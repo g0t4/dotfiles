@@ -74,14 +74,22 @@ function update_zle_with_response_widget() {
 
     buffer_tmp="$(cat $RESPONSE_BUFFER_FILE)"
     if [[ $post_display_tmp == "done" ]]; then
-        # TODO remove `` surrounding suggested command? + show POSTDISPLAY warning that they were removed (I imagine most of the time they aren't desired), 
-        # ? when might they be necessary => i.e. `echo ls` (should just be ls)... can I modify prompt to ask for commands to be simplified too?
 
-        # show suggested command too
+        # show suggested command
         BUFFER="${buffer_tmp}"
-        zle _zsh_highlight__zle-line-finish # fixes syntax highlighting after buffer replaced, NOTE: I did not verify if this is the right way to do this I just stumbled on this and it worked (found via `zle -la | grep highlight`)
-        # w/o redoing highligths, the replaced buffer seems to carry over previous highlights (ie first word is often red b/c first word of question was not a valid command, and highlighting wraps over POSTDISPLAY)
-        POSTDISPLAY="" # clear on success, also obviates most of the need for clearing POSTDISPLAY on accept-line!
+
+        # fixes syntax highlighting after buffer replaced:
+        zle _zsh_highlight__zle-line-finish
+        # NOTE: I did not verify if this is the right way to do this I just stumbled on this and it worked (found via `zle -la | grep highlight`)
+        # w/o redoing highligths, the replaced buffer keeps previous highlights (i.e. first word is often red b/c first word of ? is not usually a valid command, plus highlighting wraps over POSTDISPLAY)
+
+        # clear messages on success:
+        POSTDISPLAY=""
+        # obviates most of the need for clearing POSTDISPLAY on accept-line!
+
+        # ? remove `` surrounding suggested command + show POSTDISPLAY warning that `` removed?
+        # ? when might `` be necessary => i.e. `echo ls` (should just be ls)... can I modify system command / prompt to ask for simplified commands?
+
     else
         _set_post_display "${post_display_tmp}"
     fi
