@@ -1,4 +1,3 @@
-#!/usr/bin/env zsh
 
 ealias wf="whence -f"
 ealias wv="whence -v" # file it came from

@@ -1,4 +1,3 @@
-#!/usr/bin/env zsh
 
 ealias zc='z -c'
 ealias zr='z -r'

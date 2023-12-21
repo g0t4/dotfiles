@@ -1,4 +1,3 @@
-#!/usr/bin/env zsh
 
 # DOES NOT NEED TO BE POST-COMPINIT # ! just needs to load before 3-last/helper scripts
 # ! must load after completions.zsh (dependent on menuselect keymap for binding below)
