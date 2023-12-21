@@ -74,6 +74,9 @@ function update_zle_with_response_widget() {
 
     buffer_tmp="$(cat $RESPONSE_BUFFER_FILE)"
     if [[ $post_display_tmp == "done" ]]; then
+        # TODO remove `` surrounding suggested command? + show POSTDISPLAY warning that they were removed (I imagine most of the time they aren't desired), 
+        # ? when might they be necessary => i.e. `echo ls` (should just be ls)... can I modify prompt to ask for commands to be simplified too?
+
         # show suggested command too
         BUFFER="${buffer_tmp}"
         zle _zsh_highlight__zle-line-finish # fixes syntax highlighting after buffer replaced, NOTE: I did not verify if this is the right way to do this I just stumbled on this and it worked (found via `zle -la | grep highlight`)
@@ -112,4 +115,7 @@ bindkey -M emacs '^G' restore_last_question_widget # PRN better key to use?
 # - returns multiple suggestions
 #   - with gpt3.5 is occasionally helpful, but:
 #   - with gpt4 I've been pretty happy with a single suggestion
-alias helps="${WESCONFIG_BOOTSTRAP}/.venv/bin/python3 ${WESCONFIG_ZSH_UNIVERSALS}/3-last/ask-openai/multi.py"
+# TODO video about this and how I am using this to think about changes to single suggestions
+_python3="${WESCONFIG_BOOTSTRAP}/.venv/bin/python3"
+_mutli_py="${WESCONFIG_ZSH_UNIVERSALS}/3-last/ask-openai/multi.py"
+alias helps="'$_python3' '$_mutli_py'"
