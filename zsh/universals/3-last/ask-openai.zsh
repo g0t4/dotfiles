@@ -18,6 +18,8 @@ RESPONSE_POSTDISPLAY_FILE=$(mktemp)
 RESPONSE_BUFFER_FILE=$(mktemp)
 MAINSHELL_PID=$$
 
+zle -N ask_openai_widget
+bindkey -M emacs '^B' ask_openai_widget
 function ask_openai_widget(){
 
     _set_post_display "asking openai..."
@@ -56,9 +58,6 @@ STDIN_CONTEXT
 
 }
 
-zle -N ask_openai_widget
-bindkey -M emacs '^B' ask_openai_widget
-
 
 
 
@@ -69,6 +68,7 @@ function on_openai_done_trap() {
 
 trap 'on_openai_done_trap' SIGUSR1
 
+zle -N update_zle_with_response_widget
 function update_zle_with_response_widget() {
     post_display_tmp="$(cat $RESPONSE_POSTDISPLAY_FILE)"
 
@@ -97,20 +97,17 @@ function update_zle_with_response_widget() {
     zle reset-prompt # else POSTDISPLAY/BUFFER changes won't draw until keypress
 }
 
-zle -N update_zle_with_response_widget
 
 
 
 
-
+zle -N restore_last_question_widget
+bindkey -M emacs '^G' restore_last_question_widget # PRN better key to use?
 function restore_last_question_widget(){
     # use ctrl+Z right after ask to revert buffer to question
     # but, when you then exec suggested command and want to modify the last question then use this to restore it!
     BUFFER=$last_question_asked
 }
-
-zle -N restore_last_question_widget
-bindkey -M emacs '^G' restore_last_question_widget # PRN better key to use?
 
 
 
