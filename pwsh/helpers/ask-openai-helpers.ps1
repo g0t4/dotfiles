@@ -17,11 +17,10 @@ Set-PSReadLineKeyHandler -Chord "Ctrl+b" -BriefDescription "Ask OpenAI to genera
 
     # $output = "hard coded test result"
     $_python = "${WESCONFIG_BOOTSTRAP}\.venv\Scripts\python.exe"
-    $_single_py = "${WESCONFIG_BOOTSTRAP}\subs\dotfiles\pwsh\helpers\ask-openai.py"
+    $_single_py = "${WESCONFIG_DOTFILES}\zsh\universals\3-last\ask-openai\single.py"
     $output = $(`
             Write-Output $context | `
-            & $_python `
-            "$_single_py" `
+            & $_python "$_single_py" `
             2>&1
         # make sure to pipe stderr to stdout so it is captured in $output (i.e. missing pip install openai module)
     )
