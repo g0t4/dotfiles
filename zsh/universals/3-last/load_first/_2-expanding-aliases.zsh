@@ -40,9 +40,6 @@ function ealias()
     fi
 
     # add alias name to ealiases array, i.e. `ealias foo=bar` maps to `alias foo=bar` and ealiases+=(foo)
-    # %% - pattern match the end of the parameter
-    # \= - just an equal sign (which divides an alias)
-    # * - means we can match 0+ occurrences in the event that an alias is defined without a value
     ealiases+=(${aliasname})
     # for -NoSpaceAfter and -g (global aliases) => add metadata to a separate ealiases_metadata array?
 }
@@ -87,20 +84,19 @@ function expand-ealias-then-magic-space()
 function expand-ealias-then-accept-line()
 {
     zle expand-ealias
-    #zle add-colorize-command-python
+    # zle add-colorize-command-python # this is a separate widget I am working on (not shared, yet)
     zle accept-line
-    POSTDISPLAY=""
+    POSTDISPLAY="" # i.e. clear ask-openai messages
 }
 
 function expand-ealias-then-accept-line-without-colorize(){
     # temp - disable colorize for one command
-    # really a sign that I need to modify colorize mods
     zle expand-ealias
     zle accept-line
-    POSTDISPLAY=""
+    POSTDISPLAY="" # i.e. clear ask-openai messages
 }
 
-# register UDF widgets above 
+# register UDF widgets above
 zle -N expand-ealias
 zle -N expand-ealias-then-accept-line
 zle -N expand-ealias-then-magic-space
@@ -126,9 +122,8 @@ bindkey -M emacs '^J' expand-ealias-then-accept-line-without-colorize # Ctrl-J d
 #    which _global_ealias_ => resolves based on alias value
 #    which \_global_ealias_ => resolves based on alias name
 
-# search bind keys easily
-ealias bgr="bindkey | grep -i"
-
+##  FIRST EALIASes!
+ealias bgr="bindkey | grep -i" # search bind keys easily
 # tests
 # ealias foo="echo oof" -g
 # ealias boo="echo oob"
