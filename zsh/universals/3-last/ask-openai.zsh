@@ -122,5 +122,5 @@ function restore_last_question_widget(){
 #   - with gpt4 I've been pretty happy with a single suggestion
 # TODO video about this and how I am using this to think about changes to single suggestions
 _python3="${WESCONFIG_BOOTSTRAP}/.venv/bin/python3"
-_mutli_py="${WESCONFIG_ZSH_UNIVERSALS}/3-last/ask-openai/multi.py"
-alias helps="'$_python3' '$_mutli_py'"
+_multi_py="${WESCONFIG_ZSH_UNIVERSALS}/3-last/ask-openai/multi.py"
+alias helps="'$_python3' '$_multi_py'"
