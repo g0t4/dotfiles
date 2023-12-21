@@ -50,7 +50,7 @@ if __name__ == "__main__":
 
     # empty context usually generates echo hello :) so allow it
 
-    if "buffer: dump\n" in question:
+    if question == "dump":
         # dump context to troubleshoot
         print(question)
         sys.exit(2)
