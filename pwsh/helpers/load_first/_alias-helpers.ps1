@@ -49,7 +49,7 @@ function ealias() {
 #
 Set-PSReadLineKeyHandler -Key "Spacebar" `
     -BriefDescription "space expands ealiases" `
-    -LongDescription "Spacebar handler to expand all ealiases in current line/buffer" `
+    -LongDescription "Spacebar handler to expand all ealiases in current line/buffer, primarily intended for ealias right before current cursor position" `
     -ScriptBlock {
     param($key, $arg)
 
@@ -86,7 +86,6 @@ Set-PSReadLineKeyHandler -Key "Spacebar" `
         $expands_to = "$expands_to "
 
         # IIRC I had an open question about why I have to add space here again... but its working as is so leave it, IIAC this is b/c tokenizer strips them?
-        #   TODO port this to zsh widgets too!
       }
 
       $original_length = $original.EndOffset - $original.StartOffset
@@ -137,52 +136,3 @@ Set-PSReadLineOption -CommandValidationHandler {
 ## Examples
 # CommandValidationHandler: https://github.com/PowerShell/PSReadLine/issues/1643
 # https://www.powershellgallery.com/packages/PSReadline/1.2/Content/SamplePSReadlineProfile.ps1
-
-
-### Alt+% triggers replace all aliases
-#
-# ! vestigial?
-# ? when might I actually use this... even on copy/paste multiple aliases they already expand b/c of spacebar handler
-#   could be used to recursively expand nested aliases (but that can be added to spacebar above too)
-#
-# Largely copied from this sample (other examples too):
-#    - https://github.com/PowerShell/PSReadLine/blob/a88c22fd60a69f41d1b727b7c51b5cbf8f9b5f68/PSReadLine/SamplePSReadLineProfile.ps1#L439-L477
-#
-Set-PSReadLineKeyHandler -Key "Alt+%" `
--BriefDescription ExpandAliases `
--LongDescription "Replace all aliases with the full command" `
-    -ScriptBlock {
-    param($key, $arg)
-
-
-    $ast = $null
-    $tokens = $null
-    $errors = $null
-    $cursor = $null
-    [Microsoft.PowerShell.PSConsoleReadLine]::GetBufferState([ref]$ast, [ref]$tokens, [ref]$errors, [ref]$cursor)
-
-
-    $startAdjustment = 0
-    foreach ($token in $tokens) {
-      $original = $token.Extent
-
-      if ($token.TokenFlags -band [TokenFlags]::CommandName) {
-        # IIAC this lookup happens via the alias value (not using lookup_alias)
-        $alias = $ExecutionContext.InvokeCommand.GetCommand($original.Text, 'Alias')
-        if ($alias -ne $null) {
-          #$expands_to = $alias.ResolvedCommandName
-          $expands_to = $alias.Definition
-          if ($expands_to -ne $null) {
-            $original_length = $original.EndOffset - $original.StartOffset
-            [Microsoft.PowerShell.PSConsoleReadLine]::Replace(
-                $original.StartOffset + $startAdjustment,
-                $original_length,
-                $expands_to)
-
-            # support matching multiple aliases (startAdjustment adjusts for cumulative replacements)
-            $startAdjustment += ($expands_to.Length - $original_length)
-          }
-        }
-      }
-    }
-}
