@@ -16,15 +16,17 @@ Set-PSReadLineKeyHandler -Chord "Ctrl+b" -BriefDescription "Ask OpenAI to genera
     $context = "env: powershell`nquestion: $userInput"
 
     # $output = "hard coded test result"
+    $_python = "${WESCONFIG_BOOTSTRAP}\.venv\Scripts\python.exe"
+    $_single_py = "${WESCONFIG_BOOTSTRAP}\subs\dotfiles\pwsh\helpers\ask-openai.py"
     $output = $(`
             Write-Output $context | `
-            & "${WESCONFIG_BOOTSTRAP}\.venv\Scripts\python.exe" `
-            ${WESCONFIG_DOTFILES}/zsh/universals/3-last/ask-openai/single.py `
+            & $_python `
+            "$_single_py" `
             2>&1
-            # make sure to pipe stderr to stdout so it is captured in $output (i.e. missing pip install openai module)
+        # make sure to pipe stderr to stdout so it is captured in $output (i.e. missing pip install openai module)
     )
 
-    if ($LASTEXITCODE -eq 2){
+    if ($LASTEXITCODE -eq 2) {
         # dump context:
         $output = "[CONTEXT]:`n$output"
     }
@@ -44,5 +46,4 @@ Set-PSReadLineKeyHandler -Chord "Ctrl+b" -BriefDescription "Ask OpenAI to genera
 
 
 ## NOTES
-# FYI many examples for key handlers/bindings:
 #  https://github.com/powershell/psreadline/blob/e57f7d691d8df8c1121fddf47084f96aea74a688/PSReadLine/SamplePSReadLineProfile.ps1#L50
