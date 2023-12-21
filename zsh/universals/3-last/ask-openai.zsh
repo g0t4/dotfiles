@@ -31,7 +31,7 @@ function ask_openai_widget(){
         #   alternative: append " # asking..." to buffer like I do in powershell (cons: double undo to get back to original question, pros: Ctrl+C to kill request, unsure?)
 
         _python3="${WESCONFIG_BOOTSTRAP}/.venv/bin/python3"
-        _entrypoint_py="${WESCONFIG_ZSH_UNIVERSALS}/3-last/ask-openai/entrypoint.py"
+        _entrypoint_py="${WESCONFIG_DOTFILES}/zsh/universals/3-last/ask-openai/entrypoint.py"
         response=$( $_python3 $_entrypoint_py 2>&1 \
             <<STDIN_CONTEXT
 env: zsh on $(uname)
@@ -122,5 +122,5 @@ function restore_last_question_widget(){
 #   - with gpt4 I've been pretty happy with a single suggestion
 # TODO video about this and how I am using this to think about changes to single suggestions
 _python3="${WESCONFIG_BOOTSTRAP}/.venv/bin/python3"
-_multi_py="${WESCONFIG_ZSH_UNIVERSALS}/3-last/ask-openai/multi.py"
+_multi_py="${WESCONFIG_DOTFILES}/zsh/universals/3-last/ask-openai/multi.py"
 alias helps="'$_python3' '$_multi_py'"
