@@ -31,8 +31,8 @@ function ask_openai_widget(){
         #   alternative: append " # asking..." to buffer like I do in powershell (cons: double undo to get back to original question, pros: Ctrl+C to kill request, unsure?)
 
         _python3="${WESCONFIG_BOOTSTRAP}/.venv/bin/python3"
-        _entrypoint_py="${WESCONFIG_DOTFILES}/zsh/universals/3-last/ask-openai/entrypoint.py"
-        response=$( $_python3 $_entrypoint_py 2>&1 \
+        _single_py="${WESCONFIG_DOTFILES}/zsh/universals/3-last/ask-openai/single.py"
+        response=$( $_python3 $_single_py 2>&1 \
             <<STDIN_CONTEXT
 env: zsh on $(uname)
 question: $BUFFER
