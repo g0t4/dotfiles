@@ -126,3 +126,5 @@ ealias bgr="bindkey | grep -i" # search bind keys easily
 # tests
 # ealias foo="echo oof" -g
 # ealias boo="echo oob"
+
+## origins, IIRC I started with https://github.com/zigius/expand-ealias.plugin.zsh/blob/master/expand-ealias.plugin.zsh
