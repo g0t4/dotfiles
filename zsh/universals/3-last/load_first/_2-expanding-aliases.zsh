@@ -128,3 +128,9 @@ ealias bgr="bindkey | grep -i" # search bind keys easily
 # ealias boo="echo oob"
 
 ## origins, IIRC I started with https://github.com/zigius/expand-ealias.plugin.zsh/blob/master/expand-ealias.plugin.zsh
+
+
+# Ideas:
+# - "git c" => "git commit" [support spaces in alias/abbreviation, i.e. in https://zsh-abbr.olets.dev/essential-commands.html#expand-them)]
+#       but, tab completion seems superior b/c it doesn't require definitions (beyond completions) and is just a tab instead of space (to expand)
+
