@@ -1,7 +1,9 @@
 
 # ealias is a big part of what I use in my dotfiles in terms of zsh customization.... a adapater alone for this would make fish much more usable to test drive it...
 function ealias --description "map ealias to fish abbr(eviation)"
-    # todo if argv has 2 args then no split on =
+
+    # wow I already like fish scripting way better than zsh/bash!
+
     if test (count $argv) -eq 0 || test (count $argv) -gt 2
         echo "invalid alias definition:"
         echo "  ealias <aliasname>=<alias_value>"
