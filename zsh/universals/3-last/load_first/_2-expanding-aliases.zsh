@@ -5,6 +5,7 @@
 # ealias must be global (else ealias calls below, i.e. bgr, won't be registered as ealias and will be plain old alias)
 typeset -ag ealiases
 typeset -ag ealiases_no_space_after
+# PRN support cursor placement after expansion! then I can have `ealias gcmsg='git commit -m ""'` and cursor is placed between quotes after expansion! this could replace nospaceafter! or compliment it!
 
 function ealias()
 {
