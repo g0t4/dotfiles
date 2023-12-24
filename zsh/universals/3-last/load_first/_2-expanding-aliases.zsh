@@ -10,17 +10,39 @@ typeset -ag ealiases_no_space_after
 
 function ealias()
 {
-    local aliasdef="$1"
-    if [[ -z $aliasdef ]]; then
-      echo "aborting - no alias definition supplied"
-      return -1
+    # parse options and remove (-D) them from positional args
+    local -a flags # bool
+    zparseopts -E -a flags -D -- g NoSpaceAfter # FYI `man zshmodules` /zparseopts
+    # -E don't stop on first non-matching flag => allow args before/after aliasdef
+
+    local -a positional_args=("${(@)argv}") # remaining are positional (assumes all flags parsed)
+    if [[ -z $positional_args ]]; then
+        echo "aborting - no alias definition supplied"
+        echo "    USAGE: ealias [-g] [-NoSpaceAfter] aliasname=aliasdef"
+        echo "    OR: ealias [-g] [-NoSpaceAfter] aliasname aliasdef"
+        return -1
     fi
+    if (( ${#positional_args[@]} > 2 )); then
+        echo "aborting - invalid alias definition (> 2 positional args)"
+        echo "    USAGE: ealias [-g] [-NoSpaceAfter] aliasname=aliasdef"
+        echo "    OR: ealias [-g] [-NoSpaceAfter] aliasname aliasdef"
+        return -1
+    fi
+    local aliasdef
+    if (( ${#positional_args[@]} == 1 )); then
+        # one positional arg => assume `foo=bar` format
+        aliasdef="${positional_args[@]}"
+        # PRN validate =?
+    else
+        # two positional args => assume `foo bar` format
+        aliasdef="${positional_args[1]}=${positional_args[2]}"
+        # PRN validate no = in aliasname
+    fi
+
     local aliasname=${aliasdef%%\=*}
-
-    local remaining_args="${@:2}"
-
-    if [[ $remaining_args =~ "-g" ]]; then
+    if (( ${flags[(I)-g]} )); then
         # global alias can be used anywhere (not just in command position)
+        # echo "global: $aliasdef" # troubleshoot
         alias -g $aliasdef
     else
         alias $aliasdef
@@ -36,7 +58,8 @@ function ealias()
     # PRN generalize nospaceafter to a set of options (i.e. -NoSpaceAfter, -NoColorize?, etc)
     #   FYI don't have to track -g option since alias -g is the only diff there
     # support for -NoSpaceAfter like in my pwsh impl
-    if [[ $remaining_args =~ "-NoSpaceAfter" ]]; then
+    if (( ${flags[(I)-NoSpaceAfter]} )); then
+        # echo "NoSpaceAfter: $aliasdef" # troubleshoot
         ealiases_no_space_after+=(${aliasname})
     fi
 
@@ -127,6 +150,7 @@ bindkey -M emacs '^J' expand-ealias-then-accept-line-without-colorize # Ctrl-J d
 ealias bgr="bindkey | grep -i" # search bind keys easily
 # tests
 # ealias foo="echo oof" -g
+# ealias -g doo="echo oof"
 # ealias boo="echo oob"
 
 ## origins, IIRC I started with https://github.com/zigius/expand-ealias.plugin.zsh/blob/master/expand-ealias.plugin.zsh
