@@ -54,7 +54,7 @@ if [[ $# -eq 1 ]]; then
       refs 'cat'
       ;;
     nobeep) ;;
-    *) exit 1 ;;
+    #*) exit 1 ;;
   esac
 elif [[ $# -gt 1 ]]; then
   set -e
