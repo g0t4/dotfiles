@@ -60,6 +60,7 @@ function ealias()
     # support for -NoSpaceAfter like in my pwsh impl
     if (( ${flags[(I)-NoSpaceAfter]} )); then
         # echo "NoSpaceAfter: $aliasdef" # troubleshoot
+        # alternative might be to use `add-space` style (used by underlying _expand_alias ... would require mods below to how I use that b/c I am removing that space IIRC currently - see below) and then selectively disable it per alias via zstyle config (can zstyle handle lots of entries if specific? ie per alias?)
         ealiases_no_space_after+=(${aliasname})
     fi
 
