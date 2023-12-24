@@ -7,6 +7,10 @@ typeset -ag ealiases
 typeset -ag ealiases_no_space_after
 # PRN support cursor placement after expansion! then I can have `ealias gcmsg='git commit -m ""'` and cursor is placed between quotes after expansion! this could replace nospaceafter! or compliment it!
 #   see this for alias with a placeholder (might have tab completion through placeholders?) https://github.com/yuki-yano/zeno.zsh => way more advanced than I need for now but still cool idea
+#   fish has `abbr` command => supports --set-cursor=MARKER arg:
+#      abbr gcmsg --set-cursor=HERE 'git commit -m "HERE'
+#      docs: https://fishshell.com/docs/current/cmds/abbr.html
+#      also supports functions to create expansions! interesting!
 
 function ealias()
 {
