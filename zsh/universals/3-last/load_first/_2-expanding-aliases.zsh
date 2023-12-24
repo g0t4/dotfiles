@@ -81,7 +81,7 @@ function expand-ealias()
         # FYI (I) = case insensitive, (e) = not pattern match
         LBUFFER=${LBUFFER%%[[:space:]]} # trim last space => so that right after completion selection (on space) this triggers alias expansion too (else selection adds space and then ealias expansion won't work)
         local initial_LBUFFER=$LBUFFER
-        zle _expand_alias # zsh function to expand any alias (hence check ealias first) => FYI _expand_alias is default bound to ^Xa
+        zle _expand_alias # zsh function to expand any alias (hence check ealias first) => FYI _expand_alias is default bound to ^Xa (via compinit)
         # FYI completion regular style (default=true) means aliases are only expanded in command position, global style (default=true) decides if _expand_alias expands global aliases
         if [[ $LBUFFER != $initial_LBUFFER ]]; then
             # FYI could check rc of _expand_alias to confirm expansion but I believe that is redundant?
