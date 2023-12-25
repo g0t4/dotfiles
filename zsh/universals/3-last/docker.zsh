@@ -157,50 +157,49 @@ ealias dxs='docker context show'
 
 
 # DOCKER COMPOSE:
-prefix=dco
-ealias ${prefix}='docker compose'
-ealias ${prefix}b='docker compose build --pull'
-ealias ${prefix}c='docker compose config'
-ealias ${prefix}cp='docker compose cp'
+ealias dco='docker compose'
+ealias dcob='docker compose build --pull'
+ealias dcoc='docker compose config'
+ealias dcocp='docker compose cp'
 #
 # down:
 local _down='docker compose down --remove-orphans' #  --remove-orphans includes one-off `dco run` containers
-ealias ${prefix}d="${_down}"
-ealias ${prefix}dd="${_down} --dry-run"
-ealias ${prefix}da="${_down} --rmi local --volumes"
-ealias ${prefix}dad="${_down} --rmi local --volumes --dry-run"
+ealias dcod="${_down}"
+ealias dcodd="${_down} --dry-run"
+ealias dcoda="${_down} --rmi local --volumes"
+ealias dcodad="${_down} --rmi local --volumes --dry-run"
 # --volumes => rm named + anon, rmi local = built images (not pulled)
 #   --rmi all => pulled too
 #
-ealias ${prefix}e='docker compose exec'
-ealias ${prefix}i='docker compose images'
-ealias ${prefix}k='docker compose kill'
-ealias ${prefix}l='docker compose logs'
-ealias ${prefix}lf='docker compose logs -f'
-ealias ${prefix}lt='docker compose logs -f --tail=0'
-ealias ${prefix}ps='grc docker compose ps'
-ealias ${prefix}psa='grc docker compose ps -a'
-ealias ${prefix}ls='grc docker compose ls' # * list ALL COMPOSE projets! (not just current dir's project)
-ealias ${prefix}lsa='grc docker compose ls -a' # stopped too
+ealias dcoe='docker compose exec'
+ealias dcoi='docker compose images'
+ealias dcok='docker compose kill'
+ealias dcol='docker compose logs'
+ealias dcolf='docker compose logs -f'
+ealias dcolt='docker compose logs -f --tail=0'
+ealias dcops='grc docker compose ps'
+ealias dcopsa='grc docker compose ps -a'
+ealias dcols='grc docker compose ls' # * list ALL COMPOSE projets! (not just current dir's project)
+ealias dcolsa='grc docker compose ls -a' # stopped too
 
 # # alpha commands
-# ealias ${prefix}a='docker compose alpha'
-# ealias ${prefix}v='docker compose alpha viz'
+# ealias dcoa='docker compose alpha'
+# ealias dcov='docker compose alpha viz'
 
-ealias ${prefix}w='docker compose watch'
+ealias dcow='docker compose watch'
 
-ealias ${prefix}pull='docker compose pull'
-ealias ${prefix}push='docker compose push'
-ealias ${prefix}rm='docker compose rm'
-ealias ${prefix}r='docker compose run --rm' # --rm to cleanup tmp containers else they linger after each run
-ealias ${prefix}re='docker compose restart'
-ealias ${prefix}start='docker compose start'
-ealias ${prefix}stop='docker compose stop'
-ealias ${prefix}t='docker compose top'
-ealias ${prefix}u='docker compose up'
-ealias ${prefix}uf='docker compose up --force-recreate --remove-orphans'
-ealias ${prefix}ud='docker compose up --detach'
-ealias ${prefix}v='docker compose version'
+ealias dcopull='docker compose pull'
+ealias dcopush='docker compose push'
+ealias dcorm='docker compose rm'
+ealias dcor='docker compose run --rm' # --rm to cleanup tmp containers else they linger after each run
+ealias dcore='docker compose restart'
+ealias dcostart='docker compose start'
+ealias dcostop='docker compose stop'
+ealias dcot='docker compose top'
+ealias dcou='docker compose up'
+ealias dcouf='docker compose up --force-recreate --remove-orphans'
+ealias dcoud='docker compose up --detach'
+ealias dcov='docker compose version'
 
 
 
