@@ -18,7 +18,11 @@ end
 set -l my_filename_resolved (readlink -f (status filename))
 set -l DOTFILES (dirname (dirname (dirname $my_filename_resolved)))
 source $DOTFILES/fish/load_first/*.fish
-source $DOTFILES/zsh/compat_fish/*.zsh
+for file in $DOTFILES/zsh/compat_fish/*.zsh
+    # glob not sourcing? use loop for now
+    source $file
+end
+source $DOTFILES/fish/load_last/*.fish
 
 ## WHY fish?
 # PROS:
@@ -79,4 +83,3 @@ source $DOTFILES/zsh/compat_fish/*.zsh
 ## PROMPT
 # fish_prompt is the default prompt function, also fish_right_prompt
 #   default uses prompt_login, prompt_pwd, fish_vcs_prompt (override to change/hide)
-
