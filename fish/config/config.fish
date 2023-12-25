@@ -68,6 +68,7 @@ end
 #   fb => cd foobar  #zsh doesn't support this! don't have to have sequential letters in a given dirname!
 # CONS:
 # ! z => not fsh :( ... can I run as zsh script from fish? or is it integrated into zsh as a widget or? )
+#    ! https://github.com/jethrokuan/z   (fish port)
 # - ?
 # UNCERTAINS:
 # - use type instead of whence/which? type doesn't resolve for abbreviations? is there a better way to resolve anything (including the file its defined in like whence -v/f does in zsh)?
