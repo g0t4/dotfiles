@@ -6,6 +6,7 @@ function _ansible-config_options_name_contains
 end
 ealias aclsd="_ansible-config_option_details_contains"
 function _ansible-config_option_details_contains
+    # TODO verify works in fish
     set -l key $1
     command ansible-config list | yq "with_entries(select(.. | has(\"$key\")))"
 end
