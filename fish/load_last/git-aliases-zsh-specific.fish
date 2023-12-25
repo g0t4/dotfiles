@@ -44,16 +44,18 @@ function gdlcX
     echo "git log --patch HEAD~$num..HEAD~$prev"
 end
 
-# # # VCS in general:
-# # ealias rr='_repo_root'
-# # # prd = print repo directoy ;) (like pwd)
-# # alias prd='echo $(rr)' # don't expand this alias! it just returns a path
-# # function _repo_root() {
-# #   if git rev-parse --is-inside-work-tree 2>/dev/null  1>/dev/null; then
-# #     git rev-parse --show-toplevel 2>/dev/null
-# #   elif hg root 2>/dev/null  1>/dev/null; then
-# #     hg root 2>/dev/null
-# #   else
-# #     pwd
-# #   fi
-# # }
+# VCS in general:
+ealias rr='_repo_root'
+# prd = print repo directoy ;) (like pwd)
+alias prd='echo $(_repo_root)' # don't expand this alias! it just returns a path
+function _repo_root
+
+    if git rev-parse --is-inside-work-tree 2>/dev/null 1>/dev/null
+        git rev-parse --show-toplevel 2>/dev/null
+    else if hg root 2>/dev/null 1>/dev/null
+        hg root 2>/dev/null
+    else
+        pwd
+    end
+
+end
