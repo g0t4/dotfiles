@@ -17,12 +17,17 @@ end
 # find DOTFILES dir
 set -l my_filename_resolved (readlink -f (status filename))
 set -l DOTFILES (dirname (dirname (dirname $my_filename_resolved)))
-source $DOTFILES/fish/load_first/*.fish
-for file in $DOTFILES/zsh/compat_fish/*.zsh
-    # glob not sourcing? use loop for now
+
+# source $DOTFILES/fish/load_first/*.fish # glob not working for multiple files in dir, just one?!
+for file in $DOTFILES/fish/load_first/*.fish
     source $file
 end
-source $DOTFILES/fish/load_last/*.fish
+for file in $DOTFILES/zsh/compat_fish/*.zsh
+    source $file
+end
+for file in $DOTFILES/fish/load_last/*.fish
+    source $file
+end
 
 ## WHY fish?
 # PROS:
