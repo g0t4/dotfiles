@@ -14,18 +14,19 @@ end
 
 # TODO => use ~/.config/fish/conf.d/ OR source here?
 
-# find DOTFILES dir
+# find WES_ paths
 set -l my_filename_resolved (readlink -f (status filename))
-set -l DOTFILES (dirname (dirname (dirname $my_filename_resolved)))
+set -g WES_DOTFILES (dirname (dirname (dirname $my_filename_resolved)))
+set -g WES_BOOTSTRAP (dirname (dirname $WES_DOTFILES))
 
-# source $DOTFILES/fish/load_first/*.fish # glob not working for multiple files in dir, just one?!
-for file in $DOTFILES/fish/load_first/*.fish
+# source $WES_DOTFILES/fish/load_first/*.fish # glob not working for multiple files in dir, just one?!
+for file in $WES_DOTFILES/fish/load_first/*.fish
     source $file
 end
-for file in $DOTFILES/zsh/compat_fish/*.zsh
+for file in $WES_DOTFILES/zsh/compat_fish/*.zsh
     source $file
 end
-for file in $DOTFILES/fish/load_last/*.fish
+for file in $WES_DOTFILES/fish/load_last/*.fish
     source $file
 end
 
@@ -73,6 +74,7 @@ end
 #   `type up-or-search` shows 'widget (name?)' impl colorized
 # - variables are not split on interpolation! 
 #    i.e. `mkdir $foo` where `set -l foo "foo bar"` doesn't make two dirs, just one named "foo bar" with space in name
+#    universal => vars shared across instances of zsh (PRN should I be versioning the corresponding file fish_variables or not?)
 # CONS:
 # - ?
 # UNCERTAINS:

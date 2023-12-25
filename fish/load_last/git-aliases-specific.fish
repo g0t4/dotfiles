@@ -60,3 +60,25 @@ function _repo_root
     end
 
 end
+
+## bootstrap git helpers:
+# ? rewrite as `dotfiles gst/gcmsg/etc` and repeat command in both spots! would need to define -g aliases (yucky)
+function gstdotfiles
+
+    echo (set_color blue) 'git status of dotfiles:' (set_color normal)
+    git -C $WES_DOTFILES status
+
+    echo
+    echo (set_color blue) 'git status of bootstrap:' (set_color normal)
+    git -C $WES_BOOTSTRAP status
+
+end
+
+
+function gcmdotfiles --description "blind commit w/ message to bootstrap and dotfiles"
+    set --local message $argv
+    git -C $WES_DOTFILES commit -a -m $message
+    git -C $WES_BOOTSTRAP commit -a -m $message
+end
+
+# PRN gcan! to modify both?! if I feel that I need this
