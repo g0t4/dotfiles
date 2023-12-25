@@ -38,8 +38,6 @@ ealias ggsup='git branch --set-upstream-to=origin/$(git_current_branch)'
 # diff
 ealias gdlc="git log --patch HEAD~1..HEAD"
 abbr --regex 'gdlc\d+' --function gdlcX _gdlcX
-# ealias gdlc1="gdlc"
-# for i in {2..10}; do ealias "gdlc$i"="git log --patch HEAD~$i..HEAD~$(($i - 1))"; done # !FISHISSUE abbr+regex!
 function gdlcX
     set -l num (string replace --regex '^gdlc' '' $argv)
     set -l prev (math $num - 1)
