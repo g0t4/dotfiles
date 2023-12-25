@@ -63,7 +63,7 @@ end
 
 ## bootstrap git helpers (WIP, not sure what these will settle into just yet)
 # ? rewrite as `dotfiles gst/gcmsg/etc` and repeat command in both spots! would need to define -g aliases (yucky)
-function gstdotfiles
+function dotgst
 
     log_info "git status of dotfiles:"
     git -C $WES_DOTFILES status
@@ -72,18 +72,27 @@ function gstdotfiles
     log_info "git status of bootstrap:"
     git -C $WES_BOOTSTRAP status
 
-    cd $WES_DOTFILES
 end
 
-function gcmdotfiles --description "blind commit w/ message to bootstrap and dotfiles"
+function dotgcm --description "commit both w/ message"
+
+    # ensure message is provided:
+    argparse --min 1 -- $argv || return 1
     set --local message $argv
-    git -C $WES_DOTFILES commit -a -m $message
-    git -C $WES_BOOTSTRAP commit -a -m $message
+
+    git -C $WES_DOTFILES commit -m $message
+    read || return # check after
+    git -C $WES_BOOTSTRAP commit -m $message
 end
 
-function gpdotfiles --description "push dotfiles and bootstrap"
+function dotgp --description "push dotfiles and bootstrap"
     git -C $WES_DOTFILES push
     git -C $WES_BOOTSTRAP push
+end
+
+function dotgl --description "push dotfiles and bootstrap"
+    git -C $WES_DOTFILES pull
+    git -C $WES_BOOTSTRAP pull
 end
 
 function dotglo
@@ -96,15 +105,32 @@ function dotglo
 
 end
 
-function dotgdlc
+function dotgap
 
-    log_info "dotfiles:"
-    PAGER=none git -C $WES_DOTFILES log --patch HEAD~1..HEAD
-
-    log_blankline
-    log_info "bootstrap:"
-    PAGER=none git -C $WES_BOOTSTRAP log --patch HEAD~1..HEAD
+    git -C $WES_DOTFILES add --patch
+    git -C $WES_BOOTSTRAP add --patch
 
 end
 
+function dotgdlc
+
+    log_info "dotfiles:"
+    PAGER= git -C $WES_DOTFILES log --patch HEAD~1..HEAD
+
+    log_blankline
+    log_info "bootstrap:"
+    PAGER= git -C $WES_BOOTSTRAP log --patch HEAD~1..HEAD
+
+end
+
+function dotgdc
+
+    log_info "dotfiles:"
+    PAGER= git -C $WES_DOTFILES diff --cached --word-diff=color
+
+    log_blankline
+    log_info "bootstrap:"
+    PAGER= git -C $WES_BOOTSTRAP diff --cached --word-diff=color
+
+end
 # PRN gcan! to modify both?! if I feel that I need this

@@ -77,6 +77,7 @@ end
 #    universal => vars shared across instances of zsh (PRN should I be versioning the corresponding file fish_variables or not?)
 # - `fish --profile=file` => on exit dumps to file! awesome
 #     `fish --profile-startup=file` => after startup dumps to file
+# - argparse/fish_opt clear/concise option specs + validation (ie argparse --min 1 => warns if less than 1!)
 # CONS:
 # - abbreviations cannot be used as aliases too (like I setup in my ealias lib in zsh)... so an alias must be defined additionally else you cannot use abbreviations inside a function for example... seem to only expand in fish line editor?
 # - ?
