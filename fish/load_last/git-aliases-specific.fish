@@ -61,7 +61,7 @@ function _repo_root
 
 end
 
-## bootstrap git helpers:
+## bootstrap git helpers (WIP, not sure what these will settle into just yet)
 # ? rewrite as `dotfiles gst/gcmsg/etc` and repeat command in both spots! would need to define -g aliases (yucky)
 function gstdotfiles
 
@@ -74,7 +74,6 @@ function gstdotfiles
 
     cd $WES_DOTFILES
 end
-
 
 function gcmdotfiles --description "blind commit w/ message to bootstrap and dotfiles"
     set --local message $argv
