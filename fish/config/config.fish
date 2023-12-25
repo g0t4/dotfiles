@@ -57,7 +57,7 @@ end
 # - why does `git push --<TAB>` not show --recurse-submodules, but auto suggestion does once `--re` typed?
 # - string builtin:
 #    string replace ... etc (how do I feel about this after using it a bit?)
-
+# - set => I like foo="bar" syntax (not seeing this in fish examples and funcs so must not be supported, I get it, this is part of that compact shell syntax that becomes unruly but that said it is so common in programming languages!)
 ## TO MIGRATE
 # - z cmd & see what fishisms exist to do the same?
 # * ask-openai so I can ask when I am learning!
