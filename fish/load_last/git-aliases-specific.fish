@@ -99,11 +99,11 @@ end
 function dotgdlc
 
     log_info "dotfiles:"
-    git -C $WES_DOTFILES log --patch HEAD~1..HEAD
+    PAGER=none git -C $WES_DOTFILES log --patch HEAD~1..HEAD
 
     log_blankline
     log_info "bootstrap:"
-    git -C $WES_BOOTSTRAP log --patch HEAD~1..HEAD
+    PAGER=none git -C $WES_BOOTSTRAP log --patch HEAD~1..HEAD
 
 end
 
