@@ -1,5 +1,5 @@
 # https://raw.githubusercontent.com/zackintosh/fixnumpad-osx.plugin.zsh/master/fixnumpad-osx.plugin.zsh
-#! TODO move to macos specific
+
 # Enables numpad keys of Apple keyboards to be recognized in zsh via oh-my-zsh plugin
 # 0 . Enter
 bindkey -s "^[Op" "0"
