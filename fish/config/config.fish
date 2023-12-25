@@ -55,6 +55,8 @@ end
 # - use type instead of whence/which? type doesn't resolve for abbreviations? is there a better way to resolve anything (including the file its defined in like whence -v/f does in zsh)?
 #   how can I pattern match on all types? i.e. which -m \*foo\* in zsh
 # - why does `git push --<TAB>` not show --recurse-submodules, but auto suggestion does once `--re` typed?
+# - string builtin:
+#    string replace ... etc (how do I feel about this after using it a bit?)
 
 ## TO MIGRATE
 # - z cmd & see what fishisms exist to do the same?
