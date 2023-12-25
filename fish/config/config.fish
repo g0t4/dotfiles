@@ -54,6 +54,7 @@ end
 # UNCERTAINS:
 # - use type instead of whence/which? type doesn't resolve for abbreviations? is there a better way to resolve anything (including the file its defined in like whence -v/f does in zsh)?
 #   how can I pattern match on all types? i.e. which -m \*foo\* in zsh
+# - why does `git push --<TAB>` not show --recurse-submodules, but auto suggestion does once `--re` typed?
 
 ## TO MIGRATE
 # - z cmd & see what fishisms exist to do the same?
@@ -80,3 +81,6 @@ abbr gaa 'git add --all'
 abbr gdc 'git diff --cached'
 abbr gd 'git diff'
 abbr gap 'git add --patch'
+abbr gp 'git push --recurse-submodules=on-demand' # push submodules if referenced commits not pushed yet (abort if can't push them)
+# todo smth for bootstrap repo + subs (ie dotfiles) to commit both (dotfiles => bootstrap) and push both (provide message for both together)
+#    todo and some way to see gdlc of both bootstrap and dotfiles! and glo for both?
