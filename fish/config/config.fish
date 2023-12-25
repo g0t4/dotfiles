@@ -80,14 +80,3 @@ source $DOTFILES/zsh/compat_fish/*.zsh
 # fish_prompt is the default prompt function, also fish_right_prompt
 #   default uses prompt_login, prompt_pwd, fish_vcs_prompt (override to change/hide)
 
-
-## TMP to get me by while I migrate zsh ealiases:
-abbr --set-cursor='!' gcmsg 'git commit -m "!"'
-abbr gst 'git status'
-abbr gaa 'git add --all'
-abbr gdc 'git diff --cached'
-abbr gd 'git diff'
-abbr gap 'git add --patch'
-abbr gp 'git push --recurse-submodules=on-demand' # push submodules if referenced commits not pushed yet (abort if can't push them)
-# todo smth for bootstrap repo + subs (ie dotfiles) to commit both (dotfiles => bootstrap) and push both (provide message for both together)
-#    todo and some way to see gdlc of both bootstrap and dotfiles! and glo for both?
