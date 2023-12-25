@@ -72,6 +72,7 @@ function gstdotfiles
     echo (set_color blue) 'git status of bootstrap:' (set_color normal)
     git -C $WES_BOOTSTRAP status
 
+    cd $WES_DOTFILES
 end
 
 
@@ -79,6 +80,11 @@ function gcmdotfiles --description "blind commit w/ message to bootstrap and dot
     set --local message $argv
     git -C $WES_DOTFILES commit -a -m $message
     git -C $WES_BOOTSTRAP commit -a -m $message
+end
+
+function gpdotfiles --description "push dotfiles and bootstrap"
+    git -C $WES_DOTFILES push
+    git -C $WES_BOOTSTRAP push
 end
 
 # PRN gcan! to modify both?! if I feel that I need this
