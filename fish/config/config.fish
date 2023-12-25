@@ -63,6 +63,9 @@ end
 # - autoloading
 #   - several config dirs meant to lazy load customizations (ie a function) 
 #   - `funcsave foo`,`funced foo` to save/edit autoload function file, i.e. ~/.config/fish/functions/foo.fish
+# - cd hacks:
+#   foo => cd foo
+#   fb => cd foobar  #zsh doesn't support this! don't have to have sequential letters in a given dirname!
 # CONS:
 # - ?
 # UNCERTAINS:
