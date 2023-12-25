@@ -19,3 +19,10 @@ function multicd
 end
 
 abbr --add dotdot --regex '^\.\.+$' --function multicd
+
+
+## config
+function _reload_config
+    source ~/.config/fish/config.fish
+end
+

@@ -4,7 +4,7 @@ function ealias --description "map ealias to fish abbr(eviation)"
 
     # wow I already like fish scripting way better than zsh/bash!
 
-    set -l options (fish_opt --short=g) # explicit arg specs! ==> same as 'g' but this is clear
+    set --local options (fish_opt --short=g) # explicit arg specs! ==> same as 'g' but this is clear
     argparse $options -- $argv # removes matching specs from $argv
     # PRN warn on -NoSpaceAfter? don't impl this just warn so I know to custom rewrite it for fish
 
@@ -20,7 +20,6 @@ function ealias --description "map ealias to fish abbr(eviation)"
         # ealias foo bar
         set aliasname $argv[1]
         set alias_value $argv[2]
-        abbr -a $aliasname $alias_value
     else
         # ealias foo=bar
         set aliasdef $argv[1]
@@ -31,7 +30,7 @@ function ealias --description "map ealias to fish abbr(eviation)"
 
     # echo "name: $aliasname"
     # echo "value: $alias_value"
-    set -l position command
+    set --local position command
     if test $_flag_g
         set position anywhere
     end

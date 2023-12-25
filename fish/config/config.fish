@@ -66,6 +66,13 @@ end
 # - cd hacks:
 #   foo => cd foo
 #   fb => cd foobar  #zsh doesn't support this! don't have to have sequential letters in a given dirname!
+# - history
+#   up/down filters on prefix already typed
+#       - also shows fuzzy matches in the middle of history commands (TODO look up behavior of this)
+# - fish line editor (name?)
+#   `type up-or-search` shows 'widget (name?)' impl colorized
+# - variables are not split on interpolation! 
+#    i.e. `mkdir $foo` where `set -l foo "foo bar"` doesn't make two dirs, just one named "foo bar" with space in name
 # CONS:
 # - ?
 # UNCERTAINS:
