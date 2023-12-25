@@ -14,7 +14,18 @@ end
 
 # TODO => use ~/.config/fish/conf.d/ OR source here?
 
+# dir of config.fish (resolved link too):
+set -l my_filename_resolved (readlink -f (status filename))
+set -l DOTFILES (dirname (dirname (dirname $my_filename_resolved)))
+source $DOTFILES/fish/load_first/*.fish
+source $DOTFILES/zsh/compat_fish/*.zsh
+
+
+# resolve symlink:
+#set -l mydir (readlink -f $mydir)
+
 # load ealias shim:
+
 # load zsh/compat_fish 
 
 ## WHY fish?
