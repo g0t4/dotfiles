@@ -161,10 +161,10 @@ ealias dcocp='docker compose cp'
 #
 # down:
 #  --remove-orphans includes one-off `dco run` containers
-ealias dcod="docker compose down --remove-orphans"
-ealias dcodd="docker compose down --remove-orphans --dry-run"
-ealias dcoda="docker compose down --remove-orphans --rmi local --volumes"
-ealias dcodad="docker compose down --remove-orphans --rmi local --volumes --dry-run"
+ealias dcod='docker compose down --remove-orphans'
+ealias dcodd='docker compose down --remove-orphans --dry-run'
+ealias dcoda='docker compose down --remove-orphans --rmi local --volumes'
+ealias dcodad='docker compose down --remove-orphans --rmi local --volumes --dry-run'
 # --volumes => rm named + anon, rmi local = built images (not pulled)
 #   --rmi all => pulled too
 #
