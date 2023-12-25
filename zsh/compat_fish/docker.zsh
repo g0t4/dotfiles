@@ -1,6 +1,4 @@
-
 export DOCKER_HIDE_LEGACY_COMMANDS=1 # less clutter in help output
-
 
 ealias din='docker inspect'
 
@@ -45,7 +43,7 @@ ealias dcfgi='docker config inspect'
 ealias dcfgls='docker config ls'
 ealias dcfgrm='docker config rm'
 # secrets
-ealias dsrt='docker secret' 
+ealias dsrt='docker secret'
 ealias dsrtc='docker secret create'
 ealias dsrti='docker secret inspect'
 ealias dsrtls='docker secret ls'
@@ -60,7 +58,7 @@ ealias dsypr='docker system prune'
 # events from a time range - formatted as table
 ealias dsye_tr_table='docker system events --since 10m --until 0m --format "{{json .}}" | jq "[( .id[0:10] // .Actor.ID ),.Type, .Action] | @csv " -r | column -t -s''","''  '
     # last 10 mins, use 10h for hours
-    # --since and --until can be date times formatted like --since "2021-10-30T07:30" --until "2021-10-30T9:00" 
+    # --since and --until can be date times formatted like --since "2021-10-30T07:30" --until "2021-10-30T9:00"
     # // in jq is like a null coalesce
     # .Actor.ID might need limited too in some cases with .Actor.ID[0:30] like I did with 10 and .id... for now just trunc id which is always distracting to see it all even if room
     # column -t for table, -s is separator and if I use -s'","' then it strips quote delimited CSVs\! or at least works for me as jq pipes out @csv as double quote delimited
@@ -155,7 +153,6 @@ ealias dxc='docker context create'
 ealias dxrm='docker context rm'
 ealias dxs='docker context show'
 
-
 # DOCKER COMPOSE:
 ealias dco='docker compose'
 ealias dcob='docker compose build --pull'
@@ -200,8 +197,6 @@ ealias dcou='docker compose up'
 ealias dcouf='docker compose up --force-recreate --remove-orphans'
 ealias dcoud='docker compose up --detach'
 ealias dcov='docker compose version'
-
-
 
 ## dld - docker labs debug:
 ealias dlda='dld attach'
