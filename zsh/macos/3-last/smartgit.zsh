@@ -12,3 +12,33 @@ ealias sgl='smartgit --log "$(pwd)"' # open log for current dir repo
 # --cwd <File>                            relative paths are given relative to this absolute path
 # --list-index [repository-root]          list the files of the Git index of the given directory
 # --write-default-theme-file              write the default theme file
+
+
+#### SMART SYNCHRONIZE
+
+# alias ss="/Applications/SmartSynchronize.app/Contents/MacOS/SmartSynchronize" # block shell
+alias ss="open -a SmartSynchronize"
+# TODO add alias to launch diff?
+
+## NOTES
+
+# /Applications/SmartSynchronize.app/Contents/MacOS/SmartSynchronize --help
+# Usage: smartsynchronize [OPTION]... [--] [FILE]...
+#  [FILE]...:
+#   Directory Compare: <left-dir>  <right-dir>
+#   File Compare     : <left-file> <right-file>
+#                      <left-dir>  <right-file>
+#                      <left-file> <right-dir>
+#   File Merge       : <left-file> <right-file> <merge-file>
+
+#   If just one file/dir is specified, the welcome dialog shows and suggests the
+#   path in the clipboard as second path for the file or directory compare.
+
+#   Use -- to separate options from files, even if a file is named '--help'.
+
+# Option                                  Description
+# ------                                  -----------
+# -?, --help                              show this help
+# --root <File>                           relative paths are given relative to
+#                                           this absolute path
+# --write-default-theme-file              write the default theme file
