@@ -15,8 +15,8 @@ function ealias --description "map ealias to fish abbr(eviation)"
         # ealias foo bar
         set aliasname $argv[1]
         set alias_value $argv[2]
-        echo "name: $aliasname"
-        echo "value: $alias_value"
+        # echo "name: $aliasname"
+        # echo "value: $alias_value"
         abbr -a $aliasname $alias_value
         return
     end
@@ -29,8 +29,8 @@ function ealias --description "map ealias to fish abbr(eviation)"
     set aliasname (string split -m 1 = $aliasdef)[1]
     set alias_value (string split -m 1 = $aliasdef)[2]
 
-    echo "name: $aliasname"
-    echo "value: $alias_value"
+    # echo "name: $aliasname"
+    # echo "value: $alias_value"
 
     abbr -a $aliasname $alias_value
 end

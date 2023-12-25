@@ -14,6 +14,8 @@ end
 
 # TODO => use ~/.config/fish/conf.d/ OR source here?
 
+# load ealias shim:
+# load zsh/compat_fish 
 
 ## WHY fish?
 # PROS:
