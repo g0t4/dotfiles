@@ -87,13 +87,23 @@ function gpdotfiles --description "push dotfiles and bootstrap"
 end
 
 function dotglo
-
     log_info "dotfiles:"
     git -C $WES_DOTFILES log HEAD@{push}~1..HEAD
 
     log_blankline
     log_info "bootstrap:"
     git -C $WES_BOOTSTRAP log HEAD@{push}~1..HEAD
+
+end
+
+function dotgdlc
+
+    log_info "dotfiles:"
+    git -C $WES_DOTFILES log --patch HEAD~1..HEAD
+
+    log_blankline
+    log_info "bootstrap:"
+    git -C $WES_BOOTSTRAP log --patch HEAD~1..HEAD
 
 end
 

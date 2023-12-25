@@ -76,6 +76,7 @@ end
 #    i.e. `mkdir $foo` where `set -l foo "foo bar"` doesn't make two dirs, just one named "foo bar" with space in name
 #    universal => vars shared across instances of zsh (PRN should I be versioning the corresponding file fish_variables or not?)
 # CONS:
+# - abbreviations cannot be used as aliases too (like I setup in my ealias lib in zsh)... so an alias must be defined additionally else you cannot use abbreviations inside a function for example... seem to only expand in fish line editor?
 # - ?
 # UNCERTAINS:
 #  *** z => not fsh :( ... can I run as zsh script from fish? or is it integrated into zsh as a widget or? )

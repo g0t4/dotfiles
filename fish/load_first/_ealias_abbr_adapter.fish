@@ -36,4 +36,6 @@ function ealias --description "map ealias to fish abbr(eviation)"
     end
 
     abbr --position $position --add $aliasname $alias_value
+    # PRN define alias too so can be used in functions, etc
+    # alias --add $aliasname $alias_value # global?
 end
