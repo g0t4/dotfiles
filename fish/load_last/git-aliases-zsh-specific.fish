@@ -47,7 +47,7 @@ end
 # VCS in general:
 ealias rr='_repo_root'
 # prd = print repo directoy ;) (like pwd)
-alias prd='echo $(_repo_root)' # don't expand this alias! it just returns a path
+ealias prd='_repo_root'
 function _repo_root
 
     if git rev-parse --is-inside-work-tree 2>/dev/null 1>/dev/null
