@@ -67,10 +67,11 @@ end
 #   foo => cd foo
 #   fb => cd foobar  #zsh doesn't support this! don't have to have sequential letters in a given dirname!
 # CONS:
-# ! z => not fsh :( ... can I run as zsh script from fish? or is it integrated into zsh as a widget or? )
-#    ! https://github.com/jethrokuan/z   (fish port)
 # - ?
 # UNCERTAINS:
+#  *** z => not fsh :( ... can I run as zsh script from fish? or is it integrated into zsh as a widget or? )
+#     TODO test: https://github.com/jethrokuan/z   (fish port)
+#           via fisher: https://github.com/jorgebucaran/fisher
 # - use type instead of whence/which? type doesn't resolve for abbreviations? is there a better way to resolve anything (including the file its defined in like whence -v/f does in zsh)?
 #   how can I pattern match on all types? i.e. which -m \*foo\* in zsh
 # - why does `git push --<TAB>` not show --recurse-submodules, but auto suggestion does once `--re` typed?
