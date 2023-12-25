@@ -48,7 +48,7 @@ end
 #   - () works like $() in zsh
 # - autoloading
 #   - several config dirs meant to lazy load customizations (ie a function) 
-#   - `funcsave foo` integrates to save a given function to its autoload file in ~/.config/fish/functions/foo.fish
+#   - `funcsave foo`,`funced foo` to save/edit autoload function file, i.e. ~/.config/fish/functions/foo.fish
 # CONS:
 # - ?
 # UNCERTAINS:
