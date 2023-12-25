@@ -50,7 +50,7 @@ for i in {2..10}; do ealias "gdlc$i"="git log --patch HEAD~$i..HEAD~$(($i - 1))"
 # VCS in general:
 ealias rr='_repo_root'
 # prd = print repo directoy ;) (like pwd)
-alias prd='echo $(rr)' # don't expand this alias! it just returns a path
+ealias prd='_repo_root'
 function _repo_root() {
   if git rev-parse --is-inside-work-tree 2>/dev/null  1>/dev/null; then
     git rev-parse --show-toplevel 2>/dev/null
