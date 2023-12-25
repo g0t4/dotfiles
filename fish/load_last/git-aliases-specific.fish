@@ -86,4 +86,15 @@ function gpdotfiles --description "push dotfiles and bootstrap"
     git -C $WES_BOOTSTRAP push
 end
 
+function dotglo
+
+    log_info "dotfiles:"
+    git -C $WES_DOTFILES log HEAD@{push}~1..HEAD
+
+    log_blankline
+    log_info "bootstrap:"
+    git -C $WES_BOOTSTRAP log HEAD@{push}~1..HEAD
+
+end
+
 # PRN gcan! to modify both?! if I feel that I need this
