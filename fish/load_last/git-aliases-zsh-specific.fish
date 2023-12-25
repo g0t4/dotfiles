@@ -3,21 +3,31 @@ abbr --set-cursor='!' gcmsg 'git commit -m "!"'
 abbr --set-cursor='!' gcam 'git commit -a -m "!"'
 
 
-
-# # for i in {1..10}; do ealias gl$i="git log -$i"; done # last N commits # !FISHISSUE => use abbr + regex + func to expand this to any number and not need a loop! # split zsh specific loop out and keep in zsh files only
-abbr --regex 'gl\d+' --function glX _glX # TODO why do I need _glX? isn't regex doing the same thing => read docs on why
+# TODO why do I need _glX? isn't regex doing the same thing => read docs on why
+abbr --regex 'gl\d+' --function glX _glX
 function glX
     string replace --regex '^gl' 'git log -' $argv
 end
 
-# # #
-# # local _unpushed_commits="HEAD@{push}~1..HEAD"
-# # ealias glo="git log ${_unpushed_commits}"
-# # ealias glp="git log --patch ${_unpushed_commits}" # include patch (diff)
-# # for i in {1..10}; do ealias glp$i="git log --patch -$i"; done # last N commits # !FISHISSUE abbr+regex!
-# # ealias gls="git log --stat ${_unpushed_commits}" # summary of file changes
-# # for i in {1..10}; do ealias gls$i="git log --stat -$i"; done # last N commits # !FISHISSUE abbr+regex!
-# # ealias glg="git log --graph ${_unpushed_commits}" # graph of changes
+set -l _unpushed_commits "HEAD@{push}~1..HEAD"
+ealias glo="git log $_unpushed_commits"
+#
+# w/ patch (diff)
+ealias glp="git log --patch $_unpushed_commits" 
+abbr --regex 'glp\d+' --function glpX _glpX
+function glpX
+    string replace --regex '^glp' 'git log --patch -' $argv
+end
+#
+# w/ stat (files)
+ealias gls="git log --stat $_unpushed_commits" 
+abbr --regex 'gls\d+' --function glsX _glsX
+function glsX
+    string replace --regex '^gls' 'git log --stat -' $argv
+end
+#
+# graph
+ealias glg="git log --graph $_unpushed_commits" 
 
 # # # tracked branch
 # # function git_current_branch() {
