@@ -1,0 +1,6 @@
+## Review
+- drop shebang
+- look for variable definitions (zsh/fish not compat)
+  - also functions and for loops => not compat
+- cleanup / format entire file
+- aliases use single quotes unless " needed (nice to have)
