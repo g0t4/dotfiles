@@ -1,13 +1,13 @@
 function log_info
-    echo (set_color blue) "[INFO] $argv" (set_color normal)
+    echo (set_color blue)"[INFO] $argv"(set_color normal)
 end
 
 function log_warn
-    echo (set_color cyan) "[WARN] $argv" (set_color normal)
+    echo (set_color cyan)"[WARN] $argv"(set_color normal)
 end
 
 function log_error
-    echo (set_color red) "[ERROR] $argv" (set_color normal)
+    echo (set_color red)"[ERROR] $argv"(set_color normal)
 end
 
 function log_md

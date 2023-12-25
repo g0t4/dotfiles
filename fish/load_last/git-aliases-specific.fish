@@ -65,11 +65,11 @@ end
 # ? rewrite as `dotfiles gst/gcmsg/etc` and repeat command in both spots! would need to define -g aliases (yucky)
 function gstdotfiles
 
-    echo (set_color blue) 'git status of dotfiles:' (set_color normal)
+    log_info "git status of dotfiles:"
     git -C $WES_DOTFILES status
 
-    echo
-    echo (set_color blue) 'git status of bootstrap:' (set_color normal)
+    log_blankline
+    log_info "git status of bootstrap:"
     git -C $WES_BOOTSTRAP status
 
     cd $WES_DOTFILES
