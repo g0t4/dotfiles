@@ -3,13 +3,12 @@ abbr --set-cursor='!' gcmsg 'git commit -m "!"'
 abbr --set-cursor='!' gcam 'git commit -a -m "!"'
 
 
-ealias glf='git log'
 
 # # for i in {1..10}; do ealias gl$i="git log -$i"; done # last N commits # !FISHISSUE => use abbr + regex + func to expand this to any number and not need a loop! # split zsh specific loop out and keep in zsh files only
-# # abbr --regex 'gl\d+' --function glX
-# # function glX
-# #   string replace --regex '^gl' 'git log -' $argv
-# # end
+abbr --regex 'gl\d+' --function glX _glX # TODO why do I need _glX? isn't regex doing the same thing => read docs on why
+function glX
+    string replace --regex '^gl' 'git log -' $argv
+end
 
 # # #
 # # local _unpushed_commits="HEAD@{push}~1..HEAD"
