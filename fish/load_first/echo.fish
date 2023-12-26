@@ -83,9 +83,7 @@ function log_ --description 'echo + set_color'
     # apple colors
     # https://developer.apple.com/design/human-interface-guidelines/color#iOS-iPadOS-system-colors
     # https://developer.apple.com/design/human-interface-guidelines/color#macOS-system-colors
-    # ok I am going to try accessible dark b/c its a bit less vibrant, but I still really like default light palette
-    #   PRN try default dark palette
-    #   PRN could add toggle for which subpallete to use! (would be nice to compare the colors in a table... in my copious free time)
+    #   default dark ~= default light! ... accessible dark good for not as bright
     # FYI hex values are converted from RGB/int (apple.com site above) using chatgpt (it used python to convert so s/b good)
     # using macOS colors below (FYI iOS differences are marked if the color differs)
     if set -q _flag_apple_red
