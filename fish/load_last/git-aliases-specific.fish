@@ -74,17 +74,15 @@ function dotgst
 
 end
 
-function dotgcm --description "commit both w/ message"
+function dotgcm --description "commit staged changes w/ message"
 
     # ensure message is provided:
     argparse --min 1 -- $argv || return 1
     set --local message $argv
 
+    # commit staged changes
     git -C $WES_DOTFILES commit -m $message
-    read || return # check after
-    # TODO git add subs/dotfiles after its committed => 
-    git -C $WES_BOOTSTRAP add subs/dotfiles
-    read || return # check after
+    git -C $WES_BOOTSTRAP add subs/dotfiles # after committing dotfiles, add the commit change to bootstrap (super module)
     git -C $WES_BOOTSTRAP commit -m $message
 end
 
