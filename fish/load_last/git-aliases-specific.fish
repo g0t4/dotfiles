@@ -75,6 +75,14 @@ function dotgsl --description "gst; glo"
     log_blankline
     dotgst
 end
+function dotglo --description "log HEAD@{push}~1..HEAD"
+    _dot_both log HEAD@{push}~1..HEAD
+end
+
+# workflow: dotgap => dotgsl => dotgcm => dotgp
+function dotgap --description "add --patch"
+    _dot_both add --patch
+end
 
 function dotgcm --description "commit staged changes w/ message"
 
@@ -91,21 +99,12 @@ end
 function dotgp --description push
     _dot_both push
 end
-
 function dotgl --description pull
     _dot_both pull
 end
 
 function dotgrsh --description "reset --soft HEAD~1"
     _dot_both reset --soft HEAD~1
-end
-
-function dotglo --description "log HEAD@{push}~1..HEAD"
-    _dot_both log HEAD@{push}~1..HEAD
-end
-
-function dotgap --description "add --patch"
-    _dot_both add --patch
 end
 
 function dotgdlc --description "log --patch HEAD~1..HEAD"
