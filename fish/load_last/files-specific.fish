@@ -38,8 +38,8 @@ end
 #
 #
 # ! TODO MOVE TO files-specific.fish/zsh when done
-# TODO - do I want cdn? it is fine for now ealias cdn="cd_to_dir_of"
-function cd_to_dir_of
+# TODO - do I want cdn? it is fine for now ealias cdn="cd_dir_of"
+function cd_dir_of
     set -l _type_type $(type --type $argv)
     echo "$_type_type"
     # NOTE: this isn't strictly necessary but I like to see the type :)
@@ -70,22 +70,22 @@ function cd_to_dir_of
     end
 
     # note I could match a regex group with grep to avoid space but meh
-    cd_to_dir_of_file $_type
+    cd_dir_of_file $_type
 end
 
 # cd to the dir that houses a command (follow symlinks)
-function cd_to_dir_of_command
+function cd_dir_of_command
     # FYI: this is not 100% same as cdn b/c an alias can take precedence over a command and thus wins out with whence -v (in cdn) but =foo implies first matching command (not aliases,etc) so this would help me cd to command even if it's not first in path to handle a given name... not sure if that's good or bad?
     # ! TODO why did I have this again?
-    cd_to_dir_of_file (type --path $argv) #=foo
+    cd_dir_of_file (type --path $argv) #=foo
 end
 
-ealias cdc="cd_to_dir_of_command"
+ealias cdc="cd_dir_of_command"
 
 # if I pass file to cd it should just go to folder of file
 # dereferences symlinks (super useful for the spaghetti from brew installs)
 # test with: `cdd =python3.11`
-function cd_to_dir_of_file
+function cd_dir_of_file
     # TODO PRN: feels like I should be able to combine this into cdn paradigm (along with cdc)
     #   TODO: if so, use `cdd` for the command as I like that
     set -l _cd_path $argv
@@ -115,4 +115,4 @@ function cd_to_dir_of_file
 
     log_md "cd $(pwd)"
 end
-ealias cdd="cd_to_dir_of_file "
+ealias cdd="cd_dir_of_file "

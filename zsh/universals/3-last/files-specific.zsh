@@ -21,8 +21,8 @@ function take() {
 }
 
 #
-# TODO - do I want cdn? it is fine for now ealias cdn="cd_to_dir_of"
-cd_to_dir_of() {
+# TODO - do I want cdn? it is fine for now ealias cdn="cd_dir_of"
+cd_dir_of() {
   local _type=$(whence -w "$@")
   echo "${_type}"
   # NOTE: this isn't strictly necessary but I like to see the type :)
@@ -53,22 +53,22 @@ cd_to_dir_of() {
   fi
 
   # note I could match a regex group with grep to avoid space but meh
-  cd_to_dir_of_file $(echo $_whencev | tr -d ' ')
+  cd_dir_of_file $(echo $_whencev | tr -d ' ')
 }
 
 # cd to the dir that houses a command (follow symlinks)
-cd_to_dir_of_command() {
+cd_dir_of_command() {
   # FYI: this is not 100% same as cdn b/c an alias can take precedence over a command and thus wins out with whence -v (in cdn) but =foo implies first matching command (not aliases,etc) so this would help me cd to command even if it's not first in path to handle a given name... not sure if that's good or bad?
-  cd_to_dir_of_file =${1}
+  cd_dir_of_file =${1}
   #! FISH impl =CMD abbreviation expansion
 }
 
-ealias cdc="cd_to_dir_of_command"
+ealias cdc="cd_dir_of_command"
 
 # if I pass file to cd it should just go to folder of file
 # dereferences symlinks (super useful for the spaghetti from brew installs)
 # test with: `cdd =python3.11`
-cd_to_dir_of_file() {
+cd_dir_of_file() {
   # TODO PRN: feels like I should be able to combine this into cdn paradigm (along with cdc)
   #   TODO: if so, use `cdd` for the command as I like that
   local _cd_path="$@"
@@ -97,4 +97,4 @@ cd_to_dir_of_file() {
 
   log_md "cd $(pwd)"
 }
-ealias cdd="cd_to_dir_of_file "
+ealias cdd="cd_dir_of_file "
