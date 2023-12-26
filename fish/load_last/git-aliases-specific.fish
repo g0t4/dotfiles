@@ -86,6 +86,9 @@ end
 function dotgap --description "add --patch"
     _dot_both add --patch
 end
+function dotgrp --description "restore --patch"
+    _dot_both restore --patch
+end
 
 function dotgcm --description "commit staged changes w/ message"
 
