@@ -9,8 +9,8 @@ ealias icg="git-icdiff"
 # configure git-icdiff via git config: git config --global icdiff.options '--line-numbers'
 # thanks to expanding alises + zsh param expansion => it's clear what will happen (ie commands will be re-run)... essentially saves copy/paste previous two commands into icdiff <(cmd1) <(cmd2) format"
 # - i.e. `echo foo` then `echo bar` results in: `icdiff <(echo foo) <(echo foobar)`
-# ealias diff_last_two_commands='icdiff -L "$history[-2]" $(!-2) -L "!-1" $(!-1)'
 function diff_last_two_commands
+    # PRN diff_last_two_rerun => if need to re-run comparison (save two cmds to local vars in this file and can re-run then!)
     set tmp_a (mktemp)
     set tmp_b (mktemp)
 
