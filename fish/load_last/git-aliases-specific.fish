@@ -65,8 +65,15 @@ end
 ## bootstrap git helpers
 #
 
+# high level status of both repos:
 function dotgst
     _dot_both status
+end
+function dotgsl --description "gst; glo"
+    # * PREFER this long term will save time!
+    dotglo
+    log_blankline
+    dotgst
 end
 
 function dotgcm --description "commit staged changes w/ message"
@@ -106,11 +113,6 @@ function dotgdlc --description "log --patch HEAD~1..HEAD"
 end
 # PRN dotgdlcX
 # PRN dotglX
-function dotgsl --description "gst && echo && glo"
-    dotglo
-    log_blankline
-    dotgst
-end
 
 function dotgdc --description "diff --cached"
     _dot_both diff --cached --word-diff=color
@@ -123,11 +125,11 @@ end
 function _dot_both
     set -l cmd $argv
 
-    log_header "dotfiles:"
+    log_header "DOTFILES:"
     PAGER= git -C $WES_DOTFILES $cmd
 
     log_blankline
-    log_header "bootstrap:"
+    log_header "BOOTSTRAP:"
     PAGER= git -C $WES_BOOTSTRAP $cmd
 end
 # PRN gcan! to modify both?! if I feel that I need this
