@@ -90,58 +90,71 @@ function log_ --description 'echo + set_color'
     # using macOS colors below (FYI iOS differences are marked if the color differs)
     if set -q _flag_apple_red
         # set color FF3B30 # default light
-        set color FF6961 # accessible dark
+        # set color FF6961 # accessible dark
+        set color FF453A # default dark
     end
     if set -q _flag_apple_orange
         # set color FF9500 # default light
-        set color FFB340 # accessible dark
+        # set color FFB340 # accessible dark
+        set color ff9f0a # default dark
     end
     if set -q _flag_apple_yellow
         # set color FFCC00 # default light
-        set color FFD426 # accessible dark
+        # set color FFD426 # accessible dark
+        set color ffd60a # default dark
     end
     if set -q _flag_apple_green
         # set color 28CD41 # default light
-        set color 31DE4B # accessible dark
+        # set color 31DE4B # accessible dark
+        set color 32d74b # default dark
         # iOS: 34C759
     end
     if set -q _flag_apple_mint
         # set color 00C7BE # default light
-        set color 66D4CF # accessible dark
+        # set color 66D4CF # accessible dark
+        set color 66d4cf # default dark
     end
     if set -q _flag_apple_teal
         # set color 59ADC4 # default light
-        set color 5DE6FF # accessible dark
+        # set color 5DE6FF # accessible dark
+        set color 6ac4dc # default dark
         # iOS: 30B0C7
     end
     if set -q _flag_apple_cyan
         # set color 55BEF0 # default light
-        set color 70D7FF # accessible dark
+        # set color 70D7FF # accessible dark
+        set color 5ac8f5 # default dark
         # iOS: 32ADE6
     end
     if set -q _flag_apple_blue
         # set color 007AFF # default light
-        set color 409CFF # accessible dark
+        # set color 409CFF # accessible dark
+        set color 0a84ff # default dark
     end
     if set -q _flag_apple_indigo
         # set color 5856D6 # default light
-        set color 7D7AFF # accessible dark
+        # set color 7D7AFF # accessible dark
+        set color 5e5ce6 # default dark
     end
     if set -q _flag_apple_purple
         # set color AF52DE # default light
-        set color DA8FFF # accessible dark
+        # set color DA8FFF # accessible dark
+        set color bf5af2 # default dark
     end
     if set -q _flag_apple_pink
         # set color FF2D55 # default light
-        set color FF6482 # accessible dark
+        # set color FF6482 # accessible dark
+        set color ff375f # default dark
     end
     if set -q _flag_apple_brown
         # set color A2845E # default light
-        set color B59469 # accessible dark
+        # set color B59469 # accessible dark
+        set color ac8e68 # default dark
     end
     if set -q _flag_apple_gray
         # set color 8E8E93 # default light
-        set color 98989D # accessible dark
+        # set color 98989D # accessible dark
+        set color 98989d # default dark
         # iOS: doesn't have gray
     end
     # PRN add grayscale colors: https://developer.apple.com/design/human-interface-guidelines/color#iOS-iPadOS-system-gray-colors
