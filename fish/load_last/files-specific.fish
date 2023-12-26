@@ -34,7 +34,7 @@ end
 
 
 
-## cd helpers
+## cd_dir_of helpers
 #
 # zsh's =cmd expansion as fish abbreviation!
 #   =fish => /opt/homebrew/bin/fish
@@ -74,4 +74,4 @@ function cd_dir_of_path
 
     log_ --apple_white "cd $(pwd)"
 end
-ealias cdd="cd_dir_of_path "
+ealias cdd="cd_dir_of_path"
