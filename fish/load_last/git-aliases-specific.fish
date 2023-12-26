@@ -112,7 +112,15 @@ function dotgdlc --description "log --patch HEAD~1..HEAD"
     _dot_both log --patch HEAD~1..HEAD
 end
 # PRN dotgdlcX
-# PRN dotglX
+
+# expand `dotglX` => `dotgl -X`
+abbr --add dotglX --regex 'dotgl\d+' --function dotglX
+function dotglX
+    string replace --regex '^dotgl' 'dotgl -' $argv
+end
+function dotgl --description "log -X"
+    _dot_both log $argv
+end
 
 function dotgdc --description "diff --cached"
     _dot_both diff --cached --word-diff=color
