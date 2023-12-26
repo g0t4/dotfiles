@@ -61,17 +61,12 @@ function _repo_root
 
 end
 
-## bootstrap git helpers (WIP, not sure what these will settle into just yet)
-# ? rewrite as `dotfiles gst/gcmsg/etc` and repeat command in both spots! would need to define -g aliases (yucky)
+
+## bootstrap git helpers
+#
+
 function dotgst
-
-    log_info "git status of dotfiles:"
-    git -C $WES_DOTFILES status
-
-    log_blankline
-    log_info "git status of bootstrap:"
-    git -C $WES_BOOTSTRAP status
-
+    _dot_both status
 end
 
 function dotgcm --description "commit staged changes w/ message"
@@ -109,6 +104,13 @@ end
 function dotgdlc --description "log --patch HEAD~1..HEAD"
     _dot_both log --patch HEAD~1..HEAD
 end
+# PRN dotgdlcX
+# PRN dotglX
+function dotgsl --description "gst && echo && glo"
+    dotglo
+    log_blankline
+    dotgst
+end
 
 function dotgdc --description "diff --cached"
     _dot_both diff --cached --word-diff=color
@@ -121,11 +123,11 @@ end
 function _dot_both
     set -l cmd $argv
 
-    log_info "dotfiles:"
+    log_header "dotfiles:"
     PAGER= git -C $WES_DOTFILES $cmd
 
     log_blankline
-    log_info "bootstrap:"
+    log_header "bootstrap:"
     PAGER= git -C $WES_BOOTSTRAP $cmd
 end
 # PRN gcan! to modify both?! if I feel that I need this

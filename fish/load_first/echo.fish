@@ -1,3 +1,5 @@
+# FYI `set_color  --print-colors` to see actual colors
+
 function log_info
     echo (set_color blue)"[INFO] $argv"(set_color normal)
 end
@@ -16,4 +18,8 @@ end
 
 function log_blankline
     echo ""
+end
+
+function log_header
+    echo (set_color --bold yellow)"$argv"(set_color normal)
 end
