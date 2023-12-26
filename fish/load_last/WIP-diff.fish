@@ -14,10 +14,13 @@ ealias diff_last_two_commandsEQUALS='icdiff -L "!-2" =(!-2) -L "!-1" =(!-1)'
 # TODO !-X doesn't work in fish OOB, add it!
 # !FISH PORT (useful!) # see https://fishshell.com/docs/current/relnotes.html => search for !! example
 
-# function last_history_item; echo $history[1]; end
-# abbr -a !! --position anywhere --function last_history_item
-
 function last_history_item
     echo $history[1]
 end
-abbr -a !- --regex '\!\-\d+' --position anywhere --function last_history_item
+abbr -a !! --position anywhere --function last_history_item
+
+function expand_history_item_X
+    set -l history_num (string replace '!-' '' $argv)
+    echo $history[$history_num]
+end
+abbr --add bangbang --regex '\!\-\d+' --position anywhere --function expand_history_item_X
