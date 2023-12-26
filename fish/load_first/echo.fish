@@ -83,70 +83,71 @@ function log_ --description 'echo + set_color'
     # apple colors
     # https://developer.apple.com/design/human-interface-guidelines/color#iOS-iPadOS-system-colors
     # https://developer.apple.com/design/human-interface-guidelines/color#macOS-system-colors
-    #   PRN vibrant or light/dark variations instead? dark might look good
+    # ok I am going to try accessible dark b/c its a bit less vibrant, but I still really like default light pallette
+    #   PRN try default dark pallette
     # FYI hex values are converted from RGB/int (apple.com site above) using chatgpt (it used python to convert so s/b good)
     # using macOS colors below (FYI iOS differences are marked if the color differs)
     if set -q _flag_apple_red
-        set color FF3B30
-        # macos dark: FF6961
+        # set color FF3B30 # default light
+        set color FF6961 # accessible dark
     end
     if set -q _flag_apple_orange
-        set color FF9500
-        # macos dark: FFB340
+        # set color FF9500 # default light
+        set color FFB340 # accessible dark
     end
     if set -q _flag_apple_yellow
-        set color FFCC00
-        # macos dark: FFD426
+        # set color FFCC00 # default light
+        set color FFD426 # accessible dark
     end
     if set -q _flag_apple_green
-        set color 28CD41
-        # macos dark: 31DE4B
+        # set color 28CD41 # default light
+        set color 31DE4B # accessible dark
         # iOS: 34C759
     end
     if set -q _flag_apple_mint
-        set color 00C7BE
-        # macos dark: 66D4CF
+        # set color 00C7BE # default light
+        set color 66D4CF # accessible dark
     end
     if set -q _flag_apple_teal
-        set color 59ADC4
+        # set color 59ADC4 # default light
+        set color 5DE6FF # accessible dark
         # iOS: 30B0C7
-        # macos dark: 5DE6FF
     end
     if set -q _flag_apple_cyan
-        set color 55BEF0
-        # macos dark: 70D7FF
+        # set color 55BEF0 # default light
+        set color 70D7FF # accessible dark
         # iOS: 32ADE6
     end
     if set -q _flag_apple_blue
-        set color 007AFF
-        # macos dark: 409CFF
+        # set color 007AFF # default light
+        set color 409CFF # accessible dark
     end
     if set -q _flag_apple_indigo
-        set color 5856D6
-        # macos dark: 7D7AFF
+        # set color 5856D6 # default light
+        set color 7D7AFF # accessible dark
     end
     if set -q _flag_apple_purple
-        set color AF52DE
-        # macos dark: DA8FFF
+        # set color AF52DE # default light
+        set color DA8FFF # accessible dark
     end
     if set -q _flag_apple_pink
-        set color FF2D55
-        # macos dark: FF6482
+        # set color FF2D55 # default light
+        set color FF6482 # accessible dark
     end
     if set -q _flag_apple_brown
-        set color A2845E
-        # macos dark: B59469
+        # set color A2845E # default light
+        set color B59469 # accessible dark
     end
     if set -q _flag_apple_gray
-        set color 8E8E93
-        # macos dark: 98989D
+        # set color 8E8E93 # default light
+        set color 98989D # accessible dark
         # iOS: doesn't have gray
     end
     # PRN add grayscale colors: https://developer.apple.com/design/human-interface-guidelines/color#iOS-iPadOS-system-gray-colors
     if set -q _flag_apple_white
         # not a real white in the linked palletes, I chose a light gray as a white since I was a genious in using magenta for white in my terminal color scheme :)... I should put that back... lol
-        set color F2F2F7
-        # from systemGray6
+        set color F2F2F7 # default light systemGray6
+        # not using accessible dark cuz its dark gray
     end
 
     set -l message $argv
