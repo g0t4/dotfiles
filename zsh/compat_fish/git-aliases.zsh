@@ -186,3 +186,16 @@ ealias kgdc="git diff --cached" # common typo alias (cmd+k clear => kgst)
 ealias gdlf='git diff-tree -r HEAD~1 HEAD'
 #
 ealias dsf='diff-so-fancy'
+
+## LFS
+#
+ealias lfs="git lfs"
+ealias lfsi="git lfs install"
+ealias lfsls="git lfs ls-files"
+ealias lfsm="git lfs migrate"
+ealias lfspr="git lfs prune"
+ealias lfsst="git lfs status"
+ealias lfst="git lfs track '*.EXT"
+ealias lfsup="git lfs update"
+ealias lfsut="git lfs untrack '*.EXT"
+ealias lfsv="git lfs version"
