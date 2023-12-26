@@ -15,3 +15,7 @@ done
 
 # ! TODO move other file related ZSH SPECIFIC helpers here
 # ! ie omz-lib-directories.zsh
+
+function take() {
+  mkdir -p $@ && cd ${@:$#}
+}

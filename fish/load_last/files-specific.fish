@@ -26,3 +26,6 @@ function _reload_config
     source ~/.config/fish/config.fish
 end
 
+function take
+    mkdir -p $argv && cd $argv
+end
