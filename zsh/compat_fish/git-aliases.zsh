@@ -10,7 +10,7 @@ ealias g='git'
 
 # status
 ealias gst='git status'
-ealias gsl='gst && echo && glo' # * try
+ealias gsl='gst && echo && glo' # * try # FYI requires gst/glo aliases(funcs) to work
 ealias gstg='git status' # common typo
 ealias kgst='git status' # common typo alias (cmd+k clear => kgst)
 ealias gss='git status -s'

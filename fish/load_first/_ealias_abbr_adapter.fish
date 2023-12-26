@@ -37,6 +37,7 @@ function ealias --description "map ealias to fish abbr(eviation)"
 
     # register to expand (when typed)
     abbr --position $position --add $aliasname $alias_value
+    #
     # register to execute (i.e. when used in a function, such as `gsl`=>`glo; gst`)
 
     # problematic abbreviations to alias:
@@ -47,13 +48,15 @@ function ealias --description "map ealias to fish abbr(eviation)"
         # my global aliases that are `| foo` are problems for whatever fish does to make func out of alias
         return
     end
-    # if alias has only one " then it chokes, so far that was b/c of a mistake in my aliasdef
-    #   dilsaj/dilsj => can change this to show issue, drop second " and it fails
-    # AVOID reserved names as alias names ;) => and/or were both defined in zsh files ;)
 
-    # PRN start out with just g (git) aliases as these are the most common to reuse as command position (in func / other aliases)
-    #if string match -q -r '^g' $aliasname
+    # FYI alias failure causes:
+    # - alias value has odd number of " (something to do with how alias is a wrapper to create a function)
+    # - alias name is reserved word
+    if test $_flag_g
+        # skip global aliases (don't make sense in command position anyways, derp wes)
+        #  and I don't see a need to use them in a function in another position (would be confusing to read)
+        # - global aliases like byml=`| bat -l yml` (doesn't make sense in command position anyways)
+        return
+    end
     alias $aliasname $alias_value
-    # FYI for global ealias => just need these to work in command position for now, later if I need a global alias like zsh has then I can find out if fish supports that
-    #end
 end
