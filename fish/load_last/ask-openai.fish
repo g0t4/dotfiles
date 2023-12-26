@@ -16,29 +16,27 @@ function ask_openai
     set -l exit_code $status
     if test $exit_code -eq 2
         commandline --replace "[CONTEXT]: $response"
+        # FYI other causes rc=2 print as context (i.e. wrong path to python script, NBD as error shows anyways)
     else if test $exit_code -ne 0
         commandline --replace "[FAIL]: $response"
     else
         commandline --replace $response
     end
+    # FYI ctrl+z can undo replacment
 
     # `fish_commandline_append` doesn't use repaint, so I assume I don't need to
 end
 
+# how does fish handle multiple registrations? does last one win? is it an issue that \cb is preset bound to backward-char?
 bind \cb ask_openai
-# FYI \ch # ctrl+h is unused in fish (IIUC from reading bind output), `h` would be ok to use too (help)
 
 ## NOTES
-# FYI:
-#   `fish_commandline_append` => appends to buffer (read that impl to learn how its done)
-
-# `fish_key_reader` to find a given key combo => \ce
-# `bind --function-names` list speical funcs
-#   `bind -L` => list modes
-#   `bind` => list bindings (add -a for all)
-#   `bind \cb` => show what is bound to key sequence
-#       `bind ''` => self-insert (types key) (default key binding if seq not bound)
-#       `bind ' '` => space => self-insert & expand-abbr
-#            appears that multiple bindings can apply to a given key seq (IIUC registered via separate calls to bind, or multiple commands passed to singe bind call)
+# `fish_key_reader` to find a given key combo => type Ctrl+e => shows \ce
+# `bind --function-names` list special funcs
+#   https://fishshell.com/docs/current/cmds/bind.html#special-input-functions
+# `bind -L` => list modes
 #   `default` mode unless -M/-m passed
-#   special input funcs: https://fishshell.com/docs/current/cmds/bind.html#special-input-functions
+# `bind` => list bindings (add -a for all)
+# `bind \cb` => show what is bound to key sequence
+#   `bind ''` => self-insert (types key) (default key binding if seq not bound)
+#   `bind ' '` => space => self-insert & expand-abbr
