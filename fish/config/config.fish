@@ -70,6 +70,7 @@ end
 # - history
 #   up/down filters on prefix already typed
 #       - also shows fuzzy matches in the middle of history commands (TODO look up behavior of this)
+#         => really like w/ dotX aliases, i can type gst (as always) and up arrow pulls back `dotgst` if I last used it! yes! same w/ gsl=>UP=>dotgsl,glo etc
 # - fish line editor (name?)
 #   `type up-or-search` shows 'widget (name?)' impl colorized
 # - variables are not split on interpolation! 
