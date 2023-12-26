@@ -124,7 +124,7 @@ ealias dii='docker image inspect'
 ealias dils='grc docker image ls'
 ealias dilsa='grc docker image ls --all'
 ealias dilsj='grc docker image ls --format "{{json .}}" | jq'
-ealias dilsaj='docker image ls --all --format "{{json .}} | jq'
+ealias dilsaj='docker image ls --all --format "{{json .}}" | jq'
 #
 ealias dipr='docker image prune'
 ealias dipull='docker image pull'

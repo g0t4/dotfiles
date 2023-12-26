@@ -41,13 +41,14 @@ function ealias --description "map ealias to fish abbr(eviation)"
 
     # problematic abbreviations to alias:
     # seems like alias is a helper to build a function? and its failing when value is complex (ie has | or '" quotes)
+    #  => `type alias` => here we go! it is a function!
     # TODO build function directly? this appears to be quoting issue
     if string match -q -r '^\s*\|' $alias_value
+        # my global aliases that are `| foo` are problems for whatever fish does to make func out of alias
         return
     end
-    if string match -q -r '[\'\"]' $alias_value
-        return
-    end
+    # if alias has only one " then it chokes, so far that was b/c of a mistake in my aliasdef
+    #   dilsaj/dilsj => can change this to show issue, drop second " and it fails
 
     # PRN start out with just g (git) aliases as these are the most common to reuse as command position (in func / other aliases)
     #if string match -q -r '^g' $aliasname
