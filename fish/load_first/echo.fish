@@ -42,8 +42,27 @@ function log_ --description 'echo + set_color'
         apple_red apple_orange apple_yellow apple_green apple_mint apple_teal \
         apple_cyan apple_blue apple_indigo apple_purple apple_pink apple_brown \
         apple_gray \
+        # troubleshoot
+        print-colors \
         -- $argv
     or return
+    if set -q _flag_print_colors
+        # TODO I like this bold/yellow for headers!
+        # TODO track indent in this logging framework or with another set of funcs?
+        log_ --yellow --bold "terminal color scheme:"
+        for c in black blue cyan green magenta red white yellow
+            # FYI side by side makes it easier to see bright difference! it is subtle, so yes this is mapping to my iTerm2 colors (or win term)
+            echo (set_color $c) "  $c "(set_color "br$c") "  br$c"(set_color normal)
+        end
+
+
+        log_blankline
+        log_ --yellow --bold "apple colors:"
+        for a in apple_red apple_orange apple_yellow apple_green apple_mint apple_teal apple_cyan apple_blue apple_indigo apple_purple apple_pink apple_brown apple_gray
+            log_ --$a "  $a"
+        end
+        return
+    end
 
     set -l style
     set -l color ""
@@ -54,8 +73,6 @@ function log_ --description 'echo + set_color'
             # last color wins
         end
     end
-    # FYI brX don't appear brighter
-    #   TODO do I need to initialize colors in fish shell? (looks like maybe just brights aren't set to iterm2 bright settings?)
 
     for s in bold italic underline dim background reverse
         if set -q _flag_$s
@@ -113,7 +130,7 @@ function log_ --description 'echo + set_color'
 
     set -l message $argv
 
-    echo (eval "set_color $style $color") $message (set_color normal)
+    echo (eval "set_color $style $color")$message(set_color normal)
 end
 
 # * completions
@@ -129,3 +146,4 @@ end
 for a in apple_red apple_orange apple_yellow apple_green apple_mint apple_teal apple_cyan apple_blue apple_indigo apple_purple apple_pink apple_brown apple_gray
     complete -c log_ -l $a
 end
+complete -c log_ -l print-colors -d "print all colors"
