@@ -1,3 +1,6 @@
+#
+# *** FYI due to command substitution and history expansion differences, this is currently only applicable to fish (not zsh)
+
 # icdiff
 # PRN export ICDIFF_OPTIONS="--highlight" # FYI highlight is not an automatically wise idea to use, it loses some of value of icdiff (I do like it for ffmpeg and mediainfo output that is often very similar except for a few fields, so then the background color stands out much more than text color alone... might indicate I shouldn't use yellow for white too ;)  )
 ealias ic="icdiff -H"
@@ -10,3 +13,11 @@ ealias diff_last_two_commands='icdiff -L "!-2" <(!-2) -L "!-1" <(!-1)'
 ealias diff_last_two_commandsEQUALS='icdiff -L "!-2" =(!-2) -L "!-1" =(!-1)'
 # TODO !-X doesn't work in fish OOB, add it!
 # !FISH PORT (useful!) # see https://fishshell.com/docs/current/relnotes.html => search for !! example
+
+# function last_history_item; echo $history[1]; end
+# abbr -a !! --position anywhere --function last_history_item
+
+function last_history_item
+    echo $history[1]
+end
+abbr -a !- --regex '\!\-\d+' --position anywhere --function last_history_item
