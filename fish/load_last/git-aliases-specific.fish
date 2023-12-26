@@ -80,6 +80,9 @@ function dotglo --description "log HEAD@{push}~1..HEAD"
 end
 
 # workflow: dotgap => dotgsl => dotgcm => dotgp
+function dotgaa --description "add --all"
+    _dot_both add --all
+end
 function dotgap --description "add --patch"
     _dot_both add --patch
 end
