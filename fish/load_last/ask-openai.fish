@@ -39,3 +39,4 @@ function ask_openai
 end
 
 bind \cb ask_openai
+# FYI \ch # ctrl+h is unused in fish (IIUC from reading bind output), `h` would be ok to use too (help)
