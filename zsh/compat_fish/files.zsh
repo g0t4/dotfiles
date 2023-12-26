@@ -2,7 +2,7 @@
 ealias cdr='cd "$(_repo_root)"' # * favorite
 
 ## open
-ealias or='open "$(_repo_root)"'
+ealias orr='open "$(_repo_root)"' # can't use `or` in fish :)
 ealias oh='open .'
 
 ####### vscode aliases:
