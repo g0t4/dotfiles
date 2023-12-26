@@ -111,7 +111,7 @@ end
 function dotgdlc --description "log --patch HEAD~1..HEAD"
     _dot_both log --patch HEAD~1..HEAD
 end
-# PRN dotgdlcX
+# PRN dotgdlcX => a bit more involved (need to compute commit range) => add when it feels useful
 
 # expand `dotglX` => `dotgl -X`
 abbr --add dotglX --regex 'dotgl\d+' --function dotglX
