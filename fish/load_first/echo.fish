@@ -83,8 +83,8 @@ function log_ --description 'echo + set_color'
     # apple colors
     # https://developer.apple.com/design/human-interface-guidelines/color#iOS-iPadOS-system-colors
     # https://developer.apple.com/design/human-interface-guidelines/color#macOS-system-colors
-    # ok I am going to try accessible dark b/c its a bit less vibrant, but I still really like default light pallette
-    #   PRN try default dark pallette
+    # ok I am going to try accessible dark b/c its a bit less vibrant, but I still really like default light palette
+    #   PRN try default dark palette
     # FYI hex values are converted from RGB/int (apple.com site above) using chatgpt (it used python to convert so s/b good)
     # using macOS colors below (FYI iOS differences are marked if the color differs)
     if set -q _flag_apple_red
@@ -145,7 +145,7 @@ function log_ --description 'echo + set_color'
     end
     # PRN add grayscale colors: https://developer.apple.com/design/human-interface-guidelines/color#iOS-iPadOS-system-gray-colors
     if set -q _flag_apple_white
-        # not a real white in the linked palletes, I chose a light gray as a white since I was a genious in using magenta for white in my terminal color scheme :)... I should put that back... lol
+        # not a real white in the linked palette, I chose a light gray as a white since I was a genious in using magenta for white in my terminal color scheme :)... I should put that back... lol
         set color F2F2F7 # default light systemGray6
         # not using accessible dark cuz its dark gray
     end
