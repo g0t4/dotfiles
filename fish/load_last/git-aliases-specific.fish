@@ -88,61 +88,35 @@ function dotgcm --description "commit both w/ message"
     git -C $WES_BOOTSTRAP commit -m $message
 end
 
-function dotgp --description "push dotfiles and bootstrap"
-    git -C $WES_DOTFILES push
-    git -C $WES_BOOTSTRAP push
+function dotgp --description push
+    _dot_both push
 end
 
-function dotgl --description "push dotfiles and bootstrap"
-    git -C $WES_DOTFILES pull
-    git -C $WES_BOOTSTRAP pull
+function dotgl --description pull
+    _dot_both pull
 end
 
-function dotgrsh --description "reset soft last commit of both"
-    git -C $WES_DOTFILES reset --soft HEAD~1
-    git -C $WES_BOOTSTRAP reset --soft HEAD~1
+function dotgrsh --description "reset --soft HEAD~1"
+    _dot_both reset --soft HEAD~1
 end
 
-function dotglo
-    log_info "dotfiles:"
-    git -C $WES_DOTFILES log HEAD@{push}~1..HEAD
-
-    log_blankline
-    log_info "bootstrap:"
-    git -C $WES_BOOTSTRAP log HEAD@{push}~1..HEAD
-
+function dotglo --description "log HEAD@{push}~1..HEAD"
+    _dot_both log HEAD@{push}~1..HEAD
 end
 
-function dotgap
-
-    git -C $WES_DOTFILES add --patch
-    git -C $WES_BOOTSTRAP add --patch
-
+function dotgap --description "add --patch"
+    _dot_both add --patch
 end
 
-function dotgdlc
-
-    log_info "dotfiles:"
-    PAGER= git -C $WES_DOTFILES log --patch HEAD~1..HEAD
-
-    log_blankline
-    log_info "bootstrap:"
-    PAGER= git -C $WES_BOOTSTRAP log --patch HEAD~1..HEAD
-
+function dotgdlc --description "log --patch HEAD~1..HEAD"
+    _dot_both log --patch HEAD~1..HEAD
 end
 
-function dotgdc
-
-    log_info "dotfiles:"
-    PAGER= git -C $WES_DOTFILES diff --cached --word-diff=color
-
-    log_blankline
-    log_info "bootstrap:"
-    PAGER= git -C $WES_BOOTSTRAP diff --cached --word-diff=color
-
+function dotgdc --description "diff --cached"
+    _dot_both diff --cached --word-diff=color
 end
 
-function dotgd
+function dotgd --description diff
     _dot_both diff --word-diff=color
 end
 
@@ -150,10 +124,10 @@ function _dot_both
     set -l cmd $argv
 
     log_info "dotfiles:"
-    git -C $WES_DOTFILES $cmd
+    PAGER= git -C $WES_DOTFILES $cmd
 
     log_blankline
     log_info "bootstrap:"
-    git -C $WES_BOOTSTRAP $cmd
+    PAGER= git -C $WES_BOOTSTRAP $cmd
 end
 # PRN gcan! to modify both?! if I feel that I need this
