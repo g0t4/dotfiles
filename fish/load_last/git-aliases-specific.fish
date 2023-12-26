@@ -143,13 +143,17 @@ function dotgdc
 end
 
 function dotgd
+    _dot_both diff --word-diff=color
+end
+
+function _dot_both
+    set -l cmd $argv
 
     log_info "dotfiles:"
-    PAGER= git -C $WES_DOTFILES diff --word-diff=color
+    git -C $WES_DOTFILES $cmd
 
     log_blankline
     log_info "bootstrap:"
-    PAGER= git -C $WES_BOOTSTRAP diff --word-diff=color
-
+    git -C $WES_BOOTSTRAP $cmd
 end
 # PRN gcan! to modify both?! if I feel that I need this
