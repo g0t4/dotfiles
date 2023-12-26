@@ -84,6 +84,9 @@ end
 #    - if test/string reads so nicely! (drop verbose ; then crap)
 #       no crap about [] and [[]] and (()) yuck!!
 #       to be fair zsh can use `if test` => however it has `; then` on end of line yuck
+# - comments
+#    can have comments between line continuation lines!
+#       can't in zsh
 # CONS:
 # - abbreviations cannot be used as aliases too (like I setup in my ealias lib in zsh)... so an alias must be defined additionally else you cannot use abbreviations inside a function for example... seem to only expand in fish line editor?
 # - ?
