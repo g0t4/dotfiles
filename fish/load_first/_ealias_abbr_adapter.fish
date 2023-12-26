@@ -35,7 +35,23 @@ function ealias --description "map ealias to fish abbr(eviation)"
         set position anywhere
     end
 
+    # register to expand (when typed)
     abbr --position $position --add $aliasname $alias_value
-    # PRN define alias too so can be used in functions, etc
-    # alias --add $aliasname $alias_value # global?
+    # register to execute (i.e. when used in a function, such as `gsl`=>`glo; gst`)
+
+    # problematic abbreviations to alias:
+    # seems like alias is a helper to build a function? and its failing when value is complex (ie has | or '" quotes)
+    # TODO build function directly? this appears to be quoting issue
+    if string match -q -r '^\s*\|' $alias_value
+        return
+    end
+    if string match -q -r '[\'\"]' $alias_value
+        return
+    end
+
+    # PRN start out with just g (git) aliases as these are the most common to reuse as command position (in func / other aliases)
+    #if string match -q -r '^g' $aliasname
+    alias $aliasname $alias_value
+    # FYI for global ealias => just need these to work in command position for now, later if I need a global alias like zsh has then I can find out if fish supports that
+    #end
 end
