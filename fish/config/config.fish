@@ -79,6 +79,11 @@ end
 # - `fish --profile=file` => on exit dumps to file! awesome
 #     `fish --profile-startup=file` => after startup dumps to file
 # - argparse/fish_opt clear/concise option specs + validation (ie argparse --min 1 => warns if less than 1!)
+# - control flow
+#    - blocks all end with `end` => amen noo more esac,fi,done,etc
+#    - if test/string reads so nicely! (drop verbose ; then crap)
+#       no crap about [] and [[]] and (()) yuck!!
+#       to be fair zsh can use `if test` => however it has `; then` on end of line yuck
 # CONS:
 # - abbreviations cannot be used as aliases too (like I setup in my ealias lib in zsh)... so an alias must be defined additionally else you cannot use abbreviations inside a function for example... seem to only expand in fish line editor?
 # - ?
