@@ -6,15 +6,17 @@ function ask_openai
     set -l user_input (commandline -b)
     # https://fishshell.com/docs/current/cmds/commandline.html
 
-    # if user_input ends with space:
-    if string match --regex " \$" $user_input
-        commandline "$user_input# thinking"
-    else
-        # w/o args should overwrite buffer
-        commandline "$user_input # thinking"
-    end
-    # *** fix? appending experiences slight delay (probably until openai responds)... iss it worth bg process like zsh to get the response (if that is even a thing, fish doesn't have subshells)
+    # ** TODO can I get # thinking to show (IIAC prompt won't update until this function completes?) # not end of world if I can't show "thinking"
+    # # if user_input ends with space:
+    # if string match --regex " \$" $user_input
+    #     commandline "$user_input# thinking"
+    # else
+    #     # w/o args should overwrite buffer
+    #     commandline "$user_input # thinking"
+    # end
+
     # ! fix when last char of user input is space (suggests showing),  it causes prompt to redraw on next line (yuck), I'm not sure this is b/c suggests b/c suggestes show with file/path and if no space at end they don't mess up prompt
+    # w/o thinking.. space on end always results in prompt redrawn (even if suggestions never show)
     commandline -f repaint # ? hack => this partially fixed the prompt to fully redraw on next line and not wrap in a funky way
 
     set -l _python3 "$WESCONFIG_BOOTSTRAP/.venv/bin/python3"
