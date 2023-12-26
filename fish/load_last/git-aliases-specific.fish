@@ -82,6 +82,9 @@ function dotgcm --description "commit both w/ message"
 
     git -C $WES_DOTFILES commit -m $message
     read || return # check after
+    # TODO git add subs/dotfiles after its committed => 
+    git -C $WES_BOOTSTRAP add subs/dotfiles
+    read || return # check after
     git -C $WES_BOOTSTRAP commit -m $message
 end
 
@@ -93,6 +96,11 @@ end
 function dotgl --description "push dotfiles and bootstrap"
     git -C $WES_DOTFILES pull
     git -C $WES_BOOTSTRAP pull
+end
+
+function dotgrsh --description "reset soft last commit of both"
+    git -C $WES_DOTFILES reset --soft HEAD~1
+    git -C $WES_BOOTSTRAP reset --soft HEAD~1
 end
 
 function dotglo
@@ -131,6 +139,17 @@ function dotgdc
     log_blankline
     log_info "bootstrap:"
     PAGER= git -C $WES_BOOTSTRAP diff --cached --word-diff=color
+
+end
+
+function dotgd
+
+    log_info "dotfiles:"
+    PAGER= git -C $WES_DOTFILES diff --word-diff=color
+
+    log_blankline
+    log_info "bootstrap:"
+    PAGER= git -C $WES_BOOTSTRAP diff --word-diff=color
 
 end
 # PRN gcan! to modify both?! if I feel that I need this
