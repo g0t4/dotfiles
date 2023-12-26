@@ -99,7 +99,7 @@ function cd_dir_of_file
     # if path is a symlink then fully resolve the target (recursively)
     # echo "0: $_cd_path"
     if test -L $_cd_path
-        echo "symlink:\n   $_cd_path =>"
+        echo -e "symlink:\n   $_cd_path =>"
         set _cd_path $(readlink -f $_cd_path)
         # leaving this here as its nice to see when it happens!
         # echo " $_cd_path"
@@ -113,6 +113,6 @@ function cd_dir_of_file
         cd (dirname $_cd_path)
     end
 
-    log_md "cd $(pwd)"
+    log_ --apple_gray "cd $(pwd)"
 end
 ealias cdd="cd_dir_of_file "
