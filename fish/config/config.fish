@@ -87,10 +87,14 @@ end
 # - comments
 #    can have comments between line continuation lines!
 #       can't in zsh
+# - variables
+#   - all vars are lists (interesting, perhaps easier to reason about?)
+#   - AFAIK no concept of a dict/hash/map (I bet someone has a lib to do this with lists)
 # CONS:
 # - abbreviations cannot be used as aliases too (like I setup in my ealias lib in zsh)... so an alias must be defined additionally else you cannot use abbreviations inside a function for example... seem to only expand in fish line editor?
 # - ?
 # UNCERTAINS:
+# - which/whence in zsh take patterns (-m) => does fish have this? (haven't seen it yet in type man page) could use `functions | grep foo`?
 # - does fish have <() or =() command substitution like zsh to pass tmp file to say icdiff
 #  *** z => not fsh :( ... can I run as zsh script from fish? or is it integrated into zsh as a widget or? )
 #     TODO test: https://github.com/jethrokuan/z   (fish port)
