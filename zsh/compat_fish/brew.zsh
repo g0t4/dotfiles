@@ -1,4 +1,5 @@
 # FYI: ~/.zprofile has some brew init too (brew shellenv)
+# PRN mac only and wes/weshigbee user?
 
 export HOMEBREW_BAT=1 # for `brew cat` command, must export for brew's child process to use this
 # https://github.com/Homebrew/brew/blob/master/Library/Homebrew/env_config.rb
@@ -19,12 +20,6 @@ ealias bsvc='brew services' # list state of brew installed services (daemons)
 
 ealias bus='brew uses --eval-all' # ... depends on X
 ealias bde='brew deps' # X depends on ...
-
-############ write tasks below: require primary account
-if [[ $USER != "wes" && $USER != "weshigbee" ]]; then
-    # due to permissions, cannot modify packages installed by primary user
-    return
-fi
 
 ealias bar='brew autoremove'
 ealias bcl='brew cleanup'
