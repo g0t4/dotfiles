@@ -41,7 +41,7 @@ function log_ --description 'echo + set_color'
         # apple colors make a nice rainbow progression (look good too)
         apple_red apple_orange apple_yellow apple_green apple_mint apple_teal \
         apple_cyan apple_blue apple_indigo apple_purple apple_pink apple_brown \
-        apple_gray \
+        apple_gray apple_white \
         # troubleshoot
         print-colors \
         -- $argv
@@ -58,7 +58,7 @@ function log_ --description 'echo + set_color'
 
         log_blankline
         log_ --yellow --bold "apple colors:"
-        for a in apple_red apple_orange apple_yellow apple_green apple_mint apple_teal apple_cyan apple_blue apple_indigo apple_purple apple_pink apple_brown apple_gray
+        for a in apple_red apple_orange apple_yellow apple_green apple_mint apple_teal apple_cyan apple_blue apple_indigo apple_purple apple_pink apple_brown apple_gray apple_white
             log_ --$a "  $a"
         end
         return
@@ -142,6 +142,12 @@ function log_ --description 'echo + set_color'
         # macos dark: 98989D
         # iOS: doesn't have gray
     end
+    # PRN add grayscale colors: https://developer.apple.com/design/human-interface-guidelines/color#iOS-iPadOS-system-gray-colors
+    if set -q _flag_apple_white
+        # not a real white in the linked palletes, I chose a light gray as a white since I was a genious in using magenta for white in my terminal color scheme :)... I should put that back... lol
+        set color F2F2F7
+        # from systemGray6
+    end
 
     set -l message $argv
 
@@ -158,7 +164,7 @@ end
 for s in bold italic underline dim background reverse
     complete -c log_ -l $s -d "set_color --$s"
 end
-for a in apple_red apple_orange apple_yellow apple_green apple_mint apple_teal apple_cyan apple_blue apple_indigo apple_purple apple_pink apple_brown apple_gray
+for a in apple_red apple_orange apple_yellow apple_green apple_mint apple_teal apple_cyan apple_blue apple_indigo apple_purple apple_pink apple_brown apple_gray apple_white
     complete -c log_ -l $a
 end
 complete -c log_ -l print-colors -d "print all colors"
