@@ -75,3 +75,8 @@ function cd_dir_of_path
     log_ --apple_white "cd $(pwd)"
 end
 ealias cdd="cd_dir_of_path"
+
+# if batcat exists map to bat
+if type batcat 2>/dev/null >/dev/null
+    alias bat=batcat
+end
