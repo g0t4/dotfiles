@@ -1,0 +1,49 @@
+
+# IMAGE NAME (as docker image) # from conf.docker_ps
+regexp=\s{2,}(?:([a-z\-_0-9]+)\/)*([a-z\-_0-9]+)(:\S+)?\s{2,}\"
+colours=unchanged,yellow,bright_white,cyan
+=====
+# COMMAND ("foo") / SERVICE / PRN add created based on matching previous (otherwise probably can't disambiguate from STATUS values)
+regexp=\s+(".*")\s+(\w*)\s+
+colours=unchanged,bright_black,yellow
+# CREATED => `3 hours ago`
+
+======
+# Ip Addresses # from conf.docker_ps 
+regexp=(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})(\:)?
+colours=default,blue,default
+======
+# Ports # from conf.docker_ps
+regexp=(\d{1,5})?(-)?(\d{1,5})?(->)?(\d{1,5})(-)?(\d{1,5})?(\/)(tcp|udp)
+colours=default,bright_green,default,bright_green, default, bright_green,default,bright_green,default,cyan
+======
+
+# STATUS: 
+#   [paused | restarting | removing | running | dead | created | exited]
+#      restarting/removing seem rare? leave until needed
+#      dead I have yet to see happen (wouldn't this be exited?)
+#   `Up 13 minutes`
+#   `Up 7 seconds`
+#   `Up About a minute ago`
+# regexp=\s+(Up\s\d+\s(?:minutes|hours|seconds))
+# regexp=\s+(Up)\s(?:About|\d+)
+regexp=\s+(Up)\s
+colours=unchanged,bold green
+======
+#   `Exited (137) 3 hours ago`
+# regexp=\s+(Exited\s\(\d+\)\s\d+\s\w+\s\w+)\s
+regexp=\s+(Exited\s\(\d+\))\s
+colours=unchanged,bold red
+======
+#   `Created` => entire status is Created only
+regexp=\sCreated\s
+colours=bold yellow
+======
+#   `... (Paused)` => when paused its marked as such on end of status
+regexp=\s\(Paused\)\s
+colours=bold yellow
+
+======
+# HEADERS (underlined) => overrides prev matches with default:
+regexp=(?:\s|^)(NAME|IMAGE|COMMAND|SERVICE|CREATED|STATUS|PORTS)(?:\s|$)
+colours=default,underline

@@ -1,0 +1,26 @@
+# FYI: 
+#   (?:xxxx) is a non-captured group that can be used to match without selecting for highlighting
+#   chars outside of () use first color
+#   () matched groups use second color
+#
+## first column (NODE/NAME) => top level node (not nested builders)
+regexp=^([^\s]*)
+colours=blue
+===== 
+## * current builder node
+regexp=^([^\s]*)\s*\*
+colours=bold cyan
+=====
+## STATUSES:
+# inactive 
+regexp=inactive\s
+colours=red
+======
+# running
+regexp=running\s
+colours=green
+======
+# HEADERS (underlined)
+regexp=(?:\s|^)(NAME/NODE|DRIVER/ENDPOINT|STATUS|BUILDKIT|PLATFORMS)(?:\s|$)
+colours=default,underline
+=====

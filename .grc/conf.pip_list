@@ -1,0 +1,13 @@
+
+======
+# rows (by columns)
+regexp=(\S+)\s+(\S+)
+colours=unchanged,green,yellow
+======
+# HEADER
+regexp=(?:\s|^)(Package|Version|Latest|Type)(?:\s|$)
+colours=unchanged,bold
+=====
+# HEADER separator ----- -----
+regexp=(?:\s|^)(----*)\s+(----*)
+colours=unchanged,bold,bold

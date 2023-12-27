@@ -1,0 +1,7 @@
+# HEADERS
+regexp=(?:\s|^)(DRIVER|VOLUME NAME)(?:\s|$)
+colours=default,underline
+-
+# Line (colors for col1 and col2) => dont match header (DRIVER)
+regexp=^(?!DRIVER)(\S+)\s+(\S+)
+colours=unchanged,bright_black,blue

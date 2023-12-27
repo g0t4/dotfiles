@@ -1,0 +1,23 @@
+# file: prefix
+regexp=\b(file\:)([^\s]*)
+colors=unchanged,bright_black,unchanged
+-
+
+
+-
+# system scope
+regexp=^system\s
+colors=green
+-
+# global scope
+regexp=^global\s
+colors=red
+-
+# local scope
+regexp=^local\s
+colors=blue
+
+-
+# key=value$  on end of line
+regexp=\s([^\=\s]*)=(.*)$
+colors=default,cyan,magenta

@@ -1,0 +1,24 @@
+----
+# exited
+regexp=\bexited
+colours=bold red
+----
+# running
+regexp=\brunning
+colours=bold green
+----
+regexp=\((\d+)\)
+colours=unchanged, bold
+----
+# first column (NAME):
+# regexp=^[^\s]+
+# colours=magenta
+#
+----
+# last column (paths) (CONFIG FILES):
+regexp=\s[^\s]+$
+colours=bright_black
+----
+# HEADERS (underlined) => overrides prev matches with default:
+regexp=(?:\s|^)(NAME|STATUS|CONFIG FILES)(?:\s|$)
+colours=default,underline
