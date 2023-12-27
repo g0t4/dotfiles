@@ -17,7 +17,7 @@ end
 # find WES_ paths
 set -l my_filename_resolved (readlink -f (status filename))
 set -g WES_DOTFILES (dirname (dirname (dirname $my_filename_resolved)))
-set -g WES_BOOTSTRAP (dirname (dirname $WES_DOTFILES))
+set -g WES_BOOTSTRAP (dirname (dirname $WES_DOTFILES)) # won't work on non bootstrap machines but that's fine, it won't hurt, this is mostly used to find WES_BOOTSTRAP for its git helpers (currently)
 
 # source $WES_DOTFILES/fish/load_first/*.fish # glob not working for multiple files in dir, just one?!
 for file in $WES_DOTFILES/fish/load_first/*.fish
