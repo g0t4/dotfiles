@@ -178,9 +178,8 @@ ealias gwch='git whatchanged -p --abbrev-commit --pretty=medium'
 
 ## diff
 # * what happened to my usage of diff-so-fancy vs gdcw/gdw ... for some reason I wanted to use dsf instead but then had issues w/ it IIRC in windows/wsl so I gah... just look into this again if it becomes a hassle here
-ealias gd="git diff --word-diff=color"
-# PRN add gdnw not word-diff? for now I can just remove the arg from gd's expansion ... I prefer word-diff=color (color only) most of the time
-ealias gdc="git diff --cached --word-diff=color"
+ealias gd="git diff --color-words"
+ealias gdc="git diff --cached --color-words"
 ealias kgdc="git diff --cached" # common typo alias (cmd+k clear => kgst)
 # last commit diff:
 ealias gdlf='git diff-tree -r HEAD~1 HEAD'

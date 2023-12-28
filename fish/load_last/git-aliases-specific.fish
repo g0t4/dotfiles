@@ -36,12 +36,12 @@ end
 ealias ggsup='git branch --set-upstream-to=origin/$(git_current_branch)'
 
 # diff
-ealias gdlc="git log --patch HEAD~1..HEAD"
+ealias gdlc="git log --patch --color-words HEAD~1..HEAD"
 abbr --regex 'gdlc\d+' --function gdlcX _gdlcX
 function gdlcX
     set -l num (string replace --regex '^gdlc' '' $argv)
     set -l prev (math $num - 1)
-    echo "git log --patch HEAD~$num..HEAD~$prev"
+    echo "git log --patch --color-words HEAD~$num..HEAD~$prev"
 end
 
 # VCS in general:
@@ -114,9 +114,8 @@ function dotgrsh --description "reset --soft HEAD~1"
 end
 
 function dotgdlc --description "log --patch HEAD~1..HEAD"
-    _dot_both log --patch HEAD~1..HEAD
+    _dot_both log --patch --color-words HEAD~1..HEAD
 end
-# PRN dotgdlcX => a bit more involved (need to compute commit range) => add when it feels useful
 
 # expand `dotglX` => `dotgl -X`
 abbr --add dotglX --regex 'dotgl\d+' --function dotglX
@@ -128,11 +127,11 @@ function dotgl --description "log -X"
 end
 
 function dotgdc --description "diff --cached"
-    _dot_both diff --cached --word-diff=color
+    _dot_both diff --cached --color-words
 end
 
 function dotgd --description diff
-    _dot_both diff --word-diff=color
+    _dot_both diff --color-words
 end
 
 function _dot_both
