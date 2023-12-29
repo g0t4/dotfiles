@@ -19,6 +19,7 @@ ealias veinit='python3.10 -m venv --clear --upgrade-deps .venv && vea' # PRN fol
 ealias veinitl='python3.10 -m venv --clear --upgrade-deps .venv.local && vea'
 
 # manually activate/deactivate a venv, remember I have my autovenv plugin that will activate on cd
+# FYI use activate.fish for fish (override is in python-specific.fish)
 ealias vea='source .venv*/bin/activate' # .venv* allows for .venv or .venv.local (my two choices for venv names)
 ealias ved='deactivate'
 
