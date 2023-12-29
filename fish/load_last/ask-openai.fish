@@ -31,6 +31,11 @@ end
 bind \cb ask_openai
 
 ## NOTES
+#
+# PRN use background job/process like in zsh so # thinking... shows up in prompt
+#    async-prompt: https://github.com/acomagu/fish-async-prompt/blob/master/conf.d/__async_prompt.fish
+#    cursory review shows this doing basically what I did in zsh with &!
+#
 # `fish_key_reader` to find a given key combo => type Ctrl+e => shows \ce
 # `bind --function-names` list special funcs
 #   https://fishshell.com/docs/current/cmds/bind.html#special-input-functions
