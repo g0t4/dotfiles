@@ -63,7 +63,8 @@
 
 # - pros: changes to modified lines, especially long lines (highlighted, easy to see)
 #     especially helpful for `git add --patch` workflow (which is why I am focusing on using it w/ interactive only for now)
-# - cons: not on windows, ubuntu not a one liner install
+#     FYI snap install diff-so-fancy [ stumbled on via command-not-found :) ]
+# - cons: not on windows
 
 [diff-so-fancy]
 	markEmptyLines = false # default true
