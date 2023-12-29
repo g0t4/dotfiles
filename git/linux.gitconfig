@@ -1,0 +1,69 @@
+# linux specific git config (i.e. uses diff-so-fancy)
+#    confirmed works in ubuntu (WSL)
+
+[color]
+	# FYI avoid forced color:
+	# - when outout is for machine consumption (i.e. Jenkins can choke on color)
+	# - some pagers show esc sequences
+	ui = auto
+	branch = auto
+	diff = auto
+	interactive = auto
+	status = auto
+
+[color "diff-highlight"]
+	oldNormal = red bold
+	oldHighlight = red bold 52
+	newNormal = green bold
+	newHighlight = green bold 22
+
+[color "diff"]
+	meta = yellow
+	frag = magenta bold
+	commit = yellow bold
+	old = red bold
+	new = green bold
+	whitespace = red reverse
+
+[core]
+	editor = vim
+	# pager = diff-so-fancy
+	# dsf recommends setting it as pager (for diff output) but I've had issues (i.e. possibly w/ --word-diff/--color-words and stripLeadingSymbols below)
+	autocrlf = input
+	# https://git-scm.com/book/en/v2/Customizing-Git-Git-Configuration#_core_autocrlf
+
+[diff]
+	algorithm = histogram
+
+[diff-so-fancy]
+	markEmptyLines = false # default true
+	first-run = false
+	stripLeadingSymbols = true # default true - IIRC can conflict with --color-words(--word-diff)
+	changeHunkIndicators = true # default true
+
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+
+[init]
+	defaultBranch = master
+
+[interactive]
+    diffFilter = diff-so-fancy --patch
+
+[pull]
+  rebase = true
+
+[user]
+	name = Wes Higbee
+	email = wes.mcclure@gmail.com
+
+# git log formatting:
+[pretty]
+	# define extra formats `git log --pretty=wes`
+	wes = %C(white)%h%Creset %Cblue%cr%Creset%C(auto)%d%Creset %s
+[format]
+	# FYI format.pretty applies to git log (w/o --pretty too!)
+	pretty = %C(white)%h%Creset %Cblue%cr%Creset%C(auto)%d%Creset %s
