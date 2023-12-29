@@ -1,3 +1,4 @@
+
 function fish_vcs_prompt --description 'Print all vcs prompts'
     # If a prompt succeeded, we assume that it's printed the correct info.
     # This is so we don't try svn if git already worked.
@@ -10,9 +11,19 @@ function fish_vcs_prompt --description 'Print all vcs prompts'
 end
 
 function prompt_login --description 'display user name for the prompt'
+    # prompt_login is effectively the start of the prompt
+
+    # show python icon if in a venv
     if test -n "$VIRTUAL_ENV"
         echo -n -s (set_color cyan) \ue73c (set_color normal)
     end
+
+    # selectively show hostname
+    if not string match -q "mbp*" $hostname
+        # chances of showing hostname and python icon are low so don't worry about leading space here b/c then I have to disable it when not python icon and that's yuck
+        echo -n -s $hostname
+    end
+
     return
 end
 
