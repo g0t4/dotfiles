@@ -8,3 +8,7 @@ if not functions -q fisher
 end
 
 # install z
+if not functions -q __z
+  echo "installing z"
+  fisher install jethrokuan/z
+end
