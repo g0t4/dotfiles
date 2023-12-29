@@ -142,7 +142,8 @@ ealias gsps='git show --pretty=short --show-signature'
 
 # submodules
 ealias gsm='git submodule'
-ealias gsmf='git submodule add --branch master'
+ealias gsma='git submodule add --branch master'
+ealias gsmd='git submodule deinit'
 ealias gsmf='git submodule foreach'
 ealias gsmfgl='git submodule foreach --recursive git pull'
 ealias gsme='git submodule foreach'
