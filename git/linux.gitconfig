@@ -27,19 +27,11 @@
 
 [core]
 	editor = vim
-	# pager = diff-so-fancy
-	# dsf recommends setting it as pager (for diff output) but I've had issues (i.e. possibly w/ --word-diff/--color-words and stripLeadingSymbols below)
 	autocrlf = input
 	# https://git-scm.com/book/en/v2/Customizing-Git-Git-Configuration#_core_autocrlf
 
 [diff]
 	algorithm = histogram
-
-[diff-so-fancy]
-	markEmptyLines = false # default true
-	first-run = false
-	stripLeadingSymbols = true # default true - IIRC can conflict with --color-words(--word-diff)
-	changeHunkIndicators = true # default true
 
 [filter "lfs"]
 	clean = git-lfs clean -- %f
@@ -49,9 +41,6 @@
 
 [init]
 	defaultBranch = master
-
-[interactive]
-    diffFilter = diff-so-fancy --patch
 
 [pull]
   rebase = true
@@ -67,3 +56,24 @@
 [format]
 	# FYI format.pretty applies to git log (w/o --pretty too!)
 	pretty = %C(white)%h%Creset %Cblue%cr%Creset%C(auto)%d%Creset %s
+
+#### BEGIN diff-so-fancy ####
+
+# - pros: changes to modified lines, especially long lines (highlighted, easy to see)
+#     especially helpful for `git add --patch` workflow (which is why I am focusing on using it w/ interactive only for now)
+# - cons: not on windows, ubuntu not a one liner install
+
+[diff-so-fancy]
+	markEmptyLines = false # default true
+	first-run = false
+	stripLeadingSymbols = true # default true - IIRC can conflict with --color-words(--word-diff)
+	changeHunkIndicators = true # default true
+
+[interactive]
+	diffFilter = diff-so-fancy --patch
+
+#	dsf recommends setting it as pager (for diff output) but I've had issues (i.e. possibly w/ --word-diff/--color-words and stripLeadingSymbols below)
+# [core]
+#		pager = diff-so-fancy
+
+#### END diff-so-fancy ####
