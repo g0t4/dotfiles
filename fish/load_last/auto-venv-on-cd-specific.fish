@@ -1,4 +1,7 @@
 
+# disable modifying the fish prompt (I will modify it myself to prepend python icon)
+set -gx VIRTUAL_ENV_DISABLE_PROMPT true
+
 function _auto_venv_find_venv_in_or_above_dir
 
   set -l _dir $argv[1]
