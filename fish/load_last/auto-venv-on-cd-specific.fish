@@ -1,3 +1,8 @@
+if not status is-interactive
+  # do not use autovenv in non-interactive shells (ie scripts)
+  return
+end
+
 
 # disable modifying the fish prompt (I will modify it myself to prepend python icon)
 set -gx VIRTUAL_ENV_DISABLE_PROMPT true
