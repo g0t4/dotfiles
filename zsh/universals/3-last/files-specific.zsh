@@ -52,3 +52,16 @@ cd_dir_of_path() {
   log_md "cd $(pwd)"
 }
 ealias cdd="cd_dir_of_path"
+
+### DISK USAGE ###
+ealias du='du -h'  # tree command doesn't show size of dirs (unless showing entire hierarchy so not -L 2 for example, so stick with du command)
+ealias dua='du -ha' # show all files
+for i in {1..10}; do ealias du$i="du -hd $i"; done # show only N levels deep
+for i in {1..10}; do ealias dua$i="du -had $i"; done # show all files only N levels deep
+#
+ealias df='df -h'
+# Mac HD: (if fails try df -h and update this alias to be be more general)
+ealias dfm='df -h /System/Volumes/Data'
+
+## loop helpers
+ealias forr='for i in {1..3}; do echo $i; done'
