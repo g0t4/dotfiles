@@ -20,18 +20,11 @@ def wcl(url: str):
     os.makedirs(org_dir, exist_ok=True)
 
     ### add dir to z ahead of cloning so I can CD to it while cloning
-    #   or if dir already exists, then add to the stats count for it
-    #
-    # add to zsh's z:
+    # - or if dir already exists, then add to the stats count for it
+    # - zsh's z (dir can be added before created)
     z_add_zsh = f"z --add '{repo_dir}'"
     # zsh -i => interactive which is where I load z command
     subprocess.run(['zsh', '-il', '-c', z_add_zsh])
-    #
-    # add to fish's z:
-    # fish has __z_add which uses $PWD hence set cwd
-    # fish doesn't need interactive for z to be loaded (installed in functions dir)
-    subprocess.run(['fish', '-c', "__z_add"], cwd=repo_dir)
-    # FYI I had issues w/ auto-venv (calling deactivate) in fish but not zsh, so I am not using interactive for fish and I disabled auto-venv for non-interactive fish shells
 
     if os.path.isdir(repo_dir):
         print("repo_dir found, pulling latest")
@@ -42,6 +35,13 @@ def wcl(url: str):
         print(f"cloning {clone_from}...")
         clone = ["git", "clone", "--recurse-submodules", clone_from, repo_dir]
         subprocess.run(clone)
+
+    ### add to fish's z:
+    # - dir must exist before adding
+    # - fish has __z_add which uses $PWD hence set cwd
+    # - fish doesn't need interactive for z to be loaded (installed in functions dir)
+    # - FYI I had issues w/ auto-venv (calling deactivate) in fish but not zsh, so I am not using interactive for fish and I disabled auto-venv for non-interactive fish shells
+    subprocess.run(['fish', '-c', "__z_add"], cwd=repo_dir)
 
 
 def clone_url(parsed) -> str:
