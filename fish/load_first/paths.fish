@@ -3,6 +3,8 @@
 #     return
 # end
 
+# ! this must run early, including before auto-venv-on-cd b/c otherwise deactivate venv removes these PATH changes (reverts to PATH before venv was activated)
+
 # PRN if other scripts need HOMEBREW_PREFIX then move this earlier in startup scripts
 # if homebrew is present, add env vars/PATH
 if test -f /opt/homebrew/bin/brew
