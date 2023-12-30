@@ -6,7 +6,7 @@ function ask_openai
 
     # FYI not appending '# thinking...' b/c it doesn't show AND doing so is messing up the prompt if a space typed before this func is invoked
 
-    set -l _python3 "$WESCONFIG_BOOTSTRAP/.venv/bin/python3"
+    set -l _python3 "$WES_BOOTSTRAP/.venv/bin/python3"
     set -l _single_py "$WES_DOTFILES/zsh/universals/3-last/ask-openai/single.py"
 
     set -l response ( \
