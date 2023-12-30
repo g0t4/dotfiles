@@ -29,3 +29,8 @@ end
 if test -d "$HOME/.local/bin"
     export PATH="$HOME/.local/bin:$PATH"
 end
+
+# /snap/bin (ubuntu/wsl)
+if test -d /snap/bin
+    export PATH="/snap/bin:$PATH"
+end
