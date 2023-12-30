@@ -1,6 +1,5 @@
 
-#
-# ! FISH => add wrappers to invoke zsh function (instead of rewriting all of this for fish)
+# I setup wrappers in FISH to invoke these zsh functions
 
 ealias gattr="gitattributes_for"
 function gitattributes_for(){
