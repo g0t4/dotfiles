@@ -34,3 +34,5 @@ end
 if test -d /snap/bin
     export PATH="/snap/bin:$PATH"
 end
+
+# ? fix ~/.dotnet/tools in path (replace with abs path) => see zshrc
