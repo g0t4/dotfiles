@@ -1,9 +1,9 @@
 function gi
-    zsh -ilc "gi $argv"
+    zsh -ic "gi $argv"
 end
 
 function gic
-    zsh -ilc "gic $argv"
+    zsh -ic "gic $argv"
 end
 
 # PRN completions? viz zsh too?
