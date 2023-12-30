@@ -81,3 +81,25 @@ if type batcat 2>/dev/null >/dev/null
     # ubuntu
     alias bat=batcat
 end
+
+### DISK USAGE ###
+ealias du='du -h' # tree command doesn't show size of dirs (unless showing entire hierarchy so not -L 2 for example, so stick with du command)
+ealias dua='du -ha' # show all files (FYI cannot use -a with -d1)
+#
+# show only N levels deep
+#   du1 => du -hd 1
+abbr --add _duX --regex 'du\d+' --function duX
+function duX
+    string replace --regex '^du' 'du -hd' $argv
+end
+#
+ealias df='df -h'
+# Mac HD: (if fails try df -h and update this alias to be be more general)
+ealias dfm='df -h /System/Volumes/Data'
+
+## loop helpers
+ealias forr='for i in (seq 1 3)
+    # PRN add forr30 abbr => for i in (seq 1 30); echo $i; end
+    echo $i
+end
+' # FYI if end' on last line that triggers parse failure (stating end can't take args) so I put ' on next line
