@@ -144,6 +144,7 @@ end
 # - https://fishshell.com/docs/current/completions.html
 # - https://fishshell.com/docs/current/cmds/complete.html
 #
+complete -c log_ --no-files
 for c in (set_color --print-colors)
   complete -c log_ -l $c -d "set_color $c"
 end
