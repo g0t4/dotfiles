@@ -14,6 +14,8 @@ function _gitignoreio_get_command_list
     # results are both comma and newline delimited:
     # - fish won't split on both command and \n (only \n if both)
     # - thus, replace comma => \n so they're consistently delimited
+
+    # after first run, completions are effectively cached for the session (one api call per shell instance)
 end
 
 # _gitignore_git_command_list won't be run until completion time
