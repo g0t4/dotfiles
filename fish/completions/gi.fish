@@ -10,7 +10,10 @@ function _gitignoreio_get_command_list
     # - thus, I could inline this into gitignore commands script
     # - but I find it easier to define it all here
 
-    zsh -ic "_gitignoreio_get_command_list $argv"
+    curl -sfL https://www.gitignore.io/api/list | tr "," "\n"
+    # results are both comma and newline delimited:
+    # - fish won't split on both command and \n (only \n if both)
+    # - thus, replace comma => \n so they're consistently delimited
 end
 
 # _gitignore_git_command_list won't be run until completion time
