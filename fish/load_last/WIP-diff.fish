@@ -13,7 +13,7 @@ function diff_last_two_commands
     # PRN diff_last_two_rerun => if need to re-run comparison (save two cmds to local vars in this file and can re-run then!) => or rediff the tmp files only? why re-run if that isn't whats needed (ie just wanted to clear screen and run in cleared screen... meh just figure this out as needed)
     set tmp_a (mktemp)
     set tmp_b (mktemp)
-
+    # TODO use fish's `psub` https://fishshell.com/docs/current/cmds/psub.html
     set last_two_commands (history | head -n 2)
     set -l command_a $last_two_commands[2]
     set -l command_b $last_two_commands[1]
