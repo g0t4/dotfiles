@@ -21,7 +21,7 @@ end
 # _gitignore_git_command_list won't be run until completion time
 complete -c gi -a '(_gitignoreio_get_command_list)'
 
-# complete -c foo # shows completions for foo
+# complete -c foo # shows completions for foo (if autoloaded must first trigger completion, i.e. foo<TAB> before they will be listed)
 # docs:
 #   (man complete) https://fishshell.com/docs/current/cmds/complete.html
 #   (overview) https://fishshell.com/docs/current/completions.html
