@@ -181,3 +181,4 @@ for a in apple_red apple_orange apple_yellow apple_green apple_mint apple_teal a
     complete -c log_ -l $a
 end
 complete -c log_ -l print-colors -d "print all colors"
+# FYI: # complete -c log_  # lists all completions for log_
