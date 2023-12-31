@@ -5,6 +5,8 @@
 complete -c gi --no-files
 
 function _gitignoreio_get_command_list
+    # FYI this doesn't need to be deferred if using fish_completion_path to autoload this completion
+
     # uncomment to see this is run at completion time:
     #   echo querying gitignore.io commands
     # - thus, I could inline this into gitignore commands script
@@ -18,7 +20,7 @@ function _gitignoreio_get_command_list
     # after first run, completions are effectively cached for the session (one api call per shell instance)
 end
 
-# _gitignore_git_command_list won't be run until completion time
+# -a param won't be expanded/substituted until Completion Time
 complete -c gi -a '(_gitignoreio_get_command_list)'
 
 # complete -c foo # shows completions for foo (if autoloaded must first trigger completion, i.e. foo<TAB> before they will be listed)

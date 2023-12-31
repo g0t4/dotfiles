@@ -41,9 +41,14 @@ end
 
 ### COMPLETIONS path:
 if test -d $WES_DOTFILES/fish/completions/
-    # - FYI loaded at Completion Time per command name (foo<TAB> loads foo.fish)
+    # - FYI autoloaded at Completion Time per command name (foo<TAB> loads foo.fish)
     # - Use for complex completions (i.e. ensure slow completions are lazy loaded)
     # - Use to override other completions
     # - Otherwise it's ok to inline completions (where command is defined)
     set fish_complete_path $WES_DOTFILES/fish/completions/ $fish_complete_path
+end
+
+if test -d $WES_DOTFILES/fish/functions/
+    # - FYI autoloaded when respective command name is first run (and periodically reloaded)
+    set fish_function_path $WES_DOTFILES/fish/functions/ $fish_function_path
 end
