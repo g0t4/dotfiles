@@ -17,3 +17,6 @@ end
 complete -c gi -a '(_gitignoreio_get_command_list)'
 
 # complete -c foo # shows completions for foo
+# docs:
+#   (man complete) https://fishshell.com/docs/current/cmds/complete.html
+#   (overview) https://fishshell.com/docs/current/completions.html
