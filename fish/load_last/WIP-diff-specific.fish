@@ -5,17 +5,17 @@ ealias icg="git-icdiff"
 # configure git-icdiff via git config: git config --global icdiff.options '--line-numbers'
 # thanks to expanding alises + zsh param expansion => it's clear what will happen (ie commands will be re-run)... essentially saves copy/paste previous two commands into icdiff <(cmd1) <(cmd2) format"
 # - i.e. `echo foo` then `echo bar` results in: `icdiff <(echo foo) <(echo foobar)`
-function diff_last_two_commands
+function expand_diff_last_two_commands
     set last_two_commands (history | head -n 2)
     set -l command_a $last_two_commands[2]
     set -l command_b $last_two_commands[1]
     set command_a "echo foo\nbar"
     set command_b "echo bar"
-    icdiff -L $command_a (eval $command_a | psub) -L $command_b (eval $command_b | psub)
+    echo icdiff -L "'$command_a'" "(eval $command_a | psub)" -L "'$command_b'" "(eval $command_b | psub)"
     # https://fishshell.com/docs/current/cmds/psub.html
     # ! use expanding alias func to capture the commad diff like I have in zsh
 end
-
+abbr -a diff_last_two_commands --function expand_diff_last_two_commands
 # FYI if want these then add back (maybe new file)... I never really have used these in zsh so I don't think they're pivotal here though I could do icdiff (!-2) (!-2) typed out and it would expand out to work in that one off case :)... still more work than other ways
 # # expand !!
 # # based on https://fishshell.com/docs/current/relnotes.html#fish-3-6-0-released-january-7-2023
