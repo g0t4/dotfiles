@@ -14,7 +14,6 @@ bind \ek kill_whole_line_and_copy
 # ctrl+c clear command line instead of cancel-commandline (why pollute terminal history to cancel a command!)
 bind \cc 'commandline -r ""'
 
-# PRN add a binding to clear screen + reset status of last run command (so prompt doesn't have last non-zero exit code)
-#   FYI default binding ctrl+l:
-#      bind --preset \cl echo\ -n\ \(clear\ \|\ string\ replace\ \\e\\\[3J\ \"\"\)\;\ commandline\ -f\ repaint
-#  clear; true; # some sort of yank to killring (entire line), then have to run true command to change status, then clear again and paste original input back from killring? (sounds overly complicated... perhaps I could just find a way to modify the prompt condition to not show status after clearing screen (if no longer see previuos command output what is the point?))
+# PRN add a binding to clear screen + reset status of last run command
+#    OR modify prompt (type fish_prompt) as it already distinguishes (with bold) if status was carried over from previous command so perhaps I could find a way to hijack that ? 
+#    OR hide status in the prompt (perhaps like zsh I could show non-zero exit code on last line before new prompt?)
