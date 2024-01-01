@@ -10,3 +10,9 @@ function kill_whole_line_and_copy
 end
 
 bind \ek kill_whole_line_and_copy
+
+# ctrl+c clear command line instead of cancel-commandline (why pollute terminal history to cancel a command!)
+bind \cc 'commandline -r ""'
+
+# PRN add a binding to clear screen + reset status of last run command (so prompt doesn't have last non-zero exit code)
+#  clear; true;
