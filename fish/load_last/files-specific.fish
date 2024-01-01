@@ -103,3 +103,10 @@ ealias forr='for i in (seq 1 3)
     echo $i
 end
 ' # FYI if end' on last line that triggers parse failure (stating end can't take args) so I put ' on next line
+
+##### find helpers #####
+# WIP - new ideas to consider (added when trying to find ~/Library/Application\ Support/*elgato* dirs for streamdeck config)
+# find directories by name
+abbr --add findd --set-cursor=! 'find . -type d -iname "*!*"'
+abbr --add finddr --set-cursor=! 'find . -type d -iregex ".*!.*"' # another idea to consider
+# IDEAs: tree command for dirs? or exa?
