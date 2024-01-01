@@ -11,9 +11,8 @@ function expand_diff_last_two_commands
     set -l command_b $last_two_commands[1]
     set command_a "echo foo\nbar"
     set command_b "echo bar"
-    echo icdiff -L "'$command_a'" "(eval $command_a | psub)" -L "'$command_b'" "(eval $command_b | psub)"
+    echo icdiff -L "'$command_a'" "($command_a | psub)" -L "'$command_b'" "($command_b | psub)"
     # https://fishshell.com/docs/current/cmds/psub.html
-    # ! use expanding alias func to capture the commad diff like I have in zsh
 end
 abbr -a diff_last_two_commands --function expand_diff_last_two_commands
 # FYI if want these then add back (maybe new file)... I never really have used these in zsh so I don't think they're pivotal here though I could do icdiff (!-2) (!-2) typed out and it would expand out to work in that one off case :)... still more work than other ways
