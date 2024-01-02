@@ -1,6 +1,5 @@
-# FYI synchronize settings from fish to zsh as applicable
-
-### *** ANSI COLOR CODES
+### *** ANSI COLOR CODES (ensure sync w/ color-specific.zsh)
+# 8-bit lookup table: https://en.wikipedia.org/wiki/ANSI_escape_code#8-bit
 color_191="38;5;191"
 color_matching_text="1;$color_191"
 #

@@ -70,7 +70,14 @@ set fish_pager_color_selected_prefix # default: empty
 # bottom bar summarizes # matches etc:
 set fish_pager_color_progress brwhite '--background=cyan' # default: brwhite '--background=cyan'
 #
-### *** ANSI COLOR CODES
+### *** ANSI COLOR CODES (ensure sync w/ color-specific.zsh)
+function dump_8bit_colors
+    # 8-bit lookup table: https://en.wikipedia.org/wiki/ANSI_escape_code#8-bit
+    for i in (seq 0 255)
+        # 1 => bold to stand out
+        echo -se "$i:\033[1;38;5;$i" "m foo \033[0m bar"
+    end
+end
 set -g color_191 "38;5;191"
 set -g color_matching_text "1;$color_191"
 
