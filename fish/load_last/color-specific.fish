@@ -29,7 +29,7 @@ set fish_color_comment brblack # default: red
 set fish_color_error brred --bold # default: brred
 set fish_color_escape brcyan # default: brcyan
 set fish_color_history_current --bold # default: --bold
-set fish_color_keyword blue # default: blue
+set fish_color_keyword green # default: blue # if often next to command so use a diff color for keyword to make that pop
 set fish_color_match --background=brblue # default: --background=brblue
 set fish_color_option cyan # default: cyan
 set fish_color_param cyan # default: cyan
