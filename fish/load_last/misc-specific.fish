@@ -22,3 +22,7 @@ bind \cc 'commandline -r ""'
 ### FISH HELP ###
 set __fish_help_dir "" # overwrite fish help dir thus forcing the use of https://fishshell.com instead of local files (which I prefer b/c I have highlighting of fishshell.com pages) # ... try it with: `help help` => opens https://fishshell.com/docs/3.6/interactive.html#help
 # see `type help` to find the part of the help command that decides what to open 
+
+
+### COLORS ###
+# FYI https://color.adobe.com/create/color-wheel to pick colors
