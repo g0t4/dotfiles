@@ -22,26 +22,28 @@
 # color vars explained: https://fishshell.com/docs/current/interactive.html#syntax-highlighting-variables
 set fish_color_normal normal # default: normal
 set fish_color_autosuggestion 555 brblack # default: 555 brblack
-set fish_color_cancel -r # default: -r (reverse color)
 # cancel (\cc preset cancels current command so ^C shows w/ cancel color)
-set fish_color_command blue --bold # default: blue
-set fish_color_comment brblack # default: red
-set fish_color_error brred --bold # default: brred
-set fish_color_escape brcyan # default: brcyan
 set fish_color_history_current --bold # default: --bold
-set fish_color_keyword green # default: blue # if often next to command so use a diff color for keyword to make that pop
 set fish_color_match --background=brblue # default: --background=brblue
-set fish_color_option cyan # default: cyan
-set fish_color_param cyan # default: cyan
-set fish_color_quote yellow # default: yellow
 set fish_color_search_match bryellow '--background=brblack' # default: bryellow '--background=brblack'
 set fish_color_selection white --bold '--background=brblack' # default: white --bold '--background=brblack'
+set fish_color_cancel -r # default: -r (reverse color)
+#
+### *** key commandline components (user input):
+set fish_color_keyword green # default: blue # if followed by command so make the two different to stand out (but don't overly emphasize keywords)
+set fish_color_error brred --bold # default: brred
+set fish_color_command blue --bold # default: blue
+set fish_color_option cyan # default: cyan # -/--opt
+set fish_color_param cyan # default: cyan # arg1 arg2
+set fish_color_quote yellow # default: yellow
 set fish_color_valid_path --underline # default: --underline
+set fish_color_comment brblack # default: red
 #
 # various separators / redirects (all color coordinated currently):
 set fish_color_end A37ACC --bold # default: green  # |(pipe), ;(semicolon)
 set fish_color_operator A37ACC --bold # default: brcyan
 set fish_color_redirection A37ACC --bold # default: cyan --bold # > /dev/null
+set fish_color_escape brcyan # default: brcyan
 ### *** fish default prompts colors: (won't matter depending on how I override the prompt)
 set fish_color_status red # default: red
 set fish_color_cwd green # default: green
