@@ -39,7 +39,7 @@ set __fish_help_dir "" # overwrite fish help dir thus forcing the use of https:/
 #              set -le fish_color_normal # erases local scoped change
 # - FYI each color variable holds arguments that you would pass to `set_color` (ie color + modifiers)
 # PRN only run once b/c its stored in universal variables? but I like versioning the values in config.fish files (and don't wanna try to version fish_variables), so for now set these on every startup
-set fish_color_autosuggestion '555'  'brblack'
+set fish_color_autosuggestion 555 brblack
 set fish_color_cancel -r
 set fish_color_command blue
 set fish_color_comment brblack # default: red
@@ -58,9 +58,9 @@ set fish_color_operator brcyan
 set fish_color_option cyan
 set fish_color_param cyan
 set fish_color_quote yellow
-set fish_color_redirection 'cyan'  '--bold'
-set fish_color_search_match 'bryellow'  '--background=brblack'
-set fish_color_selection 'white'  '--bold'  '--background=brblack'
+set fish_color_redirection cyan --bold
+set fish_color_search_match bryellow '--background=brblack'
+set fish_color_selection white --bold '--background=brblack'
 set fish_color_status red
 set fish_color_user brgreen
 set fish_color_valid_path --underline
@@ -68,9 +68,9 @@ set fish_color_valid_path --underline
 # TBD fish_pager_color_*
 set fish_pager_color_background
 set fish_pager_color_completion normal
-set fish_pager_color_description 'B3A06D'  'yellow'  '-i'
-set fish_pager_color_prefix 'normal'  '--bold'  '--underline'
-set fish_pager_color_progress 'brwhite'  '--background=cyan'
+set fish_pager_color_description B3A06D yellow -i
+set fish_pager_color_prefix normal --bold --underline
+set fish_pager_color_progress brwhite '--background=cyan'
 set fish_pager_color_secondary_background
 set fish_pager_color_secondary_completion
 set fish_pager_color_secondary_description
@@ -79,5 +79,3 @@ set fish_pager_color_selected_background -r
 set fish_pager_color_selected_completion
 set fish_pager_color_selected_description
 set fish_pager_color_selected_prefix
-
-
