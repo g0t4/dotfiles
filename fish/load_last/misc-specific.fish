@@ -64,7 +64,7 @@ set fish_color_valid_path --underline # default: --underline
 #
 # various separators / redirects (all color coordinated currently):
 set fish_color_end A37ACC --bold # default: green  # |(pipe), ;(semicolon)
-set fish_color_operator A37ACC --bold  # default: brcyan
+set fish_color_operator A37ACC --bold # default: brcyan
 set fish_color_redirection A37ACC --bold # default: cyan --bold # > /dev/null
 ### default prompts colors: (won't matter depending on how I override the prompt)
 set fish_color_status red # default: red
@@ -95,5 +95,42 @@ set fish_pager_color_selected_prefix # default: empty
 set fish_pager_color_progress brwhite '--background=cyan' # default: brwhite '--background=cyan'
 #
 ### grep color ###
-# PRN find xplat way to set this? seems like on my mac `grep` (BSD variant?) only uses GREP_COLOR while gnu grep (https://www.gnu.org/software/grep/manual/grep.html) mentions that's deprecated in favor of GREP_COLORS
-# default of red is fine for now
+# default of red is fine too
+if is_macos
+    # macOS => Use GREP_COLOR (singular) only
+    #   - cursory research shows macos grep doesn't use GREP_COLORS
+    #       - only GREP_COLOR mentioned in man page
+    #       - AND in testing only GREP_COLOR modified colors)
+    #       - GREP_COLORS is used w/ GNU grep (ie ubuntu/WSL IIAC)
+    #   - IIUC GREP_COLOR is only for matching text
+    #       - whereas GREP_COLORS supports multi color style (matches, context, line#, setc)
+    #   - use `set | grep -i  color_c` to test color choice:
+    export GREP_COLOR='01;38;5;191' # bold + color 191 of 255
+    # uses ANSI control sequences (SGR):
+    #   font style:
+    #       0 normal/reset, 1 bold, 2 dim, 3 italic, 4 underline, 7 inverse, 9 strike
+    #       10 default font, 11-19 alt fonts
+    #       21 double underline, 22 normal intensity, 23+ (remove bold/italic/etc)
+    #   fg colors:
+    #       30-37 # fg colors (3-bit)
+    #          90-97 # bright fg colors (4-bit)
+    #          # https://en.wikipedia.org/wiki/ANSI_escape_code#3-bit_and_4-bit
+    #       38;5;X # 256 color mode (X is 0-255)
+    #           38;5;191 # color 191
+    #           8-bit color: https://en.wikipedia.org/wiki/ANSI_escape_code#8-bit
+    #       39 # default fg color
+    #   bg colors:
+    #       40-47 # bg colors
+    #           100-107 # bright bg colors
+    #       48;5;X # 256 color mode (X is 0-255)
+    #       49 # default bg color
+    #   58 set underline color (8-bit) / 59 default underline color
+    #       4;58;5;191' # only underline is color 191!
+    #   combine with ;
+    #       01;07 # bold + inverse
+    #       01;38;5;191 # bold + color 191
+    #           38;5;191;01 # same (order doesn't matter)
+    #   SRG https://en.wikipedia.org/wiki/ANSI_escape_code#SGR_(Select_Graphic_Rendition)_parameters
+    #   test entire color/style range:
+    #     for i in (seq 1 107); export GREP_COLOR="$i"; echo $i; set | grep -i color_r; end;
+end
