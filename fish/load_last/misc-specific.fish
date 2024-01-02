@@ -57,32 +57,36 @@ set -l apple_brown ac8e68
 set -l apple_gray 98989d
 
 # color vars explained: https://fishshell.com/docs/current/interactive.html#syntax-highlighting-variables
+set fish_color_normal normal # default: normal
 set fish_color_autosuggestion 555 brblack # default: 555 brblack
 set fish_color_cancel -r # default: -r (reverse color)
 # cancel (\cc preset cancels current command so ^C shows w/ cancel color)
 set fish_color_command blue --bold # default: blue
 set fish_color_comment brblack # default: red
-set fish_color_cwd green # default: green
-set fish_color_cwd_root red # default: red
-set fish_color_end green # default: green
 set fish_color_error brred --bold # default: brred
 set fish_color_escape brcyan # default: brcyan
 set fish_color_history_current --bold # default: --bold
-set fish_color_host normal # default: normal
-set fish_color_host_remote yellow # default: yellow
 set fish_color_keyword blue # default: blue
 set fish_color_match --background=brblue # default: --background=brblue
-set fish_color_normal normal # default: normal
-set fish_color_operator brcyan # default: brcyan
 set fish_color_option cyan # default: cyan
 set fish_color_param cyan # default: cyan
 set fish_color_quote yellow # default: yellow
-set fish_color_redirection cyan --bold # default: cyan --bold
 set fish_color_search_match bryellow '--background=brblack' # default: bryellow '--background=brblack'
 set fish_color_selection white --bold '--background=brblack' # default: white --bold '--background=brblack'
-set fish_color_status red # default: red
-set fish_color_user brgreen # default: brgreen
 set fish_color_valid_path --underline # default: --underline
+#
+# various separators / redirects (all color coordinated currently):
+set fish_color_end A37ACC --bold # default: green  # |(pipe), ;(semicolon)
+set fish_color_operator A37ACC --bold  # default: brcyan
+set fish_color_redirection A37ACC --bold # default: cyan --bold # > /dev/null
+### default prompts colors: (won't matter depending on how I override the prompt)
+set fish_color_status red # default: red
+set fish_color_cwd green # default: green
+set fish_color_cwd_root red # default: red
+set fish_color_user brgreen # default: brgreen
+set fish_color_host normal # default: normal
+set fish_color_host_remote yellow # default: yellow
+#
 ### Pager COLORS ###
 # TBD fish_pager_color_*
 # primary => odd numbered unselected completions:
@@ -94,7 +98,7 @@ set fish_pager_color_prefix normal --bold --underline # default: normal --bold -
 set fish_pager_color_secondary_background # default: empty
 set fish_pager_color_secondary_completion # default: empty
 set fish_pager_color_secondary_description # default: empty
-set fish_pager_color_secondary_prefix # default: empty
+set fish_pager_color_secondary_prefix # default: empty # prefix = --/- dashes
 # selected completion:
 set fish_pager_color_selected_background -r # default: -r
 set fish_pager_color_selected_completion # default: empty
