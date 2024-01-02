@@ -1,7 +1,8 @@
 
-### iTerm2 COLORS
+### *** iTerm2 COLORS
 # - FYI currently using '2023-08-03 wes dark colors - bg from 23252d to 17xxxx' if need to revert iterm2 changes
-### fish syntax colors ###
+
+### *** fish syntax colors ###
 # FYI https://color.adobe.com/create/color-wheel to pick colors
 # - fish_config browse
 #   fish_config theme show # preview all themes
@@ -41,7 +42,7 @@ set fish_color_valid_path --underline # default: --underline
 set fish_color_end A37ACC --bold # default: green  # |(pipe), ;(semicolon)
 set fish_color_operator A37ACC --bold # default: brcyan
 set fish_color_redirection A37ACC --bold # default: cyan --bold # > /dev/null
-### default prompts colors: (won't matter depending on how I override the prompt)
+### *** fish default prompts colors: (won't matter depending on how I override the prompt)
 set fish_color_status red # default: red
 set fish_color_cwd green # default: green
 set fish_color_cwd_root red # default: red
@@ -49,7 +50,7 @@ set fish_color_user brgreen # default: brgreen
 set fish_color_host normal # default: normal
 set fish_color_host_remote yellow # default: yellow
 #
-### Pager COLORS ###
+### *** fish pager colors (ie tab completion) ###
 # TBD fish_pager_color_*
 # primary => odd numbered unselected completions:
 set fish_pager_color_background # default: empty
@@ -69,7 +70,7 @@ set fish_pager_color_selected_prefix # default: empty
 # bottom bar summarizes # matches etc:
 set fish_pager_color_progress brwhite '--background=cyan' # default: brwhite '--background=cyan'
 #
-### grep color ###
+### *** macOS GREP_COLOR
 # default of red is fine too
 if is_macos
     # macOS => Use GREP_COLOR (singular) only
@@ -109,3 +110,6 @@ if is_macos
     #   test entire color/style range:
     #     for i in (seq 1 107); export GREP_COLOR="$i"; echo $i; set | grep -i color_r; end;
 end
+
+### *** TODO next commands
+# PRN ag command
