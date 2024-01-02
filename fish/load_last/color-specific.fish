@@ -70,6 +70,10 @@ set fish_pager_color_selected_prefix # default: empty
 # bottom bar summarizes # matches etc:
 set fish_pager_color_progress brwhite '--background=cyan' # default: brwhite '--background=cyan'
 #
+### *** ANSI COLOR CODES
+set -g color_191 "38;5;191"
+set -g color_matching_text "1;$color_191"
+
 ### *** macOS GREP_COLOR
 # default of red is fine too
 if is_macos
@@ -81,7 +85,7 @@ if is_macos
     #   - IIUC GREP_COLOR is only for matching text
     #       - whereas GREP_COLORS supports multi color style (matches, context, line#, setc)
     #   - use `set | grep -i  color_c` to test color choice:
-    export GREP_COLOR='01;38;5;191' # bold + color 191 of 255
+    export GREP_COLOR="$color_matching_text" # cannot defer expand color variable
     # uses ANSI control sequences (SGR):
     #   font style:
     #       0 normal/reset, 1 bold, 2 dim, 3 italic, 4 underline, 7 inverse, 9 strike
@@ -111,5 +115,9 @@ if is_macos
     #     for i in (seq 1 107); export GREP_COLOR="$i"; echo $i; set | grep -i color_r; end;
 end
 
+# PRN GREP_COLORS (GNU grep)
+
+### *** ag command
+#   (search for `alias ag=`, currently in ag.zsh compat file)
+
 ### *** TODO next commands
-# PRN ag command
