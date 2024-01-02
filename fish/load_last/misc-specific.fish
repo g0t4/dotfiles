@@ -38,44 +38,61 @@ set __fish_help_dir "" # overwrite fish help dir thus forcing the use of https:/
 #           eg: set -l fish_color_normal green
 #              set -le fish_color_normal # erases local scoped change
 # - FYI each color variable holds arguments that you would pass to `set_color` (ie color + modifiers)
+#   use smth like `type fish_greeting` or other builtin to get a good preview of a given color theme
 # PRN only run once b/c its stored in universal variables? but I like versioning the values in config.fish files (and don't wanna try to version fish_variables), so for now set these on every startup
+
+# FYI apple's macOS default dark colors: (see my log_ function for details)
+set -l apple_red FF453A
+set -l apple_orange ff9f0a
+set -l apple_yellow ffd60a
+set -l apple_green 32d74b
+set -l apple_mint 66d4cf
+set -l apple_teal 6ac4dc
+set -l apple_cyan 5ac8f5
+set -l apple_blue 0a84ff
+set -l apple_indigo 5e5ce6
+set -l apple_purple bf5af2
+set -l apple_pink ff375f
+set -l apple_brown ac8e68
+set -l apple_gray 98989d
+
 set fish_color_autosuggestion 555 brblack
-set fish_color_cancel -r
-set fish_color_command blue
+set fish_color_cancel -r # default: -r (reverse color)
+set fish_color_command blue # default: blue
 set fish_color_comment brblack # default: red
-set fish_color_cwd green
-set fish_color_cwd_root red
-set fish_color_end green
-set fish_color_error brred
-set fish_color_escape brcyan
-set fish_color_history_current --bold
-set fish_color_host normal
-set fish_color_host_remote yellow
-set fish_color_keyword blue
-set fish_color_match --background=brblue
-set fish_color_normal normal
-set fish_color_operator brcyan
-set fish_color_option cyan
-set fish_color_param cyan
-set fish_color_quote yellow
-set fish_color_redirection cyan --bold
-set fish_color_search_match bryellow '--background=brblack'
-set fish_color_selection white --bold '--background=brblack'
-set fish_color_status red
-set fish_color_user brgreen
-set fish_color_valid_path --underline
+set fish_color_cwd green # default: green
+set fish_color_cwd_root red # default: red
+set fish_color_end green # default: green
+set fish_color_error brred # default: brred
+set fish_color_escape brcyan # default: brcyan
+set fish_color_history_current --bold # default: --bold
+set fish_color_host normal # default: normal
+set fish_color_host_remote yellow # default: yellow
+set fish_color_keyword blue # default: blue
+set fish_color_match --background=brblue # default: --background=brblue
+set fish_color_normal normal # default: normal
+set fish_color_operator brcyan # default: brcyan
+set fish_color_option cyan # default: cyan
+set fish_color_param cyan # default: cyan
+set fish_color_quote yellow # default: yellow
+set fish_color_redirection cyan --bold # default: cyan --bold
+set fish_color_search_match bryellow '--background=brblack' # default: bryellow '--background=brblack'
+set fish_color_selection white --bold '--background=brblack' # default: white --bold '--background=brblack'
+set fish_color_status red # default: red
+set fish_color_user brgreen # default: brgreen
+set fish_color_valid_path --underline # default: --underline
 ### Pager COLORS ###
 # TBD fish_pager_color_*
-set fish_pager_color_background
-set fish_pager_color_completion normal
-set fish_pager_color_description B3A06D yellow -i
-set fish_pager_color_prefix normal --bold --underline
-set fish_pager_color_progress brwhite '--background=cyan'
-set fish_pager_color_secondary_background
-set fish_pager_color_secondary_completion
-set fish_pager_color_secondary_description
-set fish_pager_color_secondary_prefix
-set fish_pager_color_selected_background -r
-set fish_pager_color_selected_completion
-set fish_pager_color_selected_description
-set fish_pager_color_selected_prefix
+set fish_pager_color_background # default: empty
+set fish_pager_color_completion normal # default: normal
+set fish_pager_color_description B3A06D yellow -i # default: B3A06D yellow -i
+set fish_pager_color_prefix normal --bold --underline # default: normal --bold --underline
+set fish_pager_color_progress brwhite '--background=cyan' # default: brwhite '--background=cyan'
+set fish_pager_color_secondary_background # default: empty
+set fish_pager_color_secondary_completion # default: empty
+set fish_pager_color_secondary_description # default: empty
+set fish_pager_color_secondary_prefix # default: empty
+set fish_pager_color_selected_background -r # default: -r
+set fish_pager_color_selected_completion # default: empty
+set fish_pager_color_selected_description # default: empty
+set fish_pager_color_selected_prefix # default: empty
