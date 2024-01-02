@@ -33,7 +33,7 @@ set fish_color_cancel -r # default: -r (reverse color)
 set fish_color_keyword green # default: blue # if followed by command so make the two different to stand out (but don't overly emphasize keywords)
 set fish_color_error brred --bold # default: brred
 set fish_color_command blue --bold # default: blue
-set fish_color_option cyan # default: cyan # -/--opt
+set fish_color_option cyan --bold # default: cyan # -/--opt # make this stand out vs params? me thinks so
 set fish_color_param cyan # default: cyan # arg1 arg2
 set fish_color_quote yellow # default: yellow
 set fish_color_valid_path --underline # default: --underline
