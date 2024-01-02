@@ -1,6 +1,7 @@
 
 ### *** iTerm2 COLORS
 # - FYI currently using '2023-08-03 wes dark colors - bg from 23252d to 17xxxx' if need to revert iterm2 changes
+# => future, reconsider my iterm2 3/4 bit color scheme, i.e. white probably should be white and not magenta ;) (and magenta not purple?) but have to consider what all this affects
 
 ### *** fish syntax colors ###
 # FYI https://color.adobe.com/create/color-wheel to pick colors
