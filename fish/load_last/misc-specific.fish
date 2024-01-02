@@ -37,11 +37,12 @@ set __fish_help_dir "" # overwrite fish help dir thus forcing the use of https:/
 #        redefine new var in a local scope to test changes in the current shell only
 #           eg: set -l fish_color_normal green
 #              set -le fish_color_normal # erases local scoped change
+# - FYI each color variable holds arguments that you would pass to `set_color` (ie color + modifiers)
 # PRN only run once b/c its stored in universal variables? but I like versioning the values in config.fish files (and don't wanna try to version fish_variables), so for now set these on every startup
 set fish_color_autosuggestion '555'  'brblack'
 set fish_color_cancel -r
 set fish_color_command blue
-set fish_color_comment red
+set fish_color_comment brblack # default: red
 set fish_color_cwd green
 set fish_color_cwd_root red
 set fish_color_end green
