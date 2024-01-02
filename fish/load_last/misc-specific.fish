@@ -56,14 +56,14 @@ set -l apple_pink ff375f
 set -l apple_brown ac8e68
 set -l apple_gray 98989d
 
-set fish_color_autosuggestion 555 brblack
+set fish_color_autosuggestion 555 brblack # default: 555 brblack
 set fish_color_cancel -r # default: -r (reverse color)
-set fish_color_command blue # default: blue
+set fish_color_command blue --bold # default: blue
 set fish_color_comment brblack # default: red
 set fish_color_cwd green # default: green
 set fish_color_cwd_root red # default: red
 set fish_color_end green # default: green
-set fish_color_error brred # default: brred
+set fish_color_error brred --bold # default: brred
 set fish_color_escape brcyan # default: brcyan
 set fish_color_history_current --bold # default: --bold
 set fish_color_host normal # default: normal
