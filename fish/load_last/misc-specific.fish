@@ -24,7 +24,9 @@ set __fish_help_dir "" # overwrite fish help dir thus forcing the use of https:/
 # see `type help` to find the part of the help command that decides what to open 
 
 
-### Syntax COLORS ###
+### iTerm2 COLORS
+# - FYI currently using '2023-08-03 wes dark colors - bg from 23252d to 17xxxx' if need to revert iterm2 changes
+### fish syntax colors ###
 # FYI https://color.adobe.com/create/color-wheel to pick colors
 # - fish_config browse
 #   fish_config theme show # preview all themes
@@ -40,7 +42,7 @@ set __fish_help_dir "" # overwrite fish help dir thus forcing the use of https:/
 # - FYI each color variable holds arguments that you would pass to `set_color` (ie color + modifiers)
 #   use smth like `type fish_greeting` or other builtin to get a good preview of a given color theme
 # PRN only run once b/c its stored in universal variables? but I like versioning the values in config.fish files (and don't wanna try to version fish_variables), so for now set these on every startup
-
+#
 # color vars explained: https://fishshell.com/docs/current/interactive.html#syntax-highlighting-variables
 set fish_color_normal normal # default: normal
 set fish_color_autosuggestion 555 brblack # default: 555 brblack
@@ -91,3 +93,7 @@ set fish_pager_color_selected_description # default: empty
 set fish_pager_color_selected_prefix # default: empty
 # bottom bar summarizes # matches etc:
 set fish_pager_color_progress brwhite '--background=cyan' # default: brwhite '--background=cyan'
+#
+### grep color ###
+# PRN find xplat way to set this? seems like on my mac `grep` (BSD variant?) only uses GREP_COLOR while gnu grep (https://www.gnu.org/software/grep/manual/grep.html) mentions that's deprecated in favor of GREP_COLORS
+# default of red is fine for now
