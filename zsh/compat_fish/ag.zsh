@@ -7,7 +7,7 @@
 #
 
 # FYI colors are defined by fish/zsh respectively in color-specific.{fish,zsh}
-alias ag='ag --nogroup --color-match "$color_matching_text"'
+alias ag='ag --nogroup --color-match "$__color_matching_text"'
 # FYI can defer expand color variable so order of startup files is irrelevant
 # --nogroup => disable grouping to show file/line per match to click to open in vscode (via iterm links)
 

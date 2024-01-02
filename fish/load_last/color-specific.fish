@@ -78,8 +78,12 @@ function dump_8bit_colors
         echo -se "$i:\033[1;38;5;$i" "m foo \033[0m bar"
     end
 end
-set -g color_191 "38;5;191"
-set -g color_matching_text "1;$color_191"
+set -g __color_bold 1
+set -g __color_99 "38;5;99" # purple
+set -g __color_162 "38;5;162" # hot pink (darker) works!
+set -g __color_191 "38;5;191" # neon yellow/green
+set -g __color_200 "38;5;200" # neon pink (bright)
+set -g __color_matching_text "$__color_bold;$__color_162"
 
 ### *** macOS GREP_COLOR
 # default of red is fine too
@@ -92,7 +96,7 @@ if is_macos
     #   - IIUC GREP_COLOR is only for matching text
     #       - whereas GREP_COLORS supports multi color style (matches, context, line#, setc)
     #   - use `set | grep -i  color_c` to test color choice:
-    export GREP_COLOR="$color_matching_text" # cannot defer expand color variable
+    export GREP_COLOR="$__color_matching_text" # cannot defer expand color variable
     # uses ANSI control sequences (SGR):
     #   font style:
     #       0 normal/reset, 1 bold, 2 dim, 3 italic, 4 underline, 7 inverse, 9 strike
