@@ -56,8 +56,10 @@ set -l apple_pink ff375f
 set -l apple_brown ac8e68
 set -l apple_gray 98989d
 
+# color vars explained: https://fishshell.com/docs/current/interactive.html#syntax-highlighting-variables
 set fish_color_autosuggestion 555 brblack # default: 555 brblack
 set fish_color_cancel -r # default: -r (reverse color)
+# cancel (\cc preset cancels current command so ^C shows w/ cancel color)
 set fish_color_command blue --bold # default: blue
 set fish_color_comment brblack # default: red
 set fish_color_cwd green # default: green
@@ -83,16 +85,20 @@ set fish_color_user brgreen # default: brgreen
 set fish_color_valid_path --underline # default: --underline
 ### Pager COLORS ###
 # TBD fish_pager_color_*
+# primary => odd numbered unselected completions:
 set fish_pager_color_background # default: empty
 set fish_pager_color_completion normal # default: normal
 set fish_pager_color_description B3A06D yellow -i # default: B3A06D yellow -i
 set fish_pager_color_prefix normal --bold --underline # default: normal --bold --underline
-set fish_pager_color_progress brwhite '--background=cyan' # default: brwhite '--background=cyan'
+# secondary => even numbered unselected completions:
 set fish_pager_color_secondary_background # default: empty
 set fish_pager_color_secondary_completion # default: empty
 set fish_pager_color_secondary_description # default: empty
 set fish_pager_color_secondary_prefix # default: empty
+# selected completion:
 set fish_pager_color_selected_background -r # default: -r
 set fish_pager_color_selected_completion # default: empty
 set fish_pager_color_selected_description # default: empty
 set fish_pager_color_selected_prefix # default: empty
+# bottom bar summarizes # matches etc:
+set fish_pager_color_progress brwhite '--background=cyan' # default: brwhite '--background=cyan'
