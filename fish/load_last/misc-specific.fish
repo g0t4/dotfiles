@@ -41,21 +41,6 @@ set __fish_help_dir "" # overwrite fish help dir thus forcing the use of https:/
 #   use smth like `type fish_greeting` or other builtin to get a good preview of a given color theme
 # PRN only run once b/c its stored in universal variables? but I like versioning the values in config.fish files (and don't wanna try to version fish_variables), so for now set these on every startup
 
-# FYI apple's macOS default dark colors: (see my log_ function for details)
-set -l apple_red FF453A
-set -l apple_orange ff9f0a
-set -l apple_yellow ffd60a
-set -l apple_green 32d74b
-set -l apple_mint 66d4cf
-set -l apple_teal 6ac4dc
-set -l apple_cyan 5ac8f5
-set -l apple_blue 0a84ff
-set -l apple_indigo 5e5ce6
-set -l apple_purple bf5af2
-set -l apple_pink ff375f
-set -l apple_brown ac8e68
-set -l apple_gray 98989d
-
 # color vars explained: https://fishshell.com/docs/current/interactive.html#syntax-highlighting-variables
 set fish_color_normal normal # default: normal
 set fish_color_autosuggestion 555 brblack # default: 555 brblack
