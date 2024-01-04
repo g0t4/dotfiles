@@ -4,7 +4,7 @@ ealias pwdcp="pwd | pbcopy"
 ealias wdcp="pwd | pbcopy"
 
 if ! is_macos; then
-    # alias pbcopy/paste (muscle memory for me)
+    # on non-macs make it appear as if pbcopy/paste are available
     alias pbcopy="clipcopy"
     alias pbpaste="clippaste"
     # NOTE alias => not expanding
@@ -12,6 +12,8 @@ if ! is_macos; then
     # omz clipcopy/paste (calls system specific backend: ie pbcopy/paste on mac)
 
     # avoid alias on mac (not confirmed) but I suspect it could cause infinite loop depending on how clipcopy/paste are implemented to use pbcopy/paste on a mac, so just avoid the possibility
+
+    # FYI I use pbcopy/paste in several other functions/aliases so make sure to consider those if you change how pbcopy/paste work
 fi
 
 # *** yank+copy binding: meta/esc+k
