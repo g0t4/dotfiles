@@ -1,3 +1,4 @@
+# TODO warn if this is run on non-windows pwsh? or put warning elsewhere?
 
 # make it appear as if pbcopy/paste are available
 # assumption: this only runs on windows+pwsh
