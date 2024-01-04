@@ -15,7 +15,9 @@ alias pbpaste="clippaste"
 _custom_kill_and_copy_buffer() {
     # clears line and puts it into clipboard (also yank goes to killring)
     zle kill-buffer
-    echo -n $CUTBUFFER | pbcopy
+    echo -n $CUTBUFFER | clipcopy
+    # CONFIRMED clipcopy works here on a mac
+    # TODO TEST clipcopy works here in WSL
 }
 
 zle -N _custom_kill_and_copy_buffer
