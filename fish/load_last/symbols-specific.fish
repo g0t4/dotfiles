@@ -1,5 +1,4 @@
-function get_shell_symbols
-    # abbreviated as `ss`
+function get_fish_symbols
 
     # think symbols search in vscode
     # think Get-Command in powershell on steroids (gcm returns funcs, aliases, cmdlets)
@@ -30,4 +29,19 @@ function get_shell_symbols
 
 end
 
-# drawback to functions dir: wanting additional related config nearby (ie setting an abbreviation like gss for get_shell_symbols), which wouldn't load unless the one function (name of file) was invoked first!
+# OR, `fs`/`fsym` and `ffb`?
+abbr ss get_fish_symbols
+abbr sfb get_fish_function_bodies
+
+function get_fish_function_bodies
+
+    begin
+        #  might need to prefix each line with the type? for cases where we just get name
+        functions --all | while read -l func
+            echo -e "# $func\n"
+            functions $func
+        end
+        # prn what about bind functions?
+    end # | grep -i "$argv"
+    # I would like to pipe to grep but then I lose coloring which makes sense but I want to keep it for now and revisit filtering later
+end
