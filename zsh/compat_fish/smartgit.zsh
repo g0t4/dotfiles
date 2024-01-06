@@ -1,5 +1,5 @@
 # `open` means smartgit process is not a subprocess of shell (doesn't block shell)
-alias smartgit="open -na SmartGit --args" # all args after --args are passed to smartgit
+ealias smartgit="open -na SmartGit --args" # all args after --args are passed to smartgit
 # -n => new instance each time (otherwise open is ignored if existing instance is open)
 # absolute paths work, not relative
 
@@ -17,8 +17,9 @@ ealias sgl='smartgit --log "$(pwd)"' # open log for current dir repo
 #### SMART SYNCHRONIZE
 
 # alias ss="/Applications/SmartSynchronize.app/Contents/MacOS/SmartSynchronize" # block shell
-alias ss="open -a SmartSynchronize"
-# TODO add alias to launch diff?
+# alias ss="open -a SmartSynchronize"
+ealias smartsynchronize="open -na SmartSynchronize --args" # all args after --args are passed to SmartSynchronize
+# reclaimed ss for get_shell_symbols, I don't recall ever using ss for smartsynchronize (or even launching it from CLI)
 
 ## NOTES
 

@@ -1,4 +1,5 @@
 function get_shell_symbols
+    # abbreviated as `ss`
 
     # think symbols search in vscode
     # think Get-Command in powershell on steroids (gcm returns funcs, aliases, cmdlets)
@@ -28,3 +29,5 @@ function get_shell_symbols
     end | grep -i "$argv"
 
 end
+
+# drawback to functions dir: wanting additional related config nearby (ie setting an abbreviation like gss for get_shell_symbols), which wouldn't load unless the one function (name of file) was invoked first!
