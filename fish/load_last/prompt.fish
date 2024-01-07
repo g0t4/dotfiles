@@ -49,6 +49,6 @@ function fish_prompt
     # 
     # 
     # 
-    set replace_with ")"
+    set replace_with "↝"
     original_fish_prompt | string replace ">" $replace_with
 end
