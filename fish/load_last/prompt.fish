@@ -34,7 +34,10 @@ end
 
 
 # ** modify top level fish_prompt
-functions --copy fish_prompt original_fish_prompt
+if not functions -q original_fish_prompt
+    # make idempotent for _reload_config which I use to test out new prompts
+    functions --copy fish_prompt original_fish_prompt
+end
 
 # redefine (wrap)
 function fish_prompt
@@ -49,6 +52,7 @@ function fish_prompt
     # 
     # 
     # 
-    set replace_with "↝"
+    # ↝
+    set replace_with ")"
     original_fish_prompt | string replace ">" $replace_with
 end
