@@ -40,5 +40,5 @@ functions --copy fish_prompt original_fish_prompt
 # redefine (wrap)
 function fish_prompt
     # PRN could also drop showing status of previous command (or rearrange it) w/o reimplementing fish_prompt
-    original_fish_prompt | string replace ">" "❯"
+    original_fish_prompt | string replace ">" "  "
 end
