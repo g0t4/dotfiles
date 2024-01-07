@@ -41,12 +41,13 @@ function fish_prompt
     # PRN could also drop showing status of previous command (or rearrange it) w/o reimplementing fish_prompt
     # ❯
     #     \ue0c1
+    # 
     #   \ue0c8
     #    \ue0b5
     #   \uf307
     # 
     # 
     # 
-    set replace_with ""
+    set replace_with "❯ "
     original_fish_prompt | string replace ">" $replace_with
 end
