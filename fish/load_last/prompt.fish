@@ -32,7 +32,6 @@ function prompt_pwd --description 'wes mod - name of the current dir only'
     basename $PWD
 end
 
-# ❯
 
 # ** modify top level fish_prompt
 functions --copy fish_prompt original_fish_prompt
@@ -40,5 +39,13 @@ functions --copy fish_prompt original_fish_prompt
 # redefine (wrap)
 function fish_prompt
     # PRN could also drop showing status of previous command (or rearrange it) w/o reimplementing fish_prompt
-    original_fish_prompt | string replace ">" "  "
+    # ❯
+    #     \ue0c1
+    #    \ue0b5
+    #   \uf307
+    # 
+    # 
+    # 
+    set replace_with "  "
+    original_fish_prompt | string replace ">" $replace_with
 end
