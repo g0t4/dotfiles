@@ -37,6 +37,12 @@ function prompt_pwd --description 'wes mod - name of the current dir only'
     basename $PWD
 end
 
+function fish_title
+    # blank for now, never been a big fan of tab titles changing per directory or otherwise, probably b/c cd'ing in another tab between recordings leads to change on-screen that is needless (I don't find myself using the titles to navigate so its pointless friction for screen caps)
+    echo $USER
+    # FYI must set to something (can't be blank) else iTerm will show profile name (initially and then that sticks, haven't found setting to get it to stop that)
+    # TERM_PROGRAM iTerm.app
+end
 
 # ** modify top level fish_prompt
 if not functions -q original_fish_prompt
