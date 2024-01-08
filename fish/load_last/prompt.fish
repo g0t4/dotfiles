@@ -29,6 +29,11 @@ end
 
 function prompt_pwd --description 'wes mod - name of the current dir only'
     # PRN flush out other scenarios like I have with ~/repos/github/g0t4/foo => gh:g0t4/foo
+    # ~ for home dir
+    if string match -q "$HOME" $PWD
+        echo -n -s "~"
+        return
+    end
     basename $PWD
 end
 
