@@ -15,6 +15,7 @@ ealias python-config='python3-config'
 
 ### VENV (--clear allows to recreate venv if already dir exists, --upgrade-deps makes sure pip is latest)
 ealias ve='python3.10 -m venv --clear --upgrade-deps'
+ealias vedir='echo $VIRTUAL_ENV'
 ealias veinit='python3.10 -m venv --clear --upgrade-deps .venv && vea' # PRN follow with pip install -r requirements.txt (if req file exists)
 ealias veinitr='python3.10 -m venv --clear --upgrade-deps .venv && vea && pip3 install -r requirements.txt'
 # PRN make install requirements.txt conditional on its presence in current dir => i.e. fish abbreviation + function
