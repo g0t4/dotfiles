@@ -1,0 +1,6 @@
+# ask-openai
+openai
+keyring
+
+# wcl function (wes clone)
+giturlparse
