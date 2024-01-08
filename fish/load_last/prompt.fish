@@ -47,13 +47,15 @@ end
 # redefine (wrap)
 function fish_prompt
     # PRN could also drop showing status of previous command (or rearrange it) w/o reimplementing fish_prompt
-    # ❯
-    # )
+
+    # FYI these glyphs are added to nerd fonts and most are specifically from: https://github.com/ryanoasis/powerline-extra-symbols
     #     \ue0c1
     # 
     #   \ue0c8
     #    \ue0b5
     #   \uf307
+    # ❯
+    # ) # ** esp like
     # 
     # 
     # 
