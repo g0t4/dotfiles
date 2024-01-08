@@ -58,7 +58,7 @@ set fish_color_host_remote yellow # default: yellow
 # primary => odd numbered unselected completions:
 set fish_pager_color_background # default: empty
 set fish_pager_color_completion normal # default: normal
-set fish_pager_color_description B3A06D yellow -i # default: B3A06D yellow -i
+set fish_pager_color_description brblack yellow -i # default: B3A06D yellow -i   # 2nd color (yellow) is the fallback color
 set fish_pager_color_prefix normal --bold --underline # default: normal --bold --underline
 # secondary => even numbered unselected completions:
 set fish_pager_color_secondary_background # default: empty
@@ -71,7 +71,7 @@ set fish_pager_color_selected_completion # default: empty
 set fish_pager_color_selected_description # default: empty
 set fish_pager_color_selected_prefix # default: empty
 # bottom bar summarizes # matches etc:
-set fish_pager_color_progress brwhite '--background=cyan' # default: brwhite '--background=cyan'
+set fish_pager_color_progress '000' '--background=brwhite' # default: brwhite '--background=cyan'
 #
 ### *** ANSI COLOR CODES (ensure sync w/ color-specific.zsh)
 function dump_8bit_colors
