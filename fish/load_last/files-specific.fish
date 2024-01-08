@@ -110,3 +110,18 @@ end
 abbr --add findd --set-cursor=! 'find . -type d -iname "*!*"'
 abbr --add finddr --set-cursor=! 'find . -type d -iregex ".*!.*"' # another idea to consider
 # IDEAs: tree command for dirs? or exa?
+
+###### tree ######
+
+set _tree_exa 'eza --tree --group-directories-first --ignore-glob "node_modules|bower_components|.git" --color=always --color-scale=all --icons --git-repos'
+set _treed "tree --only-dirs"
+
+alias tree="$_tree_exa"
+ealias treed="$_treed"
+
+set _treeal "tree --all --long --group --sort size"
+ealias treev="$_treeal"
+
+# interchangable:
+ealias treedv="$_treeal --only-dirs"
+ealias treevd="$_treeal --only-dirs"
