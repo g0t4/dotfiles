@@ -111,8 +111,11 @@ abbr --add findd --set-cursor=! 'find . -type d -iname "*!*"'
 abbr --add finddr --set-cursor=! 'find . -type d -iregex ".*!.*"' # another idea to consider
 # IDEAs: tree command for dirs? or exa?
 
-###### tree ######
 
+###### ls/exa/eza/lsd/etc ######
+# PRN port over zsh mods for ls to use eza (though I am happy with fish's ls currently)
+
+###### tree ######
 set _tree_exa 'eza --tree --group-directories-first --ignore-glob "node_modules|bower_components|.git" --color=always --color-scale=all --icons --git-repos'
 set _treed "tree --only-dirs"
 
@@ -141,3 +144,5 @@ abbr --add _treevX --regex 'treev\d+' --function treevX
 function treevX
     string replace --regex '^treev' 'treev -L' $argv
 end
+
+ealias treeify="as-tree" # PRN do I ever use this?
