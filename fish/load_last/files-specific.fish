@@ -62,6 +62,7 @@ function cd_dir_of_path
     if test -L $_cd_path
         echo -e "symlink:\n   $_cd_path =>"
         set _cd_path $(readlink -f $_cd_path)
+        # PRN use `path resolve $_cd_path` instead (fish only)
     end
 
     if test -d $_cd_path
