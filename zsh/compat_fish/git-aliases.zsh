@@ -60,6 +60,7 @@ ealias gbl='git blame -b -w' # -w ignore whitespace, -b blank SHA1 for boundary 
 # commit and forget
 ealias gcrefactor="git commit -a -m 'refactor'"
 ealias gcnotes="git commit -a -m 'notes'"
+ealias gcsubs="git commit -a -m 'subs'"
 ealias gmark="git commit -a -m 'mark'"
 
 # FYI pwsh has many builtin aliases stating with 'g' b/c Get :)
