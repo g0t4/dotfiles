@@ -125,3 +125,19 @@ ealias treev="$_treeal"
 # interchangable:
 ealias treedv="$_treeal --only-dirs"
 ealias treevd="$_treeal --only-dirs"
+
+# treeX => tree -L X
+abbr --add _treeX --regex 'tree\d+' --function treeX
+function treeX
+    string replace --regex '^tree' 'tree -L' $argv
+end
+# treedX => treed -L X 
+abbr --add _treedX --regex 'treed\d+' --function treedX
+function treedX
+    string replace --regex '^treed' 'treed -L' $argv
+end
+# treevX => treev -L X
+abbr --add _treevX --regex 'treev\d+' --function treevX
+function treevX
+    string replace --regex '^treev' 'treev -L' $argv
+end
