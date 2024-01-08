@@ -77,7 +77,7 @@ end
 ealias cdd="cd_dir_of_path"
 
 # if batcat exists map to bat
-if type batcat 2>/dev/null >/dev/null
+if type batcat &>/dev/null
     # ubuntu
     alias bat=batcat
 end
