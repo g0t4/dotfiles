@@ -117,7 +117,7 @@ abbr --add finddr --set-cursor=! 'find . -type d -iregex ".*!.*"' # another idea
 # PRN port over zsh mods for ls to use eza (though I am happy with fish's ls currently)
 
 ###### tree ######
-set _tree_exa 'eza --tree --group-directories-first --ignore-glob "node_modules|bower_components|.git" --color=always --color-scale=all --icons --git-repos'
+set _tree_exa 'eza --tree --group-directories-first --ignore-glob "node_modules|bower_components|.git" --color-scale=all --icons --git-repos'
 set _treed "tree --only-dirs"
 
 alias tree="$_tree_exa"
