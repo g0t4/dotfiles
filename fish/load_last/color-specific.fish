@@ -88,6 +88,11 @@ set -g __color_191 "38;5;191" # neon yellow/green
 set -g __color_200 "38;5;200" # neon pink (bright)
 set -g __color_matching_text "$__color_bold;$__color_162"
 
+### *** wip LSCOLORS?
+# if is_macos
+#    set -gx LSCOLORS HfBxDxExCxGxgxaxbx
+# end
+
 ### *** macOS GREP_COLOR
 # default of red is fine too
 if is_macos
