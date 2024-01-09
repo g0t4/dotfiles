@@ -1,0 +1,14 @@
+# key : value
+regexp=^([^:]*):(.*)$
+colours=unchanged,cyan,unchanged
+=====
+# highlight key metadata (i.e. info that might be sensitive)
+regexp=(Camera Model Name|Host Computer|Lens Make|Lens Model|Lens ID)\s*:(.*)$
+colours=unchanged,unchanged,red
+=====
+# GPS data
+regexp=(GPS[^:]*)\s*:(.*)$
+colours=unchanged,unchanged,green
+
+## JUST SOME INITIAL IDEAS for how to make exif easier to review
+## PRN add more types (ie dates?) and color different?
