@@ -1,3 +1,4 @@
+import argparse
 from sys import argv
 import os
 import re
@@ -9,7 +10,9 @@ import subprocess
 import giturlparse
 
 
-def wcl(url: str):
+def wcl(args):
+    url: str = args.url
+    dry_run: bool = args.dry_run
 
     parsed = parse_repo(url)
     repos_dir = os.path.join(os.environ["HOME"], "repos")
@@ -17,31 +20,49 @@ def wcl(url: str):
     org_dir = os.path.dirname(repo_dir)
 
     # ensure org dir exists (including parents)
-    os.makedirs(org_dir, exist_ok=True)
+    if dry_run:
+        print("mkdir -p", org_dir)
+    else:
+        os.makedirs(org_dir, exist_ok=True)
 
     ### add dir to z ahead of cloning so I can CD to it while cloning
     # - or if dir already exists, then add to the stats count for it
     # - zsh's z (dir can be added before created)
     z_add_zsh = f"z --add '{repo_dir}'"
     # zsh -i => interactive which is where I load z command
-    subprocess.run(['zsh', '-il', '-c', z_add_zsh])
+    if dry_run:
+        print("zsh z add:")
+        print("\t", z_add_zsh)
+    else:
+        subprocess.run(['zsh', '-il', '-c', z_add_zsh])
 
     if os.path.isdir(repo_dir):
         print("repo_dir found, pulling latest")
         pull = ["git", "-C", repo_dir, "pull"]
-        subprocess.run(pull)
+        if dry_run:
+            print("\t", pull)
+        else:
+            subprocess.run(pull)
     else:
         clone_from = clone_url(parsed)
         print(f"cloning {clone_from}...")
         clone = ["git", "clone", "--recurse-submodules", clone_from, repo_dir]
-        subprocess.run(clone)
+        if dry_run:
+            print("\t", clone)
+        else:
+            subprocess.run(clone)
 
     ### add to fish's z:
     # - dir must exist before adding
     # - fish has __z_add which uses $PWD hence set cwd
     # - fish doesn't need interactive for z to be loaded (installed in functions dir)
     # - FYI I had issues w/ auto-venv (calling deactivate) in fish but not zsh, so I am not using interactive for fish and I disabled auto-venv for non-interactive fish shells
-    subprocess.run(['fish', '-c', "__z_add"], cwd=repo_dir)
+    z_add_fish = ['fish', '-c', "__z_add"]
+    if dry_run:
+        print("fish z add:")
+        print("\t", z_add_fish, f"cwd={repo_dir}")
+    else:
+        subprocess.run(z_add_fish, cwd=repo_dir)
 
 
 def clone_url(parsed) -> str:
@@ -91,9 +112,10 @@ def parse_repo(url: str):
 
 
 if __name__ == "__main__":
-    if len(argv) < 2:
-        print("missing repository url")
-        print(" usage: wcl <url>")
-        exit(1)
-    url = argv[1]
-    wcl(url)
+
+    parser = argparse.ArgumentParser(description="(w)es (cl)one", prog="wcl")
+    parser.add_argument("url", type=str, help="repository clone url")
+    # --dry-run flag:
+    parser.add_argument("--dry-run", action="store_true", help="preview changes")
+    parsed_args = parser.parse_args()
+    wcl(parsed_args)
