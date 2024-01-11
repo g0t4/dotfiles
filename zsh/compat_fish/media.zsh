@@ -2,6 +2,7 @@
 
 ealias exiftool="grc exiftool"
 # TODO if I add secondary expansions then need to inline this in them or find a way to recursively expand aliases (does fish do that? with abbr?)
+ealias exifc="grc exiftool -common -duration" # limit to common metadata
 
 ### *** ffmpeg et al
 alias ffmpeg="ffmpeg -hide_banner"
