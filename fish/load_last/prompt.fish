@@ -69,3 +69,9 @@ function fish_prompt
     set replace_with ")"
     original_fish_prompt | string replace ">" $replace_with
 end
+
+### *** idea for showing status code right before drawing prompt instead of in the prompt:
+#   inspired by zsh's option to show status after command runs: setopt prompt_subst
+# function after_command --on-event fish_postexec
+#     echo 'command result: '$status
+# end
