@@ -164,4 +164,9 @@ ealias bgr="bindkey | grep -i" # search bind keys easily
 # Ideas:
 # - "git c" => "git commit" [support spaces in alias/abbreviation, i.e. in https://zsh-abbr.olets.dev/essential-commands.html#expand-them)]
 #       but, tab completion seems superior b/c it doesn't require definitions (beyond completions) and is just a tab instead of space (to expand)
+#
+# PRN add -ExpandOnly flag to treat like fish abbr (not alias the ealias)?
+#   one use case is to alias a command to expand by default but not replace all other aliasing of that command
+#   ealias du='du -h | sort -hr'; ealias duh='du -h')   # in this case `duh` => 'du -h | sort -hr -h' thus breaking it
+#   PRN only do this if I switch back from fish shell which isn't likely at the current time
 

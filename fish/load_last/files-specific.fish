@@ -84,9 +84,12 @@ if type batcat &>/dev/null
 end
 
 ### DISK USAGE ###
-ealias du='du -h' # tree command doesn't show size of dirs (unless showing entire hierarchy so not -L 2 for example, so stick with du command)
-ealias dus='du -hd1 | sort -h --reverse' # sort by size (makes sense only for current dir1)
+# only expand du, don't also alias
+abbr du 'du -hd1 | sort -h --reverse' # sort by size (makes sense only for current dir1) => most of the time this is what I want to do so just use this for `du`
+#  FYI I could add psh => '| sort -hr' global alias (expands anywhere)?
+# retire: ealias du='du -h'  # tree command doesn't show size of dirs (unless showing entire hierarchy so not -L 2 for example, so stick with du command)
 ealias dua='du -ha' # show all files (FYI cannot use -a with -d1)
+ealias duh='du -h' # likely not needed, old du defaults before sort default
 #
 # show only N levels deep
 #   du1 => du -hd 1
