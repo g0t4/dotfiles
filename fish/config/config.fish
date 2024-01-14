@@ -30,6 +30,11 @@ for file in $WES_DOTFILES/fish/load_last/*.fish
     source $file
 end
 
+# optional, private config
+if test -f "$HOME/.config/fish/config-private.fish"
+    source "$HOME/.config/fish/config-private.fish"
+end
+
 ## WHY fish?
 # PROS:
 # - menu completion with tooltip (desc) for not just current menu selection but all current menu options
