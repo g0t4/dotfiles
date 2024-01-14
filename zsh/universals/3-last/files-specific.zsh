@@ -55,6 +55,7 @@ ealias cdd="cd_dir_of_path"
 
 ### DISK USAGE ###
 ealias du='du -h'  # tree command doesn't show size of dirs (unless showing entire hierarchy so not -L 2 for example, so stick with du command)
+ealias dus='du -hd1 | sort -h --reverse' # sort by size (makes sense only for current dir1)
 ealias dua='du -ha' # show all files
 for i in {1..10}; do ealias du$i="du -hd $i"; done # show only N levels deep
 #
