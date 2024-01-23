@@ -4,7 +4,6 @@ function _git_unpushed --description "Prints all branches to assess any unpushed
 
     for f in *
         if ! test -e $f/.git
-            echo skip $f
             # .git is a dir for repos
             # .git is a file for submodules
             # thus just check for existence
