@@ -8,7 +8,7 @@ function _git_unpushed --description "Prints all branches to assess any unpushed
         # submodules
         for sub in (git -C $repo_dir submodule foreach --quiet 'echo $path')
             # ? TODO indent status for submodules (would make it possible to move submodules into _repo_status)
-            log_header "  $sub" # for now indent the submodule path
+            # log_header "  $sub" # for now indent the submodule path
             _repo_status $repo_dir/$sub
         end
     end
