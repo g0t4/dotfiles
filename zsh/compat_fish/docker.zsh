@@ -201,3 +201,25 @@ ealias dcov='docker compose version'
 ## dld - docker labs debug:
 ealias dlda='dld attach'
 ealias dlds='dld shell'
+
+## skopeo
+ealias sk='skopeo'
+ealias skh='skopeo --help'
+ealias ski='skopeo --override-os linux inspect docker://'
+ealias skim='skopeo --override-os linux inspect --raw docker://'
+ealias skic='skopeo --override-os linux inspect --config --raw docker://'
+ealias skl='skopeo list-tags docker://'
+
+# usage:
+#   skopeo list-tags docker://weshigbee/oci-test
+#   skopeo inspect docker://weshigbee/oci-test
+# raw manifest:
+#   skopeo inspect --raw docker://weshigbee/oci-test
+# raw image config:
+#   skopeo inspect --config --raw docker://weshigbee/oci-test
+#  docs:  https://github.com/containers/skopeo/blob/main/contrib/skopeoimage/README.md
+
+## dive
+# alias dive='docker container run -i -t --rm -v /var/run/docker.sock:/var/run/docker.sock wagoodman/dive'
+# usage: dive <args>
+# ie: dive foo # (image)
