@@ -63,10 +63,39 @@ function _git_unpushed --description "Prints all branches to assess any unpushed
         # !  PRN get fetch all? before list/test branches
 
         # show local branches (i.e. is the latest commit pushed to a remote (tracking or otherwise)
-        PAGER= git -C $repo_dir branch -vv # add --all? shouldn't need to see all remove branches
+        #PAGER= git -C $repo_dir branch -vv # add --all? shouldn't need to see all remove branches
         # ideas for tests to replace just dumping branches:
         #   any local branches that don't have a tracked remotee
         #   any local branch that is ahead/behind its tracked remote
+
+
+        # --shell => each line of format provides a command and interpolated values are escaped
+        #   FYI see man git-ref-for-each for what info is available
+        git -C $repo_dir \
+            for-each-ref --shell \
+            --format="set ref %(refname:short); set upstream %(upstream:short); set push %(push); set upstream_track %(upstream:trackshort); set push_track %(push:trackshort)" \
+            refs/heads \
+            | while read entry
+            # rough first pass at my own emphasis on ref status, I like it! this is instead of using git branch -vv
+            eval "$entry"
+
+            # trackshort => < behind , > ahead , <> both, = same
+            if is_empty $upstream
+                log_ --apple_orange "$ref: no upstream"
+            else
+
+                # PRN consider $push too
+                if test $upstream_track = '='
+                    # = (show but don't highlight it)
+                    echo "$ref: $upstream_track ($upstream)"
+                else
+                    # ahead/behind/gone/both
+                    log_ --apple_red "$ref: $upstream_track ($upstream)"
+                end
+            end
+        end
+
+
     end
 
 
