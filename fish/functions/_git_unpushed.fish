@@ -71,10 +71,12 @@ function _git_unpushed --description "Prints all branches to assess any unpushed
 
         # --shell => each line of format provides a command and interpolated values are escaped
         #   FYI see man git-ref-for-each for what info is available
+        # TODO refs/stash => how do I wanna present that? right now it will show as stash: (no upstream) which is enough to flag it for my review, is that enough?
         git -C $repo_dir \
             for-each-ref --shell \
             --format="set ref %(refname:short); set upstream %(upstream:short); set push %(push:short); set upstream_track %(upstream:trackshort); set push_track %(push:trackshort)" \
-            refs/heads \
+            refs/heads refs/stash \
+            # refs/stash is a hack here to just flag for review (shows no upstream), take this out if it is wrong/confusing or whatever
             | while read entry
             # rough first pass at my own emphasis on ref status, I like it! this is instead of using git branch -vv
             eval "$entry"
