@@ -73,20 +73,23 @@ function _git_unpushed --description "Prints all branches to assess any unpushed
         #   FYI see man git-ref-for-each for what info is available
         git -C $repo_dir \
             for-each-ref --shell \
-            --format="set ref %(refname:short); set upstream %(upstream:short); set push %(push); set upstream_track %(upstream:trackshort); set push_track %(push:trackshort)" \
+            --format="set ref %(refname:short); set upstream %(upstream:short); set push %(push:short); set upstream_track %(upstream:trackshort); set push_track %(push:trackshort)" \
             refs/heads \
             | while read entry
             # rough first pass at my own emphasis on ref status, I like it! this is instead of using git branch -vv
             eval "$entry"
 
-            # trackshort => < behind , > ahead , <> both, = same
             if is_empty $upstream
                 log_ --apple_orange "$ref: no upstream"
             else
 
-                # PRN consider $push too
+                if test $push != $upstream
+                    # warn if push is set so I can address when encountered
+                    log_ --apple_green "$ref: upstream=$upstream differes from push=$push => not yet implemented how to present this"
+                end
+                # trackshort => < behind, > ahead, <> both, = same
                 if test $upstream_track = '='
-                    # = (show but don't highlight it)
+                    # = (show, don't emphasize)
                     echo "$ref: $upstream_track ($upstream)"
                 else
                     # ahead/behind/gone/both
