@@ -4,6 +4,7 @@ function ealias --description "map ealias to fish abbr(eviation)"
 
     # wow I already like fish scripting way better than zsh/bash!
 
+    # FYI NoSpaceAfter was a hack that worked well enough but might need polish / bug fixes
     set --local options (fish_opt --short=g) (fish_opt --short=n --long=NoSpaceAfter --long-only) # explicit arg specs! ==> same as 'g' but this is clear
     argparse $options -- $argv # removes matching specs from $argv
 
