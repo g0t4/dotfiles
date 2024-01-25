@@ -1,5 +1,27 @@
 function _git_unpushed --description "Prints all branches to assess any unpushed commits, in all git repos in the current directory"
 
+    function _abbreviated_path
+        # ? add this to my prompt, I am not sure I wanna waste space in the prompt for the org/repo name but maybe that would help, there are noticeable # of times I use pwd b/c I'm unsure which repo I am in, b/c right now prompt is just (basename $PWD)
+        set path $argv[1]
+        # $HOME/foo => ~/foo
+        set path (string replace -r '^'"$HOME" '~' $path)
+
+        # creates variable in default scope per named capture group: (long_host, remainder in this case)
+        #     ~/repos/github/g0t4/foo => long_host=github, remainder=g0t4/foo
+        #       => gh:g0t4/foo
+        set matches (string match --regex '^~/repos/(?<long_host>[^/]*)/(?<remainder>.*)' $path)
+        if test -n "$matches"
+            # replace common hostnames with shorter aliases
+            # probably more useful if I use this in prompt_pwd than to create headers for each repo below
+            set long_host (string replace 'github' 'gh' $long_host)
+            set long_host (string replace 'gitlab' 'gl' $long_host)
+            set long_host (string replace 'bitbucket' 'bb' $long_host)
+            set long_host (string replace 'wes-config' '' $long_host)
+            echo "$long_host:$remainder"
+            return
+        end
+        echo $path
+    end
 
     function _repo_and_submodules
         set repo_dir $argv[1]
@@ -7,8 +29,6 @@ function _git_unpushed --description "Prints all branches to assess any unpushed
 
         # submodules
         for sub in (git -C $repo_dir submodule foreach --quiet 'echo $path')
-            # ? TODO indent status for submodules (would make it possible to move submodules into _repo_status)
-            # log_header "  $sub" # for now indent the submodule path
             _repo_status $repo_dir/$sub
         end
     end
@@ -32,7 +52,7 @@ function _git_unpushed --description "Prints all branches to assess any unpushed
         end
 
         log_blankline
-        log_header $repo_dir # print path (has org and repo)
+        log_header (_abbreviated_path $repo_dir) # print path (has org and repo)
 
         # is the repo dirty? (ie uncommitted changes)
         set is_dirty (git -C $repo_dir status --porcelain)
