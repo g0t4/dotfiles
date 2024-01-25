@@ -7,11 +7,6 @@ function ealias --description "map ealias to fish abbr(eviation)"
     set --local options (fish_opt --short=g) (fish_opt --short=n --long=NoSpaceAfter --long-only) # explicit arg specs! ==> same as 'g' but this is clear
     argparse $options -- $argv # removes matching specs from $argv
 
-    if test $_flag_NoSpaceAfter
-        echo warn: NOSPACEAFTER
-        # -NoSpaceAfter => pass parma to abbr --cursor-position ! and add ! to end of abbr name
-    end
-
     if test (count $argv) -eq 0 || test (count $argv) -gt 2
         echo "invalid alias definition:"
         echo "  ealias <aliasname>=<alias_value>"

@@ -1,6 +1,6 @@
 # - w/ message
-ealias gcmsg='git commit -m "' -NoSpaceAfter
-ealias gcam='git commit -a -m "' -NoSpaceAfter
+ealias gcmsg='git commit -m "' --NoSpaceAfter
+ealias gcam='git commit -a -m "' --NoSpaceAfter
 
 # log
 ## https://git-scm.com/docs/git-log

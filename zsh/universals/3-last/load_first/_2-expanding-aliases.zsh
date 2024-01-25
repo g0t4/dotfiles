@@ -16,7 +16,8 @@ function ealias()
 {
     # parse options and remove (-D) them from positional args
     local -a flags # bool
-    zparseopts -E -a flags -D -- g NoSpaceAfter # FYI `man zshmodules` /zparseopts
+    # -NoSpaceAfter leads to --NoSpaceAfter parsing (I hacked this in to test and didn't research this at all so undo if it causes issues, worked on initial testings)
+    zparseopts -E -a flags -D -- g -NoSpaceAfter # FYI `man zshmodules` /zparseopts
     # -E don't stop on first non-matching flag => allow args before/after aliasdef
 
     local -a positional_args=("${(@)argv}") # remaining are positional (assumes all flags parsed)
@@ -59,10 +60,10 @@ function ealias()
     # - supports which/whence lookup
     # PRN would love to have tooltips too like I get with pwsh so tab completion shows the alias value too! that might be smth I can do with zstyle for aliases??
 
-    # PRN generalize nospaceafter to a set of options (i.e. -NoSpaceAfter, -NoColorize?, etc)
+    # PRN generalize nospaceafter to a set of options (i.e. --NoSpaceAfter, -NoColorize?, etc)
     #   FYI don't have to track -g option since alias -g is the only diff there
-    # support for -NoSpaceAfter like in my pwsh impl
-    if (( ${flags[(I)-NoSpaceAfter]} )); then
+    # support for --NoSpaceAfter like in my pwsh impl
+    if (( ${flags[(I)--NoSpaceAfter]} )); then
         # echo "NoSpaceAfter: $aliasdef" # troubleshoot
         # alternative might be to use `add-space` style (used by underlying _expand_alias ... would require mods below to how I use that b/c I am removing that space IIRC currently - see below) and then selectively disable it per alias via zstyle config (can zstyle handle lots of entries if specific? ie per alias?)
         ealiases_no_space_after+=(${aliasname})
@@ -70,7 +71,7 @@ function ealias()
 
     # add alias name to ealiases array, i.e. `ealias foo=bar` maps to `alias foo=bar` and ealiases+=(foo)
     ealiases+=(${aliasname})
-    # for -NoSpaceAfter and -g (global aliases) => add metadata to a separate ealiases_metadata array?
+    # for --NoSpaceAfter and -g (global aliases) => add metadata to a separate ealiases_metadata array?
 }
 
 function expand-ealias()
