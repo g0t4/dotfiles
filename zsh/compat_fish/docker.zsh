@@ -209,6 +209,7 @@ ealias ski='skopeo --override-os linux inspect docker://'
 ealias skim='skopeo --override-os linux inspect --raw docker://'
 ealias skic='skopeo --override-os linux inspect --config --raw docker://'
 ealias skl='skopeo list-tags docker://'
+ealias sklm='skopeo list-tags docker://mcr.microsoft.com/'
 
 # usage:
 #   skopeo list-tags docker://weshigbee/oci-test
