@@ -21,7 +21,7 @@ function _lookup_ealias_metadata() {
 function ealias() {
   # usage:
   #   ealias foo bar
-  #   ealias gcmsg 'git commit -m "' --NoSpaceAfter
+  #   ealias gcmsg 'git commit -m "' -NoSpaceAfter
   # TODO validate this works still in PowerShell or go back to single dash for ps1
   param(
     [Parameter(Mandatory=$true)][string]$Name,
