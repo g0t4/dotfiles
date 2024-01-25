@@ -4,10 +4,13 @@ function ealias --description "map ealias to fish abbr(eviation)"
 
     # wow I already like fish scripting way better than zsh/bash!
 
-    set --local options (fish_opt --short=g) # explicit arg specs! ==> same as 'g' but this is clear
+    set --local options (fish_opt --short=g) (fish_opt --short=n --long=NoSpaceAfter --long-only) # explicit arg specs! ==> same as 'g' but this is clear
     argparse $options -- $argv # removes matching specs from $argv
-    # PRN warn on -NoSpaceAfter? don't impl this just warn so I know to custom rewrite it for fish
-    # -NoSpaceAfter => pass parma to abbr --cursor-position ! and add ! to end of abbr name
+
+    if test $_flag_NoSpaceAfter
+        echo warn: NOSPACEAFTER
+        # -NoSpaceAfter => pass parma to abbr --cursor-position ! and add ! to end of abbr name
+    end
 
     if test (count $argv) -eq 0 || test (count $argv) -gt 2
         echo "invalid alias definition:"
@@ -37,7 +40,11 @@ function ealias --description "map ealias to fish abbr(eviation)"
     end
 
     # register to expand (when typed)
-    abbr --position $position --add $aliasname $alias_value
+    if test $_flag_NoSpaceAfter
+        abbr --position $position --add $aliasname --set-cursor="!" "$alias_value!"
+    else
+        abbr --position $position --add $aliasname $alias_value
+    end
     #
     # register to execute (i.e. when used in a function, such as `gsl`=>`glo; gst`)
 
