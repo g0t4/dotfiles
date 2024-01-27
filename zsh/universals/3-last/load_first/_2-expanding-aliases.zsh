@@ -1,6 +1,7 @@
 
 # DOES NOT NEED TO BE POST-COMPINIT # ! just needs to load before 3-last/helper scripts
-# ! must load after completions.zsh (dependent on menuselect keymap for binding below)
+
+# warn if compinit not yet called? i.e. if _expand_alias not yet defined?
 
 # ealias must be global (else ealias calls below, i.e. bgr, won't be registered as ealias and will be plain old alias)
 typeset -ag ealiases
