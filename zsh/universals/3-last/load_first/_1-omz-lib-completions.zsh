@@ -17,10 +17,6 @@ setopt auto_menu         # show completion menu on successive tab press
 setopt complete_in_word
 setopt always_to_end
 
-# FYI I never use this so I wouldn't be sad just to nuke it:
-bindkey -M menuselect '^o' accept-and-infer-next-history
-# directory completion with several levels of subdirs => Ctrl+O once desired dir is selected in menu and then menu completion shows completions for next nested dirs! <TAB> <arrows> <ctrl+O> selects dir <arrows> <ctrl+o> selects next dir <etc>
-
 zstyle ':completion:*:*:*:*:*' menu select
 
 # case insensitive (all), partial-word and substring completion
@@ -75,6 +71,7 @@ zstyle ':completion:*:*:*:users' ignored-patterns \
 # zstyle ':completion:*:warnings' format 'No matches for %d' # message to show when there is no match for all types searched => type bogus alias and TAB to test this
 #
 # zstyle ':completion:*' verbose yes # IIUC this is default true/yes
+#
 # FYI this guide is great for searching for a given word like 'auto-description' to see what it is about: https://zsh.sourceforge.io/Guide/zshguide06.html
 #     and/or docs lookup: https://zsh.sourceforge.io/Doc/Release/Completion-System.html#Completion-System
 
