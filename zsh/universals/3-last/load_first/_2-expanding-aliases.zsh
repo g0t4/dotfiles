@@ -1,7 +1,12 @@
 
-# DOES NOT NEED TO BE POST-COMPINIT # ! just needs to load before 3-last/helper scripts
+# DOES NOT NEED TO BE POST-COMPINIT # ! must load before 3-last/* scripts b/c many use `ealias`
 
-# warn if compinit not yet called? i.e. if _expand_alias not yet defined?
+if ! type _expand_alias &>/dev/null; then
+    # in cursory testing, compinit can be called after this script
+    # - still nice to warn that compinit needs to be called
+    # - else _expand_alias won't be defined and that will bust all ealias expansion
+    echo "expanding aliases won't work unless you call compinit" # troubleshoot
+fi
 
 # ealias must be global (else ealias calls below, i.e. bgr, won't be registered as ealias and will be plain old alias)
 typeset -ag ealiases
