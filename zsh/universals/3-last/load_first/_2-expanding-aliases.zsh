@@ -135,7 +135,19 @@ zle -N expand-ealias-then-accept-line-without-colorize
 bindkey -M emacs ' '  expand-ealias-then-magic-space # intercept (space) => expand alias first (space after word, or space to select completion)
 bindkey -M emacs '^ ' magic-space     # (control-space) => bypass completion (i.e. for troubleshooting)
 bindkey -M emacs '^M' expand-ealias-then-accept-line # intercept (return) => expand alias first! (return on command line)
-bindkey -M menuselect '^M' expand-ealias-then-accept-line # (return to select completion), also adding accept-line to run it so return means execute selection (normally return just selects)
+
+if bindkey -l menuselect &>/dev/null; then
+    # this binding is only needed when menuselect keymap is loaded
+    #   menuselect keymap comes from `zmodload -i zsh/complist`
+    bindkey -M menuselect '^M' expand-ealias-then-accept-line # (return => select completion + expand if alias + execute [accept-line]) (otherwise, return just selects + adds space)
+
+    # in completion my workflow is:
+    #   - <TAB*><SPACE> => select (space means I have more to type, more args)
+    #   - <TAB*><RETURN> => execute (as in select => expand alias => execute)
+
+    # if menuselect not present, then the below binding (^J/return) covers execute from tab completion:
+fi
+
 bindkey -M emacs '^J' expand-ealias-then-accept-line-without-colorize # Ctrl-J defaults to accept-line, repurpose to expand w/o colorize too (i.e. when colorize is not desireable/misbehaving)
 # FYI '^I'(tab) is later bound to fzf-complete (or w/o fzf maps to expand-or-complete == try shell expand (not aliases) or start complete) so don't bother overriding it here, let tab start tab completion only! later space/return selects completion and triggers bindings above
 # Test Cases:
