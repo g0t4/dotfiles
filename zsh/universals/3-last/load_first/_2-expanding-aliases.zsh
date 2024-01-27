@@ -5,7 +5,7 @@ if ! type _expand_alias &>/dev/null; then
     # in cursory testing, compinit can be called after this script
     # - still nice to warn that compinit needs to be called
     # - w/o compinit => _expand_alias not defined (no alias expansion work)
-    echo "expanding aliases won't work unless you call compinit"
+    echo "WARN: compinit must be called for alias expansion to work"
 fi
 
 # ealias must be global (else ealias calls below, i.e. bgr, won't be registered as ealias and will be plain old alias)
