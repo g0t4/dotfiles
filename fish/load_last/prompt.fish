@@ -72,6 +72,7 @@ function fish_prompt_modified --description 'Write out the prompt'
         set -l status_color (set_color $fish_color_status)
         set -l statusb_color (set_color --bold $fish_color_status)
         set prompt_status (__fish_print_pipestatus "[" "]" "|" "$status_color" "$statusb_color" $last_pipestatus)
+        # FYI ❤️ presentation of exit codes / status from __fish_print_pipestatus (aside from now effectively unused bold color part)
     end
     set --global __fish_prompt_last_displayed_status_generation $status_generation
     # test these scenarios:
