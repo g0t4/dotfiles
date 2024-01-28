@@ -67,6 +67,7 @@ function fish_prompt --description 'Write out the prompt'
     set -l bold_flag --bold
     set -q __fish_prompt_status_generation; or set -g __fish_prompt_status_generation $status_generation
     if test $__fish_prompt_status_generation = $status_generation
+        # not bold if status wasn't changed by last prompt/command (ie no command run)
         set bold_flag
     end
     set __fish_prompt_status_generation $status_generation
