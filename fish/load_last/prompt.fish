@@ -64,15 +64,13 @@ function fish_prompt --description 'Write out the prompt'
 
     # Write pipestatus
     # If the status was carried over (if no command is issued or if `set` leaves the status untouched), don't bold it.
-    set -l bold_flag --bold
     if not set -q __fish_prompt_last_status_generated
         or test $__fish_prompt_last_status_generated = $status_generation
-        # old status
-        set bold_flag
+        # not status yet, or old status
     else
         # new status
         set -l status_color (set_color $fish_color_status)
-        set -l statusb_color (set_color $bold_flag $fish_color_status)
+        set -l statusb_color (set_color --bold $fish_color_status)
         set prompt_status (__fish_print_pipestatus "[" "]" "|" "$status_color" "$statusb_color" $last_pipestatus)
     end
     set --global __fish_prompt_last_status_generated $status_generation
