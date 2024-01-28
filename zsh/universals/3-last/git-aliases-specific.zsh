@@ -51,6 +51,7 @@ for i in {2..10}; do ealias "gdlc$i"="git log --patch --color-words HEAD~$i..HEA
 ealias rr='_repo_root'
 # prd = print repo directoy ;) (like pwd)
 ealias prd='_repo_root'
+ealias pwdr='git rev-parse --show-prefix'
 function _repo_root() {
   if git rev-parse --is-inside-work-tree 2>/dev/null  1>/dev/null; then
     git rev-parse --show-toplevel 2>/dev/null

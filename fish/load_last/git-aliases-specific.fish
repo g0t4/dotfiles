@@ -49,6 +49,7 @@ ealias rr='_repo_root'
 alias rr='_repo_root' # ! first issue, abbreviations aren't expanded during command evaluation (or is there an arg for it?) so I have to define it twice if I wanna use it elsewhere... probably should just use _repo_root elsewhere but I use $(rr) often in other aliases so lets be safe
 # prd = print repo directoy ;) (like pwd)
 ealias prd='_repo_root'
+ealias pwdr='git rev-parse --show-prefix'
 function _repo_root
 
     if git rev-parse --is-inside-work-tree 2>/dev/null 1>/dev/null
