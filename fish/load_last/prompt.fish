@@ -45,7 +45,7 @@ function fish_title
 end
 
 # Defined in /opt/homebrew/Cellar/fish/3.7.0/share/fish/functions/fish_prompt.fish @ line 4
-function fish_prompt --description 'Write out the prompt'
+function fish_prompt_modified --description 'Write out the prompt'
     set -l last_pipestatus $pipestatus
     set -lx __fish_last_status $status # Export for __fish_print_pipestatus.
     set -l normal (set_color normal)
@@ -74,14 +74,13 @@ function fish_prompt --description 'Write out the prompt'
         set prompt_status (__fish_print_pipestatus "[" "]" "|" "$status_color" "$statusb_color" $last_pipestatus)
     end
     set --global __fish_prompt_last_displayed_status_generation $status_generation
+    # test these scenarios:
+    # false => shows [1] on next prompt, return clears
+    # true never shows anything
+    # sleep 10 => Ctrl+C => shows [SIGINT]
+    # true | false => shows [0|1] on next prompt, return clears
 
     echo -n -s (prompt_login)' ' (set_color $color_cwd) (prompt_pwd) $normal (fish_vcs_prompt) $normal " "$prompt_status $suffix " "
-end
-
-# ** modify top level fish_prompt
-if not functions -q original_fish_prompt
-    # make idempotent for _reload_config which I use to test out new prompts
-    functions --copy fish_prompt original_fish_prompt
 end
 
 # redefine (wrap)
@@ -101,7 +100,7 @@ function fish_prompt
     # 
     # ↝
     set replace_with ")"
-    original_fish_prompt | string replace ">" $replace_with
+    fish_prompt_modified | string replace ">" $replace_with
 end
 
 ### *** idea for showing status code right before drawing prompt instead of in the prompt:
