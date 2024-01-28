@@ -50,8 +50,7 @@ alias rr='_repo_root' # ! first issue, abbreviations aren't expanded during comm
 # prd = print repo directoy ;) (like pwd)
 ealias pwdr='git rev-parse --show-prefix'
 
-# pwd for a repository
-function prd --description "print current dir with repo root colored separate of prefix (dir relative to repo root)"
+function prd --description "pwd for a repository => repo root in yellow + repo dir in white"
     set _rr (_repo_root)
     set _prefix (git rev-parse --show-prefix)
     echo -s $_rr (set_color --bold white) /$_prefix (set_color normal)
