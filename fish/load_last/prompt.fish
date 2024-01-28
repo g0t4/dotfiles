@@ -67,13 +67,15 @@ function fish_prompt --description 'Write out the prompt'
     set -l bold_flag --bold
     set -q __fish_prompt_status_generation; or set -g __fish_prompt_status_generation $status_generation
     if test $__fish_prompt_status_generation = $status_generation
-        # not bold if status wasn't changed by last prompt/command (ie no command run)
+        # old status
         set bold_flag
+    else
+        # new status
+        set -l status_color (set_color $fish_color_status)
+        set -l statusb_color (set_color $bold_flag $fish_color_status)
+        set prompt_status (__fish_print_pipestatus "[" "]" "|" "$status_color" "$statusb_color" $last_pipestatus)
     end
     set __fish_prompt_status_generation $status_generation
-    set -l status_color (set_color $fish_color_status)
-    set -l statusb_color (set_color $bold_flag $fish_color_status)
-    set -l prompt_status (__fish_print_pipestatus "[" "]" "|" "$status_color" "$statusb_color" $last_pipestatus)
 
     echo -n -s (prompt_login)' ' (set_color $color_cwd) (prompt_pwd) $normal (fish_vcs_prompt) $normal " "$prompt_status $suffix " "
 end
