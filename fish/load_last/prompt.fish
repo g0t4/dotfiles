@@ -62,16 +62,18 @@ function fish_prompt --description 'Write out the prompt'
         set suffix '#'
     end
 
-    # Write pipestatus
+    # Write status
+    # - only if command was run in previous prompt
+    # - goal: clear status (in prompt) simply by hitting enter (empty prompt), followed by cmd+k to clear screen too
     # FYI $status_generation is incremented each time a command is actually run (so, not when empty prompt submitted)
-    if set -q __fish_prompt_last_status_generated
-        and not test $__fish_prompt_last_status_generated = $status_generation
-        # new status (generation) so show it
+    if set -q __fish_prompt_last_displayed_status_generation
+        and not test $__fish_prompt_last_displayed_status_generation = $status_generation
+        # new status (generated) => show it
         set -l status_color (set_color $fish_color_status)
         set -l statusb_color (set_color --bold $fish_color_status)
         set prompt_status (__fish_print_pipestatus "[" "]" "|" "$status_color" "$statusb_color" $last_pipestatus)
     end
-    set --global __fish_prompt_last_status_generated $status_generation
+    set --global __fish_prompt_last_displayed_status_generation $status_generation
 
     echo -n -s (prompt_login)' ' (set_color $color_cwd) (prompt_pwd) $normal (fish_vcs_prompt) $normal " "$prompt_status $suffix " "
 end
