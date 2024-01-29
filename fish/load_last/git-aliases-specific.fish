@@ -53,12 +53,14 @@ ealias pwdr='git rev-parse --show-prefix'
 function pwd --description "pwd for a repository => repo root in yellow + repo dir in white"
     # do I want to use this?
     if not isatty stdout
-        builtin pwd
+        builtin pwd $argv
         return
     end
+    # PRN support -P/-L arg like builtin does, and set default behavior of not resolving symlinks (-L) because right now the below defaults as if -P was passed (it resolves symlinks)
     set _rr (_repo_root)
     set _prefix (git rev-parse --show-prefix 2>/dev/null)
     echo -s $_rr (set_color --bold white) /$_prefix (set_color normal)
+    # PRN I like leaving white / on end of path but builtin for pwd doesn't include the final slash, I like it right now b/c it makes it clear that it is the root of a repo
 end
 
 function _repo_root
