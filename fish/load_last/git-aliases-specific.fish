@@ -45,9 +45,6 @@ function gdlcX
 end
 
 # VCS in general:
-ealias rr='_repo_root'
-alias rr='_repo_root' # ! first issue, abbreviations aren't expanded during command evaluation (or is there an arg for it?) so I have to define it twice if I wanna use it elsewhere... probably should just use _repo_root elsewhere but I use $(rr) often in other aliases so lets be safe
-# prd = print repo directoy ;) (like pwd)
 ealias pwdr='git rev-parse --show-prefix'
 
 function pwd --description "pwd for a repository => repo root in yellow + repo dir in white"
@@ -63,6 +60,8 @@ function pwd --description "pwd for a repository => repo root in yellow + repo d
     # PRN I like leaving white / on end of path but builtin for pwd doesn't include the final slash, I like it right now b/c it makes it clear that it is the root of a repo
 end
 
+ealias rr='_repo_root'
+alias rr='_repo_root' # ! first issue, abbreviations aren't expanded during command evaluation (or is there an arg for it?) so I have to define it twice if I wanna use it elsewhere... probably should just use _repo_root elsewhere but I use $(rr) often in other aliases so lets be safe
 function _repo_root
 
     if git rev-parse --is-inside-work-tree 2>/dev/null 1>/dev/null
