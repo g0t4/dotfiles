@@ -1,7 +1,7 @@
 
 
 
-function _reload_like_omz {
+function _reload_config {
   # Delete current completion cache
   command rm -rf ~/.zcomp* # for now just nuke all ~/.zcomp files/dirs => ~/.zcompdump seems default now and also ~/.zcompcache shows up at times
   # command rm -f $_comp_dumpfile $ZSH_COMPDUMP
