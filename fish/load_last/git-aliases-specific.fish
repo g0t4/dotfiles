@@ -45,8 +45,6 @@ function gdlcX
 end
 
 # VCS in general:
-ealias pwdr='git rev-parse --show-prefix'
-
 function pwd --description "pwd for a repository => repo root in yellow + repo dir in white"
     # if this causes grief, go back to just prd
     if not isatty stdout
