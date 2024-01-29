@@ -52,7 +52,7 @@ ealias pwdr='git rev-parse --show-prefix'
 
 function prd --description "pwd for a repository => repo root in yellow + repo dir in white"
     set _rr (_repo_root)
-    set _prefix (git rev-parse --show-prefix)
+    set _prefix (git rev-parse --show-prefix 2>/dev/null)
     echo -s $_rr (set_color --bold white) /$_prefix (set_color normal)
 end
 
