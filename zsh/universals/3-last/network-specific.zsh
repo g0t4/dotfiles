@@ -22,3 +22,11 @@ _my_ip6() {
 # FYI alternate API with more details
 # - https://ip-api.com/docs
 # - curl ip-api.com => json with geo location, IP etc
+
+# *** SSH ***
+
+function _ssh_exit_all_sockets() {
+  for socket in ~/.ssh/sockets/*; do
+    ssh -O exit -S "$socket" dummyuser@dummyhost
+  done
+}
