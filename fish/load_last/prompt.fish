@@ -20,6 +20,7 @@ function prompt_login --description 'display user name for the prompt'
 
     # selectively show hostname
     if not string match -q "mbp*" $hostname
+        and not string match -q "build*" $hostname
         # chances of showing hostname and python icon are low so don't worry about leading space here b/c then I have to disable it when not python icon and that's yuck
         echo -n -s $hostname
     end
