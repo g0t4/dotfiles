@@ -50,7 +50,12 @@ alias rr='_repo_root' # ! first issue, abbreviations aren't expanded during comm
 # prd = print repo directoy ;) (like pwd)
 ealias pwdr='git rev-parse --show-prefix'
 
-function prd --description "pwd for a repository => repo root in yellow + repo dir in white"
+function pwd --description "pwd for a repository => repo root in yellow + repo dir in white"
+    # do I want to use this?
+    if not isatty stdout
+        builtin pwd
+        return
+    end
     set _rr (_repo_root)
     set _prefix (git rev-parse --show-prefix 2>/dev/null)
     echo -s $_rr (set_color --bold white) /$_prefix (set_color normal)
