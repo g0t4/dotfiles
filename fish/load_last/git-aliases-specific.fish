@@ -51,7 +51,7 @@ alias rr='_repo_root' # ! first issue, abbreviations aren't expanded during comm
 ealias pwdr='git rev-parse --show-prefix'
 
 function pwd --description "pwd for a repository => repo root in yellow + repo dir in white"
-    # do I want to use this?
+    # if this causes grief, go back to just prd
     if not isatty stdout
         builtin pwd $argv
         return
