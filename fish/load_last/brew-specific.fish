@@ -32,6 +32,8 @@ function _brew_search_with_analytics
     #    _reload_config; _brew_search_with_analytics foo
 
     # ! PRN --desc --eval-all # option? (below for --cask too)
+    # if pass --desc then not only are package names listed but their descriptions too => so I would have to split those out and keep descriptions probably so I can show them in my table too?
+
     set formula (brew search --formula $query)
     # set formula fox fop fio # hard code to test
 
