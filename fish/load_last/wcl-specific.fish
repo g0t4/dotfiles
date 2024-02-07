@@ -1,7 +1,7 @@
 function wcl
 
   set -l _python3 "$WES_DOTFILES/.venv/bin/python3"
-  set -l _wcl_py "$WES_DOTFILES/zsh/universals/3-last/wcl/wcl.py"
+  set -l _wcl_py "$WES_DOTFILES/zsh/universals/3-last/pythons/wcl.py"
 
   $_python3 $_wcl_py $argv
 
