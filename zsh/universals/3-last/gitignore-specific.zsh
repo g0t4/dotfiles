@@ -15,7 +15,7 @@ function gitattributes_for(){
 # copied from omz example: https://github.com/ohmyzsh/ohmyzsh/blob/master/plugins/gitignore/gitignore.plugin.zsh
 
 ealias gi="gitignores_for"
-function gitignores_for() { 
+function gitignores_for() {
   curl -sfLw '\n' https://www.gitignore.io/api/"${(j:,:)@}"
   if [[ $? -ne 0 ]]; then
     return -1
