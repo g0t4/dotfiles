@@ -9,6 +9,10 @@ import subprocess
 #   (careful there are several other similar named packages)
 import giturlparse
 
+# set a constant to name False (for subprocess.run) to make it more readable:
+IGNORE_FAILURE = False
+STOP_ON_FAILURE = True
+
 
 def wcl(args):
     url: str = args.url
@@ -34,15 +38,15 @@ def wcl(args):
         print("zsh z add:")
         print("\t", z_add_zsh)
     else:
-        subprocess.run(['zsh', '-il', '-c', z_add_zsh])
+        subprocess.run(['zsh', '-il', '-c', z_add_zsh], check=IGNORE_FAILURE)
 
     if os.path.isdir(repo_dir):
-        print("repo_dir found, pulling latest")
+        print("repo_dir found, attempt pull latest")
         pull = ["git", "-C", repo_dir, "pull"]
         if dry_run:
             print("\t", pull)
         else:
-            subprocess.run(pull)
+            subprocess.run(pull, check=IGNORE_FAILURE)
     else:
         clone_from = clone_url(parsed)
         print(f"cloning {clone_from}...")
@@ -50,7 +54,7 @@ def wcl(args):
         if dry_run:
             print("\t", clone)
         else:
-            subprocess.run(clone)
+            subprocess.run(clone, check=STOP_ON_FAILURE)
 
     ### add to fish's z:
     # - dir must exist before adding
@@ -62,7 +66,7 @@ def wcl(args):
         print("fish z add:")
         print("\t", z_add_fish, f"cwd={repo_dir}")
     else:
-        subprocess.run(z_add_fish, cwd=repo_dir)
+        subprocess.run(z_add_fish, cwd=repo_dir, check=IGNORE_FAILURE)
 
 
 def clone_url(parsed) -> str:
