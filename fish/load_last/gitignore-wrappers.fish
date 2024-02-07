@@ -13,3 +13,8 @@ abbr gia append_gitignores_for
 function append_gitignores_for --wraps gitignores_for
     zsh -ic "append_gitignores_for $argv"
 end
+
+abbr gii gitignore_init
+function gitignore_init
+    zsh -ic "gitignore_init $argv"
+end

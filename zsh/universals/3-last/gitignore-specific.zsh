@@ -55,9 +55,9 @@ function append_gitignores_for(){
   fi
 }
 
-ealias gib="gitignore_init"
+ealias gii="gitignore_init"
 function gitignore_init(){
-  gic macos windows \
+  commit_gitignores_for macos windows \
     images \
     visualstudiocode \
     archives \
