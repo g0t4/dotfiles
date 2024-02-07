@@ -1,3 +1,10 @@
+
+# PRN gattr helper:
+# abbr gattr gitattributes_for
+# function gitattributes_for
+#     zsh -ic "gitattributes_for $argv"
+# end
+
 abbr gi gitignores_for
 function gitignores_for
     zsh -ic "gitignores_for $argv"

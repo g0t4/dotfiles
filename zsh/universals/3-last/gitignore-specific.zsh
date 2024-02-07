@@ -1,15 +1,15 @@
 
 # I setup wrappers in FISH to invoke these zsh functions
 
-ealias gattr="gitattributes_for"
-function gitattributes_for(){
-  # todo how do I want to do this? it won't be like gi (git ignore helper) b/c these gitattributes templates seem to be not additive
-  # ! most likely I want to just make my own default and stick with it always?
-  curl -sfLw '\n' https://raw.githubusercontent.com/gitattributes/gitattributes/master/Web.gitattributes
-  if [[ $? -ne 0 ]]; then
-    return -1
-  fi
-}
+# ealias gattr="gitattributes_for"
+# function gitattributes_for(){
+#   # todo how do I want to do this? it won't be like gi (git ignore helper) b/c these gitattributes templates seem to be not additive
+#   # ! most likely I want to just make my own default and stick with it always?
+#   curl -sfLw '\n' https://raw.githubusercontent.com/gitattributes/gitattributes/master/Web.gitattributes
+#   if [[ $? -ne 0 ]]; then
+#     return -1
+#   fi
+# }
 
 
 # copied from omz example: https://github.com/ohmyzsh/ohmyzsh/blob/master/plugins/gitignore/gitignore.plugin.zsh
