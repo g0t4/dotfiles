@@ -1,8 +1,8 @@
 
 # uncomment to see when this file is loaded:
-# echo "loading gi.fish"
+# echo "loading gitignores_for.fish"
 
-complete -c gi --no-files
+complete -c gitignores_for --no-files
 
 function _gitignoreio_get_command_list
     # FYI this doesn't need to be deferred if using fish_completion_path to autoload this completion
@@ -21,7 +21,7 @@ function _gitignoreio_get_command_list
 end
 
 # -a param won't be expanded/substituted until Completion Time
-complete -c gi -a '(_gitignoreio_get_command_list)'
+complete -c gitignores_for -a '(_gitignoreio_get_command_list)'
 
 # complete -c foo # shows completions for foo (if autoloaded must first trigger completion, i.e. foo<TAB> before they will be listed)
 # docs:
