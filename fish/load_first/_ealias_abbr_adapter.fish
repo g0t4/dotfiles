@@ -7,6 +7,11 @@
 
 # expensive to setup options spec (1/3 of each call to ealias) so do it once (does result in global scope) => saves 100+ ms overall
 set ealias_options (fish_opt --short=g) (fish_opt --short=n --long=NoSpaceAfter --long-only) # explicit arg specs! ==> same as 'g' but this is clear
+# FYI fish --profile-startup=startup.log:
+#   durations are in MICROSECONDS
+#   Time column = total time MINUS nested time (current only)
+#   Sum column total time (current+nested)
+#   src here: https://github.com/fish-shell/fish-shell/blob/master/src/parser.rs#L185-L211
 
 function ealias --description "map ealias to fish abbr(eviation)"
 
