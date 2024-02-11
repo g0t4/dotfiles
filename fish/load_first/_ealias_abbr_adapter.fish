@@ -22,11 +22,7 @@ set ealias_options (fish_opt --short=g) (fish_opt --short=n --long=NoSpaceAfter 
 
 function ealias --description "map ealias to fish abbr(eviation)"
 
-    # wow I already like fish scripting way better than zsh/bash!
-
-    # FYI NoSpaceAfter was a hack that worked well enough but might need polish / bug fixes
     argparse $ealias_options -- $argv # removes matching specs from $argv
-    # ! OPTIMIZE => what is strange to me is that argparse (which is a parser w/ dynamic options) only takes 7us whereas (set num_args count $argv) takes 46us and of that 19us is just count $argv?! why? they both operate on $argv and one is a hell of a lot more complex? is one written in c++ perhaps? and one in shell code? or? both set variables too?! confusing
 
     # not checking for invalid args saves 30+us per invocation => so, dont include what is a pre-condition as I can always add that check in manually and remove it from production code so as not to waste time on assertions in prod where it is not likely ever needed and so just bogs down real usage!
 
