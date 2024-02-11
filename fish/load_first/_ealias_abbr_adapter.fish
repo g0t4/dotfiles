@@ -26,7 +26,7 @@ function ealias --description "map ealias to fish abbr(eviation)"
     argparse $ealias_options -- $argv # removes matching specs from $argv
 
     # WIP optimizing => calc count one time shaves ~130ms overall!?
-    set -l num_args (count $argv)
+    set -l num_args (count $argv) # why does this take 25us???
 
     if test $num_args -eq 0 || test $num_args -gt 2
         echo "invalid alias definition:"
