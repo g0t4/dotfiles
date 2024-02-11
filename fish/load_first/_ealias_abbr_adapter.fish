@@ -92,7 +92,7 @@ function ealias --description "map ealias to fish abbr(eviation)"
     # define func directly, to inline what I need from alias to cut some of the delay
     # - FYI I may have issues with infinite recursion if name=$aliasname is start of $alias_value (body)
     # - FYI to validate these funcs work, comment out `abbr` calls above so you can call the function
-    # PRN do I really need to define the alias? TODO review why I added this and see if I can remove/modify some other way?
+    # - FYI this is needed to support compositional aliases => `gsl`=>`gst && echo && glo`
     echo "function $aliasname; $alias_value \$argv; end" | source # The function definition in split in two lines to ensure that a '#' can be put in the body.
     # - saved 100ms+ vs using alias def above
 end
