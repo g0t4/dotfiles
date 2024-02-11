@@ -44,8 +44,9 @@ function ealias --description "map ealias to fish abbr(eviation)"
         # ealias foo=bar
         set aliasdef $argv[1]
         # split aliasdef on first '=':
-        set aliasname (string split -m 1 = $aliasdef)[1]
-        set alias_value (string split -m 1 = $aliasdef)[2]
+        set splitted (string split -m 1 = $aliasdef) # ~30us mbp
+        set aliasname $splitted[1]
+        set alias_value $splitted[2]
     end
 
     # echo "name: $aliasname"
