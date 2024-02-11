@@ -78,5 +78,9 @@ function ealias --description "map ealias to fish abbr(eviation)"
         # - global aliases like byml=`| bat -l yml` (doesn't make sense in command position anyways)
         return
     end
+
+    # !!! alias is very expensive => appears to be 200us => 120+ms overall
+    #   can I define a func instead? => I imagine b/c alias is a wrapper for a func then it has to generate fish code and eval it? => 
+    #       YUP, sources => https://github.com/fish-shell/fish-shell/blob/master/share/functions/alias.fish#L70-L72
     alias $aliasname $alias_value
 end
