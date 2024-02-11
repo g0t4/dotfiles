@@ -18,6 +18,7 @@ set ealias_options (fish_opt --short=g) (fish_opt --short=n --long=NoSpaceAfter 
 #   OR: `time fish --profile-startup=startup.log -C exit`
 #       also grab startup log and compare us/ms to overall timing
 #   w00t optimizations got me to 2.53s=>700ms! (rpi4B) + 660ms=>220ms(rpi5) + 385ms=>151ms (mbp)
+#  *** careful not to use first ealias call for timing info as it loads some funcs (ie abbr first call => source /opt/homebrew/Cellar/fish/3.7.0/share/fish/functions/abbr.fish! even though abbr is builtin now),  so skip to second ealias invocation for more accurate timing into (in which case ealias right now is 150ms on mbp which is plenty fast for now => 60ms for 1k aliases and I only have 700 so that's all fine enough for now)
 
 function ealias --description "map ealias to fish abbr(eviation)"
 
