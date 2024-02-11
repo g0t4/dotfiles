@@ -32,6 +32,7 @@ function ealias --description "map ealias to fish abbr(eviation)"
     set -l num_args (count $argv) # why does this take 25us???
 
     if test $num_args -eq 0 || test $num_args -gt 2
+        # PRN I could shave off 9us/ealias by not checking for incorrect usage every time and just assume its correct, that is a logical optimization given the importance of ealias
         echo "invalid alias definition:"
         echo "  ealias <aliasname>=<alias_value>"
         echo "  ealias <aliasname> <alias_value>"
@@ -40,10 +41,12 @@ function ealias --description "map ealias to fish abbr(eviation)"
 
     # PRN use argparse on positionals?
     if test $num_args -eq 2
+        # PRN OPTIMIZE - nuke "ealias foo bar" format b/c I am not using it => save ~10us/ealias too
         # ealias foo bar
         set aliasname $argv[1]
         set alias_value $argv[2]
     else
+        # PRN OPTIMIZE just assume only one arg and let things blow up otherwise
         # ealias foo=bar
         set aliasdef $argv[1]
         # split aliasdef on first '=':
