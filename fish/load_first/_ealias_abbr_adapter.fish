@@ -79,8 +79,15 @@ function ealias --description "map ealias to fish abbr(eviation)"
         return
     end
 
-    # !!! alias is very expensive => appears to be 200us => 120+ms overall
+    # alias $aliasname $alias_value
+    #   !!! alias is very expensive => appears to be 200us => 120+ms overall
     #   can I define a func instead? => I imagine b/c alias is a wrapper for a func then it has to generate fish code and eval it? => 
-    #       YUP, sources => https://github.com/fish-shell/fish-shell/blob/master/share/functions/alias.fish#L70-L72
-    alias $aliasname $alias_value
+    #   YUP, sources => https://github.com/fish-shell/fish-shell/blob/master/share/functions/alias.fish#L70-L72
+    #
+    # define func directly, to inline what I need from alias to cut some of the delay
+    # - FYI I may have issues with infinite recursion if name=$aliasname is start of $alias_value (body)
+    # - FYI to validate these funcs work, comment out `abbr` calls above so you can call the function
+    # PRN do I really need to define the alias? TODO review why I added this and see if I can remove/modify some other way?
+    echo "function $aliasname; $alias_value \$argv; end" | source # The function definition in split in two lines to ensure that a '#' can be put in the body.
+    # - saved 100ms+ vs using alias def above
 end
