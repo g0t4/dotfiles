@@ -24,6 +24,7 @@ function ealias --description "map ealias to fish abbr(eviation)"
 
     # FYI NoSpaceAfter was a hack that worked well enough but might need polish / bug fixes
     argparse $ealias_options -- $argv # removes matching specs from $argv
+    # ! OPTIMIZE => what is strange to me is that argparse (which is a parser w/ dynamic options) only takes 7us whereas (set num_args count $argv) takes 46us and of that 19us is just count $argv?! why? they both operate on $argv and one is a hell of a lot more complex? is one written in c++ perhaps? and one in shell code? or? both set variables too?! confusing
 
     # WIP optimizing => calc count one time shaves ~130ms overall!?
     set -l num_args (count $argv) # why does this take 25us???
