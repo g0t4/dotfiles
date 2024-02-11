@@ -28,32 +28,19 @@ function ealias --description "map ealias to fish abbr(eviation)"
     argparse $ealias_options -- $argv # removes matching specs from $argv
     # ! OPTIMIZE => what is strange to me is that argparse (which is a parser w/ dynamic options) only takes 7us whereas (set num_args count $argv) takes 46us and of that 19us is just count $argv?! why? they both operate on $argv and one is a hell of a lot more complex? is one written in c++ perhaps? and one in shell code? or? both set variables too?! confusing
 
-    # WIP optimizing => calc count one time shaves ~130ms overall!?
-    set -l num_args (count $argv) # why does this take 25us???
-
-    if test $num_args -eq 0 || test $num_args -gt 2
+    if test (count $argv) -ne 1
         # PRN I could shave off 9us/ealias by not checking for incorrect usage every time and just assume its correct, that is a logical optimization given the importance of ealias
         echo "invalid alias definition:"
         echo "  ealias <aliasname>=<alias_value>"
-        echo "  ealias <aliasname> <alias_value>"
         return
     end
 
-    # PRN use argparse on positionals?
-    if test $num_args -eq 2
-        # PRN OPTIMIZE - nuke "ealias foo bar" format b/c I am not using it => save ~10us/ealias too
-        # ealias foo bar
-        set aliasname $argv[1]
-        set alias_value $argv[2]
-    else
-        # PRN OPTIMIZE just assume only one arg and let things blow up otherwise
-        # ealias foo=bar
-        set aliasdef $argv[1]
-        # split aliasdef on first '=':
-        set splitted (string split -m 1 = $aliasdef) # ~30us mbp
-        set aliasname $splitted[1]
-        set alias_value $splitted[2]
-    end
+    # only support format: ealias foo=bar
+    set aliasdef $argv[1]
+    # split aliasdef on first '=':
+    set splitted (string split -m 1 = $aliasdef) # ~30us mbp
+    set aliasname $splitted[1]
+    set alias_value $splitted[2]
 
     # echo "name: $aliasname"
     # echo "value: $alias_value"
