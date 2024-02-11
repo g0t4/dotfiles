@@ -12,6 +12,7 @@ set ealias_options (fish_opt --short=g) (fish_opt --short=n --long=NoSpaceAfter 
 #   Time column = total time MINUS nested time (current only)
 #   Sum column total time (current+nested)
 #   src here: https://github.com/fish-shell/fish-shell/blob/master/src/parser.rs#L185-L211
+#   there is no count across invocations of a given statement (ie ealias is called 600+ times, search for dupes to understand where optimization may help) => i.e. given # of calls to ealias it is well worth the time to optimize it
 
 function ealias --description "map ealias to fish abbr(eviation)"
 
