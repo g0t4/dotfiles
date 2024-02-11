@@ -5,7 +5,7 @@
 #
 # ealias is a big part of what I use in my dotfiles in terms of zsh customization.... a adapater alone for this would make fish much more usable to test drive it...
 
-# expensive to setup options spec (1/3 of each call to ealias) so do it once (does result in global scope):
+# expensive to setup options spec (1/3 of each call to ealias) so do it once (does result in global scope) => saves 100+ ms overall
 set ealias_options (fish_opt --short=g) (fish_opt --short=n --long=NoSpaceAfter --long-only) # explicit arg specs! ==> same as 'g' but this is clear
 
 function ealias --description "map ealias to fish abbr(eviation)"
