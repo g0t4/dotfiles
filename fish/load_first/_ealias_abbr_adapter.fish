@@ -15,7 +15,10 @@ function ealias --description "map ealias to fish abbr(eviation)"
     # FYI NoSpaceAfter was a hack that worked well enough but might need polish / bug fixes
     argparse $ealias_options -- $argv # removes matching specs from $argv
 
-    if test (count $argv) -eq 0 || test (count $argv) -gt 2
+    # WIP optimizing => calc count one time shaves ~130ms overall!?
+    set -l num_args (count $argv)
+
+    if test $num_args -eq 0 || test $num_args -gt 2
         echo "invalid alias definition:"
         echo "  ealias <aliasname>=<alias_value>"
         echo "  ealias <aliasname> <alias_value>"
@@ -23,7 +26,7 @@ function ealias --description "map ealias to fish abbr(eviation)"
     end
 
     # PRN use argparse on positionals?
-    if test (count $argv) -eq 2
+    if test $num_args -eq 2
         # ealias foo bar
         set aliasname $argv[1]
         set alias_value $argv[2]
