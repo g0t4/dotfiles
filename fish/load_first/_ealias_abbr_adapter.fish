@@ -16,7 +16,7 @@ set ealias_options (fish_opt --short=g) (fish_opt --short=n --long=NoSpaceAfter 
 # `time fish -C exit` to quick check overall timing
 #   OR: `time fish --profile-startup=startup.log -C exit`
 #       also grab startup log and compare us/ms to overall timing
-#   w00t optimizations got me to 2.53s=>700ms! (rpi4B) and 660ms=>220ms(rpi5)
+#   w00t optimizations got me to 2.53s=>700ms! (rpi4B) + 660ms=>220ms(rpi5) + 385ms=>151ms (mbp)
 
 function ealias --description "map ealias to fish abbr(eviation)"
 
