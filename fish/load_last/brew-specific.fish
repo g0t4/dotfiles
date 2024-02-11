@@ -34,6 +34,8 @@ function _brew_search_with_analytics
     # ! PRN --desc --eval-all # option? (below for --cask too)
     # if pass --desc then not only are package names listed but their descriptions too => so I would have to split those out and keep descriptions probably so I can show them in my table too?
 
+    # PRN keep bold white + green checkmark for installed packages?
+
     set formula (brew search --formula $query)
     # set formula fox fop fio # hard code to test
 
