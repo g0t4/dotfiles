@@ -57,6 +57,7 @@ function ealias --description "map ealias to fish abbr(eviation)"
     # seems like alias is a helper to build a function? and its failing when value is complex (ie has | or '" quotes)
     #  => `type alias` => here we go! it is a function!
     # TODO build function directly? this appears to be quoting issue
+    # ! OPTIMIZE lol ok so I had this old note here to build the function directly! ROLL this into below code? OR?
     if string match -q -r '^\s*\|' $alias_value
         # my global aliases that are `| foo` are problems for whatever fish does to make func out of alias
         return
