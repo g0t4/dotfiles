@@ -7,6 +7,7 @@
 
 # expensive to setup options spec (1/3 of each call to ealias) so do it once (does result in global scope) => saves 100+ ms overall
 set ealias_options (fish_opt --short=g) (fish_opt --short=n --long=NoSpaceAfter --long-only) # explicit arg specs! ==> same as 'g' but this is clear
+# TODO is there a simpler way to define options like in alias function (make sure its not slower though) => see `type alias` and look at its option parsing with h/help s/save or w/e
 # FYI fish --profile-startup=startup.log:
 #   durations are in MICROSECONDS
 #   Time column = total time MINUS nested time (current only)
