@@ -4,13 +4,16 @@
 # - previously I could search aliases (name/value) so this isn't technically new, just convenient to be integrated into tab completion versus a standalone command (i.e. agr ealias to grep aliases in zsh)
 #
 # ealias is a big part of what I use in my dotfiles in terms of zsh customization.... a adapater alone for this would make fish much more usable to test drive it...
+
+# expensive to setup options spec (1/3 of each call to ealias) so do it once (does result in global scope):
+set ealias_options (fish_opt --short=g) (fish_opt --short=n --long=NoSpaceAfter --long-only) # explicit arg specs! ==> same as 'g' but this is clear
+
 function ealias --description "map ealias to fish abbr(eviation)"
 
     # wow I already like fish scripting way better than zsh/bash!
 
     # FYI NoSpaceAfter was a hack that worked well enough but might need polish / bug fixes
-    set --local options (fish_opt --short=g) (fish_opt --short=n --long=NoSpaceAfter --long-only) # explicit arg specs! ==> same as 'g' but this is clear
-    argparse $options -- $argv # removes matching specs from $argv
+    argparse $ealias_options -- $argv # removes matching specs from $argv
 
     if test (count $argv) -eq 0 || test (count $argv) -gt 2
         echo "invalid alias definition:"
