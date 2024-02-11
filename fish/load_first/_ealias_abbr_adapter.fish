@@ -13,8 +13,10 @@ set ealias_options (fish_opt --short=g) (fish_opt --short=n --long=NoSpaceAfter 
 #   Sum column total time (current+nested)
 #   src here: https://github.com/fish-shell/fish-shell/blob/master/src/parser.rs#L185-L211
 #   there is no count across invocations of a given statement (ie ealias is called 600+ times, search for dupes to understand where optimization may help) => i.e. given # of calls to ealias it is well worth the time to optimize it
-# FYI I am using: `time fish -C exit` to quick check overall timing
-#   or time fish --profile-startup=startup.log -C exit # also grab startup log and compare us/ms to overall timing
+# `time fish -C exit` to quick check overall timing
+#   OR: `time fish --profile-startup=startup.log -C exit`
+#       also grab startup log and compare us/ms to overall timing
+#   w00t optimizations got me to 2.53s=>700ms! (rpi4B) and 660ms=>220ms(rpi5)
 
 function ealias --description "map ealias to fish abbr(eviation)"
 
