@@ -2,7 +2,7 @@ ealias trace='traceroute -n'
 ealias trace1='traceroute -n 1.1.1.1'
 ealias tr6='traceroute -n -6'
 
-ealias ping='ping -d'
+# ealias ping='ping -d' # infinite recursion so just leave this out for now
 ealias ping1='ping -d 1.1.1.1'
 ealias ping8='ping -d 8.8.8.8'
 function _default_gateway

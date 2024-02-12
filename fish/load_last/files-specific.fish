@@ -98,7 +98,7 @@ function duX
     string replace --regex '^du' 'du -hd' $argv
 end
 #
-ealias df='df -h'
+ealias dfh='df -h' # change from df alone which causes infinite recursion if: ealias df='df -h' (for now I am not supporting that in my ealias impl due to perf issues)
 # Mac HD: (if fails try df -h and update this alias to be be more general)
 ealias dfm='df -h /System/Volumes/Data'
 
