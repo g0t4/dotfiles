@@ -70,6 +70,7 @@ function ealias --description "map ealias to fish abbr(eviation)"
     # - FYI this is needed to support compositional aliases => `gsl`=>`gst && echo && glo`
 
     # # warn if function will lead to infinite recursion (do not leave this in prod code or it will needlessly slow down every invocation of ealias)
+    # # FYI my old ealias for `ping` and `df` triggered this
     # set first_word_of_alias_value (string split " " $alias_value)[1]
     # if string match -q $aliasname $first_word_of_alias_value
     #     echo "WARNING: infinite recursion: $aliasname => $alias_value"
