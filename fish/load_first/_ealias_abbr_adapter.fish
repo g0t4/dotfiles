@@ -68,6 +68,13 @@ function ealias --description "map ealias to fish abbr(eviation)"
     # - FYI I may have issues with infinite recursion if name=$aliasname is start of $alias_value (body)
     # - FYI to validate these funcs work, comment out `abbr` calls above so you can call the function
     # - FYI this is needed to support compositional aliases => `gsl`=>`gst && echo && glo`
+
+    # warn if function will lead to infinite recursion (do not leave this in prod code or it will needlessly slow down every invocation of ealias)
+    set first_word_of_alias_value (string split " " $alias_value)[1]
+    if string match -q $aliasname $first_word_of_alias_value
+        echo "WARNING: infinite recursion: $aliasname => $alias_value"
+    end
+
     echo "function $aliasname; $alias_value \$argv; end" | source # The function definition in split in two lines to ensure that a '#' can be put in the body.
     # - saved 100ms+ vs using alias def above
 end
