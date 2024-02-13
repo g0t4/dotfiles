@@ -22,6 +22,8 @@ if command -v systemctl >/dev/null
     eabbr sc 'sudo systemctl'
     eabbr scu 'sudo systemctl --user'
 
+    eabbr scm 'man systemd.index' # great entrypoint to systemd man pages
+
     eabbr scs 'sudo systemctl status'
     eabbr scstop 'sudo systemctl stop'
     eabbr scstart 'sudo systemctl start'
