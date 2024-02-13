@@ -29,6 +29,7 @@ function ealias --description "map ealias to fish abbr(eviation)"
     # only support format: ealias foo=bar
     set aliasdef $argv[1]
     # split aliasdef on first '=':
+    # PRN refactor ealias to use two args, won't need to split on '=' => can save considerable startup time... just rework zsh impl to not use = too... probably it will be faster also!
     set splitted (string split -m 1 = $aliasdef) # ~30us mbp
     set aliasname $splitted[1]
     set alias_value $splitted[2]
@@ -79,4 +80,11 @@ function ealias --description "map ealias to fish abbr(eviation)"
     # PRN how about pass use a defer func _ealias_func and pass $aliasname $alias_value \$argv to it and let it build the func to run at use-time not here at define-time? FYI not so simple with more complicated $alias_value like `forr` but then again I dont intend that one to be composed into other ealiases anyways so this is all fine for now
     echo "function $aliasname; $alias_value \$argv; end" | source # The function definition in split in two lines to ensure that a '#' can be put in the body.
     # - saved 100ms+ vs using alias def above
+end
+
+function eabbr --description "ealias w/ expand only, IOTW abbr marked compatible with ealias... later can impl eabbr in zsh too and share these definitions"
+    # --wraps abbr # DO NOT setup abbr completion b/c I don't intend for eabbr to use any options from abbr (use abbr directly if not just simple ealias like expansion)
+    # ** another benefit => abbr is MUST FASTER than ealias definitions (~10-100x faster)
+    # ** FYI big difference is eabbrs dont have func defined so they are not composable, i.e. won't be doing 'gsl'=> 'gst && echo && glo' with eabbrs
+    abbr $argv
 end
