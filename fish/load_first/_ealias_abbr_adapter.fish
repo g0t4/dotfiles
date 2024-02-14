@@ -82,20 +82,17 @@ function ealias --description "map ealias to fish abbr(eviation)"
     # end
 
     # build lookup of ealiases and values (fish doesn't support a dict type so I use two arrays to effectively create a dict)
+    # - for searching ealiases (b/c abbr can't do lookups on single abbr, nor is it easy to search/grep for finding similar ealiases)
+    # - for deferring function body execution until use time to optimize definition time impact of creating func below
+    #
     # PRN one-off activate this pre-condition to avoid duplicate ealiases that will fail with my current lookup strategy (I don't wanna add checks for duplicates in prod code b/c it will slow down every invocation of ealias)... 
     #    *** if I could find a library that efficiently implements dict ops in fish then that would avoid issues with duplicates
     # if contains $aliasname $ealiases
     #     echo "WARNING: redefining ealias: $aliasname"
     # end
-    # - for searching ealiases (b/c abbr can't do lookups on single abbr, nor is it easy to search/grep for finding similar ealiases)
-    # - for deferring function body execution until use time to optimize definition time impact of creating func below
+    #
     set --global --append ealiases $aliasname # <5us
     set --global --append ealiases_values $alias_value # careful if $alias_value ever becomes more than a single value
-    # lookup (contains dcps $ealiases) => <180us is fast enough for any one off lookup
-    # echo $ealiases_values[(contains -i dcps $ealiases)] # find value of an alias (if exists) => empty response otherwise
-
-    # PRN how about pass use a defer func _ealias_func and pass $aliasname $alias_value \$argv to it and let it build the func to run at use-time not here at define-time? FYI not so simple with more complicated $alias_value like `forr` but then again I dont intend that one to be composed into other ealiases anyways so this is all fine for now
-    # echo "function $aliasname; $alias_value \$argv; end" | source # The function definition is split in two lines to ensure that a '#' can be put in the body
     echo "function $aliasname; ealias_invoke $aliasname \$argv; end" | source
 
 end
