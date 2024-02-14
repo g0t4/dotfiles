@@ -141,6 +141,12 @@ function eabbr --description "ealias w/ expand only, IOTW abbr marked compatible
     abbr $argv
 end
 
-ealias als="abbr | bat --language sh -p"
-ealias agr="abbr | grep -i" # name or value contain
-abbr --add agrs --set-cursor='!' "abbr | grep -i 'abbr -a -- !'" # this won't match all abbr's but will find most of them (i.e. regex won't match)
+function ealias_list
+    # 8ms on mbp21
+    for i in (seq (count $ealiases))
+        echo "$ealiases[$i] => $ealiases_values[$i]"
+    end
+end
+ealias als="ealias_list | bat --language sh -p"
+ealias agr="ealias_list | grep -i" # name or value contain
+abbr --add agrs --set-cursor='!' "ealias_list | grep -i '^!'" # this won't match all abbr's but will find most of them (i.e. regex won't match)
