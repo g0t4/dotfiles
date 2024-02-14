@@ -99,6 +99,29 @@ function ealias --description "map ealias to fish abbr(eviation)"
     # - saved 100ms+ vs using alias def above
 end
 
+function ealias_lookup
+    # 8to13ms on mbp21 is imperceptible when used
+    set aliasname $argv[1]
+    set count 0
+    for i in (seq (count $ealiases))
+        if string match -q $aliasname $ealiases[$i]
+            set last_index $i
+            set count (math $count + 1)
+        end
+    end
+    if test $count -eq 0
+        echo "No ealias found for: $aliasname"
+        return 1
+    else if test $count -eq 1
+        echo $ealiases_values[$last_index]
+        return 0
+    else
+        echo "Multiple ealiases found for: $aliasname"
+        echo "  $count ealiases found"
+        echo "  $ealiases_values[$last_index]"
+        return 2
+    end
+end
 
 function eabbr --description "ealias w/ expand only, IOTW abbr marked compatible with ealias... later can impl eabbr in zsh too and share these definitions"
     # --wraps abbr # DO NOT setup abbr completion b/c I don't intend for eabbr to use any options from abbr (use abbr directly if not just simple ealias like expansion)
