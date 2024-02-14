@@ -99,6 +99,19 @@ function ealias --description "map ealias to fish abbr(eviation)"
 
 end
 
+function ealias_find_duplicates
+    # 4s on mbp21 is fine, not intending to use this in startup
+    for i in (seq (count $ealiases))
+        for j in (seq (count $ealiases))
+            if test $i -ne $j
+                if string match -q $ealiases[$i] $ealiases[$j]
+                    echo "duplicate ealias: $ealiases[$i] => $ealiases_values[$i] and $ealiases[$j] => $ealiases_values[$j]"
+                end
+            end
+        end
+    end
+end
+
 function ealias_invoke
     set aliasname $argv[1]
     set argv $argv[2..-1] # remove first arg so remaining args can be passed
