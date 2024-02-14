@@ -152,7 +152,7 @@ function ealias_list
     end
 end
 
-abbr --add agrs --set-cursor='!' "ealias_list | grep -i '!'" # i.e. to find `git status` aliases
+abbr --add agr --set-cursor='!' "ealias_list | grep -i '!'" # i.e. to find `git status` aliases
 abbr --add agrs --set-cursor='!' "ealias_list | grep -i '^!'" # i.e. for finding aliases that start with `dc` or `gs` etc => useful when creating new aliases to find a "namespace" that is free
 
 function eabbr --description "ealias w/ expand only, IOTW abbr marked compatible with ealias... later can impl eabbr in zsh too and share these definitions"
