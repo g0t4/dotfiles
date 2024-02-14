@@ -81,11 +81,12 @@ function ealias --description "map ealias to fish abbr(eviation)"
     #     echo "WARNING: infinite recursion: $aliasname => $alias_value"
     # end
 
-    # build lookup of ealiases and values (fish doesn't support a dict so I use two arrays to effectively create a dict)
-    # PRN monitor for duplicate definitions (enable when testing for this) => another option would be to create a function to check for this and call at end of startup and/or on-demand
-    if contains $aliasname $ealiases
-        echo "WARNING: redefining ealias: $aliasname"
-    end
+    # build lookup of ealiases and values (fish doesn't support a dict type so I use two arrays to effectively create a dict)
+    # PRN one-off activate this pre-condition to avoid duplicate ealiases that will fail with my current lookup strategy (I don't wanna add checks for duplicates in prod code b/c it will slow down every invocation of ealias)... 
+    #    *** if I could find a library that efficiently implements dict ops in fish then that would avoid issues with duplicates
+    # if contains $aliasname $ealiases
+    #     echo "WARNING: redefining ealias: $aliasname"
+    # end
     # - for searching ealiases (b/c abbr can't do lookups on single abbr, nor is it easy to search/grep for finding similar ealiases)
     # - for deferring function body execution until use time to optimize definition time impact of creating func below
     set --global --append ealiases $aliasname # <5us
