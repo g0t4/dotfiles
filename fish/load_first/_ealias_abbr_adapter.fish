@@ -82,11 +82,10 @@ function ealias --description "map ealias to fish abbr(eviation)"
     # end
 
     # build lookup of ealiases and values (fish doesn't support a dict so I use two arrays to effectively create a dict)
-    #   TODO => issue arrises if an ealias is redefined! I cannot afford the lookup time to check for this... but I can make it a precondition check that I enable preiodically to check my ealiases from time to time...
+    # PRN monitor for duplicate definitions (enable when testing for this) => another option would be to create a function to check for this and call at end of startup and/or on-demand
     if contains $aliasname $ealiases
         echo "WARNING: redefining ealias: $aliasname"
     end
-    # TODO build dup check into lookup functions! those will be what are broken anyways!
     # - for searching ealiases (b/c abbr can't do lookups on single abbr, nor is it easy to search/grep for finding similar ealiases)
     # - for deferring function body execution until use time to optimize definition time impact of creating func below
     set --global --append ealiases $aliasname # <5us
