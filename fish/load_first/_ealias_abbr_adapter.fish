@@ -5,6 +5,10 @@
 #
 # ealias is a big part of what I use in my dotfiles in terms of zsh customization.... a adapater alone for this would make fish much more usable to test drive it...
 
+# clear ealiases on reload:
+set --erase ealiases
+set --erase ealiases_values
+
 # expensive to setup options spec (1/3 of each call to ealias) so do it once (does result in global scope) => saves 100+ ms overall
 set ealias_options (fish_opt --short=g) (fish_opt --short=n --long=NoSpaceAfter --long-only) # explicit arg specs! ==> same as 'g' but this is clear
 # TODO is there a simpler way to define options like in alias function (make sure its not slower though) => see `type alias` and look at its option parsing with h/help s/save or w/e
@@ -77,10 +81,20 @@ function ealias --description "map ealias to fish abbr(eviation)"
     #     echo "WARNING: infinite recursion: $aliasname => $alias_value"
     # end
 
+    # build lookup of ealiases and values (fish doesn't support a dict so I use two arrays to effectively create a dict)
+    #   TODO => issue arrises if an ealias is redefined! I cannot afford the lookup time to check for this... but I can make it a precondition check that I enable preiodically to check my ealiases from time to time... might be an issue on _reload_config?
+    # - for searching ealiases (b/c abbr can't do lookups on single abbr, nor is it easy to search/grep for finding similar ealiases)
+    # - for deferring function body execution until use time to optimize definition time impact of creating func below
+    set --global --append ealiases $aliasname # <5us
+    set --global --append ealiases_values $alias_value # careful if $alias_value ever becomes more than a single value
+    # lookup (contains dcps $ealiases) => <180us is fast enough for any one off lookup
+    # echo $ealiases_values[(contains -i dcps $ealiases)] # find value of an alias (if exists) => empty response otherwise
+
     # PRN how about pass use a defer func _ealias_func and pass $aliasname $alias_value \$argv to it and let it build the func to run at use-time not here at define-time? FYI not so simple with more complicated $alias_value like `forr` but then again I dont intend that one to be composed into other ealiases anyways so this is all fine for now
     echo "function $aliasname; $alias_value \$argv; end" | source # The function definition in split in two lines to ensure that a '#' can be put in the body.
     # - saved 100ms+ vs using alias def above
 end
+
 
 function eabbr --description "ealias w/ expand only, IOTW abbr marked compatible with ealias... later can impl eabbr in zsh too and share these definitions"
     # --wraps abbr # DO NOT setup abbr completion b/c I don't intend for eabbr to use any options from abbr (use abbr directly if not just simple ealias like expansion)
