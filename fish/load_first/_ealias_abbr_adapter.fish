@@ -106,7 +106,7 @@ function ealias_invoke
     if test $status -eq 0
         echo $aliasvalue $argv
     else
-        echo "ealias_invoke: failed to lookup ealias: $aliasname"
+        echo "ealias_invoke failed, $aliasvalue"
     end
 end
 
@@ -121,15 +121,13 @@ function ealias_lookup
         end
     end
     if test $count -eq 0
-        echo "No ealias found for: $aliasname"
+        echo "no ealias found for: $aliasname"
         return 1
     else if test $count -eq 1
         echo $ealiases_values[$last_index]
         return 0
     else
-        echo "Multiple ealiases found for: $aliasname"
-        echo "  $count ealiases found"
-        echo "  $ealiases_values[$last_index]"
+        echo "multiple ($count) ealiases found for: $aliasname"
         return 2
     end
 end
