@@ -140,3 +140,7 @@ function eabbr --description "ealias w/ expand only, IOTW abbr marked compatible
     # ** FYI big difference is eabbrs dont have func defined so they are not composable, i.e. won't be doing 'gsl'=> 'gst && echo && glo' with eabbrs
     abbr $argv
 end
+
+ealias als="abbr | bat --language sh -p"
+ealias agr="abbr | grep -i" # name or value contain
+abbr --add agrs --set-cursor='!' "abbr | grep -i 'abbr -a -- !'" # this won't match all abbr's but will find most of them (i.e. regex won't match)
