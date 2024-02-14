@@ -15,7 +15,7 @@ ealias blc='brew list --cask'
 ealias blf='brew list --formula'
 ealias bo='brew outdated' # compliments bubo (update/outdated)
 ealias bp='brew --prefix'
-ealias bs='brew search'
+# ealias bs='brew search' # fish has bs impl that uses analytics, not yet porting that to zsh so for now just get rid of what would otherwise become a duplicated alias in fish AND... this is a reminder to port to zsh if I ever find myself wanting it there
 ealias bsvc='brew services' # list state of brew installed services (daemons)
 
 ealias bus='brew uses --eval-all' # ... depends on X
