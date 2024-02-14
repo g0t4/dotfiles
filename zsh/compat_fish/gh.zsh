@@ -10,10 +10,9 @@ ealias ghh='gh reference'
 
 # gh issue
 ealias ghi='gh issue' # CWD
-ealias ghi='gh issue list' # CWD
-ealias ghir='gh issue list --repo o/r' # CWD
+# ealias ghir='gh issue list --repo o/r' # CWD
 ealias ghils='gh issue list' # CWD
-ealias ghilsj='gh issue list --json' # CWD
+# ealias ghilsj='gh issue list --json' # CWD
 ealias ghis='gh issue list --search Q' # CWD
 ealias ghisw='gh issue list --web --search Q ' # CWD
 ealias ghiw='gh issue list --web' # CWD
