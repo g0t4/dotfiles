@@ -147,6 +147,6 @@ function ealias_list
         echo "$ealiases[$i] => $ealiases_values[$i]"
     end
 end
-ealias als="ealias_list | bat --language sh -p"
-ealias agr="ealias_list | grep -i" # name or value contain
-abbr --add agrs --set-cursor='!' "ealias_list | grep -i '^!'" # this won't match all abbr's but will find most of them (i.e. regex won't match)
+
+abbr --add agrs --set-cursor='!' "ealias_list | grep -i '!'" # i.e. to find `git status` aliases
+abbr --add agrs --set-cursor='!' "ealias_list | grep -i '^!'" # i.e. for finding aliases that start with `dc` or `gs` etc => useful when creating new aliases to find a "namespace" that is free
