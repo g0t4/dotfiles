@@ -94,8 +94,20 @@ function ealias --description "map ealias to fish abbr(eviation)"
     # echo $ealiases_values[(contains -i dcps $ealiases)] # find value of an alias (if exists) => empty response otherwise
 
     # PRN how about pass use a defer func _ealias_func and pass $aliasname $alias_value \$argv to it and let it build the func to run at use-time not here at define-time? FYI not so simple with more complicated $alias_value like `forr` but then again I dont intend that one to be composed into other ealiases anyways so this is all fine for now
-    echo "function $aliasname; $alias_value \$argv; end" | source # The function definition in split in two lines to ensure that a '#' can be put in the body.
-    # - saved 100ms+ vs using alias def above
+    # echo "function $aliasname; $alias_value \$argv; end" | source # The function definition is split in two lines to ensure that a '#' can be put in the body
+    echo "function $aliasname; ealias_invoke $aliasname \$argv; end" | source
+
+end
+
+function ealias_invoke
+    set aliasname $argv[1]
+    set argv $argv[2..-1] # remove first arg so remaining args can be passed
+    set aliasvalue (ealias_lookup $aliasname)
+    if test $status -eq 0
+        echo $aliasvalue $argv
+    else
+        echo "ealias_invoke: failed to lookup ealias: $aliasname"
+    end
 end
 
 function ealias_lookup
