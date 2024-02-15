@@ -110,33 +110,29 @@ function ealias_invoke
     set argv $argv[2..-1] # remove first arg so remaining args can be passed
     set aliasvalue (ealias_lookup $aliasname)
     if test $status -eq 0
+        # FYI not all aliasvalues work with argv, ignore for now when it doesn't work (ie forr) b/c AFAIK none of these are valid use cases of composed aliases
         echo $aliasvalue $argv
     else
-        echo "ealias_invoke failed, $aliasvalue"
+        # this should never be called with an invalid aliasname, nonetheless warn anyways
+        echo "ealias not found: $aliasname"
+        return 1
     end
 end
 
 function ealias_lookup
-    # 8to13ms on mbp21 is imperceptible when used
-    # PRN lookup last occurence so redefining doesn't use first value? (as is the case the abbr that is generated)
+
     set aliasname $argv[1]
-    set count 0
-    for i in (seq (count $ealiases))
+
+    # reverse search array so the last occurrence is used (thus supports redefining!)
+    for i in (seq (count $ealiases) 1)
         if string match -q $aliasname $ealiases[$i]
-            set last_index $i
-            set count (math $count + 1)
+            echo $ealiases_values[$i]
+            return 0
         end
     end
-    if test $count -eq 0
-        echo "no ealias found for: $aliasname"
-        return 1
-    else if test $count -eq 1
-        echo $ealiases_values[$last_index]
-        return 0
-    else
-        echo "multiple ($count) ealiases found for: $aliasname"
-        return 2
-    end
+
+    return 1 # none found
+
 end
 
 function ealias_list
