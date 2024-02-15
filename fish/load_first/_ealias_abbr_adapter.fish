@@ -107,7 +107,8 @@ end
 
 function ealias_invoke
     # test with:
-    #    gst --help # have to use arrow keys to type gst w/o triggering (space) to expand it
+    #    FYI use arrow keys to type gs<SPACE><LEFT>t<RIGHT><ENTER> w/o triggering (space) to expand it
+    #    gst --help
 
     set aliasname $argv[1]
     set argv $argv[2..-1] # remove first arg so remaining args can be passed
