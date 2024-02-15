@@ -106,17 +106,19 @@ function ealias_find_duplicates
 end
 
 function ealias_invoke
+
     set aliasname $argv[1]
     set argv $argv[2..-1] # remove first arg so remaining args can be passed
     set aliasvalue (ealias_lookup $aliasname)
     if test $status -eq 0
         # FYI not all aliasvalues work with argv, ignore for now when it doesn't work (ie forr) b/c AFAIK none of these are valid use cases of composed aliases
-        echo $aliasvalue $argv
+        eval $aliasvalue $argv
     else
         # this should never be called with an invalid aliasname, nonetheless warn anyways
         echo "ealias not found: $aliasname"
         return 1
     end
+
 end
 
 function ealias_lookup
