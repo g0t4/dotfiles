@@ -98,15 +98,10 @@ function ealias --description "map ealias to fish abbr(eviation)"
 end
 
 function ealias_find_duplicates
-    # 4s on mbp21 is fine, not intending to use this in startup
-    for i in (seq (count $ealiases))
-        for j in (seq (count $ealiases))
-            if test $i -ne $j
-                if string match -q $ealiases[$i] $ealiases[$j]
-                    echo "duplicate ealias: $ealiases[$i] => $ealiases_values[$i] and $ealiases[$j] => $ealiases_values[$j]"
-                end
-            end
-        end
+    # dump duplicated alias names only (not values), much faster this way and all that is really needed to fix them...
+    set duplicates (printf "%s\n" $ealiases | sort | uniq -d)
+    if test (count $duplicates) -ne 0
+        echo "duplicates found: $duplicates"
     end
 end
 
@@ -123,6 +118,7 @@ end
 
 function ealias_lookup
     # 8to13ms on mbp21 is imperceptible when used
+    # PRN lookup last occurence so redefining doesn't use first value? (as is the case the abbr that is generated)
     set aliasname $argv[1]
     set count 0
     for i in (seq (count $ealiases))
