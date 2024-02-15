@@ -27,6 +27,14 @@ abbr --add cd- 'cd -'
 function _reload_config
     source ~/.config/fish/config.fish
 end
+function _update_dotfiles
+    if test ! -d $WES_DOTFILES
+        echo "dotfiles not found..."
+        return
+    end
+    cd $WES_DOTFILES
+    git pull
+end
 
 function take
     mkdir -p $argv && cd $argv
