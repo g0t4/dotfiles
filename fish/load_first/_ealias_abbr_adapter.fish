@@ -100,6 +100,7 @@ function ealias --description "map ealias to fish abbr(eviation)"
     #
     # echo "function $aliasname; ealias_invoke $aliasname \$argv; end" | source # w/o description (keeping for quick ref if need to rollback)
     echo "function $aliasname --description '$(string replace --all "'" "\\'" $alias_value)'; ealias_invoke $aliasname \$argv; end" | source
+    # FYI careful with $() command substitution => vscode doesn't recognize and show this as command which makes it difficult to understand why "'" is necessary and ' doesn't just work
     # FYI I am keeping forr around just as a test case (TODO write some tests for ealias)
 end
 
