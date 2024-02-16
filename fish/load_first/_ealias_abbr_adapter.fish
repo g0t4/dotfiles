@@ -93,9 +93,14 @@ function ealias --description "map ealias to fish abbr(eviation)"
     #
     set --global --append ealiases $aliasname # <5us
     set --global --append ealiases_values $alias_value # careful if $alias_value ever becomes more than a single value
+    # precondition to check as needed to avoid slowing down every invocation of ealias
+    # if test (count $alias_value) -gt 1
+    #    echo "WARNING: ealias value has more than one item: $aliasname => $alias_value"
+    # end
+    #
     # echo "function $aliasname; ealias_invoke $aliasname \$argv; end" | source # w/o description (keeping for quick ref if need to rollback)
-    echo "function $aliasname --description '"(string replace --all ' \\' $alias_value)"'; ealias_invoke $aliasname \$argv; end" | source # FYI ~6us on mbp which is plenty fast!
-    # if function description missing then nothing shows in tab completion. Once set, fish seems to prefer the Abbreviation description! IIAC fish looks for overlap b/c if I just set desc to foo then it shows foo (not abbreviation)
+    echo "function $aliasname --description '$(string replace --all "'" "\\'" $alias_value)'; ealias_invoke $aliasname \$argv; end" | source
+    # FYI I am keeping forr around just as a test case (TODO write some tests for ealias)
 end
 
 function ealias_find_duplicates
