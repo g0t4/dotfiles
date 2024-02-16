@@ -93,8 +93,9 @@ function ealias --description "map ealias to fish abbr(eviation)"
     #
     set --global --append ealiases $aliasname # <5us
     set --global --append ealiases_values $alias_value # careful if $alias_value ever becomes more than a single value
-    echo "function $aliasname; ealias_invoke $aliasname \$argv; end" | source
-    # TODO le sigh I lost descriptions for ealiases b/c that comes from the alias/func part of the equation... can do --description $alias_value but need to escape it properly
+    # echo "function $aliasname; ealias_invoke $aliasname \$argv; end" | source # w/o description (keeping for quick ref if need to rollback)
+    echo "function $aliasname --description '"(string replace --all ' \\' $alias_value)"'; ealias_invoke $aliasname \$argv; end" | source # FYI ~6us on mbp which is plenty fast!
+    # if function description missing then nothing shows in tab completion. Once set, fish seems to prefer the Abbreviation description! IIAC fish looks for overlap b/c if I just set desc to foo then it shows foo (not abbreviation)
 end
 
 function ealias_find_duplicates
