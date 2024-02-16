@@ -94,7 +94,7 @@ function ealias --description "map ealias to fish abbr(eviation)"
     set --global --append ealiases $aliasname # <5us
     set --global --append ealiases_values $alias_value # careful if $alias_value ever becomes more than a single value
     echo "function $aliasname; ealias_invoke $aliasname \$argv; end" | source
-
+    # TODO le sigh I lost descriptions for ealiases b/c that comes from the alias/func part of the equation... can do --description $alias_value but need to escape it properly
 end
 
 function ealias_find_duplicates
