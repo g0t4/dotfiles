@@ -16,7 +16,7 @@ ealias kgst='git status' # common typo alias (cmd+k clear => kgst)
 ealias gss='git status -s'
 ealias gsb='git status -sb'
 ealias gsu='git status --untracked-files'
-ealias gsa='git status --ignored'
+ealias gsi='git status --ignored'
 
 # reset
 ealias grhh='git reset --hard HEAD' # last commit hard reset
