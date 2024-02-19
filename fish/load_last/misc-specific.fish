@@ -61,3 +61,43 @@ if command -v systemctl >/dev/null
     eabbr jcvs 'sudo journalctl --vacuum-size=100M' # vacuum logs to keep total size under 100M
     eabbr jcdu 'sudo journalctl --disk-usage' # total disk usage
 end
+
+# *** containerd
+if command -v ctr >/dev/null
+
+    eabbr ctr 'sudo ctr'
+    eabbr ctrn 'sudo ctr namespaces'
+
+    # containers:
+    eabbr ctrc 'sudo ctr container ls'
+    eabbr ctrci 'sudo ctr container info'
+    eabbr ctrcrm 'sudo ctr container rm'
+
+    # images:
+    eabbr ctri 'sudo ctr image ls'
+    abbr ctripull 'sudo ctr image pull docker.io/library/!'
+    abbr ctrirm 'sudo ctr image rm docker.io/library/!'
+
+    # tasks:
+    eabbr ctrtls 'sudo ctr task ls'
+    eabbr ctrtps 'sudo ctr task ps' # by CID
+    eabbr ctrta 'sudo ctr task attach'
+    eabbr ctrtrm 'sudo ctr task rm'
+    eabbr ctrtk 'sudo ctr task kill --all'
+    eabbr ctrtks 'sudo ctr task kill --all --signal=SIGKILL'
+    eabbr ctrtpause 'sudo ctr task pause'
+    eabbr ctrtresume 'sudo ctr task resume'
+    eabbr ctrtstart 'sudo ctr task start' # created container that is not running
+    eabbr ctrtexec 'sudo ctr task exec --tty --exec-id 100 '
+
+    # run:
+    eabbr ctrr 'sudo ctr run -t --rm'
+    # demo examples:
+    eabbr ctrrnd 'sudo ctr run -d docker.io/library/nginx:latest web' # w/o host networking
+    eabbr ctrrn 'sudo ctr run -t --rm --net-host docker.io/library/nginx:latest web' # w/ host networking
+
+    # content
+    # leases
+    # snapshots
+
+end
