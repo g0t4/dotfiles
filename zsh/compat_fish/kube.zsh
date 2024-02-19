@@ -111,4 +111,3 @@ ealias mked='eval $(minikube docker-env)' # access docker container runtime (if 
 ealias mkp="minikube profile list"
 
 ealias mkk="minikube kubectl"
-
