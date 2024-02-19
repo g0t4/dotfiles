@@ -122,6 +122,12 @@ if command -q k3s
         # return
         # TODO would be an improvement to break this out into separate completion functions and defer to completions of prominent subcommands externally: ctr, kubectl, etc
 
+        # FYI k3s uses urfave/cli
+        # - : https://pkg.go.dev/github.com/urfave/cli@v1.22.14#example-App.Run-BashComplete
+        # - has FISH completion support, look into a PR to k3s:
+        #   - https://pkg.go.dev/github.com/urfave/cli@v1.22.14#App.ToFishCompletion
+        #   - https://github.com/urfave/cli/blob/v1.22.14/fish.go#L13
+
         # --generate-bash-completion is a k3s feature that generates bash completion for k3s commands (not all though AFAICT, i.e. not k3s ctr and that makes sense cuz ctr completions would be independent of k3s)
         #   `k3s completion bash` => 
         #       bash completion scripts (ported to this fish completion func)
