@@ -118,6 +118,7 @@ function ealias_invoke
     #    gst --help
     #    ealias_invoke gst --help
 
+    # ! TODO argv is broken, noticed with: `skl docker://docker.io/registry` (not an intended use of this alias FYI so not a show stopper, yet... just accidentally didn't expand b/c of how I typed the line and so I noticed this)
     set aliasname $argv[1]
     set argv $argv[2..-1] # remove first arg so remaining args can be passed
     set aliasvalue (ealias_lookup $aliasname)
