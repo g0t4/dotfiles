@@ -118,13 +118,13 @@ function ealias_invoke
     #    gst --help
     #    ealias_invoke gst --help
 
-    # ! TODO argv is broken, noticed with: `skl docker://docker.io/registry` (not an intended use of this alias FYI so not a show stopper, yet... just accidentally didn't expand b/c of how I typed the line and so I noticed this)
     set aliasname $argv[1]
     set argv $argv[2..-1] # remove first arg so remaining args can be passed
     set aliasvalue (ealias_lookup $aliasname)
     if test $status -eq 0
         # FYI not all aliasvalues work with argv, ignore for now when it doesn't work (ie forr) b/c AFAIK none of these are valid use cases of composed aliases
         eval $aliasvalue $argv
+        # FYI not supporting -NoSpaceAfter here b/c I don't know of any that are intended to be composed... I could easily rewrite the composed such that in zsh it uses ealias only and in fish I declare a specific abbr(w/ set cursor postion too)+func... KEEP IN MIND there are so few -NoSpaceAfters, don't risk messing up other composed ealiases
     else
         # this should never be called with an invalid aliasname, nonetheless warn anyways
         echo "ealias not found: $aliasname"

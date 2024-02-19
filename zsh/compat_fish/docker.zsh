@@ -208,7 +208,7 @@ ealias skh='skopeo --help'
 ealias ski='skopeo --override-os linux inspect docker://' --NoSpaceAfter
 ealias skim='skopeo --override-os linux inspect --raw docker://' --NoSpaceAfter
 ealias skic='skopeo --override-os linux inspect --config --raw docker://' --NoSpaceAfter
-ealias skl='skopeo list-tags docker://' --NoSpaceAfter
+ealias skl='skopeo list-tags docker://docker.io/' --NoSpaceAfter
 ealias sklm='skopeo list-tags docker://mcr.microsoft.com/' --NoSpaceAfter
 
 # usage:
