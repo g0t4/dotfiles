@@ -75,8 +75,8 @@ if command -v ctr >/dev/null
 
     # images:
     eabbr ctri 'sudo ctr image ls'
-    abbr ctripull 'sudo ctr image pull docker.io/library/!'
-    abbr ctrirm 'sudo ctr image rm docker.io/library/!'
+    abbr ctripull --set-cursor='!' 'sudo ctr image pull docker.io/library/!'
+    abbr ctrirm --set-cursor='!' 'sudo ctr image rm docker.io/library/!'
 
     # tasks:
     eabbr ctrtls 'sudo ctr task ls'
