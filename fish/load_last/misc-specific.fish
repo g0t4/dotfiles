@@ -66,7 +66,7 @@ end
 if command -v ctr >/dev/null
 
     eabbr ctr 'sudo ctr'
-    eabbr ctrn 'sudo ctr namespaces'
+    eabbr ctrn 'sudo ctr namespaces ls'
 
     # containers:
     eabbr ctrc 'sudo ctr container ls'
