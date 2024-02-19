@@ -87,3 +87,27 @@ ealias ktn='kubectl top node'
 # kubectl events
 
 # kubectl plugin list
+
+# *** minikube
+ealias mk="minikube"
+ealias mkst="minikube status"
+ealias mkstop="minikube stop"
+ealias mkstart="minikube start"
+ealias mkpause="minikube pause"
+ealias mkunpause="minikube unpause"
+
+ealias mkno="minikube node list"
+
+ealias mkd="minikube dashboard --port 9090"
+ealias mksls="minikube service list"
+# minikube tunnel
+ealias mkals="minikube addons list"
+ealias mkae="minikube addons enable"
+ealias mkad="minikube addons disable"
+
+ealias mked='eval $(minikube docker-env)' # access docker container runtime (if using)
+# ealias mkep='eval $(minikube podman-env)' # access podman container runtime (if using)
+
+ealias mkp="minikube profile list"
+
+ealias mkk="minikube kubectl"
