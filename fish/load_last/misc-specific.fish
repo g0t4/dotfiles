@@ -120,6 +120,7 @@ if command -q k3s
         #    echo foo | k3s ser<CURSOR> => commmandline -cp => 'k3s ser'
         # echo "prev: $prev"
         # return
+        # TODO would be an improvement to break this out into separate completion functions and defer to completions of prominent subcommands externally: ctr, kubectl, etc
 
         # --generate-bash-completion is a k3s feature that generates bash completion for k3s commands (not all though AFAICT, i.e. not k3s ctr and that makes sense cuz ctr completions would be independent of k3s)
         #   `k3s completion bash` => 
