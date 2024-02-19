@@ -61,8 +61,8 @@ ealias kdf='kubectl diff -f'
 
 ealias kdesc='grc kubectl describe' # ~ docker inspect
 ealias krun='kubectl run' # ~ docker container run
-ealias kexec='kubectl exec' # ~ docker container exec
-ealias kattach='kubectl attach' # ~ docker container attach
+ealias kexec='kubectl exec -it' # ~ docker container exec
+ealias kattach='kubectl attach -it' # ~ docker container attach
 ealias kcp='kubectl cp' # ~ docker container cp
 ealias kpf='kubectl port-forward' # setup proxy to access pod's port from host machine # ~ docker container run -p flag
 # kubectl expose
