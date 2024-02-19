@@ -17,7 +17,7 @@ bind -k sdc kill-word # shift+del to kill forward a word (otherwise its esc+d on
 
 
 # *** systemctl (if avail)
-if command -v systemctl >/dev/null
+if command -q systemctl
 
     eabbr sc 'sudo systemctl'
     eabbr scu 'sudo systemctl --user'
@@ -63,7 +63,7 @@ if command -v systemctl >/dev/null
 end
 
 # *** containerd
-if command -v ctr >/dev/null
+if command -q ctr
 
     eabbr ctr 'sudo ctr'
     eabbr ctrn 'sudo ctr namespaces ls'
@@ -100,4 +100,7 @@ if command -v ctr >/dev/null
     # leases
     # snapshots
 
+end
+
+if command -q k3s
 end
