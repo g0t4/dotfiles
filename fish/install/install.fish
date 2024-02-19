@@ -13,7 +13,7 @@ if not functions -q __z
   fisher install jethrokuan/z
 end
 
-if not command -q bass
-  echo "installing bass"
-  fisher install edc/bass
-end
+# if not command -q bass
+#   echo "installing bass"
+#   fisher install edc/bass
+# end
