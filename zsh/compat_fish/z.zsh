@@ -1,1 +1,0 @@
-ealias zx='z -x'

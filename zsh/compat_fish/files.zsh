@@ -12,3 +12,6 @@ ealias cr='code "$(_repo_root)"' # * favorite
 #### zed
 ealias zh='zed .'
 ealias zr='zed "$(_repo_root)"'
+
+# z
+ealias zx='z -x'
