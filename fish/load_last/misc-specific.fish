@@ -103,4 +103,37 @@ if command -q ctr
 end
 
 if command -q k3s
+
+    eabbr k3s 'sudo k3s' # most helpful with say `sudo k3s ctr ...` b/c k3s containerd sock is owned by root:root
+    # `sudo k3s kubectl ...` might be useful too if lowly user doesn't have access to k3s kubeconfig, but it is easy enough to use kubectl directly
+
+    # PRN what about some sort of env/context selection for ctr socket? i.e:
+    #    export CONTAINERD_ADDRESS=unix:///run/k3s/containerd/containerd.sock
+    #    sudo -E ctr ... # shows k3s containerd instance resources  
+    #
+    #    vs default address: /run/containerd/containerd.sock
+
+    function _k3s_autocomplete
+        # *** DUCK TAPE and bailing twine ***
+        # set -l cur (commandline -ct) # current token (up to cursor position) => empty if cursor is preceeded by space
+        set -l prev (commandline -cp) # current process (back to the last pipe or start of current command), i.e.: 
+        #    echo foo | k3s ser<CURSOR> => commmandline -cp => 'k3s ser'
+        # echo "prev: $prev"
+        # return
+
+        # --generate-bash-completion is a k3s feature that generates bash completion for k3s commands (not all though AFAICT, i.e. not k3s ctr and that makes sense cuz ctr completions would be independent of k3s)
+        #   `k3s completion bash` => 
+        #       bash completion scripts (ported to this fish completion func)
+        #       differentiates on -* vs (not start w/ -) == options vs subcommands => but, same completions regardless if include or exclude current token in my testing so I am not differentiating here:
+        set -l opts (eval $prev --generate-bash-completion)
+        for opt in $opts
+            echo $opt
+        end
+    end
+
+    # Register the function for autocompletion with k3s, '' => defer func invoke until completion is requested
+    # -f => no file completion... TODO is there a situation in which I would want that? definitely not for top level k3s completions
+    complete -c k3s -a '(_k3s_autocomplete)' -f
+
+    # PRN if this doesn't work out well for fish completions, I could break out sub commands and customize completions for each
 end
