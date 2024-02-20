@@ -17,3 +17,8 @@ end
 #   echo "installing bass"
 #   fisher install edc/bass
 # end
+
+if command -q docker
+    mkdir -p ~/.config/fish/completions/
+    docker completion fish > ~/.config/fish/completions/docker.fish
+end 
