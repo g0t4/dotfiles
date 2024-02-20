@@ -245,7 +245,10 @@ if command -q kubectl
 
     # kubectl plugin list
 
-    # *** minikube
+end
+
+if command -q minikube
+
     eabbr mk minikube
     eabbr mkst 'minikube status'
     eabbr mkstop 'minikube stop'
