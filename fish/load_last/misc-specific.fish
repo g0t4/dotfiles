@@ -144,3 +144,7 @@ if command -q k3s
 
     # PRN if this doesn't work out well for fish completions, I could break out sub commands and customize completions for each
 end
+
+if command -q kubectl
+    export KUBECTL_EXTERNAL_DIFF="icdiff -r" # use icdiff for kubectl diff (slick!)... FYI $1 and $2 are directories to compare (hence the -r)
+end
