@@ -186,6 +186,7 @@ if command -q kubectl
     eabbr kgcrd 'grc kubectl get customresourcedefinitions' # alias: crd,crds
     eabbr kgds 'grc kubectl get daemonsets' # alias: ds
     eabbr kgep 'grc kubectl get endpoints' # alias: ep
+    eabbr kgepA 'grc kubectl get endpoints -A' # all endpoints
     eabbr kgev 'grc kubectl get events' # alias: ev
     eabbr kging 'grc kubectl get ingresses' # alias: ing
     eabbr kgj 'grc kubectl get jobs'
