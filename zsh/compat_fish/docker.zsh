@@ -201,9 +201,10 @@ ealias dcouf='docker compose up --force-recreate --remove-orphans'
 ealias dcoud='docker compose up --detach'
 ealias dcov='docker compose version'
 
-## dld - docker labs debug:
+## dld - docker labs debug: # unsure if dld is sticking around (Feb 2024 update leaves dld executable behind so not sure if maybe new features will come through labs extension to DD?)
 ealias dlda='dld attach'
 ealias dlds='dld shell'
+ealias dd='docker debug' # in docker desktop 4.27.0+ (appears to be replacing dld is my guess?)
 
 ## skopeo
 ealias sk='skopeo'
