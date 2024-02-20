@@ -1,13 +1,14 @@
 ealias kver='grc kubectl version'
 # explain
 ealias ke='grc kubectl explain'
-ealias kep='grc kubectl explain pods'
+ealias kep='grc kubectl explain pods' # example
+ealias keps='grc kubectl explain pods.spec' # example
+ealias ker='grc kubectl explain --recursive'
 #
 ealias kav='grc kubectl api-versions'
 ealias kar='grc kubectl api-resources'
 ealias karn='grc kubectl api-resources --namespaced=true'
 ealias karg='grc kubectl api-resources --namespaced=false' # (g)lobal
-
 
 # grc kubectl options
 
@@ -17,7 +18,8 @@ ealias karg='grc kubectl api-resources --namespaced=false' # (g)lobal
 ealias kg="grc kubectl get"
 ealias kgf="grc kubectl get -f" # status of resources defined in yml file
 #
-ealias kgn="grc kubectl get namespaces"
+ealias kgns="grc kubectl get namespaces" 
+# TODO redo get aliases to use abbreviations where applicable (ie n=>ns)
 #
 ealias kga="grc kubectl get all"
 ealias kgaa="grc kubectl get all -A" # -A/--all-namespaces
