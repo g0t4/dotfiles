@@ -49,9 +49,8 @@ function _recording
 
     # TODO disable showing return code failures in prompt? wait to see how much of a hassle this is when editing some new videos
 
-
     # FYI - I added Keyboard Maestro macros to:
-    #   on screenpal launch/activate =>
+    #   on screenpal (launch or activate) =>
     #       /opt/homebrew/bin/fish -c "_recording" 2>&1
     #       PRN on activate too?
     #       FYI can take a second or two to apply to all windows
