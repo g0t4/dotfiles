@@ -5,6 +5,10 @@ ealias kep='grc kubectl explain pods'
 #
 ealias kav='grc kubectl api-versions'
 ealias kar='grc kubectl api-resources'
+ealias karn='grc kubectl api-resources --namespaced=true'
+ealias karg='grc kubectl api-resources --namespaced=false' # (g)lobal
+
+
 # grc kubectl options
 
 # kubectl alpha
