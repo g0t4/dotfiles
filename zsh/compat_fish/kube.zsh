@@ -66,6 +66,7 @@ ealias kdf='kubectl diff -f'
 # kubectl autoscale
 
 ealias kdesc='grc kubectl describe' # ~ docker inspect
+ealias kdescf='grc kubectl describe -f'
 ealias krun='kubectl run' # ~ docker container run
 ealias kexec='kubectl exec -it' # ~ docker container exec
 ealias kattach='kubectl attach -it' # ~ docker container attach
