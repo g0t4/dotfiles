@@ -147,4 +147,126 @@ end
 
 if command -q kubectl
     export KUBECTL_EXTERNAL_DIFF="icdiff -r" # use icdiff for kubectl diff (slick!)... FYI $1 and $2 are directories to compare (hence the -r)
+
+    eabbr kver 'grc kubectl version'
+    # explain
+    eabbr ke 'grc kubectl explain'
+    eabbr kep 'grc kubectl explain pods' # example
+    eabbr keps 'grc kubectl explain pods.spec' # example
+    eabbr ker 'grc kubectl explain --recursive'
+    #
+    eabbr kav 'grc kubectl api-versions'
+    eabbr kar 'grc kubectl api-resources'
+    eabbr karn 'grc kubectl api-resources --namespaced=true'
+    eabbr karg 'grc kubectl api-resources --namespaced=false' # (g)lobal
+
+    # grc kubectl options
+
+    # kubectl alpha
+
+    # *** get
+    eabbr kg 'grc kubectl get'
+    eabbr kgf 'grc kubectl get -f' # status of resources defined in yml file
+    #
+    eabbr kgns 'grc kubectl get namespaces'
+    # TODO redo get aliases to use abbreviations where applicable (ie n=>ns)
+    #
+    eabbr kga 'grc kubectl get all'
+    eabbr kgaa 'grc kubectl get all -A' # -A/--all-namespaces
+    #
+    eabbr kgp 'grc kubectl get pods'
+    eabbr kgpa 'grc kubectl get pods -A'
+    eabbr kgpaw 'grc kubectl get pods -A --watch'
+    #
+    # PRN prune list or add other resource types:
+    eabbr kgs 'grc kubectl get svc'
+    eabbr kgno 'grc kubectl get nodes'
+    eabbr kgsa 'grc kubectl get serviceaccounts'
+    eabbr kgcr 'grc kubectl get clusterroles'
+    eabbr kgcrb 'grc kubectl get clusterrolebindings'
+    eabbr kgro 'grc kubectl get roles'
+    eabbr kgrob 'grc kubectl get rolebindings'
+    eabbr kgcm 'grc kubectl get configmaps'
+    eabbr kgsec 'grc kubectl get secrets'
+    eabbr kgcrd 'grc kubectl get customresourcedefinitions'
+
+    # create
+    eabbr kc 'kubectl create'
+    eabbr kcf 'kubectl create -f' # from file
+    # apply
+    eabbr kaf 'kubectl apply -f' # create or modify
+    # delete
+    eabbr kdel 'kubectl delete'
+    eabbr kdelf 'kubectl delete -f'
+    # replace
+    eabbr krf 'kubectl replace -f' # delete and then create
+    # diff
+    eabbr kd 'kubectl diff' # diff current (status) vs desired state (spec)
+    eabbr kdf 'kubectl diff -f'
+    # kubectl edit
+    # kubectl patch
+    # kubectl set
+    # kubectl kustomize
+    #
+    # kubectl label
+    # kubectl annotate
+    #
+    # kubectl rollout
+    # kubectl scale
+    # kubectl autoscale
+
+    eabbr kdesc 'grc kubectl describe' # ~ docker inspect
+    eabbr kdescf 'grc kubectl describe -f'
+    eabbr krun 'kubectl run' # ~ docker container run
+    eabbr kexec 'kubectl exec -it' # ~ docker container exec
+    eabbr kattach 'kubectl attach -it' # ~ docker container attach
+    eabbr kcp 'kubectl cp' # ~ docker container cp
+    eabbr kpf 'kubectl port-forward' # setup proxy to access pod's port from host machine # ~ docker container run -p flag
+    # kubectl expose
+    # kubectl wait
+
+    # logs
+    eabbr kl 'kubectl logs'
+    eabbr klf 'kubectl logs --follow'
+
+    # conte(x)t => muscle memory with docker `dxls`=`docker context ls`, so => kxls
+    eabbr kx 'kubectl config'
+    eabbr kxu 'kubectl config use-context'
+    eabbr kxls 'kubectl config get-contexts'
+    eabbr kxv 'kubectl config view'
+
+    # kubectl cluster-info dump
+    eabbr ktp 'kubectl top pod --all-namespaces'
+    eabbr ktn 'kubectl top node'
+
+    # kubectl proxy
+    # kubectl debug
+    # kubectl events
+
+    # kubectl plugin list
+
+    # *** minikube
+    eabbr mk minikube
+    eabbr mkst 'minikube status'
+    eabbr mkstop 'minikube stop'
+    eabbr mkstart 'minikube start'
+    eabbr mkpause 'minikube pause'
+    eabbr mkunpause 'minikube unpause'
+
+    eabbr mkno 'minikube node list'
+
+    eabbr mkd 'minikube dashboard --port 9090'
+    eabbr mksls 'minikube service list'
+    # minikube tunnel
+    eabbr mkals 'minikube addons list'
+    eabbr mkae 'minikube addons enable'
+    eabbr mkad 'minikube addons disable'
+
+    eabbr mked 'eval $(minikube docker-env)' # access docker container runtime (if using)
+    # eabbr mkep 'eval $(minikube podman-env)' # access podman container runtime (if using)
+
+    eabbr mkp 'minikube profile list'
+
+    eabbr mkk 'minikube kubectl'
+
 end

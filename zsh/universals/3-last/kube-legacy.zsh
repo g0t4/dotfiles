@@ -1,3 +1,8 @@
+#
+#! LEGACY ALIASES for ZSH ONLY (newer set uses abbr in fish - can always port back to zsh later, right now I am super happy with fish and would like to reduce some overhead in ealias / zsh maint + take advantage of abbr features like cursor position in fish 3.6.0+)
+
+export KUBECTL_EXTERNAL_DIFF="icdiff -r" # use icdiff for kubectl diff (slick!)... FYI $1 and $2 are directories to compare (hence the -r)
+
 ealias kver='grc kubectl version'
 # explain
 ealias ke='grc kubectl explain'
@@ -18,7 +23,7 @@ ealias karg='grc kubectl api-resources --namespaced=false' # (g)lobal
 ealias kg="grc kubectl get"
 ealias kgf="grc kubectl get -f" # status of resources defined in yml file
 #
-ealias kgns="grc kubectl get namespaces" 
+ealias kgns="grc kubectl get namespaces"
 # TODO redo get aliases to use abbreviations where applicable (ie n=>ns)
 #
 ealias kga="grc kubectl get all"
