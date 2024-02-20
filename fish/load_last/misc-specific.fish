@@ -174,21 +174,33 @@ if command -q kubectl
     eabbr kga 'grc kubectl get all'
     eabbr kgaa 'grc kubectl get all -A' # -A/--all-namespaces
     #
-    eabbr kgp 'grc kubectl get pods'
+    eabbr kgp 'grc kubectl get pods' # alias: po (gonna go with p only for now)
     eabbr kgpa 'grc kubectl get pods -A'
     eabbr kgpaw 'grc kubectl get pods -A --watch'
     #
     # PRN prune list or add other resource types:
-    eabbr kgs 'grc kubectl get svc'
-    eabbr kgno 'grc kubectl get nodes'
-    eabbr kgsa 'grc kubectl get serviceaccounts'
+    eabbr kgcj 'grc kubectl get cronjobs'
+    eabbr kgcm 'grc kubectl get configmaps' # alias: cm
     eabbr kgcr 'grc kubectl get clusterroles'
     eabbr kgcrb 'grc kubectl get clusterrolebindings'
+    eabbr kgcrd 'grc kubectl get customresourcedefinitions' # alias: crd,crds
+    eabbr kgds 'grc kubectl get daemonsets' # alias: ds
+    eabbr kgep 'grc kubectl get endpoints' # alias: ep
+    eabbr kgev 'grc kubectl get events' # alias: ev
+    eabbr kging 'grc kubectl get ingresses' # alias: ing
+    eabbr kgj 'grc kubectl get jobs'
+    eabbr kgno 'grc kubectl get nodes' # alias: no
+    eabbr kgpv 'grc kubectl get persistentvolumes' # alias: pv
+    eabbr kgpvc 'grc kubectl get persistentvolumeclaims' # alias: pvc
+    eabbr kgrb 'grc kubectl get rolebindings'
     eabbr kgro 'grc kubectl get roles'
-    eabbr kgrob 'grc kubectl get rolebindings'
-    eabbr kgcm 'grc kubectl get configmaps'
+    eabbr kgrs 'grc kubectl get replicasets' # alias: rs
+    eabbr kgs 'grc kubectl get svc'
+    eabbr kgsa 'grc kubectl get serviceaccounts' # alias: sa
+    eabbr kgsc 'grc kubectl get storageclasses' # alias: sc
     eabbr kgsec 'grc kubectl get secrets'
-    eabbr kgcrd 'grc kubectl get customresourcedefinitions'
+    eabbr kgsts 'grc kubectl get statefulsets' # alias: sts
+    eabbr kgsvc 'grc kubectl get services' # alias: svc
 
     # create
     eabbr kc 'kubectl create'
