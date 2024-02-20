@@ -169,6 +169,8 @@ ealias dcodad='docker compose down --remove-orphans --rmi local --volumes --dry-
 #   --rmi all => pulled too
 #
 ealias dcoe='docker compose exec'
+ealias dcoa='docker compose attach' # my tiny contribution
+ealias dcow='docker compose watch'
 ealias dcoi='docker compose images'
 ealias dcok='docker compose kill'
 ealias dcol='docker compose logs'
@@ -181,9 +183,10 @@ ealias dcolsa='grc docker compose ls -a' # stopped too
 
 # # alpha commands
 # ealias dcoa='docker compose alpha'
-# ealias dcov='docker compose alpha viz'
+# ealias dcoviz='docker compose alpha viz'
+# ealias dcopublish='docker compose alpha publish'
 
-ealias dcow='docker compose watch'
+
 
 ealias dcopull='docker compose pull'
 ealias dcopush='docker compose push'
