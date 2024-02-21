@@ -206,6 +206,7 @@ abbr dcov 'docker compose version'
 # abbr dlda 'dld attach'
 # abbr dlds 'dld shell'
 abbr dd 'docker debug' # in docker desktop 4.27.0+ (appears to be replacing dld is my guess?)
+abbr --set-cursor='!' ddc "docker debug --command '!'" # ready to run command in quotes
 abbr dde 'docker debug -c entrypoint' # entrypoint inspector (add image/container name/id)
 
 ## skopeo
