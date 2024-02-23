@@ -136,8 +136,8 @@ if command -q batcat # -q => w/o output
     alias bat=batcat
 end
 eabbr cat 'bat' # do not alias, only expand (abbr), else get failure trying to use cat.... TLDR as I type cat replace it with bat
-eabbr bath='bat --style=header' # == header-filename (i.e. for multi files show names)
-eabbr batf='bat --style=full'
+eabbr bath 'bat --style=header' # == header-filename (i.e. for multi files show names)
+eabbr batf 'bat --style=full'
 
 
 ### DISK USAGE ###
