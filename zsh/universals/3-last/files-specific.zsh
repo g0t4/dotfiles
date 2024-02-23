@@ -53,10 +53,13 @@ cd_dir_of_path() {
 }
 ealias cdd="cd_dir_of_path"
 
-# PRN like fish, if batcat found, alias bat=batcat? where else am I handling this (if at all)... ie wsl/ubuntu or not?
+
+# *** bat ***
+# FYI .zshenv has alias bat=batcat (conditional) b/c I need it in non-login shells too
 ealias cat='bat' # expand cat => bat is primary purpose
 ealias bath='bat --style=header' # == header-filename (i.e. for multi files show names)
 ealias batf='bat --style=full'
+
 
 ### DISK USAGE ###
 ealias dus='du -hd1 | sort -h --reverse' # sort by size (makes sense only for current dir1) => most of the time this is what I want to do so just use this for `du`

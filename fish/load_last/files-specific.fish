@@ -128,16 +128,16 @@ function cd_dir_of_path
 end
 ealias cdd="cd_dir_of_path"
 
+
+# *** bat ***
 # if batcat exists map to bat
 if command -q batcat # -q => w/o output
     # ubuntu
     alias bat=batcat
 end
-ealias cat='bat' # let's see how I feel about this! this now works at any command position b/c I fixed when to trigger ealias expansion (not just first word of command)
-
+eabbr cat 'bat' # do not alias, only expand (abbr), else get failure trying to use cat.... TLDR as I type cat replace it with bat
 ealias bath='bat --style=header' # == header-filename (i.e. for multi files show names)
 ealias batf='bat --style=full'
-
 
 
 ### DISK USAGE ###
