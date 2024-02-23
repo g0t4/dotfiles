@@ -53,6 +53,11 @@ cd_dir_of_path() {
 }
 ealias cdd="cd_dir_of_path"
 
+# PRN like fish, if batcat found, alias bat=batcat? where else am I handling this (if at all)... ie wsl/ubuntu or not?
+ealias cat='bat' # expand cat => bat is primary purpose
+ealias bath='bat --style=header' # == header-filename (i.e. for multi files show names)
+ealias batf='bat --style=full'
+
 ### DISK USAGE ###
 ealias dus='du -hd1 | sort -h --reverse' # sort by size (makes sense only for current dir1) => most of the time this is what I want to do so just use this for `du`
 # for zsh I am going to leave dus b/c I don't want to alias du to this... and right now my ealias framework doesn't support EXPAND only aliases (PRN add expand only!?)
