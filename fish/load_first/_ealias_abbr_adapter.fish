@@ -169,13 +169,16 @@ end
 
 function ealias_list
     # 8ms on mbp21
+    # dump ealiases (composable abbrs)
     for i in (seq (count $ealiases))
         echo "$ealiases[$i] => $ealiases_values[$i]"
     end
+    # dump abbr (expand only), and yes ealiases will be duplicated here too, that's fine:
+    abbr
 end
 
 abbr --add agr --set-cursor='!' "ealias_list | grep -i '!'" # i.e. to find `git status` aliases
-abbr --add agrs --set-cursor='!' "ealias_list | grep -i '^!'" # i.e. for finding aliases that start with `dc` or `gs` etc => useful when creating new aliases to find a "namespace" that is free
+abbr --add agrs --set-cursor='!' "ealias_list | grep -i '\b!'" # i.e. for finding aliases that start with `dc` or `gs` etc => useful when creating new aliases to find a "namespace" that is free
 
 function eabbr --description "ealias w/ expand only, IOTW abbr marked compatible with ealias... later can impl eabbr in zsh too and share these definitions"
     # --wraps abbr # DO NOT setup abbr completion b/c I don't intend for eabbr to use any options from abbr (use abbr directly if not just simple ealias like expansion)
