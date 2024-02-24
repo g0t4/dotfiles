@@ -73,6 +73,7 @@ eabbr gcan! 'git commit -v -a --no-edit --amend'
 
 # checkout
 eabbr gco 'git checkout'
+eabbr gcom 'git checkout master'
 eabbr gcop 'git restore --patch' # interactive restore (like git add --patch) - FYI prefer git restore over git checkout
 eabbr gcob 'git checkout -b'
 
