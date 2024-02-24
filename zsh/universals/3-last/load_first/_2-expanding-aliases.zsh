@@ -132,6 +132,11 @@ function expand-ealias-then-accept-line-without-colorize(){
     POSTDISPLAY="" # i.e. clear ask-openai messages
 }
 
+function eabbr(){
+    # shim to adapt eabbr to ealias in zsh only, while in fish it is adapted to abbr only
+    ealias "$1"="$2"
+}
+
 # register UDF widgets above
 zle -N expand-ealias
 zle -N expand-ealias-then-accept-line
