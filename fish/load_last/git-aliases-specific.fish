@@ -62,9 +62,16 @@ ealias rr='_repo_root'
 alias rr='_repo_root' # ! first issue, abbreviations aren't expanded during command evaluation (or is there an arg for it?) so I have to define it twice if I wanna use it elsewhere... probably should just use _repo_root elsewhere but I use $(rr) often in other aliases so lets be safe
 function _repo_root
 
+    # FYI missing git command should break returning a path
+    if not command -q git
+        echo "[FAIL] git not found" >&2
+        return 1
+    end
+
     if git rev-parse --is-inside-work-tree 2>/dev/null 1>/dev/null
         git rev-parse --show-toplevel 2>/dev/null
     else if command -q hg && hg root 2>/dev/null 1>/dev/null
+        # FYI don't let missing hg command break machines w/o hg repos
         hg root 2>/dev/null
     else
         builtin pwd
