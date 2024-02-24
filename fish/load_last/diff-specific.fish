@@ -1,7 +1,7 @@
 
-ealias ic="icdiff -H"
-ealias icr="icdiff --recursive" # diff all files in two dirs
-ealias icg="git-icdiff"
+eabbr ic "icdiff -H"
+eabbr icr "icdiff --recursive" # diff all files in two dirs
+eabbr icg "git-icdiff"
 # configure git-icdiff via git config: git config --global icdiff.options '--line-numbers'
 
 # For example:

@@ -102,7 +102,7 @@ abbr --add zsh_equals --regex '=[^\b]+' --function expand_zsh_equals
 function cd_dir_of_command
     cd_dir_of_path (type --path $argv) # ~ zsh's =foo
 end
-ealias cdc="cd_dir_of_command"
+eabbr cdc "cd_dir_of_command"
 
 function cd_dir_of_path
     set -l _cd_path $argv
@@ -130,7 +130,7 @@ function cd_dir_of_path
 
     log_ --apple_white "cd $(pwd)"
 end
-ealias cdd="cd_dir_of_path"
+eabbr cdd "cd_dir_of_path"
 
 
 # *** bat ***
@@ -148,9 +148,9 @@ eabbr batf 'bat --style=full'
 # only expand du, don't also alias
 abbr du 'du -hd1 | sort -h --reverse' # sort by size (makes sense only for current dir1) => most of the time this is what I want to do so just use this for `du`
 #  FYI I could add psh => '| sort -hr' global alias (expands anywhere)?
-# retire: ealias du='du -h'  # tree command doesn't show size of dirs (unless showing entire hierarchy so not -L 2 for example, so stick with du command)
-ealias dua='du -ha' # show all files (FYI cannot use -a with -d1)
-ealias duh='du -h' # likely not needed, old du defaults before sort default
+# retire: eabbr du 'du -h'  # tree command doesn't show size of dirs (unless showing entire hierarchy so not -L 2 for example, so stick with du command)
+eabbr dua 'du -ha' # show all files (FYI cannot use -a with -d1)
+eabbr duh 'du -h' # likely not needed, old du defaults before sort default
 #
 # show only N levels deep
 #   du1 => du -hd 1
@@ -159,12 +159,12 @@ function duX
     string replace --regex '^du' 'du -hd' $argv
 end
 #
-ealias df='command df -h' # use command to avoid infinite recursion
+eabbr df 'command df -h' # use command to avoid infinite recursion
 # Mac HD: (if fails try df -h and update this alias to be be more general)
-ealias dfm='df -h /System/Volumes/Data'
+eabbr dfm 'df -h /System/Volumes/Data'
 
 ## loop helpers
-ealias forr='for i in (seq 1 3)
+eabbr forr 'for i in (seq 1 3)
     # PRN add forr30 abbr => for i in (seq 1 30); echo $i; end
     echo $i
 end
@@ -186,14 +186,14 @@ set _tree_exa 'eza --tree --group-directories-first --ignore-glob "node_modules|
 set _treed "tree --only-dirs"
 
 alias tree="$_tree_exa"
-ealias treed="$_treed"
+eabbr treed "$_treed"
 
 set _treeal "tree --all --long --group --sort size"
-ealias treev="$_treeal"
+eabbr treev "$_treeal"
 
 # interchangable:
-ealias treedv="$_treeal --only-dirs"
-ealias treevd="$_treeal --only-dirs"
+eabbr treedv "$_treeal --only-dirs"
+eabbr treevd "$_treeal --only-dirs"
 
 # treeX => tree -L X
 abbr --add _treeX --regex 'tree\d+' --function treeX
@@ -211,4 +211,4 @@ function treevX
     string replace --regex '^treev' 'treev -L' $argv
 end
 
-ealias treeify="as-tree" # PRN do I ever use this?
+eabbr treeify "as-tree" # PRN do I ever use this?
