@@ -24,6 +24,7 @@ set ealias_options (fish_opt --short=g) (fish_opt --short=n --long=NoSpaceAfter 
 #   w00t optimizations got me to 2.53s=>700ms! (rpi4B) + 660ms=>220ms(rpi5) + 385ms=>151ms (mbp)
 #  *** careful not to use first ealias call for timing info as it loads some funcs (ie abbr first call => source /opt/homebrew/Cellar/fish/3.7.0/share/fish/functions/abbr.fish! even though abbr is builtin now),  so skip to second ealias invocation for more accurate timing into (in which case ealias right now is 150ms on mbp which is plenty fast for now => 60ms for 1k aliases and I only have 700 so that's all fine enough for now)
 
+# TODO I am very close to getting rid of ealias altogether, I have 3 legit uses for eabbr+composed so lets just replace those with abbr/alias and be done with ealias! can keep eabbr to shim in zsh (or rename to abbr in zsh)? I am SAVING A TON OF startup time not defining funcs for things that just needed expanded! (250ms=>40ms)
 function ealias --description "map ealias to fish abbr(eviation)"
 
     argparse $ealias_options -- $argv # removes matching specs from $argv
