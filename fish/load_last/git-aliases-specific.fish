@@ -64,7 +64,7 @@ function _repo_root
 
     if git rev-parse --is-inside-work-tree 2>/dev/null 1>/dev/null
         git rev-parse --show-toplevel 2>/dev/null
-    else if hg root 2>/dev/null 1>/dev/null
+    else if command -q hg && hg root 2>/dev/null 1>/dev/null
         hg root 2>/dev/null
     else
         builtin pwd
