@@ -66,15 +66,11 @@
   eabbr vdf 'vagrant destroy -f'
 
   ## plugins
-  eabbr vpl 'vagrant plugin'
-    eabbr vplls 'vagrant plugin list'
-  # include local plugins in list
-    eabbr vpllsl 'vagrant plugin list --local'
-    eabbr vplup 'vagrant plugin update'
-  # installing plugins
-    eabbr vpli 'vagrant plugin install'
-    eabbr vplil 'vagrant plugin install --local'
-    eabbr vplun 'vagrant plugin uninstall'
+  eabbr vp 'vagrant plugin'
+    eabbr vpls 'vagrant plugin list'
+    eabbr vpi 'vagrant plugin install'
+    eabbr vprm 'vagrant plugin uninstall'
+    eabbr vpupdate 'vagrant plugin update'
 
   # connect
   eabbr vs 'vagrant ssh'
