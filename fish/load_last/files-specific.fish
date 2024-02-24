@@ -12,6 +12,10 @@
 # alias ..........="cd ../../../../../../../../.."
 # alias ...........="cd ../../../../../../../../../.."
 
+# *** ls
+# still not using exa/eza (not worth hassle, esp b/c ls colors work well enough)
+eabbr lat "ls -alt"
+
 # this was in release notes for 3.6.0! regex just added (among other changes)
 #    https://fishshell.com/docs/3.6/relnotes.html
 function multicd
