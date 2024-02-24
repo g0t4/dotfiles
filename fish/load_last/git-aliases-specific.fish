@@ -67,7 +67,7 @@ function _repo_root
     else if hg root 2>/dev/null 1>/dev/null
         hg root 2>/dev/null
     else
-        pwd
+        builtin pwd
     end
 
 end
