@@ -7,8 +7,9 @@
 
 # PRN fix some bindings that seem backward?
 
+# FYI I submitted a PR to fix this in preset bindings:
 # bind --preset ' ' self-insert expand-abbr
-# bind ' ' expand-abbr self-insert # => FYI expand-abbr works after a space
+bind ' ' expand-abbr self-insert # => FYI expand-abbr works after a space too but I wanna keep it consistent as well
 #    BUT, for the following, expand-abbr won't work after self-insert (respective char) so I am fixing (flipping) the presets to get expansion to work again
 # bind --preset ';' self-insert expand-abbr
 bind ';' expand-abbr self-insert
