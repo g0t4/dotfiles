@@ -5,31 +5,31 @@ export HOMEBREW_BAT=1 # for `brew cat` command, must export for brew's child pro
 # https://github.com/Homebrew/brew/blob/master/Library/Homebrew/env_config.rb
 
 ############## readonly actions (ok to do with any user account)
-ealias bcat='brew cat'
-ealias bd='brew doctor --quiet' # --quiet suppresses output if successful
-ealias bh='brew home'  # i.e. brew home bat
-ealias bi='brew info'
-ealias big='brew info --github'
-ealias bl='brew list'
-ealias blc='brew list --cask'
-ealias blf='brew list --formula'
-ealias bo='brew outdated' # compliments bubo (update/outdated)
-ealias bp='brew --prefix'
-# ealias bs='brew search' # fish has bs impl that uses analytics, not yet porting that to zsh so for now just get rid of what would otherwise become a duplicated alias in fish AND... this is a reminder to port to zsh if I ever find myself wanting it there
-ealias bsvc='brew services' # list state of brew installed services (daemons)
+eabbr bcat 'brew cat'
+eabbr bd 'brew doctor --quiet' # --quiet suppresses output if successful
+eabbr bh 'brew home'  # i.e. brew home bat
+eabbr bi 'brew info'
+eabbr big 'brew info --github'
+eabbr bl 'brew list'
+eabbr blc 'brew list --cask'
+eabbr blf 'brew list --formula'
+eabbr bo 'brew outdated' # compliments bubo (update/outdated)
+eabbr bp 'brew --prefix'
+# eabbr bs 'brew search' # fish has bs impl that uses analytics, not yet porting that to zsh so for now just get rid of what would otherwise become a duplicated alias in fish AND... this is a reminder to port to zsh if I ever find myself wanting it there
+eabbr bsvc 'brew services' # list state of brew installed services (daemons)
 
-ealias bus='brew uses --eval-all' # ... depends on X
-ealias bde='brew deps' # X depends on ...
+eabbr bus 'brew uses --eval-all' # ... depends on X
+eabbr bde 'brew deps' # X depends on ...
 
-ealias bar='brew autoremove'
-ealias bcl='brew cleanup'
+eabbr bar 'brew autoremove'
+eabbr bcl 'brew cleanup'
 
-ealias bin='brew install'
-# ealias binv='brew install --verbose --debug'
+eabbr bin 'brew install'
+# eabbr binv 'brew install --verbose --debug'
 
-ealias bup='brew upgrade'
-ealias bubc='brew upgrade && brew cleanup' # src: omz/brew
-ealias bubo='brew update && brew outdated' # src: omz/brew
-ealias bubu='bubo && bubc' # src: omz/brew
+eabbr bup 'brew upgrade'
+eabbr bubc 'brew upgrade && brew cleanup' # src: omz/brew
+eabbr bubo 'brew update && brew outdated' # src: omz/brew
+eabbr bubu 'bubo && bubc' # src: omz/brew
 
-ealias bun='brew uninstall'
+eabbr bun 'brew uninstall'
