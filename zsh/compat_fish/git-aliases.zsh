@@ -6,8 +6,6 @@
 # `gi*` for my git ignore customizations
 # `globurl`
 
-ealias g='git'
-
 # status
 ealias gst='git status'
 ealias gsl='gst && echo && glo' # * try # FYI requires gst/glo aliases(funcs) to work
