@@ -1,8 +1,9 @@
-ealias pc="prlctl"
+# TODO if prlctl... fish+zsh
+eabbr pc "prlctl"
 # list [-a,--all] [-f,--full] [-t,--template] [-L] [-o,--output <field>[,filed...]] [-s,--sort <field>]
 # list -i,--info [-f,--full] [-j,--json] [<ID | NAME>]
-ealias pcls="prlctl list --full --all"          # all VMs (regardless state) - and full so I get IPs
-ealias pclsj="prlctl list --full --json --info" # super detailed json output # --all is irrelevant with --info
+eabbr pcls "prlctl list --full --all"          # all VMs (regardless state) - and full so I get IPs
+eabbr pclsj "prlctl list --full --json --info" # super detailed json output # --all is irrelevant with --info
 
 # completion is good enough for most of following... PRN add more:
 # prlctl capture NAME -file foo.png
