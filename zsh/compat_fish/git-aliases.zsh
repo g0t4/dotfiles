@@ -35,9 +35,9 @@ eabbr gap 'git add --patch' # * favorite # patch = interactive, but skips first 
 
 # branch read:
 # don't use pager on git branch (read commands)
-eabbr gbv='PAGER  git branch -vv' # -v for last commmit (sha+message) & -vv adds remote tracked branch
-eabbr gba='PAGER  git branch --all -vv'
-eabbr gbr='PAGER  git branch --remotes -vv'
+eabbr gbv 'PAGER  git branch -vv' # -v for last commmit (sha+message) & -vv adds remote tracked branch
+eabbr gba 'PAGER  git branch --all -vv'
+eabbr gbr 'PAGER  git branch --remotes -vv'
 # branch delete:
 eabbr gbd 'git branch --delete'
 eabbr gbD 'git branch -D'
