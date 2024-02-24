@@ -1,11 +1,11 @@
 ## packer
-if command -q packer
+#if command -q packer # find common if for zsh and fish?
   eabbr pa 'packer'
   eabbr pai 'packer init .'
   eabbr pav 'packer validate .'
   eabbr paf 'packer fmt .'
   eabbr pab 'packer build .'
-end
+#end
 
 ## vagrant
 # https://www.vagrantup.com/docs/experimental
@@ -18,7 +18,7 @@ end
 # export VAGRANT_BOX_UPDATE_CHECK_DISABLE=1
 # export VAGRANT_PROVIDER=virtualbox
 
-if command -q vagrant
+#if command -q vagrant
   eabbr v 'vagrant'
   eabbr vlsc 'vagrant list-commands'
 
@@ -92,4 +92,4 @@ if command -q vagrant
   # stack based snapshots
   eabbr vsnpu 'vagrant snapshot push'
   eabbr vsnpo 'vagrant snapshot pop'
-end
+#end
