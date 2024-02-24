@@ -62,4 +62,4 @@ function _brew_search_with_analytics
 
 end
 
-ealias bs="_brew_search_with_analytics"
+eabbr bs "_brew_search_with_analytics"
