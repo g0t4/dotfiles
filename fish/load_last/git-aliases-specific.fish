@@ -10,33 +10,33 @@ function glX
 end
 
 set -l _unpushed_commits "HEAD@{push}~1..HEAD"
-ealias glo="git log $_unpushed_commits"
+ealias glo="git log $_unpushed_commits" # composed by gsl
 #
 # w/ patch (diff)
-ealias glp="git log --patch $_unpushed_commits"
+eabbr glp "git log --patch $_unpushed_commits"
 abbr --regex 'glp\d+' --function glpX _glpX
 function glpX
     string replace --regex '^glp' 'git log --patch -' $argv
 end
 #
 # w/ stat (files)
-ealias gls="git log --stat $_unpushed_commits"
+eabbr gls "git log --stat $_unpushed_commits"
 abbr --regex 'gls\d+' --function glsX _glsX
 function glsX
     string replace --regex '^gls' 'git log --stat -' $argv
 end
 #
 # graph
-ealias glg="git log --graph $_unpushed_commits"
+eabbr glg "git log --graph $_unpushed_commits"
 
 # tracked branch
 function git_current_branch
     git rev-parse --abbrev-ref HEAD
 end
-ealias ggsup='git branch --set-upstream-to=origin/$(git_current_branch)'
+eabbr ggsup 'git branch --set-upstream-to=origin/$(git_current_branch)'
 
 # diff
-ealias gdlc="git log --patch --color-words HEAD~1..HEAD"
+eabbr gdlc "git log --patch --color-words HEAD~1..HEAD"
 abbr --regex 'gdlc\d+' --function gdlcX _gdlcX
 function gdlcX
     set -l num (string replace --regex '^gdlc' '' $argv)
