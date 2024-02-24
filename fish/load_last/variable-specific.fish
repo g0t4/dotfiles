@@ -1,8 +1,8 @@
 #
 
-ealias els="env | bat --language dotenv -p"
-ealias egr="env | grep -i "
+eabbr els "env | bat --language dotenv -p"
+eabbr egr "env | grep -i "
 
 # shell variables names and values
-ealias vls="set | bat --language ini -p"
-ealias vgr="set | grep -i "
+eabbr vls "set | bat --language ini -p"
+eabbr vgr "set | grep -i "

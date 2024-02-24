@@ -1,7 +1,7 @@
 
 # helpers (idea is always use pbcopy/paste -- see below)
-ealias pwdcp="pwd | pbcopy"
-ealias wdcp="pwd | pbcopy"
+eabbr pwdcp "pwd | pbcopy"
+eabbr wdcp "pwd | pbcopy"
 
 if not is_macos
     # on non-macs make it appear as if pbcopy/paste are available

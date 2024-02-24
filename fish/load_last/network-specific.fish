@@ -1,15 +1,15 @@
-ealias trace='traceroute -n'
-ealias trace1='traceroute -n 1.1.1.1'
-ealias tr6='traceroute -n -6'
+eabbr trace 'traceroute -n'
+eabbr trace1 'traceroute -n 1.1.1.1'
+eabbr tr6 'traceroute -n -6'
 
-ealias ping='command ping -d' # use command to avoid infinite recursion
-ealias ping1='ping -d 1.1.1.1'
-ealias ping8='ping -d 8.8.8.8'
+eabbr ping 'command ping -d' # use command to avoid infinite recursion
+eabbr ping1 'ping -d 1.1.1.1'
+eabbr ping8 'ping -d 8.8.8.8'
 function _default_gateway
     route -n get default | awk '/gateway/ {print $2}'
 end
-ealias pingd='ping -d $(_default_gateway)' # (d)efault gateway
-ealias p6='ping -d -6'
+eabbr pingd 'ping -d $(_default_gateway)' # (d)efault gateway
+eabbr p6 'ping -d -6'
 
 # *** what is my ip ***
 function _my_ip4
