@@ -13,7 +13,7 @@
 # alias ...........="cd ../../../../../../../../../.."
 
 # *** ls
-# still not using exa/eza (not worth hassle, esp b/c ls colors work well enough)
+# still not using exa/eza (not worth hassle, esp b/c fish builtin ls/la colors work well enough)
 eabbr lat "ls -alt"
 
 # this was in release notes for 3.6.0! regex just added (among other changes)
