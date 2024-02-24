@@ -18,6 +18,13 @@ function _lookup_ealias_metadata() {
   return $_ealiases[$Name]
 }
 
+function eabbr() {
+  # for compat w/ fish eabbr (that zsh now understands)
+  #   BONUS: eabbr uses two args like ealias (below) in powershell, so finally I can have one style across ps1,zsh,fish for vanilla expansions!
+  # PRN if it saves time only make eabbr into expansion only, leave ealias for composable+expansions like fish (and maybe port to zsh too)... if it doesn't matter for startup time then don't bother
+  ealias $args[0] $args[1]
+}
+
 function ealias() {
   # usage:
   #   ealias foo bar
