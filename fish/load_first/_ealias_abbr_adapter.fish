@@ -5,6 +5,27 @@
 #
 # ealias is a big part of what I use in my dotfiles in terms of zsh customization.... a adapater alone for this would make fish much more usable to test drive it...
 
+# PRN fix some bindings that seem backward?
+
+# bind --preset ' ' self-insert expand-abbr
+# bind ' ' expand-abbr self-insert # => FYI expand-abbr works after a space
+#    BUT, for the following, expand-abbr won't work after self-insert (respective char) so I am fixing (flipping) the presets to get expansion to work again
+# bind --preset ';' self-insert expand-abbr
+bind ';' expand-abbr self-insert
+# bind --preset '|' self-insert expand-abbr
+bind '|' expand-abbr self-insert
+# bind --preset '&' self-insert expand-abbr
+bind '&' expand-abbr self-insert
+# bind --preset '>' self-insert expand-abbr
+bind '>' expand-abbr self-insert
+# bind --preset '<' self-insert expand-abbr
+bind '<' expand-abbr self-insert
+# bind --preset ')' self-insert expand-abbr
+#
+# AND YET, space works fine: ??? makes me think I have smth wrong
+# bind --preset ' ' self-insert expand-abbr
+
+
 # clear ealiases on reload:
 set --erase ealiases
 set --erase ealiases_values
