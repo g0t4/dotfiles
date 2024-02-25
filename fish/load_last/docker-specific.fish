@@ -1,4 +1,3 @@
-# FYI using ealias added 25+ms to fish startup for this file alone b/c it had 160 ealiases... abbr alone is 10x faster than ealias
 export DOCKER_HIDE_LEGACY_COMMANDS=1 # less clutter in help output
 
 abbr din 'docker inspect'
