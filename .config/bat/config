@@ -14,9 +14,11 @@
 --map-syntax "grc.conf:INI" # close enough for primary grc.conf (regex/file pairs, with comments)
 --map-syntax "config.txt:INI" # raspberry pi /boot/fimrware/config.txt # PRN filter to full file path /boot/config.txt and /boot/firmware/config.txt?
 
-# PRN all /etc/ files treated as ini by default? (w/o override builtin mappings? i.e. /etc/nginx/** => nginx language)
---map-syntax "/opt/homebrew/etc/**/*.conf:INI" # homebrew config files (ie service config files like libvirtd)
-# PRN etc/libvirt/**/*.conf  or  **/etc/libvirt/**/*.conf:INI
+# **/etc/** specific mappings (last matching wins, so put specific last)
+# /opt/homebrew/etc/** mappings:
+#   /opt/homebrew/etc/nginx/**/*.conf    # doesn't use nginx language
+#   /opt/homebrew/etc/libvirt/**/*.conf
+--map-syntax "**/etc/libvirt/**/*.conf:INI"
 
 # default style:
 --paging=never
