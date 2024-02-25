@@ -124,7 +124,9 @@ eabbr cdd "cd_dir_of_path"
 # if batcat exists map to bat
 if command -q batcat # -q => w/o output
     # ubuntu
-    alias bat=batcat
+    function bat
+        batcat $argv
+    end
 end
 eabbr cat 'bat' # do not alias, only expand (abbr), else get failure trying to use cat.... TLDR as I type cat replace it with bat
 eabbr bath 'bat --style=header' # == header-filename (i.e. for multi files show names)
