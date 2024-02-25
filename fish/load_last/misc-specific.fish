@@ -316,3 +316,8 @@ bind '>' expand-abbr self-insert
 # bind --preset '<' self-insert expand-abbr
 bind '<' expand-abbr self-insert
 # bind --preset ')' self-insert expand-abbr
+
+# *** processes ***
+abbr psg "ps aux | grep -i "
+abbr pgrep "pgrep -il" # -l long output (show what matched => process name)
+abbr pgrepf "pgrep -ilf" # -f match full command line, -l show what matched (full line)
