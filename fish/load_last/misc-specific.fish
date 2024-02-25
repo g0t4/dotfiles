@@ -19,82 +19,82 @@ bind -k sdc kill-word # shift+del to kill forward a word (otherwise its esc+d on
 # *** systemctl (if avail)
 if command -q systemctl
 
-    eabbr sc 'sudo systemctl'
-    eabbr scu 'sudo systemctl --user'
+    abbr sc 'sudo systemctl'
+    abbr scu 'sudo systemctl --user'
 
-    eabbr scm 'man systemd.index' # great entrypoint to systemd man pages
+    abbr scm 'man systemd.index' # great entrypoint to systemd man pages
 
-    eabbr scs 'sudo systemctl status'
-    eabbr scstop 'sudo systemctl stop'
-    eabbr scstart 'sudo systemctl start'
-    eabbr screstart 'sudo systemctl restart'
-    eabbr scenable 'sudo systemctl enable'
-    eabbr scdisable 'sudo systemctl disable'
-    eabbr sck 'sudo systemctl kill' # PRN --signal=SIGKILL?
+    abbr scs 'sudo systemctl status'
+    abbr scstop 'sudo systemctl stop'
+    abbr scstart 'sudo systemctl start'
+    abbr screstart 'sudo systemctl restart'
+    abbr scenable 'sudo systemctl enable'
+    abbr scdisable 'sudo systemctl disable'
+    abbr sck 'sudo systemctl kill' # PRN --signal=SIGKILL?
 
-    eabbr sccat 'sudo systemctl cat'
-    eabbr scedit 'sudo systemctl edit'
-    eabbr screvert 'sudo systemctl revert'
-    eabbr scshow 'sudo systemctl show'
+    abbr sccat 'sudo systemctl cat'
+    abbr scedit 'sudo systemctl edit'
+    abbr screvert 'sudo systemctl revert'
+    abbr scshow 'sudo systemctl show'
 
-    eabbr scls 'sudo systemctl list-units'
-    eabbr sclsf 'sudo systemctl list-unit-files'
-    eabbr sclss 'sudo systemctl list-sockets'
-    eabbr sclsd 'sudo systemctl list-dependencies'
+    abbr scls 'sudo systemctl list-units'
+    abbr sclsf 'sudo systemctl list-unit-files'
+    abbr sclss 'sudo systemctl list-sockets'
+    abbr sclsd 'sudo systemctl list-dependencies'
 
-    eabbr jc 'sudo journalctl -u'
-    eabbr jcu 'sudo journalctl --user-unit'
+    abbr jc 'sudo journalctl -u'
+    abbr jcu 'sudo journalctl --user-unit'
 
-    eabbr jcb 'sudo journalctl --boot -u' # current boot
-    eabbr jcb1 'sudo journalctl --boot=-1 -u' # previous boot
-    eabbr jcboots 'sudo journalctl --list-boots'
+    abbr jcb 'sudo journalctl --boot -u' # current boot
+    abbr jcb1 'sudo journalctl --boot=-1 -u' # previous boot
+    abbr jcboots 'sudo journalctl --list-boots'
 
-    eabbr jcs 'sudo journalctl --since "1min ago" -u'
-    eabbr jck 'sudo journalctl -k' # kernel/dmesg
+    abbr jcs 'sudo journalctl --since "1min ago" -u'
+    abbr jck 'sudo journalctl -k' # kernel/dmesg
 
-    eabbr jcf 'sudo journalctl --follow -u'
-    eabbr jcfa 'sudo journalctl --follow --no-tail -u' # all lines + follow
+    abbr jcf 'sudo journalctl --follow -u'
+    abbr jcfa 'sudo journalctl --follow --no-tail -u' # all lines + follow
 
     # WIP - figure out what I want for cleanup, when testing I often wanna just clear all logs and try some activity to simplify looking at journalctl history, hence jcnuke
-    eabbr jcnuke 'sudo journalctl --rotate --vacuum-time=1s' # ~effectively rotate (archive all active journal files) then nuke (all archived journal files)
-    eabbr jcr 'sudo journalctl --rotate' # rotate (archive) all active journal files (new journal files going forward)
-    eabbr jcvs 'sudo journalctl --vacuum-size=100M' # vacuum logs to keep total size under 100M
-    eabbr jcdu 'sudo journalctl --disk-usage' # total disk usage
+    abbr jcnuke 'sudo journalctl --rotate --vacuum-time=1s' # ~effectively rotate (archive all active journal files) then nuke (all archived journal files)
+    abbr jcr 'sudo journalctl --rotate' # rotate (archive) all active journal files (new journal files going forward)
+    abbr jcvs 'sudo journalctl --vacuum-size=100M' # vacuum logs to keep total size under 100M
+    abbr jcdu 'sudo journalctl --disk-usage' # total disk usage
 end
 
 # *** containerd
 if command -q ctr
 
-    eabbr ctr 'sudo ctr'
-    eabbr ctrn 'sudo ctr namespaces ls'
+    abbr ctr 'sudo ctr'
+    abbr ctrn 'sudo ctr namespaces ls'
 
     # containers:
-    eabbr ctrc 'sudo ctr container ls'
-    eabbr ctrci 'sudo ctr container info'
-    eabbr ctrcrm 'sudo ctr container rm'
+    abbr ctrc 'sudo ctr container ls'
+    abbr ctrci 'sudo ctr container info'
+    abbr ctrcrm 'sudo ctr container rm'
 
     # images:
-    eabbr ctri 'sudo ctr image ls'
+    abbr ctri 'sudo ctr image ls'
     abbr ctripull --set-cursor='!' 'sudo ctr image pull docker.io/library/!'
     abbr ctrirm --set-cursor='!' 'sudo ctr image rm docker.io/library/!'
 
     # tasks:
-    eabbr ctrtls 'sudo ctr task ls'
-    eabbr ctrtps 'sudo ctr task ps' # by CID
-    eabbr ctrta 'sudo ctr task attach'
-    eabbr ctrtrm 'sudo ctr task rm'
-    eabbr ctrtk 'sudo ctr task kill --all'
-    eabbr ctrtks 'sudo ctr task kill --all --signal=SIGKILL'
-    eabbr ctrtpause 'sudo ctr task pause'
-    eabbr ctrtresume 'sudo ctr task resume'
-    eabbr ctrtstart 'sudo ctr task start' # created container that is not running
-    eabbr ctrtexec 'sudo ctr task exec --tty --exec-id 100 '
+    abbr ctrtls 'sudo ctr task ls'
+    abbr ctrtps 'sudo ctr task ps' # by CID
+    abbr ctrta 'sudo ctr task attach'
+    abbr ctrtrm 'sudo ctr task rm'
+    abbr ctrtk 'sudo ctr task kill --all'
+    abbr ctrtks 'sudo ctr task kill --all --signal=SIGKILL'
+    abbr ctrtpause 'sudo ctr task pause'
+    abbr ctrtresume 'sudo ctr task resume'
+    abbr ctrtstart 'sudo ctr task start' # created container that is not running
+    abbr ctrtexec 'sudo ctr task exec --tty --exec-id 100 '
 
     # run:
-    eabbr ctrr 'sudo ctr run -t --rm'
+    abbr ctrr 'sudo ctr run -t --rm'
     # demo examples:
-    eabbr ctrrnd 'sudo ctr run -d docker.io/library/nginx:latest web' # w/o host networking
-    eabbr ctrrn 'sudo ctr run -t --rm --net-host docker.io/library/nginx:latest web' # w/ host networking
+    abbr ctrrnd 'sudo ctr run -d docker.io/library/nginx:latest web' # w/o host networking
+    abbr ctrrn 'sudo ctr run -t --rm --net-host docker.io/library/nginx:latest web' # w/ host networking
 
     # content
     # leases
@@ -104,7 +104,7 @@ end
 
 if command -q k3s
 
-    eabbr k3s 'sudo k3s' # most helpful with say `sudo k3s ctr ...` b/c k3s containerd sock is owned by root:root
+    abbr k3s 'sudo k3s' # most helpful with say `sudo k3s ctr ...` b/c k3s containerd sock is owned by root:root
     # `sudo k3s kubectl ...` might be useful too if lowly user doesn't have access to k3s kubeconfig, but it is easy enough to use kubectl directly
 
     # PRN what about some sort of env/context selection for ctr socket? i.e:
@@ -148,74 +148,74 @@ end
 if command -q kubectl
     export KUBECTL_EXTERNAL_DIFF="icdiff -r" # use icdiff for kubectl diff (slick!)... FYI $1 and $2 are directories to compare (hence the -r)
 
-    eabbr kver 'grc kubectl version'
+    abbr kver 'grc kubectl version'
     # explain
-    eabbr ke 'grc kubectl explain'
-    eabbr kep 'grc kubectl explain pods' # example
-    eabbr keps 'grc kubectl explain pods.spec' # example
-    eabbr ker 'grc kubectl explain --recursive'
+    abbr ke 'grc kubectl explain'
+    abbr kep 'grc kubectl explain pods' # example
+    abbr keps 'grc kubectl explain pods.spec' # example
+    abbr ker 'grc kubectl explain --recursive'
     #
-    eabbr kav 'grc kubectl api-versions'
-    eabbr kar 'grc kubectl api-resources'
-    eabbr karn 'grc kubectl api-resources --namespaced=true'
-    eabbr karg 'grc kubectl api-resources --namespaced=false' # (g)lobal
+    abbr kav 'grc kubectl api-versions'
+    abbr kar 'grc kubectl api-resources'
+    abbr karn 'grc kubectl api-resources --namespaced=true'
+    abbr karg 'grc kubectl api-resources --namespaced=false' # (g)lobal
 
     # grc kubectl options
 
     # kubectl alpha
 
     # *** get
-    eabbr kg 'grc kubectl get'
-    eabbr kgf 'grc kubectl get -f' # status of resources defined in yml file
+    abbr kg 'grc kubectl get'
+    abbr kgf 'grc kubectl get -f' # status of resources defined in yml file
     #
-    eabbr kgns 'grc kubectl get namespaces'
+    abbr kgns 'grc kubectl get namespaces'
     # TODO redo get aliases to use abbreviations where applicable (ie n=>ns)
     #
-    eabbr kga 'grc kubectl get all'
-    eabbr kgaa 'grc kubectl get all -A' # -A/--all-namespaces
+    abbr kga 'grc kubectl get all'
+    abbr kgaa 'grc kubectl get all -A' # -A/--all-namespaces
     #
-    eabbr kgp 'grc kubectl get pods' # alias: po (gonna go with p only for now)
-    eabbr kgpa 'grc kubectl get pods -A'
-    eabbr kgpaw 'grc kubectl get pods -A --watch'
+    abbr kgp 'grc kubectl get pods' # alias: po (gonna go with p only for now)
+    abbr kgpa 'grc kubectl get pods -A'
+    abbr kgpaw 'grc kubectl get pods -A --watch'
     #
     # PRN prune list or add other resource types:
-    eabbr kgcj 'grc kubectl get cronjobs'
-    eabbr kgcm 'grc kubectl get configmaps' # alias: cm
-    eabbr kgcr 'grc kubectl get clusterroles'
-    eabbr kgcrb 'grc kubectl get clusterrolebindings'
-    eabbr kgcrd 'grc kubectl get customresourcedefinitions' # alias: crd,crds
-    eabbr kgds 'grc kubectl get daemonsets' # alias: ds
-    eabbr kgep 'grc kubectl get endpoints' # alias: ep
-    eabbr kgepA 'grc kubectl get endpoints -A' # all endpoints
-    eabbr kgev 'grc kubectl get events' # alias: ev
-    eabbr kging 'grc kubectl get ingresses' # alias: ing
-    eabbr kgj 'grc kubectl get jobs'
-    eabbr kgno 'grc kubectl get nodes' # alias: no
-    eabbr kgpv 'grc kubectl get persistentvolumes' # alias: pv
-    eabbr kgpvc 'grc kubectl get persistentvolumeclaims' # alias: pvc
-    eabbr kgrb 'grc kubectl get rolebindings'
-    eabbr kgro 'grc kubectl get roles'
-    eabbr kgrs 'grc kubectl get replicasets' # alias: rs
-    eabbr kgs 'grc kubectl get svc'
-    eabbr kgsa 'grc kubectl get serviceaccounts' # alias: sa
-    eabbr kgsc 'grc kubectl get storageclasses' # alias: sc
-    eabbr kgsec 'grc kubectl get secrets'
-    eabbr kgsts 'grc kubectl get statefulsets' # alias: sts
-    eabbr kgsvc 'grc kubectl get services' # alias: svc
+    abbr kgcj 'grc kubectl get cronjobs'
+    abbr kgcm 'grc kubectl get configmaps' # alias: cm
+    abbr kgcr 'grc kubectl get clusterroles'
+    abbr kgcrb 'grc kubectl get clusterrolebindings'
+    abbr kgcrd 'grc kubectl get customresourcedefinitions' # alias: crd,crds
+    abbr kgds 'grc kubectl get daemonsets' # alias: ds
+    abbr kgep 'grc kubectl get endpoints' # alias: ep
+    abbr kgepA 'grc kubectl get endpoints -A' # all endpoints
+    abbr kgev 'grc kubectl get events' # alias: ev
+    abbr kging 'grc kubectl get ingresses' # alias: ing
+    abbr kgj 'grc kubectl get jobs'
+    abbr kgno 'grc kubectl get nodes' # alias: no
+    abbr kgpv 'grc kubectl get persistentvolumes' # alias: pv
+    abbr kgpvc 'grc kubectl get persistentvolumeclaims' # alias: pvc
+    abbr kgrb 'grc kubectl get rolebindings'
+    abbr kgro 'grc kubectl get roles'
+    abbr kgrs 'grc kubectl get replicasets' # alias: rs
+    abbr kgs 'grc kubectl get svc'
+    abbr kgsa 'grc kubectl get serviceaccounts' # alias: sa
+    abbr kgsc 'grc kubectl get storageclasses' # alias: sc
+    abbr kgsec 'grc kubectl get secrets'
+    abbr kgsts 'grc kubectl get statefulsets' # alias: sts
+    abbr kgsvc 'grc kubectl get services' # alias: svc
 
     # create
-    eabbr kc 'kubectl create'
-    eabbr kcf 'kubectl create -f' # from file
+    abbr kc 'kubectl create'
+    abbr kcf 'kubectl create -f' # from file
     # apply
-    eabbr kaf 'kubectl apply -f' # create or modify
+    abbr kaf 'kubectl apply -f' # create or modify
     # delete
-    eabbr kdel 'kubectl delete'
-    eabbr kdelf 'kubectl delete -f'
+    abbr kdel 'kubectl delete'
+    abbr kdelf 'kubectl delete -f'
     # replace
-    eabbr krf 'kubectl replace -f' # delete and then create
+    abbr krf 'kubectl replace -f' # delete and then create
     # diff
-    eabbr kd 'kubectl diff' # diff current (status) vs desired state (spec)
-    eabbr kdf 'kubectl diff -f'
+    abbr kd 'kubectl diff' # diff current (status) vs desired state (spec)
+    abbr kdf 'kubectl diff -f'
     # kubectl edit
     # kubectl patch
     # kubectl set
@@ -228,29 +228,29 @@ if command -q kubectl
     # kubectl scale
     # kubectl autoscale
 
-    eabbr kdesc 'grc kubectl describe' # ~ docker inspect
-    eabbr kdescf 'grc kubectl describe -f'
-    eabbr krun 'kubectl run' # ~ docker container run
-    eabbr kexec 'kubectl exec -it' # ~ docker container exec
-    eabbr kattach 'kubectl attach -it' # ~ docker container attach
-    eabbr kcp 'kubectl cp' # ~ docker container cp
-    eabbr kpf 'kubectl port-forward' # setup proxy to access pod's port from host machine # ~ docker container run -p flag
+    abbr kdesc 'grc kubectl describe' # ~ docker inspect
+    abbr kdescf 'grc kubectl describe -f'
+    abbr krun 'kubectl run' # ~ docker container run
+    abbr kexec 'kubectl exec -it' # ~ docker container exec
+    abbr kattach 'kubectl attach -it' # ~ docker container attach
+    abbr kcp 'kubectl cp' # ~ docker container cp
+    abbr kpf 'kubectl port-forward' # setup proxy to access pod's port from host machine # ~ docker container run -p flag
     # kubectl expose
     # kubectl wait
 
     # logs
-    eabbr kl 'kubectl logs'
-    eabbr klf 'kubectl logs --follow'
+    abbr kl 'kubectl logs'
+    abbr klf 'kubectl logs --follow'
 
     # conte(x)t => muscle memory with docker `dxls`=`docker context ls`, so => kxls
-    eabbr kx 'kubectl config'
-    eabbr kxu 'kubectl config use-context'
-    eabbr kxls 'kubectl config get-contexts'
-    eabbr kxv 'kubectl config view'
+    abbr kx 'kubectl config'
+    abbr kxu 'kubectl config use-context'
+    abbr kxls 'kubectl config get-contexts'
+    abbr kxv 'kubectl config view'
 
     # kubectl cluster-info dump
-    eabbr ktp 'kubectl top pod --all-namespaces'
-    eabbr ktn 'kubectl top node'
+    abbr ktp 'kubectl top pod --all-namespaces'
+    abbr ktn 'kubectl top node'
 
     # kubectl proxy
     # kubectl debug
@@ -262,27 +262,27 @@ end
 
 if command -q minikube
 
-    eabbr mk minikube
-    eabbr mkst 'minikube status'
-    eabbr mkstop 'minikube stop'
-    eabbr mkstart 'minikube start'
-    eabbr mkpause 'minikube pause'
-    eabbr mkunpause 'minikube unpause'
+    abbr mk minikube
+    abbr mkst 'minikube status'
+    abbr mkstop 'minikube stop'
+    abbr mkstart 'minikube start'
+    abbr mkpause 'minikube pause'
+    abbr mkunpause 'minikube unpause'
 
-    eabbr mkno 'minikube node list'
+    abbr mkno 'minikube node list'
 
-    eabbr mkd 'minikube dashboard --port 9090'
-    eabbr mksls 'minikube service list'
+    abbr mkd 'minikube dashboard --port 9090'
+    abbr mksls 'minikube service list'
     # minikube tunnel
-    eabbr mkals 'minikube addons list'
-    eabbr mkae 'minikube addons enable'
-    eabbr mkad 'minikube addons disable'
+    abbr mkals 'minikube addons list'
+    abbr mkae 'minikube addons enable'
+    abbr mkad 'minikube addons disable'
 
-    eabbr mked 'eval $(minikube docker-env)' # access docker container runtime (if using)
-    # eabbr mkep 'eval $(minikube podman-env)' # access podman container runtime (if using)
+    abbr mked 'eval $(minikube docker-env)' # access docker container runtime (if using)
+    # abbr mkep 'eval $(minikube podman-env)' # access podman container runtime (if using)
 
-    eabbr mkp 'minikube profile list'
+    abbr mkp 'minikube profile list'
 
-    eabbr mkk 'minikube kubectl'
+    abbr mkk 'minikube kubectl'
 
 end

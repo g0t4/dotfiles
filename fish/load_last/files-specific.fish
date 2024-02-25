@@ -1,7 +1,7 @@
 
 # *** ls
 # still not using exa/eza (not worth hassle, esp b/c fish builtin ls/la colors work well enough)
-eabbr lat "ls -alt"
+abbr lat "ls -alt"
 
 # this was in release notes for 3.6.0! regex just added (among other changes)
 #    https://fishshell.com/docs/3.6/relnotes.html
@@ -89,7 +89,7 @@ abbr --add zsh_equals --regex '=[^\b]+' --function expand_zsh_equals
 function cd_dir_of_command
     cd_dir_of_path (type --path $argv) # ~ zsh's =foo
 end
-eabbr cdc "cd_dir_of_command"
+abbr cdc "cd_dir_of_command"
 
 function cd_dir_of_path
     set -l _cd_path $argv
@@ -117,7 +117,7 @@ function cd_dir_of_path
 
     log_ --apple_white "cd $(pwd)"
 end
-eabbr cdd "cd_dir_of_path"
+abbr cdd "cd_dir_of_path"
 
 
 # *** bat ***
@@ -128,18 +128,18 @@ if command -q batcat # -q => w/o output
         batcat $argv
     end
 end
-eabbr cat 'bat' # do not alias, only expand (abbr), else get failure trying to use cat.... TLDR as I type cat replace it with bat
-eabbr bath 'bat --style=header' # == header-filename (i.e. for multi files show names)
-eabbr batf 'bat --style=full'
+abbr cat 'bat' # do not alias, only expand (abbr), else get failure trying to use cat.... TLDR as I type cat replace it with bat
+abbr bath 'bat --style=header' # == header-filename (i.e. for multi files show names)
+abbr batf 'bat --style=full'
 
 
 ### DISK USAGE ###
 # only expand du, don't also alias
 abbr du 'du -hd1 | sort -h --reverse' # sort by size (makes sense only for current dir1) => most of the time this is what I want to do so just use this for `du`
 #  FYI I could add psh => '| sort -hr' global alias (expands anywhere)?
-# retire: eabbr du 'du -h'  # tree command doesn't show size of dirs (unless showing entire hierarchy so not -L 2 for example, so stick with du command)
-eabbr dua 'du -ha' # show all files (FYI cannot use -a with -d1)
-eabbr duh 'du -h' # likely not needed, old du defaults before sort default
+# retire: abbr du 'du -h'  # tree command doesn't show size of dirs (unless showing entire hierarchy so not -L 2 for example, so stick with du command)
+abbr dua 'du -ha' # show all files (FYI cannot use -a with -d1)
+abbr duh 'du -h' # likely not needed, old du defaults before sort default
 #
 # show only N levels deep
 #   du1 => du -hd 1
@@ -148,12 +148,12 @@ function duX
     string replace --regex '^du' 'du -hd' $argv
 end
 #
-eabbr df 'command df -h' # use command to avoid infinite recursion
+abbr df 'command df -h' # use command to avoid infinite recursion
 # Mac HD: (if fails try df -h and update this alias to be be more general)
-eabbr dfm 'df -h /System/Volumes/Data'
+abbr dfm 'df -h /System/Volumes/Data'
 
 ## loop helpers
-eabbr forr 'for i in (seq 1 3)
+abbr forr 'for i in (seq 1 3)
     # PRN add forr30 abbr => for i in (seq 1 30); echo $i; end
     echo $i
 end
@@ -177,14 +177,14 @@ function tree
     eza --tree --group-directories-first --ignore-glob "node_modules|bower_components|.git" --color-scale=all --icons --git-repos $argv
 end
 
-eabbr treed "$_treed"
+abbr treed "$_treed"
 
 set _treeal "tree --all --long --group --sort size"
-eabbr treev "$_treeal"
+abbr treev "$_treeal"
 
 # interchangable:
-eabbr treedv "$_treeal --only-dirs"
-eabbr treevd "$_treeal --only-dirs"
+abbr treedv "$_treeal --only-dirs"
+abbr treevd "$_treeal --only-dirs"
 
 # treeX => tree -L X
 abbr --add _treeX --regex 'tree\d+' --function treeX
@@ -202,4 +202,4 @@ function treevX
     string replace --regex '^treev' 'treev -L' $argv
 end
 
-eabbr treeify "as-tree" # PRN do I ever use this?
+abbr treeify "as-tree" # PRN do I ever use this?

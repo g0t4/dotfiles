@@ -1,10 +1,10 @@
 ## packer
 #if command -q packer # find common if for zsh and fish?
-  eabbr pa 'packer'
-  eabbr pai 'packer init .'
-  eabbr pav 'packer validate .'
-  eabbr paf 'packer fmt .'
-  eabbr pab 'packer build .'
+  abbr pa 'packer'
+  abbr pai 'packer init .'
+  abbr pav 'packer validate .'
+  abbr paf 'packer fmt .'
+  abbr pab 'packer build .'
 #end
 
 ## vagrant
@@ -19,73 +19,73 @@
 # export VAGRANT_PROVIDER=virtualbox
 
 #if command -q vagrant
-  eabbr v 'vagrant'
-  eabbr vlsc 'vagrant list-commands'
+  abbr v 'vagrant'
+  abbr vlsc 'vagrant list-commands'
 
   ## Vagrantfile
-  eabbr vi 'vagrant init --minimal'
-  eabbr vv 'vagrant validate'
+  abbr vi 'vagrant init --minimal'
+  abbr vv 'vagrant validate'
 
   ## cloud boxes
-  eabbr vc 'vagrant cloud'
-  eabbr vcs 'vagrant cloud search'
-  eabbr vcb 'vagrant cloud box show'
+  abbr vc 'vagrant cloud'
+  abbr vcs 'vagrant cloud search'
+  abbr vcb 'vagrant cloud box show'
 
   ## local (cached) boxes
-  eabbr vb 'vagrant box'
-  eabbr vbls 'vagrant box list -i'
-  eabbr vba 'vagrant box add'
-  eabbr vbo 'vagrant box outdated'
-  eabbr vbog 'vagrant box outdated --global'
-  eabbr vbu 'vagrant box update' # current vagrant project only
-  eabbr vbub 'vagrant box update --box' # independent of project
-  eabbr vbpr 'vagrant box prune --dry-run'
-  eabbr vbrm 'vagrant box remove'
-  eabbr vbrep 'vagrant box repackage'
+  abbr vb 'vagrant box'
+  abbr vbls 'vagrant box list -i'
+  abbr vba 'vagrant box add'
+  abbr vbo 'vagrant box outdated'
+  abbr vbog 'vagrant box outdated --global'
+  abbr vbu 'vagrant box update' # current vagrant project only
+  abbr vbub 'vagrant box update --box' # independent of project
+  abbr vbpr 'vagrant box prune --dry-run'
+  abbr vbrm 'vagrant box remove'
+  abbr vbrep 'vagrant box repackage'
 
   # any vbox VM => vagrant box (generates embedded Vagrantfile too)
-  eabbr vpack 'vagrant package --base ' # last arg is VM name (see vboxmanage list vms)
+  abbr vpack 'vagrant package --base ' # last arg is VM name (see vboxmanage list vms)
 
   ## query
-  eabbr vst 'vagrant status'
-  eabbr vgst 'vagrant global-status --prune'
+  abbr vst 'vagrant status'
+  abbr vgst 'vagrant global-status --prune'
 
   ## VM state
-  eabbr vu 'vagrant up'
-  eabbr vpv 'vagrant provision'
-  eabbr vh 'vagrant halt'
-  eabbr vrl 'vagrant reload'
-  eabbr vrlp 'vagrant reload --provision'
+  abbr vu 'vagrant up'
+  abbr vpv 'vagrant provision'
+  abbr vh 'vagrant halt'
+  abbr vrl 'vagrant reload'
+  abbr vrlp 'vagrant reload --provision'
   #
-  eabbr vsp 'vagrant suspend'
-  eabbr vspg 'vagrant suspend --all-global'
-  eabbr vrs 'vagrant resume'
+  abbr vsp 'vagrant suspend'
+  abbr vspg 'vagrant suspend --all-global'
+  abbr vrs 'vagrant resume'
 
   ## cleanup
-  eabbr vd 'vagrant destroy'
-  eabbr vdf 'vagrant destroy -f'
+  abbr vd 'vagrant destroy'
+  abbr vdf 'vagrant destroy -f'
 
   ## plugins
-  eabbr vp 'vagrant plugin'
-    eabbr vpls 'vagrant plugin list'
-    eabbr vpi 'vagrant plugin install'
-    eabbr vprm 'vagrant plugin uninstall'
-    eabbr vpupdate 'vagrant plugin update'
+  abbr vp 'vagrant plugin'
+    abbr vpls 'vagrant plugin list'
+    abbr vpi 'vagrant plugin install'
+    abbr vprm 'vagrant plugin uninstall'
+    abbr vpupdate 'vagrant plugin update'
 
   # connect
-  eabbr vs 'vagrant ssh'
-  eabbr vsc 'vagrant ssh-config'
-  eabbr vscmd 'vagrant ssh --command'
+  abbr vs 'vagrant ssh'
+  abbr vsc 'vagrant ssh-config'
+  abbr vscmd 'vagrant ssh --command'
   # TODO add alias to use ssh-config file that is in .vagrant folder with ssh command without needing ssh-config IIRC
 
   # snapshots
-  eabbr vsn 'vagrant snapshot'
-  eabbr vsnls 'vagrant snapshot list'
+  abbr vsn 'vagrant snapshot'
+  abbr vsnls 'vagrant snapshot list'
   # named snapshots
-  eabbr vsns 'vagrant snapshot save'
-  eabbr vsnr 'vagrant snapshot restore'
-  eabbr vsnrm 'vagrant snapshot delete'
+  abbr vsns 'vagrant snapshot save'
+  abbr vsnr 'vagrant snapshot restore'
+  abbr vsnrm 'vagrant snapshot delete'
   # stack based snapshots
-  eabbr vsnpu 'vagrant snapshot push'
-  eabbr vsnpo 'vagrant snapshot pop'
+  abbr vsnpu 'vagrant snapshot push'
+  abbr vsnpo 'vagrant snapshot pop'
 #end

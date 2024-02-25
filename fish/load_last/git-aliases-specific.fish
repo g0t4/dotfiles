@@ -14,30 +14,30 @@ abbr gsl "git status && echo && git log $_unpushed_commits" # * try # FYI requir
 abbr glo "git log $_unpushed_commits" # composed by gsl
 #
 # w/ patch (diff)
-eabbr glp "git log --patch $_unpushed_commits"
+abbr glp "git log --patch $_unpushed_commits"
 abbr --regex 'glp\d+' --function glpX _glpX
 function glpX
     string replace --regex '^glp' 'git log --patch -' $argv
 end
 #
 # w/ stat (files)
-eabbr gls "git log --stat $_unpushed_commits"
+abbr gls "git log --stat $_unpushed_commits"
 abbr --regex 'gls\d+' --function glsX _glsX
 function glsX
     string replace --regex '^gls' 'git log --stat -' $argv
 end
 #
 # graph
-eabbr glg "git log --graph $_unpushed_commits"
+abbr glg "git log --graph $_unpushed_commits"
 
 # tracked branch
 function git_current_branch
     git rev-parse --abbrev-ref HEAD
 end
-eabbr ggsup 'git branch --set-upstream-to=origin/$(git_current_branch)'
+abbr ggsup 'git branch --set-upstream-to=origin/$(git_current_branch)'
 
 # diff
-eabbr gdlc "git log --patch --color-words HEAD~1..HEAD"
+abbr gdlc "git log --patch --color-words HEAD~1..HEAD"
 abbr --regex 'gdlc\d+' --function gdlcX _gdlcX
 function gdlcX
     set -l num (string replace --regex '^gdlc' '' $argv)

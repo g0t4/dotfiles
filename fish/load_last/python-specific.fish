@@ -1,1 +1,1 @@
-eabbr vea 'source .venv*/bin/activate.fish' # override zsh version's /activate
+abbr vea 'source .venv*/bin/activate.fish' # override zsh version's /activate

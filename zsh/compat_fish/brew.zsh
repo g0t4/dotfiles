@@ -5,31 +5,31 @@ export HOMEBREW_BAT=1 # for `brew cat` command, must export for brew's child pro
 # https://github.com/Homebrew/brew/blob/master/Library/Homebrew/env_config.rb
 
 ############## readonly actions (ok to do with any user account)
-eabbr bcat 'brew cat'
-eabbr bd 'brew doctor --quiet' # --quiet suppresses output if successful
-eabbr bh 'brew home'  # i.e. brew home bat
-eabbr bi 'brew info'
-eabbr big 'brew info --github'
-eabbr bl 'brew list'
-eabbr blc 'brew list --cask'
-eabbr blf 'brew list --formula'
-eabbr bo 'brew outdated' # compliments bubo (update/outdated)
-eabbr bp 'brew --prefix'
-# eabbr bs 'brew search' # fish has bs impl that uses analytics, not yet porting that to zsh so for now just get rid of what would otherwise become a duplicated alias in fish AND... this is a reminder to port to zsh if I ever find myself wanting it there
-eabbr bsvc 'brew services' # list state of brew installed services (daemons)
+abbr bcat 'brew cat'
+abbr bd 'brew doctor --quiet' # --quiet suppresses output if successful
+abbr bh 'brew home'  # i.e. brew home bat
+abbr bi 'brew info'
+abbr big 'brew info --github'
+abbr bl 'brew list'
+abbr blc 'brew list --cask'
+abbr blf 'brew list --formula'
+abbr bo 'brew outdated' # compliments bubo (update/outdated)
+abbr bp 'brew --prefix'
+# abbr bs 'brew search' # fish has bs impl that uses analytics, not yet porting that to zsh so for now just get rid of what would otherwise become a duplicated alias in fish AND... this is a reminder to port to zsh if I ever find myself wanting it there
+abbr bsvc 'brew services' # list state of brew installed services (daemons)
 
-eabbr bus 'brew uses --eval-all' # ... depends on X
-eabbr bde 'brew deps' # X depends on ...
+abbr bus 'brew uses --eval-all' # ... depends on X
+abbr bde 'brew deps' # X depends on ...
 
-eabbr bar 'brew autoremove'
-eabbr bcl 'brew cleanup'
+abbr bar 'brew autoremove'
+abbr bcl 'brew cleanup'
 
-eabbr bin 'brew install'
-# eabbr binv 'brew install --verbose --debug'
+abbr bin 'brew install'
+# abbr binv 'brew install --verbose --debug'
 
-eabbr bup 'brew upgrade'
-eabbr bubc 'brew upgrade && brew cleanup' # src: omz/brew
-eabbr bubo 'brew update && brew outdated' # src: omz/brew
-eabbr bubu 'bubo && bubc' # src: omz/brew
+abbr bup 'brew upgrade'
+abbr bubc 'brew upgrade && brew cleanup' # src: omz/brew
+abbr bubo 'brew update && brew outdated' # src: omz/brew
+abbr bubu 'bubo && bubc' # src: omz/brew
 
-eabbr bun 'brew uninstall'
+abbr bun 'brew uninstall'

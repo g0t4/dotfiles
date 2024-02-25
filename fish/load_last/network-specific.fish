@@ -1,15 +1,15 @@
-eabbr trace 'traceroute -n'
-eabbr trace1 'traceroute -n 1.1.1.1'
-eabbr tr6 'traceroute -n -6'
+abbr trace 'traceroute -n'
+abbr trace1 'traceroute -n 1.1.1.1'
+abbr tr6 'traceroute -n -6'
 
-eabbr ping 'command ping -d' # use command to avoid infinite recursion
-eabbr ping1 'ping -d 1.1.1.1'
-eabbr ping8 'ping -d 8.8.8.8'
+abbr ping 'command ping -d' # use command to avoid infinite recursion
+abbr ping1 'ping -d 1.1.1.1'
+abbr ping8 'ping -d 8.8.8.8'
 function _default_gateway
     route -n get default | awk '/gateway/ {print $2}'
 end
-eabbr pingd 'ping -d $(_default_gateway)' # (d)efault gateway
-eabbr p6 'ping -d -6'
+abbr pingd 'ping -d $(_default_gateway)' # (d)efault gateway
+abbr p6 'ping -d -6'
 
 # *** what is my ip ***
 function _my_ip4

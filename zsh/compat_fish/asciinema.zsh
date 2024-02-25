@@ -1,9 +1,9 @@
-eabbr anr 'asciinema rec --overwrite test.cast' # PRN remake in fish:    abbr --set-cursor '!' --add anr 'asciinema rec --overwrite !.cast'
-eabbr anp 'asciinema play'
-eabbr anu 'asciinema upload'
-eabbr anc 'asciinema cat'
+abbr anr 'asciinema rec --overwrite test.cast' # PRN remake in fish:    abbr --set-cursor '!' --add anr 'asciinema rec --overwrite !.cast'
+abbr anp 'asciinema play'
+abbr anu 'asciinema upload'
+abbr anc 'asciinema cat'
 
-eabbr aggo "agg --font-size 20 --font-family 'SauceCodePro Nerd Font' --theme 17181d,c7b168,555a6c,dc3d6f,9ed279,fae67f,469cd0,8b47e5,61d2b8,c229cf test.cast test.gif"
+abbr aggo "agg --font-size 20 --font-family 'SauceCodePro Nerd Font' --theme 17181d,c7b168,555a6c,dc3d6f,9ed279,fae67f,469cd0,8b47e5,61d2b8,c229cf test.cast test.gif"
 
 # NOTES about ROWS/COLUMNS:
 # - check current size with: echo lines: $LINES cols: $COLUMNS
