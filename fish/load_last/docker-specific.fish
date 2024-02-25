@@ -211,11 +211,11 @@ abbr dde 'docker debug -c entrypoint' # entrypoint inspector (add image/containe
 ## skopeo
 abbr sk 'skopeo'
 abbr skh 'skopeo --help'
-abbr ski 'skopeo --override-os linux inspect docker://' --NoSpaceAfter
-abbr skim 'skopeo --override-os linux inspect --raw docker://' --NoSpaceAfter
-abbr skic 'skopeo --override-os linux inspect --config --raw docker://' --NoSpaceAfter
-abbr skl 'skopeo list-tags docker://docker.io/' --NoSpaceAfter
-abbr sklm 'skopeo list-tags docker://mcr.microsoft.com/' --NoSpaceAfter
+abbr --set-cursor='!' --  ski 'skopeo --override-os linux inspect docker://!'
+abbr --set-cursor='!' --  skim 'skopeo --override-os linux inspect --raw docker://!'
+abbr --set-cursor='!' --  skic 'skopeo --override-os linux inspect --config --raw docker://!'
+abbr --set-cursor='!' --  skl 'skopeo list-tags docker://docker.io/!'
+abbr --set-cursor='!' --  sklm 'skopeo list-tags docker://mcr.microsoft.com/!'
 
 # usage:
 #   skopeo list-tags docker://weshigbee/oci-test
