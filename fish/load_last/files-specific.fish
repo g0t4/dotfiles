@@ -1,16 +1,3 @@
-# # ... etc aliases
-
-
-# # PRN switch to loop for alias? I shouldn't have one for zsh specific variant either :)... this is much more readable (PRN turn into abbreviation? but then it would expand :( )
-# alias ...="cd ../.."
-# alias ....="cd ../../.."
-# alias .....="cd ../../../.."
-# alias ......="cd ../../../../.."
-# alias .......="cd ../../../../../.."
-# alias ........="cd ../../../../../../.."
-# alias .........="cd ../../../../../../../.."
-# alias ..........="cd ../../../../../../../../.."
-# alias ...........="cd ../../../../../../../../../.."
 
 # *** ls
 # still not using exa/eza (not worth hassle, esp b/c fish builtin ls/la colors work well enough)
