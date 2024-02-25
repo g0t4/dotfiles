@@ -12,8 +12,9 @@ alias ag='ag --nogroup --color-match "$__color_matching_text"'
 # --nogroup => disable grouping to show file/line per match to click to open in vscode (via iterm links)
 
 abbr agi 'ag -i'
-abbr agh 'ag --hidden -i' # search hidden files (including vcs ignores)
-abbr agu 'ag -u' # unrestricted # by default .gitignore/.hgignore/.ignore are excluded
+abbr agig 'ag -ig'
+abbr agh 'ag --hidden -i'
+abbr agu 'ag -u'
 
 # I am used to these params, don't currently need to alias them:
 #  -g and -G myself

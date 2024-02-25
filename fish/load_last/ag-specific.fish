@@ -14,8 +14,11 @@ end
 # --nogroup => disable grouping to show file/line per match to click to open in vscode (via iterm links)
 
 abbr --set-cursor='!' --  agi 'ag -i "!"'
-abbr --set-cursor='!' --  agh 'ag --hidden -i "!"' # search hidden files (including vcs ignores)
-abbr --set-cursor='!' --  agu 'ag --unrestricted -i "!"' # unrestricted # by default .gitignore/.hgignore/.ignore are excluded
+abbr --set-cursor='!' --  agig 'ag -ig "!"'
+abbr --set-cursor='!' --  agh 'ag --hidden -i "!"' # match hidden files, but not ignored files
+abbr --set-cursor='!' --  agu 'ag --unrestricted -i "!"' # match hidden files + ignored files
+# ignored files: .ignore, .gitignore, --ignore, etc
+# hidden files: .config, .git (dotfiles/dirs)
 
 # I am used to these params, don't currently need to alias them:
 #  -g and -G myself
