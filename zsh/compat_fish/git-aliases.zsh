@@ -1,4 +1,3 @@
-# !!!! LOADS WITH ealias adapter to abbr in fish!
 
 # Note: alias collisions to avoid:
 # `go*` for `go` commands
