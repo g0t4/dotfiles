@@ -1,4 +1,8 @@
 # - w/ message
+
+ealias gst='git status'
+ealias gsl='gst && echo && glo' # * try # FYI requires gst/glo aliases(funcs) to work
+
 ealias gcmsg='git commit -m "' --NoSpaceAfter
 ealias gcam='git commit -a -m "' --NoSpaceAfter
 

@@ -2,6 +2,8 @@
 abbr --set-cursor='!' gcmsg 'git commit -m "!"'
 abbr --set-cursor='!' gcam 'git commit -a -m "!"'
 
+ealias gst='git status'
+ealias gsl='gst && echo && glo' # * try # FYI requires gst/glo aliases(funcs) to work
 
 # TODO why do I need _glX? isn't regex doing the same thing => read docs on why
 abbr --regex 'gl\d+' --function glX _glX

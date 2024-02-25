@@ -7,8 +7,6 @@
 # `globurl`
 
 # status
-ealias gst='git status'
-ealias gsl='gst && echo && glo' # * try # FYI requires gst/glo aliases(funcs) to work
 eabbr gss 'git status -s'
 eabbr gsb 'git status -sb'
 eabbr gsu 'git status --untracked-files'
