@@ -28,8 +28,8 @@ abbr bin 'brew install'
 # abbr binv 'brew install --verbose --debug'
 
 abbr bup 'brew upgrade'
-abbr bubc 'brew upgrade && brew cleanup' # src: omz/brew
 abbr bubo 'brew update && brew outdated' # src: omz/brew
-abbr bubu 'bubo && bubc' # src: omz/brew
+abbr bubc 'brew upgrade && brew cleanup' # src: omz/brew
+abbr bubu 'brew update && brew outdated && brew upgrade && brew cleanup' # src: omz/brew
 
 abbr bun 'brew uninstall'
