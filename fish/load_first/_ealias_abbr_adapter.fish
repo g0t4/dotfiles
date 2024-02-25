@@ -26,27 +26,7 @@ bind '<' expand-abbr self-insert
 set --erase ealiases
 set --erase ealiases_values
 
-# expensive to setup options spec (1/3 of each call to ealias) so do it once (does result in global scope) => saves 100+ ms overall
-set ealias_options (fish_opt --short=n --long=NoSpaceAfter --long-only) # explicit arg specs! ==> same as 'g' but this is clear
-# TODO is there a simpler way to define options like in alias function (make sure its not slower though) => see `type alias` and look at its option parsing with h/help s/save or w/e
-# FYI fish --profile-startup=startup.log:
-#   durations are in MICROSECONDS
-#   Time column = total time MINUS nested time (current only)
-#   Sum column total time (current+nested)
-#   src here: https://github.com/fish-shell/fish-shell/blob/master/src/parser.rs#L185-L211
-#   there is no count across invocations of a given statement (ie ealias is called 600+ times, search for dupes to understand where optimization may help) => i.e. given # of calls to ealias it is well worth the time to optimize it
-# `time fish -C exit` to quick check overall timing
-#   OR: `time fish --profile-startup=startup.log -C exit`
-#       also grab startup log and compare us/ms to overall timing
-#   w00t optimizations got me to 2.53s=>700ms! (rpi4B) + 660ms=>220ms(rpi5) + 385ms=>151ms (mbp)
-#  *** careful not to use first ealias call for timing info as it loads some funcs (ie abbr first call => source /opt/homebrew/Cellar/fish/3.7.0/share/fish/functions/abbr.fish! even though abbr is builtin now),  so skip to second ealias invocation for more accurate timing into (in which case ealias right now is 150ms on mbp which is plenty fast for now => 60ms for 1k aliases and I only have 700 so that's all fine enough for now)
-
-# TODO I am very close to getting rid of ealias altogether, I have 3 legit uses for eabbr+composed so lets just replace those with abbr/alias and be done with ealias! can keep eabbr to shim in zsh (or rename to abbr in zsh)? I am SAVING A TON OF startup time not defining funcs for things that just needed expanded! (250ms=>40ms)
 function ealias --description "map ealias to fish abbr(eviation)"
-
-    argparse $ealias_options -- $argv # removes matching specs from $argv
-
-    # not checking for invalid args saves 30+us per invocation => so, dont include what is a pre-condition as I can always add that check in manually and remove it from production code so as not to waste time on assertions in prod where it is not likely ever needed and so just bogs down real usage!
 
     # only support format: ealias foo=bar
     set aliasdef $argv[1]
@@ -60,11 +40,7 @@ function ealias --description "map ealias to fish abbr(eviation)"
     # echo "value: $alias_value"
 
     # register to expand (when typed)
-    if test $_flag_NoSpaceAfter
-        abbr --add $aliasname --set-cursor="!" "$alias_value!"
-    else
-        abbr --add $aliasname $alias_value
-    end
+    abbr --add $aliasname $alias_value
     #
     # register to execute (i.e. when used in a function, such as `gsl`=>`glo; gst`)
 
@@ -132,7 +108,6 @@ function ealias_invoke
     if test $status -eq 0
         # FYI not all aliasvalues work with argv, ignore for now when it doesn't work (ie forr) b/c AFAIK none of these are valid use cases of composed aliases
         eval $aliasvalue $argv
-        # FYI not supporting -NoSpaceAfter here b/c I don't know of any that are intended to be composed... I could easily rewrite the composed such that in zsh it uses ealias only and in fish I declare a specific abbr(w/ set cursor postion too)+func... KEEP IN MIND there are so few -NoSpaceAfters, don't risk messing up other composed ealiases
     else
         # this should never be called with an invalid aliasname, nonetheless warn anyways
         echo "ealias not found: $aliasname"
