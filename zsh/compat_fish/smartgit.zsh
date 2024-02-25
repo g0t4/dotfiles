@@ -4,7 +4,7 @@ eabbr smartgit "open -na SmartGit --args" # all args after --args are passed to 
 # absolute paths work, not relative
 
 eabbr sgo 'smartgit --open "$(pwd)"' # open current dir's repo
-# eabbr sgr 'smartgit --open "$(rr)"' # open repo of current folder # ! do I even need this? smartgit opens repo of PWD so why use rr to find that?
+# FYI smartgit opens repo of PWD, no need for _repo_root
 eabbr sgl 'smartgit --log "$(pwd)"' # open log for current dir repo
 # --blame, --investigate and --status aren't working so I nuked those aliases for now (I wasn't using them anyway)
 

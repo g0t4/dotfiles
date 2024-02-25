@@ -59,7 +59,6 @@ function pwd --description "pwd for a repository => repo root in yellow + repo d
 end
 
 abbr rr '_repo_root'
-alias rr='_repo_root' # ! abbr aren't expanded during command evaluation, so define alias to compose it
 function _repo_root
 
     # FYI missing git command should break returning a path
