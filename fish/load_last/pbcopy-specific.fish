@@ -5,12 +5,12 @@ eabbr wdcp "pwd | pbcopy"
 
 if not is_macos
     # on non-macs make it appear as if pbcopy/paste are available
-    alias pbcopy fish_clipboard_copy
-    alias pbpaste fish_clipboard_paste
-    # NOTE fish alias == function (its not expanding)
-    #   PRN expand pbcopy/paste? (don't hide shell specific mechanism)
-    # fish_*_copy/paste call system specific backend (just like omz's clipcopy/clippaste)
-
+    function pbcopy
+        fish_clipboard_copy $argv
+    end
+    function pbpaste
+        fish_clipboard_paste $argv
+    end
     # don't alias on mac (b/c f_*_copy/paste uses pbcopy/paste... infinte loop fun)
 end
 
