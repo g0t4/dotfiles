@@ -52,6 +52,9 @@
 
   ## VM state
   abbr vu 'vagrant up'
+  abbr vuv 'vagrant up --provider=virtualbox'
+  abbr vup 'vagrant up --provider=parallels'
+  abbr vul 'vagrant up --provider=libvirt'
   abbr vpv 'vagrant provision'
   abbr vh 'vagrant halt'
   abbr vrl 'vagrant reload'
