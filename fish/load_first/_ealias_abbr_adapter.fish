@@ -27,7 +27,7 @@ set --erase ealiases
 set --erase ealiases_values
 
 # expensive to setup options spec (1/3 of each call to ealias) so do it once (does result in global scope) => saves 100+ ms overall
-set ealias_options (fish_opt --short=g) (fish_opt --short=n --long=NoSpaceAfter --long-only) # explicit arg specs! ==> same as 'g' but this is clear
+set ealias_options (fish_opt --short=n --long=NoSpaceAfter --long-only) # explicit arg specs! ==> same as 'g' but this is clear
 # TODO is there a simpler way to define options like in alias function (make sure its not slower though) => see `type alias` and look at its option parsing with h/help s/save or w/e
 # FYI fish --profile-startup=startup.log:
 #   durations are in MICROSECONDS
@@ -58,16 +58,12 @@ function ealias --description "map ealias to fish abbr(eviation)"
 
     # echo "name: $aliasname"
     # echo "value: $alias_value"
-    set --local position command
-    if test $_flag_g
-        set position anywhere
-    end
 
     # register to expand (when typed)
     if test $_flag_NoSpaceAfter
-        abbr --position $position --add $aliasname --set-cursor="!" "$alias_value!"
+        abbr --add $aliasname --set-cursor="!" "$alias_value!"
     else
-        abbr --position $position --add $aliasname $alias_value
+        abbr --add $aliasname $alias_value
     end
     #
     # register to execute (i.e. when used in a function, such as `gsl`=>`glo; gst`)
@@ -75,12 +71,6 @@ function ealias --description "map ealias to fish abbr(eviation)"
     # FYI alias failure causes:
     # - alias value has odd number of " (something to do with how alias is a wrapper to create a function)
     # - alias name is reserved word
-    if test $_flag_g
-        # skip global aliases (don't make sense in command position anyways, derp wes)
-        #  and I don't see a need to use them in a function in another position (would be confusing to read)
-        # - global aliases like byml=`| bat -l yml` (doesn't make sense in command position anyways)
-        return
-    end
 
     # alias $aliasname $alias_value
     #   !!! alias is very expensive => appears to be 200us => 120+ms overall
