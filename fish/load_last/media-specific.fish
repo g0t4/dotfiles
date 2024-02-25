@@ -6,10 +6,15 @@ eabbr exifc "grc exiftool -common -duration -AudioFormat -CompressorName" # limi
 eabbr exifs "grc exiftool -s" # show tag names instead of descriptions
 
 ### *** ffmpeg et al
-alias ffmpeg="ffmpeg -hide_banner"
-function 
-alias ffprobe="ffprobe -hide_banner"
-alias ffplay="ffplay -hide_banner"
+function ffmpeg
+    command ffmpeg -hide_banner $argv
+end
+function ffprobe
+    command ffprobe -hide_banner $argv
+end
+function ffplay
+    command ffplay -hide_banner $argv
+end
 # FYI some of these are reminders when I revisit ffmpeg (i.e. to know what to get help for)
 eabbr ff "ffmpeg"
 eabbr ffm "ffmpeg"
