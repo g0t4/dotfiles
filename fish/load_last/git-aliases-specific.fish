@@ -2,9 +2,6 @@
 abbr --set-cursor='!' gcmsg 'git commit -m "!"'
 abbr --set-cursor='!' gcam 'git commit -a -m "!"'
 
-ealias gst='git status'
-ealias gsl='gst && echo && glo' # * try # FYI requires gst/glo aliases(funcs) to work
-
 # TODO why do I need _glX? isn't regex doing the same thing => read docs on why
 abbr --regex 'gl\d+' --function glX _glX
 function glX
@@ -12,7 +9,9 @@ function glX
 end
 
 set -l _unpushed_commits "HEAD@{push}~1..HEAD"
-ealias glo="git log $_unpushed_commits" # composed by gsl
+abbr gst 'git status'
+abbr gsl "git status && echo && git log $_unpushed_commits" # * try # FYI requires gst/glo aliases(funcs) to work
+abbr glo "git log $_unpushed_commits" # composed by gsl
 #
 # w/ patch (diff)
 eabbr glp "git log --patch $_unpushed_commits"
