@@ -13,9 +13,9 @@ end
 # FYI can defer expand color variable so order of startup files is irrelevant
 # --nogroup => disable grouping to show file/line per match to click to open in vscode (via iterm links)
 
-abbr agi 'ag -i'
-abbr agh 'ag --hidden' # search hidden files (including vcs ignores)
-abbr agu 'ag -u' # unrestricted # by default .gitignore/.hgignore/.ignore are excluded
+abbr --set-cursor='!' --  agi 'ag -i "!"'
+abbr --set-cursor='!' --  agh 'ag --hidden -i "!"' # search hidden files (including vcs ignores)
+abbr --set-cursor='!' --  agu 'ag -u "!"' # unrestricted # by default .gitignore/.hgignore/.ignore are excluded
 
 # I am used to these params, don't currently need to alias them:
 #  -g and -G myself
