@@ -1,11 +1,11 @@
-ealias pgr='| grep -i' -g
-ealias pjq='| jq .' -g
-ealias pbat='| bat -l' -g
-ealias pyml='| bat -l yml' -g
-ealias phelp='| bat -l help' -g
-ealias pini='| bat -pl ini' -g
-ealias psh='| bat -pl sh' -g
-ealias prb='| bat -pl rb' -g
+abbr --position anywhere --  pgr '| grep -i'
+abbr --position anywhere --  pjq '| jq .'
+abbr --position anywhere --  pbat '| bat -l'
+abbr --position anywhere --  pyml '| bat -l yml'
+abbr --position anywhere --  phelp '| bat -l help'
+abbr --position anywhere --  pini '| bat -pl ini'
+abbr --position anywhere --  psh '| bat -pl sh'
+abbr --position anywhere --  prb '| bat -pl rb'
 
-ealias hC='| hexdump -C' -g
+abbr --position anywhere --  hC '| hexdump -C'
 # i.e.    echo -n $IFS | hexdump -C
