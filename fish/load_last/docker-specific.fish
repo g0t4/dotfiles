@@ -232,13 +232,14 @@ abbr --set-cursor='!' --  sklm 'skopeo list-tags docker://mcr.microsoft.com/!'
 # ie: dive foo # (image)
 
 ## *** hub-tool ***
-abbr -- dh "hub-tool"
+abbr dh "hub-tool"
 # hub-tool account rate-limiting --verbose
-abbr -- dhrls "hub-tool repo ls"
+# hub-tool repo ls roboxes
+abbr dhr "hub-tool repo ls"
 # hub-tool tag ls roboxes/debian12
-abbr -- dht "hub-tool tag ls --platforms" # --all variant?
+abbr dht "hub-tool tag ls --platforms" # --all variant?
 abbr --set-cursor='!' -- dhtj "hub-tool tag ls --format json ! | jq" # fyi json includes --platforms by default # ? or just use pjq abbr instead of | jq and ! set-cursor
-abbr -- dhti "hub-tool tag inspect"
+abbr dhti "hub-tool tag inspect"
 
 # FYI hub APIs:
 # check docker/hub-tool source for endpoints

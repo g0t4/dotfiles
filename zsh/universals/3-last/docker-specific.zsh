@@ -232,7 +232,8 @@ ealias sklm='skopeo list-tags docker://mcr.microsoft.com/' --NoSpaceAfter
 ## *** hub-tool ***
 abbr dh "hub-tool"
 # hub-tool account rate-limiting --verbose
-abbr dhrls "hub-tool repo ls"
+# hub-tool repo ls roboxes
+abbr dhr "hub-tool repo ls"
 # hub-tool tag ls roboxes/debian12
 abbr dht "hub-tool tag ls --platforms" # --all variant?
 abbr dhtj "hub-tool tag ls --format json" # fyi json includes --platforms by default
