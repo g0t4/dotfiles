@@ -230,3 +230,20 @@ abbr --set-cursor='!' --  sklm 'skopeo list-tags docker://mcr.microsoft.com/!'
 # alias dive='docker container run -i -t --rm -v /var/run/docker.sock:/var/run/docker.sock wagoodman/dive'
 # usage: dive <args>
 # ie: dive foo # (image)
+
+## *** hub-tool ***
+abbr dh "hub-tool"
+# hub-tool account rate-limiting --verbose
+abbr dhrls "hub-tool repo ls"
+# hub-tool tag ls roboxes/debian12
+abbr dht "hub-tool tag ls --platforms" # --all variant?
+abbr dhtj "hub-tool tag ls --format json" # fyi json includes --platforms by default
+abbr dhti "hub-tool tag inspect"
+
+# FYI hub APIs:
+# check docker/hub-tool source for endpoints
+# allows public access
+# or just use --format json with hub-tool commands to likely get same data
+# tags https://hub.docker.com/v2/repositories/weshigbee/swarmgs2-echo/tags
+# repos https://hub.docker.com/v2/repositories/weshigbee/
+# repo details https://hub.docker.com/v2/repositories/weshigbee/swarmgs2-echo
