@@ -54,7 +54,10 @@
   abbr vu 'vagrant up'
   abbr vuv 'vagrant up --provider=virtualbox'
   abbr vup 'vagrant up --provider=parallels'
-  abbr vul 'vagrant up --provider=libvirt'
+  abbr vuh 'vagrant up --provider=hyperv'
+  # vmware_desktop (both fusion and workstation, legacy: vmware_fusion, vmware_workstation)
+  # libvirt, qemu, docker
+  #
   abbr vpv 'vagrant provision'
   abbr vh 'vagrant halt'
   abbr vrl 'vagrant reload'
