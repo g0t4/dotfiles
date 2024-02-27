@@ -59,6 +59,13 @@ function pwd --description "pwd for a repository => repo root in yellow + repo d
     # PRN I like leaving white / on end of path but builtin for pwd doesn't include the final slash, I like it right now b/c it makes it clear that it is the root of a repo
 end
 
+function prd --description "print repo dir (pwd relative to repo root)"
+    # recreate prd
+    echo -s (set_color --bold white) \
+        (git rev-parse --show-prefix 2>/dev/null) \
+        (set_color normal)
+end
+
 abbr rr '_repo_root'
 function _repo_root
 
