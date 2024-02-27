@@ -22,6 +22,9 @@ function prompt_login --description 'display user name for the prompt'
     if not string match -q "mbp*" $hostname
         # chances of showing hostname and python icon are low so don't worry about leading space here b/c then I have to disable it when not python icon and that's yuck
         echo -n -s $hostname
+    else if string match -rq "$HOME/repos/github/g0t4/course2-mdls" $PWD
+        # in course repo show hostname as mac (temp just for course)
+        echo -n -s "host"
     end
 
     return
