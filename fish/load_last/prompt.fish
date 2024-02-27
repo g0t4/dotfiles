@@ -18,14 +18,17 @@ function prompt_login --description 'display user name for the prompt'
         echo -n -s (set_color cyan) \ue73c (set_color normal)
     end
 
-    # selectively show hostname
-    if not string match -q "mbp*" $hostname
-        # chances of showing hostname and python icon are low so don't worry about leading space here b/c then I have to disable it when not python icon and that's yuck
-        echo -n -s $hostname
-    else if string match -rq "$HOME/repos/github/g0t4/course2-mdls" $PWD
-        # in course repo show hostname as mac (temp just for course)
-        echo -n -s "host"
+    if string match -q "mbp*" $hostname
+        # for duration of course, make host clear and not confusing (just mac in this case) - otherwise dir alone mighe be ubuntu (in vms/ubuntu dir) and then its just "ubuntu" without hostname and that might lead one to believe it's the ubuntu course VM
+        echo -n -s "mac"
     end
+    # selectively show hostname
+    # if not string match -q "mbp*" $hostname
+    #     # chances of showing hostname and python icon are low so don't worry about leading space here b/c then I have to disable it when not python icon and that's yuck
+    # else if string match -rq "$HOME/repos/github/g0t4/course2-mdls" $PWD
+    #     # in course repo show hostname as mac (temp just for course)
+    #     echo -n -s "host"
+    # end
 
     return
 end
