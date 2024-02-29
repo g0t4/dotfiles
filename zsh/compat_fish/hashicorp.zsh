@@ -60,6 +60,7 @@
   #
   abbr vpv 'vagrant provision'
   abbr vh 'vagrant halt'
+  abbr vhf 'vagrant halt --force'
   abbr vrl 'vagrant reload'
   abbr vrlp 'vagrant reload --provision'
   #
