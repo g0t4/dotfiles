@@ -173,6 +173,7 @@ if command -q kubectl
     #
     abbr kga 'grc kubectl get all'
     abbr kgaa 'grc kubectl get all -A' # -A/--all-namespaces
+    abbr kgas 'grc kubectl get all --show-labels'
     #
     abbr kgp 'grc kubectl get pods' # alias: po (gonna go with p only for now)
     abbr kgpa 'grc kubectl get pods -A'
