@@ -20,7 +20,7 @@ function prompt_login --description 'display user name for the prompt'
 
     if string match -q "mbp*" $hostname
         # for duration of course, make host clear and not confusing (just mac in this case) - otherwise dir alone mighe be ubuntu (in vms/ubuntu dir) and then its just "ubuntu" without hostname and that might lead one to believe it's the ubuntu course VM
-        echo -n -s "mac"
+        echo -n -s mac
     end
     # selectively show hostname
     # if not string match -q "mbp*" $hostname
@@ -86,8 +86,18 @@ function fish_prompt_modified --description 'Write out the prompt'
     # true never shows anything
     # sleep 10 => Ctrl+C => shows [SIGINT]
     # true | false => shows [0|1] on next prompt, return clears
-
-    echo -n -s (prompt_login)' ' (set_color $color_cwd) (prompt_pwd) $normal (fish_vcs_prompt) $normal " "$prompt_status $suffix " "
+    if set -q prompt_status
+        and test -n "$prompt_status"
+        echo -s $prompt_status $normal
+        # test:    true | false => shows [0|1]
+        # ~ zsh's setopt PRINT_EXIT_VALUE (print non-zero exit code after command, before next prompt)
+        # why?
+        # - clear w/ Cmd+K alone... previously had to RETURN => CMD+K to fully clear screen
+        # - I love being smacked in the face with a non-zero exit code
+        #   - I don't like having it get in the way of typing my next command (ie prompt suddenly wider, then smaller)
+        # FYI long ago I modified prompt to not show the prior command's exit code until the next command is run (that really drove me bonkers)
+    end
+    echo -n -s (prompt_login)' ' (set_color $color_cwd) (prompt_pwd) $normal (fish_vcs_prompt) $normal $suffix " "
 end
 
 # redefine (wrap)
