@@ -89,6 +89,9 @@ function fish_prompt_modified --description 'Write out the prompt'
     if set -q prompt_status
         and test -n "$prompt_status"
         echo -s $prompt_status $normal
+
+        # ! only downside is this may screw up smth else... so be prepared... i.e. I might confuse the line as part of output of prev command... that said, if I pipe to smth else it won't be a problem b/c this is part of the prompt
+
         # test:    true | false => shows [0|1]
         # ~ zsh's setopt PRINT_EXIT_VALUE (print non-zero exit code after command, before next prompt)
         # why?
