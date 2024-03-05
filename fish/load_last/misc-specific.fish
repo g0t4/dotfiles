@@ -246,6 +246,7 @@ if command -q kubectl
     # conte(x)t => muscle memory with docker `dxls`=`docker context ls`, so => kxls
     abbr kx 'kubectl config'
     abbr --set-cursor='!' -- kxs 'kubectl config set-context --current --namespace=!' # kxsn if want more set abbr's
+    abbr --set-cursor='!' -- kns 'kubectl config set-context --current --namespace=!' # this is easier to remember BUT does not fit into kx abbr "namespacing" (pun intended)
     abbr kxu 'kubectl config use-context'
     abbr kxls 'kubectl config get-contexts'
     abbr kxv 'kubectl config view'
