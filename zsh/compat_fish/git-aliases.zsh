@@ -53,7 +53,7 @@ abbr gbl 'git blame -b -w' # -w ignore whitespace, -b blank SHA1 for boundary co
 # commit and forget
 abbr gcrefactor "git commit -a -m 'refactor'"
 abbr gcnotes "git commit -a -m 'notes'"
-abbr gcsubs "git commit -a -m 'subs'"
+abbr gcsubs "git commit -a -m 'subs'; git push"
 abbr gmark "git commit -a -m 'mark'"
 
 # FYI pwsh has many builtin aliases stating with 'g' b/c Get :)
