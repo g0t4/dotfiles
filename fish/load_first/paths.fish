@@ -33,8 +33,13 @@ if test -d "$HOME/.local/bin"
 end
 
 # kubectl krew
-set -q KREW_ROOT; and set -gx PATH $PATH $KREW_ROOT/.krew/bin; or set -gx PATH $PATH $HOME/.krew/bin
+if test -d "$HOME/.krew/bin"
+    # suggested by krew:
+    # set -q KREW_ROOT; and set -gx PATH $PATH $KREW_ROOT/.krew/bin; or set -gx PATH $PATH $HOME/.krew/bin
 
+    # I will just go with ~/.krew/bin
+    export PATH="$HOME/.krew/bin:$PATH"
+end
 
 # /snap/bin (ubuntu/wsl)
 if test -d /snap/bin
