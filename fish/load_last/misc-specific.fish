@@ -263,6 +263,9 @@ if command -q kubectl
 
     # kubectl plugin list
 
+    # krew
+    abbr krew 'kubectl krew'
+
 end
 
 if command -q minikube
