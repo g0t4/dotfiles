@@ -262,7 +262,7 @@ if command -q kubectl
     # kubectl events
 
     # kubectl plugin list
-
+    abbr kpls 'kubectl plugin list'
     # krew
     abbr krew 'kubectl krew'
 
