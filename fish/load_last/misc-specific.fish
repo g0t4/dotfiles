@@ -161,7 +161,7 @@ if command -q kubectl
     abbr karg 'grc kubectl api-resources --namespaced=false' # (g)lobal
 
     # TODO how do I feel about this:
-    abbr --position=anywhere -- oy '-o yaml'
+    abbr --position=anywhere -- oy '-o yaml | bat -l yml'
     # grc kubectl options
 
     # kubectl alpha
