@@ -320,13 +320,17 @@ if command -q helm
     # history/hist     fetch release history
     abbr hh 'helm history'
     # install     install a chart
-    abbr hi 'helm install'
+    abbr hin 'helm install'
     # lint        examine a chart for possible issues
     # list/ls        list releases
     abbr hls 'helm list' # PRN default list args?
     # package     package a chart directory into a chart archive
     # plugin      install, list, or uninstall Helm plugins
-    abbr hplls 'helm plugin list'
+    #    install/all     install one or more Helm plugins
+    #    list/ls        list installed Helm plugins
+    abbr hplls 'helm plugin ls'
+    #    uninstall/rm/remove   uninstall one or more Helm plugins
+    #    update/up      update one or more Helm plugins
     #
     # pull/fetch        download a chart from a repository and (optionally) unpack it in local directory
     abbr hp 'helm pull'
@@ -335,25 +339,33 @@ if command -q helm
     # registry    login to or logout from a registry
     # repo        add, list, remove, update, and index chart repositories
     #    add         add a chart repository
+    abbr hra 'helm repo add'
     #    index       generate an index file given a directory containing packaged charts
-    #    list        list chart repositories
-    #    remove      remove one or more chart repositories
+    #    list/ls        list chart repositories
+    abbr hrls 'helm repo ls'
+    #    remove/rm      remove one or more chart repositories
+    abbr hrrm 'helm repo remove'
     #    update      update information of available charts locally from chart repositories
+    abbr hrup 'helm repo update'
     # rollback    roll back a release to a previous revision
     #
     # search      search for a keyword in charts
     #    hub         search for charts in the Artifact Hub or your own hub instance
     #    repo        search repositories for a keyword in charts
-    abbr hsh 'helm search hub'
-    abbr hsr 'helm search repo'
+    abbr hsh 'helm search hub' # local repos, no args = list all
+    abbr hsr 'helm search repo' # remote
+    abbr hsv 'helm search repo --versions ' # list versions
     #
     # show/inspect   show information of a chart
+    abbr hi 'helm inspect'
     #    all         show all information of the chart
     #    chart       show the chart's definition
+    abbr --set-cursor='!' -- hic "helm show chart ! | bat -l yml"
     #    crds        show the chart's CRDs
     #    readme      show the chart's README
+    abbr --set-cursor='!' -- hir "helm show readme ! | bat -l md"
     #    values      show the chart's values
-    abbr hs 'helm show'
+    abbr --set-cursor='!' -- hiv "helm show values ! | bat -l yml"
     #
     # status      display the status of the named release
     abbr hst 'helm status'
