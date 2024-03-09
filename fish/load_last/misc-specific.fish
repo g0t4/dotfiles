@@ -295,6 +295,80 @@ if command -q minikube
 
 end
 
+# helm
+if command -q helm
+
+    abbr h helm
+
+    # create      create a new chart with the given name
+    #
+    # dependency/dep/dependencies  manage a chart's dependencies
+    #    build       rebuild the charts/ directory based on the Chart.lock file
+    #    list        list the dependencies for the given chart
+    #    update      update charts/ based on the contents of Chart.yaml
+    #
+    # env         helm client environment information
+    #    abbr he 'helm env' # likely to remove this
+    # get         download extended information of a named release
+    #    all         download all information for a named release
+    #    hooks       download all hooks for a named release
+    #    manifest    download the manifest for a named release
+    #    metadata    This command fetches metadata for a given release
+    #    notes       download the notes for a named release
+    #    values      download the values file for a named release
+    # help        Help about any command
+    # history/hist     fetch release history
+    abbr hh 'helm history'
+    # install     install a chart
+    abbr hi 'helm install'
+    # lint        examine a chart for possible issues
+    # list/ls        list releases
+    abbr hls 'helm list' # PRN default list args?
+    # package     package a chart directory into a chart archive
+    # plugin      install, list, or uninstall Helm plugins
+    abbr hplls 'helm plugin list'
+    #
+    # pull/fetch        download a chart from a repository and (optionally) unpack it in local directory
+    abbr hp 'helm pull'
+    # push        push a chart to remote
+    #
+    # registry    login to or logout from a registry
+    # repo        add, list, remove, update, and index chart repositories
+    #    add         add a chart repository
+    #    index       generate an index file given a directory containing packaged charts
+    #    list        list chart repositories
+    #    remove      remove one or more chart repositories
+    #    update      update information of available charts locally from chart repositories
+    # rollback    roll back a release to a previous revision
+    #
+    # search      search for a keyword in charts
+    #    hub         search for charts in the Artifact Hub or your own hub instance
+    #    repo        search repositories for a keyword in charts
+    abbr hsh 'helm search hub'
+    abbr hsr 'helm search repo'
+    #
+    # show/inspect   show information of a chart
+    #    all         show all information of the chart
+    #    chart       show the chart's definition
+    #    crds        show the chart's CRDs
+    #    readme      show the chart's README
+    #    values      show the chart's values
+    abbr hs 'helm show'
+    #
+    # status      display the status of the named release
+    abbr hst 'helm status'
+    #
+    # template    locally reinspectnder templates
+    # test        run tests for a release
+    # uninstall/delete/un/del   uninstall a release
+    abbr hun 'helm uninstall'
+    # upgrade     upgrade a release
+    abbr hup 'helm upgrade'
+    # verify      verify that a chart at the given path has been signed and is valid
+    # version     print the client version information
+    abbr hver 'helm version' # FYI - TODO - consistently define Xver across all tools I use, where version is regularly checked
+end
+
 # *** searching ***
 #
 abbr els "env | bat --language dotenv -p"
