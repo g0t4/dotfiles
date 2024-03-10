@@ -417,3 +417,10 @@ bind '<' expand-abbr self-insert
 abbr psg "ps aux | grep -i "
 abbr pgrep "pgrep -il" # -l long output (show what matched => process name)
 abbr pgrepf "pgrep -ilf" # -f match full command line, -l show what matched (full line)
+
+
+# TODO port more dns/arp helpers here
+function _flush_dns
+    # PRN check if macos, if not use different command or warn
+    sudo killall -HUP mDNSResponder
+end
