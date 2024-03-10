@@ -371,7 +371,8 @@ if command -q helm
     # status      display the status of the named release
     abbr hst 'helm status'
     #
-    # template    locally reinspectnder templates
+    # template    locally render templates
+    abbr --set-cursor='!' -- ht 'helm template ! | bat -l yml' # repo/chart-name
     # test        run tests for a release
     # uninstall/delete/un/del   uninstall a release
     abbr hun 'helm uninstall'
