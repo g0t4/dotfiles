@@ -334,6 +334,7 @@ if command -q helm
     #
     # pull/fetch        download a chart from a repository and (optionally) unpack it in local directory
     abbr hp 'helm pull'
+    abbr hpu 'helm pull --untar --untardir ./untar' # repo/chart arg => extract chart => ./untar/<chart-name>
     # push        push a chart to remote
     #
     # registry    login to or logout from a registry
