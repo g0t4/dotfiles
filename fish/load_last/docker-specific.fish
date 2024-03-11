@@ -237,7 +237,7 @@ abbr dh "hub-tool"
 # hub-tool repo ls roboxes
 abbr dhr "hub-tool repo ls"
 # hub-tool tag ls roboxes/debian12
-abbr dht "hub-tool tag ls --platforms" # --all variant?
+abbr --set-cursor='!' -- dht "hub-tool tag ls --platforms ! | sort" # --all variant?
 abbr --set-cursor='!' -- dhtj "hub-tool tag ls --format json ! | jq" # fyi json includes --platforms by default # ? or just use pjq abbr instead of | jq and ! set-cursor
 abbr dhti "hub-tool tag inspect"
 
