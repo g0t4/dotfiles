@@ -235,8 +235,9 @@ abbr dh "hub-tool"
 # hub-tool repo ls roboxes
 abbr dhr "hub-tool repo ls"
 # hub-tool tag ls roboxes/debian12
-abbr dht "hub-tool tag ls --platforms" # --all variant?
-abbr dhtj "hub-tool tag ls --format json" # fyi json includes --platforms by default
+abbr dht "hub-tool tag ls --sort=name=desc --platforms"
+abbr dhtu "hub-tool tag ls --sort=updated=desc --platforms"
+aabbr dhtj "hub-tool tag ls --format json" # fyi json includes --platforms by default
 abbr dhti "hub-tool tag inspect"
 
 # FYI hub APIs:
