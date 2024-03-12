@@ -176,7 +176,7 @@ if command -q kubectl
     function kgdump
         set filter -A # all namespaces (default)
 
-        if count $argv >0
+        if test (count $argv) -gt 0
             # filter on namespace, keep as list to pass as args below
             set filter -n $argv
         else
