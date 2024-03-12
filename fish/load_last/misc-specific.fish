@@ -180,8 +180,10 @@ if command -q kubectl
         #    kgdump -t helm
         #    kgdump kube-system
         #    kgdump -t ingress kube-system
-        argparse --name kgdump 't/type='  -- $argv
-        # PRN add 'n/name=' flag to filter resources by name too (wait until I want this)
+        argparse --name kgdump 't/type=' -- $argv
+        # TLDR: pattern search all resources by namespace/type/name (or all if no args) => this is the long term goal, todo impl
+        #   PRN add 'n/name=' flag to filter resources by name too (wait until I want this)
+        #   PRN modify namespace arg to be a flag too? to avoid confusion?  AND make it regex/pattern also
         set filter -A # all namespaces (default)
 
         if test (count $argv) -gt 0
