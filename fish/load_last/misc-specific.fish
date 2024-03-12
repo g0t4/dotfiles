@@ -174,6 +174,14 @@ if command -q kubectl
     # TODO redo get aliases to use abbreviations where applicable (ie n=>ns)
     #
     function kgdump
+        # usages:
+        #    kgdump [-t regex] [namespace]
+        #    kgdump -t ingress
+        #    kgdump -t helm
+        #    kgdump kube-system
+        #    kgdump -t ingress kube-system
+        argparse --name kgdump 't/type='  -- $argv
+        # PRN add 'n/name=' flag to filter resources by name too (wait until I want this)
         set filter -A # all namespaces (default)
 
         if test (count $argv) -gt 0
@@ -183,14 +191,33 @@ if command -q kubectl
             # only dump non-namespaced if no namespace requested
             log_ --red "NOT NAMESPACED:"
             set types (kubectl api-resources --verbs=list --namespaced=false -o name)
-            set comma_list (string join , $types)
-            grc kubectl get --show-kind --ignore-not-found $comma_list
+            if set -q _flag_type
+                set types (string match -r ".*$_flag_type.*" -- $types)
+            end
+            if test (count $types) -eq 0
+                log_ --blue "  NO matching types found"
+            else
+                set comma_list (string join , $types)
+                set what grc kubectl get --show-kind --ignore-not-found $comma_list
+                log_ --blue "  $what"
+                eval $what
+            end
         end
 
+        log_blankline
         log_ --red "NAMESPACED( $filter ):"
         set types (kubectl api-resources --verbs=list --namespaced=true -o name)
-        set comma_list (string join , $types)
-        grc kubectl get --show-kind --ignore-not-found $comma_list $filter
+        if set -q _flag_type
+            set types (string match -r ".*$_flag_type.*" -- $types)
+        end
+        if test (count $types) -eq 0
+            log_ --blue "  NO matching types found"
+        else
+            set comma_list (string join , $types)
+            set what grc kubectl get --show-kind --ignore-not-found $comma_list $filter
+            log_ --blue "  $what"
+            eval $what
+        end
     end
     #
     abbr kga 'grc kubectl get all'
