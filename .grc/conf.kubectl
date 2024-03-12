@@ -79,7 +79,12 @@ colour=bold white
 regexp=\b([A-Z]+)\b
 colour=underline
 -
-# type/name
+# type/name (not at start of line - above covers at start of line)
+
 #   only 1 / => indicates likely resource type and name
 regexp=\s([a-z0-9\.\-]+)\/([a-z0-9\.\-\:]+)\s
-colours=unchanged, bright_white, bright_blue
+colour=unchanged,yellow,bright_white
+
+# MAYBES
+#   system namespaces: kube-system (kube-public, kube-node-lease?, other common system-ish namespaces, i.e. cert-manager, kubernetes-dashboard)
+# Retain/Delete? (delete for reclaim policy, worth flagging on PVs?)
