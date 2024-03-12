@@ -173,6 +173,19 @@ if command -q kubectl
     abbr kgns 'grc kubectl get namespaces'
     # TODO redo get aliases to use abbreviations where applicable (ie n=>ns)
     #
+    function kgdump
+        set filter "-A" # all namespaces (default)
+        if count $argv > 0
+            set filter -n $argv # filter on namespace, keep as list to pass as args below
+        else
+            # only dump non-namespaced if no namespace requested
+            log_ --red "NOT NAMESPACED:"
+            kubectl api-resources --verbs=list --namespaced=false -o name | xargs -n 1 grc kubectl get --show-kind --ignore-not-found
+        end
+
+        log_ --red "NAMESPACED( $filter ):"
+        kubectl api-resources --verbs=list --namespaced -o name | xargs -n 1 grc kubectl get --show-kind --ignore-not-found $filter
+    end
     abbr kga 'grc kubectl get all'
     abbr kgaa 'grc kubectl get all -A' # -A/--all-namespaces
     abbr kgas 'grc kubectl get all --show-labels'
