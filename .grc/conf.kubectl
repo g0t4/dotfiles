@@ -26,9 +26,9 @@ colour=cyan,magenta
 regexp=(\d+)(:\d+)?/(TCP|UDP)
 colour=unchanged,yellow,bold green,magenta
 -
-# Type/Name
-regexp=^([^/ ]+)/(\S+)
-colour=unchanged,yellow,bright_white
+# Type/Name (start of line only => disabled b/c using my custom rule below)
+# regexp=^([^/ ]+)/(\S+)
+# colour=unchanged,yellow,bright_white
 -
 # No running Instances
 regexp=\s(0/[1-9]+)\b
@@ -79,11 +79,12 @@ colour=bold white
 regexp=\b([A-Z]+)\b
 colour=underline
 -
-# type/name (not at start of line - above covers at start of line)
-
-#   only 1 / => indicates likely resource type and name
-regexp=\s([a-z0-9\.\-]+)\/([a-z0-9\.\-\:]+)\s
-colour=unchanged,yellow,bright_white
+# type/name (anywhere in line)
+#   start of line or after whitespace
+#   type => a-z0-9.-
+#   name => a-z0-9.-:
+regexp=(^|\s)([a-z0-9\.\-]+)\/([a-z0-9\.\-\:]+)\s
+colour=unchanged,unchanged,yellow,bright_white
 
 # MAYBES
 #   system namespaces: kube-system (kube-public, kube-node-lease?, other common system-ish namespaces, i.e. cert-manager, kubernetes-dashboard)
