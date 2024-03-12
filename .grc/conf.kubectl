@@ -75,8 +75,10 @@ regexp=^\*.+$
 colour=bold white
 -
 # HEADERS
-# regexp=\b(NAME|NAMESPACE|CLUSTER|AUTHINFO|SERVER|STATUS|AGE|CLASS|HOST|IMAGE|CHANNEL|VERSION)\b
-regexp=\b([A-Z]+)\b
+#   PRN hardcode if space/- in header, otherwise too easy to match tons of things
+#   TODO require entire row to have uppercase letters ==> look ahead for a-z and abort matching?... if I did this I could match on \- too and maybe \(\)
+#     i.e. would fix `get pvc` => RWO/RWX/etc modes appear as a header when they are not
+regexp=\b(ACCESS MODES|NODE SELECTOR|UP-TO-DATE|LAST SEEN|CREATED AT|[A-Z]+)\b
 colour=underline
 -
 # type/name (anywhere in line)
