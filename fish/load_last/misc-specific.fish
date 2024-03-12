@@ -174,11 +174,11 @@ if command -q kubectl
     # TODO redo get aliases to use abbreviations where applicable (ie n=>ns)
     #
     function kgdump
-        set filter "-A" # all namespaces (default)
+        set filter -A # all namespaces (default)
 
-        if count $argv > 0
+        if count $argv >0
             # filter on namespace, keep as list to pass as args below
-            set filter -n $argv 
+            set filter -n $argv
         else
             # only dump non-namespaced if no namespace requested
             log_ --red "NOT NAMESPACED:"
@@ -443,4 +443,10 @@ abbr pgrepf "pgrep -ilf" # -f match full command line, -l show what matched (ful
 function _flush_dns
     # PRN check if macos, if not use different command or warn
     sudo killall -HUP mDNSResponder
+end
+
+function kill_hung_grc
+    # if grc hangs (ie due to invalid config) then use this
+    # kill grcat is all you need, the grc process dies after
+    pkill -ilf grcat
 end
