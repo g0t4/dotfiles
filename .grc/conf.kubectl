@@ -1,5 +1,5 @@
 # Green Words
-regexp=\b(Ready|Running|[Tt]rue|Active|Available|Approved|created)\b
+regexp=\b(Ready|Running|[Tt]rue|Active|Available|Approved|created|Healthy)\b
 colour=unchanged,green
 -
 # Master
@@ -7,7 +7,7 @@ regexp=\smaster\s
 colour=on_green bold white
 -
 # Red Words
-regexp=\b([Dd]isabled?|[Ee]rrors?|[Ss]topped|[Ff]alse|none|ErrImagePull|[a-zA-Z]+BackOff|OOMKilled|[Tt]erminated|[Ff]aile?d?)\b
+regexp=\b([Dd]isabled?|[Ee]rrors?|[Ss]topped|[Ff]alse|none|ErrImagePull|[a-zA-Z]+BackOff|OOMKilled|[Tt]erminated|[Ff]aile?d?|Unhealthy)\b
 colour=unchanged,red
 -
 # Yellow Words
