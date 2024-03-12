@@ -263,11 +263,14 @@ if command -q kubectl
     # delete
     abbr kdel 'kubectl delete'
     abbr kdelf 'kubectl delete -f'
+    # diff
+    abbr kdi 'kubectl diff' # diff current (status) vs desired state (spec)
+    abbr kdif 'kubectl diff -f'
+    # desc
+    abbr kd 'grc kubectl describe' # ~ docker inspect
+    abbr kdf 'grc kubectl describe -f'
     # replace
     abbr krf 'kubectl replace -f' # delete and then create
-    # diff
-    abbr kd 'kubectl diff' # diff current (status) vs desired state (spec)
-    abbr kdf 'kubectl diff -f'
     # kubectl edit
     # kubectl patch
     # kubectl set
@@ -280,8 +283,6 @@ if command -q kubectl
     # kubectl scale
     # kubectl autoscale
 
-    abbr kdesc 'grc kubectl describe' # ~ docker inspect
-    abbr kdescf 'grc kubectl describe -f'
     abbr krun 'kubectl run' # ~ docker container run
     abbr kexec 'kubectl exec -it' # ~ docker container exec
     abbr kattach 'kubectl attach -it' # ~ docker container attach
