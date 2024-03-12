@@ -343,7 +343,7 @@ if command -q helm
     abbr hin 'helm install'
     # lint        examine a chart for possible issues
     # list/ls        list releases
-    abbr hls 'helm list' # PRN default list args?
+    abbr hls 'helm list -A' # PRN default list args?
     # package     package a chart directory into a chart archive
     # plugin      install, list, or uninstall Helm plugins
     #    install/all     install one or more Helm plugins
