@@ -73,3 +73,9 @@ colour=bright_green
 # Higlight (Tested in kubectl config get-contexts)
 regexp=^\*.+$
 colour=bold white
+- 
+# HEADERS
+# regexp=\b(NAME|NAMESPACE|CLUSTER|AUTHINFO|SERVER|STATUS|AGE|CLASS|HOST|IMAGE|CHANNEL|VERSION)\b
+regexp=\b([A-Z]+)\b
+colour=underline
+-
