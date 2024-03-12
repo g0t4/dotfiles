@@ -184,8 +184,9 @@ if command -q kubectl
             log_ --red "NOT NAMESPACED:"
             set types (kubectl api-resources --verbs=list --namespaced=false -o name)
             set comma_list (string join , $types)
-            # TODO why does `runtimeclasses.node.k8s.io` in comma_list here break grc color (match rule?)
-            grc kubectl get --show-kind --ignore-not-found $comma_list
+
+            # FYI `runtimeclasses.node.k8s.io` in comma_list breaks grc coloring... so, explicitly set conf.kubectl as config file name
+            grc -c conf.kubectl kubectl get --show-kind --ignore-not-found $comma_list
         end
 
         log_ --red "NAMESPACED( $filter ):"
