@@ -310,6 +310,10 @@ if command -q kubectl
     # kubectl proxy
     # kubectl debug
     # kubectl events
+    abbr kev 'grc kubectl events'
+    abbr kevA 'grc kubectl events -A'
+    abbr kevw 'grc kubectl events --watch'
+    abbr kevwA 'grc kubectl events -A --watch'
 
     # kubectl plugin list
     abbr kpls 'kubectl plugin list'
