@@ -197,11 +197,11 @@ if command -q kubectl
                 set types (string match -r ".*$_flag_type.*" -- $types)
             end
             if test (count $types) -eq 0
-                log_ --blue "  NO matching types found"
+                log_ --brwhite --bold "  NO matching types found"
             else
                 set comma_list (string join , $types)
                 set what grc kubectl get --show-kind --ignore-not-found $comma_list
-                log_ --blue "  $what"
+                log_ --black "  $what"
                 eval $what
             end
         end
@@ -213,11 +213,11 @@ if command -q kubectl
             set types (string match -r ".*$_flag_type.*" -- $types)
         end
         if test (count $types) -eq 0
-            log_ --blue "  NO matching types found"
+            log_ --brwhite --bold "  NO matching types found"
         else
             set comma_list (string join , $types)
             set what grc kubectl get --show-kind --ignore-not-found $comma_list $filter
-            log_ --blue "  $what"
+            log_ --black "  $what"
             eval $what
         end
     end
