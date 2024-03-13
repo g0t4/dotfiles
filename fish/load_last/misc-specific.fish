@@ -484,3 +484,22 @@ function kill_hung_grc
     # kill grcat is all you need, the grc process dies after
     pkill -ilf grcat
 end
+
+function z
+    # FYI still uses z fish completions (b/c same name)
+
+    if string match --quiet --regex "github.com" $argv
+        # if a repo url then clone and/or cd to it
+        set path (wcl --path-only $argv)
+        if test -d $path
+            # PRN wcl anyways to get latest? wouldn't that be what I want when I pass a full URL http://...?
+            cd $path
+        else
+            wcl $argv
+            cd $path
+        end
+    else
+        # otherwise just call wcl
+        __z $argv
+    end
+end
