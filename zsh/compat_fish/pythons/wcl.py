@@ -17,11 +17,16 @@ STOP_ON_FAILURE = True
 def wcl(args):
     url: str = args.url
     dry_run: bool = args.dry_run
+    path_only: bool = args.path_only
 
     parsed = parse_repo(url)
     repos_dir = os.path.join(os.environ["HOME"], "repos")
     repo_dir = os.path.join(repos_dir, relative_repo_dir(parsed))
     org_dir = os.path.dirname(repo_dir)
+
+    if path_only:
+        print(repo_dir)
+        return
 
     # ensure org dir exists (including parents)
     if dry_run:
@@ -121,5 +126,9 @@ if __name__ == "__main__":
     parser.add_argument("url", type=str, help="repository clone url")
     # --dry-run flag:
     parser.add_argument("--dry-run", action="store_true", help="preview changes")
+    parser.add_argument("--path-only", action="store_true", help="return path (do not clone)")
     parsed_args = parser.parse_args()
     wcl(parsed_args)
+
+
+# TODO add some tests that i can run on demand

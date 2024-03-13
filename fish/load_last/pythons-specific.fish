@@ -6,3 +6,8 @@ function wcl
     $_python3 $_wcl_py $argv
 
 end
+
+# completions:
+complete -c wcl --no-files
+complete -c wcl --long-option path-only --description 'Only print the path'
+complete -c wcl --long-option dry-run
