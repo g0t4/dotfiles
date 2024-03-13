@@ -148,17 +148,6 @@ end
 if command -q kubectl
     export KUBECTL_EXTERNAL_DIFF="icdiff -r" # use icdiff for kubectl diff (slick!)... FYI $1 and $2 are directories to compare (hence the -r)
 
-    abbr kver 'grc kubectl version'
-    # explain
-    abbr ke 'grc kubectl explain'
-    abbr kep 'grc kubectl explain pods' # example
-    abbr keps 'grc kubectl explain pods.spec' # example
-    abbr ker 'grc kubectl explain --recursive'
-    #
-    abbr kav 'grc kubectl api-versions'
-    abbr kar 'grc kubectl api-resources'
-    abbr karn 'grc kubectl api-resources --namespaced=true'
-    abbr karg 'grc kubectl api-resources --namespaced=false' # (g)lobal
 
     # TODO how do I feel about this:
     abbr --position=anywhere -- oy '-o yaml | bat -l yml'
@@ -260,11 +249,21 @@ if command -q kubectl
     abbr kgsts 'grc kubectl get statefulsets' # alias: sts
     abbr kgsvc 'grc kubectl get services' # alias: svc
 
+
+    # apply
+    abbr kaf 'kubectl apply -f' # create or modify
+    # api-versions/resources
+    abbr kar 'grc kubectl api-resources'
+    abbr karn 'grc kubectl api-resources --namespaced=true'
+    abbr karg 'grc kubectl api-resources --namespaced=false' # (g)lobal
+    abbr kav 'grc kubectl api-versions'
+    # attach
+    abbr kattach 'kubectl attach -it' # ~ docker container attach
     # create
     abbr kc 'kubectl create'
     abbr kcf 'kubectl create -f' # from file
-    # apply
-    abbr kaf 'kubectl apply -f' # create or modify
+    # cp
+    abbr kcp 'kubectl cp' # ~ docker container cp
     # delete
     abbr kdel 'kubectl delete'
     abbr kdelf 'kubectl delete -f'
@@ -274,33 +273,60 @@ if command -q kubectl
     # desc
     abbr kd 'grc kubectl describe' # ~ docker inspect
     abbr kdf 'grc kubectl describe -f'
-    # replace
-    abbr krf 'kubectl replace -f' # delete and then create
-    # kubectl edit
-    # kubectl patch
-    # kubectl set
-    # kubectl kustomize
-    #
-    # kubectl label
-    # kubectl annotate
-    #
-    # kubectl rollout
-    # kubectl scale
-    # kubectl autoscale
-
-    abbr krun 'kubectl run' # ~ docker container run
+    # explain
+    abbr ke 'grc kubectl explain'
+    abbr kep 'grc kubectl explain pods' # example
+    abbr keps 'grc kubectl explain pods.spec' # example
+    abbr ker 'grc kubectl explain --recursive'
+    # edit
+    abbr kedit 'kubectl edit'
+    # events
+    abbr kev 'grc kubectl events'
+    abbr kevA 'grc kubectl events -A'
+    abbr kevw 'grc kubectl events --watch'
+    abbr kevwA 'grc kubectl events -A --watch'
+    # exec
     abbr kexec 'kubectl exec -it' # ~ docker container exec
-    abbr kattach 'kubectl attach -it' # ~ docker container attach
-    abbr kcp 'kubectl cp' # ~ docker container cp
-    abbr kpf 'kubectl port-forward' # setup proxy to access pod's port from host machine # ~ docker container run -p flag
-    # kubectl expose
-    # kubectl wait
-
     # logs
     abbr kl 'kubectl logs'
     abbr klf 'kubectl logs --follow'
+    # plugin
+    abbr kpls 'kubectl plugin list'
+    # patch
+    abbr kpatch 'kubectl patch'
+    # port-forward
+    abbr kpf 'kubectl port-forward' # setup proxy to access pod's port from host machine # ~ docker container run -p flag
+    # replace
+    abbr kr 'kubectl replace' # delete and then create
+    abbr krf 'kubectl replace -f'
+    # krew
+    abbr krew 'kubectl krew'
+    # rollout
+    abbr krollout 'kubectl rollout'
+    # run
+    abbr krun 'kubectl run' # ~ docker container run
+    # scale
+    abbr kscale 'kubectl scale'
+    # set
+    abbr kset 'kubectl set'
+    # top
+    abbr ktp 'kubectl top pod --all-namespaces'
+    abbr ktn 'kubectl top node'
+    # version
+    abbr kver 'grc kubectl version'
+    # wait
+    abbr kwait 'kubectl wait'
+    # PRN:
+    # kubectl kustomize
+    # kubectl label
+    # kubectl annotate
+    # kubectl autoscale
+    # kubectl expose
+    # kubectl proxy
+    # kubectl debug
 
-    # conte(x)t => muscle memory with docker `dxls`=`docker context ls`, so => kxls
+    # *** conte(x)t
+    #   => muscle memory: `dxls`=`docker context ls`, so => kxls
     abbr kx 'kubectl config'
     #
     # abbr --set-cursor='!' -- kxs 'kubectl config set-context --current --namespace=!' # kxsn if want more set abbr's
@@ -314,23 +340,6 @@ if command -q kubectl
     abbr kxu 'kubectl config use-context'
     abbr kxls 'kubectl config get-contexts'
     abbr kxv 'kubectl config view'
-
-    # kubectl cluster-info dump
-    abbr ktp 'kubectl top pod --all-namespaces'
-    abbr ktn 'kubectl top node'
-
-    # kubectl proxy
-    # kubectl debug
-    # kubectl events
-    abbr kev 'grc kubectl events'
-    abbr kevA 'grc kubectl events -A'
-    abbr kevw 'grc kubectl events --watch'
-    abbr kevwA 'grc kubectl events -A --watch'
-
-    # kubectl plugin list
-    abbr kpls 'kubectl plugin list'
-    # krew
-    abbr krew 'kubectl krew'
 
 end
 
