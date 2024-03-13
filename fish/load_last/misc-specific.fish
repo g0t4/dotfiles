@@ -148,6 +148,7 @@ end
 if command -q kubectl
     export KUBECTL_EXTERNAL_DIFF="icdiff -r" # use icdiff for kubectl diff (slick!)... FYI $1 and $2 are directories to compare (hence the -r)
 
+    # ! TODO fix completions with grc command
     abbr --position=anywhere -- oy '-o yaml | bat -l yml'
 
     # *** get
