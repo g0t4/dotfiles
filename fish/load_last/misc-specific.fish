@@ -486,6 +486,7 @@ function kill_hung_grc
 end
 
 function z
+    # TLDR = wcl + z
     # FYI still uses z fish completions (b/c same name)
 
     if string match --quiet --regex "github.com" $argv
@@ -499,7 +500,8 @@ function z
             cd $path
         end
     else
-        # otherwise just call wcl
+        # PRN in future detect if org/repo format ($argv)... AND if z has no matching results... then attempt to clone and cd to it...?
+        # otherwise just call z like normal
         __z $argv
     end
 end
