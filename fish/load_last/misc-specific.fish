@@ -221,6 +221,11 @@ if command -q kubectl
             eval $what
         end
     end
+    # kgdump completions
+    complete -c kgdump -s t -l type -d 'filter by type (regex/pattern)'
+    # ? -n/--name
+    complete -c kgdump -a '(kubectl get namespace -o custom-columns=:metadata.name)' --no-files
+    #
     #
     abbr kga 'grc kubectl get all'
     abbr kgaa 'grc kubectl get all -A' # -A/--all-namespaces
