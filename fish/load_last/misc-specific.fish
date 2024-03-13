@@ -148,12 +148,7 @@ end
 if command -q kubectl
     export KUBECTL_EXTERNAL_DIFF="icdiff -r" # use icdiff for kubectl diff (slick!)... FYI $1 and $2 are directories to compare (hence the -r)
 
-
-    # TODO how do I feel about this:
     abbr --position=anywhere -- oy '-o yaml | bat -l yml'
-    # grc kubectl options
-
-    # kubectl alpha
 
     # *** get
     abbr kg 'grc kubectl get'
@@ -248,6 +243,7 @@ if command -q kubectl
     abbr kgsec 'grc kubectl get secrets'
     abbr kgsts 'grc kubectl get statefulsets' # alias: sts
     abbr kgsvc 'grc kubectl get services' # alias: svc
+    # *** END GET related:
 
 
     # apply
@@ -324,6 +320,8 @@ if command -q kubectl
     # kubectl expose
     # kubectl proxy
     # kubectl debug
+    # grc kubectl options
+    # kubectl alpha
 
     # *** conte(x)t
     #   => muscle memory: `dxls`=`docker context ls`, so => kxls
