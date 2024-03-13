@@ -244,6 +244,7 @@ if command -q kubectl
     abbr kgsec 'grc kubectl get secrets'
     abbr kgsts 'grc kubectl get statefulsets' # alias: sts
     abbr kgsvc 'grc kubectl get services' # alias: svc
+    abbr kgv 'grc kubectl get volumes' # longhorn volumes (or if some other CRD adds volumes type)
     # *** END GET related:
 
 
