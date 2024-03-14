@@ -215,6 +215,7 @@ if command -q kubectl
     abbr kga 'grc kubectl get all'
     abbr kgaa 'grc kubectl get all -A' # -A/--all-namespaces
     abbr kgas 'grc kubectl get all --show-labels'
+    abbr kgb 'grc kubectl get -A backups,snapshots' # longhorn.io
     #
     abbr kgp 'grc kubectl get pods' # alias: po (gonna go with p only for now)
     abbr kgpa 'grc kubectl get pods -A'
@@ -244,7 +245,7 @@ if command -q kubectl
     abbr kgsec 'grc kubectl get secrets'
     abbr kgsts 'grc kubectl get statefulsets' # alias: sts
     abbr kgsvc 'grc kubectl get services' # alias: svc
-    abbr kgv 'grc kubectl get -A volumes' # longhorn volumes (or if some other CRD adds volumes type)
+    abbr kgv 'grc kubectl get -A volumes' # longhorn.io
     # *** END GET related:
 
 
