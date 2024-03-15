@@ -8,10 +8,31 @@ function glX
     string replace --regex '^gl' 'git log -' $argv
 end
 
-set -l _unpushed_commits "HEAD@{push}~1..HEAD"
+set _unpushed_commits "HEAD@{push}~1..HEAD" # always show last pushed commit too (so if nothing unpushed the output isn't empty as if maybe broken)
 abbr gst 'git status'
 abbr gsl "git status && echo && git log $_unpushed_commits" # * try # FYI requires gst/glo aliases(funcs) to work
 abbr glo "git log $_unpushed_commits" # composed by gsl
+abbr gup git_unpushed_commits
+function git_unpushed_commits --description "(g)it (u)n(p)ushed commits"
+    # think `glo` that also works w/o remotes (currently glo blows up w/o remotes)
+
+    # has remotes:
+    if git rev-parse --abbrev-ref --symbolic-full-name @{upstream} 2>/dev/null
+        git log $_unpushed_commits
+        return
+    end
+
+    # has reviewed branch:
+    if git rev-parse --verify reviewed >/dev/null 2>&1
+        # PRN do I even like this idea?
+        git log reviewed~1..HEAD
+        return
+    end
+
+    # show last X commits:
+    git log -10 # s/b slightly annoying to remind me that I don't have a point of reference for the most recent of commits (ie unpushed/reviewed)
+    log_ --red "WARN: missing both upstream and/or reviewed branch"
+end
 #
 # w/ patch (diff)
 abbr glp "git log --patch $_unpushed_commits"
