@@ -511,7 +511,8 @@ function z
     # TLDR = wcl + z
     # FYI still uses z fish completions (b/c same name)
 
-    if string match --quiet --regex "github.com" $argv
+    # -- ensures $argv can have options to z (i.e. --clean)
+    if string match --quiet --regex "github.com" -- $argv
         # if a repo url then clone and/or cd to it
         set path (wcl --path-only $argv)
         if test -d $path
