@@ -245,7 +245,7 @@ if command -q kubectl
     abbr kgsec 'grc kubectl get secrets'
     abbr kgsts 'grc kubectl get statefulsets' # alias: sts
     abbr kgsvc 'grc kubectl get services' # alias: svc
-    abbr kgv 'grc kubectl get -A volumes' # longhorn.io
+    abbr kgv 'grc kubectl get -A volumes,pv,pvc,sc' # volumes (longhorn.io) => fetch all volume globally, btw Volume=>PV=>PVC hence ordering
     # *** END GET related:
 
 
