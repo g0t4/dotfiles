@@ -458,7 +458,6 @@ if command -q helm
     #
     # template    locally render templates
     abbr --set-cursor='!' -- ht 'helm template ! | bat -l yml' # repo/chart-name
-    #
     function helm_template_diff
         # usage:
         #   helm_template_diff <chart> <version1> <version2>
