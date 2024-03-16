@@ -449,6 +449,22 @@ if command -q helm
     #
     # template    locally render templates
     abbr --set-cursor='!' -- ht 'helm template ! | bat -l yml' # repo/chart-name
+    # helm template jenkinks jenkins/jenkins => kubectl get?
+    function helm_template_diff
+        # usage:
+        #   helm_template_diff <chart> <version1> <version2>
+        #   helm_template_diff jenkins/jenkins 3.11.1 5.1.0
+
+        set -l chart $argv[1]
+        set -l version1 $argv[2]
+        set -l version2 $argv[3]
+
+        icdiff -L "$chart --version $version1" \
+            (helm template $chart --version $version1 | psub) \
+            -L "$chart --version $version2" \
+            (helm template $chart --version $version2 | psub)
+    end
+    #
     # test        run tests for a release
     # uninstall/delete/un/del   uninstall a release
     abbr hun 'helm uninstall'
