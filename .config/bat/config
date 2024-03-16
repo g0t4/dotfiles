@@ -13,6 +13,7 @@
 --map-syntax "*.nuspec:XML"
 --map-syntax "grc.conf:INI" # close enough for primary grc.conf (regex/file pairs, with comments)
 --map-syntax "config.txt:INI" # raspberry pi /boot/fimrware/config.txt # PRN filter to full file path /boot/config.txt and /boot/firmware/config.txt?
+--map-syntax "*.sln:INI"
 
 # **/etc/** specific mappings (last matching wins, so put specific last)
 # /opt/homebrew/etc/** mappings:
