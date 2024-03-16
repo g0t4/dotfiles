@@ -237,9 +237,9 @@ abbr dh "hub-tool"
 # hub-tool repo ls roboxes
 abbr dhr "hub-tool repo ls"
 # hub-tool tag ls roboxes/debian12
-abbr dht "hub-tool tag ls --sort=name=desc --platforms" # sort updated/name[=asc/desc] .. name sort sorts by versions such that :8 is before :8.1 is before :8.1.1 which makes sense (:8 ~= :8 "latest", thats commo
-# don't need --all abbr b/c the output of hub-tool tag ls already mentions to use --all if the results are paginated (at end of output too, easy to see)
-abbr dhtu "hub-tool tag ls --sort=updated=desc --platforms" # FYI updated is default, still make it explicit doesn't hurt (ie if this changes)
+# add --all b/c paging w/ --sort appears to be sorting of the current page only (effectively client side sort of just the current page)
+abbr dht "hub-tool tag ls --sort=name=desc --platforms --all" # sort updated/name[=asc/desc] .. name sort sorts by versions such that :8 is before :8.1 is before :8.1.1 which makes sense (:8 ~= :8 "latest", thats commo
+abbr dhtu "hub-tool tag ls --sort=updated=desc --platforms --all" # FYI updated is default, still make it explicit doesn't hurt (ie if this changes)
 abbr --set-cursor='!' -- dhtj "hub-tool tag ls --format json ! | jq" # fyi json includes --platforms by default # ? or just use pjq abbr instead of | jq and ! set-cursor
 abbr dhti "hub-tool tag inspect"
 
