@@ -232,6 +232,7 @@ abbr --set-cursor='!' --  sklm 'skopeo list-tags docker://mcr.microsoft.com/!'
 # ie: dive foo # (image)
 
 ## *** hub-tool ***
+# https://github.com/docker/hub-tool
 abbr dh "hub-tool"
 # hub-tool account rate-limiting --verbose
 # hub-tool repo ls roboxes
@@ -242,8 +243,41 @@ abbr dht "hub-tool tag ls --sort=name=desc --platforms --all" # sort updated/nam
 abbr dhtu "hub-tool tag ls --sort=updated=desc --platforms --all" # FYI updated is default, still make it explicit doesn't hurt (ie if this changes)
 abbr --set-cursor='!' -- dhtj "hub-tool tag ls --format json ! | jq" # fyi json includes --platforms by default # ? or just use pjq abbr instead of | jq and ! set-cursor
 abbr dhti "hub-tool tag inspect"
-# hub-tool completions
-set subcommands account help login logout org repo tag token version
+
+# $ hub-tool help
+# Available Commands:
+#   account     Manage your account
+#   help        Help about any command
+#   login       Login to the Hub
+#   logout      Logout of the Hub
+#   org         Manage organizations
+#   repo        Manage repositories
+#   tag         Manage tags
+#   token       Manage Personal Access Tokens
+#   version     Version information about this tool
+#
+# Flags:
+#   -h, --help      help for hub-tool
+#       --verbose   Print logs
+#       --version   Display the version of this tool
+
+# Available Commands:
+complete -c hub-tool --no-files
+complete -c hub-tool -a account -d "Manage your account" # todo subs
+complete -c hub-tool -a help -d "Help about any command"
+complete -c hub-tool -a login -d "Login to the Hub"
+complete -c hub-tool -a logout -d "Logout of the Hub"
+complete -c hub-tool -a org -d "Manage organizations" # todo subs
+complete -c hub-tool -a repo -d "Manage repositories" # todo subs
+complete -c hub-tool -a tag -d "Manage tags"  # todo subs: inspect,ls,rm
+complete -c hub-tool -a token -d "Manage Personal Access Tokens" # todo subs
+complete -c hub-tool -a version -d "Version information about this tool"
+# Flags:  (global)
+complete -c hub-tool --long-option help --short-option h --description "help for hub-tool"
+complete -c hub-tool --long-option verbose --description "Print logs"
+complete -c hub-tool --long-option version --description "Display the version of this tool"
+
+
 
 
 
