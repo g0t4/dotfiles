@@ -385,13 +385,22 @@ if command -q helm
     #
     # env         helm client environment information
     #    abbr he 'helm env' # likely to remove this
+    #
     # get         download extended information of a named release
     #    all         download all information for a named release
+    abbr hga 'helm get all'
     #    hooks       download all hooks for a named release
+    abbr hgh 'helm get hooks'
     #    manifest    download the manifest for a named release
+    abbr hgm 'helm get manifest' # likely to use often
+    abbr --set-cursor="!" -- hgk 'helm get manifest ! | kubectl get -f -'
     #    metadata    This command fetches metadata for a given release
+    abbr hgmetadata 'helm get metadata' # likely won't use often
     #    notes       download the notes for a named release
+    abbr hgn 'helm get notes'
     #    values      download the values file for a named release
+    abbr hgv 'helm get values'
+    #
     # help        Help about any command
     # history/hist     fetch release history
     abbr hh 'helm history'
@@ -449,7 +458,7 @@ if command -q helm
     #
     # template    locally render templates
     abbr --set-cursor='!' -- ht 'helm template ! | bat -l yml' # repo/chart-name
-    # helm template jenkinks jenkins/jenkins => kubectl get?
+    #
     function helm_template_diff
         # usage:
         #   helm_template_diff <chart> <version1> <version2>
