@@ -393,7 +393,7 @@ if command -q helm
     abbr hgh 'helm get hooks'
     #    manifest    download the manifest for a named release
     abbr hgm 'helm get manifest' # likely to use often
-    abbr --set-cursor="!" -- hgk 'helm get manifest ! | kubectl get -f -'
+    abbr --set-cursor="!" -- hgk 'helm get manifest ! | grc kubectl get -f -'
     #    metadata    This command fetches metadata for a given release
     abbr hgmetadata 'helm get metadata' # likely won't use often
     #    notes       download the notes for a named release
