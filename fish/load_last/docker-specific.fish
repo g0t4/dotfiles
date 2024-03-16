@@ -242,6 +242,11 @@ abbr dht "hub-tool tag ls --sort=name=desc --platforms --all" # sort updated/nam
 abbr dhtu "hub-tool tag ls --sort=updated=desc --platforms --all" # FYI updated is default, still make it explicit doesn't hurt (ie if this changes)
 abbr --set-cursor='!' -- dhtj "hub-tool tag ls --format json ! | jq" # fyi json includes --platforms by default # ? or just use pjq abbr instead of | jq and ! set-cursor
 abbr dhti "hub-tool tag inspect"
+# hub-tool completions
+set subcommands account help login logout org repo tag token version
+
+
+
 
 # FYI hub APIs:
 # check docker/hub-tool source for endpoints
