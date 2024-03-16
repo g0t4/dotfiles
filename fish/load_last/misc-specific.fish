@@ -205,6 +205,9 @@ if command -q kubectl
             log_ --black "  $what"
             eval $what
         end
+
+        # FYI can also use smth like:
+        #   kubectl get $(kubectl api-resources --verbs=list --namespaced -o name | paste -sd, -) --all-namespaces
     end
     # kgdump completions
     complete -c kgdump -s t -l type -d 'filter by type (regex/pattern)'
