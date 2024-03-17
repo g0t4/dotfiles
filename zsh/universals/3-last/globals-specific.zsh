@@ -1,15 +1,17 @@
 #
 # ! TODO port to powershell (might need to impl global aliases as currently I believe my pwsh expander is when in command position only)
 
-ealias pgr='| grep -i' -g
-ealias pjq='| jq .' -g
+# use p(ext) unless prominent, in which use shortened p(e) format (ensure not gonna need to not expand that often)
 ealias pbat='| bat -l' -g
-ealias pyml='| bat -l yml' -g
-ealias pxml='| bat -l xml' -g
+ealias pgr='| grep -i' -g
 ealias phelp='| bat -l help' -g
 ealias pini='| bat -pl ini' -g
-ealias psh='| bat -pl sh' -g
+ealias pj='| jq .' -g # shortened
+ealias pm='| bat -l md' # shortened
 ealias prb='| bat -pl rb' -g
+ealias psh='| bat -pl sh' -g
+ealias px='| bat -l xml' -g # shortened
+ealias py='| bat -l yml' -g # shortened
 # test with:
 #    cat site.yml byml => expands to 'cat site.yml | bat -l yml'
 #   hmmmm if I have a command like \cat (to bypass aliases)... global aliases don't complete in this case?! ... the alias works on execution but it seems like _expand_alias is never called or it doesn't expand in this case
