@@ -289,8 +289,9 @@ if command -q kubectl
         # TODO how do I wanna handle fallbacks and finding the shell to use...
         # PRN add tools mount point? and use it to provide shell (preconfigured too)
         #    think `docker debug` ... probably use nix-shell too
+        #    also can have shell history!
     end
-    complete -c kwe -a '(kubectl get pod -o name)' --no-files
+    complete -c kdd -a '(kubectl get pod -o name)' --no-files
     # kubectl get pods -o custom-columns=:metadata.name
 
     # events
