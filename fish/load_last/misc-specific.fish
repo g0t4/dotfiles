@@ -317,7 +317,7 @@ if command -q kubectl
     # version
     abbr kver 'grc kubectl version'
     # wait
-    abbr kwait 'kubectl wait'
+    abbr kw 'kubectl wait' # FYI can go back to kwait if want w for other abbr
     # PRN:
     # kubectl kustomize
     # kubectl label
