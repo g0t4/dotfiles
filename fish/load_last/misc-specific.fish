@@ -299,8 +299,8 @@ if command -q kubectl
     # port-forward
     abbr kpf 'kubectl port-forward' # setup proxy to access pod's port from host machine # ~ docker container run -p flag
     # replace
-    abbr kr 'kubectl replace' # delete and then create
-    abbr krf 'kubectl replace -f'
+    abbr kr 'kubectl replace --force' # delete and then create
+    abbr krf 'kubectl replace --force -f'
     # krew
     abbr krew 'kubectl krew'
     # rollout
