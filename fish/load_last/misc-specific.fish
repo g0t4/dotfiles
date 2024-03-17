@@ -275,20 +275,18 @@ if command -q kubectl
     # desc
     abbr kd 'grc kubectl describe' # ~ docker inspect
     abbr kdf 'grc kubectl describe -f'
-    # explain
-    abbr ke 'grc kubectl explain'
-    abbr kep 'grc kubectl explain pods' # example
-    abbr keps 'grc kubectl explain pods.spec' # example
-    abbr ker 'grc kubectl explain --recursive'
     # edit
     abbr kedit 'kubectl edit'
+    # exec
+    abbr ke 'kubectl exec -it' # ~ docker container exec
     # events
     abbr kev 'grc kubectl events'
     abbr kevA 'grc kubectl events -A'
     abbr kevw 'grc kubectl events --watch'
     abbr kevwA 'grc kubectl events -A --watch'
-    # exec
-    abbr kexec 'kubectl exec -it' # ~ docker container exec
+    # explain
+    abbr kexplain 'grc kubectl explain'
+    abbr kexplainr 'grc kubectl explain --recursive'
     # logs
     abbr kl 'kubectl logs'
     abbr klf 'kubectl logs --follow'
