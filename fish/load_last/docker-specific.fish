@@ -77,25 +77,32 @@ abbr dc 'docker container'
 abbr dca 'docker container attach'
 abbr dcc 'docker container commit'
 abbr dccp 'docker container cp'
+abbr dccreate 'docker container create' # full subcommand inclusion implies not likely to use as often (thus longer to type/tab complete)
 abbr dcd 'docker container diff'
 abbr dce 'docker container exec -i -t '
+abbr dcexport 'docker container export'
 abbr dci 'docker container inspect'
 abbr dck 'docker container kill'
 abbr dcl 'docker container logs'
-
-# listing containers
+abbr dcpause 'docker container pause'
+abbr dcport 'docker container port'
+abbr dcpr 'docker container prune'
 abbr dcps 'grc docker container ps'
 abbr dcpsa 'grc docker container ps -a'
 abbr dcpsm 'docker container ps --format "table {{.ID}}\t{{.Names}}\t{{.Image}}\t{{.Mounts}}"' # add mounts
-
-abbr dcpr 'docker container prune'
-abbr dcrm 'docker container rm -f'
-
-# favorites:
-abbr dcri 'docker container run -i -t --rm '
-abbr dcrie 'docker container run -i -t --rm --entrypoint '
 abbr dcr 'docker container run --name'
+abbr dcrename 'docker container rename'
+abbr dcrestart 'docker container restart'
+abbr dcri 'docker container run -i -t --rm ' # favorite
+abbr dcrie 'docker container run -i -t --rm --entrypoint '
+abbr dcrm 'docker container rm -f'
+abbr dcstart 'docker container start'
+abbr dcstats 'docker container stats'
+abbr dcstop 'docker container stop'
 abbr dct 'docker container top'
+abbr dcunpause 'docker container unpause'
+abbr dcupdate 'docker container update'
+abbr dcwait 'docker container wait'
 
 abbr di 'docker image'
 #
