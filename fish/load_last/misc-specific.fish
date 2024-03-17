@@ -273,8 +273,9 @@ if command -q kubectl
     abbr kdi 'kubectl diff' # diff current (status) vs desired state (spec)
     abbr kdif 'kubectl diff -f'
     # desc
-    abbr kd 'grc kubectl describe' # ~ docker inspect
-    abbr kdf 'grc kubectl describe -f'
+    # ! grc is busting tab completion with kubectl... try end w/ bat instead ... don't mass apply to all other commands, see how I feel about it here first... this is where I want my shell to apply this for me (I can re-enable that part of my ENTER binding!)
+    abbr --set-cursor='!' -- kd 'kubectl describe ! | bat -l yml' # ~ docker inspect
+    abbr --set-cursor='!' -- kdf 'kubectl describe -f ! | bat -l yml'
     # edit
     abbr kedit 'kubectl edit'
     # exec
