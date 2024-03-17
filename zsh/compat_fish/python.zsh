@@ -8,7 +8,6 @@
 #   global interpreter => command3 is ubiquitous AND recommended (for the default 3.X version)
 #   venv => command3 defined (for all v3 venvs!)
 abbr python 'python3'
-abbr py 'python3'
 abbr pip 'pip3'
 abbr pydoc 'pydoc3'
 abbr python-config 'python3-config'
