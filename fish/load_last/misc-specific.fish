@@ -279,6 +279,20 @@ if command -q kubectl
     abbr kedit 'kubectl edit'
     # exec
     abbr ke 'kubectl exec -it' # ~ docker container exec
+    function kdd --description "kwe <TAB> <ENTER> and you're in, named (dd like docker debug)"
+        kubectl wait --for=condition=Ready $argv # that way if its not running yet I don't have to run exec later
+        kubectl exec -it $argv -- bash
+        if test $status -ne 0
+            log_ --blue "bash failed, trying sh"
+            kubectl exec -it $argv -- sh
+        end
+        # TODO how do I wanna handle fallbacks and finding the shell to use...
+        # PRN add tools mount point? and use it to provide shell (preconfigured too)
+        #    think `docker debug` ... probably use nix-shell too
+    end
+    complete -c kwe -a '(kubectl get pod -o name)' --no-files
+    # kubectl get pods -o custom-columns=:metadata.name
+
     # events
     abbr kev 'grc kubectl events'
     abbr kevA 'grc kubectl events -A'
