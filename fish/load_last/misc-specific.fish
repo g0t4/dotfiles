@@ -570,3 +570,19 @@ function z
         __z $argv
     end
 end
+
+
+# *** terraform
+if command -q terraform
+
+    abbr tf terraform
+
+    abbr tfv 'terraform validate' # *** favorite
+    abbr tfi 'terraform init'
+    abbr tfa 'terraform apply'
+    abbr tfp 'terraform plan'
+    abbr tfo 'terraform output'
+    abbr tfs 'terraform show'
+    abbr tfd 'terraform destroy'
+
+end
