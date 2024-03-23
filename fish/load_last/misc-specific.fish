@@ -611,3 +611,19 @@ bind \co custom-kill-command-word # ctrl +o ([o]verwrite command)
 # '[1;7H' # ctrl+alt+home
 # '[1;13H' # ctrl+alt+home
 #    H=>F (home=>end key)
+#
+function toggle-grc
+    # can easily ditch grc in kubectl command to get tab completions to work and add it back to color output and then pull back history of previous command and switch it off to tab complete easily again and grc to run it when done
+    #   PRN turn off grc by default in abbrs where tab completion is often used and doesn't work well w/ grc
+    #   also I am well aware that I should get grc tab completion fixed and I will look into that too
+    set -f cmd (commandline)
+    if string match --quiet --regex "^grc\s" -- $cmd
+        set cmd (string replace --regex -- "^grc\s+" "" $cmd)
+        commandline -r $cmd
+    else
+        fish_commandline_prepend grc
+        return
+    end
+    # ALTERNATIVE - pull back last command, toggle-grc, run - can use if I find myself doing this two step process often
+end
+bind \cq toggle-grc # terrible key choice (ctrl+q) but it isn't used currently so yeah
