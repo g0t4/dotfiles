@@ -140,7 +140,17 @@ Set-PSReadLineOption -CommandValidationHandler {
     )
 }
 
-
 ## Examples
 # CommandValidationHandler: https://github.com/PowerShell/PSReadLine/issues/1643
 # https://www.powershellgallery.com/packages/PSReadline/1.2/Content/SamplePSReadlineProfile.ps1
+
+Set-PSReadLineKeyHandler -Key ctrl+d -ScriptBlock {
+  # make sure to use lowercase e on -Key else uppercase is literally bound just to that, not:Ctrl+E, use Ctrl+e
+
+  [Microsoft.PowerShell.PSConsoleReadLine]::KillLine() # clear line so exit works
+
+  # run exit command
+  [Microsoft.PowerShell.PSConsoleReadLine]::Insert("exit")
+  [Microsoft.PowerShell.PSConsoleReadLine]::AcceptLine()
+
+}
