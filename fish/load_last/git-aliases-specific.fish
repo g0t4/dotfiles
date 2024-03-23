@@ -10,11 +10,12 @@ end
 
 set _unpushed_commits "HEAD@{push}~1..HEAD" # always show last pushed commit too (so if nothing unpushed the output isn't empty as if maybe broken)
 abbr gst 'git status'
-abbr gsl "git status && echo && git log $_unpushed_commits" # * try # FYI requires gst/glo aliases(funcs) to work
-abbr glo "git log $_unpushed_commits" # composed by gsl
+abbr gsl "git status && echo && git_unpushed_commits" # * try # FYI requires gst/glo aliases(funcs) to work
+abbr glo "git_unpushed_commits" # composed by gsl
 abbr gup git_unpushed_commits
 function git_unpushed_commits --description "(g)it (u)n(p)ushed commits"
     # think `glo` that also works w/o remotes (currently glo blows up w/o remotes)
+    # PRN port to pwsh and zsh
 
     # has remotes:
     if git rev-parse --abbrev-ref --symbolic-full-name @{upstream} 2>/dev/null
@@ -122,6 +123,7 @@ function dotgsl --description "gst; glo"
     dotgst
 end
 function dotglo --description "log HEAD@{push}~1..HEAD"
+    # ok to leave old glo here instead of git_unpushed_commits b/c I always have pushed commits for the two repos I use this for
     _dot_both log HEAD@{push}~1..HEAD
 end
 
