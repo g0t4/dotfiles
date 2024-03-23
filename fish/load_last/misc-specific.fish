@@ -586,3 +586,10 @@ if command -q terraform
     abbr tfd 'terraform destroy'
 
 end
+
+# *** bindings
+#
+# ctrl+delete to delete next word (after cursor)
+bind '[3;5~' kill-word # PRN kill-big-word?
+#
+# PRN ...
