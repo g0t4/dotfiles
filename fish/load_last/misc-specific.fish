@@ -592,4 +592,22 @@ end
 # ctrl+delete to delete next word (after cursor)
 bind '[3;5~' kill-word # PRN kill-big-word?
 #
-# PRN ...
+# idea: shortcut to change to command position and replace command (type new command), i.e.:
+#    ls /etc/docker/daemon.json
+#    # shortcut: ctrl+shift+delete
+#    _ /etc/docker/daemon.json
+#    cat /etc/docker/daemon.json
+function custom-kill-command-word
+    # PRN move to start of current command in a pipeline of multiple commands
+    commandline -f beginning-of-line
+    commandline -f kill-word
+end
+# ctrl+ins
+bind \co custom-kill-command-word # ctrl +o ([o]verwrite command)
+# bind '*' custom-kill-command-word # * alone works w/o interrupt mid suggestion
+# ctrl+o/q unbound currently IIUC
+# '[1;5H' # ctrl+home (interrupts suggestion)
+# '[1;6H' # ctrl+shift+home (rest seem to interrupt too, likely b/c bound to smth else and triggering two bindings, maybe? i.e. home moves to home)
+# '[1;7H' # ctrl+alt+home
+# '[1;13H' # ctrl+alt+home
+#    H=>F (home=>end key)
