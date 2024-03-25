@@ -1,13 +1,44 @@
-# yaml-language-server: $schema=https://raw.githubusercontent.com/canonical/cloud-init/main/cloudinit/config/schemas/versions.schema.cloud-config.json
+# yaml-language-server: schema=https://raw.githubusercontent.com/canonical/cloud-init/main/cloudinit/config/schemas/versions.schema.cloud-config.json
 #cloud-config
 
+# ubuntu tested the following list
+# todo test debian distro
 packages:
+  - apt-file
+  - apache2-utils
   - bat
-  - grc
-  - jq
-  - silversearcher-ag
+  - command-not-found
+  - curl
+  - dnsutils
+  - exa
+  - feh
   - fish
+  - fzf
   - git
+  - git-lfs
+  - grc
+  - hey
+  - htop
+  - icdiff
+  - iproute2
+  - iputils-arping
+  - iputils-ping
+  - iputils-tracepath
+  - jq
+  - lshw
+  - lsof
+  - net-tools
+  - most
+  - pipx
+  - procps
+  - psmisc
+  - silversearcher-ag
+  - tree
+  - tldr
+  - unzip
+  - util-linux
+  - vim
+  - wget
 
 runcmd:
   - git clone https://github.com/g0t4/dotfiles /home/wes/repos/github/g0t4/dotfiles
