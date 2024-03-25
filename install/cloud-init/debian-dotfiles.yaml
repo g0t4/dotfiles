@@ -1,0 +1,13 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/canonical/cloud-init/main/cloudinit/config/schemas/versions.schema.cloud-config.json
+#cloud-config
+
+packages:
+  - bat
+  - grc
+  - jq
+  - silversearcher-ag
+  - fish
+  - git
+
+runcmd:
+  - git clone https://github.com/g0t4/dotfiles /home/wes/repos/github/g0t4/dotfiles
