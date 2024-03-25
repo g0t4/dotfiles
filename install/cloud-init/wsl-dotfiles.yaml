@@ -10,7 +10,7 @@ packages:
   - command-not-found
   - curl
   - dnsutils
-  - exa
+  # - exa # ubuntu 23.10 (yes), debian trixie (no)
   - feh
   - fish
   - fzf
@@ -41,5 +41,6 @@ packages:
   - wget
 
 runcmd:
+  # obviously not re-runnable:
   - git clone https://github.com/g0t4/dotfiles /home/wes/repos/github/g0t4/dotfiles
 # subs/dotfiles/fish/install/install.fish
