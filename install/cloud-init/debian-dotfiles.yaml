@@ -11,3 +11,4 @@ packages:
 
 runcmd:
   - git clone https://github.com/g0t4/dotfiles /home/wes/repos/github/g0t4/dotfiles
+# subs/dotfiles/fish/install/install.fish
