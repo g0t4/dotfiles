@@ -1,4 +1,4 @@
-ssh_local_sshd_fingerprints() {
+ssh_host_fingerprints() {
     #! TODO port to fish
     for f in /etc/ssh/*.pub; do
         echo $f:
