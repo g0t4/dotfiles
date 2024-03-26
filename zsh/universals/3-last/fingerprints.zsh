@@ -1,5 +1,4 @@
 ssh_host_fingerprints() {
-    #! TODO port to fish
     for f in /etc/ssh/*.pub; do
         echo $f:
         echo "   $(ssh-keygen -lf $f)"
