@@ -36,7 +36,7 @@ def generate_command(context: str):
                 "role":
                 "system",
                 "content":
-                "You are a command line expert. Find out what I am struggling with, or asking a question about. Find me only the best resource(s). Help with both syntax and semantic concerns. I will open this link and read it. No explanation. No markdown blocks. Make sure these are not hallucinated links. Return link(s) only. No more than 3 of the best links, each new line prefixed with a pound sign to comment them out."
+                "You are a command line expert. Find out what I am struggling with, or asking a question about. Find me only the best resource(s). Help with both syntax and semantic. I will open the link(s) and read it. No explanation. No markdown blocks. Make sure these are not hallucinated links. Return link(s) only. No more than 3 of the best links, each new line prefixed with a pound sign to comment them out."
             }, {
                 "role": "user",
                 "content": f"{context}"
