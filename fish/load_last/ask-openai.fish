@@ -39,11 +39,11 @@ function ask_openai_explain
     # FYI not appending '# thinking...' b/c it doesn't show AND doing so is messing up the prompt if a space typed before this func is invoked
 
     set -l _python3 "$WES_DOTFILES/.venv/bin/python3"
-    set -l _single_py "$WES_DOTFILES/zsh/universals/3-last/ask-openai/single.py"
+    set -l _explain_py "$WES_DOTFILES/zsh/universals/3-last/ask-openai/explain.py"
 
     set -l response ( \
         echo -e "env: fish on $(uname)\nquestion: $user_input" | \
-        $_python3 $_single_py 2>&1 \
+        $_python3 $_explain_py 2>&1 \
     )
     set -l exit_code $status
     if test $exit_code -eq 2
@@ -59,10 +59,10 @@ function ask_openai_explain
     # `fish_commandline_append` doesn't use repaint, so I assume I don't need to
 end
 
-bind -k F2 ask_openai_explain
+bind -k f2 ask_openai_explain
 
 
-function ask_openai_first_url
+function ask_openai_link
     # TODO ideas
     #   return first url to help me understand the command better
     #   need to differentiate which command I am struggling with, esp if multiple (so where am I likely having issues or not understanding)
@@ -76,11 +76,11 @@ function ask_openai_first_url
     # FYI not appending '# thinking...' b/c it doesn't show AND doing so is messing up the prompt if a space typed before this func is invoked
 
     set -l _python3 "$WES_DOTFILES/.venv/bin/python3"
-    set -l _single_py "$WES_DOTFILES/zsh/universals/3-last/ask-openai/single.py"
+    set -l _link_py "$WES_DOTFILES/zsh/universals/3-last/ask-openai/link.py"
 
     set -l response ( \
         echo -e "env: fish on $(uname)\nquestion: $user_input" | \
-        $_python3 $_single_py 2>&1 \
+        $_python3 $_link_py 2>&1 \
     )
     set -l exit_code $status
     if test $exit_code -eq 2
@@ -97,7 +97,7 @@ function ask_openai_first_url
 end
 
 
-bind -k F3 ask_openai_first_url
+bind -k f3 ask_openai_link
 # urls? shotgun style! open up to 5 tabs!?
 
 ## NOTES

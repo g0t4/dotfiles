@@ -26,8 +26,10 @@ def generate_command(context: str):
             # gpt-4 "turbo" and gpt-3.5-turbo are both fast, so use gpt-4 for accuracy (else 3.5 might need to be re-run/fixed which costs more)
             # ? gpt-3.5-turbo-instruct
             messages=[{
-                "role": "system",
-                "content": "You are a command line expert. Respond with a single, valid, complete command line. I intend to execute it. No explanation. No markdown blocks"
+                "role":
+                "system",
+                "content":
+                "You are a command line expert. Find out what I am struggling with, with the current command. Find me the first, best resource to help me with what I need help with. For example, if I have docker container run, respond with https://docs.docker.com/reference/cli/docker/container/run. I intend to open this link to read it. No explanation. No markdown blocks. Just ONE URL."
             }, {
                 "role": "user",
                 "content": f"{context}"
