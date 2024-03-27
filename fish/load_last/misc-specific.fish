@@ -148,12 +148,12 @@ end
 if command -q kubectl
     export KUBECTL_EXTERNAL_DIFF="icdiff -r" # use icdiff for kubectl diff (slick!)... FYI $1 and $2 are directories to compare (hence the -r)
 
-    # ! TODO fix completions with grc command
     abbr --position=anywhere -- oy '-o yaml | bat -l yml'
-
+    
     # *** get
-    abbr kg 'grc kubectl get'
-    abbr kgf 'grc kubectl get -f' # status of resources defined in yml file
+    # ! TODO fix completions with grc command and put back grc on front?
+    abbr kg 'kubectl get' # if I don't have the type already then I will want to tab complete it so don't include grc
+    abbr kgf 'grc kubectl get -f' # status of resources defined in yml file # file completion will work w/ grc so leave it?
     #
     abbr kgns 'grc kubectl get namespaces'
     # TODO redo get aliases to use abbreviations where applicable (ie n=>ns)
@@ -295,14 +295,14 @@ if command -q kubectl
     complete -c kdd -a '(kubectl get pod -o name)' --no-files
     # kubectl get pods -o custom-columns=:metadata.name
 
-    # events
+    # events (grc is often helpful with event history - i.e. paths highlighted, statuses marked red/green/etc which helps the lenghty messages be readable)
     abbr kev 'grc kubectl events'
     abbr kevA 'grc kubectl events -A'
     abbr kevw 'grc kubectl events --watch'
     abbr kevwA 'grc kubectl events -A --watch'
-    # explain
-    abbr kexplain 'grc kubectl explain'
-    abbr kexplainr 'grc kubectl explain --recursive'
+    # explain (grc isn't super useful for explain so don't include it as I prefer tab complete here anyways)
+    abbr kexplain 'kubectl explain' 
+    abbr kexplainr 'kubectl explain --recursive'
     # logs
     abbr kl 'kubectl logs'
     abbr klf 'kubectl logs --follow'
@@ -613,6 +613,8 @@ bind \co custom-kill-command-word # ctrl +o ([o]verwrite command)
 #    H=>F (home=>end key)
 #
 function toggle-grc
+    # PRN port to zsh/pwsh
+
     # can easily ditch grc in kubectl command to get tab completions to work and add it back to color output and then pull back history of previous command and switch it off to tab complete easily again and grc to run it when done
     #   PRN turn off grc by default in abbrs where tab completion is often used and doesn't work well w/ grc
     #   also I am well aware that I should get grc tab completion fixed and I will look into that too
