@@ -33,7 +33,7 @@ bind \cb ask_openai
 
 
 function ask_openai_explain
-
+    # *** UNDO to get command back? OR, explain in comment? that way can keep command visible and still undo cmd+z
     set -l user_input (commandline -b)
 
     # FYI not appending '# thinking...' b/c it doesn't show AND doing so is messing up the prompt if a space typed before this func is invoked
@@ -63,6 +63,13 @@ bind -k F2 ask_openai_explain
 
 
 function ask_openai_first_url
+    # TODO ideas
+    #   return first url to help me understand the command better
+    #   need to differentiate which command I am struggling with, esp if multiple (so where am I likely having issues or not understanding)
+    #   diff semantic vs syntactic questions/issues/lookups
+    #   just like with generating a command, use comments after to explain what I want to do and/or to modify the command
+    #   find the most helpful resource (i.e. docker container run => https://docs.docker.com/reference/cli/docker/container/run)
+    #   can't be hallucinating URLs... needs to confirm the link before responding to me? can I do that over the API?
 
     set -l user_input (commandline -b)
 
