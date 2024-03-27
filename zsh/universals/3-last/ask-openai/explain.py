@@ -6,6 +6,12 @@ import sys
 
 def generate_command(context: str):
 
+    # usages:
+    #   question only:
+    #     where is docker config
+    #   command only:
+    #   question and command:
+
     service_name = 'openai'
     account_name = 'ask'
     password = keyring.get_password(service_name, account_name)
@@ -27,7 +33,7 @@ def generate_command(context: str):
             # ? gpt-3.5-turbo-instruct
             messages=[{
                 "role": "system",
-                "content": "You are a command line expert. Respond with a single, valid, complete command line. I intend to execute it. No explanation. No markdown blocks"
+                "content": "You are a command line expert. I am sending you the contents of my current command line which may include a command and/or a question. Respond with a single, valid, complete command line. Append your explanation with a # sign as a comment. I intend to read your explanation and then execute the command too. Don't bloviate. No markdown blocks"
             }, {
                 "role": "user",
                 "content": f"{context}"
