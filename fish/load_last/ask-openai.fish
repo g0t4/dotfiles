@@ -30,6 +30,69 @@ end
 # how does fish handle multiple registrations? does last one win? is it an issue that \cb is preset bound to backward-char?
 bind \cb ask_openai
 
+
+
+function ask_openai_explain
+
+    set -l user_input (commandline -b)
+
+    # FYI not appending '# thinking...' b/c it doesn't show AND doing so is messing up the prompt if a space typed before this func is invoked
+
+    set -l _python3 "$WES_DOTFILES/.venv/bin/python3"
+    set -l _single_py "$WES_DOTFILES/zsh/universals/3-last/ask-openai/single.py"
+
+    set -l response ( \
+        echo -e "env: fish on $(uname)\nquestion: $user_input" | \
+        $_python3 $_single_py 2>&1 \
+    )
+    set -l exit_code $status
+    if test $exit_code -eq 2
+        commandline --replace "[CONTEXT]: $response"
+        # FYI other causes rc=2 print as context (i.e. wrong path to python script, NBD as error shows anyways)
+    else if test $exit_code -ne 0
+        commandline --replace "[FAIL]: $response"
+    else
+        commandline --replace $response
+    end
+    # FYI ctrl+z can undo replacment
+
+    # `fish_commandline_append` doesn't use repaint, so I assume I don't need to
+end
+
+bind -k F2 ask_openai_explain
+
+
+function ask_openai_first_url
+
+    set -l user_input (commandline -b)
+
+    # FYI not appending '# thinking...' b/c it doesn't show AND doing so is messing up the prompt if a space typed before this func is invoked
+
+    set -l _python3 "$WES_DOTFILES/.venv/bin/python3"
+    set -l _single_py "$WES_DOTFILES/zsh/universals/3-last/ask-openai/single.py"
+
+    set -l response ( \
+        echo -e "env: fish on $(uname)\nquestion: $user_input" | \
+        $_python3 $_single_py 2>&1 \
+    )
+    set -l exit_code $status
+    if test $exit_code -eq 2
+        commandline --replace "[CONTEXT]: $response"
+        # FYI other causes rc=2 print as context (i.e. wrong path to python script, NBD as error shows anyways)
+    else if test $exit_code -ne 0
+        commandline --replace "[FAIL]: $response"
+    else
+        commandline --replace $response
+    end
+    # FYI ctrl+z can undo replacment
+
+    # `fish_commandline_append` doesn't use repaint, so I assume I don't need to
+end
+
+
+bind -k F3 ask_openai_first_url
+# urls? shotgun style! open up to 5 tabs!?
+
 ## NOTES
 #
 # PRN use background job/process like in zsh so # thinking... shows up in prompt
