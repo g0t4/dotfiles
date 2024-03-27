@@ -617,6 +617,12 @@ function toggle-grc
     #   PRN turn off grc by default in abbrs where tab completion is often used and doesn't work well w/ grc
     #   also I am well aware that I should get grc tab completion fixed and I will look into that too
     set -f cmd (commandline)
+    if test -z $cmd
+        # if empty cmd, then use last command (and thus toggle its grc)
+        # idea is, run command and be like oh no I wanted grc, then bam run it again, or vice versa
+        set cmd (history | head -n 1)
+    end
+
     if string match --quiet --regex "^grc\s" -- $cmd
         set cmd (string replace --regex -- "^grc\s+" "" $cmd)
         commandline -r $cmd
