@@ -18,6 +18,13 @@ def generate_command(context: str):
 
     client = OpenAI(api_key=password)
     try:
+        # TODO ideas
+        #   return first url to help me understand the command better
+        #   need to differentiate which command I am struggling with, esp if multiple (so where am I likely having issues or not understanding)
+        #   diff semantic vs syntactic questions/issues/lookups
+        #   just like with generating a command, use comments after to explain what I want to do and/or to modify the command
+        #   find the most helpful resource (i.e. docker container run => https://docs.docker.com/reference/cli/docker/container/run)
+        #   can't be hallucinating URLs... needs to confirm the link before responding to me? can I do that over the API?
 
         completion = client.chat.completions.create(
             # models https://platform.openai.com/docs/models
@@ -29,7 +36,7 @@ def generate_command(context: str):
                 "role":
                 "system",
                 "content":
-                "You are a command line expert. Find out what I am struggling with, with the current command. Find me the first, best resource to help me with what I need help with. For example, if I have docker container run, respond with https://docs.docker.com/reference/cli/docker/container/run. I intend to open this link to read it. No explanation. No markdown blocks. Just ONE URL."
+                "You are a command line expert. Find out what I am struggling with, or asking a question about. Find me only the best resource(s). Help with both syntax and semantic concerns. I will open this link and read it. No explanation. No markdown blocks. Make sure these are not hallucinated links. Return link(s) only. No more than 3 of the best links, each new line prefixed with a pound sign to comment them out."
             }, {
                 "role": "user",
                 "content": f"{context}"

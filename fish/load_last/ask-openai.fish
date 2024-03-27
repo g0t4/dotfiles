@@ -63,13 +63,6 @@ bind -k f2 ask_openai_explain
 
 
 function ask_openai_link
-    # TODO ideas
-    #   return first url to help me understand the command better
-    #   need to differentiate which command I am struggling with, esp if multiple (so where am I likely having issues or not understanding)
-    #   diff semantic vs syntactic questions/issues/lookups
-    #   just like with generating a command, use comments after to explain what I want to do and/or to modify the command
-    #   find the most helpful resource (i.e. docker container run => https://docs.docker.com/reference/cli/docker/container/run)
-    #   can't be hallucinating URLs... needs to confirm the link before responding to me? can I do that over the API?
 
     set -l user_input (commandline -b)
 
