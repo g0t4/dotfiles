@@ -9,6 +9,7 @@ def generate_command(context: str):
     # usages:
     #   question only:
     #     where is docker config
+    #     how can I replace nginx's welcome page with "hello world"
     #   command only:
     #   question and command:
 
