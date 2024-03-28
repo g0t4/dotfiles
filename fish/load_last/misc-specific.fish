@@ -149,7 +149,7 @@ if command -q kubectl
     export KUBECTL_EXTERNAL_DIFF="icdiff -r" # use icdiff for kubectl diff (slick!)... FYI $1 and $2 are directories to compare (hence the -r)
 
     abbr --position=anywhere -- oy '-o yaml | bat -l yml'
-    
+
     # *** get
     # ! TODO fix completions with grc command and put back grc on front?
     abbr kg 'kubectl get' # if I don't have the type already then I will want to tab complete it so don't include grc
@@ -301,7 +301,7 @@ if command -q kubectl
     abbr kevw 'grc kubectl events --watch'
     abbr kevwA 'grc kubectl events -A --watch'
     # explain (grc isn't super useful for explain so don't include it as I prefer tab complete here anyways)
-    abbr kexplain 'kubectl explain' 
+    abbr kexplain 'kubectl explain'
     abbr kexplainr 'kubectl explain --recursive'
     # logs
     abbr kl 'kubectl logs'
@@ -358,6 +358,16 @@ if command -q kubectl
     abbr kxu 'kubectl config use-context'
     abbr kxls 'kubectl config get-contexts'
     abbr kxv 'kubectl config view'
+
+end
+
+if command -q base64
+    abbr d64 'base64 -d' # decode
+    abbr e64 'base64 -e' # encode
+
+    # prn others (prolly never use 32, but keep it as a reminder if I encounter others)
+    abbr d32 'base32 -d'
+    abbr e32 'base32 -e'
 
 end
 
