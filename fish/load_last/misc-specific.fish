@@ -228,7 +228,7 @@ if command -q kubectl
     abbr kgcj 'grc kubectl get cronjobs'
     abbr kgcm 'grc kubectl get configmaps' # alias: cm
     abbr kgcr 'grc kubectl get clusterroles'
-    abbr kgcrb 'grc kubectl get clusterrolebindings'
+    abbr kgcrb 'grc kubectl get clusterrolebindings -o wide' # wide shows subject (user/group/sa) too which is critical IMO
     abbr kgcrd 'grc kubectl get customresourcedefinitions' # alias: crd,crds
     abbr kgds 'grc kubectl get daemonsets' # alias: ds
     abbr kgep 'grc kubectl get endpoints' # alias: ep
@@ -239,7 +239,7 @@ if command -q kubectl
     abbr kgno 'grc kubectl get nodes' # alias: no
     abbr kgpv 'grc kubectl get persistentvolumes' # alias: pv
     abbr kgpvc 'grc kubectl get persistentvolumeclaims' # alias: pvc
-    abbr kgrb 'grc kubectl get rolebindings'
+    abbr kgrb 'grc kubectl get rolebindings -o wide' # wide shows role and subject (user/group/sa) so I absolutely want this by default
     abbr kgro 'grc kubectl get roles'
     abbr kgrs 'grc kubectl get replicasets' # alias: rs
     abbr kgs 'grc kubectl get svc'
