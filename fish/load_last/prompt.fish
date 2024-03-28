@@ -14,7 +14,7 @@ function prompt_login --description 'display user name for the prompt'
     # prompt_login is effectively the start of the prompt
 
     # SSH indicator 
-    if not set -q SSH_CONNECTION
+    if set -q SSH_CONNECTION
         echo -n -s (set_color cyan) \ue0a0 (set_color normal) " "
     end
 
