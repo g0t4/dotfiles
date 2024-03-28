@@ -13,15 +13,25 @@ end
 function prompt_login --description 'display user name for the prompt'
     # prompt_login is effectively the start of the prompt
 
-    # show python icon if in a venv
+    # SSH indicator 
+    if not set -q SSH_CONNECTION
+        echo -n -s (set_color cyan) \ue0a0 (set_color normal) " "
+    end
+
+    # python venv indicator 
     if test -n "$VIRTUAL_ENV"
         echo -n -s (set_color cyan) \ue73c (set_color normal) " "
     end
 
+    # show hostname
     if string match -q "mbp*" $hostname
         # for duration of course, make host clear and not confusing (just mac in this case) - otherwise dir alone mighe be ubuntu (in vms/ubuntu dir) and then its just "ubuntu" without hostname and that might lead one to believe it's the ubuntu course VM
         echo -n -s mac
+    else
+        echo -n -s $hostname
     end
+
+
     # selectively show hostname
     # if not string match -q "mbp*" $hostname
     #     # chances of showing hostname and python icon are low so don't worry about leading space here b/c then I have to disable it when not python icon and that's yuck
