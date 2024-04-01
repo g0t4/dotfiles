@@ -132,6 +132,7 @@ abbr dils 'grc docker image ls'
 abbr dilsa 'grc docker image ls --all'
 abbr dilsj 'grc docker image ls --format "{{json .}}" | jq'
 abbr dilsaj 'docker image ls --all --format "{{json .}}" | jq'
+abbr dilsdf "docker image ls --format '{{.Size}}\t{{.Repository}}:{{.Tag}}' | sort -h" # for cleanup, sort by size and show `size repo:tag`
 #
 abbr dipr 'docker image prune'
 abbr dipull 'docker image pull'
