@@ -361,6 +361,16 @@ if command -q kubectl
 
 end
 
+if command -q kubectl-shell
+    # docker labs debug equivalent for k8s
+    abbr ksh 'kubectl-shell'
+    abbr kshn 'kubectl-shell --namespace'
+    # --container foo
+    # --namespace bar
+    # --as/--as-group/--as-uid
+    abbr kshc 'kubectl-shell --container'
+end
+
 if command -q base64
     abbr d64 'base64 -d' # decode
     abbr e64 'base64 -e' # encode
