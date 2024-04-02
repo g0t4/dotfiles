@@ -369,6 +369,9 @@ if command -q kubectl-shell
     # --namespace bar
     # --as/--as-group/--as-uid
     abbr kshc 'kubectl-shell --container'
+
+    # add completions (are these overriden by ordering of loading ~/.config/fish/completions/kubectl-shell.fish?)
+    complete -c kubectl-shell -a '(kubectl get pod -o custom-columns=:metadata.name)' --no-files
 end
 
 if command -q base64
