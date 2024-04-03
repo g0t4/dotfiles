@@ -28,6 +28,13 @@ end
 function _brew_search_with_analytics
     set query $argv[1]
 
+    # TODO pull in github stars into new column? (if repo link avail) forks too?
+    #   set repo_url (brew info minikube --json | jq '.[].urls.stable | .url' -r)
+    #   set counts_json (gh repo view $repo_url --json stargazerCount,forkCount)
+    #   TODO per package do this lookup (gonna be a smidge slow but meh searching isn't instant anyways)
+    # TODO include analytics from other time periods? can I use any to discern increase/decrease in installs lately? ie 30d vs 365d?
+    # TODO and/or factor in other analytics besides just installs (ie primary install vs depenedency)
+
     # test with:
     #    _reload_config; _brew_search_with_analytics foo
 
