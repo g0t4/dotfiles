@@ -145,6 +145,25 @@ if command -q k3s
     # PRN if this doesn't work out well for fish completions, I could break out sub commands and customize completions for each
 end
 
+if command -q k3d
+    # k3d (idea: use k3d so I can avoid a space and then also avoid subcommand/subsubcommand)
+    #   primary subcommand is cluster... so just let sub-subs there be top level in the alias/abbr namespace
+    # cluster
+    abbr k3dls 'k3d cluster list'
+    abbr k3dcreate 'k3d cluster create'
+    abbr k3ddelete 'k3d cluster delete'
+    abbr k3dedit 'k3d cluster edit --port-add'
+    abbr k3dstart 'k3d cluster start'
+    abbr k3dstop 'k3d cluster stop'
+    # image
+    abbr k3di 'k3d image import' # from docker images
+    # node
+    abbr k3dn 'k3d node list'
+    # registry
+    abbr k3dr 'k3d registry list'
+end
+
+
 if command -q kubectl
     export KUBECTL_EXTERNAL_DIFF="icdiff -r" # use icdiff for kubectl diff (slick!)... FYI $1 and $2 are directories to compare (hence the -r)
 
@@ -363,7 +382,7 @@ end
 
 if command -q kubectl-shell
     # docker labs debug equivalent for k8s
-    abbr ksh 'kubectl-shell'
+    abbr ksh kubectl-shell
     abbr kshn 'kubectl-shell --namespace'
     # --container foo
     # --namespace bar
