@@ -430,8 +430,8 @@ if command -q minikube
     abbr mkae 'minikube addons enable'
     abbr mkad 'minikube addons disable'
 
-    abbr mked 'eval $(minikube docker-env)' # access docker container runtime (if using)
-    # abbr mkep 'eval $(minikube podman-env)' # access podman container runtime (if using)
+    abbr mkde 'eval $(minikube docker-env)' # (d)ocker-(e)nv - access nested docker containers w/o nested (uncustomized) shell
+    # abbr mkpe 'eval $(minikube podman-env)' # (p)odman-(e)nv - access nested podman containers w/o nested (uncustomized) shell
 
     abbr mkp 'minikube profile list'
 
