@@ -273,6 +273,8 @@ if command -q kubectl
 
     # apply
     abbr kaf 'kubectl apply -f' # create or modify
+    abbr kak 'kubectl apply -k .' # assumes kustomization dir is current dir (i.e. kustomization.yaml)
+    abbr kk 'kubectl kustomize' # (sort next to kak b/c they are companions) - preview rendered yaml (≈ dry-run)
     # api-versions/resources
     abbr kar 'grc kubectl api-resources'
     abbr karn 'grc kubectl api-resources --namespaced=true'
@@ -351,8 +353,7 @@ if command -q kubectl
     abbr kver 'grc kubectl version'
     # wait
     abbr kw 'kubectl wait' # FYI can go back to kwait if want w for other abbr
-    # PRN:
-    # kubectl kustomize
+
     # kubectl label
     # kubectl annotate
     # kubectl autoscale
