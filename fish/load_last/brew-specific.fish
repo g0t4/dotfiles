@@ -102,7 +102,7 @@ function _brew_search_with_analytics
             #     continue
             # end
             #
-            # set repo_url (brew info --cask $name --json | jq '.[].urls.head | .url' -r)
+            # set repo_url (brew info --cask $name --json=v2 # TODO ... urls are diff vs formula) ... maybe I shouldn't bother with getting repo url on casks and only do it for formula for now which intuitively makes sense given formula are built from src whereas cask can be close/open source
             #   TODO ERROR => Cannot specify `--cask` when using `--json=v1`!
             #
             # # might need to scrub repo_url to org/repo format (like my wcl command)
