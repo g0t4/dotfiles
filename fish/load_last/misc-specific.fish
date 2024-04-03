@@ -417,7 +417,7 @@ if command -q minikube
 
     abbr mks 'minikube ssh' # just like `vs` for `vagrant ssh`
 
-    abbr mkno 'minikube node list'
+    abbr mkn 'minikube node list'
 
     abbr mkdash 'minikube dashboard --port 9090'
     # service
@@ -435,7 +435,17 @@ if command -q minikube
 
     abbr mkp 'minikube profile list'
 
-    abbr mkk 'minikube kubectl'
+    abbr mkcp 'minikube cp'
+    abbr mkip 'minikube ip'
+
+    # logs
+    abbr mkl 'minikube logs'
+    abbr mklf 'minikube logs --follow' # i.e. pause/unpause while watching
+    abbr mkla 'minikube logs --audit'
+    # ? mklp => 'minikube logs --problems'
+    # --node # defaults to primary control plane node
+
+    abbr mkv 'minikube version'
 
     # PRN:
     #  image, cache
