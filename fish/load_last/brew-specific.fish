@@ -43,26 +43,26 @@ function _brew_search_with_analytics
 
     # PRN keep bold white + green checkmark for installed packages?
 
-    set formula (brew search --formula $query)
+    set _formulae (brew search --formula $query)
     # set formula fox fop fio # hard code to test
 
     # split items (on " ") and trim \n on last item with gsub
     #   this builds an array of formula names that can be used below with IN operator to match on analytics by formula name
-    set _array (echo $formula | jq -R -s -c 'split(" ") |  map(select(length > 0) | gsub("\n$"; ""))')
+    set _formulae_names_array_json (echo $_formulae | jq -R -s -c 'split(" ") |  map(select(length > 0) | gsub("\n$"; ""))')
     begin
         echo FORMULA\tRANK\tINSTALLS\tPERCENT # header
 
-        _brew_analytics_formula_annual | jq -r --argjson formula $_array '.items[] | select(.formula | IN($formula[])) | [.formula, .number, .count, .percent] | @tsv '
+        _brew_analytics_formula_annual | jq -r --argjson formulae_names $_formulae_names_array_json '.items[] | select(.formula | IN($formulae_names[])) | [.formula, .number, .count, .percent] | @tsv '
 
     end | column -t
     echo # blank line
 
-    set cask (brew search --cask $query)
-    set _array (echo $cask | jq -R -s -c 'split(" ") |  map(select(length > 0) | gsub("\n$"; ""))')
+    set _casks (brew search --cask $query)
+    set _casks_names_array_json (echo $_casks | jq -R -s -c 'split(" ") |  map(select(length > 0) | gsub("\n$"; ""))')
     begin
         echo CASK\tRANK\tINSTALLS\tPERCENT # header
 
-        _brew_analytics_cask_annual | jq -r --argjson cask $_array '.items[] | select(.cask | IN($cask[])) | [.cask, .number, .count, .percent] | @tsv '
+        _brew_analytics_cask_annual | jq -r --argjson cask_names $_casks_names_array_json '.items[] | select(.cask | IN($cask_names[])) | [.cask, .number, .count, .percent] | @tsv '
 
     end | column -t
 
