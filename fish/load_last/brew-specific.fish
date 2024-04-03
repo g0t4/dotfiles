@@ -49,7 +49,7 @@ function _brew_search_with_analytics
         set analytics_records (_brew_analytics_formula_annual | jq -r --argjson formulae_names $_formulae_names_array_json '.items[] | select(.formula | IN($formulae_names[])) | [.formula, .number, .count, .percent] | @tsv ')
         # loop over each record so I can append columns:
         for record in $analytics_records
-            set formula (echo $record | awk '{print $1}')
+            set name (echo $record | awk '{print $1}')
             echo -n $record
 
             if test -z $_flag_stars
@@ -57,7 +57,7 @@ function _brew_search_with_analytics
                 continue
             end
 
-            set repo_url (brew info --formula $formula --json | jq '.[].urls.head | .url' -r)
+            set repo_url (brew info --formula $name --json | jq '.[].urls.head | .url' -r)
             # might need to scrub repo_url to org/repo format (like my wcl command)
             #   and only do stars lookup if it is a github repo
             set stars_forks (gh repo view $repo_url --json stargazerCount,forkCount)
@@ -78,10 +78,36 @@ function _brew_search_with_analytics
     set _casks (brew search --cask $query)
     set _casks_names_array_json (echo $_casks | jq -R -s -c 'split(" ") |  map(select(length > 0) | gsub("\n$"; ""))')
     begin
-        echo CASK\tRANK\tINSTALLS\tPERCENT # header
+        echo CASK\tRANK\tINSTALLS\tPERCENT\tSTARS\tFORKS # header
 
-        _brew_analytics_cask_annual | jq -r --argjson cask_names $_casks_names_array_json '.items[] | select(.cask | IN($cask_names[])) | [.cask, .number, .count, .percent] | @tsv '
-        # TODO impl stars/forks for casks too
+        set analytics_records (_brew_analytics_cask_annual | jq -r --argjson cask_names $_casks_names_array_json '.items[] | select(.cask | IN($cask_names[])) | [.cask, .number, .count, .percent] | @tsv ')
+        for record in $analytics_records
+            set name (echo $record | awk '{print $1}')
+            echo -n $record
+
+            if test -z $_flag_stars
+                echo
+                continue
+            end
+
+            # set repo_url (brew info --cask $name --json | jq '.[].urls.head | .url' -r)
+            #   TODO ERROR => Cannot specify `--cask` when using `--json=v1`!
+            #
+            # # might need to scrub repo_url to org/repo format (like my wcl command)
+            # #   and only do stars lookup if it is a github repo
+            # set stars_forks (gh repo view $repo_url --json stargazerCount,forkCount)
+            # if test $status = 0
+            #     set stars (echo $stars_forks | jq '.stargazerCount')
+            #     set forks (echo $stars_forks | jq '.forkCount')
+            #     echo -e "\t$stars\t$forks"
+            # else
+            #     echo
+            # end
+
+            # PRN add other analytics too? or instead?
+        end
+
+
     end | column -t
 
 
