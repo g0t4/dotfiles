@@ -412,12 +412,20 @@ if command -q minikube
     abbr mkstart 'minikube start'
     abbr mkpause 'minikube pause'
     abbr mkunpause 'minikube unpause'
+    abbr mkd 'minikube delete'
+    abbr mkda 'minikube delete --all'
+
+    abbr mks 'minikube ssh' # just like `vs` for `vagrant ssh`
 
     abbr mkno 'minikube node list'
 
-    abbr mkd 'minikube dashboard --port 9090'
-    abbr mksls 'minikube service list'
-    # minikube tunnel
+    abbr mkdash 'minikube dashboard --port 9090'
+    # service
+    abbr mksls 'minikube service list' # any service type
+    # PRN # minikube service --all --namespace _ # open all
+    # not sure I see much of a reason to use minikube service when I can use kubectl port-forward and that is consistent across k8s-in-docker distros
+    abbr mkt 'minikube tunnel' # make LoadBalancer services routeable from host
+    # addons
     abbr mkals 'minikube addons list'
     abbr mkae 'minikube addons enable'
     abbr mkad 'minikube addons disable'
@@ -428,6 +436,9 @@ if command -q minikube
     abbr mkp 'minikube profile list'
 
     abbr mkk 'minikube kubectl'
+
+    # PRN:
+    #  image, cache
 
 end
 
