@@ -426,9 +426,12 @@ if command -q minikube
     # not sure I see much of a reason to use minikube service when I can use kubectl port-forward and that is consistent across k8s-in-docker distros
     abbr mkt 'minikube tunnel' # make LoadBalancer services routeable from host
     # addons
-    abbr mkals 'minikube addons list'
+    abbr mka 'minikube addons list'
+    abbr mkao 'minikube addons open'
     abbr mkae 'minikube addons enable'
     abbr mkad 'minikube addons disable'
+    abbr mkai 'minikube addons images' # i.e. `minikube addons images registry` 
+    abbr mkac 'minikube addons configure'
 
     abbr mkde 'eval $(minikube docker-env)' # (d)ocker-(e)nv - access nested docker containers w/o nested (uncustomized) shell
     # abbr mkpe 'eval $(minikube podman-env)' # (p)odman-(e)nv - access nested podman containers w/o nested (uncustomized) shell
