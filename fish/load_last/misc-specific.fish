@@ -267,7 +267,18 @@ if command -q kubectl
     abbr kgsec 'grc kubectl get secrets'
     abbr kgsts 'grc kubectl get statefulsets' # alias: sts
     abbr kgsvc 'grc kubectl get services' # alias: svc
-    abbr kgv 'grc kubectl get -A volumes,pv,pvc,sc' # volumes (longhorn.io) => fetch all volume globally, btw Volume=>PV=>PVC hence ordering
+    # *** volumes/storage ***
+    abbr kgv --function _abbr_kgv
+    function _abbr_kgv
+        # FYI STDOUT is used to replace the "kgv" abbreviation
+        if kubectl get crds/volumes.longhorn.io 2>/dev/null >/dev/null
+            # if longhorn volumes CRD then include volumes (first in list)
+            echo grc kubectl get -A volumes,pv,pvc,sc
+        else
+            echo grc kubectl get -A pv,pvc,sc
+        end
+        # PRN can include other CRDs here as needed! neat way to do this!
+    end
     # *** END GET related:
 
 
