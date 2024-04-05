@@ -78,8 +78,33 @@ function _convert_current_command_to_diff_two_commands
     set user_input (_current_command_or_previous)
     commandline --replace "diff_two_commands '$user_input' '$user_input' "
 end
-# TODO can I setup streamdeck buttons to bindings in fish? and I don't mean by having streamdeck just push F2 and have F2 bound... can I cut out the F2 middleman... and/or can I use a keyspace that I normally cannot access to be the middleman and not affect my ability to use standard key bindings too (given very few key bindings are avail to be hijacked as the F2 middleman)
-bind -k f6 _convert_current_command_to_diff_two_commands
+bind -k f6 _convert_current_command_to_diff_two_commands # bind to F6 for now
+bind \e\[18\;5~ _convert_current_command_to_diff_two_commands # ctrl+F7 (streamdeck button => hotkey action works)
+# see which binding I prefer (F6 or streamdeck)
+
+# *** some bind key combos ***
+#
+#   read "terminal input sequences": https://en.wikipedia.org/wiki/ANSI_escape_code#Terminal_input_sequences
+#
+#   examples (see wikipeida page for other lookups):
+#       F5          [15~
+#       F6          [17~
+#       F7          [18~
+#       shift + F7  [18;2~
+#       ctrl + F7   [18;5~   (see above where I use this, for proper escaping ])
+#       alt + F7    [18;9~
+#   modifiers (last #):
+#       shift    ;2~
+#       ctrl     ;5~
+#       alt      ;9~
+#
+#   exceptions (examples, there are many):
+#       shift+F1  [1;2P
+#       shift+F2  [1;2Q
+#       shift+F3  [1;2R
+#       shift+F4  [1;2S
+#         # very likely some of this has to do with how iterm maps bindings (it has choices for this and I should avoid changing that again without clearly knowing what I am doing :)...
+#
 
 
 #
