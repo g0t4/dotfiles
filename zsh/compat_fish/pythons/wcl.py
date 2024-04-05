@@ -35,16 +35,23 @@ def wcl(args):
     else:
         os.makedirs(org_dir, exist_ok=True)
 
-    ### add dir to z ahead of cloning so I can CD to it while cloning
-    # - or if dir already exists, then add to the stats count for it
-    # - zsh's z (dir can be added before created)
-    z_add_zsh = f"z --add '{repo_dir}'"
-    # zsh -i => interactive which is where I load z command
-    if dry_run:
-        print("zsh z add:")
-        print("\t", z_add_zsh)
-    else:
-        subprocess.run(['zsh', '-il', '-c', z_add_zsh], check=IGNORE_FAILURE)
+    is_zsh_present = not is_windows()
+    if is_zsh_present:
+        ### add dir to z ahead of cloning so I can CD to it while cloning
+        # - or if dir already exists, then add to the stats count for it
+        # - zsh's z (dir can be added before created)
+        z_add_zsh = f"z --add '{repo_dir}'"
+        # zsh -i => interactive which is where I load z command
+        # check if zsh / * nix
+        if dry_run:
+            print("zsh z add:")
+            print("\t", z_add_zsh)
+        else:
+            subprocess.run(['zsh', '-il', '-c', z_add_zsh], check=IGNORE_FAILURE)
+
+    is_pwsh_present = is_windows()
+    # TODO if is_pwsh_present:
+
 
     if os.path.isdir(repo_dir):
         print("repo_dir found, attempt pull latest")
@@ -62,17 +69,21 @@ def wcl(args):
         else:
             subprocess.run(clone, check=STOP_ON_FAILURE)
 
-    ### add to fish's z:
-    # - dir must exist before adding
-    # - fish has __z_add which uses $PWD hence set cwd
-    # - fish doesn't need interactive for z to be loaded (installed in functions dir)
-    # - FYI I had issues w/ auto-venv (calling deactivate) in fish but not zsh, so I am not using interactive for fish and I disabled auto-venv for non-interactive fish shells
-    z_add_fish = ['fish', '-c', "__z_add"]
-    if dry_run:
-        print("fish z add:")
-        print("\t", z_add_fish, f"cwd={repo_dir}")
-    else:
-        subprocess.run(z_add_fish, cwd=repo_dir, check=IGNORE_FAILURE)
+
+    is_fish_present = not is_windows()
+
+    if is_fish_present:
+        ### add to fish's z:
+        # - dir must exist before adding
+        # - fish has __z_add which uses $PWD hence set cwd
+        # - fish doesn't need interactive for z to be loaded (installed in functions dir)
+        # - FYI I had issues w/ auto-venv (calling deactivate) in fish but not zsh, so I am not using interactive for fish and I disabled auto-venv for non-interactive fish shells
+        z_add_fish = ['fish', '-c', "__z_add"]
+        if dry_run:
+            print("fish z add:")
+            print("\t", z_add_fish, f"cwd={repo_dir}")
+        else:
+            subprocess.run(z_add_fish, cwd=repo_dir, check=IGNORE_FAILURE)
 
 
 def clone_url(parsed) -> str:
@@ -120,6 +131,8 @@ def parse_repo(url: str):
     #   https://pypi.org/project/giturlparse/
     #   https://github.com/nephila/giturlparse
 
+def is_windows():
+    return os.name == 'nt'
 
 if __name__ == "__main__":
 
