@@ -31,9 +31,22 @@ end
 function diff_command_args
     # argv[1] is the command to run
     # remainder of args are the diff args to pass (with and without)
+    # FYI if nested command (to psub) fails it will do so quietly
+    # tmp file
+
+    set stdout1_file (mktemp)
+    eval $argv[1] >$stdout1_file
+
+    set stdout2_file (mktemp)
+    eval $argv[1] $argv[2..-1] >$stdout2_file
+
     icdiff \
-        -L "'$argv[1]'" (eval $argv[1] | psub) \
-        -L "'$argv[1]'" (eval $argv[1] $argv[2..-1] | psub)
+        -L "'$argv[1]'" $stdout1_file \
+        -L "'$argv[1] $argv[2..-1]'" $stdout2_file
+
+    rm $stdout1_file
+    rm $stdout2_file
+
 end
 
 # FYI if want these then add back (maybe new file)... I never really have used these in zsh so I don't think they're pivotal here though I could do icdiff (!-2) (!-2) typed out and it would expand out to work in that one off case :)... still more work than other ways
