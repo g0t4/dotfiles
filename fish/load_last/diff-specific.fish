@@ -53,6 +53,35 @@ function diff_command_args
 
 end
 
+function _current_command_or_previous
+
+    set user_input (commandline -b)
+    if test -z $user_input
+        set user_input (history | head -n 1)
+        # PRN use $history (does it have items not added to history file, IIAC?)
+    end
+    echo $user_input
+
+end
+
+# *** bindings to replace current command with a diff_ helper command ***
+
+function _convert_current_command_to_diff_command_args
+    # use to compare same command w/ and w/o a set of args
+    set user_input (_current_command_or_previous)
+    commandline --replace "diff_command_args '$user_input' "
+end
+bind -k f5 _convert_current_command_to_diff_command_args
+
+function _convert_current_command_to_diff_two_commands
+    # use to compare w/ add and remove from current command
+    set user_input (_current_command_or_previous)
+    commandline --replace "diff_two_commands '$user_input' '$user_input' "
+end
+bind -k f6 _convert_current_command_to_diff_two_commands
+
+
+#
 # FYI if want these then add back (maybe new file)... I never really have used these in zsh so I don't think they're pivotal here though I could do icdiff (!-2) (!-2) typed out and it would expand out to work in that one off case :)... still more work than other ways
 # # expand !!
 # # based on https://fishshell.com/docs/current/relnotes.html#fish-3-6-0-released-january-7-2023
