@@ -70,7 +70,7 @@ def wcl(args):
             subprocess.run(pull, check=IGNORE_FAILURE)
     else:
         clone_from = clone_url(parsed)
-        print(f"cloning {clone_from}...", "\n")
+        print(f"# cloning {clone_from}...")
         clone = ["git", "clone", "--recurse-submodules", clone_from, repo_dir]
         if dry_run:
             print(clone, "\n")
