@@ -78,6 +78,7 @@ function _convert_current_command_to_diff_two_commands
     set user_input (_current_command_or_previous)
     commandline --replace "diff_two_commands '$user_input' '$user_input' "
 end
+# TODO can I setup streamdeck buttons to bindings in fish? and I don't mean by having streamdeck just push F2 and have F2 bound... can I cut out the F2 middleman... and/or can I use a keyspace that I normally cannot access to be the middleman and not affect my ability to use standard key bindings too (given very few key bindings are avail to be hijacked as the F2 middleman)
 bind -k f6 _convert_current_command_to_diff_two_commands
 
 
