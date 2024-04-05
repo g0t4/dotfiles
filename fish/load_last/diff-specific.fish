@@ -27,25 +27,13 @@ function diff_two_commands
         -L "'$argv[2]'" (eval $argv[2] | psub)
 end
 
-# PRN 
 function diff_command_args
     # argv[1] is the command to run
-    # remainder of args are the diff args to pass (with and without)
-    # FYI if nested command (to psub) fails it will do so quietly
-    # tmp file
-
-    set stdout1_file (mktemp)
-    eval $argv[1] >$stdout1_file
-
-    set stdout2_file (mktemp)
-    eval $argv[1] $argv[2..-1] >$stdout2_file
+    # $argv[2..-1] remainder of args are the diff args to pass (with and without)
 
     icdiff \
-        -L "'$argv[1]'" $stdout1_file \
-        -L "'$argv[1] $argv[2..-1]'" $stdout2_file
-
-    rm $stdout1_file
-    rm $stdout2_file
+        -L "'$argv[1]'" (eval $argv[1] | psub) \
+        -L "'$argv[1] $argv[2..-1]'" (eval $argv[1] $argv[2..-1] | psub)
 
 end
 
