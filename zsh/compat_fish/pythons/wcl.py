@@ -31,7 +31,7 @@ def wcl(args):
 
     # ensure org dir exists (including parents)
     if dry_run:
-        print("mkdir -p", org_dir)
+        print("mkdir -p", org_dir, "\n")
     else:
         os.makedirs(org_dir, exist_ok=True)
 
@@ -44,8 +44,8 @@ def wcl(args):
         # zsh -i => interactive which is where I load z command
         # check if zsh / * nix
         if dry_run:
-            print("zsh z add:")
-            print("\t", z_add_zsh)
+            print("# zsh z add:")
+            print(z_add_zsh, "\n")
         else:
             subprocess.run(['zsh', '-il', '-c', z_add_zsh], check=IGNORE_FAILURE)
 
@@ -55,25 +55,25 @@ def wcl(args):
         z_add_pwsh = f"z --add '{repo_dir}'"
 
         if dry_run:
-            print("pwsh z add:")
-            print("\t", z_add_pwsh)
+            print("# pwsh z add:")
+            print(z_add_pwsh, "\n")
         else:
             subprocess.run(['pwsh', '-NoProfile', '-Command', z_add_pwsh], check=IGNORE_FAILURE)
 
 
     if os.path.isdir(repo_dir):
-        print("repo_dir found, attempt pull latest")
+        print("repo_dir found, attempt pull latest", "\n")
         pull = ["git", "-C", repo_dir, "pull"]
         if dry_run:
-            print("\t", pull)
+            print(pull, "\n")
         else:
             subprocess.run(pull, check=IGNORE_FAILURE)
     else:
         clone_from = clone_url(parsed)
-        print(f"cloning {clone_from}...")
+        print(f"cloning {clone_from}...", "\n")
         clone = ["git", "clone", "--recurse-submodules", clone_from, repo_dir]
         if dry_run:
-            print("\t", clone)
+            print(clone, "\n")
         else:
             subprocess.run(clone, check=STOP_ON_FAILURE)
 
@@ -88,8 +88,8 @@ def wcl(args):
         # - FYI I had issues w/ auto-venv (calling deactivate) in fish but not zsh, so I am not using interactive for fish and I disabled auto-venv for non-interactive fish shells
         z_add_fish = ['fish', '-c', "__z_add"]
         if dry_run:
-            print("fish z add:")
-            print("\t", z_add_fish, f"cwd={repo_dir}")
+            print("# fish z add:")
+            print(z_add_fish, f"cwd={repo_dir}","\n")
         else:
             subprocess.run(z_add_fish, cwd=repo_dir, check=IGNORE_FAILURE)
 
