@@ -20,7 +20,8 @@ def wcl(args):
     path_only: bool = args.path_only
 
     parsed = parse_repo(url)
-    repos_dir = os.path.join(os.environ["HOME"], "repos")
+    home_dir = os.path.expanduser("~")
+    repos_dir = os.path.join(home_dir, "repos")
     repo_dir = os.path.join(repos_dir, relative_repo_dir(parsed))
     org_dir = os.path.dirname(repo_dir)
 
