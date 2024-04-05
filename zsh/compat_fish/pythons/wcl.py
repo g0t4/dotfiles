@@ -49,18 +49,6 @@ def wcl(args):
         else:
             subprocess.run(['zsh', '-il', '-c', z_add_zsh], check=IGNORE_FAILURE)
 
-    is_pwsh_present = is_windows()
-    if is_pwsh_present:
-
-        z_add_pwsh = f"z --add '{repo_dir}'"
-
-        if dry_run:
-            print("# pwsh z add:")
-            print(z_add_pwsh, "\n")
-        else:
-            subprocess.run(['pwsh', '-NoProfile', '-Command', z_add_pwsh], check=IGNORE_FAILURE)
-
-
     if os.path.isdir(repo_dir):
         print("repo_dir found, attempt pull latest", "\n")
         pull = ["git", "-C", repo_dir, "pull"]
@@ -78,8 +66,22 @@ def wcl(args):
             subprocess.run(clone, check=STOP_ON_FAILURE)
 
 
-    is_fish_present = not is_windows()
+    is_pwsh_present = is_windows()
+    if is_pwsh_present:
+        # dir must exist b/c I am just using z command to add the path (AFAICT there is no --add arg in pwsh version and even if it existed, so in the future, check to see if it works like fish version and requires the path to exist)
+        # could rework z add to before repo clone if I create dir before cloning it (letting git currently create the dir)
+        # ok and now the issue is z in current pwsh won't reload database so... this is almost pointless to add the path in pwsh (unless I wanna not change to it and want to do that later in a new pwsh shell)
+        # PRN perhaps add pwsh z wrapper like fish shell... that adds some logic to cd to cloned repos first before calling underlying z command... that would mean I don't even need the repo paths in z command history b/c they would always be a match before anything else in z history is tried
 
+        z_add_pwsh = f"z '{repo_dir}'"
+
+        if dry_run:
+            print("# pwsh z add:")
+            print(z_add_pwsh, "\n")
+        else:
+            subprocess.run(['pwsh', '-NoProfile', '-Command', z_add_pwsh], check=IGNORE_FAILURE)
+
+    is_fish_present = not is_windows()
     if is_fish_present:
         ### add to fish's z:
         # - dir must exist before adding
