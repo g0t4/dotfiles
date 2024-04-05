@@ -50,7 +50,15 @@ def wcl(args):
             subprocess.run(['zsh', '-il', '-c', z_add_zsh], check=IGNORE_FAILURE)
 
     is_pwsh_present = is_windows()
-    # TODO if is_pwsh_present:
+    if is_pwsh_present:
+
+        z_add_pwsh = f"z --add '{repo_dir}'"
+
+        if dry_run:
+            print("pwsh z add:")
+            print("\t", z_add_pwsh)
+        else:
+            subprocess.run(['pwsh', '-NoProfile', '-Command', z_add_pwsh], check=IGNORE_FAILURE)
 
 
     if os.path.isdir(repo_dir):
