@@ -1,7 +1,7 @@
 
 abbr ic "icdiff -H"
 abbr icr "icdiff --recursive" # diff all files in two dirs
-abbr icg "git-icdiff"
+abbr icg git-icdiff
 # configure git-icdiff via git config: git config --global icdiff.options '--line-numbers'
 
 # For example:
@@ -20,6 +20,21 @@ function expand_diff_last_two_commands
     # https://fishshell.com/docs/current/cmds/psub.html
 end
 abbr -a diff_last_two_commands --function expand_diff_last_two_commands
+
+function diff_two_commands
+    icdiff \
+        -L "'$argv[1]'" (eval $argv[1] | psub) \
+        -L "'$argv[2]'" (eval $argv[2] | psub)
+end
+
+# PRN 
+function diff_command_args
+    # argv[1] is the command to run
+    # remainder of args are the diff args to pass (with and without)
+    icdiff \
+        -L "'$argv[1]'" (eval $argv[1] | psub) \
+        -L "'$argv[1]'" (eval $argv[1] $argv[2..-1] | psub)
+end
 
 # FYI if want these then add back (maybe new file)... I never really have used these in zsh so I don't think they're pivotal here though I could do icdiff (!-2) (!-2) typed out and it would expand out to work in that one off case :)... still more work than other ways
 # # expand !!
