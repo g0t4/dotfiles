@@ -22,6 +22,9 @@ end
 abbr -a diff_last_two_commands --function expand_diff_last_two_commands
 
 function diff_two_commands
+    # usage:
+    #   diff_two_commands "ls -al" "ls -al | sort -h"
+
     icdiff \
         -L "'$argv[1]'" (eval $argv[1] | psub) \
         -L "'$argv[2]'" (eval $argv[2] | psub)
@@ -30,6 +33,9 @@ end
 function diff_command_args
     # argv[1] is the command to run
     # $argv[2..-1] remainder of args are the diff args to pass (with and without)
+    #    if passing a pipe make sure to quote it else will not be an arg to this function!
+    #    e.g. diff_command_args "echo foo\nbar" "--line-numbers" "| grep foo"
+    # ALSO, if there is no diff (and no error) then its very likely not this code but the output is literally the same :)... sometimes when testing you don't always get what you expect... run commands separately to verify if they are the same
 
     icdiff \
         -L "'$argv[1]'" (eval $argv[1] | psub) \
