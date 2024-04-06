@@ -33,12 +33,16 @@ def decide_formatter(args: list) -> list:
     # DOWN THE ROAD
     #   - make transparent so wrc always used (i.e. asciinema recording style where I open a subshell with wrc running... or wrc becomes my login shell and uses fish behind the scenes...)
     #   - once transparent, I will be able to take in pipelines, not just single commands, and so I will want more advanced decision logic that needs to consider the entire pipeline, not what is just one command (b/c wrc foo | bar ... would only see foo command, b/c its output is passed to bar)
-    
+
     # if command is formatter then no need to do anything, not likely to do this (wrc bat) but if I make this wrc transparent (goal) then it will happen b/c I won't explicitly decide when to prepend it
     if args[0] in ["bat", "grc", "jq"]:
         return None
 
     # right now this is basically a combo of grc and bat/jq/etc as grc cannot handle file formats so well (uses regexes to color output) ... also this adds new mechanisms to decide if grcat should be used beyond the regexes defined in grc's config files... (i.e. kubectl get always maps to grcat conf.kubectl if no other formatter is detected prior like bat for yaml, jq for json)
+
+    # idea
+    # alias kubectl "grc kubectl" # works great but of course grc doesn't support using bat/jq (i.e. tab complete works)
+    #   alias kubectl "wrc kubectl" # will and does kinda work but tab completion is at times broken... I would need to make the alias more complex to not ever format in the case of tab completion requests.. or smth ..
 
     # todo add unit tests of formatter decisions
     formatter_args = decide_kubectl(args)
