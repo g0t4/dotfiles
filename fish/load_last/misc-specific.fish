@@ -172,9 +172,9 @@ if command -q kubectl
     # *** get
     # ! TODO fix completions with grc command and put back grc on front?
     abbr kg 'kubectl get' # if I don't have the type already then I will want to tab complete it so don't include grc
-    abbr kgf 'grc kubectl get -f' # status of resources defined in yml file # file completion will work w/ grc so leave it?
+    abbr kgf 'kubectl get -f' # status of resources defined in yml file # file completion will work w/ grc so leave it?
     #
-    abbr kgns 'grc kubectl get namespaces'
+    abbr kgns 'kubectl get namespaces'
     # TODO redo get aliases to use abbreviations where applicable (ie n=>ns)
     #
     function kgdump
@@ -204,7 +204,7 @@ if command -q kubectl
                 log_ --brwhite --bold "  NO matching types found"
             else
                 set comma_list (string join , $types)
-                set what grc kubectl get --show-kind --ignore-not-found $comma_list
+                set what kubectl get --show-kind --ignore-not-found $comma_list
                 log_ --black "  $what"
                 eval $what
             end
@@ -220,7 +220,7 @@ if command -q kubectl
             log_ --brwhite --bold "  NO matching types found"
         else
             set comma_list (string join , $types)
-            set what grc kubectl get --show-kind --ignore-not-found $comma_list $filter
+            set what kubectl get --show-kind --ignore-not-found $comma_list $filter
             log_ --black "  $what"
             eval $what
         end
@@ -234,48 +234,48 @@ if command -q kubectl
     complete -c kgdump -a '(kubectl get namespace -o custom-columns=:metadata.name)' --no-files
     #
     #
-    abbr kga 'grc kubectl get all'
-    abbr kgaa 'grc kubectl get all -A' # -A/--all-namespaces
-    abbr kgas 'grc kubectl get all --show-labels'
-    abbr kgb 'grc kubectl get -A backups,snapshots' # longhorn.io
+    abbr kga 'kubectl get all'
+    abbr kgaa 'kubectl get all -A' # -A/--all-namespaces
+    abbr kgas 'kubectl get all --show-labels'
+    abbr kgb 'kubectl get -A backups,snapshots' # longhorn.io
     #
-    abbr kgp 'grc kubectl get pods' # alias: po (gonna go with p only for now)
-    abbr kgpa 'grc kubectl get pods -A'
-    abbr kgpaw 'grc kubectl get pods -A --watch'
+    abbr kgp 'kubectl get pods' # alias: po (gonna go with p only for now)
+    abbr kgpa 'kubectl get pods -A'
+    abbr kgpaw 'kubectl get pods -A --watch'
     #
     # PRN prune list or add other resource types:
-    abbr kgcj 'grc kubectl get cronjobs'
-    abbr kgcm 'grc kubectl get configmaps' # alias: cm
-    abbr kgcr 'grc kubectl get clusterroles'
-    abbr kgcrb 'grc kubectl get clusterrolebindings -o wide' # wide shows subject (user/group/sa) too which is critical IMO
-    abbr kgcrd 'grc kubectl get customresourcedefinitions' # alias: crd,crds
-    abbr kgds 'grc kubectl get daemonsets' # alias: ds
-    abbr kgep 'grc kubectl get endpoints' # alias: ep
-    abbr kgepA 'grc kubectl get endpoints -A' # all endpoints
-    abbr kgev 'grc kubectl get events' # alias: ev
-    abbr kging 'grc kubectl get ingresses' # alias: ing
-    abbr kgj 'grc kubectl get jobs'
-    abbr kgno 'grc kubectl get nodes' # alias: no
-    abbr kgpv 'grc kubectl get persistentvolumes' # alias: pv
-    abbr kgpvc 'grc kubectl get persistentvolumeclaims' # alias: pvc
-    abbr kgrb 'grc kubectl get rolebindings -o wide' # wide shows role and subject (user/group/sa) so I absolutely want this by default
-    abbr kgro 'grc kubectl get roles'
-    abbr kgrs 'grc kubectl get replicasets' # alias: rs
-    abbr kgs 'grc kubectl get svc'
-    abbr kgsa 'grc kubectl get serviceaccounts' # alias: sa
-    abbr kgsc 'grc kubectl get storageclasses' # alias: sc
-    abbr kgsec 'grc kubectl get secrets'
-    abbr kgsts 'grc kubectl get statefulsets' # alias: sts
-    abbr kgsvc 'grc kubectl get services' # alias: svc
+    abbr kgcj 'kubectl get cronjobs'
+    abbr kgcm 'kubectl get configmaps' # alias: cm
+    abbr kgcr 'kubectl get clusterroles'
+    abbr kgcrb 'kubectl get clusterrolebindings -o wide' # wide shows subject (user/group/sa) too which is critical IMO
+    abbr kgcrd 'kubectl get customresourcedefinitions' # alias: crd,crds
+    abbr kgds 'kubectl get daemonsets' # alias: ds
+    abbr kgep 'kubectl get endpoints' # alias: ep
+    abbr kgepA 'kubectl get endpoints -A' # all endpoints
+    abbr kgev 'kubectl get events' # alias: ev
+    abbr kging 'kubectl get ingresses' # alias: ing
+    abbr kgj 'kubectl get jobs'
+    abbr kgno 'kubectl get nodes' # alias: no
+    abbr kgpv 'kubectl get persistentvolumes' # alias: pv
+    abbr kgpvc 'kubectl get persistentvolumeclaims' # alias: pvc
+    abbr kgrb 'kubectl get rolebindings -o wide' # wide shows role and subject (user/group/sa) so I absolutely want this by default
+    abbr kgro 'kubectl get roles'
+    abbr kgrs 'kubectl get replicasets' # alias: rs
+    abbr kgs 'kubectl get svc'
+    abbr kgsa 'kubectl get serviceaccounts' # alias: sa
+    abbr kgsc 'kubectl get storageclasses' # alias: sc
+    abbr kgsec 'kubectl get secrets'
+    abbr kgsts 'kubectl get statefulsets' # alias: sts
+    abbr kgsvc 'kubectl get services' # alias: svc
     # *** volumes/storage ***
     abbr kgv --function _abbr_kgv
     function _abbr_kgv
         # FYI STDOUT is used to replace the "kgv" abbreviation
         if kubectl get crds/volumes.longhorn.io 2>/dev/null >/dev/null
             # if longhorn volumes CRD then include volumes (first in list)
-            echo grc kubectl get -A volumes,pv,pvc,sc
+            echo kubectl get -A volumes,pv,pvc,sc
         else
-            echo grc kubectl get -A pv,pvc,sc
+            echo kubectl get -A pv,pvc,sc
         end
         # PRN can include other CRDs here as needed! neat way to do this!
     end
@@ -287,10 +287,10 @@ if command -q kubectl
     abbr kak 'kubectl apply -k .' # assumes kustomization dir is current dir (i.e. kustomization.yaml)
     abbr kk 'kubectl kustomize' # (sort next to kak b/c they are companions) - preview rendered yaml (≈ dry-run)
     # api-versions/resources
-    abbr kar 'grc kubectl api-resources'
-    abbr karn 'grc kubectl api-resources --namespaced=true'
-    abbr karg 'grc kubectl api-resources --namespaced=false' # (g)lobal
-    abbr kav 'grc kubectl api-versions'
+    abbr kar 'kubectl api-resources'
+    abbr karn 'kubectl api-resources --namespaced=true'
+    abbr karg 'kubectl api-resources --namespaced=false' # (g)lobal
+    abbr kav 'kubectl api-versions'
     # attach
     abbr kattach 'kubectl attach -it' # ~ docker container attach
     # create
@@ -328,10 +328,10 @@ if command -q kubectl
     # kubectl get pods -o custom-columns=:metadata.name
 
     # events (grc is often helpful with event history - i.e. paths highlighted, statuses marked red/green/etc which helps the lenghty messages be readable)
-    abbr kev 'grc kubectl events'
-    abbr kevA 'grc kubectl events -A'
-    abbr kevw 'grc kubectl events --watch'
-    abbr kevwA 'grc kubectl events -A --watch'
+    abbr kev 'kubectl events'
+    abbr kevA 'kubectl events -A'
+    abbr kevw 'kubectl events --watch'
+    abbr kevwA 'kubectl events -A --watch'
     # explain (grc isn't super useful for explain so don't include it as I prefer tab complete here anyways)
     abbr kexplain 'kubectl explain'
     abbr kexplainr 'kubectl explain --recursive'
@@ -361,7 +361,7 @@ if command -q kubectl
     abbr ktp 'kubectl top pod --all-namespaces'
     abbr ktn 'kubectl top node'
     # version
-    abbr kver 'grc kubectl version'
+    abbr kver 'kubectl version'
     # wait
     abbr kw 'kubectl wait' # FYI can go back to kwait if want w for other abbr
 
@@ -371,7 +371,7 @@ if command -q kubectl
     # kubectl expose
     # kubectl proxy
     # kubectl debug
-    # grc kubectl options
+    # kubectl options
     # kubectl alpha
 
     # *** conte(x)t
@@ -488,8 +488,8 @@ if command -q helm
     abbr hgh 'helm get hooks'
     #    manifest    download the manifest for a named release
     abbr hgm 'helm get manifest' # likely to use often
-    abbr --set-cursor="!" -- hgk 'helm get manifest ! | grc kubectl get -f -'
-    #  hgk j<TAB> =>   helm get manifest jenkins | grc kubectl get -f -
+    abbr --set-cursor="!" -- hgk 'helm get manifest ! | kubectl get -f -'
+    #  hgk j<TAB> =>   helm get manifest jenkins | kubectl get -f -
     #    metadata    This command fetches metadata for a given release
     abbr hgmetadata 'helm get metadata' # likely won't use often
     #    notes       download the notes for a named release
