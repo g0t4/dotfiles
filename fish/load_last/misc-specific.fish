@@ -165,6 +165,7 @@ end
 
 
 if command -q kubectl
+    alias kubectl "grc kubectl" # ! EVALUATING if I like this, would be sufficient for short term most likely
     export KUBECTL_EXTERNAL_DIFF="icdiff -r" # use icdiff for kubectl diff (slick!)... FYI $1 and $2 are directories to compare (hence the -r)
 
     abbr --position=anywhere -- oy '-o yaml | bat -l yml'
