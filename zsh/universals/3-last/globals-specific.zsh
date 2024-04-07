@@ -6,12 +6,12 @@ ealias pbat='| bat -l' -g
 ealias pgr='| grep -i' -g
 ealias phelp='| bat -l help' -g
 ealias pini='| bat -pl ini' -g
-ealias pj='| jq .' -g # shortened
-ealias pm='| bat -l md' # shortened
+ealias pjq='| jq .' -g # shortened
+ealias pmd='| bat -l md' # shortened
 ealias prb='| bat -pl rb' -g
 ealias psh='| bat -pl sh' -g
-ealias px='| bat -l xml' -g # shortened
-ealias py='| bat -l yml' -g # shortened
+ealias pxml='| bat -l xml' -g # shortened
+ealias pyml='| bat -l yml' -g # shortened
 # test with:
 #    cat site.yml py => expands to 'cat site.yml | bat -l yml'
 #   hmmmm if I have a command like \cat (to bypass aliases)... global aliases don't complete in this case?! ... the alias works on execution but it seems like _expand_alias is never called or it doesn't expand in this case
