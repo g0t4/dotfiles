@@ -714,3 +714,23 @@ function toggle-grc
     # ALTERNATIVE - pull back last command, toggle-grc, run - can use if I find myself doing this two step process often
 end
 bind \cq toggle-grc # terrible key choice (ctrl+q) but it isn't used currently so yeah
+
+
+if command -q apt
+
+    # start on apt helpers now that I have fish in almost all of my ubuntu environments
+
+    abbr apts 'apt search'
+    abbr apti 'sudo apt install'
+    abbr aptu 'sudo apt update'
+    abbr aptug 'sudo apt upgrade'
+
+    abbr aptl 'apt list --installed'
+    abbr aptlu 'apt list --upgradable'
+
+    abbr aptcm 'apt-cache madison'
+
+    abbr dpkgL 'dpkg -L' # list files installed by package
+    abbr dpkgS 'dpkg -S' # search for package that owns file
+
+end
