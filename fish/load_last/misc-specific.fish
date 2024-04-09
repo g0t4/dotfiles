@@ -169,6 +169,7 @@ if command -q kubectl
     export KUBECTL_EXTERNAL_DIFF="icdiff -r" # use icdiff for kubectl diff (slick!)... FYI $1 and $2 are directories to compare (hence the -r)
 
     abbr --position=anywhere -- oy '-o yaml | bat -l yml'
+    abbr --position=anywhere -- ow '-o wide' # I don't believe this will cause collisions b/c it is not a word I expect to use in other contexts, lets see
 
     # *** get
     # ! TODO fix completions with grc command and put back grc on front?
