@@ -758,3 +758,30 @@ if command -q watch
     # xterm-256color = treated as 256 colors (IIUC this is how background colors for bright white gets messed up)
 
 end
+
+if command -q yq
+
+    # helper to select a document by index from multidocument yaml file
+    abbr pyqi "| yq eval 'select(documentIndex == 1) | .status'"
+    function yq_diff_docs
+        # usage:
+        #   kubectl get pods -o yaml > pods.apply.watch.yaml
+        #   yq_diff_docs pods.apply.watch.yaml  0 1 '.status'
+        #   leave pair of #s so I can diff across indexes (should add optional arg for second documentindex for that... as mostly I would wanna compare before/after - sequential pairs)
+
+        # PRN how about loop over each document pair in a watched file from k8s
+        #   cat pods.apply.watch.yaml  | yq di
+        #   IIUC no way to query # documents but can select document indexes or otherwise count lines to get # ... or just loop over document indexes and pair them with next to avoid any maths
+
+        set file $argv[1]
+        set doc1 $argv[2]
+        set doc2 $argv[3]
+        set path $argv[4]
+
+        # https://mikefarah.gitbook.io/yq/operators/document-index
+        yq eval "select(documentIndex == $doc1) | $path" $file >/tmp/doc1.yaml
+        yq eval "select(documentIndex == $doc2) | $path" $file >/tmp/doc2.yaml
+
+        icdiff -W -L "doc $doc1" /tmp/doc1.yaml -L "doc $doc2" /tmp/doc2.yaml
+    end
+end
