@@ -750,4 +750,11 @@ if command -q watch
         # watch -n 0.5 --color -- "grc --colour=on kubectl describe pod/web"
     end
 
+    # FYI find terminfo for a TERM value:
+    #    diff_two_commands 'infocmp xterm' 'infocmp xterm-256color'
+    #
+    # xterm = treated as 8 color
+    # FYI xterm-16color still has brights issue
+    # xterm-256color = treated as 256 colors (IIUC this is how background colors for bright white gets messed up)
+
 end
