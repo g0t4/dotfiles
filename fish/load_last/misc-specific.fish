@@ -339,7 +339,10 @@ if command -q kubectl
     abbr kexplainr 'kubectl explain --recursive'
     # logs
     abbr kl 'kubectl logs'
+    abbr klc 'kubectl logs --container='
     abbr klf 'kubectl logs --follow'
+    abbr kla 'kubectl logs --all-containers=true --prefix'
+    #   PRN: --previous, --timestamps, --since, --tail
     # plugin
     abbr kpls 'kubectl plugin list'
     # patch
