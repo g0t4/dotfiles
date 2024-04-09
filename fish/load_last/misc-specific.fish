@@ -735,3 +735,19 @@ if command -q apt
     abbr dpkgS 'dpkg -S' # search for package that owns file
 
 end
+
+
+if command -q watch
+    # VERIFIED watch does this on both macos and ubuntu
+
+    # FYI this is faster than using alias and more obvious what happens:
+    function watch
+        # FYI uses same pattern of passing $argv as is found in fish's alias helper
+        TERM=xterm command watch $argv
+        # if watch believes there are 16+ colors (8 regular + 8 brights) it will then init the brights to hard coded colors and screw up background colors too (i.e. for white)... so if it believes there are only 8 colors then it doesn't alter any of them IIUC: https://gitlab.com/procps-ng/procps/-/blob/master/src/watch.c#L181
+
+        # good way to test my colors:
+        # watch -n 0.5 --color -- "grc --colour=on kubectl describe pod/web"
+    end
+
+end
