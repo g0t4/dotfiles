@@ -785,3 +785,7 @@ if command -q yq
         icdiff -W -L "doc $doc1" /tmp/doc1.yaml -L "doc $doc2" /tmp/doc2.yaml
     end
 end
+
+# TODO brew install wader/tap/fq
+#    fq = jq for binary files
+#    https://github.com/wader/fq
