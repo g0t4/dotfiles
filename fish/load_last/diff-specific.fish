@@ -25,8 +25,12 @@ function expand_diff_last_two_commands_with_diff_two_commands
     set last_two_commands (history | head -n 2)
     set -l command_a $last_two_commands[2]
     set -l command_b $last_two_commands[1]
-    # TODO wrap with " instead => wait until use case
-    # TODO either way escpae ' or " the inner quotes used => wait until use case
+    # test case:
+    #    echo 'foo'
+    #    echo 'foo\nbar'
+    #    trigger diff_last_two_commands => needs escaped
+    set command_a (string replace --all -- "'" "\\'" $command_a)
+    set command_b (string replace --all -- "'" "\\'" $command_b)
     echo diff_two_commands "'$command_a'" "'$command_b'"
 end
 abbr -a diff_last_two_commands --function expand_diff_last_two_commands_with_diff_two_commands
