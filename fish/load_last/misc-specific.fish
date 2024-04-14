@@ -761,6 +761,12 @@ if command -q watch
         # watch -n 0.5 --color -- "grc --colour=on kubectl describe pod/web"
     end
 
+    # TODO do I like w mapping to watch? So far isn't used otherwise
+    abbr w 'watch -n0.5'
+    abbr wg 'watch -n0.5 --color -- grc --colour=on'
+    # for k8s prefer kubectl --watch b/c grc colors the output w/o issues.. but when it is not avail to continually monitor then use watch command w/ color output:
+    #   watch -n0.5 --color -- grc --colour=on kubectl rollout status deployments 
+
     # FYI find terminfo for a TERM value:
     #    diff_two_commands 'infocmp xterm' 'infocmp xterm-256color'
     #
