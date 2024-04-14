@@ -764,6 +764,8 @@ if command -q watch
     # TODO do I like w mapping to watch? So far isn't used otherwise
     abbr w 'watch -n0.5'
     abbr wg 'watch -n0.5 --color -- grc --colour=on'
+    abbr wk 'watch -n0.5 --color -- grc --colour=on kubectl' #? probably wont use this much but lets see
+    abbr wc 'watch -n0.5 --color -- grc --colour=on curl' #? shot in the dark, I probably won't ever use this :)... just capturing an idea => perhaps wh for "watch + http(ie)"?
     # for k8s prefer kubectl --watch b/c grc colors the output w/o issues.. but when it is not avail to continually monitor then use watch command w/ color output:
     #   watch -n0.5 --color -- grc --colour=on kubectl rollout status deployments 
 
