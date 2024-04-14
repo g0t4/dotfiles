@@ -354,8 +354,16 @@ if command -q kubectl
     abbr krf 'kubectl replace --force -f'
     # krew
     abbr krew 'kubectl krew'
-    # rollout
-    abbr krollout 'kubectl rollout'
+    # (r)oll(o)ut
+    abbr kro 'kubectl rollout'
+    abbr kror 'kubectl rollout restart'
+    abbr krorf 'kubectl rollout restart -f'
+    abbr krost 'kubectl rollout status'
+    abbr kroh 'kubectl rollout history'
+    abbr krohf 'kubectl rollout history -f'
+    abbr kropause 'kubectl rollout pause'
+    abbr kroresume 'kubectl rollout resume'
+    abbr kroundo 'kubectl rollout undo'
     # run
     abbr krun 'kubectl run' # ~ docker container run
     # scale
