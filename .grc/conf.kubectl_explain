@@ -1,20 +1,29 @@
 # FYI grc config file for rules to color output of "kubectl explain" (no other kubectl subcommands)
 ---
-# highlight field names
+# highlight field names/types, format:
 #   field_name  <field_type>
-# pod examples:
-#   nodeName	<string>
-#   initContainers	<[]Container>           # list of X
+#
+# kubectl explain --recursive pod:
+#   nodeName	<string>                      # lower and upper case in name
+#   initContainers	<[]Container>           # list
 #   containers	<[]Container> -required-    # -required-
 #   nodeSelector	<map[string]string>       # map[string] => string
 #   overhead	<map[string]Quantity>         # map[string] => Quantity
-# top level, current inspected field:
-#   FIELD: spec <PodSpec>                   # FIELD: at start of line
-# test with:
-#   grc kubectl explain pod
-#   kubectl explain --recursive pod   # LOTS of examples! # only lists names (not descriptions)
 #
-regexp=^(FIELD\:)?\s*([a-zA-Z]+)\s+\<(\[\]|map\[string\])?([a-zA-Z]+)\>(\s+-required-)?
+#   FIELD: spec <PodSpec>                   # FIELD: at start of line
+#
+# kubectl explain --recursive crds:             # crds has several uncommon names
+#   fieldsV1	<FieldsV1>                        # numbers
+#   x-kubernetes-embedded-resource	<boolean>   # dash in name
+#   $ref	<string>
+#
+# use --recursive and look for yellowish (default, uncolored output):
+#   kubectl explain --recursive crds.spec.versions.schema
+#
+# btw:
+#   https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names  # name formats
+#
+regexp=^(FIELD\:)?\s*([a-z\$][a-zA-Z0-9\-]+)\s+\<(\[\]|map\[string\])?([a-zA-Z][a-zA-Z0-9]+)\>(\s+-required-)?
 colour=unchanged,unchanged,blue,bold magenta,green,bold white
 # colors: whole match, optional FIELD label, field name, brackets, type 
 # currently setting whole line green means I don't need to set the last match to green
