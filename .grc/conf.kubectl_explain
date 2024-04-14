@@ -53,3 +53,10 @@ regexp=^\b([A-Z]+)\b\:
 colour=unchanged,underline
 
 ---
+
+# emphasize kind
+# KIND:       Node
+regexp=^\bKIND\:\s+([a-zA-Z]+)
+colour=unchanged,bold cyan
+
+---
