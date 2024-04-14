@@ -1,0 +1,34 @@
+# FYI grc config file for rules to color output of "kubectl explain" (no other kubectl subcommands)
+---
+# highlight field names
+#   field_name  <field_type>
+# pod examples:
+#   nodeName	<string>
+#   initContainers	<[]Container>           # list of X
+#   containers	<[]Container> -required-    # -required-
+#   nodeSelector	<map[string]string>       # map[string] => string
+#   overhead	<map[string]Quantity>         # map[string] => Quantity
+# top level, current inspected field:
+#   FIELD: spec <PodSpec>                   # FIELD: at start of line
+# test with:
+#   grc kubectl explain pod
+#   kubectl explain --recursive pod   # LOTS of examples! # only lists names (not descriptions)
+#
+regexp=^(FIELD\:)?\s*([a-zA-Z]+)\s+\<(\[\]|map\[string\])?([a-zA-Z]+)\>(\s+-required-)?
+colour=unchanged,unchanged,blue,bold magenta,green,bold white
+# colors: whole match, optional FIELD label, field name, brackets, type 
+# currently setting whole line green means I don't need to set the last match to green
+
+---
+
+# HEADERS (all uppercase strings, start of line)
+# pod headers:
+#   KIND:       Pod
+#   VERSION:    v1
+#   FIELD: spec <PodSpec>
+#   DESCRIPTION:
+#   FIELDS:
+regexp=^\b([A-Z]+)\b\:
+colour=unchanged,underline
+
+---
