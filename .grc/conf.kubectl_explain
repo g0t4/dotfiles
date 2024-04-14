@@ -17,6 +17,9 @@
 #   x-kubernetes-embedded-resource	<boolean>   # dash in name
 #   $ref	<string>
 #
+# kubectl explain  --recursive node
+#   Port	<integer> -required-    # PascalCase (not camelCase)
+
 # use --recursive and look for yellowish (default, uncolored output):
 #   kubectl explain --recursive crds.spec.versions.schema
 #
@@ -32,7 +35,7 @@
 #   https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names  # name formats
 #
 #   FYI choice in list/map type prefix is to have one OR of [] | map[string] | map[string][] just so I am not introducing new subgroup matches
-regexp=^(FIELD\:)?\s*([a-z\$][a-zA-Z0-9\-\_]+)\s+\<(\[\]|map\[string\]|map\[string\]\[\])?([a-zA-Z][a-zA-Z0-9]+)\>(\s+-required-)?
+regexp=^(FIELD\:)?\s*([a-zA-Z\$][a-zA-Z0-9\-\_]+)\s+\<(\[\]|map\[string\]|map\[string\]\[\])?([a-zA-Z][a-zA-Z0-9]+)\>(\s+-required-)?
 colour=unchanged,unchanged,blue,bold magenta,green,bold white
 # colors: whole match, optional FIELD label, field name, brackets, type 
 # currently setting whole line green means I don't need to set the last match to green
