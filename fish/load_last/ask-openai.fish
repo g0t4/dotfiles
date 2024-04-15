@@ -1,19 +1,32 @@
 # https://fishshell.com/docs/current/cmds/bind.html
 
+
+
 function ask_openai
 
     set -l user_input (commandline -b)
+
 
     # FYI not appending '# thinking...' b/c it doesn't show AND doing so is messing up the prompt if a space typed before this func is invoked
 
     set -l _python3 "$WES_DOTFILES/.venv/bin/python3"
     set -l _single_py "$WES_DOTFILES/zsh/universals/3-last/ask-openai/single.py"
 
-    set -l response ( \
-        echo -e "env: fish on $(uname)\nquestion: $user_input" | \
-        $_python3 $_single_py 2>&1 \
-    )
-    set -l exit_code $status
+    if string match --regex -q "git commit -m" $user_input
+        # ? give it recent commit messages too?
+        # if using git commit => pass git diff and ask it to write a commit message
+        set git_diff (git diff --cached --no-color)
+        set response ( \
+            echo -e "env: fish on $(uname)\nquestion: write me a commit message, here is the git diff:\n$git_diff" | \
+            $_python3 $_single_py 2>&1 \
+        )
+    else
+        set response ( \
+            echo -e "env: fish on $(uname)\nquestion: $user_input" | \
+            $_python3 $_single_py 2>&1 \
+        )
+    end
+    set exit_code $status
     if test $exit_code -eq 2
         commandline --replace "[CONTEXT]: $response"
         # FYI other causes rc=2 print as context (i.e. wrong path to python script, NBD as error shows anyways)
