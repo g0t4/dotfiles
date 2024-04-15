@@ -19,6 +19,8 @@
 --map-syntax "config.txt:INI" # raspberry pi /boot/fimrware/config.txt # PRN filter to full file path /boot/config.txt and /boot/firmware/config.txt?
 --map-syntax "*.sln:INI"
 
+--map-syntax "Corefile:nginx" # coredns Corefile => caddyfile => closest I can think of are nginx and toml... nginx looks better so far
+
 # **/etc/** specific mappings (last matching wins, so put specific last)
 # /opt/homebrew/etc/** mappings:
 #   /opt/homebrew/etc/nginx/**/*.conf    # doesn't use nginx language
