@@ -268,7 +268,7 @@ if command -q kubectl
     abbr kgsc 'kubectl get storageclasses' # alias: sc
     abbr kgsec 'kubectl get secrets'
     abbr kgsts 'kubectl get statefulsets' # alias: sts
-    abbr kgcrev 'kubectl get pods,sts,controllerrevisions' # crev is not a valid short name for controllerrevisions, but it fits nicely into my abbreviation namespaces... # PRN only return controllerrevisions (or also sts+pods?)
+    abbr kgrev 'kubectl get pods,sts,controllerrevisions' # crev is not a valid short name for controllerrevisions, but it fits nicely into my abbreviation namespaces... # PRN only return controllerrevisions (or also sts+pods?)
     abbr kgsvc 'kubectl get services' # alias: svc
     # *** volumes/storage ***
     abbr kgv --function _abbr_kgv
