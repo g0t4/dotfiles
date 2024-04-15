@@ -254,6 +254,7 @@ if command -q kubectl
     abbr kgds 'kubectl get daemonsets' # alias: ds
     abbr kgep 'kubectl get endpoints' # alias: ep
     abbr kgepA 'kubectl get endpoints -A' # all endpoints
+    abbr kgend 'kubectl get svc,endpoints,endpointslices' # PRN do I like this combo? mostly as a reminder that this is a set I like to use... can find with ctrl+S in tab completion
     abbr kgev 'kubectl get events' # alias: ev
     abbr kging 'kubectl get ingresses' # alias: ing
     abbr kgj 'kubectl get jobs'
