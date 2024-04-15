@@ -406,6 +406,17 @@ if command -q kubectl
 
 end
 
+if command -q dig
+
+    # always use grc w/ dig:
+    # TODO only if interactive shell? if so also do that for kubectl above (and others)
+    # alias dig "grc dig"
+    function dig --description 'alias dig grc dig'
+        grc dig $argv
+    end
+
+end
+
 if command -q kubectl-shell
     # docker labs debug equivalent for k8s
     abbr ksh kubectl-shell
