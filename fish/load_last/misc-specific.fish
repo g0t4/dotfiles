@@ -304,6 +304,8 @@ if command -q kubectl
     abbr kcp 'kubectl cp' # ~ docker container cp
     # delete
     abbr kdel 'kubectl delete'
+    abbr kdeli 'kubectl delete --interactive' # mostly a reminder to consider showing in demos
+    abbr kdeld 'kubectl delete --dry-run' # mostly a reminder to consider showing in demos
     abbr kdelf 'kubectl delete -f'
     # diff
     abbr kdi 'kubectl diff' # diff current (status) vs desired state (spec)
