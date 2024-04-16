@@ -29,6 +29,24 @@ function _update_dotfiles
     git pull
 end
 
+function _update_completion
+    # PRN add more completions (helm, kubectl, etc)
+
+    mkdir -p ~/.config/fish/completions/
+
+    echo "updating completions in ~/.config/fish/completions/"
+
+    command -q minikube; and minikube completion fish >~/.config/fish/completions/minikube.fish
+    command -q kubectl; and kubectl completion fish >~/.config/fish/completions/kubectl.fish
+    command -q helm; and helm completion fish >~/.config/fish/completions/helm.fish
+
+    command -q docker; and docker completion fish >~/.config/fish/completions/docker.fish
+    # FYI fish shell only, generated completions are superior to DDfM bundled completions
+
+    # why? one reason is I can install beta releases of these tools and uninstall brew package and not lose out on completions
+
+end
+
 function _recording
 
     # PRN if calling repeatedly (ie on spal activate) causes problems => return if already in recording mode?
@@ -89,7 +107,7 @@ abbr --add zsh_equals --regex '=[^\b]+' --function expand_zsh_equals
 function cd_dir_of_command
     cd_dir_of_path (type --path $argv) # ~ zsh's =foo
 end
-abbr cdc "cd_dir_of_command"
+abbr cdc cd_dir_of_command
 
 function cd_dir_of_path
     set -l _cd_path $argv
@@ -117,7 +135,7 @@ function cd_dir_of_path
 
     log_ --apple_white "cd $(pwd)"
 end
-abbr cdd "cd_dir_of_path"
+abbr cdd cd_dir_of_path
 
 
 # *** bat ***
@@ -128,7 +146,7 @@ if command -q batcat # -q => w/o output
         batcat $argv
     end
 end
-abbr cat 'bat' # do not alias, only expand (abbr), else get failure trying to use cat.... TLDR as I type cat replace it with bat
+abbr cat bat # do not alias, only expand (abbr), else get failure trying to use cat.... TLDR as I type cat replace it with bat
 abbr bath 'bat --style=header' # == header-filename (i.e. for multi files show names)
 abbr batf 'bat --style=full'
 
@@ -202,4 +220,4 @@ function treevX
     string replace --regex '^treev' 'treev -L' $argv
 end
 
-abbr treeify "as-tree" # PRN do I ever use this?
+abbr treeify as-tree # PRN do I ever use this?
