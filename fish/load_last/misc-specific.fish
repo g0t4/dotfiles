@@ -830,3 +830,9 @@ end
 # TODO brew install wader/tap/fq
 #    fq = jq for binary files
 #    https://github.com/wader/fq
+
+# *** _list_<namespace>_<what>
+abbr _reminders_docker_binfmts "docker run --privileged --rm tonistiigi/binfmt" # https://github.com/tonistiigi/binfmt
+# idea for a new spot where I can locate what are essentially reminders for commands (i.e. not used often)
+# type _reminders<TAB> to see what is available
+#  I am not convinced I will like this, we shall see
