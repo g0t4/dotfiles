@@ -367,7 +367,7 @@ if command -q kubectl
     abbr kroresume 'kubectl rollout resume'
     abbr kroundo 'kubectl rollout undo'
     # run
-    abbr krun 'kubectl run' # ~ docker container run
+    abbr krun 'kubectl run --rm -i -t --image weshigbee/tools-net tmp -- bash' # ~ docker container run
     # scale
     abbr kscale 'kubectl scale'
     # set
