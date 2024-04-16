@@ -385,7 +385,11 @@ if command -q kubectl
     # kubectl autoscale
     # kubectl expose
     # kubectl proxy
-    # kubectl debug
+    # debug # TODO flesh out later, just a reminder:
+    abbr kdebug 'kubectl debug'
+    abbr kdebuge 'kubectl debug -it --image=weshigbee/tools-net pod/' # add+attach ephemeral container to pod/foo
+    abbr kdebugc 'kubectl debug -it --image=weshigbee/tools-net --copy-to=tmp pod/' # clone+attach pod/foo
+    abbr kdebugn 'kubectl debug -it --image=weshigbee/tools-net node/' # attach to node/foo's namespaces
     # kubectl options
     # kubectl alpha
 
