@@ -785,9 +785,11 @@ if command -q watch
     # TODO do I like w mapping to watch? So far `w` isn't used otherwise
     export WATCH_INTERVAL=0.5 # I almost always set to 0.5
     abbr w watch # prn add back "-n0.5" if issues w/ WATCH_INTERVAL
-    abbr wg 'watch --color -- grc --colour=on'
-    abbr wk 'watch --color -- grc --colour=on kubectl' #? probably wont use this much but lets see
-    abbr wc 'watch --color -- grc --colour=on curl' #? shot in the dark, I probably won't ever use this :)... just capturing an idea => perhaps wh for "watch + http(ie)"?
+    abbr wg 'watch --no-title --color -- grc --colour=on'
+    # to support --no-title, add --show-kind to kubectl get output that way I can save top title line and blank line after it for screen realestate! also nukes showing time in upper right corner
+    abbr wk 'watch --no-title --color -- grc --colour=on kubectl get --show-kind' # using alot! I love this
+    abbr wkp 'watch --no-title --color -- grc --colour=on kubectl get --show-kind pods'
+    abbr wc 'watch --no-title --color -- grc --colour=on curl' #? shot in the dark, I probably won't ever use this :)... just capturing an idea => perhaps wh for "watch + http(ie)"?
     # for k8s prefer kubectl --watch b/c grc colors the output w/o issues.. but when it is not avail to continually monitor then use watch command w/ color output:
     #   watch -n0.5 --color -- grc --colour=on kubectl rollout status deployments 
 
