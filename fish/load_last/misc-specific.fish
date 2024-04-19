@@ -786,7 +786,10 @@ if command -q watch
     export WATCH_INTERVAL=0.5 # I almost always set to 0.5
     abbr w watch # prn add back "-n0.5" if issues w/ WATCH_INTERVAL
     abbr wg 'watch --no-title --color -- grc --colour=on'
-    # to support --no-title, add --show-kind to kubectl get output that way I can save top title line and blank line after it for screen realestate! also nukes showing time in upper right corner
+    # to support --no-title, add --show-kind to kubectl get output
+    # - saves top title line and blank line after it for screen realestate!
+    # - also nukes showing time in upper right corner
+    # - FYI --show-kind already enabled if multi types requested, so NBD
     abbr wk 'watch --no-title --color -- grc --colour=on kubectl get --show-kind' # using alot! I love this
     abbr wkp 'watch --no-title --color -- grc --colour=on kubectl get --show-kind pods'
     abbr wc 'watch --no-title --color -- grc --colour=on curl' #? shot in the dark, I probably won't ever use this :)... just capturing an idea => perhaps wh for "watch + http(ie)"?
@@ -839,4 +842,3 @@ end
 abbr _reminders_docker_binfmts "docker run --privileged --rm tonistiigi/binfmt" # https://github.com/tonistiigi/binfmt
 # idea for a new spot where I can locate what are essentially reminders for commands (i.e. not used often)
 # type _reminders<TAB> to see what is available
-#  I am not convinced I will like this, we shall see
