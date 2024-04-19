@@ -308,6 +308,7 @@ if command -q kubectl
     abbr kdeli 'kubectl delete --interactive' # mostly a reminder to consider showing in demos
     abbr kdeld 'kubectl delete --dry-run' # mostly a reminder to consider showing in demos
     abbr kdelf 'kubectl delete -f'
+    abbr kdelp 'kubectl delete pod' # alias: delp
     # diff
     abbr kdi 'kubectl diff' # diff current (status) vs desired state (spec)
     abbr kdif 'kubectl diff -f'
