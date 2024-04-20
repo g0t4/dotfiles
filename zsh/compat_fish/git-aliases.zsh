@@ -94,6 +94,7 @@ abbr gfa 'git fetch --all --prune --jobs=10' # * favorite
 
 # push
 abbr gp 'git push'
+abbr gpsup 'git push --set-upstream origin $(git_current_branch)'
 # FYI gpr is a command so be careful # * what about submodules?
 abbr gpd 'git push --dry-run'
 abbr gpf 'git push --force'
