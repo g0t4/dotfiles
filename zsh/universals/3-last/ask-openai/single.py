@@ -4,8 +4,9 @@ import sys
 
 def generate_command(context: str):
 
-    # service_name = 'openai'
-    service_name = 'groq'
+    use_groq = True
+
+    service_name = 'groq' if use_groq else 'openai'
     account_name = 'ask'
     password = keyring.get_password(service_name, account_name)
 
@@ -17,24 +18,28 @@ def generate_command(context: str):
         print(f"No password found for {account_name} in {service_name}")
         sys.exit(1)
 
-    # client = OpenAI(api_key=password)
-    client = OpenAI(api_key=password, base_url="https://api.groq.com/openai/v1") # groq
+
     # grok base_url https://console.groq.com/docs/openai
+    base_url = "https://api.groq.com/openai/v1" if use_groq else None
+    client = OpenAI(api_key=password, base_url=base_url)
 
     try:
 
-        completion = client.chat.completions.create(
+        if use_groq:
+            # groq https://console.groq.com/docs/models
+            #   llama3-8b-8192, llama3-70b-8192, llama2-70b-4096, mixtral-8x7b-32768, gemma-7b-it
+            model = "llama3-70b-8192"
+            # wow llama3-* are fast... not sure yet about quality, time will tell
+            # does well on basic commands, noticing issues with more complex questions like how to override a value for a helm chart (seems to use outdated/wrong/hallucinated options)
+        else:
             # openai https://platform.openai.com/docs/models
-            # model="gpt-4-1106-preview",  # gpt-4 "turbo" (cheaper than gpt-4) # *** LAST USED openai
+            model = "gpt-4-1106-preview",  # gpt-4 "turbo" (cheaper than gpt-4)
             # model="gpt-3.5-turbo-1106",
             # gpt-4 "turbo" and gpt-3.5-turbo are both fast, so use gpt-4 for accuracy (else 3.5 might need to be re-run/fixed which costs more)
             # ? gpt-3.5-turbo-instruct
 
-            # groq https://console.groq.com/docs/models
-            # model="llama3-8b-8192", # llama3-8b-8192, llama3-70b-8192, llama2-70b-4096, mixtral-8x7b-32768, gemma-7b-it
-            model="llama3-70b-8192",
-            # wow llama3-* are fast... not sure yet about quality, time will tell
-
+        completion = client.chat.completions.create(
+            model=model,
             messages=[{
                 "role": "system",
                 "content": "You are a command line expert. Respond with a single, valid, complete command line. I intend to execute it. No explanation. No markdown blocks"
