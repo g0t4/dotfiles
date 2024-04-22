@@ -1,5 +1,15 @@
 
-abbr ic "icdiff -H"
+function icdiff
+    # FYI I don't really like -H/--highlight as it often colors more than what is changed (icdiff help calls it "ugly")... so don't add -H here and force it globally... that can be tempting b/c the inversion pops better than font color... but then again the real issue I had was the default color map w/ yellow bold on yellow not standing out so I went with a color map mod instead:
+
+    # inject color map changes (bold yellow doesn't stand out well versus my typical yellow default font color)
+    command icdiff --color-map='add:green_bold,change:white_bold,description:blue,meta:magenta,separator:blue,subtract:red_bold' $argv
+
+    # PRN wait until this causes a problem... but basically is there a case where I would want yellow_bold instead of white_bold? Probably not b/c if I have this modification for dotfiles then chances are I also have customized my terminal colors to make yellow font default and so white_bold will be a good choice then.
+end
+
+
+abbr ic "icdiff"
 abbr icr "icdiff --recursive" # diff all files in two dirs
 abbr icg git-icdiff
 # configure git-icdiff via git config: git config --global icdiff.options '--line-numbers'
