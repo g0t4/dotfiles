@@ -49,8 +49,12 @@ abbr -a diff_last_two_commands --function expand_diff_last_two_commands_with_dif
 function diff_two_commands
     # usage:
     #   diff_two_commands "ls -al" "ls -al | sort -h"
+    #   don't really need -- support here b/c there are only ever two args (commands to diff) and so any other options are clearly for icdiff (thus far)
 
-    icdiff \
+    # FYI strips -- and parses/strips icdiff options
+    argparse --ignore-unknown 'H/highlight' 'W/whole-file' -- $argv
+
+    icdiff $_flag_highlight $_flag_whole_file \
         -L "'$argv[1]'" (eval $argv[1] | psub) \
         -L "'$argv[2]'" (eval $argv[2] | psub)
 end
@@ -60,7 +64,6 @@ function diff_command_args
     # FYI to unambiguously pass icdiff options too, use --
     #   diff_command_args [icdiff options] -- [diff args...]
     #   diff_command_args -H -- "ls -al" -t
-    #   PRN add to other diff_* functions too
 
     # argv[1] is the command to run
     # $argv[2..-1] remainder of args are the diff args to pass (with and without)
