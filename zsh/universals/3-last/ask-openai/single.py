@@ -33,10 +33,19 @@ def generate_command(context: str):
             # does well on basic commands, noticing issues with more complex questions like how to override a value for a helm chart (seems to use outdated/wrong/hallucinated options)
         else:
             # openai https://platform.openai.com/docs/models
-            model = "gpt-4-1106-preview",  # gpt-4 "turbo" (cheaper than gpt-4)
+            #
+            # gpt4 models: https://platform.openai.com/docs/models/gpt-4-turbo-and-gpt-4
+            # *** gpt4 turbo (adds vision capabilities): # does this add anything else besides vision to the turbo preview?
+            # model = "gpt-4-turbo" # currently => "gpt-4-turbo-2024-04-09" # TODO test this vs preview for my use case
+            # model = "gpt-4-turbo-2024-04-09" # thru Dec 2023
+            # *** gpt4 turbo previews:
+            model = "gpt-4-turbo-preview" # currently => "gpt-4-0125-preview"
+            # model = "gpt-4-0125-preview" # thru Dec 2023 - aka gpt4 turbo
+            # model = "gpt-4-1106-preview", # thru Apr 2023 - aka gpt4 turbo # ! this model is the first I used and it works great (used late 2023/early 2024)
+            #
+            # *** gpt 3.5:
             # model="gpt-3.5-turbo-1106",
-            # gpt-4 "turbo" and gpt-3.5-turbo are both fast, so use gpt-4 for accuracy (else 3.5 might need to be re-run/fixed which costs more)
-            # ? gpt-3.5-turbo-instruct
+            # gpt-4 "turbo" and gpt-3.5-turbo are both fast, so use gpt-4 for accuracy (else 3.5 might need to be re-run/fixed which can cost more)
 
         completion = client.chat.completions.create(
             model=model,
