@@ -20,7 +20,7 @@ abbr icg git-icdiff
 # > echo bar
 # > diff_last_two_commands<SPACE> # expands to:
 # > icdiff -L "echo foo\nbar" (echo foo\nbar | psub) -L "echo bar" (echo bar | psub)
-function expand_diff_last_two_commands
+function legacy_expand_diff_last_two_commands
     # FYI this is original (pre expand into diff_two_commands)
     set last_two_commands (history | head -n 2)
     set -l command_a $last_two_commands[2]
@@ -30,7 +30,7 @@ function expand_diff_last_two_commands
     echo icdiff -L "'$command_a'" "($command_a | psub)" -L "'$command_b'" "($command_b | psub)"
     # https://fishshell.com/docs/current/cmds/psub.html
 end
-# abbr -a diff_old --function expand_diff_last_two_commands
+# abbr -a diff_old --function legacy_expand_diff_last_two_commands
 
 function expand_diff_last_two_commands_with_diff_two_commands
     set last_two_commands (history | head -n 2)
