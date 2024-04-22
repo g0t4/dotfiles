@@ -55,13 +55,23 @@ function diff_two_commands
 end
 
 function diff_command_args
+
+    # FYI to unambiguously pass icdiff options too, use --
+    #   diff_command_args [icdiff options] -- [diff args...]
+    #   diff_command_args -H -- "ls -al" -t
+    #   PRN add to other diff_* functions too
+
     # argv[1] is the command to run
     # $argv[2..-1] remainder of args are the diff args to pass (with and without)
     #    if passing a pipe make sure to quote it else will not be an arg to this function!
     #    e.g. diff_command_args "echo foo\nbar" "--line-numbers" "| grep foo"
     # ALSO, if there is no diff (and no error) then its very likely not this code but the output is literally the same :)... sometimes when testing you don't always get what you expect... run commands separately to verify if they are the same
 
-    icdiff \
+    # FYI argparse strips specified options (i.e. -H/--highlight) AND strips -- (if present)...  so if you remove this then you will no longer be able to use --
+    argparse --ignore-unknown 'H/highlight' 'W/whole-file' -- $argv
+    # --ignore-unknown is necessary to avoid parsing args when "--" is not used
+
+    icdiff $_flag_highlight $_flag_whole_file \
         -L "'$argv[1]'" (eval $argv[1] | psub) \
         -L "'$argv[1] $argv[2..-1]'" (eval $argv[1] $argv[2..-1] | psub)
 
