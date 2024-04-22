@@ -31,6 +31,7 @@ def generate_command(context: str):
             model = "llama3-70b-8192"
             # wow llama3-* are fast... not sure yet about quality, time will tell
             # does well on basic commands, noticing issues with more complex questions like how to override a value for a helm chart (seems to use outdated/wrong/hallucinated options)
+            print("Using Groq")
         else:
             # openai https://platform.openai.com/docs/models
             #
