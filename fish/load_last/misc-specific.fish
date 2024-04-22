@@ -576,18 +576,19 @@ if command -q helm
     abbr hi 'helm inspect'
     #    all         show all information of the chart
     #    chart       show the chart's definition
-    abbr --set-cursor='!' -- hic "helm show chart ! | bat -l yml"
+    abbr --set-cursor='!' -- hic "helm show chart ! | yq"
     #    crds        show the chart's CRDs
     #    readme      show the chart's README
     abbr --set-cursor='!' -- hir "helm show readme ! | bat -l md"
     #    values      show the chart's values
-    abbr --set-cursor='!' -- hiv "helm show values ! | bat -l yml"
+    abbr --set-cursor='!' -- hiv "helm show values ! | yq"
     #
     # status      display the status of the named release
     abbr hst 'helm status'
     #
     # template    locally render templates
-    abbr --set-cursor='!' -- ht 'helm template ! | bat -l yml' # repo/chart-name
+    # abbr --set-cursor='!' -- ht 'helm template ! | yq' # repo/chart-name
+    abbr ht 'helm template'
     function helm_template_diff
         # usage:
         #   helm_template_diff <chart> <version1> <version2>
