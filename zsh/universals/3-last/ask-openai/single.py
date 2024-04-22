@@ -4,7 +4,7 @@ import sys
 
 def generate_command(context: str):
 
-    use_groq = False
+    use_groq = True
 
     service_name = 'groq' if use_groq else 'openai'
     account_name = 'ask'
@@ -30,8 +30,7 @@ def generate_command(context: str):
             #   llama3-8b-8192, llama3-70b-8192, llama2-70b-4096, mixtral-8x7b-32768, gemma-7b-it
             model = "llama3-70b-8192"
             # wow llama3-* are fast... not sure yet about quality, time will tell
-            # does well on basic commands, noticing issues with more complex questions like how to override a value for a helm chart (seems to use outdated/wrong/hallucinated options)
-            print("Using Groq")
+            # print("Using Groq")
         else:
             # openai https://platform.openai.com/docs/models
             #
