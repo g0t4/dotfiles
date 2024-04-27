@@ -191,7 +191,10 @@ ealias dcolsa='grc docker compose ls -a' # stopped too
 ealias dcopull='docker compose pull'
 ealias dcopush='docker compose push'
 ealias dcorm='docker compose rm'
+#
 ealias dcor='docker compose run --rm' # --rm to cleanup tmp containers else they linger after each run
+ealias dcorb='docker compose run --rm --build'
+#
 ealias dcore='docker compose restart'
 ealias dcostart='docker compose start'
 ealias dcostop='docker compose stop'

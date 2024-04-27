@@ -138,7 +138,10 @@ ealias ${prefix}w 'docker compose watch'
 ealias ${prefix}pull 'docker compose pull'
 ealias ${prefix}push 'docker compose push'
 ealias ${prefix}rm 'docker compose rm'
+#
 ealias ${prefix}r 'docker compose run --rm' # --rm to cleanup tmp containers else they linger after each run
+ealias ${prefix}rb 'docker compose run --build --rm'
+#
 ealias ${prefix}re 'docker compose restart'
 ealias ${prefix}start 'docker compose start'
 ealias ${prefix}stop 'docker compose stop'

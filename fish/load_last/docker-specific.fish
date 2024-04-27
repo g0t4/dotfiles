@@ -199,7 +199,10 @@ abbr dcolsa 'grc docker compose ls -a' # stopped too
 abbr dcopull 'docker compose pull'
 abbr dcopush 'docker compose push'
 abbr dcorm 'docker compose rm'
+#
 abbr dcor 'docker compose run --rm' # --rm to cleanup tmp containers else they linger after each run
+ealias dcorb='docker compose run --rm --build'
+#
 abbr dcore 'docker compose restart'
 abbr dcostart 'docker compose start'
 abbr dcostop 'docker compose stop'
