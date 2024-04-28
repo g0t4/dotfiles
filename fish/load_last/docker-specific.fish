@@ -210,6 +210,7 @@ abbr dcot 'docker compose top'
 abbr dcou 'docker compose up'
 abbr dcouf 'docker compose up --force-recreate --remove-orphans'
 abbr dcoud 'docker compose up --detach'
+abbr dcouw 'docker compose up --watch' # TBD if I want this abbr (dco ~2.24.7 added --watch)
 abbr dcov 'docker compose version'
 
 ## dld - docker labs debug: # dld commands are hanging after latest update to DDfM
