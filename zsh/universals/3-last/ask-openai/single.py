@@ -17,6 +17,7 @@ def generate_command(context: str):
         # from keyrings.cryptfile.cryptfile import CryptFileKeyring
         # kr = CryptFileKeyring()
         # kr.set_password("groq","ask","foo")
+        # kr.set_password("openai","ask","foo")
 
         # on linux, avoid prompt for password for cryptfile:
         kr = CryptFileKeyring()
