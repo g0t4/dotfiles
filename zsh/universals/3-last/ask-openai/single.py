@@ -8,7 +8,7 @@ import platform
 
 def generate_command(context: str):
 
-    use_groq = False
+    use_groq = True
 
     if platform.system() == 'Linux':
         # https://pypi.org/project/keyrings.cryptfile/
