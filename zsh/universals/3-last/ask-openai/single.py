@@ -24,8 +24,7 @@ def generate_command(context: str):
             print("KEYRING_CRYPTFILE_PASSWORD env var not set")
             sys.exit(1)
         kr.keyring_key = getenv("KEYRING_CRYPTFILE_PASSWORD")
-        keyring.set_keyring(kr) # sets instance that has password already provided via env var (else keyring still prompts)
-
+        keyring.set_keyring(kr)  # tell keyring to use kr (not other backends, and not try to setup keyring.cryptfile backend instance itself, b/c then it prompts for password)
 
     service_name = 'groq' if use_groq else 'openai'
     account_name = 'ask'
