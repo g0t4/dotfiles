@@ -13,6 +13,7 @@ def generate_command(context: str):
     # windows => open Credential Manager => Windows Credentials tab => Generic Credentials section (add new)...  service_name => Internet/NetworkAddress, account_name => username
     # macos => open Keychain Access => kind=app password, (security add-generic-password IIRC)
     # *** linux => ubuntu/debian => sudo apt install libsecret-tools => secret-tool lookup service service_name account account_name
+    # TODO linux find an alternative (keyring is overkill on linux IIUC and seems to want some GUI tooling...).. might can use https://pypi.org/project/keyrings.cryptfile/ ... look into this later
 
     if password is None:
         print(f"No password found for {account_name} in {service_name}")
