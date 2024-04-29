@@ -15,11 +15,17 @@ def generate_command(context: str):
         # pip install keyrings.cryptfile
         #
         # from keyrings.cryptfile.cryptfile import CryptFileKeyring
-        # CryptFileKeyring().set_password("groq","ask","foo")
+        # kr = CryptFileKeyring()
+        # kr.set_password("groq","ask","foo")
 
         # on linux, avoid prompt for password for cryptfile:
         kr = CryptFileKeyring()
+        if getenv("KEYRING_CRYPTFILE_PASSWORD") is None:
+            print("KEYRING_CRYPTFILE_PASSWORD env var not set")
+            sys.exit(1)
         kr.keyring_key = getenv("KEYRING_CRYPTFILE_PASSWORD")
+        keyring.set_keyring(kr) # sets instance that has password already provided via env var (else keyring still prompts)
+
 
     service_name = 'groq' if use_groq else 'openai'
     account_name = 'ask'
