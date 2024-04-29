@@ -1,10 +1,25 @@
+from os import getenv
 from openai import OpenAI
+from keyrings.cryptfile.cryptfile import CryptFileKeyring
 import keyring
 import sys
+import platform
+
 
 def generate_command(context: str):
 
     use_groq = True
+
+    if platform.system() == 'Linux':
+        # https://pypi.org/project/keyrings.cryptfile/
+        # pip install keyrings.cryptfile
+        #
+        # from keyrings.cryptfile.cryptfile import CryptFileKeyring
+        # CryptFileKeyring().set_password("groq","ask","foo")
+
+        # on linux, avoid prompt for password for cryptfile:
+        kr = CryptFileKeyring()
+        kr.keyring_key = getenv("KEYRING_CRYPTFILE_PASSWORD")
 
     service_name = 'groq' if use_groq else 'openai'
     account_name = 'ask'
@@ -12,13 +27,10 @@ def generate_command(context: str):
 
     # windows => open Credential Manager => Windows Credentials tab => Generic Credentials section (add new)...  service_name => Internet/NetworkAddress, account_name => username
     # macos => open Keychain Access => kind=app password, (security add-generic-password IIRC)
-    # *** linux => ubuntu/debian => sudo apt install libsecret-tools => secret-tool lookup service service_name account account_name
-    # TODO linux find an alternative (keyring is overkill on linux IIUC and seems to want some GUI tooling...).. might can use https://pypi.org/project/keyrings.cryptfile/ ... look into this later
 
     if password is None:
         print(f"No password found for {account_name} in {service_name}")
         sys.exit(1)
-
 
     # grok base_url https://console.groq.com/docs/openai
     base_url = "https://api.groq.com/openai/v1" if use_groq else None
@@ -40,7 +52,7 @@ def generate_command(context: str):
             # model = "gpt-4-turbo" # currently => "gpt-4-turbo-2024-04-09" # TODO test this vs preview for my use case
             # model = "gpt-4-turbo-2024-04-09" # thru Dec 2023
             # *** gpt4 turbo previews:
-            model = "gpt-4-turbo-preview" # currently => "gpt-4-0125-preview"
+            model = "gpt-4-turbo-preview"  # currently => "gpt-4-0125-preview"
             # model = "gpt-4-0125-preview" # thru Dec 2023 - aka gpt4 turbo
             # model = "gpt-4-1106-preview", # thru Apr 2023 - aka gpt4 turbo # ! this model is the first I used and it works great (used late 2023/early 2024)
             #

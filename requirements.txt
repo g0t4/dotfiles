@@ -1,6 +1,7 @@
 # ask-openai
 openai
 keyring
+keyrings.cryptfile
 
 # wcl function (wes clone)
 giturlparse
