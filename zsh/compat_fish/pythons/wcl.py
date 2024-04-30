@@ -102,7 +102,16 @@ def clone_url(parsed) -> str:
 
 
 def relative_repo_dir(parsed) -> str:
-    return parsed.platform + "/" + parsed.owner + "/" + parsed.repo
+    # BTW for major players, I am dropping TLD (.com, .org)... everyone else includes it (i.e. nginx.org, sourceware.org, etc.)
+    host = parsed.domain
+    if host == "github.com":
+        host = "github"
+    elif host == "gitlab.com":
+        host = "gitlab"
+    elif host == "bitbucket.org":
+        host = "bitbucket"
+    # switch to host b/c platform is not the same as host, i.e. sourceware.org has gitlab as platform (IIGC that is the underlying private host that it runs, but I want repos organized based on domain they are hosted on)... in many cases platform==host so that is why that originally worked but no longer suffices.
+    return host + "/" + parsed.owner + "/" + parsed.repo
 
 
 def parse_repo(url: str):

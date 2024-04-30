@@ -43,6 +43,11 @@ class TestMapToRepoDir(unittest.TestCase):
         repo_dir = relative_repo_dir(parse_repo('g0t4/dotfiles'))
         self.assertEqual(repo_dir, 'github/g0t4/dotfiles')
 
+    def test_sourceware_org(self):
+        repo_dir = relative_repo_dir(
+            parse_repo('https://sourceware.org/git/glibc.git'))
+        self.assertEqual(repo_dir, 'sourceware.org/git/glibc')
+
 
 class TestNormalizedCloneUrl(unittest.TestCase):
 
@@ -54,6 +59,13 @@ class TestNormalizedCloneUrl(unittest.TestCase):
         url = clone_url(parse_repo('https://github.com/g0t4/dotfiles.git'))
         self.assertEqual(url, 'git@github.com:g0t4/dotfiles')  # drop .git
 
+class TestParseThirdParty(unittest.TestCase):
+
+    def test_sourceware_org_urls(self):
+        parsed = parse_repo('https://sourceware.org/git/glibc.git')
+        self.assertEqual(parsed.domain, 'sourceware.org')
+        self.assertEqual(parsed.owner, 'git')
+        self.assertEqual(parsed.repo, 'glibc')
 
 class TestParseGitHub(unittest.TestCase):
 
