@@ -97,6 +97,11 @@ def wcl(args):
 
 
 def clone_url(parsed) -> str:
+    # probably don't recreate url if not a major player? (bitbucket, github, gitlab)
+    # PRN don't recreate url if is https and want https?
+    # PRN also any cases where I want more than org/repo dir structure?
+    if parsed.domain == "sourceware.org":
+        return f"https://{parsed.domain}/{parsed.owner}/{parsed.repo}"
     # prefer ssh for git repos (simple, standard, supports ssh auth), plus I've been using this forever now and it's been great.
     return f"git@{parsed.domain}:{parsed.owner}/{parsed.repo}"
 
