@@ -46,7 +46,7 @@ def generate_command(context: str):
 
         if use_groq:
             # groq https://console.groq.com/docs/models
-            #   llama3-8b-8192, llama3-70b-8192, llama2-70b-4096, mixtral-8x7b-32768, gemma-7b-it
+            #   llama3-8b-8192, llama3-70b-8192, mixtral-8x7b-32768, gemma-7b-it
             model = "llama3-70b-8192"
             # wow llama3-* are fast... not sure yet about quality, time will tell
             # print("Using Groq")
