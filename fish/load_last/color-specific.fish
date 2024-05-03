@@ -26,7 +26,11 @@ set fish_color_autosuggestion 555 brblack # default: 555 brblack
 # cancel (\cc preset cancels current command so ^C shows w/ cancel color)
 set fish_color_history_current --bold # default: --bold
 set fish_color_match --background=brblue # default: --background=brblue
-set fish_color_search_match bryellow '--background=brblack' # default: bryellow '--background=brblack'
+#
+# fish_color_search_match (background only - i.e. underline/bold don't work, default: bryellow '--background=brblack'), default is terrible b/c it makes the command impossible to read... can't help but wonder if I overrode default before realizing that... this default seems inane
+# set fish_color_search_match -r # inverse for differentiating, looks good enough
+set fish_color_search_match '' # don't differentiate... often I just wanna hit up arrow and not make it obvious that I used history completion, just messes up video recordings w/o really adding anything meaninful to viewers who don't care where the command came from
+#
 set fish_color_selection white --bold '--background=brblack' # default: white --bold '--background=brblack'
 set fish_color_cancel -r # default: -r (reverse color)
 #
