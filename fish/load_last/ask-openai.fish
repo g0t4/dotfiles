@@ -86,7 +86,7 @@ function ask_openai_link
     set -l _link_py "$WES_DOTFILES/zsh/universals/3-last/ask-openai/link.py"
 
     set -l response ( \
-        echo -e "env: fish on $(uname)\nquestion: $user_input" | \
+        echo -e "env: $(uname)\nquestion: $user_input" | \
         $_python3 $_link_py 2>&1 \
     )
     set -l exit_code $status
