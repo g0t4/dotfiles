@@ -843,3 +843,36 @@ end
 abbr _reminders_docker_binfmts "docker run --privileged --rm tonistiigi/binfmt" # https://github.com/tonistiigi/binfmt
 # idea for a new spot where I can locate what are essentially reminders for commands (i.e. not used often)
 # type _reminders<TAB> to see what is available
+
+
+
+# examples:
+#    tellme_about docker   # executable, symlink
+#    tellme_about ld       # executable, not symlink
+function tellme_about
+    set -l what $argv[1]
+    set _where (command -v $what)
+    if test -z $_where
+        echo "I don't know about $what"
+        return 1
+    end
+    echo $_where # top level match, no indent
+    file --brief $_where | _indent # indent the description
+    if test -L $_where
+        echo "  -> " (readlink $_where) # show target
+    end
+
+    # todo multiple matches
+    # PRN flesh this out later, just a quick thought... I feel like I've done this before too :)...
+end
+
+function _indent
+    # $argv = level of indent (1 = 2 spaces, 2 = 4 spaces, etc)
+    if test -z $argv
+        set spaces 2 # default to 2 spaces (1 level of indent)
+    else
+        set spaces (math "$argv * 2") # 2 spaces per indent
+    end
+    sed "s/^/"(string repeat " " -n $spaces)"/"
+
+end
