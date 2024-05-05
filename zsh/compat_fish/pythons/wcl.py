@@ -102,6 +102,8 @@ def clone_url(parsed) -> str:
     # PRN also any cases where I want more than org/repo dir structure?
     if parsed.domain == "sourceware.org":
         return f"https://{parsed.domain}/{parsed.owner}/{parsed.repo}"
+    if parsed.domain == "gcc.gnu.org":
+        return parsed.url
     # prefer ssh for git repos (simple, standard, supports ssh auth), plus I've been using this forever now and it's been great.
     return f"git@{parsed.domain}:{parsed.owner}/{parsed.repo}"
 
