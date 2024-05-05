@@ -19,6 +19,12 @@ function prompt_login --description 'display user name for the prompt'
         echo -n -s (set_color cyan) \ue0a0 (set_color normal) " "
     end
 
+    if test -f /.dockerenv
+        # /.dockerenv => assume container
+        # PRN add diff check like a custom env var I apply to my container images which is where this is most valuable so my dotifles indicate inside a container (just like SSH indicator above)
+        echo -n -s (set_color cyan) \uf308 (set_color normal) " "
+    end
+
     # python venv indicator 
     if test -n "$VIRTUAL_ENV"
         echo -n -s (set_color cyan) \ue73c (set_color normal) " "
