@@ -77,7 +77,7 @@ function pwd --description "pwd for a repository => repo root in yellow + repo d
     # PRN support -P/-L arg like builtin does, and set default behavior of not resolving symlinks (-L) because right now the below defaults as if -P was passed (it resolves symlinks)
     set _rr (_repo_root)
     set _prefix (git rev-parse --show-prefix 2>/dev/null)
-    if string match -q -r '(?<host_dir>.*/github)/(?<repo>.*)' $_rr
+    if string match -q -r '(?<host_dir>.*/(bitbucket|github|gitlab))/(?<repo>.*)' $_rr
         # path is normal color thru host dir (i.e. ~/repos/github), then cyan for org/repo, then white for the repo dir(s)
         echo -s (set_color normal) $host_dir / \
             (set_color cyan) $repo \
