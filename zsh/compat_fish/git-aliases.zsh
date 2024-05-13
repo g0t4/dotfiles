@@ -126,10 +126,12 @@ abbr grev 'git revert'
 abbr grm 'git rm'
 abbr grmc 'git rm --cached'
 
-# restoring
+# restore (staged)
 abbr grst 'git restore --staged' # TBD do I wanna default for entire repo? or force myself to remember grstr instead?
+abbr grstp 'git restore --staged --patch' # ! USE THIS MORE OFTEN (maybe make it grst?)
 abbr grstr 'git restore --staged "$(_repo_root)"' # use $() syntax for compat w/ zsh too
-abbr grsp 'git restore --stage --patch' # * try this
+#
+# restore (unstaged)
 abbr grp 'git restore --patch' # * favorite
 abbr grss 'git restore --source'
 
