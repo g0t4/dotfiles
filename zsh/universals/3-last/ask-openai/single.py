@@ -8,7 +8,7 @@ import platform
 
 def generate_command(context: str):
 
-    use_groq = True
+    use_groq = False
 
     if platform.system() == 'Linux':
         # https://pypi.org/project/keyrings.cryptfile/
@@ -58,7 +58,8 @@ def generate_command(context: str):
             # model = "gpt-4-turbo" # currently => "gpt-4-turbo-2024-04-09" # TODO test this vs preview for my use case
             # model = "gpt-4-turbo-2024-04-09" # thru Dec 2023
             # *** gpt4 turbo previews:
-            model = "gpt-4-turbo-preview"  # currently => "gpt-4-0125-preview"
+            model = "gpt-4o" # thru Oct 2023
+            # model = "gpt-4-turbo-preview"  # currently => "gpt-4-0125-preview" (last used before gpt-4o)
             # model = "gpt-4-0125-preview" # thru Dec 2023 - aka gpt4 turbo
             # model = "gpt-4-1106-preview", # thru Apr 2023 - aka gpt4 turbo # ! this model is the first I used and it works great (used late 2023/early 2024)
             #
