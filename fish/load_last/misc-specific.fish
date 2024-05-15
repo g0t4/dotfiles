@@ -879,15 +879,21 @@ end
 
 
 if command -q act
+
+
+
+
+    # GENERATED COMPLETIONS (finagled chatgpt to spit this out):
+    #
     # function generate_completions_from_help
     #     for line in (act --help | grep -oE "\-\-[a-zA-Z0-9-]+")
     #         set option (echo $line | sed 's/--//')
     #         echo complete -c act -l $option 
     #     end
     # end
-
+    #
     # generate_completions_from_help
-    
+    #
     complete -c act -l action-cache-path -d "Defines the path where the actions get cached and host workspaces created."
     complete -c act -l action-offline-mode -d "If action contents exist, it will not be fetched or pulled again."
     complete -c act -l actor -s a -d "User that triggered the event."
@@ -949,5 +955,5 @@ if command -q act
     complete -c act -l version -d "Version for act."
     complete -c act -l watch -s w -d "Watch the contents of the local repo and run when files change."
     complete -c act -l workflows -s W -d "Specify path to workflow files."
-    
+
 end
