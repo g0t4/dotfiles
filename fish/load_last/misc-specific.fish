@@ -876,3 +876,16 @@ function _indent
     sed "s/^/"(string repeat " " -n $spaces)"/"
 
 end
+
+
+if command -q act
+    function generate_completions_from_help
+        for line in (act --help | grep -oE "\-\-[a-zA-Z0-9-]+")
+            set option (echo $line | sed 's/--//')
+            echo complete -c act -l $option -d "Description for $option"
+        end
+    end
+
+    generate_completions_from_help
+
+end
