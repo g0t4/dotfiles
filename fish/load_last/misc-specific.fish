@@ -901,8 +901,6 @@ if command -q act
     complete -c act -l cache-server-port
     complete -c act -l container-architecture
     complete -c act -l container-cap-add
-    complete -c act -l container-cap-add
-    complete -c act -l container-cap-drop
     complete -c act -l container-cap-drop
     complete -c act -l container-daemon-socket
     complete -c act -l container-options
@@ -911,14 +909,11 @@ if command -q act
     complete -c act -l directory -s=C
     complete -c act -l dryrun -s=n
     complete -c act -l env
-    complete -c act -l env
-    complete -c act -l env
     complete -c act -l env-file
     complete -c act -l eventpath -s=e
     complete -c act -l github-instance
     complete -c act -l graph -s=g
     complete -c act -l help -s=h
-    complete -c act -l input
     complete -c act -l input
     complete -c act -l input-file
     complete -c act -l insecure-secrets
@@ -927,7 +922,6 @@ if command -q act
     complete -c act -l list -s=l
     complete -c act -l local-repository
     complete -c act -l log-prefix-job-id
-    complete -c act -l matrix
     complete -c act -l matrix
     complete -c act -l network
     complete -c act -l no-cache-server
@@ -942,19 +936,14 @@ if command -q act
     complete -c act -l remote-name
     complete -c act -l replace-ghe-action-token-with-github-com
     complete -c act -l replace-ghe-action-with-github-com
-    complete -c act -l replace-ghe-action-with-github-com
     complete -c act -l reuse -s=r
     complete -c act -l rm
     complete -c act -l secret -s=s
-    complete -c act -l secret-file
     complete -c act -l secret-file
     complete -c act -l use-gitignore
     complete -c act -l use-new-action-cache
     complete -c act -l userns
     complete -c act -l var
-    complete -c act -l var
-    complete -c act -l var
-    complete -c act -l var-file
     complete -c act -l var-file
     complete -c act -l verbose -s=v
     complete -c act -l version
