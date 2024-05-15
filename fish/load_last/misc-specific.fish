@@ -882,83 +882,83 @@ if command -q act
     # function generate_completions_from_help
     #     for line in (act --help | grep -oE "\-\-[a-zA-Z0-9-]+")
     #         set option (echo $line | sed 's/--//')
-    #         echo complete -c act -l $option -d "'Description for $option'"
+    #         echo complete -c act -l $option 
     #     end
     # end
 
     # generate_completions_from_help
 
-    complete -c act -l action-cache-path -d 'Description for action-cache-path'
-    complete -c act -l action-offline-mode -d 'Description for action-offline-mode'
-    complete -c act -l actor -s=a -d 'Description for actor'
-    complete -c act -l artifact-server-addr -d 'Description for artifact-server-addr'
-    complete -c act -l artifact-server-path -d 'Description for artifact-server-path'
-    complete -c act -l artifact-server-port -d 'Description for artifact-server-port'
-    complete -c act -l bind -s=b -d 'Description for bind'
-    complete -c act -l bug-report -d 'Description for bug-report'
-    complete -c act -l cache-server-addr -d 'Description for cache-server-addr'
-    complete -c act -l cache-server-path -d 'Description for cache-server-path'
-    complete -c act -l cache-server-port -d 'Description for cache-server-port'
-    complete -c act -l container-architecture -d 'Description for container-architecture'
-    complete -c act -l container-cap-add -d 'Description for container-cap-add'
-    complete -c act -l container-cap-add -d 'Description for container-cap-add'
-    complete -c act -l container-cap-drop -d 'Description for container-cap-drop'
-    complete -c act -l container-cap-drop -d 'Description for container-cap-drop'
-    complete -c act -l container-daemon-socket -d 'Description for container-daemon-socket'
-    complete -c act -l container-options -d 'Description for container-options'
-    complete -c act -l defaultbranch -d 'Description for defaultbranch'
-    complete -c act -l detect-event -d 'Description for detect-event'
-    complete -c act -l directory -s=C -d 'Description for directory'
-    complete -c act -l dryrun -s=n -d 'Description for dryrun'
-    complete -c act -l env -d 'Description for env'
-    complete -c act -l env -d 'Description for env'
-    complete -c act -l env -d 'Description for env'
-    complete -c act -l env-file -d 'Description for env-file'
-    complete -c act -l eventpath -s=e -d 'Description for eventpath'
-    complete -c act -l github-instance -d 'Description for github-instance'
-    complete -c act -l graph -s=g -d 'Description for graph'
-    complete -c act -l help -s=h -d 'Description for help'
-    complete -c act -l input -d 'Description for input'
-    complete -c act -l input -d 'Description for input'
-    complete -c act -l input-file -d 'Description for input-file'
-    complete -c act -l insecure-secrets -d 'Description for insecure-secrets'
-    complete -c act -l job -s=j -d 'Description for job'
-    complete -c act -l json -d 'Description for json'
-    complete -c act -l list -s=l -d 'Description for list'
-    complete -c act -l local-repository -d 'Description for local-repository'
-    complete -c act -l log-prefix-job-id -d 'Description for log-prefix-job-id'
-    complete -c act -l matrix -d 'Description for matrix'
-    complete -c act -l matrix -d 'Description for matrix'
-    complete -c act -l network -d 'Description for network'
-    complete -c act -l no-cache-server -d 'Description for no-cache-server'
-    complete -c act -l no-recurse -d 'Description for no-recurse'
-    complete -c act -l workflows -d 'Description for workflows'
-    complete -c act -l no-skip-checkout -d 'Description for no-skip-checkout'
-    complete -c act -l platform -s=P -d 'Description for platform'
-    complete -c act -l privileged -d 'Description for privileged'
-    complete -c act -l pull -s=p -d 'Description for pull'
-    complete -c act -l quiet -s=q -d 'Description for quiet'
-    complete -c act -l rebuild -d 'Description for rebuild'
-    complete -c act -l remote-name -d 'Description for remote-name'
-    complete -c act -l replace-ghe-action-token-with-github-com -d 'Description for replace-ghe-action-token-with-github-com'
-    complete -c act -l replace-ghe-action-with-github-com -d 'Description for replace-ghe-action-with-github-com'
-    complete -c act -l replace-ghe-action-with-github-com -d 'Description for replace-ghe-action-with-github-com'
-    complete -c act -l reuse -s=r -d 'Description for reuse'
-    complete -c act -l rm -d 'Description for rm'
-    complete -c act -l secret -s=s -d 'Description for secret'
-    complete -c act -l secret-file -d 'Description for secret-file'
-    complete -c act -l secret-file -d 'Description for secret-file'
-    complete -c act -l use-gitignore -d 'Description for use-gitignore'
-    complete -c act -l use-new-action-cache -d 'Description for use-new-action-cache'
-    complete -c act -l userns -d 'Description for userns'
-    complete -c act -l var -d 'Description for var'
-    complete -c act -l var -d 'Description for var'
-    complete -c act -l var -d 'Description for var'
-    complete -c act -l var-file -d 'Description for var-file'
-    complete -c act -l var-file -d 'Description for var-file'
-    complete -c act -l verbose -s=v -d 'Description for verbose'
-    complete -c act -l version -d 'Description for version'
-    complete -c act -l watch -s=w -d 'Description for watch'
-    complete -c act -l workflows -s=W -d 'Description for workflows'
+    complete -c act -l action-cache-path
+    complete -c act -l action-offline-mode
+    complete -c act -l actor -s=a
+    complete -c act -l artifact-server-addr
+    complete -c act -l artifact-server-path
+    complete -c act -l artifact-server-port
+    complete -c act -l bind -s=b
+    complete -c act -l bug-report
+    complete -c act -l cache-server-addr
+    complete -c act -l cache-server-path
+    complete -c act -l cache-server-port
+    complete -c act -l container-architecture
+    complete -c act -l container-cap-add
+    complete -c act -l container-cap-add
+    complete -c act -l container-cap-drop
+    complete -c act -l container-cap-drop
+    complete -c act -l container-daemon-socket
+    complete -c act -l container-options
+    complete -c act -l defaultbranch
+    complete -c act -l detect-event
+    complete -c act -l directory -s=C
+    complete -c act -l dryrun -s=n
+    complete -c act -l env
+    complete -c act -l env
+    complete -c act -l env
+    complete -c act -l env-file
+    complete -c act -l eventpath -s=e
+    complete -c act -l github-instance
+    complete -c act -l graph -s=g
+    complete -c act -l help -s=h
+    complete -c act -l input
+    complete -c act -l input
+    complete -c act -l input-file
+    complete -c act -l insecure-secrets
+    complete -c act -l job -s=j
+    complete -c act -l json
+    complete -c act -l list -s=l
+    complete -c act -l local-repository
+    complete -c act -l log-prefix-job-id
+    complete -c act -l matrix
+    complete -c act -l matrix
+    complete -c act -l network
+    complete -c act -l no-cache-server
+    complete -c act -l no-recurse
+    complete -c act -l workflows
+    complete -c act -l no-skip-checkout
+    complete -c act -l platform -s=P
+    complete -c act -l privileged
+    complete -c act -l pull -s=p
+    complete -c act -l quiet -s=q
+    complete -c act -l rebuild
+    complete -c act -l remote-name
+    complete -c act -l replace-ghe-action-token-with-github-com
+    complete -c act -l replace-ghe-action-with-github-com
+    complete -c act -l replace-ghe-action-with-github-com
+    complete -c act -l reuse -s=r
+    complete -c act -l rm
+    complete -c act -l secret -s=s
+    complete -c act -l secret-file
+    complete -c act -l secret-file
+    complete -c act -l use-gitignore
+    complete -c act -l use-new-action-cache
+    complete -c act -l userns
+    complete -c act -l var
+    complete -c act -l var
+    complete -c act -l var
+    complete -c act -l var-file
+    complete -c act -l var-file
+    complete -c act -l verbose -s=v
+    complete -c act -l version
+    complete -c act -l watch -s=w
+    complete -c act -l workflows -s=W
 
 end
