@@ -880,8 +880,18 @@ end
 
 if command -q act
 
+    function actw_expanded
 
+        # if not in repo root, prepend a cd too, mostly as a reminder to avoid pathing issues to the workflow files and also issues when run act inside a nested dir:
+        if test (pwd) != (_repo_root)
+            echo -n "cd \$(_repo_root); "
+        end
 
+        echo act --workflows .github/workflows/!
+
+    end
+
+    abbr --add actw --set-cursor='!' --function actw_expanded # ! so we can tab complete workflow file/path
 
     # GENERATED COMPLETIONS (finagled chatgpt to spit this out):
     #
