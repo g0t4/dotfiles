@@ -887,7 +887,7 @@ if command -q act
             echo -n "cd \$(_repo_root); "
         end
 
-        echo act --workflows .github/workflows/!
+        echo act --reuse --workflows .github/workflows/!
 
     end
 
