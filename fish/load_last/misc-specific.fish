@@ -967,3 +967,10 @@ if command -q act
     complete -c act -l workflows -s W -d "Specify path to workflow files."
 
 end
+
+if command -q az
+
+    abbr azal 'az account list --output table' # subscriptions
+    # do not try to add upfront, lol!
+
+end
