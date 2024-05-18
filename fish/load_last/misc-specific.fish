@@ -692,11 +692,23 @@ if command -q terraform
 
     abbr tfv 'terraform validate' # *** favorite
     abbr tfi 'terraform init'
+    abbr tfimport 'terraform import'
+    abbr tff 'terraform fmt'
     abbr tfa 'terraform apply'
     abbr tfp 'terraform plan'
     abbr tfo 'terraform output'
-    abbr tfs 'terraform show'
+
+    abbr tfshow 'terraform show' # dump all resources in state
+    #
+    abbr tfs 'terraform state' # subcommands
+    abbr tfsl 'terraform state list' # list resources currently in state
+    abbr tfss 'terraform state show' # dump one resource in state
+    abbr tfsrm 'terraform state rm' # remove resource from state
+    abbr tfr 'terraform refresh'
+
     abbr tfd 'terraform destroy'
+    abbr tft 'terraform taint'
+    abbr tfu 'terraform untaint'
 
 end
 
@@ -970,7 +982,19 @@ end
 
 if command -q az
 
+    # *** do not try to add upfront, lol!
+
     abbr azal 'az account list --output table' # subscriptions
-    # do not try to add upfront, lol!
+    abbr azall 'az account list-locations --output table' # locations
+
+    # resources:
+    abbr azrl 'az resource list --output table' # resources
+    abbr azrs 'az resource show --output table' # resource show
+    # resource groups:
+    abbr azgl 'az group list --output table'
+
+    # app services
+    abbr azwl 'az webapp list --output table' # webapps
+    abbr azasl 'az appservice plan list --output table' # service plans
 
 end
