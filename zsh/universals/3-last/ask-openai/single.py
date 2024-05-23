@@ -103,7 +103,7 @@ def generate_command(context: str):
             model=use.model,
             messages=[{
                 "role": "system",
-                "content": "You are a command line expert. Respond with a single, valid, complete command line. I intend to execute it. No explanation. No markdown blocks"
+                "content": "You are a command line expert. Respond with a single, valid, complete command line. I intend to execute it. No explanation. No markdown. No markdown with backticks ` nor ```"
             }, {
                 "role": "user",
                 "content": f"{context}"
