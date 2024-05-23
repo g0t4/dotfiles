@@ -76,15 +76,15 @@ def get_api_key(service_name, account_name):
         kr.keyring_key = getenv("KEYRING_CRYPTFILE_PASSWORD")
         keyring.set_keyring(kr)  # tell keyring to use kr (not other backends, and not try to setup keyring.cryptfile backend instance itself, b/c then it prompts for password)
 
-    password = keyring.get_password(service_name, account_name)
+    api_key = keyring.get_password(service_name, account_name)
 
     # windows => open Credential Manager => Windows Credentials tab => Generic Credentials section (add new)...  service_name => Internet/NetworkAddress, account_name => username
     # macos => open Keychain Access => kind=app password, (security add-generic-password IIRC)
 
-    if password is None:
-        print(f"No password found for {account_name} in {service_name}")
+    if api_key is None:
+        print(f"No api_key found for account={account_name} in service={service_name}")
         sys.exit(1)
-    return password
+    return api_key
 
 
 DEBUG = False
