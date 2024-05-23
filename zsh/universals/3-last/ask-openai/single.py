@@ -29,14 +29,9 @@ def use_openai():
         print("[using openai]")
 
     # openai https://platform.openai.com/docs/models
-    # gpt4 models: https://platform.openai.com/docs/models/gpt-4-turbo-and-gpt-4
-    # *** gpt4 turbo (adds vision capabilities): # does this add anything else besides vision to the turbo preview?
-    # model = "gpt-4-turbo" # currently => "gpt-4-turbo-2024-04-09" # TODO test this vs preview for my use case
-    # model = "gpt-4-turbo-2024-04-09" # thru Dec 2023
-    # *** gpt4 turbo previews:
     # ! model = "gpt-4o"  # thru Oct 2023
+    # model = "gpt-4-turbo" # currently => "gpt-4-turbo-2024-04-09" # TODO test this vs preview for my use case
     # model = "gpt-4-turbo-preview"  # currently => "gpt-4-0125-preview" (last used before gpt-4o)
-    # model = "gpt-4-0125-preview" # thru Dec 2023 - aka gpt4 turbo
     # model = "gpt-4-1106-preview", # thru Apr 2023 - aka gpt4 turbo # ! this model is the first I used and it works great (used late 2023/early 2024)
     #
     # *** gpt 3.5:
