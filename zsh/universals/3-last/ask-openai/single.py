@@ -1,10 +1,10 @@
-from collections import namedtuple
-from os import getenv
-from openai import OpenAI
-from keyrings.cryptfile.cryptfile import CryptFileKeyring
-import keyring
 import sys
 import platform
+from os import getenv
+from collections import namedtuple
+import keyring
+from openai import OpenAI
+from keyrings.cryptfile.cryptfile import CryptFileKeyring
 
 Service = namedtuple('Service', 'base_url model api_key')
 
@@ -28,11 +28,12 @@ def use_openai():
     if debug:
         print("[using openai]")
 
+    # *** gpt 4:
     # openai https://platform.openai.com/docs/models
-    # ! model = "gpt-4o"  # thru Oct 2023
-    # model = "gpt-4-turbo" # currently => "gpt-4-turbo-2024-04-09" # TODO test this vs preview for my use case
+    # model = "gpt-4o"  # thru Oct 2023 # currently evaluating
+    # model = "gpt-4-turbo" # currently => "gpt-4-turbo-2024-04-09"
     # model = "gpt-4-turbo-preview"  # currently => "gpt-4-0125-preview" (last used before gpt-4o)
-    # model = "gpt-4-1106-preview", # thru Apr 2023 - aka gpt4 turbo # ! this model is the first I used and it works great (used late 2023/early 2024)
+    # model = "gpt-4-1106-preview", # thru Apr 2023 - aka gpt4 turbo # *** first model I used and it works great (used late 2023/early 2024)
     #
     # *** gpt 3.5:
     # model="gpt-3.5-turbo-1106",
@@ -112,7 +113,16 @@ def generate_command(context: str):
             n=1  # default
         )
 
-        return completion.choices[0].message.content
+        response = completion.choices[0].message.content
+        # log responses to ~/.ask.openai.log
+
+        with open(f"{getenv('HOME')}/.ask.openai.log", "a") as f:
+            f.writelines([
+                '#' * 40 + '\n', 
+                f"{context}\n{response}\n\n"
+            ])
+
+        return response
     except Exception as e:
         print(f"{e}")
         return None
