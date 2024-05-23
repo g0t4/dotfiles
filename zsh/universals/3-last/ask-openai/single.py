@@ -116,16 +116,21 @@ def generate_command(context: str):
         response = completion.choices[0].message.content
         # log responses to ~/.ask.openai.log
 
-        with open(f"{getenv('HOME')}/.ask.openai.log", "a") as f:
-            f.writelines([
-                '#' * 40 + '\n', 
-                f"{context}\n{response}\n\n"
-            ])
+        log_response(context, response)
 
         return response
     except Exception as e:
         print(f"{e}")
         return None
+
+def log_response(context, response):
+    log_file = f"{getenv('HOME')}/.ask.openai.log"
+    APPEND = "a"
+    with open(log_file, APPEND, encoding='utf-8') as file:
+        file.writelines([
+                '#' * 40 + '\n',
+                f"{context}\n{response}\n\n"
+            ])
 
 
 if __name__ == "__main__":
