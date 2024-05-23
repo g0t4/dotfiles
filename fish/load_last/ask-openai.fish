@@ -1,23 +1,29 @@
 # https://fishshell.com/docs/current/cmds/bind.html
 
 function ask_use_groq
-    set --universal ask_service --groq
+    set --universal ask_service --groq $argv
     ask_dump_config
 end
 
 function ask_use_openai
-    set --universal ask_service --openai
+    set --universal ask_service --openai $argv
     ask_dump_config
 end
 
 function ask_use_lmstudio
-    set --universal ask_service --lmstudio
+    set --universal ask_service --lmstudio $argv
     ask_dump_config
 end
 
 function ask_use_ollama_llama3
-    # PRN other models
-    set --universal ask_service --ollama llama3
+
+    set use_args $argv
+    if test -z $use_args
+        set use_args llama3
+    end
+
+    set --universal ask_service --ollama $use_args
+
     ask_dump_config
 end
 
