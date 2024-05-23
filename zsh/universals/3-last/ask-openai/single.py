@@ -11,18 +11,18 @@ Service = namedtuple('Service', 'base_url model api_key')
 Service.__repr__ = lambda self: f"Service(base_url={self.base_url}, model={self.model})"
 
 
-def use_groq():
+def use_groq(model: str):
 
     return Service(
         api_key=get_api_key('groq', 'ask'),
         base_url='https://api.groq.com/openai/v1',
-        model='llama3-70b-8192',
+        model=model if model else 'llama3-70b-8192',
         # groq https://console.groq.com/docs/models
         #   llama3-8b-8192, llama3-70b-8192, mixtral-8x7b-32768, gemma-7b-it
     )
 
 
-def use_openai():
+def use_openai(model: str):
 
     # *** gpt 4:
     # openai https://platform.openai.com/docs/models
@@ -38,17 +38,17 @@ def use_openai():
     return Service(
         api_key=get_api_key('openai', 'ask'),
         base_url=None,
-        model='gpt-4o',
+        model=model if model else 'gpt-4o',
     )
 
 
-def use_lmstudio():
+def use_lmstudio(model: str):
 
     # http://localhost:1234/v1/models
     return Service(
         api_key="whatever",
         base_url="http://localhost:1234/v1",
-        model='whatever',  # todo setup hosting for multiple models in LM Studio?
+        model= model if model else '',
     )
 
 
@@ -136,14 +136,15 @@ def main():
     #
     args = parser.parse_args()
 
+    # PRN pass model parameter if can be overriden per service (like w/ ollama)
     if args.groq:
-        use = use_groq()
+        use = use_groq(args.model)
     elif args.lmstudio:
-        use = use_lmstudio()
+        use = use_lmstudio(args.model)
     elif args.ollama:
         use = use_ollama(args.model)
     else:
-        use = use_openai()
+        use = use_openai(args.model)
 
     if args.dump_config:
         print("args=", args)
