@@ -18,6 +18,7 @@ function ask_toggle_debug
     else
         set --universal ask_debug debug # passed as arg, so keep it as debug when setting it
     end
+    echo "ask_debug: $ask_debug"
 end
 
 function ask_clear
