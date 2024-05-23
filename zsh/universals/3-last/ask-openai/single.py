@@ -8,7 +8,7 @@ from openai import OpenAI
 from keyrings.cryptfile.cryptfile import CryptFileKeyring
 
 Service = namedtuple('Service', 'base_url model api_key name')
-Service.__repr__ = lambda self: f"Service(base_url={self.base_url}, model={self.model})" # i.e. printing (logging), DO NOT INCLUDE api_key
+Service.__repr__ = lambda self: f"Service({self.name} model={self.model})" # i.e. printing (logging), DO NOT INCLUDE api_key
 
 
 def use_groq(model: str):
@@ -155,8 +155,8 @@ def main():
         use = use_openai(args.model)
 
     if args.dump_config:
-        print("args=", args)
-        print("use=", use)
+        # print(args)
+        print(use)
         exit(0)
 
     stdin_context = sys.stdin.read()
