@@ -146,4 +146,5 @@ if __name__ == "__main__":
     if command is None:
         sys.exit(1)
 
+    # response is piped to STDOUT => STDIN of SHELL => command line buffer (as if user typed it)
     print(command)
