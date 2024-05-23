@@ -16,6 +16,7 @@ function ask_use_lmstudio
 end
 
 function ask_use_ollama_llama3
+    # PRN other models
     set --universal ask_service --ollama llama3
     ask_dump_config
 end
