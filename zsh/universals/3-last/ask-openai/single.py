@@ -42,30 +42,30 @@ def generate_command(context: str):
     base_url = "https://api.groq.com/openai/v1" if use_groq else None
     client = OpenAI(api_key=password, base_url=base_url)
 
-    try:
+    if use_groq:
+        # groq https://console.groq.com/docs/models
+        #   llama3-8b-8192, llama3-70b-8192, mixtral-8x7b-32768, gemma-7b-it
+        model = "llama3-70b-8192"
+        # wow llama3-* are fast... not sure yet about quality, time will tell
+        # print("Using Groq")
+    else:
+        # openai https://platform.openai.com/docs/models
+        #
+        # gpt4 models: https://platform.openai.com/docs/models/gpt-4-turbo-and-gpt-4
+        # *** gpt4 turbo (adds vision capabilities): # does this add anything else besides vision to the turbo preview?
+        # model = "gpt-4-turbo" # currently => "gpt-4-turbo-2024-04-09" # TODO test this vs preview for my use case
+        # model = "gpt-4-turbo-2024-04-09" # thru Dec 2023
+        # *** gpt4 turbo previews:
+        model = "gpt-4o"  # thru Oct 2023
+        # model = "gpt-4-turbo-preview"  # currently => "gpt-4-0125-preview" (last used before gpt-4o)
+        # model = "gpt-4-0125-preview" # thru Dec 2023 - aka gpt4 turbo
+        # model = "gpt-4-1106-preview", # thru Apr 2023 - aka gpt4 turbo # ! this model is the first I used and it works great (used late 2023/early 2024)
+        #
+        # *** gpt 3.5:
+        # model="gpt-3.5-turbo-1106",
+        # gpt-4 "turbo" and gpt-3.5-turbo are both fast, so use gpt-4 for accuracy (else 3.5 might need to be re-run/fixed which can cost more)
 
-        if use_groq:
-            # groq https://console.groq.com/docs/models
-            #   llama3-8b-8192, llama3-70b-8192, mixtral-8x7b-32768, gemma-7b-it
-            model = "llama3-70b-8192"
-            # wow llama3-* are fast... not sure yet about quality, time will tell
-            # print("Using Groq")
-        else:
-            # openai https://platform.openai.com/docs/models
-            #
-            # gpt4 models: https://platform.openai.com/docs/models/gpt-4-turbo-and-gpt-4
-            # *** gpt4 turbo (adds vision capabilities): # does this add anything else besides vision to the turbo preview?
-            # model = "gpt-4-turbo" # currently => "gpt-4-turbo-2024-04-09" # TODO test this vs preview for my use case
-            # model = "gpt-4-turbo-2024-04-09" # thru Dec 2023
-            # *** gpt4 turbo previews:
-            model = "gpt-4o" # thru Oct 2023
-            # model = "gpt-4-turbo-preview"  # currently => "gpt-4-0125-preview" (last used before gpt-4o)
-            # model = "gpt-4-0125-preview" # thru Dec 2023 - aka gpt4 turbo
-            # model = "gpt-4-1106-preview", # thru Apr 2023 - aka gpt4 turbo # ! this model is the first I used and it works great (used late 2023/early 2024)
-            #
-            # *** gpt 3.5:
-            # model="gpt-3.5-turbo-1106",
-            # gpt-4 "turbo" and gpt-3.5-turbo are both fast, so use gpt-4 for accuracy (else 3.5 might need to be re-run/fixed which can cost more)
+    try:
 
         completion = client.chat.completions.create(
             model=model,
