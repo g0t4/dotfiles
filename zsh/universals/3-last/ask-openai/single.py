@@ -14,9 +14,6 @@ Service.__repr__ = lambda self: f"Service(base_url={self.base_url}, model={self.
 
 def use_groq():
 
-    if DEBUG:
-        print("[using groq]")
-
     return Service(
         api_key=get_api_key('groq', 'ask'),
         base_url='https://api.groq.com/openai/v1',
@@ -27,9 +24,6 @@ def use_groq():
 
 
 def use_openai():
-
-    if DEBUG:
-        print("[using openai]")
 
     # *** gpt 4:
     # openai https://platform.openai.com/docs/models
@@ -51,8 +45,6 @@ def use_openai():
 
 def use_lmstudio():
 
-    if DEBUG:
-        print("[using lmstudio]")
     # http://localhost:1234/v1/models
     return Service(
         api_key="whatever",
@@ -132,13 +124,9 @@ def log_response(passed_context: str, use: Service, response: str):
         file.writelines([f"{'#'*40} {use.base_url} {use.model}" + '\n', f"{passed_context}\n{response}\n\n"])
 
 
-DEBUG = False
-
-
 def main():
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('--debug', action='store_true', default=False)
     parser.add_argument('--dump_config', action='store_true', default=False)
     parser.add_argument('--openai', action='store_true', default=False)
     parser.add_argument('--lmstudio', action='store_true', default=False)
@@ -148,10 +136,6 @@ def main():
     parser.add_argument("model", type=str, const=None, nargs='?')
     #
     args = parser.parse_args()
-
-    if args.debug:
-        global DEBUG
-        DEBUG = True
 
     if args.groq:
         use = use_groq()
@@ -163,7 +147,6 @@ def main():
         use = use_openai()
 
     if args.dump_config:
-        print("DEBUG=", DEBUG)
         print("args=", args)
         print("use=", use)
         exit(0)
