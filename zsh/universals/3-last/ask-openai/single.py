@@ -40,8 +40,8 @@ def use_openai():
     return Service(
         service_name='openai',
         account_name='ask',
+        base_url=None,
         model='gpt-4o',
-        base_model=None
     )
 
 def use_lmstudio():
@@ -55,8 +55,8 @@ def use_lmstudio():
 def generate_command(context: str):
 
     # use = use_lmstudio()
-    # use = use_openai()
-    use = use_groq()
+    use = use_openai()
+    # use = use_groq()
 
     if platform.system() == 'Linux':
         # https://pypi.org/project/keyrings.cryptfile/
