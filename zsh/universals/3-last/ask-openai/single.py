@@ -6,8 +6,8 @@ import keyring
 import sys
 import platform
 
-
 Service = namedtuple('Service', 'base_url model api_key')
+
 
 def use_groq():
 
@@ -15,12 +15,13 @@ def use_groq():
         print("[using groq]")
 
     return Service(
-        api_key= get_api_key('groq', 'ask'),
+        api_key=get_api_key('groq', 'ask'),
         base_url='https://api.groq.com/openai/v1',
         model='llama3-70b-8192',
         # groq https://console.groq.com/docs/models
         #   llama3-8b-8192, llama3-70b-8192, mixtral-8x7b-32768, gemma-7b-it
     )
+
 
 def use_openai():
 
@@ -48,6 +49,7 @@ def use_openai():
         model='gpt-4o',
     )
 
+
 def use_lmstudio():
 
     if debug:
@@ -56,7 +58,7 @@ def use_lmstudio():
     return Service(
         api_key="whatever",
         base_url="http://localhost:1234/v1",
-        model='whatever', # todo setup hosting for multiple models in LM Studio?
+        model='whatever',  # todo setup hosting for multiple models in LM Studio?
     )
 
 
@@ -88,7 +90,9 @@ def get_api_key(service_name, account_name):
         sys.exit(1)
     return password
 
+
 debug = True
+
 
 def generate_command(context: str):
 
@@ -117,6 +121,7 @@ def generate_command(context: str):
     except Exception as e:
         print(f"{e}")
         return None
+
 
 if __name__ == "__main__":
 
