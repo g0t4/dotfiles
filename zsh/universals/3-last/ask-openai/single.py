@@ -11,7 +11,7 @@ Service = namedtuple('Service', 'base_url model api_key')
 
 def use_groq():
 
-    if debug:
+    if DEBUG:
         print("[using groq]")
 
     return Service(
@@ -25,7 +25,7 @@ def use_groq():
 
 def use_openai():
 
-    if debug:
+    if DEBUG:
         print("[using openai]")
 
     # *** gpt 4:
@@ -48,7 +48,7 @@ def use_openai():
 
 def use_lmstudio():
 
-    if debug:
+    if DEBUG:
         print("[using lmstudio]")
 
     return Service(
@@ -87,7 +87,7 @@ def get_api_key(service_name, account_name):
     return password
 
 
-debug = False
+DEBUG = False
 
 
 def generate_command(context: str):
@@ -123,13 +123,12 @@ def generate_command(context: str):
         print(f"{e}")
         return None
 
-def log_response(context, response):
+def log_response(passed_context, response):
     log_file = f"{getenv('HOME')}/.ask.openai.log"
-    APPEND = "a"
-    with open(log_file, APPEND, encoding='utf-8') as file:
+    with open(log_file, "a", encoding='utf-8') as file:
         file.writelines([
                 '#' * 40 + '\n',
-                f"{context}\n{response}\n\n"
+                f"{passed_context}\n{response}\n\n"
             ])
 
 
