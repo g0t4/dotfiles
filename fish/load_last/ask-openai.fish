@@ -29,7 +29,6 @@ function ask_openai
 
     set -l user_input (commandline -b)
 
-    
     # FYI not appending '# thinking...' b/c it doesn't show AND doing so is messing up the prompt if a space typed before this func is invoked
 
     set -l _python3 "$WES_DOTFILES/.venv/bin/python3"
