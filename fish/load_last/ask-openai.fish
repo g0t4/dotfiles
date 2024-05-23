@@ -41,7 +41,7 @@ function ask_openai
         set git_diff (git diff --cached --no-color)
         set response ( \
             echo -e "env: fish on $(uname)\nquestion: write me a commit message, here is the git diff:\n$git_diff" | \
-            $_python3 $_single_py 2>&1 \
+            $_python3 $_single_py $ask_service $ask_debug 2>&1 \
         )
     else
         set response ( \
