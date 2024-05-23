@@ -51,7 +51,7 @@ def use_lmstudio():
 
     if DEBUG:
         print("[using lmstudio]")
-
+    # http://localhost:1234/v1/models
     return Service(
         api_key="whatever",
         base_url="http://localhost:1234/v1",
