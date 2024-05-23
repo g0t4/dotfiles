@@ -101,20 +101,21 @@ def generate_command(passed_context: str, use: Service):
 
         completion = client.chat.completions.create(
             model=use.model,
-            messages=[{
-                "role":
-                "system",
-                "content":
-                "You are a command line expert. Respond with a single, valid, complete command line. I intend to execute it. No explanation. No markdown. No markdown with backticks ` nor ```"
-            }, {
-                "role": "user",
-                "content": f"{passed_context}"
-            },
-            # PRN can I improve phi3/mixtral by further telling it not to give me an explanataion, i.e.:
-            # {
-            #     "role": "system",
-            #     "content": "The command line is:"
-            # }],
+            messages=[
+                {
+                    "role": "system",
+                    "content": "You are a command line expert. Respond with a single, valid, complete command line. I intend to execute it. No explanation. No markdown. No markdown with backticks ` nor ```"
+                },
+                {
+                    "role": "user",
+                    "content": f"{passed_context}"
+                },
+                # PRN can I improve phi3/mixtral by further telling it not to give me an explanataion, i.e.:
+                # {
+                #     "role": "system",
+                #     "content": "The command line is:"
+                # }
+            ],
             max_tokens=80,
             n=1  # default
         )
