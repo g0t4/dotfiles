@@ -134,15 +134,15 @@ def log_response(passed_context, response):
 
 if __name__ == "__main__":
 
-    context = sys.stdin.read()
+    stdin_context = sys.stdin.read()
     # empty context usually generates echo hello :) so allow it
 
-    if "question: dump\n" in context:
+    if "question: dump\n" in stdin_context:
         # dump context to troubleshoot
-        print(context)
+        print(stdin_context)
         sys.exit(2)
 
-    command = generate_command(context)
+    command = generate_command(stdin_context)
     if command is None:
         sys.exit(1)
 
