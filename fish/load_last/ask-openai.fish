@@ -1,28 +1,28 @@
 # https://fishshell.com/docs/current/cmds/bind.html
 
 function ask_use_groq
-    export ASK_SERVICE="groq"
+    set --universal ask_service groq
 end
 
 function ask_use_openai
-    export ASK_SERVICE="openai"
+    set --universal ask_service openai
 end
 
 function ask_use_lmstudio
-    export ASK_SERVICE="lmstudio"
+    set --universal ask_service lmstudio
 end
 
 function ask_toggle_debug
-    if test -z "$ASK_DEBUG"
-        export ASK_DEBUG=true
+    if set --query ask_debug
+        set --universal --erase ask_debug
     else
-        set --erase ASK_DEBUG
+        set --universal ask_debug true
     end
 end
 
 function ask_clear
-    set --erase ASK_DEBUG
-    set --erase ASK_SERVICE
+    set --universal --erase ask_service
+    set --universal --erase ask_debug
 end
 
 function ask_openai
