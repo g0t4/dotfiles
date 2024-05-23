@@ -16,7 +16,7 @@ function ask_toggle_debug
     if set --query ask_debug
         set --universal --erase ask_debug
     else
-        set --universal ask_debug true
+        set --universal ask_debug debug # passed as arg, so keep it as debug when setting it
     end
 end
 
@@ -47,7 +47,7 @@ function ask_openai
     else
         set response ( \
             echo -e "env: fish on $(uname)\nquestion: $user_input" | \
-            $_python3 $_single_py $ask_service 2>&1 \
+            $_python3 $_single_py $ask_service $ask_debug 2>&1 \
         )
     end
     set exit_code $status

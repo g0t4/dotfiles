@@ -126,20 +126,21 @@ def log_response(passed_context, response):
         file.writelines(['#' * 40 + '\n', f"{passed_context}\n{response}\n\n"])
 
 
-DEBUG = os.environ.get('ASK_DEBUG', False)
+DEBUG = False
 
 
 def main():
     args = sys.argv[1:]
+    if 'debug' in args:
+        global DEBUG
+        DEBUG = True
 
-    use = use_openai() # default if not set, or set to openai (obviously), and for now if invalid
-
-    if len(args) > 0:
-        # if any arg is groq:
-        if 'groq' in args:
-            use = use_groq()
-        elif 'lmstudio' in args:
-            use = use_lmstudio()
+    if 'groq' in args:
+        use = use_groq()
+    elif 'lmstudio' in args:
+        use = use_lmstudio()
+    else:
+        use = use_openai()
 
     stdin_context = sys.stdin.read()
     # empty context usually generates echo hello :) so allow it
