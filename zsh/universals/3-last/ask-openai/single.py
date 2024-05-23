@@ -126,13 +126,13 @@ def log_response(passed_context, response):
         file.writelines(['#' * 40 + '\n', f"{passed_context}\n{response}\n\n"])
 
 
-DEBUG = False
+DEBUG = os.environ.get('ASK_DEBUG', False)
 
 
 def main():
 
     # optionally pass arg w/ service name, so I can use a shell variable / func to toggle this w/o code changes (i.e. fish universal variable)
-    service = os.environ.get('ASK_OPENAI_SERVICE', 'openai')
+    service = os.environ.get('ASK_SERVICE', 'openai')
     if service == 'lmstudio':
         use = use_lmstudio()
     elif service == 'groq':
