@@ -87,14 +87,7 @@ def get_api_key(service_name, account_name):
     return api_key
 
 
-DEBUG = False
-
-
-def generate_command(passed_context: str):
-
-    # use = use_lmstudio()
-    use = use_openai()
-    # use = use_groq()
+def generate_command(passed_context: str, use: Service):
 
     client = OpenAI(api_key=use.api_key, base_url=use.base_url)
 
@@ -103,8 +96,10 @@ def generate_command(passed_context: str):
         completion = client.chat.completions.create(
             model=use.model,
             messages=[{
-                "role": "system",
-                "content": "You are a command line expert. Respond with a single, valid, complete command line. I intend to execute it. No explanation. No markdown. No markdown with backticks ` nor ```"
+                "role":
+                "system",
+                "content":
+                "You are a command line expert. Respond with a single, valid, complete command line. I intend to execute it. No explanation. No markdown. No markdown with backticks ` nor ```"
             }, {
                 "role": "user",
                 "content": f"{passed_context}"
@@ -123,16 +118,30 @@ def generate_command(passed_context: str):
         print(f"{e}")
         return None
 
+
 def log_response(passed_context, response):
     log_file = f"{getenv('HOME')}/.ask.openai.log"
     with open(log_file, "a", encoding='utf-8') as file:
-        file.writelines([
-                '#' * 40 + '\n',
-                f"{passed_context}\n{response}\n\n"
-            ])
+        file.writelines(['#' * 40 + '\n', f"{passed_context}\n{response}\n\n"])
 
 
-if __name__ == "__main__":
+
+DEBUG = False
+
+
+def main():
+
+    # optionally pass arg w/ service name, so I can use a shell variable / func to toggle this w/o code changes (i.e. fish universal variable)
+    args = sys.argv[1:]
+    use = use_openai()  # default service # nobody gets fired for hiring openai
+    if len(args) > 0:
+        if args[0] == "groq":
+            use = use_groq()
+        elif args[0] == "lmstudio":
+            use = use_lmstudio()
+        elif args[0] != "openai":
+            print(f"unknown service {args[0]}")
+            sys.exit(1)
 
     stdin_context = sys.stdin.read()
     # empty context usually generates echo hello :) so allow it
@@ -142,9 +151,12 @@ if __name__ == "__main__":
         print(stdin_context)
         sys.exit(2)
 
-    command = generate_command(stdin_context)
+    command = generate_command(stdin_context, use)
     if command is None:
         sys.exit(1)
 
     # response is piped to STDOUT => STDIN of SHELL => command line buffer (as if user typed it)
     print(command)
+
+if __name__ == "__main__":
+    main()
