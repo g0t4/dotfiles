@@ -86,14 +86,14 @@ def get_api_key(service_name, account_name):
     return password
 
 
-debug = True
+debug = False
 
 
 def generate_command(context: str):
 
     # use = use_lmstudio()
-    # use = use_openai()
-    use = use_groq()
+    use = use_openai()
+    # use = use_groq()
 
     client = OpenAI(api_key=use.api_key, base_url=use.base_url)
 
