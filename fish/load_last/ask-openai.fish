@@ -29,7 +29,7 @@ function ask_openai
 
     set -l user_input (commandline -b)
 
-
+    
     # FYI not appending '# thinking...' b/c it doesn't show AND doing so is messing up the prompt if a space typed before this func is invoked
 
     set -l _python3 "$WES_DOTFILES/.venv/bin/python3"
@@ -47,7 +47,7 @@ function ask_openai
     else
         set response ( \
             echo -e "env: fish on $(uname)\nquestion: $user_input" | \
-            $_python3 $_single_py 2>&1 \
+            $_python3 $_single_py $ask_service 2>&1 \
         )
     end
     set exit_code $status

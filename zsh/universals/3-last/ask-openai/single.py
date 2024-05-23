@@ -130,18 +130,16 @@ DEBUG = os.environ.get('ASK_DEBUG', False)
 
 
 def main():
+    args = sys.argv[1:]
 
-    # optionally pass arg w/ service name, so I can use a shell variable / func to toggle this w/o code changes (i.e. fish universal variable)
-    service = os.environ.get('ASK_SERVICE', 'openai')
-    if service == 'lmstudio':
-        use = use_lmstudio()
-    elif service == 'groq':
-        use = use_groq()
-    elif service == 'openai':
-        use = use_openai()
-    else:
-        print(f"service={service} not supported")
-        sys.exit(1)
+    use = use_openai() # default if not set, or set to openai (obviously), and for now if invalid
+
+    if len(args) > 0:
+        # if any arg is groq:
+        if 'groq' in args:
+            use = use_groq()
+        elif 'lmstudio' in args:
+            use = use_lmstudio()
 
     stdin_context = sys.stdin.read()
     # empty context usually generates echo hello :) so allow it
