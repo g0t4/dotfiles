@@ -1010,5 +1010,6 @@ if command -q ollama
     abbr olr "ollama run"
     abbr olrm "ollama rm"
     abbr ols "ollama serve"
+    abbr olsd "OLLAMA_DEBUG=1 ollama serve"
     abbr olshow "ollama show"
 end
