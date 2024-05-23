@@ -1,3 +1,4 @@
+import argparse
 import os
 import sys
 import platform
@@ -8,6 +9,7 @@ from openai import OpenAI
 from keyrings.cryptfile.cryptfile import CryptFileKeyring
 
 Service = namedtuple('Service', 'base_url model api_key')
+Service.__repr__ = lambda self: f"Service(base_url={self.base_url}, model={self.model})"
 
 
 def use_groq():
@@ -57,6 +59,10 @@ def use_lmstudio():
         base_url="http://localhost:1234/v1",
         model='whatever',  # todo setup hosting for multiple models in LM Studio?
     )
+
+
+def use_ollama(model: str):
+    return Service(api_key="whatever", base_url="http://localhost:11434/v1", model=model)
 
 
 def get_api_key(service_name, account_name):
@@ -130,17 +136,37 @@ DEBUG = False
 
 
 def main():
-    args = sys.argv[1:]
-    if 'debug' in args:
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--debug', action='store_true', default=False)
+    parser.add_argument('--dump_config', action='store_true', default=False)
+    parser.add_argument('--openai', action='store_true', default=False)
+    parser.add_argument('--lmstudio', action='store_true', default=False)
+    parser.add_argument('--groq', action='store_true', default=False)
+    parser.add_argument('--ollama', action='store_true', default=False)
+    # optional model name (for all services):
+    parser.add_argument("model", type=str, const=None, nargs='?')
+    #
+    args = parser.parse_args()
+
+    if args.debug:
         global DEBUG
         DEBUG = True
 
-    if 'groq' in args:
+    if args.groq:
         use = use_groq()
-    elif 'lmstudio' in args:
+    elif args.lmstudio:
         use = use_lmstudio()
+    elif args.ollama:
+        use = use_ollama(args.model)
     else:
         use = use_openai()
+
+    if args.dump_config:
+        print("DEBUG=", DEBUG)
+        print("args=", args)
+        print("use=", use)
+        exit(0)
 
     stdin_context = sys.stdin.read()
     # empty context usually generates echo hello :) so allow it

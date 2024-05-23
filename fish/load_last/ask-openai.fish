@@ -1,29 +1,47 @@
 # https://fishshell.com/docs/current/cmds/bind.html
 
 function ask_use_groq
-    set --universal ask_service groq
+    set --universal ask_service --groq
+    ask_dump_config
 end
 
 function ask_use_openai
-    set --universal ask_service openai
+    set --universal ask_service --openai
+    ask_dump_config
 end
 
 function ask_use_lmstudio
-    set --universal ask_service lmstudio
+    set --universal ask_service --lmstudio
+    ask_dump_config
+end
+
+function ask_use_ollama_llama3
+    set --universal ask_service --ollama llama3
+    ask_dump_config
 end
 
 function ask_toggle_debug
     if set --query ask_debug
         set --universal --erase ask_debug
     else
-        set --universal ask_debug debug # passed as arg, so keep it as debug when setting it
+        set --universal ask_debug --debug # passed as arg, so keep it as debug when setting it
     end
+    ask_dump_config
+end
+
+function ask_dump_config
+    echo "ask_service: $ask_service"
     echo "ask_debug: $ask_debug"
+    echo
+    set -l _python3 "$WES_DOTFILES/.venv/bin/python3"
+    set -l _single_py "$WES_DOTFILES/zsh/universals/3-last/ask-openai/single.py"
+    $_python3 $_single_py $ask_service $ask_debug --dump_config
 end
 
 function ask_clear
     set --universal --erase ask_service
     set --universal --erase ask_debug
+    ask_dump_config
 end
 
 function ask_openai
