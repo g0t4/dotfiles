@@ -5,8 +5,13 @@ function ask_use_groq
     ask_dump_config
 end
 
-function ask_use_openai
-    set --universal ask_service --openai $argv
+function ask_use_openai_gpt4o
+    set --universal ask_service --openai gpt-4o
+    ask_dump_config
+end
+
+function ask_use_openai_gpt3
+    set --universal ask_service --openai gpt-3.5-turbo-1106
     ask_dump_config
 end
 
