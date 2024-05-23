@@ -8,7 +8,7 @@ from openai import OpenAI
 from keyrings.cryptfile.cryptfile import CryptFileKeyring
 
 Service = namedtuple('Service', 'base_url model api_key name')
-Service.__repr__ = lambda self: f"Service({self.name} model={self.model})" # i.e. printing (logging), DO NOT INCLUDE api_key
+Service.__repr__ = lambda self: f"Service({self.name} model={self.model})"  # i.e. printing (logging), DO NOT INCLUDE api_key
 
 
 def use_groq(model: str):
@@ -51,7 +51,7 @@ def use_lmstudio(model: str):
         name='lmstudio',
         api_key="whatever",
         base_url="http://localhost:1234/v1",
-        model= model if model else '',
+        model=model if model else '',
     )
 
 
@@ -109,7 +109,12 @@ def generate_command(passed_context: str, use: Service):
             }, {
                 "role": "user",
                 "content": f"{passed_context}"
-            }],
+            },
+            # PRN can I improve phi3/mixtral by further telling it not to give me an explanataion, i.e.:
+            # {
+            #     "role": "system",
+            #     "content": "The command line is:"
+            # }],
             max_tokens=80,
             n=1  # default
         )
