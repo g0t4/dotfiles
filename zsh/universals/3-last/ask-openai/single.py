@@ -112,7 +112,7 @@ def generate_command(passed_context: str, use: Service):
         response = completion.choices[0].message.content
         # log responses to ~/.ask.openai.log
 
-        log_response(passed_context, response)
+        log_response(passed_context, use, response)
 
         return response
     except Exception as e:
@@ -120,10 +120,10 @@ def generate_command(passed_context: str, use: Service):
         return None
 
 
-def log_response(passed_context, response):
+def log_response(passed_context: str, use: Service, response: str):
     log_file = f"{getenv('HOME')}/.ask.openai.log"
     with open(log_file, "a", encoding='utf-8') as file:
-        file.writelines(['#' * 40 + '\n', f"{passed_context}\n{response}\n\n"])
+        file.writelines([f"{'#'*40} {use.base_url} {use.model}" + '\n', f"{passed_context}\n{response}\n\n"])
 
 
 DEBUG = False
