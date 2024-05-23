@@ -7,20 +7,25 @@ import sys
 import platform
 
 
-Service = namedtuple('Service', 'service_name account_name base_url model')
+Service = namedtuple('Service', 'base_url model api_key')
 
 def use_groq():
 
+    if debug:
+        print("[using groq]")
+
     return Service(
-        service_name='groq',
-        account_name='ask',
+        api_key= get_api_key('groq', 'ask'),
         base_url='https://api.groq.com/openai/v1',
-        model='llama3-70b-8192'
+        model='llama3-70b-8192',
         # groq https://console.groq.com/docs/models
         #   llama3-8b-8192, llama3-70b-8192, mixtral-8x7b-32768, gemma-7b-it
     )
 
 def use_openai():
+
+    if debug:
+        print("[using openai]")
 
     # openai https://platform.openai.com/docs/models
     # gpt4 models: https://platform.openai.com/docs/models/gpt-4-turbo-and-gpt-4
@@ -38,23 +43,25 @@ def use_openai():
     # gpt-4 "turbo" and gpt-3.5-turbo are both fast, so use gpt-4 for accuracy (else 3.5 might need to be re-run/fixed which can cost more)
 
     return Service(
-        service_name='openai',
-        account_name='ask',
+        api_key=get_api_key('openai', 'ask'),
         base_url=None,
         model='gpt-4o',
     )
 
 def use_lmstudio():
-    # todo get password/apikey here so can set it to foo
+
+    if debug:
+        print("[using lmstudio]")
+
     return Service(
-        service_name='openai',
-        account_name='ask',
+        api_key="whatever",
         base_url="http://localhost:1234/v1",
-        model='gpt-4o'
+        model='whatever', # todo setup hosting for multiple models in LM Studio?
     )
 
 
-def get_apikey(use):
+def get_api_key(service_name, account_name):
+
     if platform.system() == 'Linux':
         # https://pypi.org/project/keyrings.cryptfile/
         # pip install keyrings.cryptfile
@@ -71,26 +78,25 @@ def get_apikey(use):
         kr.keyring_key = getenv("KEYRING_CRYPTFILE_PASSWORD")
         keyring.set_keyring(kr)  # tell keyring to use kr (not other backends, and not try to setup keyring.cryptfile backend instance itself, b/c then it prompts for password)
 
-    password = keyring.get_password(use.service_name, use.account_name)
+    password = keyring.get_password(service_name, account_name)
 
     # windows => open Credential Manager => Windows Credentials tab => Generic Credentials section (add new)...  service_name => Internet/NetworkAddress, account_name => username
     # macos => open Keychain Access => kind=app password, (security add-generic-password IIRC)
 
     if password is None:
-        print(f"No password found for {use.account_name} in {use.service_name}")
+        print(f"No password found for {account_name} in {service_name}")
         sys.exit(1)
     return password
 
+debug = False
 
 def generate_command(context: str):
 
     # use = use_lmstudio()
-    # use = use_openai()
-    use = use_groq()
+    use = use_openai()
+    #use = use_groq()
 
-    password = get_apikey(use)
-
-    client = OpenAI(api_key=password, base_url=use.base_url)
+    client = OpenAI(api_key=use.api_key, base_url=use.base_url)
 
     try:
 
