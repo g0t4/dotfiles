@@ -1,6 +1,29 @@
 # https://fishshell.com/docs/current/cmds/bind.html
 
+function ask_use_groq
+    export ASK_SERVICE="groq"
+end
 
+function ask_use_openai
+    export ASK_SERVICE="openai"
+end
+
+function ask_use_lmstudio
+    export ASK_SERVICE="lmstudio"
+end
+
+function ask_toggle_debug
+    if test -z "$ASK_DEBUG"
+        export ASK_DEBUG=true
+    else
+        set --erase ASK_DEBUG
+    end
+end
+
+function ask_clear
+    set --erase ASK_DEBUG
+    set --erase ASK_SERVICE
+end
 
 function ask_openai
 
