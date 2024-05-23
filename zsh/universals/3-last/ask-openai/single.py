@@ -45,6 +45,7 @@ def use_openai():
     )
 
 def use_lmstudio():
+    # todo get password/apikey here so can set it to foo
     return Service(
         service_name='openai',
         account_name='ask',
@@ -52,12 +53,8 @@ def use_lmstudio():
         model='gpt-4o'
     )
 
-def generate_command(context: str):
 
-    # use = use_lmstudio()
-    use = use_openai()
-    # use = use_groq()
-
+def get_apikey(use):
     if platform.system() == 'Linux':
         # https://pypi.org/project/keyrings.cryptfile/
         # pip install keyrings.cryptfile
@@ -66,7 +63,6 @@ def generate_command(context: str):
         # kr = CryptFileKeyring()
         # kr.set_password("groq","ask","foo")
         # kr.set_password("openai","ask","foo")
-
         # on linux, avoid prompt for password for cryptfile:
         kr = CryptFileKeyring()
         if getenv("KEYRING_CRYPTFILE_PASSWORD") is None:
@@ -83,6 +79,16 @@ def generate_command(context: str):
     if password is None:
         print(f"No password found for {use.account_name} in {use.service_name}")
         sys.exit(1)
+    return password
+
+
+def generate_command(context: str):
+
+    # use = use_lmstudio()
+    # use = use_openai()
+    use = use_groq()
+
+    password = get_apikey(use)
 
     client = OpenAI(api_key=password, base_url=use.base_url)
 
@@ -105,7 +111,6 @@ def generate_command(context: str):
     except Exception as e:
         print(f"{e}")
         return None
-
 
 if __name__ == "__main__":
 
