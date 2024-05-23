@@ -998,3 +998,17 @@ if command -q az
     abbr azasl 'az appservice plan list --output table' # service plans
 
 end
+
+if command -q ollama
+    abbr olr "ollama run"
+    abbr ols "ollama serve"
+    abbr olc "ollama create"
+    abbr olshow "ollama show"
+    abbr olp "ollama pull"
+    abbr olpush "ollama push"
+    abbr oll "ollama list"
+    abbr olps "ollama ps"
+    abbr olcp "ollama cp"
+    abbr olrm "ollama rm"
+    abbr olh "ollama help"
+end
