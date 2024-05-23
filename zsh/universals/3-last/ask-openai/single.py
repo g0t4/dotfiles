@@ -7,13 +7,14 @@ import keyring
 from openai import OpenAI
 from keyrings.cryptfile.cryptfile import CryptFileKeyring
 
-Service = namedtuple('Service', 'base_url model api_key')
+Service = namedtuple('Service', 'base_url model api_key name')
 Service.__repr__ = lambda self: f"Service(base_url={self.base_url}, model={self.model})"
 
 
 def use_groq(model: str):
 
     return Service(
+        name='groq',
         api_key=get_api_key('groq', 'ask'),
         base_url='https://api.groq.com/openai/v1',
         model=model if model else 'llama3-70b-8192',
@@ -36,6 +37,7 @@ def use_openai(model: str):
     # gpt-4 "turbo" and gpt-3.5-turbo are both fast, so use gpt-4 for accuracy (else 3.5 might need to be re-run/fixed which can cost more)
 
     return Service(
+        name='openai',
         api_key=get_api_key('openai', 'ask'),
         base_url=None,
         model=model if model else 'gpt-4o',
@@ -46,6 +48,7 @@ def use_lmstudio(model: str):
 
     # http://localhost:1234/v1/models
     return Service(
+        name='lmstudio',
         api_key="whatever",
         base_url="http://localhost:1234/v1",
         model= model if model else '',
@@ -53,7 +56,12 @@ def use_lmstudio(model: str):
 
 
 def use_ollama(model: str):
-    return Service(api_key="whatever", base_url="http://localhost:11434/v1", model=model)
+    return Service(
+        name='ollama',
+        api_key="whatever",
+        base_url="http://localhost:11434/v1",
+        model=model if model else ''
+    )
 
 
 def get_api_key(service_name, account_name):
