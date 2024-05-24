@@ -17,7 +17,7 @@ abbr python-config 'python3-config'
 ### VENV (--clear allows to recreate venv if already dir exists, --upgrade-deps makes sure pip is latest)
 abbr ve 'python3 -m venv --clear --upgrade-deps'
 abbr vedir 'echo $VIRTUAL_ENV'
-abbr veinit 'python3 -m venv --clear --upgrade-deps .venv && source .venv*/bin/activate.fish' # PRN follow with pip install -r requirements.txt (if req file exists)
+abbr veinit 'python3 -m venv --clear --upgrade-deps .venv && source .venv*/bin/activate.fish && touch requirements.txt' # PRN follow with pip install -r requirements.txt (if req file exists)
 abbr veinitr 'python3 -m venv --clear --upgrade-deps .venv && source .venv*/bin/activate.fish && pip3 install -r requirements.txt'
 # PRN make install requirements.txt conditional on its presence in current dir => i.e. fish abbreviation + function
 abbr veinitl 'python3 -m venv --clear --upgrade-deps .venv.local && vea'
