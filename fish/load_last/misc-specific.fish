@@ -646,8 +646,7 @@ bind '<' expand-abbr self-insert
 
 # *** processes ***
 abbr psg "ps aux | grep -i "
-abbr pgrep "pgrep -il" # -l long output (show what matched => process name)
-abbr pgrepf "pgrep -ilf" # -f match full command line, -l show what matched (full line)
+abbr pgrep "pgrep -ilf" # -l long output (show what matched => process name), -f match full command line, -l show what matched (full line)
 
 
 # TODO port more dns/arp helpers here
