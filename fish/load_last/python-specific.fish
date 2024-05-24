@@ -27,6 +27,7 @@ function veinit_func
 
     echo -n "python3 -m venv --clear --upgrade-deps .venv && source .venv*/bin/activate.fish"
     if test -f requirements.txt
+        # PRN search for requirements up to root repo dir? not sure I have a need for this though, so wait for now
         echo -n " && pip3 install -r requirements.txt"
     else 
         echo -n " && touch requirements.txt"
