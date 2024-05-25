@@ -36,6 +36,10 @@ if test -f "$HOME/.config/fish/config-private.fish"
     source "$HOME/.config/fish/config-private.fish"
 end
 
+# optional, iterm2 shell integration (must be installed here, i.e. by installing via iterm menus)
+test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
+
+
 ## WHY fish?
 # PROS:
 # - menu completion with tooltip (desc) for not just current menu selection but all current menu options
