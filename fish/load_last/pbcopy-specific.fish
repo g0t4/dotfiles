@@ -40,7 +40,6 @@ end
 
 # yank + kill (clear)
 bind \ek kill_whole_line_and_copy # esc+k (historically I used this key combo exclusively for this purpose)
-bind \ck kill_whole_line_and_copy # ctrl+k (added for iterm2 streaming ask openai impl which I cannot figure out how to send text to trigger esc+K so I mapped ctrl+K which is easy (0x0b))
 
 # ctrl+c clear command line instead of cancel-commandline (why pollute terminal history to cancel a command!)
 bind \cc 'commandline -r ""'
