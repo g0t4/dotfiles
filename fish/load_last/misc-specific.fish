@@ -1014,3 +1014,31 @@ if command -q ollama
     abbr olsd "OLLAMA_DEBUG=1 ollama serve"
     abbr olshow "ollama show"
 end
+
+# TODO point cd => cd2?
+function cd2
+    # --description "cd improved"
+
+    # if file passed, cd to dirname
+    #   cd2 /Users/wes/repos/wes-config/wes-bootstrap/subs/dotfiles/fish/load_last/misc-specific.fish
+    #     => cd /Users/wes/repos/wes-config/wes-bootstrap/subs/dotfiles/fish/load_last
+    # if path has spaces, don't need to quote it
+    #   cd2 ~/Library/Application Support/iTerm2/Scripts
+    #     => cd ~/Library/Application\ Support/iTerm2/Scripts
+    # if path is relative to current user HOME dir then don't require ~ or $HOME prefix, try them for them:
+    #   cd Library/Application Support/iTerm2/Scripts
+    #     => cd ~/Library/Application\ Support/iTerm2/Scripts
+    set path "$argv"
+    if test -f $path
+        # echo "File found: $path"
+        set path (dirname $path)
+    end
+    # echo "cd2 $path"
+    if test -d $path
+        cd $path
+    else if test -d $HOME/$path
+        cd $HOME/$path
+    else
+        echo "Directory not found: $dir"
+    end
+end
