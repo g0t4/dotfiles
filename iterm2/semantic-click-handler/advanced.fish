@@ -51,11 +51,9 @@ set text_after_click $argv[4]
 set working_directory $argv[5]
 
 if test -d "$clicked_path"
-    # if clicked path is a directory then open it in vscode
-
-    # PRN change to use finder to open? unsure as I don't usually click open directories
-    call_code "$clicked_path"
-
+    # if clicked path is a directory...
+    open "$clicked_path" # open dir in Finder (default handler)
+    # call_code "$clicked_path" # open dir in vscode
     exit 0
 end
 
