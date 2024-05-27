@@ -42,16 +42,17 @@ if test -e {$HOME}/.iterm2_shell_integration.fish
     source {$HOME}/.iterm2_shell_integration.fish
 
     # *** ask-openai variables to identify env (i.e. sshed to a remote shell):
-    set ask_os (uname)
-    # PRN stale values after exist ssh... fix if an issue, I don't think its worth the time to set these every prompt or is it? if so cache them when shell launches so we don't read a file every prompt? IIRC iterm2 has smth like iterm2_print_user_var  that I can override to have all  my sets?
-    # if test -f /etc/os-release
-    #     iterm2_set_user_var ask_os (cat /etc/os-release | grep '^ID=' | cut -d= -f2)
-    # else
-    #     iterm2_set_user_var ask_os (uname) # Darwin, Linux, etc
-    # end
+    if test -f /etc/os-release
+        set ask_os (cat /etc/os-release | grep '^ID=' | cut -d= -f2)
+    else
+        set ask_os (uname) # Darwin, Linux, etc
+    end
 
     function iterm2_print_user_vars
+        # mostly to avoid stale values after exist SSH, to set back to values the host has
+        # FYI this is called by iterm2_shell_integration.fish on every prompt
         iterm2_set_user_var ask_shell fish
+        # FYI caching value in $ask_os, to avoid penality on every prompt
         iterm2_set_user_var ask_os $ask_os
     end
 end
