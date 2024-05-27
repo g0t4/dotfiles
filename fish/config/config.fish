@@ -37,7 +37,15 @@ if test -f "$HOME/.config/fish/config-private.fish"
 end
 
 # optional, iterm2 shell integration (must be installed here, i.e. by installing via iterm menus)
-test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
+test -e {$HOME}/.iterm2_shell_integration.fish; and source {$HOME}/.iterm2_shell_integration.fish
+# *** ask-openai variables to identify env (i.e. sshed to a remote shell):
+iterm2_set_user_var ask_shell fish
+if test -f /etc/os-release
+    iterm2_set_user_var ask_os (cat /etc/os-release | grep '^ID=' | cut -d= -f2)
+else
+    iterm2_set_user_var ask_os (uname) # Darwin, Linux, etc
+end
+
 
 
 ## WHY fish?
