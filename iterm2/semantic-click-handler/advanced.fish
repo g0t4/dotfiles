@@ -59,8 +59,8 @@ end
 
 # TODO detect some file types and open via regular handlers?
 # # USE file command to decide if I want to use default handlers to open (or specific handler) 
-# _mime_type=$(file --brief --mime-type "${_clicked_file}")
-# echo "[DEBUG]: mime type: ${_mime_type}"
+set _mime_type (file --brief --mime-type "$clicked_path")
+echo "[DEBUG]: mime type: $_mime_type"
 #
 # if [[ "${_mime_type}" = "application/pdf" ]]; then
 #   echo "[DEBUG] pdf detected - open with default handler"
