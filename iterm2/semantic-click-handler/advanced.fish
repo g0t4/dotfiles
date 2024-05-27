@@ -62,12 +62,11 @@ end
 set _mime_type (file --brief --mime-type "$clicked_path")
 echo "[DEBUG]: mime type: $_mime_type"
 #
-# if [[ "${_mime_type}" = "application/pdf" ]]; then
-#   echo "[DEBUG] pdf detected - open with default handler"
-#   open "${_clicked_file}"
-#   exit 0
-# fi
-#
+if test "$_mime_type" = application/pdf
+    open "$clicked_path" # open w/ default handler
+    exit 0
+end
+
 # if [[ "${_mime_type}" = image/* ]]; then
 #   # image/png   image/tiff   image/gif   image/jpeg   #known mime types that I match here:
 #   echo "[DEBUG] image detected - open with default handler"
