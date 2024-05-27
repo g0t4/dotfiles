@@ -75,10 +75,15 @@ if string match --quiet --regex "image/.*" "$_mime_type"
     exit 0
 end
 
-# open vscode scoped to the repo root directory
-set repo_root (git rev-parse --show-toplevel "$working_directory")
+# scope vscoded to the repo root, else working directory if not a repo
+if git rev-parse --is-inside-work-tree 2>/dev/null 1>/dev/null
+    set vscode_scope_dir (git rev-parse --show-toplevel "$working_directory" 2>/dev/null)
+else
+    set vscode_scope_dir "$working_directory"
+end
+
 call_code \
     --goto "$clicked_path:$line_number" \
-    "$repo_root"
+    "$vscode_scope_dir"
 
 exit 0
