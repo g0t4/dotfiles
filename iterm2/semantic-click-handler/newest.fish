@@ -19,8 +19,10 @@
 # *** end docs ***
 #
 # *** FYI I used this value in iterm2 semantic history text box:
-#    $HOME/repos/wes-config/wes-bootstrap/subs/dotfiles/iterm2/semantic-click-handler/newest.fish "\1" "\2" "\3" "\4" "\5"
-#
+#    $HOME/repos/wes-config/wes-bootstrap/subs/dotfiles/iterm2/semantic-click-handler/newest.fish "\1" "\2" "unused" "unused" "\5"
+#      leave "" around items so a blank value doesn't result in shifting the other args
+#      I had an old note about "" around \1 causing issues b/c its already got "\ " escaing of spaces, but its not causing issues with "" around it so leave unles issues arise
+#      not using \3 \4 and I had an old note about them causing issues so I replaced with "unused" so the other args stay in the same position
 
 function call_code
     if test -x /opt/homebrew/bin/code
@@ -45,6 +47,8 @@ set line_number $argv[2]
 set text_before_click $argv[3]
 set text_after_click $argv[4]
 set working_directory $argv[5]
+
+exit 1
 
 if test -d $clicked_path
     # if clicked path is a directory then open it in vscode
