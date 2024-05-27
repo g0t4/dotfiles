@@ -40,17 +40,22 @@ for i in (seq 1 6)
     echo "[DEBUG] arg $i: $argv[$i]"
 end
 
-set filename $argv[1]
+set clicked_path $argv[1] # dir or file, must exist if iTerm2 allowed to click open it
 set line_number $argv[2]
 set text_before_click $argv[3]
 set text_after_click $argv[4]
 set working_directory $argv[5]
 
+if test -d $clicked_path
+    # if clicked path is a directory then open it in vscode
+    call_code $clicked_path
+    exit 0
+end
 
 # open vscode scoped to the repo root directory
 set repo_root (git rev-parse --show-toplevel $working_directory)
 call_code \
-    --goto $filename:$line_number \
+    --goto $clicked_path:$line_number \
     $repo_root
 
 exit
