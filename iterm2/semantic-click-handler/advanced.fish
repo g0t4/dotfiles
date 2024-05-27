@@ -19,7 +19,7 @@
 # *** end docs ***
 #
 # *** FYI I used this value in iterm2 semantic history text box:
-#   $HOME/repos/wes-config/wes-bootstrap/subs/dotfiles/iterm2/semantic-click-handler/newest.fish \1 "\2" "unused" "unused" \5
+#   $HOME/repos/wes-config/wes-bootstrap/subs/dotfiles/iterm2/semantic-click-handler/advanced.fish \1 "\2" "unused" "unused" \5
 #       \1,\5 => iTerm escapes "\ " the paths, so I don't need "", AND if I add "" then logic below sees them as "\ " not " " and then fails (ie test if directory)
 #           PRN if I have further issues with escaping, I should look in iTerm2 source/docs for how it interpolates...
 #       \2 => leave "\2" because if there is no line number then the blank means the args shift left (\3 => \2, \4 => \3, etc)

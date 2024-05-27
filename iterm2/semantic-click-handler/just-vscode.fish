@@ -19,7 +19,7 @@
 # *** end docs ***
 #
 # *** FYI I used this value in iterm2 semantic history text box:
-#    $HOME/repos/wes-config/wes-bootstrap/subs/dotfiles/iterm2/semantic-click-handler/newest.fish "\1" "\2" "\3" "\4" "\5"
+#    $HOME/repos/wes-config/wes-bootstrap/subs/dotfiles/iterm2/semantic-click-handler/just-vscode.fish "\1" "\2" "\3" "\4" "\5"
 #
 
 function call_code
