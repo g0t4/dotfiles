@@ -42,7 +42,9 @@ if test -e {$HOME}/.iterm2_shell_integration.fish
     source {$HOME}/.iterm2_shell_integration.fish
 
     # *** ask-openai variables to identify env (i.e. sshed to a remote shell):
-    if test -f /etc/os-release
+    if command -q sw_vers
+        set ask_os (sw_vers -productName) (sw_vers -productVersion)
+    else if test -f /etc/os-release
         set ask_os (cat /etc/os-release | grep '^ID=' | cut -d= -f2)
     else
         set ask_os (uname) # Darwin, Linux, etc
@@ -53,7 +55,7 @@ if test -e {$HOME}/.iterm2_shell_integration.fish
         # FYI this is called by iterm2_shell_integration.fish on every prompt
         iterm2_set_user_var ask_shell fish
         # FYI caching value in $ask_os, to avoid penality on every prompt
-        iterm2_set_user_var ask_os $ask_os
+        iterm2_set_user_var ask_os "$ask_os"
     end
 end
 
