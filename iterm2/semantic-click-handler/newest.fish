@@ -59,6 +59,25 @@ if test -d "$clicked_path"
     exit 0
 end
 
+# TODO detect some file types and open via regular handlers?
+# # USE file command to decide if I want to use default handlers to open (or specific handler) 
+# _mime_type=$(file --brief --mime-type "${_clicked_file}")
+# echo "[DEBUG]: mime type: ${_mime_type}"
+#
+# if [[ "${_mime_type}" = "application/pdf" ]]; then
+#   echo "[DEBUG] pdf detected - open with default handler"
+#   open "${_clicked_file}"
+#   exit 0
+# fi
+#
+# if [[ "${_mime_type}" = image/* ]]; then
+#   # image/png   image/tiff   image/gif   image/jpeg   #known mime types that I match here:
+#   echo "[DEBUG] image detected - open with default handler"
+#   open "${_clicked_file}"
+#   exit 0
+# fi
+
+
 # open vscode scoped to the repo root directory
 set repo_root (git rev-parse --show-toplevel "$working_directory")
 call_code \
