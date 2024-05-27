@@ -50,6 +50,7 @@ set text_before_click $argv[3]
 set text_after_click $argv[4]
 set working_directory $argv[5]
 
+# *** handle directory clicks ***
 if test -d "$clicked_path"
     # if clicked path is a directory...
     open "$clicked_path" # open dir in Finder (default handler)
@@ -57,17 +58,18 @@ if test -d "$clicked_path"
     exit 0
 end
 
-# TODO detect some file types and open via regular handlers?
 # # USE file command to decide if I want to use default handlers to open (or specific handler) 
 set _mime_type (file --brief --mime-type "$clicked_path")
 echo "[DEBUG]: mime type: $_mime_type"
-#
+
+# *** pdfs ***
 if string match --quiet "$_mime_type" application/pdf
     # find test cases:     ag -ig "pdf\$"
     open "$clicked_path" # open w/ default handler
     exit 0
 end
 
+# *** images ***
 if string match --quiet --regex "image/.*" "$_mime_type"
     # find test cases:     ag -ig "jpg|gif|png"
     open "$clicked_path" # open w/ default handler
@@ -75,7 +77,8 @@ if string match --quiet --regex "image/.*" "$_mime_type"
     exit 0
 end
 
-# scope vscoded to the repo root, else working directory if not a repo
+# *** default => vscode ***
+# scope vscode to the repo root, else working directory if not a repo
 if git rev-parse --is-inside-work-tree 2>/dev/null 1>/dev/null
     set vscode_scope_dir (git rev-parse --show-toplevel "$working_directory" 2>/dev/null)
 else
@@ -86,4 +89,4 @@ call_code \
     --goto "$clicked_path:$line_number" \
     "$vscode_scope_dir"
 
-exit 0
+# exit 1 # if you wanna see debug STDOUT messages above, uncomment this line and click "View" in the iTerm2 dialog
