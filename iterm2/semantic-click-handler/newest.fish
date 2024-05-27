@@ -56,7 +56,7 @@ if test -d "$clicked_path"
     # PRN change to use finder to open? unsure as I don't usually click open directories
     call_code "$clicked_path"
 
-    exit 1
+    exit 0
 end
 
 # open vscode scoped to the repo root directory
@@ -65,4 +65,4 @@ call_code \
     --goto "$clicked_path:$line_number" \
     "$repo_root"
 
-exit 1
+exit 0
