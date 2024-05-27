@@ -62,18 +62,18 @@ end
 set _mime_type (file --brief --mime-type "$clicked_path")
 echo "[DEBUG]: mime type: $_mime_type"
 #
-if test "$_mime_type" = application/pdf
+if string match --quiet "$_mime_type" application/pdf
+    # find test cases:     ag -ig "pdf\$"
     open "$clicked_path" # open w/ default handler
     exit 0
 end
 
-# if [[ "${_mime_type}" = image/* ]]; then
-#   # image/png   image/tiff   image/gif   image/jpeg   #known mime types that I match here:
-#   echo "[DEBUG] image detected - open with default handler"
-#   open "${_clicked_file}"
-#   exit 0
-# fi
-
+if string match --quiet --regex "image/.*" "$_mime_type"
+    # find test cases:     ag -ig "jpg|gif|png"
+    open "$clicked_path" # open w/ default handler
+    # PRN open w/ vscode instead? I don't really mind that aside from issues with svgs
+    exit 0
+end
 
 # open vscode scoped to the repo root directory
 set repo_root (git rev-parse --show-toplevel "$working_directory")
