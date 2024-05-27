@@ -48,7 +48,10 @@ set working_directory $argv[5]
 
 if test -d $clicked_path
     # if clicked path is a directory then open it in vscode
+
+    # PRN change to use finder to open? unsure as I don't usually click open directories
     call_code $clicked_path
+
     exit 0
 end
 
