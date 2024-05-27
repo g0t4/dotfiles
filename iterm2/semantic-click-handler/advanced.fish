@@ -19,6 +19,8 @@
 # *** end docs ***
 #
 # *** FYI I used this value in iterm2 semantic history text box:
+#   set drop down to "Run command"
+#      TODO try "Always run command" which can work with text that is not an existing file => i.e. parse text for things like github "org/repo" in output, and open in browser at github.com?
 #   $HOME/repos/wes-config/wes-bootstrap/subs/dotfiles/iterm2/semantic-click-handler/advanced.fish \1 "\2" "unused" "unused" \5
 #       \1,\5 => iTerm escapes "\ " the paths, so I don't need "", AND if I add "" then logic below sees them as "\ " not " " and then fails (ie test if directory)
 #           PRN if I have further issues with escaping, I should look in iTerm2 source/docs for how it interpolates...
