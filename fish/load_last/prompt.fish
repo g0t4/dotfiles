@@ -87,7 +87,8 @@ function fish_prompt_modified --description 'Write out the prompt'
 
     # Write status
     # - only if command was run in previous prompt
-    # - goal: clear status (in prompt) simply by hitting enter (empty prompt), followed by cmd+k to clear screen too
+    # - GOAL: clear status (in prompt) simply by hitting ENTER (empty prompt), followed by CMD+K to clear screen too
+    #        b/c exit code (prompt_status) is part of prompt, cannot clear it w/ just CMD+K b/c the prompt is just redrawn, hence RETURN first then Cmd+K
     # FYI $status_generation is incremented each time a command is actually run (so, not when empty prompt submitted)
     if set -q __fish_prompt_last_displayed_status_generation
         and not test $__fish_prompt_last_displayed_status_generation = $status_generation
