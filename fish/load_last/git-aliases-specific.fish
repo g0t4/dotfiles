@@ -2,6 +2,9 @@
 abbr --set-cursor='!' gcmsg 'git commit -m "!"'
 abbr --set-cursor='!' gcam 'git commit -a -m "!"'
 
+
+abbr --set-cursor='!' 'yolo' 'git commit --all -m "!" && git push'
+
 # TODO why do I need _glX? isn't regex doing the same thing => read docs on why
 abbr --regex 'gl\d+' --function glX _glX
 function glX
