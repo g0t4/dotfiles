@@ -76,12 +76,17 @@ async def ask_openai(connection):
     prompt = await iterm2.prompt.async_get_last_prompt(connection, session.session_id)
     if prompt is None:
         # i.e. IIGC right after sourcing iterm2 shell integration, wouldn't yet have a last prompt.. very rare but don't want to crash this script
-        log("No last prompt")
-        await session.async_send_text("No last prompt")
+        failure = "No last prompt, are you missing iterm2 shell integration?"
+        log(failure)
+        await session.async_send_text(failure)
         return
     current_command = prompt.command
     log(f"current_command: {current_command}")  # 18us to print
-
+    if current_command is None:
+        failure = "No current command, are you missing iterm2 shell integration?"
+        log(failure)
+        await session.async_send_text(failure)
+        return
     # *** clear prompt (start)
     task_clear = session.async_send_text("\x03")  # ctrl+c (start clear commandline), seems snappier than starting this after contacting openai
     # BTW ctrl+c must be bound in the shell to clear the line, i.e. in fish: bind \cc 'commandline -f kill'
