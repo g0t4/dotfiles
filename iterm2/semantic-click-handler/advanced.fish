@@ -28,19 +28,6 @@
 #       \3 \4 => unused => not using \3 \4 and I had an old note about them causing issues so I replaced with "unused" so the other args stay in the same position
 #
 
-function call_code
-    if test -x /opt/homebrew/bin/code
-        set vscode /opt/homebrew/bin/code
-    else if test -x /usr/local/bin/code
-        set vscode /usr/local/bin/code
-    else
-        echo "[FATAL] cannot find code command, aborting..."
-        exit 1
-    end
-
-    $vscode $argv # call code with all args passed to this func
-end
-
 ## TROUBLESHOOTING (iterm2 shows output on a failure, so add a failure to inspect these values)
 for i in (seq 1 6)
     echo "[DEBUG] arg $i: $argv[$i]"
@@ -87,8 +74,8 @@ else
     set vscode_scope_dir "$working_directory"
 end
 
-call_code \
-    --goto "$clicked_path:$line_number" \
+# assume in path, now that I have shebang w/ usr/bin/env fish
+code --goto "$clicked_path:$line_number" \
     "$vscode_scope_dir"
 
 # exit 1 # if you wanna see debug STDOUT messages above, uncomment this line and click "View" in the iTerm2 dialog
