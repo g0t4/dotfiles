@@ -57,6 +57,8 @@ if test -e {$HOME}/.iterm2_shell_integration.fish
         # FYI caching value in $ask_os, to avoid penality on every prompt
         iterm2_set_user_var ask_os "$ask_os"
     end
+else
+    # TODO warn? and tell to use ansible to setup?
 end
 
 
