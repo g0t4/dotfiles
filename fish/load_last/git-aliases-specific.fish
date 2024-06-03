@@ -3,7 +3,7 @@ abbr --set-cursor='!' gcmsg 'git commit -m "!"'
 abbr --set-cursor='!' gcam 'git commit -a -m "!"'
 
 
-abbr --set-cursor='!' 'yolo' 'git commit --all -m "!" && git push'
+abbr --set-cursor='!' yolo 'git commit --all -m "!" && git push'
 
 # TODO why do I need _glX? isn't regex doing the same thing => read docs on why
 abbr --regex 'gl\d+' --function glX _glX
@@ -15,14 +15,14 @@ set _unpushed_commits "HEAD@{push}~1..HEAD" # always show last pushed commit too
 set _unpushed_commits_without_last_pushed "HEAD@{push}..HEAD" # in some cases I don't wanna show last pushed (i.e. gls --stat)
 abbr gst 'git status'
 abbr gsl "git status && echo && git_unpushed_commits" # * try # FYI requires gst/glo aliases(funcs) to work
-abbr glo "git_unpushed_commits" # composed by gsl
+abbr glo git_unpushed_commits # composed by gsl
 abbr gup git_unpushed_commits
 function git_unpushed_commits --description "(g)it (u)n(p)ushed commits"
     # think `glo` that also works w/o remotes (currently glo blows up w/o remotes)
     # PRN port to pwsh and zsh
 
     # has remotes:
-    if git rev-parse --abbrev-ref --symbolic-full-name @{upstream} 2>/dev/null
+    if git rev-parse --abbrev-ref --symbolic-full-name @{upstream} &>/dev/null
         git log $_unpushed_commits
         return
     end
@@ -103,7 +103,7 @@ function prd --description "print repo dir (pwd relative to repo root)"
         (set_color normal)
 end
 
-abbr rr '_repo_root'
+abbr rr _repo_root
 function _repo_root
 
     # FYI missing git command should break returning a path
