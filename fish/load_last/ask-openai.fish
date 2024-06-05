@@ -177,21 +177,20 @@ function ask_openai_command_completer
     #     #   -p/--current-process
     #     #   -j/--current-job
     #     #   -b/--current-buffer
-
     # TODO cut at cursor position and only send that part?
     set -l user_input (commandline -b)
 
     set -l _python3 "$WES_DOTFILES/.venv/bin/python3"
     set -l _script "$WES_DOTFILES/zsh/universals/3-last/ask-openai/completer.py"
 
-    set response ( \
-        echo -e "$user_input" | \
-        $_python3 $_script $ask_service 2>&1 \
-    )
+    echo -e "$user_input" \
+        | $_python3 $_script $ask_service 2>&1 # redir errors as completion options (can change later if I hate this)
 end
 
-complete -c ask -a "(ask_openai_command_completer)" --no-files
-
+#complete -c kubectl -a '(ask_openai_command_completer)' --no-files
+complete -c ask -a '(ask_openai_command_completer)' --no-files
+complete -c security -a '(ask_openai_command_completer)' --no-files
+# commands w/o completions on macos: security
 
 # *** misc helpers for completions:
 
@@ -211,7 +210,7 @@ function __find_completions_for
     # matches either:
     #   line starts with / (a path in fish_completions_path)
     #   line starts with 2 spaces (a file under a path) and name contains search term
-    __list_all_completions | grep -E "^/|^  .*$argv.*"
+    __list_completions | grep -E "^/|^  .*$argv.*"
     # PRN maybe just inline above __list_completions impl and use string match --regex to avoid brittle grep
 
 end
