@@ -164,3 +164,19 @@ bind -k f3 ask_openai_link
 # `bind \cb` => show what is bound to key sequence
 #   `bind ''` => self-insert (types key) (default key binding if seq not bound)
 #   `bind ' '` => space => self-insert & expand-abbr
+
+
+# *** COMMAND COMPLETER...
+function ask_openai_command_completer
+
+    # TODO cut at cursor position and only send that part?
+    set -l user_input (commandline -b)
+
+    set -l _python3 "$WES_DOTFILES/.venv/bin/python3"
+    set -l _script "$WES_DOTFILES/zsh/universals/3-last/ask-openai/completer.py"
+
+    set response ( \
+        echo -e "$user_input" | \
+        $_python3 $_script $ask_service 2>&1 \
+    )
+end
