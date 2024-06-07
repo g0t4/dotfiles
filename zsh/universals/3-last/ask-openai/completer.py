@@ -1,9 +1,8 @@
-import argparse
 import sys
 from os import getenv
 from openai import OpenAI
 
-from services import args_to_use, use_openai, use_lmstudio, use_groq, use_ollama, Service
+from services import args_to_use, Service
 
 
 def generate_completions(passed_context: str, use: Service):
