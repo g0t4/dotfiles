@@ -6,7 +6,7 @@ from openai import OpenAI
 from services import args_to_use, use_openai, Service
 
 
-def generate_python_script(passed_context: str, use: Service) -> str:
+def generate_script(passed_context: str, use: Service) -> str:
 
     client = OpenAI(api_key=use.api_key, base_url=use.base_url)
 
@@ -59,7 +59,7 @@ def main():
         if line.startswith("#") or line == "\n":
             continue
         print(f"## Running: {line}", end='')
-        suggested_script = generate_python_script(line, use)
+        suggested_script = generate_script(line, use)
         bat = subprocess.Popen(["bat", "--style", "plain", "--color=always"], stdin=subprocess.PIPE)
         bat.communicate(input=suggested_script.encode())
         bat.stdin.close()
