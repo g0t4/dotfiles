@@ -17,7 +17,9 @@ def generate_python_script(passed_context: str, use: Service) -> str:
             messages=[
                 {
                     "role": "system",
-                    "content": """You are a macOS expert. For each request, generate a script with PYTHON or BASH that starts with a valid SHEBANG. If a request has multiple parts, make sure to include all of it in one go. I will execute the code you give me (once I approve it)... no explanations beyond comments and only use that sparingly. DO NOT return markdown code blocks ``` or `"""
+                    "content": """You are a macOS expert. For each request, generate a script with PYTHON or BASH that starts with a valid SHEBANG. If a request has multiple parts, make sure to include all of it in one go. I will execute the code you give me (once I approve it)... no explanations beyond comments and only use that sparingly. If a change requires restarting a program, make sure to do that too... i.e. killall Finder
+
+                    DO NOT return markdown code blocks ``` or `"""
                 },
                 {
                     "role": "user",
