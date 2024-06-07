@@ -14,7 +14,7 @@ function _auto_venv_find_venv_in_or_above_dir
     set -l _dir (realpath $argv[1]) # realpath => absolute path (i.e. to demo what this func does => call w/ relative path)
 
     # to understand how this works, uncomment: (and cd around filesystem)
-    echo "searching for venv in $_dir" >&2 # print to stderr so not captured if using cmd substitution
+    # echo "searching for venv in $_dir" >&2 # print to stderr so not captured if using cmd substitution
 
     if test -e "$_dir/.venv.local"
         echo "$_dir/.venv.local"
