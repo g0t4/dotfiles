@@ -17,11 +17,13 @@ def generate_python_script(passed_context: str, use: Service) -> str:
             messages=[
                 {
                     "role": "system",
-                    "content": "You are a preferences expert on macOS, i.e. how to use defaults commmand to change the accent color... I will request a change to macOS preferences and I want you to generate PYTHON CODE ONLY that invokes SHELL COMMANDS as needed to make the change. I will execute the code you give me (once I approve it)... no explanations beyond comments and only use that sparingly, i.e. to draw my attention to a something risky. I may ask you to do things beyond just preferences, please comply as long as you feel confident. Do not return markdown code blocks, this has to be pure python."
+                    "content": """You are a preferences expert on macOS, i.e. how to use defaults commmand to change the accent color... I will request a change and I want you to generate PYTHON CODE ONLY (that invokes SHELL COMMANDS as needed) to make the change. I will execute the code you give me (once I approve it)... no explanations beyond comments and only use that sparingly. I may ask you to alter things beyond just preferences, please comply as long as you feel confident.
+
+                    Do not return markdown code blocks, this has to be pure python."""
                 },
                 {
                     "role": "user",
-                    "content": f"{passed_context}"
+                    "content": f"Please make the following change to my system: {passed_context}"
                 },
             ],
             max_tokens=1000,
@@ -46,7 +48,7 @@ def log_response(passed_context: str, use: Service, response: str):
 
 def main():
 
-    TEST = True
+    TEST = False
 
     if not TEST:
         use = use_openai()
@@ -64,8 +66,7 @@ def main():
     bat.stdin.close()
     bat.wait()
 
-    print()
-    print()
+    print("\n")
 
     # validate valid python
     try:
@@ -82,7 +83,7 @@ def main():
         print("Rejected.")
         sys.exit(1)
 
-    print()
+    print("\n")
     # run the python:
     exec(python)
 
