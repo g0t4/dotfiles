@@ -54,13 +54,16 @@ def main():
         user_request = sys.argv[1]  # assume all in first arg, "" ed
         python = generate_python_script(user_request, use)
     else:
-        python = 'subprocess.run(["defaults", "write", "-g", "AppleAccentColor", "-int", "4"])'  # test case
+        # test case:
+        python = 'subprocess.run(["defaults", "write", "-g", "AppleAccentColor", "-int", "4"])'
 
     print("## PROPOSED:")
-    with open("generated_script.py", "w") as file:
-        file.write(python)
-    # invoke bat to syntax highlight
-    subprocess.run(["bat", "generated_script.py"], check=True)
+    # pipe to bat for syntax highlighting:
+    bat = subprocess.Popen(["bat", "-l", "python", "--style", "plain", "--color=always"], stdin=subprocess.PIPE)
+    bat.communicate(input=python.encode())
+    bat.stdin.close()
+    bat.wait()
+
     print()
     print()
 
@@ -73,7 +76,12 @@ def main():
 
     # read ENter from user
     print("## EXECUTE?")
-    input("Press Enter to execute, Ctrl+C to reject...")
+    try:
+        input("Press Enter to execute, Ctrl+C to reject...")
+    except KeyboardInterrupt:
+        print("Rejected.")
+        sys.exit(1)
+
     print()
     # run the python:
     exec(python)
