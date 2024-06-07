@@ -68,8 +68,9 @@ def main():
         print("\n## EXECUTE?")
         try:
             input("Press Enter to execute, Ctrl+C to reject...")
-        # TODO SKIP current command
-        # TODO redo suggestion
+        # IDEA SKIP current command
+        # IDEA redo suggestion
+        # IDEA add qualification and update script file with it?
         except KeyboardInterrupt:
             print("Abort...")
             sys.exit(1)
