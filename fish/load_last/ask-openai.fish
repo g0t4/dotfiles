@@ -197,7 +197,7 @@ end
 
 #complete -c kubectl -a '(ask_openai_command_completer)' --no-files
 complete -c ask -a '(ask_openai_command_completer)' --no-files
-complete -c security -a '(ask_openai_command_completer)' --no-files
+# complete -c security -a '(ask_openai_command_completer)' --no-files
 # commands w/o completions on macos: security
 
 # *** misc helpers for completions:
@@ -238,3 +238,33 @@ end
 #     echo "tree -a # other long command so we get a vertical menu of choices"
 #     echo "ls -al | grep -i"
 # end
+
+
+# *** do it
+function doit
+    # PRN pass man page, --help/-h output to model to aide in completion?
+    # set -l cmd (commandline -p) # -p == current process
+    # set -l help (eval "$cmd --help 2>&1")
+    # if test $status -ne 0
+    #     set -l help ""
+    # end
+
+    # TODO
+    #     # commandline -t (current token)
+    #     #   -o/--tokenize
+    #     #   -c/--cut-at-token
+    #     #   -t/--current-token
+    #     #   -p/--current-process
+    #     #   -j/--current-job
+    #     #   -b/--current-buffer
+    # TODO cut at cursor position and only send that part?
+    set -l user_input "$argv"
+
+    set -l _python3 "$WES_DOTFILES/.venv/bin/python3"
+    set -l _script "$WES_DOTFILES/zsh/universals/3-last/ask-openai/doit.py"
+
+    # set -l pass_stdin "user_input:"\n$user_input\n\n"BTW here is the output of '$cmd --help':"\n$help
+    set pass_stdin $user_input
+    echo -e $pass_stdin \
+        | $_python3 $_script $ask_service 2>&1 # redir errors as completion options (can change later if I hate this)
+end
