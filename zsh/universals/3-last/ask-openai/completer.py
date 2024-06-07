@@ -1,10 +1,7 @@
 import argparse
 import sys
-import platform
 from os import getenv
-import keyring
 from openai import OpenAI
-from keyrings.cryptfile.cryptfile import CryptFileKeyring
 
 from services import use_openai, use_lmstudio, use_groq, use_ollama, Service
 
