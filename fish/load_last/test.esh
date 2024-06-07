@@ -1,7 +1,7 @@
 print the current directory
 
-# list files in current directory 
+list files in current directory 
 
-# show tree of files
+show tree of files
 
-# find file with foo in it
+find file with foo in it
