@@ -3,7 +3,7 @@ import sys
 from os import getenv
 from openai import OpenAI
 
-from services import use_openai, use_lmstudio, use_groq, use_ollama, Service
+from services import args_to_use, use_openai, use_lmstudio, use_groq, use_ollama, Service
 
 
 def generate_command(passed_context: str, use: Service):
@@ -52,31 +52,7 @@ def log_response(passed_context: str, use: Service, response: str):
 
 def main():
 
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--dump_config', action='store_true', default=False)
-    parser.add_argument('--openai', action='store_true', default=False)
-    parser.add_argument('--lmstudio', action='store_true', default=False)
-    parser.add_argument('--groq', action='store_true', default=False)
-    parser.add_argument('--ollama', action='store_true', default=False)
-    # optional model name (for all services):
-    parser.add_argument("model", type=str, const=None, nargs='?')
-    #
-    args = parser.parse_args()
-
-    # PRN pass model parameter if can be overriden per service (like w/ ollama)
-    if args.groq:
-        use = use_groq(args.model)
-    elif args.lmstudio:
-        use = use_lmstudio(args.model)
-    elif args.ollama:
-        use = use_ollama(args.model)
-    else:
-        use = use_openai(args.model)
-
-    if args.dump_config:
-        # print(args)
-        print(use)
-        exit(0)
+    use = args_to_use()
 
     stdin_context = sys.stdin.read()
     # empty context usually generates echo hello :) so allow it

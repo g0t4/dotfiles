@@ -1,3 +1,4 @@
+import argparse
 from collections import namedtuple
 from os import getenv
 import platform
@@ -86,3 +87,34 @@ def get_api_key(service_name, account_name):
         print(f"No api_key found for account={account_name} in service={service_name}")
         sys.exit(1)
     return api_key
+
+
+def args_to_use() -> Service:
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--dump_config', action='store_true', default=False)
+    parser.add_argument('--openai', action='store_true', default=False)
+    parser.add_argument('--lmstudio', action='store_true', default=False)
+    parser.add_argument('--groq', action='store_true', default=False)
+    parser.add_argument('--ollama', action='store_true', default=False)
+    # optional model name (for all services):
+    parser.add_argument("model", type=str, const=None, nargs='?')
+    #
+    args = parser.parse_args()
+
+    # PRN pass model parameter if can be overriden per service (like w/ ollama)
+    if args.groq:
+        use = use_groq(args.model)
+    elif args.lmstudio:
+        use = use_lmstudio(args.model)
+    elif args.ollama:
+        use = use_ollama(args.model)
+    else:
+        use = use_openai(args.model)
+
+    if args.dump_config:
+        # print(args)
+        print(use)
+        exit(0)
+
+    return use
