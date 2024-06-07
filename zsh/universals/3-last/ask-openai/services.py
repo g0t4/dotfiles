@@ -3,6 +3,7 @@ from collections import namedtuple
 from os import getenv
 import platform
 import sys
+from typing import Optional
 
 import keyring
 from keyrings.cryptfile.cryptfile import CryptFileKeyring
@@ -11,7 +12,7 @@ Service = namedtuple('Service', 'base_url model api_key name')
 Service.__repr__ = lambda self: f"Service({self.name} model={self.model})"  # i.e. printing (logging), DO NOT INCLUDE api_key
 
 
-def use_groq(model: str):
+def use_groq(model: Optional[str] = None):
 
     return Service(
         name='groq',
@@ -23,7 +24,7 @@ def use_groq(model: str):
     )
 
 
-def use_openai(model: str):
+def use_openai(model: Optional[str] = None):
 
     # *** gpt 4:
     # openai https://platform.openai.com/docs/models
@@ -44,7 +45,7 @@ def use_openai(model: str):
     )
 
 
-def use_lmstudio(model: str):
+def use_lmstudio(model: Optional[str] = None):
 
     # http://localhost:1234/v1/models
     return Service(
@@ -55,7 +56,7 @@ def use_lmstudio(model: str):
     )
 
 
-def use_ollama(model: str):
+def use_ollama(model: Optional[str] = None):
     return Service(name='ollama', api_key="whatever", base_url="http://localhost:11434/v1", model=model if model else '')
 
 

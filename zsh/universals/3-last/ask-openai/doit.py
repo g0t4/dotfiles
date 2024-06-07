@@ -3,7 +3,7 @@ import sys
 from os import getenv
 from openai import OpenAI
 
-from services import args_to_use, Service
+from services import args_to_use, use_openai, Service
 
 
 def generate_python_script(passed_context: str, use: Service) -> str:
@@ -46,12 +46,15 @@ def log_response(passed_context: str, use: Service, response: str):
 
 def main():
 
-    # use = args_to_use()
-    # TODO use chatgpt only for now?
-    # stdin_context = sys.stdin.read()
+    TEST = True
 
-    # python = generate_python_script(stdin_context, use)
-    python = 'subprocess.run(["defaults", "write", "-g", "AppleAccentColor", "-int", "4"])'  # test case
+    if not TEST:
+        use = use_openai()
+        # TODO for now I wanna use args just for passing question b/c STDIN needs to be interactive to approve execution
+        user_request = sys.argv[1]  # assume all in first arg, "" ed
+        python = generate_python_script(user_request, use)
+    else:
+        python = 'subprocess.run(["defaults", "write", "-g", "AppleAccentColor", "-int", "4"])'  # test case
 
     print("## PROPOSED:")
     with open("generated_script.py", "w") as file:
