@@ -88,6 +88,8 @@ def main():
         print("Rejected.")
         sys.exit(1)
 
+    # PRN for long scripts, perhaps it could be split up... into key steps, and I could ask openai to do that too, to put in markers OR to stream one block at a time and then allow me to course correct along the way? that does start to bleed into the domain of my Ctrl+B ask open helper but maybe that is the direction this could go (to be more interactive and make what I am starting to think of as ESH => English langauge SHell)... OMG makes me wanna make a script parser and start on english language scripts and have it run interactively with thresholds for approval!!! OMG COOL
+
     print("\n")
     # run the python:
     # exec(python)
