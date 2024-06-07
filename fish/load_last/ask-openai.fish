@@ -168,6 +168,12 @@ bind -k f3 ask_openai_link
 
 # *** COMMAND COMPLETER...
 function ask_openai_command_completer
+    # PRN pass man page, --help/-h output to model to aide in completion?
+    # set -l cmd (commandline -p) # -p == current process
+    # set -l help (eval "$cmd --help 2>&1")
+    # if test $status -ne 0
+    #     set -l help ""
+    # end
 
     # TODO
     #     # commandline -t (current token)
@@ -183,7 +189,9 @@ function ask_openai_command_completer
     set -l _python3 "$WES_DOTFILES/.venv/bin/python3"
     set -l _script "$WES_DOTFILES/zsh/universals/3-last/ask-openai/completer.py"
 
-    echo -e "$user_input" \
+    # set -l pass_stdin "user_input:"\n$user_input\n\n"BTW here is the output of '$cmd --help':"\n$help
+    set pass_stdin $user_input
+    echo -e $pass_stdin \
         | $_python3 $_script $ask_service 2>&1 # redir errors as completion options (can change later if I hate this)
 end
 
