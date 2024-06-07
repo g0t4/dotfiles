@@ -240,31 +240,13 @@ end
 # end
 
 
-# *** do it
+# *** DO IT ***
 function doit
-    # PRN pass man page, --help/-h output to model to aide in completion?
-    # set -l cmd (commandline -p) # -p == current process
-    # set -l help (eval "$cmd --help 2>&1")
-    # if test $status -ne 0
-    #     set -l help ""
-    # end
-
-    # TODO
-    #     # commandline -t (current token)
-    #     #   -o/--tokenize
-    #     #   -c/--cut-at-token
-    #     #   -t/--current-token
-    #     #   -p/--current-process
-    #     #   -j/--current-job
-    #     #   -b/--current-buffer
-    # TODO cut at cursor position and only send that part?
+    # NOT a key binding, used as a func "doit foo the bar for me"
     set -l user_input "$argv"
 
     set -l _python3 "$WES_DOTFILES/.venv/bin/python3"
     set -l _script "$WES_DOTFILES/zsh/universals/3-last/ask-openai/doit.py"
 
-    # set -l pass_stdin "user_input:"\n$user_input\n\n"BTW here is the output of '$cmd --help':"\n$help
-    set pass_stdin $user_input
-    echo -e $pass_stdin \
-        | $_python3 $_script $ask_service 2>&1 # redir errors as completion options (can change later if I hate this)
+    $_python3 $_script $ask_service "$user_input"
 end
