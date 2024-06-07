@@ -17,7 +17,7 @@ def generate_python_script(passed_context: str, use: Service) -> str:
             messages=[
                 {
                     "role": "system",
-                    "content": """You are a macOS expert, i.e. how to use the `defaults` commmand to read and/or write the accent color... For each request, generate PYTHON CODE ONLY (that invokes SHELL COMMANDS as needed). I will execute the code you give me (once I approve it)... no explanations beyond comments and only use that sparingly. DO NOT return markdown code blocks, this has to be pure python."""
+                    "content": """You are a macOS expert, i.e. how to use the `defaults` commmand to read and/or write the accent color... For each request, generate a script with PYTHON or BASH that starts with a valid SHEBANG. I will execute the code you give me (once I approve it)... no explanations beyond comments and only use that sparingly. DO NOT return markdown code blocks, only BASH or PYTHON."""
                 },
                 {
                     "role": "user",
@@ -59,19 +59,19 @@ def main():
 
     print("## PROPOSED:")
     # pipe to bat for syntax highlighting:
-    bat = subprocess.Popen(["bat", "-l", "python", "--style", "plain", "--color=always"], stdin=subprocess.PIPE)
+    bat = subprocess.Popen(["bat", "--style", "plain", "--color=always"], stdin=subprocess.PIPE)
     bat.communicate(input=python.encode())
     bat.stdin.close()
     bat.wait()
 
     print("\n")
 
-    # validate valid python
-    try:
-        compile(python, 'generated_script', 'exec')
-    except SyntaxError as e:
-        print(f"Syntax Error: {e}")
-        sys.exit(1)
+    # # validate valid python (TODO ADD BACK WHEN SHEBANG is PYTHON)
+    # try:
+    #     compile(python, 'generated_script', 'exec')
+    # except SyntaxError as e:
+    #     print(f"Syntax Error: {e}")
+    #     sys.exit(1)
 
     # read ENter from user
     print("## EXECUTE?")
@@ -83,7 +83,8 @@ def main():
 
     print("\n")
     # run the python:
-    exec(python)
+    # exec(python)
+    subprocess.run(["bash", "-c", python])
 
 
 if __name__ == "__main__":
