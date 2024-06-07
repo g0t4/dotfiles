@@ -17,7 +17,7 @@ def generate_python_script(passed_context: str, use: Service) -> str:
             messages=[
                 {
                     "role": "system",
-                    "content": """You are a macOS expert. For each request, generate a script with PYTHON or BASH that starts with a valid SHEBANG. If a request has multiple parts, make sure to include all of it in one go. I will execute the code you give me (once I approve it)... no explanations beyond comments and only use that sparingly. DO NOT return markdown code blocks ``` or `, only BASH or PYTHON."""
+                    "content": """You are a macOS expert. For each request, generate a script with PYTHON or BASH that starts with a valid SHEBANG. If a request has multiple parts, make sure to include all of it in one go. I will execute the code you give me (once I approve it)... no explanations beyond comments and only use that sparingly. DO NOT return markdown code blocks ``` or `"""
                 },
                 {
                     "role": "user",
@@ -52,11 +52,15 @@ def main():
         use = use_openai()
         # TODO for now I wanna use args just for passing question b/c STDIN needs to be interactive to approve execution
         user_request = sys.argv[1]  # assume all in first arg, "" ed
-        print(f"## REQUEST: {user_request}") # tmp validate request passed while I iterate on this initial script, cuz I will make more idiot mistakes
+        print(
+            f"## REQUEST: {user_request}")  # tmp validate request passed while I iterate on this initial script, cuz I will make more idiot mistakes
         python = generate_python_script(user_request, use)
     else:
         # test case:
         python = 'subprocess.run(["defaults", "write", "-g", "AppleAccentColor", "-int", "4"])'
+
+    # PRN strip markdown code blocks? its hard to get it to knock that off probably given prevalence of code blocks in markdown in training sets... just get a library to remove them => ADD unit test for this logic
+    # python = re.sub(r'```.*?```', '', python, flags=re.DOTALL)
 
     print("## PROPOSED:")
     # pipe to bat for syntax highlighting:
