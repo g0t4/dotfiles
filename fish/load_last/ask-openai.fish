@@ -248,5 +248,6 @@ function doit
     set -l _python3 "$WES_DOTFILES/.venv/bin/python3"
     set -l _script "$WES_DOTFILES/zsh/universals/3-last/ask-openai/doit.py"
 
-    $_python3 $_script $ask_service "$user_input"
+    # $_python3 $_script $ask_service "$user_input"
+    $_python3 $_script "$user_input"
 end

@@ -17,7 +17,7 @@ def generate_python_script(passed_context: str, use: Service) -> str:
             messages=[
                 {
                     "role": "system",
-                    "content": """You are a macOS expert, i.e. how to use the `defaults` commmand to read and/or write the accent color... For each request, generate a script with PYTHON or BASH that starts with a valid SHEBANG. I will execute the code you give me (once I approve it)... no explanations beyond comments and only use that sparingly. DO NOT return markdown code blocks, only BASH or PYTHON."""
+                    "content": """You are a macOS expert. For each request, generate a script with PYTHON or BASH that starts with a valid SHEBANG. If a request has multiple parts, make sure to include all of it in one go. I will execute the code you give me (once I approve it)... no explanations beyond comments and only use that sparingly. DO NOT return markdown code blocks ``` or `, only BASH or PYTHON."""
                 },
                 {
                     "role": "user",
@@ -52,6 +52,7 @@ def main():
         use = use_openai()
         # TODO for now I wanna use args just for passing question b/c STDIN needs to be interactive to approve execution
         user_request = sys.argv[1]  # assume all in first arg, "" ed
+        print(f"## REQUEST: {user_request}") # tmp validate request passed while I iterate on this initial script, cuz I will make more idiot mistakes
         python = generate_python_script(user_request, use)
     else:
         # test case:
