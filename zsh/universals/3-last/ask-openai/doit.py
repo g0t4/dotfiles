@@ -17,13 +17,11 @@ def generate_python_script(passed_context: str, use: Service) -> str:
             messages=[
                 {
                     "role": "system",
-                    "content": """You are a preferences expert on macOS, i.e. how to use defaults commmand to change the accent color... I will request a change and I want you to generate PYTHON CODE ONLY (that invokes SHELL COMMANDS as needed) to make the change. I will execute the code you give me (once I approve it)... no explanations beyond comments and only use that sparingly. I may ask you to alter things beyond just preferences, please comply as long as you feel confident.
-
-                    Do not return markdown code blocks, this has to be pure python."""
+                    "content": """You are a macOS expert, i.e. how to use the `defaults` commmand to read and/or write the accent color... For each request, generate PYTHON CODE ONLY (that invokes SHELL COMMANDS as needed). I will execute the code you give me (once I approve it)... no explanations beyond comments and only use that sparingly. DO NOT return markdown code blocks, this has to be pure python."""
                 },
                 {
                     "role": "user",
-                    "content": f"Please make the following change to my system: {passed_context}"
+                    "content": f"Please help me with the following request: {passed_context}"
                 },
             ],
             max_tokens=1000,
