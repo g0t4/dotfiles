@@ -1042,3 +1042,44 @@ function cd2
         echo "Directory not found: $dir"
     end
 end
+
+# *** elgato profile sync ***
+# NOTES
+# - device names are stored in /Users/wesdemos/Library/Preferences/com.elgato.StreamDeck.plist
+#   - just manually sync device names, mostly so I can make my streamdeck buttons to switch device
+#   - otherwise doesn't matter if they differ given everything is a UUID (blessing and curse)
+# - each profile is linked to device by UUID
+#   bat **/manifest.json | jq .Device.UUID | sort | uniq -c  # count # per device UUID
+#   bat **/manifest.json | jq .Name # show profile names
+#
+
+# allows `ls $elgato_wes` as needed
+set elgato_wesdemos /Users/wesdemos/Library/Application\ Support/com.elgato.StreamDeck/ProfilesV2
+set elgato_wes /Users/wes/Library/Application\ Support/com.elgato.StreamDeck/ProfilesV2
+function elgato_diff_ProfilesV2
+    icdiff -r $elgato_wesdemos $elgato_wes
+end
+
+function elgato_sync_ProfilesV2_dry_run
+    elgato_sync_ProfilesV2 --dry-run
+end
+
+function elgato_sync_ProfilesV2
+    # I detest manual export/import of profiles, one by one AND in bulk...
+    # Can copy/sync ProfilesV2 dir verbatim and changes are picked up when restart stream deck app
+    # FYI I also have smartsync profile saved on demos account
+
+    # PRN kill stream deck
+    # pkill -ilfa "Stream Deck" # when restart dest stream deck app it will ask to restore, say no... that is likely b/c it was running when I updated its profile files... so what for now, no issues
+
+    set src /Users/wesdemos/Library/Application\ Support/com.elgato.StreamDeck/ProfilesV2
+    set dest /Users/wes/Library/Application\ Support/com.elgato.StreamDeck/ # don't include ProfilesV2 else will make a nested copy ProfilesV2/ProfilesV2 (this path is dest for ProfilesV2 dir from wesdemos)
+
+    # skip on --checksum (not mod-time/size compare) => small files so lets worry about contents
+    # argv ... i.e. "--dry-run"
+    rsync --checksum --recursive --itemize-changes --delete $src $dest $argv
+
+    # ensure owned by wes on other end:
+    sudo chown -R wes:staff /Users/wes/Library/Application\ Support/com.elgato.StreamDeck/ProfilesV2
+    # same in reverse if I ever go wes=>demos
+end
