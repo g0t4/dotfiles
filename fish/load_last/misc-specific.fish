@@ -1083,3 +1083,16 @@ function elgato_sync_ProfilesV2
     sudo chown -R wes:staff /Users/wes/Library/Application\ Support/com.elgato.StreamDeck/ProfilesV2
     # same in reverse if I ever go wes=>demos
 end
+
+# *** PATH(s)
+
+function _path_list
+    for dir in $PATH
+        if test -e $dir
+            for item in $dir/*
+                echo $dir$item
+            end
+            # PRN any filtering or additional info to show? i.e. file type? dir? etc...?
+        end
+    end
+end
