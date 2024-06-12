@@ -5,7 +5,6 @@
 # PRN prune unnecessary aliases => I clearly added the kitchen sink
 
 # live docs!
-abbr ghr 'gh reference'
 abbr ghh 'gh reference'
 
 # gh issue
@@ -74,3 +73,13 @@ abbr ghw 'gh repo view --web'
 abbr ghb 'gh repo view --branch'
 abbr ghwb 'gh repo view --web --branch'
 abbr ghv 'gh repo view'
+
+# gh run subcommands
+abbr ghr 'gh run'
+abbr ghrl 'gh run list'
+abbr ghrv 'gh run view'
+abbr ghrr 'gh run rerun'
+abbr ghrc 'gh run cancel'
+abbr ghrd 'gh run delete'
+abbr ghrw 'gh run watch'
+abbr ghrdl 'gh run download'
