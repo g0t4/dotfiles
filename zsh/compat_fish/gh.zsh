@@ -5,7 +5,6 @@
 # PRN prune unnecessary aliases => I clearly added the kitchen sink
 
 # live docs!
-abbr ghr 'gh reference'
 abbr ghh 'gh reference'
 
 # gh issue
