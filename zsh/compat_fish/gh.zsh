@@ -69,8 +69,14 @@ abbr ghei 'gh extension install'
 abbr gherm 'gh extension remove'
 
 
-# gh view
+# *** gh repo
 abbr ghw 'gh repo view --web'
 abbr ghb 'gh repo view --branch'
 abbr ghwb 'gh repo view --web --branch'
 abbr ghv 'gh repo view'
+abbr ghrd "gh repo delete" # not using --yes yet... maybe I will want that?
+abbr ghrl "gh repo list --no-archived --limit 1000"
+
+# *** gh copilot
+abbr ghcoe "gh copilot explain"
+abbr ghcos "gh copilot suggest -t shell"
