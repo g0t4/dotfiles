@@ -44,9 +44,9 @@ def generate_command(passed_context: str, use: Service):
 
 
 def log_response(passed_context: str, use: Service, response: str):
-    log_file = f"{getenv('HOME')}/.ask.openai.log"
+    log_file = f"{getenv('HOME')}/.ask.single.log"
     with open(log_file, "a", encoding='utf-8') as file:
-        file.writelines([f"{'#'*40} {use.base_url} {use.model}" + '\n', f"{passed_context}\n{response}\n\n"])
+        file.writelines([f"{'#'*40} {use.base_url} {use.name} {use.model}" + '\n', f"{passed_context}\n{response}\n\n"])
 
 
 def main():
