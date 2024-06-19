@@ -1,6 +1,7 @@
 import os
 import platform
 import iterm2
+import re
 from openai import AsyncOpenAI
 from use import use_groq, use_lmstudio, use_ollama, use_openai, use_deepseek
 
@@ -173,13 +174,26 @@ async def ask_openai(connection):
         return
 
     # *** stream the reponse chunks
+    # TODO write some tests for sanitizing and use a seam here
+
+    first_chunk = True
     async for chunk in response_stream:
         # TODO log responses too to ~/.ask.iterm.log
         if chunk.choices[0].delta.content is not None:
             # strip new lines to avoid submitting commands prematurely, is there an alternate char I could use to split the lines still w/o submitting (would have to check what the shell supports, if anything is possible)... one downside to not being a part of the line editor.. unless there is a workaround? not that I care much b/c multi line commands are not often necessary...
-            # TODO if first/last chunk, strip '\s*```\s*'
             sanitized = chunk.choices[0].delta.content.replace("\n", " ")
-            await session.async_send_text(sanitized)
+            if first_chunk:
+                print(f"first_chunk: {sanitized}")
+                sanitized = re.sub(r'```', '', sanitized).lstrip()
+                print(f"sanitized: {sanitized}")
+                print(f"sanitized hex: {sanitized.encode('utf-8').hex()}")
+                first_chunk = sanitized == "" # stay in "first_chunk" mode until first non-empty chunk
+                await session.async_send_text(sanitized)
+            else:
+                await session.async_send_text(sanitized)
+            # TODO is there a way to detect last chunk?
+    # after last chunk, can I remove ending ``` and spaces? it might span multiple last chunks btw so wouldn't just be able to keep track of last chunk, would need entire response and then detect if ends with ``` and spaces and then delete those chars?
+    # ideally I would have some sort of streaming mechanism that would detect leading/trailing ``` and spaces... and then no correction is needed to delete chars`
 
 
 iterm2.run_forever(main)
