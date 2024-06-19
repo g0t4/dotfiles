@@ -59,6 +59,17 @@ def use_lmstudio(model: Optional[str] = None):
 def use_ollama(model: Optional[str] = None):
     return Service(name='ollama', api_key="whatever", base_url="http://localhost:11434/v1", model=model if model else '')
 
+def use_deepseek(model: Optional[str] = None):
+    # curl -L -X GET 'https://api.deepseek.com/models' \-H 'Accept: application/json' \-H 'Authorization: Bearer <TOKEN>' | jq
+    # deepseek-chat
+    # deepseek-coder
+    return Service(
+        name='deepseek',
+        # FYI `security add-generic-password -a ask -s deepseek -w`
+        api_key=get_api_key('deepseek', 'ask'),
+        base_url="https://api.deepseek.com",
+        model=model if model else 'deepseek-coder'
+    )
 
 def get_api_key(service_name, account_name):
 
@@ -95,6 +106,7 @@ def args_to_use() -> Service:
     parser = argparse.ArgumentParser()
     parser.add_argument('--dump_config', action='store_true', default=False)
     parser.add_argument('--openai', action='store_true', default=False)
+    parser.add_argument('--deepseek', action='store_true', default=False)
     parser.add_argument('--lmstudio', action='store_true', default=False)
     parser.add_argument('--groq', action='store_true', default=False)
     parser.add_argument('--ollama', action='store_true', default=False)
@@ -110,6 +122,8 @@ def args_to_use() -> Service:
         use = use_lmstudio(args.model)
     elif args.ollama:
         use = use_ollama(args.model)
+    elif args.deepseek:
+        use = use_deepseek(args.model)
     else:
         use = use_openai(args.model)
 

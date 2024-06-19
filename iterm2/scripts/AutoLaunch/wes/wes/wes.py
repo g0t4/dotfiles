@@ -133,6 +133,8 @@ async def ask_openai(connection):
                 use = use_ollama(model)
             elif "--groq" in ask_service:
                 use = use_groq(model)
+            elif "--deepseek" in ask_service:
+                use = use_deepseek(model)
             elif "--lmstudio" in ask_service:
                 use = use_lmstudio(model)
             else:

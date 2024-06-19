@@ -2,6 +2,7 @@ import sys
 import platform
 from os import getenv
 from collections import namedtuple
+from typing import Optional
 import keyring
 
 # PRN merge this with single.py or at least split it out too so I can copy file back and forth to update
@@ -9,6 +10,13 @@ import keyring
 Service = namedtuple('Service', 'base_url model api_key name')
 Service.__repr__ = lambda self: f"Service({self.name} model={self.model})"  # i.e. printing (logging), DO NOT INCLUDE api_key
 
+def use_deepseek(model: Optional[str] = None):
+    return Service(
+        name='deepseek',
+        api_key=get_api_key('deepseek', 'ask'),
+        base_url="https://api.deepseek.com",
+        model=model if model else 'deepseek-coder'
+    )
 
 def use_groq(model: str):
 

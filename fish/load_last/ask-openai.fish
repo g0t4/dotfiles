@@ -1,5 +1,10 @@
 # https://fishshell.com/docs/current/cmds/bind.html
 
+function ask_use_deepseek
+    set --universal ask_service --deepseek $argv
+    ask_dump_config
+end
+
 function ask_use_groq
     set --universal ask_service --groq $argv
     ask_dump_config
