@@ -11,11 +11,12 @@ Service = namedtuple('Service', 'base_url model api_key name')
 Service.__repr__ = lambda self: f"Service({self.name} model={self.model})"  # i.e. printing (logging), DO NOT INCLUDE api_key
 
 def use_deepseek(model: Optional[str] = None):
+    # prefer deepseek-chat b/c it doesn't always return ``` leading/trailing
     return Service(
         name='deepseek',
         api_key=get_api_key('deepseek', 'ask'),
         base_url="https://api.deepseek.com",
-        model=model if model else 'deepseek-coder'
+        model=model if model else 'deepseek-chat'
     )
 
 def use_groq(model: str):

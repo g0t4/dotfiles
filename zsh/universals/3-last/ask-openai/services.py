@@ -63,12 +63,13 @@ def use_deepseek(model: Optional[str] = None):
     # curl -L -X GET 'https://api.deepseek.com/models' \-H 'Accept: application/json' \-H 'Authorization: Bearer <TOKEN>' | jq
     # deepseek-chat
     # deepseek-coder
+    # FYI w.r.t ``` ... deepseek-chat listens to request to not use ``` and ``` but deepseek-coder always returns ```... that actually makes sense for the coder...
     return Service(
         name='deepseek',
         # FYI `security add-generic-password -a ask -s deepseek -w`
         api_key=get_api_key('deepseek', 'ask'),
         base_url="https://api.deepseek.com",
-        model=model if model else 'deepseek-coder'
+        model=model if model else 'deepseek-chat'
     )
 
 def get_api_key(service_name, account_name):
