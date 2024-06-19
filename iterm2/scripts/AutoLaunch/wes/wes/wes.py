@@ -174,8 +174,12 @@ async def ask_openai(connection):
 
     # *** stream the reponse chunks
     async for chunk in response_stream:
+        # TODO log responses too to ~/.ask.iterm.log
         if chunk.choices[0].delta.content is not None:
-            await session.async_send_text(chunk.choices[0].delta.content)
+            # strip new lines to avoid submitting commands prematurely, is there an alternate char I could use to split the lines still w/o submitting (would have to check what the shell supports, if anything is possible)... one downside to not being a part of the line editor.. unless there is a workaround? not that I care much b/c multi line commands are not often necessary...
+            # TODO if first/last chunk, strip '\s*```\s*'
+            sanitized = chunk.choices[0].delta.content.replace("\n", " ")
+            await session.async_send_text(sanitized)
 
 
 iterm2.run_forever(main)
