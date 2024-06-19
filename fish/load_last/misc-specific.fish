@@ -1096,13 +1096,3 @@ function _path_list
         end
     end
 end
-
-## sanity checks (i.e. for keyboard maestro macros)
-# PRN rework this if it starts to consume too much startup time (i.e. > 10ms)
-# command -q takes ~200us so with only a few checks here, its not (yet) worth it to check a timestamp file (took 6000us in my testing)
-if not command -q cliclick
-    echo "WARNING: cliclick missing, its needed by KM macros, use 'brew install cliclick'"
-else if not command -q /opt/homebrew/bin/cliclick
-    echo "WARNING: cliclick not at expected location, update KM macros..."
-end
-touch ~/.config/.wes_doctor # only run once daily
