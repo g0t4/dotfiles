@@ -29,6 +29,17 @@ function _update_dotfiles
     git pull
 end
 
+function _update_os_lazy
+
+    if command -q apt
+        sudo apt update
+        sudo apt dist-upgrade -y
+        sudo apt autoremove -y
+        sudo apt clean
+    end
+
+end
+
 function _update_completion
     # PRN add more completions (helm, kubectl, etc)
 
