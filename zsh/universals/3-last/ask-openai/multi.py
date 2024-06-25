@@ -28,7 +28,7 @@ def generate_command(num_suggestions, context: str):
                 "role": "user",
                 "content": f"{context}"
             }],
-            max_tokens=80,
+            max_tokens=200,
             n=num_suggestions,
             # GPT 4 tends to produce deterministic responses w/ little variation when it comes to suggesting commands so honestly that obviates the need for multiple suggestsions! whereas v3.5 was more creative but then again if what GPT 4 comes up with works then it may cost less b/c not generating as many tokens!
             # - so, just use GPT4 w/ 1 suggestion?

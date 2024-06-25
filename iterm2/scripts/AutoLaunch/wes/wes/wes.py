@@ -164,7 +164,7 @@ async def ask_openai(connection):
         response_stream = await client.chat.completions.create(
             model=use.model,
             messages=messages,
-            max_tokens=80,
+            max_tokens=200,
             # TODO temperature?
             stream=True)
     except Exception as e:

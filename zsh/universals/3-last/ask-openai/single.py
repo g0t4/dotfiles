@@ -28,7 +28,7 @@ def generate_command(passed_context: str, use: Service):
                 #     "content": "The command line is:"
                 # }
             ],
-            max_tokens=80,
+            max_tokens=200,
             n=1  # default
         )
 

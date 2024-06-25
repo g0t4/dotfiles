@@ -28,7 +28,7 @@ def generate_completions(passed_context: str, use: Service):
                     "content": f"{passed_context}"
                 },
             ],
-            max_tokens=120,
+            max_tokens=200,
             n=1  # default
         )
 

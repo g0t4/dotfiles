@@ -41,7 +41,7 @@ def generate_command(context: str):
                 "role": "user",
                 "content": f"{context}"
             }],
-            max_tokens=80,
+            max_tokens=200,
             n=1  # default
         )
 
