@@ -1115,10 +1115,10 @@ end
 # FYI `veconv<TAB>` works in fish shell to complete this func:
 function video_editing_2_convert_30fps
     set -l paths (quote_paths $argv)
-    zsh -ic "video_editing_2_convert_30fps $argv"
+    zsh -ic "video_editing_2_convert_30fps $paths"
 end
 
 function video_editing_extract_most_scene_change_thumbnails
     set -l paths (quote_paths $argv)
-    zsh -ic "video_editing_extract_most_scene_change_thumbnails $argv"
+    zsh -ic "video_editing_extract_most_scene_change_thumbnails $paths"
 end
