@@ -1096,3 +1096,19 @@ function _path_list
         end
     end
 end
+
+# *** video editing wrappers ***
+
+abbr ve1 video_editing_1_check_audio
+function video_editing_1_check_audio
+    zsh -ic "video_editing_1_check_audio $argv"
+end
+
+abbr ve2 video_editing_2_convert_30fps
+function video_editing_2_convert_30fps
+    zsh -ic "video_editing_2_convert_30fps $argv"
+end
+
+function video_editing_extract_most_scene_change_thumbnails
+    zsh -ic "video_editing_extract_most_scene_change_thumbnails $argv"
+end
