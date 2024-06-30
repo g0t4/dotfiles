@@ -4,7 +4,7 @@
 # scdet # Detect video scene change
 # ffmpeg -filters | grep scdet
 
-ealias vet='video_editing_extract_most_scene_change_thumbnails'
+# USAGE: video_editing_extract_most_scene_change_thumbnails *.mp4
 function video_editing_extract_most_scene_change_thumbnails() {
 
   if [ ${#@} -eq 0 ]; then
@@ -12,13 +12,13 @@ function video_editing_extract_most_scene_change_thumbnails() {
     log_info  " AND pass optional scene change threshold (default 0.05)"
     return
   fi
-  if ! command -v ffmpeg > /dev/null; then  
+  if ! command -v ffmpeg > /dev/null; then
     log_aborting "ffmpeg command not available, install it and try again..."
     return -1
   fi
 
   # pre-req -> must have ffmpeg compiled with drawtext filter, mbpy has this
-  if ! (ffmpeg -filters | grep drawtext >/dev/null); then
+  if ! (ffmpeg -filters | grep drawtext > /dev/null); then
     echo "ffmpeg not compiled with drawtext filter, can't generate timecodes on scenes"
     echo "aborting..."
     # TODO - I could turn this feature off I suppose
@@ -72,7 +72,7 @@ function video_editing_extract_most_scene_change_thumbnails() {
   # NOTES:
   # eq(n,0) grabs the first frame b/c it won't be treated as a scene change
   # gte(scene,0.2) grabs all frames with a scene change greater than 20% probability
-    # seems like 5% is needed on terminal demos just to get about any scene detection - maybe my transitions are too smooth to notice beyond change window from terminal to browser or back and that might be it  
+    # seems like 5% is needed on terminal demos just to get about any scene detection - maybe my transitions are too smooth to notice beyond change window from terminal to browser or back and that might be it
       # tried 1% - works much better!
   # drawtext adds timecode of frame in original video
   # vsync vfr changes to variable frame rate otherwise original frame rate is kept with the original pts's so basically selected frames just replace all frames after them and we export hundreds of unneeded copies of these scene change frames

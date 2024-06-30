@@ -1,5 +1,5 @@
-# USAGE: video_editing_postSOM__to__preSubmit *.mp4
-function video_editing_postSOM__to__preSubmit() {
+# USAGE: video_editing_2_convert_30fps *.mp4
+function video_editing_2_convert_30fps() {
 
   # PRN parallelize this? https://stackoverflow.com/questions/61948652/zsh-and-parallel-how-to-use-functions-it-says-command-not-found
 

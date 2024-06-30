@@ -1,5 +1,5 @@
-# USAGE: video_editing_preSubmit_review *.mp4
-function video_editing_preSubmit_review() {
+# USAGE: video_editing_1_check_audio *.mp4
+function video_editing_1_check_audio() {
 
   if [ "${#@}" -eq 0 ]; then
     echo "no files specified, using *.mp4 in current dir"
