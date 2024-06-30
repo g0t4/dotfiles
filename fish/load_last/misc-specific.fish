@@ -1099,16 +1099,26 @@ end
 
 # *** video editing wrappers ***
 
-abbr ve1 video_editing_1_check_audio
-function video_editing_1_check_audio
-    zsh -ic "video_editing_1_check_audio $argv"
+function quote_paths
+    for path in $argv
+        echo "'$path'"
+    end
 end
 
-abbr ve2 video_editing_2_convert_30fps
+# FYI `veaud<TAB>` works in fish shell to complete this func:
+function video_editing_1_check_audio
+    # only arg would be file paths (i.e. from glob like *.mp4), btw dont need to pass any paths and it will do all *.mp4 in current dir
+    set -l paths (quote_paths $argv)
+    zsh -ic "video_editing_1_check_audio $paths"
+end
+
+# FYI `veconv<TAB>` works in fish shell to complete this func:
 function video_editing_2_convert_30fps
+    set -l paths (quote_paths $argv)
     zsh -ic "video_editing_2_convert_30fps $argv"
 end
 
 function video_editing_extract_most_scene_change_thumbnails
+    set -l paths (quote_paths $argv)
     zsh -ic "video_editing_extract_most_scene_change_thumbnails $argv"
 end
