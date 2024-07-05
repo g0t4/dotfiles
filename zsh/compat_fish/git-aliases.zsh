@@ -30,6 +30,7 @@ abbr gaa 'git add --all'
 abbr gaaa 'git add --all' # common typo
 abbr gau 'git add --update' # don't add new files, just changed files (either already indexed or head?)
 abbr gap 'git add --patch' # * favorite # patch = interactive, but skips first menu and goes right to patch
+abbr gai 'git add --interactive' # patch but w/ initial menu
 
 # branch read:
 # don't use pager on git branch (read commands)

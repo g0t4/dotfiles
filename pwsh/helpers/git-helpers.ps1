@@ -12,12 +12,14 @@ ealias grsh 'git reset --soft HEAD~1'
 ealias grl 'git reflog'
 ealias grla 'git reflog --all'
 
-# restore
-ealias grst 'git restore --staged'
-ealias grsp 'git restore --stage --patch' # ! interactive restore > learn it
-ealias grp 'git restore --patch' # ! interactive restore > learn it
-ealias grss 'git restore --source'
-
+# restore (staged)
+abbr grst 'git restore --staged' # TBD do I wanna default for entire repo? or force myself to remember grstr instead?
+abbr grstp 'git restore --staged --patch' # ! USE THIS MORE OFTEN (maybe make it grst?)
+abbr grstr 'git restore --staged "$(_repo_root)"' # use $() syntax for compat w/ zsh too
+#
+# restore (unstaged)
+abbr grp 'git restore --patch' # * favorite
+abbr grss 'git restore --source'
 
 
 # add `ga`
@@ -25,7 +27,8 @@ ealias ga "git add"
 ealias gav "git add --verbose"
 ealias gaa "git add --all"
 ealias gau 'git add --update' # only changed files (not untracked)
-ealias gap "git add --patch"
+ealias gap "git add --patch" # ~= git add --interactive => (p)atch on all modified files
+ealias gai "git add --interactive"
 
 # remotes
 ealias grv 'git remote -v'
