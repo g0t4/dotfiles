@@ -34,6 +34,12 @@ function ealias() {
     [Parameter(Mandatory=$true)][string]$Name,
     [Parameter(Mandatory=$true)][string]$ExpandsTo,
     [Parameter(Mandatory=$false)][switch]$NoSpaceAfter
+
+    # TODO pwsh needs -g like arg for anywhere vs command position only
+    #   https://github.com/g0t4/dotfiles/blob/21141ab688ebe46226067efdcd33d94f3158eb81/zsh/universals/3-last/load_first/_2-expanding-aliases.zsh#L56
+    #   this is like fish's `abbr --position=(command|anywhere)`
+    #   currently ealiases in pwsh are treated as anywhere (TODO I should default to command until this is added)
+    #   FYI `pyml` is an example of an anywhere alias
   )
 
   # *** use set-alias to see the $_cmd in MENU COMPLETION TOOL TIPS
