@@ -65,6 +65,7 @@ ealias hC '| hexdump -C' -Anywhere
 
 function ExpandAliasBeforeCursor {
     param($key, $arg)
+    # FYI this is split out for users to bind to other key(s) besides space, or to recompose with custom bindings of their own
 
     # Add space, then invoke replacement logic
     #   b/c override spacebar handler, there won't be a space unless I add it
@@ -90,7 +91,7 @@ function ExpandAliasBeforeCursor {
       $original = $token.Extent
 
       $metadata = _lookup_ealias_metadata($original.Text)
-      if ($metadata -eq $null -or $metadata.ExpandsTo -eq $null) {
+      if ($null -eq $metadata -or $null -eq $metadata.ExpandsTo) {
         continue
       }
 
