@@ -63,18 +63,6 @@ ealias pyml '| bat -l yml' -Anywhere # shortened
 ealias hC '| hexdump -C' -Anywhere
 # todo more in fish's misc for kubectl command
 
-### Spacebar => triggers expansion
-#
-# scenarios:
-# - typing `drc<SPACE>` => expands
-# - completion: `gs<TAB>` => menu shows, tab through items, hit space to select (triggers expand)
-#   - if I hit enter to select an item, space can be used after that to expand it => PRN I could impl a handler for enter during completion but lets not complicate it
-#
-Set-PSReadLineKeyHandler -Key "Spacebar" `
-    -BriefDescription "space expands ealiases" `
-    -LongDescription "Spacebar handler to expand all ealiases in current line/buffer, primarily intended for ealias right before current cursor position" `
-    -ScriptBlock ${function:ExpandAliasBeforeCursor}
-
 function ExpandAliasBeforeCursor {
     param($key, $arg)
 
@@ -141,6 +129,18 @@ function ExpandAliasBeforeCursor {
     #   right now I only expand to `bar` and stop which has been sufficient for now
 
 }
+
+### Spacebar => triggers expansion
+#
+# scenarios:
+# - typing `drc<SPACE>` => expands
+# - completion: `gs<TAB>` => menu shows, tab through items, hit space to select (triggers expand)
+#   - if I hit enter to select an item, space can be used after that to expand it => PRN I could impl a handler for enter during completion but lets not complicate it
+#
+Set-PSReadLineKeyHandler -Key "Spacebar" `
+    -BriefDescription "space expands ealiases" `
+    -LongDescription "Spacebar handler to expand all ealiases in current line/buffer, primarily intended for ealias right before current cursor position" `
+    -ScriptBlock ${function:ExpandAliasBeforeCursor}
 
 
 ### ENTER => triggers expansion
