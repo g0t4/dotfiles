@@ -29,17 +29,12 @@ function ealias() {
   # usage:
   #   ealias foo bar
   #   ealias gcmsg 'git commit -m "' -NoSpaceAfter
-  # TODO validate this works still in PowerShell or go back to single dash for ps1
+  #   ealias pyml '| yq' -Anywhere => 'kubectl get pods -o yaml pyml[EXPANDS]'
   param(
     [Parameter(Mandatory=$true)][string]$Name,
     [Parameter(Mandatory=$true)][string]$ExpandsTo,
-    [Parameter(Mandatory=$false)][switch]$NoSpaceAfter
-
-    # TODO pwsh needs -g like arg for anywhere vs command position only
-    #   https://github.com/g0t4/dotfiles/blob/21141ab688ebe46226067efdcd33d94f3158eb81/zsh/universals/3-last/load_first/_2-expanding-aliases.zsh#L56
-    #   this is like fish's `abbr --position=(command|anywhere)`
-    #   currently ealiases in pwsh are treated as anywhere (TODO I should default to command until this is added)
-    #   FYI `pyml` is an example of an anywhere alias
+    [Parameter(Mandatory=$false)][switch]$NoSpaceAfter,
+    [Parameter(Mandatory=$false)][switch]$Anywhere
   )
 
   # *** use set-alias to see the $_cmd in MENU COMPLETION TOOL TIPS
@@ -50,9 +45,23 @@ function ealias() {
   $_ealiases[$Name] = @{
     ExpandsTo = $ExpandsTo
     NoSpaceAfter = $NoSpaceAfter
+    Anywhere = $Anywhere
   }
 
 }
+
+ealias pbat '| bat -l' -Anywhere
+ealias pgr '| sls' -Anywhere
+ealias phelp '| bat -l help' -Anywhere
+ealias pini '| bat -pl ini' -Anywhere
+ealias pjq '| jq .' -Anywhere # shortened
+ealias pmd '| bat -l md' # shortened
+ealias prb '| bat -pl rb' -Anywhere
+ealias psh '| bat -pl sh' -Anywhere
+ealias pxml '| bat -l xml' -Anywhere # shortened
+ealias pyml '| bat -l yml' -Anywhere # shortened
+ealias hC '| hexdump -C' -Anywhere
+# todo more in fish's misc for kubectl command
 
 ### Spacebar => triggers expansion
 #
@@ -88,10 +97,19 @@ Set-PSReadLineKeyHandler -Key "Spacebar" `
     foreach ($token in $tokens) {
 
       $original = $token.Extent
+
       $metadata = _lookup_ealias_metadata($original.Text)
       if ($metadata -eq $null -or $metadata.ExpandsTo -eq $null) {
         continue
       }
+
+      $anywhere = $metadata.Anywhere
+      $is_command_position = $token -eq $tokens[0] # PRN if this has edge cases where command isn't first token, then address that once the problem arises, for now assume this works (to check $tokens[0])
+      if (-not $anywhere -and -not $is_command_position){
+        # skip if not in command position and not marked anywhere
+        continue
+      }
+
       $expands_to = $metadata.ExpandsTo
 
       if (-not $metadata.NoSpaceAfter) {
