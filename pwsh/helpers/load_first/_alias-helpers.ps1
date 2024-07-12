@@ -31,10 +31,10 @@ function ealias() {
   #   ealias gcmsg 'git commit -m "' -NoSpaceAfter
   #   ealias pyml '| yq' -Anywhere => 'kubectl get pods -o yaml pyml[EXPANDS]'
   param(
-    [Parameter(Mandatory=$true)][string]$Name,
-    [Parameter(Mandatory=$true)][string]$ExpandsTo,
-    [Parameter(Mandatory=$false)][switch]$NoSpaceAfter = $false,
-    [Parameter(Mandatory=$false)][switch]$Anywhere = $false
+    [Parameter(Mandatory = $true)][string]$Name,
+    [Parameter(Mandatory = $true)][string]$ExpandsTo,
+    [Parameter(Mandatory = $false)][switch]$NoSpaceAfter = $false,
+    [Parameter(Mandatory = $false)][switch]$Anywhere = $false
   )
 
   # *** use set-alias to see the $_cmd in MENU COMPLETION TOOL TIPS
@@ -43,78 +43,78 @@ function ealias() {
 
   # metadata/lookup outside of set-alias objects
   $_ealiases[$Name] = @{
-    ExpandsTo = $ExpandsTo
+    ExpandsTo    = $ExpandsTo
     NoSpaceAfter = $NoSpaceAfter
-    Anywhere = $Anywhere
+    Anywhere     = $Anywhere
   }
 
 }
 
 function ExpandAliasBeforeCursor {
-    param($key, $arg)
-    # FYI this is split out for users to bind to other key(s) besides space, or to recompose with custom bindings of their own
+  param($key, $arg)
+  # FYI this is split out for users to bind to other key(s) besides space, or to recompose with custom bindings of their own
 
-    # Add space, then invoke replacement logic
-    #   b/c override spacebar handler, there won't be a space unless I add it
-    # inserts at current cursor position - important to do that now b/c the cursor is where the user intended the space, whereas after modification the cursor might be elsewhere (ie after Replace below)
-    [Microsoft.PowerShell.PSConsoleReadLine]::Insert(" ")
-    # help for Insert overloads
-    # https://docs.microsoft.com/en-us/dotnet/api/microsoft.powershell.psconsolereadline.insert
+  # Add space, then invoke replacement logic
+  #   b/c override spacebar handler, there won't be a space unless I add it
+  # inserts at current cursor position - important to do that now b/c the cursor is where the user intended the space, whereas after modification the cursor might be elsewhere (ie after Replace below)
+  [Microsoft.PowerShell.PSConsoleReadLine]::Insert(" ")
+  # help for Insert overloads
+  # https://docs.microsoft.com/en-us/dotnet/api/microsoft.powershell.psconsolereadline.insert
 
-    $ast = $null
-    $tokens = $null
-    $errors = $null
-    $cursor = $null
-    [Microsoft.PowerShell.PSConsoleReadLine]::GetBufferState([ref]$ast, [ref]$tokens, [ref]$errors, [ref]$cursor)
+  $ast = $null
+  $tokens = $null
+  $errors = $null
+  $cursor = $null
+  [Microsoft.PowerShell.PSConsoleReadLine]::GetBufferState([ref]$ast, [ref]$tokens, [ref]$errors, [ref]$cursor)
 
-    # this must handle cumulative adjustments from multiple replaces but the thing is after each space I would've already replaced previous ealiases
-    #   in fact if I copy/paste smth like `dcr dcr dcr` the spaces trigger on paste to expand already
-    #   so, I theoretically could stop after first replacement
-    $startAdjustment = 0
+  # this must handle cumulative adjustments from multiple replaces but the thing is after each space I would've already replaced previous ealiases
+  #   in fact if I copy/paste smth like `dcr dcr dcr` the spaces trigger on paste to expand already
+  #   so, I theoretically could stop after first replacement
+  $startAdjustment = 0
 
-    foreach ($token in $tokens) {
-      # PRN revise this to only expand LAST TOKEN (before space triggered)... did I do all b/c I was lazy about finding what token was right before cursor? or couldn't find that out (i.e. space in middle of a command line where cursor not at end of command line?)
+  foreach ($token in $tokens) {
+    # PRN revise this to only expand LAST TOKEN (before space triggered)... did I do all b/c I was lazy about finding what token was right before cursor? or couldn't find that out (i.e. space in middle of a command line where cursor not at end of command line?)
 
-      $original = $token.Extent
+    $original = $token.Extent
 
-      $metadata = _lookup_ealias_metadata($original.Text)
-      if ($null -eq $metadata -or $null -eq $metadata.ExpandsTo) {
-        continue
-      }
-
-      $anywhere = $metadata.Anywhere
-      $is_command_position = $token -eq $tokens[0] # PRN if this has edge cases where command isn't first token, then address that once the problem arises, for now assume this works (to check $tokens[0])
-      if (-not $anywhere -and -not $is_command_position){
-        # skip if not in command position and not marked anywhere
-        continue
-      }
-
-      $expands_to = $metadata.ExpandsTo
-
-      if (-not $metadata.NoSpaceAfter) {
-        # add a space unless alias defined with NoSpaceAfter
-        #   i.e. `gcmsg` expands to `git commit -m "` w/o trailing space
-        $expands_to = "$expands_to "
-
-        # IIRC I had an open question about why I have to add space here again... but its working as is so leave it, IIAC this is b/c tokenizer strips them?
-      }
-
-      $original_length = $original.EndOffset - $original.StartOffset
-      [Microsoft.PowerShell.PSConsoleReadLine]::Replace(
-          $original.StartOffset + $startAdjustment,
-          $original_length,
-          $expands_to)
-
-      # Our copy of tokens isn't updated, so adjust by the difference in length
-      $startAdjustment += $expands_to.Length - $original_length
+    $metadata = _lookup_ealias_metadata($original.Text)
+    if ($null -eq $metadata -or $null -eq $metadata.ExpandsTo) {
+      continue
     }
 
-    # PRN => if any expansions then take another pass! until no more expansions b/c then I can supported nested expansions!
-    # i.e.:
-    #   ealias foo bar
-    #   ealias bar baz
-    #   foo => expands to `bar` => expands to `baz`
-    #   right now I only expand to `bar` and stop which has been sufficient for now
+    $anywhere = $metadata.Anywhere
+    $is_command_position = $token -eq $tokens[0] # PRN if this has edge cases where command isn't first token, then address that once the problem arises, for now assume this works (to check $tokens[0])
+    if (-not $anywhere -and -not $is_command_position) {
+      # skip if not in command position and not marked anywhere
+      continue
+    }
+
+    $expands_to = $metadata.ExpandsTo
+
+    if (-not $metadata.NoSpaceAfter) {
+      # add a space unless alias defined with NoSpaceAfter
+      #   i.e. `gcmsg` expands to `git commit -m "` w/o trailing space
+      $expands_to = "$expands_to "
+
+      # IIRC I had an open question about why I have to add space here again... but its working as is so leave it, IIAC this is b/c tokenizer strips them?
+    }
+
+    $original_length = $original.EndOffset - $original.StartOffset
+    [Microsoft.PowerShell.PSConsoleReadLine]::Replace(
+      $original.StartOffset + $startAdjustment,
+      $original_length,
+      $expands_to)
+
+    # Our copy of tokens isn't updated, so adjust by the difference in length
+    $startAdjustment += $expands_to.Length - $original_length
+  }
+
+  # PRN => if any expansions then take another pass! until no more expansions b/c then I can supported nested expansions!
+  # i.e.:
+  #   ealias foo bar
+  #   ealias bar baz
+  #   foo => expands to `bar` => expands to `baz`
+  #   right now I only expand to `bar` and stop which has been sufficient for now
 
 }
 
@@ -126,9 +126,9 @@ function ExpandAliasBeforeCursor {
 #   - if I hit enter to select an item, space can be used after that to expand it => PRN I could impl a handler for enter during completion but lets not complicate it
 #
 Set-PSReadLineKeyHandler -Key "Spacebar" `
-    -BriefDescription "space expands ealiases" `
-    -LongDescription "Spacebar handler to expand all ealiases in current line/buffer, primarily intended for ealias right before current cursor position" `
-    -ScriptBlock ${function:ExpandAliasBeforeCursor}
+  -BriefDescription "space expands ealiases" `
+  -LongDescription "Spacebar handler to expand all ealiases in current line/buffer, primarily intended for ealias right before current cursor position" `
+  -ScriptBlock ${function:ExpandAliasBeforeCursor}
 
 
 ### ENTER => triggers expansion
