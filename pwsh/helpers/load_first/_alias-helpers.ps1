@@ -73,7 +73,9 @@ ealias hC '| hexdump -C' -Anywhere
 Set-PSReadLineKeyHandler -Key "Spacebar" `
     -BriefDescription "space expands ealiases" `
     -LongDescription "Spacebar handler to expand all ealiases in current line/buffer, primarily intended for ealias right before current cursor position" `
-    -ScriptBlock {
+    -ScriptBlock ${function:ExpandAliasBeforeCursor}
+
+function ExpandAliasBeforeCursor {
     param($key, $arg)
 
     # Add space, then invoke replacement logic
@@ -95,6 +97,7 @@ Set-PSReadLineKeyHandler -Key "Spacebar" `
     $startAdjustment = 0
 
     foreach ($token in $tokens) {
+      # PRN revise this to only expand LAST TOKEN (before space triggered)... did I do all b/c I was lazy about finding what token was right before cursor? or couldn't find that out (i.e. space in middle of a command line where cursor not at end of command line?)
 
       $original = $token.Extent
 
