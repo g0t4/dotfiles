@@ -146,23 +146,29 @@ Set-PSReadLineKeyHandler -Key "Spacebar" `
 # enable validate handler (on enter):
 Set-PSReadLineKeyHandler -Key Enter -Function ValidateAndAcceptLine
 #
-Set-PSReadLineOption -CommandValidationHandler {
-    param([CommandAst]$CommandAst)
 
-    $possibleAlias = $CommandAst.GetCommandName()
-    # don't need metadata b/c NoSpaceAfter (only option) doesn't apply to this handler b/c this is after executing the command (possible alias) so line editing is done
-    $expands_to = _lookup_ealias($possibleAlias)
-    if ($expands_to -eq $null) {
-      return
-    }
+function ExpandAliasesCommandValidationHandler {
+  param([CommandAst]$CommandAst)
 
-    $original = $CommandAst.CommandElements[0].Extent
-    [Microsoft.PowerShell.PSConsoleReadLine]::Replace(
-        $original.StartOffset,
-        $original.EndOffset - $original.StartOffset,
-        $expands_to
-    )
+  # I split out this function so end users can re-compose it with additional validation handler logic of their own
+
+  $possibleAlias = $CommandAst.GetCommandName()
+  # don't need metadata b/c NoSpaceAfter (only option) doesn't apply to this handler b/c this is after executing the command (possible alias) so line editing is done
+  $expands_to = _lookup_ealias($possibleAlias)
+  if ($expands_to -eq $null) {
+    return
+  }
+
+  $original = $CommandAst.CommandElements[0].Extent
+  [Microsoft.PowerShell.PSConsoleReadLine]::Replace(
+    $original.StartOffset,
+    $original.EndOffset - $original.StartOffset,
+    $expands_to
+  )
+
 }
+
+Set-PSReadLineOption -CommandValidationHandler ${function:ExpandAliasesCommandValidationHandler}
 
 ## Examples
 # CommandValidationHandler: https://github.com/PowerShell/PSReadLine/issues/1643
