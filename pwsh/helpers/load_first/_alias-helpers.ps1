@@ -155,7 +155,7 @@ function ExpandAliasesCommandValidationHandler {
   $possibleAlias = $CommandAst.GetCommandName()
   # don't need metadata b/c NoSpaceAfter (only option) doesn't apply to this handler b/c this is after executing the command (possible alias) so line editing is done
   $expands_to = _lookup_ealias($possibleAlias)
-  if ($expands_to -eq $null) {
+  if ($null -eq $expands_to) {
     return
   }
 
