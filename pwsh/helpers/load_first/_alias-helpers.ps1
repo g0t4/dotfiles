@@ -33,8 +33,8 @@ function ealias() {
   param(
     [Parameter(Mandatory=$true)][string]$Name,
     [Parameter(Mandatory=$true)][string]$ExpandsTo,
-    [Parameter(Mandatory=$false)][switch]$NoSpaceAfter,
-    [Parameter(Mandatory=$false)][switch]$Anywhere
+    [Parameter(Mandatory=$false)][switch]$NoSpaceAfter = $false,
+    [Parameter(Mandatory=$false)][switch]$Anywhere = $false
   )
 
   # *** use set-alias to see the $_cmd in MENU COMPLETION TOOL TIPS
