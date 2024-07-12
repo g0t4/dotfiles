@@ -73,7 +73,7 @@ function ExpandAliasBeforeCursor {
   $startAdjustment = 0
 
   foreach ($token in $tokens) {
-    # PRN revise this to only expand LAST TOKEN (before space triggered)... did I do all b/c I was lazy about finding what token was right before cursor? or couldn't find that out (i.e. space in middle of a command line where cursor not at end of command line?)
+    # IIRC it was easier to expand on all tokens every time... I could revise this to take into account cursor position and only expand the last argument (before cursor) and then also support cursor in middle of command line too... but I won't add any of that until an issue arises as this has worked perfectly fine all along... could do smth like last token right before cursor position?
 
     $original = $token.Extent
 
