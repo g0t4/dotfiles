@@ -39,6 +39,7 @@ function ealias() {
 
   # *** use set-alias to see the $_cmd in MENU COMPLETION TOOL TIPS
   #   also allows `gcm foo` to lookup expanding aliases
+  #   also this is needed to hit return after alias (w/o space) and have command validation handler be invoked (below) otherwise if alias not defined then it looks like an invalid command and fails to trigger validation handler to expand below
   Set-Alias $Name "$ExpandsTo" -Scope Global
 
   # metadata/lookup outside of set-alias objects
