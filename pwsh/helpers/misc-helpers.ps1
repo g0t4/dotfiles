@@ -35,3 +35,18 @@ function z_pwsh_impl {
   }
 
 }
+
+
+# pipeline expanding aliases:
+ealias pbat '| bat -l' -Anywhere
+ealias pgr '| sls' -Anywhere
+ealias phelp '| bat -l help' -Anywhere
+ealias pini '| bat -pl ini' -Anywhere
+ealias pjq '| jq .' -Anywhere # shortened
+ealias pmd '| bat -l md' # shortened
+ealias prb '| bat -pl rb' -Anywhere
+ealias psh '| bat -pl sh' -Anywhere
+ealias pxml '| bat -l xml' -Anywhere # shortened
+ealias pyml '| bat -l yml' -Anywhere # shortened
+ealias hC '| hexdump -C' -Anywhere
+# todo more in fish's misc for kubectl command
