@@ -4,7 +4,7 @@
 #
 #
 
-ealias ghrc=gh_repo_create_private
+abbr ghrc gh_repo_create_private
 function gh_repo_create_private() {
   local __repo_name="$@"
   if [[ -z "${__repo_name}" ]]; then
@@ -40,7 +40,7 @@ function gh_repo_create_private() {
   # don't care if fails to add to z in fish
 }
 
-ealias ghrcp=gh_repo_create_public
+abbr ghrcp gh_repo_create_public
 function gh_repo_create_public() {
   local __repo_name="$@"
   if [[ -z "${__repo_name}" ]]; then
