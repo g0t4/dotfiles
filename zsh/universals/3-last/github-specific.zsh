@@ -1,3 +1,9 @@
+#
+#
+#!!!! FYI migrated this to fish script, updates are there... leaving as an example of why I moved to fish
+#
+#
+
 ealias ghrc=gh_repo_create_private
 function gh_repo_create_private() {
   local __repo_name="$@"
