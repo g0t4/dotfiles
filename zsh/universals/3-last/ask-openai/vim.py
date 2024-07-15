@@ -1,6 +1,7 @@
 import sys
 from os import getenv
 from openai import OpenAI
+import textwrap
 
 from services import args_to_use, Service
 
@@ -11,17 +12,24 @@ def generate_command(passed_context: str, use: Service):
 
     try:
 
+        system_message = textwrap.dedent(
+            """
+        You are a vim expert. The user (that you are talking to) has vim open in command mode. 
+        They have typed part of a command that they need help with. 
+        They might also have a question included, i.e. in a comment (after " which denotes a comment in vim). 
+        Respond with a single, valid vim command line. Their command line will be replaced with your response. So it can be reviewed and executed. 
+        No explanation. No markdown. No markdown with backticks ` nor ```. 
+
+        If the user mentions another vim mode (i.e. normal, insert, etc) then if possible return a command to switch to that mode and execute whatever they asked about. For example, if the user asks how to delete a line in normal mode, you could answer `:normal dd`. 
+        """)
+        # alternative?:   If the user mentions another vim mode (i.e. normal, insert, etc) then your answer doesn't need to be a valid command. For example, you could answer that in normal mode you can use `dd` to delete a line.
+
         completion = client.chat.completions.create(
             model=use.model,
             messages=[
                 {
                     "role": "system",
-                    "content": "You are a vim expert. The user (that you are talking to) has vim open in command mode."
-                     + "They have typed part of a command that they need help with."
-                     + "They might also have a question included, i.e. in a comment (after \" which denotes a comment in vim)"
-                     + "Respond with a single, valid vim command line. Their command line will be replaced with your response. So it can be reviewed and executed."
-                     + "No explanation. No markdown. No markdown with backticks ` nor ```"
-                     + "If the user mentions another vim mode (i.e. normal, insert, etc) then your answer doesn't need to be a valid command. For example, you could answer that in normal mode you can use `dd` to delete a line."
+                    "content": system_message
                 },
                 {
                     "role": "user",
