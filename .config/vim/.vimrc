@@ -16,6 +16,8 @@ Plugin 'VundleVim/Vundle.vim' " self-managed, required
 " Plugin 'plasticboy/vim-markdown'
 " Plugin 'christoomey/vim-titlecase'
 " Plugin 'ctrlpvim/ctrlp.vim'
+" Plugin 'tpope/vim-fugitive'
+Plugin 'preservim/nerdcommenter' " https://vimawesome.com/plugin/the-nerd-commenter
 call vundle#end()
 filetype plugin indent on
 "
