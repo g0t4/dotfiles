@@ -10,11 +10,11 @@ set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 Plugin 'VundleVim/Vundle.vim' " self-managed, required
 " TODO which of these do I still want to use?
-Plugin 'scrooloose/syntastic'
-Plugin 'altercation/vim-colors-solarized'
-Plugin 'godlygeek/tabular'
-Plugin 'plasticboy/vim-markdown'
-Plugin 'christoomey/vim-titlecase'
+" Plugin 'scrooloose/syntastic'
+" Plugin 'altercation/vim-colors-solarized'
+" Plugin 'godlygeek/tabular'
+" Plugin 'plasticboy/vim-markdown'
+" Plugin 'christoomey/vim-titlecase'
 " Plugin 'ctrlpvim/ctrlp.vim'
 call vundle#end()
 filetype plugin indent on
