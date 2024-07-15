@@ -17,9 +17,13 @@ Plugin 'VundleVim/Vundle.vim' " self-managed, required
 " Plugin 'christoomey/vim-titlecase'
 " Plugin 'ctrlpvim/ctrlp.vim'
 " Plugin 'tpope/vim-fugitive'
-Plugin 'preservim/nerdcommenter' " https://vimawesome.com/plugin/the-nerd-commenter, [count]<leader>cc  => \cc or 5\cc 
+" 
+" comments
+" Plugin 'tpope/vim-commentary' " motions compat (gc, gc# num, motions
+" Plugin 'preservim/nerdcommenter' " not compat with motions https://vimawesome.com/plugin/the-nerd-commenter, [count]<leader>cc  => \cc or 5\cc  ... \cu (uncomment)
 " \cA => append comment to line
 " \ci => invert each line
+"
 call vundle#end()
 filetype plugin indent on
 "
