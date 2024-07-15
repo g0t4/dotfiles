@@ -21,7 +21,7 @@ def generate_command(passed_context: str, use: Service):
                      + "They might also have a question included, i.e. in a comment (after \" which denotes a comment in vim)"
                      + "Respond with a single, valid vim command line. Their command line will be replaced with your response. So it can be reviewed and executed."
                      + "No explanation. No markdown. No markdown with backticks ` nor ```"
-                     # "If the user mentions another vim mode (i.e. insert mode or normal mode) then you can help them with that by returning text that they can read and not execute"
+                     + "If the user mentions another vim mode (i.e. normal, insert, etc) then your answer doesn't need to be a valid command. For example, you could answer that in normal mode you can use `dd` to delete a line."
                 },
                 {
                     "role": "user",
