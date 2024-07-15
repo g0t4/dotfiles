@@ -17,7 +17,9 @@ Plugin 'VundleVim/Vundle.vim' " self-managed, required
 " Plugin 'christoomey/vim-titlecase'
 " Plugin 'ctrlpvim/ctrlp.vim'
 " Plugin 'tpope/vim-fugitive'
-Plugin 'preservim/nerdcommenter' " https://vimawesome.com/plugin/the-nerd-commenter
+Plugin 'preservim/nerdcommenter' " https://vimawesome.com/plugin/the-nerd-commenter, [count]<leader>cc  => \cc or 5\cc 
+" \cA => append comment to line
+" \ci => invert each line
 call vundle#end()
 filetype plugin indent on
 "
