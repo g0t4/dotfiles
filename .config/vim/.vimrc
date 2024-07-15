@@ -20,7 +20,7 @@ Plugin 'VundleVim/Vundle.vim' " self-managed, required
 " 
 " comments
 Plugin 'tpope/vim-commentary' " motions compat (gcc (current line), gc<motion> 
-# alt => also uses gc https://vimawesome.com/plugin/tcomment
+" alt => also uses gc https://vimawesome.com/plugin/tcomment
 " Plugin 'preservim/nerdcommenter' " not compat with motions https://vimawesome.com/plugin/the-nerd-commenter, [count]<leader>cc  => \cc or 5\cc  ... \cu (uncomment)
 " \cA => append comment to line
 " \ci => invert each line
