@@ -143,3 +143,10 @@ function take {
 
 
 
+
+# *** rdpclip (fix copy/paste)
+function Fix-RdpClip {
+  # fixes intermittent copy/paste issues over RDP (mostly macOS => win in my experience)
+  Stop-Process -Name rdpclip
+  Start-Process -FilePath rdpclip
+}
