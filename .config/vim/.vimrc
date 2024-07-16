@@ -136,6 +136,7 @@ function! AskOpenAI()
 
     let l:cmdline = getcmdline()
 
+    " todo this prompt here should be moved into vim.py script and combined with other system message instructs? specifically the don't include leading :? or should I allow leading: b/c it still works to have it
     let l:STDIN_text = ' env: vim command mode (return a valid command w/o the leading : ) \n question: ' . l:cmdline
 
     " PRN use env var for DOTFILES_DIR, fish shell has WES_DOTFILES variable that can be used too
