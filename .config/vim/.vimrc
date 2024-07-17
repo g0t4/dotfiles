@@ -217,11 +217,6 @@ call wilder#set_option('pipeline', [
       \   ),
       \ ])
 
-let s:highlighters = [
-        \ wilder#pcre2_highlighter(),
-        \ wilder#basic_highlighter(),
-        \ ]
-
 " FYI quit/reopen vim when changing highlight parameters (i.e. ctermfg)
 highlight MyWilderPopupmenu ctermfg=121 " seagreen color, based on MoreMsg highlight group builtin
 highlight MyWilderPopupmenuSelected ctermbg=9 " red bg, based on DiffText builtin (FYI to test this search files and hit Tab to step through search results popup menu)
@@ -254,6 +249,11 @@ call wilder#set_option('renderer', wilder#popupmenu_renderer({
       \ ],
       \ }))
 
+" let s:highlighters = [
+"         \ wilder#pcre2_highlighter(),
+"         \ wilder#basic_highlighter(),
+"         \ ]
+"
 " call wilder#set_option('renderer', wilder#renderer_mux({
 "       \ ':': wilder#popupmenu_renderer({
 "       \   'left': [ ' ', wilder#popupmenu_devicons(), ],
