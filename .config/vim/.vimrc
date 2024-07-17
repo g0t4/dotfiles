@@ -9,6 +9,40 @@ filetype off " vundle required
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 Plugin 'VundleVim/Vundle.vim' " self-managed, required
+
+" wilder and company:
+" let g:python3_host_prog = expand('~/repos/wes-config/wes-bootstrap/subs/dotfiles/.venv/bin/python3')
+" FYI had to add pynvim to my user site, even though I configured a venv...
+" - after that fuzzy search and other python features worked in wilder
+"   pip3 install --break-system-packages --user pynvim
+"
+" FYI inspect python env used:
+" execute 'py3 import sys; print(sys.path)'
+" :py3 import sys; print(sys.path)
+"    :py3 for p in sys.path:  print(p)  # one per line 
+"     - interestingly, it doesn't include the path to my venv like it would if
+"       you run this inside the venv outside of vim, so its as if its overriding
+"       the site path or otherwise ignoring my venv? 
+"     - also adds '_vim_path_' entry 
+"       - does this mean I can install modules into a vim runtime dir? or?
+"       - here is code that adds this:
+"         https://github.com/vim/vim/blob/700cf8cfa1e926e2ba676203b3ad90c2c2083f1d/src/if_py_both.h#L24-L25
+" https://github.com/roxma/vim-hug-neovim-rpc?tab=readme-ov-file#requirements
+" - FYI this is where I stumbled on the --user site suggestion, though it also
+" - seems to recommend using a venv or not --user site in other spots?
+"
+" :py3 import pip; pip.main(['install', '--user', 'pynvim'])
+"    either package: pynvim|neovim
+"
+Plugin 'gelguy/wilder.nvim'
+Plugin 'ryanoasis/vim-devicons'
+if !has('nvim')
+    " let $NVIM_PYTHON_LOG_FILE="/tmp/nvim_log"
+    " let $NVIM_PYTHON_LOG_LEVEL="DEBUG"
+    Plugin 'roxma/nvim-yarp'
+    Plugin 'roxma/vim-hug-neovim-rpc'
+endif
+
 " TODO which of these do I still want to use?
 " Plugin 'scrooloose/syntastic'
 " Plugin 'altercation/vim-colors-solarized'
@@ -53,9 +87,9 @@ if has('mouse')
 endif
 
 
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
+" set statusline+=%#warningmsg#
+" set statusline+=%{SyntasticStatuslineFlag()}
+" set statusline+=%*
 
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
@@ -154,3 +188,79 @@ endfunction
 " Map a key combination to the custom command in command-line mode
 cmap <C-b> <C-\>eAskOpenAI()<CR>
 
+
+
+
+" *** wilder config
+"    https://vimawesome.com/plugin/wilder-nvim
+
+call wilder#setup({'modes': [':', '/', '?']})
+
+" FYI first func that responds terminates search, i.e.:   "   \     {ctx, x -> [x, 'foo', 'bar']},
+call wilder#set_option('pipeline', [
+      \   wilder#branch(
+      \     [
+      \       wilder#check({_, x -> empty(x)}),
+      \       wilder#history(),
+      \       wilder#result({
+      \         'draw': [{_, x -> ' ' . x}],
+      \       }),
+      \     ],
+      \     wilder#cmdline_pipeline({
+      \       
+      \     }),
+      \     wilder#python_search_pipeline({
+      \       'pattern': wilder#python_fuzzy_pattern(),
+      \       'sorter': wilder#python_difflib_sorter(),
+      \       'engine': 're',
+      \     }),
+      \   ),
+      \ ])
+
+let s:highlighters = [
+        \ wilder#pcre2_highlighter(),
+        \ wilder#basic_highlighter(),
+        \ ]
+
+" FYI quit/reopen vim when changing highlight parameters (i.e. ctermfg)
+highlight MyWilderPopupmenu ctermfg=121 " seagreen color, based on MoreMsg highlight group builtin
+highlight MyWilderPopupmenuSelected ctermbg=9 " red bg, based on DiffText builtin (FYI to test this search files and hit Tab to step through search results popup menu)
+highlight MyWilderPopupmenuAccent cterm=bold ctermfg=0 " test by searching commands (prefix matches is accent color)
+highlight MyWilderPopupmenuSelectedAccent cterm=bold ctermfg=0 ctermbg=9" test by search commmands (i.e. :w and tab to select and step through)
+" :h popupmenu_renderer  => (highlights groups) => 
+"   - default (default=PMenu), 
+"   - selected (default=PmenuSel)
+"   - error (default=ErrorMsg)
+"   - accent (default=default + underline + bold)
+"   - selected_accent (default=selected + underline + bold)
+"   - empty_message (default=WarningMsg)
+" 
+" :h highlight-groups
+" :h highlight   " list groups you can use
+
+call wilder#set_option('renderer', wilder#popupmenu_renderer({
+      \ 'highlighter': wilder#basic_highlighter(),
+      \ 'highlights': {
+      \   'default': 'MyWilderPopupmenu',
+      \   'selected': 'MyWilderPopupmenuSelected',
+      \   'accent': 'MyWilderPopupmenuAccent',
+      \   'selected_accent': 'MyWilderPopupmenuSelectedAccent',
+      \ },
+      \ 'left': [
+      \   ' ', wilder#popupmenu_devicons(),
+      \ ],
+      \ 'right': [
+      \   ' ', wilder#popupmenu_scrollbar(),
+      \ ],
+      \ }))
+
+" call wilder#set_option('renderer', wilder#renderer_mux({
+"       \ ':': wilder#popupmenu_renderer({
+"       \   'left': [ ' ', wilder#popupmenu_devicons(), ],
+"       \   'highlighter': s:highlighters,
+"       \ }),
+"       \ '/': wilder#wildmenu_renderer({
+"       \   'left': [ ' ', wilder#popupmenu_devicons(), ],
+"       \   'highlighter': s:highlighters,
+"       \ }),
+"       \ }))
