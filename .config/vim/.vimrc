@@ -235,6 +235,7 @@ highlight MyWilderPopupmenuSelectedAccent cterm=bold ctermfg=0 ctermbg=9" test b
 " :h highlight-groups
 " :h highlight   " list groups you can use
 
+" use popup menu for everything (see _mux below for diff menu based on type)
 call wilder#set_option('renderer', wilder#popupmenu_renderer({
       \ 'highlighter': wilder#basic_highlighter(),
       \ 'highlights': {
