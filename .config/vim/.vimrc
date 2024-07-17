@@ -207,7 +207,7 @@ call wilder#set_option('pipeline', [
       \       }),
       \     ],
       \     wilder#cmdline_pipeline({
-      \       
+      \       'fuzzy': 1,
       \     }),
       \     wilder#python_search_pipeline({
       \       'pattern': wilder#python_fuzzy_pattern(),
@@ -216,6 +216,7 @@ call wilder#set_option('pipeline', [
       \     }),
       \   ),
       \ ])
+" FYI for cmdline_pipeline.fuzzy => 0=off,1=fuzzy,2=fuzzy w/o first char matching
 
 " FYI quit/reopen vim when changing highlight parameters (i.e. ctermfg)
 highlight MyWilderPopupmenu ctermfg=121 " seagreen color, based on MoreMsg highlight group builtin
