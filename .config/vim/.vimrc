@@ -207,6 +207,7 @@ call wilder#set_option('pipeline', [
       \       }),
       \     ],
       \     wilder#cmdline_pipeline({
+      \       'language': 'python',
       \       'fuzzy': 1,
       \     }),
       \     wilder#python_search_pipeline({
@@ -250,11 +251,12 @@ call wilder#set_option('renderer', wilder#popupmenu_renderer({
       \ ],
       \ }))
 
+
+" example of using popup for commands, wildmenu (horizontal) for files
 " let s:highlighters = [
 "         \ wilder#pcre2_highlighter(),
 "         \ wilder#basic_highlighter(),
 "         \ ]
-"
 " call wilder#set_option('renderer', wilder#renderer_mux({
 "       \ ':': wilder#popupmenu_renderer({
 "       \   'left': [ ' ', wilder#popupmenu_devicons(), ],
