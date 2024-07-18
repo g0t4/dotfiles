@@ -10,6 +10,8 @@ set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 Plugin 'VundleVim/Vundle.vim' " self-managed, required
 
+Plugin 'ctrlpvim/ctrlp.vim'
+
 " wilder and company:
 " let g:python3_host_prog = expand('~/repos/wes-config/wes-bootstrap/subs/dotfiles/.venv/bin/python3')
 " FYI had to add pynvim to my user site, even though I configured a venv...
@@ -49,7 +51,6 @@ endif
 " Plugin 'godlygeek/tabular'
 " Plugin 'plasticboy/vim-markdown'
 " Plugin 'christoomey/vim-titlecase'
-" Plugin 'ctrlpvim/ctrlp.vim'
 " Plugin 'tpope/vim-fugitive'
 " 
 " comments
