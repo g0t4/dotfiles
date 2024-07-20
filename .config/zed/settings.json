@@ -1,0 +1,22 @@
+// https://zed.dev/docs/configuring-zed
+{
+  "vim_mode": true,
+  "ui_font_size": 24,
+  "buffer_font_size": 16,
+  "format_on_save": "off",
+  "assistant": {
+    "version": "1",
+    "provider": {
+      "name": "openai",
+      "type": "openai",
+      "default_model": "gpt-4-turbo-preview",
+      "api_url": "http://localhost:11434/v1",
+      "low_speed_timeout_in_seconds": 10
+    },
+  },
+  "git": {
+    "inline_blame": {
+      "enabled": false
+    }
+  }
+}
