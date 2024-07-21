@@ -1122,3 +1122,9 @@ function video_editing_extract_most_scene_change_thumbnails
     set -l paths (quote_paths $argv)
     zsh -ic "video_editing_extract_most_scene_change_thumbnails $paths"
 end
+
+if command -q npm
+    # TODO
+    # abbr npmi 'npm install'
+    # abbr npminit 'npm init -y'
+end
