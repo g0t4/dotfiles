@@ -1124,6 +1124,19 @@ function video_editing_extract_most_scene_change_thumbnails
 end
 
 if command -q npm
-    # TODO
+
+    # PRN as I use and find how I wanna use aliases
+    abbr npmi 'npm install'
+    abbr npminit 'npm init -y'
+    abbr npml 'npm list'
+    abbr npmr 'npm run'
+    abbr npmt 'npm test'
+    abbr npma 'npm audit'
+    abbr npmv 'npm version'
+    abbr npms 'npm start'
+    abbr npmo 'npm outdated'
+    abbr npmun 'npm uninstall'
+    abbr npmup 'npm update'
+
     
 end

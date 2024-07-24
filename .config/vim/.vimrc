@@ -11,6 +11,7 @@ call vundle#begin()
 Plugin 'VundleVim/Vundle.vim' " self-managed, required
 
 Plugin 'ctrlpvim/ctrlp.vim'
+Plugin 'github/copilot.vim'
 
 " wilder and company:
 " let g:python3_host_prog = expand('~/repos/wes-config/wes-bootstrap/subs/dotfiles/.venv/bin/python3')
