@@ -1125,6 +1125,5 @@ end
 
 if command -q npm
     # TODO
-    # abbr npmi 'npm install'
-    # abbr npminit 'npm init -y'
+    
 end
