@@ -1,5 +1,6 @@
 // https://zed.dev/docs/configuring-zed
 {
+  // "theme": "Andromeda", // kinda like this or smth in between (todo build my own colors)
   "vim_mode": true,
   "ui_font_size": 24,
   "buffer_font_size": 16, // aka editor
