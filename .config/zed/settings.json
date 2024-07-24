@@ -2,8 +2,9 @@
 {
   "vim_mode": true,
   "ui_font_size": 24,
-  "buffer_font_size": 16,
+  "buffer_font_size": 16, // aka editor
   "format_on_save": "off",
+  "hover_popover_enabled": true, // default=true (make explicit)
   "assistant": {
     "version": "1",
     "provider": {
@@ -11,12 +12,29 @@
       "type": "openai",
       "default_model": "gpt-4-turbo-preview",
       "api_url": "http://localhost:11434/v1",
-      "low_speed_timeout_in_seconds": 10
-    },
+      "low_speed_timeout_in_seconds": 30
+    }
   },
   "git": {
     "inline_blame": {
       "enabled": false
     }
+  },
+  // "features": {
+  //   "inline_completion_provider": "copilot",
+  //   "copilot": true
+  // },
+  "cursor_blink": false, // *** I am surprised I didn't notice this sooner, then again it is not blinking block
+  "toolbar": {
+    "breadcrumbs": false, // save a bunch of space at top of buffer! (name already shows on tab!)
+    "quick_actions": false
   }
+  // TODO try:
+  //  "inlay_hints": {
+  //    "enabled": true
+  //  }
+  // "tab_bar": {
+  //   "show": true // TODO hide? (can I get current file name into title bar and then hide tabs... or can I move tabs to title bar (wasted space))
+  // }
+  // TODO is there a way to toggle status bar? like vscode (I don't see it in the default settings)
 }
