@@ -25,7 +25,9 @@ function veinit_func
     # abbr veinit 'python3 -m venv --clear --upgrade-deps .venv && source .venv*/bin/activate.fish && touch requirements.txt' # PRN follow with pip install -r requirements.txt (if req file exists)
     # abbr veinitr 'python3 -m venv --clear --upgrade-deps .venv && source .venv*/bin/activate.fish && pip3 install -r requirements.txt'
 
-    echo -n "python3 -m venv --clear --upgrade-deps .venv && source .venv*/bin/activate.fish"
+    # TODO pass arg for python version? 3.11, 3.10, etc
+    set py_version 3
+    echo -n "python$py_version -m venv --clear --upgrade-deps .venv && source .venv*/bin/activate.fish"
     if test -f requirements.txt
         # PRN search for requirements up to root repo dir? not sure I have a need for this though, so wait for now
         echo -n " && pip3 install -r requirements.txt"
