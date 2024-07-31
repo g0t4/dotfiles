@@ -69,8 +69,9 @@ ealias gdc 'git diff --cached --color-words'
 ealias kgdc 'git diff --cached --color-words' # common typo alias (cmd+k clear > kgst)
 # ealias gdcw 'git diff --cached --color-words'
 
+# TODO resolve conflicting gdt
 ealias gdt 'git describe --tags `git rev-list --tags --max-count=1`'
-ealias gdt 'git diff-tree --no-commit-id --name-only -r' 
+# ealias gdt 'git diff-tree --no-commit-id --name-only -r' 
 
 ealias gdlc 'git diff --color-words HEAD~1 HEAD'
 #ealias gdlc1 --color-words 'git diff HEAD~2 HEAD~1'
