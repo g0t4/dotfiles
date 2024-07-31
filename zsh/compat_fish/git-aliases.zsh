@@ -114,6 +114,12 @@ abbr gra 'git remote add'
 abbr grset 'git remote set-url'
 abbr grup 'git remote update'
 
+# merge
+abbr gm 'git merge'
+abbr gma 'git merge --abort'
+abbr gmc 'git merge --continue'
+abbr gmff 'git merge --ff-only'
+
 # rebasing
 abbr grb 'git rebase'
 abbr grbi 'git rebase -i'
