@@ -61,3 +61,11 @@ if test -d $WES_DOTFILES/fish/functions/
     # - FYI autoloaded when respective command name is first run (and periodically reloaded)
     set fish_function_path $WES_DOTFILES/fish/functions/ $fish_function_path
 end
+
+# ghcup (haskell)
+if test -d "$HOME/.ghcup/bin"
+    export PATH="$HOME/.ghcup/bin:$PATH"
+    # FYI
+    # ghcup list --tool ghc
+    # ghcup set ghc latest/recommended
+end
