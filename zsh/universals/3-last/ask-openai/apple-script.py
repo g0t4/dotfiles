@@ -17,7 +17,7 @@ def generate_command(passed_context: str, use: Service):
         The user is working in Script Debugger or Script Editor.
         The user needs help completing statement(s) or something else about AppleScript.
         The user selected part of their script that they want to provide to you for help.
-        They might include a free-form question.
+        If you see a comment prefixed by `-- help ...` without the backticks, that is the question/request and the rest is the relevant existing script code. Do whatever is asked in the comment in this case (i.e. modify the rest of the code).
         Respond with valid AppleScript statement(s).
         Your response will replace what they selected. So they can review and use it.
         Your responpse can include new lines if you have multiple lines.
@@ -37,7 +37,7 @@ def generate_command(passed_context: str, use: Service):
                     "content": f"{passed_context}"
                 },
             ],
-            max_tokens=200,
+            max_tokens=500,
             n=1  # default
         )
 
