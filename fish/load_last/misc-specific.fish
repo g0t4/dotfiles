@@ -1138,5 +1138,19 @@ if command -q npm
     abbr npmun 'npm uninstall'
     abbr npmup 'npm update'
 
-    
+
+end
+
+
+function profiles_resume_brave
+    # todo pass profile name into applescript (or inline applescript here and pass by injecting string variable ie in a heredoc)
+    osascript "$WES_DOTFILES/misc/restorable-profiles/brave-resume.applescript" "haskell"
+end
+
+function profiles_save_brave
+    osascript "$WES_DOTFILES/misc/restorable-profiles/brave-save.applescript" "haskell"
+end
+
+function profiles_resume_iterm
+    osascript "$WES_DOTFILES/misc/restorable-profiles/iterm-resume.applescript" "haskell"
 end
