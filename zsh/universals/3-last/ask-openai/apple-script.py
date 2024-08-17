@@ -18,7 +18,9 @@ def generate_command(passed_context: str, use: Service):
         The user needs help completing statement(s) or something else about AppleScript.
         The user selected part of their script that they want to provide to you for help.
         They might include a free-form question.
-        Respond with valid AppleScript statement(s). Your response will replace what they selected. So they can review and use it.
+        Respond with valid AppleScript statement(s).
+        Your response will replace what they selected. So they can review and use it.
+        Your responpse can include new lines if you have multiple lines.
         Comments are ok, only if absolutely necessary.
         No explanation. No markdown. No markdown with backticks ` nor ```.
         """)

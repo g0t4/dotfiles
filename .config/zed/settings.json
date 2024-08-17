@@ -3,6 +3,7 @@
   // "theme": "Andromeda", // kinda like this or smth in between (todo build my own colors)
   "language_models": {
     "openai": {
+      "version": "1",
       "api_url": "http://localhost:11434/v1",
       "low_speed_timeout_in_seconds": 30
     }
