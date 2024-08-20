@@ -1123,6 +1123,16 @@ function video_editing_extract_most_scene_change_thumbnails
     zsh -ic "video_editing_extract_most_scene_change_thumbnails $paths"
 end
 
+function video_editing_shift_audio_100ms
+    # based on: ffmpeg -i foo.mp4  -itsoffset 0.1 -i foo.mp4  -map 0:v -map 1:a -c:v copy -c:a aac foo-shifted100ms.mp4
+    # PRN add ms param? right now 100 works for my setup OBS+mixpre6v2/mv7+logibrio
+    set input_file "$argv"
+    set file_extension (basename "$input_file" | awk -F. '{print $NF}') # only tested with m4v/mp4 (i.e. aac codec hard coded below)
+    set output_file (string replace -r "\.$file_extension\$" ".shifted100ms.$file_extension" "$input_file")
+    ffmpeg -i "$input_file" -itsoffset 0.1 -i "$input_file" -map 0:v -map 1:a -c:v copy -c:a aac "$output_file"
+end
+
+
 if command -q npm
 
     # PRN as I use and find how I wanna use aliases
