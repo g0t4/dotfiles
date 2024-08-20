@@ -2,14 +2,17 @@ import os
 import sys
 import json
 
-alfred_query = sys.argv[1] if len(sys.argv) > 1 else ''
-alfred_query = alfred_query.strip()
-
-## todo what about iterm resume profiles that are just applescripts currently...
-#  below I need to find these and use them as names in the list too... could use *-resume.applescript to find profile names to resume (and update brave-resume.applescript to do more than just brave, same with save, OR add a python script to unify resume/save and have it call brave resume/save applescripts)
-#  osascript "$WES_DOTFILES/misc/restorable-profiles/iterm-resume.applescript" haskell
-#  osascript "$WES_DOTFILES/misc/restorable-profiles/dotfiles-resume.applescript"
-
+# parse args for
+# --action save|resume|delete
+# --query <name>
+action = None
+alfred_query = None
+for i, arg in enumerate(sys.argv):
+    if arg == '--action':
+        action = sys.argv[i + 1]
+    if arg == '--query':
+        alfred_query = sys.argv[i + 1].strip()
+    # let it error if not passing valid args/values as each --flag value combo expects a value
 
 items = []
 profiles_dir = os.path.expanduser("~/.config/restorable-profiles")
@@ -23,17 +26,18 @@ for profile in os.listdir(profiles_dir):
         profile_item = {
             "uid": filename_without_ext,
             "title": filename_without_ext,
-            "subtitle": filename_without_ext,
+            "subtitle": f"{action.upper()} profile {filename_without_ext}",
             "arg": filename_without_ext,
             "autocomplete": filename_without_ext,
             "icon": {
                 "type": "fileicon",
-                "path": profile_path # todo use smth better than the file icon but for now folder is different and stands out so use that for new and this for existing
+                "path": profile_path  # todo use smth better than the file icon but for now folder is different and stands out so use that for new and this for existing
             }
         }
         items.append(profile_item)
 
 import os
+
 my_path = os.path.abspath(os.path.dirname(__file__))
 static_dir = os.path.join(my_path, 'static')
 # look for any *-resume.applescript files and add them to the list
@@ -52,23 +56,19 @@ for resume_script in os.listdir(static_dir):
     resume_item = {
         "uid": profile_name,
         "title": profile_name,
-        "subtitle": profile_name,
+        "subtitle": f"{action.upper()} profile {profile_name}",
         "arg": profile_name,
         "autocomplete": profile_name,
-        "icon": {
-            "type": "fileicon",
-            "path": resume_script_path
-        }
+        "icon": {"type": "fileicon", "path": resume_script_path}
     }
     items.append(resume_item)
 
-# add new item if no matches, only intended for saving a new profile... with out this, cannot save a new profile b/c cannot pick a name that doesn't already exist
-no_new_profile = '--no-new-profile' in sys.argv
-if not no_new_profile:
+# add new item if no matches, only intended for saving a new profile
+if action == "save":
     items.append({
         "uid": alfred_query,
-        # TODO pass action type so I can show a useful description here (mostly important if I wanna allow no space between keyword and profile name and then I could have multiple matches across diff actions--save,resume,delete,etc)
-        "title": "Save a new profile named '{}'".format(alfred_query),
+        "title": "Save '{}'".format(alfred_query),
+        "subtitle": "Create a new profile named '{}'".format(alfred_query),
         "arg": alfred_query,
         "autocomplete": alfred_query,
         "icon": {
@@ -77,9 +77,8 @@ if not no_new_profile:
         }
     })
 
-# filter items by query (if passed)
-if alfred_query != '' and alfred_query != '--no-new-profile': # todo add real arg parsing so dont have this mess about --no-new-profile
+# filter items by query (if passed), should I just have alfred do this (via checkbox in filter settings)?
+if alfred_query != '':
     items = [item for item in items if alfred_query.lower() in item['title'].lower()]
-
 
 print(json.dumps({"items": items}))
