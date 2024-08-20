@@ -27,16 +27,20 @@ on saveProfileUrls(profile_name, tabURLs)
 
 end saveProfileUrls
 
+on run argv
+	set {profile_name} to {item 1} of argv
+	-- display alert profile_name
 
-tell application "Brave Browser Beta"
-	set frontWindow to front window
-	set tabURLs to {}
-	repeat with t in (tabs of frontWindow)
-		set end of tabURLs to URL of t
-	end repeat
+	tell application "Brave Browser Beta"
+		set tabURLs to {}
+		repeat with t in (tabs of front window)
+			set end of tabURLs to URL of t
+		end repeat
 
-	my saveProfileUrls("haskell", tabURLs)	-- TODO take param to script from osascript
-end tell
+		my saveProfileUrls(profile_name, tabURLs)	-- TODO take param to script from osascript
+	end tell
+
+end run
 
 
 
