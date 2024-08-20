@@ -24,29 +24,35 @@ on readProfileUrls(profile_name)
 	return splitStringOnNewline(urls)
 end readProfileUrls
 
-tell application "Brave Browser Beta"
 
-	set urls to my readProfileUrls("haskell")
 
-	if urls = {} then
-		return
-	end if
+on run argv
+	set {profile_name} to {item 1} of argv
 
-	set firstUrl to item 1 of urls
-	set newWindow to make new window
-	set URL of active tab of newWindow to firstUrl
+	-- display alert profile_name
+	tell application "Brave Browser Beta"
 
-	-- would be nice to save tab groups too but I can survive for now me thinks
+		set urls to my readProfileUrls(profile_name)
 
-	-- LOOP over rest of urls, 2+
-	tell newWindow
-		repeat with i from 2 to (count of urls)
-			set theUrl to item i of urls
-			make new tab with properties {URL:theUrl}
-		end repeat
+		if urls = {} then
+			return
+		end if
 
+		set firstUrl to item 1 of urls
+		set newWindow to make new window
+		set URL of active tab of newWindow to firstUrl
+
+		-- would be nice to save tab groups too but I can survive for now me thinks
+
+		-- LOOP over rest of urls, 2+
+		tell newWindow
+			repeat with i from 2 to (count of urls)
+				set theUrl to item i of urls
+				make new tab with properties {URL:theUrl}
+			end repeat
+
+		end tell
 	end tell
-end tell
-
+end run
 
 
