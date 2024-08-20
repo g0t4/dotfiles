@@ -5,6 +5,12 @@ import json
 alfred_query = sys.argv[1] if len(sys.argv) > 1 else ''
 alfred_query = alfred_query.strip()
 
+## todo what about iterm resume profiles that are just applescripts currently...
+#  below I need to find these and use them as names in the list too... could use *-resume.applescript to find profile names to resume (and update brave-resume.applescript to do more than just brave, same with save, OR add a python script to unify resume/save and have it call brave resume/save applescripts)
+#  osascript "$WES_DOTFILES/misc/restorable-profiles/iterm-resume.applescript" haskell
+#  osascript "$WES_DOTFILES/misc/restorable-profiles/dotfiles-resume.applescript"
+
+
 items = []
 profiles_dir = os.path.expanduser("~/.config/restorable-profiles")
 for profile in os.listdir(profiles_dir):
@@ -18,14 +24,14 @@ for profile in os.listdir(profiles_dir):
 
     if not os.path.isdir(profile_path):
         profile_item = {
-            "uid": profile,
-            "title": profile,
-            "subtitle": profile_path,
+            "uid": filename_without_ext,
+            "title": filename_without_ext,
+            "subtitle": filename_without_ext,
             "arg": filename_without_ext,
-            "autocomplete": profile,
+            "autocomplete": filename_without_ext,
             "icon": {
                 "type": "fileicon",
-                "path": profile_path
+                "path": profile_path # todo use smth better than the file icon but for now folder is different and stands out so use that for new and this for existing
             }
         }
         items.append(profile_item)

@@ -1140,19 +1140,3 @@ if command -q npm
 
 
 end
-
-
-function profiles_save_haskell
-    # TODO actually pass and use profile name in applescripts
-    osascript "$WES_DOTFILES/misc/restorable-profiles/brave-save.applescript" haskell
-end
-
-function profiles_resume_haskell
-    # TODO actually pass and use profile name in applescripts
-    osascript "$WES_DOTFILES/misc/restorable-profiles/iterm-resume.applescript" haskell
-    osascript "$WES_DOTFILES/misc/restorable-profiles/brave-resume.applescript" haskell
-end
-
-function profiles_resume_dotfiles
-    osascript "$WES_DOTFILES/misc/restorable-profiles/dotfiles-resume.applescript"
-end
