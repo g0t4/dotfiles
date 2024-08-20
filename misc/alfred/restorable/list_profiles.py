@@ -14,9 +14,6 @@ alfred_query = alfred_query.strip()
 items = []
 profiles_dir = os.path.expanduser("~/.config/restorable-profiles")
 for profile in os.listdir(profiles_dir):
-    if alfred_query != '' and alfred_query.lower() not in profile.lower():
-        # skip if query is not in profile name
-        continue
 
     profile_path = os.path.join(profiles_dir, profile)
 
@@ -48,10 +45,6 @@ for resume_script in os.listdir(static_dir):
     filename_without_ext = os.path.splitext(resume_script)[0]
     profile_name = filename_without_ext.replace('-resume', '')
 
-    if alfred_query != '' and alfred_query.lower() not in profile_name.lower():
-        # skip if query is not in profile name
-        continue
-
     # dont duplicate item in results, if already in list from urls match above
     if any(item['uid'] == profile_name for item in items):
         continue
@@ -74,6 +67,7 @@ no_new_profile = '--no-new-profile' in sys.argv
 if not no_new_profile:
     items.append({
         "uid": alfred_query,
+        # TODO pass action type so I can show a useful description here (mostly important if I wanna allow no space between keyword and profile name and then I could have multiple matches across diff actions--save,resume,delete,etc)
         "title": "Save a new profile named '{}'".format(alfred_query),
         "arg": alfred_query,
         "autocomplete": alfred_query,
@@ -82,5 +76,10 @@ if not no_new_profile:
             "path": profiles_dir
         }
     })
+
+# filter items by query (if passed)
+if alfred_query != '' and alfred_query != '--no-new-profile': # todo add real arg parsing so dont have this mess about --no-new-profile
+    items = [item for item in items if alfred_query.lower() in item['title'].lower()]
+
 
 print(json.dumps({"items": items}))
