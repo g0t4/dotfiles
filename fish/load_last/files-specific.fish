@@ -232,3 +232,17 @@ function treevX
 end
 
 abbr treeify as-tree # PRN do I ever use this?
+
+# *** *z functions to combine z cmd w/ opening editor to the repo root
+function cz
+    z $argv
+    code (_repo_root)
+end
+function zz
+    z $argv
+    zed (_repo_root)
+end
+function oz
+    z $argv
+    open (_repo_root)
+end
