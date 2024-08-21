@@ -819,6 +819,12 @@ if command -q watch
 
 end
 
+abbr wc wordcount # when typing wc => expand into custom wordcount func (can still use `wc` in scripts or `command wc` to use wc directly)
+function wordcount
+    # run wc and then parse result to add labels on each value:
+    wc $argv | awk '{print "lines: "$1"\nwords: "$2"\nchars: "$3}'
+end
+
 if command -q yq
 
     # helper to select a document by index from multidocument yaml file
@@ -1150,4 +1156,3 @@ if command -q npm
 
 
 end
-
