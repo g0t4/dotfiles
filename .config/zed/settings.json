@@ -1,26 +1,11 @@
 // https://zed.dev/docs/configuring-zed
 {
   // "theme": "Andromeda", // kinda like this or smth in between (todo build my own colors)
-  "language_models": {
-    "openai": {
-      "version": "1",
-      "api_url": "http://localhost:11434/v1",
-      "low_speed_timeout_in_seconds": 30
-    }
-  },
   "vim_mode": true,
   "ui_font_size": 24,
   "buffer_font_size": 16, // aka editor
   "format_on_save": "off",
   "hover_popover_enabled": true, // default=true (make explicit)
-  "assistant": {
-    "default_model": {
-      "provider": "openai",
-      "model": "gpt-4-turbo-preview"
-    },
-    "version": "2",
-    "provider": null
-  },
   "git": {
     "inline_blame": {
       "enabled": false
