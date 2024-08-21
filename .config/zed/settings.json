@@ -3,8 +3,8 @@
   // "theme": "Andromeda", // kinda like this or smth in between (todo build my own colors)
   "assistant": {
     "default_model": {
-      "provider": "ollama",
-      "model": "codegemma:latest"
+      "provider": "copilot_chat",
+      "model": "gpt-4o"
     },
     "version": "2"
   },
