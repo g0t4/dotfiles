@@ -58,6 +58,14 @@ function _update_completion
 
 end
 
+function _shorts
+    set --universal wes_recording_youtube_shorts_need_small_prompt 1
+end
+
+function _not_shorts
+    set --erase wes_recording_youtube_shorts_need_small_prompt
+end
+
 function _recording
 
     # PRN if calling repeatedly (ie on spal activate) causes problems => return if already in recording mode?

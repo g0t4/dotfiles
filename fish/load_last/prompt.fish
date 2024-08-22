@@ -13,6 +13,11 @@ end
 function prompt_login --description 'display user name for the prompt'
     # prompt_login is effectively the start of the prompt
 
+    if set -q wes_recording_youtube_shorts_need_small_prompt
+        # no login displayed
+        return
+    end
+
     # SSH indicator 
     if set -q SSH_CONNECTION
         # keep in mind, have to update dotfiles for remote machines to pick up changes so this can't ever be assumed to be universal
@@ -51,6 +56,11 @@ function prompt_login --description 'display user name for the prompt'
 end
 
 function prompt_pwd --description 'wes mod - name of the current dir only'
+    # if recording shorts, show a small prompt
+    if set -q wes_recording_youtube_shorts_need_small_prompt
+        return
+    end
+    # variable named
     # PRN flush out other scenarios like I have with ~/repos/github/g0t4/foo => gh:g0t4/foo
     # ~ for home dir
     if string match -q "$HOME" $PWD
