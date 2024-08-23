@@ -1129,12 +1129,33 @@ function video_editing_extract_most_scene_change_thumbnails
     zsh -ic "video_editing_extract_most_scene_change_thumbnails $paths"
 end
 
+function video_editing_mkv_to_mp4
+    set input_file "$argv[1]"
+    set output_file "$input_file.mp4"
+    if test -f "$output_file"
+        echo "Skipping...file already exists: $output_file"
+        return
+    end
+    ffmpeg -i "$input_file" -c copy "$output_file"
+end
+
+function video_editing_mkv_to_mp4_shifted_audio_100ms
+    # mkv to mp4 first
+    set input_file "$argv[1]"
+    video_editing_mkv_to_mp4 "$input_file"
+    video_editing_shift_audio_100ms "$input_file.mp4" # careful w/ naming if I change conventions in mkv_to_mp4
+end
+
 function video_editing_shift_audio_100ms
     # based on: ffmpeg -i foo.mp4  -itsoffset 0.1 -i foo.mp4  -map 0:v -map 1:a -c:v copy -c:a aac foo-shifted100ms.mp4
     # PRN add ms param? right now 100 works for my setup OBS+mixpre6v2/mv7+logibrio
     set input_file "$argv"
     set file_extension (basename "$input_file" | awk -F. '{print $NF}') # only tested with m4v/mp4 (i.e. aac codec hard coded below)
     set output_file (string replace -r "\.$file_extension\$" ".shifted100ms.$file_extension" "$input_file")
+    if test -f "$output_file"
+        echo "Skipping...file already exists: $output_file"
+        return
+    end
     ffmpeg -i "$input_file" -itsoffset 0.1 -i "$input_file" -map 0:v -map 1:a -c:v copy -c:a aac "$output_file"
 end
 
