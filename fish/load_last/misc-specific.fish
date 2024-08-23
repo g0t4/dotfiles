@@ -3,13 +3,13 @@
 set fish_escape_delay_ms 200 # 30ms is default and way too fast (ie esc+k is almost impossible to trigger)
 
 # PRN add a binding to clear screen + reset status of last run command
-#    OR modify prompt (type fish_prompt) as it already distinguishes (with bold) if status was carried over from previous command so perhaps I could find a way to hijack that ? 
+#    OR modify prompt (type fish_prompt) as it already distinguishes (with bold) if status was carried over from previous command so perhaps I could find a way to hijack that ?
 #    OR hide status in the prompt (perhaps like zsh I could show non-zero exit code on last line before new prompt?)
 
 
 ### FISH HELP ###
 set __fish_help_dir "" # overwrite fish help dir thus forcing the use of https://fishshell.com instead of local files (which I prefer b/c I have highlighting of fishshell.com pages) # ... try it with: `help help` => opens https://fishshell.com/docs/3.6/interactive.html#help
-# see `type help` to find the part of the help command that decides what to open 
+# see `type help` to find the part of the help command that decides what to open
 
 ### BINDINGS ###
 # some of these might be a result of setting up iTerm2 to use xterm default keymapping (in profile), might need to adjust if key map is subsequently changed
@@ -109,14 +109,14 @@ if command -q k3s
 
     # PRN what about some sort of env/context selection for ctr socket? i.e:
     #    export CONTAINERD_ADDRESS=unix:///run/k3s/containerd/containerd.sock
-    #    sudo -E ctr ... # shows k3s containerd instance resources  
+    #    sudo -E ctr ... # shows k3s containerd instance resources
     #
     #    vs default address: /run/containerd/containerd.sock
 
     function _k3s_autocomplete
         # *** DUCK TAPE and bailing twine ***
         # set -l cur (commandline -ct) # current token (up to cursor position) => empty if cursor is preceeded by space
-        set -l prev (commandline -cp) # current process (back to the last pipe or start of current command), i.e.: 
+        set -l prev (commandline -cp) # current process (back to the last pipe or start of current command), i.e.:
         #    echo foo | k3s ser<CURSOR> => commmandline -cp => 'k3s ser'
         # echo "prev: $prev"
         # return
@@ -129,7 +129,7 @@ if command -q k3s
         #   - https://github.com/urfave/cli/blob/v1.22.14/fish.go#L13
 
         # --generate-bash-completion is a k3s feature that generates bash completion for k3s commands (not all though AFAICT, i.e. not k3s ctr and that makes sense cuz ctr completions would be independent of k3s)
-        #   `k3s completion bash` => 
+        #   `k3s completion bash` =>
         #       bash completion scripts (ported to this fish completion func)
         #       differentiates on -* vs (not start w/ -) == options vs subcommands => but, same completions regardless if include or exclude current token in my testing so I am not differentiating here:
         set -l opts (eval $prev --generate-bash-completion)
@@ -475,7 +475,7 @@ if command -q minikube
     abbr mkao 'minikube addons open'
     abbr mkae 'minikube addons enable'
     abbr mkad 'minikube addons disable'
-    abbr mkai 'minikube addons images' # i.e. `minikube addons images registry` 
+    abbr mkai 'minikube addons images' # i.e. `minikube addons images registry`
     abbr mkac 'minikube addons configure'
 
     abbr mkde 'eval $(minikube docker-env)' # (d)ocker-(e)nv - access nested docker containers w/o nested (uncustomized) shell
@@ -808,7 +808,7 @@ if command -q watch
     abbr wal 'watch --no-title --color -- grc --colour=on ls'
     abbr wat 'watch --no-title --color -- grc --colour=on tree'
     # for k8s prefer kubectl --watch b/c grc colors the output w/o issues.. but when it is not avail to continually monitor then use watch command w/ color output:
-    #   watch -n0.5 --color -- grc --colour=on kubectl rollout status deployments 
+    #   watch -n0.5 --color -- grc --colour=on kubectl rollout status deployments
 
     # FYI find terminfo for a TERM value:
     #    diff_two_commands 'infocmp xterm' 'infocmp xterm-256color'
@@ -917,7 +917,7 @@ if command -q act
     # function generate_completions_from_help
     #     for line in (act --help | grep -oE "\-\-[a-zA-Z0-9-]+")
     #         set option (echo $line | sed 's/--//')
-    #         echo complete -c act -l $option 
+    #         echo complete -c act -l $option
     #     end
     # end
     #
