@@ -1,6 +1,9 @@
 // https://zed.dev/docs/configuring-zed
 {
   // "theme": "Andromeda", // kinda like this or smth in between (todo build my own colors)
+  "tab_bar": {
+    "show": false
+  },
   "assistant": {
     "default_model": {
       "provider": "copilot_chat",
