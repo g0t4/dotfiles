@@ -38,4 +38,5 @@
   //   "show": true // TODO hide? (can I get current file name into title bar and then hide tabs... or can I move tabs to title bar (wasted space))
   // }
   // TODO is there a way to toggle status bar? like vscode (I don't see it in the default settings)
+
 }

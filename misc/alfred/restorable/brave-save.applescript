@@ -4,16 +4,16 @@ use scripting additions
 on joinStringsWithNewLine(theList)
 	set originalDelimiters to (get AppleScript's text item delimiters)
 	set AppleScript's text item delimiters to linefeed -- or `to return` -- TODO return or linefeed?
-	set joinedString to theList as text
+		set joinedString to theList as text
 	set AppleScript's text item delimiters to originalDelimiters
 	return joinedString
 end joinStringsWithNewLine
 
 on splitStringOnNewline(theString)
-	set text item delimiters to linefeed
-	set theList to every text item of theString
+  set text item delimiters to linefeed
+		set theList to every   text item   of theString
 	set text item delimiters to ""
-	return theList
+	  return theList
 end splitStringOnNewline
 
 on saveProfileUrls(profile_name, tabURLs)
@@ -22,8 +22,8 @@ on saveProfileUrls(profile_name, tabURLs)
 
 	set joinedLinks to my joinStringsWithNewLine(tabURLs)
 
-	set filePath to "~/.config/restorable-profiles/" & profile_name & ".urls"
-	do shell script "echo " & quoted form of joinedLinks & " > " & filePath
+    set filePath to "~/.config/restorable-profiles/" & profile_name & ".urls"
+	  do shell script "echo " & quoted form of joinedLinks & " > " & filePath
 
 end saveProfileUrls
 
@@ -31,13 +31,13 @@ on run argv
 	set {profile_name} to {item 1} of argv
 	-- display alert profile_name
 
-	tell application "Brave Browser Beta"
+	tell application   "Brave Browser Beta"
 		set tabURLs to {}
-		repeat with t in (tabs of front window)
-			set end of tabURLs to URL of t
+		repeat with t in  (tabs of front window)
+			  set end of tabURLs to URL of t
 		end repeat
 
-		my saveProfileUrls(profile_name, tabURLs)	-- TODO take param to script from osascript
+    	 my saveProfileUrls(profile_name, tabURLs)	-- TODO take param to script from osascript
 	end tell
 
 end run
