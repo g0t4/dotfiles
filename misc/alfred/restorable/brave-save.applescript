@@ -1,10 +1,10 @@
 use AppleScript version "2.4" -- Yosemite (10.10) or later
 use scripting additions
 
-on joinStringsWithNewLine(theList)
-	set originalDelimiters to (get AppleScript's text item delimiters)
-	set AppleScript's text item delimiters to linefeed -- or `to return` -- TODO return or linefeed?
-		set joinedString to theList as text
+on joinStringsWithNewLine( theList )
+	set originalDelimiters to (  get AppleScript's text item delimiters  )
+	set AppleScript's  text item delimiters to linefeed -- or `to return` -- TODO return or linefeed?
+		set joinedString to  theList    as text
 	set AppleScript's text item delimiters to originalDelimiters
 	return joinedString
 end joinStringsWithNewLine
