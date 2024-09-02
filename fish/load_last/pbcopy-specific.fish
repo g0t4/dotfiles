@@ -26,11 +26,20 @@ end
 # if SSH => replace fish_clipboard_copy
 if test -n "$SSH_CLIENT"
     if command -q osc-copy
+       # oscclip was removed from pypi in Aug 2024... and repo archived: https://github.com/rumpelsepp/oscclip?tab=readme-ov-file
         function fish_clipboard_copy
             # TODO think through this? is this robust? review fish_clipboard_copy
             # TODO do I wanna have my own wes_clipboard_copy that I use in special places so I am not trying to cover all other scenarios for using fish_clipboard_copy?
             osc-copy
             # osc-copy via => pipx install oscclip
+        end
+    end
+    if command -q osc
+        # osc suggested by https://github.com/rumpelsepp/oscclip?tab=readme-ov-file => https://github.com/theimpostor/osc
+        #   go install -v github.com/theimpostor/osc@latest
+        # so here is the wrapper to use it if present:
+        function fish_clipboard_copy
+            osc copy
         end
     end
     # else other osc copy commands?
