@@ -24,6 +24,8 @@ function kill_whole_line_and_copy
 end
 
 # if SSH => replace fish_clipboard_copy
+# TODO if I `sudo su` to root user, I lose env vars without `sudo -E`... and so this logic isn't injected to copy... can I just make this always the case on linux?
+#     IIAC I put this ssh check in for cases with WSL? would this just work even in WSL envs?
 if test -n "$SSH_CLIENT"
     if command -q osc-copy
        # oscclip was removed from pypi in Aug 2024... and repo archived: https://github.com/rumpelsepp/oscclip?tab=readme-ov-file
