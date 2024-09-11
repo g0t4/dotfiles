@@ -29,7 +29,7 @@
   "toolbar": {
     "breadcrumbs": false, // save a bunch of space at top of buffer! (name already shows on tab!)
     "quick_actions": false
-  }
+  },
   // TODO try:
   //  "inlay_hints": {
   //    "enabled": true
@@ -38,5 +38,9 @@
   //   "show": true // TODO hide? (can I get current file name into title bar and then hide tabs... or can I move tabs to title bar (wasted space))
   // }
   // TODO is there a way to toggle status bar? like vscode (I don't see it in the default settings)
-
+  "languages": {
+    "Markdown": {
+      "soft_wrap": "editor_width"
+    }
+  }
 }
