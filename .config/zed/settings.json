@@ -42,5 +42,8 @@
     "Markdown": {
       "soft_wrap": "editor_width"
     }
+  },
+  "file_types": {
+    "YAML": [ "*.clangd" ]
   }
 }
