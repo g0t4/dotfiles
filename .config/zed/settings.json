@@ -2,7 +2,7 @@
 {
   // "theme": "Andromeda", // kinda like this or smth in between (todo build my own colors)
   "tab_bar": {
-    "show": false
+    "show": true
   },
   "assistant": {
     "default_model": {
