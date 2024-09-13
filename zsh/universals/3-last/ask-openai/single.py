@@ -1,5 +1,5 @@
 import sys
-from os import getenv
+import os
 from openai import OpenAI
 
 from services import args_to_use, Service
@@ -44,7 +44,7 @@ def generate_command(passed_context: str, use: Service):
 
 
 def log_response(passed_context: str, use: Service, response: str):
-    log_file = f"{getenv('HOME')}/.ask.single.log"
+    log_file = os.path.join(os.path.expanduser("~"), ".ask.single.log")
     with open(log_file, "a", encoding='utf-8') as file:
         file.writelines([f"{'#'*40} {use.base_url} {use.name} {use.model}" + '\n', f"{passed_context}\n{response}\n\n"])
 
