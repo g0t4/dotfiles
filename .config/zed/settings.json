@@ -45,5 +45,8 @@
   },
   "file_types": {
     "YAML": [ "*.clangd" ]
+  },
+  "terminal": {
+    "detect_venv": "off"
   }
 }
