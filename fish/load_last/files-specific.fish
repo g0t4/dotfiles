@@ -211,7 +211,19 @@ abbr --add finddr --set-cursor=! 'find . -type d -iregex ".*!.*"' # another idea
 set _treed "tree --only-dirs"
 
 function tree
-    eza --tree --group-directories-first --ignore-glob "node_modules|bower_components|.git" --color-scale=all --icons --git-repos $argv
+
+    if command -q eza
+        eza --tree --group-directories-first --ignore-glob "node_modules|bower_components|.git|.venv" --color-scale=all --icons --git-repos --git-ignore $argv
+    else if command -q exa
+        exa --tree --group-directories-first --ignore-glob "node_modules|bower_components|.git|.venv" --color-scale --icons --git-ignore $argv
+    else
+        command tree --dirsfirst --noreport --filelimit 100 --gitignore $argv
+    end
+
+    # else if command -q lsd
+    #    lsd --tree --group-dirs first --ignore "node_modules|bower_components|.git" --color always $argv
+    #    return
+
 end
 
 abbr treed "$_treed"
@@ -228,15 +240,15 @@ abbr --add _treeX --regex 'tree\d+' --function treeX
 function treeX
     string replace --regex '^tree' 'tree -L' $argv
 end
-# treedX => treed -L X 
+# treedX => treed -L X
 abbr --add _treedX --regex 'treed\d+' --function treedX
 function treedX
-    string replace --regex '^treed' 'treed -L' $argv
+    string replace --regex '^treed' "$_treed -L" $argv
 end
 # treevX => treev -L X
 abbr --add _treevX --regex 'treev\d+' --function treevX
 function treevX
-    string replace --regex '^treev' 'treev -L' $argv
+    string replace --regex '^treev' "$_treeal -L" $argv
 end
 
 abbr treeify as-tree # PRN do I ever use this?
