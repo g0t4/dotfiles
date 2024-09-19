@@ -165,9 +165,70 @@ if command -q batcat # -q => w/o output
         batcat $argv
     end
 end
-abbr cat bat # do not alias, only expand (abbr), else get failure trying to use cat.... TLDR as I type cat replace it with bat
+
+# abbr cat bat # PRN go back to this if I don't like lscat
 abbr bath 'bat --style=header' # == header-filename (i.e. for multi files show names)
 abbr batf 'bat --style=full'
+
+if status --is-interactive
+
+    # don't alter behavior of non-interactive shells
+    abbr ls 'lscat'
+    abbr la 'lscat'
+    abbr cat 'lscat'
+
+    function _lscat_file
+        set path $argv
+        if command -q bat
+            # PRN inject language detection to override bat defaults that I don't like?
+            bat $path
+        else
+            cat $path
+        end
+    end
+
+    function _lscat_dir
+        set path $argv
+        # todo other default args I like for ls?
+        if command -q exa
+            exa -al $path
+        else if command -q eza
+            eza -al $path
+        else if command -q lsd
+            lsd -al $path
+        else
+            ls -al $path
+        end
+    end
+
+    function lscat
+
+        if test -z $argv
+            _lscat_dir . # just like ls command
+        end
+
+        for path in $argv
+
+            set path $argv
+
+            if test -f $path
+                _lscat_file $path
+            else if test -d $path
+                _lscat_dir $path
+            else if test ! -e $path
+                echo "No such file or directory: $path"
+                return 1
+            else
+                echo "Unexpected, unsupported path: $path"
+                echo "Not implemented yet...  add it to lscat!"
+                return 1
+            end
+
+        end
+
+    end
+end
+
 
 
 ### DISK USAGE ###
