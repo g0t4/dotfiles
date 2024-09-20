@@ -203,13 +203,13 @@ if status --is-interactive
 
     function lscat
 
-        if test -z $argv
+        if test -z "$argv"
             _lscat_dir . # just like ls command
         end
 
         for path in $argv
 
-            set path $argv
+            # PRN if multiple items => show each $path first?
 
             if test -f $path
                 _lscat_file $path
