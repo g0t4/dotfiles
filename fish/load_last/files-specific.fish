@@ -172,10 +172,9 @@ abbr batf 'bat --style=full'
 
 if status --is-interactive
 
-    # don't alter behavior of non-interactive shells
-    abbr ls 'lscat'
-    abbr la 'lscat'
-    abbr cat 'lscat'
+    abbr cat 'lscat' # only expand cat => lscat as a reminder to try to use this... if I like it I will reach for it and use it alongside ls/la and always instead of cat me thinks
+    # abbr ls 'lscat' # remove ls/la b/c I think there are plenty of times I want a glob to match and list files (not dump their contents)
+    # abbr la 'lscat' #
 
     function _lscat_file
         set path $argv
