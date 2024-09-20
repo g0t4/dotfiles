@@ -171,7 +171,7 @@ abbr bath 'bat --style=header' # == header-filename (i.e. for multi files show n
 abbr batf 'bat --style=full'
 
 if status --is-interactive
-
+    # EXPERIMENTAL to see if I like it and if it causes issues (best approach for dotfile changes, esp material ones, is to use it and see what blows up and/or what is awesome)
     abbr cat 'lscat' # only expand cat => lscat as a reminder to try to use this... if I like it I will reach for it and use it alongside ls/la and always instead of cat me thinks
     # abbr ls 'lscat' # remove ls/la b/c I think there are plenty of times I want a glob to match and list files (not dump their contents)
     # abbr la 'lscat' #
