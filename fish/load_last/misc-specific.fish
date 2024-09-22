@@ -1180,6 +1180,8 @@ end
 
 function maths
 
+    # motivation => working with gdb (hex/decimal/binary), rpi (gpio binary), etc
+
     # sorted in order of most output to least (easier to visually parse):
 
     echo -n "bin: "
