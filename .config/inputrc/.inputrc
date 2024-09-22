@@ -1,0 +1,5 @@
+# incremental search (prefix match)
+# up/down arrow prefix match from history (added for using gdb, though would work with any command that uses readline)
+"\e[A": history-search-backward
+"\e[B": history-search-forward
+
