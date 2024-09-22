@@ -181,6 +181,9 @@ if status --is-interactive
         if command -q bat
             # PRN inject language detection to override bat defaults that I don't like?
             bat $path
+        else if command -q batcat
+            # debian family => batcat to avoid clash... and my bat alias won't match command so I need this case too
+            batcat $path
         else
             cat $path
         end
