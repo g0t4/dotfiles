@@ -1177,3 +1177,31 @@ if command -q npm
 
 
 end
+
+function maths
+
+    # sorted in order of most output to least (easier to visually parse):
+
+    echo -n "bin: "
+    python -c "print(bin($argv))"
+
+    echo -n "hex: "
+    python -c "print(hex($argv))"
+
+    # echo -n "oct: "
+    # python -c "print(oct($argv))" | bc --obase=8
+
+    echo -n "dec: "
+    python -c "print($argv)"
+
+    # fish's `math` doesn't support binary input/output, nor does it understand 0b1101 or 0o12... only 0xFF and decimal
+    # bc doesn't understand 0x/0b/0o...  have to set ibase, yuck that is a mess as i cannot mix bases
+    #
+    # ok python has great support and great helpers to convert output too! jsut wrap python for the maths
+    #  0xFF  (hex)
+    #  0b1111 (bin)
+    #  0o77 (oct)
+    #  255 (dec)
+    # *** python can mix bases too!
+    #  maths 0xFF + 0b1111 + 0o77 + 255
+end
