@@ -1184,6 +1184,7 @@ function bitmaths # TODO name?
     # - rpi gpio signals/protocol decoders - i.e. kingstvis
     #
     # features:
+    # - its a python expression that results in an integer (current limitation)
     # - convert single values: hex <=> decimal <=> binary
     # - operations:
     #       0x1 + 10
@@ -1194,9 +1195,13 @@ function bitmaths # TODO name?
     # FYI not intended to:
     # - pass non-whole numbers (i.e. 1.5)
     # - handle signed number formats / representations *** IOTW doesn't map signed int to base 10 value
+    #   - this would have to be some floating point format like IEEE 754 or similar and I haven't had a need for that lately, much like signed/unsigned
+    # - TODO I would like to have smth for hex <=> string (ascii) conversion, but that is a different tool... xxd or hexdump or similar?
+    #   - btw hex/string conversion starts to get into territory of signed ints, floats formats and so those might make sense as a separate function if I find myself needing those often
 
+    # maybes:
+    #   import math; so math.log2(0x10) => 4 an
 
-    # motivation => working with gdb (hex/decimal/binary), rpi (gpio binary), etc
 
     # sorted in order of most output to least (easier to visually parse):
 
@@ -1220,6 +1225,4 @@ function bitmaths # TODO name?
     #  0b1111 (bin)
     #  0o77 (oct)
     #  255 (dec)
-    # *** python can mix bases too!
-    #  maths 0xFF + 0b1111 + 0o77 + 255
 end
