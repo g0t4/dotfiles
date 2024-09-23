@@ -1209,6 +1209,21 @@ function bitmaths
     #   - this would have to be some floating point format like IEEE 754 or similar and I haven't had a need for that lately, much like signed/unsigned
 
     # maybes:
+    #   gdb inspiration:
+    #      print 1 + 0x11    # 17
+    #      print/x 1 + 0x11  # 0x11
+    #      see `help x` in gdb
+    #         FMT is a repeat count followed by a format letter and a size letter.
+    #
+    #           Format letters are o(octal), x(hex), d(decimal), u(unsigned decimal),
+    #           t(binary), f(float), a(address), i(instruction), c(char), s(string)
+    #           and z(hex, zero padded on the left).
+    #
+    #           Size letters are b(byte), h(halfword), w(word), g(giant, 8 bytes).
+    #
+    #         negative = memory is reversed
+    #
+    #      x/i $rip # => which arch? perhaps sep func?
     #   import math; so math.log2(0x10) => 4 an
     #   multiple values on one line (drop prefix text)
     #   signed integer support
@@ -1235,7 +1250,6 @@ function bitmaths
 
     echo -n "dec: "
     python3 -c "print($argv)"
-
 
     # fish's `math` doesn't support binary input/output, nor does it understand 0b1101 or 0o12... only 0xFF and decimal
     # bc doesn't understand 0x/0b/0o...  have to set ibase, yuck that is a mess as i cannot mix bases
