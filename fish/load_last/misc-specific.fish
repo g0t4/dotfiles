@@ -1178,32 +1178,51 @@ if command -q npm
 
 end
 
-function bitmaths # TODO name?
+# TODO! add mechanism to discover duplicated abbrs => on-demand check?
+abbr bm bitmaths # careful brew uses b* prefix
+function bitmaths
     # *** motivation => primary use cases so far:
     # - gdb (disassembling code, runtime inspect stack/registers/etc)
     # - rpi gpio signals/protocol decoders - i.e. kingstvis
     #
     # features:
-    # - its a python expression that results in an integer (current limitation)
-    # - convert single values: hex <=> decimal <=> binary
+    # - takes a python expression that results in an integer (current limitation)
+    # - convert single values: hex <=> decimal <=> binary <=> ascii
     # - operations:
     #       0x1 + 10
     #       0b1 + 0x10
     #       0x231423 - 0b1010101
+    #       bitwise ops:
+    #           0x10 & 0x11   # \& escape
+    #           0x10 | 0x11   # \| escape
+    #           0x10 ^ 0x11   # \^ escape
+    #           0x10 << 1     # shift left/right (binary multiplication/division)
+    #       66 => bin: 0b1000010, hex: 0x42, dec: 66, ascii: B
+    #       0x4141 => ascii: "AA"  ...
+    #       0x48656c6c6f => ascii: "Hello"
+    #
     # - result in all three formats so I can use the one I want for a given situation w/o passing a parameter to specify what I want, way faster this way IMO
     #
     # FYI not intended to:
     # - pass non-whole numbers (i.e. 1.5)
     # - handle signed number formats / representations *** IOTW doesn't map signed int to base 10 value
     #   - this would have to be some floating point format like IEEE 754 or similar and I haven't had a need for that lately, much like signed/unsigned
-    # - TODO I would like to have smth for hex <=> string (ascii) conversion, but that is a different tool... xxd or hexdump or similar?
-    #   - btw hex/string conversion starts to get into territory of signed ints, floats formats and so those might make sense as a separate function if I find myself needing those often
 
     # maybes:
     #   import math; so math.log2(0x10) => 4 an
-
+    #   multiple values on one line (drop prefix text)
+    #   signed integer support
+    #   show both big endian (readable, network byte order) and little endian (memory) representations => right now just big endian, so would just need to add litte endian
+    #   split up longer numbers (hex/binary split on 4 bytes / 8bits), decimal use commas
+    #   left padding to closest 4 byte boundary on hex? how would that work with split on 4 bytes... RToL split or LToR split? this gets into endianness territory :) 
+    #   show ascii representation of hex (i.e. 0x48656c6c6f => "Hello")
 
     # sorted in order of most output to least (easier to visually parse):
+
+    echo -n "ascii: "
+    # PRN do I like this ascii approach? seems reasonable to me
+    python3 -c "print(hex($argv)[2:])" | xxd -r -p
+    echo # blank line
 
     echo -n "bin: "
     python3 -c "print(bin($argv))"
@@ -1216,6 +1235,7 @@ function bitmaths # TODO name?
 
     echo -n "dec: "
     python3 -c "print($argv)"
+
 
     # fish's `math` doesn't support binary input/output, nor does it understand 0b1101 or 0o12... only 0xFF and decimal
     # bc doesn't understand 0x/0b/0o...  have to set ibase, yuck that is a mess as i cannot mix bases
