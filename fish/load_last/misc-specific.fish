@@ -1178,7 +1178,23 @@ if command -q npm
 
 end
 
-function maths
+function bitmaths # TODO name?
+    # *** motivation => primary use cases so far:
+    # - gdb (disassembling code, runtime inspect stack/registers/etc)
+    # - rpi gpio signals/protocol decoders - i.e. kingstvis
+    #
+    # features:
+    # - convert single values: hex <=> decimal <=> binary
+    # - operations:
+    #       0x1 + 10
+    #       0b1 + 0x10
+    #       0x231423 - 0b1010101
+    # - result in all three formats so I can use the one I want for a given situation w/o passing a parameter to specify what I want, way faster this way IMO
+    #
+    # FYI not intended to:
+    # - pass non-whole numbers (i.e. 1.5)
+    # - handle signed number formats / representations *** IOTW doesn't map signed int to base 10 value
+
 
     # motivation => working with gdb (hex/decimal/binary), rpi (gpio binary), etc
 
