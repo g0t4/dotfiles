@@ -1,3 +1,13 @@
+
+function mark
+    # for review commits that I don't need to step by step commit, instead just make a commit of all changes and dump the diff for my optional review
+	git diff --color-words HEAD # make sure to compare to HEAD as we will stage everything and commit the index too
+	git add . # assumes no other work, but yeah I'm calling this explicitly
+	git commit -m 'mark-review'
+	git status
+end
+
+
 # - w/ message
 abbr --set-cursor='!' gcmsg 'git commit -m "!"'
 abbr --set-cursor='!' gcam 'git commit -a -m "!"'
