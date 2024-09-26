@@ -345,3 +345,5 @@ function oz
     z $argv
     open (_repo_root)
 end
+
+export EDITOR="vim"
