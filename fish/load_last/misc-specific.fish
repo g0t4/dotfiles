@@ -1180,65 +1180,13 @@ if command -q npm
 end
 
 # TODO! add mechanism to discover duplicated abbrs => on-demand check?
+
 abbr bm bitmaths # careful brew uses b* prefix
 function bitmaths
-    # *** motivation => primary use cases so far:
-    # - gdb (disassembling code, runtime inspect stack/registers/etc)
-    # - rpi gpio signals/protocol decoders - i.e. kingstvis
-    #
-    # features:
-    # - takes a python expression that results in an integer (current limitation)
-    # - convert single values: hex <=> decimal <=> binary <=> ascii
-    # - operations:
-    #       0x1 + 10
-    #       0b1 + 0x10
-    #       0x231423 - 0b1010101
-    #       bitwise ops:
-    #           0x10 & 0x11   # \& escape
-    #           0x10 | 0x11   # \| escape
-    #           0x10 ^ 0x11   # \^ escape
-    #           0x10 << 1     # shift left/right (binary multiplication/division)
-    #       66 => bin: 0b1000010, hex: 0x42, dec: 66, ascii: B
-    #       0x4141 => ascii: "AA"  ...
-    #       0x48656c6c6f => ascii: "Hello"
-    #
-    # - result in all three formats so I can use the one I want for a given situation w/o passing a parameter to specify what I want, way faster this way IMO
-    #
-    # FYI not intended to:
-    # - pass non-whole numbers (i.e. 1.5)
-    # - handle signed number formats / representations *** IOTW doesn't map signed int to base 10 value
-    #   - this would have to be some floating point format like IEEE 754 or similar and I haven't had a need for that lately, much like signed/unsigned
-
-    # maybes:
-    #   gdb inspiration:
-    #      print 1 + 0x11    # 17
-    #      print/x 1 + 0x11  # 0x11
-    #      see `help x` in gdb
-    #         FMT is a repeat count followed by a format letter and a size letter.
-    #
-    #           Format letters are o(octal), x(hex), d(decimal), u(unsigned decimal),
-    #           t(binary), f(float), a(address), i(instruction), c(char), s(string)
-    #           and z(hex, zero padded on the left).
-    #
-    #           Size letters are b(byte), h(halfword), w(word), g(giant, 8 bytes).
-    #
-    #         negative = memory is reversed
-    #
-    #      x/i $rip # => which arch? perhaps sep func?
-    #   import math; so math.log2(0x10) => 4 an
-    #   multiple values on one line (drop prefix text)
-    #   signed integer support
-    #   show both big endian (readable, network byte order) and little endian (memory) representations => right now just big endian, so would just need to add litte endian
-    #   split up longer numbers (hex/binary split on 4 bytes / 8bits), decimal use commas
-    #   left padding to closest 4 byte boundary on hex? how would that work with split on 4 bytes... RToL split or LToR split? this gets into endianness territory :) 
-    #   show ascii representation of hex (i.e. 0x48656c6c6f => "Hello")
-
-    # sorted in order of most output to least (easier to visually parse):
 
     echo -n "ascii: "
-    # PRN do I like this ascii approach? seems reasonable to me
     python3 -c "print(hex($argv)[2:])" | xxd -r -p
-    echo # blank line
+    echo
 
     echo -n "bin: "
     python3 -c "print(bin($argv))"
@@ -1252,12 +1200,4 @@ function bitmaths
     echo -n "dec: "
     python3 -c "print($argv)"
 
-    # fish's `math` doesn't support binary input/output, nor does it understand 0b1101 or 0o12... only 0xFF and decimal
-    # bc doesn't understand 0x/0b/0o...  have to set ibase, yuck that is a mess as i cannot mix bases
-    #
-    # ok python has great support and great helpers to convert output too! jsut wrap python for the maths
-    #  0xFF  (hex)
-    #  0b1111 (bin)
-    #  0o77 (oct)
-    #  255 (dec)
 end
