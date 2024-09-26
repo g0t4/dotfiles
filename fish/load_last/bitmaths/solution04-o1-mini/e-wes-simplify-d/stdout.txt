@@ -1,4 +1,0 @@
-ascii: 
-bin: 0b100001011
-hex: 0x10b
-dec: 267
