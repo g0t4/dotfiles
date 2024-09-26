@@ -3,17 +3,6 @@ import sys
 import re
 from binascii import unhexlify
 
-def parse_number(s):
-    if s.startswith('0b'):
-        return int(s, 2)
-    elif s.startswith('0x'):
-        return int(s, 16)
-    else:
-        return int(s)
-
-def replace_numbers(expr):
-    return re.sub(r'0b[01]+|0x[0-9a-fA-F]+|\d+', lambda x: str(parse_number(x.group())), expr)
-
 def hex_to_ascii(hex_str):
     try:
         hex_clean = hex_str[2:] if hex_str.startswith('0x') else hex_str
