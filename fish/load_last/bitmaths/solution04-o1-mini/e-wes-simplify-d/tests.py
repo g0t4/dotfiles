@@ -1,15 +1,19 @@
 import sys
 import unittest
 from maths import hex_to_ascii, main
+from io import StringIO
 
 class TestMathsFunctions(unittest.TestCase):
     
     def run_main_with(self, expr):
-        sys.stdout = open('stdout.txt', 'w')
+        
+        original_stdout = sys.stdout
+        sys.stdout = StringIO()
         sys.argv = ["maths.py", expr]
         main()
-        sys.stdout.close()
-        return open('stdout.txt', 'r').read()
+        output = sys.stdout.getvalue()
+        sys.stdout = original_stdout
+        return output
 
     def test_replace_numbers_simple(self):
         expr = '0xFF + 0xC'
