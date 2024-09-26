@@ -1,9 +1,10 @@
 
+## Initial 
 
-write a fish shell function that can be used to do:
+implement code for this new shell command/function whatever implementation/language as long as you make sure I can use it in the fish shell.
 
+```shell
 
-```
 $ maths 0xFF
 bin: 0b11111111
 hex: 0xff
@@ -54,8 +55,7 @@ dec: 1
 ```
 
 
-
-add support for ascii conversion:
+## add support for ascii conversion:
 
 ```
 $ maths 0x68656c6c6f20776f726c64
