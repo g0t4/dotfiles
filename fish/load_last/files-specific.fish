@@ -217,8 +217,11 @@ if status --is-interactive
                 _batls_file $path
             else if test -d $path
                 _batls_dir $path
-            else if test -S $path
-                file $path # sockets, show file type only
+            else if test -S $path; or test -c $path; or test -b $path; or test -p $path
+                # -S socket, -c char dev, -b block dev, -p named pipe
+                file $path # show file type only
+            else if test -t $path
+                echo "Terminal file descriptor: $path"
             else if test ! -e $path
                 echo "No such file or directory: $path"
                 return 1
