@@ -7,11 +7,15 @@ abbr oh 'open .'
 
 ####### vscode aliases:
 abbr ch 'code .' # * favorite
+abbr cih 'code-insiders .'
 abbr cr 'code "$(_repo_root)"' # * favorite
+abbr cir 'code-insiders "$(_repo_root)"'
 
 #### zed
 abbr zh 'zed .'
 abbr zr 'zed "$(_repo_root)"'
+abbr zph 'zed-preview .'
+abbr zpr 'zed-preview "$(_repo_root)"'
 
 # z
 abbr zx 'z -x'

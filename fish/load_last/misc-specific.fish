@@ -1201,3 +1201,23 @@ function bitmaths
     python3 -c "print($argv)"
 
 end
+
+
+
+# *** man page helpers
+abbr man1 "man -S 1"
+abbr man2 "man -S 2"
+# abbr mans "man -S 2" # maybe? or just learn 2 is syscalls
+abbr man3 "man -S 3"
+abbr man4 "man -S 4"
+abbr man5 "man -S 5"
+abbr man6 "man -S 6"
+abbr man7 "man -S 7"
+abbr mana "man -a"  # open all matching pages
+abbr mank "apropos" # man -k ~= apropos
+abbr manf "whatis"  # man -f == whatis
+abbr manw "man -aw"  # man -w == whereis for man pages, or map to whereis?
+# abbr manw "whereis" ???
+# PRN whereis helpers?
+# PRN apropos helpers?
+# PRN whatis helpers?
