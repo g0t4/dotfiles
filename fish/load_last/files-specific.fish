@@ -166,17 +166,17 @@ if command -q batcat # -q => w/o output
     end
 end
 
-# abbr cat bat # PRN go back to this if I don't like lscat
+# abbr cat bat # PRN go back to this if I don't like batls
 abbr bath 'bat --style=header' # == header-filename (i.e. for multi files show names)
 abbr batf 'bat --style=full'
 
 if status --is-interactive
     # EXPERIMENTAL to see if I like it and if it causes issues (best approach for dotfile changes, esp material ones, is to use it and see what blows up and/or what is awesome)
-    abbr cat lscat # only expand cat => lscat as a reminder to try to use this... if I like it I will reach for it and use it alongside ls/la and always instead of cat me thinks
-    # abbr ls 'lscat' # remove ls/la b/c I think there are plenty of times I want a glob to match and list files (not dump their contents)
-    # abbr la 'lscat' #
+    abbr cat batls # only expand cat => batls as a reminder to try to use this... if I like it I will reach for it and use it alongside ls/la and always instead of cat me thinks
+    # abbr ls 'batls' # remove ls/la b/c I think there are plenty of times I want a glob to match and list files (not dump their contents)
+    # abbr la 'batls' #
 
-    function _lscat_file
+    function _batls_file
         set path $argv
         if command -q bat
             # PRN inject language detection to override bat defaults that I don't like?
@@ -189,7 +189,7 @@ if status --is-interactive
         end
     end
 
-    function _lscat_dir
+    function _batls_dir
         set path $argv
         # todo other default args I like for ls?
         if command -q exa
@@ -203,10 +203,10 @@ if status --is-interactive
         end
     end
 
-    function lscat
+    function batls
 
         if test -z "$argv"
-            _lscat_dir . # just like ls command
+            _batls_dir . # just like ls command
         end
 
         for path in $argv
@@ -214,15 +214,17 @@ if status --is-interactive
             # PRN if multiple items => show each $path first?
 
             if test -f $path
-                _lscat_file $path
+                _batls_file $path
             else if test -d $path
-                _lscat_dir $path
+                _batls_dir $path
+            else if test -S $path
+                file $path # sockets, show file type only
             else if test ! -e $path
                 echo "No such file or directory: $path"
                 return 1
             else
-                echo "Unexpected, unsupported path: $path"
-                echo "Not implemented yet...  add it to lscat!"
+                echo "[batls] unsupported path: $path, showing file type only:"
+                file $path
                 return 1
             end
 
