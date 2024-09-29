@@ -25,8 +25,16 @@ if not command -q osc
     echo "installing osc"
     if not command -q go
         set go_version 1.23.1
-        wget https://go.dev/dl/go$go_version.linux-amd64.tar.gz
-        sudo tar -C /usr/local -xzf go$go_version.linux-amd64.tar.gz
+        # arm64/amd64
+        set go_arch $(uname -m)
+        if test $go_arch = aarch64
+            set go_arch arm64
+        else if test $go_arch = x86_64
+            set go_arch amd64
+        end
+        set go_file go$go_version.linux-$go_arch.tar.gz
+        wget https://go.dev/dl/$go_file
+        sudo tar -C /usr/local -xzf $go_file
         log_ --red LOGOUT/LOGIN to refresh PATH and then run install.fish again to complete osc install
     else
         # osc needs 1.21+ and toolchain 1.23
