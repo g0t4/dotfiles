@@ -172,9 +172,8 @@ abbr batf 'bat --style=full'
 
 if status --is-interactive
     # EXPERIMENTAL to see if I like it and if it causes issues (best approach for dotfile changes, esp material ones, is to use it and see what blows up and/or what is awesome)
-    abbr cat batls # only expand cat => batls as a reminder to try to use this... if I like it I will reach for it and use it alongside ls/la and always instead of cat me thinks
-    # abbr ls 'batls' # remove ls/la b/c I think there are plenty of times I want a glob to match and list files (not dump their contents)
-    # abbr la 'batls' #
+    # ok wait, lets just use cat... I have to use command cat to get around (mostly) so why not just keep cat as the function name (or bat at least)
+    # abbr cat batls # only expand cat => batls as a reminder to try to use this... if I like it I will reach for it and use it alongside ls/la and always instead of cat me thinks
 
     function _batls_file
         set path $argv
@@ -203,7 +202,7 @@ if status --is-interactive
         end
     end
 
-    function batls
+    function cat
 
         if test -z "$argv"
             _batls_dir . # just like ls command
