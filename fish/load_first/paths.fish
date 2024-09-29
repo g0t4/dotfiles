@@ -27,6 +27,10 @@ end
 if test -d "$HOME/go/bin"
     export PATH="$HOME/go/bin:$PATH"
 end
+if test -d "/usr/local/go/bin"
+    # from wget install (see fish/install/install.fish)
+    export PATH="/usr/local/go/bin:$PATH"
+end
 # ~/.local/bin
 if test -d "$HOME/.local/bin"
     export PATH="$HOME/.local/bin:$PATH"

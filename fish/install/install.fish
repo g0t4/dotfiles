@@ -19,3 +19,18 @@ end
 #   echo "installing bass"
 #   fisher install edc/bass
 # end
+
+if not command -q osc
+
+    echo "installing osc"
+    if not command -q go
+        set go_version 1.23.1
+        wget https://go.dev/dl/go$go_version.linux-amd64.tar.gz
+        sudo tar -C /usr/local -xzf go$go_version.linux-amd64.tar.gz
+        log_ --red LOGOUT/LOGIN to refresh PATH and then run install.fish again to complete osc install
+    else
+        # osc needs 1.21+ and toolchain 1.23
+        go install -v github.com/theimpostor/osc@latest # 1.19 in bookworm :(
+    end
+
+end
