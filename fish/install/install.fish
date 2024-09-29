@@ -37,6 +37,7 @@ if not command -q osc
         sudo tar -C /usr/local -xzf $go_file
         log_ --red LOGOUT/LOGIN to refresh PATH and then run install.fish again to complete osc install
     else
+        # TODO FIX => not working for bookworm12, compile fails on install
         # osc needs 1.21+ and toolchain 1.23
         go install -v github.com/theimpostor/osc@latest # 1.19 in bookworm :(
     end
