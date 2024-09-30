@@ -3,7 +3,7 @@
 abbr pwdcp "pwd | pbcopy"
 abbr wdcp "pwd | pbcopy"
 
-if not is_macos
+if not $IS_MACOS
     # on non-macs make it appear as if pbcopy/paste are available
     function pbcopy
         fish_clipboard_copy $argv

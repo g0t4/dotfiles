@@ -93,13 +93,13 @@ set -g __color_200 "38;5;200" # neon pink (bright)
 set -g __color_matching_text "$__color_bold;$__color_162"
 
 ### *** wip LSCOLORS?
-# if is_macos
+# if $IS_MACOS
 #    set -gx LSCOLORS HfBxDxExCxGxgxaxbx
 # end
 
 ### *** macOS GREP_COLOR
 # default of red is fine too
-if is_macos
+if $IS_MACOS
     # macOS => Use GREP_COLOR (singular) only
     #   - cursory research shows macos grep doesn't use GREP_COLORS
     #       - only GREP_COLOR mentioned in man page

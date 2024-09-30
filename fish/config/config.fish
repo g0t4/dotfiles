@@ -16,6 +16,14 @@ end
 
 # find WES_ paths
 # ! OPTIMIZE readlink/dirname calls here are very expensive (2,4,2 ms on each of these three lines - fix this)
+if test (uname) = Darwin
+    set -g IS_MACOS true
+    set -g IS_LINUX false
+else
+    # assume linux, differentiate distros later if needed
+    set -g IS_MACOS false
+    set -g IS_LINUX true
+end
 set -l my_filename_resolved (readlink -f (status filename))
 set -g WES_DOTFILES (dirname (dirname (dirname $my_filename_resolved)))
 set -g WES_BOOTSTRAP (dirname (dirname $WES_DOTFILES)) # won't work on non bootstrap machines but that's fine, it won't hurt, this is mostly used to find WES_BOOTSTRAP for its git helpers (currently)
