@@ -272,12 +272,19 @@ abbr df 'command df -h' # use command to avoid infinite recursion
 # Mac HD: (if fails try df -h and update this alias to be be more general)
 abbr dfm 'df -h /System/Volumes/Data'
 
-## loop helpers
-abbr forr 'for i in (seq 1 3)
-    # PRN add forr30 abbr => for i in (seq 1 30); echo $i; end
-    echo $i
+## loop helpers (i.e. forr30<SPACE> for testing line height, not sure why I dont just use $LINES)
+abbr --add forr --regex "forr\d*" --function forr_abbr
+function forr_abbr
+    set count (string replace "forr" "" $argv)
+    if test $count -eq 30
+        echo 'echo $LINES' # reminder
+        return
+    end
+    echo "seq 1 $count | xargs -I {} echo {}"
 end
-' # FYI if end' on last line that triggers parse failure (stating end can't take args) so I put ' on next line
+
+
+
 
 ##### find helpers #####
 # WIP - new ideas to consider (added when trying to find ~/Library/Application\ Support/*elgato* dirs for streamdeck config)
