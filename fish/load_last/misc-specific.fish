@@ -647,6 +647,21 @@ bind '<' expand-abbr self-insert
 # *** processes ***
 abbr psg "ps aux | grep -i "
 abbr pgrep "pgrep -ilf" # -l long output (show what matched => process name), -f match full command line, -l show what matched (full line)
+if $IS_MACOS
+    abbr pshelp "man ps"
+else
+    abbr pshelp "ps --help=all"
+end
+abbr psfull "ps -o 'user,pid,pcpu,pmem,vsz,rss,tty,stat,start,time,comm' -ax"
+# TODO add more in time as I encounter scenarios
+#
+# NOTES:
+# - keep non-format options on end of cmd to easily toggle:
+# - user:10 - limits to 10 chars (+ indicates ...) (:X ubuntu yes, macos no):
+#       ps -o "user:5,pid,pcpu,pmem,vsz,rss,tty,stat,start,time,comm" -ax
+
+
+
 
 
 # TODO port more dns/arp helpers here
