@@ -276,7 +276,7 @@ abbr dfm 'df -h /System/Volumes/Data'
 abbr --add forr --regex "forr\d*" --function forr_abbr
 function forr_abbr
     set count (string replace "forr" "" $argv)
-    if test $count -eq 30
+    if test -z $count; or test $count -eq 30
         echo 'echo $LINES' # reminder
         return
     end
