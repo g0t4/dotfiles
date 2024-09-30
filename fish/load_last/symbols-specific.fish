@@ -30,8 +30,8 @@ function get_fish_symbols
 end
 
 # OR, `fs`/`fsym` and `ffb`?
-abbr ss get_fish_symbols
-abbr sfb get_fish_function_bodies
+# abbr ss get_fish_symbols # conflicts with `ss` (netstat replacement)
+# abbr sfb get_fish_function_bodies
 
 function get_fish_function_bodies
 
