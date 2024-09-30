@@ -121,6 +121,10 @@ endif
 " recognize .md files as markdown
 au BufRead,BufNewFile *.md set filetype=markdown
 
+" Uncomment the following to have Vim jump to the last position when reopening a file
+au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+
+
 " show tabs as 4 spaces
 set tabstop=4
 " in insert mode, use spaces instead of tabs when typing tab key
