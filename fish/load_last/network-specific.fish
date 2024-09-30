@@ -2,7 +2,6 @@ abbr trace 'traceroute -n'
 abbr trace1 'traceroute -n 1.1.1.1'
 abbr tr6 'traceroute -n -6'
 
-abbr ping 'command ping -d' # use command to avoid infinite recursion
 abbr ping1 'ping -d 1.1.1.1'
 abbr ping8 'ping -d 8.8.8.8'
 function _default_gateway
