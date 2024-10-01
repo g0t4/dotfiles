@@ -33,6 +33,8 @@ if not command -q treeify
     end
 end
 
+# TODO what was the old "as-tree" command I used to use? was that a real thing or prototype idea on my part?
+
 # ask o1-mini to "write me a fish shell function that runs dpkg -L foo on a package and then takes the output and formats it in a tree hierarchy like the tree command"
 # this works, have not yet reviewed it... wanna save that for later video.. as I also found `cargo install treeify`
 function dpkg_tree_awk

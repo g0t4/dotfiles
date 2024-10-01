@@ -341,7 +341,7 @@ function treevX
     string replace --regex '^treev' "$_treeal -L" $argv
 end
 
-abbr treeify as-tree # PRN do I ever use this?
+# *** see treeify ideas in  fish/load_last/globals-specific.fish
 
 # *** *z functions to combine z cmd w/ opening editor to the repo root
 function cz
