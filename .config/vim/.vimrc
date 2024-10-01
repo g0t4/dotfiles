@@ -162,6 +162,7 @@ imap <c-s> <c-o><c-s>
 "   :help :highlight
 "   :hi " list all highlight groups
 "   :so $VIMRUNTIME/syntax/hitest.vim   " see current highlight groups
+"   :help higlight-args
 
 
 
