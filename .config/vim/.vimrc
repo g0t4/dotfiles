@@ -53,6 +53,10 @@ endif
 " Plugin 'christoomey/vim-titlecase'
 " Plugin 'tpope/vim-fugitive'
 " 
+
+" 2024 WIP
+Plugin 'flazz/vim-colorschemes'
+
 " comments
 Plugin 'tpope/vim-commentary' " motions compat (gcc (current line), gc<motion> 
 " alt => also uses gc https://vimawesome.com/plugin/tcomment
@@ -168,6 +172,8 @@ highlight clear Todo " clear bg colors for todo, all existing colors so they don
 highlight Todo ctermfg=LightYellow guifg=#ffcc00
 " TODO port higlight style (or similar) from vscode
 " TODO more colors from other styles (vscode/bat/iterm2/etc)
+" 
+colorscheme visualstudio " light - from flazz/vim-colorschemes
 
 
 
