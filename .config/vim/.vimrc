@@ -62,7 +62,6 @@ Plugin 'tpope/vim-commentary' " motions compat (gcc (current line), gc<motion>
 " \ci => invert each line
 "
 call vundle#end()
-filetype plugin indent on
 "
 " FYI:
 " :PluginList
@@ -73,7 +72,6 @@ filetype plugin indent on
 " see :h vundle for more details or wiki for FAQ
 " *** VUNDLE END
 
-set backspace=indent,eol,start " allow backspacing over everything in insert mode
 set history=999		" keep 50 lines of command line history
 set ruler		" show the cursor position all the time
 set showcmd		" display incomplete commands
@@ -134,6 +132,8 @@ au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g
     set listchars=tab:→\ ,trail:·,eol:$,space:⋅ " '\ ' escapes using a space for tab past first char
     command! ToggleShowWhitespace if &list | set nolist | else | set list | endif
 " *** review `autoindent`/`smartindent`/`cindent` and `smarttab` settings, I think I am fine as is but I should check
+    filetype plugin indent on " this is controlling indent on new lines for now and seems fine so leave it as is 
+    set backspace=indent,start " allow backspacing over everything in insert mode, including indent from autoindent, eol thru start of insert
 " *** line width:
 set textwidth=200
 
