@@ -129,7 +129,7 @@ au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g
     set shiftwidth=4 " when shifting use this as the width << and >>
     " set tabstop=8 (default) " leave as is so existing tabs are shown with default (as many use, esp mix tabs/spaces peeps)
 " *** showing whitespace
-    set listchars=tab:→\ ,trail:·,eol:$,space:⋅ " '\ ' escapes using a space for tab past first char
+    set listchars=tab:→\ ,trail:·,space:⋅ " FYI also `eol:$` can be useful, '\ ' escapes using a space for tab past first char
     command! ToggleShowWhitespace if &list | set nolist | else | set list | endif
 " *** review `autoindent`/`smartindent`/`cindent` and `smarttab` settings, I think I am fine as is but I should check
     filetype plugin indent on " this is controlling indent on new lines for now and seems fine so leave it as is 
