@@ -173,7 +173,7 @@ highlight Todo ctermfg=LightYellow guifg=#ffcc00
 " TODO port higlight style (or similar) from vscode
 " TODO more colors from other styles (vscode/bat/iterm2/etc)
 " 
-colorscheme visualstudio " light - from flazz/vim-colorschemes
+" colorscheme visualstudio " light - from flazz/vim-colorschemes
 
 
 
