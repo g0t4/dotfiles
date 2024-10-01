@@ -158,6 +158,11 @@ imap <c-s> <c-o><c-s>
 " :highlight clear Todo   " NOTE: TODO: are highlighted by default (clear that)
 " :highlight clear warningmsg " dont put background on warnings either
 " :highlight clear errormsg
+" FYI
+"   :help :highlight
+"   :hi " list all highlight groups
+"   :so $VIMRUNTIME/syntax/hitest.vim   " see current highlight groups
+
 
 
 " *** ASK OPENAI ABOUT VIM (duct tape)
