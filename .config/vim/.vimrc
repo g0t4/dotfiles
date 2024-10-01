@@ -54,8 +54,9 @@ endif
 " Plugin 'tpope/vim-fugitive'
 " 
 
-" 2024 WIP
-Plugin 'flazz/vim-colorschemes'
+" color scheme research
+" Plugin 'flazz/vim-colorschemes'
+Plugin 'tomasiser/vim-code-dark'
 
 " comments
 Plugin 'tpope/vim-commentary' " motions compat (gcc (current line), gc<motion> 
@@ -174,6 +175,8 @@ highlight Todo ctermfg=LightYellow guifg=#ffcc00
 " TODO more colors from other styles (vscode/bat/iterm2/etc)
 " 
 " colorscheme visualstudio " light - from flazz/vim-colorschemes
+colorscheme codedark " from tomasiser/vim-code-dark
+
 
 
 
