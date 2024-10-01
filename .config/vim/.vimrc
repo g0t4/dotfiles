@@ -125,7 +125,7 @@ au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g
     command! ToggleShowWhitespace if &list | set nolist | else | set list | endif
 " *** review `autoindent`/`smartindent`/`cindent` and `smarttab` settings, I think I am fine as is but I should check
     filetype plugin indent on " this is controlling indent on new lines for now and seems fine so leave it as is 
-    set backspace=indent,start " allow backspacing over everything in insert mode, including indent from autoindent, eol thru start of insert
+    set backspace=indent,start,eol " allow backspacing over everything in insert mode, including indent from autoindent, eol thru start of insert
 " *** line width:
 set textwidth=200
 
