@@ -47,7 +47,6 @@ if !has('nvim')
 endif
 
 " TODO which of these do I still want to use?
-" Plugin 'scrooloose/syntastic'
 " Plugin 'altercation/vim-colors-solarized'
 " Plugin 'godlygeek/tabular'
 " Plugin 'plasticboy/vim-markdown'
@@ -90,13 +89,6 @@ endif
 " set statusline+=%#warningmsg#
 " set statusline+=%{SyntasticStatuslineFlag()}
 " set statusline+=%*
-
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
-let g:syntastic_yaml_checkers = 1 
-
 
 " Switch syntax highlighting on, when the terminal has colors
 " Also switch on highlighting the last used search pattern.
@@ -161,13 +153,11 @@ imap <c-s> <c-o><c-s>
 " FYI this helps show what is set and where:
 "    :verbose highlight SpellBad
 "
+
 """" highlight settings... separate of just spell check which uses highight of results of course
-:highlight clear Todo   " NOTE: TODO: are highlighted by default (clear that)
-:highlight clear warningmsg " dont put background on warnings either
-:highlight clear errormsg
-" todo I think I need to learn who to use Syntastic? to fix some of these clashes
-"  for now remove highlight on todos / notes b/c it changes background color and is way too noticeable
-"    TODO find out what all I can set and adjust highlighting so I'm more likey to use vim
+" :highlight clear Todo   " NOTE: TODO: are highlighted by default (clear that)
+" :highlight clear warningmsg " dont put background on warnings either
+" :highlight clear errormsg
 
 
 " *** ASK OPENAI ABOUT VIM (duct tape)
