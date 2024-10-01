@@ -163,6 +163,9 @@ imap <c-s> <c-o><c-s>
 "   :hi " list all highlight groups
 "   :so $VIMRUNTIME/syntax/hitest.vim   " see current highlight groups
 "   :help higlight-args
+set termguicolors " enable 24-bit color support
+highlight clear Todo " clear bg colors for todo, all existing colors so they don't bleed through changes on next line
+highlight Todo ctermfg=LightYellow guifg=#ffcc00
 
 
 
