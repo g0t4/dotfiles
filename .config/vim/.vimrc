@@ -124,13 +124,19 @@ au BufRead,BufNewFile *.md set filetype=markdown
 " Uncomment the following to have Vim jump to the last position when reopening a file
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 
+" *** tabs *** see `:help tabstop` for intended ways to use tabs in vim (5 primary ways)
+" I chose option 2 (always insert spaces, leave tabs as is with default tabstop=8)
+    set expandtab " insert tabs as spaces
+    set softtabstop=4 " b/c expandtab is set, this is the width of an inserted tab in spaces
+    set shiftwidth=4 " when shifting use this as the width << and >>
+    " set tabstop=8 (default) " leave as is so existing tabs are shown with default (as many use, esp mix tabs/spaces peeps)
+" *** showing whitespace
+    set listchars=tab:→\ ,trail:·,eol:$,space:⋅ " '\ ' escapes using a space for tab past first char
+    command! ToggleShowWhitespace if &list | set nolist | else | set list | endif
+" *** review `autoindent`/`smartindent`/`cindent` and `smarttab` settings, I think I am fine as is but I should check
+" *** line width:
+set textwidth=200
 
-" show tabs as 4 spaces
-set tabstop=4
-" in insert mode, use spaces instead of tabs when typing tab key
-set expandtab
-" when shifting use this as the width << and >>
-set shiftwidth=4
 
 " work with OSX clipboard for yank/cut/paste
 set clipboard=unnamed
