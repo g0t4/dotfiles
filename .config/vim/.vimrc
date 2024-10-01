@@ -166,6 +166,8 @@ imap <c-s> <c-o><c-s>
 set termguicolors " enable 24-bit color support
 highlight clear Todo " clear bg colors for todo, all existing colors so they don't bleed through changes on next line
 highlight Todo ctermfg=LightYellow guifg=#ffcc00
+" TODO port higlight style (or similar) from vscode
+" TODO more colors from other styles (vscode/bat/iterm2/etc)
 
 
 
