@@ -189,6 +189,7 @@ colorscheme codedark-wes-mods " from tomasiser/vim-code-dark
 "
 set ignorecase " ignore case when searching
 highlight Todo ctermfg=LightYellow guifg=#ffcc00
+" FYI https://terminal.sexy (color designer)
 
 
 

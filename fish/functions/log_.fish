@@ -20,6 +20,7 @@ function log_ --description 'echo + set_color'
         -- $argv
     or return
     if set -q _flag_print_colors
+        log_blankline # so we can distinguish vs prompt colors by a space
         # TODO I like this bold/yellow for headers!
         # TODO track indent in this logging framework or with another set of funcs?
         log_ --yellow --bold "terminal color scheme:"
@@ -27,6 +28,9 @@ function log_ --description 'echo + set_color'
             # FYI side by side makes it easier to see bright difference! it is subtle, so yes this is mapping to my iTerm2 colors (or win term)
             echo (set_color $c) "  $c "(set_color "br$c") "  br$c"(set_color normal)
         end
+
+        log_blankline
+        log_ --bold "bold alone"
 
 
         log_blankline
