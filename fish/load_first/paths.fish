@@ -35,6 +35,9 @@ end
 if test -d "$HOME/.local/bin"
     export PATH="$HOME/.local/bin:$PATH"
 end
+if test -d "$HOME/.cargo/bin"
+    export PATH="$HOME/.cargo/bin:$PATH"
+end
 
 # kubectl krew
 if test -d "$HOME/.krew/bin"
