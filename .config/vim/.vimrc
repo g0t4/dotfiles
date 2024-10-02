@@ -144,11 +144,17 @@ set clipboard=unnamed
 nmap <c-s> :w<CR>
 " in visual mode, escape to normal mode, trigger <c-s>, restore selection (gv)
 vmap <c-s> <Esc><c-s>gv
+
 " in insert mode, save but stay in insert mode, ctrl+o goes into normal mode
 " without existing insert mode, so the <c-s> maps to the :w<CR> and then back
 " to insert mode after 
 " drawback - doesn't show that file saved b/c insert is in status
 imap <c-s> <c-o><c-s>
+"
+" ctrl+w in command mode to quit
+" nnoremap <c-w> <c-c>:q<CR>
+" nnoremap <c-s-w> <c-c>:q!<CR>
+
 
 """""" SPELL CHECK SETTINGS (hacked together, should read up on this)
 " :set spell spelllang=en_us
@@ -169,14 +175,20 @@ imap <c-s> <c-o><c-s>
 "   :so $VIMRUNTIME/syntax/hitest.vim   " see current highlight groups
 "   :help higlight-args
 set termguicolors " enable 24-bit color support
-highlight clear Todo " clear bg colors for todo, all existing colors so they don't bleed through changes on next line
-highlight Todo ctermfg=LightYellow guifg=#ffcc00
 " TODO port higlight style (or similar) from vscode
 " TODO more colors from other styles (vscode/bat/iterm2/etc)
 " 
 " colorscheme visualstudio " light - from flazz/vim-colorschemes
-colorscheme codedark " from tomasiser/vim-code-dark
-
+" foo
+" codedark-wes-mods (based on codedark.vim)
+let g:codedark_transparent = 0 " 0/1   TODO what do I want? ?? fix iterm2 padding first? around vim window
+" let g:codedark_modern = 1
+" let g:codedark_conservative=0
+" let g:codedark_italics=1 " i.e. for comments
+colorscheme codedark-wes-mods " from tomasiser/vim-code-dark
+"
+set ignorecase " ignore case when searching
+highlight Todo ctermfg=LightYellow guifg=#ffcc00
 
 
 
