@@ -15,6 +15,27 @@ set __fish_help_dir "" # overwrite fish help dir thus forcing the use of https:/
 # some of these might be a result of setting up iTerm2 to use xterm default keymapping (in profile), might need to adjust if key map is subsequently changed
 bind -k sdc kill-word # shift+del to kill forward a word (otherwise its esc+d only), I have a habit of using this (not sure why, probably an old keymapping in zsh or?)
 
+if command -q launchctl
+    abbr lcl 'launchctl list'
+    abbr lcp 'launchctl print system'
+    abbr lcpu 'launchctl print user/$(id -u)'
+    abbr lcpg 'launchctl print gui/$(id -u)'
+    abbr lcds 'launchctl disable system/'
+    abbr lcdu 'launchctl disable user/$(id -u)'
+    abbr lcdg 'launchctl disable gui/$(id -u)'
+    # PRN lce (enable)
+    abbr lcstart 'launchctl start TODO'
+    abbr lcstop 'launchctl stop TODO'
+    abbr lcrm 'launchctl remove TODO'
+    #
+    abbr lcexamine 'launchctl examine TODO'
+    # blame
+    # debug
+    # attach # cool! (first set debug, then restart, then attach)
+    #
+
+    # TODO flesh out later
+end
 
 # *** systemctl (if avail)
 if command -q systemctl
