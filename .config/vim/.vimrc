@@ -186,6 +186,7 @@ let g:codedark_transparent = 0 " 0/1   TODO what do I want? ?? fix iterm2 paddin
 " let g:codedark_conservative=0
 " let g:codedark_italics=1 " i.e. for comments
 colorscheme codedark-wes-mods " from tomasiser/vim-code-dark
+" todo add color scheme to dotfiles repo and symlink it OR setup a repo and check it out as a vim plugin would work well too
 "
 set ignorecase " ignore case when searching
 highlight Todo ctermfg=LightYellow guifg=#ffcc00
