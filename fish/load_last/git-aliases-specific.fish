@@ -89,20 +89,27 @@ function pwd --description "pwd for a repository => repo root in yellow + repo d
         return
     end
     # PRN support -P/-L arg like builtin does, and set default behavior of not resolving symlinks (-L) because right now the below defaults as if -P was passed (it resolves symlinks)
+
+    if test (builtin pwd) = /
+        # at root of fs, don't show // # TODO come back and rework below to drop the trailing / as I don't think I like that differing vs pwd.. especially b/c I do demos with this and the color is fine but less so altering the path even if the same.. NBD but might as well be consistent
+        echo -s (set_color normal) /
+        return
+    end
     set _rr (_repo_root)
     set _prefix (git rev-parse --show-prefix 2>/dev/null)
     if string match -q -r '(?<host_dir>.*/(bitbucket|github|gitlab))/(?<repo>.*)' $_rr
         # path is normal color thru host dir (i.e. ~/repos/github), then cyan for org/repo, then white for the repo dir(s)
         echo -s (set_color normal) $host_dir / \
             (set_color cyan) $repo \
-            (set_color --bold white) / $_prefix \
+            (set_color yellow) / $_prefix \
             (set_color normal)
     else
         # else path is normal through repo root and white for the repo dir(s)
         echo -s (set_color normal) $_rr \
-            (set_color --bold white) / $_prefix \
+            (set_color yellow) / $_prefix \
             (set_color normal)
     end
+
     # PRN I like leaving white / on end of path but builtin for pwd doesn't include the final slash, I like it right now b/c it makes it clear that it is the root of a repo
 end
 
