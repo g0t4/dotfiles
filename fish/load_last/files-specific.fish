@@ -213,21 +213,25 @@ if status --is-interactive
             # PRN if multiple items => show each $path first?
 
             if test -f $path
+                # for plain text files I wanna color them too.. cat would normally show the file so no harm in coloring the output, color would even be dropped if piped/non-interactive
                 _batls_file $path
             else if test -d $path
+                # override cat for dirs to list files, cat would normally error here so no harm in overriding that
                 _batls_dir $path
-            else if test -S $path; or test -c $path; or test -b $path; or test -p $path
-                # -S socket, -c char dev, -b block dev, -p named pipe
-                file $path # show file type only
-            else if test -t $path
-                echo "Terminal file descriptor: $path"
-            else if test ! -e $path
-                echo "No such file or directory: $path"
-                return 1
+            # FYI! ALL ELSE SHOULD NOT ALTER CAT COMMAND:
+            # else if test -S $path; or test -c $path; or test -b $path; or test -p $path
+            #     # -S socket, -c char dev, -b block dev, -p named pipe
+            #     # file $path # show file type only # PRN add back ONLY if find a new name, do not use cat and replace cat's functionality (i.e. cat /dev/urandom should not show the file type) or cat /dev/tty .. that should still work wes... derphead
+            #     command cat $path
+            # else if test ! -e $path
+            #     # real cat handles this gracefully so just use it
+            #     command cat $path # cat: /foob: No such file or directory
+            # else if test -t $path
+            #     # echo "Terminal file descriptor: $path" # do not modify cat behavior for exotic file types
+            #     command cat $path
             else
-                echo "[batls] unsupported path: $path, showing file type only:"
-                file $path
-                return 1
+                # fallback is use cat directly... maybe just do this overall???
+                command cat $path # FYI consider using this in a new condition above?
             end
 
         end
