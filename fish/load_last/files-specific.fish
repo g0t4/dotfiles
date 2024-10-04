@@ -204,12 +204,10 @@ if status --is-interactive
 
     function cat
 
-        if not isatty STDIN
+        if not isatty stdin 
             # use cases:
             #   stat /dev/fd/1 | cat
             #      # w/o checking if STDIN is a TTY... I would list the current directory!
-            #
-            #   begin; echo "history:"; and command cat ~/.local/share/fish/fish_history ; end | head
             #
             #   I think if I wanna pipe to cat and have syntax highlighting I s/b just using bat directly... 
             #   maybe this is another indicator that I shouldn't override cat and should maybe use a custom
