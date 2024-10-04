@@ -304,3 +304,11 @@ call wilder#set_option('renderer', wilder#popupmenu_renderer({
 "       \   'highlighter': s:highlighters,
 "       \ }),
 "       \ }))
+
+
+" copilot overrides
+:imap <C-M-[> <Plug>(copilot-previous)
+:imap <C-M-]> <Plug>(copilot-next)
+" TODO bind enable/disable to keys too and make a streamdeck button for them
+
+
