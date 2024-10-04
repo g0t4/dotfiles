@@ -204,6 +204,19 @@ if status --is-interactive
 
     function cat
 
+        if not isatty STDIN
+            # use case:
+            #   stat /dev/fd/1 | cat
+            #      # w/o checking if STDIN is a TTY... I would list the current directory!
+            #   I think if I wanna pipe to cat and have syntax highlighting I s/b just using bat directly... 
+            #   maybe this is another indicator that I shouldn't override cat and should maybe use a custom
+            #   bat OR a new *at alias instead?
+            #
+            # bat $argv # this allows me to pass args for styling though... might be useful but I shouldn't be using bat args on cat IMO
+            command cat $argv # FYI I could recursively call cat here
+            return
+        end
+
         if test -z "$argv"
             _batls_dir . # just like ls command
         end
