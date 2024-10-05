@@ -1257,3 +1257,47 @@ abbr manw "man -aw"  # man -w == whereis for man pages, or map to whereis?
 # PRN whereis helpers?
 # PRN apropos helpers?
 # PRN whatis helpers?
+
+
+# *** mitmproxy
+abbr mitm "mitmproxy"
+abbr mitml "mitmproxy --mode=local"
+#
+abbr mitmw "mitmweb" # web interface # PRN just set this to --mode=local?
+abbr mitmwl "mitmweb --mode=local" # local mode
+#
+abbr mitmd "mitmdump --mode=local" # PRN just set this to --mode=local?
+abbr mitmdl "mitmdump --mode=local" # local mode
+#
+# read flow files:
+abbr mitmr "mitmproxy --no-server --rfile" # when reading, dont start server (that way can run separate instances with sep flow recordings)
+#
+# orphaned server:
+# - sometimes mitmproxy server becomes orphaned (quit CLI doesn't stop it... so I need to find/stop it)
+# - ignore if --no-server
+abbr mitmpgrep 'pgrep -ilf mitmproxy | grep -v "\--no-server" || true' # don't error if not found, avoid confusion
+abbr mitmkill 'pgrep -ilf mitmproxy | grep -v "\--no-server" | awk "{print $1}" | xargs sudo kill -9 || true'
+#
+# program specific
+abbr mitmlc "mitmproxy --mode=local:'Visual Studio Code.app'" # capture just vscode (note not insiders)
+abbr mitmlci "mitmproxy --mode=local:'Visual Studio Code - Insiders.app'"
+abbr mitmlcurl "mitmproxy --mode=local:'curl'"
+#
+abbr mitms "mitmproxy --scripts" # pass script (i.e. python addons) # TODO do I use this?
+abbr mitmsave "mitmproxy --save-stream-file" # # TODO do I use this?
+#
+# FYI possible options for config file:
+#   PRN sync ~/.mitmproxy/config.yml via dotfiles
+#   --anticomp # (default off) # TODO try to get servers to return uncompressed content, IIGC to make it easier to mod responses... FYI set this in config file not CLI arg
+#   --console-layout {horizontal,single,vertical} # single (default) or split horiz/vertical an extra pane (ctrl+left/right).. just use `-` to switch layout on the fly for now
+#       --no-console-layout-headers / --console-layout-headers   # PRN set in ~/.mitmproxy/config.yml
+#
+# Add when needed:
+#   --map-remote PATTERN
+#   --map-local PATTERN
+#   --modify-body
+#   --modify-headers
+#
+#   --intercept  # hard filter # maybe have option for this when using --save-stream-file since this is more likely to matter when saving
+#   --view-filter  # soft filter (view only, actually captured still) # I would rather just do this with `f` in the running instance unless I wanna persist across restarts
+
