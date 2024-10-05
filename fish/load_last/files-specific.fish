@@ -14,6 +14,16 @@ abbr --add dotdot --regex '^\.\.+$' --function multicd
 # cd-
 abbr --add cd- 'cd -'
 
+
+# TODO impl cp-  or cph (like dirh, interactive to pick recent dir?) 
+#   see dir stack / history : https://fishshell.com/docs/current/interactive.html#id13
+# function _cp-
+#     echo cp "$dirprev"
+# end
+#
+# abbr --add cp- --regex 'cp-' --function _cp-
+
+
 ## *** fish related
 
 function _reload_config
@@ -376,3 +386,5 @@ function oz
 end
 
 export EDITOR="vim"
+
+
