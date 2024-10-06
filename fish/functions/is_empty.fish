@@ -10,5 +10,7 @@ function is_empty \
     end
 end
 
-# PRN write some tests using fishtape
-#   fisher install jorgebucaran/fishtape
+# fishtape fish/functions/is_empty.fish
+@test "is_empty with nothing" (is_empty) $status -eq 0
+@test "is_empty with empty string" (is_empty "") $status -eq 0
+@test "is_empty with something" (is_empty "something") $status -eq 1

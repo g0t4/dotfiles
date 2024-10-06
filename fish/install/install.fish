@@ -15,6 +15,12 @@ if not functions -q __z
     fisher install jethrokuan/z
 end
 
+# fishtape
+if not fisher list | grep -q jorgebucaran/fishtape
+    echo "installing fishtape"
+    fisher install jorgebucaran/fishtape
+end
+
 # if not command -q bass
 #   echo "installing bass"
 #   fisher install edc/bass
