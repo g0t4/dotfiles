@@ -1220,6 +1220,7 @@ end
 abbr bm bitmaths # careful brew uses b* prefix
 function bitmaths
 
+    # PRN show non-printable chars that make sense to show? i.e. \n \t etc yeah... \r
     echo -n "ascii: "
     python3 -c "print(hex($argv)[2:])" | xxd -r -p
     echo
