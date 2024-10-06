@@ -58,13 +58,6 @@ endif
 " Plugin 'flazz/vim-colorschemes'
 Plugin 'tomasiser/vim-code-dark'
 
-" comments
-Plugin 'tpope/vim-commentary' " motions compat (gcc (current line), gc<motion> 
-" alt => also uses gc https://vimawesome.com/plugin/tcomment
-" Plugin 'preservim/nerdcommenter' " not compat with motions https://vimawesome.com/plugin/the-nerd-commenter, [count]<leader>cc  => \cc or 5\cc  ... \cu (uncomment)
-" \cA => append comment to line
-" \ci => invert each line
-"
 call vundle#end()
 "
 " FYI:
@@ -75,6 +68,11 @@ call vundle#end()
 " :PluginClean      - confirms removal of unused plugins; append `!` to
 " see :h vundle for more details or wiki for FAQ
 " *** VUNDLE END
+
+" plugins from vim's builtin package manager
+packadd comment  " help comment.txt  ...  see /opt/homebrew/share/vim/vim91/pack/dist/opt/comment
+"
+" packadd editorconfig " TODO consider, this is also bundled
 
 set history=999		" keep 50 lines of command line history
 set ruler		" show the cursor position all the time
