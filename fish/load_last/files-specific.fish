@@ -279,7 +279,26 @@ function lspath
 
 end
 
+# ok cd to a file should take to its dir
+if status --is-interactive
+    functions -c cd _original_cd # FYI don't just use builtin cd, cd has dirhistory tracking (i.e. for cd -)
+    # todo see ideas for testing in fish/run-tests.fish (careful w/ cd as it can't be subshelled)
+    # PRN change behavior based on STDIN/OUT is/isn't a TTY?
 
+    function cd
+
+        set -l path $argv[1]
+        if test -f $path; and test (count $argv) -eq 1
+            # only override IF path is a file and no other args, else let _original_cd handle it (including handling failures for multiple args)
+            # PRN handle other file types as needed, not sure yet what might arise, I just wanted files for now
+            _original_cd (dirname $path)
+        else
+            # calls here if path is empty, multi args, or single arg that is not a file (i.e. a dir)
+            _original_cd $argv
+        end
+    end
+
+end
 
 ### DISK USAGE ###
 # only expand du, don't also alias
@@ -386,5 +405,3 @@ function oz
 end
 
 export EDITOR="vim"
-
-
