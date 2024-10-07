@@ -308,5 +308,28 @@ call wilder#set_option('renderer', wilder#popupmenu_renderer({
 :imap <C-M-[> <Plug>(copilot-previous)
 :imap <C-M-]> <Plug>(copilot-next)
 " TODO bind enable/disable to keys too and make a streamdeck button for them
+function! ToggleCopilot()
+    " FYI https://github.com/github/copilot.vim/blob/release/autoload/copilot.vim 
+
+    " PRN use mode logic here so I can avoid custom key maps for diff modes beyond just calling this? what is common convention?
+    " let l:current_mode = mode()
+    " if l:current_mode == 'i'
+    "     call feedkeys("\<Esc>", 'n')
+    " endif
+
+    " :echo g:copilot_enabled # alternative way to check for global, vs...
+    " :echo b:copilot_enabled # buffer local enable/disable
+    " for now I am not doing any key combo for buffer disable vs global ... just global disable/enable
+    if copilot#Enabled()
+        execute 'Copilot disable'
+    else
+        execute 'Copilot enable'
+    endif
+    
+endfunction
+
+:inoremap <F12> <Esc>:call ToggleCopilot()<CR>a
+:nnoremap <F12> :call ToggleCopilot()<CR>
+
 
 
