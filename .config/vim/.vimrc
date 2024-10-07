@@ -15,7 +15,7 @@ Plugin 'github/copilot.vim'
 
 " wilder and company:
 " let g:python3_host_prog = expand('~/repos/wes-config/wes-bootstrap/subs/dotfiles/.venv/bin/python3')
-" FYI had to add pynvim to my user site, even though I configured a venv...
+"    this seems specific to nvim or smth that nvim has OOB that vim doesn't
 " - after that fuzzy search and other python features worked in wilder
 "   pip3 install --break-system-packages --user pynvim
 "

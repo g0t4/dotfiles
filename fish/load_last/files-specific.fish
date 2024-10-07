@@ -214,7 +214,7 @@ if status --is-interactive
 
     function cat
 
-        if not isatty stdin 
+        if not isatty stdin
             # use cases:
             #   stat /dev/fd/1 | cat
             #      # w/o checking if STDIN is a TTY... I would list the current directory!
@@ -242,17 +242,17 @@ if status --is-interactive
             else if test -d $path
                 # override cat for dirs to list files, cat would normally error here so no harm in overriding that
                 _batls_dir $path
-            # FYI! ALL ELSE SHOULD NOT ALTER CAT COMMAND:
-            # else if test -S $path; or test -c $path; or test -b $path; or test -p $path
-            #     # -S socket, -c char dev, -b block dev, -p named pipe
-            #     # file $path # show file type only # PRN add back ONLY if find a new name, do not use cat and replace cat's functionality (i.e. cat /dev/urandom should not show the file type) or cat /dev/tty .. that should still work wes... derphead
-            #     command cat $path
-            # else if test ! -e $path
-            #     # real cat handles this gracefully so just use it
-            #     command cat $path # cat: /foob: No such file or directory
-            # else if test -t $path
-            #     # echo "Terminal file descriptor: $path" # do not modify cat behavior for exotic file types
-            #     command cat $path
+                # FYI! ALL ELSE SHOULD NOT ALTER CAT COMMAND:
+                # else if test -S $path; or test -c $path; or test -b $path; or test -p $path
+                #     # -S socket, -c char dev, -b block dev, -p named pipe
+                #     # file $path # show file type only # PRN add back ONLY if find a new name, do not use cat and replace cat's functionality (i.e. cat /dev/urandom should not show the file type) or cat /dev/tty .. that should still work wes... derphead
+                #     command cat $path
+                # else if test ! -e $path
+                #     # real cat handles this gracefully so just use it
+                #     command cat $path # cat: /foob: No such file or directory
+                # else if test -t $path
+                #     # echo "Terminal file descriptor: $path" # do not modify cat behavior for exotic file types
+                #     command cat $path
             else
                 # fallback is use cat directly... maybe just do this overall???
                 command cat $path # FYI consider using this in a new condition above?
