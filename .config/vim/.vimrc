@@ -312,6 +312,15 @@ call wilder#set_option('renderer', wilder#popupmenu_renderer({
 "       \ }))
 
 
+
+" *** misc key maps 
+" ctrl+d to quit (in select situations) ... is this really a good idea? 
+:nnoremap <C-d> :quit<CR>
+
+
+
+
+
 " copilot overrides
 :imap <C-M-[> <Plug>(copilot-previous)
 :imap <C-M-]> <Plug>(copilot-next)
