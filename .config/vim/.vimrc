@@ -11,6 +11,7 @@ call vundle#begin()
 Plugin 'VundleVim/Vundle.vim' " self-managed, required
 
 " Plugin 'neoclide/coc.nvim', {'branch': 'release'}
+"    TODO can I use copilot via coc?
 
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'github/copilot.vim'
