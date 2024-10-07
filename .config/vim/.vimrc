@@ -74,6 +74,14 @@ packadd comment  " help comment.txt  ...  see /opt/homebrew/share/vim/vim91/pack
 "
 " packadd editorconfig " TODO consider, this is also bundled
 
+" *** comment plugin
+" add Ctrl+\ to toggle too (think Cmd+\ in zed/vscode)
+nnoremap <silent> <expr> <C-\> comment#Toggle() .. '_'
+
+
+
+
+
 set history=999		" keep 50 lines of command line history
 set ruler		" show the cursor position all the time
 set showcmd		" display incomplete commands
