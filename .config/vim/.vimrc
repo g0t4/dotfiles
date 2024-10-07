@@ -10,6 +10,8 @@ set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 Plugin 'VundleVim/Vundle.vim' " self-managed, required
 
+" Plugin 'neoclide/coc.nvim', {'branch': 'release'}
+
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'github/copilot.vim'
 
@@ -325,10 +327,14 @@ call wilder#set_option('renderer', wilder#popupmenu_renderer({
 :imap <C-M-[> <Plug>(copilot-previous)
 :imap <C-M-]> <Plug>(copilot-next)
 
+
 function! ToggleCopilot()
     " FYI https://github.com/github/copilot.vim/blob/release/autoload/copilot.vim 
 
     " FYI only global toggle, not toggling buffer local
+
+    " PRN save across sessions? maybe modify a file that is read on startup (not this file, I want it out of vimrc)
+
     if copilot#Enabled()
         Copilot disable
     else
