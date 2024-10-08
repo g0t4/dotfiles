@@ -351,6 +351,8 @@ abbr --add finddr --set-cursor=! 'find . -type d -iregex ".*!.*"' # another idea
 ###### tree ######
 set _treed "tree --only-dirs"
 
+abbr treec "command tree" # use tree command directly, i.e. wanna see repo hidden files in somee cases... todo rethink how to handle this but for now this works
+
 function tree
 
     if command -q eza
