@@ -1302,3 +1302,17 @@ abbr mitmsave "mitmproxy --save-stream-file" # # TODO do I use this?
 #   --intercept  # hard filter # maybe have option for this when using --save-stream-file since this is more likely to matter when saving
 #   --view-filter  # soft filter (view only, actually captured still) # I would rather just do this with `f` in the running instance unless I wanna persist across restarts
 
+
+function show_hex_rgb_color
+    
+    # PRN handle other color formats as needed... or maybe make other methods for those
+
+    set hex (string replace --regex -- "^#" "" $argv[1]) # ok if fails b/c no matches
+
+    set red (math "0x$(string sub $hex --start 1 --length 2)")
+    set green (math "0x$(string sub $hex --start 3 --length 2)")
+    set blue (math "0x$(string sub $hex --start 5 --length 2)")
+
+    # Print the background color in terminal
+    printf "\e[48;2;%d;%d;%dm   %s   \e[0m\n" $red $green $blue "         "
+end
