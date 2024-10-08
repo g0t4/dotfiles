@@ -281,7 +281,11 @@ end
 
 # ok cd to a file should take to its dir
 if status --is-interactive
-    functions -c cd _original_cd # FYI don't just use builtin cd, cd has dirhistory tracking (i.e. for cd -)
+
+    if not functions -q _original_cd
+        # on reload config files, don't redefine this, would fail anyways since already exists
+        functions -c cd _original_cd # FYI don't just use builtin cd, cd has dirhistory tracking (i.e. for cd -)
+    end
     # todo see ideas for testing in fish/run-tests.fish (careful w/ cd as it can't be subshelled)
     # PRN change behavior based on STDIN/OUT is/isn't a TTY?
 
