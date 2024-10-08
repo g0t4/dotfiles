@@ -1304,15 +1304,39 @@ abbr mitmsave "mitmproxy --save-stream-file" # # TODO do I use this?
 
 
 function show_hex_rgb_color
-    
+
+    # TODO check if shell supports RGB color, i.e. vscode isn't showing colors correctly... but iTerm2 seems to be
+    #  show_hex_rgb_color "#000000" "000000"   # s/b all black (but vscode terminal isn't)
+    #  show_hex_rgb_color "#000000" "ff0000"   # s/b bright red
+    #  show_hex_rgb_color "#000000" "00ff00"   # s/b bright green
+    #  show_hex_rgb_color "#000000" "0000ff"   # s/b bright blue
+    #  show_hex_rgb_color "#000000" "ffffff"   # s/b bright white on black
+    #  show_hex_rgb_color "#ffffff" "000000"   # s/b black on white
+
+    # usage: show_hex_rgb_color "#ff0000"  # show bgcolor only
+    # usage: show_hex_rgb_color "#ff0000" "#000000" # show bgcolor and fgcolor
+    set bgcolor $argv[1]
+    set fgcolor $argv[2]
+
     # PRN handle other color formats as needed... or maybe make other methods for those
 
-    set hex (string replace --regex -- "^#" "" $argv[1]) # ok if fails b/c no matches
+    # always have bgcolor:
+    set bg_hex (string replace --regex -- "^#" "" $bgcolor) # ok if fails b/c no matches
+    set bg_red (math "0x$(string sub $bg_hex --start 1 --length 2)")
+    set bg_green (math "0x$(string sub $bg_hex --start 3 --length 2)")
+    set bg_blue (math "0x$(string sub $bg_hex --start 5 --length 2)")
 
-    set red (math "0x$(string sub $hex --start 1 --length 2)")
-    set green (math "0x$(string sub $hex --start 3 --length 2)")
-    set blue (math "0x$(string sub $hex --start 5 --length 2)")
+    if test -z $fgcolor
+        # Print the background color in terminal, without any text
+        printf "\e[48;2;%d;%d;%dm   %s   \e[0m\n" $bg_red $bg_green $bg_blue "           " # show spaces w/o text
+    else
+        set fg_hex (string replace --regex -- "^#" "" $fgcolor) # ok if fails b/c no matches
+        set fg_red (math "0x$(string sub $fg_hex --start 1 --length 2)")
+        set fg_green (math "0x$(string sub $fg_hex --start 3 --length 2)")
+        set fg_blue (math "0x$(string sub $fg_hex --start 5 --length 2)")
 
-    # Print the background color in terminal
-    printf "\e[48;2;%d;%d;%dm   %s   \e[0m\n" $red $green $blue "         "
+        # Print the background color in terminal, with text
+        printf "\e[38;2;%d;%d;%dm\e[48;2;%d;%d;%dm   %s   \e[0m\n" $fg_red $fg_green $fg_blue $bg_red $bg_green $bg_blue " text looks like " # show spaces w/o text
+    end
+
 end
