@@ -366,3 +366,23 @@ endfunction
 
 
 
+
+
+" custom coloring (of comments)
+" TODO port my highlight rules
+" FYI do not experiment with *** matching as one mistake in the regex (not escaping) can mess up what is going on, best to learn how these work with a diff rule
+" autocmd FileType * hi CommentAsterisks guifg='#ff00c3'
+" autocmd FileType * syn match CommentAsterisks "#.*\*\*\s.*$" 
+" autocmd FileType *  defers running to apply to all file types (IIUC)
+"
+" FYI matcher:
+autocmd FileType * hi CommentFYI guifg='#27AE60'
+autocmd FileType * syn match CommentFYI /\(#\)\s*FYI\s.*/ " why can I not match on stuff just after the #... it's as if I cannot match on a subset of the comment and must match starting with the # at least and then with # at start I can avoid matching start of line but I cannot just have /FYI/ that won't match whereas /# FYI/ will match (and only the #+ part, not the start of line.. why is this discrepency in subset matching)?
+" FYI! matcher (bold, inverted):
+autocmd FileType * hi CommentFYIBang guibg='#27AE60' guifg='#1f1f1f' cterm=bold " why doesn't gui=bold work? 
+autocmd FileType * syn match CommentFYIBang /\(#\)\s*FYI\!\s.*/ " why can I not match on stuff just after the #... it's as if I cannot match on a subset of the comment and must match starting with the # at least and then with # at start I can avoid matching start of line but I cannot just have /FYI/ that won't match whereas /# FYI/ will match (and only the #+ part, not the start of line.. why is this discrepency in subset matching)?
+
+
+
+
+
