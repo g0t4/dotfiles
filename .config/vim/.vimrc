@@ -92,8 +92,11 @@ call vundle#end()
 " add Ctrl+\ to toggle too (think Cmd+\ in zed/vscode)
 nnoremap <C-\> :Commentary<CR>
 
-
-
+" *** shortmess settings, for status line (keep compact so can fit more info)
+" default is "filnxtToOS"
+set shortmess+=A " don't give ATTENTION messages if already open in another instance (swap file detected)
+set shortmess+=I " don't give intro message (if no file passed in)
+set shortmess-=S " remove S so see search count and W for wrapped indicator
 
 
 set history=999		" keep 50 lines of command line history
