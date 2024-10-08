@@ -61,6 +61,16 @@ endif
 " Plugin 'flazz/vim-colorschemes'
 Plugin 'tomasiser/vim-code-dark'
 
+" comments (bring back b/c apparently comment.vim from vim-runtime isn't in debian package for vim-runtime so... ugh
+"   AND I noticed bundled has very few key bindings and extras like... no \cA \ci to append/invert comments
+Plugin 'tpope/vim-commentary' " motions compat (gcc (current line), gc<motion>
+" alt => also uses gc https://vimawesome.com/plugin/tcomment
+" Plugin 'preservim/nerdcommenter' " not compat with motions https://vimawesome.com/plugin/the-nerd-commenter, [count]<leader>cc  => \cc or 5\cc  ... \cu (uncomment)
+" \cA => append comment to line
+" \ci => invert each line
+" TODO review vim-commentary bindings (esp optional) again
+"
+
 call vundle#end()
 "
 " FYI:
@@ -72,14 +82,15 @@ call vundle#end()
 " see :h vundle for more details or wiki for FAQ
 " *** VUNDLE END
 
+
+
 " plugins from vim's builtin package manager
-packadd comment  " help comment.txt  ...  see /opt/homebrew/share/vim/vim91/pack/dist/opt/comment
-"
 " packadd editorconfig " TODO consider, this is also bundled
 
-" *** comment plugin
+
+
 " add Ctrl+\ to toggle too (think Cmd+\ in zed/vscode)
-nnoremap <silent> <expr> <C-\> comment#Toggle() .. '_'
+nnoremap <C-\> :Commentary<CR>
 
 
 
