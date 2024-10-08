@@ -377,11 +377,18 @@ endfunction
 "
 " FYI matcher:
 autocmd FileType * hi CommentFYI guifg='#27AE60'
-autocmd FileType * syn match CommentFYI /\(#\)\s*FYI\s.*/ " why can I not match on stuff just after the #... it's as if I cannot match on a subset of the comment and must match starting with the # at least and then with # at start I can avoid matching start of line but I cannot just have /FYI/ that won't match whereas /# FYI/ will match (and only the #+ part, not the start of line.. why is this discrepency in subset matching)?
+autocmd FileType * syn match CommentFYI /\(#\|"\)\s*FYI\s.*/ " why can I not match on stuff just after the #... it's as if I cannot match on a subset of the comment and must match starting with the # at least and then with # at start I can avoid matching start of line but I cannot just have /FYI/ that won't match whereas /# FYI/ will match (and only the #+ part, not the start of line.. why is this discrepency in subset matching)?
 " FYI! matcher (bold, inverted):
 autocmd FileType * hi CommentFYIBang guibg='#27AE60' guifg='#1f1f1f' cterm=bold " why doesn't gui=bold work? 
-autocmd FileType * syn match CommentFYIBang /\(#\)\s*FYI\!\s.*/ " why can I not match on stuff just after the #... it's as if I cannot match on a subset of the comment and must match starting with the # at least and then with # at start I can avoid matching start of line but I cannot just have /FYI/ that won't match whereas /# FYI/ will match (and only the #+ part, not the start of line.. why is this discrepency in subset matching)?
-
+autocmd FileType * syn match CommentFYIBang /\(#\|"\)\s*FYI\!\s.*/
+"
+" TODO disable the builtin Todo styles altogether (highlight group)
+" TODO matcher:
+autocmd FileType * hi CommentTODO guifg='#ffcc00'
+autocmd FileType * syn match CommentTODO /\(#\|"\)\s*TODO\s.*/
+" TODO! matcher (bold, inverted):
+autocmd FileType * hi CommentTODOBang guibg='#ffcc00' guifg='#1f1f1f' cterm=bold
+autocmd FileType * syn match CommentTODOBang /\(#\|"\)\s*TODO\!\s.*/
 
 
 
