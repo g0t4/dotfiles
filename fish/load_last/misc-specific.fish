@@ -1250,10 +1250,10 @@ abbr man4 "man -S 4"
 abbr man5 "man -S 5"
 abbr man6 "man -S 6"
 abbr man7 "man -S 7"
-abbr mana "man -a"  # open all matching pages
-abbr mank "apropos" # man -k ~= apropos
-abbr manf "whatis"  # man -f == whatis
-abbr manw "man -aw"  # man -w == whereis for man pages, or map to whereis?
+abbr mana "man -a" # open all matching pages
+abbr mank apropos # man -k ~= apropos
+abbr manf whatis # man -f == whatis
+abbr manw "man -aw" # man -w == whereis for man pages, or map to whereis?
 # abbr manw "whereis" ???
 # PRN whereis helpers?
 # PRN apropos helpers?
@@ -1261,10 +1261,10 @@ abbr manw "man -aw"  # man -w == whereis for man pages, or map to whereis?
 
 
 # *** mitmproxy
-abbr mitm "mitmproxy"
+abbr mitm mitmproxy
 abbr mitml "mitmproxy --mode=local"
 #
-abbr mitmw "mitmweb" # web interface # PRN just set this to --mode=local?
+abbr mitmw mitmweb # web interface # PRN just set this to --mode=local?
 abbr mitmwl "mitmweb --mode=local" # local mode
 #
 abbr mitmd "mitmdump --mode=local" # PRN just set this to --mode=local?
