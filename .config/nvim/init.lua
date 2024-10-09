@@ -16,11 +16,26 @@ packer.startup(function()
 	use 'Mofiqul/vscode.nvim'
 
 	use 'github/copilot.vim'
+
+        -- TODO (vimrc plugins list):
+        -- fuzzy find:
+        --    https://github.com/liuchengxu/vim-clap
+        --    Plugin 'ctrlpvim/ctrlp.vim' (from my vimrc)
+        --
+        -- gelguy/wilder.nvim  # compare to builtin picker and fuzzy finder instead?
+        --    port config from vimrc if I use this
+        --    can I setup wilder to not show unless I hit tab? I like how that works in nvim's menu picker OOB
+        --
+        -- Plugin 'ryanoasis/vim-devicons'
+        --
+        -- Plugin 'tpope/vim-commentary'  # switch to this if I don't like bundled comment in neovim
+        --
+        -- editorconfig? (bundled, right?)
 end)
 
 vim.cmd('colorscheme vscode') -- beautiful!
 
-
+-- FYI has('mouse') => nvi which is very close to what I had in vim ('a') ... only change if issue arises
 
 --" Uncomment the following to have Vim jump to the last position when reopening a file
 vim.cmd([[
