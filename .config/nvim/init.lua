@@ -31,6 +31,35 @@ packer.startup(function()
     -- Plugin 'tpope/vim-commentary'  # switch to this if I don't like bundled comment in neovim
     --
     -- editorconfig? (bundled, right?)
+
+    -- TODO treesitter setup (alternative to vim's syntax highlighting)
+    --    BTW looks like lua is setup with tree sitter currently (hence why not output from :syntax in a lua file)
+    --
+    use {
+        'nvim-treesitter/nvim-treesitter',
+        run = ':TSUpdate'
+    }
+    -- TSModuleInfo shows nothing setup?! including nothing for lua?
+    --
+    -- :scriptnames # shows loaded files BTW => useful to see if syntax/lua.vim loaded (how I found it uses ftplugin/lua.lua to specify tree sitter)
+    --
+    -- :TSInstall lua
+    -- :TSBufEnable highlight # now TSModuleInfo shows lua!... TODO what is gonna be different? I need to research what to expect and see if I can even identify differences
+    --
+    -- FYI markdown (via :scriptnames) seems to load vim syntax definitions (unlike lua)
+    --    THOUGH, on disk there are syntax/ lua.vim definitions too, just not loaded by default (IIAC b/c ftplugin/lua.lua says to use tree sitter instead)
+    --
+    -- :TSInstallInfo 
+    -- 
+    -- TODO look into auto enable for certain filetypes (e.g. lua)... isn't this what ftplugin/lua.lua is doing?
+    -- require'nvim-treesitter.configs'.setup {
+    --   ensure_installed = "lua", -- Or other languages
+    --   highlight = {
+    --     enable = true, -- Enable Tree-sitter
+    --   },
+    -- }
+
+
 end)
 
 vim.cmd('colorscheme vscode') -- beautiful!
