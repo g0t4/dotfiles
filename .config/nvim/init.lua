@@ -128,25 +128,32 @@ packer.startup(function()
         " Highlight the symbol and its references when holding the cursor
         "autocmd CursorHold * silent call CocActionAsync('highlight')
 
-        " Symbol renaming
-
-        "xmap <leader>F <Plug>(coc-format-selected)
-
-
-
-        " TODO rest of coc config review and paste in
-
+        " switched to lua with format key maps
 
     ]]) -- coc needs this, "Some servers have issues with backup files, see #649", sitll have swapfile in case of failure
 
+    local foo = "1"
+    local bar = foo
     -- " define keymap for foo to trigger format in orma
     -- TODO xmode too?
     vim.keymap.set('n', '<S-M-f>', ":call CocAction('format')<CR>", { desc = 'Coc format' }) -- vscode format call...can this handle selection only?
-
+    -- TODO how do i get coc-format-selection to work? in visual mode or?
 
     -- TODO vim freezes when I use this for local a below
     -- rename:
     vim.keymap.set('n', 'C-r,C-r', ":call CocAction('rename')<CR>", { desc = 'Coc rename' })
+
+    -- TODO review lua config for many other code action helpers... I skipped most for now
+
+    -- Add `:Format` command to format current buffer
+    vim.api.nvim_create_user_command("Format", "call CocAction('format')", {})
+
+    -- " Add `:Fold` command to fold current buffer
+    vim.api.nvim_create_user_command("Fold", "call CocAction('fold', <f-args>)", { nargs = '?' })
+
+    -- Add `:OR` command for organize imports of the current buffer
+    vim.api.nvim_create_user_command("OR", "call CocActionAsync('runCommand', 'editor.action.organizeImport')", {})
+
 
 
     -- TODO revisit autoclose, try https://github.com/windwp/nvim-autopairs (uses treesitter, IIUC)
