@@ -9,19 +9,19 @@ packer.startup(function()
     -- :PackerInstall (install new)
     -- :PackerUpdate
     -- :PackerSync (update+compile)
-    --     nvim observation: install window opens and can use `q` to close without :q 
-       
-    -- packer manages packer, is that wise? 
-    -- w/o this packer asks to remove packer, so I added this, run :PackerCompile, then :PackerSync and it doesn't ask to remove packer now
-    use 'wbthomason/packer.nvim' 
+    --     nvim observation: install window opens and can use `q` to close without :q
 
-    use 'Mofiqul/vscode.nvim' -- use "vscode" ... I added this in neovim, though my other theme is fine too it seems
+    -- packer manages packer, is that wise?
+    -- w/o this packer asks to remove packer, so I added this, run :PackerCompile, then :PackerSync and it doesn't ask to remove packer now
+    use 'wbthomason/packer.nvim'
+
+    use 'Mofiqul/vscode.nvim'     -- use "vscode" ... I added this in neovim, though my other theme is fine too it seems
     use 'tomasiser/vim-code-dark' -- use "codedark" from my vimrc
 
     use 'github/copilot.vim'
 
 
-    --- 
+    ---
     -- alternative but only has completions? https://neovimcraft.com/plugin/hrsh7th/nvim-cmp/
     use { 'neoclide/coc.nvim', branch = 'release' } -- LSP (language server protocol) support, completions, formatting, diagnostics, etc
     -- 0.0.82 is compat with https://microsoft.github.io/language-server-protocol/specifications/specification-3-16/
@@ -29,7 +29,7 @@ packer.startup(function()
     -- sample config: https://raw.githubusercontent.com/neoclide/coc.nvim/master/doc/coc-example-config.vim
     vim.cmd([[
         " *** FYI coc.nvim doesn't modify key-mappings nor vim options, hence the need to specify config explicitly, fine by me!
-        
+
         " FYI
         "  :CocList extensions  " and others
         "  :CocInstall coc-lua   " wow gutter icons showed right up!
@@ -87,14 +87,14 @@ packer.startup(function()
         " Use `:CocDiagnostics` to get all diagnostics of current buffer in location list
         nmap <silent> [g <Plug>(coc-diagnostic-prev)
         nmap <silent> ]g <Plug>(coc-diagnostic-next)
-        
+
         " TODO try out navigation
         " GoTo code navigation
         nmap <silent> gd <Plug>(coc-definition)
         nmap <silent> gy <Plug>(coc-type-definition)
         nmap <silent> gi <Plug>(coc-implementation)
         nmap <silent> gr <Plug>(coc-references)
-        
+
         " Use K to show documentation in preview window
         nnoremap <silent> K :call ShowDocumentation()<CR>
 
@@ -105,7 +105,7 @@ packer.startup(function()
             call feedkeys('K', 'in')
           endif
         endfunction
-        
+
 
         " disabled for now, multiline strings in lua aren't recognized as nested code which makes sense... so any time cursor stops in the multiline string it higlights all of it (yuck)
         " Highlight the symbol and its references when holding the cursor
@@ -124,7 +124,7 @@ packer.startup(function()
 
 
     ]]) -- coc needs this, "Some servers have issues with backup files, see #649", sitll have swapfile in case of failure
-    
+
     -- TODO revisit autoclose, try https://github.com/windwp/nvim-autopairs (uses treesitter, IIUC)
     -- -- https://github.com/m4xshen/autoclose.nvim
     -- use 'm4xshen/autoclose.nvim' -- auto close brackets, quotes, etc
@@ -134,7 +134,7 @@ packer.startup(function()
     --   filetypes = { 'lua', 'python', 'javascript', 'typescript', 'c', 'cpp', 'rust', 'go', 'html', 'css', 'json', 'yaml', 'markdown' },
     --   ignored_next_char = "[%w%.]", -- ignore if next char is a word or period
     --
-    --   -- FOOO isn't there a global option to stop it in command mode? 
+    --   -- FOOO isn't there a global option to stop it in command mode?
     --   -- ' disable_command_mode = true, -- disable in command line mode AND search /, often I want to search for one " or [[ and dont want them closed
     --
     -- })
@@ -143,21 +143,21 @@ packer.startup(function()
 
 
     use {
-      'nvim-telescope/telescope.nvim', 
-      tag = '0.1.8',
-      requires = { {'nvim-lua/plenary.nvim'} }
+        'nvim-telescope/telescope.nvim',
+        tag = '0.1.8',
+        requires = { { 'nvim-lua/plenary.nvim' } }
     }
     require('telescope').setup({
-      defaults = {
-        layout_strategy = 'flex', -- based on width (kinda like this actually and it resizes with the window perfectly)
-        -- layout_strategy = 'vertical', -- default is horizontal (files+prompt left, preview right)
-        -- layout_strategy = 'horizontal', -- vertical = (preview top, files middle, prompt bottom) -- maximizes both list of files and preview content
-        layout_config = {
-          -- :help telescope.layout
-          horizontal = { width = 0.9 },
-          vertical = { width = 0.9 },
+        defaults = {
+            layout_strategy = 'flex', -- based on width (kinda like this actually and it resizes with the window perfectly)
+            -- layout_strategy = 'vertical', -- default is horizontal (files+prompt left, preview right)
+            -- layout_strategy = 'horizontal', -- vertical = (preview top, files middle, prompt bottom) -- maximizes both list of files and preview content
+            layout_config = {
+                -- :help telescope.layout
+                horizontal = { width = 0.9 },
+                vertical = { width = 0.9 },
+            },
         },
-     },
     })
 
     local builtin = require('telescope.builtin')
@@ -172,27 +172,27 @@ packer.startup(function()
     vim.keymap.set('n', '<leader>fg', builtin.live_grep, { desc = 'Telescope live grep' })
     -- TODO ag? https://github.com/kelly-lin/telescope-ag  (extension  to telescope) => others https://github.com/nvim-telescope/telescope.nvim/wiki/Extensions
     vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = 'Telescope buffers' })
-    vim.keymap.set('n', '<leader>fh', builtin.help_tags, { desc = 'Telescope help tags' }) -- *** YES!
-    vim.keymap.set('n', '<leader>fc', builtin.commands, { desc = 'Telescope commands' }) -- TODO is this useful
-    vim.keymap.set('n', '<leader>fo', builtin.oldfiles, { desc = 'Telescope old files' }) -- TODO is this useful
+    vim.keymap.set('n', '<leader>fh', builtin.help_tags, { desc = 'Telescope help tags' })     -- *** YES!
+    vim.keymap.set('n', '<leader>fc', builtin.commands, { desc = 'Telescope commands' })       -- TODO is this useful
+    vim.keymap.set('n', '<leader>fo', builtin.oldfiles, { desc = 'Telescope old files' })      -- TODO is this useful
     vim.keymap.set('n', '<leader>fv', builtin.vim_options, { desc = 'Telescope vim options' }) -- TODO is this useful
-    vim.keymap.set('n', '<leader>fk', builtin.keymaps,  { desc = 'Telescope vim options' }) -- TODO is this useful
+    vim.keymap.set('n', '<leader>fk', builtin.keymaps, { desc = 'Telescope vim options' })     -- TODO is this useful
     --
     -- git related:
-    vim.keymap.set('n', '<leader>gs', builtin.git_status, { desc = 'Telescope git status' }) -- *** OMFG I am in ❤️ ... omg such a great way to do git status, side by side + search files and wow, dont need to leave my editor... wow
-    vim.keymap.set('n', '<leader>gc', builtin.git_commits, { desc = 'Telescope git commits' }) -- Ctrl+V sidebyside diff (:q closes), <CR> checkout, Ctrl+X horiz diff
+    vim.keymap.set('n', '<leader>gs', builtin.git_status, { desc = 'Telescope git status' })     -- *** OMFG I am in ❤️ ... omg such a great way to do git status, side by side + search files and wow, dont need to leave my editor... wow
+    vim.keymap.set('n', '<leader>gc', builtin.git_commits, { desc = 'Telescope git commits' })   -- Ctrl+V sidebyside diff (:q closes), <CR> checkout, Ctrl+X horiz diff
     -- TODO habituate Ctrl+V (open vertical split diff!)
     vim.keymap.set('n', '<leader>gb', builtin.git_branches, { desc = 'Telescope git branches' }) -- nice way to view, not sure I would use often
     --   pickers: https://github.com/nvim-telescope/telescope.nvim?tab=readme-ov-file#pickers
     --
     -- *** extension to telescope to search contents of help pages:
-    use 'catgoose/telescope-helpgrep.nvim' 
+    use 'catgoose/telescope-helpgrep.nvim'
     vim.keymap.set('n', '<leader>fgh', ":Telescope helpgrep<CR>", { desc = 'Telescope helpgrep' })
     -- *** maybe extensions:
     --  https://github.com/illia-shkroba/telescope-completion.nvim (completions w/ telescope... I need to get completions going before I worry about this)
     --
     -- TODO nvim-treesitter for telescope too
-    
+
 
     -- ** TODO completions
     -- ** TODO reformat files
@@ -215,10 +215,10 @@ packer.startup(function()
     -- TODO treesitter setup (alternative to vim's syntax highlighting)
     --    BTW looks like lua is setup with tree sitter currently (hence why not output from :syntax in a lua file)
     --
---    use {
---        'nvim-treesitter/nvim-treesitter',
---        run = ':TSUpdate'
---    }
+    --    use {
+    --        'nvim-treesitter/nvim-treesitter',
+    --        run = ':TSUpdate'
+    --    }
     -- TSModuleInfo shows nothing setup?! including nothing for lua?
     --
     -- :scriptnames # shows loaded files BTW => useful to see if syntax/lua.vim loaded (how I found it uses ftplugin/lua.lua to specify tree sitter)
@@ -229,8 +229,8 @@ packer.startup(function()
     -- FYI markdown (via :scriptnames) seems to load vim syntax definitions (unlike lua)
     --    THOUGH, on disk there are syntax/ lua.vim definitions too, just not loaded by default (IIAC b/c ftplugin/lua.lua says to use tree sitter instead)
     --
-    -- :TSInstallInfo 
-    -- 
+    -- :TSInstallInfo
+    --
     -- TODO look into auto enable for certain filetypes (e.g. lua)... isn't this what ftplugin/lua.lua is doing?
     -- require'nvim-treesitter.configs'.setup {
     --   ensure_installed = "lua", -- Or other languages
@@ -238,14 +238,12 @@ packer.startup(function()
     --     enable = true, -- Enable Tree-sitter
     --   },
     -- }
-
-
 end)
 
 -- force myself to learn hjkl to move up/down/left/right at least in normal mode?
-vim.keymap.set('n', '<up>', '') -- disable up arrow
-vim.keymap.set('n', '<down>', '') -- disable down arrow
-vim.keymap.set('n', '<left>', '') -- disable left arrow
+vim.keymap.set('n', '<up>', '')    -- disable up arrow
+vim.keymap.set('n', '<down>', '')  -- disable down arrow
+vim.keymap.set('n', '<left>', '')  -- disable left arrow
 vim.keymap.set('n', '<right>', '') -- disable right arrow
 
 -- *** color scheme
@@ -269,43 +267,43 @@ vim.o.clipboard = 'unnamedplus' -- use system clipboard
 -- TODO what do I want for clipboard?
 
 -- wrap settings
-vim.o.wrap = false -- global nowrap, consider local settings for this instead
+vim.o.wrap = false  -- global nowrap, consider local settings for this instead
 vim.o.textwidth = 0 -- disable globally, add back if I find myself missing it
 
 -- *** tabs
 -- I chose option 2 (always insert spaces, leave tabs as is with default tabstop=8)
 vim.o.expandtab = true -- insert spaces for tabs
-vim.o.softtabstop = 4 -- b/c expandtab is set, this is the width of an inserted tab in spaces
-vim.o.shiftwidth = 4 -- shifting: << >>
--- vim.o.tabstop -- leave as is (8) so existing uses of tabs match width likely intended 
+vim.o.softtabstop = 4  -- b/c expandtab is set, this is the width of an inserted tab in spaces
+vim.o.shiftwidth = 4   -- shifting: << >>
+-- vim.o.tabstop -- leave as is (8) so existing uses of tabs match width likely intended
 
 -- *** show whitespace
-vim.opt.listchars = {tab='→ ',trail='·',space='⋅'} -- FYI also `eol:$`
+vim.opt.listchars = { tab = '→ ', trail = '·', space = '⋅' } -- FYI also `eol:$`
 vim.cmd("command! ToggleShowWhitespace if &list | set nolist | else | set list | endif")
 
 -- TODO: port from vimrc
 -- " *** review `autoindent`/`smartindent`/`cindent` and `smarttab` settings, I think I am fine as is but I should check
---     filetype plugin indent on " this is controlling indent on new lines for now and seems fine so leave it as is 
+--     filetype plugin indent on " this is controlling indent on new lines for now and seems fine so leave it as is
 --     set backspace=indent,start,eol " allow backspacing over everything in insert mode, including indent from autoindent, eol thru start of insert
 
---[[ 
+--[[
 NOTES (vimscript => lua)
 
 vim.cmd({cmd}) to execute a vimscript command
 
-vim.o (== :set) 
+vim.o (== :set)
     https://neovim.io/doc/user/lua.html#vim.o
 vim.opt for list/map options (access as lua tables, i.e. append/prepend/remove elements)
     https://neovim.io/doc/user/lua.html#vim.opt
-]]--
+]] --
 
 vim.cmd([[
     " TODO fix when close the original file doesn't show
     command DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis
                   \ | wincmd p | diffthis
-]])   
+]])
 
--- *** Ctrl+S to save http://vim.wikia.com/wiki/Saving_a_file 
+-- *** Ctrl+S to save http://vim.wikia.com/wiki/Saving_a_file
 vim.cmd("nnoremap <c-s> :w<CR>")
 vim.cmd("vnoremap <c-s> <Esc><c-s>gv") -- esc=>normal mode => save => reselect visual mode, not working... figure out later
 vim.cmd("inoremap <c-s> <c-o><c-s>")
@@ -354,13 +352,13 @@ vim.cmd(":set guicursor=i:block")
 
 vim.cmd([[
 
-    " *** misc key maps 
-    " ctrl+d to quit (in select situations) ... is this really a good idea? 
+    " *** misc key maps
+    " ctrl+d to quit (in select situations) ... is this really a good idea?
     :nnoremap <C-d> :quit<CR>
-    
+
     " *** fix delete key reporting
     "    it reports 63272 which isn't mapped to <Del>
-    "    :echo getchar()  => type the delete key => shows 63272 (whereas vim classic shows <80>kD) 
+    "    :echo getchar()  => type the delete key => shows 63272 (whereas vim classic shows <80>kD)
     "       interesting, insert key (above delete) shows <80>kI ... which vim classic also reports, likewise pgup/pgdown show <80>kP/<80>kN in both
     inoremap <Char-63272> <Del>
     " in normal mode, just del current char
@@ -374,13 +372,13 @@ vim.cmd([[
     "       Profiles -> Keys -> Left Option Key: Meta (then alt+right works accept-word,  also alt+[/] cycles suggestions, and ctrl+alt+right accepts next line)
     "   fixes several default copilot keybindings
     "   notes:
-    "     getchar() w/ alt+right => 
+    "     getchar() w/ alt+right =>
     "         <80><fc>^H<80>kr     " with the iterm setting fix
     "                   <80>kr     " w/o the iterm setting fix
     "         btw, vim classic always has the longer version regardless of iterm2 setting
 
     function! ToggleCopilot()
-        " FYI https://github.com/github/copilot.vim/blob/release/autoload/copilot.vim 
+        " FYI https://github.com/github/copilot.vim/blob/release/autoload/copilot.vim
 
         " FYI only global toggle, not toggling buffer local
 
@@ -391,7 +389,7 @@ vim.cmd([[
         else
             Copilot enable
         endif
-        
+
         " echo "copilot is: " . (g:copilot_enabled ? "on" : "off")
         Copilot status " visual confirmation - precise about global vs buffer local too
     endfunction
@@ -418,7 +416,7 @@ vim.cmd([[
     " TODO port my highlight rules
     " FYI do not experiment with *** matching as one mistake in the regex (not escaping) can mess up what is going on, best to learn how these work with a diff rule
     " autocmd FileType * hi CommentAsterisks guifg='#ff00c3'
-    " autocmd FileType * syn match CommentAsterisks "#.*\*\*\s.*$" 
+    " autocmd FileType * syn match CommentAsterisks "#.*\*\*\s.*$"
     " autocmd FileType *  defers running to apply to all file types (IIUC)
     "
     " set notermguicolors # uses ctermfg/bg
@@ -429,12 +427,12 @@ vim.cmd([[
     "
     " I can redefine the color for Comment and new color is used: or if cleared then some other color takes over
     " :highlight clear Comment
-    " :highlight Comment guifg='#27AE60'  " Ok I can change the fg color here! wth... but somehow this controls the final value 
-    " 
+    " :highlight Comment guifg='#27AE60'  " Ok I can change the fg color here! wth... but somehow this controls the final value
+    "
     " !!! is this smth to do with treesitter or other syntax mechanism? if I run  syntax on this lua file only my syntax items are defined... as expected and their colors (even fg) are correct but then they dont render that way for FG (only BG does) here
-    
+
     command CheckSyntaxIDs :echo synIDattr(synID(line('.'), col('.'), 1), 'name') . ' -> ' . synIDattr(synID(line('.'), col('.'), 0), 'name')
-    
+
     "source ~/.config/nvim/highlights.vim
 
 
@@ -446,4 +444,3 @@ vim.cmd([[
 -- TODO
 -- load wilder.vim:
 -- vim.cmd('source /Users/wes/repos/wes-config/wes-bootstrap/subs/dotfiles/.config/nvim/todo_vimrc.vim')
-
