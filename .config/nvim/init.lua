@@ -167,11 +167,16 @@ vim.cmd(":set guicursor=i:block")
 
 
 ---*** FIX delete in insert mode for neovim, have it actually delete the next char just like vim
- vim.cmd([[
+vim.cmd([[
 
- ]])
+    " *** misc key maps 
+    " ctrl+d to quit (in select situations) ... is this really a good idea? 
+    :nnoremap <C-d> :quit<CR>
+
+]])
 
 
 -- TODO
 -- load wilder.vim:
+-- vim.cmd('source /Users/wes/repos/wes-config/wes-bootstrap/subs/dotfiles/.config/nvim/todo_vimrc.vim')
 
