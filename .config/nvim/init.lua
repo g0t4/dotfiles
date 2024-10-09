@@ -32,7 +32,8 @@ packer.startup(function()
     vim.keymap.set('n', '<leader>ft', builtin.builtin, { desc = 'Telescope Builtin' }) -- list pickers, select one opens it (like if :Telescope<CR>), shows keymaps too
     --
     vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = 'Telescope find files' })
-    vim.keymap.set('n', '<leader>fg', builtin.live_grep, { desc = 'Telescope live grep' }) -- *** habituate, I like this!.. can I get this with ag too?
+    vim.keymap.set('n', '<leader>fg', builtin.live_grep, { desc = 'Telescope live grep' })
+    -- TODO ag? https://github.com/kelly-lin/telescope-ag  (extension  to telescope) => others https://github.com/nvim-telescope/telescope.nvim/wiki/Extensions
     vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = 'Telescope buffers' })
     vim.keymap.set('n', '<leader>fh', builtin.help_tags, { desc = 'Telescope help tags' }) -- *** YES!
     vim.keymap.set('n', '<leader>fc', builtin.commands, { desc = 'Telescope commands' }) -- TODO is this useful
@@ -46,6 +47,9 @@ packer.startup(function()
     vim.keymap.set('n', '<leader>gb', builtin.git_branches, { desc = 'Telescope git branches' }) -- nice way to view, not sure I would use often
     --   pickers: https://github.com/nvim-telescope/telescope.nvim?tab=readme-ov-file#pickers
     --
+    -- *** extension to telescope to search contents of help pages:
+    use 'catgoose/telescope-helpgrep.nvim' 
+    vim.keymap.set('n', '<leader>fgh', ":Telescope helpgrep<CR>", { desc = 'Telescope helpgrep' })
 
     -- TODO nvim-treesitter for telescope too
 
