@@ -161,3 +161,17 @@ vim.cmd([[
     cmap <C-b> <C-\>eAskOpenAI()<CR>
 
 ]])
+
+-- cursor block in insert:
+vim.cmd(":set guicursor=i:block") 
+
+
+---*** FIX delete in insert mode for neovim, have it actually delete the next char just like vim
+ vim.cmd([[
+
+ ]])
+
+
+-- TODO
+-- load wilder.vim:
+
