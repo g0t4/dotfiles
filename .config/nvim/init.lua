@@ -231,6 +231,19 @@ packer.startup(function()
         run = ':TSUpdate'
     } -- treesitter (syntax highlighting, etc)
 
+    -- TSModuleInfo shows what features (highlight, illuminate[if plugin enabled], indent, incremental_selection)
+    require'nvim-treesitter.configs'.setup {
+        ensure_installed = { "c", "lua", "python", "javascript", "typescript", "html", "css", "json", "yaml", "markdown", "vim" }, -- one of "all", "maintained" (parsers with maintainers), or a list of languages
+        sync_install = false,
+        auto_install = true, -- PRN try tree-sitter CLI too, outside of neovim
+        -- ignore_install
+        highlight = {
+            enable = true, -- enable for all 
+            disable = { }, -- confirmed TSModuleInfo shows X for these languages
+        },
+        -- additional_vim_regex_highlighting = false, -- not having any effect on my regex highlighting... is that intended?
+        -- doesn't look like it's doing anything right now.. no languages are marked as highlighted (nor anything else)
+    }
     -- ** TODO completions
     -- ** TODO reformat files
     -- ** LSP (nav, completions,etc)
@@ -249,15 +262,7 @@ packer.startup(function()
     --
     -- editorconfig? (bundled, right?)
 
-    -- TODO treesitter setup (alternative to vim's syntax highlighting)
-    --    BTW looks like lua is setup with tree sitter currently (hence why not output from :syntax in a lua file)
-    --
-    --    use {
-    --        'nvim-treesitter/nvim-treesitter',
-    --        run = ':TSUpdate'
-    --    }
     -- TSModuleInfo shows nothing setup?! including nothing for lua?
-    --
     -- :scriptnames # shows loaded files BTW => useful to see if syntax/lua.vim loaded (how I found it uses ftplugin/lua.lua to specify tree sitter)
     --
     -- :TSInstall lua
@@ -268,14 +273,6 @@ packer.startup(function()
     --
     -- :TSInstallInfo
     --
-    -- TODO look into auto enable for certain filetypes (e.g. lua)... isn't this what ftplugin/lua.lua is doing?
-    -- require'nvim-treesitter.configs'.setup {
-    --   ensure_installed = "lua", -- Or other languages
-    --   highlight = {
-    --     enable = true, -- Enable Tree-sitter
-    --   },
-    -- }
-
 
 
     -- highlight just word under cursor:
@@ -517,6 +514,8 @@ vim.cmd([[
 --     vim.cmd('echo "Plugin loaded after plugin-to-load-first"')
 --   end
 -- }
+-- OBSERVATIONS:
+--   both bg and gui=bold are applied correctly to lua files... just the fg color?!
 
 --
 -- HIGHLIGHT ISSUE 2 => lua seems to have smth else styling it and that is overrding fg colors... I dont think its treesitter b/c I configured it to disable it and this still persisted..
