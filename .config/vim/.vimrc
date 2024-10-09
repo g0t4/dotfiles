@@ -212,7 +212,6 @@ colorscheme codedark-wes-mods " from tomasiser/vim-code-dark
 " todo add color scheme to dotfiles repo and symlink it OR setup a repo and check it out as a vim plugin would work well too
 "
 set ignorecase " ignore case when searching
-highlight Todo ctermfg=LightYellow guifg=#ffcc00
 " FYI https://terminal.sexy (color designer)
 
 
