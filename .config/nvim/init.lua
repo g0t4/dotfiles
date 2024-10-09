@@ -18,7 +18,57 @@ packer.startup(function()
 
     use 'github/copilot.vim'
 
+
+    -- alternative but only has completions? https://neovimcraft.com/plugin/hrsh7th/nvim-cmp/
     use { 'neoclide/coc.nvim', branch = 'release' } -- LSP (language server protocol) support, completions, formatting, diagnostics, etc
+    -- 0.0.82 is compat with https://microsoft.github.io/language-server-protocol/specifications/specification-3-16/
+    -- https://github.com/neoclide/coc.nvim/wiki/Install-coc.nvim (install extensions)
+    -- sample config: https://raw.githubusercontent.com/neoclide/coc.nvim/master/doc/coc-example-config.vim
+    vim.cmd([[
+
+        " Some servers have issues with backup files, see #649
+        set nobackup
+        set nowritebackup
+
+        " Having longer updatetime (default is 4000 ms = 4s) leads to noticeable
+        " delays and poor user experience
+        set updatetime=300
+
+        " Always show the signcolumn, otherwise it would shift the text each time
+        " diagnostics appear/become resolved
+        set signcolumn=yes
+
+        "
+        "" TODO how to reconcile coc + copilot?
+        ""
+        "" Use tab for trigger completion with characters ahead and navigate
+        "" NOTE: There's always complete item selected by default, you may want to enable
+        "" no select by `"suggest.noselect": true` in your configuration file
+        "" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+        "" other plugin before putting this into your config
+        "inoremap <silent><expr> <TAB>
+        "      \ coc#pum#visible() ? coc#pum#next(1) :
+        "      \ CheckBackspace() ? "\<Tab>" :
+        "      \ coc#refresh()
+        "inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+
+        " Make <CR> to accept selected completion item or notify coc.nvim to format
+        " <C-g>u breaks current undo, please make your own choice
+        inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+                                      \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+        function! CheckBackspace() abort
+          let col = col('.') - 1
+          return !col || getline('.')[col - 1]  =~# '\s'
+        endfunction
+
+
+    ]]) -- coc needs this, "Some servers have issues with backup files, see #649", sitll have swapfile in case of failure
+    
+    --
+
+
+
 
     use {
       'nvim-telescope/telescope.nvim', 
@@ -180,7 +230,7 @@ vim.opt for list/map options (access as lua tables, i.e. append/prepend/remove e
 vim.cmd([[
     " TODO fix when close the original file doesn't show
     command DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis
-		  \ | wincmd p | diffthis
+                  \ | wincmd p | diffthis
 ]])   
 
 -- *** Ctrl+S to save http://vim.wikia.com/wiki/Saving_a_file 
