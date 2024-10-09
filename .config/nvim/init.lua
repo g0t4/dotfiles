@@ -24,12 +24,26 @@ packer.startup(function()
       requires = { {'nvim-lua/plenary.nvim'} }
     }
     local builtin = require('telescope.builtin')
-    vim.cmd("let g:mapleader = ';'") -- default is '\' which is a bit awkward to reach, gotta take right hand off homerow
+    -- TODO probably not set these here in plugin setup, move after plugin setup?
+    --
+    vim.cmd("let g:mapleader = ' '") -- default is '\' which is a bit awkward to reach, gotta take right hand off homerow
     -- FYI g:mapleader is not set so its '\' by default
+    --
+    vim.keymap.set('n', '<leader>ft', builtin.builtin, { desc = 'Telescope Builtin' }) -- list pickers, select one opens it (like if :Telescope<CR>), shows keymaps too
+    --
     vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = 'Telescope find files' })
     vim.keymap.set('n', '<leader>fg', builtin.live_grep, { desc = 'Telescope live grep' }) -- *** habituate, I like this!.. can I get this with ag too?
     vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = 'Telescope buffers' })
     vim.keymap.set('n', '<leader>fh', builtin.help_tags, { desc = 'Telescope help tags' }) -- *** YES!
+    vim.keymap.set('n', '<leader>fc', builtin.commands, { desc = 'Telescope commands' }) -- TODO is this useful
+    vim.keymap.set('n', '<leader>fo', builtin.oldfiles, { desc = 'Telescope old files' }) -- TODO is this useful
+    vim.keymap.set('n', '<leader>fv', builtin.vim_options, { desc = 'Telescope vim options' }) -- TODO is this useful
+    --
+    -- git related:
+    vim.keymap.set('n', '<leader>gs', builtin.git_status, { desc = 'Telescope git status' }) -- *** OMFG I am in ❤️ ... omg such a great way to do git status, side by side + search files and wow, dont need to leave my editor... wow
+    vim.keymap.set('n', '<leader>gc', builtin.git_commits, { desc = 'Telescope git commits' }) -- Ctrl+V sidebyside diff (:q closes), <CR> checkout, Ctrl+X horiz diff
+    -- TODO habituate Ctrl+V (open vertical split diff!)
+    vim.keymap.set('n', '<leader>gb', builtin.git_branches, { desc = 'Telescope git branches' }) -- nice way to view, not sure I would use often
     --   pickers: https://github.com/nvim-telescope/telescope.nvim?tab=readme-ov-file#pickers
     --
 
@@ -195,12 +209,9 @@ vim.cmd([[
     " ctrl+d to quit (in select situations) ... is this really a good idea? 
     :nnoremap <C-d> :quit<CR>
 
-    
-        
-    " copilot overrides
-    :imap <C-M-[> <Plug>(copilot-previous)
-    :imap <C-M-]> <Plug>(copilot-next)
-
+    " copilot key maps, fixed alt == Meta
+    " !!! FYI I had to modify iterm2 settings to force left alt to be treated as Meta (not treat option as alt, see below that)    
+    " Profiles -> Keys -> Left Option Key: Meta (then alt+right works accept-word,  also alt+[/] cycles suggestions, and ctrl+alt+right accepts next line)
 
     function! ToggleCopilot()
         " FYI https://github.com/github/copilot.vim/blob/release/autoload/copilot.vim 
