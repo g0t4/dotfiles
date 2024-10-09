@@ -37,7 +37,24 @@ packer.startup(function()
         "     https://github.com/LuaLS/lua-language-server  # LSP backend, use this for options (ie diagnostics config)
         "  :CocInstall coc-vimlsp
         "     https://github.com/iamcco/vim-language-server
-
+        "  :CocInstall coc-fish " shows man pages on Shift+K!! cool
+        "  :CocInstall coc-pyright
+        "  :CocInstall coc-toml coc-yaml coc-json
+        "  :CocInstall coc-svg
+        "  :CocInstall coc-docker
+        "
+        " TRY:
+        "   list here: https://github.com/neoclide/coc.nvim/wiki/Using-coc-extensions#implemented-coc-extensions
+        "   ??? https://github.com/yuki-yano/coc-copilot
+        "   ??? https://github.com/neoclide/coc-tabnine
+        "   coc-sh (bash)   coc-powershell
+        "   coc-omnisharp (c#,vb)
+        "   coc-nginx
+        "   coc-rust-analyzer?
+        "   coc-tsserver (typescript, javascript)
+        "   lua alternative: https://github.com/xiyaowong/coc-sumneko-lua
+        "   mardownlint / markdown-preview-enhanced / markmap (mindmap + markdown)
+        "   spelling: coc-ltex / coc-spell-checker
 
         " Some servers have issues with backup files, see #649
         set nobackup
@@ -112,11 +129,8 @@ packer.startup(function()
         "autocmd CursorHold * silent call CocActionAsync('highlight')
 
         " Symbol renaming
-        nmap <leader>rn <Plug>(coc-rename)
 
-        " Formatting selected code
-        xmap <leader>f  <Plug>(coc-format-selected)
-        nmap <leader>f  <Plug>(coc-format-selected)
+        "xmap <leader>F <Plug>(coc-format-selected)
 
 
 
@@ -124,6 +138,16 @@ packer.startup(function()
 
 
     ]]) -- coc needs this, "Some servers have issues with backup files, see #649", sitll have swapfile in case of failure
+
+    -- " define keymap for foo to trigger format in orma
+    -- TODO xmode too?
+    vim.keymap.set('n', '<S-M-f>', ":call CocAction('format')<CR>", { desc = 'Coc format' }) -- vscode format call...can this handle selection only?
+
+
+    -- TODO vim freezes when I use this for local a below
+    -- rename:
+    vim.keymap.set('n', 'C-r,C-r', ":call CocAction('rename')<CR>", { desc = 'Coc rename' })
+
 
     -- TODO revisit autoclose, try https://github.com/windwp/nvim-autopairs (uses treesitter, IIUC)
     -- -- https://github.com/m4xshen/autoclose.nvim
