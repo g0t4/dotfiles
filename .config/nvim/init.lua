@@ -1,3 +1,6 @@
+ ---@diagnostic disable: undefined-global
+ ---  can I block specific globals (i.e.  vim/use/etc)
+
 
 local packer = require 'packer'
 packer.startup(function()
@@ -26,6 +29,13 @@ packer.startup(function()
     -- sample config: https://raw.githubusercontent.com/neoclide/coc.nvim/master/doc/coc-example-config.vim
     vim.cmd([[
         " *** FYI coc.nvim doesn't modify key-mappings nor vim options, hence the need to specify config explicitly, fine by me!
+        
+        " FYI
+        "  :CocList extensions  " and others
+        "  :CocInstall coc-lua   " wow gutter icons showed right up!
+        "     https://github.com/josa42/coc-lua
+        "     https://github.com/LuaLS/lua-language-server  # LSP backend, use this for options (ie diagnostics config)
+
 
         " Some servers have issues with backup files, see #649
         set nobackup
@@ -82,9 +92,22 @@ packer.startup(function()
         nmap <silent> gy <Plug>(coc-type-definition)
         nmap <silent> gi <Plug>(coc-implementation)
         nmap <silent> gr <Plug>(coc-references)
+        
+        " TODO try
+        " Use K to show documentation in preview window
+        nnoremap <silent> K :call ShowDocumentation()<CR>
 
+        function! ShowDocumentation()
+          if CocAction('hasProvider', 'hover')
+            call CocActionAsync('doHover')
+          else
+            call feedkeys('K', 'in')
+          endif
+        endfunction
         
 
+
+        " TODO rest of coc config review and paste in
 
 
     ]]) -- coc needs this, "Some servers have issues with backup files, see #649", sitll have swapfile in case of failure
@@ -313,7 +336,7 @@ vim.cmd([[
 ]])
 
 -- cursor block in insert:
-vim.cmd(":set guicursor=i:block") 
+vim.cmd(":set guicursor=i:block")
 
 
 vim.cmd([[
