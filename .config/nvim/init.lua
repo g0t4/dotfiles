@@ -23,6 +23,16 @@ packer.startup(function()
       tag = '0.1.8',
       requires = { {'nvim-lua/plenary.nvim'} }
     }
+    local builtin = require('telescope.builtin')
+    vim.cmd("let g:mapleader = ';'") -- default is '\' which is a bit awkward to reach, gotta take right hand off homerow
+    -- FYI g:mapleader is not set so its '\' by default
+    vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = 'Telescope find files' })
+    vim.keymap.set('n', '<leader>fg', builtin.live_grep, { desc = 'Telescope live grep' }) -- *** habituate, I like this!.. can I get this with ag too?
+    vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = 'Telescope buffers' })
+    vim.keymap.set('n', '<leader>fh', builtin.help_tags, { desc = 'Telescope help tags' }) -- *** YES!
+    --   pickers: https://github.com/nvim-telescope/telescope.nvim?tab=readme-ov-file#pickers
+    --
+
     -- TODO nvim-treesitter for telescope too
 
     -- TODO can I map [shift]+ctrl+tab to move forward/backward through files to edit? (like in vscode)
@@ -67,6 +77,12 @@ packer.startup(function()
 
 
 end)
+
+-- force myself to learn hjkl to move up/down/left/right at least in normal mode?
+vim.keymap.set('n', '<up>', '') -- disable up arrow
+vim.keymap.set('n', '<down>', '') -- disable down arrow
+vim.keymap.set('n', '<left>', '') -- disable left arrow
+vim.keymap.set('n', '<right>', '') -- disable right arrow
 
 -- *** color scheme
 vim.cmd('colorscheme codedark') -- beautiful!
