@@ -269,6 +269,12 @@ packer.startup(function()
     --     enable = true, -- Enable Tree-sitter
     --   },
     -- }
+
+
+
+    -- highlight other instances of word under cursor
+    use "RRethy/vim-illuminate" -- sadly, not the current selection (https://github.com/RRethy/vim-illuminate/issues/196), I should write this plugin
+
 end)
 
 -- force myself to learn hjkl to move up/down/left/right at least in normal mode?
