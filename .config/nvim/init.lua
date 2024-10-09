@@ -225,11 +225,11 @@ packer.startup(function()
     -- TODO nvim-treesitter for telescope too
 
 
+
     use {
         'nvim-treesitter/nvim-treesitter',
         run = ':TSUpdate'
     } -- treesitter (syntax highlighting, etc)
-
 
     -- ** TODO completions
     -- ** TODO reformat files
@@ -279,7 +279,8 @@ packer.startup(function()
 
 
     -- highlight just word under cursor:
-    use "RRethy/vim-illuminate" -- sadly, not the current selection (https://github.com/RRethy/vim-illuminate/issues/196), I should write this plugin
+    -- *** BRING BACK if needed.. but apparently treesitter can do this too and I should investigate that => via same person? use 'RRethy/nvim-treesitter-illuminate'???
+    --    use "RRethy/vim-illuminate" -- sadly, not the current selection (https://github.com/RRethy/vim-illuminate/issues/196), I should write this plugin
     --    can use modes_denylist to hide in visual mode if I wanna use smth else in that mode to highlight selections: https://github.com/RRethy/vim-illuminate/issues/141
     --    customizing:
     --      hi def IlluminatedWordText gui=underline
