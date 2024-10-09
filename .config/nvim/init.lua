@@ -23,6 +23,19 @@ packer.startup(function()
       tag = '0.1.8',
       requires = { {'nvim-lua/plenary.nvim'} }
     }
+    require('telescope').setup({
+      defaults = {
+        layout_strategy = 'flex', -- based on width (kinda like this actually and it resizes with the window perfectly)
+        -- layout_strategy = 'vertical', -- default is horizontal (files+prompt left, preview right)
+        -- layout_strategy = 'horizontal', -- vertical = (preview top, files middle, prompt bottom) -- maximizes both list of files and preview content
+        layout_config = {
+          -- :help telescope.layout
+          horizontal = { width = 0.9 },
+          vertical = { width = 0.9 },
+        },
+     },
+    })
+
     local builtin = require('telescope.builtin')
     -- TODO probably not set these here in plugin setup, move after plugin setup?
     --
@@ -39,6 +52,7 @@ packer.startup(function()
     vim.keymap.set('n', '<leader>fc', builtin.commands, { desc = 'Telescope commands' }) -- TODO is this useful
     vim.keymap.set('n', '<leader>fo', builtin.oldfiles, { desc = 'Telescope old files' }) -- TODO is this useful
     vim.keymap.set('n', '<leader>fv', builtin.vim_options, { desc = 'Telescope vim options' }) -- TODO is this useful
+    vim.keymap.set('n', '<leader>fk', builtin.keymaps,  { desc = 'Telescope vim options' }) -- TODO is this useful
     --
     -- git related:
     vim.keymap.set('n', '<leader>gs', builtin.git_status, { desc = 'Telescope git status' }) -- *** OMFG I am in ❤️ ... omg such a great way to do git status, side by side + search files and wow, dont need to leave my editor... wow
@@ -50,8 +64,16 @@ packer.startup(function()
     -- *** extension to telescope to search contents of help pages:
     use 'catgoose/telescope-helpgrep.nvim' 
     vim.keymap.set('n', '<leader>fgh', ":Telescope helpgrep<CR>", { desc = 'Telescope helpgrep' })
-
+    -- *** maybe extensions:
+    --  https://github.com/illia-shkroba/telescope-completion.nvim (completions w/ telescope... I need to get completions going before I worry about this)
+    --
     -- TODO nvim-treesitter for telescope too
+    
+
+    -- ** TODO completions
+    -- ** TODO reformat files
+    -- ** LSP (nav, completions,etc)
+    -- ** higlighting (for my custom comments at least, probably port this to an existing extension is best) - I bet some manage diff syntax types (treesitter, vim regex, syntect? sublimetext)
 
     -- TODO can I map [shift]+ctrl+tab to move forward/backward through files to edit? (like in vscode)
     --    edit #
