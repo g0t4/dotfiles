@@ -62,12 +62,30 @@ packer.startup(function()
           return !col || getline('.')[col - 1]  =~# '\s'
         endfunction
 
+        " Use <c-space> to trigger completion
+        if has('nvim')
+          inoremap <silent><expr> <c-space> coc#refresh()
+        else
+          inoremap <silent><expr> <c-@> coc#refresh()
+        endif
+
 
     ]]) -- coc needs this, "Some servers have issues with backup files, see #649", sitll have swapfile in case of failure
     
-    --
+    -- https://github.com/m4xshen/autoclose.nvim
+    use 'm4xshen/autoclose.nvim' -- auto close brackets, quotes, etc
+    require('autoclose').setup({
+      -- TODO how do I feel about this and copilot coexisting? seem to work ok, but will closing it out ever be an issue for suggestions
+      -- TODO review keymaps for conflicts with coc/copilot/etc
+      filetypes = { 'lua', 'python', 'javascript', 'typescript', 'c', 'cpp', 'rust', 'go', 'html', 'css', 'json', 'yaml', 'markdown' },
+      ignored_next_char = "[%w%.]" -- ignore if next char is a word or period
+    })
+    
+    
 
 
+
+    -- TODO paste with indent?
 
 
     use {
