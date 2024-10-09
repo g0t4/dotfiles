@@ -173,6 +173,39 @@ vim.cmd([[
     " ctrl+d to quit (in select situations) ... is this really a good idea? 
     :nnoremap <C-d> :quit<CR>
 
+    
+        
+    " copilot overrides
+    :imap <C-M-[> <Plug>(copilot-previous)
+    :imap <C-M-]> <Plug>(copilot-next)
+
+
+    function! ToggleCopilot()
+        " FYI https://github.com/github/copilot.vim/blob/release/autoload/copilot.vim 
+
+        " FYI only global toggle, not toggling buffer local
+
+        " PRN save across sessions? maybe modify a file that is read on startup (not this file, I want it out of vimrc)
+
+        if copilot#Enabled()
+            Copilot disable
+        else
+            Copilot enable
+        endif
+        
+        " echo "copilot is: " . (g:copilot_enabled ? "on" : "off")
+        Copilot status " visual confirmation - precise about global vs buffer local too
+    endfunction
+
+    :inoremap <F12> <Esc>:call ToggleCopilot()<CR>a
+    " :inoremap <F12> <C-o>:call ToggleCopilot()<CR> " on empty, indented line, causes cursor to revert to start of line afterwards
+    :nnoremap <F12> :call ToggleCopilot()<CR>
+
+
+
+
+
+
 ]])
 
 
