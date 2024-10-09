@@ -35,10 +35,10 @@ packer.startup(function()
     -- TODO treesitter setup (alternative to vim's syntax highlighting)
     --    BTW looks like lua is setup with tree sitter currently (hence why not output from :syntax in a lua file)
     --
-    use {
-        'nvim-treesitter/nvim-treesitter',
-        run = ':TSUpdate'
-    }
+--    use {
+--        'nvim-treesitter/nvim-treesitter',
+--        run = ':TSUpdate'
+--    }
     -- TSModuleInfo shows nothing setup?! including nothing for lua?
     --
     -- :scriptnames # shows loaded files BTW => useful to see if syntax/lua.vim loaded (how I found it uses ftplugin/lua.lua to specify tree sitter)
@@ -124,9 +124,12 @@ vim.cmd("nnoremap <c-s> :w<CR>")
 vim.cmd("vnoremap <c-s> <Esc><c-s>gv") -- esc=>normal mode => save => reselect visual mode, not working... figure out later
 vim.cmd("inoremap <c-s> <c-o><c-s>")
 
-vim.cmd([[
 
-    " *** ASK OPENAI wrapper
+-- *** ASK OPENAI wrapper
+vim.cmd([[
+    " nvim observation: nested languages in lua are highlighted nicely!
+    "   lua observation: multiline strings rock for embedding other languages
+
     " TODO review prompt and see if I should specify this is neovim vs classic... in fact I should update this wrapper to differentiate and pass that
 
     function! TrimNullCharacters(input)
