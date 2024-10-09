@@ -14,6 +14,7 @@ packer.startup(function()
     use 'wbthomason/packer.nvim' 
 
     use 'Mofiqul/vscode.nvim'
+    use 'tomasiser/vim-code-dark'
 
     use 'github/copilot.vim'
 
@@ -211,7 +212,11 @@ vim.cmd([[
 
 vim.cmd([[
 
-    " custom coloring (of comments)
+    " ***  custom coloring (of comments)
+
+
+    " IIGC... neovim highlighting is overriding this somehow... I need my guifg to take precedence...
+
     " TODO port my highlight rules
     " FYI do not experiment with *** matching as one mistake in the regex (not escaping) can mess up what is going on, best to learn how these work with a diff rule
     " autocmd FileType * hi CommentAsterisks guifg='#ff00c3'
