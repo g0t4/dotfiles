@@ -18,6 +18,8 @@ packer.startup(function()
 
     use 'github/copilot.vim'
 
+    use { 'neoclide/coc.nvim', branch = 'release' } -- LSP (language server protocol) support, completions, formatting, diagnostics, etc
+
     use {
       'nvim-telescope/telescope.nvim', 
       tag = '0.1.8',
