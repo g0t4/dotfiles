@@ -486,6 +486,13 @@ vim.cmd([[
 
     "source ~/.config/nvim/highlights.vim
 
+    " samples for testing lua + my syntax highlight rules
+    " ??? sample:
+    " ???? sample
+    " !!! sample
+    " ! sample
+    " ***** sample
+
 
 
 ]])
@@ -495,3 +502,30 @@ vim.cmd([[
 -- TODO
 -- load wilder.vim:
 -- vim.cmd('source /Users/wes/repos/wes-config/wes-bootstrap/subs/dotfiles/.config/nvim/todo_vimrc.vim')
+
+-- HIGHLIGHT 3 (maybe) => ultimately I need to understand what all is fighting over highlights/syntax/etc (treesitter, vim regex syntax, LSP too?, syntect (sublime text)..)
+--     autocmd filetype    -- super helpful way to see what is applied in what order (where I found the autocmds were registered too early... so maybe put back earlier registration and see if I can find the things in between that are overriding higlights)
+--         IN FACT => do binary search on registration order in the plugin chain... see if I can narrow the extension causing issues, IIAC
+-- " !!! try AFTER plugin config:
+--
+-- use {
+--   'plugin-to-load-second',
+--   after = 'plugin-to-load-first',
+--   config = function()
+--     -- Your Vimscript or Lua code that depends on `plugin-to-load-first`
+--     vim.cmd('echo "Plugin loaded after plugin-to-load-first"')
+--   end
+-- }
+
+--
+-- HIGHLIGHT ISSUE 2 => lua seems to have smth else styling it and that is overrding fg colors... I dont think its treesitter b/c I configured it to disable it and this still persisted..
+--
+--
+-- HIGHLIGHT ISSUE 1 => most files the style didn't apply (until I discovered you reload the file and that registers the autocmd FileType entries again and that must be overrdiing whatever is blocking the first registration which was before many plugin highlights...)
+-- ensure highlight style applied late in load process (before buffer ready but just after file read)...  b/c right now if these are registered earlier (ie before packer plugins...) then the style wont take effect until next file opened
+vim.api.nvim_create_autocmd("BufReadPost", {
+    callback = function()
+        vim.cmd("source ~/.config/nvim/highlights.vim")
+    end
+})
+
