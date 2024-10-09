@@ -18,8 +18,11 @@ packer.startup(function()
 
     use 'github/copilot.vim'
 
-    use "nvim-lua/plenary.nvim"
-    use 'nvim-telescope/telescope.nvim' 
+    use {
+      'nvim-telescope/telescope.nvim', --tag = '0.1.8',
+    -- or                            , branch = '0.1.x',
+      requires = { {'nvim-lua/plenary.nvim'} }
+    }
     -- TODO nvim-treesitter for telescope too
 
     -- TODO can I map [shift]+ctrl+tab to move forward/backward through files to edit? (like in vscode)
