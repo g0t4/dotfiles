@@ -1,6 +1,5 @@
- ---@diagnostic disable: undefined-global
- ---  can I block specific globals (i.e.  vim/use/etc)
-
+---@diagnostic disable: undefined-global
+---  can I block specific globals (i.e.  vim/use/etc)
 
 local packer = require 'packer'
 packer.startup(function()
@@ -22,6 +21,7 @@ packer.startup(function()
     use 'github/copilot.vim'
 
 
+    --- 
     -- alternative but only has completions? https://neovimcraft.com/plugin/hrsh7th/nvim-cmp/
     use { 'neoclide/coc.nvim', branch = 'release' } -- LSP (language server protocol) support, completions, formatting, diagnostics, etc
     -- 0.0.82 is compat with https://microsoft.github.io/language-server-protocol/specifications/specification-3-16/
@@ -93,7 +93,6 @@ packer.startup(function()
         nmap <silent> gi <Plug>(coc-implementation)
         nmap <silent> gr <Plug>(coc-references)
         
-        " TODO try
         " Use K to show documentation in preview window
         nnoremap <silent> K :call ShowDocumentation()<CR>
 
