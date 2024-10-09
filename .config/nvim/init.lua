@@ -25,6 +25,7 @@ packer.startup(function()
     -- https://github.com/neoclide/coc.nvim/wiki/Install-coc.nvim (install extensions)
     -- sample config: https://raw.githubusercontent.com/neoclide/coc.nvim/master/doc/coc-example-config.vim
     vim.cmd([[
+        " *** FYI coc.nvim doesn't modify key-mappings nor vim options, hence the need to specify config explicitly, fine by me!
 
         " Some servers have issues with backup files, see #649
         set nobackup
@@ -78,12 +79,9 @@ packer.startup(function()
       -- TODO how do I feel about this and copilot coexisting? seem to work ok, but will closing it out ever be an issue for suggestions
       -- TODO review keymaps for conflicts with coc/copilot/etc
       filetypes = { 'lua', 'python', 'javascript', 'typescript', 'c', 'cpp', 'rust', 'go', 'html', 'css', 'json', 'yaml', 'markdown' },
-      ignored_next_char = "[%w%.]" -- ignore if next char is a word or period
+      ignored_next_char = "[%w%.]", -- ignore if next char is a word or period
+      disable_command_mode = true, -- disable in command line mode AND search /, often I want to search for one " or [[ and dont want them closed
     })
-    
-    
-
-
 
     -- TODO paste with indent?
 
