@@ -35,6 +35,8 @@ packer.startup(function()
         "  :CocInstall coc-lua   " wow gutter icons showed right up!
         "     https://github.com/josa42/coc-lua
         "     https://github.com/LuaLS/lua-language-server  # LSP backend, use this for options (ie diagnostics config)
+        "  :CocInstall coc-vimlsp
+        "     https://github.com/iamcco/vim-language-server
 
 
         " Some servers have issues with backup files, see #649
@@ -104,6 +106,18 @@ packer.startup(function()
           endif
         endfunction
         
+
+        " disabled for now, multiline strings in lua aren't recognized as nested code which makes sense... so any time cursor stops in the multiline string it higlights all of it (yuck)
+        " Highlight the symbol and its references when holding the cursor
+        "autocmd CursorHold * silent call CocActionAsync('highlight')
+
+        " Symbol renaming
+        nmap <leader>rn <Plug>(coc-rename)
+
+        " Formatting selected code
+        xmap <leader>f  <Plug>(coc-format-selected)
+        nmap <leader>f  <Plug>(coc-format-selected)
+
 
 
         " TODO rest of coc config review and paste in
