@@ -202,16 +202,32 @@ vim.cmd([[
 vim.cmd(":set guicursor=i:block") 
 
 
----*** FIX delete in insert mode for neovim, have it actually delete the next char just like vim
 vim.cmd([[
 
     " *** misc key maps 
     " ctrl+d to quit (in select situations) ... is this really a good idea? 
     :nnoremap <C-d> :quit<CR>
-
-    " copilot key maps, fixed alt == Meta
-    " !!! FYI I had to modify iterm2 settings to force left alt to be treated as Meta (not treat option as alt, see below that)    
-    " Profiles -> Keys -> Left Option Key: Meta (then alt+right works accept-word,  also alt+[/] cycles suggestions, and ctrl+alt+right accepts next line)
+    
+    " *** fix delete key reporting
+    "    it reports 63272 which isn't mapped to <Del>
+    "    :echo getchar()  => type the delete key => shows 63272 (whereas vim classic shows <80>kD) 
+    "       interesting, insert key (above delete) shows <80>kI ... which vim classic also reports, likewise pgup/pgdown show <80>kP/<80>kN in both
+    inoremap <Char-63272> <Del>
+    " in normal mode, just del current char
+    nnoremap <Char-63272> x
+    "
+    " *** show key reported:
+    command! ShowKeyWes echo getchar()
+    "
+    " *** alt key troubles
+    "   fixed w/ iterm setting for now...
+    "       Profiles -> Keys -> Left Option Key: Meta (then alt+right works accept-word,  also alt+[/] cycles suggestions, and ctrl+alt+right accepts next line)
+    "   fixes several default copilot keybindings
+    "   notes:
+    "     getchar() w/ alt+right => 
+    "         <80><fc>^H<80>kr     " with the iterm setting fix
+    "                   <80>kr     " w/o the iterm setting fix
+    "         btw, vim classic always has the longer version regardless of iterm2 setting
 
     function! ToggleCopilot()
         " FYI https://github.com/github/copilot.vim/blob/release/autoload/copilot.vim 
