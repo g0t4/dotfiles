@@ -223,7 +223,10 @@ vim.cmd([[
     " autocmd FileType * syn match CommentAsterisks "#.*\*\*\s.*$" 
     " autocmd FileType *  defers running to apply to all file types (IIUC)
     "
-    set notermguicolors
+    " set notermguicolors # uses ctermfg/bg
+    "    wheras termguicolors uses guifg/bg
+    "
+    "   !!!! WHY IS fg ignored both ctermfg/bg BUT cterm (bold) works, and bg works???
     " PRN matcher:
     " FYI matcher:
     autocmd FileType * hi CommentFYI guifg='#27AE60'
@@ -231,7 +234,7 @@ vim.cmd([[
     autocmd FileType * syn match CommentFYI /\(#\|"\|\/\/\|\/\*\)\s*\(FYI\|PRN\)\s.*/ " why can I not match on stuff just after the #... it's as if I cannot match on a subset of the comment and must match starting with the # at least and then with # at start I can avoid matching start of line but I cannot just have /FYI/ that won't match whereas /# FYI/ will match (and only the #+ part, not the start of line.. why is this discrepency in subset matching)?
     " PRN! matcher too:
     " FYI! matcher (bold, inverted):
-    autocmd FileType * hi CommentFYIBang ctermbg=black ctermfg=yellow cterm=bold " why doesn't gui=bold work? 
+    autocmd FileType * hi CommentFYIBang guibg=black guifg=yellow cterm=bold " why doesn't gui=bold work? 
     autocmd FileType * syn match CommentFYIBang /\(#\|"\|\/\/\|\/\*\)\s*\(FYI\|PRN\)\!\s.*/
     " OK THIS IS ODD... if I turn off termguicolors and use ctermbg/fg... only ctermbg is respected... ctermfg is ignored!
     " FYI troubleshooting with:
