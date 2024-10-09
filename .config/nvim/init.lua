@@ -275,6 +275,11 @@ packer.startup(function()
     -- highlight just word under cursor:
     use "RRethy/vim-illuminate"      -- sadly, not the current selection (https://github.com/RRethy/vim-illuminate/issues/196), I should write this plugin
     --    can use modes_denylist to hide in visual mode if I wanna use smth else in that mode to highlight selections: https://github.com/RRethy/vim-illuminate/issues/141
+    --    customizing:
+    --      hi def IlluminatedWordText gui=underline
+    --      hi def IlluminatedWordRead gui=underline
+    --      hi def IlluminatedWordWrite gui=underline
+    --
     -- highlight selections like vscode:
     --     TODO TRY THIS...
     --      use "aaron-p1/match-visual.nvim" -- this one seems to do what I want, but I need to test it out
