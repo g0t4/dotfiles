@@ -72,6 +72,9 @@ vim.cmd([[
 ]])
 -- TODO how does neovim not have this by default?
 
+--- clipboard
+vim.o.clipboard = 'unnamedplus' -- use system clipboard
+-- TODO what do I want for clipboard?
 
 -- wrap settings
 vim.o.wrap = false -- global nowrap, consider local settings for this instead
@@ -103,4 +106,15 @@ vim.o (== :set)
 vim.opt for list/map options (access as lua tables, i.e. append/prepend/remove elements)
     https://neovim.io/doc/user/lua.html#vim.opt
 ]]--
+
+vim.cmd([[
+    " TODO fix when close the original file doesn't show
+    command DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis
+		  \ | wincmd p | diffthis
+]])   
+
+-- *** Ctrl+S to save http://vim.wikia.com/wiki/Saving_a_file 
+vim.cmd("nnoremap <c-s> :w<CR>")
+vim.cmd("vnoremap <c-s> <Esc><c-s>gv") -- esc=>normal mode => save => reselect visual mode, not working... figure out later
+vim.cmd("inoremap <c-s> <c-o><c-s>")
 
