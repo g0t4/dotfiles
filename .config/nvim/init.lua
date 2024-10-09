@@ -410,6 +410,7 @@ vim.cmd([[
     "    :echo getchar()  => type the delete key => shows 63272 (whereas vim classic shows <80>kD)
     "       interesting, insert key (above delete) shows <80>kI ... which vim classic also reports, likewise pgup/pgdown show <80>kP/<80>kN in both
     inoremap <Char-63272> <Del>
+    cnoremap <Char-63272> <Del>
     " in normal mode, just del current char
     nnoremap <Char-63272> x
     "
