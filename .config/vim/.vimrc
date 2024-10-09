@@ -122,7 +122,7 @@ endif
 " Also switch on highlighting the last used search pattern.
 if &t_Co > 2 || has('gui_running')
   " DOES THIS EVEN WORK, is # supposed to be " for a comment:
-  syntax enable #enable syntax (doesn't override settings like syntax on does) 
+  syntax enable " doesn't override settings like syntax on does
   set hlsearch
   "set background=light
   "colorscheme solarized
