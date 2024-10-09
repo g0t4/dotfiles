@@ -276,8 +276,8 @@ packer.startup(function()
 
 
     -- highlight just word under cursor:
-    -- *** BRING BACK if needed.. but apparently treesitter can do this too and I should investigate that => via same person? use 'RRethy/nvim-treesitter-illuminate'???
-    --    use "RRethy/vim-illuminate" -- sadly, not the current selection (https://github.com/RRethy/vim-illuminate/issues/196), I should write this plugin
+    use "RRethy/vim-illuminate"  -- FYI integrates with treesitter! :TSModuleInfo adds illuminate column
+    --    sadly, not the current selection (https://github.com/RRethy/vim-illuminate/issues/196), I should write this plugin
     --    can use modes_denylist to hide in visual mode if I wanna use smth else in that mode to highlight selections: https://github.com/RRethy/vim-illuminate/issues/141
     --    customizing:
     --      hi def IlluminatedWordText gui=underline
