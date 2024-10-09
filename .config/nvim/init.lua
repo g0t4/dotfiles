@@ -19,19 +19,15 @@ packer.startup(function()
     use 'github/copilot.vim'
 
     use {
-      'nvim-telescope/telescope.nvim', --tag = '0.1.8',
-    -- or                            , branch = '0.1.x',
+      'nvim-telescope/telescope.nvim', 
+      tag = '0.1.8',
       requires = { {'nvim-lua/plenary.nvim'} }
     }
     -- TODO nvim-treesitter for telescope too
 
     -- TODO can I map [shift]+ctrl+tab to move forward/backward through files to edit? (like in vscode)
+    --    edit #
 
-    -- TODO (vimrc plugins list):
-    -- fuzzy find:
-    --    https://github.com/liuchengxu/vim-clap
-    --    Plugin 'ctrlpvim/ctrlp.vim' (from my vimrc)
-    --
     -- gelguy/wilder.nvim  # compare to builtin picker and fuzzy finder instead?
     --    port config from vimrc if I use this
     --    can I setup wilder to not show unless I hit tab? I like how that works in nvim's menu picker OOB
