@@ -229,9 +229,11 @@ vim.cmd([[
     "   !!!! WHY IS fg ignored both ctermfg/bg BUT cterm (bold) works, and bg works???
     "   FURTHERMORE... `:highlight` shows my colors correctly  (scroll to bottom, very end to see them)
     "
-    " I can redefine the color for Comment and it works:, or if cleared then some other color takes over
+    " I can redefine the color for Comment and new color is used: or if cleared then some other color takes over
     " :highlight clear Comment
     " :highlight Comment guifg='#27AE60'  " Ok I can change the fg color here! wth... but somehow this controls the final value 
+    " 
+    " !!! is this smth to do with treesitter or other syntax mechanism? if I run  syntax on this lua file only my syntax items are defined... as expected and their colors (even fg) are correct but then they dont render that way for FG (only BG does) here
     
 autocmd FileType * hi CommentFYI guifg='#27AE60'
 " TODO /* should end on */ ... I need to learn more about nested syntax/highlights cuz I should be able to match on a subset of the comment rules for diff langauges,right?
