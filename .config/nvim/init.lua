@@ -21,6 +21,14 @@ end)
 vim.cmd('colorscheme vscode') -- beautiful!
 
 
+
+--" Uncomment the following to have Vim jump to the last position when reopening a file
+vim.cmd([[
+    au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+]])
+-- TODO how does neovim not have this by default?
+
+
 -- wrap settings
 vim.o.wrap = false -- global nowrap, consider local settings for this instead
 vim.o.textwidth = 0 -- disable globally, add back if I find myself missing it
