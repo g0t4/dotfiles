@@ -1,36 +1,36 @@
 
 local packer = require 'packer'
 packer.startup(function()
-	-- on changes, resource this file and :PackerSync
-	-- :PackerCompile
-	-- :PackerClean   (remove unused)
-	-- :PackerInstall (install new)
-	-- :PackerUpdate
-	-- :PackerSync (update+compile)
-	--     nvim observation: install window opens and can use `q` to close without :q 
-   	
-	-- packer manages packer, is that wise? 
-	-- w/o this packer asks to remove packer, so I added this, run :PackerCompile, then :PackerSync and it doesn't ask to remove packer now
-	use 'wbthomason/packer.nvim' 
+    -- on changes, resource this file and :PackerSync
+    -- :PackerCompile
+    -- :PackerClean   (remove unused)
+    -- :PackerInstall (install new)
+    -- :PackerUpdate
+    -- :PackerSync (update+compile)
+    --     nvim observation: install window opens and can use `q` to close without :q 
+       
+    -- packer manages packer, is that wise? 
+    -- w/o this packer asks to remove packer, so I added this, run :PackerCompile, then :PackerSync and it doesn't ask to remove packer now
+    use 'wbthomason/packer.nvim' 
 
-	use 'Mofiqul/vscode.nvim'
+    use 'Mofiqul/vscode.nvim'
 
-	use 'github/copilot.vim'
+    use 'github/copilot.vim'
 
-        -- TODO (vimrc plugins list):
-        -- fuzzy find:
-        --    https://github.com/liuchengxu/vim-clap
-        --    Plugin 'ctrlpvim/ctrlp.vim' (from my vimrc)
-        --
-        -- gelguy/wilder.nvim  # compare to builtin picker and fuzzy finder instead?
-        --    port config from vimrc if I use this
-        --    can I setup wilder to not show unless I hit tab? I like how that works in nvim's menu picker OOB
-        --
-        -- Plugin 'ryanoasis/vim-devicons'
-        --
-        -- Plugin 'tpope/vim-commentary'  # switch to this if I don't like bundled comment in neovim
-        --
-        -- editorconfig? (bundled, right?)
+    -- TODO (vimrc plugins list):
+    -- fuzzy find:
+    --    https://github.com/liuchengxu/vim-clap
+    --    Plugin 'ctrlpvim/ctrlp.vim' (from my vimrc)
+    --
+    -- gelguy/wilder.nvim  # compare to builtin picker and fuzzy finder instead?
+    --    port config from vimrc if I use this
+    --    can I setup wilder to not show unless I hit tab? I like how that works in nvim's menu picker OOB
+    --
+    -- Plugin 'ryanoasis/vim-devicons'
+    --
+    -- Plugin 'tpope/vim-commentary'  # switch to this if I don't like bundled comment in neovim
+    --
+    -- editorconfig? (bundled, right?)
 end)
 
 vim.cmd('colorscheme vscode') -- beautiful!
@@ -70,8 +70,8 @@ NOTES (vimscript => lua)
 vim.cmd({cmd}) to execute a vimscript command
 
 vim.o (== :set) 
-	https://neovim.io/doc/user/lua.html#vim.o
+    https://neovim.io/doc/user/lua.html#vim.o
 vim.opt for list/map options (access as lua tables, i.e. append/prepend/remove elements)
-	https://neovim.io/doc/user/lua.html#vim.opt
+    https://neovim.io/doc/user/lua.html#vim.opt
 ]]--
 
