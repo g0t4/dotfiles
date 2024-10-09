@@ -523,6 +523,8 @@ vim.cmd([[
 --
 -- HIGHLIGHT ISSUE 1 => most files the style didn't apply (until I discovered you reload the file and that registers the autocmd FileType entries again and that must be overrdiing whatever is blocking the first registration which was before many plugin highlights...)
 -- ensure highlight style applied late in load process (before buffer ready but just after file read)...  b/c right now if these are registered earlier (ie before packer plugins...) then the style wont take effect until next file opened
+--
+-- !!! BRING THIS BACK
 vim.api.nvim_create_autocmd("BufReadPost", {
     callback = function()
         vim.cmd("source ~/.config/nvim/highlights.vim")
