@@ -70,10 +70,26 @@ packer.startup(function()
           inoremap <silent><expr> <c-@> coc#refresh()
         endif
 
+        " TODO try out diagnostics
+        " Use `[g` and `]g` to navigate diagnostics
+        " Use `:CocDiagnostics` to get all diagnostics of current buffer in location list
+        nmap <silent> [g <Plug>(coc-diagnostic-prev)
+        nmap <silent> ]g <Plug>(coc-diagnostic-next)
+        
+        " TODO try out navigation
+        " GoTo code navigation
+        nmap <silent> gd <Plug>(coc-definition)
+        nmap <silent> gy <Plug>(coc-type-definition)
+        nmap <silent> gi <Plug>(coc-implementation)
+        nmap <silent> gr <Plug>(coc-references)
+
+        
+
+
 
     ]]) -- coc needs this, "Some servers have issues with backup files, see #649", sitll have swapfile in case of failure
     
-    -- TODO revisit autoclose, try https://github.com/windwp/nvim-autopairs
+    -- TODO revisit autoclose, try https://github.com/windwp/nvim-autopairs (uses treesitter, IIUC)
     -- -- https://github.com/m4xshen/autoclose.nvim
     -- use 'm4xshen/autoclose.nvim' -- auto close brackets, quotes, etc
     -- require('autoclose').setup({
