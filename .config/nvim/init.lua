@@ -266,6 +266,9 @@ autocmd FileType * hi CommentTripleQuestion guibg='#3498DB' guifg='#1f1f1f' cter
 autocmd FileType * syn match CommentTripleQuestion /\(#\|"\|\/\/\|\/\*\)\s*????*\s.*/ " shouldn't ? need to be escaped?! this breaks when I do that
 " * matcher:
 
+command CheckSyntaxIDs :echo synIDattr(synID(line('.'), col('.'), 1), 'name') . ' -> ' . synIDattr(synID(line('.'), col('.'), 0), 'name')
+
+
 ]])
 
 
