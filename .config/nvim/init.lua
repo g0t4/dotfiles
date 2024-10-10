@@ -528,18 +528,15 @@ local ts_utils = require 'nvim-treesitter.ts_utils'
 
 
 
--- TODO! test lua comment 
+-- TODO! test lua comment
 -- TODO test too
 vim.cmd [[
 
 
-    " TODO port to <leader>pd
-    command! CheckSyntaxIDs :echo synIDattr(synID(line('.'), col('.'), 1), 'name') . ' -> ' . synIDattr(synID(line('.'), col('.'), 0), 'name')
-
     " * override Comment color => changes the fg!
     " hi Comment ctermfg=65 guifg=#6a9955   "original => Last set from ~/.local/share/nvim/site/pack/packer/start/vim-code-dark/colors/codedark.vim
-    "hi Comment ctermfg=90 guifg=#6a9955      
-    hi clear Comment " clear it fixes the fg color ... b/c then yeah a comment doesn't have a fg color... ok... but can I add back color as a lower precedence rule?
+    "hi Comment ctermfg=90 guifg=#6a9955
+    "hi clear Comment " clear it fixes the fg color ... b/c then yeah a comment doesn't have a fg color... ok... but can I add back color as a lower precedence rule?
     " OMG OMG  if I break this style with invalid guifg!! my styles work in lua!!!! **tears** (all damn day beating around this bush)
 
 
@@ -576,9 +573,43 @@ function print_ts_cursor_details()
 
     print("captures:")
     print_captures_at_cursor()
+
+    -- TODO can I get highligther info from treesitter? too? think what I did below but for treesitter
+    -- local id = parser:syntax_tree():get_property("highlighter"):query("highlighter", cursor_row, cursor_col)
+    -- print(id)
+
+    print("syntax highlighting (not treesitter highlighting):")
+    print("name gui:'", vim.fn.synIDattr(vim.fn.synID(cursor_row, cursor_col, false), "name", "gui"),
+        "' - cterm:", vim.fn.synIDattr(vim.fn.synID(cursor_row, cursor_col, false), "name", "cterm"))
+
+    print("highlight:", vim.fn.synIDattr(vim.fn.synID(cursor_row, cursor_col, 0), "highlight", ""))
+    print("fg:", vim.fn.synIDattr(vim.fn.synID(cursor_row, cursor_col, 0), "fg", "gui"),
+        "bg:", vim.fn.synIDattr(vim.fn.synID(cursor_row, cursor_col, 0), "bg", "gui"))
+    -- print("fg#:", vim.fn.synIDattr(vim.fn.synID(cursor_row, cursor_col, 0), "fg#", "gui"),
+    --     "bg#:", vim.fn.synIDattr(vim.fn.synID(cursor_row, cursor_col, 0), "bg#", "gui"))
+    print("bold:", vim.fn.synIDattr(vim.fn.synID(cursor_row, cursor_col, 0), "bold", ""))
+    print("italic:", vim.fn.synIDattr(vim.fn.synID(cursor_row, cursor_col, 0), "italic", ""))
+    print("underline:", vim.fn.synIDattr(vim.fn.synID(cursor_row, cursor_col, 0), "underline", ""))
+    print("undercurl:", vim.fn.synIDattr(vim.fn.synID(cursor_row, cursor_col, 0), "undercurl", ""))
+
+    -- TODO!  test lua commment
+
+    -- IIAC => if have multi syntax/highlight regex hits... then I can show them all here... but won't show any treesitter highlights
+    local stack = vim.fn.synstack(cursor_row, cursor_col)
+    -- print("length:", #stack)
+    -- -- loop:
+    for key, value in pairs(stack) do
+        print("stack:", key, value, vim.fn.synIDattr(value, "name", "gui"))
+    end
 end
 
 vim.cmd("nnoremap <leader>pd :lua print_ts_cursor_details()<CR>")
+
+vim.api.nvim_create_autocmd("BufReadPost", {
+    callback = function()
+        vim.cmd("source ~/.config/nvim/highlights.vim")
+    end
+})
 
 
 
@@ -628,14 +659,3 @@ vim.cmd("nnoremap <leader>pd :lua print_ts_cursor_details()<CR>")
 -- HIGHLIGHT ISSUE 1 => most files the style didn't apply (until I discovered you reload the file and that registers the autocmd FileType entries again and that must be overrdiing whatever is blocking the first registration which was before many plugin highlights...)
 -- ensure highlight style applied late in load process (before buffer ready but just after file read)...  b/c right now if these are registered earlier (ie before packer plugins...) then the style wont take effect until next file opened
 --
--- " FYI foo
--- " FYI! foo
--- " !!! BRING THIS BACK
-vim.api.nvim_create_autocmd("BufReadPost", {
-    callback = function()
-        vim.cmd("source ~/.config/nvim/highlights.vim")
-    end
-})
-
-
-
