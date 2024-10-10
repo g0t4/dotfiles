@@ -302,22 +302,24 @@ packer.startup(function()
 
     -- TODO foo the bar
     -- FIXME fo asdf foajho
-    use {
-        "folke/todo-comments.nvim",
-        requires = "nvim-lua/plenary.nvim",
-        config = function()
-            require("todo-comments").setup {
-                signs = true, -- show icons in the gutter
-                -- You can add custom keywords and styles here
-                -- keywords = {
-                --   TODO = { icon = " ", color = "info" },
-                --   FIXME = { icon = " ", color = "error" },
-                --   NOTE = { icon = " ", color = "hint" },
-                --   CUSTOM = { icon = " ", color = "warning" }, -- Custom keyword example
-                -- },
-            }
-        end
-    }
+    -- NOTE foo
+    -- CUSTOM foo the bar
+    -- use {
+    --     "folke/todo-comments.nvim",
+    --     requires = "nvim-lua/plenary.nvim",
+    --     config = function()
+    --         require("todo-comments").setup {
+    --             signs = true, -- show icons in the gutter
+    --             -- You can add custom keywords and styles here
+    --             -- keywords = {
+    --             --   TODO = { icon = " ", color = "info" },
+    --             --   FIXME = { icon = " ", color = "error" },
+    --             --   NOTE = { icon = " ", color = "hint" },
+    --             --   CUSTOM = { icon = " ", color = "warning" }, -- Custom keyword example
+    --             -- },
+    --         }
+    --     end
+    -- }
 end)
 
 -- force myself to learn hjkl to move up/down/left/right at least in normal mode?
