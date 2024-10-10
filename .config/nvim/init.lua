@@ -188,6 +188,7 @@ packer.startup(function()
         requires = {
             { 'nvim-lua/plenary.nvim' },
             { 'nvim-tree/nvim-web-devicons' }, -- icons to the right of find_files
+            { 'xiyaowong/telescope-emoji.nvim' },
         },
         -- use `:checkhealth telescope` to verify deps
 
@@ -211,6 +212,7 @@ packer.startup(function()
             }
         }
     })
+    require("telescope").load_extension("emoji")
 
     local builtin = require('telescope.builtin')
     -- TODO probably not set these here in plugin setup, move after plugin setup?
@@ -221,6 +223,7 @@ packer.startup(function()
     vim.keymap.set('n', '<leader>ft', builtin.builtin, { desc = 'Telescope Builtin' }) -- list pickers, select one opens it (like if :Telescope<CR>), shows keymaps too
     --
     vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = 'Telescope find files' })
+    vim.keymap.set('n', '<leader>fe', ":Telescope emoji<CR>")
     vim.keymap.set('n', '<leader>fg', builtin.live_grep, { desc = 'Telescope live grep' })
     -- TODO ag? https://github.com/kelly-lin/telescope-ag  (extension  to telescope) => others https://github.com/nvim-telescope/telescope.nvim/wiki/Extensions
     vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = 'Telescope buffers' })
