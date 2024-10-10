@@ -174,6 +174,13 @@ packer.startup(function()
 
     -- TODO paste with indent?
 
+    -- use { 'wikitopian/hardmode' } -- disable arrow keys in normal mode (force hjkl)
+    --
+    -- force myself to learn hjkl to move up/down/left/right at least in normal mode?
+    vim.keymap.set('n', '<up>', '')    -- disable up arrow
+    vim.keymap.set('n', '<down>', '')  -- disable down arrow
+    vim.keymap.set('n', '<left>', '')  -- disable left arrow
+    vim.keymap.set('n', '<right>', '') -- disable right arrow
 
     use {
         'nvim-telescope/telescope.nvim',
@@ -337,12 +344,6 @@ packer.startup(function()
     -- }
 end)
 -- TODO: port from vimrc
-
--- force myself to learn hjkl to move up/down/left/right at least in normal mode?
-vim.keymap.set('n', '<up>', '')    -- disable up arrow
-vim.keymap.set('n', '<down>', '')  -- disable down arrow
-vim.keymap.set('n', '<left>', '')  -- disable left arrow
-vim.keymap.set('n', '<right>', '') -- disable right arrow
 
 -- *** color scheme
 vim.cmd('colorscheme codedark') -- beautiful!
