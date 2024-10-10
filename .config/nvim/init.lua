@@ -546,7 +546,7 @@ vim.cmd([[
 -- " !!! BRING THIS BACK
 vim.api.nvim_create_autocmd("BufReadPost", {
     callback = function()
-        vim.cmd("source ~/.config/nvim/highlights.vim") 
+        -- vim.cmd("source ~/.config/nvim/highlights.vim") 
     end
 })
 
