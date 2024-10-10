@@ -300,7 +300,10 @@ packer.startup(function()
     --      use "aaron-p1/match-visual.nvim" -- this one seems to do what I want, but I need to test it out
 
 
-    -- TODO foo the bar
+    -- TODO: foo the bar
+    --
+    -- TODO other (TODO set so not need trailing colon?)
+    --
     -- FIXME fo asdf foajho
     -- NOTE foo
     -- CUSTOM foo the bar
@@ -309,18 +312,25 @@ packer.startup(function()
     --     requires = "nvim-lua/plenary.nvim",
     --     config = function()
     --         require("todo-comments").setup {
-    --             signs = true, -- show icons in the gutter
+    --             highlight = {
+    --                 -- before = "bg",
+    --                 keyword = "bg",
+    --                 after = "bg",
+    --                 pattern = [[.*<(KEYWORDS)\s*]],
+    --             },
+    --             signs = false, -- show icons in the gutter
     --             -- You can add custom keywords and styles here
-    --             -- keywords = {
-    --             --   TODO = { icon = " ", color = "info" },
-    --             --   FIXME = { icon = " ", color = "error" },
-    --             --   NOTE = { icon = " ", color = "hint" },
-    --             --   CUSTOM = { icon = " ", color = "warning" }, -- Custom keyword example
-    --             -- },
+    --             keywords = {
+    --                 -- TODO = { icon = " ", color = "info" },
+    --                 -- FIXME = { icon = " ", color = "error" },
+    --                 -- NOTE = { icon = " ", color = "hint" },
+    --                 -- CUSTOM = { icon = " ", color = "warning" }, -- Custom keyword example
+    --             },
     --         }
     --     end
     -- }
 end)
+-- TODO: port from vimrc
 
 -- force myself to learn hjkl to move up/down/left/right at least in normal mode?
 vim.keymap.set('n', '<up>', '')    -- disable up arrow
