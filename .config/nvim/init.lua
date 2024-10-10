@@ -458,11 +458,17 @@ end
 
 vim.cmd("nnoremap <leader>pd :lua print_ts_cursor_details()<CR>")
 
+
 -- CocConfig (opens coc-settings.json in buffer to edit) => from ~/.config/nvim/coc-settings.json
 --   https://github.com/neoclide/coc.nvim/wiki/Install-coc.nvim#add-some-configuration
 --   it works now (Shift+K on vim.api.nvim_win_get_cursor(0) shows the docs for that function! and if you remove the coc-settings.json and CocRestart then it doesn't show docs... yay
 --   why? to provide the LSP with vim globals (i.e. to show docs Shift+K) and for coc's completion lists
 --
+-- FYI all language server docs: https://github.com/neoclide/coc.nvim/wiki/Language-servers#lua
+--    each LSP added can be configured in coc-settings.json
+
+
+
 
 -- map [Shift]+Ctrl+Tab to move forward/backward through files to edit, in addition to Ctrl+o/i
 --   that is my goto key combo, perhaps I should learn o/i instead... feel like many apps use -/+ for this, vscode for shizzle
