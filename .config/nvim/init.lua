@@ -534,6 +534,7 @@ vim.cmd [[
 
 
     " !!! TMP fix sets no bg color on comments ... which means here then in nested multiline vimscript lua's orange color applies which is fine ish
+    " FYI! NBD that color is orange here... I can fix the overlapping priority later... heck even the lua issue isn't a deal breaker as all other files seem to not have issue (yet, maybe treesitter on them will cause issues)
     " * override Comment color => changes the fg!
     "hi Comment ctermfg=65 guifg='#6a9955'   "original => Last set from ~/.local/share/nvim/site/pack/packer/start/vim-code-dark/colors/codedark.vim
     "hi Comment ctermfg=65 guifg='6a9955'
@@ -548,6 +549,13 @@ vim.cmd [[
     " FYI here is logic to add higlighting to a node: (is this used by extensions?)  https://github.com/nvim-treesitter/nvim-treesitter/blob/master/lua/nvim-treesitter/ts_utils.lua#L268
 
 ]]
+
+-- FYI! foo
+-- !!! FOO
+-- alternative way to replace higlight group:
+-- -- vim.api.nvim_set_hl(0, "Comment", {})
+-- -- vim.api.nvim_set_hl(0, "Comment", { fg = "#6a9955" })
+-- vim.api.nvim_set_hl(0, "@comment", {})
 
 function print_ts_cursor_details()
     -- FYI, use :InspectTree => :lua vim.treesitter.inspect_tree() => interactive select/inspect left/right split
