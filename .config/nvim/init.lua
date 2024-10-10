@@ -405,6 +405,10 @@ vim.cmd("nnoremap <c-s> :w<CR>")
 vim.cmd("vnoremap <c-s> <Esc><c-s>gv") -- esc=>normal mode => save => reselect visual mode, not working... figure out later
 vim.cmd("inoremap <c-s> <c-o><c-s>")
 
+
+
+
+-- *** treesitter helpers, i.e. for understanding highlighting issues
 function print_captures_at_cursor()
     local myTable = vim.treesitter.get_captures_at_cursor()
     for key, value in pairs(myTable) do
@@ -415,25 +419,35 @@ end
 vim.cmd("nnoremap <leader>pc :lua print_captures_at_cursor()<CR>")
 local ts = vim.treesitter
 
-function get_language_at_cursor()
-    -- Get the parser for the current buffer
-    local parser = ts.get_parser(0)
+local ts_utils = require 'nvim-treesitter.ts_utils'
 
-    -- Get the cursor position (row and col are 1-based, need 0-based for Tree-sitter)
+function print_ts_cursor_details()
+    local node_at_cursor = ts_utils.get_node_at_cursor()
+    if node_at_cursor then
+        print("Node type: ", node_at_cursor:type())
+    else
+        print("No node found")
+    end
+
     local cursor_row, cursor_col = unpack(vim.api.nvim_win_get_cursor(0))
 
-    -- Find the language at the current cursor position
+    local parser = ts.get_parser(0)
     local lang_tree = parser:language_for_range({ cursor_row - 1, cursor_col, cursor_row - 1, cursor_col })
-
     if lang_tree then
         local lang_name = lang_tree:lang()
-        return lang_name
+        print("language: ", lang_name)
     else
-        return "Unknown"
+        print("language: unknown")
     end
+
+
+    print("captures:")
+    print_captures_at_cursor()
 end
 
--- print("Language at cursor: " .. get_language_at_cursor())
+vim.cmd("nnoremap <leader>pd :lua print_ts_cursor_details()<CR>")
+
+
 
 -- map [Shift]+Ctrl+Tab to move forward/backward through files to edit, in addition to Ctrl+o/i
 --   that is my goto key combo, perhaps I should learn o/i instead... feel like many apps use -/+ for this, vscode for shizzle
