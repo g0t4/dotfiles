@@ -191,6 +191,7 @@ packer.startup(function()
         },
         -- use `:checkhealth telescope` to verify deps
 
+        -- extensions: https://github.com/nvim-telescope/telescope.nvim/wiki/Extensions
     }
     require('telescope').setup({
         defaults = {
@@ -203,6 +204,12 @@ packer.startup(function()
                 vertical = { width = 0.9 },
             },
         },
+        pickers = {
+            live_grep = {
+                layout_strategy = 'vertical',
+
+            }
+        }
     })
 
     local builtin = require('telescope.builtin')
