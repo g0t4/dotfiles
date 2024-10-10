@@ -15,7 +15,7 @@ abbr cir 'code-insiders "$(_repo_root)"'
 abbr nd 'nvim (z dotfiles)'
 abbr nh 'nvim .'
 abbr nr 'nvim "$(_repo_root)"'
-abbr ni 'z dotfiles; nvim ~/.config/nvim/init.vim'
+abbr ni 'z dotfiles; nvim ~/.config/nvim/init.lua'
 
 #### zed
 abbr zh 'zed .'
