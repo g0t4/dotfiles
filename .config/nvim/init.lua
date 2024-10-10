@@ -512,10 +512,6 @@ vim.cmd([[
 
 ]])
 
--- " *** FOO
-
-
-
 -- *** treesitter helpers, i.e. for understanding highlighting issues
 function print_captures_at_cursor()
     local myTable = vim.treesitter.get_captures_at_cursor()
@@ -530,12 +526,15 @@ local ts = vim.treesitter
 local ts_utils = require 'nvim-treesitter.ts_utils'
 
 vim.cmd [[
-   " explore capture => highlighting
-   " captures are linked to existing highlight groups (IIUC for the most part), i.e.: 
-   :hi TestNewHigh gui=bold guibg=red guifg=blue " create new highlight rule
-   :hi link @comment TestNewHigh  " link capture to it
-   " FYI here is logic to add higlighting to a node: (is this used by extensions?)  https://github.com/nvim-treesitter/nvim-treesitter/blob/master/lua/nvim-treesitter/ts_utils.lua#L268
+
+    " explore capture => highlighting
+    " captures are linked to existing highlight groups (IIUC for the most part), i.e.:
+    ":hi TestNewHigh gui=bold guibg=red guifg=blue " create new highlight rule
+    ":hi link @comment TestNewHigh  " link capture to it
+    " FYI here is logic to add higlighting to a node: (is this used by extensions?)  https://github.com/nvim-treesitter/nvim-treesitter/blob/master/lua/nvim-treesitter/ts_utils.lua#L268
+
 ]]
+
 function print_ts_cursor_details()
     -- FYI, use :InspectTree => :lua vim.treesitter.inspect_tree() => interactive select/inspect left/right split
     local node_at_cursor = ts_utils.get_node_at_cursor()
@@ -659,4 +658,3 @@ vim.api.nvim_create_autocmd("BufReadPost", {
         vim.cmd("source ~/.config/nvim/highlights.vim")
     end
 })
-
