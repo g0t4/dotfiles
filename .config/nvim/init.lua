@@ -527,16 +527,17 @@ local ts_utils = require 'nvim-treesitter.ts_utils'
 -- TODO format vimscript (nested in lua)
 
 
-
 -- TODO! test lua comment
 -- TODO test too
+-- TODO! treesitter-highlight-priority ... sets nvim_buf_set_extmark() to 100.. so how does that relate to my syntax/highlight groups? how do I see that?
 vim.cmd [[
 
 
+    " !!! TMP fix sets no bg color on comments ... which means here then in nested multiline vimscript lua's orange color applies which is fine ish
     " * override Comment color => changes the fg!
-    " hi Comment ctermfg=65 guifg=#6a9955   "original => Last set from ~/.local/share/nvim/site/pack/packer/start/vim-code-dark/colors/codedark.vim
-    "hi Comment ctermfg=90 guifg=#6a9955
-    "hi clear Comment " clear it fixes the fg color ... b/c then yeah a comment doesn't have a fg color... ok... but can I add back color as a lower precedence rule?
+    "hi Comment ctermfg=65 guifg='#6a9955'   "original => Last set from ~/.local/share/nvim/site/pack/packer/start/vim-code-dark/colors/codedark.vim
+    "hi Comment ctermfg=65 guifg='6a9955'
+    hi clear Comment " clear it fixes the fg color ... b/c then yeah a comment doesn't have a fg color... ok... but can I add back color as a lower precedence rule?
     " OMG OMG  if I break this style with invalid guifg!! my styles work in lua!!!! **tears** (all damn day beating around this bush)
 
 
@@ -561,6 +562,7 @@ function print_ts_cursor_details()
     -- API: https://neovim.io/doc/user/api.html
     local cursor_row, cursor_col = unpack(vim.api.nvim_win_get_cursor(0))
 
+    -- FYI drop local to snoop on variables, i.e. parser:
     local parser = ts.get_parser(0)
     local lang_tree = parser:language_for_range({ cursor_row - 1, cursor_col, cursor_row - 1, cursor_col })
     if lang_tree then
