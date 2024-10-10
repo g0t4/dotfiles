@@ -407,7 +407,6 @@ vim.cmd("inoremap <c-s> <c-o><c-s>")
 
 
 
-
 -- *** treesitter helpers, i.e. for understanding highlighting issues
 function print_captures_at_cursor()
     local myTable = vim.treesitter.get_captures_at_cursor()
@@ -421,14 +420,26 @@ local ts = vim.treesitter
 
 local ts_utils = require 'nvim-treesitter.ts_utils'
 
+vim.cmd [[
+ " explore capture => highlighting
+   "notes treesitter
+   "captures are linked to existing highlight groups (IIUC for the most part)
+    ":hi TestNewHigh gui=bold guibg=red guifg=blue
+   ":hi link @comment TestNewHigh
+    "     -- open :InspectTree to see highlight on the corresponding part of the tree!
+
+]]
 function print_ts_cursor_details()
+    -- FYI, use :InspectTree => :lua vim.treesitter.inspect_tree() => interactive select/inspect left/right split
     local node_at_cursor = ts_utils.get_node_at_cursor()
     if node_at_cursor then
         print("Node type: ", node_at_cursor:type())
+        print("node text: ", vim.treesitter.get_node_text(node_at_cursor, 0)) -- shows the original source! FYI 0 = buffer with text, node lookup into that buffer IIUC
     else
         print("No node found")
     end
 
+    -- API: https://neovim.io/doc/user/api.html
     local cursor_row, cursor_col = unpack(vim.api.nvim_win_get_cursor(0))
 
     local parser = ts.get_parser(0)
@@ -447,7 +458,11 @@ end
 
 vim.cmd("nnoremap <leader>pd :lua print_ts_cursor_details()<CR>")
 
-
+-- CocConfig (opens coc-settings.json in buffer to edit) => from ~/.config/nvim/coc-settings.json
+--   https://github.com/neoclide/coc.nvim/wiki/Install-coc.nvim#add-some-configuration
+--   it works now (Shift+K on vim.api.nvim_win_get_cursor(0) shows the docs for that function! and if you remove the coc-settings.json and CocRestart then it doesn't show docs... yay
+--   why? to provide the LSP with vim globals (i.e. to show docs Shift+K) and for coc's completion lists
+--
 
 -- map [Shift]+Ctrl+Tab to move forward/backward through files to edit, in addition to Ctrl+o/i
 --   that is my goto key combo, perhaps I should learn o/i instead... feel like many apps use -/+ for this, vscode for shizzle
