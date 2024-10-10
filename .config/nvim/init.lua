@@ -247,6 +247,10 @@ packer.startup(function()
     -- frecency on all pickers:
     -- use 'prochri/telescope-all-recent.nvim'
     --
+    -- native fzf/fzy compiled extensions (for perf):
+    --   https://github.com/nvim-telescope/telescope-fzf-native.nvim
+    --   https://github.com/nvim-telescope/telescope-fzy-native.nvim
+    --
     -- PRN review extensions: https://github.com/illia-shkroba/telescope-completion.nvim
     --  maybe... completions w/ telescope... I need to get completions going before I worry about this
     --  nvim-treesitter for telescope too?
