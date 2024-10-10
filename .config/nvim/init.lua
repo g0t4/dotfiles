@@ -505,14 +505,13 @@ vim.cmd([[
     " :inoremap <F12> <C-o>:call ToggleCopilot()<CR> " on empty, indented line, causes cursor to revert to start of line afterwards
     :nnoremap <F12> :call ToggleCopilot()<CR>
 
-
-
-
-
-
 ]])
 
--- *** treesitter helpers, i.e. for understanding highlighting issues
+
+
+
+--- *** treesitter helpers, i.e. for understanding highlighting issues
+
 function print_captures_at_cursor()
     local myTable = vim.treesitter.get_captures_at_cursor()
     for key, value in pairs(myTable) do
@@ -658,3 +657,6 @@ vim.api.nvim_create_autocmd("BufReadPost", {
         vim.cmd("source ~/.config/nvim/highlights.vim")
     end
 })
+
+
+
