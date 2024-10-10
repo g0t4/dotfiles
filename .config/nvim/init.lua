@@ -187,8 +187,6 @@ packer.startup(function()
         tag = '0.1.8',
         requires = {
             { 'nvim-lua/plenary.nvim' },
-            { 'nvim-tree/nvim-web-devicons' }, -- icons to the right of find_files
-            { 'xiyaowong/telescope-emoji.nvim' },
         },
         -- use `:checkhealth telescope` to verify deps
 
@@ -216,11 +214,12 @@ packer.startup(function()
 
     local builtin = require('telescope.builtin')
     --
-    vim.cmd("let g:mapleader = ' '") -- default is '\' which is a bit awkward to reach, gotta take right hand off homerow
+    vim.cmd("let g:mapleader = ' '")                                                   -- default is '\' which is a bit awkward to reach, gotta take right hand off homerow
     --
     vim.keymap.set('n', '<leader>ft', builtin.builtin, { desc = 'Telescope Builtin' }) -- list pickers, select one opens it (like if :Telescope<CR>), shows keymaps too
     --
     vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = 'Telescope find files' })
+    -- TODO habituate Ctrl+V (open vertical split diff!)
     vim.keymap.set('n', '<leader>fg', builtin.live_grep, { desc = 'Telescope live grep' }) -- proj search
     -- PRN ag? https://github.com/kelly-lin/telescope-ag  (extension  to telescope) => others https://github.com/nvim-telescope/telescope.nvim/wiki/Extensions
     vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = 'Telescope buffers' })
@@ -230,23 +229,27 @@ packer.startup(function()
     vim.keymap.set('n', '<leader>fv', builtin.vim_options, { desc = 'Telescope vim options' })
     vim.keymap.set('n', '<leader>fk', builtin.keymaps, { desc = 'Telescope vim options' })
     --
-    vim.keymap.set('n', '<leader>fe', ":Telescope emoji<CR>")
-    --
     -- git related:
     vim.keymap.set('n', '<leader>gs', builtin.git_status, { desc = 'Telescope git status' })     -- *** OMFG I am in ❤️ ... omg such a great way to do git status, side by side + search files and wow, dont need to leave my editor... wow
     vim.keymap.set('n', '<leader>gc', builtin.git_commits, { desc = 'Telescope git commits' })   -- Ctrl+V sidebyside diff (:q closes), <CR> checkout, Ctrl+X horiz diff
-    -- TODO habituate Ctrl+V (open vertical split diff!)
     vim.keymap.set('n', '<leader>gb', builtin.git_branches, { desc = 'Telescope git branches' }) -- nice way to view, not sure I would use often
     --   pickers: https://github.com/nvim-telescope/telescope.nvim?tab=readme-ov-file#pickers
     --
-    -- help pages:
+    -- EXTENSIONS:
+    use 'nvim-tree/nvim-web-devicons' -- icons to the right of find_files
+    --
+    use 'xiyaowong/telescope-emoji.nvim'
+    vim.keymap.set('n', '<leader>fe', ":Telescope emoji<CR>")
+    --
     use 'catgoose/telescope-helpgrep.nvim'
     vim.keymap.set('n', '<leader>fgh', ":Telescope helpgrep<CR>", { desc = 'Telescope helpgrep' })
     --
-    -- PRN review extensions: https://github.com/illia-shkroba/telescope-completion.nvim 
-    --  (maybe... completions w/ telescope... I need to get completions going before I worry about this)
+    -- frecency on all pickers:
+    -- use 'prochri/telescope-all-recent.nvim'
     --
-    -- TODO nvim-treesitter for telescope too?
+    -- PRN review extensions: https://github.com/illia-shkroba/telescope-completion.nvim
+    --  maybe... completions w/ telescope... I need to get completions going before I worry about this
+    --  nvim-treesitter for telescope too?
 
 
     use {
