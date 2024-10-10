@@ -528,6 +528,10 @@ vim.cmd([[
 -- }
 -- OBSERVATIONS:
 --   both bg and gui=bold are applied correctly to lua files... just the fg color?!
+--   nvim -u NONE ~/.config/nvim/init.lua
+--     run w/ no plugins => then 
+--       :source  ~/.config/nvim/immediate.highlights.vim
+--            WORKS! applies my style to FYI below
 
 --
 -- HIGHLIGHT ISSUE 2 => lua seems to have smth else styling it and that is overrding fg colors... I dont think its treesitter b/c I configured it to disable it and this still persisted..
@@ -536,11 +540,12 @@ vim.cmd([[
 -- HIGHLIGHT ISSUE 1 => most files the style didn't apply (until I discovered you reload the file and that registers the autocmd FileType entries again and that must be overrdiing whatever is blocking the first registration which was before many plugin highlights...)
 -- ensure highlight style applied late in load process (before buffer ready but just after file read)...  b/c right now if these are registered earlier (ie before packer plugins...) then the style wont take effect until next file opened
 --
--- FYI! foo
--- !!! BRING THIS BACK
+-- " FYI foo
+-- " FYI! foo
+-- " !!! BRING THIS BACK
 vim.api.nvim_create_autocmd("BufReadPost", {
     callback = function()
-        vim.cmd("source ~/.config/nvim/highlights.vim")
+        vim.cmd("source ~/.config/nvim/highlights.vim") 
     end
 })
 
