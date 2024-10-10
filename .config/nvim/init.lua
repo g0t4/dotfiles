@@ -524,7 +524,24 @@ local ts = vim.treesitter
 
 local ts_utils = require 'nvim-treesitter.ts_utils'
 
+-- TODO format vimscript (nested in lua)
+
+
+
+-- TODO! test lua comment 
+-- TODO test too
 vim.cmd [[
+
+
+    " TODO port to <leader>pd
+    command! CheckSyntaxIDs :echo synIDattr(synID(line('.'), col('.'), 1), 'name') . ' -> ' . synIDattr(synID(line('.'), col('.'), 0), 'name')
+
+    " * override Comment color => changes the fg!
+    " hi Comment ctermfg=65 guifg=#6a9955   "original => Last set from ~/.local/share/nvim/site/pack/packer/start/vim-code-dark/colors/codedark.vim
+    "hi Comment ctermfg=90 guifg=#6a9955      
+    hi clear Comment " clear it fixes the fg color ... b/c then yeah a comment doesn't have a fg color... ok... but can I add back color as a lower precedence rule?
+    " OMG OMG  if I break this style with invalid guifg!! my styles work in lua!!!! **tears** (all damn day beating around this bush)
+
 
     " explore capture => highlighting
     " captures are linked to existing highlight groups (IIUC for the most part), i.e.:
@@ -564,6 +581,7 @@ end
 vim.cmd("nnoremap <leader>pd :lua print_ts_cursor_details()<CR>")
 
 
+
 -- CocConfig (opens coc-settings.json in buffer to edit) => from ~/.config/nvim/coc-settings.json
 --   https://github.com/neoclide/coc.nvim/wiki/Install-coc.nvim#add-some-configuration
 --   it works now (Shift+K on vim.api.nvim_win_get_cursor(0) shows the docs for that function! and if you remove the coc-settings.json and CocRestart then it doesn't show docs... yay
@@ -575,46 +593,7 @@ vim.cmd("nnoremap <leader>pd :lua print_ts_cursor_details()<CR>")
 
 
 
-vim.cmd([[
 
-    " ***  custom coloring (of comments)
-
-
-    " IIGC... neovim highlighting is overriding this somehow... I need my guifg to take precedence...
-
-    " TODO port my highlight rules
-    " FYI do not experiment with *** matching as one mistake in the regex (not escaping) can mess up what is going on, best to learn how these work with a diff rule
-    " autocmd FileType * hi CommentAsterisks guifg='#ff00c3'
-    " autocmd FileType * syn match CommentAsterisks "#.*\*\*\s.*$"
-    " autocmd FileType *  defers running to apply to all file types (IIUC)
-    "
-    " set notermguicolors # uses ctermfg/bg
-    "    wheras termguicolors uses guifg/bg
-    "
-    "   !!!! WHY IS fg ignored both ctermfg/bg BUT cterm (bold) works, and bg works???
-    "   FURTHERMORE... `:highlight` shows my colors correctly  (scroll to bottom, very end to see them)
-    "
-    " I can redefine the color for Comment and new color is used: or if cleared then some other color takes over
-    " :highlight clear Comment
-    " :highlight Comment guifg='#27AE60'  " Ok I can change the fg color here! wth... but somehow this controls the final value
-    "
-    " FYI! foo the
-    " !!! is this smth to do with treesitter or other syntax mechanism? if I run  syntax on this lua file only my syntax items are defined... as expected and their colors (even fg) are correct but then they dont render that way for FG (only BG does) here
-
-    command! CheckSyntaxIDs :echo synIDattr(synID(line('.'), col('.'), 1), 'name') . ' -> ' . synIDattr(synID(line('.'), col('.'), 0), 'name')
-
-    "source ~/.config/nvim/highlights.vim
-
-    " samples for testing lua + my syntax highlight rules
-    " ??? sample:
-    " ???? sample
-    " !!! sample
-    " ! sample
-    " ***** sample
-
-
-
-]])
 
 -- vim.api.nvim_set_hl(0, "vimAutoCmd",{ fg = "red", bg = "red"})
 
