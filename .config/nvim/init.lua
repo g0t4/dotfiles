@@ -1,4 +1,5 @@
 ---@diagnostic disable: undefined-global
+--- " FYI! 
 ---  can I block specific globals (i.e.  vim/use/etc)
 
 local packer = require 'packer'
