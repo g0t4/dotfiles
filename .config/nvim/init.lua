@@ -1,5 +1,5 @@
 ---@diagnostic disable: undefined-global
---- " FYI! 
+--- " FYI!
 ---  can I block specific globals (i.e.  vim/use/etc)
 
 local packer = require 'packer'
@@ -233,14 +233,14 @@ packer.startup(function()
     } -- treesitter (syntax highlighting, etc)
 
     -- TSModuleInfo shows what features (highlight, illuminate[if plugin enabled], indent, incremental_selection)
-    require'nvim-treesitter.configs'.setup {
+    require 'nvim-treesitter.configs'.setup {
         ensure_installed = { "c", "lua", "python", "javascript", "typescript", "html", "css", "json", "yaml", "markdown", "vim" }, -- one of "all", "maintained" (parsers with maintainers), or a list of languages
         sync_install = false,
-        auto_install = true, -- PRN try tree-sitter CLI too, outside of neovim
+        auto_install = true,                                                                                                       -- PRN try tree-sitter CLI too, outside of neovim
         -- ignore_install
         highlight = {
-            enable = true, -- enable for all 
-            disable = { }, -- confirmed TSModuleInfo shows X for these languages
+            enable = true, -- enable for all
+            disable = {},  -- confirmed TSModuleInfo shows X for these languages
         },
         -- additional_vim_regex_highlighting = false, -- not having any effect on my regex highlighting... is that intended?
         -- doesn't look like it's doing anything right now.. no languages are marked as highlighted (nor anything else)
@@ -249,7 +249,7 @@ packer.startup(function()
     -- ** TODO reformat files
     -- ** LSP (nav, completions,etc)
     -- ** higlighting (for my custom comments at least, probably port this to an existing extension is best) - I bet some manage diff syntax types (treesitter, vim regex, syntect? sublimetext)
-    
+
     use {
         'nvim-treesitter/playground',
         after = 'nvim-treesitter'
@@ -287,7 +287,7 @@ packer.startup(function()
 
 
     -- highlight just word under cursor:
-    use "RRethy/vim-illuminate"  -- FYI integrates with treesitter! :TSModuleInfo adds illuminate column
+    use "RRethy/vim-illuminate" -- FYI integrates with treesitter! :TSModuleInfo adds illuminate column
     --    sadly, not the current selection (https://github.com/RRethy/vim-illuminate/issues/196), I should write this plugin
     --    can use modes_denylist to hide in visual mode if I wanna use smth else in that mode to highlight selections: https://github.com/RRethy/vim-illuminate/issues/141
     --    customizing:
@@ -512,7 +512,7 @@ vim.cmd([[
     " :highlight clear Comment
     " :highlight Comment guifg='#27AE60'  " Ok I can change the fg color here! wth... but somehow this controls the final value
     "
-    " FYI! foo the 
+    " FYI! foo the
     " !!! is this smth to do with treesitter or other syntax mechanism? if I run  syntax on this lua file only my syntax items are defined... as expected and their colors (even fg) are correct but then they dont render that way for FG (only BG does) here
 
     command CheckSyntaxIDs :echo synIDattr(synID(line('.'), col('.'), 1), 'name') . ' -> ' . synIDattr(synID(line('.'), col('.'), 0), 'name')
@@ -552,7 +552,7 @@ vim.cmd([[
 -- OBSERVATIONS:
 --   both bg and gui=bold are applied correctly to lua files... just the fg color?!
 --   nvim -u NONE ~/.config/nvim/init.lua
---     run w/ no plugins => then 
+--     run w/ no plugins => then
 --       :source  ~/.config/nvim/immediate.highlights.vim
 --            WORKS! applies my style to FYI below
 
@@ -568,7 +568,6 @@ vim.cmd([[
 -- " !!! BRING THIS BACK
 vim.api.nvim_create_autocmd("BufReadPost", {
     callback = function()
-        -- vim.cmd("source ~/.config/nvim/highlights.vim") 
+        vim.cmd("source ~/.config/nvim/highlights.vim")
     end
 })
-
