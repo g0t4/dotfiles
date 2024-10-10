@@ -1,4 +1,5 @@
 ---@diagnostic disable: undefined-global
+---@diagnostic disable: lowercase-global
 --- " FYI!
 ---  can I block specific globals (i.e.  vim/use/etc)
 
@@ -391,14 +392,54 @@ vim.opt for list/map options (access as lua tables, i.e. append/prepend/remove e
 
 vim.cmd([[
     " TODO fix when close the original file doesn't show
-    command DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis
+    command! DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis
                   \ | wincmd p | diffthis
 ]])
+
+
+
+
 
 -- *** Ctrl+S to save http://vim.wikia.com/wiki/Saving_a_file
 vim.cmd("nnoremap <c-s> :w<CR>")
 vim.cmd("vnoremap <c-s> <Esc><c-s>gv") -- esc=>normal mode => save => reselect visual mode, not working... figure out later
 vim.cmd("inoremap <c-s> <c-o><c-s>")
+
+function print_captures_at_cursor()
+    local myTable = vim.treesitter.get_captures_at_cursor()
+    for key, value in pairs(myTable) do
+        print(key, value)
+    end
+end
+
+vim.cmd("nnoremap <leader>pc :lua print_captures_at_cursor()<CR>")
+local ts = vim.treesitter
+
+function get_language_at_cursor()
+    -- Get the parser for the current buffer
+    local parser = ts.get_parser(0)
+
+    -- Get the cursor position (row and col are 1-based, need 0-based for Tree-sitter)
+    local cursor_row, cursor_col = unpack(vim.api.nvim_win_get_cursor(0))
+
+    -- Find the language at the current cursor position
+    local lang_tree = parser:language_for_range({ cursor_row - 1, cursor_col, cursor_row - 1, cursor_col })
+
+    if lang_tree then
+        local lang_name = lang_tree:lang()
+        return lang_name
+    else
+        return "Unknown"
+    end
+end
+
+-- print("Language at cursor: " .. get_language_at_cursor())
+
+-- map [Shift]+Ctrl+Tab to move forward/backward through files to edit, in addition to Ctrl+o/i
+--   that is my goto key combo, perhaps I should learn o/i instead... feel like many apps use -/+ for this, vscode for shizzle
+vim.api.nvim_set_keymap('n', '<C-->', '<C-o>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<C-S-->', '<C-i>', { noremap = true, silent = true })
+--  FYI in iTerm => Profiles -> Keys -> Key Mappings -> removed "send 0x1f" on "ctrl+-" ... if that breaks something, well you have this note :)
 
 
 -- *** ASK OPENAI wrapper
@@ -498,6 +539,7 @@ vim.cmd([[
 
 ]])
 
+-- " *** FOO
 
 vim.cmd([[
 
@@ -525,7 +567,7 @@ vim.cmd([[
     " FYI! foo the
     " !!! is this smth to do with treesitter or other syntax mechanism? if I run  syntax on this lua file only my syntax items are defined... as expected and their colors (even fg) are correct but then they dont render that way for FG (only BG does) here
 
-    command CheckSyntaxIDs :echo synIDattr(synID(line('.'), col('.'), 1), 'name') . ' -> ' . synIDattr(synID(line('.'), col('.'), 0), 'name')
+    command! CheckSyntaxIDs :echo synIDattr(synID(line('.'), col('.'), 1), 'name') . ' -> ' . synIDattr(synID(line('.'), col('.'), 0), 'name')
 
     "source ~/.config/nvim/highlights.vim
 
