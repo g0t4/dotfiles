@@ -210,7 +210,6 @@ packer.startup(function()
             }
         }
     })
-    require("telescope").load_extension("emoji")
 
     local builtin = require('telescope.builtin')
     --
@@ -222,7 +221,7 @@ packer.startup(function()
     -- TODO habituate Ctrl+V (open vertical split diff!)
     vim.keymap.set('n', '<leader>fg', builtin.live_grep, { desc = 'Telescope live grep' }) -- proj search
     -- PRN ag? https://github.com/kelly-lin/telescope-ag  (extension  to telescope) => others https://github.com/nvim-telescope/telescope.nvim/wiki/Extensions
-    vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = 'Telescope buffers' })
+    vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = 'Telescope buffers' }) -- leave as fb b/c over time I suspect I'll make more use of buffers?
     vim.keymap.set('n', '<leader>fh', builtin.help_tags, { desc = 'Telescope help tags' }) -- awesome
     vim.keymap.set('n', '<leader>fc', builtin.commands, { desc = 'Telescope commands' })
     vim.keymap.set('n', '<leader>fo', builtin.oldfiles, { desc = 'Telescope old files' })
@@ -239,10 +238,15 @@ packer.startup(function()
     use 'nvim-tree/nvim-web-devicons' -- icons to the right of find_files
     --
     use 'xiyaowong/telescope-emoji.nvim'
+    require("telescope").load_extension("emoji")
     vim.keymap.set('n', '<leader>fe', ":Telescope emoji<CR>")
     --
     use 'catgoose/telescope-helpgrep.nvim'
     vim.keymap.set('n', '<leader>fgh', ":Telescope helpgrep<CR>", { desc = 'Telescope helpgrep' })
+    --
+    use 'https://github.com/nvim-telescope/telescope-file-browser.nvim'
+    require("telescope").load_extension "file_browser" -- this is why setting PWD matters when launching vim, at least for repo type projects, like w/ vscode
+    vim.keymap.set('n', '<leader>br', ":Telescope file_browser<CR>")  -- PRN shift+cmd+e would rock, can I get cmd to work in terminal w/ iTerm2?, I suspect iterm is always gonna snipe it
     --
     -- frecency on all pickers:
     -- use 'prochri/telescope-all-recent.nvim'
