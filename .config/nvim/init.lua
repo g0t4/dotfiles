@@ -178,7 +178,12 @@ packer.startup(function()
     use {
         'nvim-telescope/telescope.nvim',
         tag = '0.1.8',
-        requires = { { 'nvim-lua/plenary.nvim' } }
+        requires = {
+            { 'nvim-lua/plenary.nvim' },
+            { 'nvim-tree/nvim-web-devicons' }, -- icons to the right of find_files
+        },
+        -- suggested `rg` (ripgrep) which I have installed already https://github.com/BurntSushi/ripgrep
+
     }
     require('telescope').setup({
         defaults = {
