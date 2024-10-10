@@ -182,7 +182,7 @@ packer.startup(function()
             { 'nvim-lua/plenary.nvim' },
             { 'nvim-tree/nvim-web-devicons' }, -- icons to the right of find_files
         },
-        -- suggested `rg` (ripgrep) which I have installed already https://github.com/BurntSushi/ripgrep
+        -- use `:checkhealth telescope` to verify deps
 
     }
     require('telescope').setup({
