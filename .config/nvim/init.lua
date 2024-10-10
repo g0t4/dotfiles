@@ -421,13 +421,11 @@ local ts = vim.treesitter
 local ts_utils = require 'nvim-treesitter.ts_utils'
 
 vim.cmd [[
- " explore capture => highlighting
-   "notes treesitter
-   "captures are linked to existing highlight groups (IIUC for the most part)
-    ":hi TestNewHigh gui=bold guibg=red guifg=blue
-   ":hi link @comment TestNewHigh
-    "     -- open :InspectTree to see highlight on the corresponding part of the tree!
-
+   " explore capture => highlighting
+   " captures are linked to existing highlight groups (IIUC for the most part), i.e.: 
+   :hi TestNewHigh gui=bold guibg=red guifg=blue " create new highlight rule
+   :hi link @comment TestNewHigh  " link capture to it
+   " FYI here is logic to add higlighting to a node: (is this used by extensions?)  https://github.com/nvim-treesitter/nvim-treesitter/blob/master/lua/nvim-treesitter/ts_utils.lua#L268
 ]]
 function print_ts_cursor_details()
     -- FYI, use :InspectTree => :lua vim.treesitter.inspect_tree() => interactive select/inspect left/right split
