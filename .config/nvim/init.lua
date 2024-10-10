@@ -508,8 +508,6 @@ vim.cmd([[
 ]])
 
 
-
-
 -- *** treesitter helpers, i.e. for understanding highlighting issues
 
 function print_captures_at_cursor()
@@ -532,6 +530,8 @@ local ts_utils = require 'nvim-treesitter.ts_utils'
 -- TODO! treesitter-highlight-priority ... sets nvim_buf_set_extmark() to 100.. so how does that relate to my syntax/highlight groups? how do I see that?
 vim.cmd [[
 
+    " FYI if I can also remove @comments capture linkage https://github.com/nvim-treesitter/nvim-treesitter/blob/master/queries/lua/highlights.scm#L229-L230
+    " TODO add custom capture that targets subset of comments insted of using regex, so I can target both syntax and/or treesitter highlight systems
 
     " !!! TMP fix sets no bg color on comments ... which means here then in nested multiline vimscript lua's orange color applies which is fine ish
     " FYI! NBD that color is orange here... I can fix the overlapping priority later... heck even the lua issue isn't a deal breaker as all other files seem to not have issue (yet, maybe treesitter on them will cause issues)
