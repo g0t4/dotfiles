@@ -248,6 +248,16 @@ packer.startup(function()
     -- ** TODO reformat files
     -- ** LSP (nav, completions,etc)
     -- ** higlighting (for my custom comments at least, probably port this to an existing extension is best) - I bet some manage diff syntax types (treesitter, vim regex, syntect? sublimetext)
+    
+    use {
+        'nvim-treesitter/playground',
+        after = 'nvim-treesitter'
+    } -- playground for treesitter (try out treesitter queries)
+    -- :TSHighlightCapturesUnderCursor
+
+
+
+
 
     -- TODO can I map [shift]+ctrl+tab to move forward/backward through files to edit? (like in vscode)
     --    edit #
@@ -479,6 +489,7 @@ vim.cmd([[
     " :highlight clear Comment
     " :highlight Comment guifg='#27AE60'  " Ok I can change the fg color here! wth... but somehow this controls the final value
     "
+    " FYI! foo the 
     " !!! is this smth to do with treesitter or other syntax mechanism? if I run  syntax on this lua file only my syntax items are defined... as expected and their colors (even fg) are correct but then they dont render that way for FG (only BG does) here
 
     command CheckSyntaxIDs :echo synIDattr(synID(line('.'), col('.'), 1), 'name') . ' -> ' . synIDattr(synID(line('.'), col('.'), 0), 'name')
@@ -525,6 +536,7 @@ vim.cmd([[
 -- HIGHLIGHT ISSUE 1 => most files the style didn't apply (until I discovered you reload the file and that registers the autocmd FileType entries again and that must be overrdiing whatever is blocking the first registration which was before many plugin highlights...)
 -- ensure highlight style applied late in load process (before buffer ready but just after file read)...  b/c right now if these are registered earlier (ie before packer plugins...) then the style wont take effect until next file opened
 --
+-- FYI! foo
 -- !!! BRING THIS BACK
 vim.api.nvim_create_autocmd("BufReadPost", {
     callback = function()
