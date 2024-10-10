@@ -37,10 +37,10 @@ autocmd FileType * syn match CommentTripleQuestion /\(--\|#\|"\|\/\/\|\/\*\)\s*?
 " ** matcher:
 " *** matcher:
 autocmd FileType * hi CommentSingleAsterisk guifg='#ff00c3'
-autocmd FileType * syn match CommentSingleAsterisk /\(#\|"\|\/\/\|\/\*\)\s*\*\**\s.*/ " using () to match ? or ?? only... ok to match more but just lets be specific so order isn't as important 
+autocmd FileType * syn match CommentSingleAsterisk /\(--\|#\|"\|\/\/\|\/\*\)\s*\*\**\s.*/ " using () to match ? or ?? only... ok to match more but just lets be specific so order isn't as important 
 " ***! matcher:
 autocmd FileType * hi CommentTripleAsterisk guibg='#ff52d1' guifg='#1f1f1f' gui=bold " FYI not same pink as foreground version (lightened up using alpha in vscode mapped to RGB for here)
-autocmd FileType * syn match CommentTripleAsterisk /\(#\|"\|\/\/\|\/\*\)\s*\*\*\*\!\s.*/ " shouldn't ? need to be escaped?! this breaks when I do that
+autocmd FileType * syn match CommentTripleAsterisk /\(--\|#\|"\|\/\/\|\/\*\)\s*\*\*\*\!\s.*/ " shouldn't ? need to be escaped?! this breaks when I do that
 
 
 " use to test when this is applied/loaded

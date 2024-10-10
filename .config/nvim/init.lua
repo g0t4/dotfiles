@@ -510,7 +510,7 @@ vim.cmd([[
 
 
 
---- *** treesitter helpers, i.e. for understanding highlighting issues
+-- *** treesitter helpers, i.e. for understanding highlighting issues
 
 function print_captures_at_cursor()
     local myTable = vim.treesitter.get_captures_at_cursor()
@@ -525,7 +525,7 @@ local ts = vim.treesitter
 local ts_utils = require 'nvim-treesitter.ts_utils'
 
 -- TODO format vimscript (nested in lua)
-
+-- ***! foo
 
 -- TODO! test lua comment
 -- TODO test too
