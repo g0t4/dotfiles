@@ -298,6 +298,26 @@ packer.startup(function()
     -- highlight selections like vscode:
     --     TODO TRY THIS...
     --      use "aaron-p1/match-visual.nvim" -- this one seems to do what I want, but I need to test it out
+
+
+    -- TODO foo the bar
+    -- FIXME fo asdf foajho
+    use {
+        "folke/todo-comments.nvim",
+        requires = "nvim-lua/plenary.nvim",
+        config = function()
+            require("todo-comments").setup {
+                signs = true, -- show icons in the gutter
+                -- You can add custom keywords and styles here
+                -- keywords = {
+                --   TODO = { icon = " ", color = "info" },
+                --   FIXME = { icon = " ", color = "error" },
+                --   NOTE = { icon = " ", color = "hint" },
+                --   CUSTOM = { icon = " ", color = "warning" }, -- Custom keyword example
+                -- },
+            }
+        end
+    }
 end)
 
 -- force myself to learn hjkl to move up/down/left/right at least in normal mode?
