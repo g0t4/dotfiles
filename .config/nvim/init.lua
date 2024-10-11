@@ -144,8 +144,8 @@ packer.startup(function()
     local bar = foo
     -- " define keymap for foo to trigger format in orma
     -- TODO xmode too?
-    vim.keymap.set('n', '<S-M-f>', ":call CocAction('format')<CR>", { desc = 'Coc format' }) -- vscode format call...can this handle selection only?
-    -- TODO how do i get coc-format-selection to work? in visual mode or?
+    vim.keymap.set('n', '<S-M-f>', ":call CocAction('format')<CR>", { desc = 'Coc format (normal mode)' }) -- vscode format call...can this handle selection only?
+    vim.keymap.set('i', '<S-M-f>', "<Esc>:call CocAction('format')<CR>a", { desc = 'Coc format (insert mode)' })
 
     -- TODO vim freezes when I use this for local a below
     -- rename:
