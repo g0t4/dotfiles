@@ -366,9 +366,9 @@ packer.startup(function()
     --   !!! ShowKeyWes (echo getchar()) to see what is reported to VIM
     vim.api.nvim_set_keymap('n', '<C-l>', ':NvimTreeFindFileToggle<CR>', { noremap = true, silent = true }) -- dont want to use ctrl+l anyways, so set this up to stop it
     vim.api.nvim_set_keymap('n', '<C-S-l>', ':NvimTreeFindFileToggle<CR>', { noremap = true, silent = true })
-    -- FYI cmd+shift+e => F2 in iterm settings
-    vim.api.nvim_set_keymap('n', '<F2>', ':NvimTreeFindFileToggle<CR>', { noremap = true, silent = true }) -- dont want to use ctrl+l anyways, so set this up to stop it
-
+    -- FYI cmd+shift+e => Esc+OQ iiterm settings => F2 (in term)
+    vim.api.nvim_set_keymap('n', '<F2>', ':NvimTreeFindFile<CR>', { noremap = true, silent = true }) -- dont want to use ctrl+l anyways, so set this up to stop it
+    -- FYI can just use my Ctrl+d (:quit) shortcut to close explorer pane, no need to hijack cmd+b in iterm settings
 
     local tree_actions = {
         {
