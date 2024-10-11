@@ -214,10 +214,11 @@ packer.startup(function()
                 layout_strategy = 'vertical',
 
             },
-            -- TODO review config recipes: https://github.com/nvim-telescope/telescope.nvim/wiki/Configuration-Recipes
-            -- TODO don't hide git files in dotfiles hidden dirs? also need recency on file list to mimic code IMO.. or that extension that makes it so you reopen picker state verbatim
             find_files = {
                 layout_strategy = 'vertical',
+                find_command = { "rg", "--files", "--hidden", "--glob", "!**/.git/*" },
+                -- https://github.com/nvim-telescope/telescope.nvim/wiki/Configuration-Recipes#file-and-text-search-in-hidden-files-and-directories
+                -- PRN use git_files and fallback to find_files: Falling back to find_files if git_files can't find a .git directory, wouldn't this be missing new files?
             },
         }
     })
