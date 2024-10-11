@@ -791,3 +791,15 @@ vim.cmd [[
     "" highlighting doesn't work on first load of session (until e! or run filetype detect)
     "autocmd SessionLoadPost * silent! filetype detect
 ]]
+
+-- -- *** folding config
+-- --   (move to treesitter config?)
+-- --   https://neovim.io/doc/user/fold.html
+-- --   TODO setup per filetype? limit to lua for now?
+-- vim.o.foldmethod = 'expr'
+-- vim.o.foldexpr = 'nvim_treesitter#foldexpr()'
+-- -- vim.o.foldenable = false -- no autofolding, just manual after open file
+-- -- TODO setup saving folds, sessionoptions has folds but... those might be diff folds? (b/c I tried foldopen command and then zo/zc no longer worked until restart vim, is there a sep fold system?)
+--
+--
+
