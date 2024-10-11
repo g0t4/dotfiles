@@ -357,7 +357,10 @@ packer.startup(function()
     -- PRN revisit what key combos are unused and how I might use them
     -- i.e. <F-X> <S-F-X> and others with Func keys, and then you can map other keys to these using iterm's escape codes (keys tab, in profile or globally), i.e. cmd+shift+E on mac => F2 => :nmap <F12> :NvimTreeFindFileToggle<CR>
     --   !!! ShowKeyWes (echo getchar()) to see what is reported to VIM
+    vim.api.nvim_set_keymap('n', '<C-l>', ':NvimTreeFindFileToggle<CR>', { noremap = true, silent = true }) -- dont want to use ctrl+l anyways, so set this up to stop it
     vim.api.nvim_set_keymap('n', '<C-S-l>', ':NvimTreeFindFileToggle<CR>', { noremap = true, silent = true })
+    -- FYI cmd+shift+e => F2 in iterm settings
+    vim.api.nvim_set_keymap('n', '<F2>', ':NvimTreeFindFileToggle<CR>', { noremap = true, silent = true }) -- dont want to use ctrl+l anyways, so set this up to stop it
 
 
     -- TODO can I map [shift]+ctrl+tab to move forward/backward through files to edit? (like in vscode)
