@@ -843,3 +843,32 @@ vim.cmd [[
 -- -- TODO setup saving folds, sessionoptions has folds but... those might be diff folds? (b/c I tried foldopen command and then zo/zc no longer worked until restart vim, is there a sep fold system?)
 --
 --
+
+vim.cmd [[
+    function! BuildGitHubLink()
+      " Get current file path relative to the git root
+      let l:filepath = system('git rev-parse --show-prefix') . expand('%')
+
+      " Get current branch
+      let l:branch = system('git rev-parse --abbrev-ref HEAD')
+
+      " Get GitHub remote URL and clean it up
+      let l:remote_url = system('git config --get remote.origin.url')
+      let l:remote_url = substitute(l:remote_url, 'git@github.com:', 'https://github.com/', '')
+      let l:remote_url = substitute(l:remote_url, '.git\n$', '', '')
+
+      " Get current line number
+      let l:line_number = line('.')
+
+      " Build the full GitHub link
+      let l:github_url = l:remote_url . '/blob/' . l:branch . '/' . l:filepath . '#L' . l:line_number
+
+      " trim new lines
+      let l:github_url = substitute(l:github_url, '\n', '', 'g')
+
+      " Copy the GitHub link to the clipboard
+      let @+ = l:github_url
+      echo 'GitHub link copied: ' . l:github_url
+    endfunction
+
+]]
