@@ -845,7 +845,8 @@ vim.cmd [[
 --
 
 vim.cmd [[
-    command! BuildGitHubLink call BuildGitHubLink()
+
+    command! CopyGitHubLink call CopyGitHubLink()
 
     function! BuildGitHubLink()
       " Get current file path relative to the git root
@@ -867,10 +868,23 @@ vim.cmd [[
 
       " trim new lines
       let l:github_url = substitute(l:github_url, '\n', '', 'g')
-
-      " Copy the GitHub link to the clipboard
-      let @+ = l:github_url
-      echo 'GitHub link copied: ' . l:github_url
+      return l:github_url
     endfunction
+
+    function! CopyGitHubLink()
+        let l:github_url = BuildGitHubLink()
+        let @+ = l:github_url
+        echo 'GitHub link copied: ' . l:github_url
+    endfunction
+
+    command! OpenGitHubLink call OpenGitHubLink()
+
+    function! OpenGitHubLink()
+        let l:github_url = BuildGitHubLink()
+        " # has to be escaped, smth with vim dispatch (no alternate file name to substitute for '#')
+        let l:escaped_url = substitute(l:github_url, '#', '\\#', 'g')
+        execute 'silent !open "' . l:escaped_url . '"'
+    endfunction
+
 
 ]]
