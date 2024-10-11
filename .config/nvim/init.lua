@@ -624,9 +624,7 @@ vim.cmd(":set guicursor=i:block")
 
 vim.cmd([[
 
-    " *** misc key maps
-    " ctrl+d to quit (in select situations) ... is this really a good idea?
-    :nnoremap <C-d> :quit<CR>
+    "PAGE UP... find a diff way wes    ":nnoremap <C-d> :quit<CR>
 
     " *** fix delete key reporting
     "    it reports 63272 which isn't mapped to <Del>
