@@ -1347,3 +1347,7 @@ if command -q nvim
     abbr vim nvim
     abbr vimc command vim # fallback to vim if nvim issues
 end
+
+
+
+

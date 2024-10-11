@@ -291,7 +291,17 @@ packer.startup(function()
 
 
 
-
+    -- works, but embedded doc types (mermaid, plantUML dont work and it seems this ext is not supported?) scrolls great though and beautifully renders markdown 
+    -- use {
+    --     "iamcco/markdown-preview.nvim",
+    --     -- run = "cd app && npm install",
+    --     -- setup = function()
+    --     --     vim.g.mkdp_filetypes = {
+    --     --         "markdown" }
+    --     -- end,
+    --     -- ft = { "markdown" },
+    -- }
+    --
 
     -- TODO can I map [shift]+ctrl+tab to move forward/backward through files to edit? (like in vscode)
     --    edit #
@@ -699,13 +709,15 @@ vim.api.nvim_create_autocmd("BufReadPost", {
 --
 
 vim.cmd [[
-
-    " Automatically save session when leaving Vim
-    autocmd VimLeavePre * if (isdirectory(".git") || filereadable(".git")) | mksession! session.vim | endif
-
-    " Automatically load session when opening Vim in a Git repository
-    autocmd VimEnter * if filereadable("session.vim") | source session.vim | endif
-
-    " highlighting doesn't work on first load of session (until e! or run filetype detect)
-    autocmd SessionLoadPost * silent! filetype detect
+    "" todo setup auto session extension instead? AND an extension for tracking session history (*like vscode recent folders feature*)...
+    "" hopefully something has a telescope compat picker to select the session to restore?
+    "
+    "" Automatically save session when leaving Vim
+    "autocmd VimLeavePre * if (isdirectory(".git") || filereadable(".git")) | mksession! session.vim | endif
+    "
+    "" Automatically load session when opening Vim in a Git repository
+    "autocmd VimEnter * if filereadable("session.vim") | source session.vim | endif
+    "
+    "" highlighting doesn't work on first load of session (until e! or run filetype detect)
+    "autocmd SessionLoadPost * silent! filetype detect
 ]]
