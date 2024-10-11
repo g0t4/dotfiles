@@ -355,7 +355,8 @@ packer.startup(function()
     require("nvim-tree").setup()
 
     -- PRN revisit what key combos are unused and how I might use them
-    -- i.e. <F-X> <S-F-X> and others with Func keys, and then you can map other keys to these using iterm's escape codes (keys tab, in profile or globally), i.e. cmd+shift+E on mac => F12 => :nmap <F12> :NvimTreeFindFileToggle<CR>
+    -- i.e. <F-X> <S-F-X> and others with Func keys, and then you can map other keys to these using iterm's escape codes (keys tab, in profile or globally), i.e. cmd+shift+E on mac => F2 => :nmap <F12> :NvimTreeFindFileToggle<CR>
+    --   !!! ShowKeyWes (echo getchar()) to see what is reported to VIM
     vim.api.nvim_set_keymap('n', '<C-S-l>', ':NvimTreeFindFileToggle<CR>', { noremap = true, silent = true })
 
 
