@@ -270,6 +270,12 @@ packer.startup(function()
         'nvim-treesitter/nvim-treesitter',
         run = ':TSUpdate'
     } -- treesitter (syntax highlighting, etc)
+    -- TODO telescope integration => actions menu (https://github.com/nvim-tree/nvim-tree.lua/wiki/Recipes#creating-an-actions-menu-using-telescope)
+    -- FYI `g?` shows help overlay with keymaps for actions
+    -- supports mouse too
+
+
+
 
     -- TSModuleInfo shows what features (highlight, illuminate[if plugin enabled], indent, incremental_selection)
     require 'nvim-treesitter.configs'.setup {
