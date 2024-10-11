@@ -289,9 +289,16 @@ packer.startup(function()
     } -- playground for treesitter (try out treesitter queries)
     -- :TSHighlightCapturesUnderCursor
 
+    -- markdown rendering:
+    -- https://github.com/MeanderingProgrammer/render-markdown.nvim
+    --
+    -- previewer: look promising https://github.com/jannis-baum/vivify.vim
+    -- 
+    -- deno based: https://github.com/toppair/peek.nvim?tab=readme-ov-file ... might be good, appears to maybe have builtin window preview?
 
-
-    -- works, but embedded doc types (mermaid, plantUML dont work and it seems this ext is not supported?) scrolls great though and beautifully renders markdown 
+    -- works, but embedded doc types (mermaid, plantUML dont work and it seems this ext is not supported?) scrolls great though and beautifully renders markdown
+    --   i.e. I ran into this issue: https://github.com/iamcco/markdown-preview.nvim/issues/549 (reported a year ago and no response)
+    --   discussion about alternatives: https://github.com/iamcco/markdown-preview.nvim/issues/688
     -- use {
     --     "iamcco/markdown-preview.nvim",
     --     -- run = "cd app && npm install",
