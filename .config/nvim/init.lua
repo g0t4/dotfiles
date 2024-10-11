@@ -3,6 +3,12 @@
 --- " FYI!
 ---  can I block specific globals (i.e.  vim/use/etc)
 
+-- per nvim-tree docs:
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+vim.opt.termguicolors = true -- s/b already enabled in most of my environments, maybe warn if not?
+
+
 local packer = require 'packer'
 packer.startup(function()
     -- on changes, resource this file and :PackerSync
@@ -342,6 +348,15 @@ packer.startup(function()
         end,
         ft = { "markdown" },
     }
+
+
+    -- ctrl+shift+l like feature to open current doc in a tree view and nav to nearby docs
+    use { "nvim-tree/nvim-tree.lua" }
+    require("nvim-tree").setup()
+
+    -- PRN revisit what key combos are unused and how I might use them
+    -- i.e. <F-X> <S-F-X> and others with Func keys, and then you can map other keys to these using iterm's escape codes (keys tab, in profile or globally), i.e. cmd+shift+E on mac => F12 => :nmap <F12> :NvimTreeFindFileToggle<CR>
+    vim.api.nvim_set_keymap('n', '<C-S-l>', ':NvimTreeFindFileToggle<CR>', { noremap = true, silent = true })
 
 
     -- TODO can I map [shift]+ctrl+tab to move forward/backward through files to edit? (like in vscode)
@@ -802,4 +817,3 @@ vim.cmd [[
 -- -- TODO setup saving folds, sessionoptions has folds but... those might be diff folds? (b/c I tried foldopen command and then zo/zc no longer worked until restart vim, is there a sep fold system?)
 --
 --
-
