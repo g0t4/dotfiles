@@ -221,6 +221,10 @@ packer.startup(function()
     --
     vim.cmd("let g:mapleader = ' '")                                                   -- default is '\' which is a bit awkward to reach, gotta take right hand off homerow
     --
+    -- use [shift]+ctrl+p like in vscode (dont worry about using cmd for it... ctrl is portable anyways)
+    vim.keymap.set('n', '<C-p>', builtin.find_files, { desc = 'Telescope find files' }) 
+    vim.keymap.set('n', '<C-S-p>', builtin.commands, { desc = 'Telescope commands' }) -- PRN try this out, see if I like it better
+    --
     vim.keymap.set('n', '<leader>ft', builtin.builtin, { desc = 'Telescope Builtin' }) -- list pickers, select one opens it (like if :Telescope<CR>), shows keymaps too
     --
     vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = 'Telescope find files' })
@@ -356,10 +360,12 @@ packer.startup(function()
     -- TODO telescope integration => actions menu (https://github.com/nvim-tree/nvim-tree.lua/wiki/Recipes#creating-an-actions-menu-using-telescope)
     -- FYI `g?` shows help overlay with keymaps for actions
     -- supports mouse too
-    -- TODO map Cmd+B to close, then use Cmd+Shift+E to open and find file but not Toggle version
 
 
-
+    -- PRN sticky scroll? at least in editor
+    -- fork that might be better: https://github.com/lewis6991/nvim-treesitter-context
+    -- lots of trouble with :  use { "nvim-treesitter/nvim-treesitter-context" }... odd behavior like showing comments at top of func (even if space separated, yuck).. also brittle/unpredictable 
+    -- another option: https://github.com/wellle/context.vim (mentioned by nvim-treesitter-context repo)
 
     -- PRN revisit what key combos are unused and how I might use them
     -- i.e. <F-X> <S-F-X> and others with Func keys, and then you can map other keys to these using iterm's escape codes (keys tab, in profile or globally), i.e. cmd+shift+E on mac => F2 => :nmap <F12> :NvimTreeFindFileToggle<CR>
