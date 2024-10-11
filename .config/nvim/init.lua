@@ -293,22 +293,56 @@ packer.startup(function()
     -- https://github.com/MeanderingProgrammer/render-markdown.nvim
     --
     -- previewer: look promising https://github.com/jannis-baum/vivify.vim
-    -- 
-    -- deno based: https://github.com/toppair/peek.nvim?tab=readme-ov-file ... might be good, appears to maybe have builtin window preview?
-
-    -- works, but embedded doc types (mermaid, plantUML dont work and it seems this ext is not supported?) scrolls great though and beautifully renders markdown
-    --   i.e. I ran into this issue: https://github.com/iamcco/markdown-preview.nvim/issues/549 (reported a year ago and no response)
-    --   discussion about alternatives: https://github.com/iamcco/markdown-preview.nvim/issues/688
-    -- use {
-    --     "iamcco/markdown-preview.nvim",
-    --     -- run = "cd app && npm install",
-    --     -- setup = function()
-    --     --     vim.g.mkdp_filetypes = {
-    --     --         "markdown" }
-    --     -- end,
-    --     -- ft = { "markdown" },
-    -- }
     --
+    -- deno based: https://github.com/toppair/peek.nvim?tab=readme-ov-file ... might be good, appears to maybe have builtin window preview?
+    use {
+        "toppair/peek.nvim",
+        -- event = "VimEnter",
+        run = "deno task --quiet build:fast",
+        config = function()
+            require("peek").setup()
+            vim.api.nvim_create_user_command("PeekOpen", require("peek").open, {})
+            vim.api.nvim_create_user_command("PeekClose", require("peek").close, {})
+        end
+    }
+    require('peek').setup({
+        auto_load = true,        -- whether to automatically load preview when
+        -- entering another markdown buffer
+        close_on_bdelete = true, -- close preview window on buffer delete
+
+        syntax = true,           -- enable syntax highlighting, affects performance
+
+        theme = 'dark',          -- 'dark' or 'light'
+
+        update_on_change = true,
+
+        app = 'browser',
+        -- app = 'webview',          -- 'webview', 'browser', string or a table of strings
+        -- explained below
+
+        filetype = { 'markdown' }, -- list of filetypes to recognize as markdown
+
+        -- relevant if update_on_change is true
+        throttle_at = 200000,   -- start throttling when file exceeds this
+        -- amount of bytes in size
+        throttle_time = 'auto', -- minimum amount of time in milliseconds
+        -- that has to pass before starting new render
+    })
+
+
+    --   works, some samples for embedded docs are indented and work when unindented FYI
+    --   not necessary to `npx yarn build`... `npm install` worked fine for me in the app dir as is show here:
+    --   discussion about if unmaintained... works though so YMMV: https://github.com/iamcco/markdown-preview.nvim/issues/688
+    use {
+        "iamcco/markdown-preview.nvim",
+        run = "cd app && npm install",
+        setup = function()
+            vim.g.mkdp_filetypes = {
+                "markdown" }
+        end,
+        ft = { "markdown" },
+    }
+
 
     -- TODO can I map [shift]+ctrl+tab to move forward/backward through files to edit? (like in vscode)
     --    edit #
