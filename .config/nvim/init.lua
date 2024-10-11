@@ -180,14 +180,6 @@ packer.startup(function()
 
     -- TODO paste with indent?
 
-    -- use { 'wikitopian/hardmode' } -- disable arrow keys in normal mode (force hjkl)
-    --
-    -- force myself to learn hjkl to move up/down/left/right at least in normal mode?
-    vim.keymap.set('n', '<up>', '')    -- disable up arrow
-    vim.keymap.set('n', '<down>', '')  -- disable down arrow
-    vim.keymap.set('n', '<left>', '')  -- disable left arrow
-    vim.keymap.set('n', '<right>', '') -- disable right arrow
-
     use {
         'nvim-telescope/telescope.nvim',
         tag = '0.1.8',
@@ -350,6 +342,10 @@ packer.startup(function()
     })
 
 
+
+
+
+
     --   works, some samples for embedded docs are indented and work when unindented FYI
     --   not necessary to `npx yarn build`... `npm install` worked fine for me in the app dir as is show here:
     --   discussion about if unmaintained... works though so YMMV: https://github.com/iamcco/markdown-preview.nvim/issues/688
@@ -362,6 +358,12 @@ packer.startup(function()
         end,
         ft = { "markdown" },
     }
+
+
+
+
+
+
 
 
     -- ctrl+shift+l like feature to open current doc in a tree view and nav to nearby docs
@@ -409,6 +411,23 @@ packer.startup(function()
     --
     -- :TSInstallInfo
     --
+
+
+    -- force myself to learn hjkl to move up/down/left/right at least in normal mode?, 
+    -- vim.keymap.set('n', '<up>', '')    -- disable up arrow
+    -- vim.keymap.set('n', '<down>', '')  -- disable down arrow
+    -- vim.keymap.set('n', '<left>', '')  -- disable left arrow
+    -- vim.keymap.set('n', '<right>', '') -- disable right arrow
+
+    -- hardtime
+    -- use 'takac/vim-hardtime' -- timer, disable keys
+    use { 'm4xshen/hardtime.nvim', -- tons of features, recommends, block repeated key use, etc 
+        requires = { "MunifTanjim/nui.nvim", "nvim-lua/plenary.nvim" },
+    }
+    require("hardtime").setup()
+    -- 
+
+
 
     -- which-key.nvim
     use {
