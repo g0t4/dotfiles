@@ -48,6 +48,8 @@
         local default_options = {
             finder = finder,
             sorter = sorter,
+            layout_strategy= "cursor", -- place by cursor (ie in tree view)
+            theme = "dropdown", -- TODO why is this not working?
             attach_mappings = function(prompt_buffer_number)
                 local actions = require("telescope.actions")
 
