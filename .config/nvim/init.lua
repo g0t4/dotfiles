@@ -270,12 +270,6 @@ packer.startup(function()
         'nvim-treesitter/nvim-treesitter',
         run = ':TSUpdate'
     } -- treesitter (syntax highlighting, etc)
-    -- TODO telescope integration => actions menu (https://github.com/nvim-tree/nvim-tree.lua/wiki/Recipes#creating-an-actions-menu-using-telescope)
-    -- FYI `g?` shows help overlay with keymaps for actions
-    -- supports mouse too
-
-
-
 
     -- TSModuleInfo shows what features (highlight, illuminate[if plugin enabled], indent, incremental_selection)
     require 'nvim-treesitter.configs'.setup {
@@ -359,6 +353,13 @@ packer.startup(function()
     -- ctrl+shift+l like feature to open current doc in a tree view and nav to nearby docs
     use { "nvim-tree/nvim-tree.lua" }
     require("nvim-tree").setup()
+    -- TODO telescope integration => actions menu (https://github.com/nvim-tree/nvim-tree.lua/wiki/Recipes#creating-an-actions-menu-using-telescope)
+    -- FYI `g?` shows help overlay with keymaps for actions
+    -- supports mouse too
+    -- TODO map Cmd+B to close, then use Cmd+Shift+E to open and find file but not Toggle version 
+
+
+
 
     -- PRN revisit what key combos are unused and how I might use them
     -- i.e. <F-X> <S-F-X> and others with Func keys, and then you can map other keys to these using iterm's escape codes (keys tab, in profile or globally), i.e. cmd+shift+E on mac => F2 => :nmap <F12> :NvimTreeFindFileToggle<CR>
