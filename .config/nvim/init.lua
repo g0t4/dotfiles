@@ -213,22 +213,27 @@ packer.startup(function()
             live_grep = {
                 layout_strategy = 'vertical',
 
-            }
+            },
+            -- TODO review config recipes: https://github.com/nvim-telescope/telescope.nvim/wiki/Configuration-Recipes
+            -- TODO don't hide git files in dotfiles hidden dirs? also need recency on file list to mimic code IMO.. or that extension that makes it so you reopen picker state verbatim
+            find_files = {
+                layout_strategy = 'vertical',
+            },
         }
     })
 
     local builtin = require('telescope.builtin')
     --
-    vim.cmd("let g:mapleader = ' '")                                                   -- default is '\' which is a bit awkward to reach, gotta take right hand off homerow
+    vim.cmd("let g:mapleader = ' '") -- default is '\' which is a bit awkward to reach, gotta take right hand off homerow
     --
     -- use [shift]+ctrl+p like in vscode (dont worry about using cmd for it... ctrl is portable anyways)
-    vim.keymap.set('n', '<C-p>', builtin.find_files, { desc = 'Telescope find files' }) 
-    vim.keymap.set('n', '<C-S-p>', builtin.commands, { desc = 'Telescope commands' }) -- PRN try this out, see if I like it better
+    vim.keymap.set('n', '<C-p>', builtin.find_files, { desc = 'Telescope find files' })
+    vim.keymap.set('n', '<C-S-p>', builtin.commands, { desc = 'Telescope commands' })  -- PRN try this out, see if I like it better
     --
     vim.keymap.set('n', '<leader>ft', builtin.builtin, { desc = 'Telescope Builtin' }) -- list pickers, select one opens it (like if :Telescope<CR>), shows keymaps too
     --
     vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = 'Telescope find files' })
-    -- TODO habituate Ctrl+V (open vertical split diff!)
+    -- FYI habituate Ctrl+V (open vertical split diff!)
     vim.keymap.set('n', '<leader>fg', builtin.live_grep, { desc = 'Telescope live grep' }) -- proj search
     -- PRN ag? https://github.com/kelly-lin/telescope-ag  (extension  to telescope) => others https://github.com/nvim-telescope/telescope.nvim/wiki/Extensions
     vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = 'Telescope buffers' })     -- leave as fb b/c over time I suspect I'll make more use of buffers?
@@ -364,7 +369,7 @@ packer.startup(function()
 
     -- PRN sticky scroll? at least in editor
     -- fork that might be better: https://github.com/lewis6991/nvim-treesitter-context
-    -- lots of trouble with :  use { "nvim-treesitter/nvim-treesitter-context" }... odd behavior like showing comments at top of func (even if space separated, yuck).. also brittle/unpredictable 
+    -- lots of trouble with :  use { "nvim-treesitter/nvim-treesitter-context" }... odd behavior like showing comments at top of func (even if space separated, yuck).. also brittle/unpredictable
     -- another option: https://github.com/wellle/context.vim (mentioned by nvim-treesitter-context repo)
 
     -- PRN revisit what key combos are unused and how I might use them
