@@ -845,6 +845,8 @@ vim.cmd [[
 --
 
 vim.cmd [[
+    command! BuildGitHubLink call BuildGitHubLink()
+
     function! BuildGitHubLink()
       " Get current file path relative to the git root
       let l:filepath = system('git rev-parse --show-prefix') . expand('%')
