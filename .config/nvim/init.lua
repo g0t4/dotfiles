@@ -883,9 +883,19 @@ dotfiles_dir = vim.fn.expand(dotfiles_dir)
 init_dir = dotfiles_dir .. ".config/nvim/init/"
 
 
+
 package.path = package.path .. ';' .. init_dir .. '?.lua'
--- TODO how about for files where order doesn't matter, just load all? file read if need be and require one at a time
-require('github-links')
+
+-- Loop through all Lua files in the directory and require them
+for _, file in ipairs(vim.fn.readdir(init_dir)) do
+    if file:match("%.lua$") then  -- Only require .lua files
+        local module_name = file:gsub("%.lua$", "")  -- Remove ".lua" extension
+        require(module_name)
+    end
+end
+
+-- TODO can I source key ordered files first and will they not be reimported? singletons?
+-- require('github-links')
 
 -- PRN add back if need vim init files
 -- vim.cmd("source " .. init_dir .. "test.vim")
