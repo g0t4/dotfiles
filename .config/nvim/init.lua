@@ -884,6 +884,7 @@ init_dir = dotfiles_dir .. ".config/nvim/init/"
 
 
 package.path = package.path .. ';' .. init_dir .. '?.lua'
+-- TODO how about for files where order doesn't matter, just load all? file read if need be and require one at a time
 require('github-links')
 
 -- PRN add back if need vim init files
