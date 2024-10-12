@@ -886,4 +886,5 @@ init_dir = dotfiles_dir .. ".config/nvim/init/"
 package.path = package.path .. ';' .. init_dir .. '?.lua'
 require('github-links')
 
-vim.cmd("source " .. init_dir .. "test.vim")
+-- PRN add back if need vim init files
+-- vim.cmd("source " .. init_dir .. "test.vim")
