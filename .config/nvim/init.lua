@@ -480,6 +480,11 @@ packer.startup(function()
     --      use "aaron-p1/match-visual.nvim" -- this one seems to do what I want, but I need to test it out
 
 
+
+    --
+    -- use 'NStefan002/screenkey.nvim' -- show key presses in a floating window
+    --  would want some sort of size bump on characters? right? And I dunno about showing all typed chars vs just motions, et al
+
     -- TODO: foo the bar
     --
     -- TODO other (TODO set so not need trailing colon?)
@@ -889,8 +894,8 @@ package.path = package.path .. ';' .. init_dir .. '?.lua'
 -- these don't show up in :scriptnames, can I make them show up there? just src them a diff way that makes them a first class dep?
 require('github-links')
 for _, file in ipairs(vim.fn.readdir(init_dir)) do
-    if file:match("%.lua$") then  -- Only require .lua files
-        local module_name = file:gsub("%.lua$", "")  -- Remove ".lua" extension
+    if file:match("%.lua$") then                    -- Only require .lua files
+        local module_name = file:gsub("%.lua$", "") -- Remove ".lua" extension
         require(module_name)
     end
 end
