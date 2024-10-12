@@ -263,6 +263,13 @@ packer.startup(function()
     -- frecency on all pickers:
     -- use 'prochri/telescope-all-recent.nvim'
     --
+    -- file frecency:
+    --   :Telescope frecency workspace=CWD
+    --      use workspace so files aren't system wide
+    --      I don't like that the list only has previously opened files, I want all of them.. apparently it sounds like if you use an LSP that it can associate workspace files with it all in one go?
+    -- use 'nvim-telescope/telescope-frecency.nvim'
+    -- require('telescope').load_extension('frecency')
+    --
     -- native fzf/fzy compiled extensions (for perf):
     --   https://github.com/nvim-telescope/telescope-fzf-native.nvim
     --   https://github.com/nvim-telescope/telescope-fzy-native.nvim
