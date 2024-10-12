@@ -886,7 +886,8 @@ init_dir = dotfiles_dir .. ".config/nvim/init/"
 
 package.path = package.path .. ';' .. init_dir .. '?.lua'
 
--- Loop through all Lua files in the directory and require them
+-- these don't show up in :scriptnames, can I make them show up there? just src them a diff way that makes them a first class dep?
+require('github-links')
 for _, file in ipairs(vim.fn.readdir(init_dir)) do
     if file:match("%.lua$") then  -- Only require .lua files
         local module_name = file:gsub("%.lua$", "")  -- Remove ".lua" extension
@@ -895,7 +896,6 @@ for _, file in ipairs(vim.fn.readdir(init_dir)) do
 end
 
 -- TODO can I source key ordered files first and will they not be reimported? singletons?
--- require('github-links')
 
 -- PRN add back if need vim init files
 -- vim.cmd("source " .. init_dir .. "test.vim")
