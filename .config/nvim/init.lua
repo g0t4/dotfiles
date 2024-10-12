@@ -895,7 +895,5 @@ for _, file in ipairs(vim.fn.readdir(init_dir)) do
     end
 end
 
--- TODO can I source key ordered files first and will they not be reimported? singletons?
-
 -- PRN add back if need vim init files
 -- vim.cmd("source " .. init_dir .. "test.vim")
