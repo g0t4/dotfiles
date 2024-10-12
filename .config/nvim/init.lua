@@ -420,7 +420,7 @@ packer.startup(function()
     --
 
 
-    -- force myself to learn hjkl to move up/down/left/right at least in normal mode?, 
+    -- force myself to learn hjkl to move up/down/left/right at least in normal mode?,
     -- vim.keymap.set('n', '<up>', '')    -- disable up arrow
     -- vim.keymap.set('n', '<down>', '')  -- disable down arrow
     -- vim.keymap.set('n', '<left>', '')  -- disable left arrow
@@ -428,11 +428,11 @@ packer.startup(function()
 
     -- hardtime
     -- use 'takac/vim-hardtime' -- timer, disable keys
-    use { 'm4xshen/hardtime.nvim', -- tons of features, recommends, block repeated key use, etc 
+    use { 'm4xshen/hardtime.nvim', -- tons of features, recommends, block repeated key use, etc
         requires = { "MunifTanjim/nui.nvim", "nvim-lua/plenary.nvim" },
     }
     require("hardtime").setup()
-    -- 
+    --
 
 
 
@@ -930,17 +930,6 @@ init_dir = dotfiles_dir .. ".config/nvim/init/"
 
 
 package.path = package.path .. ';' .. init_dir .. '?.lua'
-print("package.path:", package.path)
-local config = require('test')  -- 'config.lua' in '/path/to/dir/'
+require('test')
 
 vim.cmd("source " .. init_dir .. "test.vim")
---
-
-
-
-
-
-
-
-
-
