@@ -485,6 +485,12 @@ packer.startup(function()
     -- use 'NStefan002/screenkey.nvim' -- show key presses in a floating window
     --  would want some sort of size bump on characters? right? And I dunno about showing all typed chars vs just motions, et al
 
+    use "norcalli/nvim-colorizer.lua" -- colorize hex codes, etc
+    require("colorizer").setup()
+
+
+    --
+    -- nacro90/numb.nvim -- peek line #s while go to (:123) and hide again after, also other peeks (cursorline)
     -- TODO: foo the bar
     --
     -- TODO other (TODO set so not need trailing colon?)
