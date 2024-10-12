@@ -479,18 +479,12 @@ packer.startup(function()
     --     TODO TRY THIS...
     --      use "aaron-p1/match-visual.nvim" -- this one seems to do what I want, but I need to test it out
 
-
-
-    --
-    -- use 'NStefan002/screenkey.nvim' -- show key presses in a floating window
-    --  would want some sort of size bump on characters? right? And I dunno about showing all typed chars vs just motions, et al
-
     use "norcalli/nvim-colorizer.lua" -- colorize hex codes, etc
     require("colorizer").setup()
 
-
-    --
-    -- nacro90/numb.nvim -- peek line #s while go to (:123) and hide again after, also other peeks (cursorline)
+    -- maybe:
+    --  tjdevries/colorbuddy.nvim -- make it easier to define new color schemes
+    --  nacro90/numb.nvim -- peek line #s while go to (:123) and hide again after, also other peeks (cursorline)
     -- TODO: foo the bar
     --
     -- TODO other (TODO set so not need trailing colon?)
