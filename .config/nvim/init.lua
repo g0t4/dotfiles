@@ -912,3 +912,35 @@ vim.cmd [[
 
 
 ]]
+
+
+-- check for config directory in dotfiles repo
+if vim.fn.isdirectory(vim.fn.expand("~/repos/wes-config")) == 1 then
+    dotfiles_dir = "~/repos/wes-config/wes-bootstrap/subs/dotfiles/"
+else
+    dotfiles_dir = "~/repos/github/g0t4/dotfiles/"
+    if vim.fn.isdirectory(vim.fn.expand(dotfiles_dir)) == 0 then
+        -- abort?
+        echom "dotfiles directory not found, cannot include init/ config"
+        return
+    end
+end
+dotfiles_dir = vim.fn.expand(dotfiles_dir)
+init_dir = dotfiles_dir .. ".config/nvim/init/"
+
+
+package.path = package.path .. ';' .. init_dir .. '?.lua'
+print("package.path:", package.path)
+local config = require('test')  -- 'config.lua' in '/path/to/dir/'
+
+vim.cmd("source " .. init_dir .. "test.vim")
+--
+
+
+
+
+
+
+
+
+
