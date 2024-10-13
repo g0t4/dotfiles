@@ -475,9 +475,10 @@ packer.startup(function()
     --      hi def IlluminatedWordRead gui=underline
     --      hi def IlluminatedWordWrite gui=underline
     --
-    -- highlight selections like vscode:
-    --     TODO TRY THIS...
-    --      use "aaron-p1/match-visual.nvim" -- this one seems to do what I want, but I need to test it out
+
+    -- highlight selections like vscode, w/o limits (200 chars in vscode + no new lines)
+    use "aaron-p1/match-visual.nvim" -- will help me practice using visual mode too
+    -- FYI g,Ctrl-g to show selection length (aside from just highlighting occurrenes of selection)
 
     use "norcalli/nvim-colorizer.lua" -- colorize hex codes, etc
     require("colorizer").setup()
