@@ -873,32 +873,6 @@ vim.cmd [[
 --
 --
 
--- check for config directory in dotfiles repo
-if vim.fn.isdirectory(vim.fn.expand("~/repos/wes-config")) == 1 then
-    dotfiles_dir = "~/repos/wes-config/wes-bootstrap/subs/dotfiles/"
-else
-    dotfiles_dir = "~/repos/github/g0t4/dotfiles/"
-    if vim.fn.isdirectory(vim.fn.expand(dotfiles_dir)) == 0 then
-        -- abort?
-        echom "dotfiles directory not found, cannot include init/ config"
-        return
-    end
-end
-dotfiles_dir = vim.fn.expand(dotfiles_dir)
-init_dir = dotfiles_dir .. ".config/nvim/init/"
-
-
-
-package.path = package.path .. ';' .. init_dir .. '?.lua'
-
--- these don't show up in :scriptnames, can I make them show up there? just src them a diff way that makes them a first class dep?
+-- nvim loads lua modules first from its runtimepath in a lua/ dir (if in a given rtp dir) => TLDR ~/.config/nvim/lua/ is checked first (assuming ~/.config/nvim is first dir in rtp)
+-- FYI these dont show in :scriptnames... not sure they should (would be an explosion of modules if requires showed up there)
 require('github-links')
-for _, file in ipairs(vim.fn.readdir(init_dir)) do
-    if file:match("%.lua$") then                    -- Only require .lua files
-        local module_name = file:gsub("%.lua$", "") -- Remove ".lua" extension
-        require(module_name)
-    end
-end
-
--- PRN add back if need vim init files
--- vim.cmd("source " .. init_dir .. "test.vim")
