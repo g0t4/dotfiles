@@ -15,6 +15,8 @@ vim.cmd("let g:mapleader = ' '")          -- default is '\' which is a bit awkwa
 
 -- TODO what do I actaully need here? move any non critical parts elsewhere
 
+vim.opt.termguicolors = true -- s/b already enabled in most of my environments, maybe warn if not?
+
 vim.o.ignorecase = true -- ignore case when searching
 
 vim.cmd [[

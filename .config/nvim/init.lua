@@ -14,7 +14,6 @@ do return end
 -- per nvim-tree docs:
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
-vim.opt.termguicolors = true -- s/b already enabled in most of my environments, maybe warn if not?
 
 -- !!! TODO remove packer dirs and cache 
 
