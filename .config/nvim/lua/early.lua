@@ -10,6 +10,8 @@ vim.cmd([[
     au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 ]])
 
+-- must come before plugins that use it to define keys
+vim.cmd("let g:mapleader = ' '")          -- default is '\' which is a bit awkward to reach, gotta take right hand off homerow
 
 
 vim.o.ignorecase = true -- ignore case when searching
@@ -37,3 +39,4 @@ vim.cmd [[
     "                   <80>kr     " w/o the iterm setting fix
     "         btw, vim classic always has the longer version regardless of iterm2 setting
 ]]
+
