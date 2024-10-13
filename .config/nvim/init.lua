@@ -3,6 +3,20 @@
 --- " FYI!
 ---  can I block specific globals (i.e.  vim/use/etc)
 
+-- TODO extract "early.lua"
+-- early (so if something fails, I still have this minimal functionality (like restore position,  that I was likely just editing where mistake was made))
+--" Uncomment the following to have Vim jump to the last position when reopening a file
+vim.cmd([[
+    au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+]])
+--
+-- *** searching
+vim.o.ignorecase = true -- ignore case when searching
+
+
+
+
+
 -- per nvim-tree docs:
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
@@ -514,16 +528,7 @@ vim.cmd('colorscheme codedark') -- beautiful!
 -- set termguicolors -- seems already set (tested in iterm2)
 --
 
--- *** searching
-vim.o.ignorecase = true -- ignore case when searching
-
 -- FYI has('mouse') => nvi which is very close to what I had in vim ('a') ... only change if issue arises
-
---" Uncomment the following to have Vim jump to the last position when reopening a file
-vim.cmd([[
-    au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
-]])
--- TODO how does neovim not have this by default?
 
 --- clipboard
 vim.o.clipboard = 'unnamedplus' -- use system clipboard
