@@ -98,19 +98,6 @@ packer.startup(function()
     -- :TSInstallInfo
 
 
-    -- force myself to learn hjkl to move up/down/left/right at least in normal mode?,
-    -- vim.keymap.set('n', '<up>', '')    -- disable up arrow
-    -- vim.keymap.set('n', '<down>', '')  -- disable down arrow
-    -- vim.keymap.set('n', '<left>', '')  -- disable left arrow
-    -- vim.keymap.set('n', '<right>', '') -- disable right arrow
-
-    -- hardtime
-    -- use 'takac/vim-hardtime' -- timer, disable keys
-    use { 'm4xshen/hardtime.nvim', -- tons of features, recommends, block repeated key use, etc
-        requires = { "MunifTanjim/nui.nvim", "nvim-lua/plenary.nvim" },
-    }
-    require("hardtime").setup()
-    --
 
 
 
