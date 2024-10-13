@@ -48,24 +48,31 @@ return {
 
     {
         'catgoose/telescope-helpgrep.nvim',
+        dependencies = {
+            { 'nvim-telescope/telescope.nvim' },
+        },
+        cmd = { 'Telescope helpgrep' }, -- lazy load on command used
+        keys = {
+            { '<leader>h', ':Telescope helpgrep<CR>', mode = 'n' },
+        },
         config = function()
-            -- TODO lazy load considerations?
             require('telescope').load_extension('helpgrep') -- ensure shows in :Telescope list/completion
-
-            -- PRN redirect F1 to this? or maybe F1 to grep help tags? .. what does F1 currently map to?
-            vim.keymap.set('n', '<leader>h', ":Telescope helpgrep<CR>", { desc = 'Telescope helpgrep' }) -- not just help tags! (btw help tags already works via cmd line, dont need it here too)
         end,
 
     },
 
     {
         'xiyaowong/telescope-emoji.nvim',
+        dependencies = {
+            { 'nvim-telescope/telescope.nvim' },
+        },
+        cmd = { 'Telescope emoji' }, -- lazy load on command used
+        keys = {
+            { '<leader>te', ':Telescope emoji<CR>', mode = 'n' },
+            -- use `<leader>t*` for less used pickers, may be slow due to overlap in <leader> keymaps but NBD
+        },
         config = function()
-            -- TODO lazy load considerations? load after telescope loads? or?
-            -- TODO if telescope is loaded, does this show up under :Telescope e<TAB>?
             require("telescope").load_extension("emoji")
-
-            vim.keymap.set('n', '<leader>te', ":Telescope emoji<CR>") -- use `<leader>t*` for less used pickers, may be slow due to overlap in <leader> keymaps but NBD
         end,
     }
     --
