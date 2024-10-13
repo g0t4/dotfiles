@@ -24,6 +24,10 @@ return {
             { "<M-down>",  "<C-W><down>",                 mode = "n", noremap = true, silent = true },
         },
         config = function()
+            -- per nvim-tree docs:
+            vim.g.loaded_netrw = 1
+            vim.g.loaded_netrwPlugin = 1
+
             require("nvim-tree").setup({
                 renderer = {
 

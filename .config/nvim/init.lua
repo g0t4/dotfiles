@@ -13,9 +13,6 @@ require('localz.misc')
 
 do return end
 
--- per nvim-tree docs:
-vim.g.loaded_netrw = 1
-vim.g.loaded_netrwPlugin = 1
 
 -- !!! TODO remove packer dirs and cache 
 
