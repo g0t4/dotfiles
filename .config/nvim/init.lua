@@ -165,6 +165,12 @@ packer.startup(function()
 
 
     -- *** surround related extensions
+    --
+    -- surround with - add/rm () {} [] `` '' "" etc - like vscode, I really like that in vscode, esp in markdown to use code blocks on existing content
+    use 'kylechui/nvim-surround' -- dot repeat! (wrap multiple things), jump to nearest pair?
+    -- require('nvim-surround').setup({}) -- ds" (removes "), ysiw" (select word and "" around it), cs"' (change ' to ") (ys/cs/ds are action prefixes) - CONFIRMED ys/cs/ds aren't in use in normal mode so they aren't colliding with other keys
+    -- use 'machakann/vim-sandwich' -- alternative
+    --
     -- PRN revisit autoclose, try https://github.com/windwp/nvim-autopairs (uses treesitter, IIUC)
     -- -- https://github.com/m4xshen/autoclose.nvim
     -- use 'm4xshen/autoclose.nvim' -- auto close brackets, quotes, etc
@@ -239,6 +245,7 @@ packer.startup(function()
     -- PRN ag? https://github.com/kelly-lin/telescope-ag  (extension  to telescope) => others https://github.com/nvim-telescope/telescope.nvim/wiki/Extensions
     --
     use 'catgoose/telescope-helpgrep.nvim'
+    -- PRN redirect F1 to this? or maybe F1 to grep help tags? .. what does F1 currently map to?
     require('telescope').load_extension('helpgrep') -- ensure shows in :Telescope list/completion
     vim.keymap.set('n', '<leader>h', ":Telescope helpgrep<CR>", { desc = 'Telescope helpgrep' }) -- not just help tags! (btw help tags already works via cmd line, dont need it here too)
     --
