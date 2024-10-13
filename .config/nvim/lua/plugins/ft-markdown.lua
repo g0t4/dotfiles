@@ -23,16 +23,17 @@ return {
 
     {
         "toppair/peek.nvim",
-        event = "VeryLazy",
+        ft = { "markdown" },
+        -- event = "VeryLazy", -- this is in peek's docs but I changed to ft (above), why load until open a md file?
         build = "deno task --quiet build:fast",
         config = function()
             require("peek").setup({
                 app = "webview", -- or "browser"
             })
+            -- perfectly fine to leave these here, don't show them until needed? 
             vim.api.nvim_create_user_command("PeekOpen", require("peek").open, {})
             vim.api.nvim_create_user_command("PeekClose", require("peek").close, {})
         end,
-        -- deno based: https://github.com/toppair/peek.nvim?tab=readme-ov-file ... might be good, appears to maybe have builtin window preview?
         -- install deno on system
     }
 
