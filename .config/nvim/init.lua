@@ -44,15 +44,6 @@ packer.startup(function()
     -- https://nvimluau.dev/meznaric-conmenu  # context menu for nvim (ie format,  code actions, would this be useful?)
     -- https://nvimluau.dev/hood-popui-nvim  # boxes around UI elemennts like hover boxes?
     --
-    -- mark unique letters to jump to:
-    --  use "unblevable/quick-scope" -- quick scope marks jump
-    use "jinh0/eyeliner.nvim"   -- lua impl, validated this actually works good and the color is blue OOB which is nicely subtle, super useful on long lines!
-    --
-    use "karb94/neoscroll.nvim" -- smooth scrolling? ok I like this a bit ... lets see if I keep it (ctrl+U/D,B/F has an animated scroll basically) - not affect hjkl/gg/G
-    -- also works with zb/zt/zz which I wasn't aware of but looks useful => zz = center current line! zt/zb = curr line to top or bottom... LOVE IT!
-    -- this scratches an itch I had about how it is hard to tell where I am jumping to with page up/down half page up /down etc... this makes it obvious where the movement is headed, long term I might become annoyed by this but its a useful idea... after all we have half page up/down me thinks for a reason that you can see the scroll easier than one full page jump
-    require('neoscroll').setup()
-    --
 
 
     -- PRN indent guides (vertically, like vscode plugin)
