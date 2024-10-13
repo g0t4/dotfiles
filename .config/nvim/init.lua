@@ -185,7 +185,7 @@ packer.startup(function()
     --
     -- })
     --
-    -- FYI I don't need autoclosing tags, copilot does this for me, and it suggests adding them after I add the content 
+    -- FYI I don't need autoclosing tags, copilot does this for me, and it suggests adding them after I add the content
     --   PLUS when I use auto close end tag, it conflicts with copilot suggestions until I break a line... so disable this for now
     --   PRN maybe I can configure this to do renames only? (not add on open tag), that said how often do I do that, I dunno?
     -- use 'windwp/nvim-ts-autotag' -- auto close html tags, auto rename closing too
@@ -237,7 +237,7 @@ packer.startup(function()
     vim.cmd("let g:mapleader = ' '") -- default is '\' which is a bit awkward to reach, gotta take right hand off homerow
     --
     vim.keymap.set('n', '<C-p>', builtin.find_files, { desc = 'Telescope find files' })
-    vim.keymap.set('n', '<C-S-p>', builtin.commands, { desc = 'Telescope commands' })  -- PRN try this out, see if I like it better
+    vim.keymap.set('n', '<C-S-p>', builtin.commands, { desc = 'Telescope commands' }) -- PRN try this out, see if I like it better
     --
     vim.keymap.set('n', '<leader>t', builtin.builtin, { desc = 'Telescope Builtin' }) -- list pickers, select one opens it (like if :Telescope<CR>), shows keymaps too
     --
@@ -247,7 +247,7 @@ packer.startup(function()
     --
     use 'catgoose/telescope-helpgrep.nvim'
     -- PRN redirect F1 to this? or maybe F1 to grep help tags? .. what does F1 currently map to?
-    require('telescope').load_extension('helpgrep') -- ensure shows in :Telescope list/completion
+    require('telescope').load_extension('helpgrep')                                              -- ensure shows in :Telescope list/completion
     vim.keymap.set('n', '<leader>h', ":Telescope helpgrep<CR>", { desc = 'Telescope helpgrep' }) -- not just help tags! (btw help tags already works via cmd line, dont need it here too)
     --
     vim.keymap.set('n', '<leader>s', builtin.git_status, { desc = 'Telescope git status' })
@@ -659,13 +659,13 @@ vim.cmd([[
     "                   <80>kr     " w/o the iterm setting fix
     "         btw, vim classic always has the longer version regardless of iterm2 setting
 
-    
+
 
     "" copilot consider map to ctrl+enter instead of tab so IIUC other completions still work, O
     "imap <silent><script><expr> <C-CR> copilot#Accept("\\<CR>")
     "let g:copilot_no_tab_map = 1
     "" ok I kinda like ctrl+enter for copilot suggestions (vs enter for completions in general (coc)) but for now I will put tab back and see if I have any issues with it and swap this back in if so
-         
+
     function! ToggleCopilot()
         " FYI https://github.com/github/copilot.vim/blob/release/autoload/copilot.vim
 
