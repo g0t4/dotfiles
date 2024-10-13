@@ -29,7 +29,6 @@ packer.startup(function()
     use 'Mofiqul/vscode.nvim'     -- use "vscode" ... I added this in neovim, though my other theme is fine too it seems
     use 'tomasiser/vim-code-dark' -- use "codedark" from my vimrc
 
-    use 'github/copilot.vim'
 
 
     ---
@@ -79,9 +78,6 @@ packer.startup(function()
         " diagnostics appear/become resolved
         set signcolumn=yes
 
-        "
-        "" TODO how to reconcile coc + copilot?
-        ""
         "" Use tab for trigger completion with characters ahead and navigate
         "" NOTE: There's always complete item selected by default, you may want to enable
         "" no select by `"suggest.noselect": true` in your configuration file
@@ -591,62 +587,6 @@ vim.cmd([[
 -- cursor block in insert:
 vim.cmd(":set guicursor=i:block")
 
-
-vim.cmd([[
-
-    "PAGE UP... find a diff way wes    ":nnoremap <C-d> :quit<CR>
-
-    " *** fix delete key reporting
-    "    it reports 63272 which isn't mapped to <Del>
-    "    :echo getchar()  => type the delete key => shows 63272 (whereas vim classic shows <80>kD)
-    "       interesting, insert key (above delete) shows <80>kI ... which vim classic also reports, likewise pgup/pgdown show <80>kP/<80>kN in both
-    inoremap <Char-63272> <Del>
-    cnoremap <Char-63272> <Del>
-    " in normal mode, just del current char
-    nnoremap <Char-63272> x
-    "
-    " *** show key reported:
-    command! ShowKeyWes echo getchar()
-    "
-    " *** alt key troubles
-    "   fixed w/ iterm setting for now...
-    "       Profiles -> Keys -> Left Option Key: Meta (then alt+right works accept-word,  also alt+[/] cycles suggestions, and ctrl+alt+right accepts next line)
-    "   fixes several default copilot keybindings
-    "   notes:
-    "     getchar() w/ alt+right =>
-    "         <80><fc>^H<80>kr     " with the iterm setting fix
-    "                   <80>kr     " w/o the iterm setting fix
-    "         btw, vim classic always has the longer version regardless of iterm2 setting
-
-
-
-    "" copilot consider map to ctrl+enter instead of tab so IIUC other completions still work, O
-    "imap <silent><script><expr> <C-CR> copilot#Accept("\\<CR>")
-    "let g:copilot_no_tab_map = 1
-    "" ok I kinda like ctrl+enter for copilot suggestions (vs enter for completions in general (coc)) but for now I will put tab back and see if I have any issues with it and swap this back in if so
-
-    function! ToggleCopilot()
-        " FYI https://github.com/github/copilot.vim/blob/release/autoload/copilot.vim
-
-        " FYI only global toggle, not toggling buffer local
-
-        " PRN save across sessions? maybe modify a file that is read on startup (not this file, I want it out of vimrc)
-
-        if copilot#Enabled()
-            Copilot disable
-        else
-            Copilot enable
-        endif
-
-        " echo "copilot is: " . (g:copilot_enabled ? "on" : "off")
-        Copilot status " visual confirmation - precise about global vs buffer local too
-    endfunction
-
-    :inoremap <F12> <Esc>:call ToggleCopilot()<CR>a
-    " :inoremap <F12> <C-o>:call ToggleCopilot()<CR> " on empty, indented line, causes cursor to revert to start of line afterwards
-    :nnoremap <F12> :call ToggleCopilot()<CR>
-
-]])
 
 
 -- *** treesitter helpers, i.e. for understanding highlighting issues

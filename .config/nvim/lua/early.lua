@@ -14,5 +14,26 @@ vim.cmd([[
 
 vim.o.ignorecase = true -- ignore case when searching
 
-
-
+vim.cmd [[
+    " *** fix delete key reporting
+    "    it reports 63272 which isn't mapped to <Del>
+    "    :echo getchar()  => type the delete key => shows 63272 (whereas vim classic shows <80>kD)
+    "       interesting, insert key (above delete) shows <80>kI ... which vim classic also reports, likewise pgup/pgdown show <80>kP/<80>kN in both
+    inoremap <Char-63272> <Del>
+    cnoremap <Char-63272> <Del>
+    " in normal mode, just del current char
+    nnoremap <Char-63272> x
+    "
+    " *** show key reported:
+    command! ShowKeyWes echo getchar()
+    "
+    " *** alt key troubles
+    "   fixed w/ iterm setting for now...
+    "       Profiles -> Keys -> Left Option Key: Meta (then alt+right works accept-word,  also alt+[/] cycles suggestions, and ctrl+alt+right accepts next line)
+    "   fixes several default copilot keybindings
+    "   notes:
+    "     getchar() w/ alt+right =>
+    "         <80><fc>^H<80>kr     " with the iterm setting fix
+    "                   <80>kr     " w/o the iterm setting fix
+    "         btw, vim classic always has the longer version regardless of iterm2 setting
+]]
