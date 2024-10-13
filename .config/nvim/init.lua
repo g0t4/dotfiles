@@ -11,12 +11,8 @@ require("localz.github-links")
 require('localz.tabs')
 require('localz.misc')
 
-do return end
-
 
 -- !!! TODO remove packer dirs and cache 
-
-packer.startup(function()
 
 
     -- TODO FORMATTER focused extension:
@@ -121,48 +117,11 @@ packer.startup(function()
     --         }
     --     end
     -- }
-end)
--- TODO: port from vimrc
-
-
-
-
--- FYI has('mouse') => nvi which is very close to what I had in vim ('a') ... only change if issue arises
-
---[[
-NOTES (vimscript => lua)
-
-vim.cmd({cmd}) to execute a vimscript command
-
-vim.o (== :set)
-    https://neovim.io/doc/user/lua.html#vim.o
-vim.opt for list/map options (access as lua tables, i.e. append/prepend/remove elements)
-    https://neovim.io/doc/user/lua.html#vim.opt
-]] --
-
-vim.cmd([[
-    " TODO fix when close the original file doesn't show
-    command! DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis
-                  \ | wincmd p | diffthis
-]])
 
 
 
 
 
--- *** Ctrl+S to save http://vim.wikia.com/wiki/Saving_a_file
-vim.cmd("nnoremap <c-s> :w<CR>")
-vim.cmd("vnoremap <c-s> <Esc><c-s>gv") -- esc=>normal mode => save => reselect visual mode, not working... figure out later
-vim.cmd("inoremap <c-s> <c-o><c-s>")
-
-
-
-
--- map [Shift]+Ctrl+Tab to move forward/backward through files to edit, in addition to Ctrl+o/i
---   that is my goto key combo, perhaps I should learn o/i instead... feel like many apps use -/+ for this, vscode for shizzle
-vim.api.nvim_set_keymap('n', '<C-->', '<C-o>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<C-S-->', '<C-i>', { noremap = true, silent = true })
---  FYI in iTerm => Profiles -> Keys -> Key Mappings -> removed "send 0x1f" on "ctrl+-" ... if that breaks something, well you have this note :)
 
 
 -- *** ASK OPENAI wrapper
