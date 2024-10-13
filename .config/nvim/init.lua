@@ -1,7 +1,6 @@
 ---@diagnostic disable: undefined-global
 ---@diagnostic disable: lowercase-global
---- " FYI!
----  can I block specific globals (i.e.  vim/use/etc)
+
 require("early")
 
 
@@ -165,7 +164,7 @@ packer.startup(function()
     vim.api.nvim_create_user_command("OR", "call CocActionAsync('runCommand', 'editor.action.organizeImport')", {})
 
 
-
+    -- *** surround related extensions
     -- TODO revisit autoclose, try https://github.com/windwp/nvim-autopairs (uses treesitter, IIUC)
     -- -- https://github.com/m4xshen/autoclose.nvim
     -- use 'm4xshen/autoclose.nvim' -- auto close brackets, quotes, etc
@@ -179,6 +178,8 @@ packer.startup(function()
     --   -- ' disable_command_mode = true, -- disable in command line mode AND search /, often I want to search for one " or [[ and dont want them closed
     --
     -- })
+    use 'windwp/nvim-ts-autotag' -- auto close html tags, auto rename closing too
+    require('nvim-ts-autotag').setup()
 
     -- TODO paste with indent?
 
