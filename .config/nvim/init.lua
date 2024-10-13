@@ -8,6 +8,7 @@ require("bootstrap-lazy")
 
 -- after plugin loader
 require("localz.github-links")
+require('localz.tabs')
 
 do return end
 
@@ -452,7 +453,3 @@ vim.cmd [[
 -- -- TODO setup saving folds, sessionoptions has folds but... those might be diff folds? (b/c I tried foldopen command and then zo/zc no longer worked until restart vim, is there a sep fold system?)
 --
 --
-
--- nvim loads lua modules first from its runtimepath in a lua/ dir (if in a given rtp dir) => TLDR ~/.config/nvim/lua/ is checked first (assuming ~/.config/nvim is first dir in rtp)
--- FYI these dont show in :scriptnames... not sure they should (would be an explosion of modules if requires showed up there)
-require('github-links')
