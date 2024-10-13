@@ -16,50 +16,11 @@ vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 vim.opt.termguicolors = true -- s/b already enabled in most of my environments, maybe warn if not?
 
+-- !!! TODO remove packer dirs and cache 
 
-local packer = require 'packer'
 packer.startup(function()
-    -- on changes, resource this file and :PackerSync
-    -- :PackerCompile
-    -- :PackerClean   (remove unused)
-    -- :PackerInstall (install new)
-    -- :PackerUpdate
-    -- :PackerSync (update+compile)
-    --     nvim observation: install window opens and can use `q` to close without :q
-
-    -- packer manages packer, is that wise?
-    -- w/o this packer asks to remove packer, so I added this, run :PackerCompile, then :PackerSync and it doesn't ask to remove packer now
-    use 'wbthomason/packer.nvim'
 
 
-    -- *** surround related extensions
-    --
-    -- surround with - add/rm () {} [] `` '' "" etc - like vscode, I really like that in vscode, esp in markdown to use code blocks on existing content
-    use 'kylechui/nvim-surround' -- dot repeat! (wrap multiple things), jump to nearest pair?
-    require('nvim-surround').setup({})
-
-    -- use 'machakann/vim-sandwich' -- alternative?
-    --
-    -- PRN revisit autoclose, try https://github.com/windwp/nvim-autopairs (uses treesitter, IIUC)
-    -- -- https://github.com/m4xshen/autoclose.nvim
-    -- use 'm4xshen/autoclose.nvim' -- auto close brackets, quotes, etc
-    -- require('autoclose').setup({
-    --   -- ? how do I feel about this and copilot coexisting? seem to work ok, but will closing it out ever be an issue for suggestions
-    --   -- ? review keymaps for conflicts with coc/copilot/etc
-    --   filetypes = { 'lua', 'python', 'javascript', 'typescript', 'c', 'cpp', 'rust', 'go', 'html', 'css', 'json', 'yaml', 'markdown' },
-    --   ignored_next_char = "[%w%.]", -- ignore if next char is a word or period
-    --
-    --   -- ' disable_command_mode = true, -- disable in command line mode AND search /, often I want to search for one " or [[ and dont want them closed
-    --
-    -- })
-    --
-    -- FYI I don't need autoclosing tags, copilot does this for me, and it suggests adding them after I add the content
-    --   PLUS when I use auto close end tag, it conflicts with copilot suggestions until I break a line... so disable this for now
-    --   PRN maybe I can configure this to do renames only? (not add on open tag), that said how often do I do that, I dunno?
-    -- use 'windwp/nvim-ts-autotag' -- auto close html tags, auto rename closing too
-    -- require('nvim-ts-autotag').setup()
-
-    -- TODO paste with indent?
 
     use {
         'nvim-treesitter/nvim-treesitter',
