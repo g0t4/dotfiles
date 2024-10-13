@@ -178,8 +178,12 @@ packer.startup(function()
     --   -- ' disable_command_mode = true, -- disable in command line mode AND search /, often I want to search for one " or [[ and dont want them closed
     --
     -- })
-    use 'windwp/nvim-ts-autotag' -- auto close html tags, auto rename closing too
-    require('nvim-ts-autotag').setup()
+    --
+    -- FYI I don't need autoclosing tags, copilot does this for me, and it suggests adding them after I add the content 
+    --   PLUS when I use auto close end tag, it conflicts with copilot suggestions until I break a line... so disable this for now
+    --   PRN maybe I can configure this to do renames only? (not add on open tag), that said how often do I do that, I dunno?
+    -- use 'windwp/nvim-ts-autotag' -- auto close html tags, auto rename closing too
+    -- require('nvim-ts-autotag').setup()
 
     -- TODO paste with indent?
 
