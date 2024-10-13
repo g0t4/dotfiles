@@ -375,8 +375,9 @@ packer.startup(function()
     -- https://nvimluau.dev/meznaric-conmenu  # context menu for nvim (ie format,  code actions, would this be useful?)
     -- https://nvimluau.dev/hood-popui-nvim  # boxes around UI elemennts like hover boxes?
     --
-    -- use "unblevable/quick-scope" -- quick scope marks jump points (DOES NOT SEEM TO WORK correctly? was highlighting wrong chars IIUC.. and not underline so I would need to change its config as the colors were also hard to see by default)
-    -- https://github.com/jinh0/eyeliner.nvim # lua duplicate
+    -- mark unique letters to jump to:
+    --  use "unblevable/quick-scope" -- quick scope marks jump
+    use "jinh0/eyeliner.nvim"   -- lua impl, validated this actually works good and the color is blue OOB which is nicely subtle, super useful on long lines!
     --
     use "karb94/neoscroll.nvim" -- smooth scrolling? ok I like this a bit ... lets see if I keep it (ctrl+U/D,B/F has an animated scroll basically) - not affect hjkl/gg/G
     -- also works with zb/zt/zz which I wasn't aware of but looks useful => zz = center current line! zt/zb = curr line to top or bottom... LOVE IT!
