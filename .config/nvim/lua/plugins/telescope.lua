@@ -6,8 +6,15 @@ return {
         dependencies = {
             { 'nvim-lua/plenary.nvim' },
         },
+        cmd = { 'Telescope' }, -- lazy load on command used
+        keys = {
+            { '<C-p>',     ':Telescope find_files<CR>', mode = 'n' },
+            { '<C-S-p>',   ':Telescope commands<CR>',   mode = 'n' }, -- PRN try this out, see if I like it better
+            { '<leader>t', ':Telescope<CR>',            mode = 'n' }, -- list pickers, select one opens it (like if :Telescope<CR>), shows keymaps too
+            { '<leader>g', ':Telescope live_grep<CR>',  mode = 'n' }, -- proj search
+            { '<leader>s', ':Telescope git_status<CR>', mode = 'n' },
+        },
         config = function()
-            -- TODO lazy load on commands / keys (redefine keys using spec, same with commands if I want those to appear globally and be lazy loaded too)
             require('telescope').setup({
                 defaults = {
                     layout_strategy = 'flex', -- based on width (kinda like this actually and it resizes with the window perfectly)
@@ -36,19 +43,6 @@ return {
                     },
                 }
             })
-
-            local builtin = require('telescope.builtin')
-
-            vim.keymap.set('n', '<C-p>', builtin.find_files, { desc = 'Telescope find files' })
-            vim.keymap.set('n', '<C-S-p>', builtin.commands, { desc = 'Telescope commands' }) -- PRN try this out, see if I like it better
-
-            vim.keymap.set('n', '<leader>t', builtin.builtin, { desc = 'Telescope Builtin' }) -- list pickers, select one opens it (like if :Telescope<CR>), shows keymaps too
-
-            -- FYI habituate Ctrl+V (open vertical split diff!)
-            vim.keymap.set('n', '<leader>g', builtin.live_grep, { desc = 'Telescope live grep' }) -- proj search
-            -- PRN ag? https://github.com/kelly-lin/telescope-ag  (extension  to telescope) => others https://github.com/nvim-telescope/telescope.nvim/wiki/Extensions
-
-            vim.keymap.set('n', '<leader>s', builtin.git_status, { desc = 'Telescope git status' })
         end,
     },
 
