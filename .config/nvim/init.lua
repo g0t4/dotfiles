@@ -21,36 +21,6 @@ vim.opt.termguicolors = true -- s/b already enabled in most of my environments, 
 packer.startup(function()
 
 
-
-    use {
-        'nvim-treesitter/nvim-treesitter',
-        run = ':TSUpdate'
-    } -- treesitter (syntax highlighting, etc)
-
-    -- TSModuleInfo shows what features (highlight, illuminate[if plugin enabled], indent, incremental_selection)
-    require 'nvim-treesitter.configs'.setup {
-        ensure_installed = { "c", "lua", "python", "javascript", "typescript", "html", "css", "json", "yaml", "markdown", "vim" }, -- one of "all", "maintained" (parsers with maintainers), or a list of languages
-        sync_install = false,
-        auto_install = true,                                                                                                       -- PRN try tree-sitter CLI too, outside of neovim
-        -- ignore_install
-        highlight = {
-            enable = true, -- enable for all
-            disable = {},  -- confirmed TSModuleInfo shows X for these languages
-        },
-        -- additional_vim_regex_highlighting = false, -- not having any effect on my regex highlighting... is that intended?
-        -- doesn't look like it's doing anything right now.. no languages are marked as highlighted (nor anything else)
-    }
-    -- ** TODO completions
-    -- ** TODO reformat files
-    -- ** LSP (nav, completions,etc)
-    -- ** higlighting (for my custom comments at least, probably port this to an existing extension is best) - I bet some manage diff syntax types (treesitter, vim regex, syntect? sublimetext)
-
-    use {
-        'nvim-treesitter/playground',
-        after = 'nvim-treesitter'
-    } -- playground for treesitter (try out treesitter queries)
-    -- :TSHighlightCapturesUnderCursor
-
     -- TODO FORMATTER focused extension:
     -- use 'stevearc/conform.nvim' -- can replace LSP formatters that are problematic, per file type... DEFINITELY LOOK INTO THIS
 
