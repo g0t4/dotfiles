@@ -13,6 +13,7 @@ vim.cmd([[
 -- must come before plugins that use it to define keys
 vim.cmd("let g:mapleader = ' '")          -- default is '\' which is a bit awkward to reach, gotta take right hand off homerow
 
+-- TODO what do I actaully need here? move any non critical parts elsewhere
 
 vim.o.ignorecase = true -- ignore case when searching
 
@@ -39,4 +40,8 @@ vim.cmd [[
     "                   <80>kr     " w/o the iterm setting fix
     "         btw, vim classic always has the longer version regardless of iterm2 setting
 ]]
+
+--- clipboard
+vim.o.clipboard = 'unnamedplus' -- use system clipboard
+-- TODO what do I want for clipboard?
 

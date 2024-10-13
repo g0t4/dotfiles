@@ -262,9 +262,6 @@ end)
 
 -- FYI has('mouse') => nvi which is very close to what I had in vim ('a') ... only change if issue arises
 
---- clipboard
-vim.o.clipboard = 'unnamedplus' -- use system clipboard
--- TODO what do I want for clipboard?
 
 -- wrap settings
 vim.o.wrap = false  -- global nowrap, consider local settings for this instead
