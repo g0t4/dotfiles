@@ -1,8 +1,13 @@
 ---@diagnostic disable: undefined-global
 ---@diagnostic disable: lowercase-global
 
+-- before plugin loader
 require("early")
+
 require("bootstrap-lazy")
+
+-- after plugin loader
+require("localz.github-links")
 
 do return end
 
