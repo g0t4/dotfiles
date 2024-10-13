@@ -21,5 +21,26 @@ return {
         end,
     },
 
+    {
+        "toppair/peek.nvim",
+        event = "VeryLazy",
+        build = "deno task --quiet build:fast",
+        config = function()
+            require("peek").setup({
+                app = "webview", -- or "browser"
+            })
+            vim.api.nvim_create_user_command("PeekOpen", require("peek").open, {})
+            vim.api.nvim_create_user_command("PeekClose", require("peek").close, {})
+        end,
+        -- deno based: https://github.com/toppair/peek.nvim?tab=readme-ov-file ... might be good, appears to maybe have builtin window preview?
+        -- install deno on system
+    }
+
+    -- NOTES:
+    -- markdown rendering:
+    -- https://github.com/MeanderingProgrammer/render-markdown.nvim
+    --
+    -- previewer: look promising https://github.com/jannis-baum/vivify.vim
+    --
 
 }

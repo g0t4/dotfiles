@@ -307,46 +307,6 @@ packer.startup(function()
     } -- playground for treesitter (try out treesitter queries)
     -- :TSHighlightCapturesUnderCursor
 
-    -- markdown rendering:
-    -- https://github.com/MeanderingProgrammer/render-markdown.nvim
-    --
-    -- previewer: look promising https://github.com/jannis-baum/vivify.vim
-    --
-    -- deno based: https://github.com/toppair/peek.nvim?tab=readme-ov-file ... might be good, appears to maybe have builtin window preview?
-    use {
-        "toppair/peek.nvim",
-        -- event = "VimEnter",
-        run = "deno task --quiet build:fast",
-        config = function()
-            require("peek").setup()
-            vim.api.nvim_create_user_command("PeekOpen", require("peek").open, {})
-            vim.api.nvim_create_user_command("PeekClose", require("peek").close, {})
-        end
-    }
-    require('peek').setup({
-        auto_load = true,        -- whether to automatically load preview when
-        -- entering another markdown buffer
-        close_on_bdelete = true, -- close preview window on buffer delete
-
-        syntax = true,           -- enable syntax highlighting, affects performance
-
-        theme = 'dark',          -- 'dark' or 'light'
-
-        update_on_change = true,
-
-        app = 'browser',
-        -- app = 'webview',          -- 'webview', 'browser', string or a table of strings
-        -- explained below
-
-        filetype = { 'markdown' }, -- list of filetypes to recognize as markdown
-
-        -- relevant if update_on_change is true
-        throttle_at = 200000,   -- start throttling when file exceeds this
-        -- amount of bytes in size
-        throttle_time = 'auto', -- minimum amount of time in milliseconds
-        -- that has to pass before starting new render
-    })
-
     -- TODO FORMATTER focused extension:
     -- use 'stevearc/conform.nvim' -- can replace LSP formatters that are problematic, per file type... DEFINITELY LOOK INTO THIS
 
@@ -423,11 +383,7 @@ packer.startup(function()
     -- :TSInstall lua
     -- :TSBufEnable highlight # now TSModuleInfo shows lua!... TODO what is gonna be different? I need to research what to expect and see if I can even identify differences
     --
-    -- FYI markdown (via :scriptnames) seems to load vim syntax definitions (unlike lua)
-    --    THOUGH, on disk there are syntax/ lua.vim definitions too, just not loaded by default (IIAC b/c ftplugin/lua.lua says to use tree sitter instead)
-    --
     -- :TSInstallInfo
-    --
 
 
     -- force myself to learn hjkl to move up/down/left/right at least in normal mode?,
