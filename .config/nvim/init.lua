@@ -26,9 +26,6 @@ packer.startup(function()
     -- w/o this packer asks to remove packer, so I added this, run :PackerCompile, then :PackerSync and it doesn't ask to remove packer now
     use 'wbthomason/packer.nvim'
 
-    use 'Mofiqul/vscode.nvim'     -- use "vscode" ... I added this in neovim, though my other theme is fine too it seems
-    use 'tomasiser/vim-code-dark' -- use "codedark" from my vimrc
-
 
     -- *** surround related extensions
     --
@@ -227,11 +224,6 @@ packer.startup(function()
     use "aaron-p1/match-visual.nvim" -- will help me practice using visual mode too
     -- FYI g,Ctrl-g to show selection length (aside from just highlighting occurrenes of selection)
 
-    use "norcalli/nvim-colorizer.lua" -- colorize hex codes, etc
-    require("colorizer").setup()
-
-    -- maybe:
-    --  tjdevries/colorbuddy.nvim -- make it easier to define new color schemes
     --  nacro90/numb.nvim -- peek line #s while go to (:123) and hide again after, also other peeks (cursorline)
     -- TODO: foo the bar
     --
@@ -265,10 +257,8 @@ packer.startup(function()
 end)
 -- TODO: port from vimrc
 
--- *** color scheme
-vim.cmd('colorscheme codedark') -- beautiful!
--- set termguicolors -- seems already set (tested in iterm2)
---
+
+
 
 -- FYI has('mouse') => nvi which is very close to what I had in vim ('a') ... only change if issue arises
 
