@@ -31,7 +31,7 @@ packer.startup(function()
 
 
     ---
-    -- alternative but only has completions? https://neovimcraft.com/plugin/hrsh7th/nvim-cmp/
+    -- alternative but only has completions? https://neovimcraft.com/plugin/hrsh7th/nvim-cmp/ (example config: https://github.com/m4xshen/dotfiles/blob/main/nvim/nvim/lua/plugins/completion.lua)
     use { 'neoclide/coc.nvim', branch = 'release' } -- LSP (language server protocol) support, completions, formatting, diagnostics, etc
     -- 0.0.82 is compat with https://microsoft.github.io/language-server-protocol/specifications/specification-3-16/
     -- https://github.com/neoclide/coc.nvim/wiki/Install-coc.nvim (install extensions)
@@ -357,6 +357,20 @@ packer.startup(function()
     -- use 'numToStr/Comment.nvim' -- more features like gc$ (not entire line)
     -- use 'JoosepAlviste/nvim-ts-context-commentstring' -- context aware commentstring, IIUC for issues with embedded languages and commenting... FYI embedded vimscript in lua, gcc works fine
 
+    -- TODO git related
+    -- use "tpope/vim-fugitive" =>
+    -- use "lewis6991/gitsigns.nvim" -- git code lens essentially, never been a huge fan of that in vscode
+
+    -- TODO buffer tabs
+    -- or "akinsho/bufferline.nvim" - buffer tabs at top, not sure I want that actually... I would like some key mappings to nav between open files like vscode (ctrl+tab like)
+
+    -- TODO review list of extensions here:
+    -- https://nvimluau.dev/akinsho-bufferline-nvim (TONS of extensions and alternatives including statusline, bufferline, etc
+
+
+
+    -- PRN customize statusline plugin (though I don't care for a bunch of crap I don't need to see, i.e. git branch shouldn't waste screen space)
+    -- use "nvim-lualine/lualine.nvim" -- maybe useful for small customizations, i.e. I wanna show selected char count in visual selection mode
 
 
 
