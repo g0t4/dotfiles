@@ -1,11 +1,12 @@
 return {
 
-    {
-        'Mofiqul/vscode.nvim'
-    }, -- use "vscode" ... I added this in neovim, though my other theme is fine too it seem
+    -- {
+    --     'Mofiqul/vscode.nvim'
+    -- }, -- use "vscode" ... I added this in neovim, though my other theme is fine too it seem
 
     {
         'tomasiser/vim-code-dark', -- use "codedark" from my vimrc
+	priority = 1000, -- highest to set this first, including termguicolors early too ( random errors tie back to race conditioon on setting termguicolors)
         config = function()
             vim.cmd [[
                 colorscheme codedark

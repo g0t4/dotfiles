@@ -15,6 +15,7 @@ vim.cmd("let g:mapleader = ' '")          -- default is '\' which is a bit awkwa
 
 -- TODO what do I actaully need here? move any non critical parts elsewhere
 
+-- set this very early, will get an empty failure message from lazy load bootstrap if race conditioon is hit and this comes after some other plugins, also not setting first may change the colorscheme loaded by other plugins
 vim.opt.termguicolors = true -- s/b already enabled in most of my environments, maybe warn if not?
 
 vim.o.ignorecase = true -- ignore case when searching
