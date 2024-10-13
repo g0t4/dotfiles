@@ -366,13 +366,24 @@ packer.startup(function()
     -- use {'akinsho/bufferline.nvim', tag = "*", requires = 'nvim-tree/nvim-web-devicons'}
     -- require("bufferline").setup({})
 
+    -- PRN cursor line (highlight selected line AND also does illuminate task of showing current word (under cursor) occurrences underlined)
+    -- yamatsum/nvim-cursorline
+
     -- TODO review list of extensions here:
     -- https://nvimluau.dev/akinsho-bufferline-nvim (TONS of extensions and alternatives including statusline, bufferline, etc
 
-
+    -- PRN indent guides (vertically, like vscode plugin)
+    -- use "lukas-reineke/indent-blankline.nvim"
 
     -- PRN customize statusline plugin (though I don't care for a bunch of crap I don't need to see, i.e. git branch shouldn't waste screen space)
     -- use "nvim-lualine/lualine.nvim" -- maybe useful for small customizations, i.e. I wanna show selected char count in visual selection mode
+
+    -- PRN catppuccin/nvim # UI themes, might have smth good or ideas for my own theme mods
+
+    -- PRN mrjones2014/smart-splits.nvim => better way to manage splits with tmux and nvim? not sure I need this but maybe ideas for doing similar in iterm2?
+
+    -- HRM... tris203/precognition.nvim => shows keys to use to jump to spots... might be a good way for beginners to learn about what keys to use in a situation?
+
 
 
 
