@@ -1,3 +1,9 @@
+-- benefits/differences:
+--  aside rom lazy loading
+--  auto install depencies (dont have to PackerSync)
+--  detects config changes, says reloading... but some things maybe dont reload like keys? TBD
+
+
 -- Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then

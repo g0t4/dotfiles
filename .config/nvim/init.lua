@@ -420,22 +420,6 @@ packer.startup(function()
 
 
 
-    -- PRN sticky scroll? at least in editor
-    -- fork that might be better: https://github.com/lewis6991/nvim-treesitter-context
-    -- lots of trouble with :  use { "nvim-treesitter/nvim-treesitter-context" }... odd behavior like showing comments at top of func (even if space separated, yuck).. also brittle/unpredictable
-    -- another option: https://github.com/wellle/context.vim (mentioned by nvim-treesitter-context repo)
-
-    -- PRN revisit what key combos are unused and how I might use them
-    -- i.e. <F-X> <S-F-X> and others with Func keys, and then you can map other keys to these using iterm's escape codes (keys tab, in profile or globally), i.e. cmd+shift+E on mac => F2 => :nmap <F12> :NvimTreeFindFileToggle<CR>
-    --   !!! ShowKeyWes (echo getchar()) to see what is reported to VIM
-    vim.api.nvim_set_keymap('n', '<C-l>', ':NvimTreeFindFileToggle<CR>', { noremap = true, silent = true }) -- dont want to use ctrl+l anyways, so set this up to stop it
-    vim.api.nvim_set_keymap('n', '<C-S-l>', ':NvimTreeFindFileToggle<CR>', { noremap = true, silent = true })
-    -- FYI cmd+shift+e => Esc+OQ iiterm settings => F2 (in term)
-    vim.api.nvim_set_keymap('n', '<F2>', ':NvimTreeFindFile<CR>', { noremap = true, silent = true }) -- dont want to use ctrl+l anyways, so set this up to stop it
-    -- FYI can just use my Ctrl+d (:quit) shortcut to close explorer pane, no need to hijack cmd+b in iterm settings
-    -- TODO can I map [shift]+ctrl+tab to move forward/backward through files to edit? (like in vscode)
-    --    edit #
-
     -- gelguy/wilder.nvim  # compare to builtin picker and fuzzy finder instead?
     --    port config from vimrc if I use this
     --    can I setup wilder to not show unless I hit tab? I like how that works in nvim's menu picker OOB

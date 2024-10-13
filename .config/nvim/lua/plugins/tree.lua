@@ -10,6 +10,19 @@ return {
         dependencies = {
             "nvim-tree/nvim-web-devicons",
         },
+        keys = {
+            { "<C-l>",     ":NvimTreeFindFileToggle<CR>", mode = "n", noremap = true, silent = true },
+            { "<C-S-l>",   ":NvimTreeFindFileToggle<CR>", mode = "n", noremap = true, silent = true },
+
+            -- FYI cmd+shift+e => Esc+OQ iiterm settings => F2 (in term)
+            { "<F2>",      ":NvimTreeFindFile<CR>",       mode = "n", noremap = true, silent = true },
+
+            -- TODO move elsewhere when I find a spot, use alt instead of ctrl-w for moving between windows
+            { "<M-right>", "<C-W><right>",                mode = "n", noremap = true, silent = true },
+            { "<M-left>",  "<C-W><left>",                 mode = "n", noremap = true, silent = true },
+            { "<M-up>",    "<C-W><up>",                   mode = "n", noremap = true, silent = true },
+            { "<M-down>",  "<C-W><down>",                 mode = "n", noremap = true, silent = true },
+        },
         config = function()
             require("nvim-tree").setup({
                 renderer = {
@@ -18,11 +31,9 @@ return {
                     root_folder_label = ":t", -- `:help filename-modifiers` for more choices, this is aka root_folder_modifier IIRC
                 }
             })
-            -- TODO telescope integration => actions menu (https://github.com/nvim-tree/nvim-tree.lua/wiki/Recipes#creating-an-actions-menu-using-telescope)
+            -- PRN telescope integration => actions menu (https://github.com/nvim-tree/nvim-tree.lua/wiki/Recipes#creating-an-actions-menu-using-telescope)
             -- FYI `g?` shows help overlay with keymaps for actions
-            -- supports mouse too
-        end
-
+        end,
     },
     -- {
     --     "nvim-neo-tree/neo-tree.nvim",
