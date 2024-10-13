@@ -11,6 +11,7 @@ require("localz.github-links")
 require('localz.tabs')
 require('localz.misc')
 require('localz.ask-openai')
+require('localz.my-comment-highlights')
 
 -- !!! TODO remove packer dirs and cache 
 
