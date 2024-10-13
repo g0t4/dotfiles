@@ -2,19 +2,7 @@
 ---@diagnostic disable: lowercase-global
 --- " FYI!
 ---  can I block specific globals (i.e.  vim/use/etc)
-
--- TODO extract "early.lua"
--- early (so if something fails, I still have this minimal functionality (like restore position,  that I was likely just editing where mistake was made))
---" Uncomment the following to have Vim jump to the last position when reopening a file
-vim.cmd([[
-    au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
-]])
---
--- *** searching
-vim.o.ignorecase = true -- ignore case when searching
-
-
-
+require("early")
 
 
 -- per nvim-tree docs:
