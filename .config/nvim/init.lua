@@ -168,8 +168,9 @@ packer.startup(function()
     --
     -- surround with - add/rm () {} [] `` '' "" etc - like vscode, I really like that in vscode, esp in markdown to use code blocks on existing content
     use 'kylechui/nvim-surround' -- dot repeat! (wrap multiple things), jump to nearest pair?
-    -- require('nvim-surround').setup({}) -- ds" (removes "), ysiw" (select word and "" around it), cs"' (change ' to ") (ys/cs/ds are action prefixes) - CONFIRMED ys/cs/ds aren't in use in normal mode so they aren't colliding with other keys
-    -- use 'machakann/vim-sandwich' -- alternative
+    require('nvim-surround').setup({})
+
+    -- use 'machakann/vim-sandwich' -- alternative?
     --
     -- PRN revisit autoclose, try https://github.com/windwp/nvim-autopairs (uses treesitter, IIUC)
     -- -- https://github.com/m4xshen/autoclose.nvim
@@ -349,7 +350,12 @@ packer.startup(function()
         -- that has to pass before starting new render
     })
 
+    -- TODO FORMATTER focused extension:
+    -- use 'stevearc/conform.nvim' -- can replace LSP formatters that are problematic, per file type... DEFINITELY LOOK INTO THIS
 
+    -- TODO COMMENT alternatives:
+    -- use 'numToStr/Comment.nvim' -- more features like gc$ (not entire line)
+    -- use 'JoosepAlviste/nvim-ts-context-commentstring' -- context aware commentstring, IIUC for issues with embedded languages and commenting... FYI embedded vimscript in lua, gcc works fine
 
 
 
@@ -653,6 +659,13 @@ vim.cmd([[
     "                   <80>kr     " w/o the iterm setting fix
     "         btw, vim classic always has the longer version regardless of iterm2 setting
 
+    
+
+    "" copilot consider map to ctrl+enter instead of tab so IIUC other completions still work, O
+    "imap <silent><script><expr> <C-CR> copilot#Accept("\\<CR>")
+    "let g:copilot_no_tab_map = 1
+    "" ok I kinda like ctrl+enter for copilot suggestions (vs enter for completions in general (coc)) but for now I will put tab back and see if I have any issues with it and swap this back in if so
+         
     function! ToggleCopilot()
         " FYI https://github.com/github/copilot.vim/blob/release/autoload/copilot.vim
 
