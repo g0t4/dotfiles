@@ -230,24 +230,21 @@ packer.startup(function()
     --
     vim.cmd("let g:mapleader = ' '") -- default is '\' which is a bit awkward to reach, gotta take right hand off homerow
     --
-    -- use [shift]+ctrl+p like in vscode (dont worry about using cmd for it... ctrl is portable anyways)
     vim.keymap.set('n', '<C-p>', builtin.find_files, { desc = 'Telescope find files' })
     vim.keymap.set('n', '<C-S-p>', builtin.commands, { desc = 'Telescope commands' })  -- PRN try this out, see if I like it better
     --
     vim.keymap.set('n', '<leader>t', builtin.builtin, { desc = 'Telescope Builtin' }) -- list pickers, select one opens it (like if :Telescope<CR>), shows keymaps too
     --
-    -- vim.keymap.set('n', '<leader>f', builtin.find_files, { desc = 'Telescope find files' }) -- using ctrl+p instead
     -- FYI habituate Ctrl+V (open vertical split diff!)
     vim.keymap.set('n', '<leader>g', builtin.live_grep, { desc = 'Telescope live grep' }) -- proj search
     -- PRN ag? https://github.com/kelly-lin/telescope-ag  (extension  to telescope) => others https://github.com/nvim-telescope/telescope.nvim/wiki/Extensions
-    vim.keymap.set('n', '<leader>h', builtin.help_tags, { desc = 'Telescope help tags' }) -- awesome
-    -- vim.keymap.set('n', '<leader>c', builtin.commands, { desc = 'Telescope commands' }) -- using shift+ctrl+p instead 
-    vim.keymap.set('n', '<leader>k', builtin.keymaps, { desc = 'Telescope vim options' })
     --
-    vim.keymap.set('n', '<leader>s', builtin.git_status, { desc = 'Telescope git status' })     -- *** OMFG I am in ❤️ ... omg such a great way to do git status, side by side + search files and wow, dont need to leave my editor... wow
-    --   pickers: https://github.com/nvim-telescope/telescope.nvim?tab=readme-ov-file#pickers
+    use 'catgoose/telescope-helpgrep.nvim'
+    require('telescope').load_extension('helpgrep') -- ensure shows in :Telescope list/completion
+    vim.keymap.set('n', '<leader>h', ":Telescope helpgrep<CR>", { desc = 'Telescope helpgrep' }) -- not just help tags! (btw help tags already works via cmd line, dont need it here too)
     --
-    -- EXTENSIONS:
+    vim.keymap.set('n', '<leader>s', builtin.git_status, { desc = 'Telescope git status' })
+    --
     use 'nvim-tree/nvim-web-devicons' -- icons to the right of find_files
     --
     use 'xiyaowong/telescope-emoji.nvim'
