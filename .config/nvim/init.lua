@@ -165,16 +165,15 @@ packer.startup(function()
 
 
     -- *** surround related extensions
-    -- TODO revisit autoclose, try https://github.com/windwp/nvim-autopairs (uses treesitter, IIUC)
+    -- PRN revisit autoclose, try https://github.com/windwp/nvim-autopairs (uses treesitter, IIUC)
     -- -- https://github.com/m4xshen/autoclose.nvim
     -- use 'm4xshen/autoclose.nvim' -- auto close brackets, quotes, etc
     -- require('autoclose').setup({
-    --   -- TODO how do I feel about this and copilot coexisting? seem to work ok, but will closing it out ever be an issue for suggestions
-    --   -- TODO review keymaps for conflicts with coc/copilot/etc
+    --   -- ? how do I feel about this and copilot coexisting? seem to work ok, but will closing it out ever be an issue for suggestions
+    --   -- ? review keymaps for conflicts with coc/copilot/etc
     --   filetypes = { 'lua', 'python', 'javascript', 'typescript', 'c', 'cpp', 'rust', 'go', 'html', 'css', 'json', 'yaml', 'markdown' },
     --   ignored_next_char = "[%w%.]", -- ignore if next char is a word or period
     --
-    --   -- FOOO isn't there a global option to stop it in command mode?
     --   -- ' disable_command_mode = true, -- disable in command line mode AND search /, often I want to search for one " or [[ and dont want them closed
     --
     -- })
