@@ -1,7 +1,13 @@
 -- benefits/differences:
 --  aside rom lazy loading
 --  auto install depencies (dont have to PackerSync)
+--      SO NICE, no more :wq, :PackerSync, :q, nvim to test a plugin change (also no ordering issues w/ run on a new plugin that caused a failure b/c wasn't yet installed on next restart to install)
+--      TLDR I focus on spec and it handles the rest... what now how
 --  detects config changes, says reloading... but some things maybe dont reload like keys? TBD
+--  `dev` override to use local dep for testing while leave original spec as is
+--  lazy load on: keys, cmds, filetypes, events, ... super flexible
+--     priorities too
+-- forces nice organization of plugins
 
 
 -- Bootstrap lazy.nvim
