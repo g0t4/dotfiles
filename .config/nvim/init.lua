@@ -2,7 +2,9 @@
 ---@diagnostic disable: lowercase-global
 
 require("early")
+require("bootstrap-lazy")
 
+do return end
 
 -- per nvim-tree docs:
 vim.g.loaded_netrw = 1
