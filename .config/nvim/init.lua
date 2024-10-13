@@ -9,6 +9,7 @@ require("bootstrap-lazy")
 -- after plugin loader
 require("localz.github-links")
 require('localz.tabs')
+require('localz.misc')
 
 do return end
 
@@ -270,9 +271,6 @@ vim.cmd([[
     cmap <C-b> <C-\>eAskOpenAI()<CR>
 
 ]])
-
--- cursor block in insert:
-vim.cmd(":set guicursor=i:block")
 
 
 -- *** treesitter helpers, i.e. for understanding highlighting issues
