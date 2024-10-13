@@ -371,6 +371,13 @@ packer.startup(function()
 
     -- TODO review list of extensions here:
     -- https://nvimluau.dev/akinsho-bufferline-nvim (TONS of extensions and alternatives including statusline, bufferline, etc
+    --
+    -- https://nvimluau.dev/meznaric-conmenu  # context menu for nvim (ie format,  code actions, would this be useful?)
+    -- https://nvimluau.dev/hood-popui-nvim  # boxes around UI elemennts like hover boxes?
+    --
+    -- use "unblevable/quick-scope" -- quick scope marks jump points (DOES NOT SEEM TO WORK correctly? was highlighting wrong chars IIUC.. and not underline so I would need to change its config as the colors were also hard to see by default)
+    -- https://github.com/jinh0/eyeliner.nvim # lua duplicate
+
 
     -- PRN indent guides (vertically, like vscode plugin)
     -- use "lukas-reineke/indent-blankline.nvim"
@@ -383,6 +390,7 @@ packer.startup(function()
     -- PRN mrjones2014/smart-splits.nvim => better way to manage splits with tmux and nvim? not sure I need this but maybe ideas for doing similar in iterm2?
 
     -- HRM... tris203/precognition.nvim => shows keys to use to jump to spots... might be a good way for beginners to learn about what keys to use in a situation?
+
 
 
 
