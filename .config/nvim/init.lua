@@ -143,10 +143,6 @@ packer.startup(function()
 
     ]]) -- coc needs this, "Some servers have issues with backup files, see #649", sitll have swapfile in case of failure
 
-    local foo = "1"
-    local bar = foo
-    -- " define keymap for foo to trigger format in orma
-    -- TODO xmode too?
     vim.keymap.set('n', '<S-M-f>', ":call CocAction('format')<CR>", { desc = 'Coc format (normal mode)' }) -- vscode format call...can this handle selection only?
     vim.keymap.set('i', '<S-M-f>', "<Esc>:call CocAction('format')<CR>a", { desc = 'Coc format (insert mode)' })
 
@@ -254,7 +250,6 @@ packer.startup(function()
     --
     vim.keymap.set('n', '<leader>s', builtin.git_status, { desc = 'Telescope git status' })
     --
-    use 'nvim-tree/nvim-web-devicons' -- icons to the right of find_files
     --
     use 'xiyaowong/telescope-emoji.nvim'
     require("telescope").load_extension("emoji")
