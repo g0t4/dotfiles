@@ -377,6 +377,11 @@ packer.startup(function()
     --
     -- use "unblevable/quick-scope" -- quick scope marks jump points (DOES NOT SEEM TO WORK correctly? was highlighting wrong chars IIUC.. and not underline so I would need to change its config as the colors were also hard to see by default)
     -- https://github.com/jinh0/eyeliner.nvim # lua duplicate
+    --
+    use "karb94/neoscroll.nvim" -- smooth scrolling? ok I like this a bit ... lets see if I keep it (ctrl+U/D,B/F has an animated scroll basically) - not affect hjkl/gg/G
+    -- also works with zb/zt/zz which I wasn't aware of but looks useful => zz = center current line! zt/zb = curr line to top or bottom... LOVE IT!
+    require('neoscroll').setup()
+    --
 
 
     -- PRN indent guides (vertically, like vscode plugin)
