@@ -5,6 +5,8 @@ return {
         tag = '0.1.8',
         dependencies = {
             { 'nvim-lua/plenary.nvim' },
+            -- TODO popup.nvim?
+
         },
         cmd = { 'Telescope' }, -- lazy load on command used
         keys = {
