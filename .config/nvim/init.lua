@@ -10,7 +10,7 @@ require("bootstrap-lazy")
 require("localz.github-links")
 require('localz.tabs')
 require('localz.misc')
-
+require('localz.ask-openai')
 
 -- !!! TODO remove packer dirs and cache 
 
