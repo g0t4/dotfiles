@@ -399,19 +399,6 @@ packer.startup(function()
 
 
 
-    --   works, some samples for embedded docs are indented and work when unindented FYI
-    --   not necessary to `npx yarn build`... `npm install` worked fine for me in the app dir as is show here:
-    --   discussion about if unmaintained... works though so YMMV: https://github.com/iamcco/markdown-preview.nvim/issues/688
-    use {
-        "iamcco/markdown-preview.nvim",
-        run = "cd app && npm install",
-        setup = function()
-            vim.g.mkdp_filetypes = {
-                "markdown" }
-        end,
-        ft = { "markdown" },
-    }
-
 
 
 
