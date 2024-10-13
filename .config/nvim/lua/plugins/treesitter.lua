@@ -3,9 +3,13 @@ return {
 
     {
         'nvim-treesitter/nvim-treesitter',
-        run = ':TSUpdate',
+        -- run = ':TSUpdate',
 
-        config = function()
+        build = function()
+            -- nvim-treesitter[lua]: Could not create tree-sitter-lua-tmp
+            -- mkdir: tree-sitter-lua-tmp: File exists
+            -- TODO when do I wanna do this part of tree sitter? this keeps running the same install sync step on every load...  definitely don't want that here
+            --
             require 'nvim-treesitter.configs'.setup {
                 ensure_installed = { "c", "lua", "python", "javascript", "typescript", "html", "css", "json", "yaml", "markdown", "vim" }, -- one of "all", "maintained" (parsers with maintainers), or a list of languages
                 sync_install = false,
