@@ -9,6 +9,20 @@ return {
         -- I really like this extension as I get used to the motions, its great, ysiw" bam! or ys$"... perfection (one step to select range and highlight it, super cumbersome w/o both together in one action)
     },
 
+    -- highlight just word under cursor:
+    { "RRethy/vim-illuminate" }, -- FYI integrates with treesitter! :TSModuleInfo adds illuminate column
+    --    sadly, not the current selection (https://github.com/RRethy/vim-illuminate/issues/196), I should write this plugin
+    --    can use modes_denylist to hide in visual mode if I wanna use smth else in that mode to highlight selections: https://github.com/RRethy/vim-illuminate/issues/141
+    --    customizing:
+    --      hi def IlluminatedWordText gui=underline
+    --      hi def IlluminatedWordRead gui=underline
+    --      hi def IlluminatedWordWrite gui=underline
+
+
+    -- highlight selections like vscode, w/o limits (200 chars in vscode + no new lines)
+    { "aaron-p1/match-visual.nvim" }, -- will help me practice using visual mode too
+    -- FYI g,Ctrl-g to show selection length (aside from just highlighting occurrenes of selection)
+
 
     -- use 'machakann/vim-sandwich' -- alternative?
     --

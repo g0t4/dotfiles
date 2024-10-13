@@ -100,20 +100,6 @@ packer.startup(function()
 
 
 
-    -- highlight just word under cursor:
-    use "RRethy/vim-illuminate" -- FYI integrates with treesitter! :TSModuleInfo adds illuminate column
-    --    sadly, not the current selection (https://github.com/RRethy/vim-illuminate/issues/196), I should write this plugin
-    --    can use modes_denylist to hide in visual mode if I wanna use smth else in that mode to highlight selections: https://github.com/RRethy/vim-illuminate/issues/141
-    --    customizing:
-    --      hi def IlluminatedWordText gui=underline
-    --      hi def IlluminatedWordRead gui=underline
-    --      hi def IlluminatedWordWrite gui=underline
-    --
-
-    -- highlight selections like vscode, w/o limits (200 chars in vscode + no new lines)
-    use "aaron-p1/match-visual.nvim" -- will help me practice using visual mode too
-    -- FYI g,Ctrl-g to show selection length (aside from just highlighting occurrenes of selection)
-
     --  nacro90/numb.nvim -- peek line #s while go to (:123) and hide again after, also other peeks (cursorline)
     -- TODO: foo the bar
     --
