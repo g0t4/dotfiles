@@ -9,14 +9,6 @@ return {
         -- I really like this extension as I get used to the motions, its great, ysiw" bam! or ys$"... perfection (one step to select range and highlight it, super cumbersome w/o both together in one action)
     },
 
-    {
-        'm4xshen/hardtime.nvim', -- tons of features, recommends, block repeated key use, etc
-        requires = { "MunifTanjim/nui.nvim", "nvim-lua/plenary.nvim" },
-        config = function()
-            require("hardtime").setup()
-        end
-    },
-
 
     -- use 'machakann/vim-sandwich' -- alternative?
     --
