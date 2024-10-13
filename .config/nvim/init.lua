@@ -362,6 +362,7 @@ packer.startup(function()
     -- use "lewis6991/gitsigns.nvim" -- git code lens essentially, never been a huge fan of that in vscode
 
     -- PRN bufferline? tab strip with buffers (in addition to tabs)... interesting, gotta think if I want this, I kinda like it right now because I can see what files I have open... I would also wanna know key combos (or set those up for switching buffers, vs tabs)... I need to learn better what the intent is w/ a buffer vs tab, the latter you can :q to quit but the former is like multiple per tab (one :q closes all buffers)... also have :bdelete (close), etc
+    -- keep for now as a reminder I wanna figure out how to work with a multi open doc system in vim now, later (like vscode), I suspect I will get rid of the tab strip? or just go to showing current file name in title of entire app would be fine too
     -- use {'akinsho/bufferline.nvim', tag = "*", requires = 'nvim-tree/nvim-web-devicons'}
     -- require("bufferline").setup({})
 
@@ -397,7 +398,13 @@ packer.startup(function()
 
     -- ctrl+shift+l like feature to open current doc in a tree view and nav to nearby docs
     use { "nvim-tree/nvim-tree.lua" }
-    require("nvim-tree").setup()
+    require("nvim-tree").setup({
+        renderer = {
+
+            -- show only folder name of root dir (not full path or even ~/ path):
+            root_folder_label = ":t", -- `:help filename-modifiers` for more choices, this is aka root_folder_modifier IIRC
+        }
+    })
     -- TODO telescope integration => actions menu (https://github.com/nvim-tree/nvim-tree.lua/wiki/Recipes#creating-an-actions-menu-using-telescope)
     -- FYI `g?` shows help overlay with keymaps for actions
     -- supports mouse too
