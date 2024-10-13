@@ -361,8 +361,9 @@ packer.startup(function()
     -- use "tpope/vim-fugitive" =>
     -- use "lewis6991/gitsigns.nvim" -- git code lens essentially, never been a huge fan of that in vscode
 
-    -- TODO buffer tabs
-    -- or "akinsho/bufferline.nvim" - buffer tabs at top, not sure I want that actually... I would like some key mappings to nav between open files like vscode (ctrl+tab like)
+    -- PRN bufferline? tab strip with buffers (in addition to tabs)... interesting, gotta think if I want this, I kinda like it right now because I can see what files I have open... I would also wanna know key combos (or set those up for switching buffers, vs tabs)... I need to learn better what the intent is w/ a buffer vs tab, the latter you can :q to quit but the former is like multiple per tab (one :q closes all buffers)... also have :bdelete (close), etc
+    -- use {'akinsho/bufferline.nvim', tag = "*", requires = 'nvim-tree/nvim-web-devicons'}
+    -- require("bufferline").setup({})
 
     -- TODO review list of extensions here:
     -- https://nvimluau.dev/akinsho-bufferline-nvim (TONS of extensions and alternatives including statusline, bufferline, etc
