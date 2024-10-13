@@ -419,19 +419,6 @@ packer.startup(function()
 
 
 
-    -- ctrl+shift+l like feature to open current doc in a tree view and nav to nearby docs
-    use { "nvim-tree/nvim-tree.lua" }
-    require("nvim-tree").setup({
-        renderer = {
-
-            -- show only folder name of root dir (not full path or even ~/ path):
-            root_folder_label = ":t", -- `:help filename-modifiers` for more choices, this is aka root_folder_modifier IIRC
-        }
-    })
-    -- TODO telescope integration => actions menu (https://github.com/nvim-tree/nvim-tree.lua/wiki/Recipes#creating-an-actions-menu-using-telescope)
-    -- FYI `g?` shows help overlay with keymaps for actions
-    -- supports mouse too
-
 
     -- PRN sticky scroll? at least in editor
     -- fork that might be better: https://github.com/lewis6991/nvim-treesitter-context
