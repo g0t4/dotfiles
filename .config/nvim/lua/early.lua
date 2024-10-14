@@ -48,6 +48,3 @@ vim.cmd [[
 vim.o.clipboard = 'unnamedplus' -- use system clipboard
 -- TODO what do I want for clipboard?
 
--- per nvim-tree docs (disable netrw at startup, put that here b/c nvim-tree is lazy loaded)
-vim.g.loaded_netrw = 1
-vim.g.loaded_netrwPlugin = 1
