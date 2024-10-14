@@ -13,9 +13,6 @@ require('localz.misc')
 require('localz.ask-openai')
 require('localz.my-comment-highlights')
 
--- !!! TODO remove packer dirs and cache 
-
-
     -- TODO FORMATTER focused extension:
     -- use 'stevearc/conform.nvim' -- can replace LSP formatters that are problematic, per file type... DEFINITELY LOOK INTO THIS
 
