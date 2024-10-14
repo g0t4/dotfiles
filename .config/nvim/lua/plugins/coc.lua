@@ -54,6 +54,7 @@ return {
                 " diagnostics appear/become resolved
                 set signcolumn=yes
 
+                " FYI not using tab to trigger completion:
                 "" Use tab for trigger completion with characters ahead and navigate
                 "" NOTE: There's always complete item selected by default, you may want to enable
                 "" no select by `"suggest.noselect": true` in your configuration file
@@ -78,7 +79,7 @@ return {
 
                 " default key maps for coc... duplicating here... b/c if I open nvim `nvim` only and then Ctrl+P and pick coc.lua... the up/down arrows aren't mapped to completions?! whereas if I start nvim `nvim ...coc.lua` pointed at the lua file the arrow up/down work... WTF and when I check imap there is no up/down defined such that these shouldn't be redefined... maybe the key maps aren't called at all?
                 "   ~/.local/share/nvim/lazy/coc.nvim/plugin/coc.vim
-                "   TODO why are these not working OOB? 
+                "   TODO why are these not working OOB?
                 " move up/down completions: (w/o C-n/p setting here it changes the completion list to some other style and loses completions)
                 inoremap <silent><expr> <C-n> coc#pum#visible() ? coc#pum#next(1) : "\<C-n>"
                 inoremap <silent><expr> <C-p> coc#pum#visible() ? coc#pum#prev(1) : "\<C-p>"
@@ -133,10 +134,26 @@ return {
                   endif
                 endfunction
 
-
                 " disabled for now, multiline strings in lua aren't recognized as nested code which makes sense... so any time cursor stops in the multiline string it higlights all of it (yuck)
                 " Highlight the symbol and its references when holding the cursor
                 "autocmd CursorHold * silent call CocActionAsync('highlight')
+
+                " Symbol renaming
+                nmap <leader>rn <Plug>(coc-rename)
+
+                " Formatting selected code
+                xmap <leader>f  <Plug>(coc-format-selected)
+                nmap <leader>f  <Plug>(coc-format-selected)
+ 
+                " Remap <C-f> and <C-b> to scroll float windows/popups
+                if has('nvim-0.4.0') || has('patch-8.2.0750')
+                  nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+                  nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+                  inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
+                  inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
+                  vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+                  vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+                endif
 
             ]])
 
@@ -144,9 +161,6 @@ return {
 
             vim.keymap.set('n', '<S-M-f>', ":call CocAction('format')<CR>", { desc = 'Coc format (normal mode)' }) -- vscode format call...can this handle selection only?
             vim.keymap.set('i', '<S-M-f>', "<Esc>:call CocAction('format')<CR>a", { desc = 'Coc format (insert mode)' })
-            -- TODO vim freezes when I use this for local a below
-            -- rename:
-            vim.keymap.set('n', 'C-r,C-r', ":call CocAction('rename')<CR>", { desc = 'Coc rename' })
 
             -- TODO review lua config for many other code action helpers... I skipped most for now
 
