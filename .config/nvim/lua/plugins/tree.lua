@@ -1,11 +1,12 @@
 return {
+
     {
         -- TODO remove top level once all plugins that need this are marked as dependencies
         'nvim-tree/nvim-web-devicons',
         lazy = true,
     },
-    {
 
+    {
         "nvim-tree/nvim-tree.lua",
         dependencies = {
             "nvim-tree/nvim-web-devicons",
@@ -35,7 +36,7 @@ return {
             -- FYI `g?` shows help overlay with keymaps for actions
         end,
         init = function()
-            -- must load early to disable netrw (else causes problems with nvim-tree)... 
+            -- must load early to disable netrw (else causes problems with nvim-tree)...
             --    FYI init runs before plugin is loaded, and seems to run soon enough that it works for ensuring netrw is disabled
             --    test of if this works is to do `nvim .` and see if it loads netrw or empty doc
             vim.g.loaded_netrw = 1
