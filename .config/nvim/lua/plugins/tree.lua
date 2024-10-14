@@ -1,9 +1,8 @@
 return {
 
     {
-        -- TODO remove top level once all plugins that need this are marked as dependencies
         'nvim-tree/nvim-web-devicons',
-        lazy = true,
+        lazy = true, -- load only when require'd
     },
 
     {
