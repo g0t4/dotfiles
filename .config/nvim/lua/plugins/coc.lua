@@ -144,6 +144,11 @@ return {
                 " Formatting selected code
                 xmap <leader>f  <Plug>(coc-format-selected)
                 nmap <leader>f  <Plug>(coc-format-selected)
+                "
+                " My formatting additions:
+                xmap <S-M-f> <Plug>(coc-format-selected)
+                imap <S-M-f> <Esc>:call CocAction('format')<CR>a
+                nmap <S-M-f> :call CocAction('format')<CR>
  
                 " Remap <C-f> and <C-b> to scroll float windows/popups
                 if has('nvim-0.4.0') || has('patch-8.2.0750')
