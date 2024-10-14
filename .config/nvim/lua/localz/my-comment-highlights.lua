@@ -1,4 +1,3 @@
-
 -- *** treesitter helpers, i.e. for understanding highlighting issues
 
 function print_captures_at_cursor()
@@ -9,9 +8,6 @@ function print_captures_at_cursor()
 end
 
 vim.cmd("nnoremap <leader>pc :lua print_captures_at_cursor()<CR>")
-local ts = vim.treesitter
-
-local ts_utils = require 'nvim-treesitter.ts_utils'
 
 -- TODO format vimscript (nested in lua)
 -- ***! foo
@@ -50,6 +46,9 @@ vim.cmd [[
 -- vim.api.nvim_set_hl(0, "@comment", {})
 
 function print_ts_cursor_details()
+    local ts = vim.treesitter
+    local ts_utils = require 'nvim-treesitter.ts_utils'
+
     -- FYI, use :InspectTree => :lua vim.treesitter.inspect_tree() => interactive select/inspect left/right split
     local node_at_cursor = ts_utils.get_node_at_cursor()
     if node_at_cursor then
@@ -152,8 +151,3 @@ vim.api.nvim_create_autocmd("BufReadPost", {
 -- ensure highlight style applied late in load process (before buffer ready but just after file read)...  b/c right now if these are registered earlier (ie before packer plugins...) then the style wont take effect until next file opened
 --
 --
-
-
-
-
-
