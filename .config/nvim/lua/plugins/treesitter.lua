@@ -5,6 +5,7 @@ return {
         'nvim-treesitter/nvim-treesitter',
         build = ":TSUpdate",
 
+        event = { "BufRead", "BufNewFile" }, -- lazy load on entering buffer
         config = function()
             require 'nvim-treesitter.configs'.setup {
                 ensure_installed = { "c", "lua", "python", "javascript", "typescript", "html", "css", "json", "yaml", "markdown", "vim" }, -- one of "all", "maintained" (parsers with maintainers), or a list of languages
