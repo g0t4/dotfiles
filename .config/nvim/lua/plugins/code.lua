@@ -1,8 +1,12 @@
+-- plugins that aren't needed until a file is opened (BufRead), OR when a new file is created which InsertEnter is a surrogate for
+local buffer_with_content_events = { "BufRead", "InsertEnter" } -- TODO any edge cases where a buffer would have something loaded and not trip BufRead/InsertEnter?
+
 return {
 
     {
         -- surround with - add/rm () {} [] `` '' "" etc - like vscode, I really like that in vscode, esp in markdown to use code blocks on existing content
         'kylechui/nvim-surround', -- dot repeat! (wrap multiple things), jump to nearest pair?
+        event = buffer_with_content_events,
         config = function()
             require('nvim-surround').setup({})
         end
@@ -10,16 +14,24 @@ return {
     },
 
     -- highlight selections like vscode, w/o limits (200 chars in vscode + no new lines)
-    { "aaron-p1/match-visual.nvim" }, -- will help me practice using visual mode too
+    {
+        "aaron-p1/match-visual.nvim",
+        event = buffer_with_content_events,
+    }, -- will help me practice using visual mode too
     -- FYI g,Ctrl-g to show selection length (aside from just highlighting occurrenes of selection)
 
 
     -- mark unique letters to jump to:
     --  use "unblevable/quick-scope" -- quick scope marks jump
-    "jinh0/eyeliner.nvim", -- lua impl, validated this actually works good and the color is blue OOB which is nicely subtle, super useful on long lines!
+    {
+        "jinh0/eyeliner.nvim", -- lua impl, validated this actually works good and the color is blue OOB which is nicely subtle, super useful on long lines!
+        event = buffer_with_content_events,
+    },
+
     --
     {
         "karb94/neoscroll.nvim",
+        event = buffer_with_content_events,
         config = function()
             require('neoscroll').setup()
         end
