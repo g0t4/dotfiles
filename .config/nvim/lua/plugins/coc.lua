@@ -162,22 +162,6 @@ return {
 
             ]])
 
-            -- !!! TODO move to lazy load on keys/commands? and filetypes or? take some time to look into this when you get back to looking into coc again
-
-            vim.keymap.set('n', '<S-M-f>', ":call CocAction('format')<CR>", { desc = 'Coc format (normal mode)' }) -- vscode format call...can this handle selection only?
-            vim.keymap.set('i', '<S-M-f>', "<Esc>:call CocAction('format')<CR>a", { desc = 'Coc format (insert mode)' })
-
-            -- TODO review lua config for many other code action helpers... I skipped most for now
-
-            -- Add `:Format` command to format current buffer
-            vim.api.nvim_create_user_command("Format", "call CocAction('format')", {})
-
-            -- " Add `:Fold` command to fold current buffer
-            vim.api.nvim_create_user_command("Fold", "call CocAction('fold', <f-args>)", { nargs = '?' })
-
-            -- Add `:OR` command for organize imports of the current buffer
-            vim.api.nvim_create_user_command("OR", "call CocActionAsync('runCommand', 'editor.action.organizeImport')",
-                {})
         end,
         -- CocConfig (opens coc-settings.json in buffer to edit) => from ~/.config/nvim/coc-settings.json
         --   https://github.com/neoclide/coc.nvim/wiki/Install-coc.nvim#add-some-configuration
