@@ -53,17 +53,6 @@ require('localz.my-comment-highlights')
     -- HRM... tris203/precognition.nvim => shows keys to use to jump to spots... might be a good way for beginners to learn about what keys to use in a situation?
 
 
-
-
-
-
-
-
-
-
-
-
-
     -- gelguy/wilder.nvim  # compare to builtin picker and fuzzy finder instead?
     --    port config from vimrc if I use this
     --    can I setup wilder to not show unless I hit tab? I like how that works in nvim's menu picker OOB
@@ -81,7 +70,6 @@ require('localz.my-comment-highlights')
     -- :TSBufEnable highlight # now TSModuleInfo shows lua!... TODO what is gonna be different? I need to research what to expect and see if I can even identify differences
     --
     -- :TSInstallInfo
-
 
 
 
@@ -115,11 +103,6 @@ require('localz.my-comment-highlights')
     --         }
     --     end
     -- }
-
-
-
-
-
 
 
 
