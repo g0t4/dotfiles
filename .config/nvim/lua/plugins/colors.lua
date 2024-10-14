@@ -17,6 +17,7 @@ return {
 
     {
         "norcalli/nvim-colorizer.lua", -- colorize hex codes, etc
+        event = "BufRead",
         config = function()
             require("colorizer").setup()
         end,
