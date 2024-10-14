@@ -45,14 +45,14 @@ return {
         end
     },
 
-    -- highlight just word under cursor:
     {
+        -- highlight word under cursor, other occurrences
         "RRethy/vim-illuminate",
         event = "CursorHold",
         dependencies = {
             { 'nvim-treesitter/nvim-treesitter' },
         },
-        -- FYI integrates with treesitter! :TSModuleInfo adds illuminate column
+        -- FYI integrates with treesitter! :TSModuleInfo adds illuminate column (several providers actually: treesitter, LSP, regex by default)
         --    can use modes_denylist to hide in visual mode if I wanna use smth else in that mode to highlight selections: https://github.com/RRethy/vim-illuminate/issues/141
         --    customizing:
         --      hi def IlluminatedWordText gui=underline
