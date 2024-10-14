@@ -17,7 +17,7 @@ return {
 
     {
         "norcalli/nvim-colorizer.lua", -- colorize hex codes, etc
-        event = {"BufRead", "BufNewFile"}, -- need latter so can start new file and not need to save it to get colorizer
+        event = require("event-triggers").buffer_with_content_events,
         config = function()
             require("colorizer").setup()
         end,
