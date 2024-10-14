@@ -9,6 +9,9 @@ return {
         -- https://github.com/neoclide/coc.nvim/wiki/Install-coc.nvim (install extensions)
         -- sample config: https://raw.githubusercontent.com/neoclide/coc.nvim/master/doc/coc-example-config.vim
 
+        -- FYI its ok to load this always, that said it might be nice to only load this on specific filetypes that I configure it to work with
+        event = require('event-triggers').buffer_with_content_events,
+
         config = function()
             vim.cmd([[
                 " *** FYI coc.nvim doesn't modify key-mappings nor vim options, hence the need to specify config explicitly, fine by me!
