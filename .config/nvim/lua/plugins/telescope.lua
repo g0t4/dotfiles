@@ -16,7 +16,6 @@ return {
         dependencies = {
             { 'nvim-lua/plenary.nvim' },
             -- TODO popup.nvim?
-
         },
         cmd = { 'Telescope' }, -- lazy load on command used
         keys = {
@@ -27,6 +26,7 @@ return {
             { '<leader>s', ':Telescope git_status<CR>', mode = 'n' },
         },
         config = function()
+
             require('telescope').setup({
                 defaults = {
                     layout_strategy = 'flex', -- based on width (kinda like this actually and it resizes with the window perfectly)
