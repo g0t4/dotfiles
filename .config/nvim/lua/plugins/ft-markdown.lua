@@ -7,8 +7,7 @@ return {
 
         "iamcco/markdown-preview.nvim",
 
-        -- lazy load on:
-        ft = { "markdown" },
+        ft = { "markdown" }, -- lazy load for markdown files only
 
         -- if any issues w/ not opening preview (browser), re-install (comment out, lazy clean, uncomment back, lazy install)
         -- FYI when app install works => s/b app/node_modules
@@ -22,14 +21,14 @@ return {
 
     {
         "toppair/peek.nvim",
-        ft = { "markdown" },
+        ft = { "markdown" }, -- lazy load for markdown files only
         -- event = "VeryLazy", -- this is in peek's docs but I changed to ft (above), why load until open a md file?
         build = "deno task --quiet build:fast",
         config = function()
             require("peek").setup({
                 app = "webview", -- or "browser"
             })
-            -- perfectly fine to leave these here, don't show them until needed? 
+            -- perfectly fine to leave these here, don't show them until needed?
             vim.api.nvim_create_user_command("PeekOpen", require("peek").open, {})
             vim.api.nvim_create_user_command("PeekClose", require("peek").close, {})
         end,
