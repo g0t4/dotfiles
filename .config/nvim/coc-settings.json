@@ -1,9 +1,16 @@
 {
-  "Lua.diagnostics.globals": ["vim"],
-  "Lua.workspace.library": [
-    "/opt/homebrew/Cellar/neovim/0.10.2_1/share/nvim/runtime/lua",
-    "/opt/homebrew/Cellar/neovim/0.10.2_1/share/nvim/runtime/lua/vim/lsp",
-  ],
-  "Lua.runtime.version": "LuaJIT",
-  "Lua.runtime.path": ["?.lua", "?/init.lua", "/opt/homebrew/Cellar/neovim/0.10.2_1/share/nvim/runtime/lua/vim" ]
+    // other people use sumneko-lua... I got coc-lua to work just fine... btw make sure :CocConfig opens this file, else maybe your symlink is messed up from dotfiles repo
+    // best way to test this config, open split view with config on top and on bottom a lua file with an issue, modify config and save it and it will refresh the lua file coc diagnostics immediately, but not if edited in another instance of VIM or not using VIM btw
+
+    // the following config (workspace.library, runtime.version/path) were added to make vim globals work in coc-lua (not marked as undefined and have completions)
+    "Lua.workspace.library": [
+        "/opt/homebrew/Cellar/neovim/0.10.2_1/share/nvim/runtime/lua",
+        "/opt/homebrew/Cellar/neovim/0.10.2_1/share/nvim/runtime/lua/vim/lsp",
+    ],
+    "Lua.runtime.version": "LuaJIT",
+    "Lua.runtime.path": [
+        "?.lua",
+        "?/init.lua",
+        "/opt/homebrew/Cellar/neovim/0.10.2_1/share/nvim/runtime/lua/vim"
+    ]
 }
