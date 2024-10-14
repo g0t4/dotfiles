@@ -16,6 +16,7 @@ return {
                 highlight = {
                     enable = true, -- enable for all
                     disable = {},  -- confirmed TSModuleInfo shows X for these languages
+                    -- additional_vim_regex_highlighting = false, -- true OR list of languages... I can't get this to change anything with my custom sytnax highlights, maybe this is smth else enable/disable?
                 },
                 indent = {
                     enable = true,
