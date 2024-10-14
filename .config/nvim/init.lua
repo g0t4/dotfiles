@@ -9,6 +9,7 @@ require('localz.tabs')
 require('localz.misc')
 require('localz.ask-openai')
 require('localz.my-comment-highlights')
+require('localz.filetypemods')
 
     -- TODO FORMATTER focused extension:
     -- use 'stevearc/conform.nvim' -- can replace LSP formatters that are problematic, per file type... DEFINITELY LOOK INTO THIS
