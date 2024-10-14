@@ -152,33 +152,34 @@ return {
 
 " TODO review rest of suggested COC config (indent when done reviewing):
 
-augroup mygroup
-  autocmd!
-  " Setup formatexpr specified filetype(s)
-  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
-  " Update signature help on jump placeholder
-  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-augroup end
+"" TODO do I want this?
+"augroup mygroup
+"  autocmd!
+"  " Setup formatexpr specified filetype(s)
+"  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+"  " Update signature help on jump placeholder
+"  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+"augroup end
 
-" Applying code actions to the selected code block
-" Example: `<leader>aap` for current paragraph
-xmap <leader>a  <Plug>(coc-codeaction-selected)
-nmap <leader>a  <Plug>(coc-codeaction-selected)
+                " Applying code actions to the selected code block
+                " Example: `<leader>aap` for current paragraph
+                xmap <leader>a  <Plug>(coc-codeaction-selected)
+                nmap <leader>a  <Plug>(coc-codeaction-selected)
 
-" Remap keys for applying code actions at the cursor position
-nmap <leader>ac  <Plug>(coc-codeaction-cursor)
-" Remap keys for apply code actions affect whole buffer
-nmap <leader>as  <Plug>(coc-codeaction-source)
-" Apply the most preferred quickfix action to fix diagnostic on the current line
-nmap <leader>qf  <Plug>(coc-fix-current)
+                " Remap keys for applying code actions at the cursor position
+                nmap <leader>ac  <Plug>(coc-codeaction-cursor)
+                " Remap keys for apply code actions affect whole buffer
+                nmap <leader>as  <Plug>(coc-codeaction-source)
+                " Apply the most preferred quickfix action to fix diagnostic on the current line
+                nmap <leader>qf  <Plug>(coc-fix-current)
 
-" Remap keys for applying refactor code actions
-nmap <silent> <leader>re <Plug>(coc-codeaction-refactor)
-xmap <silent> <leader>r  <Plug>(coc-codeaction-refactor-selected)
-nmap <silent> <leader>r  <Plug>(coc-codeaction-refactor-selected)
+                " Remap keys for applying refactor code actions
+                nmap <silent> <leader>re <Plug>(coc-codeaction-refactor)
+                xmap <silent> <leader>r  <Plug>(coc-codeaction-refactor-selected)
+                nmap <silent> <leader>r  <Plug>(coc-codeaction-refactor-selected)
 
-" Run the Code Lens action on the current line
-nmap <leader>cl  <Plug>(coc-codelens-action)
+                " Run the Code Lens action on the current line
+                nmap <leader>cl  <Plug>(coc-codelens-action)
 
 " Map function and class text objects
 " NOTE: Requires 'textDocument.documentSymbol' support from the language server
@@ -231,9 +232,6 @@ set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
         --
         -- FYI all language server docs: https://github.com/neoclide/coc.nvim/wiki/Language-servers#lua
         --    each LSP added can be configured in coc-settings.json
-
-
-
 
     }
 }
