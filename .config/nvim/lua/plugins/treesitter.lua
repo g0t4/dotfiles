@@ -21,13 +21,19 @@ return {
                     enable = true,
                     disable = {},
                 },
-                -- additional_vim_regex_highlighting = false, -- not having any effect on my regex highlighting... is that intended?
-                -- doesn't look like it's doing anything right now.. no languages are marked as highlighted (nor anything else)
-                -- TODO folding with treesitter?
-                -- vim.wo.foldmethod = 'expr'
-                -- vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+                folding = {
+                    enable = true,
+                    disable = {},
+                },
             }
-            -- TSModuleInfo shows what features (highlight, illuminate[if plugin enabled], indent, incremental_selection)
+            -- TSModuleInfo shows what features (highlight, illuminate[if plugin enabled], indent, incremental_selection), not folding?
+        end,
+        init = function()
+            -- https://neovim.io/doc/user/fold.html (FYI can use other methods like indent, syntax, manual, etc... for now I will try ts based)
+            vim.wo.foldmethod = 'expr'
+            vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+
+            vim.o.foldenable = false -- no autofolding, just manual after open file
         end
     },
 
