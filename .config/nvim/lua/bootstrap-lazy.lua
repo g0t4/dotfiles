@@ -1,4 +1,5 @@
 -- benefits/differences:
+-- stellar panel overview of plugins
 --  aside rom lazy loading
 --  auto install depencies (dont have to PackerSync)
 --      SO NICE, no more :wq, :PackerSync, :q, nvim to test a plugin change (also no ordering issues w/ run on a new plugin that caused a failure b/c wasn't yet installed on next restart to install)
@@ -8,7 +9,7 @@
 --  lazy load on: keys, cmds, filetypes, events, ... super flexible
 --     priorities too
 -- forces nice organization of plugins
-
+-- shows startup reasons (to aide lazy loading) and timing (profile)
 
 -- Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
