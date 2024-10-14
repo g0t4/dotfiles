@@ -13,7 +13,6 @@ return {
         event = require('event-triggers').buffer_with_content_events,
 
         config = function()
-            -- source ~/.config/nvim/lua/plugins/vimz/coc-config.vim
             vim.cmd('source ~/.config/nvim/lua/plugins/vimz/coc-config.vim')
         end,
         -- CocConfig (opens coc-settings.json in buffer to edit) => from ~/.config/nvim/coc-settings.json
