@@ -1,6 +1,3 @@
----@diagnostic disable: undefined-global
----@diagnostic disable: lowercase-global
-
 -- before plugin loader
 require("early")
 
