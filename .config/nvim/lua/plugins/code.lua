@@ -1,4 +1,4 @@
-local buffer_with_content_events = require("event-triggers")
+local buffer_with_content_events = require("event-triggers").buffer_with_content_events
 
 return {
 
