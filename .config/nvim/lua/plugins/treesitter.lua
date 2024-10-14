@@ -21,12 +21,16 @@ return {
                     enable = true,
                     disable = {},
                 },
-                -- TODO incremental selection config?
-                -- incremental_selection = {
-                --     enable = true,
-                --     disable = {},
-                -- },
                 -- FYI doesn't seem to be a "fold/ing" enable/disable config section
+                incremental_selection = {
+                    enable = true,
+                    keymaps = {
+                        init_selection = 'gnn',    -- Start selection
+                        node_incremental = 'grn',  -- Expand to the next node
+                        scope_incremental = 'grc', -- Expand to the next scope
+                        node_decremental = 'grm',  -- Shrink selection
+                    },
+                },
             }
             -- TSModuleInfo shows what features (highlight, illuminate[if plugin enabled], indent, incremental_selection), not folding?
         end,
