@@ -52,13 +52,12 @@ return {
         dependencies = {
             { 'nvim-treesitter/nvim-treesitter' },
         },
-    }, 
-    -- FYI integrates with treesitter! :TSModuleInfo adds illuminate column
-    --    sadly, not the current selection (https://github.com/RRethy/vim-illuminate/issues/196), I should write this plugin
-    --    can use modes_denylist to hide in visual mode if I wanna use smth else in that mode to highlight selections: https://github.com/RRethy/vim-illuminate/issues/141
-    --    customizing:
-    --      hi def IlluminatedWordText gui=underline
-    --      hi def IlluminatedWordRead gui=underline
-    --      hi def IlluminatedWordWrite gui=underline
+        -- FYI integrates with treesitter! :TSModuleInfo adds illuminate column
+        --    can use modes_denylist to hide in visual mode if I wanna use smth else in that mode to highlight selections: https://github.com/RRethy/vim-illuminate/issues/141
+        --    customizing:
+        --      hi def IlluminatedWordText gui=underline
+        --      hi def IlluminatedWordRead gui=underline
+        --      hi def IlluminatedWordWrite gui=underline
+    },
 
 }
