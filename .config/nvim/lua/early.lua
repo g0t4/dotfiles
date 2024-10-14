@@ -11,14 +11,14 @@ vim.cmd([[
 ]])
 
 -- must come before plugins that use it to define keys
-vim.cmd("let g:mapleader = ' '")          -- default is '\' which is a bit awkward to reach, gotta take right hand off homerow
+vim.cmd("let g:mapleader = ' '") -- default is '\' which is a bit awkward to reach, gotta take right hand off homerow
 
 -- TODO what do I actaully need here? move any non critical parts elsewhere
 
 -- set this very early, will get an empty failure message from lazy load bootstrap if race conditioon is hit and this comes after some other plugins, also not setting first may change the colorscheme loaded by other plugins
 vim.opt.termguicolors = true -- s/b already enabled in most of my environments, maybe warn if not?
 
-vim.o.ignorecase = true -- ignore case when searching
+vim.o.ignorecase = true      -- ignore case when searching
 
 vim.cmd [[
     " *** fix delete key reporting
@@ -48,8 +48,6 @@ vim.cmd [[
 vim.o.clipboard = 'unnamedplus' -- use system clipboard
 -- TODO what do I want for clipboard?
 
-
-
-
-
-
+-- per nvim-tree docs (disable netrw at startup, put that here b/c nvim-tree is lazy loaded)
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
