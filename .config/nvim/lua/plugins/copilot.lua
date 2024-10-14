@@ -1,7 +1,7 @@
 return {
     {
         'github/copilot.vim',
-        event = { "InsertEnter", "BufReadPost" }, -- Load when entering insert mode or opening a file
+        event = { "InsertEnter" }, -- lazy load on first insert 
         config = function()
             vim.cmd([[
                 "" copilot consider map to ctrl+enter instead of tab so IIUC other completions still work, O
