@@ -1,5 +1,4 @@
--- plugins that aren't needed until a file is opened (BufRead), OR when a new file is created which InsertEnter is a surrogate for
-local buffer_with_content_events = { "BufRead", "InsertEnter" } -- TODO any edge cases where a buffer would have something loaded and not trip BufRead/InsertEnter?
+local buffer_with_content_events = require("event-triggers")
 
 return {
 
