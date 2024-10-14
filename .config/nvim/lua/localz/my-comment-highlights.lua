@@ -9,11 +9,6 @@ end
 
 vim.cmd("nnoremap <leader>pc :lua print_captures_at_cursor()<CR>")
 
--- TODO format vimscript (nested in lua)
--- ***! foo
-
--- TODO! test lua comment
--- TODO test too
 -- TODO! treesitter-highlight-priority ... sets nvim_buf_set_extmark() to 100.. so how does that relate to my syntax/highlight groups? how do I see that?
 vim.cmd [[
 
