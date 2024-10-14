@@ -1,6 +1,5 @@
 return {
 
-
     {
         'm4xshen/hardtime.nvim', -- tons of features, recommends, block repeated key use, etc
         requires = { "MunifTanjim/nui.nvim", "nvim-lua/plenary.nvim" },
