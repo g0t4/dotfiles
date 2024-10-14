@@ -23,6 +23,7 @@ return {
                 },
                 -- FYI doesn't seem to be a "fold/ing" enable/disable config section
                 incremental_selection = {
+                    -- similar to Ctrl+W in jetbrains IDEs
                     enable = true,
                     keymaps = {
                         init_selection = 'gnn',    -- Start selection
