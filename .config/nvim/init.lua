@@ -120,7 +120,7 @@ vim.cmd [[
     "autocmd SessionLoadPost * silent! filetype detect
 ]]
 
--- -- *** folding config
+-- TODO folding
 -- --   (move to treesitter config?)
 -- --   https://neovim.io/doc/user/fold.html
 -- --   TODO setup per filetype? limit to lua for now?
