@@ -4,7 +4,17 @@ return {
         'm4xshen/hardtime.nvim', -- tons of features, recommends, block repeated key use, etc
         requires = { "MunifTanjim/nui.nvim", "nvim-lua/plenary.nvim" },
         config = function()
-            require("hardtime").setup()
+            require("hardtime").setup({
+
+                disabled_keys = {
+                    -- ONLY disable arrows in normal mode, that way I can use them in INSERT mode to move up/down in the completion list, not ideal, maybe is a better way to only enable them for completion list?
+                    ["<Up>"] = { "n", },
+                    ["<Down>"] = { "n", },
+                    ["<Left>"] = { "n", },
+                    ["<Right>"] = { "n", },
+                },
+
+            })
         end
     },
 
