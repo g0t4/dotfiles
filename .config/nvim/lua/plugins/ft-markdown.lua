@@ -9,7 +9,6 @@ return {
 
         -- lazy load on:
         ft = { "markdown" },
-        cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
 
         -- if any issues w/ not opening preview (browser), re-install (comment out, lazy clean, uncomment back, lazy install)
         -- FYI when app install works => s/b app/node_modules
