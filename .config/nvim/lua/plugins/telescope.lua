@@ -68,7 +68,10 @@ return {
             -- TODO try this optional dep (stevearc)
         },
         config = function()
-            require'telescope-all-recent'.setup({
+            require 'telescope-all-recent'.setup({
+                -- UMM ...  looks like ":Telescope builtins" is partially broken, in the Grep Preview pane, it doesn't scroll to the builtin's keymap section, might be stuck on the top of the file or?
+                --   confirmed this isn't broken when I disable this plugin, can I disable just this one picker? as I don't really need frecency on list of builtins...
+                --   fix this if and when it really annoys me... that said I wanted to lookup a key for these!
                 -- FYI yes I know I should be using `opts` esp if not overriding any settings, still leaving this as its more obvious that:
                 -- FYI if opts not set and this config is not setup, it won't load this ext (file list is all sorted by original order)
                 -- FTR i don't likely need this on EVERY PICKER, probably just the file pickers... I didn't use the builtin oldfiles picker b/c it spanned all files ever opened, when I want it to be "per project" (root dir, like in vscode)
