@@ -73,6 +73,7 @@ return {
                 -- FYI if opts not set and this config is not setup, it won't load this ext (file list is all sorted by original order)
                 -- FTR i don't likely need this on EVERY PICKER, probably just the file pickers... I didn't use the builtin oldfiles picker b/c it spanned all files ever opened, when I want it to be "per project" (root dir, like in vscode)
                 -- ALSO, this must come first if wanting to map keys to require("telescope").builtins.xyz() b/c it monkey patches the builtins
+                -- TODO do I want to customize algorithm for recent vs frequent? only time will tell, just a reminder to do that if it annoys me enough
             })
         end,
     },
