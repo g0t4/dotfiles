@@ -11,24 +11,6 @@ table.insert(vimgrep_arguments, "!**/.git/*")
 return {
 
     {
-        'prochri/telescope-all-recent.nvim',
-        dependencies = {
-            "nvim-telescope/telescope.nvim",
-            "kkharji/sqlite.lua",
-            -- optional, if using telescope for vim.ui.select
-            -- "stevearc/dressing.nvim"
-            -- TODO try this optional dep (stevearc)
-        },
-        config = function()
-            require'telescope-all-recent'.setup({
-                -- FYI yes I know I should be using `opts` esp if not overriding any settings, still leaving this as its more obvious that:
-                -- FYI if opts not set and this config is not setup, it won't load this ext (file list is all sorted by original order)
-                -- FTR i don't likely need this on EVERY PICKER, probably just the file pickers... I didn't use the builtin oldfiles picker b/c it spanned all files ever opened, when I want it to be "per project" (root dir, like in vscode)
-            })
-        end,
-    },
-
-    {
         'nvim-telescope/telescope.nvim',
         tag = '0.1.8',
         dependencies = {
@@ -72,6 +54,25 @@ return {
                         previewer = false, -- PRN make it more like vscode (focus on file names, not content, esp b/c I would do a grep files if I wanted to search by content)
                     },
                 }
+            })
+        end,
+    },
+
+    {
+        'prochri/telescope-all-recent.nvim',
+        dependencies = {
+            "nvim-telescope/telescope.nvim",
+            "kkharji/sqlite.lua",
+            -- optional, if using telescope for vim.ui.select
+            -- "stevearc/dressing.nvim"
+            -- TODO try this optional dep (stevearc)
+        },
+        config = function()
+            require'telescope-all-recent'.setup({
+                -- FYI yes I know I should be using `opts` esp if not overriding any settings, still leaving this as its more obvious that:
+                -- FYI if opts not set and this config is not setup, it won't load this ext (file list is all sorted by original order)
+                -- FTR i don't likely need this on EVERY PICKER, probably just the file pickers... I didn't use the builtin oldfiles picker b/c it spanned all files ever opened, when I want it to be "per project" (root dir, like in vscode)
+                -- ALSO, this must come first if wanting to map keys to require("telescope").builtins.xyz() b/c it monkey patches the builtins
             })
         end,
     },
