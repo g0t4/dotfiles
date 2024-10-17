@@ -1351,3 +1351,63 @@ end
 
 
 
+# *** macOS screenshot helpers (for alfred file action => move here)
+
+function _screenshots_trash_secondary_display
+    # get rid of any second display screenshots (trash them for now, can always recover them if I really care later)
+    for png in "$SCREENCAPS_DIR/"*"(2)"*.png
+        # for doesn't fail if wildcard doesn't match anything: https://fishshell.com/docs/current/fish_for_bash_users.html#wildcards-globs
+        trash $png
+    end
+end
+
+function move_screenshots_from_last_x_hours
+    set -l hours $argv[1]
+    set -l dest_dir $argv[2]
+    if test -z $hours
+        echo "Usage: move_screenshots_from_last_x_hours <hours> <dest_dir>"
+        return 1
+    end
+    if test -z $dest_dir
+        echo "Usage: move_screenshots_from_last_x_hours <hours> <dest_dir>"
+        return 1
+    end
+
+    # todo modeline to specify python in this embedded string/pseduofile
+    echo "
+from pathlib import Path
+import os
+import re
+from datetime import datetime, timedelta
+
+hours = $hours
+dest_dir = Path(os.path.expanduser('$dest_dir'))
+screencaps = Path(os.path.expanduser('$SCREENCAPS_DIR'))
+
+formatted_str = '%Y-%m-%d at %H.%M.%S'
+now = datetime.now()
+cut_off = now - timedelta(hours=hours)
+print('cutoff: ' , cut_off)
+
+# example filename (varies by hostname):  
+#     hostfoo screencap 2024-09-27 at 00.26.43.png
+# must match entire filename (full string contents)
+date_time_pattern = r'.*screencap (\d\d\d\d-\d\d-\d\d at \d\d\.\d\d\.\d\d).*.png'
+
+for png in screencaps.glob('*.png'):
+    name = png.name
+    matches = re.match(date_time_pattern, name)
+    if not matches:
+        continue
+    time_str = matches.group(1)
+    parsed_date = datetime.strptime(time_str, formatted_str)
+    if cut_off > parsed_date:
+        continue
+    # png.rename(dest_dir / name)
+    new_path = dest_dir / name
+    print(f'moving {png} to {new_path}')
+    png.rename(new_path)
+
+" | python3
+
+end
