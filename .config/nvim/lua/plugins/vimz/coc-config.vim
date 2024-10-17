@@ -37,6 +37,8 @@
                 " Always show the signcolumn, otherwise it would shift the text each time
                 " diagnostics appear/become resolved
                 set signcolumn=yes
+                " FYI left gutter (leave word gutter so I can search for it)
+                "   TODO is it possible to not show the icons at all?
 
                 " FYI not using tab to trigger completion:
                 "" Use tab for trigger completion with characters ahead and navigate
