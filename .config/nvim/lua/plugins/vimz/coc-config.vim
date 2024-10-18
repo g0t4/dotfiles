@@ -34,11 +34,9 @@
                 " delays and poor user experience
                 set updatetime=300
 
-                " Always show the signcolumn, otherwise it would shift the text each time
-                " diagnostics appear/become resolved
-                set signcolumn=yes
-                " FYI left gutter (leave word gutter so I can search for it)
-                "   TODO is it possible to not show the icons at all?
+                " FYI left gutter settings:
+                set signcolumn=number " yes=always, no=never, auto=only when needed, number=(in # column, if shown)
+                set relativenumber " -- vertical equiv of eyeliner ext (horiz jump marks) - testing if i like this
 
                 " FYI not using tab to trigger completion:
                 "" Use tab for trigger completion with characters ahead and navigate
