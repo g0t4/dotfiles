@@ -95,18 +95,24 @@ function pwd --description "pwd for a repository => repo root in yellow + repo d
         echo -s (set_color normal) /
         return
     end
+
+    # FYI test w/ split pane in iterm2 (open lots of example paths, /, ~/, in a github repo, in nested repo dir) => use broadcast Cmd+Shift+I and send Cmd+K => pwd => command pwd  # compare results
     set _rr (_repo_root)
-    set _prefix (git rev-parse --show-prefix 2>/dev/null)
+
+    # prefix w/in repo (beneat repo root), prepend / for join logic below to avoid trailing / in final output (so pwd matches command pwd)
+    set _prefix "/"(git rev-parse --show-prefix 2>/dev/null)
+    set -l _prefix (string replace -r '/$' '' $_prefix) # strip trailing / from rev-parse (or if in repo root, from prepended / which is also trailing)
+
     if string match -q -r '(?<host_dir>.*/(bitbucket|github|gitlab))/(?<repo>.*)' $_rr
         # path is normal color thru host dir (i.e. ~/repos/github), then cyan for org/repo, then white for the repo dir(s)
         echo -s (set_color normal) $host_dir / \
             (set_color cyan) $repo \
-            (set_color yellow) / $_prefix \
+            (set_color yellow) $_prefix \
             (set_color normal)
     else
         # else path is normal through repo root and white for the repo dir(s)
         echo -s (set_color normal) $_rr \
-            (set_color yellow) / $_prefix \
+            (set_color yellow) $_prefix \
             (set_color normal)
     end
 
