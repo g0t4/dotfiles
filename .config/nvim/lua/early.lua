@@ -7,7 +7,7 @@
 
 --" Uncomment the following to have Vim jump to the last position when reopening a file
 vim.cmd([[
-    augroup RestoreCursorPosition 
+    augroup RestoreCursorPosition
         autocmd!
         autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
     augroup END
@@ -55,5 +55,4 @@ vim.o.clipboard = 'unnamedplus' -- use system clipboard
 -- *** left gutter settings
 vim.o.signcolumn = 'number' -- yes=always, no=never, auto=only when needed, number=(in # column, if shown)
 vim.o.relativenumber = true -- vertical equiv of eyeliner ext (horiz jump marks) - testing if i like this
-vim.o.number = false -- explicitly do not include absolute line #s (for now)
-
+vim.o.number = false        -- explicitly do not include absolute line #s (for now)
