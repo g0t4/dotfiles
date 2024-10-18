@@ -34,10 +34,6 @@
                 " delays and poor user experience
                 set updatetime=300
 
-                " FYI left gutter settings:
-                set signcolumn=number " yes=always, no=never, auto=only when needed, number=(in # column, if shown)
-                set relativenumber " -- vertical equiv of eyeliner ext (horiz jump marks) - testing if i like this
-
                 " FYI not using tab to trigger completion:
                 "" Use tab for trigger completion with characters ahead and navigate
                 "" NOTE: There's always complete item selected by default, you may want to enable
