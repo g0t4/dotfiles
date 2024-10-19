@@ -76,13 +76,19 @@ local function desaturate_color_hex(hex_color, desaturation_factor)
     -- Return the new color in hex format
     return rgb_to_hex(new_r, new_g, new_b)
 end
+
 local function adjust_brightness_hex(hex_color, brightness_factor)
     local r, g, b = hex_to_rgb(hex_color)
+
     local h, s, l = rgb_to_hsl(r, g, b)
+
     l = l * brightness_factor
+
     if l > 1 then l = 1 end
     if l < 0 then l = 0 end
+
     local new_r, new_g, new_b = hsl_to_rgb(h, s, l)
+
     return rgb_to_hex(new_r, new_g, new_b)
 end
 
