@@ -1,6 +1,9 @@
 return {
     -- FYI spec: https://lazy.folke.io/spec
 
+    -- TODO try this one: https://dotfyle.com/plugins/OXY2DEV/markview.nvim
+    --    difference is it renders a preview in normal mode and when in insert mode only shows raw markdown of current block/element IIUC, interesting idea... it's not a preview so much as a better way to edit
+
     {
         -- discussion about if unmaintained... works though so YMMV: https://github.com/iamcco/markdown-preview.nvim/issues/688
         -- not necessary to `npx yarn build`... `npm install` worked fine for me in the app dir as is show here:
