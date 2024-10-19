@@ -27,12 +27,33 @@ return {
         event = buffer_with_content_events,
     },
 
-    --
+
     {
+        -- *** smooth scrolling
         "karb94/neoscroll.nvim",
         event = buffer_with_content_events,
         config = function()
-            require('neoscroll').setup()
+            local neoscroll = require('neoscroll')
+            -- additional/custom keybindings, why aren't PageUp/Down OOB? any reason why I shouldn't remap those too?
+            local keymap = {
+                ["<PageUp>"] = function() neoscroll.ctrl_b({ duration = 450 }) end,
+                ["<PageDown>"] = function() neoscroll.ctrl_f({ duration = 450 }) end,
+                -- IIUC these are builtin defaults (or close to them):
+                -- ["<C-u>"] = function() neoscroll.ctrl_u({ duration = 250 }) end,
+                -- ["<C-d>"] = function() neoscroll.ctrl_d({ duration = 250 }) end,
+                -- ["<C-b>"] = function() neoscroll.ctrl_b({ duration = 450 }) end,
+                -- ["<C-f>"] = function() neoscroll.ctrl_f({ duration = 450 }) end,
+                -- ["<C-y>"] = function() neoscroll.scroll(-0.1, { move_cursor = false, duration = 100 }) end,
+                -- ["<C-e>"] = function() neoscroll.scroll(0.1, { move_cursor = false, duration = 100 }) end,
+                -- ["zt"]    = function() neoscroll.zt({ half_win_duration = 250 }) end,
+                -- ["zz"]    = function() neoscroll.zz({ half_win_duration = 250 }) end,
+                -- ["zb"]    = function() neoscroll.zb({ half_win_duration = 250 }) end,
+            }
+            local modes = { 'n', 'v', 'x' }
+            for key, func in pairs(keymap) do
+                vim.keymap.set(modes, key, func)
+            end
+            neoscroll.setup({})
         end
     }, -- smooth scrolling? ok I like this a bit ... lets see if I keep it (ctrl+U/D,B/F has an animated scroll basically) - not affect hjkl/gg/G
     -- also works with zb/zt/zz which I wasn't aware of but looks useful => zz = center current line! zt/zb = curr line to top or bottom... LOVE IT!
