@@ -37,10 +37,6 @@ require('localz.filetypemods')
     -- https://nvimluau.dev/hood-popui-nvim  # boxes around UI elemennts like hover boxes?
     --
 
-
-    -- PRN indent guides (vertically, like vscode plugin)
-    -- use "lukas-reineke/indent-blankline.nvim"
-
     -- PRN customize statusline plugin (though I don't care for a bunch of crap I don't need to see, i.e. git branch shouldn't waste screen space)
     -- use "nvim-lualine/lualine.nvim" -- maybe useful for small customizations, i.e. I wanna show selected char count in visual selection mode
 

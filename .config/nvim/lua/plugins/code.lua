@@ -39,6 +39,12 @@ return {
     -- this scratches an itch I had about how it is hard to tell where I am jumping to with page up/down half page up /down etc... this makes it obvious where the movement is headed, long term I might become annoyed by this but its a useful idea... after all we have half page up/down me thinks for a reason that you can see the scroll easier than one full page jump
 
 
+    {
+        -- PRN indent guides (vertically, like vscode plugin)
+        "lukas-reineke/indent-blankline.nvim",
+        main = "ibl",
+        opts = {},
+    },
 
     -- use 'machakann/vim-sandwich' -- alternative?
     --
