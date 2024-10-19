@@ -53,7 +53,9 @@ return {
             for key, func in pairs(keymap) do
                 vim.keymap.set(modes, key, func)
             end
-            neoscroll.setup({})
+            neoscroll.setup({
+                -- easing = "quartic", -- I think I prefer linear default
+            })
         end
     }, -- smooth scrolling? ok I like this a bit ... lets see if I keep it (ctrl+U/D,B/F has an animated scroll basically) - not affect hjkl/gg/G
     -- also works with zb/zt/zz which I wasn't aware of but looks useful => zz = center current line! zt/zb = curr line to top or bottom... LOVE IT!
