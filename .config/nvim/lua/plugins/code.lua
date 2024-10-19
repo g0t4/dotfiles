@@ -49,8 +49,13 @@ return {
                 hooks.type.WHITESPACE,
                 hooks.builtin.hide_first_space_indent_level -- I like excluding this one, less clutter, right?
             )
-
-            require("ibl").setup { indent = { highlight = highlight } }
+            -- :h config.indent▏
+            require("ibl").setup {
+                indent = {
+                    highlight = highlight,
+                    char = "▏",
+                }
+            }
         end
     },
 
