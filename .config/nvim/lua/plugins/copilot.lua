@@ -45,10 +45,9 @@ return {
             -- FYI defaults to claude, recommends claude too.. I should try both
             provider = "copilot",
             -- auto_suggestions_provider = "claude" -- or "copilot" or? which is better try both
-            auto_suggestions_provider = "copilot",
 
             behaviour = {
-                auto_suggestions = true, -- Experimental stage
+                auto_suggestions = false, -- Experimental stage
                 auto_set_highlight_group = true,
                 auto_set_keymaps = true,
                 auto_apply_diff_after_generation = false,
