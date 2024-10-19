@@ -76,28 +76,15 @@ local function desaturate_color_hex(hex_color, desaturation_factor)
     -- Return the new color in hex format
     return rgb_to_hex(new_r, new_g, new_b)
 end
-
 local function adjust_brightness_hex(hex_color, brightness_factor)
-    -- Convert hex to RGB
     local r, g, b = hex_to_rgb(hex_color)
-
-    -- Convert RGB to HSL
     local h, s, l = rgb_to_hsl(r, g, b)
-
-    -- Adjust the lightness by the brightness_factor
     l = l * brightness_factor
-
-    -- Ensure lightness remains within [0, 1]
     if l > 1 then l = 1 end
     if l < 0 then l = 0 end
-
-    -- Convert back to RGB
     local new_r, new_g, new_b = hsl_to_rgb(h, s, l)
-
-    -- Return the new color in hex format
     return rgb_to_hex(new_r, new_g, new_b)
 end
-
 
 -- Example usage: apply desaturation to colors (reduce saturation by 50%)
 -- local new_rainbow_red = desaturate_color_hex("#E06C75", 0.5)    -- Hex for #E06C75
