@@ -44,6 +44,12 @@ return {
         -- FYI iterm2 select copies guides as pipe char... not worse thing as I dont wanna use select for copying anyways so MEH for now
         "lukas-reineke/indent-blankline.nvim",
         config = function()
+            local hooks = require "ibl.hooks"
+            hooks.register(
+                hooks.type.WHITESPACE,
+                hooks.builtin.hide_first_space_indent_level -- I like excluding this one, less clutter, right?
+            )
+
             require("ibl").setup { indent = { highlight = highlight } }
         end
     },
