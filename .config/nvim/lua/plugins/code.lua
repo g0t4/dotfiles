@@ -44,34 +44,6 @@ return {
         -- FYI iterm2 select copies guides as pipe char... not worse thing as I dont wanna use select for copying anyways so MEH for now
         "lukas-reineke/indent-blankline.nvim",
         config = function()
-            local highlight = {
-                "RainbowRed",
-                "RainbowYellow",
-                "RainbowBlue",
-                "RainbowOrange",
-                "RainbowGreen",
-                "RainbowViolet",
-                "RainbowCyan",
-            }
-
-            local color_helpers = require "localz.color-helpers"
-            local desaturate = color_helpers.desaturate_color_hex
-            local brightness = color_helpers.adjust_brightness_hex
-            local hooks = require "ibl.hooks"
-            -- create the highlight groups in the highlight setup hook, so they are reset
-            -- every time the colorscheme changes
-            hooks.register(hooks.type.HIGHLIGHT_SETUP, function()
-                local desat = 0.50
-                local bright = 0.65
-                vim.api.nvim_set_hl(0, "RainbowRed", { fg = brightness(desaturate("#9A4F56", desat), bright) })
-                vim.api.nvim_set_hl(0, "RainbowYellow", { fg = brightness(desaturate("#B89A61", desat), bright) })
-                vim.api.nvim_set_hl(0, "RainbowBlue", { fg = brightness(desaturate("#4A7FA6", desat), bright) })
-                vim.api.nvim_set_hl(0, "RainbowOrange", { fg = brightness(desaturate("#A77A4C", desat), bright) })
-                vim.api.nvim_set_hl(0, "RainbowGreen", { fg = brightness(desaturate("#7A9B62", desat), bright) })
-                vim.api.nvim_set_hl(0, "RainbowViolet", { fg = brightness(desaturate("#9B64A7", desat), bright) })
-                vim.api.nvim_set_hl(0, "RainbowCyan", { fg = brightness(desaturate("#3D818A", desat), bright) })
-            end)
-
             require("ibl").setup { indent = { highlight = highlight } }
         end
     },
