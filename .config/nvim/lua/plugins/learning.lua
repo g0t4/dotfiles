@@ -1,5 +1,14 @@
 return {
 
+    -- TODO make a plugin that tracks which keys you use and has a report or reminds you when not using new keys you want to be learning...
+    -- i.e. right now: `zz` daily `zt/zb` weekly
+    --     H/M/L normal mode weekly
+    --     Ctrl+U/D daily
+    --     track when I sequentially move up x lines and should've used page up/down instead? ...  i.e. 10+ lines (or half of lines var) in a row
+    --     gg=G monthly
+    --      
+    --
+
     {
         'm4xshen/hardtime.nvim', -- tons of features, recommends, block repeated key use, etc
         requires = { "MunifTanjim/nui.nvim", "nvim-lua/plenary.nvim" },
