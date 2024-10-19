@@ -54,17 +54,19 @@ return {
                 "RainbowCyan",
             }
 
+            local color_helpers = require "localz.color-helpers"
+            local desaturate = color_helpers.desaturate_color_hex
             local hooks = require "ibl.hooks"
             -- create the highlight groups in the highlight setup hook, so they are reset
             -- every time the colorscheme changes
             hooks.register(hooks.type.HIGHLIGHT_SETUP, function()
-                vim.api.nvim_set_hl(0, "RainbowRed", { fg = "#E06C75" })
-                vim.api.nvim_set_hl(0, "RainbowYellow", { fg = "#E5C07B" })
-                vim.api.nvim_set_hl(0, "RainbowBlue", { fg = "#61AFEF" })
-                vim.api.nvim_set_hl(0, "RainbowOrange", { fg = "#D19A66" })
-                vim.api.nvim_set_hl(0, "RainbowGreen", { fg = "#98C379" })
-                vim.api.nvim_set_hl(0, "RainbowViolet", { fg = "#C678DD" })
-                vim.api.nvim_set_hl(0, "RainbowCyan", { fg = "#56B6C2" })
+                vim.api.nvim_set_hl(0, "RainbowRed", { fg = desaturate("#9A4F56", 0.5) })
+                vim.api.nvim_set_hl(0, "RainbowYellow", { fg = desaturate("#B89A61", 0.5) })
+                vim.api.nvim_set_hl(0, "RainbowBlue", { fg = desaturate("#4A7FA6", 0.5) })
+                vim.api.nvim_set_hl(0, "RainbowOrange", { fg = desaturate("#A77A4C", 0.5) })
+                vim.api.nvim_set_hl(0, "RainbowGreen", { fg = desaturate("#7A9B62", 0.5) })
+                vim.api.nvim_set_hl(0, "RainbowViolet", { fg = desaturate("#9B64A7", 0.5) })
+                vim.api.nvim_set_hl(0, "RainbowCyan", { fg = desaturate("#3D818A", 0.5) })
             end)
 
             require("ibl").setup { indent = { highlight = highlight } }
