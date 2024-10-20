@@ -815,7 +815,7 @@ if command -q apt
     abbr dpkgS 'dpkg -S' # search for package that owns file
 
     function dpkg_L_files
-        dpkg -L $argv | xargs -I {} echo 'test ! -d "{}"; echo "{}"' | source
+        dpkg -L $argv | xargs -I {} echo 'test ! -d "{}"; and echo "{}"' | source
     end
 
     if not command -q treeify
