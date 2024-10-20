@@ -41,7 +41,7 @@
 	required = true
 
 [init]
-	defaultBranch = main
+	defaultBranch = master 
 
 [pull]
   rebase = true
