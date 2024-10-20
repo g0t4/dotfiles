@@ -11,7 +11,7 @@ return {
             "nvim-tree/nvim-web-devicons",
         },
         keys = {
-            { "<C-l>",     ":NvimTreeFindFileToggle<CR>", mode = "n", noremap = true, silent = true },
+            { "<C-l>",     ":NvimTreeFindFile<CR>", mode = "n", noremap = true, silent = true },
             { "<C-S-l>",   ":NvimTreeFindFileToggle<CR>", mode = "n", noremap = true, silent = true },
 
             -- FYI cmd+shift+e => Esc+OQ iiterm settings => F2 (in term)
