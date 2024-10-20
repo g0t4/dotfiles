@@ -6,13 +6,18 @@ return {
     --     Ctrl+U/D daily
     --     track when I sequentially move up x lines and should've used page up/down instead? ...  i.e. 10+ lines (or half of lines var) in a row
     --     gg=G monthly
-    --      
+    --
     --
 
     {
         'm4xshen/hardtime.nvim', -- tons of features, recommends, block repeated key use, etc
         requires = { "MunifTanjim/nui.nvim", "nvim-lua/plenary.nvim" },
         config = function()
+            local version = vim.version()
+            if version.major == 0 and version.minor < 10 then
+                return
+            end
+
             require("hardtime").setup({
 
                 disabled_keys = {
