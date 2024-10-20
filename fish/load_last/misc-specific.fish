@@ -818,6 +818,11 @@ if command -q apt
         dpkg -L $argv | xargs -I {} echo 'test ! -d "{}"; and echo "{}"' | source
     end
 
+    function dpkg_L_tree
+        # uses exa to append icons (left side only), pipes to awk to put icon on right side, pipes to treeify and icon ends up on right side
+        exa  (dpkg_L_files usbutils) --icons=always  | awk '{icon=$1; $1=""; sub(/^ /, ""); print $0, icon}' | treeify
+    end
+
     if not command -q treeify
         function treeify
             echo "treeify not installed, please install it with 'cargo install treeify'"
