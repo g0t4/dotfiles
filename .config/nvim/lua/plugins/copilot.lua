@@ -79,8 +79,11 @@ return {
                 "let g:copilot_no_tab_map = 1
                 "" ok I kinda like ctrl+enter for copilot suggestions (vs enter for completions in general (coc)) but for now I will put tab back and see if I have any issues with it and swap this back in if so
 
-                " !!! what else do I want to add to statusline? where should I put all the logic combined? here for now is fine to keep it together? but this is potentially lazy loaded, though I disabled that above for now
-                set statusline+=%{GetStatusLineCopilot()}
+                " TODO move statusline elsewhere? NBD to leave for now
+                " approximately the default:
+                "set statusline=%f\ %y\ %m\ %=L:%l/C:%c\ %p%%
+                "set statusline+=%{GetStatusLineCopilot()}
+                set statusline=%f\ %y\ %m\ %=%{GetStatusLineCopilot()}\ L:%l/C:%c\ %p%% 
 
                 function! GetStatusLineCopilot()
                     " exists is just in case I move this elsewhere and I cant know for sure the copilot plugin is loaded already 
