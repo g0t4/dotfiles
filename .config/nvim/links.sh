@@ -1,5 +1,13 @@
 #!/usr/bin/env bash
 
+# new machine setup
+# clone dotfiles
+# install nvim
+# links below
+# install deps: npm/node, deno (markdown), rg (telescope), luarocks
+# use `:checkhealth` in nvim to see whats missing
+
+
 # current links I am using for vim dotfiles
 
 # PRN wipe ~/.config/nvim if drastically change the links

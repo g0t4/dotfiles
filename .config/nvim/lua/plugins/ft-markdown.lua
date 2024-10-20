@@ -22,21 +22,24 @@ return {
         end,
     },
 
-    {
-        "toppair/peek.nvim",
-        ft = { "markdown" }, -- lazy load for markdown files only
-        -- event = "VeryLazy", -- this is in peek's docs but I changed to ft (above), why load until open a md file?
-        build = "deno task --quiet build:fast",
-        config = function()
-            require("peek").setup({
-                app = "webview", -- or "browser"
-            })
-            -- perfectly fine to leave these here, don't show them until needed?
-            vim.api.nvim_create_user_command("PeekOpen", require("peek").open, {})
-            vim.api.nvim_create_user_command("PeekClose", require("peek").close, {})
-        end,
-        -- install deno on system
-    }
+    -- -- another good markdown extension with only difference being that it opens a webview window (if configured to do so) instead of a browser window, so I don't need it too 
+    -- -- uses deno which is another dep I don't care to have everywhere, unless this were a better ext
+    -- -- IIRC this one appears maintained (at least vs iamcco above)
+    -- {
+    --     "toppair/peek.nvim",
+    --     ft = { "markdown" }, -- lazy load for markdown files only
+    --     -- event = "VeryLazy", -- this is in peek's docs but I changed to ft (above), why load until open a md file?
+    --     build = "deno task --quiet build:fast",
+    --     config = function()
+    --         require("peek").setup({
+    --             app = "webview", -- or "browser"
+    --         })
+    --         -- perfectly fine to leave these here, don't show them until needed?
+    --         vim.api.nvim_create_user_command("PeekOpen", require("peek").open, {})
+    --         vim.api.nvim_create_user_command("PeekClose", require("peek").close, {})
+    --     end,
+    --     -- install deno on system
+    -- }
 
     -- NOTES:
     -- markdown rendering:
