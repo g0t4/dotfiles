@@ -67,15 +67,37 @@ if version.major == 0 and version.minor < 10 then
 end
 
 return {
+
     {
         'github/copilot.vim',
-        event = { "InsertEnter" }, -- lazy load on first insert
+        -- event = { "InsertEnter" }, -- lazy load on first insert  -- load immediately is fine, esp if changing status bar here
         config = function()
+
             vim.cmd([[
                 "" copilot consider map to ctrl+enter instead of tab so IIUC other completions still work, O
                 "imap <silent><script><expr> <C-CR> copilot#Accept("\\<CR>")
                 "let g:copilot_no_tab_map = 1
                 "" ok I kinda like ctrl+enter for copilot suggestions (vs enter for completions in general (coc)) but for now I will put tab back and see if I have any issues with it and swap this back in if so
+
+                " !!! what else do I want to add to statusline? where should I put all the logic combined? here for now is fine to keep it together? but this is potentially lazy loaded, though I disabled that above for now
+                set statusline+=%{GetStatusLineCopilot()}
+
+                function! GetStatusLineCopilot()
+                    " exists is just in case I move this elsewhere and I cant know for sure the copilot plugin is loaded already 
+                    if exists('*copilot#Enabled') && copilot#Enabled()
+                        " add spaces after icon so subsequent text doesn't run under it
+                        "return nr2char(0xEC1E)
+                        return ' '
+                    else
+                        "return nr2char(0xF4B9)
+                        return ' '
+                    endif
+                    " glyphs:
+                    "   \uEC1E
+                    "   \uF4B8
+                    "   \uF4B9
+                    "   \uF4BA
+                endfunction
 
                 function! ToggleCopilot()
                     " FYI https://github.com/github/copilot.vim/blob/release/autoload/copilot.vim
@@ -90,8 +112,7 @@ return {
                         Copilot enable
                     endif
 
-                    " echo "copilot is: " . (g:copilot_enabled ? "on" : "off")
-                    Copilot status " visual confirmation - precise about global vs buffer local too
+                    " Copilot status " visual confirmation - precise about global vs buffer local too
                 endfunction
 
                 :inoremap <F12> <Esc>:call ToggleCopilot()<CR>a
