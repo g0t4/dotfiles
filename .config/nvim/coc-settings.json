@@ -14,6 +14,8 @@
     ],
     // FYI another persons' config: https://raw.githubusercontent.com/oppara/dotfiles/611ea809e380d5b4e3e374568a85e52e744a429e/config/nvim/coc-settings.json
     "languageserver": {
+        // https://github.com/ndonfris/fish-lsp#client-configuration-required
+        // https://github.com/ndonfris/fish-lsp-language-clients/tree/coc_minimal
         "fish-lsp": {
             "command": "fish-lsp",
             "filetypes": [
@@ -21,7 +23,19 @@
             ],
             "args": [
                 "start"
-            ]
+            ],
+            "revealOutputChannelOn": "info",
+            "initializationOptions": {
+                "workspaces": {
+                    "paths": {
+                        "defaults": [
+                            // IIUC these provide paths for symbols and other definitions from primary fish config files and brew installed share/fish files
+                            "$HOME/.config/fish",
+                            "/opt/homebrew/share/fish",
+                        ]
+                    }
+                }
+            }
         },
     },
 }
