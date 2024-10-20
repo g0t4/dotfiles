@@ -72,7 +72,6 @@ return {
         'github/copilot.vim',
         -- event = { "InsertEnter" }, -- lazy load on first insert  -- load immediately is fine, esp if changing status bar here
         config = function()
-
             vim.cmd([[
                 "" copilot consider map to ctrl+enter instead of tab so IIUC other completions still work, O
                 "imap <silent><script><expr> <C-CR> copilot#Accept("\\<CR>")
@@ -83,10 +82,10 @@ return {
                 " approximately the default:
                 "set statusline=%f\ %y\ %m\ %=L:%l/C:%c\ %p%%
                 "set statusline+=%{GetStatusLineCopilot()}
-                set statusline=%f\ %y\ %m\ %=%{GetStatusLineCopilot()}\ L:%l/C:%c\ %p%% 
+                set statusline=%f\ %y\ %m\ %=%{GetStatusLineCopilot()}\ L:%l/C:%c\ %p%%
 
                 function! GetStatusLineCopilot()
-                    " exists is just in case I move this elsewhere and I cant know for sure the copilot plugin is loaded already 
+                    " exists is just in case I move this elsewhere and I cant know for sure the copilot plugin is loaded already
                     if exists('*copilot#Enabled') && copilot#Enabled()
                         " add spaces after icon so subsequent text doesn't run under it
                         "return nr2char(0xEC1E)
