@@ -103,7 +103,7 @@ vim.cmd("nnoremap <leader>pd :lua print_ts_cursor_details()<CR>")
 
 vim.api.nvim_create_autocmd("BufReadPost", {
     callback = function()
-        vim.cmd("source ~/.config/nvim/highlights.vim")
+        vim.cmd("source ~/.config/nvim/lua/plugins/vimz/highlights.vim")
     end
 })
 
