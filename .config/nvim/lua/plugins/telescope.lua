@@ -1,13 +1,3 @@
-local telescopeConfig = require('telescope.config')
-
--- Clone the default Telescope configuration
-local vimgrep_arguments = { unpack(telescopeConfig.values.vimgrep_arguments) }
--- I want to search in hidden/dot files.
-table.insert(vimgrep_arguments, "--hidden")
--- I don't want to search in the `.git` directory.
-table.insert(vimgrep_arguments, "--glob")
-table.insert(vimgrep_arguments, "!**/.git/*")
-
 return {
 
     {
@@ -26,6 +16,16 @@ return {
             { '<leader>s', ':Telescope git_status<CR>', mode = 'n' },
         },
         config = function()
+            local telescopeConfig = require('telescope.config')
+
+            -- Clone the default Telescope configuration
+            local vimgrep_arguments = { unpack(telescopeConfig.values.vimgrep_arguments) }
+            -- I want to search in hidden/dot files.
+            table.insert(vimgrep_arguments, "--hidden")
+            -- I don't want to search in the `.git` directory.
+            table.insert(vimgrep_arguments, "--glob")
+            table.insert(vimgrep_arguments, "!**/.git/*")
+
             require('telescope').setup({
                 defaults = {
                     layout_strategy = 'flex', -- based on width (kinda like this actually and it resizes with the window perfectly)
