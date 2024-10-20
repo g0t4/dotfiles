@@ -34,6 +34,12 @@ function gh_repo_create_public
     end
 
     __gh_repo_create_clone_with_ignores $__repo_name
+    if string match --quiet --regex "^course" $__repo_name
+        for r in (seq 1 10)
+            log_ --red "Does this course require 'main' branch? If so set it manually"
+        end
+    end
+
 end
 
 function __gh_repo_create_clone_with_ignores
@@ -63,7 +69,7 @@ function __gh_depoliticize
 
 
     # open page to view before/after, can check this after done with changes by refreshing
-    gh repo view --web 
+    gh repo view --web
 
     if not git pull --rebase
         echo "Failed to pull latest, aborting..."
@@ -79,7 +85,7 @@ function __gh_depoliticize
     end
 
     # create master if not exists
-    if not git branch -a | grep -q "master"
+    if not git branch -a | grep -q master
         git checkout -b master
         git push --set-upstream origin $(git_current_branch)
     end
