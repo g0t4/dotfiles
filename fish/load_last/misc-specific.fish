@@ -818,10 +818,14 @@ if command -q apt
         dpkg -L $argv | xargs -I {} echo 'test ! -d "{}"; and echo "{}"' | source
     end
 
+    complete -c dpkg_L_files -a '(dpkg --get-selections | grep -w "install" | awk \'{print $1}\')' --no-files
+
     function dpkg_L_tree
         # uses exa to append icons (left side only), pipes to awk to put icon on right side, pipes to treeify and icon ends up on right side
         exa  (dpkg_L_files usbutils) --icons=always  | awk '{icon=$1; $1=""; sub(/^ /, ""); print $0, icon}' | treeify
     end
+
+    complete -c dpkg_L_tree -w dpkg_L_files
 
     if not command -q treeify
         function treeify
