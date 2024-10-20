@@ -35,8 +35,7 @@ function _update_dotfiles
         echo "dotfiles not found..."
         return
     end
-    cd $WES_DOTFILES
-    git pull
+    git -C $WES_DOTFILES pull
 end
 
 function _update_os_lazy
