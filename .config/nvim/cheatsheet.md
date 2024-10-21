@@ -12,6 +12,9 @@
     - `:map <leader>` - list all with leader
     - `:nmap` - list normal
         - `:imap` / `:vmap` / `:cmap` / `:tmap`
+    - `:map <leader>` - prefixed with leader
+        - `<leader>` - a user defined key prefix (default is `\`), I have mine set to `' '` (space)
+    - `:nmap g` - list normal prefixed with `g`
 - terms
     - `motion` - moves cursor or targets a chunk of text (`:h motion`)
     - `operator` - acts on a motion (hence operator first => motion/text-object)
@@ -21,6 +24,23 @@
 - links
     - [neovim quickref](https://neovim.io/doc/user/quickref.html)
         - `:h quickref`
+
+### coc
+
+These are custom mappings in coc to add LSP features based on LSP availability... most of these are suggested in coc docs:
+
+- format
+    - `<leader>f` - format selected
+    - custom:
+        - `Shift-Alt-F` - format entire file
+
+- rewrite
+    - `<leader>rn` - rename symbol
+- go to
+    - `gd` - definition
+    - `gy` - type definition
+    - `gi` - implementation
+    - `gr` - references
 
 ### indentation
 
@@ -66,7 +86,7 @@
         - FYI, case is ignored for `Ctrl` keymaps
 - medium movements
     - `(` / `)` - by sentence
-    - `{` / `}` - by paragraph (*** - basically by empty lines)
+    - `{` / `}` - by paragraph (by newline) // *** favorite (I leave new lines strategically now)
     - `[[` / `]]` - by section (in markdown, by headers)
         - `[]` / `][` - end of section
 - small movements
