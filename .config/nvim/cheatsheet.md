@@ -85,12 +85,12 @@ These are custom mappings in coc to add LSP features based on LSP availability..
         - `N zl` - right
         - `zH` / `zL` - half screen left/right
     - move cursor only
-        - `H` -  top of screen
-        - `M` -  middle of screen
-        - `L` -  bottom of screen
+        - `H` - top of screen
+        - `M` - middle of screen
+        - `L` - bottom of screen
     - top/bottom
-        - `gg` -  top of document
-        - `G` -  bottom of document
+        - `gg` - top of document
+        - `G` - bottom of document
     - page up/down
         - `Ctrl+U` - up half
             - `Ctrl+D` - down half
@@ -108,21 +108,21 @@ These are custom mappings in coc to add LSP features based on LSP availability..
         - `[]` / `][` - end of section
 - small movements
     - by word
-        - `w` -  start of next word
-            - `b` -  start of previous word
-        - `e` -  end of next word
-            - `ge` -  end of previous word
+        - `w` - start of next word
+            - `b` - start of previous word
+        - `e` - end of next word
+            - `ge` - end of previous word
     - current line
-        - `0` -  start of line
-        - `^` -  first non-whitespace character of line
-        - `$` -  end of line
+        - `0` - start of line
+        - `^` - first non-whitespace character of line
+        - `$` - end of line
     - to character (f = find, t = till)
         - Notes:
             - I used to think of `t` == `to`, but `till` is more accurate b/c it stops before the char
-        - `f<char>` -  next occurrence of `<char>` on current line
-        - `F<char>` -  previous occurrence of `<char>` on current line
-        - `t<char>` -  before next occurrence of `<char>` on current line
-        - `T<char>` -  after previous occurrence of `<char>` on current line
+        - `f<char>` - next occurrence of `<char>` on current line
+        - `F<char>` - previous occurrence of `<char>` on current line
+        - `t<char>` - before next occurrence of `<char>` on current line
+        - `T<char>` - after previous occurrence of `<char>` on current line
         - `;` - repeat last `f`, `t`, `F`, or `T` movement
         - `,` - repeat last `f`, `t`, `F`, or `T` movement in opposite direction
 
