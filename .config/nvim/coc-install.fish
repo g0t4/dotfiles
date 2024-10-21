@@ -8,3 +8,5 @@ wcl ndonfris/fish-lsp
 z ndonfris/fish-lsp
 yarn install
 
+
+# :CocInstall coc-markdownlint # todo vet this

@@ -22,21 +22,27 @@
         - `Ctrl+b` / `PageUp` - up full
         - `Ctrl+f` / `PageDown` - down full
 - medium movements
-    - `(` / `)` - start of sentence
-    - `{` / `}` - start of paragraph - basically, the next blank line
-    - `[[` / `]]` -  start of section
-    - `[]` / `][` -  end of section
+    - `(` / `)` - by sentence
+    - `{` / `}` - by paragraph (*** - basically by empty lines)
+    - `[[` / `]]` - by section/{} in first column
+    - `[]` / `][` - next/previous end of section
 - small movements
-    - `w` -  start of next word
-    - `e` -  end of next word
-    - `b` -  start of previous word
-    - `0` -  start of line
-    - `^` -  first non-whitespace character of line
-    - `$` -  end of line
-    - `f<char>` -  next occurrence of `<char>` on current line
-    - `F<char>` -  previous occurrence of `<char>` on current line
-    - `t<char>` -  before next occurrence of `<char>` on current line
-    - `T<char>` -  after previous occurrence of `<char>` on current line
-    - `;` - repeat last `f`, `t`, `F`, or `T` movement
-    - `,` - repeat last `f`, `t`, `F`, or `T` movement in opposite direction
+    - by word
+        - `w` -  start of next word
+        - `e` -  end of next word
+        - `b` -  start of previous word
+        - `ge` -  end of previous word
+    - current line
+        - `0` -  start of line
+        - `^` -  first non-whitespace character of line
+        - `$` -  end of line
+    - to character (f = find, t = till)
+        - Notes:
+            - I used to think of `t` == `to`, but `till` is more accurate b/c it stops before the char
+        - `f<char>` -  next occurrence of `<char>` on current line
+        - `F<char>` -  previous occurrence of `<char>` on current line
+        - `t<char>` -  before next occurrence of `<char>` on current line
+        - `T<char>` -  after previous occurrence of `<char>` on current line
+        - `;` - repeat last `f`, `t`, `F`, or `T` movement
+        - `,` - repeat last `f`, `t`, `F`, or `T` movement in opposite direction
 
