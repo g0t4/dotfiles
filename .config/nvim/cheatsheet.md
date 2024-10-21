@@ -29,6 +29,9 @@
     - `>>` - indent current line
     - `<<` - unindent current line
     - `==` - auto-indent current line
+- paste
+    - `[p` - paste before cursor w/ adjust indent to current line
+    - `]p` - paste after "
 - TODO vim tab settings
 - TODO nvim editorconfig support (add .editorconfig)
 - TODO section on formatting (not here)
