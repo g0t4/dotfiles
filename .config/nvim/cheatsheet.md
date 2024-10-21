@@ -40,9 +40,13 @@
 
 - large movements
     - scroll current cursor line to... (***)
-        - `zz` - center cursor
-        - `zt` - top of screen
-        - `zb` - bottom of screen
+        - `zz` or `z.` - center of screen
+        - `zt` or `z<CR>` - top of screen
+        - `zb` or `z-` - bottom of screen
+    - scroll left/right
+        - `N zh` - left
+        - `N zl` - right
+        - `zH` / `zL` - half screen left/right
     - move cursor only
         - `H` -  top of screen
         - `M` -  middle of screen
@@ -51,10 +55,15 @@
         - `gg` -  top of document
         - `G` -  bottom of document
     - page up/down
-        - `Ctrl+u` - up half
-        - `Ctrl+d` - down half
-        - `Ctrl+b` / `PageUp` - up full
-        - `Ctrl+f` / `PageDown` - down full
+        - `Ctrl+U` - up half
+            - `Ctrl+D` - down half
+        - `Ctrl+B` / `PageUp` - up full
+            - `Ctrl+F` / `PageDown` - down full
+        - `Ctrl+E` - 1 line up
+            - `Ctrl+Y` - 1 line down
+        - all the above can be prefixed with a count
+        - and can change amount of lines each moves by, amounts above are defaults
+        - FYI, case is ignored for `Ctrl` keymaps
 - medium movements
     - `(` / `)` - by sentence
     - `{` / `}` - by paragraph (*** - basically by empty lines)
