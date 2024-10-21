@@ -94,3 +94,7 @@
 - `Ctrl-W` prefix
     - `h` / `j` / `k` / `l` - move to window left / down / up / right
         - `Up` / `Down` / `Left` / `Right`
+    - resize:
+        - `==` - make all windows equal size
+        - `+` / `-` - increase / decrease height (add N before Ctrl-W)
+
