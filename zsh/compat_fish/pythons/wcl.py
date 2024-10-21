@@ -35,8 +35,8 @@ def wcl(args):
     else:
         os.makedirs(org_dir, exist_ok=True)
 
-    is_zsh_present = not is_windows()
-    if is_zsh_present:
+
+    if is_executable_present("zsh"):
         ### add dir to z ahead of cloning so I can CD to it while cloning
         # - or if dir already exists, then add to the stats count for it
         # - zsh's z (dir can be added before created)
@@ -81,8 +81,7 @@ def wcl(args):
         else:
             subprocess.run(['pwsh', '-NoProfile', '-Command', z_add_pwsh], check=IGNORE_FAILURE)
 
-    is_fish_present = not is_windows()
-    if is_fish_present:
+    if is_executable_present("fish"):
         ### add to fish's z:
         # - dir must exist before adding
         # - fish has __z_add which uses $PWD hence set cwd
@@ -95,6 +94,12 @@ def wcl(args):
         else:
             subprocess.run(z_add_fish, cwd=repo_dir, check=IGNORE_FAILURE)
 
+def is_executable_present(cmd) -> bool:
+    if is_windows():
+        return False
+
+    result = subprocess.run(f"which {cmd}", shell=True, check=IGNORE_FAILURE)
+    return result.returncode == 0
 
 def clone_url(parsed) -> str:
     # probably don't recreate url if not a major player? (bitbucket, github, gitlab)
