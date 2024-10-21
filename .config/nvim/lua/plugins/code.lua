@@ -75,7 +75,7 @@ return {
             -- :h config.indent▏
             require("ibl").setup {
                 indent = {
-                    -- highlight = highlight, -- TODO what was this supposed to be for? vestigial? I commented out b/c its broken anyways
+                    -- highlight = highlight, -- TODO what was this supposed to be for? vestigial? I commented out b/c its broken anyways, FYI this is for setting a highlight group to use for the indent guides
                     char = "▏",
                 }
             }
