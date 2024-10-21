@@ -131,8 +131,7 @@ These are custom mappings in coc to add LSP features based on LSP availability..
 - `Ctrl-W` prefix
     - `h` / `j` / `k` / `l` - move to window left / down / up / right
         - `Up` / `Down` / `Left` / `Right`
-    - resize:
-        -
+    - resize
         - `==` - make all windows equal size
         - `+` / `-` - increase / decrease height # lines (use N before Ctrl-W)
         - `>` / `<` - increase / decrease width # columns
