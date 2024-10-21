@@ -2,7 +2,7 @@
 abbr ghrc gh_repo_create_private
 function gh_repo_create_private
     set __repo_name "$argv"
-    if string match $__repo_name ""
+    if string match --quiet $__repo_name ""
         log_error "No repo name provided, aborting..."
         return -1
     end
@@ -23,7 +23,7 @@ end
 abbr ghrcp gh_repo_create_public
 function gh_repo_create_public
     set __repo_name "$argv"
-    if string match $__repo_name ""
+    if string match --quiet $__repo_name ""
         log_error "No repo name provided, aborting..."
         return -1
     end
