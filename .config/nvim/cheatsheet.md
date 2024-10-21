@@ -47,6 +47,9 @@ These are custom mappings in coc to add LSP features based on LSP availability..
     - `gy` - type definition
     - `gi` - implementation
     - `gr` - references
+- diagnostics
+    - `[g` - previous diagnostic
+    - `]g` - next diagnostic
 
 ### avante
 
