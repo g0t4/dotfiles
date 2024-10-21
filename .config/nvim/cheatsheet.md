@@ -13,9 +13,9 @@
     - `:nmap` - list normal
         - `:imap` / `:vmap` / `:cmap` / `:tmap`
 - terms
-    - `motion` - moves cursor (`:h motion`)
-    - `operator` - acts on a motion/text-object (hence operator first => motion/text-object)
-    - `text-objects` - target a block of text (i.e. word, sentence, paragraph, section, etc)
+    - `motion` - moves cursor or targets a chunk of text (`:h motion`)
+    - `operator` - acts on a motion (hence operator first => motion/text-object)
+    - `text-objects` motions - target a block of text (i.e. word, sentence, paragraph, section, etc)
     - `count` - repeat following command
     - `register` - a place to store text
 - links
