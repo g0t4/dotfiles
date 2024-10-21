@@ -31,16 +31,30 @@ These are custom mappings in coc to add LSP features based on LSP availability..
 
 - format
     - `<leader>f` - format selected
-    - custom:
-        - `Shift-Alt-F` - format entire file
-
+    - `Shift-Alt-F` - format entire file (not in suggested set, mirrors vscode)
 - rewrite
     - `<leader>rn` - rename symbol
+    - `<leader>r` - refactor selection
+    - `<leader>re` - refactor
+- actions
+    - `<leader>cl` - code lens actions
+    - `<leader>ac` - code actions cursor
+    - `<leader>a` - code actions selected
+    - `<leader>as` - code actions source
+    - `<leader>qf` - quickfix current
 - go to
     - `gd` - definition
     - `gy` - type definition
     - `gi` - implementation
     - `gr` - references
+
+### avante
+
+- `<leader>at` - toggle chat pane
+- selections:
+    - `aa` - ask
+    - `ae` - edit
+- TODO review others I might wanna use
 
 ### indentation
 
