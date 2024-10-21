@@ -13,6 +13,7 @@ let g:coc_global_extensions = [
             \ 'coc-yaml',
             \ 'coc-tsserver',
             \ 'coc-toml',
+            \ 'coc-xml',
             \ 'coc-docker',
             \ 'coc-css'
             \ ]
