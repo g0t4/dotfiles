@@ -75,7 +75,7 @@ return {
             -- :h config.indent▏
             require("ibl").setup {
                 indent = {
-                    highlight = highlight,
+                    -- highlight = highlight, -- TODO what was this supposed to be for? vestigial? I commented out b/c its broken anyways
                     char = "▏",
                 }
             }
