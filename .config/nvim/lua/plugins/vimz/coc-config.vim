@@ -1,5 +1,22 @@
 " *** FYI coc.nvim doesn't modify key-mappings nor vim options, hence the need to specify config explicitly, fine by me!
 
+" FYI see coc-settings for manually added LSPs like for fish
+" TODO try other coc extensions / manual LSP registrations...
+" TODO and vet this list too
+let g:coc_global_extensions = [
+            \ 'coc-vimlsp',
+            \ 'coc-pyright',
+            \ 'coc-lua',
+            \ 'coc-json',
+            \ 'coc-html',
+            \ 'coc-yaml',
+            \ 'coc-tsserver',
+            \ 'coc-toml',
+            \ 'coc-docker',
+            \ 'coc-css'
+            \ ]
+
+
 " FYI
 "  :CocList extensions  " and others
 "  :CocInstall coc-lua   " wow gutter icons showed right up!
