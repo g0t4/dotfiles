@@ -17,6 +17,7 @@ let g:coc_global_extensions = [
             \ 'coc-css'
             \ ]
     " FYI coc-calc shows the range of what can be done... "1 + 2 = " and it suggests the result "3"
+    " PRN https://github.com/iamcco/coc-diagnostic => generic integration of diagnostics tools (make LSP adapter for them, IIUC)
 
 
 " FYI
