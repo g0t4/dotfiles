@@ -98,7 +98,7 @@ def is_executable_present(cmd) -> bool:
     if is_windows():
         return False
 
-    result = subprocess.run(f"which {cmd}", shell=True, check=IGNORE_FAILURE)
+    result = subprocess.run(f"which {cmd}", shell=True, check=IGNORE_FAILURE, stdout=subprocess.DEVNULL)
     return result.returncode == 0
 
 def clone_url(parsed) -> str:
