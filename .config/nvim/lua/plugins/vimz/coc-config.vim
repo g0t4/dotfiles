@@ -4,18 +4,18 @@
 " TODO try other coc extensions / manual LSP registrations...
 " TODO and vet this list too
 let g:coc_global_extensions = [
-            \ 'coc-lightbulb',
-            \ 'coc-vimlsp',
-            \ 'coc-pyright',
-            \ 'coc-lua',
-            \ 'coc-json',
-            \ 'coc-html',
-            \ 'coc-yaml',
-            \ 'coc-tsserver',
-            \ 'coc-toml',
-            \ 'coc-xml',
+            \ 'coc-css',
             \ 'coc-docker',
-            \ 'coc-css'
+            \ 'coc-html',
+            \ 'coc-json',
+            \ 'coc-lightbulb',
+            \ 'coc-lua',
+            \ 'coc-pyright',
+            \ 'coc-toml',
+            \ 'coc-tsserver',
+            \ 'coc-vimlsp',
+            \ 'coc-xml',
+            \ 'coc-yaml',
             \ ]
     " FYI coc-calc shows the range of what can be done... "1 + 2 = " and it suggests the result "3"
     " PRN https://github.com/iamcco/coc-diagnostic => generic integration of diagnostics tools (make LSP adapter for them, IIUC)
