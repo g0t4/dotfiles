@@ -2,6 +2,28 @@
 
 ## keymaps
 
+### help
+
+- help for builtin keymaps/commands
+    - `:h zz` - help for `zz`, etc
+    - `:h Ctrl-W`
+- list user defined
+    - `:map` - list all
+    - `:map <leader>` - list all with leader
+    - `:nmap` - list normal
+        - `:imap` / `:vmap` / `:cmap` / `:tmap`
+
+### indentation
+
+- change indentation
+    - `gg=G` - reindent entire file (`gg` = top, `=` - reindent, to `G` = bottom)
+    - `>>` - indent current line
+    - `<<` - unindent current line
+    - `==` - auto-indent current line
+- TODO vim tab settings
+- TODO nvim editorconfig support (add .editorconfig)
+- TODO section on formatting (not here)
+
 ### document movement
 
 - large movements
@@ -24,14 +46,14 @@
 - medium movements
     - `(` / `)` - by sentence
     - `{` / `}` - by paragraph (*** - basically by empty lines)
-    - `[[` / `]]` - by section/{} in first column
-    - `[]` / `][` - next/previous end of section
+    - `[[` / `]]` - by section (in markdown, by headers)
+        - `[]` / `][` - end of section
 - small movements
     - by word
         - `w` -  start of next word
+            - `b` -  start of previous word
         - `e` -  end of next word
-        - `b` -  start of previous word
-        - `ge` -  end of previous word
+            - `ge` -  end of previous word
     - current line
         - `0` -  start of line
         - `^` -  first non-whitespace character of line
@@ -46,3 +68,8 @@
         - `;` - repeat last `f`, `t`, `F`, or `T` movement
         - `,` - repeat last `f`, `t`, `F`, or `T` movement in opposite direction
 
+### windows
+
+- `Ctrl-W` prefix
+    - `h` / `j` / `k` / `l` - move to window left / down / up / right
+        - `Up` / `Down` / `Left` / `Right`
