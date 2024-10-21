@@ -16,6 +16,7 @@ let g:coc_global_extensions = [
             \ 'coc-docker',
             \ 'coc-css'
             \ ]
+    " FYI coc-calc shows the range of what can be done... "1 + 2 = " and it suggests the result "3"
 
 
 " FYI
