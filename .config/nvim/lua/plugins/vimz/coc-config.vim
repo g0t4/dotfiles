@@ -4,6 +4,7 @@
 " TODO try other coc extensions / manual LSP registrations...
 " TODO and vet this list too
 let g:coc_global_extensions = [
+            \ 'coc-clangd',
             \ 'coc-css',
             \ 'coc-docker',
             \ 'coc-html',
