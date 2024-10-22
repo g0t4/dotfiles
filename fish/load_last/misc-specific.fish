@@ -1372,7 +1372,7 @@ function show_hex_rgb_color
 
     # TODO check if shell supports 24bit RGB true color, iTerm2 supports this (validated in my testing), but vscode doesn't (smth to do w/ color correction but don't care to fix that right now)
 
-    #  show_hex_rgb_color "#000000" "000000"   # s/b all black (but vscode terminal isn't) => BEST INDICATOR of color corrections happening in vscode 
+    #  show_hex_rgb_color "#000000" "000000"   # s/b all black (but vscode terminal isn't) => BEST INDICATOR of color corrections happening in vscode
     #  show_hex_rgb_color "#000000" "ff0000"   # s/b bright red
     #  show_hex_rgb_color "#000000" "00ff00"   # s/b bright green
     #  show_hex_rgb_color "#000000" "0000ff"   # s/b bright blue
@@ -1454,7 +1454,7 @@ now = datetime.now()
 cut_off = now - timedelta(hours=hours)
 print('cutoff: ' , cut_off)
 
-# example filename (varies by hostname):  
+# example filename (varies by hostname):
 #     hostfoo screencap 2024-09-27 at 00.26.43.png
 # must match entire filename (full string contents)
 date_time_pattern = r'.*screencap (\d\d\d\d-\d\d-\d\d at \d\d\.\d\d\.\d\d).*.png'
