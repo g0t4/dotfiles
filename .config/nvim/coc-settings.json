@@ -1,5 +1,10 @@
 {
 
+    // code lens like inlay hints are a hot mess of slow to update and so when editing python they remain as if real code and not and you cannot tell until they refresh and leave and that is if you dont have a mistake in your indentation or code in which case they wont update
+    "pyright.inlayHints.variableTypes": false,
+    "pyright.inlayHints.parameterTypes": false,
+    "pyright.inlayHints.functionReturnTypes": false,
+
     // keep empty lines, at least 1... so I can partition sections (i.e. in this file), newlines also help movement with vim {}
     "json.format.keepLines": true,
 
