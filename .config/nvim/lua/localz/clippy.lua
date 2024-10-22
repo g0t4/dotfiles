@@ -27,18 +27,20 @@ vim.g.clipboard = {
         ['+'] = require('vim.ui.clipboard.osc52').copy('+'),
         ['*'] = require('vim.ui.clipboard.osc52').copy('*'),
     },
-    -- wire up provider to paste from cached version of register in VIM, not reading remote clipboard on paste
-    paste = {
-        -- OK this just uses "cached" copy in the register, means I cannot read remote clipboard and that is fine, I DONT CARE, not gonna click ok on a prompt every time so until I say F it and always allow paste just use this... I have always had vim operate this way for paste anyways... all I really want is to copy to remote clipboard, w/in vim I don't need paste beyond vim
-        ['+'] = function() return vim.fn.getreg('+') end,
-        ['*'] = function() return vim.fn.getreg('*') end,
-    },
+
+    -- DISABLE PASTE over OSC52 -- wire up provider to paste from cached version of register in VIM, not reading remote clipboard on paste
+    -- paste = {
+    --     -- OK this just uses "cached" copy in the register, means I cannot read remote clipboard and that is fine, I DONT CARE, not gonna click ok on a prompt every time so until I say F it and always allow paste just use this... I have always had vim operate this way for paste anyways... all I really want is to copy to remote clipboard, w/in vim I don't need paste beyond vim
+    --     ['+'] = function() return vim.fn.getreg('+') end,
+    --     ['*'] = function() return vim.fn.getreg('*') end,
+    -- },
 
     -- OSC52 paste:
-    -- paste = {
-    --     ['+'] = require('vim.ui.clipboard.osc52').paste('+'),
-    --     ['*'] = require('vim.ui.clipboard.osc52').paste('*'),
-    -- },
+    -- ya know what, I do realize I would like `p` to work with remote clipboard, let's try it and see how much I like having `p` just work with remote copies... I can turn this off if it isn't working out... I can't think of many times when I copy  anything material to the clipboard, esp on remote machines anyways and never to remotes I don't trust at least in principle (assumin gnot compromised but I am F'd bigger ways if they are compromised)
+    paste = {
+        ['+'] = require('vim.ui.clipboard.osc52').paste('+'),
+        ['*'] = require('vim.ui.clipboard.osc52').paste('*'),
+    },
 }
 
 -- -- wrong module now, but this can help troubleshoot w/o using the clipboard provider mechanism (which in prev testing swallowed errors in require non-existant module)
