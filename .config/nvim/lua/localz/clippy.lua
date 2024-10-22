@@ -1,7 +1,8 @@
 -- FYI old clipboard config:
 --- clipboard
 vim.o.clipboard = 'unnamedplus' -- use +/* which on macOS are wired to system clipboard for yank/paste
--- normally `yy` would yank to the " register, which is an isolated clipboard within vim, hence the need to use "+yy to yank to the system clipboard
+-- FYI clipboard setting used when you don't specify the register to yank to, i.e. `yy` vs `"+yy`
+-- so, normally `yy` would yank to the " register, which is an isolated clipboard within vim, hence the need to use "+yy to yank to the system clipboard
 -- so, setting unnamedplus => makes `yy` == `"+yy` and `p` == `"+p` etc.
 
 
