@@ -12,9 +12,8 @@ vim.o.clipboard = 'unnamedplus' -- use +/* which on macOS are wired to system cl
 --     clipboard: No provider. Try ":checkhealth" or ":h clipboard".
 --
 
-TODO can I just setup to always use osc52 escape codes and forget about macos/linux etc if I am always using a shell that supports them?
---
---
+-- *** ideas
+-- TODO can I just setup to always use osc52 escape codes and forget about macos/linux etc if I am always using a shell that supports them?
 -- see:   :h osc52...
 -- IDEAS in this osc52 plugin (predates nvim builtin support for osc52) that still has relevant config ideas:
 --    https://github.com/ojroques/nvim-osc52
@@ -29,24 +28,32 @@ TODO can I just setup to always use osc52 escape codes and forget about macos/li
 --
 -- vim.api.nvim_create_autocmd('TextYankPost', {callback = copy})
 --
-local function copy(lines, _)
-    require('osc52').copy(table.concat(lines, '\n'))
-end
---
-local function paste()
-    return { vim.fn.split(vim.fn.getreg(''), '\n'), vim.fn.getregtype('') }
-end
---
+
+-- *** test osc52 shell support w/o nvim:
+--    echo -e "\033]52;;$(echo -n jerk | base64)\a"
+--    # should paste "jerk" if works (works local and remote)
+
+-- *** set clipboard provider (for +/*) to use osc52
+--   FYI nvim 10.2+ has smth builtin and it doesn't work over SSH, so I am manually specifying to use osc52 module and this works!
+--   FYI also the new nvim 10.2+ mechanism appears disabled when setting clipboard=unnamedplus above, so I also needed this for that reason
 vim.g.clipboard = {
-    name = 'osc52',
-    copy = { ['+'] = copy, ['*'] = copy },
-    paste = { ['+'] = paste, ['*'] = paste },
+    name = 'OSC 52',
+    copy = {
+        ['+'] = require('vim.ui.clipboard.osc52').copy('+'),
+        ['*'] = require('vim.ui.clipboard.osc52').copy('*'),
+    },
+    paste = {
+        ['+'] = require('vim.ui.clipboard.osc52').paste('+'),
+        ['*'] = require('vim.ui.clipboard.osc52').paste('*'),
+    },
 }
---
--- Now the '+' register will copy to system clipboard using OSC52
-vim.keymap.set('n', '<leader>c', '"+y')
-vim.keymap.set('n', '<leader>cc', '"+yy')
---
+
+-- -- wrong module now, but this can help troubleshoot w/o using the clipboard provider mechanism (which in prev testing swallowed errors in require non-existant module)
+-- vim.keymap.set('n', '<leader>c', function()
+--     require('osc52').copy_operator()
+-- end, { expr = true })
+
+
 -- Note that if you set your clipboard provider like the example above, copying
 -- text from outside Neovim and pasting with <kbd>p</kbd> won't work. But you can
 -- still use the paste shortcut of your terminal emulator (usually
