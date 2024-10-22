@@ -1476,3 +1476,30 @@ for png in screencaps.glob('*.png'):
 " | python3
 
 end
+
+if command --query virsh
+    # mostly convenience for the times I work intensely on VMs and other infra
+    # ONLY the most prevalent commands I feel like suck w/ tab completion alone
+
+    abbr virshl "virsh list"
+    abbr virshla "virsh list --all"
+    # abbr virshc "virsh console"
+
+    abbr virshd "virsh define"
+    abbr virshu "virsh undefine"
+    abbr virshdx "virsh dumpxml"
+
+    # leave these for when I spend more time and feel pain specifically, tab complete is actually working well mostly
+    # abbr virshs "virsh start"
+    # abbr virshdestory "virsh destroy"
+    # abbr virshreboot "virsh reboot"
+    # virsh vshresume "virsh resume"
+    # virsh destroy - missing completions (completes files, needs --no-files and needs to complete domain names like `virsh start`)
+    #    others: domstate, domstats, ... find and contribute other fixes (fish shell completions)
+
+    abbr --set-cursor='!' -- vshn 'virsh net-!' # complete the net subcommand, might be cool to hit TAB too automatically... could an abbreviation generate any sort of keyboard input?
+    abbr virshnl "virsh net-list"
+    # abbr virshndx "virsh net-dumpxml"
+    abbr virshndl "virsh net-dhcp-leases" # mostly as reminder if Ctrl+S in virsh abbrs
+
+end
