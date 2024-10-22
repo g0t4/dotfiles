@@ -47,11 +47,6 @@ vim.cmd [[
     "         btw, vim classic always has the longer version regardless of iterm2 setting
 ]]
 
---- clipboard
-vim.o.clipboard = 'unnamedplus' -- use system clipboard
--- TODO what do I want for clipboard?
-
-
 -- *** left gutter settings
 vim.o.signcolumn = 'number' -- yes=always, no=never, auto=only when needed, number=(in # column, if shown)
 vim.o.relativenumber = true -- vertical equiv of eyeliner ext (horiz jump marks) - testing if i like this

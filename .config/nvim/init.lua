@@ -8,7 +8,7 @@ require("localz.github-links")
 require('localz.tabs')
 require('localz.misc')
 require('localz.ask-openai')
--- require('localz.clippy')
+require('localz.clippy')
 require('localz.my-comment-highlights')
 require('localz.filetypemods')
 
