@@ -12,6 +12,29 @@ require('localz.clippy')
 require('localz.my-comment-highlights')
 require('localz.filetypemods')
 
+-- workspace constraints: 
+--  (thoughts about what will eventually formulate my session restore plugins/scripts)
+--
+--  doing:
+--  - autcmd to restore buffer position when file opened (stored in shada?)
+--    - also jumps, cmd history (IIUC these are all in shada)
+--
+--  define workspace:
+--  - boundary around which I want to track state and restore it
+--  - == single repo root dir (95%+ of the time)
+--  - == directory (99% of the time) 
+--    - == org dir (above org's cloned repos)
+--
+--  per workspace state:
+--   - jump list per workspace (like vscode)
+--      - instead of global jump list? 
+--   - command history tied to workspace?
+--   - what else in shada or otherwise?
+--
+--  NOTES:
+--  - telescope find_files has CWD (i.e. open repo while PWD is in a subdir and it only shows a subset of files in that subdir, not terrible actually, I like that when I wanna focus on a subset of a repo but keep things like jumps, cmd history, etc)
+--
+
     -- TODO FORMATTER focused extension:
     -- use 'stevearc/conform.nvim' -- can replace LSP formatters that are problematic, per file type... DEFINITELY LOOK INTO THIS
 
