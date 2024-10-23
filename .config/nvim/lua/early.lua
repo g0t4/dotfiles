@@ -13,7 +13,7 @@ vim.cmd [[
         "    '" is an expression (see :h '")
         " so, as long as '" is within the bounds of the lines in a file, then execute a normal mode command to jump (g) to the '" mark
 
-        " jump to last column too! (TODO do other people not use this? or is it normally considered best to open to the start of the line?)
+        " jump to last column too!
         autocmd BufReadPost * if col("'\"") > 1 && col("'\"") <= col("$") |  exe "normal! " . col("'\"") . "|" | endif
         "   col("'\"") returns correct last column
         "   10| => jump to line 10 (absolute jump)
