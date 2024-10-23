@@ -27,8 +27,17 @@ return {
         event = buffer_with_content_events,
         config = function()
             require("eyeliner").setup {
-                highlight_on_key = true, -- highlight on key press, instead of before?
+                highlight_on_key = false, -- highlight on key press, instead of before?
+                -- pros: high on key doesn't mess up syntax highlights until the time comes to actually use it
+                --   only shows relevant chars for the direction of the jump (so if I jump left, only shows left chars), which is really nice
+                -- cons: always showing helps me remember to use it, its been helping prime me to use it
+                --   by the time I hit fFtT its too late to use 2f or 2F ... can repeat to fix for it but then this starts to turn into guessing jumps? guess is it 1 or 2 or 3... then fFtT
+                --
+                --
+                -- compromise: underscore highlight only? so color is less an issue but always visible?
+
                 dim = true, -- dim other characters
+                -- I can't tell the difference
             }
         end
     },
