@@ -1,33 +1,33 @@
----@diagnostic disable: undefined-global
----@diagnostic disable: lowercase-global
--- TODO would be nice to fix these missing globals (and have them resolve to real deal, or worse case explicitly ignore one by one (not all or none))
-
-
 -- FYI these are mission critical things to have during a failure
+
+
+
+
 
 vim.cmd [[
     augroup RestoreCursorPosition
         autocmd!
-        autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+
+        " FYI g'" restores to first non-blank char of line (TLDR doesn't restore column)
+        "     g`" restores to exact position (line and column)
+        autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") |  execute "normal! g`\"" | endif
         " line("'\"") == line # when last closed the buffer/file (per file)
         "    '" is an expression (see :h '")
         " so, as long as '" is within the bounds of the lines in a file, then execute a normal mode command to jump (g) to the '" mark
 
-        " jump to last column too!
-        autocmd BufReadPost * if col("'\"") > 1 && col("'\"") <= col("$") |  exe "normal! " . col("'\"") . "|" | endif
-        "   col("'\"") returns correct last column
-        "   10| => jump to line 10 (absolute jump)
-
-        " FYI testing last position:
-        "    :echo "line: " . line("'\"") . " - col: " . col("'\"")
+        "" FYI testing last position:
         autocmd BufReadPost * echom "line " . line("'\"") . " col " . col("'\"") . " file " . expand("%:p")
+
     augroup END
 ]]
 
+
+
+
+
+
 -- must come before plugins that use it to define keys
 vim.cmd("let g:mapleader = ' '") -- default is '\' which is a bit awkward to reach, gotta take right hand off homerow
-
--- TODO what do I actaully need here? move any non critical parts elsewhere
 
 -- set this very early, will get an empty failure message from lazy load bootstrap if race conditioon is hit and this comes after some other plugins, also not setting first may change the colorscheme loaded by other plugins
 vim.opt.termguicolors = true -- s/b already enabled in most of my environments, maybe warn if not?
