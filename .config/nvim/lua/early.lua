@@ -5,16 +5,14 @@
 
 -- FYI these are mission critical things to have during a failure
 
---" Uncomment the following to have Vim jump to the last position when reopening a file
-vim.cmd([[
+vim.cmd [[
     augroup RestoreCursorPosition
         autocmd!
         autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
         " line("'\"") == line # when last closed the buffer/file (per file)
         "    '" is an expression (see :h '")
         " so, as long as '" is within the bounds of the lines in a file, then execute a normal mode command to jump (g) to the '" mark
-        "
-        "
+
         " jump to last column too! (TODO do other people not use this? or is it normally considered best to open to the start of the line?)
         autocmd BufReadPost * if col("'\"") > 1 && col("'\"") <= col("$") |  exe "normal! " . col("'\"") . "|" | endif
         "   col("'\"") returns correct last column
@@ -23,9 +21,8 @@ vim.cmd([[
         " FYI testing last position:
         "    :echo "line: " . line("'\"") . " - col: " . col("'\"")
         autocmd BufReadPost * echom "line " . line("'\"") . " col " . col("'\"") . " file " . expand("%:p")
-
     augroup END
-]])
+]]
 
 -- must come before plugins that use it to define keys
 vim.cmd("let g:mapleader = ' '") -- default is '\' which is a bit awkward to reach, gotta take right hand off homerow
