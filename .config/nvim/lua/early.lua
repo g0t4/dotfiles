@@ -22,6 +22,7 @@ vim.cmd([[
 
         " FYI testing last position:
         "    :echo "line: " . line("'\"") . " - col: " . col("'\"")
+        autocmd BufReadPost * echom "line " . line("'\"") . " col " . col("'\"") . " file " . expand("%:p")
 
     augroup END
 ]])
