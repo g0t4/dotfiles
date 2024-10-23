@@ -26,18 +26,38 @@ return {
         "jinh0/eyeliner.nvim", -- lua impl, validated this actually works good and the color is blue OOB which is nicely subtle, super useful on long lines!
         event = buffer_with_content_events,
         config = function()
+            -- highlight customization:
+            --   https://github.com/jinh0/eyeliner.nvim?tab=readme-ov-file#-customize-highlight-colors
+            -- FYI IIAC eyeliner is checking if these are defined and not redefining... so order matters to customize vs replace these
+            --    I say this b/c if I define these here, the default colors aren't applied... whereas if I apply after eyeliner is loaded, these just alter its definitions
+            --
+            -- colorful:
+            -- defaults (via :highlight Eyeliner*):
+            vim.api.nvim_set_hl(0, 'EyelinerPrimary', { fg = '#569cd6', underline = true, bold = true }) -- default fg = '#569cd6'
+            vim.api.nvim_set_hl(0, 'EyelinerSecondary', { fg = '#c586c0', underline = true }) -- default fg = '#c586c0'
+            --      EyelinerDimmed xxx cleared   (default)
+            -- vim.api.nvim_set_hl(0, 'EyelinerDimmed', { fg = '#00FF00' }) -- only applies if highlight_on_key = true FYI
+            --
+            -- if only show chars after fFtT then the color can be more obnixious, in fact it should be to help it pop out (flash on)
+            -- if always visible then arguably should be more subtle (that said this can be hard to see then when I do need it)... maybe another argument for highlight after on always?
+            --
+            -- subtle => underline only:
+            -- vim.api.nvim_set_hl(0, 'EyelinerPrimary', { bold = true, underline = true })
+            -- vim.api.nvim_set_hl(0, 'EyelinerSecondary', { underline = true })
+
             require("eyeliner").setup {
                 highlight_on_key = false, -- highlight on key press, instead of before?
                 -- pros: high on key doesn't mess up syntax highlights until the time comes to actually use it
                 --   only shows relevant chars for the direction of the jump (so if I jump left, only shows left chars), which is really nice
+                --   I really like that it flashes on to help me immediately hone in on the char I want (or nearby), it's like flashing the chars after f... I really like that too
+                --   quickly find out I hit the wrong key (f when I meant F)... yes, though that is a problem that should go away with practice... so not a primary factor
                 -- cons: always showing helps me remember to use it, its been helping prime me to use it
                 --   by the time I hit fFtT its too late to use 2f or 2F ... can repeat to fix for it but then this starts to turn into guessing jumps? guess is it 1 or 2 or 3... then fFtT
-                --
-                --
+                --   BIG CON => don't see chars for repeating the jump! so you'd have to fFtT to have it show again! ouch
                 -- compromise: underscore highlight only? so color is less an issue but always visible?
-
-                dim = true, -- dim other characters
-                -- I can't tell the difference
+                --
+                --
+                dim = true, -- only applies to highlight_on_key = true, was hoping maybe it would apply when I hit fFtT always!
             }
         end
     },
