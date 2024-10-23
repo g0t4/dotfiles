@@ -10,7 +10,7 @@ vim.cmd [[
 
         " FYI g'" restores to first non-blank char of line (TLDR doesn't restore column)
         "     g`" restores to exact position (line and column)
-        "autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") |  execute "normal! g`\"" | endif
+        autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | execute "normal! g`\"" | endif
         " line("'\"") == line # when last closed the buffer/file (per file)
         "    '" is an expression (see :h '")
         " so, as long as '" is within the bounds of the lines in a file, then execute a normal mode command to jump (g) to the '" mark
