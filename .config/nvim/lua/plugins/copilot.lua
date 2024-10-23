@@ -82,7 +82,7 @@ return {
                 " approximately the default:
                 "set statusline=%f\ %y\ %m\ %=L:%l/C:%c\ %p%%
                 "set statusline+=%{GetStatusLineCopilot()}
-                set statusline=%f\ %y\ %m\ %=%{GetStatusLineCopilot()}\ L:%l/C:%c\ %p%%
+                set statusline=%f\ %y\ %m\ %{GetStatusLineCopilot()}\ L:%l/C:%c\ %p%%
 
                 function! GetStatusLineCopilot()
                     " exists is just in case I move this elsewhere and I cant know for sure the copilot plugin is loaded already
