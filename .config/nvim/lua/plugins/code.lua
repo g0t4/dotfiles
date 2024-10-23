@@ -25,6 +25,12 @@ return {
     {
         "jinh0/eyeliner.nvim", -- lua impl, validated this actually works good and the color is blue OOB which is nicely subtle, super useful on long lines!
         event = buffer_with_content_events,
+        config = function()
+            require("eyeliner").setup {
+                highlight_on_key = true, -- highlight on key press, instead of before?
+                dim = true, -- dim other characters
+            }
+        end
     },
 
 
