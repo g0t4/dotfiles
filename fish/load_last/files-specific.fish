@@ -416,5 +416,14 @@ export EDITOR="vim"
 abbr nd 'nvim (z dotfiles)'
 abbr nh 'nvim .'
 abbr nr 'nvim "$(_repo_root)"'
-abbr ni 'z dotfiles; nvim ~/.config/nvim/init.lua'
+#abbr ni 'z dotfiles; nvim ~/.config/nvim/init.lua'
 
+function ni_expand
+    if not string match --quiet --regex "dotfiles" (pwd)
+        # if not in dotfiles, then "z to it"
+        echo -n "z dotfiles; "
+    end
+    echo nvim .config/nvim/init.lua
+end
+
+abbr ni --function ni_expand
