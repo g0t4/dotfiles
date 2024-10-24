@@ -234,3 +234,10 @@ These are custom mappings in coc to add LSP features based on LSP availability..
 - Insert mode
     - TODO
 - Custom config?
+
+### recording macros
+
+- `q{register}` - start recording
+    - `q` - stop recording
+- `@{register}` - replay
+    - `@@` - replay last
