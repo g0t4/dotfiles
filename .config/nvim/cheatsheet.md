@@ -38,6 +38,7 @@
     - `u` - undo
     - `Ctrl-R` - redo
     - `U` - undo all changes on line
+    - `:changes` - list changes
 - `.` - repeat last change
 
 - TODO flush out:
