@@ -136,3 +136,25 @@ These are custom mappings in coc to add LSP features based on LSP availability..
         - `+` / `-` - increase / decrease height # lines (use N before Ctrl-W)
         - `>` / `<` - increase / decrease width # columns
 
+### text objects
+
+- `i` = inner word, `a` = around word
+
+
+### nvim-surround
+
+- Wrapping text with '")}] etc - matching pairs
+- [wiki with examples](https://github.com/kylechui/nvim-surround/wiki/getting-started-for-beginners)
+- Normal mode
+    - `cs{target}{replace}` (change)
+    - `ds{target}` (delete)
+    - `ys{object}{char}` (add)
+        - `ys4aw"` - surround 4 inner "words with double quotes"
+            - FYI when you use `ysiw` it seems to switch into a select like mode where you can see what will be wrapped
+            - prefer `aw` over `iw` for spanning multiple words
+        - `ySSt{tag}` - <p>text</p>
+- Visual mode
+    - `S{with}` => `VS"`, `viwS"` surround inner word with ""
+- Insert mode
+    - TODO
+- Custom config?
