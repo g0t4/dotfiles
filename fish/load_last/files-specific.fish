@@ -15,7 +15,7 @@ abbr --add dotdot --regex '^\.\.+$' --function multicd
 abbr --add cd- 'cd -'
 
 
-# TODO impl cp-  or cph (like dirh, interactive to pick recent dir?) 
+# TODO impl cp-  or cph (like dirh, interactive to pick recent dir?)
 #   see dir stack / history : https://fishshell.com/docs/current/interactive.html#id13
 # function _cp-
 #     echo cp "$dirprev"
@@ -218,7 +218,7 @@ if status --is-interactive
             #   stat /dev/fd/1 | cat
             #      # w/o checking if STDIN is a TTY... I would list the current directory!
             #
-            #   I think if I wanna pipe to cat and have syntax highlighting I s/b just using bat directly... 
+            #   I think if I wanna pipe to cat and have syntax highlighting I s/b just using bat directly...
             #   maybe this is another indicator that I shouldn't override cat and should maybe use a custom
             #   bat OR a new *at alias instead?
             #
@@ -410,3 +410,11 @@ function oz
 end
 
 export EDITOR="vim"
+
+
+#### nvim:
+abbr nd 'nvim (z dotfiles)'
+abbr nh 'nvim .'
+abbr nr 'nvim "$(_repo_root)"'
+abbr ni 'z dotfiles; nvim ~/.config/nvim/init.lua'
+
