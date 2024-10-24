@@ -2,6 +2,64 @@
 
 ## keymaps
 
+### misc
+
+- relocate these as needed
+- `<Shift+Tab>` is useful to bypass tab completion (i.e. with copilot or coc, if you use tab to complete either)
+
+### basic commands
+
+- `d{motion}` - delete
+    - `x` == `dl` (after cursor)
+    - `X` == `dh` (before cursor)
+    - `dd` - linewise
+    - `D` - to end of line
+    - TODO document implicit yank (based on clipboard setting?)
+        - `"adw` - delete word into register `a`
+    - `J`/`gJ`/`:j[oin]` - join lines
+- `c{motion}` - change (delete + insert)
+    - `R`/`gR` - enter replace mode
+    - `cc`/`S` - linewise
+    - `C` - to end of line
+    - `s` - substitute # chars == `cl`
+    - `r` - replace char under cursor
+    - change case
+        - `~{motion}`/`gU{motion}`/`gu{motion}` - switch/upper/lower
+        - `g~~`/`gUU`/`guu` - linewise - switch/upper/lower
+        - `g?`/`g??` - rot13 encode, lol (video?)
+    - inc/decrement numbers,  (i.e. to make a numbered list macro?)
+        - `Ctrl-A` - increment, `2,<C-A>` - increment by 2
+        - `Ctrl-X` - decrement
+- indent
+    - `<{motion}`/`>{motion}` - shift left/right
+    - `<<`/`>>` - linewise
+    - `:>[>>>]`/`:<[<<<]`- command mode indent 1 for each >/<
+- undo/redo
+    - `u` - undo
+    - `Ctrl-R` - redo
+    - `U` - undo all changes on line
+- `.` - repeat last change
+
+- TODO flush out:
+
+- `y{motion}` - yank (copy)
+    - `yy` - linewise
+- `v` - visual mode
+    - `V` - visual line mode
+    - `Ctrl-V` - visual block mode
+- `p` - paste after cursor
+    - `P` - paste before cursor
+- `{filter}`
+- `:s[ubstitute]`
+- align
+    - `:left`, `:center`, `:right`
+- format
+    - `gq{motion}` - format
+        - `gqq` - format line
+    - `gw{motion}` - format and preserve cursor position
+        - `gww` - format word
+- `:sort`
+
 ### help
 
 - help for builtin keymaps/commands
@@ -138,7 +196,25 @@ These are custom mappings in coc to add LSP features based on LSP availability..
 
 ### text objects
 
-- `i` = inner word, `a` = around word
+- `i` = inner (no whitespace), `a` = a/around (whitespace around included)
+- `iw`/`aw` - word
+    - with `iw`, whitespace isn't included, which means whitespace between words is a separte inner word
+        - thus, `v4iw` == `v2aw`
+- `iW`/`aW` - WORD (whitespace separated)
+- `is`/`as` - sentence
+- `ip`/`ap` - paragraph
+- blocks (by surrounding char)
+    - `[`, `(`==`b`, `{`==`B`, `<`/`>`, `"`, `'`, `\``
+    - thus `vi[` selects between `[` and `]`
+    - FYI `va[` also selects the surrounding brackets!
+    - SPANS multiple lines!
+    - SUPER USERFUL in CODE
+
+- Examples:
+    - `vaw`, `viw`, etc (select) - visually see what each does, good for praticing (no command, just select text)
+    - `daw`, `dap`, `das` (delete) - read nicely, try `diw` too see how whitespace is not deleted
+    - `caw`, `ciw` (change) => compare how the former is somewhat odd b/c it removes whitespace around too
+
 
 
 ### nvim-surround
