@@ -75,8 +75,8 @@ function print_ts_cursor_details()
     -- print(id)
 
     print("syntax highlighting (not treesitter highlighting):")
-    print("name gui:'", vim.fn.synIDattr(vim.fn.synID(cursor_row, cursor_col, false), "name", "gui"),
-        "' - cterm:", vim.fn.synIDattr(vim.fn.synID(cursor_row, cursor_col, false), "name", "cterm"))
+    print("name gui:'", vim.fn.synIDattr(vim.fn.synID(cursor_row, cursor_col, 0), "name", "gui"),
+        "' - cterm:", vim.fn.synIDattr(vim.fn.synID(cursor_row, cursor_col, 0), "name", "cterm"))
 
     print("highlight:", vim.fn.synIDattr(vim.fn.synID(cursor_row, cursor_col, 0), "highlight", ""))
     print("fg:", vim.fn.synIDattr(vim.fn.synID(cursor_row, cursor_col, 0), "fg", "gui"),
