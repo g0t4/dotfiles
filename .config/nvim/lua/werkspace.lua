@@ -33,10 +33,11 @@ local function setup_workspace()
         vim.cmd("source " .. session_file)
     end
 
+    -- close nvim-tree (before save session) if open before save (else doesn't reload correctly and fubars session)
+    vim.cmd("autocmd VimLeavePre * NvimTreeClose") -- w00t, works for now, I can reoen it if I care to or if it annoys me I can find a way to save its session state too
     -- Save session on exit
     vim.cmd("autocmd VimLeavePre * mksession! " .. session_file)
     -- DO NOT SAVE nvim-tree window or do? currently messing up reloading session :(... this is what I wanted to find so I can go hunting for a plugin or tweak my config ... keep taking notes
-
     -- Session notes:
     --   what if I pass file names to nvim, shouldn't I also open those in addition to whatever is open as of last session save?
     --   if open multiple instances, all bets are off but that is fine b/c its rare (usually just if I wanna test dotfiles w/o quitting nvim editing instance)... also vscode always would reopen in already open instance so I dont know there is any logic for multiple instances when there is a "shared" session...
