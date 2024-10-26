@@ -1,4 +1,4 @@
-local function set_shada_for_workspace()
+local function setup_workspace()
     -- dir or nil
     local function get_git_root()
         local handle = io.popen("git rev-parse --show-toplevel 2>/dev/null")
@@ -42,5 +42,4 @@ end
 --   privacy (don't jump list back to another project, i.e. during screencast)
 --   separate workspaces, jumplist/marks s/b per project, not global... like vscode
 --      and cmd history, also belongs per project (though I can see more of an argument for global cmd history but since I don't use it much I don't think it will matter)
---   should work well with some sort of auto session save config/plugin that tracks a session in accordance with this workspace dir too.. so I can reuse the hash file above
-set_shada_for_workspace()
+setup_workspace()
