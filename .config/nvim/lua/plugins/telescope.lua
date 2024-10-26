@@ -30,6 +30,9 @@ return {
             table.insert(vimgrep_arguments, "!**/.venv/*")
             table.insert(vimgrep_arguments, "--glob")
             table.insert(vimgrep_arguments, "!**/node_modules/*")
+            table.insert(vimgrep_arguments, "--glob")
+            table.insert(vimgrep_arguments, "!**/iterm2env/*")
+            -- TODO any better ideas on how to allow some of ignored files minus the obnoxious ones? or can I use an ignore file and pass it here and below in find_files?
 
             require('telescope').setup({
                 defaults = {
@@ -52,7 +55,7 @@ return {
                         -- https://github.com/nvim-telescope/telescope.nvim/blob/master/lua/telescope/pickers/layout_strategies.lua
                         -- layout_strategy = 'cursor', -- popup right where cursor is at? not sure I will always be expecting that... try and find out, FYI works w/ theme=dropdown
 
-                        find_command = { "rg", "--files", "--no-ignore", "--hidden", "--glob", "!**/.git/*", "--glob", "!**/.venv/*", "--glob", "!**/node_modules/*" },
+                        find_command = { "rg", "--files", "--no-ignore", "--hidden", "--glob", "!**/.git/*", "--glob", "!**/.venv/*", "--glob", "!**/node_modules/*", "--glob", "!**/iterm2env/*" },
                         -- https://github.com/nvim-telescope/telescope.nvim/wiki/Configuration-Recipes#file-and-text-search-in-hidden-files-and-directories
                         -- PRN use git_files and fallback to find_files: Falling back to find_files if git_files can't find a .git directory, wouldn't this be missing new files?
 
