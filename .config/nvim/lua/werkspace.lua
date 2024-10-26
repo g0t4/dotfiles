@@ -50,6 +50,7 @@ local function setup_workspace()
             execute "source" g:session_file
         endfunction
 
+        " TODO re-enable load session automatically?
         "call LoadSession()
 
         autocmd VimLeavePre * call OnLeaveSaveSession()
