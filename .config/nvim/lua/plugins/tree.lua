@@ -25,6 +25,15 @@ return {
         },
         config = function()
             require("nvim-tree").setup({
+                -- seems to work OOB?
+                update_focused_file = {
+                    enable = true, -- update the focused file on `BufEnter`, so when I switch files (i.e. w/ telescope) it shows the latest in the tree view to avoid confusing me (like vscode)
+                    -- THAT SAID, maybe I really shouldn't rely on tree view to show file name, gotta habituate using statusline for that?
+                    -- if setting this is a burden for perf then I should get rid of it, IIAC this has no impact if nvim-tree is closed?
+
+                    -- FYI, I am very particular about the current root dir (think workspace/project)
+                    -- update_root.enable -- I don't wanna update root dir if I open a file outside the current root dir, I also don't expect that to show in nvim-tree
+                },
                 renderer = {
 
                     -- show only folder name of root dir (not full path or even ~/ path):
