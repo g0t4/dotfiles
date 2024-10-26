@@ -27,6 +27,7 @@ return {
     --     end
     -- },
 
+    -- FYI PROVEN vscode scheme looks good enough:
     -- {
     --     'tomasiser/vim-code-dark', -- use "codedark" from my vimrc
     --     priority = 1000,           -- highest to set this first, including termguicolors early too ( random errors tie back to race conditioon on setting termguicolors)
