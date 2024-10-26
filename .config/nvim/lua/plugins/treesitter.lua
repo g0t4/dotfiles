@@ -45,20 +45,21 @@ return {
         end
     },
 
-    -- nvim has :Inspect, :InspectTree (:TSPlayground), :EditQuery (nvim 0.10) builtin now
-    {
-        'nvim-treesitter/playground',
-        dependencies = {
-            { 'nvim-treesitter/nvim-treesitter' },
-        },
-        cmd = {
-            'TSPlaygroundToggle',
-            'TSHighlightCapturesUnderCursor',
-        }, -- lazy load on command used
-        config = function()
-            require('nvim-treesitter.configs').setup()
-        end
-    },
+    -- FYI :Inspect breaks down highlights into: Treesitter, Syntax, Extmarks... very useful
+    -- -- nvim has :Inspect, :InspectTree (:TSPlayground), :EditQuery (nvim 0.10) builtin now
+    -- {
+    --     'nvim-treesitter/playground',
+    --     dependencies = {
+    --         { 'nvim-treesitter/nvim-treesitter' },
+    --     },
+    --     cmd = {
+    --         'TSPlaygroundToggle',
+    --         'TSHighlightCapturesUnderCursor',
+    --     }, -- lazy load on command used
+    --     config = function()
+    --         require('nvim-treesitter.configs').setup()
+    --     end
+    -- },
 
     {
         -- highlight word under cursor, other occurrences
