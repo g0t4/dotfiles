@@ -4,6 +4,17 @@ return {
     --     'Mofiqul/vscode.nvim'
     -- }, -- use "vscode" ... I added this in neovim, though my other theme is fine too it seem
 
+    {
+        "olimorris/onedarkpro.nvim",
+        priority = 1000,
+        config = function()
+            vim.cmd [[
+                colorscheme onedark
+                set termguicolors
+            ]]
+        end,
+    },
+
     -- {
     --     -- I like this theme, could modify it to my liking later when I figure out highlight issues
     --     -- https://github.com/navarasu/onedark.nvim
@@ -21,16 +32,16 @@ return {
     --     end
     -- },
 
-    {
-        'tomasiser/vim-code-dark', -- use "codedark" from my vimrc
-        priority = 1000,           -- highest to set this first, including termguicolors early too ( random errors tie back to race conditioon on setting termguicolors)
-        config = function()
-            vim.cmd [[
-                colorscheme codedark
-                set termguicolors
-                ]]
-        end
-    },
+    -- {
+    --     'tomasiser/vim-code-dark', -- use "codedark" from my vimrc
+    --     priority = 1000,           -- highest to set this first, including termguicolors early too ( random errors tie back to race conditioon on setting termguicolors)
+    --     config = function()
+    --         vim.cmd [[
+    --             colorscheme codedark
+    --             set termguicolors
+    --             ]]
+    --     end
+    -- },
 
     {
         "norcalli/nvim-colorizer.lua", -- colorize hex codes, etc
