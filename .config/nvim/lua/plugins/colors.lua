@@ -5,8 +5,24 @@ return {
     -- }, -- use "vscode" ... I added this in neovim, though my other theme is fine too it seem
 
     {
+        -- https://github.com/navarasu/onedark.nvim
+        'navarasu/onedark.nvim',
+        config = function()
+            require('onedark').setup {
+                style = 'darker', -- or 'onelight'
+                -- styles = {
+                --     comments = "italic",
+                --     keywords = "bold",
+                --     functions = "italic,underline",
+                -- }
+            }
+            require('onedark').load()
+        end
+    },
+
+    {
         'tomasiser/vim-code-dark', -- use "codedark" from my vimrc
-	priority = 1000, -- highest to set this first, including termguicolors early too ( random errors tie back to race conditioon on setting termguicolors)
+        priority = 1000,           -- highest to set this first, including termguicolors early too ( random errors tie back to race conditioon on setting termguicolors)
         config = function()
             vim.cmd [[
                 colorscheme codedark
