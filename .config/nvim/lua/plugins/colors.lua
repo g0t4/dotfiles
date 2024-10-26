@@ -4,21 +4,22 @@ return {
     --     'Mofiqul/vscode.nvim'
     -- }, -- use "vscode" ... I added this in neovim, though my other theme is fine too it seem
 
-    {
-        -- https://github.com/navarasu/onedark.nvim
-        'navarasu/onedark.nvim',
-        config = function()
-            require('onedark').setup {
-                style = 'darker', -- or 'onelight'
-                -- styles = {
-                --     comments = "italic",
-                --     keywords = "bold",
-                --     functions = "italic,underline",
-                -- }
-            }
-            require('onedark').load()
-        end
-    },
+    -- {
+    --     -- I like this theme, could modify it to my liking later when I figure out highlight issues
+    --     -- https://github.com/navarasu/onedark.nvim
+    --     'navarasu/onedark.nvim',
+    --     config = function()
+    --         require('onedark').setup {
+    --             style = 'darker', -- or 'onelight'
+    --             -- styles = {
+    --             --     comments = "italic",
+    --             --     keywords = "bold",
+    --             --     functions = "italic,underline",
+    --             -- }
+    --         }
+    --         require('onedark').load()
+    --     end
+    -- },
 
     {
         'tomasiser/vim-code-dark', -- use "codedark" from my vimrc
