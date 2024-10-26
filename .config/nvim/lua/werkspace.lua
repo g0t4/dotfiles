@@ -37,13 +37,20 @@ local function setup_workspace()
     --
     vim.g.session_file = workspace_dir .. hash .. "/session.vim"
     --
-    -- -- Load session on startup
-    -- if vim.fn.filereadable(vim.fn.expand(session_file)) == 1 then
-    --     print("Loading session: " .. vim.g.session_file)
-    --     vim.cmd("source " .. vim.g.session_file)
-    -- end
+    --
     --
     vim.cmd [[
+
+        function LoadSession()
+            if !filereadable(g:session_file)
+                echo "No session file found: " . g:session_file
+                return
+            endif
+
+            execute "source" g:session_file
+        endfunction
+
+        "call LoadSession()
 
         autocmd VimLeavePre * call OnLeaveSaveSession()
 
