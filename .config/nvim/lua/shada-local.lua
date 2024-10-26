@@ -13,6 +13,7 @@ local function set_shada_for_workspace()
     -- PRN should I use a global shada file if not in a repo?
     local dir = get_git_root() or vim.fn.getcwd()
     local hash = vim.fn.sha256(dir)
+    -- TODO sha256 takes 10ms to run :( ... faster way? what does vscode use, doesn't it store some workspace state centrally?
     local shada_path = "~/.local/share/nvim/shada/workspaces/" .. hash .. ".shada"
 
     vim.opt.shadafile = shada_path
