@@ -100,6 +100,7 @@ function print_ts_cursor_details()
 end
 
 vim.cmd("nnoremap <leader>pd :lua print_ts_cursor_details()<CR>")
+vim.cmd("nnoremap <leader>pi :Inspect<CR>") -- prefer over pd/pc I made, b/c this shows treesitter/syntax/extmarks differences
 
 vim.api.nvim_create_autocmd("BufReadPost", {
     callback = function()
