@@ -25,23 +25,33 @@ local function setup_workspace()
     --      and cmd history, also belongs per project (though I can see more of an argument for global cmd history but since I don't use it much I don't think it will matter)
     vim.opt.shadafile = shada_path
 
-    local session_file = workspace_dir .. hash .. "/session.vim"
 
-    -- Load session on startup
-    if vim.fn.filereadable(vim.fn.expand(session_file)) == 1 then
-        print("Loading session: " .. session_file)
-        vim.cmd("source " .. session_file)
-    end
-
-    -- close nvim-tree (before save session) if open before save (else doesn't reload correctly and fubars session)
-    vim.cmd("autocmd VimLeavePre * NvimTreeClose") -- w00t, works for now, I can reoen it if I care to or if it annoys me I can find a way to save its session state too
-    -- Save session on exit
-    vim.cmd("autocmd VimLeavePre * mksession! " .. session_file)
-    -- DO NOT SAVE nvim-tree window or do? currently messing up reloading session :(... this is what I wanted to find so I can go hunting for a plugin or tweak my config ... keep taking notes
-    -- Session notes:
-    --   what if I pass file names to nvim, shouldn't I also open those in addition to whatever is open as of last session save?
-    --   if open multiple instances, all bets are off but that is fine b/c its rare (usually just if I wanna test dotfiles w/o quitting nvim editing instance)... also vscode always would reopen in already open instance so I dont know there is any logic for multiple instances when there is a "shared" session...
-    --   I LOVE RESUMING the last open file!!!
+    -- TODO reduce what the session is tracking, it's breaking color changes (seems to hold onto old hl groups or smth... very confusing to troubleshoot changes)
+    --    vim.o.sessionoptions = "buffers,curdir,folds,help,tabpages,winsize"
+    --
+    --    # currently my sessionoptions: (so why then is it messing up color changes?)
+    --    # sessionoptions=blank,buffers,curdir,folds,help,tabpages,winsize,terminal
+    --
+    --    # or do I need smth like redraw()? require("lazy").redraw()? chatgpt suggested, no idea wtf this is and why it would be needed?
+    --
+    --
+    -- local session_file = workspace_dir .. hash .. "/session.vim"
+    --
+    -- -- Load session on startup
+    -- if vim.fn.filereadable(vim.fn.expand(session_file)) == 1 then
+    --     print("Loading session: " .. session_file)
+    --     vim.cmd("source " .. session_file)
+    -- end
+    --
+    -- -- close nvim-tree (before save session) if open before save (else doesn't reload correctly and fubars session)
+    -- vim.cmd("autocmd VimLeavePre * NvimTreeClose") -- w00t, works for now, I can reoen it if I care to or if it annoys me I can find a way to save its session state too
+    -- -- Save session on exit
+    -- vim.cmd("autocmd VimLeavePre * mksession! " .. session_file)
+    -- -- DO NOT SAVE nvim-tree window or do? currently messing up reloading session :(... this is what I wanted to find so I can go hunting for a plugin or tweak my config ... keep taking notes
+    -- -- Session notes:
+    -- --   what if I pass file names to nvim, shouldn't I also open those in addition to whatever is open as of last session save?
+    -- --   if open multiple instances, all bets are off but that is fine b/c its rare (usually just if I wanna test dotfiles w/o quitting nvim editing instance)... also vscode always would reopen in already open instance so I dont know there is any logic for multiple instances when there is a "shared" session...
+    -- --   I LOVE RESUMING the last open file!!!
 end
 
 setup_workspace()
