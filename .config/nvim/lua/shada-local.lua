@@ -19,6 +19,10 @@ local function setup_workspace()
     local shada_path = workspace_dir .. hash .. "/shada"
     -- TODO refactor to put auto sessions here too? probably rename to drop "shada" or at least make the hash available so not need to recompute
 
+    -- WHY do this with shada:
+    --   privacy (don't jump list back to another project, i.e. during screencast)
+    --   separate workspaces, jumplist/marks s/b per project, not global... like vscode
+    --      and cmd history, also belongs per project (though I can see more of an argument for global cmd history but since I don't use it much I don't think it will matter)
     vim.opt.shadafile = shada_path
 
     local session_file = workspace_dir .. hash .. "/session.vim"
@@ -38,8 +42,4 @@ local function setup_workspace()
     --   I LOVE RESUMING the last open file!!!
 end
 
--- WHY do this?
---   privacy (don't jump list back to another project, i.e. during screencast)
---   separate workspaces, jumplist/marks s/b per project, not global... like vscode
---      and cmd history, also belongs per project (though I can see more of an argument for global cmd history but since I don't use it much I don't think it will matter)
 setup_workspace()
