@@ -33,6 +33,7 @@ return {
             table.insert(vimgrep_arguments, "--glob")
             table.insert(vimgrep_arguments, "!**/iterm2env/*")
             -- TODO any better ideas on how to allow some of ignored files minus the obnoxious ones? or can I use an ignore file and pass it here and below in find_files?
+            -- TODO sync the ignored/included with nvim-tree plugin too?
 
             require('telescope').setup({
                 defaults = {
