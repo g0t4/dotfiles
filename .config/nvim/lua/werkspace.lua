@@ -52,6 +52,8 @@ local function setup_workspace()
 
         " TODO re-enable load session automatically?
         "call LoadSession()
+        " for now I can use jump history to go back to last spot (and its project specific so it will work great w/o loading session)
+        " FYI I disabled loading session when troubleshooting color issues which it was adding confusion to
 
         autocmd VimLeavePre * call OnLeaveSaveSession()
 
