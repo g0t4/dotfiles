@@ -1,5 +1,5 @@
 " PRN matcher:
-" FYI matcher:
+" FYI matcher: '#27AE60' (test how colors changes bg)
 autocmd FileType * hi CommentFYI guifg='#27AE60'
 autocmd FileType * syn match CommentFYI /\(--\|#\|"\|\/\/\|\/\*\)\s*\(FYI\|PRN\)\s.*/ " TODO I don't stop on */ on end of multiline comments, perhaps I should be using a plugin for this :)
 " PRN! matcher too:
