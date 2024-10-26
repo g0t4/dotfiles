@@ -55,6 +55,7 @@ local function setup_workspace()
 
         autocmd VimLeavePre * call OnLeaveSaveSession()
 
+        " TODO add keymap for save session? (think save conventional session file)
         function OnLeaveSaveSession()
             " if :NvimTreeClose command is defined, call it:
             if exists(":NvimTreeClose")
