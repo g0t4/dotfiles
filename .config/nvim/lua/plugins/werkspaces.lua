@@ -2,7 +2,7 @@ return {
 
 
     -- WAIT WAIT... I should research what nvim has for session management before adding extensions, maybe I don't need any?
-    --    or another might work fine ... 
+    --    or another might work fine ...
     --    separataly, this extension nails it =>  when start nvim w/o any args then try to find CWD's session and load it (https://neovimcraft.com/plugin/rmagatti/auto-session/)
     --
     -- -- what I want out of a workspace/session:
@@ -28,7 +28,7 @@ return {
     -- }
     -- -- TODO always have session recording to current dir or? ok I see once you load from a session file, it resumes saving to it... makes sense
     -- --  so, `nvim -S Session.vim` => what about on startup, look for Session.vim and auto restore it?
-    -- --     that way once i start a session it is always maintained until I toggle it off w/ `:Obsession!`? 
+    -- --     that way once i start a session it is always maintained until I toggle it off w/ `:Obsession!`?
     -- --
     -- -- FYI part of reason I looked for alternatives was I believe that options are saved and that messed up plugins I was adding... can always go back to basics if I can address that
 

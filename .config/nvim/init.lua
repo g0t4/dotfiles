@@ -2,7 +2,7 @@
 require("early")
 
 require("bootstrap-lazy")
-require("shada-local") -- TODO how does this feel? merge or move it elsewhere? replace w/ plugin?
+require("werkspace") -- TODO do I need this earlier?
 -- after plugin loader
 require("localz.github-links")
 require('localz.tabs')

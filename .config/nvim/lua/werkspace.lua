@@ -35,6 +35,7 @@ local function setup_workspace()
 
     -- Save session on exit
     vim.cmd("autocmd VimLeavePre * mksession! " .. session_file)
+    -- DO NOT SAVE nvim-tree window or do? currently messing up reloading session :(... this is what I wanted to find so I can go hunting for a plugin or tweak my config ... keep taking notes
 
     -- Session notes:
     --   what if I pass file names to nvim, shouldn't I also open those in addition to whatever is open as of last session save?
