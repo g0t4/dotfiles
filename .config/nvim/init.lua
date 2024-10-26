@@ -2,7 +2,7 @@
 require("early")
 
 require("bootstrap-lazy")
-
+require("shada-local") -- TODO how does this feel? merge or move it elsewhere? replace w/ plugin?
 -- after plugin loader
 require("localz.github-links")
 require('localz.tabs')
@@ -12,7 +12,7 @@ require('localz.clippy')
 require('localz.my-comment-highlights')
 require('localz.filetypemods')
 
--- workspace constraints: 
+-- workspace constraints:
 --  (thoughts about what will eventually formulate my session restore plugins/scripts)
 --
 --  doing:
@@ -22,12 +22,12 @@ require('localz.filetypemods')
 --  define workspace:
 --  - boundary around which I want to track state and restore it
 --  - == single repo root dir (95%+ of the time)
---  - == directory (99% of the time) 
+--  - == directory (99% of the time)
 --    - == org dir (above org's cloned repos)
 --
 --  per workspace state:
 --   - jump list per workspace (like vscode)
---      - instead of global jump list? 
+--      - instead of global jump list?
 --   - command history tied to workspace?
 --   - what else in shada or otherwise?
 --
