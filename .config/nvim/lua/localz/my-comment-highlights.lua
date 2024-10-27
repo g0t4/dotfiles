@@ -106,11 +106,40 @@ end
 
 vim.cmd("nnoremap <leader>pd :lua print_ts_cursor_details()<CR>")
 vim.cmd("nnoremap <leader>pi :Inspect<CR>") -- prefer over pd/pc I made, b/c this shows treesitter/syntax/extmarks differences
+--
+-- vim.api.nvim_create_autocmd("BufReadPost", {
+--     callback = function()
+--         vim.cmd("source ~/.config/nvim/lua/plugins/vimz/highlights.vim")
+--     end
+-- })
 
-vim.api.nvim_create_autocmd("BufReadPost", {
-    callback = function()
-        vim.cmd("source ~/.config/nvim/lua/plugins/vimz/highlights.vim")
+
+
+-- Step 1: Define the highlight group for TODOs
+vim.api.nvim_set_hl(0, 'TodoHighlight', { fg = "#ffffff", bg = "#ff0000", bold = true })
+
+-- Step 2: Function to highlight TODO comments
+local function highlight_todo()
+  local bufnr = vim.api.nvim_get_current_buf()
+  vim.api.nvim_buf_clear_namespace(bufnr, -1, 0, -1)
+
+  local ns_id = vim.api.nvim_create_namespace("todo_highlight")
+  local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
+
+  for i, line in ipairs(lines) do
+    local start_col, end_col = line:find("-- TODO.*")
+    if start_col then
+      vim.api.nvim_buf_set_extmark(bufnr, ns_id, i - 1, start_col - 1, {
+        end_col = end_col,
+        hl_group = "TodoHighlight"
+      })
     end
+  end
+end
+
+-- Step 3: Autocommand to refresh on TextChanged
+vim.api.nvim_create_autocmd({ "BufEnter", "TextChanged", "InsertLeave" }, {
+  callback = highlight_todo,
 })
 
 
