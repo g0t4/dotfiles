@@ -39,6 +39,8 @@ require('localz.filetypemods')
     -- use 'stevearc/conform.nvim' -- can replace LSP formatters that are problematic, per file type... DEFINITELY LOOK INTO THIS
 
     -- *** bar
+    -- * foo
+    -- ***! foo
     -- FOO bar
     -- TODO COMMENT alternatives:
     -- use 'numToStr/Comment.nvim' -- more features like gc$ (not entire line)
