@@ -3,6 +3,36 @@ return {
     -- {
     --     'Mofiqul/vscode.nvim'
     -- }, -- use "vscode" ... I added this in neovim, though my other theme is fine too it seem
+    {
+        -- FYI onedarkpro supports this OOB so I will try it
+        "nvim-lualine/lualine.nvim",
+        config = function()
+            require("lualine").setup {
+                -- options = {
+                --     theme = "codedark",
+                --     section_separators = { "", "" },
+                --     component_separators = { "", "" },
+                -- },
+                -- TODO port my copilot indicator
+                -- sections = {
+                --     lualine_a = { "mode" },
+                --     lualine_b = { "branch" },
+                --     lualine_c = { "filename" },
+                --     lualine_x = { "encoding", "fileformat", "filetype" },
+                --     lualine_y = { "progress" },
+                --     lualine_z = { "location" },
+                -- },
+                -- inactive_sections = {
+                --     lualine_a = {},
+                --     lualine_b = {},
+                --     lualine_c = { "filename" },
+                --     lualine_x = { "location" },
+                --     lualine_y = {},
+                --     lualine_z = {},
+                -- },
+            }
+        end,
+    },
 
     {
         "olimorris/onedarkpro.nvim",
