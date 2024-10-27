@@ -4,7 +4,7 @@
 ;
 ; #match? docs:   https://neovim.io/doc/user/treesitter.html#treesitter-predicate-vim-match%3F
 ;    is match nvim specific?
-;
+;    regex param links to: https://neovim.io/doc/user/pattern.html#regexp
 [
   ; must put most specific first, somehow that dictates which matching hlgroup wins if multiple attached... not sure I can do ! not in treesitter matches so yeah I have to overlap
   (comment) @comment_todo_bang (#match? @comment_todo_bang "TODO!")
