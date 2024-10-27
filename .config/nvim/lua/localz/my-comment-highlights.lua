@@ -114,73 +114,75 @@ vim.cmd("nnoremap <leader>pi :Inspect<CR>") -- prefer over pd/pc I made, b/c thi
 -- })
 
 
+if false then
 
--- Step 1: Define the highlight group for TODOs
-vim.api.nvim_set_hl(0, 'CommentTODO', { fg = "#ffcc00" })
-vim.api.nvim_set_hl(0, 'CommentTODOBang', { bg = "#ffcc00", fg = "#1f1f1f", bold = true })
-vim.api.nvim_set_hl(0, 'CommentPRN', { fg = "#27AE60" })
-vim.api.nvim_set_hl(0, 'CommentPRNBang', { bg = "#27AE60", fg = "#1f1f1f", bold = true })
-
-
--- Step 2: Function to highlight TODO comments
-local function highlight_todo()
-    local ns_id = vim.api.nvim_create_namespace("highlighting_comments")
-
-    local bufnr = vim.api.nvim_get_current_buf()
-    vim.api.nvim_buf_clear_namespace(bufnr, ns_id, 0, -1)
-
-    local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
+    -- Step 1: Define the highlight group for TODOs
+    vim.api.nvim_set_hl(0, 'CommentTODO', { fg = "#ffcc00" })
+    vim.api.nvim_set_hl(0, 'CommentTODOBang', { bg = "#ffcc00", fg = "#1f1f1f", bold = true })
+    vim.api.nvim_set_hl(0, 'CommentPRN', { fg = "#27AE60" })
+    vim.api.nvim_set_hl(0, 'CommentPRNBang', { bg = "#27AE60", fg = "#1f1f1f", bold = true })
 
 
-    local function find_comment(line)
-        local start_col, end_col = line:find("[#/%-]*%sTODO!.*")
-        if start_col then
-            return start_col, end_col, "CommentTODOBang"
+    -- Step 2: Function to highlight TODO comments
+    local function highlight_todo()
+        local ns_id = vim.api.nvim_create_namespace("highlighting_comments")
+
+        local bufnr = vim.api.nvim_get_current_buf()
+        vim.api.nvim_buf_clear_namespace(bufnr, ns_id, 0, -1)
+
+        local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
+
+
+        local function find_comment(line)
+            local start_col, end_col = line:find("[#/%-]*%sTODO!.*")
+            if start_col then
+                return start_col, end_col, "CommentTODOBang"
+            end
+
+            start_col, end_col = line:find("[#/%-]*%sTODO.*")
+            if start_col then
+                return start_col, end_col, "CommentTODO"
+            end
+
+            start_col, end_col = line:find("[#/%-]*%sPRN!.*")
+            if not start_col then
+                start_col, end_col = line:find("[#/%-]*%sFYI!.*")
+            end
+            if start_col then
+                return start_col, end_col, "CommentPRNBang"
+            end
+
+            start_col, end_col = line:find("[#/%-]*%sPRN.*")
+            if not start_col then
+                start_col, end_col = line:find("[#/%-]*%sFYI.*")
+            end
+            if start_col then
+                return start_col, end_col, "CommentPRN"
+            end
+
+
+            --
+
+
         end
 
-        start_col, end_col = line:find("[#/%-]*%sTODO.*")
-        if start_col then
-            return start_col, end_col, "CommentTODO"
+        for i, line in ipairs(lines) do
+            local start_col, end_col, hl_group = find_comment(line)
+            if start_col then
+                vim.api.nvim_buf_set_extmark(bufnr, ns_id, i - 1, start_col - 1, {
+                    end_col = end_col,
+                    hl_group = hl_group
+                })
+            end
         end
-
-        start_col, end_col = line:find("[#/%-]*%sPRN!.*")
-        if not start_col then
-            start_col, end_col = line:find("[#/%-]*%sFYI!.*")
-        end
-        if start_col then
-            return start_col, end_col, "CommentPRNBang"
-        end
-
-        start_col, end_col = line:find("[#/%-]*%sPRN.*")
-        if not start_col then
-            start_col, end_col = line:find("[#/%-]*%sFYI.*")
-        end
-        if start_col then
-            return start_col, end_col, "CommentPRN"
-        end
-
-
-        --
-
-
     end
 
-    for i, line in ipairs(lines) do
-        local start_col, end_col, hl_group = find_comment(line)
-        if start_col then
-            vim.api.nvim_buf_set_extmark(bufnr, ns_id, i - 1, start_col - 1, {
-                end_col = end_col,
-                hl_group = hl_group
-            })
-        end
-    end
+    -- Step 3: Autocommand to refresh on TextChanged
+    vim.api.nvim_create_autocmd({ "BufEnter", "TextChanged", "InsertLeave" }, {
+        callback = highlight_todo,
+    })
+
 end
-
--- Step 3: Autocommand to refresh on TextChanged
-vim.api.nvim_create_autocmd({ "BufEnter", "TextChanged", "InsertLeave" }, {
-    callback = highlight_todo,
-})
-
 
 
 
