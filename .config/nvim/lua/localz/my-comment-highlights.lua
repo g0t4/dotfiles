@@ -143,16 +143,22 @@ local function highlight_todo()
             return start_col, end_col, "CommentTODO"
         end
 
-        -- test for PRN! => PRN
         start_col, end_col = line:find("[#/%-]*%sPRN!.*")
+        if not start_col then
+            start_col, end_col = line:find("[#/%-]*%sFYI!.*")
+        end
         if start_col then
             return start_col, end_col, "CommentPRNBang"
         end
 
         start_col, end_col = line:find("[#/%-]*%sPRN.*")
+        if not start_col then
+            start_col, end_col = line:find("[#/%-]*%sFYI.*")
+        end
         if start_col then
             return start_col, end_col, "CommentPRN"
         end
+
 
         --
 
