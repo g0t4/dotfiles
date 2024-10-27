@@ -106,12 +106,12 @@ end
 
 vim.cmd("nnoremap <leader>pd :lua print_ts_cursor_details()<CR>")
 vim.cmd("nnoremap <leader>pi :Inspect<CR>") -- prefer over pd/pc I made, b/c this shows treesitter/syntax/extmarks differences
---
--- vim.api.nvim_create_autocmd("BufReadPost", {
---     callback = function()
---         vim.cmd("source ~/.config/nvim/lua/plugins/vimz/highlights.vim")
---     end
--- })
+
+vim.api.nvim_create_autocmd("BufReadPost", {
+    callback = function()
+        vim.cmd("source ~/.config/nvim/lua/plugins/vimz/highlights.vim")
+    end
+})
 
 
 -- disable with flip true/false, for perf testing
