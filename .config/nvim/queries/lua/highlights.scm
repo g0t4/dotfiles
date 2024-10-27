@@ -6,6 +6,7 @@
 ;    is match nvim specific?
 ;    regex param links to: https://neovim.io/doc/user/pattern.html#regexp
 [
+  ; AFAICT first capture group wins out (for whatever its corresponding hlgroup defines and only subsequent capture groups can impact attrs not set by previous hlgroup of prev capture group)
   ; must put most specific first, somehow that dictates which matching hlgroup wins if multiple attached... not sure I can do ! not in treesitter matches so yeah I have to overlap
   ;   THIS must have smth to do with issues I had with the syntax matches ... it seemed like first hl-group applied wins (for the attrs it sets and so subsequent can apply a diff characteristic (fg/bg) but not override prev capture groups or smth)...
   ;   hl group ordering doesn't matter here, if I fliop bang after non-bang, then the fg comes from the non-bang even on the bangs... flip it and then the bang wins b/c it sets both fg and bg... and I tried flipping hlgroup definitioon ordering and that did not matter
