@@ -30,9 +30,11 @@ return {
                 --     globalstatus  -- only one status line? hrm... might work now that I have inactive windows dimmed in onedarkpro theme
                 -- },
                 -- FYI =>    :lua print(vim.inspect(require('lualine').get_config()))
+                -- extensions = { 'nvim-tree' }, -- shows root dir (and dirs above it) in statusline... I dont need that, in fact if anything show file path of the file still that was right before open treeview
                 sections = {
                     -- commandline shows mode already so why put it here too? plus lualine has color changes
                     -- lualine_a = { 'buffers' }, -- TODO "buffers" looks interesting! shows tabs for each file... might be what I've been wanting?
+                    --    also has tabs/windows... interesting (is that for tab strip,  or?)
                     lualine_a = { '' },
                     lualine_b = { { -- FYI wrap in {} to customize component options
                         --   https://github.com/nvim-lualine/lualine.nvim#filename-component-options
@@ -44,6 +46,7 @@ return {
                     lualine_x = { "GetStatusLineCopilot" },
                     lualine_y = { StatusLine_Line, StatusLine_Column, "progress" },
                     lualine_z = { '' },
+                    -- search shows #/total in commandline so don't need that here
                 },
                 inactive_sections = {
                     lualine_a = {},             -- default ""
