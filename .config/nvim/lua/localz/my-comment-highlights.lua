@@ -115,7 +115,7 @@ vim.cmd("nnoremap <leader>pi :Inspect<CR>") -- prefer over pd/pc I made, b/c thi
 
 
 -- disable with flip true/false, for perf testing
-if true then
+if false then
 
     -- Step 1: Define the highlight group for TODOs
     vim.api.nvim_set_hl(0, 'CommentTODO', { fg = "#ffcc00" })
