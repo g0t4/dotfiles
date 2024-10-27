@@ -19,6 +19,7 @@ vim.cmd [[
 
     " FYI nested comments here are also tagged as lua strings... and thus the fg green color overrides...
     "    so, what is happening is treesitter links to highlight groups and I cleared the one for Comment and fixed that conflict w/ my custom comment styles
+    "    AND first doc loaded still doesn't get my highlights... just FYI thats the other bug that can be confusing
     " * override Comment color => changes the fg!
     hi clear Comment " clear it fixes the fg color ... b/c then yeah a comment doesn't have a fg color... ok... but can I add back color as a lower precedence rule?
     "hi Comment ctermfg=65 guifg='#6a9955'   "original => Last set from ~/.local/share/nvim/site/pack/packer/start/vim-code-dark/colors/codedark.vim
