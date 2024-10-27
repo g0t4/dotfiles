@@ -7,7 +7,18 @@
 - relocate these as needed
 - `<Shift+Tab>` is useful to bypass tab completion (i.e. with copilot or coc, if you use tab to complete either)
 
-### basic commands
+### commands
+
+- `:h Ex-commands` - index of cmds
+- `:h :{cmd}` - help for command
+- many commands take optional commands
+    - `:verbose nmap` - show normal mode user mapped keys + where they were defined
+    - `:vsplit :new`
+    - second `:` is optional
+    - see `:h :vsplit` => shows `:[N]vs[plit] [++opt] [+cmd] [file]` (note `[+cmd]`)
+
+
+### basic commands (mostly normal mode)
 
 - `d{motion}` - delete
     - `x` == `dl` (after cursor)
