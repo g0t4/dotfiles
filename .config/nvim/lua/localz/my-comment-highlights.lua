@@ -15,8 +15,10 @@ vim.cmd [[
     " FYI if I can also remove @comments capture linkage https://github.com/nvim-treesitter/nvim-treesitter/blob/master/queries/lua/highlights.scm#L229-L230
     " TODO add custom capture that targets subset of comments insted of using regex, so I can target both syntax and/or treesitter highlight systems
 
-    " !!! TMP fix sets no bg color on comments ... which means here then in nested multiline vimscript lua's orange color applies which is fine ish
-    " FYI! NBD that color is orange here... I can fix the overlapping priority later... heck even the lua issue isn't a deal breaker as all other files seem to not have issue (yet, maybe treesitter on them will cause issues)
+    " TODO try using extmarks instead of regex to highlight comments, many plugins use that for color and it seems to take precedence easily over treesitter too?
+
+    " FYI nested comments here are also tagged as lua strings... and thus the fg green color overrides...
+    "    so, what is happening is treesitter links to highlight groups and I cleared the one for Comment and fixed that conflict w/ my custom comment styles
     " * override Comment color => changes the fg!
     hi clear Comment " clear it fixes the fg color ... b/c then yeah a comment doesn't have a fg color... ok... but can I add back color as a lower precedence rule?
     "hi Comment ctermfg=65 guifg='#6a9955'   "original => Last set from ~/.local/share/nvim/site/pack/packer/start/vim-code-dark/colors/codedark.vim
