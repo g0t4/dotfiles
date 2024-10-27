@@ -108,11 +108,12 @@ end
 vim.cmd("nnoremap <leader>pd :lua print_ts_cursor_details()<CR>")
 vim.cmd("nnoremap <leader>pi :Inspect<CR>") -- prefer over pd/pc I made, b/c this shows treesitter/syntax/extmarks differences
 
-vim.api.nvim_create_autocmd("BufReadPost", {
-    callback = function()
-        vim.cmd("source ~/.config/nvim/lua/plugins/vimz/highlights.vim")
-    end
-})
+-- TODO remove once I am happy with new treesitter based highlights that aren't conflicting at all given treesitter highlights take precedence (IIUC) over "legacy" syntax highlights
+-- vim.api.nvim_create_autocmd("BufReadPost", {
+--     callback = function()
+--         vim.cmd("source ~/.config/nvim/lua/plugins/vimz/highlights.vim")
+--     end
+-- })
 
 -- TODO
 -- load wilder.vim:
