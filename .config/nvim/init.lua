@@ -38,6 +38,8 @@ require('localz.filetypemods')
     -- TODO!!! FORMATTER focused extension:
     -- use 'stevearc/conform.nvim' -- can replace LSP formatters that are problematic, per file type... DEFINITELY LOOK INTO THIS
 
+    -- *** bar
+    -- FOO bar
     -- TODO COMMENT alternatives:
     -- use 'numToStr/Comment.nvim' -- more features like gc$ (not entire line)
     -- use 'JoosepAlviste/nvim-ts-context-commentstring' -- context aware commentstring, IIUC for issues with embedded languages and commenting... FYI embedded vimscript in lua, gcc works fine

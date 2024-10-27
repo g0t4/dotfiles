@@ -10,6 +10,7 @@ return {
         config = function()
             vim.api.nvim_set_hl(0, '@todo_comment', { fg = '#FF8800', bold = true })
             vim.api.nvim_set_hl(0, '@todo_bang_comment', { bg = '#FF8800', fg = "#1f1f1f", bold = true })
+            vim.api.nvim_set_hl(0, '@comment_asterisks', { fg = '#ff00c3' })
 
             require 'nvim-treesitter.configs'.setup {
                 ensure_installed = { "c", "lua", "python", "javascript", "typescript", "html", "css", "json", "yaml", "markdown", "vim" }, -- one of "all", "maintained" (parsers with maintainers), or a list of languages
