@@ -8,6 +8,9 @@ return {
         event = require('event-triggers').buffer_with_content_events,
 
         config = function()
+            vim.api.nvim_set_hl(0, '@todo_comment', { fg = '#FF8800', bold = true })
+            vim.api.nvim_set_hl(0, '@todo_bang_comment', { bg = '#FF8800', fg = "#1f1f1f", bold = true })
+
             require 'nvim-treesitter.configs'.setup {
                 ensure_installed = { "c", "lua", "python", "javascript", "typescript", "html", "css", "json", "yaml", "markdown", "vim" }, -- one of "all", "maintained" (parsers with maintainers), or a list of languages
                 sync_install = false,
@@ -17,6 +20,11 @@ return {
                     enable = true, -- doesn't seem to turn it off, is treesitter initilized b/c of some other plugin first and thus my config here isn't applied?
                     -- disable = {},  -- confirmed TSModuleInfo shows X for these languages
                     -- additional_vim_regex_highlighting = true, -- true OR list of languages... I can't get this to change anything with my custom sytnax highlights, maybe this is smth else enable/disable?
+
+                    -- do I need this? probably not if I wanna have my own styles and not link to existing hlgroups
+                    -- custom_captures = {
+                    --     ["todo_comment"] = "TodoComment",
+                    -- },
                 },
                 indent = {
                     enable = true,

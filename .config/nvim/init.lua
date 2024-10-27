@@ -35,7 +35,7 @@ require('localz.filetypemods')
 --  - telescope find_files has CWD (i.e. open repo while PWD is in a subdir and it only shows a subset of files in that subdir, not terrible actually, I like that when I wanna focus on a subset of a repo but keep things like jumps, cmd history, etc)
 --
 
-    -- TODO FORMATTER focused extension:
+    -- TODO!!! FORMATTER focused extension:
     -- use 'stevearc/conform.nvim' -- can replace LSP formatters that are problematic, per file type... DEFINITELY LOOK INTO THIS
 
     -- TODO COMMENT alternatives:
