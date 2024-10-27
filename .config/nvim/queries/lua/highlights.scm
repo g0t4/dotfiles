@@ -2,7 +2,7 @@
 [
   ; must put most specific first, somehow that dictates which matching hlgroup wins if multiple attached... not sure I can do ! not in treesitter matches so yeah I have to overlap
   (comment) @comment_todo_bang (#match? @comment_todo_bang "TODO!")
-  (comment) @comment_todo (#match? @comment_todo "TODO")
+  (comment) @comment_todo (#match? @comment_todo "TODO[^!]")
 ]
 [
  ; todo would it make sense to make each language specific? so I put -- ihn ... I'd prefer copy pasta this file and have a global catchall regex on front to match whatever comment start there is ... why is this not matching comment contents? is there a way to do that?
@@ -12,7 +12,7 @@
 [
   ; not match start only:
   (comment) @comment_prn_bang (#match? @comment_prn_bang "(PRN|FYI)!")
-  (comment) @comment_prn (#match? @comment_prn "(PRN|FYI)")
+  (comment) @comment_prn (#match? @comment_prn "(PRN|FYI)[^!]")
 
   ; FYI if I wanna limit to start of comment:
   ;(comment) @comment_prn_bang (#match? @comment_prn_bang "^-- (PRN|FYI)!")
