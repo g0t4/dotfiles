@@ -14,9 +14,9 @@ return {
                 auto_install = true,                                                                                                       -- auto install on entering buffer (must have tree-sitter CLI, IIUC)
                 -- ignore_install
                 highlight = {
-                    enable = true, -- enable for all
-                    disable = {},  -- confirmed TSModuleInfo shows X for these languages
-                    -- additional_vim_regex_highlighting = false, -- true OR list of languages... I can't get this to change anything with my custom sytnax highlights, maybe this is smth else enable/disable?
+                    enable = true, -- doesn't seem to turn it off, is treesitter initilized b/c of some other plugin first and thus my config here isn't applied?
+                    -- disable = {},  -- confirmed TSModuleInfo shows X for these languages
+                    -- additional_vim_regex_highlighting = true, -- true OR list of languages... I can't get this to change anything with my custom sytnax highlights, maybe this is smth else enable/disable?
                 },
                 indent = {
                     enable = true,
