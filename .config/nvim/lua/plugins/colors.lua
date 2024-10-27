@@ -6,6 +6,7 @@ return {
     {
         -- FYI onedarkpro supports this OOB so I will try it
         "nvim-lualine/lualine.nvim",
+        dependencies = { 'nvim-tree/nvim-web-devicons' },
         config = function()
             require("lualine").setup {
                 -- options = {
