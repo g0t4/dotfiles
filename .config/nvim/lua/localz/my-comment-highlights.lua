@@ -128,12 +128,20 @@ local function highlight_todo()
 
     local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
 
+
+    local function find_comment(line)
+        local start_col, end_col = line:find("[#/%-]*%sTODO.*")
+        if start_col then
+            return start_col, end_col, "CommentTODO"
+        end
+    end
+
     for i, line in ipairs(lines) do
-        local start_col, end_col = line:find("-- TODO.*")
+        local start_col, end_col, hl_group = find_comment(line)
         if start_col then
             vim.api.nvim_buf_set_extmark(bufnr, ns_id, i - 1, start_col - 1, {
                 end_col = end_col,
-                hl_group = "CommentTODO"
+                hl_group = hl_group
             })
         end
     end
