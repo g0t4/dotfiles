@@ -21,19 +21,19 @@
   (comment) @comment_prn (#match? @comment_prn "(PRN|FYI)[^!]")
 
   ; FYI if I wanna limit to start of comment:
-  ;(comment) @comment_prn_bang (#match? @comment_prn_bang "^(--|\") (PRN|FYI)!")
-  ;(comment) @comment_prn (#match? @comment_prn "^(--|\") (PRN|FYI)")
+  ;(comment) @comment_prn_bang (#match? @comment_prn_bang "^(--|\")\\s(PRN|FYI)!")
+  ;(comment) @comment_prn (#match? @comment_prn "^(--|\")\\s(PRN|FYI)")
 ]
 [
   ; !!! => comment_triple_bang
-  (comment) @comment_triple_bang (#match? @comment_triple_bang "^(--|\") !!!")
+  (comment) @comment_triple_bang (#match? @comment_triple_bang "^(--|\")\\s!!!")
   ; gotta use start for ! single bang... else matches my others, though maybe I can change hl group orders to fix that?
-  (comment) @comment_single_bang (#match? @comment_single_bang "^(--|\") ![^!]") ; -- REDO others like this so not double labeling when not suppposed to
+  (comment) @comment_single_bang (#match? @comment_single_bang "^(--|\")\\s![^!]") ; -- REDO others like this so not double labeling when not suppposed to
 ]
 [
   ; ???+ => comment_triple_question
-  (comment) @comment_triple_question (#match? @comment_triple_question "^(--|\") \\?\\?\\?+")
+  (comment) @comment_triple_question (#match? @comment_triple_question "^(--|\")\\s\\?\\?\\?+")
   ; ?|?? => comment_single_question (\\? == ?) and \\?? means optional ? (0 or 1)
-  (comment) @comment_single_question (#match? @comment_single_question "^(--|\") \\?\\??[^\\?]")
+  (comment) @comment_single_question (#match? @comment_single_question "^(--|\")\\s\\?\\??[^\\?]")
 ]
 
