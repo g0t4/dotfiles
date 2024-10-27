@@ -78,14 +78,11 @@ return {
                 "let g:copilot_no_tab_map = 1
                 "" ok I kinda like ctrl+enter for copilot suggestions (vs enter for completions in general (coc)) but for now I will put tab back and see if I have any issues with it and swap this back in if so
 
-                " TODO move statusline elsewhere? NBD to leave for now
-                " approximately the default:
-                "set statusline=%f\ %y\ %m\ %=L:%l/C:%c\ %p%%
-                "set statusline+=%{GetStatusLineCopilot()}
-                set statusline=%f\ %y\ %m\ %=%{GetStatusLineCopilot()}\ L:%l/C:%c\ %p%% 
+                " statusline BEFORE lualine added
+                "set statusline=%f\ %y\ %m\ %=%{GetStatusLineCopilot()}\ L:%l/C:%c\ %p%%
 
                 function! GetStatusLineCopilot()
-                    " exists is just in case I move this elsewhere and I cant know for sure the copilot plugin is loaded already 
+                    " exists is just in case I move this elsewhere and I cant know for sure the copilot plugin is loaded already
                     if exists('*copilot#Enabled') && copilot#Enabled()
                         " add spaces after icon so subsequent text doesn't run under it
                         "return nr2char(0xEC1E)
