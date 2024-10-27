@@ -27,6 +27,7 @@ return {
                 --     theme = "codedark",
                 --     section_separators = { "", "" },
                 --     component_separators = { "", "" },
+                --     globalstatus  -- only one status line? hrm... might work now that I have inactive windows dimmed in onedarkpro theme
                 -- },
                 -- FYI =>    :lua print(vim.inspect(require('lualine').get_config()))
                 sections = {
