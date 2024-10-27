@@ -42,10 +42,14 @@ return {
             require("onedarkpro").setup {
                 options = {
                     highlight_inactive_windows = true, -- inactive windows are lighter => also, border mechanism w/o taking up space (for horiz splits)
-                    terminal_colors = false, -- use mine, close color wise but their black is nearly same as my bg
-                    cursorline = true, -- ok I'll give this a try
+                    terminal_colors = false,           -- use mine, close color wise but their black is nearly same as my bg
+                    cursorline = true,                 -- also highlights the line # in the gutter, makes easier to find that way too and find relative jump offsets
+                    -- transparency = true,
                 },
+
             }
+
+            -- FYI get colors =>    :lua print(vim.inspect(require("onedarkpro.helpers").get_colors()))
 
             vim.cmd [[
                 colorscheme onedark
