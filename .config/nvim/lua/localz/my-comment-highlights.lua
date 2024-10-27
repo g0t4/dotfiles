@@ -41,6 +41,8 @@ vim.cmd [[
 -- vim.api.nvim_set_hl(0, "@comment", {})
 
 function print_ts_cursor_details()
+    -- FYI use :Inspect to see more info about highlights
+    --
     local ts = vim.treesitter
     local ts_utils = require 'nvim-treesitter.ts_utils'
 
