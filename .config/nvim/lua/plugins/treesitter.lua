@@ -8,9 +8,14 @@ return {
         event = require('event-triggers').buffer_with_content_events,
 
         config = function()
-            vim.api.nvim_set_hl(0, '@todo_comment', { fg = '#FF8800', bold = true })
-            vim.api.nvim_set_hl(0, '@todo_bang_comment', { bg = '#FF8800', fg = "#1f1f1f", bold = true })
+            vim.api.nvim_set_hl(0, '@comment_todo', { fg = '#FF8800' })
+            vim.api.nvim_set_hl(0, '@comment_todo_bang', { bg = '#FF8800', fg = "#1f1f1f", bold = true })
             vim.api.nvim_set_hl(0, '@comment_asterisks', { fg = '#ff00c3' })
+            vim.api.nvim_set_hl(0, '@comment_asterisks_bang', { bg = '#ff00c3', fg = "#1f1f1f", bold = true })
+            vim.api.nvim_set_hl(0, '@comment_prn', { fg = "#27AE60" })
+            vim.api.nvim_set_hl(0, '@comment_prn_bang', { bg = "#27AE60", fg = "#1f1f1f", bold = true })
+            vim.api.nvim_set_hl(0, '@comment_single_bang', { fg = "#cc0000" }) -- crap has to be start only lol
+            vim.api.nvim_set_hl(0, '@comment_triple_bang', { bg = "#cc0000", fg = "#ffffff", bold = true })
 
             require 'nvim-treesitter.configs'.setup {
                 ensure_installed = { "c", "lua", "python", "javascript", "typescript", "html", "css", "json", "yaml", "markdown", "vim" }, -- one of "all", "maintained" (parsers with maintainers), or a list of languages
@@ -22,9 +27,9 @@ return {
                     -- disable = {},  -- confirmed TSModuleInfo shows X for these languages
                     -- additional_vim_regex_highlighting = true, -- true OR list of languages... I can't get this to change anything with my custom sytnax highlights, maybe this is smth else enable/disable?
 
-                    -- do I need this? probably not if I wanna have my own styles and not link to existing hlgroups
                     -- custom_captures = {
-                    --     ["todo_comment"] = "TodoComment",
+                    --   -- IIUC I only need this if I want to link to another existing hl group (ie in a theme)
+                    --     ["comment_todo"] = "TodoComment",
                     -- },
                 },
                 indent = {
