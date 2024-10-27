@@ -9,20 +9,25 @@ return {
         dependencies = { 'nvim-tree/nvim-web-devicons' },
         config = function()
             require("lualine").setup {
+                -- default: https://github.com/nvim-lualine/lualine.nvim?tab=readme-ov-file#default-configuration
+
                 -- options = {
                 --     theme = "codedark",
                 --     section_separators = { "", "" },
                 --     component_separators = { "", "" },
                 -- },
+
+                -- FYI =>    :lua print(vim.inspect(require('lualine').get_config()))
                 -- TODO port my copilot indicator
-                -- sections = {
-                --     lualine_a = { "mode" },
-                --     lualine_b = { "branch" },
-                --     lualine_c = { "filename" },
-                --     lualine_x = { "encoding", "fileformat", "filetype" },
-                --     lualine_y = { "progress" },
-                --     lualine_z = { "location" },
-                -- },
+                sections = {
+                    lualine_a = { "mode" }, -- default: "mode"
+                    lualine_b = { "branch", "diff" }, -- default: "branch", "diff", "diagnostics"
+                    lualine_c = { "filename" }, -- default: "filename"
+                    lualine_x = { "encoding", "fileformat", "filetype" }, -- default: "encoding", "fileformat", "filetype"
+                    lualine_y = { "progress" }, -- default: "progress"
+                    lualine_z = { "location" } -- default: "location"
+                },
+
                 -- inactive_sections = {
                 --     lualine_a = {},
                 --     lualine_b = {},
