@@ -8,6 +8,12 @@ return {
         "olimorris/onedarkpro.nvim",
         priority = 1000,
         config = function()
+            require("onedarkpro").setup {
+                options = {
+                    highlight_inactive_windows = true, -- inactive windows are lighter => also, border mechanism w/o taking up space (for horiz splits)
+                },
+            }
+
             vim.cmd [[
                 colorscheme onedark
                 set termguicolors
