@@ -11,6 +11,8 @@ return {
             require("onedarkpro").setup {
                 options = {
                     highlight_inactive_windows = true, -- inactive windows are lighter => also, border mechanism w/o taking up space (for horiz splits)
+                    terminal_colors = false, -- use mine, close color wise but their black is nearly same as my bg
+                    cursorline = true, -- ok I'll give this a try
                 },
             }
 
