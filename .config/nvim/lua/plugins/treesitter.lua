@@ -8,15 +8,20 @@ return {
         event = require('event-triggers').buffer_with_content_events,
 
         config = function()
-            vim.api.nvim_set_hl(0, '@comment_todo', { fg = '#FF8800' }) -- TODO test
-            vim.api.nvim_set_hl(0, '@comment_todo_bang', { bg = '#FF8800', fg = "#1f1f1f", bold = true }) -- TODO! test
-            vim.api.nvim_set_hl(0, '@comment_asterisks', { fg = '#ff00c3' }) -- *** test
-            vim.api.nvim_set_hl(0, '@comment_asterisks_bang', { bg = '#ff00c3', fg = "#1f1f1f", bold = true }) -- ***! test
-            vim.api.nvim_set_hl(0, '@comment_prn', { fg = "#27AE60" }) -- PRN test
-            vim.api.nvim_set_hl(0, '@comment_prn_bang', { bg = "#27AE60", fg = "#1f1f1f", bold = true }) -- PRN! test
-            vim.api.nvim_set_hl(0, '@comment_single_bang', { fg = "#cc0000" }) -- ! test
-            vim.api.nvim_set_hl(0, '@comment_triple_bang', { bg = "#cc0000", fg = "#ffffff", bold = true }) -- !!! test
-            vim.api.nvim_set_hl(0, '@comment_single_question', { fg = "#3498DB" }) -- ? test
+            -- TODO go back to yellow after I get migrated, leave orange on TODO as visual reminder as I keep my legacy highlighters loaded for all other languages not done yet
+            vim.api.nvim_set_hl(0, '@comment_todo', { fg = '#FF8800' })                                         -- TODO test
+            vim.api.nvim_set_hl(0, '@comment_todo_bang', { bg = '#FF8800', fg = "#1f1f1f", bold = true })       -- TODO! test
+            -- yellow TODOs:
+            vim.api.nvim_set_hl(0, '@comment_todo', { fg = '#ffcc00' })                                         -- TODO test
+            vim.api.nvim_set_hl(0, '@comment_todo_bang', { bg = '#ffcc00', fg = "#1f1f1f", bold = true })       -- TODO! test
+            --
+            vim.api.nvim_set_hl(0, '@comment_asterisks', { fg = '#ff00c3' })                                    -- *** test
+            vim.api.nvim_set_hl(0, '@comment_asterisks_bang', { bg = '#ff00c3', fg = "#1f1f1f", bold = true })  -- ***! test
+            vim.api.nvim_set_hl(0, '@comment_prn', { fg = "#27AE60" })                                          -- PRN test
+            vim.api.nvim_set_hl(0, '@comment_prn_bang', { bg = "#27AE60", fg = "#1f1f1f", bold = true })        -- PRN! test
+            vim.api.nvim_set_hl(0, '@comment_single_bang', { fg = "#cc0000" })                                  -- ! test
+            vim.api.nvim_set_hl(0, '@comment_triple_bang', { bg = "#cc0000", fg = "#ffffff", bold = true })     -- !!! test
+            vim.api.nvim_set_hl(0, '@comment_single_question', { fg = "#3498DB" })                              -- ? test
             vim.api.nvim_set_hl(0, '@comment_triple_question', { bg = "#3498DB", fg = "#1f1f1f", bold = true }) -- ??? test
 
             require 'nvim-treesitter.configs'.setup {
