@@ -16,6 +16,8 @@ return {
             vim.api.nvim_set_hl(0, '@comment_prn_bang', { bg = "#27AE60", fg = "#1f1f1f", bold = true })
             vim.api.nvim_set_hl(0, '@comment_single_bang', { fg = "#cc0000" }) -- crap has to be start only lol
             vim.api.nvim_set_hl(0, '@comment_triple_bang', { bg = "#cc0000", fg = "#ffffff", bold = true })
+            vim.api.nvim_set_hl(0, '@comment_single_question', { fg = "#3498DB" })
+            vim.api.nvim_set_hl(0, '@comment_triple_question', { bg = "#3498DB", fg = "#1f1f1f", bold = true })
 
             require 'nvim-treesitter.configs'.setup {
                 ensure_installed = { "c", "lua", "python", "javascript", "typescript", "html", "css", "json", "yaml", "markdown", "vim" }, -- one of "all", "maintained" (parsers with maintainers), or a list of languages

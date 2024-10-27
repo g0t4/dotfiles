@@ -44,6 +44,9 @@ require('localz.filetypemods')
     -- use 'numToStr/Comment.nvim' -- more features like gc$ (not entire line)
     -- use 'JoosepAlviste/nvim-ts-context-commentstring' -- context aware commentstring, IIUC for issues with embedded languages and commenting... FYI embedded vimscript in lua, gcc works fine
 
+    -- ? foo
+    -- ?? foo
+    -- ??? foo
     -- ! foo
     -- !!! foo
     -- TODO git related

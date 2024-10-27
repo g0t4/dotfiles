@@ -23,4 +23,10 @@
   ; gotta use start for ! single bang... else matches my others, though maybe I can change hl group orders to fix that?
   (comment) @comment_single_bang (#match? @comment_single_bang "-- ![^!]") ; -- REDO others like this so not double labeling when not suppposed to
 ]
+[
+  ; ???+ => comment_triple_question
+  (comment) @comment_triple_question (#match? @comment_triple_question "-- \\?\\?\\?+")
+  ; ?|?? => comment_single_question (\\? == ?) and \\?? means optional ? (0 or 1)
+  (comment) @comment_single_question (#match? @comment_single_question "-- \\?\\??[^\\?]")
+]
 
