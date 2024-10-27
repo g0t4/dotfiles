@@ -118,6 +118,9 @@ vim.cmd("nnoremap <leader>pi :Inspect<CR>") -- prefer over pd/pc I made, b/c thi
 -- Step 1: Define the highlight group for TODOs
 vim.api.nvim_set_hl(0, 'CommentTODO', { fg = "#ffcc00" })
 vim.api.nvim_set_hl(0, 'CommentTODOBang', { bg = "#ffcc00", fg = "#1f1f1f", bold = true })
+vim.api.nvim_set_hl(0, 'CommentPRN', { fg = "#27AE60" })
+vim.api.nvim_set_hl(0, 'CommentPRNBang', { bg = "#27AE60", fg = "#1f1f1f", bold = true })
+
 
 -- Step 2: Function to highlight TODO comments
 local function highlight_todo()
@@ -139,6 +142,21 @@ local function highlight_todo()
         if start_col then
             return start_col, end_col, "CommentTODO"
         end
+
+        -- test for PRN! => PRN
+        start_col, end_col = line:find("[#/%-]*%sPRN!.*")
+        if start_col then
+            return start_col, end_col, "CommentPRNBang"
+        end
+
+        start_col, end_col = line:find("[#/%-]*%sPRN.*")
+        if start_col then
+            return start_col, end_col, "CommentPRN"
+        end
+
+        --
+
+
     end
 
     for i, line in ipairs(lines) do
