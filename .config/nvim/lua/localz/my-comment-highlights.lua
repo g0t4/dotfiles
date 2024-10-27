@@ -130,7 +130,12 @@ local function highlight_todo()
 
 
     local function find_comment(line)
-        local start_col, end_col = line:find("[#/%-]*%sTODO.*")
+        local start_col, end_col = line:find("[#/%-]*%sTODO!.*")
+        if start_col then
+            return start_col, end_col, "CommentTODOBang"
+        end
+
+        start_col, end_col = line:find("[#/%-]*%sTODO.*")
         if start_col then
             return start_col, end_col, "CommentTODO"
         end
