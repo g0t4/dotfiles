@@ -414,8 +414,8 @@ export EDITOR="vim"
 
 #### nvim:
 abbr nd 'nvim (z dotfiles)'
-abbr nh 'nvim .'
-abbr nr 'nvim "$(_repo_root)"'
+abbr nh 'nvim' # IIAC don't need the "." here.. probably don't need it for code/zed either, I think that was an accidental carry over from zr/cr alias w/ repo root
+abbr nr 'nvim "$(_repo_root)"' # TODO do I want to change this to set cwd too or leave it which is like a filter on the files in a subset of repo (ie in telescope)
 
 abbr ni --function ni_expand
 function ni_expand
