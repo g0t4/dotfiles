@@ -17,7 +17,6 @@ local function setup_workspace()
     local workspace_dir = "~/.config/nvim/shada/workspaces/"
     workspace_dir = vim.fn.expand(workspace_dir) -- expand ~, else it will be literally ~ and yeah not what you want
     local shada_path = workspace_dir .. hash .. "/shada"
-    -- TODO refactor to put auto sessions here too? probably rename to drop "shada" or at least make the hash available so not need to recompute
 
     -- WHY do this with shada:
     --   privacy (don't jump list back to another project, i.e. during screencast)
@@ -26,18 +25,7 @@ local function setup_workspace()
     vim.opt.shadafile = shada_path
 
 
-    -- TODO reduce what the session is tracking, it's breaking color changes (seems to hold onto old hl groups or smth... very confusing to troubleshoot changes)
-    --    vim.o.sessionoptions = "buffers,curdir,folds,help,tabpages,winsize"
-    --
-    --    # currently my sessionoptions: (so why then is it messing up color changes?)
-    --    # sessionoptions=blank,buffers,curdir,folds,help,tabpages,winsize,terminal
-    --
-    --    # or do I need smth like redraw()? require("lazy").redraw()? chatgpt suggested, no idea wtf this is and why it would be needed?
-    --
-    --
     vim.g.session_file = workspace_dir .. hash .. "/session.vim"
-    --
-    --
     --
     vim.cmd [[
 
