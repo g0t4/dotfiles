@@ -2,7 +2,7 @@
 require("early")
 
 require("bootstrap-lazy")
-require("werkspace") -- TODO do I need this earlier?
+require("werkspace")
 -- after plugin loader
 require("localz.github-links")
 require('localz.tabs')
