@@ -416,7 +416,7 @@ export EDITOR="vim"
 
 
 #### nvim:
-abbr nd 'nvim (z dotfiles)'
+# FYI I changed session restore to use passed files/paths to open after session restored, so now I want that to only be if I explicitly ask for a file to be opened and not show dir every time I open, show last file open in most cases... I might need to alter this later
 abbr nh nvim # IIAC don't need the "." here.. probably don't need it for code/zed either, I think that was an accidental carry over from zr/cr alias w/ repo root
 #abbr nr 'nvim "$(_repo_root)"' # TODO do I want to change this to set cwd too or leave it which is like a filter on the files in a subset of repo (ie in telescope)
 abbr nr --function nr_expand
@@ -427,9 +427,8 @@ function nr_expand
     echo nvim
 end
 
-
-abbr ni --function ni_expand
-function ni_expand
+abbr nd --function nd_expand
+function nd_expand
     if not string match --quiet --regex dotfiles (pwd)
         # if not in dotfiles, then "z to it"
         echo -n "z dotfiles; "
