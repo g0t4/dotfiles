@@ -42,7 +42,7 @@ local function setup_workspace()
     vim.cmd [[
 
         function RestoreSession()
-            # TODO if I pass a file path(s) then I should open those after session is loaded?
+            " TODO if I pass a file path(s) then I should open those after session is loaded?
 
             if !filereadable(g:session_file)
                 echo "No session file found: " . g:session_file
