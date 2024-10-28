@@ -72,6 +72,12 @@
         - `gww` - format word
 - `:sort`
 
+### tips
+
+- `0D` to clear a line (not delete it) and stay in normal mode
+    - `cc` or `0C` to do the same but enter insert mode
+    - helpful when adding a blank line above/below a comment and the new line is started w/ a comment you don't want
+
 ### help
 
 - help for builtin keymaps/commands

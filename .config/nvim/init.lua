@@ -2,8 +2,9 @@
 require("early")
 
 require("bootstrap-lazy")
-require("werkspace")
+
 -- after plugin loader
+require("werkspace")
 require("localz.github-links")
 require('localz.tabs')
 require('localz.misc')
