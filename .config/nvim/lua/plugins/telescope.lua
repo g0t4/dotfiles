@@ -78,6 +78,22 @@ return {
         },
         config = function()
             require 'telescope-all-recent'.setup({
+                default = {
+                    -- sorting = 'recent',  -- default is 'recent' (then there are overrides per picker)
+                },
+                -- FYI see current settings:
+                --    lua print(vim.inspect(require('telescope-all-recent').config()))
+                pickers = {
+                    -- I prefer recent files to be at top, and then fuzzy find thereafter, frecency feels much less relevant IMO and IIUC vscode does it that way too, I always wanna jump to last used files, not most used
+                    -- why? b/c I prefer not to type anything if possible... that said maybe I should use jump list for that? I dunno...
+                    -- would be interesting to do sorting on recent and flip to frecency once I start typing chars? so nothing typed == recent, chars typed == frecency?
+                    find_files = {
+                        sorting = 'recent',
+                    },
+                    git_files = {
+                        sorting = 'recent',
+                    },
+                },
                 -- UMM ...  looks like ":Telescope builtins" is partially broken, in the Grep Preview pane, it doesn't scroll to the builtin's keymap section, might be stuck on the top of the file or?
                 --   confirmed this isn't broken when I disable this plugin, can I disable just this one picker? as I don't really need frecency on list of builtins...
                 --   fix this if and when it really annoys me... that said I wanted to lookup a key for these!
