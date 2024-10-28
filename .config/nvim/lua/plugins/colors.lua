@@ -14,11 +14,11 @@ return {
             end
 
             function StatusLine_Line()
-                return "Line " .. vim.fn.line(".")
+                return "Ln:" .. vim.fn.line(".")
             end
 
             function StatusLine_Column()
-                return "Col " .. vim.fn.col(".")
+                return "Col:" .. vim.fn.col(".")
             end
 
             function StatusLine_FileTypeIfNotInFileExt()
@@ -62,7 +62,11 @@ return {
                     -- lualine_c = { "filetype" },
                     lualine_c = { StatusLine_FileTypeIfNotInFileExt },
                     lualine_x = { "GetStatusLineCopilot" },
-                    lualine_y = { StatusLine_Line, StatusLine_Column, "progress" },
+                    lualine_y = {
+                        StatusLine_Line,
+                        { StatusLine_Column, padding = { left = 0, right = 1 } }, -- FYI when set padding it overrides both sides, so only specify left means right = 0
+                        { "progress",        padding = { left = 0 } },
+                    },
                     lualine_z = { '' },
                     -- search shows #/total in commandline so don't need that here
                 },
