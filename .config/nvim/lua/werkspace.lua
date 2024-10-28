@@ -42,7 +42,12 @@ local function setup_workspace()
     vim.cmd [[
 
         function RestoreSession()
-            " TODO if I pass a file path(s) then I should open those after session is loaded?
+
+            " capture passed files BEFORE session overwrites them which is ... WTH? why?
+            "    session argv() is always the args for the very first time the session was loaded! yikez (first save since not restoring a prev session)
+            "    what else is like this, that might cause issues?
+            let files_before_load = argv()
+            " what do I really need in a session besides restore last file? and maybe that's it?
 
             if !filereadable(g:session_file)
                 echo "No session file found: " . g:session_file
@@ -50,6 +55,14 @@ local function setup_workspace()
             endif
 
             execute "source" g:session_file
+
+            " open any files passed to nvim, after loading session, mimic vscode behavior
+            if len(files_before_load) > 0
+                for file in files_before_load
+                    execute "edit" file
+                endfor
+            endif
+
         endfunction
 
         call RestoreSession()
