@@ -23,12 +23,15 @@ return {
 
             require("lualine").setup {
                 -- default: https://github.com/nvim-lualine/lualine.nvim#default-configuration
-                -- options = {
-                --     theme = "codedark",
-                --     section_separators = { "", "" },
-                --     component_separators = { "", "" },
-                --     globalstatus  -- only one status line? hrm... might work now that I have inactive windows dimmed in onedarkpro theme
-                -- },
+                options = {
+                    -- theme = "codedark",
+                    -- section_separators = { left = vim.fn.nr2char(0xE0B4), right = vim.fn.nr2char(0xE0B6) },
+                    -- section_separators = { left = "", right = "" },
+                    -- section_separators = { left = "▌", right = "▐" },
+                    section_separators = "",
+                    component_separators = "",
+                    -- globalstatus  -- only one status line? hrm... might work now that I have inactive windows dimmed in onedarkpro theme
+                },
                 -- FYI =>    :lua print(vim.inspect(require('lualine').get_config()))
                 -- extensions = { 'nvim-tree' }, -- shows root dir (and dirs above it) in statusline... I dont need that, in fact if anything show file path of the file still that was right before open treeview
                 sections = {
