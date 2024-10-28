@@ -41,6 +41,12 @@ local function setup_workspace()
     --
     vim.cmd [[
 
+        " removing buffers (I don't want background buffers, I can add back if I want that later)
+        " removing curdir (this is dervied by convention, dont want that changing, session is stored PER cwd so no need to change curdir)
+        " removing terminal (I don't want to restore terminals, I can add back if I want that later)
+        " PRN do I wanna remove blank?
+        set sessionoptions=blank,folds,help,tabpages,winsize
+
         function RestoreSession()
 
             " capture passed files BEFORE session overwrites them which is ... WTH? why?
