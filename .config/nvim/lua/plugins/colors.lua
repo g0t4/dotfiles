@@ -18,18 +18,22 @@ return {
             end
 
             function StatusLine_Line()
-                return "Ln:" .. vim.fn.line(".")
+                -- "Ln:" worked nicely too, trying  to save more space?
+                -- return "" .. vim.fn.line(".")
+                return vim.fn.line(".") .. ""
             end
 
             function StatusLine_Column()
-                return "Col:" .. vim.fn.col(".")
+                -- credit / from https://neovimcraft.com/plugin/SmiteshP/nvim-navic/
+                -- "Col:"  worked nicely too, trying  to save more space?
+                -- return "" .. vim.fn.col(".")
+                return vim.fn.col(".") .. ""
             end
 
             function StatusLine_FileTypeIfNotInFileExt()
                 --  lua
                 --  why show the icon too? given the icon alone isn't as telling as the filetype, then just show the darn filetype
                 --  AND why show filetype if the filename has the same extension as it!?
-
 
                 local file_ext = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(0), ':e')
 
