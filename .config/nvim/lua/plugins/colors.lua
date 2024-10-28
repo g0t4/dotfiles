@@ -21,6 +21,20 @@ return {
                 return "Col " .. vim.fn.col(".")
             end
 
+            function StatusLine_FileTypeIfNotInFileExt()
+                --  lua
+                --  why show the icon too? given the icon alone isn't as telling as the filetype, then just show the darn filetype
+                --  AND why show filetype if the filename has the same extension as it!?
+
+
+                local file_ext = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(0), ':e')
+
+                if file_ext == vim.bo.filetype then
+                    return ""
+                end
+                return vim.bo.filetype
+            end
+
             require("lualine").setup {
                 -- default: https://github.com/nvim-lualine/lualine.nvim#default-configuration
                 options = {
@@ -45,7 +59,8 @@ return {
                         path = 1, -- 1 = relative path, 4 = filename+parentdir sounds interesting
                         -- relative path, 4 filename+parentdir sounds interesting
                     } },          -- filename includes modified
-                    lualine_c = { "filetype" },
+                    -- lualine_c = { "filetype" },
+                    lualine_c = { StatusLine_FileTypeIfNotInFileExt },
                     lualine_x = { "GetStatusLineCopilot" },
                     lualine_y = { StatusLine_Line, StatusLine_Column, "progress" },
                     lualine_z = { '' },
