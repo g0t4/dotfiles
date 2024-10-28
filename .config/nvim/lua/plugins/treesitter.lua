@@ -25,6 +25,16 @@ return {
                 sync_install = false,
                 auto_install = true,                                                                                                       -- auto install on entering buffer (must have tree-sitter CLI, IIUC)
                 -- ignore_install
+
+                -- TODO review other builtin modules/plugins:
+                -- - https://github.com/nvim-treesitter/nvim-treesitter/wiki/Extra-modules-and-plugins
+                -- - FYI can enable/disable in a buffer with: :TSBufEnable matchup
+                --    i.e. vim-matchup:
+                matchup = {
+                    -- FRIGGIN AWESOME - TODO make a video about this
+                    enable = true, -- enable for treesitter based matching, use keymap: % to jump between matching pairs, i.e. plist (xml) that has hundreds of lines under an element and you are at end and wanna jump up... wows (IIAC folds might help too?)
+                },
+
                 highlight = {
                     enable = true, -- doesn't seem to turn it off, is treesitter initilized b/c of some other plugin first and thus my config here isn't applied?
                     -- disable = {},  -- confirmed TSModuleInfo shows X for these languages
