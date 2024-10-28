@@ -9,9 +9,9 @@ return {
         "nvim-lualine/lualine.nvim",
         dependencies = { 'nvim-tree/nvim-web-devicons' },
         config = function()
-            function StatusLine_Line_Column()
-                return "L:" .. vim.fn.line(".") .. "/C:" .. vim.fn.col(".")
-            end
+            -- return require('lualine').setup()
+        end,
+        config2 = function()
 
             function StatusLine_Line()
                 -- "Ln:" worked nicely too, trying  to save more space?
