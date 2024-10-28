@@ -41,7 +41,7 @@ local function setup_workspace()
     --
     vim.cmd [[
 
-        function LoadSession()
+        function RestoreSession()
             if !filereadable(g:session_file)
                 echo "No session file found: " . g:session_file
                 return
@@ -50,12 +50,10 @@ local function setup_workspace()
             execute "source" g:session_file
         endfunction
 
-        " TODO re-enable load session automatically?
-        "call LoadSession()
-        " for now I can use jump history to go back to last spot (and its project specific so it will work great w/o loading session)
-        " FYI I disabled loading session when troubleshooting color issues which it was adding confusion to
-        "    TODO ... I suspect the issue with thinking colors are messed up was that with sessions I load the laast used doc where I dont see colors but that is due to my bug that requires reload or switch files after whhich colors work and its not sessions
-        "       NOT ENTIRELY => cuz w/ session restored, I can't reload doc to fix it, with ":e!" so it is something with sessions too, whereas w/o calling loadSession() it can be reloaded with ":e!" to get comments highlighted
+        call RestoreSession()
+        " instead of auto load session, can use Ctrl+I to go back to last file
+        " new comment coloring with treesitter queries seems to work fine w/ session restore
+        " FYI old regex syntax based comment colors were a hot mess when loading sessions (never colored initial buffer/files correctly)
 
         autocmd VimLeavePre * call OnLeaveSaveSession()
 
