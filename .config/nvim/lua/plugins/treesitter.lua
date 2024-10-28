@@ -28,12 +28,16 @@ return {
 
                 -- TODO review other builtin modules/plugins:
                 -- - https://github.com/nvim-treesitter/nvim-treesitter/wiki/Extra-modules-and-plugins
-                -- - FYI can enable/disable in a buffer with: :TSBufEnable matchup
-                --    i.e. vim-matchup:
-                matchup = {
-                    -- FRIGGIN AWESOME - TODO make a video about this
-                    enable = true, -- enable for treesitter based matching, use keymap: % to jump between matching pairs, i.e. plist (xml) that has hundreds of lines under an element and you are at end and wanna jump up... wows (IIAC folds might help too?)
-                },
+                --  PRN nvim-treesitter/nvim-treesitter-context	- show context of cursor position (ie function, class, etc) - like vscode scroll context thingy
+                --
+                -- matchup/matchit
+                -- TODO! is matchit builtin good enough? does treesitter version of it use AST instead of smth else in matchit bundled extension?
+                -- matchup = {
+                --     -- FRIGGIN AWESOME - TODO make a video about this
+                --     enable = true, -- enable for treesitter based matching, use keymap: % to jump between matching pairs, i.e. plist (xml) that has hundreds of lines under an element and you are at end and wanna jump up... wows (IIAC folds might help too?)
+                --     -- can open AST too and move around (:InspectTree) but dang is it slow on huge xml files
+                --     -- PRN any outline mode that would work well too, extension?
+                -- },
 
                 highlight = {
                     enable = true, -- doesn't seem to turn it off, is treesitter initilized b/c of some other plugin first and thus my config here isn't applied?
