@@ -253,3 +253,19 @@ These are custom mappings in coc to add LSP features based on LSP availability..
     - `q` - stop recording
 - `@{register}` - replay
     - `@@` - replay last
+
+### similar apps
+
+- `kindaVim` - macOS app, turns every app into a vim like app (normal mode)
+    - `Esc` into normal mode, `i` into regular mode? Or is it an insert mode?
+    - text boxes, i.e. URL bar/alfred search/etc
+        - `dw`/`db` delete word!
+    - `gg/G` - top/bottom - rocks in Finder!
+    - `Ctrl-U/D/F/B/Y/E` - scroll up/down
+    - `hjkl` of course (i.e. Finder up down)
+    - WIP assess how I like it
+- `homerow` - macOS => click any button with vim motion like shortcuts
+    - 1 to 2 char combos for all buttons, using Accessibility framework
+    - `Shift-Cmd-Space` - toggle
+    - works GREAT in browsers, macOS settings, FCPX, all the damn tiny buttons that are impossible to click and take forever to drag to... YES
+    - TODO are the labels consistent? assuming screen contents are same?
