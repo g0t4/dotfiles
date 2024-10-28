@@ -1,10 +1,7 @@
 -- *** treesitter helpers, i.e. for understanding highlighting issues
 
 function print_captures_at_cursor()
-    local myTable = vim.treesitter.get_captures_at_cursor()
-    for key, value in pairs(myTable) do
-        print(key, value)
-    end
+    print(vim.inspect(vim.treesitter.get_captures_at_cursor()))
 end
 
 vim.cmd("nnoremap <leader>pc :lua print_captures_at_cursor()<CR>")
