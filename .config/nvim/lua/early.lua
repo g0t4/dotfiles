@@ -61,4 +61,13 @@ vim.cmd [[
 -- *** left gutter settings
 vim.o.signcolumn = 'number' -- yes=always, no=never, auto=only when needed, number=(in # column, if shown)
 vim.o.relativenumber = true -- vertical equiv of eyeliner ext (horiz jump marks) - testing if i like this
-vim.o.number = false        -- explicitly do not include absolute line #s (for now)
+vim.o.number = true        -- explicitly do not include absolute line #s (for now)
+-- relative + number == absolute instead of 0 for current cursor line (rest are relative)
+
+-- *** help gutter settings (global options don't apply here)
+vim.api.nvim_create_augroup("HelpNumbers", { clear = true })
+vim.api.nvim_create_autocmd("FileType", {
+  group = "HelpNumbers",
+  pattern = "help",
+  command = "setlocal relativenumber number",
+})
