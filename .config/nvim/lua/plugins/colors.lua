@@ -9,6 +9,7 @@ return {
         "nvim-lualine/lualine.nvim",
         dependencies = { 'nvim-tree/nvim-web-devicons' },
         config = function()
+
             function StatusLine_Line()
                 -- "Ln:" worked nicely too, trying  to save more space?
                 -- return "" .. vim.fn.line(".")
@@ -86,10 +87,6 @@ return {
         "olimorris/onedarkpro.nvim",
         priority = 1000,
         config = function()
-            local helpers = require("onedarkpro.helpers")
-            local colors = helpers.get_preloaded_colors()
-            local new_blue = colors.red
-            local new_red = colors.blue
             require("onedarkpro").setup {
                 options = {
                     highlight_inactive_windows = true, -- inactive windows are lighter => also, border mechanism w/o taking up space (for horiz splits)
@@ -97,12 +94,7 @@ return {
                     cursorline = true,                 -- also highlights the line # in the gutter, makes easier to find that way too and find relative jump offsets
                     -- transparency = true,
                 },
-                colors = {
-                    -- red = "require('onedarkpro.helpers').darken('red', 10, 'onedark')",
-                    -- blue = "require('onedarkpro.helpers').darken('red', 10, 'onedark')",
-                    blue = new_blue,
-                    red = new_red,
-                },
+
             }
 
             -- FYI get colors =>    :lua print(vim.inspect(require("onedarkpro.helpers").get_colors()))
