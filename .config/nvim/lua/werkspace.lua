@@ -42,9 +42,8 @@ local function setup_workspace()
             "    what else is like this, that might cause issues?
             let files_before_load = argv()
             " what do I really need in a session besides restore last file? and maybe that's it?
-
             if !filereadable(g:session_file)
-                echo "No session file found: " . g:session_file
+                echom "No session file found: " . g:session_file
                 return
             endif
 
