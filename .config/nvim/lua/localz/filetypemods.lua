@@ -12,3 +12,11 @@ vim.cmd [[
 
 
 ]]
+
+-- set commentstring for json files (i.e. coc-settings.json), obviously not all json readers can handle comments so be careful
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = "json",
+    callback = function()
+        vim.bo.commentstring = "// %s" -- %s is original text
+    end,
+})
