@@ -46,7 +46,13 @@ local function setup_workspace()
                 return
             endif
 
-            execute "source" g:session_file
+            try
+                execute "source" g:session_file
+            catch
+                " known issue => session has help file for lazy loaded extension (i.e. nvim-tree) and so the help page doesn't exist on next startup b/c nvim-tree only loads when you open it
+                lua require('notify').notify("Session Restore FAILED".. "\n\n" .. vim.v.exception .. "\n\n" .. vim.v.throwpoint, "error", { title = "Session Restore", render = "wrapped-compact"})
+                " on failure, user can save a new one to fix in most cases there is no need to troubleshoot much
+            endtry
 
             " open any files passed to nvim, after loading session, mimic vscode behavior
             if len(files_before_load) > 0
