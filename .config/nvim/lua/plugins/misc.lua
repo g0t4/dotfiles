@@ -35,7 +35,11 @@ return {
     -- },
 
     -- {
-    --     "https://github.com/folke/noice.nvim"
+    --     "https://github.com/folke/noice.nvim",
+    --     config = function()
+    --         require("noice").setup({
+    --         })
+    --     end,
     --     -- TODO TRY THIS
     --     -- command output in regular buffer!!! YES?! i.e. `:highlight` or `:nmap` => not the stupid output pager thingy you cannot leave open
     --     -- many others, not sure I want all mods
