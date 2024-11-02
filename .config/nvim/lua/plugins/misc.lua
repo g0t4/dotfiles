@@ -21,7 +21,7 @@ return {
     },
     {
         "g0t4/test-nvim",
-        -- TODO has to be a way to link to local checkout
+        dir = "~/repos/github/g0t4/test-nvim", -- seems to take precedence over name => URL mapping
         config = function()
             -- without defer, the notify in my plugin doesn't work..
             -- TODO migrate to vim.notify so I don't need the explicit dependency, just for testing anyways
