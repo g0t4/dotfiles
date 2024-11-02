@@ -45,6 +45,10 @@ return {
                     section_separators = "",
                     component_separators = "",
                     -- globalstatus  -- only one status line? hrm... might work now that I have inactive windows dimmed in onedarkpro theme
+                    --
+                    -- TODO modify this theme to be more like original except my customizations of inactive bg color
+                    --    FYI split window setup and make bottom window active, the top inactive window is transparent and so IMO not at all obvious then that that is the bottom of the window, confuses me often... so the goal is to make that inactive color slightly darker to tell it apart
+                    -- theme = require("localz.lualine-theme").theme(),
                 },
                 -- FYI =>    :lua print(vim.inspect(require('lualine').get_config()))
                 -- extensions = { 'nvim-tree' }, -- shows root dir (and dirs above it) in statusline... I dont need that, in fact if anything show file path of the file still that was right before open treeview
@@ -78,7 +82,6 @@ return {
                     lualine_y = {},             -- default ""
                     lualine_z = {},             -- default ""
                 },
-                -- TODO fix bgcolor to not be transparent on inactive windows... makes it super difficult to see where one window ends and next begins when inactive is above active... looks like a mess to change this in lualine itself... TODO find out how onedarkpro sets its theme and see if anything helps there ... if not here is a solution: https://www.reddit.com/r/neovim/comments/s4ud1d/make_lualine_background_transparent/
             }
         end,
     },
