@@ -18,5 +18,27 @@ return {
 
             })
         end,
-    }
+    },
+    {
+        "g0t4/test-nvim",
+        -- TODO has to be a way to link to local checkout
+        config = function()
+            -- without defer, the notify in my plugin doesn't work..
+            -- TODO migrate to vim.notify so I don't need the explicit dependency, just for testing anyways
+            vim.defer_fn(function()
+                require("test-nvim")
+            end, 100)
+        end,
+        dependencies = {
+            "rcarriga/nvim-notify",
+        },
+    },
+
+    {
+        "https://github.com/folke/noice.nvim"
+        -- TODO TRY THIS
+        -- command output in regular buffer!!! YES?! i.e. `:highlight` or `:nmap` => not the stupid output pager thingy you cannot leave open
+        -- many others, not sure I want all mods
+    },
+
 }
