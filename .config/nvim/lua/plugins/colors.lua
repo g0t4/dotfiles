@@ -9,7 +9,6 @@ return {
         "nvim-lualine/lualine.nvim",
         dependencies = { 'nvim-tree/nvim-web-devicons' },
         config = function()
-
             function StatusLine_Line()
                 -- "Ln:" worked nicely too, trying  to save more space?
                 -- return "" .. vim.fn.line(".")
@@ -79,6 +78,7 @@ return {
                     lualine_y = {},             -- default ""
                     lualine_z = {},             -- default ""
                 },
+                -- TODO fix bgcolor to not be transparent on inactive windows... makes it super difficult to see where one window ends and next begins when inactive is above active... looks like a mess to change this in lualine itself... TODO find out how onedarkpro sets its theme and see if anything helps there ... if not here is a solution: https://www.reddit.com/r/neovim/comments/s4ud1d/make_lualine_background_transparent/
             }
         end,
     },
