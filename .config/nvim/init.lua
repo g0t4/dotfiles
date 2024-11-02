@@ -13,6 +13,18 @@ require('localz.clippy')
 require('localz.comment-highlights')
 require('localz.filetypemods')
 
+vim.cmd [[
+
+    " TODO where should I consolidate these?
+    " fix some theme issues
+    "
+    " without this, the cursor line in NvimTree is blindingly bright... and for some reason once it is used it sets CursorLine in subsequently opened files... very strange
+    "   this forces NvimTreeCursorLine to be the same as CursorLine
+    " NvimTreeCursorLine xxx guibg=#5c6370
+    " CursorLine     xxx guibg=#2d313b
+    highlight! link NvimTreeCursorLine CursorLine
+
+]]
 -- workspace constraints:
 --  (thoughts about what will eventually formulate my session restore plugins/scripts)
 --
