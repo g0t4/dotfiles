@@ -46,6 +46,10 @@ local function setup_workspace()
                 return
             endif
 
+            " TODO delay/abort session restore if Lazy window is open... otherwise session load fails
+            "   Vim(only):E5601: Cannot close window, only floating window would remain
+            "     reproduce: open lazy window and execute `silent only` (from line 4 in session.vim that triggers error)
+
             try
                 execute "source" g:session_file
             catch
