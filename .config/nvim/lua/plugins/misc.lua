@@ -18,20 +18,21 @@ return {
             })
         end,
     },
-    {
-        "g0t4/test-nvim",
-        --
-        -- dir = "~/repos/github/g0t4/test-nvim", -- uncomment to use local checkout (takes precedence over name/url convention)
-        --  FYI can also use `dev = true` and then setup lazy package manager's config.dev to path of local projects... perhaps if I get a lot of local checkouts... for now lets use dir here which works fine for now (WAIT FOR THE PAIN)
-        --     see:   ~/.local/share/nvim/lazy/lazy.nvim/doc/lazy.nvim.txt:665
-        --
-        config = function()
-            require("test-nvim")
-        end,
-        dependencies = {
-            "rcarriga/nvim-notify",
-        },
-    },
+
+    -- {
+    --     "g0t4/test-nvim",
+    --     --
+    --     -- dir = "~/repos/github/g0t4/test-nvim", -- uncomment to use local checkout (takes precedence over name/url convention)
+    --     --  FYI can also use `dev = true` and then setup lazy package manager's config.dev to path of local projects... perhaps if I get a lot of local checkouts... for now lets use dir here which works fine for now (WAIT FOR THE PAIN)
+    --     --     see:   ~/.local/share/nvim/lazy/lazy.nvim/doc/lazy.nvim.txt:665
+    --     --
+    --     config = function()
+    --         require("test-nvim")
+    --     end,
+    --     dependencies = {
+    --         "rcarriga/nvim-notify",
+    --     },
+    -- },
 
     -- {
     --     "https://github.com/folke/noice.nvim"
