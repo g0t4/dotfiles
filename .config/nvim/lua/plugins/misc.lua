@@ -25,9 +25,9 @@ return {
         config = function()
             -- without defer, the notify in my plugin doesn't work..
             -- TODO migrate to vim.notify so I don't need the explicit dependency, just for testing anyways
-            vim.defer_fn(function()
-                require("test-nvim")
-            end, 100)
+            -- vim.defer_fn(function()
+            require("test-nvim")
+            -- end, 100)
         end,
         dependencies = {
             "rcarriga/nvim-notify",
