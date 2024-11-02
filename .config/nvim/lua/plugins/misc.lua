@@ -40,6 +40,10 @@ return {
     --         require("noice").setup({
     --         })
     --     end,
+    --     dependencies = {
+    --         "rcarriga/nvim-notify",
+    --         "MunifTanjim/nui.nvim",
+    --     },
     --     -- TODO TRY THIS
     --     -- command output in regular buffer!!! YES?! i.e. `:highlight` or `:nmap` => not the stupid output pager thingy you cannot leave open
     --     -- many others, not sure I want all mods
