@@ -1,10 +1,10 @@
 return {
     {
+        -- FYI use `:Notifications` to see history of notifications
         "rcarriga/nvim-notify",
         config = function()
             -- FYI I will probably hate this with hardline... maybe turn off hardline warns then?
-            vim.notify = require("notify")
-
+            vim.notify = require("notify") -- route all notifications through this (plugins can use vim.notify none the wiser)
             require("notify").setup({
                 -- stages = "fade",
                 --
@@ -15,13 +15,16 @@ return {
                 --    OK for now just pass "wrapped-compact" on per notify call and that looks good enough (still has new line issue but whatever)
                 -- render = "wrapped-default",
                 -- max_width = 80,
-
             })
         end,
     },
     {
         "g0t4/test-nvim",
-        dir = "~/repos/github/g0t4/test-nvim", -- seems to take precedence over name => URL mapping
+        --
+        -- dir = "~/repos/github/g0t4/test-nvim", -- uncomment to use local checkout (takes precedence over name/url convention)
+        --  FYI can also use `dev = true` and then setup lazy package manager's config.dev to path of local projects... perhaps if I get a lot of local checkouts... for now lets use dir here which works fine for now (WAIT FOR THE PAIN)
+        --     see:   ~/.local/share/nvim/lazy/lazy.nvim/doc/lazy.nvim.txt:665
+        --
         config = function()
             require("test-nvim")
         end,
