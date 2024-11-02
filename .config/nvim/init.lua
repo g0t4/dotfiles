@@ -24,6 +24,9 @@ vim.cmd [[
     " CursorLine     xxx guibg=#2d313b
     highlight! link NvimTreeCursorLine CursorLine
 
+    " experiment with local plugin dev
+    set runtimepath+=~/repos/github/g0t4/test-nvim
+    lua require("test-nvim")
 ]]
 -- workspace constraints:
 --  (thoughts about what will eventually formulate my session restore plugins/scripts)
