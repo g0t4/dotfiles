@@ -38,7 +38,16 @@ return {
 
                     -- show only folder name of root dir (not full path or even ~/ path):
                     root_folder_label = ":t", -- `:help filename-modifiers` for more choices, this is aka root_folder_modifier IIRC
-                }
+                },
+                filters = {
+                    -- -- btw true/exclude == filtered out, false/include == shown
+                    -- dotfiles = false, -- false = show dotfiles, false (default)
+                    custom = { -- hidden:
+                        "^\\.git",
+                    },
+                    -- exclude = { -- show: (don't filter out)
+                    -- }
+                },
             })
             -- PRN telescope integration => actions menu (https://github.com/nvim-tree/nvim-tree.lua/wiki/Recipes#creating-an-actions-menu-using-telescope)
             -- FYI `g?` shows help overlay with keymaps for actions
