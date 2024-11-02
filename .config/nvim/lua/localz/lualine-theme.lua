@@ -4,6 +4,10 @@ M.theme = function()
     -- 1. Make inactive windows have a different bg color, b/c when top window is inactive (bottom active), the default is transparent bg which is not obvious then which window it is a part of IMO
     --
     -- FYI this file originally from https://www.reddit.com/r/neovim/comments/s4ud1d/make_lualine_background_transparent/
+    --
+    -- FYI here is onedark's base theme!
+    --    ~/.local/share/nvim/lazy/onedarkpro.nvim/lua/lualine/themes/onedark.lua
+    --    WAIT I think I should import and modify this instead
     local colors = {
         darkgray = "#16161d",
         gray = "#727169",
