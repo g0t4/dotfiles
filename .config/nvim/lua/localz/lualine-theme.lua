@@ -20,5 +20,21 @@ M.theme = function()
     }
 
     return theme
+
+    -- NOTES when researching default color theme
+    --   FYI `theme =` is from lualine's setup() function (I retired these notes here)
+    --
+    -- *** lualine's is a grey theme (not green/blue in normal/insert mode)
+    -- theme = require("lualine.themes.onedark"), -- due to rtp ordering this way lualine's wins
+    -- theme = dofile("/Users/wes/.local/share/nvim/lazy/lualine.nvim/lua/lualine/themes/onedark.lua"),
+    -- lua print(vim.inspect(dofile("/Users/wes/.local/share/nvim/lazy/lualine.nvim/lua/lualine/themes/onedark.lua")))
+    --
+    -- *** onedarkpro's is the green/blue theme I am used to (wins b/c of plugin ordering and priority)
+    -- theme = dofile("/Users/wes/.local/share/nvim/lazy/onedarkpro.nvim/lua/lualine/themes/onedark.lua"),
+    -- theme = dofile(require("lazy.core.config").plugins["onedarkpro.nvim"].dir .. "/lua/lualine/themes/onedark.lua"),
+    -- FYI find path to plugin dir (so can dofile() on it):
+    --   :lua print(vim.inspect(require("lazy.core.config").plugins))
+    --
 end
+
 return M

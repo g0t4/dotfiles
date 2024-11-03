@@ -65,22 +65,7 @@ return {
                     component_separators = "",
                     -- globalstatus  -- only one status line? hrm... might work now that I have inactive windows dimmed in onedarkpro theme
                     --
-                    -- TODO modify this theme to be more like original except my customizations of inactive bg color
-                    --    FYI split window setup and make bottom window active, the top inactive window is transparent and so IMO not at all obvious then that that is the bottom of the window, confuses me often... so the goal is to make that inactive color slightly darker to tell it apart
                     theme = require("localz.lualine-theme").theme(),
-                    --
-                    -- lualine's onedark is winning out (b/c rtp lualine is prepended before onedarkpro)
-                    -- theme = require("lualine.themes.onedark"), -- grey instead of green normal mode color
-                    -- theme = dofile("/Users/wes/.local/share/nvim/lazy/lualine.nvim/lua/lualine/themes/onedark.lua"),
-                    -- lua print(vim.inspect(dofile("/Users/wes/.local/share/nvim/lazy/lualine.nvim/lua/lualine/themes/onedark.lua")))
-                    --
-                    -- onedarkpro's theme has green, and wins in these cases:
-                    -- theme = dofile("/Users/wes/.local/share/nvim/lazy/onedarkpro.nvim/lua/lualine/themes/onedark.lua"),
-                    -- theme = "onedark" -- doesn't seem to do anything
-                    -- theme = dofile(require("lazy.core.config").plugins["onedarkpro.nvim"].dir .. "/lua/lualine/themes/onedark.lua"),
-                    -- FYI find path to plugin dir (so can dofile() on it):
-                    --   :lua print(vim.inspect(require("lazy.core.config").plugins))
-                    --
 
                 },
                 -- FYI =>    :lua print(vim.inspect(require('lualine').get_config()))
