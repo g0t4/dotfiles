@@ -4,6 +4,10 @@ return {
 
     {
         "gelguy/wilder.nvim",
+        dependencies = {
+            -- devicons
+            "kyazdani42/nvim-web-devicons",
+        },
         config = function()
             require("wilder").setup {
                 modes = {
@@ -57,17 +61,14 @@ return {
                     accent = 'MyWilderPopupmenuAccent',
                     selected_accent = 'MyWilderPopupmenuSelectedAccent',
                 },
-                -- -- wilder#popupmenu_devicons()
-                -- left = {
-                --     ' ', wilder.basic_devicons_renderer({
-                --         separator = ' ',
-                --     }),
-                -- },
-                --
-                -- wilder#popupmenu_scrollbar()
-                -- right = {
-                --     ' ', wilder.basic_scrollbar_renderer(),
-                -- },
+                left = {
+                    ' ',
+                    wilder.popupmenu_devicons(),
+                },
+                right = {
+                    -- PRN wire up page up/down to scroll?
+                    ' ', wilder.popupmenu_scrollbar()
+                },
             }))
 
             vim.cmd [[
