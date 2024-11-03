@@ -89,6 +89,11 @@ local function setup_workspace()
             execute "mksession!" g:session_file
         endfunction
 
+        function SaveSessionWithNotify()
+            call SaveSession()
+            lua vim.notify("", "info", { title= "Session Saved", timeout = 500 }) -- briefly show only
+        endfunction
+        nnoremap <silent> <F6> :call SaveSessionWithNotify()<CR>
     ]]
     --
     -- -- Session notes:
