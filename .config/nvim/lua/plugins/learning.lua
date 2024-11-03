@@ -20,6 +20,10 @@ return {
 
             require("hardtime").setup({
 
+                -- messages (via cmdline OR nvim-notify popups) =>  I find the disabled/restricted notify popups useless, the key not working / stopping is enough for me to knock it off
+                notification = false, -- don't notify for disabled/restricted keys, i.e. down disabled, OR hit j repeatedly...
+                hint = true, -- explicit that I want hints for now... i.e. `cw` instead of `dwi`
+
                 disabled_keys = {
                     -- ONLY disable arrows in normal mode, that way I can use them in INSERT mode to move up/down in the completion list, not ideal, maybe is a better way to only enable them for completion list?
                     ["<Up>"] = { "n", },
