@@ -70,6 +70,22 @@ end
 return {
 
     {
+        enabled = true,
+        "supermaven-inc/supermaven-nvim",
+        config = function()
+            require("supermaven-nvim").setup {
+                keymaps = {
+                    -- -- defaults:
+                    -- accept_suggestion = "<Tab>",
+                    -- clear_suggestion = "<C-]>",
+                    -- accept_word = "<C-j>",
+                }
+
+            }
+        end,
+    },
+
+    {
         enabled = false,
         'github/copilot.vim',
         -- event = { "InsertEnter" }, -- lazy load on first insert  -- load immediately is fine, esp if changing status bar here
