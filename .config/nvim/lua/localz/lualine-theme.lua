@@ -1,7 +1,14 @@
 local M = {}
 M.theme = function()
-
-    local theme = dofile(require("lazy.core.config").plugins["onedarkpro.nvim"].dir .. "/lua/lualine/themes/onedark.lua")
+    -- have to get the theme by entire file path b/c lualine shadows this one
+    local lazycfg = require("lazy.core.config")
+    local odp_plugin_install_dir = lazycfg.plugins["onedarkpro.nvim"].dir
+    if not odp_plugin_install_dir then
+        -- just in case I change config and mess up ordering or don't have plugins yet all installed, add some graceful death
+        vim.notify("onedarkpro.nvim plugin not found, cannot modify its lualine theme", vim.log.levels.ERROR)
+        return
+    end
+    local theme = dofile(odp_plugin_install_dir .. "/lua/lualine/themes/onedark.lua")
 
     theme.inactive = {
         a = { fg = "#727169", bg = "#16161D", gui = "bold" },
@@ -62,6 +69,5 @@ M.theme = function()
     --         c = { fg = colors.gray, bg = colors.innerbg },
     --     },
     -- }
-
 end
 return M
