@@ -16,13 +16,22 @@ return {
             local wilder = require('wilder')
             wilder.set_option('pipeline', {
                 wilder.branch(
+                    -- TODO do I even want history? Also it only shows if I have nothing typed?
+                    -- {
+                    --     wilder.check(function(ctx, x) return x == '' end),
+                    --     wilder.history(),
+                    --     -- \       wilder#result({
+                    --     -- \         'draw': [{_, x -> ' ' . x}],
+                    --     -- \       }),
+                    -- },
                     wilder.cmdline_pipeline({
                         -- sets the language to use, 'vim' and 'python' are supported
                         language = 'python',
                         -- 0 turns off fuzzy matching
                         -- 1 turns on fuzzy matching
                         -- 2 partial fuzzy matching (match does not have to begin with the same first letter)
-                        fuzzy = 1,
+                        fuzzy = 2, -- !!! what do I want to use?
+                        -- lets try 2 and see if it feels overly distracting
                     }),
                     wilder.python_search_pipeline({
                         -- can be set to wilder#python_fuzzy_delimiter_pattern() for stricter fuzzy matching
