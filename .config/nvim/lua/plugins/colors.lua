@@ -34,6 +34,7 @@ return {
         -- FYI onedarkpro supports this OOB so I will try it
         "nvim-lualine/lualine.nvim",
         dependencies = { 'nvim-tree/nvim-web-devicons' },
+        -- TODO consider "kyazdani42/nvim-web-devicons" (lua rewrite) if some reaosn to do so, i.e. perf? or other forks?
         config = function()
             function StatusLine_Line()
                 -- "Ln:" worked nicely too, trying  to save more space?

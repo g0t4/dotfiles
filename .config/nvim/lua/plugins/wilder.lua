@@ -5,8 +5,7 @@ return {
     {
         "gelguy/wilder.nvim",
         dependencies = {
-            -- devicons
-            "kyazdani42/nvim-web-devicons",
+            'nvim-tree/nvim-web-devicons'
         },
         config = function()
             require("wilder").setup {
