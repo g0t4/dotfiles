@@ -34,7 +34,7 @@ vim.opt.termguicolors = true -- s/b already enabled in most of my environments, 
 
 vim.o.ignorecase = true      -- ignore case when searching
 
--- shortmess
+-- shortmess in nvim defaults to => ltToOCF
 -- set shortmess+=A " don't give ATTENTION messages if already open in another instance (swap file detected)
 -- set shortmess+=I " don't give intro message (if no file passed in)
 -- set shortmess-=S " remove S so see search count and W for wrapped indicator
@@ -67,13 +67,13 @@ vim.cmd [[
 -- *** left gutter settings
 vim.o.signcolumn = 'number' -- yes=always, no=never, auto=only when needed, number=(in # column, if shown)
 vim.o.relativenumber = true -- vertical equiv of eyeliner ext (horiz jump marks) - testing if i like this
-vim.o.number = true        -- explicitly do not include absolute line #s (for now)
+vim.o.number = true         -- explicitly do not include absolute line #s (for now)
 -- relative + number == absolute instead of 0 for current cursor line (rest are relative)
 
 -- *** help gutter settings (global options don't apply here)
 vim.api.nvim_create_augroup("HelpNumbers", { clear = true })
 vim.api.nvim_create_autocmd("FileType", {
-  group = "HelpNumbers",
-  pattern = "help",
-  command = "setlocal relativenumber number",
+    group = "HelpNumbers",
+    pattern = "help",
+    command = "setlocal relativenumber number",
 })
