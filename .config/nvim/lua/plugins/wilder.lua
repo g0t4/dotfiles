@@ -23,7 +23,7 @@ return {
                     --     --   just complete possible commands
                     --     --   and then the cool thing is, the wilder menu is like adding an arrow to draw attention to the lower left so I don't have to add those in editing!
                     --
-                    --     -- FYI this only shows history right now if nothing is typed... useless:
+                    --     -- FYI this only shows history right now if nothing is typed... mostly useless unless I wanna arrow thru history w/o typing any filter on it
                     --     wilder.check(function(ctx, x) return x == '' end),
                     --     wilder.history(),
                     --     --     -- \       wilder#result({
