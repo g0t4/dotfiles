@@ -51,7 +51,7 @@ return {
 highlight MyWilderPopupmenu guifg=#90ee90
 highlight MyWilderPopupmenuSelected guibg=#ee9090 guifg=#282828
 highlight MyWilderPopupmenuAccent gui=bold
-highlight MyWilderPopupmenuSelectedAccent gui=bold guibg=#ee9090 guifg=#282828
+highlight MyWilderPopupmenuSelectedAccent gui=bold guibg=#ffd0d0 guifg=#282828
 
 " use popup menu for everything (see _mux below for diff menu based on type)
 call wilder#set_option('renderer', wilder#popupmenu_renderer({
