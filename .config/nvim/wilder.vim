@@ -9,15 +9,6 @@ call wilder#set_option('pipeline', [
       \         'draw': [{_, x -> ' ' . x}],
       \       }),
       \     ],
-      \     wilder#cmdline_pipeline({
-      \       'language': 'python',
-      \       'fuzzy': 1,
-      \     }),
-      \     wilder#python_search_pipeline({
-      \       'pattern': wilder#python_fuzzy_pattern(),
-      \       'sorter': wilder#python_difflib_sorter(),
-      \       'engine': 're',
-      \     }),
       \   ),
       \ ])
 " FYI for cmdline_pipeline.fuzzy => 0=off,1=fuzzy,2=fuzzy w/o first char matching
