@@ -11,9 +11,9 @@ return {
         config = function()
             require("wilder").setup {
                 modes = {
-                    "/",
+                    "/", -- absolutely love this for searching, so darn awesome
                     "?",
-                    ":",
+                    ":", -- cmd completion that is fuzzy!
                 },
             }
 
