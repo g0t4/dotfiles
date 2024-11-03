@@ -91,9 +91,17 @@ local function setup_workspace()
 
         function SaveSessionWithNotify()
             call SaveSession()
-            lua vim.notify("", "info", { title= "Session Saved", timeout = 500 }) -- briefly show only
+            lua vim.notify("Saved", "info", { title= "Session Saved", timeout = 500 }) -- briefly show only
         endfunction
         nnoremap <silent> <F6> :call SaveSessionWithNotify()<CR>
+
+        -- i.e. change to diff files temp (brief tangent) and wanna go back to what I had when opened vim (dont wanna open new tab, and come back and close current instance just to restore and keep prior saved session)
+        function RestoreSessionWithNotify()
+            call RestoreSession()
+            lua vim.notify("Restored", "info", { title= "Session Restored", timeout = 500 }) -- briefly show only
+        endfunction
+        nnoremap <silent> <F7> :call RestoreSessionWithNotify()<CR>
+
     ]]
     --
     -- -- Session notes:
