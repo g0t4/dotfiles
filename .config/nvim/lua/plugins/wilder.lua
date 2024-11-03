@@ -1,7 +1,5 @@
 return {
 
-
-
     {
         "gelguy/wilder.nvim",
         -- TODO lazy load https://github.com/gelguy/wilder.nvim?tab=readme-ov-file#faster-startup-time
