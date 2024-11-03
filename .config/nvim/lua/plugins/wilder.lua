@@ -17,7 +17,13 @@ return {
             wilder.set_option('pipeline', {
                 wilder.branch(
                     -- {
-                    --     -- TODO decide if I want history to show at all... and if so then I need to match beyond just nothing typed (x='') b/c that just shows history when nothing is typed (useless)
+                    --     -- FYI showing command history always worries me in video recordings
+                    --     --   so leave history off for that reaosn too
+                    --     --   that said, I do have per workspace history but still
+                    --     --   just complete possible commands
+                    --     --   and then the cool thing is, the wilder menu is like adding an arrow to draw attention to the lower left so I don't have to add those in editing!
+                    --
+                    --     -- FYI this only shows history right now if nothing is typed... useless:
                     --     wilder.check(function(ctx, x) return x == '' end),
                     --     wilder.history(),
                     --     --     -- \       wilder#result({
@@ -32,6 +38,7 @@ return {
                         -- 1 turns on fuzzy matching
                         -- 2 partial fuzzy matching (match does not have to begin with the same first letter)
                         fuzzy = 2, -- !!! what do I want to use?
+                        -- TODO go back to fuzzy = 1 if 2 is too busy
                         -- awesome to use this for help files... :h history
                     }),
                     wilder.python_search_pipeline({
