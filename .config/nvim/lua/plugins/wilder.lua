@@ -23,7 +23,7 @@ return {
                 --   just complete possible commands
                 --   and then the cool thing is, the wilder menu is like adding an arrow to draw attention to the lower left so I don't have to add those in editing!
                 -- PRN add back check to only show history when nothing typed in... I might wanna have history if I can filter it (i.e. fish shell, not fuzzy but on subset and not start of string)
-                    wilder.history(),
+                -- wilder.history(),
 
                     wilder.cmdline_pipeline({
                         -- sets the language to use, 'vim' and 'python' are supported
