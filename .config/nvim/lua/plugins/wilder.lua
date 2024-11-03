@@ -16,13 +16,14 @@ return {
             local wilder = require('wilder')
             wilder.set_option('pipeline', {
                 wilder.branch(
-                    -- TODO do I even want history? Also it only shows if I have nothing typed?
                     -- {
+                    --     -- TODO decide if I want history to show at all... and if so then I need to match beyond just nothing typed (x='') b/c that just shows history when nothing is typed (useless)
                     --     wilder.check(function(ctx, x) return x == '' end),
                     --     wilder.history(),
-                    --     -- \       wilder#result({
-                    --     -- \         'draw': [{_, x -> ' ' . x}],
-                    --     -- \       }),
+                    --     --     -- \       wilder#result({
+                    --     --     -- \         'draw': [{_, x -> ' ' . x}],
+                    --     --     -- \       }),
+                    --     --     -- do I need to show the calendar icon?
                     -- },
                     wilder.cmdline_pipeline({
                         -- sets the language to use, 'vim' and 'python' are supported
@@ -31,7 +32,7 @@ return {
                         -- 1 turns on fuzzy matching
                         -- 2 partial fuzzy matching (match does not have to begin with the same first letter)
                         fuzzy = 2, -- !!! what do I want to use?
-                        -- lets try 2 and see if it feels overly distracting
+                        -- awesome to use this for help files... :h history
                     }),
                     wilder.python_search_pipeline({
                         -- can be set to wilder#python_fuzzy_delimiter_pattern() for stricter fuzzy matching
