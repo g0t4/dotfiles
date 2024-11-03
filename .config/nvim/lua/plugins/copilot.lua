@@ -1,5 +1,6 @@
 local avante =
 {
+    enabled = false,
     "yetone/avante.nvim",
     event = "VeryLazy",
     lazy = false,
@@ -69,6 +70,7 @@ end
 return {
 
     {
+        enabled = false,
         'github/copilot.vim',
         -- event = { "InsertEnter" }, -- lazy load on first insert  -- load immediately is fine, esp if changing status bar here
         config = function()
