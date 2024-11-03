@@ -1,9 +1,4 @@
 
-" *** wilder config
-"    https://vimawesome.com/plugin/wilder-nvim
-
-call wilder#setup({'modes': [':', '/', '?']})
-
 " FYI first func that responds terminates search, i.e.:   "   \     {ctx, x -> [x, 'foo', 'bar']},
 call wilder#set_option('pipeline', [
       \   wilder#branch(
