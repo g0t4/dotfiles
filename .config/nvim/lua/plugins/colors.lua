@@ -1,5 +1,25 @@
 return {
 
+    {
+        "olimorris/onedarkpro.nvim",
+        priority = 1000,
+        config = function()
+            require("onedarkpro").setup {
+                options = {
+                    highlight_inactive_windows = true, -- inactive windows are lighter => also, border mechanism w/o taking up space (for horiz splits)
+                    terminal_colors = false,           -- use mine, close color wise but their black is nearly same as my bg
+                    cursorline = true,                 -- also highlights the line # in the gutter, makes easier to find that way too and find relative jump offsets
+                    -- transparency = true,
+                },
+            }
+            -- FYI get colors =>    :lua print(vim.inspect(require("onedarkpro.helpers").get_colors()))
+            vim.cmd [[
+                colorscheme onedark
+                set termguicolors
+            ]]
+        end,
+    },
+
     -- {
     --     'Mofiqul/vscode.nvim'
     -- }, -- use "vscode" ... I added this in neovim, though my other theme is fine too it seem
@@ -38,7 +58,6 @@ return {
             require("lualine").setup {
                 -- default: https://github.com/nvim-lualine/lualine.nvim#default-configuration
                 options = {
-                    -- theme = "codedark",
                     -- section_separators = { left = vim.fn.nr2char(0xE0B4), right = vim.fn.nr2char(0xE0B6) },
                     -- section_separators = { left = "", right = "" },
                     -- section_separators = { left = "▌", right = "▐" },
@@ -48,7 +67,21 @@ return {
                     --
                     -- TODO modify this theme to be more like original except my customizations of inactive bg color
                     --    FYI split window setup and make bottom window active, the top inactive window is transparent and so IMO not at all obvious then that that is the bottom of the window, confuses me often... so the goal is to make that inactive color slightly darker to tell it apart
-                    -- theme = require("localz.lualine-theme").theme(),
+                    theme = require("localz.lualine-theme").theme(),
+                    --
+                    -- lualine's onedark is winning out (b/c rtp lualine is prepended before onedarkpro)
+                    -- theme = require("lualine.themes.onedark"), -- grey instead of green normal mode color
+                    -- theme = dofile("/Users/wes/.local/share/nvim/lazy/lualine.nvim/lua/lualine/themes/onedark.lua"),
+                    -- lua print(vim.inspect(dofile("/Users/wes/.local/share/nvim/lazy/lualine.nvim/lua/lualine/themes/onedark.lua")))
+                    --
+                    -- onedarkpro's theme has green, and wins in these cases:
+                    -- theme = dofile("/Users/wes/.local/share/nvim/lazy/onedarkpro.nvim/lua/lualine/themes/onedark.lua"),
+                    -- theme = "onedark" -- doesn't seem to do anything
+                    -- theme = dofile(require("lazy.core.config").plugins["onedarkpro.nvim"].dir .. "/lua/lualine/themes/onedark.lua"),
+                    -- FYI find path to plugin dir (so can dofile() on it):
+                    --   :lua print(vim.inspect(require("lazy.core.config").plugins))
+                    --
+
                 },
                 -- FYI =>    :lua print(vim.inspect(require('lualine').get_config()))
                 -- extensions = { 'nvim-tree' }, -- shows root dir (and dirs above it) in statusline... I dont need that, in fact if anything show file path of the file still that was right before open treeview
@@ -83,29 +116,6 @@ return {
                     lualine_z = {},             -- default ""
                 },
             }
-        end,
-    },
-
-    {
-        "olimorris/onedarkpro.nvim",
-        priority = 1000,
-        config = function()
-            require("onedarkpro").setup {
-                options = {
-                    highlight_inactive_windows = true, -- inactive windows are lighter => also, border mechanism w/o taking up space (for horiz splits)
-                    terminal_colors = false,           -- use mine, close color wise but their black is nearly same as my bg
-                    cursorline = true,                 -- also highlights the line # in the gutter, makes easier to find that way too and find relative jump offsets
-                    -- transparency = true,
-                },
-
-            }
-
-            -- FYI get colors =>    :lua print(vim.inspect(require("onedarkpro.helpers").get_colors()))
-
-            vim.cmd [[
-                colorscheme onedark
-                set termguicolors
-            ]]
         end,
     },
 
