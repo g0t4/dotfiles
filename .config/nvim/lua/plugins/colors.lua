@@ -11,6 +11,12 @@ return {
                     cursorline = true,                 -- also highlights the line # in the gutter, makes easier to find that way too and find relative jump offsets
                     -- transparency = true,
                 },
+                colors = {
+                    onedark = {
+                        -- override bg to not be so washed out (bright) for a dark bg... felt glowing and like it conflicted with reading the code
+                        bg = "#1f2229", -- 282c34", -- this feels better (is my new terminal bg I made)
+                    },
+                },
             }
             -- FYI get colors =>    :lua print(vim.inspect(require("onedarkpro.helpers").get_colors()))
             vim.cmd [[

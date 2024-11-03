@@ -14,9 +14,11 @@ M.theme = function()
 
     -- when two windows stacked, and bottom active, the top statusline should clearly split the two, by default it appears transparent which makes it confusing to see where top ends and bottom begins
     theme.inactive = {
-        a = { bg = "#22262d" },
-        b = { bg = "#22262d" },
-        c = { bg = "#22262d" },
+        -- todo use 22262d if I got back to original bg color 282c34 from onedarkpro...
+        -- using 282c34 with my new darker ODP bg 22262d
+        a = { bg = "#282c34" },
+        b = { bg = "#282c34" },
+        c = { bg = "#282c34" },
     }
 
     return theme
