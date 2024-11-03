@@ -47,6 +47,7 @@ return {
             })
 
 
+            -- use popup menu for everything (see _mux to change based on menu type)
             wilder.set_option('renderer', wilder.popupmenu_renderer({
                 -- highlighter applies highlighting to the candidates
                 highlighter = wilder.basic_highlighter(),
@@ -56,35 +57,28 @@ return {
                     accent = 'MyWilderPopupmenuAccent',
                     selected_accent = 'MyWilderPopupmenuSelectedAccent',
                 },
+                -- -- wilder#popupmenu_devicons()
+                -- left = {
+                --     ' ', wilder.basic_devicons_renderer({
+                --         separator = ' ',
+                --     }),
+                -- },
+                --
+                -- wilder#popupmenu_scrollbar()
+                -- right = {
+                --     ' ', wilder.basic_scrollbar_renderer(),
+                -- },
             }))
 
             vim.cmd [[
 
-highlight MyWilderPopupmenu guifg=#90ee90
-highlight MyWilderPopupmenuSelected guibg=#ee9090 guifg=#282828
-highlight MyWilderPopupmenuAccent gui=bold guibg=#d0ffd0 guifg=#282828
-highlight MyWilderPopupmenuSelectedAccent gui=bold guibg=#ffd0d0 guifg=#282828
-
-"" use popup menu for everything (see _mux below for diff menu based on type)
-"call wilder#set_option('renderer', wilder#popupmenu_renderer({
-"      \ 'highlighter': wilder#basic_highlighter(),
-"      \ 'highlights': {
-"      \   'default': 'MyWilderPopupmenu',
-"      \   'selected': 'MyWilderPopupmenuSelected',
-"      \   'accent': 'MyWilderPopupmenuAccent',
-"      \   'selected_accent': 'MyWilderPopupmenuSelectedAccent',
-"      \ },
-"      \ 'left': [
-"      \   ' ', wilder#popupmenu_devicons(),
-"      \ ],
-"      \ 'right': [
-"      \   ' ', wilder#popupmenu_scrollbar(),
-"      \ ],
-"      \ }))
+                highlight MyWilderPopupmenu guifg=#90ee90
+                highlight MyWilderPopupmenuSelected guibg=#ee9090 guifg=#282828
+                highlight MyWilderPopupmenuAccent gui=bold guibg=#d0ffd0 guifg=#282828
+                highlight MyWilderPopupmenuSelectedAccent gui=bold guibg=#ffd0d0 guifg=#282828
 
             ]]
         end,
-
     }
 
 }
