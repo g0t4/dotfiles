@@ -34,6 +34,12 @@ vim.opt.termguicolors = true -- s/b already enabled in most of my environments, 
 
 vim.o.ignorecase = true      -- ignore case when searching
 
+-- shortmess
+-- set shortmess+=A " don't give ATTENTION messages if already open in another instance (swap file detected)
+-- set shortmess+=I " don't give intro message (if no file passed in)
+-- set shortmess-=S " remove S so see search count and W for wrapped indicator
+vim.o.shortmess = vim.o.shortmess .. "A" .. "I"
+
 vim.cmd [[
     " *** fix delete key reporting
     "    it reports 63272 which isn't mapped to <Del>
