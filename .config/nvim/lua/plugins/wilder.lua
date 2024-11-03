@@ -1,6 +1,11 @@
 return {
 
     {
+        -- FYI wildmenu is pretty good too, can use fuzzy in it too:
+        -- set wildoptions=pum,fuzzy,tagfile -- pum,tagfile by default
+        -- doesn't show until hit tab
+        -- SO I can always go back to this if wilder isn't adding anything material or if I don't like it showing right away
+
         "gelguy/wilder.nvim",
         -- TODO lazy load https://github.com/gelguy/wilder.nvim?tab=readme-ov-file#faster-startup-time
         dependencies = {
