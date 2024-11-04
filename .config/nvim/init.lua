@@ -11,6 +11,7 @@ require('localz.misc')
 require('localz.clippy')
 require('localz.comment-highlights')
 require('localz.filetypemods')
+-- require('localz.ideas')
 
 vim.cmd [[
     " TODO where should I consolidate these?
