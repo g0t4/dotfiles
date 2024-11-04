@@ -1,3 +1,13 @@
+function NvimTreeFindFileOrClose()
+    if vim.bo.filetype == "NvimTree" then
+        -- <C-l> should close tree view if its open and current window (that way I can <C-l> to quickly open and close it)
+        vim.cmd("NvimTreeClose")
+    else
+        -- BUT, <C-l> always opens to current file if not in tree view, that way <C-l> doesn't toggle close/open when not in tree view
+        vim.cmd("NvimTreeFindFile")
+    end
+end
+
 return {
 
     {
@@ -11,12 +21,8 @@ return {
             "nvim-tree/nvim-web-devicons",
         },
         keys = {
-            -- TODO I want <C-l> to locate current file in tree view (if active window is NOT tree view), else I wanna toggle tree view closed/open
-            --     so, I can keep tree open if I just changed files (don't wanna toggle close/open just to select current file)
-            --     so,  if active window is tree view => close it
-            --     else => open it and select current file
-            { "<C-l>",     ":NvimTreeFindFile<CR>", mode = "n", noremap = true, silent = true },
-            { "<C-S-l>",   ":NvimTreeFindFileToggle<CR>", mode = "n", noremap = true, silent = true },
+            { "<C-l>",     ":lua NvimTreeFindFileOrClose()<CR>", mode = "n", noremap = true, silent = true },
+            { "<C-S-l>",   ":NvimTreeFindFileToggle<CR>",        mode = "n", noremap = true, silent = true },
 
             -- TODO move elsewhere when I find a spot, use alt instead of ctrl-w for moving between windows
             { "<M-right>", "<C-W><right>",                mode = "n", noremap = true, silent = true },
