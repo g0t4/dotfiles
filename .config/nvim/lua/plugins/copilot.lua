@@ -70,6 +70,14 @@ end
 return {
 
     {
+        "g0t4/ask-openai.nvim",
+        dir = "~/repos/github/g0t4/ask-openai.nvim",
+        config = function()
+            require("ask-openai")
+        end,
+    },
+
+    {
         enabled = true,
         "supermaven-inc/supermaven-nvim",
         config = function()
