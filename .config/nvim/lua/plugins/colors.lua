@@ -62,7 +62,7 @@ return {
                 return vim.bo.filetype
             end
 
-            function StatusLine_Cwd()
+            function StatusLine_NvimTree()
                 return " " .. vim.fn.fnamemodify(vim.fn.getcwd(), ":t") -- only show last part of path (folder name)
             end
 
@@ -118,7 +118,7 @@ return {
                             "NvimTree",
                         },
                         sections = {
-                            lualine_a = { StatusLine_Cwd },
+                            lualine_a = { StatusLine_NvimTree },
                         },
                     }
                 }
