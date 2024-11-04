@@ -73,7 +73,7 @@ return {
         "g0t4/ask-openai.nvim",
         dir = "~/repos/github/g0t4/ask-openai.nvim",
         config = function()
-            require("ask-openai")
+            require("ask-openai").setup {}
         end,
         dependencies = {
             -- TODO do I really need notify as a dep? leave it for now during testing (for predictblie notifys, otherwise have had random plugin order load and notifys not showing)
