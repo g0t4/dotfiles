@@ -22,6 +22,7 @@ augroup cmdline_history
     autocmd CmdlineEnter * call CmdlineHistory_clear()
 augroup END
 
+" FYI eCmdlineHistory_prev shows up as CmdlineChanged events as its typed out... yikez
 cmap <C-u> <C-\>eCmdlineHistory_prev()<CR>
 cmap <C-n> <C-\>eCmdlineHistory_next()<CR>
 
