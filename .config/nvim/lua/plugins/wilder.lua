@@ -18,6 +18,7 @@ return {
                     "?",
                     ":", -- cmd completion that is fuzzy!
                 },
+                -- enable_cmdline_enter = false, -- only show on tab... I like to see it right away!... maybe if it could show after first chars typed and not smth like :w or :q?... I love having it show up on help lookups especially, wouldn't wanna have to tab on every `:h *`
             }
 
             local wilder = require('wilder')
