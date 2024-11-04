@@ -19,7 +19,10 @@ vim.cmd("nnoremap <c-s> :w<CR>")
 vim.cmd("vnoremap <c-s> <Esc><c-s>gv") -- esc=>normal mode => save => reselect visual mode, not working... figure out later
 vim.cmd("inoremap <c-s> <c-o><c-s>")
 
-
+-- F9 == quit all
+vim.cmd("nnoremap <F9> :qall<CR>")
+-- perhaps I am doing something wrong if I need F9.. but I love this, open lots of tabs to test neovim config changes and just wanna close w/o BS... also love one click quit if no changes
+-- FYI F10 is F9 + re-run nvim (in keyboard maestro to relaunch nvim after quitting)
 
 
 -- map [Shift]+Ctrl+Tab to move forward/backward through files to edit, in addition to Ctrl+o/i
