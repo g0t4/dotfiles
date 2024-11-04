@@ -62,6 +62,10 @@ return {
                 return vim.bo.filetype
             end
 
+            function StatusLine_Cwd()
+                return " " .. vim.fn.fnamemodify(vim.fn.getcwd(), ":t") -- only show last part of path (folder name)
+            end
+
             require("lualine").setup {
                 -- default: https://github.com/nvim-lualine/lualine.nvim#default-configuration
                 options = {
@@ -114,7 +118,7 @@ return {
                             "NvimTree",
                         },
                         sections = {
-                            lualine_a = { function() return " " .. vim.fn.fnamemodify(vim.fn.getcwd(), ":t") end },
+                            lualine_a = { StatusLine_Cwd },
                         },
                     }
                 }
