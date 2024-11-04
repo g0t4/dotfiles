@@ -11,11 +11,12 @@ return {
             "nvim-tree/nvim-web-devicons",
         },
         keys = {
+            -- TODO I want <C-l> to locate current file in tree view (if active window is NOT tree view), else I wanna toggle tree view closed/open
+            --     so, I can keep tree open if I just changed files (don't wanna toggle close/open just to select current file)
+            --     so,  if active window is tree view => close it
+            --     else => open it and select current file
             { "<C-l>",     ":NvimTreeFindFile<CR>", mode = "n", noremap = true, silent = true },
             { "<C-S-l>",   ":NvimTreeFindFileToggle<CR>", mode = "n", noremap = true, silent = true },
-
-            -- FYI cmd+shift+e => Esc+OQ iiterm settings => F2 (in term)
-            { "<F2>",      ":NvimTreeFindFile<CR>",       mode = "n", noremap = true, silent = true },
 
             -- TODO move elsewhere when I find a spot, use alt instead of ctrl-w for moving between windows
             { "<M-right>", "<C-W><right>",                mode = "n", noremap = true, silent = true },
