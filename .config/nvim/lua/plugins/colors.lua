@@ -107,6 +107,17 @@ return {
                     lualine_y = {},             -- default ""
                     lualine_z = {},             -- default ""
                 },
+                -- extensions = { 'nvim-tree' },
+                extensions = {
+                    {
+                        filetypes = {
+                            "NvimTree",
+                        },
+                        sections = {
+                            lualine_a = { function() return " " .. vim.fn.fnamemodify(vim.fn.getcwd(), ":t") end },
+                        },
+                    }
+                }
             }
         end,
     },
