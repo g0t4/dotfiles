@@ -131,7 +131,9 @@ function FocusLastFocusedFile()
     -- FYI this only works for first tab focus, fine with me as I don't use tabs much yet
     for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
         local buf_id                = vim.api.nvim_win_get_buf(win)
+        -- tested w/ help left open too, works b/c help is a file
         local buf_name              = vim.fn.bufname(buf_id)
+        -- PRN add a check if not a file/path? if I encounter that issue then do this
         local buf_abs_path          = vim.fn.fnamemodify(buf_name, ':p')
         -- print("win: " .. win .. " buf_id: " .. buf_id .. " buf_name: " .. buf_name .. " buf_abs_path: " .. buf_abs_path)
         local last_focused_abs_path = vim.fn.fnamemodify(vim.g.last_focused_file, ':p')
