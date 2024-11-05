@@ -63,3 +63,12 @@ vim.keymap.set('v', '<F1>', function()
     local search_term = vim.fn.getreg("\"")
     vim.cmd('help ' .. search_term)
 end)
+
+-- *** quit help on 'q' => see how I feel about this
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = "help",
+    callback = function()
+        vim.api.nvim_buf_set_keymap(0, "n", "q", ":q<CR>", { noremap = true, silent = true })
+        -- PRN others?
+    end,
+})
