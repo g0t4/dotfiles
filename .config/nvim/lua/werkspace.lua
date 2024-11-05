@@ -106,6 +106,12 @@ local function setup_workspace()
         endfunction
         nnoremap <silent> <F7> :call RestoreSessionWithNotify()<CR>
 
+        augroup SaveLastFocusedFile
+            " TODO not running on startup, only on focus changed
+            autocmd!
+            autocmd WinEnter * lua vim.g.last_focused_file = vim.fn.bufname(vim.fn.winbufnr(0))
+        augroup END
+
     ]]
     --
     -- -- Session notes:
