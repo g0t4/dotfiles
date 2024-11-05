@@ -96,10 +96,23 @@ return {
                     -- accept_word = "<C-j>",
                 },
                 color = {
+                    -- MUST SET a color to get SupermavenSuggestion highlight group to work, else won't exist
                     suggestion_color = "#ffffff",
                     cterm = 244,
                 }
             }
+
+            -- SupermavenSuggestion is set on VimEnter/ColorScheme, so create a new augroup to override it b/c this happens after the supermaven augroup events run
+            vim.api.nvim_create_augroup("supermaven2", { clear = true })
+            vim.api.nvim_create_autocmd({ "VimEnter", "ColorScheme" }, {
+                group = "supermaven2",
+                pattern = "*",
+                callback = function(event)
+                    vim.api.nvim_set_hl(0, "SupermavenSuggestion", {
+                        fg = "#ff0000", force = true, bold = true, underline = true
+                    })
+                end,
+            })
         end,
     },
 
