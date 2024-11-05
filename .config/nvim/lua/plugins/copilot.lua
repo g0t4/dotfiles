@@ -86,7 +86,7 @@ return {
 
     {
         -- TODO, try this (recommmended by tabnine)
-        enabled = false,
+        enabled = true,
         "codota/tabnine-nvim",
         build = "./dl_binaries.sh",
         -- AND/OR :CocInstall coc-tabnine
@@ -94,7 +94,7 @@ return {
     },
 
     {
-        enabled = true,
+        enabled = false,
         "supermaven-inc/supermaven-nvim",
         config = function()
             require("supermaven-nvim").setup {
