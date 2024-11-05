@@ -85,6 +85,15 @@ return {
     },
 
     {
+        -- TODO, try this (recommmended by tabnine)
+        enabled = false,
+        "codota/tabnine-nvim",
+        build = "./dl_binaries.sh",
+        -- AND/OR :CocInstall coc-tabnine
+        -- https://github.com/tabnine/coc-tabnine
+    },
+
+    {
         enabled = true,
         "supermaven-inc/supermaven-nvim",
         config = function()
