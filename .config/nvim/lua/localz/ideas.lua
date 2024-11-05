@@ -55,3 +55,7 @@ vim.keymap.set('c', '<C-y>', function()
     end
     vim.fn.setcmdline(last_cmd_line)
 end)
+
+
+-- :Dump vim.g.foo
+vim.api.nvim_create_user_command('Dump', "lua print(vim.inspect(<args>))", { nargs = '*' })
