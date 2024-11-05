@@ -30,20 +30,28 @@ vim.keymap.set('c', '<C-z>', function()
     elseif vim.g.cmdline_history_index > 0 then
         vim.g.cmdline_history_index = vim.g.cmdline_history_index - 1
     else
-        vim.g.cmdline_history_index = #vim.g.cmdline_history
+        return
     end
     local last_cmd_line = vim.g.cmdline_history[vim.g.cmdline_history_index]
+    if last_cmd_line == nil then
+        vim.fn.setcmdline('')
+        return
+    end
     vim.fn.setcmdline(last_cmd_line)
 end)
 
 vim.keymap.set('c', '<C-y>', function()
     if vim.g.cmdline_history_index == nil then
-        vim.g.cmdline_history_index = 0
+        return -- nothing to redo until after first undo
     elseif vim.g.cmdline_history_index < #vim.g.cmdline_history - 1 then
         vim.g.cmdline_history_index = vim.g.cmdline_history_index + 1
     else
-        vim.g.cmdline_history_index = 0
+        return
     end
     local last_cmd_line = vim.g.cmdline_history[vim.g.cmdline_history_index]
+    if last_cmd_line == nil then
+        vim.fn.setcmdline('')
+        return
+    end
     vim.fn.setcmdline(last_cmd_line)
 end)
