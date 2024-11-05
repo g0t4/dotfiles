@@ -114,7 +114,10 @@ return {
                         vim.api.nvim_set_hl(0, "SupermavenSuggestion", {
                             -- FYI force not needed currently, leaving as reminder
                             -- fg = "#ff0000", force = true, bold = true, underline = true
-                            fg = "#ffffff", underline = true
+                            -- fg = "#6d6a94", underline = true -- purpleish gray
+                            -- fg = "#4b7266", underline = true -- green
+                            -- fg = "#CCCCCC", underline = true -- dimmed white
+                            fg = "#ffffff", underline = true -- white
                         })
                     end,
                 })
