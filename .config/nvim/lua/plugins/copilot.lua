@@ -103,6 +103,8 @@ return {
             }
 
             local function override_suggestion_color()
+                -- FYI color options only allow setting a foreground color, hence the following to set any aspect I want
+
                 -- SupermavenSuggestion is set on VimEnter/ColorScheme, so create a new augroup to override it b/c this happens after the supermaven augroup events run
                 -- vim.api.nvim_create_augroup("supermaven2", { clear = true }) -- if use diff augroup then create it here, else append to supermaven augroup commands:
                 vim.api.nvim_create_autocmd({ "VimEnter", "ColorScheme" }, {
@@ -110,7 +112,9 @@ return {
                     pattern = "*",
                     callback = function()
                         vim.api.nvim_set_hl(0, "SupermavenSuggestion", {
-                            fg = "#ff0000", force = true, bold = true, underline = true
+                            -- FYI force not needed currently, leaving as reminder
+                            -- fg = "#ff0000", force = true, bold = true, underline = true
+                            fg = "#ffffff"
                         })
                     end,
                 })
