@@ -94,7 +94,7 @@ return {
                     } },          -- filename includes modified
                     -- lualine_c = { "filetype" },
                     lualine_c = { StatusLine_FileTypeIfNotInFileExt },
-                    lualine_x = { "GetStatusLineCopilot" },
+                    lualine_x = { "GetStatusLineCopilot", GetStatusLineSupermaven },
                     lualine_y = {
                         StatusLine_Line,
                         { StatusLine_Column, padding = { left = 0, right = 1 } }, -- FYI when set padding it overrides both sides, so only specify left means right = 0
