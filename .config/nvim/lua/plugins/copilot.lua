@@ -102,17 +102,21 @@ return {
                 }
             }
 
-            -- SupermavenSuggestion is set on VimEnter/ColorScheme, so create a new augroup to override it b/c this happens after the supermaven augroup events run
-            -- vim.api.nvim_create_augroup("supermaven2", { clear = true }) -- if use diff augroup then create it here, else append to supermaven augroup commands:
-            vim.api.nvim_create_autocmd({ "VimEnter", "ColorScheme" }, {
-                group = "supermaven", -- TLDR: append autocmd that sets color and b/c its last, it wins
-                pattern = "*",
-                callback = function(event)
-                    vim.api.nvim_set_hl(0, "SupermavenSuggestion", {
-                        fg = "#ff0000", force = true, bold = true, underline = true
-                    })
-                end,
-            })
+            local function override_suggestion_color()
+                -- SupermavenSuggestion is set on VimEnter/ColorScheme, so create a new augroup to override it b/c this happens after the supermaven augroup events run
+                -- vim.api.nvim_create_augroup("supermaven2", { clear = true }) -- if use diff augroup then create it here, else append to supermaven augroup commands:
+                vim.api.nvim_create_autocmd({ "VimEnter", "ColorScheme" }, {
+                    group = "supermaven", -- TLDR: append autocmd that sets color and b/c its last, it wins
+                    pattern = "*",
+                    callback = function()
+                        vim.api.nvim_set_hl(0, "SupermavenSuggestion", {
+                            fg = "#ff0000", force = true, bold = true, underline = true
+                        })
+                    end,
+                })
+            end
+
+            override_suggestion_color()
         end,
     },
 
