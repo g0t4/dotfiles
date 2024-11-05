@@ -35,5 +35,5 @@ vim.api.nvim_set_keymap('n', '<C-S-->', '<C-i>', { noremap = true, silent = true
 vim.api.nvim_set_keymap('n', '<F1>', ':help <C-R><C-W><CR>', { noremap = true, silent = true })
 --
 -- in visual mode, press F1 to search for selected text
--- TODO write func to see if selected text is empty and do word under cursor instead
+-- TODO write func to see if selected text is empty and do word under cursor instead => right now its just copying the letter under the cursor, which is fine for now but not ideal
 vim.api.nvim_set_keymap('x', '<F1>', 'y:help <C-R>"<CR>', { noremap = true, silent = true })
