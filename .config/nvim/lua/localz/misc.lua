@@ -1,5 +1,3 @@
-
-
 -- cursor block in insert:
 vim.cmd(":set guicursor=i:block")
 
@@ -32,6 +30,10 @@ vim.api.nvim_set_keymap('n', '<C-S-->', '<C-i>', { noremap = true, silent = true
 --  FYI in iTerm => Profiles -> Keys -> Key Mappings -> removed "send 0x1f" on "ctrl+-" ... if that breaks something, well you have this note :)
 
 -- *** help
-vim.api.nvim_set_keymap('n', '<F1>', ':help <C-R><C-W><CR>', { noremap = true, silent = true })
+--
 -- start typing :help then Ctrl+R, Ctrl+W takes word under cursor
-
+vim.api.nvim_set_keymap('n', '<F1>', ':help <C-R><C-W><CR>', { noremap = true, silent = true })
+--
+-- in visual mode, press F1 to search for selected text
+-- TODO write func to see if selected text is empty and do word under cursor instead
+vim.api.nvim_set_keymap('x', '<F1>', 'y:help <C-R>"<CR>', { noremap = true, silent = true })
