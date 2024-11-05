@@ -46,6 +46,8 @@ local function setup_workspace()
                 return
             endif
 
+            " TODO is there a way to check if Lazy window is open and abort so we don't have it auto save over the session with inevitably nothing?
+
             " TODO delay/abort session restore if Lazy window is open... otherwise session load fails
             "   Vim(only):E5601: Cannot close window, only floating window would remain
             "     reproduce: open lazy window and execute `silent only` (from line 4 in session.vim that triggers error)
