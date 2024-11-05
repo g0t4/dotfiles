@@ -95,6 +95,10 @@ return {
                     -- clear_suggestion = "<C-]>",
                     -- accept_word = "<C-j>",
                 },
+                color = {
+                    suggestion_color = "#ffffff",
+                    cterm = 244,
+                }
             }
         end,
     },
