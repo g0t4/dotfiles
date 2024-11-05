@@ -23,11 +23,21 @@ augroup cmdline_history
 augroup END
 
 " FYI eCmdlineHistory_prev shows up as CmdlineChanged events as its typed out... yikez
-cmap <C-u> <C-\>eCmdlineHistory_prev()<CR>
-cmap <C-n> <C-\>eCmdlineHistory_next()<CR>
+"cmap <C-u> <C-\>eCmdlineHistory_prev()<CR>
+"cmap <C-n> <C-\>eCmdlineHistory_next()<CR>
 
 function! CmdlineHistory_prev()
     "return g:cmdline_history[len(g:cmdline_history) - 1]
     return "replace with undone cmdline"
 endfunction
 ]]
+
+vim.keymap.set('c', '<C-z>', function()
+    if vim.g.cmdline_history_index == nil then
+        vim.g.cmdline_history_index = #vim.g.cmdline_history - 1
+    else
+        vim.g.cmdline_history_index = vim.g.cmdline_history_index - 1
+    end
+    local last_cmd_line = vim.g.cmdline_history[vim.g.cmdline_history_index]
+    vim.fn.setcmdline(last_cmd_line)
+end)
