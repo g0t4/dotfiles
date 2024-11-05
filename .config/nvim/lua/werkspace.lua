@@ -70,6 +70,8 @@ local function setup_workspace()
                 endfor
             endif
 
+            lua FocusLastFocusedFile()
+
         endfunction
 
         call RestoreSession()
@@ -121,7 +123,33 @@ local function setup_workspace()
     -- --   I LOVE RESUMING the last open file!!!
 end
 
+function FocusLastFocusedFile()
+    if not vim.g.last_focused_file then
+        print('no last file')
+        return
+    end
+    -- FYI this only works for first tab focus, fine with me as I don't use tabs much yet
+    for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+        local buf_id                = vim.api.nvim_win_get_buf(win)
+        local buf_name              = vim.fn.bufname(buf_id)
+        local buf_abs_path          = vim.fn.fnamemodify(buf_name, ':p')
+        -- print("win: " .. win .. " buf_id: " .. buf_id .. " buf_name: " .. buf_name .. " buf_abs_path: " .. buf_abs_path)
+        local last_focused_abs_path = vim.fn.fnamemodify(vim.g.last_focused_file, ':p')
+        -- print("  lff: " .. last_focused_abs_path)
+        if buf_abs_path == last_focused_abs_path then
+            -- print(" found last focused window: " .. win)
+            vim.schedule(function()
+                -- for some reason, only on startup, it won't switch windows without a schedule delay
+                -- doesn't hurt to leave it this way always
+                vim.api.nvim_set_current_win(win)
+            end)
+            break
+        end
+    end
+end
+
 function AppendLastFocusedFileToSession()
+    -- tail session.vim to check this
     -- assume session.vim already created with mksession
     local buf_id = vim.fn.winbufnr(0)
     local file_path = vim.fn.bufname(buf_id)
@@ -129,6 +157,7 @@ function AppendLastFocusedFileToSession()
         vim.g.last_focused_file = file_path
         -- TODO isn't this already expanded?
         local session_file = vim.fn.expand(vim.g.session_file)
+        -- TODO check if exists to be safe?
         if session_file then
             vim.fn.writefile({ "let g:last_focused_file = '" .. file_path .. "'" }, session_file, "a")
         end
