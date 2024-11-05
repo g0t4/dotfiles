@@ -140,7 +140,7 @@ function FocusLastFocusedFile()
             -- print(" found last focused window: " .. win)
             vim.schedule(function()
                 -- for some reason, only on startup, it won't switch windows without a schedule delay
-                -- doesn't hurt to leave it this way always
+                -- doesn't hurt to leave it this way always (for session restore without restart nvim)
                 vim.api.nvim_set_current_win(win)
             end)
             break
