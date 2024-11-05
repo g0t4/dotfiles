@@ -85,8 +85,8 @@ return {
     },
 
     {
-        -- TODO, try this (recommmended by tabnine)
-        enabled = true,
+        -- TODO sign up for a trial and try the full deal, starter version is just useless (completes like two words at a time)
+        enabled = false,
         "codota/tabnine-nvim",
         build = "./dl_binaries.sh",
         config = function()
@@ -106,7 +106,7 @@ return {
     },
 
     {
-        enabled = false,
+        enabled = true,
         "supermaven-inc/supermaven-nvim",
         config = function()
             require("supermaven-nvim").setup {

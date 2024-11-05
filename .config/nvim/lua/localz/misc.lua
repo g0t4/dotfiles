@@ -34,3 +34,4 @@ vim.api.nvim_set_keymap('n', '<C-S-->', '<C-i>', { noremap = true, silent = true
 -- *** help
 vim.api.nvim_set_keymap('n', '<F1>', ':help <C-R><C-W><CR>', { noremap = true, silent = true })
 -- start typing :help then Ctrl+R, Ctrl+W takes word under cursor
+
