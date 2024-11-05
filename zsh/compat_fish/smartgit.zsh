@@ -3,9 +3,17 @@ abbr smartgit "open -na SmartGit --args" # all args after --args are passed to s
 # -n => new instance each time (otherwise open is ignored if existing instance is open)
 # absolute paths work, not relative
 
-abbr sgo 'smartgit --open "$(pwd)"' # open current dir's repo
+# FYI
+#  running `/Applications/SmartGit.app/Contents/MacOS/SmartGit` directly (or cd to its dir and run it w/o abs path) works fine,
+#    only have library issue if using homebrew installed smartgit cmd... odd
+#    `/Applications/SmartGit.app/Contents/MacOS/SmartGit --help` will show args
+#  also help: https://docs.syntevo.com/SmartGit/Latest/Command-Line-Options.html
+#
+# abbr sgo 'smartgit --open "$(pwd)"' # open current dir's repo
+abbr sgo 'open -a SmartGit --args --open "$(pwd)"'
 # FYI smartgit opens repo of PWD, no need for _repo_root
-abbr sgl 'smartgit --log "$(pwd)"' # open log for current dir repo
+# abbr sgl 'smartgit --log "$(pwd)"' # open log for current dir repo
+abbr sgl 'open -a SmartGit --args --log "$(pwd)"'
 # --blame, --investigate and --status aren't working so I nuked those aliases for now (I wasn't using them anyway)
 
 # --anchor-commit <commit>                optional commit to open the log for
