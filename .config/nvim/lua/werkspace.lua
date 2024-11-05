@@ -131,6 +131,7 @@ function FocusLastFocusedFile()
         -- print('no last file')
         return
     end
+    -- TODO support multiple windows w/ same file open? viminfo/shada successfully stores and restores folds/position info in this case, so I can certainly find a way to restore focus!
     -- FYI this only works for first tab focus, fine with me as I don't use tabs much yet
     for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
         local buf_id                = vim.api.nvim_win_get_buf(win)
