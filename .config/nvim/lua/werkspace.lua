@@ -128,7 +128,7 @@ end
 
 function FocusLastFocusedFile()
     if not vim.g.last_focused_file then
-        print('no last file')
+        -- print('no last file')
         return
     end
     -- FYI this only works for first tab focus, fine with me as I don't use tabs much yet
