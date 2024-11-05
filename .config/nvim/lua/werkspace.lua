@@ -91,6 +91,7 @@ local function setup_workspace()
 
         function SaveSession()
             execute "mksession!" g:session_file
+            lua AppendLastFocusedFileToSession()
         endfunction
 
         function SaveSessionWithNotify()
@@ -118,6 +119,20 @@ local function setup_workspace()
     -- --   what if I pass file names to nvim, shouldn't I also open those in addition to whatever is open as of last session save?
     -- --   if open multiple instances, all bets are off but that is fine b/c its rare (usually just if I wanna test dotfiles w/o quitting nvim editing instance)... also vscode always would reopen in already open instance so I dont know there is any logic for multiple instances when there is a "shared" session...
     -- --   I LOVE RESUMING the last open file!!!
+end
+
+function AppendLastFocusedFileToSession()
+    -- assume session.vim already created with mksession
+    local buf_id = vim.fn.winbufnr(0)
+    local file_path = vim.fn.bufname(buf_id)
+    if file_path and file_path ~= '' then
+        vim.g.last_focused_file = file_path
+        -- TODO isn't this already expanded?
+        local session_file = vim.fn.expand(vim.g.session_file)
+        if session_file then
+            vim.fn.writefile({ "let g:last_focused_file = '" .. file_path .. "'" }, session_file, "a")
+        end
+    end
 end
 
 setup_workspace()
