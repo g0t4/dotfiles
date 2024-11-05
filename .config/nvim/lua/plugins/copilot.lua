@@ -131,9 +131,9 @@ return {
                 -- OK so if this function exists that means supermaven plugin is loaded, so no need to check beyond that, check for the existence of this func when using it (i.e. in statusline, and lualine will silently ignore a missing func)
                 local api = require("supermaven-nvim.api") -- https://github.com/supermaven-inc/supermaven-nvim/tree/main#lua-api
                 if api.is_running() then
-                    return " "
+                    return " " -- add space after too
                 end
-                return "no supermaven"
+                return " " -- add space after icon so subsequent text doesn't run under it
             end
         end
     },
