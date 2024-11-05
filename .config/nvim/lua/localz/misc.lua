@@ -31,5 +31,6 @@ vim.api.nvim_set_keymap('n', '<C-->', '<C-o>', { noremap = true, silent = true }
 vim.api.nvim_set_keymap('n', '<C-S-->', '<C-i>', { noremap = true, silent = true })
 --  FYI in iTerm => Profiles -> Keys -> Key Mappings -> removed "send 0x1f" on "ctrl+-" ... if that breaks something, well you have this note :)
 
-
-
+-- *** help
+vim.api.nvim_set_keymap('n', '<F1>', ':help <C-R><C-W><CR>', { noremap = true, silent = true })
+-- start typing :help then Ctrl+R, Ctrl+W takes word under cursor
