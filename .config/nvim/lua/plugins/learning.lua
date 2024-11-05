@@ -22,7 +22,7 @@ return {
 
                 -- messages (via cmdline OR nvim-notify popups) =>  I find the disabled/restricted notify popups useless, the key not working / stopping is enough for me to knock it off
                 notification = false, -- don't notify for disabled/restricted keys, i.e. down disabled, OR hit j repeatedly...
-                hint = true, -- explicit that I want hints for now... i.e. `cw` instead of `dwi`
+                hint = true,          -- explicit that I want hints for now... i.e. `cw` instead of `dwi`
 
                 disabled_keys = {
                     -- ONLY disable arrows in normal mode, that way I can use them in INSERT mode to move up/down in the completion list, not ideal, maybe is a better way to only enable them for completion list?
@@ -32,6 +32,9 @@ return {
                     ["<Right>"] = { "n", },
                 },
 
+                -- -- not sure why, but exit insert mode after timeout? what is the goal to learn here, to always exit insert mode? or not leave it lingering? maybe... maybe that is good so I stop using Esc Esc Esc to make sure :)
+                -- force_exit_insert_mode = true, -- timeout insert mode iIUC
+                -- max_insert_idle_ms = 5000 -- default 5000
             })
         end
     },
