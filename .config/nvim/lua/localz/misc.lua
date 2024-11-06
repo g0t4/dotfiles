@@ -107,7 +107,7 @@ vim.api.nvim_create_user_command('Dump', "lua print(vim.inspect(<args>))", {
 --
 
 -- TODO can I use nvim-dap / nvim-dap-virtual-text / etc to debug lua/vimscript running in nvim?
-function stop_watching_variable()
+function stop_watching()
     if _G.timer then
         _G.timer:stop()
         _G.timer:close()
@@ -152,5 +152,15 @@ function show_variable_in_float(var_content)
         row = 3,
         col = 3,
         border = "single",
+    })
+    -- set wrap, for some reasonm it doesn't work if set before opening the window?
+    vim.api.nvim_buf_set_option(vim.g.inspected_buf, 'wrap', true)
+
+    -- when window is closed, stop watching too
+    vim.api.nvim_create_autocmd("WinClosed", {
+        pattern = tostring(vim.g.inspected_win),
+        callback = function()
+            stop_watching()
+        end,
     })
 end
