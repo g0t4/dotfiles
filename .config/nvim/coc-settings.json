@@ -33,6 +33,24 @@
         "?/init.lua",
         "/opt/homebrew/Cellar/neovim/0.10.2_1/share/nvim/runtime/lua/vim"
     ],
+    "Lua.diagnostics.globals": [
+        "vim",
+        "describe",
+        "it",
+
+        "assert",
+        "assert.equals",
+        "assert.is_true",
+        "assert.is_false",
+        "assert.is_nil",
+        "assert.is_not_nil",
+
+        "before_each",
+        "after_each",
+        "pending",
+        "setup",
+        "teardown",
+    ],
     // FYI another persons' config: https://raw.githubusercontent.com/oppara/dotfiles/611ea809e380d5b4e3e374568a85e52e744a429e/config/nvim/coc-settings.json
     "languageserver": {
         // https://github.com/ndonfris/fish-lsp#client-configuration-required
