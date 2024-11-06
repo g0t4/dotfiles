@@ -120,6 +120,7 @@ else
                             -- { name = 'supermaven' },
                             { name = 'nvim_lsp' },
                             { name = "nvim_lua" },
+                            -- TODO try snippets sourceds too
                             -- { name = 'vsnip' }, -- For vsnip users.
                             -- { name = 'luasnip' }, -- For luasnip users.
                             -- { name = 'ultisnips' }, -- For ultisnips users.
@@ -154,6 +155,8 @@ else
 
                 -- FYI command line completion works good (could standalone use it over wilder)
                 -- Enable command-line completion for `:`
+                -- TODO try snippets with CLI! sounds like fish abbrs!
+                --    TODO https://github.com/hrsh7th/nvim-cmp/wiki/Example-mappings#ultisnips--cmp-cmdline
                 cmp.setup.cmdline(':', {
                     mapping = cmp.mapping.preset.cmdline(),
                     sources = cmp.config.sources({
