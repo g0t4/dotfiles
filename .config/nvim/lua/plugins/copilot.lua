@@ -1,6 +1,13 @@
+local use_ai = {
+    -- "avante",
+    -- "copilot"
+    -- "tabnine",
+    "supermaven"
+}
+
 local avante =
 {
-    enabled = false,
+    enabled = vim.tbl_contains(use_ai, "avante"),
     "yetone/avante.nvim",
     event = "VeryLazy",
     lazy = false,
@@ -86,7 +93,7 @@ return {
 
     {
         -- TODO sign up for a trial and try the full deal, starter version is just useless (completes like two words at a time)
-        enabled = false,
+        enabled = vim.tbl_contains(use_ai, "tabnine"),
         "codota/tabnine-nvim",
         build = "./dl_binaries.sh",
         config = function()
@@ -106,7 +113,7 @@ return {
     },
 
     {
-        enabled = true,
+        enabled = vim.tbl_contains(use_ai, "supermaven"),
         "supermaven-inc/supermaven-nvim",
         config = function()
             require("supermaven-nvim").setup {
@@ -163,7 +170,7 @@ return {
     },
 
     {
-        enabled = false,
+        enabled = vim.tbl_contains(use_ai, "copilot"),
         'github/copilot.vim',
         -- event = { "InsertEnter" }, -- lazy load on first insert  -- load immediately is fine, esp if changing status bar here
         config = function()
