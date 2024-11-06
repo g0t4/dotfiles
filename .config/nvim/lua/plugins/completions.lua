@@ -31,7 +31,7 @@ else
     -- nvim-cmp definitely feels super slow, but I should extensively test it before writing it off, esp for things coc fails at, i.e. refactoring in many cases
     -- would need formatting to work too
     -- would need to take coc-config.vim and replciate as much as it as is possible
-    -- also has cmdline completions, would be alternative to wilder/wildmenu?
+    -- FYI also has cmdline completions, would be alternative to wilder/wildmenu?
     return {
         {
             "neovim/nvim-lspconfig",
