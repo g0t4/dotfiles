@@ -42,7 +42,10 @@ else
                 lspconfig.lua_ls.setup({
                     capabilities = capabilities,
                     on_attach = function(client, bufnr)
-                        -- Optional: Set keymaps for LSP functions here if needed
+                        -- code formatting works
+                        -- client.server_capabilities.documentFormattingProvider = true
+                        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>f',
+                            '<cmd>lua vim.lsp.buf.format({ async = true })<CR>', { noremap = true, silent = true })
                     end,
                     settings = {
                         Lua = {
@@ -130,21 +133,21 @@ else
                 -- FYI search completion works good (could standalone use it over wilder)
                 -- Enable command-line completion for `/` and `?`
                 cmp.setup.cmdline({ '/', '?' }, {
-                  mapping = cmp.mapping.preset.cmdline(),
-                  sources = {
-                    { name = 'buffer' }
-                  }
+                    mapping = cmp.mapping.preset.cmdline(),
+                    sources = {
+                        { name = 'buffer' }
+                    }
                 })
 
                 -- FYI command line completion works good (could standalone use it over wilder)
                 -- Enable command-line completion for `:`
                 cmp.setup.cmdline(':', {
-                  mapping = cmp.mapping.preset.cmdline(),
-                  sources = cmp.config.sources({
-                    { name = 'path' }
-                  }, {
-                    { name = 'cmdline' }
-                  })
+                    mapping = cmp.mapping.preset.cmdline(),
+                    sources = cmp.config.sources({
+                        { name = 'path' }
+                    }, {
+                        { name = 'cmdline' }
+                    })
                 })
             end,
             dependencies = {
