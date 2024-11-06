@@ -127,7 +127,7 @@ else
                     },
                 }
 
-                -- FYI command line completion is working well, might even take this over wilder...
+                -- FYI search completion works good (could standalone use it over wilder)
                 -- Enable command-line completion for `/` and `?`
                 cmp.setup.cmdline({ '/', '?' }, {
                   mapping = cmp.mapping.preset.cmdline(),
@@ -136,6 +136,7 @@ else
                   }
                 })
 
+                -- FYI command line completion works good (could standalone use it over wilder)
                 -- Enable command-line completion for `:`
                 cmp.setup.cmdline(':', {
                   mapping = cmp.mapping.preset.cmdline(),
