@@ -118,14 +118,16 @@ function stop_watching_variable()
     end
 end
 
-function start_watching_variable()
+function start_watching(func)
     local uv = vim.loop
     _G.timer = uv.new_timer()
 
     _G.timer:start(0, 1000, vim.schedule_wrap(function()
-        show_variable_in_float(vim.g.watch_me)
+        show_variable_in_float(func())
     end))
 end
+
+-- start_watching(function() return vim.g.watch_me end)
 
 function show_variable_in_float(var_content)
     -- ensure buffer exists with content
