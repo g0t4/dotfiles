@@ -1,5 +1,5 @@
 -- boolean is simple way to toggle coc vs nvim-cmp
-if (false) then
+if (true) then
     return {
         {
             -- alternative but only has completions? https://neovimcraft.com/plugin/hrsh7th/nvim-cmp/ (example config: https://github.com/m4xshen/dotfiles/blob/main/nvim/nvim/lua/plugins/completion.lua)
