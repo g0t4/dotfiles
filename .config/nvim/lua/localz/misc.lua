@@ -104,3 +104,30 @@ vim.api.nvim_create_user_command('Dump', "lua print(vim.inspect(<args>))", {
 -- vim.cmd [[
 --     command! -nargs=1 -complete=lua Dump lua print(vim.inspect(<args>))
 -- ]]
+--
+
+function show_variable_in_float(var_content)
+    -- ensure buffer exists with content
+    if vim.g.inspected_buf == nil then
+        vim.g.inspected_buf = vim.api.nvim_create_buf(false, true)
+    end
+    local inspected = vim.inspect(var_content)
+    vim.api.nvim_buf_set_lines(vim.g.inspected_buf, 0, -1, false, vim.split(inspected, "\n"))
+
+    if vim.g.inspected_win then
+        if vim.api.nvim_win_is_valid(vim.g.inspected_win) then
+            -- stop if window already open
+            return
+        end
+        -- IIAC is_valid means I need to create a new window? or is there a case when its just closed and needs to be reopened?
+    end
+
+    vim.g.inspected_win = vim.api.nvim_open_win(vim.g.inspected_buf, true, {
+        relative = "editor",
+        width = 50,
+        height = 10,
+        row = 3,
+        col = 3,
+        border = "single",
+    })
+end
