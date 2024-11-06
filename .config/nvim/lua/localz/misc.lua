@@ -106,14 +106,22 @@ vim.api.nvim_create_user_command('Dump', "lua print(vim.inspect(<args>))", {
 -- ]]
 --
 
+function stop_watching_variable()
+    if _G.timer then
+        _G.timer:stop()
+        _G.timer:close()
+        _G.timer = nil
+    end
+    if vim.g.inspected_win then
+        vim.api.nvim_win_close(vim.g.inspected_win, true)
+    end
+end
+
 function start_watching_variable()
-    -- show_variable_in_float(vim.g.watch_me)
-
     local uv = vim.loop
-    local timer = uv.new_timer()
+    _G.timer = uv.new_timer()
 
-    timer:start(0, 1000, vim.schedule_wrap(function()
-        -- Code to run every X seconds
+    _G.timer:start(0, 1000, vim.schedule_wrap(function()
         show_variable_in_float(vim.g.watch_me)
     end))
 end
