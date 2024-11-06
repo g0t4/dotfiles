@@ -92,3 +92,10 @@ vim.api.nvim_create_autocmd("FileType", {
         -- PRN others?
     end,
 })
+
+
+-- *** :Dump vim.g.foo
+-- TODO completion for <args>, lua expression completion
+-- Am I the only who hates typing :lua print(vim.inspect(...))?
+vim.api.nvim_create_user_command('Dump', "lua print(vim.inspect(<args>))", { nargs = '*' })
+
