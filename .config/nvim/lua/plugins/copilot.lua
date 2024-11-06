@@ -18,7 +18,6 @@ local avante =
         -- FYI defaults to claude, recommends claude too.. I should try both
         provider = "copilot",
         -- auto_suggestions_provider = "claude" -- or "copilot" or? which is better try both
-
         behaviour = {
             auto_suggestions = false, -- Experimental stage
             auto_set_highlight_group = true,
@@ -26,7 +25,6 @@ local avante =
             auto_apply_diff_after_generation = false,
             support_paste_from_clipboard = false,
         },
-
     },
 
     -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
@@ -132,7 +130,6 @@ return {
 
             local function override_suggestion_color()
                 -- FYI color options only allow setting a foreground color, hence the following to set any aspect I want
-
                 -- SupermavenSuggestion is set on VimEnter/ColorScheme, so create a new augroup to override it b/c this happens after the supermaven augroup events run
                 -- vim.api.nvim_create_augroup("supermaven2", { clear = true }) -- if use diff augroup then create it here, else append to supermaven augroup commands:
                 vim.api.nvim_create_autocmd({ "VimEnter", "ColorScheme" }, {
