@@ -170,4 +170,5 @@ vim.api.nvim_create_autocmd("FileType", {
     pattern = "help",
     command = "wincmd L" -- open help in vertical split, on the far left side
     -- ==> Ctrl+W, L ==> far left (vertical split)
+    -- TODO do I want this to first check existing splits?
 })
