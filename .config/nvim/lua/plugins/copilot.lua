@@ -115,6 +115,7 @@ return {
         "supermaven-inc/supermaven-nvim",
         config = function()
             require("supermaven-nvim").setup {
+                -- disable_inline_completion = true, -- use w/ nvim-cmp
                 keymaps = {
                     -- -- defaults:
                     -- accept_suggestion = "<Tab>",
