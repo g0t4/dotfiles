@@ -106,6 +106,7 @@ vim.api.nvim_create_user_command('Dump', "lua print(vim.inspect(<args>))", {
 -- ]]
 --
 
+-- TODO can I use nvim-dap / nvim-dap-virtual-text / etc to debug lua/vimscript running in nvim?
 function stop_watching_variable()
     if _G.timer then
         _G.timer:stop()
