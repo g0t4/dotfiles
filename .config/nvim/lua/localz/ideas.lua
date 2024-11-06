@@ -55,3 +55,8 @@ vim.keymap.set('c', '<C-y>', function()
     end
     vim.fn.setcmdline(last_cmd_line)
 end)
+
+start_watching(function()
+    return vim.g.cmdline_history
+end)
+
