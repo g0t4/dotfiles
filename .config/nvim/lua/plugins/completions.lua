@@ -1,5 +1,5 @@
 -- boolean is simple way to toggle coc vs nvim-cmp
-if (true) then
+if (false) then
     return {
         {
             -- alternative but only has completions? https://neovimcraft.com/plugin/hrsh7th/nvim-cmp/ (example config: https://github.com/m4xshen/dotfiles/blob/main/nvim/nvim/lua/plugins/completion.lua)
@@ -94,22 +94,25 @@ else
                 -- })
                 -- vim.api.nvim_set_hl(0, "CmpItemKindSupermaven", {fg ="#6CC644"})
 
+
                 cmp.setup {
                     performance = {
                         debounce = 50, -- Adjust debounce timing to find the sweet spot
                     },
-                    sources = cmp.config.sources({
-
-                        { name = 'supermaven' },
-                        -- { name = 'nvim_lsp' },
-                        -- TODO path/cmdline/buffer?
-                        -- { name = 'vsnip' }, -- For vsnip users.
-                        -- { name = 'luasnip' }, -- For luasnip users.
-                        -- { name = 'ultisnips' }, -- For ultisnips users.
-                        -- { name = 'snippy' }, -- For snippy users.
-                    }, {
-                        { name = 'buffer' },
-                    }),
+                    sources = cmp.config.sources(
+                        {
+                            -- { name = 'supermaven' },
+                            { name = 'nvim_lsp' },
+                            { name = "nvim_lua" },
+                            -- { name = 'vsnip' }, -- For vsnip users.
+                            -- { name = 'luasnip' }, -- For luasnip users.
+                            -- { name = 'ultisnips' }, -- For ultisnips users.
+                            -- { name = 'snippy' }, -- For snippy users.
+                        },
+                        {
+                            { name = 'buffer' },
+                        }
+                    ),
                     mapping = {
                         -- Use Up/Down arrow keys to navigate the menu
                         ["<Up>"] = cmp.mapping.select_prev_item(),
@@ -122,12 +125,31 @@ else
                         ["<C-Space>"] = cmp.mapping.complete(),
                         ["<C-e>"] = cmp.mapping.abort(),
                     },
-
                 }
+
+                -- FYI command line completion is working well, might even take this over wilder...
+                -- Enable command-line completion for `/` and `?`
+                cmp.setup.cmdline({ '/', '?' }, {
+                  mapping = cmp.mapping.preset.cmdline(),
+                  sources = {
+                    { name = 'buffer' }
+                  }
+                })
+
+                -- Enable command-line completion for `:`
+                cmp.setup.cmdline(':', {
+                  mapping = cmp.mapping.preset.cmdline(),
+                  sources = cmp.config.sources({
+                    { name = 'path' }
+                  }, {
+                    { name = 'cmdline' }
+                  })
+                })
             end,
             dependencies = {
                 'neovim/nvim-lspconfig',
                 'hrsh7th/cmp-nvim-lsp',
+                'hrsh7th/cmp-nvim-lua',
                 'hrsh7th/cmp-buffer',
                 'hrsh7th/cmp-path',
                 'hrsh7th/cmp-cmdline',
