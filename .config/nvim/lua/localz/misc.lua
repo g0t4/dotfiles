@@ -106,6 +106,14 @@ vim.api.nvim_create_user_command('Dump', "lua print(vim.inspect(<args>))", {
 -- ]]
 --
 
+function start_watching_variable()
+    show_variable_in_float(vim.g.watch_me)
+
+    vim.defer_fn(function()
+        start_watching_variable()
+    end, 1000)
+end
+
 function show_variable_in_float(var_content)
     -- ensure buffer exists with content
     if vim.g.inspected_buf == nil then
