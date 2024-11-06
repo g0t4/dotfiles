@@ -69,6 +69,21 @@ vim.keymap.set('v', '<F1>', function()
     vim.cmd('help ' .. search_term)
 end)
 
+vim.keymap.set('c', '<F1>', function()
+    -- *** help for cmdline contents
+    local cmdline = vim.fn.getcmdline()
+
+    -- use Ctrl+C to cancel cmdline mode (otherwise help won't show until after you exit cmdline mode)
+    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-c>", true, false, true), 'n', false)
+
+    -- TODO if mutliple words, take first word that has help? OR word under cursor?
+    vim.cmd('help ' .. cmdline, { silent = true })
+
+    -- could attempt to put cmdline back so it can be edited again BUT people wanted help so stay in help, they can always uparrow to get back cmd next time they enter cmdline mode
+    -- pointless to put back the cmdline unless someone was just gonna read the start of the help which is doubtfully enough
+    -- vim.api.nvim_feedkeys(":", 'n', false)
+end)
+
 -- *** quit help on 'q' => see how I feel about this
 vim.api.nvim_create_autocmd("FileType", {
     pattern = "help",
