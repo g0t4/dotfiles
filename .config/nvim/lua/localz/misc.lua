@@ -107,11 +107,15 @@ vim.api.nvim_create_user_command('Dump', "lua print(vim.inspect(<args>))", {
 --
 
 function start_watching_variable()
-    show_variable_in_float(vim.g.watch_me)
+    -- show_variable_in_float(vim.g.watch_me)
 
-    vim.defer_fn(function()
-        start_watching_variable()
-    end, 1000)
+    local uv = vim.loop
+    local timer = uv.new_timer()
+
+    timer:start(0, 1000, vim.schedule_wrap(function()
+        -- Code to run every X seconds
+        show_variable_in_float(vim.g.watch_me)
+    end))
 end
 
 function show_variable_in_float(var_content)
