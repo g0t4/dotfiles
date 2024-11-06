@@ -6,6 +6,7 @@ return {
         -- doesn't show until hit tab
         -- SO I can always go back to this if wilder isn't adding anything material or if I don't like it showing right away
 
+        enabled = false,
         "gelguy/wilder.nvim",
         -- TODO lazy load https://github.com/gelguy/wilder.nvim?tab=readme-ov-file#faster-startup-time
         dependencies = {
