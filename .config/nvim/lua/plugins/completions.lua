@@ -87,6 +87,8 @@ else
                         vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>rn',
                             '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
 
+
+                        -- TODO review my coc mappings for any inconsitencies?
                         vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>f',
                             '<cmd>lua vim.lsp.buf.format({ async = true })<CR>', opts)
                         vim.api.nvim_buf_set_keymap(bufnr, 'x', '<Leader>f',
@@ -100,9 +102,13 @@ else
                         vim.api.nvim_buf_set_keymap(bufnr, 'i', '<S-M-f>',
                             '<cmd>lua vim.lsp.buf.format({ async = true })<CR>', opts)
 
-                        -- TODO left off here with coc-config.vim porting
                         vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>ca',
                             '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+
+                        -- TODO coc-config.vim's augroup mygroup?
+
+                        -- TODO left off here with coc-config.vim porting
+
                     end,
                     settings = {
                         Lua = {
