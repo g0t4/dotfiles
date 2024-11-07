@@ -1,9 +1,24 @@
 local use_ai = {
     -- "avante",
-    -- "copilot"
+    "copilot",
     -- "tabnine",
-    "supermaven"
+    "supermaven",
 }
+
+function SwitchCopilot()
+    local supermavenapi = require("supermaven-nvim.api")
+    if supermavenapi.is_running() then
+        supermavenapi.stop()
+        if vim.fn.exists("*copilot#Enabled") then
+            vim.cmd("Copilot enable")
+        end
+    else
+        supermavenapi.start()
+        if vim.fn.exists("*copilot#Enabled") then
+            vim.cmd("Copilot disable")
+        end
+    end
+end
 
 local avante =
 {
