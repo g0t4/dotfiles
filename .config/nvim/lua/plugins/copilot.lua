@@ -214,6 +214,19 @@ return {
                 :nnoremap <F13> :call ToggleCopilot()<CR>
 
             ]])
+
+            -- TODO why is this not winning when use autocmd (do I need a group, TBD, copilot help didn't mention it)
+            -- vim.api.nvim_create_autocmd('ColorScheme', {
+            --     pattern = '*',
+            --     -- group = "...",
+            --     callback = function()
+            vim.api.nvim_set_hl(0, 'CopilotSuggestion', {
+                fg = '#ff0000',
+                -- ctermfg = 8,
+                force = true,
+            })
+            -- end
+            -- })
         end,
     },
     avante,
