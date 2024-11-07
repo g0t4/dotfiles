@@ -66,6 +66,18 @@ return {
                 return " " .. vim.fn.fnamemodify(vim.fn.getcwd(), ":t") -- only show last part of path (folder name)
             end
 
+            function StatusLine_WrapCopilotStatus()
+                -- need this wrapper b/c if I put a user defined function in the statusline and it doesn't exist it is permanently disabled basically, so this won't blow up and will dynamically figure out which status to show too
+                if type(_G["GetStatusLineCopilot"]) == "function" then
+                    return _G["GetStatusLineCopilot"]()
+                end
+                -- PRN if I add mechanism to switch copilot/supermaven w/o restart nvim then I can check more than just if func exists
+                if type(_G["GetStatusLineSupermaven"]) == "function" then
+                    return _G["GetStatusLineSupermaven"]()
+                end
+                return ""
+            end
+
             require("lualine").setup {
                 -- default: https://github.com/nvim-lualine/lualine.nvim#default-configuration
                 options = {
@@ -94,7 +106,7 @@ return {
                     } },          -- filename includes modified
                     -- lualine_c = { "filetype" },
                     lualine_c = { StatusLine_FileTypeIfNotInFileExt },
-                    lualine_x = { "GetStatusLineCopilot", GetStatusLineSupermaven },
+                    lualine_x = { StatusLine_WrapCopilotStatus },
                     lualine_y = {
                         StatusLine_Line,
                         { StatusLine_Column, padding = { left = 0, right = 1 } }, -- FYI when set padding it overrides both sides, so only specify left means right = 0
