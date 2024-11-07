@@ -48,18 +48,6 @@ else
                         -- FYI also would need to generalize this to all LSPs, not just lua
                         -- FYI my code comment coloring highlight groups are overriden by sematnic token highlights?
                         local opts = { noremap = true, silent = true }
-                        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>f',
-                            '<cmd>lua vim.lsp.buf.format({ async = true })<CR>', opts)
-                        vim.api.nvim_buf_set_keymap(bufnr, 'x', '<Leader>f',
-                            '<cmd>lua vim.lsp.buf.format({ async = true })<CR>', opts)
-                        --#region
-                        vim.api.nvim_buf_set_keymap(bufnr, 'v', '<S-M-f>', '<cmd>lua vim.lsp.buf.range_formatting()<CR>',
-                            opts)
-                        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<S-M-f>',
-                            '<cmd>lua vim.lsp.buf.format({ async = true })<CR>', opts)
-                        -- in insert mode, allow formatting everything:
-                        vim.api.nvim_buf_set_keymap(bufnr, 'i', '<S-M-f>',
-                            '<cmd>lua vim.lsp.buf.format({ async = true })<CR>', opts)
 
                         local foo = "bar"
                         local bar = "foo"
@@ -98,6 +86,19 @@ else
 
                         vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>rn',
                             '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+
+                        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>f',
+                            '<cmd>lua vim.lsp.buf.format({ async = true })<CR>', opts)
+                        vim.api.nvim_buf_set_keymap(bufnr, 'x', '<Leader>f',
+                            '<cmd>lua vim.lsp.buf.format({ async = true })<CR>', opts)
+                        --#region
+                        vim.api.nvim_buf_set_keymap(bufnr, 'v', '<S-M-f>', '<cmd>lua vim.lsp.buf.range_formatting()<CR>',
+                            opts)
+                        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<S-M-f>',
+                            '<cmd>lua vim.lsp.buf.format({ async = true })<CR>', opts)
+                        -- in insert mode, allow formatting everything:
+                        vim.api.nvim_buf_set_keymap(bufnr, 'i', '<S-M-f>',
+                            '<cmd>lua vim.lsp.buf.format({ async = true })<CR>', opts)
 
                         -- TODO left off here with coc-config.vim porting
                         vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>ca',
