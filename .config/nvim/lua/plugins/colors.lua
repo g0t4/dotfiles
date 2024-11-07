@@ -93,6 +93,7 @@ return {
                 },
                 -- FYI =>    :lua print(vim.inspect(require('lualine').get_config()))
                 -- extensions = { 'nvim-tree' }, -- shows root dir (and dirs above it) in statusline... I dont need that, in fact if anything show file path of the file still that was right before open treeview
+                -- FYI do not use a function that may not exist before this is loaded else the component will be gone the entire nvim session (see what I did with copilot statusline)
                 sections = {
                     -- commandline shows mode already so why put it here too? plus lualine has color changes
                     -- lualine_a = { 'buffers' }, -- TODO "buffers" looks interesting! shows tabs for each file... might be what I've been wanting?
