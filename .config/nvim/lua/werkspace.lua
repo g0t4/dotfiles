@@ -184,7 +184,7 @@ function is_single_new_file()
         local buf = vim.api.nvim_win_get_buf(win)
         local buf_name = vim.api.nvim_buf_get_name(buf)
 
-        -- Skip windows related to Wilder or any other unwanted buffers
+        -- Skip windows related to Wilder or any other ignoreable buffers (i.e. float windows, esp if not opened yet)
         if not buf_name:match("Wilder") then
             if eligible_window_buf then
                 return false -- More than one eligible window
