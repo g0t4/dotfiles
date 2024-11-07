@@ -91,7 +91,7 @@ else
 
                         -- [g ]g for goto diagnostics
                         vim.api.nvim_buf_set_keymap(bufnr, 'n', '[g',
-                            '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
+                            '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
                         vim.api.nvim_buf_set_keymap(bufnr, 'n', ']g',
                             '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
                     end,
