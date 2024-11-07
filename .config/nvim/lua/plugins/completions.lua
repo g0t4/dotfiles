@@ -68,10 +68,6 @@ else
                         local baz = "foo"
 
                         -- too can I get these in popup windows? currently in cmdline
-                        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>rn',
-                            '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
-                        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>ca',
-                            '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
                         vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gd',
                             '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
                         vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gy',
@@ -94,6 +90,18 @@ else
                             '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
                         vim.api.nvim_buf_set_keymap(bufnr, 'n', ']g',
                             '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
+
+                        -- K for hover docs
+                        vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K',
+                            '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
+                        -- TODO review my coc's ShowDocumentation() function and see if I can use it here too
+
+                        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>rn',
+                            '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+
+                        -- TODO left off here with coc-config.vim porting
+                        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>ca',
+                            '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
                     end,
                     settings = {
                         Lua = {
