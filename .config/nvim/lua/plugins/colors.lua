@@ -68,8 +68,8 @@ return {
 
             function StatusLine_WrapCopilotStatus()
                 -- need this wrapper b/c if I put a user defined function in the statusline and it doesn't exist it is permanently disabled basically, so this won't blow up and will dynamically figure out which status to show too
-                if type(_G["GetStatusLineCopilot"]) == "function" then
-                    return _G["GetStatusLineCopilot"]()
+                if vim.fn.exists("*GetStatusLineCopilot") == 1 then
+                    return vim.fn["GetStatusLineCopilot"]()
                 end
                 -- PRN if I add mechanism to switch copilot/supermaven w/o restart nvim then I can check more than just if func exists
                 if type(_G["GetStatusLineSupermaven"]) == "function" then
