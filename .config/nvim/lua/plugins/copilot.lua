@@ -1,11 +1,13 @@
 local use_ai = {
     -- "avante",
-    "copilot",
+    -- "copilot",
     -- "tabnine",
     "supermaven",
 }
 
 function SwitchCopilot()
+    -- TODO I should call this in config of preferred copilot OR ...  setup one to be disabled out of the gate and other to be enabled in the opts for each
+    -- FYI supermaven toggle works across vim restarts, copilot is per buffer IIUC
     local supermavenapi = require("supermaven-nvim.api")
     if supermavenapi.is_running() then
         supermavenapi.stop()
