@@ -88,6 +88,12 @@ else
 
                         vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>cd',
                             '<cmd>lua vim.lsp.buf.document_symbol()<CR>', { noremap = true, silent = true })
+
+                        -- [g ]g for goto diagnostics
+                        vim.api.nvim_buf_set_keymap(bufnr, 'n', '[g',
+                            '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
+                        vim.api.nvim_buf_set_keymap(bufnr, 'n', ']g',
+                            '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
                     end,
                     settings = {
                         Lua = {
