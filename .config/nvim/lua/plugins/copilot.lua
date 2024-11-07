@@ -162,8 +162,8 @@ return {
                 return " " -- add space after icon so subsequent text doesn't run under it
             end
 
-            vim.keymap.set('n', '<F12>', ':SupermavenToggle<CR>')
-            vim.keymap.set('i', '<F12>', '<Esc>:SupermavenToggle<CR>a')
+            vim.keymap.set('n', '<F13>', ':SupermavenToggle<CR>')
+            vim.keymap.set('i', '<F13>', '<Esc>:SupermavenToggle<CR>a')
         end
     },
 
@@ -209,9 +209,9 @@ return {
                     endif
                     " Copilot status " visual confirmation - precise about global vs buffer local too
                 endfunction
-                :inoremap <F12> <Esc>:call ToggleCopilot()<CR>a
-                " :inoremap <F12> <C-o>:call ToggleCopilot()<CR> " on empty, indented line, causes cursor to revert to start of line afterwards
-                :nnoremap <F12> :call ToggleCopilot()<CR>
+                :inoremap <F13> <Esc>:call ToggleCopilot()<CR>a
+                " :inoremap <F13> <C-o>:call ToggleCopilot()<CR> " on empty, indented line, causes cursor to revert to start of line afterwards
+                :nnoremap <F13> :call ToggleCopilot()<CR>
 
             ]])
         end,

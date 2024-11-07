@@ -354,14 +354,14 @@ function! ToggleCopilot()
     else
         Copilot enable
     endif
-    
+
     " echo "copilot is: " . (g:copilot_enabled ? "on" : "off")
     Copilot status " visual confirmation - precise about global vs buffer local too
 endfunction
 
-:inoremap <F12> <Esc>:call ToggleCopilot()<CR>a
-" :inoremap <F12> <C-o>:call ToggleCopilot()<CR> " on empty, indented line, causes cursor to revert to start of line afterwards
-:nnoremap <F12> :call ToggleCopilot()<CR>
+:inoremap <F13> <Esc>:call ToggleCopilot()<CR>a
+" :inoremap <F13> <C-o>:call ToggleCopilot()<CR> " on empty, indented line, causes cursor to revert to start of line afterwards
+:nnoremap <F13> :call ToggleCopilot()<CR>
 
 
 
