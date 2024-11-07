@@ -106,8 +106,8 @@ return {
                         -- relative path, 4 filename+parentdir sounds interesting
                     } },          -- filename includes modified
                     -- lualine_c = { "filetype" },
-                    lualine_c = { StatusLine_FileTypeIfNotInFileExt },
-                    lualine_x = { StatusLine_WrapCopilotStatus },
+                    lualine_c = { StatusLine_FileTypeIfNotInFileExt, StatusLine_WrapCopilotStatus },
+                    lualine_x = {},  -- todo move copilot back here?
                     lualine_y = {
                         StatusLine_Line,
                         { StatusLine_Column, padding = { left = 0, right = 1 } }, -- FYI when set padding it overrides both sides, so only specify left means right = 0
