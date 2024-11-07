@@ -1,6 +1,19 @@
 return {
 
     {
+        -- !!! cons/issues to fix:
+        -- - it's duplicating characters during completion:
+        --    i.e. vim.a<TAB><ACCEPT> => vim.aapi
+        -- - tab completion fuzzy match is not working for sub completions unless first char is same as completion
+        --    so:   vim.api.get<TAB> (no matches), whereas vim.api.nvim_get<TAB> has matches!
+        --              is this an option somewhere? I set fuzzy = 2 but that doesn't seem to work for these .sub completions?
+
+        -- *** possible things to try:
+        -- - should it select first item automatically, w/o putting it into buffer? and then accept populates it? https://github.com/gelguy/wilder.nvim/issues/67
+        --     try:   call wilder#set_option('noselect', 0)
+        --     like nvim-cmp does, so you can just arrow up/down to select items in popup menu right away? or would that break cycling history?
+        -- - I'd like to see how I feel about seleting a path based on fuzzy match entire path not just one dir at a time
+
         -- FYI wildmenu is pretty good too, can use fuzzy in it too:
         -- set wildoptions=pum,fuzzy,tagfile -- pum,tagfile by default
         -- doesn't show until hit tab
