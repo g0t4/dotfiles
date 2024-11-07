@@ -171,3 +171,45 @@ function AppendLastFocusedFileToSession()
 end
 
 setup_workspace()
+
+-- *** I probably don't need this, nor should I have it... but just an idea to see how I feel...
+-- *** basically only gonna apply when I first open a project/werkspace and there are no prior files open (or exit with a new file only open)
+--     HENCE it would be fine to nuke all this
+function is_single_new_file()
+    -- review windows (ignoring some, i.e. Wilder) and find if there is only one "eligible" window that is a new, unsaved file
+    local windows = vim.api.nvim_tabpage_list_wins(0) -- get all windows in current tab only
+    local eligible_window_buf = nil
+
+    for _, win in ipairs(windows) do
+        local buf = vim.api.nvim_win_get_buf(win)
+        local buf_name = vim.api.nvim_buf_get_name(buf)
+
+        -- Skip windows related to Wilder or any other unwanted buffers
+        if not buf_name:match("Wilder") then
+            if eligible_window_buf then
+                return false -- More than one eligible window
+            else
+                eligible_window_buf = buf
+            end
+        end
+    end
+
+    -- If there's only one eligible window, check if it's a new, unsaved file
+    if eligible_window_buf then
+        -- if vim.api.nvim_buf_get_option(eligible_window_buf, "buftype") == "" then
+        local filename = vim.api.nvim_buf_get_name(eligible_window_buf)
+        return filename == "" or vim.fn.filereadable(filename) == 0 -- empty or non-existent file
+        -- end
+    end
+    return false
+end
+
+function open_tree_if_single_new_file()
+    if is_single_new_file() then
+        -- dispatch <C-l> to open tree view (its lazy loaded)
+        require("nvim-tree")
+        vim.cmd("NvimTreeOpen")
+    end
+end
+
+open_tree_if_single_new_file()
