@@ -161,6 +161,7 @@ return {
                 return " " -- add space after icon so subsequent text doesn't run under it
             end
 
+            -- TODO... if I wanna toggle copilots, write one func to toggle the active one and set up one keymap for it across all copilots, like I did with lualine StatusLine_WrapCopilotStatus
             vim.keymap.set('n', '<F13>', ':SupermavenToggle<CR>')
             vim.keymap.set('i', '<F13>', '<Esc>:SupermavenToggle<CR>a')
         end
