@@ -1,5 +1,6 @@
 -- boolean is simple way to toggle coc vs nvim-cmp
-if (false) then
+local use_coc = true
+if (use_coc) then
     return {
         {
             -- alternative but only has completions? https://neovimcraft.com/plugin/hrsh7th/nvim-cmp/ (example config: https://github.com/m4xshen/dotfiles/blob/main/nvim/nvim/lua/plugins/completion.lua)
@@ -108,7 +109,6 @@ else
                         -- TODO coc-config.vim's augroup mygroup?
 
                         -- TODO left off here with coc-config.vim porting
-
                     end,
                     settings = {
                         Lua = {
