@@ -117,10 +117,9 @@ return {
             require("supermaven-nvim").setup {
                 -- disable_inline_completion = true, -- use w/ nvim-cmp
                 keymaps = {
-                    -- -- defaults:
-                    -- accept_suggestion = "<Tab>",
-                    -- clear_suggestion = "<C-]>",
-                    -- accept_word = "<C-j>",
+                    -- accept_suggestion = "<Tab>", -- all copilots use this, also doesn't apply if no suggestion shown (obviously)
+                    -- clear_suggestion = "<C-]>", -- all copilots use this
+                    accept_word = "<M-Right>", -- <C-j> is default
                 },
                 color = {
                     -- MUST SET a color to get SupermavenSuggestion highlight group to work, else won't exist
