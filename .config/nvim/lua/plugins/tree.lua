@@ -16,6 +16,14 @@ end
 
 return {
 
+    {
+        'stevearc/dressing.nvim',
+        opts = {},
+        -- TODO what do I think of this?
+        --   in nvim-tree r/a (rename/add) files are done right next to cursor position
+        --   good deal, ESC twice in float window cancels/closes it
+    },
+
     -- {
     --     "MunifTanjim/nui.nvim",
     --     config = function()
@@ -77,10 +85,10 @@ return {
             { "<C-S-l>",   ":NvimTreeFindFileToggle<CR>",        mode = "n", noremap = true, silent = true },
 
             -- TODO move elsewhere when I find a spot, use alt instead of ctrl-w for moving between windows
-            { "<M-right>", "<C-W><right>",                mode = "n", noremap = true, silent = true },
-            { "<M-left>",  "<C-W><left>",                 mode = "n", noremap = true, silent = true },
-            { "<M-up>",    "<C-W><up>",                   mode = "n", noremap = true, silent = true },
-            { "<M-down>",  "<C-W><down>",                 mode = "n", noremap = true, silent = true },
+            { "<M-right>", "<C-W><right>",                       mode = "n", noremap = true, silent = true },
+            { "<M-left>",  "<C-W><left>",                        mode = "n", noremap = true, silent = true },
+            { "<M-up>",    "<C-W><up>",                          mode = "n", noremap = true, silent = true },
+            { "<M-down>",  "<C-W><down>",                        mode = "n", noremap = true, silent = true },
         },
         config = function()
             require("nvim-tree").setup({
