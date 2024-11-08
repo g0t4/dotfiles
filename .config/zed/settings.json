@@ -4,12 +4,22 @@
   "tab_bar": {
     "show": true
   },
+  "language_models": {
+    "ollama": {
+      "provider": "ollama",
+      "api_url": "http://0.0.0.0:11434"
+    }
+  },
   "assistant": {
     "default_model": {
       "provider": "ollama",
-      "model": "llama3.2-vision:11b"
+      "model": "llama3.2:1b"
     },
-    "version": "2"
+    "version": "2",
+    "inline_alternatives": [
+      { "provider": "ollama", "model": "llama3.2:3b" },
+      { "provider": "ollama", "model": "llama3.2-vision:11b" }
+    ]
   },
   "vim_mode": true,
   "ui_font_size": 24,
@@ -22,7 +32,7 @@
     }
   },
   "features": {
-    "inline_completion_provider": "supermaven",
+    "inline_completion_provider": "supermaven"
   },
   "cursor_blink": false, // *** I am surprised I didn't notice this sooner, then again it is not blinking block
   "toolbar": {
@@ -43,7 +53,7 @@
     }
   },
   "file_types": {
-    "YAML": [ "*.clangd" ]
+    "YAML": ["*.clangd"]
   },
   "terminal": {
     "detect_venv": "off"
