@@ -15,12 +15,15 @@
       "provider": "ollama",
       "model": "llama3.2:3b"
     },
-    "version": "2",
+    "version": "2"
     // "inline_alternatives": [
     //   { "provider": "ollama", "model": "llama3.1:8b" },
     //   { "provider": "ollama", "model": "llama3.2:3b" },
     //   { "provider": "ollama", "model": "llama3.2:1b" }
     // ]
+  },
+  "vim": {
+    "toggle_relative_line_numbers": true
   },
   "vim_mode": true,
   "ui_font_size": 24,
@@ -33,7 +36,8 @@
     }
   },
   "features": {
-    "inline_completion_provider": "supermaven"
+    "inline_completion_provider": "supermaven",
+    // "copilot": true
   },
   "cursor_blink": false, // *** I am surprised I didn't notice this sooner, then again it is not blinking block
   "toolbar": {
