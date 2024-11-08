@@ -19,9 +19,11 @@ return {
     {
         'stevearc/dressing.nvim',
         opts = {},
+        -- https://github.com/stevearc/dressing.nvim#configuration
         -- TODO what do I think of this?
         --   in nvim-tree r/a (rename/add) files are done right next to cursor position
         --   good deal, ESC twice in float window cancels/closes it
+        --     also, in insert mode Ctrl=C closes
     },
 
     -- {
