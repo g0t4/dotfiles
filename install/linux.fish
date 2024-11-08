@@ -1,4 +1,3 @@
-
 #!/usr/bin/env fish
 
 sudo timedatectl set-timezone 'America/Chicago'
