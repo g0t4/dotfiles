@@ -8,7 +8,59 @@ function NvimTreeFindFileOrClose()
     end
 end
 
+function testUI()
+    vim.ui.input({ prompt = "Rename File: " }, function(input)
+        vim.notify(input)
+    end)
+end
+
 return {
+
+    -- {
+    --     "MunifTanjim/nui.nvim",
+    --     config = function()
+    --         local Input = require("nui.input")
+    --         local Select = require("nui.menu")
+    --         -- Override vim.ui.input
+    --         vim.ui.input = function(opts, on_confirm)
+    --             local input_popup = Input({
+    --                 position = "50%",
+    --                 size = { width = 40 },
+    --                 border = {
+    --                     style = "rounded",
+    --                     text = { top = opts.prompt or "Input" },
+    --                 },
+    --             }, {
+    --                 on_submit = function(value)
+    --                     on_confirm(value)
+    --                 end,
+    --             })
+    --             input_popup:mount()
+    --         end
+    --         -- Override vim.ui.select
+    --         vim.ui.select = function(items, opts, on_choice)
+    --             local menu_items = {}
+    --             for _, item in ipairs(items) do
+    --                 table.insert(menu_items, Select.item(item))
+    --             end
+    --             local select_popup = Select({
+    --                 position = "50%",
+    --                 size = { width = 40, height = 10 },
+    --                 border = {
+    --                     style = "rounded",
+    --                     text = { top = opts.prompt or "Select an option" },
+    --                 },
+    --                 win_options = { winblend = 10 },
+    --             }, {
+    --                 lines = menu_items,
+    --                 on_submit = function(item)
+    --                     on_choice(item.text)
+    --                 end,
+    --             })
+    --             select_popup:mount()
+    --         end
+    --     end,
+    -- },
 
     {
         'nvim-tree/nvim-web-devicons',
