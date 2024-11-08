@@ -21,10 +21,9 @@
       "enabled": false
     }
   },
-  // "features": {
-  //   "inline_completion_provider": "copilot",
-  //   "copilot": true
-  // },
+  "features": {
+    "inline_completion_provider": "supermaven",
+  },
   "cursor_blink": false, // *** I am surprised I didn't notice this sooner, then again it is not blinking block
   "toolbar": {
     "breadcrumbs": false, // save a bunch of space at top of buffer! (name already shows on tab!)
