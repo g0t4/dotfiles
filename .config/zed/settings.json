@@ -6,8 +6,8 @@
   },
   "assistant": {
     "default_model": {
-      "provider": "copilot_chat",
-      "model": "gpt-4o"
+      "provider": "ollama",
+      "model": "llama3.2:1b"
     },
     "version": "2"
   },
