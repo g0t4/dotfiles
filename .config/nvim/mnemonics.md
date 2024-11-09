@@ -19,8 +19,11 @@
 
 ## WIP
 
-- To the End of the line:
-  - `C`hange
-  - `D`elete
-  - `Y`ank
+- Line level (capitalized)
+  - To the End of the line:
+    - `C`hange
+    - `D`elete
+    - `Y`ank
+  - `I`/`A` at the start/end of line
+  - `J`oin lines
 - `xp`ose => `transpose`
