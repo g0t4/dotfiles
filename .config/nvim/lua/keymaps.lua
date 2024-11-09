@@ -19,7 +19,9 @@ end
 
 
 -- *** Ctrl+S to save http://vim.wikia.com/wiki/Saving_a_file
-vim.keymap.set({ "n", "i" }, "<C-s>", "<cmd>w<CR>",  default_options)
+-- <cmd> preserves mode and is independent of initial mode
+-- <cmd> also preserves visual mode selection!
+vim.keymap.set({ "n", "i", "v" }, "<C-s>", "<cmd>w<CR>",  default_options)
 -- vim.cmd("nnoremap <c-s> :w<CR>")
 -- vim.cmd("vnoremap <c-s> <Esc><c-s>gv") -- esc=>normal mode => save => reselect visual mode, not working... figure out later
 -- vim.cmd("inoremap <c-s> <c-o><c-s>")
