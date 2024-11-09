@@ -1,5 +1,8 @@
 # Vim Mnemonics
 
+*Note, I prefer either a single word (i.e. `y`ank) or a short phrase that rhymes*
+
+
 - `A`ppend at the End
 - `I`nsert at the Start
 - `J`oin (lines)
