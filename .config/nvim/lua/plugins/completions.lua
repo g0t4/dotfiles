@@ -135,10 +135,10 @@ else
                     capabilities = capabilities,
                     on_attach = function(client, bufnr)
                         -- Optional: keymaps for LSP commands
-                        local opts = { buffer = bufnr }
-                        vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
-                        vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
-                        vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
+                        local buffer_keymap_options = { buffer = bufnr }
+                        vim.keymap.set("n", "gd", vim.lsp.buf.definition, buffer_keymap_options)
+                        vim.keymap.set("n", "K", vim.lsp.buf.hover, buffer_keymap_options)
+                        vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, buffer_keymap_options)
                     end,
                 })
             end,
