@@ -12,9 +12,9 @@ vim.cmd([[
 -- *** help
 --
 -- start typing :help then Ctrl+R, Ctrl+W takes word under cursor
-vim.api.nvim_set_keymap('n', '<F1>', ':help <C-R><C-W><CR>', { noremap = true, silent = true })
+vim.keymap.set('n', '<F1>', ':help <C-R><C-W><CR>', { noremap = true, silent = true })
 --
-vim.api.nvim_set_keymap('x', '<F1>', 'y:help <C-R>"<CR>', { noremap = true, silent = true })
+vim.keymap.set('x', '<F1>', 'y:help <C-R>"<CR>', { noremap = true, silent = true })
 vim.keymap.set('v', '<F1>', function()
     -- *** in visual mode, press F1 to search for selected text, or select word under cursor
     -- local mode = vim.fn.visualmode()
