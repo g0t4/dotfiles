@@ -72,8 +72,8 @@ else
                             '<cmd>lua vim.lsp.buf.references()<CR>', buffer_keymap_options)
                         -- FYI refs stay open, I kinda like that but want a fast way to close them, maybe a keymap?
 
-                        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>cd',
-                            '<cmd>lua vim.lsp.buf.document_symbol()<CR>', { noremap = true, silent = true })
+                        vim.keymap.set('n', '<Leader>cd',
+                            '<cmd>lua vim.lsp.buf.document_symbol()<CR>', buffer_keymap_options)
 
                         -- [g ]g for goto diagnostics
                         vim.keymap.set('n', '[g',
