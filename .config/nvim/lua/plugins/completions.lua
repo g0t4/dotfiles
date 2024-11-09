@@ -48,7 +48,7 @@ else
                         -- FYI see coc-config.vim for my current keymaps
                         -- FYI also would need to generalize this to all LSPs, not just lua
                         -- FYI my code comment coloring highlight groups are overriden by sematnic token highlights?
-                        local opts = { noremap = true, silent = true }
+                        local buffer_keymap_options = { noremap = true, silent = true, buffer = bufnr }
 
                         local foo = "bar"
                         local bar = "foo"
@@ -56,55 +56,56 @@ else
                         print(foo .. " " .. bar)
                         local baz = "foo"
 
+
                         -- too can I get these in popup windows? currently in cmdline
-                        vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gd',
-                            '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
-                        vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gy',
-                            '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
-                        vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gi',
-                            '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
-                        vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr',
-                            '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-                        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<F12>',
-                            '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
-                        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<S-F12>',
-                            '<cmd>lua vim.lsp.buf.references()<CR>', opts)
+                        vim.keymap.set('n', 'gd',
+                            '<cmd>lua vim.lsp.buf.definition()<CR>', buffer_keymap_options)
+                        vim.keymap.set('n', 'gy',
+                            '<cmd>lua vim.lsp.buf.type_definition()<CR>', buffer_keymap_options)
+                        vim.keymap.set('n', 'gi',
+                            '<cmd>lua vim.lsp.buf.implementation()<CR>', buffer_keymap_options)
+                        vim.keymap.set('n', 'gr',
+                            '<cmd>lua vim.lsp.buf.references()<CR>', buffer_keymap_options)
+                        vim.keymap.set('n', '<F12>',
+                            '<cmd>lua vim.lsp.buf.definition()<CR>', buffer_keymap_options)
+                        vim.keymap.set('n', '<S-F12>',
+                            '<cmd>lua vim.lsp.buf.references()<CR>', buffer_keymap_options)
                         -- FYI refs stay open, I kinda like that but want a fast way to close them, maybe a keymap?
 
                         vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>cd',
                             '<cmd>lua vim.lsp.buf.document_symbol()<CR>', { noremap = true, silent = true })
 
                         -- [g ]g for goto diagnostics
-                        vim.api.nvim_buf_set_keymap(bufnr, 'n', '[g',
-                            '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
-                        vim.api.nvim_buf_set_keymap(bufnr, 'n', ']g',
-                            '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
+                        vim.keymap.set('n', '[g',
+                            '<cmd>lua vim.diagnostic.goto_prev()<CR>', buffer_keymap_options)
+                        vim.keymap.set('n', ']g',
+                            '<cmd>lua vim.diagnostic.goto_prev()<CR>', buffer_keymap_options)
 
                         -- K for hover docs
-                        vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K',
-                            '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
+                        vim.keymap.set('n', 'K',
+                            '<cmd>lua vim.lsp.buf.hover()<CR>', buffer_keymap_options)
                         -- TODO review my coc's ShowDocumentation() function and see if I can use it here too
 
-                        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>rn',
-                            '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+                        vim.keymap.set('n', '<Leader>rn',
+                            '<cmd>lua vim.lsp.buf.rename()<CR>', buffer_keymap_options)
 
 
                         -- TODO review my coc mappings for any inconsitencies?
-                        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>f',
-                            '<cmd>lua vim.lsp.buf.format({ async = true })<CR>', opts)
-                        vim.api.nvim_buf_set_keymap(bufnr, 'x', '<Leader>f',
-                            '<cmd>lua vim.lsp.buf.format({ async = true })<CR>', opts)
+                        vim.keymap.set('n', '<Leader>f',
+                            '<cmd>lua vim.lsp.buf.format({ async = true })<CR>', buffer_keymap_options)
+                        vim.keymap.set('x', '<Leader>f',
+                            '<cmd>lua vim.lsp.buf.format({ async = true })<CR>', buffer_keymap_options)
                         --#region
-                        vim.api.nvim_buf_set_keymap(bufnr, 'v', '<S-M-f>', '<cmd>lua vim.lsp.buf.range_formatting()<CR>',
-                            opts)
-                        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<S-M-f>',
-                            '<cmd>lua vim.lsp.buf.format({ async = true })<CR>', opts)
+                        vim.keymap.set('v', '<S-M-f>', '<cmd>lua vim.lsp.buf.range_formatting()<CR>',
+                            buffer_keymap_options)
+                        vim.keymap.set('n', '<S-M-f>',
+                            '<cmd>lua vim.lsp.buf.format({ async = true })<CR>', buffer_keymap_options)
                         -- in insert mode, allow formatting everything:
-                        vim.api.nvim_buf_set_keymap(bufnr, 'i', '<S-M-f>',
-                            '<cmd>lua vim.lsp.buf.format({ async = true })<CR>', opts)
+                        vim.keymap.set('i', '<S-M-f>',
+                            '<cmd>lua vim.lsp.buf.format({ async = true })<CR>', buffer_keymap_options)
 
-                        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>ca',
-                            '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+                        vim.keymap.set('n', '<Leader>ca',
+                            '<cmd>lua vim.lsp.buf.code_action()<CR>', buffer_keymap_options)
 
                         -- TODO coc-config.vim's augroup mygroup?
 
