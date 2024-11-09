@@ -21,7 +21,7 @@ end
 -- *** Ctrl+S to save http://vim.wikia.com/wiki/Saving_a_file
 -- <cmd> preserves mode and is independent of initial mode
 -- <cmd> also preserves visual mode selection!
-vim.keymap.set({ "n", "i", "v" }, "<C-s>", "<cmd>w<CR>",  default_options)
+vim.keymap.set({ "n", "i", "v" }, "<C-s>", "<cmd>w<CR>", default_options)
 -- vim.cmd("nnoremap <c-s> :w<CR>")
 -- vim.cmd("vnoremap <c-s> <Esc><c-s>gv") -- esc=>normal mode => save => reselect visual mode, not working... figure out later
 -- vim.cmd("inoremap <c-s> <c-o><c-s>")
@@ -34,6 +34,6 @@ vim.keymap.set({ "v", "n", "i" }, "<F9>", "<cmd>qall<CR>", default_options)
 
 -- map [Shift]+Ctrl+Tab to move forward/backward through files to edit, in addition to Ctrl+o/i
 --   that is my goto key combo, perhaps I should learn o/i instead... feel like many apps use -/+ for this, vscode for shizzle
-vim.api.nvim_set_keymap('n', '<C-->', '<C-o>', default_options)
-vim.api.nvim_set_keymap('n', '<C-S-->', '<C-i>', default_options)
+vim.keymap.set('n', '<C-->', '<C-o>', default_options)
+vim.keymap.set('n', '<C-S-->', '<C-i>', default_options)
 --  FYI in iTerm => Profiles -> Keys -> Key Mappings -> removed "send 0x1f" on "ctrl+-" ... if that breaks something, well you have this note :)
