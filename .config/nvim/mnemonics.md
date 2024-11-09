@@ -5,7 +5,7 @@
 
 - `A`ppend at the End
 - `I`nsert at the Start
-- `J`oin (lines)
+- [`J`oin (lines)](https://www.youtube.com/watch?v=1x9jRt53ZYA)
 - `c`hange
 - `d`elete
 - `y`ank
