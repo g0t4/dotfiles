@@ -1,6 +1,6 @@
--- *** window keymaps
 local default_options = { noremap = true, silent = true }
 
+-- *** window keymaps
 for _, arrow in ipairs({ "right", "left", "up", "down" }) do
     -- simpler:
     -- vim.keymap.set({ "n" }, "<M-" .. arrow .. ">", "<C-W><" .. arrow .. ">", default_options)
@@ -31,6 +31,6 @@ vim.cmd("nnoremap <F9> :qall<CR>")
 
 -- map [Shift]+Ctrl+Tab to move forward/backward through files to edit, in addition to Ctrl+o/i
 --   that is my goto key combo, perhaps I should learn o/i instead... feel like many apps use -/+ for this, vscode for shizzle
-vim.api.nvim_set_keymap('n', '<C-->', '<C-o>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<C-S-->', '<C-i>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<C-->', '<C-o>', default_options)
+vim.api.nvim_set_keymap('n', '<C-S-->', '<C-i>', default_options)
 --  FYI in iTerm => Profiles -> Keys -> Key Mappings -> removed "send 0x1f" on "ctrl+-" ... if that breaks something, well you have this note :)
