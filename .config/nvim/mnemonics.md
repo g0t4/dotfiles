@@ -11,6 +11,11 @@
 - `y`ank
 - `t`ill / un`t`il
 - `f`ind
+- move/select
+  - `b`ack a word
+  - `w`ord / for`w`ard
+  - `e`nd of word
+  - `i`nner / `a`aroud
 
 ## WIP
 
