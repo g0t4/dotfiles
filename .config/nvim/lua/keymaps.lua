@@ -19,9 +19,10 @@ end
 
 
 -- *** Ctrl+S to save http://vim.wikia.com/wiki/Saving_a_file
-vim.cmd("nnoremap <c-s> :w<CR>")
-vim.cmd("vnoremap <c-s> <Esc><c-s>gv") -- esc=>normal mode => save => reselect visual mode, not working... figure out later
-vim.cmd("inoremap <c-s> <c-o><c-s>")
+vim.keymap.set({ "n", "i" }, "<C-s>", "<cmd>w<CR>",  default_options)
+-- vim.cmd("nnoremap <c-s> :w<CR>")
+-- vim.cmd("vnoremap <c-s> <Esc><c-s>gv") -- esc=>normal mode => save => reselect visual mode, not working... figure out later
+-- vim.cmd("inoremap <c-s> <c-o><c-s>")
 
 -- F9 == quit all
 vim.cmd("nnoremap <F9> :qall<CR>")
