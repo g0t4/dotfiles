@@ -152,3 +152,8 @@ vim.api.nvim_create_autocmd("FileType", {
     -- ==> Ctrl+W, L ==> far left (vertical split)
     -- TODO do I want this to first check existing splits?
 })
+
+-- *** win splits
+-- vim.opt.splitbelow = true -- i.e. help opens below then
+vim.opt.splitright = true -- :vsplit now opens new window on the right, I def want that as I always flip them, also Ctrl+V in telescope opens file to the right
+
