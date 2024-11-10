@@ -28,6 +28,7 @@ vim.keymap.set({ "n", "i", "v" }, "<C-s>", "<cmd>w<CR>", default_options)
 
 -- F9 == quit all
 vim.keymap.set({ "v", "n", "i" }, "<F9>", "<cmd>qall<CR>", default_options)
+vim.keymap.set({ "v", "n", "i" }, "<F8>", "<cmd>q<CR>", default_options)
 -- perhaps I am doing something wrong if I need F9.. but I love this, open lots of tabs to test neovim config changes and just wanna close w/o BS... also love one click quit if no changes
 -- FYI F10 is F9 + re-run nvim (in keyboard maestro to relaunch nvim after quitting)
 
