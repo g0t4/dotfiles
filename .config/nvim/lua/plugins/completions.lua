@@ -215,9 +215,6 @@ local plugin_nvim_cmp = {
             -- }
             local mapping = cmp.mapping.preset.cmdline() -- for now this is fine
 
-            -- FYI search completion works good (could standalone use it over wilder)
-            -- Enable command-line completion for `/` and `?`
-            -- TODO key maps for page up/down, up/down arrows?, tab, shift tab or otherwise? (wilder doesn't have this)
             cmp.setup.cmdline({ '/', '?' }, {
                 -- FYI will use mappings from ':' below
                 sources = {
@@ -225,10 +222,8 @@ local plugin_nvim_cmp = {
                 }
             })
 
-            -- FYI command line completion works good (could standalone use it over wilder)
-            -- Enable command-line completion for `:`
             -- TODO try snippets with CLI! sounds like fish abbrs!
-            --    TODO https://github.com/hrsh7th/nvim-cmp/wiki/Example-mappings#ultisnips--cmp-cmdline
+            --    https://github.com/hrsh7th/nvim-cmp/wiki/Example-mappings#ultisnips--cmp-cmdline
             cmp.setup.cmdline(':', {
                 -- apparently, command line mapping is not possible to make it just for `:` but has to be unified with `/` and `?`
                 mapping = mapping,
