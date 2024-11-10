@@ -16,6 +16,7 @@
   - `w`ord / for`w`ard
   - `e`nd of word
   - `i`nner / `a`aroud
+- `%` - percenthesis (parenthesis)
 
 ## WIP
 
