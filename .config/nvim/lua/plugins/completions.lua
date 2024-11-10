@@ -1,7 +1,10 @@
 -- boolean is simple way to toggle coc vs nvim-cmp
+local use_coc_completions = true
+local use_cmp_cmdline_search = true
 
 local plugin_coc = {
     -- alternative but only has completions? https://neovimcraft.com/plugin/hrsh7th/nvim-cmp/ (example config: https://github.com/m4xshen/dotfiles/blob/main/nvim/nvim/lua/plugins/completion.lua)
+    enabled = use_coc_completions,
     'neoclide/coc.nvim',
     branch = 'release',
     -- LSP (language server protocol) support, completions, formatting, diagnostics, etc
@@ -29,6 +32,7 @@ local plugin_coc = {
 -- would need to take coc-config.vim and replciate as much as it as is possible
 -- FYI also has cmdline completions, would be alternative to wilder/wildmenu?
 local plugin_lspconfig = {
+    enabled = not use_coc_completions,
     "neovim/nvim-lspconfig",
     config = function()
         local lspconfig = require("lspconfig")
@@ -139,8 +143,7 @@ local plugin_lspconfig = {
 }
 
 local plugin_nvim_cmp = {
-    enabled = true,
-    -- cmp instead:
+    enabled = true,                            -- always, b/c I am suBB
     "hrsh7th/nvim-cmp",
     event = { "InsertEnter", "CmdlineEnter" }, -- https://github.com/hrsh7th/nvim-cmp/wiki/Example-mappings
     config = function()
@@ -156,61 +159,71 @@ local plugin_nvim_cmp = {
         -- vim.api.nvim_set_hl(0, "CmpItemKindSupermaven", {fg ="#6CC644"})
 
 
-        cmp.setup {
-            performance = {
-                debounce = 50, -- Adjust debounce timing to find the sweet spot
-            },
-            sources = cmp.config.sources(
-                {
-                    -- { name = 'supermaven' },
-                    { name = 'nvim_lsp' },
-                    { name = "nvim_lua" },
-                    -- TODO try snippets sourceds too
-                    -- { name = 'vsnip' }, -- For vsnip users.
-                    -- { name = 'luasnip' }, -- For luasnip users.
-                    -- { name = 'ultisnips' }, -- For ultisnips users.
-                    -- { name = 'snippy' }, -- For snippy users.
+        if not use_coc_completions then
+            cmp.setup {
+                performance = {
+                    debounce = 50, -- Adjust debounce timing to find the sweet spot
                 },
-                {
-                    { name = 'buffer' },
-                }
-            ),
-            mapping = {
-                -- Use Up/Down arrow keys to navigate the menu
-                ["<Up>"] = cmp.mapping.select_prev_item(),
-                ["<Down>"] = cmp.mapping.select_next_item(),
-                -- Other useful mappings
-                ["<Tab>"] = cmp.mapping.select_next_item(),
-                ["<S-Tab>"] = cmp.mapping.select_prev_item(),
-                ["<CR>"] = cmp.mapping.confirm({ select = true }),
-                ["<C-Space>"] = cmp.mapping.complete(),
-                ["<C-e>"] = cmp.mapping.abort(),
-            },
-        }
-
-        -- FYI search completion works good (could standalone use it over wilder)
-        -- Enable command-line completion for `/` and `?`
-        cmp.setup.cmdline({ '/', '?' }, {
-            mapping = cmp.mapping.preset.cmdline(),
-            sources = {
-                { name = 'buffer' }
+                sources = cmp.config.sources(
+                    {
+                        -- { name = 'supermaven' },
+                        { name = 'nvim_lsp' },
+                        { name = "nvim_lua" },
+                        -- TODO try snippets sourceds too
+                        -- { name = 'vsnip' }, -- For vsnip users.
+                        -- { name = 'luasnip' }, -- For luasnip users.
+                        -- { name = 'ultisnips' }, -- For ultisnips users.
+                        -- { name = 'snippy' }, -- For snippy users.
+                    },
+                    {
+                        { name = 'buffer' },
+                    }
+                ),
+                mapping = {
+                    -- Use Up/Down arrow keys to navigate the menu
+                    ["<Up>"] = cmp.mapping.select_prev_item(),
+                    ["<Down>"] = cmp.mapping.select_next_item(),
+                    -- Other useful mappings
+                    ["<Tab>"] = cmp.mapping.select_next_item(),
+                    ["<S-Tab>"] = cmp.mapping.select_prev_item(),
+                    ["<CR>"] = cmp.mapping.confirm({ select = true }),
+                    ["<C-Space>"] = cmp.mapping.complete(),
+                    ["<C-e>"] = cmp.mapping.abort(),
+                },
             }
-        })
+        end
 
-        -- FYI command line completion works good (could standalone use it over wilder)
-        -- Enable command-line completion for `:`
-        -- TODO try snippets with CLI! sounds like fish abbrs!
-        --    TODO https://github.com/hrsh7th/nvim-cmp/wiki/Example-mappings#ultisnips--cmp-cmdline
-        cmp.setup.cmdline(':', {
-            mapping = cmp.mapping.preset.cmdline(),
-            sources = cmp.config.sources({
-                { name = 'path' }
-            }, {
-                { name = 'cmdline' }
+
+        if use_cmp_cmdline_search then
+            -- TODOs:
+            --   * keymappings for page up/down, up/down arrows?, tab, shift tab or otherwise? (wilder doesn't have this)
+            --   * auto show completions (not after tab)?
+
+            -- FYI search completion works good (could standalone use it over wilder)
+            -- Enable command-line completion for `/` and `?`
+            cmp.setup.cmdline({ '/', '?' }, {
+                mapping = cmp.mapping.preset.cmdline(),
+                sources = {
+                    { name = 'buffer' }
+                }
             })
-        })
+
+            -- FYI command line completion works good (could standalone use it over wilder)
+            -- Enable command-line completion for `:`
+            -- TODO try snippets with CLI! sounds like fish abbrs!
+            --    TODO https://github.com/hrsh7th/nvim-cmp/wiki/Example-mappings#ultisnips--cmp-cmdline
+            cmp.setup.cmdline(':', {
+                mapping = cmp.mapping.preset.cmdline(),
+                sources = cmp.config.sources({
+                    { name = 'path' }
+                }, {
+                    { name = 'cmdline' }
+                })
+            })
+        end
     end,
     dependencies = {
+        -- PRN for only cmdline completions, I don't need all of these and could limt what I include
         'neovim/nvim-lspconfig',
         'hrsh7th/cmp-nvim-lsp',
         'hrsh7th/cmp-nvim-lua',
@@ -221,8 +234,9 @@ local plugin_nvim_cmp = {
         'supermaven-inc/supermaven-nvim',
     },
 }
+
 return {
     plugin_coc,
-    -- plugin_lspconfig,
-    -- plugin_nvim_cmp,
+    plugin_lspconfig,
+    plugin_nvim_cmp,
 }
