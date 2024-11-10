@@ -21,6 +21,10 @@
 ## WIP
 
 - Line level (capitalized)
+  - cursor movement
+    - `H`ighest line (top)
+    - `M`iddle line
+    - `L`owest line (bottom)
   - To the End of the line:
     - `C`hange
     - `D`elete
