@@ -146,15 +146,21 @@ function show_variable_in_float(var_content)
 end
 
 -- *** help customization
-vim.api.nvim_create_autocmd("FileType", {
-    pattern = "help",
-    -- TODO this doesn't work on second help window (after open help and close it :q then next :h opens on top)
-    command = "wincmd L" -- open help in vertical split, on the far right side
-    -- ==> Ctrl+W, R ==> far right (vertical split)
-    -- TODO do I want this to first check existing splits?
+vim.api.nvim_create_autocmd("BufWinEnter", {
+    callback = function()
+        if not (vim.bo.filetype == "help") then
+            return
+        end
+        -- TODO do I want this to first check existing splits?
+        --
+        -- FYI this fubars session restore... if its run before session restore runs... so just keep this after.. perhaps warn if it runs before?
+        --
+        -- command = "wincmd L" -- open help in vertical split, on the far right side
+        -- ==> Ctrl+W, R ==> far right (vertical split)
+        vim.cmd("wincmd L")
+    end,
 })
 
 -- *** win splits
 -- vim.opt.splitbelow = true -- i.e. help opens below then
 vim.opt.splitright = true -- :vsplit now opens new window on the right, I def want that as I always flip them, also Ctrl+V in telescope opens file to the right
-
