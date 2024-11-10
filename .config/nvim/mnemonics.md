@@ -20,6 +20,7 @@
     - `e`nd of word
     - `i`nner / `a`aroud
         - `iw` inner word
+        - `it` inside tag
         - `as` around `s`entence
         - `ip` inner `p`aragraph
         - `a(` around block
