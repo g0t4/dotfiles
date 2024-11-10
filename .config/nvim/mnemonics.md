@@ -41,3 +41,25 @@
   - `ys{motion}"` [y]ou [s]urround (I hate this purported mnemonic, it's not at all memorable) - `y`oke? (as in attach a cross bar with ends that attach to cattle?) need smth new... or maybe this one is just gonna have to be its c/d/y and c/d have good mnemonics, so y is left over?
 - help
   - `:h c` -  can lookup any char and get its help page
+  - `:h index` - index of builtin commands (not user defined w/ i.e. *map)
+- modes
+    - key`map` commands (TODO prune to critical only, i.e. probaly `x`map/`v`map are probably the only commonly used that aren't obvious
+      - `i`map (insert)
+      - `n`map (normal)
+      - `c`map (cmdline)
+      - `s`map (select)
+      - `x`map (visual) *** need mnemonic here (maybe smth about how this is like `v`map but just for visual, like X out select? = nah)
+      - `o`map (operator-pending)
+      - `t`map (terminal)
+      - multiple modes:
+        - `map` = normal,visual,select,operator-pending
+        - `v`map = visual,select
+        - map`!` = insert,cmdline
+        - `l`map = insert,cmdline,lang-arg
+    - `i`nsert
+    - `n`ormal
+    - `c`mdline
+    - `v`isual
+    - `s`elect
+    - `t`erminal
+    - `:h vim-modes`
