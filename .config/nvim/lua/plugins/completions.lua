@@ -171,7 +171,8 @@ local plugin_nvim_cmp = {
             --   callback = function()
             cmp.setup.buffer({
                 sources = {
-                    -- { name = 'supermaven' },
+                    -- FYI https://github.com/hrsh7th/nvim-cmp/wiki/List-of-sources
+                    -- { name = 'supermaven' }, -- didn't like this, feels limited to like 50 chars and why do that when I can use inline suggestions instead
                     { name = 'nvim_lsp' },
                     { name = "nvim_lua" },
                     -- TODO try snippets sourceds too
