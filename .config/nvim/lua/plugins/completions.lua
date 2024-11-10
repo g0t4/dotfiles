@@ -143,13 +143,13 @@ local plugin_lspconfig = {
 }
 
 local plugin_nvim_cmp = {
-    enabled = true,                            -- always, b/c I am suBB
+    enabled = true,
     "hrsh7th/nvim-cmp",
     event = { "InsertEnter", "CmdlineEnter" }, -- https://github.com/hrsh7th/nvim-cmp/wiki/Example-mappings
     config = function()
         local cmp = require('cmp')
 
-        -- TODO style supermaven completions:
+        -- PRN style supermaven completions:
         -- local lspkind = require("lspkind")
         -- lspkind.init({
         --   symbol_map = {
@@ -158,49 +158,58 @@ local plugin_nvim_cmp = {
         -- })
         -- vim.api.nvim_set_hl(0, "CmpItemKindSupermaven", {fg ="#6CC644"})
 
+        cmp.setup {
+            -- Global Setup (for all scenarios)
+            enabled = function()
+                --TODO is this necessary if I do buffer specific setup which is also gonna be conditional?
+                return vim.api.nvim_get_mode().mode == 'c' or
+                    not use_coc_completions
+            end,
+            performance = {
+                debounce = 50, -- Adjust debounce timing to find the sweet spot
+            },
+            -- TODO can I make this different for buffer vs cmdline?
+            --   IOTW can I call cmp.setup multiple times with additional config or does it overwrite it?
+            -- mapping = {
+            --     -- Use Up/Down arrow keys to navigate the menu
+            --     ["<Up>"] = cmp.mapping.select_prev_item(),
+            --     ["<Down>"] = cmp.mapping.select_next_item(),
+            --     -- Other useful mappings
+            --     ["<Tab>"] = cmp.mapping.select_next_item(),
+            --     ["<S-Tab>"] = cmp.mapping.select_prev_item(),
+            --     ["<CR>"] = cmp.mapping.confirm({ select = true }),
+            --     ["<C-Space>"] = cmp.mapping.complete(),
+            --     ["<C-e>"] = cmp.mapping.abort(),
+            -- },
+        }
 
         if not use_coc_completions then
-            cmp.setup {
-                performance = {
-                    debounce = 50, -- Adjust debounce timing to find the sweet spot
-                },
-                sources = cmp.config.sources(
-                    {
-                        -- { name = 'supermaven' },
-                        { name = 'nvim_lsp' },
-                        { name = "nvim_lua" },
-                        -- TODO try snippets sourceds too
-                        -- { name = 'vsnip' }, -- For vsnip users.
-                        -- { name = 'luasnip' }, -- For luasnip users.
-                        -- { name = 'ultisnips' }, -- For ultisnips users.
-                        -- { name = 'snippy' }, -- For snippy users.
-                    },
-                    {
-                        { name = 'buffer' },
-                    }
-                ),
-                mapping = {
-                    -- Use Up/Down arrow keys to navigate the menu
-                    ["<Up>"] = cmp.mapping.select_prev_item(),
-                    ["<Down>"] = cmp.mapping.select_next_item(),
-                    -- Other useful mappings
-                    ["<Tab>"] = cmp.mapping.select_next_item(),
-                    ["<S-Tab>"] = cmp.mapping.select_prev_item(),
-                    ["<CR>"] = cmp.mapping.confirm({ select = true }),
-                    ["<C-Space>"] = cmp.mapping.complete(),
-                    ["<C-e>"] = cmp.mapping.abort(),
-                },
-            }
+            -- TODO on BufEnter? and maybe on file type?
+            -- vim.api.nvim_create_autocmd('BufEnter', {
+            --   callback = function()
+            cmp.setup.buffer({
+                sources = {
+                    -- { name = 'supermaven' },
+                    { name = 'nvim_lsp' },
+                    { name = "nvim_lua" },
+                    -- TODO try snippets sourceds too
+                    -- { name = 'vsnip' }, -- For vsnip users.
+                    -- { name = 'luasnip' }, -- For luasnip users.
+                    -- { name = 'ultisnips' }, -- For ultisnips users.
+                    -- { name = 'snippy' }, -- For snippy users.
+                }
+            })
+            -- end
+            -- })
         end
 
-
         if use_cmp_cmdline_search then
-            -- TODOs:
-            --   * keymappings for page up/down, up/down arrows?, tab, shift tab or otherwise? (wilder doesn't have this)
-            --   * auto show completions (not after tab)?
+            -- FYI I like that it doesn't show until first char typed (by default)
+            --
 
             -- FYI search completion works good (could standalone use it over wilder)
             -- Enable command-line completion for `/` and `?`
+            -- TODO key maps for page up/down, up/down arrows?, tab, shift tab or otherwise? (wilder doesn't have this)
             cmp.setup.cmdline({ '/', '?' }, {
                 mapping = cmp.mapping.preset.cmdline(),
                 sources = {
