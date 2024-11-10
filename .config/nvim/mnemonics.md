@@ -6,8 +6,10 @@
 - `A`ppend at the End
 - `I`nsert at the Start
 - [`J`oin (lines)](https://www.youtube.com/watch?v=1x9jRt53ZYA)
-- `c`hange
 - `d`elete
+- `c`hange (change implies insert mode)
+    - `s` substitute (== `cl`)
+- `r`eplace
 - `y`ank
 - `t`ill / un`t`il
 - `f`ind
@@ -35,6 +37,17 @@
     - `gg` - start of file
     - `G` - end of file
 - `0` start of non-blank chars (FYI end blanks not common so no equivalent)
+- group related operations?
+    - dont really wanna turn this inot list of all commands, or would that be useful and color code memonics?
+    - `c`hange (`cc` = change line, `C` = change to end of line)
+        - (delete-insert replacement) ==> delete, then go to insert mode
+            - `cw` == `dwi`
+        - `s` substitute (== `cl`)
+        - `S` substitute line (== `cc`)
+        - `r`eplace
+            - `R` replace line
+    - `d`elete (`dd` = delete line, `D` = delete to end of line)
+    - OR, keep them separate?
 - Line level (capitalized)
     - cursor movement
         - `H`ighest line (top)
@@ -43,6 +56,10 @@
         - `zz` (middle)
         - `zt` top
         - `zb` bottom
+    - entire line
+        - `cc` change line
+        - `dd` delete line
+        - `yy` yank line
     - To the End of the line:
         - `C`hange
         - `D`elete
