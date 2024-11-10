@@ -16,7 +16,9 @@ let g:coc_global_extensions = [
             \ 'coc-vimlsp',
             \ 'coc-xml',
             \ 'coc-yaml',
+            \ 'coc-zig',
             \ ]
+            "\ 'coc-rust-analyzer',
             "\ 'coc-lightbulb', " seemed to show up on every line regardless if any code actions available => TODO investigate?
     " FYI coc-calc shows the range of what can be done... "1 + 2 = " and it suggests the result "3"
     " PRN https://github.com/iamcco/coc-diagnostic => generic integration of diagnostics tools (make LSP adapter for them, IIUC)
