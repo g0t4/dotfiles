@@ -216,6 +216,12 @@ local plugin_nvim_cmp = {
             --     -- ['<PageDown>'] = { c = cmp.mapping.scroll_docs(4) },
             -- }
             local mapping = cmp.mapping.preset.cmdline() -- for now this is fine
+            -- ok these work, but do I really need them, I should just be fuzzy matching to narrow down list, right?
+            -- can I get line #s show to impl page down / up?
+            -- also could impl Ctrl-D/U to scroll half page... in cmap Ctrl-D doesn't seem useful
+            mapping['<PageUp>'] = cmp.mapping(cmp.mapping.select_prev_item({ count = 10 }), { 'c' })
+            mapping['<PageDown>'] = cmp.mapping(cmp.mapping.select_next_item({ count = 10 }), { 'c' })
+            -- print(vim.inspect(mapping))
 
             cmp.setup.cmdline({ '/', '?' }, {
                 -- FYI will use mappings from ':' below
