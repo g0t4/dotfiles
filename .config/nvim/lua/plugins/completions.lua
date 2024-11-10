@@ -221,4 +221,8 @@ local plugin_nvim_cmp = {
         'supermaven-inc/supermaven-nvim',
     },
 }
-return { plugin_coc }
+return {
+    plugin_coc,
+    -- plugin_lspconfig,
+    -- plugin_nvim_cmp,
+}
