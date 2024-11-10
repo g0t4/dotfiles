@@ -4,6 +4,9 @@ local use_ai = {
     -- "tabnine",
     "supermaven",
 }
+-- ! consider https://github.com/zbirenbaum/copilot.lua
+--    purportedly faster and less glitchy than copilot.vim
+--    has panel too with completion preview, is that useful?
 
 function SwitchCopilot()
     -- TODO I should call this in config of preferred copilot OR ...  setup one to be disabled out of the gate and other to be enabled in the opts for each
