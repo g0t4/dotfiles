@@ -18,7 +18,8 @@
     - `b`ack a word
     - `w`ord / for`w`ard
     - `e`nd of word
-    - `i`nner / `a`aroud
+    - text-objects
+        - `i`nner / `a`aroud
         - `iw` inner word
         - `it` inside tag
         - `as` around `s`entence
@@ -34,6 +35,12 @@
 - `/` and `?` search forward/backward (I bet many don't know it, or at least not `?`)
     - `n`ext and `N` (shift+n == opposite of `n`ext)
 - `.` - repeat last command (can show next to `<<`?)
+- `:h object-motions`
+    - `{`/`}` - move by paragraph (think blank line separators)
+    - `(`/`)` - move by sentences (ends w/ `.` then space/new line)
+    - `[[`/`]]` - move by sections (or start of func)
+        - `[]`/`][` - end of func
+    - sentence
 - `g`oto (in many cases, but not all)
     - `gg` - start of file
     - `G` - end of file
