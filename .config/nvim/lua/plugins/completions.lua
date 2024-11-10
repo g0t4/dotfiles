@@ -220,10 +220,22 @@ local plugin_nvim_cmp = {
             -- can I get line #s show to impl page down / up?
             -- also could impl Ctrl-D/U to scroll half page... in cmap Ctrl-D doesn't seem useful
             -- TODO get line numbers and use that?
-            mapping['<C-d>'] = cmp.mapping(cmp.mapping.select_next_item({ count = 10 }), { 'c' })
-            mapping['<C-u>'] = cmp.mapping(cmp.mapping.select_prev_item({ count = 10 }), { 'c' })
-            mapping['<PageUp>'] = cmp.mapping(cmp.mapping.select_prev_item({ count = 20 }), { 'c' })
-            mapping['<PageDown>'] = cmp.mapping(cmp.mapping.select_next_item({ count = 20 }), { 'c' })
+            function get_half_screen_height_lines()
+                return math.floor((vim.o.lines - vim.o.cmdheight) / 2)
+            end
+
+            -- function get_screen_height_lines()
+            --     return vim.o.lines - vim.o.cmdheight
+            -- end
+
+            mapping['<C-d>'] = cmp.mapping(cmp.mapping.select_next_item({ count = get_half_screen_height_lines() }),
+                { 'c' })
+            mapping['<C-u>'] = cmp.mapping(cmp.mapping.select_prev_item({ count = get_half_screen_height_lines() }),
+                { 'c' })
+            -- mapping['<PageUp>'] = cmp.mapping(cmp.mapping.select_prev_item({ count = get_screen_height_lines() }),
+            --     { 'c' })
+            -- mapping['<PageDown>'] = cmp.mapping(cmp.mapping.select_next_item({ count = get_screen_height_lines() }),
+            --     { 'c' })
             -- print(vim.inspect(mapping))
 
             cmp.setup.cmdline({ '/', '?' }, {
