@@ -45,7 +45,7 @@
   - `:h c_` - cmap builtins
   - `:h down` - wilder/nvim-cmp cmdline completions can be fuzzy filtered (FYI lowercase matches case insensitivee, uppercase letter only match uppercase - in most fuzzy match algos)
 - modes
-    - key`map` commands (TODO prune to critical only, i.e. probaly `x`map/`v`map are probably the only commonly used that aren't obvious
+    - commands for managing user-defined key`map`s  (TODO prune to critical only, i.e. probaly `x`map/`v`map are probably the only commonly used that aren't obvious
       - `i`map (insert)
       - `n`map (normal)
       - `c`map (cmdline)
