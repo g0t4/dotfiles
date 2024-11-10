@@ -203,8 +203,10 @@ local plugin_nvim_cmp = {
             -- note: I like that it doesn't show until first char typed (by default)
 
             -- FYI incorrect mappings are silently ignored, USE :cmap to verify first (don't try to invoke the keymaps until cmap is correct)
-            --  TODO wtf is this '...' = { c = crap } ?
-            --  see docs, they cover alot of it in examples
+            --   FYI { c = func } is for cmdline mode mappings, whereas { i = func } is for insert mode in buffer
+            --      use cmp.mapping(func, { 'c', 'i' } ) -- instead of { c = func, i = func }
+            --      see docs, they cover alot of it in examples
+            --
             -- local mapping = {
             --     -- *** GAH I hate up/down mapped to drop down b/c then I can't up arrow through command history so don't do this at all, there is a reason wilder doesn't have that!!!
             --     --   *** learn defaults for moving up/down thru list items
