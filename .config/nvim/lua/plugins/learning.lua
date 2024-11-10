@@ -31,7 +31,17 @@ return {
                     ["<Left>"] = { "n", },
                     ["<Right>"] = { "n", },
                 },
-
+                -- hints = {
+                --     -- https://github.com/m4xshen/hardtime.nvim/blob/main/lua/hardtime/config.lua#L3
+                --     -- appended to the default hints (see https://github.com/m4xshen/hardtime.nvim/blob/main/lua/hardtime/config.lua#L362)
+                --     --   however, if hints is empty, then it wipes out builtin hints
+                --     ["dw"] = {
+                --         message = function()
+                --             return "Use `foo` instead of `bar`"
+                --         end,
+                --         length = 2,
+                --     },
+                -- }
                 -- -- not sure why, but exit insert mode after timeout? what is the goal to learn here, to always exit insert mode? or not leave it lingering? maybe... maybe that is good so I stop using Esc Esc Esc to make sure :)
                 -- force_exit_insert_mode = true, -- timeout insert mode iIUC
                 -- max_insert_idle_ms = 5000 -- default 5000
