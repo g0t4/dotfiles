@@ -158,30 +158,12 @@ local plugin_nvim_cmp = {
         -- })
         -- vim.api.nvim_set_hl(0, "CmpItemKindSupermaven", {fg ="#6CC644"})
 
-        cmp.setup {
-            -- Global Setup (for all scenarios)
-            enabled = function()
-                --TODO is this necessary if I do buffer specific setup which is also gonna be conditional?
-                return vim.api.nvim_get_mode().mode == 'c' or
-                    not use_coc_completions
-            end,
-            performance = {
-                debounce = 50, -- Adjust debounce timing to find the sweet spot
-            },
-            -- TODO can I make this different for buffer vs cmdline?
-            --   IOTW can I call cmp.setup multiple times with additional config or does it overwrite it?
-            -- mapping = {
-            --     -- Use Up/Down arrow keys to navigate the menu
-            --     ["<Up>"] = cmp.mapping.select_prev_item(),
-            --     ["<Down>"] = cmp.mapping.select_next_item(),
-            --     -- Other useful mappings
-            --     ["<Tab>"] = cmp.mapping.select_next_item(),
-            --     ["<S-Tab>"] = cmp.mapping.select_prev_item(),
-            --     ["<CR>"] = cmp.mapping.confirm({ select = true }),
-            --     ["<C-Space>"] = cmp.mapping.complete(),
-            --     ["<C-e>"] = cmp.mapping.abort(),
-            -- },
-        }
+        -- cmp.setup {
+        --     -- Global Setup (for all scenarios) => use buffer/cmdline specific instead
+        --     performance = {
+        --         debounce = 50, -- Adjust debounce timing to find the sweet spot
+        --     },
+        -- }
 
         if not use_coc_completions then
             -- TODO on BufEnter? and maybe on file type?
@@ -197,7 +179,21 @@ local plugin_nvim_cmp = {
                     -- { name = 'luasnip' }, -- For luasnip users.
                     -- { name = 'ultisnips' }, -- For ultisnips users.
                     -- { name = 'snippy' }, -- For snippy users.
-                }
+                },
+                mapping = {
+                    -- in buffer, makes sense to have diff mappings vs cmdline
+                    -- TODO test w and w/o these mappings before adding them:
+                    --     ["<Up>"] = cmp.mapping.select_prev_item(),
+                    --     ["<Down>"] = cmp.mapping.select_next_item(),
+                    --     ["<Tab>"] = cmp.mapping.select_next_item(),
+                    --     ["<S-Tab>"] = cmp.mapping.select_prev_item(),
+                    --     ["<CR>"] = cmp.mapping.confirm({ select = true }),
+                    --     ["<C-Space>"] = cmp.mapping.complete(),
+                    --     ["<C-e>"] = cmp.mapping.abort(),
+                    -- FYI should scroll docs up/down in hover windows, test w/ vim. (shift+K to show it)
+                    -- ['<PageUp>'] = cmp.mapping.scroll_docs(-4),
+                    -- ['<PageDown>'] = cmp.mapping.scroll_docs(4),
+                },
             })
             -- end
             -- })
@@ -205,15 +201,25 @@ local plugin_nvim_cmp = {
 
         if use_cmp_cmdline_search then
             -- FYI I like that it doesn't show until first char typed (by default)
-            --
 
-            local mapping = cmp.mapping.preset.cmdline()
+            -- FYI incorrect mappings are silently ignored, USE :cmap to verify first (don't try to invoke the keymaps until cmap is correct)
+            --  TODO wtf is this '...' = { c = crap } ?
+            --  see docs, they cover alot of it in examples
+            local mapping = {
+                -- ? what is scroll_docs?
+                -- FYI PageUp/Down scroll pages in menu w/o any mappings added here
+                -- GAH I hate up/down mapped to drop down b/c then I can't up arrow through command history so don't do this at all, there is a reason wilder doesn't have that!!!
+                -- ['<Up>'] = { c = cmp.mapping.select_prev_item() }, -- FYI select_prev_item returns a func
+                -- ['<Down>'] = { c = cmp.mapping.select_next_item() },
+                -- ['<PageUp>'] = { c = cmp.mapping.scroll_docs(-4) },
+                -- ['<PageDown>'] = { c = cmp.mapping.scroll_docs(4) },
+            }
 
             -- FYI search completion works good (could standalone use it over wilder)
             -- Enable command-line completion for `/` and `?`
             -- TODO key maps for page up/down, up/down arrows?, tab, shift tab or otherwise? (wilder doesn't have this)
             cmp.setup.cmdline({ '/', '?' }, {
-                mapping = mapping,
+                -- FYI will use mappings from ':' below
                 sources = {
                     { name = 'buffer' }
                 }
@@ -224,6 +230,7 @@ local plugin_nvim_cmp = {
             -- TODO try snippets with CLI! sounds like fish abbrs!
             --    TODO https://github.com/hrsh7th/nvim-cmp/wiki/Example-mappings#ultisnips--cmp-cmdline
             cmp.setup.cmdline(':', {
+                -- apparently, command line mapping is not possible to make it just for `:` but has to be unified with `/` and `?`
                 mapping = mapping,
                 sources = cmp.config.sources({
                     { name = 'path' }
