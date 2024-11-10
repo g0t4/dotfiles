@@ -1,4 +1,4 @@
-local function setup_workspace()
+function setup_workspace()
     -- dir or nil
     local function get_git_root()
         local handle = io.popen("git rev-parse --show-toplevel 2>/dev/null")

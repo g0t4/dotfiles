@@ -146,9 +146,10 @@ function show_variable_in_float(var_content)
 end
 
 -- *** help customization
-if type(_G.setup_workspace ~= "function") then
-    error "setup_workspace should be defined (so that session is restore) before loading misc.lua, else help windows will be rearranged (to the right) when they are restored"
-end
+-- print(_G["setup_workspace"])
+-- if type(_G["setup_workspace"]) ~= "function" then
+--     vim.notify "setup_workspace should be defined (so that session is restored before loading misc.lua), else help windows will be rearranged (to the right) when they are restored"
+-- end
 vim.api.nvim_create_autocmd("BufWinEnter", {
     callback = function()
         if not (vim.bo.filetype == "help") then
