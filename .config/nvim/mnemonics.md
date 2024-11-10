@@ -25,6 +25,9 @@
     - `H`ighest line (top)
     - `M`iddle line
     - `L`owest line (bottom)
+    - `zz` (middle)
+    - `zt` top
+    - `zb` bottom
   - To the End of the line:
     - `C`hange
     - `D`elete
