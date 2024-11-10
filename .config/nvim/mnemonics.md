@@ -16,6 +16,11 @@
   - `w`ord / for`w`ard
   - `e`nd of word
   - `i`nner / `a`aroud
+    - `iw` inner word
+    - `as` around `s`entence
+    - `ip` inner `p`aragraph
+    - `a(` around block
+    - `i(` inside block
 - `%` - percenthesis (parenthesis)
 
 ## WIP
