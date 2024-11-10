@@ -1,6 +1,6 @@
 -- boolean is simple way to toggle coc vs nvim-cmp
 local use_coc_completions = true
-local use_cmp_cmdline_search = true
+local use_cmp_cmdline_search = true -- make sure to enable wilder via its enabled property
 
 local plugin_coc = {
     -- alternative but only has completions? https://neovimcraft.com/plugin/hrsh7th/nvim-cmp/ (example config: https://github.com/m4xshen/dotfiles/blob/main/nvim/nvim/lua/plugins/completion.lua)
