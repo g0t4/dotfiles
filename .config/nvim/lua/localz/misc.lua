@@ -148,8 +148,9 @@ end
 -- *** help customization
 vim.api.nvim_create_autocmd("FileType", {
     pattern = "help",
-    command = "wincmd L" -- open help in vertical split, on the far left side
-    -- ==> Ctrl+W, L ==> far left (vertical split)
+    -- TODO this doesn't work on second help window (after open help and close it :q then next :h opens on top)
+    command = "wincmd L" -- open help in vertical split, on the far right side
+    -- ==> Ctrl+W, R ==> far right (vertical split)
     -- TODO do I want this to first check existing splits?
 })
 
