@@ -207,11 +207,13 @@ local plugin_nvim_cmp = {
             -- FYI I like that it doesn't show until first char typed (by default)
             --
 
+            local mapping = cmp.mapping.preset.cmdline()
+
             -- FYI search completion works good (could standalone use it over wilder)
             -- Enable command-line completion for `/` and `?`
             -- TODO key maps for page up/down, up/down arrows?, tab, shift tab or otherwise? (wilder doesn't have this)
             cmp.setup.cmdline({ '/', '?' }, {
-                mapping = cmp.mapping.preset.cmdline(),
+                mapping = mapping,
                 sources = {
                     { name = 'buffer' }
                 }
@@ -222,7 +224,7 @@ local plugin_nvim_cmp = {
             -- TODO try snippets with CLI! sounds like fish abbrs!
             --    TODO https://github.com/hrsh7th/nvim-cmp/wiki/Example-mappings#ultisnips--cmp-cmdline
             cmp.setup.cmdline(':', {
-                mapping = cmp.mapping.preset.cmdline(),
+                mapping = mapping,
                 sources = cmp.config.sources({
                     { name = 'path' }
                 }, {
