@@ -41,7 +41,7 @@
   - `ys{motion}"` [y]ou [s]urround (I hate this purported mnemonic, it's not at all memorable) - `y`oke? (as in attach a cross bar with ends that attach to cattle?) need smth new... or maybe this one is just gonna have to be its c/d/y and c/d have good mnemonics, so y is left over?
 - command help
   - `:h c` -  can lookup any char and get its help page
-  - `:h index` - index of builtin commands (not user defined w/ i.e. *map)
+  - `:h index` - index of builtin keymaps (not user defined)
   - `:h c_` - cmap builtins
   - `:h down` - wilder/nvim-cmp cmdline completions can be fuzzy filtered (FYI lowercase matches case insensitivee, uppercase letter only match uppercase - in most fuzzy match algos)
 - modes
