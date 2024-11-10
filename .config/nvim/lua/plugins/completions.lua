@@ -200,20 +200,20 @@ local plugin_nvim_cmp = {
         end
 
         if use_cmp_cmdline_search then
-            -- FYI I like that it doesn't show until first char typed (by default)
+            -- note: I like that it doesn't show until first char typed (by default)
 
             -- FYI incorrect mappings are silently ignored, USE :cmap to verify first (don't try to invoke the keymaps until cmap is correct)
             --  TODO wtf is this '...' = { c = crap } ?
             --  see docs, they cover alot of it in examples
-            local mapping = {
-                -- ? what is scroll_docs?
-                -- FYI PageUp/Down scroll pages in menu w/o any mappings added here
-                -- GAH I hate up/down mapped to drop down b/c then I can't up arrow through command history so don't do this at all, there is a reason wilder doesn't have that!!!
-                -- ['<Up>'] = { c = cmp.mapping.select_prev_item() }, -- FYI select_prev_item returns a func
-                -- ['<Down>'] = { c = cmp.mapping.select_next_item() },
-                -- ['<PageUp>'] = { c = cmp.mapping.scroll_docs(-4) },
-                -- ['<PageDown>'] = { c = cmp.mapping.scroll_docs(4) },
-            }
+            -- local mapping = {
+            --     -- *** GAH I hate up/down mapped to drop down b/c then I can't up arrow through command history so don't do this at all, there is a reason wilder doesn't have that!!!
+            --     --   *** learn defaults for moving up/down thru list items
+            --     -- ['<Up>'] = { c = cmp.mapping.select_prev_item() }, -- FYI select_prev_item returns a func
+            --     -- ['<Down>'] = { c = cmp.mapping.select_next_item() },
+            --     -- ['<PageUp>'] = { c = cmp.mapping.scroll_docs(-4) },
+            --     -- ['<PageDown>'] = { c = cmp.mapping.scroll_docs(4) },
+            -- }
+            local mapping = cmp.mapping.preset.cmdline() -- for now this is fine
 
             -- FYI search completion works good (could standalone use it over wilder)
             -- Enable command-line completion for `/` and `?`
