@@ -11,6 +11,7 @@
 - `y`ank
 - `t`ill / un`t`il
 - `f`ind
+- `^`/`$` start/end of line - as in a regex
 - move/select
     - `b`ack a word
     - `w`ord / for`w`ard
@@ -22,9 +23,18 @@
         - `a(` around block
         - `i(` inside block
 - `%` - percenthesis (parenthesis)
+- `>>` - shift right
+    - `<<` - shift left
 
 ## WIP
 
+- `/` and `?` search forward/backward (I bet many don't know it, or at least not `?`)
+    - `n`ext and `N` (shift+n == opposite of `n`ext)
+- `.` - repeat last command (can show next to `<<`?)
+- `g`oto (in many cases, but not all)
+    - `gg` - start of file
+    - `G` - end of file
+- `0` start of non-blank chars (FYI end blanks not common so no equivalent)
 - Line level (capitalized)
     - cursor movement
         - `H`ighest line (top)
@@ -41,11 +51,13 @@
     - `J`oin lines
 - `xp`ose => `transpose`
 - surrounding (i.e. nvim-surround, et al)
-    - `cs"` [c]hange [s]urrounding to _
-    - `ds"` [d]elete [s]urrounding _
+    - `cs"_` [c]hange [s]urrounding `"` to `_`
+    - `ds"` [d]elete [s]urrounding `_`
     - `ys{motion}"` [y]ou [s]urround (I hate this purported mnemonic, it's not at all memorable) - `y`oke? (as in attach a cross bar with ends that attach to cattle?) need smth new... or maybe this one is just gonna have to be its c/d/y and c/d have good mnemonics, so y is left over?
+        - `ysl_` - surround one character with `_`
 - command help
     - `:h c` -  can lookup any char and get its help page
+        - `:h g` - cmds prefixed with `g`
     - `:h index` - index of builtin keymaps (not user defined)
     - `:h c_` - cmap builtins
     - `:h down` - wilder/nvim-cmp cmdline completions can be fuzzy filtered (FYI lowercase matches case insensitivee, uppercase letter only match uppercase - in most fuzzy match algos)
