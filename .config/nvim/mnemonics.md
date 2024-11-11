@@ -91,6 +91,7 @@
     - `J`oin lines
 - `xp`ose => `transpose`
 - surrounding (i.e. nvim-surround, et al)
+    - TODO move most of this to cheatsheet.md, leave only mnemonics here
     - `cs"_` [c]hange [s]urrounding `"` to `_`
     - `ds"` [d]elete [s]urrounding `_`
     - `ys{motion}"` - [y]ield [s]urrounding `"`
