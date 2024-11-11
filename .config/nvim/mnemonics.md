@@ -16,6 +16,11 @@
 - `t`ill / un`t`il
 - `f`ind
 - motions
+    - `hjkl`
+        - `h` - left(most) key
+        - `l` - right(most) key
+        - `j` - think arrow pointing down
+        - `k` - up (opposite of j)
     - `b`ack a word
     - `w`ord / for`w`ard
     - `e`nd of word
