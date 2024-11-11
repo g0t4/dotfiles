@@ -152,7 +152,9 @@ end
 -- end
 vim.api.nvim_create_autocmd("BufWinEnter", {
     callback = function()
-        if not (vim.bo.filetype == "help") then
+        -- FYI `:h eyeliner` filetype is markdown, so don't use filetype, instead use buftype
+        -- TODO is buftype == "help" a viable check?
+        if not (vim.bo.buftype == "help") then
             return
         end
         -- TODO do I want this to first check existing splits?
