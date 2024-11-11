@@ -93,8 +93,12 @@
 - surrounding (i.e. nvim-surround, et al)
     - `cs"_` [c]hange [s]urrounding `"` to `_`
     - `ds"` [d]elete [s]urrounding `_`
-    - `ys{motion}"` [y]ou [s]urround (I hate this purported mnemonic, it's not at all memorable) - `y`oke? (as in attach a cross bar with ends that attach to cattle?) need smth new... or maybe this one is just gonna have to be its c/d/y and c/d have good mnemonics, so y is left over?
-        - `ysl_` - surround one character with `_`
+    - `ys{motion}"` - [y]ield [s]urrounding `"`
+        - yield surrounding char (yield surrounding ") - kinda sounds good
+        - official: [y]ou [s]urround (I hate this purported mnemonic, it's not at all memorable) - `y`oke? (as in attach a cross bar with ends that attach to cattle?) need smth new... or maybe this one is just gonna have to be its c/d/y and c/d have good mnemonics, so y is left over?
+    - `ys{motion}t[chars]` - surround w/ tags (i.e. html)
+    - `yss{char}` - surround line
+        - `ySS{char}` - surround line above and below
 - command help
     - `:h c` -  can lookup any char and get its help page
         - `:h g` - cmds prefixed with `g`
