@@ -50,6 +50,8 @@
     - `[[`/`]]` - sections (i.e. markdown headers, or start of func)
         - `[]`/`][` - end of func
     - sentence
+- insert `o`ne line below, `O`ne above?
+    - `p`aste below, `P`aste above
 - `g`oto (in many cases, but not all)
     - `gg` - start of file
     - `G` - end of file
