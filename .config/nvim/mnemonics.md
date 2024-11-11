@@ -99,6 +99,14 @@
     - `ys{motion}t[chars]` - surround w/ tags (i.e. html)
     - `yss{char}` - surround line
         - `ySS{char}` - surround line above and below
+    - `<C-g>` insert mode commands
+        - `<C-g>s"` "*" with cursor between
+        - `<C-g>S"` "\n*\n" - above/belo{
+    - `v_S{char}` - { surround } selection
+    - closing vs opening - `()`, `{}`, `[]`, and `<>`
+        - `{` open means add/remove inner space (even if already spaces at start/end of selection)
+        - `}` no add/rm spaces
+        - applies to y/d/c - for c can apply to both from/to char
 - command help
     - `:h c` -  can lookup any char and get its help page
         - `:h g` - cmds prefixed with `g`
