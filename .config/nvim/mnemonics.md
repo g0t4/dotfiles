@@ -6,6 +6,7 @@
 - `A`ppend at the End
     - `I`nsert at the Start
     - `a` is for after, so `i` is before - the current cursor (in normal mode)
+    - `gi` is go to last insert mode cursor position (i.e. change your last edit)
 - [`J`oin (lines)](https://www.youtube.com/watch?v=1x9jRt53ZYA)
 - `d`elete
 - `c`hange (change implies insert mode)
@@ -14,7 +15,7 @@
 - `y`ank
 - `t`ill / un`t`il
 - `f`ind
-- move/select
+- motions
     - `b`ack a word
     - `w`ord / for`w`ard
     - `e`nd of word
