@@ -10,8 +10,11 @@ return {
     --
 
     {
-        'm4xshen/hardtime.nvim', -- tons of features, recommends, block repeated key use, etc
-        requires = { "MunifTanjim/nui.nvim", "nvim-lua/plenary.nvim" },
+        'm4xshen/hardtime.nvim',    -- tons of features, recommends, block repeated key use, etc
+        dependencies = {
+            "MunifTanjim/nui.nvim", -- for report float window
+            "nvim-lua/plenary.nvim"
+        },
         config = function()
             local version = vim.version()
             if version.major == 0 and version.minor < 10 then
