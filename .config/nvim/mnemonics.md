@@ -14,7 +14,6 @@
 - `y`ank
 - `t`ill / un`t`il
 - `f`ind
-- `^`/`$` start/end of line - as in a regex
 - move/select
     - `b`ack a word
     - `w`ord / for`w`ard
@@ -42,6 +41,10 @@
 
 ## WIP
 
+- `^`/`$` start/end of line
+    - `$` same as regex
+    - `^` is first non-blank so that isn't 100% the same
+    - `0` is start of line
 - `/` and `?` search forward/backward (I bet many don't know it, or at least not `?`)
     - `n`ext and `N` (shift+n == opposite of `n`ext)
 - `.` - repeat last command (can show next to `<<`?)
