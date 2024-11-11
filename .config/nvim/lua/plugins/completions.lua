@@ -60,9 +60,11 @@ local plugin_lspconfig = {
                     '<cmd>lua vim.lsp.buf.definition()<CR>', buffer_keymap_options)
                 vim.keymap.set('n', 'gy',
                     '<cmd>lua vim.lsp.buf.type_definition()<CR>', buffer_keymap_options)
-                vim.keymap.set('n', 'gi',
+                -- TODO what to use for gi? since it is a builtin command
+                vim.keymap.set('n', '<leader>gi',
                     '<cmd>lua vim.lsp.buf.implementation()<CR>', buffer_keymap_options)
-                vim.keymap.set('n', 'gr',
+                -- TODO what to use for gr? its a builtin cmd too, do I care about replacing it?
+                vim.keymap.set('n', '<leader>gr',
                     '<cmd>lua vim.lsp.buf.references()<CR>', buffer_keymap_options)
                 vim.keymap.set('n', '<F12>',
                     '<cmd>lua vim.lsp.buf.definition()<CR>', buffer_keymap_options)
