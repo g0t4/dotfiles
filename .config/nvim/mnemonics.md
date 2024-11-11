@@ -4,7 +4,8 @@
 
 
 - `A`ppend at the End
-- `I`nsert at the Start
+    - `I`nsert at the Start
+    - `a` is for after, so `i` is before - the current cursor (in normal mode)
 - [`J`oin (lines)](https://www.youtube.com/watch?v=1x9jRt53ZYA)
 - `d`elete
 - `c`hange (change implies insert mode)
