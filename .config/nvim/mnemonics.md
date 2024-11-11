@@ -29,6 +29,15 @@
 - `%` - percenthesis (parenthesis)
 - `>>` - shift right
     - `<<` - shift left
+- commands
+    - `:!{shell_cmd}` (much like a shebang!)
+    - `:r`ead
+    - `:w`rite
+    - `:wq` write and quit
+    - `:q` quit
+    - `:q!` quit without saving
+    - `:e` edit
+    - `:h` help
 
 ## WIP
 
