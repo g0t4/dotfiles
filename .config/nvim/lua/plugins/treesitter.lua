@@ -88,6 +88,7 @@ return {
         dependencies = {
             { 'nvim-treesitter/nvim-treesitter' },
         },
+        -- FYI alt+p works (next match), and alt+n should do next but is swallowed by nvim/iterm2, also alt+i in visual should work as a text object for selection but doesn't work which is fine as `iw`/`iW` works fine
         -- config = function()
         --     require("illuminate").configure({
         --         -- under_cursor = false -- not the current word, only other matches
