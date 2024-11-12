@@ -35,6 +35,26 @@ function setup_workspace()
         " PRN do I wanna remove blank?
         set sessionoptions=blank,folds,help,tabpages,winsize
 
+        function EraseSession()
+            " preserves shada! i.e. cmd history to call this func!
+            if !filereadable(g:session_file)
+                return
+            endif
+            call delete(g:session_file)
+        endfunction
+
+        function QuitWithEraseSession()
+            call EraseSession()
+            call QuitWithoutSavingSession()
+        endfunction
+
+        function QuitWithoutSavingSession()
+            augroup SaveSessionOnQuit
+                autocmd!
+            augroup END
+            quitall
+        endfunction
+
         function RestoreSession()
 
             " capture passed files BEFORE session overwrites them which is ... WTH? why?
@@ -82,7 +102,10 @@ function setup_workspace()
         " new comment coloring with treesitter queries seems to work fine w/ session restore
         " FYI old regex syntax based comment colors were a hot mess when loading sessions (never colored initial buffer/files correctly)
 
-        autocmd VimLeavePre * call OnLeaveSaveSession()
+        augroup SaveSessionOnQuit
+            autocmd!
+            autocmd VimLeavePre * call OnLeaveSaveSession()
+        augroup END
 
         " TODO add keymap for save session? (think save conventional session file)
         function OnLeaveSaveSession()
