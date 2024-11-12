@@ -1253,7 +1253,7 @@ function _get_file_extension
     echo $argv[1] | sed 's/.*\.//'
 end
 
-function video_editing_concat_files
+function _ffmpeg_concat
     set extension (_get_file_extension $argv[1])
     set output_file "combined.$extension"
 
@@ -1262,9 +1262,19 @@ function video_editing_concat_files
         -c copy $output_file
 end
 
+function video_editing_parts_to_shifted_mp4
+    set extension (_get_file_extension $argv[1])
+    set output_file "combined.$extension"
+    # TODO don't need concat intermediate, can do *.mkv => *.shifted.mp4
+    _ffmpeg_concat $argv
+
+    video_editing_mkv_to_mp4_shifted_audio_100ms $output_file
+end
+
 function video_editing_mkv_to_mp4_shifted_audio_100ms
     # mkv to mp4 first
     set input_file "$argv[1]"
+    # TODO dont need mp4 intermediate
     video_editing_mkv_to_mp4 "$input_file"
     video_editing_shift_audio_100ms "$input_file.mp4" # careful w/ naming if I change conventions in mkv_to_mp4
 end
