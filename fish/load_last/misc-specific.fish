@@ -1279,7 +1279,7 @@ end
 function video_editing_parts_to_shifted_mp4
     set combined_file (_get_output_file_based_on_first_file combined.mp4 $argv)
 
-    # TODO don't need concat intermediate, can do *.mkv => *.shifted.mp4
+    # TODO remove intermediate when done, using this b/c it would be a mess below to concat + shift audio
     _ffmpeg_concat $argv
 
     # based on: ffmpeg -i foo.mp4  -itsoffset 0.1 -i foo.mp4  -map 0:v -map 1:a -c:v copy -c:a aac foo-shifted100ms.mp4
@@ -1291,8 +1291,19 @@ function video_editing_parts_to_shifted_mp4
         return
     end
     ffmpeg -i "$combined_file" -itsoffset 0.1 -i "$combined_file" -map 0:v -map 1:a -c:v copy -c:a aac "$output_file"
+    trash $combined_file # be safe with rm, if it was wrong file I wanna have it be recoverable
 end
 
+function video_editing_boost_audio_dB_by
+    set boost_dB $argv[2]
+    # TODO name based on file stem too
+    set input_file (realpath $argv[1])
+    set file_extension (_get_first_file_extension $input_file)
+    set boosted_file (string replace -r "\.$file_extension\$" ".$boost_dB.$file_extension" "$input_file")
+    # FYI I use sep audio detect to manually decide the boost, TODO maybe change to automate that? based on highest sample?
+    #ffmpeg -i finalvim-c-as-in-change.m4v  -af "volume=7dB" -c:v copy finalvim-c-as-in-change.boosted7dB.m4v
+    echo ffmpeg -i "$input_file" -af "volume=$boost_dB" -c:v copy "$boosted_file"
+end
 
 if command -q npm
 
