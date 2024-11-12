@@ -1295,6 +1295,7 @@ function video_editing_parts_to_shifted_mp4
 end
 
 function video_editing_boost_audio_dB_by
+    # usage:    video_editing_boost_audio_dB_by foo.mp4 7dB
     set boost_dB $argv[2]
     set input_file (realpath $argv[1])
     set file_extension (_get_first_file_extension $input_file)
