@@ -1248,27 +1248,40 @@ function _video_editing_ffmpeg_file_list
     end
 end
 
-function _get_file_extension
+function _get_first_file_extension
     # PRN move to top level fish function?
     echo $argv[1] | sed 's/.*\.//'
 end
 
+function _get_first_file_dir
+    realpath $(dirname $argv[1])
+end
+
+function _get_output_file_based_on_first_file
+    set output_name $argv[1] # i.e. combined (first arg is not path)
+    set paths $argv[2..-1] # i.e. /Users/wes/foo/bar/baz.mp4 /Users/wes/foo/bar/baz.mp4
+
+    set extension (_get_first_file_extension $paths[1])
+    set path (_get_first_file_dir $paths[1])
+    set output_file "$path/$output_name.$extension"
+    echo $output_file
+end
+
 function _ffmpeg_concat
-    set extension (_get_file_extension $argv[1])
-    set output_file "combined.$extension"
+    set combined_file (_get_output_file_based_on_first_file combined $argv)
 
     ffmpeg -f concat -safe 0 \
         -i (_video_editing_ffmpeg_file_list $argv | psub) \
-        -c copy $output_file
+        -c copy $combined_file
 end
 
 function video_editing_parts_to_shifted_mp4
-    set extension (_get_file_extension $argv[1])
-    set output_file "combined.$extension"
+    set combined_file (_get_output_file_based_on_first_file combined $argv)
+
     # TODO don't need concat intermediate, can do *.mkv => *.shifted.mp4
     _ffmpeg_concat $argv
 
-    video_editing_mkv_to_mp4_shifted_audio_100ms $output_file
+    video_editing_mkv_to_mp4_shifted_audio_100ms $combined_file
 end
 
 function video_editing_mkv_to_mp4_shifted_audio_100ms
