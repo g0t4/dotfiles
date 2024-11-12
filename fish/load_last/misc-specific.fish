@@ -1282,13 +1282,8 @@ function video_editing_parts_to_shifted_mp4
     # TODO don't need concat intermediate, can do *.mkv => *.shifted.mp4
     _ffmpeg_concat $argv
 
-    video_editing_shift_audio_100ms $combined_file
-end
-
-function video_editing_shift_audio_100ms
     # based on: ffmpeg -i foo.mp4  -itsoffset 0.1 -i foo.mp4  -map 0:v -map 1:a -c:v copy -c:a aac foo-shifted100ms.mp4
     # PRN add ms param? right now 100 works for my setup OBS+mixpre6v2/mv7+logibrio
-    set input_file "$argv"
     set file_extension (basename "$input_file" | awk -F. '{print $NF}') # only tested with m4v/mp4 (i.e. aac codec hard coded below)
     set output_file (string replace -r "\.$file_extension\$" ".shifted100ms.$file_extension" "$input_file")
     if test -f "$output_file"
