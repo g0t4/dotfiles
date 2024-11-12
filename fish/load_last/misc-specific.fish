@@ -1258,17 +1258,18 @@ function _get_first_file_dir
 end
 
 function _get_output_file_based_on_first_file
-    set output_name $argv[1] # i.e. combined (first arg is not path)
+    # ! assumes -c copy so really only works on mkv/mp4 and similar types
+    set output_name $argv[1] # i.e. combined.mp4 (first arg is output file name w/o path)
     set paths $argv[2..-1] # i.e. /Users/wes/foo/bar/baz.mp4 /Users/wes/foo/bar/baz.mp4
 
     set extension (_get_first_file_extension $paths[1])
     set path (_get_first_file_dir $paths[1])
-    set output_file "$path/$output_name.$extension"
+    set output_file "$path/$output_name"
     echo $output_file
 end
 
 function _ffmpeg_concat
-    set combined_file (_get_output_file_based_on_first_file combined $argv)
+    set combined_file (_get_output_file_based_on_first_file combined.mp4 $argv)
 
     ffmpeg -f concat -safe 0 \
         -i (_video_editing_ffmpeg_file_list $argv | psub) \
@@ -1276,20 +1277,12 @@ function _ffmpeg_concat
 end
 
 function video_editing_parts_to_shifted_mp4
-    set combined_file (_get_output_file_based_on_first_file combined $argv)
+    set combined_file (_get_output_file_based_on_first_file combined.mp4 $argv)
 
     # TODO don't need concat intermediate, can do *.mkv => *.shifted.mp4
     _ffmpeg_concat $argv
 
-    video_editing_mkv_to_mp4_shifted_audio_100ms $combined_file
-end
-
-function video_editing_mkv_to_mp4_shifted_audio_100ms
-    # mkv to mp4 first
-    set input_file "$argv[1]"
-    # TODO dont need mp4 intermediate
-    video_editing_mkv_to_mp4 "$input_file"
-    video_editing_shift_audio_100ms "$input_file.mp4" # careful w/ naming if I change conventions in mkv_to_mp4
+    video_editing_shift_audio_100ms $combined_file
 end
 
 function video_editing_shift_audio_100ms
