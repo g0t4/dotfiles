@@ -1241,6 +1241,13 @@ function video_editing_mkv_to_mp4
     ffmpeg -i "$input_file" -c copy "$output_file"
 end
 
+function video_editing_concat_mkvs
+    # test build concat file:
+    #cat (for p in $argv; echo "file '$(realpath $p)'"; end | psub)
+
+    ffmpeg -f concat -safe 0 -i ( for p in "$argv"; echo "file '$(realpath $p)'"; end | psub ) -c copy combined.mkv
+end
+
 function video_editing_mkv_to_mp4_shifted_audio_100ms
     # mkv to mp4 first
     set input_file "$argv[1]"
