@@ -47,7 +47,7 @@ if test -d "$clicked_path"
     exit 0
 end
 
-# # USE file command to decide if I want to use default handlers to open (or specific handler) 
+# # USE file command to decide if I want to use default handlers to open (or specific handler)
 set _mime_type (file --brief --mime-type "$clicked_path")
 echo "[DEBUG]: mime type: $_mime_type"
 
@@ -78,4 +78,9 @@ end
 code --goto "$clicked_path:$line_number" \
     "$vscode_scope_dir"
 
-# exit 1 # if you wanna see debug STDOUT messages above, uncomment this line and click "View" in the iTerm2 dialog
+#cd "$vscode_scope_dir"
+#nvim "$clicked_path"
+#env -i open -a iTerm -n
+# TODO open a new tab in iTerm2 (cd to dir) then open file in nvim (including line number)
+
+#exit 1 # if you wanna see debug STDOUT messages above, uncomment this line and click "View" in the iTerm2 dialog
