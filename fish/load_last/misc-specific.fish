@@ -822,7 +822,7 @@ if command -q apt
 
     function dpkg_L_tree
         # uses exa to append icons (left side only), pipes to awk to put icon on right side, pipes to treeify and icon ends up on right side
-        exa  (dpkg_L_files usbutils) --icons=always  | awk '{icon=$1; $1=""; sub(/^ /, ""); print $0, icon}' | treeify
+        exa (dpkg_L_files usbutils) --icons=always | awk '{icon=$1; $1=""; sub(/^ /, ""); print $0, icon}' | treeify
     end
 
     complete -c dpkg_L_tree -w dpkg_L_files
@@ -838,14 +838,14 @@ if command -q apt
     # ask o1-mini to "write me a fish shell function that runs dpkg -L foo on a package and then takes the output and formats it in a tree hierarchy like the tree command"
     # this works, have not yet reviewed it... wanna save that for later video.. as I also found `cargo install treeify`
     function dpkg_tree_awk
-      if not set -q argv[1]
-        echo "Usage: dpkg_tree_awk <package_name>"
-        return 1
-      end
+        if not set -q argv[1]
+            echo "Usage: dpkg_tree_awk <package_name>"
+            return 1
+        end
 
-      set pkg $argv[1]
+        set pkg $argv[1]
 
-      dpkg -L $pkg | sort | awk '
+        dpkg -L $pkg | sort | awk '
       BEGIN {
           FS="/"
       }
@@ -1241,11 +1241,25 @@ function video_editing_mkv_to_mp4
     ffmpeg -i "$input_file" -c copy "$output_file"
 end
 
-function video_editing_concat_mkvs
-    # test build concat file:
-    #cat (for p in $argv; echo "file '$(realpath $p)'"; end | psub)
+function _video_editing_ffmpeg_file_list
+    for p in $argv
+        # use realpath to get absolute path, that way no issues w/ relative paths
+        echo "file '$(realpath $p)'"
+    end
+end
 
-    ffmpeg -f concat -safe 0 -i ( for p in "$argv"; echo "file '$(realpath $p)'"; end | psub ) -c copy combined.mkv
+function _get_file_extension
+    # PRN move to top level fish function?
+    echo $argv[1] | sed 's/.*\.//'
+end
+
+function video_editing_concat_files
+    set extension (_get_file_extension $argv[1])
+    set output_file "combined.$extension"
+
+    ffmpeg -f concat -safe 0 \
+        -i (_video_editing_ffmpeg_file_list $argv | psub) \
+        -c copy $output_file
 end
 
 function video_editing_mkv_to_mp4_shifted_audio_100ms
