@@ -31,6 +31,7 @@
         },
         "MD012": false,
         "line-length": false,
+        "MD034": false, // no-bare-urls, I like them
         // FYI tag groups combine rules: https://github.com/DavidAnson/markdownlint?tab=readme-ov-file#tags (seems to only enable/disable though, so suboptions of similar rules cannot be set like can't do indent on all indent related rules
         // FYI I really just want some basic format consistency in spacing (i.e. after - list items) and don't give a RATS A about rules, that said if they don't get in my way they are fine
     },
