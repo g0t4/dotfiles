@@ -8,6 +8,9 @@
     // keep empty lines, at least 1... so I can partition sections (i.e. in this file), newlines also help movement with vim {}
     "json.format.keepLines": true,
 
+    // OK, for markdown I am biting the bullet and using:
+    // markdownlint for diagnostics
+    // prettier for formatting (and getting over 2 level indent, it really will be fine wes)
     "markdownlint.config": {
         // rules: https://github.com/DavidAnson/markdownlint?tab=readme-ov-file#rules--aliases
         "MD007": {
