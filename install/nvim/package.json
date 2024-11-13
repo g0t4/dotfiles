@@ -1,0 +1,18 @@
+{
+  "name": "nvim",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "remark-cli": "^12.0.1",
+    "remark-preset-lint-consistent": "^6.0.0",
+    "remark-preset-lint-recommended": "^7.0.0",
+    "remark-toc": "^9.0.0"
+  }
+}
