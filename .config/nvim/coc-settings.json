@@ -5,8 +5,15 @@
     "pyright.inlayHints.parameterTypes": false,
     "pyright.inlayHints.functionReturnTypes": false,
 
+    // *** json
+    // *** coc-json - (not prettier, see below)
     // keep empty lines, at least 1... so I can partition sections (i.e. in this file), newlines also help movement with vim {}
     "json.format.keepLines": true,
+    // "json.format.defaultFormatter": "coc-json",
+
+    // *** prettier - so far, for markdown only
+    // "prettier.formatterPriority": -1, // make prettier the fallback formatter (works but not needed as I can just disable it here:)
+    "prettier.disableLanguages": [ "json" ], // *** using coc-json formatter for now
 
     // *** markdown:
     // markdownlint - for diagnostics
