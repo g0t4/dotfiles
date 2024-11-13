@@ -152,7 +152,7 @@ These are custom mappings in coc to add LSP features based on LSP availability..
 ### document movement
 
 - large movements
-    - scroll current cursor line to... (***)
+    - scroll current cursor line to...
         - `zz` or `z.` - center of screen
         - `zt` or `z<CR>` - top of screen
         - `zb` or `z-` - bottom of screen
@@ -179,7 +179,7 @@ These are custom mappings in coc to add LSP features based on LSP availability..
         - FYI, case is ignored for `Ctrl` keymaps
 - medium movements
     - `(` / `)` - by sentence
-    - `{` / `}` - by paragraph (by newline) // *** favorite (I leave new lines strategically now)
+    - `{` / `}` - by paragraph (by newline) // favorite (I leave new lines strategically now)
     - `[[` / `]]` - by section (in markdown, by headers)
         - `[]` / `][` - end of section
 - small movements
