@@ -11,6 +11,7 @@
     // OK, for markdown I am biting the bullet and using:
     // markdownlint for diagnostics
     // prettier for formatting (and getting over 2 level indent, it really will be fine wes)
+    // I mostly want formatting so my list indents are consistent and if it is only 2 then fine, I hate reformatting manually, esp when copying and pasting content that has other level of indent
     "markdownlint.config": {
         // rules: https://github.com/DavidAnson/markdownlint?tab=readme-ov-file#rules--aliases
         "MD007": {
