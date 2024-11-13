@@ -53,7 +53,11 @@ if test -d /snap/bin
     export PATH="/snap/bin:$PATH"
 end
 
-# ? fix ~/.dotnet/tools in path (replace with abs path) => see zshrc
+# ? fix ~/.dotnet/tools in path (replace with abs path) => see zshrc (ignore wrong path in /etc/paths.d/dotnet-cli-tools with ~/.dotnet/tools)
+if test -d "$HOME/.dotnet/tools"
+    # make dotnet tool install --global work (add to PATH)
+    export PATH="$HOME/.dotnet/tools:$PATH"
+end
 
 ### COMPLETIONS path:
 if test -d $WES_DOTFILES/fish/completions/
