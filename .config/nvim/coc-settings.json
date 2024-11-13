@@ -79,6 +79,7 @@
     "languageserver": {
         // *** csharp-ls ***
         "csharp-ls": {
+            // todo get rid of blocking messages on startup, every time wow... i.e. the MIT license messages that I have to hit Enter through and every time locating a solution/project file message by message
             "command": "csharp-ls",
             "filetypes": [ "cs" ],
             "rootPatterns": [ "*.csproj", ".vim/", ".git/", ".hg/" ]
