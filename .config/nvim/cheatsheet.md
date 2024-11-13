@@ -222,7 +222,7 @@ These are custom mappings in coc to add LSP features based on LSP availability..
 - `is`/`as` - sentence
 - `ip`/`ap` - paragraph
 - blocks (by surrounding char)
-    - `[`, `(`==`b`, `{`==`B`, `<`/`>`, `"`, `'`, `\``
+    - `[`, `(`==`b`, `{`==`B`, `<`/`>`, `"`, `'`, backticks
     - thus `vi[` selects between `[` and `]`
     - FYI `va[` also selects the surrounding brackets!
     - SPANS multiple lines!
