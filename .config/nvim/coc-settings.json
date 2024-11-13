@@ -11,7 +11,7 @@
     "markdownlint.config": {
         // rules: https://github.com/DavidAnson/markdownlint?tab=readme-ov-file#rules--aliases
         "MD007": {
-            "indent": 4
+            "indent": 2
             // https://github.com/DavidAnson/markdownlint/blob/main/doc/md007.md
             // default is 2 and doesn't respect .editorconfig NOR vim variables for tab size
         },
