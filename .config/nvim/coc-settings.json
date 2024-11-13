@@ -24,6 +24,8 @@
         // FYI tag groups combine rules: https://github.com/DavidAnson/markdownlint?tab=readme-ov-file#tags (seems to only enable/disable though, so suboptions of similar rules cannot be set like can't do indent on all indent related rules
         // FYI I really just want some basic format consistency in spacing (i.e. after - list items) and don't give a RATS A about rules, that said if they don't get in my way they are fine
     },
+
+    // *** lua:
     // other people use sumneko-lua... I got coc-lua to work just fine... btw make sure :CocConfig opens this file, else maybe your symlink is messed up from dotfiles repo
     // best way to test this config, open split view with config on top and on bottom a lua file with an issue, modify config and save it and it will refresh the lua file coc diagnostics immediately, but not if edited in another instance of VIM or not using VIM btw
     // the following config (workspace.library, runtime.version/path) were added to make vim globals work in coc-lua (not marked as undefined and have completions)
