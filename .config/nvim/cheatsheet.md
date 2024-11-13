@@ -244,7 +244,7 @@ These are custom mappings in coc to add LSP features based on LSP availability..
     - `ys4aw"` - surround 4 inner "words with double quotes"
       - FYI when you use `ysiw` it seems to switch into a select like mode where you can see what will be wrapped
       - prefer `aw` over `iw` for spanning multiple words
-    - `ySSt{tag}` - <p>text</p>
+    - `ySSt{tag}` - `<p>text</p>`
 - Visual mode
   - `S{with}` => `VS"`, `viwS"` surround inner word with ""
 - Insert mode
