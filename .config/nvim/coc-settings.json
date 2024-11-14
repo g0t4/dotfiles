@@ -86,17 +86,19 @@
     //
     // FYI another persons' config: https://raw.githubusercontent.com/oppara/dotfiles/611ea809e380d5b4e3e374568a85e52e744a429e/config/nvim/coc-settings.json
     "languageserver": {
+
         // *** csharp-ls ***
         // PRN try omnisharp-roslyn instead of csharp-ls (download archive from https://github.com/OmniSharp/omnisharp-roslyn/releases)
         //     and dotnet-format for formatting?
         // csharp-ls is supposed to be faster than omnisharp-roslyn, and not require heavy deps (i.e. mono on mac/linux)
         "csharp-ls": {
             // todo get rid of blocking messages on startup, every time wow... i.e. the MIT license messages that I have to hit Enter through and every time locating a solution/project file message by message
+            // interestin that this doesn't always happen, i.e. if I have codeql/csproj's Program.cs it doesn't block me, if i have dotnet/example/csproj it does, smth to do w/ multi project repos?
+            //   FYI "args": [ "--loglevel", "warning" ], // did not do anything to help
             //      wow, cannot get rid of the messages?! https://github.com/razzmatazz/csharp-language-server/issues/64
             "command": "csharp-ls",
             "filetypes": [ "cs" ],
             "rootPatterns": [ "*.csproj", ".vim/", ".git/", ".hg/" ],
-
         },
 
         // https://github.com/ndonfris/fish-lsp#client-configuration-required
