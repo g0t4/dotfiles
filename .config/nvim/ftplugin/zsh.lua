@@ -1,9 +1,6 @@
 -- ensure don't override base ftplugin for zsh:
 vim.cmd('runtime! ftplugin/zsh.lua')
 
--- print("hi from zsh")
---
-
 -- for now, use bash file type for zsh given treesitter lacks zsh support
 vim.bo.filetype = "bash"
 -- alternatively, disable treesitter for zsh
