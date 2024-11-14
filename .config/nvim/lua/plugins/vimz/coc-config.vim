@@ -131,7 +131,8 @@ nmap <silent> <leader>gr <Plug>(coc-references)
 nmap <silent> <F12> <Plug>(coc-definition) " vscode
 nmap <silent> <S-F12> <Plug>(coc-references) " vscode
 
-" Use K to show documentation in preview window
+" Use K to show documentation in preview window (I have F1 for help pages)
+" FYI K (shift+k) normally maps to man/help pages
 nnoremap <silent> K :call ShowDocumentation()<CR>
 
 function! ShowDocumentation()
