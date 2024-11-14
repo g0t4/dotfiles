@@ -23,6 +23,7 @@ let g:coc_global_extensions = [
     " FYI coc-calc shows the range of what can be done... "1 + 2 = " and it suggests the result "3"
     " PRN https://github.com/iamcco/coc-diagnostic => generic integration of diagnostics tools (make LSP adapter for them, IIUC)
     " brew install zig zls " also consider https://github.com/ziglang/zig.vim
+    "\ 'coc-snippets', " TODO investigate .. probably just want copilot completions alone
 
 " FYI
 "  :CocList extensions  " and others
