@@ -1,5 +1,14 @@
 {
 
+    // *** coc settings:
+    //   :h coc-config
+    //
+    // "codeLens.enable": false, // PRN disable this if slow too, so far only big issues are with inlay hints
+    //
+    "inlayHint.enable": false, // slow and get in the way (i.e. type hints that aren't in actual code)
+    // "inlayHint.position": "eol", // terrible idea! stick with inline, or none
+    // "inlayHint.enableParameter": false, // can remove just param hints
+
     // code lens like inlay hints are a hot mess of slow to update and so when editing python they remain as if real code and not and you cannot tell until they refresh and leave and that is if you dont have a mistake in your indentation or code in which case they wont update
     "pyright.inlayHints.variableTypes": false,
     "pyright.inlayHints.parameterTypes": false,
