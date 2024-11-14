@@ -1,1 +1,1 @@
-print("hi from zsh")
+-- print("hi from zsh")
