@@ -96,6 +96,8 @@
             // interestin that this doesn't always happen, i.e. if I have codeql/csproj's Program.cs it doesn't block me, if i have dotnet/example/csproj it does, smth to do w/ multi project repos?
             //   FYI "args": [ "--loglevel", "warning" ], // did not do anything to help
             //      wow, cannot get rid of the messages?! https://github.com/razzmatazz/csharp-language-server/issues/64
+            //   interesting, at some point it stop blocking and just shows messages at bottom in cmdline without needing to hit Enter repeatedly, that smells very much like when sometimes I have to hit enter after opening vim and a session restore, its random too
+            //   !! this may very well be a timing issue on plugin load and sometimes things load before others and thus only sometimes I get prompted to hit Enter!
             "command": "csharp-ls",
             "filetypes": [ "cs" ],
             "rootPatterns": [ "*.csproj", ".vim/", ".git/", ".hg/" ],
