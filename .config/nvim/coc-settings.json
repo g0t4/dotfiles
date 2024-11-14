@@ -95,7 +95,7 @@
             // hit-enter - several long messages on startup, to avoid needing to hit Enter:
             //   happens when cmdheight=1 and not big enough to show full message (IIUC tT in shortmess don't apply to this b/c Ex mode)
             //   *** zoom out so messages fit
-            //   *** hit `q` to stop listing messages (or j key)
+            //   *** hit `q` to stop listing messages (or j key, then use g< to see all messages if needed, before next cmd runs)
             //   set cmdheight=2 (yuck)
             //   see :h hit-enter (in message.txt)
             //       g< - see messages from last cmd (msgs before q)
