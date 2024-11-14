@@ -91,9 +91,11 @@
         //     and dotnet-format for formatting?
         "csharp-ls": {
             // todo get rid of blocking messages on startup, every time wow... i.e. the MIT license messages that I have to hit Enter through and every time locating a solution/project file message by message
+            //      wow, cannot get rid of the messages?! https://github.com/razzmatazz/csharp-language-server/issues/64
             "command": "csharp-ls",
             "filetypes": [ "cs" ],
-            "rootPatterns": [ "*.csproj", ".vim/", ".git/", ".hg/" ]
+            "rootPatterns": [ "*.csproj", ".vim/", ".git/", ".hg/" ],
+
         },
 
         // https://github.com/ndonfris/fish-lsp#client-configuration-required
