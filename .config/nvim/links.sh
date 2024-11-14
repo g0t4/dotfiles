@@ -18,5 +18,7 @@ mkdir -p ~/.config/nvim
 ln -s $WES_DOTFILES/.config/nvim/init.lua ~/.config/nvim/init.lua
 ln -s $WES_DOTFILES/.config/nvim/lua ~/.config/nvim/lua
 ln -s $WES_DOTFILES/.config/nvim/queries ~/.config/nvim/queries  # for treesitter, and in my case to add highlighting on TODO comments, etc ...  alternative to syntax/regex matches
+# ln -s $WES_DOTFILES/.config/nvim/spell ~/.config/nvim/spell # PRN add this
+ln -s $WES_DOTFILES/.config/nvim/ftplugin ~/.config/nvim/ftplugin
 
 ln -s $WES_DOTFILES/.config/nvim/coc-settings.json ~/.config/nvim/coc-settings.json
