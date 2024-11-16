@@ -109,11 +109,11 @@ def clone_url(parsed) -> str:
     use_https = parsed.domain in ["gitlab.gnome.org","sourceware.org", "git.kernel.org"]
     # TODO change to default to https and override for github and specific others where I want ssh
     if use_https:
-        return f"https://{parsed.domain}/{parsed.owner}/{parsed.repo}"
+        return f"https://{parsed.domain}/{parsed.repo}"
     if parsed.domain == "gcc.gnu.org":
         return parsed.url
     # prefer ssh for git repos (simple, standard, supports ssh auth), plus I've been using this forever now and it's been great.
-    return f"git@{parsed.domain}:{parsed.owner}/{parsed.repo}"
+    return f"git@{parsed.domain}:{parsed.repo}"
 
 
 def relative_repo_dir(parsed) -> str:
@@ -126,44 +126,56 @@ def relative_repo_dir(parsed) -> str:
     elif host == "bitbucket.org":
         host = "bitbucket"
     # switch to host b/c platform is not the same as host, i.e. sourceware.org has gitlab as platform (IIGC that is the underlying private host that it runs, but I want repos organized based on domain they are hosted on)... in many cases platform==host so that is why that originally worked but no longer suffices.
-    return host + "/" + parsed.owner + "/" + parsed.repo
+    return host + "/" + parsed.repo
 
+
+class ParsedRepo:
+
+    def __init__(self, domain, repo):
+        self.domain = domain
+        self.repo = repo
+
+    def __str__(self):
+        return f"ParsedRepo(domain={self.domain}, repo={self.repo})"
 
 def parse_repo(url: str):
 
     url = url.strip()
 
-    p = giturlparse.parse(url, check_domain=True)
-    if p.valid:
-        return p
+    from urllib.parse import urlparse
+
+    # strip .git
+    if url.endswith(".git"):
+        url = url[:-4]
+
+    # TODO turn http into https?
+
+    if url.startswith("git@"):  # SSH URL
+        # git@host:path/to/repo.git
+        ssh_pattern = r"git@([^:]+):(.+)"
+        match = re.match(ssh_pattern, url)
+        if match:
+            host, path = match.groups()
+            return ParsedRepo(domain=host, repo=path)
+
+    elif url.startswith("https://"):  # HTTPS or similar
+        parsed = urlparse(url)
+        path = parsed.path.lstrip("/")  # Remove leading '/'
+        return ParsedRepo(domain=parsed.netloc, repo=path)
 
     # see if non-url passed and use defaults for github:
     if not re.search(r"\/", url):
         # repo name only (no slashes)
         #     "g0t4" => "github.com:g0t4/{url}"
-        url = f"git@github.com:g0t4/{url}.git"
+        return ParsedRepo(domain="github.com", repo="g0t4/" + url)
     elif re.search(r"\/", url):
         # org/repo name only (one slash)
         #     "g0t4/dotfiles" => "github.com:g0t4/dotfiles"
-        url = f"git@github.com:{url}.git"
+        # or more levels too
+        #
+        return ParsedRepo(domain="github.com", repo=url)
 
-    p = giturlparse.parse(url)
-    # PRN raise on `not p.valid`
-    return p
-
-    # p.url = 'git@github.com:g0t4/dotfiles'
-    # p.domain = 'github.com'
-    #   p.platform = 'github'
-    # p.owner = 'g0t4'
-    #   p.repo = 'dotfiles'
-    #   p.pathname = 'g0t4/dotfiles'
-    # p._user = 'git'
-    #   p.protocol = 'ssh'
-    # dump p obj nicely formatted:
-    # pprint.pprint(vars(p))
-    # docs lists attrs nicely:
-    #   https://pypi.org/project/giturlparse/
-    #   https://github.com/nephila/giturlparse
+    return None  # Unable to parse
 
 def is_windows():
     return os.name == 'nt'

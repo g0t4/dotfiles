@@ -8,14 +8,12 @@ class TestParseGeneral(unittest.TestCase):
         # .git suffix shown in the various "clone" popups (confirmed: github,bitbucket,gitlab)
         parsed = parse_repo('https://gitlab.com/g0t4/dotfiles.git')
         self.assertEqual(parsed.domain, 'gitlab.com')
-        self.assertEqual(parsed.owner, 'g0t4')
-        self.assertEqual(parsed.repo, 'dotfiles')
+        self.assertEqual(parsed.repo, 'g0t4/dotfiles')
 
     def test_space_padding_ignores(self):
         parsed = parse_repo('  https://gitlab.com/g0t4/dotfiles.git  ')
         self.assertEqual(parsed.domain, 'gitlab.com')
-        self.assertEqual(parsed.owner, 'g0t4')
-        self.assertEqual(parsed.repo, 'dotfiles')
+        self.assertEqual(parsed.repo, 'g0t4/dotfiles')
 
 
 class TestMapToRepoDir(unittest.TestCase):
@@ -68,22 +66,19 @@ class TestParseThirdParty(unittest.TestCase):
     def test_sourceware_org_urls(self):
         parsed = parse_repo('https://sourceware.org/git/glibc.git')
         self.assertEqual(parsed.domain, 'sourceware.org')
-        self.assertEqual(parsed.owner, 'git')
-        self.assertEqual(parsed.repo, 'glibc')
+        self.assertEqual(parsed.repo, 'git/glibc')
 
 class TestParseGitHub(unittest.TestCase):
 
     def test_github_urls(self):
         parsed = parse_repo('git@github.com:g0t4/dotfiles.git')
         self.assertEqual(parsed.domain, 'github.com')
-        self.assertEqual(parsed.owner, 'g0t4')
-        self.assertEqual(parsed.repo, 'dotfiles')
+        self.assertEqual(parsed.repo, 'g0t4/dotfiles')
 
     def test_github_https(self):
         parsed = parse_repo('https://github.com/g0t4/dotfiles')
         self.assertEqual(parsed.domain, 'github.com')
-        self.assertEqual(parsed.owner, 'g0t4')
-        self.assertEqual(parsed.repo, 'dotfiles')
+        self.assertEqual(parsed.repo, 'g0t4/dotfiles')
 
     def test_https_includes_branch_and_path(self):
         # this use case is NICE-TO-HAVE and not mission critical
@@ -93,16 +88,14 @@ class TestParseGitHub(unittest.TestCase):
         parsed = parse_repo(
             'https://github.com/g0t4/dotfiles/blob/master/git/linux.gitconfig')
         self.assertEqual(parsed.domain, 'github.com')
-        self.assertEqual(parsed.owner, 'g0t4')
-        self.assertEqual(parsed.repo, 'dotfiles')
+        self.assertEqual(parsed.repo, 'g0t4/dotfiles')
 
     # PRN map githubusercontent.com => github
     # def test_map_githubusercontent_to_github(self):
     #     parsed = parse_repo(
     #         'https://raw.githubusercontent.com/g0t4/dotfiles/master/git/linux.gitconfig')
     #     self.assertEqual(parsed.domain, 'github.com')
-    #     self.assertEqual(parsed.owner, 'g0t4')
-    #     self.assertEqual(parsed.repo, 'dotfiles')
+    #     self.assertEqual(parsed.repo, 'g0t4/dotfiles')
 
 
 class TestParseBitbucket(unittest.TestCase):
@@ -110,14 +103,12 @@ class TestParseBitbucket(unittest.TestCase):
     def test_bitbucket_https(self):
         parsed = parse_repo('https://bitbucket.org/g0t4/dotfiles')
         self.assertEqual(parsed.domain, 'bitbucket.org')
-        self.assertEqual(parsed.owner, 'g0t4')
-        self.assertEqual(parsed.repo, 'dotfiles')
+        self.assertEqual(parsed.repo, 'g0t4/dotfiles')
 
     def test_bitbucket_ssh(self):
         parsed = parse_repo('git@bitbucket.org:g0t4/dotfiles.git')
         self.assertEqual(parsed.domain, 'bitbucket.org')
-        self.assertEqual(parsed.owner, 'g0t4')
-        self.assertEqual(parsed.repo, 'dotfiles')
+        self.assertEqual(parsed.repo, 'g0t4/dotfiles')
 
 
 class TestParseGitLab(unittest.TestCase):
@@ -125,14 +116,12 @@ class TestParseGitLab(unittest.TestCase):
     def test_gitlab_https(self):
         parsed = parse_repo('https://gitlab.com/g0t4/dotfiles')
         self.assertEqual(parsed.domain, 'gitlab.com')
-        self.assertEqual(parsed.owner, 'g0t4')
-        self.assertEqual(parsed.repo, 'dotfiles')
+        self.assertEqual(parsed.repo, 'g0t4/dotfiles')
 
     def test_gitlab_ssh(self):
         parsed = parse_repo('git@gitlab.com:g0t4/dotfiles.git')
         self.assertEqual(parsed.domain, 'gitlab.com')
-        self.assertEqual(parsed.owner, 'g0t4')
-        self.assertEqual(parsed.repo, 'dotfiles')
+        self.assertEqual(parsed.repo, 'g0t4/dotfiles')
 
 
 class TestDefaultToGitHub(unittest.TestCase):
@@ -140,14 +129,12 @@ class TestDefaultToGitHub(unittest.TestCase):
     def test_repoOnly_assumes_github_g0t4(self):
         parsed = parse_repo('dotfiles')
         self.assertEqual(parsed.domain, 'github.com')
-        self.assertEqual(parsed.owner, 'g0t4')
-        self.assertEqual(parsed.repo, 'dotfiles')
+        self.assertEqual(parsed.repo, 'g0t4/dotfiles')
 
     def test_orgRepoOnly_assumes_github(self):
         parsed = parse_repo('g0t4/dotfiles')
         self.assertEqual(parsed.domain, 'github.com')
-        self.assertEqual(parsed.owner, 'g0t4')
-        self.assertEqual(parsed.repo, 'dotfiles')
+        self.assertEqual(parsed.repo, 'g0t4/dotfiles')
 
 
 class TestParseHuggingFace(unittest.TestCase):
@@ -161,8 +148,7 @@ class TestParseHuggingFace(unittest.TestCase):
     def test_huggingface(self):
         parsed = parse_repo('https://huggingface.co/microsoft/speecht5_tts')
         self.assertEqual(parsed.domain, 'huggingface.co')
-        self.assertEqual(parsed.owner, 'microsoft')
-        self.assertEqual(parsed.repo, 'speecht5_tts')
+        self.assertEqual(parsed.repo, 'microsoft/speecht5_tts')
 
 
 # TODO support hg (mercurial)?
