@@ -138,7 +138,7 @@ class ParsedRepo:
     def __str__(self):
         return f"ParsedRepo(domain={self.domain}, repo={self.repo})"
 
-def parse_repo(url: str):
+def parse_repo(url: str) -> ParsedRepo:
 
     url = url.strip()
 
