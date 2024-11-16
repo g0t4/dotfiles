@@ -1,13 +1,7 @@
 import argparse
-from sys import argv
 import os
 import re
 import subprocess
-
-# https://pypi.org/project/giturlparse/
-#   pip3 install giturlparse
-#   (careful there are several other similar named packages)
-import giturlparse
 
 # set a constant to name False (for subprocess.run) to make it more readable:
 IGNORE_FAILURE = False
