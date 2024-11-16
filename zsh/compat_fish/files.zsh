@@ -12,6 +12,7 @@ abbr cr 'code "$(_repo_root)"' # * favorite
 abbr cir 'code-insiders "$(_repo_root)"'
 ## adv
 abbr cie 'code --inspect-extensions=9229 .' # attach then with devtools, mostly adding this so I remember it
+abbr cieb 'code --inspect-brk-extensions=9229 .' # attach, set breakpoints, then run!
 
 #### zed
 abbr zh 'zed .'
