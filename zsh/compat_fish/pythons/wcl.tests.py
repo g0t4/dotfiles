@@ -153,16 +153,17 @@ class TestParseHuggingFace(unittest.TestCase):
 class TestMoreThanOrgReop(unittest.TestCase):
 
     def test_huggingface_three_levels(self):
-        # https://huggingface.co/datasets/PleIAs/common_corpus
         parsed = parse_repo('https://huggingface.co/datasets/PleIAs/common_corpus')
         self.assertEqual(parsed.domain, 'huggingface.co')
         self.assertEqual(parsed.repo, 'datasets/PleIAs/common_corpus')
 
-class TestStopAtTree(unittest.TestCase):
-
-    def test_huggingface_three_levels(self):
-        # https://huggingface.co/datasets/PleIAs/common_corpus
+    def test_huggingface_three_levels_with_tree(self):
         parsed = parse_repo('https://huggingface.co/datasets/PleIAs/common_corpus/tree/main')
+        self.assertEqual(parsed.domain, 'huggingface.co')
+        self.assertEqual(parsed.repo, 'datasets/PleIAs/common_corpus')
+
+    def test_huggingface_three_levels_with_blob(self):
+        parsed = parse_repo('https://huggingface.co/datasets/PleIAs/common_corpus/blob/main/README.md')
         self.assertEqual(parsed.domain, 'huggingface.co')
         self.assertEqual(parsed.repo, 'datasets/PleIAs/common_corpus')
 
