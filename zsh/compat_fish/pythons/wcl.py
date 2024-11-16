@@ -157,9 +157,9 @@ def parse_repo(url: str) -> ParsedRepo:
         path = parsed.path.lstrip("/")  # Remove leading '/'
 
         # org/repo/blob/branch/path/to/file, strip blob+ (must have org/repo before blob)
+        # PRN if it happens to be that a repo is named blob/tree then we have issues!
         if re.search(r"[^/]+/[^/]+/(blob|tree)/", path):
             path = re.sub(r"/(blob|tree).*", "", path)
-        # TODO make support 3+ levels before blog/tree (need a test for that first, and a use case)
 
         return ParsedRepo(domain=parsed.netloc, repo=path)
 
