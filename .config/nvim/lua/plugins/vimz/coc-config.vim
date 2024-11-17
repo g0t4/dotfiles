@@ -83,14 +83,19 @@ endfunction
 
 
 " FYI some keymaps in coc.vim: ~/.local/share/nvim/lazy/coc.nvim/plugin/coc.vim line 723
-" page up/down for coc hover windows/menus
+" TODO do I have a race condition on loading plugins that might be causing the defaults to not map?
+"    BECAUSE: coc.vim won't set  these if a keymap already exists so that might be it, if so add those back here from coc.vim (above, line 723 etc)
+"    OK I have a few not working for LUA maybe only? investigate later, I am leaving the broken ones for now
+" *** page up/down for coc hover windows/menus
 " coc#pum is for completions [p]op[u]p [m]enu
 "   #visible()
 " FYI for testing, in insert mode, in lua, type `vim.o` and you have multiple pages of completions to scroll up/down
 " FYI, scroll(1) is down a page, scroll(0) is up a page
 " PRN could I wire up neoscroll on this too?! use next/prev if I can get page size? then I could as it has custom funcs IIRC to do other scrolls
-"inoremap <silent><expr> <PageDown> coc#pum#visible() ? coc#pum#scroll(1) : "\<PageDown>"
-"inoremap <silent><expr> <PageUp> coc#pum#visible() ? coc#pum#scroll(0) : "\<PageUp>"
+"   TODO pageup/down doesn't work when pum first opens (push down arrow and then page up/down works?) try in a lua file
+"    TODO could it have anything to do with sessions? hrm figure out later
+inoremap <silent><expr> <PageDown> coc#pum#visible() ? coc#pum#scroll(1) : "\<PageDown>"
+inoremap <silent><expr> <PageUp> coc#pum#visible() ? coc#pum#scroll(0) : "\<PageUp>"
 "
 " coc#float is for hover docs
 " #has_scroll() and has_float() are available to check if it is visible/scrollable
