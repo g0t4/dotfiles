@@ -105,9 +105,6 @@ return {
             require("ask-openai").setup {}
         end,
         dependencies = {
-            -- TODO do I really need notify as a dep? leave it for now during testing (for predictblie notifys, otherwise have had random plugin order load and notifys not showing)
-            "rcarriga/nvim-notify", -- make sure this loads after vim.notify is patched to use nvim-notify
-            --
             "nvim-lua/plenary.nvim",
             -- "luarocks/cjson", ==> check and install it if not found? OR add checkhealth to my plugin?
         }
