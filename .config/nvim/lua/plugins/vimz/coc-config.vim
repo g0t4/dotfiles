@@ -82,29 +82,21 @@ function! CheckBackspace() abort
 endfunction
 
 
-" default key maps for coc... duplicating here... b/c if I open nvim `nvim` only and then Ctrl+P and pick coc.lua... the up/down arrows aren't mapped to completions?! whereas if I start nvim `nvim ...coc.lua` pointed at the lua file the arrow up/down work... WTF and when I check imap there is no up/down defined such that these shouldn't be redefined... maybe the key maps aren't called at all?
-"   ~/.local/share/nvim/lazy/coc.nvim/plugin/coc.vim
-"   TODO why are these not working OOB?
-" move up/down completions: (w/o C-n/p setting here it changes the completion list to some other style and loses completions)
-inoremap <silent><expr> <C-n> coc#pum#visible() ? coc#pum#next(1) : "\<C-n>"
-inoremap <silent><expr> <C-p> coc#pum#visible() ? coc#pum#prev(1) : "\<C-p>"
+" FYI some keymaps in coc.vim: ~/.local/share/nvim/lazy/coc.nvim/plugin/coc.vim line 723
+" page up/down for coc hover windows/menus
+" coc#pum is for completions [p]op[u]p [m]enu
+"   #visible()
+" FYI for testing, in insert mode, in lua, type `vim.o` and you have multiple pages of completions to scroll up/down
+" FYI, scroll(1) is down a page, scroll(0) is up a page
+" PRN could I wire up neoscroll on this too?! use next/prev if I can get page size? then I could as it has custom funcs IIRC to do other scrolls
+"inoremap <silent><expr> <PageDown> coc#pum#visible() ? coc#pum#scroll(1) : "\<PageDown>"
+"inoremap <silent><expr> <PageUp> coc#pum#visible() ? coc#pum#scroll(0) : "\<PageUp>"
 "
-inoremap <silent><expr> <down> coc#pum#visible() ? coc#pum#next(0) : "\<down>"
-inoremap <silent><expr> <up> coc#pum#visible() ? coc#pum#prev(0) : "\<up>"
-"
-"  FYI so far I don't need these, leave here just in case I wanna add them too:
-"if empty(mapcheck('<C-e>', 'i'))
-"  inoremap <silent><expr> <C-e> coc#pum#visible() ? coc#pum#cancel() : "\<C-e>"
-"endif
-"if empty(mapcheck('<C-y>', 'i'))
-"  inoremap <silent><expr> <C-y> coc#pum#visible() ? coc#pum#confirm() : "\<C-y>"
-"endif
-"if empty(mapcheck('<PageDown>', 'i'))
-"  inoremap <silent><expr> <PageDown> coc#pum#visible() ? coc#pum#scroll(1) : "\<PageDown>"
-"endif
-"if empty(mapcheck('<PageUp>', 'i'))
-"  inoremap <silent><expr> <PageUp> coc#pum#visible() ? coc#pum#scroll(0) : "\<PageUp>"
-"endif
+" coc#float is for hover docs
+" #has_scroll() and has_float() are available to check if it is visible/scrollable
+" FYI    :echo coc#float#has_scroll() " returns 1 if visible, 0 if not
+nnoremap <silent><expr> <PageDown> coc#float#has_scroll() ? coc#float#scroll(1) : "\<PageDown>"
+nnoremap <silent><expr> <PageUp> coc#float#has_scroll() ? coc#float#scroll(0) : "\<PageUp>"
 
 
 
