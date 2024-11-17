@@ -102,6 +102,11 @@ inoremap <silent><expr> <PageUp> coc#pum#visible() ? coc#pum#scroll(0) : "\<Page
 " FYI    :echo coc#float#has_scroll() " returns 1 if visible, 0 if not
 nnoremap <silent><expr> <PageDown> coc#float#has_scroll() ? coc#float#scroll(1) : "\<PageDown>"
 nnoremap <silent><expr> <PageUp> coc#float#has_scroll() ? coc#float#scroll(0) : "\<PageUp>"
+" issue with neoscroll which maps Page up/down to ctrlb/f so I need those here too
+" ABSOLUTELY A LOADING ISSUE... if this loads before neoscroll then this wins out, else neoscroll wins out
+"  and yet neoscroll winnning doesn't seem to always be an issue either.. WTF.. .is it the session?
+nnoremap <silent><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-b>"
+nnoremap <silent><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-f>"
 
 
 
