@@ -2,3 +2,5 @@
 openai
 keyring
 keyrings.cryptfile
+
+debugpy
