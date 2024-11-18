@@ -39,3 +39,61 @@ vim.keymap.set({ "v", "n", "i" }, "<F8>", "<cmd>q<CR>", default_options)
 vim.keymap.set('n', '<C-->', '<C-o>', default_options)
 vim.keymap.set('n', '<C-S-->', '<C-i>', default_options)
 --  FYI in iTerm => Profiles -> Keys -> Key Mappings -> removed "send 0x1f" on "ctrl+-" ... if that breaks something, well you have this note :)
+
+
+
+-- *** help
+--
+-- start typing :help then Ctrl+R, Ctrl+W takes word under cursor
+vim.keymap.set('n', '<F1>', ':help <C-R><C-W><CR>', { noremap = true, silent = true })
+--
+vim.keymap.set('x', '<F1>', 'y:help <C-R>"<CR>', { noremap = true, silent = true })
+vim.keymap.set('v', '<F1>', function()
+    -- *** in visual mode, press F1 to search for selected text, or select word under cursor
+    -- local mode = vim.fn.visualmode()
+
+    -- current visual seletion start/end:
+    local start_pos = vim.fn.getpos("v")
+    local end_pos = vim.fn.getpos(".")
+
+    -- FYI '<, '> are positions of LAST visual selection (not current)
+    -- this is why '<,'> is inserted into command line when you select text! now it makes sense! ' == mark, </> are the mark "register" names
+    -- local start_pos = vim.fn.getpos("'<")
+    -- local end_pos = vim.fn.getpos("'>")
+    -- vim.cmd('normal! gv') -- reselect LAST visual selection ('<,'> marks)
+
+    local start_line = start_pos[2]
+    local start_col = start_pos[3]
+    local end_line = end_pos[2]
+    local end_col = end_pos[3]
+
+    -- print("start/end", vim.inspect(start_pos), "/", vim.inspect(end_pos))
+    if start_line == end_line and start_col == end_col then
+        -- print("  only one char, expanding selection to word")
+        vim.cmd('normal! iw') -- selects word under cursor (since one char alone isn't really a selection and if it is then this won't change it!)
+        -- think of this as not requiring user to make simple selections, do it for them
+    end
+
+    -- yank selection into " register
+    vim.cmd('normal! ""y')
+
+    local search_term = vim.fn.getreg("\"")
+    -- print("  search term: '", search_term, "' (w/o single quotes)")
+    vim.cmd('help ' .. search_term)
+end)
+
+
+vim.keymap.set('c', '<F1>', function()
+    -- *** help for cmdline contents
+    local cmdline = vim.fn.getcmdline()
+
+    -- use Ctrl+C to cancel cmdline mode (otherwise help won't show until after you exit cmdline mode)
+    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-c>", true, false, true), 'n', false)
+
+    -- TODO if mutliple words, take first word that has help? OR word under cursor?
+    vim.cmd('help ' .. cmdline, { silent = true })
+
+    -- could attempt to put cmdline back so it can be edited again BUT people wanted help so stay in help, they can always uparrow to get back cmd next time they enter cmdline mode
+    -- pointless to put back the cmdline unless someone was just gonna read the start of the help which is doubtfully enough
+    -- vim.api.nvim_feedkeys(":", 'n', false)
+end)
