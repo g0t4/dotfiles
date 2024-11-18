@@ -17,6 +17,7 @@ let g:coc_global_extensions = [
             \ 'coc-xml',
             \ 'coc-yaml',
             \ 'coc-zig',
+            \ 'coc-prettier',
             \ ]
             "\ 'coc-rust-analyzer',
             "\ 'coc-lightbulb', " seemed to show up on every line regardless if any code actions available => TODO investigate?
@@ -24,6 +25,7 @@ let g:coc_global_extensions = [
     " PRN https://github.com/iamcco/coc-diagnostic => generic integration of diagnostics tools (make LSP adapter for them, IIUC)
     " brew install zig zls " also consider https://github.com/ziglang/zig.vim
     "\ 'coc-snippets', " TODO investigate .. probably just want copilot completions alone
+    " BTW prettier formats (graphql, ...)
 
 " FYI
 "  :CocList extensions  " and others
