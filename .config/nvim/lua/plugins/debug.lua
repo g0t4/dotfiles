@@ -78,10 +78,7 @@ return {
             vim.keymap.set('n', '<Leader>b', function() require('dap').toggle_breakpoint() end)
             vim.keymap.set('n', '<Leader>B', function() require('dap').set_breakpoint() end)
             vim.keymap.set('n', '<Leader>dl', function() require('dap').set_breakpoint(nil, nil, vim.fn.input('Log point message: ')) end)
-            vim.keymap.set('n', '<Leader>dr', function() require('dap').repl.open() end)
-            -- repl.toggle()
-            -- repl.close()
-            -- repl.execute()
+            vim.keymap.set('n', '<Leader>dr', function() require('dap').repl.toggle() end) -- toggle instead of open/close
             -- I will likely use legendary for remembering these commands and so its fine for a few to be unrealistic to type out and just for lookup only:
             vim.keymap.set('n', '<Leader>d_r', function()
                 require('dap').repl.open()
@@ -117,6 +114,9 @@ return {
         --
         --   REPL completions?
         --     au FileType dap-repl lua require('dap.ext.autocompl').attach()
+        --   why does repl (like terminal) not show the cursor after the prompt on first open?
+        --   Esc should close float windows? is it possible to show hover and when move cursor off symbol it closes?
+        --   Keep breakpoints between restarts of nvim?
     },
 
     -- {
