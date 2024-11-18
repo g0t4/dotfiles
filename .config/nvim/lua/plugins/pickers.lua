@@ -1,17 +1,32 @@
 return {
 
     {
+        -- *** Command Palette Picker ***
         "mrjones2014/legendary.nvim",
-        -- command like picker
         keys = {
             { '<C-S-p>', '<Cmd>Legendary<CR>', mode = 'n' },
-            -- TODO is there a way to cut the lag on showing the picker?
+            --
+            -- notes:
+            -- - think vscode cmd palette
+            -- - can have both keymaps and commands
+            --   - NOT a cmd line replacement, just like vscode cmd palette isn't a command line interface
+            --   - again, builtin cmds are not included in the list by default
+            --   - only cmds by default are for telescope itself
+            -- - interesting way to notify users of deprecated config, I like it:
+            --   - https://github.com/mrjones2014/legendary.nvim/blob/master/lua/legendary/deprecate.lua
+            --
             -- pros:
-            -- - builtin and custom keymaps, it seems...
+            -- - search builtin commands (telescope didn't have this)
+            -- - extensions for user defined commands
+            -- - easy to mod discovery extension for lazy keys
             -- - fuzzy finder (also frecency though I don't know that I need that)
+            -- - frecency too, TBD if I care about that
+            --
+            -- TODOs:
+            -- - VERIFY why it is slow:
+            --   - is it just first use, and b/c it has to discover (IIUC per buffer) all keymaps
             --
             -- - uses telescope.nvim + dressing.nvim (via vim.ui.select)
-            -- - FYI not command line replacement, and that makes sense
         },
         -- opts = {
         --     -- FYI can manually register keymap entries
