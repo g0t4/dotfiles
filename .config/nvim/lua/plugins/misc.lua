@@ -1,4 +1,7 @@
 return {
+    -- TODO try https://github.com/folke/neoconf.nvim
+    --  project specific config
+
     {
         -- FYI use `:Notifications` to see history of notifications
         "rcarriga/nvim-notify",
