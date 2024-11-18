@@ -39,3 +39,11 @@ vim.keymap.set({ "v", "n", "i" }, "<F8>", "<cmd>q<CR>", default_options)
 vim.keymap.set('n', '<C-->', '<C-o>', default_options)
 vim.keymap.set('n', '<C-S-->', '<C-i>', default_options)
 --  FYI in iTerm => Profiles -> Keys -> Key Mappings -> removed "send 0x1f" on "ctrl+-" ... if that breaks something, well you have this note :)
+
+
+-- *** ctrl+shift+e/y now move the cursor too to keep it on the same line (think scroll under)
+-- TODO how can I find the e/y scroll line amount?
+local scroll_line_amount = 6
+-- nmap <C-S-e> <Cmd>normal <C-e> 6j<CR>
+vim.keymap.set('n', '<C-S-e>', "<cmd>normal <C-e> " .. scroll_line_amount .. "j<CR>", default_options)
+vim.keymap.set('n', '<C-S-y>', "<cmd>normal <C-y> " .. scroll_line_amount .. "k<CR>", default_options)
