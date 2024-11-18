@@ -50,6 +50,8 @@ return {
                         i = {
                             -- close on esc, otherwise have to double press esc to close (also this prevents me from going to normal mode which I don't want in this picker - at least not yet)
                             -- FYI registers for the popup/float window only (confirmed by disabling this and using Esc into normal mode to check with :verbose nmap <Esc>)
+                            -- FYI testing popup key maps without leaving insert mode (and losing popup in some case): inoremap <C-c> <Cmd>verbose map \<Up\><CR>
+                            --    also `:messages clear` ... but some of verbose map doesn't show up in :messages (todo is there some sort of <Cmd> caveat that loses some of the messages?)
                             ["<Esc>"] = require("telescope.actions").close,
                         },
 
