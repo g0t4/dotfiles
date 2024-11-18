@@ -101,9 +101,15 @@ return {
         --   or, notify on the fly - after each cmd, send recent cmds [ keep history of normal mode commands ] (same for cmdline mode cmds)
         "g0t4/ask-openai.nvim",
         dir = "~/repos/github/g0t4/ask-openai.nvim",
-        config = function()
-            require("ask-openai").setup {}
-        end,
+        --
+        -- lazy has heuristics to call setup so you don't have to, but you must set opts then:
+        opts = {},
+        -- opts = true, // alternative
+        --
+        -- OR, call setup yourself:
+        -- config = function()
+        --     require("ask-openai").setup {}
+        -- end,
         dependencies = {
             "nvim-lua/plenary.nvim",
             -- "luarocks/cjson", ==> check and install it if not found? OR add checkhealth to my plugin?
