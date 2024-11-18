@@ -76,10 +76,10 @@ return {
                     --
                     --
                 },
-                -- does this go here or in extensions?
-                which_key = {
-                    auto_register = true,
-                },
+                -- ? does this go here or in extensions:
+                -- which_key = {
+                --     auto_register = true,
+                -- },
 
             }
         end,
