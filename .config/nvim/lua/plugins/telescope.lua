@@ -1,6 +1,11 @@
 return {
 
     {
+        -- command like picker
+        "https://github.com/mrjones2014/legendary.nvim"
+    },
+
+    {
         'nvim-telescope/telescope.nvim',
         tag = '0.1.8',
         dependencies = {
