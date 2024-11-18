@@ -63,6 +63,7 @@
     // - LSP: https://github.com/LuaLS/lua-language-server/wiki/Formatter
     // - formatter: https://raw.githubusercontent.com/CppCXY/EmmyLuaCodeStyle
     // *** use editorconfig to set lua format config unless I switch to another formatter like stylua?
+    //  TODO ugh I cannot stop it from wrapping lines with func calls and multi args (i.e. debug.lua keymaps for nvim-dap)
     //    editorconfig works and defaultConfig is not working for me
     //       is it possible editorconfig clobbers all settings if its present?
     // "Lua.format.defaultConfig": {
