@@ -50,9 +50,53 @@ return {
         "mfussenegger/nvim-dap",
         -- https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation
         --
+        -- keys = {
+        -- TODO keys for keymaps (so legendary picks them up)
+
+        config = function()
+            -- require("dap").setup()
+            -- setup_python_dap()
+            -- TODO can I enable these when debugging only and go back to my regualar set when not???
+            --    and by that I mean F5,F10, etc not leader keys
+            --    ACTUALLY I always have felt the F key hard to remember b/c I rarely debug and cuz there's no logic to the assignments (and they change in some tools)... so maybe I will like leader keys! will spell like the action
+            vim.keymap.set('n', '<leader>dc', function() require('dap').continue() end)  -- <F5>?
+            vim.keymap.set('n', '<leader>so', function() require('dap').step_over() end) -- F10?
+            vim.keymap.set('n', '<leader>si', function() require('dap').step_into() end) -- F11?
+            vim.keymap.set('n', '<leader>su', function() require('dap').step_out() end)  -- F12? (s[u] == step up?)
+            vim.keymap.set('n', '<Leader>b', function() require('dap').toggle_breakpoint() end)
+            vim.keymap.set('n', '<Leader>B', function() require('dap').set_breakpoint() end)
+            vim.keymap.set('n', '<Leader>dl', function() require('dap').set_breakpoint(nil, nil, vim.fn.input('Log point message: ')) end)
+            vim.keymap.set('n', '<Leader>dr', function() require('dap').repl.open() end)
+            -- I will likely use legendary for remembering these commands and so its fine for a few to be unrealistic to type out and just for lookup only:
+            vim.keymap.set('n', '<Leader>d_r', function() require('dap').repl.open() require('dap.ext.debugger').restart() end)
+            vim.keymap.set('n', '<Leader>dt', function() require('dap').repl.open() require('dap.ext.debugger').terminate() end)
+
+            vim.keymap.set('n', '<Leader>da', function() require('dap').run_last() end) -- a as in again?
+            vim.keymap.set({ 'n', 'v' }, '<Leader>dh', function() require('dap.ui.widgets').hover() end)
+            vim.keymap.set({ 'n', 'v' }, '<Leader>dp', function() require('dap.ui.widgets').preview() end)
+            vim.keymap.set('n', '<Leader>df', function()
+                local widgets = require('dap.ui.widgets')
+                widgets.centered_float(widgets.frames)
+            end)
+            vim.keymap.set('n', '<Leader>ds', function()
+                local widgets = require('dap.ui.widgets')
+                widgets.centered_float(widgets.scopes)
+            end)
+            -- TODO other keymaps?
+        end,
         -- config = function()
         --     require("dap").setup()
         -- end,
+        -- notes:
+        --   launch.json support!
+        --   completions omnifunc from debugger
+        --   REPL
+        -- TODO try:
+        --   SIGNS:
+        --      vim.fn.sign_define('DapBreakpoint', {text='🛑', texthl='', linehl='', numhl=''})
+        --
+        --   REPL completions?
+        --     au FileType dap-repl lua require('dap.ext.autocompl').attach()
     },
 
     -- {
