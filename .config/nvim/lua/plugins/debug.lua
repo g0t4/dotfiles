@@ -1,6 +1,6 @@
 return {
 
-    -- vimspector vs nvim-dap?
+    -- !!! TODO try either/both vimspector vs nvim-dap
     --   others?
     -- wants:
     --   DAP support
