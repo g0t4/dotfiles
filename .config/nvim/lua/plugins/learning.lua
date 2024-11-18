@@ -10,6 +10,7 @@ return {
     --
 
     {
+        enabled = false,
         'm4xshen/hardtime.nvim',    -- tons of features, recommends, block repeated key use, etc
         dependencies = {
             "MunifTanjim/nui.nvim", -- for report float window
@@ -61,6 +62,7 @@ return {
 
     {
         "folke/which-key.nvim",
+        enabled = false,
         config = function()
             require("which-key").setup {
                 delay = 1000, -- before open (ms)

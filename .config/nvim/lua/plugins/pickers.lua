@@ -1,8 +1,45 @@
 return {
 
     {
+        "mrjones2014/legendary.nvim",
         -- command like picker
-        "https://github.com/mrjones2014/legendary.nvim"
+        keys = {
+            { '<C-S-p>', '<Cmd>Legendary<CR>', mode = 'n' },
+            -- TODO is there a way to cut the lag on showing the picker?
+            -- pros:
+            -- - builtin and custom keymaps, it seems...
+            --    - TODO why can't I see its own keymap C-S-p that I setup?! I guess it makes sense not to show that!
+            --    - Why doesn't it show any PageUp/Down keys? Also no shift entries..
+            --      - in fact it only lists a few hundred entries, that seems way off
+            -- - fuzzy finder (also frecency though I don't know that I need that)
+            --
+            -- - uses telescope.nvim + dressing.nvim (via vim.ui.select)
+            -- - FYI not command line replacement, and that makes sense
+        },
+        -- opts = {
+        --     -- FYI can manually register keymap entries
+        --     extensions = {
+        --         -- discover various keymap sources
+        --         lazy_nvim = true, -- lazy plugin keys spec
+        --     }
+        -- },
+        config = function()
+            require('legendary').setup {
+                include_builtin = true, -- show builtins (default true), i.e. zz (323 of 335, OOB)
+                -- include_legendary_cmds = false, -- legendary commands (default true) (12 of 335, OOB)
+                --
+                extensions = {
+                    -- discover various keymap sources
+                    lazy_nvim = true, -- has ZERO impact on choices?!
+                },
+                lazy_nvim = {
+                    -- Automatically register keymaps that are defined on lazy.nvim plugin specs
+                    -- using the `keys = {}` property.
+                    auto_register = true,
+                },
+
+            }
+        end,
     },
 
     {
@@ -15,7 +52,6 @@ return {
         cmd = { 'Telescope' }, -- lazy load on command used
         keys = {
             { '<C-p>',     ':Telescope find_files<CR>', mode = 'n' },
-            { '<C-S-p>',   ':Telescope commands<CR>',   mode = 'n' }, -- PRN try this out, see if I like it better
             { '<leader>t', ':Telescope<CR>',            mode = 'n' }, -- list pickers, select one opens it (like if :Telescope<CR>), shows keymaps too
             { '<leader>g', ':Telescope live_grep<CR>',  mode = 'n' }, -- proj search
             { '<leader>s', ':Telescope git_status<CR>', mode = 'n' },
