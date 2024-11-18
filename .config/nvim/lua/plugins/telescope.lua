@@ -49,7 +49,7 @@ return {
                     mappings = {
                         i = {
                             -- close on esc, otherwise have to double press esc to close (also this prevents me from going to normal mode which I don't want in this picker - at least not yet)
-                            -- TODO how is this implemented? is it going to break something else I have setup?
+                            -- FYI registers for the popup/float window only (confirmed by disabling this and using Esc into normal mode to check with :verbose nmap <Esc>)
                             ["<Esc>"] = require("telescope.actions").close,
                         },
 
