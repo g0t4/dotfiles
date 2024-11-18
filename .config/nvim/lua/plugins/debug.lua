@@ -1,3 +1,4 @@
+
 return {
 
     -- !!! TODO try either/both vimspector vs nvim-dap
@@ -16,5 +17,26 @@ return {
     --
     -- differences not as important to me:
     --   nvim-dap is nvim only, vimspector works in vim... not sure which way this is pro or con, right now I am focused on nvim config (would be much work to go back to just vim)
+
+    {
+        "mfussenegger/nvim-dap",
+        -- config = function()
+        --     require("dap").setup()
+        -- end,
+    },
+
+    -- {
+    --     "puremourning/vimspector",
+    --     config = function()
+    --         require("vimspector").setup()
+    --     end,
+    -- },
+
+    -- {
+    --     "mfussenegger/nvim-dap-python",
+    --     config = function()
+    --         require("dap-python").setup("python")
+    --     end,
+    -- }
 
 }
