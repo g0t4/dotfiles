@@ -17,6 +17,8 @@ return {
             -- - uses telescope.nvim + dressing.nvim (via vim.ui.select)
             --
             -- pros:
+            -- - I love searching by keymap type here, with this focused on a subset of all keymaps, it feels more helpful than a general doc search where there are many unrelated results
+            --   i.e. <C-p> shows builtins and user defined keymaps!
             -- - search builtin commands (telescope didn't have this)
             -- - extensions for user defined commands
             -- - easy to mod discovery extension for lazy keys
@@ -33,6 +35,10 @@ return {
             --     - make sure it uses rhs, I don't want to search descriptions alone
             --   - register my commands too?
             --   - register my lua funcs?
+            -- - REVIEW DUPLICATE KEYMAPS (not a problem when its overriding a builtin)
+            --   - esp helpful after I get all my userdefined keymaps registered
+            -- - TODO maybe move to defining my keymaps with this tool too?
+            --   - not sure I like the idea of "centralizing" keymaps though that might have benefits for overlapping keys in diff scenarios (i.e. PageUp)
             --
         },
         config = function()

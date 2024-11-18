@@ -19,8 +19,6 @@ return function()
 
             -- FYI use this to see full lazy plugin config:
             --    :Dump require('lazy').plugins()
-            -- TODO is this getting all my lazy keys, feels like not all of them, IIRC there is a keys_list or key_list too with more?
-
 
             -- FYI description MUST be set or its not shown
             local use_description = keymap.rhs
