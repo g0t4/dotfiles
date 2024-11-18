@@ -1,6 +1,9 @@
 return {
     -- TODO try https://github.com/folke/neoconf.nvim
-    --  project specific config
+    -- project specific config (but wait until I need this, i.e. maybe if I need diff formatters or rules)
+    --  OR find smth similar? I am not keen on the idea of using json instead of lua/vimscript
+    -- !!! import vscode settings?! DEFINITELY NEED TO TEST THAT for ideas for what to configure yet
+    --
 
     {
         -- FYI use `:Notifications` to see history of notifications
