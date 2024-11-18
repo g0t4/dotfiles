@@ -1,3 +1,14 @@
+function is_lazy_open()
+    local win_ids = vim.api.nvim_list_wins()
+    local win_buf_filetypes = vim.iter(win_ids):map(function(win_id)
+        local buf_id = vim.api.nvim_win_get_buf(win_id)
+        return vim.api.nvim_buf_get_option(buf_id, "filetype")
+    end)
+    -- print(vim.inspect(win_buf_filetypes))
+
+    return win_buf_filetypes:any(function(ft) return ft == "lazy" end)
+end
+
 function setup_workspace()
     -- dir or nil
     local function get_git_root()
