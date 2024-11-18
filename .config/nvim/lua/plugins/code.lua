@@ -34,7 +34,7 @@ return {
             -- colorful:
             -- defaults (via :highlight Eyeliner*):
             vim.api.nvim_set_hl(0, 'EyelinerPrimary', { fg = '#569cd6', underline = true, bold = true }) -- default fg = '#569cd6'
-            vim.api.nvim_set_hl(0, 'EyelinerSecondary', { fg = '#c586c0', underline = true }) -- default fg = '#c586c0'
+            vim.api.nvim_set_hl(0, 'EyelinerSecondary', { fg = '#c586c0', underline = true })            -- default fg = '#c586c0'
             --      EyelinerDimmed xxx cleared   (default)
             -- vim.api.nvim_set_hl(0, 'EyelinerDimmed', { fg = '#00FF00' }) -- only applies if highlight_on_key = true FYI
             --
@@ -81,10 +81,18 @@ return {
                 -- scroll half page:
                 -- ["<C-u>"]      = function() neoscroll.ctrl_u({ duration = 250 }) end, -- 250 default
                 -- ["<C-d>"]      = function() neoscroll.ctrl_d({ duration = 250 }) end, -- 250 default
-                --
-                -- scroll a few line(s):
+
+                -- scroll a "few" line(s):
+                -- FYI benefit is # lines is relative to size of window (and if I resize the vim instance, it correctly adjusts on the fly with ratio below)
+                -- TODO go back to using relative line count scroll instead of default 1 line?
+                --    if so, I need to update <C-S-e> and <C-S-y> to use relative line count too
                 ["<C-y>"]      = function() neoscroll.scroll(-0.1, { move_cursor = false, duration = 50 }) end, -- 100 default
                 ["<C-e>"]      = function() neoscroll.scroll(0.1, { move_cursor = false, duration = 50 }) end,  -- 100 default (feels slow)
+                -- FYI love move_cursor param! allows me to use original C-e/y design and have a scrollunder variant:
+                ["<C-S-y>"]    = function() neoscroll.scroll(-0.1, { move_cursor = true, duration = 50 }) end,  -- 100 default
+                ["<C-S-e>"]    = function() neoscroll.scroll(0.1, { move_cursor = true, duration = 50 }) end,   -- 100 default (feels slow)
+                -- FYI neoscroll is more than just about smooth scroll, it's a tool to design all sorts of scrolls
+
                 --
                 -- scroll cursor line to top/middle/bottom:
                 -- 150 feels fine (even slow sometimes) for these, esp zz which often has a minimal move to make
