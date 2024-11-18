@@ -103,7 +103,9 @@ return {
         dir = "~/repos/github/g0t4/ask-openai.nvim",
         --
         -- lazy has heuristics to call setup so you don't have to, but you must set opts then:
-        opts = {},
+        opts = {
+            -- provider = "keychain", -- for now, I want to test github copilot more so and find any issues so I'll use auto=>copilot for now
+        },
         -- opts = true, // alternative
         --
         -- OR, call setup yourself:
