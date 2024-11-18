@@ -14,6 +14,7 @@ return {
             --   - only cmds by default are for telescope itself
             -- - interesting way to notify users of deprecated config, I like it:
             --   - https://github.com/mrjones2014/legendary.nvim/blob/master/lua/legendary/deprecate.lua
+            -- - uses telescope.nvim + dressing.nvim (via vim.ui.select)
             --
             -- pros:
             -- - search builtin commands (telescope didn't have this)
@@ -25,21 +26,19 @@ return {
             -- TODOs:
             -- - VERIFY why it is slow:
             --   - is it just first use, and b/c it has to discover (IIUC per buffer) all keymaps
+            -- ! finish READing the full README for all the things I might want
+            --   - https://github.com/mrjones2014/legendary.nvim
+            -- - register all my user defined keymaps?
+            --   - can I do that via which-key and not have to do anything extra?
+            --     - make sure it uses rhs, I don't want to search descriptions alone
+            --   - register my commands too?
+            --   - register my lua funcs?
             --
-            -- - uses telescope.nvim + dressing.nvim (via vim.ui.select)
         },
-        -- opts = {
-        --     -- FYI can manually register keymap entries
-        --     extensions = {
-        --         -- discover various keymap sources
-        --         lazy_nvim = true, -- lazy plugin keys spec
-        --     }
-        -- },
         config = function()
             require('legendary').setup {
-                include_builtin = true,        -- show builtins (default true), i.e. zz (323 of 335, OOB)
-                include_legendary_cmds = true, -- legendary commands (default true) (12 of 335, OOB)
-                --
+                include_builtin = true,        -- show builtins (default true), i.e. zz (~323)
+                include_legendary_cmds = true, -- legendary commands (default true) (12)
                 extensions = {
                     -- keymap discovery extensions
                     --
@@ -47,11 +46,10 @@ return {
                     --  TODO can I just use which-key extension and have it get those via that (or does it not pick up all of mine?)
                     --
                     lazy_nvim = false, -- builtin requires desc set on lazy keys entries, and I want it to be rhs by default
-                    -- TODO custom lazy_nvim loader extension that uses rhs
+                    my_lazy_nvim = true, -- my own lazy keys loader
                     --
                     -- FYI command palette builds list on first use (per buffer?), so that is why it has slight lag there and that also means you need to restart to rebuild the list
                     -- FYI ~/.cache/nvim/legendary/legendary.log shows discovery logs (if you use its own Log.debug it won't do multiparam nor multiline logs, so just use print(vim.inspect(foo))
-                    my_lazy_nvim = true,
                 },
 
             }

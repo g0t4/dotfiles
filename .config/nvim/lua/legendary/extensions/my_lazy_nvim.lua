@@ -17,6 +17,11 @@ return function()
             -- in the legendary.nvim finder.
             -- WES note: IIAC the others bind keymaps too? so people use this as a tool to bind and find! ok makes sense
 
+            -- FYI use this to see full lazy plugin config:
+            --    :Dump require('lazy').plugins()
+            -- TODO is this getting all my lazy keys, feels like not all of them, IIRC there is a keys_list or key_list too with more?
+
+
             -- FYI description MUST be set or its not shown
             local use_description = keymap.rhs
             if keymap.desc then
