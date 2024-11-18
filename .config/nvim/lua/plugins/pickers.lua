@@ -72,7 +72,9 @@ return {
                     --   C-S-p before (nothing specific to nvim-tree
                     --   :lua require('legendary.extensions.nvim_tree')()
                     --   C-S-p now has 50+ extra entries (and they don't show in other windows so they are buffer specific)
-                    nvim_tree = true, -- TODO why does this not work to load the extension?
+                    -- nvim_tree = true, -- TODO this causes an error, that's why its not working (it's trying)! when first activate legendary in nvim-tree window
+                    --     ERROR: "...l/share/nvim/lazy/nvim-tree.lua/lua/nvim-tree/keymap.lua:17: E565: Not allowed to change text or change window"
+                    --     TODO is this rebinding the keys or?
                     --
                     --
                 },
