@@ -29,10 +29,12 @@ return {
                     -- keymap discovery extensions
                     --
                     -- TODO load user defined keymaps... is this not already an extension?! i.e. <PageUp>/<PageDown> and <leader> ... etc
+                    --  TODO can I just use which-key extension and have it get those via that (or does it not pick up all of mine?)
                     --
                     lazy_nvim = false, -- builtin requires desc set on lazy keys entries, and I want it to be rhs by default
                     -- TODO custom lazy_nvim loader extension that uses rhs
-                    -- FYI command palette builds list on first use, so that is why it has slight lag there and that also means you need to restart to rebuild the list
+                    --
+                    -- FYI command palette builds list on first use (per buffer?), so that is why it has slight lag there and that also means you need to restart to rebuild the list
                     -- FYI ~/.cache/nvim/legendary/legendary.log shows discovery logs (if you use its own Log.debug it won't do multiparam nor multiline logs, so just use print(vim.inspect(foo))
                 },
 
