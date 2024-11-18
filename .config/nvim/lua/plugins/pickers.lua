@@ -51,7 +51,11 @@ return {
                     -- TODO load user defined keymaps... is this not already an extension?! i.e. <PageUp>/<PageDown> and <leader> ... etc
                     --  TODO can I just use which-key extension and have it get those via that (or does it not pick up all of mine?)
                     --
-                    which_key = true,
+                    -- FYI which_key isn't loading any either? what does it load? all keys which-key shows or some set that are added to which key itself? unsure
+                    --    CAREFUL not to rebind the keys too
+                    -- which_key = {
+                    --     auto_register = true,
+                    -- },
                     lazy_nvim = false, -- builtin requires desc set on lazy keys entries, and I want it to be rhs by default
                     my_lazy_nvim = true, -- my own lazy keys loader
                     --
