@@ -82,7 +82,6 @@ vim.keymap.set('v', '<F1>', function()
     vim.cmd('help ' .. search_term)
 end)
 
-
 vim.keymap.set('c', '<F1>', function()
     -- *** help for cmdline contents
     local cmdline = vim.fn.getcmdline()
@@ -96,4 +95,10 @@ vim.keymap.set('c', '<F1>', function()
     -- could attempt to put cmdline back so it can be edited again BUT people wanted help so stay in help, they can always uparrow to get back cmd next time they enter cmdline mode
     -- pointless to put back the cmdline unless someone was just gonna read the start of the help which is doubtfully enough
     -- vim.api.nvim_feedkeys(":", 'n', false)
+end)
+
+-- *** search for word under cursor, can also use alt+p/n from vim-illuminate
+-- TODO is this the mapping I want? it is hard to activate but it works if I can remember it and use it often
+vim.keymap.set('n', '<leader>/', function()
+    vim.fn.execute("/" .. vim.fn.expand("<cword>"))
 end)
