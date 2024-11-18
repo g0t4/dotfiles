@@ -78,13 +78,6 @@ function setup_workspace()
                 return
             endif
 
-            " TODO is there a way to check if Lazy window is open and abort so we don't have it auto save over the session with inevitably nothing?
-
-            " TODO delay/abort session restore if Lazy window is open... otherwise session load fails
-            "   Vim(only):E5601: Cannot close window, only floating window would remain
-            "     reproduce: open lazy window and execute `silent only` (from line 4 in session.vim that triggers error)
-            "     which tries to close all windows except the current one, thus the failure => b/c current window is floating!
-
             try
                 execute "source" g:session_file
             catch
@@ -108,16 +101,6 @@ function setup_workspace()
             lua FocusLastFocusedFile()
 
         endfunction
-
-        call RestoreSession()
-        " instead of auto load session, can use Ctrl+I to go back to last file
-        " new comment coloring with treesitter queries seems to work fine w/ session restore
-        " FYI old regex syntax based comment colors were a hot mess when loading sessions (never colored initial buffer/files correctly)
-
-        augroup SaveSessionOnQuit
-            autocmd!
-            autocmd VimLeavePre * call OnLeaveSaveSession()
-        augroup END
 
         " TODO add keymap for save session? (think save conventional session file)
         function OnLeaveSaveSession()
@@ -147,18 +130,34 @@ function setup_workspace()
         endfunction
         nnoremap <silent> <F7> :call RestoreSessionWithNotify()<CR>
 
-        augroup SaveLastFocusedFile
-            " TODO not running on startup, only on focus changed
-            autocmd!
-            autocmd WinEnter * lua vim.g.last_focused_file = vim.fn.bufname(vim.fn.winbufnr(0))
-        augroup END
-
     ]]
     --
     -- -- Session notes:
     -- --   what if I pass file names to nvim, shouldn't I also open those in addition to whatever is open as of last session save?
     -- --   if open multiple instances, all bets are off but that is fine b/c its rare (usually just if I wanna test dotfiles w/o quitting nvim editing instance)... also vscode always would reopen in already open instance so I dont know there is any logic for multiple instances when there is a "shared" session...
     -- --   I LOVE RESUMING the last open file!!!
+
+    if not is_lazy_open() then
+        vim.cmd [[
+            call RestoreSession()
+            " instead of auto load session, can use Ctrl+I to go back to last file
+            " new comment coloring with treesitter queries seems to work fine w/ session restore
+            " FYI old regex syntax based comment colors were a hot mess when loading sessions (never colored initial buffer/files correctly)
+
+            augroup SaveSessionOnQuit
+                autocmd!
+                autocmd VimLeavePre * call OnLeaveSaveSession()
+            augroup END
+
+            augroup SaveLastFocusedFile
+                " TODO not running on startup, only on focus changed
+                autocmd!
+                autocmd WinEnter * lua vim.g.last_focused_file = vim.fn.bufname(vim.fn.winbufnr(0))
+            augroup END
+        ]]
+    else
+        vim.notify("Lazy open => no session restore / autosave, restart to restore prior session", vim.log.levels.WARN)
+    end
 end
 
 function FocusLastFocusedFile()
