@@ -8,9 +8,6 @@ return {
             -- TODO is there a way to cut the lag on showing the picker?
             -- pros:
             -- - builtin and custom keymaps, it seems...
-            --    - TODO why can't I see its own keymap C-S-p that I setup?! I guess it makes sense not to show that!
-            --    - Why doesn't it show any PageUp/Down keys? Also no shift entries..
-            --      - in fact it only lists a few hundred entries, that seems way off
             -- - fuzzy finder (also frecency though I don't know that I need that)
             --
             -- - uses telescope.nvim + dressing.nvim (via vim.ui.select)
@@ -25,17 +22,18 @@ return {
         -- },
         config = function()
             require('legendary').setup {
-                include_builtin = true, -- show builtins (default true), i.e. zz (323 of 335, OOB)
-                -- include_legendary_cmds = false, -- legendary commands (default true) (12 of 335, OOB)
+                include_builtin = true,        -- show builtins (default true), i.e. zz (323 of 335, OOB)
+                include_legendary_cmds = true, -- legendary commands (default true) (12 of 335, OOB)
                 --
                 extensions = {
-                    -- discover various keymap sources
-                    lazy_nvim = true, -- has ZERO impact on choices?!
-                },
-                lazy_nvim = {
-                    -- Automatically register keymaps that are defined on lazy.nvim plugin specs
-                    -- using the `keys = {}` property.
-                    auto_register = true,
+                    -- keymap discovery extensions
+                    --
+                    -- TODO load user defined keymaps... is this not already an extension?! i.e. <PageUp>/<PageDown> and <leader> ... etc
+                    --
+                    lazy_nvim = false, -- builtin requires desc set on lazy keys entries, and I want it to be rhs by default
+                    -- TODO custom lazy_nvim loader extension that uses rhs
+                    -- FYI command palette builds list on first use, so that is why it has slight lag there and that also means you need to restart to rebuild the list
+                    -- FYI ~/.cache/nvim/legendary/legendary.log shows discovery logs (if you use its own Log.debug it won't do multiparam nor multiline logs, so just use print(vim.inspect(foo))
                 },
 
             }
