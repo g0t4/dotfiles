@@ -21,11 +21,11 @@
     // "json.format.defaultFormatter": "coc-json",
     // prettier dislikes for json:
     // - trim trailing commas (i.e. in this file, I like it when allowed, that said often its not allowed and then fails stuff so I am on fence)
-    // - force 2 spaces indent (can get over this)
 
     // *** prettier - so far, for markdown only
     // "prettier.formatterPriority": -1, // make prettier the fallback formatter (works but not needed as I can just disable it here:)
     "prettier.disableLanguages": [ "json" ], // *** using coc-json formatter for now
+    "prettier.tabWidth": 4,
 
     // *** markdown:
     // markdownlint - for diagnostics
