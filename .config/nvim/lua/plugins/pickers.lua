@@ -36,6 +36,7 @@ return {
                     --
                     -- FYI command palette builds list on first use (per buffer?), so that is why it has slight lag there and that also means you need to restart to rebuild the list
                     -- FYI ~/.cache/nvim/legendary/legendary.log shows discovery logs (if you use its own Log.debug it won't do multiparam nor multiline logs, so just use print(vim.inspect(foo))
+                    my_lazy_nvim = true,
                 },
 
             }
