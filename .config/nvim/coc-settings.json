@@ -59,6 +59,16 @@
         "?/init.lua",
         "/opt/homebrew/Cellar/neovim/0.10.2_1/share/nvim/runtime/lua/vim"
     ],
+    // lua LSP server has formatter builtin:
+    // - LSP: https://github.com/LuaLS/lua-language-server/wiki/Formatter
+    // - formatter: https://raw.githubusercontent.com/CppCXY/EmmyLuaCodeStyle
+    // *** use editorconfig to set lua format config unless I switch to another formatter like stylua?
+    //    editorconfig works and defaultConfig is not working for me
+    //       is it possible editorconfig clobbers all settings if its present?
+    // "Lua.format.defaultConfig": {
+    //     // ** these are ignored (maybe b/c if editorconfig is present it trumps everything here?)
+    //     // "max_line_length": "200",
+    // },
     "Lua.diagnostics.globals": [
         "vim",
         "describe",
