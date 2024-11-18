@@ -41,6 +41,12 @@ return {
             --   - not sure I like the idea of "centralizing" keymaps though that might have benefits for overlapping keys in diff scenarios (i.e. PageUp)
             --
         },
+        dependencies = {
+            -- PRN do I need to mark these to load first? is it all working b/c I lazy load this (legendary)? could order be an issue with maybe nvim-tree?
+            -- "stevearc/dressing.nvim",
+            -- "nvim-telescope/telescope.nvim",
+            -- "folke/which-key.nvim",
+        },
         config = function()
             require('legendary').setup {
                 include_builtin = true,        -- show builtins (default true), i.e. zz (~323)
@@ -53,14 +59,26 @@ return {
                     --
                     -- FYI which_key isn't loading any either? what does it load? all keys which-key shows or some set that are added to which key itself? unsure
                     --    CAREFUL not to rebind the keys too
-                    -- which_key = {
-                    --     auto_register = true,
-                    -- },
-                    lazy_nvim = false, -- builtin requires desc set on lazy keys entries, and I want it to be rhs by default
+                    -- FYI   :h legendary-which-key.txt
+                    -- which_key = true,
+                    lazy_nvim = false,   -- builtin requires desc set on lazy keys entries, and I want it to be rhs by default
                     my_lazy_nvim = true, -- my own lazy keys loader
                     --
                     -- FYI command palette builds list on first use (per buffer?), so that is why it has slight lag there and that also means you need to restart to rebuild the list
                     -- FYI ~/.cache/nvim/legendary/legendary.log shows discovery logs (if you use its own Log.debug it won't do multiparam nor multiline logs, so just use print(vim.inspect(foo))
+                    --
+                    -- troubleshoot why nvim_tree is also not working?!
+                    --   - open nvim-tree
+                    --   C-S-p before (nothing specific to nvim-tree
+                    --   :lua require('legendary.extensions.nvim_tree')()
+                    --   C-S-p now has 50+ extra entries (and they don't show in other windows so they are buffer specific)
+                    nvim_tree = true, -- TODO why does this not work to load the extension?
+                    --
+                    --
+                },
+                -- does this go here or in extensions?
+                which_key = {
+                    auto_register = true,
                 },
 
             }
