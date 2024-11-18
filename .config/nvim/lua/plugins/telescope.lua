@@ -46,6 +46,14 @@ return {
                         vertical = { width = 0.9 },
                     },
                     vimgrep_arguments = vimgrep_arguments,
+                    mappings = {
+                        i = {
+                            -- close on esc, otherwise have to double press esc to close (also this prevents me from going to normal mode which I don't want in this picker - at least not yet)
+                            -- TODO how is this implemented? is it going to break something else I have setup?
+                            ["<Esc>"] = require("telescope.actions").close,
+                        },
+
+                    },
                 },
                 pickers = {
                     live_grep = {
