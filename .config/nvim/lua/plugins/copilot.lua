@@ -104,11 +104,12 @@ return {
         dir = "~/repos/github/g0t4/ask-openai.nvim",
         --
         -- lazy has heuristics to call setup so you don't have to, but you must set opts then:
-        -- groq:
+        -- groq (lightning fast and llama 70b rocks, even 3.1!)
         opts = {
             provider = "keychain",
 
-            model = "llama-3.1-70b-versatile",
+            -- model = "llama-3.1-70b-versatile",
+            model = "llama-3.2-90b-text-preview",
             api_url = "https://api.groq.com/openai/v1/chat/completions",
 
             -- optional:
