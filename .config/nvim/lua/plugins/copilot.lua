@@ -134,9 +134,10 @@ return {
         -- *** ollama:
         opts = {
             provider = "keyless",
-            model = "llama3.2-vision:11b",               -- ollama list
+            model = "llama3.2-vision:11b", -- ollama list
             -- optional, if not default host:port
-            api_url = "http://localhost:11434/api/chat", -- include endpoint /api/chat b/c keyless can be any openai compatible endpoint
+            -- api_url = "http://localhost:11434/api/chat", -- include endpoint /api/chat b/c keyless can be any openai compatible endpoint
+            use_api_ollama = true,
         },
         --
         dependencies = {
