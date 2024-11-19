@@ -105,20 +105,27 @@ return {
         --
         -- lazy has heuristics to call setup so you don't have to, but you must set opts then:
         -- groq (lightning fast and llama 70b rocks, even 3.1!)
+        --
         opts = {
-            provider = "keychain",
-
-            -- model = "llama-3.1-70b-versatile",
-            model = "llama-3.2-90b-text-preview",
-            api_url = "https://api.groq.com/openai/v1/chat/completions",
-
-            -- optional:
-            keychain = {
-                service = "groq",
-                account = "ask",
-            },
+            -- DEFAULTS
+            -- provider = "keychain", -- for now, I want to test github copilot more so and find any issues so I'll use auto=>copilot for now
         },
-        -- ollama:
+        -- *** GROQ:
+        -- opts = {
+        --     provider = "keychain",
+        --
+        --     -- model = "llama-3.1-70b-versatile",
+        --     model = "llama-3.2-90b-text-preview",
+        --     api_url = "https://api.groq.com/openai/v1/chat/completions",
+        --
+        --     -- optional:
+        --     keychain = {
+        --         service = "groq",
+        --         account = "ask",
+        --     },
+        -- },
+        --
+        -- *** ollama:
         --
         -- opts = {
         --     provider = "keyless",
@@ -127,9 +134,6 @@ return {
         --     api_url = "http://localhost:11434/api/chat", -- include endpoint /api/chat b/c keyless can be any openai compatible endpoint
         -- },
         --
-        -- opts = {
-        --     -- provider = "keychain", -- for now, I want to test github copilot more so and find any issues so I'll use auto=>copilot for now
-        -- },
         -- opts = true, // alternative
         --
         -- OR, call setup yourself:
