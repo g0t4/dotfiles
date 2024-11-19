@@ -99,6 +99,7 @@ return {
         --   also review cmd history from cmdline mode
         --   produce a report (suggestions over time period, most frequent cmds you could improve)
         --   or, notify on the fly - after each cmd, send recent cmds [ keep history of normal mode commands ] (same for cmdline mode cmds)
+        event = { "CmdlineEnter" },
         "g0t4/ask-openai.nvim",
         dir = "~/repos/github/g0t4/ask-openai.nvim",
         --
