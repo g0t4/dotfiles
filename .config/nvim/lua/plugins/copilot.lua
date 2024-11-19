@@ -109,6 +109,11 @@ return {
         opts = {
             -- DEFAULTS
             -- provider = "keychain", -- for now, I want to test github copilot more so and find any issues so I'll use auto=>copilot for now
+            provider = function()
+                -- test with:
+                -- export OPENAI_API_KEY=$(security find-generic-password -s openai -a ask -w )
+                return os.getenv("OPENAI_API_KEY")
+            end,
         },
         -- *** GROQ:
         -- opts = {
