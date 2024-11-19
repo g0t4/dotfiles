@@ -100,7 +100,7 @@ return {
         dir = "~/repos/github/g0t4/ask-openai.nvim",
 
         -- *** copilot (default):
-        -- opts = { },
+        opts = {},
 
         -- *** OpenAI + keychain:
         -- opts = {
@@ -115,8 +115,8 @@ return {
         -- opts = {
         --     -- model = "llama-3.1-70b-versatile",
         --     model = "llama-3.2-90b-text-preview",
-        --     -- api_url = "https://api.groq.com/openai/v1/chat/completions",
         --     use_api_groq = true, -- easier
+        --     -- api_url = "https://api.groq.com/openai/v1/chat/completions", -- if not standard
         --     provider = function()
         --         return require("ask-openai.config")
         --             .get_key_from_stdout("security find-generic-password -s groq -a ask -w")
@@ -125,13 +125,11 @@ return {
         -- },
 
         -- *** ollama:
-        opts = {
-            provider = "keyless",
-            model = "llama3.2-vision:11b", -- ollama list
-            -- optional, if not default host:port
-            -- api_url = "http://localhost:11434/api/chat", -- include endpoint /api/chat b/c keyless can be any openai compatible endpoint
-            use_api_ollama = true,
-        },
+        -- opts = {
+        --     provider = "keyless",
+        --     model = "llama3.2-vision:11b", -- ollama list
+        --     use_api_ollama = true,
+        -- },
 
         dependencies = {
             "nvim-lua/plenary.nvim",
