@@ -100,7 +100,9 @@ return {
         dir = "~/repos/github/g0t4/ask-openai.nvim",
 
         -- *** copilot (default):
-        opts = {},
+        opts = {
+            verbose = true,
+        },
 
         -- *** OpenAI + keychain:
         -- opts = {
