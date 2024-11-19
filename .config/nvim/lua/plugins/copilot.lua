@@ -103,9 +103,17 @@ return {
         dir = "~/repos/github/g0t4/ask-openai.nvim",
         --
         -- lazy has heuristics to call setup so you don't have to, but you must set opts then:
+        -- ollama:
         opts = {
-            -- provider = "keychain", -- for now, I want to test github copilot more so and find any issues so I'll use auto=>copilot for now
+            provider = "keyless",
+            model = "llama3.2-vision:11b",               -- ollama list
+            -- optional, if not default host:port
+            api_url = "http://localhost:11434/api/chat", -- include endpoint /api/chat b/c keyless can be any openai compatible endpoint
         },
+        --
+        -- opts = {
+        --     -- provider = "keychain", -- for now, I want to test github copilot more so and find any issues so I'll use auto=>copilot for now
+        -- },
         -- opts = true, // alternative
         --
         -- OR, call setup yourself:
