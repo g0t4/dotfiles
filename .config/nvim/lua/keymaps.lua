@@ -14,7 +14,12 @@ for _, arrow in ipairs({ "right", "left", "up", "down" }) do
 end
 -- FYI can use Shift+Alt+arrows to move some other thing, might even want that for window moves if not something else b/c that is what I use in iterm2 for switching panes in a split tab/window
 
--- TODO tab keymaps? would it be helpful to use tabs (and maybe even restore them as part of session restore?)
+-- *** tab keymaps
+vim.keymap.set({ "n", "i", "v" }, "<C-t>", "<Cmd>tabnew<CR>", default_options)
+-- <C-M-arrow> == move tabs
+vim.keymap.set({ "n", "i", "v" }, "<C-M-left>", "<Cmd>tabprevious<CR>", default_options)
+vim.keymap.set({ "n", "i", "v" }, "<C-M-right>", "<Cmd>tabnext<CR>", default_options)
+
 -- TODO buffer keymaps?
 
 
