@@ -107,12 +107,14 @@ return {
         -- groq (lightning fast and llama 70b rocks, even 3.1!)
         --
         opts = {
-            -- DEFAULTS
-            -- provider = "keychain", -- for now, I want to test github copilot more so and find any issues so I'll use auto=>copilot for now
             provider = function()
-                -- test with:
-                -- export OPENAI_API_KEY=$(security find-generic-password -s openai -a ask -w )
-                return os.getenv("OPENAI_API_KEY")
+                local handle = io.popen('security find-generic-password -s openai -a ask -w')
+                if not handle then
+                    return nil
+                end
+                local api_key = handle:read("*a"):gsub("%s+", "") -- remove any extra whitespace
+                handle:close()
+                return api_key                                    -- return empty is fine, is checked by consumer
             end,
         },
         -- *** GROQ:
