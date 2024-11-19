@@ -101,7 +101,7 @@ return {
 
         -- *** copilot (default):
         opts = {
-            verbose = true,
+            -- verbose = true,
         },
 
         -- *** OpenAI + keychain:
