@@ -76,6 +76,11 @@ local avante =
             },
         },
         {
+            -- TODO do I wanna keep this? I'm pretty happy with just onedarkpro + darker bg... looks great
+            -- TODO use this w/o avante too?
+            -- cons:
+            --   - alignment is off when switching to insert mode b/c normal mode formats different (i.e. lists)
+            --
             -- Make sure to set this up properly if you have lazy=true
             'MeanderingProgrammer/render-markdown.nvim',
             opts = {
