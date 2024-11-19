@@ -95,20 +95,13 @@ end
 return {
 
     {
-        -- TODO ask for help reviewing recent commands (ie normal mode)
-        --   also review cmd history from cmdline mode
-        --   produce a report (suggestions over time period, most frequent cmds you could improve)
-        --   or, notify on the fly - after each cmd, send recent cmds [ keep history of normal mode commands ] (same for cmdline mode cmds)
-        event = { "CmdlineEnter" },
         "g0t4/ask-openai.nvim",
+        event = { "CmdlineEnter" },
         dir = "~/repos/github/g0t4/ask-openai.nvim",
-        --
-        -- lazy has heuristics to call setup so you don't have to, but you must set opts then:
-        -- groq (lightning fast and llama 70b rocks, even 3.1!)
-        --
+
         -- *** copilot (default):
         -- opts = { },
-        --
+
         -- *** OpenAI + keychain:
         -- opts = {
         --     provider = function()
@@ -117,7 +110,7 @@ return {
         --     end,
         --     -- verbose = true,
         -- },
-        --
+
         -- *** GROQ + keychain:
         -- opts = {
         --     -- model = "llama-3.1-70b-versatile",
@@ -130,7 +123,7 @@ return {
         --     end,
         --     -- verbose = true,
         -- },
-        --
+
         -- *** ollama:
         opts = {
             provider = "keyless",
@@ -139,7 +132,7 @@ return {
             -- api_url = "http://localhost:11434/api/chat", -- include endpoint /api/chat b/c keyless can be any openai compatible endpoint
             use_api_ollama = true,
         },
-        --
+
         dependencies = {
             "nvim-lua/plenary.nvim",
         }
