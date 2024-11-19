@@ -106,29 +106,29 @@ return {
         -- lazy has heuristics to call setup so you don't have to, but you must set opts then:
         -- groq (lightning fast and llama 70b rocks, even 3.1!)
         --
-        opts = {
-            provider = function()
-                return require("ask-openai.config")
-                    .get_key_from_stdout("security find-generic-password -s openai -a ask -w")
-            end,
-        },
-        -- *** GROQ:
-        -- opts = {
-        --     provider = "keychain",
+        -- *** copilot (default):
+        -- opts = { },
         --
+        -- *** OpenAI + keychain:
+        -- opts = {
+        --     provider = function()
+        --         return require("ask-openai.config")
+        --             .get_key_from_stdout("security find-generic-password -s openai -a ask -w")
+        --     end,
+        -- },
+        --
+        -- *** GROQ + keychain:
+        -- opts = {
         --     -- model = "llama-3.1-70b-versatile",
         --     model = "llama-3.2-90b-text-preview",
         --     api_url = "https://api.groq.com/openai/v1/chat/completions",
-        --
-        --     -- optional:
-        --     keychain = {
-        --         service = "groq",
-        --         account = "ask",
-        --     },
+        --     provider = function()
+        --         return require("ask-openai.config")
+        --             .get_key_from_stdout("security find-generic-password -s openai -a ask -w")
+        --     end,
         -- },
         --
         -- *** ollama:
-        --
         -- opts = {
         --     provider = "keyless",
         --     model = "llama3.2-vision:11b",               -- ollama list
@@ -136,15 +136,8 @@ return {
         --     api_url = "http://localhost:11434/api/chat", -- include endpoint /api/chat b/c keyless can be any openai compatible endpoint
         -- },
         --
-        -- opts = true, // alternative
-        --
-        -- OR, call setup yourself:
-        -- config = function()
-        --     require("ask-openai").setup {}
-        -- end,
         dependencies = {
             "nvim-lua/plenary.nvim",
-            -- "luarocks/cjson", ==> check and install it if not found? OR add checkhealth to my plugin?
         }
     },
 
