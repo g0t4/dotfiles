@@ -3,4 +3,10 @@ if not use_vimspector then
     return {}
 end
 
-return {}
+return {
+
+    {
+        'puremourning/vimspector',
+    },
+
+}
