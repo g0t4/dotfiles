@@ -10,7 +10,7 @@ return {
     --
 
     {
-        enabled = false,
+        enabled = true,
         'm4xshen/hardtime.nvim',    -- tons of features, recommends, block repeated key use, etc
         dependencies = {
             "MunifTanjim/nui.nvim", -- for report float window
@@ -25,8 +25,10 @@ return {
             require("hardtime").setup({
 
                 -- messages (via cmdline OR nvim-notify popups) =>  I find the disabled/restricted notify popups useless, the key not working / stopping is enough for me to knock it off
-                notification = false, -- don't notify for disabled/restricted keys, i.e. down disabled, OR hit j repeatedly...
-                hint = true,          -- explicit that I want hints for now... i.e. `cw` instead of `dwi`
+                notification = false,  -- don't notify for disabled/restricted keys, i.e. down disabled, OR hit j repeatedly...
+                hint = true,           -- explicit that I want hints for now... i.e. `cw` instead of `dwi`
+                disable_mouse = false, -- I missed occasional resize windows, might just mean I need a key for that? also does this block hover windows (i.e. vimspector?) if mouse is disabled?
+
 
                 disabled_keys = {
                     -- ONLY disable arrows in normal mode, that way I can use them in INSERT mode to move up/down in the completion list, not ideal, maybe is a better way to only enable them for completion list?
