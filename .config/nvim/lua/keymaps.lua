@@ -116,9 +116,11 @@ vim.cmd [[
     " gcc is 3 keystrokes, for a very common command
     " <C-/> is 1 chord (eqiv to 1 keystroke), not 3 key/chors in a row
     " only issue C-/ won't work with trailing motions, i.e. gc{
+    vmap <C-/> gcc
 
     " PRN add a toggle comments command?, each line is treated separately instead of a multi line comment/uncomment
 
     " TODO find a comments plugin that extends the neovim builtin, basic comment commands
 
+    " TODO learn more about when/why to use selectmode vs visual mode, have to `:set selectmode=mouse` or key/cmd ... by default its empty for my config
 ]]
