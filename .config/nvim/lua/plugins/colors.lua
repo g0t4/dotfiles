@@ -68,6 +68,10 @@ return {
                 return status
             end
 
+            local function workspace_name()
+                return vim.fn.fnamemodify(vim.fn.getcwd(), ":t")
+            end
+
             require("lualine").setup {
                 -- default: https://github.com/nvim-lualine/lualine.nvim#default-configuration
                 options = {
@@ -110,9 +114,13 @@ return {
                             end,
                             padding = { left = 0, right = 1 }
                         }, -- FYI when set padding it overrides both sides, so only specify left means right = 0
-                        { "progress", padding = { left = 0 } },
+                        { "progress", padding = { right = 1 } },
                     },
-                    lualine_z = { '' },
+                    lualine_z = {
+                        {
+                            workspace_name,
+                        }
+                    },
                     -- search shows #/total in commandline so don't need that here
                 },
                 inactive_sections = {
