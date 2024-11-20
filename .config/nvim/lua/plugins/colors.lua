@@ -36,14 +36,7 @@ return {
         dependencies = { 'nvim-tree/nvim-web-devicons' },
         -- TODO consider "kyazdani42/nvim-web-devicons" (lua rewrite) if some reaosn to do so, i.e. perf? or other forks?
         config = function()
-            local function statusline_line()
-                return vim.fn.line(".") .. ""
-            end
-
-            local function statusline_column()
-                -- credit / from https://neovimcraft.com/plugin/SmiteshP/nvim-navic/
-                return vim.fn.col(".") .. ""
-            end
+            -- credit / from https://neovimcraft.com/plugin/SmiteshP/nvim-navic/
 
             local function statusline_filetype()
                 --  lua
@@ -106,9 +99,12 @@ return {
                     lualine_c = { statusline_filetype, statusline_copilots_status },
                     lualine_x = {}, -- todo move copilot back here?
                     lualine_y = {
-                        statusline_line,
-                        { statusline_column, padding = { left = 0, right = 1 } }, -- FYI when set padding it overrides both sides, so only specify left means right = 0
-                        { "progress",        padding = { left = 0 } },
+                        { function() return vim.fn.line(".") .. "" end },
+                        {
+                            function() return vim.fn.col(".") .. "" end,
+                            padding = { left = 0, right = 1 }
+                        }, -- FYI when set padding it overrides both sides, so only specify left means right = 0
+                        { "progress", padding = { left = 0 } },
                     },
                     lualine_z = { '' },
                     -- search shows #/total in commandline so don't need that here
