@@ -99,9 +99,15 @@ return {
                     lualine_c = { statusline_filetype, statusline_copilots_status },
                     lualine_x = {}, -- todo move copilot back here?
                     lualine_y = {
-                        { function() return vim.fn.line(".") .. "" end },
                         {
-                            function() return vim.fn.col(".") .. "" end,
+                            function()
+                                return vim.fn.line(".") .. ""
+                            end,
+                        },
+                        {
+                            function()
+                                return vim.fn.col(".") .. ""
+                            end,
                             padding = { left = 0, right = 1 }
                         }, -- FYI when set padding it overrides both sides, so only specify left means right = 0
                         { "progress", padding = { left = 0 } },
