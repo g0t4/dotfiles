@@ -107,3 +107,18 @@ end)
 vim.keymap.set('n', '<leader>/', function()
     vim.fn.execute("/" .. vim.fn.expand("<cword>"))
 end)
+
+-- NO idea why these won't work in lua vim.keymap.set but they don't :(
+vim.cmd [[
+    " map ctrl+/ (similar to cmd+/ in vscode/zed), IIAC windows uses ctrl+/ in vscode?
+    " NOTE, I want 6<C-/> to do 6gcc
+    nmap <C-/> gcc
+    " gcc is 3 keystrokes, for a very common command
+    " <C-/> is 1 chord (eqiv to 1 keystroke), not 3 key/chors in a row
+    " only issue C-/ won't work with trailing motions, i.e. gc{
+
+    " PRN add a toggle comments command?, each line is treated separately instead of a multi line comment/uncomment
+
+    " TODO find a comments plugin that extends the neovim builtin, basic comment commands
+
+]]
