@@ -36,20 +36,16 @@ return {
         dependencies = { 'nvim-tree/nvim-web-devicons' },
         -- TODO consider "kyazdani42/nvim-web-devicons" (lua rewrite) if some reaosn to do so, i.e. perf? or other forks?
         config = function()
-            function StatusLine_Line()
-                -- "Ln:" worked nicely too, trying  to save more space?
-                -- return "" .. vim.fn.line(".")
+            local function statusline_line()
                 return vim.fn.line(".") .. ""
             end
 
-            function StatusLine_Column()
+            local function statusline_column()
                 -- credit / from https://neovimcraft.com/plugin/SmiteshP/nvim-navic/
-                -- "Col:"  worked nicely too, trying  to save more space?
-                -- return "" .. vim.fn.col(".")
                 return vim.fn.col(".") .. ""
             end
 
-            function StatusLine_FileTypeIfNotInFileExt()
+            local function statusline_filetype()
                 --  lua
                 --  why show the icon too? given the icon alone isn't as telling as the filetype, then just show the darn filetype
                 --  AND why show filetype if the filename has the same extension as it!?
@@ -62,11 +58,11 @@ return {
                 return vim.bo.filetype
             end
 
-            function StatusLine_NvimTree()
+            local function statusline_nvim_tree()
                 return " " .. vim.fn.fnamemodify(vim.fn.getcwd(), ":t") -- only show last part of path (folder name)
             end
 
-            function StatusLine_WrapCopilotStatus()
+            local function statusline_copilots_status()
                 -- need this wrapper b/c if I put a user defined function in the statusline and it doesn't exist it is permanently disabled basically, so this won't blow up and will dynamically figure out which status to show too
                 local status = ""
                 if vim.fn.exists("*GetStatusLineCopilot") == 1 then
@@ -107,11 +103,11 @@ return {
                         -- relative path, 4 filename+parentdir sounds interesting
                     } },          -- filename includes modified
                     -- lualine_c = { "filetype" },
-                    lualine_c = { StatusLine_FileTypeIfNotInFileExt, StatusLine_WrapCopilotStatus },
+                    lualine_c = { statusline_filetype, statusline_copilots_status },
                     lualine_x = {}, -- todo move copilot back here?
                     lualine_y = {
-                        StatusLine_Line,
-                        { StatusLine_Column, padding = { left = 0, right = 1 } }, -- FYI when set padding it overrides both sides, so only specify left means right = 0
+                        statusline_line,
+                        { statusline_column, padding = { left = 0, right = 1 } }, -- FYI when set padding it overrides both sides, so only specify left means right = 0
                         { "progress",        padding = { left = 0 } },
                     },
                     lualine_z = { '' },
@@ -132,7 +128,7 @@ return {
                             "NvimTree",
                         },
                         sections = {
-                            lualine_a = { StatusLine_NvimTree },
+                            lualine_a = { statusline_nvim_tree },
                         },
                     }
                 }
