@@ -1,3 +1,8 @@
+local use_dap = false
+if not use_dap then
+    return {}
+end
+
 function setup_python_dap()
     -- local dap = require('dap')
     -- dap.adapters.python = function(cb, config)
