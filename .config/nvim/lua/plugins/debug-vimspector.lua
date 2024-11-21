@@ -24,8 +24,7 @@ return {
                 " TODO map with leader (mostly), probably
                 "  <leader>d
                 "  <leader>s  # step over/into/out/up/etc
-
-
+                " TODO keys to consider: https://puremourning.github.io/vimspector-web/#debugging
 
 
                 " alternatives to mouse hover which isn't likely gonna work in terminals (nor in nvim IIUC)
