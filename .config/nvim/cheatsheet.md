@@ -148,6 +148,14 @@ These are custom mappings in coc to add LSP features based on LSP availability..
 - TODO nvim editorconfig support (add .editorconfig)
 - TODO section on formatting (not here)
 
+### search
+
+- Cmdline can be used to search with `/` (forward) and `?` (backward)
+  - `/foo<CR>` will jump to the first match
+  - `n` and `N` cycle matches (forward/backward)
+- Also, use `*` to search forward for the exact word under cursor, and `#` to search backward
+  - `g*`/`g#` is the same search without `\<` and `\>` which means it doesn't have to be an exact match
+
 ### document movement
 
 - large movements
