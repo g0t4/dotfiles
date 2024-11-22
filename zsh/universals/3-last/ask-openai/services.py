@@ -3,14 +3,23 @@ from collections import namedtuple
 from os import getenv
 import platform
 import sys
-from typing import Optional
+from typing import Optional, NamedTuple
 
 import keyring
 from keyrings.cryptfile.cryptfile import CryptFileKeyring
 
-Service = namedtuple('Service', 'base_url model api_key name')
-Service.__repr__ = lambda self: f"Service({self.name} model={self.model})"  # i.e. printing (logging), DO NOT INCLUDE api_key
+class NewService(NamedTuple):
+    base_url: str
+    model: str
+    api_key: str
+    name: str
+    chat_completions_path: str|None
 
+    def chat_url(self):
+        f"{self.base_url}/{self.chat_completions_path}"
+
+Service = namedtuple('Service', 'base_url model api_key name chat_completions_path')
+Service.__repr__ = lambda self: f"Service({self.name} model={self.model})"  # i.e. printing (logging), DO NOT INCLUDE api_key
 
 def use_groq(model: Optional[str] = None):
 
@@ -19,6 +28,7 @@ def use_groq(model: Optional[str] = None):
         api_key=get_api_key('groq', 'ask'),
         base_url='https://api.groq.com/openai/v1',
         model=model if model else 'llama-3.1-70b-versatile',
+        chat_completions_path= None,
         # groq https://console.groq.com/docs/models
         #   llama3-8b-8192, llama3-70b-8192, mixtral-8x7b-32768, gemma-7b-it, gemma2-9b-it
         #   llama-3.1-405b-reasoning, llama-3.1-70b-versatile, llama-3.1-8b-instant
@@ -44,7 +54,18 @@ def use_openai(model: Optional[str] = None):
         api_key=get_api_key('openai', 'ask'),
         base_url=None,
         model=model if model else 'gpt-4o',
+        chat_completions_path= None,
     )
+
+def use_anthropic(model: Optional[str] = None):
+    return NewService(
+        name='anthropic',
+        api_key=get_api_key('anthropic', 'ask'),
+        base_url="https://api.anthropic.com/v1",
+        model=model if model else 'claude-3-5-sonnet-latest',
+        chat_completions_path= "messages",
+    )
+    # https://docs.anthropic.com/en/docs/about-claude/models
 
 
 def use_lmstudio(model: Optional[str] = None):
@@ -55,11 +76,18 @@ def use_lmstudio(model: Optional[str] = None):
         api_key="whatever",
         base_url="http://localhost:1234/v1",
         model=model if model else '',
+        chat_completions_path= None,
     )
 
 
 def use_ollama(model: Optional[str] = None):
-    return Service(name='ollama', api_key="whatever", base_url="http://localhost:11434/v1", model=model if model else '')
+    return Service(
+        name='ollama',
+        api_key="whatever",
+        base_url="http://localhost:11434/v1",
+        model=model if model else '',
+        chat_completions_path= None
+    )
 
 def use_deepseek(model: Optional[str] = None):
     # curl -L -X GET 'https://api.deepseek.com/models' \-H 'Accept: application/json' \-H 'Authorization: Bearer <TOKEN>' | jq
@@ -71,7 +99,8 @@ def use_deepseek(model: Optional[str] = None):
         # FYI `security add-generic-password -a ask -s deepseek -w`
         api_key=get_api_key('deepseek', 'ask'),
         base_url="https://api.deepseek.com",
-        model=model if model else 'deepseek-chat'
+        model=model if model else 'deepseek-chat',
+        chat_completions_path= None,
     )
 
 def get_api_key(service_name, account_name):
@@ -113,6 +142,8 @@ def args_to_use() -> Service:
     parser.add_argument('--lmstudio', action='store_true', default=False)
     parser.add_argument('--groq', action='store_true', default=False)
     parser.add_argument('--ollama', action='store_true', default=False)
+    parser.add_argument('--anthropic', action='store_true', default=False)
+
     # optional model name (for all services):
     parser.add_argument("model", type=str, const=None, nargs='?')
     #
@@ -127,6 +158,8 @@ def args_to_use() -> Service:
         use = use_ollama(args.model)
     elif args.deepseek:
         use = use_deepseek(args.model)
+    elif args.anthropic:
+        use = use_anthropic(args.model)
     else:
         use = use_openai(args.model)
 
