@@ -3,6 +3,8 @@ if not use_vimspector then
     return {}
 end
 
+-- FYI good reference: https://github.com/puremourning/vimspector/blob/master/support/custom_ui_vimrc#L13
+-- including conditional keys inside of debug session (tab/windows) only
 return {
 
     {
@@ -26,6 +28,8 @@ return {
                 "  <leader>s  # step over/into/out/up/etc
                 " TODO keys to consider: https://puremourning.github.io/vimspector-web/#debugging
 
+                " always map these:
+                nmap <F5> <Plug>VimspectorLaunch
 
                 " alternatives to mouse hover which isn't likely gonna work in terminals (nor in nvim IIUC)
                 nmap <Leader>di <Plug>VimspectorBalloonEval
