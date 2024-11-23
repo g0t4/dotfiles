@@ -161,6 +161,10 @@ async def ask_openai(connection):
 
     await task_clear  # ? why can't I put this after try/catch (smth happens with timing to not actually clear the prompt if I do that, but only on remote pi7.lan?)
 
+    if use.name == "anthropic":
+        await session.async_send_text(f"cannot use claude yet b/c its streaming is a diff format")
+        return
+
     # *** request completion
     try:
         response_stream = await client.chat.completions.create(
