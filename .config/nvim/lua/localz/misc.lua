@@ -115,6 +115,7 @@ vim.api.nvim_create_autocmd("BufWinEnter", {
 vim.opt.splitright = true -- :vsplit now opens new window on the right, I def want that as I always flip them, also Ctrl+V in telescope opens file to the right
 
 -- *** WIP CmdCapture
+-- TODO how is this not a builtin thing? or is it? (redir + cmd + paste?)
 -- i.e. `:CmdCapture nmap <leader>` => new buffer, then :sort if desired to find what keymaps are avail
 -- this is like :Dump, a command means its just one word before what I want to run to add this special behavior below
 vim.api.nvim_create_user_command('CmdCapture', "lua CaptureCommandOutput(<q-args>)", {
