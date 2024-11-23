@@ -53,6 +53,7 @@ def get_anthropic_suggestion(passed_context: str, use: Service):
         # https://docs.anthropic.com/en/api/messages
         body = {
             # TODO how does this perform vs as user message? same question for openai compat above
+            #  FYI I tested that role: "system" appears fine for both openai and claude, is there any benefit one way or the other, I'll just wait to see if cmd suggestions suck
             "system": system_message,
             "model": use.model,
             "messages": [
