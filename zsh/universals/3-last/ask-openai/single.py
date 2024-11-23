@@ -6,8 +6,15 @@ from services import args_to_use, Service
 
 
 def generate_command(passed_context: str, use: Service):
+    if use.name == "anthropic":
+        return get_anthropic_suggestion(passed_context, use)
+    else:
+        return get_openai_suggestion(passed_context, use)
+
+def get_openai_suggestion(passed_context: str, use: Service):
 
     http_client = httpx.Client()
+
     try:
 
         # TODO add request builder to make separate requests/reponses for custom APIs
