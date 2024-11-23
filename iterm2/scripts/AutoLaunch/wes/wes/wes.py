@@ -138,6 +138,8 @@ async def ask_openai(connection):
                 use = use_deepseek(model)
             elif "--lmstudio" in ask_service:
                 use = use_lmstudio(model)
+            elif "--anthropic" in ask_service:
+                use = use_anthropic(model)
             else:
                 use = use_openai(model)
 
