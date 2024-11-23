@@ -1,12 +1,10 @@
 import argparse
-from collections import namedtuple
 from os import getenv
 import platform
 import sys
 from typing import Optional, NamedTuple
 
 import keyring
-from keyrings.cryptfile.cryptfile import CryptFileKeyring
 
 class Service(NamedTuple):
     base_url: str
@@ -108,6 +106,7 @@ def use_deepseek(model: Optional[str] = None):
 def get_api_key(service_name, account_name):
 
     if platform.system() == 'Linux':
+        from keyrings.cryptfile.cryptfile import CryptFileKeyring
         # https://pypi.org/project/keyrings.cryptfile/
         # pip install keyrings.cryptfile
         #
