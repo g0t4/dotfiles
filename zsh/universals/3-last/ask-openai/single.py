@@ -12,11 +12,8 @@ def generate_command(passed_context: str, use: Service):
         return get_openai_suggestion(passed_context, use)
 
 def get_openai_suggestion(passed_context: str, use: Service):
-
     http_client = httpx.Client()
-
     try:
-
         # TODO add request builder to make separate requests/reponses for custom APIs
         body = {
             "model": use.model,
@@ -33,9 +30,7 @@ def get_openai_suggestion(passed_context: str, use: Service):
             "max_tokens":200,
             # "n":1  # default # claude chokes on this, don't need it anyways, its default on openai API
         }
-
         chat_url = use.chat_url()
-
         headers = {
             "Authorization": f"Bearer {use.api_key}", # TODO openai compat only, remove for claude (though doesn't hurt claude currently)
             "x-api-key": f"{use.api_key}", # TODO claude only, take off for openai compat (works with openai currently)
@@ -51,9 +46,7 @@ def get_openai_suggestion(passed_context: str, use: Service):
         else:
             # TODO openai parser only
             content = completion["choices"][0]["message"]["content"]
-
         log_response(passed_context, use, content)
-
         return content
     except Exception as e:
         print(f"{e}")
