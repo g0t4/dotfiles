@@ -50,19 +50,15 @@ def get_anthropic_suggestion(passed_context: str, use: Service):
     try:
         # https://docs.anthropic.com/en/api/messages
         body = {
+            "system": "You are a command line expert. Respond with a single, valid, complete command line. I intend to execute it. No explanation. No markdown. No markdown with backticks ` nor ```",
             "model": use.model,
             "messages": [
-                {
-                    "role": "user",
-                    "content": "You are a command line expert. Respond with a single, valid, complete command line. I intend to execute it. No explanation. No markdown. No markdown with backticks ` nor ```"
-                },
                 {
                     "role": "user",
                     "content": f"{passed_context}"
                 },
             ],
             "max_tokens":200,
-
         }
         chat_url = use.chat_url()
         headers = {
