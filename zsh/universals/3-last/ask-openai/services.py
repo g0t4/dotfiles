@@ -8,7 +8,7 @@ from typing import Optional, NamedTuple
 import keyring
 from keyrings.cryptfile.cryptfile import CryptFileKeyring
 
-class NewService(NamedTuple):
+class Service(NamedTuple):
     base_url: str
     model: str
     api_key: str
@@ -20,9 +20,8 @@ class NewService(NamedTuple):
             return f"{self.base_url}/chat/completions"
         else:
             return f"{self.base_url}/{self.chat_completions_path}"
-
-Service = namedtuple('Service', 'base_url model api_key name chat_completions_path')
-Service.__repr__ = lambda self: f"Service({self.name} model={self.model})"  # i.e. printing (logging), DO NOT INCLUDE api_key
+    def __repr__(self):
+        return f"Service({self.name} model={self.model})"  # i.e. printing (logging), DO NOT INCLUDE api_key
 
 def use_groq(model: Optional[str] = None):
 
@@ -52,7 +51,7 @@ def use_openai(model: Optional[str] = None):
     # model="gpt-3.5-turbo-1106",
     # gpt-4 "turbo" and gpt-3.5-turbo are both fast, so use gpt-4 for accuracy (else 3.5 might need to be re-run/fixed which can cost more)
 
-    return NewService(
+    return Service(
         name='openai',
         api_key=get_api_key('openai', 'ask'),
         base_url="https://api.openai.com/v1",
@@ -61,7 +60,7 @@ def use_openai(model: Optional[str] = None):
     )
 
 def use_anthropic(model: Optional[str] = None):
-    return NewService(
+    return Service(
         name='anthropic',
         api_key=get_api_key('anthropic', 'ask'),
         base_url="https://api.anthropic.com/v1",
