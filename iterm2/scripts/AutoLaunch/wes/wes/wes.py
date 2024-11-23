@@ -162,7 +162,11 @@ async def ask_openai(connection):
     await task_clear  # ? why can't I put this after try/catch (smth happens with timing to not actually clear the prompt if I do that, but only on remote pi7.lan?)
 
     if use.name == "anthropic":
-        await session.async_send_text(f"cannot use claude yet b/c its streaming is a diff format")
+        # can I import the non streaming impl here?
+        from single import get_anthropic_suggestion
+        command = get_anthropic_suggestion(current_command, use)
+        await session.async_send_text(command)
+        # TODO impl it elsewhere and plug it in here, testing by restarting wes.py is a PITA
         return
 
     # *** request completion

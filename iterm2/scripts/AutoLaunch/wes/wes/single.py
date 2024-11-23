@@ -1,0 +1,1 @@
+../../../../../zsh/universals/3-last/ask-openai/single.py
