@@ -98,8 +98,8 @@ return {
         keys = {
             { '<C-p>',     ':Telescope find_files<CR>', mode = 'n' },
             { '<leader>t', ':Telescope<CR>',            mode = 'n' }, -- list pickers, select one opens it (like if :Telescope<CR>), shows keymaps too
-            { '<leader>g', ':Telescope live_grep<CR>',  mode = 'n' }, -- proj search
-            { '<leader>s', ':Telescope git_status<CR>', mode = 'n' },
+            { '<leader>s', ':Telescope live_grep<CR>',  mode = 'n' }, -- keep top level w/o submapping collision so this is snappy fast
+            { '<leader>gst', ':Telescope git_status<CR>', mode = 'n' }, -- like gst abbr/alias
         },
         config = function()
             local telescopeConfig = require('telescope.config')
