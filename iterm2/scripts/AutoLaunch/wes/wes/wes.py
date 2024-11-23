@@ -3,7 +3,7 @@ import platform
 import iterm2
 import re
 from openai import AsyncOpenAI
-from use import use_groq, use_lmstudio, use_ollama, use_openai, use_deepseek
+from services import use_groq, use_lmstudio, use_ollama, use_openai, use_deepseek, use_anthropic
 
 DEBUG = True
 
