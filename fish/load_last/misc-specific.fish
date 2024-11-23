@@ -680,6 +680,10 @@ abbr psfull "ps -o 'user,pid,pcpu,pmem,vsz,rss,tty,stat,start,time,comm' -ax"
 # - keep non-format options on end of cmd to easily toggle:
 # - user:10 - limits to 10 chars (+ indicates ...) (:X ubuntu yes, macos no):
 #       ps -o "user:5,pid,pcpu,pmem,vsz,rss,tty,stat,start,time,comm" -ax
+# *** process info
+# files for a process:
+# TODO how to deal with multiple matches, I don't like using head but at least it is obvious in the expanded command so leave it for now
+abbr --set-cursor="!" lsofp 'lsof -p $(pgrep -if "!" | head -1)'
 
 
 
