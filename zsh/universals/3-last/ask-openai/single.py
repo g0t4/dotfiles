@@ -1,19 +1,18 @@
 import sys
 import os
-from openai import OpenAI
+import httpx
 
 from services import args_to_use, Service
 
 
 def generate_command(passed_context: str, use: Service):
 
-    client = OpenAI(api_key=use.api_key, base_url=use.base_url)
-
+    http_client = httpx.Client()
     try:
 
-        completion = client.chat.completions.create(
-            model=use.model,
-            messages=[
+        body = {
+            "model": use.model,
+            "messages": [
                 {
                     "role": "system",
                     "content": "You are a command line expert. Respond with a single, valid, complete command line. I intend to execute it. No explanation. No markdown. No markdown with backticks ` nor ```"
@@ -22,22 +21,23 @@ def generate_command(passed_context: str, use: Service):
                     "role": "user",
                     "content": f"{passed_context}"
                 },
-                # PRN can I improve phi3/mixtral by further telling it not to give me an explanataion, i.e.:
-                # {
-                #     "role": "system",
-                #     "content": "The command line is:"
-                # }
             ],
-            max_tokens=200,
-            n=1  # default
-        )
+            "max_tokens":200,
+            "n":1  # default
+        }
 
-        response = completion.choices[0].message.content
-        # log responses to ~/.ask.openai.log
+        chat_url = f"{use.base_url}/chat/completions"
 
-        log_response(passed_context, use, response)
+        response = http_client.post(chat_url,
+                                    json=body,
+                                    headers={"Authorization": f"Bearer {use.api_key}"})
+        response.raise_for_status()
+        completion = response.json()
+        choices = completion["choices"]
+        content  = choices[0]["message"]["content"]
+        log_response(passed_context, use, content)
 
-        return response
+        return content
     except Exception as e:
         print(f"{e}")
         return None

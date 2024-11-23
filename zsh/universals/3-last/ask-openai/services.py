@@ -52,7 +52,7 @@ def use_openai(model: Optional[str] = None):
     return Service(
         name='openai',
         api_key=get_api_key('openai', 'ask'),
-        base_url=None,
+        base_url="https://api.openai.com/v1",
         model=model if model else 'gpt-4o',
         chat_completions_path= None,
     )

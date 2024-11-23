@@ -1,6 +1,7 @@
 # ask-openai
-openai
+openai # todo remove when all ported to httpx
 keyring
 keyrings.cryptfile
+httpx
 
 debugpy
