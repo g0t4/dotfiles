@@ -26,7 +26,7 @@ def generate_command(passed_context: str, use: Service):
             "n":1  # default
         }
 
-        chat_url = f"{use.base_url}/chat/completions"
+        chat_url = use.chat_url()
 
         response = http_client.post(chat_url,
                                     json=body,
