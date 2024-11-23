@@ -10,11 +10,12 @@ def generate_command(passed_context: str, use: Service):
     http_client = httpx.Client()
     try:
 
+        # TODO add request builder to make separate requests/reponses for custom APIs
         body = {
             "model": use.model,
             "messages": [
                 {
-                    "role": "system",
+                    "role": "user", # TODO use system for openai compat, use "user" for claude, for now all can use user too
                     "content": "You are a command line expert. Respond with a single, valid, complete command line. I intend to execute it. No explanation. No markdown. No markdown with backticks ` nor ```"
                 },
                 {
@@ -23,18 +24,27 @@ def generate_command(passed_context: str, use: Service):
                 },
             ],
             "max_tokens":200,
-            "n":1  # default
+            # "n":1  # default # claude chokes on this, don't need it anyways, its default on openai API
         }
 
         chat_url = use.chat_url()
 
-        response = http_client.post(chat_url,
-                                    json=body,
-                                    headers={"Authorization": f"Bearer {use.api_key}"})
+        headers = {
+            "Authorization": f"Bearer {use.api_key}", # TODO openai compat only, remove for claude (though doesn't hurt claude currently)
+            "x-api-key": f"{use.api_key}", # TODO claude only, take off for openai compat (works with openai currently)
+            "Content-Type": "application/json",
+            "anthropic-version": "2023-06-01", # TODO claude only, take off for openai compat (works w/ openai currentlY)
+        }
+        response = http_client.post(chat_url, json=body, headers=headers)
         response.raise_for_status()
         completion = response.json()
-        choices = completion["choices"]
-        content  = choices[0]["message"]["content"]
+        if "content" in completion:
+            # TODO claude parser only
+            content = completion["content"][0]["text"]
+        else:
+            # TODO openai parser only
+            content = completion["choices"][0]["message"]["content"]
+
         log_response(passed_context, use, content)
 
         return content
