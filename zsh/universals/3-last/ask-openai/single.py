@@ -5,6 +5,8 @@ import httpx
 from services import args_to_use, Service
 
 
+system_message = "You are a command line expert. Respond with a single, valid, complete command line. I intend to execute it. No explanation. No markdown. No markdown with backticks ` nor ```"
+
 def generate_command(passed_context: str, use: Service):
     if use.name == "anthropic":
         return get_anthropic_suggestion(passed_context, use)
@@ -19,7 +21,7 @@ def get_openai_suggestion(passed_context: str, use: Service):
             "messages": [
                 {
                     "role": "system",
-                    "content": "You are a command line expert. Respond with a single, valid, complete command line. I intend to execute it. No explanation. No markdown. No markdown with backticks ` nor ```"
+                    "content": system_message
                 },
                 {
                     "role": "user",
@@ -50,7 +52,7 @@ def get_anthropic_suggestion(passed_context: str, use: Service):
     try:
         # https://docs.anthropic.com/en/api/messages
         body = {
-            "system": "You are a command line expert. Respond with a single, valid, complete command line. I intend to execute it. No explanation. No markdown. No markdown with backticks ` nor ```",
+            "system": system_message,
             "model": use.model,
             "messages": [
                 {
