@@ -52,6 +52,7 @@ def get_anthropic_suggestion(passed_context: str, use: Service):
     try:
         # https://docs.anthropic.com/en/api/messages
         body = {
+            # TODO how does this perform vs as user message? same question for openai compat above
             "system": system_message,
             "model": use.model,
             "messages": [
