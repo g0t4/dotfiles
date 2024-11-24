@@ -95,6 +95,7 @@ end
 -- if type(_G["setup_workspace"]) ~= "function" then
 --     vim.notify "setup_workspace should be defined (so that session is restored before loading misc.lua), else help windows will be rearranged (to the right) when they are restored"
 -- end
+-- FYI I switched away from BufEnter => Ctrl+W,L b/c it resized already open help and I don't like that and WinNew won't suffice b/c doesn't have filetype to only trigger first time win opens.. so use abbr instead, I like this so far
 vim.cmd [[
     " TODO see how I feel about this, not sure I like it, wish it didn't involve changing the cmd line,
     "   PRN I could redefine h/help to call vert h... and then set command-complete too to make completion work
