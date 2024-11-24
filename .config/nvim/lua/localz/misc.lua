@@ -95,20 +95,28 @@ end
 -- if type(_G["setup_workspace"]) ~= "function" then
 --     vim.notify "setup_workspace should be defined (so that session is restored before loading misc.lua), else help windows will be rearranged (to the right) when they are restored"
 -- end
-vim.api.nvim_create_autocmd("BufWinEnter", {
-    callback = function()
-        -- FYI `:h eyeliner` filetype is markdown, so don't use filetype, instead use buftype
-        -- TODO is buftype == "help" a viable check?
-        if not (vim.bo.buftype == "help") then
-            return
-        end
-        -- TODO do I want this to first check existing splits?
-        --
-        -- command = "wincmd L" -- open help in vertical split, on the far right side
-        -- ==> Ctrl+W, R ==> far right (vertical split)
-        vim.cmd("wincmd L")
-    end,
-})
+vim.cmd [[
+    " TODO see how I feel about this, not sure I like it, wish it didn't involve changing the cmd line,
+    "   PRN I could redefine h/help to call vert h... and then set command-complete too to make completion work
+    " only downside is trying to use H alone in a command line also expands, can use Ctrl+V=>Space to avoid expanding it
+    "
+    " vertical split help:
+    cnoreabbrev h vert h
+    "
+    " horiz split (or otherwise not prepend vert)
+    cnoreabbrev H h
+    " TODO this all feels wrong, but works for now maybe
+]]
+--
+-- ALTERNATIVE works fine too:
+-- vim.api.nvim_create_user_command(
+--     'H', -- must be uppercase, gah
+--     function(opts)
+--         vim.cmd('vert help ' .. opts.args)
+--     end,
+--     { nargs = "*", complete = "help" }
+-- )
+
 
 -- *** win splits
 -- vim.opt.splitbelow = true -- i.e. help opens below then
