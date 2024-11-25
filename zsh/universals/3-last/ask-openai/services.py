@@ -36,6 +36,10 @@ def use_groq(model: Optional[str] = None):
         #   llama3-groq-70b-8192-tool-use-preview, llama3-groq-8b-8192-tool-use-preview
     )
 
+def use_gh_copilot(model: Optional[str] = None):
+    # TODO reuse logic in my ask-openai.nvim plugin, basically take ~/.config/github-copilot/[apps|host].yml to get GH copilot API_KEY => get bearer token and go! cache the config so its not an extra step on every request, config has expiration field
+    # TODO get base_url off of v2_token/config response
+    raise Exception("not implemented yet")
 
 def use_openai(model: Optional[str] = None):
 
@@ -148,13 +152,13 @@ def args_to_use() -> Service:
     parser.add_argument('--groq', action='store_true', default=False)
     parser.add_argument('--ollama', action='store_true', default=False)
     parser.add_argument('--anthropic', action='store_true', default=False)
+    parser.add_argument('--gh-copilot', action='store_true', default=False)
 
     # optional model name (for all services):
     parser.add_argument("model", type=str, const=None, nargs='?')
     #
     args = parser.parse_args()
 
-    # PRN pass model parameter if can be overriden per service (like w/ ollama)
     if args.groq:
         use = use_groq(args.model)
     elif args.lmstudio:
@@ -165,6 +169,8 @@ def args_to_use() -> Service:
         use = use_deepseek(args.model)
     elif args.anthropic:
         use = use_anthropic(args.model)
+    elif args.gh_copilot:
+        use = use_gh_copilot(args.model)
     else:
         use = use_openai(args.model)
 
