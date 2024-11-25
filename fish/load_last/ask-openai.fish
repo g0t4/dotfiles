@@ -20,7 +20,7 @@ function ask_use_openai_gpt4o
     ask_dump_config
 end
 
-function ask_use_openai_gpt3
+function ask_use_openai_gpt3.5
     set --universal ask_service --openai gpt-3.5-turbo-1106
     ask_dump_config
 end
@@ -30,7 +30,7 @@ function ask_use_lmstudio
     ask_dump_config
 end
 
-function ask_use_ollama_llama3
+function ask_use_ollama
     set --universal ask_service --ollama $use_args
     ask_dump_config
 end
