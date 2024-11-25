@@ -193,7 +193,9 @@ return {
                     group = "supermaven", -- TLDR: append autocmd that sets color and b/c its last, it wins
                     pattern = "*",
                     callback = function()
-                        vim.api.nvim_set_hl(0, "SupermavenSuggestion", {
+                        local group_name = require("supermaven-nvim.completion_preview").suggestion_group
+                        -- FYI was SupermavenSuggestion last I checked, use name just in case it changes?!
+                        vim.api.nvim_set_hl(0, group_name, {
                             -- FYI force not needed currently, leaving as reminder
                             -- fg = "#ff0000", force = true, bold = true, underline = true
                             -- fg = "#6d6a94", underline = true -- purpleish gray
@@ -230,7 +232,6 @@ return {
         'github/copilot.vim',
         -- event = { "InsertEnter" }, -- lazy load on first insert  -- load immediately is fine, esp if changing status bar here
         config = function()
-
             vim.cmd [[
 
                 "let g:copilot_filetypes = {
