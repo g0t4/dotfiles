@@ -1,8 +1,8 @@
 local use_ai = {
     -- "avante",
-    "copilot",
+    -- "copilot",
     -- "tabnine",
-    -- "supermaven",
+    "supermaven",
 }
 -- ! consider https://github.com/zbirenbaum/copilot.lua
 --    purportedly faster and less glitchy than copilot.vim
@@ -168,6 +168,7 @@ return {
         enabled = vim.tbl_contains(use_ai, "supermaven"),
         "supermaven-inc/supermaven-nvim",
         config = function()
+            -- FYI supermaven wont work in a buffer that doesn't have an actual file, IIUC from log errors when renaming a file in a filetype=DressingInput inside Nvim-Tree panel (on rename command)... hrm that stinks
             require("supermaven-nvim").setup {
                 -- disable_inline_completion = true, -- use w/ nvim-cmp
                 keymaps = {
@@ -197,6 +198,7 @@ return {
                             -- fg = "#4b7266", underline = true -- green
                             -- fg = "#CCCCCC", underline = true -- dimmed white
                             fg = "#ffffff",
+                            italic = true,
                             underline = true -- white
                         })
                     end,
