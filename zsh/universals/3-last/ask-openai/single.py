@@ -81,6 +81,9 @@ def get_anthropic_suggestion(passed_context: str, use: Service):
         content = completion["content"][0]["text"]
         log_response(passed_context, use, content)
         return content
+    except httpx.HTTPStatusError as e:
+        print(f"HTTP error occurred: {e}")
+        print(f"Response body: {e.response.text}") # response body
     except Exception as e:
         print(f"{e}")
         return None
