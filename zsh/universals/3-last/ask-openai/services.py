@@ -19,7 +19,8 @@ class Service(NamedTuple):
         else:
             return f"{self.base_url}/{self.chat_completions_path}"
     def __repr__(self):
-        return f"Service({self.name} model={self.model})"  # i.e. printing (logging), DO NOT INCLUDE api_key
+        # i.e. printing (logging), DO NOT INCLUDE api_key
+        return f"Service({self.name} model={self.model} chat_url={self.chat_url()})"
 
 def use_groq(model: Optional[str] = None):
 
