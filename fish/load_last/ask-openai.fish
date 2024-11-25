@@ -31,14 +31,7 @@ function ask_use_lmstudio
 end
 
 function ask_use_ollama_llama3
-
-    set use_args $argv
-    if test -z $use_args
-        set use_args llama3 # default
-    end
-
     set --universal ask_service --ollama $use_args
-
     ask_dump_config
 end
 
