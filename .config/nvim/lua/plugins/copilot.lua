@@ -1,8 +1,8 @@
 local use_ai = {
     -- "avante",
-    -- "copilot",
+    "copilot",
     -- "tabnine",
-    "supermaven",
+    -- "supermaven",
 }
 -- ! consider https://github.com/zbirenbaum/copilot.lua
 --    purportedly faster and less glitchy than copilot.vim
@@ -226,7 +226,13 @@ return {
         'github/copilot.vim',
         -- event = { "InsertEnter" }, -- lazy load on first insert  -- load immediately is fine, esp if changing status bar here
         config = function()
-            vim.cmd([[
+
+            vim.cmd [[
+
+                "let g:copilot_filetypes = {
+                "    \ '*': v:true,
+                "    \ }
+
                 "" copilot consider map to ctrl+enter instead of tab so IIUC other completions still work, O
                 "imap <silent><script><expr> <C-CR> copilot#Accept("\\<CR>")
                 "let g:copilot_no_tab_map = 1
@@ -267,7 +273,7 @@ return {
                 " :inoremap <F13> <C-o>:call ToggleCopilot()<CR> " on empty, indented line, causes cursor to revert to start of line afterwards
                 :nnoremap <F13> :call ToggleCopilot()<CR>
 
-            ]])
+            ]]
 
             -- TODO why is this not winning when use autocmd (do I need a group, TBD, copilot help didn't mention it)
             -- vim.api.nvim_create_autocmd('ColorScheme', {
