@@ -82,11 +82,14 @@ def use_lmstudio(model: Optional[str] = None):
 
 
 def use_ollama(model: Optional[str] = None):
+    # https://github.com/ollama/ollama/blob/main/docs/openai.md
+    #   FYI yes it has openai compat api support, pay attention to failures for what might have gone wrong (i.e. 404 on invalid model)
     return Service(
         name='ollama',
         api_key="whatever",
         base_url="http://localhost:11434/v1",
-        model=model if model else '',
+        # TODO can blank be used and let it pick?
+        model=model if model else 'llama3.2:3b',
         chat_completions_path= None
     )
 
