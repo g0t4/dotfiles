@@ -195,6 +195,7 @@ return {
                     callback = function()
                         local group_name = require("supermaven-nvim.completion_preview").suggestion_group
                         -- FYI was SupermavenSuggestion last I checked, use name just in case it changes?!
+                        -- TODO - set my own suggestion group name on init? so I don't need an autocmd to ensure this style wins? https://github.com/supermaven-inc/supermaven-nvim/issues/49
                         vim.api.nvim_set_hl(0, group_name, {
                             -- FYI force not needed currently, leaving as reminder
                             -- fg = "#ff0000", force = true, bold = true, underline = true
