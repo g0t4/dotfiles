@@ -169,6 +169,8 @@ return {
         "supermaven-inc/supermaven-nvim",
         config = function()
             -- FYI supermaven wont work in a buffer that doesn't have an actual file, IIUC from log errors when renaming a file in a filetype=DressingInput inside Nvim-Tree panel (on rename command)... hrm that stinks
+            -- TODO investigate why fill-in-the-middle completions show at the end of the line (lua, py confirmed) => probably smth with my config: https://github.com/supermaven-inc/supermaven-nvim/issues/66#issuecomment-2221721242
+            --   NBD honestly just wanna keep my eye on a fix if possible it would be nice to see what is/isn't changing before accept!
             require("supermaven-nvim").setup {
                 -- disable_inline_completion = true, -- use w/ nvim-cmp
                 keymaps = {
