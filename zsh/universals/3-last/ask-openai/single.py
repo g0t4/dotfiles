@@ -42,6 +42,11 @@ def get_openai_suggestion(passed_context: str, use: Service):
         content = completion["choices"][0]["message"]["content"]
         log_response(passed_context, use, content)
         return content
+    except httpx.HTTPStatusError as e:
+        # this is triggered by raise_for_status and gives me access to resopnse body
+        #   i.e. useful with ollama when I request invalid model, the body explains that where as w/o the body its a generic 404 which is frustrating at best
+        print(f"HTTP error occurred: {e}")
+        print(f"Response body: {e.response.text}") # response body
     except Exception as e:
         print(f"{e}")
         return None
