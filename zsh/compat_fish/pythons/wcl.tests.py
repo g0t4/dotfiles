@@ -167,6 +167,13 @@ class TestMoreThanOrgReop(unittest.TestCase):
         self.assertEqual(parsed.domain, 'huggingface.co')
         self.assertEqual(parsed.repo, 'datasets/PleIAs/common_corpus')
 
+    def TODO_test_github_pulls(self):
+        # TODO impl later, if I care to, currently broken
+        # TODO turn into some special case for github that never allows for more than org/repo
+        parsed = parse_repo('https://github.com/datasets/PleIAs/pulls')
+        self.assertEqual(parsed.domain, 'github.com')
+        self.assertEqual(parsed.repo, 'datasets/PleIAs')
+
 # TODO support hg (mercurial)?
 #  hg.nginx.org/nginx
 #  hg.nginx.org/nginx.org
