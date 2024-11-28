@@ -28,8 +28,7 @@ abbr agl 'ag -l' # print file name only, not matched content
 abbr agL 'ag -L' # print files w/o content match
 abbr agw 'ag --word-regexp' # match whole words
 abbr agz 'ag --search-zip' # search inside zip files (gz,xz only)
-abbr agimages 'ag --unrestricted -i -g "\.(png|jpg|jpeg|gif|bmp|tiff|webp|svg|icns)"' # search for images
-function agimagescat
+function agimages
     for f in (ag --unrestricted -i -g "\.(png|jpg|jpeg|gif|bmp|tiff|webp|svg|icns)")
         echo $f
         imgcat $f
