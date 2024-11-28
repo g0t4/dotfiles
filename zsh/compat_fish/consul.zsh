@@ -55,7 +55,7 @@ abbr "usd" "consul services deregister"
 # snapshot       Saves, restores and inspects snapshots of Consul server state
 # tls            Builtin helpers for creating CAs and certificates
 # validate       Validate config files/directories
-abbr "uv" "consul validate"
+# abbr "uv" "consul validate" # uv command
 # version        Prints the Consul version
 abbr "uver" "consul version"
 # watch          Watch for changes in Consul
