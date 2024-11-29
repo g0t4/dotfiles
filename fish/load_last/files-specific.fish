@@ -355,9 +355,9 @@ abbr treec "command tree" # use tree command directly, i.e. wanna see repo hidde
 set package_dirs "node_modules|bower_components|.git|.venv|iterm2env"
 function tree
     if command -q eza
-        eza --tree --group-directories-first --ignore-glob "node_modules|bower_components|.git|.venv" --color-scale=all --icons --git-repos --git-ignore $argv
+        eza --tree --group-directories-first --ignore-glob $package_dirs --color-scale=all --icons --git-repos --git-ignore $argv
     else if command -q exa
-        exa --tree --group-directories-first --ignore-glob "node_modules|bower_components|.git|.venv" --color-scale --icons --git-ignore $argv
+        exa --tree --group-directories-first --ignore-glob $package_dirs --color-scale --icons --git-ignore $argv
     else
         command tree --dirsfirst --noreport --filelimit 100 --gitignore $argv
     end
@@ -377,9 +377,9 @@ function treeh
     # FYI not quite like ag -h b/c that still hides .gitignore files and shows package dirs (flip of this one), work on naming over time
     # TODO what about hidden files like dotfiles/dirs?!
     if command -q eza
-        eza --tree --group-directories-first --ignore-glob "node_modules|bower_components|.git|.venv" --color-scale=all --icons --git-repos  $argv
+        eza --tree --group-directories-first --ignore-glob $package_dirs --color-scale=all --icons --git-repos  $argv
     else if command -q exa
-        exa --tree --group-directories-first --ignore-glob "node_modules|bower_components|.git|.venv" --color-scale --icons $argv
+        exa --tree --group-directories-first --ignore-glob $package_dirs --color-scale --icons $argv
     else
         command tree --dirsfirst --noreport --filelimit 100 --hidden $argv
     end
