@@ -356,8 +356,6 @@ set package_dirs "node_modules|bower_components|.git|.venv|iterm2env"
 function tree
     if command -q eza
         eza --tree --group-directories-first --ignore-glob $package_dirs --color-scale=all --icons --git-repos --git-ignore $argv
-    else if command -q exa
-        exa --tree --group-directories-first --ignore-glob $package_dirs --color-scale --icons --git-ignore $argv
     else
         command tree --dirsfirst --noreport --filelimit 100 --gitignore $argv
     end
@@ -365,11 +363,10 @@ function tree
     #    lsd --tree --group-dirs first --ignore "node_modules|bower_components|.git" --color always $argv
     #    return
 end
-# levels:
-# - normal = hide package dirs (node_modules), hide .gitignore? (or do I want to see those too?)
-# - ? = include .gitignores but not package dirs
-# - ag hidden = include packge dirs but NOT .gitignore files
-# - unrestricted = search everything (no package ignores, no .gitignore ignores, etc)
+# file types:
+# - dotfiles/dirs
+# - gitignores/ignores
+# - package dirs (manual ignores)
 
 function treeh
     # h = hidden => show ignores but not package dirs
@@ -377,11 +374,9 @@ function treeh
     # FYI not quite like ag -h b/c that still hides .gitignore files and shows package dirs (flip of this one), work on naming over time
     # TODO what about hidden files like dotfiles/dirs?!
     if command -q eza
-        eza --tree --group-directories-first --ignore-glob $package_dirs --color-scale=all --icons --git-repos  $argv
-    else if command -q exa
-        exa --tree --group-directories-first --ignore-glob $package_dirs --color-scale --icons $argv
+        eza --tree --group-directories-first --ignore-glob $package_dirs --color-scale=all --icons --git-repos $argv
     else
-        command tree --dirsfirst --noreport --filelimit 100 --hidden $argv
+        command tree --dirsfirst --noreport --filelimit 100 $argv
     end
 end
 
