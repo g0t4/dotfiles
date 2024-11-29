@@ -14,11 +14,11 @@ end
 # --nogroup => disable grouping to show file/line per match to click to open in vscode (via iterm links)
 
 abbr --set-cursor='!' --  agi 'ag -i "!"'
-abbr --set-cursor='!' --  agig 'ag -ig "!"'
+abbr --set-cursor='!' --  agg 'ag -ig "!"'
 abbr --set-cursor='!' --  agh 'ag --hidden -i "!"' # match hidden files, but not ignored files
-abbr --set-cursor='!' --  aghg 'ag --hidden -ig "!"' # match hidden files, but not ignored files
+abbr --set-cursor='!' --  aggh 'ag --hidden -ig "!"' # match hidden files, but not ignored files
 abbr --set-cursor='!' --  agu 'ag --unrestricted -i "!"' # match hidden files + ignored files
-abbr --set-cursor='!' --  agug 'ag --unrestricted -ig "!"' # match hidden files + ignored files
+abbr --set-cursor='!' --  aggu 'ag --unrestricted -ig "!"' # match hidden files + ignored files
 # ignored files: .ignore, .gitignore, --ignore, etc
 # hidden files: .config, .git (dotfiles/dirs)
 
