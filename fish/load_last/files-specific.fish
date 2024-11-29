@@ -352,8 +352,8 @@ set _treed "tree --only-dirs"
 
 abbr treec "command tree" # use tree command directly, i.e. wanna see repo hidden files in somee cases... todo rethink how to handle this but for now this works
 
+set package_dirs "node_modules|bower_components|.git|.venv|iterm2env"
 function tree
-
     if command -q eza
         eza --tree --group-directories-first --ignore-glob "node_modules|bower_components|.git|.venv" --color-scale=all --icons --git-repos --git-ignore $argv
     else if command -q exa
@@ -361,11 +361,39 @@ function tree
     else
         command tree --dirsfirst --noreport --filelimit 100 --gitignore $argv
     end
-
     # else if command -q lsd
     #    lsd --tree --group-dirs first --ignore "node_modules|bower_components|.git" --color always $argv
     #    return
+end
+# levels:
+# - normal = hide package dirs (node_modules), hide .gitignore? (or do I want to see those too?)
+# - ? = include .gitignores but not package dirs
+# - ag hidden = include packge dirs but NOT .gitignore files
+# - unrestricted = search everything (no package ignores, no .gitignore ignores, etc)
 
+function treeh
+    # h = hidden => show ignores but not package dirs
+    # TODO do I really want treeh (can I just use tree/treeu and be done?)
+    # FYI not quite like ag -h b/c that still hides .gitignore files and shows package dirs (flip of this one), work on naming over time
+    # TODO what about hidden files like dotfiles/dirs?!
+    if command -q eza
+        eza --tree --group-directories-first --ignore-glob "node_modules|bower_components|.git|.venv" --color-scale=all --icons --git-repos  $argv
+    else if command -q exa
+        exa --tree --group-directories-first --ignore-glob "node_modules|bower_components|.git|.venv" --color-scale --icons $argv
+    else
+        command tree --dirsfirst --noreport --filelimit 100 --hidden $argv
+    end
+end
+
+function treeu
+    # u = unrestricted (like ag -u)
+    if command -q eza
+        eza --tree --group-directories-first --color-scale=all --icons --git-repos $argv
+    else if command -q exa
+        exa --tree --group-directories-first --color-scale --icons $argv
+    else
+        command tree --dirsfirst --noreport --filelimit 100 $argv
+    end
 end
 
 abbr treed "$_treed"
