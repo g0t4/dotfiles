@@ -348,13 +348,22 @@ abbr --add finddr --set-cursor=! 'find . -type d -iregex ".*!.*"' # another idea
 # PRN port over zsh mods for ls to use eza (though I am happy with fish's ls currently)
 
 ###### tree ######
-set _treed "tree --only-dirs"
 
-abbr treec "command tree" # use tree command directly, i.e. wanna see repo hidden files in somee cases... todo rethink how to handle this but for now this works
+# - only show directories
+#   - show w/ eza --only-dirs
+#   - show w/ tree cmd's -d
+function treed
+    # PRN add treehd/treeud
+    if command -q eza
+        tree --only-dirs
+    else
+        command tree -d
+    end
+end
 
 set package_dirs "node_modules|bower_components|.git|.venv|iterm2env"
 function tree
-    # FYI verify side by side show same dirs (or close enough) => just did this after redoing tree to just be eza/command tree
+    # FYI verify icdiff (drop --icons and run -L1/2 if diffs to find them w/o lotsa scrolling)
     if command -q eza
         eza --tree --group-directories-first --ignore-glob $package_dirs --color-scale=all --icons --git-repos --git-ignore $argv
     else
@@ -395,15 +404,6 @@ function treeu
     end
 end
 
-abbr treed "$_treed"
-
-set _treeal "tree --all --long --group --sort size"
-abbr treev "$_treeal"
-
-# interchangable:
-abbr treedv "$_treeal --only-dirs"
-abbr treevd "$_treeal --only-dirs"
-
 # treeX => tree -L X
 abbr --add _treeX --regex 'tree\d+' --function treeX
 function treeX
@@ -412,12 +412,17 @@ end
 # treedX => treed -L X
 abbr --add _treedX --regex 'treed\d+' --function treedX
 function treedX
-    string replace --regex '^treed' "$_treed -L" $argv
+    string replace --regex '^treed' "treed -L" $argv
 end
-# treevX => treev -L X
-abbr --add _treevX --regex 'treev\d+' --function treevX
-function treevX
-    string replace --regex '^treev' "$_treeal -L" $argv
+# treehX => treeh -L X
+abbr --add _treehX --regex 'treeh\d+' --function treehX
+function treehX
+    string replace --regex '^treeh' "treeh -L" $argv
+end
+# treeuX => treeu -L X
+abbr --add _treeuX --regex 'treeu\d+' --function treeuX
+function treeuX
+    string replace --regex '^treeu' "treeu -L" $argv
 end
 
 # *** see treeify ideas in  fish/load_last/globals-specific.fish
