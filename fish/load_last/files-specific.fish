@@ -353,7 +353,7 @@ abbr --add finddr --set-cursor=! 'find . -type d -iregex ".*!.*"' # another idea
 #   - show w/ eza --only-dirs
 #   - show w/ tree cmd's -d
 function treed
-    # PRN add treehd/treeud
+    # PRN add treehd/treeud and add L expansions below too
     if command -q eza
         tree --only-dirs
     else
