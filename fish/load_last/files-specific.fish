@@ -363,31 +363,34 @@ function tree
     #    lsd --tree --group-dirs first --ignore "node_modules|bower_components|.git" --color always $argv
     #    return
 end
-# file types:
+
+# file types and corresponding options:
 # - dotfiles/dirs
+#   - show w/ eza --all
+#   - show w/ tree cmd's -a
 # - gitignores/ignores
-# - package dirs (manual ignores)
+#   - hide w/ eza --git-ignore
+#   - hide w/ tree cmd's --gitignore
+# - package dirs
+#   - hide w/ eza --ignore-glob $package_dirs
+#   - hide w/ tree cmd's -I $package_dirs
 
 function treeh
-    # h = hidden => show ignores but not package dirs
-    # TODO do I really want treeh (can I just use tree/treeu and be done?)
+    # show ignores + dotfiles/dirs but not package_dirs
     # FYI not quite like ag -h b/c that still hides .gitignore files and shows package dirs (flip of this one), work on naming over time
-    # TODO what about hidden files like dotfiles/dirs?!
     if command -q eza
-        eza --tree --group-directories-first --ignore-glob $package_dirs --color-scale=all --icons --git-repos $argv
+        eza --tree --group-directories-first --ignore-glob $package_dirs --color-scale=all --icons --git-repos --all $argv
     else
-        command tree --dirsfirst --noreport --filelimit 100 $argv
+        command tree --dirsfirst --noreport --filelimit 100 -I $package_dirs $argv
     end
 end
 
 function treeu
     # u = unrestricted (like ag -u)
     if command -q eza
-        eza --tree --group-directories-first --color-scale=all --icons --git-repos $argv
-    else if command -q exa
-        exa --tree --group-directories-first --color-scale --icons $argv
+        eza --tree --group-directories-first --color-scale=all --icons --git-repos --all $argv
     else
-        command tree --dirsfirst --noreport --filelimit 100 $argv
+        command tree --dirsfirst --noreport --filelimit 100 -a $argv
     end
 end
 
