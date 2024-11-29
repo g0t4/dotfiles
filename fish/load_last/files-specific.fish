@@ -354,6 +354,7 @@ abbr treec "command tree" # use tree command directly, i.e. wanna see repo hidde
 
 set package_dirs "node_modules|bower_components|.git|.venv|iterm2env"
 function tree
+    # FYI verify side by side show same dirs (or close enough) => just did this after redoing tree to just be eza/command tree
     if command -q eza
         eza --tree --group-directories-first --ignore-glob $package_dirs --color-scale=all --icons --git-repos --git-ignore $argv
     else
