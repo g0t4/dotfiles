@@ -382,7 +382,7 @@ function treeh
     if command -q eza
         eza --tree --group-directories-first --ignore-glob $package_dirs --color-scale=all --icons --git-repos --all $argv
     else
-        command tree --dirsfirst --noreport --filelimit 100 -I $package_dirs $argv
+        command tree --dirsfirst --noreport --filelimit 100 -I $package_dirs -a $argv
     end
 end
 
