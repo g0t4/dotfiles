@@ -357,7 +357,7 @@ function tree
     if command -q eza
         eza --tree --group-directories-first --ignore-glob $package_dirs --color-scale=all --icons --git-repos --git-ignore $argv
     else
-        command tree --dirsfirst --noreport --filelimit 100 --gitignore $argv
+        command tree --dirsfirst --noreport --filelimit 100 -I $package_dirs --gitignore $argv
     end
     # else if command -q lsd
     #    lsd --tree --group-dirs first --ignore "node_modules|bower_components|.git" --color always $argv
