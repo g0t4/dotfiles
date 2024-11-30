@@ -5,23 +5,19 @@
     "show": true
   },
   "language_models": {
-    "openai": {
-      "api_url": "https://api.groq.com/openai/v1",
-      "version": "1",
-      "available_models": [
-        {
-          "provider": "openai",
-          "name": "llama-3.1-70b-versatile",
-          "max_tokens": 128000
-        }
-      ]
-    }
+    // "openai": {
+    //   "api_url": "https://api.groq.com/openai/v1",
+    //   "version": "1",
+    //   "available_models": [
+    //     {
+    //       "provider": "openai",
+    //       "name": "llama-3.1-70b-versatile",
+    //       "max_tokens": 128000
+    //     }
+    //   ]
+    // }
   },
   "assistant": {
-    "default_model": {
-      "provider": "openai",
-      "model": "llama-3.1-70b-versatile"
-    },
     "version": "2"
     // "inline_alternatives": [
     //   { "provider": "ollama", "model": "llama3.1:8b" },
@@ -43,7 +39,7 @@
     }
   },
   "features": {
-    "inline_completion_provider": "supermaven",
+    "inline_completion_provider": "supermaven"
     // "copilot": true
   },
   "cursor_blink": false, // *** I am surprised I didn't notice this sooner, then again it is not blinking block
