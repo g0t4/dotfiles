@@ -65,5 +65,14 @@
   },
   "terminal": {
     "detect_venv": "off"
+  },
+  "context_servers": {
+    "commands-context-server": {
+      "command": {
+        "path": "/Users/wes/repos/github/g0t4/mcp-server-commands/build/index.js",
+        "args": [],
+        "env": {}
+      }
+    }
   }
 }
