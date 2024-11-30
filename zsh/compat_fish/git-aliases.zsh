@@ -53,10 +53,13 @@ abbr gbdf 'git branch --delete --force' #same as gbD
 abbr gbl 'git blame -b -w' # -w ignore whitespace, -b blank SHA1 for boundary commits
 
 # commit and forget
-abbr gcrefactor "git commit -a -m 'refactor'"
 abbr gcnotes "git commit -a -m 'notes'"
-abbr gcsubs "git commit -a -m 'subs'; git push; git diff --color-words HEAD~1 HEAD"
+abbr gcrefactor "git commit -a -m 'refactor'"
 abbr gmark "git commit -a -m 'mark'"
+abbr gcclear "git commit -a -m 'clear the slate'"
+abbr gcwe "git commit -a -m 'whatever'"
+
+abbr gcsubs "git commit -a -m 'subs'; git push; git diff --color-words HEAD~1 HEAD"
 
 # FYI pwsh has many builtin aliases stating with 'g' b/c Get :)
 #   gcm = Get-Command, gc = Get-Content
