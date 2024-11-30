@@ -5,15 +5,22 @@
     "show": true
   },
   "language_models": {
-    "ollama": {
-      "provider": "ollama",
-      "api_url": "http://0.0.0.0:11434"
+    "openai": {
+      "api_url": "https://api.groq.com/openai/v1",
+      "version": "1",
+      "available_models": [
+        {
+          "provider": "openai",
+          "name": "llama-3.1-70b-versatile",
+          "max_tokens": 128000
+        }
+      ]
     }
   },
   "assistant": {
     "default_model": {
-      "provider": "ollama",
-      "model": "llama3.2-vision:11b"
+      "provider": "openai",
+      "model": "llama-3.1-70b-versatile"
     },
     "version": "2"
     // "inline_alternatives": [
