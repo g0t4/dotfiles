@@ -1310,6 +1310,13 @@ end
 
 if command -q npm
 
+    # TODO REVISIT
+    # suppress annoying warning for now
+    # (node:76864) ExperimentalWarning: CommonJS module /opt/homebrew/lib/node_modules/npm/node_modules/debug/src/node.js is loading ES Module /opt/homebrew/lib/node_modules/npm/node_modules/supports-color/index.js using require().
+    # Support for loading ES Module in require() is an experimental feature and might change at any time
+    # (Use `node --trace-warnings ...` to show where the warning was created)
+    export NODE_OPTIONS='--disable-warning=ExperimentalWarning'
+
     # PRN as I use and find how I wanna use aliases
     abbr npmi 'npm install'
     abbr npminit 'npm init -y'
