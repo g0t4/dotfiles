@@ -20,6 +20,10 @@ abbr zr 'zed "$(_repo_root)"'
 abbr zph 'zed-preview .'
 abbr zpr 'zed-preview "$(_repo_root)"'
 
+### cursor
+abbr r 'cursor .'
+abbr rr 'cursor "$(_repo_root)"'
+
 # z
 abbr zx 'z -x'
 
