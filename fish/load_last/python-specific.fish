@@ -17,6 +17,12 @@ abbr python-config python3-config
 ### VENV (--clear allows to recreate venv if already dir exists, --upgrade-deps makes sure pip is latest)
 abbr ve 'python3 -m venv --clear --upgrade-deps'
 abbr vedir 'echo $VIRTUAL_ENV'
+
+function vestatus
+    if test -n "$VIRTUAL_ENV"
+        echo -n -s (set_color cyan) \ue73c (set_color normal) " "
+    end
+end
 #
 abbr --function veinit_func --add veinit
 function veinit_func

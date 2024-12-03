@@ -31,10 +31,10 @@ function prompt_login --description 'display user name for the prompt'
         echo -n -s (set_color cyan) \uf308 (set_color normal) " "
     end
 
-    # python venv indicator 
-    if test -n "$VIRTUAL_ENV"
-        echo -n -s (set_color cyan) \ue73c (set_color normal) " "
-    end
+    ## python venv indicator 
+    #if test -n "$VIRTUAL_ENV"
+    #    echo -n -s (set_color cyan) \ue73c (set_color normal) " "
+    #end
 
     # show hostname
     if string match -q "mbp*" $hostname
