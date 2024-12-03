@@ -18,11 +18,26 @@ abbr python-config python3-config
 abbr ve 'python3 -m venv --clear --upgrade-deps'
 abbr vedir 'echo $VIRTUAL_ENV'
 
+function relative_path
+    # doesn't have to be real paths
+
+    set -l from $argv[1]
+    set -l to $argv[2]
+    python3 -c "import os; print(os.path.relpath('$to', '$from'))"
+
+    # Example usage:
+    #relative_path /home/user/project "/home/user/project/docs/file.txt"
+end
+
 abbr ves venv_status
 function venv_status
     if test -n "$VIRTUAL_ENV"
         echo -n -s (set_color cyan) \ue73c (set_color normal) " "
+    else
+        return
     end
+    # show how high up the venv_dir is vs current_dir
+    relative_path (pwd) $VIRTUAL_ENV
 end
 #
 abbr --function veinit_func --add veinit
