@@ -41,7 +41,9 @@ function prompt_login --description 'display user name for the prompt'
         # for duration of course, make host clear and not confusing (just mac in this case) - otherwise dir alone mighe be ubuntu (in vms/ubuntu dir) and then its just "ubuntu" without hostname and that might lead one to believe it's the ubuntu course VM
         echo -n -s mac
     else
-        echo -n -s $hostname
+        # strip .lan, .local from hostname
+        set display_hostname (string replace -r "\.lan\$|\.local\$" "" $hostname)
+        echo -n -s $display_hostname
     end
 
 
