@@ -1280,11 +1280,8 @@ function _ffmpeg_concat
         -c copy $combined_file
 end
 
-function video_editing_parts_to_shifted_mp4
+function video_editing_aio
     set combined_file (_get_output_file_based_on_first_file combined.mp4 $argv)
-
-    # TODO remove intermediate when done, using this b/c it would be a mess below to concat + shift audio
-    _ffmpeg_concat $argv
 
     # based on: ffmpeg -i foo.mp4  -itsoffset 0.1 -i foo.mp4  -map 0:v -map 1:a -c:v copy -c:a aac foo-shifted100ms.mp4
     # PRN add ms param? right now 100 works for my setup OBS+mixpre6v2/mv7+logibrio
@@ -1292,10 +1289,24 @@ function video_editing_parts_to_shifted_mp4
     set output_file (string replace -r "\.$file_extension\$" ".shifted100ms.$file_extension" "$combined_file")
     if test -f "$output_file"
         echo "Skipping...file already exists: $output_file"
-        return
+    else
+        _ffmpeg_concat $argv # produces $combined_file
+
+        ffmpeg -i "$combined_file" -itsoffset 0.1 -i "$combined_file" -map 0:v -map 1:a -c:v copy -c:a aac "$output_file"
+        trash $combined_file # be safe with rm, if it was wrong file I wanna have it be recoverable
     end
-    ffmpeg -i "$combined_file" -itsoffset 0.1 -i "$combined_file" -map 0:v -map 1:a -c:v copy -c:a aac "$output_file"
-    trash $combined_file # be safe with rm, if it was wrong file I wanna have it be recoverable
+
+
+    # PRN skip if already exists?
+    video_editing_gen_fcpxml $output_file
+end
+
+function video_editing_gen_fcpxml
+    set video_file (realpath $argv[1])
+
+    set python3 "$HOME/repos/github/g0t4/private-auto-edit-suggests/.venv/bin/python3"
+    set script "$HOME/repos/github/g0t4/private-auto-edit-suggests/research/FCPX/05-auto-transcribe-after-split-FCPX-drop-offset-too.py"
+    $python3 $script $video_file
 end
 
 function video_editing_boost_audio_dB_by
