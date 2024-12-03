@@ -19,11 +19,11 @@ function prompt_login --description 'display user name for the prompt'
     end
 
     # SSH indicator  or 
-    if set -q SSH_CONNECTION
-        # keep in mind, have to update dotfiles for remote machines to pick up changes so this can't ever be assumed to be universal
-        #echo -n -s (set_color cyan) \ue0a0 (set_color normal) " "
-        echo -n -s (set_color cyan) \ue0a2 (set_color normal)
-    end
+    #if set -q SSH_CONNECTION
+    #    # keep in mind, have to update dotfiles for remote machines to pick up changes so this can't ever be assumed to be universal
+    #    #echo -n -s (set_color cyan) \ue0a0 (set_color normal) " "
+    #    echo -n -s (set_color cyan) \ue0a2 (set_color normal)
+    #end
 
     if test -f /.dockerenv
         # /.dockerenv => assume container
