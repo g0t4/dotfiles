@@ -18,7 +18,8 @@ abbr python-config python3-config
 abbr ve 'python3 -m venv --clear --upgrade-deps'
 abbr vedir 'echo $VIRTUAL_ENV'
 
-function vestatus
+abbr ves venv_status
+function venv_status
     if test -n "$VIRTUAL_ENV"
         echo -n -s (set_color cyan) \ue73c (set_color normal) " "
     end
