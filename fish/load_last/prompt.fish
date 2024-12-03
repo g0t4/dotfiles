@@ -22,7 +22,7 @@ function prompt_login --description 'display user name for the prompt'
     if set -q SSH_CONNECTION
         # keep in mind, have to update dotfiles for remote machines to pick up changes so this can't ever be assumed to be universal
         #echo -n -s (set_color cyan) \ue0a0 (set_color normal) " "
-        echo -n -s (set_color cyan) \ueb3a (set_color normal) " "
+        echo -n -s (set_color cyan) \ueb3a (set_color normal)
     end
 
     if test -f /.dockerenv
