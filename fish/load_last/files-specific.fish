@@ -176,7 +176,7 @@ if command -q batcat # -q => w/o output
 end
 
 # *** batman (not man alone)...
-abbr man batman
+#abbr man batman (stick with less for now, and custom TERMCAP env vars)
 complete -c batman -w man # wrap man completions
 function batman
     # honestly not many themes do much and many man pages only have minor colorings... TODO find a better tool to color for man pages specifically?
