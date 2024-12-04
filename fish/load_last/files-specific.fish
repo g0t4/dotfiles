@@ -175,6 +175,14 @@ if command -q batcat # -q => w/o output
     end
 end
 
+# *** batman (not man alone)...
+abbr man batman
+complete -c batman -w man # wrap man completions
+function batman
+    # honestly not many themes do much and many man pages only have minor colorings... TODO find a better tool to color for man pages specifically?
+    BAT_THEME="Monokai Extended" command batman
+end
+
 # abbr cat bat # PRN go back to this if I don't like batls
 abbr bath 'bat --style=header' # == header-filename (i.e. for multi files show names)
 abbr batf 'bat --style=full'
