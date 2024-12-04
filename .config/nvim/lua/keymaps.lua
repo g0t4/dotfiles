@@ -102,12 +102,6 @@ vim.keymap.set('c', '<F1>', function()
     -- vim.api.nvim_feedkeys(":", 'n', false)
 end)
 
--- *** search for word under cursor, can also use alt+p/n from vim-illuminate
--- TODO is this the mapping I want? it is hard to activate but it works if I can remember it and use it often
-vim.keymap.set('n', '<leader>/', function()
-    vim.fn.execute("/" .. vim.fn.expand("<cword>"))
-end)
-
 -- NO idea why these won't work in lua vim.keymap.set but they don't :(
 vim.cmd [[
     " map ctrl+/ (similar to cmd+/ in vscode/zed), IIAC windows uses ctrl+/ in vscode?
