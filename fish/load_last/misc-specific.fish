@@ -684,8 +684,24 @@ abbr psfull "ps -o 'user,pid,pcpu,pmem,vsz,rss,tty,stat,start,time,comm' -ax"
 # files for a process:
 # TODO how to deal with multiple matches, I don't like using head but at least it is obvious in the expanded command so leave it for now
 abbr --set-cursor="!" lsofp 'lsof -p $(pgrep -if "!" | head -1)'
-
-
+#
+# *** pstree
+# pstreeX => pstree -l X
+abbr --add _pstreeX --regex "pstree\d+" --function pstreeX
+function pstreeX
+    string replace pstree 'pstree -l' $argv
+end
+abbr pstrees --set-cursor='!' 'pstree -s "!"' # ***! NEW FAVORITE, shows all matching parents/descendants (IIUC)
+abbr pstreep 'pstree -p' # parents/descendants of PID, without -p then its just descendants
+abbr pstreeU 'pstree -U' # skip root only branches
+abbr pstreeu 'pstree -u $(whoami)' # my processes
+abbr pstreew 'pstree -w' # wide output (otherwise truncated)
+# TODO pstree on macos/linux differs - reconcile abbrs based on env? use macos rooted abbrs (i.e. pstrees => pstree -s) but then have it map to smth similar on linux?
+function pstree
+    # TODO use -g 2 by default on macOS (looks better IMO)
+    command pstree -g 2 $argv
+end
+# TODO look into utils like fuser (not necessarily for abbrs, though maybe) but b/c I need to shore up my knowlege here, so much easier to diagnose what an app is doing if I can look at its external interactions (ie files, ports, etc)
 
 
 
