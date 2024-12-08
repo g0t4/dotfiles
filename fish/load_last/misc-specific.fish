@@ -668,6 +668,7 @@ bind '<' expand-abbr self-insert
 # *** processes ***
 abbr psg "grc ps aux | grep -i "
 abbr pgrep "grc pgrep -ilf" # -l long output (show what matched => process name), -f match full command line, -l show what matched (full line)
+abbr pkill "pkill -ilf -9" # same options as pgrep (-l (long) shows underlying kill command used per PID)
 if $IS_MACOS
     abbr pshelp "man ps"
 else
