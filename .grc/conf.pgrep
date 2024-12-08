@@ -1,0 +1,4 @@
+-e # PIDs (numbers at start of line)
+regexp=^\s*([0-9]+)
+colours=green
+.
