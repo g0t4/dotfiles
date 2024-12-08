@@ -1,0 +1,15 @@
+# Headers
+regexp=^ +(Model|Parameters|License)$
+colours=cyan
+=======
+# Section names
+regexp=^ +(architecture|parameters|context length|embedding length|quantization|stop|License|rope_frequency_base) +
+colours=yellow
+=======
+# Values
+regexp=([0-9.]+B|[0-9]+|Q[0-9]_[0-9]|Q4_K_M|[0-9]e\+[0-9]+|Apache License|Version [0-9.]+|LLAMA [23] COMMUNITY LICENSE AGREEMENT|Llama [23].2 Version Release Date: .+)
+colours=green
+=======
+# Special stop tokens
+regexp="(\[INST\]|\[/INST\]|<<SYS>>|<</SYS>>|<\|start_header_id\|>|<\|end_header_id\|>|<\|eot_id\|>)"
+colours=magenta
