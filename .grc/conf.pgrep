@@ -3,6 +3,7 @@ regexp=^\s*([0-9]+)
 colours=green
 =====
 # /full/path (TODO how to handle spaces in paths)
+#  maybe, if arg has / and doesn't start with --,-, http[s]:// etc? not sure what other prefixes would be needed to do this... I wish we had a better way to parse CLI output :( ...i.e. like file stat with regex match?)
 regexp=(\s|^)/[-\w\d.]+/[-\w\d./]+
 colours=bold white
 =====
