@@ -1,4 +1,8 @@
--e # PIDs (numbers at start of line)
+# PIDs (numbers at start of line)
 regexp=^\s*([0-9]+)
 colours=green
-.
+=====
+# /full/path (TODO how to handle spaces in paths)
+regexp=(\s|^)/[-\w\d.]+/[-\w\d./]+
+colours=bold white
+=====
