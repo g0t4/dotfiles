@@ -370,12 +370,20 @@ function treed
 end
 
 set package_dirs "node_modules|bower_components|.git|.venv|iterm2env"
+set more_ignore_dirs "*.lproj" # in /Applications/*/Contents/Resources/*.lproj (I hate seeing these in normal tree output)
 function tree
+    # TODO I might like to write something a bit more flexible for ignoring dirs... the globs are somewhat fragile... like I'd prefer *.lproj to be limited to Contents/Resources/*.lproj but that doesn't work
+    #  what if I had a builder that looked at the path passed and based on it activated/inactivated ignore globs and maybe other parameters?
     # FYI verify icdiff (drop --icons and run -L1/2 if diffs to find them w/o lotsa scrolling)
     if command -q eza
-        eza --tree --group-directories-first --ignore-glob $package_dirs --color-scale=all --icons --git-repos --git-ignore $argv
+        eza --tree --group-directories-first \
+            --ignore-glob $package_dirs --ignore-glob "*.lproj" \
+            --color-scale=all --icons \
+            --git-repos --git-ignore $argv
     else
-        command tree --dirsfirst --noreport --filelimit 100 -I $package_dirs --gitignore $argv
+        command tree --dirsfirst --noreport --filelimit 100 \
+            -I $package_dirs -I $more_ignore_dirs \
+            --gitignore $argv
     end
     # else if command -q lsd
     #    lsd --tree --group-dirs first --ignore "node_modules|bower_components|.git" --color always $argv
