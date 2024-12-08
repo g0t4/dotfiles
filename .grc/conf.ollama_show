@@ -1,9 +1,9 @@
 # Headers
-regexp=^ +(Model|Parameters|License)$
+regexp=^ +(Model|Parameters|License|Projector)$
 colours=cyan
 =======
 # Section names
-regexp=^ +(architecture|parameters|context length|embedding length|quantization|License|rope_frequency_base) +
+regexp=^ +(architecture|parameters|context length|embedding length|quantization|License|rope_frequency_base|dimensions|temperature|top_p|penalize_newline|repeat_penalty|num_ctx|num_keep) +
 colours=yellow
 =======
 # Stop tokens/parameters
