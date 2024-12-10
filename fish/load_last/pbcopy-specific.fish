@@ -1,7 +1,10 @@
 
 # helpers (idea is always use pbcopy/paste -- see below)
-abbr pwdcp "pwd | pbcopy"
-abbr wdcp "pwd | pbcopy"
+function pwdcp
+    # FYI, just added `'`s, not sure if I will like that or not, TBD.. previously didn't have any and spaces weren't escaped either
+    # other choices: `"` and `\ ` escaping spaces
+    echo "'$(pwd)'" | pbcopy
+end
 
 if not $IS_MACOS
     # on non-macs make it appear as if pbcopy/paste are available
