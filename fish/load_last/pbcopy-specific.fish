@@ -4,15 +4,15 @@ abbr pwdcp cppath # reminder, hopefully cppath stick with me but we shall see..
 # I am tempted to leave pwdcp and let it take the relative path arg too :), basically alias cppath without abbr expansion
 
 function cppath
-    # no args => pwdcp
-    # 1 arg ~= pwdcp + relative path
+    # no args => pwd
+    # 1 arg ~= pwd + relative path (no resolve symlinks)
     #   do not resolve symlinks
     #   so you can do `cppath README.md` to grab the path to the README.md file
     #   inspired by pwdcp and wanting to be able to use it to include filenames too
 
     set _path (_cppath $argv)
     if test $status -ne 0
-        # make sure to show error message
+        # make sure to show error message, and indicate failure
         echo $_path
         return 1
     end
