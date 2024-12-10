@@ -1,10 +1,49 @@
 
 # helpers (idea is always use pbcopy/paste -- see below)
-function pwdcp
-    # FYI, just added `'`s, not sure if I will like that or not, TBD.. previously didn't have any and spaces weren't escaped either
-    # other choices: `"` and `\ ` escaping spaces
-    echo "'$(pwd)'" | pbcopy
+abbr pwdcp cppath # reminder, hopefully cppath stick with me but we shall see..
+# I am tempted to leave pwdcp and let it take the relative path arg too :), basically alias cppath without abbr expansion
+
+function cppath
+    # no args => pwdcp
+    # 1 arg ~= pwdcp + relative path
+    #   do not resolve symlinks
+    #   so you can do `cppath README.md` to grab the path to the README.md file
+    #   inspired by pwdcp and wanting to be able to use it to include filenames too
+
+    set _path (_cppath $argv)
+    if test $status -ne 0
+        # make sure to show error message
+        echo $_path
+        return 1
+    end
+
+    # if spaces in path, need to wrap in `'` for pbcopy to work
+    if string match --regex --quiet -- ' ' "$_path"
+        echo "'$_path'" | pbcopy
+    else
+        echo "$_path" | pbcopy
+    end
 end
+
+function _cppath
+    if test -z "$argv"
+        # no args => pwd only
+        pwd
+        return 0
+    end
+
+    if command -q sgrealpath
+        grealpath --no-symlinks "$argv"
+    else if uname | grep -q Darwin
+        # macOS version of realpath doesn't have --no-symlinks option
+        echo "FAIL: grealpath not found and is needed on macOS (brew install coreutils)"
+        return 1
+    else
+        # s/b linux only here:
+        realpath --no-symlinks "$argv"
+    end
+end
+
 
 if not $IS_MACOS
     # on non-macs make it appear as if pbcopy/paste are available
@@ -31,7 +70,7 @@ end
 #     IIAC I put this ssh check in for cases with WSL? would this just work even in WSL envs?
 if test -n "$SSH_CLIENT"
     if command -q osc-copy
-       # oscclip was removed from pypi in Aug 2024... and repo archived: https://github.com/rumpelsepp/oscclip?tab=readme-ov-file
+        # oscclip was removed from pypi in Aug 2024... and repo archived: https://github.com/rumpelsepp/oscclip?tab=readme-ov-file
         function fish_clipboard_copy
             # TODO think through this? is this robust? review fish_clipboard_copy
             # TODO do I wanna have my own wes_clipboard_copy that I use in special places so I am not trying to cover all other scenarios for using fish_clipboard_copy?
