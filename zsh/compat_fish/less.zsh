@@ -9,7 +9,17 @@ export LESS_TERMCAP_mb=(echo -e '\e[1;32m')
 export LESS_TERMCAP_md=(echo -e '\e[1;32m')
 export LESS_TERMCAP_me=(echo -e '\e[0m')
 export LESS_TERMCAP_se=(echo -e '\e[0m')
-export LESS_TERMCAP_so=(echo -e '\e[01;33m')
+#
+# so == standout (search matches)
+export LESS_TERMCAP_so=(echo -e '\e[1;48;5;11;38;5;235m') # terminal bg color for text, bg is yellow
+# 1 == bold
+#
+# 8 bit colors:
+#  48;5; => bg 256 color lookup => 11 == bright yellow (based on terminal theme)
+#  38;5; => fg 256 color lookup => 235 (fixed black color)
+#  - FYI 0-15 are standard 3/4 bit colors (defined in terminal theme)
+#  - 16+ are hardcoded colors (see wikipedia:  https://en.wikipedia.org/wiki/ANSI_escape_code#8-bit)
+#
 export LESS_TERMCAP_ue=(echo -e '\e[0m')
 export LESS_TERMCAP_us=(echo -e '\e[1;4;31m')
 # TODO others:? not sure these are needed:
