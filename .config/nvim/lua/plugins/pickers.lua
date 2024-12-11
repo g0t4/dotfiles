@@ -139,6 +139,10 @@ return {
                             -- FYI testing popup key maps without leaving insert mode (and losing popup in some case): inoremap <C-c> <Cmd>verbose map \<Up\><CR>
                             --    also `:messages clear` ... but some of verbose map doesn't show up in :messages (todo is there some sort of <Cmd> caveat that loses some of the messages?)
                             ["<Esc>"] = require("telescope.actions").close,
+                            -- CYCLE history of previous searches: (like command line history)
+                            --  use Ctrl-Up/Down so arrows can move through results of current search
+                            ["<C-Up>"] = require("telescope.actions").cycle_history_prev,
+                            ["<C-Down>"] = require("telescope.actions").cycle_history_next,
                         },
 
                     },
