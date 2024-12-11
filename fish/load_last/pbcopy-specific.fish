@@ -32,7 +32,7 @@ function _cppath
         return 0
     end
 
-    if command -q sgrealpath
+    if command -q grealpath
         grealpath --no-symlinks "$argv"
     else if uname | grep -q Darwin
         # macOS version of realpath doesn't have --no-symlinks option
