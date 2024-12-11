@@ -2,7 +2,6 @@
 # helpers (idea is always use pbcopy/paste -- see below)
 abbr pwdcp cppath # reminder, hopefully cppath stick with me but we shall see..
 # I am tempted to leave pwdcp and let it take the relative path arg too :), basically alias cppath without abbr expansion
-
 function cppath
     # no args => pwd
     # 1 arg ~= pwd + relative path (no resolve symlinks)
@@ -10,7 +9,22 @@ function cppath
     #   so you can do `cppath README.md` to grab the path to the README.md file
     #   inspired by pwdcp and wanting to be able to use it to include filenames too
 
-    set _path (_cppath $argv)
+    if test -z "$argv"
+        # no args => pwd only
+        set _path (pwd)
+    else
+        if command -q grealpath
+            set _path (grealpath --no-symlinks "$argv")
+        else if uname | grep -q Darwin
+            # macOS version of realpath doesn't have --no-symlinks option
+            echo "FAIL: grealpath not found and is needed on macOS (brew install coreutils)"
+            return 1
+        else
+            # s/b linux only here:
+            set _path (realpath --no-symlinks "$argv")
+        end
+    end
+
     if test $status -ne 0
         # make sure to show error message, and indicate failure
         echo $_path
@@ -24,26 +38,6 @@ function cppath
         echo "$_path" | pbcopy
     end
 end
-
-function _cppath
-    if test -z "$argv"
-        # no args => pwd only
-        pwd
-        return 0
-    end
-
-    if command -q grealpath
-        grealpath --no-symlinks "$argv"
-    else if uname | grep -q Darwin
-        # macOS version of realpath doesn't have --no-symlinks option
-        echo "FAIL: grealpath not found and is needed on macOS (brew install coreutils)"
-        return 1
-    else
-        # s/b linux only here:
-        realpath --no-symlinks "$argv"
-    end
-end
-
 
 if not $IS_MACOS
     # on non-macs make it appear as if pbcopy/paste are available
