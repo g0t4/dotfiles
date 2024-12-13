@@ -14,9 +14,12 @@ function collect_system_info
         # PERHAPS filter the list with known important commands (i.e. ag command, gcoreutils set, etc that will help write commands and I could add to this list as I encounter issues without it)
         echo "brew list: $(brew list | xargs echo)"
         echo
-        # claude noted these key packages:
-        #    git gh docker kubectl minikube kind node go rust vim neovim fish fzf ripgrep fd bat tmux eza curl wget nmap wireshark mitmproxy
-        # i think these matter too:
-        #    ag python3 nvim
+        # considering mentioning these (if avail):
+        #    ag python3 nvim fish zsh rg fd gh eza
+        # these I feel should be assumed always avail (not sure these all should be told to claude though):
+        #    git docker curl wget nmap bat
+        #  maybe also assumed:
+        #    bat kubectl minikube node go rust
+        #
     end
 end
