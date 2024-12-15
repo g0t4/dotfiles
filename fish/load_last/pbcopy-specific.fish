@@ -94,3 +94,15 @@ bind \ek kill_all_lines # esc+k (historically I used this key combo exclusively 
 
 # ctrl+c clear command line instead of cancel-commandline (why pollute terminal history to cancel a command!)
 bind \cc 'commandline -r ""'
+
+# !!! TODO USE THIS LATER...
+#function pre_exec_set_CMDLINE_env_var --on-event fish_preexec
+#    # this way the command that is running can introspect what is running!
+#    # would I be able to run grc too, based on command contents? and not need the line to show it prepended?
+#    # also, if bat runs at end of pipeline, it could look at cmdline to determine the filetype that is piped to it
+#    # or grcat on end of pipeline could match on what is running just like grc does... no need for grc in front anymore
+#    #    PRN could I write a grcatwrapper that I could echo foo | grcatwrapper and have it do w/e grc does when grc is in front? (pass off params to grcat)
+#
+#    # first arg is the cmdline
+#    export FISH_CURRENT_CMDLINE=$argv
+#end
