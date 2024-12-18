@@ -19,16 +19,16 @@ function cppath
 
     # if spaces in path, need to wrap in `'` for pbcopy to work
     if string match --regex --quiet -- ' ' "$_path"
-        echo "'$_path'" | pbcopy
+        echo -n "'$_path'" | pbcopy
     else
-        echo "$_path" | pbcopy
+        echo -n "$_path" | pbcopy
     end
 end
 
 function _cppath
     if test -z "$argv"
         # no args => pwd only
-        pwd
+        command pwd
         return 0
     end
 
