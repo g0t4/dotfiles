@@ -1234,6 +1234,25 @@ function quote_paths
     end
 end
 
+function video_editing_total_duration
+    set -l paths (quote_paths $argv)
+
+    # wow I used my ask-openai CLI helper to generate this and it did and it works well (asked for first to get durations, then said split hours:mins:secs and sheesh it did it right using one lone command line with semicolon separators, I just split it out here... bravo this is not straightforward to do
+    set totalSeconds 0;
+    for file in *.mp4;
+        set duration (ffmpeg -i $file 2>&1 | grep "Duration" | cut -d ' ' -f 4 | sed s/,//);
+        set -l h (echo $duration | cut -d ':' -f1);
+        set -l m (echo $duration | cut -d ':' -f2);
+        set -l s (echo $duration | cut -d ':' -f3);
+        set totalSeconds (math "$totalSeconds + ($h * 3600) + ($m * 60) + $s");
+    end;
+    set -l hours (math "floor($totalSeconds / 3600)");
+    set -l minutes (math "floor(($totalSeconds % 3600) / 60)");
+    set -l seconds (math "$totalSeconds % 60");
+    echo $hours:$minutes:$seconds
+
+end
+
 # FYI `veaud<TAB>` works in fish shell to complete this func:
 function video_editing_1_check_audio
     # only arg would be file paths (i.e. from glob like *.mp4), btw dont need to pass any paths and it will do all *.mp4 in current dir
