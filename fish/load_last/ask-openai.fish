@@ -254,13 +254,3 @@ function doit
     # $_python3 $_script $ask_service "$user_input"
     $_python3 $_script "$user_input"
 end
-function runit
-    # NOT a key binding, used as a func "keyit foo.esh"
-    set -l script_file "$argv"
-
-    set -l _python3 "$WES_DOTFILES/.venv/bin/python3"
-    set -l _script "$WES_DOTFILES/zsh/universals/3-last/ask-openai/runit.py"
-
-    # $_python3 $_script $ask_service "$user_input"
-    $_python3 $_script "$script_file"
-end
