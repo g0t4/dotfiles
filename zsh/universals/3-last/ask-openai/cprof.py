@@ -25,8 +25,11 @@ pr.enable()
 # or, override args:
 #    sys.argv = [sys.argv[0], "--ollama"]
 #
-from single import main
-main()
+# from single import main
+# main()
+#
+from km_devtools import main
+# main()
 
 # *** END of PROFILING
 pr.disable()
