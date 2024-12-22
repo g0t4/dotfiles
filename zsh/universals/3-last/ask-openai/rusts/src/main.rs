@@ -6,6 +6,8 @@ use reqwest::Client;
 use serde::{Deserialize, Serialize};
 use std::io::{self, Read};
 
+static SYSTEM_MESSAGE: &str = "You are a command line expert. Respond with a single, valid, complete command line. I intend to execute it. No explanation. No markdown. No markdown with backticks ` nor ```";
+
 // TODO test w/ and w/o async... I don't think async has a benefit but I am curious how much overhead it adds
 // reimpl as SYNC
 
@@ -32,10 +34,16 @@ async fn main() {
 
     let request = ChatCompletionRequest {
         model: "gpt-4o".to_string(),
-        messages: vec![Message {
-            role: "user".to_string(),
-            content: "What is the best way to learn Rust?".to_string(),
-        }],
+        messages: vec![
+            Message {
+                role: "system".to_string(),
+                content: SYSTEM_MESSAGE.to_string(),
+            },
+            Message {
+                role: "user".to_string(),
+                content: input,
+            },
+        ],
         max_tokens: 200,
     };
 
