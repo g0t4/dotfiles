@@ -17,7 +17,7 @@
     // https://github.com/fannheyward/coc-pyright?tab=readme-ov-file#configurations
     "python.formatting.provider": "yapf",
     "python.formatting.yapfArgs": [
-        // "--style",
+        "--style", "{column_limit: 200, }"
         // "{based_on_style: pep8, indent_width: 4}"
     ],
 
