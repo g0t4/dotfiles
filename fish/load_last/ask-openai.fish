@@ -1,6 +1,7 @@
 # https://fishshell.com/docs/current/cmds/bind.html
 
 function _ask_write_state
+    # TODO get rid of fish universal variable? or? what is file read overhead? <2ms??? hopefully if so then get rid of fish universal variable to simplify logic
     mkdir -p ~/.local/share/ask/
     echo "$ask_service" >~/.local/share/ask/service
 end
