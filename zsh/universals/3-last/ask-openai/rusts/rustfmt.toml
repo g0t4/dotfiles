@@ -1,0 +1,3 @@
+# rustfmt --print-config current .
+# max_width = 110
+# single_line_if_else_max_width = 150
