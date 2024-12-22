@@ -13,6 +13,11 @@ def log(msg):
 ## I could easily move this logic elsewhere but works fine in fish variable for now
 
 def get_ask_client() -> tuple[Service, AsyncOpenAI]:
+
+    # TODO profile this, takes 50-60ms to run (read file and build client) and see if there are ways to optimize... 50ms is borderline too slow for a responsive Ux for asking for help... seems way too high too to read a file...
+    #   PRN store variable in a dedicated file (not need to parse other lines?)
+    #   PRN or if its slow to build the AsyncOpenAI client then switch to maybe httpx client?
+
     # *** lookup backend => parse fish universal vars file (for ask_service)
     #   FYI vars file is unicode_escape'd (i.e. '\x2d\x2d' => '--')
     fish_vars_path = os.path.expanduser("~/.config/fish/fish_variables")
