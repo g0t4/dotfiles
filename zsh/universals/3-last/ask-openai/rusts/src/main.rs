@@ -8,6 +8,18 @@ use std::io::{self, Read};
 
 static SYSTEM_MESSAGE: &str = "You are a command line expert. Respond with a single, valid, complete command line. I intend to execute it. No explanation. No markdown. No markdown with backticks ` nor ```";
 
+static SYSTEM_MESSAGE_DEVTOOLS: &str = "
+You are a chrome devtools expert.
+The user is working in the devtools Console in the Brave Beta Browser.
+The user needs help completing a javascript command.
+Whatever they have typed into the Console's command line will be provided to you.
+They might also have a free-form question included, i.e. in a comment (after //).
+Respond with a single, valid javascript command line. Their command line will be replaced with your response. So they can review and execute it.
+No explanation. No markdown. No markdown with backticks ` nor ```.
+
+An example of a command line could be `find the first div on the page` and a valid response would be `document.querySelector('div')`
+";
+
 // TODO test w/ and w/o async... I don't think async has a benefit but I am curious how much overhead it adds
 // reimpl as SYNC
 
