@@ -1,5 +1,6 @@
 from services import Service
-import httpx # import alone is ~58ms
+import httpx  # import alone is ~58ms
+
 
 def generate(passed_context: str, system_message: str, use: Service, max_tokens: int):
     if use.name == "anthropic":
@@ -24,7 +25,7 @@ def get_openai_suggestion(passed_context: str, system_message: str, use: Service
                 },
             ],
             "max_tokens": max_tokens,
-            "n":1 # default
+            "n": 1  # default
         }
         chat_url = use.chat_url()
         headers = {
@@ -39,14 +40,13 @@ def get_openai_suggestion(passed_context: str, system_message: str, use: Service
         # this is triggered by raise_for_status and gives me access to resopnse body
         #   i.e. useful with ollama when I request invalid model, the body explains that where as w/o the body its a generic 404 which is frustrating at best
         print(f"HTTP error occurred: {e}")
-        print(f"Response body: {e.response.text}") # response body
+        print(f"Response body: {e.response.text}")  # response body
     except Exception as e:
         print(f"{e}")
         return None
 
 
-
-def get_anthropic_suggestion(passed_context:str, system_message: str, use: Service, max_tokens: int):
+def get_anthropic_suggestion(passed_context: str, system_message: str, use: Service, max_tokens: int):
     http_client = httpx.Client()
     try:
         # https://docs.anthropic.com/en/api/messages
@@ -75,8 +75,7 @@ def get_anthropic_suggestion(passed_context:str, system_message: str, use: Servi
         return completion["content"][0]["text"]
     except httpx.HTTPStatusError as e:
         print(f"HTTP error occurred: {e}")
-        print(f"Response body: {e.response.text}") # response body
+        print(f"Response body: {e.response.text}")  # response body
     except Exception as e:
         print(f"{e}")
         return None
-
