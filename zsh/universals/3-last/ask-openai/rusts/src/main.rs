@@ -84,7 +84,7 @@ struct Choice {
 
 async fn send_openai_request(
     api_key: &str,
-    service: Service,
+    service: Service<'_>,
     request: ChatCompletionRequest,
 ) -> Result<ChatCompletionResponse, reqwest::Error> {
     let client = Client::new();
@@ -118,14 +118,14 @@ async fn send_openai_request(
 }
 
 #[derive(Debug)]
-struct Service {
+struct Service<'a> {
     // ! TODO learn about String vs &str and intended uses... and all the to_string()/unswrap()/etc
-    name: String,
+    name: &'a str,
     model: String,
     url: String,
 }
 
-fn get_service() -> Service {
+fn get_service() -> Service<'static> {
     let home_dir = dirs::home_dir().expect("Could not find home directory");
     let file_path = home_dir.join(".local/share/ask/service");
     let contents = std::fs::read_to_string(file_path).expect("Could not read file");
@@ -141,7 +141,7 @@ fn get_service() -> Service {
         // PRN add more from services.py when I wanna use them
         "--groq" => {
             return Service {
-                name: "groq".to_string(),
+                name: "groq",
                 model: if model.is_some() {
                     model.unwrap().to_string()
                 } else {
@@ -152,7 +152,7 @@ fn get_service() -> Service {
         }
         "--ollama" => {
             return Service {
-                name: "ollama".to_string(),
+                name: "ollama",
                 model: if model.is_some() {
                     model.unwrap().to_string()
                 } else {
@@ -164,7 +164,7 @@ fn get_service() -> Service {
         _ => {
             // OpenAI is the default
             return Service {
-                name: "openai".to_string(),
+                name: "openai",
                 model: if model.is_some() {
                     model.unwrap().to_string()
                 } else {
