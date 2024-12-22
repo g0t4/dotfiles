@@ -9,3 +9,7 @@ def main():
     except subprocess.CalledProcessError as e:
         print("Command failed!")
         print("Error:", e.stderr)
+
+
+if __name__ == '__main__':
+    main()
