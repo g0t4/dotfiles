@@ -1,4 +1,5 @@
 import sys
+# !!! taking 150 to 200ms to import openai package (w/o even using it, ouch) - vs httpx import time - this is only diff in IMPLs
 from openai import OpenAI
 import textwrap
 

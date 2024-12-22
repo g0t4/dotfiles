@@ -131,6 +131,9 @@ def get_api_key(service_name, account_name):
         keyring.set_keyring(
             kr)  # tell keyring to use kr (not other backends, and not try to setup keyring.cryptfile backend instance itself, b/c then it prompts for password)
 
+    # TODO why does this take __89ms__ to exec to the CLI for security cmd? can this be optimized? or is this a good reason to just leave a background service open locally so the overhead is irrelevant and then its a one time hit
+    #   INSTEAD of perf hit EVERY time I use ask openai for any context
+    #   FYI command call `security find-generic-password -a ask -s openai` takes 39ms in CLI
     api_key = keyring.get_password(service_name, account_name)
 
     # windows => open Credential Manager => Windows Credentials tab => Generic Credentials section (add new)...  service_name => Internet/NetworkAddress, account_name => username
