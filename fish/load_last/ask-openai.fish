@@ -37,10 +37,7 @@ end
 
 function ask_dump_config
     echo "ask_service: $ask_service"
-    echo
-    set -l _python3 "$WES_DOTFILES/.venv/bin/python3"
-    set -l _single_py "$WES_DOTFILES/zsh/universals/3-last/ask-openai/single.py"
-    $_python3 $_single_py $ask_service --dump_config
+    # PRN I could add pythons script to create client and dump use like before, but lets see if I even need it
 end
 
 function ask_clear

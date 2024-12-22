@@ -148,7 +148,6 @@ def get_api_key(service_name, account_name):
 def args_to_use() -> Service:
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('--dump_config', action='store_true', default=False)
     parser.add_argument('--openai', action='store_true', default=False)
     parser.add_argument('--deepseek', action='store_true', default=False)
     parser.add_argument('--lmstudio', action='store_true', default=False)
@@ -176,10 +175,5 @@ def args_to_use() -> Service:
         use = use_gh_copilot(args.model)
     else:
         use = use_openai(args.model)
-
-    if args.dump_config:
-        # print(args)
-        print(use)
-        exit(0)
 
     return use
