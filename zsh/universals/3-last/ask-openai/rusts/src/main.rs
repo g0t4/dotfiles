@@ -22,9 +22,12 @@ async fn main() {
         .trim()
         .to_string();
 
-    let request = OpenAIRequest {
+    let request = ChatCompletionRequest {
         model: "gpt-4o".to_string(),
-        prompt: "Tell me a joke.".to_string(),
+        messages: vec![Message {
+            role: "user".to_string(),
+            content: "What is the best way to learn Rust?".to_string(),
+        }],
         max_tokens: 200,
     };
 
@@ -36,40 +39,40 @@ async fn main() {
 
 // TODO should I remove the auto-derives for Debug, how much overhead does that add?
 #[derive(Serialize, Debug)]
-struct OpenAIRequest {
+struct ChatCompletionRequest {
     model: String,
-    prompt: String,
+    messages: Vec<Message>,
     max_tokens: u32,
+    // PRN? n: 1
+}
+
+#[derive(Deserialize, Serialize, Debug)]
+struct Message {
+    role: String,
+    content: String,
 }
 
 #[derive(Deserialize, Debug)]
-struct OpenAIResponse {
+struct ChatCompletionResponse {
     choices: Vec<Choice>,
-    data: Vec<ModelData>,
-}
-
-#[derive(Deserialize, Debug)]
-struct ModelData {
-    id: String,
-    object: String,
 }
 
 #[derive(Deserialize, Debug)]
 struct Choice {
-    text: String,
+    message: Message,
 }
 
 async fn send_openai_request(
     api_key: &str,
-    request: OpenAIRequest,
-) -> Result<OpenAIResponse, reqwest::Error> {
+    request: ChatCompletionRequest,
+) -> Result<ChatCompletionResponse, reqwest::Error> {
     let client = Client::new();
-    let url = "https://api.openai.com/v1/models";
+    let url = "https://api.openai.com/v1/chat/completions";
 
     let response = client
-        .get(url)
+        .post(url)
         .header("Authorization", format!("Bearer {}", api_key))
-        //.json(&request)
+        .json(&request)
         .send()
         .await?;
 
@@ -79,7 +82,7 @@ async fn send_openai_request(
     if !response.status().is_success() {
         println!("FAIL, response status: {}", response.status());
     }
-    let result = response.json::<OpenAIResponse>().await?;
+    let result = response.json::<ChatCompletionResponse>().await?;
     println!("Result: {:#?}", result); // dump pretty, bound data
     Ok(result)
 }
