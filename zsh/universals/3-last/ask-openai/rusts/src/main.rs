@@ -119,6 +119,7 @@ async fn send_openai_request(
 
 #[derive(Debug)]
 struct Service {
+    // ! TODO learn about String vs &str and intended uses... and all the to_string()/unswrap()/etc
     name: String,
     model: String,
     url: String,
