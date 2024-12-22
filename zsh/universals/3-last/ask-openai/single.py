@@ -1,5 +1,5 @@
 import sys
-import httpx
+import httpx # import alone is ~58ms
 from services import args_to_use, Service
 
 system_message = "You are a command line expert. Respond with a single, valid, complete command line. I intend to execute it. No explanation. No markdown. No markdown with backticks ` nor ```"
