@@ -1,3 +1,6 @@
+#![allow(dead_code)]
+#![allow(unused_variables)]
+
 use reqwest::Client;
 use serde::{Deserialize, Serialize};
 
