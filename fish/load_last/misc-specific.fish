@@ -1605,3 +1605,21 @@ if command --query virsh
     abbr virshndl "virsh net-dhcp-leases" # mostly as reminder if Ctrl+S in virsh abbrs
 
 end
+
+if command --query cargo
+
+    abbr cacl "cargo clean"
+    abbr cab "cargo build"
+    abbr car "cargo run"
+    abbr catest "cargo test"
+    abbr cabench "cargo bench" # reminder to investigate
+
+    abbr caa "cargo add"
+    abbr carm "cargo remove"
+    abbr cau "cargo update"
+
+    abbr canew "cargo new"
+    abbr cainit "cargo init"
+    abbr cas "cargo search"
+
+end
