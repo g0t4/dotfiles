@@ -34,7 +34,8 @@ async fn main() {
     }
 }
 
-#[derive(Serialize)]
+// TODO should I remove the auto-derives for Debug, how much overhead does that add?
+#[derive(Serialize, Debug)]
 struct OpenAIRequest {
     model: String,
     prompt: String,
@@ -43,7 +44,7 @@ struct OpenAIRequest {
 
 #[derive(Deserialize, Debug)]
 struct OpenAIResponse {
-    //choices: Vec<Choice>,
+    choices: Vec<Choice>,
     data: Vec<ModelData>,
 }
 
@@ -53,7 +54,7 @@ struct ModelData {
     object: String,
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Debug)]
 struct Choice {
     text: String,
 }
