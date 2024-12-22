@@ -30,10 +30,8 @@ async fn main() {
     io::stdin()
         .read_to_string(&mut input)
         .expect("Failed to read from stdin");
-    //println!("Input: {:?}", input);
 
     let service = get_service();
-    println!("Service: {:?}", service);
 
     let output = std::process::Command::new("security")
         .arg("find-generic-password")
@@ -47,7 +45,6 @@ async fn main() {
         .unwrap()
         .trim()
         .to_string();
-    //println!("API Key: {}", api_key);
 
     let request = ChatCompletionRequest {
         model: service.model.to_string(),
