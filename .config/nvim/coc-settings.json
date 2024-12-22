@@ -102,6 +102,13 @@
     "zig.startUpMessage": true,
     "zig.path": "zls", // oddly enough I had to set this to zls? why isn't that default?
     "zig.debugLog": false,
+
+
+    // rust
+    // https://github.com/fannheyward/coc-rust-analyzer#configurations
+    //    PRN rust-analyzer.*
+
+
     //
     // FYI another persons' config: https://raw.githubusercontent.com/oppara/dotfiles/611ea809e380d5b4e3e374568a85e52e744a429e/config/nvim/coc-settings.json
     "languageserver": {
