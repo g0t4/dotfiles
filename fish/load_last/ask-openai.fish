@@ -1,47 +1,61 @@
 # https://fishshell.com/docs/current/cmds/bind.html
 
+function _ask_write_state
+    mkdir -p ~/.local/share/ask/
+    echo "$ask_service" >~/.local/share/ask/service
+end
+
 function ask_use_anthropic
     set --universal ask_service --anthropic $argv
+    _ask_write_state
     ask_dump_config
 end
 
 function ask_use_deepseek
     set --universal ask_service --deepseek $argv
+    _ask_write_state
     ask_dump_config
 end
 
 function ask_use_groq
     set --universal ask_service --groq $argv
+    _ask_write_state
     ask_dump_config
 end
 
 function ask_use_openai_gpt4o
     set --universal ask_service --openai gpt-4o
+    _ask_write_state
     ask_dump_config
 end
 
 function ask_use_openai_gpt3.5
     set --universal ask_service --openai gpt-3.5-turbo-1106
+    _ask_write_state
     ask_dump_config
 end
 
 function ask_use_lmstudio
     set --universal ask_service --lmstudio $argv
+    _ask_write_state
     ask_dump_config
 end
 
 function ask_use_ollama
     set --universal ask_service --ollama $use_args
+    _ask_write_state
     ask_dump_config
 end
 
 function ask_dump_config
     echo "ask_service: $ask_service"
+    echo "file: $(cat ~/.local/share/ask/service)"
     # PRN I could add pythons script to create client and dump use like before, but lets see if I even need it
 end
 
 function ask_clear
     set --universal --erase ask_service
+    _ask_write_state
     ask_dump_config
 end
 
