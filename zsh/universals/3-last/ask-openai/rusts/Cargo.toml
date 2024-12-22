@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [features]
-default = ["perf_without_api_call"]
+# default = ["perf_without_api_call"]
 perf_without_api_call = []
 
 [dependencies]
