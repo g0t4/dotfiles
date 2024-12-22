@@ -33,6 +33,9 @@ async fn main() {
 
     let service = get_service();
 
+    // TODO make work on windows or leave windows pointed at python impl
+    // Install-Module -Name CredentialManager -Force
+    // $credential = Get-StoredCredential -Target "YourTargetName"
     let output = std::process::Command::new("security")
         .arg("find-generic-password")
         .arg("-s")
@@ -148,6 +151,7 @@ fn get_service() -> Service {
         None
     };
     match service[0].trim() {
+        // PRN add more from services.py when I wanna use them
         "--groq" => {
             return Service {
                 name: "groq".to_string(),
