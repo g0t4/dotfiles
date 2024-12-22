@@ -1,6 +1,6 @@
 import sys
-
-from services import args_to_use, Service
+from services import args_to_use
+from suggest import get_openai_suggestion
 
 # TODO there seems to be some lag due to keyboard maestro (probabaly in calling fish => python overhead)
 #    I found a few seettings for delays and set them to 0 and its sliightly helped but 200ms still fels like 1+ seconds (vs test at CLI where I run the test fish script that calls same thing)
@@ -17,34 +17,7 @@ No explanation. No markdown. No markdown with backticks ` nor ```.
 
 An example of a command line could be `find the first div on the page` and a valid response would be `document.querySelector('div')`
 """
-
-
-def generate_command(passed_context: str, use: Service):
-
-    client = OpenAI(api_key=use.api_key, base_url=use.base_url)
-
-    try:
-        completion = client.chat.completions.create(
-            model=use.model,
-            messages=[
-                {
-                    "role": "system",
-                    "content": system_message
-                },
-                {
-                    "role": "user",
-                    "content": f"{passed_context}"
-                },
-            ],
-            max_tokens=200,
-            n=1  # default
-        )
-
-        return completion.choices[0].message.content
-
-    except Exception as e:
-        print(f"{e}")
-        return None
+max_tokens = 200
 
 
 def main():
@@ -53,7 +26,7 @@ def main():
 
     stdin_context = sys.stdin.read()
 
-    command = generate_command(stdin_context, use)
+    command = get_openai_suggestion(stdin_context, system_message, use, max_tokens)
     if command is None:
         sys.exit(1)
 
