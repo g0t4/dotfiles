@@ -6,20 +6,20 @@
 let g:coc_global_extensions = [
             \ 'coc-clangd',
             \ 'coc-css',
-            \ 'coc-rls',
             \ 'coc-docker',
             \ 'coc-html',
             \ 'coc-json',
             \ 'coc-lua',
+            \ 'coc-prettier',
             \ 'coc-pyright',
+            \ 'coc-rls',
+            \ 'coc-sh',
             \ 'coc-toml',
             \ 'coc-tsserver',
             \ 'coc-vimlsp',
             \ 'coc-xml',
             \ 'coc-yaml',
             \ 'coc-zig',
-            \ 'coc-prettier',
-            \ 'coc-sh',
             \ ]
             "\ 'coc-rust-analyzer',
             "\ 'coc-lightbulb', " seemed to show up on every line regardless if any code actions available => TODO investigate?
