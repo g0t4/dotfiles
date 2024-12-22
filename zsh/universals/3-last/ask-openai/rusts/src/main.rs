@@ -22,11 +22,11 @@ async fn main() {
     let request = OpenAIRequest {
         model: "gpt-4o".to_string(),
         prompt: "Tell me a joke.".to_string(),
-        max_tokens: 50,
+        max_tokens: 200,
     };
 
     match send_openai_request(&api_key, request).await {
-        Ok(response) => println!("Response: {:?}", response),
+        Ok(response) => println!("Response: {:#?}", response),
         Err(e) => eprintln!("Error: {}", e),
     }
 }
@@ -69,10 +69,13 @@ async fn send_openai_request(
         .send()
         .await?;
 
-    println!("Response status: {:?}", response);
+    //println!("Response: {:?}", response); // dump compact, doesn't show body AFAICT
+    println!("Response: {:#?}", response); // dump pretty
+
     if !response.status().is_success() {
         println!("FAIL, response status: {}", response.status());
     }
     let result = response.json::<OpenAIResponse>().await?;
+    println!("Result: {:#?}", result); // dump pretty, bound data
     Ok(result)
 }
