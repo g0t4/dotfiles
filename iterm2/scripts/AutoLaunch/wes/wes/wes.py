@@ -2,8 +2,7 @@ import os
 import platform
 import iterm2
 import re
-from openai import AsyncOpenAI
-from services import use_groq, use_lmstudio, use_ollama, use_openai, use_deepseek, use_anthropic
+from client import get_ask_client
 
 DEBUG = True
 
@@ -110,43 +109,7 @@ async def ask_openai(connection):
     # FYI last_comand is not critical, can probably be removed, I just added it b/c it was there... not sure it will ever be that helpful and I loved my single.py w/o it forever now...
     env_last_command = await session.async_get_variable("lastCommand")  # FYI works on remotes w/ iterm2 shell integration
 
-    # *** lookup backend => parse fish universal vars file (for ask_service)
-    #   FYI vars file is unicode_escape'd (i.e. '\x2d\x2d' => '--')
-    fish_vars_path = os.path.expanduser("~/.config/fish/fish_variables")
-    if not os.path.exists(fish_vars_path):
-        log("cannot read ask_service from fish universal variables file")
-        use = use_openai(None)
-    else:
-        # read fish universal variables:
-        with open(fish_vars_path, 'r', encoding="utf-8") as _file:
-            lines = _file.readlines()
-        # extract ask_service variable:
-        ask_service_raw = next((line for line in lines if "ask_service" in line), None)
-        if ask_service_raw is None:
-            log("ask_service not found in fish universal variables file")
-            use = use_openai(None)
-        else:
-            ask_service = ask_service_raw.encode('utf-8').decode('unicode_escape').strip()  # strip trailing \n
-            ask_service_split = ask_service.split("\x1e")  # split on RS (record separator)
-            model = ask_service_split[1] if len(ask_service_split) > 1 else None
-            # PRN this parsing logic can be shared with single.py, after I re-hydrate the ask_service variable
-            if "--ollama" in ask_service:
-                use = use_ollama(model)
-            elif "--groq" in ask_service:
-                use = use_groq(model)
-            elif "--deepseek" in ask_service:
-                use = use_deepseek(model)
-            elif "--lmstudio" in ask_service:
-                use = use_lmstudio(model)
-            elif "--anthropic" in ask_service:
-                use = use_anthropic(model)
-            else:
-                use = use_openai(model)
-
-    log(f"using {use}")
-
-    client = AsyncOpenAI(api_key=use.api_key, base_url=use.base_url, timeout=15)
-    # timeout (seconds), don't want shell locked up for the default (seems like 60s?)
+    use, client = get_ask_client()
 
     messages = [
         {
