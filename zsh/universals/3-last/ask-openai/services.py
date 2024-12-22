@@ -1,26 +1,26 @@
 import argparse
-from os import getenv
 import platform
 import sys
 from typing import Optional, NamedTuple
 
-import keyring
 
 class Service(NamedTuple):
     base_url: str
     model: str
     api_key: str
     name: str
-    chat_completions_path: str|None
+    chat_completions_path: str | None
 
     def chat_url(self):
         if self.chat_completions_path is None:
             return f"{self.base_url}/chat/completions"
         else:
             return f"{self.base_url}/{self.chat_completions_path}"
+
     def __repr__(self):
         # i.e. printing (logging), DO NOT INCLUDE api_key
         return f"Service({self.name} model={self.model} chat_url={self.chat_url()})"
+
 
 def use_groq(model: Optional[str] = None):
 
@@ -29,17 +29,19 @@ def use_groq(model: Optional[str] = None):
         api_key=get_api_key('groq', 'ask'),
         base_url='https://api.groq.com/openai/v1',
         model=model if model else 'llama-3.1-70b-versatile',
-        chat_completions_path= None,
+        chat_completions_path=None,
         # groq https://console.groq.com/docs/models
         #   llama3-8b-8192, llama3-70b-8192, mixtral-8x7b-32768, gemma-7b-it, gemma2-9b-it
         #   llama-3.1-405b-reasoning, llama-3.1-70b-versatile, llama-3.1-8b-instant
         #   llama3-groq-70b-8192-tool-use-preview, llama3-groq-8b-8192-tool-use-preview
     )
 
+
 def use_gh_copilot(model: Optional[str] = None):
     # TODO reuse logic in my ask-openai.nvim plugin, basically take ~/.config/github-copilot/[apps|host].yml to get GH copilot API_KEY => get bearer token and go! cache the config so its not an extra step on every request, config has expiration field
     # TODO get base_url off of v2_token/config response
     raise Exception("not implemented yet")
+
 
 def use_openai(model: Optional[str] = None):
 
@@ -59,8 +61,9 @@ def use_openai(model: Optional[str] = None):
         api_key=get_api_key('openai', 'ask'),
         base_url="https://api.openai.com/v1",
         model=model if model else 'gpt-4o',
-        chat_completions_path= None,
+        chat_completions_path=None,
     )
+
 
 def use_anthropic(model: Optional[str] = None):
     return Service(
@@ -68,7 +71,7 @@ def use_anthropic(model: Optional[str] = None):
         api_key=get_api_key('anthropic', 'ask'),
         base_url="https://api.anthropic.com/v1",
         model=model if model else 'claude-3-5-sonnet-latest',
-        chat_completions_path= "messages",
+        chat_completions_path="messages",
     )
     # https://docs.anthropic.com/en/docs/about-claude/models
 
@@ -81,7 +84,7 @@ def use_lmstudio(model: Optional[str] = None):
         api_key="whatever",
         base_url="http://localhost:1234/v1",
         model=model if model else '',
-        chat_completions_path= None,
+        chat_completions_path=None,
     )
 
 
@@ -94,8 +97,8 @@ def use_ollama(model: Optional[str] = None):
         base_url="http://localhost:11434/v1",
         # TODO can blank be used and let it pick?
         model=model if model else 'llama3.2:3b',
-        chat_completions_path= None
-    )
+        chat_completions_path=None)
+
 
 def use_deepseek(model: Optional[str] = None):
     # curl -L -X GET 'https://api.deepseek.com/models' \-H 'Accept: application/json' \-H 'Authorization: Bearer <TOKEN>' | jq
@@ -108,13 +111,26 @@ def use_deepseek(model: Optional[str] = None):
         api_key=get_api_key('deepseek', 'ask'),
         base_url="https://api.deepseek.com",
         model=model if model else 'deepseek-chat',
-        chat_completions_path= None,
+        chat_completions_path=None,
     )
+
 
 def get_api_key(service_name, account_name):
 
+    if platform.system() == 'Darwin':
+        import subprocess
+        # using security command directly for speed (45ms vs 120ms to use library)
+        cmd = ['security', 'find-generic-password', '-s', service_name, '-a', account_name, '-w']
+        # check == raise on failure
+        result = subprocess.run(cmd, text=True, capture_output=True, check=True)
+        return result.stdout.strip()
+
+    # only load for linux/macOS (no overhead for subsquent calls)
+    import keyring
+
     if platform.system() == 'Linux':
         from keyrings.cryptfile.cryptfile import CryptFileKeyring
+        from os import getenv
         # https://pypi.org/project/keyrings.cryptfile/
         # pip install keyrings.cryptfile
         #
@@ -128,8 +144,7 @@ def get_api_key(service_name, account_name):
             print("KEYRING_CRYPTFILE_PASSWORD env var not set")
             sys.exit(1)
         kr.keyring_key = getenv("KEYRING_CRYPTFILE_PASSWORD")
-        keyring.set_keyring(
-            kr)  # tell keyring to use kr (not other backends, and not try to setup keyring.cryptfile backend instance itself, b/c then it prompts for password)
+        keyring.set_keyring(kr)  # tell keyring to use kr (not other backends, and not try to setup keyring.cryptfile backend instance itself, b/c then it prompts for password)
 
     # TODO why does this take __89ms__ to exec to the CLI for security cmd? can this be optimized? or is this a good reason to just leave a background service open locally so the overhead is irrelevant and then its a one time hit
     #   INSTEAD of perf hit EVERY time I use ask openai for any context
