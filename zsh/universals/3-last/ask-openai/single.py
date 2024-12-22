@@ -86,12 +86,6 @@ def main():
     use = args_to_use()
 
     stdin_context = sys.stdin.read()
-    # empty context usually generates echo hello :) so allow it
-
-    if "question: dump\n" in stdin_context:
-        # dump context to troubleshoot
-        print(stdin_context)
-        sys.exit(2)
 
     command = generate_command(stdin_context, use)
     if command is None:

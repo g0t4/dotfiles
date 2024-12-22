@@ -52,12 +52,6 @@ def generate_command(context: str):
 if __name__ == "__main__":
 
     context = sys.stdin.read()
-    # empty context usually generates echo hello :) so allow it
-
-    if "question: dump\n" in context:
-        # dump context to troubleshoot
-        print(context)
-        sys.exit(2)
 
     command = generate_command(context)
     if command is None:
