@@ -1,6 +1,6 @@
 #![allow(dead_code)]
 #![allow(unused_variables)]
-#![allow(unreachable_code)]
+#![allow(unreachable_code, inactive_code)]
 
 use reqwest::Client;
 use serde::{Deserialize, Serialize};
@@ -85,19 +85,16 @@ async fn send_openai_request(
     let client = Client::new();
     let url = "https://api.openai.com/v1/chat/completions";
 
-    #[cfg(feature = "perf_without_api_call")]
-    {
-        // toggle this true to test everything except calling the API... 27.5ms yes!
-        println!("Request: {:#?}", request);
-        return Ok(ChatCompletionResponse {
-            choices: vec![Choice {
-                message: Message {
-                    role: "assistant".to_string(),
-                    content: "short ciruct testing".to_string(),
-                },
-            }],
-        });
-    }
+    //// uncomment to test everything except calling the API... 27.5ms yes!
+    //println!("Request: {:#?}", request);
+    //return Ok(ChatCompletionResponse {
+    //    choices: vec![Choice {
+    //        message: Message {
+    //            role: "assistant".to_string(),
+    //            content: "short ciruct testing".to_string(),
+    //        },
+    //    }],
+    //});
 
     let response = client
         .post(url)
