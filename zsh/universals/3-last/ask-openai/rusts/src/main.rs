@@ -20,6 +20,14 @@ No explanation. No markdown. No markdown with backticks ` nor ```.
 An example of a command line could be `find the first div on the page` and a valid response would be `document.querySelector('div')`
 ";
 
+//static SECURITY_ACCOUNT: &str = "openai";
+static SECURITY_ACCOUNT: &str = "groq";
+//static MODEL: &str = "gpt-4o";
+static MODEL: &str = "llama-3.1-70b-versatile"; // TODO newer groq model?
+
+//static URL: &str = "https://api.openai.com/v1/chat/completions";
+static URL: &str = "https://api.groq.com/openai/v1/chat/completions";
+
 // TODO test w/ and w/o async... I don't think async has a benefit but I am curious how much overhead it adds
 // reimpl as SYNC
 
@@ -36,7 +44,7 @@ async fn main() {
     let output = std::process::Command::new("security")
         .arg("find-generic-password")
         .arg("-s")
-        .arg("openai")
+        .arg(SECURITY_ACCOUNT)
         .arg("-a")
         .arg("ask")
         .arg("-w")
@@ -45,9 +53,10 @@ async fn main() {
         .unwrap()
         .trim()
         .to_string();
+    //println!("API Key: {}", api_key);
 
     let request = ChatCompletionRequest {
-        model: "gpt-4o".to_string(),
+        model: MODEL.to_string(),
         messages: vec![
             Message {
                 role: "system".to_string(),
@@ -97,7 +106,6 @@ async fn send_openai_request(
     request: ChatCompletionRequest,
 ) -> Result<ChatCompletionResponse, reqwest::Error> {
     let client = Client::new();
-    let url = "https://api.openai.com/v1/chat/completions";
 
     //// uncomment to test everything except calling the API... 27.5ms yes!
     //println!("Request: {:#?}", request);
@@ -111,7 +119,7 @@ async fn send_openai_request(
     //});
 
     let response = client
-        .post(url)
+        .post(URL)
         .header("Authorization", format!("Bearer {}", api_key))
         .json(&request)
         .send()
