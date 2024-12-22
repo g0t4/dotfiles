@@ -9,6 +9,16 @@ function _ask_write_state
     ask_dump_config
 end
 
+function ask_dump_config
+    echo "ask_service: $ask_service"
+    echo "file: $(cat ~/.local/share/ask/service)"
+    # PRN I could add pythons script to create client and dump use like before, but lets see if I even need it
+end
+
+function ask_clear
+    _ask_write_state
+end
+
 function ask_use_anthropic
     _ask_write_state --anthropic $argv
 end
@@ -35,16 +45,6 @@ end
 
 function ask_use_ollama
     _ask_write_state --ollama $use_args
-end
-
-function ask_dump_config
-    echo "ask_service: $ask_service"
-    echo "file: $(cat ~/.local/share/ask/service)"
-    # PRN I could add pythons script to create client and dump use like before, but lets see if I even need it
-end
-
-function ask_clear
-    _ask_write_state
 end
 
 function ask_openai
