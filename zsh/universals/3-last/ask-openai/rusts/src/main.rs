@@ -89,7 +89,7 @@ async fn send_openai_request(
 ) -> Result<ChatCompletionResponse, reqwest::Error> {
     let client = Client::new();
 
-    //// uncomment to test everything except calling the API... 27.5ms yes!
+    //// uncomment to test everything except calling the API... 25ms in latest tests (even with reading config file!)
     //return Ok(ChatCompletionResponse {
     //    choices: vec![Choice {
     //        message: Message {
