@@ -51,7 +51,7 @@ async fn main() {
         messages: vec![
             Message {
                 role: "system".to_string(),
-                content: SYSTEM_MESSAGE.to_string(),
+                content: SYSTEM_MESSAGE_DEVTOOLS.to_string(),
             },
             Message {
                 role: "user".to_string(),
