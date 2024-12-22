@@ -7,7 +7,6 @@ use reqwest::Client;
 use serde::{Deserialize, Serialize};
 use std::io::{self, Read};
 
-
 // TODO new switching mechanism so I can keep one binary for all cases... I need this to be passed from caller (as arg, or env var, or I could symlink same binary to diff names for - single,devtools,links,etc)
 static SYSTEM_MESSAGE: &str = "You are a command line expert. Respond with a single, valid, complete command line. I intend to execute it. No explanation. No markdown. No markdown with backticks ` nor ```";
 
@@ -35,21 +34,7 @@ async fn main() {
 
     let service = get_service();
 
-    // TODO make work on windows or leave windows pointed at python impl
-    // Install-Module -Name CredentialManager -Force
-    // $credential = Get-StoredCredential -Target "YourTargetName"
-    let output = std::process::Command::new("security")
-        .arg("find-generic-password")
-        .arg("-s")
-        .arg(service.name.to_string())
-        .arg("-a")
-        .arg("ask")
-        .arg("-w")
-        .output();
-    let api_key = String::from_utf8(output.unwrap().stdout)
-        .unwrap()
-        .trim()
-        .to_string();
+    let api_key = get_api_key(service.name.to_string());
 
     let request = ChatCompletionRequest {
         model: service.model.to_string(),
@@ -189,4 +174,24 @@ fn get_service() -> Service {
             };
         }
     }
+}
+
+fn get_api_key(service_name: String) -> String {
+    // TODO make work on windows or leave windows pointed at python impl
+    // Install-Module -Name CredentialManager -Force
+    // $credential = Get-StoredCredential -Target "YourTargetName"
+    let output = std::process::Command::new("security")
+        .arg("find-generic-password")
+        .arg("-s")
+        .arg(service_name)
+        .arg("-a")
+        .arg("ask")
+        .arg("-w")
+        .output();
+
+    return String::from_utf8(output.unwrap().stdout)
+        .unwrap()
+        .trim()
+        .to_string();
+    // TODO error handling
 }
