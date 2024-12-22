@@ -4,12 +4,19 @@
 
 use reqwest::Client;
 use serde::{Deserialize, Serialize};
+use std::io::{self, Read};
 
 // TODO test w/ and w/o async... I don't think async has a benefit but I am curious how much overhead it adds
 // reimpl as SYNC
 
 #[tokio::main]
 async fn main() {
+    let mut input = String::new();
+    io::stdin()
+        .read_to_string(&mut input)
+        .expect("Failed to read from stdin");
+    println!("Input: {:?}", input);
+
     let output = std::process::Command::new("security")
         .arg("find-generic-password")
         .arg("-s")
