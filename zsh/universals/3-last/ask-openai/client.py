@@ -26,6 +26,7 @@ def get_ask_client() -> tuple[Service, AsyncOpenAI]:
         use = use_openai(None)
     else:
         # read fish universal variables:
+        # <2ms to read file
         with open(fish_vars_path, 'r', encoding="utf-8") as _file:
             lines = _file.readlines()
         # extract ask_service variable:
@@ -54,8 +55,7 @@ def get_ask_client() -> tuple[Service, AsyncOpenAI]:
             else:
                 use = use_openai(model)
 
-    log(f"using {use}")
-
+    # 20ms to create client... YUCK, almost no time to read file above (<2ms)
     client = AsyncOpenAI(api_key=use.api_key, base_url=use.base_url, timeout=15)
     # timeout (seconds), don't want shell locked up for the default (seems like 60s?)
 
