@@ -1,10 +1,8 @@
 import sys
-from os import getenv
 from openai import OpenAI
 import textwrap
 
 from services import args_to_use, Service
-
 
 def generate_command(passed_context: str, use: Service):
 
@@ -40,22 +38,11 @@ def generate_command(passed_context: str, use: Service):
             n=1  # default
         )
 
-        response = completion.choices[0].message.content
-        # log responses to ~/.ask.openai.log
+        return completion.choices[0].message.content
 
-        log_response(passed_context, use, response)
-
-        return response
     except Exception as e:
         print(f"{e}")
         return None
-
-
-def log_response(passed_context: str, use: Service, response: str):
-    log_file = f"{getenv('HOME')}/.ask.km-chrome.log"
-    with open(log_file, "a", encoding='utf-8') as file:
-        file.writelines([f"{'#'*40} {use.base_url} {use.name} {use.model}" + '\n', f"{passed_context}\n{response}\n\n"])
-
 
 def main():
 

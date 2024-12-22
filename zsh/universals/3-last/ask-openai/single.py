@@ -40,7 +40,6 @@ def get_openai_suggestion(passed_context: str, use: Service):
         response.raise_for_status()
         completion = response.json()
         content = completion["choices"][0]["message"]["content"]
-        log_response(passed_context, use, content)
         return content
     except httpx.HTTPStatusError as e:
         # this is triggered by raise_for_status and gives me access to resopnse body
@@ -79,7 +78,6 @@ def get_anthropic_suggestion(passed_context: str, use: Service):
         response.raise_for_status()
         completion = response.json()
         content = completion["content"][0]["text"]
-        log_response(passed_context, use, content)
         return content
     except httpx.HTTPStatusError as e:
         print(f"HTTP error occurred: {e}")
@@ -87,13 +85,6 @@ def get_anthropic_suggestion(passed_context: str, use: Service):
     except Exception as e:
         print(f"{e}")
         return None
-
-
-def log_response(passed_context: str, use: Service, response: str):
-    log_file = os.path.join(os.path.expanduser("~"), ".ask.single.log")
-    with open(log_file, "a", encoding='utf-8') as file:
-        file.writelines([f"{'#'*40} {use.base_url} {use.name} {use.model}" + '\n', f"{passed_context}\n{response}\n\n"])
-
 
 def main():
 
