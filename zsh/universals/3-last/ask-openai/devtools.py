@@ -6,7 +6,6 @@ from services import args_to_use, Service
 
 def generate_command(passed_context: str, use: Service):
 
-    return "disabled km_devtools"
     client = OpenAI(api_key=use.api_key, base_url=use.base_url)
 
     try:

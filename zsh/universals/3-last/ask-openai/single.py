@@ -5,6 +5,7 @@ from services import args_to_use, Service
 system_message = "You are a command line expert. Respond with a single, valid, complete command line. I intend to execute it. No explanation. No markdown. No markdown with backticks ` nor ```"
 
 def generate_command(passed_context: str, use: Service):
+    return "disabled single"
     if use.name == "anthropic":
         return get_anthropic_suggestion(passed_context, use)
     else:
