@@ -5,3 +5,5 @@ keyrings.cryptfile
 httpx
 
 debugpy
+
+yapf # formatting
