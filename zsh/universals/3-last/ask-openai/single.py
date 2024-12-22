@@ -39,8 +39,7 @@ def get_openai_suggestion(passed_context: str, use: Service):
         response = http_client.post(chat_url, json=body, headers=headers)
         response.raise_for_status()
         completion = response.json()
-        content = completion["choices"][0]["message"]["content"]
-        return content
+        return completion["choices"][0]["message"]["content"]
     except httpx.HTTPStatusError as e:
         # this is triggered by raise_for_status and gives me access to resopnse body
         #   i.e. useful with ollama when I request invalid model, the body explains that where as w/o the body its a generic 404 which is frustrating at best
@@ -77,8 +76,7 @@ def get_anthropic_suggestion(passed_context: str, use: Service):
         response = http_client.post(chat_url, json=body, headers=headers)
         response.raise_for_status()
         completion = response.json()
-        content = completion["content"][0]["text"]
-        return content
+        return completion["content"][0]["text"]
     except httpx.HTTPStatusError as e:
         print(f"HTTP error occurred: {e}")
         print(f"Response body: {e.response.text}") # response body
