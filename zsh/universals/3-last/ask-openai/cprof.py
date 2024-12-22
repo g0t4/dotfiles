@@ -28,8 +28,10 @@ pr.enable()
 # from single import main
 # main()
 #
-from km_devtools import main
+# from devtools import main
 # main()
+from test import main
+main()
 
 # *** END of PROFILING
 pr.disable()
