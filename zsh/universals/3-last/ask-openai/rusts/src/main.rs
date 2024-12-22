@@ -1,6 +1,6 @@
 #![allow(dead_code)]
 #![allow(unused_variables)]
-#![allow(unreachable_code, inactive_code)]
+#![allow(unreachable_code)]
 
 use reqwest::Client;
 use serde::{Deserialize, Serialize};
@@ -17,7 +17,9 @@ async fn main() {
     io::stdin()
         .read_to_string(&mut input)
         .expect("Failed to read from stdin");
-    println!("Input: {:?}", input);
+    //println!("Input: {:?}", input);
+
+    // TODO read in config for which service to use (openai,groq, ... and add this to timing)
 
     let output = std::process::Command::new("security")
         .arg("find-generic-password")
@@ -48,7 +50,7 @@ async fn main() {
     };
 
     match send_openai_request(&api_key, request).await {
-        Ok(response) => println!("Response: {:#?}", response),
+        Ok(response) => println!("fooo {}", response.choices[0].message.content),
         Err(e) => eprintln!("Error: {}", e),
     }
 }
@@ -104,12 +106,12 @@ async fn send_openai_request(
         .await?;
 
     //println!("Response: {:?}", response); // dump compact, doesn't show body AFAICT
-    println!("Response: {:#?}", response); // dump pretty
+    //println!("Response: {:#?}", response); // dump pretty
 
     if !response.status().is_success() {
         println!("FAIL, response status: {}", response.status());
     }
     let result = response.json::<ChatCompletionResponse>().await?;
-    println!("Result: {:#?}", result); // dump pretty, bound data
+    //println!("Result: {:#?}", result); // dump pretty, bound data
     Ok(result)
 }
