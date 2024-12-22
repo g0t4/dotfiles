@@ -14,7 +14,10 @@ async fn main() {
         .arg("ask")
         .arg("-w")
         .output();
-    let api_key = String::from_utf8(output.unwrap().stdout).unwrap();
+    let api_key = String::from_utf8(output.unwrap().stdout)
+        .unwrap()
+        .trim()
+        .to_string();
     //println!("API key: {}", api_key);
 
     // Prepare the request body
