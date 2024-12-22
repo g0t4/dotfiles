@@ -226,31 +226,3 @@ function __find_completions_for
 
 end
 
-
-## NOTES completions research
-#
-# tab delimit to add description:
-# echo -e "get\tfoo the bar"
-# echo -e "exec\tshel on in"
-#
-# can even modify commandline in completion func: commandline -a foo # => I could use this to rewrite the command line (i.e. trigger ask openai) by registering a custom completion func with some top level "ask" or "help" command (aside - could even setup real command so if I run it, it explains a solution too)... OMYGOSH => I could use completions (if it works) to propose multiple entire command line solutions and pick from them by tabbing?!
-# idea: return entire command and have enter (or tab) delete first part of line or just have ask run whatever comes after? hrm => I don't like how it escapes every space but that actually probably makes sense given its suppopse to be a single token...
-# set proc (commandline --tokenize)
-# for token in $proc
-#     echo "ls -al | ls -al | ls -al | ls -al | ls -al | ls -al | ls -al | ls -al | ls -al | ls -al"
-#     echo "tree -a # other long command so we get a vertical menu of choices"
-#     echo "ls -al | grep -i"
-# end
-
-
-# *** DO IT ***
-function doit
-    # NOT a key binding, used as a func "doit foo the bar for me"
-    set -l user_input "$argv"
-
-    set -l _python3 "$WES_DOTFILES/.venv/bin/python3"
-    set -l _script "$WES_DOTFILES/zsh/universals/3-last/ask-openai/doit.py"
-
-    # $_python3 $_script $ask_service "$user_input"
-    $_python3 $_script "$user_input"
-end
