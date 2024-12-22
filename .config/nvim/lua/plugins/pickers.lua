@@ -96,9 +96,9 @@ return {
         },
         cmd = { 'Telescope' }, -- lazy load on command used
         keys = {
-            { '<C-p>',     ':Telescope find_files<CR>', mode = 'n' },
-            { '<leader>t', ':Telescope<CR>',            mode = 'n' }, -- list pickers, select one opens it (like if :Telescope<CR>), shows keymaps too
-            { '<leader>s', ':Telescope live_grep<CR>',  mode = 'n' }, -- keep top level w/o submapping collision so this is snappy fast
+            { '<C-p>',       ':Telescope find_files<CR>', mode = 'n' },
+            { '<leader>t',   ':Telescope<CR>',            mode = 'n' }, -- list pickers, select one opens it (like if :Telescope<CR>), shows keymaps too
+            { '<leader>s',   ':Telescope live_grep<CR>',  mode = 'n' }, -- keep top level w/o submapping collision so this is snappy fast
             { '<leader>gst', ':Telescope git_status<CR>', mode = 'n' }, -- like gst abbr/alias
         },
         config = function()
@@ -164,6 +164,12 @@ return {
                     },
                 }
             })
+            -- FYI this complements <leader>s which opens live_grep with empty search query
+            vim.keymap.set('n', '<leader>w', function()
+                require('telescope.builtin').live_grep({
+                    default_text = vim.fn.expand('<cword>')
+                })
+            end, { desc = "Live grep, starting with word under cursor" })
         end,
     },
 
