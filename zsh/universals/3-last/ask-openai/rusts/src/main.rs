@@ -7,6 +7,8 @@ use reqwest::Client;
 use serde::{Deserialize, Serialize};
 use std::io::{self, Read};
 
+
+// TODO new switching mechanism so I can keep one binary for all cases... I need this to be passed from caller (as arg, or env var, or I could symlink same binary to diff names for - single,devtools,links,etc)
 static SYSTEM_MESSAGE: &str = "You are a command line expert. Respond with a single, valid, complete command line. I intend to execute it. No explanation. No markdown. No markdown with backticks ` nor ```";
 
 static SYSTEM_MESSAGE_DEVTOOLS: &str = "
