@@ -109,18 +109,3 @@ function restore_last_question_widget(){
     BUFFER=$last_question_asked
 }
 
-
-
-
-############################################################
-##### $ multiple suggestions
-############################################################
-#
-# ALTERNATE design is to make a command to ask for help
-# - returns multiple suggestions
-#   - with gpt3.5 is occasionally helpful, but:
-#   - with gpt4 I've been pretty happy with a single suggestion
-# TODO video about this and how I am using this to think about changes to single suggestions
-_python3="${WESCONFIG_DOTFILES}/.venv/bin/python3"
-_multi_py="${WESCONFIG_DOTFILES}/zsh/universals/3-last/ask-openai/multi.py"
-alias helps="'$_python3' '$_multi_py'"
