@@ -18,17 +18,15 @@ async fn main() {
         .unwrap()
         .trim()
         .to_string();
-    //println!("API key: {}", api_key);
 
-    // Prepare the request body
     let request = OpenAIRequest {
-        model: "text-davinci-003".to_string(),
+        model: "gpt-4o".to_string(),
         prompt: "Tell me a joke.".to_string(),
         max_tokens: 50,
     };
 
     match send_openai_request(&api_key, request).await {
-        Ok(response) => println!("Response: {}", response.choices[0].text),
+        Ok(response) => println!("Response: {:?}", response),
         Err(e) => eprintln!("Error: {}", e),
     }
 }
@@ -40,9 +38,16 @@ struct OpenAIRequest {
     max_tokens: u32,
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Debug)]
 struct OpenAIResponse {
-    choices: Vec<Choice>,
+    //choices: Vec<Choice>,
+    data: Vec<ModelData>,
+}
+
+#[derive(Deserialize, Debug)]
+struct ModelData {
+    id: String,
+    object: String,
 }
 
 #[derive(Deserialize)]
@@ -55,15 +60,19 @@ async fn send_openai_request(
     request: OpenAIRequest,
 ) -> Result<OpenAIResponse, reqwest::Error> {
     let client = Client::new();
-    let url = "https://api.openai.com/v1/completions";
+    let url = "https://api.openai.com/v1/models";
 
     let response = client
-        .post(url)
+        .get(url)
         .header("Authorization", format!("Bearer {}", api_key))
-        .json(&request)
+        //.json(&request)
         .send()
         .await?;
 
+    println!("Response status: {:?}", response);
+    if !response.status().is_success() {
+        println!("FAIL, response status: {}", response.status());
+    }
     let result = response.json::<OpenAIResponse>().await?;
     Ok(result)
 }
