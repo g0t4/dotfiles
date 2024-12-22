@@ -159,6 +159,17 @@ fn get_service() -> Service {
                 url: "https://api.groq.com/openai/v1/chat/completions".to_string(),
             };
         }
+        "--ollama" => {
+            return Service {
+                name: "ollama".to_string(),
+                model: if model.is_some() {
+                    model.unwrap().to_string()
+                } else {
+                    "llama3.2:3b".to_string()
+                },
+                url: "http://localhost:11434/v1/chat/completions".to_string(),
+            };
+        }
         _ => {
             // OpenAI is the default
             return Service {
