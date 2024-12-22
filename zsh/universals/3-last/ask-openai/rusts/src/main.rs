@@ -2,6 +2,7 @@
 #![allow(unused_variables)]
 #![allow(unreachable_code)]
 
+use dirs;
 use reqwest::Client;
 use serde::{Deserialize, Serialize};
 use std::io::{self, Read};
@@ -20,14 +21,6 @@ No explanation. No markdown. No markdown with backticks ` nor ```.
 An example of a command line could be `find the first div on the page` and a valid response would be `document.querySelector('div')`
 ";
 
-//static SECURITY_ACCOUNT: &str = "openai";
-static SECURITY_ACCOUNT: &str = "groq";
-//static MODEL: &str = "gpt-4o";
-static MODEL: &str = "llama-3.1-70b-versatile"; // TODO newer groq model?
-
-//static URL: &str = "https://api.openai.com/v1/chat/completions";
-static URL: &str = "https://api.groq.com/openai/v1/chat/completions";
-
 // TODO test w/ and w/o async... I don't think async has a benefit but I am curious how much overhead it adds
 // reimpl as SYNC
 
@@ -39,12 +32,13 @@ async fn main() {
         .expect("Failed to read from stdin");
     //println!("Input: {:?}", input);
 
-    // TODO read in config for which service to use (openai,groq, ... and add this to timing)
+    let service = get_service();
+    println!("Service: {:?}", service);
 
     let output = std::process::Command::new("security")
         .arg("find-generic-password")
         .arg("-s")
-        .arg(SECURITY_ACCOUNT)
+        .arg(service.name.to_string())
         .arg("-a")
         .arg("ask")
         .arg("-w")
@@ -56,7 +50,7 @@ async fn main() {
     //println!("API Key: {}", api_key);
 
     let request = ChatCompletionRequest {
-        model: MODEL.to_string(),
+        model: service.model.to_string(),
         messages: vec![
             Message {
                 role: "system".to_string(),
@@ -70,7 +64,7 @@ async fn main() {
         max_tokens: 200,
     };
 
-    match send_openai_request(&api_key, request).await {
+    match send_openai_request(&api_key, service, request).await {
         Ok(response) => println!("{}", response.choices[0].message.content),
         Err(e) => eprintln!("Error: {}", e),
     }
@@ -103,6 +97,7 @@ struct Choice {
 
 async fn send_openai_request(
     api_key: &str,
+    service: Service,
     request: ChatCompletionRequest,
 ) -> Result<ChatCompletionResponse, reqwest::Error> {
     let client = Client::new();
@@ -119,7 +114,7 @@ async fn send_openai_request(
     //});
 
     let response = client
-        .post(URL)
+        .post(service.url)
         .header("Authorization", format!("Bearer {}", api_key))
         .json(&request)
         .send()
@@ -139,12 +134,45 @@ async fn send_openai_request(
 #[derive(Debug)]
 struct Service {
     name: String,
+    model: String,
     url: String,
 }
 
 fn get_service() -> Service {
-    return Service {
-        name: "openai".to_string(),
-        url: "https://api.openai.com/v1/chat/completions".to_string(),
+    let home_dir = dirs::home_dir().expect("Could not find home directory");
+    let file_path = home_dir.join(".local/share/ask/service");
+    let contents = std::fs::read_to_string(file_path).expect("Could not read file");
+    // contents looks like:
+    // --ollama model-1
+    let service = contents.split(" ").collect::<Vec<&str>>();
+    let model = if service.len() > 1 {
+        Some(service[1])
+    } else {
+        None
     };
+    match service[0] {
+        "--groq" => {
+            return Service {
+                name: "groq".to_string(),
+                model: if model.is_some() {
+                    model.unwrap().to_string()
+                } else {
+                    "llama-3.1-70b-versatile".to_string()
+                },
+                url: "https://api.groq.com/openai/v1/chat/completions".to_string(),
+            };
+        }
+        _ => {
+            // OpenAI is the default
+            return Service {
+                name: "openai".to_string(),
+                model: if model.is_some() {
+                    model.unwrap().to_string()
+                } else {
+                    "gpt-4o".to_string()
+                },
+                url: "https://api.openai.com/v1/chat/completions".to_string(),
+            };
+        }
+    }
 }
