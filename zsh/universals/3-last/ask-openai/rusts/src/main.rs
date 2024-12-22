@@ -146,11 +146,11 @@ fn get_service() -> Service {
     // --ollama model-1
     let service = contents.split(" ").collect::<Vec<&str>>();
     let model = if service.len() > 1 {
-        Some(service[1])
+        Some(service[1].trim())
     } else {
         None
     };
-    match service[0] {
+    match service[0].trim() {
         "--groq" => {
             return Service {
                 name: "groq".to_string(),
