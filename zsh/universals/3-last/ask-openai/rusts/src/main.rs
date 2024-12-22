@@ -90,7 +90,6 @@ async fn send_openai_request(
     let client = Client::new();
 
     //// uncomment to test everything except calling the API... 27.5ms yes!
-    //println!("Request: {:#?}", request);
     //return Ok(ChatCompletionResponse {
     //    choices: vec![Choice {
     //        message: Message {
