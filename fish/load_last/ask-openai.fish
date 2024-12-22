@@ -5,7 +5,7 @@ function _ask_write_state
     set --universal ask_service $argv
 
     mkdir -p ~/.local/share/ask/
-    echo "$ask_service" >~/.local/share/ask/service
+    echo "$argv" >~/.local/share/ask/service
     ask_dump_config
 end
 
