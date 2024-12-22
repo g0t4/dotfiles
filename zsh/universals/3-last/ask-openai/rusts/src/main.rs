@@ -135,3 +135,16 @@ async fn send_openai_request(
     //println!("Result: {:#?}", result); // dump pretty, bound data
     Ok(result)
 }
+
+#[derive(Debug)]
+struct Service {
+    name: String,
+    url: String,
+}
+
+fn get_service() -> Service {
+    return Service {
+        name: "openai".to_string(),
+        url: "https://api.openai.com/v1/chat/completions".to_string(),
+    };
+}
