@@ -30,7 +30,7 @@ pr.enable()
 #
 # from devtools import main
 # main()
-from test import main
+from tests.keyring import main
 main()
 
 # *** END of PROFILING
