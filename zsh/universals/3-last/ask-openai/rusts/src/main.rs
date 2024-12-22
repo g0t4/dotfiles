@@ -50,7 +50,7 @@ async fn main() {
     };
 
     match send_openai_request(&api_key, request).await {
-        Ok(response) => println!("fooo {}", response.choices[0].message.content),
+        Ok(response) => println!("{}", response.choices[0].message.content),
         Err(e) => eprintln!("Error: {}", e),
     }
 }
