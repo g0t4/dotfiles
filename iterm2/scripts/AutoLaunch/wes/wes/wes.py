@@ -8,9 +8,7 @@ import itertools
 import time
 from scrape_ask import copy_screen_to_clipboard
 from f9command import on_f9
-
-DEBUG = True
-
+from logs import log
 
 async def main(connection: iterm2.Connection):
 
@@ -66,13 +64,6 @@ async def new_tab_then_close_others(connection):
     for tab in prior_window.tabs:
         if tab != new_tab:
             await tab.async_close(force=True)
-
-
-def log(msg):
-    # FYI check Cmd+Alt+J to see iterm2 logs (script console), with this output
-    if not DEBUG:
-        return
-    print(msg)
 
 
 async def ask_openai(connection):
