@@ -27,17 +27,8 @@ async def get_current_tab(connection: iterm2.Connection):
 
 
 async def get_session(connection: iterm2.Connection):
-    app = await iterm2.async_get_app(connection)
-    if app is None:
-        log("No current app")
-        return
-    window = app.current_window
-    if window is None:
-        log("No current terminal window")
-        return
-    tab = window.current_tab
+    tab = await get_current_tab(connection)
     if tab is None:
-        log("No current tab")
         return
     session = tab.current_session
     if session is None:
