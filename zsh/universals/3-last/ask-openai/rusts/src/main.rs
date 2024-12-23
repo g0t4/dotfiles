@@ -84,7 +84,7 @@ struct Choice {
 
 async fn send_openai_request(
     api_key: &str,
-    service: Service<'_>,
+    service: Service,
     request: ChatCompletionRequest,
 ) -> Result<ChatCompletionResponse, reqwest::Error> {
     let client = Client::new();
@@ -118,14 +118,14 @@ async fn send_openai_request(
 }
 
 #[derive(Debug)]
-struct Service<'a> {
+struct Service {
     // ! TODO learn about String vs &str and intended uses... and all the to_string()/unswrap()/etc
-    name: &'a str,
+    name: String,
     model: String,
     url: String,
 }
 
-fn get_service() -> Service<'static> {
+fn get_service() -> Service {
     let home_dir = dirs::home_dir().expect("Could not find home directory");
     let file_path = home_dir.join(".local/share/ask/service");
     let contents = std::fs::read_to_string(file_path).expect("Could not read file");
