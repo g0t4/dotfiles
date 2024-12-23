@@ -112,18 +112,23 @@ async def ask_openai(connection):
     # FYI last_comand is not critical, can probably be removed, I just added it b/c it was there... not sure it will ever be that helpful and I loved my single.py w/o it forever now...
     env_last_command = await session.async_get_variable("lastCommand")  # FYI works on remotes w/ iterm2 shell integration
 
-    use, client = get_ask_client()
-
+    user_content = f"env: shell={ask_shell} on uname={ask_os} and FYI lastCommand={env_last_command}\nquestion: {current_command}"
     messages = [{
         "role": "system",
         "content": "You are a command line expert. Respond with a single, valid, complete command line. I intend to execute it. No explanation. No markdown. DO NOT respond with leading ``` nor trailing ```"
     }, {
         "role": "user",
-        "content": f"env: shell={ask_shell} on uname={ask_os} and FYI lastCommand={env_last_command}\nquestion: {current_command}"
+        "content": user_content
     }]
-    log(f"messages: {messages[1]['content']}")
+    log(f"messages: {user_content}")
 
     await task_clear  # ? why can't I put this after try/catch (smth happens with timing to not actually clear the prompt if I do that, but only on remote pi7.lan?)
+
+    await ask_openai_async_type_response(session, messages)
+
+
+async def ask_openai_async_type_response(session, messages):
+    use, client = get_ask_client()
 
     if use.name == "anthropic":
         # PRN impl streaming anthropic here based on httpx only
