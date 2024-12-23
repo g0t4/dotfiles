@@ -1,10 +1,11 @@
-import os
 import platform
 import iterm2
 import re
 from client import get_ask_client
 import pyperclip
 import difflib
+import itertools
+import time
 
 DEBUG = True
 
@@ -40,6 +41,7 @@ async def main(connection: iterm2.Connection):
             keystroke = await mon.async_get()
             await keystroke_handler(keystroke)
 
+
 async def copy_screen_to_clipboard(connection):
     app = await iterm2.async_get_app(connection)
     window = app.current_terminal_window
@@ -47,25 +49,36 @@ async def copy_screen_to_clipboard(connection):
         print("No current terminal window")
         return
     session = window.current_tab.current_session
-    line_info = await session.async_get_line_info()
-    lines = await session.async_get_contents(0,10)
+    if session is None:
+        print("No current session")
+        return
+    # ! line_info = await session.async_get_line_info()
+    lines = await session.async_get_contents(0, 10)
     before_text = [line.string for line in lines]
     # pyperclip.copy(text)
 
     # send ctrl+c to fish shell to clear line (w/o copy)
     # TODO based on current program, will have to change clear strategy
     await session.async_send_text("\x03")
+    #
+    # wait for clear
+    time.sleep(0.1) # otherwise sometimes command isn't cleared when I copy the after text
+    # TODO OR can I wait for a change to screen instead of fixed delay?
 
     # get new screen contents
-    lines = await session.async_get_contents(0,10)
+    lines = await session.async_get_contents(0, 10)
     after_text = [line.string for line in lines]
 
-    # diff
-    diff = difflib.ndiff(before_text, after_text)
-    print(diff)
-
-    # copy
-    pyperclip.copy(diff)
+    # *** diff
+    both = list(itertools.zip_longest(before_text, after_text, fillvalue=""))
+    print(f"both: {list(both)}")
+    # crude=> assumes before/after lines align and just need to subtract the after (clear cmd) from the before (cmd present):
+    #   honestly does't need to be perfect b/c it is going to an LLM... infact,l maybe just send the screen?!
+    changed_text = [line[0].replace(line[1], "") for line in both]
+    changed_text = [l for l in changed_text if l != ""]
+    print(f"diff: {changed_text}")
+    # TODO concat lines? or?
+    pyperclip.copy("\n".join(changed_text))
 
     # get current command line text
     # prompt = await iterm2.prompt.async_get_last_prompt(connection, session.session_id)

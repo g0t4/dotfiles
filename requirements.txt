@@ -7,3 +7,8 @@ httpx
 debugpy
 
 yapf # formatting
+
+# for iterm2 scripts, to have completions when editing in this repo (even though it uses separate venv)
+iterm2
+pyperclip
+# TODO add others here as needed
