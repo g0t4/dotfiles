@@ -23,8 +23,6 @@ def log(msg):
 
 
 async def copy_screen_to_clipboard(connection: iterm2.Connection):
-    app = await iterm2.async_get_app(connection)
-
     session = await get_session(connection)
     if session is None:
         print("No current session")
