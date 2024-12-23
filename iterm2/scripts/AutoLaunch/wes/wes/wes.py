@@ -175,15 +175,15 @@ async def ask_openai(connection):
 
     use, client = get_ask_client()
 
-    messages = [
-        {
-            "role": "system",
-            "content": "You are a command line expert. Respond with a single, valid, complete command line. I intend to execute it. No explanation. No markdown. DO NOT respond with leading ``` nor trailing ```"
-        }, {
-            "role": "user",
-            "content": f"env: shell={ask_shell} on uname={ask_os} and FYI lastCommand={env_last_command}\nquestion: {current_command}"
-        }
-    ]
+    messages = [{
+        "role":
+        "system",
+        "content":
+        "You are a command line expert. Respond with a single, valid, complete command line. I intend to execute it. No explanation. No markdown. DO NOT respond with leading ``` nor trailing ```"
+    }, {
+        "role": "user",
+        "content": f"env: shell={ask_shell} on uname={ask_os} and FYI lastCommand={env_last_command}\nquestion: {current_command}"
+    }]
     log(f"messages: {messages[1]['content']}")
 
     await task_clear  # ? why can't I put this after try/catch (smth happens with timing to not actually clear the prompt if I do that, but only on remote pi7.lan?)
@@ -224,7 +224,7 @@ async def ask_openai(connection):
                 sanitized = re.sub(r'```', '', sanitized).lstrip()
                 print(f"sanitized: {sanitized}")
                 print(f"sanitized hex: {sanitized.encode('utf-8').hex()}")
-                first_chunk = sanitized == "" # stay in "first_chunk" mode until first non-empty chunk
+                first_chunk = sanitized == ""  # stay in "first_chunk" mode until first non-empty chunk
                 await session.async_send_text(sanitized)
             else:
                 await session.async_send_text(sanitized)
