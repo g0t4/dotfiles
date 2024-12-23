@@ -141,7 +141,7 @@ fn get_service() -> Service {
         // PRN add more from services.py when I wanna use them
         "--groq" => {
             return Service {
-                name: "groq",
+                name: String::from("groq"),
                 model: if model.is_some() {
                     model.unwrap().to_string()
                 } else {
@@ -152,7 +152,7 @@ fn get_service() -> Service {
         }
         "--ollama" => {
             return Service {
-                name: "ollama",
+                name: String::from("ollama"),
                 model: if model.is_some() {
                     model.unwrap().to_string()
                 } else {
