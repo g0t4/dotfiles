@@ -64,7 +64,6 @@ async def copy_screen_to_clipboard(connection: iterm2.Connection):
     changed_text = [line[0].replace(line[1], "") for line in both]
     changed_text = [l for l in changed_text if l != ""]
     print(f"diff: {changed_text}")
-    # TODO concat lines? or?
     current_command = "\n".join(changed_text)
 
     # GOOD testing seam:
@@ -90,8 +89,7 @@ async def copy_screen_to_clipboard(connection: iterm2.Connection):
         "role": "user",
         "content": f"env: shell={jobName} on uname={ask_os}\nquestion: {current_command}"
     }]
-    # TODO LOGGING like other scripts (have toggle in one spot)
-    print(f"messages: {messages[1]['content']}")
+    log(f"messages: {messages[1]['content']}")
 
     # await task_clear  # ? why can't I put this after try/catch (smth happens with timing to not actually clear the prompt if I do that, but only on remote pi7.lan?)
     # ALREADY cleared b/c I had to, to get the diff (hopefully clear!)
