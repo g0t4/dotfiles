@@ -30,8 +30,12 @@ async def main(connection: iterm2.Connection):
 
         e = keystroke.keycode == iterm2.Keycode.ANSI_F
         if e and control and shift and command:
-            # spike an idea for a new type of ask-openai that doesn't need iterm2 shell integration (use running program to trigger actions and diff screen contents to copy the command)
-            await copy_screen_to_clipboard(connection)
+            # TODO merge with ANSI_B? should I just use this instead of ANSI_B approach?
+            await copy_screen_to_clipboard(connection, history=False)
+
+        e = keystroke.keycode == iterm2.Keycode.ANSI_H
+        if e and control and shift and command:
+            await copy_screen_to_clipboard(connection, history=True)
 
         e = keystroke.keycode == iterm2.Keycode.F9
         if e:
