@@ -50,7 +50,7 @@ async def main(connection: iterm2.Connection):
 
 async def close_other_tabs(connection):
     app = await iterm2.async_get_app(connection)
-    current_tab = app.current_terminal_window.current_tab
+    current_tab = app.current_window.current_tab
     for tab in current_tab.window.tabs:
         if tab != current_tab:
             await tab.async_close()
@@ -59,7 +59,7 @@ async def close_other_tabs(connection):
 async def new_tab_then_close_others(connection):
     app = await iterm2.async_get_app(connection)
 
-    prior_window = app.current_terminal_window
+    prior_window = app.current_window
 
     # make new tab and close all other tabs in current window
     new_tab = await prior_window.async_create_tab()
@@ -81,7 +81,7 @@ async def ask_openai(connection):
 
     # *** get current terminal session
     app = await iterm2.async_get_app(connection)
-    window = app.current_terminal_window
+    window = app.current_window
     if window is None:
         print("No current terminal window")
         return
