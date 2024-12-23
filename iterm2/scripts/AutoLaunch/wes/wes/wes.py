@@ -52,6 +52,16 @@ async def copy_screen_to_clipboard(connection):
     if session is None:
         print("No current session")
         return
+
+    commandLine = await session.async_get_variable("commandLine")  # see inspector for vars
+    print(f"commandLine: {commandLine}")
+    if commandLine is None:
+        # probably should bail if I don't know if this will work
+        return
+    allowed = ["fish", "lldb", "-fish"]
+    if commandLine not in allowed:
+        return
+
     # ! line_info = await session.async_get_line_info()
     lines = await session.async_get_contents(0, 10)
     before_text = [line.string for line in lines]
