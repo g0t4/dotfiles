@@ -128,9 +128,11 @@ async def ask_openai(connection):
     if use.name == "anthropic":
         # PRN impl streaming anthropic here based on httpx only
         # TODO impl it elsewhere and plug it in here, testing by restarting wes.py is a PITA
-        from single import get_anthropic_suggestion
-        command = get_anthropic_suggestion(current_command, use)
-        await session.async_send_text(command)
+        # TODO I MOVED anthropic impl when I redid single.py... needs redone here too
+        # from single import get_anthropic_suggestion
+        # command = get_anthropic_suggestion(current_command, use)
+        # await session.async_send_text(command)
+        log("anthropic impl not redone since moving it in single.py")
         return
 
     # *** request completion
