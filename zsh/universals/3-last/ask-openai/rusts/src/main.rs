@@ -166,7 +166,7 @@ fn get_service() -> Service {
             return Service {
                 name: String::from("openai"),
                 model: if model.is_some() {
-                    String::from(model.unwrap())
+                    model.unwrap().to_owned()
                 } else {
                     String::from("gpt-4o")
                 },
