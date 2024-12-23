@@ -1,11 +1,16 @@
 # editline config (i.e. used by lldb)
-# man editrc # this config file format
-# man editline # library
+# *** FYI comments must start with #, cannot append # foo to end of line
+# man editrc
+# man editline
 
 # FYI mod this file and start new lldb instance to see output, i.e. output of bind -l
-# bind  # list existing mappings
-bind -l # list commands w/ description
+# list existing mappings:
+# bind
+# list commands w/ description:
+# bind -l
 
 # primary modes
-# bind -e # emacs
-# bind -v # vi-mode
+# # emacs
+# bind -e
+# # vi mode:
+# bind -v
