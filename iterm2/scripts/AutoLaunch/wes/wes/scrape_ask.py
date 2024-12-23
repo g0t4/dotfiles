@@ -42,10 +42,9 @@ async def copy_screen_to_clipboard(connection: iterm2.Connection):
         return
 
     line_info = await session.async_get_line_info()
-    print(f"line_info: {line_info}")
-    lines = await session.async_get_contents(0, 10)
+    rows = line_info.mutable_area_height
+    lines = await session.async_get_contents(0, rows)
     before_text = [line.string for line in lines]
-    # pyperclip.copy(text)
 
     await session.async_send_text(clear_command[jobName])
     #
@@ -54,7 +53,7 @@ async def copy_screen_to_clipboard(connection: iterm2.Connection):
     # TODO OR can I wait for a change to screen instead of fixed delay?
 
     # get new screen contents
-    lines = await session.async_get_contents(0, 10)
+    lines = await session.async_get_contents(0, rows)
     after_text = [line.string for line in lines]
 
     # *** diff
