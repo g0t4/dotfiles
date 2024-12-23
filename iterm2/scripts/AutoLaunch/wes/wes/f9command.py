@@ -1,31 +1,36 @@
 import iterm2
 
 
-async def on_f9(connection: iterm2.Connection):
-    # this started out with how I use F9 to quit nvim
-    #   might be nice to F9 nvim and F9 again to close iterm pane (not all of iterm though)
-    #   yes, F9 quits nvim but it only quits the instance in the current pane (thus F9 to close pane)
+async def get_session(connection: iterm2.Connection):
 
-    # TODO make away method to get session
+    # TODO is there a simpler way already built into the API?
     app = await iterm2.async_get_app(connection)
     window = app.current_terminal_window
     if window is None:
         print("No current terminal window")
         return
     session = window.current_tab.current_session
+    return session
+
+
+async def on_f9(connection: iterm2.Connection):
+    # this started out with how I use F9 to quit nvim
+    #   might be nice to F9 nvim and F9 again to close iterm pane (not all of iterm though)
+    #   yes, F9 quits nvim but it only quits the instance in the current pane (thus F9 to close pane)
+
+    # TODO use optional return type to chain next operations w/o needing to check for None (see connection.current_window for alternate API)
+    session = await get_session(connection)
     if session is None:
         print("No current session")
         return
 
     jobName = await session.async_get_variable("jobName")  # see inspector for vars
-    print(f"jobName: {jobName}")
     if jobName is "nvim":
-        # do not handle this
+        # already handled by nvim
         return
     if jobName in ["fish", "bash", "zsh"]:
-        # fish shell won't quit if you have text entered when ctrl+d is pressed
-        # must clear the line (otherwise text from F9 shows up asa [20~ and blocks ctrl+d])
-        await session.async_send_text("\x03")  # ctrl+c
-        await session.async_send_text("\x04")  # ctrl+d
+        # shell command line must be empty to quit
+        await session.async_send_text("\x03")  # ctrl+c (clear)
+        await session.async_send_text("\x04")  # ctrl+d (exit)
         return
     # TODO others?
