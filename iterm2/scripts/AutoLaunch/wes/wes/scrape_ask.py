@@ -14,6 +14,7 @@ async def copy_screen_to_clipboard(connection: iterm2.Connection, history: bool 
         log("No current session")
         return
 
+    # if clear isn't possible I can still take full screen capture (like history) which would then have the commandline in it... and then the response I can paste anyways and then user can clear previous entry (yes cumbersome, just a possible workaround if needed - or mash the delete key :))
     ctrl_c = "\x03"
     ctrl_u = "\x15"
     clear_command = {
@@ -67,8 +68,6 @@ async def copy_screen_to_clipboard(connection: iterm2.Connection, history: bool 
         # fallback to iterm2's host os (not specific to a remote shell)
         ask_os = platform.system()
 
-    # TODO add keymap that includes command history too!
-
     # with python REPL, I had to be more specific than just 'shell: Python' => added REPL/shell comment (otherwise genreated 'ptyhon -c "print(1)"' which is not wanted in python REPL)
     user_content = f"env: I am using a {jobName} REPL/shell, on uname={ask_os}\nquestion: {current_command}"
     log(f"user_content: {user_content}")
@@ -91,6 +90,8 @@ async def copy_screen_to_clipboard(connection: iterm2.Connection, history: bool 
 
 async def get_previous_output(session: iterm2.Session):
     li = await session.async_get_line_info()
+
+    # TODO verify further if this works?! I am still not 100% sure about scrolling positions but it looks like it might be ok
 
     # todo cap the history? (why not expect me to make judicious use of clear screen when I want help and want to limit what is passed? sounds good to me)
     # TODO get cursor line? and stop right before it?
