@@ -5,7 +5,6 @@ from client import get_ask_client
 import pyperclip
 import difflib
 import itertools
-import time
 from scrape_ask import copy_screen_to_clipboard
 from f9command import on_f9
 from logs import log
@@ -53,6 +52,7 @@ async def close_other_tabs(connection):
     if current_tab is None:
         return
 
+    assert current_tab.window is not None
     for tab in current_tab.window.tabs:
         if tab != current_tab:
             await tab.async_close()
@@ -74,13 +74,7 @@ async def ask_openai(connection):
 
     # BTW b/c most variables/info is extracted via iterm2 shell integration, this works with remote shells that have iterm2 shell integration installed & sourced!
 
-    # *** get current terminal session
-    app = await iterm2.async_get_app(connection)
-    window = app.current_window
-    if window is None:
-        print("No current terminal window")
-        return
-    session = window.current_tab.current_session
+    session = await get_session(connection)
 
     # *** get current command line text
     prompt = await iterm2.prompt.async_get_last_prompt(connection, session.session_id)
