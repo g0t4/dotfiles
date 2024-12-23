@@ -135,7 +135,12 @@ async def ask_openai(connection):
 
     # *** request completion
     try:
-        response_stream = await client.chat.completions.create(model=use.model, messages=messages, max_tokens=200, stream=True)
+        response_stream = await client.chat.completions.create(
+            model=use.model,
+            messages=messages,
+            max_tokens=200,
+            # TODO temperature?
+            stream=True)
     except Exception as e:
         # TODO test timeouts?
         log(f"Error contacting OpenAI: {e}")
