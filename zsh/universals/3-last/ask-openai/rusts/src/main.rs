@@ -156,6 +156,7 @@ fn get_service() -> Service {
                 model: if model.is_some() {
                     String::from(model.unwrap())
                 } else {
+                    // BTW this llama model is FAST and GOOD for simple devtool command suggestions
                     String::from("llama3.2:3b")
                 },
                 url: "http://localhost:11434/v1/chat/completions".to_string(),
