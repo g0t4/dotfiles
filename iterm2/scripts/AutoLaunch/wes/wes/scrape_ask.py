@@ -14,9 +14,13 @@ async def copy_screen_to_clipboard(connection: iterm2.Connection):
         print("No current session")
         return
 
-    # send ctrl+c to fish shell to clear line (w/o copy) - FYI this is my custom keymap... just use it here for testing b/c I should be using the othher ask-openai below with my fish config
-    # ctrl+u for lldb
-    clear_command = {"fish": "\x03", "lldb": "\x15", "-fish": "\x03"}
+    ctrl_c = "\x03"
+    ctrl_u = "\x15"
+    clear_command = {
+        "fish": ctrl_c,  # ctrl+c (my own binding)
+        "lldb": ctrl_u,  # builtin
+        "Python": ctrl_u,  # builtin
+    }
     # FYI might want fallback mechanisms... i.e. my fish shell I have ctrl+C for clear but that is not standard... might be useful to detect if my config is loaded (i.e. user vars for other ask-openai path and if so then invoke other one else invoke fallback ctrl+e,ctrl+u  or ctrl+u => ctrl+k to clear (or is there a better way), I'm thinking mostly for remote systems w/o shell integration
     jobName = await session.async_get_variable("jobName")  # see inspector for vars
     print(f"jobName: {jobName}")
