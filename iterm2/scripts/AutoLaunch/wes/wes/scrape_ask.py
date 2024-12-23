@@ -66,7 +66,10 @@ async def copy_screen_to_clipboard(connection: iterm2.Connection):
     print(f"diff: {changed_text}")
     # TODO concat lines? or?
     current_command = "\n".join(changed_text)
-    # pyperclip.copy(current_command) # don't need now!
+
+    # GOOD testing seam:
+    # pyperclip.copy(current_command)
+    # return
 
     # TODO extract shared logic with the other ask-openai async script! will be cool to do this async too!
 
