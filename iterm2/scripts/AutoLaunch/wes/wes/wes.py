@@ -75,6 +75,8 @@ async def ask_openai(connection):
     # BTW b/c most variables/info is extracted via iterm2 shell integration, this works with remote shells that have iterm2 shell integration installed & sourced!
 
     session = await get_session(connection)
+    if session is None:
+        return
 
     # *** get current command line text
     prompt = await iterm2.prompt.async_get_last_prompt(connection, session.session_id)
