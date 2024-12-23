@@ -27,3 +27,14 @@ vim.api.nvim_create_autocmd("FileType", {
         vim.bo.commentstring = "# %s" -- %s is original text
     end,
 })
+
+-- ~/.editrc
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = "editrc",
+    callback = function()
+        vim.bo.commentstring = "# %s" -- %s is original text
+        -- PRN do I want these here too:
+        -- vim.bo.shiftwidth = 4
+        -- vim.bo.tabstop = 4
+    end,
+})
