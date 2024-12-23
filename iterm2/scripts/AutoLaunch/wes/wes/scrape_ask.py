@@ -42,7 +42,7 @@ async def copy_screen_to_clipboard(connection: iterm2.Connection):
     lines = await session.async_get_contents(0, rows)
     after_text = [line.string for line in lines]
 
-    # *** diff
+    # *** diff (before has command, after doesn't)
     both = list(itertools.zip_longest(before_text, after_text, fillvalue=""))
     print(f"both: {list(both)}")
     # crude=> assumes before/after lines align and just need to subtract the after (clear cmd) from the before (cmd present):
