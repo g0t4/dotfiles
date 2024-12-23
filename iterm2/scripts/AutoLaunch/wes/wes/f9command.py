@@ -1,7 +1,7 @@
 import iterm2
 
 
-async def on_f9(connection):
+async def on_f9(connection: iterm2.Connection):
     # this started out with how I use F9 to quit nvim
     #   might be nice to F9 nvim and F9 again to close iterm pane (not all of iterm though)
     #   yes, F9 quits nvim but it only quits the instance in the current pane (thus F9 to close pane)

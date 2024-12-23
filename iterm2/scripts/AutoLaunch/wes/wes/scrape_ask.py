@@ -7,7 +7,8 @@ import pyperclip
 import difflib
 import itertools
 
-async def copy_screen_to_clipboard(connection):
+
+async def copy_screen_to_clipboard(connection: iterm2.Connection):
     app = await iterm2.async_get_app(connection)
     window = app.current_terminal_window
     if window is None:
@@ -58,6 +59,4 @@ async def copy_screen_to_clipboard(connection):
     # TODO concat lines? or?
     pyperclip.copy("\n".join(changed_text))
 
-    # type fucker
-    await session.async_send_text("fucker")
-
+    # await session.async_send_text("TODO finish ask-openai scrape")
