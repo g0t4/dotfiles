@@ -147,7 +147,7 @@ fn get_service() -> Service {
                 } else {
                     String::from("llama-3.1-70b-versatile")
                 },
-                url: "https://api.groq.com/openai/v1/chat/completions".to_string(),
+                url: String::from("https://api.groq.com/openai/v1/chat/completions"),
             };
         }
         "--ollama" => {
@@ -159,11 +159,10 @@ fn get_service() -> Service {
                     // BTW this llama model is FAST and GOOD for simple devtool command suggestions
                     String::from("llama3.2:3b")
                 },
-                url: "http://localhost:11434/v1/chat/completions".to_string(),
+                url: String::from("http://localhost:11434/v1/chat/completions"),
             };
         }
         _ => {
-            // OpenAI is the default
             return Service {
                 name: String::from("openai"),
                 model: if model.is_some() {
