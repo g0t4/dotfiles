@@ -14,3 +14,12 @@
 # bind -e
 # # vi mode:
 # bind -v
+
+
+# TODO .lldbinit file ... maybe also python customizations...
+#   also would like to be able to trigger a custom action to wire up ask-openai... either directly in editline action
+#   OR, iterm2 integration, if running program is lldb, copy current command line (kill-line), then take clipboard and gen suggestion and paste it... I can do all of this BUT, copy/kill doesn't copy to system clipboard :( and I dunno if I can change that in editline
+#      IS IT POSSIBLE to setup an action to write the editline buffer to a file? can you string together commands to execute shell commands? then I could read that file with iTerm2 integration
+#      OTHER OPTION, capture screen before/after killing the line and diff it to get the text, IIUC iTerm2 can do that (maybe)
+#          https://iterm2.com/python-api/screen.html # even appears to have blocking interface to wait until after change happens!  (invoke kill action with Ctrl+K/U and then when it changes I can get contents, line by line comparison too... and then diff it to get the command line!
+#          Session.async_get_screen_contents()
