@@ -80,3 +80,7 @@ if test -d "$HOME/.ghcup/bin"
     # ghcup list --tool ghc
     # ghcup set ghc latest/recommended
 end
+
+function use_brew_llvm
+    export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
+end
