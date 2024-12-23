@@ -40,10 +40,10 @@ async def ask_openai_async_type_response(session, messages):
             # strip new lines to avoid submitting commands prematurely, is there an alternate char I could use to split the lines still w/o submitting (would have to check what the shell supports, if anything is possible)... one downside to not being a part of the line editor.. unless there is a workaround? not that I care much b/c multi line commands are not often necessary...
             sanitized = chunk.choices[0].delta.content.replace("\n", " ")
             if first_chunk:
-                print(f"first_chunk: {sanitized}")
+                log(f"first_chunk: {sanitized}")
                 sanitized = re.sub(r'```', '', sanitized).lstrip()
-                print(f"sanitized: {sanitized}")
-                print(f"sanitized hex: {sanitized.encode('utf-8').hex()}")
+                log(f"sanitized: {sanitized}")
+                log(f"sanitized hex: {sanitized.encode('utf-8').hex()}")
                 first_chunk = sanitized == ""  # stay in "first_chunk" mode until first non-empty chunk
                 await session.async_send_text(sanitized)
             else:
