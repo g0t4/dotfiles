@@ -4,6 +4,7 @@ import iterm2
 import re
 from client import get_ask_client
 import pyperclip
+import difflib
 
 DEBUG = True
 
@@ -48,8 +49,40 @@ async def copy_screen_to_clipboard(connection):
     session = window.current_tab.current_session
     line_info = await session.async_get_line_info()
     lines = await session.async_get_contents(0,10)
-    text = [line.string for line in lines]
-    pyperclip.copy(text)
+    before_text = [line.string for line in lines]
+    # pyperclip.copy(text)
+
+    # send ctrl+c to fish shell to clear line (w/o copy)
+    # TODO based on current program, will have to change clear strategy
+    await session.async_send_text("\x03")
+
+    # get new screen contents
+    lines = await session.async_get_contents(0,10)
+    after_text = [line.string for line in lines]
+
+    # diff
+    diff = difflib.ndiff(before_text, after_text)
+    print(diff)
+
+    # copy
+    pyperclip.copy(diff)
+
+    # get current command line text
+    # prompt = await iterm2.prompt.async_get_last_prompt(connection, session.session_id)
+    # if prompt is None:
+    #     # i.e. IIGC right after sourcing iterm2 script, wouldn't yet have a last prompt.. very rare but don't want to crash this script
+    #     failure = "No last prompt, are you missing iterm2 shell integration?"
+    #     log(failure)
+    #     await session.async_send_text(failure)
+    #     return
+    # # current_command = prompt.command
+    # # log(f"current_command: {current_command}")  # 18us to print
+    # # if current_command is None:
+    # #     failure = "No current command, are you missing iterm2 shell integration?"
+    # #     log(failure)
+    # #     await session.async_send_text(failure)
+    # #     return
+
 
 async def close_other_tabs(connection):
     app = await iterm2.async_get_app(connection)
