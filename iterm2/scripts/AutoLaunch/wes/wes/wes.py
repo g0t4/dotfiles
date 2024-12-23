@@ -68,11 +68,12 @@ async def copy_screen_to_clipboard(connection):
     # pyperclip.copy(text)
 
     # send ctrl+c to fish shell to clear line (w/o copy)
-    # TODO based on current program, will have to change clear strategy
-    await session.async_send_text("\x03")
+    # ctrl+u for lldb
+    clear_command = {"fish": "\x03", "lldb": "\x15", "-fish": "\x03"}
+    await session.async_send_text(clear_command[commandLine])
     #
     # wait for clear
-    time.sleep(0.1) # otherwise sometimes command isn't cleared when I copy the after text
+    time.sleep(0.1)  # otherwise sometimes command isn't cleared when I copy the after text
     # TODO OR can I wait for a change to screen instead of fixed delay?
 
     # get new screen contents
