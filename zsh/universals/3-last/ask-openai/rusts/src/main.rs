@@ -164,13 +164,13 @@ fn get_service() -> Service {
         _ => {
             // OpenAI is the default
             return Service {
-                name: "openai",
+                name: String::from("openai"),
                 model: if model.is_some() {
-                    model.unwrap().to_string()
+                    String::from(model.unwrap())
                 } else {
-                    "gpt-4o".to_string()
+                    String::from("gpt-4o")
                 },
-                url: "https://api.openai.com/v1/chat/completions".to_string(),
+                url: String::from("https://api.openai.com/v1/chat/completions"),
             };
         }
     }
