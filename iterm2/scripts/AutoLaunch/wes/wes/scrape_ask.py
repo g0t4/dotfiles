@@ -7,14 +7,13 @@ import pyperclip
 import difflib
 import itertools
 
+from common import get_session
+
 
 async def copy_screen_to_clipboard(connection: iterm2.Connection):
     app = await iterm2.async_get_app(connection)
-    window = app.current_terminal_window
-    if window is None:
-        print("No current terminal window")
-        return
-    session = window.current_tab.current_session
+
+    session = await get_session(connection)
     if session is None:
         print("No current session")
         return

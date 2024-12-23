@@ -1,17 +1,5 @@
 import iterm2
-
-
-async def get_session(connection: iterm2.Connection):
-
-    # TODO is there a simpler way already built into the API?
-    app = await iterm2.async_get_app(connection)
-    window = app.current_terminal_window
-    if window is None:
-        print("No current terminal window")
-        return
-    session = window.current_tab.current_session
-    return session
-
+from common import get_session
 
 async def on_f9(connection: iterm2.Connection):
     # this started out with how I use F9 to quit nvim
