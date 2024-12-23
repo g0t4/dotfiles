@@ -53,13 +53,17 @@ async def copy_screen_to_clipboard(connection):
         print("No current session")
         return
 
-    commandLine = await session.async_get_variable("commandLine")  # see inspector for vars
-    print(f"commandLine: {commandLine}")
-    if commandLine is None:
+    # send ctrl+c to fish shell to clear line (w/o copy)
+    # ctrl+u for lldb
+    clear_command = {"fish": "\x03", "lldb": "\x15", "-fish": "\x03"}
+    # FYI might want fallback mechanisms... i.e. my fish shell I have ctrl+C for clear but that is not standard... might be useful to detect if my config is loaded (i.e. user vars for other ask-openai path and if so then invoke other one else invoke fallback ctrl+e,ctrl+u  or ctrl+u => ctrl+k to clear (or is there a better way), I'm thinking mostly for remote systems w/o shell integration
+    jobName = await session.async_get_variable("jobName")  # see inspector for vars
+    print(f"jobName: {jobName}")
+    if jobName is None:
         # probably should bail if I don't know if this will work
         return
-    allowed = ["fish", "lldb", "-fish"]
-    if commandLine not in allowed:
+    if jobName not in clear_command:
+        print(f"jobName {jobName} not recognized, find and add its clear command to wes.py")
         return
 
     # ! line_info = await session.async_get_line_info()
@@ -67,10 +71,7 @@ async def copy_screen_to_clipboard(connection):
     before_text = [line.string for line in lines]
     # pyperclip.copy(text)
 
-    # send ctrl+c to fish shell to clear line (w/o copy)
-    # ctrl+u for lldb
-    clear_command = {"fish": "\x03", "lldb": "\x15", "-fish": "\x03"}
-    await session.async_send_text(clear_command[commandLine])
+    await session.async_send_text(clear_command[jobName])
     #
     # wait for clear
     time.sleep(0.1)  # otherwise sometimes command isn't cleared when I copy the after text
