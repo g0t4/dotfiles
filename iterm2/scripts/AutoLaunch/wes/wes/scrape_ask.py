@@ -68,7 +68,8 @@ async def copy_screen_to_clipboard(connection: iterm2.Connection):
         # fallback to iterm2's host os (not specific to a remote shell)
         ask_os = platform.system()
 
-    user_content = f"env: shell={jobName} on uname={ask_os}\nquestion: {current_command}"
+    # with python REPL, I had to be more specific than just 'shell: Python' => added REPL/shell comment (otherwise genreated 'ptyhon -c "print(1)"' which is not wanted in python REPL)
+    user_content = f"env: I am using a {jobName} REPL/shell, on uname={ask_os}\nquestion: {current_command}"
     messages = [{
         "role": "system",
         "content": "You are a command line expert. Respond with a single, valid, complete command line. I intend to execute it. No explanation. No markdown. DO NOT respond with leading ``` nor trailing ```"
