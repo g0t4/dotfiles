@@ -143,9 +143,9 @@ fn get_service() -> Service {
             return Service {
                 name: String::from("groq"),
                 model: if model.is_some() {
-                    model.unwrap().to_string()
+                    String::from(model.unwrap())
                 } else {
-                    "llama-3.1-70b-versatile".to_string()
+                    String::from("llama-3.1-70b-versatile")
                 },
                 url: "https://api.groq.com/openai/v1/chat/completions".to_string(),
             };
@@ -154,9 +154,9 @@ fn get_service() -> Service {
             return Service {
                 name: String::from("ollama"),
                 model: if model.is_some() {
-                    model.unwrap().to_string()
+                    String::from(model.unwrap())
                 } else {
-                    "llama3.2:3b".to_string()
+                    String::from("llama3.2:3b")
                 },
                 url: "http://localhost:11434/v1/chat/completions".to_string(),
             };
