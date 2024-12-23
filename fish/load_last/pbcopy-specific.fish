@@ -87,7 +87,11 @@ end
 
 function kill_all_lines
     #commandline -C 0 # move to start of prompt
-    commandline -b | fish_clipboard_copy # copies all lines of cmdline (not just current line)
+
+    # use perl to cut off last new line at end of file... why the FUCK is it added by commandline -b???
+    # if there is a new line at the end of the last line, pasting in iTerm2 warns/prompts to paste w/o new line, otherwise I might not give a F
+    commandline -b | perl -pe 'chomp if eof' | pbcopy # copies all lines of cmdline (not just current line)
+
     commandline -r "" # replace all lines with empty string
 end
 bind \ek kill_all_lines # esc+k (historically I used this key combo exclusively for this purpose)
