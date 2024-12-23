@@ -7,6 +7,7 @@ import difflib
 import itertools
 import time
 from scrape_ask import copy_screen_to_clipboard
+from f9command import on_f9
 
 DEBUG = True
 
@@ -36,6 +37,10 @@ async def main(connection: iterm2.Connection):
         if e and control and shift and command:
             # spike an idea for a new type of ask-openai that doesn't need iterm2 shell integration (use running program to trigger actions and diff screen contents to copy the command)
             await copy_screen_to_clipboard(connection)
+
+        e = keystroke.keycode == iterm2.Keycode.F9
+        if e:
+            await on_f9(connection)
 
     async with iterm2.KeystrokeMonitor(connection) as mon:
         while True:

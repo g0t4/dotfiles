@@ -12,3 +12,6 @@ yapf # formatting
 iterm2
 pyperclip
 # TODO add others here as needed
+
+# nvim refactoring
+rope
