@@ -3,6 +3,7 @@ import platform
 import iterm2
 import re
 from client import get_ask_client
+import pyperclip
 
 DEBUG = True
 
@@ -28,11 +29,27 @@ async def main(connection: iterm2.Connection):
         if e and control and shift and command:
             await new_tab_then_close_others(connection)
 
+        e = keystroke.keycode == iterm2.Keycode.ANSI_F
+        if e and control and shift and command:
+            # spike an idea for a new type of ask-openai that doesn't need iterm2 shell integration (use running program to trigger actions and diff screen contents to copy the command)
+            await copy_screen_to_clipboard(connection)
+
     async with iterm2.KeystrokeMonitor(connection) as mon:
         while True:
             keystroke = await mon.async_get()
             await keystroke_handler(keystroke)
 
+async def copy_screen_to_clipboard(connection):
+    app = await iterm2.async_get_app(connection)
+    window = app.current_terminal_window
+    if window is None:
+        print("No current terminal window")
+        return
+    session = window.current_tab.current_session
+    line_info = await session.async_get_line_info()
+    lines = await session.async_get_contents(0,10)
+    text = [line.string for line in lines]
+    pyperclip.copy(text)
 
 async def close_other_tabs(connection):
     app = await iterm2.async_get_app(connection)
