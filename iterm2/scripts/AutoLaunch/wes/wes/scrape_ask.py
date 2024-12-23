@@ -9,6 +9,8 @@ import itertools
 
 from common import get_session
 
+# CELEBRATORY pointless commit ... w00000h000000000 it works!!!! first try dumping all that shit below and w00t.. I just got help in lldb with ask-openai!!
+
 # TODO MAKE COMMON VERSION AND TOGGLE
 DEBUG = True
 
