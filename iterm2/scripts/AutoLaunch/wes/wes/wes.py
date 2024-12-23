@@ -9,6 +9,8 @@ import time
 from scrape_ask import copy_screen_to_clipboard
 from f9command import on_f9
 from logs import log
+from common import *
+
 
 async def main(connection: iterm2.Connection):
 
@@ -47,17 +49,19 @@ async def main(connection: iterm2.Connection):
 
 
 async def close_other_tabs(connection):
-    app = await iterm2.async_get_app(connection)
-    current_tab = app.current_window.current_tab
+    current_tab = await get_current_tab(connection)
+    if current_tab is None:
+        return
+
     for tab in current_tab.window.tabs:
         if tab != current_tab:
             await tab.async_close()
 
 
 async def new_tab_then_close_others(connection):
-    app = await iterm2.async_get_app(connection)
-
-    prior_window = app.current_window
+    prior_window = await get_current_window(connection)
+    if prior_window is None:
+        return
 
     # make new tab and close all other tabs in current window
     new_tab = await prior_window.async_create_tab()

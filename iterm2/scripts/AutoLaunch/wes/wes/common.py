@@ -16,6 +16,16 @@ async def get_current_window(connection: iterm2.Connection):
     return window
 
 
+async def get_current_tab(connection: iterm2.Connection):
+    window = await get_current_window(connection)
+    if window is None:
+        return
+    tab = window.current_tab
+    if tab is None:
+        log("No current tab")
+    return tab
+
+
 async def get_session(connection: iterm2.Connection):
     app = await iterm2.async_get_app(connection)
     if app is None:
