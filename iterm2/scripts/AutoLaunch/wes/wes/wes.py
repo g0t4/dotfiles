@@ -118,10 +118,8 @@ async def ask_openai(connection):
     use, client = get_ask_client()
 
     messages = [{
-        "role":
-        "system",
-        "content":
-        "You are a command line expert. Respond with a single, valid, complete command line. I intend to execute it. No explanation. No markdown. DO NOT respond with leading ``` nor trailing ```"
+        "role": "system",
+        "content": "You are a command line expert. Respond with a single, valid, complete command line. I intend to execute it. No explanation. No markdown. DO NOT respond with leading ``` nor trailing ```"
     }, {
         "role": "user",
         "content": f"env: shell={ask_shell} on uname={ask_os} and FYI lastCommand={env_last_command}\nquestion: {current_command}"
