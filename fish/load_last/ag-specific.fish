@@ -44,6 +44,12 @@ function agimages
         imgcat $f
     end
 
+    # printf "\x1B]1337;File=name=Tray-Win32.ico;inline=1:$(cat Contents/Resources/Tray-Win32.ico | base64)\x07"
+    #   width=100 paramerter is avail
+    # imgcat uses iterm protocol extensions https://iterm2.com/documentation-images.html
+
+    # https://iterm2.com/utilities/imgcat
+
     ## TODOS
     # TODO why does imgcat fail on some svgs? can I detect and avoid that? => look at ~/Applications/DataSpell.app/Contents/plugins/pycharm-ds-customization/jupyter-web/fontawesome-webfont.svg
     # TODO can I limit size of image?
