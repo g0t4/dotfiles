@@ -1,4 +1,22 @@
 
+# grvcp (copy remote url)
+abbr --add grvcp --function _grvcp
+function _grvcp
+    set -l first_remote $(git remote | head -n 1)
+
+    # 1. expand into "git remote get-url $first_remote | pbcopy" so user can see the REMOTE NAME (and change it if need be?)
+
+    # 2. expand into "echo https://... | pbcopy" so user can see the URL
+    #echo "echo $(git remote get-url $first_remote) | pbcopy"
+
+    # 3. or BOTH :)
+    echo "git remote get-url $first_remote | pbcopy # $(git remote get-url $first_remote)"
+
+    # 4. OR copy all remotes?
+
+    # most of the time there is one remote so lets not overcomplicate it... pick one and use it until it rubs the wrong way
+end
+
 function mark
     # for review commits that I don't need to step by step commit, instead just make a commit of all changes and dump the diff for my optional review
 	git diff --color-words HEAD # make sure to compare to HEAD as we will stage everything and commit the index too

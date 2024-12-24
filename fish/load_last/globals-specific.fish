@@ -12,6 +12,7 @@ abbr --position anywhere -- pxml '| bat -l xml' # shortened
 abbr --position anywhere -- pyml '| bat -l yml' # shortened
 
 abbr --position anywhere -- hC '| hexdump -C'
+abbr --position anywhere -- pcp '| pbcopy' # copy to clipboard
 # i.e.    echo -n $IFS | hexdump -C
 
 abbr --position anywhere -- pxargs '| xargs -I {} -- echo {}'
