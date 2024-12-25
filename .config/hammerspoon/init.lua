@@ -108,6 +108,9 @@ local prompt = "Tell me a very short joke"
 
 function AskOpenAIStreaming()
     -- docs: https://www.hammerspoon.org/docs/hs.application.html#name
+    -- run from CLI:
+    -- hs -c 'AskOpenAIStreaming()'
+
 
     local app = hs.application.frontmostApplication()
     -- todo use this to decide how to copy the current context... i.e. in AppleScript context I expect to already copy the relevant question part... whereas in devtools I just wanna grab the full command line and so I don't wanna have to select it myself...
@@ -120,20 +123,14 @@ function AskOpenAIStreaming()
         hs.alert.show("use iterm specific shortcut for ask-openai")
     end
 
+    -- if true then
+    --     return
+    -- end
 
-    if true then
-        return
-    end
-
-    -- trigger select all =>
-    hs.eventtap.keyStroke({ "cmd" }, "a")
-    -- trigger copy
-    hs.eventtap.keyStroke({ "cmd" }, "c")
-end
-
-function Remainder()
-    -- run from CLI:
-    -- hs -c 'AskOpenAIStreaming()'
+    -- -- trigger select all =>
+    -- hs.eventtap.keyStroke({ "cmd" }, "a")
+    -- -- trigger copy
+    -- hs.eventtap.keyStroke({ "cmd" }, "c")
 
     -- TODO lookup ask-open service from ~/.local/share/ask/service
     -- JUST cache it on startup, cuz I can always trigger reload config for ask-openai to switch it -- ZERO latency feels best and is the goal for this rewrite
@@ -163,6 +160,8 @@ function Remainder()
     hs.http.asyncPost(url, body, headers, function(status, response, _)
         if status ~= 200 then
             hs.alert.show("Error: " .. status)
+            -- FYI prints just fine! shows json dump of each chunk
+            print("Response:", response)
             return
         end
 
