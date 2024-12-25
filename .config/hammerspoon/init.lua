@@ -36,12 +36,14 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "S", function()
     -- end, "c")
 
     local function streamingHandler(_task, stdout, stderr)
-        if stdout and stdout ~= "" then
-            print("STDOUT: " .. stdout)
-        end
-        if stderr and stderr ~= "" then
-            print("STDERR: " .. stderr)
-        end
+        typeText(stdout)
+        -- TODO stderr?
+        -- if stdout and stdout ~= "" then
+        --     print("STDOUT: " .. stdout)
+        -- end
+        -- if stderr and stderr ~= "" then
+        --     print("STDERR: " .. stderr)
+        -- end
         return true
     end
     --
