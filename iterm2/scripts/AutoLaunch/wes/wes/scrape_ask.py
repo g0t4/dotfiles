@@ -75,13 +75,15 @@ async def copy_screen_to_clipboard(connection: iterm2.Connection, history: bool 
         "role": "system",
         "content": "You are a command line expert. Respond with a single, valid, complete command line. I intend to execute it. No explanation. No markdown. DO NOT respond with leading ``` nor trailing ```"
     }]
-    messages.append({"role": "user", "content": user_content})
 
     await troubleshoot_lines(session)
     if history:
         previous = await get_previous_output(session)
         log(f"previous: {previous}")
         messages.append({"role": "user", "content": "here is previous output in my shell/REPL: \n" + previous})
+
+    # append last, as it has question
+    messages.append({"role": "user", "content": user_content})
 
     # await task_clear  # in this case, already waited for clear above
 
