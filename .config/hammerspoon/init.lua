@@ -102,11 +102,16 @@ local model = "gpt-4o"
 local prompt = "Tell me a very short joke"
 
 function AskOpenAIStreaming()
+    -- test smth
+
+    if true then
+        return
+    end
+
     -- trigger select all =>
     hs.eventtap.keyStroke({ "cmd" }, "a")
     -- trigger copy
     hs.eventtap.keyStroke({ "cmd" }, "c")
-
 end
 
 function Remainder()
