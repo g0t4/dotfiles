@@ -94,11 +94,11 @@ local model = "gpt-4o"
 
 local prompt = "Tell me a very short joke"
 
--- local function typeText(text)
---     for char in text:gmatch(".") do
---         hs.eventtap.keyStrokes(char)
---     end
--- end
+local function typeText(text)
+    for char in text:gmatch(".") do
+        hs.eventtap.keyStrokes(char)
+    end
+end
 
 -- run from CLI:
 -- hs -c 'AskOpenAIStreaming()'
@@ -136,7 +136,7 @@ function AskOpenAIStreaming()
                 local delta = parsed.choices[1].delta or {}
                 local text = delta.content
                 if text then
-                    pasteText(text)
+                    typeText(text)
                 end
             end
         end
