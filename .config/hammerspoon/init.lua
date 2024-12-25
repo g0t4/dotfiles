@@ -24,14 +24,15 @@ end
 --     end
 -- end
 
+-- "preload" eventtap so I don't get load message in KM shell script call to `hs -c 'AskOpenAIStreaming()'` ... that way I can leave legit output messages to show in a window (unless I encounter other
+-- annoyances in which case I should turn off showing output in KM macro's action)
+local _et = hs.eventtap
 
 -- run from CLI:
--- hs -c 'askOpenAIStreaming()'
-function askOpenAIStreaming()
-    -- hs.alert.show("Hello from the CLI!")
+-- hs -c 'AskOpenAIStreaming()'
+function AskOpenAIStreaming()
     pasteText("Hellofoo")
 end
-
 
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "S", function()
     -- hs.alert.show("Streaming pastes...")
