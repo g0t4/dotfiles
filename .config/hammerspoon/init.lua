@@ -166,6 +166,7 @@ function AskOpenAIStreaming()
             return
         end
 
+        -- TODO is it necessary to gmatch here... IIRC each chunk is its own line.. maybe this callback is invoked with multiple lines in some cases... if so, then it makes sense to do this (also doesn't appear to hurt, thus far)
         for chunk in response:gmatch("%b{}") do
             local parsed = hs.json.decode(chunk)
             if parsed and parsed.choices then
