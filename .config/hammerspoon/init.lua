@@ -13,17 +13,17 @@ hs.console.darkMode(true)
 --     hs -c 'hs.alert.show("Hello, Stream Deck!")'
 hs.ipc.cli = true
 
-local function typeText(text)
-    for char in text:gmatch(".") do
-        -- hs.eventtap.keyStroke({}, char, 0)
-        hs.eventtap.keyStrokes(char)
-        hs.timer.usleep(10000)
-        -- 1k is like almost instant
-        -- 5k looks like super fast typer
-        -- 10k looks like fast typer
-        -- 20k?
-    end
-end
+-- local function typeText(text)
+--     for char in text:gmatch(".") do
+--         -- hs.eventtap.keyStroke({}, char, 0)
+--         hs.eventtap.keyStrokes(char)
+--         hs.timer.usleep(10000)
+--         -- 1k is like almost instant
+--         -- 5k looks like super fast typer
+--         -- 10k looks like fast typer
+--         -- 20k?
+--     end
+-- end
 
 local function pasteText(text)
     -- TODO if need be, can I track the app that was active when triggering the ask-openai action... so I can make sure to pass it to type into it only... would allow me to switch apps (or more important, if some other app / window pops up... wouldn't steal typing focus)
@@ -101,9 +101,14 @@ local model = "gpt-4o"
 
 local prompt = "Tell me a very short joke"
 
--- run from CLI:
--- hs -c 'AskOpenAIStreaming()'
 function AskOpenAIStreaming()
+    -- run from CLI:
+    -- hs -c 'AskOpenAIStreaming()'
+
+    -- TODO lookup ask-open service from ~/.local/share/ask/service
+    -- JUST cache it on startup, cuz I can always trigger reload config for ask-openai to switch it -- ZERO latency feels best and is the goal for this rewrite
+    -- TODO with streaming, it feels like gpt-4o/opeani is as fast as groq.. so impressive (also somewhat due to lower overhead - preloaded API key, similar to benefit in my wes.py iterm2 impl)
+
     if apiKey == nil then
         hs.alert.show("Error: No API key for ask-openai")
         return
@@ -137,7 +142,7 @@ function AskOpenAIStreaming()
                 local delta = parsed.choices[1].delta or {}
                 local text = delta.content
                 if text then
-                    typeText(text)
+                    pasteText(text)
                 end
             end
         end
