@@ -39,6 +39,7 @@ local _json = hs.json
 local _http = hs.http
 local _application = hs.application
 local _alert = hs.alert
+local _pasteboard = hs.pasteboard
 
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "S", function()
     -- TODO what is this debug hook?
@@ -104,8 +105,6 @@ local apiKey = getApiKey("ask", "openai")
 
 local model = "gpt-4o"
 
-local prompt = "Tell me a very short joke"
-
 function AskOpenAIStreaming()
     -- docs: https://www.hammerspoon.org/docs/hs.application.html#name
     -- run from CLI:
@@ -118,7 +117,6 @@ function AskOpenAIStreaming()
     -- MAYBE even use context of the app (i.e. in devtools) to decide what prompt to use
     --    COULD also have diff prmopts tied to streamdeck buttons (app specific) if I find it useful to control the prompt instead of trying to guess it based on current app... (app by app basis that I care to do this for)
 
-    -- print("frontmost app " .. app:name())
     if app:name() == "iTerm2" then
         hs.alert.show("use iterm specific shortcut for ask-openai")
         return
@@ -128,10 +126,12 @@ function AskOpenAIStreaming()
     --     return
     -- end
 
-    -- -- trigger select all =>
-    -- hs.eventtap.keyStroke({ "cmd" }, "a")
-    -- -- trigger copy
-    -- hs.eventtap.keyStroke({ "cmd" }, "c")
+    -- trigger select all =>
+    hs.eventtap.keyStroke({ "cmd" }, "a")
+    -- trigger copy
+    hs.eventtap.keyStroke({ "cmd" }, "c")
+    -- get prompt from clipboard:
+    local prompt = hs.pasteboard.getContents()
 
     -- TODO lookup ask-open service from ~/.local/share/ask/service
     -- JUST cache it on startup, cuz I can always trigger reload config for ask-openai to switch it -- ZERO latency feels best and is the goal for this rewrite
@@ -169,6 +169,12 @@ An example of a command line could be `find the first div on the page` and a val
         stream = true,
         max_tokens = 200,
     })
+
+    -- print("body", body)
+    -- if true then
+    --     return
+    -- end
+
 
     hs.http.asyncPost(url, body, headers, function(status, response, _)
         if status ~= 200 then
