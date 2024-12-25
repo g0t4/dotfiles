@@ -13,18 +13,23 @@ hs.console.darkMode(true)
 --     hs -c 'hs.alert.show("Hello, Stream Deck!")'
 hs.ipc.cli = true
 
-local function typeText(text)
-    for char in text:gmatch(".") do
-        hs.eventtap.keyStroke({}, char, 0)
-        -- hs.timer.usleep(50000) -- Small delay to simulate human typing (~20 characters per second)
-    end
+local function pasteText(text)
+    hs.eventtap.keyStrokes(text)
 end
+
+-- local function typeText(text)
+--     for char in text:gmatch(".") do
+--         hs.eventtap.keyStroke({}, char, 0)
+--         -- hs.timer.usleep(50000) -- Small delay to simulate human typing (~20 characters per second)
+--     end
+-- end
 
 
 -- run from CLI:
 -- hs -c 'askOpenAIStreaming()'
 function askOpenAIStreaming()
-    hs.alert.show("Hello from the CLI!")
+    -- hs.alert.show("Hello from the CLI!")
+    pasteText("Hellofoo")
 end
 
 
