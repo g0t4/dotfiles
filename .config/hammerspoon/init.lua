@@ -45,6 +45,8 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "S", function()
     -- debug.sethook(function(event, line)
     --     print("Debug hook triggered: " .. event .. " on line " .. tostring(line))
     -- end, "c")
+    --
+    -- ! keep around as a good example of streaming from a command's output (instead of http response used for ask-openai)... both are useful to recall (and this concept is somewhat novel in my automations so I don't wanna let it slip my mind)
 
     local function streamingHandler(_task, stdout, stderr)
         pasteText(stdout)
