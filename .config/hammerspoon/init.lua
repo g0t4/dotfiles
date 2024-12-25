@@ -33,9 +33,12 @@ end
 
 -- "preload" eventtap so I don't get load message in KM shell script call to `hs -c 'AskOpenAIStreaming()'` ... that way I can leave legit output messages to show in a window (unless I encounter other
 -- annoyances in which case I should turn off showing output in KM macro's action)
+-- TODO how about not show loaded modules over stdout?! OR hide it when I run KM macro STDOUT>/dev/null b/c I only care about STDERR me thinks
 local _et = hs.eventtap
 local _json = hs.json
 local _http = hs.http
+local _application = hs.application
+local _alert = hs.alert
 
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "S", function()
     -- TODO what is this debug hook?
@@ -102,7 +105,19 @@ local model = "gpt-4o"
 local prompt = "Tell me a very short joke"
 
 function AskOpenAIStreaming()
-    -- test smth
+    -- docs: https://www.hammerspoon.org/docs/hs.application.html#name
+
+    local app = hs.application.frontmostApplication()
+    -- todo use this to decide how to copy the current context... i.e. in AppleScript context I expect to already copy the relevant question part... whereas in devtools I just wanna grab the full command line and so I don't wanna have to select it myself...
+    -- ALSO use app to select prompt!
+    -- MAYBE even use context of the app (i.e. in devtools) to decide what prompt to use
+    --    COULD also have diff prmopts tied to streamdeck buttons (app specific) if I find it useful to control the prompt instead of trying to guess it based on current app... (app by app basis that I care to do this for)
+
+    -- print("frontmost app " .. app:name())
+    if app:name() == "iTerm2" then
+        hs.alert.show("use iterm specific shortcut for ask-openai")
+    end
+
 
     if true then
         return
