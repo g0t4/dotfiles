@@ -13,16 +13,23 @@ hs.console.darkMode(true)
 --     hs -c 'hs.alert.show("Hello, Stream Deck!")'
 hs.ipc.cli = true
 
-local function pasteText(text)
-    hs.eventtap.keyStrokes(text)
+local function typeText(text)
+    for char in text:gmatch(".") do
+        -- hs.eventtap.keyStroke({}, char, 0)
+        hs.eventtap.keyStrokes(char)
+        hs.timer.usleep(10000)
+        -- 1k is like almost instant
+        -- 5k looks like super fast typer
+        -- 10k looks like fast typer
+        -- 20k?
+    end
 end
 
--- local function typeText(text)
---     for char in text:gmatch(".") do
---         hs.eventtap.keyStroke({}, char, 0)
---         -- hs.timer.usleep(50000) -- Small delay to simulate human typing (~20 characters per second)
---     end
--- end
+local function pasteText(text)
+    -- TODO if need be, can I track the app that was active when triggering the ask-openai action... so I can make sure to pass it to type into it only... would allow me to switch apps (or more important, if some other app / window pops up... wouldn't steal typing focus)
+    --     hs.eventtap.keyStrokes(text[, application])
+    hs.eventtap.keyStrokes(text)
+end
 
 -- "preload" eventtap so I don't get load message in KM shell script call to `hs -c 'AskOpenAIStreaming()'` ... that way I can leave legit output messages to show in a window (unless I encounter other
 -- annoyances in which case I should turn off showing output in KM macro's action)
@@ -93,12 +100,6 @@ local apiKey = getApiKey("ask", "openai")
 local model = "gpt-4o"
 
 local prompt = "Tell me a very short joke"
-
-local function typeText(text)
-    for char in text:gmatch(".") do
-        hs.eventtap.keyStrokes(char)
-    end
-end
 
 -- run from CLI:
 -- hs -c 'AskOpenAIStreaming()'
