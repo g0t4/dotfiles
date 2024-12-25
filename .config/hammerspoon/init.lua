@@ -121,6 +121,7 @@ function AskOpenAIStreaming()
     -- print("frontmost app " .. app:name())
     if app:name() == "iTerm2" then
         hs.alert.show("use iterm specific shortcut for ask-openai")
+        return
     end
 
     -- if true then
