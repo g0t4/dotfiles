@@ -35,14 +35,13 @@ function AskOpenAIStreaming()
 end
 
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "S", function()
-    -- hs.alert.show("Streaming pastes...")
-    -- log starting:
+    -- TODO what is this debug hook?
     -- debug.sethook(function(event, line)
     --     print("Debug hook triggered: " .. event .. " on line " .. tostring(line))
     -- end, "c")
 
     local function streamingHandler(_task, stdout, stderr)
-        typeText(stdout)
+        pasteText(stdout)
         -- TODO stderr?
         -- if stdout and stdout ~= "" then
         --     print("STDOUT: " .. stdout)
@@ -57,16 +56,9 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "S", function()
     local task = hs.task.new("/opt/homebrew/bin/fish", function(exitCode)
         print("Task finished with exit code: " .. exitCode)
         return true
-    end, streamingHandler, { "-c for i in (seq 1 10); echo $i;sleep 1; end" }) -- Arguments as a table
+    end, streamingHandler, { "-c for i in (seq 1 10); echo -n $i;sleep 0.1; end" }) -- Arguments as a table
 
     task:start()
-
-    -- local file = io.popen("ls")
-    -- for line in file:lines() do
-    --     -- print(line)
-    --     -- hs.eventtap.keyStrokes(line)
-    -- end
-    -- file:close()
 end)
 
 
