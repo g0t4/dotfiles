@@ -61,6 +61,7 @@
     "Lua.workspace.library": [
         "/opt/homebrew/Cellar/neovim/0.10.2_1/share/nvim/runtime/lua",
         "/opt/homebrew/Cellar/neovim/0.10.2_1/share/nvim/runtime/lua/vim/lsp",
+        // "/Applications/Hammerspoon.app/Contents/Resources/extensions", // doesn't work, don't try again unless you find good reason to
     ],
     "Lua.runtime.version": "LuaJIT",
     "Lua.runtime.path": [
@@ -96,6 +97,9 @@
         "pending",
         "setup",
         "teardown",
+
+        // hammerspoon (don't try to get LS to work with hs beyond this (not warn about hs usages))
+        "hs",
     ],
     //
     // per https://github.com/UltiRequiem/coc-zig
