@@ -43,9 +43,8 @@ function M.AskOpenAIStreaming()
     -- TODO why not clear clipboard and wait for it to be set, instead of fixed delay? do this if you further want to optimize timing
     -- trigger select all:
     hs.eventtap.keyStroke({ "cmd" }, "a", keystrokeDelay)
-    -- trigger copy:
-    -- hs.eventtap.keyStroke({ "cmd" }, "c", keystrokeDelay)
-    -- trigger cut: (see if ux feels faster b/c you see it cleared)
+    -- trigger cut: (feels much faster b/c of change in screen contents) static screen contents is gonna feel slower (even if its not)...
+    --    might also be faster to paste w/o having selection... PRN time it to see if initial paste is net faster w/ cut vs copy
     hs.eventtap.keyStroke({ "cmd" }, "x", keystrokeDelay)
 
     local prompt = hs.pasteboard.getContents() -- < 0.6ms
