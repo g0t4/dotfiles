@@ -13,6 +13,8 @@ An example of a command line could be `find the first div on the page` and a val
 ]]
 
 
+-- TODO would it be useful to differentiate Script Debugger vs Script Editor
+--   i.e. the former has better debug tools so might want diff prompt to elucidate setting variables to inspect in Explorer view vs using logs in Script Editor
 local applescript_system_message = [[
 You are an AppleScript expert.
 The user is working in Script Debugger or Script Editor.
