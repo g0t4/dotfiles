@@ -126,8 +126,9 @@ An example of a command line could be `find the first div on the page` and a val
         -- openai takes about 280ms until first chunk (FAST!)
         -- depends on length but done by 420ms for one small test case
         if not success then
+            -- GOOD TEST CASE use ollama and make sure its not running! works nicely as is:
             hs.alert.show("Error in streaming request: " .. exitCode)
-            print("Error:", chunk, "Exit Code:", exitCode)
+            print("Error in streaming request:", chunk, "Exit Code:", exitCode)
         else
             -- print("Chunk received:", chunk)
             -- interesting that at this point, the prints don't get routed to the KM window that pops up...
