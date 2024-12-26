@@ -34,22 +34,33 @@ function M.AskOpenAIStreaming()
 
     -- print_elapsed("appname") -- < 0.5ms
 
-    -- if true then
-    --     return
-    -- end
+    -- -- trigger select all =>
+    -- TODO pass app as last arg to keyStroke? does it matter for timing?
+    -- -- *** standalone 200ms!!!
+    hs.eventtap.keyStroke({ "cmd" }, "a", 100000) -- !!! BOTTLENECK
+    -- OK 100ms is working fine for now... and feels maybe fast enough?
+    print_elapsed("select all")
+    -- -- trigger copy
+    hs.eventtap.keyStroke({ "cmd" }, "c", 100000) -- !!! BOTTLENECK
+    -- -- *** standalone 200ms!!!
+    print_elapsed("copy")
+    -- https://www.hammerspoon.org/docs/hs.eventtap.html#keyStroke (200ms is default keystroke delay)
 
-    -- trigger select all =>
-    -- *** standalone 200ms!!!
-    hs.eventtap.keyStroke({ "cmd" }, "a") -- !!! BOTTLENECK
-    -- print_elapsed("select all")
-    -- trigger copy
-    hs.eventtap.keyStroke({ "cmd" }, "c") -- !!! BOTTLENECK
-    -- *** standalone 200ms!!!
-    -- print_elapsed("copy")
+    -- HOW else can I copy faster? or get the text?!
+    -- FYI can try applescript but I dont think that's necessary, unless issuing keystrokes is also slow, the 200 ms is artificial (potentially)
+    -- can system events select all and copy for the front most app faster?
+
+
     -- get prompt from clipboard:
     local prompt = hs.pasteboard.getContents()
+    print_elapsed("got prompt")
+    print("Prompt:", prompt)
 
-    -- print_elapsed("got prompt") -- 400ms to this point
+    if true then
+        return
+    end
+
+
 
     -- TODO lookup ask-open service from ~/.local/share/ask/service
     -- JUST cache it on startup, cuz I can always trigger reload config for ask-openai to switch it -- ZERO latency feels best and is the goal for this rewrite
