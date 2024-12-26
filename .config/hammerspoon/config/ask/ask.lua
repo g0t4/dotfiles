@@ -131,6 +131,7 @@ An example of a command line could be `find the first div on the page` and a val
             print("Error:", chunk, "Exit Code:", exitCode)
         else
             -- print("Chunk received:", chunk)
+            -- interesting that at this point, the prints don't get routed to the KM window that pops up...
             processChunk(chunk)
         end
         return true
