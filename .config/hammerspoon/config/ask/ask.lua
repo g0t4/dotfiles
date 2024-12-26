@@ -79,6 +79,8 @@ function M.AskOpenAIStreaming()
                 if text then
                     hs.eventtap.keyStrokes(text, app) -- app param is optional
                 end
+            else
+                print("Error: failed to parse json for data_line", data_line)
             end
         end
     end
