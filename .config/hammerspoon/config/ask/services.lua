@@ -40,6 +40,17 @@ function M.getService()
     --     return { service = "groq", model = "gpt-4o" }
     -- end
 
+    if stored.service == "--groq" then
+        -- TODO any newer models?
+        return {
+            name = "groq",
+            api_key = security.getSecret("ask", "groq"),
+            base_url = "https://api.groq.com/openai/v1/chat/completions",
+            model = stored.model == "" and "llama-3.1-70b-versatile" or stored.model,
+        }
+    end
+
+
     return {
         name = "openai",
         model = stored.model == "" and "gpt-4o" or stored.model,
