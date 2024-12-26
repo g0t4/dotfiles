@@ -11,7 +11,13 @@ function M.AskOpenAIStreaming()
     -- docs: https://www.hammerspoon.org/docs/hs.application.html#name
     -- run from CLI:
     -- hs -c 'AskOpenAIStreaming()'
+    local socket = require("socket")
+    local start_time = socket.gettime()
 
+    local function print_elapsed(message)
+        local elapsed_time = socket.gettime() - start_time
+        print(string.format("%s: %.6f seconds", message, elapsed_time))
+    end
 
     local app = hs.application.frontmostApplication()
     -- todo use this to decide how to copy the current context... i.e. in AppleScript context I expect to already copy the relevant question part... whereas in devtools I just wanna grab the full command line and so I don't wanna have to select it myself...
@@ -19,25 +25,37 @@ function M.AskOpenAIStreaming()
     -- MAYBE even use context of the app (i.e. in devtools) to decide what prompt to use
     --    COULD also have diff prmopts tied to streamdeck buttons (app specific) if I find it useful to control the prompt instead of trying to guess it based on current app... (app by app basis that I care to do this for)
 
+    -- print_elapsed("frontmost") -- < 0.5ms
+
     if app:name() == "iTerm2" then
         hs.alert.show("use iterm specific shortcut for ask-openai")
         return
     end
+
+    -- print_elapsed("appname") -- < 0.5ms
 
     -- if true then
     --     return
     -- end
 
     -- trigger select all =>
-    hs.eventtap.keyStroke({ "cmd" }, "a")
+    -- *** standalone 200ms!!!
+    hs.eventtap.keyStroke({ "cmd" }, "a") -- !!! BOTTLENECK
+    -- print_elapsed("select all")
     -- trigger copy
-    hs.eventtap.keyStroke({ "cmd" }, "c")
+    hs.eventtap.keyStroke({ "cmd" }, "c") -- !!! BOTTLENECK
+    -- *** standalone 200ms!!!
+    -- print_elapsed("copy")
     -- get prompt from clipboard:
     local prompt = hs.pasteboard.getContents()
+
+    -- print_elapsed("got prompt") -- 400ms to this point
 
     -- TODO lookup ask-open service from ~/.local/share/ask/service
     -- JUST cache it on startup, cuz I can always trigger reload config for ask-openai to switch it -- ZERO latency feels best and is the goal for this rewrite
     -- TODO with streaming, it feels like gpt-4o/opeani is as fast as groq.. so impressive (also somewhat due to lower overhead - preloaded API key, similar to benefit in my wes.py iterm2 impl)
+
+    -- start_time = socket.gettime()
 
     if apiKey == nil then
         hs.alert.show("Error: No API key for ask-openai")
@@ -71,6 +89,7 @@ An example of a command line could be `find the first div on the page` and a val
         stream = true,
         max_tokens = 200,
     })
+    -- print_elapsed("json encode") -- < 0.2ms (from right before apiKey=nil check to here)
 
     -- print("body", body)
     -- if true then
@@ -95,7 +114,13 @@ An example of a command line could be `find the first div on the page` and a val
     end
 
     local streamingRequest = require("config.ask.streaming_curl").streamingRequest
+
+    start_time = socket.gettime()
+
     streamingRequest(url, "POST", headers, body, function(success, chunk, exitCode)
+        print_elapsed("streaming request")
+        -- openai takes about 280ms until first chunk (FAST!)
+        -- depends on length but done by 420ms for one small test case
         if not success then
             hs.alert.show("Error in streaming request: " .. exitCode)
             print("Error:", chunk, "Exit Code:", exitCode)
