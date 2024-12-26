@@ -36,9 +36,14 @@ function M.getService()
         return nil
     end
 
-    -- if stored.service == "--groq" then
-    --     return { service = "groq", model = "gpt-4o" }
-    -- end
+    if stored.service == "--ollama" then
+        return {
+            name = "ollama",
+            api_key = "whatever",
+            base_url = "http://localhost:11434/v1/chat/completions",
+            model = stored.model == "" and "llama-3.2:3b" or stored.model,
+        }
+    end
 
     if stored.service == "--groq" then
         -- TODO any newer models?
@@ -49,7 +54,6 @@ function M.getService()
             model = stored.model == "" and "llama-3.1-70b-versatile" or stored.model,
         }
     end
-
 
     return {
         name = "openai",
