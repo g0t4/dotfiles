@@ -25,7 +25,7 @@ function M.streamStdout()
     local task = hs.task.new("/opt/homebrew/bin/fish", function(exitCode)
         print("Task finished with exit code: " .. exitCode)
         return true
-    end, streamingHandler, { "-c for i in (seq 1 10); echo -n $i;sleep 0.1; end" }) -- Arguments as a table
+    end, streamingHandler, { "-c for i in (seq 1 10); echo -n $i;sleep 0.5; end" }) -- Arguments as a table
 
     task:start()
 end
