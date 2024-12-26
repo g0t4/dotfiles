@@ -77,19 +77,13 @@ An example of a command line could be `find the first div on the page` and a val
     --     return
     -- end
 
+    local function processChunk(chunk)
+        -- TODO gmatch here in case a chunk has multiple data lines (multiple chunks)
+        -- each data line is a json object
+        -- TODO logic for failure to parse json?
 
-    -- THIS IS NOT STREAMING the result back ... hrm does the http client not support that? or is it too fast or?
-    hs.http.asyncPost(url, body, headers, function(status, response, _)
-        if status ~= 200 then
-            hs.alert.show("Error: " .. status)
-            -- FYI prints just fine! shows json dump of each chunk
-            print("Response:", response)
-            return
-        end
-
-        -- TODO is it necessary to gmatch here... IIRC each chunk is its own line.. maybe this callback is invoked with multiple lines in some cases... if so, then it makes sense to do this (also doesn't appear to hurt, thus far)
-        for chunk in response:gmatch("%b{}") do
-            local parsed = hs.json.decode(chunk)
+        for data_line in chunk:gmatch("%b{}") do
+            local parsed = hs.json.decode(data_line)
             if parsed and parsed.choices then
                 local delta = parsed.choices[1].delta or {}
                 local text = delta.content
@@ -98,8 +92,27 @@ An example of a command line could be `find the first div on the page` and a val
                 end
             end
         end
-        print("response", response)
+    end
+
+    local streamingRequest = require("config.ask.streaming_curl").streamingRequest
+    streamingRequest(url, "POST", headers, body, function(success, chunk, exitCode)
+        if not success then
+            hs.alert.show("Error in streaming request: " .. exitCode)
+            print("Error:", chunk, "Exit Code:", exitCode)
+        else
+            print("Chunk received:", chunk)
+            processChunk(chunk)
+        end
+        return true
     end)
+
+    -- THIS IS NOT STREAMING the result back ... hrm does the http client not support that? or is it too fast or?
+    -- if status ~= 200 then
+    --     hs.alert.show("Error: " .. status)
+    --     -- FYI prints just fine! shows json dump of each chunk
+    --     print("Response:", response)
+    --     return
+    -- end
 end
 
 return M

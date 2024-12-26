@@ -22,6 +22,7 @@ local _http = hs.http
 local _application = hs.application
 local _alert = hs.alert
 local _pasteboard = hs.pasteboard
+local _task = hs.task
 
 local streamStdout = require("config.tests.stream-stdout").streamStdout
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "S", streamStdout)
