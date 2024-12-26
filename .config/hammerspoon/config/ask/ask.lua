@@ -1,7 +1,5 @@
 local M = {}
 
-local helpers = require("config.helpers")
-
 local services = require("config.ask.services")
 local service = services.getService()
 
@@ -123,7 +121,7 @@ An example of a command line could be `find the first div on the page` and a val
                 local delta = parsed.choices[1].delta or {}
                 local text = delta.content
                 if text then
-                    helpers.pasteText(text)
+                    hs.eventtap.keyStrokes(text, app) -- app param is optional
                 end
             end
         end

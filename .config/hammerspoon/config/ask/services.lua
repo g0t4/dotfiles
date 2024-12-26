@@ -1,5 +1,4 @@
 local security = require("config.ask.security")
-local inspect = require("hs.inspect")
 
 local M = {}
 
