@@ -127,8 +127,12 @@ An example of a command line could be `find the first div on the page` and a val
             -- print_elapsed("complete callback")
             -- GOOD TEST CASE use ollama and make sure its not running! works nicely as is:
             hs.alert.show("Error in streaming request: " .. exitCode .. " see hammerspoon console logs")
-            print("completeCallback - STDERR: ", stderr)
-            print("completeCallback - STDOUT: ", stdout)
+            if stderr ~= "" then
+                print("completeCallback - STDERR: ", stderr)
+            end
+            if stdout ~= "" then
+                print("completeCallback - STDOUT: ", stdout)
+            end
             print("completeCallback - Exit Code:", exitCode)
         end
         -- TODO if STDERR not empty?
@@ -141,8 +145,14 @@ An example of a command line could be `find the first div on the page` and a val
             -- print_elapsed("streaming callback")
             -- GOOD TEST CASE use ollama and make sure its not running! works nicely as is:
             hs.alert.show("Error in streaming request: " .. stderr .. " see hammerspoon console logs")
-            print("streamingCallback - STDERR: ", stderr)
-            print("streamingCallback - STDOUT: ", stdout)
+            if stdout ~= "" then
+                print("streamingCallback - STDOUT: ", stdout)
+            end
+            if stderr ~= "" then
+                print("streamingCallback - STDERR: ", stderr)
+            end
+
+            -- TODO should I still try to process the chunk?
             return false
         end
 
