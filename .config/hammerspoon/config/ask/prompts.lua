@@ -1,6 +1,6 @@
 local M = {}
 
-local devtools_system_message = [[
+local devtoolsSystemMessage = [[
 You are a chrome devtools expert.
 The user is working in the devtools Console in the Brave Beta Browser.
 The user needs help completing a javascript command.
@@ -13,9 +13,7 @@ An example of a command line could be `find the first div on the page` and a val
 ]]
 
 
--- TODO would it be useful to differentiate Script Debugger vs Script Editor
---   i.e. the former has better debug tools so might want diff prompt to elucidate setting variables to inspect in Explorer view vs using logs in Script Editor
-local applescript_system_message = [[
+local applescriptSystemMessage = [[
 You are an AppleScript expert.
 The user is working in Script Debugger or Script Editor.
 The user needs help completing statement(s) or something else about AppleScript.
@@ -28,16 +26,39 @@ Comments are ok, only if absolutely necessary.
 No explanation. No markdown. No markdown with backticks ` nor ```.
 ]]
 
--- TODO max_tokens longer for AppleScript?
+
+local excelSystemMessage = [[
+You are a excel expert.
+The user is working in Excel.
+The user needs help completing a formula or something else to do with excel.
+Whatever they have typed into the Excel cell will be provided to you.
+They might also have a free-form question included.
+Respond with a single, valid excel formula. Their cell contents will be replaced with your response. So they can review and use it.
+No explanation. No markdown. No markdown with backticks ` nor ```.
+
+An example of a question could be `= sum up H4:H8` and a valid response would be `= SUM(H4:H8)`. Make sure to include the = sign if you are suggesting a formula.
+]]
 
 function M.getPrompt(app)
     local name = app:name()
+
     if name == "Brave Browser Beta" then
-        return devtools_system_message
-    elseif name == "Script Debugger" or name == "Script Editor" then
-        return applescript_system_message
+        return { systemMessage = devtoolsSystemMessage, max_tokens = 200 }
     end
-    hs.alert.show("Error: No prompt found for app: " .. name)
+
+    if name == "Script Debugger" or name == "Script Editor" then
+        -- TODO would it be useful to differentiate Script Debugger vs Script Editor
+        --   i.e. the former has better debug tools so might want diff prompt to elucidate setting variables to inspect in Explorer view vs using logs in Script Editor
+        -- TODO max_tokens longer for AppleScript?
+        return { systemMessage = applescriptSystemMessage, max_tokens = 200 }
+    end
+
+    if name == "Microsoft Excel" then
+        -- TODO max_tokens longer for Excel? or shorter or?
+        return { systemMessage = excelSystemMessage, max_tokens = 200 }
+    end
+
+    return nil
 end
 
 return M

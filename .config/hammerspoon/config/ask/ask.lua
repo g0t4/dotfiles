@@ -20,13 +20,11 @@ function M.AskOpenAIStreaming()
         hs.alert.show("use iterm specific shortcut for ask-openai")
         return
     end
-    -- TODO use app to select prompt!
-    -- TODO "Script Debugger"
-    -- TODO "Script Editor"
-    -- TODO "Microsoft Excel"
 
-    local prompt = selection.getSelectedText()
-    if prompt == "" then
+
+    -- TODO userPrompt has env details in some cases, did I use those for excel/scripteditor/devtools? look at scrfipt that called python
+    local userPrompt = selection.getSelectedText()
+    if userPrompt == "" then
         hs.alert.show("No selection found, try again...")
         return
     end
@@ -40,21 +38,26 @@ function M.AskOpenAIStreaming()
         return
     end
 
-    local url = service.base_url
-
     local headers = {
         ["Authorization"] = "Bearer " .. service.api_key,
         ["Content-Type"] = "application/json",
     }
 
+    local appParameters = prompts.getPrompt(app)
+    if appParameters == nil then
+        print("Error: unknown app - no prompt available: " .. app:name())
+        hs.alert.show("Error: unknown app - no prompt available: " .. app:name())
+        return
+    end
+
     local body = hs.json.encode({
         model = service.model,
         messages = {
-            { role = "system", content = prompts.getPrompt(app) },
-            { role = "user",   content = prompt },
+            { role = "system", content = appParameters.systemMessage },
+            { role = "user",   content = userPrompt },
         },
         stream = true,
-        max_tokens = 200,
+        max_tokens = appParameters.max_tokens,
     })
     -- print_elapsed("json encode") -- < 0.2ms (from right before apiKey=nil check to here)
 
@@ -105,7 +108,7 @@ function M.AskOpenAIStreaming()
     local function streamingCallback(task, stdout, stderr)
         if stderr ~= "" then
             -- print_elapsed("streaming callback")
-            -- GOOD TEST CASE use ollama and make sure its not running! works nicely as is:
+            -- GOOD TEST CASE use ollama and make sure its not running!
             hs.alert.show("Error in streaming request: " .. stderr .. " see hammerspoon console logs")
             if stdout ~= "" then
                 print("streamingCallback - STDOUT: ", stdout)
@@ -118,28 +121,15 @@ function M.AskOpenAIStreaming()
             return false
         end
 
-        -- print("Chunk received:", chunk)
-        --
-        -- interesting that at this point, the prints don't get routed to the KM window that pops up...
         processChunk(stdout)
 
         -- FTR when I wasn't checking stderr and not passing -fsSL to curl, there was a stdout error object for ollama API if model is invalid, might want to parse that too or instead of stderr/-fsSL (-fsS part causes diff error handling)...
         -- {"error":{"message":"model \"llama-3.2:3b\" not found, try pulling it first","type":"api_error","param":null,"code":null}}
-        --   IS THIS A UNIFORM FORMAT (assuming request itself doesn't fail)?
-
 
         return true -- continue streaming, false would result in rest going to final callback (IIUC)
     end
 
-    streamingRequest(url, "POST", headers, body, streamingCallback, completeCallback)
-
-    -- THIS IS NOT STREAMING the result back ... hrm does the http client not support that? or is it too fast or?
-    -- if status ~= 200 then
-    --     hs.alert.show("Error: " .. status)
-    --     -- FYI prints just fine! shows json dump of each chunk
-    --     print("Response:", response)
-    --     return
-    -- end
+    streamingRequest(service.url, "POST", headers, body, streamingCallback, completeCallback)
 end
 
 return M

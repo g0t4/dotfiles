@@ -51,7 +51,7 @@ function M.getService()
         return {
             name = "ollama",
             api_key = "whatever",
-            base_url = "http://localhost:11434/v1/chat/completions",
+            url = "http://localhost:11434/v1/chat/completions",
             model = stored.model == "" and "llama3.2:3b" or stored.model,
         }
     end
@@ -61,7 +61,7 @@ function M.getService()
         return {
             name = "groq",
             api_key = security.getSecret("ask", "groq"),
-            base_url = "https://api.groq.com/openai/v1/chat/completions",
+            url = "https://api.groq.com/openai/v1/chat/completions",
             model = stored.model == "" and "llama-3.1-70b-versatile" or stored.model,
         }
     end
@@ -70,7 +70,7 @@ function M.getService()
         name = "openai",
         model = stored.model == "" and "gpt-4o" or stored.model,
         api_key = security.getSecret("ask", "openai"),
-        base_url = "https://api.openai.com/v1/chat/completions",
+        url = "https://api.openai.com/v1/chat/completions",
     }
 end
 
