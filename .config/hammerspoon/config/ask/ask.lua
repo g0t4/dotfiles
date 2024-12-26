@@ -130,7 +130,7 @@ An example of a command line could be `find the first div on the page` and a val
             hs.alert.show("Error in streaming request: " .. exitCode)
             print("Error:", chunk, "Exit Code:", exitCode)
         else
-            print("Chunk received:", chunk)
+            -- print("Chunk received:", chunk)
             processChunk(chunk)
         end
         return true
