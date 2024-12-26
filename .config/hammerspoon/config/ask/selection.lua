@@ -1,36 +1,33 @@
 local M = {}
 
+local t = require("config.times")
+
 function M.getSelectedText()
-    -- OMG I can return both the selection AND the value of the textbox... WITHOUT using the clipboard at FUCKING ALL
-    -- AND THIS APPEARS TO PERFORM at least somewhat well
-    --
-
-    local socket = require("socket")
-    local start_time = socket.gettime()
-
-    local function print_elapsed(message)
-        local elapsed_time = socket.gettime() - start_time
-        print(string.format("%s: %.6f seconds", message, elapsed_time))
-    end
+    -- NOTES:
+    --   selected text does not work in iTerm (at least not in nvim)... that'sfine as I am not using this at all in iterm... if I was I could just impl smth specific to iterm most likley...
+    --   verified works in: Brave devtools, Script Debugger and Editor, (AXValue in iterm + nvim)
 
     -- Access the currently focused UI element
     -- ~10ms first call
     --   then <1ms on back to back calls
     --   max was 25ms one time... still less than 30ms just to select text with keystroke!!!
+    t.set_start_time()
     local focusedElement = hs.axuielement.systemWideElement():attributeValue("AXFocusedUIElement")
-    print_elapsed("focusedElement")
-    -- print("focusedElement", focusedElement)
+    t.print_elapsed("AXFocusedUIElement")
 
     if focusedElement then
+        t.set_start_time()
         local selectedText = focusedElement:attributeValue("AXSelectedText") -- < 0.4ms !!
-        print_elapsed("AXSeelctedText")
+        t.print_elapsed("AXSelectedText")
 
         if selectedText and selectedText ~= "" then
+            print("selected text found")
             return selectedText
         else
-            -- print("No selection or unsupported element.")
+            print("No selection or unsupported element.")
+            t.set_start_time()
             local value = focusedElement:attributeValue("AXValue")
-            print_elapsed("AXValue")
+            t.print_elapsed("AXValue")
             return value
         end
     else
