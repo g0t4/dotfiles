@@ -1,6 +1,6 @@
 local M = {}
 
-local t = require("config.times")
+-- local t = require("config.times")
 
 function M.getSelectedText()
     -- NOTES:
@@ -8,26 +8,22 @@ function M.getSelectedText()
     --   verified works in: Brave devtools, Script Debugger and Editor, (AXValue in iterm + nvim)
 
     -- Access the currently focused UI element
-    -- ~10ms first call
+    -- ~ 6 to 10ms first call (sometimes <1ms too)
     --   then <1ms on back to back calls
     --   max was 25ms one time... still less than 30ms just to select text with keystroke!!!
-    t.set_start_time()
+    -- t.set_start_time()
     local focusedElement = hs.axuielement.systemWideElement():attributeValue("AXFocusedUIElement")
-    t.print_elapsed("AXFocusedUIElement")
+    -- t.print_elapsed("AXFocusedUIElement")
 
     if focusedElement then
-        t.set_start_time()
         local selectedText = focusedElement:attributeValue("AXSelectedText") -- < 0.4ms !!
-        t.print_elapsed("AXSelectedText")
 
         if selectedText and selectedText ~= "" then
             print("selected text found")
             return selectedText
         else
             print("No selection or unsupported element.")
-            t.set_start_time()
-            local value = focusedElement:attributeValue("AXValue")
-            t.print_elapsed("AXValue")
+            local value = focusedElement:attributeValue("AXValue") -- < 0.4ms !!
             return value
         end
     else
