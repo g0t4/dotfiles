@@ -27,7 +27,14 @@ function M.getSelectedText()
                 -- clear the text to simulate cut behavior (clear until response starts)
                 -- could select all to simulate having copied it (so response replaces it too)
                 -- excel assume no selection == replace all too
-                focusedElement:setAttributeValue("AXValue", "")
+                focusedElement:setAttributeValue("AXValue", "") -- TODO not working in excel
+                if name == "Microsoft Excel" then
+                    -- AXValue replace isn't working in excel so use cmd+A is fine
+                    -- *** FYI super cool to use this prompt in excel:
+                    --   average of A1 to A12
+                    --   (F2 edit then ask... as it types into cell the range selects!)
+                    hs.eventtap.keyStroke({ "cmd" }, "a")
+                end
             end
             -- print("No selection or unsupported element.")
             return value
