@@ -23,5 +23,3 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "T", function()
     local result = require("config.ask.selection").getSelectedText()
     print("result:\n ", result)
 end)
-
-require("config.preloads")

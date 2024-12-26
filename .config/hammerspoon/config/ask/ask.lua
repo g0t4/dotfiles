@@ -7,6 +7,7 @@ local service = services.getService()
 local inspect = require("hs.inspect")
 print("service", inspect(services.logSafeService(service)))
 
+require("config.ask.preloads") -- optional
 
 local selection = require("config.ask.selection")
 
