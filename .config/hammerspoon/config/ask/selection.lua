@@ -1,7 +1,5 @@
 local M = {}
 
--- local t = require("config.times")
-
 function M.getSelectedText()
     -- NOTES:
     --   selected text does not work in iTerm (at least not in nvim)... that'sfine as I am not using this at all in iterm... if I was I could just impl smth specific to iterm most likley...
@@ -11,10 +9,8 @@ function M.getSelectedText()
     -- ~ 6 to 10ms first call (sometimes <1ms too)
     --   then <1ms on back to back calls
     --   max was 25ms one time... still less than 30ms just to select text with keystroke!!!
-    -- t.set_start_time()
     -- COOL dont even need to specify the app! just finds frontmost app's focused element!
     local focusedElement = hs.axuielement.systemWideElement():attributeValue("AXFocusedUIElement")
-    -- t.print_elapsed("AXFocusedUIElement")
 
     local app = hs.application.frontmostApplication()
 
