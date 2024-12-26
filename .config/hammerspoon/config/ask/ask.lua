@@ -39,7 +39,7 @@ function M.AskOpenAIStreaming()
 
     -- TEST keyStroke app parameter (invoke this func, then switch apps in 3 seconds and see if other app still receives the keystrokes -- i.e. selected text, copied text and hopefully pasted too)
     local timer = require("hs.timer")
-    timer.usleep(3000000)
+    timer.usleep(2000000)
 
 
 
@@ -51,11 +51,12 @@ function M.AskOpenAIStreaming()
     --
     -- PRN why not clear clipboard and wait for it to be set, instead of fixed delay? do this if you further want to optimize timing
     -- trigger select all:
-    hs.eventtap.keyStroke({ "cmd" }, "a", keystrokeDelay, app) -- FYI passing app is optional, doing so to test if it helps if something steals focus
+    hs.eventtap.keyStroke({ "cmd" }, "a", keystrokeDelay) -- FYI passing app is optional, doing so to test if it helps if something steals focus
     -- trigger cut: (feels much faster b/c of change in screen contents) static screen contents is gonna feel slower (even if its not)...
     --    might also be faster to paste w/o having selection... PRN time it to see if initial paste is net faster w/ cut vs copy
     -- FYI cut vs copy requires double undo to get back to original prompt to retry, NBD but a slight downside
-    hs.eventtap.keyStroke({ "cmd" }, "x", keystrokeDelay, app)
+    hs.eventtap.keyStroke({ "cmd" }, "x", keystrokeDelay)
+    -- FTR, passing app param to keyStroke worked for Cmd+A to select text, but not for Cmd+X (nor Cmd+C) to cut/copy the text... DARN... also FYI paste text worked if I was in diff app so I will leave that as that is the one area someone might run into issues... maybe also gonna need to ensure frontmost window is the same?
 
     local prompt = hs.pasteboard.getContents() -- < 0.6ms
     -- print("Prompt:", prompt)
