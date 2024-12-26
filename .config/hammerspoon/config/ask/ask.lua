@@ -37,11 +37,13 @@ function M.AskOpenAIStreaming()
     -- -- trigger select all =>
     -- TODO pass app as last arg to keyStroke? does it matter for timing?
     -- -- *** standalone 200ms!!!
-    hs.eventtap.keyStroke({ "cmd" }, "a", 100000) -- !!! BOTTLENECK
+    -- TODO how long can keystroke delay be?
+    local keystrokeDelay = 100000
+    hs.eventtap.keyStroke({ "cmd" }, "a", keystrokeDelay)
     -- OK 100ms is working fine for now... and feels maybe fast enough?
     print_elapsed("select all")
     -- -- trigger copy
-    hs.eventtap.keyStroke({ "cmd" }, "c", 100000) -- !!! BOTTLENECK
+    hs.eventtap.keyStroke({ "cmd" }, "c", keystrokeDelay)
     -- -- *** standalone 200ms!!!
     print_elapsed("copy")
     -- https://www.hammerspoon.org/docs/hs.eventtap.html#keyStroke (200ms is default keystroke delay)
