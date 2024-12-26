@@ -45,6 +45,7 @@ function M.AskOpenAIStreaming()
     hs.eventtap.keyStroke({ "cmd" }, "a", keystrokeDelay)
     -- trigger cut: (feels much faster b/c of change in screen contents) static screen contents is gonna feel slower (even if its not)...
     --    might also be faster to paste w/o having selection... PRN time it to see if initial paste is net faster w/ cut vs copy
+    -- FYI cut vs copy requires double undo to get back to original prompt to retry, NBD but a slight downside
     hs.eventtap.keyStroke({ "cmd" }, "x", keystrokeDelay)
 
     local prompt = hs.pasteboard.getContents() -- < 0.6ms
