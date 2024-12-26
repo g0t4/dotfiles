@@ -8,10 +8,6 @@ local inspect = require("hs.inspect")
 print("service", inspect(services.logSafeService(service)))
 
 function M.AskOpenAIStreaming()
-    -- docs: https://www.hammerspoon.org/docs/hs.application.html#name
-    -- run from CLI:
-    -- hs -c 'AskOpenAIStreaming()'
-
     -- local socket = require("socket")
     -- local start_time = socket.gettime()
     --
@@ -20,29 +16,24 @@ function M.AskOpenAIStreaming()
     --     print(string.format("%s: %.6f seconds", message, elapsed_time))
     -- end
 
-    local app = hs.application.frontmostApplication()
-    -- print_elapsed("frontmost") -- < 0.5ms
+    local app = hs.application.frontmostApplication() -- < 0.5ms
     -- todo use this to decide how to copy the current context... i.e. in AppleScript context I expect to already copy the relevant question part... whereas in devtools I just wanna grab the full command line and so I don't wanna have to select it myself...
     -- ALSO use app to select prompt!
     -- MAYBE even use context of the app (i.e. in devtools) to decide what prompt to use
     --    COULD also have diff prmopts tied to streamdeck buttons (app specific) if I find it useful to control the prompt instead of trying to guess it based on current app... (app by app basis that I care to do this for)
-    -- CAREFUL NOT TO INTRODUCE A TON OF OVERHEAD HERE in app detection
 
     if app:name() == "iTerm2" then
+        -- app:name() is < 0.5ms
         hs.alert.show("use iterm specific shortcut for ask-openai")
         return
     end
-    -- print_elapsed("appname") -- < 0.5ms
-    -- print("appname", app:name())
-    -- "Script Debugger"
-    -- "Script Editor"
-    -- "Microsoft Excel"
+    -- TODO "Script Debugger"
+    -- TODO "Script Editor"
+    -- TODO "Microsoft Excel"
 
-    -- -- TEST keyStroke app parameter (invoke this func, then switch apps in 3 seconds and see if other app still receives the keystrokes -- i.e. selected text, copied text and hopefully pasted too)
-    -- local timer = require("hs.timer")
-    -- timer.usleep(2000000)
+    -- TODO what if I could use applescript to determine if there is a selection already (and not need to have app specific behavior!) -- what if overhead is low enough!?
 
-    local keystrokeDelay = 30000 -- worked: 100ms, 50ms,30m (works, can try lower)... wow we're good at even 25ms/20ms IMO
+    local keystrokeDelay = 30000 -- worked: 100ms, 50ms,30ms (works, can try lower)...
     -- FYI make sure to remove all print statements when testing delays b/c that adds overhead between keystrokes (if used) and will not be there in reality
     -- FYI 5ms sometimes worked then other times failed... 20 is NBD
     -- https://www.hammerspoon.org/docs/hs.eventtap.html#keyStroke (200ms is default keystroke delay)
@@ -57,17 +48,10 @@ function M.AskOpenAIStreaming()
     -- FTR, passing app param to keyStroke worked for Cmd+A to select text, but not for Cmd+X (nor Cmd+C) to cut/copy the text... DARN... also FYI paste text worked if I was in diff app so I will leave that as that is the one area someone might run into issues... maybe also gonna need to ensure frontmost window is the same?
 
     local prompt = hs.pasteboard.getContents() -- < 0.6ms
-    -- print("Prompt:", prompt)
 
     -- if true then
     --     return
     -- end
-
-    -- TODO lookup ask-open service from ~/.local/share/ask/service
-    -- JUST cache it on startup, cuz I can always trigger reload config for ask-openai to switch it -- ZERO latency feels best and is the goal for this rewrite
-    -- TODO with streaming, it feels like gpt-4o/opeani is as fast as groq.. so impressive (also somewhat due to lower overhead - preloaded API key, similar to benefit in my wes.py iterm2 impl)
-
-    -- start_time = socket.gettime()
 
     if service == nil or service.api_key == nil then
         hs.alert.show("Error: No API key for ask-openai, or service config is invalid")
