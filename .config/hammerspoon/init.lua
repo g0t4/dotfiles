@@ -23,34 +23,8 @@ local _application = hs.application
 local _alert = hs.alert
 local _pasteboard = hs.pasteboard
 
-hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "S", function()
-    -- TODO what is this debug hook?
-    -- debug.sethook(function(event, line)
-    --     print("Debug hook triggered: " .. event .. " on line " .. tostring(line))
-    -- end, "c")
-    --
-    -- ! keep around as a good example of streaming from a command's output (instead of http response used for ask-openai)... both are useful to recall (and this concept is somewhat novel in my automations so I don't wanna let it slip my mind)
-
-    local function streamingHandler(_task, stdout, stderr)
-        pasteText(stdout)
-        -- TODO stderr?
-        -- if stdout and stdout ~= "" then
-        --     print("STDOUT: " .. stdout)
-        -- end
-        -- if stderr and stderr ~= "" then
-        --     print("STDERR: " .. stderr)
-        -- end
-        return true
-    end
-    --
-    -- https://www.hammerspoon.org/docs/hs.task.html
-    local task = hs.task.new("/opt/homebrew/bin/fish", function(exitCode)
-        print("Task finished with exit code: " .. exitCode)
-        return true
-    end, streamingHandler, { "-c for i in (seq 1 10); echo -n $i;sleep 0.1; end" }) -- Arguments as a table
-
-    task:start()
-end)
+local streamStdout = require("config.tests.stream-stdout").streamStdout
+hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "S", streamStdout)
 
 local security = require("config.ask.security")
 local helpers = require("config.helpers")
