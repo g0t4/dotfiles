@@ -41,7 +41,7 @@ function M.getService()
             name = "ollama",
             api_key = "whatever",
             base_url = "http://localhost:11434/v1/chat/completions",
-            model = stored.model == "" and "llama-3.2:3b" or stored.model,
+            model = stored.model == "" and "llama3.2:3b" or stored.model,
         }
     end
 
