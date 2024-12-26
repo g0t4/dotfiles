@@ -49,12 +49,12 @@ function M.getPrompt(app)
     if name == "Script Debugger" or name == "Script Editor" then
         -- TODO would it be useful to differentiate Script Debugger vs Script Editor
         --   i.e. the former has better debug tools so might want diff prompt to elucidate setting variables to inspect in Explorer view vs using logs in Script Editor
-        -- TODO max_tokens longer for AppleScript?
-        return { systemMessage = applescriptSystemMessage, max_tokens = 200 }
+        -- try a smidge more for getting code blocks (I noticed that often it stops early b/c runs out of tokens)
+        return { systemMessage = applescriptSystemMessage, max_tokens = 300 }
     end
 
     if name == "Microsoft Excel" then
-        -- TODO max_tokens longer for Excel? or shorter or?
+        -- 200 is more than plenty for an excel formula
         return { systemMessage = excelSystemMessage, max_tokens = 200 }
     end
 
