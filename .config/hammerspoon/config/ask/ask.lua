@@ -37,12 +37,9 @@ function M.AskOpenAIStreaming()
     -- "Script Editor"
     -- "Microsoft Excel"
 
-    -- TEST keyStroke app parameter (invoke this func, then switch apps in 3 seconds and see if other app still receives the keystrokes -- i.e. selected text, copied text and hopefully pasted too)
-    local timer = require("hs.timer")
-    timer.usleep(2000000)
-
-
-
+    -- -- TEST keyStroke app parameter (invoke this func, then switch apps in 3 seconds and see if other app still receives the keystrokes -- i.e. selected text, copied text and hopefully pasted too)
+    -- local timer = require("hs.timer")
+    -- timer.usleep(2000000)
 
     local keystrokeDelay = 30000 -- worked: 100ms, 50ms,30m (works, can try lower)... wow we're good at even 25ms/20ms IMO
     -- FYI make sure to remove all print statements when testing delays b/c that adds overhead between keystrokes (if used) and will not be there in reality
