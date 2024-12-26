@@ -38,7 +38,7 @@ function M.AskOpenAIStreaming()
     -- TODO pass app as last arg to keyStroke? does it matter for timing?
     -- -- *** standalone 200ms!!!
     -- TODO how long can keystroke delay be?
-    local keystrokeDelay = 50000 -- 50ms
+    local keystrokeDelay = 25000 -- worked: 100ms, 50ms
     hs.eventtap.keyStroke({ "cmd" }, "a", keystrokeDelay)
     -- OK 100ms is working fine for now... and feels maybe fast enough?
     print_elapsed("select all")
