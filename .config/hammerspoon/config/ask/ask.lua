@@ -38,15 +38,14 @@ function M.AskOpenAIStreaming()
     -- "Script Editor"
     -- "Microsoft Excel"
 
-    -- TODO pass app as last arg to keyStroke? does it matter for timing?
     local keystrokeDelay = 30000 -- worked: 100ms, 50ms,30m (works, can try lower)... wow we're good at even 25ms/20ms IMO
     -- FYI make sure to remove all print statements when testing delays b/c that adds overhead between keystrokes (if used) and will not be there in reality
     -- FYI 5ms sometimes worked then other times failed... 20 is NBD
     -- https://www.hammerspoon.org/docs/hs.eventtap.html#keyStroke (200ms is default keystroke delay)
     --
-    -- TODO why not clear clipboard and wait for it to be set, instead of fixed delay? do this if you further want to optimize timing
+    -- PRN why not clear clipboard and wait for it to be set, instead of fixed delay? do this if you further want to optimize timing
     -- trigger select all:
-    hs.eventtap.keyStroke({ "cmd" }, "a", keystrokeDelay, app)
+    hs.eventtap.keyStroke({ "cmd" }, "a", keystrokeDelay, app) -- FYI passing app is optional, doing so to test if it helps if something steals focus
     -- trigger cut: (feels much faster b/c of change in screen contents) static screen contents is gonna feel slower (even if its not)...
     --    might also be faster to paste w/o having selection... PRN time it to see if initial paste is net faster w/ cut vs copy
     -- FYI cut vs copy requires double undo to get back to original prompt to retry, NBD but a slight downside
