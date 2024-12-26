@@ -11,13 +11,7 @@ function M.streamStdout()
 
     local function streamingHandler(_task, stdout, stderr)
         pasteText(stdout)
-        -- TODO stderr?
-        -- if stdout and stdout ~= "" then
-        --     print("STDOUT: " .. stdout)
-        -- end
-        -- if stderr and stderr ~= "" then
-        --     print("STDERR: " .. stderr)
-        -- end
+        -- pasteText("...")
         return true
     end
     --
