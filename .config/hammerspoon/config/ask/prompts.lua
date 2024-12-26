@@ -1,6 +1,6 @@
 local M = {}
 
-local system_message = [[
+local devtools_system_message = [[
 You are a chrome devtools expert.
 The user is working in the devtools Console in the Brave Beta Browser.
 The user needs help completing a javascript command.
@@ -13,7 +13,7 @@ An example of a command line could be `find the first div on the page` and a val
 ]]
 
 function M.getPrompt(app)
-    return system_message
+    return devtools_system_message
 end
 
 return M
