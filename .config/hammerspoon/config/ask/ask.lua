@@ -78,6 +78,7 @@ An example of a command line could be `find the first div on the page` and a val
     -- end
 
 
+    -- THIS IS NOT STREAMING the result back ... hrm does the http client not support that? or is it too fast or?
     hs.http.asyncPost(url, body, headers, function(status, response, _)
         if status ~= 200 then
             hs.alert.show("Error: " .. status)
@@ -97,6 +98,7 @@ An example of a command line could be `find the first div on the page` and a val
                 end
             end
         end
+        print("response", response)
     end)
 end
 
