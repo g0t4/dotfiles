@@ -38,6 +38,9 @@ function M.getStoredService()
     -- split on first space
     local service = contents:match("(.-)%s")
     local model = contents:match("%s(.-)$")
+    -- trim new lines if any
+    service = service:gsub("\n", "")
+    model = model:gsub("\n", "")
     return { service = service, model = model }
 end
 
