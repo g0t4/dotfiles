@@ -28,6 +28,7 @@ Comments are ok, only if absolutely necessary.
 No explanation. No markdown. No markdown with backticks ` nor ```.
 ]]
 
+-- TODO max_tokens longer for AppleScript?
 
 function M.getPrompt(app)
     local name = app:name()
