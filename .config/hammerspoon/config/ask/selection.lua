@@ -12,6 +12,7 @@ function M.getSelectedText()
     --   then <1ms on back to back calls
     --   max was 25ms one time... still less than 30ms just to select text with keystroke!!!
     -- t.set_start_time()
+    -- COOL dont even need to specify the app! just finds frontmost app's focused element!
     local focusedElement = hs.axuielement.systemWideElement():attributeValue("AXFocusedUIElement")
     -- t.print_elapsed("AXFocusedUIElement")
 

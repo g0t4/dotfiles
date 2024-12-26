@@ -7,18 +7,11 @@ local service = services.getService()
 local inspect = require("hs.inspect")
 print("service", inspect(services.logSafeService(service)))
 
-function M.AskOpenAIStreaming()
-    -- local socket = require("socket")
-    -- local start_time = socket.gettime()
-    --
-    -- local function print_elapsed(message)
-    --     local elapsed_time = socket.gettime() - start_time
-    --     print(string.format("%s: %.6f seconds", message, elapsed_time))
-    -- end
 
+local selection = require("config.ask.selection")
+
+function M.AskOpenAIStreaming()
     local app = hs.application.frontmostApplication() -- < 0.5ms
-    -- todo use this to decide how to copy the current context... i.e. in AppleScript context I expect to already copy the relevant question part... whereas in devtools I just wanna grab the full command line and so I don't wanna have to select it myself...
-    -- ALSO use app to select prompt!
     -- MAYBE even use context of the app (i.e. in devtools) to decide what prompt to use
     --    COULD also have diff prmopts tied to streamdeck buttons (app specific) if I find it useful to control the prompt instead of trying to guess it based on current app... (app by app basis that I care to do this for)
 
@@ -27,27 +20,12 @@ function M.AskOpenAIStreaming()
         hs.alert.show("use iterm specific shortcut for ask-openai")
         return
     end
+    -- TODO use app to select prompt!
     -- TODO "Script Debugger"
     -- TODO "Script Editor"
     -- TODO "Microsoft Excel"
 
-    -- TODO what if I could use applescript to determine if there is a selection already (and not need to have app specific behavior!) -- what if overhead is low enough!?
-
-    local keystrokeDelay = 30000 -- worked: 100ms, 50ms,30ms (works, can try lower)...
-    -- FYI make sure to remove all print statements when testing delays b/c that adds overhead between keystrokes (if used) and will not be there in reality
-    -- FYI 5ms sometimes worked then other times failed... 20 is NBD
-    -- https://www.hammerspoon.org/docs/hs.eventtap.html#keyStroke (200ms is default keystroke delay)
-    --
-    -- PRN why not clear clipboard and wait for it to be set, instead of fixed delay? do this if you further want to optimize timing
-    -- trigger select all:
-    hs.eventtap.keyStroke({ "cmd" }, "a", keystrokeDelay) -- FYI passing app is optional, doing so to test if it helps if something steals focus
-    -- trigger cut: (feels much faster b/c of change in screen contents) static screen contents is gonna feel slower (even if its not)...
-    --    might also be faster to paste w/o having selection... PRN time it to see if initial paste is net faster w/ cut vs copy
-    -- FYI cut vs copy requires double undo to get back to original prompt to retry, NBD but a slight downside
-    hs.eventtap.keyStroke({ "cmd" }, "x", keystrokeDelay)
-    -- FTR, passing app param to keyStroke worked for Cmd+A to select text, but not for Cmd+X (nor Cmd+C) to cut/copy the text... DARN... also FYI paste text worked if I was in diff app so I will leave that as that is the one area someone might run into issues... maybe also gonna need to ensure frontmost window is the same?
-
-    local prompt = hs.pasteboard.getContents() -- < 0.6ms
+    local prompt = selection.getSelectedText()
 
     -- if true then
     --     return
