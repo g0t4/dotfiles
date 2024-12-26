@@ -13,18 +13,6 @@ hs.console.darkMode(true)
 --     hs -c 'hs.alert.show("Hello, Stream Deck!")'
 hs.ipc.cli = true
 
--- "preload" eventtap so I don't get load message in KM shell script call to `hs -c 'AskOpenAIStreaming()'` ... that way I can leave legit output messages to show in a window (unless I encounter other
--- annoyances in which case I should turn off showing output in KM macro's action)
--- TODO how about not show loaded modules over stdout?! OR hide it when I run KM macro STDOUT>/dev/null b/c I only care about STDERR me thinks
-local _et = hs.eventtap
-local _json = hs.json
-local _http = hs.http
-local _application = hs.application
-local _alert = hs.alert
-local _pasteboard = hs.pasteboard
-local _task = hs.task
-local _axuielement = hs.axuielement
-
 local streamStdout = require("config.tests.stream-stdout").streamStdout
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "S", streamStdout)
 
@@ -35,3 +23,5 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "T", function()
     local result = require("config.ask.selection").getSelectedText()
     print("result:\n ", result)
 end)
+
+require("config.preloads")
