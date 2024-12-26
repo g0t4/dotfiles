@@ -40,15 +40,13 @@ function M.AskOpenAIStreaming()
     -- FYI 5ms sometimes worked then other times failed... 20 is NBD
     -- https://www.hammerspoon.org/docs/hs.eventtap.html#keyStroke (200ms is default keystroke delay)
     --
+    -- TODO why not clear clipboard and wait for it to be set, instead of fixed delay? do this if you further want to optimize timing
     -- trigger select all:
     hs.eventtap.keyStroke({ "cmd" }, "a", keystrokeDelay)
     -- trigger copy:
-    hs.eventtap.keyStroke({ "cmd" }, "c", keystrokeDelay)
-
-    -- HOW else can I copy faster? or get the text?!
-    -- FYI can try applescript but I dont think that's necessary, unless issuing keystrokes is also slow, the 200 ms is artificial (potentially)
-    -- can system events select all and copy for the front most app faster?
-
+    -- hs.eventtap.keyStroke({ "cmd" }, "c", keystrokeDelay)
+    -- trigger cut: (see if ux feels faster b/c you see it cleared)
+    hs.eventtap.keyStroke({ "cmd" }, "x", keystrokeDelay)
 
     local prompt = hs.pasteboard.getContents() -- < 0.6ms
     -- print("Prompt:", prompt)
