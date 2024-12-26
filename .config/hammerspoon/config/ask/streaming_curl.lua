@@ -1,6 +1,6 @@
 local M = {}
 
-function M.streamingRequest(url, method, headers, body, callback)
+function M.streamingRequest(url, method, headers, body, streamingCallback, completeCallback)
     local args = { "--no-buffer", "-X", method, url }
 
     for key, value in pairs(headers or {}) do
@@ -13,19 +13,7 @@ function M.streamingRequest(url, method, headers, body, callback)
         table.insert(args, body)
     end
 
-    local task = hs.task.new("/usr/bin/curl",
-        function(exitCode, stdOut, stdErr)
-            if exitCode ~= 0 then
-                return callback(false, stdErr, exitCode)
-            else
-                return callback(true, stdOut, exitCode)
-            end
-        end,
-        function(task, chunk)
-            return callback(true, chunk)
-        end,
-        args
-    )
+    local task = hs.task.new("/usr/bin/curl", completeCallback, streamingCallback, args)
 
     task:start()
 end

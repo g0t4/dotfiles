@@ -121,21 +121,35 @@ An example of a command line could be `find the first div on the page` and a val
     local streamingRequest = require("config.ask.streaming_curl").streamingRequest
 
     -- start_time = socket.gettime()
-    streamingRequest(url, "POST", headers, body, function(success, chunk, exitCode)
-        -- print_elapsed("streaming request")
-        -- openai takes about 280ms until first chunk (FAST!)
-        -- depends on length but done by 420ms for one small test case
-        if not success then
+    local function completeCallback(exitCode, stdout, stderr)
+        if exitCode ~= 0 then
+            -- print_elapsed("complete callback")
             -- GOOD TEST CASE use ollama and make sure its not running! works nicely as is:
-            hs.alert.show("Error in streaming request: " .. exitCode)
-            print("Error in streaming request:", chunk, "Exit Code:", exitCode)
-        else
-            -- print("Chunk received:", chunk)
-            -- interesting that at this point, the prints don't get routed to the KM window that pops up...
-            processChunk(chunk)
+            hs.alert.show("Error in streaming request: " .. exitCode .. " see hammerspoon console logs")
+            print("completeCallback - STDERR: ", stderr)
+            print("completeCallback - STDOUT: ", stdout)
+            print("completeCallback - Exit Code:", exitCode)
         end
+        -- TODO if STDERR not empty?
+        -- should all output go to streaming callback unless I return false in it?
         return true
-    end)
+    end
+
+    local function streamingCallback(task, stdout, stderr)
+        -- print("Chunk received:", chunk)
+        -- TODO handle error response format, is this consistent?, i.e. use invalid model name with ollama and the only chunk you get is:
+        -- {"error":{"message":"model \"llama-3.2:3b\" not found, try pulling it first","type":"api_error","param":null,"code":null}}
+        --   IS THIS A UNIFORM FORMAT (assuming request itself doesn't fail)?
+        --
+        -- interesting that at this point, the prints don't get routed to the KM window that pops up...
+        processChunk(stdout)
+
+        -- TODO if STDERR not empty?
+
+        return true -- continue streaming, false would result in rest going to final callback (IIUC)
+    end
+
+    streamingRequest(url, "POST", headers, body, streamingCallback, completeCallback)
 
     -- THIS IS NOT STREAMING the result back ... hrm does the http client not support that? or is it too fast or?
     -- if status ~= 200 then
