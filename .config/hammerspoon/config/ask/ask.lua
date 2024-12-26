@@ -123,6 +123,7 @@ An example of a command line could be `find the first div on the page` and a val
     -- start_time = socket.gettime()
     local function completeCallback(exitCode, stdout, stderr)
         if exitCode ~= 0 then
+            -- test this: ollama set invalid url (delete c in completion)... then curl w/ -fsSL will use STDERR to print error and that is detected here!
             -- print_elapsed("complete callback")
             -- GOOD TEST CASE use ollama and make sure its not running! works nicely as is:
             hs.alert.show("Error in streaming request: " .. exitCode .. " see hammerspoon console logs")
@@ -136,6 +137,15 @@ An example of a command line could be `find the first div on the page` and a val
     end
 
     local function streamingCallback(task, stdout, stderr)
+        if stderr ~= "" then
+            -- print_elapsed("streaming callback")
+            -- GOOD TEST CASE use ollama and make sure its not running! works nicely as is:
+            hs.alert.show("Error in streaming request: " .. stderr .. " see hammerspoon console logs")
+            print("streamingCallback - STDERR: ", stderr)
+            print("streamingCallback - STDOUT: ", stdout)
+            return false
+        end
+
         -- print("Chunk received:", chunk)
         -- TODO handle error response format, is this consistent?, i.e. use invalid model name with ollama and the only chunk you get is:
         -- {"error":{"message":"model \"llama-3.2:3b\" not found, try pulling it first","type":"api_error","param":null,"code":null}}
@@ -143,8 +153,6 @@ An example of a command line could be `find the first div on the page` and a val
         --
         -- interesting that at this point, the prints don't get routed to the KM window that pops up...
         processChunk(stdout)
-
-        -- TODO if STDERR not empty?
 
         return true -- continue streaming, false would result in rest going to final callback (IIUC)
     end

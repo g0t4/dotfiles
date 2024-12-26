@@ -1,7 +1,7 @@
 local M = {}
 
 function M.streamingRequest(url, method, headers, body, streamingCallback, completeCallback)
-    local args = { "--no-buffer", "-X", method, url }
+    local args = { "-fsSL", "--no-buffer", "-X", method, url }
 
     for key, value in pairs(headers or {}) do
         table.insert(args, "-H")
