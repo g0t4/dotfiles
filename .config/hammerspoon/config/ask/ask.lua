@@ -11,13 +11,14 @@ function M.AskOpenAIStreaming()
     -- docs: https://www.hammerspoon.org/docs/hs.application.html#name
     -- run from CLI:
     -- hs -c 'AskOpenAIStreaming()'
-    local socket = require("socket")
-    local start_time = socket.gettime()
 
-    local function print_elapsed(message)
-        local elapsed_time = socket.gettime() - start_time
-        print(string.format("%s: %.6f seconds", message, elapsed_time))
-    end
+    -- local socket = require("socket")
+    -- local start_time = socket.gettime()
+    --
+    -- local function print_elapsed(message)
+    --     local elapsed_time = socket.gettime() - start_time
+    --     print(string.format("%s: %.6f seconds", message, elapsed_time))
+    -- end
 
     local app = hs.application.frontmostApplication()
     -- print_elapsed("frontmost") -- < 0.5ms
@@ -120,8 +121,7 @@ An example of a command line could be `find the first div on the page` and a val
 
     local streamingRequest = require("config.ask.streaming_curl").streamingRequest
 
-    start_time = socket.gettime()
-
+    -- start_time = socket.gettime()
     streamingRequest(url, "POST", headers, body, function(success, chunk, exitCode)
         -- print_elapsed("streaming request")
         -- openai takes about 280ms until first chunk (FAST!)
