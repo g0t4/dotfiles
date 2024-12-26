@@ -1,11 +1,11 @@
 local M = {}
 
-local security = require("config.ask.security")
 local helpers = require("config.helpers")
 
-local apiKey = security.getSecret("ask", "openai")
-
-local model = "gpt-4o"
+local services = require("config.ask.services")
+local service = services.getService()
+local inspect = require("hs.inspect")
+print("service", inspect(service))
 
 function M.AskOpenAIStreaming()
     -- docs: https://www.hammerspoon.org/docs/hs.application.html#name
@@ -60,14 +60,15 @@ function M.AskOpenAIStreaming()
 
     -- start_time = socket.gettime()
 
-    if apiKey == nil then
-        hs.alert.show("Error: No API key for ask-openai")
+    if service == nil or service.api_key == nil then
+        hs.alert.show("Error: No API key for ask-openai, or service config is invalid")
         return
     end
 
-    local url = "https://api.openai.com/v1/chat/completions"
+    local url = service.base_url
+
     local headers = {
-        ["Authorization"] = "Bearer " .. apiKey,
+        ["Authorization"] = "Bearer " .. service.api_key,
         ["Content-Type"] = "application/json",
     }
 
@@ -84,7 +85,7 @@ An example of a command line could be `find the first div on the page` and a val
 ]]
 
     local body = hs.json.encode({
-        model = model,
+        model = service.model,
         messages = {
             { role = "system", content = system_message },
             { role = "user",   content = prompt },
