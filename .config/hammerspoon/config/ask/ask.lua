@@ -33,6 +33,10 @@ function M.AskOpenAIStreaming()
         return
     end
     -- print_elapsed("appname") -- < 0.5ms
+    -- print("appname", app:name())
+    -- "Script Debugger"
+    -- "Script Editor"
+    -- "Microsoft Excel"
 
     -- TODO pass app as last arg to keyStroke? does it matter for timing?
     local keystrokeDelay = 30000 -- worked: 100ms, 50ms,30m (works, can try lower)... wow we're good at even 25ms/20ms IMO
@@ -42,11 +46,11 @@ function M.AskOpenAIStreaming()
     --
     -- TODO why not clear clipboard and wait for it to be set, instead of fixed delay? do this if you further want to optimize timing
     -- trigger select all:
-    hs.eventtap.keyStroke({ "cmd" }, "a", keystrokeDelay)
+    hs.eventtap.keyStroke({ "cmd" }, "a", keystrokeDelay, app)
     -- trigger cut: (feels much faster b/c of change in screen contents) static screen contents is gonna feel slower (even if its not)...
     --    might also be faster to paste w/o having selection... PRN time it to see if initial paste is net faster w/ cut vs copy
     -- FYI cut vs copy requires double undo to get back to original prompt to retry, NBD but a slight downside
-    hs.eventtap.keyStroke({ "cmd" }, "x", keystrokeDelay)
+    hs.eventtap.keyStroke({ "cmd" }, "x", keystrokeDelay, app)
 
     local prompt = hs.pasteboard.getContents() -- < 0.6ms
     -- print("Prompt:", prompt)
