@@ -157,12 +157,14 @@ An example of a command line could be `find the first div on the page` and a val
         end
 
         -- print("Chunk received:", chunk)
-        -- TODO handle error response format, is this consistent?, i.e. use invalid model name with ollama and the only chunk you get is:
-        -- {"error":{"message":"model \"llama-3.2:3b\" not found, try pulling it first","type":"api_error","param":null,"code":null}}
-        --   IS THIS A UNIFORM FORMAT (assuming request itself doesn't fail)?
         --
         -- interesting that at this point, the prints don't get routed to the KM window that pops up...
         processChunk(stdout)
+
+        -- FTR when I wasn't checking stderr and not passing -fsSL to curl, there was a stdout error object for ollama API if model is invalid, might want to parse that too or instead of stderr/-fsSL (-fsS part causes diff error handling)...
+        -- {"error":{"message":"model \"llama-3.2:3b\" not found, try pulling it first","type":"api_error","param":null,"code":null}}
+        --   IS THIS A UNIFORM FORMAT (assuming request itself doesn't fail)?
+
 
         return true -- continue streaming, false would result in rest going to final callback (IIUC)
     end
