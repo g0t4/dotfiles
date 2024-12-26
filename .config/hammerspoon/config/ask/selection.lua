@@ -1,7 +1,10 @@
--- OMG I can return both the selection AND the value of the textbox... WITHOUT using the clipboard at FUCKING ALL
--- AND THIS APPEARS TO PERFORM at least somewhat well
---
-function GetSelectedText()
+local M = {}
+
+function M.getSelectedText()
+    -- OMG I can return both the selection AND the value of the textbox... WITHOUT using the clipboard at FUCKING ALL
+    -- AND THIS APPEARS TO PERFORM at least somewhat well
+    --
+
     local socket = require("socket")
     local start_time = socket.gettime()
 
@@ -34,3 +37,5 @@ function GetSelectedText()
         return "No focused element."
     end
 end
+
+return M

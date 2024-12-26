@@ -29,9 +29,8 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "S", streamStdout)
 
 AskOpenAIStreaming = require("config.ask.ask").AskOpenAIStreaming
 
-require("config.ask.selection")
 -- test w/ T
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "T", function()
-    local result = GetSelectedText()
-    -- print("result", result)
+    local result = require("config.ask.selection").getSelectedText()
+    print("result", result)
 end)
