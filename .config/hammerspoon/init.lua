@@ -13,24 +13,6 @@ hs.console.darkMode(true)
 --     hs -c 'hs.alert.show("Hello, Stream Deck!")'
 hs.ipc.cli = true
 
--- local function typeText(text)
---     for char in text:gmatch(".") do
---         -- hs.eventtap.keyStroke({}, char, 0)
---         hs.eventtap.keyStrokes(char)
---         hs.timer.usleep(10000)
---         -- 1k is like almost instant
---         -- 5k looks like super fast typer
---         -- 10k looks like fast typer
---         -- 20k?
---     end
--- end
-
-local function pasteText(text)
-    -- TODO if need be, can I track the app that was active when triggering the ask-openai action... so I can make sure to pass it to type into it only... would allow me to switch apps (or more important, if some other app / window pops up... wouldn't steal typing focus)
-    --     hs.eventtap.keyStrokes(text[, application])
-    hs.eventtap.keyStrokes(text)
-end
-
 -- "preload" eventtap so I don't get load message in KM shell script call to `hs -c 'AskOpenAIStreaming()'` ... that way I can leave legit output messages to show in a window (unless I encounter other
 -- annoyances in which case I should turn off showing output in KM macro's action)
 -- TODO how about not show loaded modules over stdout?! OR hide it when I run KM macro STDOUT>/dev/null b/c I only care about STDERR me thinks
@@ -71,6 +53,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "S", function()
 end)
 
 local security = require("config.ask.security")
+local helpers = require("config.helpers")
 
 local apiKey = security.getSecret("ask", "openai")
 
@@ -162,7 +145,7 @@ An example of a command line could be `find the first div on the page` and a val
                 local delta = parsed.choices[1].delta or {}
                 local text = delta.content
                 if text then
-                    pasteText(text)
+                    helpers.pasteText(text)
                 end
             end
         end
