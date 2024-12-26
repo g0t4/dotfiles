@@ -28,13 +28,16 @@ function M.getSelectedText()
                 -- could select all to simulate having copied it (so response replaces it too)
                 -- excel assume no selection == replace all too
                 focusedElement:setAttributeValue("AXValue", "") -- TODO not working in excel
-                if name == "Microsoft Excel" then
+                -- TODO why is setting AXValue empty causing menu to open in dev tools?
+                -- FOR NOW allow just use cmd+a in Brave too (stops the context menu from showing... odd)
+                -- if name == "Microsoft Excel" then
+                    -- TODO when figure out brave devtools, go back to only using cmd+a in excel
                     -- AXValue replace isn't working in excel so use cmd+A is fine
                     -- *** FYI super cool to use this prompt in excel:
                     --   average of A1 to A12
                     --   (F2 edit then ask... as it types into cell the range selects!)
-                    hs.eventtap.keyStroke({ "cmd" }, "a")
-                end
+                    hs.eventtap.keyStroke({ "cmd" }, "a", 0) -- 0ms delay b/c by the time we get any response will be way long enoughk
+                -- end
             end
             -- print("No selection or unsupported element.")
             return value
