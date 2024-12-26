@@ -1,8 +1,20 @@
 local security = require("config.ask.security")
+local inspect = require("hs.inspect")
 
 local M = {}
 
 local filePath = os.getenv("HOME") .. "/.local/share/ask/service"
+
+function M.logSafeService(service)
+    -- DO NOT LOG API KEY, log the rest:
+    local tmp = {}
+    for key, value in pairs(service) do
+        if key ~= "api_key" then
+            tmp[key] = value
+        end
+    end
+    return tmp
+end
 
 local function readServiceFile()
     local file = io.open(filePath, "r")

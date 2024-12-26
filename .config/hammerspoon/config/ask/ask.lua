@@ -4,8 +4,9 @@ local helpers = require("config.helpers")
 
 local services = require("config.ask.services")
 local service = services.getService()
+
 local inspect = require("hs.inspect")
-print("service", inspect(service))
+print("service", inspect(services.logSafeService(service)))
 
 function M.AskOpenAIStreaming()
     -- docs: https://www.hammerspoon.org/docs/hs.application.html#name
@@ -40,9 +41,7 @@ function M.AskOpenAIStreaming()
 
     -- TEST keyStroke app parameter (invoke this func, then switch apps in 3 seconds and see if other app still receives the keystrokes -- i.e. selected text, copied text and hopefully pasted too)
     local timer = require("hs.timer")
-
     timer.usleep(3000000)
-
 
 
 
