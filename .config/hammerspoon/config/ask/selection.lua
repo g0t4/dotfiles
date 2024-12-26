@@ -16,19 +16,27 @@ function M.getSelectedText()
     local focusedElement = hs.axuielement.systemWideElement():attributeValue("AXFocusedUIElement")
     -- t.print_elapsed("AXFocusedUIElement")
 
+    local app = hs.application.frontmostApplication()
+
     if focusedElement then
         local selectedText = focusedElement:attributeValue("AXSelectedText") -- < 0.4ms !!
 
         if selectedText and selectedText ~= "" then
-            print("selected text found")
+            -- print("selected text found")
             return selectedText
         else
-            print("No selection or unsupported element.")
             local value = focusedElement:attributeValue("AXValue") -- < 0.4ms !!
+            if app:name() == "Brave Browser Beta" then
+                -- clear the text to simulate cut behavior (clear until response starts)
+                -- could select all to simulate having copied it (so response replaces it too)
+                focusedElement:setAttributeValue("AXValue", "")
+            end
+            -- print("No selection or unsupported element.")
             return value
         end
     else
-        return "No focused element."
+        print("No selection or unsupported element.")
+        return ""
     end
 end
 

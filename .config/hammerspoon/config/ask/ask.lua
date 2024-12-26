@@ -26,6 +26,10 @@ function M.AskOpenAIStreaming()
     -- TODO "Microsoft Excel"
 
     local prompt = selection.getSelectedText()
+    if prompt == "" then
+        hs.alert.show("No selection found, try again...")
+        return
+    end
 
     -- if true then
     --     return
