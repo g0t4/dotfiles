@@ -123,7 +123,7 @@ An example of a command line could be `find the first div on the page` and a val
     start_time = socket.gettime()
 
     streamingRequest(url, "POST", headers, body, function(success, chunk, exitCode)
-        print_elapsed("streaming request")
+        -- print_elapsed("streaming request")
         -- openai takes about 280ms until first chunk (FAST!)
         -- depends on length but done by 420ms for one small test case
         if not success then

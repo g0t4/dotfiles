@@ -3,6 +3,7 @@ local M = {}
 function M.pasteText(text)
     -- TODO if need be, can I track the app that was active when triggering the ask-openai action... so I can make sure to pass it to type into it only... would allow me to switch apps (or more important, if some other app / window pops up... wouldn't steal typing focus)
     --     hs.eventtap.keyStrokes(text[, application])
+    -- FYI no added delay here like keyStroke (interesting)
     hs.eventtap.keyStrokes(text)
 end
 
