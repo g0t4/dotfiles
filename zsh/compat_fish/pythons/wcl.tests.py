@@ -46,6 +46,12 @@ class TestMapToRepoDir(unittest.TestCase):
             parse_repo('https://sourceware.org/git/glibc.git'))
         self.assertEqual(repo_dir, 'sourceware.org/git/glibc')
 
+    def test_trailing_slash(self):
+        repo_dir = relative_repo_dir(
+            parse_repo('https://github.com/Hammerspoon/Spoons/'))
+        self.assertEqual(repo_dir, 'github/Hammerspoon/Spoons')
+
+
 
 class TestNormalizedCloneUrl(unittest.TestCase):
 
