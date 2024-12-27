@@ -81,3 +81,8 @@ spoon.Emojis:bindHotkeys({
         "E",
     }
 })
+
+-- hs.loadSpoon("HSearch")
+-- hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "F", function()
+--     spoon.HSearch:toggleShow()
+-- end)
