@@ -155,6 +155,7 @@ def parse_repo(url: str) -> ParsedRepo|None:
     elif url.startswith("https://"):  # HTTPS or similar
         parsed = urlparse(url)
         path = parsed.path.lstrip("/")  # Remove leading '/'
+        path = path.rstrip("/")  # Remove trailing '/'
 
         # org/repo/blob/branch/path/to/file, strip blob+ (must have org/repo before blob)
         # PRN if it happens to be that a repo is named blob/tree then we have issues!
