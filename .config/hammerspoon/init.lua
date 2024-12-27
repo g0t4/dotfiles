@@ -63,3 +63,8 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "M", function()
     -- end)
     -- timer:start()
 end)
+
+hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "C", function()
+    hs.loadSpoon("AClock")
+    spoon.AClock:toggleShow()
+end)

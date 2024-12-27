@@ -100,6 +100,8 @@
 
         // hammerspoon (don't try to get LS to work with hs beyond this (not warn about hs usages))
         "hs",
+        "spoon",
+        // TODO move these to project specific config files? can I have coc-settings.json in my .config/hammerspoon dir?
     ],
     //
     // per https://github.com/UltiRequiem/coc-zig
