@@ -73,3 +73,11 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "C", function()
     hs.loadSpoon("AClock")
     spoon.AClock:toggleShow()
 end)
+
+hs.loadSpoon("Emojis")
+spoon.Emojis:bindHotkeys({
+    toggle = {
+        { "cmd", "alt", "ctrl" },
+        "E",
+    }
+})
