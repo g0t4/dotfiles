@@ -75,6 +75,79 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "C", function()
     spoon.AClock:toggleShow()
 end)
 
+hs.loadSpoon("WindowHalfsAndThirds")
+spoon.WindowHalfsAndThirds:bindHotkeys({
+
+    -- TODO use diff win spoon for move to diff monitor/display
+    -- https://www.hammerspoon.org/Spoons/WinWin.html
+
+    -- TOGGLES max / restore!!! YES
+    max_toggle = {
+        { "cmd", "alt", "ctrl" },
+        -- up
+        "Up",
+    },
+
+    -- *** HABITUATE
+    -- revert window change!!
+    undo = {
+        { "cmd", "alt", "ctrl" },
+        "Z",
+    },
+
+    -- halves:
+    left_half = {
+        { "cmd", "shift" },
+        "Left",
+    },
+    right_half = {
+        { "cmd", "shift" },
+        "Right",
+    },
+    top_half = {
+        { "cmd", "shift" },
+        "Up",
+    },
+    bottom_half = {
+        { "cmd", "shift" },
+        "Down",
+    },
+
+    -- quarters:
+    top_left = {
+        { "cmd", "shift", "ctrl" },
+        "Pad7",
+    },
+    top_right = {
+        { "cmd", "shift", "ctrl" },
+        "Pad8",
+    },
+    bottom_left = {
+        { "cmd", "shift", "ctrl" },
+        "Pad4",
+    },
+    bottom_right = {
+        { "cmd", "shift", "ctrl" },
+        "Pad5",
+    },
+
+    -- thirds:
+    left_third = {
+        { "cmd", "shift", "ctrl" },
+        "Pad1",
+    },
+    right_third = {
+        { "cmd", "shift", "ctrl" },
+        "Pad2",
+    },
+
+    -- TODO next monitor:
+    --   shift+ctrl+cmd + right
+    -- next_monitor = {
+    --     { "cmd", "shift", "ctrl" },
+    --     "Right",
+    -- },
+})
 
 hs.loadSpoon("Emojis")
 spoon.Emojis:bindHotkeys({
