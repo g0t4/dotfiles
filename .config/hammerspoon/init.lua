@@ -26,6 +26,10 @@ end)
 
 local inspect = require("hs.inspect")
 
+
+
+
+
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "W", function()
     -- https://www.hammerspoon.org/docs/hs.window.html
     local window = hs.window.focusedWindow()
@@ -38,6 +42,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "W", function()
         window:setTopLeft({ x = 0, y = 0 })
     end
 end)
+
 
 
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "M", function()
