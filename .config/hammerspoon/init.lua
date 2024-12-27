@@ -75,6 +75,15 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "C", function()
     spoon.AClock:toggleShow()
 end)
 
+hs.loadSpoon("WinWin")
+hs.hotkey.bind({ "cmd", "shift", "ctrl" }, "Right", function()
+    spoon.WinWin:moveToScreen("right")
+end)
+hs.hotkey.bind({ "cmd", "shift", "ctrl" }, "Left", function()
+    -- now I can do left too (bettersnap only had cycle displays key)
+    spoon.WinWin:moveToScreen("left")
+end)
+
 hs.loadSpoon("WindowHalfsAndThirds")
 spoon.WindowHalfsAndThirds:bindHotkeys({
 
@@ -131,22 +140,19 @@ spoon.WindowHalfsAndThirds:bindHotkeys({
         "Pad5",
     },
 
-    -- thirds:
-    left_third = {
-        { "cmd", "shift", "ctrl" },
-        "Pad1",
-    },
-    right_third = {
-        { "cmd", "shift", "ctrl" },
-        "Pad2",
-    },
-
-    -- TODO next monitor:
-    --   shift+ctrl+cmd + right
-    -- next_monitor = {
+    -- For now, I don't think I will need these, esp b/c left/right above has three sizes each to adjust and that sounds good enough for what I might use thirds for
+    --
+    -- -- thirds:
+    -- left_third = {
     --     { "cmd", "shift", "ctrl" },
-    --     "Right",
+    --     "Pad1",
     -- },
+    -- right_third = {
+    --     { "cmd", "shift", "ctrl" },
+    --     "Pad2",
+    -- },
+    -- FYI I do not see a middle third binding?
+
 })
 
 hs.loadSpoon("Emojis")
