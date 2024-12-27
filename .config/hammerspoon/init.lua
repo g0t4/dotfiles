@@ -75,6 +75,10 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "C", function()
     spoon.AClock:toggleShow()
 end)
 
+
+-- TODO add a function to check/install missing spoons using spoon to install spoons: https://www.hammerspoon.org/Spoons/SpoonInstall.html
+--    I think I can call on-demand (don't run on every restart unless it has very little overhead to check spoons)
+
 hs.loadSpoon("WinWin")
 hs.hotkey.bind({ "cmd", "shift", "ctrl" }, "Right", function()
     spoon.WinWin:moveToScreen("right")
