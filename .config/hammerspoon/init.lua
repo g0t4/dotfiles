@@ -69,10 +69,12 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "M", function()
     -- timer:start()
 end)
 
+
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "C", function()
     hs.loadSpoon("AClock")
     spoon.AClock:toggleShow()
 end)
+
 
 hs.loadSpoon("Emojis")
 spoon.Emojis:bindHotkeys({
@@ -81,6 +83,7 @@ spoon.Emojis:bindHotkeys({
         "E",
     }
 })
+
 
 -- hs.loadSpoon("HSearch")
 -- hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "F", function()
