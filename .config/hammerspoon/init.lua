@@ -79,11 +79,13 @@ end)
 -- TODO add a function to check/install missing spoons using spoon to install spoons: https://www.hammerspoon.org/Spoons/SpoonInstall.html
 --    I think I can call on-demand (don't run on every restart unless it has very little overhead to check spoons)
 
+local tripleModifiers = { "cmd", "shift", "ctrl" }
+local doubleModifiers = { "cmd", "shift" }
 hs.loadSpoon("WinWin")
-hs.hotkey.bind({ "cmd", "shift", "ctrl" }, "Right", function()
+hs.hotkey.bind(tripleModifiers, "Right", function()
     spoon.WinWin:moveToScreen("right")
 end)
-hs.hotkey.bind({ "cmd", "shift", "ctrl" }, "Left", function()
+hs.hotkey.bind(tripleModifiers, "Left", function()
     -- now I can do left too (bettersnap only had cycle displays key)
     spoon.WinWin:moveToScreen("left")
     -- PRN if cannot move to the left, cycle to the right most display? or let it stop as it is now?
@@ -92,56 +94,52 @@ end)
 hs.loadSpoon("WindowHalfsAndThirds")
 spoon.WindowHalfsAndThirds:bindHotkeys({
 
-    -- TODO use diff win spoon for move to diff monitor/display
-    -- https://www.hammerspoon.org/Spoons/WinWin.html
-
-    -- TOGGLES max / restore!!! YES
+    -- toggles max (improvement over bettersnap which only does max)
     max_toggle = {
-        { "cmd", "shift", "ctrl" },
-        -- up
+        tripleModifiers,
         "Up",
     },
 
     -- *** HABITUATE
     -- revert window change!!
     undo = {
-        { "cmd", "alt", "ctrl" },
+        tripleModifiers,
         "Z",
     },
 
     -- halves:
     left_half = {
-        { "cmd", "shift" },
+        doubleModifiers,
         "Left",
     },
     right_half = {
-        { "cmd", "shift" },
+        doubleModifiers,
         "Right",
     },
     top_half = {
-        { "cmd", "shift" },
+        doubleModifiers,
         "Up",
     },
     bottom_half = {
-        { "cmd", "shift" },
+        doubleModifiers,
         "Down",
     },
 
     -- quarters:
     top_left = {
-        { "cmd", "shift", "ctrl" },
+        tripleModifiers,
         "Pad7",
     },
     top_right = {
-        { "cmd", "shift", "ctrl" },
+        tripleModifiers,
         "Pad8",
     },
     bottom_left = {
-        { "cmd", "shift", "ctrl" },
+        tripleModifiers,
         "Pad4",
     },
     bottom_right = {
-        { "cmd", "shift", "ctrl" },
+        tripleModifiers,
         "Pad5",
     },
 
@@ -149,11 +147,11 @@ spoon.WindowHalfsAndThirds:bindHotkeys({
     --
     -- -- thirds:
     -- left_third = {
-    --     { "cmd", "shift", "ctrl" },
+    --     tripleModifiers,
     --     "Pad1",
     -- },
     -- right_third = {
-    --     { "cmd", "shift", "ctrl" },
+    --     tripleModifiers,
     --     "Pad2",
     -- },
     -- FYI I do not see a middle third binding?
