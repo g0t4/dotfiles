@@ -121,6 +121,18 @@ function touchp
     set -l parent (dirname $path)
     mkdir -p $parent
     touch $path
+    # PRN handle case where touchp has a / on end and make it behave like mkdir -p in that case? (not create the file)... not really a primary use case for the touch command other than I could write a unified command to create a dir or a file
+end
+
+# TODO unified dir/file create command (like in nvim-tree ... add item => if ends in / then dir, else file)
+function mkpath
+    # if ends in / => dir, else file
+    set -l path $argv
+    if string match --quiet '*/' $path
+        mkdir -p $path
+    else
+        touchp $path
+    end
 end
 
 ## dirs
