@@ -118,9 +118,7 @@ function touchp
     # why use mkdir -p + touch when I can do it all in one command!
     set -l path $argv
     set -l parent (dirname $path)
-    if not test -d $parent
-        mkdir -p $parent
-    end
+    mkdir -p $parent
     touch $path
 end
 
