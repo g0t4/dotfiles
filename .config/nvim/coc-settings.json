@@ -150,7 +150,8 @@
                 // set env vars to configure lsp server options
                 // https://github.com/ndonfris/fish-lsp?tab=readme-ov-file#environment-variables
                 // 2003 is warning about universal variables in a non-interactive context, F it... I don't care... I use them in my ask-openai.fish script which is used in interactive contexts to change ask settings
-                "fish_lsp_diagnostic_disable_error_codes": "2003",
+                "fish_lsp_diagnostic_disable_error_codes": "2003 2001",
+                // 2001 is non-escaped expansion variable in single quote string (fish-lsp 2001) => but that is precisely why I am using single quotes... so don't warn me that I might've mean to use double quotes... you are gonna flag legitimate use of the single quotes (in fact the entire purpose is arguably for this scenario)
             },
             "args": [
                 "start"
