@@ -86,6 +86,7 @@ end)
 hs.hotkey.bind({ "cmd", "shift", "ctrl" }, "Left", function()
     -- now I can do left too (bettersnap only had cycle displays key)
     spoon.WinWin:moveToScreen("left")
+    -- PRN if cannot move to the left, cycle to the right most display? or let it stop as it is now?
 end)
 
 hs.loadSpoon("WindowHalfsAndThirds")
@@ -96,7 +97,7 @@ spoon.WindowHalfsAndThirds:bindHotkeys({
 
     -- TOGGLES max / restore!!! YES
     max_toggle = {
-        { "cmd", "alt", "ctrl" },
+        { "cmd", "shift", "ctrl" },
         -- up
         "Up",
     },
