@@ -127,6 +127,7 @@ end
 function take
     mkdir -p $argv && cd $argv
 end
+abbr mkdir 'mkdir -p' # I already use this in take and that's never been a problem so I suspect its always gonna be fine
 
 
 
