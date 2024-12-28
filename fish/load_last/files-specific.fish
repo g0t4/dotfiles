@@ -114,7 +114,7 @@ end
 
 # *** touchp
 abbr touch touchp # make it explicit and help me remember I made the change
-abbr mkfile touchp # PRN consider renmaing touchp?
+abbr mkfile touchp # PRN consider renaming (and maybe get rid of touch and just make file if not exists?)
 function touchp
     if test -z "$argv"
         echo "create a file and optionally its parent dir(s) if they don't exist"
