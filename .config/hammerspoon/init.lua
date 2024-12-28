@@ -70,15 +70,17 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "M", function()
     -- timer:start()
 end)
 
+-- *** load spoons from the repo so I can clone and update it using git and not one by one "install"
+--    alternatively use spoonInstall?
+--    I did a diff of AClock and Source/AClock.spoon and it matched, maybe others won't?
+local spoons_repo = os.getenv("HOME") .. "/repos/github/Hammerspoon/Spoons/Source/?.spoon/init.lua"
+package.path = package.path .. ";" .. spoons_repo
 
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "C", function()
     hs.loadSpoon("AClock")
     spoon.AClock:toggleShow()
 end)
 
-
--- TODO add a function to check/install missing spoons using spoon to install spoons: https://www.hammerspoon.org/Spoons/SpoonInstall.html
---    I think I can call on-demand (don't run on every restart unless it has very little overhead to check spoons)
 require("config.windows")
 
 -- hs.loadSpoon("HSearch")
