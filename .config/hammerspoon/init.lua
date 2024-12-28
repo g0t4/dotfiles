@@ -84,3 +84,5 @@ require("config.windows")
 -- hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "F", function()
 --     spoon.HSearch:toggleShow()
 -- end)
+
+require("config.appKeys")
