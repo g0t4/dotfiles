@@ -113,6 +113,7 @@ function _enable_fish_suggestions
 end
 
 # *** touchp
+abbr touch touchp # make it explicit and help me remember I made the change
 abbr mkfile touchp # PRN consider renmaing touchp?
 function touchp
     # why use mkdir -p + touch when I can do it all in one command!
