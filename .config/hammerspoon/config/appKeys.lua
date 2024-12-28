@@ -51,7 +51,7 @@ local function activateBindings(appName)
 
     -- YES I am going to overwrite for iTerm too... well I guess KM F10 won't work if it registers before this does... unsure but yeah lets move both here and see how it does (I will disable in KM for now too)
     if appName == "iTerm2" or appName == "Ghostty" then -- Replace with your Vim app name
-        print("Activating Vim bindings for " .. appName)
+        -- print("Activating Vim bindings for " .. appName)
         activeBindings[appName] = {}
         for key, action in pairs(vimBindings) do
             table.insert(activeBindings[appName], hs.hotkey.bind({}, key, action))
