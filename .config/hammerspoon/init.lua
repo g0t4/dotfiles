@@ -7,6 +7,7 @@
 -- config console:
 -- https://www.hammerspoon.org/docs/hs.console.html
 hs.console.darkMode(true)
+-- hs.console.titleVisibility("hidden") -- hide title, but doesn't save space b/c buttons still show... why is there a fat border too below title/button bar?!
 
 -- ensure IPC so `hs` cli works
 --     hs -c 'hs.console.clearConsole()'
