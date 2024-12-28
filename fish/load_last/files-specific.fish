@@ -116,6 +116,13 @@ end
 abbr touch touchp # make it explicit and help me remember I made the change
 abbr mkfile touchp # PRN consider renmaing touchp?
 function touchp
+    if test -z "$argv"
+        echo "create a file and optionally its parent dir(s) if they don't exist"
+        echo "usage: "
+        echo "  touchp path/to/file"
+        return
+    end
+
     # why use mkdir -p + touch when I can do it all in one command!
     set -l path $argv
     set -l parent (dirname $path)
@@ -124,10 +131,17 @@ function touchp
     # PRN handle case where touchp has a / on end and make it behave like mkdir -p in that case? (not create the file)... not really a primary use case for the touch command other than I could write a unified command to create a dir or a file
 end
 
-# TODO unified dir/file create command (like in nvim-tree ... add item => if ends in / then dir, else file)
 function mkpath
     # if ends in / => dir, else file
     set -l path $argv
+
+    if test -z "$path"
+        echo "usage: "
+        echo "  mkpath path/to/file"
+        echo "  mkpath path/to/dir/"
+        return
+    end
+
     if string match --quiet '*/' $path
         mkdir -p $path
     else
@@ -137,6 +151,12 @@ end
 
 ## dirs
 function take
+    if test -z "$argv"
+        echo "create a directory and cd into it"
+        echo "usage: "
+        echo "  take path/to/dir"
+        return
+    end
     mkdir -p $argv && cd $argv
 end
 abbr mkdir 'mkdir -p' # I already use this in take and that's never been a problem so I suspect its always gonna be fine
