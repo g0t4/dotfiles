@@ -3,6 +3,7 @@
 -- FYI it doesn't seem like the API for hs and its extensions were built with any sort of discoverability in mind, the LS can't find most everything (even if I add the path to the extensions to the coc config... so just forget about using that)... i.e. look at require("hs.console") and go to the module and it has like 2 things and no wonder the LS doesn't find anything... it's all globals built on hs.* which is gah
 -- TLDR => hs.* was not built for LS to work, you just have to know what to use (or look at docs)
 -- JUST PUT hs global into lua LS config and be done with that
+local start_time = os.clock()
 
 -- config console:
 -- https://www.hammerspoon.org/docs/hs.console.html
@@ -89,3 +90,6 @@ require("config.windows")
 -- end)
 
 require("config.appKeys")
+
+local end_time = os.clock()
+print("init.lua took", end_time - start_time, "seconds")
