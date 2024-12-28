@@ -112,8 +112,17 @@ function _enable_fish_suggestions
     set -U fish_autosuggestion_enabled 1
 end
 
-
-
+# *** touchp
+abbr mkfile touchp # PRN consider renmaing touchp?
+function touchp
+    # why use mkdir -p + touch when I can do it all in one command!
+    set -l path $argv
+    set -l parent (dirname $path)
+    if not test -d $parent
+        mkdir -p $parent
+    end
+    touch $path
+end
 
 ## dirs
 function take
