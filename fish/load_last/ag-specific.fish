@@ -56,14 +56,6 @@ function agimages
 end
 
 
-
-
-
-
-
-
-
-
 function _agimages-dir
     for p in $argv[1]/*
         if string match -q -r $argv[2] $p then
@@ -73,9 +65,17 @@ function _agimages-dir
     end
 end
 function agimages-global
+
+    # FYI hold down Ctrl+C to stop the loop (will eventually work) dont tap it repeatedly
+
     #-- take a search term, find in common places, i.e. /Applications/X.app/*
     _agimages-dir /Applications "$argv"
     _agimages-dir ~/Applications "$argv"
+
+    # TODO just adding this here, need to revisit how it should work vs other app dirs above... just wanted to make sure I don't forget this spot
+    # /System/Library/CoreServices/Finder.app # i.e. to find Movie dir, or Picture dir icons
+    _agimages-dir /System/Library/CoreServices/ "$argv"
+
     # what other spots?
 
     # this direction would be useful if agimages also takes an optional search term to match the file name (in addition to the extension)
