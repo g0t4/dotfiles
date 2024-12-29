@@ -36,6 +36,24 @@ abbr agz 'ag --search-zip' # search inside zip files (gz,xz only)
 
 
 
+function agimages_filtered
+    # usage:
+    #   agimages_filtered /System/Library/CoreServices/ Picture
+    #   agimages_filtered /System/Library/CoreServices/ Finder
+    #   agimages_filtered /System/Library/CoreServices/ Movie
+
+    # TODO rethink how this works vs agimages, maybe consolidate them?
+
+    set look_in_dir $argv[1]
+    set secondary_path_filter $argv[2]
+    # cannot filter paths with -g and -G with ag command, so use grep as secondary filter to get subset of matching image files
+    set cmd "ag --unrestricted -i -g '\.(png|jpg|jpeg|gif|bmp|tiff|webp|svg|icns|ico)' $look_in_dir | grep -i '$secondary_path_filter'"
+    for f in (eval $cmd)
+        echo $f
+        imgcat $f
+    end
+
+end
 
 function agimages
     set look_in_dir $argv[1] # optional
