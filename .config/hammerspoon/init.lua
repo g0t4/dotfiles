@@ -94,7 +94,6 @@ end)
 
 require("config.windows")
 require("config.appKeys")
-require("config.presentations")
 
 local end_time = os.clock()
 print("init.lua took", end_time - start_time, "seconds")
