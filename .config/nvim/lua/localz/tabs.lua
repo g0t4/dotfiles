@@ -2,6 +2,7 @@
 -- wrap settings
 vim.o.wrap = false  -- global nowrap, consider local settings for this instead
 vim.o.textwidth = 0 -- disable globally, add back if I find myself missing it
+vim.o.wrapmargin = 0 -- disable globally, add back if I find myself missing it
 -- TODO ftplugin/ is overriding textwidth for vim script... grrr
 
 -- *** tabs
