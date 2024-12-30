@@ -271,6 +271,11 @@ local plugin_nvim_cmp = {
         'hrsh7th/cmp-cmdline',
         'hrsh7th/nvim-cmp',
         'supermaven-inc/supermaven-nvim',
+
+        -- optional deps to consider (i.e. snippets)
+        -- 'L3MON4D3/LuaSnip',
+        -- 'saadparwaiz1/cmp_luasnip',
+
     },
 }
 
