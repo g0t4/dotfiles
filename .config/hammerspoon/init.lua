@@ -3,7 +3,8 @@
 -- FYI it doesn't seem like the API for hs and its extensions were built with any sort of discoverability in mind, the LS can't find most everything (even if I add the path to the extensions to the coc config... so just forget about using that)... i.e. look at require("hs.console") and go to the module and it has like 2 things and no wonder the LS doesn't find anything... it's all globals built on hs.* which is gah
 -- TLDR => hs.* was not built for LS to work, you just have to know what to use (or look at docs)
 -- JUST PUT hs global into lua LS config and be done with that
-local start_time = os.clock()
+local start_time = hs.timer.secondsSinceEpoch()
+
 
 require("config.helpers")
 
@@ -86,6 +87,14 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "C", function()
     spoon.AClock:toggleShow()
 end)
 
+-- HOLY CRAP this spoon takes a ton of time to load... 2ish seconds+ and its not the spoons in general b/c AClock is fast
+-- hs.loadSpoon("Emojis")
+-- spoon.Emojis:bindHotkeys({
+--     toggle = {
+--         { "cmd", "alt", "ctrl" },
+--         "E",
+--     }
+-- })
 
 -- hs.loadSpoon("HSearch")
 -- hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "F", function()
@@ -95,5 +104,5 @@ end)
 require("config.windows")
 require("config.appKeys")
 
-local end_time = os.clock()
+local end_time = hs.timer.secondsSinceEpoch()
 print("init.lua took", end_time - start_time, "seconds")

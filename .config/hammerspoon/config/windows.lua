@@ -77,12 +77,3 @@ spoon.WindowHalfsAndThirds:bindHotkeys({
     -- FYI I do not see a middle third binding?
 
 })
-
--- HOLY CRAP this spoon takes a ton of time to load... 2ish seconds+ and its not the spoons in general b/c AClock is fast
--- hs.loadSpoon("Emojis")
--- spoon.Emojis:bindHotkeys({
---     toggle = {
---         { "cmd", "alt", "ctrl" },
---         "E",
---     }
--- })
