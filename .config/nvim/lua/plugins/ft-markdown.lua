@@ -9,6 +9,7 @@ return {
         -- not necessary to `npx yarn build`... `npm install` worked fine for me in the app dir as is show here:
 
         "iamcco/markdown-preview.nvim",
+        enabled = false, -- causing issues during update (rebuild fails w/ npm/yarn error, figure out later or just use a diff plugin)
 
         ft = { "markdown" }, -- lazy load for markdown files only
 
@@ -22,7 +23,7 @@ return {
         end,
     },
 
-    -- -- another good markdown extension with only difference being that it opens a webview window (if configured to do so) instead of a browser window, so I don't need it too 
+    -- -- another good markdown extension with only difference being that it opens a webview window (if configured to do so) instead of a browser window, so I don't need it too
     -- -- uses deno which is another dep I don't care to have everywhere, unless this were a better ext
     -- -- IIRC this one appears maintained (at least vs iamcco above)
     -- {
