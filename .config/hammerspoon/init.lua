@@ -5,6 +5,8 @@
 -- JUST PUT hs global into lua LS config and be done with that
 local start_time = os.clock()
 
+require("config.helpers")
+
 -- config console:
 -- https://www.hammerspoon.org/docs/hs.console.html
 hs.console.darkMode(true)
@@ -84,14 +86,15 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "C", function()
     spoon.AClock:toggleShow()
 end)
 
-require("config.windows")
 
 -- hs.loadSpoon("HSearch")
 -- hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "F", function()
 --     spoon.HSearch:toggleShow()
 -- end)
 
+require("config.windows")
 require("config.appKeys")
+require("config.presentations")
 
 local end_time = os.clock()
 print("init.lua took", end_time - start_time, "seconds")

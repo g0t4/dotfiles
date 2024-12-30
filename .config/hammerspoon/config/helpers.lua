@@ -1,3 +1,5 @@
+local inspect = require("hs.inspect")
+
 local M = {}
 
 function M.pasteText(text, app)
@@ -19,6 +21,10 @@ function M.typeText(text, delay)
         -- 10k looks like fast typer
         -- 20k?
     end
+end
+
+function Dump(what)
+    print(inspect(what))
 end
 
 return M
