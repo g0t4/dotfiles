@@ -25,6 +25,7 @@ ALSO happening on / completions too.. a bit harder to see erorr b/c it can disap
 BTW this still fails evenn if I disable COC for completions (other scenarios)
 
 BTW issue is not b/c of nvim-notify (it just happens the error is thrown during some call to notify... but it happens w/o nvim-notify - regular vim.notify too)
+IIGC is this to do with a buffer for the completion results? ... and IIGC then the completion results aren't being cached b/c of buffer creation issues?
 
 
 
