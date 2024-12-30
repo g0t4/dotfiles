@@ -11,6 +11,8 @@ function PresentationHideMouse()
     -- last_mouse_pos = hs.mouse.absolutePosition()
     if last_mouse_pos == nil then
         last_mouse_pos = hs.mouse.absolutePosition()
+        -- TODO primary vs main screen?
+        -- PRN move mouse to secondary screen? still shows with f'in powerpoint presenter mode that if I hide causes other trouble (can't recall what it was, smth with switching apps while keeping presentation open
         local mode = hs.screen.primaryScreen():currentMode()
         -- Dump(mode)
         -- move to lower right corner
