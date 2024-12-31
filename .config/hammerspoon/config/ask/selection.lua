@@ -11,6 +11,7 @@ function M.getSelectedText()
     --   max was 25ms one time... still less than 30ms just to select text with keystroke!!!
     -- COOL dont even need to specify the app! just finds frontmost app's focused element!
     local focusedElement = hs.axuielement.systemWideElement():attributeValue("AXFocusedUIElement")
+    -- FYI this comes back nil for devtools, not sure why but when I added back Emojis spoon and restarted hs => it worked again... after which I took out Emojis spoon and it kept working?
 
     local app = hs.application.frontmostApplication()
 

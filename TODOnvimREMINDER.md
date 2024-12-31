@@ -27,5 +27,11 @@ BTW this still fails evenn if I disable COC for completions (other scenarios)
 BTW issue is not b/c of nvim-notify (it just happens the error is thrown during some call to notify... but it happens w/o nvim-notify - regular vim.notify too)
 IIGC is this to do with a buffer for the completion results? ... and IIGC then the completion results aren't being cached b/c of buffer creation issues?
 
+FYI this is related to that issue where if I change to a lua file (not the one session restored with)... then it has textwidth=200 (b/c of /opt/homebrew/Cellar/neovim/0.10.2_1/share/nvim/runtime/lua/editorconfig.lua)
+- if lua file is last used then it will have correct textwidth=0
+- so, exit nvim with two lua files open
+- run `nvim -V1` and check `verbose set textwidth wrapmargin`
+- which makes me think the issue is causing a failure to load ftplugins for lua for the second lua file I switch to
+
 
 
