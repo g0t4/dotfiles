@@ -66,8 +66,20 @@ function M.AskOpenAIStreaming()
     -- if true then
     --     return
     -- end
+    -- OPEN ~/.hammerspoon/tmp/ask-openai-streaming-chunk-log.txt
+    local chunkLog = io.open(os.getenv("HOME") .. "/.hammerspoon/tmp/ask-openai-streaming-chunk-log.txt", "a")
+    if chunkLog == nil then
+        print("Error: failed to open chunk log")
+        return
+    end
+    -- chunkLog:write(body .. "\n\n\n")
+    -- chunkLog:close()
 
     local function processChunk(chunk)
+        chunkLog:write("## chunk\n")
+        chunkLog:write(chunk .. "\n")
+        chunkLog:write("## end chunk\n")
+
         -- TODO gmatch here in case a chunk has multiple data lines (multiple chunks)
         -- each data line is a json object
         -- TODO logic for failure to parse json?
@@ -90,6 +102,13 @@ function M.AskOpenAIStreaming()
 
     -- start_time = socket.gettime()
     local function completeCallback(exitCode, stdout, stderr)
+        chunkLog:write("## completeCallback\n")
+        chunkLog:write("exitCode: " .. exitCode .. "\n")
+        chunkLog:write("stdout: " .. stdout .. "\n")
+        chunkLog:write("stderr: " .. stderr .. "\n")
+        chunkLog:write("## end completeCallback\n")
+        chunkLog:close()
+
         if exitCode ~= 0 then
             -- test this: ollama set invalid url (delete c in completion)... then curl w/ -fsSL will use STDERR to print error and that is detected here! ... fyi non-zero exit code is also picked up in complete callback which is fine (shown twice, NBD)
             -- print_elapsed("complete callback")
@@ -109,6 +128,11 @@ function M.AskOpenAIStreaming()
     end
 
     local function streamingCallback(task, stdout, stderr)
+        chunkLog:write("## streamingCallback\n")
+        chunkLog:write("stdout: " .. stdout .. "\n")
+        chunkLog:write("stderr: " .. stderr .. "\n")
+        chunkLog:write("## end streamingCallback\n")
+
         if stderr ~= "" then
             -- print_elapsed("streaming callback")
             -- GOOD TEST CASE use ollama and make sure its not running!
