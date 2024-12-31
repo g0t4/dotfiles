@@ -1,6 +1,5 @@
 local M = {}
 
--- TODO inject name of browser (if it were to matter), i.e. User Agent? ... can probably query that from AppleScript
 -- TODO ok FYI some reason chunk processing is not quite working ... esp if the chunk contains {} curly braces... otherwise seems to work fine...
 --    TODO develop a way to log the entire response so I can review it (to a file is gonna be best)... just the raw response is gonna be best me thinks
 local devtoolsSystemMessage = [[
