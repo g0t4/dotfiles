@@ -66,20 +66,29 @@ function M.AskOpenAIStreaming()
     --     return
     -- end
 
-    local chunkLog = io.open(os.getenv("HOME") .. "/.hammerspoon/tmp/ask-openai-streaming-chunk-log.txt", "w")
+    local IS_LOGGING = true
+    local chunkLog = nil
+    if IS_LOGGING then
+        chunkLog = io.open(os.getenv("HOME") .. "/.hammerspoon/tmp/ask-openai-streaming-chunk-log.txt", "w")
+    end
+
+    local function logMessage(message)
+        if chunkLog then
+            chunkLog:write(message)
+            chunkLog:flush()
+        end
+    end
+
+    local function logClose()
+        if chunkLog then
+            chunkLog:close()
+        end
+    end
     -- FYI double check logged lines with:
     --    cat ask-openai-streaming-chunk-log.txt | grep '^\s*data:' | cut -c7- | jq ".choices[] | .delta.content " -r
     --      make sure to log only once and with matching data: prefix
-    if chunkLog == nil then
-        print("Error: failed to open chunk log")
-        return
-    end
 
     local function processChunk(chunk)
-        -- chunkLog:write("## chunk\n")
-        -- chunkLog:write(chunk .. "\n")
-        -- chunkLog:write("## end chunk\n")
-
         -- stream response is data only SSEs:
         --   https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format
         --   https://cookbook.openai.com/examples/how_to_stream_completions
@@ -104,7 +113,7 @@ function M.AskOpenAIStreaming()
                 print("Error: failed to parse json (or no choices) for dataMessage", dataMessage)
             end
         end
-        -- TODO find a library to do this OR split out a testable lib of my own
+        -- PRN find a library to do this OR split out a testable lib of my own
 
         -- PROMPTS:
         -- - complex response w/ curly braces:
@@ -117,12 +126,12 @@ function M.AskOpenAIStreaming()
 
     -- start_time = socket.gettime()
     local function completeCallback(exitCode, stdout, stderr)
-        chunkLog:write("## completeCallback\n")
-        chunkLog:write("exitCode: " .. exitCode .. "\n")
-        chunkLog:write("stdout:\n " .. stdout .. "\n")
-        chunkLog:write("stderr:\n " .. stderr .. "\n")
-        chunkLog:write("## end completeCallback\n")
-        chunkLog:close()
+        logMessage("## completeCallback\n")
+        logMessage("exitCode: " .. exitCode .. "\n")
+        logMessage("stdout:\n" .. stdout .. "\n")
+        logMessage("stderr:\n" .. stderr .. "\n")
+        logMessage("## end completeCallback\n")
+        logClose()
 
         if exitCode ~= 0 then
             -- test this: ollama set invalid url (delete c in completion)... then curl w/ -fsSL will use STDERR to print error and that is detected here! ... fyi non-zero exit code is also picked up in complete callback which is fine (shown twice, NBD)
@@ -143,10 +152,10 @@ function M.AskOpenAIStreaming()
     end
 
     local function streamingCallback(task, stdout, stderr)
-        chunkLog:write("## streamingCallback\n")
-        chunkLog:write("stdout:\n " .. stdout .. "\n")
-        chunkLog:write("stderr:\n " .. stderr .. "\n")
-        chunkLog:write("## end streamingCallback\n")
+        logMessage("## streamingCallback\n")
+        logMessage("stdout:\n" .. stdout .. "\n")
+        logMessage("stderr:\n" .. stderr .. "\n")
+        logMessage("## end streamingCallback\n")
 
         if stderr ~= "" then
             -- print_elapsed("streaming callback")
