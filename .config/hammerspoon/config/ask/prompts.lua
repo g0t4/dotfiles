@@ -16,6 +16,7 @@ An example of a command line could be `find the first div on the page` and a val
 ]]
 
 
+-- issue => adding extra `end` after all completions (on own line)
 local applescriptSystemMessage = [[
 You are an AppleScript expert.
 The user is working in Script Debugger or Script Editor.
