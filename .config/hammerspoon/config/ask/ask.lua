@@ -62,40 +62,52 @@ function M.AskOpenAIStreaming()
     })
     -- print_elapsed("json encode") -- < 0.2ms (from right before apiKey=nil check to here)
 
-    -- print("body", body)
     -- if true then
     --     return
     -- end
-    -- OPEN ~/.hammerspoon/tmp/ask-openai-streaming-chunk-log.txt
-    local chunkLog = io.open(os.getenv("HOME") .. "/.hammerspoon/tmp/ask-openai-streaming-chunk-log.txt", "a")
+
+    local chunkLog = io.open(os.getenv("HOME") .. "/.hammerspoon/tmp/ask-openai-streaming-chunk-log.txt", "w")
+    -- FYI double check logged lines with:
+    --    cat ask-openai-streaming-chunk-log.txt | grep '^\s*data:' | cut -c7-  | jq ".choices[] | .delta.content " -r
+    --      make sure to log only once and with matching data: prefix
     if chunkLog == nil then
         print("Error: failed to open chunk log")
         return
     end
-    -- chunkLog:write(body .. "\n\n\n")
-    -- chunkLog:close()
 
     local function processChunk(chunk)
-        chunkLog:write("## chunk\n")
-        chunkLog:write(chunk .. "\n")
-        chunkLog:write("## end chunk\n")
+        -- chunkLog:write("## chunk\n")
+        -- chunkLog:write(chunk .. "\n")
+        -- chunkLog:write("## end chunk\n")
 
-        -- TODO gmatch here in case a chunk has multiple data lines (multiple chunks)
-        -- each data line is a json object
-        -- TODO logic for failure to parse json?
+        -- stream response is data only SSEs:
+        --   https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format
+        --   https://cookbook.openai.com/examples/how_to_stream_completions
+        --   message == event
+        --   messages separated by \n\n
+        --   `data: ` prefix on each message
+        --   `:` for comments are part of format, but no mention of using those in the docs
 
-        for data_line in chunk:gmatch("%b{}") do
-            local parsed = hs.json.decode(data_line)
-            if parsed and parsed.choices then
-                local delta = parsed.choices[1].delta or {}
+        -- so, each chunk can have 0+ data messages
+        -- TODO is last message always followed by \n\n? (of each chunk and last of response?)
+        for dataMessage in chunk:gmatch("data:.-\n\n") do
+            -- strip data: prefix to extract data value
+            local dataValue = dataMessage:gsub("data: ", "")
+            local sse = hs.json.decode(dataValue)
+            if sse and sse.choices then
+                local delta = sse.choices[1].delta or {}
                 local text = delta.content
                 if text then
                     hs.eventtap.keyStrokes(text, app) -- app param is optional
                 end
             else
-                print("Error: failed to parse json (or no choices) for data_line", data_line)
+                print("Error: failed to parse json (or no choices) for dataMessage", dataMessage)
             end
         end
+        -- TODO find a library to do this OR split out a testable lib of my own
+
+        -- FYI good prompt to validate complex response (w/ {} curly braces)
+        --    how can I write an async function with await and sleep 2 seconds
     end
 
     local streamingRequest = require("config.ask.streaming_curl").streamingRequest
@@ -104,8 +116,8 @@ function M.AskOpenAIStreaming()
     local function completeCallback(exitCode, stdout, stderr)
         chunkLog:write("## completeCallback\n")
         chunkLog:write("exitCode: " .. exitCode .. "\n")
-        chunkLog:write("stdout: " .. stdout .. "\n")
-        chunkLog:write("stderr: " .. stderr .. "\n")
+        chunkLog:write("stdout:\n " .. stdout .. "\n")
+        chunkLog:write("stderr:\n " .. stderr .. "\n")
         chunkLog:write("## end completeCallback\n")
         chunkLog:close()
 
@@ -129,8 +141,8 @@ function M.AskOpenAIStreaming()
 
     local function streamingCallback(task, stdout, stderr)
         chunkLog:write("## streamingCallback\n")
-        chunkLog:write("stdout: " .. stdout .. "\n")
-        chunkLog:write("stderr: " .. stderr .. "\n")
+        chunkLog:write("stdout:\n " .. stdout .. "\n")
+        chunkLog:write("stderr:\n " .. stderr .. "\n")
         chunkLog:write("## end streamingCallback\n")
 
         if stderr ~= "" then
