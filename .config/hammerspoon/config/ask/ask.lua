@@ -102,6 +102,15 @@ function M.AskOpenAIStreaming()
         for dataMessage in chunk:gmatch("data:.-\n\n") do
             -- strip data: prefix to extract data value
             local dataValue = dataMessage:gsub("data: ", "")
+
+            -- check if it starts with data: [DONE], use regex to ignore whitespace diffs
+            print("dataValue", dataValue)
+            if dataValue:match("^%s*%[DONE%]%s*$") then
+                -- IIUC this is openai specific? not sure why but it's coming back at end of response
+                print("DONE detected")
+                break
+            end
+
             local sse = hs.json.decode(dataValue)
             if sse and sse.choices then
                 local delta = sse.choices[1].delta or {}
@@ -113,8 +122,10 @@ function M.AskOpenAIStreaming()
                 -- TODO
                 -- handle:       "finish_reason":"stop"}
                 --     this is on choices (need to set a flag and stop processing the rest?)
+                --     currently parses ok but no choices, effectively ignored...
                 -- handle:       data: [DONE]
                 --     this comes after stop reason (at least from openai)
+                --     no idea why this would be returned, it's not valid JSON?
             else
                 print("Error: failed to parse json (or no choices) for dataMessage", dataMessage)
             end
