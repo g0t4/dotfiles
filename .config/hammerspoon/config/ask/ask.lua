@@ -68,7 +68,7 @@ function M.AskOpenAIStreaming()
 
     local chunkLog = io.open(os.getenv("HOME") .. "/.hammerspoon/tmp/ask-openai-streaming-chunk-log.txt", "w")
     -- FYI double check logged lines with:
-    --    cat ask-openai-streaming-chunk-log.txt | grep '^\s*data:' | cut -c7-  | jq ".choices[] | .delta.content " -r
+    --    cat ask-openai-streaming-chunk-log.txt | grep '^\s*data:' | cut -c7- | jq ".choices[] | .delta.content " -r
     --      make sure to log only once and with matching data: prefix
     if chunkLog == nil then
         print("Error: failed to open chunk log")
@@ -106,8 +106,11 @@ function M.AskOpenAIStreaming()
         end
         -- TODO find a library to do this OR split out a testable lib of my own
 
-        -- FYI good prompt to validate complex response (w/ {} curly braces)
-        --    how can I write an async function with await and sleep 2 seconds
+        -- PROMPTS:
+        -- - complex response w/ curly braces:
+        --     how can I write an async function with await and sleep 2 seconds
+        -- - simple:
+        --     what is my user agent?
     end
 
     local streamingRequest = require("config.ask.streaming_curl").streamingRequest
