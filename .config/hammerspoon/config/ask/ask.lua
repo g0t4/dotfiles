@@ -66,7 +66,7 @@ function M.AskOpenAIStreaming()
     --     return
     -- end
 
-    local IS_LOGGING = true
+    local IS_LOGGING = false
     local chunkLog = nil
     if IS_LOGGING then
         chunkLog = io.open(os.getenv("HOME") .. "/.hammerspoon/tmp/ask-openai-streaming-chunk-log.txt", "w")
@@ -104,10 +104,11 @@ function M.AskOpenAIStreaming()
             local dataValue = dataMessage:gsub("data: ", "")
 
             -- check if it starts with data: [DONE], use regex to ignore whitespace diffs
-            print("dataValue", dataValue)
             if dataValue:match("^%s*%[DONE%]%s*$") then
                 -- IIUC this is openai specific? not sure why but it's coming back at end of response
-                print("DONE detected")
+                if IS_LOGGING then
+                    print("DONE detected")
+                end
                 break
             end
 
