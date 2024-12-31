@@ -109,6 +109,12 @@ function M.AskOpenAIStreaming()
                 if text then
                     hs.eventtap.keyStrokes(text, app) -- app param is optional
                 end
+
+                -- TODO
+                -- handle:       "finish_reason":"stop"}
+                --     this is on choices (need to set a flag and stop processing the rest?)
+                -- handle:       data: [DONE]
+                --     this comes after stop reason (at least from openai)
             else
                 print("Error: failed to parse json (or no choices) for dataMessage", dataMessage)
             end
