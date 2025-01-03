@@ -62,7 +62,7 @@ abbr pipxr 'pipx run' # think `npx foo`
 # !!! GO COLD TURKEY TO TRY uv command and update all venvs to use it, best way to see what I think of it and learn it... so stop using pip directly (unless uv doesn't work for my projects)
 abbr pipls "uv tree"
 abbr piplo "uv tree --outdated"
-abbr pipir "uv pip add -r requirements.txt && rm requirements.txt # REMINDER TO MIGRATE to pyproject.toml + uv"
+abbr pipir "uv add -r requirements.txt && rm requirements.txt # REMINDER TO MIGRATE to pyproject.toml + uv"
 
 abbr uva 'uv add'
 abbr uvrm 'uv remove'
