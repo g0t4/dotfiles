@@ -65,6 +65,8 @@ function veinit_func
     # FYI remember I don't always put venv in root of repo, so only check current dir as some repos have multiple venvs (nested)
 
     # FYI do `uv add -r requirements.txt` by hand, and remove it when done... will rarely be done and I need practice to learn that step... and `uv init` (for pyproject.toml) must come first anyways and I dont need all that automated
+
+    # TODO with uv run... I shouldn't need to auto activate venvs anymore... maybe look into getting rid of that!
 end
 
 abbr veinitl 'python3 -m venv --clear --upgrade-deps .venv.local && vea'
