@@ -48,17 +48,6 @@ abbr veinit12 'uv venv --python 3.12' # good reminder to replace w/ whatever ver
 abbr ved deactivate
 abbr vea 'source .venv*/bin/activate.fish' # override zsh version's /activate
 
-### pipx ###
-abbr pipxi 'pipx install'
-abbr pipxir 'pipx install -r requirements.txt'
-abbr pipxip 'pipx install --python'
-abbr pipxls 'pipx list'
-abbr pipxrp 'pipx runpip' # ie to install pypi deps (of primary command), i.e.:
-#  pipx install ansible
-#  pipx runpip ansible install toml  # add toml dependency, i.e. used by ansible-inventory --toml
-abbr pipxr 'pipx run' # think `npx foo`
-
-
 # !!! GO COLD TURKEY TO TRY uv command and update all venvs to use it, best way to see what I think of it and learn it... so stop using pip directly (unless uv doesn't work for my projects)
 abbr pipls "uv tree"
 abbr piplo "uv tree --outdated"
@@ -69,14 +58,30 @@ abbr pipir "uv add -r requirements.txt && rm requirements.txt # REMINDER TO MIGR
 
 abbr uva 'uv add'
 abbr uvrm 'uv remove'
+abbr uvs 'uv sync'
 abbr uvr 'uv run'
 abbr uvt 'uv tree'
-abbr uvto 'uv tree --outdated'
+abbr uvtree 'uv tree --outdated'
 abbr uvv 'uv venv'
 abbr uvp 'uv pip'
-abbr uvtool 'uv tool'
 abbr uvi 'uv init'
-# TODO sync/lock?
+#
+# `uv tool install` is a replacement for `pipx install` (IIUC)
+abbr uvt 'uv tool'
+abbr uvtr 'uv tool run'
+#abbr uvtd 'uv tool dir'
+#   uv tool dir --bin # ~/.local/bin (many apps use this)
+abbr uvtr 'uv tool list'
+abbr uvti 'uv tool install'
+#abbr uvtu 'uv tool upgarde'
+#abbr uvtun 'uv tool uninstall'
+abbr uvx 'uv tool run' # uvx is an alias for `uv tool run`
+#
+abbr uvpy 'uv python list'
+# abbr uvpyi 'uv python install'
+
+
+
 
 # *** wcl wrappers
 function wcl
