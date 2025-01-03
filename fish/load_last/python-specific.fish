@@ -49,29 +49,24 @@ function veinit_func
     # TODO pass arg for python version? 3.11, 3.10, etc
     set py_version 3
 
-    ## TODO explore using uv instead of venv directly?
-    if command -q uv
-        # FYI uv venv # by default does not install pip into venv... so that links to global install of pip...
-        #     supposed to use `uv pip *` to use pip commands in a uv venv
-        #     apparently --seed exists to install pip into venv, I'm going to try not using it
-        echo -n "uv venv && source .venv*/bin/activate.fish"
-        #if test -f requirements.txt
-        #    # PRN search for requirements up to root repo dir? not sure I have a need for this though, so wait for now
-        #    # TODO `uv add -r requirements.txt`? instead?
-        #    echo -n " && uv pip install -r requirements.txt"
-        #end
-        return
+    if not command -q uv
+        echo "INSTALL uv command"
     end
 
-    #echo -n "python$py_version -m venv --clear --upgrade-deps .venv && source .venv*/bin/activate.fish"
-    #if test -f requirements.txt
-    #    # PRN search for requirements up to root repo dir? not sure I have a need for this though, so wait for now
-    #    echo -n " && pip3 install -r requirements.txt"
-    #else
-    #    echo -n " && touch requirements.txt"
-    #end
+    # check for pyproject.toml in current dir
+    # FYI uv venv # by default does not install pip into venv... so that links to global install of pip...
+    #     supposed to use `uv pip *` to use pip commands in a uv venv
+    #     apparently --seed exists to install pip into venv, I'm going to try not using it
+    echo -n "uv venv && source .venv*/bin/activate.fish"
+    if test -f pyproject.toml
+        # technically, I can skip uv venv above if using uv sync... b/c sync does the venv creation... but I wanna make sure I activate the venv on first create too so just leave above, it doesn't hurt
+        echo -n " && uv sync"
+    end
+    # FYI remember I don't always put venv in root of repo, so only check current dir as some repos have multiple venvs (nested)
 
+    # FYI do `uv add -r requirements.txt` by hand, and remove it when done... will rarely be done and I need practice to learn that step... and `uv init` (for pyproject.toml) must come first anyways and I dont need all that automated
 end
+
 abbr veinitl 'python3 -m venv --clear --upgrade-deps .venv.local && vea'
 # PRN veinitl w/ veinitl_func like veinit_func
 
