@@ -63,6 +63,9 @@ abbr pipxr 'pipx run' # think `npx foo`
 abbr pipls "uv tree"
 abbr piplo "uv tree --outdated"
 abbr pipir "uv add -r requirements.txt && rm requirements.txt # REMINDER TO MIGRATE to pyproject.toml + uv"
+# later => after I convert most of my projects => switch pipir => uvar abbr
+#   pipir is just for muscle memory b/c I used it to `pip install -r requirements.txt` previously
+
 
 abbr uva 'uv add'
 abbr uvrm 'uv remove'
