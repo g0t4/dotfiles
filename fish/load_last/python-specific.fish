@@ -46,16 +46,31 @@ function veinit_func
     # legacy abbr's
     # abbr veinit 'python3 -m venv --clear --upgrade-deps .venv && source .venv*/bin/activate.fish && touch requirements.txt' # PRN follow with pip install -r requirements.txt (if req file exists)
     # abbr veinitr 'python3 -m venv --clear --upgrade-deps .venv && source .venv*/bin/activate.fish && pip3 install -r requirements.txt'
-
     # TODO pass arg for python version? 3.11, 3.10, etc
     set py_version 3
-    echo -n "python$py_version -m venv --clear --upgrade-deps .venv && source .venv*/bin/activate.fish"
-    if test -f requirements.txt
-        # PRN search for requirements up to root repo dir? not sure I have a need for this though, so wait for now
-        echo -n " && pip3 install -r requirements.txt"
-    else
-        echo -n " && touch requirements.txt"
+
+    ## TODO explore using uv instead of venv directly?
+    if command -q uv
+        # FYI uv venv # by default does not install pip into venv... so that links to global install of pip...
+        #     supposed to use `uv pip *` to use pip commands in a uv venv
+        #     apparently --seed exists to install pip into venv, I'm going to try not using it
+        echo -n "uv venv && source .venv*/bin/activate.fish"
+        #if test -f requirements.txt
+        #    # PRN search for requirements up to root repo dir? not sure I have a need for this though, so wait for now
+        #    # TODO `uv add -r requirements.txt`? instead?
+        #    echo -n " && uv pip install -r requirements.txt"
+        #end
+        return
     end
+
+    #echo -n "python$py_version -m venv --clear --upgrade-deps .venv && source .venv*/bin/activate.fish"
+    #if test -f requirements.txt
+    #    # PRN search for requirements up to root repo dir? not sure I have a need for this though, so wait for now
+    #    echo -n " && pip3 install -r requirements.txt"
+    #else
+    #    echo -n " && touch requirements.txt"
+    #end
+
 end
 abbr veinitl 'python3 -m venv --clear --upgrade-deps .venv.local && vea'
 # PRN veinitl w/ veinitl_func like veinit_func
@@ -80,21 +95,21 @@ abbr pipxrp 'pipx runpip' # ie to install pypi deps (of primary command), i.e.:
 #  pipx runpip ansible install toml  # add toml dependency, i.e. used by ansible-inventory --toml
 abbr pipxr 'pipx run' # think `npx foo`
 
-### PIP ###
-abbr pipls 'pip3 list'
-abbr piplo 'pip3 list --outdated'
 
-abbr pipir 'pip3 install -r requirements.txt'
-abbr pipi 'pip3 install'
+# !!! GO COLD TURKEY TO TRY uv command and update all venvs to use it, best way to see what I think of it and learn it... so stop using pip directly (unless uv doesn't work for my projects)
+abbr pipls "uv pip list"
+abbr piplo "uv pip list --outdated"
+abbr pipir "uv pip install -r requirements.txt"
 
-abbr pipup 'pip3 install --upgrade '
-abbr pipupp 'pip3 install --upgrade pip'
-
-# uninstall all packages:
-abbr pipun 'pip3 uninstall -y $(pip3 freeze)'
-abbr pipunu 'pip3 uninstall -y $(pip3 freeze --user)' # --user site (if applicable)
-
-
+abbr uva 'uv add'
+abbr uvrm 'uv remove'
+abbr uvr 'uv run'
+abbr uvtree 'uv tree'
+abbr uvv 'uv venv'
+abbr uvp 'uv pip'
+abbr uvt 'uv tool'
+abbr uvi 'uv init'
+# TODO sync/lock?
 
 # *** wcl wrappers
 function wcl
