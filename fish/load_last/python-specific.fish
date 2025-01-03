@@ -40,47 +40,13 @@ function venv_status
     relative_path (pwd) $VIRTUAL_ENV
 end
 #
-abbr --function veinit_func --add veinit
-function veinit_func
-
-    # legacy abbr's
-    # abbr veinit 'python3 -m venv --clear --upgrade-deps .venv && source .venv*/bin/activate.fish && touch requirements.txt' # PRN follow with pip install -r requirements.txt (if req file exists)
-    # abbr veinitr 'python3 -m venv --clear --upgrade-deps .venv && source .venv*/bin/activate.fish && pip3 install -r requirements.txt'
-    # TODO pass arg for python version? 3.11, 3.10, etc
-    set py_version 3
-
-    if not command -q uv
-        echo "INSTALL uv command"
-    end
-
-    # check for pyproject.toml in current dir
-    # FYI uv venv # by default does not install pip into venv... so that links to global install of pip...
-    #     supposed to use `uv pip *` to use pip commands in a uv venv
-    #     apparently --seed exists to install pip into venv, I'm going to try not using it
-    echo -n "uv venv && source .venv*/bin/activate.fish"
-    if test -f pyproject.toml
-        # technically, I can skip uv venv above if using uv sync... b/c sync does the venv creation... but I wanna make sure I activate the venv on first create too so just leave above, it doesn't hurt
-        echo -n " && uv sync"
-    end
-    # FYI remember I don't always put venv in root of repo, so only check current dir as some repos have multiple venvs (nested)
-
-    # FYI do `uv add -r requirements.txt` by hand, and remove it when done... will rarely be done and I need practice to learn that step... and `uv init` (for pyproject.toml) must come first anyways and I dont need all that automated
-
-    # TODO with uv run... I shouldn't need to auto activate venvs anymore... maybe look into getting rid of that!
-end
-
-abbr veinitl 'python3 -m venv --clear --upgrade-deps .venv.local && vea'
-# PRN veinitl w/ veinitl_func like veinit_func
+abbr veinit 'uv venv'
+abbr veinit12 'uv venv --python 3.12' # good reminder to replace w/ whatever version I need
 
 # manually activate/deactivate a venv, remember I have my autovenv plugin that will activate on cd
 # FYI use activate.fish for fish (override is in python-specific.fish)
 abbr ved deactivate
 abbr vea 'source .venv*/bin/activate.fish' # override zsh version's /activate
-# add function so this can be embedded in other abbr expansions
-function vea --wraps=source
-    source .venv*/bin/activate.fish
-end
-
 
 ### pipx ###
 abbr pipxi 'pipx install'
