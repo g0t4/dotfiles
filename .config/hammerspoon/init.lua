@@ -87,14 +87,17 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "C", function()
     spoon.AClock:toggleShow()
 end)
 
--- -- HOLY CRAP this spoon takes a ton of time to load... 2ish seconds+ and its not the spoons in general b/c AClock is fast
--- hs.loadSpoon("Emojis")
--- spoon.Emojis:bindHotkeys({
---     toggle = {
---         { "cmd", "alt", "ctrl" },
---         "E",
---     }
--- })
+
+-- TODO find out why ask-openai fails to find focused element if I remove this spoon:
+-- -- is it loading some library that enables focused element detection, perhaps ahead of when I need it in ask-openai?
+-- HOLY CRAP this spoon takes a ton of time to load... 2ish seconds+ and its not the spoons in general b/c AClock is fast
+hs.loadSpoon("Emojis")
+spoon.Emojis:bindHotkeys({
+    toggle = {
+        { "cmd", "alt", "ctrl" },
+        "E",
+    }
+})
 
 -- hs.loadSpoon("HSearch")
 -- hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "F", function()
