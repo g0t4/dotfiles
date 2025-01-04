@@ -60,14 +60,10 @@ async def open_nvim_window(connection: iterm2.Connection):
         return
 
     current_profile = await session.async_get_profile()
-    with open("output.txt", "w") as f:
-        f.write(str(vars(current_profile)))
-
-    current_font = current_profile.normal_font
-    # i.e. SauceCodeProNF 12
-    #   IIUC can have other things after size? or? (see example below)
-    # example of altering font size:
-    # https://iterm2.com/python-api/examples/increase_font_size.html#increase-font-size-example
+    # with open("profile.txt", "w") as f:
+    #     f.write(str(vars(current_profile)))
+    #  FYI: pretty print profile.txt:
+    #    cat profile.txt | yq --prettyPrint
 
     # neat thing is, this new nvim window if started with nvim then when nvim is closed, window closes too! no shell to go back to (so this becomes very much like what I had with vscode before)
     # PRN in future, if I click multiple files in same workspace... don't open new nvim window? or should I just do that? ... i.e. if perusing ag command matches and want to open up a few in nvim... I am thinking it s/b fine to close nvim/reopen each time, for now s/b fast enough... if I have trouble with speed (i.e. starting plugins each time) then investigate in a method to dedupe (only for this semantic click handler) windows per workspace
@@ -76,11 +72,14 @@ async def open_nvim_window(connection: iterm2.Connection):
     new_profile.set_custom_directory(workspace_root)
     new_profile.set_initial_directory_mode(iterm2.InitialWorkingDirectory.INITIAL_WORKING_DIRECTORY_CUSTOM)
 
-    new_profile.set_normal_font(current_font)
+    new_profile.set_normal_font(current_profile.normal_font)
+    # i.e. SauceCodeProNF 12
+    #   IIUC can have other things after size? or? (see example below)
+    # example of altering font size:
+    # https://iterm2.com/python-api/examples/increase_font_size.html#increase-font-size-example
     # PRN preserve other profile settings...?
-
-    # TODO match zoom level of current window (where click happened)... so dont have to adjust zoom every time too...
-    #   just a thought, but what if I could set zoom for nvim in general based on workspace!... interesting...
+    #
+    # ASIDE: font size, I wonder if I would find it useful to have font size tied to the workspace (like other nvim settings)... not an easy feat to accomplish but you could observe font size (profile changes) changes and then store it per workspace and then what would you do, when opening just one of these nvim windows then apply that size? Maybe this would be a size for these nvim dedicated windows only? interesting...
 
     # advanced dirs lets you set window/tab/pane specific dirs (not one working dir), so I don't need that for now
     # profile.set_advanced_working_directory_window_directory("/Users/wesdemos/repos")
