@@ -73,9 +73,10 @@ if test $status -ne 0
     set repo_root $working_directory
 end
 
-# hack to get uv to run w/ venv (todo remove need for cd here)
+# cd to dir for two reasons:
+#    1. so uv run finds venv
+#    2. relative path for nvim.py
 cd $WES_DOTFILES/iterm2/semantic-click-handler
-# why doesn't `uv run` find the venv in the parent dir of the script?
 uv run nvim.py \
     "$clicked_path" "$line_number" "$text_before_click" \
     "$text_after_click" "$working_directory" "$repo_root"
