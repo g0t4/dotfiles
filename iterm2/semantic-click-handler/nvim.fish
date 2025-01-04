@@ -68,9 +68,9 @@ end
 
 # *** default => vscode ***
 # scope vscode to the repo root, else working directory if not a repo
-set repo_root $(git -C $working_directory rev-parse --show-toplevel 2>/dev/null)
+set workspace_root $(git -C $working_directory rev-parse --show-toplevel 2>/dev/null)
 if test $status -ne 0
-    set repo_root $working_directory
+    set workspace_root $working_directory
 end
 
 # cd to dir for two reasons:
@@ -79,6 +79,6 @@ end
 cd $WES_DOTFILES/iterm2/semantic-click-handler
 uv run nvim.py \
     "$clicked_path" "$line_number" "$text_before_click" \
-    "$text_after_click" "$working_directory" "$repo_root"
+    "$text_after_click" "$working_directory" "$workspace_root"
 
 #exit 1 # if you wanna see debug STDOUT messages above, uncomment this line and click "View" in the iTerm2 dialog
