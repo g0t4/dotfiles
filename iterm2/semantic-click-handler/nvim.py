@@ -86,6 +86,14 @@ async def open_nvim_window(connection: iterm2.Connection):
     # command/profile_customizations are mutually exclusive, thus pass command with profile_customizations
     window = await iterm2.Window.async_create(connection, profile_customizations=new_profile)
 
+    # TODO what size to use and can I have it appear this size initially (i.e. via profile_customizations so I am not resizing it after opening it)?
+    # FYI it is pretty fast about the resize but still, might be nice to consolidate and minimize lag
+    new_size = iterm2.Frame(origin=iterm2.Point(x=0, y=0), size=iterm2.Size(width=1024, height=800))
+    await window.async_set_frame(new_size)
+    # TODO maximze the window? for now just use fixed size and I can max it if needed
+    # PRN this would be a nice area, once again, to store the iterm2 window position/size along w/ workspace! ... maybe I just need a workspace file for iterm2 nvim windows... and save w/e I want there and restore it... and as I change the nvim popup windows I can save changes to the workspace
+    #   in fact, don't conflate this workspace with nvim workspace... this is a separate workspace albeit it overlaps in definition (i.e. repo root or cwd)
+
 
 ## NOTES:
 #  - try open new window/tab/pane in nvim popup window and that just opens another nvim instance, not necessarily a bad thing! ... just FYI, think about it
