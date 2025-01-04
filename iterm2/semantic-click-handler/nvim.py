@@ -71,12 +71,12 @@ async def open_nvim_window(connection: iterm2.Connection):
     # both of these are closable too.. IOTW neither returns to shell if you quit nvim so either is fine for me for now:
     # fish_to_nvim_cmd = f"/opt/homebrew/bin/fish -c 'nvim {clicked_path}'"
     nvim_directly_cmd = f"/opt/homebrew/bin/nvim {clicked_path}"
-    # ok setting PATH from this outer shell fixes it... if need more of env, then maybe copy env from outer shell?
-    #   setting path this way avoids needing to use fish -c and add that overhead
-    nvim_path = f"{os.environ['PATH']}"
-    env_nvim_cmd = f"env -i PATH='{nvim_path}' {nvim_directly_cmd}"
+    # ok set path with env command works too, much better than fish -c overhead
+    #   BTW much of env vars are inherited by new nvim standalone process... but not PATH
+    use_this_path = f"{os.environ['PATH']}"
+    nvim_inherit_path_cmd = f"env PATH='{use_this_path}' {nvim_directly_cmd}"
     #
-    cmd = env_nvim_cmd
+    cmd = nvim_inherit_path_cmd
     if line_number:
         cmd += f" +{line_number}"
         # FYI use `ag foo` to test line number matches (click file:# in output)
@@ -87,9 +87,6 @@ async def open_nvim_window(connection: iterm2.Connection):
     window = await iterm2.Window.async_create(connection, profile_customizations=new_profile)
 
 
-## TODOs:
-#  - fix path, nvim can't find node and vimspector, etc... IIAC also cant find LSPs.. the path in the click handler is likley restricted
-#
 ## NOTES:
 #  - try open new window/tab/pane in nvim popup window and that just opens another nvim instance, not necessarily a bad thing! ... just FYI, think about it
 #    - for now keep terminal panes in a new / separate window to avoid this (perfectly fine, in fact kinda how I wanted it)...
