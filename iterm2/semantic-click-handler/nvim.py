@@ -46,6 +46,19 @@ async def open_nvim_window(connection: iterm2.Connection):
     # new_profile.set_normal_font(current_profile.normal_font)
     new_profile._simple_set("Normal Font", current_profile.normal_font)
 
+    # figure out how to size window initially with profile_customizations:
+    #   - how to find the profile properties to set (many aren't listed in API Profile type but can still be set as its just a dict)
+    #     - nav to iterm settings plist and copy it (before changes)
+    #     - use iterm2 gui to change profile settings
+    #     - icdiff *.plist # => find keys, then use _simple_set to set them!
+    #        - can use Save Now to flush changes if they don't auto save
+    # make sure Window Type is set to "Normal" (15) and not "Maximized"/"Fullscreen" fo the current profile b/c that is going to be used for this new window...
+    # new_profile._simple_set("Window Type", "16")  # Doesn't seem like I can set Window Type in profile_customizations... but I didn't exhausitvely look for how to do that either
+    # effectively maximize window using ridiculous values:
+    new_profile._simple_set("Columns", "300")  # if set bigger than screen, seems to stop at screen size (for Rows and Columns)
+    new_profile._simple_set("Rows", "100")
+    #  PRN can I get screen size info and use that for rows/cols?
+
     # i.e. SauceCodeProNF 12
     #   IIUC can have other things after size? or? (see example below)
     # example of altering font size:
@@ -88,18 +101,18 @@ async def open_nvim_window(connection: iterm2.Connection):
     # command/profile_customizations are mutually exclusive, thus pass command with profile_customizations
     window = await iterm2.Window.async_create(connection, profile_customizations=new_profile)
 
-    # FYI iterm2 settings => profiles => profile => window tab => screen (size) dropdown... can I set that settting here?
-    #   lets print out entire profile again to see
-    #
-    # TODO what size to use and can I have it appear this size initially (i.e. via profile_customizations so I am not resizing it after opening it)?
-    # FYI it is pretty fast about the resize but still, might be nice to consolidate and minimize lag
-    #   another reason to resize before start nvim, so messages aren't shown based on small initial window size...
-    # ... oh how about auto click through that damn message that is imposible to disable in nvim... :) the one with file name... I need to recompile nvim itself to cut that shit out
-    new_size = iterm2.Frame(origin=iterm2.Point(x=0, y=0), size=iterm2.Size(width=1024, height=800))
-    await window.async_set_frame(new_size)
-    # TODO maximze the window? for now just use fixed size and I can max it if needed
-    # PRN this would be a nice area, once again, to store the iterm2 window position/size along w/ workspace! ... maybe I just need a workspace file for iterm2 nvim windows... and save w/e I want there and restore it... and as I change the nvim popup windows I can save changes to the workspace
-    #   in fact, don't conflate this workspace with nvim workspace... this is a separate workspace albeit it overlaps in definition (i.e. repo root or cwd)
+    # # FYI iterm2 settings => profiles => profile => window tab => screen (size) dropdown... can I set that settting here?
+    # #   lets print out entire profile again to see
+    # #
+    # # TODO what size to use and can I have it appear this size initially (i.e. via profile_customizations so I am not resizing it after opening it)?
+    # # FYI it is pretty fast about the resize but still, might be nice to consolidate and minimize lag
+    # #   another reason to resize before start nvim, so messages aren't shown based on small initial window size...
+    # # ... oh how about auto click through that damn message that is imposible to disable in nvim... :) the one with file name... I need to recompile nvim itself to cut that shit out
+    # new_size = iterm2.Frame(origin=iterm2.Point(x=0, y=0), size=iterm2.Size(width=1024, height=800))
+    # await window.async_set_frame(new_size)
+    # # TODO maximze the window? for now just use fixed size and I can max it if needed
+    # # PRN this would be a nice area, once again, to store the iterm2 window position/size along w/ workspace! ... maybe I just need a workspace file for iterm2 nvim windows... and save w/e I want there and restore it... and as I change the nvim popup windows I can save changes to the workspace
+    # #   in fact, don't conflate this workspace with nvim workspace... this is a separate workspace albeit it overlaps in definition (i.e. repo root or cwd)
 
 
 ## NOTES:
