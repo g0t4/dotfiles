@@ -1,5 +1,6 @@
 from re import I
 import iterm2
+import os
 from common import get_session, get_current_window, get_current_tab
 from logs import log
 import sys
@@ -19,11 +20,11 @@ print(f"py - text_after_click: {text_after_click}")
 print(f"py - working_directory: {working_directory}")
 print(f"py - workspace_root: {workspace_root}")
 
+
 # FYI test this w/o literally clicking in iterm2 (i.e. tree output in this sematnic-click-handler dir and click on nvim.fish):
 #   ./nvim.fish  $WES_DOTFILES/iterm2/semantic-click-handler/nvim.py "" "" "" $WES_DOTFILES/iterm2/semantic-click-handler $WES_DOTFILES
 
 # exit(0) # for testing, uncomment to stop here
-
 async def open_nvim_window(connection: iterm2.Connection):
     session = await get_session(connection)
     if session is None:
@@ -58,18 +59,24 @@ async def open_nvim_window(connection: iterm2.Connection):
     # profile.set_initial_directory_mode(iterm2.InitialWorkingDirectory.INITIAL_WORKING_DIRECTORY_ADVANCED)
 
     # FYI can wrap in fish shell if I need the shell env to get nvim to work (i.e. coc requires smth I have in my shell dotfiles... and so it works if use fish -c nvim but not nvim directly, currently)
-    #    repro w/o click handler:    `env -i (which nvim)` # which nvim runs in outer shell BTW, dont confuse that
-    #    test that PATH fixes it:
+    #    repro w/o click handler:
+    #         env -i (which nvim) # PATH not even set here
+    #         => run `:!env` and observe no PATH
+    #    test that PATH fixes issue:
     #         # clear entir env except PATH (copy that from outer fish shell):
     #         env -i PATH=(string join : $PATH) (which nvim)
     #    diff PATHs:
     #         icdiff (for p in $PATH; echo $p; end | psub) (env -i (which fish) -c "for p in \$PATH; echo \$p; end" | psub)
     #
     # both of these are closable too.. IOTW neither returns to shell if you quit nvim so either is fine for me for now:
-    fish_to_nvim_cmd = f"/opt/homebrew/bin/fish -c 'nvim {clicked_path}'"
+    # fish_to_nvim_cmd = f"/opt/homebrew/bin/fish -c 'nvim {clicked_path}'"
     nvim_directly_cmd = f"/opt/homebrew/bin/nvim {clicked_path}"
+    # ok setting PATH from this outer shell fixes it... if need more of env, then maybe copy env from outer shell?
+    #   setting path this way avoids needing to use fish -c and add that overhead
+    nvim_path = f"{os.environ['PATH']}"
+    env_nvim_cmd = f"env -i PATH='{nvim_path}' {nvim_directly_cmd}"
     #
-    cmd = fish_to_nvim_cmd
+    cmd = env_nvim_cmd
     if line_number:
         cmd += f" +{line_number}"
         # FYI use `ag foo` to test line number matches (click file:# in output)
@@ -78,6 +85,7 @@ async def open_nvim_window(connection: iterm2.Connection):
 
     # command/profile_customizations are mutually exclusive, thus pass command with profile_customizations
     window = await iterm2.Window.async_create(connection, profile_customizations=new_profile)
+
 
 ## TODOs:
 #  - fix path, nvim can't find node and vimspector, etc... IIAC also cant find LSPs.. the path in the click handler is likley restricted
