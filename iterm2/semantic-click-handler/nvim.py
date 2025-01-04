@@ -19,8 +19,6 @@ print(f"py - repo root: {repo_root}")
 
 
 # exit(0) # for testing, uncomment to stop here
-
-# foo
 async def open_nvim_window(connection: iterm2.Connection):
     # neat thing is, this new nvim window if started with nvim then when nvim is closed, window closes too! no shell to go back to (so this becomes very much like what I had with vscode before)
 
@@ -38,7 +36,7 @@ async def open_nvim_window(connection: iterm2.Connection):
     profile.set_command(cmd)
     profile.set_use_custom_command("Yes")
 
-    # IIUC command/profile_customizations are mutually exclusive
+    # command/profile_customizations are mutually exclusive, thus pass command with profile_customizations
     window = await iterm2.Window.async_create(connection, profile_customizations=profile)
 
 
