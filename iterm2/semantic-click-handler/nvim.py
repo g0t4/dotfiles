@@ -31,8 +31,8 @@ async def open_nvim_window(connection: iterm2.Connection):
         return
 
     current_profile = await session.async_get_profile()
-    # with open("profile.txt", "w") as f:
-    #     f.write(str(vars(current_profile)))
+    with open("profile.txt", "w") as f:
+        f.write(str(vars(current_profile)))
     #  FYI: pretty print profile.txt:
     #    cat profile.txt | yq --prettyPrint
 
@@ -86,6 +86,9 @@ async def open_nvim_window(connection: iterm2.Connection):
     # command/profile_customizations are mutually exclusive, thus pass command with profile_customizations
     window = await iterm2.Window.async_create(connection, profile_customizations=new_profile)
 
+    # FYI iterm2 settings => profiles => profile => window tab => screen (size) dropdown... can I set that settting here?
+    #   lets print out entire profile again to see
+    #
     # TODO what size to use and can I have it appear this size initially (i.e. via profile_customizations so I am not resizing it after opening it)?
     # FYI it is pretty fast about the resize but still, might be nice to consolidate and minimize lag
     #   another reason to resize before start nvim, so messages aren't shown based on small initial window size...
