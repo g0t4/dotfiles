@@ -24,11 +24,12 @@ import hashlib
 
 hash_of_workspace_root = hashlib.sha256(workspace_root.encode('utf-8')).hexdigest()
 print(f"py - hash_of_workspace_root: {hash_of_workspace_root}")
-workspace_saved_path = os.path.expanduser(f"~/.config/wes-iterm2/workspaces/{hash_of_workspace_root}.json")
+workspace_profile_path = os.path.expanduser(f"~/.config/wes-iterm2/workspaces/{hash_of_workspace_root}/profile.json")
 import json
+
 workspace_profile = None
-if os.path.exists(workspace_saved_path):
-    with open(workspace_saved_path, "r") as f:
+if os.path.exists(workspace_profile_path):
+    with open(workspace_profile_path, "r") as f:
         workspace_profile = json.load(f)
     print(f"py - loaded workspace: {workspace_profile}")
 
@@ -123,6 +124,11 @@ async def open_nvim_window(connection: iterm2.Connection):
 
     # command/profile_customizations are mutually exclusive, thus pass command with profile_customizations
     window = await iterm2.Window.async_create(connection, profile_customizations=new_profile)
+    if window is None:
+        log("No window created, aborting...")
+        return
+
+    await window.async_set_variable("user.workspace_profile_path", workspace_profile_path)
 
 
 ## NOTES:
