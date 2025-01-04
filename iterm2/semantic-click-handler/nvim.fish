@@ -39,12 +39,16 @@ set text_before_click $argv[3]
 set text_after_click $argv[4]
 set working_directory $argv[5]
 
+set alfred_open_with $argv[6]
+
 # *** handle directory clicks ***
 if test -d "$clicked_path"
-    # if clicked path is a directory...
-    open "$clicked_path" # open dir in Finder (default handler)
-    # call_code "$clicked_path" # open dir in vscode
-    exit 0
+    if not test "$alfred_open_with" = alfred-open-with
+        # if clicked path is a directory...
+        open "$clicked_path" # open dir in Finder (default handler)
+        # call_code "$clicked_path" # open dir in vscode
+        exit 0
+    end
 end
 
 # # USE file command to decide if I want to use default handlers to open (or specific handler)

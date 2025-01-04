@@ -23,4 +23,6 @@ set nvim_fish_path $WES_DOTFILES/iterm2/semantic-click-handler/nvim.fish
 "$nvim_fish_path" \
     $first_path \
     "" "" "" \
-    $working_directory
+    $working_directory \
+    "alfred-open-with"
+# FYI alfred-open-with is a hack to open dirs in nvim too when passed from just this script (not in iterm2 semantic click handler)
