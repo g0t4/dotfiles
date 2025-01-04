@@ -91,3 +91,4 @@ if test $status -ne 0
 end
 
 #exit 1 # if you wanna see debug STDOUT messages above, uncomment this line and click "View" in the iTerm2 dialog
+osascript -e 'tell application "iTerm" to activate'
