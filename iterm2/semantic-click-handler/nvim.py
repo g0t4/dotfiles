@@ -31,10 +31,10 @@ async def open_nvim_window(connection: iterm2.Connection):
         return
 
     current_profile = await session.async_get_profile()
-    with open("profile.txt", "w") as f:
-        f.write(str(vars(current_profile)))
-    #  FYI: pretty print profile.txt:
-    #    cat profile.txt | yq --prettyPrint
+    # with open("profile.txt", "w") as f:
+    #     f.write(str(vars(current_profile)))
+    # #  FYI: pretty print profile.txt:
+    # #    cat profile.txt | yq --prettyPrint
 
     # neat thing is, this new nvim window if started with nvim then when nvim is closed, window closes too! no shell to go back to (so this becomes very much like what I had with vscode before)
     # PRN in future, if I click multiple files in same workspace... don't open new nvim window? or should I just do that? ... i.e. if perusing ag command matches and want to open up a few in nvim... I am thinking it s/b fine to close nvim/reopen each time, for now s/b fast enough... if I have trouble with speed (i.e. starting plugins each time) then investigate in a method to dedupe (only for this semantic click handler) windows per workspace
