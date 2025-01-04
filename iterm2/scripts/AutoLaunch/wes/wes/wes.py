@@ -41,10 +41,25 @@ async def main(connection: iterm2.Connection):
         if e:
             await on_f9(connection)
 
-    async with iterm2.KeystrokeMonitor(connection) as mon:
+    # async with iterm2.KeystrokeMonitor(connection) as mon:
+    #     while True:
+    #         keystroke = await mon.async_get()
+    #         await keystroke_handler(keystroke)
+
+    # monitor for SessionTerminationMonitor for saving workspace_profile info (via workspace_profile_path user var)
+    #   ONLY supposed to be for nvim semantic click handler opened windows... to be able to restore the size to the same size as last used!
+    async with iterm2.SessionTerminationMonitor(connection) as mon:
         while True:
-            keystroke = await mon.async_get()
-            await keystroke_handler(keystroke)
+            log("waiting for session termination...")
+            session_id = await mon.async_get()
+            log("sesion terminated, saving workspace profile, session_id: " + str(session_id))
+            # workspace_profile_path = await connection.async_get_variable("user.workspace_profile_path")
+            # if workspace_profile_path is None:
+            #     log("No workspace profile path, aborting...")
+            #     return
+            # # FYI workspace_profile_path is a string
+            # with open(workspace_profile_path, "w") as f:
+            #     f.write(str(vars(current_profile)))
 
 
 iterm2.run_forever(main)
