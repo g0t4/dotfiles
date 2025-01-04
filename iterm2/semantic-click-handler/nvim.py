@@ -20,9 +20,21 @@ log(f"py - text_after_click: {text_after_click}")
 log(f"py - working_directory: {working_directory}")
 log(f"py - workspace_root: {workspace_root}")
 
+import hashlib
+
+hash_of_workspace_root = hashlib.sha256(workspace_root.encode('utf-8')).hexdigest()
+print(f"py - hash_of_workspace_root: {hash_of_workspace_root}")
+workspace_saved_path = os.path.expanduser(f"~/.config/wes-iterm2/workspaces/{hash_of_workspace_root}.json")
+import json
+workspace_profile = None
+if os.path.exists(workspace_saved_path):
+    with open(workspace_saved_path, "r") as f:
+        workspace_profile = json.load(f)
+    print(f"py - loaded workspace: {workspace_profile}")
 
 # FYI test this w/o literally clicking in iterm2 (i.e. tree output in this sematnic-click-handler dir and click on nvim.fish):
 #   ./nvim.fish  $WES_DOTFILES/iterm2/semantic-click-handler/nvim.py "" "" "" $WES_DOTFILES/iterm2/semantic-click-handler $WES_DOTFILES
+
 
 # exit(0) # for testing, uncomment to stop here
 async def open_nvim_window(connection: iterm2.Connection):
@@ -55,8 +67,13 @@ async def open_nvim_window(connection: iterm2.Connection):
     # make sure Window Type is set to "Normal" (15) and not "Maximized"/"Fullscreen" fo the current profile b/c that is going to be used for this new window...
     # new_profile._simple_set("Window Type", "16")  # Doesn't seem like I can set Window Type in profile_customizations... but I didn't exhausitvely look for how to do that either
     # effectively maximize window using ridiculous values:
-    new_profile._simple_set("Columns", "300")  # if set bigger than screen, seems to stop at screen size (for Rows and Columns)
-    new_profile._simple_set("Rows", "100")
+    if workspace_profile is not None:
+        new_profile._simple_set("Columns", str(workspace_profile["columns"]))
+        new_profile._simple_set("Rows", str(workspace_profile["rows"]))
+    else:
+        new_profile._simple_set("Columns", "300")  # if set bigger than screen, seems to stop at screen size (for Rows and Columns)
+        new_profile._simple_set("Rows", "100")
+
     #  PRN can I get screen size info and use that for rows/cols?
     # ANOTHER OPTION => setup dedicated profile for these nvim windows and use that (IIAC I can even combine with profile_customziations?).. pass profile name to async_create too
 
@@ -67,6 +84,11 @@ async def open_nvim_window(connection: iterm2.Connection):
     # PRN preserve other profile settings...?
     #
     # ASIDE: font size, I wonder if I would find it useful to have font size tied to the workspace (like other nvim settings)... not an easy feat to accomplish but you could observe font size (profile changes) changes and then store it per workspace and then what would you do, when opening just one of these nvim windows then apply that size? Maybe this would be a size for these nvim dedicated windows only? interesting...
+
+    # TODO use https://iterm2.com/python-api/lifecycle.html
+    #   SessionTerminationMonitor
+    #   LayoutChangeMonitor
+    #   use these to record window size and position? per workspace (repo root or cwd)
 
     # PRN adjust other profile settings... i.e. maybe a diff background color (slightly) to remind me its nvim only or smth minor?
 
