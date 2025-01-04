@@ -51,6 +51,8 @@ async def open_nvim_window(connection: iterm2.Connection):
     #
     # ASIDE: font size, I wonder if I would find it useful to have font size tied to the workspace (like other nvim settings)... not an easy feat to accomplish but you could observe font size (profile changes) changes and then store it per workspace and then what would you do, when opening just one of these nvim windows then apply that size? Maybe this would be a size for these nvim dedicated windows only? interesting...
 
+    # PRN adjust other profile settings... i.e. maybe a diff background color (slightly) to remind me its nvim only or smth minor?
+
     # advanced dirs lets you set window/tab/pane specific dirs (not one working dir), so I don't need that for now
     # profile.set_advanced_working_directory_window_directory("/Users/wesdemos/repos")
     # profile.set_initial_directory_mode(iterm2.InitialWorkingDirectory.INITIAL_WORKING_DIRECTORY_ADVANCED)
