@@ -80,5 +80,10 @@ cd $WES_DOTFILES/iterm2/semantic-click-handler
 uv run nvim.py \
     "$clicked_path" "$line_number" "$text_before_click" \
     "$text_after_click" "$working_directory" "$workspace_root"
+if test $status -ne 0
+    # return non-zero so I can trigger failure in nvim.py alone and not need to set exit code here to get iterm to show the handler's debug output
+    # don't need a message, that would come from nvim.py
+    exit 1
+end
 
 #exit 1 # if you wanna see debug STDOUT messages above, uncomment this line and click "View" in the iTerm2 dialog
