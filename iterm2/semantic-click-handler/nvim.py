@@ -13,12 +13,12 @@ text_after_click = sys.argv[4]
 working_directory = sys.argv[5]
 workspace_root = sys.argv[6]  # keep separate of workign_directory b/c working_directory is passed by iterm2 when it invokes the semantic click handler so I wanna preserve verbatim what iterm2 passed
 
-print(f"py - clicked_path: {clicked_path}")
-print(f"py - line_number: {line_number}")
-print(f"py - text_before_click: {text_before_click}")
-print(f"py - text_after_click: {text_after_click}")
-print(f"py - working_directory: {working_directory}")
-print(f"py - workspace_root: {workspace_root}")
+log(f"py - clicked_path: {clicked_path}")
+log(f"py - line_number: {line_number}")
+log(f"py - text_before_click: {text_before_click}")
+log(f"py - text_after_click: {text_after_click}")
+log(f"py - working_directory: {working_directory}")
+log(f"py - workspace_root: {workspace_root}")
 
 
 # FYI test this w/o literally clicking in iterm2 (i.e. tree output in this sematnic-click-handler dir and click on nvim.fish):
