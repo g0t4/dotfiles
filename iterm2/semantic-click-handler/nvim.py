@@ -43,7 +43,9 @@ async def open_nvim_window(connection: iterm2.Connection):
     new_profile.set_custom_directory(workspace_root)
     new_profile.set_initial_directory_mode(iterm2.InitialWorkingDirectory.INITIAL_WORKING_DIRECTORY_CUSTOM)
 
-    new_profile.set_normal_font(current_profile.normal_font)
+    # new_profile.set_normal_font(current_profile.normal_font)
+    new_profile._simple_set("Normal Font", current_profile.normal_font)
+
     # i.e. SauceCodeProNF 12
     #   IIUC can have other things after size? or? (see example below)
     # example of altering font size:
