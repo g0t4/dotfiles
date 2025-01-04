@@ -19,8 +19,11 @@ print(f"py - text_after_click: {text_after_click}")
 print(f"py - working_directory: {working_directory}")
 print(f"py - workspace_root: {workspace_root}")
 
+# FYI test this w/o literally clicking in iterm2 (i.e. tree output in this sematnic-click-handler dir and click on nvim.fish):
+#   ./nvim.fish  $WES_DOTFILES/iterm2/semantic-click-handler/nvim.py "" "" "" $WES_DOTFILES/iterm2/semantic-click-handler $WES_DOTFILES
 
 # exit(0) # for testing, uncomment to stop here
+
 async def open_nvim_window(connection: iterm2.Connection):
     session = await get_session(connection)
     if session is None:
