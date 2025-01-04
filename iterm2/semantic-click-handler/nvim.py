@@ -1,6 +1,7 @@
 from re import I
 import iterm2
-
+from common import get_session, get_current_window, get_current_tab
+from logs import log
 import sys
 
 # leave all args even if unused so they are always available AND always in the same order
@@ -17,40 +18,6 @@ print(f"py - text_before_click: {text_before_click}")
 print(f"py - text_after_click: {text_after_click}")
 print(f"py - working_directory: {working_directory}")
 print(f"py - workspace_root: {workspace_root}")
-
-
-# avoid none soup 4 levels deep in consumer code... feels like a better way to do this (later)
-# for now just log why something is missing, if it is missing, otherwise return the level I want
-async def get_current_window(connection: iterm2.Connection):
-    app = await iterm2.async_get_app(connection)
-    if app is None:
-        log("No current app")
-        return
-    window = app.current_window
-    if window is None:
-        log("No current terminal window")
-    return window
-
-
-async def get_current_tab(connection: iterm2.Connection):
-    window = await get_current_window(connection)
-    if window is None:
-        return
-    tab = window.current_tab
-    if tab is None:
-        log("No current tab")
-    return tab
-
-
-async def get_session(connection: iterm2.Connection):
-    tab = await get_current_tab(connection)
-    if tab is None:
-        return
-    session = tab.current_session
-    if session is None:
-        log("No current session")
-        return
-    return session
 
 
 # exit(0) # for testing, uncomment to stop here
