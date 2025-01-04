@@ -65,5 +65,11 @@ async def open_nvim_window(connection: iterm2.Connection):
     # command/profile_customizations are mutually exclusive, thus pass command with profile_customizations
     window = await iterm2.Window.async_create(connection, profile_customizations=new_profile)
 
+## NOTES:
+#  - try open new window/tab/pane in nvim popup window and that just opens another nvim instance, not necessarily a bad thing! ... just FYI, think about it
+#    - for now keep terminal panes in a new / separate window to avoid this (perfectly fine, in fact kinda how I wanted it)...
+#    - intereswting to think you can easily open new instances of same workspace in nvim with Cmd+T here... might be useful for smth else
+# - what about clicking several files (i.e. ag output multiple matches, open each one by one)... can we open in same instance of nvim (and/or a new tab in same window?)... is that important or not?
+#    - mostly I am worried about perf to load nvim for each file... but maybe wait until that is a real pain first
 
 iterm2.run_until_complete(open_nvim_window)
