@@ -58,6 +58,7 @@ async def open_nvim_window(connection: iterm2.Connection):
     new_profile._simple_set("Columns", "300")  # if set bigger than screen, seems to stop at screen size (for Rows and Columns)
     new_profile._simple_set("Rows", "100")
     #  PRN can I get screen size info and use that for rows/cols?
+    # ANOTHER OPTION => setup dedicated profile for these nvim windows and use that (IIAC I can even combine with profile_customziations?).. pass profile name to async_create too
 
     # i.e. SauceCodeProNF 12
     #   IIUC can have other things after size? or? (see example below)
