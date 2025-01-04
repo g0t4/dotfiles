@@ -58,7 +58,7 @@ async def open_nvim_window(connection: iterm2.Connection):
     # profile.set_initial_directory_mode(iterm2.InitialWorkingDirectory.INITIAL_WORKING_DIRECTORY_ADVANCED)
 
     # FYI can wrap in fish shell if I need the shell env to get nvim to work (i.e. coc requires smth I have in my shell dotfiles... and so it works if use fish -c nvim but not nvim directly, currently)
-    #    repro w/o click handler:    `env -i nvim`
+    #    repro w/o click handler:    `env -i (which nvim)` # which nvim runs in outer shell BTW, dont confuse that
     # both of these are closable too.. IOTW neither returns to shell if you quit nvim so either is fine for me for now:
     fish_to_nvim_cmd = f"/opt/homebrew/bin/fish -c 'nvim {clicked_path}'"
     nvim_directly_cmd = f"/opt/homebrew/bin/nvim {clicked_path}"
