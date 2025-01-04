@@ -88,6 +88,7 @@ async def open_nvim_window(connection: iterm2.Connection):
 
     # TODO what size to use and can I have it appear this size initially (i.e. via profile_customizations so I am not resizing it after opening it)?
     # FYI it is pretty fast about the resize but still, might be nice to consolidate and minimize lag
+    #   another reason to resize before start nvim, so messages aren't shown based on small initial window size...
     new_size = iterm2.Frame(origin=iterm2.Point(x=0, y=0), size=iterm2.Size(width=1024, height=800))
     await window.async_set_frame(new_size)
     # TODO maximze the window? for now just use fixed size and I can max it if needed
