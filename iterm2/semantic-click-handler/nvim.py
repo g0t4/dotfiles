@@ -65,6 +65,9 @@ async def open_nvim_window(connection: iterm2.Connection):
     # command/profile_customizations are mutually exclusive, thus pass command with profile_customizations
     window = await iterm2.Window.async_create(connection, profile_customizations=new_profile)
 
+## TODOs:
+#  - fix path, nvim can't find node and vimspector, etc... IIAC also cant find LSPs.. the path in the click handler is likley restricted
+#
 ## NOTES:
 #  - try open new window/tab/pane in nvim popup window and that just opens another nvim instance, not necessarily a bad thing! ... just FYI, think about it
 #    - for now keep terminal panes in a new / separate window to avoid this (perfectly fine, in fact kinda how I wanted it)...
