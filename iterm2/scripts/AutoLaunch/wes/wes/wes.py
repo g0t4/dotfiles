@@ -88,10 +88,8 @@ async def main(connection: iterm2.Connection):
                     last_saved_was = last_saved_profile_by_window.get(window.window_id)
                     # PRN debounce changes? (i.e. when drag resizing window, or zoom in/out)... only look into if resize feels sluggish (drag resize)
                     if last_saved_was is None or last_saved_was != save_profile:
-                        # log(f"save_profile: {save_profile}")
                         if last_saved_was is None:
                             log("ensuring profile dir exists... s/b called once per window")
-                            # only cal once per window on first save
                             # 7ms... not enough to justify caching most likely but hey the dir should never be removed so leave it
                             os.makedirs(os.path.dirname(workspace_profile_path), exist_ok=True)  # can I cache that this exists... one less call then
 
