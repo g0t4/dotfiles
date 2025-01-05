@@ -1,6 +1,7 @@
 import iterm2
 import json
 import asyncio
+import os
 
 from scrape_ask import *
 from f9command import *
@@ -56,6 +57,7 @@ async def main(connection: iterm2.Connection):
 
     async def save_workspace_profile(connection):
         last_saved_profile_by_window = {}
+        profile_dir_exists_by_window = {}
 
         async with iterm2.LayoutChangeMonitor(connection) as mon:
             while True:
@@ -85,6 +87,11 @@ async def main(connection: iterm2.Connection):
                     # PRN debvounce changes (i.e. when drag resizing window)... only look into if resize feels sluggish (drag resize)
                     if last_saved_was is None or last_saved_was != save_profile:
                         # log(f"save_profile: {save_profile}")
+                        if not profile_dir_exists_by_window.get(window.window_id):
+                            # only call once per window... yes if someone deletes the dir then I would be in trouble...
+                            # TODO do a timing analysis to see overhead here
+                            os.makedirs(os.path.dirname(workspace_profile_path), exist_ok=True)  # can I cache that this exists... one less call then
+                            profile_dir_exists_by_window[window.window_id] = True
                         with open(workspace_profile_path, "w") as f:
                             f.write(json.dumps(save_profile))
                         last_saved_profile_by_window[window.window_id] = save_profile
