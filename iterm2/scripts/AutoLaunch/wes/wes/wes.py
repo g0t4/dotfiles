@@ -82,6 +82,9 @@ async def main(connection: iterm2.Connection):
                         "columns": grid_size.width,
                         "rows": grid_size.height,
                         "font": cur_font,
+                        # ! TODO SAVE POSITION TOO, otherwise I am getting confused about where the window should open!!! when it is moved and not resized that throws me off
+                        # "x": ??
+                        # "y": ??
                     }
                     # TODO do last saved based on profile_path not window id.. that way if open new window in same dir... not fighting to save over each other
                     #   FYI if two sep windows are opened... unpredictable as to which is used to save the profile (order is not deterministic) but I don't intend for this use case anyways so ignore this and honestly I think restoring either size would feel fine... PRN avoid thrashing to save over top of each other?
