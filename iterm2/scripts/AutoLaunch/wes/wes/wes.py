@@ -104,17 +104,24 @@ async def main(connection: iterm2.Connection):
                     # log(f"workspace_profile_path: {workspace_profile_path}")
                     # get columns and rows
                     session = app.current_window.current_tab.current_session
+                    # FYI if open new tab in nvim-window then that is gonna be diff font size.. this is not a primary use case though so leave alone for now... anyways that will cause new size to be saved b/c it will be default font size (again, if in a nvim-window opened by semantic handler, if I cmd+t to make new tab and open the same workspace again in new tab then font differs and thus size differs)
+                    # FYI grid is based on both font size AND screen size... rows/cols are used ultimately but need font size to restore too
                     if session is None:
                         log("No session, skipping...")
                         continue
                     grid_size = session.grid_size
-                    # TODO CHECK IF CHANGED and only save if changed
-                    # log(f"grid_size: {grid_size}") # YAY THIS IS IT!
+                    cur_session_profile = await session.async_get_profile()
+                    if cur_session_profile is None:
+                        log("No session profile, skipping...")
+                        continue
+                    cur_font = cur_session_profile.normal_font
                     save_profile = {
                         "columns": grid_size.width,
                         "rows": grid_size.height,
+                        "font": cur_font,
                     }
                     last_saved_was = last_saved_profile_by_window.get(window.window_id)
+                    # PRN debvounce changes (i.e. when drag resizing window)... only look into if resize feels sluggish (drag resize)
                     if last_saved_was is None or last_saved_was != save_profile:
                         log(f"save_profile: {save_profile}")
                         with open(workspace_profile_path, "w") as f:
