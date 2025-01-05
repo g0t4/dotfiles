@@ -65,11 +65,8 @@ async def main(connection: iterm2.Connection):
                     workspace_profile_path = await window.async_get_variable("user.workspace_profile_path")
                     if workspace_profile_path is None:
                         continue
-                    # log(f"workspace_profile_path: {workspace_profile_path}")
-                    # get columns and rows
                     session = window.current_tab.current_session
-                    # FYI if open new tab in nvim-window then that is gonna be diff font size.. this is not a primary use case though so leave alone for now... anyways that will cause new size to be saved b/c it will be default font size (again, if in a nvim-window opened by semantic handler, if I cmd+t to make new tab and open the same workspace again in new tab then font differs and thus size differs)
-                    # FYI grid is based on both font size AND screen size... rows/cols are used ultimately but need font size to restore too
+                    # set the window's sizing based solely on the currrent tab/sesssion...  usually only 1 b/c I don't intend for new tabs in nvim-window from semantic handler clicks
                     if session is None:
                         log("No session, skipping...")
                         continue
@@ -94,7 +91,7 @@ async def main(connection: iterm2.Connection):
 
     asyncio.create_task(keystroke_monitor(connection))
     # TODO restore when I am convinced this isn't killing perf... hold down key to zoom feels slightly slower... NBD but I am worried about the use case of just using APIs to check for layout changes on every layout change... that could easily slow down a ton of stuff
-    # asyncio.create_task(save_workspace_profile(connection))
+    asyncio.create_task(save_workspace_profile(connection))
 
 
 iterm2.run_forever(main)
