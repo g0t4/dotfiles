@@ -18,6 +18,7 @@ async def save_workspace_profile(connection):
             # FYI KEEP IN MIND, sizing/positioning of regular terminal windows is not considered here.. these are for only the nvim-window semantic handler windows (currently)
             await mon.async_get()
             # FYI layout doesn't encompass moving windows... would need separate monitor for that, not gonna spend tiem on that part now
+            # TODO it would be nice just to cache the save_profile objects and lookup in memory (and change in memory too) and then when iterm closes, flush them to disk... would be much more performant than writing to the file every time... could use closing a session as signal to flush changes... though I should actually do perf tests before I worry much about this...
             for window in app.windows:
                 workspace_profile_path = await window.async_get_variable("user.workspace_profile_path")
                 if workspace_profile_path is None:
