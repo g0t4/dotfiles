@@ -56,9 +56,6 @@ async def open_nvim_window(connection: iterm2.Connection):
     new_profile.set_custom_directory(workspace_root)
     new_profile.set_initial_directory_mode(iterm2.InitialWorkingDirectory.INITIAL_WORKING_DIRECTORY_CUSTOM)
 
-    # new_profile.set_normal_font(current_profile.normal_font)
-    new_profile._simple_set("Normal Font", current_profile.normal_font)
-
     # figure out how to size window initially with profile_customizations:
     #   - how to find the profile properties to set (many aren't listed in API Profile type but can still be set as its just a dict)
     #     - nav to iterm settings plist and copy it (before changes)
@@ -71,9 +68,12 @@ async def open_nvim_window(connection: iterm2.Connection):
     if workspace_profile is not None:
         new_profile._simple_set("Columns", str(workspace_profile["columns"]))
         new_profile._simple_set("Rows", str(workspace_profile["rows"]))
+        new_profile._simple_set("Normal Font", workspace_profile["font"])
     else:
         new_profile._simple_set("Columns", "300")  # if set bigger than screen, seems to stop at screen size (for Rows and Columns)
         new_profile._simple_set("Rows", "100")
+        # new_profile.set_normal_font(current_profile.normal_font)
+        new_profile._simple_set("Normal Font", current_profile.normal_font)
 
     #  PRN can I get screen size info and use that for rows/cols?
     # ANOTHER OPTION => setup dedicated profile for these nvim windows and use that (IIAC I can even combine with profile_customziations?).. pass profile name to async_create too
