@@ -84,7 +84,7 @@ async def main(connection: iterm2.Connection):
                     last_saved_was = last_saved_profile_by_window.get(window.window_id)
                     # PRN debvounce changes (i.e. when drag resizing window)... only look into if resize feels sluggish (drag resize)
                     if last_saved_was is None or last_saved_was != save_profile:
-                        log(f"save_profile: {save_profile}")
+                        # log(f"save_profile: {save_profile}")
                         with open(workspace_profile_path, "w") as f:
                             f.write(json.dumps(save_profile))
                         last_saved_profile_by_window[window.window_id] = save_profile
