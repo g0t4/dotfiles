@@ -88,6 +88,8 @@ async def main(connection: iterm2.Connection):
         return
 
     async def save_workspace_profile(connection):
+        last_saved_profile_by_window = {}
+
         async with iterm2.LayoutChangeMonitor(connection) as mon:
             while True:
                 # ! BASED ON THIS EXAMPLE: https://iterm2.com/python-api/examples/mrutabs2.html
@@ -96,7 +98,6 @@ async def main(connection: iterm2.Connection):
                 log("layout changed, saving workspace profile...")
                 # enumerate all windows and save workspace_profile_path if defined
                 for window in app.windows:
-                    # TODO cache last values in user vars or otherwise so i don't write file every time... or set global var w/ previous values
                     workspace_profile_path = await window.async_get_variable("user.workspace_profile_path")
                     if workspace_profile_path is None:
                         continue
@@ -113,9 +114,12 @@ async def main(connection: iterm2.Connection):
                         "columns": grid_size.width,
                         "rows": grid_size.height,
                     }
-                    log(f"save_profile: {save_profile}")
-                    with open(workspace_profile_path, "w") as f:
-                        f.write(json.dumps(save_profile))
+                    last_saved_was = last_saved_profile_by_window.get(window.window_id)
+                    if last_saved_was is None or last_saved_was != save_profile:
+                        log(f"save_profile: {save_profile}")
+                        with open(workspace_profile_path, "w") as f:
+                            f.write(json.dumps(save_profile))
+                        last_saved_profile_by_window[window.window_id] = save_profile
 
     asyncio.create_task(keystroke_monitor(connection))
     asyncio.create_task(save_workspace_profile(connection))
