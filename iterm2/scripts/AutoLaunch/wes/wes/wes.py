@@ -60,17 +60,14 @@ async def main(connection: iterm2.Connection):
         async with iterm2.LayoutChangeMonitor(connection) as mon:
             while True:
                 # ! BASED ON THIS EXAMPLE: https://iterm2.com/python-api/examples/mrutabs2.html
-                log("waiting for layout change...")
                 await mon.async_get()
-                log("layout changed, saving workspace profile...")
-                # enumerate all windows and save workspace_profile_path if defined
                 for window in app.windows:
                     workspace_profile_path = await window.async_get_variable("user.workspace_profile_path")
                     if workspace_profile_path is None:
                         continue
                     # log(f"workspace_profile_path: {workspace_profile_path}")
                     # get columns and rows
-                    session = app.current_window.current_tab.current_session
+                    session = window.current_tab.current_session
                     # FYI if open new tab in nvim-window then that is gonna be diff font size.. this is not a primary use case though so leave alone for now... anyways that will cause new size to be saved b/c it will be default font size (again, if in a nvim-window opened by semantic handler, if I cmd+t to make new tab and open the same workspace again in new tab then font differs and thus size differs)
                     # FYI grid is based on both font size AND screen size... rows/cols are used ultimately but need font size to restore too
                     if session is None:
