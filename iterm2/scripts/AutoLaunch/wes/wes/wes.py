@@ -1,11 +1,12 @@
 import iterm2
+import json
+import asyncio
 
 from scrape_ask import *
 from f9command import *
 from common import *
 from og_ask import *
 from tabs import *
-import json
 
 
 async def main(connection: iterm2.Connection):
@@ -85,34 +86,38 @@ async def main(connection: iterm2.Connection):
         log("No current app, aborting...")
         return
 
-    async with iterm2.LayoutChangeMonitor(connection) as mon:
-        while True:
-            # ! BASED ON THIS EXAMPLE: https://iterm2.com/python-api/examples/mrutabs2.html
-            log("waiting for layout change...")
-            await mon.async_get()
-            log("layout changed, saving workspace profile...")
-            # enumerate all windows and save workspace_profile_path if defined
-            for window in app.windows:
-                # TODO cache last values in user vars or otherwise so i don't write file every time... or set global var w/ previous values
-                workspace_profile_path = await window.async_get_variable("user.workspace_profile_path")
-                if workspace_profile_path is None:
-                    continue
-                # log(f"workspace_profile_path: {workspace_profile_path}")
-                # get columns and rows
-                session = app.current_window.current_tab.current_session
-                if session is None:
-                    log("No session, skipping...")
-                    continue
-                grid_size = session.grid_size
-                # TODO CHECK IF CHANGED and only save if changed
-                # log(f"grid_size: {grid_size}") # YAY THIS IS IT!
-                save_profile = {
-                    "columns": grid_size.width,
-                    "rows": grid_size.height,
-                }
-                log(f"save_profile: {save_profile}")
-                with open(workspace_profile_path, "w") as f:
-                    f.write(json.dumps(save_profile))
+    async def save_workspace_profile(connection):
+        async with iterm2.LayoutChangeMonitor(connection) as mon:
+            while True:
+                # ! BASED ON THIS EXAMPLE: https://iterm2.com/python-api/examples/mrutabs2.html
+                log("waiting for layout change...")
+                await mon.async_get()
+                log("layout changed, saving workspace profile...")
+                # enumerate all windows and save workspace_profile_path if defined
+                for window in app.windows:
+                    # TODO cache last values in user vars or otherwise so i don't write file every time... or set global var w/ previous values
+                    workspace_profile_path = await window.async_get_variable("user.workspace_profile_path")
+                    if workspace_profile_path is None:
+                        continue
+                    # log(f"workspace_profile_path: {workspace_profile_path}")
+                    # get columns and rows
+                    session = app.current_window.current_tab.current_session
+                    if session is None:
+                        log("No session, skipping...")
+                        continue
+                    grid_size = session.grid_size
+                    # TODO CHECK IF CHANGED and only save if changed
+                    # log(f"grid_size: {grid_size}") # YAY THIS IS IT!
+                    save_profile = {
+                        "columns": grid_size.width,
+                        "rows": grid_size.height,
+                    }
+                    log(f"save_profile: {save_profile}")
+                    with open(workspace_profile_path, "w") as f:
+                        f.write(json.dumps(save_profile))
+
+    # TODO  add back key listner too
+    asyncio.create_task(save_workspace_profile(connection))
 
 
 iterm2.run_forever(main)
