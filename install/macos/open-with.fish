@@ -9,6 +9,10 @@ if not command -q duti
     brew install duti
 end
 
+for item in applescript scpt scptd
+    duti -s com.latenightsw.ScriptDebugger8 $item all
+end
+
 duti -s freemind.main.FreeMind mm all
 
 for item in csv xls xlsx
