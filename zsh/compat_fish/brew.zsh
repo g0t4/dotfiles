@@ -30,6 +30,6 @@ abbr bin 'brew install'
 abbr bup 'brew upgrade'
 abbr bubo 'brew update && brew outdated' # src: omz/brew
 abbr bubc 'brew upgrade && brew cleanup' # src: omz/brew
-abbr bubu 'brew update && brew outdated && brew upgrade && brew cleanup' # src: omz/brew
+abbr bubu 'test $USER = "wes" && brew update && brew outdated && brew upgrade && brew cleanup' # src: omz/brew
 
 abbr bun 'brew uninstall'
