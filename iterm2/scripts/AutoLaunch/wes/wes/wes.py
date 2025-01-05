@@ -96,7 +96,8 @@ async def main(connection: iterm2.Connection):
                         last_saved_profile_by_window[window.window_id] = save_profile
 
     asyncio.create_task(keystroke_monitor(connection))
-    asyncio.create_task(save_workspace_profile(connection))
+    # TODO restore when I am convinced this isn't killing perf... hold down key to zoom feels slightly slower... NBD but I am worried about the use case of just using APIs to check for layout changes on every layout change... that could easily slow down a ton of stuff
+    # asyncio.create_task(save_workspace_profile(connection))
 
 
 iterm2.run_forever(main)
