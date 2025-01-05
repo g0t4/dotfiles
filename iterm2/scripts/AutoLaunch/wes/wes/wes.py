@@ -67,7 +67,7 @@ async def main(connection: iterm2.Connection):
                     if workspace_profile_path is None:
                         continue
                     session = window.current_tab.current_session
-                    # set the window's sizing based solely on the currrent tab/sesssion...  usually only 1 b/c I don't intend for new tabs in nvim-window from semantic handler clicks
+                    # set the window's sizing based solely on the currrent tab/sesssion...  usually only 1 b/c I don't intend for multiple tabs in nvim-window from semantic handler clicks
                     if session is None:
                         log("No session, skipping...")
                         continue
@@ -83,12 +83,13 @@ async def main(connection: iterm2.Connection):
                         "font": cur_font,
                     }
                     # TODO do last saved based on profile_path not window id.. that way if open new window in same dir... not fighting to save over each other
+                    #   FYI if two sep windows are opened... unpredictable as to which is used to save the profile (order is not deterministic) but I don't intend for this use case anyways so ignore this and honestly I think restoring either size would feel fine... PRN avoid thrashing to save over top of each other?
                     last_saved_was = last_saved_profile_by_window.get(window.window_id)
-                    # PRN debvounce changes (i.e. when drag resizing window)... only look into if resize feels sluggish (drag resize)
+                    # PRN debounce changes? (i.e. when drag resizing window, or zoom in/out)... only look into if resize feels sluggish (drag resize)
                     if last_saved_was is None or last_saved_was != save_profile:
                         # log(f"save_profile: {save_profile}")
                         if last_saved_was is None:
-                            log("ensuring profile dir exists...")
+                            log("ensuring profile dir exists... s/b called once per window")
                             # only cal once per window on first save
                             # 7ms... not enough to justify caching most likely but hey the dir should never be removed so leave it
                             os.makedirs(os.path.dirname(workspace_profile_path), exist_ok=True)  # can I cache that this exists... one less call then
@@ -98,7 +99,6 @@ async def main(connection: iterm2.Connection):
                         last_saved_profile_by_window[window.window_id] = save_profile
 
     asyncio.create_task(keystroke_monitor(connection))
-    # TODO restore when I am convinced this isn't killing perf... hold down key to zoom feels slightly slower... NBD but I am worried about the use case of just using APIs to check for layout changes on every layout change... that could easily slow down a ton of stuff
     asyncio.create_task(save_workspace_profile(connection))
 
 
