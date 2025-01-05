@@ -29,8 +29,9 @@ for item in wav mp3 mpc m4a m4v m4b mp4 m4p mpg mp2 mpeg mpe mpv m2v svi mxf roq
     # TEST DRIVE iina for video playback (i.e. back a frame, not just forward... though sometimes back doesn't work)
 end
 
+for item in md yml txt js py zsh ini json xml iqy svg meta
+    # TODO FIX: html htm - cannot be set => https://github.com/moretension/duti/issues/34
 
-for item in md yml txt js htm html htm py zsh ini json xml iqy svg meta
     duti -s com.microsoft.VSCode $item all
     # TODO migrate to my nvim-window semantic handler (adapter to use it instead of vscode)
 
