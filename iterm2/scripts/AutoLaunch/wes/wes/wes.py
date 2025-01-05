@@ -86,6 +86,13 @@ async def main(connection: iterm2.Connection):
                         # "x": ??
                         # "y": ??
                     }
+                    # FOOOO bar
+                    # frame = await window.async_get_frame()
+                    # log(f"origin: {frame.origin}, size: {frame.size.height}height x {frame.size.width}width")
+                    # origin would give me position info... to save too... but then I'd need to listen for window position changes too.. yuck...
+                    # CRAP MOVING WINDOW DOESN'T TRIGGER LAYOUT CHANGE... ok so skip this part for now is fine then...
+                    # so the reason why the windows restored in prior positions was b/c current window had last position used... thus also why it felt like it was restoring values from other workspaces when it wasn't
+
                     # TODO do last saved based on profile_path not window id.. that way if open new window in same dir... not fighting to save over each other
                     #   FYI if two sep windows are opened... unpredictable as to which is used to save the profile (order is not deterministic) but I don't intend for this use case anyways so ignore this and honestly I think restoring either size would feel fine... PRN avoid thrashing to save over top of each other?
                     last_saved_was = last_saved_profile_by_window.get(window.window_id)
