@@ -61,6 +61,7 @@ async def main(connection: iterm2.Connection):
         async with iterm2.LayoutChangeMonitor(connection) as mon:
             while True:
                 # ! BASED ON THIS EXAMPLE: https://iterm2.com/python-api/examples/mrutabs2.html
+                # FYI KEEP IN MIND, sizing/positioning of regular terminal windows is not considered here.. these are for only the nvim-window semantic handler windows (currently)
                 await mon.async_get()
                 for window in app.windows:
                     workspace_profile_path = await window.async_get_variable("user.workspace_profile_path")
