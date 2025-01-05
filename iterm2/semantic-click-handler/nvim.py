@@ -65,15 +65,18 @@ async def open_nvim_window(connection: iterm2.Connection):
     # make sure Window Type is set to "Normal" (15) and not "Maximized"/"Fullscreen" fo the current profile b/c that is going to be used for this new window...
     # new_profile._simple_set("Window Type", "16")  # Doesn't seem like I can set Window Type in profile_customizations... but I didn't exhausitvely look for how to do that either
     # effectively maximize window using ridiculous values:
+    new_profile._simple_set("Normal Font", current_profile.normal_font)
     if workspace_profile is not None:
-        new_profile._simple_set("Columns", str(workspace_profile["columns"]))
-        new_profile._simple_set("Rows", str(workspace_profile["rows"]))
-        new_profile._simple_set("Normal Font", workspace_profile["font"])
+        if workspace_profile["columns"] is not None:
+            new_profile._simple_set("Columns", str(workspace_profile["columns"]))
+        if workspace_profile["rows"] is not None:
+            new_profile._simple_set("Rows", str(workspace_profile["rows"]))
+        if workspace_profile["font"] is not None:
+            new_profile._simple_set("Normal Font", workspace_profile["font"])
     else:
         new_profile._simple_set("Columns", "300")  # if set bigger than screen, seems to stop at screen size (for Rows and Columns)
         new_profile._simple_set("Rows", "100")
         # new_profile.set_normal_font(current_profile.normal_font)
-        new_profile._simple_set("Normal Font", current_profile.normal_font)
 
     #  PRN can I get screen size info and use that for rows/cols?
     # ANOTHER OPTION => setup dedicated profile for these nvim windows and use that (IIAC I can even combine with profile_customziations?).. pass profile name to async_create too
