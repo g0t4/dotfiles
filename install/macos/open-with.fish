@@ -33,7 +33,7 @@ for item in md yml txt js py zsh ini json xml iqy svg meta
     # TODO FIX: html htm - cannot be set => https://github.com/moretension/duti/issues/34
 
     duti -s com.microsoft.VSCode $item all
-    # TODO migrate to my nvim-window semantic handler (adapter to use it instead of vscode)
+    # !!! TODO migrate to my nvim-window semantic handler (adapter to use it instead of vscode)
 
     # 'iqy', # excel web connection scraping definition files
 end
