@@ -30,6 +30,7 @@ abbr bin 'brew install'
 abbr bup 'brew upgrade'
 abbr bubo 'brew update && brew outdated' # src: omz/brew
 abbr bubc 'brew upgrade && brew cleanup' # src: omz/brew
+# don't run as any other user but wes (fux up brew installs)
 abbr bubu 'test $USER = "wes" && brew update && brew outdated && brew upgrade && brew cleanup' # src: omz/brew
 
 abbr bun 'brew uninstall'
