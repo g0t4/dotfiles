@@ -57,7 +57,6 @@ async def main(connection: iterm2.Connection):
 
     async def save_workspace_profile(connection):
         last_saved_profile_by_window = {}
-        profile_dir_exists_by_window = {}
 
         async with iterm2.LayoutChangeMonitor(connection) as mon:
             while True:
@@ -83,15 +82,17 @@ async def main(connection: iterm2.Connection):
                         "rows": grid_size.height,
                         "font": cur_font,
                     }
+                    # TODO do last saved based on profile_path not window id.. that way if open new window in same dir... not fighting to save over each other
                     last_saved_was = last_saved_profile_by_window.get(window.window_id)
                     # PRN debvounce changes (i.e. when drag resizing window)... only look into if resize feels sluggish (drag resize)
                     if last_saved_was is None or last_saved_was != save_profile:
                         # log(f"save_profile: {save_profile}")
-                        if not profile_dir_exists_by_window.get(window.window_id):
-                            # only call once per window... yes if someone deletes the dir then I would be in trouble...
-                            # TODO do a timing analysis to see overhead here
+                        if last_saved_was is None:
+                            log("ensuring profile dir exists...")
+                            # only cal once per window on first save
+                            # 7ms... not enough to justify caching most likely but hey the dir should never be removed so leave it
                             os.makedirs(os.path.dirname(workspace_profile_path), exist_ok=True)  # can I cache that this exists... one less call then
-                            profile_dir_exists_by_window[window.window_id] = True
+
                         with open(workspace_profile_path, "w") as f:
                             f.write(json.dumps(save_profile))
                         last_saved_profile_by_window[window.window_id] = save_profile
