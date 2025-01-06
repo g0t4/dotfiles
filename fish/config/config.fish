@@ -50,9 +50,7 @@ if test -e {$HOME}/.iterm2_shell_integration.fish
     source {$HOME}/.iterm2_shell_integration.fish
 
     # *** ask-openai variables to identify env (i.e. sshed to a remote shell):
-    if command -q sw_vers
-        set ask_os (sw_vers -productName) (sw_vers -productVersion)
-    else if test -f /etc/os-release
+    if test -f /etc/os-release
         set ask_os (cat /etc/os-release | grep '^ID=' | cut -d= -f2)
     else
         set ask_os (uname) # Darwin, Linux, etc
@@ -107,7 +105,7 @@ end
 # - command substitution
 #   - () works like $() in zsh
 # - autoloading
-#   - several config dirs meant to lazy load customizations (ie a function) 
+#   - several config dirs meant to lazy load customizations (ie a function)
 #   - `funcsave foo`,`funced foo` to save/edit autoload function file, i.e. ~/.config/fish/functions/foo.fish
 # - cd hacks:
 #   foo => cd foo
@@ -118,7 +116,7 @@ end
 #         => really like w/ dotX aliases, i can type gst (as always) and up arrow pulls back `dotgst` if I last used it! yes! same w/ gsl=>UP=>dotgsl,glo etc
 # - fish line editor (name?)
 #   `type up-or-search` shows 'widget (name?)' impl colorized
-# - variables are not split on interpolation! 
+# - variables are not split on interpolation!
 #    i.e. `mkdir $foo` where `set -l foo "foo bar"` doesn't make two dirs, just one named "foo bar" with space in name
 #    universal => vars shared across instances of zsh (PRN should I be versioning the corresponding file fish_variables or not?)
 # - `fish --profile=file` => on exit dumps to file! awesome
