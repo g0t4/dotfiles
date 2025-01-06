@@ -32,12 +32,17 @@ end
 
 function _update_dotfiles
     # update both spots for now until I merge all usage into ~/repos/github/g0t4/dotfiles
-    if test ! -d $WES_BOOTSTRAP/subs/dotfiles
+    if test -d $WES_BOOTSTRAP/subs/dotfiles
+        echo
+        echo "## $WES_BOOTSTRAP/subs/dotfiles"
         git -C $WES_DOTFILES pull
     end
-    if test ! -d ~/repos/github/g0t4/dotfiles
+    if test -d ~/repos/github/g0t4/dotfiles
+        echo
+        echo "## ~/repos/github/g0t4/dotfiles"
         git -C ~/repos/github/g0t4/dotfiles pull
     end
+    echo
 end
 
 function _update_os_lazy
