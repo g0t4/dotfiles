@@ -1,0 +1,65 @@
+# https://ghostty.org/docs/config/reference
+# cmd+shift+, to reload
+# dump default config: 
+#    ghostty +show-config --default --docs
+#    https://github.com/ghostty-org/ghostty/blob/main/src/config/Config.zig
+
+shell-integration-features = no-cursor
+cursor-style = block
+cursor-style-blink = false
+cursor-color = #b22793
+
+# FYI iterm2 does this and I never noticed!
+mouse-hide-while-typing = true
+
+# TODO link clicking (ie open file path, or https link, etc)
+# https://ghostty.org/docs/config/reference#link
+# link = [] some sort of array
+
+
+
+# title = ""
+# *** make this work w/ tabs (otherwise tabs open in new windows):
+macos-titlebar-style = tabs
+# TODO when using tabs in titlebar, can we not have such a thick titlebar? the tab bar + titlebar is taller than just the titlebar alone
+# hides the proxy icon in the titlebar (seems to only matter if using native titlebar-style):
+macos-titlebar-proxy-icon = hidden 
+
+# macos specific
+# macos-option-as-alt 
+#
+
+# https://ghostty.org/docs/config/keybind
+#   ghostty +list-keybinds
+#   poossible keys: https://github.com/ghostty-org/ghostty/blob/d6e76858164d52cff460fedc61ddf2e560912d71/src/input/key.zig#L255
+#   actions: https://ghostty.org/docs/config/keybind/reference
+#       ghostty +list-actions
+#   actions: https://github.com/ghostty-org/ghostty/blob/d6e76858164d52cff460fedc61ddf2e560912d71/src/input/key.zig#L255
+#   physical:   # respond to hardware keycode
+#
+# keybind=?
+
+# font-family # jetbrains mono default is fine, wanna try it vs saucecodepro
+# ghostty +list-fonts
+font-size = 20
+
+# clippy (defaults: read=ask, write=allow)
+# clipboard-read = allow
+# clipboard-write = allow
+
+
+# ghostty +list-theme
+# theme = dark:catppuccin-mocha,light:catppuccin-latte #? TODO onedarkpro?
+# window-decoration = false #?
+# window-theme = auto # default
+# bold-is-bright = true # ?
+#
+# ghostty +list-colors
+# TODO COLORs from itermgg
+#
+# window-padding-x/y 2 by default
+# FYI depending on font size, zooming in nvim (and elsewhere) will result in extra padding below if partial character would only be visible at given zoom level for last row/column
+#
+# default colorspace is srgb, can be display-p3 too (using p3, looks more vibrant on xdr)
+# window-colorspace = srgb
+window-colorspace = display-p3
