@@ -135,7 +135,7 @@ function setup_workspace()
                 return
             endif
 
-            !time uv run "/Users/wes/repos/wes-config/wes-bootstrap/subs/dotfiles/iterm2/semantic-click-handler/on-nvim-quit.py"
+            !uv run "/Users/wes/repos/wes-config/wes-bootstrap/subs/dotfiles/iterm2/semantic-click-handler/on-nvim-quit.py"
         endfunction
     ]]
     --
