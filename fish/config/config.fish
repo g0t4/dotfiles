@@ -24,9 +24,14 @@ else
     set -g IS_MACOS false
     set -g IS_LINUX true
 end
-set -l my_filename_resolved (readlink -f (status filename))
-set -g WES_DOTFILES (dirname (dirname (dirname $my_filename_resolved)))
-set -g WES_BOOTSTRAP (dirname (dirname $WES_DOTFILES)) # won't work on non bootstrap machines but that's fine, it won't hurt, this is mostly used to find WES_BOOTSTRAP for its git helpers (currently)
+
+set -g WES_BOOTSTRAP ~/repos/wes-config/wes-bootstrap
+if test -d $WES_BOOTSTRAP
+    # TODO MOVE THIS TO repos/github/g0t4/dotfiles too... get it out of bootstrap...
+    set -g WES_DOTFILES $WES_BOOTSTRAP/subs/dotfiles
+else
+    set -g WES_DOTFILES ~/repos/github/g0t4/dotfiles
+end
 
 # source $WES_DOTFILES/fish/load_first/*.fish # glob not working for multiple files in dir, just one?!
 for file in $WES_DOTFILES/fish/load_first/*.fish
