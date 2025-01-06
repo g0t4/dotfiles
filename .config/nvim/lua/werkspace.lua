@@ -135,7 +135,9 @@ function setup_workspace()
                 return
             endif
 
+            " 20ms+ to send via new python process, not surprising
             "!uv run "/Users/wes/repos/wes-config/wes-bootstrap/subs/dotfiles/iterm2/semantic-click-handler/quit-client.py" $ITERM_SESSION_ID
+            " ZERO lag using lua to send the notification... as expected
             lua require("localz.client-nvim-quit").NotifyDaemonOfSessionQuit()
         endfunction
     ]]
