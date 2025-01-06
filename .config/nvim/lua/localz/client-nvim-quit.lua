@@ -3,7 +3,7 @@ local uv = vim.loop
 
 local socket_path = "/tmp/iterm2_daemon.sock"
 
-local function send_message()
+function NotifyDaemonOfSessionQuit(message)
     local session_id = os.getenv("ITERM_SESSION_ID")
     print("session_id: " .. session_id)
     if session_id == nil then
@@ -31,5 +31,3 @@ local function send_message()
     end)
     uv.run("default")
 end
-
-send_message()
