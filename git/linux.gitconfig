@@ -27,7 +27,7 @@
 	func = 146 bold
 
 [core]
-	editor = vim
+	editor = nvim
 	autocrlf = input
 	# https://git-scm.com/book/en/v2/Customizing-Git-Git-Configuration#_core_autocrlf
 
@@ -41,7 +41,7 @@
 	required = true
 
 [init]
-	defaultBranch = master 
+	defaultBranch = master
 
 [pull]
   rebase = true
