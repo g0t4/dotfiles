@@ -13,4 +13,5 @@ ln -s ~/repos/wes-config/wes-bootstrap/subs/dotfiles/.config/hammerspoon/init.lu
 ln -s ~/repos/wes-config/wes-bootstrap/subs/dotfiles/.config/hammerspoon/config ~/.hammerspoon/config
 
 # ghostty
+mkdir -p ~/.config/ghostty
 ln -s ~/repos/wes-config/wes-bootstrap/subs/dotfiles/.config/ghostty/config ~/.config/ghostty/config
