@@ -50,9 +50,9 @@ if test -f "$HOME/.config/fish/config-private.fish"
 end
 
 # optional, iterm2 shell integration (must be installed here, i.e. by installing via iterm menus)
-if test -e {$HOME}/.iterm2_shell_integration.fish
+if test -e $HOME/.iterm2_shell_integration.fish
 
-    source {$HOME}/.iterm2_shell_integration.fish
+    source $HOME/.iterm2_shell_integration.fish
 
     # *** ask-openai variables to identify env (i.e. sshed to a remote shell):
     if test -f /etc/os-release
