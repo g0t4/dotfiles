@@ -1,9 +1,10 @@
-local uv = vim.loop
--- local uv = require("luv")
+-- local uv = vim.loop
+local uv = require("luv")
+-- TODO does it matter if I use luv or vim.loop?
 
 local socket_path = "/tmp/iterm2_daemon.sock"
 
-function NotifyDaemonOfSessionQuit(message)
+function NotifyDaemonOfSessionQuit()
     local session_id = os.getenv("ITERM_SESSION_ID")
     print("session_id: " .. session_id)
     if session_id == nil then
