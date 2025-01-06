@@ -31,11 +31,13 @@ function _reload_config
 end
 
 function _update_dotfiles
-    if test ! -d $WES_DOTFILES
-        echo "dotfiles not found..."
-        return
+    # update both spots for now until I merge all usage into ~/repos/github/g0t4/dotfiles
+    if test ! -d $WES_BOOTSTRAP/subs/dotfiles
+        git -C $WES_DOTFILES pull
     end
-    git -C $WES_DOTFILES pull
+    if test ! -d ~/repos/github/g0t4/dotfiles
+        git -C ~/repos/github/g0t4/dotfiles pull
+    end
 end
 
 function _update_os_lazy
