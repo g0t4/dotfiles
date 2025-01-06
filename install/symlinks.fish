@@ -11,3 +11,6 @@ ln -s ~/repos/wes-config/wes-bootstrap/subs/dotfiles/.config/editrc/.editrc ~/.e
 mkdir -p ~/.hammerspoon
 ln -s ~/repos/wes-config/wes-bootstrap/subs/dotfiles/.config/hammerspoon/init.lua ~/.hammerspoon/init.lua
 ln -s ~/repos/wes-config/wes-bootstrap/subs/dotfiles/.config/hammerspoon/config ~/.hammerspoon/config
+
+# ghostty
+ln -s ~/repos/wes-config/wes-bootstrap/subs/dotfiles/.config/ghostty/config ~/.config/ghostty/config
