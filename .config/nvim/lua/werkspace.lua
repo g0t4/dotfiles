@@ -131,13 +131,10 @@ function setup_workspace()
         nnoremap <silent> <F7> :call RestoreSessionWithNotify()<CR>
 
         function OnLeaveSaveWindowState()
-
             if ! exists('$IS_SEMANTIC_WINDOW')
-                echo "Not a semantic window, aborting..."
                 return
             endif
 
-            echo "Saving window state..."
             !time uv run "/Users/wes/repos/wes-config/wes-bootstrap/subs/dotfiles/iterm2/semantic-click-handler/on-nvim-quit.py"
         endfunction
     ]]
