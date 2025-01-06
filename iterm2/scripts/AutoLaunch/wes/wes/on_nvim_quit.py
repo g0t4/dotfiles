@@ -1,35 +1,21 @@
 import iterm2
 import json
-import os
-from timing import Timer
+# from timing import Timer
 from logs import log
 
 
-def get_session_id():
-    iterm_session_id = os.environ.get("ITERM_SESSION_ID")
-    if iterm_session_id is None:
-        log("No session id, aborting...")
-        return
+async def on_nvim_quit_save_window_state(connection: iterm2.Connection, session_id):
 
-    # FYI ITERM_SESSION_ID has two parts:
-    #   wXtYpZ:session_id
-    #   i.e. w0t0p0:1EB6FBA4-5980-4DE5-9638-76BA088787ED
-    #   wX = window #
-    #   tY = tab #
-    #   pZ = pane #
-    # I only need session_id right now
-
-    return iterm_session_id.split(":")[1]
-
-
-# TODO make sure nvim checks ENV VARS before calling this script or just check here?
-async def on_nvim_quit_save_window_state(connection: iterm2.Connection):
-
-    # with Timer():
-    session_id = get_session_id()
     if session_id is None:
         log("No session id, aborting...")
         return
+    session_id = session_id.strip()
+    if ":" in session_id:
+        # so I can pass ITERM_SESSION_ID env var verbatim in clients (or not)
+        # simplifies client code to handle this here
+        session_id = session_id.split(":")[1]
+
+    log(f"session_id: {session_id}")
 
     app = await iterm2.async_get_app(connection)  # ~ 2.5ms
     if app is None:
@@ -80,6 +66,3 @@ async def on_nvim_quit_save_window_state(connection: iterm2.Connection):
 
     with open(workspace_profile_path, "w") as f:
         f.write(json.dumps(save_profile))
-
-
-iterm2.run_until_complete(on_nvim_quit_save_window_state)
