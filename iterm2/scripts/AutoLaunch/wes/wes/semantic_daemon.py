@@ -24,7 +24,6 @@ async def semantic_daemon(connection):
     #   AND make sure I don't have any issues (esp issues with race conditions)
 
     while True:
-        log("waiting for connection")
         # conn, _ = server.accept()
         conn, _ = await asyncio.get_running_loop().sock_accept(server)
         conn.setblocking(False)
@@ -32,7 +31,6 @@ async def semantic_daemon(connection):
         # message = conn.recv(1024).decode()
         data = await asyncio.get_running_loop().sock_recv(conn, 1024)
         message = data.decode().strip()
-        log(f"message: {message}")
 
         # TODO add try catch to handle errors so I don't crash my daemon :)
         #   BUT, wait for another failure to happen first so I am adding the right error handling
