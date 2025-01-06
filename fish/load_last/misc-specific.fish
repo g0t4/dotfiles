@@ -1219,16 +1219,16 @@ end
 
 function elgato_kill_other_account_streamdeck
     # kill them before you change settings in current account's streamdeck, otherwise on quit the other one may overwrite new settings
-    set other_user "wes"
+    set other_user wes
 
-    if test $USER = "wes"
-        set other_user "wesdemos"
+    if test $USER = wes
+        set other_user wesdemos
     else
-        set other_user "wes"
+        set other_user wes
     end
 
     sudo pkill -U $other_user -ilf "stream deck"
-    sudo pkill -U $other_user -ilf "streamdeck"
+    sudo pkill -U $other_user -ilf streamdeck
     # just open other account's streamdeck next time you switch to it
 end
 
