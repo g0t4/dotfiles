@@ -122,7 +122,7 @@ async def open_nvim_window(connection: iterm2.Connection):
     #   BTW much of env vars are inherited by new nvim standalone process... but not PATH
     use_this_path = f"{os.environ['PATH']}"
     # IS_NVIM_WINDOW=yes makes it SUPER cheap for nvim (on quit) to check if it needs to store window state (size,position, etc) b/c invoking iterm script is expensive (1-2 seconds to startup) and I wanna avoid that unless its actually an nvim-window from semantic handler in which case the lag s/b fine
-    nvim_inherit_path_cmd = f"env PATH='{use_this_path}' IS_NVIM_WINDOW=yes {nvim_directly_cmd}"
+    nvim_inherit_path_cmd = f"env PATH='{use_this_path}' IS_SEMANTIC_WINDOW=yes {nvim_directly_cmd}"
     #
     cmd = nvim_inherit_path_cmd
     if line_number:
