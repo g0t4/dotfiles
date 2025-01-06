@@ -19,9 +19,6 @@ async def semantic_daemon(connection):
     server.bind(SOCKET_PATH)
     server.listen()
     server.setblocking(False)
-    # TODO I NEED TO LEARN MORE about the non-blocking sockets in lua...
-    #   AND the event loop IMPL... just so I can wrap my head around it
-    #   AND make sure I don't have any issues (esp issues with race conditions)
 
     while True:
         # conn, _ = server.accept()
