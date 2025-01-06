@@ -1,7 +1,7 @@
 import asyncio
 import socket
 import os
-from on_nvim_quit import on_nvim_quit_save_window_state
+from semantic_save_window_state import on_nvim_quit_save_window_state
 from logs import log
 
 SOCKET_PATH = os.path.expanduser("~/.config/wes-iterm2/run/semantic-click-handler.sock")
