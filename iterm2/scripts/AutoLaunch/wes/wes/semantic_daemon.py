@@ -16,6 +16,9 @@ async def semantic_daemon(connection):
     server.bind(SOCKET_PATH)
     server.listen()
     server.setblocking(False)
+    # TODO I NEED TO LEARN MORE about the non-blocking sockets in lua...
+    #   AND the event loop IMPL... just so I can wrap my head around it
+    #   AND make sure I don't have any issues (esp issues with race conditions)
 
     while True:
         log("waiting for connection")
@@ -28,6 +31,8 @@ async def semantic_daemon(connection):
         message = data.decode().strip()
         log(f"message: {message}")
 
+        # TODO add try catch to handle errors so I don't crash my daemon :)
+        #   BUT, wait for another failure to happen first so I am adding the right error handling
         await on_nvim_quit_save_window_state(connection, message)
         conn.close()
 
