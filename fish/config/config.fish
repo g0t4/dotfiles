@@ -32,6 +32,7 @@ if test -d $WES_BOOTSTRAP
 else
     set -g WES_DOTFILES ~/repos/github/g0t4/dotfiles
 end
+export WES_DOTFILES=$WES_DOTFILES
 
 # source $WES_DOTFILES/fish/load_first/*.fish # glob not working for multiple files in dir, just one?!
 for file in $WES_DOTFILES/fish/load_first/*.fish
