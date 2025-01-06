@@ -1,5 +1,5 @@
--- local uv = vim.loop
-local uv = require("luv")
+local uv = vim.loop
+-- local uv = require("luv")
 
 local socket_path = "/tmp/iterm2_daemon.sock"
 
