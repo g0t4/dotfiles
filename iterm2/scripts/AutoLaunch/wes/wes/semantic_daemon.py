@@ -21,11 +21,9 @@ async def semantic_daemon(connection):
     server.setblocking(False)
 
     while True:
-        # conn, _ = server.accept()
         conn, _ = await asyncio.get_running_loop().sock_accept(server)
         conn.setblocking(False)
 
-        # message = conn.recv(1024).decode()
         data = await asyncio.get_running_loop().sock_recv(conn, 1024)
         message = data.decode().strip()
 
