@@ -9,7 +9,7 @@ local M = {}
 
 function M.NotifyDaemonOfSessionQuit()
     local session_id = os.getenv("ITERM_SESSION_ID")
-    print("session_id: " .. session_id)
+
     if session_id == nil then
         print("No session id, aborting...")
         return
