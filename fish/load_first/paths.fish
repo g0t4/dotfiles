@@ -9,10 +9,25 @@
 # if homebrew is present, add env vars/PATH
 if test -f /opt/homebrew/bin/brew
     # apple silicon macs
-    eval $(/opt/homebrew/bin/brew shellenv)
+
+    # eval $(/opt/homebrew/bin/brew shellenv) # 30ms to run this so don't do it on every startup...
+    # *** generated code:
+    set --global --export HOMEBREW_PREFIX /opt/homebrew
+    set --global --export HOMEBREW_CELLAR /opt/homebrew/Cellar
+    set --global --export HOMEBREW_REPOSITORY /opt/homebrew
+    fish_add_path --global --move --path /opt/homebrew/bin /opt/homebrew/sbin
+    if test -n "$MANPATH[1]"
+        set --global --export MANPATH '' $MANPATH
+    end
+    if not contains /opt/homebrew/share/info $INFOPATH
+        set --global --export INFOPATH /opt/homebrew/share/info $INFOPATH
+    end
+    # *** end generated code
+
 else if test -f /usr/local/bin/brew
     # intel macs
-    eval $(/usr/local/bin/brew shellenv)
+    #eval $(/usr/local/bin/brew shellenv)
+    echo "brew shellenv not implemented yet, do this if you ever use an intel mac again"
 end
 
 # export PATH="$HOME/bin:$PATH"
@@ -27,7 +42,7 @@ end
 if test -d "$HOME/go/bin"
     export PATH="$HOME/go/bin:$PATH"
 end
-if test -d "/usr/local/go/bin"
+if test -d /usr/local/go/bin
     # from wget install (see fish/install/install.fish)
     export PATH="/usr/local/go/bin:$PATH"
 end
