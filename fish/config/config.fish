@@ -45,8 +45,8 @@ for file in $WES_DOTFILES/fish/load_last/*.fish
 end
 
 # optional, private config
-if test -f "$HOME/.config/fish/config-private.fish"
-    source "$HOME/.config/fish/config-private.fish"
+if test -f $HOME/.config/fish/config-private.fish
+    source $HOME/.config/fish/config-private.fish
 end
 
 # optional, iterm2 shell integration (must be installed here, i.e. by installing via iterm menus)
