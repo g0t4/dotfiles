@@ -66,11 +66,6 @@ async def on_nvim_quit_save_window_state(connection: iterm2.Connection):
 
     cur_font = current_profile.normal_font  # 6us
 
-    window = session.window  # 5us
-    if window is None:
-        log("No window, aborting...")
-        return
-
     frame = await window.async_get_frame()  # 3ms
     # log(f"origin: {frame.origin}, size: {frame.size.height}height x {frame.size.width}width")
 
