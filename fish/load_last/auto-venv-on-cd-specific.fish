@@ -1,3 +1,17 @@
+# ************************************************************************
+# ******  !! 2025-01-06 DISABLED because THANKS TO uv I don't need this anymore... I will leave it around a bit longer just in case but dang...
+# ******  b/c these don't require venv activation:
+# ******    `uv pip list`
+# ******    `uv add foo`
+# ******    `uv run x.py`
+# ******    IIRC these are the only things I did that needed to activate a venv
+# ******    FYI any scripts that also call activate.fish directly... or that path to python in the venv... also work (don't need to be ported to uv run)
+# ************************************************************************
+return
+# ************************************************************************
+# ************************************************************************
+#  FYI this takes 7ms+ to run on every startup!
+
 if not status is-interactive
     # do not use autovenv in non-interactive shells (ie scripts)
     return
