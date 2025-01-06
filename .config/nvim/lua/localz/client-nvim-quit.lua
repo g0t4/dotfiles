@@ -1,8 +1,11 @@
+local os = require("os")
 -- local uv = vim.loop
 local uv = require("luv")
 -- TODO does it matter if I use luv or vim.loop?
 
-local socket_path = "/tmp/iterm2_daemon.sock"
+local socket_path = os.getenv("HOME") .. "/.config/wes-iterm2/run/semantic-click-handler.sock"
+
+-- TODO add timeout waiting for message to be sent (call uv.stop() and fail, else locks up nvim indefinitely)
 
 local M = {}
 

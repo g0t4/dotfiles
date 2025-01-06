@@ -4,10 +4,13 @@ import os
 from on_nvim_quit import on_nvim_quit_save_window_state
 from logs import log
 
-SOCKET_PATH = "/tmp/iterm2_daemon.sock"
+SOCKET_PATH = os.path.expanduser("~/.config/wes-iterm2/run/semantic-click-handler.sock")
 
 
 async def semantic_daemon(connection):
+
+    if not os.path.exists(os.path.dirname(SOCKET_PATH)):
+        os.makedirs(os.path.dirname(SOCKET_PATH))
 
     if os.path.exists(SOCKET_PATH):
         os.remove(SOCKET_PATH)
