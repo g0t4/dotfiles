@@ -5,6 +5,11 @@
 
 
 vim.cmd [[
+
+    " use venv specific to dotfiles repo for nvim purposes, double check with:
+    "   :checkhealth provider.python
+    let g:python3_host_prog = "$WES_DOTFILES/.venv/bin/python3"
+
     augroup RestoreCursorPosition
         autocmd!
 
