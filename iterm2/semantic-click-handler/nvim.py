@@ -1,7 +1,8 @@
-from re import I
+import json
+import hashlib
 import iterm2
 import os
-from common import get_session, get_current_window, get_current_tab
+from common import get_session
 from logs import log
 import sys
 
@@ -20,12 +21,10 @@ log(f"py - text_after_click: {text_after_click}")
 log(f"py - working_directory: {working_directory}")
 log(f"py - workspace_root: {workspace_root}")
 
-import hashlib
 
 hash_of_workspace_root = hashlib.sha256(workspace_root.encode('utf-8')).hexdigest()
 print(f"py - hash_of_workspace_root: {hash_of_workspace_root}")
 workspace_profile_path = os.path.expanduser(f"~/.config/wes-iterm2/workspaces/{hash_of_workspace_root}/profile.json")
-import json
 
 workspace_profile = None
 if os.path.exists(workspace_profile_path):
@@ -131,6 +130,7 @@ async def open_nvim_window(connection: iterm2.Connection):
         log("No window created, aborting...")
         return
 
+    await window.async_set_variable("user.workspace_root", workspace_root)
     await window.async_set_variable("user.workspace_profile_path", workspace_profile_path)
 
 
