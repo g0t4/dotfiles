@@ -4,7 +4,9 @@ local uv = require("luv")
 
 local socket_path = "/tmp/iterm2_daemon.sock"
 
-function NotifyDaemonOfSessionQuit()
+local M = {}
+
+function M.NotifyDaemonOfSessionQuit()
     local session_id = os.getenv("ITERM_SESSION_ID")
     print("session_id: " .. session_id)
     if session_id == nil then
@@ -32,3 +34,5 @@ function NotifyDaemonOfSessionQuit()
     end)
     uv.run("default")
 end
+
+return M
