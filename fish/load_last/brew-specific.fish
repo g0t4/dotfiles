@@ -5,13 +5,14 @@
 
 # FYI analytics: https://formulae.brew.sh/analytics/ (click through to find json files with current data)
 
-# cache for duration of current shell session (instance)
-#   -u => don't create file (dry-run)
-#   just want the file name at this point
-set tmp_formula_json (mktemp -u)
-set tmp_cask_json (mktemp -u)
-
 function _brew_analytics_formula_annual
+    if test -z "$tmp_formula_json"
+        # check if a tmp file _NAME_ is generated, if not then first call should create it:
+        #   DO NOT GENERATE THIS ON SHELL STARTUP, takes 4 to 6ms to call mktemp!!!
+        #   -u => don't create file (dry-run)
+        set -g tmp_formula_json (mktemp -u) # 4ms to do this!!!! even with -u ... wtf
+    end
+
     if ! test -e $tmp_formula_json
         curl -fsSL https://formulae.brew.sh/api/analytics/install/365d.json >$tmp_formula_json
     end
@@ -19,6 +20,11 @@ function _brew_analytics_formula_annual
 end
 
 function _brew_analytics_cask_annual
+    if test -z "$tmp_cask_json"
+        # check if a tmp file _NAME_ is generated, if not then first call should create it:
+        set -g tmp_cask_json (mktemp -u) # 4ms to do this!!!! even with -u ... wtf
+    end
+
     if ! test -e $tmp_cask_json
         curl -fsSL https://formulae.brew.sh/api/analytics/cask-install/365d.json >$tmp_cask_json
     end
