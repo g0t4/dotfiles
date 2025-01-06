@@ -21,7 +21,6 @@ log(f"py - text_after_click: {text_after_click}")
 log(f"py - working_directory: {working_directory}")
 log(f"py - workspace_root: {workspace_root}")
 
-
 hash_of_workspace_root = hashlib.sha256(workspace_root.encode('utf-8')).hexdigest()
 print(f"py - hash_of_workspace_root: {hash_of_workspace_root}")
 workspace_profile_path = os.path.expanduser(f"~/.config/wes-iterm2/workspaces/{hash_of_workspace_root}/profile.json")
@@ -65,6 +64,9 @@ async def open_nvim_window(connection: iterm2.Connection):
     # new_profile._simple_set("Window Type", "16")  # Doesn't seem like I can set Window Type in profile_customizations... but I didn't exhausitvely look for how to do that either
     # effectively maximize window using ridiculous values:
     new_profile._simple_set("Normal Font", current_profile.normal_font)
+    x = None
+    y = None
+
     if workspace_profile is not None:
         if workspace_profile["columns"] is not None:
             new_profile._simple_set("Columns", str(workspace_profile["columns"]))
@@ -72,6 +74,10 @@ async def open_nvim_window(connection: iterm2.Connection):
             new_profile._simple_set("Rows", str(workspace_profile["rows"]))
         if workspace_profile["font"] is not None:
             new_profile._simple_set("Normal Font", workspace_profile["font"])
+        if workspace_profile.get("x") is not None:
+            x = int(workspace_profile["x"])
+        if workspace_profile.get("y") is not None:
+            y = int(workspace_profile["y"])
     else:
         new_profile._simple_set("Columns", "300")  # if set bigger than screen, seems to stop at screen size (for Rows and Columns)
         new_profile._simple_set("Rows", "100")
@@ -115,7 +121,8 @@ async def open_nvim_window(connection: iterm2.Connection):
     # ok set path with env command works too, much better than fish -c overhead
     #   BTW much of env vars are inherited by new nvim standalone process... but not PATH
     use_this_path = f"{os.environ['PATH']}"
-    nvim_inherit_path_cmd = f"env PATH='{use_this_path}' {nvim_directly_cmd}"
+    # IS_NVIM_WINDOW=yes makes it SUPER cheap for nvim (on quit) to check if it needs to store window state (size,position, etc) b/c invoking iterm script is expensive (1-2 seconds to startup) and I wanna avoid that unless its actually an nvim-window from semantic handler in which case the lag s/b fine
+    nvim_inherit_path_cmd = f"env PATH='{use_this_path}' IS_NVIM_WINDOW=yes {nvim_directly_cmd}"
     #
     cmd = nvim_inherit_path_cmd
     if line_number:
@@ -129,6 +136,12 @@ async def open_nvim_window(connection: iterm2.Connection):
     if window is None:
         log("No window created, aborting...")
         return
+    # TODO can we set position before opening window?
+    if x is not None and y is not None:
+        frame = await window.async_get_frame()
+        log(f"originally: {frame.origin.x}, {frame.origin.y} and {frame.size.width}x{frame.size.height}")
+        # DO NOT CHANGE SIZE
+        await window.async_set_frame(iterm2.Frame(origin=iterm2.Point(x=x, y=y), size=iterm2.Size(width=frame.size.width, height=frame.size.height)))
 
     await window.async_set_variable("user.workspace_root", workspace_root)
     await window.async_set_variable("user.workspace_profile_path", workspace_profile_path)

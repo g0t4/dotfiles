@@ -6,7 +6,6 @@ from f9command import *
 from common import *
 from og_ask import *
 from tabs import *
-from layout.workspaces import save_workspace_profile
 
 
 async def main(connection: iterm2.Connection):
@@ -50,7 +49,6 @@ async def main(connection: iterm2.Connection):
                 await keystroke_handler(keystroke)
 
     asyncio.create_task(keystroke_monitor(connection))
-    asyncio.create_task(save_workspace_profile(connection))
 
 
 iterm2.run_forever(main)
