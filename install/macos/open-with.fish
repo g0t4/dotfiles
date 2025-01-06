@@ -29,10 +29,13 @@ for item in wav mp3 mpc m4a m4v m4b mp4 m4p mpg mp2 mpeg mpe mpv m2v svi mxf roq
     # TEST DRIVE iina for video playback (i.e. back a frame, not just forward... though sometimes back doesn't work)
 end
 
-for item in md yml txt js py zsh ini json xml iqy svg meta
+for item in md yml txt js py zsh ini json xml iqy svg meta cfg
     # TODO FIX: html htm - cannot be set => https://github.com/moretension/duti/issues/34
-
-    duti -s com.microsoft.VSCode $item all
+    # my automator app that just calls my semantich handler like alfred does!
+    # PRN in the future modify that app to dispatch to other scripts too.. if so just put some logic in a script in dotfiles to do that and plug it in
+    # FYI app is backed up in dropbox
+    duti -s com.apple.automator.wes-dispatcher $item all
+    #duti -s com.microsoft.VSCode $item all
     # !!! TODO migrate to my nvim-window semantic handler (adapter to use it instead of vscode)
 
     # 'iqy', # excel web connection scraping definition files
