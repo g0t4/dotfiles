@@ -22,18 +22,23 @@ function M.NotifyDaemonOfSessionQuit()
         client:write(session_id, function(write_err)
             if write_err then
                 print("Error writing to socket: " .. write_err)
+                client:close()
+                uv.stop()
                 return
             end
-
-            client:close()
 
             -- FYI could have server send back messages... but let's just go with iterm2's console logs (for daemon)
             -- client:read_start(function(read_err, data)
             -- end)
+
+            client:close()
+            -- w/o this, the loop blocks on uv.run() indefinitely (even though all handles are closed at this point...), so make sure to call uv.stop()
+            -- w/o this you can send SIGWINCH and that will trigger loop cleanup (even if client:close() is not called, in my testing... must check state of connection and close it on SIGWINCH too, or?)
             uv.stop()
         end)
     end)
     uv.run("default")
+    -- print("notify client is done...") --  use this to troubleshoot event loop hanging
 end
 
 return M

@@ -19,12 +19,14 @@ async def semantic_daemon(connection):
     server.bind(SOCKET_PATH)
     server.listen()
     server.setblocking(False)
+    # non-blocking so other tasks can run too (i.e. iterm key monitor)
 
     while True:
-        conn, _ = await asyncio.get_running_loop().sock_accept(server)
+        loop = asyncio.get_running_loop()
+        conn, _ = await loop.sock_accept(server)
         conn.setblocking(False)
 
-        data = await asyncio.get_running_loop().sock_recv(conn, 1024)
+        data = await loop.sock_recv(conn, 1024)
         message = data.decode().strip()
 
         # TODO add try catch to handle errors so I don't crash my daemon :)
