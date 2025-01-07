@@ -82,9 +82,10 @@ async def on_nvim_quit_save_window_state(connection: iterm2.Connection, session_
         "x": frame.origin.x,
         "y": frame.origin.y,
     }
+
+    # PRN can send DONE (to client) here, before saving profile.json (if needed for an actual lag issue, else leave as is for simplicity)
     log(f"save_profile: {save_profile}")
 
     os.makedirs(os.path.dirname(workspace_profile_path), exist_ok=True)
-
     with open(workspace_profile_path, "w") as f:
         f.write(json.dumps(save_profile))
