@@ -1363,9 +1363,9 @@ function video_editing_gen_fcpxml
 end
 
 function video_editing_boost_audio_dB_by
-    # usage:    video_editing_boost_audio_dB_by foo.mp4 7dB
-    set boost_dB $argv[2]
-    set input_file (realpath $argv[1])
+    # usage:    video_editing_boost_audio_dB_by 7dB foo.mp4
+    set boost_dB $argv[1]
+    set input_file (realpath $argv[2])
     set file_extension (_get_first_file_extension $input_file)
     set boosted_file (string replace -r "\.$file_extension\$" ".$boost_dB.$file_extension" "$input_file")
     # FYI I use sep audio detect to manually decide the boost, TODO maybe change to automate that? based on highest sample?
