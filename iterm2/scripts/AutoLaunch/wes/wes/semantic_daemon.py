@@ -1,4 +1,5 @@
 import asyncio
+import traceback
 import socket
 import os
 from semantic_save_window_state import on_nvim_quit_save_window_state
@@ -35,7 +36,8 @@ async def semantic_daemon(connection):
             # TODO reproduce a legit example of this?
             #   MIGHT HAPPEN even in spite of blocking uv.run client call... if window is removed before server can get win position/state... I think I saw that recently...
             #   though honestly not saving one time is NBD... old position will be used and as long as I don't terminate my daemon on that failure, all will be fine
-            log(f"save state exception: {e}")
+            stack = traceback.format_exc()
+            log(f"save state exception: {stack}")
             # use finder to open via wes-dispatcher... after 3 or 4 closes I will get a failure, last one was:
             # 1/6, 18:53:41.029: save state exception: 2
             # this is the exception before adding this except/log:
