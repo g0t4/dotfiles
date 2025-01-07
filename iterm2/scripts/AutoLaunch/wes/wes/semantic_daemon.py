@@ -29,8 +29,6 @@ async def semantic_daemon(connection):
         data = await loop.sock_recv(conn, 1024)
         message = data.decode().strip()
 
-        # TODO add try catch to handle errors so I don't crash my daemon :)
-        #   BUT, wait for another failure to happen first so I am adding the right error handling
         try:
             await on_nvim_quit_save_window_state(connection, message)
         except Exception as e:
@@ -38,6 +36,8 @@ async def semantic_daemon(connection):
             #   MIGHT HAPPEN even in spite of blocking uv.run client call... if window is removed before server can get win position/state... I think I saw that recently...
             #   though honestly not saving one time is NBD... old position will be used and as long as I don't terminate my daemon on that failure, all will be fine
             log(f"save state exception: {e}")
+            # use finder to open via wes-dispatcher... after 3 or 4 closes I will get a failure, last one was:
+            # 1/6, 18:53:41.029: save state exception: 2
         conn.close()
 
     server.close()
