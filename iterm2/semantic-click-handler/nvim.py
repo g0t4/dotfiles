@@ -22,14 +22,14 @@ log(f"py - working_directory: {working_directory}")
 log(f"py - workspace_root: {workspace_root}")
 
 hash_of_workspace_root = hashlib.sha256(workspace_root.encode('utf-8')).hexdigest()
-print(f"py - hash_of_workspace_root: {hash_of_workspace_root}")
+log(f"py - hash_of_workspace_root: {hash_of_workspace_root}")
 workspace_profile_path = os.path.expanduser(f"~/.config/wes-iterm2/workspaces/{hash_of_workspace_root}/profile.json")
 
 workspace_profile = None
 if os.path.exists(workspace_profile_path):
     with open(workspace_profile_path, "r") as f:
         workspace_profile = json.load(f)
-    print(f"py - loaded workspace: {workspace_profile}")
+    log(f"py - loaded workspace: {workspace_profile}")
 
 # FYI test this w/o literally clicking in iterm2 (i.e. tree output in this sematnic-click-handler dir and click on nvim.fish):
 #   ./nvim.fish  $WES_DOTFILES/iterm2/semantic-click-handler/nvim.py "" "" "" $WES_DOTFILES/iterm2/semantic-click-handler $WES_DOTFILES
@@ -75,9 +75,9 @@ async def open_nvim_window(connection: iterm2.Connection):
             #   Anyways, this is gonna be rare now b/c once a profile is saved, this branch won't be hit (once per workspace)
             #   If I encounter this again, just try to reproduce it...
             #   FYI activate fix might take care of it... but I need to repro it first to be sure before I start sprinkling in activation calls
-            log("No session, aborting nvim.py open...")
+            log("py - No session, aborting nvim.py open...")
             return
-        print("found current window's session_id: ", session.session_id)
+        log("py - found current window's session_id: " + session.session_id)
 
         current_profile = await session.async_get_profile()
         # with open("profile.txt", "w") as f:
@@ -143,12 +143,12 @@ async def open_nvim_window(connection: iterm2.Connection):
     # command/profile_customizations are mutually exclusive, thus pass command with profile_customizations
     window = await iterm2.Window.async_create(connection, profile_customizations=new_profile)
     if window is None:
-        log("No window created, aborting...")
+        log("py - No window created, aborting...")
         return
     # TODO can we set position before opening window?
     if x is not None and y is not None:
         frame = await window.async_get_frame()
-        log(f"originally: {frame.origin.x}, {frame.origin.y} and {frame.size.width}x{frame.size.height}")
+        log(f"py - originally: {frame.origin.x}, {frame.origin.y} and {frame.size.width}x{frame.size.height}")
         # DO NOT CHANGE SIZE
         await window.async_set_frame(iterm2.Frame(origin=iterm2.Point(x=x, y=y), size=iterm2.Size(width=frame.size.width, height=frame.size.height)))
 
