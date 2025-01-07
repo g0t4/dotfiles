@@ -19,6 +19,11 @@ function M.NotifyDaemonOfSessionQuit()
 
 
     local function log_file(msg)
+        -- disable for now, can re-enable if needed
+        if true then
+            return
+        end
+
         local path = os.getenv("HOME") .. "/.config/wes-iterm2/semantic-client.log"
         local file = io.open(path, "a")
         if not file then
