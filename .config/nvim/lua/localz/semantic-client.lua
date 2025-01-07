@@ -26,15 +26,22 @@ function M.NotifyDaemonOfSessionQuit()
                 uv.stop()
                 return
             end
+            print("Wrote session_id: " .. session_id)
 
+            -- TODO oh yeah derp... I need a response from the server else I start closing the window before it is done getting frame info (hence that error)
             -- FYI could have server send back messages... but let's just go with iterm2's console logs (for daemon)
-            -- client:read_start(function(read_err, data)
-            -- end)
+            client:read_start(function(read_err, data)
+                if read_err then
+                    print("Error reading from socket: " .. read_err)
+                    client:close()
+                    uv.stop()
+                    return
+                end
 
-            client:close()
-            -- w/o this, the loop blocks on uv.run() indefinitely (even though all handles are closed at this point...), so make sure to call uv.stop()
-            -- w/o this you can send SIGWINCH and that will trigger loop cleanup (even if client:close() is not called, in my testing... must check state of connection and close it on SIGWINCH too, or?)
-            uv.stop()
+                print("Received data: " .. data)
+                client:close()
+                uv.stop()
+            end)
         end)
     end)
     uv.run("default")

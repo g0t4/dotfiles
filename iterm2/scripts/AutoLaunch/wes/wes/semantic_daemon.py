@@ -24,7 +24,7 @@ async def semantic_daemon(connection):
 
     while True:
         loop = asyncio.get_running_loop()
-        conn, _ = await loop.sock_accept(server)
+        conn, addr = await loop.sock_accept(server)
         conn.setblocking(False)
 
         data = await loop.sock_recv(conn, 1024)
@@ -57,6 +57,9 @@ async def semantic_daemon(connection):
             # 1/6, 17:38:14.050: iterm2.window.GetPropertyException: 2
             # 1/6, 17:38:31.786:
             #
+
+        # await loop.sock_sendto(conn, b"DONE", addr)
+        await loop.sock_sendall(conn, b"DONE")  # TODO sendall or sendto??
 
         conn.close()
 
