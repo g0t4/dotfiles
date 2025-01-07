@@ -1362,9 +1362,23 @@ function video_editing_gen_fcpxml
     $python3 $script $video_file
 end
 
+abbr --add 7db --regex '\d+db' --function abbr_db
+function abbr_db
+    set boost $argv[1] # i.e. 7db
+
+    # if only one video in current dir, select it
+    # exclude previous boosted vides i.e. .7dB.m4v
+    set video_files (ls *.{mp4,m4v} | grep -vE "dB\.[a-z0-9]{3}\$")
+    if test (count $video_files) -eq 1
+        set video_file $video_files[1]
+    end
+    echo "video_editing_boost_audio_dB_by $boost $video_file"
+end
+#abbr 7db "video_editing_boost_audio_dB_by 7dB"
+
 function video_editing_boost_audio_dB_by
     # usage:    video_editing_boost_audio_dB_by 7dB foo.mp4
-    set boost_dB $argv[1]
+    set boost_dB (string replace "db" "dB" $argv[1])
     set input_file (realpath $argv[2])
     set file_extension (_get_first_file_extension $input_file)
     set boosted_file (string replace -r "\.$file_extension\$" ".$boost_dB.$file_extension" "$input_file")
