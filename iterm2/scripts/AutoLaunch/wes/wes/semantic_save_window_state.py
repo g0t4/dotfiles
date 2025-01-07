@@ -57,7 +57,7 @@ async def on_nvim_quit_save_window_state(connection: iterm2.Connection, session_
     cur_font = current_profile.normal_font  # 6us
 
     frame = await window.async_get_frame()  # 3ms
-    log(f"origin: {frame.origin}, size: {frame.size.height}height x {frame.size.width}width")
+    # log(f"origin: {frame.origin}, size: {frame.size.height}height x {frame.size.width}width")
 
     save_profile = {
         "columns": grid_size.width,
@@ -66,6 +66,7 @@ async def on_nvim_quit_save_window_state(connection: iterm2.Connection, session_
         "x": frame.origin.x,
         "y": frame.origin.y,
     }
+    log(f"save_profile: {save_profile}")
 
     os.makedirs(os.path.dirname(workspace_profile_path), exist_ok=True)
 
