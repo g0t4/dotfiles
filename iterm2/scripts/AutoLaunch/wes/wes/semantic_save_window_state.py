@@ -57,7 +57,7 @@ async def on_nvim_quit_save_window_state(connection: iterm2.Connection, session_
     cur_font = current_profile.normal_font  # 6us
 
     frame = await window.async_get_frame()  # 3ms
-    # log(f"origin: {frame.origin}, size: {frame.size.height}height x {frame.size.width}width")
+    log(f"origin: {frame.origin}, size: {frame.size.height}height x {frame.size.width}width")
 
     save_profile = {
         "columns": grid_size.width,
