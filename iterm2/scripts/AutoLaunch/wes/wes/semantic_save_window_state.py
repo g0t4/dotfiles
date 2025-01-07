@@ -1,6 +1,8 @@
 import os
+import time
 import iterm2
 import json
+import traceback
 # from timing import Timer
 from logs import log
 
@@ -56,7 +58,21 @@ async def on_nvim_quit_save_window_state(connection: iterm2.Connection, session_
 
     cur_font = current_profile.normal_font  # 6us
 
-    frame = await window.async_get_frame()  # 3ms
+    try:
+        frame = await window.async_get_frame()  # 3ms
+    except iterm2.GetPropertyException as e:
+        # CONFIRMED WINDOW IS NO LONGER VISIBLE HERE... why is the client not blocking for this!?
+        # PRN just save w/o frame?
+        stack = traceback.format_exc()
+        log(f"GetPropertyException on window.async_get_frame() => {stack}")
+        log(f" start sleeping, is window gone?")
+        time.sleep(10)
+        log(f" end sleeping")
+        return
+
+        # TODO TRYING AGAIN to see if this fixes it?
+        # PRN ADD SLEEP HERE TO SEE IF WINDOW IS ALREADY GONE MAYBE?
+
     # log(f"origin: {frame.origin}, size: {frame.size.height}height x {frame.size.width}width")
 
     save_profile = {

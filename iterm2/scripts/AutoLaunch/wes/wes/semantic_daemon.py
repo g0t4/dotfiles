@@ -33,9 +33,9 @@ async def semantic_daemon(connection):
         try:
             await on_nvim_quit_save_window_state(connection, message)
         except Exception as e:
-            # TODO reproduce a legit example of this?
-            #   MIGHT HAPPEN even in spite of blocking uv.run client call... if window is removed before server can get win position/state... I think I saw that recently...
-            #   though honestly not saving one time is NBD... old position will be used and as long as I don't terminate my daemon on that failure, all will be fine
+            # repro: use wes-dispatcher + finder to open and close a workspace repeatedly (3 to 6 times and it should cause the error with frame's property status not marked "OK"...
+            #   possible fix, try again?
+            #   is it a race condition wherein the window iss being closed when get frame is called? hard to say...
             stack = traceback.format_exc()
             log(f"save state exception: {stack}")
             # use finder to open via wes-dispatcher... after 3 or 4 closes I will get a failure, last one was:
