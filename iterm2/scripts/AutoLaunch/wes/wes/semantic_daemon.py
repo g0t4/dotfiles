@@ -38,6 +38,9 @@ async def semantic_daemon(connection):
             log(f"save state exception: {e}")
             # use finder to open via wes-dispatcher... after 3 or 4 closes I will get a failure, last one was:
             # 1/6, 18:53:41.029: save state exception: 2
+            # this is the exception before adding this except/log:
+            #   Task exception was never retrieved
+            #   future: <Task finished name='Task-8' coro=<semantic_daemon() done, defined at /Users/wes/repos/wes-config/wes-bootstrap/subs/dotfiles/iterm2/scripts/AutoLaunch/wes/wes/semantic_daemon.py:10> exception=GetPropertyException(2)>
         conn.close()
 
     server.close()
