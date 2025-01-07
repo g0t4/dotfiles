@@ -6,6 +6,8 @@ import traceback
 # from timing import Timer
 from logs import log
 
+app = None
+
 
 async def on_nvim_quit_save_window_state(connection: iterm2.Connection, session_id):
 
@@ -20,10 +22,14 @@ async def on_nvim_quit_save_window_state(connection: iterm2.Connection, session_
 
     log(f"session_id: {session_id}")
 
-    app = await iterm2.async_get_app(connection)  # ~ 2.5ms
+    global app
     if app is None:
-        log("No current app, aborting...")
-        return
+        # TODO find out if app would ever change w/o restarting iterm2?
+        # PRN testing one time lookup, s/b fine... the app should always be the same, right?
+        app = await iterm2.async_get_app(connection)  # ~ 2.5ms
+        if app is None:
+            log("No current app, aborting...")
+            return
 
     session = app.get_session_by_id(session_id)  # 3us
     if session is None:
