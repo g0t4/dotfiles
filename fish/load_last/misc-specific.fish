@@ -1364,7 +1364,7 @@ end
 
 abbr --add 7db --regex '\d+db' --function abbr_db
 function abbr_db
-    set boost $argv[1] # i.e. 7db
+    set boost $argv[1] # i.e. 7db (do not need to have dB captial B... db is fine)
 
     # if only one video in current dir, select it
     # exclude previous boosted vides i.e. .7dB.m4v
