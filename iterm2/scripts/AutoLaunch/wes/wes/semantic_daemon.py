@@ -39,8 +39,23 @@ async def semantic_daemon(connection):
             # use finder to open via wes-dispatcher... after 3 or 4 closes I will get a failure, last one was:
             # 1/6, 18:53:41.029: save state exception: 2
             # this is the exception before adding this except/log:
-            #   Task exception was never retrieved
-            #   future: <Task finished name='Task-8' coro=<semantic_daemon() done, defined at /Users/wes/repos/wes-config/wes-bootstrap/subs/dotfiles/iterm2/scripts/AutoLaunch/wes/wes/semantic_daemon.py:10> exception=GetPropertyException(2)>
+            #
+            # TODO demo this... cat out this file and use stack trace to jump right to the line of the issue! (iterm matches on the line numbers too, i.e. 374):
+            #  PRN keep this around somewhere for testing? (not here once thie bug is fixed)
+            #
+            # 1/6, 17:38:14.050: Task exception was never retrieved
+            # 1/6, 17:38:14.050: future: <Task finished name='Task-8' coro=<semantic_daemon() done, defined at /Users/wes/repos/wes-config/wes-bootstrap/subs/dotfiles/iterm2/scripts/AutoLaunch/wes/wes/semantic_daemon.py:10> exception=GetPropertyException(2)>
+            # 1/6, 17:38:14.050: Traceback (most recent call last):
+            # 1/6, 17:38:14.050:   File "/Users/wes/repos/wes-config/wes-bootstrap/subs/dotfiles/iterm2/scripts/AutoLaunch/wes/wes/semantic_daemon.py", line 34, in semantic_daemon
+            # 1/6, 17:38:14.050:     await on_nvim_quit_save_window_state(connection, message)
+            # 1/6, 17:38:14.050:   File "/Users/wes/repos/wes-config/wes-bootstrap/subs/dotfiles/iterm2/scripts/AutoLaunch/wes/wes/semantic_save_window_state.py", line 59, in on_nvim_quit_save_window_state
+            # 1/6, 17:38:14.050:     frame = await window.async_get_frame()  # 3ms
+            # 1/6, 17:38:14.050:   File "/Users/wes/.config/iterm2/AppSupport/Scripts/AutoLaunch/wes/iterm2env/versions/3.10.4/lib/python3.10/site-packages/iterm2/window.py", line 374, in async_get_frame
+            # 1/6, 17:38:14.050:     raise GetPropertyException(response.get_property_response.status)
+            # 1/6, 17:38:14.050: iterm2.window.GetPropertyException: 2
+            # 1/6, 17:38:31.786:
+            #
+
         conn.close()
 
     server.close()
