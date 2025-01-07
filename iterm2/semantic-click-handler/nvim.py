@@ -37,20 +37,6 @@ if os.path.exists(workspace_profile_path):
 
 # exit(0) # for testing, uncomment to stop here
 async def open_nvim_window(connection: iterm2.Connection):
-    session = await get_session(connection)
-    if session is None:
-        log("No session, aborting nvim.py open...")
-        return
-
-    print("session: ", session)
-    current_profile = await session.async_get_profile()
-    # with open("profile.txt", "w") as f:
-    #     f.write(str(vars(current_profile)))
-    # #  FYI: pretty print profile.txt:
-    # #    cat profile.txt | yq --prettyPrint
-
-    # neat thing is, this new nvim window if started with nvim then when nvim is closed, window closes too! no shell to go back to (so this becomes very much like what I had with vscode before)
-    # PRN in future, if I click multiple files in same workspace... don't open new nvim window? or should I just do that? ... i.e. if perusing ag command matches and want to open up a few in nvim... I am thinking it s/b fine to close nvim/reopen each time, for now s/b fast enough... if I have trouble with speed (i.e. starting plugins each time) then investigate in a method to dedupe (only for this semantic click handler) windows per workspace
 
     new_profile = iterm2.LocalWriteOnlyProfile()
     new_profile.set_custom_directory(workspace_root)
@@ -65,7 +51,6 @@ async def open_nvim_window(connection: iterm2.Connection):
     # make sure Window Type is set to "Normal" (15) and not "Maximized"/"Fullscreen" fo the current profile b/c that is going to be used for this new window...
     # new_profile._simple_set("Window Type", "16")  # Doesn't seem like I can set Window Type in profile_customizations... but I didn't exhausitvely look for how to do that either
     # effectively maximize window using ridiculous values:
-    new_profile._simple_set("Normal Font", current_profile.normal_font)
     x = None
     y = None
 
@@ -81,9 +66,28 @@ async def open_nvim_window(connection: iterm2.Connection):
         if workspace_profile.get("y") is not None:
             y = int(workspace_profile["y"])
     else:
+        log("py - no workspace profile found... using current window's profile")
+        # PRN activate iTerm2 to make sure its on top before I try to get cut current window => tab => session here:
+        session = await get_session(connection)
+        if session is None:
+            # TODO I had this error randomly from Finder/wes-dispatcher (back when I always looked up session)
+            #   It was random, but IIAC it has smth to do with focus and apps and iterm2 not having a current window/tab
+            #   Anyways, this is gonna be rare now b/c once a profile is saved, this branch won't be hit (once per workspace)
+            #   If I encounter this again, just try to reproduce it...
+            #   FYI activate fix might take care of it... but I need to repro it first to be sure before I start sprinkling in activation calls
+            log("No session, aborting nvim.py open...")
+            return
+        print("found current window's session_id: ", session.session_id)
+
+        current_profile = await session.async_get_profile()
+        # with open("profile.txt", "w") as f:
+        #     f.write(str(vars(current_profile)))
+        # #  FYI: pretty print profile.txt:
+        # #    cat profile.txt | yq --prettyPrint
+
         new_profile._simple_set("Columns", "300")  # if set bigger than screen, seems to stop at screen size (for Rows and Columns)
         new_profile._simple_set("Rows", "100")
-        # new_profile.set_normal_font(current_profile.normal_font)
+        new_profile._simple_set("Normal Font", current_profile.normal_font)
 
     #  PRN can I get screen size info and use that for rows/cols?
     # ANOTHER OPTION => setup dedicated profile for these nvim windows and use that (IIAC I can even combine with profile_customziations?).. pass profile name to async_create too
@@ -106,6 +110,9 @@ async def open_nvim_window(connection: iterm2.Connection):
     # advanced dirs lets you set window/tab/pane specific dirs (not one working dir), so I don't need that for now
     # profile.set_advanced_working_directory_window_directory("/Users/wesdemos/repos")
     # profile.set_initial_directory_mode(iterm2.InitialWorkingDirectory.INITIAL_WORKING_DIRECTORY_ADVANCED)
+
+    # neat thing is, this new nvim window if started with nvim then when nvim is closed, window closes too! no shell to go back to (so this becomes very much like what I had with vscode before)
+    # PRN in future, if I click multiple files in same workspace... don't open new nvim window? or should I just do that? ... i.e. if perusing ag command matches and want to open up a few in nvim... I am thinking it s/b fine to close nvim/reopen each time, for now s/b fast enough... if I have trouble with speed (i.e. starting plugins each time) then investigate in a method to dedupe (only for this semantic click handler) windows per workspace
 
     # FYI can wrap in fish shell if I need the shell env to get nvim to work (i.e. coc requires smth I have in my shell dotfiles... and so it works if use fish -c nvim but not nvim directly, currently)
     #    repro w/o click handler:
