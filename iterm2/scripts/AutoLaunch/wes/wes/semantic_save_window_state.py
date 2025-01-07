@@ -1,3 +1,4 @@
+import os
 import iterm2
 import json
 # from timing import Timer
@@ -46,6 +47,9 @@ async def on_nvim_quit_save_window_state(connection: iterm2.Connection, session_
         log("No workspace profile path, aborting...")
         return
 
+    print(f"workspace_root: {workspace_root}")
+    print(f"workspace_profile_path: {workspace_profile_path}")
+
     current_profile = await session.async_get_profile()  # 2ms
 
     grid_size = session.grid_size  # 1us
@@ -62,7 +66,8 @@ async def on_nvim_quit_save_window_state(connection: iterm2.Connection, session_
         "x": frame.origin.x,
         "y": frame.origin.y,
     }
-    log(f"save_profile: {save_profile}")
+
+    os.makedirs(os.path.dirname(workspace_profile_path), exist_ok=True)
 
     with open(workspace_profile_path, "w") as f:
         f.write(json.dumps(save_profile))

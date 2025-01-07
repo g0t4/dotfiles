@@ -39,8 +39,10 @@ if os.path.exists(workspace_profile_path):
 async def open_nvim_window(connection: iterm2.Connection):
     session = await get_session(connection)
     if session is None:
+        log("No session, aborting nvim.py open...")
         return
 
+    print("session: ", session)
     current_profile = await session.async_get_profile()
     # with open("profile.txt", "w") as f:
     #     f.write(str(vars(current_profile)))
