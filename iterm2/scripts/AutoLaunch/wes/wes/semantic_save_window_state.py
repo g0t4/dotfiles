@@ -47,8 +47,8 @@ async def on_nvim_quit_save_window_state(connection: iterm2.Connection, session_
         log("No workspace profile path, aborting...")
         return
 
-    print(f"workspace_root: {workspace_root}")
-    print(f"workspace_profile_path: {workspace_profile_path}")
+    log(f"workspace_root: {workspace_root}")
+    log(f"workspace_profile_path: {workspace_profile_path}")
 
     current_profile = await session.async_get_profile()  # 2ms
 
