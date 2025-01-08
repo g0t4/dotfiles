@@ -16,8 +16,8 @@ Set-PSReadLineKeyHandler -Chord "Ctrl+b" -BriefDescription "Ask OpenAI to genera
     $context = "env: powershell`nquestion: $userInput"
 
     # $output = "hard coded test result"
-    $_python = "${WESCONFIG_DOTFILES}\.venv\Scripts\python.exe"
-    $_single_py = "${WESCONFIG_DOTFILES}\zsh\universals\3-last\ask-openai\single.py"
+    $_python = "${WES_DOTFILES}\.venv\Scripts\python.exe"
+    $_single_py = "${WES_DOTFILES}\zsh\universals\3-last\ask-openai\single.py"
     $output = $(`
             Write-Output $context | `
             & $_python "$_single_py" `
