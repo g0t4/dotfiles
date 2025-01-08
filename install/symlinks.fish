@@ -58,3 +58,6 @@ else
     # -n means don't follow target symlink (else recreates nested symlink)
     ln -f -n -s $dotfiles_dir/iterm2/scripts/ ~/Library/Application\ Support/iTerm2/Scripts
 end
+
+# *** git ***
+ln -f -s $dotfiles_dir/.config/git/ignore ~/.config/git/.
