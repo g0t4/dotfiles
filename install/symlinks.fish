@@ -28,3 +28,18 @@ ln -f -s $dotfiles_dir/.config/nvim/queries ~/.config/nvim/. # DIR SYMLINK
 # ln -s $dotfiles_dir/.config/nvim/spell ~/.config/nvim/spell # PRN add this
 ln -f -s $dotfiles_dir/.config/nvim/ftplugin ~/.config/nvim/. # DIR SYMLINK
 ln -f -s $dotfiles_dir/.config/nvim/coc-settings.json ~/.config/nvim/coc-settings.json
+
+# *** zed
+mkdir -p ~/.config/zed
+ln -f -s $dotfiles_dir/.config/zed/settings.json ~/.config/zed/settings.json
+
+# *** bat
+mkdir -p ~/.config/bat
+ln -f -s $dotfiles_dir/.config/bat/config ~/.config/bat/config
+
+# *** fish
+if ! test -d ~/.config/fish
+    echo "MISSING ~/.config/fish, do you have fish installed, not creating to avoid issues... create it and re-run this script"
+else
+    ln -f -s $dotfiles_dir/.config/fish/config.fish ~/.config/fish/config.fish
+end
