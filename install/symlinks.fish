@@ -2,18 +2,19 @@
 
 mkdir -p ~/.config
 
+set -l dotfiles_dir ~/repos/github/g0t4/dotfiles
 # start moving general symlinks to dotfiles here (consolidate them?)
-ln -s ~/repos/wes-config/wes-bootstrap/subs/dotfiles/.config/inputrc/.inputrc ~/.
+ln -f -s $dotfiles_dir/.config/inputrc/.inputrc ~/.
 
 # editline:
-ln -s ~/repos/wes-config/wes-bootstrap/subs/dotfiles/.config/editrc/.editrc ~/.
+ln -f -s $dotfiles_dir/.config/editrc/.editrc ~/.
 
 # hammerspoon:
 #
 mkdir -p ~/.hammerspoon
-ln -s ~/repos/wes-config/wes-bootstrap/subs/dotfiles/.config/hammerspoon/init.lua ~/.hammerspoon/.
-ln -s ~/repos/wes-config/wes-bootstrap/subs/dotfiles/.config/hammerspoon/config ~/.hammerspoon/.
+ln -f -s $dotfiles_dir/.config/hammerspoon/init.lua ~/.hammerspoon/.
+ln -f -s $dotfiles_dir/.config/hammerspoon/config ~/.hammerspoon/.
 
 # ghostty
 mkdir -p ~/.config/ghostty
-ln -s ~/repos/wes-config/wes-bootstrap/subs/dotfiles/.config/ghostty/config ~/.config/ghostty/.
+ln -f -s $dotfiles_dir/.config/ghostty/config ~/.config/ghostty/.
