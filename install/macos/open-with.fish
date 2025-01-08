@@ -29,7 +29,20 @@ for item in wav mp3 mpc m4a m4v m4b mp4 m4p mpg mp2 mpeg mpe mpv m2v svi mxf roq
     # TEST DRIVE iina for video playback (i.e. back a frame, not just forward... though sometimes back doesn't work)
 end
 
-for item in md yml txt js py zsh ini json xml iqy svg meta cfg sdef
+set exts xml dtd plist
+set exts $exts cpp c h hpp
+set exts $exts cnf conf cfg def
+set exts $exts lua vim vimrc
+set exts $exts md yaml yml txt toml ini json json5
+set exts $exts bash fish zsh sh csh ps1
+# TODO htm/html doesn't work currently (blocked by macOS):
+set exts $exts css js
+set exts $exts py
+set exts $exts cs csproj fsproj sln proj
+set exts $exts iqy svg meta sdef
+set exts $exts asm
+
+for item in $exts
     # TODO FIX: html htm - cannot be set => https://github.com/moretension/duti/issues/34
     # my automator app that just calls my semantich handler like alfred does!
     # PRN in the future modify that app to dispatch to other scripts too.. if so just put some logic in a script in dotfiles to do that and plug it in
