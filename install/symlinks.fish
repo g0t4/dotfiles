@@ -41,5 +41,6 @@ ln -f -s $dotfiles_dir/.config/bat/config ~/.config/bat/config
 if ! test -d ~/.config/fish
     echo "MISSING ~/.config/fish, do you have fish installed, not creating to avoid issues... create it and re-run this script"
 else
-    ln -f -s $dotfiles_dir/.config/fish/config.fish ~/.config/fish/config.fish
+    # FYI odd man out link here... fish has top level dir in dotfiles
+    ln -f -s $dotfiles_dir/fish/config/config.fish ~/.config/fish/.
 end
