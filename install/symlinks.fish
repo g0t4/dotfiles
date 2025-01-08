@@ -50,3 +50,11 @@ end
 
 # *** grc
 ln -f -s $dotfiles_dir/.grc ~/. # DIR SYMLINK
+
+# *** iterm2 scripts dir
+if ! test -d ~/Library/Application\ Support/iTerm2/Scripts
+    echo "MISSING ~/Library/Application\ Support/iTerm2/Scripts, do you have iTerm2 installed, not creating to avoid issues... create it and re-run this script"
+else
+    # -n means don't follow target symlink (else recreates nested symlink)
+    ln -f -n -s $dotfiles_dir/iterm2/scripts/ ~/Library/Application\ Support/iTerm2/Scripts
+end
