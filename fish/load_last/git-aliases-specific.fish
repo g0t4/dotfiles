@@ -19,10 +19,10 @@ end
 
 function mark
     # for review commits that I don't need to step by step commit, instead just make a commit of all changes and dump the diff for my optional review
-	git diff --color-words HEAD # make sure to compare to HEAD as we will stage everything and commit the index too
-	git add . # assumes no other work, but yeah I'm calling this explicitly
-	git commit -m 'mark-review'
-	git status
+    git diff --color-words HEAD # make sure to compare to HEAD as we will stage everything and commit the index too
+    git add . # assumes no other work, but yeah I'm calling this explicitly
+    git commit -m mark-review
+    git status
 end
 
 
@@ -163,89 +163,3 @@ function _repo_root
     end
 
 end
-
-
-## bootstrap git helpers
-#
-
-# high level status of both repos:
-function dotgst
-    _dot_both status
-end
-function dotgsl --description "gst; glo"
-    # * PREFER this long term will save time!
-    dotglo
-    log_blankline
-    dotgst
-end
-function dotglo --description "log HEAD@{push}~1..HEAD"
-    # ok to leave old glo here instead of git_unpushed_commits b/c I always have pushed commits for the two repos I use this for
-    _dot_both log HEAD@{push}~1..HEAD
-end
-
-# workflow: dotgap => dotgsl => dotgcm => dotgp
-function dotgaa --description "add --all"
-    _dot_both add --all
-end
-function dotgap --description "add --patch"
-    _dot_both add --patch
-end
-function dotgrp --description "restore --patch"
-    _dot_both restore --patch
-end
-
-function dotgcm --description "commit staged changes w/ message"
-
-    # ensure message is provided:
-    argparse --min 1 -- $argv || return 1
-    set --local message $argv
-
-    # commit staged changes
-    git -C $WES_DOTFILES commit -m $message
-    git -C $WES_BOOTSTRAP add subs/dotfiles # after committing dotfiles, add the commit change to bootstrap (super module)
-    git -C $WES_BOOTSTRAP commit -m $message
-end
-
-function dotgp --description push
-    _dot_both push
-end
-function dotgl --description pull
-    _dot_both pull
-end
-
-function dotgrsh --description "reset --soft HEAD~1"
-    _dot_both reset --soft HEAD~1
-end
-
-function dotgdlc --description "log --patch HEAD~1..HEAD"
-    _dot_both log --patch --color-words HEAD~1..HEAD
-end
-
-# expand `dotglX` => `dotgl -X`
-abbr --add dotglX --regex 'dotgl\d+' --function dotglX
-function dotglX
-    string replace --regex '^dotgl' 'dotgl -' $argv
-end
-function dotgl --description "log -X"
-    _dot_both log $argv
-end
-
-function dotgdc --description "diff --cached"
-    _dot_both diff --cached --color-words
-end
-
-function dotgd --description diff
-    _dot_both diff --color-words
-end
-
-function _dot_both
-    set -l cmd $argv
-
-    log_header "DOTFILES:"
-    PAGER= git -C $WES_DOTFILES $cmd
-
-    log_blankline
-    log_header "BOOTSTRAP:"
-    PAGER= git -C $WES_BOOTSTRAP $cmd
-end
-# PRN gcan! to modify both?! if I feel that I need this

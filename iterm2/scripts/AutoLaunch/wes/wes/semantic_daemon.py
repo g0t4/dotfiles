@@ -46,11 +46,11 @@ async def semantic_daemon(connection):
             #  PRN keep this around somewhere for testing? (not here once thie bug is fixed)
             #
             # 1/6, 17:38:14.050: Task exception was never retrieved
-            # 1/6, 17:38:14.050: future: <Task finished name='Task-8' coro=<semantic_daemon() done, defined at /Users/wes/repos/wes-config/wes-bootstrap/subs/dotfiles/iterm2/scripts/AutoLaunch/wes/wes/semantic_daemon.py:10> exception=GetPropertyException(2)>
+            # 1/6, 17:38:14.050: future: <Task finished name='Task-8' coro=<semantic_daemon() done, defined at ~/repos/github/g0t4/dotfiles/iterm2/scripts/AutoLaunch/wes/wes/semantic_daemon.py:10> exception=GetPropertyException(2)>
             # 1/6, 17:38:14.050: Traceback (most recent call last):
-            # 1/6, 17:38:14.050:   File "/Users/wes/repos/wes-config/wes-bootstrap/subs/dotfiles/iterm2/scripts/AutoLaunch/wes/wes/semantic_daemon.py", line 34, in semantic_daemon
+            # 1/6, 17:38:14.050:   File "~/repos/github/g0t4/dotfiles/iterm2/scripts/AutoLaunch/wes/wes/semantic_daemon.py", line 34, in semantic_daemon
             # 1/6, 17:38:14.050:     await on_nvim_quit_save_window_state(connection, message)
-            # 1/6, 17:38:14.050:   File "/Users/wes/repos/wes-config/wes-bootstrap/subs/dotfiles/iterm2/scripts/AutoLaunch/wes/wes/semantic_save_window_state.py", line 59, in on_nvim_quit_save_window_state
+            # 1/6, 17:38:14.050:   File "~/repos/github/g0t4/dotfiles/iterm2/scripts/AutoLaunch/wes/wes/semantic_save_window_state.py", line 59, in on_nvim_quit_save_window_state
             # 1/6, 17:38:14.050:     frame = await window.async_get_frame()  # 3ms
             # 1/6, 17:38:14.050:   File "/Users/wes/.config/iterm2/AppSupport/Scripts/AutoLaunch/wes/iterm2env/versions/3.10.4/lib/python3.10/site-packages/iterm2/window.py", line 374, in async_get_frame
             # 1/6, 17:38:14.050:     raise GetPropertyException(response.get_property_response.status)

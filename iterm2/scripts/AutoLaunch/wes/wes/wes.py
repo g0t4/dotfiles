@@ -70,7 +70,7 @@ iterm2.run_forever(main)
 #    /Users/wes/.config/iterm2/AppSupport/Scripts/ask-openai/streaming-ask-openai/iterm2env/versions/3.10.4/bin/pip3 install openai    # FYI may not show up in list that iterm2 shows but doesn't matter, as long as its installed it should work fine
 #       BTW: ls -al /Users/wes/.config/iterm2/AppSupport -> /Users/wes/Library/Application Support/iTerm2
 #    FYI ignored iterm2env dir... might have to copy that between machines at first? who knows... learn how iterm2 sets up these envs and see if I cannot find a reproducible way?
-#    FYI I have a symlink from ~/Library/Application Support/iTerm2/Scripts -> /Users/wes/repos/wes-config/wes-bootstrap/subs/dotfiles/iterm2/scripts
+#    FYI I have a symlink from ~/Library/Application Support/iTerm2/Scripts -> ~/repos/github/g0t4/dotfiles/iterm2/scripts
 #       so make sure this is setup on other machines/accounts too
 #
 

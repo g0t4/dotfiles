@@ -19,7 +19,7 @@ tell application "iTerm"
 
 			-- TODO reuse this for diff profiles? wait until I have a need to do that and address it then
 
-			write text "z subs/dotfiles"
+			write text "cd ~/repos/github/g0t4/dotfiles"
 			write text "zed (_repo_root)"
 			delay 0.1
 

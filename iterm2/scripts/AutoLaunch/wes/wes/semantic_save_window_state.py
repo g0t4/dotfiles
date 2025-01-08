@@ -35,10 +35,6 @@ async def on_nvim_quit_save_window_state(connection: iterm2.Connection, session_
         log("No window, aborting...")
         return
 
-    # TMP set var for testing
-    # await session.async_set_variable("user.workspace_root", "/Users/wes/repos/wes-config/wes-bootstrap/subs/dotfiles")
-    # await session.async_set_variable("user.workspace_profile_path", "/Users/wes/.config/wes-iterm2/workspaces/1b833d1461faf13fbe9c1e6fcc42dac77803a88dda808cdbc89b51682d320d52/profile.json")
-
     workspace_root = await window.async_get_variable("user.workspace_root")  # 240us
     if workspace_root is None:
         log("No workspace root, aborting...")

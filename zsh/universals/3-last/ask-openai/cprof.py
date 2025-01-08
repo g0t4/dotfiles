@@ -58,8 +58,8 @@ def custom_print_stats(pr, stream, sortby=SortKey.CUMULATIVE, strip_path=None):
         percall_cumtime = data[3]/ncalls
 
         # could do this: cwd for first path to string, then venv lib dir... to sitepackages... then Python.framework dir to current python exe (sys.path[0]?, venv is env var)
-        filepath = filename.replace("/Users/wesdemos/repos/wes-config/wes-bootstrap/subs/dotfiles/zsh/universals/3-last/ask-openai/", "* ")
-        filepath = filepath.replace("/Users/wesdemos/repos/wes-config/wes-bootstrap/subs/dotfiles/.venv/lib/python3.13/site-packages", "")
+        filepath = filename.replace("/Users/wesdemos/repos/github/g0t4/dotfiles/zsh/universals/3-last/ask-openai/", "* ")
+        filepath = filepath.replace("/Users/wesdemos/repos/github/g0t4/dotfiles/.venv/lib/python3.13/site-packages", "")
         filepath = filepath.replace("/opt/homebrew/Cellar/python@3.13/3.13.0_1/Frameworks/Python.framework/Versions/3.13", "py3.13")
 
         print(f"   {ncalls:>7}  {tottime:.6f}  {percall:.6f}  {cumtime:.6f}  {percall_cumtime:.6f}  {filepath}:{line}({name})")
