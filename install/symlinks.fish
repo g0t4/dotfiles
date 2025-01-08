@@ -28,6 +28,9 @@ ln -f -s $dotfiles_dir/.config/nvim/queries ~/.config/nvim/. # DIR SYMLINK
 # ln -s $dotfiles_dir/.config/nvim/spell ~/.config/nvim/spell # PRN add this
 ln -f -s $dotfiles_dir/.config/nvim/ftplugin ~/.config/nvim/. # DIR SYMLINK
 ln -f -s $dotfiles_dir/.config/nvim/coc-settings.json ~/.config/nvim/coc-settings.json
+#
+# FYI no longer using vimrc, but I might want it back for some envs?
+# ~/.vimrc
 
 # *** zed
 mkdir -p ~/.config/zed
@@ -44,3 +47,6 @@ else
     # FYI odd man out link here... fish has top level dir in dotfiles
     ln -f -s $dotfiles_dir/fish/config/config.fish ~/.config/fish/.
 end
+
+# *** grc
+ln -f -s $dotfiles_dir/.grc ~/. # DIR SYMLINK
