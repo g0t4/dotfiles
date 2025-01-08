@@ -26,12 +26,7 @@ else
 end
 
 set -g WES_BOOTSTRAP ~/repos/wes-config/wes-bootstrap
-if test -d $WES_BOOTSTRAP
-    # TODO MOVE THIS TO repos/github/g0t4/dotfiles too... get it out of bootstrap...
-    set -g WES_DOTFILES $WES_BOOTSTRAP/subs/dotfiles
-else
-    set -g WES_DOTFILES ~/repos/github/g0t4/dotfiles
-end
+set -g WES_DOTFILES ~/repos/github/g0t4/dotfiles
 export WES_DOTFILES=$WES_DOTFILES
 
 # source $WES_DOTFILES/fish/load_first/*.fish # glob not working for multiple files in dir, just one?!
