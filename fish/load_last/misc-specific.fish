@@ -1270,6 +1270,25 @@ function video_editing_total_duration
 
 end
 
+# *** #1 check audio ***
+abbr --add _1 --function abbr_check
+function abbr_check
+    echo -n "video_editing_1_check_audio "
+    abbr_videos_glob_for_current_dir
+end
+function abbr_videos_glob_for_current_dir
+    # quite often I want to target all video files in current dir, so find those by different extensions and expand appropriately to match most use cases (priority order)
+    if test (ls *.mp4 | count) -gt 0
+        echo -n "*.mp4"
+    else if test (ls *.m4v | count) -gt 0
+        echo -n "*.m4v"
+    else if test (ls *.mkv | count) -gt 0
+        echo -n "*.mkv"
+    else if test (ls *.mov | count) -gt 0
+        echo -n "*.mov"
+    end
+    # default case don't add glob to match all video files
+end
 # FYI `veaud<TAB>` works in fish shell to complete this func:
 function video_editing_1_check_audio
     # only arg would be file paths (i.e. from glob like *.mp4), btw dont need to pass any paths and it will do all *.mp4 in current dir
@@ -1277,6 +1296,12 @@ function video_editing_1_check_audio
     zsh -ic "video_editing_1_check_audio $paths"
 end
 
+# *** #2 convert 30fps ***
+abbr --add _2 --function abbr_30fps
+function abbr_30fps
+    echo -n "video_editing_2_convert_30fps "
+    abbr_videos_glob_for_current_dir
+end
 # FYI `veconv<TAB>` works in fish shell to complete this func:
 function video_editing_2_convert_30fps
     set -l paths (quote_paths $argv)
