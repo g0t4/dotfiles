@@ -1,7 +1,7 @@
 export DOCKER_HIDE_LEGACY_COMMANDS=1 # less clutter in help output
 
-set use_grc_with_docker yes
-#set use_grc_with_docker no
+#set use_grc_with_docker yes
+set use_grc_with_docker no
 function grcify
     if test $use_grc_with_docker = yes
         echo -n "grc $argv"
