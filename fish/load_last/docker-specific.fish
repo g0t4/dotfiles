@@ -67,11 +67,11 @@ abbr dsypr 'docker system prune'
 
 # events from a time range - formatted as table
 abbr dsye_tr_table 'docker system events --since 10m --until 0m --format "{{json .}}" | jq "[( .id[0:10] // .Actor.ID ),.Type, .Action] | @csv " -r | column -t -s''","''  '
-    # last 10 mins, use 10h for hours
-    # --since and --until can be date times formatted like --since "2021-10-30T07:30" --until "2021-10-30T9:00"
-    # // in jq is like a null coalesce
-    # .Actor.ID might need limited too in some cases with .Actor.ID[0:30] like I did with 10 and .id... for now just trunc id which is always distracting to see it all even if room
-    # column -t for table, -s is separator and if I use -s'","' then it strips quote delimited CSVs\! or at least works for me as jq pipes out @csv as double quote delimited
+# last 10 mins, use 10h for hours
+# --since and --until can be date times formatted like --since "2021-10-30T07:30" --until "2021-10-30T9:00"
+# // in jq is like a null coalesce
+# .Actor.ID might need limited too in some cases with .Actor.ID[0:30] like I did with 10 and .id... for now just trunc id which is always distracting to see it all even if room
+# column -t for table, -s is separator and if I use -s'","' then it strips quote delimited CSVs\! or at least works for me as jq pipes out @csv as double quote delimited
 
 abbr dv 'docker volume' # useful for expanding this alias to then use sub commands, i.e. "dv[space]"
 abbr dvls (grcify 'docker volume ls')
@@ -231,13 +231,13 @@ abbr --set-cursor='!' ddc "docker debug --command '!'" # ready to run command in
 abbr dde 'docker debug -c entrypoint' # entrypoint inspector (add image/container name/id)
 
 ## skopeo
-abbr sk 'skopeo'
+abbr sk skopeo
 abbr skh 'skopeo --help'
-abbr --set-cursor='!' --  ski 'skopeo --override-os linux inspect docker://!'
-abbr --set-cursor='!' --  skim 'skopeo --override-os linux inspect --raw docker://!'
-abbr --set-cursor='!' --  skic 'skopeo --override-os linux inspect --config --raw docker://!'
-abbr --set-cursor='!' --  skl 'skopeo list-tags docker://docker.io/!'
-abbr --set-cursor='!' --  sklm 'skopeo list-tags docker://mcr.microsoft.com/!'
+abbr --set-cursor='!' -- ski 'skopeo --override-os linux inspect docker://!'
+abbr --set-cursor='!' -- skim 'skopeo --override-os linux inspect --raw docker://!'
+abbr --set-cursor='!' -- skic 'skopeo --override-os linux inspect --config --raw docker://!'
+abbr --set-cursor='!' -- skl 'skopeo list-tags docker://docker.io/!'
+abbr --set-cursor='!' -- sklm 'skopeo list-tags docker://mcr.microsoft.com/!'
 
 # usage:
 #   skopeo list-tags docker://weshigbee/oci-test
@@ -255,7 +255,7 @@ abbr --set-cursor='!' --  sklm 'skopeo list-tags docker://mcr.microsoft.com/!'
 
 ## *** hub-tool ***
 # https://github.com/docker/hub-tool
-abbr dh "hub-tool"
+abbr dh hub-tool
 # hub-tool account rate-limiting --verbose
 # hub-tool repo ls roboxes
 abbr dhr "hub-tool repo ls"
@@ -291,7 +291,7 @@ complete -c hub-tool -a login -d "Login to the Hub"
 complete -c hub-tool -a logout -d "Logout of the Hub"
 complete -c hub-tool -a org -d "Manage organizations" # todo subs
 complete -c hub-tool -a repo -d "Manage repositories" # todo subs
-complete -c hub-tool -a tag -d "Manage tags"  # todo subs: inspect,ls,rm
+complete -c hub-tool -a tag -d "Manage tags" # todo subs: inspect,ls,rm
 complete -c hub-tool -a token -d "Manage Personal Access Tokens" # todo subs
 complete -c hub-tool -a version -d "Version information about this tool"
 # Flags:  (global)
