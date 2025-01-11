@@ -11,41 +11,41 @@ async def get_current_window(connection: iterm2.Connection):
         # LOG MESSAGES to help troubleshoot when None is returned...
         # - I use this code in many places, so do a good job logging details here
         # - big reason to have this file is to not have to log all this in consumer code
-        log("No app from iterm2.async_get_app (got None)")
+        log(f"No app from iterm2.async_get_app, got '{app}'")
         return
-    window = app.current_window
-    if window is None:
-        log("No window from app.current_window (got None)")
-    return window
+    current_window = app.current_window
+    if current_window is None:
+        log(f"No window from app.current_window, got '{current_window}'")
+    return current_window
 
 
 async def get_current_tab(connection: iterm2.Connection):
-    window = await get_current_window(connection)
-    if window is None:
-        log("No window from get_current_window (got None)")
+    current_window = await get_current_window(connection)
+    if current_window is None:
+        log(f"No window from get_current_window, got '{current_window}'")
         return
-    tab = window.current_tab
-    if tab is None:
-        log("No tab from window.current_tab (got None)")
-    return tab
+    current_tab = current_window.current_tab
+    if current_tab is None:
+        log(f"No tab from window.current_tab, got '{current_tab}'")
+    return current_tab
 
 
 async def get_current_session(connection: iterm2.Connection):
-    tab = await get_current_tab(connection)
-    if tab is None:
+    current_tab = await get_current_tab(connection)
+    if current_tab is None:
         # it is fine to dup log messages here too... functions as a mini stack trace
-        log("No tab from get_current_tab (got None)")
+        log(f"No tab from get_current_tab, got '{current_tab}'")
         return
-    session = tab.current_session
-    if session is None:
-        log("No session from tab.current_session (got None)")
+    current_session = current_tab.current_session
+    if current_session is None:
+        log(f"No session from tab.current_session, got '{current_session}'")
         return
-    return session
+    return current_session
 
 
 async def bring_iterm_to_front(connection: iterm2.Connection):
     app = await iterm2.async_get_app(connection)
     if app is None:
-        log("Cannot bring iTerm to front... No app from iterm2.async_get_app (got None)")
+        log(f"Cannot bring iTerm to front... No app from iterm2.async_get_app, got '{app}'")
         return
     await app.async_activate()
