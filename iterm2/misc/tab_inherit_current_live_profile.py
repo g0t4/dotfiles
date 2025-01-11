@@ -50,4 +50,4 @@ async def main(connection):
 
 
 # Run the main function
-# iterm2.run_until_complete(main)
+iterm2.run_until_complete(main)
