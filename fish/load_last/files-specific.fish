@@ -159,7 +159,14 @@ function take
 end
 abbr mkdir 'mkdir -p' # I already use this in take and that's never been a problem so I suspect its always gonna be fine
 #  BTW I understand why mkdir -p in a script/non-interactive shell would possibly be a problem (i.e. get one part of a path wrong and it just works)... though arguably that is a matter of writing a proper/tested script... anyways my impl here is never for non-interactive
-
+function remkdir
+    # ensure dir exists AND is empty
+    if test -d $argv
+        # trash dir if it exists
+        trash $argv
+    end
+    mkdir -p $argv
+end
 
 
 ## cd_dir_of helpers
