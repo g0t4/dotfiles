@@ -9,44 +9,35 @@ from reuse.iterm_helpers import *
 
 
 async def main(connection):
-    # Get the current iTerm2 app
-    app = await iterm2.async_get_app(connection)
+    # args
+    to_dir = sys.argv[1]
+    print(f"to_dir: {to_dir}")
+    if not os.path.isdir(to_dir):
+        print(f"Directory '{to_dir}' does not exist!")
+        return 1
 
-    # Get the current window
-    current_window = app.current_window
+    current_window = await get_current_window(connection)
     if current_window is None:
         print("No current window found!")
         return
 
-    # Get the currently focused tab and session
-    current_tab = current_window.current_tab
-    if current_tab is None:
-        print("No current tab found!")
+    current_session = await get_current_session(connection)
+    if current_session is None:
+        print("No current session found!")
         return
-    current_session = current_tab.current_session
 
     # Get font zoom level and profile of the current session
     profile = await current_session.async_get_profile()
+    new_profile = profile.local_write_only_copy
 
-    print(f"Current profile: {profile}")
-    print(f"type(profile): {type(profile)}")
+    new_profile.set_custom_directory(to_dir)
+    new_profile.set_initial_directory_mode(iterm2.InitialWorkingDirectory.INITIAL_WORKING_DIRECTORY_CUSTOM)
 
-    local_copy = profile.local_write_only_copy
-    print(f"local_copy: {local_copy}")
-    # Open a new tab in the same window
-    new_tab = await current_window.async_create_tab(profile_customizations=local_copy)
+    new_tab = await current_window.async_create_tab(profile_customizations=new_profile)
 
-    # # Set the font zoom level of the new session to match the original
-    # new_session = new_tab.current_session
-    # if font_zoom is not None:
-    #     await new_session.async_set_variable("fontSize", font_zoom)
-    #
-    # # Change the directory of the new session
-    # target_directory = "/path/to/your/directory"  # Replace with your target directory
-    # if os.path.isdir(target_directory):
-    #     await new_session.async_send_text(f"cd {target_directory}\n")
-    # else:
-    #     print(f"Directory '{target_directory}' does not exist!")
+    # bring window to front too...
+    #   PRN I could add something to detect if option is heldd down and then not do this
+    await current_window.async_activate()
 
 
 # Run the main function

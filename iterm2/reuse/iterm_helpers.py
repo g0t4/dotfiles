@@ -30,7 +30,7 @@ async def get_current_tab(connection: iterm2.Connection):
     return tab
 
 
-async def get_session(connection: iterm2.Connection):
+async def get_current_session(connection: iterm2.Connection):
     tab = await get_current_tab(connection)
     if tab is None:
         # it is fine to dup log messages here too... functions as a mini stack trace
