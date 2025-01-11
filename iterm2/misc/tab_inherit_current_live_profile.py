@@ -6,7 +6,11 @@ from pathlib import Path
 
 # add parent dir to sys.path so reuse "package" is available
 sys.path.append(str(Path(__file__).resolve().parent.parent))
-from reuse.common import *
+# FYI can make this script dir part of reuse package for relative imports too
+__package__ = "reuse"
+from .common import *
+
+# from reuse.common import *
 
 async def main(connection):
     # Get the current iTerm2 app
