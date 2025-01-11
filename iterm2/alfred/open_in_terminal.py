@@ -35,9 +35,8 @@ async def main(connection):
 
     new_tab = await current_window.async_create_tab(profile_customizations=new_profile)
 
-    # bring window to front too...
     #   PRN I could add something to detect if option is heldd down and then not do this
-    await current_window.async_activate()
+    await bring_iterm_to_front(connection)
 
 
 # Run the main function

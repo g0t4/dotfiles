@@ -41,3 +41,11 @@ async def get_current_session(connection: iterm2.Connection):
         log("No session from tab.current_session (got None)")
         return
     return session
+
+
+async def bring_iterm_to_front(connection: iterm2.Connection):
+    app = await iterm2.async_get_app(connection)
+    if app is None:
+        log("Cannot bring iTerm to front... No app from iterm2.async_get_app (got None)")
+        return
+    await app.async_activate()
