@@ -1,5 +1,6 @@
 DEBUG = True
 
+# TODO make debug toggleable? OR better yet use a logging library
 
 # log should take one or more args like print
 def log(*args):
