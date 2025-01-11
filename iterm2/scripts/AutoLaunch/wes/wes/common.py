@@ -1,6 +1,6 @@
 import iterm2
 
-from .logs import log
+from logs import log
 
 
 # avoid none soup 4 levels deep in consumer code... feels like a better way to do this (later)

@@ -1,1 +1,0 @@
-../scripts/AutoLaunch/wes/wes/logs.py
