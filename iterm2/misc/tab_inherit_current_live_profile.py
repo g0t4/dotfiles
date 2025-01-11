@@ -5,7 +5,7 @@ from pathlib import Path
 
 # add parent dir to sys.path so reuse "package" is available
 sys.path.append(str(Path(__file__).resolve().parent.parent))
-from reuse.common import *
+from reuse.iterm_helpers import *
 
 
 async def main(connection):
