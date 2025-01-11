@@ -17,10 +17,8 @@
 	<key>currentInputConfigName</key>
 	<string>VLC Default</string>
 	<key>enableAdvancedSettings</key>
-	<true/>
+	<false/>
 	<key>softVolume</key>
 	<real>100</real>
-	<key>useUserDefinedConfDir</key>
-	<true/>
 </dict>
 </plist>
