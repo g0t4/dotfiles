@@ -1,6 +1,13 @@
 import iterm2
 import os
 
+import sys
+from pathlib import Path
+
+# add parent dir to sys.path so reuse "package" is available
+sys.path.append(str(Path(__file__).resolve().parent.parent))
+from reuse.common import *
+
 async def main(connection):
     # Get the current iTerm2 app
     app = await iterm2.async_get_app(connection)
@@ -41,5 +48,6 @@ async def main(connection):
     # else:
     #     print(f"Directory '{target_directory}' does not exist!")
 
+
 # Run the main function
-iterm2.run_until_complete(main)
+# iterm2.run_until_complete(main)
