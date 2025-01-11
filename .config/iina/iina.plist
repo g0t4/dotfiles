@@ -20,6 +20,8 @@
 	<string>VLC Default</string>
 	<key>enableAdvancedSettings</key>
 	<false/>
+	<key>oscPosition</key>
+	<integer>2</integer>
 	<key>softVolume</key>
 	<real>100</real>
 </dict>
