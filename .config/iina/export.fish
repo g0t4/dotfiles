@@ -3,7 +3,7 @@
 # defaults export com.colliderli.iina iina.plist
 
 # export as xml
-plutil -convert xml1 ~/Library/Preferences/com.colliderli.iina.plist -o test.plist
+plutil -convert xml1 ~/Library/Preferences/com.colliderli.iina.plist -o iina.plist
 
 # alternatively, I could allow list the keys to keep
 #   I like idea of denylist b/c then I am forced to review new keys from settings I might've changed recently though
@@ -23,7 +23,7 @@ set rm_keys MainWindowLastPosition NSFullScreenMenuItemEverywhere \
 
 # exclude anything that would vary (ie window positions, last played file)
 for key in $rm_keys
-    /usr/libexec/PlistBuddy -c "Delete ':$key'" test.plist
+    /usr/libexec/PlistBuddy -c "Delete ':$key'" iina.plist
 end
 
 
