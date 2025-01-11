@@ -164,6 +164,10 @@ function remkdir
     if test -d $argv
         # trash dir if it exists
         trash $argv
+        if test $status -ne 0
+            echo "failed to remove existing dir: $argv"
+            return 1
+        end
     end
     mkdir -p $argv
 end
