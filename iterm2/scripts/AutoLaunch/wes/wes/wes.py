@@ -7,6 +7,7 @@ from common import *
 from og_ask import *
 from tabs import *
 from semantic_daemon import *
+from cmd_k import *
 
 async def main(connection: iterm2.Connection):
 
@@ -33,6 +34,10 @@ async def main(connection: iterm2.Connection):
         if e and control and shift and command:
             # TODO merge with ANSI_B? should I just use this instead of ANSI_B approach?
             await copy_screen_to_clipboard(connection, history=False)
+
+        e = keystroke.keycode == iterm2.Keycode.ANSI_K
+        if e and shift and command:
+            await new_cmd_k_clear(connection)
 
         e = keystroke.keycode == iterm2.Keycode.ANSI_H
         if e and control and shift and command:
