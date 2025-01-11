@@ -20,8 +20,6 @@
 	<string>VLC Default</string>
 	<key>enableAdvancedSettings</key>
 	<false/>
-	<key>playlistAutoAdd</key>
-	<false/>
 	<key>softVolume</key>
 	<real>100</real>
 </dict>
