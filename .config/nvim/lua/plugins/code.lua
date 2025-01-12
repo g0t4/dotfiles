@@ -15,16 +15,22 @@ return {
     -- TODO TRY visimatch.nvim
     --    https://www.reddit.com/r/neovim/comments/1hz8d6o/visimatchnvim_a_tiny_plugin_to_highlight_matches/
     --    can match with whitespace differences! can match-visual.nvim do that too?
-    --    vet repo first, seems to be new (not sure if safe yet)
+    {
+        "wurli/visimatch.nvim",
+          enabled = true,
+        opts = {},
+    },
+    -- example: uncomment and use on this:
     -- {
-    --     "wurli/visimatch.nvim",
-    --     enabled = false,
+    --         "wurli/visimatch.nvim",
+    --     enabled = true,
     -- },
     --
     -- highlight selections like vscode, w/o limits (200 chars in vscode + no new lines)
     {
         "aaron-p1/match-visual.nvim",
         event = buffer_with_content_events,
+        enabled = false,
     }, -- will help me practice using visual mode too
     -- FYI g,Ctrl-g to show selection length (aside from just highlighting occurrenes of selection)
 
