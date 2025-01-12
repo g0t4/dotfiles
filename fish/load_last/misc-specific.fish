@@ -1313,14 +1313,18 @@ function video_editing_extract_most_scene_change_thumbnails
     zsh -ic "video_editing_extract_most_scene_change_thumbnails $paths"
 end
 
-function video_editing_mkv_to_mp4
-    set combined_file "$argv[1]"
-    set output_file "$combined_file.mp4"
-    if test -f "$output_file"
-        echo "Skipping...file already exists: $output_file"
-        return
+abbr --add _mp4 --function abbr_mp4
+function abbr_mp4
+    # for now all mkv => mp4 helper func
+    if test (ls *.mkv | count) -gt 0
+        for mkv in *.mkv
+            set output_file (string replace -r "\.mkv\$" ".mp4" "$mkv")
+            if test -f "$output_file"
+                continue
+            end
+            echo ffmpeg -i "'$mkv'" -c copy "'$output_file'"
+        end
     end
-    ffmpeg -i "$combined_file" -c copy "$output_file"
 end
 
 function _video_editing_ffmpeg_file_list
