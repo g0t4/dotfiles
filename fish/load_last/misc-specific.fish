@@ -1362,6 +1362,12 @@ function _ffmpeg_concat
         -c copy $combined_file
 end
 
+abbr --add _aio --function abbr_aio
+function abbr_aio
+    echo -n "video_editing_aio "
+    abbr_videos_glob_for_current_dir
+end
+
 function video_editing_aio
     set combined_file (_get_output_file_based_on_first_file combined.mp4 $argv)
 
