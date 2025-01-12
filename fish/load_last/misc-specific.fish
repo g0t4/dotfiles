@@ -1278,13 +1278,13 @@ function abbr_check
 end
 function abbr_videos_glob_for_current_dir
     # quite often I want to target all video files in current dir, so find those by different extensions and expand appropriately to match most use cases (priority order)
-    if test (ls *.mp4 | count) -gt 0
+    if count *.mp4 >/dev/null
         echo -n "*.mp4"
-    else if test (ls *.m4v | count) -gt 0
+    else if count *.m4v >/dev/null
         echo -n "*.m4v"
-    else if test (ls *.mkv | count) -gt 0
+    else if count *.mkv >/dev/null
         echo -n "*.mkv"
-    else if test (ls *.mov | count) -gt 0
+    else if count *.mov >/dev/null
         echo -n "*.mov"
     end
     # default case don't add glob to match all video files
