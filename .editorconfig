@@ -11,5 +11,6 @@ trim_trailing_whitespace = true
 # https://github.com/CppCXY/EmmyLuaCodeo#Style/blob/master/docs/format_config.md
 # https://github.com/CppCXY/EmmyLuaCodeStyle/blob/master/lua.template.editorconfig
 #   FYI using editorconfig for the formatter in the lua LS I am using (couldn't get defaultConfig to work in coc-settings.json)
+#   TODO IIAC I have to set per repo/workspace? or can I have a global editorconfig (in this dotfiles repo? - w.r.t. the formatter using editorconfig for its options)
 max_line_length = 200
-
+align_continuous_inline_comment = false
