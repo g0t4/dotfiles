@@ -127,5 +127,5 @@ ensureBool(hs.dockIcon, false) -- FYI this one is 1-2ms to check, 3+ to set ... 
 -- hs.dockIcon(false) -- hide dock icon (default false) - also shows in app switcher if true) - REMINDER ONLY... uncomment to toggle but do not set every time (nor check every time) b/c that takes 2/4ms respectively
 
 
-require("config.learn.axuielem")
--- require("config.learn.hsapp")
+-- require("config.learn.axuielem") -- WIP
+-- DONE for now: -- require("config.learn.hsapp")
