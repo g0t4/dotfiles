@@ -5,12 +5,9 @@ hs.application.defaultAppForUTI("mp4") -- returns bundle id, i.e.:
 
 
 local vlc = hs.application.applicationsForBundleID("org.videolan.vlc") -- returns hs.application object
-print("vlc app from bundle id", vlc)
 Dump(vlc)
-DumpWithMetatables(vlc)
-Dump("foo")
--- hs.inspect.inspect(vlc, { metatables = true })
+-- FYI vlc will basically be empty table if no app instance is running
+-- IF app running:
+--    { <userdata 1> -- hs.application: VLC }
 
 -- TODO? hs.application.find
-
---
