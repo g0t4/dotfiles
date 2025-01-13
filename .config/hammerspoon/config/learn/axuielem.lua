@@ -4,16 +4,30 @@ local focusedWinAXUIElem = hs.axuielement.windowElement(focusedHSWindow) -- HSWi
 
 -- *** DONT FORGET to use Accessibility Inspector (superior version of UIElement Inspector b/c shows neigbhoring elements)
 
--- references (static lists, IIUC from extracted from header files):
+
+
+-- *** CONSTANTS: (static lists, IIUC from extracted from header files):
 -- print('actions reference', hs.axuielement.actions) -- static list
 -- print('attributes reference', hs.axuielement.attributes) -- static list, useful to explore what might be possible (when supported)
 -- print('orientations reference', hs.axuielement.orientations) -- static list (horizontal, vertical, unknown)
 -- print('parameterizedAttributes: ', hs.axuielement.parameterizedAttributes)
-print('roles:', hs.axuielement.roles)
--- interesting roles: AXBrowser, AXColorWell,
-print('subroles:', hs.axuielement.subroles)
-print('rulerMarkers:', hs.axuielement.rulerMarkers)
-print('sortDirections:', hs.axuielement.sortDirections)
+--
+-- print('roles:', hs.axuielement.roles)
+-- hrm... AXBrowser, AXHelpTag, AXLink, AXSystemWide?, AXUnknown
+--
+-- print('subroles:', hs.axuielement.subroles)
+-- hrm... AXApplicationDockItem, AXProcessSwitcherList,
+--          - CAN I ALTER AXProcessSwitcherList? tab switcher?!
+--        AXFloatingWindow, AXSystemFloatingWindow
+--        AXTextLink, AXTimeline, AXUnknown
+--
+-- print('rulerMarkers:', hs.axuielement.rulerMarkers)
+-- print('sortDirections:', hs.axuielement.sortDirections)
+-- print('units', hs.axuielement.units)
+
+
+
+
 
 
 if false then
@@ -22,7 +36,7 @@ if false then
         -- syntactic sugar for ipairs(obj:attributeNames())
         -- FYI if value is nil, it won't be included in the loop... need to directly use attributeValue... to get check that it is nil if for whatever reason that is needed
         print(k, v)
-        -- text related attrs (maybe useful to search elements?):
+        -- ?? text related attrs (maybe useful to search elements?):
         --    AXAnnotation, AXColumnTitles, AXCustom, AXDescription, AXFilename, AXHelp, AXHeader, AXIdentifier
         --    AXLabelValue/AXLabelUIElements, AXLink, AXURL, AXListItemPrefix, AXPlaceholderValue, AXReplacementString
         --    AXRole, AXRoleDescription, AXMarkerTypeDescription, AXMarkerValues, AXServesAsTitleForUIElements
@@ -41,4 +55,3 @@ if false then
         print(i, v)
     end
 end
-
