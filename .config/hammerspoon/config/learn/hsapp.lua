@@ -18,9 +18,12 @@ Dump("ppt", ppt) -- FYI so far... not showing ppt instance that is running... mu
 -- Dump("pptInfo", pptInfo) -- UTT infos, etc -- IIAC Info.plist(s) are used to make this
 
 -- IIUC use name in App Switcher
+--   == open -a "foo"
 -- hs.application.launchOrFocus("PowerPoint") -- DOES NOT WORK
 -- hs.application.launchOrFocus("Microsoft PowerPoint") -- works
 -- hs.application.launchOrFocus("vlc") -- works
+local worked = hs.application.launchOrFocus("/Applications/Microsoft PowerPoint.app") -- WORKS too
+Dump("worked", worked) -- false means no app found, else true for launch/focus
 
 
 
