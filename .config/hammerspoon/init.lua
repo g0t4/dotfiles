@@ -8,24 +8,6 @@ local start_time = hs.timer.secondsSinceEpoch()
 
 require("config.helpers")
 
-local inspect = hs.inspect.inspect
-local focusedHSWindow = hs.window.focusedWindow()
-local focusedWinAXUIElem = hs.axuielement.windowElement(focusedHSWindow) -- HSWin => AXUIElem window (FYI .AsHSWindow can go back to HSWin)
-
-print('actions reference', hs.axuielement.actions)                       -- static list
-print('attributes reference', hs.axuielement.attributes)                 -- static list
-
-print('Attributes')
-for k, v in pairs(focusedWinAXUIElem) do
-    -- syntactic sugar for ipairs(obj:attributeNames())
-    print(k, v)
-end
-print('AXChildren')
-for i, v in pairs(focusedWinAXUIElem:attributeValue("AXChildren") or {}) do
-    -- enumerate children elements
-    print(i, v)
-end
-
 
 local streamStdout = require("config.tests.stream-stdout").streamStdout
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "S", streamStdout)
@@ -143,3 +125,6 @@ ensureBool(hs.menuIcon, false)
 ensureBool(hs.dockIcon, true) -- FYI this one is 1-2ms to check, 3+ to set ... unlike others where its fast to check (and slow to set, even if not changing the actual value)
 -- hs.console.titleVisibility("hidden") -- hide title, but doesn't save space b/c buttons still show... why is there a fat border too below title/button bar?!
 -- hs.dockIcon(false) -- hide dock icon (default false) - also shows in app switcher if true) - REMINDER ONLY... uncomment to toggle but do not set every time (nor check every time) b/c that takes 2/4ms respectively
+
+
+require("config.learn.axuielem"):
