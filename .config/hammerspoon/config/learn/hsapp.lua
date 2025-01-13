@@ -1,7 +1,7 @@
--- require("helpers")
--- *** hs.application module => AFAICT this is akin to get app process from System Events? similar?
-hs.application.defaultAppForUTI("mp4") -- returns bundle id, i.e.:
---     org.videolan.vlc
+require("config.helpers")
+-- -- *** hs.application module => AFAICT this is akin to get app process from System Events? similar?
+-- hs.application.defaultAppForUTI("mp4") -- returns bundle id, i.e.:
+-- --     org.videolan.vlc
 
 
 -- FYI
@@ -31,9 +31,14 @@ Dump("ppt", ppt) -- FYI so far... not showing ppt instance that is running... mu
 -- local pathForBundleID = hs.application.pathForBundleID("com.microsoft.PowerPoint") -- returns "/Applications/Microsoft PowerPoint.app"
 -- Dump("pathForBundleID(com.microsoft.PowerPoint)", pathForBundleID) -- "/Applications/Microsoft PowerPoint.app"
 
--- running apps:
-local running = hs.application.runningApplications()
-Dump("running", running)
+-- -- running apps:
+-- local running = hs.application.runningApplications()
+-- Dump("running", running)
 
 
--- TODO? hs.application.find
+-- *** find
+local pptFind = hs.application.find("PowerPoint") -- YAY THIS WORKS!
+-- hint can match any of: PID, bundle ID, name, window title
+Dump("pptFind", pptFind)
+local vlcFind = hs.application("VLC") -- convenience method on top level module too
+Dump("vlcFind", vlcFind)
