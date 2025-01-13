@@ -122,7 +122,7 @@ ensureBool(hs.preferencesDarkMode, true)
 ensureBool(hs.menuIcon, false)
 -- dock icon true => shows in APP SWITCHER TOO
 --   set true when changing config and want to quickly change in app switcher.. then set false again when it annoys you :)
-ensureBool(hs.dockIcon, true) -- FYI this one is 1-2ms to check, 3+ to set ... unlike others where its fast to check (and slow to set, even if not changing the actual value)
+ensureBool(hs.dockIcon, false) -- FYI this one is 1-2ms to check, 3+ to set ... unlike others where its fast to check (and slow to set, even if not changing the actual value)
 -- hs.console.titleVisibility("hidden") -- hide title, but doesn't save space b/c buttons still show... why is there a fat border too below title/button bar?!
 -- hs.dockIcon(false) -- hide dock icon (default false) - also shows in app switcher if true) - REMINDER ONLY... uncomment to toggle but do not set every time (nor check every time) b/c that takes 2/4ms respectively
 
