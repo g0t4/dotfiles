@@ -12,6 +12,9 @@ require("config.helpers")
 -- https://www.hammerspoon.org/docs/hs.console.html
 hs.console.darkMode(true)
 -- hs.console.titleVisibility("hidden") -- hide title, but doesn't save space b/c buttons still show... why is there a fat border too below title/button bar?!
+hs.menuIcon(false) -- hide menu icon (default true) - can use show console streamdeck button to see console (keep menu less cluttered)
+hs.dockIcon(false) -- hide dock icon (default false - also shows in app switcher if true)
+-- TODO is there a ton of overhead to set these settings on every startup? if like 20 ms then consider not calling every time...
 
 -- ensure IPC so `hs` cli works
 --     hs -c 'hs.console.clearConsole()'
