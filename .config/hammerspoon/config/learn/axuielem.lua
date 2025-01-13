@@ -55,3 +55,9 @@ if false then
         print(i, v)
     end
 end
+
+
+local pptHsApp = hs.application.find("PowerPoint")
+Dump("pptHsApp", pptHsApp)
+local pptAxAppElem = hs.axuielement.applicationElement(pptHsApp)
+Dump("pptAxAppElem", pptAxAppElem)
