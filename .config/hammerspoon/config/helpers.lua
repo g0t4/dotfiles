@@ -35,4 +35,17 @@ function DumpWithMetatables(...)
     print(inspect({ ... }, { metatables = true }))
 end
 
+function DumpAXAttributes(obj)
+    local roleDesc = obj:attributeValue("AXRoleDescription")
+    local title = obj:attributeValue("AXTitle")
+    if not title then title = "" end
+    if not roleDesc then roleDesc = "" end
+    print()
+    print('## ATTRIBUTES for - ' .. roleDesc .. ' - ' .. title)
+    for k, v in pairs(obj) do
+        print(k, v)
+    end
+    print()
+end
+
 return M
