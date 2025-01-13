@@ -26,9 +26,10 @@ Dump("ppt", ppt) -- FYI so far... not showing ppt instance that is running... mu
 -- Dump("worked", worked) -- false means no app found, else true for launch/focus
 
 -- DERP ... doesn't return a name that works... lol for launchOrFocus... (at least not for ppt)
-local pptName = hs.application.nameForBundleID("com.microsoft.PowerPoint") -- returns "PowerPoint"
-Dump("nameForBundleID(com.microsoft.PowerPoint)", pptName)
-
+local nameForBundleID = hs.application.nameForBundleID("com.microsoft.PowerPoint") -- returns "PowerPoint"
+Dump("nameForBundleID(com.microsoft.PowerPoint)", nameForBundleID)
+local pathForBundleID = hs.application.pathForBundleID("com.microsoft.PowerPoint") -- returns "/Applications/Microsoft PowerPoint.app"
+Dump("pathForBundleID(com.microsoft.PowerPoint)", pathForBundleID) -- "/Applications/Microsoft PowerPoint.app"
 
 
 
