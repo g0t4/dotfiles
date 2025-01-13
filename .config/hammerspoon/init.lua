@@ -8,19 +8,6 @@ local start_time = hs.timer.secondsSinceEpoch()
 
 require("config.helpers")
 
--- config console:
--- https://www.hammerspoon.org/docs/hs.console.html
-hs.console.darkMode(true)
-hs.preferencesDarkMode(true) -- NBD really..
--- hs.console.titleVisibility("hidden") -- hide title, but doesn't save space b/c buttons still show... why is there a fat border too below title/button bar?!
-hs.menuIcon(false) -- hide menu icon (default true) - can use show console streamdeck button to see console (keep menu less cluttered)
-hs.dockIcon(false) -- hide dock icon (default false - also shows in app switcher if true)
--- TODO is there a ton of overhead to set these settings on every startup? if like 20 ms then consider not calling every time...
-
--- ensure IPC so `hs` cli works
---     hs -c 'hs.console.clearConsole()'
---     hs -c 'hs.alert.show("Hello, Stream Deck!")'
-hs.ipc.cli = true
 
 local streamStdout = require("config.tests.stream-stdout").streamStdout
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "S", streamStdout)
@@ -113,3 +100,27 @@ require("config.windows")
 
 local end_time = hs.timer.secondsSinceEpoch()
 print("init.lua took", end_time - start_time, "seconds")
+
+
+
+-- *** insignificant config last so it doesn't slow down critical startup config
+--
+-- ensure IPC so `hs` cli works
+--     hs -c 'hs.console.clearConsole()'
+--     hs -c 'hs.alert.show("Hello, Stream Deck!")'
+hs.ipc.cli = true
+--
+-- FYI be careful with overhead to call every time
+function ensureBool(func, value)
+    -- check first, in most cases takes <1ms to check before setting
+    if func() ~= value then func(value) end
+end
+
+ensureBool(hs.console.darkMode, true)
+ensureBool(hs.preferencesDarkMode, true)
+-- menu icon => hide to declutter menu bar, also b/c I use streamdeck button to show console
+ensureBool(hs.menuIcon, false)
+-- dock icon true => shows in APP SWITCHER TOO
+ensureBool(hs.dockIcon, false)  -- FYI this one is 1-2ms to check, 3+ to set ... unlike others where its fast to check (and slow to set, even if not changing the actual value)
+-- hs.console.titleVisibility("hidden") -- hide title, but doesn't save space b/c buttons still show... why is there a fat border too below title/button bar?!
+-- hs.dockIcon(false) -- hide dock icon (default false) - also shows in app switcher if true) - REMINDER ONLY... uncomment to toggle but do not set every time (nor check every time) b/c that takes 2/4ms respectively
