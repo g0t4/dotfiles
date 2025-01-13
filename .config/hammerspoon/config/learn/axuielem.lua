@@ -1,4 +1,3 @@
-local inspect = hs.inspect.inspect
 local focusedHSWindow = hs.window.focusedWindow()
 local focusedWinAXUIElem = hs.axuielement.windowElement(focusedHSWindow) -- HSWin => AXUIElem window (FYI .AsHSWindow can go back to HSWin)
 
@@ -61,3 +60,20 @@ local pptHsApp = hs.application.find("PowerPoint")
 Dump("pptHsApp", pptHsApp)
 local pptAxAppElem = hs.axuielement.applicationElement(pptHsApp)
 Dump("pptAxAppElem", pptAxAppElem)
+
+-- hs.axuielement.systemElementAtPosition(x, y | pointTable)
+local elementAt = hs.axuielement.systemElementAtPosition(0, 0)
+Dump("elementAt", elementAt)
+
+function dumpAttrs(obj)
+    local roleDesc = obj:attributeValue("AXRoleDescription")
+    local title = obj:attributeValue("AXTitle")
+    print()
+    print('## ATTRIBUTES for - ' .. roleDesc .. ' - ' .. title)
+    for k, v in pairs(obj) do
+        print(k, v)
+    end
+    print()
+end
+
+dumpAttrs(elementAt)
