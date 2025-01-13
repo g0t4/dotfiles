@@ -22,8 +22,12 @@ Dump("ppt", ppt) -- FYI so far... not showing ppt instance that is running... mu
 -- hs.application.launchOrFocus("PowerPoint") -- DOES NOT WORK
 -- hs.application.launchOrFocus("Microsoft PowerPoint") -- works
 -- hs.application.launchOrFocus("vlc") -- works
-local worked = hs.application.launchOrFocus("/Applications/Microsoft PowerPoint.app") -- WORKS too
-Dump("worked", worked) -- false means no app found, else true for launch/focus
+-- local worked = hs.application.launchOrFocus("/Applications/Microsoft PowerPoint.app") -- WORKS too
+-- Dump("worked", worked) -- false means no app found, else true for launch/focus
+
+-- DERP ... doesn't return a name that works... lol for launchOrFocus... (at least not for ppt)
+local pptName = hs.application.nameForBundleID("com.microsoft.PowerPoint") -- returns "PowerPoint"
+Dump("nameForBundleID(com.microsoft.PowerPoint)", pptName)
 
 
 
