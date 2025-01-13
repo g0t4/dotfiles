@@ -128,3 +128,4 @@ ensureBool(hs.dockIcon, true) -- FYI this one is 1-2ms to check, 3+ to set ... u
 
 
 require("config.learn.axuielem")
+require("config.learn.hsapp")

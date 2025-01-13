@@ -27,4 +27,10 @@ function Dump(what)
     print(inspect(what))
 end
 
+function DumpWithMetatables(what)
+    -- TODO is this useful, need to find an example where I find it helpful...
+    -- added this in theory to be useful
+    print(inspect(what, { metatables = true }))
+end
+
 return M

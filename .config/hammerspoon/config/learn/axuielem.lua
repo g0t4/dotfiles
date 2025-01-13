@@ -2,12 +2,19 @@ local inspect = hs.inspect.inspect
 local focusedHSWindow = hs.window.focusedWindow()
 local focusedWinAXUIElem = hs.axuielement.windowElement(focusedHSWindow) -- HSWin => AXUIElem window (FYI .AsHSWindow can go back to HSWin)
 
+-- *** DONT FORGET to use Accessibility Inspector (superior version of UIElement Inspector b/c shows neigbhoring elements)
 
 -- references (static lists, IIUC from extracted from header files):
 -- print('actions reference', hs.axuielement.actions) -- static list
 -- print('attributes reference', hs.axuielement.attributes) -- static list, useful to explore what might be possible (when supported)
 -- print('orientations reference', hs.axuielement.orientations) -- static list (horizontal, vertical, unknown)
 -- print('parameterizedAttributes: ', hs.axuielement.parameterizedAttributes)
+print('roles:', hs.axuielement.roles)
+-- interesting roles: AXBrowser, AXColorWell,
+print('subroles:', hs.axuielement.subroles)
+print('rulerMarkers:', hs.axuielement.rulerMarkers)
+print('sortDirections:', hs.axuielement.sortDirections)
+
 
 if false then
     print('Attributes')
@@ -34,3 +41,4 @@ if false then
         print(i, v)
     end
 end
+
