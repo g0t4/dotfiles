@@ -42,3 +42,6 @@ local pptFind = hs.application.find("PowerPoint") -- YAY THIS WORKS!
 Dump("pptFind", pptFind)
 local vlcFind = hs.application("VLC") -- convenience method on top level module too
 Dump("vlcFind", vlcFind)
+-- FYI a warning when using find:
+--  -- Some applications have alternate names which can also be checked if you enable Spotlight support with `hs.application.enableSpotlightForNameSearches(true)`.
+--  PRN try if I have issues finding apps, don't think I will
