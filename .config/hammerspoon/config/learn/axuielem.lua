@@ -80,3 +80,26 @@ local focused = hs.axuielement.systemWideElement():attributeValue("AXFocusedUIEl
 Dump('focused', focused)
 DumpAXAttributes(focused)
 DumpAXActions(focused)
+
+
+-- *** TODOs
+-- TODO! hs.axuielement:elementSearch(callback, [criteria], [namedModifiers]) -> elementSearchObject
+--    read all of: https://www.hammerspoon.org/docs/hs.axuielement.html#elementSearch
+-- TODO hs.axuielement:allDescendantElements(callback, [withParents]) -> elementSearchObject
+-- TODO hs.axuielement:buildTree(callback, [depth], [withParents]) -> elementSearchObject
+-- immediate children:
+--    hs.axuielement:childrenWithRole(role) -> table
+-- hs.axuielement:elementAtPosition(x, y | pointTable) -> axuielementObject | nil, errString
+--
+-- hs.axuielement:setAttributeValue(attribute, value) -> axuielementObject | nil, errString
+--
+-- hs.axuielement:isValid() -> boolean | nil, errString
+--    find out if element is removed, etc (aka invalid)
+-- hs.axuielement:matchesCriteria(criteria) -> boolean
+--    test like if searching?
+-- hs.axuielement:path() -> table
+--   OMG use with element at position!
+--   THEN... I should be able to programatically produce applescript or otherwise to find an object using my own locator code...
+--       I could even traverse nearby elements and find where decision points are and find differing aspects to build the unique path to object
+--
+--
