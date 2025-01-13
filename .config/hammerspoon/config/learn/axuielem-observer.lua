@@ -4,7 +4,7 @@ local observer = axuielement.observer
 -- observer.new():start()
 --
 -- *** constants ***
--- Dump("notifications", observer.notifications)
+Dump("notifications", observer.notifications)
 -- interesting: applicationActivated, applicationDeactivated
 --    applicationHidden, applicationShown
 --    created, drawerCreated
@@ -18,6 +18,9 @@ local observer = axuielement.observer
 --    valueChanged
 --    windowCreated/Moved/Resized/Miniaturized/Deminiaturized
 --
+-- TODO can I use systemwide element for focusedElement and detect when it changes and use that to trigger an accessbility inspector like tool?
+--
+
 
 
 local pptHsApp = hs.application.find("PowerPoint")
@@ -33,16 +36,60 @@ DumpAXEverything(mainWinElem)
 --
 -- local winObserver = observer.new(pptAppElem:pid())
 -- winObserver:addWatcher(mainWinElem, "AXMoved")
--- -- acObserver:addWatcher(mainWinElem, "AXResized")
+-- -- acObserver:addWatcher(mainWinElem, "XResized")
 -- -- acObserver:addWatcher(mainWinElem, "AXMiniaturized")
 -- -- acObserver:addWatcher(mainWinElem, "AXDeminiaturized")
 -- -- acObserver:addWatcher(mainWinElem, "AXTitleChanged")
 -- -- acObserver:addWatcher(mainWinElem, "AXValueChanged")
 -- -- acObserver:addWatcher(mainWinElem, "AXCreated")
 -- -- acObserver:addWatcher(mainWinElem, "AXDestroyed")
--- winObserver:callback(function(_observer, elem, notification)
---     Dump("cb", _observer, elem, notification)
+-- winObserver:callback(function(_observer, elem, notification, detailsTable)
+--     Dump("cb", _observer, elem, notification, detailsTable)
 -- end)
 -- winObserver:start()
 --
 --
+
+
+-- PRN would like to know if I can subscribe to focus changed across all apps (akin to system wide element's focused element)... might have to first swap the focused app/window then element?
+--    applicationActivated/Deactivated, focusedWindowChanged,focusedUIElementChanged ... and so I would change observer to most recent activate app as I switch apps
+-- local systemWideElem = axuielement.systemWideElement()
+-- Dump("swElem", systemWideElem)
+-- local focusedObserver = observer.new(pptAppElem:pid())
+-- focusedObserver:addWatcher(pptAppElem, "AXFocusedUIElementChanged")
+-- focusedObserver:callback(function(_observer, elem, notification, detailsTable)
+--     Dump("cb", _observer, elem, notification, detailsTable)
+-- end)
+-- focusedObserver:start()
+-- can I capture typing into focused element?
+
+
+local textObserver = observer.new(pptAppElem:pid())
+textObserver:callback(function(_observer, elem, notification, detailsTable)
+    Dump("textObserver", _observer, elem, notification, detailsTable)
+end)
+textObserver:start()
+
+-- *** observe text entry changes => I could add AI auto complete to anything with this!
+--    would need to narrow down to text input elements only...
+local focusedObserver = observer.new(pptAppElem:pid())
+focusedObserver:addWatcher(pptAppElem, "AXFocusedUIElementChanged")
+focusedObserver:callback(function(_observer, elem, notification, detailsTable)
+    Dump("focusedObserver", _observer, elem, notification, detailsTable)
+    for elem, notifications in pairs(textObserver:watching()) do
+        print(elem, notifications)
+        for _, notificationString in pairs(notifications) do
+            print("-- removing --- ", elem, notificationString)
+            textObserver:removeWatcher(elem, notificationString)
+        end
+        -- FYI elem remains associated w/ observer... w/ empty notifications table after remove all its watchers (notificaitons) (until addWatcher is called for it again in future)
+    end
+    textObserver:addWatcher(elem, "AXValueChanged")
+    -- textObserver:addWatcher(pptAppElem, "AXValueChanged")
+    -- TODO remove prior watcher(s)
+end)
+focusedObserver:start()
+
+
+
+if true then return end -- ! STOP HERE FOR NOW:
