@@ -12,19 +12,12 @@ return {
         -- I really like this extension as I get used to the motions, its great, ysiw" bam! or ys$"... perfection (one step to select range and highlight it, super cumbersome w/o both together in one action)
     },
 
-    -- TODO TRY visimatch.nvim
-    --    https://www.reddit.com/r/neovim/comments/1hz8d6o/visimatchnvim_a_tiny_plugin_to_highlight_matches/
-    --    can match with whitespace differences! can match-visual.nvim do that too?
+    -- can match with whitespace differences
     {
         "wurli/visimatch.nvim",
-          enabled = true,
+        enabled = true,
         opts = {},
     },
-    -- example: uncomment and use on this:
-    -- {
-    --         "wurli/visimatch.nvim",
-    --     enabled = true,
-    -- },
     --
     -- highlight selections like vscode, w/o limits (200 chars in vscode + no new lines)
     {
