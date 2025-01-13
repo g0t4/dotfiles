@@ -11,11 +11,16 @@ require("config.helpers")
 local inspect = hs.inspect.inspect
 local focusedHSWindow = hs.window.focusedWindow()
 local focusedWinAXUIElem = hs.axuielement.windowElement(focusedHSWindow) -- HSWin => AXUIElem window (FYI .AsHSWindow can go back to HSWin)
+
+print('actions reference', hs.axuielement.actions)                       -- static list
+print('attributes reference', hs.axuielement.attributes)                 -- static list
+
 print('Attributes')
 for k, v in pairs(focusedWinAXUIElem) do
     -- syntactic sugar for ipairs(obj:attributeNames())
     print(k, v)
 end
+print('AXChildren')
 for i, v in pairs(focusedWinAXUIElem:attributeValue("AXChildren") or {}) do
     -- enumerate children elements
     print(i, v)
