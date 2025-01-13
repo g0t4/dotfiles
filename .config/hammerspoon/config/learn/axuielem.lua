@@ -76,3 +76,15 @@ DumpAXAttributes(hs.axuielement.systemWideElement())
 -- 2025-01-13 03:20:44: AXFocusedUIElement	hs.axuielement: AXTextArea (0x6000023b1638)
 -- 2025-01-13 03:20:44: AXRole	AXSystemWide
 -- 2025-01-13 03:20:44: AXRoleDescription
+local focused = hs.axuielement.systemWideElement():attributeValue("AXFocusedUIElement")
+Dump('focused', focused)
+
+
+
+function DumpAXActions(element)
+    for a in element:actionNames() do
+        print(a)
+    end
+end
+
+
