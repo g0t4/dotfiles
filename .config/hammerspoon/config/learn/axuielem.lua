@@ -62,7 +62,17 @@ local pptAxAppElem = hs.axuielement.applicationElement(pptHsApp)
 Dump("pptAxAppElem", pptAxAppElem)
 
 
--- ***! hs.axuielement.systemElementAtPosition(x, y | pointTable)
-local elementAt = hs.axuielement.systemElementAtPosition(0, 0)
-Dump("elementAt", elementAt)
-DumpAXAttributes(elementAt)
+-- -- ***! hs.axuielement.systemElementAtPosition(x, y | pointTable)
+-- local elementAt = hs.axuielement.systemElementAtPosition(0, 0)
+-- Dump("elementAt", elementAt)
+-- DumpAXAttributes(elementAt)
+--
+
+-- *** system wide info (focused element/app!)
+Dump(hs.axuielement.systemWideElement())
+DumpAXAttributes(hs.axuielement.systemWideElement())
+-- HAS:
+-- 2025-01-13 03:20:44: AXFocusedApplication	hs.axuielement: AXApplication (0x6000023b1778)
+-- 2025-01-13 03:20:44: AXFocusedUIElement	hs.axuielement: AXTextArea (0x6000023b1638)
+-- 2025-01-13 03:20:44: AXRole	AXSystemWide
+-- 2025-01-13 03:20:44: AXRoleDescription
