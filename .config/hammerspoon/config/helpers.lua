@@ -23,14 +23,16 @@ function M.typeText(text, delay)
     end
 end
 
-function Dump(what)
-    print(inspect(what))
+function Dump(...)
+    -- ... declares 0+ args
+    --  {... } collects the args into a var, so this is actually the rest like operator
+    print(inspect({ ... }))
 end
 
-function DumpWithMetatables(what)
+function DumpWithMetatables(...)
     -- TODO is this useful, need to find an example where I find it helpful...
     -- added this in theory to be useful
-    print(inspect(what, { metatables = true }))
+    print(inspect({ ... }, { metatables = true }))
 end
 
 return M
