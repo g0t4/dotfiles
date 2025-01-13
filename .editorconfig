@@ -8,6 +8,8 @@ trim_trailing_whitespace = true
 # end_of_line = lf
 
 [*.lua]
-# https://github.com/CppCXY/EmmyLuaCodeStyle/blob/master/docs/format_config.md
+# https://github.com/CppCXY/EmmyLuaCodeo#Style/blob/master/docs/format_config.md
+# https://github.com/CppCXY/EmmyLuaCodeStyle/blob/master/lua.template.editorconfig
+#   FYI using editorconfig for the formatter in the lua LS I am using (couldn't get defaultConfig to work in coc-settings.json)
 max_line_length = 200
 
