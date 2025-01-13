@@ -79,12 +79,4 @@ DumpAXAttributes(hs.axuielement.systemWideElement())
 local focused = hs.axuielement.systemWideElement():attributeValue("AXFocusedUIElement")
 Dump('focused', focused)
 DumpAXAttributes(focused)
-
-
-
-function DumpAXActions(element)
-    for a in element:actionNames() do
-        print(a)
-    end
-end
-
+DumpAXActions(focused)

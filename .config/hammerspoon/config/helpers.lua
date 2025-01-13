@@ -48,4 +48,11 @@ function DumpAXAttributes(obj)
     print()
 end
 
+function DumpAXActions(element)
+    Dump(element:actionNames())
+    -- for k, v in pairs(element:actionNames()) do
+    --     print(k, v)
+    -- end
+end
+
 return M
