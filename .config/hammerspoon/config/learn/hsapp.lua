@@ -40,8 +40,24 @@ Dump("ppt", ppt) -- FYI so far... not showing ppt instance that is running... mu
 local pptFind = hs.application.find("PowerPoint") -- YAY THIS WORKS!
 -- hint can match any of: PID, bundle ID, name, window title
 Dump("pptFind", pptFind)
-local vlcFind = hs.application("VLC") -- convenience method on top level module too
+local vlcFind = hs.applicatn("VLC") -- convenience method on top level module too
 Dump("vlcFind", vlcFind)
+-- FYI nil (IIUC) when not running, multiple if more than one instance of app
 -- FYI a warning when using find:
 --  -- Some applications have alternate names which can also be checked if you enable Spotlight support with `hs.application.enableSpotlightForNameSearches(true)`.
 --  PRN try if I have issues finding apps, don't think I will
+
+
+-- TODO hs.application.open(hint,... waitForFirstWindow)
+-- TODO methods (on HSApp instances - FYI : means method not static func):
+--   TODO hs.application:activate() -- only main window to front
+--     :activate([true]) -- all windows to front
+--   :allWindows()
+--     :mainWindow()
+--     :findWindow(titlePattern)
+--     :focusedWindow()
+--     :getWindow(title)
+--     :visibleWindows()
+--   :kill() / :kill9()
+--   :findMenuItem(menuItemHint[, isRegex])
+--     :selectMenuItem(menuitem[, isRegex]
