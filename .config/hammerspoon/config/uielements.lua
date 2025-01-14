@@ -25,6 +25,15 @@ function BuildAppleScriptTo(toElement)
         -- TODO duplicated title (use AXParent to get other child windows)
     end
     local function classSelector(elem)
+        -- FYI powerpoint, ribbon has incrementors that are grouped with other similar controls and good for testing collision in generating script (i.e. group1 vs group2 vs group3)
+        --   	set inc to first incrementor of group 3 of first scroll area of first tab group of window "Presentation1" of application process "PowerPoint"
+        --   	increment foo
+
+        -- TODO also IIGC AXChildrenInNavigationOrder  can help me pick group 1/2/3 etc...?! I suspect!?
+        -- or is childrenWithRole(role) ordered too?
+        --
+
+
         -- TODO can I get `class` property on axuielement... like class shows in Script Debugger.. that has the correct (singular name) for the following references
         local role = GetValueOrEmptyString(elem, "AXRole")
         local roleDescription = GetValueOrEmptyString(elem, "AXRoleDescription")
@@ -134,6 +143,13 @@ function GetValueOrEmptyString(element, attribute)
 end
 
 function GetDumpAXAttributes(element, skips)
+    local function compactUserData(userdata)
+        -- TODO add test of userdata type to makes sure is axuielement before getting attr values
+        local title = GetValueOrEmptyString(userdata, "AXTitle")
+        local role = GetValueOrEmptyString(userdata, "AXRole")
+        return title .. ' (' .. role .. ')'
+    end
+
     local function compactTableAttrValue(tbl)
         if tbl == nil then
             return "nil"
@@ -141,21 +157,25 @@ function GetDumpAXAttributes(element, skips)
         local result = {}
         -- TODO what about tables with multiple hs.axuielement objects? I am showing those now so that is interesting! accidentally added that here with compact table
         --   TODO detect and strip what is a list (keys are numbers, values are axuielement objects)
-        for k, v in pairs(tbl) do
+        for key, value in pairs(tbl) do
             -- IIRC cannot get nil using pairs() which is syntactic sugar for allAttributeValues... nonetheless doesn't hurt to leave in case I go with another approach for enumeration and it has nil values
-            if not v then
-                v = "nil"
+            local displayValue = value
+            -- TODO do I wanna extract reusable (and/or limit to one level deep?)
+            if value == nil then
+                displayValue = "nil"
+            elseif type(value) == "userdata" then
+                displayValue = compactUserData(value)
+            elseif type(value) == "table" then
+                -- i.e. AXSize, AXPosition, AXFrame, AXVisibleCharacterRange
+                displayValue = compactTableAttrValue(value)
+            elseif type(value) == 'string' then
+                displayValue = '"' .. value .. '"'
+            else
+                displayValue = tostring(value)
             end
-            table.insert(result, string.format("%s=%s", tostring(k), tostring(v)))
+            table.insert(result, string.format("%s=%s", tostring(key), displayValue))
         end
         return "{" .. table.concat(result, ", ") .. "}"
-    end
-
-    local function compactUserData(userdata)
-        -- TODO add test of userdata type to makes sure is axuielement before fetting attr values
-        -- local title = GetValueOrEmptyString(userdata, "AXTitle")
-        -- local role = GetValueOrEmptyString(userdata, "AXRole")
-        return GetDumpElementLine(userdata)
     end
 
     skips = skips or {}
@@ -286,6 +306,9 @@ function GetDumpPath(element, expanded)
 
             if expanded then
                 local children = elem:attributeValue("AXChildren")
+                if children == nil then
+                    children = {}
+                end
                 for _, child in pairs(children) do
                     result = result .. "    " .. GetDumpElementLine(child) .. "\n"
                 end
