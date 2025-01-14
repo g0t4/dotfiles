@@ -1,13 +1,19 @@
 --
 -- *** INSPECT ELEMENT HELPERS ***
 
-local skipVerboseAttrs = { AXValue = true } -- PRN truncate long values instead? could pass max length here
+local skipAttrsWhenInspectForPathBuilding = {
+    -- PRN truncate long values instead? could pass max length here
+    AXValue = true,
+    AXTopLevelUIElement = true,
+    AXWindow = true,
+    AXParent = true,
+}
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "A", function()
     -- TODO applescript genereator based on path (IIAC I can use role desc to build applescript?)
     local coords = hs.mouse.absolutePosition()
     local elementAt = hs.axuielement.systemElementAtPosition(coords.x, coords.y)
     DumpAXPath(elementAt, true)
-    DumpAXAttributes(elementAt, skipVerboseAttrs)
+    DumpAXAttributes(elementAt, skipAttrsWhenInspectForPathBuilding)
     print(BuildAppleScriptTo(elementAt))
 end)
 
@@ -16,7 +22,8 @@ function BuildAppleScriptTo(toElement)
     -- REMEMBER toElement is last item in :path() list/table so dont need special handling for it outside of list
     -- TODO stop at len -1 so we can finish it and can check parent for dup types and need to constraint it or mark where dups are issue
     for _, elem in pairs(toElement:path()) do
-        DumpAXAttributes(elem, skipVerboseAttrs) -- hack just to also dump attrs to review, don't keep this after testing is done
+        -- TODO use parentElement to handle finding conflicting child items in path
+        DumpAXAttributes(elem, skipAttrsWhenInspectForPathBuilding) -- hack just to also dump attrs to review, don't keep this after testing is done
         local role = GetValueOrEmptyString(elem, "AXRole")
         local roleDescription = GetValueOrEmptyString(elem, "AXRoleDescription")
         local current = "first " .. roleDescription .. " of "
@@ -24,12 +31,7 @@ function BuildAppleScriptTo(toElement)
             current = "first application process '" .. GetValueOrEmptyString(elem, "AXTitle") .. "'"
         end
         script = current .. script .. '\n'
-        -- for k1, v1 in pairs(v) do
-        --     print("  * ", k1, v1)
-        -- end
     end
-    local roleDescription = GetValueOrEmptyString(toElement, "AXRoleDescription")
-    -- print("*" .. roleDescription)
     return "set foo to " .. script
 end
 
@@ -107,7 +109,9 @@ function GetDumpAXAttributes(element, skips)
 
     local function compactUserData(userdata)
         -- TODO add test of userdata type to makes sure is axuielement before fetting attr values
-        return "UD " .. GetValueOrEmptyString(userdata, "AXRole")
+        -- local title = GetValueOrEmptyString(userdata, "AXTitle")
+        -- local role = GetValueOrEmptyString(userdata, "AXRole")
+        return GetDumpElementLine(userdata)
     end
 
     skips = skips or {}
