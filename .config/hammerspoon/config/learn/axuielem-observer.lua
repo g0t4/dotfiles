@@ -64,33 +64,31 @@ DumpAXEverything(mainWinElem)
 -- can I capture typing into focused element?
 
 
-local scriptDebuggerAppElem = axuielement.applicationElement(hs.application.find("Script Debugger"))
-local textObserverAppElem = scriptDebuggerAppElem
--- local textObserver = observer.new(textObserverAppElem:pid())
--- textObserver:callback(function(_observer, elem, notification, detailsTable)
---     Dump("textObserver", _observer, elem, notification, detailsTable)
--- end)
--- textObserver:start()
---
--- *** observe text entry changes => I could add AI auto complete to anything with this!
---    would need to narrow down to text input elements only...
-local focusedObserver = observer.new(textObserverAppElem:pid())
-focusedObserver:addWatcher(textObserverAppElem, "AXFocusedUIElementChanged")
-focusedObserver:addWatcher(textObserverAppElem, "AXValueChanged") -- FYI CAN DIRECTLY OBSERVE FOR ENTIRE APP, DO NOT NEED TO SUBSCRIBE on each element, unless don't want for entire app...
-focusedObserver:callback(function(_observer, elem, notification, detailsTable)
-    Dump("fObs", _observer, elem, notification, detailsTable)
-    -- for elem, notifications in pairs(textObserver:watching()) do
-    --     print(elem, notifications)
-    --     for _, notificationString in pairs(notifications) do
-    --         print("-- removing --- ", elem, notificationString)
-    --         textObserver:removeWatcher(elem, notificationString)
-    --     end
-    --     -- FYI elem remains associated w/ observer... w/ empty notifications table after remove all its watchers (notificaitons) (until addWatcher is called for it again in future)
-    -- end
-    -- textObserver:addWatcher(elem, "AXValueChanged")
-end)
-focusedObserver:start()
-
-
-
-if true then return end -- ! STOP HERE FOR NOW:
+if true then
+    local scriptDebuggerAppElem = axuielement.applicationElement(hs.application.find("Script Debugger"))
+    local textObserverAppElem = scriptDebuggerAppElem
+    -- local textObserver = observer.new(textObserverAppElem:pid())
+    -- textObserver:callback(function(_observer, elem, notification, detailsTable)
+    --     Dump("textObserver", _observer, elem, notification, detailsTable)
+    -- end)
+    -- textObserver:start()
+    --
+    -- *** observe text entry changes => I could add AI auto complete to anything with this!
+    --    would need to narrow down to text input elements only...
+    local focusedObserver = observer.new(textObserverAppElem:pid())
+    focusedObserver:addWatcher(textObserverAppElem, "AXFocusedUIElementChanged")
+    focusedObserver:addWatcher(textObserverAppElem, "AXValueChanged") -- FYI CAN DIRECTLY OBSERVE FOR ENTIRE APP, DO NOT NEED TO SUBSCRIBE on each element
+    focusedObserver:callback(function(_observer, elem, notification, detailsTable)
+        Dump("fObs", _observer, elem, notification, detailsTable)
+        -- for elem, notifications in pairs(textObserver:watching()) do
+        --     print(elem, notifications)
+        --     for _, notificationString in pairs(notifications) do
+        --         print("-- removing --- ", elem, notificationString)
+        --         textObserver:removeWatcher(elem, notificationString)
+        --     end
+        --     -- FYI elem remains associated w/ observer... w/ empty notifications table after remove all its watchers (notificaitons) (until addWatcher is called for it again in future)
+        -- end
+        -- textObserver:addWatcher(elem, "AXValueChanged")
+    end)
+    focusedObserver:start()
+end
