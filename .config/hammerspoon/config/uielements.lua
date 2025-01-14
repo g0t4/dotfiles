@@ -48,8 +48,18 @@ function BuildAppleScriptTo(toElement)
         local parent = elem:attributeValue("AXParent") -- TODO or use prev element in list
         local roleSiblings = parent:childrenWithRole(role)
         if #roleSiblings > 1 then
-            print("[FUUU] multiple siblings with same role, so actually this is your test case you needed!")
+            local warning = "[FUUU] multiple siblings with same role: " .. role
+            for _, sibling in ipairs(roleSiblings) do
+                warning = warning .. "\n    " .. GetDumpElementLine(sibling)
+            end
+            print(warning)
+
             -- FYI powerpoint, ribbon => Transitions => Duration text box has roleSiblings (groups)
+            --    AND, overlaps with After: text box, right next to it (to the right)
+            --    so, two good test cases... to gen code for both to mod their values
+            --
+            -- FYI in general, powerpoint has a ton of overlap... as does FCPX
+
         end
 
         if role == "AXWindow" then
