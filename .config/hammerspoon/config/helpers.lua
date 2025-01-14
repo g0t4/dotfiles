@@ -35,4 +35,38 @@ function DumpWithMetatables(...)
     print(inspect({ ... }, { metatables = true }))
 end
 
+function M.get_function_source(func)
+    -- hack to see function body...
+    local info = debug.getinfo(func, "S")
+    if not info then
+        return nil, "Unable to retrieve debug info"
+    end
+
+    if info.what ~= "Lua" then
+        return nil, "Not a Lua function"
+    end
+
+    local source_file = info.source:sub(2) -- Remove "@" prefix from file name
+    local start_line = info.linedefined
+    local end_line = info.lastlinedefined
+
+    local lines = {}
+    local file = io.open(source_file, "r")
+    if not file then
+        return nil, "Cannot open source file: " .. source_file
+    end
+
+    for i = 1, end_line do
+        local line = file:read("*line")
+        if i >= start_line and line then
+            table.insert(lines, line)
+        end
+    end
+
+    file:close()
+    return table.concat(lines, "\n")
+end
+
+
+
 return M
