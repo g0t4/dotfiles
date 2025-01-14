@@ -18,21 +18,32 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "A", function()
 end)
 
 function BuildAppleScriptTo(toElement)
+    local function elemType(elem)
+        local role = GetValueOrEmptyString(elem, "AXRole")
+        local roleDescription = GetValueOrEmptyString(elem, "AXRoleDescription")
+        if role == "AXApplication" then
+            return 'application process "' .. GetValueOrEmptyString(elem, "AXTitle") .. '"'
+        elseif role == "AXWindow" then
+            -- return "first window of "
+            local title = GetValueOrEmptyString(elem, "AXTitle")
+            return 'window "' .. title .. '" of '
+        elseif role == "AXSplitGroup" then
+            return "first splitter group of "
+        elseif role == "AXTextArea" then
+            return "first text area of "
+        end
+        return "first " .. roleDescription .. " of "
+    end
     local script = ""
     -- REMEMBER toElement is last item in :path() list/table so dont need special handling for it outside of list
     -- TODO stop at len -1 so we can finish it and can check parent for dup types and need to constraint it or mark where dups are issue
     for _, elem in pairs(toElement:path()) do
         -- TODO use parentElement to handle finding conflicting child items in path
         DumpAXAttributes(elem, skipAttrsWhenInspectForPathBuilding) -- hack just to also dump attrs to review, don't keep this after testing is done
-        local role = GetValueOrEmptyString(elem, "AXRole")
-        local roleDescription = GetValueOrEmptyString(elem, "AXRoleDescription")
-        local current = "first " .. roleDescription .. " of "
-        if role == "AXApplication" then
-            current = "first application process '" .. GetValueOrEmptyString(elem, "AXTitle") .. "'"
-        end
-        script = current .. script .. '\n'
+        script = elemType(elem) .. script .. '\n'
     end
-    return "set foo to " .. script
+
+    return "\nset foo to " .. script
 end
 
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "I", function()
