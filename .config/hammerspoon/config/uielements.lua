@@ -95,6 +95,31 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "A", function()
     prints(BuildAppleScriptTo(elementAt))
 end)
 
+
+local mouseMoveWatcher = hs.eventtap.new({ hs.eventtap.event.types.mouseMoved }, function(event)
+    local mousePos = hs.mouse.absolutePosition()
+    print(string.format("Mouse moved to: x=%d, y=%d", mousePos.x, mousePos.y))
+    -- Add custom logic here
+    return false -- Return false to allow the event to propagate
+end)
+
+-- mouseMoveWatcher:start()
+
+hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "T", function()
+    -- TOGGLE TRACKING MODE?
+    if not mouseMoveWatcher then
+        return
+    end
+    if mouseMoveWatcher:isEnabled() then
+        mouseMoveWatcher:stop()
+    else
+        mouseMoveWatcher:start()
+    end
+end)
+
+-- Stop the watcher when done (optional)
+-- mouseMoveWatcher:stop()
+
 function BuildAppleScriptTo(toElement)
     local function warnOnEmptyTitle(title, role)
         if title == "" then
