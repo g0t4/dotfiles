@@ -87,22 +87,22 @@ function GetValueOrEmptyString(element, attribute)
     end
 end
 
-local function compactTableAttrValue(tbl)
-    if tbl == nil then
-        return "nil"
-    end
-    local result = {}
-    for k, v in pairs(tbl) do
-        -- IIRC cannot get nil using pairs() which is syntactic sugar for allAttributeValues... nonetheless doesn't hurt to leave in case I go with another approach for enumeration and it has nil values
-        if not v then
-            v = "nil"
-        end
-        table.insert(result, string.format("%s=%s", tostring(k), tostring(v)))
-    end
-    return "{" .. table.concat(result, ", ") .. "}"
-end
-
 function GetDumpAXAttributes(element, skips)
+    local function compactTableAttrValue(tbl)
+        if tbl == nil then
+            return "nil"
+        end
+        local result = {}
+        for k, v in pairs(tbl) do
+            -- IIRC cannot get nil using pairs() which is syntactic sugar for allAttributeValues... nonetheless doesn't hurt to leave in case I go with another approach for enumeration and it has nil values
+            if not v then
+                v = "nil"
+            end
+            table.insert(result, string.format("%s=%s", tostring(k), tostring(v)))
+        end
+        return "{" .. table.concat(result, ", ") .. "}"
+    end
+
     skips = skips or {}
     -- local roleDesc = GetValueOrEmptyString(element, "AXRoleDescription")
     local role = GetValueOrEmptyString(element, "AXRole")
