@@ -69,7 +69,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "M", function()
 end)
 
 require("config.spoons")
--- require("config.windows")
+require("config.windows")
 -- require("config.appKeys") -- was not working lately, TODO find out why later on
 
 require("config.inspecting")
