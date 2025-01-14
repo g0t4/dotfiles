@@ -96,3 +96,12 @@ if true then
     end)
     focusedObserver:start()
 end
+
+-- TODO how about add keybinding to use element at position to lookup and dump info to hammerspoon console!
+hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "I", function()
+    local coords = hs.mouse.absolutePosition()
+    print("coords", coords)
+    local elementAt = hs.axuielement.systemElementAtPosition(coords.x, coords.y)
+    DumpAXAttributes(elementAt)
+    DumpAXPath(elementAt)
+end)
