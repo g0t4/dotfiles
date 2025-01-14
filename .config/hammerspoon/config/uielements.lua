@@ -150,7 +150,9 @@ function GetDumpAXAttributes(element, skips)
         return title .. ' (' .. role .. ')'
     end
 
-    function displayAttr(attrValue)
+    local compactTableAttrValue -- forward define b/c dependency loop and I wanna keepe local funcs
+
+    local function displayAttr(attrValue)
         if attrValue == nil then
             return 'nil'
         elseif type(attrValue) == "userdata" then
