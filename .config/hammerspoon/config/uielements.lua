@@ -144,7 +144,12 @@ end
 
 function GetDumpAXAttributes(element, skips)
     local function compactUserData(userdata)
-        -- TODO add test of userdata type to makes sure is axuielement before getting attr values
+        if userdata.__name ~= "hs.axuielement" then
+            -- IIUC __name is frequently used so that is a pretty safe bet
+            -- getmetatable(value) == hs.getObjectMetatable("hs.axuielement") -- alternate to check
+            print("UNEXPECTED userdata type, consider adding it to display helpers: " .. tostring(userdata))
+            return "UNEXPECTED: " .. tostring(userdata)
+        end
         local title = GetValueOrEmptyString(userdata, "AXTitle")
         local role = GetValueOrEmptyString(userdata, "AXRole")
         return title .. ' (' .. role .. ')'
