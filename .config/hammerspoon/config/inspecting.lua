@@ -6,13 +6,19 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "I", function()
     local elementAt = hs.axuielement.systemElementAtPosition(coords.x, coords.y)
     DumpAXAttributes(elementAt)
     DumpAXPath(elementAt)
-    DumpParents(elementAt)
+    DumpParentsAlternativeForPath(elementAt)
 end)
 
-function DumpParents(element)
-    local parent = element:parent()
+function DumpParentsAlternativeForPath(element)
+    -- ALTERNATIVE way to get path, IIAC this is how element:path() works?
+    -- if not then just know this is available as an alternative
+    local parent = element:attributeValue("AXParent")
     print("parent", hs.inspect(parent))
-    -- if parent then
-    --     DumpParents(parent)
-    -- end
+    if parent then
+        if parent == element then
+            print("parent == element")
+            return
+        end
+        DumpParentsAlternativeForPath(parent)
+    end
 end
