@@ -34,7 +34,16 @@ function BuildAppleScriptTo(toElement)
             -- TODO handle (warn) about duplicate app process titles... I might then be able to use some signature to identify the correct one but I don't know if I can ever refer to it properly... i.e. screenpal I always had to terminate the tray app b/c has same name and never seemed like I could reference the app by smth else... that said I didn't direclty use accessibiltiy APIs so it is possible there is a way that AppleScript/ScriptDebugger don't support
             warnOnEmptyTitle(title, role)
             return 'application process "' .. title .. '"'
-        elseif role == "AXWindow" then
+        end
+        -- app is always the top level element that doesn't have a parent... so if I handle it first, then the rest of these always have parents (IIAC)
+        local parent = elem:attributeValue("AXParent") -- TODO or use prev element in list
+        local roleSiblings = parent:childrenWithRole(role)
+        if #roleSiblings > 1 then
+            print("[FUUU] multiple siblings with same role, so actually this is your test case you needed!")
+            -- FYI powerpoint, ribbon => Transitions => Duration text box has roleSiblings (groups)
+        end
+
+        if role == "AXWindow" then
             warnOnEmptyTitle(title, role)
             -- TODO handle duplicate titles (windows)
             return 'window "' .. title .. '" of '
