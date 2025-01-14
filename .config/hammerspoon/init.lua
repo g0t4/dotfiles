@@ -24,7 +24,6 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "T", function()
     print("result:\n ", result)
 end)
 
-local inspect = require("hs.inspect")
 
 
 
@@ -35,7 +34,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "W", function()
     local window = hs.window.focusedWindow()
     -- window:focus()
     -- window:maximize()
-    print("window", inspect(window:topLeft().x))
+    print("window", hs.inspect(window:topLeft().x))
     if (window:topLeft().x == 0 and window:topLeft().y == 0) then
         window:setTopLeft({ x = 400, y = 400 })
     else
@@ -48,7 +47,7 @@ end)
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "M", function()
     local mouse = require("hs.mouse")
     local pos = mouse.absolutePosition()
-    print("mouse pos", inspect(pos))
+    print("mouse pos", hs.inspect(pos))
 
     local canvas = require("hs.canvas")
     local width = 50
