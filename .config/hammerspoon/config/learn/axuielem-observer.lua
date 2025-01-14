@@ -27,11 +27,13 @@ local pptHsApp = hs.application.find("PowerPoint")
 local pptAppElem = axuielement.applicationElement(pptHsApp)
 -- Dump(pptAppElem:pid())
 DumpAXEverything(pptAppElem)
+DumpAXPath(pptAppElem)
 -- pptAppElem:activate()
 -- local focusedWin = pptAppElem:focusedWindow()
 local mainWin = pptAppElem:asHSApplication():mainWindow()
 local mainWinElem = axuielement.windowElement(mainWin)
 DumpAXEverything(mainWinElem)
+DumpAXPath(mainWinElem)
 
 --
 -- local winObserver = observer.new(pptAppElem:pid())
@@ -80,6 +82,8 @@ if true then
     focusedObserver:addWatcher(textObserverAppElem, "AXValueChanged") -- FYI CAN DIRECTLY OBSERVE FOR ENTIRE APP, DO NOT NEED TO SUBSCRIBE on each element
     focusedObserver:callback(function(_observer, elem, notification, detailsTable)
         Dump("fObs", _observer, elem, notification, detailsTable)
+        DumpAXEverything(elem)
+        DumpAXPath(elem)
         -- for elem, notifications in pairs(textObserver:watching()) do
         --     print(elem, notifications)
         --     for _, notificationString in pairs(notifications) do
