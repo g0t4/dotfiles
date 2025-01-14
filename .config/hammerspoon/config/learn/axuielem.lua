@@ -68,19 +68,23 @@ Dump("pptAxAppElem", pptAxAppElem)
 -- DumpAXAttributes(elementAt)
 --
 
--- *** system wide info (focused element/app!)
-Dump(hs.axuielement.systemWideElement())
-DumpAXAttributes(hs.axuielement.systemWideElement())
--- HAS:
--- 2025-01-13 03:20:44: AXFocusedApplication	hs.axuielement: AXApplication (0x6000023b1778)
--- 2025-01-13 03:20:44: AXFocusedUIElement	hs.axuielement: AXTextArea (0x6000023b1638)
--- 2025-01-13 03:20:44: AXRole	AXSystemWide
--- 2025-01-13 03:20:44: AXRoleDescription
-local focused = hs.axuielement.systemWideElement():attributeValue("AXFocusedUIElement")
-Dump('focused', focused)
-DumpAXAttributes(focused)
-DumpAXActions(focused)
-if true then
+if false then
+    -- *** system wide info (focused element/app!)
+    Dump(hs.axuielement.systemWideElement())
+    DumpAXAttributes(hs.axuielement.systemWideElement())
+    -- HAS:
+    -- 2025-01-13 03:20:44: AXFocusedApplication	hs.axuielement: AXApplication (0x6000023b1778)
+    -- 2025-01-13 03:20:44: AXFocusedUIElement	hs.axuielement: AXTextArea (0x6000023b1638)
+    -- 2025-01-13 03:20:44: AXRole	AXSystemWide
+    -- 2025-01-13 03:20:44: AXRoleDescription
+    local focused = hs.axuielement.systemWideElement():attributeValue("AXFocusedUIElement")
+    Dump('focused', focused)
+    DumpAXAttributes(focused)
+    DumpAXActions(focused)
+end
+
+if false then
+    -- *** menu items
     -- activate Writing Tools => Compose... (demonstrate menu item use)
     local app = hs.application("Script Debugger")
     app:activate()
