@@ -64,6 +64,13 @@
         "/Applications/Hammerspoon.app/Contents/Resources/extensions",
         // "/Applications/Hammerspoon.app/Contents/Resources/extensions", // doesn't work, don't try again unless you find good reason to
     ],
+    // stop warning about luv:
+    //   prompt:
+    //     Do you need to configure your work environment as `luv`? (1)Apply and modify settings, (2)Apply but do not modify settings, (3)Don't show again:
+    //   FYI selecting 3 does not stop it from showing again, every time I open nvim at all (b/c I am using luv in semantic daemon for special nvim windows in iterm)
+    //   TODO why does this work?
+    "Lua.workspace.checkThirdParty": false,
+    //
     "Lua.runtime.version": "LuaJIT",
     "Lua.runtime.path": [
         "?.lua",
