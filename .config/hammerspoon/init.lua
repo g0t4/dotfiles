@@ -13,16 +13,16 @@ hs.ipc.cli = true -- early so hs CLI always works
 require("config.helpers")
 
 
-local streamStdout = require("config.tests.stream-stdout").streamStdout
-hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "S", streamStdout)
+-- local streamStdout = require("config.tests.stream-stdout").streamStdout
+-- hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "S", streamStdout)
 
 AskOpenAIStreaming = require("config.ask.ask").AskOpenAIStreaming
 
 -- test w/ T
-hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "T", function()
-    local result = require("config.ask.selection").getSelectedText()
-    print("result:\n ", result)
-end)
+-- hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "T", function()
+--     local result = require("config.ask.selection").getSelectedText()
+--     print("result:\n ", result)
+-- end)
 
 
 
