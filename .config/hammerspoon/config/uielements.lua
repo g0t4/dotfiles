@@ -172,11 +172,7 @@ function GetDumpAXAttributes(element, skips)
             return "nil"
         end
         local result = {}
-        -- TODO what about tables with multiple hs.axuielement objects? I am showing those now so that is interesting! accidentally added that here with compact table
-        --   TODO detect and strip what is a list (keys are numbers, values are axuielement objects)
         for attrName, attrValue in pairs(tbl) do
-            -- IIRC cannot get nil using pairs() which is syntactic sugar for allAttributeValues... nonetheless doesn't hurt to leave in case I go with another approach for enumeration and it has nil values
-            -- TODO do I wanna extract reusable (and/or limit to one level deep?)
             local displayValue = displayAttr(attrValue)
             table.insert(result, string.format("%s=%s", tostring(attrName), displayValue))
         end
@@ -184,7 +180,6 @@ function GetDumpAXAttributes(element, skips)
     end
 
     skips = skips or {}
-    -- local roleDesc = GetValueOrEmptyString(element, "AXRoleDescription")
     local role = GetValueOrEmptyString(element, "AXRole")
     local title = GetValueOrEmptyString(element, "AXTitle")
     local result = '## ATTRIBUTES for - ' .. role .. ' - ' .. title .. '\n'
@@ -192,14 +187,11 @@ function GetDumpAXAttributes(element, skips)
         if not skips[attrName] then
             local displayName = attrName
             local nonStandard = not StandardAttributesSet[attrName]
-
             local displayValue = displayAttr(attrValue)
             if nonStandard then
                 displayName = '** ' .. attrName
             end
             result = result .. "  " .. displayName .. ' = ' .. displayValue .. '\n'
-            -- TODO descend attrs that are tables? conditionally? allowlist/denylist which ones?
-            --   maybe just add flag to do this (and only for one level deep) -  i.e. AXFrame, AXPosition
         end
     end
     return result
