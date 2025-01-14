@@ -98,6 +98,7 @@ spoon.Emojis:bindHotkeys({
 require("config.windows")
 -- require("config.appKeys") -- was not working lately, TODO find out why later on
 
+require("config.inspecting")
 local end_time = hs.timer.secondsSinceEpoch()
 print("init.lua took", end_time - start_time, "seconds")
 
