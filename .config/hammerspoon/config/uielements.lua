@@ -24,7 +24,8 @@ function BuildAppleScriptTo(toElement)
         end
         -- TODO duplicated title (use AXParent to get other child windows)
     end
-    local function elemType(elem)
+    local function classSelector(elem)
+        -- TODO can I get `class` property on axuielement... like class shows in Script Debugger.. that has the correct (singular name) for the following references
         local role = GetValueOrEmptyString(elem, "AXRole")
         local roleDescription = GetValueOrEmptyString(elem, "AXRoleDescription")
         local title = GetValueOrEmptyString(elem, "AXTitle")
@@ -41,7 +42,20 @@ function BuildAppleScriptTo(toElement)
             return "first splitter group of "
         elseif role == "AXTextArea" then
             return "first text area of "
+        elseif role == "AXIncrementor" then
+            return "first incrementor of "
+        elseif role == "AXPopUpButton" then
+            return "first pop up button of "
+        elseif role == "AXList" then
+            -- PRN Subrole == "AXSectionList"? does that matter (i.e. diff list types?)
+            return "first section of "
+        elseif role == "AXCell" then
+            -- TODO does this work?
+            return "first cell of "
+        elseif role == "AXStaticText" then
+            return "first static text of "
         end
+        -- FYI pattern, mostly split AXRole on captial letters (doesn't work for AXApplication, though actually it probably does work as ref to application class in Standard Suite?
         return "first " .. roleDescription .. " of "
     end
     local script = ""
@@ -50,7 +64,7 @@ function BuildAppleScriptTo(toElement)
     for _, elem in pairs(toElement:path()) do
         -- TODO use parentElement to handle finding conflicting child items in path
         DumpAXAttributes(elem, skipAttrsWhenInspectForPathBuilding) -- hack just to also dump attrs to review, don't keep this after testing is done
-        script = elemType(elem) .. script .. '\n'
+        script = classSelector(elem) .. script .. '\n'
     end
 
     return "\nset foo to " .. script
