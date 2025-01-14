@@ -1,5 +1,6 @@
---
--- *** INSPECT ELEMENT HELPERS ***
+local printWebView = nil
+local printWebWindow = nil
+local printHtmlBuffer = {}
 
 local skipAttrsWhenInspectForPathBuilding = {
     -- PRN truncate long values instead? could pass max length here
@@ -8,19 +9,96 @@ local skipAttrsWhenInspectForPathBuilding = {
     AXWindow = true,
     AXParent = true,
 }
+
+local function prints(...)
+    for _, arg in ipairs({ ... }) do
+        if printWebView == nil then
+            print(arg)
+        else
+            if type(arg) == "string" then
+                arg = arg:gsub("\n", "<br/>")
+            end
+            table.insert(printHtmlBuffer, arg)
+        end
+    end
+    if printWebView then
+        local html = table.concat(printHtmlBuffer, "<br/>")
+        printWebView:html(html)
+    end
+end
+
+local function ensureWebview()
+    -- do return end -- disable using html printer
+
+    local mouseAt = hs.mouse.absolutePosition() -- {"NSPoint", x = 786.484375, y = 612.0546875 }
+    -- print("mouseAt", hs.inspect(mouseAt))
+
+    -- main screen is screen with current focused window (not based on mouse position)
+    local whichScreen = hs.screen.mainScreen()
+    -- print("whichScreen:id", whichScreen:id())
+    -- print("whichScreen:getUUID", whichScreen:getUUID())
+    -- print("whichScreen:name", whichScreen:name())
+    local frame = whichScreen:frame() -- hs.geometry.rect(0.0,0.0,1920.0,1080.0)
+    -- print("frame", hs.inspect(frame))
+
+    local rect = nil
+    local midX = frame.w / 2 + frame.x
+    -- FYI assumes frame might not start at 0,0
+    if mouseAt.x < midX then
+        -- mouse is on left side of screen, show webview on right side
+        rect = hs.geometry.rect(midX, frame.y, frame.w / 2, frame.h)
+        -- print("right rect:", hs.inspect(rect))
+    else
+        -- mouse is on right, show webview on left
+        rect = hs.geometry.rect(frame.x, frame.y, frame.w / 2, frame.h)
+        -- print("left rect:", hs.inspect(rect))
+    end
+
+    if printWebView == nil then
+        -- how to make sure not a new tab in previous browser webview instance?
+
+        printWebView = hs.webview.newBrowser(rect)
+        -- webview:url("https://google.com")
+        printWebView:windowTitle("Inspector")
+        printWebView:show()
+        printWebWindow = printWebView:hswindow()
+        printWebView:titleVisibility("hidden")
+
+        printWebView:windowCallback(function(action, _, _)
+            -- FYI 2nd arg is webview, 3rd arg is state/frame (depending on action type)
+            if action == "closing" then
+                printWebView = nil
+                printWebWindow = nil
+            end
+        end)
+    else
+        -- PRN ensure not minimized
+        -- PRN ensure on top w/o modal
+        -- right now lets leave it alone if it still exists, that way I can hide it if I don't want it on top
+        --   might be useful to have it in background until I capture the element I want and then I can switch to it
+    end
+    if not printWebWindow then
+        prints("no webview window, aborting")
+        return
+    end
+    printWebView:frame(rect)
+end
+
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "A", function()
+    ensureWebview()
+    prints("test")
     -- TODO applescript genereator based on path (IIAC I can use role desc to build applescript?)
     local coords = hs.mouse.absolutePosition()
     local elementAt = hs.axuielement.systemElementAtPosition(coords.x, coords.y)
     DumpAXPath(elementAt, true)
     DumpAXAttributes(elementAt, skipAttrsWhenInspectForPathBuilding)
-    print(BuildAppleScriptTo(elementAt))
+    prints(BuildAppleScriptTo(elementAt))
 end)
 
 function BuildAppleScriptTo(toElement)
     local function warnOnEmptyTitle(title, role)
         if title == "" then
-            print("[WARN] title is empty for " .. role .. ", script might not work")
+            prints("[WARN] title is empty for " .. role .. ", script might not work")
         end
         -- TODO duplicated title (use AXParent to get other child windows)
     end
@@ -52,7 +130,7 @@ function BuildAppleScriptTo(toElement)
             for _, sibling in ipairs(roleSiblings) do
                 warning = warning .. "\n    " .. GetDumpElementLine(sibling)
             end
-            print(warning)
+            prints(warning)
 
             -- FYI powerpoint, ribbon => Transitions => Duration text box has roleSiblings (groups)
             --    AND, overlaps with After: text box, right next to it (to the right)
@@ -105,7 +183,7 @@ end
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "I", function()
     -- INSPECT ELEMENT UNDER MOUSE POSITION
     local coords = hs.mouse.absolutePosition()
-    print("coords: " .. hs.inspect(coords))
+    prints("coords: " .. hs.inspect(coords))
     -- TODO any variance in what element is selected? isn't there another method to find element? deepest or smth?
     local elementAt = hs.axuielement.systemElementAtPosition(coords.x, coords.y)
     DumpAXAttributes(elementAt)
@@ -120,10 +198,10 @@ function DumpParentsAlternativeForPath(element)
     -- ALTERNATIVE way to get path, IIAC this is how element:path() works?
     -- if not then just know this is available as an alternative
     local parent = element:attributeValue("AXParent")
-    print("parent", hs.inspect(parent))
+    prints("parent", hs.inspect(parent))
     if parent then
         if parent == element then
-            print("parent == element")
+            prints("parent == element")
             return
         end
         DumpParentsAlternativeForPath(parent)
@@ -135,7 +213,7 @@ function DumpAXEverything(element)
     local result = GetDumpAXAttributes(element)
     result = result .. "\n" .. GetDumpAXActions(element)
     -- PRN add parameterizedAttributes too
-    print(result)
+    prints(result)
 end
 
 function GetValueOrDefault(element, attribute, default)
@@ -161,7 +239,7 @@ function GetDumpAXAttributes(element, skips)
         if userdata.__name ~= "hs.axuielement" then
             -- IIUC __name is frequently used so that is a pretty safe bet
             -- getmetatable(value) == hs.getObjectMetatable("hs.axuielement") -- alternate to check
-            print("UNEXPECTED userdata type, consider adding it to display helpers: " .. tostring(userdata))
+            prints("UNEXPECTED userdata type, consider adding it to display helpers: " .. tostring(userdata))
             return "UNEXPECTED: " .. tostring(userdata)
         end
         local title = GetValueOrEmptyString(userdata, "AXTitle")
@@ -234,7 +312,7 @@ StandardAttributesSet["AXEnhancedUserInterface"] = true
 
 
 function DumpAXAttributes(element, skips)
-    print(GetDumpAXAttributes(element, skips))
+    prints(GetDumpAXAttributes(element, skips))
 end
 
 function GetDumpAXActions(element)
@@ -250,7 +328,7 @@ function GetDumpAXActions(element)
 end
 
 function DumpAXActions(element)
-    print(GetDumpAXActions(element))
+    prints(GetDumpAXActions(element))
 end
 
 function GetDumpElementLine(elem)
@@ -337,14 +415,14 @@ function GetDumpPath(element, expanded)
 end
 
 function DumpAXPath(element, expanded)
-    print(GetDumpPath(element, expanded))
+    prints(GetDumpPath(element, expanded))
 end
 
 -- function DumpAxPathExpanded(element)
 --     for k, v in pairs(element:path()) do
---         print(" * ", k)
+--         printIt(" * ", k)
 --         for k1, v1 in pairs(v) do
---             print("  * ", k1, v1)
+--             printIt("  * ", k1, v1)
 --         end
 --     end
 -- end
