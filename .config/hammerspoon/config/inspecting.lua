@@ -6,4 +6,13 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "I", function()
     local elementAt = hs.axuielement.systemElementAtPosition(coords.x, coords.y)
     DumpAXAttributes(elementAt)
     DumpAXPath(elementAt)
+    DumpParents(elementAt)
 end)
+
+function DumpParents(element)
+    local parent = element:parent()
+    print("parent", hs.inspect(parent))
+    -- if parent then
+    --     DumpParents(parent)
+    -- end
+end

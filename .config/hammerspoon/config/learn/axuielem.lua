@@ -1,8 +1,4 @@
-local focusedHSWindow = hs.window.focusedWindow()
-local focusedWinAXUIElem = hs.axuielement.windowElement(focusedHSWindow) -- HSWin => AXUIElem window (FYI .AsHSWindow can go back to HSWin)
-
 -- *** DONT FORGET to use Accessibility Inspector (superior version of UIElement Inspector b/c shows neigbhoring elements)
-
 
 
 -- *** CONSTANTS: (static lists, IIUC from extracted from header files):
@@ -25,11 +21,10 @@ local focusedWinAXUIElem = hs.axuielement.windowElement(focusedHSWindow) -- HSWi
 -- print('units', hs.axuielement.units)
 
 
-
-
-
-
 if false then
+    local focusedHSWindow = hs.window.focusedWindow()
+    local focusedWinAXUIElem = hs.axuielement.windowElement(focusedHSWindow) -- HSWin => AXUIElem window (FYI .AsHSWindow can go back to HSWin)
+
     print('Attributes')
     for k, v in pairs(focusedWinAXUIElem) do
         -- syntactic sugar for ipairs(obj:attributeNames())
@@ -45,9 +40,7 @@ if false then
         -- FYI focus related:
         --    AXFocused, AXFocusedApplication, AXFocusedUIElement, AXFocusedWindow
     end
-end
 
-if false then
     print('AXChildren')
     for i, v in pairs(focusedWinAXUIElem:attributeValue("AXChildren") or {}) do
         -- enumerate children elements
@@ -55,11 +48,10 @@ if false then
     end
 end
 
-
-local pptHsApp = hs.application.find("PowerPoint")
-Dump("pptHsApp", pptHsApp)
-local pptAxAppElem = hs.axuielement.applicationElement(pptHsApp)
-Dump("pptAxAppElem", pptAxAppElem)
+-- local pptHsApp = hs.application.find("PowerPoint")
+-- Dump("pptHsApp", pptHsApp)
+-- local pptAxAppElem = hs.axuielement.applicationElement(pptHsApp)
+-- Dump("pptAxAppElem", pptAxAppElem)
 
 
 -- -- ***! hs.axuielement.systemElementAtPosition(x, y | pointTable)
