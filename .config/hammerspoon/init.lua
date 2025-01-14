@@ -102,3 +102,4 @@ require("config.learn.axuielem") -- WIP
 -- require("config.learn.axuielem-observer") -- WIP
 -- DONE for now: -- require("config.learn.hsapp")
 -- require("config.learn.uielem")
+require("config.learn.webview")
