@@ -150,7 +150,22 @@ function GetDumpAXAttributes(element, skips)
         return title .. ' (' .. role .. ')'
     end
 
-    local function compactTableAttrValue(tbl)
+    function displayAttr(attrValue)
+        if attrValue == nil then
+            return 'nil'
+        elseif type(attrValue) == "userdata" then
+            return compactUserData(attrValue)
+        elseif type(attrValue) == "table" then
+            -- i.e. AXSize, AXPosition, AXFrame, AXVisibleCharacterRange
+            return compactTableAttrValue(attrValue)
+        elseif type(attrValue) == 'string' then
+            return '"' .. attrValue .. '"'
+        else
+            return tostring(attrValue)
+        end
+    end
+
+    function compactTableAttrValue(tbl)
         if tbl == nil then
             return "nil"
         end
@@ -159,20 +174,8 @@ function GetDumpAXAttributes(element, skips)
         --   TODO detect and strip what is a list (keys are numbers, values are axuielement objects)
         for attrName, attrValue in pairs(tbl) do
             -- IIRC cannot get nil using pairs() which is syntactic sugar for allAttributeValues... nonetheless doesn't hurt to leave in case I go with another approach for enumeration and it has nil values
-            local displayValue = attrValue
             -- TODO do I wanna extract reusable (and/or limit to one level deep?)
-            if attrValue == nil then
-                displayValue = "nil"
-            elseif type(attrValue) == "userdata" then
-                displayValue = compactUserData(attrValue)
-            elseif type(attrValue) == "table" then
-                -- i.e. AXSize, AXPosition, AXFrame, AXVisibleCharacterRange
-                displayValue = compactTableAttrValue(attrValue)
-            elseif type(attrValue) == 'string' then
-                displayValue = '"' .. attrValue .. '"'
-            else
-                displayValue = tostring(attrValue)
-            end
+            local displayValue = displayAttr(attrValue)
             table.insert(result, string.format("%s=%s", tostring(attrName), displayValue))
         end
         return "{" .. table.concat(result, ", ") .. "}"
@@ -185,22 +188,10 @@ function GetDumpAXAttributes(element, skips)
     local result = '## ATTRIBUTES for - ' .. role .. ' - ' .. title .. '\n'
     for attrName, attrValue in pairs(element) do
         if not skips[attrName] then
-            local displayValue = attrValue
             local displayName = attrName
             local nonStandard = not StandardAttributesSet[attrName]
-            -- PRN denylist some attrs I don't care to see (unless pass a verbose flag or global DEBUG var of some sort?)
-            if attrValue == nil then
-                displayValue = 'nil'
-            elseif type(attrValue) == "userdata" then
-                displayValue = compactUserData(attrValue)
-            elseif type(attrValue) == "table" then
-                -- i.e. AXSize, AXPosition, AXFrame, AXVisibleCharacterRange
-                displayValue = compactTableAttrValue(attrValue)
-            elseif type(attrValue) == 'string' then
-                displayValue = '"' .. attrValue .. '"'
-            else
-                displayValue = tostring(attrValue)
-            end
+
+            local displayValue = displayAttr(attrValue)
             if nonStandard then
                 displayName = '** ' .. attrName
             end
