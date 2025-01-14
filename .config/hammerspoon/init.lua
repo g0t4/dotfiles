@@ -129,6 +129,6 @@ ensureBool(hs.dockIcon, false) -- FYI this one is 1-2ms to check, 3+ to set ... 
 
 
 -- TODO comment out when done in learning so dont slow down config otherwise
--- require("config.learn.axuielem") -- WIP
-require("config.learn.axuielem-observer") -- WIP
+require("config.learn.axuielem") -- WIP
+-- require("config.learn.axuielem-observer") -- WIP
 -- DONE for now: -- require("config.learn.hsapp")
