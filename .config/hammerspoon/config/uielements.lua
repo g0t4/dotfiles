@@ -16,7 +16,7 @@ function BuildAppleScriptTo(toElement)
     -- REMEMBER toElement is last item in :path() list/table so dont need special handling for it outside of list
     -- TODO stop at len -1 so we can finish it and can check parent for dup types and need to constraint it or mark where dups are issue
     for _, elem in pairs(toElement:path()) do
-        DumpAXAttributes(elem, skipVerboseAttrs)
+        DumpAXAttributes(elem, skipVerboseAttrs) -- hack just to also dump attrs to review, don't keep this after testing is done
         local role = GetValueOrEmptyString(elem, "AXRole")
         local roleDescription = GetValueOrEmptyString(elem, "AXRoleDescription")
         local current = "first " .. roleDescription .. " of "
@@ -93,6 +93,8 @@ function GetDumpAXAttributes(element, skips)
             return "nil"
         end
         local result = {}
+        -- TODO what about tables with multiple hs.axuielement objects? I am showing those now so that is interesting! accidentally added that here with compact table
+        --   TODO detect and strip what is a list (keys are numbers, values are axuielement objects)
         for k, v in pairs(tbl) do
             -- IIRC cannot get nil using pairs() which is syntactic sugar for allAttributeValues... nonetheless doesn't hurt to leave in case I go with another approach for enumeration and it has nil values
             if not v then
@@ -110,22 +112,26 @@ function GetDumpAXAttributes(element, skips)
     local result = '## ATTRIBUTES for - ' .. role .. ' - ' .. title .. '\n'
     for attrName, attrValue in pairs(element) do
         if not skips[attrName] then
+            local displayValue = attrValue
+            local displayName = attrName
             local nonStandard = not StandardAttributesSet[attrName]
             -- PRN denylist some attrs I don't care to see (unless pass a verbose flag or global DEBUG var of some sort?)
             if attrValue == nil then
-                attrValue = 'nil'
+                displayValue = 'nil'
+            elseif type(attrValue) == "userdata" then
+                displayValue = "UD " .. tostring(attrValue)
             elseif type(attrValue) == "table" then
                 -- i.e. AXSize, AXPosition, AXFrame, AXVisibleCharacterRange
-                attrValue = compactTableAttrValue(attrValue)
+                displayValue = compactTableAttrValue(attrValue)
             elseif type(attrValue) == 'string' then
-                attrValue = '"' .. attrValue .. '"'
+                displayValue = '"' .. attrValue .. '"'
             else
-                attrValue = tostring(attrValue)
+                displayValue = tostring(attrValue)
             end
             if nonStandard then
-                attrName = '** ' .. attrName
+                displayName = '** ' .. attrName
             end
-            result = result .. "  " .. attrName .. ' = ' .. attrValue .. '\n'
+            result = result .. "  " .. displayName .. ' = ' .. displayValue .. '\n'
             -- TODO descend attrs that are tables? conditionally? allowlist/denylist which ones?
             --   maybe just add flag to do this (and only for one level deep) -  i.e. AXFrame, AXPosition
         end
