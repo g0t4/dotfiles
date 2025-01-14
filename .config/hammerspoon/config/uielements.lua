@@ -1,3 +1,10 @@
+--
+-- *** INSPECT ELEMENT HELPERS ***
+
+hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "A", function()
+    -- TODO applescript genereator based on path (IIAC I can use role desc to build applescript?)
+end)
+
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "I", function()
     -- INSPECT ELEMENT UNDER MOUSE POSITION
     local coords = hs.mouse.absolutePosition()
@@ -9,6 +16,9 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "I", function()
     DumpParentsAlternativeForPath(elementAt)
 end)
 
+
+
+-- *** HELPERS below for DUMPING info ***
 function DumpParentsAlternativeForPath(element)
     -- ALTERNATIVE way to get path, IIAC this is how element:path() works?
     -- if not then just know this is available as an alternative
