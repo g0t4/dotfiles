@@ -185,9 +185,11 @@ function GetDumpPath(element, expanded)
             local current = GetDumpElementLine(elem)
             result = result .. current .. '\n'
 
-            local children = elem:attributeValue("AXChildren")
-            for _, child in pairs(children) do
-                result = result .. "    " .. GetDumpElementLine(child) .. "\n"
+            if expanded then
+                local children = elem:attributeValue("AXChildren")
+                for _, child in pairs(children) do
+                    result = result .. "    " .. GetDumpElementLine(child) .. "\n"
+                end
             end
 
             -- FYI can add one '-' to front of block comment start => ---[[ and then the block is back in play, and last
