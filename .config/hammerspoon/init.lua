@@ -5,6 +5,10 @@
 -- JUST PUT hs global into lua LS config and be done with that
 local start_time = hs.timer.secondsSinceEpoch()
 
+--     hs -c 'hs.console.clearConsole()'
+--     hs -c 'hs.alert.show("Hello, Stream Deck!")'
+hs.ipc.cli = true -- early so hs CLI always works
+
 
 require("config.helpers")
 
@@ -105,11 +109,6 @@ print("init.lua took", end_time - start_time, "seconds")
 
 
 -- *** insignificant config last so it doesn't slow down critical startup config
---
--- ensure IPC so `hs` cli works
---     hs -c 'hs.console.clearConsole()'
---     hs -c 'hs.alert.show("Hello, Stream Deck!")'
-hs.ipc.cli = true
 --
 -- FYI be careful with overhead to call every time
 function ensureBool(func, value)
