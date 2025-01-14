@@ -22,10 +22,16 @@ function BuildAppleScriptTo(toElement)
         local role = GetValueOrEmptyString(elem, "AXRole")
         local roleDescription = GetValueOrEmptyString(elem, "AXRoleDescription")
         if role == "AXApplication" then
+            -- FYI `application Process` is the process suite's class type
             return 'application process "' .. GetValueOrEmptyString(elem, "AXTitle") .. '"'
         elseif role == "AXWindow" then
-            -- return "first window of "
+            -- window by title is working great so far!
+            -- PRN might have issues if title is empty or same as another window
             local title = GetValueOrEmptyString(elem, "AXTitle")
+            if title == "" then
+                print("[WARN] title is empty for window, script might not work")
+                -- TODO duplicated title (use AXParent to get other child windows)
+            end
             return 'window "' .. title .. '" of '
         elseif role == "AXSplitGroup" then
             return "first splitter group of "
