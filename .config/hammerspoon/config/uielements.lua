@@ -58,8 +58,12 @@ function BuildAppleScriptTo(toElement)
             --    AND, overlaps with After: text box, right next to it (to the right)
             --    so, two good test cases... to gen code for both to mod their values
             --
+            -- *** ok interesting.. this works in ScriptDebugger to search across siblings... use "every ___ " in middle of expression, IIAC can cross product that?)
+            --    set foo to first incrementor of every group of first scroll area of first tab group of window "Presentation1" of application process "PowerPoint" whose description is "Duration:"
+            --    -- then for each group w/o the item, it is an item with missing value in the list (in foo)... might be useful to search this way!
+            --  FYI use constraint on title of UI element at bottom (whose description is "Duration:")... then this pairs nicely with every for middle overlaps.... and might be all I need!
+            --
             -- FYI in general, powerpoint has a ton of overlap... as does FCPX
-
         end
 
         if role == "AXWindow" then
