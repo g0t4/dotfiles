@@ -76,29 +76,8 @@ end)
 local spoons_repo = os.getenv("HOME") .. "/repos/github/Hammerspoon/Spoons/Source/?.spoon/init.lua"
 package.path = package.path .. ";" .. spoons_repo
 
-hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "C", function()
-    hs.loadSpoon("AClock")
-    spoon.AClock:toggleShow()
-end)
-
-
--- TODO find out why ask-openai fails to find focused element if I remove this spoon:
--- -- is it loading some library that enables focused element detection, perhaps ahead of when I need it in ask-openai?
--- HOLY CRAP this spoon takes a ton of time to load... 2ish seconds+ and its not the spoons in general b/c AClock is fast
-hs.loadSpoon("Emojis")
-spoon.Emojis:bindHotkeys({
-    toggle = {
-        { "cmd", "alt", "ctrl" },
-        "E",
-    }
-})
-
--- hs.loadSpoon("HSearch")
--- hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "F", function()
---     spoon.HSearch:toggleShow()
--- end)
-
-require("config.windows")
+require("config.spoons")
+-- require("config.windows")
 -- require("config.appKeys") -- was not working lately, TODO find out why later on
 
 require("config.inspecting")

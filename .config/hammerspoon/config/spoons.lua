@@ -1,0 +1,14 @@
+-- hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "C", function()
+--     hs.loadSpoon("AClock")
+--     spoon.AClock:toggleShow()
+-- end)
+--
+-- OK so ask-openai works fine now w/o this spoon... BUT FOR A WHILE, ask-openai (B shortcut) wasn't working w/o this loaded too, some dependency issue? or timing?
+-- hs.loadSpoon("Emojis") -- SUPER SLOW
+-- spoon.Emojis:bindHotkeys({
+--     toggle = {
+--         { "cmd", "alt", "ctrl" },
+--         "E",
+--     }
+-- })
+
