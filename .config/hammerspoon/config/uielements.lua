@@ -87,6 +87,21 @@ function GetValueOrEmptyString(element, attribute)
     end
 end
 
+local function compactTableAttrValue(tbl)
+    if tbl == nil then
+        return "nil"
+    end
+    local result = {}
+    for k, v in pairs(tbl) do
+        -- IIRC cannot get nil using pairs() which is syntactic sugar for allAttributeValues... nonetheless doesn't hurt to leave in case I go with another approach for enumeration and it has nil values
+        if not v then
+            v = "nil"
+        end
+        table.insert(result, string.format("%s=%s", tostring(k), tostring(v)))
+    end
+    return "{" .. table.concat(result, ", ") .. "}"
+end
+
 function GetDumpAXAttributes(element, skips)
     skips = skips or {}
     -- local roleDesc = GetValueOrEmptyString(element, "AXRoleDescription")
@@ -99,6 +114,10 @@ function GetDumpAXAttributes(element, skips)
             -- PRN denylist some attrs I don't care to see (unless pass a verbose flag or global DEBUG var of some sort?)
             if attrValue == nil then
                 attrValue = 'nil'
+                -- elseif attrName == "AXSize" then
+                --     attrValue = compact_table(attrValue)
+            elseif type(attrValue) == "table" then
+                attrValue = compactTableAttrValue(attrValue)
             elseif type(attrValue) == 'string' then
                 attrValue = '"' .. attrValue .. '"'
             else
