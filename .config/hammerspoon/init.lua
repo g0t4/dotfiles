@@ -68,14 +68,6 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "M", function()
     -- timer:start()
 end)
 
--- *** load spoons from the repo so I can clone and update it using git and not one by one "install"
---    wcl Hammerspoon/Spoons   # install/update spoons :)
---    alternatively use spoonInstall?
---    I did a diff of AClock and Source/AClock.spoon and it matched, maybe others won't?
---    FYI timing wise, didn't seem to add any penalty to this init.lua performance (one concern I had was impact on resolving modules)
-local spoons_repo = os.getenv("HOME") .. "/repos/github/Hammerspoon/Spoons/Source/?.spoon/init.lua"
-package.path = package.path .. ";" .. spoons_repo
-
 require("config.spoons")
 -- require("config.windows")
 -- require("config.appKeys") -- was not working lately, TODO find out why later on
