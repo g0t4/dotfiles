@@ -18,20 +18,24 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "A", function()
 end)
 
 function BuildAppleScriptTo(toElement)
+    local function warnOnEmptyTitle(title, role)
+        if title == "" then
+            print("[WARN] title is empty for " .. role .. ", script might not work")
+        end
+        -- TODO duplicated title (use AXParent to get other child windows)
+    end
     local function elemType(elem)
         local role = GetValueOrEmptyString(elem, "AXRole")
         local roleDescription = GetValueOrEmptyString(elem, "AXRoleDescription")
+        local title = GetValueOrEmptyString(elem, "AXTitle")
         if role == "AXApplication" then
             -- FYI `application Process` is the process suite's class type
-            return 'application process "' .. GetValueOrEmptyString(elem, "AXTitle") .. '"'
+            -- TODO handle (warn) about duplicate app process titles... I might then be able to use some signature to identify the correct one but I don't know if I can ever refer to it properly... i.e. screenpal I always had to terminate the tray app b/c has same name and never seemed like I could reference the app by smth else... that said I didn't direclty use accessibiltiy APIs so it is possible there is a way that AppleScript/ScriptDebugger don't support
+            warnOnEmptyTitle(title, role)
+            return 'application process "' .. title .. '"'
         elseif role == "AXWindow" then
-            -- window by title is working great so far!
-            -- PRN might have issues if title is empty or same as another window
-            local title = GetValueOrEmptyString(elem, "AXTitle")
-            if title == "" then
-                print("[WARN] title is empty for window, script might not work")
-                -- TODO duplicated title (use AXParent to get other child windows)
-            end
+            warnOnEmptyTitle(title, role)
+            -- TODO handle duplicate titles (windows)
             return 'window "' .. title .. '" of '
         elseif role == "AXSplitGroup" then
             return "first splitter group of "
