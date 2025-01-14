@@ -140,6 +140,11 @@ function GetDumpPath(element)
                     useDescription = roleDescription .. ' / ' .. description
                 end
             end
+            -- TODO conditions to clear the description (dont show it)..
+            --    i.e. AXApplication role, desc=application...
+            --      AXWindow role, AXStandardWindow subrole... desc=standard window
+            --    basically, condense what I show in path view (make it easily decipherable... IOTW always show role and if anything hide rightmost items (i.e. desc) when it doesn't tell me anything new... that is what I dislike about other inspectors, they are hard to decipher what matters (the one thing that doesn't stand out cuz everything else is duplicated)
+            --
             -- TODO AXValue
             -- TODO AXValueDescription
             --
