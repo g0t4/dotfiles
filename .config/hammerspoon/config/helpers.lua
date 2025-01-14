@@ -80,6 +80,8 @@ function GetDumpAXAttributes(element)
             k = '** ' .. k
         end
         result = result .. "  " .. k .. ' = ' .. v .. '\n'
+        -- TODO descend attrs that are tables? conditionally? allowlist/denylist which ones?
+        --   maybe just add flag to do this (and only for one level deep) -  i.e. AXFrame, AXPosition
     end
     return result
 end
