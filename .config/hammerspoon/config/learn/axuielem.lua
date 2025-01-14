@@ -80,7 +80,14 @@ local focused = hs.axuielement.systemWideElement():attributeValue("AXFocusedUIEl
 Dump('focused', focused)
 DumpAXAttributes(focused)
 DumpAXActions(focused)
-
+if true then
+    -- activate Writing Tools => Compose... (demonstrate menu item use)
+    local app = hs.application("Script Debugger")
+    app:activate()
+    local item = app:findMenuItem("Compose...")
+    Dump("item", hs.inspect(item)) -- item is a table, not an hs.axuielementObject
+    app:selectMenuItem("Compose...")
+end
 
 -- *** TODOs
 -- TODO! hs.axuielement:elementSearch(callback, [criteria], [namedModifiers]) -> elementSearchObject
@@ -101,5 +108,6 @@ DumpAXActions(focused)
 --   OMG use with element at position!
 --   THEN... I should be able to programatically produce applescript or otherwise to find an object using my own locator code...
 --       I could even traverse nearby elements and find where decision points are and find differing aspects to build the unique path to object
+--
 --
 --
