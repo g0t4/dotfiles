@@ -114,9 +114,8 @@ function GetDumpAXAttributes(element, skips)
             -- PRN denylist some attrs I don't care to see (unless pass a verbose flag or global DEBUG var of some sort?)
             if attrValue == nil then
                 attrValue = 'nil'
-                -- elseif attrName == "AXSize" then
-                --     attrValue = compact_table(attrValue)
             elseif type(attrValue) == "table" then
+                -- i.e. AXSize, AXPosition, AXFrame, AXVisibleCharacterRange
                 attrValue = compactTableAttrValue(attrValue)
             elseif type(attrValue) == 'string' then
                 attrValue = '"' .. attrValue .. '"'
