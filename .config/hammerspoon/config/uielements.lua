@@ -1,18 +1,37 @@
 --
 -- *** INSPECT ELEMENT HELPERS ***
 
+local skipVerboseAttrs = { AXValue = true } -- PRN truncate long values instead? could pass max length here
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "A", function()
     -- TODO applescript genereator based on path (IIAC I can use role desc to build applescript?)
     local coords = hs.mouse.absolutePosition()
     local elementAt = hs.axuielement.systemElementAtPosition(coords.x, coords.y)
     DumpAXPath(elementAt, true)
-    -- for k, v in pairs(elementAt:path()) do
-    --     print(" * ", k)
-    --     for k1, v1 in pairs(v) do
-    --         print("  * ", k1, v1)
-    --     end
-    -- end
+    DumpAXAttributes(elementAt, skipVerboseAttrs)
+    print(BuildAppleScriptTo(elementAt))
 end)
+
+function BuildAppleScriptTo(toElement)
+    local script = ""
+    -- REMEMBER toElement is last item in :path() list/table so dont need special handling for it outside of list
+    -- TODO stop at len -1 so we can finish it and can check parent for dup types and need to constraint it or mark where dups are issue
+    for _, elem in pairs(toElement:path()) do
+        DumpAXAttributes(elem, skipVerboseAttrs)
+        local role = GetValueOrEmptyString(elem, "AXRole")
+        local roleDescription = GetValueOrEmptyString(elem, "AXRoleDescription")
+        local current = "first " .. roleDescription .. " of "
+        if role == "AXApplication" then
+            current = "first application process '" .. GetValueOrEmptyString(elem, "AXTitle") .. "'"
+        end
+        script = current .. script .. '\n'
+        -- for k1, v1 in pairs(v) do
+        --     print("  * ", k1, v1)
+        -- end
+    end
+    local roleDescription = GetValueOrEmptyString(toElement, "AXRoleDescription")
+    -- print("*" .. roleDescription)
+    return "set foo to " .. script
+end
 
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "I", function()
     -- INSPECT ELEMENT UNDER MOUSE POSITION
@@ -68,27 +87,30 @@ function GetValueOrEmptyString(element, attribute)
     end
 end
 
-function GetDumpAXAttributes(element)
+function GetDumpAXAttributes(element, skips)
+    skips = skips or {}
     -- local roleDesc = GetValueOrEmptyString(element, "AXRoleDescription")
     local role = GetValueOrEmptyString(element, "AXRole")
     local title = GetValueOrEmptyString(element, "AXTitle")
     local result = '## ATTRIBUTES for - ' .. role .. ' - ' .. title .. '\n'
-    for k, v in pairs(element) do
-        local nonStandard = not StandardAttributesSet[k]
-        -- PRN denylist some attrs I don't care to see (unless pass a verbose flag or global DEBUG var of some sort?)
-        if v == nil then
-            v = 'nil'
-        elseif type(v) == 'string' then
-            v = '"' .. v .. '"'
-        else
-            v = tostring(v)
+    for attrName, attrValue in pairs(element) do
+        if not skips[attrName] then
+            local nonStandard = not StandardAttributesSet[attrName]
+            -- PRN denylist some attrs I don't care to see (unless pass a verbose flag or global DEBUG var of some sort?)
+            if attrValue == nil then
+                attrValue = 'nil'
+            elseif type(attrValue) == 'string' then
+                attrValue = '"' .. attrValue .. '"'
+            else
+                attrValue = tostring(attrValue)
+            end
+            if nonStandard then
+                attrName = '** ' .. attrName
+            end
+            result = result .. "  " .. attrName .. ' = ' .. attrValue .. '\n'
+            -- TODO descend attrs that are tables? conditionally? allowlist/denylist which ones?
+            --   maybe just add flag to do this (and only for one level deep) -  i.e. AXFrame, AXPosition
         end
-        if nonStandard then
-            k = '** ' .. k
-        end
-        result = result .. "  " .. k .. ' = ' .. v .. '\n'
-        -- TODO descend attrs that are tables? conditionally? allowlist/denylist which ones?
-        --   maybe just add flag to do this (and only for one level deep) -  i.e. AXFrame, AXPosition
     end
     return result
 end
@@ -110,8 +132,8 @@ StandardAttributesSet["AXEnhancedUserInterface"] = true
 --   once I find something new, its ok to add to this list (so only new stick out)
 
 
-function DumpAXAttributes(element)
-    print(GetDumpAXAttributes(element))
+function DumpAXAttributes(element, skips)
+    print(GetDumpAXAttributes(element, skips))
 end
 
 function GetDumpAXActions(element)
