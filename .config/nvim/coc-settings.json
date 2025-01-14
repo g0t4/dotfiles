@@ -68,8 +68,9 @@
     //   prompt:
     //     Do you need to configure your work environment as `luv`? (1)Apply and modify settings, (2)Apply but do not modify settings, (3)Don't show again:
     //   FYI selecting 3 does not stop it from showing again, every time I open nvim at all (b/c I am using luv in semantic daemon for special nvim windows in iterm)
-    //   TODO why does this work?
-    //    https://github.com/LunarVim/LunarVim/issues/4049
+    //   - discussion about warning: https://github.com/LunarVim/LunarVim/issues/4049
+    //   https://github.com/xiyaowong/coc-sumneko-lua/blob/main/settings.md#luaworkspacecheckthirdparty
+    //   - some sort of auto config for select 3rd party libs... I might want this then, right?
     "Lua.workspace.checkThirdParty": false,
     //
     "Lua.runtime.version": "LuaJIT",
