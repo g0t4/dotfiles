@@ -105,6 +105,11 @@ function GetDumpAXAttributes(element, skips)
         return "{" .. table.concat(result, ", ") .. "}"
     end
 
+    local function compactUserData(userdata)
+        -- TODO add test of userdata type to makes sure is axuielement before fetting attr values
+        return "UD " .. GetValueOrEmptyString(userdata, "AXRole")
+    end
+
     skips = skips or {}
     -- local roleDesc = GetValueOrEmptyString(element, "AXRoleDescription")
     local role = GetValueOrEmptyString(element, "AXRole")
@@ -119,7 +124,7 @@ function GetDumpAXAttributes(element, skips)
             if attrValue == nil then
                 displayValue = 'nil'
             elseif type(attrValue) == "userdata" then
-                displayValue = "UD " .. tostring(attrValue)
+                displayValue = compactUserData(attrValue)
             elseif type(attrValue) == "table" then
                 -- i.e. AXSize, AXPosition, AXFrame, AXVisibleCharacterRange
                 displayValue = compactTableAttrValue(attrValue)
