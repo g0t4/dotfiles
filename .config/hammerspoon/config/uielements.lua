@@ -3,6 +3,15 @@
 
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "A", function()
     -- TODO applescript genereator based on path (IIAC I can use role desc to build applescript?)
+    local coords = hs.mouse.absolutePosition()
+    local elementAt = hs.axuielement.systemElementAtPosition(coords.x, coords.y)
+    DumpAXPath(elementAt, true)
+    -- for k, v in pairs(elementAt:path()) do
+    --     print(" * ", k)
+    --     for k1, v1 in pairs(v) do
+    --         print("  * ", k1, v1)
+    --     end
+    -- end
 end)
 
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "I", function()
@@ -84,6 +93,7 @@ function GetDumpAXAttributes(element)
     return result
 end
 
+-- *** non-standard attr identification ***
 StandardAttributesSet = {}
 for _, value in pairs(hs.axuielement.attributes) do
     StandardAttributesSet[value] = true
@@ -95,8 +105,7 @@ StandardAttributesSet["AXPreferredLanguage"] = true
 StandardAttributesSet["AXEnhancedUserInterface"] = true
 -- AXFunctionRowTopLevelElements ?
 -- AXChildrenInNavigationOrder ?
--- TODO look into nonstandard attrs:
---   TODO AXSections (could this be useful in searching elements?
+-- TODO AXSections (could this be useful in searching elements?
 -- FYI I am using this detection really just to point them out to me so I can figure out what each one is and then exploit if useful
 --   once I find something new, its ok to add to this list (so only new stick out)
 
@@ -121,7 +130,8 @@ function DumpAXActions(element)
     print(GetDumpAXActions(element))
 end
 
-function GetDumpPath(element)
+function GetDumpPath(element, expanded)
+    expanded = expanded or false
     -- OMG this is already way better than UI Element Inspector, and Accessibility Inspector
     local path = element:path()
     if #path > 0 then
@@ -148,9 +158,6 @@ function GetDumpPath(element)
             -- TODO AXValue
             -- TODO AXValueDescription
             --
-            -- TODO WHAT ELSE (review attrs of sevearl apps you use... there can be non-standard attrs too... can't hurt to find those)
-            --     TODO add a method to print non-standard attrs (not in the constants reference)
-            --
             local identifier = elem:attributeValue("AXIdentifier") -- !!! UMM... this is news to me... can I search elements on this Identifier?!
             -- don't show identifier: Accessibility Inspector,
             -- Script Debugger only shows Identifier under Attributes list... so basically hidden... sheesh
@@ -172,6 +179,17 @@ function GetDumpPath(element)
                 current = current .. ' [' .. details .. ']'
             end
             result = result .. current .. '\n'
+            ---- FYI can add one '-' to front of block comment start => ---[[ and then the block is back in play, and last
+            --[[
+            -- consider showing more attrs on 1 or a few lines below each path elem... that is another way to not have a bunch of fields in one line like other inspectors
+            if expanded then
+                -- iterate over its attrs
+                -- TODO allow/deny list specific attrs to show/not show
+                for k, v in pairs(elem) do
+                    result = result .. "    " .. k .. "\n"
+                end
+            end
+            --]]
         end
         return result
     else
@@ -179,6 +197,15 @@ function GetDumpPath(element)
     end
 end
 
-function DumpAXPath(element)
-    print(GetDumpPath(element))
+function DumpAXPath(element, expanded)
+    print(GetDumpPath(element, expanded))
 end
+
+-- function DumpAxPathExpanded(element)
+--     for k, v in pairs(element:path()) do
+--         print(" * ", k)
+--         for k1, v1 in pairs(v) do
+--             print("  * ", k1, v1)
+--         end
+--     end
+-- end
