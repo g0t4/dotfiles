@@ -189,9 +189,8 @@ function GetDumpPath(element, expanded)
             for _, child in pairs(children) do
                 result = result .. "    " .. GetDumpElementLine(child) .. "\n"
             end
-            -- end
 
-            ---- FYI can add one '-' to front of block comment start => ---[[ and then the block is back in play, and last
+            -- FYI can add one '-' to front of block comment start => ---[[ and then the block is back in play, and last
             --[[
             -- consider showing more attrs on 1 or a few lines below each path elem... that is another way to not have a bunch of fields in one line like other inspectors
             if expanded then
@@ -202,8 +201,6 @@ function GetDumpPath(element, expanded)
                 end
             end
             --]]
-
-            -- FYI consider expanding AXChildren to look for conflicts... or at least do so with role type from next path level (below)
         end
         return result
     else
