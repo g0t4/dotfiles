@@ -157,23 +157,23 @@ function GetDumpAXAttributes(element, skips)
         local result = {}
         -- TODO what about tables with multiple hs.axuielement objects? I am showing those now so that is interesting! accidentally added that here with compact table
         --   TODO detect and strip what is a list (keys are numbers, values are axuielement objects)
-        for key, value in pairs(tbl) do
+        for attrName, attrValue in pairs(tbl) do
             -- IIRC cannot get nil using pairs() which is syntactic sugar for allAttributeValues... nonetheless doesn't hurt to leave in case I go with another approach for enumeration and it has nil values
-            local displayValue = value
+            local displayValue = attrValue
             -- TODO do I wanna extract reusable (and/or limit to one level deep?)
-            if value == nil then
+            if attrValue == nil then
                 displayValue = "nil"
-            elseif type(value) == "userdata" then
-                displayValue = compactUserData(value)
-            elseif type(value) == "table" then
+            elseif type(attrValue) == "userdata" then
+                displayValue = compactUserData(attrValue)
+            elseif type(attrValue) == "table" then
                 -- i.e. AXSize, AXPosition, AXFrame, AXVisibleCharacterRange
-                displayValue = compactTableAttrValue(value)
-            elseif type(value) == 'string' then
-                displayValue = '"' .. value .. '"'
+                displayValue = compactTableAttrValue(attrValue)
+            elseif type(attrValue) == 'string' then
+                displayValue = '"' .. attrValue .. '"'
             else
-                displayValue = tostring(value)
+                displayValue = tostring(attrValue)
             end
-            table.insert(result, string.format("%s=%s", tostring(key), displayValue))
+            table.insert(result, string.format("%s=%s", tostring(attrName), displayValue))
         end
         return "{" .. table.concat(result, ", ") .. "}"
     end
