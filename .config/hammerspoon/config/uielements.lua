@@ -130,6 +130,51 @@ function DumpAXActions(element)
     print(GetDumpAXActions(element))
 end
 
+function GetDumpElementLine(elem)
+    local role = GetValueOrEmptyString(elem, "AXRole")
+    local title = GetValueOrEmptyString(elem, "AXTitle")
+    local subRole = GetValueOrEmptyString(elem, "AXSubrole")
+    --
+    local description = elem:attributeValue("AXDescription")
+    local roleDescription = elem:attributeValue("AXRoleDescription")
+    local useDescription = description or roleDescription
+    if description and roleDescription then
+        if description ~= roleDescription then
+            -- TODO find example to test
+            useDescription = roleDescription .. ' / ' .. description
+        end
+    end
+    -- TODO conditions to clear the description (dont show it)..
+    --    i.e. AXApplication role, desc=application...
+    --      AXWindow role, AXStandardWindow subrole... desc=standard window
+    --    basically, condense what I show in path view (make it easily decipherable... IOTW always show role and if anything hide rightmost items (i.e. desc) when it doesn't tell me anything new... that is what I dislike about other inspectors, they are hard to decipher what matters (the one thing that doesn't stand out cuz everything else is duplicated)
+    --
+    -- TODO AXValue
+    -- TODO AXValueDescription
+    --
+    local identifier = elem:attributeValue("AXIdentifier") -- !!! UMM... this is news to me... can I search elements on this Identifier?!
+    -- don't show identifier: Accessibility Inspector,
+    -- Script Debugger only shows Identifier under Attributes list... so basically hidden... sheesh
+    --
+    local current = '  ' .. role
+    if subRole ~= "" then
+        current = current .. ' (' .. subRole .. ')'
+    end
+    current = current .. ' - ' .. title
+    local details = ""
+    if identifier then
+        details = details .. ' id=' .. identifier
+    end
+    if useDescription then
+        -- TODO I think I can exclude description (mostly mirrors Role/SubRole)
+        details = details .. ' desc=' .. useDescription
+    end
+    if details ~= "" then
+        current = current .. ' [' .. details .. ']'
+    end
+    return current
+end
+
 function GetDumpPath(element, expanded)
     expanded = expanded or false
     -- OMG this is already way better than UI Element Inspector, and Accessibility Inspector
@@ -137,47 +182,7 @@ function GetDumpPath(element, expanded)
     if #path > 0 then
         local result = '## PATH:\n'
         for _, elem in ipairs(path) do
-            local role = GetValueOrEmptyString(elem, "AXRole")
-            local title = GetValueOrEmptyString(elem, "AXTitle")
-            local subRole = GetValueOrEmptyString(elem, "AXSubrole")
-            --
-            local description = elem:attributeValue("AXDescription")
-            local roleDescription = elem:attributeValue("AXRoleDescription")
-            local useDescription = description or roleDescription
-            if description and roleDescription then
-                if description ~= roleDescription then
-                    -- TODO find example to test
-                    useDescription = roleDescription .. ' / ' .. description
-                end
-            end
-            -- TODO conditions to clear the description (dont show it)..
-            --    i.e. AXApplication role, desc=application...
-            --      AXWindow role, AXStandardWindow subrole... desc=standard window
-            --    basically, condense what I show in path view (make it easily decipherable... IOTW always show role and if anything hide rightmost items (i.e. desc) when it doesn't tell me anything new... that is what I dislike about other inspectors, they are hard to decipher what matters (the one thing that doesn't stand out cuz everything else is duplicated)
-            --
-            -- TODO AXValue
-            -- TODO AXValueDescription
-            --
-            local identifier = elem:attributeValue("AXIdentifier") -- !!! UMM... this is news to me... can I search elements on this Identifier?!
-            -- don't show identifier: Accessibility Inspector,
-            -- Script Debugger only shows Identifier under Attributes list... so basically hidden... sheesh
-            --
-            local current = '  ' .. role
-            if subRole ~= "" then
-                current = current .. ' (' .. subRole .. ')'
-            end
-            current = current .. ' - ' .. title
-            local details = ""
-            if identifier then
-                details = details .. ' id=' .. identifier
-            end
-            if useDescription then
-                -- TODO I think I can exclude description (mostly mirrors Role/SubRole)
-                details = details .. ' desc=' .. useDescription
-            end
-            if details ~= "" then
-                current = current .. ' [' .. details .. ']'
-            end
+            local current = GetDumpElementLine(elem)
             result = result .. current .. '\n'
             ---- FYI can add one '-' to front of block comment start => ---[[ and then the block is back in play, and last
             --[[
@@ -190,6 +195,8 @@ function GetDumpPath(element, expanded)
                 end
             end
             --]]
+
+            -- FYI consider expanding AXChildren to look for conflicts... or at least do so with role type from next path level (below)
         end
         return result
     else
