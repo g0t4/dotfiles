@@ -1,7 +1,7 @@
 local printWebView = nil
 local printWebWindow = nil
 local printHtmlBuffer = {}
-local printWebViewUserContentController = nil
+-- local printWebViewUserContentController = nil
 
 local skipAttrsWhenInspectForPathBuilding = {
     -- PRN truncate long values instead? could pass max length here
@@ -23,28 +23,29 @@ local function prints(...)
         end
     end
     if printWebView then
+        -- PRN debounce updating html when prining in rapid succession (also will apply to scroll to bottom)
         local html = table.concat(printHtmlBuffer, "<br/>")
         printWebView:html(html)
 
-        require("hs.timer").doAfter(0.5, function()
-            -- TODO fix scroll to bottom
-            -- -- FYI  hrm... this works in dev tools, why not here? wtf...
-            -- -- TODO? the docs for webview:new mention smth about a controller to inject the JS? is this failing b/c I am using newBrowser below and not targeting the right place?
+        -- printWebViewUserContentController:injectScript({ source = "PRN if needed" })
+        require("hs.timer").doAfter(0.1, function()
+            -- FYI smth in setting :html(html) above, means I cannot immediatelly scroll to bottom, so I add a slight delay here
+            -- FYI last test I did, cannot use setTimeout() in JS to accomplish this so it has smth to do with when I tee up running the JS, not when the JS inside runs
+            -- FYI 0.01 is too fast, 0.1 seems to work and appears instant when html content is changed
             local scrollToBottom = [[
-            window.scrollTo(0,document.body.scrollHeight);
-        ]]
-            -- OMFG I AM SO FUCKING STUPID (thanks supermaven for completing that for me :))... I suspected it was a timing issue... and inject IIUC is not for this purpose... so yeah with slight delay all is fine... question is can I setup an event to auto scroll instead of needing delay here? OR, wait... lets use setTimeout() in js
-            -- -- FYI user content controller is also not working, when I go to inspect an element... in console I see errors from injectScript: TypeError: null is not an object (evaluating 'document.body.scrollHeight')
-            -- printWebViewUserContentController:injectScript({ source = scrollToBottom })
-            printWebView:evaluateJavaScript(scrollToBottom, function(err, result)
-                if err then
-                    hs.showError("js failed")
+                window.scrollTo(0,document.body.scrollHeight);
+            ]]
+            printWebView:evaluateJavaScript(scrollToBottom, function(result, nsError)
+                -- AFAICT error is NSError https://developer.apple.com/documentation/foundation/nserror
+                --   error s/b nil if no error... but I also am getting { code = 0 } on successes, so ignore based on code too:
+                if nsError and nsError.code ~= 0 then
+                    hs.showError("js failed: " .. hs.inspect(nsError))
                 end
-                print("scroll result:", hs.inspect(result))
             end)
         end)
     end
 end
+
 local function applescriptIdentifierFor(text)
     -- Replace non-alphanumeric characters with underscores
     local identifier = text:gsub("%W", "_")
@@ -106,6 +107,7 @@ local function ensureWebview()
             -- FYI 2nd arg is webview, 3rd arg is state/frame (depending on action type)
             if action == "closing" then
                 printWebView = nil
+                -- printWebViewUserContentController = nil
                 printWebWindow = nil
             end
         end)
