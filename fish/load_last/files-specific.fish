@@ -349,8 +349,30 @@ if status --is-interactive
     # todo see ideas for testing in fish/run-tests.fish (careful w/ cd as it can't be subshelled)
     # PRN change behavior based on STDIN/OUT is/isn't a TTY?
 
-    function cd
+    function supercd
+        # TODO make cd default to supercd?
+        #
+        # super cd uses a series of fallbacks to try to cd to the dir requested
+        #    cd /foo/bar     # 1. tried first
+        #    z /foo/bar      # 2. tried second
+        #    cdz /foo/bar  # 3. tried third # TODO implement this
+        #      think of cd gaining the ability to match like z does (fuzzy match to paths that I have not yet cd'd to so they're not in z's db)
+        #      and if cdnew fails then we should a failure message, which would be rare I believe
+        #      alternatively, I could index some commmon dirs and add them to z's db (maybe with a modified z command that uses this db set second)
 
+        set -l path $argv[1]
+        cd $path 2>/dev/null # ensure func used?
+        if test $status -eq 0
+            return
+        end
+        z $path 2>/dev/null
+        if test $status -eq 0
+            return
+        end
+        echo "TODO impl cdz fallback"
+    end
+
+    function cd
         set -l path $argv[1]
         if test -f $path; and test (count $argv) -eq 1
             # only override IF path is a file and no other args, else let _original_cd handle it (including handling failures for multiple args)
