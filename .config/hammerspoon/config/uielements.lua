@@ -124,14 +124,17 @@ local function ensureWebview()
     printWebView:frame(rect)
 end
 
+
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "A", function()
+    -- [A]ppleScript
+    -- FYI "A" is easy to invoke with left hand alone (after position mouse with right--trackpad)
+    -- reserve "I" for some other inspect mode? maybe to toggle mouse inspect mode
+
     ensureWebview()
-    prints("test")
-    -- TODO applescript genereator based on path (IIAC I can use role desc to build applescript?)
     local coords = hs.mouse.absolutePosition()
     local elementAt = hs.axuielement.systemElementAtPosition(coords.x, coords.y)
     DumpAXPath(elementAt, true)
-    DumpAXAttributes(elementAt, skipAttrsWhenInspectForPathBuilding)
+    -- DumpAXAttributes(elementAt, skipAttrsWhenInspectForPathBuilding)
     prints(BuildAppleScriptTo(elementAt))
 end)
 
@@ -203,7 +206,7 @@ function BuildAppleScriptTo(toElement)
                 end
             end
             -- TODO can I go off of index of sibling in the overall list of siblings?
-            prints(warning)
+            -- prints(warning)
 
 
             -- FYI powerpoint, ribbon => Transitions => Duration text box has roleSiblings (groups)
@@ -286,34 +289,6 @@ function BuildAppleScriptTo(toElement)
     return "\nset " .. variableName .. " to " .. specifierChain
     -- PRN add suggestions section for actions to use and properties to get/set? as examples to copy/pasta
     --    i.e. text area => get/set value, button =>click
-end
-
-hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "I", function()
-    -- INSPECT ELEMENT UNDER MOUSE POSITION
-    local coords = hs.mouse.absolutePosition()
-    prints("coords: " .. hs.inspect(coords))
-    -- TODO any variance in what element is selected? isn't there another method to find element? deepest or smth?
-    local elementAt = hs.axuielement.systemElementAtPosition(coords.x, coords.y)
-    DumpAXAttributes(elementAt)
-    DumpAXPath(elementAt)
-    DumpParentsAlternativeForPath(elementAt)
-end)
-
-
-
--- *** HELPERS below for DUMPING info ***
-function DumpParentsAlternativeForPath(element)
-    -- ALTERNATIVE way to get path, IIAC this is how element:path() works?
-    -- if not then just know this is available as an alternative
-    local parent = element:attributeValue("AXParent")
-    prints("parent", hs.inspect(parent))
-    if parent then
-        if parent == element then
-            prints("parent == element")
-            return
-        end
-        DumpParentsAlternativeForPath(parent)
-    end
 end
 
 function DumpAXEverything(element)
