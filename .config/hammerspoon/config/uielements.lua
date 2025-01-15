@@ -12,12 +12,14 @@ local skipAttrsWhenInspectForPathBuilding = {
 }
 
 local function prints(...)
+    -- PRN www.jstree.com - if I want a tree view that has collapsed sections that hide details initially ... only use this if use case arises from daily use... my hope is generated AppleScript works most of the time
     for _, arg in ipairs({ ... }) do
         if printWebView == nil then
             print(arg)
         else
             if type(arg) == "string" then
                 arg = arg:gsub("\n", "<br/>")
+                arg = arg:gsub("\t", "&nbsp;&nbsp;")
             end
             table.insert(printHtmlBuffer, arg)
         end
@@ -136,6 +138,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "A", function()
     DumpAXPath(elementAt, true)
     -- DumpAXAttributes(elementAt, skipAttrsWhenInspectForPathBuilding)
     prints(BuildAppleScriptTo(elementAt))
+    -- TODO build lua hammerspoon code instead of just AppleScript! that I can drop into my hammerspoon lua config instead of AppleScript in say KM
 end)
 
 local debounced = nil
@@ -379,7 +382,7 @@ function GetDumpAXAttributes(element, skips)
         if nonStandard then
             displayName = '** ' .. attrName
         end
-        result = result .. "  " .. displayName .. ' = ' .. displayValue .. '\n'
+        result = result .. "\t" .. displayName .. ' = ' .. displayValue .. '\n'
     end
     return result
 end
@@ -482,7 +485,7 @@ function GetDumpPath(element, expanded)
                     children = {}
                 end
                 for _, child in pairs(children) do
-                    result = result .. "    " .. GetDumpElementLine(child) .. "\n"
+                    result = result .. "\t\t" .. GetDumpElementLine(child) .. "\n"
                 end
             end
 
@@ -493,7 +496,7 @@ function GetDumpPath(element, expanded)
                 -- iterate over its attrs
                 -- TODO allow/deny list specific attrs to show/not show
                 for k, v in pairs(elem) do
-                    result = result .. "    " .. k .. "\n"
+                    result = result .. "\t\t" .. k .. "\n"
                 end
             end
             --]]
@@ -507,12 +510,3 @@ end
 function DumpAXPath(element, expanded)
     prints(GetDumpPath(element, expanded))
 end
-
--- function DumpAxPathExpanded(element)
---     for k, v in pairs(element:path()) do
---         printIt(" * ", k)
---         for k1, v1 in pairs(v) do
---             printIt("  * ", k1, v1)
---         end
---     end
--- end
