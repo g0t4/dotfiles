@@ -3,7 +3,8 @@ local HammerspoonTimeoutScheduler = require("config.rx.hammerspoon_timeout_sched
 
 local M = {}
 
-function M.mouseMovesObservable()
+function M.mouseMovesObservable(delay_ms)
+    delay_ms = delay_ms or 250
     --   TODO debounce events (so UI is responsive and don't query element info until stopped moving)
     --   ideally don't respond to the input until it stops for x ms
     --
@@ -22,7 +23,7 @@ function M.mouseMovesObservable()
         return false -- Return false to allow the event to propagate
     end)
 
-    local debounced = moves:debounce(1200, scheduler)
+    local debounced = moves:debounce(delay_ms, scheduler)
 
     function stop()
         mouseMoveWatcher:stop()

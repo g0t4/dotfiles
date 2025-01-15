@@ -100,7 +100,7 @@ local stop = nil
 local mouseMovesObservable = require("config.rx.mouse").mouseMovesObservable
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "T", function()
     if not debounced then
-        debounced, stop = mouseMovesObservable()
+        debounced, stop = mouseMovesObservable(400)
         debounced:subscribe(function(position)
             if not position then
                 print("[NEXT]", "nil position")
