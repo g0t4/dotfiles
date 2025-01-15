@@ -1,4 +1,16 @@
 document.addEventListener("DOMContentLoaded", () => {
+    // features I care about (behave as close to browser impl as feasible):
+    // - ctrl+f opens search box
+    //    - focus is on search right away
+    //    - ENTER searches
+    //    - focus stays on search box
+    //       - THUS, ENTER works to go to next match
+    //    - enter/ctrl+g/G should not lose current match position (if same search term)
+    //       - TODO does it clear search currentIndex when searchTerm changes?
+    //    - Escape closes search box
+    // - ctrl+g goes to next match
+    // - ctrl+shift+g goes to previous match
+
     let searchTerm = "";
     let currentIndex = -1;
 
