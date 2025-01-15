@@ -224,6 +224,8 @@ function BuildAppleScriptTo(toElement)
             warnOnEmptyTitle(title, role)
             -- TODO handle duplicate titles (windows)
             -- PRN use window index instead?
+            -- FYI title is an issue in some scenarios (i.e. if title is based on current document, like in Script Debugger)
+            -- PRN use title or index match? using intermediate reference vars
             return 'window "' .. title .. '" of '
         elseif role == "AXSplitGroup" then
             return "splitter group " .. elemIndex .. " of "
