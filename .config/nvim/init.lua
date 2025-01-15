@@ -14,6 +14,22 @@ require('localz.comment-highlights')
 require('localz.filetypemods')
 -- require('localz.ideas')
 
+function PrintDebugInfo()
+    -- Iterate through package.loaders (or package.searchers in Lua 5.2+)
+    local loaders = package.loaders or package.searchers
+
+    for i, loader in ipairs(loaders) do
+        print(string.format("Loader #%d:", i))
+        local info = debug.getinfo(loader)
+        if info then
+            print(vim.inspect(info))
+        else
+            print("  Could not retrieve debug info.")
+        end
+        print()
+    end
+end
+
 vim.cmd [[
     " TODO where should I consolidate these?
     " fix some theme issues
