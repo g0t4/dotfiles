@@ -1,6 +1,7 @@
 local printWebView = nil
 local printWebWindow = nil
 local printHtmlBuffer = {}
+local printWebViewUserContentController = nil
 
 local skipAttrsWhenInspectForPathBuilding = {
     -- PRN truncate long values instead? could pass max length here
@@ -28,9 +29,11 @@ local function prints(...)
         -- TODO fix scroll to bottom
         -- -- FYI  hrm... this works in dev tools, why not here? wtf...
         -- -- TODO? the docs for webview:new mention smth about a controller to inject the JS? is this failing b/c I am using newBrowser below and not targeting the right place?
-        -- local scrollToBottom = [[
-        --     window.scrollTo(0,document.body.scrollHeight);
-        -- ]]
+        local scrollToBottom = [[
+            window.scrollTo(0,document.body.scrollHeight);
+        ]]
+        -- -- FYI user content controller is also not working, when I go to inspect an element... in console I see errors from injectScript: TypeError: null is not an object (evaluating 'document.body.scrollHeight')
+        -- printWebViewUserContentController:injectScript({ source = scrollToBottom })
         -- printWebView:evaluateJavaScript(scrollToBottom, function(err, result)
         --     if err then
         --         hs.showError("js failed")
@@ -86,7 +89,10 @@ local function ensureWebview()
         --    FYI more preferencesTable options: https://www.hammerspoon.org/docs/hs.webview.html#new
         --    USE THIS TO TEST JS FIRST!
         local prefs = { ["developerExtrasEnabled"] = true }
-        printWebView = hs.webview.newBrowser(rect, prefs)
+
+        -- printWebViewUserContentController = require("hs.webview.usercontent").new("testmessageport")
+        printWebView = require("hs.webview").newBrowser(rect, prefs) -- ,printWebViewUserContentController)
+
         -- webview:url("https://google.com")
         printWebView:windowTitle("Inspector")
         printWebView:show()
