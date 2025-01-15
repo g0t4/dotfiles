@@ -95,58 +95,32 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "A", function()
     prints(BuildAppleScriptTo(elementAt))
 end)
 
-local rx = require 'rx'
-local HammerspoonTimeoutScheduler = require("config.rx.hammerspoon_timeout_scheduler")
-local scheduler = HammerspoonTimeoutScheduler.create()
-local moves = rx.Subject.create()
-local debounced = moves:debounce(2000, scheduler)
-debounced:subscribe(function(position)
-    if not position then
-        print("[NEXT]", "nil position")
-        return
-    end
-    print("[NEXT]", position.x .. "," .. position.y)
-end, function(error)
-    print("[ERROR]", error)
-end, function()
-    print("[COMPLETE]")
-end)
-moves:onNext({ x = 0, y = 0 })
--- moves:onCompleted()
--- moves:onError("fuuuuu") -- never received b/c commplete already called
-
-local mouseMoveWatcher = hs.eventtap.new({ hs.eventtap.event.types.mouseMoved }, function(event)
-    --   TODO debounce events (so UI is responsive and don't query element info until stopped moving)
-    --   ideally don't respond to the input until it stops for x ms
-    --
-    --   luarocks install reactivex -- fork of rxlua, with some fixes for unsubscribe on take, IIUC -- also more recent release (2020)
-    --      darn, this is constrianed to lua 5.3 max... why?
-    --   luarocks install rxlua -- upstream (original repo) - last release 2017
-    --      this is not limited to lua <5.3
-    --   age of releases is not necessarily an issue beyond likley bug fixes... Rx is much like Ix (enumerable) in that the API is arguably stable and "commplete" if truly based on work done in RxJS (et al)
-
-    local mousePos = hs.mouse.absolutePosition()
-    -- print(string.format("Mouse moved to: x=%d, y=%d", mousePos.x, mousePos.y))
-    moves:onNext(mousePos)
-    return false -- Return false to allow the event to propagate
-end)
-
--- mouseMoveWatcher:start()
-
+local mouseMoveWatcher = nil
+local mouseMovesObservable = require("config.rx.mouse").mouseMovesObservable
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "T", function()
     -- TOGGLE TRACKING MODE?
     if not mouseMoveWatcher then
-        return
+        mouseMoveWatcher, debounced = mouseMovesObservable()
+        -- PRN capture debounced in local var too? ... i.e. to subscribe later on too
+        debounced:subscribe(function(position)
+            if not position then
+                print("[NEXT]", "nil position")
+                return
+            end
+            print("[NEXT]", position.x .. "," .. position.y)
+        end, function(error)
+            print("[ERROR]", error)
+        end, function()
+            print("[COMPLETE]")
+        end)
     end
+
     if mouseMoveWatcher:isEnabled() then
         mouseMoveWatcher:stop()
     else
         mouseMoveWatcher:start()
     end
 end)
-
--- Stop the watcher when done (optional)
--- mouseMoveWatcher:stop()
 
 function BuildAppleScriptTo(toElement)
     local function warnOnEmptyTitle(title, role)
