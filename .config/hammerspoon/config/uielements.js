@@ -9,23 +9,33 @@ document.addEventListener("DOMContentLoaded", () => {
     //    - Escape closes search box
     // - ctrl+g goes to next match
     // - ctrl+shift+g goes to previous match
-    //
-    // TODOs
     // - on first search, or after changing search term... find the next closest match after the current scroll position
-    //    - get scroll position and then find first after that, compute its currentIndex... bam!
+    //    - prefer scroll down before up (up == wrap around)
 
     let searchTerm = "";
     let lastSearchTerm = "";
-    let currentIndex = -1;
+    let currentIndex = -1; // -1 means first search (with current term)
+
+    function log(...args) {
+        // comment out to disable logging
+        console.log(...args);
+    }
 
     const highlightMatches = () => {
+        if (lastSearchTerm === searchTerm) return;
+
         // Remove previous highlights
         document.querySelectorAll(".highlight").forEach((el) => {
             el.outerHTML = el.textContent; // Replace with original text
         });
+        // clears even if no search term provided, edge case is fine to include
 
         // Add highlights
-        if (searchTerm && lastSearchTerm !== searchTerm) {
+        if (searchTerm) {
+            log("new searchTerm", searchTerm);
+            currentIndex = -1; // Reset current index
+            lastSearchTerm = searchTerm;
+
             const regex = new RegExp(`(${searchTerm})`, "gi");
 
             const highlightClass = "highlight";
@@ -100,17 +110,41 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!highlights.length) return;
 
         // Remove current highlight (play it safe, remove on all instances)
-        const currentHighlight = document.querySelector(".currentHighlight");
-        if (currentHighlight) {
-            currentHighlight.classList.remove("currentHighlight");
+        document
+            .querySelectorAll(".currentHighlight")
+            .forEach((el) => el.classList.remove("currentHighlight"));
+
+        // FYI I hobbled this together quickly, I wouldn't be surprised if I used the wrong y coordinate for searching for next match, but as long as it works then I don't care
+        log("currentIndex before", currentIndex);
+        if (currentIndex === -1) {
+            // Find first after current scroll position
+            const windowScrolledToY = window.scrollY;
+            log("  windowScrolledToY", windowScrolledToY);
+            // scroll up feels unnatural... so use half of window height b/c then won't scroll up (unless no matches below and some are above)
+            // add half the window height to the scroll position, so we don't scroll up
+            // - scrolling up indicates the search wrapped and there were no results below
+            // - scrolling down indicates results below half way point on page height
+            const cutoffY = windowScrolledToY + window.innerHeight / 2;
+            log("  cutoffY", cutoffY);
+            for (let i = 0; i < highlights.length; i++) {
+                const highlight = highlights[i];
+                log("    offsetTop", highlight.offsetTop);
+                if (highlight.offsetTop > cutoffY) {
+                    log("      found", i);
+                    currentIndex = i;
+                    break;
+                } else {
+                    log("      not found", i);
+                }
+            }
+            log("new currentIndex", currentIndex);
+        } else {
+            // Calculate next index
+            currentIndex = forward
+                ? (currentIndex + 1) % highlights.length
+                : (currentIndex - 1 + highlights.length) % highlights.length;
+            log("stepping currentIndex", currentIndex);
         }
-
-        // TODO any way on first search (or search term changed) that we can find first after the current scroll position?
-
-        // Calculate next index
-        currentIndex = forward
-            ? (currentIndex + 1) % highlights.length
-            : (currentIndex - 1 + highlights.length) % highlights.length;
 
         const nextHighlight = highlights[currentIndex];
         if (nextHighlight) {
@@ -144,6 +178,7 @@ document.addEventListener("DOMContentLoaded", () => {
             input.onkeydown = (e) => {
                 if (e.key === "Enter") {
                     e.preventDefault();
+                    log("enter", input.value);
                     searchTerm = input.value;
                     highlightMatches();
                     navigateToMatch(true);
