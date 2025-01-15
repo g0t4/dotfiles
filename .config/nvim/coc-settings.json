@@ -64,6 +64,7 @@
         "/opt/homebrew/Cellar/neovim/0.10.3/share/nvim/runtime/lua",
         "/opt/homebrew/Cellar/neovim/0.10.3/share/nvim/runtime/lua/vim/lsp",
         "/Applications/Hammerspoon.app/Contents/Resources/extensions",
+        // "/Applications/Hammerspoon.app/Contents/Frameworks", // do I need this for any LSP features, these are dylib modules
         "~/.luarocks/share/lua/5.4", // luarocks --local
         "/opt/homebrew/share/lua/5.4/rx.lua", // luarocks --global (system wide)
         // "/Applications/Hammerspoon.app/Contents/Resources/extensions", // doesn't work, don't try again unless you find good reason to
