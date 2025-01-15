@@ -424,6 +424,31 @@ function DumpAXActions(element)
     prints(GetDumpAXActions(element))
 end
 
+function GetElementSiblingIndex(elem)
+    local parent = elem:attributeValue("AXParent")
+    print("got parent", parent, "for", elem)
+    if parent == nil then
+        return nil
+    end
+
+    -- how expensive is it to get the attribute value here (again)? same for AXParent above
+    local role = GetValueOrEmptyString(elem, "AXRole")
+    local roleSiblings = parent:childrenWithRole(role)
+    local elemIndex = 1
+    if #roleSiblings > 1 then
+        for i, sibling in ipairs(roleSiblings) do
+            if sibling == elem then
+                elemIndex = i
+            end
+        end
+    end
+    return elemIndex
+end
+
+function WrapInQuotesIfNeeded(value)
+    return string.find(value, "%s") and '"' .. value .. '"' or value
+end
+
 function GetDumpElementLine(elem)
     local role = GetValueOrEmptyString(elem, "AXRole")
     local title = GetValueOrEmptyString(elem, "AXTitle")
@@ -432,6 +457,7 @@ function GetDumpElementLine(elem)
     -- TODO AXHelp?
     local description = GetValueOrEmptyString(elem, "AXDescription")
     local roleDescription = GetValueOrEmptyString(elem, "AXRoleDescription")
+    local elemIndex = GetElementSiblingIndex(elem) or ''
 
     -- TODO conditions to clear out (not show) AXRole or otherwise
     --    i.e. AXApplication role, desc=application...
@@ -441,25 +467,25 @@ function GetDumpElementLine(elem)
     -- TODO AXValue
     -- TODO AXValueDescription
 
-    local current = '  ' .. role
+    -- TODO add back role (if I go with column view where I keep some attrs in sep columns to avoid cluttering items)
+    local current = roleDescription .. ' ' .. elemIndex
     if subRole ~= "" then
         current = current .. ' (' .. subRole .. ')'
     end
     if title ~= "" then
-        current = current .. ' - "' .. title .. '"'
+        current = current .. ' "' .. title .. '"'
     end
 
+    -- TODO put into separate column too (details)
     local details = ""
     if description ~= "" and description ~= roleDescription then
         -- only show if AXRoleDescription doesn't already cover what AXDescription has
-        details = details .. ' desc=' .. description
+        details = details .. ' desc=' .. WrapInQuotesIfNeeded(description)
     end
     if identifier ~= "" then
         details = details .. ' id=' .. identifier
     end
-    if details ~= "" then
-        current = current .. ' [' .. details .. ']'
-    end
+    current = current .. " - " .. details
 
     return current
 end
