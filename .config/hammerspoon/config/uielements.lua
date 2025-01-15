@@ -449,7 +449,8 @@ function WrapInQuotesIfNeeded(value)
     return string.find(value, "%s") and '"' .. value .. '"' or value
 end
 
-function GetDumpElementLine(elem)
+function GetDumpElementLine(elem, indent)
+    indent = indent or ""
     local role = GetValueOrEmptyString(elem, "AXRole")
     local title = GetValueOrEmptyString(elem, "AXTitle")
     local subRole = GetValueOrEmptyString(elem, "AXSubrole")
@@ -468,12 +469,12 @@ function GetDumpElementLine(elem)
     -- TODO AXValueDescription
 
     -- TODO add back role (if I go with column view where I keep some attrs in sep columns to avoid cluttering items)
-    local current = roleDescription .. ' ' .. elemIndex
+    local col1 = indent .. roleDescription .. ' ' .. elemIndex
     if subRole ~= "" then
-        current = current .. ' (' .. subRole .. ')'
+        col1 = col1 .. ' (' .. subRole .. ')'
     end
     if title ~= "" then
-        current = current .. ' "' .. title .. '"'
+        col1 = col1 .. ' "' .. title .. '"'
     end
 
     -- TODO put into separate column too (details)
@@ -485,9 +486,8 @@ function GetDumpElementLine(elem)
     if identifier ~= "" then
         details = details .. ' id=' .. identifier
     end
-    current = current .. " - " .. details
 
-    return current
+    return "<tr><td>" .. col1 .. "</td><td>" .. role .. "</td><td>" .. details .. "</td></tr>"
 end
 
 function GetDumpPath(element, expanded)
@@ -496,6 +496,7 @@ function GetDumpPath(element, expanded)
     local path = element:path()
     if #path > 0 then
         local result = '## PATH:\n'
+        result = result .. "<table><tr><th align=left>PATH</th><th>role</th><th>details</th></tr>\n"
         for _, elem in ipairs(path) do
             local current = GetDumpElementLine(elem)
             result = result .. current .. '\n'
@@ -506,7 +507,7 @@ function GetDumpPath(element, expanded)
                     children = {}
                 end
                 for _, child in pairs(children) do
-                    result = result .. "\t\t" .. GetDumpElementLine(child) .. "\n"
+                    result = result .. GetDumpElementLine(child, "\t\t") .. "\n"
                 end
             end
 
@@ -522,6 +523,7 @@ function GetDumpPath(element, expanded)
             end
             --]]
         end
+        result = result .. "</table>\n"
         return result
     else
         return "NO PATH - should not happen, even AXApplication (top level) has self as path"
