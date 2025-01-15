@@ -15,10 +15,13 @@ local function prints(...)
     -- PRN www.jstree.com - if I want a tree view that has collapsed sections that hide details initially ... only use this if use case arises from daily use... my hope is generated AppleScript works most of the time
     for _, arg in ipairs({ ... }) do
         if printWebView == nil then
+            -- user visible line break == <br>, html src line break == \n
+            --   this replace with \n for all line breaks when printing to console
+            arg = arg:gsub("<br>", "\n")
+            -- PRN strip table tags too?
             print(arg)
         else
             if type(arg) == "string" then
-                arg = arg:gsub("\n", "<br/>")
                 arg = arg:gsub("\t", "&nbsp;&nbsp;")
             end
             table.insert(printHtmlBuffer, arg)
@@ -196,32 +199,12 @@ function BuildAppleScriptTo(toElement)
             -- FYI this is the root most object, aka "object string specifier" (see Definitive Guide book, page 206-207)
             return 'application process "' .. title .. '"'
         end
+
         -- app is always the top level element that doesn't have a parent... so if I handle it first, then the rest of these always have parents (IIAC)
-        local parent = elem:attributeValue("AXParent") -- TODO or use prev element in list
-        local roleSiblings = parent:childrenWithRole(role)
-        local elemIndex = 1
-        if #roleSiblings > 1 then
-            local warning = "[FUUU] multiple siblings with same role: " .. role
-            for i, sibling in ipairs(roleSiblings) do
-                warning = warning .. "\n FUUUsibling(" .. i .. "):\n" .. GetDumpAXAttributes(sibling)
-                if sibling == elem then
-                    elemIndex = i
-                end
-            end
-            -- TODO can I go off of index of sibling in the overall list of siblings?
-            -- prints(warning)
-
-
-            -- FYI powerpoint, ribbon => Transitions => Duration text box has roleSiblings (groups)
-            --    AND, overlaps with After: text box, right next to it (to the right)
-            --    so, two good test cases... to gen code for both to mod their values
-            --
-            -- *** ok interesting.. this works in ScriptDebugger to search across siblings... use "every ___ " in middle of expression, IIAC can cross product that?)
-            --    set foo to first incrementor of every group of first scroll area of first tab group of window "Presentation1" of application process "PowerPoint" whose description is "Duration:"
-            --    -- then for each group w/o the item, it is an item with missing value in the list (in foo)... might be useful to search this way!
-            --  FYI use constraint on title of UI element at bottom (whose description is "Duration:")... then this pairs nicely with every for middle overlaps.... and might be all I need!
-            --
-            -- FYI in general, powerpoint has a ton of overlap... as does FCPX
+        local elemIndex = GetElementSiblingIndex(elem)
+        if elemIndex == nil then
+            print("ERROR: could not get sibling index for", elem)
+            return " failed to get sibling index for " .. role .. " " .. title
         end
 
         -- PRN use intermediate references, each with a whose/where clause (index == 1 or title == "foo") so I can match on either/both?
@@ -289,7 +272,7 @@ function BuildAppleScriptTo(toElement)
     -- TODO hungarian notation if title/desc are "too short" or?
     -- TODO build up some test cases would be helpful as you encounter real work examples
     local variableName = applescriptIdentifierFor(identifier)
-    return "\nset " .. variableName .. " to " .. specifierChain
+    return "<br>set " .. variableName .. " to " .. specifierChain
     -- PRN add suggestions section for actions to use and properties to get/set? as examples to copy/pasta
     --    i.e. text area => get/set value, button =>click
 end
@@ -297,7 +280,7 @@ end
 function DumpAXEverything(element)
     -- TODO header?
     local result = GetDumpAXAttributes(element)
-    result = result .. "\n" .. GetDumpAXActions(element)
+    result = result .. "<br>" .. GetDumpAXActions(element)
     -- PRN add parameterizedAttributes too
     prints(result)
 end
@@ -363,9 +346,10 @@ function GetDumpAXAttributes(element, skips)
     end
 
     skips = skips or {}
-    local role = GetValueOrEmptyString(element, "AXRole")
-    local title = GetValueOrEmptyString(element, "AXTitle")
-    local result = '## ATTRIBUTES for - ' .. role .. ' - ' .. title .. '\n'
+
+    -- yes, I know this has tr/td tags but it still shows fine for now so I don't need to make GetDumpElementLine() handle non table output too (not yet)
+    local result = '## ATTRs - ' .. GetDumpElementLine(element) .. '<br>'
+
     local sortedAttrs = {}
     for attrName, attrValue in pairs(element) do
         -- TODO skip nil attrValue?
@@ -382,7 +366,7 @@ function GetDumpAXAttributes(element, skips)
         if nonStandard then
             displayName = '** ' .. attrName
         end
-        result = result .. "\t" .. displayName .. ' = ' .. displayValue .. '\n'
+        result = result .. "\t" .. displayName .. ' = ' .. displayValue .. '<br>'
     end
     return result
 end
@@ -426,7 +410,6 @@ end
 
 function GetElementSiblingIndex(elem)
     local parent = elem:attributeValue("AXParent")
-    print("got parent", parent, "for", elem)
     if parent == nil then
         return nil
     end
@@ -490,16 +473,32 @@ function GetDumpElementLine(elem, indent)
     return "<tr><td>" .. col1 .. "</td><td>" .. role .. "</td><td>" .. details .. "</td></tr>"
 end
 
+local pathTableStart = [[
+<style>
+table {
+    border-collapse: collapse;
+    /*width: 100%;*/
+}
+
+tr:nth-child(even){background-color: #f2f2f2}
+
+th {
+    background-color: #4CAF50;
+    color: white;
+}
+</style>
+
+<table><tr><th align=left>PATH</th><th>role</th><th>details</th></tr>
+]]
 function GetDumpPath(element, expanded)
     expanded = expanded or false
     -- OMG this is already way better than UI Element Inspector, and Accessibility Inspector
     local path = element:path()
     if #path > 0 then
-        local result = '## PATH:\n'
-        result = result .. "<table><tr><th align=left>PATH</th><th>role</th><th>details</th></tr>\n"
+        local result = pathTableStart
         for _, elem in ipairs(path) do
             local current = GetDumpElementLine(elem)
-            result = result .. current .. '\n'
+            result = result .. current .. '\n' -- \n is for html formatting in src
 
             if expanded then
                 local children = elem:attributeValue("AXChildren")
