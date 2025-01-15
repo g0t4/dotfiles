@@ -1,7 +1,7 @@
 local printWebView = nil
 local printWebWindow = nil
 local printHtmlBuffer = {}
--- local printWebViewUserContentController = nil
+local printWebViewUserContentController = nil
 
 local skipAttrsWhenInspectForPathBuilding = {
     -- PRN truncate long values instead? could pass max length here
@@ -32,7 +32,6 @@ local function prints(...)
         local html = table.concat(printHtmlBuffer, "<br/>")
         printWebView:html(html)
 
-        -- printWebViewUserContentController:injectScript({ source = "PRN if needed" })
         require("hs.timer").doAfter(0.1, function()
             -- FYI smth in setting :html(html) above, means I cannot immediatelly scroll to bottom, so I add a slight delay here
             -- FYI last test I did, cannot use setTimeout() in JS to accomplish this so it has smth to do with when I tee up running the JS, not when the JS inside runs
@@ -99,8 +98,22 @@ local function ensureWebview()
         --    USE THIS TO TEST JS FIRST!
         local prefs = { ["developerExtrasEnabled"] = true }
 
-        -- printWebViewUserContentController = require("hs.webview.usercontent").new("testmessageport")
-        printWebView = require("hs.webview").newBrowser(rect, prefs) -- ,printWebViewUserContentController)
+        printWebViewUserContentController = require("hs.webview.usercontent").new("testmessageport")
+        local jsFilePath = hs.configdir .. "/config/uielements.js" -- Assuming it's saved in the same directory as your Hammerspoon config
+        local file = io.open(jsFilePath, "r")
+        local jsCode
+
+        if file then
+            jsCode = file:read("*a")
+            file:close()
+        else
+            error("Unable to load JavaScript file: " .. jsFilePath)
+        end
+
+        printWebViewUserContentController:injectScript({ source = jsCode })
+
+
+        printWebView = require("hs.webview").newBrowser(rect, prefs, printWebViewUserContentController)
 
         -- webview:url("https://google.com")
         printWebView:windowTitle("Inspector")
@@ -112,7 +125,7 @@ local function ensureWebview()
             -- FYI 2nd arg is webview, 3rd arg is state/frame (depending on action type)
             if action == "closing" then
                 printWebView = nil
-                -- printWebViewUserContentController = nil
+                printWebViewUserContentController = nil
                 printWebWindow = nil
             end
         end)
