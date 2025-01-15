@@ -143,9 +143,10 @@ function BuildAppleScriptTo(toElement)
         local roleDescription = GetValueOrEmptyString(elem, "AXRoleDescription")
         local title = GetValueOrEmptyString(elem, "AXTitle")
         if role == "AXApplication" then
-            -- FYI `application Process` is the process suite's class type
+            -- FYI `application process` is the process suite's class type
             -- TODO handle (warn) about duplicate app process titles... I might then be able to use some signature to identify the correct one but I don't know if I can ever refer to it properly... i.e. screenpal I always had to terminate the tray app b/c has same name and never seemed like I could reference the app by smth else... that said I didn't direclty use accessibiltiy APIs so it is possible there is a way that AppleScript/ScriptDebugger don't support
             warnOnEmptyTitle(title, role)
+            -- FYI this is the root most object, aka "object string specifier" (see Definitive Guide book, page 206-207)
             return 'application process "' .. title .. '"'
         end
         -- app is always the top level element that doesn't have a parent... so if I handle it first, then the rest of these always have parents (IIAC)

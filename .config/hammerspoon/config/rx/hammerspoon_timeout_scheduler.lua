@@ -26,6 +26,7 @@ function HammerspoonTimeoutScheduler:schedule(action, delay, ...)
     end)
 
     return rx.Subscription.create(function()
+        -- unsubscribe function (when observer unsubscribes)
         self.timer:stop()
     end)
 end
