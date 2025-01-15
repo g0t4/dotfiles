@@ -26,20 +26,23 @@ local function prints(...)
         local html = table.concat(printHtmlBuffer, "<br/>")
         printWebView:html(html)
 
-        -- TODO fix scroll to bottom
-        -- -- FYI  hrm... this works in dev tools, why not here? wtf...
-        -- -- TODO? the docs for webview:new mention smth about a controller to inject the JS? is this failing b/c I am using newBrowser below and not targeting the right place?
-        local scrollToBottom = [[
+        require("hs.timer").doAfter(0.5, function()
+            -- TODO fix scroll to bottom
+            -- -- FYI  hrm... this works in dev tools, why not here? wtf...
+            -- -- TODO? the docs for webview:new mention smth about a controller to inject the JS? is this failing b/c I am using newBrowser below and not targeting the right place?
+            local scrollToBottom = [[
             window.scrollTo(0,document.body.scrollHeight);
         ]]
-        -- -- FYI user content controller is also not working, when I go to inspect an element... in console I see errors from injectScript: TypeError: null is not an object (evaluating 'document.body.scrollHeight')
-        -- printWebViewUserContentController:injectScript({ source = scrollToBottom })
-        -- printWebView:evaluateJavaScript(scrollToBottom, function(err, result)
-        --     if err then
-        --         hs.showError("js failed")
-        --     end
-        --     print("scroll result:", hs.inspect(result))
-        -- end)
+            -- OMFG I AM SO FUCKING STUPID (thanks supermaven for completing that for me :))... I suspected it was a timing issue... and inject IIUC is not for this purpose... so yeah with slight delay all is fine... question is can I setup an event to auto scroll instead of needing delay here? OR, wait... lets use setTimeout() in js
+            -- -- FYI user content controller is also not working, when I go to inspect an element... in console I see errors from injectScript: TypeError: null is not an object (evaluating 'document.body.scrollHeight')
+            -- printWebViewUserContentController:injectScript({ source = scrollToBottom })
+            printWebView:evaluateJavaScript(scrollToBottom, function(err, result)
+                if err then
+                    hs.showError("js failed")
+                end
+                print("scroll result:", hs.inspect(result))
+            end)
+        end)
     end
 end
 local function applescriptIdentifierFor(text)
