@@ -99,10 +99,8 @@ local debounced = nil
 local stop = nil
 local mouseMovesObservable = require("config.rx.mouse").mouseMovesObservable
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "T", function()
-    -- TOGGLE TRACKING MODE?
     if not debounced then
         debounced, stop = mouseMovesObservable()
-        -- PRN capture debounced in local var too? ... i.e. to subscribe later on too
         debounced:subscribe(function(position)
             if not position then
                 print("[NEXT]", "nil position")
