@@ -95,6 +95,7 @@ ensureBool(hs.menuIcon, false)
 ensureBool(hs.dockIcon, false) -- FYI this one is 1-2ms to check, 3+ to set ... unlike others where its fast to check (and slow to set, even if not changing the actual value)
 -- hs.console.titleVisibility("hidden") -- hide title, but doesn't save space b/c buttons still show... why is there a fat border too below title/button bar?!
 -- hs.dockIcon(false) -- hide dock icon (default false) - also shows in app switcher if true) - REMINDER ONLY... uncomment to toggle but do not set every time (nor check every time) b/c that takes 2/4ms respectively
+hs.window.animationDuration = 0 -- default is 0.2 (FYI this means window layout changes don't animate, which I prefer)
 
 
 -- TODO comment out when done in learning so dont slow down config otherwise
