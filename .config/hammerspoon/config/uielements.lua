@@ -18,6 +18,12 @@ local function prints(...)
         else
             if type(arg) == "string" then
                 arg = arg:gsub("\n", "<br/>")
+                -- if spaces at front of line, then replace with &nbsp;
+                --   do not replace after non whitespace char in line
+                local firstNonSpace = string.find(arg, "%S")
+                local indent = string.rep("&nbsp;", firstNonSpace - 1)
+                local afterIndent = string.sub(arg, firstNonSpace or 1)
+                arg = indent .. afterIndent
             end
             table.insert(printHtmlBuffer, arg)
         end
