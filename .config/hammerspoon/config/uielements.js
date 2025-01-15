@@ -14,7 +14,6 @@ document.addEventListener("DOMContentLoaded", () => {
     // - on first search, or after changing search term... find the next closest match after the current scroll position
     //    - would need to detect term changed, vs same... and btw same might happen when I mash enter key so I dont have to switch to ctrl+g right away
     //    - get scroll position and then find first after that, compute its currentIndex... bam!
-    //    - need to track lastSearchTerm .. would also be good so I dont have to rehighlight if search term isn't changed too
 
     let searchTerm = "";
     let lastSearchTerm = "";
