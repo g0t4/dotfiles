@@ -26,6 +26,17 @@ local function prints(...)
         printWebView:html(html)
     end
 end
+local function applescriptIdentifierFor(text)
+    -- Replace non-alphanumeric characters with underscores
+    local identifier = text:gsub("%W", "_")
+    -- Trim leading/trailing underscores
+    identifier = identifier:gsub("^_+", ""):gsub("_+$", "")
+    -- Ensure the identifier starts with a letter or underscore
+    if not identifier:match("^[a-zA-Z_]") then
+        identifier = "_" .. identifier
+    end
+    return identifier
+end
 
 local function ensureWebview()
     -- do return end -- disable using html printer
@@ -146,6 +157,7 @@ function BuildAppleScriptTo(toElement)
             -- FYI `application process` is the process suite's class type
             -- TODO handle (warn) about duplicate app process titles... I might then be able to use some signature to identify the correct one but I don't know if I can ever refer to it properly... i.e. screenpal I always had to terminate the tray app b/c has same name and never seemed like I could reference the app by smth else... that said I didn't direclty use accessibiltiy APIs so it is possible there is a way that AppleScript/ScriptDebugger don't support
             warnOnEmptyTitle(title, role)
+            -- PRN warn on multiple app process matches? use runningApplications() to get a list (i.e. Screenpal and its menu/tray icon)
             -- FYI this is the root most object, aka "object string specifier" (see Definitive Guide book, page 206-207)
             return 'application process "' .. title .. '"'
         end
@@ -206,8 +218,25 @@ function BuildAppleScriptTo(toElement)
         specifierChain = elementSpecifierFor(elem) .. specifierChain .. '\n'
     end
 
-    -- TODO name basd on description/name/title attrs?
-    return "\nset foo to " .. specifierChain
+    local identifier = GetValueOrEmptyString(toElement, "AXTitle")
+    if identifier == "" then
+        identifier = GetValueOrEmptyString(toElement, "AXDescription")
+    end
+    if identifier == "" then
+        identifier = GetValueOrEmptyString(toElement, "AXRoleDescription")
+    end
+    if identifier == "" then
+        prints("cannot determine an identifier, using foo")
+        identifier = "foo"
+    end
+
+    -- TODO use description if not title?
+    -- TODO hungarian notation if title/desc are "too short" or?
+    -- TODO build up some test cases would be helpful as you encounter real work examples
+    local variableName = applescriptIdentifierFor(identifier)
+    return "\nset " .. variableName .. " to " .. specifierChain
+    -- PRN add suggestions section for actions to use and properties to get/set? as examples to copy/pasta
+    --    i.e. text area => get/set value, button =>click
 end
 
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "I", function()
