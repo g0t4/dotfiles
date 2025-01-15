@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
     let searchTerm = "";
-    let matches = [];
     let currentIndex = -1;
 
     const highlightMatches = () => {
@@ -10,21 +9,61 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         // Add highlights
-        matches = [];
         if (searchTerm) {
-            // TERRIBLE WAY TO HIGHLIGHT... searching for say "td" fuuus the table... argh
             // clear search box so it isn't messed up, and dont use reference across
+            // TODO filter out this node in walkNodes...
             searchBox = document.querySelector("#search-input");
             searchBox.value = "";
 
             const regex = new RegExp(`(${searchTerm})`, "gi");
-            document.body.innerHTML = document.body.innerHTML.replace(
-                regex,
-                (match, group) => {
-                    matches.push(match);
-                    return `<span class="highlight">${group}</span>`;
+
+            const highlightClass = "highlight";
+
+            const walkNodes = (node) => {
+                if (node.nodeType === Node.TEXT_NODE) {
+                    const matches = regex.exec(node.textContent); // Check if there's a match
+                    if (matches) {
+                        const parent = node.parentNode;
+
+                        // Split the text into before, match, and after parts
+                        const textBefore = node.textContent.slice(
+                            0,
+                            matches.index
+                        );
+                        const textMatch = node.textContent.slice(
+                            matches.index,
+                            regex.lastIndex
+                        );
+                        const textAfter = node.textContent.slice(
+                            regex.lastIndex
+                        );
+
+                        // Create nodes for each part
+                        const beforeNode = document.createTextNode(textBefore);
+                        const matchNode = document.createElement("span");
+                        matchNode.className = highlightClass;
+                        matchNode.textContent = textMatch;
+                        const afterNode = document.createTextNode(textAfter);
+
+                        // Insert the new nodes in place of the original text node
+                        parent.insertBefore(beforeNode, node);
+                        parent.insertBefore(matchNode, node);
+                        parent.insertBefore(afterNode, node);
+                        parent.removeChild(node);
+
+                        // Continue highlighting the rest of the text
+                        regex.lastIndex = 0; // Reset regex for subsequent matches
+                        walkNodes(afterNode);
+                    }
+                } else if (node.nodeType === Node.ELEMENT_NODE) {
+                    // Avoid processing script/style elements
+                    if (node.tagName !== "SCRIPT" && node.tagName !== "STYLE") {
+                        Array.from(node.childNodes).forEach(walkNodes);
+                    }
                 }
-            );
+            };
+
+            walkNodes(document.body);
 
             // restore search box
             searchBox = document.querySelector("#search-input");
@@ -47,15 +86,15 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     const navigateToMatch = (forward = true) => {
-        if (!matches.length) return;
+        const highlights = document.querySelectorAll(".highlight");
+        if (!highlights.length) return;
 
         // Calculate next index
         currentIndex = forward
-            ? (currentIndex + 1) % matches.length
-            : (currentIndex - 1 + matches.length) % matches.length;
+            ? (currentIndex + 1) % highlights.length
+            : (currentIndex - 1 + highlights.length) % highlights.length;
 
         // Scroll to match
-        const highlights = document.querySelectorAll(".highlight");
         if (highlights[currentIndex]) {
             highlights[currentIndex].scrollIntoView({
                 behavior: "smooth",
