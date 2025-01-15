@@ -428,44 +428,39 @@ function GetDumpElementLine(elem)
     local role = GetValueOrEmptyString(elem, "AXRole")
     local title = GetValueOrEmptyString(elem, "AXTitle")
     local subRole = GetValueOrEmptyString(elem, "AXSubrole")
-    --
-    local description = elem:attributeValue("AXDescription")
-    local roleDescription = elem:attributeValue("AXRoleDescription")
-    local useDescription = description or roleDescription
-    if description and roleDescription then
-        if description ~= roleDescription then
-            -- TODO find example to test
-            useDescription = roleDescription .. ' / ' .. description
-        end
-    end
-    -- TODO conditions to clear the description (dont show it)..
+    local identifier = GetValueOrEmptyString(elem, "AXIdentifier")
+    -- TODO AXHelp?
+    local description = GetValueOrEmptyString(elem, "AXDescription")
+    local roleDescription = GetValueOrEmptyString(elem, "AXRoleDescription")
+
+    -- TODO conditions to clear out (not show) AXRole or otherwise
     --    i.e. AXApplication role, desc=application...
     --      AXWindow role, AXStandardWindow subrole... desc=standard window
     --    basically, condense what I show in path view (make it easily decipherable... IOTW always show role and if anything hide rightmost items (i.e. desc) when it doesn't tell me anything new... that is what I dislike about other inspectors, they are hard to decipher what matters (the one thing that doesn't stand out cuz everything else is duplicated)
     --
     -- TODO AXValue
     -- TODO AXValueDescription
-    --
-    local identifier = elem:attributeValue("AXIdentifier") -- !!! UMM... this is news to me... can I search elements on this Identifier?!
-    -- don't show identifier: Accessibility Inspector,
-    -- Script Debugger only shows Identifier under Attributes list... so basically hidden... sheesh
-    --
+
     local current = '  ' .. role
     if subRole ~= "" then
         current = current .. ' (' .. subRole .. ')'
     end
-    current = current .. ' - ' .. title
-    local details = ""
-    if identifier then
-        details = details .. ' id=' .. identifier
+    if title ~= "" then
+        current = current .. ' - "' .. title .. '"'
     end
-    if useDescription then
-        -- TODO I think I can exclude description (mostly mirrors Role/SubRole)
-        details = details .. ' desc=' .. useDescription
+
+    local details = ""
+    if description ~= "" and description ~= roleDescription then
+        -- only show if AXRoleDescription doesn't already cover what AXDescription has
+        details = details .. ' desc=' .. description
+    end
+    if identifier ~= "" then
+        details = details .. ' id=' .. identifier
     end
     if details ~= "" then
         current = current .. ' [' .. details .. ']'
     end
+
     return current
 end
 
