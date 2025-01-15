@@ -306,16 +306,23 @@ function GetDumpAXAttributes(element, skips)
     local role = GetValueOrEmptyString(element, "AXRole")
     local title = GetValueOrEmptyString(element, "AXTitle")
     local result = '## ATTRIBUTES for - ' .. role .. ' - ' .. title .. '\n'
+    local sortedAttrs = {}
     for attrName, attrValue in pairs(element) do
+        -- TODO skip nil attrValue?
         if not skips[attrName] then
-            local displayName = attrName
-            local nonStandard = not StandardAttributesSet[attrName]
-            local displayValue = displayAttr(attrValue)
-            if nonStandard then
-                displayName = '** ' .. attrName
-            end
-            result = result .. "  " .. displayName .. ' = ' .. displayValue .. '\n'
+            table.insert(sortedAttrs, attrName)
         end
+    end
+    table.sort(sortedAttrs)
+    for _, attrName in ipairs(sortedAttrs) do
+        local attrValue = element[attrName]
+        local displayName = attrName
+        local nonStandard = not StandardAttributesSet[attrName]
+        local displayValue = displayAttr(attrValue)
+        if nonStandard then
+            displayName = '** ' .. attrName
+        end
+        result = result .. "  " .. displayName .. ' = ' .. displayValue .. '\n'
     end
     return result
 end
