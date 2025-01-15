@@ -24,6 +24,19 @@ local function prints(...)
     if printWebView then
         local html = table.concat(printHtmlBuffer, "<br/>")
         printWebView:html(html)
+
+        -- TODO fix scroll to bottom
+        -- -- FYI  hrm... this works in dev tools, why not here? wtf...
+        -- -- TODO? the docs for webview:new mention smth about a controller to inject the JS? is this failing b/c I am using newBrowser below and not targeting the right place?
+        -- local scrollToBottom = [[
+        --     window.scrollTo(0,document.body.scrollHeight);
+        -- ]]
+        -- printWebView:evaluateJavaScript(scrollToBottom, function(err, result)
+        --     if err then
+        --         hs.showError("js failed")
+        --     end
+        --     print("scroll result:", hs.inspect(result))
+        -- end)
     end
 end
 local function applescriptIdentifierFor(text)
@@ -68,7 +81,12 @@ local function ensureWebview()
     if printWebView == nil then
         -- how to make sure not a new tab in previous browser webview instance?
 
-        printWebView = hs.webview.newBrowser(rect)
+        -- Enable inspect element (and thus dev tools) in the webview
+        --    right click to inspect
+        --    FYI more preferencesTable options: https://www.hammerspoon.org/docs/hs.webview.html#new
+        --    USE THIS TO TEST JS FIRST!
+        local prefs = { ["developerExtrasEnabled"] = true }
+        printWebView = hs.webview.newBrowser(rect, prefs)
         -- webview:url("https://google.com")
         printWebView:windowTitle("Inspector")
         printWebView:show()
@@ -170,6 +188,7 @@ function BuildAppleScriptTo(toElement)
                 warning = warning .. "\n    " .. GetDumpElementLine(sibling)
             end
             prints(warning)
+            -- TODO left off here, need to find how I wanna generate applescript when siblings exist
 
             -- FYI powerpoint, ribbon => Transitions => Duration text box has roleSiblings (groups)
             --    AND, overlaps with After: text box, right next to it (to the right)
