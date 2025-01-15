@@ -245,9 +245,19 @@ function BuildAppleScriptTo(toElement)
         identifier = GetValueOrEmptyString(toElement, "AXRoleDescription")
     end
     if identifier == "" then
+        -- TODO does this make sense, ever?
+        -- FYI I don't recall seeing AXIdentifier on leaf level ui elements... usually up the chain in a split group
+        --   FYI I bet this would change across diff configs of the app so not likely wise beyond current session... that's fine
+        identifier = GetValueOrEmptyString(toElement, "AXIdentifier")
+    end
+    if identifier == "" then
         prints("cannot determine an identifier, using foo")
         identifier = "foo"
     end
+
+    -- IDEAS:
+    --   return intermediate references too (for each level, or notable level, i.e. sg1, sg2, sg3, sa4, etc)
+    --     consider variable name based on AXIdentifier (if other options fail)
 
     -- TODO use description if not title?
     -- TODO hungarian notation if title/desc are "too short" or?
