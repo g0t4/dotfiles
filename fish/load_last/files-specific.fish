@@ -349,27 +349,50 @@ if status --is-interactive
     # todo see ideas for testing in fish/run-tests.fish (careful w/ cd as it can't be subshelled)
     # PRN change behavior based on STDIN/OUT is/isn't a TTY?
 
+    # TODO... more dir/file command ideas:
+    #    https://github.com/wting/autojump
+    #    jo (jump and open in Finder) => jo Movies
+    #       think... z + open
+    #       open -R (z --echo Claude) ???
+    #       lolz I have `oz` already which kinda does this (not entirely... but make sure I need smth new before doing this, I couldn't recall oz when first thinking about this today :) )
+    #    jc  # child of a dir
+    #  fasd # https://github.com/clvv/fasd#introduction (see the alias ideas)
+    #  locate (build db of paths and use with fzf/fasd/etc?)
+
     function supercd
+        # TODO! package this up in a separate repo and support diff fallbacks? share like z/v/autojump (simple to install and use)
+        #   do the same with other commands that I like, maybe a single package/repo with the best ones (i.e. cd to file name, pwdcp/cppath, etc)
+
         # TODO make cd default to supercd?
         #
         # super cd uses a series of fallbacks to try to cd to the dir requested
         #    cd /foo/bar     # 1. tried first
         #    z /foo/bar      # 2. tried second
-        #    cdz /foo/bar  # 3. tried third # TODO implement this
+        #    cdz /foo/bar    # 3. tried third - any way to just take first match from fzf and cd to it? and only open interactive if NO matches with fzf?
         #      think of cd gaining the ability to match like z does (fuzzy match to paths that I have not yet cd'd to so they're not in z's db)
         #      and if cdnew fails then we should a failure message, which would be rare I believe
         #      alternatively, I could index some commmon dirs and add them to z's db (maybe with a modified z command that uses this db set second)
+        #    fzf --query /foo/bar  # 4. interactive selection
 
-        set -l path $argv[1]
-        cd $path 2>/dev/null # ensure func used?
+        cd $argv 2>/dev/null 1>/dev/null # ensure I use func so this can include file name
         if test $status -eq 0
             return
         end
-        z $path 2>/dev/null
+        z $argv 2>/dev/null 1>/dev/null
         if test $status -eq 0
             return
         end
-        echo "TODO impl cdz fallback"
+        # tmp idea... get all dirs and query with fzf...
+        # TODO if I like this, I should get the locate database working to speed it up?
+        # fallback to interactive cd! with fd+fzf
+        #   FYI fd does not use a db so it is gonna be slow when I target entire filesystem with . /
+        set selected_dir (fd --type d . / | fzf --preview 'ls {}' --query "$argv")
+        # TODO when I use locate, how about allow picking a file too (not just dirs) b/c I can use my cd below to handle that and maybe there is a file name I am targeting and I know nothing else about the path
+        if test $status -eq 0; and test -e $selected_dir
+            cd $selected_dir
+            return
+        end
+        echo "no dir found to cd to"
     end
 
     function cd
