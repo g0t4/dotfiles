@@ -21,13 +21,20 @@ function HammerspoonTimeoutScheduler:schedule(action, delay, ...)
     --   https://github.com/luvit/luv/blob/master/examples/timers.lua
 
     -- FYI https://www.hammerspoon.org/docs/hs.timer.html#doAfter
-    local timer = hs.timer.doAfter(delay / 1000, function()
+    self.timer = hs.timer.doAfter(delay / 1000, function()
         action(table.unpack(packed_args))
     end)
 
     return rx.Subscription.create(function()
-        timer:stop()
+        self.timer:stop()
     end)
+end
+
+function HammerspoonTimeoutScheduler:stop()
+    if self.timer then
+        self.timer:stop()
+        self.timer = nil
+    end
 end
 
 return HammerspoonTimeoutScheduler

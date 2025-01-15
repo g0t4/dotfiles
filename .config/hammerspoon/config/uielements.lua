@@ -95,12 +95,13 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "A", function()
     prints(BuildAppleScriptTo(elementAt))
 end)
 
-local mouseMoveWatcher = nil
+local debounced = nil
+local stop = nil
 local mouseMovesObservable = require("config.rx.mouse").mouseMovesObservable
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "T", function()
     -- TOGGLE TRACKING MODE?
-    if not mouseMoveWatcher then
-        mouseMoveWatcher, debounced = mouseMovesObservable()
+    if not debounced then
+        debounced, stop = mouseMovesObservable()
         -- PRN capture debounced in local var too? ... i.e. to subscribe later on too
         debounced:subscribe(function(position)
             if not position then
@@ -113,12 +114,12 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "T", function()
         end, function()
             print("[COMPLETE]")
         end)
-    end
-
-    if mouseMoveWatcher:isEnabled() then
-        mouseMoveWatcher:stop()
     else
-        mouseMoveWatcher:start()
+        debounced = nil
+        if stop then
+            stop()
+            stop = nil
+        end
     end
 end)
 

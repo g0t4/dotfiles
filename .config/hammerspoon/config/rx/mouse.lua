@@ -22,11 +22,18 @@ function M.mouseMovesObservable()
         return false -- Return false to allow the event to propagate
     end)
 
-    local debounced = moves:debounce(2000, scheduler)
+    local debounced = moves:debounce(1200, scheduler)
 
-    -- todo make some sort of start/stop function and mask the watcher
-    -- TODO stop should also cancel the last debounced event (if pending)
-    return mouseMoveWatcher, debounced
+    function stop()
+        mouseMoveWatcher:stop()
+        scheduler:stop()
+        -- or moves:onCompleted()?? is it debounced to complete?
+    end
+
+    -- start emitting mouse moves...
+    mouseMoveWatcher:start()
+
+    return debounced, stop
 
     -- example of pushing values (b/c its a subject, too):
     -- moves:onNext({ x = 0, y = 0 })
