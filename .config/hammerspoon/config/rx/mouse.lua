@@ -25,13 +25,13 @@ function M.mouseMovesObservable(delay_ms)
 
     local debounced = moves:debounce(delay_ms, scheduler)
 
-    function stop()
+    local function stop()
+        print("stopping mouseMovesObservable")
         mouseMoveWatcher:stop()
+        -- this way, any pending timers are cancelled:
         scheduler:stop()
-        -- or moves:onCompleted()?? is it debounced to complete?
     end
 
-    -- start emitting mouse moves...
     mouseMoveWatcher:start()
 
     return debounced, stop
