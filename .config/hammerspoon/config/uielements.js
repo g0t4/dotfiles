@@ -88,6 +88,9 @@ document.addEventListener("DOMContentLoaded", () => {
           background-color: yellow;
           color: black;
         }
+        .currentHighlight {
+            background-color: red;
+        }
       `;
             document.head.appendChild(styleTag);
         }
@@ -97,6 +100,12 @@ document.addEventListener("DOMContentLoaded", () => {
         const highlights = document.querySelectorAll(".highlight");
         if (!highlights.length) return;
 
+        // Remove current highlight (play it safe, remove on all instances)
+        const currentHighlight = document.querySelector(".currentHighlight");
+        if (currentHighlight) {
+            currentHighlight.classList.remove("currentHighlight");
+        }
+
         // TODO any way on first search (or search term changed) that we can find first after the current scroll position?
 
         // Calculate next index
@@ -104,9 +113,10 @@ document.addEventListener("DOMContentLoaded", () => {
             ? (currentIndex + 1) % highlights.length
             : (currentIndex - 1 + highlights.length) % highlights.length;
 
-        // Scroll to match
-        if (highlights[currentIndex]) {
-            highlights[currentIndex].scrollIntoView({
+        const nextHighlight = highlights[currentIndex];
+        if (nextHighlight) {
+            nextHighlight.classList.add("currentHighlight");
+            nextHighlight.scrollIntoView({
                 behavior: "smooth",
                 block: "center",
             });
