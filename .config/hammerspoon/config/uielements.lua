@@ -193,13 +193,18 @@ function BuildAppleScriptTo(toElement)
         -- app is always the top level element that doesn't have a parent... so if I handle it first, then the rest of these always have parents (IIAC)
         local parent = elem:attributeValue("AXParent") -- TODO or use prev element in list
         local roleSiblings = parent:childrenWithRole(role)
+        local elemIndex = 1
         if #roleSiblings > 1 then
             local warning = "[FUUU] multiple siblings with same role: " .. role
-            for _, sibling in ipairs(roleSiblings) do
-                warning = warning .. "\n    " .. GetDumpElementLine(sibling)
+            for i, sibling in ipairs(roleSiblings) do
+                warning = warning .. "\n FUUUsibling(" .. i .. "):\n" .. GetDumpAXAttributes(sibling)
+                if sibling == elem then
+                    elemIndex = i
+                end
             end
+            -- TODO can I go off of index of sibling in the overall list of siblings?
             prints(warning)
-            -- TODO left off here, need to find how I wanna generate applescript when siblings exist
+
 
             -- FYI powerpoint, ribbon => Transitions => Duration text box has roleSiblings (groups)
             --    AND, overlaps with After: text box, right next to it (to the right)
@@ -213,30 +218,32 @@ function BuildAppleScriptTo(toElement)
             -- FYI in general, powerpoint has a ton of overlap... as does FCPX
         end
 
+        -- PRN use intermediate references, each with a whose/where clause (index == 1 or title == "foo") so I can match on either/both?
         -- FTR, I am mapping role => class, when role description != class
         if role == "AXWindow" then
             warnOnEmptyTitle(title, role)
             -- TODO handle duplicate titles (windows)
+            -- PRN use window index instead?
             return 'window "' .. title .. '" of '
         elseif role == "AXSplitGroup" then
-            return "first splitter group of "
+            return "splitter group " .. elemIndex .. " of "
         elseif role == "AXTextArea" then
-            return "first text area of "
+            return "text area " .. elemIndex .. " of "
         elseif role == "AXIncrementor" then
-            return "first incrementor of "
+            return "incrementor " .. elemIndex .. " of "
         elseif role == "AXPopUpButton" then
-            return "first pop up button of "
+            return "pop up button " .. elemIndex .. " of "
         elseif role == "AXList" then
             -- PRN Subrole == "AXSectionList"? does that matter (i.e. diff list types?)
-            return "first section of "
+            return "section " .. elemIndex .. " of "
         elseif role == "AXCell" then
             -- TODO does this work?
-            return "first cell of "
+            return "cell " .. elemIndex .. " of "
         elseif role == "AXStaticText" then
-            return "first static text of "
+            return "static text " .. elemIndex .. " of "
         end
         -- FYI pattern, class == roleDesc - AX => split on captial letters (doesn't work for AXApplication, though actually it probably does work as ref to application class in Standard Suite?
-        return "first " .. roleDescription .. " of "
+        return roleDescription .. " " .. elemIndex .. " of "
     end
     local specifierChain = ""
     -- REMEMBER toElement is last item in :path() list/table so dont need special handling for it outside of list
