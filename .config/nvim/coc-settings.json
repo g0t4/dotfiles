@@ -55,6 +55,8 @@
     },
 
     // *** lua:
+    //   coc-lua options: https://github.com/josa42/coc-lua
+    //     uses https://github.com/LuaLS/lua-language-server
     // other people use sumneko-lua... I got coc-lua to work just fine... btw make sure :CocConfig opens this file, else maybe your symlink is messed up from dotfiles repo
     // best way to test this config, open split view with config on top and on bottom a lua file with an issue, modify config and save it and it will refresh the lua file coc diagnostics immediately, but not if edited in another instance of VIM or not using VIM btw
     // the following config (workspace.library, runtime.version/path) were added to make vim globals work in coc-lua (not marked as undefined and have completions)
@@ -62,6 +64,8 @@
         "/opt/homebrew/Cellar/neovim/0.10.3/share/nvim/runtime/lua",
         "/opt/homebrew/Cellar/neovim/0.10.3/share/nvim/runtime/lua/vim/lsp",
         "/Applications/Hammerspoon.app/Contents/Resources/extensions",
+        "~/.luarocks/share/lua/5.4", // luarocks --local
+        "/opt/homebrew/share/lua/5.4/rx.lua", // luarocks --global (system wide)
         // "/Applications/Hammerspoon.app/Contents/Resources/extensions", // doesn't work, don't try again unless you find good reason to
     ],
     // stop warning about luv:
