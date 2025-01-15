@@ -128,7 +128,7 @@ function BuildAppleScriptTo(toElement)
         end
         -- TODO duplicated title (use AXParent to get other child windows)
     end
-    local function classSelector(elem)
+    local function elementSpecifierFor(elem)
         -- FYI powerpoint, ribbon has incrementors that are grouped with other similar controls and good for testing collision in generating script (i.e. group1 vs group2 vs group3)
         --   	set inc to first incrementor of group 3 of first scroll area of first tab group of window "Presentation1" of application process "PowerPoint"
         --   	increment foo
@@ -170,6 +170,7 @@ function BuildAppleScriptTo(toElement)
             -- FYI in general, powerpoint has a ton of overlap... as does FCPX
         end
 
+        -- FTR, I am mapping role => class, when role description != class
         if role == "AXWindow" then
             warnOnEmptyTitle(title, role)
             -- TODO handle duplicate titles (windows)
@@ -191,19 +192,21 @@ function BuildAppleScriptTo(toElement)
         elseif role == "AXStaticText" then
             return "first static text of "
         end
-        -- FYI pattern, mostly split AXRole on captial letters (doesn't work for AXApplication, though actually it probably does work as ref to application class in Standard Suite?
+        -- FYI pattern, class == roleDesc - AX => split on captial letters (doesn't work for AXApplication, though actually it probably does work as ref to application class in Standard Suite?
         return "first " .. roleDescription .. " of "
     end
-    local script = ""
+    local specifierChain = ""
     -- REMEMBER toElement is last item in :path() list/table so dont need special handling for it outside of list
     -- TODO stop at len -1 so we can finish it and can check parent for dup types and need to constraint it or mark where dups are issue
     for _, elem in pairs(toElement:path()) do
         -- TODO use parentElement to handle finding conflicting child items in path
         DumpAXAttributes(elem, skipAttrsWhenInspectForPathBuilding) -- hack just to also dump attrs to review, don't keep this after testing is done
-        script = classSelector(elem) .. script .. '\n'
+        -- see AppleScript The Definitive Guide, page 197 about Element Specifier forms (name, index, ID, some, every, range, relative, bool test [whose?],...?)
+        specifierChain = elementSpecifierFor(elem) .. specifierChain .. '\n'
     end
 
-    return "\nset foo to " .. script
+    -- TODO name basd on description/name/title attrs?
+    return "\nset foo to " .. specifierChain
 end
 
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "I", function()
