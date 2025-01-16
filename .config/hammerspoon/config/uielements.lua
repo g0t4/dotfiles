@@ -304,7 +304,7 @@ function BuildAppleScriptTo(toElement, includeAttrDumps)
             table.insert(attrDumps, attrDump)
         end
 
-        specifierChain = elementSpecifierFor(elem) .. specifierChain .. '\n'
+        specifierChain = elementSpecifierFor(elem) .. specifierChain
     end
 
     local identifier = GetValueOrEmptyString(toElement, "AXTitle")
