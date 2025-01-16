@@ -491,14 +491,15 @@ function GetDumpElementLine(elem, indent)
         details = details .. ' id=' .. identifier
     end
 
-    return "<tr><td>" .. col1 .. "</td><td>" .. role .. "</td><td>" .. details .. "</td></tr>"
+    return "<tr><td>" .. col1 .. "</td><td>" .. role .. "</td><td>" .. details .. "</td><td>" .. elementSpecifierFor(elem) .. "</td></tr>"
 end
 
 local pathTableStart = [[
 <style>
 table {
     border-collapse: collapse;
-    /*width: 100%;*/
+    width: 100%;
+    min-width: 500px;
 }
 
 tr:nth-child(even){background-color: #f2f2f2}
@@ -507,9 +508,26 @@ th {
     background-color: #4CAF50;
     color: white;
 }
+
+td {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+th:nth-child(4),
+td:nth-child(4) {
+    padding-left: 10px;
+    text-align: left;
+}
 </style>
 
-<table><tr><th align=left>PATH</th><th>role</th><th>details</th></tr>
+<table>
+    <tr>
+        <th align=left>PATH</th>
+        <th>role</th>
+        <th>details</th>
+        <th align=left>specifier</th>
+    </tr>
 ]]
 function GetDumpPath(element, expanded)
     expanded = expanded or false
