@@ -23,8 +23,11 @@ local function prints(...)
         else
             if type(arg) == "string" then
                 arg = arg:gsub("\t", "&nbsp;&nbsp;")
+                table.insert(printHtmlBuffer, arg)
+            else
+                print("WARN: unexpected prints arg type: " .. type(arg))
+                table.insert(printHtmlBuffer, tostring(arg))
             end
-            table.insert(printHtmlBuffer, arg)
         end
     end
     if printWebView then
@@ -32,21 +35,24 @@ local function prints(...)
         local html = table.concat(printHtmlBuffer, "<br/>")
         printWebView:html(html)
 
-        require("hs.timer").doAfter(0.1, function()
-            -- FYI smth in setting :html(html) above, means I cannot immediatelly scroll to bottom, so I add a slight delay here
-            -- FYI last test I did, cannot use setTimeout() in JS to accomplish this so it has smth to do with when I tee up running the JS, not when the JS inside runs
-            -- FYI 0.01 is too fast, 0.1 seems to work and appears instant when html content is changed
-            local scrollToBottom = [[
-                window.scrollTo(0,document.body.scrollHeight);
-            ]]
-            printWebView:evaluateJavaScript(scrollToBottom, function(result, nsError)
-                -- AFAICT error is NSError https://developer.apple.com/documentation/foundation/nserror
-                --   error s/b nil if no error... but I also am getting { code = 0 } on successes, so ignore based on code too:
-                if nsError and nsError.code ~= 0 then
-                    hs.showError("js failed: " .. hs.inspect(nsError))
-                end
+        if false then
+            -- disable for now... since I put PATH on top
+            require("hs.timer").doAfter(0.1, function()
+                -- FYI smth in setting :html(html) above, means I cannot immediatelly scroll to bottom, so I add a slight delay here
+                -- FYI last test I did, cannot use setTimeout() in JS to accomplish this so it has smth to do with when I tee up running the JS, not when the JS inside runs
+                -- FYI 0.01 is too fast, 0.1 seems to work and appears instant when html content is changed
+                local scrollToBottom = [[
+                    window.scrollTo(0,document.body.scrollHeight);
+                ]]
+                printWebView:evaluateJavaScript(scrollToBottom, function(result, nsError)
+                    -- AFAICT error is NSError https://developer.apple.com/documentation/foundation/nserror
+                    --   error s/b nil if no error... but I also am getting { code = 0 } on successes, so ignore based on code too:
+                    if nsError and nsError.code ~= 0 then
+                        hs.showError("js failed: " .. hs.inspect(nsError))
+                    end
+                end)
             end)
-        end)
+        end
     end
 end
 
@@ -148,12 +154,18 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "A", function()
     -- FYI "A" is easy to invoke with left hand alone (after position mouse with right--trackpad)
     -- reserve "I" for some other inspect mode? maybe to toggle mouse inspect mode
 
+    if printWebView then
+        -- do I want to clear or not?
+        printHtmlBuffer = {}
+    end
     ensureWebview()
     local coords = hs.mouse.absolutePosition()
     local elementAt = hs.axuielement.systemElementAtPosition(coords.x, coords.y)
     DumpAXPath(elementAt, true)
     -- DumpAXAttributes(elementAt, skipAttrsWhenInspectForPathBuilding)
-    prints(BuildAppleScriptTo(elementAt))
+    local script, attrDumps = BuildAppleScriptTo(elementAt, true)
+    prints(script)
+    prints(table.unpack(attrDumps))
     -- TODO build lua hammerspoon code instead of just AppleScript! that I can drop into my hammerspoon lua config instead of AppleScript in say KM
 end)
 
@@ -183,6 +195,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "T", function()
     end
 end)
 
+-- see AppleScript The Definitive Guide, page 197 about Element Specifier forms (name, index, ID, some, every, range, relative, bool test [whose?],...?)
 local function elementSpecifierFor(elem)
     local function warnOnEmptyTitle(title, role)
         if title == "" then
@@ -207,6 +220,7 @@ local function elementSpecifierFor(elem)
         -- TODO signal failure to caller
         return " should not happen - failed to get sibling index for " .. role .. " " .. title
     end
+
 
     -- PRN use intermediate references, each with a whose/where clause (index == 1 or title == "foo") so I can match on either/both?
     -- FTR, I am mapping role => class, when role description != class
@@ -237,14 +251,19 @@ local function elementSpecifierFor(elem)
     return roleDescription .. " " .. elemIndex .. " of "
 end
 
-function BuildAppleScriptTo(toElement)
+function BuildAppleScriptTo(toElement, includeAttrDumps)
+    includeAttrDumps = includeAttrDumps or false
+
     local specifierChain = ""
+    local attrDumps = {}
     -- REMEMBER toElement is last item in :path() list/table so dont need special handling for it outside of list
-    -- TODO stop at len -1 so we can finish it and can check parent for dup types and need to constraint it or mark where dups are issue
     for _, elem in pairs(toElement:path()) do
-        -- TODO use parentElement to handle finding conflicting child items in path
-        DumpAXAttributes(elem, skipAttrsWhenInspectForPathBuilding) -- hack just to also dump attrs to review, don't keep this after testing is done
-        -- see AppleScript The Definitive Guide, page 197 about Element Specifier forms (name, index, ID, some, every, range, relative, bool test [whose?],...?)
+        if includeAttrDumps then
+            -- for testing, don't even run this if not needed (has to have a good perf hit)
+            local attrDump = GetDumpAXAttributes(elem, skipAttrsWhenInspectForPathBuilding)
+            table.insert(attrDumps, attrDump)
+        end
+
         specifierChain = elementSpecifierFor(elem) .. specifierChain .. '\n'
     end
 
@@ -274,7 +293,7 @@ function BuildAppleScriptTo(toElement)
     -- TODO hungarian notation if title/desc are "too short" or?
     -- TODO build up some test cases would be helpful as you encounter real work examples
     local variableName = applescriptIdentifierFor(identifier)
-    return "<br>set " .. variableName .. " to " .. specifierChain
+    return "<br>set " .. variableName .. " to " .. specifierChain, attrDumps
     -- PRN add suggestions section for actions to use and properties to get/set? as examples to copy/pasta
     --    i.e. text area => get/set value, button =>click
 end
