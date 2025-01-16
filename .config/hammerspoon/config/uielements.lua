@@ -191,33 +191,21 @@ function BuildAppleScriptTo(toElement)
         -- TODO duplicated title (use AXParent to get other child windows)
     end
     local function elementSpecifierFor(elem)
-        -- FYI powerpoint, ribbon has incrementors that are grouped with other similar controls and good for testing collision in generating script (i.e. group1 vs group2 vs group3)
-        --   	set inc to first incrementor of group 3 of first scroll area of first tab group of window "Presentation1" of application process "PowerPoint"
-        --   	increment foo
-
-        -- TODO also IIGC AXChildrenInNavigationOrder  can help me pick group 1/2/3 etc...?! I suspect!?
-        -- or is childrenWithRole(role) ordered too?
-        --
-
-
-        -- TODO can I get `class` property on axuielement... like class shows in Script Debugger.. that has the correct (singular name) for the following references
         local role = GetValueOrEmptyString(elem, "AXRole")
         local roleDescription = GetValueOrEmptyString(elem, "AXRoleDescription")
         local title = GetValueOrEmptyString(elem, "AXTitle")
         if role == "AXApplication" then
-            -- FYI `application process` is the process suite's class type
             -- TODO handle (warn) about duplicate app process titles... I might then be able to use some signature to identify the correct one but I don't know if I can ever refer to it properly... i.e. screenpal I always had to terminate the tray app b/c has same name and never seemed like I could reference the app by smth else... that said I didn't direclty use accessibiltiy APIs so it is possible there is a way that AppleScript/ScriptDebugger don't support
             warnOnEmptyTitle(title, role)
-            -- PRN warn on multiple app process matches? use runningApplications() to get a list (i.e. Screenpal and its menu/tray icon)
             -- FYI this is the root most object, aka "object string specifier" (see Definitive Guide book, page 206-207)
+            -- app is only top level element (w/o parent) so I don't let it go thru parent logic (don't need to)
             return 'application process "' .. title .. '"'
         end
 
-        -- app is always the top level element that doesn't have a parent... so if I handle it first, then the rest of these always have parents (IIAC)
         local elemIndex = GetElementSiblingIndex(elem)
         if elemIndex == nil then
-            print("ERROR: could not get sibling index for", elem)
-            return " failed to get sibling index for " .. role .. " " .. title
+            -- TODO signal failure to caller
+            return " should not happen - failed to get sibling index for " .. role .. " " .. title
         end
 
         -- PRN use intermediate references, each with a whose/where clause (index == 1 or title == "foo") so I can match on either/both?
@@ -241,7 +229,6 @@ function BuildAppleScriptTo(toElement)
             -- PRN Subrole == "AXSectionList"? does that matter (i.e. diff list types?)
             return "section " .. elemIndex .. " of "
         elseif role == "AXCell" then
-            -- TODO does this work?
             return "cell " .. elemIndex .. " of "
         elseif role == "AXStaticText" then
             return "static text " .. elemIndex .. " of "
