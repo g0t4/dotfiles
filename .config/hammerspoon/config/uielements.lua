@@ -513,7 +513,6 @@ th {
 ]]
 function GetDumpPath(element, expanded)
     expanded = expanded or false
-    -- OMG this is already way better than UI Element Inspector, and Accessibility Inspector
     local path = element:path()
     if #path > 0 then
         local result = pathTableStart
