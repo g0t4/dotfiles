@@ -221,6 +221,12 @@ local function elementSpecifierFor(elem)
         return " should not happen - failed to get sibling index for " .. role .. " " .. title
     end
 
+    local function preferTitleOverIndexSpecifier(asClass)
+        if title ~= "" then
+            return asClass .. "'" .. title .. "' of "
+        end
+        return asClass .. " " .. elemIndex .. " of "
+    end
 
     -- PRN use intermediate references, each with a whose/where clause (index == 1 or title == "foo") so I can match on either/both?
     -- FTR, I am mapping role => class, when role description != class
@@ -260,13 +266,7 @@ local function elementSpecifierFor(elem)
         warnOnEmptyTitle(title, role)
         return "menu item '" .. title .. "' of "
     elseif role == "AXMenuButton" then
-        warnOnEmptyTitle(title, role) -- still warn so I find test cases
-        -- TODO fallback to index if no title?
-        -- TODO extract method to do title/index fallback
-        if title == "" then
-            return "menu button " .. elemIndex .. " of "
-        end
-        return "menu button '" .. title .. "' of "
+        return preferTitleOverIndexSpecifier("menu button")
     end
     -- FYI pattern, class == roleDesc - AX => split on captial letters (doesn't work for AXApplication, though actually it probably does work as ref to application class in Standard Suite?
     return roleDescription .. " " .. elemIndex .. " of "
