@@ -164,7 +164,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "A", function()
     DumpAXPath(elementAt, true)
     -- DumpAXAttributes(elementAt, skipAttrsWhenInspectForPathBuilding)
     local script, attrDumps = BuildAppleScriptTo(elementAt, true)
-    prints(script)
+    prints("<code>" .. script .. "</code><br>")
     prints(table.unpack(attrDumps))
     -- TODO build lua hammerspoon code instead of just AppleScript! that I can drop into my hammerspoon lua config instead of AppleScript in say KM
 end)
@@ -246,6 +246,8 @@ local function elementSpecifierFor(elem)
         return "cell " .. elemIndex .. " of "
     elseif role == "AXStaticText" then
         return "static text " .. elemIndex .. " of "
+    elseif role == "AXRadioButton" then
+        return "radio button " .. elemIndex .. " of "
     end
     -- FYI pattern, class == roleDesc - AX => split on captial letters (doesn't work for AXApplication, though actually it probably does work as ref to application class in Standard Suite?
     return roleDescription .. " " .. elemIndex .. " of "
@@ -518,6 +520,10 @@ th:nth-child(4),
 td:nth-child(4) {
     padding-left: 10px;
     text-align: left;
+}
+
+code {
+    font-size: large;
 }
 </style>
 
