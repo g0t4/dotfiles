@@ -223,7 +223,7 @@ local function elementSpecifierFor(elem)
 
     local function preferTitleOverIndexSpecifier(asClass)
         if title ~= "" then
-            return asClass .. " '" .. title .. "' of "
+            return asClass .. ' "' .. title .. '" of '
         end
         return asClass .. " " .. elemIndex .. " of "
     end
@@ -261,6 +261,8 @@ local function elementSpecifierFor(elem)
         --    	set View to menu button 1 of group 1 of group 4 of splitter group 1 of group 2 of splitter group 1 of group 1 of splitter group 1 of window "Final Cut Pro" of application process "Final Cut Pro"
         --      suggest: 	click View
         --      suggest: before that, activate FCPX and tell block Sys Events around it all
+        --      ALSO: in the case of a menu item, to click it in this way, we should recommend opening the menu first (so find its menu parend generate a click on it + delay 0.1... yes!)
+        --      ALSO: is it sometimes possible to click the menu items even if menu isn't visible and if that is the case (confirmed in code) can we prefer that first?
         -- TODO use preferTitle in other places (as it makes sense)
         return preferTitleOverIndexSpecifier("menu item")
     elseif role == "AXMenuButton" then
