@@ -221,6 +221,12 @@ local function elementSpecifierFor(elem)
         return " should not happen - failed to get sibling index for " .. role .. " " .. title
     end
 
+    -- TODO fallback to whose on AXDescription? if avail? would need intermediate references... can I inline those?
+    -- 	-- todo try inline nested refs:
+    --      set sg2 to first splitter group of (first splitter group of window 1 of application process "Script Debugger" whose it is it)
+    --      of course, `it is it` s/b a useful boolean specifier
+
+
     local function preferTitleOverIndexSpecifier(asClass)
         if title ~= "" then
             return asClass .. ' "' .. title .. '" of '
