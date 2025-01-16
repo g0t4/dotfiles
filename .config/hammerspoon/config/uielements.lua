@@ -2,6 +2,7 @@ local printWebView = nil
 local printWebWindow = nil
 local printHtmlBuffer = {}
 local printWebViewUserContentController = nil
+local htmlPage
 
 local skipAttrsWhenInspectForPathBuilding = {
     -- PRN truncate long values instead? could pass max length here
@@ -10,6 +11,20 @@ local skipAttrsWhenInspectForPathBuilding = {
     AXWindow = true,
     AXParent = true,
 }
+
+local function readEntireFile(configRelativePath)
+    local fullPath = hs.configdir .. "/" .. configRelativePath
+    local file = io.open(fullPath, "r")
+
+    if not file then
+        error("Unable to read file: " .. fullPath)
+        return nil
+    end
+
+    local contents = file:read("*a")
+    file:close()
+    return contents
+end
 
 local function prints(...)
     -- PRN www.jstree.com - if I want a tree view that has collapsed sections that hide details initially ... only use this if use case arises from daily use... my hope is generated AppleScript works most of the time
@@ -31,8 +46,15 @@ local function prints(...)
         end
     end
     if printWebView then
+        if not htmlPage then
+            -- basically the <head> section with js/css, don't worry about proper body ... just print after this
+            htmlPage = readEntireFile("config/uielements.html")
+            if not htmlPage then
+                htmlPage = "<h1>FAILED TO LOAD uielements.html</h1>"
+            end
+        end
         -- PRN debounce updating html when prining in rapid succession (also will apply to scroll to bottom)
-        local html = table.concat(printHtmlBuffer, "<br/>")
+        local html = htmlPage .. table.concat(printHtmlBuffer, "<br/>")
         printWebView:html(html)
 
         if false then
@@ -105,17 +127,8 @@ local function ensureWebview()
         local prefs = { ["developerExtrasEnabled"] = true }
 
         printWebViewUserContentController = require("hs.webview.usercontent").new("testmessageport")
-        local jsFilePath = hs.configdir .. "/config/uielements.js" -- Assuming it's saved in the same directory as your Hammerspoon config
-        local file = io.open(jsFilePath, "r")
-        local jsCode
 
-        if file then
-            jsCode = file:read("*a")
-            file:close()
-        else
-            error("Unable to load JavaScript file: " .. jsFilePath)
-        end
-
+        local jsCode = readEntireFile("config/uielements.js")
         printWebViewUserContentController:injectScript({ source = jsCode })
 
 
@@ -163,7 +176,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "A", function()
     local elementAt = hs.axuielement.systemElementAtPosition(coords.x, coords.y)
     -- DumpAXAttributes(elementAt, skipAttrsWhenInspectForPathBuilding)
     local script, attrDumps = BuildAppleScriptTo(elementAt, true)
-    prints("<code>" .. script .. "</code><br>")
+    prints("<pre><code class=\"language-applescript\">" .. script .. "</code></pre>")
     DumpAXPath(elementAt, true)
     prints(table.unpack(attrDumps))
     -- TODO build lua hammerspoon code instead of just AppleScript! that I can drop into my hammerspoon lua config instead of AppleScript in say KM
@@ -522,37 +535,7 @@ function GetDumpElementLine(elem, indent)
 end
 
 local pathTableStart = [[
-<style>
-table {
-    border-collapse: collapse;
-    width: 100%;
-    min-width: 500px;
-}
-
-tr:nth-child(even){background-color: #f2f2f2}
-
-th {
-    background-color: #4CAF50;
-    color: white;
-}
-
-td {
-    padding-left: 5px;
-    padding-right: 5px;
-}
-
-th:nth-child(4),
-td:nth-child(4) {
-    padding-left: 10px;
-    text-align: left;
-}
-
-code {
-    font-size: large;
-}
-</style>
-
-<table>
+<table class="path">
     <tr>
         <th align=left>PATH</th>
         <th>role</th>
