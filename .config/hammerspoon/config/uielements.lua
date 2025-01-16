@@ -248,6 +248,25 @@ local function elementSpecifierFor(elem)
         return "static text " .. elemIndex .. " of "
     elseif role == "AXRadioButton" then
         return "radio button " .. elemIndex .. " of "
+    elseif role == "AXMenuItem" then
+        -- FCPX show captions menu item (in expanded menu)
+        -- set Show_Captions to menu item 37 of menu 1 of menu button 1 of group 1 of group 4 of splitter group 1 of group 2 of splitter group 1 of group 1 of splitter group 1 of window "Final Cut Pro" of application process "Final Cut Pro"
+        --   TODO other menu titles... menu button, etc
+        -- FCPX menu to open first:
+        --    	set View to menu button 1 of group 1 of group 4 of splitter group 1 of group 2 of splitter group 1 of group 1 of splitter group 1 of window "Final Cut Pro" of application process "Final Cut Pro"
+        --      suggest: 	click View
+        --      suggest: before that, activate FCPX and tell block Sys Events around it all
+        -- PREFER to use menu item title instead of index
+        warnOnEmptyTitle(title, role)
+        return "menu item '" .. title .. "' of "
+    elseif role == "AXMenuButton" then
+        warnOnEmptyTitle(title, role) -- still warn so I find test cases
+        -- TODO fallback to index if no title?
+        -- TODO extract method to do title/index fallback
+        if title == "" then
+            return "menu button " .. elemIndex .. " of "
+        end
+        return "menu button '" .. title .. "' of "
     end
     -- FYI pattern, class == roleDesc - AX => split on captial letters (doesn't work for AXApplication, though actually it probably does work as ref to application class in Standard Suite?
     return roleDescription .. " " .. elemIndex .. " of "
