@@ -223,7 +223,7 @@ local function elementSpecifierFor(elem)
 
     local function preferTitleOverIndexSpecifier(asClass)
         if title ~= "" then
-            return asClass .. "'" .. title .. "' of "
+            return asClass .. " '" .. title .. "' of "
         end
         return asClass .. " " .. elemIndex .. " of "
     end
@@ -257,14 +257,12 @@ local function elementSpecifierFor(elem)
     elseif role == "AXMenuItem" then
         -- FCPX show captions menu item (in expanded menu)
         -- set Show_Captions to menu item 37 of menu 1 of menu button 1 of group 1 of group 4 of splitter group 1 of group 2 of splitter group 1 of group 1 of splitter group 1 of window "Final Cut Pro" of application process "Final Cut Pro"
-        --   TODO other menu titles... menu button, etc
         -- FCPX menu to open first:
         --    	set View to menu button 1 of group 1 of group 4 of splitter group 1 of group 2 of splitter group 1 of group 1 of splitter group 1 of window "Final Cut Pro" of application process "Final Cut Pro"
         --      suggest: 	click View
         --      suggest: before that, activate FCPX and tell block Sys Events around it all
-        -- PREFER to use menu item title instead of index
-        warnOnEmptyTitle(title, role)
-        return "menu item '" .. title .. "' of "
+        -- TODO use preferTitle in other places (as it makes sense)
+        return preferTitleOverIndexSpecifier("menu item")
     elseif role == "AXMenuButton" then
         return preferTitleOverIndexSpecifier("menu button")
     end
