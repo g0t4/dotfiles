@@ -530,18 +530,6 @@ function GetDumpPath(element, expanded)
                     result = result .. GetDumpElementLine(child, "\t\t") .. "\n"
                 end
             end
-
-            -- FYI can add one '-' to front of block comment start => ---[[ and then the block is back in play, and last
-            --[[
-            -- consider showing more attrs on 1 or a few lines below each path elem... that is another way to not have a bunch of fields in one line like other inspectors
-            if expanded then
-                -- iterate over its attrs
-                -- TODO allow/deny list specific attrs to show/not show
-                for k, v in pairs(elem) do
-                    result = result .. "\t\t" .. k .. "\n"
-                end
-            end
-            --]]
         end
         result = result .. "</table>\n"
         return result
