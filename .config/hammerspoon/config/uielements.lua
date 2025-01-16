@@ -183,59 +183,61 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "T", function()
     end
 end)
 
-function BuildAppleScriptTo(toElement)
+local function elementSpecifierFor(elem)
     local function warnOnEmptyTitle(title, role)
         if title == "" then
             prints("[WARN] title is empty for " .. role .. ", script might not work")
         end
         -- TODO duplicated title (use AXParent to get other child windows)
     end
-    local function elementSpecifierFor(elem)
-        local role = GetValueOrEmptyString(elem, "AXRole")
-        local roleDescription = GetValueOrEmptyString(elem, "AXRoleDescription")
-        local title = GetValueOrEmptyString(elem, "AXTitle")
-        if role == "AXApplication" then
-            -- TODO handle (warn) about duplicate app process titles... I might then be able to use some signature to identify the correct one but I don't know if I can ever refer to it properly... i.e. screenpal I always had to terminate the tray app b/c has same name and never seemed like I could reference the app by smth else... that said I didn't direclty use accessibiltiy APIs so it is possible there is a way that AppleScript/ScriptDebugger don't support
-            warnOnEmptyTitle(title, role)
-            -- FYI this is the root most object, aka "object string specifier" (see Definitive Guide book, page 206-207)
-            -- app is only top level element (w/o parent) so I don't let it go thru parent logic (don't need to)
-            return 'application process "' .. title .. '"'
-        end
 
-        local elemIndex = GetElementSiblingIndex(elem)
-        if elemIndex == nil then
-            -- TODO signal failure to caller
-            return " should not happen - failed to get sibling index for " .. role .. " " .. title
-        end
-
-        -- PRN use intermediate references, each with a whose/where clause (index == 1 or title == "foo") so I can match on either/both?
-        -- FTR, I am mapping role => class, when role description != class
-        if role == "AXWindow" then
-            warnOnEmptyTitle(title, role)
-            -- TODO handle duplicate titles (windows)
-            -- PRN use window index instead?
-            -- FYI title is an issue in some scenarios (i.e. if title is based on current document, like in Script Debugger)
-            -- PRN use title or index match? using intermediate reference vars
-            return 'window "' .. title .. '" of '
-        elseif role == "AXSplitGroup" then
-            return "splitter group " .. elemIndex .. " of "
-        elseif role == "AXTextArea" then
-            return "text area " .. elemIndex .. " of "
-        elseif role == "AXIncrementor" then
-            return "incrementor " .. elemIndex .. " of "
-        elseif role == "AXPopUpButton" then
-            return "pop up button " .. elemIndex .. " of "
-        elseif role == "AXList" then
-            -- PRN Subrole == "AXSectionList"? does that matter (i.e. diff list types?)
-            return "section " .. elemIndex .. " of "
-        elseif role == "AXCell" then
-            return "cell " .. elemIndex .. " of "
-        elseif role == "AXStaticText" then
-            return "static text " .. elemIndex .. " of "
-        end
-        -- FYI pattern, class == roleDesc - AX => split on captial letters (doesn't work for AXApplication, though actually it probably does work as ref to application class in Standard Suite?
-        return roleDescription .. " " .. elemIndex .. " of "
+    local role = GetValueOrEmptyString(elem, "AXRole")
+    local roleDescription = GetValueOrEmptyString(elem, "AXRoleDescription")
+    local title = GetValueOrEmptyString(elem, "AXTitle")
+    if role == "AXApplication" then
+        -- TODO handle (warn) about duplicate app process titles... I might then be able to use some signature to identify the correct one but I don't know if I can ever refer to it properly... i.e. screenpal I always had to terminate the tray app b/c has same name and never seemed like I could reference the app by smth else... that said I didn't direclty use accessibiltiy APIs so it is possible there is a way that AppleScript/ScriptDebugger don't support
+        warnOnEmptyTitle(title, role)
+        -- FYI this is the root most object, aka "object string specifier" (see Definitive Guide book, page 206-207)
+        -- app is only top level element (w/o parent) so I don't let it go thru parent logic (don't need to)
+        return 'application process "' .. title .. '"'
     end
+
+    local elemIndex = GetElementSiblingIndex(elem)
+    if elemIndex == nil then
+        -- TODO signal failure to caller
+        return " should not happen - failed to get sibling index for " .. role .. " " .. title
+    end
+
+    -- PRN use intermediate references, each with a whose/where clause (index == 1 or title == "foo") so I can match on either/both?
+    -- FTR, I am mapping role => class, when role description != class
+    if role == "AXWindow" then
+        warnOnEmptyTitle(title, role)
+        -- TODO handle duplicate titles (windows)
+        -- PRN use window index instead?
+        -- FYI title is an issue in some scenarios (i.e. if title is based on current document, like in Script Debugger)
+        -- PRN use title or index match? using intermediate reference vars
+        return 'window "' .. title .. '" of '
+    elseif role == "AXSplitGroup" then
+        return "splitter group " .. elemIndex .. " of "
+    elseif role == "AXTextArea" then
+        return "text area " .. elemIndex .. " of "
+    elseif role == "AXIncrementor" then
+        return "incrementor " .. elemIndex .. " of "
+    elseif role == "AXPopUpButton" then
+        return "pop up button " .. elemIndex .. " of "
+    elseif role == "AXList" then
+        -- PRN Subrole == "AXSectionList"? does that matter (i.e. diff list types?)
+        return "section " .. elemIndex .. " of "
+    elseif role == "AXCell" then
+        return "cell " .. elemIndex .. " of "
+    elseif role == "AXStaticText" then
+        return "static text " .. elemIndex .. " of "
+    end
+    -- FYI pattern, class == roleDesc - AX => split on captial letters (doesn't work for AXApplication, though actually it probably does work as ref to application class in Standard Suite?
+    return roleDescription .. " " .. elemIndex .. " of "
+end
+
+function BuildAppleScriptTo(toElement)
     local specifierChain = ""
     -- REMEMBER toElement is last item in :path() list/table so dont need special handling for it outside of list
     -- TODO stop at len -1 so we can finish it and can check parent for dup types and need to constraint it or mark where dups are issue
