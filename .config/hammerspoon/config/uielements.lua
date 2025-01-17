@@ -540,10 +540,10 @@ end
 local pathTableStart = [[
 <table class="path">
     <tr>
-        <th align=left>PATH</th>
+        <th>PATH</th>
         <th>role</th>
         <th>details</th>
-        <th align=left>specifier</th>
+        <th>specifier</th>
     </tr>
 ]]
 function GetDumpPath(element, expanded)
