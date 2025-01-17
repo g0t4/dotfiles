@@ -43,7 +43,7 @@ end
 ensureBool(hs.console.darkMode, true)
 ensureBool(hs.preferencesDarkMode, true)
 -- menu icon => hide to declutter menu bar, also b/c I use streamdeck button to show console
-ensureBool(hs.menuIcon, false)
+ensureBool(hs.menuIcon, true)
 -- dock icon true => shows in APP SWITCHER TOO
 --   set true when changing config and want to quickly change in app switcher.. then set false again when it annoys you :)
 ensureBool(hs.dockIcon, false) -- FYI this one is 1-2ms to check, 3+ to set ... unlike others where its fast to check (and slow to set, even if not changing the actual value)

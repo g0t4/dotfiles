@@ -11,12 +11,19 @@ package.path = package.path .. ";" .. spoons_repo
 --     hs.loadSpoon("AClock")
 --     spoon.AClock:toggleShow()
 -- end)
---
--- OK so ask-openai works fine now w/o this spoon... BUT FOR A WHILE, ask-openai (B shortcut) wasn't working w/o this loaded too, some dependency issue? or timing?
+
+-- *** FUUU, ask-openai (in devtools only - B shortcut) isn't working if I comment this out:
+-- -- THEN, when I uncomment this and reload hammerspoon's config, ask-open starts working again in devtools
+-- -- AND, if I comment this out again and reload config,  relaunch, even quity/start (restart) hammerspoon, it works still
+-- --   AS If the first load of these spoons fixes the issue... IIAC after reboot it won't work again
+-- --   INEVITABLY though it stops working again (IIGC after machine reboot) - todo check restart/logout and see if repro
+-- --   FIX WHEN I CAN RELIABLY REPRO this... IIRC I could get it to repro across reload configs, so I might need to do some more testing on that
+-- -- FYI if I wanna keep this spoon, I could nest it inside a hotkey like AClock above and invoke without using its bindHotKeys function
+-- --
 -- hs.loadSpoon("Emojis") -- SUPER SLOW
 -- spoon.Emojis:bindHotkeys({
 --     toggle = {
 --         { "cmd", "alt", "ctrl" },
---         "E",
+--         "J",
 --     }
 -- })

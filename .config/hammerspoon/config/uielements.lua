@@ -184,7 +184,6 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "M", function()
     -- FYI could use this to replace app - Paletro
     local app = hs.application.frontmostApplication()
     if printWebView then
-        -- do I want to clear or not?
         printHtmlBuffer = {}
     end
     ensureWebview()
@@ -204,7 +203,8 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "M", function()
     -- end
 end)
 
-hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "I", function()
+hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "E", function()
+    -- test drive element search
     local coords = hs.mouse.absolutePosition()
     local elementAt = hs.axuielement.systemElementAtPosition(coords)
     local app = hs.application.find("Hammerspoon")
@@ -231,7 +231,6 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "A", function()
     -- reserve "I" for some other inspect mode? maybe to toggle mouse inspect mode
 
     if printWebView then
-        -- do I want to clear or not?
         printHtmlBuffer = {}
     end
     ensureWebview()
