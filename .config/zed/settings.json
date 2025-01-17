@@ -1,9 +1,11 @@
 // https://zed.dev/docs/configuring-zed
 {
   // "theme": "Andromeda", // kinda like this or smth in between (todo build my own colors)
+  "show_inline_completions": true,
   "tab_bar": {
     "show": true
   },
+
   "language_models": {
     // "openai": {
     //   "api_url": "https://api.groq.com/openai/v1",
@@ -43,7 +45,8 @@
     }
   },
   "features": {
-    "inline_completion_provider": "supermaven"
+    // https://docs.google.com/document/d/1CaLVuamUQLOKkoNfXLs42lHqICNDn8BC0ROGKIFfuKw
+    "inline_completion_provider": "zed"
     // "copilot": true
   },
   "cursor_blink": false, // *** I am surprised I didn't notice this sooner, then again it is not blinking block
