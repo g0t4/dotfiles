@@ -173,7 +173,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "A", function()
     end
     ensureWebview()
     local coords = hs.mouse.absolutePosition()
-    local elementAt = hs.axuielement.systemElementAtPosition(coords.x, coords.y)
+    local elementAt = hs.axuielement.systemElementAtPosition(coords)
     -- DumpAXAttributes(elementAt, skipAttrsWhenInspectForPathBuilding)
     local script, attrDumps = BuildAppleScriptTo(elementAt, true)
     prints("<pre><code class=\"language-applescript\">" .. script .. "</code></pre>")
