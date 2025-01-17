@@ -169,25 +169,56 @@ end
 
 function InspectHtml(value, completed)
     completed = completed or {}
-    if type(value) == "userdata" then
-        -- TODO don't check if not userdata/table (ref type):
-        -- TODO and... wait... I don't wanna do this on tables just cuz they have the same keys/values... unless its truly the same items... I might have to go off of fields that can have a duplicate reference...'
-        --    FOR EXAMPLE:
-        --      AXMenuItemCmdModifiers": Circular Reference
-        --    a table of modifiers {"cmd"} is not a problem...
-        --
+
+    local isBuildTreeTableOfAxUiElement = type(value) == "table" and value["_element"]
+    local referenceName = ""
+    if type(value) == "userdata" or isBuildTreeTableOfAxUiElement then
+        -- don't repeat showing same objects (userdata, or tables of axuielement info from buildTree)
+        -- FYI do not ban all dup tables b/c then coordinates are a mess for example, will only show first time
         if completed[value] then
-            return "<span style='color:red'>Circular Reference</span>"
+            referenceName = type(value) .. completed[value]
+            return "<span style='color:red'>Repeated #" .. referenceName .. "</span>"
         end
-        completed[value] = true
+
+        -- this way I can use the index into completed tabl as an identifier to know which is the first time it was dumped
+        local completedNumber = completed.nextNumber or 1 -- track # as extra field so it is passed too (effectively by ref)
+        completed[value] = completedNumber
+        completed.nextNumber = completedNumber + 1
+        referenceName = type(value) .. completedNumber -- so I can link back to the first time the reference is displayed, in future occurences
+        print(referenceName)
     end
 
     local function _inspectTable(tbl)
         -- helper only for InspectHTML, don't use this directly
         -- FYI I like that this prints each level (unlike hs.inspect which consolidates tables with one item in them,  mine shows the actual index of each, within each table)
         local html = "<ul>"
+        if referenceName ~= "" then
+            -- show right before the table's nested list (ul)
+            html = referenceName .. "<ul>"
+        end
+
         for k, v in pairs(tbl) do
+            -- FYI if you use hs.inspect output for this table, anywhere that it doesn't show a table value is probably a wise spot to also not show a table in html, i.e.:
+            --   AXParent = <table 215>,
+            --   IIAC this is hardcoded logic behind hs.inspect to avoid stack overflow and/or cyclical inspection?
+            --   TODO review hs.inspect approach to decide what to show and where.. does it show first time an obj is encountered (then show ref on subsequent encounters)....
+            --      OR, does it also have any logic like this where it prefers not to show a given object in specific locations (i.e. AXVisibleChildren would not be preferrable to first the obj itself is encountered...)
+            --
+            -- local isHsInspectSkippedKey = k == "AXWindow" or k == "AXWindows"
+            --     or k == "AXVisibleChildren" -- already have "AXChildren"
+            --     or k == "AXParent" or k == "AXTopLevelUIElement"
+            --     or k == "AXSections"
+            --     or k == "AXMainWindow" or k == "AXFocusedWindow" -- AXWindows is sufficient
+            --     or k == "AXTitleUIElement" or k == "AXMenuItemPrimaryUIElement"
+            --     or k == "AXChildrenInNavigationOrder"
+            --     or k == "AXExtrasMenuBar" or k == "AXMenuBar"
+            --     or k == "_element" or k == "_attributes"
+
+            -- if isBuildTreeTableOfAxUiElement and isHsInspectSkippedKey then
+            --     html = html .. string.format("<li>%s: %s</li>", hs.inspect(k), "SKIPPED")
+            -- else
             html = html .. string.format("<li>%s: %s</li>", hs.inspect(k), InspectHtml(v, completed))
+            -- end
         end
         return html .. "</ul>"
     end
@@ -199,16 +230,16 @@ function InspectHtml(value, completed)
             local axTitle = WrapInQuotesIfNeeded(userdata["AXTitle"])
             local axDesc = WrapInQuotesIfNeeded(userdata["AXDescription"])
             -- FYI in this case, do not show hs.axuielement b/c AX* indicates that already so save the space
-            return string.format("%s %s %s", axType, axTitle, axDesc)
+            return string.format("%s %s %s %s", referenceName, axType, axTitle, axDesc)
         elseif userdataType == "hs.application" then
             local appName = userdata:name()
             local appBundleID = userdata:bundleID()
             -- in this case, app name alone isn't enough of hint so show the type 'hs.application'
-            return string.format("hs.application - %s %s", appName, appBundleID)
+            return string.format("hs.application(%s) - %s %s", referenceName, appName, appBundleID)
         end
 
         -- TODO handle other hammerspoon userdata types
-        return hs.inspect(userdata) .. " - TODO add this hs type to inspectHTML"
+        return referenceName .. hs.inspect(userdata) .. " - TODO add this hs type to inspectHTML"
     end
 
     if value == nil then
@@ -313,6 +344,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "E", function()
             if message ~= "completed" then
                 print("SOMETHING WENT WRONG b/c message is not 'completed'")
             end
+            print(hs.inspect(results))
             prints("results: ", InspectHtml(results))
 
             -- leave timing info in here b/c I will be running into more complex test cases and I wanna understand the overall timinmg implications of some of the apps I use
