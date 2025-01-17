@@ -167,10 +167,13 @@ end
 
 function InspectHtml(value, completed)
     completed = completed or {}
-    if completed[value] then
-        return "<span style='color:red'>Circular Reference</span>"
+    if type(value) == "table" or type(value) == "userdata" then
+        -- TODO don't check if not userdata/table (ref type):
+        if completed[value] then
+            return "<span style='color:red'>Circular Reference</span>"
+        end
+        completed[value] = true
     end
-    completed[value] = true
 
     local function _inspectTable(tbl)
         -- helper only for InspectHTML, don't use this directly
@@ -226,13 +229,13 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "M", function()
     -- USEFUL to quick check for a menu item
     -- TODO try axuielement.elementSearch and see how it compares vs this... (should have more attribute info avail)
     --   - IIAC it might find more menus (i.e. context  menus?)
-
     -- TODO for each menu item => generate AppleScript or hammerspoon lua code to invoke this menu item?
     -- FYI could use this to replace app - Paletro
     local app = hs.application.frontmostApplication()
     if printWebView then
         printHtmlBuffer = {}
     end
+    print("starting potentially slow element search of: " .. app:name())
     ensureWebview()
 
     -- FYI can use app:getMenuItems(callback) instead (called when done, non-blocking too) - callback gets same object and then the return here is the app object (when cb provided)
@@ -271,6 +274,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "E", function()
         --   objectOnly=false (default with buildTree) means axuielement is transformed into a table (per element) and that means the
         --     I was worried attribute lookup would be super slow (like in Script Debugger's explorer)... but it seems like that isn't the case, necessarily ...
         --       !!! WHICH means SEARCH is viable to find and build scripts for me!!!
+        -- WOW FCPX everything is 2672.4ms ... and that's with transform to tables!!!wow...that is the craziest app I have used for elements
         --
         appElement:buildTree(function(message, results)
             prints("time to callback: " .. GetElapsedTimeInMilliseconds(start_time) .. " ms")
@@ -286,7 +290,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "E", function()
             prints("time to display: " .. GetElapsedTimeInMilliseconds(start_time) .. " ms")
         end)
     end
-    -- testBuildTree()
+    testBuildTree()
 
     local start_time = GetTime()
 
@@ -346,8 +350,9 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "E", function()
             -- SKY IS THE LIMIT HERE
             -- wow checking both role (all elements have role) and title on all matching AXMenuItems (>200)... takes no more or less time in fact its takeing 260ms (hammerspoon full app/windows/) for the callback to start! that is 80-100ms less than using the above filters, why?
             -- WOW I CAN ENUMERATE EVERYTHING AND FIND WHAT I WANT... SO DARN COOL... even better if I have a way to take the frontmost app and the primary/main window.. that can help chisel away at extra stuff to avoid enumerating... I love it!
+            -- WOW FCPX time to callback is 1739.8ms for everything! that is not at all bad... so why is Script Debugger so damn slow then?/
             local role = element:attributeValue("AXRole")
-            if role and role == "AXMenuItem" then
+            if role and role ~= "AXMenuItem" then
                 local title = element:attributeValue("AXTitle")
                 if title and title ~= "" then
                     return true
@@ -359,7 +364,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "E", function()
 
         local searchTask = appElement:elementSearch(afterSearch, myFilterFunction)
     end
-    testMyOwnFilterFunction()
+    -- testMyOwnFilterFunction()
 end)
 
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "A", function()
