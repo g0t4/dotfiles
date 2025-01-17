@@ -81,5 +81,26 @@
         "env": {}
       }
     }
+  },
+  "experimental.theme_overrides": {
+    // https://github.com/zed-industries/zed/blob/5da67899b7c102724bb69054f9e7fbad5369ba60/assets/themes/one/one.json#L6-L79
+    // I want to bring out a bit more color than the defaults for one dark - some colors like for diff are too subtle, especially when viewing the "rate completions" panel diffs, and even when showing predictions
+    // *** FYI open another zed instance (i.e. to a diff view like Rate Completions) and split screen to observe color changes for the diff features
+    // line w/ cursor, or other emphasis (i.e. context of suggested edit)
+    // "editor.active_line.background": "#2f343ebf", // default one dark
+    "editor.active_line.background": "#6f7b932a", // same hue, diff luminance (https://imagecolorpicker.com/color-code/2f343e)
+    //  FYI 6f7b933a can work as alternative that can be boosted a bit more and looks close to original active line color
+    //
+    // "editor.highlighted_line.background": "#2f343eff", // default one dark
+    // "editor.highlighted_line.background": "#2f343eff", // todo where is this used?
+    //
+    // "deleted.background": "#d072771a", // default one dark
+    "deleted.background": "#d072772a", // slight alpha boost
+    // "created.background": "#a1c1811a", // default one dark
+    "created.background": "#a1c1813a", // slight alpha boost
+    //
+    //         "elevated_surface.background": "#2f343eff",
+    "elevated_surface.background": "#2f343eff",
+
   }
 }
