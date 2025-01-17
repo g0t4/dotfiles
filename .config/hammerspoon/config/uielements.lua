@@ -178,6 +178,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "A", function()
     local script, attrDumps = BuildAppleScriptTo(elementAt, true)
     prints("<pre><code class=\"language-applescript\">" .. script .. "</code></pre>")
     DumpAXPath(elementAt, true)
+    DumpAXActions(elementAt)
     prints(table.unpack(attrDumps))
     -- TODO build lua hammerspoon code instead of just AppleScript! that I can drop into my hammerspoon lua config instead of AppleScript in say KM
 end)
@@ -457,9 +458,11 @@ function GetDumpAXActions(element)
     local actions = element:actionNames()
     local result = ' ## NO ACTIONS'
     if #actions > 0 then
-        result = '## ACTIONS: '
+        result = '## ACTIONS:<br>'
         for _, action in ipairs(actions) do
-            result = result .. action .. ', '
+            -- FYI probably don't need description in most cases, only for custom app specific actions
+            local description = element:actionDescription(action)
+            result = result .. action .. ': ' .. description .. '<br>'
         end
     end
     return result
