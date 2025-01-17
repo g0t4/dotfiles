@@ -161,6 +161,69 @@ local function ensureWebview()
     printWebView:frame(rect)
 end
 
+local function tableToHTML(tbl)
+    -- FYI I like that this prints each level (unlike hs.inspect which consolidates tables with one item in them,  mine shows the actual index of each, within each table)
+    local html = "<ul>"
+    for k, v in pairs(tbl) do
+        if type(v) == "table" then
+            html = html .. string.format("<li>%s: %s</li>", hs.inspect(k), tableToHTML(v))
+        else
+            html = html .. string.format("<li>%s: %s</li>", hs.inspect(k), hs.inspect(v))
+        end
+    end
+    return html .. "</ul>"
+end
+
+-- find [M]enu items
+hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "M", function()
+    -- USEFUL to quick check for a menu item
+    -- TODO try axuielement.elementSearch and see how it compares vs this... (should have more attribute info avail)
+    --   - IIAC it might find more menus (i.e. context  menus?)
+
+    -- TODO for each menu item => generate AppleScript or hammerspoon lua code to invoke this menu item?
+    -- FYI could use this to replace app - Paletro
+    local app = hs.application.frontmostApplication()
+    if printWebView then
+        -- do I want to clear or not?
+        printHtmlBuffer = {}
+    end
+    ensureWebview()
+
+    local menuItems = app:getMenuItems()
+    -- timings:
+    --  41ms (feels super fast) with hammerspoon's menus (~120 entries) at least
+    --  can be slow with more menu items (i.e. FCPX)
+
+    -- Dump(menuItems)
+    prints(tableToHTML(menuItems))
+
+    -- PRN anything worth doing to enumerate the menus?
+    -- for _, item in ipairs(menuItems) do
+    --     -- local title = GetValueOrEmptyString(item)
+    --     prints(hs.inspect(item), "<br>")
+    -- end
+end)
+
+hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "I", function()
+    local coords = hs.mouse.absolutePosition()
+    local elementAt = hs.axuielement.systemElementAtPosition(coords)
+    local app = hs.application.find("Hammerspoon")
+    local appElement = app:element()
+
+    -- searchCriteriaFunction takes same arg as matchCriteria:
+    --  www.hammerspoon.org/docs/hs.axuielement.html#matchesCriteria
+    --  => single string (AXRole) matches exactly
+    --  => array of strings (AXRole)
+    --  => table of key/value pairs
+    --  => array table of key/value pairs (logical AND of all criteria)
+    local elementCritera = "AXWindow"
+
+    -- this is a function builder that IIAC transforms the elementCriteria into element API calls
+    local criteriaFunction = hs.axuielement.searchCriteriaFunction(elementCritera)
+
+
+    -- local searchResults = hs.axuielement.
+end)
 
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "A", function()
     -- [A]ppleScript
@@ -173,6 +236,8 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "A", function()
     end
     ensureWebview()
     local coords = hs.mouse.absolutePosition()
+    -- FYI systemElementAtPosition(coords) => hs.axuielement.systemWideElement():elementAtPosition(coords)
+    --   alternatively, could use an app element and ask for its elementAtPosition specific to just that app
     local elementAt = hs.axuielement.systemElementAtPosition(coords)
     -- DumpAXAttributes(elementAt, skipAttrsWhenInspectForPathBuilding)
     local script, attrDumps = BuildAppleScriptTo(elementAt, true)
