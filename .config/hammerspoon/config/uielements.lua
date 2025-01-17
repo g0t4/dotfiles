@@ -267,12 +267,13 @@ end
 
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "S", function()
     -- [S]earch menu items
-    local app = hs.application.frontmostApplication()
     if printWebView then
         printHtmlBuffer = {}
     end
-    print("starting potentially slow element search of: " .. app:name())
     ensureWebview()
+
+    local app = hs.application.frontmostApplication()
+    print("starting potentially slow element search of: " .. app:name())
 
     local menuItems = app:findMenuItem("Activity Monitor", true)
     DumpHtml(menuItems)
@@ -294,13 +295,13 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "M", function()
     --   - IIAC it might find more menus (i.e. context  menus?)
     -- TODO for each menu item => generate AppleScript or hammerspoon lua code to invoke this menu item?
     -- FYI could use this to replace app - Paletro
-    local app = hs.application.frontmostApplication()
     if printWebView then
         printHtmlBuffer = {}
     end
-    print("starting potentially slow element search of: " .. app:name())
     ensureWebview()
 
+    local app = hs.application.frontmostApplication()
+    print("starting potentially slow element search of: " .. app:name())
     -- FYI can use app:getMenuItems(callback) instead (called when done, non-blocking too) - callback gets same object and then the return here is the app object (when cb provided)
     local menuItems = app:getMenuItems()
     -- timings:
