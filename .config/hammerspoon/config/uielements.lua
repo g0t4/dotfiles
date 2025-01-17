@@ -31,6 +31,8 @@ local function prints(...)
     -- PRN www.jstree.com - if I want a tree view that has collapsed sections that hide details initially ... only use this if use case arises from daily use... my hope is generated AppleScript works most of the time
     for _, arg in ipairs({ ... }) do
         if printWebView == nil then
+            -- if no web view to print to, then print to console
+
             -- user visible line break == <br>, html src line break == \n
             --   this replace with \n for all line breaks when printing to console
             arg = arg:gsub("<br>", "\n")
