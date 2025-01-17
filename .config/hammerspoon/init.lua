@@ -24,50 +24,6 @@ AskOpenAIStreaming = require("config.ask.ask").AskOpenAIStreaming
 --     print("result:\n ", result)
 -- end)
 
-
-
-
-
-
-hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "W", function()
-    -- https://www.hammerspoon.org/docs/hs.window.html
-    local window = hs.window.focusedWindow()
-    -- window:focus()
-    -- window:maximize()
-    print("window", hs.inspect(window:topLeft().x))
-    if (window:topLeft().x == 0 and window:topLeft().y == 0) then
-        window:setTopLeft({ x = 400, y = 400 })
-    else
-        window:setTopLeft({ x = 0, y = 0 })
-    end
-end)
-
-
-
-hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "M", function()
-    local mouse = require("hs.mouse")
-    local pos = mouse.absolutePosition()
-    print("mouse pos", hs.inspect(pos))
-
-    local canvas = require("hs.canvas")
-    local width = 50
-    local rect = canvas.new({ x = pos.x - width / 2, y = pos.y - width / 2, w = width, h = width })
-        :appendElements({
-            action = "stroke",
-            padding = 0,
-            type = "rectangle",
-            fillColor = { red = 1, blue = 0, green = 0 },
-            strokeColor = { red = 1, blue = 0, green = 0 },
-            strokeWidth = 8,
-        }):show()
-
-    -- local timer = hs.timer.doAfter(3, function()
-    --     rect:delete()
-    --     print("rect deleted")
-    -- end)
-    -- timer:start()
-end)
-
 require("config.spoons")
 require("config.windows")
 -- require("config.appKeys") -- was not working lately, TODO find out why later on
@@ -75,8 +31,6 @@ require("config.windows")
 require("config.uielements")
 local end_time = hs.timer.secondsSinceEpoch()
 print("init.lua took", end_time - start_time, "seconds")
-
-
 
 -- *** insignificant config last so it doesn't slow down critical startup config
 --
