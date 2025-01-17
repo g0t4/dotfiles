@@ -351,7 +351,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "E", function()
             prints("time to display: " .. GetElapsedTimeInMilliseconds(start_time) .. " ms")
         end)
     end
-    testBuildTree()
+    -- testBuildTree()
 
     local start_time = GetTime()
 
@@ -425,7 +425,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "E", function()
 
         local searchTask = appElement:elementSearch(afterSearch, myFilterFunction)
     end
-    -- testMyOwnFilterFunction()
+    testMyOwnFilterFunction()
 end)
 
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "A", function()
