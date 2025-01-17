@@ -288,6 +288,28 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "E", function()
     end
     -- testBuildTree()
 
+    local start_time = GetTime()
+
+    local function afterSearch(message, searchTask, numResultsAdded)
+        -- numResultsAdded is the number of results added to the searchTask since elementSearch/next called (not overall #)
+        -- FYI if you pass namedModifiers = { count: 3 } then it "pauses" search if you will and calls this callback and then you can resume with results:next() here, and then this callback is invoked after 3 more items are found, and you can continue until all elements are searched
+        --    result object has cumulative results across each search run
+        --    use this to build a more interactive/responsive search experience
+        prints("time to callback: " .. GetElapsedTimeInMilliseconds(start_time) .. " ms")
+        start_time = GetTime() -- reset
+
+        prints("message: " .. message)
+        if message ~= "completed" then
+            print("SOMETHING WENT WRONG b/c message is not 'completed'")
+        end
+        prints("numResultsAdded: " .. numResultsAdded)
+        prints("matched: " .. searchTask:matched())
+        local results = searchTask -- just a reminder, enumerate the task (result) to get items
+        prints("results: ", InspectHtml(results))
+
+        -- leave timing info in here b/c I will be running into more complex test cases and I wanna understand the overall timinmg implications of some of the apps I use
+        prints("time to display: " .. GetElapsedTimeInMilliseconds(start_time) .. " ms")
+    end
     local function testElementSearchWithFilter()
         -- searchCriteriaFunction takes same arg as matchCriteria:
         --  www.hammerspoon.org/docs/hs.axuielement.html#matchesCriteria
@@ -307,30 +329,9 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "E", function()
         --  => array table of key/value pairs (logical AND of all criteria)
         prints("elementCriteria:", InspectHtml(elementCriteria))
 
-        local start_time = GetTime()
-
         -- this is a function builder that IIAC transforms the elementCriteria into element API calls
         local criteriaFunction = hs.axuielement.searchCriteriaFunction(elementCriteria)
-        local function afterSearch(message, searchTask, numResultsAdded)
-            -- numResultsAdded is the number of results added to the searchTask since elementSearch/next called (not overall #)
-            -- FYI if you pass namedModifiers = { count: 3 } then it "pauses" search if you will and calls this callback and then you can resume with results:next() here, and then this callback is invoked after 3 more items are found, and you can continue until all elements are searched
-            --    result object has cumulative results across each search run
-            --    use this to build a more interactive/responsive search experience
-            prints("time to callback: " .. GetElapsedTimeInMilliseconds(start_time) .. " ms")
-            start_time = GetTime() -- reset
 
-            prints("message: " .. message)
-            if message ~= "completed" then
-                print("SOMETHING WENT WRONG b/c message is not 'completed'")
-            end
-            prints("numResultsAdded: " .. numResultsAdded)
-            prints("matched: " .. searchTask:matched())
-            local results = searchTask -- just a reminder, enumerate the task (result) to get items
-            prints("results: ", InspectHtml(results))
-
-            -- leave timing info in here b/c I will be running into more complex test cases and I wanna understand the overall timinmg implications of some of the apps I use
-            prints("time to display: " .. GetElapsedTimeInMilliseconds(start_time) .. " ms")
-        end
 
         local namedModifiers = nil -- optional settings
         -- local namedModifiers = { count = 3 } -- TODO try this with nested element, use to show progress updates after each X items and then call resume
@@ -339,9 +340,16 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "E", function()
     end
     -- testElementSearchWithFilter()
 
-    -- PRN try cancel, monitoring, etc - iteratively finding batches? is it worth the time for apps with more elements
 
+    local function testMyOwnFilterFunction()
+        local function myFilterFunction(element)
+            -- SKY IS THE LIMIT HERE
+            return true
+        end
 
+        local searchTask = appElement:elementSearch(afterSearch, myFilterFunction)
+    end
+    testMyOwnFilterFunction()
 end)
 
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "A", function()
