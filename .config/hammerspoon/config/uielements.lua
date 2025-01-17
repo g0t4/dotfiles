@@ -172,7 +172,11 @@ function InspectHtml(value, completed)
 
     local isBuildTreeTableOfAxUiElement = type(value) == "table" and value["_element"]
     local referenceName = ""
-    if type(value) == "userdata" or isBuildTreeTableOfAxUiElement then
+    if isBuildTreeTableOfAxUiElement then
+        -- PRN add back:
+        --    type(value) == "userdata" or
+        --    IF AND WHEN I add _inspectUserData pathway that recursively calls InspectHtml (for some child attr/property)
+        --
         -- don't repeat showing same objects (userdata, or tables of axuielement info from buildTree)
         -- FYI do not ban all dup tables b/c then coordinates are a mess for example, will only show first time
         if completed[value] then
@@ -185,7 +189,7 @@ function InspectHtml(value, completed)
         completed[value] = completedNumber
         completed.nextNumber = completedNumber + 1
         referenceName = type(value) .. completedNumber -- so I can link back to the first time the reference is displayed, in future occurences
-        print(referenceName)
+        -- prints(referenceName)
     end
 
     local function _inspectTable(tbl)
@@ -350,7 +354,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "E", function()
             prints("time to display: " .. GetElapsedTimeInMilliseconds(start_time) .. " ms")
         end)
     end
-    -- testBuildTree()
+    testBuildTree()
 
     local start_time = GetTime()
 
@@ -424,7 +428,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "E", function()
 
         local searchTask = appElement:elementSearch(afterSearch, myFilterFunction)
     end
-    testMyOwnFilterFunction()
+    -- testMyOwnFilterFunction()
 end)
 
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "A", function()
