@@ -1,3 +1,4 @@
+local fun = require "fun"
 local printWebView = nil
 local printWebWindow = nil
 local printHtmlBuffer = {}
@@ -39,6 +40,8 @@ local function prints(...)
             if type(arg) == "string" then
                 arg = arg:gsub("\t", "&nbsp;&nbsp;")
                 table.insert(printHtmlBuffer, arg)
+            elseif type(arg) == "number" then
+                table.insert(printHtmlBuffer, tostring(arg))
             else
                 print("WARN: unexpected prints arg type: " .. type(arg))
                 table.insert(printHtmlBuffer, tostring(arg))
@@ -161,17 +164,61 @@ local function ensureWebview()
     printWebView:frame(rect)
 end
 
-local function tableToHTML(tbl)
-    -- FYI I like that this prints each level (unlike hs.inspect which consolidates tables with one item in them,  mine shows the actual index of each, within each table)
-    local html = "<ul>"
-    for k, v in pairs(tbl) do
-        if type(v) == "table" then
-            html = html .. string.format("<li>%s: %s</li>", hs.inspect(k), tableToHTML(v))
-        else
-            html = html .. string.format("<li>%s: %s</li>", hs.inspect(k), hs.inspect(v))
-        end
+
+function InspectHtml(value, completed)
+    completed = completed or {}
+    if completed[value] then
+        return "<span style='color:red'>Circular Reference</span>"
     end
-    return html .. "</ul>"
+    completed[value] = true
+
+    local function _inspectTable(tbl)
+        -- helper only for InspectHTML, don't use this directly
+        -- FYI I like that this prints each level (unlike hs.inspect which consolidates tables with one item in them,  mine shows the actual index of each, within each table)
+        local html = "<ul>"
+        for k, v in pairs(tbl) do
+            html = html .. string.format("<li>%s: %s</li>", hs.inspect(k), InspectHtml(v, completed))
+        end
+        return html .. "</ul>"
+    end
+
+    local function _inspectUserData(userdata)
+        local userdataType = userdata["__type"] -- nil if not set (i.e. non hammerspoon userdata types)
+        if userdataType == "hs.axuielement" then
+            local axType = userdata["AXRole"] or ""
+            local axTitle = WrapInQuotesIfNeeded(userdata["AXTitle"])
+            local axDesc = WrapInQuotesIfNeeded(userdata["AXDescription"])
+            -- FYI in this case, do not show hs.axuielement b/c AX* indicates that already so save the space
+            return string.format("%s %s %s", axType, axTitle, axDesc)
+        elseif userdataType == "hs.application" then
+            local appName = userdata:name()
+            local appBundleID = userdata:bundleID()
+            -- in this case, app name alone isn't enough of hint so show the type 'hs.application'
+            return string.format("hs.application - %s %s", appName, appBundleID)
+        end
+
+        -- TODO handle other hammerspoon userdata types
+        return hs.inspect(userdata) .. " - TODO add this hs type to inspectHTML"
+    end
+
+    if value == nil then
+        return "nil"
+    elseif type(value) == "table" then
+        return _inspectTable(value)
+    elseif type(value) == "string" then
+        return value
+    elseif type(value) == "number" or type(value) == "boolean" then
+        return tostring(value)
+    elseif type(value) == "userdata" then
+        return _inspectUserData(value)
+    else
+        return hs.inspect(value)
+    end
+end
+
+function DumpHtml(value)
+    completed = {}
+    prints(InspectHtml(value, completed))
 end
 
 -- find [M]enu items
@@ -188,13 +235,14 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "M", function()
     end
     ensureWebview()
 
+    -- FYI can use app:getMenuItems(callback) instead (called when done, non-blocking too) - callback gets same object and then the return here is the app object (when cb provided)
     local menuItems = app:getMenuItems()
     -- timings:
     --  41ms (feels super fast) with hammerspoon's menus (~120 entries) at least
     --  can be slow with more menu items (i.e. FCPX)
 
     -- Dump(menuItems)
-    prints(tableToHTML(menuItems))
+    DumpHtml(menuItems)
 
     -- PRN anything worth doing to enumerate the menus?
     -- for _, item in ipairs(menuItems) do
@@ -205,24 +253,95 @@ end)
 
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "E", function()
     -- test drive element search
-    local coords = hs.mouse.absolutePosition()
-    local elementAt = hs.axuielement.systemElementAtPosition(coords)
-    local app = hs.application.find("Hammerspoon")
-    local appElement = app:element()
+    -- TODO try menu item search (like app.getMenuItems() above)
 
-    -- searchCriteriaFunction takes same arg as matchCriteria:
-    --  www.hammerspoon.org/docs/hs.axuielement.html#matchesCriteria
-    --  => single string (AXRole) matches exactly
-    --  => array of strings (AXRole)
-    --  => table of key/value pairs
-    --  => array table of key/value pairs (logical AND of all criteria)
-    local elementCritera = "AXWindow"
+    if printWebView then
+        printHtmlBuffer = {}
+    end
+    ensureWebview()
 
-    -- this is a function builder that IIAC transforms the elementCriteria into element API calls
-    local criteriaFunction = hs.axuielement.searchCriteriaFunction(elementCritera)
+    local app = hs.application.frontmostApplication()
+    DumpHtml(app)
+    local appElement = hs.axuielement.applicationElement(app)
+
+    local function testBuildTree()
+        local start_time = GetTime()
+        -- wow this is everything on the Hammerspoon app (all nested windows) and it took < 500ms until callback and then <200ms to display (of which some is probably lag to render page or to start rendering it?)
+        -- serializing all the output to HTML was not at all expensive <200ms part!
+        --   objectOnly=false (default with buildTree) means axuielement is transformed into a table (per element) and that means the
+        --     I was worried attribute lookup would be super slow (like in Script Debugger's explorer)... but it seems like that isn't the case, necessarily ...
+        --       !!! WHICH means SEARCH is viable to find and build scripts for me!!!
+        --
+        appElement:buildTree(function(message, results)
+            prints("time to callback: " .. GetElapsedTimeInMilliseconds(start_time) .. " ms")
+            start_time = GetTime() -- reset
+
+            prints("message: " .. message)
+            if message ~= "completed" then
+                print("SOMETHING WENT WRONG b/c message is not 'completed'")
+            end
+            prints("results: ", InspectHtml(results))
+
+            -- leave timing info in here b/c I will be running into more complex test cases and I wanna understand the overall timinmg implications of some of the apps I use
+            prints("time to display: " .. GetElapsedTimeInMilliseconds(start_time) .. " ms")
+        end)
+    end
+    -- testBuildTree()
+
+    local function testElementSearchWithFilter()
+        -- searchCriteriaFunction takes same arg as matchCriteria:
+        --  www.hammerspoon.org/docs/hs.axuielement.html#matchesCriteria
+        --  => single string (AXRole) matches exactly
+        -- local elementCriteria = "AXWindow"
+        --  => array table of strings (AXRole)
+        -- local elementCriteria = { "AXWindow" }
+        -- local elementCriteria = { "AXMenuItem" } -- 300ms to callback, 70ms to display with InspectHTML - Hammerspoon => 230 menu item matches
+        --
+        -- filter on common roles for menu type elements:
+        --  - FYI value has the string, key is int, so have to filter/map on value
+        local elementCriteria = EnumTableValues(hs.axuielement.roles):filter(function(e) return string.find(e, "Menu") end):totable()
+        --
+        -- local elementCriteria = { "AXButton", "AXRadioButton", "AXPopUpButton", "AXMenuButton" } -- ~300ms callback, 3.7ms to display (FYI I
+        -- FYI when I re-run this shortcut (2nd time+) it takes 6.7 seconds to run elementSearch! ODD?! but reload hammerspoon config (wipes out state) and its back down to 300ms!
+        --  => table of key/value pairs
+        --  => array table of key/value pairs (logical AND of all criteria)
+        prints("elementCriteria:", InspectHtml(elementCriteria))
+
+        local start_time = GetTime()
+
+        -- this is a function builder that IIAC transforms the elementCriteria into element API calls
+        local criteriaFunction = hs.axuielement.searchCriteriaFunction(elementCriteria)
+        local function afterSearch(message, searchTask, numResultsAdded)
+            -- numResultsAdded is the number of results added to the searchTask since elementSearch/next called (not overall #)
+            -- FYI if you pass namedModifiers = { count: 3 } then it "pauses" search if you will and calls this callback and then you can resume with results:next() here, and then this callback is invoked after 3 more items are found, and you can continue until all elements are searched
+            --    result object has cumulative results across each search run
+            --    use this to build a more interactive/responsive search experience
+            prints("time to callback: " .. GetElapsedTimeInMilliseconds(start_time) .. " ms")
+            start_time = GetTime() -- reset
+
+            prints("message: " .. message)
+            if message ~= "completed" then
+                print("SOMETHING WENT WRONG b/c message is not 'completed'")
+            end
+            prints("numResultsAdded: " .. numResultsAdded)
+            prints("matched: " .. searchTask:matched())
+            local results = searchTask -- just a reminder, enumerate the task (result) to get items
+            prints("results: ", InspectHtml(results))
+
+            -- leave timing info in here b/c I will be running into more complex test cases and I wanna understand the overall timinmg implications of some of the apps I use
+            prints("time to display: " .. GetElapsedTimeInMilliseconds(start_time) .. " ms")
+        end
+
+        local namedModifiers = nil -- optional settings
+        -- local namedModifiers = { count = 3 } -- TODO try this with nested element, use to show progress updates after each X items and then call resume
+        local searchTask = appElement:elementSearch(afterSearch, criteriaFunction, namedModifiers)
+        -- CAN check progress/cancel/see results even with searchTask outside of the callback
+    end
+    -- testElementSearchWithFilter()
+
+    -- PRN try cancel, monitoring, etc - iteratively finding batches? is it worth the time for apps with more elements
 
 
-    -- local searchResults = hs.axuielement.
 end)
 
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "A", function()
@@ -557,6 +676,9 @@ function GetElementSiblingIndex(elem)
 end
 
 function WrapInQuotesIfNeeded(value)
+    if value == nil then
+        return ""
+    end
     return string.find(value, "%s") and '"' .. value .. '"' or value
 end
 

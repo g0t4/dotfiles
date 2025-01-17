@@ -1,4 +1,5 @@
 local inspect = require("hs.inspect")
+local fun = require("fun")
 
 local M = {}
 
@@ -67,6 +68,25 @@ function M.get_function_source(func)
     return table.concat(lines, "\n")
 end
 
+-- PRN setup a timing module? and pass a block of code to be timed?
+function GetTime()
+    return hs.timer.secondsSinceEpoch()
+end
 
+function GetElapsedTimeSince(start_time)
+    return GetTime() - start_time
+end
+
+function GetElapsedTimeInMilliseconds(start_time)
+    local elapsed_time_seconds = GetElapsedTimeSince(start_time)
+    -- round to 1 decimal place
+    return math.floor(elapsed_time_seconds * 10000 + 0.5) / 10
+end
+
+function EnumTableValues(tbl)
+    return fun.enumerate(tbl):map(function(key, value)
+        return value
+    end)
+end
 
 return M
