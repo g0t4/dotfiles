@@ -258,8 +258,7 @@ function InspectHtml(value, completed)
 end
 
 function DumpHtml(value)
-    completed = {}
-    prints(InspectHtml(value, completed))
+    prints(InspectHtml(value))
 end
 
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "S", function()
