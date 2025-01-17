@@ -167,8 +167,13 @@ end
 
 function InspectHtml(value, completed)
     completed = completed or {}
-    if type(value) == "table" or type(value) == "userdata" then
+    if type(value) == "userdata" then
         -- TODO don't check if not userdata/table (ref type):
+        -- TODO and... wait... I don't wanna do this on tables just cuz they have the same keys/values... unless its truly the same items... I might have to go off of fields that can have a duplicate reference...'
+        --    FOR EXAMPLE:
+        --      AXMenuItemCmdModifiers": Circular Reference
+        --    a table of modifiers {"cmd"} is not a problem...
+        --
         if completed[value] then
             return "<span style='color:red'>Circular Reference</span>"
         end
@@ -224,7 +229,29 @@ function DumpHtml(value)
     prints(InspectHtml(value, completed))
 end
 
--- find [M]enu items
+hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "S", function()
+    -- [S]earch menu items
+    local app = hs.application.frontmostApplication()
+    if printWebView then
+        printHtmlBuffer = {}
+    end
+    print("starting potentially slow element search of: " .. app:name())
+    ensureWebview()
+
+    local menuItems = app:findMenuItem("Activity Monitor", true)
+    DumpHtml(menuItems)
+
+    -- BUT IMO is easier just to use elementSearch (which I bet is used under the hood here too on findMenuItem.. as does I bet getMenuItems use elementSearch, IIGC)
+    -- DumpHtml(menuItems)
+
+    -- PRN anything worth doing to enumerate the menus?
+    -- for _, item in ipairs(menuItems) do
+    --     -- local title = GetValueOrEmptyString(item)
+    --     prints(hs.inspect(item), "<br>")
+    -- end
+end)
+
+
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "M", function()
     -- USEFUL to quick check for a menu item
     -- TODO try axuielement.elementSearch and see how it compares vs this... (should have more attribute info avail)
