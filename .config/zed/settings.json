@@ -21,8 +21,8 @@
   },
   "assistant": {
     "default_model": {
-      "provider": "ollama",
-      "model": "llama3.2-vision:11b"
+      "provider": "zed.dev",
+      "model": "claude-3-5-sonnet-20240620-fast-edit"
     },
     "version": "2"
     // "inline_alternatives": [
