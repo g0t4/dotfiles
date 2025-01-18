@@ -110,15 +110,16 @@ local function ensureWebview()
     -- print("frame", hs.inspect(frame))
 
     local rect = nil
-    local midX = frame.w / 2 + frame.x
+    local halfWidth = frame.w / 2
+    local midX = halfWidth + frame.x
     -- FYI assumes frame might not start at 0,0
     if mouseAt.x < midX then
         -- mouse is on left side of screen, show webview on right side
-        rect = hs.geometry.rect(midX, frame.y, frame.w / 2, frame.h)
+        rect = hs.geometry.rect(midX, frame.y, halfWidth, frame.h)
         -- print("right rect:", hs.inspect(rect))
     else
         -- mouse is on right, show webview on left
-        rect = hs.geometry.rect(frame.x, frame.y, frame.w / 2, frame.h)
+        rect = hs.geometry.rect(frame.x, frame.y, halfWidth, frame.h)
         -- print("left rect:", hs.inspect(rect))
     end
 
