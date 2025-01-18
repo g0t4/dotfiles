@@ -301,10 +301,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "M", function()
     -- TODO for each menu item => generate AppleScript or hammerspoon lua code to invoke this menu item?
     -- FYI could use this to replace app - Paletro
 
-    if printWebView then
-        printHtmlBuffer = {}
-    end
-    ensureWebview()
+    ensureClearedWebView()
 
     local app = hs.application.frontmostApplication()
     print("starting potentially slow element search of: " .. app:name())
@@ -328,10 +325,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "E", function()
     -- test drive element search
     -- TODO try menu item search (like app.getMenuItems() above)
 
-    if printWebView then
-        printHtmlBuffer = {}
-    end
-    ensureWebview()
+    ensureClearedWebView()
 
     local app = hs.application.frontmostApplication()
     DumpHtml(app)
@@ -443,10 +437,8 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "A", function()
     -- FYI "A" is easy to invoke with left hand alone (after position mouse with right--trackpad)
     -- reserve "I" for some other inspect mode? maybe to toggle mouse inspect mode
 
-    if printWebView then
-        printHtmlBuffer = {}
-    end
-    ensureWebview()
+    ensureClearedWebView()
+
     local coords = hs.mouse.absolutePosition()
     -- FYI systemElementAtPosition(coords) => hs.axuielement.systemWideElement():elementAtPosition(coords)
     --   alternatively, could use an app element and ask for its elementAtPosition specific to just that app
