@@ -265,13 +265,17 @@ function DumpHtml(value)
     prints(InspectHtml(value))
 end
 
-hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "S", function()
-    -- [S]earch menu items
-
+function ensureClearedWebView()
     if printWebView then
         printHtmlBuffer = {}
     end
     ensureWebview()
+end
+
+hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "S", function()
+    -- [S]earch menu items
+
+    ensureClearedWebView()
 
     local app = hs.application.frontmostApplication()
     print("starting potentially slow element search of: " .. app:name())
