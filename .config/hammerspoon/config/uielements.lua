@@ -267,6 +267,7 @@ end
 
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "S", function()
     -- [S]earch menu items
+
     if printWebView then
         printHtmlBuffer = {}
     end
@@ -295,6 +296,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "M", function()
     --   - IIAC it might find more menus (i.e. context  menus?)
     -- TODO for each menu item => generate AppleScript or hammerspoon lua code to invoke this menu item?
     -- FYI could use this to replace app - Paletro
+
     if printWebView then
         printHtmlBuffer = {}
     end
