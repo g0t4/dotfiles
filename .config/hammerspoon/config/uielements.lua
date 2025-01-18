@@ -266,7 +266,7 @@ function DumpHtml(value)
     prints(InspectHtml(value))
 end
 
-function ensureClearedWebView()
+local function ensureClearedWebView()
     if printWebView then
         printHtmlBuffer = {}
     end
