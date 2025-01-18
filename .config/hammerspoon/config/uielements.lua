@@ -533,6 +533,8 @@ local function elementSpecifierFor(elem)
         return "text area " .. elemIndex .. " of "
     elseif role == "AXIncrementor" then
         return "incrementor " .. elemIndex .. " of "
+    elseif role == "AXPopover" then
+        return "pop over " .. elemIndex .. " of "
     elseif role == "AXPopUpButton" then
         return "pop up button " .. elemIndex .. " of "
     elseif role == "AXList" then
