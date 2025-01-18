@@ -36,7 +36,7 @@
   },
   "vim_mode": true,
   "ui_font_size": 24,
-  "buffer_font_size": 16, // aka editor
+  "buffer_font_size": 20, // aka editor
   "format_on_save": "off",
   "hover_popover_enabled": true, // default=true (make explicit)
   "git": {
