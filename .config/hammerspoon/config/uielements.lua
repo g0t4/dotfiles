@@ -575,6 +575,9 @@ local function elementSpecifierFor(elem)
     elseif role == "AXCheckBox" then
         -- FYI in powerpoint, color picker dropper button is subrole=AXToggle + roleDesc == "toggle button" but "toggle button 1" doesn't work.. put it back to "checkbox 1" and that worked
         return "checkbox " .. elemIndex .. " of "
+    elseif role == "AXWebArea" then
+    -- brave browser had one of these, "web area 1" does not work... generic works and in the case I found title == name
+        return preferTitleOverIndexSpecifier("UI element")
     end
     -- FYI pattern, class == roleDesc - AX => split on captial letters (doesn't work for AXApplication, though actually it probably does work as ref to application class in Standard Suite?
     return roleDescription .. " " .. elemIndex .. " of "
