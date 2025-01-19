@@ -560,14 +560,17 @@ local function elementSpecifierFor(elem)
     elseif role == "AXMenuButton" then
         return preferTitleOverIndexSpecifier("menu button")
     elseif role == "AXGroup" then
-    -- FYI AXGroup in powerpoint fill color picker in Format Background tab has roleDescription == "Pane" and that did not work to select the item b/c it became "pane 1" and only "group 1" works
-    --   I am not sure if that is a one off or if others fail like this...
-    --   I did notice the AXName works with 'group "Format Background"' so maybe try that
-    --   and in other cases w/ roleDescription default below, maybe name should be tried?
-    --      TODO try "group \"" .. name .. "\" of "
-    -- !!! TODO find a way to test a reference before suggesting it? might slow things down but I should consider that...  and use a fallback strategy until something works... need some sort of builder that can test top to bottom elements and at each level have fallback and warn if nothing works
-    --
+        -- FYI AXGroup in powerpoint fill color picker in Format Background tab has roleDescription == "Pane" and that did not work to select the item b/c it became "pane 1" and only "group 1" works
+        --   I am not sure if that is a one off or if others fail like this...
+        --   I did notice the AXName works with 'group "Format Background"' so maybe try that
+        --   and in other cases w/ roleDescription default below, maybe name should be tried?
+        --      TODO try "group \"" .. name .. "\" of "
+        -- !!! TODO find a way to test a reference before suggesting it? might slow things down but I should consider that...  and use a fallback strategy until something works... need some sort of builder that can test top to bottom elements and at each level have fallback and warn if nothing works
+        --
         return "group " .. elemIndex .. " of "
+    elseif role == "AXCheckBox" then
+        -- FYI in powerpoint, color picker dropper button is subrole=AXToggle + roleDesc == "toggle button" but "toggle button 1" doesn't work.. put it back to "checkbox 1" and that worked
+        return "checkbox " .. elemIndex .. " of "
     end
     -- FYI pattern, class == roleDesc - AX => split on captial letters (doesn't work for AXApplication, though actually it probably does work as ref to application class in Standard Suite?
     return roleDescription .. " " .. elemIndex .. " of "
