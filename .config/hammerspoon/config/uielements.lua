@@ -631,15 +631,6 @@ function BuildAppleScriptTo(toElement, includeAttrDumps)
     --    i.e. text area => get/set value, button =>click
 end
 
-function GetValueOrDefault(element, attribute, default)
-    local value = element:attributeValue(attribute)
-    if value then
-        return value
-    else
-        return default
-    end
-end
-
 function GetValueOrEmptyString(element, attribute)
     local value = element:attributeValue(attribute)
     if value then
