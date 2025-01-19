@@ -631,14 +631,6 @@ function BuildAppleScriptTo(toElement, includeAttrDumps)
     --    i.e. text area => get/set value, button =>click
 end
 
-function DumpAXEverything(element)
-    -- TODO header?
-    local result = GetDumpAXAttributes(element)
-    result = result .. "<br>" .. GetDumpAXActions(element)
-    -- PRN add parameterizedAttributes too
-    prints(result)
-end
-
 function GetValueOrDefault(element, attribute, default)
     local value = element:attributeValue(attribute)
     if value then
