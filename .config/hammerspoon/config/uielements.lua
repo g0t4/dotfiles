@@ -576,9 +576,10 @@ local function elementSpecifierFor(elem)
         -- FYI in powerpoint, color picker dropper button is subrole=AXToggle + roleDesc == "toggle button" but "toggle button 1" doesn't work.. put it back to "checkbox 1" and that worked
         return "checkbox " .. elemIndex .. " of "
     elseif role == "AXWebArea" then
-    -- brave browser had one of these, "web area 1" does not work... generic works and in the case I found title == name
+        -- brave browser had one of these, "web area 1" does not work... generic works and in the case I found title == name
         return preferTitleOverIndexSpecifier("UI element")
     end
+    prints("WARN: using roleDescription \"" .. roleDescription .. "\", add mapping for AXRole: " .. role)
     -- FYI pattern, class == roleDesc - AX => split on captial letters (doesn't work for AXApplication, though actually it probably does work as ref to application class in Standard Suite?
     return roleDescription .. " " .. elemIndex .. " of "
 end
@@ -662,6 +663,7 @@ function GetDumpAXAttributes(element, skips)
             -- IIUC __name is frequently used so that is a pretty safe bet
             -- getmetatable(value) == hs.getObjectMetatable("hs.axuielement") -- alternate to check
             prints("UNEXPECTED userdata type, consider adding it to display helpers: " .. tostring(userdata))
+            prints(hs.inspect(userdata))
             return "UNEXPECTED: " .. tostring(userdata)
         end
         local title = GetValueOrEmptyString(userdata, "AXTitle")
