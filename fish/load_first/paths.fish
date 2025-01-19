@@ -54,6 +54,11 @@ if test -d "$HOME/.cargo/bin"
     export PATH="$HOME/.cargo/bin:$PATH"
 end
 
+if test -d "$HOME/repos/github/zed-industries/zed/target/debug"
+    # target debug build of zed (comment out when done using it as daily driver)
+    export PATH="$HOME/repos/github/zed-industries/zed/target/debug:$PATH"
+end
+
 # kubectl krew
 if test -d "$HOME/.krew/bin"
     # suggested by krew:
