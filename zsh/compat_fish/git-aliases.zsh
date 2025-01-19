@@ -180,9 +180,11 @@ abbr gswc 'git switch -c'
 abbr gts 'git tag -s'
 abbr gtv 'git tag | sort -V'
 
-# update-index
-# prn # gignore alias => find it and add back here
-# abbr gunignore 'git update-index --no-assume-unchanged'
+# update-index (mark files as not changed, i.e. font size settings in zed settings.json file, or vscode settings.json)
+abbr gassume 'git update-index --assume-unchanged'
+abbr gassumeun 'git update-index --no-assume-unchanged'
+abbr gassumels 'git ls-files -v | grep ^h'
+# TODO are there other letter/status prefixes besides 'h' that apply to assume-unchanged files? they would be lowercase btw, if so
 
 # whatchanged (logs)
 abbr gwch 'git whatchanged -p --abbrev-commit --pretty=medium'
