@@ -565,6 +565,10 @@ local function elementSpecifierFor(elem)
         --   I did notice the AXName works with 'group "Format Background"' so maybe try that
         --   and in other cases w/ roleDescription default below, maybe name should be tried?
         --      TODO try "group \"" .. name .. "\" of "
+        --      WAIT I DON'T have NAME like in Script Debugger... is that not available or is it smth that hammerspoon would need to fetch too? it is not an attribute BTW... it is smth else (like class)
+        --         I am starting to suspect in most cases name == title (not always IIRC) but it has worked several times for windows
+        --         PRN look into if hammerspoon could get name/class from Accessibility APIs or if that is some other construct in applescript that is not available
+        --             dont forget I can always build nested () with where/whose clauses for each element (at all levels)
         -- !!! TODO find a way to test a reference before suggesting it? might slow things down but I should consider that...  and use a fallback strategy until something works... need some sort of builder that can test top to bottom elements and at each level have fallback and warn if nothing works
         --
         return "group " .. elemIndex .. " of "
