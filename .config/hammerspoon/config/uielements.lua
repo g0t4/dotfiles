@@ -165,6 +165,9 @@ local function ensureWebview()
         return
     end
     printWebView:frame(rect)
+    print("raising")
+    printWebWindow:raise() -- ensure on top for Hammerspoon app
+    printWebWindow:application():activate() -- ensure Hammerspoon app is front most too (else all app windows remain in the background)
 end
 
 
