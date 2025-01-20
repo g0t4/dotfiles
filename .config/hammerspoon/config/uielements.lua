@@ -492,6 +492,7 @@ local function elementSpecifierFor(elem)
     end
 
     local role = GetValueOrEmptyString(elem, "AXRole")
+    local subrole = GetValueOrEmptyString(elem, "AXSubrole")
     local roleDescription = GetValueOrEmptyString(elem, "AXRoleDescription")
     local title = GetValueOrEmptyString(elem, "AXTitle")
     if role == "AXApplication" then
@@ -563,8 +564,11 @@ local function elementSpecifierFor(elem)
     elseif role == "AXPopUpButton" then
         return "pop up button " .. elemIndex .. " of "
     elseif role == "AXList" then
-        -- PRN Subrole == "AXSectionList"? does that matter (i.e. diff list types?)
-        return "section " .. elemIndex .. " of "
+        -- TODO I might have had a special case of AXSubrole == "AXSectionList" ... and then used "section 1" instead of "list 1" (find and repro if so)
+        if subrole == "AXSectionList" then
+            prints("WARNING: AXSubrole is AXSectionList, using 'list' but might need 'section' instead? double check and then update this warning in code and change if needed")
+        end
+        return "list " .. elemIndex .. " of "
     elseif role == "AXCell" then
         return "cell " .. elemIndex .. " of "
     elseif role == "AXStaticText" then
