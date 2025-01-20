@@ -65,6 +65,9 @@
   "languages": {
     "Markdown": {
       "soft_wrap": "editor_width"
+    },
+    "lua": {
+      "format_on_save": "off"
     }
   },
   "file_types": {
