@@ -518,14 +518,33 @@ local function elementSpecifierFor(elem)
         return asClass .. " " .. elemIndex .. " of "
     end
 
-    -- PRN use intermediate references, each with a whose/where clause (index == 1 or title == "foo") so I can match on either/both?
-    -- FTR, I am mapping role => class, when role description != class
+
+    -- FYI element specifier logic, my current understanding:
+    --   `class index` or `class "name"` are the two primary specifiers to use
+    --      can also filter with where/whose clause if I add parens to nest the specifier and target the desired element's attributes'
+    --   `class` nor `name` are available via AXUIElement
+    --      IIUC these are synthesized... but I have not yet found an explanation of the synthesis logic
+    --      `class` often matches `AXRoleDescription` but not always
+    --      `class` can easily be mapped (so far no conflicts) to a hard coded value based on AXRole (below)
+    --      `class` can also be `UI element` as a generic placeholder for any AXRole
+    --   `name` often matches `AXTitle`
+    --      but, IIRC, that is not always the case (that said, I have not encountered any issues yet where title != name, when I used title below)
+    --      name might also be based on `AXDescription`, need to find examples to affirm/reject this possibility
+    --   PRN I can add some fallback logic to synthesize name/class (when issues arise)
+    --      PRN for class => use `osacompile` to check for compile error (will catch invalid class values)
+    --      PRN for name => use `osascript` to see if element specifier works to get reference (or at least the generated AppleScript doesn't blow up)
+    --        would need to find an example where the fallback logic then detects the next possible name for the specifier... not sure this will even be a thing
+    --   `index` instead of using `name` use `index`, i.e. `window 1 of` or `first window of`
+    --   where/whose
+    --      Some issues may be resolved by looking at AXSubrole and using an attribute filter:
+    --      i.e.:
+    --         `set win to first window of proc whose value of attribute "AXSubrole" is "AXStandardWindow"`
+
     if role == "AXWindow" then
         warnOnEmptyTitle(title, role)
-        -- TODO handle duplicate titles (windows)
-        -- PRN use window index instead?
+        -- TODO handle duplicate titles (windows) => revert to use index?
         -- FYI title is an issue in some scenarios (i.e. if title is based on current document, like in Script Debugger)
-        -- PRN use title or index match? using intermediate reference vars
+        -- PRN consider using AXSubrole  (i.e. AXStandardWindow) as a filter too? get index relative to it?
         return 'window "' .. title .. '" of '
     elseif role == "AXSplitGroup" then
         return "splitter group " .. elemIndex .. " of "
@@ -579,7 +598,7 @@ local function elementSpecifierFor(elem)
         -- brave browser had one of these, "web area 1" does not work... generic works and in the case I found title == name
         return preferTitleOverIndexSpecifier("UI element")
     end
-    prints("WARN: using roleDescription \"" .. roleDescription .. "\", add mapping for AXRole: " .. role)
+    prints("SUGGESTION: using roleDescription \"" .. roleDescription .. "\" as class (error prone in some cases), add an explicit mapping for AXRole: " .. role)
     -- FYI pattern, class == roleDesc - AX => split on captial letters (doesn't work for AXApplication, though actually it probably does work as ref to application class in Standard Suite?
     return roleDescription .. " " .. elemIndex .. " of "
 end
@@ -813,7 +832,12 @@ function GetDumpElementLine(elem, indent)
         details = details .. ' id=' .. identifier
     end
 
-    return "<tr><td>" .. col1 .. "</td><td>" .. role .. "</td><td>" .. details .. "</td><td><code class='language-applescript'>" .. elementSpecifierFor(elem) .. "</code></td></tr>"
+    return "<tr><td>" ..
+    col1 ..
+    "</td><td>" ..
+    role ..
+    "</td><td>" ..
+    details .. "</td><td><code class='language-applescript'>" .. elementSpecifierFor(elem) .. "</code></td></tr>"
 end
 
 local pathTableStart = [[
