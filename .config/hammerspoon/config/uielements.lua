@@ -622,8 +622,6 @@ local function elementSpecifierFor(elem)
             prints("WARNING: AXSubrole is AXSectionList, using 'list' but might need 'section' instead? double check and then update this warning in code and change if needed")
         end
         return "list " .. elemIndex .. " of "
-    elseif role == "AXCell" then
-        return "cell " .. elemIndex .. " of "
     elseif role == "AXStaticText" then
         return "static text " .. elemIndex .. " of "
     elseif role == "AXRadioButton" then
@@ -683,7 +681,7 @@ local function elementSpecifierFor(elem)
     elseif role == "AXLink" then
         -- not working as "link 1", use generic
         return "UI element " .. elemIndex .. " of "
-    -- TODO AXHelpTag (subrole AXUknown) => saw in brave browser when pointed at links, couldn't repo in Script Debugger though
+        -- TODO AXHelpTag (subrole AXUknown) => saw in brave browser when pointed at links, couldn't repo in Script Debugger though
     end
     prints("SUGGESTION: using roleDescription \"" .. roleDescription .. "\" as class (error prone in some cases), add an explicit mapping for AXRole: " .. role)
     -- FYI pattern, class == roleDesc - AX => split on captial letters (doesn't work for AXApplication, though actually it probably does work as ref to application class in Standard Suite?
@@ -718,7 +716,7 @@ function getIdentifier(toElement)
         -- alternatively I could put _ on the front of all generated identifiers... so I always know when it was a name I made vs actual keywords
         identifier = "_" .. identifier
     end
-    return identifier
+    return applescriptIdentifierFor(identifier)
 end
 
 function BuildAppleScriptTo(toElement, includeAttrDumps)
@@ -744,7 +742,7 @@ function BuildAppleScriptTo(toElement, includeAttrDumps)
     -- TODO use description if not title?
     -- TODO hungarian notation if title/desc are "too short" or?
     -- TODO build up some test cases would be helpful as you encounter real work examples
-    local variableName = applescriptIdentifierFor(getIdentifier(toElement))
+    local variableName = getIdentifier(toElement)
     -- return "<br>set " .. variableName .. " to " .. specifierChain, attrDumps
     local setCommand = "set " .. variableName .. " to "
     table_prepend(specifierChain, setCommand)
@@ -867,14 +865,16 @@ function DumpAXAttributes(element, skips)
 end
 
 function GetDumpAXActions(element)
+    local identifer = getIdentifier(element)
     local actions = element:actionNames()
     local result = ' ## NO ACTIONS'
     if #actions > 0 then
         result = '## ACTIONS:<br>'
         for _, action in ipairs(actions) do
             -- FYI probably don't need description in most cases, only for custom app specific actions
-            local description = element:actionDescription(action)
-            result = result .. action .. ': ' .. description .. '<br>'
+            -- local description = element:actionDescription(action)
+            -- result = result .. action .. ': ' .. description .. '<br>'
+            result = result .. "perform action \"" .. action .. "\" of " .. identifer .. "<br>"
         end
     end
     return result
