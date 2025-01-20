@@ -552,6 +552,8 @@ local function elementSpecifierFor(elem)
         -- FYI Finder columns view uses browser control:
         --    FYI finder example had issues when I used the title of "", whereas index worked
         return "browser " .. elemIndex .. " of "
+    elseif role == "AXButton" then
+        return "button " .. elemIndex .. " of "
     elseif role == "AXTextField" then
         return "text field " .. elemIndex .. " of "
     elseif role == "AXScrollArea" then
@@ -560,6 +562,8 @@ local function elementSpecifierFor(elem)
         return "splitter " .. elemIndex .. " of "
     elseif role == "AXSplitGroup" then
         return "splitter group " .. elemIndex .. " of "
+    elseif role == "AXToolbar" then
+        return "toolbar " .. elemIndex .. " of "
     elseif role == "AXTextArea" then
         return "text area " .. elemIndex .. " of "
     elseif role == "AXIncrementor" then
