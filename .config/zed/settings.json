@@ -63,6 +63,13 @@
   // }
   // TODO is there a way to toggle status bar? like vscode (I don't see it in the default settings)
   "languages": {
+    "JSON": {
+      "prettier": {
+        // how can I turn off the diagnostic errors about comments in json files... I don't give a F
+        // FYI I don't use prettier in nvim... fine to leave on here if it causes issues...
+        "allowed": true
+      }
+    },
     "Markdown": {
       "soft_wrap": "editor_width"
     },
@@ -103,7 +110,6 @@
     "created.background": "#a1c1813a", // slight alpha boost
     //
     //         "elevated_surface.background": "#2f343eff",
-    "elevated_surface.background": "#2f343eff",
-
+    "elevated_surface.background": "#2f343eff"
   }
 }
