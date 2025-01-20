@@ -86,8 +86,6 @@ end
 local function applescriptIdentifierFor(text)
     -- Replace non-alphanumeric characters with underscores
     local identifier = text:gsub("%W", "_")
-    -- Trim leading/trailing underscores
-    identifier = identifier:gsub("^_+", ""):gsub("_+$", "")
     -- Ensure the identifier starts with a letter or underscore
     if not identifier:match("^[a-zA-Z_]") then
         identifier = "_" .. identifier
