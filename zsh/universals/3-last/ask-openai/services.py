@@ -102,8 +102,9 @@ def use_ollama(model: Optional[str] = None):
 
 def use_deepseek(model: Optional[str] = None):
     # curl -L -X GET 'https://api.deepseek.com/models' \-H 'Accept: application/json' \-H 'Authorization: Bearer <TOKEN>' | jq
-    # deepseek-chat
-    # deepseek-coder
+    # deepseek-chat (DeepSeek-V3)
+    # deepseek-reasoner (DeepSeek-R1 as of 2025-01-20)
+    # https://api-docs.deepseek.com/quick_start/pricing
     # FYI w.r.t ``` ... deepseek-chat listens to request to not use ``` and ``` but deepseek-coder always returns ```... that actually makes sense for the coder...
     return Service(
         name='deepseek',
