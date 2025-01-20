@@ -460,6 +460,17 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "A", function()
 
     ensureClearedWebView()
 
+    -- TODO use elementSearch to find and build the applescript for a control, take in a string of text and go! its fast...
+    --    consider using this to find an element if the original specifier chain stops working... and to have it spit out again a new chain?
+    --    or even better if I switch to hammerspoon and have code that uses this accessibility API (much more predictable this way)... that can activate based on a fallback search... and update the specifier if it finds it with new one.. all  transparent for the user
+    --      and/or could just cache a control first time shortcut key is used... until hammerspoon is reloaded (one time hit to find vs brittle specifiers => could be a trade off when to use which)
+    --      would be neat to make more robust and just know how to do stuff so I can spend even less time thinking
+    --    b/c I suspect if I have a unique-ish description (on buttons, text box) then I can always find that control w/ element search and the path/chain is not that mission critical other than the only way to write AppleScript (easily)
+    --    remember I don't need AppleScript anymore, I can use axuielement in hammerspoon
+    --          OR USE AXUIElement in python with pyobjc which I know that well too
+    -- TODO build a tree of entire main/focused window using buildTree (or elementSearch)... it is super fast and would be cool to explore it like UI Browser has
+    --
+
     local coords = hs.mouse.absolutePosition()
     -- FYI systemElementAtPosition(coords) => hs.axuielement.systemWideElement():elementAtPosition(coords)
     --   alternatively, could use an app element and ask for its elementAtPosition specific to just that app
