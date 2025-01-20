@@ -2,5 +2,19 @@
     // FYI I confirmed this works with both zed's lua extension and coc in nvim
     //    just split a pane and comment out one of these globals
     //    (both zed and nvim will almost instantly flip to a diagnostic error)
-    "diagnostics.globals": ["hs"]
+    "diagnostics.globals": ["hs"],
+
+    // FYI I had to quit/restart zed to get new workspace.library paths to start working with Find Ref (F12)
+    // nvim diagnostics refresh without restart, in a few seconds max:
+    "workspace.library": [
+        "/opt/homebrew/Cellar/neovim/0.10.3/share/nvim/runtime/lua",
+        "/opt/homebrew/Cellar/neovim/0.10.3/share/nvim/runtime/lua/vim/lsp",
+        "/Applications/Hammerspoon.app/Contents/Resources/extensions",
+        // "/Applications/Hammerspoon.app/Contents/Frameworks", // do I need this for any LSP features, these are dylib modules
+        "~/.luarocks/share/lua/5.4", // luarocks --local
+        "/opt/homebrew/share/lua/5.4/rx.lua" // luarocks --global (system wide)
+        // "/Applications/Hammerspoon.app/Contents/Resources/extensions", // doesn't work, don't try again unless you find good reason to
+    ]
+
+
 }
