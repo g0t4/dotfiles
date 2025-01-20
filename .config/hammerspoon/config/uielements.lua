@@ -683,6 +683,7 @@ local function elementSpecifierFor(elem)
     elseif role == "AXLink" then
         -- not working as "link 1", use generic
         return "UI element " .. elemIndex .. " of "
+    -- TODO AXHelpTag (subrole AXUknown) => saw in brave browser when pointed at links, couldn't repo in Script Debugger though
     end
     prints("SUGGESTION: using roleDescription \"" .. roleDescription .. "\" as class (error prone in some cases), add an explicit mapping for AXRole: " .. role)
     -- FYI pattern, class == roleDesc - AX => split on captial letters (doesn't work for AXApplication, though actually it probably does work as ref to application class in Standard Suite?
