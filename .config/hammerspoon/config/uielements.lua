@@ -543,14 +543,13 @@ local function elementSpecifierFor(elem)
     --      set sg2 to first splitter group of (first splitter group of window 1 of application process "Script Debugger" whose it is it)
     --      of course, `it is it` s/b a useful boolean specifier
 
-
     local function preferTitleOverIndexSpecifier(asClass)
+        -- FYI AXTitle is a proxy (often, always?) for the name of the element in AppleScript
         if title ~= "" then
             return asClass .. ' "' .. title .. '" of '
         end
         return asClass .. " " .. elemIndex .. " of "
     end
-
 
     -- FYI element specifier logic, my current understanding:
     --   `class index` or `class "name"` are the two primary specifiers to use
@@ -727,6 +726,10 @@ end
 
 function GetDumpAXAttributes(element, skips)
     local function compactUserData(userdata)
+        if userdata.__name == "hs.axuielement.axtextmarker" then
+            -- FYI nothing material to show, also don't wanna risk slowing anything down to get length/content (bytes).. unless that is useful and right now I don't think it is
+            return hs.inspect(userdata)
+        end
         if userdata.__name ~= "hs.axuielement" then
             -- IIUC __name is frequently used so that is a pretty safe bet
             -- getmetatable(value) == hs.getObjectMetatable("hs.axuielement") -- alternate to check
