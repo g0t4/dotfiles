@@ -83,16 +83,6 @@ local function prints(...)
     end
 end
 
-local function applescriptIdentifierFor(text)
-    -- Replace non-alphanumeric characters with underscores
-    local identifier = text:gsub("%W", "_")
-    -- Ensure the identifier starts with a letter or underscore
-    if not identifier:match("^[a-zA-Z_]") then
-        identifier = "_" .. identifier
-    end
-    return identifier
-end
-
 local function ensureWebview()
     -- do return end -- disable using html printer
 
@@ -716,7 +706,18 @@ function getIdentifier(toElement)
         -- alternatively I could put _ on the front of all generated identifiers... so I always know when it was a name I made vs actual keywords
         identifier = "_" .. identifier
     end
-    return applescriptIdentifierFor(identifier)
+
+    local function applescriptSanitizeIdentifier(text)
+        -- Replace non-alphanumeric characters with underscores
+        local identifier = text:gsub("%W", "_")
+        -- Ensure the identifier starts with a letter or underscore
+        if not identifier:match("^[a-zA-Z_]") then
+            identifier = "_" .. identifier
+        end
+        return identifier
+    end
+
+    return applescriptSanitizeIdentifier(identifier)
 end
 
 function BuildAppleScriptTo(toElement, includeAttrDumps)
