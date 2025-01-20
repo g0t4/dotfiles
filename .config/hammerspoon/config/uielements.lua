@@ -435,7 +435,22 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "E", function()
 end)
 
 local function combineClausesWithLineContinuations(clauses)
-    return table.concat(clauses, "\n")
+    -- assumes this is one set of clauses for a single line of code
+    -- and that I can use a line continuation between any of the consecutive clauses
+    --  - i.e. won't result in line continuation in the middle of a string literal
+    local lines = EnumTableValues(clauses)
+        :foldl(function(accum, current)
+            local last = accum[#accum]
+            if string.len(last) + string.len(current) > 80 then
+                table.insert(accum, current)
+                -- FYI don't forget return has to come last in a block (obscure detail I wanted to write down one time)
+                return accum
+            end
+            accum[#accum] = last .. current
+            return accum
+        end, { "" })
+
+    return table.concat(lines, "¬\n    ") -- four spaces on ident too
 end
 
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "A", function()
