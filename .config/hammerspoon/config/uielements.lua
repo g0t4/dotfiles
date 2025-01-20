@@ -573,9 +573,9 @@ local function elementSpecifierFor(elem)
     --         `set win to first window of proc whose value of attribute "AXSubrole" is "AXStandardWindow"`
     --      nested whose/where that works (both are same but one uses AXRole attr vs role property):
     --         set directLink to first UI element of (first UI element of (group 10 of ¬
-	-- 	           application process "Brave Beta") whose value of attribute "AXRole" is equal to "AXHeading")
-	--         set directLinkRole to first UI element of (first UI element of (group 10 of ¬
-	-- 	           application process "Brave Beta") whose role is equal to "AXHeading")
+    -- 	           application process "Brave Beta") whose value of attribute "AXRole" is equal to "AXHeading")
+    --         set directLinkRole to first UI element of (first UI element of (group 10 of ¬
+    -- 	           application process "Brave Beta") whose role is equal to "AXHeading")
     --
     if role == "AXWindow" then
         warnOnEmptyTitle(title, role)
@@ -665,6 +665,9 @@ local function elementSpecifierFor(elem)
         -- AFAICT can only refer to it as "UI element"...
         --   can use title as name, at least in one test I did
         return preferTitleOverIndexSpecifier("UI element")
+    elseif role == "AXTabGroup" then
+        -- confirmed, see separate scpt files
+        return "tab group " .. elemIndex .. " of "
     end
     prints("SUGGESTION: using roleDescription \"" .. roleDescription .. "\" as class (error prone in some cases), add an explicit mapping for AXRole: " .. role)
     -- FYI pattern, class == roleDesc - AX => split on captial letters (doesn't work for AXApplication, though actually it probably does work as ref to application class in Standard Suite?
