@@ -836,8 +836,7 @@ function GetDumpAXAttributes(element, skips)
         local displayName = attrName
         local displayValue = displayAttr(attrValue)
         if displayValue == "nil" then
-            -- span with light gray text
-            table.insert(result, "\t<span style='color: #888'>" .. displayName .. ' = ' .. displayValue .. "</span><br>")
+            table.insert(result, "\t<span class='not-set-attribute'>" .. displayName .. ' = ' .. displayValue .. "</span><br>")
         else
             table.insert(result, "\t" .. displayName .. ' = ' .. displayValue .. '<br>')
         end
