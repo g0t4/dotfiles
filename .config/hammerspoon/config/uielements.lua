@@ -549,6 +549,9 @@ local function elementSpecifierFor(elem)
         -- FYI title is an issue in some scenarios (i.e. if title is based on current document, like in Script Debugger)
         -- PRN consider using AXSubrole  (i.e. AXStandardWindow) as a filter too? get index relative to it?
         return 'window "' .. title .. '" of '
+    elseif role == "AXBrowser" then
+        -- FYI Finder columns view uses browser control:
+        return 'browser "' .. title .. '" of '
     elseif role == "AXSplitGroup" then
         return "splitter group " .. elemIndex .. " of "
     elseif role == "AXTextArea" then
