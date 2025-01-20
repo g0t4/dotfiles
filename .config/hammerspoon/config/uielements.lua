@@ -552,7 +552,8 @@ local function elementSpecifierFor(elem)
         return 'window "' .. title .. '" of '
     elseif role == "AXBrowser" then
         -- FYI Finder columns view uses browser control:
-        return 'browser "' .. title .. '" of '
+        --    FYI finder example had issues when I used the title of "", whereas index worked
+        return 'browser "' .. elemIndex .. '" of '
     elseif role == "AXTextField" then
         return "text field " .. elemIndex .. " of "
     elseif role == "AXScrollArea" then
