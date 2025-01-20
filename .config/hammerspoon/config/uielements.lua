@@ -743,15 +743,15 @@ end
 
 function GetDumpAXAttributes(element, skips)
     local function compactUserData(userdata)
-        if userdata.__name == "hs.axuielement.axtextmarker" then
+        if userdata.__name == "hs.axuielement.axtextmarker"
+            or userdata.__name == "hs.axuielement.axtextmarkerrange" then
             -- FYI nothing material to show, also don't wanna risk slowing anything down to get length/content (bytes).. unless that is useful and right now I don't think it is
-            return hs.inspect(userdata)
+            return tostring(userdata)
         end
         if userdata.__name ~= "hs.axuielement" then
             -- IIUC __name is frequently used so that is a pretty safe bet
             -- getmetatable(value) == hs.getObjectMetatable("hs.axuielement") -- alternate to check
             prints("UNEXPECTED userdata type, consider adding it to display helpers: " .. tostring(userdata))
-            prints(hs.inspect(userdata))
             return "UNEXPECTED: " .. tostring(userdata)
         end
         local title = GetValueOrEmptyString(userdata, "AXTitle")
