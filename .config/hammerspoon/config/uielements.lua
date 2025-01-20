@@ -756,12 +756,6 @@ function BuildAppleScriptTo(toElement, includeAttrDumps)
     --    i.e. text area => get/set value, button =>click
 end
 
-function BuildActionExamples(element)
-    local actionNames = element:actionNames()
-    -- element:actionDescriptions() => IIAC these work to invoke some actions
-    return table.concat(actionNames, ", ")
-end
-
 function GetValueOrEmptyString(element, attribute)
     local value = element:attributeValue(attribute)
     if value then
