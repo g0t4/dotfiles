@@ -1687,3 +1687,21 @@ if command --query cargo
     abbr cas "cargo search"
 
 end
+
+function find_huge_files
+    # find_huge_files +1M
+    # find_huge_files +10M
+
+    # FYI good question to ask with ask-openai just to validate helper is working
+    # from deepseek-chat
+    # find . -type f -size +100M -exec ls -lh {} \; | awk '{ print $9 ": " $5 }'
+
+    set size +100M
+    if test (count $argv) -gt 0
+        set size $argv[1]
+    end
+    # BTW ~/.cache is a good dir to look for huge files (test command output)
+
+    # find huge files and sort ascending: (deepseek-chat - V3 currently):
+    find . -type f -size $size -exec ls -lh {} \; | awk '{ print $9 ": " $5 }' | sort -k2,2h
+end
