@@ -641,7 +641,8 @@ function BuildAppleScriptTo(toElement, includeAttrDumps)
         identifier = GetValueOrEmptyString(toElement, "AXDescription")
     end
     if identifier == "" then
-        identifier = GetValueOrEmptyString(toElement, "AXRoleDescription")
+        -- prepend "_" b/c role description often overlaps with class (and cannot use that as name)
+        identifier = "_" .. GetValueOrEmptyString(toElement, "AXRoleDescription")
     end
     if identifier == "" then
         -- TODO does this make sense, ever?
@@ -649,10 +650,12 @@ function BuildAppleScriptTo(toElement, includeAttrDumps)
         --   FYI I bet this would change across diff configs of the app so not likely wise beyond current session... that's fine
         identifier = GetValueOrEmptyString(toElement, "AXIdentifier")
     end
+    -- TODO last fallback to AXRole? and prepend _?
     if identifier == "" then
         prints("cannot determine an identifier, using foo")
         identifier = "foo"
     end
+    -- TODO alter identifier if keyword/class is derived
 
     -- IDEAS:
     --   return intermediate references too (for each level, or notable level, i.e. sg1, sg2, sg3, sa4, etc)
