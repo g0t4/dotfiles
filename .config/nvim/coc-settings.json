@@ -63,8 +63,8 @@
     // best way to test this config, open split view with config on top and on bottom a lua file with an issue, modify config and save it and it will refresh the lua file coc diagnostics immediately, but not if edited in another instance of VIM or not using VIM btw
     // the following config (workspace.library, runtime.version/path) were added to make vim globals work in coc-lua (not marked as undefined and have completions)
     "Lua.workspace.library": [
-        // *** ONLY use .luarc.json for project specific settings
-        // *** ONLY PUT paths for all repos/projects here
+        // *** use .luarc.json for project specific settings
+        // *** ONLY add paths for all repos/projects here
     ],
     // stop warning about luv:
     //   prompt:
@@ -73,7 +73,7 @@
     //   - discussion about warning: https://github.com/LunarVim/LunarVim/issues/4049
     //   https://github.com/xiyaowong/coc-sumneko-lua/blob/main/settings.md#luaworkspacecheckthirdparty
     //   - some sort of auto config for select 3rd party libs... I might want this then, right?
-    "Lua.workspace.checkThirdParty": false,
+    "Lua.workspace.checkThirdParty": false, // *** ok for global for now
     //
     "Lua.runtime.version": "LuaJIT",
     "Lua.runtime.path": [

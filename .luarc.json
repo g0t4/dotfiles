@@ -14,7 +14,12 @@
         "~/.luarocks/share/lua/5.4", // luarocks --local
         "/opt/homebrew/share/lua/5.4/rx.lua" // luarocks --global (system wide)
         // "/Applications/Hammerspoon.app/Contents/Resources/extensions", // doesn't work, don't try again unless you find good reason to
-    ]
+    ],
+
+    // darn warning in nvim about luv... picking 3 (dont show again) sets this!
+    //   and before I had this .luarc.json file picking 3 did nothing! message appeared on every restart of nvim
+    // see coc-settings.json for more notes about why I set this:
+    "workspace.checkThirdParty": "Disable"
 
 
 }
