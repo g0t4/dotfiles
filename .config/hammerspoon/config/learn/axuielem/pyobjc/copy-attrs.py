@@ -10,6 +10,13 @@ from ApplicationServices import AXUIElementCopyAttributeValues, AXUIElementCopyA
     kAXErrorNotificationAlreadyRegistered, kAXErrorNotificationNotRegistered, kAXErrorNotificationUnsupported, \
     kAXErrorParameterizedAttributeUnsupported, kAXErrorSuccess
 
+# !!! this example was primarily just to familiarize with underlying APIs used by hammerspoon...
+#   and I was in search of `name` and `class` properties of AXUIElement (if they exist... turns out IIUC they don't)...
+#   near as I can tell,they are synthesized from attributes (i.e. name = title,desc?, class = role desc? map(AXRole)?)
+#   I wanted to check b/c class and name are key to building element specifiers in AppleScript... but aren't actually on the underlying AXUIElement itself
+#      I have also check three diff ui element inspectors and they all don't show name/class beyond UIBrowser which can gen AppleScript (and clearly uses underlying attributes to build these up, or just element index)
+
+
 out_arg = None # make explicit which args are out args as a reminder is all, could inline this and all is fine
 def explainAXError(error):
     # https://developer.apple.com/documentation/applicationservices/axerror AXError
