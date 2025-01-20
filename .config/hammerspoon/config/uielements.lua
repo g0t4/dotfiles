@@ -468,7 +468,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "A", function()
     -- DumpAXAttributes(elementAt, skipAttrsWhenInspectForPathBuilding)
     local clauses, attrDumps = BuildAppleScriptTo(elementAt, true)
     local script = combineClausesWithLineContinuations(clauses)
-    prints("<pre>" .. htmlCodeBlock(script) .. "</pre>")
+    prints(preHtmlCodeBlock(script))
     DumpAXActions(elementAt)
     DumpAXPath(elementAt, true)
     prints(table.unpack(attrDumps))
@@ -904,6 +904,10 @@ function WrapInQuotesIfNeeded(value)
         return ""
     end
     return string.find(value, "%s") and '"' .. value .. '"' or value
+end
+
+function preHtmlCodeBlock(script)
+    return "<pre>" .. script .. "</pre>"
 end
 
 function htmlCodeBlock(script)
