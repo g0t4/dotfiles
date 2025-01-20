@@ -836,11 +836,11 @@ function GetDumpElementLine(elem, indent)
     end
 
     return "<tr><td>" ..
-    col1 ..
-    "</td><td>" ..
-    role ..
-    "</td><td>" ..
-    details .. "</td><td><code class='language-applescript'>" .. elementSpecifierFor(elem) .. "</code></td></tr>"
+        col1 ..
+        "</td><td>" ..
+        role ..
+        "</td><td>" ..
+        details .. "</td><td><code class='language-applescript'>" .. elementSpecifierFor(elem) .. "</code></td></tr>"
 end
 
 local pathTableStart = [[

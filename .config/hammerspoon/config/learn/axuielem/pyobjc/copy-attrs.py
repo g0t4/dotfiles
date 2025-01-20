@@ -16,8 +16,9 @@ from ApplicationServices import AXUIElementCopyAttributeValues, AXUIElementCopyA
 #   I wanted to check b/c class and name are key to building element specifiers in AppleScript... but aren't actually on the underlying AXUIElement itself
 #      I have also check three diff ui element inspectors and they all don't show name/class beyond UIBrowser which can gen AppleScript (and clearly uses underlying attributes to build these up, or just element index)
 
+out_arg = None  # make explicit which args are out args as a reminder is all, could inline this and all is fine
 
-out_arg = None # make explicit which args are out args as a reminder is all, could inline this and all is fine
+
 def explainAXError(error):
     # https://developer.apple.com/documentation/applicationservices/axerror AXError
     # kAXErrorSuccess https://developer.apple.com/documentation/applicationservices/axerror/kaxerrorsuccess
@@ -58,15 +59,18 @@ def explainAXError(error):
     else:
         return f"Unknown error: {error}"
 
+
 def raiseOnFailure(error, message):
     if error != kAXErrorSuccess:
         raise Exception(f"{message}: {explainAXError(error)}")
+
 
 def print_indent(message, indent_level=1):
     # indent each line of the message by splitting on new line, otherwise subequent lines aren't indented to match first line
     lines = message.split('\n')
     indented_lines = [f"{'  ' * indent_level}{line}" for line in lines]
     print('\n'.join(indented_lines))
+
 
 def dumpAttributes(element):
     print()
@@ -79,7 +83,7 @@ def dumpAttributes(element):
         if error == kAXErrorSuccess:
             # print_indent(f"type: {type(value)}", indent_level=1)
             if isinstance(value, NSArray) and len(value) == 0:
-                print_indent(f"{attr}: ()", indent_level=1) # avoid wrapping () across two lines otherwise
+                print_indent(f"{attr}: ()", indent_level=1)  # avoid wrapping () across two lines otherwise
             else:
                 print_indent(f"{attr}: {value}", indent_level=1)
         else:
@@ -116,6 +120,7 @@ def get_focused_element_attributes():
     error, focused_element = AXUIElementCopyAttributeValue(appElement, kAXFocusedUIElementAttribute, out_arg)
     raiseOnFailure(error, "Failed to get focused element")
     dumpAttributes(focused_element)
+
 
 if __name__ == "__main__":
     get_focused_element_attributes()
