@@ -571,7 +571,12 @@ local function elementSpecifierFor(elem)
     --      Some issues may be resolved by looking at AXSubrole and using an attribute filter:
     --      i.e.:
     --         `set win to first window of proc whose value of attribute "AXSubrole" is "AXStandardWindow"`
-
+    --      nested whose/where that works (both are same but one uses AXRole attr vs role property):
+    --         set directLink to first UI element of (first UI element of (group 10 of ¬
+	-- 	           application process "Brave Beta") whose value of attribute "AXRole" is equal to "AXHeading")
+	--         set directLinkRole to first UI element of (first UI element of (group 10 of ¬
+	-- 	           application process "Brave Beta") whose role is equal to "AXHeading")
+    --
     if role == "AXWindow" then
         warnOnEmptyTitle(title, role)
         -- TODO handle duplicate titles (windows) => revert to use index?
@@ -656,6 +661,7 @@ local function elementSpecifierFor(elem)
         -- brave browser had one of these, "web area 1" does not work... generic works and in the case I found title == name
         return preferTitleOverIndexSpecifier("UI element")
     elseif role == "AXHeading" then
+        -- BTW you could filter (whose) on UI element here.. though then I have to redo the clasuses thing :)... maybe? or have pairs of before/afterclauses
         -- AFAICT can only refer to it as "UI element"...
         --   can use title as name, at least in one test I did
         return preferTitleOverIndexSpecifier("UI element")
