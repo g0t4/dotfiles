@@ -1,4 +1,6 @@
 {
+    // FYI see more notes in coc-settings.json about lua LS/LSP and formatter
+
     // FYI I confirmed this works with both zed's lua extension and coc in nvim
     //    just split a pane and comment out one of these globals
     //    (both zed and nvim will almost instantly flip to a diagnostic error)
