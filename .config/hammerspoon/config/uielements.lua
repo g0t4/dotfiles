@@ -468,7 +468,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "A", function()
     -- DumpAXAttributes(elementAt, skipAttrsWhenInspectForPathBuilding)
     local clauses, attrDumps = BuildAppleScriptTo(elementAt, true)
     local script = combineClausesWithLineContinuations(clauses)
-    prints("<pre><code class=\"language-applescript\">" .. script .. "</code></pre>")
+    prints("<pre>" .. htmlCodeBlock(script) .. "</pre>")
     DumpAXActions(elementAt)
     DumpAXPath(elementAt, true)
     prints(table.unpack(attrDumps))
@@ -906,6 +906,10 @@ function WrapInQuotesIfNeeded(value)
     return string.find(value, "%s") and '"' .. value .. '"' or value
 end
 
+function htmlCodeBlock(script)
+    return "<code class='language-applescript'>" .. script .. "</code>"
+end
+
 function GetDumpElementLine(elem, indent)
     indent = indent or ""
     local role = GetValueOrEmptyString(elem, "AXRole")
@@ -949,7 +953,7 @@ function GetDumpElementLine(elem, indent)
         "</td><td>" ..
         role ..
         "</td><td>" ..
-        details .. "</td><td><code class='language-applescript'>" .. elementSpecifierFor(elem) .. "</code></td></tr>"
+        details .. "</td><td>" .. htmlCodeBlock(elementSpecifierFor(elem)) .. "</td></tr>"
 end
 
 local pathTableStart = [[
