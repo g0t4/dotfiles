@@ -821,7 +821,7 @@ function GetDumpAXAttributes(element, skips)
 
     skips = skips or {}
 
-    local result = '<h4>' .. htmlCodeBlock(elementSpecifierFor(element)) .. '</h4>'
+    local result = { '<h4>' .. htmlCodeBlock(elementSpecifierFor(element)) .. '</h4>' }
 
     local sortedAttrs = {}
     for attrName, attrValue in pairs(element) do
@@ -837,12 +837,12 @@ function GetDumpAXAttributes(element, skips)
         local displayValue = displayAttr(attrValue)
         if displayValue == "nil" then
             -- span with light gray text
-            result = result .. "\t<span style='color: #888'>" .. displayName .. ' = ' .. displayValue .. "</span><br>"
+            table.insert(result, "\t<span style='color: #888'>" .. displayName .. ' = ' .. displayValue .. "</span><br>")
         else
-            result = result .. "\t" .. displayName .. ' = ' .. displayValue .. '<br>'
+            table.insert(result, "\t" .. displayName .. ' = ' .. displayValue .. '<br>')
         end
     end
-    return result
+    return table.concat(result)
 end
 
 function BuildActionExamples(element)
