@@ -678,7 +678,7 @@ local function elementSpecifierFor(elem)
     return roleDescription .. " " .. elemIndex .. " of "
 end
 
-function getIdentifier(toElement)
+local function getIdentifier(toElement)
     local identifier = GetValueOrEmptyString(toElement, "AXTitle")
     if identifier == "" then
         identifier = GetValueOrEmptyString(toElement, "AXDescription")
