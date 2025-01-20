@@ -674,9 +674,11 @@ local function elementSpecifierFor(elem)
     elseif role == "AXRow" then
         -- confirmed, see separate scpt files
         return "row " .. elemIndex .. " of "
+    elseif role == "AXColumn" then
+        -- confirmed, see separate scpt files
+        return "column " .. elemIndex .. " of "
     elseif role == "AXCell" then
-        -- not working in current example (tested w/ AXTable/AXRow both of which worked :<)
-        -- TODO why didn't `cell 1` work? (for html page table cell)
+        -- so, AXTable/Row/Column all work, so AXCell is just a standalone concept that intersects but doesn't have a class to correspond
         return "UI element " .. elemIndex .. " of "
     elseif role == "AXLink" then
         -- not working as "link 1", use generic
