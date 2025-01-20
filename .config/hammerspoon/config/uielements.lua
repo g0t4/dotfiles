@@ -870,17 +870,16 @@ end
 function GetDumpAXActions(element)
     local identifer = getIdentifier(element)
     local actions = element:actionNames()
-    local result = ' ## NO ACTIONS'
+    local script = "" -- leave empty if none is likely fine
     if #actions > 0 then
-        result = '## ACTIONS:<br>'
         for _, action in ipairs(actions) do
             -- FYI probably don't need description in most cases, only for custom app specific actions
             -- local description = element:actionDescription(action)
             -- result = result .. action .. ': ' .. description .. '<br>'
-            result = result .. "perform action \"" .. action .. "\" of " .. identifer .. "<br>"
+            script = script .. "perform action \"" .. action .. "\" of " .. identifer .. "<br>"
         end
     end
-    return result
+    return preHtmlCodeBlock(script)
 end
 
 function DumpAXActions(element)
