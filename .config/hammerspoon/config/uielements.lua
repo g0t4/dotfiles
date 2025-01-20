@@ -553,6 +553,12 @@ local function elementSpecifierFor(elem)
     elseif role == "AXBrowser" then
         -- FYI Finder columns view uses browser control:
         return 'browser "' .. title .. '" of '
+    elseif role == "AXTextField" then
+        return "text field " .. elemIndex .. " of "
+    elseif role == "AXScrollArea" then
+        return "scroll area " .. elemIndex .. " of "
+    elseif role == "AXSplitter" then
+        return "splitter " .. elemIndex .. " of "
     elseif role == "AXSplitGroup" then
         return "splitter group " .. elemIndex .. " of "
     elseif role == "AXTextArea" then
