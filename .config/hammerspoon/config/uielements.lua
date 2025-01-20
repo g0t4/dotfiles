@@ -685,6 +685,14 @@ function getIdentifier(toElement)
         prints("cannot determine an identifier, using foo")
         identifier = "foo"
     end
+    -- todo ensure not reserved word:
+    local appleScriptReservedWords = { "length", "if", "then", "else", "end", "repeat",
+        "until", "for", "in", "do", "while", "function", "local", "return", "break",
+        "goto", "and", "or", "not", "true", "false" }
+    if EnumTableValues(appleScriptReservedWords):any(function(word) return word == identifier end) then
+        -- alternatively I could put _ on the front of all generated identifiers... so I always know when it was a name I made vs actual keywords
+        identifier = "_" .. identifier
+    end
     return identifier
 end
 
