@@ -834,31 +834,16 @@ function GetDumpAXAttributes(element, skips)
     for _, attrName in ipairs(sortedAttrs) do
         local attrValue = element[attrName]
         local displayName = attrName
-        local nonStandard = not StandardAttributesSet[attrName]
         local displayValue = displayAttr(attrValue)
-        if nonStandard then
-            displayName = '** ' .. attrName
+        if displayValue == "nil" then
+            -- span with light gray text
+            result = result .. "\t<span style='color: #888'>" .. displayName .. ' = ' .. displayValue .. "</span><br>"
+        else
+            result = result .. "\t" .. displayName .. ' = ' .. displayValue .. '<br>'
         end
-        result = result .. "\t" .. displayName .. ' = ' .. displayValue .. '<br>'
     end
     return result
 end
-
--- *** non-standard attr identification ***
-StandardAttributesSet = {}
-for _, value in pairs(hs.axuielement.attributes) do
-    StandardAttributesSet[value] = true
-end
--- add these as standard too:
-StandardAttributesSet["AXFullScreen"] = true
-StandardAttributesSet["AXFrame"] = true
-StandardAttributesSet["AXPreferredLanguage"] = true
-StandardAttributesSet["AXEnhancedUserInterface"] = true
--- AXFunctionRowTopLevelElements ?
--- AXChildrenInNavigationOrder ?
--- TODO AXSections (could this be useful in searching elements?
--- FYI I am using this detection really just to point them out to me so I can figure out what each one is and then exploit if useful
---   once I find something new, its ok to add to this list (so only new stick out)
 
 function BuildActionExamples(element)
     local identifer = getIdentifier(element)
