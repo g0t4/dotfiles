@@ -443,6 +443,14 @@ local function combineClausesWithLineContinuations(clauses)
     return table.concat(lines, "¬\n    ") -- four spaces on ident too
 end
 
+local function htmlCodeBlock(script)
+    return "<code class='language-applescript'>" .. script .. "</code>"
+end
+
+local function preHtmlCodeBlock(script)
+    return "<pre>" .. htmlCodeBlock(script) .. "</pre>"
+end
+
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "A", function()
     -- [A]ppleScript
     -- FYI "A" is easy to invoke with left hand alone (after position mouse with right--trackpad)
@@ -904,14 +912,6 @@ function WrapInQuotesIfNeeded(value)
         return ""
     end
     return string.find(value, "%s") and '"' .. value .. '"' or value
-end
-
-function preHtmlCodeBlock(script)
-    return "<pre>" .. script .. "</pre>"
-end
-
-function htmlCodeBlock(script)
-    return "<code class='language-applescript'>" .. script .. "</code>"
 end
 
 function GetDumpElementLine(elem, indent)
