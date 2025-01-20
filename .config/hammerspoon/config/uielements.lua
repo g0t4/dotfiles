@@ -477,7 +477,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "A", function()
     local clauses, attrDumps = BuildAppleScriptTo(elementAt, true)
     local script = combineClausesWithLineContinuations(clauses)
     prints(preHtmlCodeBlock(script))
-    DumpAXActions(elementAt)
+    prints(BuildActionExamples(elementAt))
     DumpAXPath(elementAt, true)
     prints(table.unpack(attrDumps))
     -- TODO build lua hammerspoon code instead of just AppleScript! that I can drop into my hammerspoon lua config instead of AppleScript in say KM
@@ -867,7 +867,7 @@ function DumpAXAttributes(element, skips)
     prints(GetDumpAXAttributes(element, skips))
 end
 
-function GetDumpAXActions(element)
+function BuildActionExamples(element)
     local identifer = getIdentifier(element)
     local actions = element:actionNames()
     local script = "" -- leave empty if none is likely fine
@@ -880,10 +880,6 @@ function GetDumpAXActions(element)
         end
     end
     return preHtmlCodeBlock(script)
-end
-
-function DumpAXActions(element)
-    prints(GetDumpAXActions(element))
 end
 
 function GetElementSiblingIndex(elem)
