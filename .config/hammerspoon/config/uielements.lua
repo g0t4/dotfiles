@@ -479,8 +479,8 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "A", function()
     local clauses, attrDumps = BuildAppleScriptTo(elementAt, true)
     local script = combineClausesWithLineContinuations(clauses)
     prints("<pre><code class=\"language-applescript\">" .. script .. "</code></pre>")
-    DumpAXPath(elementAt, true)
     DumpAXActions(elementAt)
+    DumpAXPath(elementAt, true)
     prints(table.unpack(attrDumps))
     -- TODO build lua hammerspoon code instead of just AppleScript! that I can drop into my hammerspoon lua config instead of AppleScript in say KM
 end)
@@ -740,6 +740,7 @@ end
 
 function BuildActionExamples(element)
     local actionNames = element:actionNames()
+    -- element:actionDescriptions() => IIAC these work to invoke some actions
     return table.concat(actionNames, ", ")
 end
 
