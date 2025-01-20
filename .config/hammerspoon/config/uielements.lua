@@ -738,6 +738,11 @@ function BuildAppleScriptTo(toElement, includeAttrDumps)
     --    i.e. text area => get/set value, button =>click
 end
 
+function BuildActionExamples(element)
+    local actionNames = element:actionNames()
+    return table.concat(actionNames, ", ")
+end
+
 function GetValueOrEmptyString(element, attribute)
     local value = element:attributeValue(attribute)
     if value then
