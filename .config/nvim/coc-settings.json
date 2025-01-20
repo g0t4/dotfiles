@@ -75,6 +75,7 @@
     //   - some sort of auto config for select 3rd party libs... I might want this then, right?
     "Lua.workspace.checkThirdParty": false, // *** ok for global for now
     //
+    // TODO! do I want these global or project specific?
     "Lua.runtime.version": "LuaJIT",
     "Lua.runtime.path": [
         "?.lua",
@@ -86,11 +87,8 @@
     //   - formatter: https://github.com/CppCXY/EmmyLuaCodeStyle/blob/master/README_EN.md
     //   - options: https://github.com/CppCXY/EmmyLuaCodeStyle/blob/master/lua.template.editorconfig
     //
-    //  TODO ugh I cannot stop it from wrapping lines with func calls and multi args (i.e. debug.lua keymaps for nvim-dap)
-    //    editorconfig works and defaultConfig is not working for me
-    //       is it possible editorconfig clobbers all settings if its present?
+    // FYI editorconfig works for formatter settings (and appears to clobber defaultConfig here):
     // "Lua.format.defaultConfig": {
-    //     // ** these are ignored (maybe b/c if editorconfig is present it trumps everything here?)
     //     // "max_line_length": "200",
     // },
     "Lua.diagnostics.globals": [
