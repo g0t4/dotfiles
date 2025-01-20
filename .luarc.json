@@ -4,7 +4,17 @@
     // FYI I confirmed this works with both zed's lua extension and coc in nvim
     //    just split a pane and comment out one of these globals
     //    (both zed and nvim will almost instantly flip to a diagnostic error)
-    "diagnostics.globals": ["hs"],
+    "diagnostics.globals": [
+
+        "hs",
+        // nvim:
+        "vim",
+        "describe",
+        "it",
+        "assert",
+        // TODO is it possible to point these globals at a require("..") call so I get completions and what not and don't get bogus diag failures when using them
+
+    ],
 
     // FYI I had to quit/restart zed to get new workspace.library paths to start working with Find Ref (F12)
     // nvim diagnostics refresh without restart, in a few seconds max:
@@ -22,6 +32,4 @@
     //   and before I had this .luarc.json file picking 3 did nothing! message appeared on every restart of nvim
     // see coc-settings.json for more notes about why I set this:
     "workspace.checkThirdParty": "Disable"
-
-
 }
