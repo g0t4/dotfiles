@@ -553,7 +553,9 @@ local function elementSpecifierFor(elem)
         --    FYI finder example had issues when I used the title of "", whereas index worked
         return "browser " .. elemIndex .. " of "
     elseif role == "AXButton" then
-        return "button " .. elemIndex .. " of "
+        -- todo can I use title as name for buttons?
+        -- return "button " .. elemIndex .. " of "
+        return preferTitleOverIndexSpecifier("button")
     elseif role == "AXTextField" then
         return "text field " .. elemIndex .. " of "
     elseif role == "AXScrollArea" then
