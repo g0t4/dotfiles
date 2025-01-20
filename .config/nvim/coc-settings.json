@@ -56,7 +56,9 @@
 
     // *** lua:
     //   coc-lua options: https://github.com/josa42/coc-lua
-    //     uses https://github.com/LuaLS/lua-language-server
+    //     uses https://github.com/LuaLS/lua-language-server (yay, Zed's lua extension also uses this!)
+    //        BUT, zed uses .luarc.json config files (not obviously coc-settings.json)... so I should move the settings to .luarc.json (entirely, or replicate there too)
+    //        IIAC coc-settings.json applies to all projects/repos.. not just the one that houses my dotfiles repo's nvim config, so maybe use coc-settings.json as a set of global/default settings and then mirror those to luarc.json and then use luarc.json for project specific overrides?
     // other people use sumneko-lua... I got coc-lua to work just fine... btw make sure :CocConfig opens this file, else maybe your symlink is messed up from dotfiles repo
     // best way to test this config, open split view with config on top and on bottom a lua file with an issue, modify config and save it and it will refresh the lua file coc diagnostics immediately, but not if edited in another instance of VIM or not using VIM btw
     // the following config (workspace.library, runtime.version/path) were added to make vim globals work in coc-lua (not marked as undefined and have completions)
@@ -97,27 +99,7 @@
     //     // "max_line_length": "200",
     // },
     "Lua.diagnostics.globals": [
-        "vim",
-        "describe",
-        "it",
-
-        "assert",
-        "assert.equals",
-        "assert.is_true",
-        "assert.is_false",
-        "assert.is_nil",
-        "assert.is_not_nil",
-
-        "before_each",
-        "after_each",
-        "pending",
-        "setup",
-        "teardown",
-
-        // hammerspoon (don't try to get LS to work with hs beyond this (not warn about hs usages))
-        "hs",
-        "spoon",
-        // TODO move these to project specific config files? can I have coc-settings.json in my .config/hammerspoon dir?
+        // USE .luarc.json PROJECT SPECIFIC GLOBALS, not here... i.e. only dotfiles has vim/hs globals, I don't want those in every lua repo/workspace
     ],
     //
     // per https://github.com/UltiRequiem/coc-zig
