@@ -473,7 +473,6 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "A", function()
     -- FYI systemElementAtPosition(coords) => hs.axuielement.systemWideElement():elementAtPosition(coords)
     --   alternatively, could use an app element and ask for its elementAtPosition specific to just that app
     local elementAt = hs.axuielement.systemElementAtPosition(coords)
-    -- DumpAXAttributes(elementAt, skipAttrsWhenInspectForPathBuilding)
     local clauses, attrDumps = BuildAppleScriptTo(elementAt, true)
     local script = combineClausesWithLineContinuations(clauses)
     prints(preHtmlCodeBlock(script))
@@ -860,11 +859,6 @@ StandardAttributesSet["AXEnhancedUserInterface"] = true
 -- TODO AXSections (could this be useful in searching elements?
 -- FYI I am using this detection really just to point them out to me so I can figure out what each one is and then exploit if useful
 --   once I find something new, its ok to add to this list (so only new stick out)
-
-
-function DumpAXAttributes(element, skips)
-    prints(GetDumpAXAttributes(element, skips))
-end
 
 function BuildActionExamples(element)
     local identifer = getIdentifier(element)
