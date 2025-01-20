@@ -665,22 +665,7 @@ local function elementSpecifierFor(elem)
     return roleDescription .. " " .. elemIndex .. " of "
 end
 
-function BuildAppleScriptTo(toElement, includeAttrDumps)
-    includeAttrDumps = includeAttrDumps or false
-
-    local specifierChain = {}
-    local attrDumps = {}
-    -- REMEMBER toElement is last item in :path() list/table so dont need special handling for it outside of list
-    for _, elem in pairs(toElement:path()) do
-        if includeAttrDumps then
-            -- for testing, don't even run this if not needed (has to have a good perf hit)
-            local attrDump = GetDumpAXAttributes(elem, skipAttrsWhenInspectForPathBuilding)
-            table.insert(attrDumps, attrDump)
-        end
-
-        table_prepend(specifierChain, elementSpecifierFor(elem))
-    end
-
+function getIdentifier(toElement)
     local identifier = GetValueOrEmptyString(toElement, "AXTitle")
     if identifier == "" then
         identifier = GetValueOrEmptyString(toElement, "AXDescription")
@@ -700,6 +685,26 @@ function BuildAppleScriptTo(toElement, includeAttrDumps)
         prints("cannot determine an identifier, using foo")
         identifier = "foo"
     end
+    return identifier
+end
+
+function BuildAppleScriptTo(toElement, includeAttrDumps)
+    includeAttrDumps = includeAttrDumps or false
+
+    local specifierChain = {}
+    local attrDumps = {}
+    -- REMEMBER toElement is last item in :path() list/table so dont need special handling for it outside of list
+    for _, elem in pairs(toElement:path()) do
+        if includeAttrDumps then
+            -- for testing, don't even run this if not needed (has to have a good perf hit)
+            local attrDump = GetDumpAXAttributes(elem, skipAttrsWhenInspectForPathBuilding)
+            table.insert(attrDumps, attrDump)
+        end
+
+        table_prepend(specifierChain, elementSpecifierFor(elem))
+    end
+
+
     -- TODO alter identifier if keyword/class is derived
 
     -- IDEAS:
@@ -709,7 +714,7 @@ function BuildAppleScriptTo(toElement, includeAttrDumps)
     -- TODO use description if not title?
     -- TODO hungarian notation if title/desc are "too short" or?
     -- TODO build up some test cases would be helpful as you encounter real work examples
-    local variableName = applescriptIdentifierFor(identifier)
+    local variableName = applescriptIdentifierFor(getIdentifier(toElement))
     -- return "<br>set " .. variableName .. " to " .. specifierChain, attrDumps
     local setCommand = "set " .. variableName .. " to "
     table_prepend(specifierChain, setCommand)
