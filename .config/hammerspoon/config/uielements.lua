@@ -655,6 +655,10 @@ local function elementSpecifierFor(elem)
     elseif role == "AXWebArea" then
         -- brave browser had one of these, "web area 1" does not work... generic works and in the case I found title == name
         return preferTitleOverIndexSpecifier("UI element")
+    elseif role == "AXHeading" then
+        -- AFAICT can only refer to it as "UI element"...
+        --   can use title as name, at least in one test I did
+        return preferTitleOverIndexSpecifier("UI element")
     end
     prints("SUGGESTION: using roleDescription \"" .. roleDescription .. "\" as class (error prone in some cases), add an explicit mapping for AXRole: " .. role)
     -- FYI pattern, class == roleDesc - AX => split on captial letters (doesn't work for AXApplication, though actually it probably does work as ref to application class in Standard Suite?
