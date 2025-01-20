@@ -712,9 +712,6 @@ function BuildAppleScriptTo(toElement, includeAttrDumps)
         table_prepend(specifierChain, elementSpecifierFor(elem))
     end
 
-
-    -- TODO alter identifier if keyword/class is derived
-
     -- IDEAS:
     --   return intermediate references too (for each level, or notable level, i.e. sg1, sg2, sg3, sa4, etc)
     --     consider variable name based on AXIdentifier (if other options fail)
@@ -727,6 +724,9 @@ function BuildAppleScriptTo(toElement, includeAttrDumps)
     local setCommand = "set " .. variableName .. " to "
     table_prepend(specifierChain, setCommand)
 
+    -- FYI I could change the result to have more than one element item per specifierChain location (IOTW list of lists)...
+    --   then could combine items at each location... so if two options in one location => then two final scripts
+    --   two options w/ two each => 4 combinations
     return specifierChain, attrDumps
     -- PRN add suggestions section for actions to use and properties to get/set? as examples to copy/pasta
     --    i.e. text area => get/set value, button =>click
