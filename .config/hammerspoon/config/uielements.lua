@@ -477,7 +477,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "A", function()
     local script = combineClausesWithLineContinuations(clauses)
     prints(preHtmlCodeBlock(script))
     prints(BuildActionExamples(elementAt))
-    DumpAXPath(elementAt, true)
+    prints(GetDumpPath(elementAt, true))
     prints(table.unpack(attrDumps))
     -- TODO build lua hammerspoon code instead of just AppleScript! that I can drop into my hammerspoon lua config instead of AppleScript in say KM
 end)
@@ -981,8 +981,4 @@ function GetDumpPath(element, expanded)
     else
         return "NO PATH - should not happen, even AXApplication (top level) has self as path"
     end
-end
-
-function DumpAXPath(element, expanded)
-    prints(GetDumpPath(element, expanded))
 end
