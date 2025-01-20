@@ -553,8 +553,10 @@ local function elementSpecifierFor(elem)
         --    FYI finder example had issues when I used the title of "", whereas index worked
         return "browser " .. elemIndex .. " of "
     elseif role == "AXButton" then
-        -- todo can I use title as name for buttons?
-        -- return "button " .. elemIndex .. " of "
+        -- FYI UI Browser - tested a button with title as name and it worked! lets just wait and see if I encounter any issues...
+        --    if issues arise... then how about switch to: `whose value of attribute "AXTitle" is __`
+        --    FYI button in hierarchy is almost always gonna be the control at the bottom... just FYI
+        --    could use tested fallback too or just show multiple options for button if last elem?
         return preferTitleOverIndexSpecifier("button")
     elseif role == "AXTextField" then
         return "text field " .. elemIndex .. " of "
