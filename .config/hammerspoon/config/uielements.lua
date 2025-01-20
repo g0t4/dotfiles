@@ -434,6 +434,10 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "E", function()
     -- testMyOwnFilterFunction()
 end)
 
+local function combineClausesWithLineContinuations(clauses)
+    return table.concat(clauses, "\n")
+end
+
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "A", function()
     -- [A]ppleScript
     -- FYI "A" is easy to invoke with left hand alone (after position mouse with right--trackpad)
@@ -447,7 +451,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "A", function()
     local elementAt = hs.axuielement.systemElementAtPosition(coords)
     -- DumpAXAttributes(elementAt, skipAttrsWhenInspectForPathBuilding)
     local clauses, attrDumps = BuildAppleScriptTo(elementAt, true)
-    local script = table.concat(clauses, "\n")
+    local script = combineClausesWithLineContinuations(clauses)
     prints("<pre><code class=\"language-applescript\">" .. script .. "</code></pre>")
     DumpAXPath(elementAt, true)
     DumpAXActions(elementAt)
