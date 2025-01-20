@@ -44,7 +44,7 @@ function ask_use_lmstudio
 end
 
 function ask_use_ollama
-    _ask_write_state --ollama $use_args
+    _ask_write_state --ollama $argv
 end
 
 function ask_openai
