@@ -678,6 +678,9 @@ local function elementSpecifierFor(elem)
         -- not working in current example (tested w/ AXTable/AXRow both of which worked :<)
         -- TODO why didn't `cell 1` work? (for html page table cell)
         return "UI element " .. elemIndex .. " of "
+    elseif role == "AXLink" then
+        -- not working as "link 1", use generic
+        return "UI element " .. elemIndex .. " of "
     end
     prints("SUGGESTION: using roleDescription \"" .. roleDescription .. "\" as class (error prone in some cases), add an explicit mapping for AXRole: " .. role)
     -- FYI pattern, class == roleDesc - AX => split on captial letters (doesn't work for AXApplication, though actually it probably does work as ref to application class in Standard Suite?
