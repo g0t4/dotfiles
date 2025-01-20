@@ -908,7 +908,7 @@ function WrapInQuotesIfNeeded(value)
     return string.find(value, "%s") and '"' .. value .. '"' or value
 end
 
-function GetDumpElementLine(elem, indent)
+function GetElementTableRow(elem, indent)
     indent = indent or ""
     local role = GetValueOrEmptyString(elem, "AXRole")
     local title = GetValueOrEmptyString(elem, "AXTitle")
@@ -969,7 +969,7 @@ function GetDumpPath(element, expanded)
     if #path > 0 then
         local result = pathTableStart
         for _, elem in ipairs(path) do
-            local current = GetDumpElementLine(elem)
+            local current = GetElementTableRow(elem)
             result = result .. current .. '\n' -- \n is for html formatting in src
 
             if expanded then
@@ -978,7 +978,7 @@ function GetDumpPath(element, expanded)
                     children = {}
                 end
                 for _, child in pairs(children) do
-                    result = result .. GetDumpElementLine(child, "\t\t") .. "\n"
+                    result = result .. GetElementTableRow(child, "\t\t") .. "\n"
                 end
             end
         end
