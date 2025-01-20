@@ -822,8 +822,7 @@ function GetDumpAXAttributes(element, skips)
 
     skips = skips or {}
 
-    -- yes, I know this has tr/td tags but it still shows fine for now so I don't need to make GetDumpElementLine() handle non table output too (not yet)
-    local result = '## ATTRs - ' .. GetDumpElementLine(element) .. '<br>'
+    local result = '<h4>' .. htmlCodeBlock(elementSpecifierFor(element)) .. '</h4>'
 
     local sortedAttrs = {}
     for attrName, attrValue in pairs(element) do
