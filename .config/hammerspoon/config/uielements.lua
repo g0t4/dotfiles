@@ -558,6 +558,8 @@ local function elementSpecifierFor(elem)
         --    FYI button in hierarchy is almost always gonna be the control at the bottom... just FYI
         --    could use tested fallback too or just show multiple options for button if last elem?
         return preferTitleOverIndexSpecifier("button")
+    elseif role == "AXScrollBar" then
+        return "scroll bar " .. elemIndex .. " of "
     elseif role == "AXMenuBar" then
         -- s/b fine to use index here.. esp b/c menu item would have title as name
         return "menu bar " .. elemIndex .. " of "
