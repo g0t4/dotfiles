@@ -111,4 +111,11 @@ function TableReverse(theTable)
     return reversed
 end
 
+-- chainable too, perhaps add more overloads with builder pattern of chaining (return tablej)
+---@diagnostic disable-next-line: lowercase-global
+function table_prepend(theTable, value)
+    table.insert(theTable, 1, value)
+    return theTable
+end
+
 return M

@@ -644,9 +644,7 @@ function BuildAppleScriptTo(toElement, includeAttrDumps)
             table.insert(attrDumps, attrDump)
         end
 
-
-        -- prepend
-        table.insert(specifierChain, 1, elementSpecifierFor(elem))
+        table_prepend(specifierChain, elementSpecifierFor(elem))
     end
 
     local identifier = GetValueOrEmptyString(toElement, "AXTitle")
@@ -680,23 +678,9 @@ function BuildAppleScriptTo(toElement, includeAttrDumps)
     local variableName = applescriptIdentifierFor(identifier)
     -- return "<br>set " .. variableName .. " to " .. specifierChain, attrDumps
     local setCommand = "set " .. variableName .. " to "
-    table.insert(specifierChain, 1, setCommand)
-    -- local elementCriteria = EnumTableValues(specifierChain)
-    --     :filter(function(e) return string.find(e, "process") end)
-    --     :totable()
-    --
-    -- concat re-implemented:
-    -- local elementCriteria = EnumTableValues(specifierChain)
-    --     :foldl(function(accum, current) return accum .. " - " .. current end, "")
-    -- return elementCriteria, attrDumps
+    table_prepend(specifierChain, setCommand)
 
-    -- local elementCriteria = EnumTableValues(specifierChain)
-    --     :foldl(function(accum, current)
-    --         table.insert(accum, 1, current); return accum
-    --     end, {})
-    -- return table.concat(elementCriteria, " "), attrDumps
-
-    return TableLeftJoin(specifierChain, " !!! "), attrDumps
+    return specifierChain, attrDumps
     -- PRN add suggestions section for actions to use and properties to get/set? as examples to copy/pasta
     --    i.e. text area => get/set value, button =>click
 end
