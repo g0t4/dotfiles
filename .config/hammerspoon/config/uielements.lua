@@ -634,7 +634,7 @@ end
 function BuildAppleScriptTo(toElement, includeAttrDumps)
     includeAttrDumps = includeAttrDumps or false
 
-    local specifierChain = ""
+    local specifierChain = {}
     local attrDumps = {}
     -- REMEMBER toElement is last item in :path() list/table so dont need special handling for it outside of list
     for _, elem in pairs(toElement:path()) do
@@ -644,7 +644,9 @@ function BuildAppleScriptTo(toElement, includeAttrDumps)
             table.insert(attrDumps, attrDump)
         end
 
-        specifierChain = elementSpecifierFor(elem) .. specifierChain
+
+        -- prepend
+        table.insert(specifierChain, 1, elementSpecifierFor(elem))
     end
 
     local identifier = GetValueOrEmptyString(toElement, "AXTitle")
@@ -676,7 +678,25 @@ function BuildAppleScriptTo(toElement, includeAttrDumps)
     -- TODO hungarian notation if title/desc are "too short" or?
     -- TODO build up some test cases would be helpful as you encounter real work examples
     local variableName = applescriptIdentifierFor(identifier)
-    return "<br>set " .. variableName .. " to " .. specifierChain, attrDumps
+    -- return "<br>set " .. variableName .. " to " .. specifierChain, attrDumps
+    local setCommand = "set " .. variableName .. " to "
+    table.insert(specifierChain, 1, setCommand)
+    -- local elementCriteria = EnumTableValues(specifierChain)
+    --     :filter(function(e) return string.find(e, "process") end)
+    --     :totable()
+    --
+    -- concat re-implemented:
+    -- local elementCriteria = EnumTableValues(specifierChain)
+    --     :foldl(function(accum, current) return accum .. " - " .. current end, "")
+    -- return elementCriteria, attrDumps
+
+    -- local elementCriteria = EnumTableValues(specifierChain)
+    --     :foldl(function(accum, current)
+    --         table.insert(accum, 1, current); return accum
+    --     end, {})
+    -- return table.concat(elementCriteria, " "), attrDumps
+
+    return TableLeftJoin(specifierChain, " !!! "), attrDumps
     -- PRN add suggestions section for actions to use and properties to get/set? as examples to copy/pasta
     --    i.e. text area => get/set value, button =>click
 end

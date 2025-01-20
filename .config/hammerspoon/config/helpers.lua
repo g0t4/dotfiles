@@ -89,4 +89,26 @@ function EnumTableValues(tbl)
     end)
 end
 
+function TableLeftJoin(theTable, separator)
+    -- FYI just to get a bit of practice using luafun library
+    --  surprised to find it provides very few methods (i.e. no reverse)
+    return EnumTableValues(theTable)
+        :foldl(function(accum, current)
+            if accum == "" then
+                -- don't join nothing with first entry
+                return current
+            end
+            return accum .. separator .. current
+        end, "")
+end
+
+function TableReverse(theTable)
+    -- just for practice
+    local reversed = {}
+    for _, v in pairs(theTable) do
+        table.insert(reversed, 1, v)
+    end
+    return reversed
+end
+
 return M

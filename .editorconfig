@@ -14,3 +14,4 @@ trim_trailing_whitespace = true
 #   TODO IIAC I have to set per repo/workspace? or can I have a global editorconfig (in this dotfiles repo? - w.r.t. the formatter using editorconfig for its options)
 max_line_length = 200
 align_continuous_inline_comment = false
+# BTW zed lua extension works with this (as long as I load entire repo dir and not a subdir), cool
