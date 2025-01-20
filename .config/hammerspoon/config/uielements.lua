@@ -835,7 +835,7 @@ function GetDumpAXAttributes(element, skips)
         local attrValue = element[attrName]
         local displayName = attrName
         local displayValue = displayAttr(attrValue)
-        if displayValue == "nil" then
+        if displayValue == "nil" or displayValue == '""' then
             table.insert(result, "\t<span class='not-set-attribute'>" .. displayName .. ' = ' .. displayValue .. "</span><br>")
         else
             local displayNameClass = string.lower(attrName) -- used for styling important attributes (i.e. AXTitle)
