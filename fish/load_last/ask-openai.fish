@@ -31,12 +31,9 @@ function ask_use_groq
     _ask_write_state --groq $argv
 end
 
-function ask_use_openai_gpt4o
-    _ask_write_state --openai gpt-4o
-end
-
-function ask_use_openai_gpt3.5
-    _ask_write_state --openai gpt-3.5-turbo-1106
+function ask_use_openai
+    # FYI let the service code handle the default model, dont duplicate that logic here
+    _ask_write_state --openai $argv
 end
 
 function ask_use_lmstudio
