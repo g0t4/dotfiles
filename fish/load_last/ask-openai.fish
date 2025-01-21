@@ -47,6 +47,9 @@ function ask_use_ollama
     _ask_write_state --ollama $argv
 end
 
+complete --command ask_use_ollama --no-files \
+    -a "(ollama list | tail -n +2 | cut -d ' ' -f1)"
+
 function ask_openai
 
     set -l user_input (commandline -b)
