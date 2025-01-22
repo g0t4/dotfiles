@@ -14,6 +14,31 @@ local use_ai = {
 -- - https://github.com/tzachar/cmp-ai
 --   sounds like it has on-demand or all the time completions... and mentions qwen so it should work
 --   only concern, is it previewed in a dropdown like coc? or is it inline grayed out text like copilot/supermaven?
+--      yuck, emphasis is on pretty print in completion menus... YUCK..
+--      THAT SAID, are there any plugins to nvim-cmp that take the first suggestion and show it inline? like copilot/supermaven? I wouldn't care as long as I can prioritize model suggestions over all others
+--         ASIDE... curious, does COC have a way to preview first completion inline (but, only if no supermaven avail)?
+--   also I use coc so this is gonna conflict, but I do use cmp for cmdline completions so this isn't gonna be absolutely terrrible... I even had some keys mapped for using nvim-cmp in buffers (though I would need to flesh that out and migrate my LSP settings => cocsettings, etc)
+--   debounce is not part of the plugin... and it likley should go into nvim-cmp...
+--      https://www.reddit.com/r/neovim/comments/18lxe4a/comment/ke1jf1f/
+--      another issue as yeah... can't fire off 100 requests (even if canceled) in a row... and why?!
+--      throttle is not debounce
+-- - https://github.com/fauxpilot/fauxpilot
+--    - works w/ vscode too.. swap in ollama there... interesting
+--    - allegely works w/ copilot.nvim and can map requests to ollama... that said its docs are not reassuring.. insane tech stack setup with docker/nvidida-containers and ... I just want to config an API.. I don't want smth else loading/importing models... etc
+-- - ROLL MY OWN
+--    - how hard is it? to just debounce the mouse... .request completions (w/ cancelation on prev)... and hardest part has to be extmarks to show it but is that that difficult?
+--    - how is this not already conquered?!
+--       - ok TBH... supermaven does what I want... (minus I'd like to see jump edits)
+--    - I could impl jump edits with my own :)
+--
+-- - vscode ollama notes:
+--    - btw ChatGPT vscode plugin did work in vscode... but it was not fun to configure it and didn't have streaming either (not AFAICT)
+--      - it did work nicely with gwen2.5-coder:3b
+--      - this is what made me want to see what is avail in nvim... so I can see if I like qwen2.5 in nvim too
+--
+-- Seprate notes:
+--   - investigate GPU/CPU usage for models... is ollama utilizing GPU for the models I run this for... that could explain the issue I had with bigger models not running even if there is room on GPU still:
+--      if it isn't, consider using llama.cpp directly to force it : https://github.com/ggerganov/llama.cpp/blob/master/examples/server/README.md
 --
 --
 --
