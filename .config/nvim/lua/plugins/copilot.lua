@@ -8,8 +8,6 @@ local use_ai = {
 --    purportedly faster and less glitchy than copilot.vim
 --    has panel too with completion preview, is that useful?
 
--- !!! TODO TRY https://github.com/jackMort/ChatGPT.nvim + ollama locally (on win machine with qwen2.5:14b .. IIRC that was fastest of bigger qwen2.5 models and much faster than my mac)
-
 function SwitchCopilot()
     -- TODO I should call this in config of preferred copilot OR ...  setup one to be disabled out of the gate and other to be enabled in the opts for each
     -- FYI supermaven toggle works across vim restarts, copilot is per buffer IIUC
@@ -299,3 +297,50 @@ return {
     },
     avante,
 }
+
+
+-- DECIDED NO
+-- {
+--     -- NOT A GOOD FIT: completions aren't automatic AND cannot use custom models (let alone not openai models)
+--
+--     enabled = vim.tbl_contains(use_ai, "ChatGPT.nvim"),
+--     "jackMort/ChatGPT.nvim",
+--     config = function()
+--         -- BTW uses curl under the hood, super accessible plugin code
+--         -- pros:
+--         -- - actions concept => configure model per "action" (scenario)... also tweak params, etc - builtin actions + custom
+--         -- - interactive/float window => I like the iteration idea where you have it gen some code, then you can take it and prompt more changes to it, good workflow for focusing on a new chunk of code
+--         --   - https://youtu.be/dWe01EV0q3Q?t=40
+--         -- improves (submit PRs, if I like using this):
+--         -- - needs checkhealth provider to dump info
+--         -- - docs should include non-OpenAI (ie ollama) config example
+--         -- cons:
+--         -- - have to trigger inline completions with a keymap... not in advance...
+--         --   - deal breaker as I just wanted an altenrative for running my own completions model to see how it feels
+--         --   - and doesn't have a way to change the model for completions, its hardcoded (lua/chatgpt/flows/code_completions/init.lua)
+--         --     - using this with qwen2.5-coder:3b was disastrous (took forever and just generated repetative code :)... would need prompt changd for qwen
+--         -- - no global default model, IIUC has to be set per action (b/c actions default to set models) - not end of world
+--         --   - not at all clear if I need to put models for actions into a new actions file OR if it can go into this config below?
+--         -- - action for complete_code is doing weird stuff...
+--         -- outstanding to figure out:
+--         --   understand actions.json and how to override that (I just modified the lazy plugin repo checkout to swap values)
+--         require('chatgpt').setup({
+--             verbose = true, -- TODO ADD to API
+--             -- cool uses nested commands, makes sense... but is that gonna hurt latency to run these every time (or are they cached?)
+--             -- ms matters with completions, I wouldn't wanna add 40ms in lookup commands
+--             --  security find-* -w => 57ms ! yikez
+--             api_host_cmd = 'echo -n http://localhost:11434',
+--             api_key_cmd = 'echo -n foo',
+--             -- api_key_cmd = 'security -s openai -a ask -w'
+--             openai_params = {
+--                 model = "qwen2.5-coder:3b"
+--             }
+--         })
+--     end,
+--     dependencies = {
+--         "MunifTanjim/nui.nvim",
+--         "nvim-lua/plenary.nvim",
+--         -- "folke/trouble.nvim", -- optional -- TODO DO I WANT THIS?
+--         "nvim-telescope/telescope.nvim"
+--     }
+-- },
