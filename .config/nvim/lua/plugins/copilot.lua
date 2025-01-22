@@ -8,6 +8,16 @@ local use_ai = {
 --    purportedly faster and less glitchy than copilot.vim
 --    has panel too with completion preview, is that useful?
 
+-- *** local autocompletion plugin candidates:
+-- only focus is inline completions as I can open a chat window on my own should I need that (in a browser, or in nvim)
+--
+-- - https://github.com/tzachar/cmp-ai
+--   sounds like it has on-demand or all the time completions... and mentions qwen so it should work
+--   only concern, is it previewed in a dropdown like coc? or is it inline grayed out text like copilot/supermaven?
+--
+--
+--
+
 function SwitchCopilot()
     -- TODO I should call this in config of preferred copilot OR ...  setup one to be disabled out of the gate and other to be enabled in the opts for each
     -- FYI supermaven toggle works across vim restarts, copilot is per buffer IIUC
