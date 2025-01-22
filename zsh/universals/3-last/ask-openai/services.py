@@ -3,6 +3,9 @@ import platform
 import sys
 from typing import Optional, NamedTuple
 
+# subprocess.run check values:
+IGNORE_FAILURE = False
+RAISE_CalledProcessError_ON_FAILURE = True
 
 class Service(NamedTuple):
     base_url: str
@@ -122,8 +125,7 @@ def get_api_key(service_name, account_name):
         import subprocess
         # using security command directly for speed (45ms vs 120ms to use library)
         cmd = ['security', 'find-generic-password', '-s', service_name, '-a', account_name, '-w']
-        # check == raise on failure
-        result = subprocess.run(cmd, text=True, capture_output=True, check=True)
+        result = subprocess.run(cmd, text=True, capture_output=True, check=RAISE_CalledProcessError_ON_FAILURE)
         return result.stdout.strip()
 
     # only load for linux/macOS (no overhead for subsquent calls)

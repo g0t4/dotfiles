@@ -63,4 +63,9 @@ async def ask_openai(connection):
 
     await task_clear  # ? why can't I put this after try/catch (smth happens with timing to not actually clear the prompt if I do that, but only on remote pi7.lan?)
 
-    await ask_openai_async_type_response(session, messages)
+    try:
+        await ask_openai_async_type_response(session, messages)
+    except Exception as e:
+        failure = f"Failure getting OpenAI response {e}"
+        await session.async_send_text(failure)
+
