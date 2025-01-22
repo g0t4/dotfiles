@@ -8,6 +8,8 @@ local use_ai = {
 --    purportedly faster and less glitchy than copilot.vim
 --    has panel too with completion preview, is that useful?
 
+-- !!! TODO TRY https://github.com/jackMort/ChatGPT.nvim + ollama locally (on win machine with qwen2.5:14b .. IIRC that was fastest of bigger qwen2.5 models and much faster than my mac)
+
 function SwitchCopilot()
     -- TODO I should call this in config of preferred copilot OR ...  setup one to be disabled out of the gate and other to be enabled in the opts for each
     -- FYI supermaven toggle works across vim restarts, copilot is per buffer IIUC
