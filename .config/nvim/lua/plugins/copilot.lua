@@ -302,6 +302,9 @@ return {
 -- DECIDED NO
 -- {
 --     -- NOT A GOOD FIT: completions aren't automatic AND cannot use custom models (let alone not openai models)
+--          completions are designed more like prompting for help on a chunk of code and then waiting
+--          ALSO, results are NOT STREAMED... deal breaker too (I want a responsive Ux and that includes, if possible, streaming results, so I can start reviewing and not just wait, esp for local models that take more time to get full completion)
+--
 --
 --     enabled = vim.tbl_contains(use_ai, "ChatGPT.nvim"),
 --     "jackMort/ChatGPT.nvim",
