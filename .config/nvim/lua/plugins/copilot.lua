@@ -54,10 +54,16 @@ local llm_nvim = {
             -- Then I sucked a big fat ... and completely missed request_body earlier... to literally modify the http request for completion (if ollama backend => /api/generate, if openai => /v1/completions)
             -- !!! DO NOT TEST COMPLETIONS with the below tokens config.... fux it all up, lol
             request_body = {
+                -- https://github.com/abetlen/llama-cpp-python?tab=readme-ov-file#openai-compatible-web-server
                 raw = true, -- set this b/c llm.nvim is litearlly building the entire prompt (do not use template)
+                -- PRN CONSIDER:
+                --     temperature = 0.2,
+                --     top_p = 0.95,
             },
             -- DOES THIS HAVE streaming support? I suspect not... hrm doesn't matter, can still try it like you used vscode-CodeGPT ext... which worked well enough you just have to set expectations that you are only testing quality of suggestions (not speed, yet)
             --  I CAN CONFIRM COMPLETIONS ARE GOOD (quality)...
+
+            -- TODO is it sometimes not showing multiple lines when there are several and it only shows first? I felt like that might have happened in the python tests I tried... is it a whitespace problem?
 
             -- *** qwen2.5
             model = "qwen2.5-coder:3b",
@@ -141,15 +147,6 @@ local llm_nvim = {
             -- TODO if it works, try all sorts of models (you've never tested any of them for this use case!)
             url = "http://build21.lan:11434", -- llm-ls uses "/v1/completions"
 
-            -- https://github.com/abetlen/llama-cpp-python?tab=readme-ov-file#openai-compatible-web-server
-            -- TODO try params if things feel right UX wise
-            -- request_body = {
-            --     temperature = 0.2,
-            --     top_p = 0.95,
-            -- }
-            -- !!! TODO MODEL PARAM CONFIG:
-            --    https://github.com/huggingface/llm.nvim?tab=readme-ov-file#models
-            -- ie tokens
         })
     end
 }
