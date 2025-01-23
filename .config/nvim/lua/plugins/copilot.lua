@@ -27,6 +27,12 @@ local llm_nvim = {
     -- event = "VeryLazy", -- TODO WHEN? buffer enter?
     config = function()
         require("llm").setup({
+            -- pros:
+            -- cons:
+            -- - no partial accept :(... only accept_keymap and dismiss_keymap
+            --   - I can add this and learn how to use extmarks along the way
+            -- - issue w/ new lines / tab/indent in python not showing more than one line, also in lua IIUC that is happening (only top level completions show multi line)
+
             -- full config ref: https://github.com/huggingface/llm.nvim?tab=readme-ov-file#setup
             enable_suggestions_on_startup = true,
             -- debounce_ms = 150, -- good deal, it has debounce
@@ -64,7 +70,7 @@ local llm_nvim = {
                 options = {
                     -- https://github.com/ollama/ollama/blob/main/docs/api.md - api docs for api/generate, including options and links to
                     -- https://github.com/ollama/ollama/blob/main/docs/modelfile.md#valid-parameters-and-values
-                    num_predict = 10,
+                    num_predict = 40,
                     -- HOLY CRAP this is FAST at 4... and it was half a line in some cases... so maybe set this low? if I only get one line at a time...  ... otherwise IIUC its infinite or up to the modelfile/ model limits!
                     -- WOULD be nice to have a short/long completions mode to toggle how long I allow
                 },
@@ -78,7 +84,8 @@ local llm_nvim = {
             --  and it sucks that it its taking longer to generate 10 lines of suggestion and then only showing me the first one!! :(
 
             -- *** qwen2.5
-            model = "qwen2.5-coder:14b",
+            model = "qwen2.5-coder:3b", -- scrappy but if I give right context it is much faster and still accurate (i.e. paste in ref files list when completing require calls in lazy setup)
+            -- model = "qwen2.5-coder:14b",
             -- run ollama serve in debug mode... look at output when model is first loaded, IIAC this is what I need
             -- llm_load_print_meta: general.name     = Qwen2.5 Coder 3B Instruct
             -- llm_load_print_meta: BOS token        = 1516c43 '<|endoftext|>'
