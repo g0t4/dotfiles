@@ -16,6 +16,7 @@ if true then
     vim.cmd("highlight MySuggestion2 guifg=#FF0000")
     vim.cmd("highlight MySuggestionSign guifg=#00FF00")
     vim.cmd("highlight MySuggestionNumberCol guifg=#0000FF")
+    vim.cmd("highlight MySuggestionLine guibg=#ee9090")
 
 
     vim.cmd("autocmd CursorMoved * lua ShowSuggestion()")
@@ -61,6 +62,8 @@ if true then
             sign_hl_group = "MySuggestionSign",
             -- highlight for (line) number column - btw big signtext can overwrite this in my current config
             -- number_hl_group = "MySuggestionNumberCol",
+
+            -- line_hl_group = "MySuggestionLine", -- highlight rest of line(s) affected
             --
             -- virt_text_pos = "eol", -- eol==default
             virt_text_pos = "overlay", -- over top of text, start at col(umn)
