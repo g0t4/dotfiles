@@ -139,7 +139,7 @@ local llm_nvim = {
 
 
             -- TODO if it works, try all sorts of models (you've never tested any of them for this use case!)
-            url = "http://localhost:11434", -- llm-ls uses "/v1/completions"
+            url = "http://build21.lan:11434", -- llm-ls uses "/v1/completions"
 
             -- https://github.com/abetlen/llama-cpp-python?tab=readme-ov-file#openai-compatible-web-server
             -- TODO try params if things feel right UX wise
