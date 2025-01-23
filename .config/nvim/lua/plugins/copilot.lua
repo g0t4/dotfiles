@@ -50,6 +50,9 @@ if true then
             -- hl_group = "MySuggestion",
             virt_text = { { show_text, "MySuggestion" }, { "show more", "MySuggestion2" }},
             --
+            -- additional line(s) to show (default below current line)
+            virt_lines = {{ {"slap your ass", "MySuggestion" }}},
+            --
             virt_text_pos = "eol", -- eol==default
             -- virt_text_pos = "overlay", -- over top of text, start at col(umn)
             -- virt_text_pos = "inline", -- in between text, start at col(umn)
