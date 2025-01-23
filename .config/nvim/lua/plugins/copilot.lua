@@ -13,6 +13,7 @@ if true then
     local ns_id = vim.api.nvim_create_namespace("line_highlight")
 
     vim.cmd("highlight MySuggestion gui=italic guifg=#DDD")
+    vim.cmd("highlight MySuggestion2 guifg=#FF0000")
     vim.cmd("autocmd CursorMoved * lua ShowSuggestion()")
     function ShowSuggestion()
         -- NOT IN help windows
@@ -47,7 +48,7 @@ if true then
         vim.api.nvim_buf_set_extmark(current_buffer, ns_id, line_0based, col, {
             end_row = line_0based + 1,
             -- hl_group = "MySuggestion",
-            virt_text = { { show_text, "MySuggestion" } },
+            virt_text = { { show_text, "MySuggestion" }, { "show more", "MySuggestion2" }},
             --
             virt_text_pos = "eol", -- eol==default
             -- virt_text_pos = "overlay", -- over top of text, start at col(umn)
