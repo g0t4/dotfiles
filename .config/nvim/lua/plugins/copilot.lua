@@ -70,6 +70,8 @@ if true then
             -- virt_text_pos = "inline", -- in between text, start at col(umn)
             -- virt_text_pos = "right_align", -- like a right prompt
             --
+            -- spell = false -- disable spell check in extmarks
+            -- url = "http://google.com", -- make clickable link => seems to be for the line(s) affected not the extmarks.. FYI
         })
     end
 
