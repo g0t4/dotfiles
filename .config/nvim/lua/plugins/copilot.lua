@@ -48,13 +48,18 @@ if true then
         vim.api.nvim_buf_set_extmark(current_buffer, ns_id, line_0based, col, {
             end_row = line_0based + 1,
             -- hl_group = "MySuggestion",
-            virt_text = { { show_text, "MySuggestion" }, { "show more", "MySuggestion2" }},
+            virt_text = { { show_text, "MySuggestion" }, { "show more", "MySuggestion2" } },
             --
             -- additional line(s) to show (default below current line)
-            virt_lines = {{ {"slap your ass", "MySuggestion" }}},
+            virt_lines = { { { "slap your ass", "MySuggestion" } } },
+            -- virt_lines_above = true, -- default=false (below)
+            -- virt_lines_leftcol  -- left most col?
             --
-            virt_text_pos = "eol", -- eol==default
-            -- virt_text_pos = "overlay", -- over top of text, start at col(umn)
+            -- sign_text = "d", -- show sign in gutter! (marks line(s) affected by extmark)
+            sign_text = "", -- show sign in gutter! (marks line(s) affected by extmark)
+            --
+            -- virt_text_pos = "eol", -- eol==default
+            virt_text_pos = "overlay", -- over top of text, start at col(umn)
             -- virt_text_pos = "inline", -- in between text, start at col(umn)
             -- virt_text_pos = "right_align", -- like a right prompt
             --
