@@ -13,7 +13,7 @@ local ns_id = vim.api.nvim_create_namespace("line_highlight")
 
 
 -- vim.cmd("highlight MyHighlightLine guibg=#ee9090 guifg=#282828 cterm=underline")
-vim.cmd("highlight MyHighlightLine gui=underline")
+vim.cmd("highlight MyHighlightLine gui=underline guibg=#ee9090 guifg=#282828")
 
 -- Highlight the current line
 vim.cmd("autocmd CursorMoved * lua HighlightLine()")
