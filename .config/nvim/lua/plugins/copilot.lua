@@ -118,6 +118,17 @@ local llm_nvim = {
             --   - also doesn't seem to cache completions (but, IIUC ollama may do that?) or a middle tier could do that too
             --   - I can add this and learn how to use extmarks along the way
             -- - issue w/ new lines / tab/indent in python not showing more than one line, also in lua IIUC that is happening (only top level completions show multi line)
+            --   - llm-ls is the culprit... it only returns the first line to llm.nvim plugin in callback... so what in llm-ls decides to truncate multiple lines... I confirmed again w/ mitmproxy that the correct spacing is even returned for subsequent lines and yet... its axed... and llm.nvim of course has logic to correctly show virt_lines for additional lines
+            --     - FYI add this to callback in llm.completion.lua:
+            --             M.last = result
+            --       then :Dump require("llm.completion")
+            --     - btw in llm-ls:
+            --        'llm-ls/getCompletions'
+            --           https://github.com/huggingface/llm-ls/blob/main/crates/llm-ls/src/main.rs#L492
+
+            --     - i guess it is possible llm-ls is configured wrong by llm.nvim to do this?
+            --     - does it do this with openai as backend instead? maybe just api/generate issue?
+
 
             -- full config ref: https://github.com/huggingface/llm.nvim?tab=readme-ov-file#setup
             enable_suggestions_on_startup = true,
@@ -135,10 +146,18 @@ local llm_nvim = {
             --   PROXY to capture requests so I can confirm what llm-ls is doing and I fixed it!
             --   also mapped to remote ollama instance (localhost wasn't capturing, not surprising...)... I should've done 192.168.1.X with my IP to get it , derp below
             --
-            -- llm-ls logs
-            --   ~/.cache/llm_ls/llm-ls.log
-            --   these logs were nearly useless.. on erorrs, barely anything is logged and it's just like "derp fail"
-            --
+            lsp = {
+                -- LSP/LS settings (these are parsed and used to start the LS
+                -- :h vim.lsp.ClientConfig (for some of these, i.e. cmd_env)
+                cmd_env = {
+                    -- llm-ls logs
+                    --   tail -f ~/.cache/llm_ls/llm-ls.log | jq
+                    --      # json objs (one per line) => must set INFO level logging
+                    --   INFO level => tells you about each LS message pretty much (i.e. open buffer/file)
+                    LLM_LOG_LEVEL = "DEBUG"
+                },
+                -- cmd = { "llm-ls" }, -- custom build
+            },
 
             -- PRN TRY huggingface backend and pull model that way, would have many more choices then
 
