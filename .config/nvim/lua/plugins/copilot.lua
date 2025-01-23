@@ -12,20 +12,28 @@ local use_ai = {
 local ns_id = vim.api.nvim_create_namespace("line_highlight")
 
 
--- vim.cmd("highlight MyHighlightLine guibg=#ee9090 guifg=#282828 cterm=underline")
-vim.cmd("highlight MyHighlightLine gui=underline guibg=#ee9090 guifg=#282828")
-
--- Highlight the current line
-vim.cmd("autocmd CursorMoved * lua HighlightLine()")
-function HighlightLine()
+vim.cmd("highlight MySuggestion gui=italic guifg=#DDD")
+vim.cmd("autocmd CursorMoved * lua ShowSuggestion()")
+function ShowSuggestion()
     local line = vim.api.nvim_win_get_cursor(0)[1] - 1
     vim.api.nvim_buf_clear_namespace(0, ns_id, 0, -1)
     vim.api.nvim_buf_set_extmark(0, ns_id, line, 0, {
         end_row = line + 1,
-        hl_group = "MyHighlightLine"
+        -- hl_group = "MySuggestion",
+        virt_text = {{"suck a dick", "MySuggestion" }}
     })
 end
 
+-- vim.cmd("highlight MyHighlightLine gui=underline guibg=#ee9090 guifg=#282828")
+-- vim.cmd("autocmd CursorMoved * lua HighlightLine()")
+-- function HighlightLine()
+--     local line = vim.api.nvim_win_get_cursor(0)[1] - 1
+--     vim.api.nvim_buf_clear_namespace(0, ns_id, 0, -1)
+--     vim.api.nvim_buf_set_extmark(0, ns_id, line, 0, {
+--         end_row = line + 1,
+--         hl_group = "MyHighlightLine"
+--     })
+-- end
 
 
 
