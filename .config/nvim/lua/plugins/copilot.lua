@@ -14,6 +14,9 @@ if true then
 
     vim.cmd("highlight MySuggestion gui=italic guifg=#DDD")
     vim.cmd("highlight MySuggestion2 guifg=#FF0000")
+    vim.cmd("highlight MySuggestionSign guifg=#00FF00")
+
+
     vim.cmd("autocmd CursorMoved * lua ShowSuggestion()")
     function ShowSuggestion()
         -- NOT IN help windows
@@ -57,6 +60,7 @@ if true then
             --
             -- sign_text = "d", -- show sign in gutter! (marks line(s) affected by extmark)
             sign_text = "", -- show sign in gutter! (marks line(s) affected by extmark)
+            sign_hl_group = "MySuggestionSign",
             --
             -- virt_text_pos = "eol", -- eol==default
             virt_text_pos = "overlay", -- over top of text, start at col(umn)
