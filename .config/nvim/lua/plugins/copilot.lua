@@ -2,7 +2,8 @@ local use_ai = {
     -- "avante",
     -- "copilot",
     -- "tabnine",
-    "supermaven",
+    -- "supermaven",
+    "llm.nvim",
 }
 -- ! consider https://github.com/zbirenbaum/copilot.lua
 --    purportedly faster and less glitchy than copilot.vim
@@ -12,13 +13,41 @@ local use_ai = {
 -- only focus is inline completions as I can open a chat window on my own should I need that (in a browser, or in nvim)
 --
 -- - TODO llm.nvim
---    *** YAY ollama backend supported
+--    *** YAY ollama backend supported (ollama's api/generate ... and via OpenAI API endpoint too!)
+--
 --     - https://github.com/huggingface/llm.nvim?tab=readme-ov-file#ollama
 --   - uses llm-ls backend (very cool, a language server... much like supermaven does... makes a ton of sense to let it acess entire codebase predictably and not just one off requests w/o the ability to bring in context)
 --     - https://github.com/huggingface/llm-ls
 --   - looks promising (specifically says alternative to copilot.vim/tabnine-nvim)
 --   - formerly hfcc.nvim
 --   https://github.com/huggingface/llm.nvim
+local llm_nvim = {
+    enabled = vim.tbl_contains(use_ai, "llm.nvim"),
+    "huggingface/llm.nvim",
+    -- event = "VeryLazy", -- TODO WHEN? buffer enter?
+    config = function()
+        require("llm").setup({
+            -- full config ref: https://github.com/huggingface/llm.nvim?tab=readme-ov-file#setup
+            enable_suggestions_on_startup = true,
+            backend = "openai",
+
+            model = "qwen2.5-coder:3b",
+            -- model = "codellama", -- TODO try this one too
+            -- TODO if it works, try all sorts of models (you've never tested any of them for this use case!)
+            url = "http://localhost:11434", -- llm-ls uses "/v1/completions"
+
+            -- https://github.com/abetlen/llama-cpp-python?tab=readme-ov-file#openai-compatible-web-server
+            -- TODO try params if things feel right UX wise
+            -- request_body = {
+            --     temperature = 0.2,
+            --     top_p = 0.95,
+            -- }
+            -- !!! TODO MODEL PARAM CONFIG:
+            --    https://github.com/huggingface/llm.nvim?tab=readme-ov-file#models
+            -- ie tokens
+        })
+    end
+}
 --
 --
 -- - https://github.com/tzachar/cmp-ai
@@ -143,6 +172,7 @@ if version.major == 0 and version.minor < 10 then
 end
 
 return {
+    llm_nvim,
 
     {
         "g0t4/ask-openai.nvim",
