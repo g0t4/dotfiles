@@ -54,11 +54,20 @@ local llm_nvim = {
             -- Then I sucked a big fat ... and completely missed request_body earlier... to literally modify the http request for completion (if ollama backend => /api/generate, if openai => /v1/completions)
             -- !!! DO NOT TEST COMPLETIONS with the below tokens config.... fux it all up, lol
             request_body = {
+                -- *** THIS WILL DIFFER PER BACKEND!!!
+                -- right now this is for ollama backend:
                 -- https://github.com/abetlen/llama-cpp-python?tab=readme-ov-file#openai-compatible-web-server
                 raw = true, -- set this b/c llm.nvim is litearlly building the entire prompt (do not use template)
                 -- PRN CONSIDER:
                 --     temperature = 0.2,
                 --     top_p = 0.95,
+                options = {
+                    -- https://github.com/ollama/ollama/blob/main/docs/api.md - api docs for api/generate, including options and links to
+                    -- https://github.com/ollama/ollama/blob/main/docs/modelfile.md#valid-parameters-and-values
+                    num_predict = 4,
+                    -- HOLY CRAP this is FAST at 4... and it was half a line in some cases... so maybe set this low? if I only get one line at a time...  ... otherwise IIUC its infinite or up to the modelfile/ model limits!
+                    -- WOULD be nice to have a short/long completions mode to toggle how long I allow
+                },
             },
             -- DOES THIS HAVE streaming support? I suspect not... hrm doesn't matter, can still try it like you used vscode-CodeGPT ext... which worked well enough you just have to set expectations that you are only testing quality of suggestions (not speed, yet)
             --  I CAN CONFIRM COMPLETIONS ARE GOOD (quality)...
@@ -66,6 +75,7 @@ local llm_nvim = {
             -- TODO is it sometimes not showing multiple lines when there are several and it only shows first? I felt like that might have happened in the python tests I tried... is it a whitespace problem?
             --  YUP JUST CONFIRMED... WTF? look at suggests repo and add subtract tests
             --  BUT PREVIOUSLY I SAW multiple suggestions showing in lua code files...
+            --  and it sucks that it its taking longer to generate 10 lines of suggestion and then only showing me the first one!! :(
 
             -- *** qwen2.5
             model = "qwen2.5-coder:3b",
