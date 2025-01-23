@@ -35,12 +35,22 @@ local llm_nvim = {
             backend = "openai", -- /v1/complete # why not /chat/completions!?
             -- BOTH working with codellama/starcoder2 ...
 
+            -- llm-ls logs
+            --   ~/.cache/llm_ls/llm-ls.log
+            --
+
+
             -- TODO TRY huggingface backend and pull model that way, would have many more choices then
 
             -- DOES THIS HAVE streaming support? I suspect not... hrm doesn't matter, can still try it like you used vscode-CodeGPT ext... which worked well enough you just have to set expectations that you are only testing quality of suggestions (not speed, yet)
 
-            -- model = "qwen2.5-coder:3b",
+            -- *** qwen2.5
+            model = "qwen2.5-coder:3b",
+
             -- TODO tokens config (see if repo mentions qwen anywhere... also check https://ollama.com/library/qwen2.5-coder
+
+
+
 
             -- -- START codellama model = "codellama", -- TODO try this one too
             -- -- model = "codellama/CodeLlama-13b-hf",
@@ -60,23 +70,23 @@ local llm_nvim = {
             -- -- },
             -- -- END codellama
 
-            -- *** TRY starcoder
-            -- https://ollama.com/library/starcoder2
-            -- use config example in repo https://github.com/huggingface/llm.nvim?tab=readme-ov-file#starcoder
-            tokens_to_clear = { "<|endoftext|>" },
-            fim = {
-                enabled = true,
-                prefix = "<fim_prefix>",
-                middle = "<fim_middle>",
-                suffix = "<fim_suffix>",
-            },
-            model = "starcoder2", -- RESULTS COME BACK FAST... but never show... codellama much slower than starcoder so at least troubleshoot with this... can I log the response from ollama?
-            -- model = "bigcode/starcoder",
-            context_window = 8192,
-            -- tokenizer = {
-            --   repository = "bigcode/starcoder",
-            -- }
-            --
+            -- -- *** TRY starcoder
+            -- -- https://ollama.com/library/starcoder2
+            -- -- use config example in repo https://github.com/huggingface/llm.nvim?tab=readme-ov-file#starcoder
+            -- tokens_to_clear = { "<|endoftext|>" },
+            -- fim = {
+            --     enabled = true,
+            --     prefix = "<fim_prefix>",
+            --     middle = "<fim_middle>",
+            --     suffix = "<fim_suffix>",
+            -- },
+            -- model = "starcoder2", -- RESULTS COME BACK FAST... but never show... codellama much slower than starcoder so at least troubleshoot with this... can I log the response from ollama?
+            -- -- model = "bigcode/starcoder",
+            -- context_window = 8192,
+            -- -- tokenizer = {
+            -- --   repository = "bigcode/starcoder",
+            -- -- }
+            -- --
 
 
 
