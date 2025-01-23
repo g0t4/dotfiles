@@ -64,7 +64,7 @@ local llm_nvim = {
                 options = {
                     -- https://github.com/ollama/ollama/blob/main/docs/api.md - api docs for api/generate, including options and links to
                     -- https://github.com/ollama/ollama/blob/main/docs/modelfile.md#valid-parameters-and-values
-                    num_predict = 4,
+                    num_predict = 40,
                     -- HOLY CRAP this is FAST at 4... and it was half a line in some cases... so maybe set this low? if I only get one line at a time...  ... otherwise IIUC its infinite or up to the modelfile/ model limits!
                     -- WOULD be nice to have a short/long completions mode to toggle how long I allow
                 },
