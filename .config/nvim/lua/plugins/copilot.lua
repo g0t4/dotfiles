@@ -30,6 +30,8 @@ local llm_nvim = {
             -- pros:
             -- cons:
             -- - no partial accept :(... only accept_keymap and dismiss_keymap
+            --   - this is also why, if you type part of the suggestion instead... it the refetches the entire same suggestion (often)... bc it has no caching mechanism to know the completion is still what it was before partially accepted
+            --   - also doesn't seem to cache completions (but, IIUC ollama may do that?) or a middle tier could do that too
             --   - I can add this and learn how to use extmarks along the way
             -- - issue w/ new lines / tab/indent in python not showing more than one line, also in lua IIUC that is happening (only top level completions show multi line)
 
@@ -164,8 +166,8 @@ local llm_nvim = {
 
 
             -- TODO if it works, try all sorts of models (you've never tested any of them for this use case!)
-            -- url = "http://build21.lan:11434", -- llm-ls uses "/v1/completions"
-            url = "http://localhost:11434",
+            url = "http://build21.lan:11434", -- llm-ls uses "/v1/completions"
+            -- url = "http://localhost:11434",
 
         })
     end
