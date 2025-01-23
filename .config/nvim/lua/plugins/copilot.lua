@@ -9,7 +9,7 @@ local use_ai = {
 --    purportedly faster and less glitchy than copilot.vim
 --    has panel too with completion preview, is that useful?
 
-if true then
+if false then
     local ns_id = vim.api.nvim_create_namespace("line_highlight")
 
     vim.cmd("highlight MySuggestion gui=italic guifg=#DDD")
