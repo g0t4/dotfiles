@@ -15,6 +15,15 @@ if true then
     vim.cmd("highlight MySuggestion gui=italic guifg=#DDD")
     vim.cmd("autocmd CursorMoved * lua ShowSuggestion()")
     function ShowSuggestion()
+        -- NOT IN help windows
+        if vim.bo.filetype == "help"
+            or vim.bo.filetype == "TelescopePrompt" then
+            -- TODO OTHERS
+            return
+        end
+        -- do return end -- stop temp
+
+
         local current_buffer = 0
         local cursor_pos = vim.api.nvim_win_get_cursor(current_buffer)
         -- wow, frustrating... cursor_pos has row/line (1 based), column (0 based)
@@ -22,7 +31,7 @@ if true then
         local show_text = "" .. vim.inspect(cursor_pos)
         local line_0based = cursor_pos[1] - 1
         local col_0based = cursor_pos[2]
-        show_text = show_text .. " \n " .. line_0based .. "," .. col_0based
+        show_text = show_text .. " - " .. line_0based .. "," .. col_0based
         vim.api.nvim_buf_clear_namespace(current_buffer, ns_id, 0, -1)
         local col = 10 -- for overlay, this is the col to start
         -- todo check columns of current line
@@ -40,12 +49,10 @@ if true then
             -- hl_group = "MySuggestion",
             virt_text = { { show_text, "MySuggestion" } },
             --
-            -- virt_text_pos = "eol", -- eol==default
+            virt_text_pos = "eol", -- eol==default
             -- virt_text_pos = "overlay", -- over top of text, start at col(umn)
-            virt_text_pos = "inline", -- in between text, start at col(umn)
+            -- virt_text_pos = "inline", -- in between text, start at col(umn)
             -- virt_text_pos = "right_align", -- like a right prompt
-
-            --
             --
         })
     end
