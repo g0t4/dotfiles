@@ -15,12 +15,20 @@ local ns_id = vim.api.nvim_create_namespace("line_highlight")
 vim.cmd("highlight MySuggestion gui=italic guifg=#DDD")
 vim.cmd("autocmd CursorMoved * lua ShowSuggestion()")
 function ShowSuggestion()
-    local line = vim.api.nvim_win_get_cursor(0)[1] - 1
-    vim.api.nvim_buf_clear_namespace(0, ns_id, 0, -1)
-    vim.api.nvim_buf_set_extmark(0, ns_id, line, 0, {
+    local current_buffer = 0
+    local line = vim.api.nvim_win_get_cursor(current_buffer)[1] - 1
+    vim.api.nvim_buf_clear_namespace(current_buffer, ns_id, 0, -1)
+    local col = 10 -- for overlay, this is the col to start
+    vim.api.nvim_buf_set_extmark(current_buffer, ns_id, line, col, {
         end_row = line + 1,
         -- hl_group = "MySuggestion",
-        virt_text = {{"suck a dick", "MySuggestion" }}
+        virt_text = { { "suck a dick", "MySuggestion" } },
+        --
+        virt_text_pos = "eol", -- eol==default
+        -- virt_text_pos = "overlay" -- over top of text, start at col(umn)
+        -- virt_text_pos = "inline" -- in between text, start at col(umn)
+        --
+        --
     })
 end
 
