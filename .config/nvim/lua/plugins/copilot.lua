@@ -136,6 +136,7 @@ local llm_nvim = {
 
             -- backend = "ollama", -- /api/generate
             backend = "ollama", -- /v1/complete # why not /chat/completions!?
+            api_token = "", -- otherwise looks up HF token if this isn't set
             -- BOTH working with codellama/starcoder2 ...
             --
 
