@@ -36,8 +36,29 @@ vim.g.maplocalleader = "\\"
 require("lazy").setup({
     -- FYI here is the core config logic: https://github.com/folke/lazy.nvim/blob/main/lua/lazy/core/config.lua#L179
 
+
     spec = {
-        { import = "plugins" },
+
+        -- INSTEAD OF AUTO LOAD ... I want require calls below so I can easily comment out spec files to troubleshoot across plugins
+        -- { import = "plugins" },
+        -- ALSO, use enabled to one off disable plugin(s)... esp for permenant disablement...
+        -- SO, comment out when want to say disable everything and troubleshoot:
+        require("plugins.code"),
+        require("plugins.colors"),
+        require("plugins.comments"),
+        require("plugins.completions"),
+        require("plugins.copilot"),
+        require("plugins.debug-dap"),
+        require("plugins.debug-vimspector"),
+        require("plugins.ft-markdown"),
+        require("plugins.learning"),
+        require("plugins.misc"),
+        require("plugins.pickers"),
+        require("plugins.refactor"),
+        require("plugins.tree"),
+        require("plugins.treesitter"),
+        require("plugins.wilder"),
+
     },
 
     -- colorscheme that will be used when installing plugins
