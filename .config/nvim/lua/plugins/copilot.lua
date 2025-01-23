@@ -29,10 +29,31 @@ local llm_nvim = {
         require("llm").setup({
             -- full config ref: https://github.com/huggingface/llm.nvim?tab=readme-ov-file#setup
             enable_suggestions_on_startup = true,
-            backend = "openai",
+            -- debounce_ms = 150, -- good deal, it has debounce
 
-            model = "qwen2.5-coder:3b",
-            -- model = "codellama", -- TODO try this one too
+            backend = "ollama",
+
+
+            -- model = "qwen2.5-coder:3b",
+            -- TODO tokens config (see if repo mentions qwen anywhere... also check https://ollama.com/library/qwen2.5-coder
+
+            -- START codellama model = "codellama", -- TODO try this one too
+            -- model = "codellama/CodeLlama-13b-hf",
+            model = "codellama",
+
+            tokens_to_clear = { "<EOT>" },
+            fim = {
+                enabled = true,
+                prefix = "<PRE> ",
+                middle = " <MID>",
+                suffix = " <SUF>",
+            },
+            context_window = 1024, -- 4096,
+            -- tokenizer = {
+            --     repository = "codellama/CodeLlama-13b-hf",
+            -- },
+            -- END codellama
+
             -- TODO if it works, try all sorts of models (you've never tested any of them for this use case!)
             url = "http://localhost:11434", -- llm-ls uses "/v1/completions"
 
