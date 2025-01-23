@@ -64,6 +64,8 @@ local llm_nvim = {
             --  I CAN CONFIRM COMPLETIONS ARE GOOD (quality)...
 
             -- TODO is it sometimes not showing multiple lines when there are several and it only shows first? I felt like that might have happened in the python tests I tried... is it a whitespace problem?
+            --  YUP JUST CONFIRMED... WTF? look at suggests repo and add subtract tests
+            --  BUT PREVIOUSLY I SAW multiple suggestions showing in lua code files...
 
             -- *** qwen2.5
             model = "qwen2.5-coder:3b",
