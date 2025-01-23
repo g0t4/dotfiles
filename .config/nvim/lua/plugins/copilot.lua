@@ -77,10 +77,9 @@ local llm_nvim = {
             -- -- tokenizer = {
             -- --     repository = "codellama/CodeLlama-13b-hf",
             -- -- },
-            -- -- END codellama
-
-
-            -- TODO tokens config (see if repo mentions qwen anywhere... also check https://ollama.com/library/qwen2.5-coder
+            -- -- END codellamaj
+            -- FYI I get completions that summarize this file!!! wow.. cool... and it tells me about each plugin... that is at least not noise
+            -- OK AND LOOK IN THE ollama logs... shows request made... and I can see how it filled out the template! GOOD ... now, is this right? it seems to be not doing what I want with code completion...  smth with fim is not quite what it expected... are those wrong?
 
 
 
