@@ -114,6 +114,7 @@ local llm_nvim = {
             -- pros:
             -- cons:
             -- - no partial accept :(... only accept_keymap and dismiss_keymap
+            --   - I wonder if you can send a subset of suggestion in the llm-ls/acceptCompletions message? (or does it have to match entire thing?)
             --   - this is also why, if you type part of the suggestion instead... it the refetches the entire same suggestion (often)... bc it has no caching mechanism to know the completion is still what it was before partially accepted
             --   - also doesn't seem to cache completions (but, IIUC ollama may do that?) or a middle tier could do that too
             --   - I can add this and learn how to use extmarks along the way
