@@ -33,7 +33,9 @@ local llm_nvim = {
 
             -- backend = "ollama", -- /api/generate
             backend = "openai", -- /v1/complete # why not /chat/completions!?
+            -- BOTH working with codellama/starcoder2 ...
 
+            -- TODO TRY huggingface backend and pull model that way, would have many more choices then
 
             -- DOES THIS HAVE streaming support? I suspect not... hrm doesn't matter, can still try it like you used vscode-CodeGPT ext... which worked well enough you just have to set expectations that you are only testing quality of suggestions (not speed, yet)
 
@@ -61,6 +63,23 @@ local llm_nvim = {
             -- *** TRY starcoder
             -- https://ollama.com/library/starcoder2
             -- use config example in repo https://github.com/huggingface/llm.nvim?tab=readme-ov-file#starcoder
+            tokens_to_clear = { "<|endoftext|>" },
+            fim = {
+                enabled = true,
+                prefix = "<fim_prefix>",
+                middle = "<fim_middle>",
+                suffix = "<fim_suffix>",
+            },
+            model = "starcoder2", -- RESULTS COME BACK FAST... but never show... codellama much slower than starcoder so at least troubleshoot with this... can I log the response from ollama?
+            -- model = "bigcode/starcoder",
+            context_window = 8192,
+            -- tokenizer = {
+            --   repository = "bigcode/starcoder",
+            -- }
+            --
+
+
+
 
             -- TODO if it works, try all sorts of models (you've never tested any of them for this use case!)
             url = "http://localhost:11434", -- llm-ls uses "/v1/completions"
