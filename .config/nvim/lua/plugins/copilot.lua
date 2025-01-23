@@ -46,6 +46,39 @@ local llm_nvim = {
 
             -- *** qwen2.5
             model = "qwen2.5-coder:3b",
+            -- run ollama serve in debug mode... look at output when model is first loaded, IIAC this is what I need
+            -- llm_load_print_meta: general.name     = Qwen2.5 Coder 3B Instruct
+            -- llm_load_print_meta: BOS token        = 1516c43 '<|endoftext|>'
+            -- llm_load_print_meta: EOS token        = 151645 '<|im_end|>'
+            -- llm_load_print_meta: EOT token        = 151645 '<|im_end|>'
+            -- llm_load_print_meta: PAD token        = 151643 '<|endoftext|>'
+            -- llm_load_print_meta: LF token         = 148848 'ÄĬ'
+            -- llm_load_print_meta: FIM PRE token    = 151659 '<|fim_prefix|>'
+            -- llm_load_print_meta: FIM SUF token    = 151661 '<|fim_suffix|>'
+            -- llm_load_print_meta: FIM MID token    = 151660 '<|fim_middle|>'
+            -- llm_load_print_meta: FIM PAD token    = 151662 '<|fim_pad|>'
+            -- llm_load_print_meta: FIM REP token    = 151663 '<|repo_name|>'
+            -- llm_load_print_meta: FIM SEP token    = 151664 '<|file_sep|>'
+            -- llm_load_print_meta: EOG token        = 151643 '<|endoftext|>'
+            -- llm_load_print_meta: EOG token        = 151645 '<|im_end|>'
+            -- llm_load_print_meta: EOG token        = 151662 '<|fim_pad|>'
+            -- llm_load_print_meta: EOG token        = 151663 '<|repo_name|>'
+            -- llm_load_print_meta: EOG token        = 151664 '<|file_sep|>'
+            -- llm_load_print_meta: max token length = 256
+            -- FAST RESPONSES... so if I can fix token params this is gonna be what I want (faster than even CodeGPT used this same model)
+            tokens_to_clear = { "<|endoftext|>" },
+            fim = {
+                enabled = true,
+                prefix = "<|fim_prefix|>",
+                middle = "<|fim_middle|>",
+                suffix = "<|fim_suffix|>",
+            },
+            -- context_window = 1024, -- 4096,
+            -- -- tokenizer = {
+            -- --     repository = "codellama/CodeLlama-13b-hf",
+            -- -- },
+            -- -- END codellama
+
 
             -- TODO tokens config (see if repo mentions qwen anywhere... also check https://ollama.com/library/qwen2.5-coder
 
