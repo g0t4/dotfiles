@@ -31,28 +31,36 @@ local llm_nvim = {
             enable_suggestions_on_startup = true,
             -- debounce_ms = 150, -- good deal, it has debounce
 
-            backend = "ollama",
+            -- backend = "ollama", -- /api/generate
+            backend = "openai", -- /v1/complete # why not /chat/completions!?
 
+
+            -- DOES THIS HAVE streaming support? I suspect not... hrm doesn't matter, can still try it like you used vscode-CodeGPT ext... which worked well enough you just have to set expectations that you are only testing quality of suggestions (not speed, yet)
 
             -- model = "qwen2.5-coder:3b",
             -- TODO tokens config (see if repo mentions qwen anywhere... also check https://ollama.com/library/qwen2.5-coder
 
-            -- START codellama model = "codellama", -- TODO try this one too
-            -- model = "codellama/CodeLlama-13b-hf",
-            model = "codellama",
-
-            tokens_to_clear = { "<EOT>" },
-            fim = {
-                enabled = true,
-                prefix = "<PRE> ",
-                middle = " <MID>",
-                suffix = " <SUF>",
-            },
-            context_window = 1024, -- 4096,
-            -- tokenizer = {
-            --     repository = "codellama/CodeLlama-13b-hf",
+            -- -- START codellama model = "codellama", -- TODO try this one too
+            -- -- model = "codellama/CodeLlama-13b-hf",
+            -- -- TODO double check this params... I am not getting predictable completions yet
+            -- --
+            -- model = "codellama", -- ollama variant of codellama doesnot list FIM tokens
+            -- tokens_to_clear = { "<EOT>" },
+            -- fim = {
+            --     enabled = true,
+            --     prefix = "<PRE> ",
+            --     middle = " <MID>",
+            --     suffix = " <SUF>",
             -- },
-            -- END codellama
+            -- context_window = 1024, -- 4096,
+            -- -- tokenizer = {
+            -- --     repository = "codellama/CodeLlama-13b-hf",
+            -- -- },
+            -- -- END codellama
+
+            -- *** TRY starcoder
+            -- https://ollama.com/library/starcoder2
+            -- use config example in repo https://github.com/huggingface/llm.nvim?tab=readme-ov-file#starcoder
 
             -- TODO if it works, try all sorts of models (you've never tested any of them for this use case!)
             url = "http://localhost:11434", -- llm-ls uses "/v1/completions"
