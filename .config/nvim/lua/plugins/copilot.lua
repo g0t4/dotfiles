@@ -9,6 +9,25 @@ local use_ai = {
 --    purportedly faster and less glitchy than copilot.vim
 --    has panel too with completion preview, is that useful?
 
+local ns_id = vim.api.nvim_create_namespace("line_highlight")
+
+
+vim.cmd("highlight MyWilderPopupmenuSelected guibg=#ee9090 guifg=#282828")
+
+-- Highlight the current line
+vim.cmd("autocmd CursorMoved * lua HighlightLine()")
+function HighlightLine()
+    local line = vim.api.nvim_win_get_cursor(0)[1] - 1
+    vim.api.nvim_buf_clear_namespace(0, ns_id, 0, -1)
+    vim.api.nvim_buf_set_extmark(0, ns_id, line, 0, {
+        end_row = line + 1,
+        hl_group = "MyWilderPopupmenuSelected"
+    })
+end
+
+
+
+
 -- *** local autocompletion plugin candidates:
 -- only focus is inline completions as I can open a chat window on my own should I need that (in a browser, or in nvim)
 --

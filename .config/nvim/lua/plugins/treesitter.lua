@@ -83,6 +83,7 @@ return {
 
     {
         -- highlight word under cursor, other occurrences
+        enabled = false,
         "RRethy/vim-illuminate",
         event = "CursorHold",
         dependencies = {
