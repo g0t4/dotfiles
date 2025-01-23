@@ -147,12 +147,12 @@ local avante =
     -- build = "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false" -- for windows
     dependencies = {
         "nvim-treesitter/nvim-treesitter",
-        "stevearc/dressing.nvim",      -- for vim.ui.select
+        "stevearc/dressing.nvim", -- for vim.ui.select
         "nvim-lua/plenary.nvim",
-        "MunifTanjim/nui.nvim",        -- ui component library
+        "MunifTanjim/nui.nvim", -- ui component library
         --- The below dependencies are optional,
         "nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
-        "zbirenbaum/copilot.lua",      -- for providers='copilot'
+        "zbirenbaum/copilot.lua", -- for providers='copilot'
         {
             -- support for image pasting (FOR REAL?)
             "HakonHarnes/img-clip.nvim",
