@@ -32,17 +32,32 @@ local llm_nvim = {
             -- debounce_ms = 150, -- good deal, it has debounce
 
             -- backend = "ollama", -- /api/generate
-            backend = "openai", -- /v1/complete # why not /chat/completions!?
+            backend = "ollama", -- /v1/complete # why not /chat/completions!?
             -- BOTH working with codellama/starcoder2 ...
-
-            -- llm-ls logs
-            --   ~/.cache/llm_ls/llm-ls.log
             --
 
+            -- *** llm-ls troubleshooting
+            --
+            --   mitmproxy --mode=local:"/Users/wesdemos/.local/share/nvim/llm_nvim/bin/llm-ls-aarch64-apple-darwin-0.5.3"
+            --
+            --   PROXY to capture requests so I can confirm what llm-ls is doing and I fixed it!
+            --   also mapped to remote ollama instance (localhost wasn't capturing, not surprising...)... I should've done 192.168.1.X with my IP to get it , derp below
+            --
+            -- llm-ls logs
+            --   ~/.cache/llm_ls/llm-ls.log
+            --   these logs were nearly useless.. on erorrs, barely anything is logged and it's just like "derp fail"
+            --
 
-            -- TODO TRY huggingface backend and pull model that way, would have many more choices then
+            -- PRN TRY huggingface backend and pull model that way, would have many more choices then
 
+
+            -- Then I sucked a big fat ... and completely missed request_body earlier... to literally modify the http request for completion (if ollama backend => /api/generate, if openai => /v1/completions)
+            -- !!! DO NOT TEST COMPLETIONS with the below tokens config.... fux it all up, lol
+            request_body = {
+                raw = true, -- set this b/c llm.nvim is litearlly building the entire prompt (do not use template)
+            },
             -- DOES THIS HAVE streaming support? I suspect not... hrm doesn't matter, can still try it like you used vscode-CodeGPT ext... which worked well enough you just have to set expectations that you are only testing quality of suggestions (not speed, yet)
+            --  I CAN CONFIRM COMPLETIONS ARE GOOD (quality)...
 
             -- *** qwen2.5
             model = "qwen2.5-coder:3b",
