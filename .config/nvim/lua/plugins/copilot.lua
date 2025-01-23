@@ -188,6 +188,9 @@ local llm_nvim = {
             --  BUT PREVIOUSLY I SAW multiple suggestions showing in lua code files...
             --  and it sucks that it its taking longer to generate 10 lines of suggestion and then only showing me the first one!! :(
 
+            -- FYI config of completions parsed here: https://github.com/huggingface/llm.nvim/blob/main/lua/llm/language_server.lua#L116
+            --   review this if you have ?s
+
             -- *** qwen2.5
             model = "qwen2.5-coder:3b", -- scrappy but if I give right context it is much faster and still accurate (i.e. paste in ref files list when completing require calls in lazy setup)
             -- model = "qwen2.5-coder:14b",
