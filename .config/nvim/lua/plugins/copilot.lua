@@ -64,7 +64,7 @@ local llm_nvim = {
                 options = {
                     -- https://github.com/ollama/ollama/blob/main/docs/api.md - api docs for api/generate, including options and links to
                     -- https://github.com/ollama/ollama/blob/main/docs/modelfile.md#valid-parameters-and-values
-                    num_predict = 40,
+                    num_predict = 10,
                     -- HOLY CRAP this is FAST at 4... and it was half a line in some cases... so maybe set this low? if I only get one line at a time...  ... otherwise IIUC its infinite or up to the modelfile/ model limits!
                     -- WOULD be nice to have a short/long completions mode to toggle how long I allow
                 },
@@ -78,7 +78,7 @@ local llm_nvim = {
             --  and it sucks that it its taking longer to generate 10 lines of suggestion and then only showing me the first one!! :(
 
             -- *** qwen2.5
-            model = "qwen2.5-coder:3b",
+            model = "qwen2.5-coder:14b",
             -- run ollama serve in debug mode... look at output when model is first loaded, IIAC this is what I need
             -- llm_load_print_meta: general.name     = Qwen2.5 Coder 3B Instruct
             -- llm_load_print_meta: BOS token        = 1516c43 '<|endoftext|>'
