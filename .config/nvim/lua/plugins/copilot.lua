@@ -15,6 +15,7 @@ if true then
     vim.cmd("highlight MySuggestion gui=italic guifg=#DDD")
     vim.cmd("highlight MySuggestion2 guifg=#FF0000")
     vim.cmd("highlight MySuggestionSign guifg=#00FF00")
+    vim.cmd("highlight MySuggestionNumberCol guifg=#0000FF")
 
 
     vim.cmd("autocmd CursorMoved * lua ShowSuggestion()")
@@ -45,9 +46,6 @@ if true then
             col = current_line_len
         end
 
-
-
-
         vim.api.nvim_buf_set_extmark(current_buffer, ns_id, line_0based, col, {
             end_row = line_0based + 1,
             -- hl_group = "MySuggestion",
@@ -61,6 +59,8 @@ if true then
             -- sign_text = "d", -- show sign in gutter! (marks line(s) affected by extmark)
             sign_text = "", -- show sign in gutter! (marks line(s) affected by extmark)
             sign_hl_group = "MySuggestionSign",
+            -- highlight for (line) number column - btw big signtext can overwrite this in my current config
+            -- number_hl_group = "MySuggestionNumberCol",
             --
             -- virt_text_pos = "eol", -- eol==default
             virt_text_pos = "overlay", -- over top of text, start at col(umn)
