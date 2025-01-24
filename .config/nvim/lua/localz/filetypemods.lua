@@ -13,6 +13,32 @@ vim.cmd [[
 
 ]]
 
+
+-- TODO review formatoptions
+--   o = insert vim.o.comments on `o` and `O`
+--      r = same for enter
+--   autowrap lines
+--      t = auto wrap regular text
+--      c = auto wrap comments + insert comments leader too
+--  j = remove comment leader when joining lines
+--- q = gq formats comments
+---
+-- REMOVE c for wrap comments:
+
+-- TODO review indent options
+--   o = insert vim.o.comments on `o` and `O`
+--
+-- TODO address any issues w/ custom lua settings I have scattered elsewhere, gather them here?
+
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = "lua",
+    callback = function()
+        -- vim.bo.commentstring = "# %s" -- %s is original text
+        vim.cmd('set formatoptions-=c') -- disable wrapping comments on textwidth
+        vim.cmd('set formatoptions-=t') -- disable wrapping regular text on textwidth
+    end,
+})
+
 vim.api.nvim_create_autocmd("FileType", {
     pattern = "editorconfig",
     callback = function()

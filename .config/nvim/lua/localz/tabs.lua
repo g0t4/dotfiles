@@ -18,6 +18,38 @@ vim.cmd([[
     command! ToggleShowWhitespace if &list | set nolist | else | set list | endif
 ]])
 
+-- *** command to show tab config (print messages)
+vim.api.nvim_create_user_command('TroubleshootOptions', function()
+  -- sometimes things are misconfigured and I wanna dump the config all at once that is likely affected (i.e. my werkspace plugin, the lua file loaded doesn't seem to apply the editorconfig values for lua but if I :e! then it does)
+  -- expandtab == true => insert spaces for tabs (used w/ < > commands and when autoindent=on)
+  --
+  print(
+  -- print first so it doesn't show unless :messages
+    "wrap:" .. tostring(vim.o.wrap),
+    "wrapmargin:" .. tostring(vim.o.wrapmargin),
+    "textwidth:" .. tostring(vim.o.textwidth),
+    "linebreak:" .. tostring(vim.o.linebreak),
+    " - ",
+    -- noteworthy:
+    -- t = auto-wrap text using textwidth
+    -- c = auto-wrap comments using textwidth
+    "formatoptions:" .. tostring(vim.o.formatoptions)
+  )
+  -- ok to have super wide output... most of the time I have full screen width... and zoomed small
+  print("expandtab:" .. tostring(vim.o.expandtab),
+    "softtabstop:" .. tostring(vim.o.softtabstop),
+    "shiftwidth:" .. tostring(vim.o.shiftwidth),
+    "tabstop:" .. tostring(vim.o.tabstop),
+    " - ",
+    "autoindent:" .. tostring(vim.o.autoindent),
+    "smartindent:" .. tostring(vim.o.smartindent),
+    "cindent:" .. tostring(vim.o.cindent),
+    "smarttab:" .. tostring(vim.o.smarttab)
+  )
+end, { bang = true })
+
+-- *** review `autoindent`/`smartindent`/`cindent` and `smarttab` settings, I think I am fine as is but I
+
 
 -- TODO: port from vimrc
 -- " *** review `autoindent`/`smartindent`/`cindent` and `smarttab` settings, I think I am fine as is but I should check
