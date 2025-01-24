@@ -7,7 +7,6 @@ require("bootstrap-lazy")
 require('localz.filetypemods') -- before werkspace else filetype mods dont fire
 require("werkspace")
 require("localz.github-links")
-require('localz.tabs')
 require('localz.misc')
 require('keymaps')
 require('localz.clippy')
