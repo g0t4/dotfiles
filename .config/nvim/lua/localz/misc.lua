@@ -81,8 +81,11 @@ function show_variable_in_float(var_content)
     -- set wrap, for some reasonm it doesn't work if set before opening the window?
     vim.api.nvim_buf_set_option(vim.g.inspected_buf, 'wrap', true)
 
+    vim.api.nvim_create_augroup("FloatWinClose", { clear = true })
+
     -- when window is closed, stop watching too
     vim.api.nvim_create_autocmd("WinClosed", {
+        group = "FloatWinClose",
         pattern = tostring(vim.g.inspected_win),
         callback = function()
             stop_watching()
