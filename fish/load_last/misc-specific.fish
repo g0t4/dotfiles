@@ -1143,8 +1143,14 @@ if command -q ollama
     abbr olpush "ollama push"
     abbr olr "ollama run"
     abbr olrm "ollama rm"
-    abbr ols "ollama serve"
-    abbr olsd "OLLAMA_DEBUG=1 ollama serve"
+
+    # PRN - use grc with ollama serve too and write my own coloring config (have claude do it)... do this if I dislike using bat for this
+    set -l ollama_serve "ollama serve 2>&1 | bat -pp -l log" # -pp to disable pager and use plain style (no line numbers).. w/o disable pager, on mac my pager setup prohibits streaming somehow (anyways just use this always)
+    abbr ols "$ollama_serve"
+    abbr olsd "OLLAMA_DEBUG=1 $ollama_serve"
+    abbr olsh "OLLAMA_KEEP_ALIVE=30m OLLAMA_HOST='http://0.0.0.0:11434' $ollama_serve"
+    abbr olshd "OLLAMA_KEEP_ALIVE=30m OLLAMA_DEBUG=1 OLLAMA_HOST='http://0.0.0.0:11434' $ollama_serve"
+
     abbr olshow "ollama show"
 end
 
