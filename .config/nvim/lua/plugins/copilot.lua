@@ -23,7 +23,8 @@ local use_ai = {
 --   https://github.com/huggingface/llm.nvim
 local llm_nvim = {
     enabled = vim.tbl_contains(use_ai, "llm.nvim"),
-    "huggingface/llm.nvim",
+    "g0t4/llm.nvim",
+    dir = "~/repos/github/g0t4/llm.nvim",
     -- event = "VeryLazy", -- TODO WHEN? buffer enter?
     config = function()
         require("llm").setup({
