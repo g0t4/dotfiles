@@ -59,6 +59,7 @@ require("lazy").setup({
         require("plugins.tree"),
         require("plugins.treesitter"),
         require("plugins.wilder"),
+        require("plugins.g0t4"),
         -- YES, I need to manually add new entries here.. that is fine
 
     },
