@@ -101,6 +101,7 @@ local llm_nvim = {
 
             -- *** llm-ls troubleshooting
             --
+            --   mitmproxy --mode=local:"llm-ls" -- my g0t4/llm-ls fork build
             --   mitmproxy --mode=local:"/Users/wesdemos/.local/share/nvim/llm_nvim/bin/llm-ls-aarch64-apple-darwin-0.5.3"
             --
             --   PROXY to capture requests so I can confirm what llm-ls is doing and I fixed it!
