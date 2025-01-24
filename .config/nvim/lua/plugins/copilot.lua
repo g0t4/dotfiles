@@ -444,7 +444,8 @@ return {
                 keymaps = {
                     -- accept_suggestion = "<Tab>", -- all copilots use this, also doesn't apply if no suggestion shown (obviously)
                     -- clear_suggestion = "<C-]>", -- all copilots use this
-                    accept_word = "<M-Right>", -- <C-j> is default
+                    -- using defaults now that I set them in g0t4/llm.nvim fork
+                    -- accept_word = "<M-Right>", -- <C-j> is default
                 },
                 color = {
                     -- MUST SET a color to get SupermavenSuggestion highlight group to work, else won't exist
