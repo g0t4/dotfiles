@@ -86,7 +86,10 @@ vim.cmd [[
 --- q = gq formats comments
 ---
 
+vim.api.nvim_create_augroup("filetypemods", { clear = true })
+
 vim.api.nvim_create_autocmd("FileType", {
+    group = "filetypemods",
     pattern = "lua",
     callback = function()
         -- TODO review nvim's bundled ftplugin/lua.vim and ftplugin/lua.lua and see if I wannna override anything in them
@@ -106,6 +109,7 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 vim.api.nvim_create_autocmd("FileType", {
+    group = "filetypemods",
     pattern = "editorconfig",
     callback = function()
         vim.bo.commentstring = "# %s" -- %s is original text
@@ -114,6 +118,7 @@ vim.api.nvim_create_autocmd("FileType", {
 
 -- set commentstring for json files (i.e. coc-settings.json), obviously not all json readers can handle comments so be careful
 vim.api.nvim_create_autocmd("FileType", {
+    group = "filetypemods",
     pattern = "json",
     callback = function()
         vim.bo.commentstring = "// %s" -- %s is original text
@@ -121,6 +126,7 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 vim.api.nvim_create_autocmd("FileType", {
+    group = "filetypemods",
     pattern = "graphql",
     callback = function()
         vim.bo.commentstring = "# %s" -- %s is original text
@@ -129,6 +135,7 @@ vim.api.nvim_create_autocmd("FileType", {
 
 -- ~/.editrc
 vim.api.nvim_create_autocmd("FileType", {
+    group = "filetypemods",
     pattern = "editrc",
     callback = function()
         vim.bo.commentstring = "# %s" -- %s is original text
