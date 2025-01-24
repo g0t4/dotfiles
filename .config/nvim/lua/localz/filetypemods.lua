@@ -5,14 +5,16 @@
 
 
 
--- definitely move this elsewhere later
--- wrap settings
+-- *** GLOBAL OPTION DEFAULTS ***
+-- FYI global defaults need to be applied BEFORE WERKSPACE RESTORE... else those files restore before this and then these mess up the restored files/windows... (globals must come first)... what happens is then this fubars the coc/format settings that somehow override (IIUC) based on things like luarc
+--    SO, if :TroubleshootOptions shows diff option values... and then :e! and :TroubleshootOptions again shows correct (diff) values... for restored files... likely the issue is with ordering of these globals/filetype overrides
+--
+-- *** wrap global defaults
 vim.o.wrap = false -- global nowrap, consider local settings for this instead
 vim.o.textwidth = 0 -- disable globally, add back if I find myself missing it
 vim.o.wrapmargin = 0 -- disable globally, add back if I find myself missing it
--- TODO ftplugin/ is overriding textwidth for vim script... grrr
 
--- *** tabs
+-- *** tab global defaults (then filetype/coc should override these) - only plan to use these if you don't have formatter setup for a given filetype that feeds back into these values
 -- I chose option 2 (always insert spaces, leave tabs as is with default tabstop=8)
 vim.o.expandtab = true -- insert spaces for tabs
 vim.o.softtabstop = 4 -- b/c expandtab is set, this is the width of an inserted tab in spaces
@@ -27,6 +29,7 @@ vim.cmd([[
 
 -- *** command to show tab config (print messages)
 vim.api.nvim_create_user_command('TroubleshootOptions', function()
+  -- invaluable to troubleshoot script ordering issues b/c I can quickly see what is what after rearranges
   -- sometimes things are misconfigured and I wanna dump the config all at once that is likely affected (i.e. my werkspace plugin, the lua file loaded doesn't seem to apply the editorconfig values for lua but if I :e! then it does)
   -- expandtab == true => insert spaces for tabs (used w/ < > commands and when autoindent=on)
   --
@@ -55,11 +58,7 @@ vim.api.nvim_create_user_command('TroubleshootOptions', function()
   )
 end, { bang = true })
 
--- *** review `autoindent`/`smartindent`/`cindent` and `smarttab` settings, I think I am fine as is but I
-
-
--- TODO: port from vimrc
--- " *** review `autoindent`/`smartindent`/`cindent` and `smarttab` settings, I think I am fine as is but I should check
+-- PRN review `autoindent`/`smartindent`/`cindent` and `smarttab` settings
 --     filetype plugin indent on " this is controlling indent on new lines for now and seems fine so leave it as is
 --     set backspace=indent,start,eol " allow backspacing over everything in insert mode, including indent from autoindent, eol thru start of insert
 
