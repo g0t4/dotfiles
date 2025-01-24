@@ -4,6 +4,7 @@ require("early")
 require("bootstrap-lazy")
 
 -- after plugin loader
+require('localz.filetypemods') -- before werkspace else filetype mods dont fire
 require("werkspace")
 require("localz.github-links")
 require('localz.tabs')
@@ -11,7 +12,6 @@ require('localz.misc')
 require('keymaps')
 require('localz.clippy')
 require('localz.comment-highlights')
-require('localz.filetypemods')
 -- require('localz.ideas')
 
 vim.cmd [[
