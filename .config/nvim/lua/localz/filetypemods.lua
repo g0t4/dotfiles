@@ -34,8 +34,12 @@ vim.api.nvim_create_autocmd("FileType", {
     pattern = "lua",
     callback = function()
         -- vim.bo.commentstring = "# %s" -- %s is original text
+
+        -- BTW if I put formatoptions changes in filetype/lua.lua ... it seems to be overriden or not applied, but it works here:
         vim.cmd('set formatoptions-=c') -- disable wrapping comments on textwidth
         vim.cmd('set formatoptions-=t') -- disable wrapping regular text on textwidth
+        -- FYI I think I wanna use this over ftplugin/lua.lua
+        --   so for now, put those types of overrides here and then I need to look into what I want (one or both)?
     end,
 })
 
