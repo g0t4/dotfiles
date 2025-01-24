@@ -162,4 +162,9 @@
         },
     },
     "snippets.ultisnips.pythonPrompt": false,
+
+
+    // *** POWERSHELL ***
+    "powershell.integratedConsole.showOnStartup": false,
+
 }
