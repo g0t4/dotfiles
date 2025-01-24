@@ -10,7 +10,10 @@ vim.cmd([[
 ]])
 
 -- *** quit help on 'q' => see how I feel about this
+vim.api.nvim_create_augroup("HelpQuitWithQ", { clear = true })
+
 vim.api.nvim_create_autocmd("FileType", {
+    group = "HelpQuitWithQ",
     pattern = "help",
     callback = function()
         vim.keymap.set("n", "q", ":q<CR>", { noremap = true, silent = true, buffer = true })
