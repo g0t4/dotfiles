@@ -11,10 +11,9 @@ trim_trailing_whitespace = true
 # https://github.com/CppCXY/EmmyLuaCodeo#Style/blob/master/docs/format_config.md
 # https://github.com/CppCXY/EmmyLuaCodeStyle/blob/master/lua.template.editorconfig
 #   FYI using editorconfig for the formatter in the lua LS I am using (couldn't get defaultConfig to work in coc-settings.json)
-#   TODO IIAC I have to set per repo/workspace? or can I have a global editorconfig (in this dotfiles repo? - w.r.t. the formatter using editorconfig for its options)
-# TODO later... if I edit .editorconfig in a sep repo... suddenly its used for indent_size.. but then if I restart nvim, it reverts to what appears to be the settings here? or defaults?
-#  TODO can I get it to respect stylua for lua?
-indent_size = 2
+#  OK, IIUC luarc s/b per workspace/repo and coc-settings.json is gonna be global fallbacks, so I should add some of this over there
+indent_size = 4
+# TODO move to coc-settings.json and see if these work with other repos:
 max_line_length = 200
 align_continuous_inline_comment = false
 # BTW zed lua extension works with this (as long as I load entire repo dir and not a subdir), cool

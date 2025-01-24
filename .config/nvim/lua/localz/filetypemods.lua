@@ -15,7 +15,7 @@ vim.cmd [[
 
 
 -- TODO review formatoptions
---   o = insert vim.o.comments on `o` and `O`
+--   o = insert comments on `o` and `O`
 --      r = same for enter
 --   autowrap lines
 --      t = auto wrap regular text
@@ -33,13 +33,25 @@ vim.cmd [[
 vim.api.nvim_create_autocmd("FileType", {
     pattern = "lua",
     callback = function()
+        -- TODO is this not firing for focused window/buffer after werkspace reloads last session?
+
         -- vim.bo.commentstring = "# %s" -- %s is original text
 
-        -- BTW if I put formatoptions changes in filetype/lua.lua ... it seems to be overriden or not applied, but it works here:
+        -- BTW if I put formatoptions changes in ftplugin/lua.lua ... it seems to be overriden or not applied, but it works here:
+        --   so for now, dont use ftplugin/lua.lua, use this autocmd
+
+        -- wrapping related
         vim.cmd('set formatoptions-=c') -- disable wrapping comments on textwidth
         vim.cmd('set formatoptions-=t') -- disable wrapping regular text on textwidth
-        -- FYI I think I wanna use this over ftplugin/lua.lua
-        --   so for now, put those types of overrides here and then I need to look into what I want (one or both)?
+        vim.cmd('set formatoptions+=l') -- do not wrap in insert mode (when past textwidth columns) - was already default, just make explicit
+
+        -- comment leaders:
+        vim.cmd('set formatoptions+=o') -- insert comments on `o` and `O`
+        vim.cmd('set formatoptions+=r') -- same for enter
+        vim.cmd('set formatoptions+=j') -- remove comment leader when joining lines
+
+        -- TODO any others I wanna explicitly set?
+
     end,
 })
 
