@@ -1,20 +1,17 @@
-vim.cmd [[
+-- TODO warn if werkspaces already loaded
+-- FYI if issues with werkspace not having these options set... that can happen if this is registered after werkspaces are loaded
 
+vim.cmd [[
     " SVG
     "autocmd FileType svg echo "SVG opened"
     autocmd FileType svg set wrap
 
-
-
-
     " markdown
     autocmd FileType md set wrap
-
-
 ]]
 
-
--- TODO review formatoptions
+-- :h formatoptions
+-- :h fo-table
 --   o = insert comments on `o` and `O`
 --      r = same for enter
 --   autowrap lines
@@ -23,22 +20,13 @@ vim.cmd [[
 --  j = remove comment leader when joining lines
 --- q = gq formats comments
 ---
--- REMOVE c for wrap comments:
-
--- TODO review indent options
---   o = insert vim.o.comments on `o` and `O`
---
--- TODO address any issues w/ custom lua settings I have scattered elsewhere, gather them here?
 
 vim.api.nvim_create_autocmd("FileType", {
     pattern = "lua",
     callback = function()
-        -- TODO is this not firing for focused window/buffer after werkspace reloads last session?
-
+        -- TODO review nvim's bundled ftplugin/lua.vim and ftplugin/lua.lua and see if I wannna override anything in them
+        -- print "my autocmd FileType"
         -- vim.bo.commentstring = "# %s" -- %s is original text
-
-        -- BTW if I put formatoptions changes in ftplugin/lua.lua ... it seems to be overriden or not applied, but it works here:
-        --   so for now, dont use ftplugin/lua.lua, use this autocmd
 
         -- wrapping related
         vim.cmd('set formatoptions-=c') -- disable wrapping comments on textwidth
@@ -49,9 +37,6 @@ vim.api.nvim_create_autocmd("FileType", {
         vim.cmd('set formatoptions+=o') -- insert comments on `o` and `O`
         vim.cmd('set formatoptions+=r') -- same for enter
         vim.cmd('set formatoptions+=j') -- remove comment leader when joining lines
-
-        -- TODO any others I wanna explicitly set?
-
     end,
 })
 
