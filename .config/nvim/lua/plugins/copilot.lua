@@ -50,6 +50,11 @@ local llm_nvim = {
             --          then I think I can modify the require("llm.completion").suggestion to look like the completion is there for the rest and not re-request it... YES
             --       then I need to figure out how to handle this in my client side code
             --         (llm.nvim)n
+            -- - ok now I figured it out... it will generate FITM which replaces existing lines ... and right now those are just added without finding /replacing existing lines...
+            --   - need to detect when it is suggesting to replace multiple lines (much like it suggests redoing end of line) and appropriately SHOW that diff...
+            --   - and apply the diff ...  how to detect? use some sort of diff %? similarity matching of existing line(s)? ... then this can do what Zed is doing with jump edits!!!
+            --    - holy crap are jump edits really just FITM and finding the overlap for what is replaced vs added?!
+            --      - and then its like inline assist with implicit prompt
             -- - issue w/ new lines / tab/indent in python not showing more than one line, also in lua IIUC that is happening (only top level completions show multi line)
             --   - llm-ls is the culprit... it only returns the first line to llm.nvim plugin in callback... so what in llm-ls decides to truncate multiple lines... I confirmed again w/ mitmproxy that the correct spacing is even returned for subsequent lines and yet... its axed... and llm.nvim of course has logic to correctly show virt_lines for additional lines
             --     - FYI add this to callback in llm.completion.lua:
