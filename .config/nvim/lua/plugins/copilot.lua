@@ -118,6 +118,12 @@ local llm_nvim = {
             --   - this is also why, if you type part of the suggestion instead... it the refetches the entire same suggestion (often)... bc it has no caching mechanism to know the completion is still what it was before partially accepted
             --   - also doesn't seem to cache completions (but, IIUC ollama may do that?) or a middle tier could do that too
             --   - I can add this and learn how to use extmarks along the way
+            --   - HRM... I think it has acceptCompletion JUST to track what was accepted... I need to verify, but that is my guess... if so then
+            --       I can make my own client side complete keyboard shortcut
+            --          using require("llm.completion").suggestion to get the text to determine partial accept!
+            --          then I think I can modify the require("llm.completion").suggestion to look like the completion is there for the rest and not re-request it... YES
+            --       then I need to figure out how to handle this in my client side code
+            --         (llm.nvim)n
             -- - issue w/ new lines / tab/indent in python not showing more than one line, also in lua IIUC that is happening (only top level completions show multi line)
             --   - llm-ls is the culprit... it only returns the first line to llm.nvim plugin in callback... so what in llm-ls decides to truncate multiple lines... I confirmed again w/ mitmproxy that the correct spacing is even returned for subsequent lines and yet... its axed... and llm.nvim of course has logic to correctly show virt_lines for additional lines
             --     - FYI add this to callback in llm.completion.lua:
@@ -126,14 +132,23 @@ local llm_nvim = {
             --     - btw in llm-ls:
             --        'llm-ls/getCompletions'
             --           https://github.com/huggingface/llm-ls/blob/main/crates/llm-ls/src/main.rs#L492
-
-            --     - i guess it is possible llm-ls is configured wrong by llm.nvim to do this?
-            --     - does it do this with openai as backend instead? maybe just api/generate issue?
+            --     - ENABLED LLM_LOG_LEVEL=DEBUG =>
+            --          -- can see body of request.. (not FULL HTTP REQUEST)
+            --          -- can see generations (from "response" field in api/generate... not full HTTP RESPONSE THOUGH)
+            --          can see timing too! (can I pass verbose flag too?)
+            --        and logs say: "completion type: SingleLine"
+            --           - => https://github.com/huggingface/llm-ls/blob/main/crates/llm-ls/src/main.rs#L536
+            --             -   this is the type of completion that the model will return. SingleLine means a single line response, MultiLine means multiple lines.
+            --           and that is before request for completion is sent?! or are logs just in diff order?
+            --     -
+            --     ??? is it possible llm-ls is configured wrong by llm.nvim?
+            --     ??? does it do this with openai as backend instead? maybe just api/generate issue?
 
 
             -- full config ref: https://github.com/huggingface/llm.nvim?tab=readme-ov-file#setup
             enable_suggestions_on_startup = true,
-            -- debounce_ms = 150, -- good deal, it has debounce
+            debounce_ms = 150, -- good deal, it has debounce
+            context_window = 1024,
 
             -- backend = "ollama", -- /api/generate
             backend = "ollama", -- /v1/complete # why not /chat/completions!?
@@ -156,9 +171,9 @@ local llm_nvim = {
                     --   tail -f ~/.cache/llm_ls/llm-ls.log | jq
                     --      # json objs (one per line) => must set INFO level logging
                     --   INFO level => tells you about each LS message pretty much (i.e. open buffer/file)
-                    LLM_LOG_LEVEL = "DEBUG"
+                    LLM_LOG_LEVEL = "DEBUG" -- "DEBUG" is best, also "INFO", and "WARN" ... maybe more
                 },
-                -- cmd = { "llm-ls" }, -- custom build
+                bin_path = "/Users/wesdemos/repos/github/g0t4/llm-ls/target/debug/llm-ls",
             },
 
             -- PRN TRY huggingface backend and pull model that way, would have many more choices then
