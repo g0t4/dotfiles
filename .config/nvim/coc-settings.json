@@ -166,5 +166,7 @@
 
     // *** POWERSHELL ***
     "powershell.integratedConsole.showOnStartup": false,
+    // WTH it still flashes momentarily, WT WT WTF
+
 
 }

@@ -10,7 +10,6 @@ let g:coc_global_extensions = [
             \ 'coc-html',
             \ 'coc-json',
             \ 'coc-lua',
-            \ 'coc-powershell',
             \ 'coc-prettier',
             \ 'coc-pyright',
             \ 'coc-rust-analyzer',
@@ -24,6 +23,8 @@ let g:coc_global_extensions = [
             \ ]
             "\ 'coc-rust-analyzer',
             "\ 'coc-lightbulb', " seemed to show up on every line regardless if any code actions available => TODO investigate?
+            " \ 'coc-powershell', " WTF the it opens an integrated terminal EVERY TIME AND EVEN IF IT IS DISABLED, it still does it and just closes it .. WTF
+
     " FYI coc-calc shows the range of what can be done... "1 + 2 = " and it suggests the result "3"
     " PRN https://github.com/iamcco/coc-diagnostic => generic integration of diagnostics tools (make LSP adapter for them, IIUC)
     " brew install zig zls " also consider https://github.com/ziglang/zig.vim
