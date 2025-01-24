@@ -28,8 +28,17 @@ local llm_nvim = {
     config = function()
         require("llm").setup({
             -- pros:
+            -- - debounces typing... and cancels prev requests, works nicely
+            --   - in the future, I might like something where the first keystroke that completion always generates and then if it is in line with what I typed then it can be used! sometimes I type
+            --   the first word or so not knowing what is needed to trigger my completion and if it guesses the same then no delay from debounce!
+            --     - after first keystroke, then debounce kicks in for the remaining keystrokes, that way it can feel more instantaneous (when it can be, and I suspect this is more often that I think)
+            --
             -- cons:
-            -- - no partial accept :(... only accept_keymap and dismiss_keymap
+            -- - YUP, when a completion is visible, even if you type part of what is showing, it cancels the completion and triggers a new suggestion! ouch
+            --   - it should leave it up unless you type something that contradicts it... then it can generate a new suggestion...
+            --   - this will fit with the accept partial logic, it should just take that part of the completion off that you type and keep showing it char by char, or word by word, or line by line as
+            --   you partial accept through a variety of mechanisms
+           -- - no partial accept :(... only accept_keymap and dismiss_keymap
             --   - I wonder if you can send a subset of suggestion in the llm-ls/acceptCompletions message? (or does it have to match entire thing?)
             --   - this is also why, if you type part of the suggestion instead... it the refetches the entire same suggestion (often)... bc it has no caching mechanism to know the completion is still what it was before partially accepted
             --   - also doesn't seem to cache completions (but, IIUC ollama may do that?) or a middle tier could do that too
@@ -59,6 +68,22 @@ local llm_nvim = {
             --     -
             --     ??? is it possible llm-ls is configured wrong by llm.nvim?
             --     ??? does it do this with openai as backend instead? maybe just api/generate issue?
+            -- ideas:
+            --  - if there is gonna be a determination between single vs multi line completion, then tell the model that (ie set stop token to new line if only a single line)
+            --    - right now, the model generates multiple lines no matter what and often all but the first is thrown away
+            --  - would it be possible to give hints about the type of completion to generate?
+            --    - first, I could have settings PER language (or files)...
+            --      - could have prompt customizations per file too (and per model) => so if one model has trouble with say AppleScript, then I can prompt it with an AppleScript sytnax info in the
+            --      prompt... alternatively I can fine tune local ones to not need this... just ideas
+            --    - *** I WANT STREAMING COMPLETIONS... why not?
+            --       - will feel way faster, be more likely to want to use it... also will allow me to immediately see if the first part is wrong or not...
+            --       - not waiting for full completion
+            --       - ALSO, slow models aren't as big of a deal then.. and that means I can run bigger/better models and not notice it b/c it starts streaming no matter what model and the...
+            --         - ... tokens/sec are plenty fast as long as I am not waiting for the entire completion
+            --       - AND don't have to have small max_token counts to avoid waiting forever which means longer completions don't get interrupted and have to be resumed with a second round!
+            --       - this would obviate the need to differentiate between only want single vs multi line completion, and even token limits, because I don't care if I can quickly see the part I want
+            --         - and I could partially accept as its streaming! and let it keep streaming unless I contradict it... which!!! then I don't worry so much about debounce... I worry about "typed a
+            --         diff character" so now stop the generation... so yeah... could I have it pause while generating a suggestion and I dunno resume after I accept X tokens too? or? just ideas
 
 
             -- full config ref: https://github.com/huggingface/llm.nvim?tab=readme-ov-file#setup
