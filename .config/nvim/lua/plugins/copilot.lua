@@ -65,6 +65,7 @@ local llm_nvim = {
             enable_suggestions_on_startup = true,
             debounce_ms = 150, -- good deal, it has debounce
             context_window = 4096,
+            -- TODO find tokenizer for qwen model... right now tokenizer=nil => so I stop using count(chars) == token estimate
 
             -- backend = "ollama", -- /api/generate
             backend = "ollama", -- /v1/complete # why not /chat/completions!?
