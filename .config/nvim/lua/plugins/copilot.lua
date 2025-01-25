@@ -2,8 +2,8 @@ local use_ai = {
     -- "avante",
     -- "copilot",
     -- "tabnine",
-    -- "supermaven",
-    "llm.nvim",
+    "supermaven",
+    -- "llm.nvim",
 }
 -- ! consider https://github.com/zbirenbaum/copilot.lua
 --    purportedly faster and less glitchy than copilot.vim
