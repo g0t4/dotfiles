@@ -39,7 +39,7 @@ local llm_nvim = {
             --   - it should leave it up unless you type something that contradicts it... then it can generate a new suggestion...
             --   - this will fit with the accept partial logic, it should just take that part of the completion off that you type and keep showing it char by char, or word by word, or line by line as
             --   you partial accept through a variety of mechanisms
-           -- - no partial accept :(... only accept_keymap and dismiss_keymap
+            -- - no partial accept :(... only accept_keymap and dismiss_keymap
             --   - I wonder if you can send a subset of suggestion in the llm-ls/acceptCompletions message? (or does it have to match entire thing?)
             --   - this is also why, if you type part of the suggestion instead... it the refetches the entire same suggestion (often)... bc it has no caching mechanism to know the completion is still what it was before partially accepted
             --   - also doesn't seem to cache completions (but, IIUC ollama may do that?) or a middle tier could do that too
@@ -126,6 +126,8 @@ local llm_nvim = {
             },
 
             -- PRN TRY huggingface backend and pull model that way, would have many more choices then
+            --
+            --
 
 
             -- Then I sucked a big fat ... and completely missed request_body earlier... to literally modify the http request for completion (if ollama backend => /api/generate, if openai => /v1/completions)
@@ -374,7 +376,7 @@ return {
 
     {
         "g0t4/ask-openai.nvim",
-        event = { "CmdlineEnter" },
+        event = { "CmdlineEnter", "InsertEnter" },
         dir = "~/repos/github/g0t4/ask-openai.nvim",
 
         -- *** copilot (default):
