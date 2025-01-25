@@ -378,9 +378,9 @@ return {
         dir = "~/repos/github/g0t4/ask-openai.nvim",
 
         -- *** copilot (default):
-        opts = {
-            -- verbose = true,
-        },
+        -- opts = {
+        --     -- verbose = true,
+        -- },
 
         -- *** OpenAI + keychain:
         -- opts = {
@@ -405,11 +405,12 @@ return {
         -- },
 
         -- *** ollama:
-        -- opts = {
-        --     provider = "keyless",
-        --     model = "llama3.2-vision:11b", -- ollama list
-        --     use_api_ollama = true,
-        -- },
+        opts = {
+            provider = "keyless",
+            -- model = "llama3.2-vision:11b", -- ollama list
+            model = "qwen2.5-coder:3b",
+            use_api_ollama = true,
+        },
 
         dependencies = {
             "nvim-lua/plenary.nvim",
