@@ -3,7 +3,7 @@ local use_ai = {
     -- "copilot",
     -- "tabnine",
     -- "supermaven",
-    "llm.nvim",
+    -- "llm.nvim",
 }
 -- ! consider https://github.com/zbirenbaum/copilot.lua
 --    purportedly faster and less glitchy than copilot.vim
