@@ -4,6 +4,8 @@ local use_ai = {
     -- "tabnine",
     "supermaven",
     -- "llm.nvim",
+    -- "ask-openai-cmdline",
+    -- "ask-openai-predictions",
 }
 -- ! consider https://github.com/zbirenbaum/copilot.lua
 --    purportedly faster and less glitchy than copilot.vim
@@ -376,6 +378,7 @@ return {
 
     {
         "g0t4/ask-openai.nvim",
+        enabled = vim.tbl_contains(use_ai, "ask-openai.nvim") or vim.tbl_contains(use_ai, "ask-openai.nvim"),
         event = { "CmdlineEnter", "InsertEnter" },
         dir = "~/repos/github/g0t4/ask-openai.nvim",
 
