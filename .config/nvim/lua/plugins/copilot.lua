@@ -414,7 +414,9 @@ return {
             -- model = "llama3.2-vision:11b", -- ollama list
             model = "qwen2.5-coder:3b",
             use_api_ollama = true,
-            api_url = "http://build21.lan:11434/v1/chat/completions"
+            api_url = "http://build21.lan:11434/v1/chat/completions",
+
+            verbose = true,
         },
 
         dependencies = {
