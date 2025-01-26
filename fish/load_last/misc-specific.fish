@@ -1736,8 +1736,8 @@ if command -q security
             return -1
         end
     end
-    complete -c securitys --short-option "s" --long-option "service"
-    complete -c securitys --short-option "a" --long-option "account"
+    complete -c securitys --short-option s --long-option service
+    complete -c securitys --short-option a --long-option account
     # PRN other args for find/add/delete-generic-password
 
     # had ChatGPT do this based on man page of security cmd (since fish shell generated completions dont work for security subcommadns, just its options)
