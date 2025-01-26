@@ -48,6 +48,8 @@ async def ask_openai_async_type_response(session, messages):
                 await session.async_send_text(sanitized)
             else:
                 await session.async_send_text(sanitized)
+
+            # if is_last_chunk:
+            #    strip trailing "```" => how often does this happen though?
             # TODO is there a way to detect last chunk? => actually IIRC yes... there is a stop reason on each chunk, IIRC
-    # after last chunk, can I remove ending ``` and spaces? it might span multiple last chunks btw so wouldn't just be able to keep track of last chunk, would need entire response and then detect if ends with ``` and spaces and then delete those chars?
-    # ideally I would have some sort of streaming mechanism that would detect leading/trailing ``` and spaces... and then no correction is needed to delete chars`
+            # after last chunk, can I remove ending ``` and spaces? it might span multiple last chunks btw so wouldn't just be able to keep track of last chunk, would need entire response and then detect if ends with ``` and spaces and then delete those chars?
