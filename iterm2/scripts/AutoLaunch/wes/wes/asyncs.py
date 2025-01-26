@@ -35,7 +35,6 @@ async def ask_openai_async_type_response(session, messages):
 
     first_chunk = True
     async for chunk in response_stream:
-        # FYI w.r.t ``` ... deepseek-chat listens to request to not use ``` and ``` but deepseek-coder always returns ```... that actually makes sense for the coder...
         if chunk.choices[0].delta.content is not None:
             # strip new lines to avoid submitting commands prematurely, is there an alternate char I could use to split the lines still w/o submitting (would have to check what the shell supports, if anything is possible)... one downside to not being a part of the line editor.. unless there is a workaround? not that I care much b/c multi line commands are not often necessary...
             sanitized = chunk.choices[0].delta.content.replace("\n", " ")

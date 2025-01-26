@@ -108,7 +108,6 @@ def use_deepseek(model: Optional[str] = None):
     # deepseek-chat (DeepSeek-V3)
     # deepseek-reasoner (DeepSeek-R1 as of 2025-01-20)
     # https://api-docs.deepseek.com/quick_start/pricing
-    # FYI w.r.t ``` ... deepseek-chat listens to request to not use ``` and ``` but deepseek-coder always returns ```... that actually makes sense for the coder...
     return Service(
         name='deepseek',
         # FYI `security add-generic-password -a ask -s deepseek -w`
