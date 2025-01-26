@@ -1824,3 +1824,20 @@ if command -q security
     #complete -c security -n '__fish_seen_subcommand_from error' -d "Display a descriptive message for the given error code(s)"
 
 end
+
+if command -q luarocks
+
+    abbr lr luarocks
+    abbr lrl luarocks list # global and local, for newest lua version
+    abbr lrll luarocks list --local # only local
+    abbr lrl1 luarocks list --lua-version=5.1 # nvim uses 5.1
+    abbr lrl4 luarocks list --lua-version=5.4 # hammerspoon uses this + its the current release
+
+    # abbr lrd luarocks doc # show docs for package
+
+    abbr lri luarocks install
+    abbr lrrm luarocks remove
+    abbr lrs luarocks search
+    abbr lrshow luarocks show
+
+end
