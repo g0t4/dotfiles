@@ -90,3 +90,36 @@ spoon.WindowHalfsAndThirds:bindHotkeys({
     -- FYI I do not see a middle third binding?
 
 })
+
+
+-- WIP SCREENSHOTS
+--
+
+hs.hotkey.bind({ "shift", "cmd" }, "3", function()
+    local screen = hs.screen.mainScreen()
+    local filename = os.date("%Y-%m-%d_%I-%M-%S-%p_Screenshot.png")
+    local snapshots_dir = os.getenv("HOME") .. "/Pictures/Screencaps"
+    local filePath = snapshots_dir .. "/" .. filename
+    -- screen:shotAsPNG(filePath)
+    -- 3840 × 2160
+    -- 7680 × 4320 -- literally saving an 8k image! why?!
+    -- TODO => size is HUGE ... need to compress it with smth like imagemagick/convert
+
+    -- instead take in-memory snapshot I can manipulate
+    local snap = screen:snapshot() -- TODO rect param
+    print("snap", hs.inspect(snap))
+    print("size", hs.inspect(snap:size())) -- 4k size initially...
+    -- croppedCopy()
+    -- saveToFile()
+    -- setSize()
+    -- print("ascii\n", snap:toASCII())
+    --
+    --
+    -- OK much better 4k resolution now (even though it says 2k here after divide by 2... it is retina at 2k so 4k effective pixels)... 4MB instead of 11MB
+    --   STILL TOO BIG THOUGH... would need to further compress (i.e. imagemagick => do that later)
+    local half = snap:setSize({
+        w = snap:size().w / 2,
+        h = snap:size().h / 2
+    })
+    half:saveToFile(filePath)
+end)
