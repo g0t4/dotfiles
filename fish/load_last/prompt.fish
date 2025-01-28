@@ -65,6 +65,13 @@ function prompt_pwd --description 'wes mod - name of the current dir only'
     end
     # variable named
     # PRN flush out other scenarios like I have with ~/repos/github/g0t4/foo => gh:g0t4/foo
+
+    # truncate long course paths
+    if string match -q "$HOME/repos/github/g0t4/course-deploying-containerized-application-docker" $PWD
+        echo -n -s course
+        return
+    end
+
     # ~ for home dir
     if string match -q "$HOME" $PWD
         echo -n -s "~"
