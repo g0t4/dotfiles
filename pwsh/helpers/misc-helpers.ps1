@@ -161,7 +161,7 @@ abbr oll "ollama list"
 abbr olp "ollama pull"
 abbr olps "ollama ps"
 abbr olpush "ollama push"
-abbr olr "ollama run"
+abbr olr "ollama run --verbose"
 abbr olrm "ollama rm"
 
 #$env:OLLAMA_HOST="http://0.0.0.0:11434"; $env:OLLAMA_DEBUG=1; ollama serve | bat -l log

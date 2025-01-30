@@ -1141,7 +1141,7 @@ if command -q ollama
     abbr olp "ollama pull"
     abbr olps "ollama ps"
     abbr olpush "ollama push"
-    abbr olr "ollama run"
+    abbr olr "ollama run --verbose"
     abbr olrm "ollama rm"
 
     # PRN - use grc with ollama serve too and write my own coloring config (have claude do it)... do this if I dislike using bat for this

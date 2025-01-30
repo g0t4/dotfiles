@@ -12,9 +12,10 @@ pacman -S grub efibootmgr openssh networkmanager
 
 # --needed => don't reinstall
 pacman --needed --noconfirm -S tree less neovim \
-    python which pacman-contrib \
+    python which pacman-contrib grc \
     python-pip python-pipx \
-    eza jq httpie nmap sudo git bat wget
+    eza jq httpie nmap sudo git bat wget \
+    ollama ollama-rocm
 
 pipx install icdiff
 
