@@ -12,17 +12,16 @@ pacman -S grub efibootmgr openssh networkmanager
 
 # --needed => don't reinstall
 pacman --needed --noconfirm -S tree less neovim \
-    python which pacman-contrib extra/python-pip \
+    python which pacman-contrib \
+    python-pip python-pipx \
     eza jq httpie nmap sudo git bat wget
+
+pipx install icdiff
 
 # fish
 pacman -S fish
 chsh -s /usr/bin/fish
 # logout/in to create ~/.config/fish/ dir/files (before symlink below)
-
-# not avail, install from src:
-# icdiff
-# TODO pipx install icdiff
 
 git clone https://github.com/g0t4/dotfiles ~/repos/github/g0t4/dotfiles
 . ~/repos/github/g0t4/dotfiles/install/symlinks.fish
