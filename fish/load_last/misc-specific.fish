@@ -1843,8 +1843,29 @@ if command -q luarocks
 end
 
 if command -q pacman
+
     # arch linux
     # FYI this could collide with my p* pipe abbrs (i.e. pgr => | grep -i), resolve it when that happesn
     abbr pm pacman
+
+    # *** -S sync
+    # pacman -Ss regex => searches desc too, can be noisy
+    abbr --set-cursor='!' pmss "pacman -Ss '^!'" # search, name starts with
+    abbr pmsi "pacman -Si" # pkg info
+    # pacman -Sl [repo] # list all pkgs in repo extra
+
+    # *** -Q query (local aka installed pkgs)
+    abbr pmq "pacman -Q"
+    abbr pmqi "pacman -Qi" # pkg info (probably easier to just use -Si for most pkgs unless install a local dev checkout)
+    abbr pmqs "pacman -Qs" # ERE(regex) search installed pkgs (prolly just use `pacman -Q | grep -i`)
+    abbr pmql "pacman -Ql" # list files for pkg
+    abbr pmqe "pacman -Qe" # list explicitly installed pkgs
+
+    # install (aka sync)
+    abbr pms "pacman -S"
+
+    # pactree reminder:
+    abbr pmtree pactree
+
 
 end
