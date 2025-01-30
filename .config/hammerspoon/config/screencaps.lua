@@ -51,13 +51,16 @@ hs.hotkey.bind({ "shift", "cmd", "ctrl" }, "4", function()
 end)
 
 hs.hotkey.bind({ "shift", "cmd" }, "5", function()
+    -- !!! TODO check if currently running and STOP if so! that would rock
+
     -- TODO hrm... must need to be interactive to work? or can I pass a thing to show a toolbar or smth?
     --   or non-interactive can that only be when I set a fixed duration
     local filename = getScreencaptureFileName("mp4")
     -- TODO defaults?
     --   TODO alt bindings for other combos (instead of ctrl to copy to clippy, or could I do that?)
     -- TODO `-G` and device id for MixPre6v2
-    hs.task.new("/usr/sbin/screencapture", nil, { "-v", "-U", filename }):start()
+    -- TODO -U... show toolbar in interactive
+    hs.task.new("/usr/sbin/screencapture", nil, { "-vi", "-U", filename }):start()
 end)
 
 -- screencapture cmd:
