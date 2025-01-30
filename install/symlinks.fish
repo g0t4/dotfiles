@@ -70,3 +70,6 @@ ln -f -s $dotfiles_dir/.grc ~/. # DIR SYMLINK
 
 # *** git ***
 ln -f -s $dotfiles_dir/.config/git/ignore ~/.config/git/.
+
+# *** hushlogin
+touch ~/.hushlogin
