@@ -26,6 +26,7 @@ AskOpenAIStreaming = require("config.ask.ask").AskOpenAIStreaming
 
 require("config.spoons")
 require("config.windows")
+require("config.screencaps")
 -- require("config.appKeys") -- was not working lately, TODO find out why later on
 
 require("config.uielements")
