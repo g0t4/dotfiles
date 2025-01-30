@@ -1,9 +1,10 @@
-function getScreencaptureFileName()
+function getScreencaptureFileName(extension)
+    extension = extension or "png"
     local app = hs.application.frontmostApplication()
     local appElement = hs.axuielement.applicationElement(app)
 
     -- TODO what do I want for filename? how about capture frontmost app's frontmost window name?
-    local filename = os.date("%Y-%m-%d_%I-%M-%S-%p_Screenshot.png")
+    local filename = os.date("%Y-%m-%d_%I-%M-%S-%p_Screenshot." .. extension)
     local snapshots_dir = os.getenv("HOME") .. "/Pictures/Screencaps"
     local filePath = snapshots_dir .. "/" .. filename
     return filePath
@@ -49,6 +50,16 @@ hs.hotkey.bind({ "shift", "cmd", "ctrl" }, "4", function()
     hs.task.new("/usr/sbin/screencapture", nil, { "-ci", "-J", "window" }):start()
 end)
 
+hs.hotkey.bind({ "shift", "cmd" }, "5", function()
+    -- TODO hrm... must need to be interactive to work? or can I pass a thing to show a toolbar or smth?
+    --   or non-interactive can that only be when I set a fixed duration
+    local filename = getScreencaptureFileName("mp4")
+    -- TODO defaults?
+    --   TODO alt bindings for other combos (instead of ctrl to copy to clippy, or could I do that?)
+    -- TODO `-G` and device id for MixPre6v2
+    hs.task.new("/usr/sbin/screencapture", nil, { "-v", filename }):start()
+end)
+
 -- screencapture cmd:
 -- -c      * Force screen capture to go to the clipboard.
 -- -b      Capture Touch Bar, only works in non-interactive modes.
@@ -73,11 +84,12 @@ end)
 -- -S      In window capture mode, capture the screen instead of the window.
 -- -J      * <style> Sets the starting style of interfactive capture:
 --                     "selection","window","video"
--- -t      ** <format> Image format to create, default is png (other options include pdf, jpg, tiff and other formats).
+-- -t      ** <format> Image format to create, default is png:
+--                     (other options include pdf, jpg, tiff and other formats).
 -- -T      *** <seconds> Take the picture after a delay of <seconds>, default is 5.
 --
--- -w      *** Only allow window selection mode.
--- -W      *** Start interaction in window selection mode.
+-- -w      * Only allow window selection mode.
+-- -W      * Start interaction in window selection mode.
 --
 -- -x      * Do not play sounds.
 -- -a      Do not capture attached windows.
