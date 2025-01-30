@@ -13,6 +13,8 @@ pacman -S grub efibootmgr openssh networkmanager
 # list installed packages
 pacman -Q  # --query
 pacman -Qi # details per package
+#
+pacman -Si whois # info for remote package (not installed)
 
 # *** search for packages (by name/desc):
 pacman -Ss fish    # search remote packages to sync (ERE - regex)
@@ -44,7 +46,7 @@ pactree fish # list deps tree
 # --needed => don't reinstall
 pacman --needed --noconfirm -S tree less neovim \
     python which pacman-contrib extra/python-pip \
-    eza jq httpie
+    eza jq httpie nmap
 # TODOs:
 #  pynvim?
 
