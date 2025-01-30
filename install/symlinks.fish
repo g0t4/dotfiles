@@ -9,11 +9,14 @@ ln -f -s $dotfiles_dir/.config/inputrc/.inputrc ~/.
 # editline:
 ln -f -s $dotfiles_dir/.config/editrc/.editrc ~/.
 
-# hammerspoon:
-#
-mkdir -p ~/.hammerspoon
-ln -f -s $dotfiles_dir/.config/hammerspoon/init.lua ~/.hammerspoon/.
-ln -f -s $dotfiles_dir/.config/hammerspoon/config ~/.hammerspoon/. # DIR SYMLINK
+if string match --quiet (uname) Darwin
+    # macOS
+
+    # hammerspoon:
+    mkdir -p ~/.hammerspoon
+    ln -f -s $dotfiles_dir/.config/hammerspoon/init.lua ~/.hammerspoon/.
+    ln -f -s $dotfiles_dir/.config/hammerspoon/config ~/.hammerspoon/. # DIR SYMLINK
+end
 
 # ghostty
 mkdir -p ~/.config/ghostty
