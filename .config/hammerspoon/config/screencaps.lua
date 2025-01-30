@@ -41,11 +41,12 @@ end)
 
 hs.hotkey.bind({ "shift", "cmd" }, "4", function()
     local filename = getScreencaptureFileName()
-    hs.task.new("/usr/sbin/screencapture", nil, { "-i", filename }):start()
+    -- FYI -J window => b/c I like window almost always when use region/interactive selection
+    hs.task.new("/usr/sbin/screencapture", nil, { "-i", "-J", "window", filename }):start()
 end)
 
 hs.hotkey.bind({ "shift", "cmd", "ctrl" }, "4", function()
-    hs.task.new("/usr/sbin/screencapture", nil, { "-ci" }):start()
+    hs.task.new("/usr/sbin/screencapture", nil, { "-ci", "-J", "window" }):start()
 end)
 
 -- screencapture cmd:
@@ -59,9 +60,10 @@ end)
 --             The space key will toggle between mouse selection and window selection modes.
 --             The escape key will cancel the interactive screenshot.
 --
--- -m      *** Only capture the main monitor, undefined if -i is set.
--- -D      <display> Screen capture or record from the display specified. 1 is main, 2 secondary, etc
--- -o      *** In window capture mode, do not capture the shadow of the window.
+-- -m      * Only capture the main monitor, undefined if -i is set.
+-- -D      * <display> Screen capture or record from the display specified. 1 is main, 2 secondary, etc
+-- -o      * In window capture mode, do not capture the shadow of the window.
+--             FYI can just hold down option when take the screenshot to not take shadow too...
 -- -p      Screen capture will use the default settings for capture. The files argument will be ignored.
 -- -M      Open the taken picture in a new Mail message.
 -- -P      Open the taken picture in a Preview window or QuickTime Player if video.
@@ -69,7 +71,8 @@ end)
 -- -B      <bundleid> Open in the app matching bundleid.
 -- -s      * Only allow mouse selection mode.
 -- -S      In window capture mode, capture the screen instead of the window.
--- -J      * <style> Sets the starting style of interfactive capture "selection","window","video".
+-- -J      * <style> Sets the starting style of interfactive capture:
+--                     "selection","window","video"
 -- -t      ** <format> Image format to create, default is png (other options include pdf, jpg, tiff and other formats).
 -- -T      *** <seconds> Take the picture after a delay of <seconds>, default is 5.
 --
