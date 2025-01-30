@@ -1841,3 +1841,10 @@ if command -q luarocks
     abbr lrshow luarocks show
 
 end
+
+if command -q pacman
+    # arch linux
+    # FYI this could collide with my p* pipe abbrs (i.e. pgr => | grep -i), resolve it when that happesn
+    abbr pm pacman
+
+end

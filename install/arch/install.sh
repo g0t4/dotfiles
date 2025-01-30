@@ -60,12 +60,10 @@ chsh -s /usr/bin/fish
 # icdiff
 
 git clone https://github.com/g0t4/dotfiles ~/repos/github/g0t4/dotfiles
-set dotfiles_dir ~/repos/github/g0t4/dotfiles
-ln --force -s $dotfiles_dir/fish/config/config.fish ~/.config/fish/config.fish
+. ~/repos/github/g0t4/dotfiles/install/symlinks.fish
+#  FYI symlinks dotfiles fish.config
 
 # installs fish plugins (i.e. z)
 #   AND osc for copy over ssh :)
 . ~/repos/github/g0t4/dotfiles/fish/install/install.fish
 
-# regular symlinks
-. ~/repos/github/g0t4/dotfiles/install/symlinks.fish
