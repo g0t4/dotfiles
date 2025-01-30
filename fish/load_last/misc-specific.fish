@@ -1845,27 +1845,47 @@ end
 if command -q pacman
 
     # arch linux
+
     # FYI this could collide with my p* pipe abbrs (i.e. pgr => | grep -i), resolve it when that happesn
     abbr pm pacman
 
     # *** -S sync
-    # pacman -Ss regex => searches desc too, can be noisy
-    abbr --set-cursor='!' pmss "pacman -Ss '^!'" # search, name starts with
-    abbr pmsi "pacman -Si" # pkg info
+    abbr --set-cursor='!' pmss "sudo pacman -Ss '^!'" # (s)earch, name starts with
+    # pacman -Ss regex => (s)earches desc too, can be noisy
+    abbr pmsi "pacman -Si" # pkg (i)nfo
     # pacman -Sl [repo] # list all pkgs in repo extra
+    abbr pms "sudo pacman -S" # install (aka sync)
 
     # *** -Q query (local aka installed pkgs)
     abbr pmq "pacman -Q"
-    abbr pmqi "pacman -Qi" # pkg info (probably easier to just use -Si for most pkgs unless install a local dev checkout)
-    abbr pmqs "pacman -Qs" # ERE(regex) search installed pkgs (prolly just use `pacman -Q | grep -i`)
-    abbr pmql "pacman -Ql" # list files for pkg
-    abbr pmqe "pacman -Qe" # list explicitly installed pkgs
+    abbr pmqi "pacman -Qi" # pkg (i)nfo (probably easier to just use -Si for most pkgs unless install a local dev checkout)
+    abbr pmqs "pacman -Qs" # (s)earch ERE(regex) search installed pkgs (prolly just use `pacman -Q | grep -i`)
+    #
+    abbr pmql "pacman -Ql" # (l)ist files for pkg
+    #pacman -Qk fish # verify installed files
+    abbr pmqo "pacman -Qo" # (o)wned by pkg
+    #pacman -Qo /path/to/file # find package for an installed file
+    #pacman -Qo ip # owned by iproute2
+    #
+    # *** explicit / implicit installed pkgs
+    abbr pmqe "pacman -Qe" # list (e)xplicitly installed pkgs
+    #pacman -Qet # explicit installed packages (not required as deps of another package)
+    #pacman -Qdt # orphans (not explicitly installed, also no longer a dep of another package)
 
-    # install (aka sync)
-    abbr pms "pacman -S"
+    # *** Files database
+    abbr pmf "pacman -F" # (f)ile => find file in remote packages
+    # pacman -F /path/to/file # find file in remote package (i.e. not yet installed)
+    #
+    abbr pmfl "pacman -Fl" # (l)ist files for pkg
+    abbr pmfy "pacman -Fy" # reminder - download/s(y)nc fresh package databases
 
     # pactree reminder:
     abbr pmtree pactree
 
+    # TODOs (as I use and figure out what I want):
+    # -R == --remove
+    abbr prm "sudo pacman -R"
+    # -U == --upgrade
+    abbr pum "sudo pacman -U"
 
 end
