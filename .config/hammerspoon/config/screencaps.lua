@@ -57,7 +57,7 @@ hs.hotkey.bind({ "shift", "cmd" }, "5", function()
     -- TODO defaults?
     --   TODO alt bindings for other combos (instead of ctrl to copy to clippy, or could I do that?)
     -- TODO `-G` and device id for MixPre6v2
-    hs.task.new("/usr/sbin/screencapture", nil, { "-v", filename }):start()
+    hs.task.new("/usr/sbin/screencapture", nil, { "-v", "-U", filename }):start()
 end)
 
 -- screencapture cmd:
