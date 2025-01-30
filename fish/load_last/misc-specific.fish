@@ -1875,8 +1875,9 @@ if command -q pacman
     # *** Files database
     abbr pmf "pacman -F" # (f)ile => find file in remote packages
     # pacman -F /path/to/file # find file in remote package (i.e. not yet installed)
+    # pacman -F ollama # or, w/o path => find what provides ollama command
     #
-    abbr pmfl "pacman -Fl" # (l)ist files for pkg
+    abbr pmfl "pacman -Fl" # (l)ist files for (remote) pkg
     abbr pmfy "pacman -Fy" # reminder - download/s(y)nc fresh package databases
 
     # pactree reminder:
