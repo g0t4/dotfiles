@@ -10,6 +10,11 @@ pacman -S grub efibootmgr openssh networkmanager
 # list installed packages
 pacman -Q # --query, -Qi (info)
 
+# search for packages (by name/desc):
+pacman -Ss fish # search remote packages to sync (ERE - regex)
+pacman -Qs fish # search already installed packages (regex)
+pacman -Ss '^fish' # limit to packages starting with fish
+
 # list files:
 pacman -Ql fish # list of files installed (IIUC for local installed packages)
 pacman -Fl fish # for remote packages
