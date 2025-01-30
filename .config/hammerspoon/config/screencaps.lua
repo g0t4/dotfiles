@@ -40,7 +40,7 @@ end)
 
 hs.hotkey.bind({ "shift", "cmd" }, "4", function()
     local filename = getScreencaptureFileName()
-    hs.task.new("/usr/sbin/screencapture", nil, { filename }):start()
+    hs.task.new("/usr/sbin/screencapture", nil, { "-i", filename }):start()
 end)
 
 hs.hotkey.bind({ "shift", "cmd", "ctrl" }, "4", function()
