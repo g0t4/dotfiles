@@ -23,6 +23,7 @@ end
 
 hs.hotkey.bind({ "shift", "cmd" }, "3", function()
     local filename = getScreencaptureFileName()
+    -- PRN add "-m" if secondary screen is captured... right now it isn't so I don't need it (yet?)
     hs.task.new("/usr/sbin/screencapture", nil, { filename }):start()
 
     -- TODO quality level? any undocumented settings for that (look at binary for undocumented options)
