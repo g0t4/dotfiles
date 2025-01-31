@@ -243,7 +243,7 @@ local llm_nvim = {
 
 
             -- TODO if it works, try all sorts of models (you've never tested any of them for this use case!)
-            url = "http://build21.lan:11434", -- llm-ls uses "/v1/completions"
+            url = "http://ollama:11434", -- llm-ls uses "/v1/completions"
             -- url = "http://localhost:11434",
 
         })
@@ -414,7 +414,7 @@ return {
             -- model = "llama3.2-vision:11b", -- ollama list
             model = "qwen2.5-coder:3b",
             use_api_ollama = true,
-            api_url = "http://build21.lan:11434/v1/chat/completions",
+            api_url = "http://ollama:11434/v1/chat/completions",
 
             verbose = true,
         },
