@@ -77,8 +77,12 @@ abbr uvti 'uv tool install'
 #abbr uvtun 'uv tool uninstall'
 abbr uvx 'uv tool run' # uvx is an alias for `uv tool run`
 #
+# *** OMG it can install python versions (like pyenv)
+#  mostly reminders for now:
 abbr uvpy 'uv python list'
-# abbr uvpyi 'uv python install'
+#abbr uvpyi 'uv python install'
+# FYI just put .python-version file in repo and run `uv venv` and it will install the version (if needed!)
+
 
 
 
