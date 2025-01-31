@@ -1879,7 +1879,7 @@ if command -q pacman
     # pacman -F ollama # or, w/o path => find what provides ollama command
     #
     abbr pmfl "pacman -Fl" # (l)ist files for (remote) pkg
-    abbr pmfy "pacman -Fy" # reminder - download/s(y)nc fresh package databases
+    abbr pmfy "sudo pacman -Fy" # reminder - download/s(y)nc fresh package databases
 
     # pactree reminder:
     abbr pmtree pactree
