@@ -1855,7 +1855,7 @@ if command -q pacman
     # pacman -Ss regex => (s)earches desc too, can be noisy
     abbr pmsi "pacman -Si" # pkg (i)nfo
     # pacman -Sl [repo] # list all pkgs in repo extra
-    abbr pms "sudo pacman -S" # install (aka sync)
+    abbr pms "sudo pacman --noconfirm -S" # install (aka sync)
 
     # *** -Q query (local aka installed pkgs)
     abbr pmq "pacman -Q"

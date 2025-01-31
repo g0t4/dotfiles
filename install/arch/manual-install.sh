@@ -13,9 +13,12 @@ pacman -S grub efibootmgr openssh networkmanager
 # --needed => don't reinstall
 pacman --needed --noconfirm -S tree less neovim \
     which pacman-contrib grc \
-    python python-pip python-pipx uv \
+    python python-pip python-pipx uv pyenv \
     eza jq httpie nmap sudo git bat wget \
-    ollama ollama-rocm
+    ollama ollama-rocm \
+    gcc
+
+# pyenv install 3.10  # for older versions
 
 pipx install icdiff
 
