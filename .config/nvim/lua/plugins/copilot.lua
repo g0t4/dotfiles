@@ -425,6 +425,14 @@ return {
         }
     },
     {
+        "nvim-lua/plenary.nvim",
+        config = function()
+            -- nmap <leader>u <Plug>PlenaryTestFile
+            -- think "u" in unit test (didn't have many leader keys left .. this works)
+            vim.api.nvim_set_keymap("n", '<leader>u', "<Plug>PlenaryTestFile", { noremap = true, silent = true })
+        end
+    },
+    {
         "bjornbytes/rxlua",
         config = function()
             -- rx.lua is in repo root (not in lua dir), so modify package path to support that
