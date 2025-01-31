@@ -12,8 +12,8 @@ pacman -S grub efibootmgr openssh networkmanager
 
 # --needed => don't reinstall
 pacman --needed --noconfirm -S tree less neovim \
-    python which pacman-contrib grc \
-    python-pip python-pipx \
+    which pacman-contrib grc \
+    python python-pip python-pipx uv \
     eza jq httpie nmap sudo git bat wget \
     ollama ollama-rocm
 
