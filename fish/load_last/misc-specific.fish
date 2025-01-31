@@ -1150,6 +1150,7 @@ if command -q ollama
     abbr olsd "OLLAMA_DEBUG=1 $ollama_serve"
     abbr olsh "OLLAMA_KEEP_ALIVE=30m OLLAMA_HOST='http://0.0.0.0:11434' $ollama_serve"
     abbr olshd "OLLAMA_KEEP_ALIVE=30m OLLAMA_DEBUG=1 OLLAMA_HOST='http://0.0.0.0:11434' $ollama_serve"
+    abbr ole "export OLLAMA_HOST='ollama:11434'"
 
     abbr olshow "ollama show"
 end
