@@ -16,6 +16,7 @@ pacman --needed --noconfirm -S tree less neovim \
     python python-pip python-pipx uv \
     eza jq httpie nmap sudo git bat wget \
     ollama ollama-rocm \
+    the_silver_searcher \
     base-devel cmake
 
 # FYI older python versions, use uv to install based on .python-version in a repo dir
@@ -34,3 +35,9 @@ git clone https://github.com/g0t4/dotfiles ~/repos/github/g0t4/dotfiles
 # installs fish plugins (i.e. z)
 #   AND osc for copy over ssh :)
 . ~/repos/github/g0t4/dotfiles/fish/install/install.fish
+
+
+# nvim dev checkouts (TODO why not configure this conditionally?)
+git clone https://github.com/g0t4/ask-openai.nvim ~/repos/github/g0t4/ask-openai.nvim
+git clone https://github.com/g0t4/illuminate.nvim ~/repos/github/g0t4/illuminate.nvim
+
