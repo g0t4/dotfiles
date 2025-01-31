@@ -16,7 +16,7 @@ pacman --needed --noconfirm -S tree less neovim \
     python python-pip python-pipx uv pyenv \
     eza jq httpie nmap sudo git bat wget \
     ollama ollama-rocm \
-    gcc
+    base-devel
 
 # pyenv install 3.10  # for older versions
 
