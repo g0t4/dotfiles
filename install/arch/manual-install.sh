@@ -18,7 +18,7 @@ pacman --needed --noconfirm -S tree less neovim \
     ollama ollama-rocm \
     base-devel cmake
 
-# pyenv install 3.10  # for older versions
+# FYI older python versions, use uv to install based on .python-version in a repo dir
 
 pipx install icdiff
 
