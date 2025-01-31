@@ -421,7 +421,16 @@ return {
 
         dependencies = {
             "nvim-lua/plenary.nvim",
+            "bjornbytes/rxlua", -- tentative for predictions only (i.e. debounce)
         }
+    },
+    {
+        "bjornbytes/rxlua",
+        config = function()
+            -- rx.lua is in repo root (not in lua dir), so modify package path to support that
+            local plugin_path = vim.fn.stdpath("data") .. "/lazy/RxLua/"
+            package.path = package.path .. ";" .. plugin_path .. "?.lua"
+        end
     },
 
     {
