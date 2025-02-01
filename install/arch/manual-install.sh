@@ -17,7 +17,7 @@ pacman --needed --noconfirm -S tree less neovim \
     eza jq httpie nmap sudo git bat wget \
     ollama ollama-rocm \
     the_silver_searcher \
-    base-devel cmake
+    base-devel cmake ffmpeg man-db
 
 # FYI older python versions, use uv to install based on .python-version in a repo dir
 
