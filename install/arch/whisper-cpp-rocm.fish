@@ -8,10 +8,6 @@ set PATH /opt/rocm/bin $PATH # hipconfig
 # FYI I do not know why/if all this is needed to build... but it does work when I use the following
 #    TODO test which of these is actually needed, dig into each?
 # -- fixes missing -lamdhip64 error
-set LIBRARY_PATH /opt/rocm/lib $LIBRARY_PATH
-export LIBRARY_PATH
-set LD_LIBRARY_PATH /opt/rocm/lib $LD_LIBRARY_PATH
-export LD_LIBRARY_PATH
 set CPATH /opt/rocm/include $CPATH
 export CPATH
 export LDFLAGS="-L/opt/rocm/lib"
