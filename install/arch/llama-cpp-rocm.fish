@@ -1,0 +1,14 @@
+
+cd ~/repos/github/ggerganov/llama.cpp
+
+# add hipconfig to path
+set PATH /opt/rocm/bin $PATH
+
+# docs for llama.cpp w/ hip(blas)
+# https://github.com/ggerganov/llama.cpp/blob/master/docs/build.md#hip
+
+HIPCXX="$(hipconfig -l)/clang" HIP_PATH="$(hipconfig -R)" \
+    cmake -S . -B build -DGGML_HIP=ON -DAMDGPU_TARGETS=gfx1030 -DCMAKE_BUILD_TYPE=Release \
+    && cmake --build build --config Release -- -j 16
+
+
