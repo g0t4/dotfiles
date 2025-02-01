@@ -49,12 +49,8 @@ abbr ved deactivate
 abbr vea 'source .venv*/bin/activate.fish' # override zsh version's /activate
 
 # !!! GO COLD TURKEY TO TRY uv command and update all venvs to use it, best way to see what I think of it and learn it... so stop using pip directly (unless uv doesn't work for my projects)
-abbr pipls "uv tree"
-abbr piplo "uv tree --outdated"
 abbr pipir "uv add -r requirements.txt && rm requirements.txt # REMINDER TO MIGRATE to pyproject.toml + uv"
-# later => after I convert most of my projects => switch pipir => uvar abbr
 #   pipir is just for muscle memory b/c I used it to `pip install -r requirements.txt` previously
-
 
 abbr uva 'uv add'
 abbr uvrm 'uv remove'
@@ -63,8 +59,16 @@ abbr uvr 'uv run'
 abbr uvt 'uv tree'
 abbr uvtree 'uv tree --outdated'
 abbr uvv 'uv venv'
-abbr uvp 'uv pip'
 abbr uvi 'uv init'
+#
+abbr uvp 'uv pip'
+abbr uvpi 'uv pip install'
+abbr uvpir 'uv pip install -r requirements.txt'
+abbr uvpls 'uv pip list'
+abbr uvplo 'uv pip list --outdated'
+# TODO add back other pip commands as `uv pip` commands now that I wrapped my mind around using uv for my projects and not for other projects that are just using requirements.txt
+#
+abbr uvpy 'uv python list' # list installed python versions
 #
 # `uv tool install` is a replacement for `pipx install` (IIUC)
 abbr uvt 'uv tool'
