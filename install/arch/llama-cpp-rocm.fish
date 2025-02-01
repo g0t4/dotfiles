@@ -6,6 +6,9 @@ rm -rf build # get rid of full dir first
 # add hipconfig to path
 set PATH /opt/rocm/bin $PATH
 
+set CPATH /opt/rocm/include $CPATH
+export CPATH
+
 # docs for llama.cpp w/ hip(blas)
 # https://github.com/ggerganov/llama.cpp/blob/master/docs/build.md#hip
 
