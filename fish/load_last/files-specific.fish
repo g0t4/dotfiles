@@ -167,6 +167,7 @@ function take
     end
     mv $files[1..] $argv[1]
     cd $argv[1]
+    # PRN what if I don't wanna cd into the final dir? maybe have an alternative version of this that drops the final cd?
 end
 abbr mkdir 'mkdir -p' # I already use this in take and that's never been a problem so I suspect its always gonna be fine
 #  BTW I understand why mkdir -p in a script/non-interactive shell would possibly be a problem (i.e. get one part of a path wrong and it just works)... though arguably that is a matter of writing a proper/tested script... anyways my impl here is never for non-interactive
