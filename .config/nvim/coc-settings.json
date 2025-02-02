@@ -168,5 +168,17 @@
     "powershell.integratedConsole.showOnStartup": false,
     // WTH it still flashes momentarily, WT WT WTF
 
+    // *** clangd (c,cpp,etc) ***
+    // clangd LS bundles clangd-format (do not need to install, IIUC)
+    //   (https://clang.llvm.org/docs/ClangFormat.html)
+    //   respects .clang-format
+    //    generate with: clang-format -style=llvm -dump-config > .clang-format
+    //
+    //   formatting as you type experimental feature => DEAR GOD NO...
+    //
+    //  clangd config: https://clangd.llvm.org/config
+
+
+
 
 }
