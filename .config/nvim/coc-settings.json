@@ -177,7 +177,16 @@
     //   formatting as you type experimental feature => DEAR GOD NO...
     //
     //  clangd config: https://clangd.llvm.org/config
-    // ? not sure if I can set anything here.. so use .clang-format file in each repo for now, which is fine actually
+    // hrm.. s/b able to pass arg to clangd server...
+    //   someone else has same issue: https://github.com/clangd/clangd/issues/362
+    //     sounds like only .clang-format works for now
+    //
+    //   "clangd.arguments": [
+    //       //      "--fallback-style={BasedOnStyle: LLVM, IndentWidth: 4, UseTab: Never}"
+    //       "--fallback-style={AllowShortEnumsOnASingleLine: false}",
+    //   ]
+    //
+
 
 
 
