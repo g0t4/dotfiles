@@ -5,8 +5,8 @@ ealias gsi 'git status --ignored'
 ealias gwhatsignored 'git ls-files --others --directory --no-empty-directory; echo NOTE: gsa works too'
 
 # reset
-ealias grhh 'git reset --hard HEAD' 
-ealias grsh 'git reset --soft HEAD~1' 
+ealias grhh 'git reset --hard HEAD'
+ealias grsh 'git reset --soft HEAD~1'
 
 # reflog
 ealias grl 'git reflog'
@@ -39,14 +39,13 @@ ealias gbr 'git branch --remote -vv'
 
 
 # gcmark like
-ealias gcrefactor "git commit -a -m 'refactor'"
-ealias gcnotes "git commit -a -m 'notes'"
-ealias gcsubs "git commit -a -m 'subs'; git push; git diff --color-words HEAD~1 HEAD"
-ealias gmark "git commit -a -m 'mark'"
+abbr review "git commit -a -m 'review'"
+abbr notes "git commit -a -m 'notes'"
+# abbr gcsubs "git commit -a -m 'subs'; git push; git diff --color-words HEAD~1 HEAD"
 # new commit:
 ealias gcv 'git commit -v' # `gc` reserved in posh
 ealias gca 'git commit -v -a'
-# start the quoted message 
+# start the quoted message
 ealias gcmsg 'git commit -m "' -NoSpaceAfter # don't use gcm (Get-Command)
 ealias gcam 'git commit -a -m "' -NoSpaceAfter
 # amend:
@@ -71,7 +70,7 @@ ealias kgdc 'git diff --cached --color-words' # common typo alias (cmd+k clear >
 
 # TODO resolve conflicting gdt
 ealias gdt 'git describe --tags `git rev-list --tags --max-count=1`'
-# ealias gdt 'git diff-tree --no-commit-id --name-only -r' 
+# ealias gdt 'git diff-tree --no-commit-id --name-only -r'
 
 ealias gdlc 'git diff --color-words HEAD~1 HEAD'
 #ealias gdlc1 --color-words 'git diff HEAD~2 HEAD~1'
@@ -86,7 +85,7 @@ ealias gdlc 'git diff --color-words HEAD~1 HEAD'
 ealias glf "git log" # used to inline format
 1..10 | ForEach-Object { ealias "gl$_" "git log -$_" } # last N commits
 #
-$_unpushed_commits="'HEAD@{push}~1..HEAD'" 
+$_unpushed_commits="'HEAD@{push}~1..HEAD'"
 ealias glo "git log ${_unpushed_commits}"
 ealias glp "git log --patch ${_unpushed_commits}" # include patch (diff)
 1..10 | ForEach-Object { ealias "glp$_" "git log --patch -$_" } # last N commits
@@ -132,7 +131,7 @@ ealias gpsup 'git push --set-upstream origin $(git_current_branch)'
 
 ## submodules
 # alias pattern: (g)it (s)ub(m)odule (c)ommand
-ealias gsm 'git submodule' 
+ealias gsm 'git submodule'
 ealias gsmi 'git submodule init'
 ealias gsmu 'git submodule update --remote --recursive'
 ealias gsmst 'git submodule status --recursive'
@@ -160,7 +159,7 @@ ealias gcl 'git clone --recurse-submodules'
 ealias gbl 'git blame -b -w'
 
 
-ealias gclean 'git clean -fd' 
+ealias gclean 'git clean -fd'
 
 ealias 'gcan!' 'git commit -v -a --no-edit --amend'
 
