@@ -1,4 +1,7 @@
 
+
+# *** building llama.cpp
+
 cd ~/repos/github/ggerganov/llama.cpp
 
 rm -rf build # get rid of full dir first
