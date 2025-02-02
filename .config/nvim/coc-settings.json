@@ -180,6 +180,7 @@
     // hrm.. s/b able to pass arg to clangd server...
     //   someone else has same issue: https://github.com/clangd/clangd/issues/362
     //     sounds like only .clang-format works for now
+    //     IIUC the issue is the --fallback-style doesn't take a yaml string... but rather a predefined style (name) like above with --style=llvm
     //
     //   "clangd.arguments": [
     //       //      "--fallback-style={BasedOnStyle: LLVM, IndentWidth: 4, UseTab: Never}"
