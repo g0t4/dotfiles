@@ -295,7 +295,7 @@ function SwitchCopilot()
         return
     end
     if vim.tbl_contains(use_ai, "copilot") then
-        if vim.fn.exists("*copilot#Enabled") and vim.fn["copilot#Enabled"]() == 1 then -- this works
+        if vim.fn.exists("*copilot#Enabled") and vim.fn["copilot#Enabled"]() == 1 then
             DisableAllCopilots()
         else
             EnableAllCopilots()
