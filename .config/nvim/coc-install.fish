@@ -10,3 +10,10 @@ yarn install
 
 
 # :CocInstall coc-markdownlint # todo vet this
+
+# for cmake-format, et al => https://cmake-format.readthedocs.io/en/latest/release_process.html
+#   used by coc-cmake in nvim
+pipx install cmakelang
+
+
+# TODO move more here
