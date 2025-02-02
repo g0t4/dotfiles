@@ -177,6 +177,7 @@
     //   formatting as you type experimental feature => DEAR GOD NO...
     //
     //  clangd config: https://clangd.llvm.org/config
+    // ? not sure if I can set anything here.. so use .clang-format file in each repo for now, which is fine actually
 
 
 
