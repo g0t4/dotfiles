@@ -149,15 +149,6 @@ end
 
 ## dirs
 function take
-    if test -z "$argv"
-        echo "create a directory and cd into it"
-        echo "usage: "
-        echo "  take path/to/dir"
-        return
-    end
-    mkdir -p $argv && cd $argv
-end
-function takefiles
     if test -z "$argv[1]"
         echo "takefiles requires at least a new directory to create and usually files to move into it"
         echo "usage:"
