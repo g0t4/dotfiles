@@ -284,22 +284,41 @@ local llm_nvim = {
 --
 
 function SwitchCopilot()
-    -- if any of them are running, then toggle all of them off?
+    -- SIMPLE IDEA... check first enabled copilot I find and assume all others are same (turn all off/on accordingly)
+    if vim.tbl_contains(use_ai, "supermaven") then
+        local supermavenapi = require("supermaven-nvim.api")
+        if supermavenapi.is_running() then
+            DisableAllCopilots()
+        else
+            EnableAllCopilots()
+        end
+        return
+    end
+    if vim.tbl_contains(use_ai, "copilot") then
+        if vim.fn.exists("*copilot#Enabled") and vim.fn["copilot#Enabled"]() == 1 then -- this works
+            DisableAllCopilots()
+        else
+            EnableAllCopilots()
+        end
+        return
+    end
+    if vim.tbl_contains(use_ai, "ask-openai") then
+        local api = require("ask-openai.api")
 
-    -- -- FYI supermaven toggle works across vim restarts, copilot is per buffer IIUC
-    -- local supermavenapi = require("supermaven-nvim.api")
-    -- if supermavenapi.is_running() then
-    --     supermavenapi.stop()
-    --     if vim.fn.exists("*copilot#Enabled") then
-    --         vim.cmd("Copilot enable")
-    --     end
-    --     return
-    -- end
-    -- supermavenapi.start()
-    -- if vim.fn.exists("*copilot#Enabled") then
-    --     vim.cmd("Copilot disable")
-    -- end
+        if api.is_enabled() then
+            DisableAllCopilots()
+        else
+            EnableAllCopilots()
+        end
+        return
+    end
 end
+
+-- *** switch copilot keymaps:
+vim.api.nvim_set_keymap("n", "<F13>", ":lua SwitchCopilot()<CR>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("i", "<F13>", "<Esc>:lua SwitchCopilot()<CR>a", { noremap = true, silent = true })
+
+
 
 function EnableAllCopilots()
     if vim.tbl_contains(use_ai, "supermaven") then
@@ -338,26 +357,13 @@ function CopilotsStatus()
     if vim.tbl_contains(use_ai, "supermaven") then
         local supermavenapi = require("supermaven-nvim.api")
         if supermavenapi.is_running() then
-            -- <U+F0EA>
             status = status .. " "
         else
             status = status .. " "
         end
     end
     if vim.tbl_contains(use_ai, "copilot") then
-        -- if exists('*copilot#Enabled') && copilot#Enabled()
-        --     " add spaces after icon so subsequent text doesn't run under it
-        --     "return nr2char(0xEC1E)
-        --     return ' '
-        -- else
-        --     "return nr2char(0xF4B9)
-        --     return ' '
-        -- endif
-        -- " glyphs:
-        -- "   \uEC1E
-        -- "   \uF4B8
-        -- "   \uF4B9
-        -- "   \uF4BA
+        -- "   \uEC1E -   \uF4B8 -   \uF4B9 -   \uF4BA
         if vim.fn.exists("*copilot#Enabled") and vim.fn["copilot#Enabled"]() == 1 then
             status = status .. " "
         else
@@ -585,10 +591,6 @@ return {
             end
 
             override_suggestion_color()
-
-            -- TODO... if I wanna toggle copilots, write one func to toggle the active one and set up one keymap for it across all copilots, like I did with lualine StatusLine_WrapCopilotStatus
-            vim.keymap.set('n', '<F13>', ':SupermavenToggle<CR>')
-            vim.keymap.set('i', '<F13>', '<Esc>:SupermavenToggle<CR>a')
         end
     },
 
@@ -607,21 +609,6 @@ return {
                 "imap <silent><script><expr> <C-CR> copilot#Accept("\\<CR>")
                 "let g:copilot_no_tab_map = 1
                 "" ok I kinda like ctrl+enter for copilot suggestions (vs enter for completions in general (coc)) but for now I will put tab back and see if I have any issues with it and swap this back in if so
-
-                function! ToggleCopilot()
-                    " FYI https://github.com/github/copilot.vim/blob/release/autoload/copilot.vim
-                    " FYI only global toggle, not toggling buffer local
-                    " PRN save across sessions? maybe modify a file that is read on startup (not this file, I want it out of vimrc)
-                    if copilot#Enabled()
-                        Copilot disable
-                    else
-                        Copilot enable
-                    endif
-                    " Copilot status " visual confirmation - precise about global vs buffer local too
-                endfunction
-                :inoremap <F13> <Esc>:call ToggleCopilot()<CR>a
-                " :inoremap <F13> <C-o>:call ToggleCopilot()<CR> " on empty, indented line, causes cursor to revert to start of line afterwards
-                :nnoremap <F13> :call ToggleCopilot()<CR>
 
             ]]
 
