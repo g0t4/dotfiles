@@ -53,6 +53,7 @@ require("lazy").setup({
         require("plugins.debug-vimspector"),
         require("plugins.ft-markdown"),
         require("plugins.learning"),
+        require("plugins.lualine"),
         require("plugins.misc"),
         require("plugins.pickers"),
         require("plugins.refactor"),
