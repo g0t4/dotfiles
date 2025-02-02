@@ -284,7 +284,6 @@ local llm_nvim = {
 --
 
 function SwitchCopilot()
-    -- TODO I should call this in config of preferred copilot OR ...  setup one to be disabled out of the gate and other to be enabled in the opts for each
     -- FYI supermaven toggle works across vim restarts, copilot is per buffer IIUC
     local supermavenapi = require("supermaven-nvim.api")
     if supermavenapi.is_running() then
@@ -292,11 +291,11 @@ function SwitchCopilot()
         if vim.fn.exists("*copilot#Enabled") then
             vim.cmd("Copilot enable")
         end
-    else
-        supermavenapi.start()
-        if vim.fn.exists("*copilot#Enabled") then
-            vim.cmd("Copilot disable")
-        end
+        return
+    end
+    supermavenapi.start()
+    if vim.fn.exists("*copilot#Enabled") then
+        vim.cmd("Copilot disable")
     end
 end
 
