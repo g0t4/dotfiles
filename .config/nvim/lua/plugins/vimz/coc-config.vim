@@ -5,8 +5,10 @@
 " TODO and vet this list too
 let g:coc_global_extensions = [
             \ 'coc-clangd',
+            \ 'coc-cmake',
             \ 'coc-css',
             \ 'coc-docker',
+            \ 'coc-go',
             \ 'coc-html',
             \ 'coc-json',
             \ 'coc-lua',
