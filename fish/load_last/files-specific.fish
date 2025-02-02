@@ -157,6 +157,26 @@ function take
     end
     mkdir -p $argv && cd $argv
 end
+function takefiles
+    if test -z "$argv[1]"
+        echo "takefiles requires at least a new directory to create and usually files to move into it"
+        echo "usage:"
+        echo "'takefiles newdir file1 [file2 ...]'"
+        return
+    end
+
+    # not only create the dir, move the files passed as args 2+
+    mkdir -p $argv[1]
+    # strip arg1
+    set files $argv[2..]
+    if test -z "$files"
+        # with 1 arg, effectively works the asme as 'take'
+        cd $argv[1]
+        return
+    end
+    mv $files[1..] $argv[1]
+    cd $argv[1]
+end
 abbr mkdir 'mkdir -p' # I already use this in take and that's never been a problem so I suspect its always gonna be fine
 #  BTW I understand why mkdir -p in a script/non-interactive shell would possibly be a problem (i.e. get one part of a path wrong and it just works)... though arguably that is a matter of writing a proper/tested script... anyways my impl here is never for non-interactive
 
