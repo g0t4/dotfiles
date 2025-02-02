@@ -1,8 +1,8 @@
 local use_ai = {
     -- "avante",
-    -- "copilot",
+    "copilot",
     -- "tabnine",
-    -- "supermaven",
+    "supermaven",
     -- "llm.nvim",
     "ask-openai", -- use master branch to disable predictions
 }
@@ -335,20 +335,13 @@ end
 
 function CopilotsStatus()
     local status = ""
-    if vim.tbl_contains(use_ai, "ask-openai") then
-        local api = require("ask-openai.api")
-        if api.is_enabled() then
-            status = status .. "󰼇"
-        else
-            status = status .. "󰼈"
-        end
-    end
     if vim.tbl_contains(use_ai, "supermaven") then
         local supermavenapi = require("supermaven-nvim.api")
         if supermavenapi.is_running() then
-            status = status .. ""
+            -- <U+F0EA>
+            status = status .. " "
         else
-            status = status .. ""
+            status = status .. " "
         end
     end
     if vim.tbl_contains(use_ai, "copilot") then
@@ -369,6 +362,14 @@ function CopilotsStatus()
             status = status .. " "
         else
             status = status .. " "
+        end
+    end
+    if vim.tbl_contains(use_ai, "ask-openai") then
+        local api = require("ask-openai.api")
+        if api.is_enabled() then
+            status = status .. "󰼇"
+        else
+            status = status .. "󰼈"
         end
     end
     return status
