@@ -15,7 +15,10 @@ abbr gsi 'git status --ignored'
 abbr grhh 'git reset --hard HEAD' # last commit hard reset
 abbr grsh 'git reset --soft HEAD~1' # previous commit soft reset to review it and then purge by grhh or gco etc
 # clean
-abbr gclean 'git clean -id'
+#   (FYI leave --dry-run so I can remove it as last arg, then I don't need a second set of abbrs... b/c I should always do a quick review dryrun / or interactive)
+abbr gclean 'git clean -d --dry-run' # --dry-ru[n], entire [d]irectories
+abbr gcleani 'git clean -d --interactive' # [i]nteractive is alternative to dry-run
+abbr gcleanx 'git clean -d -x --dry-run' # -x == ignored files too
 abbr gpristine 'git reset --hard && git clean -dffx'
 
 # reflog

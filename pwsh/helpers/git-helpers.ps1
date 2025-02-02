@@ -158,8 +158,12 @@ ealias gcl 'git clone --recurse-submodules'
 
 ealias gbl 'git blame -b -w'
 
-
-ealias gclean 'git clean -fd'
+# clean
+#   (FYI leave --dry-run so I can remove it as last arg, then I don't need a second set of abbrs... b/c I should always do a quick review dryrun / or interactive)
+abbr gclean 'git clean -d --dry-run' # --dry-ru[n], entire [d]irectories
+abbr gcleani 'git clean -d --interactive' # [i]nteractive is alternative to dry-run
+abbr gcleanx 'git clean -d -x --dry-run' # -x == ignored files too
+abbr gpristine 'git reset --hard && git clean -dffx'
 
 ealias 'gcan!' 'git commit -v -a --no-edit --amend'
 
