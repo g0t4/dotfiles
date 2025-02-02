@@ -301,6 +301,22 @@ function SwitchCopilot()
     -- end
 end
 
+function EnableAllCopilots()
+    if vim.tbl_contains(use_ai, "supermaven") then
+        local supermavenapi = require("supermaven-nvim.api")
+        supermavenapi.start()
+    end
+    if vim.tbl_contains(use_ai, "copilot") then
+        if vim.fn.exists("*copilot#Enabled") then
+            vim.cmd("Copilot enable")
+        end
+    end
+    if vim.tbl_contains(use_ai, "ask-openai") then
+        local api = require("ask-openai.api")
+        api.enable_predictions()
+    end
+end
+
 function DisableAllCopilots()
     if vim.tbl_contains(use_ai, "supermaven") then
         local supermavenapi = require("supermaven-nvim.api")
