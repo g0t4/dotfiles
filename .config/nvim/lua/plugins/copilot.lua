@@ -284,18 +284,36 @@ local llm_nvim = {
 --
 
 function SwitchCopilot()
-    -- FYI supermaven toggle works across vim restarts, copilot is per buffer IIUC
-    local supermavenapi = require("supermaven-nvim.api")
-    if supermavenapi.is_running() then
+    -- if any of them are running, then toggle all of them off?
+
+    -- -- FYI supermaven toggle works across vim restarts, copilot is per buffer IIUC
+    -- local supermavenapi = require("supermaven-nvim.api")
+    -- if supermavenapi.is_running() then
+    --     supermavenapi.stop()
+    --     if vim.fn.exists("*copilot#Enabled") then
+    --         vim.cmd("Copilot enable")
+    --     end
+    --     return
+    -- end
+    -- supermavenapi.start()
+    -- if vim.fn.exists("*copilot#Enabled") then
+    --     vim.cmd("Copilot disable")
+    -- end
+end
+
+function DisableAllCopilots()
+    if vim.tbl_contains(use_ai, "supermaven") then
+        local supermavenapi = require("supermaven-nvim.api")
         supermavenapi.stop()
-        if vim.fn.exists("*copilot#Enabled") then
-            vim.cmd("Copilot enable")
-        end
-        return
     end
-    supermavenapi.start()
-    if vim.fn.exists("*copilot#Enabled") then
-        vim.cmd("Copilot disable")
+    if vim.tbl_contains(use_ai, "copilot") then
+        if vim.fn.exists("*copilot#Enabled") then
+            vim.cmd("Copilot disable")
+        end
+    end
+    if vim.tbl_contains(use_ai, "ask-openai") then
+        local api = require("ask-openai.api")
+        api.disable_predictions()
     end
 end
 
