@@ -24,23 +24,6 @@ return {
                 return " " .. vim.fn.fnamemodify(vim.fn.getcwd(), ":t") -- only show last part of path (folder name)
             end
 
-            local function statusline_copilots_status()
-                -- need this wrapper b/c if I put a user defined function in the statusline and it doesn't exist it is permanently disabled basically, so this won't blow up and will dynamically figure out which status to show too
-                local status = ""
-                if vim.fn.exists("*GetStatusLineCopilot") == 1 then
-                    status = vim.fn["GetStatusLineCopilot"]()
-                end
-
-                -- PRN if I add mechanism to switch copilot/supermaven w/o restart nvim then I can check more than just if func exists
-                if type(_G["GetStatusLineSupermaven"]) == "function" then
-                    status = status .. " " .. _G["GetStatusLineSupermaven"]()
-                end
-
-                -- todo move all logic into so I can factor in use_ai config:
-                status = status .. CopilotsStatus()
-                return status
-            end
-
             local function workspace_name()
                 -- wait to show more (above) the CWD, but I suspect I might want to see a github org/repo name... not sure... could I check what other instances of nvim are running and if two have diff CWDs but same last component then show dir above? i.e. open upstream + fork at same time (again, wait to be confused before adding any of this)
                 return vim.fn.fnamemodify(vim.fn.getcwd(), ":t")
@@ -74,7 +57,7 @@ return {
                         -- relative path, 4 filename+parentdir sounds interesting
                     } }, -- filename includes modified
                     -- lualine_c = { "filetype" },
-                    lualine_c = { statusline_filetype, statusline_copilots_status },
+                    lualine_c = { statusline_filetype, CopilotsStatus },
                     lualine_x = {}, -- todo move copilot back here?
                     lualine_y = {
                         {

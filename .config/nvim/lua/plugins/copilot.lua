@@ -334,15 +334,44 @@ function DisableAllCopilots()
 end
 
 function CopilotsStatus()
+    local status = ""
     if vim.tbl_contains(use_ai, "ask-openai") then
         local api = require("ask-openai.api")
         if api.is_enabled() then
-            return ""
+            status = status .. "󰼇"
         else
-            return ""
+            status = status .. "󰼈"
         end
     end
-    return ""
+    if vim.tbl_contains(use_ai, "supermaven") then
+        local supermavenapi = require("supermaven-nvim.api")
+        if supermavenapi.is_running() then
+            status = status .. ""
+        else
+            status = status .. ""
+        end
+    end
+    if vim.tbl_contains(use_ai, "copilot") then
+        -- if exists('*copilot#Enabled') && copilot#Enabled()
+        --     " add spaces after icon so subsequent text doesn't run under it
+        --     "return nr2char(0xEC1E)
+        --     return ' '
+        -- else
+        --     "return nr2char(0xF4B9)
+        --     return ' '
+        -- endif
+        -- " glyphs:
+        -- "   \uEC1E
+        -- "   \uF4B8
+        -- "   \uF4B9
+        -- "   \uF4BA
+        if vim.fn.exists("*copilot#Enabled") and vim.fn["copilot#Enabled"]() == 1 then
+            status = status .. " "
+        else
+            status = status .. " "
+        end
+    end
+    return status
 end
 
 local avante =
@@ -556,16 +585,6 @@ return {
 
             override_suggestion_color()
 
-            function GetStatusLineSupermaven()
-                -- test with: :SupermavenToggle
-                -- OK so if this function exists that means supermaven plugin is loaded, so no need to check beyond that, check for the existence of this func when using it (i.e. in statusline, and lualine will silently ignore a missing func)
-                local api = require("supermaven-nvim.api") -- https://github.com/supermaven-inc/supermaven-nvim/tree/main#lua-api
-                if api.is_running() then
-                    return " " -- add space after too
-                end
-                return " " -- add space after icon so subsequent text doesn't run under it
-            end
-
             -- TODO... if I wanna toggle copilots, write one func to toggle the active one and set up one keymap for it across all copilots, like I did with lualine StatusLine_WrapCopilotStatus
             vim.keymap.set('n', '<F13>', ':SupermavenToggle<CR>')
             vim.keymap.set('i', '<F13>', '<Esc>:SupermavenToggle<CR>a')
@@ -587,26 +606,6 @@ return {
                 "imap <silent><script><expr> <C-CR> copilot#Accept("\\<CR>")
                 "let g:copilot_no_tab_map = 1
                 "" ok I kinda like ctrl+enter for copilot suggestions (vs enter for completions in general (coc)) but for now I will put tab back and see if I have any issues with it and swap this back in if so
-
-                " statusline BEFORE lualine added
-                "set statusline=%f\ %y\ %m\ %=%{GetStatusLineCopilot()}\ L:%l/C:%c\ %p%%
-
-                function! GetStatusLineCopilot()
-                    " exists is just in case I move this elsewhere and I cant know for sure the copilot plugin is loaded already
-                    if exists('*copilot#Enabled') && copilot#Enabled()
-                        " add spaces after icon so subsequent text doesn't run under it
-                        "return nr2char(0xEC1E)
-                        return ' '
-                    else
-                        "return nr2char(0xF4B9)
-                        return ' '
-                    endif
-                    " glyphs:
-                    "   \uEC1E
-                    "   \uF4B8
-                    "   \uF4B9
-                    "   \uF4BA
-                endfunction
 
                 function! ToggleCopilot()
                     " FYI https://github.com/github/copilot.vim/blob/release/autoload/copilot.vim
