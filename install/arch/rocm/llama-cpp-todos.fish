@@ -7,3 +7,6 @@
 
 
 --log-colors
+
+--seed SEED
+

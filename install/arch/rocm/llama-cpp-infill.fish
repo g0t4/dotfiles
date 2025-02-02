@@ -12,4 +12,5 @@
 #    https://github.com/ggerganov/llama.cpp/blob/master/examples/server/server.cpp#L4355
 
 # TODO test /infill
-
+#   --spm-infill
+--spm-infill use Suffix/Prefix/Middle pattern for infill (instead of Prefix/Suffix/Middle) as some models prefer this. (default: disabled)
