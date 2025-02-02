@@ -333,6 +333,18 @@ function DisableAllCopilots()
     end
 end
 
+function CopilotsStatus()
+    if vim.tbl_contains(use_ai, "ask-openai") then
+        local api = require("ask-openai.api")
+        if api.is_enabled() then
+            return ""
+        else
+            return ""
+        end
+    end
+    return ""
+end
+
 local avante =
 {
     enabled = vim.tbl_contains(use_ai, "avante"),

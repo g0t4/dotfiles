@@ -30,10 +30,14 @@ return {
                 if vim.fn.exists("*GetStatusLineCopilot") == 1 then
                     status = vim.fn["GetStatusLineCopilot"]()
                 end
+
                 -- PRN if I add mechanism to switch copilot/supermaven w/o restart nvim then I can check more than just if func exists
                 if type(_G["GetStatusLineSupermaven"]) == "function" then
                     status = status .. " " .. _G["GetStatusLineSupermaven"]()
                 end
+
+                -- todo move all logic into so I can factor in use_ai config:
+                status = status .. CopilotsStatus()
                 return status
             end
 
