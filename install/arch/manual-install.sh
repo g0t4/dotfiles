@@ -18,7 +18,8 @@ pacman --needed --noconfirm -S tree less neovim \
     ollama ollama-rocm \
     the_silver_searcher \
     base-devel cmake ffmpeg man-db \
-    core/inetutils
+    core/inetutils nodejs
+
 # inetutils => hostname cmd
 
 # FYI older python versions, use uv to install based on .python-version in a repo dir
