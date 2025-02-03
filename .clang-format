@@ -1,4 +1,7 @@
 ---
+# cp ~/repos/github/g0t4/dotfiles/.clang-format (_repo_root)
+#   TODO maybe setup a helper func that copies over standard formatting config for all languages?
+#
 # clang-format -style=llvm -dump-config
 #
 MaxEmptyLinesToKeep: 3
