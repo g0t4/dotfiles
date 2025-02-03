@@ -472,6 +472,11 @@ function _du
     log_ --blue -- $dir "$threshold" # show both
     grc du -h -d$levels $threshold $dir | sort -h --reverse
 end
+function gpristine_nested_repos
+    for i in *
+        test -d $i && git -C $i reset --hard && git -C $i clean -dffx
+    end
+end
 
 function review_huge_files
     # somewhat a reminder how I wanna clean things
