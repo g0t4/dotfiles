@@ -1891,3 +1891,10 @@ if command -q pacman
     abbr pum "sudo pacman -U"
 
 end
+
+
+function zedraw
+    # for parsing mitm proxy e[x]ported raw (full req/response) files... and dumping the diff of input_excerpt vs output_excerpt to see the diff
+    set reqnum "$argv[1]"
+    diff_two_commands "head -8 $reqnum.raw | tail -1 | jq .input_excerpt -r" "tail -1 $reqnum.raw | jq .output_excerpt -r"
+end
