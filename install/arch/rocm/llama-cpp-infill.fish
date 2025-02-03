@@ -1,8 +1,17 @@
 
 ./build/bin/llama-server -h
 
-
-
+# btw find GGUF existing models, i.e. qwen:
+#  https://huggingface.co/Qwen?search_models=GGUF
+#   open a "repo" and go to its files tab,  find GGUF files to download
+#   use arrow that points down in middle to copy link and wget:
+wget "https://huggingface.co/Qwen/Qwen2.5-Coder-7B-Instruct-GGUF/resolve/main/qwen2.5-coder-7b-instruct-q8_0.gguf"
+#   mod this to get variants
+#     in case of qwen, can swap 7B and 7b for 3B 3b.. and it works
+wget "https://huggingface.co/Qwen/Qwen2.5-Coder-3B-Instruct-GGUF/resolve/main/qwen2.5-coder-3b-instruct-q8_0.gguf"
+#
+# FYI for now store here:
+ls ~/repos/github/ggerganov/llama.cpp/models/qwen2.5*
 
 # TODO other models... what about serve multiple models too?
 # -hf ggml-org/Qwen2.5-Coder-7B-Q8_0-GGUF \
