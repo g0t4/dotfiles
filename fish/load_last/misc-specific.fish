@@ -1918,3 +1918,59 @@ function zedfull
     log_ --blue "## .output_excerpt"
     echo $output_json | jq -r .output_excerpt
 end
+
+function review_huge_files
+
+
+    function _check
+        if not test -e $argv[2]
+            log_ --yellow "skipping non-existent dir $argv[2]"
+            return
+        end
+        log_ --blue $argv[2]
+        grc du -hd1 -t $argv[1] $argv[2] | sort -h --reverse
+    end
+
+    set threshold 100M
+    if test -n "$argv"
+        set threshold "$argv"
+    end
+
+    log_ --red "threshold: $threshold"
+
+    _check $threshold $HOME/.cache
+    # .cache => packer, huggingface, whisper, vosk, lm-studio, package managers
+
+
+    _check $threshold $HOME/.config
+    _check $threshold $HOME/.local
+    _check $threshold $HOME/.local/share
+    _check $threshold $HOME/Parallels
+    _check $threshold $HOME/.ollama
+    _check $threshold $HOME/Downloads
+    _check $threshold $HOME/Trash
+    #_check $threshold $HOME/Library
+    log_ --red "FYI checking home dir is last so feel free to ctrl+c"
+    _check $threshold $HOME #
+    # todo docker image/container store
+    # log files?
+    # VM dirs in home dir
+    # do on entire home dir last too? .. that way can ctrl+c before that point and work on first detected issues
+
+    # package caches (get unruly over time)
+    ##   also get moved at times?
+    #_check $threshold $HOME/.local/share/NuGet # one of these is old!
+    #_check $threshold $HOME/.nuget
+    #_check $threshold $HOME/.npm
+    #_check $threshold $HOME/.local/pipx
+    #_check $threshold $HOME/.cache/uv
+    #_check $threshold $HOME/.minikube
+    #_check $threshold $HOME/.vagrant.d
+    #_check $threshold $HOME/.docker
+    #_check $threshold $HOME/.gradle
+
+    # maybe clears:
+    #    ~/.vscode  # old extensions and stuff here? logs? 4.1G on wesdemos
+
+
+end
