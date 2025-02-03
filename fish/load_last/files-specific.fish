@@ -423,22 +423,22 @@ end
 
 ### DISK USAGE ###
 # only expand du, don't also alias
-abbr du 'du -hd1 | sort -h --reverse' # sort by size (makes sense only for current dir1) => most of the time this is what I want to do so just use this for `du`
+abbr du 'grc du -hd1 | sort -h --reverse' # sort by size (makes sense only for current dir1) => most of the time this is what I want to do so just use this for `du`
 #  FYI I could add psh => '| sort -hr' global alias (expands anywhere)?
-# retire: abbr du 'du -h'  # tree command doesn't show size of dirs (unless showing entire hierarchy so not -L 2 for example, so stick with du command)
-abbr dua 'du -ha' # show all files (FYI cannot use -a with -d1)
-abbr duh 'du -h' # likely not needed, old du defaults before sort default
+# retire: abbr du 'grc du -h'  # tree command doesn't show size of dirs (unless showing entire hierarchy so not -L 2 for example, so stick with du command)
+abbr dua 'grc du -ha' # show all files (FYI cannot use -a with -d1)
+abbr duh 'grc du -h' # likely not needed, old du defaults before sort default
 #
 # show only N levels deep
 #   du1 => du -hd 1
 abbr --add _duX --regex 'du\d+' --function duX
 function duX
-    string replace --regex '^du' 'du -hd' $argv
+    string replace --regex '^du' 'grc du -hd' $argv
 end
 #
-abbr df 'command df -h' # use command to avoid infinite recursion
+abbr df 'grc df -h' # use command to avoid infinite recursion
 # Mac HD: (if fails try df -h and update this alias to be be more general)
-abbr dfm 'df -h /System/Volumes/Data'
+abbr dfm 'grc df -h /System/Volumes/Data'
 
 ## loop helpers (i.e. forr30<SPACE> for testing line height, not sure why I dont just use $LINES)
 abbr --add forr --regex "forr\d*" --function forr_abbr

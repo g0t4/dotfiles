@@ -62,18 +62,18 @@ ealias batf='bat --style=full'
 
 
 ### DISK USAGE ###
-ealias dus='du -hd1 | sort -h --reverse' # sort by size (makes sense only for current dir1) => most of the time this is what I want to do so just use this for `du`
+ealias dus='grc du -hd1 | sort -h --reverse' # sort by size (makes sense only for current dir1) => most of the time this is what I want to do so just use this for `du`
 # for zsh I am going to leave dus b/c I don't want to alias du to this... and right now my ealias framework doesn't support EXPAND only aliases (PRN add expand only!?)
 #  FYI I could add psh => '| sort -hr' global alias (expands anywhere)?
 # retire: ealias du='du -h'  # tree command doesn't show size of dirs (unless showing entire hierarchy so not -L 2 for example, so stick with du command)
-ealias dua='du -ha' # show all files (FYI cannot use -a with -d1)
-ealias duh='du -h' # likely not needed, old du defaults before sort default
+ealias dua='grc du -ha' # show all files (FYI cannot use -a with -d1)
+ealias duh='grc du -h' # likely not needed, old du defaults before sort default
 #
-for i in {1..10}; do ealias du$i="du -hd $i"; done # show only N levels deep
+for i in {1..10}; do ealias du$i="grc du -hd $i"; done # show only N levels deep
 #
-ealias df='df -h'
+ealias df='grc df -h'
 # Mac HD: (if fails try df -h and update this alias to be be more general)
-ealias dfm='df -h /System/Volumes/Data'
+ealias dfm='grc df -h /System/Volumes/Data'
 
 ## loop helpers
 ealias forr='for i in {1..3}; do echo $i; done'
