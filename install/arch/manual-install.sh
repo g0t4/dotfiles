@@ -19,8 +19,10 @@ pacman --needed --noconfirm -S tree less neovim \
     the_silver_searcher \
     base-devel cmake ffmpeg man-db \
     core/inetutils \
-    nodejs npm
+    nodejs npm \
+    dmidecode
 
+# dmidecode - bios info
 # inetutils => hostname cmd
 
 # FYI older python versions, use uv to install based on .python-version in a repo dir
