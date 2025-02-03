@@ -1895,6 +1895,8 @@ end
 
 function zedraw
     # for parsing mitm proxy e[x]ported raw (full req/response) files... and dumping the diff of input_excerpt vs output_excerpt to see the diff
+    # FYI if headers change then line offsets will change for the request
+    # todo can I just save a flow and extract matching requests and run through this so I can take a stream of predictions and review?
     set reqnum "$argv[1]"
     diff_two_commands "head -8 $reqnum.raw | tail -1 | jq .input_excerpt -r" "tail -1 $reqnum.raw | jq .output_excerpt -r"
 end
