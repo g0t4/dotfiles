@@ -1894,9 +1894,27 @@ end
 
 
 function zedraw
+    # zedraw 1.raw
     # for parsing mitm proxy e[x]ported raw (full req/response) files... and dumping the diff of input_excerpt vs output_excerpt to see the diff
     # FYI if headers change then line offsets will change for the request
     # todo can I just save a flow and extract matching requests and run through this so I can take a stream of predictions and review?
-    set reqnum "$argv[1]"
-    diff_two_commands "head -8 $reqnum.raw | tail -1 | jq .input_excerpt -r" "tail -1 $reqnum.raw | jq .output_excerpt -r"
+    set raw_file "$argv[1]"
+    diff_two_commands "head -8 $raw_file | tail -1 | jq .input_excerpt -r" "tail -1 $raw_file | jq .output_excerpt -r"
+end
+
+function zedfull
+    # show the request only
+    set raw_file "$argv[1]"
+    set json (head -8 $raw_file | tail -1 | jq) # not so useful to see the markdown embedded inside json fields so lets remove that
+
+    log_ --blue "## .input_events"
+    echo $json | jq -r .input_events
+    log_ --blue "## .input_excerpt"
+    echo $json | jq -r .input_excerpt
+    log_ --blue "## .outline"
+    echo $json | jq -r .outline
+
+    set output_json (tail -1 $raw_file | jq)
+    log_ --blue "## .output_excerpt"
+    echo $output_json | jq -r .output_excerpt
 end
