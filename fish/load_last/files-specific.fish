@@ -508,6 +508,7 @@ function review_huge_files
     _du $HOME/.local $threshold
     _du $HOME/.local/share $threshold
     _du $HOME/.ollama $threshold
+    _du $HOME/Library/Application\ Support/pywhispercpp/models $threshold
     _du $HOME/Downloads $threshold
     _du $HOME/.Trash $threshold
     #_du $HOME/Library $threshold
