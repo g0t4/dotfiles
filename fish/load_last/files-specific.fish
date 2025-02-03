@@ -421,17 +421,16 @@ if status --is-interactive
 
 end
 
-### DISK USAGE ###
+# *** DISK USAGE ***
 # only expand du, don't also alias
-abbr du 'grc du -hd1 | sort -h --reverse' # sort by size (makes sense only for current dir1) => most of the time this is what I want to do so just use this for `du`
+abbr du _du # sort by size (makes sense only for current dir1) => most of the time this is what I want to do so just use this for `du`
 #  FYI I could add psh => '| sort -hr' global alias (expands anywhere)?
 # retire: abbr du 'grc du -h'  # tree command doesn't show size of dirs (unless showing entire hierarchy so not -L 2 for example, so stick with du command)
 abbr dua 'grc du -ha' # show all files (FYI cannot use -a with -d1)
-abbr duh 'grc du -h' # likely not needed, old du defaults before sort default
 #
 # show only N levels deep
 #   du1 => du -hd 1
-abbr --add _duX --regex 'du\d+' --function duX
+abbr --add duX --regex 'du\d+' --function duX
 function duX
     string replace --regex '^du' 'grc du -hd' $argv
 end
@@ -439,6 +438,127 @@ end
 abbr df 'grc df -h' # use command to avoid infinite recursion
 # Mac HD: (if fails try df -h and update this alias to be be more general)
 abbr dfm 'grc df -h /System/Volumes/Data'
+
+# a few hard coded _du nested helpers
+function _du3
+    # REALLY JUST USE FINDER AT THIS POINT... can easily drill in  and move around with sizes cached
+    _du "$argv[1]" "$argv[2]" 3
+end
+function _du2
+    # todo if I like this then find a way to generalize it...
+    #   one issue is now I am back to the path (first arg) being way to the left.... yucky
+    #   but I also dont really want it to the right b/c then I have to pass all the other args
+    _du "$argv[1]" "$argv[2]" 2
+end
+
+function _du
+    # use this for du now? so I don't have to arrow back and put path in middle (before sort)
+    set dir $argv[1]
+    set threshold $argv[2] # empty to not filter
+    if test -n "$threshold"
+        # otherwise leave empty to not apply it
+        set threshold "-t $threshold"
+    end
+    set levels $argv[3]
+    if test -z "$levels"
+        set levels = 1
+    end
+
+
+    if not test -e $dir
+        log_ --yellow "skipping non-existent dir $argv[2]"
+        return
+    end
+    log_ --blue -- $dir "$threshold" # show both
+    grc du -h -d$levels $threshold $dir | sort -h --reverse
+end
+
+function review_huge_files
+    # somewhat a reminder how I wanna clean things
+    if test $USER = wes
+        log_blankline
+        log_blankline
+        log_ --bold --brred "USE wesdemos for all VMs/containers/models/etc, do not put on both accounts... or share between them"
+        log_blankline
+        log_blankline
+    end
+
+    set threshold 100M
+    if test -n "$argv"
+        set threshold "$argv"
+    end
+
+    log_ --bold --white "USE FINDER FOR ~/repos .. often a few repos blow up => .venv or build/target dirs\n   just use this CLI entrypoint as a reminder for common spots and then finder the rest"
+    log_ --bold --white "use gpristine on large repos that can be cleaned"
+    log_blankline
+
+    _du $HOME/.cache $threshold
+    # .cache => packer, huggingface, whisper, vosk, lm-studio, package managers
+
+
+    log_ --yellow "Check for other VM dirs in home dir => vbox, vmware fusion"
+    _du $HOME/Parallels $threshold
+
+    _du $HOME/.config $threshold
+    _du $HOME/.local $threshold
+    _du $HOME/.local/share $threshold
+    _du $HOME/.ollama $threshold
+    _du $HOME/Downloads $threshold
+    _du $HOME/.Trash $threshold
+    #_du $HOME/Library $threshold
+
+    # might be a few BIG apps in there worth removing
+    # _du /opt/homebrew $threshold
+    _du /opt/homebrew/Cellar $threshold
+    _du /opt/homebrew/Caskroom $threshold
+
+
+    #  search these in finder... very easy to find HUGE repos
+    #_du ~/repos # use finder to drill in... sometimes a few repos are MASSIVE
+
+    log_ --red "FYI checking home dir is last so feel free to ctrl+c"
+    _du $HOME # $threshold
+    # todo docker image/container store
+    # log files?
+    # VM dirs in home dir
+    # do on entire home dir last too? .. that way can ctrl+c before that point and work on first detected issues
+
+    # package caches (get unruly over time)
+    ##   also get moved at times?
+    #_du $HOME/.local/share/NuGet # one of these is old! $threshold
+    #_du $HOME/.nuget $threshold
+    #_du $HOME/.npm $threshold
+    #_du $HOME/.local/pipx $threshold
+    #_du $HOME/.cache/uv $threshold
+    #_du $HOME/.minikube/cache $threshold
+    #_du $HOME/.vagrant.d/boxes $threshold
+    #_du $HOME/.docker $threshold
+    #_du $HOME/.gradle $threshold
+
+
+
+    # maybe clears:
+    #    ~/.vscode  # old extensions and stuff here? logs? 4.1G on wesdemos
+
+
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## loop helpers (i.e. forr30<SPACE> for testing line height, not sure why I dont just use $LINES)
 abbr --add forr --regex "forr\d*" --function forr_abbr
