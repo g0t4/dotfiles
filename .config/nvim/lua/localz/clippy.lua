@@ -20,25 +20,60 @@ vim.o.clipboard = 'unnamedplus'
 --    # should paste "jerk" if works (works local and remote)
 
 -- *** set clipboard provider (for +/*) to use osc52
---   FYI nvim 10.2+ has smth builtin and it doesn't work over SSH, so I am manually specifying to use osc52 module and this works!
---   FYI also the new nvim 10.2+ mechanism appears disabled when setting clipboard=unnamedplus above, so I also needed this for that reason
+--  FYI nvim 10.2+ has smth builtin and it doesn't work over SSH
+--    - `:h clipboard-osc52` which covers the defaults W.R.T. osc
+--    - so I am manually specifying to use osc52 module and this works!
+--  FYI also, the new nvim 10.2+ mechanism is disabled when setting clipboard=unnamedplus above
+--    - thus, another reason to specify this manually
 --
---   FYI always using OSC52 for now, unless presents issues... in fact I don't recall paste working w/ the builtin macos provider... so this might actually be an improvement locally
---   PRN disable paste support over OSC52 to stop the annoying paste prompt (clipboard reporting warning in iterm2, or just always enable it... not sure it's that huge of a deal.... I mean, reading my clipboard sure that is dangerous but if someone has RCE on my remote env... probably just as much of a problem, or more so)
---     PRN wire up paste to be isolated again... so I can abate the damn warnings, I never cared about paste over SSH b/c I already have Cmd+V for that
+--  FYI always using OSC52 for now, unless presents issues...
+--  - in fact I don't recall paste working w/ the builtin macos provider (default nvim provider)
+--  - so this might actually be an improvement locally
+--  PRN disable paste support over OSC52 to stop the annoying paste prompt
+--  - clipboard reporting warning in iterm2,
+--  - or just always enable it...  although then you get the lovely "contents of pasteboard reported"
+--  - FYI even if I disable passte, Cmd+V still works for most use cases
+--    - obviously not for `p` command (and any vimscript/lua funcs that depend on it)
+
+function paste_from(register)
+    -- THIS is gonna cause issues on windows/remotes (resolve later)
+    --   also might cause issues if I SSH into a mac that has pbpaste (deal with that later)
+    function pbpaste()
+        -- pbpaste bbypasses ypasses showing "clipboard contents reported" on every single paste
+        local handle = io.popen("pbpaste")
+        local clipboard_content = handle:read("*a")
+        handle:close()
+        return clipboard_content
+    end
+
+    local success, result = pcall(pbpaste)
+    if success then
+        print("worked", result)
+        return result
+    end
+
+    print("fallback", result)
+
+    -- fallback to getreg
+    return vim.fn.getreg(register)
+end
+
 vim.g.clipboard = {
     name = 'OSC 52',
     copy = {
         ['+'] = require('vim.ui.clipboard.osc52').copy('+'),
         ['*'] = require('vim.ui.clipboard.osc52').copy('*'),
     },
-
-    -- DISABLE PASTE over OSC52 -- wire up provider to paste from cached version of register in VIM, not reading remote clipboard on paste
     paste = {
-        -- OK this just uses "cached" copy in the register, means I cannot read remote clipboard and that is fine, I DONT CARE, not gonna click ok on a prompt every time so until I say F it and always allow paste just use this... I have always had vim operate this way for paste anyways... all I really want is to copy to remote clipboard, w/in vim I don't need paste beyond vim
-        ['+'] = function() return vim.fn.getreg('+') end,
-        ['*'] = function() return vim.fn.getreg('*') end,
+        ['+'] = require('vim.ui.clipboard.osc52').paste('+'),
+        ['*'] = require('vim.ui.clipboard.osc52').paste('*'),
     },
+    -- -- DISABLE PASTE over OSC52 -- wire up provider to paste from cached version of register in VIM, not reading remote clipboard on paste
+    -- paste = {
+    --     -- OK this just uses "cached" copy in the register, means I cannot read remote clipboard and that is fine, I DONT CARE, not gonna click ok on a prompt every time so until I say F it and always allow paste just use this... I have always had vim operate this way for paste anyways... all I really want is to copy to remote clipboard, w/in vim I don't need paste beyond vim
+    --     ['+'] = function() return vim.fn.getreg('+') end,
+    --     ['*'] = function() return vim.fn.getreg('*') end,
+    -- },
 
     -- -- OSC52 paste:
     -- -- Fooo iterm2 has a bubble on every paste now... and no way to disable it?! WTF... "Clipboard contents reported"... that is not gonna be cool in video recordings... gah w/e safety paranoia people, you win
@@ -46,6 +81,14 @@ vim.g.clipboard = {
     --     ['+'] = require('vim.ui.clipboard.osc52').paste('+'),
     --     ['*'] = require('vim.ui.clipboard.osc52').paste('*'),
     -- },
+
+    -- -- -- OSC52 paste:
+    -- -- -- Fooo iterm2 has a bubble on every paste now... and no way to disable it?! WTF... "Clipboard contents reported"... that is not gonna be cool in video recordings... gah w/e safety paranoia people, you win
+    -- paste = {
+    --     ['+'] = function() return paste_from("+") end,
+    --     ['*'] = function() return paste_from("*") end,
+    -- },
+
 }
 
 -- -- wrong module now, but this can help troubleshoot w/o using the clipboard provider mechanism (which in prev testing swallowed errors in require non-existant module)
