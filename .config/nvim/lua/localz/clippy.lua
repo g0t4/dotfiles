@@ -73,14 +73,13 @@ vim.g.clipboard = {
         ['*'] = require('vim.ui.clipboard.osc52').copy('*'),
     },
 
-    -- FYI iterm will always at least say "contents of pasteboard reported"...
-    --   - no way to disable that message
-    --   - that actually isn't that big of a deal, possibly..
-    --     - we shall see if it fux up my course recordings
-    --     - if so, I can frame hold over any super annoying parts
-    --   - and if you dont mark "always" approve then it will prompt every time
-    --     - gotta love people that don't understand prompt fatigue
-    --
+    -- -- FYI iterm will always at least say "contents of pasteboard reported"...
+    -- --   - no way to disable that message
+    -- --   - that actually isn't that big of a deal, possibly..
+    -- --     - we shall see if it fux up my course recordings
+    -- --     - if so, I can frame hold over any super annoying parts
+    -- --   - and if you dont mark "always" approve then it will prompt every time
+    -- --     - gotta love people that don't understand prompt fatigue
     -- paste = {
     --     ['+'] = require('vim.ui.clipboard.osc52').paste('+'),
     --     ['*'] = require('vim.ui.clipboard.osc52').paste('*'),
@@ -88,19 +87,24 @@ vim.g.clipboard = {
 
     -- -- use the vim register cached contents instead of OSC-52 PASTE
     --    - IOTW, won't be able to paste from external (remote,macos) clipboard
-    -- FYI this is what causes that warning about
+    -- FYI this is what causes that warning about:
     --    "clipboard: provider returned invalid data"
-    paste = {
-        ['+'] = function() return vim.fn.getreg('+') end,
-        ['*'] = function() return vim.fn.getreg('*') end,
-    },
-
-    -- -- -- OSC52 paste:
-    -- -- -- Fooo iterm2 has a bubble on every paste now... and no way to disable it?! WTF... "Clipboard contents reported"... that is not gonna be cool in video recordings... gah w/e safety paranoia people, you win
+    -- !!! WRONG RETURN SIGNATURE?
     -- paste = {
-    --     ['+'] = function() return paste_from("+") end,
-    --     ['*'] = function() return paste_from("*") end,
+    --     ['+'] = function() return vim.fn.getreg('+') end,
+    --     ['*'] = function() return vim.fn.getreg('*') end,
     -- },
+
+    -- -- OSC52 paste:
+    -- -- Fooo iterm2 has a bubble on every paste now... and no way to disable it?! WTF... "Clipboard contents reported"... that is not gonna be cool in video recordings... gah w/e safety paranoia people, you win
+    -- DRAWBACK:
+    -- FYI also reports:
+    --    clipboard: provider returned invalid data
+    -- !!! HRM... maybe my function return info is wrong, does it require more than just a string!
+    paste = {
+        ['+'] = function() return paste_from("+") end,
+        ['*'] = function() return paste_from("*") end,
+    },
 
 }
 
