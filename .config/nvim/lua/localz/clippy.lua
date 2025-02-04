@@ -68,9 +68,15 @@ function paste_from(register)
     if success then
         -- split on \n (newline), otherwise, messes up multi line pastes
         local lines_list = vim.split(assert(contents), '\n')
-        -- second item in top level list (table) is register type spec (not using it, yet?)
-        -- return { lines_list, nil }
-        return { lines_list }
+
+        -- second item in response list (table) is register type spec (see :h getreg)
+        --   if its empty I get:
+        --     "clipboard: provider returned invalid data"
+        --        BTW it can be deceptive when this fails, b/c it falls back to whatever was last copied (cached) in nvim)...
+        --           so make sure to test it by copying something exteranl to nvim
+        --           also the warning message is one liner and easy to miss
+        --   otherwise with '' seems fine and works to copy from macos clipboard!
+        return { lines_list, '' }
     end
 
     -- SHOULD ONLY ARISE if LOCAL ISSUES, ONCE I MAP SSH connects to OSC52
@@ -123,10 +129,10 @@ vim.g.clipboard = {
     -- FYI also reports:
     --    clipboard: provider returned invalid data
     -- !!! HRM... maybe my function return info is wrong, does it require more than just a string!
-    -- paste = {
-    --     ['+'] = function() return paste_from("+") end,
-    --     ['*'] = function() return paste_from("*") end,
-    -- },
+    paste = {
+        ['+'] = function() return paste_from("+") end,
+        ['*'] = function() return paste_from("*") end,
+    },
 }
 
 if os.getenv("SSH_CONNECTION") then
