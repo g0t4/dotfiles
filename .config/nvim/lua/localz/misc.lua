@@ -144,3 +144,18 @@ function CaptureCommandOutput(cmd)
     local output = vim.fn.execute(cmd)
     vim.api.nvim_buf_set_lines(0, 0, -1, false, vim.split(output, '\n'))
 end
+
+vim.keymap.set("n", "<leader>ml", function()
+    -- turn the current big Word into a markdown link
+    --    use link in the clipboard
+
+    pcall(vim.cmd, 'normal ysiW]Ea(\27pa)')
+    -- STEPS:
+    -- ysiW] - surrounds text with []
+    -- then ( starts the parens after for link
+    -- p pastes link from clippy
+    -- a) appends closing parens
+    --
+    -- FYI might be easier to copy current word and build link in code and paste it over the top :)
+    --   above was heavily inspired by recording a macro first
+end, { noremap = true, silent = true })
