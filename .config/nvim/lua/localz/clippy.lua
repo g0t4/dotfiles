@@ -1,9 +1,14 @@
+--
+-- *** critical notee to read when having issues:
 -- FYI clipboard setting used when you don't specify the register to yank to, i.e. `yy` vs `"+yy`
 vim.o.clipboard = 'unnamedplus'
 -- unnamedplus => use +/* register by default now
 -- - which on macOS are wired to system clipboard for yank/paste
--- - and below, I override the macOS provider too (as well as for SSH) and just use OSC52 always (so it works over SSH too)
--- so, normally `yy` would yank to the " register, which is an isolated clipboard within vim, hence the need to use "+yy to yank to the system clipboard
+-- - and below, I override the macOS clipboard provider too (as well as for SSH)
+--   - forces OSC52 always (works locally too)
+-- b/c, normally `yy` would yank to the " register
+--   - " is an isolated clipboard within vim
+--   - hence the need to use "+yy to yank to the system clipboard
 -- so, setting unnamedplus => makes `yy` == `"+yy` and `p` == `"+p` etc.
 
 -- FYI `:registers` will show if there is a clipboard provider for +/* registers
