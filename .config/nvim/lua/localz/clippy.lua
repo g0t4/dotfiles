@@ -72,23 +72,28 @@ vim.g.clipboard = {
         ['+'] = require('vim.ui.clipboard.osc52').copy('+'),
         ['*'] = require('vim.ui.clipboard.osc52').copy('*'),
     },
-    paste = {
-        ['+'] = require('vim.ui.clipboard.osc52').paste('+'),
-        ['*'] = require('vim.ui.clipboard.osc52').paste('*'),
-    },
-    -- -- DISABLE PASTE over OSC52 -- wire up provider to paste from cached version of register in VIM, not reading remote clipboard on paste
-    -- paste = {
-    --     -- OK this just uses "cached" copy in the register, means I cannot read remote clipboard and that is fine, I DONT CARE, not gonna click ok on a prompt every time so until I say F it and always allow paste just use this... I have always had vim operate this way for paste anyways... all I really want is to copy to remote clipboard, w/in vim I don't need paste beyond vim
-    --     ['+'] = function() return vim.fn.getreg('+') end,
-    --     ['*'] = function() return vim.fn.getreg('*') end,
-    -- },
 
-    -- -- OSC52 paste:
-    -- -- Fooo iterm2 has a bubble on every paste now... and no way to disable it?! WTF... "Clipboard contents reported"... that is not gonna be cool in video recordings... gah w/e safety paranoia people, you win
+    -- FYI iterm will always at least say "contents of pasteboard reported"...
+    --   - no way to disable that message
+    --   - that actually isn't that big of a deal, possibly..
+    --     - we shall see if it fux up my course recordings
+    --     - if so, I can frame hold over any super annoying parts
+    --   - and if you dont mark "always" approve then it will prompt every time
+    --     - gotta love people that don't understand prompt fatigue
+    --
     -- paste = {
     --     ['+'] = require('vim.ui.clipboard.osc52').paste('+'),
     --     ['*'] = require('vim.ui.clipboard.osc52').paste('*'),
     -- },
+
+    -- -- use the vim register cached contents instead of OSC-52 PASTE
+    --    - IOTW, won't be able to paste from external (remote,macos) clipboard
+    -- FYI this is what causes that warning about
+    --    "clipboard: provider returned invalid data"
+    paste = {
+        ['+'] = function() return vim.fn.getreg('+') end,
+        ['*'] = function() return vim.fn.getreg('*') end,
+    },
 
     -- -- -- OSC52 paste:
     -- -- -- Fooo iterm2 has a bubble on every paste now... and no way to disable it?! WTF... "Clipboard contents reported"... that is not gonna be cool in video recordings... gah w/e safety paranoia people, you win
@@ -103,9 +108,3 @@ vim.g.clipboard = {
 -- vim.keymap.set('n', '<leader>c', function()
 --     require('osc52').copy_operator()
 -- end, { expr = true })
-
-
--- Note that if you set your clipboard provider like the example above, copying
--- text from outside Neovim and pasting with <kbd>p</kbd> won't work. But you can
--- still use the paste shortcut of your terminal emulator (usually
--- -- <kbd>ctrl+shift+v</kbd>).
