@@ -1,0 +1,54 @@
+defaults read io.appmakes.Paletro
+
+a subset is fine and maybe desired:
+    skipWelcome = 1;
+    theme = "Extra Dark";
+    usePreferenceShortcut = 1;
+
+also:
+    SUEnableAutomaticChecks = 0;
+    SUHasLaunchedBefore = 1;
+    listNumber = 9;
+    "palette_rule_app" =     (
+                (
+            "com.microsoft.VSCode",
+            disabled,
+            "VS Code"
+        ),
+                (
+            "com.sublimetext.2",
+            disabled,
+            "Sublime Text"
+        ),
+                (
+            "com.github.atom",
+            disabled,
+            Atom
+        ),
+                (
+            "com.apple.dt.Xcode",
+            allow,
+            XCode
+        ),
+                (
+            "com.apple.finder",
+            allow,
+            Finder
+        ),
+                (
+            "dev.zed.Zed-Preview",
+            disabled,
+            "Zed Preview"
+        ),
+                (
+            "dev.zed.Zed",
+            disabled,
+            Zed
+        )
+    );
+
+would likely need more than just this setting to get login to work, so bypass is fine for now
+    startOnLogin = 1;
+
+ideally a separate plist that I can import and merge into current config (not replace, but overwrite specified keys).. plistbuddy can do it and I have examples of that...
+   also long ago with my ansible-osx defaults config I could import a plist file IIRC and it overwrote (not replaced)... so check there too
