@@ -50,9 +50,9 @@ function paste_from(register)
     --   - obviously this only works with local iTerm shells
     -- - then for fallback, either try osc52 paste OR just use cached register
     --   - this would be for remote SSH connections
-    -- - one caveat, unsure what happens if I SSH into a mac
-    --   - pbpaste may work with remote user's clipboard
-    --   - I wouldn't be able to paste then
+    -- - one caveat, if I SSH into a mac
+    --   - pbpaste will use the remote user's clipboard
+    --   - doesn't work then to paste
     --   - TODO if env var SSH_CONNECTION is set, use OSC52?
 
     function pbpaste()
@@ -73,10 +73,8 @@ function paste_from(register)
         return { lines_list }
     end
 
-    -- TODO wire up osc52 paste as fallback, so this works over SSH again
-    --   TODO OR, fallback to cached register instead?
+    -- SHOULD ONLY ARISE if LOCAL ISSUES, ONCE I MAP SSH connects to OSC52
     vim.notify("Failed to run pbpaste to get clipboard contents, using cached register instead.", vim.log.levels.ERROR)
-
     return vim.fn.getreg(register)
 end
 
@@ -129,8 +127,18 @@ vim.g.clipboard = {
         ['+'] = function() return paste_from("+") end,
         ['*'] = function() return paste_from("*") end,
     },
-
 }
+
+if os.getenv("SSH_CONNECTION") then
+    -- TODO OR fallback to register cached copy instead (most pasting works)
+    --   and then CMD+V is only way to paste from remote clipboard
+
+    print("using OSC52 paste")
+    vim.g.clipboard.paste = {
+        ['+'] = require('vim.ui.clipboard.osc52').paste('+'),
+        ['*'] = require('vim.ui.clipboard.osc52').paste('*'),
+    }
+end
 
 -- -- wrong module now, but this can help troubleshoot w/o using the clipboard provider mechanism (which in prev testing swallowed errors in require non-existant module)
 -- vim.keymap.set('n', '<leader>c', function()
