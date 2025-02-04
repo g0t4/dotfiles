@@ -123,20 +123,26 @@ vim.g.clipboard = {
     -- FYI also reports:
     --    clipboard: provider returned invalid data
     -- !!! HRM... maybe my function return info is wrong, does it require more than just a string!
-    paste = {
-        ['+'] = function() return paste_from("+") end,
-        ['*'] = function() return paste_from("*") end,
-    },
+    -- paste = {
+    --     ['+'] = function() return paste_from("+") end,
+    --     ['*'] = function() return paste_from("*") end,
+    -- },
 }
 
 if os.getenv("SSH_CONNECTION") then
-    -- TODO OR fallback to register cached copy instead (most pasting works)
+    -- ??? OR fallback to register cached copy instead (most pasting works)?
     --   and then CMD+V is only way to paste from remote clipboard
 
-    print("using OSC52 paste")
-    vim.g.clipboard.paste = {
-        ['+'] = require('vim.ui.clipboard.osc52').paste('+'),
-        ['*'] = require('vim.ui.clipboard.osc52').paste('*'),
+    vim.g.clipboard = {
+        name = 'OSC 52 both',
+        copy = {
+            ['+'] = require('vim.ui.clipboard.osc52').copy('+'),
+            ['*'] = require('vim.ui.clipboard.osc52').copy('*'),
+        },
+        paste = {
+            ['+'] = require('vim.ui.clipboard.osc52').paste('+'),
+            ['*'] = require('vim.ui.clipboard.osc52').paste('*'),
+        }
     }
 end
 
