@@ -15,10 +15,6 @@ vim.o.clipboard = 'unnamedplus'
 --   might have failure like this: (from ubuntu before I set clipboard provider below)
 --     clipboard: No provider. Try ":checkhealth" or ":h clipboard".
 
--- *** test osc52 shell support w/o nvim:
---    echo -e "\033]52;;$(echo -n jerk | base64)\a"
---    # should paste "jerk" if works (works local and remote)
-
 -- *** set clipboard provider (for +/*) to use osc52
 --  FYI nvim 10.2+ has smth builtin and it doesn't work over SSH
 --    - `:h clipboard-osc52` which covers the defaults W.R.T. osc
@@ -34,6 +30,18 @@ vim.o.clipboard = 'unnamedplus'
 --  - or just always enable it...  although then you get the lovely "contents of pasteboard reported"
 --  - FYI even if I disable passte, Cmd+V still works for most use cases
 --    - obviously not for `p` command (and any vimscript/lua funcs that depend on it)
+
+-- FYI test cases to consider when changing anything
+-- - local, on a mac, can you
+--   - copy via `yy` to system clipboard (use Cmd+V to validate)
+--   - paste from clipboard (copy from another program) using `p` normal mode command
+-- - remote (over SSH)
+--   - copy using osc (use command above to test too)
+--   - `yy` to copy to remote clipboard
+--   - `p` from remote clipboard
+-- *** test osc52 shell support w/o nvim:
+--    echo -e "\033]52;;$(echo -n jerk | base64)\a"
+--    # should paste "jerk" if works (works local and remote)
 
 function paste_from(register)
     -- THIS is gonna cause issues on windows/remotes (resolve later)
