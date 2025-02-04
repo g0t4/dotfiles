@@ -44,8 +44,17 @@ vim.o.clipboard = 'unnamedplus'
 --    # should paste "jerk" if works (works local and remote)
 
 function paste_from(register)
-    -- THIS is gonna cause issues on windows/remotes (resolve later)
-    --   also might cause issues if I SSH into a mac that has pbpaste (deal with that later)
+    -- RATIONALE:
+    -- - I hate that iTerm shows clipboard contents reported warning when using OSC52 paste alone
+    -- - so, why not use pbpaste (if present) to paste from the clipboard
+    --   - obviously this only works with local iTerm shells
+    -- - then for fallback, either try osc52 paste OR just use cached register
+    --   - this would be for remote SSH connections
+    -- - one caveat, unsure what happens if I SSH into a mac
+    --   - pbpaste may work with remote user's clipboard
+    --   - I wouldn't be able to paste then
+    --   - TODO if env var SSH_CONNECTION is set, use OSC52?
+
     function pbpaste()
         -- pbpaste bbypasses ypasses showing "clipboard contents reported" on every single paste
         local handle = io.popen("pbpaste")
@@ -54,15 +63,20 @@ function paste_from(register)
         return clipboard_content
     end
 
-    local success, result = pcall(pbpaste)
+    -- contents is a string
+    local success, contents = pcall(pbpaste)
     if success then
-        print("worked", result)
-        return result
+        -- split on \n (newline), otherwise, messes up multi line pastes
+        local lines_list = vim.split(assert(contents), '\n')
+        -- second item in top level list (table) is register type spec (not using it, yet?)
+        -- return { lines_list, nil }
+        return { lines_list }
     end
 
-    print("fallback", result)
+    -- TODO wire up osc52 paste as fallback, so this works over SSH again
+    --   TODO OR, fallback to cached register instead?
+    vim.notify("Failed to run pbpaste to get clipboard contents, using cached register instead.", vim.log.levels.ERROR)
 
-    -- fallback to getreg
     return vim.fn.getreg(register)
 end
 
@@ -73,6 +87,7 @@ vim.g.clipboard = {
         ['*'] = require('vim.ui.clipboard.osc52').copy('*'),
     },
 
+    -- *** paste option 1 - ALWAYS use osc paste:
     -- -- FYI iterm will always at least say "contents of pasteboard reported"...
     -- --   - no way to disable that message
     -- --   - that actually isn't that big of a deal, possibly..
@@ -85,10 +100,19 @@ vim.g.clipboard = {
     --     ['*'] = require('vim.ui.clipboard.osc52').paste('*'),
     -- },
 
-    -- -- use the vim register cached contents instead of OSC-52 PASTE
-    --    - IOTW, won't be able to paste from external (remote,macos) clipboard
-    -- FYI this is what causes that warning about:
-    --    "clipboard: provider returned invalid data"
+    -- *** paste option 2 - use vim registers for paste
+    -- -- *** FYI... paste provider funcs must RETURN a LIST [ contents, register_type_spec ]
+    --    otherwise it will fail with:
+    --       "clipboard: provider returned invalid data"
+    --       then, it ignores whatever you returned and does a fallback
+    --         IIAC to cache registers to)
+    --    - IOTW, won't be able to paste from external (remote, macos) clipboar
+    --    register_type_spec:
+    --      see `:h setreg()`
+    --      "c"/"v" == charwise mode
+    --      "l"/"V" == linewise mode
+    --      "b"/"<CTRL-V>" == blockwise-visual mode
+    --
     -- !!! WRONG RETURN SIGNATURE?
     -- paste = {
     --     ['+'] = function() return vim.fn.getreg('+') end,
