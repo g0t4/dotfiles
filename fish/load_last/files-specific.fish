@@ -398,6 +398,12 @@ if status --is-interactive
         # TODO if I like this, I should get the locate database working to speed it up?
         # fallback to interactive cd! with fd+fzf
         #   FYI fd does not use a db so it is gonna be slow when I target entire filesystem: /
+        #  FYI this is now setup to work only with nested dirs (in contrast to `z` which can jump anywhere...
+        #     this might not be the best way to do this...
+        #     maybe that is why I had `fd /` ...
+        #     lets just try this way and see how I feel
+        #
+        # FYI --select-1 auto selects if only one matching entry instead of showing fzf UI
         set selected_dir (fd --type d | fzf --select-1 --preview 'ls {}' --query "$argv")
         # TODO when I use locate, how about allow picking a file too (not just dirs) b/c I can use my cd below to handle that and maybe there is a file name I am targeting and I know nothing else about the path
         if test $status -eq 0; and test -e $selected_dir
