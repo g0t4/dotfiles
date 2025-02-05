@@ -667,8 +667,8 @@ bind '<' expand-abbr self-insert
 
 # *** processes ***
 abbr psg "grc ps aux | grep -i "
-abbr pgrep "grc pgrep -ilf" # -l long output (show what matched => process name), -f match full command line, -l show what matched (full line)
-abbr pgrepu 'grc pgrep -U $USER -ilf'
+abbr pgrep "grc pgrep -ilfa" # -l long output (show what matched => process name), -f match full command line, -l show what matched (full line)
+abbr pgrepu 'grc pgrep -U $USER -ilfa'
 abbr pkill "pkill -ilf" # same options as pgrep (-l (long) shows underlying kill command used per PID)
 abbr pkill9 'pkill -9 -ilf'
 abbr pkillu 'pkill -U $USER -ilf'
