@@ -14,9 +14,10 @@ pacman -S grub efibootmgr openssh networkmanager
 pacman --needed --noconfirm -S tree less neovim \
     which pacman-contrib grc \
     python python-pip python-pipx uv \
-    eza jq httpie nmap sudo git bat wget \
+    eza jq httpie nmap sudo git wget \
+    bat hyperfine \
     ollama ollama-rocm \
-    the_silver_searcher \
+    the_silver_searcher fd \
     base-devel cmake ffmpeg man-db \
     core/inetutils \
     nodejs npm \
