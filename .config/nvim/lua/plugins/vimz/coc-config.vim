@@ -163,8 +163,9 @@ endfunction
 " Highlight the symbol and its references when holding the cursor
 "autocmd CursorHold * silent call CocActionAsync('highlight')
 
-" Symbol renaming
+" Symbol renaming (I love F2 for this, maybe get rid of rn if I use F2 alone)
 nmap <leader>rn <Plug>(coc-rename)
+nmap <F2> <Plug>(coc-rename)
 
 " Formatting selected code
 xmap <leader>f  <Plug>(coc-format-selected)

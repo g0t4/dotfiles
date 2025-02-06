@@ -88,6 +88,8 @@ local plugin_lspconfig = {
 
                 vim.keymap.set('n', '<Leader>rn',
                     '<cmd>lua vim.lsp.buf.rename()<CR>', buffer_keymap_options)
+                vim.keymap.set('n', '<F2>',
+                    '<cmd>lua vim.lsp.buf.rename()<CR>', buffer_keymap_options)
 
 
                 -- TODO review my coc mappings for any inconsitencies?
