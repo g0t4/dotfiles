@@ -4,7 +4,7 @@ function getScreencaptureFileName(extension)
     local appElement = hs.axuielement.applicationElement(app)
 
     -- TODO what do I want for filename? how about capture frontmost app's frontmost window name?
-    local filename = os.date("%Y-%m-%d_%I-%M-%S-%p_Screenshot." .. extension)
+    local filename = os.date("%Y-%m-%d %I-%M-%S cap" .. extension)
     local snapshots_dir = os.getenv("HOME") .. "/Pictures/Screencaps"
     local filePath = snapshots_dir .. "/" .. filename
     return filePath
