@@ -2,6 +2,8 @@
 -- FYI if issues with werkspace not having these options set... that can happen if this is registered after werkspaces are loaded
 --
 --
+-- NOTES:
+--   use buffer local variables in filetype mods
 
 -- *** FORMAT indents
 -- gg=G - runs formatter (indent)
