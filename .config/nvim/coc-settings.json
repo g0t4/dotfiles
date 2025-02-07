@@ -33,7 +33,7 @@
 
     // *** prettier - so far, for markdown only
     // "prettier.formatterPriority": -1, // make prettier the fallback formatter (works but not needed as I can just disable it here:)
-    "prettier.disableLanguages": [ "json", "markdown" ], // *** using coc-json formatter for now
+    "prettier.disableLanguages": [ "json", "markdown", "yaml", ], // *** using coc-json formatter for now
     "prettier.tabWidth": 4,
 
     // *** markdown:
