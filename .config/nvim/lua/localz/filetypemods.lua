@@ -31,6 +31,16 @@ vim.cmd([[
     command! ToggleShowWhitespace if &list | set nolist | else | set list | endif
 ]])
 
+-- *** notes == md
+--     so I can stop putting notes.md on the end of files
+vim.filetype.add({
+  extension = {
+    notes = "markdown",
+  },
+})
+
+
+
 -- *** command to show tab config (print messages)
 vim.api.nvim_create_user_command('TroubleshootOptions', function()
     -- invaluable to troubleshoot script ordering issues b/c I can quickly see what is what after rearranges
