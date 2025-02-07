@@ -31,6 +31,9 @@
     // prettier dislikes for json:
     // - trim trailing commas (i.e. in this file, I like it when allowed, that said often its not allowed and then fails stuff so I am on fence)
 
+    // *** yaml
+    "yaml.format.enable": true,
+
     // *** prettier - so far, for markdown only
     // "prettier.formatterPriority": -1, // make prettier the fallback formatter (works but not needed as I can just disable it here:)
     "prettier.disableLanguages": [ "json", "markdown", "yaml", ], // *** using coc-json formatter for now
