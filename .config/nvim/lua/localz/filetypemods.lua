@@ -125,6 +125,23 @@ vim.api.nvim_create_autocmd("FileType", {
     end,
 })
 
+-- yaml
+vim.api.nvim_create_autocmd("FileType", {
+    group = "filetypemods",
+    pattern = "yaml",
+    callback = function()
+        -- FYI ftplugin/yaml.vim:28:  setlocal shiftwidth=2 softtabstop=2
+        --     in nvim runtime
+
+        vim.o.shiftwidth = 4
+        vim.o.softtabstop = 4
+    end
+})
+
+
+
+
+
 vim.api.nvim_create_autocmd("FileType", {
     group = "filetypemods",
     pattern = "graphql",
