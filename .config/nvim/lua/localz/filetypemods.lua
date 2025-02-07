@@ -132,9 +132,9 @@ vim.api.nvim_create_autocmd("FileType", {
     callback = function()
         -- FYI ftplugin/yaml.vim:28:  setlocal shiftwidth=2 softtabstop=2
         --     in nvim runtime
-
-        vim.o.shiftwidth = 4
-        vim.o.softtabstop = 4
+        -- actually I like 2...  I will fix formatters to use this
+        -- vim.o.shiftwidth = 4
+        -- vim.o.softtabstop = 4
     end
 })
 
