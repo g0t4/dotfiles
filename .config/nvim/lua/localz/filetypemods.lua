@@ -3,7 +3,9 @@
 --
 --
 
-
+-- *** FORMAT indents
+-- gg=G - runs formatter (indent)
+--  indentexpr can be set for that too (mine defaults to treesitter's indent
 
 -- *** GLOBAL OPTION DEFAULTS ***
 -- FYI global defaults need to be applied BEFORE WERKSPACE RESTORE... else those files restore before this and then these mess up the restored files/windows... (globals must come first)... what happens is then this fubars the coc/format settings that somehow override (IIUC) based on things like luarc
@@ -133,8 +135,8 @@ vim.api.nvim_create_autocmd("FileType", {
         -- FYI ftplugin/yaml.vim:28:  setlocal shiftwidth=2 softtabstop=2
         --     in nvim runtime
         -- actually I like 2...  I will fix formatters to use this
-        -- vim.o.shiftwidth = 4
-        -- vim.o.softtabstop = 4
+        -- vim.bo.shiftwidth = 4
+        -- vim.bo.softtabstop = 4
     end
 })
 
