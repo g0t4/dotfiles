@@ -469,9 +469,8 @@ function _du
     end
     set levels $argv[3]
     if test -z "$levels"
-        set levels = 1
+        set levels 1
     end
-
 
     if not test -e $dir
         log_ --yellow "skipping non-existent dir $argv[2]"
