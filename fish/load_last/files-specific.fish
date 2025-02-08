@@ -3,6 +3,7 @@
 # still not using exa/eza (not worth hassle, esp b/c fish builtin ls/la colors work well enough)
 abbr lat "ls -alht" # -t == sort by time
 abbr las "ls -alhS" # -S == sort by size
+abbr la "la -h" # use fish builtin `la` and pass -h by default now
 
 # this was in release notes for 3.6.0! regex just added (among other changes)
 #    https://fishshell.com/docs/3.6/relnotes.html
