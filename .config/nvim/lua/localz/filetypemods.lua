@@ -1,4 +1,3 @@
--- TODO warn if werkspaces already loaded
 -- FYI if issues with werkspace not having these options set... that can happen if this is registered after werkspaces are loaded
 --
 --
