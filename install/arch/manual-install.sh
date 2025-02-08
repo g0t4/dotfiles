@@ -21,7 +21,7 @@ pacman --needed --noconfirm -S tree less neovim \
     base-devel cmake ffmpeg man-db \
     core/inetutils \
     nodejs npm \
-    dmidecode
+    dmidecode docker iotop unzip
 
 # dmidecode - bios info
 # inetutils => hostname cmd
