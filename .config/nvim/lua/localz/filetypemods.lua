@@ -81,13 +81,16 @@ end, { bang = true })
 
 
 vim.cmd [[
-    " SVG
-    "autocmd FileType svg echo "SVG opened"
-    autocmd FileType svg set wrap
 
-    " markdown
-    autocmd FileType md set wrap
+    autocmd FileType svg setlocal wrap
+
+    " *** DO NOT USE `md` for markdown...
+    autocmd FileType markdown setlocal wrap
+
 ]]
+
+-- markdown why the fuck is it ignoring my set wrap
+
 
 -- :h formatoptions
 -- :h fo-table
