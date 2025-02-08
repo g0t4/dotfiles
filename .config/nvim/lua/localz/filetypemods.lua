@@ -129,6 +129,14 @@ vim.api.nvim_create_autocmd("FileType", {
 
 vim.api.nvim_create_autocmd("FileType", {
     group = "filetypemods",
+    pattern = "sql",
+    callback = function()
+        vim.bo.commentstring = "-- %s" -- %s is original text
+    end,
+})
+
+vim.api.nvim_create_autocmd("FileType", {
+    group = "filetypemods",
     pattern = "editorconfig",
     callback = function()
         vim.bo.commentstring = "# %s" -- %s is original text
