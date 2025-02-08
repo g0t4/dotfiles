@@ -34,9 +34,9 @@ vim.cmd([[
 -- *** notes == md
 --     so I can stop putting notes.md on the end of files
 vim.filetype.add({
-  extension = {
-    notes = "markdown",
-  },
+    extension = {
+        notes = "markdown",
+    },
 })
 
 
@@ -77,21 +77,6 @@ end, { bang = true })
 --     set backspace=indent,start,eol " allow backspacing over everything in insert mode, including indent from autoindent, eol thru start of insert
 
 
-
-
-
-vim.cmd [[
-
-    autocmd FileType svg setlocal wrap
-
-    " *** DO NOT USE `md` for markdown...
-    autocmd FileType markdown setlocal wrap
-
-]]
-
--- markdown why the fuck is it ignoring my set wrap
-
-
 -- :h formatoptions
 -- :h fo-table
 --   o = insert comments on `o` and `O`
@@ -104,6 +89,23 @@ vim.cmd [[
 ---
 
 vim.api.nvim_create_augroup("filetypemods", { clear = true })
+
+vim.api.nvim_create_autocmd("FileType", {
+    group = "filetypemods",
+    pattern = "markdown",
+    callback = function()
+        vim.opt_local.wrap = true
+    end,
+})
+
+vim.api.nvim_create_autocmd("FileType", {
+    group = "filetypemods",
+    pattern = "svg",
+    -- pattern = "xml,html,xsl,svg", -- todo add others?
+    callback = function()
+        vim.opt_local.wrap = true
+    end,
+})
 
 vim.api.nvim_create_autocmd("FileType", {
     group = "filetypemods",
