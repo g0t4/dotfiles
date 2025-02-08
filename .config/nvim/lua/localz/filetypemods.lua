@@ -94,6 +94,7 @@ vim.api.nvim_create_autocmd("FileType", {
     group = "filetypemods",
     pattern = "markdown",
     callback = function()
+        -- FYI `vim.opt_local` (lua) == `setlocal` (vimscript)
         vim.opt_local.wrap = true
     end,
 })
