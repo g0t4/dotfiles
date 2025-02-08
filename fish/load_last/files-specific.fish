@@ -452,6 +452,7 @@ function _du3
     # REALLY JUST USE FINDER AT THIS POINT... can easily drill in  and move around with sizes cached
     _du "$argv[1]" "$argv[2]" 3
 end
+
 function _du2
     # todo if I like this then find a way to generalize it...
     #   one issue is now I am back to the path (first arg) being way to the left.... yucky
@@ -481,6 +482,7 @@ function _du
     log_ --blue -- $cmd
     eval $cmd
 end
+
 function gpristine_nested_repos
     for i in *
         test -d $i && git -C $i reset --hard && git -C $i clean -dffx
