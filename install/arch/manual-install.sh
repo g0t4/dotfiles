@@ -21,10 +21,11 @@ pacman --needed --noconfirm -S tree less neovim \
     base-devel cmake ffmpeg man-db \
     core/inetutils \
     nodejs npm \
-    dmidecode docker iotop unzip
+    dmidecode docker iotop unzip sysstat
 
 # dmidecode - bios info
 # inetutils => hostname cmd
+# sysstat => iostat
 
 # FYI older python versions, use uv to install based on .python-version in a repo dir
 
@@ -43,8 +44,6 @@ git clone https://github.com/g0t4/dotfiles ~/repos/github/g0t4/dotfiles
 #   AND osc for copy over ssh :)
 . ~/repos/github/g0t4/dotfiles/fish/install/install.fish
 
-
 # nvim dev checkouts (TODO why not configure this conditionally?)
 git clone https://github.com/g0t4/ask-openai.nvim ~/repos/github/g0t4/ask-openai.nvim
 git clone https://github.com/g0t4/illuminate.nvim ~/repos/github/g0t4/illuminate.nvim
-
