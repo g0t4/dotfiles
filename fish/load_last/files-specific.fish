@@ -476,8 +476,10 @@ function _du
         log_ --yellow "skipping non-existent dir $argv[2]"
         return
     end
-    log_ --blue -- $dir "$threshold" # show both
-    grc du -h -d$levels $threshold $dir | sort -h --reverse
+
+    set cmd "grc du -h -d$levels $threshold $dir | sort -h --reverse"
+    log_ --blue -- $cmd
+    eval $cmd
 end
 function gpristine_nested_repos
     for i in *
