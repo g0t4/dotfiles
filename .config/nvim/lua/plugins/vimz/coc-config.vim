@@ -16,7 +16,7 @@ let g:coc_global_extensions = [
             \ 'coc-pyright',
             \ 'coc-rust-analyzer',
             \ 'coc-sh',
-            \ 'coc-sql',
+            \ 'coc-sqlfluff',
             \ 'coc-toml',
             \ 'coc-tsserver',
             \ 'coc-vimlsp',
