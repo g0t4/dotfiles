@@ -192,6 +192,18 @@
     //
 
 
+    // *** sql (coc-sqlfluff) ***
+    // this has many options
+    // TODO I have yet to find out if I can stop line breaks around eveyr single goddamn column name in a select clause
+    // they do not at all explain wtf they mean in their "reflow" docs and their options are a fucking mess of shit all over the place
+    //  it will leave a one column select on its own line but beyond one it busts select|col1|col2 each onto its own goddamn line
+    //    SEE my .sqlfluff config file in g0t4/usaspending repo for where I left off cuz I cant waste time on this shit right now
+
+    // DO NOT USE coc-sql (no config to speak of)
+    //    uses: https://github.com/sql-formatter-org/sql-formatter
+    //          https://sql-formatter-org.github.io/sql-formatter/
+    //          holy crap, this formatter has no option to NOT split a line on every single column in the select clause
+
 
 
 
