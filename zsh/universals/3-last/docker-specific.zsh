@@ -199,9 +199,11 @@ ealias dcore='docker compose restart'
 ealias dcostart='docker compose start'
 ealias dcostop='docker compose stop'
 ealias dcot='docker compose top'
-ealias dcou='docker compose up'
-ealias dcouf='docker compose up --force-recreate --remove-orphans'
-ealias dcoud='docker compose up --detach'
+abbr dcou 'docker compose up'
+abbr dcoub 'docker compose up --build'
+abbr dcouf 'docker compose up --build --force-recreate --remove-orphans'
+abbr dcoud 'docker compose up --detach'
+abbr dcouw 'docker compose up --watch' # TBD if I want this abbr (dco ~2.24.7 added --watch)
 ealias dcov='docker compose version'
 
 ## dld - docker labs debug: # dld commands are hanging after latest update to DDfM

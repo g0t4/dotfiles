@@ -147,8 +147,10 @@ ealias ${prefix}start 'docker compose start'
 ealias ${prefix}stop 'docker compose stop'
 ealias ${prefix}t 'docker compose top'
 ealias ${prefix}u 'docker compose up'
-ealias ${prefix}uf 'docker compose up --force-recreate --remove-orphans'
+ealias ${prefix}ub 'docker compose up --build'
+ealias ${prefix}uf 'docker compose up --build --force-recreate --remove-orphans'
 ealias ${prefix}ud 'docker compose up --detach'
+ealias ${prefix}uw 'docker compose up --watch'
 ealias ${prefix}v 'docker compose version'
 
 
