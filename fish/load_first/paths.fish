@@ -104,3 +104,10 @@ end
 function use_brew_llvm
     export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
 end
+
+if test -d "/opt/homebrew/opt/postgresql@17/bin"
+    # todo should I warn if newer or other version is installed instead?
+    #  btw v14 is the "default" version in homebrew, why? why not v17?
+    #  also if I use `brew link postgresql@17` it appends _17 on end of all commands which YUCK hence adding here:
+    export PATH="/opt/homebrew/opt/postgresql@17/bin:$PATH"
+end
