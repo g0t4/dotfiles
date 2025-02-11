@@ -49,7 +49,7 @@ return {
         },
         config = function()
             require('legendary').setup {
-                include_builtin = true,        -- show builtins (default true), i.e. zz (~323)
+                include_builtin = true, -- show builtins (default true), i.e. zz (~323)
                 include_legendary_cmds = true, -- legendary commands (default true) (12)
                 extensions = {
                     -- keymap discovery extensions
@@ -61,7 +61,7 @@ return {
                     --    CAREFUL not to rebind the keys too
                     -- FYI   :h legendary-which-key.txt
                     -- which_key = true,
-                    lazy_nvim = false,   -- builtin requires desc set on lazy keys entries, and I want it to be rhs by default
+                    lazy_nvim = false, -- builtin requires desc set on lazy keys entries, and I want it to be rhs by default
                     my_lazy_nvim = true, -- my own lazy keys loader
                     --
                     -- FYI command palette builds list on first use (per buffer?), so that is why it has slight lag there and that also means you need to restart to rebuild the list
@@ -98,27 +98,48 @@ return {
         keys = {
             { '<C-p>',       ':Telescope find_files<CR>', mode = 'n' },
             { '<leader>t',   ':Telescope<CR>',            mode = 'n' }, -- list pickers, select one opens it (like if :Telescope<CR>), shows keymaps too
-            { '<leader>s',   ':Telescope live_grep<CR>',  mode = 'n' }, -- keep top level w/o submapping collision so this is snappy fast
+            -- { '<leader>s',   ':Telescope live_grep<CR>',  mode = 'n' }, -- keep top level w/o submapping collision so this is snappy fast
             { '<leader>gst', ':Telescope git_status<CR>', mode = 'n' }, -- like gst abbr/alias
         },
         config = function()
             local telescopeConfig = require('telescope.config')
 
+            -- *** use rg
             -- Clone the default Telescope configuration
-            local vimgrep_arguments = { unpack(telescopeConfig.values.vimgrep_arguments) }
-            -- I want to search in hidden/dot files.
-            table.insert(vimgrep_arguments, "--hidden")
-            table.insert(vimgrep_arguments, "--no-ignore") -- allow so gitignored files
-            -- dirs to exclude now:
-            table.insert(vimgrep_arguments, "--glob")
-            table.insert(vimgrep_arguments, "!**/.git/*")
-            table.insert(vimgrep_arguments, "--glob")
-            table.insert(vimgrep_arguments, "!**/.venv/*")
-            table.insert(vimgrep_arguments, "--glob")
-            table.insert(vimgrep_arguments, "!**/node_modules/*")
-            table.insert(vimgrep_arguments, "--glob")
-            table.insert(vimgrep_arguments, "!**/iterm2env/*")
-            -- TODO any better ideas on how to allow some of ignored files minus the obnoxious ones? or can I use an ignore file and pass it here and below in find_files?
+            -- local vimgrep_arguments = { unpack(telescopeConfig.values.vimgrep_arguments) }
+            -- -- FYI right now:        { "rg", "--color=never", "--no-heading", "--with-filename", "--line-number", "--column", "--smart-case" }
+            -- --    can just set these myself and make sure of it...
+            -- -- I want to search in hidden/dot files.
+            -- table.insert(vimgrep_arguments, "--hidden")
+            -- table.insert(vimgrep_arguments, "--no-ignore") -- allow so gitignored files
+            -- -- dirs to exclude now:
+            -- table.insert(vimgrep_arguments, "--glob")
+            -- table.insert(vimgrep_arguments, "!**/.git/*")
+            -- table.insert(vimgrep_arguments, "--glob")
+            -- table.insert(vimgrep_arguments, "!**/.venv/*")
+            -- table.insert(vimgrep_arguments, "--glob")
+            -- table.insert(vimgrep_arguments, "!**/node_modules/*")
+            -- table.insert(vimgrep_arguments, "--glob")
+            -- table.insert(vimgrep_arguments, "!**/iterm2env/*")
+            -- print(vim.inspect(vimgrep_arguments))
+            --
+            -- *** use ag
+            --    btw `ag -G lua` == `rg -g "*.lua"` -- YUCK... I shouldn't need *.lua to do lua... FUCK YUCK and then ALSO motherfucking "" or escaping *...no way
+            local vimgrep_arguments = { 'ag', '--nocolor', '--nogroup', '--numbers', '--column', '--smart-case',
+                -- FYI unrestricted = hidden + no ignores... nope... -u appears to ignore my --ignore... whereas -U doesn't....
+                --   btw --hidden is needed to be able to search dotfiles (any file with leading dot, or dir)
+                --   --ignore PATTERN ~= rg's --glob
+                --   ag -U --ignore "iterm2env" -i "local"  # this works, doesn't show iterm2env paths
+                --   ag -u --ignore "iterm2env" -i "local"  # this still shows iterm2env paths
+                --   what is odd, is that -U is supposed to be about not consider .gitignore/.hgignore... and -u does that too plus .ignore files... so I don't know why the latter wouldn't also work for iterm2env filter?
+                --
+                '--hidden', '-U',
+                '--ignore', '.venv/',
+                '--ignore', '.iterm2env/',
+                '--ignore', '.git/',
+                '--ignore', 'node_modules/',
+                '--ignore', '__pycache__/',
+            }
             -- TODO sync the ignored/included with nvim-tree plugin too?
 
             require('telescope').setup({
@@ -162,6 +183,26 @@ return {
 
                         previewer = false, -- PRN make it more like vscode (focus on file names, not content, esp b/c I would do a grep files if I wanted to search by content)
                     },
+                },
+                extensions = {
+                    live_grep_args = {
+                        -- FYI ok to leave on auto_quoting... otherwise I always have to quote when I want multiple words in search string with spaces
+                        --    even with it on... I can mostly think about the prompt as command line args... and it only works by magic in special cases for me and I don't think those will throw me off as I can always use "" if I am confused
+                        -- auto_quoting = false,
+                        -- TODO! fuzzy refine?
+                        -- mappings?
+                        --   ["<C-k>"] = lga_actions.quote_prompt(),
+                        --   ["<C-i>"] = lga_actions.quote_prompt({ postfix = " --iglob " }),
+                        -- -- freeze the current list and start a fuzzy search in the frozen list
+                        --   ["<C-space>"] = actions.to_fuzzy_refine,
+                        --
+                        --   grep_word_under_cursor  -- avail via live_grep_args too
+                        --   grep_word_under_cursor_current_buffer
+                        --   grep_visual_selection
+                        --      IIRC in code, telescope's builtin has this too I just never mapped visual mode keys
+                        --   grep_word_visual_selection_current_buffer
+                        layout_strategy = 'vertical',
+                    }
                 }
             })
             -- FYI this complements <leader>s which opens live_grep with empty search query
@@ -170,6 +211,33 @@ return {
                     default_text = vim.fn.expand('<cword>')
                 })
             end, { desc = "Live grep, starting with word under cursor" })
+        end,
+    },
+    {
+        -- live_grep + pass args!
+        --   thus, can pass params to filter file path too (ag's -G, rg's -r glob)
+        --   TLDR removes the "--" in the upstream live_grep (lolz)
+        --      https://github.com/nvim-telescope/telescope.nvim/blob/master/lua/telescope/builtin/__files.lua#L172
+        --             return flatten { args, "--", prompt, search_list }
+        --      https://github.com/nvim-telescope/telescope-live-grep-args.nvim/blob/master/lua/telescope/_extensions/live_grep_args.lua#L58
+        --             return
+        --   YUP 100% this is goal (so you can pass args too)
+        --      here is a PR that inspired live-grep-args ext!
+        --      https://github.com/nvim-telescope/telescope.nvim/pull/670
+        'nvim-telescope/telescope-live-grep-args.nvim',
+        dependencies = {
+            'nvim-telescope/telescope.nvim',
+        },
+        config = function()
+            require('telescope').load_extension('live_grep_args')
+            vim.keymap.set('n', '<leader>s', function()
+                require("telescope").extensions.live_grep_args.live_grep_args()
+            end, { desc = "Live grep with custom args or empty search query" })
+            --
+            -- UMM... to_fuzzy_refine is not in the codebase?!
+            -- vim.keymap.set('n', '<C-space>', function()
+            --     require("telescope-live-grep-args.actions").to_fuzzy_refine()
+            -- end, { desc = "freeze test" })
         end,
     },
 
