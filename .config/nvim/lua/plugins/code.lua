@@ -27,6 +27,18 @@ return {
     }, -- will help me practice using visual mode too
     -- FYI g,Ctrl-g to show selection length (aside from just highlighting occurrenes of selection)
 
+    {
+        -- https://github.com/justinmk/vim-sneak
+        "justinmk/vim-sneak", -- easy jump to unique chars or groups of chars (like vscode find all occurences)
+        -- interesting, not terrible... I need to take some time to try to get used to using it before I pass judgement...
+        --    first thought is... I prefer search / over this.. b/c search I can keep typing a 3rd char...
+        --    why don't I map s => / ... / is awkward is my only issue with it
+        --    btw s => cl  and S => cc  # and so far I haven't found a need to use s in normal mode... I like c/r alone so far... ... I do see a use for s to replace + stay in insert mode... and for sure cl is awkward but... how often do I need that?
+        enabled = false,
+        -- config = function()
+        --     -- vim.g.sneak_no_default_keybindings = 1
+        -- end,
+    },
 
     -- mark unique letters to jump to:
     --  use "unblevable/quick-scope" -- quick scope marks jump
