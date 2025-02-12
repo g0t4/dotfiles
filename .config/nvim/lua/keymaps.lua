@@ -1,5 +1,15 @@
 local default_options = { noremap = true, silent = true }
 
+-- *** s and S => / and ?
+--   inspired by trying vim-sneak which I like that s/S is much easier to type!
+--   and I don't much find myself using s/S key for substitute command in normal/vim modes
+--   as for S... I really like cc anyways... so I won't likely need S ever...
+--   as for s... cl is not at all intuitive... (it could be if I work on it)... so this is a loss but honestly I rarely used s thus far... so lets see how I feel
+--   downside to remapping is getting in wrong habit :)... for vim envs w/o my config :)
+vim.keymap.set({ "n", "v" }, "s", "/", default_options)
+vim.keymap.set({ "n", "v" }, "S", "?", default_options)
+
+
 -- *** window keymaps
 for _, arrow in ipairs({ "right", "left", "up", "down" }) do
     -- simpler:
