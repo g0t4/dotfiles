@@ -23,6 +23,7 @@ let g:coc_global_extensions = [
             \ 'coc-xml',
             \ 'coc-yaml',
             \ 'coc-zig',
+            \ '@yaegassy/coc-nginx',
             \ ]
             "\ 'coc-rust-analyzer',
             "\ 'coc-lightbulb', " seemed to show up on every line regardless if any code actions available => TODO investigate?
