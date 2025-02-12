@@ -32,18 +32,24 @@ return {
         "justinmk/vim-sneak", -- easy jump to unique chars or groups of chars (like vscode find all occurences)
         -- interesting, not terrible... I need to take some time to try to get used to using it before I pass judgement...
         --    first thought is... I prefer search / over this.. b/c search I can keep typing a 3rd char...
-        --    why don't I map s => / ... / is awkward is my only issue with it
+        --    it is kinda like multi-line version of eyeliner
+        --      I like that it shows you what highlights are forward as you move forwardand drops off previous ones.. and vice versa for reverse
+        --      s => forward, S => backward
+        --    if I dont use this... then why not map s => / ... / is awkward is my only issue with it
         --    btw s => cl  and S => cc  # and so far I haven't found a need to use s in normal mode... I like c/r alone so far... ... I do see a use for s to replace + stay in insert mode... and for sure cl is awkward but... how often do I need that?
         enabled = false,
-        -- config = function()
-        --     -- vim.g.sneak_no_default_keybindings = 1
-        -- end,
+        config = function()
+            require("sneak").setup({})
+            -- alternative mode more like easymotion (and IIAC like eyeliner):
+            -- vim.cmd(" let g:sneak#label = 1 ")
+        end,
     },
 
     -- mark unique letters to jump to:
     --  use "unblevable/quick-scope" -- quick scope marks jump
     {
         "jinh0/eyeliner.nvim", -- lua impl, validated this actually works good and the color is blue OOB which is nicely subtle, super useful on long lines!
+        enabled = true,
         event = buffer_with_content_events,
         config = function()
             -- highlight customization:
@@ -54,7 +60,7 @@ return {
             -- colorful:
             -- defaults (via :highlight Eyeliner*):
             vim.api.nvim_set_hl(0, 'EyelinerPrimary', { fg = '#569cd6', underline = true, bold = true }) -- default fg = '#569cd6'
-            vim.api.nvim_set_hl(0, 'EyelinerSecondary', { fg = '#c586c0', underline = true })            -- default fg = '#c586c0'
+            vim.api.nvim_set_hl(0, 'EyelinerSecondary', { fg = '#c586c0', underline = true }) -- default fg = '#c586c0'
             --      EyelinerDimmed xxx cleared   (default)
             -- vim.api.nvim_set_hl(0, 'EyelinerDimmed', { fg = '#00FF00' }) -- only applies if highlight_on_key = true FYI
             --
@@ -107,10 +113,10 @@ return {
                 -- TODO go back to using relative line count scroll instead of default 1 line?
                 --    if so, I need to update <C-S-e> and <C-S-y> to use relative line count too
                 ["<C-y>"]      = function() neoscroll.scroll(-0.1, { move_cursor = false, duration = 50 }) end, -- 100 default
-                ["<C-e>"]      = function() neoscroll.scroll(0.1, { move_cursor = false, duration = 50 }) end,  -- 100 default (feels slow)
+                ["<C-e>"]      = function() neoscroll.scroll(0.1, { move_cursor = false, duration = 50 }) end, -- 100 default (feels slow)
                 -- FYI love move_cursor param! allows me to use original C-e/y design and have a scrollunder variant:
-                ["<C-S-y>"]    = function() neoscroll.scroll(-0.1, { move_cursor = true, duration = 50 }) end,  -- 100 default
-                ["<C-S-e>"]    = function() neoscroll.scroll(0.1, { move_cursor = true, duration = 50 }) end,   -- 100 default (feels slow)
+                ["<C-S-y>"]    = function() neoscroll.scroll(-0.1, { move_cursor = true, duration = 50 }) end, -- 100 default
+                ["<C-S-e>"]    = function() neoscroll.scroll(0.1, { move_cursor = true, duration = 50 }) end, -- 100 default (feels slow)
                 -- FYI neoscroll is more than just about smooth scroll, it's a tool to design all sorts of scrolls
 
                 --
