@@ -1458,6 +1458,7 @@ end
 
 abbr bm bitmaths # careful brew uses b* prefix
 function bitmaths
+    # FYI completions-eval-test-candidate
 
     # PRN show non-printable chars that make sense to show? i.e. \n \t etc yeah... \r
     echo -n "ascii: "
@@ -1476,6 +1477,28 @@ function bitmaths
     echo -n "dec: "
     python3 -c "print($argv)"
 
+end
+
+function pretty_size
+    # FYI completions-eval-test-candidate
+    # user passes in raw number like 1024  or 1024000 and this passes back 1KB, 1MB or w/e nearest size is
+    set size $argv[1]
+    if test (count $argv) -lt 1
+        echo "Usage: size_in_bytes <size>"
+        return 1
+    end
+
+    python3 -c "
+import math;
+if $size < 1024/2:
+    print(f'{$size}B')
+elif $size < 1024**2/2:
+    print(f'{$size/1024:.2f}KB')
+elif $size < 1024**3/2:
+    print(f'{$size/1024**2:.2f}MB')
+else:
+    print(f'{$size/1024**3:.2f}GB')
+"
 end
 
 
