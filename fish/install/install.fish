@@ -21,15 +21,12 @@ if not fisher list | grep -q jorgebucaran/fishtape
     fisher install jorgebucaran/fishtape
 end
 
-if not test -e ~/.config/fish/completions/gcloud.fish
-    # clone repo, or update it
-    wcl https://github.com/lgathy/google-cloud-sdk-fish-completion
-    set repo_dir $HOME/repos/github/lgathy/google-cloud-sdk-fish-completion
-    #cp -r functions ~/.config/fish/
-    #cp -r completions ~/.config/fish/
-    cp -r $repo_dir/functions ~/.config/fish/
-    cp -r $repo_dir/completions ~/.config/fish/
+# lgathy/google-cloud-sdk-fish-completion
+if not fisher list | grep -q lgathy/google-cloud-sdk-fish-completion
+    echo "installing google-cloud-sdk-fish-completion"
+    fisher install lgathy/google-cloud-sdk-fish-completion
 end
+
 
 # FYI didn't work for gcloud bash completion scripts...
 # if not command -q bass
