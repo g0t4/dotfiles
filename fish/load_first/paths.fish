@@ -111,3 +111,8 @@ if test -d "/opt/homebrew/opt/postgresql@17/bin"
     #  also if I use `brew link postgresql@17` it appends _17 on end of all commands which YUCK hence adding here:
     export PATH="/opt/homebrew/opt/postgresql@17/bin:$PATH"
 end
+
+# google-cloud-sdk
+if test -d /opt/homebrew/share/google-cloud-sdk/bin
+    export PATH="/opt/homebrew/share/google-cloud-sdk/bin:$PATH"
+end
