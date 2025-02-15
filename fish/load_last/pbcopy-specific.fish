@@ -69,6 +69,7 @@ if test -n "$SSH_CLIENT"
             osc-copy
             # osc-copy via => pipx install oscclip
         end
+        echo "osc-copy found, using it for pbcopy, please install osc instead"
     end
     if command -q osc
         # osc suggested by https://github.com/rumpelsepp/oscclip?tab=readme-ov-file => https://github.com/theimpostor/osc
@@ -76,6 +77,9 @@ if test -n "$SSH_CLIENT"
         # so here is the wrapper to use it if present:
         function fish_clipboard_copy
             osc copy
+        end
+        function fish_clipboard_paste
+            osc paste
         end
     end
     # else other osc copy commands?
