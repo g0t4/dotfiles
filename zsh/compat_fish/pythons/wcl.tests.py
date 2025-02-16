@@ -67,6 +67,10 @@ class TestNormalizedCloneUrl(unittest.TestCase):
         url = clone_url(parse_repo('https://sourceware.org/git/glibc.git'))
         self.assertEqual(url, 'https://sourceware.org/git/glibc')
 
+    def test_huggingface_uses_https(self):
+        url = clone_url(parse_repo('https://huggingface.co/g0t4/dotfiles'))
+        self.assertEqual(url, 'https://huggingface.co/g0t4/dotfiles')
+
 class TestParseThirdParty(unittest.TestCase):
 
     def test_sourceware_org_urls(self):
