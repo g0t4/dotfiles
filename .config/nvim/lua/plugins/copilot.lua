@@ -2,9 +2,9 @@ local use_ai = {
     -- "avante",
     -- "copilot",
     -- "tabnine",
-    -- "supermaven",
+    "supermaven",
     -- "llm.nvim",
-    "ask-openai", -- use master branch to disable predictions
+    -- "ask-openai", -- use master branch to disable predictions
 }
 -- ! consider https://github.com/zbirenbaum/copilot.lua
 --    purportedly faster and less glitchy than copilot.vim
