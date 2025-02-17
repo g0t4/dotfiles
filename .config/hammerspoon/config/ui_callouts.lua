@@ -1,10 +1,10 @@
-
 local function mouse_remove_last_highlight_element()
     if not _G.mouse_last_highlight then
         return
     end
     _G.mouse_last_highlight:delete()
     _G.mouse_last_highlight = nil
+    _G.mouse_last_element = nil
 end
 
 local function mouse_highlight_element()
@@ -12,6 +12,11 @@ local function mouse_highlight_element()
 
     local pos = hs.mouse.absolutePosition()
     local element = hs.axuielement.systemElementAtPosition(pos)
+    if element == _G.mouse_last_element then
+        -- skip if same element
+        return
+    end
+    _G.mouse_last_element = element
     local frame = element:attributeValue("AXFrame")
     -- sometimes the frame is off screen... like a scrolled window (i.e. hammerspoon console)...
     --   would I cap its border with the boundaries of a parent element?
@@ -61,4 +66,3 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "T", function()
         end
     end
 end)
-
