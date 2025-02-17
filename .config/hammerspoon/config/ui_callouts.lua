@@ -8,6 +8,8 @@ M.last = {
 local function showTooltipForElement(element, frame)
     if not element then return end
 
+    print("[NEXT]", hs.inspect(element:allAttributeValues()))
+
     -- Extract AX properties
     local role = element:attributeValue("AXRole") or "No Role"
     local title = element:attributeValue("AXTitle") or "No Title"
@@ -75,9 +77,6 @@ local function mouse_highlight_element()
         return
     end
 
-    -- TODO REMOVE WHEN HAPPY WITH TOOLTIP
-    -- print("[NEXT]", hs.inspect(element:allAttributeValues()))
-
     M.last.element = element
     local frame = element:attributeValue("AXFrame")
     -- sometimes the frame is off screen... like a scrolled window (i.e. hammerspoon console)...
@@ -94,9 +93,7 @@ local function mouse_highlight_element()
             strokeWidth = 4,
         }):show()
 
-
-    -- later when move mouse then move shape too
-    -- later add some brief info about object in a window or tooltip of some sort
+    showTooltipForElement(element, frame)
 end
 
 M.mouse_debounced = nil
