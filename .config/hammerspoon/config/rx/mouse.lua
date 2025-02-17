@@ -39,26 +39,16 @@ function M.mouseMovesDebouncedObservable(delay_ms)
     --   age of releases is not necessarily an issue beyond likley bug fixes... Rx is much like Ix (enumerable) in that the API is arguably stable and "commplete" if truly based on work done in RxJS (et al)
 
     local scheduler = HammerspoonTimeoutScheduler.create()
-    local moves = rx.Subject.create()
-
-    local mouseMoveWatcher = hs.eventtap.new({ hs.eventtap.event.types.mouseMoved }, function(event)
-        local mousePos = hs.mouse.absolutePosition()
-        moves:onNext(mousePos)
-        return false -- Return false to allow the event to propagate
-    end)
-
+    local moves, stop_upstream = M.mouseMovesObservable()
     local debounced = moves:debounce(delay_ms, scheduler)
 
     local function stop()
         print("stopping mouseMovesDebouncedObservable")
-        scheduler:stop()
-        mouseMoveWatcher:stop()
         -- this way, any pending timers are cancelled:
-        moves:onCompleted() -- send completed event
-        -- TODO shouldn't this use unsubscribe to stop the timer at least? and maybe also the event source if I make that interface return a Subscription too
+        scheduler:stop() -- immediately stop sending any more events
+        stop_upstream() -- btw have to call after I stop the scheduler for some reason... otherwise onCompleted isn't passed along?
     end
 
-    mouseMoveWatcher:start()
 
     return debounced, stop
 end
