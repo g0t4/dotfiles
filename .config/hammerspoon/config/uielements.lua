@@ -341,12 +341,12 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "T", function()
     end
 end)
 
-_G.lastElementCallout = nil
+_G.mouse_last_highlight_element = nil
 -- shift E
 hs.hotkey.bind({ "cmd", "alt", "ctrl", "shift" }, "E", function()
-    if _G.lastElementCallout then
-        _G.lastElementCallout:delete()
-        _G.lastElementCallout = nil
+    if _G.mouse_last_highlight_element then
+        _G.mouse_last_highlight_element:delete()
+        _G.mouse_last_highlight_element = nil
     end
 
     local pos = hs.mouse.absolutePosition()
@@ -356,7 +356,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl", "shift" }, "E", function()
     --   would I cap its border with the boundaries of a parent element?
 
     local canvas = require("hs.canvas")
-    _G.lastElementCallout = canvas.new(frame)
+    _G.mouse_last_highlight_element = canvas.new(frame)
         :appendElements({
             action = "stroke",
             padding = 0,
