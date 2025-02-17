@@ -7,8 +7,9 @@ function M.mouseMovesObservable()
     local moves = rx.Subject.create()
 
     local mouseMoveWatcher = hs.eventtap.new({ hs.eventtap.event.types.mouseMoved }, function(event)
-        local mousePos = hs.mouse.absolutePosition()
-        moves:onNext(mousePos)
+        local location = event:location()
+        print("location", location.x, location.y)
+        moves:onNext(location)
         return false -- Return false to allow the event to propagate
     end)
 
