@@ -23,12 +23,35 @@ local function showTooltipForElement(element, frame)
     local tooltipWidth, tooltipHeight = 300, 80
     local padding = 10
 
-    -- Positioning (slightly below the element)
-    local x = frame.x
-    local y = frame.y + frame.h + 5 -- Position below the element
+    -- Get screen bounds
+    local screenFrame = hs.screen.mainScreen():frame() -- Gets the current screen dimensions
 
-    -- Create the canvas tooltip
-    local tooltip = hs.canvas.new({ x = x, y = y, w = tooltipWidth, h = tooltipHeight })
+    -- considerations:
+    -- - default tooltip position is below (could be above/left/right)
+    -- - if below is off screen, then move above
+    -- - TODO if above is off screen, then move INSIDE frame, on bottom? (i.e. select giant element like iTerm2 window)
+    -- Initial positioning (slightly below the element)
+    local x = frame.x
+    local y = frame.y + frame.h + 5 -- Below the element
+
+    -- Ensure tooltip does not go off the right edge
+    if x + tooltipWidth > screenFrame.x + screenFrame.w then
+        x = screenFrame.x + screenFrame.w - tooltipWidth - 10 -- Shift left
+        -- IIUC the box is positioned to right of element left side so I don't think I need to worry about x being shifted left of screen
+    end
+
+    -- Ensure tooltip does not go off the bottom edge
+    if y + tooltipHeight > screenFrame.y + screenFrame.h then
+        -- if it's off the bottom, then move it above the element
+        y = frame.y - tooltipHeight - 5 -- Move above element
+        if y < screenFrame.y then
+            -- if above is also off screen, then shift it down, INSIDE the frame
+            --   means it stays on top btw... could put it inside on bottom too
+            y = screenFrame.y + 10 -- Shift up
+        end
+    end
+
+    M.last.tooltip = hs.canvas.new({ x = x, y = y, w = tooltipWidth, h = tooltipHeight })
         :appendElements({
             -- Background box
             {
@@ -101,7 +124,7 @@ M.mouse_stop = nil
 M.mouseMovesObservable = require("config.rx.mouse").mouseMovesObservable
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "T", function()
     if not M.mouse_debounced then
-        M.mouse_debounced, M.mouse_stop = M.mouseMovesObservable(200)
+        M.mouse_debounced, M.mouse_stop = M.mouseMovesObservable(50)
         M.mouse_debounced:subscribe(function(position)
             if not position then
                 print("[NEXT] - FAILURE?", "nil position")
