@@ -51,9 +51,9 @@ function M.mouseMovesDebouncedObservable(delay_ms)
 
     local function stop()
         print("stopping mouseMovesDebouncedObservable")
+        scheduler:stop()
         mouseMoveWatcher:stop()
         -- this way, any pending timers are cancelled:
-        scheduler:stop()
         moves:onCompleted() -- send completed event
         -- TODO shouldn't this use unsubscribe to stop the timer at least? and maybe also the event source if I make that interface return a Subscription too
     end
