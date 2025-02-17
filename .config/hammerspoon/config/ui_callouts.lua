@@ -16,33 +16,30 @@ local function showTooltipForElement(element, frame)
 
     -- Positioning (slightly below the element)
     local x = frame.x
-    local y = frame.y + frame.h + 5  -- Position below the element
+    local y = frame.y + frame.h + 5 -- Position below the element
 
     -- Create the canvas tooltip
-    local tooltip = hs.canvas.new({x = x, y = y, w = tooltipWidth, h = tooltipHeight})
+    local tooltip = hs.canvas.new({ x = x, y = y, w = tooltipWidth, h = tooltipHeight })
         :appendElements({
             -- Background box
             {
                 type = "rectangle",
                 action = "fill",
-                frame = {x = 0, y = 0, w = tooltipWidth, h = tooltipHeight},
-                fillColor = {white = 0, alpha = 0.8}, -- Dark semi-transparent background
-                roundedRectRadii = {xRadius = 8, yRadius = 8}
+                frame = { x = 0, y = 0, w = tooltipWidth, h = tooltipHeight },
+                fillColor = { white = 0, alpha = 0.8 }, -- Dark semi-transparent background
+                roundedRectRadii = { xRadius = 8, yRadius = 8 }
             },
             -- Text
             {
                 type = "text",
                 text = text,
                 textSize = 14,
-                textColor = {white = 1},
-                frame = {x = padding, y = padding, w = tooltipWidth - 2 * padding, h = tooltipHeight - 2 * padding},
+                textColor = { white = 1 },
+                frame = { x = padding, y = padding, w = tooltipWidth - 2 * padding, h = tooltipHeight - 2 * padding },
                 textAlignment = "left"
             }
         })
         :show()
-
-    -- Auto-hide after 3 seconds
-    hs.timer.doAfter(3, function() tooltip:delete() end)
 end
 
 local function mouse_remove_last_highlight_element()
