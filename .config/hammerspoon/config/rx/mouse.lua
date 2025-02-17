@@ -50,7 +50,7 @@ function M.mouseMovesDebouncedObservable(delay_ms)
     local debounced = moves:debounce(delay_ms, scheduler)
 
     local function stop()
-        print("stopping mouseMovesObservable")
+        print("stopping mouseMovesDebouncedObservable")
         mouseMoveWatcher:stop()
         -- this way, any pending timers are cancelled:
         scheduler:stop()
