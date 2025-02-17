@@ -123,8 +123,8 @@ M.stop_moves = nil
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "T", function()
     if not M.moves then
         -- I would prefer a throttle here not debounce... I wanna immediately show the callout/tooltip and then not do it again until a small period of time has elapsed
-        M.moves, M.stop_moves = require("config.rx.mouse").mouseMovesDebouncedObservable(100)
-        M.moves:subscribe(function()
+        M.moves, M.stop_moves = require("config.rx.mouse").mouseMovesObservable()
+        M.subscription = M.moves:subscribe(function()
             -- stream is just move alert not position
             highlightCurrentElement()
         end, function(error)
@@ -136,6 +136,8 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "T", function()
         end)
     else
         M.moves = nil
+        M.subscription:unsubscribe() -- optional, just cleanup subject cuz I'll make a new one next time
+        -- separately need to stop the upstream event source (do not comingle unsub w/ stop source, usually you might have multiple subs and would want to separately control the subs vs source)
         if M.stop_moves then
             M.stop_moves()
             M.stop_moves = nil
