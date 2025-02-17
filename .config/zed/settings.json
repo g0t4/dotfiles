@@ -1,7 +1,7 @@
 // https://zed.dev/docs/configuring-zed
 {
   // "theme": "Andromeda", // kinda like this or smth in between (todo build my own colors)
-  "show_inline_completions": true,
+  "show_edit_predictions": true,
   "tab_bar": {
     "show": true
   },
@@ -46,7 +46,7 @@
   },
   "features": {
     // https://docs.google.com/document/d/1CaLVuamUQLOKkoNfXLs42lHqICNDn8BC0ROGKIFfuKw
-    "inline_completion_provider": "zed"
+    "edit_prediction_provider": "zed"
     // "copilot": true
   },
   "cursor_blink": false, // *** I am surprised I didn't notice this sooner, then again it is not blinking block
