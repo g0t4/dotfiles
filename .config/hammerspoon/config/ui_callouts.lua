@@ -1,10 +1,10 @@
 
 local function mouse_remove_last_highlight_element()
-    if not _G.mouse_last_highlight_element then
+    if not _G.mouse_last_highlight then
         return
     end
-    _G.mouse_last_highlight_element:delete()
-    _G.mouse_last_highlight_element = nil
+    _G.mouse_last_highlight:delete()
+    _G.mouse_last_highlight = nil
 end
 
 local function mouse_highlight_element()
@@ -17,7 +17,7 @@ local function mouse_highlight_element()
     --   would I cap its border with the boundaries of a parent element?
 
     local canvas = require("hs.canvas")
-    _G.mouse_last_highlight_element = canvas.new(frame)
+    _G.mouse_last_highlight = canvas.new(frame)
         :appendElements({
             action = "stroke",
             padding = 0,
@@ -32,7 +32,7 @@ local function mouse_highlight_element()
     -- later add some brief info about object in a window or tooltip of some sort
 end
 
-_G.mouse_last_highlight_element = nil
+_G.mouse_last_highlight = nil
 _G.mouse_debounced = nil
 _G.mouse_stop = nil
 _G.mouseMovesObservable = require("config.rx.mouse").mouseMovesObservable
