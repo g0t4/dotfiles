@@ -123,12 +123,8 @@ M.stop_moves = nil
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "T", function()
     if not M.moves then
         M.moves, M.stop_moves = require("config.rx.mouse").mouseMovesObservable()
-        M.moves:subscribe(function(position)
-            if not position then
-                print("[NEXT] - FAILURE?", "nil position")
-                return
-            end
-            -- print("[NEXT]", position.x .. "," .. position.y)
+        M.moves:subscribe(function()
+            -- stream is just move alert not position
             highlightCurrentElement()
         end, function(error)
             print("[ERROR] TODO what to do here?", error)
