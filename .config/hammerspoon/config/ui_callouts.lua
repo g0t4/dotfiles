@@ -120,10 +120,9 @@ end
 
 M.mouse_debounced = nil
 M.mouse_stop = nil
-M.mouseMovesObservable = require("config.rx.mouse").mouseMovesObservable
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "T", function()
     if not M.mouse_debounced then
-        M.mouse_debounced, M.mouse_stop = M.mouseMovesObservable()
+        M.mouse_debounced, M.mouse_stop = require("config.rx.mouse").mouseMovesObservable()
         M.mouse_debounced:subscribe(function(position)
             if not position then
                 print("[NEXT] - FAILURE?", "nil position")
