@@ -10,7 +10,7 @@ function M.mouseMovesObservable()
         -- print("location", location.x, location.y)
         -- we will always get current mouse position WHEN using it... that way it's never old in my case...
         --  really this is an alert "stream" that the mouse is moving, not a mouse event stream
-        moves:onNext()
+        moves:onNext(true)
         return false -- Return false to allow the event to propagate
     end)
 
