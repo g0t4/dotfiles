@@ -116,3 +116,8 @@ end
 if test -d /opt/homebrew/share/google-cloud-sdk/bin
     export PATH="/opt/homebrew/share/google-cloud-sdk/bin:$PATH"
 end
+
+if test -d "$HOME/repos/github/ggerganov/llama.cpp/build/bin"
+    # TODO is this what I want?
+    export PATH="$HOME/repos/github/ggerganov/llama.cpp/build/bin:$PATH"
+end
