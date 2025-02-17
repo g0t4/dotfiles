@@ -6,7 +6,7 @@ local M = {}
 function M.mouseMovesObservable()
     local moves = rx.Subject.create()
 
-    local mouseMoveWatcher = hs.eventtap.new({ hs.eventtap.event.types.mouseMoved }, function(event)
+    local mouseMoveWatcher = hs.eventtap.new({ hs.eventtap.event.types.mouseMoved }, function()
         -- print("location", location.x, location.y)
         -- we will always get current mouse position WHEN using it... that way it's never old in my case...
         --  really this is an alert "stream" that the mouse is moving, not a mouse event stream
@@ -17,9 +17,6 @@ function M.mouseMovesObservable()
     local function stop()
         print("stopping mouseMovesObservable")
         mouseMoveWatcher:stop()
-        -- this way, any pending timers are cancelled:
-        moves:onCompleted() -- send completed event
-        -- TODO shouldn't this use unsubscribe to stop the timer at least? and maybe also the event source if I make that interface return a Subscription too
     end
 
     mouseMoveWatcher:start()
@@ -39,16 +36,15 @@ function M.mouseMovesDebouncedObservable(delay_ms)
     --   age of releases is not necessarily an issue beyond likley bug fixes... Rx is much like Ix (enumerable) in that the API is arguably stable and "commplete" if truly based on work done in RxJS (et al)
 
     local scheduler = HammerspoonTimeoutScheduler.create()
-    local moves, stop_upstream = M.mouseMovesObservable()
+    local moves, stop_event_source = M.mouseMovesObservable()
     local debounced = moves:debounce(delay_ms, scheduler)
 
     local function stop()
         print("stopping mouseMovesDebouncedObservable")
         -- this way, any pending timers are cancelled:
         scheduler:stop() -- immediately stop sending any more events
-        stop_upstream() -- btw have to call after I stop the scheduler for some reason... otherwise onCompleted isn't passed along?
+        stop_event_source() -- btw have to call after I stop the scheduler for some reason... otherwise onCompleted isn't passed along?
     end
-
 
     return debounced, stop
 end
