@@ -315,9 +315,10 @@ end)
 
 
 
-local _G.mouse_debounced = nil
-local _G.mouse_stop = nil
-local _G.mouseMovesObservable = require("config.rx.mouse").mouseMovesObservable
+_G.mouse_last_highlight_element = nil
+_G.mouse_debounced = nil
+_G.mouse_stop = nil
+_G.mouseMovesObservable = require("config.rx.mouse").mouseMovesObservable
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "T", function()
     if not _G.mouse_debounced then
         _G.mouse_debounced, _G.mouse_stop = _G.mouseMovesObservable(400)
@@ -341,7 +342,6 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "T", function()
     end
 end)
 
-_G.mouse_last_highlight_element = nil
 -- shift E
 hs.hotkey.bind({ "cmd", "alt", "ctrl", "shift" }, "E", function()
     if _G.mouse_last_highlight_element then
