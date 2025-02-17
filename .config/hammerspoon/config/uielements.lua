@@ -313,6 +313,11 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "M", function()
     -- end
 end)
 
+-- shift E
+hs.hotkey.bind({ "cmd", "alt", "ctrl", "shift" }, "E", function()
+
+end)
+
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "E", function()
     -- test drive element search
     -- TODO try menu item search (like app.getMenuItems() above)
