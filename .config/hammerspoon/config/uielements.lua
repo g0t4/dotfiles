@@ -315,33 +315,6 @@ end)
 
 
 
-_G.mouse_last_highlight_element = nil
-_G.mouse_debounced = nil
-_G.mouse_stop = nil
-_G.mouseMovesObservable = require("config.rx.mouse").mouseMovesObservable
-hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "T", function()
-    if not _G.mouse_debounced then
-        _G.mouse_debounced, _G.mouse_stop = _G.mouseMovesObservable(400)
-        _G.mouse_debounced:subscribe(function(position)
-            if not position then
-                print("[NEXT]", "nil position")
-                return
-            end
-            print("[NEXT]", position.x .. "," .. position.y)
-        end, function(error)
-            print("[ERROR]", error)
-        end, function()
-            print("[COMPLETE]")
-        end)
-    else
-        _G.mouse_debounced = nil
-        if _G.mouse_stop then
-            _G.mouse_stop()
-            _G.mouse_stop = nil
-        end
-    end
-end)
-
 local function mouse_highlight_element()
     if _G.mouse_last_highlight_element then
         _G.mouse_last_highlight_element:delete()
@@ -369,6 +342,32 @@ local function mouse_highlight_element()
     -- later when move mouse then move shape too
     -- later add some brief info about object in a window or tooltip of some sort
 end
+_G.mouse_last_highlight_element = nil
+_G.mouse_debounced = nil
+_G.mouse_stop = nil
+_G.mouseMovesObservable = require("config.rx.mouse").mouseMovesObservable
+hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "T", function()
+    if not _G.mouse_debounced then
+        _G.mouse_debounced, _G.mouse_stop = _G.mouseMovesObservable(400)
+        _G.mouse_debounced:subscribe(function(position)
+            if not position then
+                print("[NEXT]", "nil position")
+                return
+            end
+            print("[NEXT]", position.x .. "," .. position.y)
+        end, function(error)
+            print("[ERROR]", error)
+        end, function()
+            print("[COMPLETE]")
+        end)
+    else
+        _G.mouse_debounced = nil
+        if _G.mouse_stop then
+            _G.mouse_stop()
+            _G.mouse_stop = nil
+        end
+    end
+end)
 
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "E", function()
     -- test drive element search
