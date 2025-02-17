@@ -356,7 +356,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "T", function()
         _G.mouse_debounced, _G.mouse_stop = _G.mouseMovesObservable(400)
         _G.mouse_debounced:subscribe(function(position)
             if not position then
-                print("[NEXT]", "nil position")
+                print("[NEXT] - FAILURE?", "nil position")
                 return
             end
             -- print("[NEXT]", position.x .. "," .. position.y)
