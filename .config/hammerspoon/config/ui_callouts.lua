@@ -20,8 +20,11 @@ local function showTooltipForElement(element, frame)
     local text = string.format("Role: %s\nTitle: %s\nWindow: %s", role, title, windowTitle)
 
     -- Tooltip box size
-    local tooltipWidth, tooltipHeight = 300, 80
+    local tooltipHeight = 80
     local padding = 10
+    -- find max width of text:
+    local maxWidth = math.max(role:len(), title:len(), windowTitle:len())
+    local tooltipWidth = maxWidth * 8 + 2 * padding
 
     -- Get screen bounds
     local screenFrame = hs.screen.mainScreen():frame() -- Gets the current screen dimensions
