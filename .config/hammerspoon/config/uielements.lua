@@ -315,7 +315,24 @@ end)
 
 -- shift E
 hs.hotkey.bind({ "cmd", "alt", "ctrl", "shift" }, "E", function()
+    local pos = hs.mouse.absolutePosition()
+    local element = hs.axuielement.systemElementAtPosition(pos)
+    local frame = element:attributeValue("AXFrame")
 
+    local canvas = require("hs.canvas")
+    local rect = canvas.new(frame)
+        :appendElements({
+            action = "stroke",
+            padding = 0,
+            type = "rectangle",
+            fillColor = { red = 1, blue = 0, green = 0 },
+            strokeColor = { red = 1, blue = 0, green = 0 },
+            strokeWidth = 8,
+        }):show()
+
+
+    -- later when move mouse then move shape too
+    -- later add some brief info about object in a window or tooltip of some sort
 end)
 
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "E", function()
