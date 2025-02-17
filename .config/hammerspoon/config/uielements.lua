@@ -315,33 +315,31 @@ end)
 
 
 
--- -- TODO what did I intend to do with this? ... keep shell just in case I wanna go back to it... was I just learning rxlua?
--- --   I think I did this as a first step to showing the current element under the mouse visually (selecting it)... so I am gonna go use it for that for now :)
--- local debounced = nil
--- local stop = nil
--- local mouseMovesObservable = require("config.rx.mouse").mouseMovesObservable
--- hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "T", function()
---     if not debounced then
---         debounced, stop = mouseMovesObservable(400)
---         debounced:subscribe(function(position)
---             if not position then
---                 print("[NEXT]", "nil position")
---                 return
---             end
---             print("[NEXT]", position.x .. "," .. position.y)
---         end, function(error)
---             print("[ERROR]", error)
---         end, function()
---             print("[COMPLETE]")
---         end)
---     else
---         debounced = nil
---         if stop then
---             stop()
---             stop = nil
---         end
---     end
--- end)
+local _G.mouse_debounced = nil
+local _G.mouse_stop = nil
+local _G.mouseMovesObservable = require("config.rx.mouse").mouseMovesObservable
+hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "T", function()
+    if not _G.mouse_debounced then
+        _G.mouse_debounced, _G.mouse_stop = _G.mouseMovesObservable(400)
+        _G.mouse_debounced:subscribe(function(position)
+            if not position then
+                print("[NEXT]", "nil position")
+                return
+            end
+            print("[NEXT]", position.x .. "," .. position.y)
+        end, function(error)
+            print("[ERROR]", error)
+        end, function()
+            print("[COMPLETE]")
+        end)
+    else
+        _G.mouse_debounced = nil
+        if _G.mouse_stop then
+            _G.mouse_stop()
+            _G.mouse_stop = nil
+        end
+    end
+end)
 
 _G.lastElementCallout = nil
 -- shift E
