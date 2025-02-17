@@ -118,12 +118,12 @@ local function highlightCurrentElement()
     showTooltipForElement(element, frame)
 end
 
-M.mouse_debounced = nil
-M.mouse_stop = nil
+M.moves = nil
+M.stop_moves = nil
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "T", function()
-    if not M.mouse_debounced then
-        M.mouse_debounced, M.mouse_stop = require("config.rx.mouse").mouseMovesObservable()
-        M.mouse_debounced:subscribe(function(position)
+    if not M.moves then
+        M.moves, M.stop_moves = require("config.rx.mouse").mouseMovesObservable()
+        M.moves:subscribe(function(position)
             if not position then
                 print("[NEXT] - FAILURE?", "nil position")
                 return
@@ -138,10 +138,10 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "T", function()
             removeHighlight()
         end)
     else
-        M.mouse_debounced = nil
-        if M.mouse_stop then
-            M.mouse_stop()
-            M.mouse_stop = nil
+        M.moves = nil
+        if M.stop_moves then
+            M.stop_moves()
+            M.stop_moves = nil
         end
     end
 end)
