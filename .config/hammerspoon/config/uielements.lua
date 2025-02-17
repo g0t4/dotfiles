@@ -342,8 +342,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "T", function()
     end
 end)
 
--- shift E
-hs.hotkey.bind({ "cmd", "alt", "ctrl", "shift" }, "E", function()
+local function mouse_highlight_element()
     if _G.mouse_last_highlight_element then
         _G.mouse_last_highlight_element:delete()
         _G.mouse_last_highlight_element = nil
@@ -369,7 +368,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl", "shift" }, "E", function()
 
     -- later when move mouse then move shape too
     -- later add some brief info about object in a window or tooltip of some sort
-end)
+end
 
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "E", function()
     -- test drive element search
