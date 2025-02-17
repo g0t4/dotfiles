@@ -51,7 +51,7 @@ local function showTooltipForElement(element, frame)
         :show()
 end
 
-local function mouse_remove_last_highlight_element()
+local function removeHighlight()
     if not M.last.element then
         return
     end
@@ -66,9 +66,9 @@ local function mouse_remove_last_highlight_element()
     M.last.callout = nil
 end
 
-local function mouse_highlight_element()
+local function highlightCurrentElement()
     assert(M.last ~= nil)
-    mouse_remove_last_highlight_element()
+    removeHighlight()
 
     local pos = hs.mouse.absolutePosition()
     local element = hs.axuielement.systemElementAtPosition(pos)
@@ -108,13 +108,13 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "T", function()
                 return
             end
             -- print("[NEXT]", position.x .. "," .. position.y)
-            mouse_highlight_element()
+            highlightCurrentElement()
         end, function(error)
             print("[ERROR] TODO what to do here?", error)
-            mouse_remove_last_highlight_element()
+            removeHighlight()
         end, function()
             print("[COMPLETE]")
-            mouse_remove_last_highlight_element()
+            removeHighlight()
         end)
     else
         M.mouse_debounced = nil
