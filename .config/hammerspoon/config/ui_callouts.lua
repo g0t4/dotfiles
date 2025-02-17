@@ -122,7 +122,7 @@ M.moves = nil
 M.stop_moves = nil
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "T", function()
     if not M.moves then
-        M.moves, M.stop_moves = require("config.rx.mouse").mouseMovesObservable()
+        M.moves, M.stop_moves = require("config.rx.mouse").mouseMovesDebouncedObservable(25)
         M.moves:subscribe(function()
             -- stream is just move alert not position
             highlightCurrentElement()
