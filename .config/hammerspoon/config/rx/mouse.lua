@@ -46,7 +46,7 @@ function M.mouseMovesObservable(delay_ms)
     -- moves:onError("fuuuuu") -- never received b/c commplete already called
 end
 
-function M.mouseMovesObservable(delay_ms)
+function M.mouseMovesDebouncedObservable(delay_ms)
     -- FYI arguably I could be using: https://www.hammerspoon.org/docs/hs.timer.delayed.html for the narrow case of debouncing
 
     delay_ms = delay_ms or 250
