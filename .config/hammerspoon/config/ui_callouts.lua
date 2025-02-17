@@ -8,31 +8,27 @@ M.last = {
 local function showTooltipForElement(element, frame)
     if not element then return end
 
-    print("[NEXT]", hs.inspect(element:allAttributeValues()))
+    -- print("[NEXT]", hs.inspect(element:allAttributeValues()))
 
     -- Extract AX properties
-    local role = element:attributeValue("AXRole") or "No Role"
-    local title = element:attributeValue("AXTitle") or "No Title"
+    local role = element:attributeValue("AXRole") or "<none>"
+    local title = element:attributeValue("AXTitle") or "<none>"
     local window = element:attributeValue("AXWindow")
-    local windowTitle = window and window:attributeValue("AXTitle") or "No Window Title"
+    local windowTitle = window and  window:attributeValue("AXTitle") or "<none>"
 
     -- Format tooltip text
     local text = string.format("Role: %s\nTitle: %s\nWindow: %s", role, title, windowTitle)
 
     -- Tooltip box size
-    local tooltipHeight = 80
+    local tooltipHeight = 100
     local padding = 10
     -- find max width of text:
     local maxWidth = math.max(role:len(), title:len(), windowTitle:len())
-    local tooltipWidth = maxWidth * 8 + 2 * padding
+    local tooltipWidth = maxWidth * 12 + 4 * padding
 
     -- Get screen bounds
     local screenFrame = hs.screen.mainScreen():frame() -- Gets the current screen dimensions
 
-    -- considerations:
-    -- - default tooltip position is below (could be above/left/right)
-    -- - if below is off screen, then move above
-    -- - TODO if above is off screen, then move INSIDE frame, on bottom? (i.e. select giant element like iTerm2 window)
     -- Initial positioning (slightly below the element)
     local x = frame.x
     local y = frame.y + frame.h + 5 -- Below the element
