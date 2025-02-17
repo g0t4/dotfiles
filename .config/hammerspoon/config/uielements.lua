@@ -512,31 +512,33 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "A", function()
     -- TODO build lua hammerspoon code instead of just AppleScript! that I can drop into my hammerspoon lua config instead of AppleScript in say KM
 end)
 
-local debounced = nil
-local stop = nil
-local mouseMovesObservable = require("config.rx.mouse").mouseMovesObservable
-hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "T", function()
-    if not debounced then
-        debounced, stop = mouseMovesObservable(400)
-        debounced:subscribe(function(position)
-            if not position then
-                print("[NEXT]", "nil position")
-                return
-            end
-            print("[NEXT]", position.x .. "," .. position.y)
-        end, function(error)
-            print("[ERROR]", error)
-        end, function()
-            print("[COMPLETE]")
-        end)
-    else
-        debounced = nil
-        if stop then
-            stop()
-            stop = nil
-        end
-    end
-end)
+-- -- TODO what did I intend to do with this? ... keep shell just in case I wanna go back to it... was I just learning rxlua?
+-- --   I think I did this as a first step to showing the current element under the mouse visually (selecting it)... so I am gonna go use it for that for now :)
+-- local debounced = nil
+-- local stop = nil
+-- local mouseMovesObservable = require("config.rx.mouse").mouseMovesObservable
+-- hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "T", function()
+--     if not debounced then
+--         debounced, stop = mouseMovesObservable(400)
+--         debounced:subscribe(function(position)
+--             if not position then
+--                 print("[NEXT]", "nil position")
+--                 return
+--             end
+--             print("[NEXT]", position.x .. "," .. position.y)
+--         end, function(error)
+--             print("[ERROR]", error)
+--         end, function()
+--             print("[COMPLETE]")
+--         end)
+--     else
+--         debounced = nil
+--         if stop then
+--             stop()
+--             stop = nil
+--         end
+--     end
+-- end)
 
 -- see AppleScript The Definitive Guide, page 197 about Element Specifier forms (name, index, ID, some, every, range, relative, bool test [whose?],...?)
 local function elementSpecifierFor(elem)
