@@ -315,10 +315,11 @@ end)
 
 
 local function mouse_remove_last_highlight_element()
-    if _G.mouse_last_highlight_element then
-        _G.mouse_last_highlight_element:delete()
-        _G.mouse_last_highlight_element = nil
+    if not _G.mouse_last_highlight_element then
+        return
     end
+    _G.mouse_last_highlight_element:delete()
+    _G.mouse_last_highlight_element = nil
 end
 
 local function mouse_highlight_element()
