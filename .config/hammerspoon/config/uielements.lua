@@ -314,12 +314,15 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "M", function()
 end)
 
 
-
-local function mouse_highlight_element()
+local function mouse_remove_last_highlight_element()
     if _G.mouse_last_highlight_element then
         _G.mouse_last_highlight_element:delete()
         _G.mouse_last_highlight_element = nil
     end
+end
+
+local function mouse_highlight_element()
+    mouse_remove_last_highlight_element()
 
     local pos = hs.mouse.absolutePosition()
     local element = hs.axuielement.systemElementAtPosition(pos)
