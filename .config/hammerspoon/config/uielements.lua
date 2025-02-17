@@ -326,7 +326,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl", "shift" }, "E", function()
             padding = 0,
             type = "rectangle",
             fillColor = { red = 1, blue = 0, green = 0 },
-            strokeColor = { red = 1, blue = 0, green = 0 },
+            strokeColor = { red = 1, blue = 0, green = 0, alpha = 0.5 },
             strokeWidth = 8,
         }):show()
 
