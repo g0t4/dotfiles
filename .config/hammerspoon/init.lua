@@ -30,6 +30,7 @@ require("config.screencaps")
 -- require("config.appKeys") -- was not working lately, TODO find out why later on
 
 require("config.uielements")
+require("config.ui_callouts")
 local end_time = hs.timer.secondsSinceEpoch()
 print("init.lua took", end_time - start_time, "seconds")
 
