@@ -346,6 +346,7 @@ local function mouse_highlight_element()
     -- later when move mouse then move shape too
     -- later add some brief info about object in a window or tooltip of some sort
 end
+
 _G.mouse_last_highlight_element = nil
 _G.mouse_debounced = nil
 _G.mouse_stop = nil
@@ -358,11 +359,14 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "T", function()
                 print("[NEXT]", "nil position")
                 return
             end
-            print("[NEXT]", position.x .. "," .. position.y)
+            -- print("[NEXT]", position.x .. "," .. position.y)
+            mouse_highlight_element()
         end, function(error)
-            print("[ERROR]", error)
+            print("[ERROR] TODO what to do here?", error)
+            mouse_remove_last_highlight_element()
         end, function()
             print("[COMPLETE]")
+            mouse_remove_last_highlight_element()
         end)
     else
         _G.mouse_debounced = nil
