@@ -1,3 +1,10 @@
+local M = {}
+M.last = {
+    element = nil,
+    tooltip = nil,
+    callout = nil,
+}
+
 local function showTooltipForElement(element, frame)
     if not element then return end
 
@@ -43,30 +50,41 @@ local function showTooltipForElement(element, frame)
 end
 
 local function mouse_remove_last_highlight_element()
-    if not _G.mouse_last_highlight then
+    if not M.last.element then
         return
     end
-    _G.mouse_last_highlight:delete()
-    _G.mouse_last_highlight = nil
-    _G.mouse_last_element = nil
+    if M.last.tooltip then
+        M.last.tooltip:delete()
+    end
+    if M.last.callout then
+        M.last.callout:delete()
+    end
+    M.last.element = nil
+    M.last.tooltip = nil
+    M.last.callout = nil
 end
 
 local function mouse_highlight_element()
+    assert(M.last ~= nil)
     mouse_remove_last_highlight_element()
 
     local pos = hs.mouse.absolutePosition()
     local element = hs.axuielement.systemElementAtPosition(pos)
-    if element == _G.mouse_last_element then
+    if element == M.last.element then
         -- skip if same element
         return
     end
-    _G.mouse_last_element = element
+
+    -- TODO REMOVE WHEN HAPPY WITH TOOLTIP
+    -- print("[NEXT]", hs.inspect(element:allAttributeValues()))
+
+    M.last.element = element
     local frame = element:attributeValue("AXFrame")
     -- sometimes the frame is off screen... like a scrolled window (i.e. hammerspoon console)...
     --   would I cap its border with the boundaries of a parent element?
 
     local canvas = require("hs.canvas")
-    _G.mouse_last_highlight = canvas.new(frame)
+    M.last.callout = canvas.new(frame)
         :appendElements({
             action = "stroke",
             padding = 0,
@@ -81,14 +99,13 @@ local function mouse_highlight_element()
     -- later add some brief info about object in a window or tooltip of some sort
 end
 
-_G.mouse_last_highlight = nil
-_G.mouse_debounced = nil
-_G.mouse_stop = nil
-_G.mouseMovesObservable = require("config.rx.mouse").mouseMovesObservable
+M.mouse_debounced = nil
+M.mouse_stop = nil
+M.mouseMovesObservable = require("config.rx.mouse").mouseMovesObservable
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "T", function()
-    if not _G.mouse_debounced then
-        _G.mouse_debounced, _G.mouse_stop = _G.mouseMovesObservable(400)
-        _G.mouse_debounced:subscribe(function(position)
+    if not M.mouse_debounced then
+        M.mouse_debounced, M.mouse_stop = M.mouseMovesObservable(200)
+        M.mouse_debounced:subscribe(function(position)
             if not position then
                 print("[NEXT] - FAILURE?", "nil position")
                 return
@@ -103,10 +120,12 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "T", function()
             mouse_remove_last_highlight_element()
         end)
     else
-        _G.mouse_debounced = nil
-        if _G.mouse_stop then
-            _G.mouse_stop()
-            _G.mouse_stop = nil
+        M.mouse_debounced = nil
+        if M.mouse_stop then
+            M.mouse_stop()
+            M.mouse_stop = nil
         end
     end
 end)
+
+return M
