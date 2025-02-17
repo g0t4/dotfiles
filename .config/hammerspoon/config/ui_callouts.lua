@@ -14,7 +14,7 @@ local function showTooltipForElement(element, frame)
     local role = element:attributeValue("AXRole") or "<none>"
     local title = element:attributeValue("AXTitle") or "<none>"
     local window = element:attributeValue("AXWindow")
-    local windowTitle = window and  window:attributeValue("AXTitle") or "<none>"
+    local windowTitle = window and window:attributeValue("AXTitle") or "<none>"
 
     -- Format tooltip text
     local text = string.format("Role: %s\nTitle: %s\nWindow: %s", role, title, windowTitle)
