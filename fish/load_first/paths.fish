@@ -120,4 +120,5 @@ end
 if test -d "$HOME/repos/github/ggerganov/llama.cpp/build/bin"
     # TODO is this what I want?
     export PATH="$HOME/repos/github/ggerganov/llama.cpp/build/bin:$PATH"
+    set GGUF_MODELS "$HOME/repos/github/ggerganov/llama.cpp/models"
 end
