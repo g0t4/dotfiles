@@ -313,21 +313,29 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "M", function()
     -- end
 end)
 
+_G.lastElementCallout = nil
 -- shift E
 hs.hotkey.bind({ "cmd", "alt", "ctrl", "shift" }, "E", function()
+    if _G.lastElementCallout then
+        _G.lastElementCallout:delete()
+        _G.lastElementCallout = nil
+    end
+
     local pos = hs.mouse.absolutePosition()
     local element = hs.axuielement.systemElementAtPosition(pos)
     local frame = element:attributeValue("AXFrame")
+    -- sometimes the frame is off screen... like a scrolled window (i.e. hammerspoon console)...
+    --   would I cap its border with the boundaries of a parent element?
 
     local canvas = require("hs.canvas")
-    local rect = canvas.new(frame)
+    _G.lastElementCallout = canvas.new(frame)
         :appendElements({
             action = "stroke",
             padding = 0,
             type = "rectangle",
             fillColor = { red = 1, blue = 0, green = 0 },
             strokeColor = { red = 1, blue = 0, green = 0, alpha = 0.5 },
-            strokeWidth = 8,
+            strokeWidth = 4,
         }):show()
 
 
