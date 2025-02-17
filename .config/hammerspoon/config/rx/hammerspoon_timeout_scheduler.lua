@@ -26,6 +26,8 @@ function HammerspoonTimeoutScheduler:schedule(action, delay, ...)
     end)
 
     return rx.Subscription.create(function()
+        -- FYI I am not relying on unsubscribe to stop upstream event source, it can stop this scheduler, that's fine
+        --    but I am also gonna stop event source cuz I don't want to keep firing after stopping (one at a time sub is intended, but yeah wouldn't want it to run for days at a time after stopping it)
         -- unsubscribe function (when observer unsubscribes)
         self.timer:stop()
     end)
