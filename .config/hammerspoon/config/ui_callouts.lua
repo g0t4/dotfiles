@@ -11,19 +11,19 @@ local function showTooltipForElement(element, frame)
     -- print("[NEXT]", hs.inspect(element:allAttributeValues()))
 
     -- Extract AX properties
-    local role = element:attributeValue("AXRole") or "<none>"
-    local title = element:attributeValue("AXTitle") or "<none>"
-    local window = element:attributeValue("AXWindow")
-    local windowTitle = window and window:attributeValue("AXTitle") or "<none>"
-
-    -- Format tooltip text
-    local text = string.format("Role: %s\nTitle: %s\nWindow: %s", role, title, windowTitle)
+    -- local role = element:attributeValue("AXRole") or "<none>"
+    -- local title = element:attributeValue("AXTitle") or "<none>"
+    -- local window = element:attributeValue("AXWindow")
+    -- local windowTitle = window and window:attributeValue("AXTitle") or "<none>"
+    -- local text = string.format("Role: %s\nTitle: %s\nWindow: %s", role, title, windowTitle)
+    local text = elementSpecifierFor(element)
 
     -- Tooltip box size
     local tooltipHeight = 100
     local padding = 10
     -- find max width of text:
-    local maxWidth = math.max(role:len(), title:len(), windowTitle:len())
+    -- local maxWidth = math.max(role:len(), title:len(), windowTitle:len())
+    local maxWidth = text:len()
     local tooltipWidth = maxWidth * 12 + 4 * padding
 
     -- Get screen bounds

@@ -484,7 +484,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "A", function()
 end)
 
 -- see AppleScript The Definitive Guide, page 197 about Element Specifier forms (name, index, ID, some, every, range, relative, bool test [whose?],...?)
-local function elementSpecifierFor(elem)
+function elementSpecifierFor(elem)
     local function warnOnEmptyTitle(title, role)
         if title == "" then
             prints("[WARN] title is empty for " .. role .. ", script might not work")
