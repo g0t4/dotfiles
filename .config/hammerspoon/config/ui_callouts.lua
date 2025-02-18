@@ -6,7 +6,10 @@ M.last = {
     script = nil,
     escBinding = nil,
 }
+
+-- FYI use require so I get LS completions, docs, etc => globals don't work well w/ LSP
 local canvas = require("hs.canvas")
+local alert = require("hs.alert")
 local function showTooltipForElement(element, frame)
     if not element then return end
 
@@ -203,15 +206,21 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "up", function()
     end
     local parent = M.last.element:attributeValue("AXParent")
     if parent == M.last.element then
-        hs.alert.show("already at top")
+        alert.show("already at top")
         print("already at top")
         return
     end
     if not parent then
-        hs.alert.show("no parent")
+        alert.show("no parent")
         print("no parent")
         return
     end
+    local role = parent:attributeValue("AXRole")
+    if role == "AXApplication" then
+        print("already at top: AXApplication")
+        return
+    end
+
     highlightThisElement(parent)
 end)
 
@@ -222,7 +231,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "down", function()
     end
     local children = M.last.element:attributeValue("AXChildren")
     if not children or #children == 0 then
-        hs.alert.show("no children")
+        alert.show("no children")
         print("no children")
         return
     end
@@ -248,7 +257,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "right", function()
     end
     local next = nextSibling(M.last.element)
     if not next then
-        hs.alert.show("no next sibling")
+        alert.show("no next sibling")
         print("no next sibling")
         return
     end
@@ -273,7 +282,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "left", function()
     end
     local prev = previousSibling(M.last.element)
     if not prev then
-        hs.alert.show("no previous sibling")
+        alert.show("no previous sibling")
         print("no previous sibling")
         return
     end
