@@ -5,7 +5,7 @@ M.last = {
     callout = nil,
 }
 local drawing = require("hs.drawing")
-
+local canvas = require("hs.canvas")
 local function showTooltipForElement(element, frame)
     if not element then return end
 
@@ -26,10 +26,17 @@ local function showTooltipForElement(element, frame)
     local text = script
 
     -- PRN I can style text!
-    local size = drawing.getTextDrawingSize(text) -- PRN is there a new way with canvas? minimumTextSize I saw but I'm not sure its what I need/ or?
-    print("size", hs.inspect(size))
-    local tooltipWidth = size.w
-    local tooltipHeight = size.h
+    local tmpcanvas = canvas.new({ x = 0, y = 0, w = 1000, h = 1000 })
+    local estimatedSizeForDefaultFont = tmpcanvas:minimumTextSize(text)
+    -- local size = drawing.getTextDrawingSize(text) -- PRN is there a new way with canvas? minimumTextSize I saw but I'm not sure its what I need/ or?
+    print("size", hs.inspect(estimatedSizeForDefaultFont))
+    local useFontSize = 14
+    local defaultTextStyle = canvas.defaultTextStyle()
+    -- *** SUPER HACK to get font sizing to work... this works though!
+    --    BTW font height estimate seems off, could find factor for it but for 14 point it will work with default at 27pt...
+    -- print("defaultTextStyle", hs.inspect(defaultTextStyle))
+    local tooltipWidth = estimatedSizeForDefaultFont.w * useFontSize / defaultTextStyle.font.size -- scale by default vs used font size
+    local tooltipHeight = estimatedSizeForDefaultFont.h
 
     -- local tooltipHeight = 60
     local padding = 10
@@ -37,7 +44,8 @@ local function showTooltipForElement(element, frame)
     -- local maxWidth = 1
     for line in text:gmatch("[^\n]+") do
         print("line", line)
-        line_size = drawing.getTextDrawingSize(line)
+        line_size = tmpcanvas:minimumTextSize(line)
+        -- line_size = drawing.getTextDrawingSize(line)
         print("  line_size", hs.inspect(line_size))
     end
     -- print("maxWidth", maxWidth)
@@ -81,7 +89,7 @@ local function showTooltipForElement(element, frame)
             {
                 type = "text",
                 text = text,
-                textSize = 14,
+                textSize = useFontSize,
                 textColor = { white = 1 },
                 frame = { x = padding, y = padding, w = tooltipWidth - 2 * padding, h = tooltipHeight - 2 * padding },
                 textAlignment = "left"
