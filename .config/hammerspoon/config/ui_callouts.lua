@@ -4,29 +4,45 @@ M.last = {
     tooltip = nil,
     callout = nil,
 }
+local drawing = require("hs.drawing")
 
 local function showTooltipForElement(element, frame)
     if not element then return end
 
     -- print("[NEXT]", hs.inspect(element:allAttributeValues()))
-    local window = element:attributeValue("AXWindow")
-    local element_text = elementSpecifierFor(element)
-    -- avoid confusion about window being direct parent, it's not, trim trailing "of" and any surrounding whitespace:
-    local trail_of = "%sof%s*$"
-    element_text = string.gsub(element_text, trail_of, "")
-    local window_text = ""
-    if window then
-        window_text = elementSpecifierFor(window)
-        window_text = string.gsub(window_text, trail_of, "")
-    end
-    local text = string.format("%s\n%s", element_text, window_text)
+    -- local window = element:attributeValue("AXWindow")
+    -- local element_text = elementSpecifierFor(element)
+    -- -- avoid confusion about window being direct parent, it's not, trim trailing "of" and any surrounding whitespace:
+    -- local trail_of = "%sof%s*$"
+    -- element_text = string.gsub(element_text, trail_of, "")
+    -- local window_text = ""
+    -- if window then
+    --     window_text = elementSpecifierFor(window)
+    --     window_text = string.gsub(window_text, trail_of, "")
+    -- end
+    -- local text = string.format("%s\n%s", element_text, window_text)
+    local clauses = BuildAppleScriptTo(element, false)
+    local script = combineClausesWithLineContinuations(clauses)
+    local text = script
 
-    local tooltipHeight = 60
+    -- PRN I can style text!
+    local size = drawing.getTextDrawingSize(text) -- PRN is there a new way with canvas? minimumTextSize I saw but I'm not sure its what I need/ or?
+    print("size", hs.inspect(size))
+    local tooltipWidth = size.w
+    local tooltipHeight = size.h
+    print("tooltipWidth", tooltipWidth)
+    print("tooltipHeight", tooltipHeight)
+
+    -- local tooltipHeight = 60
     local padding = 10
-    -- find max width of text:
-    -- local maxWidth = math.max(role:len(), title:len(), windowTitle:len())
-    local maxWidth = math.max(element_text:len(), window_text:len())
-    local tooltipWidth = maxWidth * 12 + 4 * padding
+    -- -- find longest line in text:
+    -- local maxWidth = 1
+    -- for line in text:gmatch("[^\n]+") do
+    --     print("line", line:len())
+    --     maxWidth = math.max(maxWidth, line:len())
+    -- end
+    -- print("maxWidth", maxWidth)
+    -- local tooltipWidth = maxWidth * 12 + 4 * padding
 
     -- Get screen bounds
     local screenFrame = hs.screen.mainScreen():frame() -- Gets the current screen dimensions

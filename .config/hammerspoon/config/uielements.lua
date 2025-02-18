@@ -425,7 +425,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "E", function()
     -- testMyOwnFilterFunction()
 end)
 
-local function combineClausesWithLineContinuations(clauses)
+function combineClausesWithLineContinuations(clauses)
     -- assumes this is one set of clauses for a single line of code
     -- and that I can use a line continuation between any of the consecutive clauses
     --  - i.e. won't result in line continuation in the middle of a string literal
