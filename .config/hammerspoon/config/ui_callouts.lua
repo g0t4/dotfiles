@@ -25,13 +25,12 @@ local function showTooltipForElement(element, frame)
     --    BTW font height estimate is off, could find factor for it but for 14 point it will work with default at 27pt so I won't adjust it for now...
     -- print("defaultTextStyle", hs.inspect(defaultTextStyle))
     local ratio = useFontSize / defaultTextStyle.font.size
-    local tooltipWidth = estimatedSizeForDefaultFont.w * ratio * 1.2
-    local tooltipHeight = estimatedSizeForDefaultFont.h * ratio * 1.2
-
+    local textWidth = estimatedSizeForDefaultFont.w * ratio * 1.2
+    local textHeight = estimatedSizeForDefaultFont.h * ratio * 1.2
     -- add padding (don't subtract it from needed width/height)
     local padding = 10
-    tooltipWidth = tooltipWidth + 2 * padding
-    tooltipHeight = tooltipHeight + 2 * padding
+    local tooltipWidth = textWidth + 2 * padding
+    local tooltipHeight = textHeight + 2 * padding
 
     local screenFrame = hs.screen.mainScreen():frame() -- Gets the current screen dimensions
 
