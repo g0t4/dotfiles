@@ -101,6 +101,9 @@ local function highlightThisElement(element)
     M.last.element = element
 
     local frame = element:attributeValue("AXFrame")
+    if not frame then
+        print("no frame", hs.inspect(element))
+    end
     -- sometimes the frame is off screen... like a scrolled window (i.e. hammerspoon console)...
     --   would I cap its border with the boundaries of a parent element?
 
@@ -193,9 +196,41 @@ local function getSiblings(element)
     return parent:attributeValue("AXChildren")
 end
 
+hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "up", function()
+    -- move up to parent!
+    if not M.moves then
+        return
+    end
+    local parent = M.last.element:attributeValue("AXParent")
+    if parent == M.last.element then
+        hs.alert.show("already at top")
+        print("already at top")
+        return
+    end
+    if not parent then
+        hs.alert.show("no parent")
+        print("no parent")
+        return
+    end
+    highlightThisElement(parent)
+end)
+
+hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "down", function()
+    -- move down to child!
+    if not M.moves then
+        return
+    end
+    local children = M.last.element:attributeValue("AXChildren")
+    if not children or #children == 0 then
+        hs.alert.show("no children")
+        print("no children")
+        return
+    end
+    highlightThisElement(children[1])
+end)
+
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "right", function()
     -- PRN consider binding right to left/right ... like escape, remove only use binding while in observing mode
-    --   TODO move up/down to parent and cycle its siblings!!
     if not M.moves then
         return
     end
