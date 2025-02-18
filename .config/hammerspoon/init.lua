@@ -31,6 +31,7 @@ require("config.screencaps")
 
 require("config.uielements")
 require("config.ui_callouts")
+require("config.observer")
 local end_time = hs.timer.secondsSinceEpoch()
 print("init.lua took", end_time - start_time, "seconds")
 
