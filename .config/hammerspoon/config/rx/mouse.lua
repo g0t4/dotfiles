@@ -24,6 +24,56 @@ function M.mouseMovesObservable()
     return moves, stop
 end
 
+local function throttle(observable, delay_ms, scheduler)
+    local throttled = rx.Subject.create()
+    local waiting = false
+    local subscription = observable:subscribe(
+        function(...)
+            if waiting then
+                -- ignore any events while throttled
+                return
+            end
+            waiting = true
+            -- TODO args ... ???
+            throttled:onNext(...)
+            scheduler:schedule(function()
+                waiting = false
+            end, delay_ms)
+        end,
+
+        -- just forward error/completed immediatley
+        function(e) throttled:onError(e) end,
+        function() throttled:onCompleted() end
+    )
+    -- TODO subscription cleanup?
+    return throttled
+end
+
+function M.mouseMovesThrottledObservable(delay_ms)
+    -- FYI arguably I could be using: https://www.hammerspoon.org/docs/hs.timer.delayed.html for the narrow case of throttling
+
+    delay_ms = delay_ms or 250
+
+    --   luarocks install reactivex -- fork of rxlua, with some fixes for unsubscribe on take, IIUC -- also more recent release (2020)
+    --      darn, this is constrianed to lua 5.3 max... why?
+    --   luarocks install rxlua -- upstream (original repo) - last release 2017
+    --      this is not limited to lua <5.3
+    --   age of releases is not necessarily an issue beyond likley bug fixes... Rx is much like Ix (enumerable) in that the API is arguably stable and "commplete" if truly based on work done in RxJS (et al)
+
+    local scheduler = HammerspoonTimeoutScheduler.create()
+    local moves, stop_event_source = M.mouseMovesObservable()
+    local throttled = throttle(moves, delay_ms, scheduler)
+
+    local function stop()
+        print("stopping mouseMovesThrottledObservable")
+        -- this way, any pending timers are cancelled:
+        scheduler:stop() -- immediately stop sending any more events
+        stop_event_source() -- btw have to call after I stop the scheduler for some reason... otherwise onCompleted isn't passed along?
+    end
+
+    return throttled, stop
+end
+
 function M.mouseMovesDebouncedObservable(delay_ms)
     -- FYI arguably I could be using: https://www.hammerspoon.org/docs/hs.timer.delayed.html for the narrow case of debouncing
 
