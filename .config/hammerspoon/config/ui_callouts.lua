@@ -110,6 +110,14 @@ local function highlightThisElement(element)
     -- sometimes the frame is off screen... like a scrolled window (i.e. hammerspoon console)...
     --   would I cap its border with the boundaries of a parent element?
 
+    -- PRN:
+    --   what if element has no width/height or neither?
+    --   what if element is off screen? how can I tell?
+    --      i.e. in iTerm if I go up to level of window buttons and keep moving right through siblings, I encounter extra text elements that are negative y only... so above the window? (when iTerm is maximized window - not full screen)
+    --          frame	{ h = 16.0, w = 16.0, x = 26.0, y = -21.0 }
+    --          frame	{ h = 16.0, w = 16.0, x = 46.0, y = -21.0 }
+    --          frame	{ h = 16.0, w = 16.0, x = 6.0, y = -21.0 }
+
     M.last.callout = canvas.new(frame)
         :appendElements({
             action = "stroke",
