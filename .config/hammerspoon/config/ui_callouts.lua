@@ -9,21 +9,23 @@ local function showTooltipForElement(element, frame)
     if not element then return end
 
     -- print("[NEXT]", hs.inspect(element:allAttributeValues()))
+    local window = element:attributeValue("AXWindow")
+    local element_text = elementSpecifierFor(element)
+    -- avoid confusion about window being direct parent, it's not, trim trailing "of" and any surrounding whitespace:
+    local trail_of = "%sof%s*$"
+    element_text = string.gsub(element_text, trail_of, "")
+    local window_text = ""
+    if window then
+        window_text = elementSpecifierFor(window)
+        window_text = string.gsub(window_text, trail_of, "")
+    end
+    local text = string.format("%s\n%s", element_text, window_text)
 
-    -- Extract AX properties
-    -- local role = element:attributeValue("AXRole") or "<none>"
-    -- local title = element:attributeValue("AXTitle") or "<none>"
-    -- local window = element:attributeValue("AXWindow")
-    -- local windowTitle = window and window:attributeValue("AXTitle") or "<none>"
-    -- local text = string.format("Role: %s\nTitle: %s\nWindow: %s", role, title, windowTitle)
-    local text = elementSpecifierFor(element)
-
-    -- Tooltip box size
-    local tooltipHeight = 100
+    local tooltipHeight = 60
     local padding = 10
     -- find max width of text:
     -- local maxWidth = math.max(role:len(), title:len(), windowTitle:len())
-    local maxWidth = text:len()
+    local maxWidth = math.max(element_text:len(), window_text:len())
     local tooltipWidth = maxWidth * 12 + 4 * padding
 
     -- Get screen bounds
