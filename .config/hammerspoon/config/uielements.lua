@@ -425,7 +425,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "E", function()
     -- testMyOwnFilterFunction()
 end)
 
-function combineClausesWithLineContinuations(clauses)
+function CombineClausesWithLineContinuations(clauses)
     -- assumes this is one set of clauses for a single line of code
     -- and that I can use a line continuation between any of the consecutive clauses
     --  - i.e. won't result in line continuation in the middle of a string literal
@@ -475,7 +475,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "A", function()
     --   alternatively, could use an app element and ask for its elementAtPosition specific to just that app
     local elementAt = hs.axuielement.systemElementAtPosition(coords)
     local clauses, attrDumps = BuildAppleScriptTo(elementAt, true)
-    local script = combineClausesWithLineContinuations(clauses)
+    local script = CombineClausesWithLineContinuations(clauses)
     prints(preHtmlCodeBlock(script))
     prints(BuildActionExamples(elementAt))
     prints(GetDumpPath(elementAt, true))
@@ -484,7 +484,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "A", function()
 end)
 
 -- see AppleScript The Definitive Guide, page 197 about Element Specifier forms (name, index, ID, some, every, range, relative, bool test [whose?],...?)
-function elementSpecifierFor(elem)
+function ElementSpecifierFor(elem)
     local function warnOnEmptyTitle(title, role)
         if title == "" then
             prints("[WARN] title is empty for " .. role .. ", script might not work")
@@ -715,7 +715,7 @@ function BuildAppleScriptTo(toElement, includeAttrDumps)
             table.insert(attrDumps, attrDump)
         end
 
-        table_prepend(specifierChain, elementSpecifierFor(elem))
+        table_prepend(specifierChain, ElementSpecifierFor(elem))
     end
 
     -- IDEAS:
@@ -796,7 +796,7 @@ function GetDumpAXAttributes(element, skips)
 
     skips = skips or {}
 
-    local result = { '<h4>' .. htmlCodeBlock(elementSpecifierFor(element)) .. '</h4>' }
+    local result = { '<h4>' .. htmlCodeBlock(ElementSpecifierFor(element)) .. '</h4>' }
 
     local sortedAttrs = {}
     for attrName, attrValue in pairs(element) do
@@ -905,7 +905,7 @@ function GetElementTableRow(elem, indent)
         "</td><td>" ..
         role ..
         "</td><td>" ..
-        details .. "</td><td>" .. htmlCodeBlock(elementSpecifierFor(elem)) .. "</td></tr>"
+        details .. "</td><td>" .. htmlCodeBlock(ElementSpecifierFor(elem)) .. "</td></tr>"
 end
 
 local pathTableStart = [[
