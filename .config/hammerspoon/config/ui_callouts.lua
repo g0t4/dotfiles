@@ -179,6 +179,7 @@ end
 M.moves = nil
 M.stop_event_source = nil
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "T", function()
+    alert.closeAll()
     if not M.moves then
         startObserving()
     else
@@ -206,6 +207,8 @@ local function onlyAlert(message)
 end
 
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "up", function()
+    alert.closeAll() -- any alerts should be closed to avoid confusion
+
     -- move up to parent!
     if not M.moves then
         return
@@ -229,6 +232,8 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "up", function()
 end)
 
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "down", function()
+    alert.closeAll()
+
     -- move down to child!
     if not M.moves then
         return
@@ -242,6 +247,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "down", function()
 end)
 
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "right", function()
+    alert.closeAll()
     -- PRN consider binding right to left/right ... like escape, remove only use binding while in observing mode
     if not M.moves then
         return
@@ -267,6 +273,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "right", function()
 end)
 
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "left", function()
+    alert.closeAll()
     if not M.moves then
         return
     end
