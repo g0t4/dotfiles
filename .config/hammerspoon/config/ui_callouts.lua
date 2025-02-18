@@ -4,23 +4,15 @@ M.last = {
     tooltip = nil,
     callout = nil,
 }
-local drawing = require("hs.drawing")
 local canvas = require("hs.canvas")
 local function showTooltipForElement(element, frame)
     if not element then return end
 
-    -- print("[NEXT]", hs.inspect(element:allAttributeValues()))
-    -- local window = element:attributeValue("AXWindow")
-    -- local element_text = elementSpecifierFor(element)
-    -- -- avoid confusion about window being direct parent, it's not, trim trailing "of" and any surrounding whitespace:
-    -- local trail_of = "%sof%s*$"
-    -- element_text = string.gsub(element_text, trail_of, "")
-    -- local window_text = ""
-    -- if window then
-    --     window_text = elementSpecifierFor(window)
-    --     window_text = string.gsub(window_text, trail_of, "")
-    -- end
-    -- local text = string.format("%s\n%s", element_text, window_text)
+    -- TODO copy to clipboard -- maybe do it by default when in scan mode?
+    -- TODO add pause mode that doesn't hide callout/tooltip... but freezes it (maybe that is when to copy it!)
+    --    register opt key or smth like that and unregister it when hide callout/tooltip
+
+    -- PRN could add coloring of text if I can show an html element in canvas
     local clauses = BuildAppleScriptTo(element, false)
     local script = combineClausesWithLineContinuations(clauses)
     local text = script
