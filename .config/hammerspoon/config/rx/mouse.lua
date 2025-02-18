@@ -25,6 +25,11 @@ function M.mouseMovesObservable()
 end
 
 local function throttle(observable, delay_ms, scheduler)
+    -- PRN use Observable.create (w/ nested Subscription.create)
+    --   to handle multiple subscribers (so one call to throttled can be used repeatedly)
+    --   and to handle unsub (so subscription to upstream observable can be cleaned up)
+    --   though I dont care about these criteria currently
+
     local throttled = rx.Subject.create()
     local waiting = false
     local subscription = observable:subscribe(
@@ -45,7 +50,6 @@ local function throttle(observable, delay_ms, scheduler)
         function(e) throttled:onError(e) end,
         function() throttled:onCompleted() end
     )
-    -- TODO subscription cleanup?
     return throttled
 end
 
