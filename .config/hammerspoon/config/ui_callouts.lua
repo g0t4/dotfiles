@@ -56,7 +56,7 @@ local function showTooltipForElement(element, frame)
         end
     end
 
-    M.last.tooltip = hs.canvas.new({ x = x, y = y, w = tooltipWidth, h = tooltipHeight })
+    M.last.tooltip = canvas.new({ x = x, y = y, w = tooltipWidth, h = tooltipHeight })
         :appendElements({
             -- Background box
             {
@@ -93,23 +93,17 @@ local function removeHighlight()
     M.last.callout = nil
 end
 
-local function highlightCurrentElement()
-    assert(M.last ~= nil)
+local function highlightThisElement(element)
     removeHighlight()
-
-    local pos = hs.mouse.absolutePosition()
-    local element = hs.axuielement.systemElementAtPosition(pos)
-    if element == M.last.element then
-        -- skip if same element
+    if not element then
         return
     end
-
     M.last.element = element
+
     local frame = element:attributeValue("AXFrame")
     -- sometimes the frame is off screen... like a scrolled window (i.e. hammerspoon console)...
     --   would I cap its border with the boundaries of a parent element?
 
-    local canvas = require("hs.canvas")
     M.last.callout = canvas.new(frame)
         :appendElements({
             action = "stroke",
@@ -121,6 +115,19 @@ local function highlightCurrentElement()
         }):show()
 
     showTooltipForElement(element, frame)
+end
+
+local function highlightCurrentElement()
+    assert(M.last ~= nil)
+
+    local pos = hs.mouse.absolutePosition()
+    local element = hs.axuielement.systemElementAtPosition(pos)
+    if element == M.last.element then
+        -- skip if same element
+        return
+    end
+
+    highlightThisElement(element)
 end
 
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "C", function()
@@ -173,12 +180,69 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "T", function()
     end
 end)
 
-hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "left", function()
-    hs.alert.show("left")
-end)
+local function getSiblings(element)
+    if not element then
+        print("no element to move")
+        return
+    end
+    local parent = element:attributeValue("AXParent")
+    if not parent then
+        print("no parent")
+        return
+    end
+    return parent:attributeValue("AXChildren")
+end
 
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "right", function()
-    hs.alert.show("right")
+    -- PRN consider binding right to left/right ... like escape, remove only use binding while in observing mode
+    --   TODO move up/down to parent and cycle its siblings!!
+    if not M.moves then
+        return
+    end
+    local function nextSibling(element)
+        local siblings = getSiblings(element)
+        if not siblings then
+            print("no siblings")
+            return
+        end
+        for i, child in ipairs(siblings) do
+            if child == element and i < #siblings then
+                return siblings[i + 1] -- Return next sibling
+            end
+        end
+    end
+    local next = nextSibling(M.last.element)
+    if not next then
+        hs.alert.show("no next sibling")
+        print("no next sibling")
+        return
+    end
+    highlightThisElement(next)
+end)
+
+hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "left", function()
+    if not M.moves then
+        return
+    end
+    local function previousSibling(element)
+        local siblings = getSiblings(element)
+        if not siblings then
+            print("no siblings")
+            return
+        end
+        for i, child in ipairs(siblings) do
+            if child == element and i > 1 then
+                return siblings[i - 1] -- Return previous sibling
+            end
+        end
+    end
+    local prev = previousSibling(M.last.element)
+    if not prev then
+        hs.alert.show("no previous sibling")
+        print("no previous sibling")
+        return
+    end
+    highlightThisElement(prev)
 end)
 
 return M
