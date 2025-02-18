@@ -199,6 +199,12 @@ local function getSiblings(element)
     return parent:attributeValue("AXChildren")
 end
 
+local function onlyAlert(message)
+    alert.closeAll()
+    alert.show(message)
+    print(message)
+end
+
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "up", function()
     -- move up to parent!
     if not M.moves then
@@ -206,18 +212,16 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "up", function()
     end
     local parent = M.last.element:attributeValue("AXParent")
     if parent == M.last.element then
-        alert.show("already at top")
-        print("already at top")
+        onlyAlert("already at top")
         return
     end
     if not parent then
-        alert.show("no parent")
-        print("no parent")
+        print("unexpected: no parent")
         return
     end
     local role = parent:attributeValue("AXRole")
     if role == "AXApplication" then
-        print("already at top: AXApplication")
+        onlyAlert("already at top: AXApplication")
         return
     end
 
@@ -231,8 +235,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "down", function()
     end
     local children = M.last.element:attributeValue("AXChildren")
     if not children or #children == 0 then
-        alert.show("no children")
-        print("no children")
+        onlyAlert("no children")
         return
     end
     highlightThisElement(children[1])
@@ -257,8 +260,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "right", function()
     end
     local next = nextSibling(M.last.element)
     if not next then
-        alert.show("no next sibling")
-        print("no next sibling")
+        onlyAlert("no next sibling")
         return
     end
     highlightThisElement(next)
@@ -282,8 +284,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "left", function()
     end
     local prev = previousSibling(M.last.element)
     if not prev then
-        alert.show("no previous sibling")
-        print("no previous sibling")
+        onlyAlert("no previous sibling")
         return
     end
     highlightThisElement(prev)
