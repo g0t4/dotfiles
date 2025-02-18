@@ -4,6 +4,7 @@ M.last = {
     tooltip = nil,
     callout = nil,
     script = nil,
+    escBinding = nil,
 }
 local canvas = require("hs.canvas")
 local function showTooltipForElement(element, frame)
@@ -129,34 +130,55 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "C", function()
     end
 end)
 
+local function stopObserving()
+    M.moves = nil
+    M.subscription:unsubscribe() -- subscription cleanup is all... really can skip this here
+    removeHighlight() -- clear the callout/tooltips
+    if M.stop_event_source then
+        -- separately need to stop the upstream event source (do not comingle unsub w/ stop source, usually you might have multiple subs and would want to separately control the subs vs source)
+        M.stop_event_source()
+        M.stop_event_source = nil
+    end
+    if M.escBinding then
+        M.escBinding:delete()
+        M.escBinding = nil
+    end
+end
+
+local function startObserving()
+    M.moves, M.stop_event_source = require("config.rx.mouse").mouseMovesThrottledObservable(50)
+    M.subscription = M.moves:subscribe(
+        function()
+            -- stream is just move alert not position
+            highlightCurrentElement()
+        end
+    -- function(error)
+    --     -- right now my sources don't levearge error (nor complete) events... so just ignore
+    --     print("[ERROR] what to do here?", error)
+    -- end,
+    -- function()
+    --     print("[COMPLETE] what to do here?")
+    -- end
+    )
+    M.escBinding = hs.hotkey.bind({}, "escape", stopObserving)
+end
+
 M.moves = nil
 M.stop_event_source = nil
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "T", function()
     if not M.moves then
-        M.moves, M.stop_event_source = require("config.rx.mouse").mouseMovesThrottledObservable(50)
-        M.subscription = M.moves:subscribe(
-            function()
-                -- stream is just move alert not position
-                highlightCurrentElement()
-            end
-        -- function(error)
-        --     -- right now my sources don't levearge error (nor complete) events... so just ignore
-        --     print("[ERROR] what to do here?", error)
-        -- end,
-        -- function()
-        --     print("[COMPLETE] what to do here?")
-        -- end
-        )
+        startObserving()
     else
-        M.moves = nil
-        M.subscription:unsubscribe() -- subscription cleanup is all... really can skip this here
-        removeHighlight() -- clear the callout/tooltips
-        if M.stop_event_source then
-            -- separately need to stop the upstream event source (do not comingle unsub w/ stop source, usually you might have multiple subs and would want to separately control the subs vs source)
-            M.stop_event_source()
-            M.stop_event_source = nil
-        end
+        stopObserving()
     end
+end)
+
+hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "left", function()
+    hs.alert.show("left")
+end)
+
+hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "right", function()
+    hs.alert.show("right")
 end)
 
 return M
