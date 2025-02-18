@@ -17,33 +17,21 @@ local function showTooltipForElement(element, frame)
     local script = combineClausesWithLineContinuations(clauses)
     local text = script
 
-    -- PRN I can style text!
     local tmpcanvas = canvas.new({ x = 0, y = 0, w = 1000, h = 1000 })
     local estimatedSizeForDefaultFont = tmpcanvas:minimumTextSize(text)
-    -- local size = drawing.getTextDrawingSize(text) -- PRN is there a new way with canvas? minimumTextSize I saw but I'm not sure its what I need/ or?
-    print("size", hs.inspect(estimatedSizeForDefaultFont))
     local useFontSize = 14
     local defaultTextStyle = canvas.defaultTextStyle()
     -- *** SUPER HACK to get font sizing to work... this works though!
-    --    BTW font height estimate seems off, could find factor for it but for 14 point it will work with default at 27pt...
+    --    BTW font height estimate is off, could find factor for it but for 14 point it will work with default at 27pt so I won't adjust it for now...
     -- print("defaultTextStyle", hs.inspect(defaultTextStyle))
-    local tooltipWidth = estimatedSizeForDefaultFont.w * useFontSize / defaultTextStyle.font.size -- scale by default vs used font size
+    local tooltipWidth = estimatedSizeForDefaultFont.w * useFontSize / defaultTextStyle.font.size * 1.2 -- scale by default vs used font size
     local tooltipHeight = estimatedSizeForDefaultFont.h
 
-    -- local tooltipHeight = 60
+    -- add padding
     local padding = 10
-    -- -- find longest line in text:
-    -- local maxWidth = 1
-    for line in text:gmatch("[^\n]+") do
-        print("line", line)
-        line_size = tmpcanvas:minimumTextSize(line)
-        -- line_size = drawing.getTextDrawingSize(line)
-        print("  line_size", hs.inspect(line_size))
-    end
-    -- print("maxWidth", maxWidth)
-    -- local tooltipWidth = maxWidth * 12 + 4 * padding
+    tooltipWidth = tooltipWidth + 2 * padding
+    tooltipHeight = tooltipHeight
 
-    -- Get screen bounds
     local screenFrame = hs.screen.mainScreen():frame() -- Gets the current screen dimensions
 
     -- Initial positioning (slightly below the element)
