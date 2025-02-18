@@ -5,6 +5,10 @@ M.last = {
     callout = nil,
     script = nil,
     escBinding = nil,
+    upBinding = nil,
+    downBinding = nil,
+    leftBinding = nil,
+    rightBinding = nil,
 }
 
 -- FYI use require so I get LS completions, docs, etc => globals don't work well w/ LSP
@@ -164,6 +168,22 @@ local function stopObserving()
         M.escBinding:delete()
         M.escBinding = nil
     end
+    if M.upBinding then
+        M.upBinding:delete()
+        M.upBinding = nil
+    end
+    if M.downBinding then
+        M.downBinding:delete()
+        M.downBinding = nil
+    end
+    if M.leftBinding then
+        M.leftBinding:delete()
+        M.leftBinding = nil
+    end
+    if M.rightBinding then
+        M.rightBinding:delete()
+        M.rightBinding = nil
+    end
 end
 
 local function startObserving()
@@ -182,6 +202,10 @@ local function startObserving()
     -- end
     )
     M.escBinding = hs.hotkey.bind({}, "escape", stopObserving)
+    M.upBinding = hs.hotkey.bind({}, "up", M.up)
+    M.downBinding = hs.hotkey.bind({}, "down", M.down)
+    M.leftBinding = hs.hotkey.bind({}, "left", M.left)
+    M.rightBinding = hs.hotkey.bind({}, "right", M.right)
 end
 
 M.moves = nil
@@ -214,7 +238,7 @@ local function onlyAlert(message)
     print(message)
 end
 
-hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "up", function()
+function M.up()
     alert.closeAll() -- any alerts should be closed to avoid confusion
 
     -- move up to parent!
@@ -237,9 +261,9 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "up", function()
     end
 
     highlightThisElement(parent)
-end)
+end
 
-hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "down", function()
+function M.down()
     alert.closeAll()
 
     -- move down to child!
@@ -252,9 +276,9 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "down", function()
         return
     end
     highlightThisElement(children[1])
-end)
+end
 
-hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "right", function()
+function M.right()
     alert.closeAll()
     -- PRN consider binding right to left/right ... like escape, remove only use binding while in observing mode
     if not M.moves then
@@ -278,9 +302,9 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "right", function()
         return
     end
     highlightThisElement(next)
-end)
+end
 
-hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "left", function()
+function M.left()
     alert.closeAll()
     if not M.moves then
         return
@@ -303,6 +327,6 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "left", function()
         return
     end
     highlightThisElement(prev)
-end)
+end
 
 return M
