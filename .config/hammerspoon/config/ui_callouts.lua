@@ -120,10 +120,10 @@ local function highlightThisElement(element)
 
     M.last.callout = canvas.new(frame)
         :appendElements({
-            action = "stroke",
+            action = "strokeAndFill",
             padding = 0,
             type = "rectangle",
-            fillColor = { red = 1, blue = 0, green = 0 },
+            fillColor = { red = 1, blue = 0, green = 0, alpha = 0.1 },
             strokeColor = { red = 1, blue = 0, green = 0, alpha = 0.5 },
             strokeWidth = 4,
         }):show()
