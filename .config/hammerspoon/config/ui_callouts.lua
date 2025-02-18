@@ -30,17 +30,16 @@ local function showTooltipForElement(element, frame)
     print("size", hs.inspect(size))
     local tooltipWidth = size.w
     local tooltipHeight = size.h
-    print("tooltipWidth", tooltipWidth)
-    print("tooltipHeight", tooltipHeight)
 
     -- local tooltipHeight = 60
     local padding = 10
     -- -- find longest line in text:
     -- local maxWidth = 1
-    -- for line in text:gmatch("[^\n]+") do
-    --     print("line", line:len())
-    --     maxWidth = math.max(maxWidth, line:len())
-    -- end
+    for line in text:gmatch("[^\n]+") do
+        print("line", line)
+        line_size = drawing.getTextDrawingSize(line)
+        print("  line_size", hs.inspect(line_size))
+    end
     -- print("maxWidth", maxWidth)
     -- local tooltipWidth = maxWidth * 12 + 4 * padding
 
