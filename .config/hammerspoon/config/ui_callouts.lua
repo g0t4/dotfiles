@@ -3,6 +3,7 @@ M.last = {
     element = nil,
     tooltip = nil,
     callout = nil,
+    script = nil,
 }
 local canvas = require("hs.canvas")
 local function showTooltipForElement(element, frame)
@@ -14,10 +15,10 @@ local function showTooltipForElement(element, frame)
 
     -- PRN could add coloring of text if I can show an html element in canvas
     local clauses = BuildAppleScriptTo(element, false)
-    local text = CombineClausesWithLineContinuations(clauses)
+    M.last.script = CombineClausesWithLineContinuations(clauses)
 
     local tmpcanvas = canvas.new({ x = 0, y = 0, w = 1000, h = 1000 })
-    local estimatedSizeForDefaultFont = tmpcanvas:minimumTextSize(text)
+    local estimatedSizeForDefaultFont = tmpcanvas:minimumTextSize(M.last.script)
     local useFontSize = 14
     local defaultTextStyle = canvas.defaultTextStyle()
     -- *** SUPER HACK to get font sizing to work... this works though!
@@ -64,10 +65,9 @@ local function showTooltipForElement(element, frame)
                 fillColor = { white = 0, alpha = 0.8 }, -- Dark semi-transparent background
                 roundedRectRadii = { xRadius = 8, yRadius = 8 }
             },
-            -- Text
             {
                 type = "text",
-                text = text,
+                text = M.last.script,
                 textSize = useFontSize,
                 textColor = { white = 1 },
                 frame = { x = padding, y = padding, w = tooltipWidth - 2 * padding, h = tooltipHeight - 2 * padding },
@@ -121,6 +121,13 @@ local function highlightCurrentElement()
 
     showTooltipForElement(element, frame)
 end
+
+hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "C", function()
+    -- copy last script to clipboard... maybe just do this on stop?
+    if M.last.script then
+        hs.pasteboard.setContents(M.last.script)
+    end
+end)
 
 M.moves = nil
 M.stop_event_source = nil
