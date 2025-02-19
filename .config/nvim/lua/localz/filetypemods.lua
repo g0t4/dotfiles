@@ -129,6 +129,16 @@ vim.api.nvim_create_autocmd("FileType", {
 
 vim.api.nvim_create_autocmd("FileType", {
     group = "filetypemods",
+    pattern = "fish",
+    callback = function()
+        -- override commentstring to be # %s... was #%s (no space)
+        --   I suspect there are gonna be times I hate this too ;)
+        vim.bo.commentstring = "# %s" -- %s is original text
+    end,
+})
+
+vim.api.nvim_create_autocmd("FileType", {
+    group = "filetypemods",
     pattern = "sql",
     callback = function()
         vim.bo.commentstring = "-- %s" -- %s is original text
