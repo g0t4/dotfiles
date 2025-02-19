@@ -33,3 +33,11 @@ abbr tart 'tar -tf' # lis(t) / (t)est
 abbr tarc 'tar --xz -cf' # create xz (todo use set-position to put cursor in name that already has .txz extension)
 abbr tarcg 'tar --gzip -cf' # create gzip (todo use set-position to put cursor in name that already has .tgz extension)
 abbr tarcb 'tar --bzip2 -cf' # create bzip2 (todo use set-position to put cursor in name that already has .tbz2 extension)
+
+# *** java
+# jar:
+abbr jarx 'jar -xf' # e(x)tract
+abbr jart 'jar -tf' # lis(t) / (t)est
+abbr jaru 'jar -uf' # u(n)pack
+abbr jarc 'jar -cf' # create
+# TODO more based on jar/zip/unzip (FYI bsdtar supports zip, not gnu tar)
