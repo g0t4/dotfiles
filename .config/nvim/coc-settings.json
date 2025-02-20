@@ -137,6 +137,8 @@
         //    https://github.com/ndonfris/fish-lsp-language-clients/tree/coc_example // TODO review other files in this example to incoporate (ie keymaps for coc)
         //    https://github.com/ndonfris/fish-lsp-language-clients/tree/coc_minimal
         //    https://github.com/ndonfris/fish-lsp-language-clients/tree/native-nvim
+        // FORMATTER:
+        //    uses `fish-indent foo.fish` # no options AFAIK to configure
         // config discussions: https://github.com/ndonfris/fish-lsp/discussions
         "fish-lsp": {
             "command": "fish-lsp",
