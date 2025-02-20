@@ -141,7 +141,7 @@
                 "fish"
             ],
             "env": {
-                // set env vars to configure lsp server options
+                // *** run:    `fish-lsp env` to see current/default config
                 // https://github.com/ndonfris/fish-lsp?tab=readme-ov-file#environment-variables
                 // 2003 is warning about universal variables in a non-interactive context, F it... I don't care... I use them in my ask-openai.fish script which is used in interactive contexts to change ask settings
                 "fish_lsp_diagnostic_disable_error_codes": "2003 2001",
