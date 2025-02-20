@@ -133,7 +133,10 @@
         },
 
         // https://github.com/ndonfris/fish-lsp#client-configuration-required
-        // https://github.com/ndonfris/fish-lsp-language-clients/tree/coc_minimal
+        // EXAMPLES: https://github.com/ndonfris/fish-lsp-language-clients
+        //    https://github.com/ndonfris/fish-lsp-language-clients/tree/coc_example // TODO review other files in this example to incoporate (ie keymaps for coc)
+        //    https://github.com/ndonfris/fish-lsp-language-clients/tree/coc_minimal
+        //    https://github.com/ndonfris/fish-lsp-language-clients/tree/native-nvim
         // config discussions: https://github.com/ndonfris/fish-lsp/discussions
         "fish-lsp": {
             "command": "fish-lsp",
