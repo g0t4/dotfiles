@@ -1955,7 +1955,11 @@ function trash
         # -F => use finder to ensure `Put Back` works
         #   otherwise item is in trash but have to manually restore location
         for file in $argv
-            trash -F $file
+            if test -e $file
+                command trash -F $file
+            end
         end
+    else
+        echo "TODO not implemented yet for your OS"
     end
 end
