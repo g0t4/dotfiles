@@ -1942,3 +1942,20 @@ function zedfull
     log_ --blue "## .output_excerpt"
     echo $output_json | jq -r .output_excerpt
 end
+
+# *** trash helpers
+
+function trash
+    if not command -q trash
+        echo "trash not installed...  install or find workaround for your OS"
+        return 1
+    end
+
+    if $IS_MACOS then
+        # -F => use finder to ensure `Put Back` works
+        #   otherwise item is in trash but have to manually restore location
+        for file in $argv
+            trash -F $file
+        end
+    end
+end
