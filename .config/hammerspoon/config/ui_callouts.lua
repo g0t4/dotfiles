@@ -261,6 +261,21 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "right", function()
         return
     end
     local function nextSibling(element)
+        if element:attributeValue("AXRole") == "AXWindow" then
+            local sections = element:attributeValue("AXSections")
+            if sections then
+                for i, section in ipairs(sections) do
+                    if section == element and i < #sections then
+                        return sections[i + 1] -- Return next sibling
+                    end
+                end
+                -- if no matches then the current child was not in section list... so just return the first section
+                print("current element is not in section list, returning first section")
+                return sections[1]
+            end
+            return
+        end
+
         local siblings = getSiblings(element)
         if not siblings then
             print("no siblings")
@@ -286,6 +301,20 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "left", function()
         return
     end
     local function previousSibling(element)
+        if element:attributeValue("AXRole") == "AXWindow" then
+            local sections = element:attributeValue("AXSections")
+            if sections then
+                for i, section in ipairs(sections) do
+                    if section == element and i > 1 then
+                        return sections[i - 1] -- Return previous sibling
+                    end
+                end
+                print("current element is not in section list, returning first section")
+                return sections[1]
+            end
+            return
+        end
+
         local siblings = getSiblings(element)
         if not siblings then
             print("no siblings")

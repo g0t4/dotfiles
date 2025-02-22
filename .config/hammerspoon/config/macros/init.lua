@@ -14,6 +14,28 @@ function GetFcpxAppElement()
     return GetAppElement("com.apple.FinalCut")
 end
 
+function GetFcpxEditorWindow()
+    local fcpx = GetFcpxAppElement()
+
+    -- identified by:
+    -- AXMain = true
+    -- AXMinimized = false
+    -- AXModal = false
+    -- AXRole = "AXWindow"
+    -- AXRoleDescription = "standard window"
+    -- AXSections = {1={SectionDescription="Toolbar", SectionUniqueID="AXToolbar", SectionObject= (AXToolbar)}, 2={SectionDescription="Content", SectionUniqueID="AXContent", SectionObject= (AXScrollArea)}, 3={SectionUniqueID="AXContainer", SectionObject= (AXGroup)}, 4={SectionUniqueID="AXContainer", SectionObject= (AXGroup)}, 5={SectionUniqueID="AXContainer", SectionObject= (AXGroup)}, 6={SectionUniqueID="AXContainer", SectionObject= (AXGroup)}, 7={SectionUniqueID="AXContainer", SectionObject= (AXGroup)}, 8={SectionUniqueID="AXContainer", SectionObject= (AXGroup)}, 9={SectionUniqueID="AXContainer", SectionObject= (AXGroup)}, 10={SectionUniqueID="AXContainer", SectionObject= (AXGroup)}, 11={SectionUniqueID="AXContainer", SectionObject= (AXGroup)}, 12={SectionUniqueID="AXContainer", SectionObject= (AXGroup)}, 13={SectionUniqueID="AXContainer", SectionObject= (AXGroup)}, 14={SectionUniqueID="AXContainer", SectionObject= (AXGroup)}, 15={SectionUniqueID="AXContainer", SectionObject= (AXGroup)}, 16={SectionUniqueID="AXContainer", SectionObject= (AXGroup)}}
+    --   TODO AXSections are what?
+    -- AXSize = {h=1080.0, w=1920.0}
+    -- AXSubrole = "AXStandardWindow"
+    -- AXTitle = "Final Cut Pro"
+
+    return fcpx:attributeValue("AXFocusedWindow")
+end
+
+function GetFcpxRightSidePanel()
+    local window = GetFcpxEditorWindow()
+end
+
 function FcpxFindTitlePanelCheckbox(doWithTitlePanel)
     local fcpx = GetFcpxAppElement()
     local window = fcpx:attributeValue("AXFocusedWindow")
