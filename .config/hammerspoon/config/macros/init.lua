@@ -1,4 +1,9 @@
 local application = require("hs.application")
+local M = {}
+
+-- TODO impement cancelation of search task(s)?
+M.searchTasks = {}
+
 function MacroFcpxFindXSlider()
     EnsureClearedWebView()
 
@@ -30,4 +35,7 @@ function MacroFcpxFindXSlider()
     --        SO maybe search should be on demand so I can search when something moves? and then I would want app wide search most likely
     local namedModifiers = { count = 1 }
     local searchTask = fcpx:elementSearch(afterSearch, criteriaFunction, namedModifiers)
+    -- TODO wire up button to cancel any outstanding search tasks
 end
+
+return M
