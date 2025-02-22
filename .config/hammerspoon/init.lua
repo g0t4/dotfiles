@@ -61,3 +61,6 @@ require("config.learn.axuielem") -- WIP
 -- DONE for now: -- require("config.learn.hsapp")
 -- require("config.learn.uielem")
 -- require("config.learn.webview")
+--
+
+require("config.macros.init")
