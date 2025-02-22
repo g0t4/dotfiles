@@ -22,13 +22,13 @@ function MacroFcpxFindXSlider()
     -- OMG finding button to show panels is nearly instant!! I can use this as a first search (Fallback) if fixed path doesn't work!
     --     OR Can I just search every time?
     --     FYI must set count = 1 to be fast
-    local criteria = { attribute = "AXDescription", value = "Title Inspector" } -- 270ms w/ count=1
+    local criteria = { attribute = "AXDescription", value = "Title Inspector" } -- 270ms to 370ms w/ count=1
+    FindOneElement(fcpx, criteria, afterSearch)
 
     -- slider (deeply nested)
     -- local criteria = { attribute = "AXHelp", value = "Y Slider" } -- 2.5s w/ count=1 (~10+ w/o)
     -- setTimeout doesn't seem to work for elementSearch?!
 
-    local criteriaFunction = hs.axuielement.searchCriteriaFunction(criteria)
     -- FYI takes < half time if I know there's only one item I want to find!
     --   taking 5 seconds for a full search in FCPX...
     --   deosn't mean I can't search but I need to narrow my search scope (i.e. find panel I want and search there instead of globally in app!)
@@ -36,9 +36,22 @@ function MacroFcpxFindXSlider()
     --     IDEA => find a fixed scope (i.e. panel) and search within it (the dynamic scope)... OR...
     --        trigger search if fixed element specifier no longer works and if search works then alert use to update to new specifier!
     --        SO maybe search should be on demand so I can search when something moves? and then I would want app wide search most likely
+end
+
+function FindOneElement(app, criteria, callback)
+    local startTime = GetTime()
+    local criteriaFunction = hs.axuielement.searchCriteriaFunction(criteria)
     local namedModifiers = { count = 1 }
-    local searchTask = fcpx:elementSearch(afterSearch, criteriaFunction, namedModifiers)
-    -- TODO wire up button to cancel any outstanding search tasks
+
+
+    local function afterSearch(message, searchTask, numResultsAdded)
+        print("time to callback: " .. GetElapsedTimeInMilliseconds(startTime) .. " ms")
+        callback(searchTask, numResultsAdded)
+    end
+
+    local searchTask = app:elementSearch(afterSearch, criteriaFunction, namedModifiers)
+
+    -- TODO M.searchTasks[searchTask] = true
 end
 
 return M
