@@ -55,6 +55,12 @@ end
 set _mime_type (file --brief --mime-type "$clicked_path")
 echo "[DEBUG]: mime type: $_mime_type"
 
+if string match --quiet --regex "\.car\$" "$clicked_path"
+    # TODO other image types
+    open "$clicked_path" # open w/ default handler
+    exit 0
+end
+
 # *** pdfs ***
 if string match --quiet "$_mime_type" application/pdf
     # find test cases:     ag -ig "pdf\$"
