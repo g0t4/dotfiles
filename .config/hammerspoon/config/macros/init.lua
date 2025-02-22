@@ -15,6 +15,8 @@ function GetFcpxAppElement()
 end
 
 function FcpxFindTitlePanelCheckbox(doWithTitlePanel)
+    local fcpx = GetFcpxAppElement()
+
     -- FIXED PATH CURRENTLY:
     --    set Title to checkbox 1 of group 2 of group 5 of splitter group 1 of group 2 of ¬
     --      splitter group 1 of group 1 of splitter group 1 of window "Final Cut Pro" of ¬
@@ -37,7 +39,6 @@ function FcpxFindTitlePanelCheckbox(doWithTitlePanel)
     --   AXTitle = "Title"
     --   AXValue = 1
 
-    local fcpx = GetFcpxAppElement()
     local criteria = { attribute = "AXDescription", value = "Title Inspector" } -- 270ms to 370ms w/ count=1
     FindOneElement(fcpx, criteria, function(_, searchTask, numResultsAdded)
         if numResultsAdded == 0 then
