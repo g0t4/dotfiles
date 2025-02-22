@@ -37,14 +37,55 @@ function MacroFcpxFindXSlider()
         --   AXSubrole = "AXToggle"
         --   AXTitle = "Title"
 
+        -- TODO add helper to do this for any AXCheckBox (ensure checked)
         -- if not enabled then I need to click it
         local checkbox = searchTask[1]
         if checkbox:attributeValue("AXValue") == 0 then
             print("checkbox not enabled")
             checkbox:performAction("AXPress")
-            -- checkbox:setAttributeValue("AXValue", 1)
         else
             print("checkbox already enabled")
+        end
+
+        local grandparent = checkbox:attributeValue("AXParent"):attributeValue("AXParent")
+        -- checkbox is in group2/element2 of grandparent
+        -- group1/element1 is panel of controls below the buttons to switch panels
+        local scrollarea1 = grandparent:attributeValue("AXChildren")[1][1][1]
+        -- print("AXRole of scrollarea1: " .. scrollarea1:attributeValue("AXRole"))
+
+        -- controls are all beneat scorllarea1
+        --
+        -- text field 5 of
+        --
+        -- AXChildren = {}
+        -- AXChildrenInNavigationOrder = {}
+        -- AXDescription = "y scrubber"
+        -- AXEnabled = true
+        -- AXFocused = false
+        -- AXFrame = {y=175.0, h=18.0, w=51.0, x=1763.0}
+        -- AXHelp = "Y Scrubber"
+        -- AXInsertionPointLineNumber = 0
+        -- AXNumberOfCharacters = 4
+        -- AXPlaceholderValue = nil
+        -- AXPosition = {y=175.0, x=1763.0}
+        -- AXRole = "AXTextField"
+        -- AXRoleDescription = "text field"
+        -- AXSelectedText = nil
+        -- AXSelectedTextRange = {length=0, location=0}
+        -- AXSize = {w=51.0, h=18.0}
+        -- AXValue = "0.61"
+        -- AXVisibleCharacterRange = {length=4, location=0}
+
+        -- loop over until find AXDescription == "y scrubber"
+        for i, v in ipairs(scrollarea1) do
+            if v:attributeValue("AXDescription") == "y scrubber" then
+                print("found y scrubber")
+                -- YES, YES BITCH!
+                v:setAttributeValue("AXFocused", true)
+                -- YES, YES BITCH!
+                v:setAttributeValue("AXValue", "0.69")
+                break
+            end
         end
     end
 
