@@ -63,6 +63,7 @@ hs.window.animationDuration = 0 -- default is 0.2 (FYI this means window layout 
 
 -- TODO comment out when done in learning so dont slow down config otherwise
 require("config.learn.axuielem") -- WIP
+require("config.learn.coroutines")
 -- require("config.learn.axuielem-observer") -- WIP
 -- DONE for now: -- require("config.learn.hsapp")
 -- require("config.learn.uielem")
