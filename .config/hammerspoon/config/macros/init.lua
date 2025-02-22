@@ -2,15 +2,8 @@ local application = require("hs.application")
 function MacroFcpxFindXSlider()
     EnsureClearedWebView()
 
-    -- local app = hs.application.frontmostApplication()
-    -- local app = application.find("Final Cut Pro")
     local app = application.find("com.apple.FinalCut")
     local fcpx = hs.axuielement.applicationElement(app)
-
-    -- local elementCriteria = EnumTableValues(hs.axuielement.roles)
-    --     :filter(function(e) return string.find(e, "y_slider") end)
-    --     :totable()
-    -- print("searching")
 
     local function afterSearch(message, searchTask, numResultsAdded)
         PrintToWebView("results: ", numResultsAdded)
