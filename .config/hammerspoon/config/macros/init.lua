@@ -19,7 +19,7 @@ function FcpxTitlePanelFocusYSlider()
 end
 
 function FcpxTitlePanelFocusXSlider()
-    local function afterFindTitlePanel(message, searchTask, numResultsAdded)
+    local function doWithTitlePanel(message, searchTask, numResultsAdded)
         local checkbox = searchTask[1]
         if checkbox == nil then
             print("no title panel found")
@@ -46,7 +46,7 @@ function FcpxTitlePanelFocusXSlider()
     -- TODO after extract logic for find title inspector, let's make it first try a fixed path... that will be much faster (300ms is ok but can be unpleasant too)
     local fcpx = GetFcpxAppElement()
     local criteria = { attribute = "AXDescription", value = "Title Inspector" } -- 270ms to 370ms w/ count=1
-    FindOneElement(fcpx, criteria, afterFindTitlePanel)
+    FindOneElement(fcpx, criteria, doWithTitlePanel)
 end
 
 function FcpxExperimentTitlePanel()
