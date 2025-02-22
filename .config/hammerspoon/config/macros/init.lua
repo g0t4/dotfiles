@@ -51,16 +51,11 @@ function FcpxTitlePanelFocusOnElementByAttr(attrName, attrValue)
     end)
 end
 
-function FcpxTitlePanelFocusYSlider()
-    -- TODO if I use this focus more often then I should just pass description as param from streamdeck button
-    FcpxTitlePanelFocusOnElementByAttr("AXDescription", "y scrubber")
-end
-
-function FcpxTitlePanelFocusXSlider()
+function FcpxTitlePanelFocusOnElementByDescription(description)
     -- FYI it is ok to just assume the control is there, it will mostly just work and when it doesn't then I can troubleshoot
     --    that is how most of my applescripts work too!
     --    LATER, PRN, I can develop automatic troubleshooting too... even when using these presumptive [1][1][2] et
-    FcpxTitlePanelFocusOnElementByAttr("AXDescription", "x scrubber")
+    FcpxTitlePanelFocusOnElementByAttr("AXDescription", description)
 end
 
 function FcpxExperimentTitlePanel()
