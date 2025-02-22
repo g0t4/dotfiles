@@ -92,9 +92,6 @@ function FcpxInspectorPanel:new(panelElement, window)
 end
 
 function FcpxInspectorPanel:ensureOpen()
-    -- set Show_or_hide_the_Inspector to checkbox 5 of toolbar 1 of ¬
-    --     window "Final Cut Pro" of application process "Final Cut Pro"
-    -- TODO move typed button to toolbar "class"
     local button = self.window.topToolbar.btnInspector
     if button:attributeValue("AXValue") == 0 then
         print("opening title inspector")
@@ -105,7 +102,7 @@ function FcpxInspectorPanel:ensureOpen()
 end
 
 function FcpxInspectorPanel:ensureClosed()
-    local button = self.window.topToolbar:childrenWithRole("AXCheckBox")[5]
+    local button = self.window.topToolbar.btnInspector
     if button:attributeValue("AXValue") == 1 then
         print("closing title inspector")
         button:performAction("AXPress")
