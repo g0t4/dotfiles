@@ -11,7 +11,9 @@ M.last = {
 local canvas = require("hs.canvas")
 local alert = require("hs.alert")
 local function showTooltipForElement(element, frame)
-    if not element then return end
+    if not element then
+        return
+    end
 
     -- TODO copy to clipboard -- maybe do it by default when in scan mode?
     -- TODO add pause mode that doesn't hide callout/tooltip... but freezes it (maybe that is when to copy it!)
