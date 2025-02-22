@@ -15,6 +15,23 @@ function GetFcpxAppElement()
 end
 
 function MacroFcpxFindXSlider()
+    local function afterFindTitlePanel(message, searchTask, numResultsAdded)
+        if numResultsAdded == 0 then
+            print("no title panel found")
+            return
+        end
+
+        local titlePanel = searchTask:resultElementAtIndex(0)
+        local xSlider = titlePanel:elementById("xSlider")
+        xSlider:click()
+    end
+
+    local fcpx = GetFcpxAppElement()
+    local criteria = { attribute = "AXDescription", value = "Title Inspector" } -- 270ms to 370ms w/ count=1
+    FindOneElement(fcpx, criteria, afterFindTitlePanel)
+end
+
+function TestBack2BackElementSearch()
     EnsureClearedWebView()
 
     local function afterYSliderSearch(message, searchTask, numResultsAdded)
@@ -26,6 +43,8 @@ function MacroFcpxFindXSlider()
         PrintToWebView("results: ", numResultsAdded)
         DumpHtml(searchTask)
 
+        -- SHIT I forgot I needed to nest the next search! interesting that it goes faster still...
+        --   also now I can't recall if slider is neseted under title panel button... I think it's not! :)
         local ySliderCriteria = { attribute = "AXHelp", value = "Y Slider" }
         FindOneElement(GetFcpxAppElement(), ySliderCriteria, afterYSliderSearch)
     end
