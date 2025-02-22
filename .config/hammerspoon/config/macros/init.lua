@@ -43,6 +43,14 @@ function GetChildWithAttr(parent, attrName, attrValue)
     return nil
 end
 
+function FcpxTitlePanelFocusOnElementByAttr(attrName, attrValue)
+    FcpxFindTitlePanelCheckbox(function(checkbox)
+        local grandparent = checkbox:attributeValue("AXParent"):attributeValue("AXParent")
+        local scrollarea1 = grandparent:attributeValue("AXChildren")[1][1][1]
+        GetChildWithAttr(scrollarea1, attrName, attrValue):setAttributeValue("AXFocused", true)
+    end)
+end
+
 function FcpxTitlePanelFocusYSlider()
 
 end
@@ -51,12 +59,7 @@ function FcpxTitlePanelFocusXSlider()
     -- FYI it is ok to just assume the control is there, it will mostly just work and when it doesn't then I can troubleshoot
     --    that is how most of my applescripts work too!
     --    LATER, PRN, I can develop automatic troubleshooting too... even when using these presumptive [1][1][2] et
-
-    FcpxFindTitlePanelCheckbox(function(checkbox)
-        local grandparent = checkbox:attributeValue("AXParent"):attributeValue("AXParent")
-        local scrollarea1 = grandparent:attributeValue("AXChildren")[1][1][1]
-        GetChildWithAttr(scrollarea1, "AXDescription", "x scrubber"):setAttributeValue("AXFocused", true)
-    end)
+    FcpxTitlePanelFocusOnElementByAttr("AXDescription", "x scrubber")
 end
 
 function FcpxExperimentTitlePanel()
