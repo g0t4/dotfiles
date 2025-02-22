@@ -19,7 +19,8 @@ local function showTooltipForElement(element, frame)
 
     -- PRN could add coloring of text if I can show an html element in canvas
     local clauses = BuildAppleScriptTo(element, false)
-    M.last.text = CombineClausesWithLineContinuations(clauses)
+    local script = CombineClausesWithLineContinuations(clauses)
+    M.last.text = script
 
     local tmpcanvas = canvas.new({ x = 0, y = 0, w = 1000, h = 1000 })
     local estimatedSizeForDefaultFont = tmpcanvas:minimumTextSize(M.last.text)
