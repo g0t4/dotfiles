@@ -42,13 +42,42 @@ function FcpxEditorWindow:new()
     setmetatable(o, self)
     self.__index = self
     o.window = GetFcpxEditorWindow()
-    o.topToolbar = o.window:childrenWithRole("AXToolbar")[1]
+    o.topToolbar = FcpxTopToolbar:new(o.window:childrenWithRole("AXToolbar")[1])
     -- everything below top toolbar
     -- use _ to signal that it's not guaranteed to be there
     o._mainSplitGroup = o.window:childrenWithRole("AXSplitGroup")[1]
     local rightSidePanel = o._mainSplitGroup:childrenWithRole("AXGroup")[1]
     -- local leftSidePanel = mainSplitGroup:childrenWithRole("AXGroup")[2]
     o.inspector = FcpxInspectorPanel:new(rightSidePanel, o)
+    return o
+end
+
+FcpxTopToolbar = {}
+function FcpxTopToolbar:new(topToolbarElement)
+    local o = {}
+    setmetatable(o, self)
+    self.__index = self
+    o.topToolbarElement = topToolbarElement
+    -- TODO consider a toggle for troubleshooting... that will check more carefully (i.e. for desc here)... but not when toggle is off, like an assertion (enabled in dev, disabled in prod)
+    o.btnInspector = o.topToolbarElement:childrenWithRole("AXCheckBox")[5]
+    -- PRN use :matchCriteria w/ AXDescription instead of index?
+    --    TODO time the difference
+    --    FYI for tooggling a panel... it's perfectly fine to be slower (i.e. even 10ms is NBD)...
+    --    VERSUS, siturations where I might repeat a key to change a slider in which case then speed is critical
+    --
+    -- o.btnBrowser = o.topToolbarElement:childrenWithRole("AXCheckBox")[3]
+    -- o.btnTimeline = o.topToolbarElement:childrenWithRole("AXCheckBox")[4]
+    --
+    -- toolbar 1	AXToolbar		toolbar 1 of
+    --     button 1	AXButton	desc="Import media from a device, camera, or archive"	button 1 of
+    --     checkbox 1	AXCheckBox	desc="Show or hide the Keyword Editor"	checkbox 1 of
+    --     checkbox 2	AXCheckBox		checkbox 2 of
+    --     group 1	AXGroup		group 1 of
+    --     checkbox 3	AXCheckBox	desc="Show or hide the Browser"	checkbox 3 of
+    --     checkbox 4	AXCheckBox	desc="Show or hide the Timeline"	checkbox 4 of
+    --     checkbox 5	AXCheckBox	desc="Show or hide the Inspector"	checkbox 5 of
+    --     button 2	AXButton	desc="Share the project, event clip, or Timeline range"	button 2 of
+
     return o
 end
 
@@ -63,10 +92,10 @@ function FcpxInspectorPanel:new(panelElement, window)
 end
 
 function FcpxInspectorPanel:ensureOpen()
-    -- TODO find button (upper right) and AXPress if not enabled
     -- set Show_or_hide_the_Inspector to checkbox 5 of toolbar 1 of ¬
     --     window "Final Cut Pro" of application process "Final Cut Pro"
-    local button = self.window.topToolbar:childrenWithRole("AXCheckBox")[5]
+    -- TODO move typed button to toolbar "class"
+    local button = self.window.topToolbar.btnInspector
     if button:attributeValue("AXValue") == 0 then
         print("opening title inspector")
         button:performAction("AXPress")
@@ -85,9 +114,13 @@ function FcpxInspectorPanel:ensureClosed()
     print("title inspector already closed")
 end
 
+function FcpxInspectorPanel:showTitleInspector()
+    self:ensureOpen()
+end
+
 function FcpxInspectorTitlePanelEnsureOpen()
     local window = FcpxEditorWindow:new()
-    window.inspector:ensureOpen()
+    window.inspector:showTitleInspector()
 end
 
 function GetFcpxRightSideInspectorPanel()
