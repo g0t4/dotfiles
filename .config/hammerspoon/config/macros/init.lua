@@ -23,7 +23,14 @@ function FindFcpxTitlePanelCheckbox(doWithTitlePanel)
             print("no title panel found")
             return
         end
-        doWithTitlePanel(searchTask[1])
+        local checkbox = searchTask[1]
+
+        -- ensure title panel is visible!
+        if checkbox:attributeValue("AXValue") == 0 then
+            checkbox:performAction("AXPress")
+        end
+
+        doWithTitlePanel(checkbox)
     end)
 end
 
@@ -33,10 +40,6 @@ end
 
 function FcpxTitlePanelFocusXSlider()
     local function doWithTitlePanel(checkbox)
-        if checkbox:attributeValue("AXValue") == 0 then
-            checkbox:performAction("AXPress")
-        end
-
         local grandparent = checkbox:attributeValue("AXParent"):attributeValue("AXParent")
         local scrollarea1 = grandparent:attributeValue("AXChildren")[1][1][1]
 
