@@ -16,9 +16,6 @@ end
 function MacroFcpxFindXSlider()
     EnsureClearedWebView()
 
-    local fcpx = GetFcpxAppElement()
-
-
     local function afterSearch(message, searchTask, numResultsAdded)
         PrintToWebView("results: ", numResultsAdded)
         DumpHtml(searchTask)
@@ -29,7 +26,7 @@ function MacroFcpxFindXSlider()
     --     OR Can I just search every time?
     --     FYI must set count = 1 to be fast
     local criteria = { attribute = "AXDescription", value = "Title Inspector" } -- 270ms to 370ms w/ count=1
-    FindOneElement(fcpx, criteria, afterSearch)
+    FindOneElement(GetFcpxAppElement(), criteria, afterSearch)
 
     -- slider (deeply nested)
     -- local criteria = { attribute = "AXHelp", value = "Y Slider" } -- 2.5s w/ count=1 (~10+ w/o)
