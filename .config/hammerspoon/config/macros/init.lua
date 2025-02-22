@@ -10,7 +10,10 @@ function MacroFcpxFindXSlider()
     local app = application.find("com.apple.FinalCut")
     local fcpx = hs.axuielement.applicationElement(app)
 
+    local startTime = GetTime()
+
     local function afterSearch(message, searchTask, numResultsAdded)
+        print("time to callback: " .. GetElapsedTimeInMilliseconds(startTime) .. " ms")
         PrintToWebView("results: ", numResultsAdded)
         DumpHtml(searchTask)
     end
@@ -19,10 +22,10 @@ function MacroFcpxFindXSlider()
     -- OMG finding button to show panels is nearly instant!! I can use this as a first search (Fallback) if fixed path doesn't work!
     --     OR Can I just search every time?
     --     FYI must set count = 1 to be fast
-    -- local criteria = { attribute = "AXDescription", value = "Title Inspector" }
+    local criteria = { attribute = "AXDescription", value = "Title Inspector" } -- 270ms w/ count=1
 
     -- slider (deeply nested)
-    local criteria = { attribute = "AXHelp", value = "Y Slider" } --, -- value = "y_slider" }
+    -- local criteria = { attribute = "AXHelp", value = "Y Slider" } -- 2.5s w/ count=1 (~10+ w/o)
     -- setTimeout doesn't seem to work for elementSearch?!
 
     local criteriaFunction = hs.axuielement.searchCriteriaFunction(criteria)
