@@ -85,7 +85,7 @@ function FcpxInspectorPanel:ensureClosed()
     print("title inspector already closed")
 end
 
-function FcpxEnsureTitleInspectorIsOpen()
+function FcpxInspectorTitlePanelEnsureOpen()
     local window = FcpxEditorWindow:new()
     window.inspector:ensureOpen()
 end
