@@ -755,53 +755,51 @@ function GetValueOrEmptyString(element, attribute)
     end
 end
 
+function CompactUserData(userdata)
+    if userdata.__name == "hs.axuielement.axtextmarker"
+        or userdata.__name == "hs.axuielement.axtextmarkerrange" then
+        -- FYI nothing material to show, also don't wanna risk slowing anything down to get length/content (bytes).. unless that is useful and right now I don't think it is
+        return tostring(userdata)
+    end
+    if userdata.__name ~= "hs.axuielement" then
+        -- IIUC __name is frequently used so that is a pretty safe bet
+        -- getmetatable(value) == hs.getObjectMetatable("hs.axuielement") -- alternate to check
+        prints("UNEXPECTED userdata type, consider adding it to display helpers: " .. tostring(userdata))
+        return "UNEXPECTED: " .. tostring(userdata)
+    end
+    local title = GetValueOrEmptyString(userdata, "AXTitle")
+    local role = GetValueOrEmptyString(userdata, "AXRole")
+    return title .. ' (' .. role .. ')'
+end
+
+function DisplayAttr(attrValue)
+    if attrValue == nil then
+        return 'nil'
+    elseif type(attrValue) == "userdata" then
+        return CompactUserData(attrValue)
+    elseif type(attrValue) == "table" then
+        -- i.e. AXSize, AXPosition, AXFrame, AXVisibleCharacterRange
+        return CompactTableAttrValue(attrValue)
+    elseif type(attrValue) == 'string' then
+        return '"' .. attrValue .. '"'
+    else
+        return tostring(attrValue)
+    end
+end
+
+function CompactTableAttrValue(tbl)
+    if tbl == nil then
+        return "nil"
+    end
+    local result = {}
+    for attrName, attrValue in pairs(tbl) do
+        local displayValue = DisplayAttr(attrValue)
+        table.insert(result, string.format("%s=%s", tostring(attrName), displayValue))
+    end
+    return "{" .. table.concat(result, ", ") .. "}"
+end
+
 function GetDumpAXAttributes(element, skips)
-    local function compactUserData(userdata)
-        if userdata.__name == "hs.axuielement.axtextmarker"
-            or userdata.__name == "hs.axuielement.axtextmarkerrange" then
-            -- FYI nothing material to show, also don't wanna risk slowing anything down to get length/content (bytes).. unless that is useful and right now I don't think it is
-            return tostring(userdata)
-        end
-        if userdata.__name ~= "hs.axuielement" then
-            -- IIUC __name is frequently used so that is a pretty safe bet
-            -- getmetatable(value) == hs.getObjectMetatable("hs.axuielement") -- alternate to check
-            prints("UNEXPECTED userdata type, consider adding it to display helpers: " .. tostring(userdata))
-            return "UNEXPECTED: " .. tostring(userdata)
-        end
-        local title = GetValueOrEmptyString(userdata, "AXTitle")
-        local role = GetValueOrEmptyString(userdata, "AXRole")
-        return title .. ' (' .. role .. ')'
-    end
-
-    local compactTableAttrValue -- forward define b/c dependency loop and I wanna keepe local funcs
-
-    local function displayAttr(attrValue)
-        if attrValue == nil then
-            return 'nil'
-        elseif type(attrValue) == "userdata" then
-            return compactUserData(attrValue)
-        elseif type(attrValue) == "table" then
-            -- i.e. AXSize, AXPosition, AXFrame, AXVisibleCharacterRange
-            return compactTableAttrValue(attrValue)
-        elseif type(attrValue) == 'string' then
-            return '"' .. attrValue .. '"'
-        else
-            return tostring(attrValue)
-        end
-    end
-
-    function compactTableAttrValue(tbl)
-        if tbl == nil then
-            return "nil"
-        end
-        local result = {}
-        for attrName, attrValue in pairs(tbl) do
-            local displayValue = displayAttr(attrValue)
-            table.insert(result, string.format("%s=%s", tostring(attrName), displayValue))
-        end
-        return "{" .. table.concat(result, ", ") .. "}"
-    end
-
     skips = skips or {}
 
     local result = { '<h4>' .. htmlCodeBlock(ElementSpecifierFor(element)) .. '</h4>' }
@@ -817,7 +815,7 @@ function GetDumpAXAttributes(element, skips)
     for _, attrName in ipairs(sortedAttrs) do
         local attrValue = element[attrName]
         local displayName = attrName
-        local displayValue = displayAttr(attrValue)
+        local displayValue = DisplayAttr(attrValue)
         if displayValue == "nil" or displayValue == '""' then
             table.insert(result, "\t<span class='not-set-attribute'>" .. displayName .. ' = ' .. displayValue .. "</span><br>")
         else

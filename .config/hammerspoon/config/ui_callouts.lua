@@ -24,6 +24,24 @@ local function showTooltipForElement(element, frame)
     local script = CombineClausesWithLineContinuations(clauses)
     M.last.text = script
 
+    if false then
+        -- TODO add some toggle for enabling verbose cuz normally I don't want verbose...
+        -- WAIT... if I have a second display, how about show it there!?
+        for k, v in pairs(element) do
+            if v == nil then
+                -- skip nil key
+                goto continue
+            end
+            local value = DisplayAttr(v)
+            -- only allow 50 chars max for text
+            if #value > 50 then
+                value = value:sub(1, 50) .. "..."
+            end
+            M.last.text = M.last.text .. "\n" .. k .. ": " .. value
+            ::continue::
+        end
+    end
+
     local tmpcanvas = canvas.new({ x = 0, y = 0, w = 1000, h = 1000 })
     local estimatedSizeForDefaultFont = tmpcanvas:minimumTextSize(M.last.text)
     local useFontSize = 14
