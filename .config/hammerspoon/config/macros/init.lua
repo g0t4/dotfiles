@@ -115,6 +115,11 @@ function FcpxInspectorPanel:showTitleInspector()
     self:ensureOpen()
 end
 
+function FcpxInspectorTitlePanelEnsureClosed()
+    local window = FcpxEditorWindow:new()
+    window.inspector:ensureClosed()
+end
+
 function FcpxInspectorTitlePanelEnsureOpen()
     local window = FcpxEditorWindow:new()
     window.inspector:showTitleInspector()
