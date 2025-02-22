@@ -383,7 +383,9 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "E", function()
         --
         -- filter on common roles for menu type elements:
         --  - FYI value has the string, key is int, so have to filter/map on value
-        local elementCriteria = EnumTableValues(hs.axuielement.roles):filter(function(e) return string.find(e, "Menu") end):totable()
+        local elementCriteria = EnumTableValues(hs.axuielement.roles)
+            :filter(function(e) return string.find(e, "Menu") end)
+            :totable()
         --
         -- local elementCriteria = { "AXButton", "AXRadioButton", "AXPopUpButton", "AXMenuButton" } -- ~300ms callback, 3.7ms to display (FYI I
         -- FYI when I re-run this shortcut (2nd time+) it takes 6.7 seconds to run elementSearch! ODD?! but reload hammerspoon config (wipes out state) and its back down to 300ms!
