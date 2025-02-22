@@ -36,6 +36,50 @@ function GetFcpxEditorWindow()
     return fcpx:attributeValue("AXFocusedWindow")
 end
 
+FcpxEditorWindow = {}
+function FcpxEditorWindow:new()
+    local o = {}
+    setmetatable(o, self)
+    self.__index = self
+    o.window = GetFcpxEditorWindow()
+    o.topToolbar = o.window:childrenWithRole("AXToolbar")[1]
+    -- everything below top toolbar
+    -- use _ to signal that it's not guaranteed to be there
+    o._mainSplitGroup = o.window:childrenWithRole("AXSplitGroup")[1]
+    local rightSidePanel = o._mainSplitGroup:childrenWithRole("AXGroup")[1]
+    -- local leftSidePanel = mainSplitGroup:childrenWithRole("AXGroup")[2]
+    o.inspector = FcpxInspectorPanel:new(rightSidePanel, o)
+    return o
+end
+
+FcpxInspectorPanel = {}
+function FcpxInspectorPanel:new(panelElement, window)
+    local o = {}
+    setmetatable(o, self)
+    self.__index = self
+    o.panelElement = panelElement
+    o.window = window
+    return o
+end
+
+function FcpxInspectorPanel:ensureOpen()
+    -- TODO find button (upper right) and AXPress if not enabled
+    -- set Show_or_hide_the_Inspector to checkbox 5 of toolbar 1 of ¬
+    --     window "Final Cut Pro" of application process "Final Cut Pro"
+    local button = self.window.topToolbar:childrenWithRole("AXCheckBox")[5]
+    if button:attributeValue("AXValue") == 0 then
+        print("opening title inspector")
+        button:performAction("AXPress")
+        return
+    end
+    print("title inspector already open")
+end
+
+function FcpxEnsureTitleInspectorIsOpen()
+    local window = FcpxEditorWindow:new()
+    window.inspector:ensureOpen()
+end
+
 function GetFcpxRightSideInspectorPanel()
     -- FYI this panel might be somewhere else depending on layout...
     --   not sure if that would affect the element specifier, my guess is yes...
@@ -48,9 +92,6 @@ function GetFcpxRightSideInspectorPanel()
     end
     local toolbar = window:childrenWithRole("AXToolbar")[1]
     print("toolbar", hs.inspect(toolbar))
-    local mainSplitGroup = window:childrenWithRole("AXSplitGroup")[1]
-    local rightSidePanel = mainSplitGroup:childrenWithRole("AXGroup")[1]
-    local leftSidePanel = mainSplitGroup:childrenWithRole("AXGroup")[2]
     return mainSplitGroup
 end
 
