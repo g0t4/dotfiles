@@ -454,11 +454,11 @@ local function preHtmlCodeBlock(script)
 end
 
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "A", function()
+    EnsureClearedWebView()
+
     -- [A]ppleScript
     -- FYI "A" is easy to invoke with left hand alone (after position mouse with right--trackpad)
     -- reserve "I" for some other inspect mode? maybe to toggle mouse inspect mode
-
-    EnsureClearedWebView()
 
     -- TODO use elementSearch to find and build the applescript for a control, take in a string of text and go! its fast...
     --    consider using this to find an element if the original specifier chain stops working... and to have it spit out again a new chain?
@@ -471,10 +471,17 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "A", function()
     -- TODO build a tree of entire main/focused window using buildTree (or elementSearch)... it is super fast and would be cool to explore it like UI Browser has
     --
 
-    local coords = hs.mouse.absolutePosition()
-    -- FYI systemElementAtPosition(coords) => hs.axuielement.systemWideElement():elementAtPosition(coords)
-    --   alternatively, could use an app element and ask for its elementAtPosition specific to just that app
-    local elementAt = hs.axuielement.systemElementAtPosition(coords)
+    local callouts = require("config.ui_callouts")
+    local elementAt = nil
+    if callouts.moves then
+        -- run dump on current element from callouts, this way I can nav around with arrows + pick parent elements that aren't selected by systemElementAtPosition, also children item sometimes aren't selected (i.e. SOM image buttons on toolbars)
+        elementAt = callouts.last.element
+    else
+        local coords = hs.mouse.absolutePosition()
+        -- FYI systemElementAtPosition(coords) => hs.axuielement.systemWideElement():elementAtPosition(coords)
+        --   alternatively, could use an app element and ask for its elementAtPosition specific to just that app
+        elementAt = hs.axuielement.systemElementAtPosition(coords)
+    end
     local clauses, attrDumps = BuildAppleScriptTo(elementAt, true)
     local script = CombineClausesWithLineContinuations(clauses)
     prints(preHtmlCodeBlock(script))
