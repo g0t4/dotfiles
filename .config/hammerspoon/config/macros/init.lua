@@ -10,7 +10,11 @@ function GetAppElement(appName)
 end
 
 function GetFcpxAppElement()
-    return GetAppElement("com.apple.FinalCut")
+    -- PRN measure overhead to find this
+    local startTime = GetTime()
+    local app = GetAppElement("com.apple.FinalCut") -- 1.4ms per, not at all bad
+    print("time to find app element: " .. GetElapsedTimeInMilliseconds(startTime) .. " ms")
+    return app
 end
 
 function MacroFcpxFindXSlider()
