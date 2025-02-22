@@ -83,6 +83,10 @@ local function prints(...)
     end
 end
 
+function PrintToWebView(...)
+    prints(...)
+end
+
 local function ensureWebview()
     -- do return end -- disable using html printer
 
