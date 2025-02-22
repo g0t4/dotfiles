@@ -36,8 +36,16 @@ function GetFcpxEditorWindow()
     return fcpx:attributeValue("AXFocusedWindow")
 end
 
-function GetFcpxRightSidePanel()
+function GetFcpxRightSideInspectorPanel()
+    -- FYI this panel might be somewhere else depending on layout...
+    --   not sure if that would affect the element specifier, my guess is yes...
+    --   thus, name it according to function so I can build upon it and then if it moves element speicifer
+    --     then I can just update this one func
     local window = GetFcpxEditorWindow()
+    if not window then
+        error("Could not find fcpx editor window")
+        return
+    end
     local toolbar = window:childrenWithRole("AXToolbar")[1]
     print("toolbar", hs.inspect(toolbar))
     local mainSplitGroup = window:childrenWithRole("AXSplitGroup")[1]
