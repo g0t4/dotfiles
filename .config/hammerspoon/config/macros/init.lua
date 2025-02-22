@@ -15,7 +15,27 @@ function GetFcpxAppElement()
 end
 
 function FcpxFindTitlePanelCheckbox(doWithTitlePanel)
-    -- TODO after extract logic for find title inspector, let's make it first try a fixed path... that will be much faster (300ms is ok but can be unpleasant too)
+    -- FIXED PATH CURRENTLY:
+    --    set Title to checkbox 1 of group 2 of group 5 of splitter group 1 of group 2 of ¬
+    --      splitter group 1 of group 1 of splitter group 1 of window "Final Cut Pro" of ¬
+    --        application process "Final Cut Pro"
+    --
+    -- TODO use fixed path if works, fallback to search otherwise
+    --   AXActivationPoint = {y=54.0, x=1539.0}
+    --   AXDescription = "Title Inspector"
+    --   AXEnabled = true
+    --   AXFocused = false
+    --   AXFrame = {y=44.0, x=1529.0, w=20.0, h=20.0}
+    --   AXHelp = "Show the Title Inspector"
+    --   AXIdentifier = "_NS:10"
+    --   AXPosition = {y=44.0, x=1529.0}
+    --   AXRole = "AXCheckBox"
+    --   AXRoleDescription = "toggle button"
+    --   AXSize = {w=20.0, h=20.0}
+    --   AXSubrole = "AXToggle"
+    --   AXTitle = "Title"
+    --   AXValue = 1
+
     local fcpx = GetFcpxAppElement()
     local criteria = { attribute = "AXDescription", value = "Title Inspector" } -- 270ms to 370ms w/ count=1
     FindOneElement(fcpx, criteria, function(_, searchTask, numResultsAdded)
@@ -56,90 +76,6 @@ function FcpxTitlePanelFocusOnElementByDescription(description)
     --    that is how most of my applescripts work too!
     --    LATER, PRN, I can develop automatic troubleshooting too... even when using these presumptive [1][1][2] et
     FcpxTitlePanelFocusOnElementByAttr("AXDescription", description)
-end
-
-function FcpxExperimentTitlePanel()
-    local function afterFindTitlePanel(message, searchTask, numResultsAdded)
-        if numResultsAdded == 0 then
-            print("no title panel found")
-            return
-        end
-        -- FYI IDEA IS... focus the x slider and I can use a knob on streamdeck to up/down it!
-
-        -- checkbox 1 of
-        --
-        --   AXActivationPoint = {x=1539.0, y=54.0}
-        --   AXDescription = "Title Inspector"
-        --   AXEnabled = true
-        --   AXFocused = false
-        --   AXFrame = {x=1529.0, y=44.0, h=20.0, w=20.0}
-        --   AXHelp = "Show the Title Inspector"
-        --   AXIdentifier = "_NS:10"
-        --   AXPosition = {x=1529.0, y=44.0}
-        --   AXRole = "AXCheckBox"
-        --   AXRoleDescription = "toggle button"
-        --   AXSize = {h=20.0, w=20.0}
-        --   AXSubrole = "AXToggle"
-        --   AXTitle = "Title"
-
-        -- TODO add helper to do this for any AXCheckBox (ensure checked)
-        -- if not enabled then I need to click it
-        local checkbox = searchTask[1]
-        if checkbox:attributeValue("AXValue") == 0 then
-            print("checkbox not enabled")
-            checkbox:performAction("AXPress")
-        else
-            print("checkbox already enabled")
-        end
-
-        local grandparent = checkbox:attributeValue("AXParent"):attributeValue("AXParent")
-        -- checkbox is in group2/element2 of grandparent
-        -- group1/element1 is panel of controls below the buttons to switch panels
-        local scrollarea1 = grandparent:attributeValue("AXChildren")[1][1][1]
-        -- print("AXRole of scrollarea1: " .. scrollarea1:attributeValue("AXRole"))
-
-        -- controls are all beneat scorllarea1
-        --
-        -- text field 5 of
-        --
-        -- AXChildren = {}
-        -- AXChildrenInNavigationOrder = {}
-        -- AXDescription = "y scrubber"
-        -- AXEnabled = true
-        -- AXFocused = false
-        -- AXFrame = {y=175.0, h=18.0, w=51.0, x=1763.0}
-        -- AXHelp = "Y Scrubber"
-        -- AXInsertionPointLineNumber = 0
-        -- AXNumberOfCharacters = 4
-        -- AXPlaceholderValue = nil
-        -- AXPosition = {y=175.0, x=1763.0}
-        -- AXRole = "AXTextField"
-        -- AXRoleDescription = "text field"
-        -- AXSelectedText = nil
-        -- AXSelectedTextRange = {length=0, location=0}
-        -- AXSize = {w=51.0, h=18.0}
-        -- AXValue = "0.61"
-        -- AXVisibleCharacterRange = {length=4, location=0}
-
-        -- loop over until find AXDescription == "y scrubber"
-        -- TODO split out helper that can find a child by attr name and value...
-        for i, v in ipairs(scrollarea1) do
-            if v:attributeValue("AXDescription") == "y scrubber" then
-                print("found y scrubber")
-                -- YES, YES BITCH!
-                v:setAttributeValue("AXFocused", true)
-                -- YES, YES BITCH!
-                -- v:setAttributeValue("AXValue", "0.69")
-                -- TODO alternatively... consider read AXValue and increment it by X variable amount that I can pass from streamdeck to have different granularity knob adjustments
-                --   the knobs by the way can be KM Link to macros... that call this with amount and I can use the focused element (split out separately to switch dimensions as I don't need knobs dedicated to each published poroperty... rather I want knobs that can work on all slider based props)
-                break
-            end
-        end
-    end
-
-    local fcpx = GetFcpxAppElement()
-    local criteria = { attribute = "AXDescription", value = "Title Inspector" } -- 270ms to 370ms w/ count=1
-    FindOneElement(fcpx, criteria, afterFindTitlePanel)
 end
 
 function TestBack2BackElementSearch()
