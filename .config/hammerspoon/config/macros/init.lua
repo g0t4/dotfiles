@@ -19,6 +19,7 @@ function FcpxFindTitlePanelCheckbox(doWithTitlePanel)
     --    set Title to checkbox 1 of group 2 of group 5 of splitter group 1 of group 2 of ¬
     --      splitter group 1 of group 1 of splitter group 1 of window "Final Cut Pro" of ¬
     --        application process "Final Cut Pro"
+    -- TODO use childrenWithRole and offsets above -  https://www.hammerspoon.org/docs/hs.axuielement.html#childrenWithRole
     --
     -- TODO use fixed path if works, fallback to search otherwise
     --   AXActivationPoint = {y=54.0, x=1539.0}
