@@ -151,7 +151,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "C", function()
     end
 end)
 
-local function stopObserving()
+local function stopElementInspector()
     M.moves = nil
     M.subscription:unsubscribe() -- subscription cleanup is all... really can skip this here
     removeHighlight() -- clear the callout/tooltips
@@ -166,7 +166,7 @@ local function stopObserving()
     end
 end
 
-local function startObserving()
+local function startElementInspector()
     M.moves, M.stop_event_source = require("config.rx.mouse").mouseMovesThrottledObservable(50)
     M.subscription = M.moves:subscribe(
         function()
@@ -181,7 +181,7 @@ local function startObserving()
     --     print("[COMPLETE] what to do here?")
     -- end
     )
-    M.escBinding = hs.hotkey.bind({}, "escape", stopObserving)
+    M.escBinding = hs.hotkey.bind({}, "escape", stopElementInspector)
 end
 
 M.moves = nil
@@ -189,9 +189,9 @@ M.stop_event_source = nil
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "T", function()
     alert.closeAll()
     if not M.moves then
-        startObserving()
+        startElementInspector()
     else
-        stopObserving()
+        stopElementInspector()
     end
 end)
 
