@@ -21,9 +21,31 @@ function MacroFcpxFindXSlider()
             return
         end
 
-        local titlePanel = searchTask:resultElementAtIndex(0)
-        local xSlider = titlePanel:elementById("xSlider")
-        xSlider:click()
+        -- checkbox 1 of
+        --
+        --   AXActivationPoint = {x=1539.0, y=54.0}
+        --   AXDescription = "Title Inspector"
+        --   AXEnabled = true
+        --   AXFocused = false
+        --   AXFrame = {x=1529.0, y=44.0, h=20.0, w=20.0}
+        --   AXHelp = "Show the Title Inspector"
+        --   AXIdentifier = "_NS:10"
+        --   AXPosition = {x=1529.0, y=44.0}
+        --   AXRole = "AXCheckBox"
+        --   AXRoleDescription = "toggle button"
+        --   AXSize = {h=20.0, w=20.0}
+        --   AXSubrole = "AXToggle"
+        --   AXTitle = "Title"
+
+        -- if not enabled then I need to click it
+        local checkbox = searchTask[1]
+        if checkbox:attributeValue("AXValue") == 0 then
+            print("checkbox not enabled")
+            checkbox:performAction("AXPress")
+            -- checkbox:setAttributeValue("AXValue", 1)
+        else
+            print("checkbox already enabled")
+        end
     end
 
     local fcpx = GetFcpxAppElement()
