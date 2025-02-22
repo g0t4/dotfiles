@@ -14,11 +14,17 @@ function GetFcpxAppElement()
     return GetAppElement("com.apple.FinalCut")
 end
 
-function FindFcpxTitlePanel(doWithTitlePanel)
+function FindFcpxTitlePanelCheckbox(doWithTitlePanel)
     -- TODO after extract logic for find title inspector, let's make it first try a fixed path... that will be much faster (300ms is ok but can be unpleasant too)
     local fcpx = GetFcpxAppElement()
     local criteria = { attribute = "AXDescription", value = "Title Inspector" } -- 270ms to 370ms w/ count=1
-    FindOneElement(fcpx, criteria, doWithTitlePanel)
+    FindOneElement(fcpx, criteria, function(_, searchTask, numResultsAdded)
+        if numResultsAdded == 0 then
+            print("no title panel found")
+            return
+        end
+        doWithTitlePanel(searchTask[1])
+    end)
 end
 
 function FcpxTitlePanelFocusYSlider()
@@ -26,13 +32,7 @@ function FcpxTitlePanelFocusYSlider()
 end
 
 function FcpxTitlePanelFocusXSlider()
-    local function doWithTitlePanel(message, searchTask, numResultsAdded)
-        local checkbox = searchTask[1]
-        if checkbox == nil then
-            print("no title panel found")
-            return
-        end
-
+    local function doWithTitlePanel(checkbox)
         if checkbox:attributeValue("AXValue") == 0 then
             checkbox:performAction("AXPress")
         end
@@ -50,7 +50,7 @@ function FcpxTitlePanelFocusXSlider()
         print("no x scrubber found")
     end
 
-    FindFcpxTitlePanel(doWithTitlePanel)
+    FindFcpxTitlePanelCheckbox(doWithTitlePanel)
 end
 
 function FcpxExperimentTitlePanel()
