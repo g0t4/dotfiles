@@ -4,11 +4,19 @@ local M = {}
 -- TODO impement cancelation of search task(s)?
 M.searchTasks = {}
 
+function GetAppElement(appName)
+    local app = application.find(appName)
+    return hs.axuielement.applicationElement(app)
+end
+
+function GetFcpxAppElement()
+    return GetAppElement("com.apple.FinalCut")
+end
+
 function MacroFcpxFindXSlider()
     EnsureClearedWebView()
 
-    local app = application.find("com.apple.FinalCut")
-    local fcpx = hs.axuielement.applicationElement(app)
+    local fcpx = GetFcpxAppElement()
 
     local startTime = GetTime()
 
