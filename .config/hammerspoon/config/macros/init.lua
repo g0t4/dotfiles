@@ -75,6 +75,16 @@ function FcpxInspectorPanel:ensureOpen()
     print("title inspector already open")
 end
 
+function FcpxInspectorPanel:ensureClosed()
+    local button = self.window.topToolbar:childrenWithRole("AXCheckBox")[5]
+    if button:attributeValue("AXValue") == 1 then
+        print("closing title inspector")
+        button:performAction("AXPress")
+        return
+    end
+    print("title inspector already closed")
+end
+
 function FcpxEnsureTitleInspectorIsOpen()
     local window = FcpxEditorWindow:new()
     window.inspector:ensureOpen()
