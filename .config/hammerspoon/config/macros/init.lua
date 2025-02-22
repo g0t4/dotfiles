@@ -20,6 +20,7 @@ function MacroFcpxFindXSlider()
             print("no title panel found")
             return
         end
+        -- FYI IDEA IS... focus the x slider and I can use a knob on streamdeck to up/down it!
 
         -- checkbox 1 of
         --
@@ -77,13 +78,16 @@ function MacroFcpxFindXSlider()
         -- AXVisibleCharacterRange = {length=4, location=0}
 
         -- loop over until find AXDescription == "y scrubber"
+        -- TODO split out helper that can find a child by attr name and value...
         for i, v in ipairs(scrollarea1) do
             if v:attributeValue("AXDescription") == "y scrubber" then
                 print("found y scrubber")
                 -- YES, YES BITCH!
                 v:setAttributeValue("AXFocused", true)
                 -- YES, YES BITCH!
-                v:setAttributeValue("AXValue", "0.69")
+                -- v:setAttributeValue("AXValue", "0.69")
+                -- TODO alternatively... consider read AXValue and increment it by X variable amount that I can pass from streamdeck to have different granularity knob adjustments
+                --   the knobs by the way can be KM Link to macros... that call this with amount and I can use the focused element (split out separately to switch dimensions as I don't need knobs dedicated to each published poroperty... rather I want knobs that can work on all slider based props)
                 break
             end
         end
