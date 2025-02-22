@@ -59,7 +59,10 @@ function FcpxTopToolbar:new(topToolbarElement)
     self.__index = self
     o.topToolbarElement = topToolbarElement
     -- TODO consider a toggle for troubleshooting... that will check more carefully (i.e. for desc here)... but not when toggle is off, like an assertion (enabled in dev, disabled in prod)
-    o.btnInspector = o.topToolbarElement:childrenWithRole("AXCheckBox")[5]
+    local checkboxes = o.topToolbarElement:childrenWithRole("AXCheckBox")
+    o.btnInspector = checkboxes[5]
+    o.btnBrowser = checkboxes[3]
+    o.btnTimeline = checkboxes[4]
     -- PRN use :matchCriteria w/ AXDescription instead of index?
     --    TODO time the difference
     --    FYI for tooggling a panel... it's perfectly fine to be slower (i.e. even 10ms is NBD)...
