@@ -18,10 +18,8 @@ function MacroFcpxFindXSlider()
 
     local fcpx = GetFcpxAppElement()
 
-    local startTime = GetTime()
 
     local function afterSearch(message, searchTask, numResultsAdded)
-        print("time to callback: " .. GetElapsedTimeInMilliseconds(startTime) .. " ms")
         PrintToWebView("results: ", numResultsAdded)
         DumpHtml(searchTask)
     end
