@@ -7,7 +7,6 @@ local htmlPage
 
 local skipAttrsWhenInspectForPathBuilding = {
     -- PRN truncate long values instead? could pass max length here
-    AXValue = true,
     AXTopLevelUIElement = true,
     AXWindow = true,
     AXParent = true,
