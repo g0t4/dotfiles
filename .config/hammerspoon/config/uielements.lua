@@ -257,7 +257,7 @@ function DumpHtml(value)
     prints(InspectHtml(value))
 end
 
-local function ensureClearedWebView()
+function EnsureClearedWebView()
     if printWebView then
         printHtmlBuffer = {}
     end
@@ -267,7 +267,7 @@ end
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "S", function()
     -- [S]earch menu items
 
-    ensureClearedWebView()
+    EnsureClearedWebView()
 
     local app = hs.application.frontmostApplication()
     print("starting potentially slow element search of: " .. app:name())
@@ -293,7 +293,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "M", function()
     -- TODO for each menu item => generate AppleScript or hammerspoon lua code to invoke this menu item?
     -- FYI could use this to replace app - Paletro
 
-    ensureClearedWebView()
+    EnsureClearedWebView()
 
     local app = hs.application.frontmostApplication()
     print("starting potentially slow element search of: " .. app:name())
@@ -318,7 +318,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "E", function()
     -- test drive element search
     -- TODO try menu item search (like app.getMenuItems() above)
 
-    ensureClearedWebView()
+    EnsureClearedWebView()
 
     local app = hs.application.frontmostApplication()
     DumpHtml(app)
@@ -459,7 +459,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "A", function()
     -- FYI "A" is easy to invoke with left hand alone (after position mouse with right--trackpad)
     -- reserve "I" for some other inspect mode? maybe to toggle mouse inspect mode
 
-    ensureClearedWebView()
+    EnsureClearedWebView()
 
     -- TODO use elementSearch to find and build the applescript for a control, take in a string of text and go! its fast...
     --    consider using this to find an element if the original specifier chain stops working... and to have it spit out again a new chain?
