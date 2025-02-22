@@ -14,7 +14,7 @@ function GetFcpxAppElement()
     return GetAppElement("com.apple.FinalCut")
 end
 
-function MacroFcpxFindXSlider()
+function FcpxTitlePanelFocusXSlider()
     local function afterFindTitlePanel(message, searchTask, numResultsAdded)
         if numResultsAdded == 0 then
             print("no title panel found")
