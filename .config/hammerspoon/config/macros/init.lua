@@ -56,9 +56,9 @@ function FindOneElement(app, criteria, callback)
     local namedModifiers = { count = 1 }
 
 
-    local function afterSearch(message, searchTask, numResultsAdded)
+    local function afterSearch(...)
         print("time to callback: " .. GetElapsedTimeInMilliseconds(startTime) .. " ms")
-        callback(searchTask, numResultsAdded)
+        callback(...)
     end
 
     local searchTask = app:elementSearch(afterSearch, criteriaFunction, namedModifiers)
