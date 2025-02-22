@@ -28,12 +28,22 @@ function GetFcpxEditorWindow()
     -- AXSize = {h=1080.0, w=1920.0}
     -- AXSubrole = "AXStandardWindow"
     -- AXTitle = "Final Cut Pro"
+    if fcpx:attributeValue("AXTitle") ~= "Final Cut sPro" then
+        print("GetFcpxEditorWindow: unexpected title", fcpx:attributeValue("AXTitle"))
+        return nil
+    end
 
     return fcpx:attributeValue("AXFocusedWindow")
 end
 
 function GetFcpxRightSidePanel()
     local window = GetFcpxEditorWindow()
+    local toolbar = window:childrenWithRole("AXToolbar")[1]
+    print("toolbar", hs.inspect(toolbar))
+    local mainSplitGroup = window:childrenWithRole("AXSplitGroup")[1]
+    local rightSidePanel = mainSplitGroup:childrenWithRole("AXGroup")[1]
+    local leftSidePanel = mainSplitGroup:childrenWithRole("AXGroup")[2]
+    return mainSplitGroup
 end
 
 function FcpxFindTitlePanelCheckbox(doWithTitlePanel)
