@@ -34,23 +34,27 @@ function FcpxFindTitlePanelCheckbox(doWithTitlePanel)
     end)
 end
 
+function GetChildWithAttr(parent, attrName, attrValue)
+    for _, child in ipairs(parent) do
+        if child:attributeValue(attrName) == attrValue then
+            return child
+        end
+    end
+    return nil
+end
+
 function FcpxTitlePanelFocusYSlider()
 
 end
 
 function FcpxTitlePanelFocusXSlider()
     local function doWithTitlePanel(checkbox)
+        -- FYI it is ok to just assume the control is there, it will mostly just work and when it doesn't then I can troubleshoot
+        --    that is how most of my applescripts work too!
+        --    LATER, PRN, I can develop automatic troubleshooting too... even when using these presumptive [1][1][2] et
         local grandparent = checkbox:attributeValue("AXParent"):attributeValue("AXParent")
         local scrollarea1 = grandparent:attributeValue("AXChildren")[1][1][1]
-
-        for _, v in ipairs(scrollarea1) do
-            if v:attributeValue("AXDescription") == "x scrubber" then
-                print("found x scrubber")
-                v:setAttributeValue("AXFocused", true)
-                return
-            end
-        end
-        print("no x scrubber found")
+        GetChildWithAttr(scrollarea1, "AXDescription", "x scrubber"):setAttributeValue("AXFocused", true)
     end
 
     FcpxFindTitlePanelCheckbox(doWithTitlePanel)
