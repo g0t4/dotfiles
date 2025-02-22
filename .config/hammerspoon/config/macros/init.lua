@@ -28,7 +28,7 @@ function GetFcpxEditorWindow()
     -- AXSize = {h=1080.0, w=1920.0}
     -- AXSubrole = "AXStandardWindow"
     -- AXTitle = "Final Cut Pro"
-    if fcpx:attributeValue("AXTitle") ~= "Final Cut sPro" then
+    if fcpx:attributeValue("AXTitle") ~= "Final Cut Pro" then
         print("GetFcpxEditorWindow: unexpected title", fcpx:attributeValue("AXTitle"))
         return nil
     end
