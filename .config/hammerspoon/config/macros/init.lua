@@ -17,9 +17,17 @@ end
 function MacroFcpxFindXSlider()
     EnsureClearedWebView()
 
+    local function afterYSliderSearch(message, searchTask, numResultsAdded)
+        PrintToWebView("results: ", numResultsAdded)
+        DumpHtml(searchTask)
+    end
+
     local function afterSearch(message, searchTask, numResultsAdded)
         PrintToWebView("results: ", numResultsAdded)
         DumpHtml(searchTask)
+
+        local ySliderCriteria = { attribute = "AXHelp", value = "Y Slider" }
+        FindOneElement(GetFcpxAppElement(), ySliderCriteria, afterYSliderSearch)
     end
 
     -- OMG finding button to show panels is nearly instant!! I can use this as a first search (Fallback) if fixed path doesn't work!

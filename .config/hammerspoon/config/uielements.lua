@@ -291,10 +291,7 @@ end)
 
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "M", function()
     -- USEFUL to quick check for a menu item
-    -- TODO try axuielement.elementSearch and see how it compares vs this... (should have more attribute info avail)
-    --   - IIAC it might find more menus (i.e. context  menus?)
-    -- TODO for each menu item => generate AppleScript or hammerspoon lua code to invoke this menu item?
-    -- FYI could use this to replace app - Paletro
+    -- FYI could use this to replace app - Paletro (use canvas to draw menu control)
 
     EnsureClearedWebView()
 
