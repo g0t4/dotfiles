@@ -348,7 +348,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "E", function()
             prints("time to display: " .. GetElapsedTimeInMilliseconds(start_time) .. " ms")
         end)
     end
-    testBuildTree()
+    -- testBuildTree()
 
     local start_time = GetTime()
 
@@ -402,7 +402,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "E", function()
         local searchTask = appElement:elementSearch(afterSearch, criteriaFunction, namedModifiers)
         -- CAN check progress/cancel/see results even with searchTask outside of the callback
     end
-    -- testElementSearchWithFilter()
+    testElementSearchWithFilter()
 
 
     local function testMyOwnFilterFunction()
