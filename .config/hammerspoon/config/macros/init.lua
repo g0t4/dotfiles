@@ -14,7 +14,42 @@ function GetFcpxAppElement()
     return GetAppElement("com.apple.FinalCut")
 end
 
+function FcpxTitlePanelFocusYSlider()
+
+end
+
 function FcpxTitlePanelFocusXSlider()
+    local function afterFindTitlePanel(message, searchTask, numResultsAdded)
+        local checkbox = searchTask[1]
+        if checkbox == nil then
+            print("no title panel found")
+            return
+        end
+
+        if checkbox:attributeValue("AXValue") == 0 then
+            checkbox:performAction("AXPress")
+        end
+
+        local grandparent = checkbox:attributeValue("AXParent"):attributeValue("AXParent")
+        local scrollarea1 = grandparent:attributeValue("AXChildren")[1][1][1]
+
+        for _, v in ipairs(scrollarea1) do
+            if v:attributeValue("AXDescription") == "x scrubber" then
+                print("found x scrubber")
+                v:setAttributeValue("AXFocused", true)
+                return
+            end
+        end
+        print("no x scrubber found")
+    end
+
+    -- TODO after extract logic for find title inspector, let's make it first try a fixed path... that will be much faster (300ms is ok but can be unpleasant too)
+    local fcpx = GetFcpxAppElement()
+    local criteria = { attribute = "AXDescription", value = "Title Inspector" } -- 270ms to 370ms w/ count=1
+    FindOneElement(fcpx, criteria, afterFindTitlePanel)
+end
+
+function FcpxExperimentTitlePanel()
     local function afterFindTitlePanel(message, searchTask, numResultsAdded)
         if numResultsAdded == 0 then
             print("no title panel found")
