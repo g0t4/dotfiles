@@ -52,7 +52,8 @@ function FcpxTitlePanelFocusOnElementByAttr(attrName, attrValue)
 end
 
 function FcpxTitlePanelFocusYSlider()
-
+    -- TODO if I use this focus more often then I should just pass description as param from streamdeck button
+    FcpxTitlePanelFocusOnElementByAttr("AXDescription", "y scrubber")
 end
 
 function FcpxTitlePanelFocusXSlider()
