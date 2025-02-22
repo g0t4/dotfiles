@@ -20,9 +20,9 @@ end)
 
 
 local job2 = coroutine.create(function()
-    print('job2 started: ')
+    print('job2 started')
     local result1 = coroutine.yield(slowSearch)
-    print('job2 result1: ', result1)
+    print('job2 result1:', result1)
     local result2 = coroutine.yield(slowSearch)
     print('job2 result2:', result2)
 end)
@@ -38,12 +38,15 @@ table.insert(queue, job1)
 local ok, asyncFunc = coroutine.resume(job1)
 -- if (asyncFunc ~= nil) then
 asyncFunc(function(...)
-    print("fuck")
-    coroutine.resume(job1, ...)
+    print("main")
+    local ok, asyncFunc = coroutine.resume(job1, ...)
+    asyncFunc(function(...)
+        print("main2 ... ", coroutine.status(job1))
+        local ok = coroutine.resume(job1, ...)
+        print("main3... ", coroutine.status(job1))
+    end)
 end)
--- end
-
-
+print("after main")
 
 
 -- FYI blocking sleep:
