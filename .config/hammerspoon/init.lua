@@ -49,7 +49,13 @@ ensureBool(hs.preferencesDarkMode, true)
 ensureBool(hs.menuIcon, true)
 -- dock icon true => shows in APP SWITCHER TOO
 --   set true when changing config and want to quickly change in app switcher.. then set false again when it annoys you :)
-ensureBool(hs.dockIcon, false) -- FYI this one is 1-2ms to check, 3+ to set ... unlike others where its fast to check (and slow to set, even if not changing the actual value)
+--
+-- don't set this on every startup... otherwise, if I reload config w/ Hammerspoon Console window open...
+--    then this hides the dock icon, thus breaking my KM macros specific to HS app
+--    BTW this value is persisted and used by default when I restart Hammerspoon
+--      I just don't want it to reset on reload hammerspoon config
+-- ensureBool(hs.dockIcon, false) -- FYI this one is 1-2ms to check, 3+ to set ... unlike others where its fast to check (and slow to set, even if not changing the actual value)
+--
 -- hs.console.titleVisibility("hidden") -- hide title, but doesn't save space b/c buttons still show... why is there a fat border too below title/button bar?!
 -- hs.dockIcon(false) -- hide dock icon (default false) - also shows in app switcher if true) - REMINDER ONLY... uncomment to toggle but do not set every time (nor check every time) b/c that takes 2/4ms respectively
 hs.window.animationDuration = 0 -- default is 0.2 (FYI this means window layout changes don't animate, which I prefer)
