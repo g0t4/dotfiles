@@ -710,8 +710,20 @@ local function getIdentifier(toElement)
     return applescriptSanitizeIdentifier(identifier)
 end
 
-function BuildHammerspoonLuaTo(toElement, includeAttrDumps)
-
+function BuildHammerspoonLuaTo(toElement)
+    local tmp = fun.enumerate(toElement:path())
+        :map(function(index, pathItem)
+            local role = pathItem:attributeValue("AXRole")
+            if role == "AXApplication" then
+                -- this is just meant as a generic example, not actually using as is
+                -- TODO could hsow hs.application.find() too (to set app)
+                return "app"
+            end
+            return ":childrenWithRole(\"" .. role .. "\")[" .. index .. "]"
+        end)
+        :totable()
+    -- todo split on line length too (minimal though)
+    return table.concat(tmp, "")
 end
 
 function BuildAppleScriptTo(toElement, includeAttrDumps)
