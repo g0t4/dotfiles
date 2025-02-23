@@ -27,6 +27,9 @@
         "~/.luarocks/share/lua/5.4", // luarocks --local
         "/opt/homebrew/share/lua/5.4/", // luarocks --global (IIAC luarocks links here too?)
         // "/Applications/Hammerspoon.app/Contents/Resources/extensions", // doesn't work, don't try again unless you find good reason to
+
+        // hammerspoon stubs (based on my custom checkout dir):
+        "~/repos/github/Hammerspoon/Spoons/Source/EmmyLua.spoon/annotations/",
     ],
 
     // darn warning in nvim about luv... picking 3 (dont show again) sets this!
