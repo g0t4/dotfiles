@@ -134,9 +134,19 @@ function FcpxInspectorPanel:titleCheckbox()
     return checkbox
 end
 
+local function EnsureCheckboxIsChecked(checkbox)
+    if checkbox:attributeValue("AXValue") ~= 0 then
+        return
+    end
+    checkbox:performAction("AXPress")
+    if checkbox:attributeValue("AXValue") ~= 1 then
+        error("checkbox was not checked")
+    end
+end
+
 function FcpxInspectorPanel:showTitleInspector()
     self:ensureOpen()
-    self:titleCheckbox():performAction("AXPress")
+    EnsureCheckboxIsChecked(self:titleCheckbox())
 end
 
 -- function StreamDeckFcpxInspectorTitlePanelEnsureClosed()
