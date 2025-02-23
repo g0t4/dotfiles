@@ -70,4 +70,5 @@ require("config.learn.axuielem") -- WIP
 -- require("config.learn.webview")
 --
 
+require("config.macros.streamdecks")
 require("config.macros.init")
