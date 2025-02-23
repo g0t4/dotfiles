@@ -172,7 +172,7 @@ function FcpxInspectorPanel:titleCheckbox()
 end
 
 function FcpxInspectorPanel:titleCheckboxSearch()
-    FindOneElement(self.window.fcpx,
+    FindOneElement(self.window:rightSidePanel(),
         { attribute = "AXDescription", value = "Title Inspector" },
         function(_, searchTask, numResultsAdded)
             if numResultsAdded == 0 then
