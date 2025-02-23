@@ -162,7 +162,12 @@ function FcpxInspectorPanel:titleCheckbox()
     local checkbox = self.window:rightSidePanel()
         :childrenWithRole("AXGroup")[1]
         :childrenWithRole("AXCheckBox")[1]
-    -- TODO did this change or did I have the wrong selector in here before I passed out this AM?
+    if not checkbox then
+        error("Could not find title inspector checkbox")
+    end
+    if checkbox:attributeValue("AXDescription") ~= "Title Inspector" then
+        error("Unexpected title inspector checkbox description: " .. checkbox:attributeValue("AXDescription"))
+    end
     return checkbox
 end
 
