@@ -711,14 +711,18 @@ local function getIdentifier(toElement)
 end
 
 local axuielemMT = hs.getObjectMetatable("hs.axuielement")
-axuielemMT.fuckMe = function(self)
-    print("fuck me")
+axuielemMT.windows = function(self)
+    return self:childrenWithRole("AXWindow")
+end
+axuielemMT.splitGroups = function(self)
+    return self:childrenWithRole("AXSplitGroup")
+end
+axuielemMT.groups = function(self)
+    return self:childrenWithRole("AXGroup")
 end
 
 function BuildHammerspoonLuaTo(toElement)
-    toElement:fuckMe()
-    local tmp = fun.enumerate(toElement:path())
-        :map(function(index, pathItem)
+    local tmp = fun.enumerate(toElement:path()):map(function(index, pathItem)
             local role = pathItem:attributeValue("AXRole")
             if role == "AXApplication" then
                 -- this is just meant as a generic example, not actually using as is
