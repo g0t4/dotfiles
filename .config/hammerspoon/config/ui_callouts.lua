@@ -24,6 +24,12 @@ local function showTooltipForElement(element, frame)
     local script = CombineClausesWithLineContinuations(clauses)
     M.last.text = script
 
+
+    if true then
+        local lua = BuildHammerspoonLuaTo(element, false)
+        M.last.text = M.last.text .. "\n" .. lua
+    end
+
     if false then
         -- TODO add some toggle for enabling verbose cuz normally I don't want verbose...
         -- WAIT... if I have a second display, how about show it there!?

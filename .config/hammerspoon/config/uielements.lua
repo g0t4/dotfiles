@@ -710,6 +710,10 @@ local function getIdentifier(toElement)
     return applescriptSanitizeIdentifier(identifier)
 end
 
+function BuildHammerspoonLuaTo(toElement, includeAttrDumps)
+
+end
+
 function BuildAppleScriptTo(toElement, includeAttrDumps)
     includeAttrDumps = includeAttrDumps or false
 

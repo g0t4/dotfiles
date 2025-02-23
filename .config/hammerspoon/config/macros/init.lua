@@ -158,16 +158,20 @@ function FcpxInspectorPanel:titleCheckbox()
     --   AXSubrole = "AXToggle"
     --   AXTitle = "Title"
     --   AXValue = 1
+    local startTime = GetTime()
 
     local checkbox = self.window:rightSidePanel()
         :childrenWithRole("AXGroup")[1]
         :childrenWithRole("AXCheckBox")[1]
+    print("time to index cbox: " .. GetElapsedTimeInMilliseconds(startTime) .. " ms")
     if not checkbox then
         error("Could not find title inspector checkbox")
     end
-    if checkbox:attributeValue("AXDescription") ~= "Title Inspector" then
+    if checkbox:attributeValue("AXDescription") ~= "Title Inspector" then -- 1.6ms to check AXDescription
+        print("time to assertion failure: " .. GetElapsedTimeInMilliseconds(startTime) .. " ms")
         error("Unexpected title inspector checkbox description: " .. checkbox:attributeValue("AXDescription"))
     end
+    print("time after assertion: " .. GetElapsedTimeInMilliseconds(startTime) .. " ms")
     return checkbox
 end
 
@@ -184,8 +188,8 @@ end
 
 function FcpxInspectorPanel:showTitleInspector()
     self:ensureOpen()
-    -- EnsureCheckboxIsChecked(self:titleCheckboxSearch())
-    self:titleCheckboxSearch() -- test timing only
+    EnsureCheckboxIsChecked(self:titleCheckbox())
+    -- self:titleCheckboxSearch() -- test timing only
 end
 
 -- function StreamDeckFcpxInspectorTitlePanelEnsureClosed()
