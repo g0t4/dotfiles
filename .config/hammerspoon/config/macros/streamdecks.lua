@@ -27,6 +27,7 @@ end
 -- TODO turn this into hot reload for just streamdeck lua scripts?
 reloadOnMacrosChanges()
 
-hs.streamdeck.discoveryCallback(function(connected, deck)
-    print("Discovered streamdeck", deck.name, "connected:", connected)
+hs.streamdeck.init(function(connected, deck)
+    -- YAY IT READS ALL OF MY DECKS!!!!!
+    print("Discovered streamdeck", hs.inspect(deck), "connected:", connected)
 end)
