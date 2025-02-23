@@ -710,7 +710,13 @@ local function getIdentifier(toElement)
     return applescriptSanitizeIdentifier(identifier)
 end
 
+local axuielemMT = hs.getObjectMetatable("hs.axuielement")
+axuielemMT.fuckMe = function(self)
+    print("fuck me")
+end
+
 function BuildHammerspoonLuaTo(toElement)
+    toElement:fuckMe()
     local tmp = fun.enumerate(toElement:path())
         :map(function(index, pathItem)
             local role = pathItem:attributeValue("AXRole")
