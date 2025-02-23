@@ -75,3 +75,16 @@ require("config.learn.axuielem") -- WIP
 
 require("config.macros.streamdecks")
 require("config.macros.init")
+
+
+
+-- *** EmmyLua generate stubs for hs.* modules
+-- - be careful if use pathwatcher to reload config... don't want to trigger it during code gen
+-- - first run takes a second to generate stubs
+-- - also if outdated, IIAC on file timestamps?
+-- - based on discussion in:
+--   - https://github.com/Hammerspoon/hammerspoon/pull/2530
+--   - https://github.com/Hammerspoon/Spoons/pull/240
+-- PRN could set a script that runs automatically when neovim starts in just my hammerspoon config dir
+print("loading EmmyLua to generate stubs if needed... can do this manually if this is too slow here as I only need this for neovim lua LS... not for hammerspoon app itself")
+hs.loadSpoon("EmmyLua") -- <2ms to check is fine... NBD to run all the time
