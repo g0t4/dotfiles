@@ -5,8 +5,14 @@
 -- JUST PUT hs global into lua LS config and be done with that
 local start_time = hs.timer.secondsSinceEpoch()
 
---     hs -c 'hs.console.clearConsole()'
---     hs -c 'hs.alert.show("Hello, Stream Deck!")'
+
+-- -- attempt to fix completions for hs.* globals
+-- TODO why can't I set this in LS config?!
+-- b/c seems I cannot do this with luarc... I'll just do it here, map globals to real modules to provide completions
+-- hs.axuielement = require("hs.axuielement") -- some good completions here by redefining this to require
+-- hs.streamdeck = require("hs.streamdeck") -- BTW somme reason... no completions still.. even if require.. only a few top level static funcs but still
+--  -- why doesn't completion work for all top level static funcs... ?
+
 hs.ipc.cli = true -- early so hs CLI always works
 
 
