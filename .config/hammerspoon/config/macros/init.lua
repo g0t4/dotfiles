@@ -18,6 +18,16 @@ local function EnsureCheckboxIsChecked(checkbox)
     end
 end
 
+local function EnsureCheckboxIsUnchecked(checkbox)
+    if checkbox:attributeValue("AXValue") ~= 0 then
+        return
+    end
+    checkbox:performAction("AXPress")
+    if checkbox:attributeValue("AXValue") ~= 0 then
+        error("checkbox was not unchecked")
+    end
+end
+
 function GetAppElement(appName)
     local app = application.find(appName)
     return hs.axuielement.applicationElement(app)
@@ -121,23 +131,11 @@ function FcpxInspectorPanel:new(window)
 end
 
 function FcpxInspectorPanel:ensureOpen()
-    local button = self.window.topToolbar.btnInspector
-    if button:attributeValue("AXValue") == 0 then
-        print("opening title inspector")
-        button:performAction("AXPress")
-        return
-    end
-    print("title inspector already open")
+    EnsureCheckboxIsChecked(self.window.topToolbar.btnInspector)
 end
 
 function FcpxInspectorPanel:ensureClosed()
-    local button = self.window.topToolbar.btnInspector
-    if button:attributeValue("AXValue") == 1 then
-        print("closing title inspector")
-        button:performAction("AXPress")
-        return
-    end
-    print("title inspector already closed")
+    EnsureCheckboxIsUnchecked(self.window.topToolbar.btnInspector)
 end
 
 function FcpxInspectorPanel:titleCheckbox()
