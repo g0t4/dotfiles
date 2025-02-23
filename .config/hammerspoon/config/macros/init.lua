@@ -52,6 +52,7 @@ function FcpxEditorWindow:new()
 end
 
 function FcpxEditorWindow:rightSidePanel()
+    -- FYI if overhead in lookup on every use, can memoize this... but not until I have proof its an issue.. and probabaly only for situations where 10ms is a problem
     return self._mainSplitGroup:childrenWithRole("AXGroup")[1]
 end
 
