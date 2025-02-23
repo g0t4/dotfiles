@@ -211,6 +211,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "T", function()
     alert.closeAll()
     if not M.moves then
         startElementInspector()
+        highlightCurrentElement() -- don't need to move mouse to highlight first element
     else
         stopElementInspector()
     end
