@@ -40,16 +40,56 @@ vim.filetype.add({
 
 local function describeFormatOptionForLetter(letter)
     local descriptions = {
-        ["a"] = "auto-wrap text using textwidth",
-        ["c"] = "auto-wrap comments using textwidth",
-        ["t"] = "auto-wrap text using textwidth",
-        ["o"] = "insert comments on `o` and `O`",
-        ["r"] = "same for enter",
+
+        -- auto-wrap:
+        ["c"] = "auto-wrap comments", -- on textwidth?
+        ["t"] = "auto-wrap text", -- on textwidth?
+        ["l"] = "do not wrap in insert mode",
+
+        -- comment leader:
+        ["o"] = "insert comment leader on `o` and `O`",
+        ["r"] = "insert comment leader on <Enter>",
+        ["j"] = "remove comment leader on [J]oin",
+
+        -- misc:
+        ["a"] = "auto-format paragraphs",
         ["q"] = "gq formats comments",
-        ["j"] = "remove comment leader when joining lines",
-        ["l"] = "do not wrap in insert mode (when past textwidth columns)",
+        ["n"] = "format recognizes numbered lists", -- TODO OMG this sounds like what I wanted! for lists in comments?
     }
     return descriptions[letter] or letter
+end
+
+local function printFormatOptions()
+    local enabled_letters = vim.opt.formatoptions._value
+
+    local message = ""
+    local function forLetter(letter)
+        if enabled_letters:find(letter) then
+            message = message .. "    " .. letter .. " - " .. describeFormatOptionForLetter(letter) .. "\n"
+        end
+        -- optional => else => show disabled in group at end of section? add forGroup("wrapping related", "ctl")?
+    end
+
+    -- instead of a loop, I want to control of grouping/sorting
+    -- instead of a loop, I want to control of the foo the bar
+
+    message = message .. "  auto-wrap:\n"
+    forLetter("c")
+    forLetter("t")
+    forLetter("l")
+
+    message = message .. "  comments:\n"
+    forLetter("o")
+    forLetter("r")
+    forLetter("j")
+    message = message .. "    note: Ctrl-U removes leader\n"
+
+    message = message .. "  formatting:\n"
+    forLetter("q")
+    forLetter("a")
+    forLetter("n")
+
+    print(message)
 end
 
 -- *** command to show tab config (print messages)
@@ -83,10 +123,7 @@ vim.api.nvim_create_user_command('TroubleshootOptions', function()
     )
 
     print("formatoptions:", vim.opt.formatoptions._value)
-    for key, _ in pairs(vim.opt.formatoptions:get()) do
-        -- ignore value b/c all are true, false are not in the table
-        print("  ", key, describeFormatOptionForLetter(key))
-    end
+    printFormatOptions()
 end, { bang = true })
 
 -- PRN review `autoindent`/`smartindent`/`cindent` and `smarttab` settings
@@ -106,6 +143,35 @@ end, { bang = true })
 ---
 
 vim.api.nvim_create_augroup("filetypemods", { clear = true })
+
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = "*",
+    group = "filetypemods",
+    callback = function()
+        -- FYI subsequent autocmds can override this... so careful with printing out current settings cuz it might be interim
+
+        -- *** global defaults ***
+        --   using autocmd on BufEnter to override all init.lua config settings for this (including after ftplugins)
+        -- opt_local is for current file only
+        local opts = vim.opt.formatoptions._value -- use a FUCKING string... whoever came up with this fucking multi-value option should be raped and shot and then raped again
+        -- print("filetypemods - initial formatoptions:", opts)
+
+        -- auto-wrap on textwidth:
+        --   I HATE auto wrapping... especially for comments
+        --   You might convince me to wrap code/text automatically if it is smart about how it decides... but sometimes I want a long line of code too (or comment at end)
+        opts = opts:gsub("c", "") --  wrapping comments on textwidth
+        opts = opts:gsub("t", "") --  wrapping regular text on textwidth
+        opts = opts .. "l" --  do not wrap in insert mode (when past textwidth columns) - was already default, just make explicit
+
+        -- comment leaders:
+        --   FYI habitutate using Ctrl-U to remove comment leader (this should help when I don't want it)
+        opts = opts .. "o" --  insert comment leader on `o` and `O`
+        opts = opts .. "r" --  insert comment leader on <Enter>
+        opts = opts .. "j" --  remove comment leader when joining lines
+
+        vim.opt_local.formatoptions = opts
+    end,
+})
 
 vim.api.nvim_create_autocmd("FileType", {
     group = "filetypemods",
