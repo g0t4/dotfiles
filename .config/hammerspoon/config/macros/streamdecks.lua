@@ -30,8 +30,10 @@ reloadOnMacrosChanges()
 hs.streamdeck.init(function(connected, deck)
     -- YAY IT READS ALL OF MY DECKS!!!!!
     print("Discovered streamdeck", hs.inspect(deck), "connected:", connected)
+    print("devices: ", hs.streamdeck.numDevices())
 end)
 
+-- FYI at this point, there are no devices available, wait for them to connect (each one)
 
 -- NOTES:
 -- - hammerspoon crashes if you call discoveryCallback first (w/o init first)
