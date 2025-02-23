@@ -196,18 +196,7 @@ vim.api.nvim_create_autocmd("FileType", {
     pattern = "lua",
     callback = function()
         -- TODO review nvim's bundled ftplugin/lua.vim and ftplugin/lua.lua and see if I wannna override anything in them
-        -- print "my autocmd FileType"
         -- vim.bo.commentstring = "# %s" -- %s is original text
-
-        -- wrapping related
-        vim.cmd('set formatoptions-=c') -- disable wrapping comments on textwidth
-        vim.cmd('set formatoptions-=t') -- disable wrapping regular text on textwidth
-        vim.cmd('set formatoptions+=l') -- do not wrap in insert mode (when past textwidth columns) - was already default, just make explicit
-
-        -- comment leaders:
-        vim.cmd('set formatoptions+=o') -- insert comments on `o` and `O`
-        vim.cmd('set formatoptions+=r') -- same for enter
-        vim.cmd('set formatoptions+=j') -- remove comment leader when joining lines
     end,
 })
 
