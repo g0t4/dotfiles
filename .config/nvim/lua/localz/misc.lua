@@ -159,3 +159,11 @@ vim.keymap.set("n", "<leader>ml", function()
     -- FYI might be easier to copy current word and build link in code and paste it over the top :)
     --   above was heavily inspired by recording a macro first
 end, { noremap = true, silent = true })
+
+
+vim.api.nvim_create_user_command('ZedHere', function(opts)
+    local filename = vim.fn.expand("%:p")
+    local row_1based, col_0based = unpack(vim.api.nvim_win_get_cursor(0))
+    local command = "zed " .. filename .. ":" .. row_1based --.. ":" .. col_0based
+    vim.fn.system(command)
+end, { nargs = 0 })
