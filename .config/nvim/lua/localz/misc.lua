@@ -161,9 +161,22 @@ vim.keymap.set("n", "<leader>ml", function()
 end, { noremap = true, silent = true })
 
 
-vim.api.nvim_create_user_command('ZedHere', function(opts)
+
+
+-- *** open in ... => quickly toggle to other editors
+
+vim.api.nvim_create_user_command('CodeHere', function()
+    -- to trigger you!
     local filename = vim.fn.expand("%:p")
     local row_1based, col_0based = unpack(vim.api.nvim_win_get_cursor(0))
-    local command = "zed " .. filename .. ":" .. row_1based --.. ":" .. col_0based
+    local cwd = vim.fn.getcwd()
+    local command = "code " .. cwd .. " --goto " .. filename .. ":" .. row_1based .. ":" .. (col_0based + 1)
     vim.fn.system(command)
-end, { nargs = 0 })
+end, {})
+
+vim.api.nvim_create_user_command('ZedHere', function()
+    local filename = vim.fn.expand("%:p")
+    local row_1based, col_0based = unpack(vim.api.nvim_win_get_cursor(0))
+    local command = "zed " .. filename .. ":" .. row_1based .. ":" .. (col_0based + 1)
+    vim.fn.system(command)
+end, {})
