@@ -6,15 +6,12 @@
 local start_time = hs.timer.secondsSinceEpoch()
 
 
--- -- attempt to fix completions for hs.* globals
--- TODO why can't I set this in LS config?!
--- b/c seems I cannot do this with luarc... I'll just do it here, map globals to real modules to provide completions
--- hs.axuielement = require("hs.axuielement") -- some good completions here by redefining this to require
--- hs.streamdeck = require("hs.streamdeck") -- BTW somme reason... no completions still.. even if require.. only a few top level static funcs but still
---  -- why doesn't completion work for all top level static funcs... ?
+-- TODO look and see if anyone has defined type stubs/hints for hs.* globals since most IIAC are not in lua scripts, in objective-c
+--   IIRC there are some in hammerspoon repo itself but maybe they just need some love
+--   ALSO, why are :methods not showing for axuielement? is it the get element method that isn't clearly showing the type info?
+--   i.e. hs.pathwatcher (.lua) => hs.libpathwatcher (.m)
 
 hs.ipc.cli = true -- early so hs CLI always works
-
 
 require("config.helpers")
 
