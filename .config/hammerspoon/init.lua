@@ -6,11 +6,6 @@
 local start_time = hs.timer.secondsSinceEpoch()
 
 
--- TODO look and see if anyone has defined type stubs/hints for hs.* globals since most IIAC are not in lua scripts, in objective-c
---   IIRC there are some in hammerspoon repo itself but maybe they just need some love
---   ALSO, why are :methods not showing for axuielement? is it the get element method that isn't clearly showing the type info?
---   i.e. hs.pathwatcher (.lua) => hs.libpathwatcher (.m)
-
 hs.ipc.cli = true -- early so hs CLI always works
 
 require("config.helpers")
@@ -86,5 +81,6 @@ require("config.macros.init")
 --   - https://github.com/Hammerspoon/hammerspoon/pull/2530
 --   - https://github.com/Hammerspoon/Spoons/pull/240
 -- PRN could set a script that runs automatically when neovim starts in just my hammerspoon config dir
+-- ! BTW it seems like these only work for hs.* globals? not require("hs.*")? that is fine,  just odd
 print("loading EmmyLua to generate stubs if needed... can do this manually if this is too slow here as I only need this for neovim lua LS... not for hammerspoon app itself")
 hs.loadSpoon("EmmyLua") -- <2ms to check is fine... NBD to run all the time
