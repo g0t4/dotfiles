@@ -171,9 +171,21 @@ function FcpxInspectorPanel:titleCheckbox()
     return checkbox
 end
 
+function FcpxInspectorPanel:titleCheckboxSearch()
+    FindOneElement(self.window.fcpx,
+        { attribute = "AXDescription", value = "Title Inspector" },
+        function(_, searchTask, numResultsAdded)
+            if numResultsAdded == 0 then
+                error("Could not find title inspector checkbox")
+            end
+            return searchTask[1]
+        end)
+end
+
 function FcpxInspectorPanel:showTitleInspector()
     self:ensureOpen()
-    EnsureCheckboxIsChecked(self:titleCheckbox())
+    -- EnsureCheckboxIsChecked(self:titleCheckboxSearch())
+    self:titleCheckboxSearch() -- test timing only
 end
 
 -- function StreamDeckFcpxInspectorTitlePanelEnsureClosed()
@@ -211,7 +223,7 @@ function FcpxFindTitlePanelCheckbox(doWithTitlePanel)
             print("no title panel found")
             return
         end
-        local foundCheckbox= searchTask[1]
+        local foundCheckbox = searchTask[1]
 
         -- ensure title panel is visible!
         if foundCheckbox:attributeValue("AXValue") == 0 then
