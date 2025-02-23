@@ -57,7 +57,7 @@ function GetFcpxEditorWindow()
         return nil
     end
 
-    return fcpx:attributeValue("AXFocusedWindow")
+    return fcpx:attributeValue("AXFocusedWindow"), fcpx
 end
 
 FcpxEditorWindow = {}
@@ -65,7 +65,7 @@ function FcpxEditorWindow:new()
     local o = {}
     setmetatable(o, self)
     self.__index = self
-    o.window = GetFcpxEditorWindow()
+    o.window, o.fcpx = GetFcpxEditorWindow()
     o.topToolbar = FcpxTopToolbar:new(o.window:childrenWithRole("AXToolbar")[1])
     -- everything below top toolbar
     -- use _ to signal that it's not guaranteed to be there
