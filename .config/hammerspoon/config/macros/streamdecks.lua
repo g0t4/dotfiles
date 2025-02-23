@@ -31,3 +31,7 @@ hs.streamdeck.init(function(connected, deck)
     -- YAY IT READS ALL OF MY DECKS!!!!!
     print("Discovered streamdeck", hs.inspect(deck), "connected:", connected)
 end)
+
+
+-- NOTES:
+-- - hammerspoon crashes if you call discoveryCallback first (w/o init first)
