@@ -139,6 +139,26 @@ function FcpxInspectorPanel:ensureClosed()
 end
 
 function FcpxInspectorPanel:titleCheckbox()
+    -- FIXED PATH CURRENTLY (this seems to have changed, extra splitgroup.. if so lets try search to find it going forward, nested under right panel which s/b mostly fixed in place)
+    --    set Title to checkbox 1 of group 2 of group 5 of splitter group 1 of group 2 of ¬
+    --      splitter group 1 of group 1 of splitter group 1 of window "Final Cut Pro" of ¬
+    --        application process "Final Cut Pro"
+    -- attrs:
+    --   AXActivationPoint = {y=55.0, x=1537.0}
+    --   AXDescription = "Title Inspector"
+    --   AXEnabled = true
+    --   AXFocused = false
+    --   AXFrame = {y=44.0, h=20.0, w=20.0, x=1527.0}
+    --   AXHelp = "Show the Title Inspector"
+    --   AXIdentifier = "_NS:10"
+    --   AXPosition = {y=44.0, x=1527.0}
+    --   AXRole = "AXCheckBox"
+    --   AXRoleDescription = "toggle button"
+    --   AXSize = {w=20.0, h=20.0}
+    --   AXSubrole = "AXToggle"
+    --   AXTitle = "Title"
+    --   AXValue = 1
+
     local checkbox = self.window:rightSidePanel()
         :childrenWithRole("AXGroup")[1]
         :childrenWithRole("AXCheckBox")[1]
@@ -194,26 +214,6 @@ function FcpxFindTitlePanelCheckbox(doWithTitlePanel)
         return
     end
     print("[WARNING] no fixed path to title panel checkbox found, falling back to search which is going to be slower, fix the fixed path to speed things up!")
-
-    -- FIXED PATH CURRENTLY:
-    --    set Title to checkbox 1 of group 2 of group 5 of splitter group 1 of group 2 of ¬
-    --      splitter group 1 of group 1 of splitter group 1 of window "Final Cut Pro" of ¬
-    --        application process "Final Cut Pro"
-    -- attrs:
-    --   AXActivationPoint = {y=55.0, x=1537.0}
-    --   AXDescription = "Title Inspector"
-    --   AXEnabled = true
-    --   AXFocused = false
-    --   AXFrame = {y=44.0, h=20.0, w=20.0, x=1527.0}
-    --   AXHelp = "Show the Title Inspector"
-    --   AXIdentifier = "_NS:10"
-    --   AXPosition = {y=44.0, x=1527.0}
-    --   AXRole = "AXCheckBox"
-    --   AXRoleDescription = "toggle button"
-    --   AXSize = {w=20.0, h=20.0}
-    --   AXSubrole = "AXToggle"
-    --   AXTitle = "Title"
-    --   AXValue = 1
 
     local criteria = { attribute = "AXDescription", value = "Title Inspector" } -- 270ms to 370ms w/ count=1
     FindOneElement(fcpx, criteria, function(_, searchTask, numResultsAdded)
