@@ -105,10 +105,6 @@ vim.api.nvim_create_user_command('TroubleshootOptions', function()
         "textwidth:" .. tostring(vim.o.textwidth),
         "linebreak:" .. tostring(vim.o.linebreak),
         " - ",
-        -- noteworthy:
-        -- t = auto-wrap text using textwidth
-        -- c = auto-wrap comments using textwidth
-        "formatoptions:" .. tostring(vim.o.formatoptions)
     )
     -- ok to have super wide output... most of the time I have full screen width... and zoomed small
     print("expandtab:" .. tostring(vim.o.expandtab),
@@ -130,18 +126,6 @@ end, { bang = true })
 --     filetype plugin indent on " this is controlling indent on new lines for now and seems fine so leave it as is
 --     set backspace=indent,start,eol " allow backspacing over everything in insert mode, including indent from autoindent, eol thru start of insert
 
-
--- :h formatoptions
--- :h fo-table
---   o = insert comments on `o` and `O`
---      r = same for enter
---   autowrap lines
---      t = auto wrap regular text
---      c = auto wrap comments + insert comments leader too
---  j = remove comment leader when joining lines
---- q = gq formats comments
----
-
 vim.api.nvim_create_augroup("filetypemods", { clear = true })
 
 vim.api.nvim_create_autocmd("FileType", {
@@ -152,7 +136,6 @@ vim.api.nvim_create_autocmd("FileType", {
 
         -- *** global defaults ***
         --   using autocmd on BufEnter to override all init.lua config settings for this (including after ftplugins)
-        -- opt_local is for current file only
         local opts = vim.opt.formatoptions._value -- use a FUCKING string... whoever came up with this fucking multi-value option should be raped and shot and then raped again
         -- print("filetypemods - initial formatoptions:", opts)
 
@@ -169,6 +152,7 @@ vim.api.nvim_create_autocmd("FileType", {
         opts = opts .. "r" --  insert comment leader on <Enter>
         opts = opts .. "j" --  remove comment leader when joining lines
 
+        -- opt_local is for current file only
         vim.opt_local.formatoptions = opts
     end,
 })
