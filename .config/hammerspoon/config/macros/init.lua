@@ -211,14 +211,14 @@ function FcpxFindTitlePanelCheckbox(doWithTitlePanel)
             print("no title panel found")
             return
         end
-        local checkbox = searchTask[1]
+        local foundCheckbox= searchTask[1]
 
         -- ensure title panel is visible!
-        if checkbox:attributeValue("AXValue") == 0 then
-            checkbox:performAction("AXPress")
+        if foundCheckbox:attributeValue("AXValue") == 0 then
+            foundCheckbox:performAction("AXPress")
         end
 
-        doWithTitlePanel(checkbox)
+        doWithTitlePanel(foundCheckbox)
     end)
 end
 
@@ -249,12 +249,12 @@ end
 function TestBack2BackElementSearch()
     EnsureClearedWebView()
 
-    local function afterYSliderSearch(message, searchTask, numResultsAdded)
+    local function afterYSliderSearch(_, searchTask, numResultsAdded)
         PrintToWebView("results: ", numResultsAdded)
         DumpHtml(searchTask)
     end
 
-    local function afterSearch(message, searchTask, numResultsAdded)
+    local function afterSearch(_, searchTask, numResultsAdded)
         PrintToWebView("results: ", numResultsAdded)
         DumpHtml(searchTask)
 
