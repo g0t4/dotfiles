@@ -4,6 +4,20 @@ local M = {}
 -- TODO impement cancelation of search task(s)?
 M.searchTasks = {}
 
+local function EnsureCheckboxIsChecked(checkbox)
+    if checkbox:attributeValue("AXValue") ~= 0 then
+        return
+    end
+    checkbox:performAction("AXPress")
+    if checkbox:attributeValue("AXValue") ~= 1 then
+        -- FYI errors look really nice when using hs -c "command" in terminal
+        --   AND look good in notifications from Keyboard Maestro when that hs command fails
+        --   Line nubmer shows in initial part of message so I can just use that to jump to spot
+        --   TODO use error() in more places, basically for failed assertions
+        error("checkbox was not checked")
+    end
+end
+
 function GetAppElement(appName)
     local app = application.find(appName)
     return hs.axuielement.applicationElement(app)
@@ -132,16 +146,6 @@ function FcpxInspectorPanel:titleCheckbox()
         :childrenWithRole("AXCheckBox")[1]
     -- TODO did this change or did I have the wrong selector in here before I passed out this AM?
     return checkbox
-end
-
-local function EnsureCheckboxIsChecked(checkbox)
-    if checkbox:attributeValue("AXValue") ~= 0 then
-        return
-    end
-    checkbox:performAction("AXPress")
-    if checkbox:attributeValue("AXValue") ~= 1 then
-        error("checkbox was not checked")
-    end
 end
 
 function FcpxInspectorPanel:showTitleInspector()
