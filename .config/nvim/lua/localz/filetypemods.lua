@@ -38,7 +38,19 @@ vim.filetype.add({
     },
 })
 
-
+local function describeFormatOptionForLetter(letter)
+    local descriptions = {
+        ["a"] = "auto-wrap text using textwidth",
+        ["c"] = "auto-wrap comments using textwidth",
+        ["t"] = "auto-wrap text using textwidth",
+        ["o"] = "insert comments on `o` and `O`",
+        ["r"] = "same for enter",
+        ["q"] = "gq formats comments",
+        ["j"] = "remove comment leader when joining lines",
+        ["l"] = "do not wrap in insert mode (when past textwidth columns)",
+    }
+    return descriptions[letter] or letter
+end
 
 -- *** command to show tab config (print messages)
 vim.api.nvim_create_user_command('TroubleshootOptions', function()
@@ -69,6 +81,12 @@ vim.api.nvim_create_user_command('TroubleshootOptions', function()
         "cindent:" .. tostring(vim.o.cindent),
         "smarttab:" .. tostring(vim.o.smarttab)
     )
+
+    print("formatoptions:", vim.opt.formatoptions._value)
+    for key, _ in pairs(vim.opt.formatoptions:get()) do
+        -- ignore value b/c all are true, false are not in the table
+        print("  ", key, describeFormatOptionForLetter(key))
+    end
 end, { bang = true })
 
 -- PRN review `autoindent`/`smartindent`/`cindent` and `smarttab` settings
