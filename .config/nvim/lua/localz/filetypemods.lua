@@ -104,7 +104,7 @@ vim.api.nvim_create_user_command('TroubleshootOptions', function()
         "wrapmargin:" .. tostring(vim.o.wrapmargin),
         "textwidth:" .. tostring(vim.o.textwidth),
         "linebreak:" .. tostring(vim.o.linebreak),
-        " - ",
+        " - "
     )
     -- ok to have super wide output... most of the time I have full screen width... and zoomed small
     print("expandtab:" .. tostring(vim.o.expandtab),
