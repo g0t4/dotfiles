@@ -289,15 +289,12 @@ function FindOneElement(app, criteria, callback)
     local criteriaFunction = hs.axuielement.searchCriteriaFunction(criteria)
     local namedModifiers = { count = 1 }
 
-
     local function afterSearch(...)
         print("time to callback: " .. GetElapsedTimeInMilliseconds(startTime) .. " ms")
         callback(...)
     end
 
-    local searchTask = app:elementSearch(afterSearch, criteriaFunction, namedModifiers)
-
-    -- TODO M.searchTasks[searchTask] = true
+    app:elementSearch(afterSearch, criteriaFunction, namedModifiers)
 end
 
 return M
