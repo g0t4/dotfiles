@@ -46,10 +46,18 @@ function FcpxEditorWindow:new()
     -- everything below top toolbar
     -- use _ to signal that it's not guaranteed to be there
     o._mainSplitGroup = o.window:childrenWithRole("AXSplitGroup")[1]
-    local rightSidePanel = o._mainSplitGroup:childrenWithRole("AXGroup")[1]
-    -- local leftSidePanel = mainSplitGroup:childrenWithRole("AXGroup")[2]
-    o.inspector = FcpxInspectorPanel:new(rightSidePanel, o)
+    print("main split group", hs.inspect(o._mainSplitGroup))
+    o.inspector = FcpxInspectorPanel:new(o)
     return o
+end
+
+function FcpxEditorWindow:rightSidePanel()
+    return self._mainSplitGroup:childrenWithRole("AXGroup")[1]
+end
+
+function FcpxEditorWindow:leftSideEverythingElse()
+    -- TODO use and rename this... b/c its not a left side panel, it's the rest of the UI (browser,timeline,events viewer,titles,generators,etc) - everything except the inspector (in my current layout)
+    return self._mainSplitGroup:childrenWithRole("AXGroup")[2]
 end
 
 FcpxTopToolbar = {}
@@ -85,11 +93,13 @@ function FcpxTopToolbar:new(topToolbarElement)
 end
 
 FcpxInspectorPanel = {}
-function FcpxInspectorPanel:new(panelElement, window)
+function FcpxInspectorPanel:new(window)
     local o = {}
     setmetatable(o, self)
     self.__index = self
-    o.panelElement = panelElement
+    -- yeah at this point, probably all I can guarantee is that a window exists...
+    --   panels need to be opened before any interactions, so defer all of that!
+    --   FYI... I will find the right balance for where logic belongs as I use this (window vs this class, etc)
     o.window = window
     return o
 end
@@ -114,14 +124,24 @@ function FcpxInspectorPanel:ensureClosed()
     print("title inspector already closed")
 end
 
-function FcpxInspectorPanel:showTitleInspector()
-    self:ensureOpen()
+function FcpxInspectorPanel:titleCheckbox()
+    local checkbox = self.window:rightSidePanel()
+        :childrenWithRole("AXGroup")[1]
+        :childrenWithRole("AXCheckBox")[1]
+    -- TODO did this change or did I have the wrong selector in here before I passed out this AM?
+    return checkbox
 end
 
-function StreamDeckFcpxInspectorTitlePanelEnsureClosed()
-    local window = FcpxEditorWindow:new()
-    window.inspector:ensureClosed()
+function FcpxInspectorPanel:showTitleInspector()
+    self:ensureOpen()
+    self:titleCheckbox():performAction("AXPress")
 end
+
+-- function StreamDeckFcpxInspectorTitlePanelEnsureClosed()
+--     not using
+--     local window = FcpxEditorWindow:new()
+--     window.inspector:ensureClosed()
+-- end
 
 function StreamDeckFcpxInspectorTitlePanelEnsureOpen()
     local window = FcpxEditorWindow:new()
