@@ -200,14 +200,14 @@ function FcpxFindTitlePanelCheckbox(doWithTitlePanel)
     --      splitter group 1 of group 1 of splitter group 1 of window "Final Cut Pro" of ¬
     --        application process "Final Cut Pro"
     -- attrs:
-    --   AXActivationPoint = {y=54.0, x=1539.0}
+    --   AXActivationPoint = {y=55.0, x=1537.0}
     --   AXDescription = "Title Inspector"
     --   AXEnabled = true
     --   AXFocused = false
-    --   AXFrame = {y=44.0, x=1529.0, w=20.0, h=20.0}
+    --   AXFrame = {y=44.0, h=20.0, w=20.0, x=1527.0}
     --   AXHelp = "Show the Title Inspector"
     --   AXIdentifier = "_NS:10"
-    --   AXPosition = {y=44.0, x=1529.0}
+    --   AXPosition = {y=44.0, x=1527.0}
     --   AXRole = "AXCheckBox"
     --   AXRoleDescription = "toggle button"
     --   AXSize = {w=20.0, h=20.0}
