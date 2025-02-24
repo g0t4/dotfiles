@@ -57,28 +57,8 @@ local function prints(...)
                 htmlPage = "<h1>FAILED TO LOAD uielements.html</h1>"
             end
         end
-        -- PRN debounce updating html when prining in rapid succession (also will apply to scroll to bottom)
         local html = htmlPage .. table.concat(printHtmlBuffer, "<br/>")
         printWebView:html(html)
-
-        if false then
-            -- disable for now... since I put PATH on top
-            require("hs.timer").doAfter(0.1, function()
-                -- FYI smth in setting :html(html) above, means I cannot immediatelly scroll to bottom, so I add a slight delay here
-                -- FYI last test I did, cannot use setTimeout() in JS to accomplish this so it has smth to do with when I tee up running the JS, not when the JS inside runs
-                -- FYI 0.01 is too fast, 0.1 seems to work and appears instant when html content is changed
-                local scrollToBottom = [[
-                    window.scrollTo(0,document.body.scrollHeight);
-                ]]
-                printWebView:evaluateJavaScript(scrollToBottom, function(result, nsError)
-                    -- AFAICT error is NSError https://developer.apple.com/documentation/foundation/nserror
-                    --   error s/b nil if no error... but I also am getting { code = 0 } on successes, so ignore based on code too:
-                    if nsError and nsError.code ~= 0 then
-                        hs.showError("js failed: " .. hs.inspect(nsError))
-                    end
-                end)
-            end)
-        end
     end
 end
 
@@ -955,3 +935,20 @@ function GetDumpPath(element, expanded)
         return "NO PATH - should not happen, even AXApplication (top level) has self as path"
     end
 end
+
+--
+-- OLD code, keep in case needed
+--
+-- -- scrolling the webview to bottom:
+--     require("hs.timer").doAfter(0.1, function()
+--         local scrollToBottom = [[
+--             window.scrollTo(0,document.body.scrollHeight);
+--         ]]
+--         printWebView:evaluateJavaScript(scrollToBottom, function(result, nsError)
+--             -- AFAICT error is NSError https://developer.apple.com/documentation/foundation/nserror
+--             --   error s/b nil if no error... but I also am getting { code = 0 } on successes, so ignore based on code too:
+--             if nsError and nsError.code ~= 0 then
+--                 hs.showError("js failed: " .. hs.inspect(nsError))
+--             end
+--         end)
+--     end)
