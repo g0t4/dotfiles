@@ -27,7 +27,8 @@ local function showTooltipForElement(element, frame)
     local lua = BuildHammerspoonLuaTo(element)
     M.last.text = lua
 
-    if false then
+    if true then
+        M.last.text = M.last.text .. "\n" -- blank line
         -- TODO add some toggle for enabling verbose cuz normally I don't want verbose...
         -- WAIT... if I have a second display, how about show it there!?
         for k, v in pairs(element) do
