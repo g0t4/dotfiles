@@ -56,21 +56,29 @@ function dumpButtonInfo(deck, buttonNumber, pressedOrReleased)
 end
 
 function drawTextIcon(text)
+    local width = 96
+    local height = 96
     -- use canvas for text on images on icons! COOL
     --   streamdeck works off of images only for the buttons, makes 100% sense
-    local canvas = hs.canvas.new({ x = 0, y = 0, w = 72, h = 72 })
+    local canvas = hs.canvas.new({ x = 0, y = 0, w = width, h = height })
     canvas[1] = {
         type = "rectangle",
         action = "fill",
         fillColor = { red = 0, green = 0, blue = 0, alpha = 1 }, -- Background color
     }
+    -- TODO try hs.styledtext (instead of attrs below)
+    --   TODO can it set vertical alignment?
     canvas[2] = {
         type = "text",
         text = text,
-        textSize = 20,
+        -- textLineBreak =
+        textSize = 24,
+        textAlignment = "center",
+        -- TODO vertical alignment?
         textColor = { red = 1, green = 1, blue = 1, alpha = 1 },
-        frame = { x = 0, y = 20, w = 72, h = 32 }, -- Adjust positioning
+        frame = { x = 0, y = 0, w = width, h = height },
     }
+    -- FYI https://www.hammerspoon.org/docs/hs.canvas.html#attributes
     return canvas:imageFromCanvas()
 end
 
@@ -83,6 +91,8 @@ function onButtonPressed(deck, buttonNumber, pressedOrReleased)
             hs.openConsole()
         elseif buttonNumber == 8 then
             hs.console.clearConsole()
+        elseif buttonNumber == 16 then
+            hs.reload()
         end
     elseif name == "4+" then
         if buttonNumber == 1 then
@@ -193,6 +203,9 @@ local function onDeviceDiscovery(connected, deck)
     local hammerspoonAppIcon = hs.image.imageFromPath("/Applications/Hammerspoon.app/Contents/Resources/AppIcon.icns")
     deck:setButtonImage(7, hammerspoonAppIcon)
 
+    deck:setButtonImage(8, drawTextIcon("Clear Console"))
+    deck:setButtonImage(16, drawTextIcon("Reload Config"))
+
     if name == "1XL" then
         deck1XL = deck
     elseif name == "2XL" then
@@ -225,9 +238,10 @@ function onAppActivated(hsApp, appName)
     local staticTextElement = headerGroup:childrenWithRole("AXStaticText")[1]
     print("  value:", staticTextElement:attributeValue("AXValue"))
     print(" identifier:", staticTextElement:attributeValue("AXIdentifier"))
-    -- FYI does have AXIdentifier _NS:84
-    --    AXRoleDescription: text
-    --    AXDescription: text
+    -- FYI does have AXIdentifier _NS:84  -  AXRoleDescription: text    -    AXDescription: text
+    --    TODO have a strategy set for finding any given element, go through it in order and then cache the strategy until (if) it fails, and/or cache the object
+    --       two ways I've seen to find the Title Inspector checkbox so I could code up both into a class and defer to it
+    --          and 3rd fallback can be search!
     --    probably need to find it relative to the buttons next to it (Title Inspector)... as nothing is likely to uniquely identify this element
 
     observer = hs.axuielement.observer.new(hsApp:pid())
@@ -242,12 +256,6 @@ function onAppActivated(hsApp, appName)
         end
         print("AXValueChanged: ", hs.inspect(element), text, hs.inspect(infoTable))
     end)
-    -- local obsObj = observer:addWatcher(staticText, "AXValueChanged")
-    -- TODO find if I can only watch at app level?
-    --    TODO maybe find a better way to detect title inspector changed to new asset/element on timeline... so I can dynamic show controls for that type!
-    --    if AXIdentifier is static across all app restarts then that's great I can use it...
-    --    otherwise I may need to find the neighboring sibling buttons to confirm
-    --    if I register app level... is it only attaching to currently visible elements or future ones too?
     --
     -- local watchElement = hs.axuielement.applicationElement(hsApp) -- works, for all elements!
     -- local watchElement = hs.axuielement.windowElement(hsApp:mainWindow()) -- nothing for AXValueChanged
