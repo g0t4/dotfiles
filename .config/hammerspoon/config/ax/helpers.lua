@@ -46,3 +46,20 @@ axuielemMT.checkbox = function(self, index)
     return self:checkboxes()[index]
 end
 
+-- AXTextField
+axuielemMT.textFields = function(self)
+    return self:childrenWithRole("AXTextField")
+end
+axuielemMT.textField = function(self, index)
+    return self:textFields()[index]
+end
+
+-- AXTextArea
+axuielemMT.textAreas = function(self)
+    return self:childrenWithRole("AXTextArea")
+end
+axuielemMT.textArea = function(self, index)
+    return self:textAreas()[index]
+end
+
+
