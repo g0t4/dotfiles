@@ -98,6 +98,11 @@ local function onDeviceDiscovery(connected, deck)
     deck:reset() -- TODO when do I need to call this? w/o this the buttonCallback doesn't reliably fire on config reload
     deck:buttonCallback(onButtonPressed)
 
+    deck:setButtonColor(1, hs.drawing.color.x11.red)
+    deck:setButtonColor(2, hs.drawing.color.x11.blue)
+    deck:setButtonColor(3, hs.drawing.color.x11.yellow)
+    if name == "1XL" then
+    end
 end
 
 hs.streamdeck.init(onDeviceDiscovery) -- onDeviceConnected)
