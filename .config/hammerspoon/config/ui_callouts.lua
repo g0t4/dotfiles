@@ -64,54 +64,52 @@ local function showTooltipForElement(element, frame)
         return
     end
 
-    -- TODO copy to clipboard -- maybe do it by default when in scan mode?
-    -- TODO add pause mode that doesn't hide callout/tooltip... but freezes it (maybe that is when to copy it!)
-    --    register opt key or smth like that and unregister it when hide callout/tooltip
+    local specifierLua = BuildHammerspoonLuaTo(element)
+    M.last.text = specifierLua
 
-    -- PRN could add coloring of text if I can show an html element in canvas
-    -- local clauses = BuildAppleScriptTo(element, false)
-    -- local script = CombineClausesWithLineContinuations(clauses)
-    -- M.last.text = script
+    local attributes = {}
+    -- GOAL is to quickly see attrs that I can use to target elements
+    --   hide the noise (nil, "", lists, attrs I dont care about)
+    --   everything else => use html report
+    for _, attrName in pairs(sortedAttributeNames(element)) do
+        if skips[attrName] then goto continue end
+        local attrValue = element:attributeValue(attrName)
+        if attrValue == nil then goto continue end
+        if attrName == "AXHelp" and attrValue == "" then goto continue end
 
-    local lua = BuildHammerspoonLuaTo(element)
-    M.last.text = lua
-
-    if true then
-        M.last.text = M.last.text .. "\n" -- blank line
-        -- *** GOAL is to quickly see attrs that I can use to target elements
-        --   hide the noise (nil, "", lists, attrs I dont care about)
-        --   everything else => use html report
-        for _, attrName in pairs(sortedAttributeNames(element)) do
-            if skips[attrName] then goto continue end
-            local attrValue = element:attributeValue(attrName)
-            if attrValue == nil then goto continue end
-            if attrName == "AXHelp" and attrValue == "" then goto continue end
-
-            local value = DisplayAttr(attrValue)
-            -- only allow 50 chars max for text
-            if #value > 50 then
-                value = value:sub(1, 50) .. "..."
-            end
-            M.last.text = M.last.text .. "\n" .. attrName .. ": " .. value
-
-            ::continue::
+        local value = DisplayAttr(attrValue)
+        -- only allow 50 chars max for text
+        if #value > 50 then
+            value = value:sub(1, 50) .. "..."
         end
+        table.insert(attributes, attrName .. ": " .. value)
+
+        ::continue::
     end
+    local attributeDump = table.concat(attributes, "\n")
+
 
     local tmpcanvas = canvas.new({ x = 0, y = 0, w = 1000, h = 1000 })
-    local estimatedSizeForDefaultFont = tmpcanvas:minimumTextSize(M.last.text)
-    local useFontSize = 14
+    local estimatedSpecifierSizeForDefaultFont = tmpcanvas:minimumTextSize(specifierLua)
+    local estimatedAttributeSizeForDefaultFont = tmpcanvas:minimumTextSize(attributeDump)
+    local specifierFontSize = 14
+    local attributeFontSize = 10
     local defaultTextStyle = canvas.defaultTextStyle()
+
     -- *** SUPER HACK to get font sizing to work... this works though!
     --    BTW font height estimate is off, could find factor for it but for 14 point it will work with default at 27pt so I won't adjust it for now...
     -- print("defaultTextStyle", hs.inspect(defaultTextStyle))
-    local ratio = useFontSize / defaultTextStyle.font.size
-    local textWidth = estimatedSizeForDefaultFont.w * ratio * 1.2
-    local textHeight = estimatedSizeForDefaultFont.h * ratio * 1.2
+    local specifierRatio = specifierFontSize / defaultTextStyle.font.size -- * 1.1
+    local attributeRatio = attributeFontSize / defaultTextStyle.font.size -- * 1.1
+    local specifierTextWidth = estimatedSpecifierSizeForDefaultFont.w * specifierRatio
+    local specifierTextHeight = estimatedSpecifierSizeForDefaultFont.h * specifierRatio
+    local attributeTextWidth = estimatedAttributeSizeForDefaultFont.w * attributeRatio
+    local attributeTextHeight = estimatedAttributeSizeForDefaultFont.h * attributeRatio
+
     -- add padding (don't subtract it from needed width/height)
     local padding = 10
-    local tooltipWidth = textWidth + 2 * padding
-    local tooltipHeight = textHeight + 2 * padding
+    local tooltipWidth = math.max(specifierTextWidth, attributeTextWidth) + 2 * padding
+    local tooltipHeight = specifierTextHeight + attributeTextHeight + 2 * padding
 
     local screenFrame = hs.screen.mainScreen():frame() -- Gets the current screen dimensions
 
@@ -138,8 +136,8 @@ local function showTooltipForElement(element, frame)
 
     M.last.tooltip = canvas.new({ x = x, y = y, w = tooltipWidth, h = tooltipHeight })
         :appendElements({
-            -- Background box
             {
+                -- background
                 type = "rectangle",
                 action = "fill",
                 frame = { x = 0, y = 0, w = tooltipWidth, h = tooltipHeight },
@@ -147,13 +145,41 @@ local function showTooltipForElement(element, frame)
                 roundedRectRadii = { xRadius = 8, yRadius = 8 }
             },
             {
+                -- specifier
                 type = "text",
-                text = M.last.text,
-                textSize = useFontSize,
+                text = specifierLua,
+                textSize = specifierFontSize,
                 textColor = { white = 1 },
-                frame = { x = padding, y = padding, w = tooltipWidth - 2 * padding, h = tooltipHeight - 2 * padding },
+                frame = { x = padding, y = padding, w = tooltipWidth - 2 * padding, h = specifierTextHeight },
                 textAlignment = "left"
-            }
+            },
+            {
+                -- horizontal line (y = padding)
+                type = "segments",
+                coordinates = { { x = padding, y = padding }, { y = padding, x = tooltipWidth - padding } },
+                strokeColor = { white = 0.5 },
+            },
+            {
+                -- horizontal line (y = specifierTextHeight + padding => bottom of specifier)
+                type = "segments",
+                coordinates = { { x = padding, y = specifierTextHeight + padding }, { y = specifierTextHeight + padding, x = tooltipWidth - padding } },
+                strokeColor = { white = 0.5 },
+            },
+            {
+                -- attributes
+                type = "text",
+                text = attributeDump,
+                textSize = attributeFontSize,
+                textColor = { white = 1 },
+                frame = { x = padding, y = padding + specifierTextHeight, w = tooltipWidth - 2 * padding, h = attributeTextHeight },
+                textAlignment = "left"
+            },
+            {
+                -- horizontal line (y = specifierTextHeight + attributeTextHeight + padding => bottom of attributes)
+                type = "segments",
+                coordinates = { { x = padding, y = specifierTextHeight + attributeTextHeight + padding }, { y = specifierTextHeight + attributeTextHeight + padding, x = tooltipWidth - padding } },
+                strokeColor = { white = 0.5 },
+            },
         })
         :show()
 end
