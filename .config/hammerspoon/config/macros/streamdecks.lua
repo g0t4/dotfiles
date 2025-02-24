@@ -247,6 +247,7 @@ function onAppActivated(hsApp, appName)
     --    TODO maybe find a better way to detect title inspector changed to new asset/element on timeline... so I can dynamic show controls for that type!
     --    if AXIdentifier is static across all app restarts then that's great I can use it...
     --    otherwise I may need to find the neighboring sibling buttons to confirm
+    --    if I register app level... is it only attaching to currently visible elements or future ones too?
     --
     -- local watchElement = hs.axuielement.applicationElement(hsApp) -- works, for all elements!
     -- local watchElement = hs.axuielement.windowElement(hsApp:mainWindow()) -- nothing for AXValueChanged
