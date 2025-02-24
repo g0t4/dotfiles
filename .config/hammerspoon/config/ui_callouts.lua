@@ -65,7 +65,11 @@ end
 local function displayTable(name, value)
     local text = ""
     for k, v in pairs(value) do
-        text = text .. k .. ": " .. tostring(v) .. "\n"
+        if name == "AXSections" then
+            text = text .. displayTable(k, v) .. "\n"
+        else
+            text = text .. k .. ": " .. tostring(v) .. "\n"
+        end
     end
     return "[" .. text .. "]"
 end
@@ -128,8 +132,10 @@ local function showTooltipForElement(element, frame)
 
         local value = displayAttribute(attrName, attrValue)
         -- only allow 50 chars max for text
-        if #value > 50 then
-            value = value:sub(1, 50) .. "..."
+        if not TableContains({ "AXSections" }, attrName) then
+            if #value > 50 then
+                value = value:sub(1, 50) .. "..."
+            end
         end
         table.insert(attributes, attrName .. ": " .. value)
 
