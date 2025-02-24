@@ -118,4 +118,11 @@ function table_prepend(theTable, value)
     return theTable
 end
 
+function resolveHomePath(path)
+    if path:sub(1, 1) == "~" then
+        return os.getenv("HOME") .. path:sub(2)
+    end
+    return path
+end
+
 return M

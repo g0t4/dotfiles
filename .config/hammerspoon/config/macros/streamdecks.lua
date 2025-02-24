@@ -101,6 +101,23 @@ local function onDeviceDiscovery(connected, deck)
     deck:setButtonColor(1, hs.drawing.color.x11.red)
     deck:setButtonColor(2, hs.drawing.color.x11.blue)
     deck:setButtonColor(3, hs.drawing.color.x11.yellow)
+
+    -- TODO try hs.image.imageFromAppBundle  -- get app icons!
+
+    -- keep local copies of images!
+    -- local testSvg = "https://img.icons8.com/?size=256w&id=jrkQk3VIHBgH&format=png"
+    -- local image   = hs.image.imageFromURL(testSvg)
+
+    local testSvg = "~/repos/github/g0t4/dotfiles/misc/hammerspoon-icons/test-svgs/machine-64.png"
+    local image   = hs.image.imageFromPath(resolveHomePath(testSvg))
+    deck:setButtonImage(4, image)
+
+    local pngFileType = hs.image.iconForFileType("png")
+    deck:setButtonImage(5, pngFileType)
+
+    local htmlFileType = hs.image.iconForFileType("html")
+    deck:setButtonImage(6, htmlFileType)
+
     if name == "1XL" then
     end
 end
