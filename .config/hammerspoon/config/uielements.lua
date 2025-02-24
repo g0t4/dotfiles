@@ -711,15 +711,19 @@ local function getIdentifier(toElement)
 end
 
 function BuildHammerspoonLuaTo(toElement)
-    local tmp = fun.enumerate(toElement:path()):map(function(_, pathItem)
+    local tmp = fun.enumerate(toElement:path())
+        :map(function(_, pathItem)
             local role = pathItem:attributeValue("AXRole")
             if role == "AXApplication" then
                 -- this is just meant as a generic example, not actually using as is
                 -- TODO could hsow hs.application.find() too (to set app)
                 return "app"
             end
+            local singular = role:gsub("^AX", "")
+            singular = lowercaseFirstLetter(singular)
+            -- PRN overrides for singulars that don't match AXRole
             local siblingIndex = GetElementSiblingIndex(pathItem)
-            return ":childrenWithRole(\"" .. role .. "\")[" .. siblingIndex .. "]"
+            return ":" .. singular .. "(" .. siblingIndex .. ")"
         end)
         :totable()
     -- todo split on line length too (minimal though)

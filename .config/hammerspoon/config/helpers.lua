@@ -125,4 +125,11 @@ function resolveHomePath(path)
     return path
 end
 
+function lowercaseFirstLetter(str)
+    if str == nil then
+        return nil
+    end
+    return str:sub(1, 1):lower() .. str:sub(2)
+end
+
 return M
