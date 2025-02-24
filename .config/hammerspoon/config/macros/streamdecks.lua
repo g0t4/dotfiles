@@ -222,6 +222,7 @@ hs.streamdeck.init(onDeviceDiscovery) -- onDeviceConnected)
 
 local observer = nil
 local currentApp = hs.application.frontmostApplication()
+-- ! TODO look into CommandPost and what it does for UI automation in FCPX, IIAC it uses that w/ its own lua fwk
 
 function onAppActivated(hsApp, appName)
     if observer then
@@ -255,7 +256,8 @@ function onAppActivated(hsApp, appName)
         if value then
             text = text .. " '" .. value .. "'"
         end
-        print("AXValueChanged: ", hs.inspect(element), text, hs.inspect(infoTable))
+        local luaScript = BuildHammerspoonLuaTo(element)
+        print("AXValueChanged: ", hs.inspect(element), text, hs.inspect(infoTable), luaScript)
     end)
     --
     local appElement = hs.axuielement.applicationElement(hsApp) -- works, for all elements!
@@ -269,10 +271,14 @@ function onAppActivated(hsApp, appName)
     -- FYI raises an error if cannot watch the given element
     --   i.e. pass element from different app than was used for pid of observer
     --      observer:addWatcher(hs.axuielement.applicationElement(hs.application.find("Finder")), "AXValueChanged")
-    local test = appElement:childrenWithRole("AXWindow")[2]:childrenWithRole("AXSplitGroup")[1]:childrenWithRole("AXGroup")[1]:childrenWithRole("AXSplitGroup")[1]:childrenWithRole("AXGroup")[2]
-        :childrenWithRole("AXSplitGroup")[1]:childrenWithRole("AXGroup")[4]:childrenWithRole("AXGroup")[2]:childrenWithRole("AXStaticText")[1] -- 00:00:25:24 - AXValueChanged
-    print("test:", hs.inspect(test))
-    local watchElement = test
+    -- local test = appElement:childrenWithRole("AXWindow")[2]:childrenWithRole("AXSplitGroup")[1]:childrenWithRole("AXGroup")[1]:childrenWithRole("AXSplitGroup")[1]:childrenWithRole("AXGroup")[2]
+    --     :childrenWithRole("AXSplitGroup")[1]:childrenWithRole("AXGroup")[4]:childrenWithRole("AXGroup")[2]:childrenWithRole("AXStaticText")[1] -- 00:00:25:24 - AXValueChanged
+    -- print("test:", hs.inspect(test))
+    -- local watchElement = test
+    -- local watchElement = appElement
+    -- local watchElement = appElement:childrenWithRole("AXWindow")[2]:childrenWithRole("AXSplitGroup")[1]:childrenWithRole("AXGroup")[2]:childrenWithRole("AXGroup")[2]:childrenWithRole("AXStaticText")[1]
+    local watchElement = appElement:childrenWithRole("AXWindow")[2]:childrenWithRole("AXSplitGroup")[1]:childrenWithRole("AXGroup")[2]:childrenWithRole("AXGroup")[2]:childrenWithRole("AXStaticText")[2]
+
     observer:addWatcher(watchElement, "AXValueChanged")
     observer:start()
 end
