@@ -119,6 +119,10 @@ function getDeckName(deck)
     return "unknown"
 end
 
+local deck1XL = nil
+local deck2XL = nil
+local deck3XL = nil
+local deck4Plus = nil
 --
 -- @param connected boolean
 -- @param deck hs.streamdeck
@@ -190,11 +194,27 @@ local function onDeviceDiscovery(connected, deck)
     deck:setButtonImage(7, hammerspoonAppIcon)
 
     if name == "1XL" then
+        deck1XL = deck
+    elseif name == "2XL" then
+        deck2XL = deck
+    elseif name == "3XL" then
+        deck3XL = deck
+    elseif name == "4+" then
+        deck4Plus = deck
     end
 end
 
 hs.streamdeck.init(onDeviceDiscovery) -- onDeviceConnected)
 
+
+hs.application.watcher.new(function(appName, eventType, hsApp)
+    if eventType == hs.application.watcher.activated then
+        print("app activated: ", appName)
+        if deck1XL then
+            deck1XL:setButtonImage(9, drawTextIcon(appName))
+        end
+    end
+end):start()
 -- FYI at this point, there are no devices available, wait for them to connect (each one)
 
 -- NOTES:
