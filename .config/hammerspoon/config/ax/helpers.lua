@@ -39,11 +39,11 @@ axuielemMT.staticText = function(self, index)
 end
 
 -- AXCheckBox
-axuielemMT.checkboxes = function(self)
+axuielemMT.checkBoxes = function(self)
     return self:childrenWithRole("AXCheckBox")
 end
-axuielemMT.checkbox = function(self, index)
-    return self:checkboxes()[index]
+axuielemMT.checkBox = function(self, index)
+    return self:checkBoxes()[index]
 end
 
 -- AXTextField
@@ -61,5 +61,3 @@ end
 axuielemMT.textArea = function(self, index)
     return self:textAreas()[index]
 end
-
-
