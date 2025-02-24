@@ -95,12 +95,34 @@ local function onDeviceDiscovery(connected, deck)
     print("  cols:", cols, " rows:", rows)
     -- PRN deck:setBrightness(80) -- 0 to 100 (FYI persists across restarts of hammerspoon... IIAC only need to set this once when I wanna change it)
 
-    deck:reset() -- TODO when do I need to call this? w/o this the buttonCallback doesn't reliably fire on config reload
+    -- TODO on hammerspon QUIT, reset the decks... right? sooo... do that on disconnect? or?
+
+    -- TODO now wth... reset isn't needed it seems... ... well ok maybe if something else sets the buttons... but I am reloading config w/o reset and it changes any button I explicitly set... and no flash this way!
+    --    FOR NOW see if it works w/o reset
+    --    OR, see if I can repor the issue w/o reset and button presses (which I just tested and are fine)
+    --        could it be that I hadn't set any buttons yet and now that I have button clicks work w/o reset?
+    -- deck:reset() -- TODO when do I need to call this? w/o this the buttonCallback doesn't reliably fire on config reload
     deck:buttonCallback(onButtonPressed)
 
+    --- WOW this is super fast too... in a flash they're all loaded (and that's with a reset in between)
     deck:setButtonColor(1, hs.drawing.color.x11.red)
     deck:setButtonColor(2, hs.drawing.color.x11.blue)
     deck:setButtonColor(3, hs.drawing.color.x11.yellow)
+    deck:setButtonColor(9, hs.drawing.color.x11.red)
+    deck:setButtonColor(10, hs.drawing.color.x11.blue)
+    deck:setButtonColor(11, hs.drawing.color.x11.yellow)
+    deck:setButtonColor(12, hs.drawing.color.x11.red)
+    deck:setButtonColor(13, hs.drawing.color.x11.blue)
+    deck:setButtonColor(14, hs.drawing.color.x11.yellow)
+    deck:setButtonColor(17, hs.drawing.color.x11.red)
+    deck:setButtonColor(18, hs.drawing.color.x11.blue)
+    deck:setButtonColor(19, hs.drawing.color.x11.yellow)
+    deck:setButtonColor(20, hs.drawing.color.x11.red)
+    deck:setButtonColor(21, hs.drawing.color.x11.blue)
+    deck:setButtonColor(22, hs.drawing.color.x11.yellow)
+    deck:setButtonColor(23, hs.drawing.color.x11.red)
+    deck:setButtonColor(24, hs.drawing.color.x11.blue)
+    deck:setButtonColor(32, hs.drawing.color.x11.blue)
 
     -- TODO try hs.image.imageFromAppBundle  -- get app icons!
 
