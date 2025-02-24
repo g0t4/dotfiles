@@ -16,6 +16,7 @@
         ],
         "disable": [
             "lowercase-global",
+            "need-check-nil",
         ],
     },
 

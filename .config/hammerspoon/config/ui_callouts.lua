@@ -88,28 +88,33 @@ local function showTooltipForElement(element, frame)
     end
     local attributeDump = table.concat(attributes, "\n")
 
+    local styledSpecifier = hs.styledtext.new(specifierLua, {
+        font = {
+            name = "SauceCodePro Nerd Font",
+            size = 14
+        },
+        color = { white = 1 },
+    })
 
-    local tmpcanvas = canvas.new({})
-    local estimatedSpecifierSizeForDefaultFont = tmpcanvas:minimumTextSize(specifierLua)
-    local estimatedAttributeSizeForDefaultFont = tmpcanvas:minimumTextSize(attributeDump)
-    local specifierFontSize = 14
-    local attributeFontSize = 10
-    local defaultTextStyle = canvas.defaultTextStyle()
+    local styledAttributes = hs.styledtext.new(attributeDump, {
+        font = {
+            name = "SauceCodePro Nerd Font",
+            size = 10
+        },
+        color = { white = 1 },
+    })
 
-    -- *** SUPER HACK to get font sizing to work... this works though!
-    --    BTW font height estimate is off, could find factor for it but for 14 point it will work with default at 27pt so I won't adjust it for now...
-    -- print("defaultTextStyle", hs.inspect(defaultTextStyle))
-    local specifierRatio = specifierFontSize / defaultTextStyle.font.size -- * 1.1
-    local attributeRatio = attributeFontSize / defaultTextStyle.font.size -- * 1.1
-    local specifierTextWidth = estimatedSpecifierSizeForDefaultFont.w * specifierRatio
-    local specifierTextHeight = estimatedSpecifierSizeForDefaultFont.h * specifierRatio
-    local attributeTextWidth = estimatedAttributeSizeForDefaultFont.w * attributeRatio
-    local attributeTextHeight = estimatedAttributeSizeForDefaultFont.h * attributeRatio
+    --- PRN move to a common definition file (helpers/hammerspoon.lua?)
+    ---@type { w: number, h: number } | nil
+    local specifierSize = hs.drawing.getTextDrawingSize(styledSpecifier)
+    ---@type { w: number, h: number } | nil
+    local attributeSize = hs.drawing.getTextDrawingSize(styledAttributes)
+    -- BTW switching to styled text returns much more accurate dimensions (even if not monospaced font)
 
     -- add padding (don't subtract it from needed width/height)
     local padding = 10
-    local tooltipWidth = math.max(specifierTextWidth, attributeTextWidth) + 2 * padding
-    local tooltipHeight = specifierTextHeight + attributeTextHeight + 3 * padding
+    local tooltipWidth = math.max(specifierSize.w, attributeSize.w) + 2 * padding
+    local tooltipHeight = specifierSize.h + attributeSize.h + 3 * padding
 
     local screenFrame = hs.screen.mainScreen():frame() -- Gets the current screen dimensions
 
@@ -157,21 +162,15 @@ local function showTooltipForElement(element, frame)
             {
                 -- specifier
                 type = "text",
-                text = specifierLua,
-                textSize = specifierFontSize,
-                textColor = { white = 1 },
-                frame = { x = padding, y = padding, w = tooltipWidth - 2 * padding, h = specifierTextHeight },
-                textAlignment = "left"
+                text = styledSpecifier,
+                frame = { x = padding, y = padding, w = tooltipWidth - 2 * padding, h = specifierSize.h },
             },
             -- padding
             {
                 -- attributes
                 type = "text",
-                text = attributeDump,
-                textSize = attributeFontSize,
-                textColor = { white = 1 },
-                frame = { x = padding, y = 2 * padding + specifierTextHeight, w = tooltipWidth - 2 * padding, h = attributeTextHeight },
-                textAlignment = "left"
+                text = styledAttributes,
+                frame = { x = padding, y = 2 * padding + specifierSize.h, w = tooltipWidth - 2 * padding, h = attributeSize.h },
             },
             -- padding
         })
@@ -437,10 +436,3 @@ return M
 
 -- NOTES
 -- - iTerm2 + nvim => sets AXDocument attribute with path to currentcurrent  file
--- code refs:
--- {
---     -- horizontal line (y = specifierTextHeight + attributeTextHeight + padding => bottom of attributes)
---     type = "segments",
---     coordinates = { { x = padding, y = specifierTextHeight + attributeTextHeight + padding }, { y = specifierTextHeight + attributeTextHeight + padding, x = tooltipWidth - padding } },
---     strokeColor = { white = 0.5 },
--- },
