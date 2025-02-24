@@ -20,6 +20,8 @@ end
 ---@param name string The attribute name.
 ---@return any value The value of the attribute.
 function CachedElement:attribute(name)
+    -- TODO avoid double lookup on non-existent attributes
+    --   PRN? add a cacheEntry type to hold nil and signal looked up already
     if not self.cache[name] then
         self.cache[name] = self.element:attributeValue(name)
     end
@@ -51,7 +53,12 @@ function CachedElement:clearCache()
     self.typeCache = {}
 end
 
+--- Retrieve the AXUIElement.
+---@return CachedElement|nil The AXUIElement.
 function CachedElement.forApp(appName)
+    -- FYI this already borders on getting into strategy to locate element... save that for later
+    -- PRN make a throwable version?
+    -- PRN take both string and hs.application
     local app = hs.application.find(appName)
     if not app then
         return nil
