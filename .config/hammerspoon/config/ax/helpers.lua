@@ -87,3 +87,11 @@ function BuildHammerspoonLuaTo(toElement)
     -- todo split on line length too (minimal though)
     return table.concat(tmp, "")
 end
+
+function sortedAttributeNames(element)
+    -- TODO can I make an enumerator like pairs(sortedAttributeNames(element))?
+    if not element or not element.attributeNames then return {} end
+    local attributes = element:attributeNames()
+    table.sort(attributes)
+    return attributes
+end

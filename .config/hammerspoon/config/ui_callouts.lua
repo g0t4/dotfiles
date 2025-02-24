@@ -31,18 +31,14 @@ local function showTooltipForElement(element, frame)
         M.last.text = M.last.text .. "\n" -- blank line
         -- TODO add some toggle for enabling verbose cuz normally I don't want verbose...
         -- WAIT... if I have a second display, how about show it there!?
-        for k, v in pairs(element) do
-            if v == nil then
-                -- skip nil key
-                goto continue
-            end
-            local value = DisplayAttr(v)
+        for _, attrName in pairs(sortedAttributeNames(element)) do
+            local attrValue = element:attributeValue(attrName)
+            local value = DisplayAttr(attrValue)
             -- only allow 50 chars max for text
             if #value > 50 then
                 value = value:sub(1, 50) .. "..."
             end
-            M.last.text = M.last.text .. "\n" .. k .. ": " .. value
-            ::continue::
+            M.last.text = M.last.text .. "\n" .. attrName .. ": " .. value
         end
     end
 
