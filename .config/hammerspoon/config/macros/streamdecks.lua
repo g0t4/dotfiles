@@ -225,6 +225,8 @@ local currentApp = hs.application.frontmostApplication()
 
 -- ! TODO look into CommandPost and what it does for UI automation in FCPX, IIAC it uses that w/ its own lua fwk
 -- https://github.com/CommandPost/CommandPost?tab=readme-ov-file
+--   OH YEAH BABY... they're right up my alley... or I'm right up theirs
+--      https://github.com/CommandPost/CommandPost/blob/develop/src/extensions/cp/apple/finalcutpro/inspector/Inspector.lua#L127
 
 function onAppActivated(hsApp, appName)
     if observer then
