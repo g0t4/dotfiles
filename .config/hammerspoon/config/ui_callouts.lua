@@ -4,8 +4,8 @@ M.last = {
     tooltip = nil,
     callout = nil,
     text = nil,
-    escBinding = nil,
 }
+M.bindings = {}
 local skips = {
     AXRole = true,
     AXChildren = true,
@@ -231,9 +231,9 @@ local function stopElementInspector()
         M.stop_event_source()
         M.stop_event_source = nil
     end
-    if M.escBinding then
-        M.escBinding:delete()
-        M.escBinding = nil
+
+    for _, binding in pairs(M.bindings) do
+        binding:delete()
     end
 end
 
@@ -252,7 +252,7 @@ local function startElementInspector()
     --     print("[COMPLETE] what to do here?")
     -- end
     )
-    M.escBinding = hs.hotkey.bind({}, "escape", stopElementInspector)
+    table.insert(M.bindings, hs.hotkey.bind({}, "escape", stopElementInspector))
 end
 
 M.moves = nil
