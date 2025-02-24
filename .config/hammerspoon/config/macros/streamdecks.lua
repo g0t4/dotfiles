@@ -241,7 +241,8 @@ function onAppActivated(hsApp, appName)
     assert(window ~= nil, "window is nil")
     local headerGroup = window:childrenWithRole("AXSplitGroup")[1]:childrenWithRole("AXGroup")[2]:childrenWithRole("AXGroup")[2]
     assert(headerGroup ~= nil, "headerGroup is nil")
-    local staticTextElement = headerGroup:childrenWithRole("AXStaticText")[1]
+    local staticTextElement = headerGroup:staticTexts(1)
+    print("staticTextElement:", hs.inspect(staticTextElement))
     print("  value:", staticTextElement:attributeValue("AXValue"))
     print(" identifier:", staticTextElement:attributeValue("AXIdentifier"))
     -- FYI does have AXIdentifier _NS:84  -  AXRoleDescription: text    -    AXDescription: text

@@ -710,28 +710,6 @@ local function getIdentifier(toElement)
     return applescriptSanitizeIdentifier(identifier)
 end
 
-local axuielemMT = hs.getObjectMetatable("hs.axuielement")
-axuielemMT.windows = function(self, index)
-    -- goal here is to simplify syntax for navigating children by roles (and index)
-    -- instead of:
-    --    :childrenWithRole("AXWindow")[1]
-    -- you can do:
-    --    :windows(1)
-    -- todo if index is # then index
-    -- PRN allow index to be string? for title lookup like AppleScript? might want windowTitle("title") instead to avoid unecessary type checks and magic in what it matches on?
-    local windows = self:childrenWithRole("AXWindow")
-    if index == nil then
-        return windows
-    end
-    return windows[index]
-end
-axuielemMT.splitGroups = function(self)
-    return self:childrenWithRole("AXSplitGroup")
-end
-axuielemMT.groups = function(self)
-    return self:childrenWithRole("AXGroup")
-end
-
 function BuildHammerspoonLuaTo(toElement)
     local tmp = fun.enumerate(toElement:path()):map(function(_, pathItem)
             local role = pathItem:attributeValue("AXRole")

@@ -9,6 +9,7 @@ local start_time = hs.timer.secondsSinceEpoch()
 hs.ipc.cli = true -- early so hs CLI always works
 
 require("config.helpers")
+require("config.ax.helpers")
 
 
 -- local streamStdout = require("config.tests.stream-stdout").streamStdout
