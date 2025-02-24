@@ -710,31 +710,6 @@ local function getIdentifier(toElement)
     return applescriptSanitizeIdentifier(identifier)
 end
 
-function BuildHammerspoonLuaTo(toElement)
-    local tmp = fun.enumerate(toElement:path())
-        :map(function(_, pathItem)
-            local role = pathItem:attributeValue("AXRole")
-            if role == "AXApplication" then
-                -- this is just meant as a generic example, not actually using as is
-                -- TODO could hsow hs.application.find() too (to set app)
-                return "app"
-            end
-            local singular = role:gsub("^AX", "")
-            singular = lowercaseFirstLetter(singular)
-            -- PRN overrides for singulars that don't match AXRole
-            local siblingIndex = GetElementSiblingIndex(pathItem)
-            if singular == "splitGroup" then
-                -- add space before the colon to help split up deep specifiers
-                --   splitGroup is often "evenly" distributed
-                return " :" .. singular .. "(" .. siblingIndex .. ")"
-            end
-            return ":" .. singular .. "(" .. siblingIndex .. ")"
-        end)
-        :totable()
-    -- todo split on line length too (minimal though)
-    return table.concat(tmp, "")
-end
-
 function BuildAppleScriptTo(toElement, includeAttrDumps)
     includeAttrDumps = includeAttrDumps or false
 
