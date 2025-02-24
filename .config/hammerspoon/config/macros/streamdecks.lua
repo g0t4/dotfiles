@@ -4,6 +4,10 @@
 --  I can do this with an accessibility observer
 local log = require("hs.logger").new("streamdeck", "verbose") -- set to "warning" or "error" when done developing this module
 
+function verbose(...)
+    log.v(...)
+end
+
 function reloadOnMacrosChanges(path)
     local scriptPath = path or "/Users/wesdemos/.hammerspoon/config/macros"
 
@@ -15,13 +19,12 @@ function reloadOnMacrosChanges(path)
 
     local watcher = hs.pathwatcher.new(scriptPath, function(files, flagTables)
         -- for _, file in ipairs(files) do ... hot reload each? (FYI symlinks might not match if checking based on file name
-        print("Reloading script: ", scriptPath)
         hs.reload() -- crude, reload config as a pseudo restart
         -- PRN setup hot reload type functionality? or at least module reload
     end)
 
     watcher:start()
-    print("Auto-reload enabled for: " .. scriptPath)
+    verbose("Auto-reload enabled for: " .. scriptPath)
 end
 
 -- TODO turn this into hot reload for just streamdeck lua scripts?
@@ -36,7 +39,6 @@ function dumpButtonInfo(deck, buttonNumber, pressedOrReleased)
 
     local buttonExtra = ""
     local cols, rows = deck:buttonLayout()
-    print("  cols:", cols, " rows:", rows)
 
     -- nice for debugging
     local col = (buttonNumber - 1) % cols + 1
@@ -48,7 +50,7 @@ function dumpButtonInfo(deck, buttonNumber, pressedOrReleased)
         explainPressed = (pressedOrReleased and "pressed" or "released")
     end
 
-    print(
+    log.v(
         getDeckName(deck) ..
         " btn " .. buttonNumber .. buttonExtra ..
         explainPressed
@@ -156,11 +158,6 @@ local deck4Plus = nil
 -- @param connected boolean
 -- @param deck hs.streamdeck
 local function onDeviceDiscovery(connected, deck)
-    -- print(hs.inspect(getmetatable(deck)))
-    -- print("Discovered streamdeck", hs.inspect(deck), "connected:", connected)
-    local serial = deck:serialNumber()
-    -- print("firmwareVersion: ", deck:firmwareVersion())
-
     local name = getDeckName(deck)
     -- PRN deck:setBrightness(80) -- 0 to 100 (FYI persists across restarts of hammerspoon... IIAC only need to set this once when I wanna change it)
 
@@ -205,10 +202,7 @@ local function onDeviceDiscovery(connected, deck)
         deck:setScreenImage(4, hs.image.imageFromPath(testSvg5))
     end
 
-
-    -- PRN capture deck image sizes for button image gen
     -- local imageSize = deck:imageSize()
-    -- print("imageSizes: ", hs.inspect(imageSize))
     -- XL => { h = 96.0, w = 96.0 }
     -- +  => { h = 120.0, w = 120.0 }
 
@@ -296,7 +290,7 @@ function onAppActivated(hsApp, appName)
             text = text .. " '" .. value .. "'"
         end
         local luaScript = BuildHammerspoonLuaTo(element)
-        print("AXValueChanged: ", hs.inspect(element), text, hs.inspect(infoTable), luaScript)
+        verbose("AXValueChanged: ", hs.inspect(element), text, hs.inspect(infoTable), luaScript)
     end)
     --
     local appElement = hs.axuielement.applicationElement(hsApp) -- works, for all elements!
@@ -312,7 +306,6 @@ function onAppActivated(hsApp, appName)
     --      observer:addWatcher(hs.axuielement.applicationElement(hs.application.find("Finder")), "AXValueChanged")
     -- local test = appElement:childrenWithRole("AXWindow")[2]:childrenWithRole("AXSplitGroup")[1]:childrenWithRole("AXGroup")[1]:childrenWithRole("AXSplitGroup")[1]:childrenWithRole("AXGroup")[2]
     --     :childrenWithRole("AXSplitGroup")[1]:childrenWithRole("AXGroup")[4]:childrenWithRole("AXGroup")[2]:childrenWithRole("AXStaticText")[1] -- 00:00:25:24 - AXValueChanged
-    -- print("test:", hs.inspect(test))
     -- local watchElement = test
     -- local watchElement = appElement
     -- local watchElement = appElement:window(2):splitGroup(1):group(2):group(2):staticText(1)
