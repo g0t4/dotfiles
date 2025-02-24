@@ -34,11 +34,15 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "O", function()
 
     local function eventHandler(observer, element, event, event_info)
         -- TODO consider a mode to dump entire script instead of just the element specifier
-        local specifier = ElementSpecifierFor(element)
+        local text = BuildHammerspoonLuaTo(element)
+        if event == "AXValueChanged" then
+            text = text .. " " .. (element:attributeValue("AXValue") or "")
+            -- PRN add more event type info dumps
+        end
         if event_info == {} then
-            print(string.format("[AX EVENT] %s - %s", specifier, event))
+            print(string.format("[AX EVENT] %s - %s", text, event))
         else
-            print(string.format("[AX EVENT] %s - %s\n  %s", specifier, event, hs.inspect(event_info)))
+            print(string.format("[AX EVENT] %s - %s\n  %s", text, event, hs.inspect(event_info)))
         end
     end
 
