@@ -457,6 +457,10 @@ local function htmlPreCodeAppleScript(script)
     return "<pre>" .. htmlCodeAppleScript(script) .. "</pre>"
 end
 
+local function htmlPreCodeLua(script)
+    return "<pre>" .. htmlCodeLua(script) .. "</pre>"
+end
+
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "A", function()
     EnsureClearedWebView()
 
@@ -487,8 +491,10 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "A", function()
         elementAt = hs.axuielement.systemElementAtPosition(coords)
     end
     local clauses, attrDumps = BuildAppleScriptTo(elementAt, true)
-    local script = CombineClausesWithLineContinuations(clauses)
-    prints(htmlPreCodeAppleScript(script))
+    local applescript = CombineClausesWithLineContinuations(clauses)
+    prints(htmlPreCodeAppleScript(applescript))
+    local lua = BuildHammerspoonLuaTo(elementAt)
+    prints(htmlPreCodeLua(lua))
     prints(BuildActionExamples(elementAt))
     prints(GetDumpPath(elementAt, true))
     prints(table.unpack(attrDumps))
