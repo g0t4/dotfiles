@@ -36,10 +36,24 @@ reloadOnMacrosChanges()
 --      pressed/released AND rotated (plus only, IIUC)
 --
 --
-function onButtonPressed(deck, buttonNumber, pressedOrReleased)
-    print("button " .. buttonNumber .. ": "
+function dumpButtonInfo(deck, buttonNumber, pressedOrReleased)
+    local buttonExtra = ""
+    if deck:serialNumber():find("^CL") then
+        -- nice for debugging
+        local col = (buttonNumber - 1) % 8 + 1
+        local row = math.ceil(buttonNumber / 8)
+        buttonExtra = " (" .. row .. "," .. col .. ") "
+    end
+
+    print(
+        getDeckName(deck)
+        .. " btn " .. buttonNumber .. buttonExtra
         .. (pressedOrReleased and "pressed" or "released")
-        .. " on button " .. getDeckName(deck))
+    )
+end
+
+function onButtonPressed(deck, buttonNumber, pressedOrReleased)
+    dumpButtonInfo(deck, buttonNumber, pressedOrReleased)
 end
 
 function getDeckName(deck)
