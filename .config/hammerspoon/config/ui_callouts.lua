@@ -82,8 +82,7 @@ local function displayUserData(name, value)
     end
 end
 local function displayType(value)
-    -- uncommment to turn off type display:
-    do return "" end
+    -- do return "" end -- uncomment to quickly turn off/on type display
     local valueType = type(value)
     if valueType == "table" then
         -- tables are implicit with surrounding [ ]
