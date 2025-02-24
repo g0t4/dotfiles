@@ -258,13 +258,21 @@ function onAppActivated(hsApp, appName)
         print("AXValueChanged: ", hs.inspect(element), text, hs.inspect(infoTable))
     end)
     --
-    -- local watchElement = hs.axuielement.applicationElement(hsApp) -- works, for all elements!
+    local appElement = hs.axuielement.applicationElement(hsApp) -- works, for all elements!
+    assert(appElement ~= nil, "appElement is nil")
     -- local watchElement = hs.axuielement.windowElement(hsApp:mainWindow()) -- nothing for AXValueChanged
-    local watchElement = staticTextElement -- not working so far :(
+    -- local watchElement = staticTextElement -- not working so far :(
     -- TODO why can't I get watching to work beneath the app level?!
     --   appElement => all events (including the AXValueChanged I want)
     --   mainWindow => nothing
     --   individual element that has value changing => nothing
+    -- FYI raises an error if cannot watch the given element
+    --   i.e. pass element from different app than was used for pid of observer
+    --      observer:addWatcher(hs.axuielement.applicationElement(hs.application.find("Finder")), "AXValueChanged")
+    local test = appElement:childrenWithRole("AXWindow")[2]:childrenWithRole("AXSplitGroup")[1]:childrenWithRole("AXGroup")[1]:childrenWithRole("AXSplitGroup")[1]:childrenWithRole("AXGroup")[2]
+        :childrenWithRole("AXSplitGroup")[1]:childrenWithRole("AXGroup")[4]:childrenWithRole("AXGroup")[2]:childrenWithRole("AXStaticText")[1] -- 00:00:25:24 - AXValueChanged
+    print("test:", hs.inspect(test))
+    local watchElement = test
     observer:addWatcher(watchElement, "AXValueChanged")
     observer:start()
 end
