@@ -153,18 +153,18 @@ local function showTooltipForElement(element, frame)
                 frame = { x = padding, y = padding, w = tooltipWidth - 2 * padding, h = specifierTextHeight },
                 textAlignment = "left"
             },
-            {
-                -- horizontal line (y = padding)
-                type = "segments",
-                coordinates = { { x = padding, y = padding }, { y = padding, x = tooltipWidth - padding } },
-                strokeColor = { white = 0.5 },
-            },
-            {
-                -- horizontal line (y = specifierTextHeight + padding => bottom of specifier)
-                type = "segments",
-                coordinates = { { x = padding, y = specifierTextHeight + padding }, { y = specifierTextHeight + padding, x = tooltipWidth - padding } },
-                strokeColor = { white = 0.5 },
-            },
+            -- {
+            --     -- horizontal line (y = padding)
+            --     type = "segments",
+            --     coordinates = { { x = padding, y = padding }, { y = padding, x = tooltipWidth - padding } },
+            --     strokeColor = { white = 0.5 },
+            -- },
+            -- {
+            --     -- horizontal line (y = specifierTextHeight + padding => bottom of specifier)
+            --     type = "segments",
+            --     coordinates = { { x = padding, y = specifierTextHeight + padding }, { y = specifierTextHeight + padding, x = tooltipWidth - padding } },
+            --     strokeColor = { white = 0.5 },
+            -- },
             {
                 -- attributes
                 type = "text",
@@ -174,12 +174,12 @@ local function showTooltipForElement(element, frame)
                 frame = { x = padding, y = padding + specifierTextHeight, w = tooltipWidth - 2 * padding, h = attributeTextHeight },
                 textAlignment = "left"
             },
-            {
-                -- horizontal line (y = specifierTextHeight + attributeTextHeight + padding => bottom of attributes)
-                type = "segments",
-                coordinates = { { x = padding, y = specifierTextHeight + attributeTextHeight + padding }, { y = specifierTextHeight + attributeTextHeight + padding, x = tooltipWidth - padding } },
-                strokeColor = { white = 0.5 },
-            },
+            -- {
+            --     -- horizontal line (y = specifierTextHeight + attributeTextHeight + padding => bottom of attributes)
+            --     type = "segments",
+            --     coordinates = { { x = padding, y = specifierTextHeight + attributeTextHeight + padding }, { y = specifierTextHeight + attributeTextHeight + padding, x = tooltipWidth - padding } },
+            --     strokeColor = { white = 0.5 },
+            -- },
         })
         :show()
 end
