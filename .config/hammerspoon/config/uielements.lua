@@ -733,14 +733,15 @@ axuielemMT.groups = function(self)
 end
 
 function BuildHammerspoonLuaTo(toElement)
-    local tmp = fun.enumerate(toElement:path()):map(function(index, pathItem)
+    local tmp = fun.enumerate(toElement:path()):map(function(_, pathItem)
             local role = pathItem:attributeValue("AXRole")
             if role == "AXApplication" then
                 -- this is just meant as a generic example, not actually using as is
                 -- TODO could hsow hs.application.find() too (to set app)
                 return "app"
             end
-            return ":childrenWithRole(\"" .. role .. "\")[" .. index .. "]"
+            local siblingIndex = GetElementSiblingIndex(pathItem)
+            return ":childrenWithRole(\"" .. role .. "\")[" .. siblingIndex .. "]"
         end)
         :totable()
     -- todo split on line length too (minimal though)
