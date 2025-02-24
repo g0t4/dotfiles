@@ -222,7 +222,9 @@ hs.streamdeck.init(onDeviceDiscovery) -- onDeviceConnected)
 
 local observer = nil
 local currentApp = hs.application.frontmostApplication()
+
 -- ! TODO look into CommandPost and what it does for UI automation in FCPX, IIAC it uses that w/ its own lua fwk
+-- https://github.com/CommandPost/CommandPost?tab=readme-ov-file
 
 function onAppActivated(hsApp, appName)
     if observer then
