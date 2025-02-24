@@ -108,7 +108,7 @@ local function showTooltipForElement(element, frame)
 
     -- add padding (don't subtract it from needed width/height)
     local padding = 10
-    local tooltipWidth = math.max(specifierTextWidth, attributeTextWidth) + 3 * padding
+    local tooltipWidth = math.max(specifierTextWidth, attributeTextWidth) + 2 * padding
     local tooltipHeight = specifierTextHeight + attributeTextHeight + 3 * padding
 
     local screenFrame = hs.screen.mainScreen():frame() -- Gets the current screen dimensions
@@ -134,6 +134,15 @@ local function showTooltipForElement(element, frame)
         end
     end
 
+    local role = element:attributeValue("AXRole")
+    local background = { white = 0, alpha = 1 }
+    if role == "AXWindow" then
+        -- dark green
+        background = { hex = "#013220", alpha = 1 }
+    elseif role == "AXApplication" then
+        -- dark blue
+        background = { hex = "#002040", alpha = 1 }
+    end
     M.last.tooltip = canvas.new({ x = x, y = y, w = tooltipWidth, h = tooltipHeight })
         :appendElements({
             -- padding
@@ -142,7 +151,7 @@ local function showTooltipForElement(element, frame)
                 type = "rectangle",
                 action = "fill",
                 frame = { x = 0, y = 0, w = tooltipWidth, h = tooltipHeight },
-                fillColor = { white = 0, alpha = 1 }, -- Dark semi-transparent background
+                fillColor = background,
                 roundedRectRadii = { xRadius = 8, yRadius = 8 }
             },
             {
@@ -151,7 +160,7 @@ local function showTooltipForElement(element, frame)
                 text = specifierLua,
                 textSize = specifierFontSize,
                 textColor = { white = 1 },
-                frame = { x = padding, y = padding, w = tooltipWidth - 3 * padding, h = specifierTextHeight },
+                frame = { x = padding, y = padding, w = tooltipWidth - 2 * padding, h = specifierTextHeight },
                 textAlignment = "left"
             },
             -- padding
@@ -161,7 +170,7 @@ local function showTooltipForElement(element, frame)
                 text = attributeDump,
                 textSize = attributeFontSize,
                 textColor = { white = 1 },
-                frame = { x = padding, y = 2 * padding + specifierTextHeight, w = tooltipWidth - 3 * padding, h = attributeTextHeight },
+                frame = { x = padding, y = 2 * padding + specifierTextHeight, w = tooltipWidth - 2 * padding, h = attributeTextHeight },
                 textAlignment = "left"
             },
             -- padding
@@ -426,7 +435,8 @@ end)
 
 return M
 
-
+-- NOTES
+-- - iTerm2 + nvim => sets AXDocument attribute with path to currentcurrent  file
 -- code refs:
 -- {
 --     -- horizontal line (y = specifierTextHeight + attributeTextHeight + padding => bottom of attributes)
