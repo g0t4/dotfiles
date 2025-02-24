@@ -21,6 +21,29 @@ local skips = {
     AXTopLevelUIElement = true,
     AXWindow = true,
     AXParent = true,
+
+    AXFrame = true,
+    AXPosition = true,
+    AXActivationPoint = true,
+    AXSize = true,
+
+    -- windows
+    AXZoomButton = true,
+    AXCloseButton = true,
+    AXMinimizeButton = true,
+    AXFullScreenButton = true,
+    AXFullScreen = true,
+    AXSections = true,
+
+    -- splitters
+    AXNextContents = true,
+    AXPreviousContents = true,
+    AXSplitters = true,
+
+    -- PRN outlines/tables(rows/columns)
+    AXRows = true,
+    AXColumns = true,
+    AXVisibleRows = true,
 }
 
 -- FYI use require so I get LS completions, docs, etc => globals don't work well w/ LSP
@@ -45,12 +68,14 @@ local function showTooltipForElement(element, frame)
 
     if true then
         M.last.text = M.last.text .. "\n" -- blank line
-        -- TODO add some toggle for enabling verbose cuz normally I don't want verbose...
-        -- WAIT... if I have a second display, how about show it there!?
+        -- *** GOAL is to quickly see attrs that I can use to target elements
+        --   hide the noise (nil, "", lists, attrs I dont care about)
+        --   everything else => use html report
         for _, attrName in pairs(sortedAttributeNames(element)) do
             if skips[attrName] then goto continue end
             local attrValue = element:attributeValue(attrName)
             if attrValue == nil then goto continue end
+            if attrName == "AXHelp" and attrValue == "" then goto continue end
 
             local value = DisplayAttr(attrValue)
             -- only allow 50 chars max for text
