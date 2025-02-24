@@ -108,7 +108,24 @@ function onEncoderPressed(deck, buttonNumber, pressedOrReleased, turnedLeft, tur
     --      pressed/released AND rotated (plus only, IIUC)
     --
     -- dumpButtonInfo(deck, buttonNumber, pressedOrReleased)
-    log.vf("encoder pressed: ", buttonNumber, pressedOrReleased, turnedLeft, turnedRight)
+    local message = "encoder " .. buttonNumber
+    -- .. " pressed: "
+    --     .. pressedOrReleased .. " turnedLeft: " .. turnedLeft .. " turnedRight: " .. turnedRight
+    if pressedOrReleased then
+        message = message .. " pressed"
+    else
+        -- if left/right turn then release is not relevant
+        if turnedLeft then
+            message = message .. " left"
+        elseif turnedRight then
+            message = message .. " right"
+        else
+            -- only release event IF not left nor right
+            message = message .. " released"
+        end
+    end
+
+    log.v(message)
 end
 
 function getDeckName(deck)
