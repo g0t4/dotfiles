@@ -58,6 +58,7 @@ end
 function drawTextIcon(text)
     local width = 96
     local height = 96
+    -- todo based on device button size (4+ has 120x120, XL has 96x96)
     -- use canvas for text on images on icons! COOL
     --   streamdeck works off of images only for the buttons, makes 100% sense
     local canvas = hs.canvas.new({ x = 0, y = 0, w = width, h = height })
