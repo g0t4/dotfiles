@@ -453,7 +453,7 @@ local function htmlCodeLua(script)
     return "<code class='language-lua'>" .. script .. "</code>"
 end
 
-local function preHtmlCodeBlock(script)
+local function htmlPreCodeAppleScript(script)
     return "<pre>" .. htmlCodeAppleScript(script) .. "</pre>"
 end
 
@@ -488,7 +488,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "A", function()
     end
     local clauses, attrDumps = BuildAppleScriptTo(elementAt, true)
     local script = CombineClausesWithLineContinuations(clauses)
-    prints(preHtmlCodeBlock(script))
+    prints(htmlPreCodeAppleScript(script))
     prints(BuildActionExamples(elementAt))
     prints(GetDumpPath(elementAt, true))
     prints(table.unpack(attrDumps))
@@ -842,7 +842,7 @@ function BuildActionExamples(element)
             script = script .. "perform action \"" .. action .. "\" of " .. identifer .. "<br>"
         end
     end
-    return preHtmlCodeBlock(script)
+    return htmlPreCodeAppleScript(script)
 end
 
 function GetElementSiblingIndex(elem)
