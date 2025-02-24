@@ -141,8 +141,7 @@ local function onDeviceDiscovery(connected, deck)
     -- print(hs.inspect(getmetatable(deck)))
     -- print("Discovered streamdeck", hs.inspect(deck), "connected:", connected)
     local serial = deck:serialNumber()
-    print("serialNumber: ", serial)
-    print("firmwareVersion: ", deck:firmwareVersion())
+    -- print("firmwareVersion: ", deck:firmwareVersion())
 
     local name = getDeckName(deck)
     -- PRN deck:setBrightness(80) -- 0 to 100 (FYI persists across restarts of hammerspoon... IIAC only need to set this once when I wanna change it)
@@ -179,8 +178,9 @@ local function onDeviceDiscovery(connected, deck)
 
     -- TODO setScreenImage (when disconnected, right?)
 
-    local imageSize = deck:imageSize()
-    print("imageSizes: ", hs.inspect(imageSize))
+    -- PRN capture deck image sizes for button image gen
+    -- local imageSize = deck:imageSize()
+    -- print("imageSizes: ", hs.inspect(imageSize))
     -- XL => { h = 96.0, w = 96.0 }
     -- +  => { h = 120.0, w = 120.0 }
 
