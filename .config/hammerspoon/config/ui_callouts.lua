@@ -37,7 +37,7 @@ local skips = {
     AXMinimizeButton = true,
     AXFullScreenButton = true,
     AXFullScreen = true,
-    -- AXSections = true,
+    -- AXSections = true, -- very well useful on window level
 
     -- splitters
     AXNextContents = true,
