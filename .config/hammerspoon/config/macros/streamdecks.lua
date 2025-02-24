@@ -265,9 +265,7 @@ function onAppActivated(hsApp, appName)
     --   appElement => all events (including the AXValueChanged I want)
     --   mainWindow => nothing
     --   individual element that has value changing => nothing
-    print("watchElement: ", watchElement:attributeValue("AXTitle"))
-    local obsObj = observer:addWatcher(watchElement, "AXValueChanged")
-    print("obsObj: ", hs.inspect(obsObj))
+    observer:addWatcher(watchElement, "AXValueChanged")
     observer:start()
 end
 
