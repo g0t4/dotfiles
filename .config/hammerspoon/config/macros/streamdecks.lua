@@ -227,6 +227,7 @@ local currentApp = hs.application.frontmostApplication()
 -- https://github.com/CommandPost/CommandPost?tab=readme-ov-file
 --   OH YEAH BABY... they're right up my alley... or I'm right up theirs
 --      https://github.com/CommandPost/CommandPost/blob/develop/src/extensions/cp/apple/finalcutpro/inspector/Inspector.lua#L127
+--   yup, they memoize... "cache" https://github.com/CommandPost/CommandPost/blob/develop/src/extensions/cp/apple/finalcutpro/inspector/BasePanel.lua#L28
 
 function onAppActivated(hsApp, appName)
     if observer then
