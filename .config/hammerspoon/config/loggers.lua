@@ -1,20 +1,50 @@
 --
 
+local M = {}
+local initialPrint = print
+function M.muteCoreMessages()
+    print = function(first, ...)
+        -- filter out chatty messages
+        if first:match("^-- ") then
+            -- avoid overhead of multiple matches... and I wonder if I can just filter any messages with "--" on start
+            if first:match("^-- Some applications have alternate names which") then
+                return
+            end
+            if first:match("^-- Loading extension:") then
+                return
+            end
+            if first:match("^-- Loading Spoon:") then
+                return
+            end
+        end
+        initialPrint(first, ...)
+    end
+end
 
+function M.unmuteCoreMessages()
+    print = initialPrint
+end
 
+local quietStartup = true
 
+-- *** comment out to re-enable core messages
+-- have to set this here b/c below when I use setLogLevel on modules, then the initial load will show too
+if quietStartup then
+    M.muteCoreMessages()
+end
 
 -- FYI levels:
---   1 to 5, or error, warning, info, debug, trace - or "nothing"
---   TODO confirm "nothing" works
+--   1 to 5, or 'nothing', 'error', 'warning', 'info', 'debug', or 'verbose',
 
 -- *** threshold for NEW LOGGERS:
-print("initial hs.logger.defaultLogLevel", hs.logger.defaultLogLevel)
+-- print("initial hs.logger.defaultLogLevel", hs.logger.defaultLogLevel) => "warning" by default
 -- hs.logger.defaultLogLevel = "error" -- threshold for new loggers
 
 -- *** threshold for individual modules:
 --   modules don't expose logger instance, but they do expose setting log level (common practice?)
-hs.hotkey.setLogLevel("error")
+if quietStartup then
+    hs.hotkey.setLogLevel("error")
+end
 -- TODO OTHER MODULES that are TOO VERBOSE (search hammerspoon repo)
 
 -- *** set threshold for all loggers (modules and instances):
@@ -33,3 +63,5 @@ hs.hotkey.setLogLevel("error")
 -- myLog.e("from myLog erroring")
 -- myLog.ef("foo: %s", "from myLog ef-ing")
 -- myLog.f("foo: %s", "from myLog f-ing") -- override entire log output format (i.e. timestamp, level, etc)
+
+return M

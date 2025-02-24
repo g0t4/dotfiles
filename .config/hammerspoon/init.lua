@@ -3,10 +3,10 @@
 -- FYI it doesn't seem like the API for hs and its extensions were built with any sort of discoverability in mind, the LS can't find most everything (even if I add the path to the extensions to the coc config... so just forget about using that)... i.e. look at require("hs.console") and go to the module and it has like 2 things and no wonder the LS doesn't find anything... it's all globals built on hs.* which is gah
 -- TLDR => hs.* was not built for LS to work, you just have to know what to use (or look at docs)
 -- JUST PUT hs global into lua LS config and be done with that
+
+local loggers = require("config.loggers") -- s/b early to mute core messages
+
 local start_time = hs.timer.secondsSinceEpoch()
-
-require("config.loggers") -- s/b early
-
 
 hs.ipc.cli = true -- early so hs CLI always works
 
@@ -87,3 +87,6 @@ require("config.macros.init")
 -- PRN could set a script that runs automatically when neovim starts in just my hammerspoon config dir
 -- print("loading EmmyLua to generate stubs if needed... can do this manually if this is too slow here as I only need this for neovim lua LS... not for hammerspoon app itself")
 hs.loadSpoon("EmmyLua") -- <2ms to check is fine... NBD to run all the time
+
+-- now that we're done with init, put back regular print?
+loggers.unmuteCoreMessages()
