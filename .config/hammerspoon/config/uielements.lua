@@ -498,7 +498,6 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "A", function()
     prints(BuildActionExamples(elementAt))
     prints(GetDumpPath(elementAt, true))
     prints(table.unpack(attrDumps))
-    -- TODO build lua hammerspoon code instead of just AppleScript! that I can drop into my hammerspoon lua config instead of AppleScript in say KM
 end)
 
 -- see AppleScript The Definitive Guide, page 197 about Element Specifier forms (name, index, ID, some, every, range, relative, bool test [whose?],...?)
@@ -507,7 +506,6 @@ function ElementSpecifierFor(elem)
         if title == "" then
             prints("[WARN] title is empty for " .. role .. ", script might not work")
         end
-        -- TODO duplicated title (use AXParent to get other child windows)
     end
 
     local role = GetValueOrEmptyString(elem, "AXRole")
@@ -515,10 +513,9 @@ function ElementSpecifierFor(elem)
     local roleDescription = GetValueOrEmptyString(elem, "AXRoleDescription")
     local title = GetValueOrEmptyString(elem, "AXTitle")
     if role == "AXApplication" then
-        -- TODO handle (warn) about duplicate app process titles... I might then be able to use some signature to identify the correct one but I don't know if I can ever refer to it properly... i.e. screenpal I always had to terminate the tray app b/c has same name and never seemed like I could reference the app by smth else... that said I didn't direclty use accessibiltiy APIs so it is possible there is a way that AppleScript/ScriptDebugger don't support
         warnOnEmptyTitle(title, role)
-        -- FYI this is the root most object, aka "object string specifier" (see Definitive Guide book, page 206-207)
-        -- app is only top level element (w/o parent) so I don't let it go thru parent logic (don't need to)
+        -- PRN if duplicated title, use AXParent to get other child windows?
+        -- FYI AXApplication is the root most object, aka "object string specifier" (see Definitive Guide book, page 206-207)
         return 'application process "' .. title .. '"'
     end
 
