@@ -445,12 +445,16 @@ function CombineClausesWithLineContinuations(clauses)
     return table.concat(lines, "¬\n    ") -- four spaces on ident too
 end
 
-local function htmlCodeBlock(script)
+local function htmlCodeAppleScript(script)
     return "<code class='language-applescript'>" .. script .. "</code>"
 end
 
+local function htmlCodeLua(script)
+    return "<code class='language-lua'>" .. script .. "</code>"
+end
+
 local function preHtmlCodeBlock(script)
-    return "<pre>" .. htmlCodeBlock(script) .. "</pre>"
+    return "<pre>" .. htmlCodeAppleScript(script) .. "</pre>"
 end
 
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "A", function()
@@ -802,7 +806,7 @@ end
 function GetDumpAXAttributes(element, skips)
     skips = skips or {}
 
-    local result = { '<h4>' .. htmlCodeBlock(ElementSpecifierFor(element)) .. '</h4>' }
+    local result = { '<h4>' .. htmlCodeAppleScript(ElementSpecifierFor(element)) .. '</h4>' }
 
     local sortedAttrs = {}
     for attrName, attrValue in pairs(element) do
@@ -911,7 +915,7 @@ function GetElementTableRow(elem, indent)
         "</td><td>" ..
         role ..
         "</td><td>" ..
-        details .. "</td><td>" .. htmlCodeBlock(ElementSpecifierFor(elem)) .. "</td></tr>"
+        details .. "</td><td>" .. htmlCodeAppleScript(ElementSpecifierFor(elem)) .. "</td></tr>"
 end
 
 local pathTableStart = [[
