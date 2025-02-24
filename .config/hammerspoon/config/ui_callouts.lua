@@ -6,6 +6,22 @@ M.last = {
     text = nil,
     escBinding = nil,
 }
+local skips = {
+    AXRole = true,
+    AXChildren = true,
+    AXChildrenInNavigationOrder = true,
+    AXSelectedTextRanges = true,
+    AXSelectedTextRange = true,
+    AXSharedCharacterRange = true,
+    AXVisibleCharacterRange = true,
+    AXNumberOfCharacters = true,
+    AXInsertionPointLineNumber = true,
+    AXSharedTextUIElements = true,
+    AXTextInputMarkedRange = true,
+    AXTopLevelUIElement = true,
+    AXWindow = true,
+    AXParent = true,
+}
 
 -- FYI use require so I get LS completions, docs, etc => globals don't work well w/ LSP
 local canvas = require("hs.canvas")
@@ -32,13 +48,18 @@ local function showTooltipForElement(element, frame)
         -- TODO add some toggle for enabling verbose cuz normally I don't want verbose...
         -- WAIT... if I have a second display, how about show it there!?
         for _, attrName in pairs(sortedAttributeNames(element)) do
+            if skips[attrName] then goto continue end
             local attrValue = element:attributeValue(attrName)
+            if attrValue == nil then goto continue end
+
             local value = DisplayAttr(attrValue)
             -- only allow 50 chars max for text
             if #value > 50 then
                 value = value:sub(1, 50) .. "..."
             end
             M.last.text = M.last.text .. "\n" .. attrName .. ": " .. value
+
+            ::continue::
         end
     end
 
