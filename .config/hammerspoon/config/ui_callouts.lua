@@ -1,9 +1,13 @@
+local canvas = require("hs.canvas")
+local alert = require("hs.alert")
+
 local M = {}
 M.last = {
     element = nil,
     tooltip = nil,
     callout = nil,
     text = nil,
+    cycle = "AXChildren",
 }
 M.bindings = {}
 local skips = {
@@ -33,7 +37,7 @@ local skips = {
     AXMinimizeButton = true,
     AXFullScreenButton = true,
     AXFullScreen = true,
-    AXSections = true,
+    -- AXSections = true,
 
     -- splitters
     AXNextContents = true,
@@ -49,10 +53,12 @@ local skips = {
     AXVerticalScrollBar = true,
 }
 
+local function onlyAlert(message)
+    alert.closeAll()
+    alert.show(message)
+    print(message)
+end
 
--- FYI use require so I get LS completions, docs, etc => globals don't work well w/ LSP
-local canvas = require("hs.canvas")
-local alert = require("hs.alert")
 local function showTooltipForElement(element, frame)
     if not element then
         return
@@ -173,10 +179,18 @@ local function highlightThisElement(element)
         return
     end
     M.last.element = element
+    local role = element:attributeValue("AXRole")
 
     local frame = element:attributeValue("AXFrame")
-    if not frame then
-        print("no frame", hs.inspect(element))
+    if role == "AXApplication" then
+        -- make synthetic frame to show app in upper left basically (unless not main screen and so 0,0 is not valid)
+        frame = { x = 0, y = 0, w = 1, h = 1 }
+        -- frame = hs.screen.mainScreen():frame() -- this makes it cover whole screen... another option, that might be confusing
+        -- perhaps special color for app/window levels vs other elements?
+    elseif not frame then
+        onlyAlert("no frame: " .. role)
+        print("no frame: " .. role)
+        return
     end
     -- sometimes the frame is off screen... like a scrolled window (i.e. hammerspoon console)...
     --   would I cap its border with the boundaries of a parent element?
@@ -237,6 +251,22 @@ local function stopElementInspector()
     end
 end
 
+local function cycleSegments()
+    -- IIRC only windows have AxSections
+    hs.alert.show("Cycling AxSections")
+    M.last.cycle = "AxSections"
+end
+
+local function cycleChildren()
+    hs.alert.show("Cycling AXChildren")
+    M.last.cycle = "AXChildren"
+end
+
+local function cycleChildrenInNavigationOrder()
+    hs.alert.show("Cycling AXChildrenInNavigationOrder")
+    M.last.cycle = "AXChildrenInNavigationOrder"
+end
+
 local function startElementInspector()
     M.moves, M.stop_event_source = require("config.rx.mouse").mouseMovesThrottledObservable(50)
     M.subscription = M.moves:subscribe(
@@ -253,6 +283,9 @@ local function startElementInspector()
     -- end
     )
     table.insert(M.bindings, hs.hotkey.bind({}, "escape", stopElementInspector))
+    table.insert(M.bindings, hs.hotkey.bind({}, "s", cycleSegments))
+    table.insert(M.bindings, hs.hotkey.bind({}, "c", cycleChildren))
+    table.insert(M.bindings, hs.hotkey.bind({}, "n", cycleChildrenInNavigationOrder))
 end
 
 M.moves = nil
@@ -277,13 +310,8 @@ local function getSiblings(element)
         print("no parent")
         return
     end
-    return parent:attributeValue("AXChildren")
-end
-
-local function onlyAlert(message)
-    alert.closeAll()
-    alert.show(message)
-    print(message)
+    local cycle = M.last.cycle or "AXChildren"
+    return parent:attributeValue(cycle)
 end
 
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "up", function()
@@ -293,6 +321,13 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "up", function()
     if not M.moves then
         return
     end
+
+    local role = M.last.element:attributeValue("AXRole")
+    if role == "AXApplication" then
+        onlyAlert("already at top: AXApplication")
+        return
+    end
+
     local parent = M.last.element:attributeValue("AXParent")
     if parent == M.last.element then
         onlyAlert("already at top")
@@ -302,12 +337,6 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "up", function()
         print("unexpected: no parent")
         return
     end
-    local role = parent:attributeValue("AXRole")
-    if role == "AXApplication" then
-        onlyAlert("already at top: AXApplication")
-        return
-    end
-
     highlightThisElement(parent)
 end)
 
@@ -318,9 +347,10 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "down", function()
     if not M.moves then
         return
     end
-    local children = M.last.element:attributeValue("AXChildren")
+    local cycle = M.last.cycle or "AXChildren"
+    local children = M.last.element:attributeValue(cycle)
     if not children or #children == 0 then
-        onlyAlert("no children")
+        onlyAlert("no " .. cycle)
         return
     end
     highlightThisElement(children[1])
@@ -335,7 +365,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "right", function()
     local function nextSibling(element)
         local siblings = getSiblings(element)
         if not siblings then
-            print("no siblings")
+            print("no sibling " .. M.last.cycle)
             return
         end
         for i, child in ipairs(siblings) do
@@ -346,7 +376,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "right", function()
     end
     local next = nextSibling(M.last.element)
     if not next then
-        onlyAlert("no next sibling")
+        onlyAlert("no next sibling " .. M.last.cycle)
         return
     end
     highlightThisElement(next)
@@ -360,7 +390,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "left", function()
     local function previousSibling(element)
         local siblings = getSiblings(element)
         if not siblings then
-            print("no siblings")
+            print("no siblings " .. M.last.cycle)
             return
         end
         for i, child in ipairs(siblings) do
@@ -371,7 +401,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "left", function()
     end
     local prev = previousSibling(M.last.element)
     if not prev then
-        onlyAlert("no previous sibling")
+        onlyAlert("no previous sibling " .. M.last.cycle)
         return
     end
     highlightThisElement(prev)

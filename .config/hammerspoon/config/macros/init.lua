@@ -40,22 +40,23 @@ end
 
 function GetFcpxEditorWindow()
     local fcpx = GetFcpxAppElement()
+    assert(fcpx, "GetFcpxEditorWindow: could not find Final Cut Pro")
+    if fcpx:attributeValue("AXTitle") ~= "Final Cut Pro" then
+        print("GetFcpxEditorWindow: unexpected title", fcpx:attributeValue("AXTitle"))
+        return nil
+    end
 
-    -- identified by:
+    -- IIRC this is from the main window (not app) element:
     -- AXMain = true
     -- AXMinimized = false
     -- AXModal = false
     -- AXRole = "AXWindow"
     -- AXRoleDescription = "standard window"
     -- AXSections = {1={SectionDescription="Toolbar", SectionUniqueID="AXToolbar", SectionObject= (AXToolbar)}, 2={SectionDescription="Content", SectionUniqueID="AXContent", SectionObject= (AXScrollArea)}, 3={SectionUniqueID="AXContainer", SectionObject= (AXGroup)}, 4={SectionUniqueID="AXContainer", SectionObject= (AXGroup)}, 5={SectionUniqueID="AXContainer", SectionObject= (AXGroup)}, 6={SectionUniqueID="AXContainer", SectionObject= (AXGroup)}, 7={SectionUniqueID="AXContainer", SectionObject= (AXGroup)}, 8={SectionUniqueID="AXContainer", SectionObject= (AXGroup)}, 9={SectionUniqueID="AXContainer", SectionObject= (AXGroup)}, 10={SectionUniqueID="AXContainer", SectionObject= (AXGroup)}, 11={SectionUniqueID="AXContainer", SectionObject= (AXGroup)}, 12={SectionUniqueID="AXContainer", SectionObject= (AXGroup)}, 13={SectionUniqueID="AXContainer", SectionObject= (AXGroup)}, 14={SectionUniqueID="AXContainer", SectionObject= (AXGroup)}, 15={SectionUniqueID="AXContainer", SectionObject= (AXGroup)}, 16={SectionUniqueID="AXContainer", SectionObject= (AXGroup)}}
-    --   TODO AXSections are what?
+    --   TODO AXSections are AXSections reusable entry points? in predictable order? ... that would rock if I could find panels using that, I bet I can
     -- AXSize = {h=1080.0, w=1920.0}
     -- AXSubrole = "AXStandardWindow"
     -- AXTitle = "Final Cut Pro"
-    if fcpx:attributeValue("AXTitle") ~= "Final Cut Pro" then
-        print("GetFcpxEditorWindow: unexpected title", fcpx:attributeValue("AXTitle"))
-        return nil
-    end
 
     return fcpx:attributeValue("AXFocusedWindow"), fcpx
 end
