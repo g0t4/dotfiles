@@ -521,11 +521,11 @@ function ElementSpecifierFor(elem)
 
     local elemIndex = GetElementSiblingIndex(elem)
     if elemIndex == nil then
-        -- TODO signal failure to caller
-        return " should not happen - failed to get sibling index for " .. role .. " " .. title
+        return " should not happen - failed to get sibling index for "
+            .. role .. " " .. title
     end
 
-    -- TODO fallback to whose on AXDescription? if avail? would need intermediate references... can I inline those?
+    -- PRN fallback to whose on AXDescription? if avail? would need intermediate references... can I inline those?
     -- 	-- todo try inline nested refs:
     --      set sg2 to first splitter group of (first splitter group of window 1 of application process "Script Debugger" whose it is it)
     --      of course, `it is it` s/b a useful boolean specifier
