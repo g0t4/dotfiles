@@ -83,6 +83,10 @@ local function displayUserData(name, value)
 end
 local function displayType(value)
     local valueType = type(value)
+    if valueType == "table" then
+        -- tables are implicit with surrounding [ ]
+        return ""
+    end
     if valueType == "userdata" then
         valueType = value.__name
     end
@@ -113,15 +117,6 @@ end
 local function displayAttribute(name, value)
     if value == nil then return nil end
     if type(value) == "userdata" then
-        -- if name == "AXTitleUIElement" then
-        --     -- custom AXTitleUIElement handling
-        --     assert(value.__name == "hs.axuielement")
-        --     local title = value:attributeValue("AXTitle")
-        --     local role = value:attributeValue("AXRole")
-        --     local text = role
-        --     if title then text = text .. " '" .. title .. "'" end
-        --     return text
-        -- end
         return displayUserData(name, value)
     end
     if type(value) == "table" then
