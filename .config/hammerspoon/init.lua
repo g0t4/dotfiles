@@ -5,8 +5,11 @@
 -- JUST PUT hs global into lua LS config and be done with that
 local start_time = hs.timer.secondsSinceEpoch()
 
+require("config.loggers") -- s/b early
+
 
 hs.ipc.cli = true -- early so hs CLI always works
+
 
 require("config.helpers")
 require("config.ax.helpers")
