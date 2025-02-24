@@ -20,15 +20,12 @@ local function showTooltipForElement(element, frame)
     --    register opt key or smth like that and unregister it when hide callout/tooltip
 
     -- PRN could add coloring of text if I can show an html element in canvas
-    local clauses = BuildAppleScriptTo(element, false)
-    local script = CombineClausesWithLineContinuations(clauses)
-    M.last.text = script
+    -- local clauses = BuildAppleScriptTo(element, false)
+    -- local script = CombineClausesWithLineContinuations(clauses)
+    -- M.last.text = script
 
-
-    if true then
-        local lua = BuildHammerspoonLuaTo(element, false)
-        M.last.text = M.last.text .. "\n" .. lua
-    end
+    local lua = BuildHammerspoonLuaTo(element)
+    M.last.text = lua
 
     if false then
         -- TODO add some toggle for enabling verbose cuz normally I don't want verbose...
@@ -93,7 +90,7 @@ local function showTooltipForElement(element, frame)
                 type = "rectangle",
                 action = "fill",
                 frame = { x = 0, y = 0, w = tooltipWidth, h = tooltipHeight },
-                fillColor = { white = 0, alpha = 0.8 }, -- Dark semi-transparent background
+                fillColor = { white = 0, alpha = 1 }, -- Dark semi-transparent background
                 roundedRectRadii = { xRadius = 8, yRadius = 8 }
             },
             {

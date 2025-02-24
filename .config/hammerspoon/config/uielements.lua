@@ -723,6 +723,11 @@ function BuildHammerspoonLuaTo(toElement)
             singular = lowercaseFirstLetter(singular)
             -- PRN overrides for singulars that don't match AXRole
             local siblingIndex = GetElementSiblingIndex(pathItem)
+            if singular == "splitGroup" then
+                -- add space before the colon to help split up deep specifiers
+                --   splitGroup is often "evenly" distributed
+                return " :" .. singular .. "(" .. siblingIndex .. ")"
+            end
             return ":" .. singular .. "(" .. siblingIndex .. ")"
         end)
         :totable()
