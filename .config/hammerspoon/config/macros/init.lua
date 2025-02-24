@@ -78,12 +78,19 @@ end
 function FcpxEditorWindow:rightSidePanel()
     -- FYI if overhead in lookup on every use, can memoize this... but not until I have proof its an issue.. and probabaly only for situations where 10ms is a problem
     -- FOR NOW... defer everything beyond the window!
-    return self._mainSplitGroup:childrenWithRole("AXGroup")[2]
+    -- TODO this group is varying...  CAN I query smth like # elements and find what I want that way?
+    return self._mainSplitGroup:group(2)
+end
+
+function FcpxEditorWindow:rightSidePanelTopBar()
+    -- TODO this group is varying...
+    return self:rightSidePanel():group(2)
 end
 
 function FcpxEditorWindow:leftSideEverythingElse()
     -- TODO use and rename this... b/c its not a left side panel, it's the rest of the UI (browser,timeline,events viewer,titles,generators,etc) - everything except the inspector (in my current layout)
-    return self._mainSplitGroup:childrenWithRole("AXGroup")[2]
+    -- TODO this group is varying...
+    return self._mainSplitGroup:group(1)
 end
 
 FcpxTopToolbar = {}
@@ -146,6 +153,7 @@ function FcpxInspectorPanel:topBarCheckboxByDescription(matchDescription)
     local startTime = GetTime()
 
     local candidates = self.window:rightSidePanel():group(2):checkBoxes()
+    -- OUCH 11ms! ... IIUC b/c its cloning axuielements using CopyAttributeValue("AXChildren") every time!
     print("candidates: ", hs.inspect(candidates))
     print("time to index cbox: " .. GetElapsedTimeInMilliseconds(startTime) .. " ms")
 
@@ -163,6 +171,9 @@ end
 
 function FcpxInspectorPanel:titleCheckbox()
     -- FIXED PATH CURRENTLY (this seems to have changed, extra splitgroup.. if so lets try search to find it going forward, nested under right panel which s/b mostly fixed in place)
+    --
+    -- longer path I found a few times:
+    --    PRN recapture this using hammerspoon lua specifier...
     --    set Title to checkbox 1 of group 2 of group 5 of splitter group 1 of group 2 of ¬
     --      splitter group 1 of group 1 of splitter group 1 of window "Final Cut Pro" of ¬
     --        application process "Final Cut Pro"
@@ -183,22 +194,6 @@ function FcpxInspectorPanel:titleCheckbox()
     --   AXValue = 1
 
     return self:topBarCheckboxByDescription("Title Inspector")
-
-    -- local startTime = GetTime()
-    --
-    -- local checkbox = self.window:rightSidePanel()
-    --     :childrenWithRole("AXGroup")[2]
-    --     :childrenWithRole("AXCheckBox")[1]
-    -- print("time to index cbox: " .. GetElapsedTimeInMilliseconds(startTime) .. " ms")
-    -- if not checkbox then
-    --     error("Could not find title inspector checkbox")
-    -- end
-    -- if checkbox:attributeValue("AXDescription") ~= "Title Inspector" then -- 1.6ms to check AXDescription
-    --     print("time to assertion failure: " .. GetElapsedTimeInMilliseconds(startTime) .. " ms")
-    --     error("Unexpected title inspector checkbox description: " .. checkbox:attributeValue("AXDescription"))
-    -- end
-    -- print("time after assertion: " .. GetElapsedTimeInMilliseconds(startTime) .. " ms")
-    -- return checkbox
 
     -- btw CommandPost goes off of AXTitle:
     --   https://github.com/CommandPost/CommandPost/blob/develop/src/extensions/cp/apple/finalcutpro/inspector/Inspector.lua#L359
