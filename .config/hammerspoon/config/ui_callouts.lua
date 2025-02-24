@@ -62,17 +62,6 @@ local function onlyAlert(message)
     print(message)
 end
 
-local function displayTable(name, value)
-    local text = ""
-    for k, v in pairs(value) do
-        if name == "AXSections" then
-            text = text .. displayTable(k, v) .. "\n"
-        else
-            text = text .. k .. ": " .. tostring(v) .. "\n"
-        end
-    end
-    return "[" .. text .. "]"
-end
 local function displayUserData(name, value)
     if value.__name == "hs.axuielement" then
         local role = value:attributeValue("AXRole")
@@ -91,6 +80,19 @@ local function displayUserData(name, value)
         end
         return text
     end
+end
+local function displayTable(name, value)
+    local text = ""
+    for k, v in pairs(value) do
+        if name == "AXSections" then
+            text = text .. k .. ": " .. displayTable(k, v):gsub("\n", ", ") .. "\n"
+        elseif type(v) == "userdata" then
+            text = text .. k .. ": " .. displayUserData(k, v) .. "\n"
+        else
+            text = text .. k .. ": " .. tostring(v) .. "\n"
+        end
+    end
+    return "[" .. text .. "]"
 end
 local function displayAttribute(name, value)
     if value == nil then return nil end
