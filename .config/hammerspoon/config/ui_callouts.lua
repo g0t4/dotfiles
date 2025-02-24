@@ -327,6 +327,13 @@ local function stopElementInspector()
 end
 
 -- local function cycleSegments()
+--     -- TODO yes you can navigate sections:
+--     --   for now just use Script Debugger until this provies useful
+--     AXSections: [
+--       [SectionUniqueID: AXToolbar, SectionDescription: Toolbar, SectionObject: hs. axuielement: AXToolbar (0x60000391bf38)
+--       [SectionUniqueID: AXContent, SectionDescription: Content, SectionObject: hs. axuielement: AXScrollArea
+--       ...
+--     ]
 --     -- in testing in Script Debugger... I don't think there is a reference to the element anyways, seems to just be an ID ref (not even unique even though it is called unique in Script Debugger's explroer... for now lets disable this)
 --     -- IIRC only windows have AxSections
 --     hs.alert.show("Cycling AxSections")
@@ -360,8 +367,8 @@ local function startElementInspector()
     )
     table.insert(M.bindings, hs.hotkey.bind({}, "escape", stopElementInspector))
     -- table.insert(M.bindings, hs.hotkey.bind({}, "s", cycleSegments))
-    table.insert(M.bindings, hs.hotkey.bind({}, "c", cycleChildren))
-    table.insert(M.bindings, hs.hotkey.bind({}, "n", cycleChildrenInNavigationOrder))
+    -- table.insert(M.bindings, hs.hotkey.bind({}, "c", cycleChildren))
+    -- table.insert(M.bindings, hs.hotkey.bind({}, "n", cycleChildrenInNavigationOrder))
 end
 
 M.moves = nil
