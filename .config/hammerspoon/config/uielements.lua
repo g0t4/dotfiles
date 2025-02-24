@@ -462,6 +462,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "A", function()
     local callouts = require("config.ui_callouts")
     local elementAt = nil
     if callouts.moves then
+        print("using last callout element for report")
         -- run dump on current element from callouts, this way I can nav around with arrows + pick parent elements that aren't selected by systemElementAtPosition, also children item sometimes aren't selected (i.e. SOM image buttons on toolbars)
         elementAt = callouts.last.element
     else

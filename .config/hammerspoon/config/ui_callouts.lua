@@ -519,7 +519,7 @@ local function testHighlightOnReloadConfig()
     highlightThisElement(target)
 end
 
-testHighlightOnReloadConfig()
+-- testHighlightOnReloadConfig()
 
 return M
 
