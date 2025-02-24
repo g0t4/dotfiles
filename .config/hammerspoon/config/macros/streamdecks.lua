@@ -246,14 +246,17 @@ function onAppActivated(hsApp, appName)
     if observer then
         observer:stop()
     end
-    print("app activated: ", appName)
     if appName ~= "Final Cut Pro" then
         return
     end
     -- set _group to group 2 of group 2 of splitter group 1 of ¬ window "Final Cut Pro" of application process "Final Cut Pro"
     local window = hs.axuielement.windowElement(hsApp:mainWindow())
     assert(window ~= nil, "window is nil")
-    local headerGroup = window:splitGroup(1):group(2):group(2)
+
+    -- ! headerGroup paths so far:
+    -- local headerGroup = window:splitGroup(1):group(2):group(2)
+    local headerGroup = window:splitGroup(1):group(1):group(2)
+
     assert(headerGroup ~= nil, "headerGroup is nil")
     local staticTextElement = headerGroup:staticText(1)
     print("staticTextElement:", hs.inspect(staticTextElement))
@@ -307,7 +310,6 @@ onAppActivated(currentApp) -- currentApp:title()?
 
 hs.application.watcher.new(function(appName, eventType, hsApp)
     if eventType == hs.application.watcher.activated then
-        print("app activated: ", appName)
         if deck1XL then
             deck1XL:setButtonImage(9, drawTextIcon(appName))
         end
