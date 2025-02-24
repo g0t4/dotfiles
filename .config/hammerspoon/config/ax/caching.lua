@@ -1,14 +1,21 @@
 local hsax = require("hs.axuielement")
 
 ---@class CachedElement
+---@field element hs.axuielement The accessibility element to wrap.
+---@field cache table<string, any> A cache of attribute values.
+---   TODO use CacheEntry instead of any?
 local CachedElement = {}
 CachedElement.__index = CachedElement
+
+
 
 --- Create a new CachedElement from an AXUIElement.
 ---@param axElement hs.axuielement The accessibility element to wrap.
 ---@return CachedElement
 function CachedElement.new(axElement)
-    assert(axElement and type(axElement) == "userdata", "Expected an hs.axuielement")
+    assert(axElement, "Expected an hs.axuielement")
+    -- luals chokes on these assertions (TLDR it doesn't have a concept of userdata<T>... IIUC which is very strange not to)
+    -- assert(axElement and type(axElement) == "userdata" and axElement["__name"] == "hs.axuielement", "Expected an hs.axuielement")
     local self = setmetatable({}, CachedElement)
     self.element = axElement
     self.cache = {}
@@ -69,6 +76,11 @@ function CachedElement.forApp(appName)
         return nil
     end
     return CachedElement.new(appElement)
+end
+
+--- @return string
+function CachedElement:__tostring()
+    return "CachedElementz: " .. self.element:attributeValue("AXRole")
 end
 
 return CachedElement

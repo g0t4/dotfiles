@@ -1,5 +1,6 @@
 local canvas = require("hs.canvas")
 local alert = require("hs.alert")
+local CachedElement = require("config.ax.caching")
 
 local M = {}
 M.last = {
@@ -520,6 +521,13 @@ local function testHighlightOnReloadConfig()
 end
 
 -- testHighlightOnReloadConfig()
+
+local function testCaching()
+    local fcpx = CachedElement.forApp("Final Cut Pro")
+    print("fcpx", hs.inspect(fcpx))
+end
+
+testCaching()
 
 return M
 
