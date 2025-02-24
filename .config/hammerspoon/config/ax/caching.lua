@@ -51,5 +51,17 @@ function CachedElement:clearCache()
     self.typeCache = {}
 end
 
-return CachedElement
+function CachedElement.forApp(appName)
+    local app = hs.application.find(appName)
+    if not app then
+        return nil
+    end
+    local appElement = hs.axuielement.applicationElement(app)
+    if appElement == nil then
+        print("forApp - no app element for " .. app)
+        return nil
+    end
+    return CachedElement.new(appElement)
+end
 
+return CachedElement
