@@ -111,6 +111,13 @@ function TableReverse(theTable)
     return reversed
 end
 
+function TableContains(theTable, value)
+    for _, v in pairs(theTable) do
+        if v == value then return true end
+    end
+    return false
+end
+
 -- chainable too, perhaps add more overloads with builder pattern of chaining (return tablej)
 ---@diagnostic disable-next-line: lowercase-global
 function table_prepend(theTable, value)

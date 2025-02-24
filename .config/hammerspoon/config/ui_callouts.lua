@@ -37,7 +37,7 @@ local skips = {
     AXMinimizeButton = true,
     AXFullScreenButton = true,
     AXFullScreen = true,
-    AXSections = true,
+    -- AXSections = true,
 
     -- splitters
     AXNextContents = true,
@@ -51,12 +51,61 @@ local skips = {
 
     AXContents = true,
     AXVerticalScrollBar = true,
+
+    -- AXApplication ... might be nice to constrain to only hide on AXApplication type?
+    AXWindows = true,
 }
 
 local function onlyAlert(message)
     alert.closeAll()
     alert.show(message)
     print(message)
+end
+
+local function displayTable(name, value)
+    local text = ""
+    for k, v in pairs(value) do
+        text = text .. k .. ": " .. tostring(v) .. "\n"
+    end
+    return "[" .. text .. "]"
+end
+local function displayUserData(name, value)
+    if value.__name == "hs.axuielement" then
+        local role = value:attributeValue("AXRole")
+        local title = value:attributeValue("AXTitle")
+        local text = role
+        if title then
+            text = text .. " '" .. title .. "'"
+        end
+        local identifier = value:attributeValue("AXIdentifier")
+        if identifier then
+            text = text .. " " .. identifier
+        end
+        local description = value:attributeValue("AXDescription")
+        if description then
+            text = text .. " - " .. description
+        end
+        return text
+    end
+end
+local function displayAttribute(name, value)
+    if value == nil then return nil end
+    if type(value) == "userdata" then
+        -- if name == "AXTitleUIElement" then
+        --     -- custom AXTitleUIElement handling
+        --     assert(value.__name == "hs.axuielement")
+        --     local title = value:attributeValue("AXTitle")
+        --     local role = value:attributeValue("AXRole")
+        --     local text = role
+        --     if title then text = text .. " '" .. title .. "'" end
+        --     return text
+        -- end
+        return displayUserData(name, value)
+    end
+    if type(value) == "table" then
+        return displayTable(name, value)
+    end
+    return tostring(value)
 end
 
 local function showTooltipForElement(element, frame)
@@ -77,7 +126,7 @@ local function showTooltipForElement(element, frame)
         if attrValue == nil then goto continue end
         if attrName == "AXHelp" and attrValue == "" then goto continue end
 
-        local value = DisplayAttr(attrValue)
+        local value = displayAttribute(attrName, attrValue)
         -- only allow 50 chars max for text
         if #value > 50 then
             value = value:sub(1, 50) .. "..."
@@ -141,7 +190,8 @@ local function showTooltipForElement(element, frame)
 
     local role = element:attributeValue("AXRole")
     local background = { white = 0, alpha = 1 }
-    if role == "AXWindow" then
+    -- if role == "AXWindow" or role == "AXMenuBar" then
+    if TableContains({ "AXMenuBar", "AXWindow" }, role) then
         -- dark green
         background = { hex = "#013220", alpha = 1 }
     elseif role == "AXApplication" then
@@ -431,6 +481,17 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "left", function()
     end
     highlightThisElement(prev)
 end)
+
+local function testHighlightOnReloadConfig()
+    -- tmp testing specific control
+    local fcpx = hs.axuielement.applicationElement(hs.application.find("Final Cut Pro"))
+    -- local target = fcpx:window(2):splitGroup(1):group(2) -- AXTitleUIElement test case
+    -- local target = fcpx
+    local target = fcpx:window(2)
+    highlightThisElement(target)
+end
+
+testHighlightOnReloadConfig()
 
 return M
 
