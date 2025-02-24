@@ -35,12 +35,14 @@ function dumpButtonInfo(deck, buttonNumber, pressedOrReleased)
     --   NOT touchscreen dials on PLUS
 
     local buttonExtra = ""
-    if deck:serialNumber():find("^CL") then
-        -- nice for debugging
-        local col = (buttonNumber - 1) % 8 + 1
-        local row = math.ceil(buttonNumber / 8)
-        buttonExtra = " (" .. row .. "," .. col .. ") "
-    end
+    local cols, rows = deck:buttonLayout()
+    print("  cols:", cols, " rows:", rows)
+
+    -- nice for debugging
+    local col = (buttonNumber - 1) % cols + 1
+    local row = math.ceil(buttonNumber / cols)
+    buttonExtra = " (" .. row .. "," .. col .. ") "
+
     local explainPressed = ""
     if pressedOrReleased ~= nil then
         explainPressed = (pressedOrReleased and "pressed" or "released")
@@ -103,20 +105,18 @@ local function onDeviceDiscovery(connected, deck)
     local serial = deck:serialNumber()
     print("serialNumber: ", serial)
     print("firmwareVersion: ", deck:firmwareVersion())
-    -- use serialNumber to identify which device is which
-    -- serial ends in "9","8","1" (all start with "CL" too)... PLUS starts wtih "A"
+
     local name = getDeckName(deck)
-    local cols, rows = deck:buttonLayout()
-    print("  cols:", cols, " rows:", rows)
     -- PRN deck:setBrightness(80) -- 0 to 100 (FYI persists across restarts of hammerspoon... IIAC only need to set this once when I wanna change it)
 
     -- TODO on hammerspon QUIT, reset the decks... right? sooo... do that on disconnect? or?
 
-    -- TODO now wth... reset isn't needed it seems... ... well ok maybe if something else sets the buttons... but I am reloading config w/o reset and it changes any button I explicitly set... and no flash this way!
+    -- FYI now wth... reset isn't needed it seems... ... well ok maybe if something else sets the buttons... but I am reloading config w/o reset and it changes any button I explicitly set... and no flash this way!
     --    FOR NOW see if it works w/o reset
     --    OR, see if I can repor the issue w/o reset and button presses (which I just tested and are fine)
     --        could it be that I hadn't set any buttons yet and now that I have button clicks work w/o reset?
     -- deck:reset() -- TODO when do I need to call this? w/o this the buttonCallback doesn't reliably fire on config reload
+    deck:encoderCallback(onEncoderPressed) -- don't need to limit to just PLUS... seems irrelevant on XLs
     deck:buttonCallback(onButtonPressed)
 
     --- WOW this is super fast too... in a flash they're all loaded (and that's with a reset in between)
