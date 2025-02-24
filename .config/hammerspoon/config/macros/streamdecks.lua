@@ -206,6 +206,59 @@ end
 
 hs.streamdeck.init(onDeviceDiscovery) -- onDeviceConnected)
 
+local observer = nil
+local currentApp = hs.application.frontmostApplication()
+
+function onAppActivated(hsApp, appName)
+    if observer then
+        observer:stop()
+    end
+    print("app activated: ", appName)
+    if appName ~= "Final Cut Pro" then
+        return
+    end
+    -- set _group to group 2 of group 2 of splitter group 1 of ¬ window "Final Cut Pro" of application process "Final Cut Pro"
+    local window = hs.axuielement.windowElement(hsApp:mainWindow())
+    print("window: ", hs.inspect(window))
+    assert(window ~= nil, "window is nil")
+    local headerGroup = window:childrenWithRole("AXSplitGroup")[1]:childrenWithRole("AXGroup")[2]:childrenWithRole("AXGroup")[2]
+    print("headerGroup: ", hs.inspect(headerGroup))
+    assert(headerGroup ~= nil, "headerGroup is nil")
+    local staticText = headerGroup:childrenWithRole("AXStaticText")[1]
+    print("staticText: ", hs.inspect(staticText))
+    print("  value:", staticText:attributeValue("AXValue"))
+    print(" identifier:", staticText:attributeValue("AXIdentifier"))
+    -- FYI does have AXIdentifier _NS:84
+    --    AXRoleDescription: text
+    --    AXDescription: text
+    --    probably need to find it relative to the buttons next to it (Title Inspector)... as nothing is likely to uniquely identify this element
+
+    observer = hs.axuielement.observer.new(hsApp:pid())
+    -- local elem = hs.axuielement.applicationElement(hsApp:pid())
+    -- exammple notification types:   hs.axuielement.observer.notifications
+    assert(observer ~= nil, "observer is nil")
+    observer:callback(function(_observer, element, notification, infoTable)
+        local value = element:attributeValue("AXValue")
+        local text = notification
+        if value then
+            text = text .. " '" .. value .. "'"
+        end
+        print("AXValueChanged: ", hs.inspect(element), text, hs.inspect(infoTable))
+    end)
+    -- local obsObj = observer:addWatcher(staticText, "AXValueChanged")
+    -- local watchElement = hs.axuielement.applicationElement(hsApp)
+    local watchElement = hs.axuielement.windowElement(hsApp:mainWindow())
+    -- TODO why can't I get watching to work beneath the app level?!
+    --   appElement => all events (including the AXValueChanged I want)
+    --   mainWindow => nothing
+    --   individual element that has value changing => nothing
+    print("watchElement: ", watchElement:attributeValue("AXTitle"))
+    local obsObj = observer:addWatcher(watchElement, "AXValueChanged")
+    print("obsObj: ", hs.inspect(obsObj))
+    observer:start()
+end
+
+onAppActivated(currentApp) -- currentApp:title()?
 
 hs.application.watcher.new(function(appName, eventType, hsApp)
     if eventType == hs.application.watcher.activated then
@@ -213,6 +266,7 @@ hs.application.watcher.new(function(appName, eventType, hsApp)
         if deck1XL then
             deck1XL:setButtonImage(9, drawTextIcon(appName))
         end
+        onAppActivated(hsApp, appName)
     end
 end):start()
 -- FYI at this point, there are no devices available, wait for them to connect (each one)
