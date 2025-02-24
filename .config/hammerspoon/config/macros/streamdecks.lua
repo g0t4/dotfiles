@@ -28,15 +28,12 @@ end
 reloadOnMacrosChanges()
 
 
--- TODO test dials on streamdeck plus
---   ALL/REGULAR:
---      :buttonCallback(fn)
---   PLUS touchscreen:
---      hs.streamdeck:screenCallback(fn)
---      pressed/released AND rotated (plus only, IIUC)
---
---
+-- TODO test hs.streamdeck:screenCallback(fn)  - touch screen on PLUS
 function dumpButtonInfo(deck, buttonNumber, pressedOrReleased)
+    -- buttons on all decks (including XL and PLUS)
+    --   NOT dials on PLUS
+    --   NOT touchscreen dials on PLUS
+
     local buttonExtra = ""
     if deck:serialNumber():find("^CL") then
         -- nice for debugging
@@ -44,11 +41,15 @@ function dumpButtonInfo(deck, buttonNumber, pressedOrReleased)
         local row = math.ceil(buttonNumber / 8)
         buttonExtra = " (" .. row .. "," .. col .. ") "
     end
+    local explainPressed = ""
+    if pressedOrReleased ~= nil then
+        explainPressed = (pressedOrReleased and "pressed" or "released")
+    end
 
     print(
-        getDeckName(deck)
-        .. " btn " .. buttonNumber .. buttonExtra
-        .. (pressedOrReleased and "pressed" or "released")
+        getDeckName(deck) ..
+        " btn " .. buttonNumber .. buttonExtra ..
+        explainPressed
     )
 end
 
@@ -56,9 +57,21 @@ function onButtonPressed(deck, buttonNumber, pressedOrReleased)
     local name = getDeckName(deck)
     dumpButtonInfo(deck, buttonNumber, pressedOrReleased)
 
-    if name ~= "4+" then
-
+    if name == "3XL" then
+        if buttonNumber == 7 then
+            hs.openConsole()
+        elseif buttonNumber == 8 then
+            hs.console.clearConsole()
+        end
     end
+end
+
+function onEncoderPressed(deck, buttonNumber, pressedOrReleased, turnedLeft, turnedRight)
+    -- TODO test dials on PLUS
+    --      pressed/released AND rotated (plus only, IIUC)
+    --
+    -- dumpButtonInfo(deck, buttonNumber, pressedOrReleased)
+    print("encoder pressed: ", buttonNumber, pressedOrReleased, turnedLeft, turnedRight)
 end
 
 function getDeckName(deck)
@@ -78,6 +91,7 @@ function getDeckName(deck)
     elseif serial:find("A$") then
         return "4+"
     end
+    return "unknown"
 end
 
 --
@@ -86,7 +100,8 @@ end
 local function onDeviceDiscovery(connected, deck)
     -- print(hs.inspect(getmetatable(deck)))
     -- print("Discovered streamdeck", hs.inspect(deck), "connected:", connected)
-    print("serialNumber: ", deck:serialNumber())
+    local serial = deck:serialNumber()
+    print("serialNumber: ", serial)
     print("firmwareVersion: ", deck:firmwareVersion())
     -- use serialNumber to identify which device is which
     -- serial ends in "9","8","1" (all start with "CL" too)... PLUS starts wtih "A"
@@ -124,6 +139,13 @@ local function onDeviceDiscovery(connected, deck)
     deck:setButtonColor(24, hs.drawing.color.x11.blue)
     deck:setButtonColor(32, hs.drawing.color.x11.blue)
 
+    -- TODO setScreenImage (when disconnected, right?)
+
+    local imageSize = deck:imageSize()
+    print("imageSizes: ", hs.inspect(imageSize))
+    -- XL => { h = 96.0, w = 96.0 }
+    -- +  => { h = 120.0, w = 120.0 }
+
     -- TODO try hs.image.imageFromAppBundle  -- get app icons!
 
     -- keep local copies of images!
@@ -139,6 +161,10 @@ local function onDeviceDiscovery(connected, deck)
 
     local htmlFileType = hs.image.iconForFileType("html")
     deck:setButtonImage(6, htmlFileType)
+
+    -- /Applications/Hammerspoon.app/Contents/Resources/AppIcon.icns
+    local hammerspoonAppIcon = hs.image.imageFromPath("/Applications/Hammerspoon.app/Contents/Resources/AppIcon.icns")
+    deck:setButtonImage(7, hammerspoonAppIcon)
 
     if name == "1XL" then
     end
