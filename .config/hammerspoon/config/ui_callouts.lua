@@ -85,7 +85,7 @@ local function displayType(value)
     -- do return "" end -- uncomment to quickly turn off/on type display
     local valueType = type(value)
     if valueType == "boolean" then
-        return "bool"
+        return "<bool>"
     end
     if valueType == "table" then
         -- tables are implicit with surrounding [ ]
