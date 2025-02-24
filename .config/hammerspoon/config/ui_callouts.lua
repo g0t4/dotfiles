@@ -44,7 +44,11 @@ local skips = {
     AXRows = true,
     AXColumns = true,
     AXVisibleRows = true,
+
+    AXContents = true,
+    AXVerticalScrollBar = true,
 }
+
 
 -- FYI use require so I get LS completions, docs, etc => globals don't work well w/ LSP
 local canvas = require("hs.canvas")

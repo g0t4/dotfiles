@@ -68,6 +68,7 @@ function drawTextIcon(text)
         fillColor = { red = 0, green = 0, blue = 0, alpha = 1 }, -- Background color
     }
     -- TODO try hs.styledtext (instead of attrs below)
+    --    hs.styledtext.getStyledTextFromData(data, [type]) w/ type = "html"!
     --   TODO can it set vertical alignment?
     canvas[2] = {
         type = "text",
