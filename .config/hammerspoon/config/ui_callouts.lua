@@ -81,16 +81,32 @@ local function displayUserData(name, value)
         return text
     end
 end
+local function displayType(value)
+    local valueType = type(value)
+    if valueType == "userdata" then
+        valueType = value.__name
+    end
+    return "<" .. valueType .. ">"
+end
 local function displayTable(name, value)
     local text = ""
     for k, v in pairs(value) do
         if name == "AXSections" then
-            text = text .. k .. ": " .. displayTable(k, v):gsub("\n", ", ") .. "\n"
+            -- FYI section entries have:
+            --  SectionObject: AXScrollArea<hs.axuielement> - ** seems most important, the object itself :)
+            --  SectionUniqueID: AXContent<string>
+            --  SectionDescription: Toolbar<string>
+            -- ! TODO try using this to find key parts of UI (i.e. inspector panel)
+            text = text .. k .. ": " .. displayTable(k, v):gsub("\n", ", ")
         elseif type(v) == "userdata" then
-            text = text .. k .. ": " .. displayUserData(k, v) .. "\n"
+            text = text .. k .. ": " .. displayUserData(k, v)
         else
-            text = text .. k .. ": " .. tostring(v) .. "\n"
+            text = text .. k .. ": " .. tostring(v)
         end
+        -- temporarily show type too:
+        text = text .. displayType(v) -- separate so can easily comment out
+
+        text = text .. "\n"
     end
     return "[" .. text .. "]"
 end
