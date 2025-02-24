@@ -349,7 +349,9 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "down", function()
     end
     local cycle = M.last.cycle or "AXChildren"
     local children = M.last.element:attributeValue(cycle)
+    -- TODO why doe AXSections come back nil even when it is visible in callout for the Window?!
     if not children or #children == 0 then
+        print("no " .. cycle, children)
         onlyAlert("no " .. cycle)
         return
     end
@@ -373,6 +375,10 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "right", function()
                 return siblings[i + 1] -- Return next sibling
             end
         end
+        -- TODO if element is not last then that means it was not in the list...
+        --   TODO jump to last item in that case? or first?
+        --   this is needed for cycling AXSections
+        print("no next sibling " .. M.last.cycle)
     end
     local next = nextSibling(M.last.element)
     if not next then
