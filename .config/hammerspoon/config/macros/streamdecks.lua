@@ -239,7 +239,7 @@ function onAppActivated(hsApp, appName)
     -- set _group to group 2 of group 2 of splitter group 1 of ¬ window "Final Cut Pro" of application process "Final Cut Pro"
     local window = hs.axuielement.windowElement(hsApp:mainWindow())
     assert(window ~= nil, "window is nil")
-    local headerGroup = window:childrenWithRole("AXSplitGroup")[1]:childrenWithRole("AXGroup")[2]:childrenWithRole("AXGroup")[2]
+    local headerGroup = window:splitGroups(1):groups(2):groups(2)
     assert(headerGroup ~= nil, "headerGroup is nil")
     local staticTextElement = headerGroup:staticTexts(1)
     print("staticTextElement:", hs.inspect(staticTextElement))
