@@ -524,7 +524,8 @@ end
 
 local function testCaching()
     local fcpx = CachedElement.forApp("Final Cut Pro")
-    print("fcpx", hs.inspect(fcpx))
+    print("fcpx", fcpx)
+
 end
 
 testCaching()
