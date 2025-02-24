@@ -2,7 +2,7 @@
 --    i.e. FCPX when I select a shape (title)
 --    light up the dials for adjusting its specific properties...
 --  I can do this with an accessibility observer
-local logger = require("hs.logger").new("streamdeck", "trace")
+local log = require("hs.logger").new("streamdeck", "verbose") -- set to "warning" or "error" when done developing this module
 
 function reloadOnMacrosChanges(path)
     local scriptPath = path or "/Users/wesdemos/.hammerspoon/config/macros"
@@ -108,7 +108,7 @@ function onEncoderPressed(deck, buttonNumber, pressedOrReleased, turnedLeft, tur
     --      pressed/released AND rotated (plus only, IIUC)
     --
     -- dumpButtonInfo(deck, buttonNumber, pressedOrReleased)
-    print("encoder pressed: ", buttonNumber, pressedOrReleased, turnedLeft, turnedRight)
+    log.vf("encoder pressed: ", buttonNumber, pressedOrReleased, turnedLeft, turnedRight)
 end
 
 function getDeckName(deck)
@@ -256,12 +256,12 @@ function onAppActivated(hsApp, appName)
     -- ! headerGroup paths so far:
     -- local headerGroup = window:splitGroup(1):group(2):group(2)
     local headerGroup = window:splitGroup(1):group(1):group(2)
-
     assert(headerGroup ~= nil, "headerGroup is nil")
+
     local staticTextElement = headerGroup:staticText(1)
-    print("staticTextElement:", hs.inspect(staticTextElement))
-    print("  value:", staticTextElement:attributeValue("AXValue"))
-    print(" identifier:", staticTextElement:attributeValue("AXIdentifier"))
+    log.v("staticTextElement:", hs.inspect(staticTextElement))
+    log.v("  value:", staticTextElement:attributeValue("AXValue"))
+    log.v(" identifier:", staticTextElement:attributeValue("AXIdentifier"))
     -- FYI does have AXIdentifier _NS:84  -  AXRoleDescription: text    -    AXDescription: text
     --    TODO have a strategy set for finding any given element, go through it in order and then cache the strategy until (if) it fails, and/or cache the object
     --       two ways I've seen to find the Title Inspector checkbox so I could code up both into a class and defer to it
@@ -298,9 +298,10 @@ function onAppActivated(hsApp, appName)
     -- print("test:", hs.inspect(test))
     -- local watchElement = test
     -- local watchElement = appElement
-    -- local watchElement = appElement:childrenWithRole("AXWindow")[2]:childrenWithRole("AXSplitGroup")[1]:childrenWithRole("AXGroup")[2]:childrenWithRole("AXGroup")[2]:childrenWithRole("AXStaticText")[1]
-    local watchElement = appElement:childrenWithRole("AXWindow")[2]:childrenWithRole("AXSplitGroup")[1]
-        :childrenWithRole("AXGroup")[2]:childrenWithRole("AXGroup")[2]:childrenWithRole("AXStaticText")[2]
+    -- local watchElement = appElement:window(2):splitGroup(1):group(2):group(2):staticText(1)
+    local watchElement = staticTextElement
+    -- local watchElement = appElement:childrenWithRole("AXWindow")[2]:childrenWithRole("AXSplitGroup")[1]
+    --     :childrenWithRole("AXGroup")[2]:childrenWithRole("AXGroup")[2]:childrenWithRole("AXStaticText")[2]
 
     observer:addWatcher(watchElement, "AXValueChanged")
     observer:start()
