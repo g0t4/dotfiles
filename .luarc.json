@@ -5,7 +5,6 @@
     //    just split a pane and comment out one of these globals
     //    (both zed and nvim will almost instantly flip to a diagnostic error)
     "diagnostics.globals": [
-
         "hs",
         // nvim:
         "vim",
@@ -13,7 +12,9 @@
         "it",
         "assert",
         // TODO is it possible to point these globals at a require("..") call so I get completions and what not and don't get bogus diag failures when using them
-
+    ],
+    "diagnostics.disable": [
+        "lowercase-global",
     ],
 
     // FYI I had to quit/restart zed to get new workspace.library paths to start working with Find Ref (F12)
@@ -31,9 +32,6 @@
         // hammerspoon stubs (based on my custom checkout dir):
         "~/repos/github/Hammerspoon/Spoons/Source/EmmyLua.spoon/annotations/",
     ],
-    "diagnostics.disable": [
-        "lowercase-global",
-    ]
 
     // darn warning in nvim about luv... picking 3 (dont show again) sets this!
     //   and before I had this .luarc.json file picking 3 did nothing! message appeared on every restart of nvim
