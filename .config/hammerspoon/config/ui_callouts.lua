@@ -82,6 +82,8 @@ local function displayUserData(name, value)
     end
 end
 local function displayType(value)
+    -- uncommment to turn off type display:
+    do return "" end
     local valueType = type(value)
     if valueType == "table" then
         -- tables are implicit with surrounding [ ]
@@ -107,9 +109,7 @@ local function displayTable(name, value)
         else
             text = text .. k .. ": " .. tostring(v)
         end
-        -- temporarily show type too:
-        text = text .. displayType(v) -- separate so can easily comment out
-
+        text = text .. displayType(v)
         text = text .. "\n"
     end
     return "[" .. text .. "]"
@@ -150,7 +150,7 @@ local function showTooltipForElement(element, frame)
                 value = value:sub(1, 50) .. "..."
             end
         end
-        table.insert(attributes, attrName .. ": " .. value)
+        table.insert(attributes, attrName .. ": " .. value .. displayType(attrValue))
 
         ::continue::
     end
