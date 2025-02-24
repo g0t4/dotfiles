@@ -228,6 +228,8 @@ local currentApp = hs.application.frontmostApplication()
 --   OH YEAH BABY... they're right up my alley... or I'm right up theirs
 --      https://github.com/CommandPost/CommandPost/blob/develop/src/extensions/cp/apple/finalcutpro/inspector/Inspector.lua#L127
 --   yup, they memoize... "cache" https://github.com/CommandPost/CommandPost/blob/develop/src/extensions/cp/apple/finalcutpro/inspector/BasePanel.lua#L28
+--   here is how they locate the title I've been working on too:
+--      https://github.com/CommandPost/CommandPost/blob/develop/src/extensions/cp/apple/finalcutpro/inspector/Inspector.lua#L187
 
 function onAppActivated(hsApp, appName)
     if observer then

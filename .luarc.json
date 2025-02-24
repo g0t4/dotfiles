@@ -31,6 +31,9 @@
         // hammerspoon stubs (based on my custom checkout dir):
         "~/repos/github/Hammerspoon/Spoons/Source/EmmyLua.spoon/annotations/",
     ],
+    "diagnostics.disable": [
+        "lowercase-global",
+    ]
 
     // darn warning in nvim about luv... picking 3 (dont show again) sets this!
     //   and before I had this .luarc.json file picking 3 did nothing! message appeared on every restart of nvim
