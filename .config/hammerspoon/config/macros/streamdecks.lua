@@ -53,7 +53,12 @@ function dumpButtonInfo(deck, buttonNumber, pressedOrReleased)
 end
 
 function onButtonPressed(deck, buttonNumber, pressedOrReleased)
+    local name = getDeckName(deck)
     dumpButtonInfo(deck, buttonNumber, pressedOrReleased)
+
+    if name ~= "4+" then
+
+    end
 end
 
 function getDeckName(deck)
@@ -65,13 +70,13 @@ function getDeckName(deck)
 
     local serial = deck:serialNumber()
     if serial:find("9$") then
-        return "deck #1"
+        return "1XL"
     elseif serial:find("1$") then
-        return "deck #2"
+        return "2XL"
     elseif serial:find("8$") then
-        return "deck #3"
+        return "3XL"
     elseif serial:find("A$") then
-        return "deck #4"
+        return "4+"
     end
 end
 
@@ -85,12 +90,14 @@ local function onDeviceDiscovery(connected, deck)
     print("firmwareVersion: ", deck:firmwareVersion())
     -- use serialNumber to identify which device is which
     -- serial ends in "9","8","1" (all start with "CL" too)... PLUS starts wtih "A"
+    local name = getDeckName(deck)
     local cols, rows = deck:buttonLayout()
     print("  cols:", cols, " rows:", rows)
     -- PRN deck:setBrightness(80) -- 0 to 100 (FYI persists across restarts of hammerspoon... IIAC only need to set this once when I wanna change it)
 
     deck:reset() -- TODO when do I need to call this? w/o this the buttonCallback doesn't reliably fire on config reload
     deck:buttonCallback(onButtonPressed)
+
 end
 
 hs.streamdeck.init(onDeviceDiscovery) -- onDeviceConnected)
