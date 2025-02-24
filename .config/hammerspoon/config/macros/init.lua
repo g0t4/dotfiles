@@ -78,7 +78,7 @@ end
 function FcpxEditorWindow:rightSidePanel()
     -- FYI if overhead in lookup on every use, can memoize this... but not until I have proof its an issue.. and probabaly only for situations where 10ms is a problem
     -- FOR NOW... defer everything beyond the window!
-    return self._mainSplitGroup:childrenWithRole("AXGroup")[1]
+    return self._mainSplitGroup:childrenWithRole("AXGroup")[2]
 end
 
 function FcpxEditorWindow:leftSideEverythingElse()
@@ -131,11 +131,34 @@ function FcpxInspectorPanel:new(window)
 end
 
 function FcpxInspectorPanel:ensureOpen()
+    -- TODO... can also use menu to show it, from CommandPost:
+    -- menuBar:selectMenu({"Window", "Show in Workspace", "Inspector"})
+    -- https://github.com/CommandPost/CommandPost/blob/develop/src/extensions/cp/apple/finalcutpro/inspector/Inspector.lua#L261
+
     EnsureCheckboxIsChecked(self.window.topToolbar.btnInspector)
 end
 
 function FcpxInspectorPanel:ensureClosed()
     EnsureCheckboxIsUnchecked(self.window.topToolbar.btnInspector)
+end
+
+function FcpxInspectorPanel:topBarCheckboxByDescription(matchDescription)
+    local startTime = GetTime()
+
+    local candidates = self.window:rightSidePanel():group(2):checkBoxes()
+    print("candidates: ", hs.inspect(candidates))
+    print("time to index cbox: " .. GetElapsedTimeInMilliseconds(startTime) .. " ms")
+
+    for _, candidate in ipairs(candidates) do
+        if candidate:attributeValue("AXDescription") == matchDescription then
+            print("time to found cbox: " .. GetElapsedTimeInMilliseconds(startTime) .. " ms")
+            print("found fixed path to title panel checkbox")
+            return candidate
+        end
+    end
+
+    print("time to search failed: " .. GetElapsedTimeInMilliseconds(startTime) .. " ms")
+    error("Could not find checkbox for description: " .. matchDescription)
 end
 
 function FcpxInspectorPanel:titleCheckbox()
@@ -158,21 +181,28 @@ function FcpxInspectorPanel:titleCheckbox()
     --   AXSubrole = "AXToggle"
     --   AXTitle = "Title"
     --   AXValue = 1
-    local startTime = GetTime()
 
-    local checkbox = self.window:rightSidePanel()
-        :childrenWithRole("AXGroup")[1]
-        :childrenWithRole("AXCheckBox")[1]
-    print("time to index cbox: " .. GetElapsedTimeInMilliseconds(startTime) .. " ms")
-    if not checkbox then
-        error("Could not find title inspector checkbox")
-    end
-    if checkbox:attributeValue("AXDescription") ~= "Title Inspector" then -- 1.6ms to check AXDescription
-        print("time to assertion failure: " .. GetElapsedTimeInMilliseconds(startTime) .. " ms")
-        error("Unexpected title inspector checkbox description: " .. checkbox:attributeValue("AXDescription"))
-    end
-    print("time after assertion: " .. GetElapsedTimeInMilliseconds(startTime) .. " ms")
-    return checkbox
+    return self:topBarCheckboxByDescription("Title Inspector")
+
+    -- local startTime = GetTime()
+    --
+    -- local checkbox = self.window:rightSidePanel()
+    --     :childrenWithRole("AXGroup")[2]
+    --     :childrenWithRole("AXCheckBox")[1]
+    -- print("time to index cbox: " .. GetElapsedTimeInMilliseconds(startTime) .. " ms")
+    -- if not checkbox then
+    --     error("Could not find title inspector checkbox")
+    -- end
+    -- if checkbox:attributeValue("AXDescription") ~= "Title Inspector" then -- 1.6ms to check AXDescription
+    --     print("time to assertion failure: " .. GetElapsedTimeInMilliseconds(startTime) .. " ms")
+    --     error("Unexpected title inspector checkbox description: " .. checkbox:attributeValue("AXDescription"))
+    -- end
+    -- print("time after assertion: " .. GetElapsedTimeInMilliseconds(startTime) .. " ms")
+    -- return checkbox
+
+    -- btw CommandPost goes off of AXTitle:
+    --   https://github.com/CommandPost/CommandPost/blob/develop/src/extensions/cp/apple/finalcutpro/inspector/Inspector.lua#L359
+    --   ALSO, uses localized (IIUC) strings to find the title match: FFInspectorTabMotionEffectTitle
 end
 
 function FcpxInspectorPanel:titleCheckboxSearch()
