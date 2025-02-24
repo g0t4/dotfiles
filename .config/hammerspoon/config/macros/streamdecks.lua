@@ -219,15 +219,12 @@ function onAppActivated(hsApp, appName)
     end
     -- set _group to group 2 of group 2 of splitter group 1 of ¬ window "Final Cut Pro" of application process "Final Cut Pro"
     local window = hs.axuielement.windowElement(hsApp:mainWindow())
-    print("window: ", hs.inspect(window))
     assert(window ~= nil, "window is nil")
     local headerGroup = window:childrenWithRole("AXSplitGroup")[1]:childrenWithRole("AXGroup")[2]:childrenWithRole("AXGroup")[2]
-    print("headerGroup: ", hs.inspect(headerGroup))
     assert(headerGroup ~= nil, "headerGroup is nil")
-    local staticText = headerGroup:childrenWithRole("AXStaticText")[1]
-    print("staticText: ", hs.inspect(staticText))
-    print("  value:", staticText:attributeValue("AXValue"))
-    print(" identifier:", staticText:attributeValue("AXIdentifier"))
+    local staticTextElement = headerGroup:childrenWithRole("AXStaticText")[1]
+    print("  value:", staticTextElement:attributeValue("AXValue"))
+    print(" identifier:", staticTextElement:attributeValue("AXIdentifier"))
     -- FYI does have AXIdentifier _NS:84
     --    AXRoleDescription: text
     --    AXDescription: text
@@ -246,8 +243,14 @@ function onAppActivated(hsApp, appName)
         print("AXValueChanged: ", hs.inspect(element), text, hs.inspect(infoTable))
     end)
     -- local obsObj = observer:addWatcher(staticText, "AXValueChanged")
-    -- local watchElement = hs.axuielement.applicationElement(hsApp)
-    local watchElement = hs.axuielement.windowElement(hsApp:mainWindow())
+    -- TODO find if I can only watch at app level?
+    --    TODO maybe find a better way to detect title inspector changed to new asset/element on timeline... so I can dynamic show controls for that type!
+    --    if AXIdentifier is static across all app restarts then that's great I can use it...
+    --    otherwise I may need to find the neighboring sibling buttons to confirm
+    --
+    -- local watchElement = hs.axuielement.applicationElement(hsApp) -- works, for all elements!
+    -- local watchElement = hs.axuielement.windowElement(hsApp:mainWindow()) -- nothing for AXValueChanged
+    local watchElement = staticTextElement -- not working so far :(
     -- TODO why can't I get watching to work beneath the app level?!
     --   appElement => all events (including the AXValueChanged I want)
     --   mainWindow => nothing
