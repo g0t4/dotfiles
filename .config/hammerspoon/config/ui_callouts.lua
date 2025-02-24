@@ -89,7 +89,7 @@ local function showTooltipForElement(element, frame)
     local attributeDump = table.concat(attributes, "\n")
 
 
-    local tmpcanvas = canvas.new({ x = 0, y = 0, w = 1000, h = 1000 })
+    local tmpcanvas = canvas.new({})
     local estimatedSpecifierSizeForDefaultFont = tmpcanvas:minimumTextSize(specifierLua)
     local estimatedAttributeSizeForDefaultFont = tmpcanvas:minimumTextSize(attributeDump)
     local specifierFontSize = 14
@@ -108,8 +108,8 @@ local function showTooltipForElement(element, frame)
 
     -- add padding (don't subtract it from needed width/height)
     local padding = 10
-    local tooltipWidth = math.max(specifierTextWidth, attributeTextWidth) + 2 * padding
-    local tooltipHeight = specifierTextHeight + attributeTextHeight + 2 * padding
+    local tooltipWidth = math.max(specifierTextWidth, attributeTextWidth) + 3 * padding
+    local tooltipHeight = specifierTextHeight + attributeTextHeight + 3 * padding
 
     local screenFrame = hs.screen.mainScreen():frame() -- Gets the current screen dimensions
 
@@ -136,6 +136,7 @@ local function showTooltipForElement(element, frame)
 
     M.last.tooltip = canvas.new({ x = x, y = y, w = tooltipWidth, h = tooltipHeight })
         :appendElements({
+            -- padding
             {
                 -- background
                 type = "rectangle",
@@ -150,18 +151,20 @@ local function showTooltipForElement(element, frame)
                 text = specifierLua,
                 textSize = specifierFontSize,
                 textColor = { white = 1 },
-                frame = { x = padding, y = padding, w = tooltipWidth - 2 * padding, h = specifierTextHeight },
+                frame = { x = padding, y = padding, w = tooltipWidth - 3 * padding, h = specifierTextHeight },
                 textAlignment = "left"
             },
+            -- padding
             {
                 -- attributes
                 type = "text",
                 text = attributeDump,
                 textSize = attributeFontSize,
                 textColor = { white = 1 },
-                frame = { x = padding, y = padding + specifierTextHeight, w = tooltipWidth - 2 * padding, h = attributeTextHeight },
+                frame = { x = padding, y = 2 * padding + specifierTextHeight, w = tooltipWidth - 3 * padding, h = attributeTextHeight },
                 textAlignment = "left"
             },
+            -- padding
         })
         :show()
 end
