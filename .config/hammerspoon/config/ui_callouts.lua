@@ -37,7 +37,7 @@ local skips = {
     AXMinimizeButton = true,
     AXFullScreenButton = true,
     AXFullScreen = true,
-    -- AXSections = true,
+    AXSections = true,
 
     -- splitters
     AXNextContents = true,
@@ -251,11 +251,12 @@ local function stopElementInspector()
     end
 end
 
-local function cycleSegments()
-    -- IIRC only windows have AxSections
-    hs.alert.show("Cycling AxSections")
-    M.last.cycle = "AxSections"
-end
+-- local function cycleSegments()
+--     -- in testing in Script Debugger... I don't think there is a reference to the element anyways, seems to just be an ID ref (not even unique even though it is called unique in Script Debugger's explroer... for now lets disable this)
+--     -- IIRC only windows have AxSections
+--     hs.alert.show("Cycling AxSections")
+--     M.last.cycle = "AxSections"
+-- end
 
 local function cycleChildren()
     hs.alert.show("Cycling AXChildren")
@@ -283,7 +284,7 @@ local function startElementInspector()
     -- end
     )
     table.insert(M.bindings, hs.hotkey.bind({}, "escape", stopElementInspector))
-    table.insert(M.bindings, hs.hotkey.bind({}, "s", cycleSegments))
+    -- table.insert(M.bindings, hs.hotkey.bind({}, "s", cycleSegments))
     table.insert(M.bindings, hs.hotkey.bind({}, "c", cycleChildren))
     table.insert(M.bindings, hs.hotkey.bind({}, "n", cycleChildrenInNavigationOrder))
 end
@@ -349,7 +350,6 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "down", function()
     end
     local cycle = M.last.cycle or "AXChildren"
     local children = M.last.element:attributeValue(cycle)
-    -- TODO why doe AXSections come back nil even when it is visible in callout for the Window?!
     if not children or #children == 0 then
         print("no " .. cycle, children)
         onlyAlert("no " .. cycle)
