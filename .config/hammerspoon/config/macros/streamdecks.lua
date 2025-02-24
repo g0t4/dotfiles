@@ -176,7 +176,17 @@ local function onDeviceDiscovery(connected, deck)
     deck:setButtonColor(24, hs.drawing.color.x11.blue)
     deck:setButtonColor(32, hs.drawing.color.x11.blue)
 
-    -- TODO setScreenImage (when disconnected, right?)
+    if name == "4+" then
+        local testSvg2 = "~/repos/github/g0t4/dotfiles/misc/hammerspoon-icons/test-svgs/hanging-96.png"
+        deck:setScreenImage(1, hs.image.imageFromPath(testSvg2))
+        local testSvg3 = "~/repos/github/g0t4/dotfiles/misc/hammerspoon-icons/test-svgs/saggy-64.png"
+        deck:setScreenImage(2, hs.image.imageFromPath(testSvg3))
+        local testSvg4 = "~/repos/github/g0t4/dotfiles/misc/hammerspoon-icons/test-svgs/stick.svg"
+        deck:setScreenImage(3, hs.image.imageFromPath(testSvg4))
+        local testSvg5 = "~/repos/github/g0t4/dotfiles/misc/hammerspoon-icons/test-svgs/purple-pink-128.png"
+        deck:setScreenImage(4, hs.image.imageFromPath(testSvg5))
+    end
+
 
     -- PRN capture deck image sizes for button image gen
     -- local imageSize = deck:imageSize()
