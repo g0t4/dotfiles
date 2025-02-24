@@ -55,6 +55,25 @@ function dumpButtonInfo(deck, buttonNumber, pressedOrReleased)
     )
 end
 
+function drawTextIcon(text)
+    -- use canvas for text on images on icons! COOL
+    --   streamdeck works off of images only for the buttons, makes 100% sense
+    local canvas = hs.canvas.new({ x = 0, y = 0, w = 72, h = 72 })
+    canvas[1] = {
+        type = "rectangle",
+        action = "fill",
+        fillColor = { red = 0, green = 0, blue = 0, alpha = 1 }, -- Background color
+    }
+    canvas[2] = {
+        type = "text",
+        text = text,
+        textSize = 20,
+        textColor = { red = 1, green = 1, blue = 1, alpha = 1 },
+        frame = { x = 0, y = 20, w = 72, h = 32 }, -- Adjust positioning
+    }
+    return canvas:imageFromCanvas()
+end
+
 function onButtonPressed(deck, buttonNumber, pressedOrReleased)
     local name = getDeckName(deck)
     dumpButtonInfo(deck, buttonNumber, pressedOrReleased)
@@ -64,6 +83,10 @@ function onButtonPressed(deck, buttonNumber, pressedOrReleased)
             hs.openConsole()
         elseif buttonNumber == 8 then
             hs.console.clearConsole()
+        end
+    elseif name == "4+" then
+        if buttonNumber == 1 then
+            deck:setButtonImage(buttonNumber, drawTextIcon("Hello"))
         end
     end
 end
@@ -90,7 +113,7 @@ function getDeckName(deck)
         return "2XL"
     elseif serial:find("8$") then
         return "3XL"
-    elseif serial:find("A$") then
+    elseif serial:find("^A") then
         return "4+"
     end
     return "unknown"
