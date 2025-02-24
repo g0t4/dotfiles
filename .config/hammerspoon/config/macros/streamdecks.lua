@@ -36,14 +36,37 @@ reloadOnMacrosChanges()
 --      pressed/released AND rotated (plus only, IIUC)
 --
 --
+function onButtonPressed(deck, buttonNumber, pressedOrReleased)
+    print("button " .. buttonNumber .. ": "
+        .. (pressedOrReleased and "pressed" or "released")
+        .. " on button " .. getDeckName(deck))
+end
+
+function getDeckName(deck)
+    -- CL start
+    --  + 9 end => deck 1XL
+    --  + 1 end => deck 2XL
+    --  + 8 end => deck 3XL
+    -- A start (also ends with 4) => deck 4+
+
+    local serial = deck:serialNumber()
+    if serial:find("9$") then
+        return "deck #1"
+    elseif serial:find("1$") then
+        return "deck #2"
+    elseif serial:find("8$") then
+        return "deck #3"
+    elseif serial:find("A$") then
+        return "deck #4"
+    end
+end
 
 --
 -- @param connected boolean
 -- @param deck hs.streamdeck
-function onDeviceDiscovery(connected, deck)
-    print("Discovered streamdeck", hs.inspect(deck), "connected:", connected)
-    print("devices: ", hs.streamdeck.numDevices())
-    -- setBrightness
+local function onDeviceDiscovery(connected, deck)
+    -- print(hs.inspect(getmetatable(deck)))
+    -- print("Discovered streamdeck", hs.inspect(deck), "connected:", connected)
     print("serialNumber: ", deck:serialNumber())
     print("firmwareVersion: ", deck:firmwareVersion())
     -- use serialNumber to identify which device is which
@@ -52,9 +75,8 @@ function onDeviceDiscovery(connected, deck)
     print("  cols:", cols, " rows:", rows)
     -- PRN deck:setBrightness(80) -- 0 to 100 (FYI persists across restarts of hammerspoon... IIAC only need to set this once when I wanna change it)
 
-
-
-    print(hs.inspect(getmetatable(deck)))
+    deck:reset() -- TODO when do I need to call this? w/o this the buttonCallback doesn't reliably fire on config reload
+    deck:buttonCallback(onButtonPressed)
 end
 
 hs.streamdeck.init(onDeviceDiscovery) -- onDeviceConnected)
@@ -63,3 +85,5 @@ hs.streamdeck.init(onDeviceDiscovery) -- onDeviceConnected)
 
 -- NOTES:
 -- - hammerspoon crashes if you call discoveryCallback first (w/o init first)
+-- - operations:
+--   - when I restart hammerspoon they appear to be turned off or smth?
