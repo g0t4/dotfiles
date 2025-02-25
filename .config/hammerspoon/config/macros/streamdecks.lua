@@ -188,7 +188,7 @@ local function onDeviceDiscovery(connected, deck)
     --    OR, see if I can repor the issue w/o reset and button presses (which I just tested and are fine)
     --        could it be that I hadn't set any buttons yet and now that I have button clicks work w/o reset?
 
-    deck:reset() -- TODO add a mechanism to effectively reset keys that I remove from a layout... for now just reset all on every restart is fine
+    -- deck:reset() -- TODO add a mechanism to effectively reset keys that I remove from a layout... for now just reset all on every restart is fine
 
     deck:encoderCallback(onEncoderPressed) -- don't need to limit to just PLUS... seems irrelevant on XLs
     deck:buttonCallback(onButtonPressed)
@@ -217,8 +217,6 @@ local function onDeviceDiscovery(connected, deck)
     -- keep local copies of images!
     -- local testSvg = "https://img.icons8.com/?size=256w&id=jrkQk3VIHBgH&format=png"
     -- local image   = hs.image.imageFromURL(testSvg)
-
-    deck:setButtonImage(4, hsIcon("test-svgs/machine-64.png"))
 
     local pngFileType = hs.image.iconForFileType("png")
     deck:setButtonImage(5, pngFileType)
