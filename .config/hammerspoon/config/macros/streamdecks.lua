@@ -39,7 +39,8 @@ function dumpButtonInfo(deck, buttonNumber, pressedOrReleased)
     --   NOT touchscreen dials on PLUS
 
     local buttonExtra = ""
-    local cols, rows = deck:buttonLayout()
+
+    local cols, _ = deck:buttonLayout()
 
     -- nice for debugging
     local col = (buttonNumber - 1) % cols + 1
@@ -122,6 +123,16 @@ function getDeckName(deck)
     return "unknown"
 end
 
+local hsIcons = resolveHomePath("~/repos/github/g0t4/dotfiles/misc/hammerspoon-icons/")
+local function hsIcon(relativePath)
+    local path = hsIcons .. relativePath
+    local image = hs.image.imageFromPath(path)
+    if image ~= nil then
+        return image
+    end
+    log.e("hsIcons: could not load image from path:", path)
+end
+
 local deck1XL = nil
 local deck2XL = nil
 local deck3XL = nil
@@ -167,7 +178,6 @@ local function onDeviceDiscovery(connected, deck)
     deck:setButtonColor(22, hs.drawing.color.x11.yellow)
     deck:setButtonColor(23, hs.drawing.color.x11.red)
     deck:setButtonColor(24, hs.drawing.color.x11.blue)
-    deck:setButtonColor(32, hs.drawing.color.x11.blue)
 
     if name == "4+" then
         local testSvg2 = "~/repos/github/g0t4/dotfiles/misc/hammerspoon-icons/test-svgs/hanging-96.png"
@@ -193,9 +203,7 @@ local function onDeviceDiscovery(connected, deck)
     local clockButton = ClockButton:new(1, deck)
     clockButton:start()
 
-    local testSvg = "~/repos/github/g0t4/dotfiles/misc/hammerspoon-icons/test-svgs/machine-64.png"
-    local image   = hs.image.imageFromPath(resolveHomePath(testSvg))
-    deck:setButtonImage(4, image)
+    deck:setButtonImage(4, hsIcon("test-svgs/machine-64.png"))
 
     local pngFileType = hs.image.iconForFileType("png")
     deck:setButtonImage(5, pngFileType)
@@ -214,6 +222,7 @@ local function onDeviceDiscovery(connected, deck)
         deck1XL = deck
     elseif name == "2XL" then
         deck2XL = deck
+        deck:setButtonImage(32, hsIcon("fcpx/todo-CE8C404B/todo-9KIV/3IFQSQ540515H3IVM8I5EP4J38Z.png"))
     elseif name == "3XL" then
         deck3XL = deck
     elseif name == "4+" then
@@ -256,7 +265,7 @@ function onAppActivated(hsApp, appName)
     -- local elem = hs.axuielement.applicationElement(hsApp:pid())
     -- exammple notification types:   hs.axuielement.observer.notifications
     assert(observer ~= nil, "observer is nil")
-    observer:callback(function(_observer, element, notification, infoTable)
+    observer:callback(function(_, element, notification, infoTable)
         local value = element:attributeValue("AXValue")
         local text = notification
         if value then
