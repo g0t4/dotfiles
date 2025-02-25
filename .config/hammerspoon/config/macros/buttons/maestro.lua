@@ -6,7 +6,7 @@ require("config.macros.buttons.commands")
 -- @field deck hs.streamdeck
 -- @field image string
 -- @field macro string
--- @field param string
+-- @field param string|nil
 local MaestroButton = {}
 MaestroButton.__index = MaestroButton
 
