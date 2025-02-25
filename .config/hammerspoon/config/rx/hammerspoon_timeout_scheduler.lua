@@ -12,9 +12,9 @@ function HammerspoonTimeoutScheduler.create()
 end
 
 --- Schedules an action to run at a future point in time.
--- @arg {function} action
--- @arg {number=0} delay, in milliseconds.
--- @returns {rx.Subscription}
+---@arg {function} action
+---@arg {number=0} delay, in milliseconds.
+---@returns {rx.Subscription}
 function HammerspoonTimeoutScheduler:schedule(action, delay, ...)
     local packed_args = { ... }
     -- LUV timer example:

@@ -1,26 +1,26 @@
 require("config.macros.buttons.helpers")
 
--- various types for holding sets of buttons
+---various types for holding sets of buttons
 --
--- XLPage => 8 cols x 4 rows - 96x96
--- PlusPage => 4cols x 2 rows - 120x120 (IIRC)
--- PlusEncoderPage => 4 encoders (one screen each, plus dial)
+---XLPage => 8 cols x 4 rows - 96x96
+---PlusPage => 4cols x 2 rows - 120x120 (IIRC)
+---PlusEncoderPage => 4 encoders (one screen each, plus dial)
 --
 
--- @classmod ButtonPage
--- @field buttonNumber number
--- @field deck hs.streamdeck
--- @field image string
--- @field macro string
--- @field param string|nil
+---@class ButtonPage
+---@field buttonNumber number
+---@field deck hs.streamdeck
+---@field image string
+---@field macro string
+---@field param string|nil
 local ButtonPage = {}
 ButtonPage.__index = ButtonPage
 
 
--- @param deck hs.streamdeck
--- @param rows number
--- @param cols number
--- @return ButtonPage instance
+---@param deck hs.streamdeck
+---@param rows number
+---@param cols number
+---@return ButtonPage instance
 function ButtonPage:new(deck, rows, cols)
     local o = {}
     setmetatable(o, self)
@@ -33,8 +33,8 @@ function ButtonPage:new(deck, rows, cols)
     return o
 end
 
--- @param deck hs.streamdeck
--- @return ButtonPage instance
+---@param deck hs.streamdeck
+---@return ButtonPage instance
 function ButtonPage:newXL(deck)
     return ButtonPage:new(deck, 4, 8)
 end

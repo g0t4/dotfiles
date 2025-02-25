@@ -161,8 +161,8 @@ local function hsIcon(relativePath)
 end
 
 --
--- @param connected boolean
--- @param deck hs.streamdeck
+---@param connected boolean
+---@param deck hs.streamdeck
 local function onDeviceDiscovery(connected, deck)
     local name = getDeckName(deck)
     if not connected then

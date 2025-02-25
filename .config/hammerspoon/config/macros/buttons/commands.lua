@@ -9,8 +9,8 @@ function runCommand(cmd)
     return nil
 end
 
--- @param macro string
--- @param param string|nil
+---@param macro string
+---@param param string|nil
 function runKMMacro(macro, param)
     local app = "/Applications/Keyboard\\ Maestro.app/Contents/MacOS/keyboardmaestro"
     local command = app .. " " .. macro

@@ -24,6 +24,7 @@ function ClockButton:new(buttonNumber, deck)
     local o = {}
     setmetatable(o, self)
     self.__index = self
+    -- good case where button needs to know its deck/number to update the image!
     o.buttonNumber = buttonNumber
     o.deck = deck
     o.lastTime = nil

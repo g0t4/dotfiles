@@ -1,12 +1,12 @@
 require("config.macros.buttons.helpers")
 require("config.macros.buttons.commands")
 
--- @classmod MaestroButton
--- @field buttonNumber number
--- @field deck hs.streamdeck
--- @field image string
--- @field macro string
--- @field param string|nil
+---@class MaestroButton
+---@field buttonNumber number
+---@field deck hs.streamdeck
+---@field image string
+---@field macro string
+---@field param string|nil
 local MaestroButton = {}
 MaestroButton.__index = MaestroButton
 

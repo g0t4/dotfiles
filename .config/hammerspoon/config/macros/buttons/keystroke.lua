@@ -2,10 +2,20 @@
 --   hs.eventtap.keyStroke({"cmd", "alt"}, "T")
 --   mostly as a reminder of an obscure hot key
 
+---@class KeyStrokeButton
+---@field buttonNumber number
+---@field deck hs.streamdeck
+---@field modifiers table
+---@field character string
 local KeyStrokeButton = {}
 KeyStrokeButton.__index = KeyStrokeButton
 
 
+---@param buttonNumber number
+---@param deck hs.streamdeck
+---@param modifiers table
+---@param character string
+---@return KeyStrokeButton
 function KeyStrokeButton:new(buttonNumber, deck, modifiers, character)
     local o = {}
     setmetatable(o, self)
@@ -24,7 +34,6 @@ function KeyStrokeButton:start()
 end
 
 function KeyStrokeButton:stop()
-    self.timer:stop()
 end
 
 function KeyStrokeButton:pressed()

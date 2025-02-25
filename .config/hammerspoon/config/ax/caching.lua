@@ -1,12 +1,12 @@
 local hsax = require("hs.axuielement")
 
+--   TODO use CacheEntry instead of any?
+--
 ---@class CachedElement
 ---@field element hs.axuielement The accessibility element to wrap.
 ---@field cache table<string, any> A cache of attribute values.
----   TODO use CacheEntry instead of any?
 local CachedElement = {}
 CachedElement.__index = CachedElement
-
 
 
 --- Create a new CachedElement from an AXUIElement.
