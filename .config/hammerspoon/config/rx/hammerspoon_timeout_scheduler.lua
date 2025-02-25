@@ -14,7 +14,7 @@ end
 --- Schedules action to run after delay
 ---@param action function
 ---@param delay number @in milliseconds
----@returns {rx.Subscription}
+---@return Subscription
 function HammerspoonTimeoutScheduler:schedule(action, delay, ...)
     local packed_args = { ... }
     -- LUV timer example:

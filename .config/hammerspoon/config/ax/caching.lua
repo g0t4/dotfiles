@@ -1,7 +1,10 @@
 local hsax = require("hs.axuielement")
 
---- TODO can I use hs.axuielement as type, does that help?
---- TODO use CacheEntry instead of any?
+--- PRN add CacheEntry
+
+
+--- any can be: string, number, boolean, table, hs.axuielement...
+---
 ---@class CachedElement
 ---@field element hs.axuielement
 ---@field cache table<string, any>
@@ -59,7 +62,6 @@ function CachedElement:clearCache()
     self.cache = {}
     self.typeCache = {}
 end
-
 
 ---@param appName string
 ---@return CachedElement|nil
