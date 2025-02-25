@@ -8,11 +8,10 @@ require("config.macros.buttons.helpers")
 --
 
 ---@class ButtonPage
----@field buttonNumber number
 ---@field deck hs.streamdeck
----@field image string
----@field macro string
----@field param string|nil
+---@field rows number
+---@field cols number
+---@field buttons table<number, Button> @TODO button abstraction
 local ButtonPage = {}
 ButtonPage.__index = ButtonPage
 
@@ -20,7 +19,7 @@ ButtonPage.__index = ButtonPage
 ---@param deck hs.streamdeck
 ---@param rows number
 ---@param cols number
----@return ButtonPage instance
+---@return ButtonPage
 function ButtonPage:new(deck, rows, cols)
     local o = {}
     setmetatable(o, self)
@@ -34,15 +33,18 @@ function ButtonPage:new(deck, rows, cols)
 end
 
 ---@param deck hs.streamdeck
----@return ButtonPage instance
+---@return ButtonPage
 function ButtonPage:newXL(deck)
     return ButtonPage:new(deck, 4, 8)
 end
 
+---@param deck hs.streamdeck
+---@return ButtonPage
 function ButtonPage:newPlus(deck)
     return ButtonPage:new(deck, 2, 4)
 end
 
+-- TODO button abstraction for all button types?
 function ButtonPage:addButton(button)
     -- !!! TODO does the button need to know which number it is?
     -- !!! TODO likewise why does it know its deck?
@@ -85,14 +87,21 @@ function ButtonPage:stop()
     end
 end
 
+--- called when a button is pressed
+---@param buttonNumber number
+---@param pressedOrReleased boolean
 function ButtonPage:onButtonPressed(buttonNumber, pressedOrReleased)
     local button = self.buttons[buttonNumber]
     if button then
-        if button.pressed == nil then
-            print("button does not have pressed method: " .. buttonNumber)
+        if pressedOrReleased then
+            if button.pressed == nil then
+                print("button does not have pressed method: " .. buttonNumber)
+                return
+            end
+            button:pressed()
             return
         end
-        button:pressed()
+        -- PRN else case... for triggering on release... use button.released in that case
     else
         print("button not mapped: " .. buttonNumber)
     end
