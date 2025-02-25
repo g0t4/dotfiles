@@ -229,14 +229,15 @@ local function onDeviceDiscovery(connected, deck)
         deck1XL = deck
     elseif name == "2XL" then
         deck2XL = deck
-        local btn = MaestroButton:new(26, deck, hsIcon("fcpx/titles/down-arrow.png"))
+        local macro = "'Titles - Add wes-arrows-* (Parameterized)'"
+        local btn = MaestroButton:new(26, deck, hsIcon("fcpx/titles/down-arrow.png"), macro, "wes-arrows-down")
         setButton(deck, btn)
         -- todo pass macro name & params here:
-        btn = MaestroButton:new(27, deck, hsIcon("fcpx/titles/right-arrow.png"))
+        btn = MaestroButton:new(27, deck, hsIcon("fcpx/titles/right-arrow.png"), macro, "wes-arrows-right")
         setButton(deck, btn)
-        btn = MaestroButton:new(25, deck, hsIcon("fcpx/titles/left-arrow.png"))
+        btn = MaestroButton:new(25, deck, hsIcon("fcpx/titles/left-arrow.png"), macro, "wes-arrows-left")
         setButton(deck, btn)
-        btn = MaestroButton:new(18, deck, hsIcon("fcpx/titles/up-arrow.png"))
+        btn = MaestroButton:new(18, deck, hsIcon("fcpx/titles/up-arrow.png"), macro, "wes-arrows-up")
         setButton(deck, btn)
     elseif name == "3XL" then
         deck3XL = deck

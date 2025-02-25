@@ -4,10 +4,13 @@ require("config.macros.buttons.commands")
 -- @classmod MaestroButton
 -- @field number number
 -- @field deck hs.streamdeck
+-- @field image string
+-- @field macro string
+-- @field param string
 local MaestroButton = {}
 MaestroButton.__index = MaestroButton
 
-function MaestroButton:new(number, deck, image)
+function MaestroButton:new(number, deck, image, macro, param)
     -- FYI... actually most buttons are static, including KM buttons
     --   when I need a dynamic button, I can revist this...
     --   for now keep both concepts together:
@@ -20,6 +23,8 @@ function MaestroButton:new(number, deck, image)
     o.number = number
     o.deck = deck
     o.image = image
+    o.macro = macro
+    o.param = param
     return o
 end
 
@@ -34,10 +39,8 @@ end
 
 function MaestroButton:pressed()
     -- FYI could use osascript too (pass applescript to hammerspoon?)
-    local macro = "'Titles - Add wes-arrows-* (Parameterized)'"
-    local param = "wes-arrows-right"
-    verbose("exec KM: " .. macro .. "(" .. param .. ")")
-    runKMMacro(macro, param)
+    verbose("exec KM: " .. self.macro .. "(" .. self.param .. ")")
+    runKMMacro(self.macro, self.param)
 end
 
 function MaestroButton:released()
