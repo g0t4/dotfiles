@@ -33,6 +33,22 @@ end
 reloadOnMacrosChanges()
 
 
+local deck1XL = nil
+local deck2XL = nil
+local deck2Buttons = {}
+local deck3XL = nil
+local deck4Plus = nil
+
+local function setButton(deck, button)
+    if deck ~= deck2XL then
+        error("TODO impl other decks")
+    end
+
+    -- TODO consider adding a deck class of some sort to package this stuff up
+    deck2Buttons[button.number] = button
+    button:start()
+end
+
 -- TODO test hs.streamdeck:screenCallback(fn)  - touch screen on PLUS
 function dumpButtonInfo(deck, buttonNumber, pressedOrReleased)
     -- buttons on all decks (including XL and PLUS)
@@ -64,7 +80,16 @@ function onButtonPressed(deck, buttonNumber, pressedOrReleased)
     local name = getDeckName(deck)
     dumpButtonInfo(deck, buttonNumber, pressedOrReleased)
 
-    if name == "3XL" then
+    if name == "2XL" then
+        local button = deck2Buttons[buttonNumber]
+        if button then
+            if pressedOrReleased then
+                button:pressed()
+            else
+                button:released()
+            end
+        end
+    elseif name == "3XL" then
         if buttonNumber == 7 then
             hs.openConsole()
         elseif buttonNumber == 8 then
@@ -134,10 +159,6 @@ local function hsIcon(relativePath)
     log.e("hsIcons: could not load image from path:", path)
 end
 
-local deck1XL = nil
-local deck2XL = nil
-local deck3XL = nil
-local deck4Plus = nil
 --
 -- @param connected boolean
 -- @param deck hs.streamdeck
@@ -225,8 +246,7 @@ local function onDeviceDiscovery(connected, deck)
         deck2XL = deck
         -- deck:setButtonImage(32, hsIcon("fcpx/todo-CE8C404B/todo-9KIV/3IFQSQ540515H3IVM8I5EP4J38Z.png"))
         local maestroButton = MaestroButton:new(32, deck, hsIcon("fcpx/todo-CE8C404B/todo-9KIV/3IFQSQ540515H3IVM8I5EP4J38Z.png"))
-        maestroButton:start()
-        maestroButton:stop()
+        setButton(deck, maestroButton)
     elseif name == "3XL" then
         deck3XL = deck
     elseif name == "4+" then
