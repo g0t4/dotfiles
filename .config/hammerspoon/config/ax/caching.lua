@@ -28,7 +28,7 @@ end
 
 --- Retrieve a single attribute, using cache if available.
 ---@param name string
----@return any @attribute value
+---@return any attributeValue
 function CachedElement:attribute(name)
     -- TODO avoid double lookup on non-existent attributes
     --   PRN? add a cacheEntry type to hold nil and signal looked up already
