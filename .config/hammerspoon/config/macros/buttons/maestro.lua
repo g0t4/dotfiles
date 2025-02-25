@@ -1,4 +1,5 @@
 require("config.macros.buttons.helpers")
+require("config.macros.buttons.commands")
 
 -- @classmod MaestroButton
 -- @field number number
@@ -32,11 +33,11 @@ function MaestroButton:stop()
 end
 
 function MaestroButton:pressed()
-    --  /Applications/Keyboard\ Maestro.app/Contents/MacOS/keyboardmaestro
-    --  or osascript
-    local macro = "Titles - Add * Arrow (Parameterized)"
+    -- FYI could use osascript too (pass applescript to hammerspoon?)
+    local macro = "'Titles - Add wes-arrows-* (Parameterized)'"
     local param = "wes-arrows-right"
     verbose("exec KM: " .. macro .. "(" .. param .. ")")
+    runKMMacro(macro, param)
 end
 
 function MaestroButton:released()
