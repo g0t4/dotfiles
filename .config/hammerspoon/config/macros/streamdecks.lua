@@ -184,22 +184,7 @@ local function onDeviceDiscovery(connected, deck)
 
     --- WOW this is super fast too... in a flash they're all loaded (and that's with a reset in between)
     -- deck:setButtonColor(1, hs.drawing.color.x11.red)
-    deck:setButtonColor(2, hs.drawing.color.x11.blue)
-    deck:setButtonColor(3, hs.drawing.color.x11.yellow)
-    deck:setButtonColor(9, hs.drawing.color.x11.red)
-    deck:setButtonColor(10, hs.drawing.color.x11.blue)
-    deck:setButtonColor(11, hs.drawing.color.x11.yellow)
-    deck:setButtonColor(12, hs.drawing.color.x11.red)
-    deck:setButtonColor(13, hs.drawing.color.x11.blue)
-    deck:setButtonColor(14, hs.drawing.color.x11.yellow)
-    deck:setButtonColor(17, hs.drawing.color.x11.red)
-    deck:setButtonColor(18, hs.drawing.color.x11.blue)
-    deck:setButtonColor(19, hs.drawing.color.x11.yellow)
-    deck:setButtonColor(20, hs.drawing.color.x11.red)
-    deck:setButtonColor(21, hs.drawing.color.x11.blue)
-    deck:setButtonColor(22, hs.drawing.color.x11.yellow)
-    deck:setButtonColor(23, hs.drawing.color.x11.red)
-    deck:setButtonColor(24, hs.drawing.color.x11.blue)
+    -- deck:reset() -- uncomment to reset and then recomment out
 
     if name == "4+" then
         local testSvg2 = "~/repos/github/g0t4/dotfiles/misc/hammerspoon-icons/test-svgs/hanging-96.png"
