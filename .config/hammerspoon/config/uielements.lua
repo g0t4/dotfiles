@@ -905,6 +905,9 @@ function GetElementTableRow(elem, indent)
         details .. "</td><td>" .. htmlCodeAppleScript(ElementSpecifierFor(elem)) .. "</td></tr>"
 end
 
+-- TODO look into inject language.. should work
+--    https://emmylua.github.io/annotations/language.html
+---@language HTML
 local pathTableStart = [[
 <table class="path">
     <tr>

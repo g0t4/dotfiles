@@ -1,7 +1,6 @@
 local hsax = require("hs.axuielement")
 
 --- TODO can I use hs.axuielement as type, does that help?
---- TODO can I use table<string,any>
 --- TODO use CacheEntry instead of any?
 ---@class CachedElement
 ---@field element hs.axuielement
@@ -61,9 +60,12 @@ function CachedElement:clearCache()
     self.typeCache = {}
 end
 
---- Retrieve the AXUIElement.
+
+---@param appName string
 ---@return CachedElement|nil
 function CachedElement.forApp(appName)
+    -- PRN cache it per app too?
+
     -- FYI this already borders on getting into strategy to locate element... save that for later
     -- PRN make a throwable version?
     -- PRN take both string and hs.application
