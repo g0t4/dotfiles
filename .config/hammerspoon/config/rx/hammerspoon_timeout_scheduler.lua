@@ -13,7 +13,7 @@ end
 
 --- Schedules action to run after delay
 ---@param action function
----@param delay number @in milliseconds
+---@param delay number #in milliseconds
 ---@return Subscription
 function HammerspoonTimeoutScheduler:schedule(action, delay, ...)
     local packed_args = { ... }
