@@ -226,16 +226,6 @@ hs.streamdeck.init(onDeviceDiscovery) -- onDeviceConnected)
 local observer = nil
 local currentApp = hs.application.frontmostApplication()
 
--- ! TODO look into CommandPost and what it does for UI automation in FCPX, IIAC it uses that w/ its own lua fwk
--- https://github.com/CommandPost/CommandPost?tab=readme-ov-file
---   OH YEAH BABY... they're right up my alley... or I'm right up theirs
---      https://github.com/CommandPost/CommandPost/blob/develop/src/extensions/cp/apple/finalcutpro/inspector/Inspector.lua#L127
---   yup, they memoize... "cache" https://github.com/CommandPost/CommandPost/blob/develop/src/extensions/cp/apple/finalcutpro/inspector/BasePanel.lua#L28
---   here is how they locate the title I've been working on too:
---      https://github.com/CommandPost/CommandPost/blob/develop/src/extensions/cp/apple/finalcutpro/inspector/Inspector.lua#L187
--- FYI! GO FIGURE... commandpost is a FORK of Hammerspoon!!! (I knew it smelled familiar!)
---     https://commandpost.io/developer/introduction/#what-is-hammerspoon
-
 function onAppActivated(hsApp, appName)
     if observer then
         observer:stop()
@@ -319,8 +309,16 @@ end):start()
 
 
 
-
-
+-- *** COMMANDPOST ***
+--   https://github.com/CommandPost/CommandPost
+--   OH YEAH BABY... they're right up my alley... or I'm right up theirs
+--      https://github.com/CommandPost/CommandPost/blob/develop/src/extensions/cp/apple/finalcutpro/inspector/Inspector.lua#L127
+--   yup, they memoize... "cache" https://github.com/CommandPost/CommandPost/blob/develop/src/extensions/cp/apple/finalcutpro/inspector/BasePanel.lua#L28
+--   here is how they locate the title I've been working on too:
+--      https://github.com/CommandPost/CommandPost/blob/develop/src/extensions/cp/apple/finalcutpro/inspector/Inspector.lua#L187
+-- FYI! GO FIGURE... commandpost is a FORK of Hammerspoon!!! (I knew it smelled familiar!)
+--     https://commandpost.io/developer/introduction/#what-is-hammerspoon
+--
 -- * BENEFITS over elgato app:
 --   don't need a black png for text only buttons! SHEESH what a PITA
 --   not limited to only changing when apps change or if I impl a plugin (even then not sure how much things can change)
@@ -331,3 +329,7 @@ end):start()
 -- - hammerspoon crashes if you call discoveryCallback first (w/o init first)
 -- - operations:
 --   - when I restart hammerspoon they appear to be turned off or smth?
+--
+-- - streamdeck module:
+--   - code to create type of deck:
+--     - https://github.com/Hammerspoon/hammerspoon/blob/master/extensions/streamdeck/HSStreamDeckManager.m#L256
