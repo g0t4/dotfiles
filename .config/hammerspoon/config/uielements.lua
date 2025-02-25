@@ -669,6 +669,9 @@ local function getIdentifier(toElement)
         -- TODO does this make sense, ever?
         -- FYI I don't recall seeing AXIdentifier on leaf level ui elements... usually up the chain in a split group
         --   FYI I bet this would change across diff configs of the app so not likely wise beyond current session... that's fine
+
+        -- UMM... while testing FCPX (restarts, close panels and quit, reopen... AXIdentifier seems stable for at least this version?!
+        --   # 10 (title inspect cbox), 18 (video), 21 (color), 24 (info), 84 (static text 1 - title bar on inspector panel)
         identifier = GetValueOrEmptyString(toElement, "AXIdentifier")
     end
     -- TODO last fallback to AXRole? and prepend _?
