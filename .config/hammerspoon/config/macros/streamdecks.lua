@@ -3,6 +3,7 @@
 --    light up the dials for adjusting its specific properties...
 --  I can do this with an accessibility observer
 local log = require("hs.logger").new("streamdeck", "verbose") -- set to "warning" or "error" when done developing this module
+local ClockButton = require("config.macros.buttons.clock")
 
 function verbose(...)
     log.v(...)
@@ -211,17 +212,9 @@ local function onDeviceDiscovery(connected, deck)
     -- keep local copies of images!
     -- local testSvg = "https://img.icons8.com/?size=256w&id=jrkQk3VIHBgH&format=png"
     -- local image   = hs.image.imageFromURL(testSvg)
-    local lastTime = nil
-    local timer = hs.timer.doEvery(10, function()
-        local now = os.date("%H:%M")
-        if lastTime ~= nil and lastTime == now then
-            return
-        end
-        deck:setButtonImage(1, getTimeImage())
-    end)
-    timer:start()
-    -- todo mechanism to stop/cleanup timer if button removed
-    timer:fire()
+
+    local clockButton = ClockButton:new(1, deck)
+    clockButton:start()
 
     local testSvg = "~/repos/github/g0t4/dotfiles/misc/hammerspoon-icons/test-svgs/machine-64.png"
     local image   = hs.image.imageFromPath(resolveHomePath(testSvg))
@@ -344,10 +337,3 @@ end):start()
 -- - hammerspoon crashes if you call discoveryCallback first (w/o init first)
 -- - operations:
 --   - when I restart hammerspoon they appear to be turned off or smth?
-
-function getTimeImage()
-    local now = os.date("%H:%M")
-    local date = os.date("%a %b %d")
-    -- https://www.lua.org/pil/22.1.html
-    return drawTextIcon(now .. " " .. date)
-end
