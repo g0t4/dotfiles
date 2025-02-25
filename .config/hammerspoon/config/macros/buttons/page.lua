@@ -23,7 +23,6 @@ ButtonPage.__index = ButtonPage
 function ButtonPage:new(deck, rows, cols)
     local o = {}
     setmetatable(o, self)
-    self.__index = self
     -- TODO do I need the deck here?
     o.deck = deck
     o.rows = rows

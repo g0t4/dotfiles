@@ -61,11 +61,13 @@ function GetFcpxEditorWindow()
     return fcpx:attributeValue("AXFocusedWindow"), fcpx
 end
 
+---@class FcpxEditorWindow
 FcpxEditorWindow = {}
+FcpxEditorWindow.__index = FcpxEditorWindow
+
 function FcpxEditorWindow:new()
     local o = {}
     setmetatable(o, self)
-    self.__index = self
     o.window, o.fcpx = GetFcpxEditorWindow()
     o.topToolbar = FcpxTopToolbar:new(o.window:childrenWithRole("AXToolbar")[1])
     -- everything below top toolbar
@@ -94,11 +96,12 @@ function FcpxEditorWindow:leftSideEverythingElse()
     return self._mainSplitGroup:group(1)
 end
 
+---@class FcpxTopToolbar
 FcpxTopToolbar = {}
+FcpxTopToolbar.__index = FcpxTopToolbar
 function FcpxTopToolbar:new(topToolbarElement)
     local o = {}
     setmetatable(o, self)
-    self.__index = self
     o.topToolbarElement = topToolbarElement
     -- TODO consider a toggle for troubleshooting... that will check more carefully (i.e. for desc here)... but not when toggle is off, like an assertion (enabled in dev, disabled in prod)
     local checkboxes = o.topToolbarElement:childrenWithRole("AXCheckBox")
@@ -126,11 +129,12 @@ function FcpxTopToolbar:new(topToolbarElement)
     return o
 end
 
+---@class FcpxInspectorPanel
 FcpxInspectorPanel = {}
+FcpxInspectorPanel.__index = FcpxInspectorPanel
 function FcpxInspectorPanel:new(window)
     local o = {}
     setmetatable(o, self)
-    self.__index = self
     -- yeah at this point, probably all I can guarantee is that a window exists...
     --   panels need to be opened before any interactions, so defer all of that!
     --   FYI... I will find the right balance for where logic belongs as I use this (window vs this class, etc)

@@ -1,4 +1,5 @@
 require("config.macros.buttons.textToImage")
+PushButton = require("config.macros.buttons.push")
 
 local function getTimeImage()
     local now = os.date("%H:%M")
@@ -7,28 +8,25 @@ local function getTimeImage()
     return drawTextIcon(now .. "\n" .. date)
 end
 
-
-
----@class ClockButton
----@field buttonNumber number
----@field deck hs.streamdeck
+---@class ClockButton : PushButton
 ---@field lastTime string|nil
 ---@field timer hs.timer
-local ClockButton = {}
+local ClockButton = setmetatable({}, { __index = PushButton })
 ClockButton.__index = ClockButton
 
 ---@param buttonNumber number
 ---@param deck hs.streamdeck
 ---@return ClockButton
 function ClockButton:new(buttonNumber, deck)
-    local o = {}
+    -- w/o specifying child class on new object, lua-ls complains:
+    --   Fields cannot be injected into the reference of `PushButton` for `lastTime`.
+    --   To do so, use `---@class` for `o`. (Lua Diagnostics. inject-field))
+    ---@class ClockButton
+    local o = PushButton.new(self, buttonNumber, deck)
     setmetatable(o, self)
-    self.__index = self
-    -- good case where button needs to know its deck/number to update the image!
-    o.buttonNumber = buttonNumber
-    o.deck = deck
     o.lastTime = nil
     o.timer = hs.timer.doEvery(10, function()
+        -- FYI this is a good case where button needs to know its deck/number to update the image!
         local now = os.date("%H:%M")
         if o.lastTime ~= nil and o.lastTime == now then
             return

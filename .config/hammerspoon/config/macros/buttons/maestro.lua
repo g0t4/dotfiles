@@ -19,7 +19,6 @@ function MaestroButton:new(buttonNumber, deck, image, macro, param)
 
     local o = {}
     setmetatable(o, self)
-    self.__index = self
     o.buttonNumber = buttonNumber
     o.deck = deck
     o.image = image
