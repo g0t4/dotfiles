@@ -292,14 +292,16 @@ function onAppActivated(hsApp, appName)
     observer:start()
 end
 
-onAppActivated(currentApp) -- currentApp:title()?
-
+local function updateAppNameButton(hsApp, appName)
+    if deck1XL then
+        deck1XL:setButtonImage(9, drawTextIcon(appName))
+    end
+    onAppActivated(hsApp, appName)
+end
+-- updateAppNameButton(currentApp, currentApp:title()) -- TODO need to do this once the deck is connected, not here
 hs.application.watcher.new(function(appName, eventType, hsApp)
     if eventType == hs.application.watcher.activated then
-        if deck1XL then
-            deck1XL:setButtonImage(9, drawTextIcon(appName))
-        end
-        onAppActivated(hsApp, appName)
+        updateAppNameButton(hsApp, appName)
     end
 end):start()
 -- FYI at this point, there are no devices available, wait for them to connect (each one)
