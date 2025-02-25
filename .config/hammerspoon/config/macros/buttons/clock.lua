@@ -9,13 +9,17 @@ end
 
 
 
--- @classmod ClockButton
+---@class ClockButton
+---@field buttonNumber number
+---@field deck hs.streamdeck
+---@field lastTime string|nil
+---@field timer hs.timer
 local ClockButton = {}
 ClockButton.__index = ClockButton
 
--- @param buttonNumber number
--- @param deck hs.streamdeck
--- @return ClockButton
+---@param buttonNumber number
+---@param deck hs.streamdeck
+---@return ClockButton
 function ClockButton:new(buttonNumber, deck)
     local o = {}
     setmetatable(o, self)

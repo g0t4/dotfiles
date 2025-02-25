@@ -16,6 +16,11 @@ require("config.macros.buttons.helpers")
 local ButtonPage = {}
 ButtonPage.__index = ButtonPage
 
+
+-- @param deck hs.streamdeck
+-- @param rows number
+-- @param cols number
+-- @return ButtonPage instance
 function ButtonPage:new(deck, rows, cols)
     local o = {}
     setmetatable(o, self)
@@ -28,8 +33,20 @@ function ButtonPage:new(deck, rows, cols)
     return o
 end
 
-function ButtonPage:addButton(buttonNumber, button)
-    self.buttons[buttonNumber] = button
+-- @param deck hs.streamdeck
+-- @return ButtonPage instance
+function ButtonPage:newXL(deck)
+    return ButtonPage:new(deck, 4, 8)
+end
+
+function ButtonPage:newPlus(deck)
+    return ButtonPage:new(deck, 2, 4)
+end
+
+function ButtonPage:addButton(button)
+    -- !!! TODO does the button need to know which number it is?
+    -- !!! TODO likewise why does it know its deck?
+    self.buttons[button.buttonNumber] = button
 end
 
 function ButtonPage:start()
@@ -67,3 +84,18 @@ function ButtonPage:stop()
         button:stop()
     end
 end
+
+function ButtonPage:onButtonPressed(buttonNumber, pressedOrReleased)
+    local button = self.buttons[buttonNumber]
+    if button then
+        if button.pressed == nil then
+            print("button does not have pressed method: " .. buttonNumber)
+            return
+        end
+        button:pressed()
+    else
+        print("button not mapped: " .. buttonNumber)
+    end
+end
+
+return ButtonPage

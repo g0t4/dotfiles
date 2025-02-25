@@ -5,6 +5,7 @@
 local log = require("hs.logger").new("streamdeck", "verbose") -- set to "warning" or "error" when done developing this module
 local ClockButton = require("config.macros.buttons.clock")
 local MaestroButton = require("config.macros.buttons.maestro")
+local ButtonPage = require("config.macros.buttons.page")
 
 function verbose(...)
     log.v(...)
@@ -34,28 +35,18 @@ reloadOnMacrosChanges()
 
 
 local deck1XL = nil
-local deck1Buttons = {}
+-- TODO why is lua-ls not detecting type info (I am using @return on newXL
+--   I can find fields/funcs w/ Shift+K on deck1page, and on :newXL here... but down below I cannot gd on anything to get to the backing fields/funcs
+local deck1page = ButtonPage:newXL(deck1XL)
+-- TODO => cannot gd/gr on this:
+-- deck1page:addButton(ClockButton:new(1, deck1XL)) -- FYI testing only, remove when luals fixed
+--
 local deck2XL = nil
-local deck2Buttons = {}
+local deck2page = ButtonPage:newXL(deck2XL)
 local deck3XL = nil
-local deck3Buttons = {}
+local deck3page = ButtonPage:newXL(deck3XL)
 local deck4Plus = nil
-local deck4Buttons = {}
-
-local function setButton(deck, button)
-    if deck == deck1XL then
-        deck1Buttons[button.buttonNumber] = button
-    elseif deck == deck2XL then
-        deck2Buttons[button.buttonNumber] = button
-    elseif deck == deck3XL then
-        deck3Buttons[button.buttonNumber] = button
-    elseif deck == deck4Plus then
-        deck4Buttons[button.buttonNumber] = button
-    else
-        error("TODO deck not supported: " .. getDeckName(deck))
-    end
-    button:start()
-end
+local deck4page = ButtonPage:newPlus(deck4Plus)
 
 -- TODO test hs.streamdeck:screenCallback(fn)  - touch screen on PLUS
 function dumpButtonInfo(deck, buttonNumber, pressedOrReleased)
@@ -88,26 +79,27 @@ function onButtonPressed(deck, buttonNumber, pressedOrReleased)
     local name = getDeckName(deck)
     dumpButtonInfo(deck, buttonNumber, pressedOrReleased)
 
-    if name == "2XL" then
+    if name == "1XL" then
+        -- TODO why can I see type fileds/funcs if I shift+K on deck1page but I cannot `gd` on onButtonPressed?
+        deck1page:onButtonPressed(buttonNumber, pressedOrReleased)
+    elseif name == "2XL" then
+        deck2page:onButtonPressed(buttonNumber, pressedOrReleased)
     elseif name == "3XL" then
-        local button = deck2Buttons[buttonNumber]
-        if button then
-            if pressedOrReleased then
-                button:pressed()
-            else
-                button:released()
-            end
-            return
-        end
+        deck3page:onButtonPressed(buttonNumber, pressedOrReleased)
         if buttonNumber == 7 then
+            log.e("TODO MOVE TO BUTTON INSTANCES:")
             hs.openConsole()
         elseif buttonNumber == 8 then
+            log.e("TODO MOVE TO BUTTON INSTANCES:")
             hs.console.clearConsole()
         elseif buttonNumber == 16 then
+            log.e("TODO MOVE TO BUTTON INSTANCES:")
             hs.reload()
         end
     elseif name == "4+" then
+        deck4page:onButtonPressed(buttonNumber, pressedOrReleased)
         if buttonNumber == 1 then
+            log.e("TODO MOVE TO BUTTON INSTANCES:")
             deck:setButtonImage(buttonNumber, drawTextIcon("Hello"))
         end
     end
@@ -173,6 +165,10 @@ end
 -- @param deck hs.streamdeck
 local function onDeviceDiscovery(connected, deck)
     local name = getDeckName(deck)
+    if not connected then
+        error("TODO DECK DISCONNECTED, add logic?")
+        return
+    end
     -- verbose("deck metatable:", hs.inspect(getmetatable(deck)))
     -- verbose("deckType:", deck)
     --   FYI deckType is in the swift module, but not exposed directly in lua...
@@ -192,10 +188,6 @@ local function onDeviceDiscovery(connected, deck)
 
     deck:encoderCallback(onEncoderPressed) -- don't need to limit to just PLUS... seems irrelevant on XLs
     deck:buttonCallback(onButtonPressed)
-
-    --- WOW this is super fast too... in a flash they're all loaded (and that's with a reset in between)
-    -- deck:setButtonColor(1, hs.drawing.color.x11.red)
-    -- deck:reset() -- uncomment to reset and then recomment out
 
     if name == "4+" then
         local testSvg2 = "~/repos/github/g0t4/dotfiles/misc/hammerspoon-icons/test-svgs/hanging-96.png"
@@ -233,23 +225,25 @@ local function onDeviceDiscovery(connected, deck)
 
     if name == "1XL" then
         deck1XL = deck
-        setButton(deck, ClockButton:new(1, deck))
+        deck1page:addButton(ClockButton:new(1, deck))
     elseif name == "2XL" then
         deck2XL = deck
     elseif name == "3XL" then
         deck3XL = deck
         local macro = "'Titles - Add wes-arrows-* (Parameterized)'"
         local btn = MaestroButton:new(26, deck, hsIcon("fcpx/titles/down-arrow.png"), macro, "wes-arrows-down")
-        setButton(deck, btn)
+        deck3page:addButton(btn)
         -- todo pass macro name & params here:
         btn = MaestroButton:new(27, deck, hsIcon("fcpx/titles/right-arrow.png"), macro, "wes-arrows-right")
-        setButton(deck, btn)
+        deck3page:addButton(btn)
         btn = MaestroButton:new(25, deck, hsIcon("fcpx/titles/left-arrow.png"), macro, "wes-arrows-left")
-        setButton(deck, btn)
+        deck3page:addButton(btn)
         btn = MaestroButton:new(18, deck, hsIcon("fcpx/titles/up-arrow.png"), macro, "wes-arrows-up")
-        setButton(deck, btn)
+        deck3page:addButton(btn)
     elseif name == "4+" then
         deck4Plus = deck
+    else
+        error("Unknown device: " .. name)
     end
 end
 
