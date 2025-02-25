@@ -139,4 +139,17 @@ function lowercaseFirstLetter(str)
     return str:sub(1, 1):lower() .. str:sub(2)
 end
 
+-- *** type helpers
+function isUserData(value, name)
+    local valueType = type(value)
+    if valueType ~= "userdata" then
+        return false
+    end
+    return value.__name == name
+end
+
+function isStyledText(value)
+    return isUserData(value, "hs.styledtext")
+end
+
 return M

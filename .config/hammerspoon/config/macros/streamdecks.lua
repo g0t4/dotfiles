@@ -58,35 +58,6 @@ function dumpButtonInfo(deck, buttonNumber, pressedOrReleased)
     )
 end
 
-function drawTextIcon(text)
-    local width = 96
-    local height = 96
-    -- todo based on device button size (4+ has 120x120, XL has 96x96)
-    -- use canvas for text on images on icons! COOL
-    --   streamdeck works off of images only for the buttons, makes 100% sense
-    local canvas = hs.canvas.new({ x = 0, y = 0, w = width, h = height })
-    canvas[1] = {
-        type = "rectangle",
-        action = "fill",
-        fillColor = { red = 0, green = 0, blue = 0, alpha = 1 }, -- Background color
-    }
-    -- TODO try hs.styledtext (instead of attrs below)
-    --    hs.styledtext.getStyledTextFromData(data, [type]) w/ type = "html"!
-    --   TODO can it set vertical alignment?
-    canvas[2] = {
-        type = "text",
-        text = text,
-        -- textLineBreak =
-        textSize = 24,
-        textAlignment = "center",
-        -- TODO vertical alignment?
-        textColor = { red = 1, green = 1, blue = 1, alpha = 1 },
-        frame = { x = 0, y = 0, w = width, h = height },
-    }
-    -- FYI https://www.hammerspoon.org/docs/hs.canvas.html#attributes
-    return canvas:imageFromCanvas()
-end
-
 function onButtonPressed(deck, buttonNumber, pressedOrReleased)
     local name = getDeckName(deck)
     dumpButtonInfo(deck, buttonNumber, pressedOrReleased)

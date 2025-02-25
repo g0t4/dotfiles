@@ -1,4 +1,4 @@
---
+require("config.macros.buttons.textToImage")
 
 local function getTimeImage()
     local now = os.date("%H:%M")
