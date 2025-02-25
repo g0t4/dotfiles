@@ -9,6 +9,7 @@ function runCommand(cmd)
     return nil
 end
 
+---TODO @uid instead of title, uuid doesn't change (can copy from KM right click macro copy as UUID)
 ---@param macro string
 ---@param param string|nil
 function runKMMacro(macro, param)
