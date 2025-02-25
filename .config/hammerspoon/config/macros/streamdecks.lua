@@ -307,9 +307,19 @@ hs.application.watcher.new(function(appName, eventType, hsApp)
         updateAppNameButton(hsApp, appName)
     end
 end):start()
--- FYI at this point, there are no devices available, wait for them to connect (each one)
 
--- NOTES:
+
+
+
+
+
+-- * BENEFITS over elgato app:
+--   don't need a black png for text only buttons! SHEESH what a PITA
+--   not limited to only changing when apps change or if I impl a plugin (even then not sure how much things can change)
+--   terrible button designer is BYE BYE!
+--
+-- * NOTES
+-- - only use devices after connect
 -- - hammerspoon crashes if you call discoveryCallback first (w/o init first)
 -- - operations:
 --   - when I restart hammerspoon they appear to be turned off or smth?
