@@ -2,7 +2,7 @@ require("config.macros.buttons.helpers")
 require("config.macros.buttons.commands")
 
 -- @classmod MaestroButton
--- @field number number
+-- @field buttonNumber number
 -- @field deck hs.streamdeck
 -- @field image string
 -- @field macro string
@@ -10,7 +10,7 @@ require("config.macros.buttons.commands")
 local MaestroButton = {}
 MaestroButton.__index = MaestroButton
 
-function MaestroButton:new(number, deck, image, macro, param)
+function MaestroButton:new(buttonNumber, deck, image, macro, param)
     -- FYI... actually most buttons are static, including KM buttons
     --   when I need a dynamic button, I can revist this...
     --   for now keep both concepts together:
@@ -20,7 +20,7 @@ function MaestroButton:new(number, deck, image, macro, param)
     local o = {}
     setmetatable(o, self)
     self.__index = self
-    o.number = number
+    o.buttonNumber = buttonNumber
     o.deck = deck
     o.image = image
     o.macro = macro
@@ -30,11 +30,11 @@ end
 
 function MaestroButton:start()
     -- technically don't need this for static images
-    self.deck:setButtonImage(self.number, self.image)
+    self.deck:setButtonImage(self.buttonNumber, self.image)
 end
 
 function MaestroButton:stop()
-    resetButton(self.number, self.deck)
+    resetButton(self.buttonNumber, self.deck)
 end
 
 function MaestroButton:pressed()

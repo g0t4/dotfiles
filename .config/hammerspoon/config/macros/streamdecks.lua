@@ -45,7 +45,7 @@ local function setButton(deck, button)
     end
 
     -- TODO consider adding a deck class of some sort to package this stuff up
-    deck2Buttons[button.number] = button
+    deck2Buttons[button.buttonNumber] = button
     button:start()
 end
 
