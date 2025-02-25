@@ -310,14 +310,18 @@ end):start()
 
 
 -- *** COMMANDPOST ***
---   https://github.com/CommandPost/CommandPost
 --   OH YEAH BABY... they're right up my alley... or I'm right up theirs
 --      https://github.com/CommandPost/CommandPost/blob/develop/src/extensions/cp/apple/finalcutpro/inspector/Inspector.lua#L127
 --   yup, they memoize... "cache" https://github.com/CommandPost/CommandPost/blob/develop/src/extensions/cp/apple/finalcutpro/inspector/BasePanel.lua#L28
 --   here is how they locate the title I've been working on too:
 --      https://github.com/CommandPost/CommandPost/blob/develop/src/extensions/cp/apple/finalcutpro/inspector/Inspector.lua#L187
 -- FYI! GO FIGURE... commandpost is a FORK of Hammerspoon!!! (I knew it smelled familiar!)
---     https://commandpost.io/developer/introduction/#what-is-hammerspoon
+--   https://commandpost.io/developer/introduction/#what-is-hammerspoon
+--   CommandPost-App => fork of Hammerspoon
+--     https://github.com/CommandPost/CommandPost-App
+--   CommandPost repo => lua scripts
+--     https://github.com/CommandPost/CommandPost
+--      TODO! review their lua models (seems like they build what I am thinking of building, can I reuse or at least be inspired by?)
 --
 -- * BENEFITS over elgato app:
 --   don't need a black png for text only buttons! SHEESH what a PITA
