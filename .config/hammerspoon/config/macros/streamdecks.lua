@@ -131,6 +131,12 @@ local deck4Plus = nil
 -- @param deck hs.streamdeck
 local function onDeviceDiscovery(connected, deck)
     local name = getDeckName(deck)
+    -- verbose("deck metatable:", hs.inspect(getmetatable(deck)))
+    -- verbose("deckType:", deck)
+    --   FYI deckType is in the swift module, but not exposed directly in lua...
+    --     use tostring(deck) and it's used under the hood:
+    --       deckType: hs.streamdeck: Elgato Stream Deck Plus, serial: A5
+    --
     -- PRN deck:setBrightness(80) -- 0 to 100 (FYI persists across restarts of hammerspoon... IIAC only need to set this once when I wanna change it)
 
     -- TODO on hammerspon QUIT, reset the decks... right? sooo... do that on disconnect? or?
@@ -227,6 +233,8 @@ local currentApp = hs.application.frontmostApplication()
 --   yup, they memoize... "cache" https://github.com/CommandPost/CommandPost/blob/develop/src/extensions/cp/apple/finalcutpro/inspector/BasePanel.lua#L28
 --   here is how they locate the title I've been working on too:
 --      https://github.com/CommandPost/CommandPost/blob/develop/src/extensions/cp/apple/finalcutpro/inspector/Inspector.lua#L187
+-- FYI! GO FIGURE... commandpost is a FORK of Hammerspoon!!! (I knew it smelled familiar!)
+--     https://commandpost.io/developer/introduction/#what-is-hammerspoon
 
 function onAppActivated(hsApp, appName)
     if observer then
