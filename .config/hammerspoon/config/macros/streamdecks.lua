@@ -244,9 +244,15 @@ local function onDeviceDiscovery(connected, deck)
         deck1XL = deck
     elseif name == "2XL" then
         deck2XL = deck
-        -- deck:setButtonImage(32, hsIcon("fcpx/todo-CE8C404B/todo-9KIV/3IFQSQ540515H3IVM8I5EP4J38Z.png"))
-        local maestroButton = MaestroButton:new(32, deck, hsIcon("fcpx/todo-CE8C404B/todo-9KIV/3IFQSQ540515H3IVM8I5EP4J38Z.png"))
-        setButton(deck, maestroButton)
+        local btn = MaestroButton:new(26, deck, hsIcon("fcpx/titles/down-arrow.png"))
+        setButton(deck, btn)
+        -- todo pass macro name & params here:
+        btn = MaestroButton:new(27, deck, hsIcon("fcpx/titles/right-arrow.png"))
+        setButton(deck, btn)
+        btn = MaestroButton:new(25, deck, hsIcon("fcpx/titles/left-arrow.png"))
+        setButton(deck, btn)
+        btn = MaestroButton:new(18, deck, hsIcon("fcpx/titles/up-arrow.png"))
+        setButton(deck, btn)
     elseif name == "3XL" then
         deck3XL = deck
     elseif name == "4+" then
