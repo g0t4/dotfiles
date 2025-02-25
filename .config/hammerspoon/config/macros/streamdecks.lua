@@ -34,18 +34,26 @@ reloadOnMacrosChanges()
 
 
 local deck1XL = nil
+local deck1Buttons = {}
 local deck2XL = nil
 local deck2Buttons = {}
 local deck3XL = nil
+local deck3Buttons = {}
 local deck4Plus = nil
+local deck4Buttons = {}
 
 local function setButton(deck, button)
-    if deck ~= deck2XL then
-        error("TODO impl other decks")
+    if deck == deck1XL then
+        deck1Buttons[button.buttonNumber] = button
+    elseif deck == deck2XL then
+        deck2Buttons[button.buttonNumber] = button
+    elseif deck == deck3XL then
+        deck3Buttons[button.buttonNumber] = button
+    elseif deck == deck4Plus then
+        deck4Buttons[button.buttonNumber] = button
+    else
+        error("TODO deck not supported: " .. getDeckName(deck))
     end
-
-    -- TODO consider adding a deck class of some sort to package this stuff up
-    deck2Buttons[button.buttonNumber] = button
     button:start()
 end
 
@@ -81,6 +89,7 @@ function onButtonPressed(deck, buttonNumber, pressedOrReleased)
     dumpButtonInfo(deck, buttonNumber, pressedOrReleased)
 
     if name == "2XL" then
+    elseif name == "3XL" then
         local button = deck2Buttons[buttonNumber]
         if button then
             if pressedOrReleased then
@@ -88,8 +97,8 @@ function onButtonPressed(deck, buttonNumber, pressedOrReleased)
             else
                 button:released()
             end
+            return
         end
-    elseif name == "3XL" then
         if buttonNumber == 7 then
             hs.openConsole()
         elseif buttonNumber == 8 then
@@ -178,7 +187,9 @@ local function onDeviceDiscovery(connected, deck)
     --    FOR NOW see if it works w/o reset
     --    OR, see if I can repor the issue w/o reset and button presses (which I just tested and are fine)
     --        could it be that I hadn't set any buttons yet and now that I have button clicks work w/o reset?
-    -- deck:reset() -- TODO when do I need to call this? w/o this the buttonCallback doesn't reliably fire on config reload
+
+    deck:reset() -- TODO add a mechanism to effectively reset keys that I remove from a layout... for now just reset all on every restart is fine
+
     deck:encoderCallback(onEncoderPressed) -- don't need to limit to just PLUS... seems irrelevant on XLs
     deck:buttonCallback(onButtonPressed)
 
@@ -207,9 +218,6 @@ local function onDeviceDiscovery(connected, deck)
     -- local testSvg = "https://img.icons8.com/?size=256w&id=jrkQk3VIHBgH&format=png"
     -- local image   = hs.image.imageFromURL(testSvg)
 
-    local clockButton = ClockButton:new(1, deck)
-    clockButton:start()
-
     deck:setButtonImage(4, hsIcon("test-svgs/machine-64.png"))
 
     local pngFileType = hs.image.iconForFileType("png")
@@ -227,8 +235,11 @@ local function onDeviceDiscovery(connected, deck)
 
     if name == "1XL" then
         deck1XL = deck
+        setButton(deck, ClockButton:new(1, deck))
     elseif name == "2XL" then
         deck2XL = deck
+    elseif name == "3XL" then
+        deck3XL = deck
         local macro = "'Titles - Add wes-arrows-* (Parameterized)'"
         local btn = MaestroButton:new(26, deck, hsIcon("fcpx/titles/down-arrow.png"), macro, "wes-arrows-down")
         setButton(deck, btn)
@@ -239,8 +250,6 @@ local function onDeviceDiscovery(connected, deck)
         setButton(deck, btn)
         btn = MaestroButton:new(18, deck, hsIcon("fcpx/titles/up-arrow.png"), macro, "wes-arrows-up")
         setButton(deck, btn)
-    elseif name == "3XL" then
-        deck3XL = deck
     elseif name == "4+" then
         deck4Plus = deck
     end
