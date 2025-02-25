@@ -172,7 +172,7 @@ local function onDeviceDiscovery(connected, deck)
     deck:buttonCallback(onButtonPressed)
 
     --- WOW this is super fast too... in a flash they're all loaded (and that's with a reset in between)
-    deck:setButtonColor(1, hs.drawing.color.x11.red)
+    -- deck:setButtonColor(1, hs.drawing.color.x11.red)
     deck:setButtonColor(2, hs.drawing.color.x11.blue)
     deck:setButtonColor(3, hs.drawing.color.x11.yellow)
     deck:setButtonColor(9, hs.drawing.color.x11.red)
@@ -211,6 +211,17 @@ local function onDeviceDiscovery(connected, deck)
     -- keep local copies of images!
     -- local testSvg = "https://img.icons8.com/?size=256w&id=jrkQk3VIHBgH&format=png"
     -- local image   = hs.image.imageFromURL(testSvg)
+    local lastTime = nil
+    local timer = hs.timer.doEvery(10, function()
+        local now = os.date("%H:%M")
+        if lastTime ~= nil and lastTime == now then
+            return
+        end
+        deck:setButtonImage(1, getTimeImage())
+    end)
+    timer:start()
+    -- todo mechanism to stop/cleanup timer if button removed
+    timer:fire()
 
     local testSvg = "~/repos/github/g0t4/dotfiles/misc/hammerspoon-icons/test-svgs/machine-64.png"
     local image   = hs.image.imageFromPath(resolveHomePath(testSvg))
@@ -333,3 +344,10 @@ end):start()
 -- - hammerspoon crashes if you call discoveryCallback first (w/o init first)
 -- - operations:
 --   - when I restart hammerspoon they appear to be turned off or smth?
+
+function getTimeImage()
+    local now = os.date("%H:%M")
+    local date = os.date("%a %b %d")
+    -- https://www.lua.org/pil/22.1.html
+    return drawTextIcon(now .. " " .. date)
+end
