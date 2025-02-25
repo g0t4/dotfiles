@@ -4,6 +4,7 @@
 --  I can do this with an accessibility observer
 local log = require("hs.logger").new("streamdeck", "verbose") -- set to "warning" or "error" when done developing this module
 local ClockButton = require("config.macros.buttons.clock")
+local MaestroButton = require("config.macros.buttons.maestro")
 
 function verbose(...)
     log.v(...)
@@ -222,7 +223,10 @@ local function onDeviceDiscovery(connected, deck)
         deck1XL = deck
     elseif name == "2XL" then
         deck2XL = deck
-        deck:setButtonImage(32, hsIcon("fcpx/todo-CE8C404B/todo-9KIV/3IFQSQ540515H3IVM8I5EP4J38Z.png"))
+        -- deck:setButtonImage(32, hsIcon("fcpx/todo-CE8C404B/todo-9KIV/3IFQSQ540515H3IVM8I5EP4J38Z.png"))
+        local maestroButton = MaestroButton:new(32, deck, hsIcon("fcpx/todo-CE8C404B/todo-9KIV/3IFQSQ540515H3IVM8I5EP4J38Z.png"))
+        maestroButton:start()
+        maestroButton:stop()
     elseif name == "3XL" then
         deck3XL = deck
     elseif name == "4+" then
