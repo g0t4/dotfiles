@@ -78,7 +78,7 @@ function CachedElement.forApp(appName)
     return CachedElement.new(appElement)
 end
 
---- @return string
+---@return string
 function CachedElement:__tostring()
     return "CachedElementz: " .. self.element:attributeValue("AXRole")
 end
