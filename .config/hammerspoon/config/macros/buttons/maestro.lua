@@ -1,39 +1,18 @@
 require("config.macros.buttons.helpers")
 require("config.macros.buttons.commands")
+local PushButton = require("config.macros.buttons.push")
 
----@class MaestroButton
----@field buttonNumber number
----@field deck hs.streamdeck
----@field image hs.image
+---@class MaestroButton : PushButton
 ---@field macro string
 ---@field param string|nil
-local MaestroButton = {}
-MaestroButton.__index = MaestroButton
+local MaestroButton = setmetatable({}, { __index = PushButton })
 
 function MaestroButton:new(buttonNumber, deck, image, macro, param)
-    -- FYI... actually most buttons are static, including KM buttons
-    --   when I need a dynamic button, I can revist this...
-    --   for now keep both concepts together:
-    --   1. behavior (keyboard maestro part) maestroButtonAction
-    --   2. button image/color display
-
-    local o = {}
-    setmetatable(o, self)
-    o.buttonNumber = buttonNumber
-    o.deck = deck
-    o.image = image
+    ---@class MaestroButton
+    local o = PushButton.new(MaestroButton, buttonNumber, deck, image)
     o.macro = macro
     o.param = param
     return o
-end
-
-function MaestroButton:start()
-    -- technically don't need this for static images
-    self.deck:setButtonImage(self.buttonNumber, self.image)
-end
-
-function MaestroButton:stop()
-    resetButton(self.buttonNumber, self.deck)
 end
 
 function MaestroButton:pressed()
@@ -42,7 +21,10 @@ function MaestroButton:pressed()
     runKMMacro(self.macro, self.param)
 end
 
-function MaestroButton:released()
+function MaestroButton:__tostring()
+    return "MaestroButton: " .. (self.buttonNumber or "nil")
+        .. " " .. self.macro
+        .. " " .. self.param
 end
 
 return MaestroButton
