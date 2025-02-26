@@ -6,13 +6,12 @@ local log = require("hs.logger").new("streamdeck", "verbose") -- set to "warning
 local ClockButton = require("config.macros.streamdeck.clockButton")
 local MaestroButton = require("config.macros.streamdeck.maestroButton")
 local LuaButton = require("config.macros.streamdeck.luaButton")
-local KeyStrokeButton = require("config.macros.streamdeck.keystrokeButton")
 local Encoder = require("config.macros.streamdeck.encoder")
 local DecksController = require("config.macros.streamdeck.decksController")
 -- FYI buttons and encoders controllers comprise a DeckController (singular)
 local EncodersController = require("config.macros.streamdeck.encodersController")
 local ButtonsController = require("config.macros.streamdeck.buttonsController")
---
+local AppsObserver = require("config.macros.streamdeck.appsObserver")
 require("config.macros.streamdeck.helpers")
 
 function verbose(...)
@@ -43,6 +42,9 @@ reloadOnMacrosChanges()
 
 local decksController = DecksController:new()
 decksController:init()
+
+local apps = AppsObserver:new()
+apps:start()
 
 ---@param connected boolean
 ---@param deck hs.streamdeck
