@@ -1,12 +1,18 @@
 ---@class Profile
+---@field name string
+---@field appBundleId string
+---@field deckIdentifier string
 local Profile = {}
 Profile.__index = Profile
 
+---@param name string @friendly name
+---@param appBundleId string @com.apple.FinalCut, com.apple.iMovie, com.apple.Terminal
+---@param deckIdentifier string @1XL, 2XL, 3XL, 4+
 function Profile:new(name, appBundleId, deckIdentifier)
-    local o = setmetatable({}, self)
-    self.name = name
-    self.appBundleId = appBundleId
-    self.deckIdentifier = deckIdentifier
+    local o = setmetatable({}, Profile)
+    o.name = name
+    o.appBundleId = appBundleId
+    o.deckIdentifier = deckIdentifier
     return o
 end
 
