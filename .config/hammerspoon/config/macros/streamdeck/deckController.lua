@@ -7,7 +7,7 @@ local Profiles = require("config.macros.streamdeck.profiles.profiles")
 ---@field deck hs.streamdeck
 ---@field name string
 ---@field buttons ButtonsController
----@field encoders EncodersController
+---@field encoders EncodersController|nil
 local DeckController = {}
 DeckController.__index = DeckController
 

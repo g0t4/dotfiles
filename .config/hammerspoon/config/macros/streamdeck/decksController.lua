@@ -4,12 +4,12 @@ require("config.macros.streamdeck.helpers")
 ---@class DecksController
 ---@field private _deckControllers table<string, DeckController>
 local DecksController = {}
+DecksController.__index = DecksController
 
 ---@return DecksController
 function DecksController:new()
-    local o = setmetatable({}, self) -- metatable, for __tostring only (so far)
-    self.__index = self
-    self._deckControllers = {}
+    local o = setmetatable({}, self)
+    o._deckControllers = {}
     return o
 end
 
