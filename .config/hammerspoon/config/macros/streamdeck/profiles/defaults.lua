@@ -14,7 +14,11 @@ FallbackProfiles:addProfile("1XL", function(_, deck)
     }
 end)
 
-FallbackProfiles:addProfile("4+", function(_, deck)
+FallbackProfiles:addProfile("4+",
+    function(_, deck)
+        -- PRN => static app switcher buttons
+        --     => good news is can be computed once during app activation (if a neww app)
+        -- FUTURE => dynamic app switcher buttons in default profile here...
         return {
             LuaButton:new(3, deck, appIconHammerspoon(), hs.openConsole),
             LuaButton:new(4, deck, drawTextIcon("Clear Console"), hs.console.clearConsole),
@@ -28,6 +32,7 @@ FallbackProfiles:addProfile("4+", function(_, deck)
             Encoder:new(3, deck, hsIcon("test-svgs/stick.svg")),
             Encoder:new(4, deck, hsIcon("test-svgs/purple-pink-128.png"))
         }
-    end)
+    end
+)
 
 return FallbackProfiles
