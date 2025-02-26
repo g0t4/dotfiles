@@ -5,12 +5,14 @@
 local log = require("hs.logger").new("streamdeck", "verbose") -- set to "warning" or "error" when done developing this module
 local ClockButton = require("config.macros.streamdeck.clockButton")
 local MaestroButton = require("config.macros.streamdeck.maestroButton")
-local ButtonsController = require("config.macros.streamdeck.buttonsController")
 local LuaButton = require("config.macros.streamdeck.luaButton")
 local KeyStrokeButton = require("config.macros.streamdeck.keystrokeButton")
 local Encoder = require("config.macros.streamdeck.encoder")
-local EncodersController = require("config.macros.streamdeck.encodersController")
 local DecksController = require("config.macros.streamdeck.decksController")
+-- FYI buttons and encoders controllers comprise a DeckController (singular)
+local EncodersController = require("config.macros.streamdeck.encodersController")
+local ButtonsController = require("config.macros.streamdeck.buttonsController")
+--
 require("config.macros.streamdeck.helpers")
 
 function verbose(...)
@@ -40,62 +42,6 @@ end
 reloadOnMacrosChanges()
 
 local decksController = DecksController:new()
----@type hs.streamdeck
-local deck1XL = nil
----@type ButtonsController
-local deck1page = nil
----@type hs.streamdeck
-local deck2XL = nil
----@type ButtonsController
-local deck2page = nil
----@type hs.streamdeck
-local deck3XL = nil
----@type ButtonsController
-local deck3page = nil
----@type hs.streamdeck
-local deck4Plus = nil
----@type ButtonsController
-local deck4page = nil
----@type EncodersController
-local deck4encodersController = nil
-
----@param deck hs.streamdeck
----@param interaction string
----@param xFirst number
----@param yFirst number
----@param xLast number
----@param yLast number
-function onScreenTouched(deck, interaction, xFirst, yFirst, xLast, yLast)
-    local name = getDeckName(deck)
-    if name == "4+" then
-        deck4encodersController:onScreenTouched(interaction, xFirst, yFirst, xLast, yLast)
-    else
-        error("onScreenPressed: unknown device: " .. name)
-    end
-end
-
-function onEncoderPressed(deck, encoderNumber, pressedOrReleased, turnedLeft, turnedRight)
-    local name = getDeckName(deck)
-    if name == "4+" then
-        deck4encodersController:onEncoderPressed(encoderNumber, pressedOrReleased, turnedLeft, turnedRight)
-    else
-        error("onEncoderPressed: unknown device: " .. name)
-    end
-end
-
-function onButtonPressed(deck, buttonNumber, pressedOrReleased)
-    local name = getDeckName(deck)
-
-    if name == "1XL" then
-        deck1page:onButtonPressed(buttonNumber, pressedOrReleased)
-    elseif name == "2XL" then
-        deck2page:onButtonPressed(buttonNumber, pressedOrReleased)
-    elseif name == "3XL" then
-        deck3page:onButtonPressed(buttonNumber, pressedOrReleased)
-    elseif name == "4+" then
-        deck4page:onButtonPressed(buttonNumber, pressedOrReleased)
-    end
-end
 
 ---@param connected boolean
 ---@param deck hs.streamdeck
@@ -106,17 +52,12 @@ local function onDeviceDiscovery(connected, deck)
         decksController:deckDisconnected(deck)
     end
 
-
+    -- deck:reset() -- FYI if smth goes wrong use reset one off when testing new configs... otherwise my resetButton that sets black background is AWESOME (no flashing logos)
     do return end
     local name = "foo"
 
     -- PRN deck:setBrightness(80) -- 0 to 100 (FYI persists across restarts of hammerspoon... IIAC only need to set this once when I wanna change it)
     -- TODO on hammerspon QUIT, reset the decks... right? sooo... do that on disconnect? or?
-    -- deck:reset() -- FYI if smth goes wrong use reset one off when testing new configs... otherwise my resetButton that sets black background is AWESOME (no flashing logos)
-
-    deck:screenCallback(onScreenTouched)
-    deck:encoderCallback(onEncoderPressed) -- don't need to limit to just PLUS... seems irrelevant on XLs
-    deck:buttonCallback(onButtonPressed)
 
     if name == "1XL" then
         deck1XL = deck
