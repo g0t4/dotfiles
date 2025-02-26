@@ -1,4 +1,4 @@
-PushButton = require("config.macros.buttons.pushButton")
+PushButton = require("config.macros.streamdeck.pushButton")
 
 -- button press emulates a hot key:
 --   hs.eventtap.keyStroke({"cmd", "alt"}, "T")

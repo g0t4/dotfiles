@@ -1,6 +1,6 @@
-require("config.macros.buttons.textToImage")
-require("config.macros.buttons.helpers")
-PushButton = require("config.macros.buttons.pushButton")
+require("config.macros.streamdeck.textToImage")
+require("config.macros.streamdeck.helpers")
+PushButton = require("config.macros.streamdeck.pushButton")
 
 local function getTimeImage()
     local now = os.date("%H:%M")

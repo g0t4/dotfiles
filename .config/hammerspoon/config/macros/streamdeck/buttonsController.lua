@@ -1,4 +1,4 @@
-require("config.macros.buttons.helpers")
+require("config.macros.streamdeck.helpers")
 
 ---@class ButtonsController
 ---@field deck hs.streamdeck

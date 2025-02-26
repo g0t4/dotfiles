@@ -3,15 +3,15 @@
 --    light up the dials for adjusting its specific properties...
 --  I can do this with an accessibility observer
 local log = require("hs.logger").new("streamdeck", "verbose") -- set to "warning" or "error" when done developing this module
-local ClockButton = require("config.macros.buttons.clockButton")
-local MaestroButton = require("config.macros.buttons.maestroButton")
-local ButtonsController = require("config.macros.buttons.buttonsController")
-local LuaButton = require("config.macros.buttons.luaButton")
-local KeyStrokeButton = require("config.macros.buttons.keystrokeButton")
-local Encoder = require("config.macros.buttons.encoders")
-local EncodersController = require("config.macros.buttons.encodersController")
-local DecksController = require("config.macros.buttons.decksController")
-require("config.macros.buttons.helpers")
+local ClockButton = require("config.macros.streamdeck.clockButton")
+local MaestroButton = require("config.macros.streamdeck.maestroButton")
+local ButtonsController = require("config.macros.streamdeck.buttonsController")
+local LuaButton = require("config.macros.streamdeck.luaButton")
+local KeyStrokeButton = require("config.macros.streamdeck.keystrokeButton")
+local Encoder = require("config.macros.streamdeck.encoders")
+local EncodersController = require("config.macros.streamdeck.encodersController")
+local DecksController = require("config.macros.streamdeck.decksController")
+require("config.macros.streamdeck.helpers")
 
 function verbose(...)
     log.v(...)
