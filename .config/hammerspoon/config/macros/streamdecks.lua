@@ -146,7 +146,7 @@ local function onDeviceDiscovery(connected, deck)
     --    OR, see if I can repor the issue w/o reset and button presses (which I just tested and are fine)
     --        could it be that I hadn't set any buttons yet and now that I have button clicks work w/o reset?
 
-    deck:reset() -- TODO add a mechanism to effectively reset keys that I remove from a layout... for now just reset all on every restart is fine
+    -- deck:reset() -- FYI if smth goes wrong use reset one off when testing new configs... otherwise my resetButton that sets black background is AWESOME (no flashing logos)
 
     deck:encoderCallback(onEncoderPressed) -- don't need to limit to just PLUS... seems irrelevant on XLs
     deck:buttonCallback(onButtonPressed)
@@ -185,7 +185,10 @@ local function onDeviceDiscovery(connected, deck)
         deck2XL = deck
         deck2page = ButtonPage:newXL(deck2XL)
         deck2page:addButtons(
-            MaestroButton:new(1, deck, hsIcon("fcpx/commands/customize-command-sets.png"), "E5D823AF-6720-4228-940B-C7FC472CBBE5")
+            MaestroButton:new(1, deck, hsIcon("fcpx/commands/customize-command-sets.png"), "E5D823AF-6720-4228-940B-C7FC472CBBE5"),
+            MaestroButton:new(6, deck, hsIcon("fcpx/viewer/disable-captions.png"), "CE9D34A3-348C-457D-BFB9-65908EF3A25B"),
+            MaestroButton:new(7, deck, hsIcon("fcpx/viewer/dual-screen.png"), "7967644C-59AE-4AB5-A65F-6EE7D29B9E4C"),
+            MaestroButton:new(8, deck, hsIcon("fcpx/viewer/single-screen.png"), "2D134D9A-EABB-4658-A745-27228C12FF94")
         )
         deck2page:start()
     elseif name == "3XL" then
