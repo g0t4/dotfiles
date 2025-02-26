@@ -26,7 +26,7 @@ end
 function AppsObserver:onAppActivated(appName, hsApp)
     -- verbose("app activated", appName)
 
-    -- TODO can I do decks in parallel?
+    -- TODO can I do decks in parallel? ...  YES.. takes 70-100ms per deck, would ROCK to do in parallel
     --  I imagine w/ File I/O it might make a difference to load in parallel instead of series
     --  TODO measure timings
     for deckName, deckController in pairs(self.decks.deckControllers) do
@@ -38,6 +38,7 @@ end
 ---@param deckController DeckController
 ---@param appName string
 function AppsObserver:tryLoadProfileForDeck(deckName, deckController, appName)
+    local startTime = GetTime()
     ---@type Profile
     local selected = nil
     if (appName == "Final Cut Pro") then
@@ -56,11 +57,13 @@ function AppsObserver:tryLoadProfileForDeck(deckName, deckController, appName)
     if selected ~= nil then
         -- verbose("applying", selected, "to", deckName)
         selected:applyTo(deckController)
+        print("took", GetElapsedTimeInMilliseconds(startTime), "ms to apply", selected, "to", deckName)
         return
     end
 
     -- PRN revisit clear/reset... test any perf impact (if any)
     deckController.buttons:clearButtons()
+    print("took", GetElapsedTimeInMilliseconds(startTime), "ms to clear", deckName)
 end
 
 function AppsObserver:onAppDeactivated(appName, hsApp)
