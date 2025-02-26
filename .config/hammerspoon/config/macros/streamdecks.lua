@@ -226,6 +226,12 @@ local function onDeviceDiscovery(connected, deck)
         deck3page:addButton(btn)
         btn = MaestroButton:new(18, deck, hsIcon("fcpx/titles/up-arrow.png"), macro, "wes-arrows-up")
         deck3page:addButton(btn)
+        btn = KeyStrokeButton:new(14, deck, hsIcon("fcpx/timeline/edges/select-right-60x60.png"), {}, "]")
+        deck3page:addButton(btn)
+        btn = KeyStrokeButton:new(15, deck, hsIcon("fcpx/timeline/edges/select-both-edges-60x60.png"), {}, "\\") -- single \
+        deck3page:addButton(btn)
+        btn = KeyStrokeButton:new(16, deck, hsIcon("fcpx/timeline/edges/select-left-60x60.png"), {}, "[")
+        deck3page:addButton(btn)
         deck3page:start()
     elseif name == "4+" then
         deck4Plus = deck

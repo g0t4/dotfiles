@@ -32,4 +32,8 @@ function KeyStrokeButton:pressed()
     hs.eventtap.keyStroke(self.modifiers, self.character)
 end
 
+function KeyStrokeButton:__tostring()
+    return "KeyStrokeButton " .. (self.buttonNumber or "nil") .. " modifiers: " .. hs.inspect(self.modifiers) .. " character: " .. self.character
+end
+
 return KeyStrokeButton
