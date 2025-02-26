@@ -3,7 +3,7 @@ require("config.macros.buttons.commands")
 local PushButton = require("config.macros.buttons.push")
 
 ---@class MaestroButton : PushButton
----@field macro string
+---@field macro string @Name or UUID
 ---@field param string|nil
 local MaestroButton = setmetatable({}, { __index = PushButton })
 
