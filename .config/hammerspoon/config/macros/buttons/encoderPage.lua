@@ -96,12 +96,6 @@ function EncoderPage:onScreenTouched(interaction, xStart, yStart, xStop, yStop)
     message = message .. "above encoder " .. startEncoderNumber ..
         " (" .. xStart .. ", " .. yStart .. ")"
     print(message)
-
-    -- FYI encoder # is not tied to screen touches
-    --   PRN decouple screen image from encoder button? if that makes sense go for it..
-    --   I only mention this b/c the screen interactions are all treated as one type of event (not per encoder area)
-    --   that is for swipes most likely but also can press on screen and so yeah... figure out how to use that!
-    --   can probably tap on screen to change the functionality of an encoder!
 end
 
 function EncoderPage:onEncoderPressed(encoderNumber, pressedOrReleased, turnedLeft, turnedRight)
