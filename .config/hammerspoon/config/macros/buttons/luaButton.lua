@@ -1,4 +1,4 @@
-PushButton = require("config.macros.buttons.push")
+PushButton = require("config.macros.buttons.pushButton")
 
 
 -- a button that executes a lua script

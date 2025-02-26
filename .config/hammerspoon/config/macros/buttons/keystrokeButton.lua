@@ -1,4 +1,4 @@
-PushButton = require("config.macros.buttons.push")
+PushButton = require("config.macros.buttons.pushButton")
 
 -- button press emulates a hot key:
 --   hs.eventtap.keyStroke({"cmd", "alt"}, "T")

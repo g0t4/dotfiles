@@ -1,6 +1,6 @@
 require("config.macros.buttons.textToImage")
 require("config.macros.buttons.helpers")
-PushButton = require("config.macros.buttons.push")
+PushButton = require("config.macros.buttons.pushButton")
 
 local function getTimeImage()
     local now = os.date("%H:%M")

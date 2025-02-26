@@ -1,6 +1,6 @@
 require("config.macros.buttons.helpers")
 require("config.macros.buttons.commands")
-local PushButton = require("config.macros.buttons.push")
+local PushButton = require("config.macros.buttons.pushButton")
 
 ---@class MaestroButton : PushButton
 ---@field macro string @Name or UUID
