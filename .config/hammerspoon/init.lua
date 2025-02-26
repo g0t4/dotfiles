@@ -90,3 +90,6 @@ hs.loadSpoon("EmmyLua") -- <2ms to check is fine... NBD to run all the time
 
 -- now that we're done with init, put back regular print?
 loggers.unmuteCoreMessages()
+
+
+require("config.learn.metatables")

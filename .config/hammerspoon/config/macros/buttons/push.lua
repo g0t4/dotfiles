@@ -10,7 +10,6 @@
 ---@field buttonNumber number
 ---@field deck hs.streamdeck
 local PushButton = {}
-PushButton.__index = PushButton -- Ensure PushButton can be used as a metatable directly
 
 ---@param buttonNumber number
 ---@param deck hs.streamdeck
@@ -25,7 +24,7 @@ function PushButton:new(buttonNumber, deck)
     local o = {} -- new object (no "type" yet)
     -- FYI new tables don't have a metatable
     -- FYI self here points to the implicit self param (that becomes the metatable)
-    setmetatable(o, self)
+    setmetatable(o, { __index = self })
     o.buttonNumber = buttonNumber
     o.deck = deck
     return o
