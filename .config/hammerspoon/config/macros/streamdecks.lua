@@ -2,14 +2,10 @@
 --    i.e. FCPX when I select a shape (title)
 --    light up the dials for adjusting its specific properties...
 --  I can do this with an accessibility observer
-local log = require("hs.logger").new("streamdeck", "verbose") -- set to "warning" or "error" when done developing this module
 local DecksController = require("config.macros.streamdeck.decksController")
 local AppsObserver = require("config.macros.streamdeck.appsObserver")
 require("config.macros.streamdeck.helpers")
 
-function verbose(...)
-    log.v(...)
-end
 
 function reloadOnMacrosChanges(path)
     local scriptPath = path or "/Users/wesdemos/.hammerspoon/config/macros"

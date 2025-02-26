@@ -1,3 +1,10 @@
+local log = require("hs.logger").new("streamdeck", "verbose") -- set to "warning" or "error" when done developing this module
+
+function verbose(...)
+    log.v(...)
+end
+
+
 function resetButton(buttonNumber, deck)
     -- wipes color/image
     -- seems like a reset :)

@@ -1,6 +1,7 @@
 local AppObserver = require("config.macros.streamdeck.profiles.appObserver")
 local MaestroButton = require("config.macros.streamdeck.maestroButton")
 local KeyStrokeButton = require("config.macros.streamdeck.keystrokeButton")
+require("config.macros.streamdeck.helpers")
 
 
 
@@ -55,9 +56,9 @@ function onAppActivated(hsApp, appName)
     assert(headerGroup ~= nil, "headerGroup is nil")
 
     local staticTextElement = headerGroup:staticText(1)
-    log.v("staticTextElement:", hs.inspect(staticTextElement))
-    log.v("  value:", staticTextElement:attributeValue("AXValue"))
-    log.v(" identifier:", staticTextElement:attributeValue("AXIdentifier"))
+    verbose("staticTextElement:", hs.inspect(staticTextElement))
+    verbose("  value:", staticTextElement:attributeValue("AXValue"))
+    verbose(" identifier:", staticTextElement:attributeValue("AXIdentifier"))
     -- FYI does have AXIdentifier _NS:84  -  AXRoleDescription: text    -    AXDescription: text
     --    TODO have a strategy set for finding any given element, go through it in order and then cache the strategy until (if) it fails, and/or cache the object
     --       two ways I've seen to find the Title Inspector checkbox so I could code up both into a class and defer to it
@@ -101,7 +102,5 @@ function onAppActivated(hsApp, appName)
     observer:addWatcher(watchElement, "AXValueChanged")
     observer:start()
 end
-
-
 
 return FcpxObserver
