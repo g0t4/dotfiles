@@ -10,7 +10,7 @@
 ---@field buttonNumber number
 ---@field deck hs.streamdeck
 local PushButton = {}
-PushButton.__index = PushButton
+PushButton.__index = PushButton -- Ensure PushButton can be used as a metatable directly
 
 ---@param buttonNumber number
 ---@param deck hs.streamdeck
@@ -18,9 +18,14 @@ PushButton.__index = PushButton
 function PushButton:new(buttonNumber, deck)
     -- remember, :new( == .new(self ... and whatever is left of :new is passed as self...
     --   so   PushButton:new(1, deck) is the same as PushButton.new(PushButton, 1, deck)
-    -- therefore, we need to create a new table (object) and have it "inherit" from PushButton's metatable
-    --   think JS likly prototypical inheritance
-    local o = setmetatable({}, self)
+
+    -- Two needs from this ctor:
+    -- 1. "inherit" metatable of PushButton (for its functions)
+    -- 2. set base fields (buttonNumber, deck)
+    local o = {} -- new object (no "type" yet)
+    -- FYI new tables don't have a metatable
+    -- FYI self here points to the implicit self param (that becomes the metatable)
+    setmetatable(o, self)
     o.buttonNumber = buttonNumber
     o.deck = deck
     return o
