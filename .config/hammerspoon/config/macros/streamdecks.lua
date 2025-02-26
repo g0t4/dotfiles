@@ -3,14 +3,7 @@
 --    light up the dials for adjusting its specific properties...
 --  I can do this with an accessibility observer
 local log = require("hs.logger").new("streamdeck", "verbose") -- set to "warning" or "error" when done developing this module
-local ClockButton = require("config.macros.streamdeck.clockButton")
-local MaestroButton = require("config.macros.streamdeck.maestroButton")
-local LuaButton = require("config.macros.streamdeck.luaButton")
-local Encoder = require("config.macros.streamdeck.encoder")
 local DecksController = require("config.macros.streamdeck.decksController")
--- FYI buttons and encoders controllers comprise a DeckController (singular)
-local EncodersController = require("config.macros.streamdeck.encodersController")
-local ButtonsController = require("config.macros.streamdeck.buttonsController")
 local AppsObserver = require("config.macros.streamdeck.appsObserver")
 require("config.macros.streamdeck.helpers")
 
@@ -30,14 +23,12 @@ function reloadOnMacrosChanges(path)
     local watcher = hs.pathwatcher.new(scriptPath, function(files, flagTables)
         -- for _, file in ipairs(files) do ... hot reload each? (FYI symlinks might not match if checking based on file name
         hs.reload() -- crude, reload config as a pseudo restart
-        -- PRN setup hot reload type functionality? or at least module reload
     end)
 
     watcher:start()
     verbose("Auto-reload enabled for: " .. scriptPath)
 end
 
--- TODO turn this into hot reload for just streamdeck lua scripts?
 reloadOnMacrosChanges()
 
 local decks = DecksController:new()
@@ -48,7 +39,6 @@ apps:start()
 -- deck:reset() -- FYI if smth goes wrong use reset one off when testing new configs... otherwise my resetButton that sets black background is AWESOME (no flashing logos)
 -- PRN deck:setBrightness(80) -- 0 to 100 (FYI persists across restarts of hammerspoon... IIAC only need to set this once when I wanna change it)
 -- TODO on hammerspon QUIT, reset the decks... right? sooo... do that on disconnect? or?
-
 
 local observer = nil
 local currentApp = hs.application.frontmostApplication()
@@ -116,26 +106,6 @@ function onAppActivated(hsApp, appName)
     observer:addWatcher(watchElement, "AXValueChanged")
     observer:start()
 end
-
-onAppActivated(currentApp, currentApp:title())
-
--- FYI could have a set of buttons that are dynamic that show open apps (app switcher)
--- TODO move to an AppNameButton class (if I want to keep it)
-local function updateAppNameButton(hsApp, appName)
-    if deck1XL then
-        deck1XL:setButtonImage(9, drawTextIcon(appName))
-    end
-    onAppActivated(hsApp, appName)
-end
-
--- updateAppNameButton(currentApp, currentApp:title()) -- TODO need to do this once the deck is connected, not here
-hs.application.watcher.new(function(appName, eventType, hsApp)
-    if eventType == hs.application.watcher.activated then
-        updateAppNameButton(hsApp, appName)
-    end
-end):start()
-
-
 
 -- * REMINDERS
 -- local imageSize = deck:imageSize()
