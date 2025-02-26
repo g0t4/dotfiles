@@ -10,6 +10,7 @@ local LuaButton = require("config.macros.buttons.lua")
 local KeyStrokeButton = require("config.macros.buttons.keystroke")
 local Encoder = require("config.macros.buttons.encoders")
 local EncoderPage = require("config.macros.buttons.encoderPage")
+local ButtonController = require("config.macros.buttons.controller")
 require("config.macros.buttons.helpers")
 
 function verbose(...)
@@ -38,7 +39,7 @@ end
 -- TODO turn this into hot reload for just streamdeck lua scripts?
 reloadOnMacrosChanges()
 
-
+local controller = ButtonController:new()
 ---@type hs.streamdeck
 local deck1XL = nil
 ---@type ButtonPage
@@ -99,11 +100,14 @@ end
 ---@param connected boolean
 ---@param deck hs.streamdeck
 local function onDeviceDiscovery(connected, deck)
-    local name = getDeckName(deck)
-    if not connected then
-        error("TODO DECK DISCONNECTED, add logic?")
-        return
+    if connected then
+        controller:deviceConnected(deck)
+    else
+        controller:deviceDisconnected(deck)
     end
+
+    do return end
+
     -- PRN deck:setBrightness(80) -- 0 to 100 (FYI persists across restarts of hammerspoon... IIAC only need to set this once when I wanna change it)
     -- TODO on hammerspon QUIT, reset the decks... right? sooo... do that on disconnect? or?
     -- deck:reset() -- FYI if smth goes wrong use reset one off when testing new configs... otherwise my resetButton that sets black background is AWESOME (no flashing logos)
@@ -241,6 +245,7 @@ end
 
 onAppActivated(currentApp, currentApp:title())
 
+-- FYI could have a set of buttons that are dynamic that show open apps (app switcher)
 -- TODO move to an AppNameButton class (if I want to keep it)
 local function updateAppNameButton(hsApp, appName)
     if deck1XL then
@@ -248,6 +253,7 @@ local function updateAppNameButton(hsApp, appName)
     end
     onAppActivated(hsApp, appName)
 end
+
 -- updateAppNameButton(currentApp, currentApp:title()) -- TODO need to do this once the deck is connected, not here
 hs.application.watcher.new(function(appName, eventType, hsApp)
     if eventType == hs.application.watcher.activated then
