@@ -122,16 +122,6 @@ function onEncoderPressed(deck, buttonNumber, pressedOrReleased, turnedLeft, tur
     log.v(message)
 end
 
-local hsIcons = resolveHomePath("~/repos/github/g0t4/dotfiles/misc/hammerspoon-icons/")
-local function hsIcon(relativePath)
-    local path = hsIcons .. relativePath
-    local image = hs.image.imageFromPath(path)
-    if image ~= nil then
-        return image
-    end
-    log.e("hsIcons: could not load image from path:", path)
-end
-
 --
 ---@param connected boolean
 ---@param deck hs.streamdeck
@@ -185,9 +175,6 @@ local function onDeviceDiscovery(connected, deck)
     -- local htmlFileType = hs.image.iconForFileType("html")
     -- deck:setButtonImage(6, htmlFileType)
 
-    -- /Applications/Hammerspoon.app/Contents/Resources/AppIcon.icns
-    local hammerspoonAppIcon = hs.image.imageFromPath("/Applications/Hammerspoon.app/Contents/Resources/AppIcon.icns")
-    deck:setButtonImage(7, hammerspoonAppIcon)
 
     if name == "1XL" then
         deck1XL = deck
@@ -222,7 +209,7 @@ local function onDeviceDiscovery(connected, deck)
         deck4Plus = deck
         deck4page = ButtonPage:newPlus(deck4Plus)
         deck4page:addButton(LuaButton:new(4, deck, drawTextIcon("Clear Console"), hs.console.clearConsole))
-        deck4page:addButton(LuaButton:new(3, deck, drawTextIcon("Open Console"), hs.openConsole))
+        deck4page:addButton(LuaButton:new(3, deck, appIconHammerspoon(), hs.openConsole))
         deck4page:addButton(LuaButton:new(8, deck, drawTextIcon("Reload Config"), hs.reload))
         deck4page:start()
     else

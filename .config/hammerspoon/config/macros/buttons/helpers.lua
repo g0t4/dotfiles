@@ -24,3 +24,29 @@ function getDeckName(deck)
     end
     return "unknown"
 end
+
+local hsIcons = resolveHomePath("~/repos/github/g0t4/dotfiles/misc/hammerspoon-icons/")
+function hsIcon(relativePath)
+    local path = hsIcons .. relativePath
+    local image = hs.image.imageFromPath(path)
+    if image ~= nil then
+        return image
+    end
+    error("hsIcons: could not load image from path:", path)
+end
+
+function appIcon(appName)
+    local icon = hs.image.imageFromAppBundle("org.hammerspoon.Hammerspoon")
+    if icon ~= nil then
+        return icon
+    end
+    error("appIcon: could not load image from app:", appName)
+
+    -- alternatively, use hs.application.find(appName):icon()?
+    -- or:
+    -- /Applications/Hammerspoon.app/Contents/Resources/AppIcon.icns
+end
+
+function appIconHammerspoon()
+    return appIcon("org.hammerspoon.Hammerspoon")
+end
