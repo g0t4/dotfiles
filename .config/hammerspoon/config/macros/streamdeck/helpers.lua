@@ -1,4 +1,6 @@
-local log = require("hs.logger").new("streamdeck", "verbose") -- set to "warning" or "error" when done developing this module
+-- global toggle to enable/disable verbose logging w.r.t. streamdeck "subsystem"
+local verboseStreamDeckLogsOn = false -- make it easy to toggle (maybe even more this into hammerspoon init.lua?.. if I add more like it)
+local log = require("hs.logger").new("streamdeck", verboseStreamDeckLogsOn and "verbose" or "warning")
 
 -- do not need to put everythin on the module...
 --   verbose could easily overlap with the same name in other "subsystems" of my hammerspoon config
