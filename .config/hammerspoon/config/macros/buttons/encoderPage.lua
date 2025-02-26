@@ -39,7 +39,7 @@ function EncoderPage:start()
             encoder:start()
         else
             -- TODO how do I reset the screen image w/o full reset?
-            local image = hsIcon("blank/black.png")
+            local image = hsIcon("blank/transparent.svg")
             self.deck:setScreenImage(encoderNumber, image)
             -- ("'/Users/wesdemos/repos/github/g0t4/dotfiles/misc/hammerspoon-icons/blank/black.png'
             -- self.deck:setScreenImage(encoderNumber, nil) -- FAILS
