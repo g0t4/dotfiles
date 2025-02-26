@@ -212,7 +212,7 @@ local function onDeviceDiscovery(connected, deck)
     elseif name == "2XL" then
         deck2XL = deck
         deck2page = ButtonPage:newXL(deck2XL)
-        -- deck2page:start()
+        deck2page:start()
     elseif name == "3XL" then
         deck3XL = deck
         deck3page = ButtonPage:newXL(deck3XL)
@@ -226,7 +226,7 @@ local function onDeviceDiscovery(connected, deck)
         deck3page:addButton(btn)
         btn = MaestroButton:new(18, deck, hsIcon("fcpx/titles/up-arrow.png"), macro, "wes-arrows-up")
         deck3page:addButton(btn)
-        -- deck3page:start()
+        deck3page:start()
     elseif name == "4+" then
         deck4Plus = deck
         deck4page = ButtonPage:newPlus(deck4Plus)
