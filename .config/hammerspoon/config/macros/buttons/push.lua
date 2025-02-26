@@ -26,7 +26,10 @@ function PushButton:new(buttonNumber, deck, image)
     local o = {} -- new object (no "type" yet)
     -- FYI new tables don't have a metatable
     -- FYI self here points to the implicit self param (that becomes the metatable)
-    setmetatable(o, { __index = self })
+    setmetatable(o, {
+        __index = self,
+        __tostring = self.__tostring
+    })
     o.buttonNumber = buttonNumber
     o.deck = deck
     o.image = image
@@ -49,5 +52,13 @@ end
 
 function PushButton:released()
 end
+
+function PushButton:__tostring()
+    return "PushButton: " .. (self.buttonNumber or "nil")
+end
+
+-- TODO add test case of __tostring since it can be frustrating to say the least
+-- local test = PushButton:new(1, {}, nil)
+-- print(test)
 
 return PushButton
