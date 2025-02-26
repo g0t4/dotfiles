@@ -17,7 +17,7 @@ end
 
 function MaestroButton:pressed()
     -- FYI could use osascript too (pass applescript to hammerspoon?)
-    verbose("exec KM: " .. self.macro .. "(" .. self.param .. ")")
+    verbose("exec KM: " .. self.macro .. " (" .. self.param .. ")")
     runKMMacro(self.macro, self.param)
 end
 
