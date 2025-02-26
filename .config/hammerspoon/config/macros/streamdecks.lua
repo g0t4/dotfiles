@@ -197,26 +197,25 @@ local function onDeviceDiscovery(connected, deck)
     -- local testSvg = "https://img.icons8.com/?size=256w&id=jrkQk3VIHBgH&format=png"
     -- local image   = hs.image.imageFromURL(testSvg)
 
-    local pngFileType = hs.image.iconForFileType("png")
-    deck:setButtonImage(5, pngFileType)
-
-    local htmlFileType = hs.image.iconForFileType("html")
-    deck:setButtonImage(6, htmlFileType)
+    -- local htmlFileType = hs.image.iconForFileType("html")
+    -- deck:setButtonImage(6, htmlFileType)
 
     -- /Applications/Hammerspoon.app/Contents/Resources/AppIcon.icns
     local hammerspoonAppIcon = hs.image.imageFromPath("/Applications/Hammerspoon.app/Contents/Resources/AppIcon.icns")
     deck:setButtonImage(7, hammerspoonAppIcon)
 
-    deck:setButtonImage(8, drawTextIcon("Clear Console"))
-    deck:setButtonImage(16, drawTextIcon("Reload Config"))
-
     if name == "1XL" then
         deck1XL = deck
+        deck1page = ButtonPage:newXL(deck1XL)
         deck1page:addButton(ClockButton:new(1, deck))
+        -- deck1page:start()
     elseif name == "2XL" then
         deck2XL = deck
+        deck2page = ButtonPage:newXL(deck2XL)
+        -- deck2page:start()
     elseif name == "3XL" then
         deck3XL = deck
+        deck3page = ButtonPage:newXL(deck3XL)
         local macro = "'Titles - Add wes-arrows-* (Parameterized)'"
         local btn = MaestroButton:new(26, deck, hsIcon("fcpx/titles/down-arrow.png"), macro, "wes-arrows-down")
         deck3page:addButton(btn)
@@ -227,8 +226,13 @@ local function onDeviceDiscovery(connected, deck)
         deck3page:addButton(btn)
         btn = MaestroButton:new(18, deck, hsIcon("fcpx/titles/up-arrow.png"), macro, "wes-arrows-up")
         deck3page:addButton(btn)
+        -- deck3page:start()
     elseif name == "4+" then
         deck4Plus = deck
+        deck4page = ButtonPage:newPlus(deck4Plus)
+        deck4page:addButton(LuaButton:new(4, deck, drawTextIcon("Clear Console"), hs.console.clearConsole))
+        deck4page:addButton(LuaButton:new(8, deck, drawTextIcon("Reload Config"), hs.reload))
+        deck4page:start()
     else
         error("Unknown device: " .. name)
     end
