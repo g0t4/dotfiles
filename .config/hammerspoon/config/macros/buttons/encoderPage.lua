@@ -1,6 +1,7 @@
 ---@class EncoderPage
 ---@field encoders table<number, Encoder>
----@field numberOfEncoders number
+---@field private _numberOfEncoders number
+---@field private _screen table<string, number>
 ---@field deck hs.streamdeck
 local EncoderPage = {}
 EncoderPage.__index = EncoderPage
@@ -11,7 +12,12 @@ EncoderPage.__index = EncoderPage
 function EncoderPage:newPlus(deck)
     local o = setmetatable({}, self)
     o.deck = deck
-    o.numberOfEncoders = 4
+    o._numberOfEncoders = 4
+    -- TODO confirm height/width
+    o._screen = {
+        width = 800,
+        height = 600,
+    }
     o.encoders = {}
     return o
 end
@@ -27,7 +33,7 @@ function EncoderPage:addEncoders(...)
 end
 
 function EncoderPage:start()
-    for encoderNumber = 1, self.numberOfEncoders do
+    for encoderNumber = 1, self._numberOfEncoders do
         local encoder = self.encoders[encoderNumber]
         if encoder then
             encoder:start()
@@ -49,8 +55,32 @@ function EncoderPage:stop()
     end
 end
 
-function EncoderPage:onScreenPressed(pressedOrReleased)
-    -- TODO
+---@param interaction string
+---@param xFirst number
+---@param yFirst number
+---@param xLast number
+---@param yLast number
+function EncoderPage:onScreenTouched(interaction, xFirst, yFirst, xLast, yLast)
+    --  "shortPress", "longPress" or "swipe"
+    -- for "shortPress" and "longPress" only use xFirst/yFirst, b/c xLast/yLast are 0
+    local message = interaction .. " screen "
+    if interaction == "swipe" then
+        message = message .. "from (" .. xFirst .. ", " .. yFirst .. ") to (" .. xLast .. ", " .. yLast .. ")"
+        print(message)
+        return
+    end
+
+    -- short/longPress:
+    assert(xLast == 0, "xLast must be 0 for interactions other than swipe")
+    assert(yLast == 0, "yLast must be 0 for interactions other than swipe")
+    message = message .. "at (" .. xFirst .. ", " .. yFirst .. ")"
+    print(message)
+
+    -- FYI encoder # is not tied to screen touches
+    --   PRN decouple screen image from encoder button? if that makes sense go for it..
+    --   I only mention this b/c the screen interactions are all treated as one type of event (not per encoder area)
+    --   that is for swipes most likely but also can press on screen and so yeah... figure out how to use that!
+    --   can probably tap on screen to change the functionality of an encoder!
 end
 
 function EncoderPage:onEncoderPressed(encoderNumber, pressedOrReleased, turnedLeft, turnedRight)

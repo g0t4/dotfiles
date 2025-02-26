@@ -58,7 +58,20 @@ local deck4page = nil
 ---@type EncoderPage
 local deck4encoderPage = nil
 
--- TODO test hs.streamdeck:screenCallback(fn)  - touch screen on PLUS
+---@param deck hs.streamdeck
+---@param interaction string
+---@param xFirst number
+---@param yFirst number
+---@param xLast number
+---@param yLast number
+function onScreenTouched(deck, interaction, xFirst, yFirst, xLast, yLast)
+    local name = getDeckName(deck)
+    if name == "4+" then
+        deck4encoderPage:onScreenTouched(interaction, xFirst, yFirst, xLast, yLast)
+    else
+        error("onScreenPressed: unknown device: " .. name)
+    end
+end
 
 function onEncoderPressed(deck, encoderNumber, pressedOrReleased, turnedLeft, turnedRight)
     local name = getDeckName(deck)
@@ -83,7 +96,6 @@ function onButtonPressed(deck, buttonNumber, pressedOrReleased)
     end
 end
 
---
 ---@param connected boolean
 ---@param deck hs.streamdeck
 local function onDeviceDiscovery(connected, deck)
@@ -92,34 +104,13 @@ local function onDeviceDiscovery(connected, deck)
         error("TODO DECK DISCONNECTED, add logic?")
         return
     end
-    -- verbose("deck metatable:", hs.inspect(getmetatable(deck)))
-    -- verbose("deckType:", deck)
-    --   FYI deckType is in the swift module, but not exposed directly in lua...
-    --     use tostring(deck) and it's used under the hood:
-    --       deckType: hs.streamdeck: Elgato Stream Deck Plus, serial: A5
-    --
     -- PRN deck:setBrightness(80) -- 0 to 100 (FYI persists across restarts of hammerspoon... IIAC only need to set this once when I wanna change it)
-
     -- TODO on hammerspon QUIT, reset the decks... right? sooo... do that on disconnect? or?
-
     -- deck:reset() -- FYI if smth goes wrong use reset one off when testing new configs... otherwise my resetButton that sets black background is AWESOME (no flashing logos)
 
+    deck:screenCallback(onScreenTouched)
     deck:encoderCallback(onEncoderPressed) -- don't need to limit to just PLUS... seems irrelevant on XLs
     deck:buttonCallback(onButtonPressed)
-
-    -- local imageSize = deck:imageSize()
-    -- XL => { h = 96.0, w = 96.0 }
-    -- +  => { h = 120.0, w = 120.0 }
-
-    -- TODO try hs.image.imageFromAppBundle  -- get app icons!
-
-    -- keep local copies of images!
-    -- local testSvg = "https://img.icons8.com/?size=256w&id=jrkQk3VIHBgH&format=png"
-    -- local image   = hs.image.imageFromURL(testSvg)
-
-    -- local htmlFileType = hs.image.iconForFileType("html")
-    -- deck:setButtonImage(6, htmlFileType)
-
 
     if name == "1XL" then
         deck1XL = deck
@@ -266,6 +257,12 @@ end):start()
 
 
 
+-- * REMINDERS
+-- local imageSize = deck:imageSize()
+-- XL => { h = 96.0, w = 96.0 }
+-- +  => { h = 120.0, w = 120.0 }
+--
+-- local htmlFileType = hs.image.iconForFileType("html")
 
 -- *** COMMANDPOST ***
 --   OH YEAH BABY... they're right up my alley... or I'm right up theirs
