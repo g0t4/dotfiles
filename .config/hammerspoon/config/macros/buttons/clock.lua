@@ -1,4 +1,5 @@
 require("config.macros.buttons.textToImage")
+require("config.macros.buttons.helpers")
 PushButton = require("config.macros.buttons.push")
 
 local function getTimeImage()
@@ -43,18 +44,18 @@ function ClockButton:new(buttonNumber, deck)
     -- TODO move this testing to unit tests... that way I don't have to leave it here
     o.testMyOwnField = "foo" -- when testing field inheritance, uncomment this
     o.lastTime = nil
-    o.timer = hs.timer.doEvery(10, function()
-        -- FYI this is a good case where button needs to know its deck/number to update the image!
-        local now = os.date("%H:%M")
-        if o.lastTime ~= nil and o.lastTime == now then
-            return
-        end
-        deck:setButtonImage(buttonNumber, getTimeImage())
-    end)
     return o
 end
 
 function ClockButton:start()
+    self.timer = hs.timer.doEvery(10, function()
+        -- FYI this is a good case where button needs to know its deck/number to update the image!
+        local now = os.date("%H:%M")
+        if self.lastTime ~= nil and self.lastTime == now then
+            return
+        end
+        self.deck:setButtonImage(self.buttonNumber, getTimeImage())
+    end)
     self.timer:start()
     self.timer:fire()
 end
