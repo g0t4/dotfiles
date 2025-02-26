@@ -101,9 +101,9 @@ end
 ---@param deck hs.streamdeck
 local function onDeviceDiscovery(connected, deck)
     if connected then
-        controller:deviceConnected(deck)
+        decksController:deckConnected(deck)
     else
-        controller:deviceDisconnected(deck)
+        decksController:deckDisconnected(deck)
     end
 
 
