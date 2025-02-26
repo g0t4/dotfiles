@@ -89,6 +89,12 @@ return {
         config = function()
             require("nvim-tree").setup({
                 -- seems to work OOB?
+                notify = {
+                    -- stop the INFO notices espeically (when create/delete a file and it works... it blocked my screen! yuck)
+                    threshold = vim.log.levels.WARN,
+                    -- :help nvim-tree-opts-notify
+                    -- ALSO, :help nvim-notify.txt " shows levels
+                },
                 update_focused_file = {
                     enable = true, -- update the focused file on `BufEnter`, so when I switch files (i.e. w/ telescope) it shows the latest in the tree view to avoid confusing me (like vscode)
                     -- THAT SAID, maybe I really shouldn't rely on tree view to show file name, gotta habituate using statusline for that?
