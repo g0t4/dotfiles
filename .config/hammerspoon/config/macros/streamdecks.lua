@@ -5,12 +5,11 @@
 local log = require("hs.logger").new("streamdeck", "verbose") -- set to "warning" or "error" when done developing this module
 local ClockButton = require("config.macros.buttons.clock")
 local MaestroButton = require("config.macros.buttons.maestro")
-local ButtonPage = require("config.macros.buttons.page")
+local ButtonsController = require("config.macros.buttons.page")
 local LuaButton = require("config.macros.buttons.lua")
 local KeyStrokeButton = require("config.macros.buttons.keystroke")
 local Encoder = require("config.macros.buttons.encoders")
 local EncoderPage = require("config.macros.buttons.encoderPage")
-local ButtonController = require("config.macros.buttons.controller")
 require("config.macros.buttons.helpers")
 
 function verbose(...)
@@ -39,22 +38,21 @@ end
 -- TODO turn this into hot reload for just streamdeck lua scripts?
 reloadOnMacrosChanges()
 
-local controller = ButtonController:new()
 ---@type hs.streamdeck
 local deck1XL = nil
----@type ButtonPage
+---@type ButtonsController
 local deck1page = nil
 ---@type hs.streamdeck
 local deck2XL = nil
----@type ButtonPage
+---@type ButtonsController
 local deck2page = nil
 ---@type hs.streamdeck
 local deck3XL = nil
----@type ButtonPage
+---@type ButtonsController
 local deck3page = nil
 ---@type hs.streamdeck
 local deck4Plus = nil
----@type ButtonPage
+---@type ButtonsController
 local deck4page = nil
 ---@type EncoderPage
 local deck4encoderPage = nil
@@ -118,12 +116,12 @@ local function onDeviceDiscovery(connected, deck)
 
     if name == "1XL" then
         deck1XL = deck
-        deck1page = ButtonPage:newXL(deck1XL)
+        deck1page = ButtonsController:newXL(deck1XL)
         deck1page:addButton(ClockButton:new(1, deck))
         deck1page:start()
     elseif name == "2XL" then
         deck2XL = deck
-        deck2page = ButtonPage:newXL(deck2XL)
+        deck2page = ButtonsController:newXL(deck2XL)
         deck2page:addButtons(
             MaestroButton:new(1, deck, hsIcon("fcpx/commands/customize-command-sets.png"), "E5D823AF-6720-4228-940B-C7FC472CBBE5"),
             MaestroButton:new(6, deck, hsIcon("fcpx/viewer/disable-captions.png"), "CE9D34A3-348C-457D-BFB9-65908EF3A25B"),
@@ -137,7 +135,7 @@ local function onDeviceDiscovery(connected, deck)
         deck2page:start()
     elseif name == "3XL" then
         deck3XL = deck
-        deck3page = ButtonPage:newXL(deck3XL)
+        deck3page = ButtonsController:newXL(deck3XL)
         -- local macro = "'Titles - Add wes-arrows-* (Parameterized)'"
         local macro = "BEE464BB-0C6F-4B8A-9AAF-81603BBA8351"
         deck3page:addButtons(
@@ -152,7 +150,7 @@ local function onDeviceDiscovery(connected, deck)
         deck3page:start()
     elseif name == "4+" then
         deck4Plus = deck
-        deck4page = ButtonPage:newPlus(deck4Plus)
+        deck4page = ButtonsController:newPlus(deck4Plus)
         deck4page:addButtons(
             LuaButton:new(4, deck, drawTextIcon("Clear Console"), hs.console.clearConsole),
             LuaButton:new(3, deck, appIconHammerspoon(), hs.openConsole),

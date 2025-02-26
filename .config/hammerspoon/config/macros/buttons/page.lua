@@ -1,19 +1,19 @@
 require("config.macros.buttons.helpers")
 
----@class ButtonPage
+---@class ButtonsController
 ---@field deck hs.streamdeck
 ---@field rows number
 ---@field cols number
 ---@field buttons table<number, PushButton>
-local ButtonPage = {}
-ButtonPage.__index = ButtonPage
+local ButtonsController = {}
+ButtonsController.__index = ButtonsController
 
 
 ---@param deck hs.streamdeck
 ---@param rows number
 ---@param cols number
----@return ButtonPage
-function ButtonPage:new(deck, rows, cols)
+---@return ButtonsController
+function ButtonsController:new(deck, rows, cols)
     local o = {}
     setmetatable(o, self)
     -- TODO do I need the deck here?
@@ -25,30 +25,30 @@ function ButtonPage:new(deck, rows, cols)
 end
 
 ---@param deck hs.streamdeck
----@return ButtonPage
-function ButtonPage:newXL(deck)
-    return ButtonPage:new(deck, 4, 8)
+---@return ButtonsController
+function ButtonsController:newXL(deck)
+    return ButtonsController:new(deck, 4, 8)
 end
 
 ---@param deck hs.streamdeck
----@return ButtonPage
-function ButtonPage:newPlus(deck)
-    return ButtonPage:new(deck, 2, 4)
+---@return ButtonsController
+function ButtonsController:newPlus(deck)
+    return ButtonsController:new(deck, 2, 4)
 end
 
 ---@param button PushButton
-function ButtonPage:addButton(button)
+function ButtonsController:addButton(button)
     self.buttons[button.buttonNumber] = button
 end
 
 ---@param ... PushButton
-function ButtonPage:addButtons(...)
+function ButtonsController:addButtons(...)
     for _, button in ipairs({ ... }) do
         self:addButton(button)
     end
 end
 
-function ButtonPage:start()
+function ButtonsController:start()
     for buttonNumber = 1, self.rows * self.cols do
         local button = self.buttons[buttonNumber]
         if button then
@@ -72,7 +72,7 @@ function ButtonPage:start()
     end
 end
 
-function ButtonPage:stop()
+function ButtonsController:stop()
     -- for now just call stop on all buttons... to stop dynamic updates
     -- PRN and mark smth to stop reacting to keypresses
     for _, button in pairs(self.buttons) do
@@ -83,7 +83,7 @@ end
 --- called when a button is pressed
 ---@param buttonNumber number
 ---@param pressedOrReleased boolean
-function ButtonPage:onButtonPressed(buttonNumber, pressedOrReleased)
+function ButtonsController:onButtonPressed(buttonNumber, pressedOrReleased)
     local button = self.buttons[buttonNumber]
     if not button then
         print("button not mapped: " .. buttonNumber)
@@ -101,4 +101,4 @@ function ButtonPage:onButtonPressed(buttonNumber, pressedOrReleased)
     -- PRN else case... for triggering on release... use button.released in that case
 end
 
-return ButtonPage
+return ButtonsController
