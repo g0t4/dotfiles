@@ -6,6 +6,9 @@ local log = require("hs.logger").new("streamdeck", "verbose") -- set to "warning
 local ClockButton = require("config.macros.buttons.clock")
 local MaestroButton = require("config.macros.buttons.maestro")
 local ButtonPage = require("config.macros.buttons.page")
+local LuaButton = require("config.macros.buttons.lua")
+local KeyStrokeButton = require("config.macros.buttons.keystroke")
+require("config.macros.buttons.helpers")
 
 function verbose(...)
     log.v(...)
@@ -34,21 +37,25 @@ end
 reloadOnMacrosChanges()
 
 
+---@type hs.streamdeck
 local deck1XL = nil
--- TODO why is lua-ls not detecting type info (I am using @return on newXL
---   I can find fields/funcs w/ Shift+K on deck1page, and on :newXL here... but down below I cannot gd on anything to get to the backing fields/funcs
-local deck1page = ButtonPage:newXL(deck1XL)
--- TODO => cannot gd/gr on this:
--- deck1page:addButton(ClockButton:new(1, deck1XL)) -- FYI testing only, remove when luals fixed
---
+---@type ButtonPage
+local deck1page = nil
+---@type hs.streamdeck
 local deck2XL = nil
-local deck2page = ButtonPage:newXL(deck2XL)
+---@type ButtonPage
+local deck2page = nil
+---@type hs.streamdeck
 local deck3XL = nil
-local deck3page = ButtonPage:newXL(deck3XL)
+---@type ButtonPage
+local deck3page = nil
+---@type hs.streamdeck
 local deck4Plus = nil
-local deck4page = ButtonPage:newPlus(deck4Plus)
+---@type ButtonPage
+local deck4page = nil
 
 -- TODO test hs.streamdeck:screenCallback(fn)  - touch screen on PLUS
+
 function dumpButtonInfo(deck, buttonNumber, pressedOrReleased)
     -- buttons on all decks (including XL and PLUS)
     --   NOT dials on PLUS
@@ -130,26 +137,6 @@ function onEncoderPressed(deck, buttonNumber, pressedOrReleased, turnedLeft, tur
     log.v(message)
 end
 
-function getDeckName(deck)
-    -- CL start
-    --  + 9 end => deck 1XL
-    --  + 1 end => deck 2XL
-    --  + 8 end => deck 3XL
-    -- A start (also ends with 4) => deck 4+
-
-    local serial = deck:serialNumber()
-    if serial:find("9$") then
-        return "1XL"
-    elseif serial:find("1$") then
-        return "2XL"
-    elseif serial:find("8$") then
-        return "3XL"
-    elseif serial:find("^A") then
-        return "4+"
-    end
-    return "unknown"
-end
-
 local hsIcons = resolveHomePath("~/repos/github/g0t4/dotfiles/misc/hammerspoon-icons/")
 local function hsIcon(relativePath)
     local path = hsIcons .. relativePath
@@ -184,7 +171,7 @@ local function onDeviceDiscovery(connected, deck)
     --    OR, see if I can repor the issue w/o reset and button presses (which I just tested and are fine)
     --        could it be that I hadn't set any buttons yet and now that I have button clicks work w/o reset?
 
-    -- deck:reset() -- TODO add a mechanism to effectively reset keys that I remove from a layout... for now just reset all on every restart is fine
+    deck:reset() -- TODO add a mechanism to effectively reset keys that I remove from a layout... for now just reset all on every restart is fine
 
     deck:encoderCallback(onEncoderPressed) -- don't need to limit to just PLUS... seems irrelevant on XLs
     deck:buttonCallback(onButtonPressed)
