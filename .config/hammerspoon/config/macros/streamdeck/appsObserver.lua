@@ -19,6 +19,7 @@ function AppsObserver:onAppEvent(appName, eventType, hsApp)
         print("app activated", appName)
     elseif eventType == hs.application.watcher.deactivated then
         print("app deactivated", appName)
+        -- TODO cleanup (FYI happens after other app activates)
     end
 end
 
