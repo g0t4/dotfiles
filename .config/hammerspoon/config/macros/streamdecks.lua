@@ -5,28 +5,10 @@
 local DecksController = require("config.macros.streamdeck.decksController")
 local AppsObserver = require("config.macros.streamdeck.appsObserver")
 require("config.macros.streamdeck.helpers")
+require("config.macros.streamdeck.reloader") -- side effect, comment out to disable reloader
 
-
-function reloadOnMacrosChanges(path)
-    local scriptPath = path or "/Users/wesdemos/.hammerspoon/config/macros"
-
-    -- local function hotReloadModule()
-    --     package.loaded[scriptPath] = nil -- Unload from cache
-    --     dofile(scriptPath) -- Reload the script
-    --     hs.alert.show("Reloaded: " .. scriptPath)
-    -- end
-
-    local watcher = hs.pathwatcher.new(scriptPath, function(files, flagTables)
-        -- for _, file in ipairs(files) do ... hot reload each? (FYI symlinks might not match if checking based on file name
-        hs.reload() -- crude, reload config as a pseudo restart
-    end)
-
-    watcher:start()
-    verbose("Auto-reload enabled for: " .. scriptPath)
-end
-
-reloadOnMacrosChanges()
-
+-- todo add error handling that wires up only hammerspoon control buttons?
+--    puts them on all decks!
 local decks = DecksController:new()
 decks:init()
 local apps = AppsObserver:new(decks)
