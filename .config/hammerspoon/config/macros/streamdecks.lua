@@ -5,7 +5,7 @@
 local log = require("hs.logger").new("streamdeck", "verbose") -- set to "warning" or "error" when done developing this module
 local ClockButton = require("config.macros.buttons.clock")
 local MaestroButton = require("config.macros.buttons.maestro")
-local ButtonsController = require("config.macros.buttons.page")
+local ButtonsController = require("config.macros.buttons.buttonsController")
 local LuaButton = require("config.macros.buttons.lua")
 local KeyStrokeButton = require("config.macros.buttons.keystroke")
 local Encoder = require("config.macros.buttons.encoders")
