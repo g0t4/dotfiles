@@ -45,34 +45,20 @@ decks:init()
 local apps = AppsObserver:new(decks)
 apps:start()
 
----@param connected boolean
----@param deck hs.streamdeck
-local function onDeviceDiscovery(connected, deck)
-    -- deck:reset() -- FYI if smth goes wrong use reset one off when testing new configs... otherwise my resetButton that sets black background is AWESOME (no flashing logos)
-    do return end
-    local name = "foo"
+-- deck:reset() -- FYI if smth goes wrong use reset one off when testing new configs... otherwise my resetButton that sets black background is AWESOME (no flashing logos)
+-- PRN deck:setBrightness(80) -- 0 to 100 (FYI persists across restarts of hammerspoon... IIAC only need to set this once when I wanna change it)
+-- TODO on hammerspon QUIT, reset the decks... right? sooo... do that on disconnect? or?
 
-    -- PRN deck:setBrightness(80) -- 0 to 100 (FYI persists across restarts of hammerspoon... IIAC only need to set this once when I wanna change it)
-    -- TODO on hammerspon QUIT, reset the decks... right? sooo... do that on disconnect? or?
-
-    if name == "1XL" then
-        deck1XL = deck
-        deck1page = ButtonsController:newXL(deck1XL)
-        deck1page:addButton(ClockButton:new(1, deck))
-        deck1page:start()
-    elseif name == "4+" then
-        deck4encodersController = EncodersController:newPlus(deck4Plus)
-        deck4encodersController:addEncoders(
-            Encoder:new(1, deck, hsIcon("test-svgs/hanging-96.png")),
-            Encoder:new(2, deck, hsIcon("test-svgs/saggy-64.png")),
-            Encoder:new(3, deck, hsIcon("test-svgs/stick.svg")),
-            Encoder:new(4, deck, hsIcon("test-svgs/purple-pink-128.png"))
-        )
-        deck4encodersController:start()
-    else
-        error("Unknown device: " .. name)
-    end
-end
+-- TOOD => encoder pages w/ new profiles scheme
+-- if name == "4+" then
+--     deck4encodersController = EncodersController:newPlus(deck4Plus)
+--     deck4encodersController:addEncoders(
+--         Encoder:new(1, deck, hsIcon("test-svgs/hanging-96.png")),
+--         Encoder:new(2, deck, hsIcon("test-svgs/saggy-64.png")),
+--         Encoder:new(3, deck, hsIcon("test-svgs/stick.svg")),
+--         Encoder:new(4, deck, hsIcon("test-svgs/purple-pink-128.png"))
+--     )
+--     deck4encodersController:start()
 
 local observer = nil
 local currentApp = hs.application.frontmostApplication()
