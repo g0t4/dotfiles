@@ -92,4 +92,4 @@ hs.loadSpoon("EmmyLua") -- <2ms to check is fine... NBD to run all the time
 loggers.unmuteCoreMessages()
 
 
-require("config.learn.metatables")
+-- require("config.learn.metatables")
