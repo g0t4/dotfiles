@@ -60,7 +60,7 @@ end
 -- keep these assertions for now b/c metatables + __index still throws me off and I need this to fallback on
 --   especially as I flesh out my button hierarchy
 --
-function ClockButton:specialForTesting()
+function ClockButton:_specialForTesting()
 end
 --
 local clockTest = ClockButton:new(1, {})
@@ -73,8 +73,8 @@ local clockTest = ClockButton:new(1, {})
 assert(type(clockTest.pressed) == "function", "clockTest.pressed is a function")
 assert(clockTest.pressed == PushButton.pressed, "clockTest.pressed is inherited")
 -- keeps its own functions:
-assert(type(clockTest.specialForTesting) == "function", "clockTest.specialForTesting is a function")
-assert(clockTest.specialForTesting == ClockButton.specialForTesting, "still has clockTest.specialForTesting")
+assert(type(clockTest._specialForTesting) == "function", "clockTest._specialForTesting is a function")
+assert(clockTest._specialForTesting == ClockButton._specialForTesting, "still has clockTest._specialForTesting")
 -- has its own fields:
 -- NOTE add this field for testing b/c ClockButton by default won't have a good field to test initially
 assert(clockTest.testMyOwnField == "foo", "clockTest.testMyOwnField is set to 'foo'")
