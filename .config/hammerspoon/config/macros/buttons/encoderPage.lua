@@ -38,10 +38,9 @@ function EncoderPage:start()
         if encoder then
             encoder:start()
         else
-            -- TODO how do I reset the screen image w/o full reset?
+            -- clear/reset one button with transparent image:
             local image = hsIcon("blank/transparent.svg")
             self.deck:setScreenImage(encoderNumber, image)
-            -- self.deck:setScreenImage(encoderNumber, nil) -- FAILS
         end
     end
 end
