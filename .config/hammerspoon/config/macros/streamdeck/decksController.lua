@@ -2,14 +2,14 @@ local DeckController = require("config.macros.streamdeck.deckController")
 require("config.macros.streamdeck.helpers")
 
 ---@class DecksController
----@field private _deckControllers table<string, DeckController>
+---@field deckControllers table<string, DeckController>
 local DecksController = {}
 DecksController.__index = DecksController
 
 ---@return DecksController
 function DecksController:new()
     local o = setmetatable({}, DecksController)
-    o._deckControllers = {}
+    o.deckControllers = {}
     return o
 end
 
@@ -18,7 +18,7 @@ function DecksController:deckConnected(deck)
     local deckController = DeckController:new(deck)
     print("Deck connected:", deckController)
     local name = getDeckName(deck)
-    self._deckControllers[name] = deckController
+    self.deckControllers[name] = deckController
     -- print("Starting deck controller:", hs.inspect(getmetatable(deckController)))
     deckController:start()
 end
@@ -27,11 +27,11 @@ end
 function DecksController:deckDisconnected(deck)
     print("Deck disconnected: " .. getDeckName(deck))
     local name = getDeckName(deck)
-    local deckController = self._deckControllers[name]
+    local deckController = self.deckControllers[name]
     if deckController then
         print("Stopping deck controller:", deckController)
         deckController:stop()
-        self._deckControllers[name] = nil
+        self.deckControllers[name] = nil
     end
 end
 
@@ -51,7 +51,7 @@ end
 
 function DecksController:getDeckNames()
     local names = {}
-    for name in pairs(self._deckControllers) do
+    for name in pairs(self.deckControllers) do
         table.insert(names, name)
     end
     return names

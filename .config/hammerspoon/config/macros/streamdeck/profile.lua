@@ -1,18 +1,18 @@
 ---@class Profile
 ---@field name string
----@field appBundleId string
----@field deckIdentifier string
+---@field appName string
+---@field deckName string
 local Profile = {}
 Profile.__index = Profile
 
 ---@param name string @friendly name
----@param appBundleId string @com.apple.FinalCut, com.apple.iMovie, com.apple.Terminal
----@param deckIdentifier string @1XL, 2XL, 3XL, 4+
-function Profile:new(name, appBundleId, deckIdentifier)
+---@param appName string @com.apple.FinalCut, com.apple.iMovie, com.apple.Terminal
+---@param deckName string @1XL, 2XL, 3XL, 4+
+function Profile:new(name, appName, deckName)
     local o = setmetatable({}, Profile)
     o.name = name
-    o.appBundleId = appBundleId
-    o.deckIdentifier = deckIdentifier
+    o.appName = appName
+    o.deckName = deckName
     return o
 end
 
@@ -20,9 +20,11 @@ end
 function Profile:applyTo(deck)
     if deck.buttons ~= nil then
         deck.buttons:addButtons(self:buttons(deck.deck))
+        deck.buttons:start()
     end
     if deck.encoders ~= nil then
         deck.encoders:addEncoders(self:encoders(deck.deck))
+        deck.encoders:start()
     end
 end
 
@@ -41,7 +43,7 @@ function Profile:encoders(deck)
 end
 
 function Profile:__tostring()
-    return "Profile<" .. self.name .. ", " .. self.appBundleId .. ", " .. self.deckIdentifier .. ">"
+    return "Profile<" .. self.name .. ", " .. self.appName .. ", " .. self.deckName .. ">"
 end
 
 return Profile

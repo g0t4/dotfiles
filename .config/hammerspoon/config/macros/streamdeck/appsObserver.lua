@@ -21,9 +21,28 @@ end
 
 function AppsObserver:onAppActivated(appName, hsApp)
     print("app activated", appName)
-    local deckNames = self.decks:getDeckNames()
-    if (appName == "com.apple.FinalCut") then
-        local fcpx = require("config.macros.streamdeck.profiles.fcpx")
+
+    for deckName, deckController in pairs(self.decks.deckControllers) do
+        print("  considering:", deckController)
+
+        ---@type Profile
+        local selected = nil
+        if (appName == "Final Cut Pro") then
+            local fcpx = require("config.macros.streamdeck.profiles.fcpx")
+            selected = fcpx:getProfile(deckName)
+        else
+            print("  TODO default profile fallback logic")
+        end
+        -- TODO iterm2 next
+        print("  selected:", selected)
+
+        if selected ~= nil then
+            print("applying", selected, "to", deckName)
+            selected:applyTo(deckController)
+            return
+        end
+        -- CLEAR BUTTONS? OR would calling stop previously do that?
+        deckController.buttons:clearButtons()
     end
 end
 
@@ -35,6 +54,10 @@ end
 
 function AppsObserver:start()
     self.watcher:start()
+
+    -- activate for current app
+    local currentApp = hs.application.frontmostApplication()
+    self:onAppActivated(currentApp:title(), currentApp)
 end
 
 function AppsObserver:stop()

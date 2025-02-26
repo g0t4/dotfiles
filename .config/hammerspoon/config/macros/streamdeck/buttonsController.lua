@@ -72,6 +72,13 @@ function ButtonsController:start()
     end
 end
 
+function ButtonsController:clearButtons()
+    print("clearing buttons")
+    for buttonNumber = 1, self.rows * self.cols do
+        resetButton(buttonNumber, self.deck)
+    end
+end
+
 function ButtonsController:stop()
     -- for now just call stop on all buttons... to stop dynamic updates
     -- PRN and mark smth to stop reacting to keypresses
