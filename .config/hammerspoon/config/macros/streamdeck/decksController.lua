@@ -35,20 +35,6 @@ function DecksController:deckDisconnected(deck)
     end
 end
 
----@param application hs.application
-function DecksController:applicationActivated(application)
-    print("Application activated: " .. application.name)
-end
-
-function DecksController:applicationChanged(application)
-    -- TODO what does this look like, this is just a stub method to think about it
-    -- for example, using AXObserver, filtering the events for something important..
-    --   do I wanna have an app specific controller? that might actually make sense
-    --   then it can register watches it wants and handle extra features like dynamic
-    --   sets of buttons... which might be a bit too much for one controller alone?
-    --   could have base controller logic that is shared too
-end
-
 function DecksController:onDeviceDiscovery(connected, deck)
     if connected then
         self:deckConnected(deck)
@@ -61,6 +47,14 @@ function DecksController:init()
     hs.streamdeck.init(function(connected, deck)
         self:onDeviceDiscovery(connected, deck)
     end)
+end
+
+function DecksController:getDeckNames()
+    local names = {}
+    for name in pairs(self._deckControllers) do
+        table.insert(names, name)
+    end
+    return names
 end
 
 return DecksController

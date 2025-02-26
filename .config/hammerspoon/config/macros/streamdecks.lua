@@ -40,10 +40,9 @@ end
 -- TODO turn this into hot reload for just streamdeck lua scripts?
 reloadOnMacrosChanges()
 
-local decksController = DecksController:new()
-decksController:init()
-
-local apps = AppsObserver:new()
+local decks = DecksController:new()
+decks:init()
+local apps = AppsObserver:new(decks)
 apps:start()
 
 ---@param connected boolean
