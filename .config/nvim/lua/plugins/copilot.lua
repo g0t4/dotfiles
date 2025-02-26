@@ -303,12 +303,14 @@ function SwitchCopilot()
         return
     end
     if vim.tbl_contains(use_ai, "ask-openai") then
-        local api = require("ask-openai.api")
+        if IsAskOpenAIPredictionsAvailable() then
+            local api = require("ask-openai.api")
 
-        if api.is_enabled() then
-            DisableAllCopilots()
-        else
-            EnableAllCopilots()
+            if api.is_enabled() then
+                DisableAllCopilots()
+            else
+                EnableAllCopilots()
+            end
         end
         return
     end
@@ -318,7 +320,9 @@ end
 vim.api.nvim_set_keymap("n", "<F13>", ":lua SwitchCopilot()<CR>", { noremap = true, silent = true })
 vim.api.nvim_set_keymap("i", "<F13>", "<Esc>:lua SwitchCopilot()<CR>a", { noremap = true, silent = true })
 
-
+function IsAskOpenAIPredictionsAvailable()
+    return require("ask-openai.config").get_options().predictions
+end
 
 function EnableAllCopilots()
     if vim.tbl_contains(use_ai, "supermaven") then
@@ -331,7 +335,7 @@ function EnableAllCopilots()
         end
     end
     if vim.tbl_contains(use_ai, "ask-openai") then
-        if require("ask-openai.config").get_options().predictions then
+        if IsAskOpenAIPredictionsAvailable() then
             -- TODO see notes below for disabling predictions for more about how to config this
             local api = require("ask-openai.api")
             api.enable_predictions()
@@ -350,7 +354,7 @@ function DisableAllCopilots()
         end
     end
     if vim.tbl_contains(use_ai, "ask-openai") then
-        if require("ask-openai.config").get_options().predictions then
+        if IsAskOpenAIPredictionsAvailable() then
             -- TODO figure out what I wanna use for enabling predictions...
             -- for now just turn this off so it doesn't break my config when not using feat-predictions branch
             local api = require("ask-openai.api")
@@ -378,11 +382,13 @@ function CopilotsStatus()
         end
     end
     if vim.tbl_contains(use_ai, "ask-openai") then
-        local api = require("ask-openai.api")
-        if api.is_enabled() then
-            status = status .. "󰼇"
-        else
-            status = status .. "󰼈"
+        if IsAskOpenAIPredictionsAvailable() then
+            local api = require("ask-openai.api")
+            if api.is_enabled() then
+                status = status .. "󰼇"
+            else
+                status = status .. "󰼈"
+            end
         end
     end
     return status
