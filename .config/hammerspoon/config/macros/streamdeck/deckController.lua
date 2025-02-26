@@ -61,7 +61,9 @@ function DeckController:applyProfiles()
     -- load profile(s) for buttons/encoders (default, per app, per apps(later), within app, mods - ie app switcher?)
     for _, profile in ipairs(Profiles) do
         -- TODO get current app and use that
+        print("considering profile", profile)
         if profile.appBundleId == "com.apple.FinalCut" and profile.deckIdentifier == self.name then
+            print("applying profile", profile.name)
             profile:applyTo(self)
         end
     end
