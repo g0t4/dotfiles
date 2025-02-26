@@ -26,12 +26,17 @@ function AppObserver:getProfile(deckName)
 end
 
 ---@param deckName string
----@param func function(deck: hs.streamdeck): PushButton[]
-function AppObserver:addProfile(deckName, func)
+---@param getButtons (fun(self, deck: hs.streamdeck): PushButton[])|nil
+---@param getEncoders (fun(self, deck: hs.streamdeck): Encoder[])|nil
+function AppObserver:addProfile(deckName, getButtons, getEncoders)
     local profile = Profile:new("n/a", self.appName, deckName)
     self.profiles[deckName] = profile
-    profile.buttons = func
-    -- TODO add encoders (SEP METHOD?)
+    if getButtons ~= nil then
+        profile.buttons = getButtons
+    end
+    if getEncoders ~= nil then
+        profile.encoders = getEncoders
+    end
 end
 
 return AppObserver

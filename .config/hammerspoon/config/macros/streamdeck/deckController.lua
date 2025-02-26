@@ -18,7 +18,7 @@ function DeckController:new(deck)
     o.name = getDeckName(deck)
     o.buttons = o.name:find("XL$") and ButtonsController:newXL(deck) or ButtonsController:newPlus(deck)
     -- TODO add empty encoder controller instead of nil? with 0 encoders?
-    o.encoders = o.name:find("Plus$") and EncodersController:newPlus(deck) or nil
+    o.encoders = o.name:find("+$") and EncodersController:newPlus(deck) or nil
     return o
 end
 

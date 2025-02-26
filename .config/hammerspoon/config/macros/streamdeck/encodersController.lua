@@ -26,8 +26,8 @@ function EncodersController:addEncoder(encoder)
     self.encoders[encoder.number] = encoder
 end
 
-function EncodersController:addEncoders(...)
-    for _, encoder in ipairs({ ... }) do
+function EncodersController:addEncoders(encoders)
+    for _, encoder in ipairs(encoders) do
         self:addEncoder(encoder)
     end
 end
