@@ -62,11 +62,10 @@ function ClockButton:specialForTesting()
 end
 
 local clockTest = ClockButton:new(1, {})
-print("clockTest:", hs.inspect(clockTest)) -- should show fields of both ClockButton and PushButton
-print("getmetatable(clockTest):", hs.inspect(getmetatable(clockTest)))
-print("  metatable(clockTest) == PushButton", getmetatable(clockTest) == PushButton)
-print("  metatable(clockTest) == ClockButton", getmetatable(clockTest) == ClockButton)
-print("2x getmetatable(clockTest):", hs.inspect(getmetatable(getmetatable(clockTest))))
+-- print("clockTest:", hs.inspect(clockTest)) -- should show fields of both ClockButton and PushButton
+-- print("getmetatable(clockTest):", hs.inspect(getmetatable(clockTest)))
+-- print("  metatable(clockTest) == PushButton", getmetatable(clockTest) == PushButton)
+-- print("  metatable(clockTest) == ClockButton", getmetatable(clockTest) == ClockButton)
 -- make sure all of these say true (would've used asssertions but those sucked to troubleshoot)
 -- inherits funcs from PushButton:
 assert(type(clockTest.pressed) == "function", "clockTest.pressed is a function")
