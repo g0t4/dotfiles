@@ -87,28 +87,13 @@ function onButtonPressed(deck, buttonNumber, pressedOrReleased)
     dumpButtonInfo(deck, buttonNumber, pressedOrReleased)
 
     if name == "1XL" then
-        -- TODO why can I see type fileds/funcs if I shift+K on deck1page but I cannot `gd` on onButtonPressed?
         deck1page:onButtonPressed(buttonNumber, pressedOrReleased)
     elseif name == "2XL" then
         deck2page:onButtonPressed(buttonNumber, pressedOrReleased)
     elseif name == "3XL" then
         deck3page:onButtonPressed(buttonNumber, pressedOrReleased)
-        if buttonNumber == 7 then
-            log.e("TODO MOVE TO BUTTON INSTANCES:")
-            hs.openConsole()
-        elseif buttonNumber == 8 then
-            log.e("TODO MOVE TO BUTTON INSTANCES:")
-            hs.console.clearConsole()
-        elseif buttonNumber == 16 then
-            log.e("TODO MOVE TO BUTTON INSTANCES:")
-            hs.reload()
-        end
     elseif name == "4+" then
         deck4page:onButtonPressed(buttonNumber, pressedOrReleased)
-        if buttonNumber == 1 then
-            log.e("TODO MOVE TO BUTTON INSTANCES:")
-            deck:setButtonImage(buttonNumber, drawTextIcon("Hello"))
-        end
     end
 end
 
@@ -237,6 +222,7 @@ local function onDeviceDiscovery(connected, deck)
         deck4Plus = deck
         deck4page = ButtonPage:newPlus(deck4Plus)
         deck4page:addButton(LuaButton:new(4, deck, drawTextIcon("Clear Console"), hs.console.clearConsole))
+        deck4page:addButton(LuaButton:new(3, deck, drawTextIcon("Open Console"), hs.openConsole))
         deck4page:addButton(LuaButton:new(8, deck, drawTextIcon("Reload Config"), hs.reload))
         deck4page:start()
     else
