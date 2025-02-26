@@ -331,8 +331,11 @@ function EnableAllCopilots()
         end
     end
     if vim.tbl_contains(use_ai, "ask-openai") then
-        local api = require("ask-openai.api")
-        api.enable_predictions()
+        if require("ask-openai.config").get_options().predictions then
+            -- TODO see notes below for disabling predictions for more about how to config this
+            local api = require("ask-openai.api")
+            api.enable_predictions()
+        end
     end
 end
 
@@ -347,8 +350,12 @@ function DisableAllCopilots()
         end
     end
     if vim.tbl_contains(use_ai, "ask-openai") then
-        local api = require("ask-openai.api")
-        api.disable_predictions()
+        if require("ask-openai.config").get_options().predictions then
+            -- TODO figure out what I wanna use for enabling predictions...
+            -- for now just turn this off so it doesn't break my config when not using feat-predictions branch
+            local api = require("ask-openai.api")
+            api.disable_predictions()
+        end
     end
 end
 
