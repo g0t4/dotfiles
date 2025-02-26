@@ -8,7 +8,7 @@ DecksController.__index = DecksController
 
 ---@return DecksController
 function DecksController:new()
-    local o = setmetatable({}, self)
+    local o = setmetatable({}, DecksController)
     o._deckControllers = {}
     return o
 end
