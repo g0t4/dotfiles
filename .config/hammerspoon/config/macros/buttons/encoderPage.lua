@@ -54,24 +54,47 @@ function EncoderPage:stop()
 end
 
 ---@param interaction string
----@param xFirst number
----@param yFirst number
----@param xLast number
----@param yLast number
-function EncoderPage:onScreenTouched(interaction, xFirst, yFirst, xLast, yLast)
+---@param xStart number
+---@param yStart number
+---@param xStop number
+---@param yStop number
+function EncoderPage:onScreenTouched(interaction, xStart, yStart, xStop, yStop)
+    -- figure out which encoder region the first coordinate is in
+    local pixelsPerEncoder = self._screen.width / self._numberOfEncoders
+    local startEncoderNumber = math.floor(xStart / pixelsPerEncoder) + 1
+    if startEncoderNumber > self._numberOfEncoders then
+        print("start encoder not mapped: " .. startEncoderNumber)
+        return
+    end
+
+    -- PRN if need to interact with the encoder:
+    -- local encoder = self.encoders[encoderNumber]
+    -- if not encoder then
+    --     print("encoder not mapped: " .. encoderNumber)
+    --     return
+    -- end
+
     --  "shortPress", "longPress" or "swipe"
     -- for "shortPress" and "longPress" only use xFirst/yFirst, b/c xLast/yLast are 0
     local message = interaction .. " screen "
     if interaction == "swipe" then
-        message = message .. "from (" .. xFirst .. ", " .. yFirst .. ") to (" .. xLast .. ", " .. yLast .. ")"
+        stopEncoderNumber = math.floor(xStop / pixelsPerEncoder) + 1
+        if stopEncoderNumber > self._numberOfEncoders then
+            print("stop encoder not mapped: " .. stopEncoderNumber)
+            return
+        end
+        message = message .. "from " .. startEncoderNumber ..
+            " (" .. xStart .. ", " .. yStart .. ")" ..
+            " to " .. stopEncoderNumber .. " (" .. xStop .. ", " .. yStop .. ")"
         print(message)
         return
     end
 
     -- short/longPress:
-    assert(xLast == 0, "xLast must be 0 for interactions other than swipe")
-    assert(yLast == 0, "yLast must be 0 for interactions other than swipe")
-    message = message .. "at (" .. xFirst .. ", " .. yFirst .. ")"
+    assert(xStop == 0, "xLast must be 0 for interactions other than swipe")
+    assert(yStop == 0, "yLast must be 0 for interactions other than swipe")
+    message = message .. "above encoder " .. startEncoderNumber ..
+        " (" .. xStart .. ", " .. yStart .. ")"
     print(message)
 
     -- FYI encoder # is not tied to screen touches
