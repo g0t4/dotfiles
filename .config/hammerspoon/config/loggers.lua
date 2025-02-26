@@ -5,16 +5,18 @@ local initialPrint = print
 function M.muteCoreMessages()
     print = function(first, ...)
         -- filter out chatty messages
-        if first:match("^-- ") then
-            -- avoid overhead of multiple matches... and I wonder if I can just filter any messages with "--" on start
-            if first:match("^-- Some applications have alternate names which") then
-                return
-            end
-            if first:match("^-- Loading extension:") then
-                return
-            end
-            if first:match("^-- Loading Spoon:") then
-                return
+        if first ~= nil and type(first) == "string" then
+            if first:match("^-- ") then
+                -- avoid overhead of multiple matches... and I wonder if I can just filter any messages with "--" on start
+                if first:match("^-- Some applications have alternate names which") then
+                    return
+                end
+                if first:match("^-- Loading extension:") then
+                    return
+                end
+                if first:match("^-- Loading Spoon:") then
+                    return
+                end
             end
         end
         initialPrint(first, ...)
