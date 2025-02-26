@@ -1,6 +1,5 @@
 PushButton = require("config.macros.streamdeck.pushButton")
 
-
 -- a button that executes a lua script
 ---@class LuaButton : PushButton
 ---@field func function
@@ -25,8 +24,5 @@ end
 function LuaButton:__tostring()
     return "LuaButton: " .. (self.buttonNumber or "nil")
 end
-
--- local test = LuaButton:new(1, {}, nil, function() print("test lua func") end)
--- print("__tostring on lua button:\n ", test)
 
 return LuaButton
