@@ -98,13 +98,14 @@ end
 function ButtonsController:onButtonPressed(buttonNumber, pressedOrReleased)
     local button = self.buttons[buttonNumber]
     if not button then
-        print("button not mapped: " .. buttonNumber)
+        -- verbose("button not mapped: ", buttonNumber, "pressedOrReleased: ", pressedOrReleased)
         return
     end
 
     if pressedOrReleased then
         if button.pressed == nil then
-            print("button does not have pressed method: " .. buttonNumber)
+            -- don't need to warn really b/c a button could be setup on release only...
+            -- verbose("button does not have pressed method: ", buttonNumber)
             return
         end
         button:pressed()

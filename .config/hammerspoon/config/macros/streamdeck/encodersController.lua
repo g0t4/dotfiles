@@ -1,3 +1,6 @@
+local verbose = require("config.macros.streamdeck.helpers").verbose
+
+
 ---@class EncodersController
 ---@field encoders table<number, Encoder>
 ---@field private _numberOfEncoders number
@@ -67,8 +70,8 @@ function EncodersController:onScreenTouched(interaction, xStart, yStart, xStop, 
     local pixelsPerEncoder = self._screen.width / self._numberOfEncoders
     local startEncoderNumber = math.floor(xStart / pixelsPerEncoder) + 1
     if startEncoderNumber > self._numberOfEncoders then
-        print("start encoder not mapped: " .. startEncoderNumber)
-        return
+        -- (rare) + not a show-stopper, worth investigating
+        verbose("start encoder not mapped: " .. startEncoderNumber)
     end
 
     -- PRN if need to interact with the encoder:
@@ -83,8 +86,8 @@ function EncodersController:onScreenTouched(interaction, xStart, yStart, xStop, 
     if interaction == "swipe" then
         stopEncoderNumber = math.floor(xStop / pixelsPerEncoder) + 1
         if stopEncoderNumber > self._numberOfEncoders then
-            print("stop encoder not mapped: " .. stopEncoderNumber)
-            return
+            -- (rare) + not a show-stopper, worth investigating
+            verbose("stop encoder not mapped: " .. stopEncoderNumber)
         end
 
 
@@ -146,7 +149,8 @@ function EncodersController:onScreenTouched(interaction, xStart, yStart, xStop, 
             " from enc" .. startEncoderNumber ..
             " (" .. xStart .. ", " .. yStart .. ")" ..
             " to enc" .. stopEncoderNumber .. " (" .. xStop .. ", " .. yStop .. ")"
-        print(message)
+        verbose(message)
+        -- TODO implement actions
         return
     end
 
@@ -156,13 +160,14 @@ function EncodersController:onScreenTouched(interaction, xStart, yStart, xStop, 
     local message = interaction ..
         "above encoder " .. startEncoderNumber ..
         " at (" .. xStart .. ", " .. yStart .. ")"
-    print(message)
+    verbose(message)
+    -- TODO implement actions
 end
 
 function EncodersController:onEncoderPressed(encoderNumber, pressedOrReleased, turnedLeft, turnedRight)
     local encoder = self.encoders[encoderNumber]
     if not encoder then
-        print("encoder not mapped: " .. encoderNumber)
+        verbose("encoder not mapped: " .. encoderNumber)
         return
     end
 
@@ -181,7 +186,8 @@ function EncodersController:onEncoderPressed(encoderNumber, pressedOrReleased, t
             message = message .. " released"
         end
     end
-    print(message)
+    verbose(message)
+    -- TODO implement actions
 end
 
 return EncodersController

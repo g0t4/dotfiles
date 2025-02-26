@@ -1,9 +1,13 @@
 local log = require("hs.logger").new("streamdeck", "verbose") -- set to "warning" or "error" when done developing this module
 
-function verbose(...)
+-- do not need to put everythin on the module...
+--   verbose could easily overlap with the same name in other "subsystems" of my hammerspoon config
+--   so lets make that clear so I don't have to namespace it to sdVerbose...
+local M = {}
+
+function M.verbose(...)
     log.v(...)
 end
-
 
 function resetButton(buttonNumber, deck)
     -- wipes color/image
@@ -42,12 +46,12 @@ function hsIcon(relativePath)
     error("hsIcons: could not load image from path:", path)
 end
 
-function appIcon(appName)
-    local icon = hs.image.imageFromAppBundle("org.hammerspoon.Hammerspoon")
+function appIcon(bundleId)
+    local icon = hs.image.imageFromAppBundle(bundleId)
     if icon ~= nil then
         return icon
     end
-    error("appIcon: could not load image from app:", appName)
+    error("appIcon: could not load image from app:", bundleId)
 
     -- alternatively, use hs.application.find(appName):icon()?
     -- or:
@@ -58,3 +62,4 @@ function appIconHammerspoon()
     return appIcon("org.hammerspoon.Hammerspoon")
 end
 
+return M

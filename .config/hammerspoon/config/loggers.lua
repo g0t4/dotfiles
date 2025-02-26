@@ -63,8 +63,8 @@ end
 --   modules don't expose logger instance, but they do expose setting log level (common practice?)
 if quietStartup then
     hs.hotkey.setLogLevel("error")
+    -- PRN add other chatty core modules here
 end
--- TODO OTHER MODULES that are TOO VERBOSE (search hammerspoon repo)
 
 -- *** set threshold for all loggers (modules and instances):
 -- hs.logger.setGlobalLogLevel("debug")

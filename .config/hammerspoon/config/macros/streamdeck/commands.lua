@@ -1,4 +1,4 @@
-require("config.macros.streamdeck.helpers")
+local verbose = require("config.macros.streamdeck.helpers").verbose
 
 function runCommand(cmd)
     -- AVOID hs.execute and os.execute... PITA, can't see STDERR or not easily

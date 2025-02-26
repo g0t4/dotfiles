@@ -1,3 +1,4 @@
+require("config.macros.streamdeck.helpers")
 require("config.helpers")
 
 ---@class AppsObserver
@@ -23,7 +24,7 @@ function AppsObserver:new(decks)
 end
 
 function AppsObserver:onAppActivated(appName, hsApp)
-    print("app activated", appName)
+    -- verbose("app activated", appName)
 
     -- TODO can I do decks in parallel?
     --  I imagine w/ File I/O it might make a difference to load in parallel instead of series
@@ -45,7 +46,6 @@ function AppsObserver:tryLoadProfileForDeck(deckName, deckController, appName)
     elseif (appName == "iTerm2") then
         local iterm = require("config.macros.streamdeck.profiles.iterm")
         selected = iterm:getProfile(deckName)
-        print("selected iterm", selected)
     end
 
     if selected == nil then
@@ -54,7 +54,7 @@ function AppsObserver:tryLoadProfileForDeck(deckName, deckController, appName)
     end
 
     if selected ~= nil then
-        print("applying", selected, "to", deckName)
+        -- verbose("applying", selected, "to", deckName)
         selected:applyTo(deckController)
         return
     end
@@ -64,7 +64,7 @@ function AppsObserver:tryLoadProfileForDeck(deckName, deckController, appName)
 end
 
 function AppsObserver:onAppDeactivated(appName, hsApp)
-    -- print("app deactivated", appName)
+    -- verbose("app deactivated", appName)
     -- FYI happens after other app activates
     -- TODO cleanup
 end
@@ -73,7 +73,7 @@ end
 function AppsObserver:loadCurrentAppForDeck(deck)
     -- when deck first connected, or for another reason...
     local currentApp = hs.application.frontmostApplication()
-    print("  load: ", quote(currentApp:title()), "for", deck.name)
+    -- verbose("  load: ", quote(currentApp:title()), "for", deck.name)
     self:tryLoadProfileForDeck(deck.name, deck, currentApp:title())
 end
 

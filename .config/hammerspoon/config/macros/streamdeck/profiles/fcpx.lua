@@ -1,7 +1,7 @@
 local AppObserver = require("config.macros.streamdeck.profiles.appObserver")
 local MaestroButton = require("config.macros.streamdeck.maestroButton")
 local KeyStrokeButton = require("config.macros.streamdeck.keystrokeButton")
-require("config.macros.streamdeck.helpers")
+local verbose = require("config.macros.streamdeck.helpers").verbose
 
 
 
