@@ -4,20 +4,37 @@ local M = {}
 local initialPrint = print
 function M.muteCoreMessages()
     print = function(first, ...)
-        -- filter out chatty messages
-        if first ~= nil and type(first) == "string" then
-            if first:match("^-- ") then
-                -- avoid overhead of multiple matches... and I wonder if I can just filter any messages with "--" on start
-                if first:match("^-- Some applications have alternate names which") then
-                    return
-                end
-                if first:match("^-- Loading extension:") then
-                    return
-                end
-                if first:match("^-- Loading Spoon:") then
-                    return
-                end
-            end
+        local succeeded, skipThisEntry =
+            xpcall(function()
+                    -- filter out chatty messages
+                    if first ~= nil and type(first) == "string" then
+                        if first:match("^-- ") then
+                            -- avoid overhead of multiple matches... and I wonder if I can just filter any messages with "--" on start
+                            if first:match("^-- Some applications have alternate names which") then
+                                return true
+                            end
+                            if first:match("^-- Loading extension:") then
+                                -- error("FUUUU2") -- good for testing xpcall handler
+                                return true
+                            end
+                            if first:match("^-- Loading Spoon:") then
+                                return true
+                            end
+                        end
+                    end
+                    return false
+                end,
+                function(err)
+                    initialPrint("UNEXPECTED failure in PRINT OVERRIDE, review your logic: ", err)
+                end)
+        -- print is brittle, especially overriding it (and w/ varargs)... catch failures and make error message EXPLICIT
+        --   I wasted an hour I believe b/c sometimes this was failing while I was troubleshooting another issue...
+        --   would've been nice to clearly see the issue..
+        --   also I need to learn to read stacktraces more carefully, I always skim and jump into code before finding line #
+        -- on failure, succeeded = false, skipThisEntry = error
+        -- on success, succeded = true and then skipThisEntry has true/false for skipping the entry (based on return X inside xpcall)
+        if succeeded and skipThisEntry then
+            return
         end
         initialPrint(first, ...)
     end
