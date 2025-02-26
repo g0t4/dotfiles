@@ -26,9 +26,7 @@ end
 function AppsObserver:onAppActivated(appName, hsApp)
     -- verbose("app activated", appName)
 
-    -- TODO can I do decks in parallel? ...  YES.. takes 70-100ms per deck, would ROCK to do in parallel
-    --  I imagine w/ File I/O it might make a difference to load in parallel instead of series
-    --  TODO measure timings
+    -- TODO paralell? takes 70-100ms per deck, would ROCK to do in parallel
     for deckName, deckController in pairs(self.decks.deckControllers) do
         self:tryLoadProfileForDeck(deckName, deckController, appName)
     end
