@@ -22,8 +22,8 @@ end
 
 ---@param deck hs.streamdeck
 function DecksController:deckConnected(deck)
-    local deckController = DeckController:new(deck)
-    print("Deck connected: " .. deckController.name)
+    -- local deckController = DeckController:new(deck)
+    print("Deck connected: " .. getDeckName(deck))
 end
 
 ---@param deck hs.streamdeck
