@@ -10,6 +10,7 @@ local LuaButton = require("config.macros.buttons.luaButton")
 local KeyStrokeButton = require("config.macros.buttons.keystrokeButton")
 local Encoder = require("config.macros.buttons.encoders")
 local EncodersController = require("config.macros.buttons.encodersController")
+local DecksController = require("config.macros.buttons.decksController")
 require("config.macros.buttons.helpers")
 
 function verbose(...)
@@ -38,6 +39,7 @@ end
 -- TODO turn this into hot reload for just streamdeck lua scripts?
 reloadOnMacrosChanges()
 
+local decksController = DecksController:new()
 ---@type hs.streamdeck
 local deck1XL = nil
 ---@type ButtonsController
@@ -104,7 +106,9 @@ local function onDeviceDiscovery(connected, deck)
         controller:deviceDisconnected(deck)
     end
 
+
     do return end
+    local name = "foo"
 
     -- PRN deck:setBrightness(80) -- 0 to 100 (FYI persists across restarts of hammerspoon... IIAC only need to set this once when I wanna change it)
     -- TODO on hammerspon QUIT, reset the decks... right? sooo... do that on disconnect? or?
