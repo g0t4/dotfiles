@@ -41,9 +41,9 @@ function ButtonsController:addButton(button)
     self.buttons[button.buttonNumber] = button
 end
 
----@param ... PushButton
-function ButtonsController:addButtons(...)
-    for _, button in ipairs({ ... }) do
+---@param buttons PushButton[]
+function ButtonsController:addButtons(buttons)
+    for _, button in ipairs(buttons) do
         self:addButton(button)
     end
 end
