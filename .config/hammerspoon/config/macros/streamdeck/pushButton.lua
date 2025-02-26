@@ -60,6 +60,6 @@ end
 
 -- TODO add test case of __tostring since it can be frustrating to say the least
 -- local test = PushButton:new(1, {}, nil)
--- print(test)
+-- assert(tostring(test) == "PushButton: 1")
 
 return PushButton

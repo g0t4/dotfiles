@@ -77,7 +77,7 @@ function EncodersController:onScreenTouched(interaction, xStart, yStart, xStop, 
     -- PRN if need to interact with the encoder:
     -- local encoder = self.encoders[encoderNumber]
     -- if not encoder then
-    --     print("encoder not mapped: " .. encoderNumber)
+    --     verbose("encoder not mapped: " .. encoderNumber)
     --     return
     -- end
 

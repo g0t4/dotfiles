@@ -80,7 +80,7 @@ end
 
 -- TESTING only:
 local clockTest = ClockButton:new(1, {})
--- print("clockTest: ", clockTest:__tostring())
+-- assert(tostring(clockTest) == "ClockButton: 1")
 -- inherits funcs from PushButton:
 assert(type(clockTest.pressed) == "function", "clockTest.pressed is a function")
 assert(clockTest.pressed == PushButton.pressed, "clockTest.pressed is inherited")

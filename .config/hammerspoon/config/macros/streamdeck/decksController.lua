@@ -1,5 +1,6 @@
 local DeckController = require("config.macros.streamdeck.deckController")
-require("config.macros.streamdeck.helpers")
+local verbose = require("config.macros.streamdeck.helpers").verbose
+
 
 ---@class DecksController
 ---@field deckControllers table<string, DeckController>
@@ -17,21 +18,19 @@ end
 ---@param deck hs.streamdeck
 function DecksController:deckConnected(deck)
     local deckController = DeckController:new(deck)
-    print("Deck connected:", deckController)
+    verbose("Deck connected:", deckController)
     local name = getDeckName(deck)
     self.deckControllers[name] = deckController
-    -- print("Starting deck controller:", hs.inspect(getmetatable(deckController)))
     deckController:start()
     self.appsObserver:loadCurrentAppForDeck(deckController)
 end
 
 ---@param deck hs.streamdeck
 function DecksController:deckDisconnected(deck)
-    print("Deck disconnected: " .. getDeckName(deck))
+    verbose("Deck disconnected: " .. getDeckName(deck))
     local name = getDeckName(deck)
     local deckController = self.deckControllers[name]
     if deckController then
-        print("Stopping deck controller:", deckController)
         deckController:stop()
         self.deckControllers[name] = nil
     end
