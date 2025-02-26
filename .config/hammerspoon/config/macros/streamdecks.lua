@@ -8,6 +8,8 @@ local MaestroButton = require("config.macros.buttons.maestro")
 local ButtonPage = require("config.macros.buttons.page")
 local LuaButton = require("config.macros.buttons.lua")
 local KeyStrokeButton = require("config.macros.buttons.keystroke")
+local Encoder = require("config.macros.buttons.encoders")
+local EncoderPage = require("config.macros.buttons.encoderPage")
 require("config.macros.buttons.helpers")
 
 function verbose(...)
@@ -53,38 +55,22 @@ local deck3page = nil
 local deck4Plus = nil
 ---@type ButtonPage
 local deck4page = nil
+---@type EncoderPage
+local deck4encoderPage = nil
 
 -- TODO test hs.streamdeck:screenCallback(fn)  - touch screen on PLUS
 
-function dumpButtonInfo(deck, buttonNumber, pressedOrReleased)
-    -- buttons on all decks (including XL and PLUS)
-    --   NOT dials on PLUS
-    --   NOT touchscreen dials on PLUS
-
-    local buttonExtra = ""
-
-    local cols, _ = deck:buttonLayout()
-
-    -- nice for debugging
-    local col = (buttonNumber - 1) % cols + 1
-    local row = math.ceil(buttonNumber / cols)
-    buttonExtra = " (" .. row .. "," .. col .. ") "
-
-    local explainPressed = ""
-    if pressedOrReleased ~= nil then
-        explainPressed = (pressedOrReleased and "pressed" or "released")
+function onEncoderPressed(deck, encoderNumber, pressedOrReleased, turnedLeft, turnedRight)
+    local name = getDeckName(deck)
+    if name == "4+" then
+        deck4encoderPage:onEncoderPressed(encoderNumber, pressedOrReleased, turnedLeft, turnedRight)
+    else
+        error("onEncoderPressed: unknown device: " .. name)
     end
-
-    log.v(
-        getDeckName(deck) ..
-        " btn " .. buttonNumber .. buttonExtra ..
-        explainPressed
-    )
 end
 
 function onButtonPressed(deck, buttonNumber, pressedOrReleased)
     local name = getDeckName(deck)
-    dumpButtonInfo(deck, buttonNumber, pressedOrReleased)
 
     if name == "1XL" then
         deck1page:onButtonPressed(buttonNumber, pressedOrReleased)
@@ -95,31 +81,6 @@ function onButtonPressed(deck, buttonNumber, pressedOrReleased)
     elseif name == "4+" then
         deck4page:onButtonPressed(buttonNumber, pressedOrReleased)
     end
-end
-
-function onEncoderPressed(deck, buttonNumber, pressedOrReleased, turnedLeft, turnedRight)
-    -- TODO test dials on PLUS
-    --      pressed/released AND rotated (plus only, IIUC)
-    --
-    -- dumpButtonInfo(deck, buttonNumber, pressedOrReleased)
-    local message = "encoder " .. buttonNumber
-    -- .. " pressed: "
-    --     .. pressedOrReleased .. " turnedLeft: " .. turnedLeft .. " turnedRight: " .. turnedRight
-    if pressedOrReleased then
-        message = message .. " pressed"
-    else
-        -- if left/right turn then release is not relevant
-        if turnedLeft then
-            message = message .. " left"
-        elseif turnedRight then
-            message = message .. " right"
-        else
-            -- only release event IF not left nor right
-            message = message .. " released"
-        end
-    end
-
-    log.v(message)
 end
 
 --
@@ -145,17 +106,6 @@ local function onDeviceDiscovery(connected, deck)
 
     deck:encoderCallback(onEncoderPressed) -- don't need to limit to just PLUS... seems irrelevant on XLs
     deck:buttonCallback(onButtonPressed)
-
-    if name == "4+" then
-        local testSvg2 = "~/repos/github/g0t4/dotfiles/misc/hammerspoon-icons/test-svgs/hanging-96.png"
-        deck:setScreenImage(1, hs.image.imageFromPath(testSvg2))
-        local testSvg3 = "~/repos/github/g0t4/dotfiles/misc/hammerspoon-icons/test-svgs/saggy-64.png"
-        deck:setScreenImage(2, hs.image.imageFromPath(testSvg3))
-        local testSvg4 = "~/repos/github/g0t4/dotfiles/misc/hammerspoon-icons/test-svgs/stick.svg"
-        deck:setScreenImage(3, hs.image.imageFromPath(testSvg4))
-        local testSvg5 = "~/repos/github/g0t4/dotfiles/misc/hammerspoon-icons/test-svgs/purple-pink-128.png"
-        deck:setScreenImage(4, hs.image.imageFromPath(testSvg5))
-    end
 
     -- local imageSize = deck:imageSize()
     -- XL => { h = 96.0, w = 96.0 }
@@ -213,6 +163,16 @@ local function onDeviceDiscovery(connected, deck)
             LuaButton:new(3, deck, appIconHammerspoon(), hs.openConsole),
             LuaButton:new(8, deck, drawTextIcon("Reload Config"), hs.reload)
         )
+        deck4encoderPage = EncoderPage:newPlus(deck4Plus)
+        deck4encoderPage:addEncoders(
+            Encoder:new(1, deck, hsIcon("test-svgs/hanging-96.png")),
+            Encoder:new(2, deck, hsIcon("test-svgs/saggy-64.png")),
+            Encoder:new(3, deck, hsIcon("test-svgs/stick.svg")),
+            Encoder:new(4, deck, hsIcon("test-svgs/purple-pink-128.png"))
+        )
+        deck4encoderPage:start()
+
+        -- TODO make a new EncoderPage
         deck4page:start()
     else
         error("Unknown device: " .. name)

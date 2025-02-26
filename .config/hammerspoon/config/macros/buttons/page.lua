@@ -85,19 +85,20 @@ end
 ---@param pressedOrReleased boolean
 function ButtonPage:onButtonPressed(buttonNumber, pressedOrReleased)
     local button = self.buttons[buttonNumber]
-    if button then
-        if pressedOrReleased then
-            if button.pressed == nil then
-                print("button does not have pressed method: " .. buttonNumber)
-                return
-            end
-            button:pressed()
+    if not button then
+        print("button not mapped: " .. buttonNumber)
+        return
+    end
+
+    if pressedOrReleased then
+        if button.pressed == nil then
+            print("button does not have pressed method: " .. buttonNumber)
             return
         end
-        -- PRN else case... for triggering on release... use button.released in that case
-    else
-        print("button not mapped: " .. buttonNumber)
+        button:pressed()
+        return
     end
+    -- PRN else case... for triggering on release... use button.released in that case
 end
 
 return ButtonPage
