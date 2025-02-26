@@ -263,6 +263,8 @@ end):start()
 -- +  => { h = 120.0, w = 120.0 }
 --
 -- local htmlFileType = hs.image.iconForFileType("html")
+-- ? should I bother with checking for new firmware updates? I can always just use elgato's app to check manually
+--
 
 -- *** COMMANDPOST ***
 --   OH YEAH BABY... they're right up my alley... or I'm right up theirs
