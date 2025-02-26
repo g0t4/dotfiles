@@ -208,7 +208,7 @@ local function onDeviceDiscovery(connected, deck)
         deck1XL = deck
         deck1page = ButtonPage:newXL(deck1XL)
         deck1page:addButton(ClockButton:new(1, deck))
-        -- deck1page:start()
+        deck1page:start()
     elseif name == "2XL" then
         deck2XL = deck
         deck2page = ButtonPage:newXL(deck2XL)
