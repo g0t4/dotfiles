@@ -1,15 +1,15 @@
----@class EncoderPage
+---@class EncodersController
 ---@field encoders table<number, Encoder>
 ---@field private _numberOfEncoders number
 ---@field private _screen table<string, number>
 ---@field deck hs.streamdeck
-local EncoderPage = {}
-EncoderPage.__index = EncoderPage
+local EncodersController = {}
+EncodersController.__index = EncodersController
 
 
 ---@param deck hs.streamdeck
----@return EncoderPage
-function EncoderPage:newPlus(deck)
+---@return EncodersController
+function EncodersController:newPlus(deck)
     local o = setmetatable({}, self)
     o.deck = deck
     o._numberOfEncoders = 4
@@ -22,17 +22,17 @@ function EncoderPage:newPlus(deck)
     return o
 end
 
-function EncoderPage:addEncoder(encoder)
+function EncodersController:addEncoder(encoder)
     self.encoders[encoder.number] = encoder
 end
 
-function EncoderPage:addEncoders(...)
+function EncodersController:addEncoders(...)
     for _, encoder in ipairs({ ... }) do
         self:addEncoder(encoder)
     end
 end
 
-function EncoderPage:start()
+function EncodersController:start()
     for encoderNumber = 1, self._numberOfEncoders do
         local encoder = self.encoders[encoderNumber]
         if encoder then
@@ -45,7 +45,7 @@ function EncoderPage:start()
     end
 end
 
-function EncoderPage:stop()
+function EncodersController:stop()
     -- for now just call stop on all encoders... to stop dynamic updates
     -- PRN and mark smth to stop reacting to keypresses
     for _, encoder in pairs(self.encoders) do
@@ -58,7 +58,7 @@ end
 ---@param yStart number
 ---@param xStop number
 ---@param yStop number
-function EncoderPage:onScreenTouched(interaction, xStart, yStart, xStop, yStop)
+function EncodersController:onScreenTouched(interaction, xStart, yStart, xStop, yStop)
     -- figure out which encoder region the first coordinate is in
     local pixelsPerEncoder = self._screen.width / self._numberOfEncoders
     local startEncoderNumber = math.floor(xStart / pixelsPerEncoder) + 1
@@ -155,7 +155,7 @@ function EncoderPage:onScreenTouched(interaction, xStart, yStart, xStop, yStop)
     print(message)
 end
 
-function EncoderPage:onEncoderPressed(encoderNumber, pressedOrReleased, turnedLeft, turnedRight)
+function EncodersController:onEncoderPressed(encoderNumber, pressedOrReleased, turnedLeft, turnedRight)
     local encoder = self.encoders[encoderNumber]
     if not encoder then
         print("encoder not mapped: " .. encoderNumber)
@@ -180,4 +180,4 @@ function EncoderPage:onEncoderPressed(encoderNumber, pressedOrReleased, turnedLe
     print(message)
 end
 
-return EncoderPage
+return EncodersController

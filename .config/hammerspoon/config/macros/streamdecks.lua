@@ -9,7 +9,7 @@ local ButtonsController = require("config.macros.buttons.buttonsController")
 local LuaButton = require("config.macros.buttons.luaButton")
 local KeyStrokeButton = require("config.macros.buttons.keystrokeButton")
 local Encoder = require("config.macros.buttons.encoders")
-local EncoderPage = require("config.macros.buttons.encoderPage")
+local EncodersController = require("config.macros.buttons.encodersController")
 require("config.macros.buttons.helpers")
 
 function verbose(...)
@@ -54,8 +54,8 @@ local deck3page = nil
 local deck4Plus = nil
 ---@type ButtonsController
 local deck4page = nil
----@type EncoderPage
-local deck4encoderPage = nil
+---@type EncodersController
+local deck4encodersController = nil
 
 ---@param deck hs.streamdeck
 ---@param interaction string
@@ -66,7 +66,7 @@ local deck4encoderPage = nil
 function onScreenTouched(deck, interaction, xFirst, yFirst, xLast, yLast)
     local name = getDeckName(deck)
     if name == "4+" then
-        deck4encoderPage:onScreenTouched(interaction, xFirst, yFirst, xLast, yLast)
+        deck4encodersController:onScreenTouched(interaction, xFirst, yFirst, xLast, yLast)
     else
         error("onScreenPressed: unknown device: " .. name)
     end
@@ -75,7 +75,7 @@ end
 function onEncoderPressed(deck, encoderNumber, pressedOrReleased, turnedLeft, turnedRight)
     local name = getDeckName(deck)
     if name == "4+" then
-        deck4encoderPage:onEncoderPressed(encoderNumber, pressedOrReleased, turnedLeft, turnedRight)
+        deck4encodersController:onEncoderPressed(encoderNumber, pressedOrReleased, turnedLeft, turnedRight)
     else
         error("onEncoderPressed: unknown device: " .. name)
     end
@@ -156,17 +156,16 @@ local function onDeviceDiscovery(connected, deck)
             LuaButton:new(3, deck, appIconHammerspoon(), hs.openConsole),
             LuaButton:new(8, deck, drawTextIcon("Reload Config"), hs.reload)
         )
-        deck4encoderPage = EncoderPage:newPlus(deck4Plus)
-        deck4encoderPage:addEncoders(
+        deck4page:start()
+
+        deck4encodersController = EncodersController:newPlus(deck4Plus)
+        deck4encodersController:addEncoders(
             Encoder:new(1, deck, hsIcon("test-svgs/hanging-96.png")),
             Encoder:new(2, deck, hsIcon("test-svgs/saggy-64.png")),
             Encoder:new(3, deck, hsIcon("test-svgs/stick.svg")),
             Encoder:new(4, deck, hsIcon("test-svgs/purple-pink-128.png"))
         )
-        deck4encoderPage:start()
-
-        -- TODO make a new EncoderPage
-        deck4page:start()
+        deck4encodersController:start()
     else
         error("Unknown device: " .. name)
     end
