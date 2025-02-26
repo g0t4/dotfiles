@@ -66,6 +66,11 @@ function ClockButton:stop()
     self.timer:stop()
 end
 
+function ClockButton:__tostring()
+    -- this works by virtue of it being set in PushButton.new to self.__tostring which is this
+    return "ClockButton: " .. (self.buttonNumber or "nil")
+end
+
 -- TESTING only:
 -- keep these assertions for now b/c metatables + __index still throws me off and I need this to fallback on
 --   especially as I flesh out my button hierarchy
@@ -75,9 +80,12 @@ end
 
 -- TESTING only:
 local clockTest = ClockButton:new(1, {})
+-- print("clockTest: ", clockTest:__tostring())
 -- inherits funcs from PushButton:
 assert(type(clockTest.pressed) == "function", "clockTest.pressed is a function")
 assert(clockTest.pressed == PushButton.pressed, "clockTest.pressed is inherited")
+assert(type(clockTest.start) == "function", "clockTest.start is a function")
+assert(clockTest.start == ClockButton.start, "clockTest.start is overridden")
 -- keeps its own functions:
 assert(type(clockTest._specialForTesting) == "function", "clockTest._specialForTesting is a function")
 assert(clockTest._specialForTesting == ClockButton._specialForTesting, "still has clockTest._specialForTesting")
