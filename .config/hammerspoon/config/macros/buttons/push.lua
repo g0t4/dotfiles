@@ -8,13 +8,15 @@
 
 ---@class PushButton
 ---@field buttonNumber number
+---@field image hs.image|nil
 ---@field deck hs.streamdeck
 local PushButton = {}
 
 ---@param buttonNumber number
 ---@param deck hs.streamdeck
+---@param image hs.image|nil
 ---@return PushButton
-function PushButton:new(buttonNumber, deck)
+function PushButton:new(buttonNumber, deck, image)
     -- remember, :new( == .new(self ... and whatever is left of :new is passed as self...
     --   so   PushButton:new(1, deck) is the same as PushButton.new(PushButton, 1, deck)
 
@@ -27,13 +29,19 @@ function PushButton:new(buttonNumber, deck)
     setmetatable(o, { __index = self })
     o.buttonNumber = buttonNumber
     o.deck = deck
+    o.image = image
     return o
 end
 
 function PushButton:start()
+    if self.image == nil then
+        return
+    end
+    self.deck:setButtonImage(self.buttonNumber, self.image)
 end
 
 function PushButton:stop()
+    resetButton(self.buttonNumber, self.deck)
 end
 
 function PushButton:pressed()

@@ -11,12 +11,18 @@ end
 ---@class ClockButton : PushButton
 ---@field lastTime string|nil
 ---@field timer hs.timer
-local ClockButton = setmetatable({}, { __index = PushButton }) -- ClockButton inherits PushButton funcs
--- FYI metatable MUST have __index defined (table/func) to use it for lookups
---    THAT SAID, { __index = PushButton } is redundant since PushButton.__index = PushButton (already)
--- FTR foo.__index is not used for lookups, getmetatable(foo).__index is used
--- ClockButton.__index = ClockButton -- Ensure ClockButton can be used as a metatable directly
---  I find setting __index confusing, instead just always use { __index = metatable }
+local ClockButton = setmetatable({}, { __index = PushButton })
+-- here is how you read the line above:
+--  ClockButton is a new table w/ a metatable that has its __index set to PushButton
+--  b/c {} doesn't have a metatable, so we're just attaching one right away
+--  so, KeyStrokeButton inherits everything "static" from PushButton (i.e. functions)
+-- FYI metatable MUST have __index defined (table/func) to use it for key lookups
+--  getmetatable(foo).__index is used, NOT foo.__index
+--
+-- I find setting __index on regular tables confusing, instead just always use { __index = metatable }
+--   so don't use this:
+--     ClockButton.__index = ClockButton -- Ensure ClockButton can be used as a metatable directly
+--   yes, there is an extra table of indirection, don't care if it helps me keep it straight for now
 
 ---@param buttonNumber number
 ---@param deck hs.streamdeck
@@ -24,15 +30,17 @@ local ClockButton = setmetatable({}, { __index = PushButton }) -- ClockButton in
 function ClockButton:new(buttonNumber, deck)
     -- mark return type as ClockButton so luals doesn't complain about setting fields below
     ---@class ClockButton
-    local o = PushButton.new(ClockButton, buttonNumber, deck)
-    -- FYI new(self would allow subclassing ClockButton, but I won't do that until I need it
-    -- FYI PushButton:new(...) == PushButton.new(PushButton, ...)
+    local o = PushButton.new(ClockButton, buttonNumber, deck, nil)
+    -- FTR `.new(self` would allow subclassing ClockButton, but I won't do that until I need it
+    --   using `.new` to explicitly set `self`, otherwise (w/ : colon operator):
+    --   PushButton:new(...) == PushButton.new(PushButton, ...)
     -- Thus I override and pass ClockButton instead (as the implicit self param)
-    --   thus setmetatable in PushButton sets the metatable for me
+    -- AND then setmetatable in PushButton:new sets the metatable for me
     --   or, I could use:
     -- setmetatable(o, ClockButton) -- REDUNDANT, but would not hurt if done again
 
     -- add fields specific to ClockButton
+    -- TODO move this testing to unit tests... that way I don't have to leave it here
     o.testMyOwnField = "foo" -- when testing field inheritance, uncomment this
     o.lastTime = nil
     o.timer = hs.timer.doEvery(10, function()
@@ -57,18 +65,15 @@ function ClockButton:stop()
     self.timer:stop()
 end
 
+-- TESTING only:
 -- keep these assertions for now b/c metatables + __index still throws me off and I need this to fallback on
 --   especially as I flesh out my button hierarchy
 --
 function ClockButton:_specialForTesting()
 end
---
+
+-- TESTING only:
 local clockTest = ClockButton:new(1, {})
--- print("clockTest:", hs.inspect(clockTest)) -- should show fields of both ClockButton and PushButton
--- print("getmetatable(clockTest):", hs.inspect(getmetatable(clockTest)))
--- print("  metatable(clockTest) == PushButton", getmetatable(clockTest) == PushButton)
--- print("  metatable(clockTest) == ClockButton", getmetatable(clockTest) == ClockButton)
--- make sure all of these say true (would've used asssertions but those sucked to troubleshoot)
 -- inherits funcs from PushButton:
 assert(type(clockTest.pressed) == "function", "clockTest.pressed is a function")
 assert(clockTest.pressed == PushButton.pressed, "clockTest.pressed is inherited")
@@ -80,7 +85,8 @@ assert(clockTest._specialForTesting == ClockButton._specialForTesting, "still ha
 assert(clockTest.testMyOwnField == "foo", "clockTest.testMyOwnField is set to 'foo'")
 -- inerhits fields (and they are set) from PushButton:
 assert(clockTest.buttonNumber == 1, "clockTest.buttonNumber is set to 1")
-
+--
+ClockButton._specialForTesting = nil
 
 
 
