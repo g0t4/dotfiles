@@ -57,10 +57,12 @@ function ClockButton:stop()
     self.timer:stop()
 end
 
--- tests to ensure I setup inheritance properly:
+-- keep these assertions for now b/c metatables + __index still throws me off and I need this to fallback on
+--   especially as I flesh out my button hierarchy
+--
 function ClockButton:specialForTesting()
 end
-
+--
 local clockTest = ClockButton:new(1, {})
 -- print("clockTest:", hs.inspect(clockTest)) -- should show fields of both ClockButton and PushButton
 -- print("getmetatable(clockTest):", hs.inspect(getmetatable(clockTest)))
