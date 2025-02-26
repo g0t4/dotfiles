@@ -141,11 +141,6 @@ local function onDeviceDiscovery(connected, deck)
 
     -- TODO on hammerspon QUIT, reset the decks... right? sooo... do that on disconnect? or?
 
-    -- FYI now wth... reset isn't needed it seems... ... well ok maybe if something else sets the buttons... but I am reloading config w/o reset and it changes any button I explicitly set... and no flash this way!
-    --    FOR NOW see if it works w/o reset
-    --    OR, see if I can repor the issue w/o reset and button presses (which I just tested and are fine)
-    --        could it be that I hadn't set any buttons yet and now that I have button clicks work w/o reset?
-
     -- deck:reset() -- FYI if smth goes wrong use reset one off when testing new configs... otherwise my resetButton that sets black background is AWESOME (no flashing logos)
 
     deck:encoderCallback(onEncoderPressed) -- don't need to limit to just PLUS... seems irrelevant on XLs
