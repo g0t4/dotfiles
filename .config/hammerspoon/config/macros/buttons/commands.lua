@@ -12,6 +12,7 @@ end
 ---@param macro string @Name or UUID
 ---@param param string|nil
 function runKMMacro(macro, param)
+    -- FYI could use osascript too (pass applescript to hammerspoon?)
     local app = "/Applications/Keyboard\\ Maestro.app/Contents/MacOS/keyboardmaestro"
     local command = app .. " " .. macro
     if param then

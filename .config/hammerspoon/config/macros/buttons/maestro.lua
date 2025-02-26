@@ -16,15 +16,13 @@ function MaestroButton:new(buttonNumber, deck, image, macro, param)
 end
 
 function MaestroButton:pressed()
-    -- FYI could use osascript too (pass applescript to hammerspoon?)
-    verbose("exec KM: " .. self.macro .. " (" .. self.param .. ")")
     runKMMacro(self.macro, self.param)
 end
 
 function MaestroButton:__tostring()
     return "MaestroButton: " .. (self.buttonNumber or "nil")
-        .. " " .. self.macro
-        .. " " .. self.param
+        .. " " .. (self.macro or "nil")
+        .. " " .. (self.param or "nil")
 end
 
 return MaestroButton

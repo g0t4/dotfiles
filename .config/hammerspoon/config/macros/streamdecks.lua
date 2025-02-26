@@ -184,6 +184,9 @@ local function onDeviceDiscovery(connected, deck)
     elseif name == "2XL" then
         deck2XL = deck
         deck2page = ButtonPage:newXL(deck2XL)
+        deck2page:addButtons(
+            MaestroButton:new(1, deck, hsIcon("fcpx/commands/customize-command-sets.png"), "E5D823AF-6720-4228-940B-C7FC472CBBE5")
+        )
         deck2page:start()
     elseif name == "3XL" then
         deck3XL = deck
