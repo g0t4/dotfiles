@@ -1,3 +1,5 @@
+require("config.helpers")
+
 ---@class AppsObserver
 ---@field watcher hs.application.watcher
 ---@field decks DecksController
@@ -9,6 +11,7 @@ AppsObserver.__index = AppsObserver
 function AppsObserver:new(decks)
     local o = setmetatable({}, AppsObserver)
     o.decks = decks
+    o.decks.appsObserver = o
     o.watcher = hs.application.watcher.new(function(appName, eventType, hsApp)
         if eventType == hs.application.watcher.activated then
             o:onAppActivated(appName, hsApp)
@@ -22,28 +25,41 @@ end
 function AppsObserver:onAppActivated(appName, hsApp)
     print("app activated", appName)
 
+    -- TODO can I do decks in parallel?
+    --  I imagine w/ File I/O it might make a difference to load in parallel instead of series
+    --  TODO measure timings
     for deckName, deckController in pairs(self.decks.deckControllers) do
-        print("  considering:", deckController)
-
-        ---@type Profile
-        local selected = nil
-        if (appName == "Final Cut Pro") then
-            local fcpx = require("config.macros.streamdeck.profiles.fcpx")
-            selected = fcpx:getProfile(deckName)
-        else
-            print("  TODO default profile fallback logic")
-        end
-        -- TODO iterm2 next
-        print("  selected:", selected)
-
-        if selected ~= nil then
-            print("applying", selected, "to", deckName)
-            selected:applyTo(deckController)
-            return
-        end
-        -- CLEAR BUTTONS? OR would calling stop previously do that?
-        deckController.buttons:clearButtons()
+        self:tryLoadProfileForDeck(deckName, deckController, appName)
     end
+end
+
+---@param deckName string
+---@param deckController DeckController
+---@param appName string
+function AppsObserver:tryLoadProfileForDeck(deckName, deckController, appName)
+    ---@type Profile
+    local selected = nil
+    if (appName == "Final Cut Pro") then
+        local fcpx = require("config.macros.streamdeck.profiles.fcpx")
+        selected = fcpx:getProfile(deckName)
+    elseif (appName == "iTerm2") then
+        local iterm = require("config.macros.streamdeck.profiles.iterm")
+        selected = iterm:getProfile(deckName)
+        print("selected iterm", selected)
+    end
+
+    if selected == nil then
+        print("  TODO default profile fallback logic")
+    end
+
+    if selected ~= nil then
+        print("applying", selected, "to", deckName)
+        selected:applyTo(deckController)
+        return
+    end
+
+    -- PRN revisit clear/reset... test any perf impact (if any)
+    deckController.buttons:clearButtons()
 end
 
 function AppsObserver:onAppDeactivated(appName, hsApp)
@@ -52,12 +68,16 @@ function AppsObserver:onAppDeactivated(appName, hsApp)
     -- TODO cleanup
 end
 
+---@param deck DeckController
+function AppsObserver:loadCurrentAppForDeck(deck)
+    -- when deck first connected, or for another reason...
+    local currentApp = hs.application.frontmostApplication()
+    print("  load: ", quote(currentApp:title()), "for", deck.name)
+    self:tryLoadProfileForDeck(deck.name, deck, currentApp:title())
+end
+
 function AppsObserver:start()
     self.watcher:start()
-
-    -- activate for current app
-    local currentApp = hs.application.frontmostApplication()
-    self:onAppActivated(currentApp:title(), currentApp)
 end
 
 function AppsObserver:stop()

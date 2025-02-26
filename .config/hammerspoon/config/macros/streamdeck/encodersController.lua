@@ -32,6 +32,10 @@ function EncodersController:addEncoders(...)
     end
 end
 
+function EncodersController:removeEncoders()
+    self.encoders = {}
+end
+
 function EncodersController:start()
     for encoderNumber = 1, self._numberOfEncoders do
         local encoder = self.encoders[encoderNumber]

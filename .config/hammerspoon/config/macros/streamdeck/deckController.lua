@@ -1,7 +1,6 @@
 local ButtonsController = require("config.macros.streamdeck.buttonsController")
 local EncodersController = require("config.macros.streamdeck.encodersController")
 require("config.macros.streamdeck.helpers")
-local Profiles = require("config.macros.streamdeck.profiles.profiles")
 
 ---@class DeckController
 ---@field deck hs.streamdeck

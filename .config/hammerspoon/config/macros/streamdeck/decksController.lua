@@ -3,6 +3,7 @@ require("config.macros.streamdeck.helpers")
 
 ---@class DecksController
 ---@field deckControllers table<string, DeckController>
+---@field appsObserver AppsObserver
 local DecksController = {}
 DecksController.__index = DecksController
 
@@ -21,6 +22,7 @@ function DecksController:deckConnected(deck)
     self.deckControllers[name] = deckController
     -- print("Starting deck controller:", hs.inspect(getmetatable(deckController)))
     deckController:start()
+    self.appsObserver:loadCurrentAppForDeck(deckController)
 end
 
 ---@param deck hs.streamdeck

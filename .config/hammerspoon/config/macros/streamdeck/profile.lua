@@ -6,7 +6,7 @@ local Profile = {}
 Profile.__index = Profile
 
 ---@param name string @friendly name
----@param appName string @com.apple.FinalCut, com.apple.iMovie, com.apple.Terminal
+---@param appName string @"Final Cut Pro", "iTerm2"
 ---@param deckName string @1XL, 2XL, 3XL, 4+
 function Profile:new(name, appName, deckName)
     local o = setmetatable({}, Profile)
@@ -19,10 +19,12 @@ end
 ---@param deck DeckController
 function Profile:applyTo(deck)
     if deck.buttons ~= nil then
+        deck.buttons:removeButtons()
         deck.buttons:addButtons(self:buttons(deck.deck))
         deck.buttons:start()
     end
     if deck.encoders ~= nil then
+        deck.encoders:removeEncoders()
         deck.encoders:addEncoders(self:encoders(deck.deck))
         deck.encoders:start()
     end

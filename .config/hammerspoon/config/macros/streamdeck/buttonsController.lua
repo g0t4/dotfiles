@@ -41,6 +41,10 @@ function ButtonsController:addButton(button)
     self.buttons[button.buttonNumber] = button
 end
 
+function ButtonsController:removeButtons()
+    self.buttons = {}
+end
+
 ---@param buttons PushButton[]
 function ButtonsController:addButtons(buttons)
     for _, button in ipairs(buttons) do
@@ -73,7 +77,8 @@ function ButtonsController:start()
 end
 
 function ButtonsController:clearButtons()
-    print("clearing buttons")
+    self:removeButtons() -- this just takes them out of the table
+    -- in the event we have no profile ... then we need to show nothing... so we also wipe the button images:
     for buttonNumber = 1, self.rows * self.cols do
         resetButton(buttonNumber, self.deck)
     end

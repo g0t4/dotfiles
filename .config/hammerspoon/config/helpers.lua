@@ -151,4 +151,11 @@ function isStyledText(value)
     return isUserData(value, "hs.styledtext")
 end
 
+function quote(str)
+    if str == nil then
+        return "nil"
+    end
+    return "'" .. str .. "'"
+end
+
 return M
