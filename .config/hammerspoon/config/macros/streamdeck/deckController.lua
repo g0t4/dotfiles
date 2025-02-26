@@ -14,7 +14,7 @@ DeckController.__index = DeckController
 ---@param deck hs.streamdeck
 ---@return DeckController
 function DeckController:new(deck)
-    o = setmetatable({}, self)
+    local o = setmetatable({}, self)
     o.deck = deck
     o.name = getDeckName(deck)
     o.buttons = o.name:find("XL$") and ButtonsController:newXL(deck) or ButtonsController:newPlus(deck)

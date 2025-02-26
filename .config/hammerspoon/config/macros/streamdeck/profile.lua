@@ -3,7 +3,7 @@ local Profile = {}
 Profile.__index = Profile
 
 function Profile:new(name, appBundleId, deckIdentifier)
-    o = setmetatable({}, self)
+    local o = setmetatable({}, self)
     self.name = name
     self.appBundleId = appBundleId
     self.deckIdentifier = deckIdentifier

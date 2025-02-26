@@ -7,7 +7,7 @@ local DecksController = {}
 
 ---@return DecksController
 function DecksController:new()
-    o = setmetatable({}, self) -- metatable, for __tostring only (so far)
+    local o = setmetatable({}, self) -- metatable, for __tostring only (so far)
     self.__index = self
     self._deckControllers = {}
     return o
