@@ -71,15 +71,6 @@ local function onDeviceDiscovery(connected, deck)
         )
         deck2page:start()
     elseif name == "4+" then
-        deck4Plus = deck
-        deck4page = ButtonsController:newPlus(deck4Plus)
-        deck4page:addButtons(
-            LuaButton:new(4, deck, drawTextIcon("Clear Console"), hs.console.clearConsole),
-            LuaButton:new(3, deck, appIconHammerspoon(), hs.openConsole),
-            LuaButton:new(8, deck, drawTextIcon("Reload Config"), hs.reload)
-        )
-        deck4page:start()
-
         deck4encodersController = EncodersController:newPlus(deck4Plus)
         deck4encodersController:addEncoders(
             Encoder:new(1, deck, hsIcon("test-svgs/hanging-96.png")),

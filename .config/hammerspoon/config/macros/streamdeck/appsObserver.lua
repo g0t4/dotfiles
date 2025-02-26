@@ -49,7 +49,8 @@ function AppsObserver:tryLoadProfileForDeck(deckName, deckController, appName)
     end
 
     if selected == nil then
-        print("  TODO default profile fallback logic")
+        local fallback = require("config.macros.streamdeck.profiles.defaults")
+        selected = fallback:getProfile(deckName)
     end
 
     if selected ~= nil then
