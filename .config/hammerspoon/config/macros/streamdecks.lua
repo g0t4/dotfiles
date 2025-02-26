@@ -188,7 +188,8 @@ local function onDeviceDiscovery(connected, deck)
     elseif name == "3XL" then
         deck3XL = deck
         deck3page = ButtonPage:newXL(deck3XL)
-        local macro = "'Titles - Add wes-arrows-* (Parameterized)'"
+        -- local macro = "'Titles - Add wes-arrows-* (Parameterized)'"
+        local macro = "BEE464BB-0C6F-4B8A-9AAF-81603BBA8351"
         deck3page:addButtons(
             MaestroButton:new(26, deck, hsIcon("fcpx/titles/down-arrow.png"), macro, "wes-arrows-down"),
             MaestroButton:new(27, deck, hsIcon("fcpx/titles/right-arrow.png"), macro, "wes-arrows-right"),
