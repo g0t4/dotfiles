@@ -189,10 +189,8 @@ local function onDeviceDiscovery(connected, deck)
         deck3XL = deck
         deck3page = ButtonPage:newXL(deck3XL)
         local macro = "'Titles - Add wes-arrows-* (Parameterized)'"
-        local btn = MaestroButton:new(26, deck, hsIcon("fcpx/titles/down-arrow.png"), macro, "wes-arrows-down")
-        deck3page:addButton(btn)
-        -- todo pass macro name & params here:
         deck3page:addButtons(
+            MaestroButton:new(26, deck, hsIcon("fcpx/titles/down-arrow.png"), macro, "wes-arrows-down"),
             MaestroButton:new(27, deck, hsIcon("fcpx/titles/right-arrow.png"), macro, "wes-arrows-right"),
             MaestroButton:new(25, deck, hsIcon("fcpx/titles/left-arrow.png"), macro, "wes-arrows-left"),
             MaestroButton:new(18, deck, hsIcon("fcpx/titles/up-arrow.png"), macro, "wes-arrows-up"),
@@ -204,9 +202,11 @@ local function onDeviceDiscovery(connected, deck)
     elseif name == "4+" then
         deck4Plus = deck
         deck4page = ButtonPage:newPlus(deck4Plus)
-        deck4page:addButton(LuaButton:new(4, deck, drawTextIcon("Clear Console"), hs.console.clearConsole))
-        deck4page:addButton(LuaButton:new(3, deck, appIconHammerspoon(), hs.openConsole))
-        deck4page:addButton(LuaButton:new(8, deck, drawTextIcon("Reload Config"), hs.reload))
+        deck4page:addButtons(
+            LuaButton:new(4, deck, drawTextIcon("Clear Console"), hs.console.clearConsole),
+            LuaButton:new(3, deck, appIconHammerspoon(), hs.openConsole),
+            LuaButton:new(8, deck, drawTextIcon("Reload Config"), hs.reload)
+        )
         deck4page:start()
     else
         error("Unknown device: " .. name)
