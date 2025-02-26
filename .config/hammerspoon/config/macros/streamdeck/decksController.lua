@@ -131,4 +131,18 @@ function DecksController:applicationChanged(application)
     --   could have base controller logic that is shared too
 end
 
+function DecksController:onDeviceDiscovery(connected, deck)
+    if connected then
+        self:deckConnected(deck)
+    else
+        self:deckDisconnected(deck)
+    end
+end
+
+function DecksController:init()
+    hs.streamdeck.init(function(connected, deck)
+        self:onDeviceDiscovery(connected, deck)
+    end)
+end
+
 return DecksController

@@ -42,16 +42,11 @@ end
 reloadOnMacrosChanges()
 
 local decksController = DecksController:new()
+decksController:init()
 
 ---@param connected boolean
 ---@param deck hs.streamdeck
 local function onDeviceDiscovery(connected, deck)
-    if connected then
-        decksController:deckConnected(deck)
-    else
-        decksController:deckDisconnected(deck)
-    end
-
     -- deck:reset() -- FYI if smth goes wrong use reset one off when testing new configs... otherwise my resetButton that sets black background is AWESOME (no flashing logos)
     do return end
     local name = "foo"
@@ -115,8 +110,6 @@ local function onDeviceDiscovery(connected, deck)
         error("Unknown device: " .. name)
     end
 end
-
-hs.streamdeck.init(onDeviceDiscovery) -- onDeviceConnected)
 
 local observer = nil
 local currentApp = hs.application.frontmostApplication()
