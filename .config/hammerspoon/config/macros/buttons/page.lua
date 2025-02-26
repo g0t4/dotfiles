@@ -41,6 +41,13 @@ function ButtonPage:addButton(button)
     self.buttons[button.buttonNumber] = button
 end
 
+---@param ... PushButton
+function ButtonPage:addButtons(...)
+    for _, button in ipairs({ ... }) do
+        self:addButton(button)
+    end
+end
+
 function ButtonPage:start()
     for buttonNumber = 1, self.rows * self.cols do
         local button = self.buttons[buttonNumber]

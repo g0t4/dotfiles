@@ -50,3 +50,4 @@ end
 function appIconHammerspoon()
     return appIcon("org.hammerspoon.Hammerspoon")
 end
+
