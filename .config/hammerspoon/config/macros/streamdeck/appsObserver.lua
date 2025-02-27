@@ -1,4 +1,4 @@
-require("config.macros.streamdeck.helpers")
+verbose = require("config.macros.streamdeck.helpers").verbose
 require("config.helpers")
 
 ---@class AppsObserver
@@ -36,6 +36,11 @@ function AppsObserver:onAppActivated(appName, hsApp)
     end
 end
 
+function logMyTimes(...)
+    -- verbose(...)
+    -- print(...)
+end
+
 ---@param deckName string
 ---@param deckController DeckController
 ---@param appName string
@@ -46,31 +51,31 @@ function AppsObserver:tryLoadProfileForDeck(deckName, deckController, appName)
     if (appName == "Final Cut Pro") then
         local insideStartTime = GetTime()
         local fcpx = require("config.macros.streamdeck.profiles.fcpx")
-        print("fcpx-require took:", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
+        logMyTimes("fcpx-require took:", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
         selected = fcpx:getProfile(deckName)
-        print("fcpx-getProfile took:", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
+        logMyTimes("fcpx-getProfile took:", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
     elseif (appName == "iTerm2") then
         local insideStartTime = GetTime()
         local iterm = require("config.macros.streamdeck.profiles.iterm")
-        print("iterm-require took:", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
+        logMyTimes("iterm-require took:", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
         selected = iterm:getProfile(deckName)
-        print("iterm-getProfile took:", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
+        logMyTimes("iterm-getProfile took:", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
     end
 
     if selected == nil then
         local insideStartTime = GetTime()
         local fallback = require("config.macros.streamdeck.profiles.defaults")
-        print("fallback-require took:", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
+        logMyTimes("fallback-require took:", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
         selected = fallback:getProfile(deckName)
-        print("fallback-getProfile took:", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
+        logMyTimes("fallback-getProfile took:", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
     end
 
     if selected ~= nil then
         local insideStartTime = GetTime()
         -- verbose("applying", selected, "to", deckName)
         selected:applyTo(deckController)
-        print("applyTo-alone took", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
-        print("FULL LOAD took", GetElapsedTimeInMilliseconds(startTime), "ms to apply", selected, "to", deckName)
+        logMyTimes("applyTo-alone took", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
+        logMyTimes("FULL LOAD took", GetElapsedTimeInMilliseconds(startTime), "ms to apply", selected, "to", deckName)
         return
     end
 
@@ -83,10 +88,10 @@ function AppsObserver:tryLoadProfileForDeck(deckName, deckController, appName)
     --       MY GUESS is resizing images is some of overhead
     --       ALSO, converting formats
     --       ALSO, is color button genreating an image, if so is that slow or?
-    -- deckController.buttons:clearButtons() => 50 to 110ms!!!
-    deckController.deck:reset() -- MUCH faster <1ms
-    print("clearButtons-alone took", GetElapsedTimeInMilliseconds(clearStartTime), "ms to clear", deckName)
-    print("FULL LOAD took", GetElapsedTimeInMilliseconds(startTime), "ms to clear", deckName)
+    deckController.buttons:clearButtons() -- => 50 to 110ms!!!
+    -- deckController.deck:reset() -- MUCH faster <1ms
+    logMyTimes("clearButtons-alone took", GetElapsedTimeInMilliseconds(clearStartTime), "ms to clear", deckName)
+    logMyTimes("FULL LOAD took", GetElapsedTimeInMilliseconds(startTime), "ms to clear", deckName)
 end
 
 function AppsObserver:onAppDeactivated(appName, hsApp)
