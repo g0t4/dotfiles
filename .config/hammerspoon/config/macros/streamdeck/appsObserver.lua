@@ -27,6 +27,10 @@ function AppsObserver:onAppActivated(appName, hsApp)
     -- verbose("app activated", appName)
 
     -- TODO paralell? takes 70-100ms per deck, would ROCK to do in parallel
+    --   TODO measure where bottleneck is... if it is file I/O then I might get speedups using background tasks to load image files..
+    --   if it's crunching numbers => I can likely spin up a separate process per deck to load and set the deck buttons
+    --   TODO also it might be smth trivial, in which case just fix it in-process!
+    --   AFAICT there is no mechanism in hammerspoon to run concurrent tasks (short of using coroutines)?
     for deckName, deckController in pairs(self.decks.deckControllers) do
         self:tryLoadProfileForDeck(deckName, deckController, appName)
     end
@@ -40,28 +44,49 @@ function AppsObserver:tryLoadProfileForDeck(deckName, deckController, appName)
     ---@type Profile
     local selected = nil
     if (appName == "Final Cut Pro") then
+        local insideStartTime = GetTime()
         local fcpx = require("config.macros.streamdeck.profiles.fcpx")
+        print("fcpx-require took:", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
         selected = fcpx:getProfile(deckName)
+        print("fcpx-getProfile took:", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
     elseif (appName == "iTerm2") then
+        local insideStartTime = GetTime()
         local iterm = require("config.macros.streamdeck.profiles.iterm")
+        print("iterm-require took:", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
         selected = iterm:getProfile(deckName)
+        print("iterm-getProfile took:", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
     end
 
     if selected == nil then
+        local insideStartTime = GetTime()
         local fallback = require("config.macros.streamdeck.profiles.defaults")
+        print("fallback-require took:", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
         selected = fallback:getProfile(deckName)
+        print("fallback-getProfile took:", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
     end
 
     if selected ~= nil then
+        local insideStartTime = GetTime()
         -- verbose("applying", selected, "to", deckName)
         selected:applyTo(deckController)
-        print("took", GetElapsedTimeInMilliseconds(startTime), "ms to apply", selected, "to", deckName)
+        print("applyTo-alone took", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
+        print("FULL LOAD took", GetElapsedTimeInMilliseconds(startTime), "ms to apply", selected, "to", deckName)
         return
     end
 
     -- PRN revisit clear/reset... test any perf impact (if any)
-    deckController.buttons:clearButtons()
-    print("took", GetElapsedTimeInMilliseconds(startTime), "ms to clear", deckName)
+    local clearStartTime = GetTime()
+    -- TODO one adjustment, only clear buttons that had something applied to them...
+    --   TODO or can I reset w/o the splashscreen showing?
+    --   TODO as I suspected, setting the image is taking time...
+    --     TODO see that code for timing... I bet if the image is sized appropriately, it's not as slow
+    --       MY GUESS is resizing images is some of overhead
+    --       ALSO, converting formats
+    --       ALSO, is color button genreating an image, if so is that slow or?
+    -- deckController.buttons:clearButtons() => 50 to 110ms!!!
+    deckController.deck:reset() -- MUCH faster <1ms
+    print("clearButtons-alone took", GetElapsedTimeInMilliseconds(clearStartTime), "ms to clear", deckName)
+    print("FULL LOAD took", GetElapsedTimeInMilliseconds(startTime), "ms to clear", deckName)
 end
 
 function AppsObserver:onAppDeactivated(appName, hsApp)
