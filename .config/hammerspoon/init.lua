@@ -72,7 +72,15 @@ require("config.learn.axuielem") -- WIP
 -- require("config.learn.webview")
 --
 
-require("config.macros.streamdeck.bootstrap")
+
+-- TODO try perf monitoring on various image sizes when setButtonImage is called, read code for Hammerspoon to guide
+--   the image sizes or otherwise to try to optimize changing button images
+--   https://github.com/Hammerspoon/hammerspoon/blob/master/extensions/streamdeck/HSStreamDeckDevice.m#L394
+-- StartProfiler()
+-- require("config.macros.streamdeck.bootstrap")
+-- StopProfiler("streamdeck-bootstrap.txt")
+--    see ~/.hammerspoon/streamdeck-bootstrap.txt
+
 require("config.macros.init")
 
 
