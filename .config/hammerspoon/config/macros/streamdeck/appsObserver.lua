@@ -73,6 +73,7 @@ function AppsObserver:tryLoadProfileForDeck(deckName, deckController, appName)
     if selected ~= nil then
         local insideStartTime = GetTime()
         -- verbose("applying", selected, "to", deckName)
+        deckController.deck:reset() -- MUCH faster <1ms (with transparent standby screen on all decks, this is best of all worlds, barely can see flicker - not like that stock elgato image)
         selected:applyTo(deckController)
         logMyTimes("applyTo-alone took", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
         logMyTimes("FULL LOAD took", GetElapsedTimeInMilliseconds(startTime), "ms to apply", selected, "to", deckName)

@@ -71,17 +71,32 @@ function ButtonsController:start()
             -- TODO move this to a deck wrapper type that I can use to add my own deck logic
             -- i.e.:
             --   mydeck:resetButton(buttonNumber)
-            resetButton(buttonNumber, self.deck)
+            -- resetButton(buttonNumber, self.deck)
+            -- SUBSTANTIAL OVERHEAD TO do this on every not set button... lets pull that behavior out and use reset if needed be which is like instant!
         end
     end
 end
 
-function ButtonsController:clearButtons()
-    self:removeButtons() -- this just takes them out of the table
-    -- in the event we have no profile ... then we need to show nothing... so we also wipe the button images:
-    for buttonNumber = 1, self.rows * self.cols do
-        resetButton(buttonNumber, self.deck)
-    end
+function ButtonsController:resetButtons()
+    -- local startTime = GetTime()
+    self:removeButtons() -- EMPTY the LIST of buttons
+    self.deck:reset() -- ~0.3ms
+    -- print("rm in", GetElapsedTimeInMilliseconds(startTime), "ms")
+
+    -- TO get rid of elgato splash screen:
+    -- => elgato app => prefs => devices => pick each deck => advanced btn (lower right)
+    --   => standby screen => click set => drop transparent.svg... BAM!
+    -- WHY reset?
+    --  no holdover buttons
+    --  avoid flicker from logo/standby screen
+    --    by changing standby to blank, if you don't set any buttons on the deck, it won't show the standby screen!
+    --    otherwise, the stock standy logo stays until first button is set after reset
+    --      this also causes the logo flicker (albeit very fast)
+    --  <1 ms to clear (vs 100ms to set each button to transparent)
+    --    FYI it is possible that clear would be fast if I had the right image size
+    --     TODO test image size and performance:
+    --      I found code that appears to do a resize to button dimensions (can get from deck) => 96x96 for XL, 120x120 for Plus
+    --      https://github.com/Hammerspoon/hammerspoon/blob/master/extensions/streamdeck/HSStreamDeckDevice.m#L390
 end
 
 function ButtonsController:stop()
