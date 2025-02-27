@@ -36,7 +36,7 @@ function AppsObserver:onAppActivated(appName, hsApp)
     end
 end
 
-function logMyTimes(...)
+local function logMyTimes(...)
     -- verbose(...)
     -- print(...)
 end
