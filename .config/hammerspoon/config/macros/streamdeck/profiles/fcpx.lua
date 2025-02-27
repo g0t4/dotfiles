@@ -10,7 +10,6 @@ local FcpxObserver = AppObserver:new("Final Cut Pro")
 
 FcpxObserver:addProfile("2XL", function(_, deck)
     return {
-        -- TODO can I decouple deck here?
         MaestroButton:new(1, deck, hsIcon("fcpx/commands/customize-command-sets.png"), "E5D823AF-6720-4228-940B-C7FC472CBBE5"),
         MaestroButton:new(6, deck, hsIcon("fcpx/viewer/disable-captions.png"), "CE9D34A3-348C-457D-BFB9-65908EF3A25B"),
         MaestroButton:new(7, deck, hsIcon("fcpx/viewer/dual-screen.png"), "7967644C-59AE-4AB5-A65F-6EE7D29B9E4C"),
@@ -22,7 +21,6 @@ FcpxObserver:addProfile("3XL", function(_, deck)
     -- local macro = "'Titles - Add wes-arrows-* (Parameterized)'"
     local macro = "BEE464BB-0C6F-4B8A-9AAF-81603BBA8351"
     return {
-        -- TODO can I decouple deck here?
         MaestroButton:new(26, deck, hsIcon("fcpx/titles/down-arrow.png"), macro, "wes-arrows-down"),
         MaestroButton:new(27, deck, hsIcon("fcpx/titles/right-arrow.png"), macro, "wes-arrows-right"),
         MaestroButton:new(25, deck, hsIcon("fcpx/titles/left-arrow.png"), macro, "wes-arrows-left"),
@@ -37,7 +35,6 @@ end)
 
 
 
--- TODO app observing profile changes! (only update buttons that are dynamic, should help with speed, don't redo all buttons... right?)
 local observer = nil
 function onAppActivated(hsApp, appName)
     if observer then
