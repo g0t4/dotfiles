@@ -83,6 +83,18 @@ function GetElapsedTimeInMilliseconds(start_time)
     return math.floor(elapsed_time_seconds * 10000 + 0.5) / 10
 end
 
+function StartProfiler()
+    local ProFi = require("ProFi")
+    ProFi:start()
+end
+
+function StopProfiler(path)
+    path = path or "profi.txt"
+    local ProFi = require("ProFi")
+    ProFi:stop()
+    ProFi:writeReport(path)
+end
+
 function EnumTableValues(tbl)
     return fun.enumerate(tbl):map(function(key, value)
         return value
