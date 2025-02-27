@@ -72,25 +72,16 @@ function AppsObserver:tryLoadProfileForDeck(deckName, deckController, appName)
 
     if selected ~= nil then
         local insideStartTime = GetTime()
-        -- verbose("applying", selected, "to", deckName)
-        deckController.deck:reset() -- MUCH faster <1ms (with transparent standby screen on all decks, this is best of all worlds, barely can see flicker - not like that stock elgato image)
+        deckController.deck:reset() -- < 0.3ms
+        -- FYI applyTo calls removeButtons too, so just need :reset here
         selected:applyTo(deckController)
         logMyTimes("applyTo-alone took", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
         logMyTimes("FULL LOAD took", GetElapsedTimeInMilliseconds(startTime), "ms to apply", selected, "to", deckName)
         return
     end
 
-    -- PRN revisit clear/reset... test any perf impact (if any)
     local clearStartTime = GetTime()
-    -- TODO one adjustment, only clear buttons that had something applied to them...
-    --   TODO or can I reset w/o the splashscreen showing?
-    --   TODO as I suspected, setting the image is taking time...
-    --     TODO see that code for timing... I bet if the image is sized appropriately, it's not as slow
-    --       MY GUESS is resizing images is some of overhead
-    --       ALSO, converting formats
-    --       ALSO, is color button genreating an image, if so is that slow or?
-    deckController.buttons:clearButtons() -- => 50 to 110ms!!!
-    -- deckController.deck:reset() -- MUCH faster <1ms
+    deckController.buttons:resetButtons()
     logMyTimes("clearButtons-alone took", GetElapsedTimeInMilliseconds(clearStartTime), "ms to clear", deckName)
     logMyTimes("FULL LOAD took", GetElapsedTimeInMilliseconds(startTime), "ms to clear", deckName)
 end
