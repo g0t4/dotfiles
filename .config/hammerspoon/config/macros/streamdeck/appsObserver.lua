@@ -38,7 +38,7 @@ end
 
 local function logMyTimes(...)
     -- verbose(...)
-    print(...)
+    -- print(...)
 end
 
 ---@param deckName string
