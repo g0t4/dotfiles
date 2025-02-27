@@ -105,6 +105,7 @@ abbr dcrename 'docker container rename'
 abbr dcrestart 'docker container restart'
 abbr dcri 'docker container run -i -t --rm ' # favorite
 abbr dcrie 'docker container run -i -t --rm --entrypoint '
+abbr dcrpriv 'docker container run -i -t --rm --privileged --pid host ubuntu nsenter -t 1 -a' #  ==> all ns of PID 1
 abbr dcrm 'docker container rm -f'
 abbr dcstart 'docker container start'
 abbr dcstats 'docker container stats'
