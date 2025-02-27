@@ -28,17 +28,21 @@ local blankBlack288ElgatoPNG = hsIcon("blank/black-288x288-elgato-resized-identi
 ---@param buttonNumber number
 ---@param deck hs.streamdeck
 function resetButton(buttonNumber, deck)
-    -- TODO can I speed up by creating an ideal resolution image (72x72, 144x144, 288x288-elgaot's app resized to this size)
+    error("resetButton is no longer used, using reset instead for full device wipes, reimpl one off when a need for it arises... i.e. dynamic subset of a profile might clear some buttons in which case I MAY not wanna do a full rest, though I might!")
     -- deck:setButtonColor(buttonNumber, hs.drawing.color.x11.black) -- 70 to 90ms
     -- deck:setButtonImage(buttonNumber, blankTransparentSVG) -- 70ms to 90ms too
     -- deck:setButtonImage(buttonNumber, blankBlack720PNG) -- 190ms!!!
-    deck:setButtonImage(buttonNumber, blankBlack288ElgatoPNG) -- 90 to 100ms (better)
+    -- deck:setButtonImage(buttonNumber, blankBlack288ElgatoPNG) -- 90 to 100ms (better)
     -- FTR 90/100ms feels super fast in my testing
-    -- TODO try other sizes? look at code under hood for what is gonna work best?
-    -- ! 96x96 on XL, 120x120 on Plus RIGHT?
 
-    -- TODO idea... reset and then set one button to stop the logo from staying on? is there a setting to turn it off?
-    --  elgato app has a setting for changing the logo screen.. use it if needed
+    -- TODO try other sizes? look at code under hood for what is gonna work best?
+    -- !!! 96x96 on XL, 120x120 on Plus RIGHT?
+    --  I still suspect image sizing will make a big difference...
+    --   also curious how the standby screen works?
+    --     IIAC it caches the image for each button device...
+    --     it takes < 0.3ms to set every ICON!!!  even with custom standby screen
+    --     why is it so fast?
+    --     IIAC it's device sized icons
 end
 
 function getDeckName(deck)
