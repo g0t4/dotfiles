@@ -21,11 +21,24 @@ function M.verbose(...)
     log.v(...)
 end
 
+-- local blankTransparentSVG = hsIcon("blank/transparent.svg")
+-- local blankBlack720PNG = hsIcon("blank/black-720x720.png")
+local blankBlack288ElgatoPNG = hsIcon("blank/black-288x288-elgato-resized-identital-across-xl-and-plus.png")
+
+---@param buttonNumber number
+---@param deck hs.streamdeck
 function resetButton(buttonNumber, deck)
-    -- wipes color/image
-    -- seems like a reset :)
-    -- TODO is this at all a problem?
-    deck:setButtonColor(buttonNumber, hs.drawing.color.x11.black)
+    -- TODO can I speed up by creating an ideal resolution image (72x72, 144x144, 288x288-elgaot's app resized to this size)
+    -- deck:setButtonColor(buttonNumber, hs.drawing.color.x11.black) -- 70 to 90ms
+    -- deck:setButtonImage(buttonNumber, blankTransparentSVG) -- 70ms to 90ms too
+    -- deck:setButtonImage(buttonNumber, blankBlack720PNG) -- 190ms!!!
+    deck:setButtonImage(buttonNumber, blankBlack288ElgatoPNG) -- 90 to 100ms (better)
+    -- FTR 90/100ms feels super fast in my testing
+    -- TODO try other sizes? look at code under hood for what is gonna work best?
+    -- ! 96x96 on XL, 120x120 on Plus RIGHT?
+
+    -- TODO idea... reset and then set one button to stop the logo from staying on? is there a setting to turn it off?
+    --  elgato app has a setting for changing the logo screen.. use it if needed
 end
 
 function getDeckName(deck)
