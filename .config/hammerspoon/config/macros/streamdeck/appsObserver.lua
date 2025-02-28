@@ -60,6 +60,18 @@ function AppsObserver:tryLoadProfileForDeck(deckName, deckController, appName)
         logMyTimes("fcpx-require took:", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
         selected = fcpx:getProfile(deckName)
         logMyTimes("fcpx-getProfile took:", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
+    elseif (appName == "Hammerspoon") then
+        local insideStartTime = GetTime()
+        local hammerspoon = require("config.macros.streamdeck.profiles.hammerspoon")
+        logMyTimes("hammerspoon-require took:", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
+        selected = hammerspoon:getProfile(deckName)
+        logMyTimes("hammerspoon-getProfile took:", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
+    elseif (appName == "Finder") then
+        local insideStartTime = GetTime()
+        local finder = require("config.macros.streamdeck.profiles.finder")
+        logMyTimes("finder-require took:", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
+        selected = finder:getProfile(deckName)
+        logMyTimes("finder-getProfile took:", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
     elseif (appName == "iTerm2") then
         local insideStartTime = GetTime()
         local iterm = require("config.macros.streamdeck.profiles.iterm")

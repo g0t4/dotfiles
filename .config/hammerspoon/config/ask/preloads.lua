@@ -28,3 +28,4 @@ local _window = hs.window
 local _sd = hs.streamdeck
 local _console = hs.console
 local _keycodes = hs.keycodes
+local _settings = hs.settings
