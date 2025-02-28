@@ -28,25 +28,27 @@ end
 
 function MenuButton:pressed()
     local frontmostApp = hs.application.frontmostApplication()
-    -- PRN can check if enabled and/or ticked using findMenuItem
-    --    https://www.hammerspoon.org/docs/hs.application.html#bundleID
-    --    FYI if app is not in foreground then all menu items are disabled
-    local menuItem = frontmostApp:findMenuItem(self.menu)
-    -- menuItem has "enabled" and "ticked" fields
-    if menuItem == nil then
-        print("Failed to find menu item for " .. hs.inspect(self.menu))
-        local debugFile = "~/.hammerspoon/menu-dump.lua"
-        hs.alert.show("Failed to find menu item, dumping all menu items to " .. debugFile)
-        frontmostApp:getMenuItems(function(items)
-            local file = io.open(resolveHomePath(debugFile), "w")
-            file:write(hs.inspect(items))
-            file:close()
-        end)
-    end
 
     local succeeded = frontmostApp:selectMenuItem(self.menu, true)
     if not succeeded then
-        print("Failed to select menu item for " .. hs.inspect(self.menu))
+        print("Failed to SELECT menu item for " .. hs.inspect(self.menu))
+
+        local menuItem = frontmostApp:findMenuItem(self.menu)
+        -- menuItem has "enabled" and "ticked" fields
+        --    https://www.hammerspoon.org/docs/hs.application.html#bundleID
+        --    FYI if app is not in foreground then all menu items are disabled
+        if menuItem == nil then
+            print("Failed to FIND menu item for " .. hs.inspect(self.menu))
+            local debugFile = "~/.hammerspoon/menu-dump.lua"
+            hs.alert.show("Failed to find menu item, dumping all menu items to " .. debugFile)
+            frontmostApp:getMenuItems(function(items)
+                local file = io.open(resolveHomePath(debugFile), "w")
+                file:write(hs.inspect(items))
+                file:close()
+            end)
+        else
+            print("HOWEVER, found menu item: " .. hs.inspect(menuItem))
+        end
     end
 end
 
