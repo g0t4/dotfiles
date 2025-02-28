@@ -1,3 +1,4 @@
+local verbose = require("config.macros.streamdeck.helpers").verbose
 local CAPTURE_DIR_SETTINGS_KEY = "screencapture_directory"
 
 -- read the value:
@@ -9,51 +10,65 @@ function getDefaultPhotosDir()
 end
 
 function setPhotosDir()
-    local dir = getSelectedFinderPath()
-    print("dir", dir)
+    local dir = getSelectedFinderDirectories()
     if dir == nil or #dir == 0 then
         hs.alert.show("No directory selected")
     else
         local firstDir = dir[1]
+        -- TODO only allow directories => intermediate func for this
         hs.settings.set(CAPTURE_DIR_SETTINGS_KEY, firstDir)
-        hs.alert.show("Capture dir is now: " .. firstDir)
+        local message = "Capture dir is now: " .. firstDir
+        if #dir > 1 then
+            message = "multiple dirs selected, using first: " .. firstDir
+        end
+        hs.alert.show(message)
     end
 end
 
---- 0+ paths (for all selected items)
---- TODO support multiple selections
-function getSelectedFinderPath()
-    -- ? replicate in hammerspoon alone (not applescript)
-    -- local finder = hs.application.find("Finder")
-    -- local window = finder:focusedWindow()
-    -- ---@type hs.axuielement
-    -- -- local windowElement = hs.axuielement.windowElement(window)
-    -- local windowElement = hs.axuielement.applicationElement(finder)
-    -- print("window", hs.inspect(windowElement:attributeNames()))
+function getSelectedFinderDirectories()
+    local paths = getSelectedFinderPaths()
+    local dirs = {}
+    for _, path in ipairs(paths) do
+        local exists = hs.fs.attributes(path)
+        local isDir = exists and exists.mode == "directory"
+        if isDir then
+            table.insert(dirs, path)
+        end
+    end
+    verbose("selectedFinderDirectories", hs.inspect(dirs))
+    return dirs
+end
 
-    -- PRN review applescript, I had ChatGPT write it for me
+--- return all selected finder item paths (0+ paths)
+--- if nothing is selected, but a window is open, return the directory of that window
+function getSelectedFinderPaths()
     local script = [[
         tell application "Finder"
             try
                 set selectedItems to selection
                 if (count of selectedItems) > 0 then
-                    set firstItem to item 1 of selectedItems
-                    return POSIX path of (firstItem as alias)
+                    set paths to {}
+                    repeat with i in selectedItems
+                        set end of paths to POSIX path of (i as alias)
+                    end repeat
+                    return paths
                 else
-                    return POSIX path of (target of front window as alias)
+                    -- if nothing is selected, but a window is open, return the directory of that window
+                    return {POSIX path of (target of front window as alias)}
                 end if
             on error
-                return ""
+                return {}
             end try
         end tell
     ]]
 
-    local success, output, _ = hs.osascript.applescript(script)
-    if success then
-        -- trim trailing /
-        return { output:gsub("/$", "") }
+    -- btw applescript func returns lua compatible types (parses from func result) AFAICT (haven't looked yet :)
+    local success, paths, _ = hs.osascript.applescript(script)
+    verbose("selectedFinderPaths", hs.inspect(paths))
+    if success and paths then
+        return paths
     else
-        return nil
+        return {}
     end
 end
 
