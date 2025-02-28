@@ -24,7 +24,12 @@ FcpxObserver:addProfile("2XL", function(_, deck)
         MaestroButton:new(1, deck, hsIcon("fcpx/commands/customize-command-sets.png"), "E5D823AF-6720-4228-940B-C7FC472CBBE5"),
         MaestroButton:new(6, deck, hsIcon("fcpx/viewer/disable-captions.png"), "CE9D34A3-348C-457D-BFB9-65908EF3A25B"),
         MaestroButton:new(7, deck, hsIcon("fcpx/viewer/dual-screen.png"), "7967644C-59AE-4AB5-A65F-6EE7D29B9E4C"),
-        MaestroButton:new(8, deck, hsIcon("fcpx/viewer/single-screen.png"), "2D134D9A-EABB-4658-A745-27228C12FF94")
+        MaestroButton:new(8, deck, hsIcon("fcpx/viewer/single-screen.png"), "2D134D9A-EABB-4658-A745-27228C12FF94"),
+
+
+        MenuButton:new(25, deck, drawTextIcon("Save\nCurrent\nFrame", deck), { "File", "Share", "Save Current Frame..." }),
+        MenuButton:new(26, deck, drawTextIcon("Save\n4K", deck), { "File", "Share", "Apple Devices 4K..." }),
+
     }
 end)
 
