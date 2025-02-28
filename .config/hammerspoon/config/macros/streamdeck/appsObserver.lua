@@ -45,6 +45,12 @@ end
 ---@param deckController DeckController
 ---@param appName string
 function AppsObserver:tryLoadProfileForDeck(deckName, deckController, appName)
+    -- TODO perf monitoring on various image sizes when setButtonImage is called,
+    -- read code for Hammerspoon to guide image sizes
+    -- or otherwise to try to optimize changing button images
+    -- https://github.com/Hammerspoon/hammerspoon/blob/master/extensions/streamdeck/HSStreamDeckDevice.m#L394
+    -- StartProfiler()
+
     local startTime = GetTime()
     ---@type Profile
     local selected = nil
@@ -77,6 +83,7 @@ function AppsObserver:tryLoadProfileForDeck(deckName, deckController, appName)
         selected:applyTo(deckController)
         logMyTimes("applyTo-alone took", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
         logMyTimes("FULL LOAD took", GetElapsedTimeInMilliseconds(startTime), "ms to apply", selected, "to", deckName)
+        -- StopProfiler("streamdeck-bootstrap" .. startTime .. "." .. appName .. "." .. deckName .. ".txt")
         return
     end
 
@@ -84,6 +91,8 @@ function AppsObserver:tryLoadProfileForDeck(deckName, deckController, appName)
     deckController.buttons:resetButtons()
     logMyTimes("clearButtons-alone took", GetElapsedTimeInMilliseconds(clearStartTime), "ms to clear", deckName)
     logMyTimes("FULL LOAD took", GetElapsedTimeInMilliseconds(startTime), "ms to clear", deckName)
+
+    -- StopProfiler("streamdeck-bootstrap" .. startTime .. "." .. appName .. "." .. deckName .. ".txt")
 end
 
 function AppsObserver:onAppDeactivated(appName, hsApp)

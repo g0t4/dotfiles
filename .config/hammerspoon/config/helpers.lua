@@ -89,6 +89,7 @@ function StartProfiler()
 end
 
 function StopProfiler(path)
+    print("StopProfiler", path)
     path = path or "profi.txt"
     local ProFi = require("ProFi")
     ProFi:stop()
