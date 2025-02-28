@@ -1,6 +1,68 @@
+local CAPTURE_DIR_SETTINGS_KEY = "screencapture_directory"
+
+-- read the value:
+--   defaults read org.hammerspoon.Hammerspoon screencapture_directory
+-- print("settings bundle", hs.settings.bundleID) => org.hammerspoon.Hammerspoon
+
+function getDefaultPhotosDir()
+    return os.getenv("HOME") .. "/Pictures/Screencaps"
+end
+
+function setPhotosDir()
+    local dir = getSelectedFinderPath()
+    print("dir", dir)
+    if dir == nil or #dir == 0 then
+        hs.alert.show("No directory selected")
+    else
+        local firstDir = dir[1]
+        hs.settings.set(CAPTURE_DIR_SETTINGS_KEY, firstDir)
+        hs.alert.show("Capture dir is now: " .. firstDir)
+    end
+end
+
+--- 0+ paths (for all selected items)
+--- TODO support multiple selections
+function getSelectedFinderPath()
+    -- ? replicate in hammerspoon alone (not applescript)
+    -- local finder = hs.application.find("Finder")
+    -- local window = finder:focusedWindow()
+    -- ---@type hs.axuielement
+    -- -- local windowElement = hs.axuielement.windowElement(window)
+    -- local windowElement = hs.axuielement.applicationElement(finder)
+    -- print("window", hs.inspect(windowElement:attributeNames()))
+
+    -- PRN review applescript, I had ChatGPT write it for me
+    local script = [[
+        tell application "Finder"
+            try
+                set selectedItems to selection
+                if (count of selectedItems) > 0 then
+                    set firstItem to item 1 of selectedItems
+                    return POSIX path of (firstItem as alias)
+                else
+                    return POSIX path of (target of front window as alias)
+                end if
+            on error
+                return ""
+            end try
+        end tell
+    ]]
+
+    local success, output, _ = hs.osascript.applescript(script)
+    if success then
+        -- trim trailing /
+        return { output:gsub("/$", "") }
+    else
+        return nil
+    end
+end
+
+function resetPhotosDir()
+    hs.settings.clear(CAPTURE_DIR_SETTINGS_KEY)
+end
+
 local function getCaptureDirectory()
-    local snapshots_dir = os.getenv("HOME") .. "/Pictures/Screencaps"
-    return snapshots_dir
+    return hs.settings.get(CAPTURE_DIR_SETTINGS_KEY) or getDefaultPhotosDir()
 end
 
 function getScreencaptureFileName(extension)
