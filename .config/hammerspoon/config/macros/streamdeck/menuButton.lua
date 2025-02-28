@@ -47,6 +47,10 @@ function MenuButton:pressed()
                 file:close()
             end)
         else
+            -- this shouldn't happen unless maybe a menu item is disabled?
+            -- select has to fail and find succeeds
+            hs.alert.show("Select menu item failed, but found menu item... unexpected... opening console for you")
+            hs.openConsole()
             print("HOWEVER, found menu item: " .. hs.inspect(menuItem))
         end
     end
