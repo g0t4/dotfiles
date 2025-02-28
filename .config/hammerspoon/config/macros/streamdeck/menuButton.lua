@@ -31,6 +31,10 @@ end
 
 function MenuButton:pressed()
     local menu = self.menu
+    pressMenuItem(menu)
+end
+
+function pressMenuItem(menu)
     local frontmostApp = hs.application.frontmostApplication()
 
     local succeeded = frontmostApp:selectMenuItem(menu, true)
