@@ -1,6 +1,12 @@
 require("config.helpers")
 
-function drawTextIcon(text)
+
+---@param text string
+---@param style table|nil
+---@return hs.image
+function drawTextIcon(text, style)
+    -- PRN? text = hs.styledtext.getStyledTextFromData(text, "html")
+
     local width = 96
     local height = 96
     -- todo based on device button size (4+ has 120x120, XL has 96x96)
@@ -17,23 +23,26 @@ function drawTextIcon(text)
 
     --    hs.styledtext.getStyledTextFromData(data, [type]) w/ type = "html"!
     if type(text) == "string" then
-        -- PRN? text = hs.styledtext.getStyledTextFromData(text, "html")
-        -- https://www.hammerspoon.org/docs/hs.styledtext.html
-        -- print("default font style:", hs.inspect(hs.styledtext.defaultFonts))
-        -- Menlo
-        local styledText = hs.styledtext.new(text, {
-            font = {
-                -- name = ".AppleSystemUIFont", -- THIS matches default, and it looks good (tight, not spaced out)
-                --    TODO can I lookup the default font's name?
-                -- name = "Helvetica"/"Helvetica Neue", -- these are 10-20% bigger
-                -- name = "SF Pro Display", (not this, this is taller)
-                size = 26
-            },
-            color = { red = 1, green = 1, blue = 1, alpha = 1 },
-            paragraphStyle = {
-                alignment = "center",
-            },
-        })
+        if style == nil then
+            -- https://www.hammerspoon.org/docs/hs.styledtext.html
+            -- FYI https://www.hammerspoon.org/docs/hs.canvas.html#attributes
+            -- print("default font style:", hs.inspect(hs.styledtext.defaultFonts))
+            -- Menlo
+            style = {
+                font = {
+                    -- name = ".AppleSystemUIFont", -- THIS matches default, and it looks good (tight, not spaced out)
+                    --    TODO can I lookup the default font's name?
+                    -- name = "Helvetica"/"Helvetica Neue", -- these are 10-20% bigger
+                    -- name = "SF Pro Display", (not this, this is taller)
+                    size = 24
+                },
+                color = { red = 1, green = 1, blue = 1, alpha = 1 },
+                paragraphStyle = {
+                    alignment = "center",
+                },
+            }
+        end
+        local styledText = hs.styledtext.new(text, style)
 
         canvas[2] = {
             type = "text",
@@ -47,6 +56,5 @@ function drawTextIcon(text)
             frame = { x = 0, y = 0, w = width, h = height },
         }
     end
-    -- FYI https://www.hammerspoon.org/docs/hs.canvas.html#attributes
     return canvas:imageFromCanvas()
 end

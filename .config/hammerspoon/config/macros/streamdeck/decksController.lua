@@ -19,16 +19,15 @@ end
 function DecksController:deckConnected(deck)
     local deckController = DeckController:new(deck)
     verbose("Deck connected:", deckController)
-    local name = getDeckName(deck)
-    self.deckControllers[name] = deckController
+    self.deckControllers[deckController.name] = deckController
     deckController:start()
     self.appsObserver:loadCurrentAppForDeck(deckController)
 end
 
 ---@param deck hs.streamdeck
 function DecksController:deckDisconnected(deck)
-    verbose("Deck disconnected: " .. getDeckName(deck))
-    local name = getDeckName(deck)
+    local name = DeckController.getDeckName(deck)
+    verbose("Deck disconnected: " .. name)
     local deckController = self.deckControllers[name]
     if deckController then
         deckController:stop()
