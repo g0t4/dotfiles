@@ -3,9 +3,19 @@ local MaestroButton = require("config.macros.streamdeck.maestroButton")
 local KeyStrokeButton = require("config.macros.streamdeck.keystrokeButton")
 local verbose = require("config.macros.streamdeck.helpers").verbose
 local MenuButton = require("config.macros.streamdeck.menuButton")
+local LuaButton = require("config.macros.streamdeck.luaButton")
 
 
 
+function menu(menu)
+    return function()
+        local frontmostApp = hs.application.frontmostApplication()
+        local succeeded = frontmostApp:selectMenuItem(menu)
+        if not succeeded then
+            print("Failed to select menu item for " .. hs.inspect(menu))
+        end
+    end
+end
 
 local FcpxObserver = AppObserver:new("Final Cut Pro")
 
@@ -44,6 +54,9 @@ FcpxObserver:addProfile("4+", function(_, deck)
         -- *** row 1
         -- KeyStrokeButton:new(1, deck, drawTextIcon("Detach\nAudio", deck), { "ctrl", "shift" }, "s"),
         MenuButton:new(1, deck, drawTextIcon("***\nDetach\nAudio", deck), { "Clip", "Detach Audio" }),
+        -- LuaButton:new(1, deck, drawTextIcon("***\nDetach\nAudio", deck), menu({ "Clip", "Detach Audio" })),
+        --  TODO which do I prefer? lets try menu() approach => one drawback is in dumping the menu details, I would need to reflect over the lua code to dump that which I dunno if that is impossible... but then again do I really need __tostring() on menu classes, that was so not what I think was the point of making them :)
+
         KeyStrokeButton:new(2, deck, drawTextIcon("Freeze\nFrame", deck), { "alt" }, "f"), -- TODO MenuButton?
         KeyStrokeButton:new(3, deck, drawTextIcon("Precision\nEditor", deck), { "ctrl" }, "e"), -- TODO MenuButton?
         MaestroButton:new(4, deck, drawTextIcon("Silence\n0dB", deck), "9EA0CC0E-D4C8-4BC0-B8DD-A4AA6F905940"), -- TODO MenuButton
