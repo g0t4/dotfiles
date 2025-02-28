@@ -17,13 +17,27 @@ function drawTextIcon(text)
 
     --    hs.styledtext.getStyledTextFromData(data, [type]) w/ type = "html"!
     if type(text) == "string" then
-        -- text = hs.styledtext.getStyledTextFromData(text, "html")
+        -- PRN? text = hs.styledtext.getStyledTextFromData(text, "html")
+        -- https://www.hammerspoon.org/docs/hs.styledtext.html
+        -- print("default font style:", hs.inspect(hs.styledtext.defaultFonts))
+        -- Menlo
+        local styledText = hs.styledtext.new(text, {
+            font = {
+                -- name = ".AppleSystemUIFont", -- THIS matches default, and it looks good (tight, not spaced out)
+                --    TODO can I lookup the default font's name?
+                -- name = "Helvetica"/"Helvetica Neue", -- these are 10-20% bigger
+                -- name = "SF Pro Display", (not this, this is taller)
+                size = 26
+            },
+            color = { red = 1, green = 1, blue = 1, alpha = 1 },
+            paragraphStyle = {
+                alignment = "center",
+            },
+        })
+
         canvas[2] = {
             type = "text",
-            text = text,
-            textSize = 24,
-            textAlignment = "center",
-            textColor = { red = 1, green = 1, blue = 1, alpha = 1 },
+            text = styledText,
             frame = { x = 0, y = 0, w = width, h = height },
         }
     elseif isStyledText(text) then
