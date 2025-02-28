@@ -27,7 +27,14 @@ FcpxObserver:addProfile("3XL", function(_, deck)
         MaestroButton:new(18, deck, hsIcon("fcpx/titles/up-arrow.png"), macro, "wes-arrows-up"),
         KeyStrokeButton:new(14, deck, hsIcon("fcpx/timeline/edges/select-right-60x60.png"), {}, "["),
         KeyStrokeButton:new(15, deck, hsIcon("fcpx/timeline/edges/select-both-edges-60x60.png"), {}, "\\"),
-        KeyStrokeButton:new(16, deck, hsIcon("fcpx/timeline/edges/select-left-60x60.png"), {}, "]")
+        KeyStrokeButton:new(16, deck, hsIcon("fcpx/timeline/edges/select-left-60x60.png"), {}, "]"),
+
+
+        MaestroButton:new(30, deck, hsIcon("fcpx/timeline/playhead/select-and-delete-elgato72.png"), "EFEF889C-3C4C-404A-8592-A3BBBD7A5AD6"),
+        -- TODO ; \    -- two separate key strokes (add KeyStrokesButton (plural?))
+        MaestroButton:new(31, deck, hsIcon("fcpx/timeline/edges/prev-edge-both-elgato72.png"), "392700A6-2CB4-44ED-ADDC-F2AC3024116D"),
+        -- TODO ' \    -- two separate key strokes
+        MaestroButton:new(32, deck, hsIcon("fcpx/timeline/edges/next-edge-both-elgato72.png"), "9EA4E03C-31AE-4A25-A683-DFCF265C0FAA"),
     }
 end)
 
