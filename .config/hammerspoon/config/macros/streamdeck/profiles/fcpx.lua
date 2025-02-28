@@ -24,8 +24,7 @@ FcpxObserver:addProfile("2XL", function(_, deck)
 
 
         LuaButton:new(25, deck, drawTextIcon("Save\nCurrent\nFrame", deck), menu({ "File", "Share", "Save Current Frame…" })),
-        LuaButton:new(26, deck, drawTextIcon("Save\n4K", deck), menu({ "File", "Share", "Apple Devices 4K..." })),
-
+        LuaButton:new(26, deck, drawTextIcon("Save\n4K", deck), menu({ "File", "Share", "Apple Devices 4K…" })),
     }
 end)
 
