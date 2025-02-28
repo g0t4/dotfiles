@@ -77,7 +77,7 @@ require("config.learn.axuielem") -- WIP
 --   the image sizes or otherwise to try to optimize changing button images
 --   https://github.com/Hammerspoon/hammerspoon/blob/master/extensions/streamdeck/HSStreamDeckDevice.m#L394
 -- StartProfiler()
--- require("config.macros.streamdeck.bootstrap")
+require("config.macros.streamdeck.bootstrap")
 -- StopProfiler("streamdeck-bootstrap.txt")
 --    see ~/.hammerspoon/streamdeck-bootstrap.txt
 

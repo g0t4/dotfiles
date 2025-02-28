@@ -27,10 +27,11 @@ FallbackProfiles:addProfile("4+",
     end,
     function(_, deck)
         return {
-            Encoder:new(1, deck, hsIcon("test-svgs/hanging-96.png")),
-            Encoder:new(2, deck, hsIcon("test-svgs/saggy-64.png")),
-            Encoder:new(3, deck, hsIcon("test-svgs/stick.svg")),
-            Encoder:new(4, deck, hsIcon("test-svgs/purple-pink-128.png"))
+            -- TODO setup touch screen buttohn gesture! for corresponding encoder
+            -- Encoder:new(1, deck, hsIcon("test-svgs/hanging-96.png")),
+            -- Encoder:new(2, deck, hsIcon("test-svgs/saggy-64.png")),
+            -- Encoder:new(3, deck, hsIcon("test-svgs/stick.svg")),
+            -- Encoder:new(4, deck, hsIcon("test-svgs/purple-pink-128.png"))
         }
     end
 )
