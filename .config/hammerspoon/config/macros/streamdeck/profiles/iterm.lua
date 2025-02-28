@@ -3,8 +3,6 @@ local KeyStrokeButton = require("config.macros.streamdeck.keystrokeButton")
 local LuaButton = require("config.macros.streamdeck.luaButton")
 local AppObserver = require("config.macros.streamdeck.profiles.appObserver")
 
-
-
 local ItermProfile = AppObserver:new("iTerm2")
 
 ItermProfile:addProfile("3XL", function(_, deck)

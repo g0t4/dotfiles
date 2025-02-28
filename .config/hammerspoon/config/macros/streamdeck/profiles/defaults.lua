@@ -19,6 +19,12 @@ FallbackProfiles:addProfile("1XL", function(_, deck)
         LuaButton:new(8, deck, drawTextIcon("Reload Config"), hs.reload),
 
         -- * row 2
+
+
+        -- * row 3
+
+
+        -- * row 4
         -- open folder button
         --   movies dir
         --   screenshots dir
@@ -28,8 +34,18 @@ FallbackProfiles:addProfile("1XL", function(_, deck)
         CommandButton:new(31, deck, hsIcon("files/camera-dir-elgato72.png"), { "open", "~/Pictures/Screencaps" }),
         CommandButton:new(32, deck, hsIcon("files/movies-dir-elgato72.png"), { "open", "~/Movies2" }),
 
+    }
+end)
+
+local function myTestFunc()
+    print("hello jerk")
+end
 
 
+FallbackProfiles:addProfile("2XL", function(_, deck)
+    return {
+        -- row 4:
+        LuaButton:new(32, deck, drawTextIcon("Test"), myTestFunc)
     }
 end)
 
