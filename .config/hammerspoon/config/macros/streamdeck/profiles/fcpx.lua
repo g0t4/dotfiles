@@ -44,9 +44,10 @@ FcpxObserver:addProfile("4+", function(_, deck)
         -- *** row 1
         -- KeyStrokeButton:new(1, deck, drawTextIcon("Detach\nAudio", deck), { "ctrl", "shift" }, "s"),
         MenuButton:new(1, deck, drawTextIcon("***\nDetach\nAudio", deck), { "Clip", "Detach Audio" }),
-        KeyStrokeButton:new(2, deck, drawTextIcon("Freeze\nFrame", deck), { "alt" }, "f"),
-        KeyStrokeButton:new(3, deck, drawTextIcon("Precision\nEditor", deck), { "ctrl" }, "e"), -- forgot about this!
-        MaestroButton:new(4, deck, drawTextIcon("Silence\n0dB", deck), "9EA0CC0E-D4C8-4BC0-B8DD-A4AA6F905940"), -- TODO MenuButton => see Maestro for Silence is all using menus
+        KeyStrokeButton:new(2, deck, drawTextIcon("Freeze\nFrame", deck), { "alt" }, "f"), -- TODO MenuButton?
+        KeyStrokeButton:new(3, deck, drawTextIcon("Precision\nEditor", deck), { "ctrl" }, "e"), -- TODO MenuButton?
+        MaestroButton:new(4, deck, drawTextIcon("Silence\n0dB", deck), "9EA0CC0E-D4C8-4BC0-B8DD-A4AA6F905940"), -- TODO MenuButton
+        -- TODO add speed up/down buttons 4x/2x/1x/custom/0.5/0.25 => most are menu items IIRC
 
         -- *** row 2
         -- 5
