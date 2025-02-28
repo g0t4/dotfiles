@@ -36,21 +36,29 @@ end
 
 function getScreencaptureFileName(extension)
     extension = extension or "png"
-    -- local app = hs.application.frontmostApplication()
-    -- local appElement = hs.axuielement.applicationElement(app)
-    -- PRN capture frontmost app's frontmost window name?
+
+    local frontmostapp = hs.application.frontmostApplication()
+    local appName = frontmostapp:name()
+
     -- I hate having seconds on the screencap UNLESS I have multiple from the same minute
-    local filename = os.date("%Y-%m-%d %Hh%Mm.png")
+    local filename = os.date("%Y-%m-%d %Hh%Mm")
+    if appName ~= nil then
+        filename = filename .. "." .. appName
+    end
     local filePath = getCaptureDirectory() .. "/" .. filename
     if hs.fs.attributes(filePath) ~= nil then
         -- add differentiation otherwise screencap will overwrite previous caps with same name
         --    2025-02-07 14h17m41s.450.png
         -- get fraction of second using absoluteTime such that .100 == 100ms
         local sub_second = (hs.timer.absoluteTime() / 1e6) % 1000
-        filePath = getCaptureDirectory() .. "/" .. os.date("%Y-%m-%d %Hh%Mm%Ss.")
-        filePath = filePath .. string.format("%3.0f", sub_second) .. "." .. extension
+        filePath = getCaptureDirectory() .. "/" .. os.date("%Y-%m-%d %Hh%Mm%Ss")
+        filePath = filePath .. string.format("%3.0f", sub_second)
+        if appName ~= nil then
+            filePath = filePath .. "." .. appName
+        end
     end
-    return filePath
+
+    return filePath .. "." .. extension
 end
 
 -- normal keys:
