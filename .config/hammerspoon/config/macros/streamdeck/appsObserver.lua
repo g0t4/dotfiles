@@ -78,7 +78,7 @@ function AppsObserver:tryLoadProfileForDeck(deckName, deckController, appName)
 
     if selected ~= nil then
         local insideStartTime = GetTime()
-        deckController.deck:reset() -- < 0.3ms
+        deckController.hsdeck:reset() -- < 0.3ms
         -- FYI applyTo calls removeButtons too, so just need :reset here
         selected:applyTo(deckController)
         logMyTimes("applyTo-alone took", GetElapsedTimeInMilliseconds(insideStartTime), "ms")

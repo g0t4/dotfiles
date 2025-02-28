@@ -20,25 +20,25 @@ end
 function Profile:applyTo(deck)
     if deck.buttons ~= nil then
         deck.buttons:removeButtons()
-        deck.buttons:addButtons(self:buttons(deck.deck))
+        deck.buttons:addButtons(self:buttons(deck))
         deck.buttons:start()
     end
     if deck.encoders ~= nil then
         deck.encoders:removeEncoders()
-        deck.encoders:addEncoders(self:encoders(deck.deck))
+        deck.encoders:addEncoders(self:encoders(deck))
         deck.encoders:start()
     end
 end
 
 ---override in subclasses for specific profiles
----@param deck hs.streamdeck
+---@param deck DeckController
 ---@return PushButton[] buttons
 function Profile:buttons(deck)
     return {}
 end
 
 --- override in subclasses for specific profiles
----@param deck hs.streamdeck
+---@param deck DeckController
 ---@return Encoder[] encoders
 function Profile:encoders(deck)
     return {}

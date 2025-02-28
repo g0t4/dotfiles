@@ -15,18 +15,18 @@ function DecksController:new()
     return o
 end
 
----@param deck hs.streamdeck
-function DecksController:deckConnected(deck)
-    local deckController = DeckController:new(deck)
+---@param hsdeck hs.streamdeck
+function DecksController:deckConnected(hsdeck)
+    local deckController = DeckController:new(hsdeck)
     verbose("Deck connected:", deckController)
     self.deckControllers[deckController.name] = deckController
     deckController:start()
     self.appsObserver:loadCurrentAppForDeck(deckController)
 end
 
----@param deck hs.streamdeck
-function DecksController:deckDisconnected(deck)
-    local name = DeckController.getDeckName(deck)
+---@param hsdeck hs.streamdeck
+function DecksController:deckDisconnected(hsdeck)
+    local name = DeckController.getDeckName(hsdeck)
     verbose("Deck disconnected: " .. name)
     local deckController = self.deckControllers[name]
     if deckController then
@@ -35,17 +35,17 @@ function DecksController:deckDisconnected(deck)
     end
 end
 
-function DecksController:onDeviceDiscovery(connected, deck)
+function DecksController:onDeviceDiscovery(connected, hsdeck)
     if connected then
-        self:deckConnected(deck)
+        self:deckConnected(hsdeck)
     else
-        self:deckDisconnected(deck)
+        self:deckDisconnected(hsdeck)
     end
 end
 
 function DecksController:init()
-    hs.streamdeck.init(function(connected, deck)
-        self:onDeviceDiscovery(connected, deck)
+    hs.streamdeck.init(function(connected, hsdeck)
+        self:onDeviceDiscovery(connected, hsdeck)
     end)
 end
 

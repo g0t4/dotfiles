@@ -6,7 +6,7 @@ PushButton = require("config.macros.streamdeck.pushButton")
 local LuaButton = setmetatable({}, { __index = PushButton })
 
 ---@param buttonNumber number
----@param deck hs.streamdeck
+---@param deck DeckController
 ---@param image hs.image
 ---@param func function
 ---@return LuaButton

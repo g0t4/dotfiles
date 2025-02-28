@@ -6,7 +6,7 @@ local PushButton = require("config.macros.streamdeck.pushButton")
 
 ---@class CommandButton : PushButton
 ---@field buttonNumber integer
----@field deck hs.streamdeck
+---@field deck DeckController
 ---@field image string
 ---@field command table<integer, string>
 local CommandButton = setmetatable({}, { __index = PushButton })

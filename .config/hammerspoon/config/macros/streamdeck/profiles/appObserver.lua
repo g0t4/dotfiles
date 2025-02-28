@@ -26,8 +26,8 @@ function AppObserver:getProfile(deckName)
 end
 
 ---@param deckName string
----@param getButtons (fun(self, deck: hs.streamdeck): PushButton[])|nil
----@param getEncoders (fun(self, deck: hs.streamdeck): Encoder[])|nil
+---@param getButtons (fun(self, deck: DeckController): PushButton[])|nil
+---@param getEncoders (fun(self, deck: DeckController): Encoder[])|nil
 function AppObserver:addProfile(deckName, getButtons, getEncoders)
     local profile = Profile:new("n/a", self.appName, deckName)
     self.profiles[deckName] = profile

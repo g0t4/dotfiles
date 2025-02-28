@@ -5,14 +5,12 @@ PushButton = require("config.macros.streamdeck.pushButton")
 --   mostly as a reminder of an obscure hot key
 
 ---@class KeyStrokeButton : PushButton
----@field buttonNumber number
----@field deck hs.streamdeck
 ---@field modifiers table
 ---@field character string
 local KeyStrokeButton = setmetatable({}, { __index = PushButton })
 
 ---@param buttonNumber number
----@param deck hs.streamdeck
+---@param deck DeckController
 ---@param image hs.image
 ---@param modifiers table
 ---@param character string

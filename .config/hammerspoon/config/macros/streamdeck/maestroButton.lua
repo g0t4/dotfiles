@@ -7,6 +7,12 @@ local PushButton = require("config.macros.streamdeck.pushButton")
 ---@field param string|nil
 local MaestroButton = setmetatable({}, { __index = PushButton })
 
+---@param buttonNumber number
+---@param deck DeckController
+---@param image hs.image
+---@param macro string @Name or UUID
+---@param param string|nil
+---@return MaestroButton
 function MaestroButton:new(buttonNumber, deck, image, macro, param)
     ---@class MaestroButton
     local o = PushButton.new(MaestroButton, buttonNumber, deck, image)

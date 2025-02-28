@@ -9,11 +9,11 @@
 ---@class PushButton
 ---@field buttonNumber number
 ---@field image hs.image|nil
----@field deck hs.streamdeck
+---@field deck DeckController
 local PushButton = {}
 
 ---@param buttonNumber number
----@param deck hs.streamdeck
+---@param deck DeckController
 ---@param image hs.image|nil
 ---@return PushButton
 function PushButton:new(buttonNumber, deck, image)
@@ -40,12 +40,12 @@ function PushButton:start()
     if self.image == nil then
         return
     end
-    self.deck:setButtonImage(self.buttonNumber, self.image)
+    self.deck.hsdeck:setButtonImage(self.buttonNumber, self.image)
 end
 
 function PushButton:stop()
     -- TODO this shouldn't be needed here... do a review of cleanup at some point
-    -- resetButton(self.buttonNumber, self.deck)
+    -- resetButton(self.buttonNumber, self.deck.deck)
 end
 
 function PushButton:pressed()

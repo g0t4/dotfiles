@@ -2,11 +2,12 @@ require("config.macros.streamdeck.textToImage")
 require("config.macros.streamdeck.helpers")
 PushButton = require("config.macros.streamdeck.pushButton")
 
-local function getTimeImage()
+---@param deck DeckController
+local function getTimeImage(deck)
     local now = os.date("%H:%M")
     local date = os.date("%a\n%b %d")
     -- https://www.lua.org/pil/22.1.html
-    return drawTextIcon(now .. "\n" .. date)
+    return drawTextIcon(now .. "\n" .. date, deck)
 end
 
 ---@class ClockButton : PushButton
@@ -26,7 +27,7 @@ local ClockButton = setmetatable({}, { __index = PushButton })
 --   yes, there is an extra table of indirection, don't care if it helps me keep it straight for now
 
 ---@param buttonNumber number
----@param deck hs.streamdeck
+---@param deck DeckController
 ---@return ClockButton
 function ClockButton:new(buttonNumber, deck)
     -- mark return type as ClockButton so luals doesn't complain about setting fields below
@@ -54,7 +55,7 @@ function ClockButton:start()
         if self.lastTime ~= nil and self.lastTime == now then
             return
         end
-        self.deck:setButtonImage(self.buttonNumber, getTimeImage())
+        self.deck.hsdeck:setButtonImage(self.buttonNumber, getTimeImage(self.deck))
     end)
     self.timer:start()
     self.timer:fire()
