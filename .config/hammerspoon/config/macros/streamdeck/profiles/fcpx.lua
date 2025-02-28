@@ -27,7 +27,7 @@ FcpxObserver:addProfile("2XL", function(_, deck)
         MaestroButton:new(8, deck, hsIcon("fcpx/viewer/single-screen.png"), "2D134D9A-EABB-4658-A745-27228C12FF94"),
 
 
-        MenuButton:new(25, deck, drawTextIcon("Save\nCurrent\nFrame", deck), { "File", "Share", "Save Current Frame..." }),
+        MenuButton:new(25, deck, drawTextIcon("Save\nCurrent\nFrame", deck), { "File", "Share", "Save Current Frame…" }),
         MenuButton:new(26, deck, drawTextIcon("Save\n4K", deck), { "File", "Share", "Apple Devices 4K..." }),
 
     }

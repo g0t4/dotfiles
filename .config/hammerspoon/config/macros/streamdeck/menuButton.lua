@@ -11,11 +11,12 @@ require("config.macros.streamdeck.helpers")
 local MenuButton = setmetatable({}, { __index = PushButton })
 MenuButton.__index = MenuButton
 
---- only pass one of appBundleID or appPath
+--- pass a table for an exact menu path match
+--- or, a string (regex) to search for a menu item
 ---@param buttonNumber number
 ---@param deck DeckController
 ---@param image hs.image
----@param menu table<integer, string>|string  # PREFER table with exact path, or string to search - i.e. { "File", "Open" }
+---@param menu table<integer, string>|string  # i.e. { "File", "Share", "Save Current Frame…" } or "Save Current.*"
 ---@return MenuButton
 function MenuButton:new(buttonNumber, deck, image, menu)
     ---@class MenuButton
@@ -26,20 +27,27 @@ end
 
 function MenuButton:pressed()
     local frontmostApp = hs.application.frontmostApplication()
-    local succeeded = frontmostApp:selectMenuItem(self.menu)
-    if not succeeded then
-        print("Failed to select menu item for " .. hs.inspect(self.menu))
-    end
     -- PRN can check if enabled and/or ticked using findMenuItem
     --    https://www.hammerspoon.org/docs/hs.application.html#bundleID
     --    FYI if app is not in foreground then all menu items are disabled
-    -- local menuItem = frontmostApp:findMenuItem(self.menu)
-    --   menuItem has "enabled" and "ticked" fields
-    -- if menuItem == nil then
-    --     print("Failed to find menu item for " .. hs.inspect(self.menu))
-    -- else
-    --     menuItem:
-    -- end
+    local menuItem = frontmostApp:findMenuItem(self.menu)
+    -- menuItem has "enabled" and "ticked" fields
+    if menuItem == nil then
+        print("Failed to find menu item for " .. hs.inspect(self.menu))
+        hs.alert.show("Failed to find menu item, check hammerspoon consoole for full list of menu item")
+        frontmostApp:getMenuItems(function(items)
+            for _, item in ipairs(items) do
+                print(hs.inspect(item))
+            end
+        end)
+    else
+        print("Found menu item for " .. hs.inspect(menuItem))
+    end
+
+    local succeeded = frontmostApp:selectMenuItem(self.menu, true)
+    if not succeeded then
+        print("Failed to select menu item for " .. hs.inspect(self.menu))
+    end
 end
 
 function MenuButton:__tostring()

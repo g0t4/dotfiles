@@ -49,6 +49,9 @@ ensureBool(hs.console.darkMode, true)
 ensureBool(hs.preferencesDarkMode, true)
 -- menu icon => hide to declutter menu bar, also b/c I use streamdeck button to show console
 ensureBool(hs.menuIcon, true)
+--
+hs.console.maxOutputHistory(1000000) -- max # chars => default is 100K and resets on reload config
+--
 -- dock icon true => shows in APP SWITCHER TOO
 --   set true when changing config and want to quickly change in app switcher.. then set false again when it annoys you :)
 --
