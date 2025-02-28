@@ -1,3 +1,8 @@
+local function getCaptureDirectory()
+    local snapshots_dir = os.getenv("HOME") .. "/Pictures/Screencaps"
+    return snapshots_dir
+end
+
 function getScreencaptureFileName(extension)
     extension = extension or "png"
     -- local app = hs.application.frontmostApplication()
@@ -5,14 +10,13 @@ function getScreencaptureFileName(extension)
     -- PRN capture frontmost app's frontmost window name?
     -- I hate having seconds on the screencap UNLESS I have multiple from the same minute
     local filename = os.date("%Y-%m-%d %Hh%Mm.png")
-    local snapshots_dir = os.getenv("HOME") .. "/Pictures/Screencaps"
-    local filePath = snapshots_dir .. "/" .. filename
+    local filePath = getCaptureDirectory() .. "/" .. filename
     if hs.fs.attributes(filePath) ~= nil then
         -- add differentiation otherwise screencap will overwrite previous caps with same name
         --    2025-02-07 14h17m41s.450.png
         -- get fraction of second using absoluteTime such that .100 == 100ms
         local sub_second = (hs.timer.absoluteTime() / 1e6) % 1000
-        filePath = snapshots_dir .. "/" .. os.date("%Y-%m-%d %Hh%Mm%Ss.")
+        filePath = getCaptureDirectory() .. "/" .. os.date("%Y-%m-%d %Hh%Mm%Ss.")
         filePath = filePath .. string.format("%3.0f", sub_second) .. "." .. extension
     end
     return filePath
