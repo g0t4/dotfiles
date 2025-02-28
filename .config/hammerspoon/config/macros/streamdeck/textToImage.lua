@@ -3,7 +3,7 @@ require("config.helpers")
 
 ---@param text string
 ---@param deck DeckController
----@param style table|nil
+---@param style table|nil # pass custom style table (https://www.hammerspoon.org/docs/hs.styledtext.html)
 ---@return hs.image
 function drawTextIcon(text, deck, style)
     -- PRN? text = hs.styledtext.getStyledTextFromData(text, "html")
@@ -16,19 +16,21 @@ function drawTextIcon(text, deck, style)
     local canvas = hs.canvas.new({ x = 0, y = 0, w = width, h = height })
     assert(canvas ~= nil, "canvas is nil")
 
-    canvas[1] = {
-        type = "rectangle",
-        action = "fill",
-        fillColor = { red = 0, green = 0, blue = 0, alpha = 1 }, -- Background color
-    }
+    -- if false then
+    --     -- PRN add background color a parameter
+    --     -- right now it's just black so I don't need this
+    --     -- see hs.canvas element attributes for shapes/options:
+    --     --   https://www.hammerspoon.org/docs/hs.canvas.html#attributes
+    --     table.insert(canvas, {
+    --         type = "rectangle",
+    --         action = "fill",
+    --         fillColor = { hex = "#b22793", alpha = 1 },
+    --         -- many ways to set color: https://www.hammerspoon.org/docs/hs.drawing.color.html
+    --     })
+    -- end
 
-    --    hs.styledtext.getStyledTextFromData(data, [type]) w/ type = "html"!
     if type(text) == "string" then
         if style == nil then
-            -- https://www.hammerspoon.org/docs/hs.styledtext.html
-            -- FYI https://www.hammerspoon.org/docs/hs.canvas.html#attributes
-            -- print("default font style:", hs.inspect(hs.styledtext.defaultFonts))
-            -- Menlo
             style = {
                 font = {
                     -- name = ".AppleSystemUIFont", -- THIS matches default, and it looks good (tight, not spaced out)
@@ -37,7 +39,7 @@ function drawTextIcon(text, deck, style)
                     -- name = "SF Pro Display", (not this, this is taller)
                     size = 24
                 },
-                color = { red = 1, green = 1, blue = 1, alpha = 1 },
+                color = { hex = "ffffff", alpha = 1 },
                 paragraphStyle = {
                     alignment = "center",
                 },
@@ -45,17 +47,17 @@ function drawTextIcon(text, deck, style)
         end
         local styledText = hs.styledtext.new(text, style)
 
-        canvas[2] = {
+        table.insert(canvas, {
             type = "text",
             text = styledText,
             frame = { x = 0, y = 0, w = width, h = height },
-        }
+        })
     elseif isStyledText(text) then
-        canvas[2] = {
+        table.insert(canvas, {
             type = "text",
             text = text,
             frame = { x = 0, y = 0, w = width, h = height },
-        }
+        })
     end
     return canvas:imageFromCanvas()
 end

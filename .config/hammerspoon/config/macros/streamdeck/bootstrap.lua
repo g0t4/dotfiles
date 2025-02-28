@@ -14,7 +14,6 @@ decks:init()
 local apps = AppsObserver:new(decks)
 apps:start()
 
--- PRN deck:setBrightness(80) -- 0 to 100 (FYI persists across restarts of hammerspoon... IIAC only need to set this once when I wanna change it)
 -- TODO on hammerspon QUIT, reset the decks... right? sooo... do that on disconnect? or?
 
 -- * REMINDERS

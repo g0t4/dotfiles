@@ -22,6 +22,9 @@ function DecksController:deckConnected(hsdeck)
     self.deckControllers[deckController.name] = deckController
     deckController:start()
     self.appsObserver:loadCurrentAppForDeck(deckController)
+
+    hsdeck:setBrightness(80)
+    -- deck:setBrightness(100) -- 0 to 100 (FYI persists across restarts of hammerspoon... IIAC only need to set this once when I wanna change it)
 end
 
 ---@param hsdeck hs.streamdeck
