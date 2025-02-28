@@ -31,6 +31,7 @@ function drawTextIcon(text, deck, style)
 
     if type(text) == "string" then
         if style == nil then
+            -- TODO merge style table with defaults:
             style = {
                 font = {
                     -- name = ".AppleSystemUIFont", -- THIS matches default, and it looks good (tight, not spaced out)
@@ -46,11 +47,23 @@ function drawTextIcon(text, deck, style)
             }
         end
         local styledText = hs.styledtext.new(text, style)
+        local y = 0
+        -- -- FYI size estimate is off on "Clear\nConsole" but appears good for ClockButton?! (has 3 lines)
+        -- if true then
+        --     local estimatedSize = hs.drawing.getTextDrawingSize(styledText)
+        --     print("estimatedSize(", text, ")", hs.inspect(estimatedSize))
+        --     if estimatedSize.h < height then
+        --         -- shift down by half of diff
+        --         local diff = height - estimatedSize.h
+        --         y = diff / 2
+        --         print("  y", y)
+        --     end
+        -- end
 
         table.insert(canvas, {
             type = "text",
             text = styledText,
-            frame = { x = 0, y = 0, w = width, h = height },
+            frame = { x = 0, y = y, w = width, h = height },
         })
     elseif isStyledText(text) then
         table.insert(canvas, {
