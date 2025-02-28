@@ -5,6 +5,7 @@ local AppObserver = require("config.macros.streamdeck.profiles.appObserver")
 local ClockButton = require("config.macros.streamdeck.clockButton")
 local Encoder = require("config.macros.streamdeck.encoder")
 local CommandButton = require("config.macros.streamdeck.commandButton")
+local AppButton = require("config.macros.streamdeck.appButton")
 
 
 local FallbackProfiles = AppObserver:new("fallback")
@@ -56,13 +57,17 @@ FallbackProfiles:addProfile("4+",
         -- FUTURE => dynamic app switcher buttons in default profile here...
         return {
             -- *** row 1
+            AppButton:new(1, deck, "com.apple.finder"),
+            -- AppButton:new(1, deck, nil, "/System/Library/CoreServices/Finder.app"),
+
+
             -- TODO app switcher
             -- *** row 2
         }
     end,
     function(_, deck)
         return {
-            -- TODO setup touch screen buttohn gesture! for corresponding encoder
+            -- TODO setup touch screen button gesture! for corresponding encoder
             Encoder:new(1, deck, hsIcon("test-svgs/hanging-96.png")),
             Encoder:new(2, deck, hsIcon("test-svgs/saggy-64.png")),
             Encoder:new(3, deck, hsIcon("test-svgs/stick.svg")),
