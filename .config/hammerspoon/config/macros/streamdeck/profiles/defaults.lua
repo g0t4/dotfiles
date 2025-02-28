@@ -13,6 +13,13 @@ FallbackProfiles:addProfile("1XL", function(_, deck)
         ClockButton:new(1, deck)
     }
 end)
+FallbackProfiles:addProfile("1XL", function(_, deck)
+    return {
+        LuaButton:new(6, deck, appIconHammerspoon(), hs.openConsole),
+        LuaButton:new(7, deck, drawTextIcon("Clear Console"), hs.console.clearConsole),
+        LuaButton:new(8, deck, drawTextIcon("Reload Config"), hs.reload)
+    }
+end)
 
 FallbackProfiles:addProfile("4+",
     function(_, deck)
