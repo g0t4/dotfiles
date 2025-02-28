@@ -2,6 +2,7 @@ local AppObserver = require("config.macros.streamdeck.profiles.appObserver")
 local MaestroButton = require("config.macros.streamdeck.maestroButton")
 local KeyStrokeButton = require("config.macros.streamdeck.keystrokeButton")
 local verbose = require("config.macros.streamdeck.helpers").verbose
+local MenuButton = require("config.macros.streamdeck.menuButton")
 
 
 
@@ -41,7 +42,8 @@ end)
 FcpxObserver:addProfile("4+", function(_, deck)
     return {
         -- *** row 1
-        KeyStrokeButton:new(1, deck, drawTextIcon("Detach\nAudio", deck), { "ctrl", "shift" }, "s"),
+        -- KeyStrokeButton:new(1, deck, drawTextIcon("Detach\nAudio", deck), { "ctrl", "shift" }, "s"),
+        MenuButton:new(1, deck, drawTextIcon("***\nDetach\nAudio", deck), { "Clip", "Detach Audio" }),
         KeyStrokeButton:new(2, deck, drawTextIcon("Freeze\nFrame", deck), { "alt" }, "f"),
         KeyStrokeButton:new(3, deck, drawTextIcon("Precision\nEditor", deck), { "ctrl" }, "e"), -- forgot about this!
         MaestroButton:new(4, deck, drawTextIcon("Silence\n0dB", deck), "9EA0CC0E-D4C8-4BC0-B8DD-A4AA6F905940"), -- TODO MenuButton => see Maestro for Silence is all using menus
