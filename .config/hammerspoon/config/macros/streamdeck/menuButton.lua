@@ -23,22 +23,26 @@ function MenuButton:new(buttonNumber, deck, image, menu)
     ---@class MenuButton
     local o = PushButton.new(MenuButton, buttonNumber, deck, image)
     o.menu = menu
+    if menu == nil then
+        error("MenuButton:new() menu param is required, it cannot be nil")
+    end
     return o
 end
 
 function MenuButton:pressed()
+    local menu = self.menu
     local frontmostApp = hs.application.frontmostApplication()
 
-    local succeeded = frontmostApp:selectMenuItem(self.menu, true)
+    local succeeded = frontmostApp:selectMenuItem(menu, true)
     if not succeeded then
-        print("Failed to SELECT menu item for " .. hs.inspect(self.menu))
+        print("Failed to SELECT menu item for " .. hs.inspect(menu))
 
-        local menuItem = frontmostApp:findMenuItem(self.menu)
+        local menuItem = frontmostApp:findMenuItem(menu)
         -- menuItem has "enabled" and "ticked" fields
         --    https://www.hammerspoon.org/docs/hs.application.html#bundleID
         --    FYI if app is not in foreground then all menu items are disabled
         if menuItem == nil then
-            print("Failed to FIND menu item for " .. hs.inspect(self.menu))
+            print("Failed to FIND menu item for " .. hs.inspect(menu))
             local debugFile = "~/.hammerspoon/menu-dump.lua"
             hs.alert.show("Failed to find menu item, dumping all menu items to " .. debugFile)
             frontmostApp:getMenuItems(function(items)
