@@ -31,10 +31,10 @@ end
 
 function MenuButton:pressed()
     local menu = self.menu
-    pressMenuItemWithFailureTroubleshooting(menu)
+    selectMenuItemWithFailureTroubleshooting(menu)
 end
 
-function pressMenuItemWithFailureTroubleshooting(menu)
+function selectMenuItemWithFailureTroubleshooting(menu)
     local frontmostApp = hs.application.frontmostApplication()
 
     local succeeded = frontmostApp:selectMenuItem(menu, true)
