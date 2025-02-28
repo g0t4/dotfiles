@@ -31,6 +31,25 @@ FcpxObserver:addProfile("3XL", function(_, deck)
     }
 end)
 
+FcpxObserver:addProfile("4+", function(_, deck)
+    return {
+        -- *** row 1
+        KeyStrokeButton:new(1, deck, drawTextIcon("Detach\nAudio"), { "ctrl", "shift" }, "s"),
+        KeyStrokeButton:new(2, deck, drawTextIcon("Freeze\nFrame"), { "alt" }, "f"),
+        KeyStrokeButton:new(3, deck, drawTextIcon("Precision\nEditor"), { "ctrl" }, "e"), -- forgot about this!
+        MaestroButton:new(4, deck, drawTextIcon("Silence\n0dB"), "9EA0CC0E-D4C8-4BC0-B8DD-A4AA6F905940"),
+        -- TODO MenuButton => see Maestro for Silence is all using menus
+
+
+        -- *** row 2
+
+
+        -- TODO I would love to have this style:
+        -- keyStroke(1, drawTextIcon("Detach\nAudio"), { "alt", "f" })
+        --   A builder pattern but I don't think methods can be called without fully qualifying the class (table) name?
+    }
+end)
+
 
 
 
