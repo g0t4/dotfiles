@@ -28,9 +28,9 @@ function DeckController:new(hsdeck)
     ---@diagnostic disable-next-line: assign-type-mismatch
     o.buttonSize = hsdeck:imageSize()
 
-    o.buttons = o.name:find("XL$") and ButtonsController:newXL(hsdeck) or ButtonsController:newPlus(hsdeck)
+    o.buttons = o.name:find("XL$") and ButtonsController:newXL(o) or ButtonsController:newPlus(o)
     -- TODO add empty encoder controller instead of nil? with 0 encoders?
-    o.encoders = o.name:find("+$") and EncodersController:newPlus(hsdeck) or nil
+    o.encoders = o.name:find("+$") and EncodersController:newPlus(o) or nil
     return o
 end
 
@@ -73,6 +73,11 @@ function DeckController:onScreenTouched(hsdeck, interaction, xFirst, yFirst, xLa
     self.encoders:onScreenTouched(interaction, xFirst, yFirst, xLast, yLast)
 end
 
+---@param hsdeck hs.streamdeck
+---@param encoderNumber integer
+---@param pressedOrReleased boolean
+---@param turnedLeft boolean
+---@param turnedRight boolean
 function DeckController:onEncoderPressed(hsdeck, encoderNumber, pressedOrReleased, turnedLeft, turnedRight)
     if self.encoders == nil then
         error("onEncoderPressed: no encoders on " .. self.name)
@@ -81,6 +86,9 @@ function DeckController:onEncoderPressed(hsdeck, encoderNumber, pressedOrRelease
     self.encoders:onEncoderPressed(encoderNumber, pressedOrReleased, turnedLeft, turnedRight)
 end
 
+---@param hsdeck hs.streamdeck
+---@param buttonNumber integer
+---@param pressedOrReleased boolean
 function DeckController:onButtonPressed(hsdeck, buttonNumber, pressedOrReleased)
     if self.buttons == nil then
         error("onButtonPressed: no buttons on " .. self.name)

@@ -35,6 +35,8 @@ function DecksController:deckDisconnected(hsdeck)
     end
 end
 
+---@param connected boolean
+---@param hsdeck hs.streamdeck
 function DecksController:onDeviceDiscovery(connected, hsdeck)
     if connected then
         self:deckConnected(hsdeck)

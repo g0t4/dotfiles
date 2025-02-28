@@ -1,7 +1,8 @@
 require("config.macros.streamdeck.helpers")
 
+
 ---@class ButtonsController
----@field deck hs.streamdeck
+---@field deck DeckController
 ---@field rows number
 ---@field cols number
 ---@field buttons table<number, PushButton>
@@ -9,14 +10,12 @@ local ButtonsController = {}
 ButtonsController.__index = ButtonsController
 
 
----@param deck hs.streamdeck
+---@param deck DeckController
 ---@param rows number
 ---@param cols number
 ---@return ButtonsController
 function ButtonsController:new(deck, rows, cols)
-    local o = {}
-    setmetatable(o, self)
-    -- TODO do I need the deck here?
+    local o = setmetatable({}, self)
     o.deck = deck
     o.rows = rows
     o.cols = cols
@@ -24,13 +23,13 @@ function ButtonsController:new(deck, rows, cols)
     return o
 end
 
----@param deck hs.streamdeck
+---@param deck DeckController
 ---@return ButtonsController
 function ButtonsController:newXL(deck)
     return ButtonsController:new(deck, 4, 8)
 end
 
----@param deck hs.streamdeck
+---@param deck DeckController
 ---@return ButtonsController
 function ButtonsController:newPlus(deck)
     return ButtonsController:new(deck, 2, 4)
@@ -71,7 +70,7 @@ function ButtonsController:start()
             -- TODO move this to a deck wrapper type that I can use to add my own deck logic
             -- i.e.:
             --   mydeck:resetButton(buttonNumber)
-            -- resetButton(buttonNumber, self.deck)
+            -- resetButton(buttonNumber, self.deck.hsdeck)
             -- SUBSTANTIAL OVERHEAD TO do this on every not set button... lets pull that behavior out and use reset if needed be which is like instant!
         end
     end
@@ -80,7 +79,7 @@ end
 function ButtonsController:resetButtons()
     -- local startTime = GetTime()
     self:removeButtons() -- EMPTY the LIST of buttons
-    self.deck:reset() -- ~0.3ms
+    self.deck.hsdeck:reset() -- ~0.3ms
     -- print("rm in", GetElapsedTimeInMilliseconds(startTime), "ms")
 
     -- TO get rid of elgato splash screen:

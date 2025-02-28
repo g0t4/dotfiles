@@ -1,16 +1,15 @@
 --
 
 
-
 --- Dial + Screen on Plus models
 ---@class Encoder
 ---@field number number
----@field deck hs.streamdeck
+---@field deck DeckController
 ---@field screenImage hs.image|nil
 local Encoder = {}
 
 ---@param number number
----@param deck hs.streamdeck
+---@param deck DeckController
 ---@param screenImage hs.image|nil
 ---@return Encoder
 function Encoder:new(number, deck, screenImage)
@@ -22,7 +21,7 @@ function Encoder:new(number, deck, screenImage)
 end
 
 function Encoder:start()
-    self.deck:setScreenImage(self.number, self.screenImage)
+    self.deck.hsdeck:setScreenImage(self.number, self.screenImage)
 end
 
 function Encoder:stop()

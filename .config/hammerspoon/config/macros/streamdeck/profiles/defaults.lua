@@ -15,8 +15,8 @@ FallbackProfiles:addProfile("1XL", function(_, deck)
         ClockButton:new(1, deck),
 
         LuaButton:new(6, deck, appIconHammerspoon(), hs.openConsole),
-        LuaButton:new(7, deck, drawTextIcon("Clear Console"), hs.console.clearConsole),
-        LuaButton:new(8, deck, drawTextIcon("Reload Config"), hs.reload),
+        LuaButton:new(7, deck, drawTextIcon("Clear Console", deck), hs.console.clearConsole),
+        LuaButton:new(8, deck, drawTextIcon("Reload Config", deck), hs.reload),
 
         -- * row 2
 
@@ -45,7 +45,7 @@ end
 FallbackProfiles:addProfile("2XL", function(_, deck)
     return {
         -- row 4:
-        LuaButton:new(32, deck, drawTextIcon("Test"), myTestFunc)
+        LuaButton:new(32, deck, drawTextIcon("Test", deck), myTestFunc)
     }
 end)
 
@@ -63,10 +63,10 @@ FallbackProfiles:addProfile("4+",
     function(_, deck)
         return {
             -- TODO setup touch screen buttohn gesture! for corresponding encoder
-            -- Encoder:new(1, deck, hsIcon("test-svgs/hanging-96.png")),
-            -- Encoder:new(2, deck, hsIcon("test-svgs/saggy-64.png")),
-            -- Encoder:new(3, deck, hsIcon("test-svgs/stick.svg")),
-            -- Encoder:new(4, deck, hsIcon("test-svgs/purple-pink-128.png"))
+            Encoder:new(1, deck, hsIcon("test-svgs/hanging-96.png")),
+            Encoder:new(2, deck, hsIcon("test-svgs/saggy-64.png")),
+            Encoder:new(3, deck, hsIcon("test-svgs/stick.svg")),
+            Encoder:new(4, deck, hsIcon("test-svgs/purple-pink-128.png"))
         }
     end
 )

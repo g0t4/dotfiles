@@ -5,12 +5,12 @@ local verbose = require("config.macros.streamdeck.helpers").verbose
 ---@field encoders table<number, Encoder>
 ---@field private _numberOfEncoders number
 ---@field private _screen table<string, number>
----@field deck hs.streamdeck
+---@field deck DeckController
 local EncodersController = {}
 EncodersController.__index = EncodersController
 
 
----@param deck hs.streamdeck
+---@param deck DeckController
 ---@return EncodersController
 function EncodersController:newPlus(deck)
     local o = setmetatable({}, self)
@@ -47,7 +47,7 @@ function EncodersController:start()
         else
             -- clear/reset one button with transparent image:
             local image = hsIcon("blank/transparent.svg")
-            self.deck:setScreenImage(encoderNumber, image)
+            self.deck.hsdeck:setScreenImage(encoderNumber, image)
         end
     end
 end

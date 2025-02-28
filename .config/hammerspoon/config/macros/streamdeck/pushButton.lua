@@ -44,8 +44,6 @@ function PushButton:start()
 end
 
 function PushButton:stop()
-    -- TODO this shouldn't be needed here... do a review of cleanup at some point
-    -- resetButton(self.buttonNumber, self.deck.deck)
 end
 
 function PushButton:pressed()

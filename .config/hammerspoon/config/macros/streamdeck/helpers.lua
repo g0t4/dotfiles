@@ -26,13 +26,13 @@ end
 local blankBlack288ElgatoPNG = hsIcon("blank/black-288x288-elgato-resized-identital-across-xl-and-plus.png")
 
 ---@param buttonNumber number
----@param deck hs.streamdeck
-function resetButton(buttonNumber, deck)
+---@param hsdeck hs.streamdeck
+function resetButton(buttonNumber, hsdeck)
     error("resetButton is no longer used, using reset instead for full device wipes, reimpl one off when a need for it arises... i.e. dynamic subset of a profile might clear some buttons in which case I MAY not wanna do a full rest, though I might!")
-    -- deck:setButtonColor(buttonNumber, hs.drawing.color.x11.black) -- 70 to 90ms
-    -- deck:setButtonImage(buttonNumber, blankTransparentSVG) -- 70ms to 90ms too
-    -- deck:setButtonImage(buttonNumber, blankBlack720PNG) -- 190ms!!!
-    -- deck:setButtonImage(buttonNumber, blankBlack288ElgatoPNG) -- 90 to 100ms (better)
+    -- hsdeck:setButtonColor(buttonNumber, hs.drawing.color.x11.black) -- 70 to 90ms
+    -- hsdeck:setButtonImage(buttonNumber, blankTransparentSVG) -- 70ms to 90ms too
+    -- hsdeck:setButtonImage(buttonNumber, blankBlack720PNG) -- 190ms!!!
+    -- hsdeck:setButtonImage(buttonNumber, blankBlack288ElgatoPNG) -- 90 to 100ms (better)
     -- FTR 90/100ms feels super fast in my testing
 
     -- TODO try other sizes? look at code under hood for what is gonna work best?
