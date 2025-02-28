@@ -48,20 +48,26 @@ function getScreencaptureFileName(extension)
     if appName ~= nil then
         filename = filename .. "." .. appName
     end
-    local filePath = getCaptureDirectory() .. "/" .. filename
-    if hs.fs.attributes(filePath) ~= nil then
-        -- add differentiation otherwise screencap will overwrite previous caps with same name
-        --    2025-02-07 14h17m41s.450.png
-        -- get fraction of second using absoluteTime such that .100 == 100ms
-        local sub_second = (hs.timer.absoluteTime() / 1e6) % 1000
-        filePath = getCaptureDirectory() .. "/" .. os.date("%Y-%m-%d %Hh%Mm%Ss")
-        filePath = filePath .. string.format("%3.0f", sub_second)
-        if appName ~= nil then
-            filePath = filePath .. "." .. appName
-        end
+
+    local shortFileNamePath = getCaptureDirectory() .. "/" .. filename .. "." .. extension
+    if hs.fs.attributes(shortFileNamePath) == nil then
+        return shortFileNamePath
     end
 
-    return filePath .. "." .. extension
+    -- add differentiation otherwise screencap will overwrite previous caps with same name
+    --    2025-02-07 14h17m41s.450.png
+    -- get fraction of second using absoluteTime such that .100 == 100ms
+    local sub_second = (hs.timer.absoluteTime() / 1e6) % 1000
+
+    local longerPath = getCaptureDirectory()
+        .. "/" .. os.date("%Y-%m-%d %Hh%Mm%Ss")
+        .. string.format("%3.0f", sub_second)
+
+    if appName ~= nil then
+        longerPath = longerPath .. "." .. appName
+    end
+
+    return longerPath .. "." .. extension
 end
 
 -- normal keys:
