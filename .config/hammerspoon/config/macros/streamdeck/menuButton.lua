@@ -1,6 +1,7 @@
 local PushButton = require("config.macros.streamdeck.pushButton")
 require("config.macros.streamdeck.textToImage")
 require("config.macros.streamdeck.helpers")
+require("config.helpers")
 
 --- search is slow so if at all possible provide table w/ exact path
 ---   only need string if location changes or text changes base don app/machine/user/etc
@@ -34,14 +35,13 @@ function MenuButton:pressed()
     -- menuItem has "enabled" and "ticked" fields
     if menuItem == nil then
         print("Failed to find menu item for " .. hs.inspect(self.menu))
-        hs.alert.show("Failed to find menu item, check hammerspoon consoole for full list of menu item")
+        local debugFile = "~/.hammerspoon/menu-dump.lua"
+        hs.alert.show("Failed to find menu item, dumping all menu items to " .. debugFile)
         frontmostApp:getMenuItems(function(items)
-            for _, item in ipairs(items) do
-                print(hs.inspect(item))
-            end
+            local file = io.open(resolveHomePath(debugFile), "w")
+            file:write(hs.inspect(items))
+            file:close()
         end)
-    else
-        print("Found menu item for " .. hs.inspect(menuItem))
     end
 
     local succeeded = frontmostApp:selectMenuItem(self.menu, true)
