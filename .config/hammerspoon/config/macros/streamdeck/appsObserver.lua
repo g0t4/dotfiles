@@ -9,8 +9,8 @@ local appModuleLookupByAppName = {
     ["Finder"] = "finder",
     ["iTerm2"] = "iterm",
     ["Brave Browser Beta"] = "brave",
-    ["Safari"] = "safari",
-    ["Preview"] = "preview",
+    -- ["Safari"] = "safari",
+    -- ["Preview"] = "preview",
 }
 
 ---@class AppsObserver
