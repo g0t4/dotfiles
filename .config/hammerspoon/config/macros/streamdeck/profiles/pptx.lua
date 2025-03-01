@@ -26,6 +26,8 @@ local PptxObserver = AppObserver:new("Microsoft PowerPoint")
 
 PptxObserver:addProfilePage(DECK_1XL, PAGE_1, function(_, deck)
     return {
+        -- TODO finish review of buttons and names (Claude started this whole page)
+
         -- * row 1 (buttons 1-8)
         MaestroButton:new(4, deck, hsIconWithText("pptx/recording/start-recording.png", "Start\nRecording", deck, SmallText), "2C964DF9-0831-432B-94FE-124D43593C02"),
         MaestroButton:new(5, deck, hsIcon("pptx/recording/stop-recording.png"), "662A956C-CC67-499B-AEB5-C36D59E5BA3F"),
