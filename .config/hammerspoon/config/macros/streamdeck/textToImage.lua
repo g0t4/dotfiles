@@ -1,5 +1,17 @@
 require("config.helpers")
 
+function merge(t1, t2)
+    local res = {}
+    for k, v in pairs(t1) do res[k] = v end
+    for k, v in pairs(t2) do res[k] = v end
+    return res
+end
+
+--
+-- local t1 = { a = 1, b = 2 }
+-- local t2 = { b = 3, c = 4 }
+-- local merged = merge(t1, t2)
+-- print(hs.inspect(merged))
 
 ---@param text string
 ---@param deck DeckController
