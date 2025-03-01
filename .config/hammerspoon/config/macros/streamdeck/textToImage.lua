@@ -8,6 +8,8 @@ function merge(t1, t2)
     return res
 end
 
+RedText = { color = { hex = "#FF0000" } }
+
 --
 -- local t1 = { a = 1, b = 2 }
 -- local t2 = { b = 3, c = 4 }

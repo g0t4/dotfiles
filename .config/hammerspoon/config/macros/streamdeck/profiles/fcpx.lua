@@ -25,7 +25,7 @@ FcpxObserver:addProfile("2XL", function(_, deck)
 
         LuaButton:new(25, deck, drawTextIcon("Save\nCurrent\nFrame", deck), menu({ "File", "Share", "Save Current Frame…" })),
         LuaButton:new(26, deck, drawTextIcon("Save\n4K", deck), menu({ "File", "Share", "Apple Devices 4K…" })),
-        MaestroButton:new(27, deck, drawTextIcon("Delete GEN'D", deck, { color = { hex = "#FF0000" } }), "B8053FBF-6B8D-4679-A3AA-81A6DFA65A36"), -- Delete Generated/Preview assets
+        MaestroButton:new(27, deck, drawTextIcon("Delete GEN'D", deck, RedText), "B8053FBF-6B8D-4679-A3AA-81A6DFA65A36"), -- Delete Generated/Preview assets
     }
 end)
 
