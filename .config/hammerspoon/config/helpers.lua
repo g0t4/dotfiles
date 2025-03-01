@@ -120,6 +120,7 @@ function TableLeftJoin(theTable, separator)
         end, "")
 end
 
+-- TODO use https://github.com/mirven/underscore.lua/blob/master/lib/underscore.lua?
 function TableReverse(theTable)
     -- just for practice
     local reversed = {}

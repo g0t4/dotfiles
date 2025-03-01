@@ -14,6 +14,7 @@ decks:init()
 local apps = AppsObserver:new(decks)
 apps:start()
 
+local windowFilters = require("config.macros.streamdeck.profiles.testWindowsFilters")
 -- TODO on hammerspon QUIT, reset the decks... right? sooo... do that on disconnect? or?
 
 -- * REMINDERS
