@@ -5,6 +5,7 @@
     //    just split a pane and comment out one of these globals
     //    (both zed and nvim will almost instantly flip to a diagnostic error)
     "diagnostics": {
+        // diagnositcs docs: https://github.com/LuaLS/lua-language-server/blob/master/doc/en-us/config.md
         "globals": [
             "hs",
             // nvim:
