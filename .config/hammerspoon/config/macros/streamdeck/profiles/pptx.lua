@@ -21,7 +21,6 @@ function changePage(deckName, appModuleName, page)
     local pageSettings = require("config.macros.streamdeck.settings.page")
     return function()
         pageSettings.setSavedPageNumber(deckName, appModuleName, page)
-        -- TODO trigger profile change too
     end
 end
 
