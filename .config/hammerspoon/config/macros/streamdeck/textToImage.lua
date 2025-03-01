@@ -1,28 +1,33 @@
 require("config.helpers")
 
-function deep_clone(t, seen)
-    if type(t) ~= "table" then return t end
-    if seen and seen[t] then return seen[t] end
+---@param original table
+---@param seen table|nil
+---@return table
+function deep_clone(original, seen)
+    if type(original) ~= "table" then return original end
+    if seen and seen[original] then return seen[original] end
 
     local copy = {}
     seen = seen or {}
-    seen[t] = copy
+    seen[original] = copy
 
-    for k, v in pairs(t) do
+    for k, v in pairs(original) do
         copy[k] = deep_clone(v, seen)
     end
 
     return copy
 end
 
+---@param defaults table
+---@param overrides table
+---@return table
 function merge(defaults, overrides)
-    local res = {}
-    -- TODO nested merging, i.e. font.size only
-    res = deep_clone(defaults)
+    local merged = deep_clone(defaults)
     for k, v in pairs(overrides) do
-        res[k] = v
+        -- TODO nested merging, i.e. font.size only
+        merged[k] = v
     end
-    return res
+    return merged
 end
 
 RedText = { color = { hex = "#FF0000" } }
