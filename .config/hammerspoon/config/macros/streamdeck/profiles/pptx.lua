@@ -34,6 +34,7 @@ end)
 
 PptxObserver:addProfilePage(DECK_3XL, PAGE_1, function(_, deck)
     return {
+        -- TODO verify button names are appropriate (the ones claude moved, I did pptx/shapes)
         -- * row 1 (buttons 1-8)
         LuaButton:new(1, deck, hsIcon("pptx/shapes/align-left.png"), menu({ "Arrange", "Align or Distribute", "Align Left" })),
         LuaButton:new(2, deck, hsIcon("pptx/shapes/align-center.png"), menu({ "Arrange", "Align or Distribute", "Align Center" })),
