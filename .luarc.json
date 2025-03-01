@@ -18,6 +18,7 @@
             "lowercase-global",
             "need-check-nil",
         ],
+        // I prefer to leave the original variable name too so I can see what it is and not forget its there
         "unusedLocalExclude": [ "_*" ],
     },
 
