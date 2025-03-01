@@ -5,7 +5,7 @@ local AppObserver = require("config.macros.streamdeck.profiles.appObserver")
 
 local ItermProfile = AppObserver:new("iTerm2")
 
-ItermProfile:addProfilePage("3XL", 1, function(_, deck)
+ItermProfile:addProfilePage(DECK_3XL, PAGE_1, function(_, deck)
     return {
         -- row 4:
         KeyStrokeButton:new(32, deck, hsIcon("iterm/copilot-disable.png"), {}, hs.keycodes.map.f13)

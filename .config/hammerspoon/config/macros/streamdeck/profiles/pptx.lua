@@ -27,13 +27,13 @@ end
 
 local PptxObserver = AppObserver:new("Microsoft PowerPoint")
 
-PptxObserver:addProfilePage("2XL", 1, function(_, deck)
+PptxObserver:addProfilePage(DECK_2XL, PAGE_1, function(_, deck)
     return {
 
     }
 end)
 
-PptxObserver:addProfilePage("3XL", 1, function(_, deck)
+PptxObserver:addProfilePage(DECK_3XL, PAGE_1, function(_, deck)
     return {
         -- * row 1
         LuaButton:new(1, deck, hsIcon("pptx/shapes/align-left.png"), menu({ "Arrange", "Align or Distribute", "Align Left" })),
@@ -58,7 +58,7 @@ PptxObserver:addProfilePage("3XL", 1, function(_, deck)
     }
 end)
 
-PptxObserver:addProfilePage("3XL", 2, function(_, deck)
+PptxObserver:addProfilePage(DECK_3XL, PAGE_2, function(_, deck)
     return {
         -- * row 1
 
@@ -67,7 +67,7 @@ PptxObserver:addProfilePage("3XL", 2, function(_, deck)
     }
 end)
 
-PptxObserver:addProfilePage("4+", 1, function(_, deck)
+PptxObserver:addProfilePage(DECK_4PLUS, PAGE_1, function(_, deck)
     return {
         -- *** row 1
 

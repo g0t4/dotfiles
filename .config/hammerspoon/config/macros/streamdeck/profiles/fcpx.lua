@@ -15,7 +15,7 @@ end
 
 local FcpxObserver = AppObserver:new("Final Cut Pro")
 
-FcpxObserver:addProfilePage("2XL", 1, function(_, deck)
+FcpxObserver:addProfilePage(DECK_2XL, PAGE_1, function(_, deck)
     return {
         MaestroButton:new(1, deck, hsIcon("fcpx/commands/customize-command-sets.png"), "E5D823AF-6720-4228-940B-C7FC472CBBE5"),
         MaestroButton:new(6, deck, hsIcon("fcpx/viewer/disable-captions.png"), "CE9D34A3-348C-457D-BFB9-65908EF3A25B"),
@@ -29,7 +29,7 @@ FcpxObserver:addProfilePage("2XL", 1, function(_, deck)
     }
 end)
 
-FcpxObserver:addProfilePage("3XL", 1, function(_, deck)
+FcpxObserver:addProfilePage(DECK_3XL, PAGE_1, function(_, deck)
     -- local macro = "'Titles - Add wes-arrows-* (Parameterized)'"
     local macro = "BEE464BB-0C6F-4B8A-9AAF-81603BBA8351"
     return {
@@ -50,7 +50,7 @@ FcpxObserver:addProfilePage("3XL", 1, function(_, deck)
     }
 end)
 
-FcpxObserver:addProfilePage("4+", 1, function(_, deck)
+FcpxObserver:addProfilePage(DECK_4PLUS, PAGE_1, function(_, deck)
     return {
         -- *** row 1
         -- KeyStrokeButton:new(1, deck, drawTextIcon("Detach\nAudio", deck), { "ctrl", "shift" }, "s"),

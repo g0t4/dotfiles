@@ -1,9 +1,21 @@
 local Profile = require "config.macros.streamdeck.profile"
 ---
 
+DECK_1XL = "1XL"
+DECK_2XL = "2XL"
+DECK_3XL = "3XL"
+DECK_4PLUS = "4+"
 
-
-
+PAGE_1 = 1
+PAGE_2 = 2
+PAGE_3 = 3
+PAGE_4 = 4
+PAGE_5 = 5
+PAGE_6 = 6
+PAGE_7 = 7
+PAGE_8 = 8
+PAGE_9 = 9
+PAGE_10 = 10
 
 ---@class AppObserver
 ---@field profiles table<string, Profile> @deckName -> Profile

@@ -10,7 +10,7 @@ local AppButton = require("config.macros.streamdeck.appButton")
 
 local FallbackProfiles = AppObserver:new("fallback")
 
-FallbackProfiles:addProfilePage("1XL", 1, function(_, deck)
+FallbackProfiles:addProfilePage(DECK_1XL, PAGE_1, function(_, deck)
     return {
         -- * row 1
         ClockButton:new(1, deck),
@@ -43,14 +43,14 @@ local function myTestFunc()
 end
 
 
-FallbackProfiles:addProfilePage("2XL", 1, function(_, deck)
+FallbackProfiles:addProfilePage(DECK_2XL, PAGE_1, function(_, deck)
     return {
         -- row 4:
         LuaButton:new(32, deck, drawTextIcon("Test", deck), myTestFunc)
     }
 end)
 
-FallbackProfiles:addProfilePage("4+", 1,
+FallbackProfiles:addProfilePage(DECK_4PLUS, PAGE_1,
     function(_, deck)
         -- PRN => static app switcher buttons
         --     => good news is can be computed once during app activation (if a neww app)
