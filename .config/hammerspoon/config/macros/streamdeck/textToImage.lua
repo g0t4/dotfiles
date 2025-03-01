@@ -22,9 +22,11 @@ end
 ---@param overrides table
 ---@return table
 function merge(defaults, overrides)
+    print("FYI merge is NOT deep yet... TODO finish or remove this warning if its ok as is")
     local merged = deep_clone(defaults)
     for k, v in pairs(overrides) do
         -- TODO nested merging, i.e. font.size only
+        -- TODO don't overwrite all of nested tables? or do?
         merged[k] = v
     end
     return merged
