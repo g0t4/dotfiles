@@ -29,6 +29,17 @@ local PptxObserver = AppObserver:new("Microsoft PowerPoint")
 PptxObserver:addProfilePage(DECK_2XL, PAGE_1, function(_, deck)
     return {
 
+        LuaButton:new(32, deck, drawTextIcon(">", deck), changePage(DECK_2XL, "pptx", PAGE_2)),
+
+    }
+end)
+
+PptxObserver:addProfilePage(DECK_2XL, PAGE_2, function(_, deck)
+    return {
+        -- * row 1
+
+        -- * row 4
+        LuaButton:new(25, deck, drawTextIcon("<", deck), changePage(DECK_2XL, "pptx", PAGE_1)),
     }
 end)
 
@@ -39,14 +50,13 @@ PptxObserver:addProfilePage(DECK_3XL, PAGE_1, function(_, deck)
         LuaButton:new(2, deck, hsIcon("pptx/shapes/align-center.png"), menu({ "Arrange", "Align or Distribute", "Align Center" })),
         LuaButton:new(3, deck, hsIcon("pptx/shapes/align-right.png"), menu({ "Arrange", "Align or Distribute", "Align Right" })),
 
-        LuaButton:new(4, deck, hsIcon("pptx/shapes/distribute-horizontal.png"), menu({ "Arrange", "Align or Distribute", "Distribute Horizontally" })),
         LuaButton:new(5, deck, hsIcon("pptx/shapes/distribute-vertical.png"), menu({ "Arrange", "Align or Distribute", "Distribute Vertically" })),
+        LuaButton:new(6, deck, hsIcon("pptx/shapes/distribute-horizontal.png"), menu({ "Arrange", "Align or Distribute", "Distribute Horizontally" })),
 
         LuaButton:new(8, deck, hsIcon("pptx/shapes/align-top.png"), menu({ "Arrange", "Align or Distribute", "Align Top" })),
         LuaButton:new(16, deck, hsIcon("pptx/shapes/align-middle.png"), menu({ "Arrange", "Align or Distribute", "Align Middle" })),
         LuaButton:new(24, deck, hsIcon("pptx/shapes/align-bottom.png"), menu({ "Arrange", "Align or Distribute", "Align Bottom" })),
 
-        LuaButton:new(16, deck, drawTextIcon(">", deck), changePage("3XL", "pptx", 2)),
 
 
         LuaButton:new(17, deck, hsIcon("pptx/shapes/flip-vertical.png"), menu({ "Arrange", "Rotate or Flip", "Flip Vertical" })),
@@ -54,15 +64,6 @@ PptxObserver:addProfilePage(DECK_3XL, PAGE_1, function(_, deck)
         LuaButton:new(19, deck, hsIcon("pptx/shapes/rotate-left-90.png"), menu({ "Arrange", "Rotate or Flip", "Rotate Left 90°" })),
         LuaButton:new(20, deck, hsIcon("pptx/shapes/rotate-right-90.png"), menu({ "Arrange", "Rotate or Flip", "Rotate Right 90°" })),
 
-    }
-end)
-
-PptxObserver:addProfilePage(DECK_3XL, PAGE_2, function(_, deck)
-    return {
-        -- * row 1
-
-        -- * row 4
-        LuaButton:new(25, deck, drawTextIcon("<", deck), changePage("3XL", "pptx", 1)),
     }
 end)
 
