@@ -11,10 +11,10 @@ require("config.macros.streamdeck.iconHelpers")
 -- !!! TODO app observer for shapes and other types... activate different buttons (or behaviors) based on the current seleted shape
 
 
-
 function openPath(path)
     return function()
-        runCommand("open " .. path)
+        -- TODO how do I wanna deal with spaces? Is this fine:
+        runCommand("open '" .. path .. "'")
     end
 end
 
