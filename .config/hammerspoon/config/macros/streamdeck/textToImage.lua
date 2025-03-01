@@ -2,6 +2,7 @@ require("config.helpers")
 
 function merge(t1, t2)
     local res = {}
+    -- TODO nested merging, i.e. font.size only
     for k, v in pairs(t1) do res[k] = v end
     for k, v in pairs(t2) do res[k] = v end
     return res
