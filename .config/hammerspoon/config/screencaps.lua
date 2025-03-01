@@ -36,9 +36,11 @@ end
 
 function getScreencaptureFileName(extension)
     extension = extension or "png"
-    -- TODO can I adjust quality of the screencapture? IIRC there was a way to adjust this but not sure if I am using it or not
-    --   TODO use stock macOS screencapture buttons w/o my overrides (to same cmd) here and see if sizes are similar?
-    --
+
+    -- FYI file sizes verified to match macOS keyboard shortcuts for screencap
+    --   probably b/c macOS uses exact same args to screencapture cmd
+
+    -- TODO how about have shadow be when I hold down option key and off by default?
 
     local frontmostapp = hs.application.frontmostApplication()
     local appName = frontmostapp:name()
