@@ -51,48 +51,33 @@ function AppsObserver:tryLoadProfileForDeck(deckName, deckController, appName)
     -- https://github.com/Hammerspoon/hammerspoon/blob/master/extensions/streamdeck/HSStreamDeckDevice.m#L394
     -- StartProfiler()
 
+    -- TODO add ability to switch pages
+    --   TODO store current page across restarts?
+
     local startTime = GetTime()
     ---@type Profile
     local selected = nil
-    if (appName == "Final Cut Pro") then
-        local insideStartTime = GetTime()
-        local fcpx = require("config.macros.streamdeck.profiles.fcpx")
-        logMyTimes("fcpx-require took:", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
-        selected = fcpx:getProfilePage(deckName, 1)
-        logMyTimes("fcpx-getProfile took:", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
-    elseif (appName == "Hammerspoon") then
-        local insideStartTime = GetTime()
-        local hammerspoon = require("config.macros.streamdeck.profiles.hammerspoon")
-        logMyTimes("hammerspoon-require took:", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
-        selected = hammerspoon:getProfilePage(deckName, 1)
-        logMyTimes("hammerspoon-getProfile took:", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
-    elseif (appName == "Microsoft PowerPoint") then
-        local insideStartTime = GetTime()
-        local pptx = require("config.macros.streamdeck.profiles.pptx")
-        logMyTimes("pptx-require took:", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
-        selected = pptx:getProfilePage(deckName, 1)
-        logMyTimes("pptx-getProfile took:", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
-    elseif (appName == "Finder") then
-        local insideStartTime = GetTime()
-        local finder = require("config.macros.streamdeck.profiles.finder")
-        logMyTimes("finder-require took:", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
-        selected = finder:getProfilePage(deckName, 1)
-        logMyTimes("finder-getProfile took:", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
-    elseif (appName == "iTerm2") then
-        local insideStartTime = GetTime()
-        local iterm = require("config.macros.streamdeck.profiles.iterm")
-        logMyTimes("iterm-require took:", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
-        selected = iterm:getProfilePage(deckName, 1)
-        logMyTimes("iterm-getProfile took:", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
+    local appLookup = {
+        ["Final Cut Pro"] = "fcpx",
+        ["Hammerspoon"] = "hammerspoon",
+        ["Microsoft PowerPoint"] = "pptx",
+        ["Finder"] = "finder",
+        ["iTerm2"] = "iterm",
+        ["Brave Browser Beta"] = "brave",
+        ["Safari"] = "safari",
+        ["Preview"] = "preview",
+    }
+
+    local moduleName = appLookup[appName]
+    if moduleName == nil then
+        moduleName = "defaults"
     end
 
-    if selected == nil then
-        local insideStartTime = GetTime()
-        local fallback = require("config.macros.streamdeck.profiles.defaults")
-        logMyTimes("fallback-require took:", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
-        selected = fallback:getProfilePage(deckName, 1)
-        logMyTimes("fallback-getProfile took:", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
-    end
+    local insideStartTime = GetTime()
+    local module = require("config.macros.streamdeck.profiles." .. moduleName)
+    logMyTimes(moduleName .. "-require took:", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
+    selected = module:getProfilePage(deckName, 1)
+    logMyTimes(moduleName .. "-getProfile took:", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
 
     if selected ~= nil then
         local insideStartTime = GetTime()
