@@ -38,6 +38,15 @@ end
 
 RedText = { color = { hex = "#FF0000" } }
 
+
+function pageLeftImage(deck)
+    return drawTextIcon("<", deck, { font = { size = 50 } })
+end
+
+function pageRightImage(deck)
+    return drawTextIcon(">", deck, { font = { size = 50 } })
+end
+
 --
 -- local t1 = { a = 1, b = 2 }
 -- local t2 = { b = 3, c = 4 }
