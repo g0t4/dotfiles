@@ -56,21 +56,72 @@ end)
 
 PptxObserver:addProfilePage(DECK_2XL, PAGE_1, function(_, deck)
     return {
+        -- * row 1 (buttons 1-8)
+        MaestroButton:new(1, deck, hsIcon("pptx/colors/fill-gray-dark.png"), "D2B20FA1-3564-4021-86CB-D94D08151BED"),
+        MaestroButton:new(2, deck, hsIcon("pptx/colors/line-gray-dark.png"), "5B6621C7-D4F3-4602-9C3B-E8BC3C458C37"),
+        MaestroButton:new(3, deck, hsIcon("pptx/colors/text-gray-dark.png"), "55278E01-CAE8-4E99-ACEE-2BDD7941A0DC"),
+        MaestroButton:new(5, deck, hsIcon("pptx/colors/fill-gray-middle.png"), "FAC6E724-4481-4F68-8112-178042B43CB4"),
+        MaestroButton:new(6, deck, hsIcon("pptx/colors/line-gray-middle.png"), "61EA278C-0DC9-46F3-939E-26EF933D2CBD"),
+        MaestroButton:new(7, deck, hsIcon("pptx/colors/text-gray-middle.png"), "FEB8C424-5350-4B4B-8CDA-1291EAF13F01"),
+        
+        -- * row 2 (buttons 9-16)
+        MaestroButton:new(9, deck, hsIcon("pptx/colors/fill-gray-light.png"), "F5AF89F1-2ACC-4272-BCAA-87106F78B11E"),
+        MaestroButton:new(10, deck, hsIcon("pptx/colors/line-gray-light.png"), "5ED37CD2-669A-49B1-ABDC-03B1C42926A6"),
+        MaestroButton:new(11, deck, hsIcon("pptx/colors/text-gray-light.png"), "813D28B3-9EFB-4871-ABA9-447FF9F848E1"),
+        MaestroButton:new(13, deck, hsIcon("pptx/colors/fill-white.png"), "0604BF43-7965-4BDB-98C0-06A3017F2C4E"),
+        MaestroButton:new(14, deck, hsIcon("pptx/colors/line-white.png"), "7EBFC5EC-7DC2-47B2-BDB0-81907ED745CD"),
+        MaestroButton:new(15, deck, hsIcon("pptx/colors/text-white.png"), "FB59CAE0-092B-4793-887B-41D914EC4FC3"),
 
-
-        -- * row 4
+        -- * row 3 (buttons 17-24)
+        
+        -- * row 4 (buttons 25-32)
         LuaButton:new(32, deck, pageRightImage(deck), changePage(DECK_2XL, "pptx", PAGE_2)),
-
     }
 end)
 
 PptxObserver:addProfilePage(DECK_2XL, PAGE_2, function(_, deck)
     return {
-        -- * row 1
-
-        -- * row 4
-        LuaButton:new(25, deck, pageLeftImage(deck), changePage(DECK_2XL, "pptx", PAGE_1)),
-
+        -- * row 1 (buttons 1-8)
+        MaestroButton:new(1, deck, hsIcon("pptx/colors/fill-pink.png"), "02BF881E-47AF-4812-830F-4765B6AABC41"),
+        MaestroButton:new(2, deck, hsIcon("pptx/colors/line-pink.png"), "FBAD1498-E64F-4A26-8B41-59D4B59C4F6B"),
+        MaestroButton:new(3, deck, hsIcon("pptx/colors/text-pink.png"), "F5068DE4-4EA3-4B4E-ABE9-44A358D380B1"),
+        MaestroButton:new(5, deck, hsIcon("pptx/colors/fill-blue.png"), "D5CD851F-5A99-46E1-A922-4EF11726BD8A"),
+        MaestroButton:new(6, deck, hsIcon("pptx/colors/line-blue.png"), "5250FA4D-74BE-4E29-8EFB-3F9DA4183923"),
+        MaestroButton:new(7, deck, hsIcon("pptx/colors/text-blue.png"), "A8963B4C-825B-4BBC-9C4B-105B1FDBB253"),
+        
+        -- * row 2 (buttons 9-16)
+        MaestroButton:new(9, deck, hsIcon("pptx/colors/fill-purple.png"), "EE2F4019-8615-4A6C-9CE8-840D9FA27778"),
+        MaestroButton:new(10, deck, hsIcon("pptx/colors/line-purple.png"), "4AD5641B-4BAF-47D6-A6B8-D8D93041F23C"),
+        MaestroButton:new(11, deck, hsIcon("pptx/colors/text-purple.png"), "09063A55-0CE1-4AE3-BAC2-8DF341AF619D"),
+        MaestroButton:new(13, deck, hsIcon("pptx/colors/fill-yellow.png"), "70299E82-5094-44CD-98EB-EE783BE3FA0E"),
+        MaestroButton:new(14, deck, hsIcon("pptx/colors/line-yellow.png"), "289D7C69-74B6-4127-B7EF-4C054EADD65E"),
+        MaestroButton:new(15, deck, hsIcon("pptx/colors/text-yellow.png"), "E13771C5-F241-4C3A-8064-7765F6F30369"),
+        
+        -- * row 3 (buttons 17-24)
+        MaestroButton:new(17, deck, hsIcon("pptx/colors/fill-orange.png"), "C4E8F125-C719-4125-A3A2-1492642DC054"),
+        MaestroButton:new(18, deck, hsIcon("pptx/colors/line-orange.png"), "2AA28BE5-58A4-403C-8ABD-3FC69152E5B3"),
+        MaestroButton:new(19, deck, hsIcon("pptx/colors/text-orange.png"), "F4CB8BE1-1199-4472-948F-07D5BBF11464"),
+        MaestroButton:new(21, deck, hsIcon("pptx/colors/fill-green.png"), "EB427AC4-F6EE-4C4A-8972-47C7D91F1C92"),
+        MaestroButton:new(22, deck, hsIcon("pptx/colors/line-green.png"), "D1E5B8B5-3160-4FF7-B6F3-F6812576AEFD"),
+        MaestroButton:new(23, deck, hsIcon("pptx/colors/text-green.png"), "3634BCDF-9426-47ED-94DB-5A2B6AE29C66"),
+        
+        -- * row 4 (buttons 25-32)
+        MaestroButton:new(25, deck, hsIcon("pptx/colors/fill-red.png"), "7E4D159E-F181-4D32-B567-033AD826CD6A"),
+        MaestroButton:new(26, deck, hsIcon("pptx/colors/line-red.png"), "39368956-2C5B-41B6-8ACE-AC26D8BE2BFC"),
+        MaestroButton:new(27, deck, hsIcon("pptx/colors/text-red.png"), "6D19B684-4DA2-4566-8F76-FCAACB39FED9"),
+        MaestroButton:new(28, deck, hsIconWithText("pptx/grouping/group-objects.png", "G", deck, MediumText), "D31AB7EB-3AFC-423E-8029-10C2AB5D5E33"),
+        MaestroButton:new(29, deck, hsIcon("pptx/colors/fill-inky-blue.png"), "796DFBC5-8B80-4422-9AA5-D19DE2A055D4"),
+        MaestroButton:new(30, deck, hsIcon("pptx/colors/line-inky-blue.png"), "6769734A-DC6E-4D4E-9E20-641AD9197005"),
+        MaestroButton:new(31, deck, hsIcon("pptx/colors/text-inky-blue.png"), "7F18E471-F989-4DA0-967D-1E935E3E0FC3"),
+        MaestroButton:new(32, deck, hsIconWithText("pptx/grouping/ungroup-objects.png", "UN", deck, MediumText), "5E6CF183-E907-4316-B833-04421A29A304"),
+        
+        -- Additional buttons from second page's other positions
+        -- Adding as comments as they weren't in the specific positions I migrated above
+        -- MaestroButton:new(??, deck, hsIcon("pptx/recording/record-pptx.png"), "B0F6834D-5E1D-4E08-AD92-3C2F87886CC0"),
+        -- MaestroButton:new(??, deck, hsIcon("pptx/recording/record-mouse-only.png"), "C998899A-74A5-4329-8B94-6E1DE875F32B"),
+        -- MaestroButton:new(??, deck, hsIconWithText("pptx/grouping/regroup-objects.png", "RE", deck, MediumText), "21C045E3-ACC3-4EE7-BE19-0EA2D4E68322"),
+        
+        LuaButton:new(1, deck, pageLeftImage(deck), changePage(DECK_2XL, "pptx", PAGE_1)),
     }
 end)
 
