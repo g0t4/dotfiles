@@ -105,11 +105,14 @@ end)
 hs.hotkey.bind({ "shift", "cmd" }, "4", function()
     local filename = getScreencaptureFileName()
     -- FYI -J window => b/c I like window almost always when use region/interactive selection
-    hs.task.new("/usr/sbin/screencapture", nil, { "-i", "-J", "window", filename }):start()
+    -- -o => don't capture shadow (and cannot use option to add it either, which is fine, use software to add it if needed)
+    --   shadow adds 300KB+ to each image! good riddance
+    hs.task.new("/usr/sbin/screencapture", nil, { "-i", "-o", "-J", "window", filename }):start()
 end)
 
 hs.hotkey.bind({ "shift", "cmd", "ctrl" }, "4", function()
-    hs.task.new("/usr/sbin/screencapture", nil, { "-ci", "-J", "window" }):start()
+    -- -c => clipboard
+    hs.task.new("/usr/sbin/screencapture", nil, { "-ci", "-o", "-J", "window" }):start()
 end)
 
 hs.hotkey.bind({ "shift", "cmd" }, "5", function()
