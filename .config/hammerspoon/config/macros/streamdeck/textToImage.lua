@@ -19,9 +19,13 @@ function deep_clone(original, seen)
 end
 
 ---@param defaults table
----@param overrides table
+---@param overrides table|nil
 ---@return table
 function merge(defaults, overrides)
+    if overrides == nil or overrides == {} then
+        return defaults
+    end
+
     print("FYI merge is NOT deep yet... TODO finish or remove this warning if its ok as is")
     local merged = deep_clone(defaults)
     for k, v in pairs(overrides) do
@@ -42,9 +46,9 @@ RedText = { color = { hex = "#FF0000" } }
 
 ---@param text string
 ---@param deck DeckController
----@param style table|nil # pass custom style table (https://www.hammerspoon.org/docs/hs.styledtext.html)
+---@param passedStyle table|nil # pass custom style table (https://www.hammerspoon.org/docs/hs.styledtext.html)
 ---@return hs.image
-function drawTextIcon(text, deck, style)
+function drawTextIcon(text, deck, passedStyle)
     -- PRN? text = hs.styledtext.getStyledTextFromData(text, "html")
 
     local width = deck.buttonSize.w
@@ -82,8 +86,8 @@ function drawTextIcon(text, deck, style)
                 alignment = "center",
             },
         }
-        style = merge(defaultStyle, style or {})
-        local styledText = hs.styledtext.new(text, style)
+        local mergedStyle = merge(defaultStyle, passedStyle)
+        local styledText = hs.styledtext.new(text, mergedStyle)
         local y = 0
         -- -- FYI size estimate is off on "Clear\nConsole" but appears good for ClockButton?! (has 3 lines)
         -- if true then
