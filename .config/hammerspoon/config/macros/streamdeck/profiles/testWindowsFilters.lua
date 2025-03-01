@@ -6,6 +6,8 @@ do return end -- !!! REMOVE if you are ok with breaking observers
 --   JUST LOADING the module alone breaks things (even if after setup observers)
 local wf = hs.window.filter
 
+--- FYI! window.filter felt sluggish so maybe not end of world that it is buggy (and the docs mention it is gonna be bugg)
+
 
 local braveWindows = wf.new { "Brave Browser Beta" }
 -- local allWindows = wf.new(true)
