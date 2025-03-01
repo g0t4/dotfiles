@@ -18,6 +18,7 @@
             "lowercase-global",
             "need-check-nil",
         ],
+        "unusedLocalExclude": [ "_*" ],
     },
 
     // FYI I had to quit/restart zed to get new workspace.library paths to start working with Find Ref (F12)
