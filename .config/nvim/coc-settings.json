@@ -26,18 +26,21 @@
     // *** json
     // *** coc-json - (not prettier, see below)
     // keep empty lines, at least 1... so I can partition sections (i.e. in this file), newlines also help movement with vim {}
-    "json.format.keepLines": true,
     // "json.format.defaultFormatter": "coc-json",
-    // prettier dislikes for json:
-    // - trim trailing commas (i.e. in this file, I like it when allowed, that said often its not allowed and then fails stuff so I am on fence)
+    "json.format.keepLines": true,
     "json.schemas": [
         {
             "fileMatch": [ ".luarc.json", ".luarc.jsonc" ],
             "url": "https://raw.githubusercontent.com/LuaLS/vscode-lua/master/setting/schema.json"
         }
     ],
+    "json.validate.enable": false, // I don't care much about json validation... this shuts it up about commas/comments
+    // if I could I would disable rules about "comments" and "trailing commas" but I can't find how to do that with coc-json
     // BTW see filetypemods.lua to map json files to jsonc to stop comment spamming
     // BTW to see what services are running for current window/buffer:  :CocList services
+    //
+    // * prettier instead => NO:
+    // - trim trailing commas (i.e. in this file, I like it when allowed, that said often its not allowed and then fails stuff so I am on fence)
 
     // *** yaml
     "yaml.format.enable": true,
