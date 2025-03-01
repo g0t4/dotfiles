@@ -38,16 +38,16 @@ vim.filetype.add({
     },
 })
 
--- *** jsonc doesn't spam about comments (while coc-json still seems to provide services, notably schema completion)
--- TODO how about treat all json files as jsonc?!
--- FYI confirmed coc-json still works with jsonc:
---       https://github.com/neoclide/coc-json/blob/master/server/jsonServer.ts#L357
---       why didn't they make the options configurable though?!
-vim.filetype.add({
-    pattern = {
-        [".*%.luarc%.json"] = "jsonc",
-    },
-})
+-- -- *** jsonc doesn't spam about comments (while coc-json still seems to provide services, notably schema completion)
+-- --  map a few key files that are heavily commented here so if I re-enable validation (disagnostics) for json then these are still ok
+-- -- FYI confirmed coc-json still works with jsonc:
+-- --       https://github.com/neoclide/coc-json/blob/master/server/jsonServer.ts#L357
+-- --       why didn't they make the options configurable though?!
+-- vim.filetype.add({
+--     pattern = {
+--         [".*%.luarc%.json"] = "jsonc",
+--     },
+-- })
 
 
 local function describeFormatOptionForLetter(letter)
