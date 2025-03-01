@@ -6,6 +6,7 @@ local MenuButton = require("config.macros.streamdeck.menuButton")
 local LuaButton = require("config.macros.streamdeck.luaButton")
 
 
+--- TODO app observer for shapes and other types... activate different buttons (or behaviors) based on the current seleted shape
 
 function menu(menu)
     return function()
