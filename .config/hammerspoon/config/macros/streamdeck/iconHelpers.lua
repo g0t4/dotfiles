@@ -37,7 +37,20 @@ function merge(defaults, overrides)
 end
 
 RedText = { color = { hex = "#FF0000" } }
-TinyText = { font = { size = 20 } } -- looks good with one blank line before two lines of text
+TinyText = { font = { size = 14 } }
+ExtraSmallText = {
+    font = { size = 18 },
+    -- shadow = { offset = { h = 3, w = 3 } }, -- gives a slight outline to text
+    --
+    -- -- interesting too but so small it loses its color... I think I just need black text for my case
+    -- strokeColor = { hex = "#000000" },-- , alpha = 0.5 },
+    -- strokeWidth = 4,
+}
+SmallBlackText = {
+    font = { size = 20 },
+    color = { hex = "#000000" },
+}
+SmallText = { font = { size = 20 } } -- looks good with one blank line before two lines of text
 
 function pageLeftImage(deck)
     return drawTextIcon("<", deck, { font = { size = 50 } })
@@ -136,4 +149,24 @@ end
 function hsIconWithText(icon, text, deck, style)
     local image = hsIcon(icon)
     return drawTextIcon(text, deck, style, image)
+end
+
+function hsIconWithTinyText(icon, text, deck)
+    local image = hsIcon(icon)
+    return drawTextIcon(text, deck, TinyText, image)
+end
+
+function hsIconWithExtraSmallText(icon, text, deck)
+    local image = hsIcon(icon)
+    return drawTextIcon(text, deck, ExtraSmallText, image)
+end
+
+function hsIconWithSmallText(icon, text, deck)
+    local image = hsIcon(icon)
+    return drawTextIcon(text, deck, SmallText, image)
+end
+
+function hsIconWithSmallBlackText(icon, text, deck)
+    local image = hsIcon(icon)
+    return drawTextIcon(text, deck, SmallBlackText, image)
 end
