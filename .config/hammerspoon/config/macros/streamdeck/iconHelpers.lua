@@ -51,6 +51,7 @@ SmallBlackText = {
     color = { hex = "#000000" },
 }
 SmallText = { font = { size = 20 } } -- looks good with one blank line before two lines of text
+MediumText = { font = { size = 24 } }
 LargeText = { font = { size = 30 } }
 LargeBlackText = { font = { size = 30 }, color = { hex = "#000000" } }
 ExtraLargeText = { font = { size = 40 } }
