@@ -14,17 +14,30 @@ decks:init()
 local apps = AppsObserver:new(decks)
 apps:start()
 
-local windowFilters = require("config.macros.streamdeck.profiles.testWindowsFilters")
--- TODO on hammerspon QUIT, reset the decks... right? sooo... do that on disconnect? or?
+
+
+
+
+
+-- TODOs:
+--   on hammerspon QUIT, reset the decks... right? sooo... do that on disconnect? or?
+
+
+
+
+
+
+-- *** TESTS:
+-- ! FYI window.filters BREAKS ALL AXUIELEMENT OBSERVERS (however, hs.application.watcher still works)
+-- local windowFilters = require("config.macros.streamdeck.profiles.testWindowsFilters")
+
+
+
+
+
 
 -- * REMINDERS
--- local imageSize = deck:imageSize()
--- XL => { h = 96.0, w = 96.0 }
--- +  => { h = 120.0, w = 120.0 }
---
--- local htmlFileType = hs.image.iconForFileType("html")
 -- ? should I bother with checking for new firmware updates? I can always just use elgato's app to check manually
---
 
 -- *** COMMANDPOST ***
 --   OH YEAH BABY... they're right up my alley... or I'm right up theirs
