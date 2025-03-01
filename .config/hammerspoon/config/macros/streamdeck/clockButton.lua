@@ -1,4 +1,4 @@
-require("config.macros.streamdeck.textToImage")
+require("config.macros.streamdeck.iconHelpers")
 require("config.macros.streamdeck.helpers")
 PushButton = require("config.macros.streamdeck.pushButton")
 

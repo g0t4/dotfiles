@@ -37,7 +37,7 @@ function merge(defaults, overrides)
 end
 
 RedText = { color = { hex = "#FF0000" } }
-
+TinyText = { font = { size = 18 } }
 
 function pageLeftImage(deck)
     return drawTextIcon("<", deck, { font = { size = 50 } })
@@ -56,8 +56,9 @@ end
 ---@param text string
 ---@param deck DeckController
 ---@param passedStyle table|nil # pass custom style table (https://www.hammerspoon.org/docs/hs.styledtext.html)
+---@param backgroundImage hs.image|nil # background image to draw on top of
 ---@return hs.image
-function drawTextIcon(text, deck, passedStyle)
+function drawTextIcon(text, deck, passedStyle, backgroundImage)
     -- PRN? text = hs.styledtext.getStyledTextFromData(text, "html")
 
     local width = deck.buttonSize.w
@@ -80,6 +81,13 @@ function drawTextIcon(text, deck, passedStyle)
     --         -- many ways to set color: https://www.hammerspoon.org/docs/hs.drawing.color.html
     --     })
     -- end
+    if backgroundImage then
+        table.insert(canvas, {
+            type = "image",
+            image = backgroundImage,
+            frame = { x = 0, y = 0, w = width, h = height },
+        })
+    end
 
     if type(text) == "string" then
         local defaultStyle = {
@@ -123,4 +131,9 @@ function drawTextIcon(text, deck, passedStyle)
         })
     end
     return canvas:imageFromCanvas()
+end
+
+function hsIconWithText(icon, text, deck, style)
+    local image = hsIcon(icon)
+    return drawTextIcon(text, deck, style, image)
 end

@@ -1,5 +1,5 @@
 local PushButton = require("config.macros.streamdeck.pushButton")
-require("config.macros.streamdeck.textToImage")
+require("config.macros.streamdeck.iconHelpers")
 require("config.macros.streamdeck.helpers")
 
 ---@class AppButton : PushButton

@@ -4,6 +4,7 @@ local KeyStrokeButton = require("config.macros.streamdeck.keystrokeButton")
 local verbose = require("config.macros.streamdeck.helpers").verbose
 local MenuButton = require("config.macros.streamdeck.menuButton")
 local LuaButton = require("config.macros.streamdeck.luaButton")
+require("config.macros.streamdeck.iconHelpers")
 
 
 -- !!! TODO app observer for shapes and other types... activate different buttons (or behaviors) based on the current seleted shape
@@ -30,13 +31,14 @@ PptxObserver:addProfilePage(DECK_2XL, PAGE_2, function(_, deck)
     }
 end)
 
+
 PptxObserver:addProfilePage(DECK_3XL, PAGE_1, function(_, deck)
     return {
         -- * row 1 (buttons 1-8)
         LuaButton:new(1, deck, hsIcon("pptx/shapes/align-left.png"), menu({ "Arrange", "Align or Distribute", "Align Left" })),
         LuaButton:new(2, deck, hsIcon("pptx/shapes/align-center.png"), menu({ "Arrange", "Align or Distribute", "Align Center" })),
         LuaButton:new(3, deck, hsIcon("pptx/shapes/align-right.png"), menu({ "Arrange", "Align or Distribute", "Align Right" })),
-        MaestroButton:new(4, deck, hsIcon("pptx/arrange/alignment-objects.png"), "14B23130-38EC-4510-BFE9-557900E13DF6"),
+        MaestroButton:new(4, deck, hsIconWithText("pptx/arrange/alignment-objects.png", "Align Objects", deck, TinyText), "14B23130-38EC-4510-BFE9-557900E13DF6"),
         LuaButton:new(5, deck, hsIcon("pptx/shapes/distribute-vertical.png"), menu({ "Arrange", "Align or Distribute", "Distribute Vertically" })),
         LuaButton:new(6, deck, hsIcon("pptx/shapes/distribute-horizontal.png"), menu({ "Arrange", "Align or Distribute", "Distribute Horizontally" })),
         LuaButton:new(8, deck, hsIcon("pptx/shapes/align-top.png"), menu({ "Arrange", "Align or Distribute", "Align Top" })),
