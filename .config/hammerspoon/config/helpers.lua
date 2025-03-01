@@ -83,6 +83,11 @@ function GetElapsedTimeInMilliseconds(start_time)
     return math.floor(elapsed_time_seconds * 10000 + 0.5) / 10
 end
 
+function GetElapsedTimeInNanoseconds(start_time)
+    local elapsed_time_seconds = GetElapsedTimeSince(start_time)
+    return math.floor(elapsed_time_seconds * 1000000000)
+end
+
 function StartProfiler()
     local ProFi = require("ProFi")
     ProFi:start()

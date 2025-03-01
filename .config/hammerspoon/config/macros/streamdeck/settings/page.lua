@@ -10,8 +10,7 @@ end
 ---@param appModuleName string
 ---@return number
 function M.getSavedPageNumber(deckName, appModuleName)
-    -- TODO how expensive is this? probably not worth caching IIAC
-    local settings = hs.settings.get(getkey(deckName, appModuleName))
+    local settings = hs.settings.get(getkey(deckName, appModuleName)) -- < 2 to 12us (microseconds)
     if settings == nil then
         return 1
     end
