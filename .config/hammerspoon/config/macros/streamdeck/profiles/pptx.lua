@@ -64,7 +64,7 @@ PptxObserver:addProfilePage(DECK_3XL, PAGE_1, function(_, deck)
         LuaButton:new(24, deck, hsIcon("pptx/shapes/align-bottom.png"), menu({ "Arrange", "Align or Distribute", "Align Bottom" })),
 
         -- * row 4 (buttons 25-32)
-        KeyStrokeButton:new(25, deck, hsIconWithSmallBlackText("pptx/arrange/bring-to-front-60x60.png", "\n\nFront", deck), { "cmd", "shift" }, "f"),
+        KeyStrokeButton:new(25, deck, hsIconWithSmallBlackText("pptx/arrange/bring-to-front-60x60.png", "\nFront", deck), { "cmd", "shift" }, "f"),
         KeyStrokeButton:new(26, deck, hsIcon("pptx/arrange/send-forward-60x60.png"), { "cmd", "alt", "shift" }, "f"),
         KeyStrokeButton:new(27, deck, hsIcon("pptx/arrange/send-backward-60x60.png"), { "cmd", "alt", "shift" }, "b"),
         KeyStrokeButton:new(28, deck, hsIcon("pptx/arrange/send-to-back-60x60.png"), { "cmd", "shift" }, "b"),

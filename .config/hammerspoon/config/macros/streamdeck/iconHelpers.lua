@@ -51,6 +51,9 @@ SmallBlackText = {
     color = { hex = "#000000" },
 }
 SmallText = { font = { size = 20 } } -- looks good with one blank line before two lines of text
+LargeText = { font = { size = 30 } }
+LargeBlackText = { font = { size = 30 }, color = { hex = "#000000" } }
+ExtraLargeText = { font = { size = 40 } }
 
 function pageLeftImage(deck)
     return drawTextIcon("<", deck, { font = { size = 50 } })
@@ -169,4 +172,19 @@ end
 function hsIconWithSmallBlackText(icon, text, deck)
     local image = hsIcon(icon)
     return drawTextIcon(text, deck, SmallBlackText, image)
+end
+
+function hsIconWithExtraLargeText(icon, text, deck)
+    local image = hsIcon(icon)
+    return drawTextIcon(text, deck, ExtraLargeText, image)
+end
+
+function hsIconWithLargeText(icon, text, deck)
+    local image = hsIcon(icon)
+    return drawTextIcon(text, deck, LargeText, image)
+end
+
+function hsIconWithLargeBlackText(icon, text, deck)
+    local image = hsIcon(icon)
+    return drawTextIcon(text, deck, LargeBlackText, image)
 end
