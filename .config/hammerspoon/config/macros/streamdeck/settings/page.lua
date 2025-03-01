@@ -1,9 +1,9 @@
-local SETTINGS_PREFIX = "streamdeck.page."
+local SETTINGS_PREFIX = "streamdeck_page_"
 
 local M = {}
 
 local function getkey(deckName, appModuleName)
-    return SETTINGS_PREFIX .. deckName .. "." .. appModuleName
+    return SETTINGS_PREFIX .. deckName .. "_" .. appModuleName
 end
 
 ---@param deckName string
@@ -23,12 +23,20 @@ end
 ---@param pageNumber number
 function M.setSavedPageNumber(deckName, appModuleName, pageNumber)
     hs.settings.set(getkey(deckName, appModuleName), pageNumber)
+    if M.appsObserver ~= nil then
+        M.appsObserver:onPageNumberChanged(deckName, appModuleName, pageNumber)
+    end
 end
 
 ---@param deckName string
 ---@param appModuleName string
 function M.clearSavedPageNumber(deckName, appModuleName)
     hs.settings.set(getkey(deckName, appModuleName), nil)
+end
+
+---@param observer AppsObserver
+function M.setAppsObserver(observer)
+    M.appsObserver = observer
 end
 
 return M

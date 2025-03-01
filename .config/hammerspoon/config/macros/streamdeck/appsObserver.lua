@@ -2,6 +2,17 @@ verbose = require("config.macros.streamdeck.helpers").verbose
 pageSettings = require("config.macros.streamdeck.settings.page")
 require("config.helpers")
 
+local appModuleLookupByAppName = {
+    ["Final Cut Pro"] = "fcpx",
+    ["Hammerspoon"] = "hammerspoon",
+    ["Microsoft PowerPoint"] = "pptx",
+    ["Finder"] = "finder",
+    ["iTerm2"] = "iterm",
+    ["Brave Browser Beta"] = "brave",
+    ["Safari"] = "safari",
+    ["Preview"] = "preview",
+}
+
 ---@class AppsObserver
 ---@field watcher hs.application.watcher
 ---@field decks DecksController
@@ -21,7 +32,29 @@ function AppsObserver:new(decks)
             o:onAppDeactivated(appName, hsApp)
         end
     end)
+    pageSettings.setAppsObserver(o)
     return o
+end
+
+function AppsObserver:onPageNumberChanged(deckName, appModuleName, _pageNumber)
+    local deckController = self.decks.deckControllers[deckName]
+    if deckController == nil then
+        return
+    end
+    -- if the page changed for a different app then we don't need to do anything
+    local currentApp = hs.application.frontmostApplication()
+    if currentApp == nil then
+        print("onPageNumberChanged: no current app")
+        return
+    end
+    local currentAppName = currentApp:name()
+    local currentAppModuleName = appModuleLookupByAppName[currentAppName]
+    if currentAppName == nil or currentAppModuleName ~= appModuleName then
+        print("onPageNumberChanged: current app module name (" .. currentAppModuleName .. ") does not match changed module name (" .. appModuleName .. ")")
+        return
+    end
+    -- BTW it will lookup the page number so we don't need to pass that
+    self:tryLoadProfileForDeck(deckName, deckController, currentAppName)
 end
 
 function AppsObserver:onAppActivated(appName, hsApp)
@@ -53,16 +86,6 @@ function AppsObserver:tryLoadProfileForDeck(deckName, deckController, appName)
     -- StartProfiler()
 
     local startTime = GetTime()
-    local appLookup = {
-        ["Final Cut Pro"] = "fcpx",
-        ["Hammerspoon"] = "hammerspoon",
-        ["Microsoft PowerPoint"] = "pptx",
-        ["Finder"] = "finder",
-        ["iTerm2"] = "iterm",
-        ["Brave Browser Beta"] = "brave",
-        ["Safari"] = "safari",
-        ["Preview"] = "preview",
-    }
 
     function getProfile(appModuleName)
         if appModuleName == nil then
@@ -78,7 +101,7 @@ function AppsObserver:tryLoadProfileForDeck(deckName, deckController, appName)
         return selected
     end
 
-    local appModuleName = appLookup[appName]
+    local appModuleName = appModuleLookupByAppName[appName]
     local selected = getProfile(appModuleName)
     if selected == nil then
         selected = getProfile("defaults")
