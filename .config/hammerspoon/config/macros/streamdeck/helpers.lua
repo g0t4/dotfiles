@@ -1,5 +1,8 @@
 -- global toggle to enable/disable verbose logging w.r.t. streamdeck "subsystem"
 local verboseStreamDeckLogsOn = false -- make it easy to toggle (maybe even more this into hammerspoon init.lua?.. if I add more like it)
+if not verboseStreamDeckLogsOn then
+    print("streamdeck: VERBOSE LOGGING IS OFF")
+end
 local log = require("hs.logger").new("streamdeck", verboseStreamDeckLogsOn and "verbose" or "warning")
 local hsIcons = resolveHomePath("~/repos/github/g0t4/dotfiles/misc/hammerspoon-icons/")
 
