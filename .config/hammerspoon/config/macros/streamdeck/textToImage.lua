@@ -1,10 +1,27 @@
 require("config.helpers")
 
-function merge(t1, t2)
+function deep_clone(t, seen)
+    if type(t) ~= "table" then return t end
+    if seen and seen[t] then return seen[t] end
+
+    local copy = {}
+    seen = seen or {}
+    seen[t] = copy
+
+    for k, v in pairs(t) do
+        copy[k] = deep_clone(v, seen)
+    end
+
+    return copy
+end
+
+function merge(defaults, overrides)
     local res = {}
     -- TODO nested merging, i.e. font.size only
-    for k, v in pairs(t1) do res[k] = v end
-    for k, v in pairs(t2) do res[k] = v end
+    res = deep_clone(defaults)
+    for k, v in pairs(overrides) do
+        res[k] = v
+    end
     return res
 end
 
