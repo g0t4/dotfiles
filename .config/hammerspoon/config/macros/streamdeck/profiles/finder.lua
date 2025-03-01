@@ -9,7 +9,7 @@ local LuaButton = require("config.macros.streamdeck.luaButton")
 
 local FinderObserver = AppObserver:new("Finder")
 
-FinderObserver:addProfile("3XL", function(_, deck)
+FinderObserver:addProfilePage("3XL", 1, function(_, deck)
     return {
         -- * row 1
         -- TODO what about reflect on func name and use that as button text? debug.getinfo(foo).nparams

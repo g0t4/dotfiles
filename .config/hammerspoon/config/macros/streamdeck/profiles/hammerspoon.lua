@@ -9,7 +9,7 @@ local LuaButton = require("config.macros.streamdeck.luaButton")
 
 local HammerspoonObserver = AppObserver:new("Final Cut Pro")
 
-HammerspoonObserver:addProfile("3XL", function(_, deck)
+HammerspoonObserver:addProfilePage("3XL", 1, function(_, deck)
     return {
         -- * row 1
         -- TODO what about reflect on func name and use that as button text? debug.getinfo(foo).nparams
