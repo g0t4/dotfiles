@@ -15,7 +15,7 @@ local apps = AppsObserver:new(decks)
 apps:start()
 
 
-
+require("config.macros.streamdeck.profiles.testAXObserversForProfileMods")
 
 
 
