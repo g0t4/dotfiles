@@ -42,22 +42,20 @@ function drawTextIcon(text, deck, style)
     -- end
 
     if type(text) == "string" then
-        if style == nil then
-            -- TODO merge style table with defaults:
-            style = {
-                font = {
-                    -- name = ".AppleSystemUIFont", -- THIS matches default, and it looks good (tight, not spaced out)
-                    --    TODO can I lookup the default font's name?
-                    -- name = "Helvetica"/"Helvetica Neue", -- these are 10-20% bigger
-                    -- name = "SF Pro Display", (not this, this is taller)
-                    size = 24
-                },
-                color = { hex = "ffffff", alpha = 1 },
-                paragraphStyle = {
-                    alignment = "center",
-                },
-            }
-        end
+        local defaultStyle = {
+            font = {
+                -- name = ".AppleSystemUIFont", -- THIS matches default, and it looks good (tight, not spaced out)
+                --    TODO can I lookup the default font's name?
+                -- name = "Helvetica"/"Helvetica Neue", -- these are 10-20% bigger
+                -- name = "SF Pro Display", (not this, this is taller)
+                size = 24
+            },
+            color = { hex = "ffffff", alpha = 1 },
+            paragraphStyle = {
+                alignment = "center",
+            },
+        }
+        style = merge(defaultStyle, style or {})
         local styledText = hs.styledtext.new(text, style)
         local y = 0
         -- -- FYI size estimate is off on "Clear\nConsole" but appears good for ClockButton?! (has 3 lines)
