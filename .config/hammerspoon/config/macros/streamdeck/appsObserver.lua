@@ -72,6 +72,7 @@ function AppsObserver:tryLoadProfileForDeck(deckName, deckController, appName)
         local module = require("config.macros.streamdeck.profiles." .. appModuleName)
         logMyTimes(appModuleName .. "-require took:", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
         local pageNumber = pageSettings.getSavedPageNumber(deckName, appModuleName)
+        -- TODO cache for duration of app lifetime? -- measure impact before doing that
         local selected = module:getProfilePage(deckName, pageNumber)
         logMyTimes(appModuleName .. "-getProfile took:", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
         return selected
