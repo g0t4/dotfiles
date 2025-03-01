@@ -2,9 +2,7 @@ local wf = hs.window.filter
 
 local braveWindows = wf.new { "Brave Browser Beta" }
 -- local allWindows = wf.new(true)
-print("braveWindows", hs.inspect(braveWindows))
-
-print("testWindowsFilters")
+-- print("braveWindows", hs.inspect(braveWindows))
 
 -- -- https://www.hamierspoon.org/docs/hs.window.filter.html#subscribe
 -- braveWindows:subscribe(hs.window.filter.windowFocused,
@@ -31,6 +29,9 @@ braveWindows:subscribe(hs.window.filter.windowTitleChanged,
         --   can use this to trigger a profile reload (like page/app change)
         --     for one deck (or multiple)
         --     based on registered profile page modifications (sets of buttons)
+        --
+        -- Also, when loading profiles normally I would just read env (window titles) to load profile mods...
+        --   so all I really need is a trigger to reload profiles
     end)
 
 return braveWindows
