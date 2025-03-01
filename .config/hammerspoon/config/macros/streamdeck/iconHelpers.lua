@@ -37,7 +37,7 @@ function merge(defaults, overrides)
 end
 
 RedText = { color = { hex = "#FF0000" } }
-TinyText = { font = { size = 18 } }
+TinyText = { font = { size = 20 } } -- looks good with one blank line before two lines of text
 
 function pageLeftImage(deck)
     return drawTextIcon("<", deck, { font = { size = 50 } })
