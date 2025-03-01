@@ -94,13 +94,19 @@ function AppsObserver:tryLoadProfileForDeck(deckName, deckController, appName)
         local insideStartTime = GetTime()
         local module = require("config.macros.streamdeck.profiles." .. appModuleName)
         if module == nil then
-            print("Failed to load module: " .. appModuleName)
+            print("Failed to load profiles module for app: " .. appModuleName)
             return nil
         end
         logMyTimes(appModuleName .. "-require took:", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
         local pageNumber = pageSettings.getSavedPageNumber(deckName, appModuleName)
+        -- print("Selected page: " .. pageNumber, "for deck: " .. deckName, "and app: " .. appModuleName)
         -- TODO cache for duration of app lifetime? -- measure impact before doing that
         local selected = module:getProfilePage(deckName, pageNumber)
+        if selected == nil and pageNumber ~= 1 then
+            print("WARNING: Failed to get page " .. pageNumber .. " for deck " .. deckName .. " and app " .. appModuleName, "trying page 1")
+            -- try 1, can happen if page is removed and was set as current still
+            selected = module:getProfilePage(deckName, 1)
+        end
         logMyTimes(appModuleName .. "-getProfile took:", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
         return selected
     end
