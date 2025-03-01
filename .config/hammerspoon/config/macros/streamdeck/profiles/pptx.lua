@@ -12,12 +12,45 @@ require("config.macros.streamdeck.iconHelpers")
 
 
 
+function openPath(path)
+    return function()
+        runCommand("open " .. path)
+    end
+end
 
 local PptxObserver = AppObserver:new("Microsoft PowerPoint")
 
 
 -- Example CommandButton:
 --         CommandButton:new(32, deck, hsIcon("files/movies-dir-elgato72.png"), { "open", "~/Movies2" }),
+
+PptxObserver:addProfilePage(DECK_1XL, PAGE_1, function(_, deck)
+    return {
+        -- * row 1 (buttons 1-8)
+        MaestroButton:new(4, deck, hsIconWithText("pptx/recording/start-recording.png", "Start\nRecording", deck, SmallText), "2C964DF9-0831-432B-94FE-124D43593C02"),
+        MaestroButton:new(5, deck, hsIcon("pptx/recording/stop-recording.png"), "662A956C-CC67-499B-AEB5-C36D59E5BA3F"),
+        -- TODO look into profile addons (for private buttons, i.e. don't want action in my dotfiles repo)
+
+        -- * row 2 (buttons 9-16)
+        MaestroButton:new(9, deck, hsIconWithText("pptx/utilities/restart-powerpoint.png", "Restart\nPowerPoint", deck, SmallText), "340FAC91-F2D0-4C13-94CB-64492671B5CE"),
+        MaestroButton:new(11, deck, hsIcon("pptx/ribbon/slide-layout.png"), "B436C96B-4A24-494C-A221-C7572633E631"),
+        MaestroButton:new(12, deck, hsIcon("pptx/ribbon/section-expand.png"), "7A072785-AD96-4750-8B3C-9E8C7D7A8878"),
+        MaestroButton:new(13, deck, hsIcon("pptx/ribbon/section-collapse.png"), "A20F3F91-C284-4CCE-8E1C-EF64E4513C11"),
+        MaestroButton:new(14, deck, hsIconWithText("pptx/tabs/wes-tab.png", "\nWES", deck, MediumText), "C9E06D7C-63AA-4729-BFE1-B8140E89F2DE"),
+        MaestroButton:new(15, deck, hsIconWithText("pptx/tabs/shape-format-tab.png", "\nShape\nFormat", deck, SmallText), "C9E06D7C-63AA-4729-BFE1-B8140E89F2DE", "Shape Format"),
+        MaestroButton:new(16, deck, hsIconWithText("pptx/tabs/animations-tab.png", "\nAnim\nations", deck, SmallText), "C9E06D7C-63AA-4729-BFE1-B8140E89F2DE", "Animations"),
+
+        -- * row 3 (buttons 17-24)
+        MaestroButton:new(17, deck, hsIcon("pptx/layouts/hide-thumbnails.png"), "D848AD00-9FBC-4770-A12A-2552D0BE51F5"),
+        MaestroButton:new(18, deck, hsIcon("pptx/layouts/small-thumbnails.png"), "E1DD6FDE-DDDC-4D78-A722-E6C4613D89A9"),
+        MaestroButton:new(19, deck, hsIcon("pptx/layouts/medium-thumbnails.png"), "B61C9924-66AE-43BA-9EC1-C90CA40CBB80"),
+        MaestroButton:new(20, deck, hsIcon("pptx/layouts/hide-side-panes.png"), "0B9F4515-6A58-4A17-8447-BE5FA15D1266"),
+        MaestroButton:new(21, deck, hsIcon("pptx/layouts/hide-right-pane.png"), "A5E648CD-4064-482F-9412-F91D4420664A"),
+
+        -- * row 4 (buttons 25-32)
+        MaestroButton:new(32, deck, hsIconWithText("pptx/utilities/export-thumb.png", "Export\nThumb", deck, MediumText), "3721DD9F-A02C-4293-B2DF-982FBFCFEBC7"),
+    }
+end)
 
 PptxObserver:addProfilePage(DECK_2XL, PAGE_1, function(_, deck)
     return {
