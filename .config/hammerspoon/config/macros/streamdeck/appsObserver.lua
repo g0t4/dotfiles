@@ -66,6 +66,12 @@ function AppsObserver:tryLoadProfileForDeck(deckName, deckController, appName)
         logMyTimes("hammerspoon-require took:", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
         selected = hammerspoon:getProfile(deckName)
         logMyTimes("hammerspoon-getProfile took:", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
+    elseif (appName == "Microsoft PowerPoint") then
+        local insideStartTime = GetTime()
+        local pptx = require("config.macros.streamdeck.profiles.pptx")
+        logMyTimes("pptx-require took:", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
+        selected = pptx:getProfile(deckName)
+        logMyTimes("pptx-getProfile took:", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
     elseif (appName == "Finder") then
         local insideStartTime = GetTime()
         local finder = require("config.macros.streamdeck.profiles.finder")
