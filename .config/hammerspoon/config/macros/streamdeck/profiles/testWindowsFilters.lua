@@ -1,4 +1,11 @@
+require("config.helpers")
+
+-- !!! using hs.window.filter breaks all hs.axuielement.observer.notifications
+do return end -- !!! REMOVE if you are ok with breaking observers
+-- FYI hs.application.watcher still works (i use for app switch notifications)
+--   JUST LOADING the module alone breaks things (even if after setup observers)
 local wf = hs.window.filter
+
 
 local braveWindows = wf.new { "Brave Browser Beta" }
 -- local allWindows = wf.new(true)
