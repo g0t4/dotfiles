@@ -20,17 +20,24 @@ function AppObserver:new(appName)
     return o
 end
 
-function AppObserver:getProfile(deckName)
+---@param deckName string
+---@param pageNumber number|nil
+function AppObserver:getProfile(deckName, pageNumber)
     -- TODO later add in app observations too (and allow updating profiles/buttons!)
-    return self.profiles[deckName]
+    pageNumber = pageNumber or 1
+    local key = deckName .. "-" .. pageNumber
+    return self.profiles[key]
 end
 
 ---@param deckName string
 ---@param getButtons (fun(self, deck: DeckController): PushButton[])|nil
 ---@param getEncoders (fun(self, deck: DeckController): Encoder[])|nil
-function AppObserver:addProfile(deckName, getButtons, getEncoders)
+---@param pageNumber number|nil
+function AppObserver:addProfile(deckName, getButtons, getEncoders, pageNumber)
     local profile = Profile:new("n/a", self.appName, deckName)
-    self.profiles[deckName] = profile
+    pageNumber = pageNumber or 1
+    key = deckName .. "-" .. pageNumber
+    self.profiles[key] = profile
     if getButtons ~= nil then
         profile.buttons = getButtons
     end
