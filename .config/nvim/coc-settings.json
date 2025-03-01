@@ -30,6 +30,14 @@
     // "json.format.defaultFormatter": "coc-json",
     // prettier dislikes for json:
     // - trim trailing commas (i.e. in this file, I like it when allowed, that said often its not allowed and then fails stuff so I am on fence)
+    "json.schemas": [
+        {
+            "fileMatch": [ ".luarc.json", ".luarc.jsonc" ],
+            "url": "https://raw.githubusercontent.com/LuaLS/vscode-lua/master/setting/schema.json"
+        }
+    ],
+    // BTW see filetypemods.lua to map json files to jsonc to stop comment spamming
+    // BTW to see what services are running for current window/buffer:  :CocList services
 
     // *** yaml
     "yaml.format.enable": true,

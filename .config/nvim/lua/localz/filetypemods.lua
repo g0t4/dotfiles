@@ -38,6 +38,15 @@ vim.filetype.add({
     },
 })
 
+-- *** jsonc doesn't spam about comments (while coc-json still seems to provide services, notably schema completion)
+-- TODO how about treat all json files as jsonc?!
+vim.filetype.add({
+    pattern = {
+        [".*%.luarc%.json"] = "jsonc",
+    },
+})
+
+
 local function describeFormatOptionForLetter(letter)
     local descriptions = {
 
