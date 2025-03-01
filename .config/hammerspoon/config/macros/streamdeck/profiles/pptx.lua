@@ -1,6 +1,7 @@
 local AppObserver = require("config.macros.streamdeck.profiles.appObserver")
 local MaestroButton = require("config.macros.streamdeck.maestroButton")
 local KeyStrokeButton = require("config.macros.streamdeck.keystrokeButton")
+local CommandButton = require("config.macros.streamdeck.commandButton")
 local verbose = require("config.macros.streamdeck.helpers").verbose
 local MenuButton = require("config.macros.streamdeck.menuButton")
 local LuaButton = require("config.macros.streamdeck.luaButton")
@@ -9,7 +10,14 @@ require("config.macros.streamdeck.iconHelpers")
 
 -- !!! TODO app observer for shapes and other types... activate different buttons (or behaviors) based on the current seleted shape
 
+
+
+
 local PptxObserver = AppObserver:new("Microsoft PowerPoint")
+
+
+-- Example CommandButton:
+--         CommandButton:new(32, deck, hsIcon("files/movies-dir-elgato72.png"), { "open", "~/Movies2" }),
 
 PptxObserver:addProfilePage(DECK_2XL, PAGE_1, function(_, deck)
     return {
