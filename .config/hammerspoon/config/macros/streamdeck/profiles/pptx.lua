@@ -13,6 +13,8 @@ local PptxObserver = AppObserver:new("Microsoft PowerPoint")
 PptxObserver:addProfilePage(DECK_2XL, PAGE_1, function(_, deck)
     return {
 
+
+        -- * row 4
         LuaButton:new(32, deck, pageRightImage(deck), changePage(DECK_2XL, "pptx", PAGE_2)),
 
     }
@@ -24,6 +26,7 @@ PptxObserver:addProfilePage(DECK_2XL, PAGE_2, function(_, deck)
 
         -- * row 4
         LuaButton:new(25, deck, pageLeftImage(deck), changePage(DECK_2XL, "pptx", PAGE_1)),
+
     }
 end)
 
