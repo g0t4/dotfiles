@@ -14,6 +14,17 @@ function menu(menu)
     end
 end
 
+---@param deckName string
+---@param appModuleName string
+---@param page number
+function changePage(deckName, appModuleName, page)
+    local pageSettings = require("config.macros.streamdeck.settings.page")
+    return function()
+        pageSettings.setSavedPageNumber(deck, appModuleName, page)
+        -- TODO trigger profile change too
+    end
+end
+
 local PptxObserver = AppObserver:new("Microsoft PowerPoint")
 
 PptxObserver:addProfilePage("2XL", 1, function(_, deck)
@@ -36,11 +47,23 @@ PptxObserver:addProfilePage("3XL", 1, function(_, deck)
         LuaButton:new(16, deck, hsIcon("pptx/shapes/align-middle.png"), menu({ "Arrange", "Align or Distribute", "Align Middle" })),
         LuaButton:new(24, deck, hsIcon("pptx/shapes/align-bottom.png"), menu({ "Arrange", "Align or Distribute", "Align Bottom" })),
 
+        LuaButton:new(16, deck, drawTextIcon(">", deck), changePage("3XL", "pptx", 2)),
+
+
         LuaButton:new(17, deck, hsIcon("pptx/shapes/flip-vertical.png"), menu({ "Arrange", "Rotate or Flip", "Flip Vertical" })),
         LuaButton:new(18, deck, hsIcon("pptx/shapes/flip-horizontal.png"), menu({ "Arrange", "Rotate or Flip", "Flip Horizontal" })),
         LuaButton:new(19, deck, hsIcon("pptx/shapes/rotate-left-90.png"), menu({ "Arrange", "Rotate or Flip", "Rotate Left 90°" })),
         LuaButton:new(20, deck, hsIcon("pptx/shapes/rotate-right-90.png"), menu({ "Arrange", "Rotate or Flip", "Rotate Right 90°" })),
 
+    }
+end)
+
+PptxObserver:addProfilePage("3XL", 2, function(_, deck)
+    return {
+        -- * row 1
+
+        -- * row 4
+        LuaButton:new(25, deck, drawTextIcon("<", deck), changePage("3XL", "pptx", 1)),
     }
 end)
 

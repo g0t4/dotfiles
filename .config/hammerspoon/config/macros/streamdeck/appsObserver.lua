@@ -1,4 +1,5 @@
 verbose = require("config.macros.streamdeck.helpers").verbose
+pageSettings = require("config.macros.streamdeck.settings.page")
 require("config.helpers")
 
 ---@class AppsObserver
@@ -68,16 +69,17 @@ function AppsObserver:tryLoadProfileForDeck(deckName, deckController, appName)
         ["Preview"] = "preview",
     }
 
-    local moduleName = appLookup[appName]
-    if moduleName == nil then
-        moduleName = "defaults"
+    local appModuleName = appLookup[appName]
+    if appModuleName == nil then
+        appModuleName = "defaults"
     end
 
     local insideStartTime = GetTime()
-    local module = require("config.macros.streamdeck.profiles." .. moduleName)
-    logMyTimes(moduleName .. "-require took:", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
-    selected = module:getProfilePage(deckName, 1)
-    logMyTimes(moduleName .. "-getProfile took:", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
+    local module = require("config.macros.streamdeck.profiles." .. appModuleName)
+    logMyTimes(appModuleName .. "-require took:", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
+    pageNumber = pageSettings.getSavedPageNumber(deckName, appModuleName)
+    selected = module:getProfilePage(deckName, pageNumber)
+    logMyTimes(appModuleName .. "-getProfile took:", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
 
     if selected ~= nil then
         local insideStartTime = GetTime()
