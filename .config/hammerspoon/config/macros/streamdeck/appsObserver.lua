@@ -52,12 +52,7 @@ function AppsObserver:tryLoadProfileForDeck(deckName, deckController, appName)
     -- https://github.com/Hammerspoon/hammerspoon/blob/master/extensions/streamdeck/HSStreamDeckDevice.m#L394
     -- StartProfiler()
 
-    -- TODO add ability to switch pages
-    --   TODO store current page across restarts?
-
     local startTime = GetTime()
-    ---@type Profile
-    local selected = nil
     local appLookup = {
         ["Final Cut Pro"] = "fcpx",
         ["Hammerspoon"] = "hammerspoon",
@@ -69,17 +64,24 @@ function AppsObserver:tryLoadProfileForDeck(deckName, deckController, appName)
         ["Preview"] = "preview",
     }
 
-    local appModuleName = appLookup[appName]
-    if appModuleName == nil then
-        appModuleName = "defaults"
+    function getProfile(appModuleName)
+        if appModuleName == nil then
+            return nil
+        end
+        local insideStartTime = GetTime()
+        local module = require("config.macros.streamdeck.profiles." .. appModuleName)
+        logMyTimes(appModuleName .. "-require took:", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
+        local pageNumber = pageSettings.getSavedPageNumber(deckName, appModuleName)
+        local selected = module:getProfilePage(deckName, pageNumber)
+        logMyTimes(appModuleName .. "-getProfile took:", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
+        return selected
     end
 
-    local insideStartTime = GetTime()
-    local module = require("config.macros.streamdeck.profiles." .. appModuleName)
-    logMyTimes(appModuleName .. "-require took:", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
-    pageNumber = pageSettings.getSavedPageNumber(deckName, appModuleName)
-    selected = module:getProfilePage(deckName, pageNumber)
-    logMyTimes(appModuleName .. "-getProfile took:", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
+    local appModuleName = appLookup[appName]
+    local selected = getProfile(appModuleName)
+    if selected == nil then
+        selected = getProfile("defaults")
+    end
 
     if selected ~= nil then
         local insideStartTime = GetTime()
