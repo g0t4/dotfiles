@@ -8,22 +8,6 @@ local LuaButton = require("config.macros.streamdeck.luaButton")
 
 -- !!! TODO app observer for shapes and other types... activate different buttons (or behaviors) based on the current seleted shape
 
-function menu(menu)
-    return function()
-        selectMenuItemWithFailureTroubleshooting(menu)
-    end
-end
-
----@param deckName string
----@param appModuleName string
----@param page number
-function changePage(deckName, appModuleName, page)
-    local pageSettings = require("config.macros.streamdeck.settings.page")
-    return function()
-        pageSettings.setSavedPageNumber(deckName, appModuleName, page)
-    end
-end
-
 local PptxObserver = AppObserver:new("Microsoft PowerPoint")
 
 PptxObserver:addProfilePage(DECK_2XL, PAGE_1, function(_, deck)

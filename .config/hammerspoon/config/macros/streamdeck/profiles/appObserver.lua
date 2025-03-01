@@ -1,4 +1,23 @@
 local Profile = require "config.macros.streamdeck.profile"
+
+--- *** LuaButton helper wrappers, though can be used in other buttons potentially (i.e. encoder buttons/gestures)
+
+function menu(menu)
+    return function()
+        selectMenuItemWithFailureTroubleshooting(menu)
+    end
+end
+
+---@param deckName string
+---@param appModuleName string
+---@param page number
+function changePage(deckName, appModuleName, page)
+    local pageSettings = require("config.macros.streamdeck.settings.page")
+    return function()
+        pageSettings.setSavedPageNumber(deckName, appModuleName, page)
+    end
+end
+
 ---
 
 DECK_1XL = "1XL"
