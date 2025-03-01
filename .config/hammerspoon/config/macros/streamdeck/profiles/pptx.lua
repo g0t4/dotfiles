@@ -119,8 +119,8 @@ PptxObserver:addProfilePage(DECK_2XL, PAGE_1, function(_, deck)
         -- MaestroButton:new(??, deck, hsIcon("pptx/recording/record-mouse-only.png"), "C998899A-74A5-4329-8B94-6E1DE875F32B"),
         -- MaestroButton:new(??, deck, hsIconWithText("pptx/grouping/regroup-objects.png", "RE", deck, MediumText), "21C045E3-ACC3-4EE7-BE19-0EA2D4E68322"),
 
-        MaestroButton:new(32, deck, hsIconWithText("pptx/grouping/ungroup-objects.png", "UN", deck, MediumText), "5E6CF183-E907-4316-B833-04421A29A304"),
-        MaestroButton:new(28, deck, hsIconWithText("pptx/grouping/group-objects.png", "G", deck, MediumText), "D31AB7EB-3AFC-423E-8029-10C2AB5D5E33"),
+        MaestroButton:new(32, deck, hsIconWithText("pptx/grouping/ungroup-objects.png", "\n\n    UN", deck, MediumText), "5E6CF183-E907-4316-B833-04421A29A304"),
+        MaestroButton:new(28, deck, hsIconWithText("pptx/grouping/group-objects.png", "\nG", deck, MediumText), "D31AB7EB-3AFC-423E-8029-10C2AB5D5E33"),
 
         LuaButton:new(25, deck, pageLeftImage(deck), changePage(DECK_2XL, "pptx", PAGE_2)),
     }
