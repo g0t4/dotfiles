@@ -116,6 +116,7 @@ end
 
 ---@param deck DeckController
 function AppsObserver:loadCurrentAppForDeck(deck)
+    -- TODO can I remove this extra layer too? seems vestigial possibly for old integration point
     local currentApp = hs.application.frontmostApplication()
     if currentApp then
         self:tryLoadProfileForDeck(deck, currentApp:title())
