@@ -9,8 +9,8 @@
 
 -- - FYI issue switching to hammerspoon console from observing app (and then back to it):
 --   - subscribe to Brave Browser events, switch to Brave and then away (it breaks)
---   - seems limited to switching to hammerspoon console (click on that window)
---   - this is when hammerspoon console doesn't have dock icon for app switcher, is that why?
+--   - especially when switch to hammerspoon console (click on that window)
+--     - also might be rapid switching b/c now its any app randonmly
 
 local hsapp = hs.application.find("Brave Browser Beta")
 -- FYI  most of the following is just to get typing to provide completions (asserts/annotations)
