@@ -1,5 +1,4 @@
 local inspect = require("hs.inspect")
-local fun = require("fun")
 
 function pasteText(text, app)
     -- TODO if need be, can I track the app that was active when triggering the ask-openai action... so I can make sure to pass it to type into it only... would allow me to switch apps (or more important, if some other app / window pops up... wouldn't steal typing focus)
@@ -97,47 +96,6 @@ function StopProfiler(path)
     local ProFi = require("ProFi")
     ProFi:stop()
     ProFi:writeReport(path)
-end
-
-function EnumTableValues(tbl)
-    return fun.enumerate(tbl):map(function(key, value)
-        return value
-    end)
-end
-
-function TableLeftJoin(theTable, separator)
-    -- FYI just to get a bit of practice using luafun library
-    --  surprised to find it provides very few methods (i.e. no reverse)
-    return EnumTableValues(theTable)
-        :foldl(function(accum, current)
-            if accum == "" then
-                -- don't join nothing with first entry
-                return current
-            end
-            return accum .. separator .. current
-        end, "")
-end
-
-function TableReverse(theTable)
-    -- just for practice
-    local reversed = {}
-    for _, v in pairs(theTable) do
-        table.insert(reversed, 1, v)
-    end
-    return reversed
-end
-
-function TableContains(theTable, value)
-    for _, v in pairs(theTable) do
-        if v == value then return true end
-    end
-    return false
-end
-
--- chainable too, perhaps add more overloads with builder pattern of chaining (return tablej)
-function table_prepend(theTable, value)
-    table.insert(theTable, 1, value)
-    return theTable
 end
 
 function resolveHomePath(path)

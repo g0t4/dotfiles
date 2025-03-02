@@ -88,5 +88,47 @@ function _.ieachKey(t, fn)
     end
 end
 
--- *** helpers for fun.lua
+-- *** MISC table operations:
+--   some use fun.lua
+local fun = require("fun")
 
+function EnumTableValues(tbl)
+    return fun.enumerate(tbl):map(function(key, value)
+        return value
+    end)
+end
+
+function TableLeftJoin(theTable, separator)
+    -- FYI just to get a bit of practice using luafun library
+    --  surprised to find it provides very few methods (i.e. no reverse)
+    return EnumTableValues(theTable)
+        :foldl(function(accum, current)
+            if accum == "" then
+                -- don't join nothing with first entry
+                return current
+            end
+            return accum .. separator .. current
+        end, "")
+end
+
+function TableReverse(theTable)
+    -- just for practice
+    local reversed = {}
+    for _, v in pairs(theTable) do
+        table.insert(reversed, 1, v)
+    end
+    return reversed
+end
+
+function TableContains(theTable, value)
+    for _, v in pairs(theTable) do
+        if v == value then return true end
+    end
+    return false
+end
+
+-- chainable too, perhaps add more overloads with builder pattern of chaining (return tablej)
+function table_prepend(theTable, value)
+    table.insert(theTable, 1, value)
+    return theTable
+end
