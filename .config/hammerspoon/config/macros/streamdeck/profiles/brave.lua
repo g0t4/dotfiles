@@ -115,7 +115,7 @@ BraveObserver:addProfilePage(DECK_3XL, PAGE_1, function(_, deck)
         -- print("myMods", hs.inspect(myMods))
         -- FYI works for now but clicking them will be broken (IIAC first button per # would get press event)
         f.each(myMods, function(_index, button)
-            -- TODO override, not just ADD
+            -- !!! TODO override, not just ADD
             -- print("  button", hs.inspect(button))
             base[#base + 1] = button
         end)
