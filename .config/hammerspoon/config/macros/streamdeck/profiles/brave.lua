@@ -83,8 +83,11 @@ BraveObserver:addProfilePage(DECK_3XL, PAGE_1, function(_, deck)
     }
 end)
 
-function BraveObserver:getProfilePage(deckName, pageNumber)
-    local page = AppObserver.getProfilePage(self, deckName, pageNumber)
+---@param deck DeckController
+---@param pageNumber number
+---@return Profile|nil
+function BraveObserver:getProfilePage(deck, pageNumber)
+    local page = AppObserver.getProfilePage(self, deck, pageNumber)
     if page == nil then
         return nil
     end

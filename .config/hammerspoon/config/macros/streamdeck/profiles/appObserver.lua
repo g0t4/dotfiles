@@ -51,10 +51,10 @@ function AppObserver:new(appName)
     return o
 end
 
----@param deckName string
+---@param deck DeckController
 ---@param pageNumber number|nil
 ---@return Profile
-function AppObserver:getProfilePage(deckName, pageNumber)
+function AppObserver:getProfilePage(deck, pageNumber)
     pageNumber = pageNumber or 1
     local key = deckName .. "-" .. pageNumber
     return self.profiles[key]
