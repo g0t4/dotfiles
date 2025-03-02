@@ -83,16 +83,11 @@ function AppsObserver:onAppActivated(appName, hsApp)
             --   AXWindowResized AXWindow ''
             --   AXTitleChanged AX  Window 'News and Trending Stories Around the Internet | Digg - Brave Beta - wes private'
             --
-            -- AXDocument: https://digg.com/   # has the URL!!!
-            -- AXMain: true? is this for frontmost only?
-            --
-            -- btw window events only happened when I changed pages, and opened a new tab... so not bad to narrow it down
+            --   AXWindow title changed seemed to only happen when I changed sites
 
-
-            local role = element:attributeValue("AXRole")
             -- pick filters based on rarity of events (cursory testing)
             --   esp make sure any expensive checks are last
-
+            local role = element:attributeValue("AXRole")
             if role ~= "AXWindow" then
                 -- ignore non-window events
                 return
@@ -116,21 +111,55 @@ function AppsObserver:onAppActivated(appName, hsApp)
                 return
             end
 
-            local value = element:attributeValue("AXValue")
-            local title = element:attributeValue("AXTitle")
             local description = element:attributeValue("AXDescription")
             local message = "[N] " .. notification
             if role ~= nil then
                 message = message .. " " .. role
             end
+            local title = element:attributeValue("AXTitle")
             if title ~= nil then
                 message = message .. " " .. quote(title)
             end
             if description ~= nil then
                 message = message .. " " .. quote(description)
             end
+            local value = element:attributeValue("AXValue")
             if value ~= nil then
                 message = message .. " " .. quote(value)
+            end
+
+            -- -- FYI! AXDocument is often stale
+            -- local axDocument = element:attributeValue("AXDocument")
+            -- if axDocument ~= nil then
+            --     message = message .. "\n  (may be stale) URL: " .. axDocument
+            -- end
+
+            local urlTextField = focusedWindowElem:group(1):group(1):group(1):group(1):toolbar(1):group(1):textField(1)
+            if urlTextField ~= nil then
+                local value = urlTextField:attributeValue("AXValue")
+                -- YAY... I am reliably finding the URL text field and it's correct even when AXDocument is stale
+                --
+                -- textbox for URL bar:
+                --   app:window(1):group(1):group(1):group(1):group(1):toolbar(1):group(1):textField(1)
+                --
+                -- noteworthy attributes:
+                --   AXDescription = "Address and search bar"
+                --   AXPlaceholderValue = "Search Brave or type a URL"
+                --   AXKeyShortcutsValue = "⌘L"
+                --   AXValue = "https://www.reddit.com"
+                --   ChromeAXNodeId = "1028"
+                --
+                --   hierarchy of this attr, super helpful if I have to go the search route in the future or have other issues!
+                --   AXDOMClassList = {1="BraveOmniboxViewViews"} textField(1) [THIS IS THE URL BOX]
+                --     AXDOMClassList = {1="BraveLocationBarView"} group(1)
+                --       AXDOMClassList = {1="BraveToolbarView"} toolbar(1)
+                --         AXDOMClassList = {1="BraveBrowserView"} group(1)
+                --           AXDOMClassList = {1="BrowserNonClientFrameView"} group(1)
+                --             AXDOMClassList = {1="NonClientView"} group(1)
+                --               AXDOMClassList = {1="BraveBrowserRootView"} group(1)
+                --                 window(1)
+                --                   app
+                message = message .. "\n  urlTextField: " .. value
             end
 
             print(message)
