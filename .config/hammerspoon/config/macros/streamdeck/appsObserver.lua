@@ -64,11 +64,15 @@ function AppsObserver:onAppActivated(appName, hsApp)
     if notificationObserver ~= nil then
         notificationObserver:stop()
     end
+    local thisAppsObserver = self
     local appElement = hs.axuielement.applicationElement(hsApp)
     notificationObserver = hs.axuielement.observer.new(hsApp:pid())
     assert(notificationObserver ~= nil)
     notificationObserver:addWatcher(appElement, "AXTitleChanged")
     notificationObserver:addWatcher(appElement, "AXFocusedWindowChanged")
+    -- FYI app changed trigger (to browser window w/ current tab on docs...) that will be handled by current AppsObserver app switch monitoring (when merged with this logic)
+    --   OR... I could fire this after app changes and go that route if this is best kept separate
+    -- ! FOR NOW DO NOT TEST WITH SWITCHING TO/FROM BRAVE w/ google docs in focused window (that will come with final integration into page loading)
     notificationObserver:callback(
     ---@param _observer hs.axuielement.observer
     ---@param element hs.axuielement
@@ -164,8 +168,80 @@ function AppsObserver:onAppActivated(appName, hsApp)
                 --                   app
                 message = message .. "\n  urlTextField: " .. value
             end
-
             print(message)
+
+
+            -- TODO move elsewhere once I smoothout any issues with swapping buttons on top of the profile buttons
+            --   TODO I will want a addProfilePageMods(...) method of some sort that registers modifications
+            --      including events to observe and handler that returns list of buttons!
+            --      don't make it generic just yet, do that after I have multiple apps w/ real use cases...
+            --      for now this is just a POC...
+            --      and really I don't need this until I have more browser buttons (only a few for google docs currently)
+            --       I suspect I will make many more though with site based profiles/mods
+            --      ultimately will generate multiple sets of buttons all in one go so we don't have to call it 4 times (1 per deck)
+            --
+            local deckName = DECK_3XL
+            local pageNumber = PAGE_1
+            local km_docs_menu_item = "B06C1815-51D0-4DD7-A22C-5A3C39C4D1E0"
+
+
+            if urlTextField == nil then
+                print("no urlTextField, skipping...")
+                return
+            end
+
+            local deck = thisAppsObserver.decks.deckControllers[deckName]
+            local MaestroButton = require("config.macros.streamdeck.maestroButton")
+            local buttons = {
+                MaestroButton:new(32, deck, hsCircleIcon("#FFFF00", deck),
+                    km_docs_menu_item, "Highlight color yellow"),
+                MaestroButton:new(32, deck, hsCircleIcon("#FF0000", deck),
+                    km_docs_menu_item, "Highlight color red"),
+            }
+
+            local value = urlTextField:attributeValue("AXValue")
+            -- appsObserver:loadCurrentAppForDeck(deck) -- TODO! next do this to remove them on site changes
+            if value:find("https://docs.google.com") then
+                -- TODO setButtons or updateButtons? addButtons is kinda misleading
+                deck.buttons:addButtons(buttons)
+                -- TODO any issues calling start a 2nd time? i.e. clock button? if so that button should cache if it is running
+                deck:start()
+            end
+            -- * ultimately I thinmk it makes sense to have profile loader handle the mods too
+            --   b/c it has to check the current window title when switching apps
+            --   so if it does it all for a given profile I can just trigger it and let it do the rest
+            --   I can still have special event that doesn't reload profiles UNLESS mods to make
+            --   then for mods why not just apply it after reloading the deck's profile
+            --   that way I never have to "put back" buttons from underlying profile
+
+            -- TODO make sure current app still matches? another reason to push most logic into profile loader so buttons are consistently selected
+
+            -- Consider rapid fire events
+            -- - Print warnings every # in Y short period of time?
+            --     might be obvious though when stuff locks up :)
+            -- - if rapid app changes causes issues => use debouncing (on 2nd+)
+            --   first event after long duration X, handle immediately (no debouncing)
+            --   second (within Y short duration of first), then debounce it and the rest
+            --     until quiet enough that hopefully events have stopped
+            --     think of a triggered debounce (if that makes sense)
+            --     probably could even do this for 50-100ms and not notice...
+            --       but only do this if you need a rapid fire event
+            --       ideally rare events for dynamic profile changes
+            -- - BTW the reason why I don't want the first one throttled is b/c
+            --     most of the time it's only the first one that shows up!
+            --     so, don't delay it too unless second arrives in which case first is useless
+            -- - or, maybe think of it as cancel on next event
+            --     so, if processing first event is not complete
+            --       when a second event arrives
+            --       cancel first immediatley
+            --       immediately start second
+            --     effectively debouncing (with duration based on handler duration)
+            --       a dynamic duration
+            --       think of auto-complete copilot tools... they work like this
+            --         immediately request completion
+            --         cancel if user types something else
+            --     might want a longer duration, in which case use debounce as described above
+            --
         end
     )
     notificationObserver:start()
