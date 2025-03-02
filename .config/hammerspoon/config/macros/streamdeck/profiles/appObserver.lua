@@ -42,6 +42,7 @@ PAGE_10 = 10
 ---@field appName string
 ---@field isActive boolean
 ---@field watcher hs.window.filter|nil
+---@field decks DecksController
 local AppObserver = {}
 AppObserver.__index = AppObserver
 
@@ -49,6 +50,8 @@ AppObserver.__index = AppObserver
 ---@return AppObserver
 function AppObserver:new(appName)
     local o = setmetatable({}, AppObserver)
+    -- TODO! padd in decksController and use that throughout, INCLUDING for new DSL for registering buttons! (remember I use deck multiple times to build button pages)
+    o.decks = {} -- TODO pass and set
     o.profiles = {}
     o.appName = appName
     o.isActive = false
@@ -81,7 +84,8 @@ function AppObserver:addProfilePage(deckName, pageNumber, getButtons, getEncoder
     end
 end
 
--- New methods for intra-app events handling
+-- *** New methods for intra-app events handling
+--  TODO remove this note once all is settled below (reviewed)
 
 ---@param decksController DecksController
 function AppObserver:activate(decksController)
