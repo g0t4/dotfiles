@@ -84,50 +84,28 @@ end
 ---@param deck DeckController
 ---@param appName string
 function AppsObserver:tryLoadProfileForDeck(deck, appName)
-    -- TODO perf monitoring on various image sizes when setButtonImage is called,
-    -- read code for Hammerspoon to guide image sizes
-    -- or otherwise to try to optimize changing button images
-    -- https://github.com/Hammerspoon/hammerspoon/blob/master/extensions/streamdeck/HSStreamDeckDevice.m#L394
-    -- StartProfiler()
-
-    local deckName = deck.name
-
-    ---@param appModuleName string
-    ---@return Profile|nil
-    function getProfile(appModuleName)
-        if appModuleName == nil then
-            return nil
-        end
-        ---@type AppObserver|nil
-        local module = require("config.macros.streamdeck.profiles." .. appModuleName)
-        if module == nil then
-            print("Failed to load profiles module for app: " .. appModuleName)
-            return nil
-        end
-        local pageNumber = pageSettings.getSavedPageNumber(deckName, appModuleName)
-        local selected = module:getProfilePage(deck, pageNumber)
-        if selected == nil and pageNumber ~= 1 then
-            print("WARNING: Failed to get page " .. pageNumber .. " for deck " .. deckName .. " and app " .. appModuleName, "trying page 1")
-            -- try 1, can happen if page is removed and was set as current still
-            pageSettings.clearSavedPageNumber(deckName, appModuleName) -- clear so doesn't happen again
-            selected = module:getProfilePage(deck, 1)
-        end
-        return selected
-    end
-
+    -- This function can be simplified since the activeObserver now handles profile loading
     local appModuleName = appModuleLookupByAppName[appName]
-    local selected = getProfile(appModuleName)
-    if selected == nil then
-        selected = getProfile("defaults")
+
+    if activeObserver and activeObserver:getModuleName() == (appModuleName or "") then
+        -- Let the active observer handle it
+        if activeObserver:loadProfileForDeck(deck) then
+            return
+        end
     end
 
-    if selected ~= nil then
-        deck.hsdeck:reset() -- < 0.3ms
-        selected:applyTo(deck)
-        return
+    -- Try to load default profile if app-specific profile failed
+    if appModuleName == nil or activeObserver == nil then
+        local success, defaultsModule = pcall(require, "config.macros.streamdeck.profiles.defaults")
+        if success and defaultsModule then
+            local tempObserver = defaultsModule
+            if tempObserver:loadProfileForDeck(deck) then
+                return
+            end
+        end
     end
 
-    -- no profile page to show
+    -- No profile available, reset the deck
     deck.buttons:resetButtons()
 end
 
@@ -138,10 +116,10 @@ end
 
 ---@param deck DeckController
 function AppsObserver:loadCurrentAppForDeck(deck)
-    -- when deck first connected, or for another reason...
     local currentApp = hs.application.frontmostApplication()
-    -- verbose("  load: ", quote(currentApp:title()), "for", deck.name)
-    self:tryLoadProfileForDeck(deck, currentApp:title())
+    if currentApp then
+        self:tryLoadProfileForDeck(deck, currentApp:title())
+    end
 end
 
 function AppsObserver:start()
