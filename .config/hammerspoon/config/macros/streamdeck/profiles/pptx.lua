@@ -57,6 +57,9 @@ end)
 PptxObserver:addProfilePage(DECK_2XL, PAGE_2, function(_, deck)
     -- FYI verified all are good from Claude migration
     return {
+
+        -- TODO? make colors secondary pages, then when I get into context detection/observation, I can setup deck2 with contextual buttons (i.e. if color field then show color buttons, or shape selected then show outline buttons, etc)
+
         -- * row 1 (buttons 1-8)
         MaestroButton:new(1, deck, hsIcon("pptx/colors/fill-gray-dark.png"), "D2B20FA1-3564-4021-86CB-D94D08151BED"),
         MaestroButton:new(9, deck, hsIcon("pptx/colors/line-gray-dark.png"), "5B6621C7-D4F3-4602-9C3B-E8BC3C458C37"),
