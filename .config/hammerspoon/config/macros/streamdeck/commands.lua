@@ -5,7 +5,10 @@ function runCommand(cmd)
     local handle = io.popen(cmd .. " 2>&1") -- Redirects STDERR to STDOUT
     if handle then
         local output = handle:read("*a")
-        handle:close()
+        local succeeded, reason, exitCode = handle:close()
+        if not succeeded then
+            print("command failed: " .. reason .. " (exit code: " .. exitCode, "output: ", output, "command:", cmd)
+        end
         return output
     end
     return nil
@@ -22,6 +25,5 @@ function runKMMacro(macro, param)
     end
     verbose("exec KM: " .. command)
 
-    local output = runCommand(command)
-    verbose("output: ", output)
+    runCommand(command)
 end
