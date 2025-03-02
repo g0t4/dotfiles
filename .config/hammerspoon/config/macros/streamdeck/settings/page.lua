@@ -1,6 +1,7 @@
 local SETTINGS_PREFIX = "streamdeck_page_"
 
 local M = {
+    -- TODO remove later
     appsObserver = nil,
     decksController = nil,
 }
@@ -46,6 +47,7 @@ end
 
 ---@return DecksController|nil
 function M.getDecksController()
+    -- TODO remove later
     return M.decksController
 end
 
