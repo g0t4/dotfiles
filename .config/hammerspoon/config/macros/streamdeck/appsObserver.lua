@@ -319,6 +319,7 @@ function AppsObserver:tryLoadProfileForDeck(deck, appName)
         if selected == nil and pageNumber ~= 1 then
             print("WARNING: Failed to get page " .. pageNumber .. " for deck " .. deckName .. " and app " .. appModuleName, "trying page 1")
             -- try 1, can happen if page is removed and was set as current still
+            pageSettings.clearSavedPageNumber(deckName, appModuleName) -- clear so doesn't happen again
             selected = module:getProfilePage(deck, 1)
         end
         return selected
