@@ -1,6 +1,6 @@
 -- https://www.hammerspoon.org/docs/hs.axuielement.observer.html
 
---- TODO! TRY hs.uielement.watcher if I have issues with axuielement.observer
+
 
 -- FYI ISSUES:
 -- - when I subscribe to all events for Brave Browser, if I switch to Brave and away (before triggering any other events)... the callback no longer fires
@@ -9,7 +9,6 @@
 --
 
 local braveApp = hs.application.find("Brave Browser Beta")
-
 -- FYI  most of the following is just to get typing to provide completions (asserts/annotations)
 print("  PID", hs.inspect(braveApp:pid()))
 ---@type hs.axuielement|nil

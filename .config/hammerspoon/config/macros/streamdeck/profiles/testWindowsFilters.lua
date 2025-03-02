@@ -4,6 +4,7 @@ require("config.helpers")
 do return end -- !!! REMOVE if you are ok with breaking observers
 -- FYI hs.application.watcher still works (i use for app switch notifications)
 --   JUST LOADING the module alone breaks things (even if after setup observers)
+-- *** ISSUE I REPORTED: https://github.com/Hammerspoon/hammerspoon/issues/3754
 local wf = hs.window.filter
 
 --- FYI! window.filter felt sluggish so maybe not end of world that it is buggy (and the docs mention it is gonna be bugg)
