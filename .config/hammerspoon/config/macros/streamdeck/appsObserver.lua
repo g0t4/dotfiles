@@ -66,6 +66,11 @@ function AppsObserver:onAppActivated(appName, hsApp)
     end
     local thisAppsObserver = self
     local appElement = hs.axuielement.applicationElement(hsApp)
+    if appName ~= APPS.BraveBrowserBeta then
+        print("ONLY DOING DYNAMIC PROFILES For BRAVE CURRENTLY")
+        return
+    end
+
     notificationObserver = hs.axuielement.observer.new(hsApp:pid())
     assert(notificationObserver ~= nil)
     notificationObserver:addWatcher(appElement, "AXTitleChanged")
