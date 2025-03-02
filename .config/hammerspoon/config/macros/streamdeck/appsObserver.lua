@@ -87,11 +87,12 @@ function AppsObserver:onAppActivated(appName, hsApp)
             --   AXWindow title changed covers:
             --     1. new addy into omnibox (submitted)
             --     2. change tabs
-            --     3. open new tab (empty addy)
-            --     4. NOT when I switch windows
+            --     3. open new tab
+            --     4. NOT switch windows
             --
             --   AXFocusedWindowChanged covers:
-            --     1. TODO? switch windows (already opened sites)
+            --     1. switch windows
+            --     2. open new window
 
             -- pick filters based on rarity of events (cursory testing)
             --   esp make sure any expensive checks are last
