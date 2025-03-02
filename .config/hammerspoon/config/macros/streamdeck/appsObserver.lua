@@ -200,7 +200,7 @@ function AppsObserver:onAppActivated(appName, hsApp)
             }
 
             local value = urlTextField:attributeValue("AXValue")
-            -- appsObserver:loadCurrentAppForDeck(deck) -- TODO! next do this to remove them on site changes
+            thisAppsObserver:loadCurrentAppForDeck(deck) -- TODO! next do this to remove them on site changes
             if value:find("https://docs.google.com") then
                 -- TODO setButtons or updateButtons? addButtons is kinda misleading
                 deck.buttons:addButtons(buttons)
