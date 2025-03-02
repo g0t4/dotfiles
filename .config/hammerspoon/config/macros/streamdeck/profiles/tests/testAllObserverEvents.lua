@@ -6,10 +6,14 @@
 
 -- TODO! find a way to subscribe to other app specific events not listed in hs.axuielement.observer.notifications constants
 
+-- FYI see notes abou
 -- FYI ISSUES:
+-- - SEE BOTTOM for EVENT EXAMPLES I CAPTURED FOR REFERENCE
 -- - when I subscribe to all events for Brave Browser, if I switch to Brave and away (before triggering any other events)... the callback no longer fires
 --   - if I open a new tab/changes website/etc and more notifications fire... then when I switch away and come back events still work...
 --   - fortunately I'll be using an observer only for the duration of the app staying on top... and I haven't noticed the issue in that case
+--   - FYI* if I swtich to hammerspoon console it breaks, but not if I switch to iTerm and back
+--      this is when hammerspoon console doesn't have dock icon for app switcher, is that why?
 --
 
 local hsapp = hs.application.find("Brave Browser Beta")
@@ -43,7 +47,7 @@ observer:callback(
         local title = element:attributeValue("AXTitle")
         local role = element:attributeValue("AXRole")
         local description = element:attributeValue("AXDescription")
-        local message = "[N] "
+        local message = "[N] " .. notification
         if role ~= nil then
             message = message .. " " .. role
         end
@@ -104,3 +108,14 @@ observer:start()
 -- windowMiniaturized      AXWindowMiniaturized
 -- windowMoved             AXWindowMoved
 -- windowResized           AXWindowResized
+--
+--
+
+
+-- EVENT EXAMPLES to consider:
+--
+-- typing in address bar of a new browser tab (brave)
+-- 2025-03-01 18:35:40: [N]  AXTextField '' 'Address and search bar' ''
+-- 2025-03-01 18:35:44: [N]  AXTextField '' 'Address and search bar' 'slashdot.org'
+--
+--

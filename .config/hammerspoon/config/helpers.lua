@@ -263,7 +263,7 @@ function quote(str)
     if str == nil then
         return "nil"
     end
-    return "'" .. str .. "'"
+    return "'" .. tostring(str) .. "'"
 end
 
 return M
