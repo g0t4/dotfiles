@@ -67,7 +67,7 @@ function AppsObserver:onAppActivated(appName, hsApp)
     local appElement = hs.axuielement.applicationElement(hsApp)
     notificationObserver = hs.axuielement.observer.new(hsApp:pid())
     assert(notificationObserver ~= nil)
-    -- notificationObserver:addWatcher(appElement, "AXTitleChanged")
+    notificationObserver:addWatcher(appElement, "AXTitleChanged")
     notificationObserver:addWatcher(appElement, "AXFocusedWindowChanged")
     notificationObserver:callback(
     ---@param _observer hs.axuielement.observer
