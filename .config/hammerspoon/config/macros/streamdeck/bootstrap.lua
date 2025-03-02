@@ -16,7 +16,7 @@ apps:start()
 
 
 -- FINDING OBSERVER NOTIFICATIONS:
--- require("config.macros.streamdeck.profiles.testAllObserverEvents")
+require("config.macros.streamdeck.profiles.tests.testAllObserverEvents")
 
 
 
@@ -30,7 +30,7 @@ apps:start()
 
 -- *** TESTS:
 -- ! FYI window.filters BREAKS ALL AXUIELEMENT OBSERVERS (however, hs.application.watcher still works)
--- local windowFilters = require("config.macros.streamdeck.profiles.testWindowsFilters")
+-- local windowFilters = require("config.macros.streamdeck.profiles.tests.testWindowsFilters")
 
 
 
