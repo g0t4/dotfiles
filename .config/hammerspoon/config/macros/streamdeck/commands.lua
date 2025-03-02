@@ -18,7 +18,7 @@ function runKMMacro(macro, param)
     local app = "/Applications/Keyboard\\ Maestro.app/Contents/MacOS/keyboardmaestro"
     local command = app .. " " .. macro
     if param then
-        command = command .. " -p " .. param
+        command = command .. " -p '" .. param .. "'"
     end
     verbose("exec KM: " .. command)
 
