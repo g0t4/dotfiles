@@ -36,6 +36,7 @@ function AppsObserver:new(decks)
 end
 
 function AppsObserver:onPageNumberChanged(deckName, appModuleName, pageNumber)
+    -- TODO push into appObserver (it should be able to detect its own page change and handle it there)
     -- Delegate to the active observer if appropriate
     if activeObserver and activeObserver:getModuleName() == appModuleName then
         activeObserver:handlePageChange(deckName, pageNumber)
