@@ -73,8 +73,7 @@ function AppsObserver:onAppActivated(appName, hsApp)
     -- Fall back to default profiles if no specific observer exists
     local success, defaultsModule = pcall(require, "config.macros.streamdeck.profiles.defaults")
     if success and defaultsModule then
-        activeObserver = defaultsModule
-        activeObserver:activate(self.decks)
+        defaultsModule:activate(self.decks)
     else
         -- No observer available, reset all decks
         for _, deckController in pairs(self.decks.deckControllers) do
