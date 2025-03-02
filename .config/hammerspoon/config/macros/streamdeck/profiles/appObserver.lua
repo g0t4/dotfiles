@@ -56,7 +56,7 @@ end
 ---@return Profile
 function AppObserver:getProfilePage(deck, pageNumber)
     pageNumber = pageNumber or 1
-    local key = deckName .. "-" .. pageNumber
+    local key = deck.name .. "-" .. pageNumber
     return self.profiles[key]
 end
 

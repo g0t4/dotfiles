@@ -53,7 +53,7 @@ function AppsObserver:onPageNumberChanged(deckName, appModuleName, _pageNumber)
         return
     end
     -- BTW it will lookup the page number so we don't need to pass that
-    self:tryLoadProfileForDeck(deckName, deckController, currentAppName)
+    self:tryLoadProfileForDeck(deckController, currentAppName)
 end
 
 ---@type hs.axuielement.observer|nil
@@ -279,8 +279,8 @@ function AppsObserver:onAppActivated(appName, hsApp)
     --   if it's crunching numbers => I can likely spin up a separate process per deck to load and set the deck buttons
     --   TODO also it might be smth trivial, in which case just fix it in-process!
     --   AFAICT there is no mechanism in hammerspoon to run concurrent tasks (short of using coroutines)?
-    for deckName, deckController in pairs(self.decks.deckControllers) do
-        self:tryLoadProfileForDeck(deckName, deckController, appName)
+    for _deckName, deckController in pairs(self.decks.deckControllers) do
+        self:tryLoadProfileForDeck(deckController, appName)
     end
 end
 
@@ -289,16 +289,16 @@ local function logMyTimes(...)
     -- print(...)
 end
 
----@param deckName string
----@param deckController DeckController
+---@param deck DeckController
 ---@param appName string
-function AppsObserver:tryLoadProfileForDeck(deckName, deckController, appName)
+function AppsObserver:tryLoadProfileForDeck(deck, appName)
     -- TODO perf monitoring on various image sizes when setButtonImage is called,
     -- read code for Hammerspoon to guide image sizes
     -- or otherwise to try to optimize changing button images
     -- https://github.com/Hammerspoon/hammerspoon/blob/master/extensions/streamdeck/HSStreamDeckDevice.m#L394
     -- StartProfiler()
 
+    local deckName = deck.name
     local startTime = GetTime()
 
     ---@param appModuleName string
@@ -316,11 +316,11 @@ function AppsObserver:tryLoadProfileForDeck(deckName, deckController, appName)
         end
         logMyTimes(appModuleName .. "-require took:", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
         local pageNumber = pageSettings.getSavedPageNumber(deckName, appModuleName)
-        local selected = module:getProfilePage(deckController, pageNumber)
+        local selected = module:getProfilePage(deck, pageNumber)
         if selected == nil and pageNumber ~= 1 then
             print("WARNING: Failed to get page " .. pageNumber .. " for deck " .. deckName .. " and app " .. appModuleName, "trying page 1")
             -- try 1, can happen if page is removed and was set as current still
-            selected = module:getProfilePage(deckController, 1)
+            selected = module:getProfilePage(deck, 1)
         end
         logMyTimes(appModuleName .. "-getProfile took:", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
         return selected
@@ -334,9 +334,9 @@ function AppsObserver:tryLoadProfileForDeck(deckName, deckController, appName)
 
     if selected ~= nil then
         local insideStartTime = GetTime()
-        deckController.hsdeck:reset() -- < 0.3ms
+        deck.hsdeck:reset() -- < 0.3ms
         -- FYI applyTo calls removeButtons too, so just need :reset here
-        selected:applyTo(deckController)
+        selected:applyTo(deck)
         logMyTimes("applyTo-alone took", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
         logMyTimes("FULL LOAD took", GetElapsedTimeInMilliseconds(startTime), "ms to apply", selected, "to", deckName)
         -- StopProfiler("streamdeck-bootstrap" .. startTime .. "." .. appName .. "." .. deckName .. ".txt")
@@ -344,7 +344,7 @@ function AppsObserver:tryLoadProfileForDeck(deckName, deckController, appName)
     end
 
     local clearStartTime = GetTime()
-    deckController.buttons:resetButtons()
+    deck.buttons:resetButtons()
     logMyTimes("clearButtons-alone took", GetElapsedTimeInMilliseconds(clearStartTime), "ms to clear", deckName)
     logMyTimes("FULL LOAD took", GetElapsedTimeInMilliseconds(startTime), "ms to clear", deckName)
 
@@ -362,7 +362,7 @@ function AppsObserver:loadCurrentAppForDeck(deck)
     -- when deck first connected, or for another reason...
     local currentApp = hs.application.frontmostApplication()
     -- verbose("  load: ", quote(currentApp:title()), "for", deck.name)
-    self:tryLoadProfileForDeck(deck.name, deck, currentApp:title())
+    self:tryLoadProfileForDeck(deck, currentApp:title())
 end
 
 function AppsObserver:start()
