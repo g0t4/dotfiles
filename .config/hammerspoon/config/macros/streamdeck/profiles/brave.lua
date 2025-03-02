@@ -85,7 +85,7 @@ function BraveObserver:setupWatchers()
     self.watcher = hs.window.filter.new(APPS.BraveBrowserBeta)
 
     -- Watch for window focus changes (tab changes, URL changes)
-    self.watcher:subscribe(hs.window.filter.windowFocused, function(window, appName, event)
+    self.watcher:subscribe(hs.window.filter.windowFocused, function(_window, _appName, _event)
         -- Check the URL and update the decks if needed
         self:checkCurrentURL()
     end)
