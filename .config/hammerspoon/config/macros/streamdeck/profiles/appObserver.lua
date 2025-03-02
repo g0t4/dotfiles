@@ -136,11 +136,7 @@ end
 function AppObserver:handlePageChange(deckName, pageNumber)
     if not self.isActive then return end
 
-    -- TODO don't need this once I inject decksController into AppObserver
-    local decksController = pageSettings.getDecksController()
-    if not decksController then return end
-
-    local deckController = decksController.deckControllers[deckName]
+    local deckController = self.decks.deckControllers[deckName]
     if not deckController then return end
 
     self:loadProfileForDeck(deckController)

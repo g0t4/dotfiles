@@ -75,11 +75,7 @@ function BraveObserver:setupWatchers()
             self.currentURL = url
 
             -- Refresh the decks with the current URL context
-            -- TODO decouple from getDecksController (will pass in deckscontroller to appObserver)
-            local decksController = pageSettings.getDecksController()
-            if decksController then
-                self:refreshDecks(decksController)
-            end
+            self:refreshDecks(self.decks)
         end
     end
 
