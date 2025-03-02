@@ -56,10 +56,6 @@ function AppsObserver:onPageNumberChanged(deckName, appModuleName, _pageNumber)
     self:tryLoadProfileForDeck(deckController, currentAppName)
 end
 
----@type hs.axuielement.observer|nil
-local notificationObserver = nil
-local tmpDeck3HasButtonMods = nil
-
 function AppsObserver:onAppActivated(appName, hsApp)
     -- verbose("app activated", appName)
     self:testBraveNotificationObserver(appName, hsApp)
@@ -70,6 +66,9 @@ function AppsObserver:onAppActivated(appName, hsApp)
     end
 end
 
+---@type hs.axuielement.observer|nil
+local notificationObserver = nil
+local tmpDeck3HasButtonMods = nil
 function AppsObserver:testBraveNotificationObserver(appName, hsApp)
     -- STOP and START new NOTIFICATION OBSERVER
     if notificationObserver ~= nil then
