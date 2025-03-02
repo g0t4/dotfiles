@@ -217,6 +217,9 @@ function AppsObserver:onAppActivated(appName, hsApp)
                 --   however these conditions are not absolutely essential... if I am working on Google Docs..
                 --     i won't be changing sites rapidly enough to care about the flicker
                 -- in the ideal world, I would track individual buttons and for mods only change the ones that need it for intra app events
+                -- wait.. if I kept track of button mods from last profile change (app change)...
+                --   had profile page and mods stored.. I could use that for intra app changes to
+                --   only change the buttons that differ... hrm!
 
                 thisAppsObserver:loadCurrentAppForDeck(deck)
                 -- TODO setButtons or updateButtons? addButtons is kinda misleading
