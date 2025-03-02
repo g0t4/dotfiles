@@ -9,29 +9,14 @@ require("config.macros.streamdeck.iconHelpers")
 local f = require("config.helpers.underscore")
 
 
--- TODO add in web site observer that changes buttons based on site
---   google docs I can activate my buttons for menu items like highlight colors
---   that way I don't have to dedicate a button to one purpose and waste it when on other sites
-
 local BraveObserver = AppObserver:new(APPS.BraveBrowserBeta)
-
 
 local km_docs_menu_item = "B06C1815-51D0-4DD7-A22C-5A3C39C4D1E0"
 
 ---@param deck DeckController
 ---@return PushButton[] # empty if none, never nil
 function getMyDeck3Page1Mods(deck, pageNumber)
-    local app = hs.application.get(APPS.BraveBrowserBeta)
-    if app == nil then return {} end
-    ---@type hs.axuielement|nil
-    local appElement = hs.axuielement.applicationElement(app)
-    if appElement == nil then return {} end
-    ---@type hs.axuielement|nil
-    local window = appElement:attributeValue("AXFocusedWindow")
-    if window == nil then return {} end
-    local urlTextField = window:group(1):group(1):group(1):group(1):toolbar(1):group(1):textField(1)
-    if urlTextField == nil then return {} end
-    local url = urlTextField:attributeValue("AXValue")
+    local url = getCurrentURL()
     if url and url:find("^https://docs.google.com") then
         if deck.name == DECK_3XL and pageNumber == PAGE_1 then
             return {
@@ -81,35 +66,42 @@ end)
 
 -- Override setupWatchers to handle URL changes and other Brave-specific events
 function BraveObserver:setupWatchers()
-    -- TODO plugin my AXObserver impl not hs.window.filter
+    -- TODO plugin my AXObserver
+    -- TODO make actual watcher + handler smth like this:
+    function tmpWatcherHandlerStartPoint()
+        local url = getCurrentURL()
+        if url then
+            -- Store the current URL (and check it for changes?)
+            self.currentURL = url
 
-    self.watcher:start()
+            -- Refresh the decks with the current URL context
+            -- TODO decouple from getDecksController (will pass in deckscontroller to appObserver)
+            local decksController = pageSettings.getDecksController()
+            if decksController then
+                self:refreshDecks(decksController)
+            end
+        end
+    end
+
+    -- self.watcher:start()
 end
 
-function BraveObserver:checkCurrentURL()
+function getCurrentURL()
     local app = hs.application.get(APPS.BraveBrowserBeta)
     if not app then return end
 
+    ---@type hs.axuielement|nil
     local appElement = hs.axuielement.applicationElement(app)
     if not appElement then return end
 
+    ---@type hs.axuielement|nil
     local window = appElement:attributeValue("AXFocusedWindow")
     if not window then return end
 
     local urlTextField = window:group(1):group(1):group(1):group(1):toolbar(1):group(1):textField(1)
     if not urlTextField then return end
 
-    local url = urlTextField:attributeValue("AXValue")
-    if url then
-        -- Store the current URL
-        self.currentURL = url
-
-        -- Refresh the decks with the current URL context
-        local decksController = pageSettings.getDecksController()
-        if decksController then
-            self:refreshDecks(decksController)
-        end
-    end
+    return urlTextField:attributeValue("AXValue")
 end
 
 return BraveObserver
