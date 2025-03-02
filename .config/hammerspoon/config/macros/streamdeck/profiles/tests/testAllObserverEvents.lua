@@ -11,6 +11,7 @@
 --   - subscribe to Brave Browser events, switch to Brave and then away (it breaks)
 --   - especially when switch to hammerspoon console (click on that window)
 --     - also might be rapid switching b/c now its any app randonmly
+--   - FIX => reload hs config (or don't observe beyond span of one app in front)
 
 local hsapp = hs.application.find("Brave Browser Beta")
 -- FYI  most of the following is just to get typing to provide completions (asserts/annotations)
