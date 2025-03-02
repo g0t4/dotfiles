@@ -111,22 +111,12 @@ function AppsObserver:onAppActivated(appName, hsApp)
                 return
             end
 
-            local description = element:attributeValue("AXDescription")
-            local message = "[N] " .. notification
-            if role ~= nil then
-                message = message .. " " .. role
-            end
-            local title = element:attributeValue("AXTitle")
-            if title ~= nil then
-                message = message .. " " .. quote(title)
-            end
-            if description ~= nil then
-                message = message .. " " .. quote(description)
-            end
-            local value = element:attributeValue("AXValue")
-            if value ~= nil then
-                message = message .. " " .. quote(value)
-            end
+            local parts = {
+                axTitleQuoted(element),
+                axDescriptionQuoted(element),
+                axValueQuoted(element),
+            }
+            local message = table.concat(parts, " ")
 
             -- -- FYI! AXDocument is often stale
             -- local axDocument = element:attributeValue("AXDocument")

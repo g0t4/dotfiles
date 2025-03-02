@@ -9,6 +9,8 @@ local axuielement = require("hs.axuielement") -- load to modify its metatable
 
 -- PRN allow index to be string? for title lookup like AppleScript? might want windowTitle("title") instead to avoid unecessary type checks and magic in what it matches on?
 
+-- mark as class so I can modify w/o diagnostics noise
+---@class hs.axuielement
 local axuielemMT = hs.getObjectMetatable("hs.axuielement")
 
 axuielemMT.windows = function(self)
@@ -69,6 +71,42 @@ axuielemMT.toolbars = function(self)
 end
 axuielemMT.toolbar = function(self, index)
     return self:toolbars()[index]
+end
+
+function axValueQuoted(element)
+    if not element then return "" end
+    local value = element:attributeValue("AXValue")
+    if not value then
+        return ""
+    end
+    if value then
+        return value
+    end
+end
+
+function axDescriptionQuoted(element)
+    if not element then return "" end
+    local description = element:attributeValue("AXDescription")
+    if not description then
+        return ""
+    end
+    if description then
+        -- PRN use " if ' present?
+        return "'" .. description .. "'"
+    end
+end
+
+function axTitleQuoted(element)
+    if not element then return "" end
+
+    local title = element:attributeValue("AXTitle")
+    if not title then
+        return ""
+    end
+
+    if title then
+        return "'" .. title .. "'"
+    end
 end
 
 function BuildHammerspoonLuaTo(toElement)
