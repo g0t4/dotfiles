@@ -301,7 +301,6 @@ function AppsObserver:tryLoadProfileForDeck(deck, appName)
     -- StartProfiler()
 
     local deckName = deck.name
-    local startTime = GetTime()
 
     ---@param appModuleName string
     ---@return Profile|nil
@@ -309,14 +308,12 @@ function AppsObserver:tryLoadProfileForDeck(deck, appName)
         if appModuleName == nil then
             return nil
         end
-        local insideStartTime = GetTime()
         ---@type AppObserver|nil
         local module = require("config.macros.streamdeck.profiles." .. appModuleName)
         if module == nil then
             print("Failed to load profiles module for app: " .. appModuleName)
             return nil
         end
-        logMyTimes(appModuleName .. "-require took:", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
         local pageNumber = pageSettings.getSavedPageNumber(deckName, appModuleName)
         local selected = module:getProfilePage(deck, pageNumber)
         if selected == nil and pageNumber ~= 1 then
@@ -324,7 +321,6 @@ function AppsObserver:tryLoadProfileForDeck(deck, appName)
             -- try 1, can happen if page is removed and was set as current still
             selected = module:getProfilePage(deck, 1)
         end
-        logMyTimes(appModuleName .. "-getProfile took:", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
         return selected
     end
 
@@ -335,22 +331,13 @@ function AppsObserver:tryLoadProfileForDeck(deck, appName)
     end
 
     if selected ~= nil then
-        local insideStartTime = GetTime()
         deck.hsdeck:reset() -- < 0.3ms
-        -- FYI applyTo calls removeButtons too, so just need :reset here
         selected:applyTo(deck)
-        logMyTimes("applyTo-alone took", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
-        logMyTimes("FULL LOAD took", GetElapsedTimeInMilliseconds(startTime), "ms to apply", selected, "to", deckName)
-        -- StopProfiler("streamdeck-bootstrap" .. startTime .. "." .. appName .. "." .. deckName .. ".txt")
         return
     end
 
-    local clearStartTime = GetTime()
+    -- no profile page to show
     deck.buttons:resetButtons()
-    logMyTimes("clearButtons-alone took", GetElapsedTimeInMilliseconds(clearStartTime), "ms to clear", deckName)
-    logMyTimes("FULL LOAD took", GetElapsedTimeInMilliseconds(startTime), "ms to clear", deckName)
-
-    -- StopProfiler("streamdeck-bootstrap" .. startTime .. "." .. appName .. "." .. deckName .. ".txt")
 end
 
 function AppsObserver:onAppDeactivated(appName, hsApp)
