@@ -6,6 +6,7 @@ local verbose = require("config.macros.streamdeck.helpers").verbose
 local MenuButton = require("config.macros.streamdeck.menuButton")
 local LuaButton = require("config.macros.streamdeck.luaButton")
 require("config.macros.streamdeck.iconHelpers")
+local f = require("config.helpers.underscore")
 
 
 -- TODO add in web site observer that changes buttons based on site
@@ -113,7 +114,7 @@ BraveObserver:addProfilePage(DECK_3XL, PAGE_1, function(_, deck)
     else
         -- print("myMods", hs.inspect(myMods))
         -- FYI works for now but clicking them will be broken (IIAC first button per # would get press event)
-        _G._.each(myMods, function(_index, button)
+        f.each(myMods, function(_index, button)
             -- TODO override, not just ADD
             -- print("  button", hs.inspect(button))
             base[#base + 1] = button

@@ -88,11 +88,13 @@ function M.ieachKey(t, fn)
     end
 end
 
-_G._ = M
+-- *** MISC table operations
+--  TODO migrate to underscore equivalents above
+--  FYI DO NOT TRY TO EXPORT THESE from this module, instead split them out if you need that.
 
--- *** MISC table operations:
 --   some use fun.lua
 local fun = require("fun")
+-- TODO break away from fun.lua too (it barely had anything useful anyways)
 
 function EnumTableValues(tbl)
     return fun.enumerate(tbl):map(function(key, value)
@@ -134,3 +136,5 @@ function table_prepend(theTable, value)
     table.insert(theTable, 1, value)
     return theTable
 end
+
+return M

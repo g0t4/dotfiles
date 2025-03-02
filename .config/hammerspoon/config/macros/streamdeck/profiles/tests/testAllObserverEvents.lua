@@ -1,3 +1,4 @@
+local f = require("config.helpers.underscore")
 -- https://www.hammerspoon.org/docs/hs.axuielement.observer.html
 
 
@@ -24,7 +25,7 @@ local observer = hs.axuielement.observer.new(hsapp:pid())
 assert(observer ~= nil)
 
 -- -- ALL events (good way to find what is available)
-_.each(hs.axuielement.observer.notifications, function(key, value)
+f.each(hs.axuielement.observer.notifications, function(key, value)
     print(" " .. key .. " => " .. value)
     observer:addWatcher(appElement, value)
 end)
