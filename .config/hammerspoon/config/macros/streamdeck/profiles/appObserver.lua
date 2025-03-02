@@ -118,17 +118,17 @@ function AppObserver:loadProfileForDeck(deck)
     -- PRN! technically could load the page number on module load! and only need to save new values!
     local pageNumber = pageSettings.getSavedPageNumber(deck.name, self:getModuleName())
 
-    local selected = self:getProfilePage(deck, pageNumber)
+    local page = self:getProfilePage(deck, pageNumber)
 
-    if selected == nil and pageNumber ~= 1 then
+    if page == nil and pageNumber ~= 1 then
         -- Try page 1 if the requested page doesn't exist
         pageSettings.clearSavedPageNumber(deck.name, self:getModuleName())
-        selected = self:getProfilePage(deck, 1)
+        page = self:getProfilePage(deck, 1)
     end
 
-    if selected ~= nil then
+    if page ~= nil then
         deck.hsdeck:reset()
-        selected:applyTo(deck)
+        page:applyTo(deck)
         return true
     end
 
