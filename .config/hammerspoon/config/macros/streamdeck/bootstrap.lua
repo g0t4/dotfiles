@@ -15,7 +15,8 @@ local apps = AppsObserver:new(decks)
 apps:start()
 
 
-require("config.macros.streamdeck.profiles.testAXObserversForProfileMods")
+-- FINDING OBSERVER NOTIFICATIONS:
+-- require("config.macros.streamdeck.profiles.testAllObserverEvents")
 
 
 

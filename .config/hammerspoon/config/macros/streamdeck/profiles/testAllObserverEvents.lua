@@ -1,6 +1,10 @@
 -- https://www.hammerspoon.org/docs/hs.axuielement.observer.html
 
 
+--- FYI!  this is for finding events to watch, just subscribes to everything
+-- leave this as is (ALL EVENTS) so its a reminder of a good way to find events
+
+-- TODO! find a way to subscribe to other app specific events not listed in hs.axuielement.observer.notifications constants
 
 -- FYI ISSUES:
 -- - when I subscribe to all events for Brave Browser, if I switch to Brave and away (before triggering any other events)... the callback no longer fires
@@ -8,32 +12,56 @@
 --   - fortunately I'll be using an observer only for the duration of the app staying on top... and I haven't noticed the issue in that case
 --
 
-local braveApp = hs.application.find("Brave Browser Beta")
+local hsapp = hs.application.find("Brave Browser Beta")
 -- FYI  most of the following is just to get typing to provide completions (asserts/annotations)
-print("  PID", hs.inspect(braveApp:pid()))
+print("  PID", hs.inspect(hsapp:pid()))
 ---@type hs.axuielement|nil
-local braveAppElement = hs.axuielement.applicationElement(braveApp)
-assert(braveAppElement ~= nil)
+local appElement = hs.axuielement.applicationElement(hsapp)
+assert(appElement ~= nil)
 ---@type hs.axuielement.observer|nil
-local braveObserver = hs.axuielement.observer.new(braveApp:pid())
-assert(braveObserver ~= nil)
+local observer = hs.axuielement.observer.new(hsapp:pid())
+assert(observer ~= nil)
 
+-- -- ALL events (good way to find what is available)
 _.each(hs.axuielement.observer.notifications, function(key, value)
     print(" " .. key .. " => " .. value)
-    braveObserver:addWatcher(braveAppElement, value)
+    observer:addWatcher(appElement, value)
 end)
 
-braveObserver:callback(
+-- WHY THE F do they notices just stop coming? after switching apps a few times they stop firing...
+--   my workaround is that I will make a new observer every time I change apps
+--   so a fix for me (if i stops working intraapp which I haven't noticed yet, would be to switch apps quickly)
+-- observer:addWatcher(appElement, "AXFocusedUIElementChanged")
+-- open new tab, this fires
+-- observer:addWatcher(appElement, "AXValueChanged") -- FYI CAN DIRECTLY OBSERVE FOR ENTIRE APP, DO NOT NEED TO SUBSCRIBE on each element
+-- very chatty (every time you type in a text field anywhere! fires value changed!)
+
+observer:callback(
 ---@param element hs.axuielement
     function(_observer, element, notification, _detailsTable)
-        print("[OBSERVER] " .. notification, hs.inspect(element))
+        local value = element:attributeValue("AXValue")
+        local title = element:attributeValue("AXTitle")
+        local role = element:attributeValue("AXRole")
+        local description = element:attributeValue("AXDescription")
+        local message = "[N] "
+        if role ~= nil then
+            message = message .. " " .. role
+        end
+        if title ~= nil then
+            message = message .. " " .. quote(title)
+        end
+        if description ~= nil then
+            message = message .. " " .. quote(description)
+        end
+        if value ~= nil then
+            message = message .. " " .. quote(value)
+        end
+
+        print(message)
     end
 )
 
--- focusedObserver:addWatcher(textObserverAppElem, "AXFocusedUIElementChanged")
--- focusedObserver:addWatcher(textObserverAppElem, "AXValueChanged") -- FYI CAN DIRECTLY OBSERVE FOR ENTIRE APP, DO NOT NEED TO SUBSCRIBE on each element
-
-braveObserver:start()
+observer:start()
 
 -- TODO! how can I find other events for a given app? dictionary? or?
 --
