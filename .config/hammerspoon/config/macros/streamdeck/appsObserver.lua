@@ -58,6 +58,7 @@ end
 
 ---@type hs.axuielement.observer|nil
 local notificationObserver = nil
+local tmpDeck3HasButtonMods = nil
 
 function AppsObserver:onAppActivated(appName, hsApp)
     -- STOP and START new NOTIFICATION OBSERVER
@@ -204,15 +205,30 @@ function AppsObserver:onAppActivated(appName, hsApp)
                     km_docs_menu_item, "Highlight color red"),
             }
 
+
             local value = urlTextField:attributeValue("AXValue")
-            thisAppsObserver:loadCurrentAppForDeck(deck) -- TODO! next do this to remove them on site changes
-            if value:find("https://docs.google.com") then
+
+            tmpDeck3HasButtonMods = value
+            local isNowGoogle = value:find("https://docs.google.com")
+            if tmpDeck3HasButtonMods or isNowGoogle then
+                -- reset if leaving mods page, or set if entering mods page
+                --   otherwise don't reset if not to/from mods (needless flickering)
+                -- PRN would be nice to track if google_docs => google_docs and also not reload in this case
+                --   however these conditions are not absolutely essential... if I am working on Google Docs..
+                --     i won't be changing sites rapidly enough to care about the flicker
+
+                thisAppsObserver:loadCurrentAppForDeck(deck)
                 -- TODO setButtons or updateButtons? addButtons is kinda misleading
-                deck.buttons:addButtons(buttons)
+                if isNowGoogle then
+                    deck.buttons:addButtons(buttons)
+                end
                 -- TODO any issues calling start a 2nd time? i.e. clock button? if so that button should cache if it is running
                 deck:start()
+                tmpDeck3HasButtonMods = true
+            else
+                tmpDeck3HasButtonMods = false
             end
-            -- * ultimately I thinmk it makes sense to have profile loader handle the mods too
+            -- * ultimately I think it makes sense to have profile loader handle the mods too
             --   b/c it has to check the current window title when switching apps
             --   so if it does it all for a given profile I can just trigger it and let it do the rest
             --   I can still have special event that doesn't reload profiles UNLESS mods to make
