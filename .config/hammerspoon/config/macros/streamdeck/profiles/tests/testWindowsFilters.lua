@@ -10,7 +10,7 @@ local wf = hs.window.filter
 --- FYI! window.filter felt sluggish so maybe not end of world that it is buggy (and the docs mention it is gonna be bugg)
 
 
-local braveWindows = wf.new { "Brave Browser Beta" }
+local braveWindows = wf.new { APPS.BraveBrowserBeta }
 -- local allWindows = wf.new(true)
 -- print("braveWindows", hs.inspect(braveWindows))
 

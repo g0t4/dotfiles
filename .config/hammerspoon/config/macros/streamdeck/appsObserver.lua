@@ -2,14 +2,14 @@ verbose = require("config.macros.streamdeck.helpers").verbose
 pageSettings = require("config.macros.streamdeck.settings.page")
 
 local appModuleLookupByAppName = {
-    ["Final Cut Pro"] = "fcpx",
-    ["Hammerspoon"] = "hammerspoon",
-    ["Microsoft PowerPoint"] = "pptx",
-    ["Finder"] = "finder",
-    ["iTerm2"] = "iterm",
-    ["Brave Browser Beta"] = "brave",
-    -- ["Safari"] = "safari",
-    -- ["Preview"] = "preview",
+    [APPS.FinalCutPro] = "fcpx",
+    [APPS.Hammerspoon] = "hammerspoon",
+    [APPS.MicrosoftPowerPoint] = "pptx",
+    [APPS.Finder] = "finder",
+    [APPS.iTerm] = "iterm",
+    [APPS.BraveBrowserBeta] = "brave",
+    -- [APPS.Safari] = "safari",
+    -- [APPS.Preview] = "preview",
 }
 
 ---@class AppsObserver

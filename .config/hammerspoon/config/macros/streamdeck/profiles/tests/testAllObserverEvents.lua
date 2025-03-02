@@ -13,7 +13,7 @@
 --     - also might be rapid switching b/c now its any app randonmly
 --   - FIX => reload hs config (or don't observe beyond span of one app in front)
 
-local hsapp = hs.application.find("Brave Browser Beta")
+local hsapp = hs.application.find(APPS.BraveBrowserBeta)
 -- FYI  most of the following is just to get typing to provide completions (asserts/annotations)
 print("  PID", hs.inspect(hsapp:pid()))
 ---@type hs.axuielement|nil

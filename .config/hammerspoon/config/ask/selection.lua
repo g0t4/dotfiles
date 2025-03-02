@@ -24,14 +24,14 @@ function M.getSelectedText()
         else
             local value = focusedElement:attributeValue("AXValue") -- < 0.4ms !!
             local name = app:name()
-            if name == "Brave Browser Beta" or name == "Microsoft Excel" then
+            if name == APPS.BraveBrowserBeta or name == APPS.MicrosoftExcel then
                 -- clear the text to simulate cut behavior (clear until response starts)
                 -- could select all to simulate having copied it (so response replaces it too)
                 -- excel assume no selection == replace all too
                 focusedElement:setAttributeValue("AXValue", "") -- TODO not working in excel
                 -- TODO why is setting AXValue empty causing menu to open in dev tools?
                 -- FOR NOW allow just use cmd+a in Brave too (stops the context menu from showing... odd)
-                -- if name == "Microsoft Excel" then
+                -- if name == APPS.MicrosoftExcel then
                     -- TODO when figure out brave devtools, go back to only using cmd+a in excel
                     -- AXValue replace isn't working in excel so use cmd+A is fine
                     -- *** FYI super cool to use this prompt in excel:

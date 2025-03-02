@@ -45,7 +45,7 @@ An example of a question could be `= sum up H4:H8` and a valid response would be
 function M.getPrompt(app)
     local name = app:name()
 
-    if name == "Brave Browser Beta" then
+    if name == APPS.BraveBrowserBeta then
         return { systemMessage = devtoolsSystemMessage, max_tokens = 200 }
     end
 
