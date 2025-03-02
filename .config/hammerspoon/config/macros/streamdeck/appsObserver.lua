@@ -199,7 +199,7 @@ function AppsObserver:onAppActivated(appName, hsApp)
             local deck = thisAppsObserver.decks.deckControllers[deckName]
             local MaestroButton = require("config.macros.streamdeck.maestroButton")
             local buttons = {
-                MaestroButton:new(32, deck, hsCircleIcon("#FFFF00", deck),
+                MaestroButton:new(31, deck, hsCircleIcon("#FFFF00", deck),
                     km_docs_menu_item, "Highlight color yellow"),
                 MaestroButton:new(32, deck, hsCircleIcon("#FF0000", deck),
                     km_docs_menu_item, "Highlight color red"),
