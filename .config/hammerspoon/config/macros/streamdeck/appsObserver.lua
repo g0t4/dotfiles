@@ -50,6 +50,8 @@ function AppsObserver:onPageNumberChanged(deckName, appModuleName, pageNumber)
     end
 end
 
+---@param appName string
+---@param hsApp hs.application
 function AppsObserver:onAppActivated(appName, hsApp)
     -- Deactivate the previous observer if it exists
     if activeObserver then
