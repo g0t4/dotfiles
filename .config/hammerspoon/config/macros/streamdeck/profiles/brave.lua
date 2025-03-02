@@ -18,7 +18,7 @@ require("config.macros.streamdeck.iconHelpers")
 --
 
 
-local BraveObserver = AppObserver:new("Microsoft PowerPoint")
+local BraveObserver = AppObserver:new("Brave Browser Beta")
 
 -- TODO
 
