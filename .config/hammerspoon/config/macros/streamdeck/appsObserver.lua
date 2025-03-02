@@ -79,6 +79,7 @@ function AppsObserver:onAppActivated(appName, hsApp)
         end
     end
 
+    -- TODO mesh logic for default within appObserver so we can reuse one or more pages while having app specific pages, IIUC right now its default or app but not some of both
     -- Fall back to default profiles if no specific observer exists
     local success, defaultsModule = pcall(require, "config.macros.streamdeck.profiles.defaults")
     if success and defaultsModule then
