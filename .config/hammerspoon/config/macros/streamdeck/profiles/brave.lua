@@ -69,6 +69,7 @@ function getMyDeck3Page1Mods(deck, pageNumber)
     if app == nil then return {} end
     local appElement = hs.axuielement.applicationElement(app)
     if appElement == nil then return {} end
+    ---@type hs.axuielement|nil
     local window = appElement:attributeValue("AXFocusedWindow")
     if window == nil then return {} end
     local urlTextField = window:group(1):group(1):group(1):group(1):toolbar(1):group(1):textField(1)
