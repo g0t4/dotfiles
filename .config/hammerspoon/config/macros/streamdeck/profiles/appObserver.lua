@@ -53,6 +53,7 @@ end
 
 ---@param deckName string
 ---@param pageNumber number|nil
+---@return Profile
 function AppObserver:getProfilePage(deckName, pageNumber)
     pageNumber = pageNumber or 1
     local key = deckName .. "-" .. pageNumber

@@ -119,12 +119,12 @@ function AppsObserver:onAppActivated(appName, hsApp)
                 print("[WindowTitleChanges]unexpected notification type (did you add a notification type?): " .. notification)
                 return
             end
-            local appElem = element:attributeValue("AXParent")
-            if appElem == nil then
+            local appElement = element:attributeValue("AXParent")
+            if appElement == nil then
                 print("[WindowTitleChanges] no parent, should never happen!")
                 return
             end
-            local focusedWindowElem = appElem:attributeValue("AXFocusedWindow")
+            local focusedWindowElem = appElement:attributeValue("AXFocusedWindow")
             if focusedWindowElem == nil then
                 print("[WindowTitleChanges] no focused window, should never happen!")
                 return
@@ -301,11 +301,14 @@ function AppsObserver:tryLoadProfileForDeck(deckName, deckController, appName)
 
     local startTime = GetTime()
 
+    ---@param appModuleName string
+    ---@return Profile|nil
     function getProfile(appModuleName)
         if appModuleName == nil then
             return nil
         end
         local insideStartTime = GetTime()
+        ---@type AppObserver|nil
         local module = require("config.macros.streamdeck.profiles." .. appModuleName)
         if module == nil then
             print("Failed to load profiles module for app: " .. appModuleName)
@@ -313,8 +316,6 @@ function AppsObserver:tryLoadProfileForDeck(deckName, deckController, appName)
         end
         logMyTimes(appModuleName .. "-require took:", GetElapsedTimeInMilliseconds(insideStartTime), "ms")
         local pageNumber = pageSettings.getSavedPageNumber(deckName, appModuleName)
-        -- print("Selected page: " .. pageNumber, "for deck: " .. deckName, "and app: " .. appModuleName)
-        -- TODO cache for duration of app lifetime? -- measure impact before doing that
         local selected = module:getProfilePage(deckName, pageNumber)
         if selected == nil and pageNumber ~= 1 then
             print("WARNING: Failed to get page " .. pageNumber .. " for deck " .. deckName .. " and app " .. appModuleName, "trying page 1")
