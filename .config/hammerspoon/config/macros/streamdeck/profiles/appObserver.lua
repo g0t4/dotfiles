@@ -113,7 +113,11 @@ end
 
 ---@param deck DeckController
 function AppObserver:loadProfileForDeck(deck)
+    -- FYI I have spidey senses that page number can be pushed down into the Profile? with the page it belongs to
+    --   and mabye other logic can follow?
+    -- PRN! technically could load the page number on module load! and only need to save new values!
     local pageNumber = pageSettings.getSavedPageNumber(deck.name, self:getModuleName())
+
     local selected = self:getProfilePage(deck, pageNumber)
 
     if selected == nil and pageNumber ~= 1 then
