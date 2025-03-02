@@ -3,7 +3,7 @@
 
 -- *** my own underscore impl
 -- define globally so I don't need to split out a module, or aggregate it into other helpers as a module
-_ = {}
+_G._ = {}
 
 --- works on all tables, but does not guarantee order
 --- I added this b/c underscore.lua has broken detection of array/map
@@ -12,7 +12,7 @@ _ = {}
 ---@param t table
 ---@param fn function
 ---@return table
-function _.map(t, fn)
+function _G._.map(t, fn)
     local result = {}
     for k, v in pairs(t) do
         result[k] = fn(v)
@@ -68,7 +68,7 @@ end
 ---
 ---@param t table
 ---@param fn fun(key: string|integer, value: any)
-function _.each(t, fn)
+function _G._.each(t, fn)
     for k, v in pairs(t) do
         fn(k, v)
     end
