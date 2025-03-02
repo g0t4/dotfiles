@@ -79,4 +79,44 @@ BraveObserver:addProfilePage(DECK_3XL, PAGE_1, function(_, deck)
     end
 end)
 
+-- Override setupWatchers to handle URL changes and other Brave-specific events
+function BraveObserver:setupWatchers()
+    -- Create a window filter to watch Brave windows
+    self.watcher = hs.window.filter.new(APPS.BraveBrowserBeta)
+
+    -- Watch for window focus changes (tab changes, URL changes)
+    self.watcher:subscribe(hs.window.filter.windowFocused, function(window, appName, event)
+        -- Check the URL and update the decks if needed
+        self:checkCurrentURL()
+    end)
+
+    self.watcher:start()
+end
+
+function BraveObserver:checkCurrentURL()
+    local app = hs.application.get(APPS.BraveBrowserBeta)
+    if not app then return end
+
+    local appElement = hs.axuielement.applicationElement(app)
+    if not appElement then return end
+
+    local window = appElement:attributeValue("AXFocusedWindow")
+    if not window then return end
+
+    local urlTextField = window:group(1):group(1):group(1):group(1):toolbar(1):group(1):textField(1)
+    if not urlTextField then return end
+
+    local url = urlTextField:attributeValue("AXValue")
+    if url then
+        -- Store the current URL
+        self.currentURL = url
+
+        -- Refresh the decks with the current URL context
+        local decksController = pageSettings.getDecksController()
+        if decksController then
+            self:refreshDecks(decksController)
+        end
+    end
+end
+
 return BraveObserver
