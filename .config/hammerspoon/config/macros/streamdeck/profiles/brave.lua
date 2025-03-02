@@ -59,9 +59,9 @@ function hsCircleIcon(hexColor, deck, label)
     return canvas:imageFromCanvas()
 end
 
-BraveObserver:addProfilePage(DECK_3XL, PAGE_1, function(_, deck)
-    local km_docs_menu_item = "B06C1815-51D0-4DD7-A22C-5A3C39C4D1E0"
+local km_docs_menu_item = "B06C1815-51D0-4DD7-A22C-5A3C39C4D1E0"
 
+BraveObserver:addProfilePage(DECK_3XL, PAGE_1, function(_, deck)
     return {
         MaestroButton:new(1, deck, hsCircleIcon("#FFFF00", deck),
             km_docs_menu_item, "Highlight color yellow"),
@@ -83,5 +83,37 @@ BraveObserver:addProfilePage(DECK_3XL, PAGE_1, function(_, deck)
     }
 end)
 
+function BraveObserver:getProfilePage(deckName, pageNumber)
+    local page = AppObserver.getProfilePage(self, deckName, pageNumber)
+    if page == nil then
+        return nil
+    end
+
+    -- lookup website
+    local app = hs.application.get(APPS.BraveBrowserBeta)
+    if app == nil then return nil end
+    local appElement = hs.axuielement.applicationElement(app)
+    if appElement == nil then return nil end
+    local window = appElement:attributeValue("AXFocusedWindow")
+    if window == nil then return nil end
+    local urlTextField = window:group(1):group(1):group(1):group(1):toolbar(1):group(1):textField(1)
+    if urlTextField == nil then return nil end
+    local url = urlTextField:attributeValue("AXValue")
+    if url and url:find("^https://docs.google.com") then
+        if deck.name == DECK_3XL and pageNumber == PAGE_1 then
+            return {
+                MaestroButton:new(31, deck, hsCircleIcon("#FFFF00", deck),
+                    km_docs_menu_item, "Highlight color yellow"),
+                MaestroButton:new(32, deck, hsCircleIcon("#FF0000", deck),
+                    km_docs_menu_item, "Highlight color red"),
+            }
+        end
+    end
+
+    return {}
+
+    -- TODO if it makes sense move to register sets of mods like addProfilePage so its only done once and dont need 'deck' passed here then either
+    -- for now compute on the fly is fine for simplicity
+end
 
 return BraveObserver
