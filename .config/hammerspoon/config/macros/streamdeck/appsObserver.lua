@@ -286,11 +286,6 @@ function AppsObserver:onAppActivated(appName, hsApp)
     end
 end
 
-local function logMyTimes(...)
-    -- verbose(...)
-    -- print(...)
-end
-
 ---@param deck DeckController
 ---@param appName string
 function AppsObserver:tryLoadProfileForDeck(deck, appName)
@@ -344,7 +339,6 @@ end
 function AppsObserver:onAppDeactivated(appName, hsApp)
     -- verbose("app deactivated", appName)
     -- FYI happens after other app activates
-    -- TODO cleanup
 end
 
 ---@param deck DeckController
