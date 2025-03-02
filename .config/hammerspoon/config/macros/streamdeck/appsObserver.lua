@@ -61,10 +61,21 @@ local notificationObserver = nil
 local tmpDeck3HasButtonMods = nil
 
 function AppsObserver:onAppActivated(appName, hsApp)
+    -- verbose("app activated", appName)
+    self:testBraveNotificationObserver(appName, hsApp)
+
+    -- parallel could help, but so could optimizing switching button images
+    for _deckName, deckController in pairs(self.decks.deckControllers) do
+        self:tryLoadProfileForDeck(deckController, appName)
+    end
+end
+
+function AppsObserver:testBraveNotificationObserver(appName, hsApp)
     -- STOP and START new NOTIFICATION OBSERVER
     if notificationObserver ~= nil then
         notificationObserver:stop()
     end
+
     local thisAppsObserver = self
     local appElement = hs.axuielement.applicationElement(hsApp)
     if appName ~= APPS.BraveBrowserBeta then
@@ -272,17 +283,6 @@ function AppsObserver:onAppActivated(appName, hsApp)
             end
         )
         notificationObserver:start()
-    end
-
-    -- verbose("app activated", appName)
-
-    -- TODO paralell? takes 70-100ms per deck, would ROCK to do in parallel
-    --   TODO measure where bottleneck is... if it is file I/O then I might get speedups using background tasks to load image files..
-    --   if it's crunching numbers => I can likely spin up a separate process per deck to load and set the deck buttons
-    --   TODO also it might be smth trivial, in which case just fix it in-process!
-    --   AFAICT there is no mechanism in hammerspoon to run concurrent tasks (short of using coroutines)?
-    for _deckName, deckController in pairs(self.decks.deckControllers) do
-        self:tryLoadProfileForDeck(deckController, appName)
     end
 end
 
