@@ -63,15 +63,32 @@ end
 local activeObserver = nil
 
 function AppsObserver:onAppActivated(appName, hsApp)
-    -- verbose("app activated", appName)
-    local test = require("config.macros.streamdeck.profiles.testBraveNotifications")
-    test(self, appName, hsApp)
-    -- TODO stop previous activeObserver
+    -- Deactivate the previous observer if it exists
+    if activeObserver then
+        activeObserver:deactivate()
+    end
 
-    -- TODO start new activeObserver
-    -- parallel could help, but so could optimizing switching button images
-    for _deckName, deckController in pairs(self.decks.deckControllers) do
-        self:tryLoadProfileForDeck(deckController, appName)
+    -- Try to load the app-specific observer module
+    local appModuleName = appModuleLookupByAppName[appName]
+    if appModuleName then
+        local success, module = pcall(require, "config.macros.streamdeck.profiles." .. appModuleName)
+        if success and module then
+            activeObserver = module
+            activeObserver:activate(self.decks)
+            return
+        end
+    end
+
+    -- Fall back to default profiles if no specific observer exists
+    local success, defaultsModule = pcall(require, "config.macros.streamdeck.profiles.defaults")
+    if success and defaultsModule then
+        activeObserver = defaultsModule
+        activeObserver:activate(self.decks)
+    else
+        -- No observer available, reset all decks
+        for _, deckController in pairs(self.decks.deckControllers) do
+            deckController.buttons:resetButtons()
+        end
     end
 end
 
