@@ -57,7 +57,44 @@ function AppsObserver:onPageNumberChanged(deckName, appModuleName, _pageNumber)
     self:tryLoadProfileForDeck(deckName, deckController, currentAppName)
 end
 
+---@type hs.axuielement.observer|nil
+local notificaitonObserver = nil
+
 function AppsObserver:onAppActivated(appName, hsApp)
+    -- STOP and START new NOTIFICATION OBSERVER
+    if notificaitonObserver ~= nil then
+        notificaitonObserver:stop()
+    end
+    local appElement = hs.axuielement.applicationElement(hsApp)
+    notificaitonObserver = hs.axuielement.observer.new(hsApp:pid())
+    assert(notificaitonObserver ~= nil)
+    notificaitonObserver:addWatcher(appElement, "AXFocusedUIElementChanged")
+    notificaitonObserver:callback(
+        function(_observer, element, notification, _detailsTable)
+            local value = element:attributeValue("AXValue")
+            local title = element:attributeValue("AXTitle")
+            local role = element:attributeValue("AXRole")
+            local description = element:attributeValue("AXDescription")
+            local message = "[N] " .. notification
+            if role ~= nil then
+                message = message .. " " .. role
+            end
+            if title ~= nil then
+                message = message .. " " .. quote(title)
+            end
+            if description ~= nil then
+                message = message .. " " .. quote(description)
+            end
+            if value ~= nil then
+                message = message .. " " .. quote(value)
+            end
+
+            print(message)
+        end
+    )
+    notificaitonObserver:start()
+
+
     -- verbose("app activated", appName)
 
     -- TODO paralell? takes 70-100ms per deck, would ROCK to do in parallel
