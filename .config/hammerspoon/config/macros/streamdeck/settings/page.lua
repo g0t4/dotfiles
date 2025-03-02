@@ -1,6 +1,9 @@
 local SETTINGS_PREFIX = "streamdeck_page_"
 
-local M = {}
+local M = {
+    appsObserver = nil,
+    decksController = nil,
+}
 
 local function getkey(deckName, appModuleName)
     return SETTINGS_PREFIX .. deckName .. "_" .. appModuleName
@@ -35,7 +38,15 @@ end
 
 ---@param observer AppsObserver
 function M.setAppsObserver(observer)
+    -- TODO decouple decksController and appsObserver from these settings (along w/ pushing decksController into AppObserver)
+    --    ALLOW for now to test new refactoring
     M.appsObserver = observer
+    M.decksController = observer.decks
+end
+
+---@return DecksController|nil
+function M.getDecksController()
+    return M.decksController
 end
 
 return M
