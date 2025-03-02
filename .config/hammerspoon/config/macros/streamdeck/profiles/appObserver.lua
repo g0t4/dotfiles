@@ -1,4 +1,5 @@
 local Profile = require "config.macros.streamdeck.profile"
+local pageSettings = require("config.macros.streamdeck.settings.page")
 
 --- *** LuaButton helper wrappers, though can be used in other buttons potentially (i.e. encoder buttons/gestures)
 
@@ -39,6 +40,8 @@ PAGE_10 = 10
 ---@class AppObserver
 ---@field profiles table<string, Profile> @deckName -> Profile
 ---@field appName string
+---@field isActive boolean
+---@field watcher hs.window.filter|nil
 local AppObserver = {}
 AppObserver.__index = AppObserver
 
@@ -48,6 +51,7 @@ function AppObserver:new(appName)
     local o = setmetatable({}, AppObserver)
     o.profiles = {}
     o.appName = appName
+    o.isActive = false
     return o
 end
 
@@ -75,6 +79,82 @@ function AppObserver:addProfilePage(deckName, pageNumber, getButtons, getEncoder
     if getEncoders ~= nil then
         profile.encoders = getEncoders
     end
+end
+
+-- New methods for intra-app events handling
+
+---@param decksController DecksController
+function AppObserver:activate(decksController)
+    self.isActive = true
+    self:setupWatchers()
+    self:refreshDecks(decksController)
+end
+
+function AppObserver:deactivate()
+    self.isActive = false
+    if self.watcher then
+        self.watcher:stop()
+        self.watcher = nil
+    end
+    -- Cleanup any app-specific observers here
+end
+
+---@param decksController DecksController
+function AppObserver:refreshDecks(decksController)
+    -- Refresh all decks with the current app's profiles
+    for deckName, deckController in pairs(decksController.deckControllers) do
+        self:loadProfileForDeck(deckController)
+    end
+end
+
+---@param deck DeckController
+function AppObserver:loadProfileForDeck(deck)
+    local pageNumber = pageSettings.getSavedPageNumber(deck.name, self:getModuleName())
+    local selected = self:getProfilePage(deck, pageNumber)
+
+    if selected == nil and pageNumber ~= 1 then
+        -- Try page 1 if the requested page doesn't exist
+        pageSettings.clearSavedPageNumber(deck.name, self:getModuleName())
+        selected = self:getProfilePage(deck, 1)
+    end
+
+    if selected ~= nil then
+        deck.hsdeck:reset()
+        selected:applyTo(deck)
+        return true
+    end
+
+    return false
+end
+
+---@param deckName string
+---@param pageNumber number
+function AppObserver:handlePageChange(deckName, pageNumber)
+    if not self.isActive then return end
+
+    local decksController = pageSettings.getDecksController()
+    if not decksController then return end
+
+    local deckController = decksController.deckControllers[deckName]
+    if not deckController then return end
+
+    self:loadProfileForDeck(deckController)
+end
+
+---@return string
+function AppObserver:getModuleName()
+    -- Default implementation - subclasses might override this
+    -- to return a different module name
+    return self.appName:lower():gsub(" ", "")
+end
+
+---
+-- Override this method in app-specific observers to handle
+-- app-specific events like window changes, URL changes, etc.
+---
+function AppObserver:setupWatchers()
+    -- Base implementation does nothing
+    -- App-specific observers should override this
 end
 
 return AppObserver
