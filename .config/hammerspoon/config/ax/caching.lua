@@ -1,3 +1,4 @@
+-- IIAC I added this so mods below apply correctly:
 local hsax = require("hs.axuielement")
 
 --- PRN add CacheEntry

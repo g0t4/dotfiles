@@ -5,13 +5,13 @@
 -- JUST PUT hs global into lua LS config and be done with that
 
 local loggers = require("config.loggers") -- s/b early to mute core messages
+require("config.helpers.all") -- globals, import once
 
 local start_time = hs.timer.secondsSinceEpoch()
 
 hs.ipc.cli = true -- early so hs CLI always works
 
 
-require("config.helpers")
 require("config.ax.helpers")
 
 

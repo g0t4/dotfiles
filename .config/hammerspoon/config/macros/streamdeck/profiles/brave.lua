@@ -17,8 +17,7 @@ require("config.macros.streamdeck.iconHelpers")
 
 --
 
-
-local BraveObserver = AppObserver:new("Brave Browser Beta")
+local BraveObserver = AppObserver:new(APPS.BraveBrowserBeta)
 
 -- TODO
 
