@@ -83,7 +83,14 @@ function AppsObserver:onAppActivated(appName, hsApp)
             --   AXWindowResized AXWindow ''
             --   AXTitleChanged AX  Window 'News and Trending Stories Around the Internet | Digg - Brave Beta - wes private'
             --
-            --   AXWindow title changed seemed to only happen when I changed sites
+            --   AXWindow title changed covers:
+            --     1. new addy into omnibox (submitted)
+            --     2. change tabs
+            --     3. open new tab (empty addy)
+            --     4. NOT when I switch windows
+            --
+            --   AXFOcusedWindowChanged covers:
+            --     1. TODO? switch windows (already opened sites)
 
             -- pick filters based on rarity of events (cursory testing)
             --   esp make sure any expensive checks are last
