@@ -81,14 +81,7 @@ end)
 
 -- Override setupWatchers to handle URL changes and other Brave-specific events
 function BraveObserver:setupWatchers()
-    -- Create a window filter to watch Brave windows
-    self.watcher = hs.window.filter.new(APPS.BraveBrowserBeta)
-
-    -- Watch for window focus changes (tab changes, URL changes)
-    self.watcher:subscribe(hs.window.filter.windowFocused, function(_window, _appName, _event)
-        -- Check the URL and update the decks if needed
-        self:checkCurrentURL()
-    end)
+    -- TODO plugin my AXObserver impl not hs.window.filter
 
     self.watcher:start()
 end
