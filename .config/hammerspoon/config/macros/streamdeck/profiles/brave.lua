@@ -25,11 +25,10 @@ end
 
 ---@param hexColor string
 ---@param deck DeckController
+---@param label string|nil
 ---@return hs.image
-function hsCircleIcon(hexColor, deck)
-    local diameter = math.min(deck.buttonSize.w, deck.buttonSize.h)
+function hsCircleIcon(hexColor, deck, label)
     local canvas = newButtonCanvas(deck)
-
     canvas[1] = {
         type = "circle",
         action = "fill", -- action = "strokeAndFill", -- don't need outline (yet?)
@@ -40,7 +39,23 @@ function hsCircleIcon(hexColor, deck)
         -- TODO radius = 90% -- default is 50%
         radius = "40%",
     }
-
+    if label then
+        label = "\n" .. label
+        local styledText = hs.styledtext.new(label, {
+            font = {
+                -- PERFECT SIZE FOR 96x96 XL buttons... figure out PLUS later (IIGC just increase size a smidge)
+                size = 26,
+            },
+            paragraphStyle = {
+                alignment = "center",
+            },
+            color = { hex = "#000000" },
+        })
+        canvas[2] = {
+            type = "text",
+            text = styledText,
+        }
+    end
     return canvas:imageFromCanvas()
 end
 
@@ -51,17 +66,17 @@ BraveObserver:addProfilePage(DECK_3XL, PAGE_1, function(_, deck)
         MaestroButton:new(1, deck, hsCircleIcon("#FFFF00", deck),
             km_docs_menu_item, "Highlight color yellow"),
 
-        -- TODO "rec"
         -- #FCE5CD (highlight light orange 3) => increase saturation for button color: #FFC690
-        MaestroButton:new(2, deck, hsCircleIcon("#FFC690", deck),
+        MaestroButton:new(2, deck, hsCircleIcon("#FFC690", deck, "rec"),
             km_docs_menu_item, "highlight light orange 3"),
 
-        -- TODO this is color of text not background
-        MaestroButton:new(3, deck, hsCircleIcon("#00FFFF", deck),
+        -- "none" == remove highlight (background color)
+        MaestroButton:new(3, deck, hsCircleIcon("#FFFFFF", deck, "none"),
             km_docs_menu_item, "highlight none"),
 
-        -- TODO "none"
-        MaestroButton:new(4, deck, hsCircleIcon("#FF00FF", deck),
+        -- changes text color (not highlight) => looks nice! (could be veritcal middle aligned but this is FINE for now)
+        MaestroButton:new(9, deck, drawTextIcon("dark green 2", deck,
+                { color = { hex = "#38761D" }, font = { size = 30 } }),
             km_docs_menu_item, "dark green 2"),
 
         KeyStrokeButton:new(5, deck, drawTextIcon("⇒", deck), {}, "⇒"),
