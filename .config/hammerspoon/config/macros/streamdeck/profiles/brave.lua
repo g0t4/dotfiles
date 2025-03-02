@@ -88,7 +88,7 @@ function getMyDeck3Page1Mods(deck, pageNumber)
 end
 
 BraveObserver:addProfilePage(DECK_3XL, PAGE_1, function(_, deck)
-    -- ! TODO caching of base and mod sets so we only load those images once!... look into timing on that
+    -- ! TODO run some timing to find out how much would be saved if these were cached and not re-created on every profile change
     local base = {
         MaestroButton:new(1, deck, hsCircleIcon("#FFFF00", deck),
             km_docs_menu_item, "Highlight color yellow"),
