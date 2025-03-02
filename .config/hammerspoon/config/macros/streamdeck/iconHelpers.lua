@@ -187,3 +187,48 @@ function hsIconWithLargeBlackText(icon, text, deck)
     local image = hsIcon(icon)
     return drawTextIcon(text, deck, LargeBlackText, image)
 end
+
+
+---@param deck DeckController
+---@return hs.canvas
+function newButtonCanvas(deck)
+    local canvas = hs.canvas.new({ x = 0, y = 0, w = deck.buttonSize.w, h = deck.buttonSize.h })
+    assert(canvas ~= nil, "canvas is not nil")
+    return canvas
+end
+
+---@param hexColor string
+---@param deck DeckController
+---@param label string|nil
+---@return hs.image
+function hsCircleIcon(hexColor, deck, label)
+    local canvas = newButtonCanvas(deck)
+    canvas[1] = {
+        type = "circle",
+        action = "fill", -- action = "strokeAndFill", -- don't need outline (yet?)
+        fillColor = { hex = hexColor },
+        -- strokeColor = hexColor,
+
+        -- center = { x = "50%", y = "50%" }, -- this is the default and is perfect
+        -- TODO radius = 90% -- default is 50%
+        radius = "40%",
+    }
+    if label then
+        label = "\n" .. label
+        local styledText = hs.styledtext.new(label, {
+            font = {
+                -- PERFECT SIZE FOR 96x96 XL buttons... figure out PLUS later (IIGC just increase size a smidge)
+                size = 26,
+            },
+            paragraphStyle = {
+                alignment = "center",
+            },
+            color = { hex = "#000000" },
+        })
+        canvas[2] = {
+            type = "text",
+            text = styledText,
+        }
+    end
+    return canvas:imageFromCanvas()
+end
