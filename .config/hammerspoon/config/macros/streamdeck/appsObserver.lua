@@ -216,6 +216,7 @@ function AppsObserver:onAppActivated(appName, hsApp)
                 -- PRN would be nice to track if google_docs => google_docs and also not reload in this case
                 --   however these conditions are not absolutely essential... if I am working on Google Docs..
                 --     i won't be changing sites rapidly enough to care about the flicker
+                -- in the ideal world, I would track individual buttons and for mods only change the ones that need it for intra app events
 
                 thisAppsObserver:loadCurrentAppForDeck(deck)
                 -- TODO setButtons or updateButtons? addButtons is kinda misleading
