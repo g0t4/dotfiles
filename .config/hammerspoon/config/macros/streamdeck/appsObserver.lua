@@ -35,6 +35,13 @@ function AppsObserver:new(decks)
     return o
 end
 
+function AppsObserver:onPageNumberChanged(deckName, appModuleName, pageNumber)
+    -- Delegate to the active observer if appropriate
+    if activeObserver and activeObserver:getModuleName() == appModuleName then
+        activeObserver:handlePageChange(deckName, pageNumber)
+    end
+end
+
 function AppsObserver:onPageNumberChanged(deckName, appModuleName, _pageNumber)
     -- TODO this is an intra-app event too (the page change is specific to the app!...  unless its a default page but lets deal with that later)
     local deckController = self.decks.deckControllers[deckName]
