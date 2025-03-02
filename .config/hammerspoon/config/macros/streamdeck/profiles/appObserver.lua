@@ -50,8 +50,7 @@ AppObserver.__index = AppObserver
 ---@return AppObserver
 function AppObserver:new(appName)
     local o = setmetatable({}, AppObserver)
-    -- TODO! padd in decksController and use that throughout, INCLUDING for new DSL for registering buttons! (remember I use deck multiple times to build button pages)
-    o.decks = {} -- TODO pass and set
+    o.decks = nil
     o.profiles = {}
     o.appName = appName
     o.isActive = false
@@ -84,11 +83,11 @@ function AppObserver:addProfilePage(deckName, pageNumber, getButtons, getEncoder
     end
 end
 
--- *** New methods for intra-app events handling
---  TODO remove this note once all is settled below (reviewed)
-
 ---@param decksController DecksController
 function AppObserver:activate(decksController)
+    -- TODO pass in ctor intead (will be able to use it to simplify button creation if I inject it that way => closure over it)
+    self.decks = decksController
+
     self.isActive = true
     self:setupWatchers()
     self:refreshDecks(decksController)
@@ -100,7 +99,6 @@ function AppObserver:deactivate()
         self.watcher:stop()
         self.watcher = nil
     end
-    -- Cleanup any app-specific observers here
 end
 
 ---@param decksController DecksController

@@ -7,6 +7,13 @@ local LuaButton = require("config.macros.streamdeck.luaButton")
 
 
 
+-- TODO refactor to pass decks? is it worth it? probably only if it improves the button creation?
+-- local cached = nil
+-- function createFinderObserver(decks)  -- cache the instance once create too
+--   if cached then return cached end
+--   cached = AppObserver:new("Finder")
+--   ... (below)
+
 local FinderObserver = AppObserver:new("Finder")
 
 FinderObserver:addProfilePage(DECK_3XL, PAGE_1, function(_, deck)
@@ -21,5 +28,9 @@ FinderObserver:addProfilePage(DECK_3XL, PAGE_1, function(_, deck)
     }
 end)
 
+
+
+-- end
+-- return createFinderObserver
 
 return FinderObserver
