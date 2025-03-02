@@ -1,13 +1,16 @@
 ---@type hs.axuielement.observer|nil
 local notificationObserver = nil
 local tmpDeck3HasButtonMods = nil
-function AppsObserver:testBraveNotificationObserver(appName, hsApp)
+
+---@param thisAppsObserver AppsObserver
+---@param appName string
+---@param hsApp hs.application
+function testBraveNotificationObserver(thisAppsObserver, appName, hsApp)
     -- STOP and START new NOTIFICATION OBSERVER
     if notificationObserver ~= nil then
         notificationObserver:stop()
     end
 
-    local thisAppsObserver = self
     local appElement = hs.axuielement.applicationElement(hsApp)
     if appName ~= APPS.BraveBrowserBeta then
         print("ONLY DOING DYNAMIC PROFILES For BRAVE CURRENTLY")
@@ -217,3 +220,4 @@ function AppsObserver:testBraveNotificationObserver(appName, hsApp)
     end
 end
 
+return testBraveNotificationObserver

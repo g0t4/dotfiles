@@ -58,14 +58,14 @@ end
 
 function AppsObserver:onAppActivated(appName, hsApp)
     -- verbose("app activated", appName)
-    self:testBraveNotificationObserver(appName, hsApp)
+    local test = require("config.macros.streamdeck.profiles.testBraveNotifications")
+    test(self, appName, hsApp)
 
     -- parallel could help, but so could optimizing switching button images
     for _deckName, deckController in pairs(self.decks.deckControllers) do
         self:tryLoadProfileForDeck(deckController, appName)
     end
 end
-
 
 ---@param deck DeckController
 ---@param appName string
