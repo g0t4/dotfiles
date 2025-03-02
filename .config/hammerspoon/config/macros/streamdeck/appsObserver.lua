@@ -99,25 +99,28 @@ function AppsObserver:onAppActivated(appName, hsApp)
             local role = element:attributeValue("AXRole")
             if role ~= "AXWindow" then
                 -- ignore non-window events
-                print("unexpected role: " .. role)
+                -- technically ignore role entirely for title changed events
+                --   and for focus window changed events that s/b AXWindow always
+                --   not important to distinguish for now
                 return
             end
             if notification ~= "AXTitleChanged" and notification ~= "AXFocusedWindowChanged" then
-                print("unexpected notification type: " .. notification)
+                -- technically shouldn't happen unless I expand the list of notifications
+                print("[WindowTitleChanges]unexpected notification type (did you add a notification type?): " .. notification)
                 return
             end
             local appElem = element:attributeValue("AXParent")
             if appElem == nil then
-                print("no parent, should never happen!")
+                print("[WindowTitleChanges] no parent, should never happen!")
                 return
             end
             local focusedWindowElem = appElem:attributeValue("AXFocusedWindow")
             if focusedWindowElem == nil then
-                print("no focused window, should never happen!")
+                print("[WindowTitleChanges] no focused window, should never happen!")
                 return
             end
             if focusedWindowElem ~= element then
-                print("non-focused window title changed, skipping...")
+                print("[WindowTitleChanges] non-focused window title changed, skipping...")
                 return
             end
 
