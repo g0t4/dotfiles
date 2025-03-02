@@ -149,10 +149,8 @@ function AppObserver:handlePageChange(deckName, pageNumber)
     self:loadProfileForDeck(deckController)
 end
 
----@return string
+---@return string, _
 function AppObserver:getModuleName()
-    -- Default implementation - subclasses might override this
-    -- to return a different module name
     return self.appName:lower():gsub(" ", "")
 end
 
