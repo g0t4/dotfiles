@@ -58,18 +58,18 @@ function AppsObserver:onPageNumberChanged(deckName, appModuleName, _pageNumber)
 end
 
 ---@type hs.axuielement.observer|nil
-local notificaitonObserver = nil
+local notificationObserver = nil
 
 function AppsObserver:onAppActivated(appName, hsApp)
     -- STOP and START new NOTIFICATION OBSERVER
-    if notificaitonObserver ~= nil then
-        notificaitonObserver:stop()
+    if notificationObserver ~= nil then
+        notificationObserver:stop()
     end
     local appElement = hs.axuielement.applicationElement(hsApp)
-    notificaitonObserver = hs.axuielement.observer.new(hsApp:pid())
-    assert(notificaitonObserver ~= nil)
-    notificaitonObserver:addWatcher(appElement, "AXFocusedUIElementChanged")
-    notificaitonObserver:callback(
+    notificationObserver = hs.axuielement.observer.new(hsApp:pid())
+    assert(notificationObserver ~= nil)
+    notificationObserver:addWatcher(appElement, "AXFocusedUIElementChanged")
+    notificationObserver:callback(
         function(_observer, element, notification, _detailsTable)
             local value = element:attributeValue("AXValue")
             local title = element:attributeValue("AXTitle")
@@ -92,7 +92,7 @@ function AppsObserver:onAppActivated(appName, hsApp)
             print(message)
         end
     )
-    notificaitonObserver:start()
+    notificationObserver:start()
 
 
     -- verbose("app activated", appName)

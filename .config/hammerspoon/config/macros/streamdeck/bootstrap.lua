@@ -16,7 +16,7 @@ apps:start()
 
 
 -- FINDING OBSERVER NOTIFICATIONS:
-require("config.macros.streamdeck.profiles.tests.testAllObserverEvents")
+-- require("config.macros.streamdeck.profiles.tests.testAllObserverEvents")
 
 
 
