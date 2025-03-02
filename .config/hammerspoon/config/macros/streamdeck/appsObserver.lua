@@ -176,6 +176,9 @@ function AppsObserver:onAppActivated(appName, hsApp)
             end
             print(message)
 
+            do return end -- !!! STOP THIS FIRST TEST for NOW... its moved to profile page!
+            -- ! Get rid of following once I am happy with profile page approach
+            --    LEAVE AS EXAMPLE UNTIL THEN
 
             -- TODO move elsewhere once I smoothout any issues with swapping buttons on top of the profile buttons
             --   TODO I will want a addProfilePageMods(...) method of some sort that registers modifications
