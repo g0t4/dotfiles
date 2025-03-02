@@ -67,7 +67,8 @@ function AppsObserver:onAppActivated(appName, hsApp)
     local appElement = hs.axuielement.applicationElement(hsApp)
     notificationObserver = hs.axuielement.observer.new(hsApp:pid())
     assert(notificationObserver ~= nil)
-    notificationObserver:addWatcher(appElement, "AXTitleChanged")
+    -- notificationObserver:addWatcher(appElement, "AXTitleChanged")
+    notificationObserver:addWatcher(appElement, "AXFocusedWindowChanged")
     notificationObserver:callback(
     ---@param _observer hs.axuielement.observer
     ---@param element hs.axuielement
@@ -89,7 +90,7 @@ function AppsObserver:onAppActivated(appName, hsApp)
             --     3. open new tab (empty addy)
             --     4. NOT when I switch windows
             --
-            --   AXFOcusedWindowChanged covers:
+            --   AXFocusedWindowChanged covers:
             --     1. TODO? switch windows (already opened sites)
 
             -- pick filters based on rarity of events (cursory testing)
@@ -97,20 +98,21 @@ function AppsObserver:onAppActivated(appName, hsApp)
             local role = element:attributeValue("AXRole")
             if role ~= "AXWindow" then
                 -- ignore non-window events
+                print("unexpected role: " .. role)
                 return
             end
-            if notification ~= "AXTitleChanged" then
-                -- ignore non-title events
+            if notification ~= "AXTitleChanged" and notification ~= "AXFocusedWindowChanged" then
+                print("unexpected notification type: " .. notification)
                 return
             end
             local appElem = element:attributeValue("AXParent")
             if appElem == nil then
-                print("AXTitleChanged: no parent, should never happen!")
+                print("no parent, should never happen!")
                 return
             end
             local focusedWindowElem = appElem:attributeValue("AXFocusedWindow")
             if focusedWindowElem == nil then
-                print("AXTitleChanged: no focused window, should never happen!")
+                print("no focused window, should never happen!")
                 return
             end
             if focusedWindowElem ~= element then
