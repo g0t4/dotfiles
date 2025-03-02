@@ -1,4 +1,3 @@
-require("config.helpers")
 -- -- *** hs.application module => AFAICT this is akin to get app process from System Events? similar?
 -- hs.application.defaultAppForUTI("mp4") -- returns bundle id, i.e.:
 -- --     org.videolan.vlc

@@ -1,5 +1,3 @@
-require("config.helpers")
-
 ---@param original table
 ---@param seen table|nil
 ---@return table

@@ -1,4 +1,4 @@
-require("config.helpers")
+--
 
 -- !!! using hs.window.filter breaks all hs.axuielement.observer.notifications
 do return end -- !!! REMOVE if you are ok with breaking observers

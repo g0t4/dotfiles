@@ -1,6 +1,5 @@
 verbose = require("config.macros.streamdeck.helpers").verbose
 pageSettings = require("config.macros.streamdeck.settings.page")
-require("config.helpers")
 
 local appModuleLookupByAppName = {
     ["Final Cut Pro"] = "fcpx",

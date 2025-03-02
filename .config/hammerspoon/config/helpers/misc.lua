@@ -1,16 +1,14 @@
 local inspect = require("hs.inspect")
 local fun = require("fun")
 
-local M = {}
-
-function M.pasteText(text, app)
+function pasteText(text, app)
     -- TODO if need be, can I track the app that was active when triggering the ask-openai action... so I can make sure to pass it to type into it only... would allow me to switch apps (or more important, if some other app / window pops up... wouldn't steal typing focus)
     --     hs.eventtap.keyStrokes(text[, application])
     -- FYI no added delay here like keyStroke (interesting)
     hs.eventtap.keyStrokes(text, app) -- app param is optional
 end
 
-function M.typeText(text, delay)
+function typeText(text, delay)
     delay = delay or 10000
 
     for char in text:gmatch(".") do
@@ -36,7 +34,7 @@ function DumpWithMetatables(...)
     print(inspect({ ... }, { metatables = true }))
 end
 
-function M.get_function_source(func)
+function get_function_source(func)
     -- hack to see function body...
     local info = debug.getinfo(func, "S")
     if not info then
@@ -101,95 +99,6 @@ function StopProfiler(path)
     ProFi:writeReport(path)
 end
 
--- *** my own underscore impl
--- define globally so I don't need to split out a module, or aggregate it into other helpers as a module
-_ = {}
-
---- works on all tables, but does not guarantee order
---- I added this b/c underscore.lua has broken detection of array/map
----   i.e. hs.axuilement.observer.notifications is not an array, but it treats it as such and thus appears empty
---- if you want ipairs semantics, use imap (uses ipairs under the hood)
----@param t table
----@param fn function
----@return table
-function _.map(t, fn)
-    local result = {}
-    for k, v in pairs(t) do
-        result[k] = fn(v)
-    end
-    return result
-end
-
---- returns array of keys (values are dropped)
----@param t table
----@return table<integer, string>
-function _.keys(t)
-    local result = {}
-    _.each(t, function(key, _)
-        table.insert(result, key)
-    end)
-    return result
-end
-
---- returns array of values (keys are dropped)
----@param t table
----@return table<integer, any>
-function _.values(t)
-    local result = {}
-    _.each(t, function(_, value)
-        table.insert(result, value)
-    end)
-    return result
-end
-
---- preserves order for arrays only (integer, consecutive keys) (uses ipairs)
----   [i]map => [i]pairs
----@param t table
----@param fn function
----@return table
-function _.imap(t, fn)
-    local result = {}
-    for i, v in ipairs(t) do
-        result[i] = fn(v)
-    end
-    return result
-end
-
---- works on all tables, but does not guarantee order (uses pairs)
---- usage:
----
----   _.each(hs.axuielement.observer.notifications, function(key, value)
----       print(" " .. key .. " => " .. value)
----   end)
----
----   _.each({ foo = "bar", baz = "qux" }, function(key, _)
----       print(key)
----   end)
----
----@param t table
----@param fn fun(key: string|integer, value: any)
-function _.each(t, fn)
-    for k, v in pairs(t) do
-        fn(k, v)
-    end
-end
-
---- preserves order for arrays only (integer, consecutive keys) (uses ipairs)
-function _.ieach(t, fn)
-    for i, v in ipairs(t) do
-        fn(v, i)
-    end
-end
-
---- preserves order for arrays only (integer, consecutive keys) (uses ipairs)
-function _.ieachKey(t, fn)
-    for i, v in ipairs(t) do
-        fn(v, i)
-    end
-end
-
--- *** helpers for fun.lua
-
 function EnumTableValues(tbl)
     return fun.enumerate(tbl):map(function(key, value)
         return value
@@ -209,7 +118,6 @@ function TableLeftJoin(theTable, separator)
         end, "")
 end
 
--- TODO use https://github.com/mirven/underscore.lua/blob/master/lib/underscore.lua?
 function TableReverse(theTable)
     -- just for practice
     local reversed = {}
@@ -265,5 +173,3 @@ function quote(str)
     end
     return "'" .. tostring(str) .. "'"
 end
-
-return M

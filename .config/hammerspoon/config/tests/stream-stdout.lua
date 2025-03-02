@@ -1,4 +1,5 @@
-local pasteText = require("config.helpers").pasteText
+require("helpers.all")
+
 local M = {}
 
 function M.streamStdout()
