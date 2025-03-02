@@ -36,6 +36,7 @@ function AppsObserver:new(decks)
 end
 
 function AppsObserver:onPageNumberChanged(deckName, appModuleName, _pageNumber)
+    -- TODO this is an intra-app event too (the page change is specific to the app!...  unless its a default page but lets deal with that later)
     local deckController = self.decks.deckControllers[deckName]
     if deckController == nil then
         return
@@ -65,7 +66,9 @@ function AppsObserver:onAppActivated(appName, hsApp)
     -- verbose("app activated", appName)
     local test = require("config.macros.streamdeck.profiles.testBraveNotifications")
     test(self, appName, hsApp)
+    -- TODO stop previous activeObserver
 
+    -- TODO start new activeObserver
     -- parallel could help, but so could optimizing switching button images
     for _deckName, deckController in pairs(self.decks.deckControllers) do
         self:tryLoadProfileForDeck(deckController, appName)
