@@ -67,6 +67,7 @@ local km_docs_menu_item = "B06C1815-51D0-4DD7-A22C-5A3C39C4D1E0"
 function getMyDeck3Page1Mods(deck, pageNumber)
     local app = hs.application.get(APPS.BraveBrowserBeta)
     if app == nil then return {} end
+    ---@type hs.axuielement|nil
     local appElement = hs.axuielement.applicationElement(app)
     if appElement == nil then return {} end
     ---@type hs.axuielement|nil

@@ -16,59 +16,78 @@ local axuielemMT = hs.getObjectMetatable("hs.axuielement")
 axuielemMT.windows = function(self)
     return self:childrenWithRole("AXWindow")
 end
+---@param index number
+---@return hs.axuielement
 axuielemMT.window = function(self, index)
     return self:windows()[index]
 end
 
+---@return hs.axuielement[]
 axuielemMT.splitGroups = function(self)
-    return self:childrenWithRole("AXSplitGroup")
+    return self:childrenWithRole("AXSplitGroup") or {}
 end
+---@param index number
+---@return hs.axuielement
 axuielemMT.splitGroup = function(self, index)
     return self:splitGroups()[index]
 end
 
+---@return hs.axuielement[]
 axuielemMT.groups = function(self)
-    return self:childrenWithRole("AXGroup")
+    return self:childrenWithRole("AXGroup") or {}
 end
+---@param index number
+---@return hs.axuielement
 axuielemMT.group = function(self, index)
     return self:groups()[index]
 end
 
+---@return hs.axuielement[]
 axuielemMT.staticTexts = function(self)
-    return self:childrenWithRole("AXStaticText")
+    return self:childrenWithRole("AXStaticText") or {}
 end
+---@param index number
+---@return hs.axuielement
 axuielemMT.staticText = function(self, index)
     return self:staticTexts()[index]
 end
 
--- AXCheckBox
+---@return hs.axuielement[]
 axuielemMT.checkBoxes = function(self)
-    return self:childrenWithRole("AXCheckBox")
+    return self:childrenWithRole("AXCheckBox") or {}
 end
+---@param index number
+---@return hs.axuielement
 axuielemMT.checkBox = function(self, index)
     return self:checkBoxes()[index]
 end
 
--- AXTextField
+---@return hs.axuielement[]
 axuielemMT.textFields = function(self)
-    return self:childrenWithRole("AXTextField")
+    return self:childrenWithRole("AXTextField") or {}
 end
+---@param index number
+---@return hs.axuielement
 axuielemMT.textField = function(self, index)
     return self:textFields()[index]
 end
 
--- AXTextArea
+---@return hs.axuielement[]
 axuielemMT.textAreas = function(self)
-    return self:childrenWithRole("AXTextArea")
+    return self:childrenWithRole("AXTextArea") or {}
 end
+---@param index number
+---@return hs.axuielement
 axuielemMT.textArea = function(self, index)
     return self:textAreas()[index]
 end
 
--- AXToolbar
+---@return hs.axuielement[]
 axuielemMT.toolbars = function(self)
-    return self:childrenWithRole("AXToolbar")
+    return self:childrenWithRole("AXToolbar") or {}
 end
+---@param index number
+---@return hs.axuielement
 axuielemMT.toolbar = function(self, index)
     return self:toolbars()[index]
 end
