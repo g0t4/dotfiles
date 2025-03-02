@@ -21,9 +21,6 @@ end
 local PptxObserver = AppObserver:new("Microsoft PowerPoint")
 
 
--- Example CommandButton:
---         CommandButton:new(32, deck, hsIcon("files/movies-dir-elgato72.png"), { "open", "~/Movies2" }),
-
 PptxObserver:addProfilePage(DECK_1XL, PAGE_1, function(_, deck)
     return {
         -- TODO finish review of buttons and names (Claude started this whole page)
@@ -31,7 +28,10 @@ PptxObserver:addProfilePage(DECK_1XL, PAGE_1, function(_, deck)
         -- * row 1 (buttons 1-8)
         MaestroButton:new(4, deck, hsIconWithText("pptx/recording/start-recording.png", "Start\nRecording", deck, SmallText), "2C964DF9-0831-432B-94FE-124D43593C02"),
         MaestroButton:new(5, deck, hsIcon("pptx/recording/stop-recording.png"), "662A956C-CC67-499B-AEB5-C36D59E5BA3F"),
-        -- TODO look into profile addons (for private buttons, i.e. don't want action in my dotfiles repo)
+        -- TODO show pptx file type icon? and then add text on bottom?
+        MaestroButton:new(6, deck, hsIconWithText("pptx/utilities/ps-template.png", "Template", deck, SmallText), "7CA5817C-EAA6-45C2-B0C6-3CC7204B2E29"),
+        -- TODO show generic folder icon?
+        MaestroButton:new(7, deck, hsIcon("pptx/utilities/ps-icons.png"), "885C3710-A8BB-4280-9764-CD32A9B822A4"),
 
         -- * row 2 (buttons 9-16)
         MaestroButton:new(9, deck, hsIconWithText("pptx/utilities/restart-powerpoint.png", "Restart\nPowerPoint", deck, SmallText), "340FAC91-F2D0-4C13-94CB-64492671B5CE"),
