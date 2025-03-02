@@ -35,6 +35,11 @@ function AppsObserver:new(decks)
     return o
 end
 
+--- only one at a time, so I can hand off all intra app observation and deck handling to the observer!
+--- this App(s)Observer should focus only on inter app events (i.e. switching apps)
+---@type AppsObserver|nil
+local activeObserver = nil
+
 function AppsObserver:onPageNumberChanged(deckName, appModuleName, pageNumber)
     -- TODO push into appObserver (it should be able to detect its own page change and handle it there)
     -- Delegate to the active observer if appropriate
@@ -42,33 +47,6 @@ function AppsObserver:onPageNumberChanged(deckName, appModuleName, pageNumber)
         activeObserver:handlePageChange(deckName, pageNumber)
     end
 end
-
-function AppsObserver:onPageNumberChanged(deckName, appModuleName, _pageNumber)
-    -- TODO this is an intra-app event too (the page change is specific to the app!...  unless its a default page but lets deal with that later)
-    local deckController = self.decks.deckControllers[deckName]
-    if deckController == nil then
-        return
-    end
-    -- if the page changed for a different app then we don't need to do anything
-    local currentApp = hs.application.frontmostApplication()
-    if currentApp == nil then
-        print("onPageNumberChanged: no current app")
-        return
-    end
-    local currentAppName = currentApp:name()
-    local currentAppModuleName = appModuleLookupByAppName[currentAppName]
-    if currentAppName == nil or currentAppModuleName ~= appModuleName then
-        print("onPageNumberChanged: current app module name (" .. currentAppModuleName .. ") does not match changed module name (" .. appModuleName .. ")")
-        return
-    end
-    -- BTW it will lookup the page number so we don't need to pass that
-    self:tryLoadProfileForDeck(deckController, currentAppName)
-end
-
---- only one at a time, so I can hand off all intra app observation and deck handling to the observer!
---- this App(s)Observer should focus only on inter app events (i.e. switching apps)
----@type AppsObserver|nil
-local activeObserver = nil
 
 function AppsObserver:onAppActivated(appName, hsApp)
     -- Deactivate the previous observer if it exists
