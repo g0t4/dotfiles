@@ -42,6 +42,8 @@ local activeObserver = nil
 
 function AppsObserver:onPageNumberChanged(deckName, appModuleName, pageNumber)
     -- TODO push into appObserver (it should be able to detect its own page change and handle it there)
+    --   TODO see appObserver.setSavedPageNumber and pageSettings.getSavedPageNumber (s/b able to remove coupling in page settings!)
+
     -- Delegate to the active observer if appropriate
     if activeObserver and activeObserver:getModuleName() == appModuleName then
         activeObserver:handlePageChange(deckName, pageNumber)
