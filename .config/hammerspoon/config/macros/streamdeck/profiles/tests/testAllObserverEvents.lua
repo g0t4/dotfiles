@@ -29,6 +29,9 @@ _.each(hs.axuielement.observer.notifications, function(key, value)
     observer:addWatcher(appElement, value)
 end)
 
+-- TODO if it becomes an issue w/in using a single app (not swtiching apps bug).. then research why...
+--   IIAC the OS decides to terminate observers for any # of reasons
+--   probably is why you can ask for the current watchers() so you can restart missing ones
 -- WHY THE F do they notices just stop coming? after switching apps a few times they stop firing...
 --   my workaround is that I will make a new observer every time I change apps
 --   so a fix for me (if i stops working intraapp which I haven't noticed yet, would be to switch apps quickly)
@@ -65,7 +68,6 @@ observer:callback(
 observer:start()
 
 -- TODO! how can I find other events for a given app? dictionary? or?
---
 -- hs.axuielement.observer.notifications
 --
 -- announcementRequested   AXAnnouncementRequested
@@ -105,14 +107,3 @@ observer:start()
 -- windowMiniaturized      AXWindowMiniaturized
 -- windowMoved             AXWindowMoved
 -- windowResized           AXWindowResized
---
---
-
-
--- EVENT EXAMPLES to consider:
---
--- typing in address bar of a new browser tab (brave)
--- 2025-03-01 18:35:40: [N]  AXTextField '' 'Address and search bar' ''
--- 2025-03-01 18:35:44: [N]  AXTextField '' 'Address and search bar' 'slashdot.org'
---
---

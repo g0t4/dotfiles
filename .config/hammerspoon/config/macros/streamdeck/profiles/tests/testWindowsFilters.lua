@@ -7,7 +7,9 @@ do return end -- !!! REMOVE if you are ok with breaking observers
 -- *** ISSUE I REPORTED: https://github.com/Hammerspoon/hammerspoon/issues/3754
 local wf = hs.window.filter
 
---- FYI! window.filter felt sluggish so maybe not end of world that it is buggy (and the docs mention it is gonna be bugg)
+-- ! hs.window.filters IS NOT SLOW, the title of the web browser only changes after the page LOADS!
+--    its often fast when a page loads fast, slow otherwise!
+--    but, I won't be using any buttons until the page is loaded anyways, so NBD!
 
 
 local braveWindows = wf.new { APPS.BraveBrowserBeta }
@@ -21,7 +23,7 @@ local braveWindows = wf.new { APPS.BraveBrowserBeta }
 --     ---@param event string
 --     function(hsWin, appName, event)
 --         print("windowFocused", hs.inspect(hsWin))
---         -- could also use window changes to trigger app profile reloads... though not if its way slower
+--         -- could also use window changes to trigger app profile reloads...
 --         local winTitle = hsWin:title()
 --         print("  winTitle", winTitle)
 --     end)
@@ -32,16 +34,9 @@ braveWindows:subscribe(hs.window.filter.windowTitleChanged,
     ---@param event string
     function(hsWin, appName, event)
         print("windowTitleChanged", hs.inspect(hsWin))
-        -- local winTitle = hsWin:title()
-        -- print("  winTitle:", winTitle)
-        -- btw the notice may be slightly delayed, the print to console takes about a second after I change tabs/sites in browser
+        local winTitle = hsWin:title()
+        print("  winTitle:", winTitle)
         -- "Google Docs - Brave Beta - demos" => even has profiles
-        --   can use this to trigger a profile reload (like page/app change)
-        --     for one deck (or multiple)
-        --     based on registered profile page modifications (sets of buttons)
-        --
-        -- Also, when loading profiles normally I would just read env (window titles) to load profile mods...
-        --   so all I really need is a trigger to reload profiles
     end)
 
 return braveWindows

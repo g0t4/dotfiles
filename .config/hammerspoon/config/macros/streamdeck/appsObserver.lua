@@ -67,12 +67,57 @@ function AppsObserver:onAppActivated(appName, hsApp)
     local appElement = hs.axuielement.applicationElement(hsApp)
     notificationObserver = hs.axuielement.observer.new(hsApp:pid())
     assert(notificationObserver ~= nil)
-    notificationObserver:addWatcher(appElement, "AXFocusedUIElementChanged")
+    notificationObserver:addWatcher(appElement, "AXTitleChanged")
     notificationObserver:callback(
+    ---@param _observer hs.axuielement.observer
+    ---@param element hs.axuielement
+    ---@param notification string
+    ---@param _detailsTable table
         function(_observer, element, notification, _detailsTable)
+            -- brave browser nav slashdot - new tab - nav digg (AXWindow events only):
+            --   AXTitleChanged AXWindow 'Slashdot: News for nerds, stuff that matters - Brave Beta - wes private'
+            --   AXTitleChanged AXWindow 'New Tab - Brave Beta - wes private'
+            --   AXCreated AXWindow ''
+            --   AXWindowCreated AXWindow ''
+            --   AXResized AXWindow ''
+            --   AXWindowResized AXWindow ''
+            --   AXTitleChanged AX  Window 'News and Trending Stories Around the Internet | Digg - Brave Beta - wes private'
+            --
+            -- AXDocument: https://digg.com/   # has the URL!!!
+            -- AXMain: true? is this for frontmost only?
+            --
+            -- btw window events only happened when I changed pages, and opened a new tab... so not bad to narrow it down
+
+
+            local role = element:attributeValue("AXRole")
+            -- pick filters based on rarity of events (cursory testing)
+            --   esp make sure any expensive checks are last
+
+            if role ~= "AXWindow" then
+                -- ignore non-window events
+                return
+            end
+            if notification ~= "AXTitleChanged" then
+                -- ignore non-title events
+                return
+            end
+            local appElem = element:attributeValue("AXParent")
+            if appElem == nil then
+                print("AXTitleChanged: no parent, should never happen!")
+                return
+            end
+            local focusedWindowElem = appElem:attributeValue("AXFocusedWindow")
+            if focusedWindowElem == nil then
+                print("AXTitleChanged: no focused window, should never happen!")
+                return
+            end
+            if focusedWindowElem ~= element then
+                print("non-focused window title changed, skipping...")
+                return
+            end
+
             local value = element:attributeValue("AXValue")
             local title = element:attributeValue("AXTitle")
-            local role = element:attributeValue("AXRole")
             local description = element:attributeValue("AXDescription")
             local message = "[N] " .. notification
             if role ~= nil then
