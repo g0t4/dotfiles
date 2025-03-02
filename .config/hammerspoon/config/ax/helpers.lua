@@ -63,6 +63,14 @@ axuielemMT.textArea = function(self, index)
     return self:textAreas()[index]
 end
 
+-- AXToolbar
+axuielemMT.toolbars = function(self)
+    return self:childrenWithRole("AXToolbar")
+end
+axuielemMT.toolbar = function(self, index)
+    return self:toolbars()[index]
+end
+
 function BuildHammerspoonLuaTo(toElement)
     local tmp = fun.enumerate(toElement:path())
         :map(function(_, pathItem)
