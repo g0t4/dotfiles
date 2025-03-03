@@ -64,30 +64,41 @@ BraveObserver:addProfilePage(DECK_3XL, PAGE_1, function(_, deck)
     end
 end)
 
--- Override setupWatchers to handle URL changes and other Brave-specific events
-function BraveObserver:setupWatchers()
-    -- TODO plugin my AXObserver
 
-    function tmpWatcherHandlerStartPoint()
+local observerFactory = require("config.macros.streamdeck.profiles.braveIntra")
+local tmpDeck3HasButtonMods = nil -- TODO rename / remove
+function BraveObserver:setupIntraAppObserver()
+    if self.intraAppObserver ~= nil then
+        self.intraAppObserver:stop()
+        -- TODO any other cleanup?
+        self.intraAppObserver = nil
+    end
+
+    self.intraAppObserver = observerFactory.createNotificationObserver(self, getMyAppElement())
+
+    function tmpHandlerStartPoint()
         local url = getCurrentURL()
         if url then
             -- Store the current URL (and check it for changes?)
             self.currentURL = url
-
             -- Refresh the decks with the current URL context
             self:refreshDecks()
         end
     end
 
-    -- self.watcher:start()
+    self.intraAppObserver:start()
+end
+
+---@return hs.axuielement|nil, hs.application|nil
+function getMyAppElement()
+    ---@type hs.application
+    local hsApp = hs.application.get(APPS.BraveBrowserBeta)
+    if hsApp == nil then return end
+    return hs.axuielement.applicationElement(hsApp), hsApp
 end
 
 function getCurrentURL()
-    local app = hs.application.get(APPS.BraveBrowserBeta)
-    if not app then return end
-
-    ---@type hs.axuielement|nil
-    local appElement = hs.axuielement.applicationElement(app)
+    local appElement = getMyAppElement()
     if not appElement then return end
 
     ---@type hs.axuielement|nil
