@@ -74,7 +74,7 @@ function BraveObserver:setupIntraAppObserver()
         self.intraAppObserver = nil
     end
 
-    self.intraAppObserver = createNotificationObserver() -- self, getMyAppElement())
+    self.intraAppObserver = createNotificationObserver(self) -- self, getMyAppElement())
     self.intraAppObserver:start()
 end
 
@@ -116,7 +116,8 @@ function getCurrentURL()
     return urlTextField:attributeValue("AXValue")
 end
 
-function createNotificationObserver()
+---@param braveAppObserver AppObserver
+function createNotificationObserver(braveAppObserver)
     local appElement, hsApp = getMyAppElement()
 
     local notificationObserver = hs.axuielement.observer.new(hsApp:pid())
