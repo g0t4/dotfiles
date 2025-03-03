@@ -83,21 +83,19 @@ function OpenWebHelpHammerspoon(bigWord)
     --   hs.application   -- 1 dot => https://www.hammerspoon.org/docs/hs.application.html
     --
     if bigWord:find("%(") then
-        -- if contains ( then its a func call and we wanna strip the args
-        local startUntilOpenParens = bigWord:match("^(.*)%(")
-        -- replace last "." with ".html#"
-        local docsPath = startUntilOpenParens:gsub("^(.*)%.(.*)$", "%1.html%\\#%2")
-        -- FYI # must be escaped or will be replaced with current file path (part of vim cmdline)
-        vim.cmd("!open 'https://www.hammerspoon.org/docs/" .. docsPath .. "'")
-        return
+        -- string trailing function call, take everything up until first open parens
+        bigWord = bigWord:match("^(.*)%(")
     end
+
     local dotCount = select(2, bigWord:gsub("%.", ""))
     if dotCount < 2 then
         -- if only one dot => treat as module
         vim.cmd("!open 'https://www.hammerspoon.org/docs/" .. bigWord .. ".html'")
         return
     end
+
     local docsPath = bigWord:gsub("^(.*)%.([^%.]*)$", "%1.html%\\#%2")
+    --    FYI # must be escaped or will be replaced with current file path (part of vim cmdline)
     vim.cmd("!open 'https://www.hammerspoon.org/docs/" .. docsPath .. "'")
 end
 
