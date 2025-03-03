@@ -30,7 +30,7 @@ function Profile:applyTo(deck, isModSetChange)
     end
 
     if deck.buttons ~= nil then
-        print("buttons - profile:", self.name, "applying to", deck.name)
+        print("buttons - profile:" .. self.appName .. " applying to " .. deck.name)
         local buttonsBefore = deck.buttons.buttons
         local logBefore = f.concatKeys(buttonsBefore)
         print("  buttons before", logBefore)
