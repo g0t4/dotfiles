@@ -18,6 +18,7 @@ function changePage(deckName, appTitle, page, appObserver)
     return function()
         -- pass deckName so you can use a button on a different deck to change another deck's page
         --   so long as both decks are claimed by same observer that seems reasonable
+        --   most page buttons are for the same deck BTW (all I've used so far)
         --   if need to set pages across observers, will figure that out later then
         local deck = appObserver.claimedDecks[deckName]
         if not deck then
