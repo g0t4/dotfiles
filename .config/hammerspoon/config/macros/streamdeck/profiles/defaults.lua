@@ -38,15 +38,41 @@ FallbackProfiles:addProfilePage(DECK_1XL, PAGE_1, function(_, deck)
     }
 end)
 
-local function myTestFunc()
-    print("hello jerk")
+local function myTimingTest()
+    local startTime = GetTime()
+    local xlDeck = {
+        buttonSize = {
+            w = 96,
+            h = 96
+        }
+    }
+    local base = {
+        MaestroButton:new(1, xlDeck, hsCircleIcon("#FFFF00", xlDeck),
+            "foo", "Highlight color yellow"),
+
+        -- #FCE5CD (highlight light orange 3) => increase saturation for button color: #FFC690
+        MaestroButton:new(2, xlDeck, hsCircleIcon("#FFC690", xlDeck, "rec"),
+            "foo", "highlight light orange 3"),
+
+        -- "none" == remove highlight (background color)
+        MaestroButton:new(3, xlDeck, hsCircleIcon("#FFFFFF", xlDeck, "none"),
+            "foo", "highlight none"),
+
+        -- changes text color (not highlight) => looks nice! (could be veritcal middle aligned but this is FINE for now)
+        MaestroButton:new(9, xlDeck, drawTextIcon("dark green 2", xlDeck,
+                { color = { hex = "#38761D" }, font = { size = 30 } }),
+            "foo", "dark green 2"),
+
+        KeyStrokeButton:new(5, xlDeck, drawTextIcon("⇒", xlDeck), {}, "⇒"),
+    }
+    print("myTestFunc took " .. GetElapsedTimeInMilliseconds(startTime) .. "ms")
 end
 
 
 FallbackProfiles:addProfilePage(DECK_2XL, PAGE_1, function(_, deck)
     return {
         -- row 4:
-        LuaButton:new(32, deck, drawTextIcon("Test", deck), myTestFunc)
+        LuaButton:new(32, deck, drawTextIcon("Timing Test", deck), myTimingTest)
     }
 end)
 
