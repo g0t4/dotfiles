@@ -40,6 +40,7 @@ end
 --- this App(s)Observer should focus only on inter app events (i.e. switching apps)
 ---@type AppObserver|nil
 local activeObserver = nil
+local defaultObserver = nil
 
 function AppsObserver:onPageNumberChanged(deckName, appModuleName, pageNumber)
     -- TODO push into appObserver (it should be able to detect its own page change and handle it there)
@@ -54,10 +55,16 @@ end
 ---@param appName string
 ---@param hsApp hs.application
 function AppsObserver:onAppActivated(appName, hsApp)
-    -- Deactivate the previous observer if it exists
+    -- Deactivate the previous observers
     if activeObserver then
         activeObserver:deactivate()
     end
+    if defaultObserver then
+        defaultObserver:deactivate()
+    end
+
+    ---@type table<string, DeckController>
+    local unclaimedDecks = f.shallowCopyTable(self.decks.deckControllers)
 
     -- Try to load the app-specific observer module
     local appModuleName = appModuleLookupByAppName[appName]
@@ -65,21 +72,38 @@ function AppsObserver:onAppActivated(appName, hsApp)
         local success, module = pcall(require, "config.macros.streamdeck.profiles." .. appModuleName)
         if success and module then
             activeObserver = module
-            activeObserver:activate(self.decks)
+            activeObserver:activate(unclaimedDecks)
+            unclaimedDecks = f.where(unclaimedDecks, function(deck)
+                return not activeObserver.claimedDecks[deck.name]
+            end)
+            if unclaimedDecks == {} then
+                return
+            end
+        end
+    end
+
+    -- Fall back to default profiles for unclaimed decks
+    if not defaultObserver then
+        -- load default observer (if not already loaded)
+        local success, defaultsModule = pcall(require, "config.macros.streamdeck.profiles.defaults")
+        if success and defaultsModule then
+            defaultObserver = defaultsModule
+        end
+    end
+
+    if defaultObserver then
+        defaultObserver:activate(unclaimedDecks)
+        unclaimedDecks = f.where(unclaimedDecks, function(deck)
+            return not defaultObserver.claimedDecks[deck.name]
+        end)
+        if unclaimedDecks == {} then
             return
         end
     end
 
-    -- TODO mesh logic for default within appObserver so we can reuse one or more pages while having app specific pages, IIUC right now its default or app but not some of both
-    -- Fall back to default profiles if no specific observer exists
-    local success, defaultsModule = pcall(require, "config.macros.streamdeck.profiles.defaults")
-    if success and defaultsModule then
-        defaultsModule:activate(self.decks)
-    else
-        -- No observer available, reset all decks
-        for _, deckController in pairs(self.decks.deckControllers) do
-            deckController.buttons:resetButtons()
-        end
+    -- reset any remaining unclaimed decks
+    for _, deckController in pairs(unclaimedDecks) do
+        deckController.buttons:resetButtons()
     end
 end
 

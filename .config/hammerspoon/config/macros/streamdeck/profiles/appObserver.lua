@@ -43,7 +43,8 @@ PAGE_10 = 10
 ---@field appName string
 ---@field isActive boolean
 ---@field watcher hs.window.filter|nil
----@field decks DecksController
+---@field claimedDecks table<string, DeckController> # currently controlled by this observer
+---@field private registeredDecks table<string, boolean> # decks that have registered pages (really shouldn't be used externally)
 local AppObserver = {}
 AppObserver.__index = AppObserver
 
@@ -51,7 +52,8 @@ AppObserver.__index = AppObserver
 ---@return AppObserver
 function AppObserver:new(appName)
     local o = setmetatable({}, AppObserver)
-    o.decks = nil
+    o.claimedDecks = {}
+    o.registeredDecks = {}
     o.profiles = {}
     o.appName = appName
     o.isActive = false
@@ -72,6 +74,7 @@ end
 ---@param getEncoders (fun(self, deck: DeckController): Encoder[])|nil
 ---@param pageNumber number|nil
 function AppObserver:addProfilePage(deckName, pageNumber, getButtons, getEncoders)
+    self.registeredDecks[deckName] = true
     local profile = Profile:new("n/a", self.appName, deckName)
     pageNumber = pageNumber or 1
     key = deckName .. "-" .. pageNumber
@@ -84,14 +87,15 @@ function AppObserver:addProfilePage(deckName, pageNumber, getButtons, getEncoder
     end
 end
 
----@param decksController DecksController
-function AppObserver:activate(decksController)
-    -- TODO pass in ctor intead (will be able to use it to simplify button creation if I inject it that way => closure over it)
-    self.decks = decksController
+---@param unclaimedDecks table<string, DeckController>
+function AppObserver:activate(unclaimedDecks)
+    self.claimedDecks = f.where(unclaimedDecks, function(deck)
+        return self.registeredDecks[deck.name]
+    end)
 
     self.isActive = true
     self:setupWatchers()
-    self:refreshDecks(decksController)
+    self:refreshDecks()
 end
 
 function AppObserver:deactivate()
@@ -102,10 +106,8 @@ function AppObserver:deactivate()
     end
 end
 
----@param decksController DecksController
-function AppObserver:refreshDecks(decksController)
-    -- Refresh all decks with the current app's profiles
-    for deckName, deckController in pairs(decksController.deckControllers) do
+function AppObserver:refreshDecks()
+    for _, deckController in pairs(self.claimedDecks) do
         self:loadProfileForDeck(deckController)
     end
 end
@@ -118,18 +120,24 @@ function AppObserver:loadProfileForDeck(deck)
     local page = self:getProfilePage(deck, pageNumber)
 
     if page == nil and pageNumber ~= 1 then
-        -- Try page 1 if the requested page doesn't exist
+        -- Try page 1 if the saved page # doesn't exist
         pageSettings.clearSavedPageNumber(deck.name, self:getModuleName())
+        pageNumber = 1
         page = self:getProfilePage(deck, 1)
     end
 
-    if page ~= nil then
-        deck.hsdeck:reset()
-        page:applyTo(deck)
-        return true
+    if page == nil then
+        -- PRN add any checks here?
+        print("Registered deck " .. deck.name ..
+            " is missing expected page #" .. pageNumber,
+            "available pages:", f.keys(self.profiles))
+        return false
     end
 
-    return false
+    -- load the page
+    deck.hsdeck:reset()
+    page:applyTo(deck)
+    return true
 end
 
 ---@param deckName string
@@ -137,7 +145,7 @@ end
 function AppObserver:handlePageChange(deckName, pageNumber)
     if not self.isActive then return end
 
-    local deckController = self.decks.deckControllers[deckName]
+    local deckController = self.claimedDecks[deckName]
     if not deckController then return end
 
     self:loadProfileForDeck(deckController)

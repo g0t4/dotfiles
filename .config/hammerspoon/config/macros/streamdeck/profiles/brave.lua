@@ -75,7 +75,7 @@ function BraveObserver:setupWatchers()
             self.currentURL = url
 
             -- Refresh the decks with the current URL context
-            self:refreshDecks(self.decks)
+            self:refreshDecks()
         end
     end
 
