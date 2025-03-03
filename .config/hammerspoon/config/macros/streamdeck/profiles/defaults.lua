@@ -130,6 +130,7 @@ local function myTimingTest()
 end
 
 
+-- *** 10-13ms for 26 images (not a huge factor)
 local function myTimingTestHSIcon()
     local startTime = GetTime()
     local deck = TestXLDeck
