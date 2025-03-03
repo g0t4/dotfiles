@@ -245,15 +245,6 @@ function createNotificationObserver(braveAppObserver)
             tmpDeck3HasButtonMods = value
             local isNowGoogle = value:find("https://docs.google.com")
             if tmpDeck3HasButtonMods or isNowGoogle then
-                -- reset if leaving mods page, or set if entering mods page
-                --   otherwise don't reset if not to/from mods (needless flickering)
-                -- PRN would be nice to track if google_docs => google_docs and also not reload in this case
-                --   however these conditions are not absolutely essential... if I am working on Google Docs..
-                --     i won't be changing sites rapidly enough to care about the flicker
-                -- in the ideal world, I would track individual buttons and for mods only change the ones that need it for intra app events
-                -- wait.. if I kept track of button mods from last profile change (app change)...
-                --   had profile page and mods stored.. I could use that for intra app changes to
-                --   only change the buttons that differ... hrm!
 
                 thisAppsObserver:loadCurrentAppForDeck(deck)
                 -- TODO setButtons or updateButtons? addButtons is kinda misleading
