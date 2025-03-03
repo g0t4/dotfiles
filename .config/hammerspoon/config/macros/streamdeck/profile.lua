@@ -31,10 +31,10 @@ function Profile:applyTo(deck, isModSetChange)
     end
 
     if deck.buttons ~= nil then
-        print("buttons - profile:" .. self.appName .. " applying to " .. deck.name)
+        -- print("buttons - profile:" .. self.appName .. " applying to " .. deck.name)
         local buttonsBefore = deck.buttons.buttons
         local logBefore = f.concatKeys(buttonsBefore)
-        print("  buttons before", logBefore)
+        -- print("  buttons before", logBefore)
 
         deck.buttons:removeButtons()
         deck.buttons:addButtons(self:buttons(deck))
@@ -42,13 +42,13 @@ function Profile:applyTo(deck, isModSetChange)
         if isModSetChange then
             -- only if not reset:
             local logAfter = f.concatKeys(deck.buttons.buttons)
-            print("  buttons after", logAfter)
+            -- print("  buttons after", logAfter)
             -- TODO if more than x% then reset deck instead?
             local buttonsAfter = deck.buttons.buttons
             f.each(buttonsBefore, function(btnNumberBefore, _btn)
                 -- DO NOT USE ipairs (each uses pairs)
                 if not buttonsAfter[btnNumberBefore] then
-                    print("resetting button", btnNumberBefore)
+                    -- print("resetting button", btnNumberBefore)
                     resetButton(btnNumberBefore, deck.hsdeck)
                 end
             end)
