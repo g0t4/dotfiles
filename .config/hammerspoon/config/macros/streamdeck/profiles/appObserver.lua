@@ -99,6 +99,19 @@ function AppObserver:activate(unclaimedDecks)
     self:refreshDecks()
 end
 
+---@param deck DeckController
+function AppObserver:tryClaimNewDeck(deck)
+    if not self.registeredDecks[deck.name] then
+        -- reject deck
+        return false
+    end
+
+    -- claim deck and load its profile
+    self.claimedDecks[deck.name] = deck
+    self:loadProfileForDeck(deck)
+    return true
+end
+
 function AppObserver:deactivate()
     self.isActive = false
     if self.intraAppObserver then

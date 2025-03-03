@@ -49,6 +49,8 @@ function AppsObserver:onAppActivated(appTitle, hsApp)
         local success, module = pcall(require, "config.macros.streamdeck.profiles." .. appModuleName)
         if success and module then
             activeObserver = module
+            -- BTW this app specific observer is now active EVEN IF NO DECKS ARE CLAIMED BY IT
+            --    and that's good b/c a new deck may be in the process of connecting!
             activeObserver:activate(unclaimedDecks)
             unclaimedDecks = f.where(unclaimedDecks, function(deck)
                 return not activeObserver.claimedDecks[deck.name]
@@ -90,32 +92,24 @@ end
 
 ---@param deck DeckController
 function AppsObserver:onNewDeckConnected(deck)
-    -- FYI! ONLY USED BY DECK CONNECTED HANDLER... so let's clean this up..
-    --    AND IT DOESN'T EVEN SEEM TO WORK ON CONFIG RELOAD :)
-    local hsApp = hs.application.frontmostApplication()
-    if not hsApp then return end
-    print("loading current app for deck", deck.name, quote(hsApp:title()))
-
-    -- TODO This function can be simplified since the activeObserver now handles profile loading
-
-    local appTitle = hsApp:title()
-    if not appTitle then return end
-
-    if activeObserver and activeObserver.appTitle == appTitle then
-        if activeObserver:loadProfileForDeck(deck) then
-            print("  loaded profile with activeObserver")
+    if activeObserver then
+        local claimed = activeObserver:tryClaimNewDeck(deck)
+        if claimed then
+            print("  claimed by:", activeObserver.appTitle)
             return
         end
-        -- TODO issue is addProfilePage call happens w/o the new decks so pages are not loaded so then we have to trigger activate below
-        --    TODO fix adding a new deck to an existing observer...
-        --       TODO need to impl the logic to gracefully add it in so we don't refresh all decks 4x on every config reload!
-        --    then if I fake fire an app activate in bootrstrap then the observer will be ready and only flash that deck one time
-        --      TODO add fake app activate to bootstrap.lua (before starting this apps observer)
-        print("  could not load profile with activeObserver")
     end
 
-    print("  trigger fake app activated to add deck")
-    self:onAppActivated(appTitle, hsApp)
+    if defaultObserver then
+        local claimed = defaultObserver:tryClaimNewDeck(deck)
+        if claimed then
+            print("  claimed by:", defaultObserver.appTitle)
+            return
+        end
+    end
+
+    print("  new deck not claimed, resetting buttons")
+    deck.buttons:resetButtons()
 end
 
 function AppsObserver:onAppDeactivated(appTitle, hsApp)
