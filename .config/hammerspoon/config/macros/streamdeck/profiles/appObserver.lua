@@ -151,7 +151,7 @@ function AppObserver:handlePageChange(deckName, pageNumber)
     self:loadProfileForDeck(deckController)
 end
 
----@return string, _
+---@return string
 function AppObserver:appNameSettingsKey()
     -- TODO TEST PAGE CHANGES LATER... I had to fix the app modulename lookup
     --   TODO MAKE SURE MODULE NAME LOOKUP MATCHES MODULE NAMES IN profiles/foo.lua dir
