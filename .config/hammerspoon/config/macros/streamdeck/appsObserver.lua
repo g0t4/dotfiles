@@ -115,13 +115,13 @@ end
 function AppsObserver:onNewDeckConnected(deck)
     -- FYI! ONLY USED BY DECK CONNECTED HANDLER... so let's clean this up..
     --    AND IT DOESN'T EVEN SEEM TO WORK ON CONFIG RELOAD :)
-    local currentApp = hs.application.frontmostApplication()
-    if not currentApp then return end
-    print("loading current app for deck", deck.name, quote(currentApp:title()))
+    local hsApp = hs.application.frontmostApplication()
+    if not hsApp then return end
+    print("loading current app for deck", deck.name, quote(hsApp:title()))
 
     -- TODO This function can be simplified since the activeObserver now handles profile loading
 
-    local appName = currentApp:title()
+    local appName = hsApp:title()
     if not appName then return end
     local appModuleName = appModuleLookupByAppName[appName]
 
@@ -132,20 +132,8 @@ function AppsObserver:onNewDeckConnected(deck)
         end
     end
 
-    -- Try to load default profile if app-specific profile failed
-    -- TODO OMG... this should try to load the activeObserver first!!!
-    if appModuleName == nil or activeObserver == nil then
-        local success, defaultsModule = pcall(require, "config.macros.streamdeck.profiles.defaults")
-        if success and defaultsModule then
-            local tempObserver = defaultsModule
-            if tempObserver:loadProfileForDeck(deck) then
-                return
-            end
-        end
-    end
-
-    -- No profile available, reset the deck
-    deck.buttons:resetButtons()
+    -- first deck to connect triggers app activation
+    self:onAppActivated(appName, hsApp)
 end
 
 function AppsObserver:onAppDeactivated(appName, hsApp)
