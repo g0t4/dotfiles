@@ -14,7 +14,7 @@ local BraveObserver = AppObserver:new(APPS.BraveBrowserBeta)
 local km_docs_menu_item = "B06C1815-51D0-4DD7-A22C-5A3C39C4D1E0"
 
 
-function isGoogleDocs(url)
+function getModSetNumber(url)
     return url and url:find("^https://docs.google.com")
 end
 
@@ -22,7 +22,7 @@ end
 ---@return PushButton[] # empty if none, never nil
 function getMyDeck3Page1Mods(deck, pageNumber)
     local url = getCurrentURL()
-    if isGoogleDocs(url) then
+    if getModSetNumber(url) then
         if deck.name == DECK_3XL and pageNumber == PAGE_1 then
             return {
                 MaestroButton:new(31, deck, hsCircleIcon("#FFFF00", deck),
@@ -232,7 +232,7 @@ function createNotificationObserver(braveAppObserver)
             --  or both
             -- CRUDE TRIGGER FOR NOW: if site before/after was different mod set
             -- TODO categorize mod sets and have a getmodset(variables) that I can call and use!
-            local modSetDifers = isGoogleDocs(currentSite) ~= isGoogleDocs(lastSiteWas)
+            local modSetDifers = getModSetNumber(currentSite) ~= getModSetNumber(lastSiteWas)
             if modSetDifers then
                 braveAppObserver:refreshDecks()
             end
