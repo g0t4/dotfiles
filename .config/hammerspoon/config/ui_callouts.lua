@@ -328,14 +328,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "C", function()
     end
 end)
 
-local lastChildCanvas = nil
-
 local function stopElementInspector()
-    if lastChildCanvas then
-        lastChildCanvas:delete()
-        lastChildCanvas = nil
-    end
-    M.moves = nil
     M.subscription:unsubscribe() -- subscription cleanup is all... really can skip this here
     removeHighlight() -- clear the callout/tooltips
     if M.stop_event_source then
@@ -363,49 +356,6 @@ end
 --     M.last.cycle = "AxSections"
 -- end
 
-local function showChildren()
-    local children = M.last.element:attributeValue("AXChildren") or {}
-    local childText = ""
-    for _, child in ipairs(children) do
-        -- use ipairs to guarnatee order
-        local childInfo = ""
-        childInfo = childInfo .. child:attributeValue("AXRole") .. " "
-            .. quote(child:attributeValue("AXTitle"))
-            .. child:attributeValue("AXTitle") .. "\n"
-        childText = childText .. childInfo
-    end
-    print("childText", childText)
-
-    local screenFrame = hs.screen.mainScreen():frame()
-    print("screenFrame", hs.inspect(screenFrame))
-    local bg = {
-        type = "rectangle",
-        action = "fill",
-        frame = { x = screenFrame.w / 2 - 200, y = screenFrame.h / 2 - 200, w = 400, h = 400 },
-        fillColor = { hex = "#002040", alpha = 0.9 },
-    }
-
-    local styledText = hs.styledtext.new(childText, {
-        font = {
-            name = "SauceCodePro Nerd Font",
-            size = 14
-        },
-        color = { white = 1 },
-    })
-
-    local childInfo = {
-        type = "text",
-        text = styledText,
-        frame = { x = screenFrame.w / 2 - 200, y = screenFrame.h / 2 - 200, w = 400, h = 400 },
-    }
-    ---@type hs.canvas|nil
-    local childCanvas = hs.canvas.new(screenFrame)
-    lastChildCanvas = childCanvas
-    assert(childCanvas ~= nil)
-    childCanvas:appendElements(bg, childInfo)
-    childCanvas:show()
-end
-
 local function cycleChildren()
     hs.alert.show("Cycling AXChildren")
     M.last.cycle = "AXChildren"
@@ -432,7 +382,6 @@ local function startElementInspector()
     -- end
     )
     table.insert(M.bindings, hs.hotkey.bind({}, "escape", stopElementInspector))
-    table.insert(M.bindings, hs.hotkey.bind({}, "c", showChildren))
     -- table.insert(M.bindings, hs.hotkey.bind({}, "s", cycleSegments))
     -- table.insert(M.bindings, hs.hotkey.bind({}, "c", cycleChildren))
     -- table.insert(M.bindings, hs.hotkey.bind({}, "n", cycleChildrenInNavigationOrder))
