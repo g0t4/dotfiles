@@ -43,7 +43,7 @@ function deck3Page1Mods(deck, pageNumber)
     end
     if getModSetNumber(url) == MOD_SETS.CHATGPT_COM then
         return {
-            KeyStrokeButton:new(31, deck, drawTextIcon("STOP", deck), { "ctrl", "shift" }, "s"),
+            KeyStrokeButton:new(31, deck, drawTextIcon("\nSTOP", deck, LargeText), { "ctrl", "shift" }, "s"),
         }
     end
     return {}
