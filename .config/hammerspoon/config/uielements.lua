@@ -901,7 +901,7 @@ function GetElementTableRow(elem, indent)
         details .. "</td><td>" .. htmlCodeAppleScript(ElementSpecifierFor(elem)) .. "</td></tr>"
 end
 
--- TODO look into inject language.. should work
+-- PRN try to get nested @language annotations to work and provide syntax highlighting (etc) for nested language, i.e. html:
 --    https://emmylua.github.io/annotations/language.html
 ---@language HTML
 local pathTableStart = [[
