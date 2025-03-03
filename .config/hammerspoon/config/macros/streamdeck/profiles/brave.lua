@@ -65,12 +65,10 @@ BraveObserver:addProfilePage(DECK_3XL, PAGE_1, function(_, deck)
 end)
 
 
-local tmpDeck3HasButtonMods = nil -- TODO rename / remove
 function BraveObserver:setupIntraAppObserver()
     print("dervied intra app observer")
     if self.intraAppObserver ~= nil then
         self.intraAppObserver:stop()
-        -- TODO any other cleanup?
         self.intraAppObserver = nil
     end
 
@@ -222,32 +220,10 @@ function createNotificationObserver(braveAppObserver)
             end
             print(message)
 
-            local deckName = DECK_3XL
-            local pageNumber = PAGE_1 -- TODO
-
-            if urlTextField == nil then
-                print("no urlTextField, skipping...")
-                return
-            end
-
-            local deck = thisAppsObserver.decks.deckControllers[deckName]
-
-            local value = urlTextField:attributeValue("AXValue")
-            tmpDeck3HasButtonMods = value
-
-            local isNowGoogle = value:find("https://docs.google.com")
-            if tmpDeck3HasButtonMods or isNowGoogle then
-                thisAppsObserver:loadCurrentAppForDeck(deck)
-                -- TODO setButtons or updateButtons? addButtons is kinda misleading
-                if isNowGoogle then
-                    deck.buttons:addButtons(buttons)
-                end
-                -- TODO any issues calling start a 2nd time? i.e. clock button? if so that button should cache if it is running
-                deck:start()
-                tmpDeck3HasButtonMods = true
-            else
-                tmpDeck3HasButtonMods = false
-            end
+            -- TODO only trigger when value indicates a change in mods is needed?
+            --  or make button mods/setting idempotent (doesn't re-run unless changed)
+            --  or both
+            braveAppObserver:refreshDecks()
         end)
 
 
