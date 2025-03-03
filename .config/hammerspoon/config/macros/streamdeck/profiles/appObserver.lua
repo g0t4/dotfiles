@@ -124,7 +124,7 @@ function AppObserver:tryClaimNewDeck(deck)
         return false
     end
 
-    print("  " .. deck.name .. " claimed by " .. self.appTitle)
+    -- print("  " .. deck.name .. " claimed by " .. self.appTitle)
     -- claim deck and load its profile
     self.claimedDecks[deck.name] = deck
     self:loadProfileForDeck(deck)
@@ -139,7 +139,6 @@ end
 
 ---@param deck DeckController
 function AppObserver:loadProfileForDeck(deck)
-    -- PRN! technically could load the page number on module load! and only need to save new values!
     local pageNumber = pageSettings.getSavedPageNumber(deck.name, self.appTitle)
 
     local page = self:getProfilePage(deck, pageNumber)
@@ -152,7 +151,6 @@ function AppObserver:loadProfileForDeck(deck)
     end
 
     if page == nil then
-        -- PRN add any checks here?
         print("Registered deck " .. deck.name ..
             " is missing expected page #" .. pageNumber,
             "available pages:", hs.inspect(f.keys(self.profiles)))

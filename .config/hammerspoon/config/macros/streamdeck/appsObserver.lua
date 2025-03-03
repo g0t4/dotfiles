@@ -30,8 +30,8 @@ local activeObserver = nil
 local defaultObserver = nil
 
 ---@param appTitle string
----@param hsApp hs.application
-function AppsObserver:onAppActivated(appTitle, hsApp)
+---@param _hsApp hs.application
+function AppsObserver:onAppActivated(appTitle, _hsApp)
     -- Deactivate the previous observers
     if activeObserver then
         activeObserver:deactivate()

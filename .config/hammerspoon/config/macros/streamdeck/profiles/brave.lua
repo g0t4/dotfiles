@@ -30,7 +30,7 @@ end
 
 ---@param deck DeckController
 ---@return PushButton[] # empty if none, never nil
-function deck3Page1Mods(deck, pageNumber)
+function deck3Page1Mods(deck)
     local url = getCurrentURL()
     if getModSetNumber(url) == MOD_SETS.GOOGLE_DOCS then
         return {
@@ -70,7 +70,7 @@ BraveObserver:addProfilePage(DECK_3XL, PAGE_1, function(_, deck)
 
         KeyStrokeButton:new(5, deck, drawTextIcon("⇒", deck), {}, "⇒"),
     }
-    local myMods = deck3Page1Mods(deck, PAGE_1)
+    local myMods = deck3Page1Mods(deck)
     if myMods == nil then
         return base
     else
@@ -85,7 +85,6 @@ end)
 
 
 function BraveObserver:setupIntraAppObserver()
-    print("dervied intra app observer")
     if self.intraAppObserver ~= nil then
         -- just in case deactivate didn't do it's job (which it should've done for this)
         self.intraAppObserver:stop()
@@ -113,7 +112,8 @@ function getCurrentURL()
     local window = appElement:attributeValue("AXFocusedWindow")
     if not window then return end
 
-    print("focused AXSubrole: " .. window:attributeValue("AXSubrole"))
+    -- print("focused AXSubrole: " .. window:attributeValue("AXSubrole"))
+
     -- if not standard window then take first standard window
     -- TODO something isn't working if focus is in find box (but if url bar focused with find box open it works)
     -- !TODO lets see if intra app observing can fix this if I close find box at least, just curious if that is a temp workaround too
@@ -127,7 +127,7 @@ function getCurrentURL()
         window = appElement:standardWindow(1)
     end
     if not window then return end
-    print("found standard window: " .. window:attributeValue("AXTitle"))
+    -- print("found standard window: " .. window:attributeValue("AXTitle"))
 
     local urlTextField = window:group(1):group(1):group(1):group(1):toolbar(1):group(1):textField(1)
     if not urlTextField then return end
@@ -240,7 +240,7 @@ function createNotificationObserver(braveAppObserver)
                 --                   app
                 message = message .. "\n  urlTextField: " .. currentSite
             end
-            print(message)
+            -- print(message)
 
             -- TODO only trigger when value indicates a change in mods is needed?
             --  or make button mods/setting idempotent (doesn't re-run unless changed)
