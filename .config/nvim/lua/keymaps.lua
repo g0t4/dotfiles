@@ -62,6 +62,47 @@ vim.keymap.set('n', '<C-S-->', '<C-i>', default_options)
 -- start typing :help then Ctrl+R, Ctrl+W takes word under cursor
 vim.keymap.set('n', '<F1>', ':help <C-R><C-W><CR>', { noremap = true, silent = true })
 --
+-- take current big word and open a help page for it on web page based on what is shown
+--   I want hs.canvas => https://www.hammerspoon.org/docs/hs.canvas.html#canvasDefaultFor
+--   so if starts with "hs." then I can build link and open it (like gx)
+function OpenWebHelp()
+    local bigWord = vim.fn.expand("<cWORD>")
+    if bigWord:sub(1, 3) == "hs." then
+        return OpenWebHelpHammerspoon(bigWord)
+    end
+    -- TODO how about ask qwen2.5 model locally to suggest the link and open it?
+    --    IOTW have hard mappings above (esp for thinks qwen fails at and then otherwise use qwen)
+    print("ADD MORE HELP MAPPINGS to OpenWebHelp")
+end
+
+function OpenWebHelpHammerspoon(bigWord)
+    -- examples:
+    --   hs.application.get("foo") => https://www.hammerspoon.org/docs/hs.application.html#get
+    --   hs.axuielement.observer.new  -- 3 dots => https://www.hammerspoon.org/docs/hs.axuielement.observer.html#new
+    --   hs.application.get  -- 2 dots => https://www.hammerspoon.org/docs/hs.application.html#get
+    --   hs.application   -- 1 dot => https://www.hammerspoon.org/docs/hs.application.html
+    --
+    if bigWord:find("%(") then
+        -- if contains ( then its a func call and we wanna strip the args
+        local startUntilOpenParens = bigWord:match("^(.*)%(")
+        -- replace last "." with ".html#"
+        local docsPath = startUntilOpenParens:gsub("^(.*)%.(.*)$", "%1.html%\\#%2")
+        -- FYI # must be escaped or will be replaced with current file path (part of vim cmdline)
+        vim.cmd("!open 'https://www.hammerspoon.org/docs/" .. docsPath .. "'")
+        return
+    end
+    local dotCount = select(2, bigWord:gsub("%.", ""))
+    if dotCount < 2 then
+        -- if only one dot => treat as module
+        vim.cmd("!open 'https://www.hammerspoon.org/docs/" .. bigWord .. ".html'")
+        return
+    end
+    local docsPath = bigWord:gsub("^(.*)%.([^%.]*)$", "%1.html%\\#%2")
+    vim.cmd("!open 'https://www.hammerspoon.org/docs/" .. docsPath .. "'")
+end
+
+vim.keymap.set('n', '<S-F1>', OpenWebHelp, { noremap = true, silent = true })
+--
 vim.keymap.set('x', '<F1>', 'y:help <C-R>"<CR>', { noremap = true, silent = true })
 vim.keymap.set('v', '<F1>', function()
     -- *** in visual mode, press F1 to search for selected text, or select word under cursor
