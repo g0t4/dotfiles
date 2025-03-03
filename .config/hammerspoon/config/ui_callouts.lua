@@ -105,7 +105,7 @@ local function displayTable(name, value)
         count = count + 1
         if count > 1 then
             -- new line + indent for 2+
-            text = text .. "\n\t"
+            text = text .. "\n  "
         end
         if name == "AXSections" then
             -- FYI section entries have:
@@ -114,7 +114,11 @@ local function displayTable(name, value)
             --  SectionDescription: Toolbar<string>
             -- ! TODO try using this to find key parts of UI (i.e. inspector panel)
             -- table values, start with new line
-            text = text .. k .. ": " .. displayTable(k, v):gsub("\n", ", ")
+            local section = displayTable(k, v)
+            -- trim leading "[\n  " and trailing "\n]"
+            section = section:gsub("^%[\n  ", "")
+            section = section:gsub("\n]$", "")
+            text = text .. k .. ": " .. section:gsub("\n", ", ")
             text = text .. displayType(v)
         elseif type(v) == "userdata" then
             text = text .. k .. ": " .. displayUserData(k, v)
@@ -124,7 +128,12 @@ local function displayTable(name, value)
             text = text .. displayType(v)
         end
     end
-    return "[" .. text .. "]"
+    if count < 2 then
+        -- zero / one element => no new lines
+        return "[" .. text .. "]"
+    end
+    --  for multiple, then make sure first is on its own line and closing ] is on own line for readability
+    return "[\n  " .. text .. "\n]"
 end
 local function displayAttribute(name, value)
     if value == nil then return nil end
