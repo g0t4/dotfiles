@@ -11,12 +11,12 @@ function menu(menu)
 end
 
 ---@param deckName string
----@param appNameAsSettingsKey string
+---@param appTitle string
 ---@param page number
-function changePage(deckName, appNameAsSettingsKey, page)
+function changePage(deckName, appTitle, page)
     local pageSettings = require("config.macros.streamdeck.settings.page")
     return function()
-        pageSettings.setSavedPageNumber(deckName, appNameAsSettingsKey, page)
+        pageSettings.setSavedPageNumber(deckName, appTitle, page)
     end
 end
 
@@ -40,7 +40,7 @@ PAGE_10 = 10
 
 ---@class AppObserver
 ---@field profiles table<string, Profile> @deckName -> Profile
----@field appName string
+---@field appTitle string
 ---@field isActive boolean
 ---@field intraAppObserver hs.axuielement.observer|nil
 ---@field claimedDecks table<string, DeckController> # currently controlled by this observer
@@ -48,14 +48,14 @@ PAGE_10 = 10
 local AppObserver = {}
 AppObserver.__index = AppObserver
 
----@param appName string
+---@param appTitle string
 ---@return AppObserver
-function AppObserver:new(appName)
+function AppObserver:new(appTitle)
     local o = setmetatable({}, AppObserver)
     o.claimedDecks = {}
     o.registeredDecks = {}
     o.profiles = {}
-    o.appName = appName
+    o.appTitle = appTitle
     o.isActive = false
     return o
 end
@@ -75,7 +75,7 @@ end
 ---@param pageNumber number|nil
 function AppObserver:addProfilePage(deckName, pageNumber, getButtons, getEncoders)
     self.registeredDecks[deckName] = true
-    local profile = Profile:new("n/a", self.appName, deckName)
+    local profile = Profile:new("n/a", self.appTitle, deckName)
     pageNumber = pageNumber or 1
     key = deckName .. "-" .. pageNumber
     self.profiles[key] = profile
@@ -115,13 +115,13 @@ end
 ---@param deck DeckController
 function AppObserver:loadProfileForDeck(deck)
     -- PRN! technically could load the page number on module load! and only need to save new values!
-    local pageNumber = pageSettings.getSavedPageNumber(deck.name, self:appNameSettingsKey())
+    local pageNumber = pageSettings.getSavedPageNumber(deck.name, self.appTitle)
 
     local page = self:getProfilePage(deck, pageNumber)
 
     if page == nil and pageNumber ~= 1 then
         -- Try page 1 if the saved page # doesn't exist
-        pageSettings.clearSavedPageNumber(deck.name, self:appNameSettingsKey())
+        pageSettings.clearSavedPageNumber(deck.name, self.appTitle)
         pageNumber = 1
         page = self:getProfilePage(deck, 1)
     end
@@ -149,12 +149,6 @@ function AppObserver:handlePageChange(deckName, pageNumber)
     if not deckController then return end
 
     self:loadProfileForDeck(deckController)
-end
-
----@return string
-function AppObserver:appNameSettingsKey()
-    -- TODO TEST PAGE CHANGES LATER... I had to fix the app modulename lookup
-    return AppModuleName(self.appName)
 end
 
 ---

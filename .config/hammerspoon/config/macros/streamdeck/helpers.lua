@@ -65,19 +65,22 @@ function appIconHammerspoon()
     return appIcon("org.hammerspoon.Hammerspoon")
 end
 
-AppModuleLookupByAppName = {
+AppModuleLookupByAppTitle = {
     [APPS.FinalCutPro] = "fcpx",
     [APPS.Hammerspoon] = "hammerspoon",
     [APPS.MicrosoftPowerPoint] = "pptx",
     [APPS.Finder] = "finder",
     [APPS.iTerm] = "iterm",
     [APPS.BraveBrowserBeta] = "brave",
+    -- fallback is for defaults for a deck if no app claims the deck
+    [APPS.Fallback] = "defaults",
     -- [APPS.Safari] = "safari",
     -- [APPS.Preview] = "preview",
 }
 
-function AppModuleName(appName)
-    return AppModuleLookupByAppName[appName]
+---@param appTitle string
+function AppModuleName(appTitle)
+    return AppModuleLookupByAppTitle[appTitle]
 end
 
 return M

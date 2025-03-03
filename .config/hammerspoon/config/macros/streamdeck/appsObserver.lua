@@ -14,11 +14,11 @@ function AppsObserver:new(decks)
     local o = setmetatable({}, AppsObserver)
     o.decks = decks
     o.decks.appsObserver = o
-    o.interAppWatcher = hs.application.watcher.new(function(appName, eventType, hsApp)
+    o.interAppWatcher = hs.application.watcher.new(function(appTitle, eventType, hsApp)
         if eventType == hs.application.watcher.activated then
-            o:onAppActivated(appName, hsApp)
+            o:onAppActivated(appTitle, hsApp)
         elseif eventType == hs.application.watcher.deactivated then
-            o:onAppDeactivated(appName, hsApp)
+            o:onAppDeactivated(appTitle, hsApp)
         end
     end)
     pageSettings.setAppsObserver(o)
@@ -31,21 +31,19 @@ end
 local activeObserver = nil
 local defaultObserver = nil
 
-function AppsObserver:onPageNumberChanged(deckName, appNameAsSettingsKey, pageNumber)
+function AppsObserver:onPageNumberChanged(deckName, appTitle, pageNumber)
     -- TODO push into appObserver (it should be able to detect its own page change and handle it there)
     --   TODO see appObserver.setSavedPageNumber and pageSettings.getSavedPageNumber (s/b able to remove coupling in page settings!)
 
-
-    -- TODO MOVE appNameAsSettingsKey =>  back to AppModule that it should've been in the first place...
     -- Delegate to the active observer if appropriate
-    if activeObserver and activeObserver:appNameSettingsKey() == appNameAsSettingsKey then
+    if activeObserver and activeObserver.appTitle == appTitle then
         activeObserver:handlePageChange(deckName, pageNumber)
     end
 end
 
----@param appName string
+---@param appTitle string
 ---@param hsApp hs.application
-function AppsObserver:onAppActivated(appName, hsApp)
+function AppsObserver:onAppActivated(appTitle, hsApp)
     -- Deactivate the previous observers
     if activeObserver then
         activeObserver:deactivate()
@@ -58,7 +56,7 @@ function AppsObserver:onAppActivated(appName, hsApp)
     local unclaimedDecks = f.shallowCopyTable(self.decks.deckControllers)
 
     -- Try to load the app-specific observer module
-    local appModuleName = AppModuleName(appName)
+    local appModuleName = AppModuleName(appTitle)
     if appModuleName then
         local success, module = pcall(require, "config.macros.streamdeck.profiles." .. appModuleName)
         if success and module then
@@ -112,10 +110,10 @@ function AppsObserver:onNewDeckConnected(deck)
 
     -- TODO This function can be simplified since the activeObserver now handles profile loading
 
-    local appName = hsApp:title()
-    if not appName then return end
+    local appTitle = hsApp:title()
+    if not appTitle then return end
 
-    if activeObserver and activeObserver.appName == appName then
+    if activeObserver and activeObserver.appTitle == appTitle then
         if activeObserver:loadProfileForDeck(deck) then
             print("  loaded profile with activeObserver")
             return
@@ -129,11 +127,11 @@ function AppsObserver:onNewDeckConnected(deck)
     end
 
     print("  trigger fake app activated to add deck")
-    self:onAppActivated(appName, hsApp)
+    self:onAppActivated(appTitle, hsApp)
 end
 
-function AppsObserver:onAppDeactivated(appName, hsApp)
-    -- verbose("app deactivated", appName)
+function AppsObserver:onAppDeactivated(appTitle, hsApp)
+    -- verbose("app deactivated", appTitle)
     -- FYI happens after other app activates
 end
 
