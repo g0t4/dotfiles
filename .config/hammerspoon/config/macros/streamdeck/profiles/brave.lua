@@ -97,6 +97,7 @@ function getCurrentURL()
     print("focused AXSubrole: " .. window:attributeValue("AXSubrole"))
     -- if not standard window then take first standard window
     -- TODO something isn't working if focus is in find box (but if url bar focused with find box open it works)
+    -- !TODO lets see if intra app observing can fix this if I close find box at least, just curious if that is a temp workaround too
     --    when find box isn't focused it seems to be a group?! and a window when it is?!
     if window:attributeValue("AXSubrole") ~= "AXStandardWindow" then
         print("focused window is not standard window, trying to find standard window")
