@@ -387,6 +387,7 @@ local function stopElementInspector()
     for _, binding in pairs(M.bindings) do
         binding:delete()
     end
+    M.bindings = {}
 end
 
 local function startElementInspector()
