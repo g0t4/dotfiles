@@ -7,12 +7,12 @@
 -- - some base logic is ok too (i.e. set button number, deck, etc), secondary goal btw
 
 ---@class PushButton
----@field buttonNumber number
+---@field buttonNumber integer
 ---@field image hs.image|nil
 ---@field deck DeckController
 local PushButton = {}
 
----@param buttonNumber number
+---@param buttonNumber integer
 ---@param deck DeckController
 ---@param image hs.image|nil
 ---@return PushButton

@@ -3,16 +3,16 @@ require("config.macros.streamdeck.helpers")
 
 ---@class ButtonsController
 ---@field deck DeckController
----@field rows number
----@field cols number
----@field buttons table<number, PushButton>
+---@field rows integer
+---@field cols integer
+---@field buttons table<integer, PushButton>
 local ButtonsController = {}
 ButtonsController.__index = ButtonsController
 
 
 ---@param deck DeckController
----@param rows number
----@param cols number
+---@param rows integer
+---@param cols integer
 ---@return ButtonsController
 function ButtonsController:new(deck, rows, cols)
     local o = setmetatable({}, self)
@@ -107,7 +107,7 @@ function ButtonsController:stop()
 end
 
 --- called when a button is pressed
----@param buttonNumber number
+---@param buttonNumber integer
 ---@param pressedOrReleased boolean
 function ButtonsController:onButtonPressed(buttonNumber, pressedOrReleased)
     local button = self.buttons[buttonNumber]

@@ -37,7 +37,7 @@ end
 ---@param separator string|nil
 ---@return string
 function M.concatKeys(t, separator)
-    separator = separator or ""
+    separator = separator or ", "
     local result = {}
     for k, _ in pairs(t) do
         table.insert(result, k)
@@ -97,8 +97,9 @@ end
 ---       print(key)
 ---   end)
 ---
----@param t table
----@param fn fun(key: string|integer, value: any)
+---@generic TKey: string|integer
+---@param t table<TKey, any>
+---@param fn fun(key: TKey, value: any)
 function M.each(t, fn)
     for k, v in pairs(t) do
         fn(k, v)

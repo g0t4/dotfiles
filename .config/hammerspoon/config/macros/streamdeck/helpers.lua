@@ -28,7 +28,7 @@ end
 -- local blankBlack720PNG = hsIcon("blank/black-720x720.png")
 local blankBlack288ElgatoPNG = hsIcon("blank/black-288x288-elgato-resized-identital-across-xl-and-plus.png")
 
----@param buttonNumber number
+---@param buttonNumber integer
 ---@param hsdeck hs.streamdeck
 function resetButton(buttonNumber, hsdeck)
     error(

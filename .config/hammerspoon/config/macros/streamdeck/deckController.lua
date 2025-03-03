@@ -6,8 +6,8 @@ require("config.macros.streamdeck.helpers")
 ---@field hsdeck hs.streamdeck
 ---@field name string
 ---@field serial string
----@field rows number
----@field cols number
+---@field rows integer
+---@field cols integer
 ---@field buttonSize { w: number, h: number }
 ---@field buttons ButtonsController
 ---@field encoders EncodersController|nil
