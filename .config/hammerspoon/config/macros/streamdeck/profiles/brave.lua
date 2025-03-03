@@ -65,16 +65,16 @@ BraveObserver:addProfilePage(DECK_3XL, PAGE_1, function(_, deck)
 end)
 
 
-local observerFactory = require("config.macros.streamdeck.profiles.braveIntra")
 local tmpDeck3HasButtonMods = nil -- TODO rename / remove
 function BraveObserver:setupIntraAppObserver()
+    print("dervied intra app observer")
     if self.intraAppObserver ~= nil then
         self.intraAppObserver:stop()
         -- TODO any other cleanup?
         self.intraAppObserver = nil
     end
 
-    self.intraAppObserver = observerFactory.createNotificationObserver(self, getMyAppElement())
+    self.intraAppObserver = createNotificationObserver() -- self, getMyAppElement())
     self.intraAppObserver:start()
 end
 
