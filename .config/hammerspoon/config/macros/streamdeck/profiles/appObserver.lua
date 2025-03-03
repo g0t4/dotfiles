@@ -16,8 +16,21 @@ end
 ---@param appObserver AppObserver
 function changePage(deckName, appTitle, page, appObserver)
     return function()
+        -- TODO what about changing pages for other app/deck combos?
+        --   for now just assume to change a page it can only be for the current app (or default observer) observer, for a registered deck
+        local deck = appObserver.claimedDecks[deckName]
+        if not deck then
+            hs.notify.show("Deck not claimed, cannot change its page, see hs console")
+            print("Deck not claimed, cannot change its page: ", deckName,
+                "app:", quote(appTitle)
+                "page:", page,
+                "observer:", appObserver)
+            return
+        end
+
         pageSettings.setSavedPageNumber(deckName, appTitle, page)
-        appObserver:handlePageChange(deckName, page)
+
+        appObserver:loadProfileForDeck(deck)
     end
 end
 
@@ -148,15 +161,6 @@ function AppObserver:loadProfileForDeck(deck)
     deck.hsdeck:reset()
     page:applyTo(deck)
     return true
-end
-
----@param deckName string
----@param pageNumber number
-function AppObserver:handlePageChange(deckName, pageNumber)
-    local deck = self.claimedDecks[deckName]
-    if not deck then return end
-
-    self:loadProfileForDeck(deck)
 end
 
 ---
