@@ -218,12 +218,17 @@ function createNotificationObserver(braveAppObserver)
             --     message = message .. "\n  (may be stale) URL: " .. axDocument
             -- end
 
-            -- TODO! focusedWindowElem:group(1) has an "AXURL" attribute that appaers to be NSURL type... can I use that?
-            --    if so, that group might be there when find search box/window is open
             local axURL = focusedWindowElem:group(1):attributeValue("AXURL")
             if axURL ~= nil then
-                -- it's a table!
+                -- first group of first standard window has AXURL (lua table, exposes NSURL)
+
                 print("found AXURL attribute: ", hs.inspect(axURL))
+                -- 2025-03-03 14:35:22: found AXURL attribute: 	{
+                --   __luaSkinType = "NSURL",
+                --   url = "https://www.google.com/"
+                -- }
+
+                -- it's a table!
                 local url = axURL["url"]
                 print("  parsed url: ", url)
                 -- !!!! DING DING DING DING... IT WORKS!!!!
@@ -261,11 +266,6 @@ function createNotificationObserver(braveAppObserver)
             end
             -- print(message)
 
-            -- TODO only trigger when value indicates a change in mods is needed?
-            --  or make button mods/setting idempotent (doesn't re-run unless changed)
-            --  or both
-            -- CRUDE TRIGGER FOR NOW: if site before/after was different mod set
-            -- TODO categorize mod sets and have a getmodset(variables) that I can call and use!
             local newModeSet = getModSetNumber(currentSite)
             local modSetDiffers = newModeSet ~= lastModSet
             lastModSet = newModeSet
