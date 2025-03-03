@@ -10,6 +10,8 @@ local f = require("config.helpers.underscore")
 
 
 local BraveObserver = AppObserver:new(APPS.BraveBrowserBeta)
+-- PRN make BraveObserver into a full-fledged class?
+local lastModSet = nil
 
 local km_docs_menu_item = "B06C1815-51D0-4DD7-A22C-5A3C39C4D1E0"
 
@@ -79,10 +81,11 @@ end)
 function BraveObserver:setupIntraAppObserver()
     print("dervied intra app observer")
     if self.intraAppObserver ~= nil then
+        -- just in case deactivate didn't do it's job (which it should've done for this)
         self.intraAppObserver:stop()
         self.intraAppObserver = nil
-        self.lastModSet = nil
     end
+    lastModSet = nil -- always reset when resuming app
 
     self.intraAppObserver = createNotificationObserver(self) -- self, getMyAppElement())
     self.intraAppObserver:start()
@@ -239,11 +242,11 @@ function createNotificationObserver(braveAppObserver)
             -- CRUDE TRIGGER FOR NOW: if site before/after was different mod set
             -- TODO categorize mod sets and have a getmodset(variables) that I can call and use!
             local newModeSet = getModSetNumber(currentSite)
-            local modSetDifers = newModeSet ~= braveAppObserver.lastModSet
+            local modSetDifers = newModeSet ~= lastModSet
+            lastModSet = newModeSet
             if modSetDifers then
                 braveAppObserver:refreshDecks()
             end
-            braveAppObserver.lastModSet = newModeSet
         end)
 
 
