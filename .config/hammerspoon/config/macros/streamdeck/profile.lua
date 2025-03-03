@@ -23,7 +23,6 @@ end
 function Profile:applyTo(deck, isModSetChange)
     if not isModSetChange then
         -- FYI ideally I would makde decision on reset based on timing of resetButton vs # of buttons removed (cleared) vs previous set of buttons
-        -- TODO move into profile too?
         -- modSetChange is an INTRA-APP event, in which case the likelihood of changes is lower... so we only reset the removed buttons (below)
         --   this doesn't apply to INTER-APP changes and page switches... these almost never have button overlap (wouldn't make sense to have overlap)
         --      so we always reset for these event types
@@ -53,15 +52,9 @@ function Profile:applyTo(deck, isModSetChange)
                     resetButton(btnNumberBefore, deck.hsdeck)
                 end
             end)
-            -- TODO MOVE more of this into profile and let it handle all of this before/after
         end
 
         deck.buttons:start() -- for now just start all every time... b/c I have no button reuse logic yet (see brave profile for testing criteria and ideas)
-        -- -- TODO stop recreating buttons EVERY TIME... right now they app appear new b/c they are new tables each time...
-        -- --   OR add identtiy to buttons (more work)... how about try caching buttons (should speed up changes too)
-        -- --   TODO once same buttons between runs, then make sure not :start()ing again works
-        -- --
-        -- -- PRN compute list of buttons that are the same so we can skip setting their image again?
         -- local notSameButtons = f.whereValues(deck.buttons.buttons, function(btn)
         --     return buttonsBefore[btn.buttonNumber] ~= btn
         -- end)
@@ -76,6 +69,8 @@ function Profile:applyTo(deck, isModSetChange)
         --     print("  SAME BUTTONS DETECTED, MAKE SURE TO CHECK LOGIC in profile.lua for skipping calling START() on the same buttons")
         --     print("  same buttons", f.concatKeys(sameButtons))
         -- end
+
+        --
     end
     if deck.encoders ~= nil then
         -- TODO clear encoders on mod set changes
