@@ -133,6 +133,7 @@ function AppsObserver:onNewDeckConnected(deck)
     end
 
     -- Try to load default profile if app-specific profile failed
+    -- TODO OMG... this should try to load the activeObserver first!!!
     if appModuleName == nil or activeObserver == nil then
         local success, defaultsModule = pcall(require, "config.macros.streamdeck.profiles.defaults")
         if success and defaultsModule then
