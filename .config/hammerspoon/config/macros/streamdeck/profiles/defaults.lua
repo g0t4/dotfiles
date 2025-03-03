@@ -231,14 +231,15 @@ end
 
 
 
--- image size and format matter
---   6-8ms for 3x loads 73KB of Finder.icns (original)
---      IIAC entire file must be loaded and then pick a size
---      AFAICT there is no way to pick that size with hs.image APIs...
---        in testing, the image used for sdeck was 32x32 (above setButtonImage) which IIAC has to then be sized up too
---   3-4ms for 3x loads 54KB of 256x256 png (sips converted from icns)
---   1-3ms for 3x loads 6KB of 72x72 png (sips converted from icns)
 local function timingDoesSizeMatter(deck)
+    -- image size and format matter, load times:
+    --   6-8ms for 3x loads 73KB of Finder.icns (original)
+    --      IIAC entire file must be loaded and then pick a size
+    --      AFAICT there is no way to pick that size with hs.image APIs...
+    --        in testing, the image used for sdeck was 32x32 (above setButtonImage) which IIAC has to then be sized up too
+    --   3-4ms for 3x loads 54KB of 256x256 png (sips converted from icns)
+    --   1-3ms for 3x loads 6KB of 72x72 png (sips converted from icns)
+
     print("deck buttonSize:", hs.inspect(deck.buttonSize))
 
     local startTime = GetTime()
