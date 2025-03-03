@@ -375,6 +375,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "C", function()
 end)
 
 local function stopElementInspector()
+    M.moves = nil
     M.subscription:unsubscribe() -- subscription cleanup is all... really can skip this here
     removeHighlight() -- clear the callout/tooltips
     if M.stop_event_source then
