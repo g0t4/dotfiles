@@ -62,6 +62,17 @@ function M.concatValues(t, separator)
     return table.concat(result, separator)
 end
 
+--- count the number of items in the table (safe for non-array tables)
+---@param t table<any, any>
+---@return integer
+function M.count(t)
+    local count = 0
+    M.each(t, function(_key, _value)
+        count = count + 1
+    end)
+    return count
+end
+
 --- returns array of values (keys are dropped)
 ---@param t table
 ---@return table<integer, any>

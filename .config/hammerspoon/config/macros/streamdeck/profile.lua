@@ -69,7 +69,7 @@ function Profile:applyTo(deck, isModSetChange)
         local sameButtons = f.whereValues(deck.buttons.buttons, function(btn)
             return buttonsBefore[btn.buttonNumber] == btn
         end)
-        if sameButtons ~= {} then
+        if f.count(sameButtons) > 0 then
             print("  SAME BUTTONS DETECTED, MAKE SURE TO CHECK LOGIC in profile.lua for skipping calling START() on the same buttons")
             print("  same buttons", f.concatKeys(sameButtons))
         end
