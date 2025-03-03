@@ -112,9 +112,15 @@ function AppsObserver:onAppActivated(appName, hsApp)
 end
 
 ---@param deck DeckController
----@param appName string
-function AppsObserver:tryLoadProfileForDeck(deck, appName)
-    -- This function can be simplified since the activeObserver now handles profile loading
+function AppsObserver:loadCurrentAppForDeck(deck)
+    local currentApp = hs.application.frontmostApplication()
+    if not currentApp then return end
+    print("loading current app for deck", deck.name, quote(currentApp:title()))
+
+    -- TODO This function can be simplified since the activeObserver now handles profile loading
+
+    local appName = currentApp:title()
+    if not appName then return end
     local appModuleName = appModuleLookupByAppName[appName]
 
     if activeObserver and activeObserver:getModuleName() == (appModuleName or "") then
@@ -146,16 +152,6 @@ end
 function AppsObserver:onAppDeactivated(appName, hsApp)
     -- verbose("app deactivated", appName)
     -- FYI happens after other app activates
-end
-
----@param deck DeckController
-function AppsObserver:loadCurrentAppForDeck(deck)
-    -- TODO can I remove this extra layer too? seems vestigial possibly for old integration point
-    local currentApp = hs.application.frontmostApplication()
-    if currentApp then
-        print("loading current app for deck", deck.name, quote(currentApp:title()))
-        self:tryLoadProfileForDeck(deck, currentApp:title())
-    end
 end
 
 function AppsObserver:start()
