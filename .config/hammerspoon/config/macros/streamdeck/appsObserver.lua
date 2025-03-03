@@ -12,6 +12,7 @@ local appModuleLookupByAppName = {
     -- [APPS.Safari] = "safari",
     -- [APPS.Preview] = "preview",
 }
+_G.APP_MODULE_LOOKUP_BY_APP_NAME = appModuleLookupByAppName
 
 ---@class AppsObserver
 ---@field interAppWatcher hs.application.watcher
@@ -47,6 +48,7 @@ function AppsObserver:onPageNumberChanged(deckName, appNameAsSettingsKey, pageNu
     --   TODO see appObserver.setSavedPageNumber and pageSettings.getSavedPageNumber (s/b able to remove coupling in page settings!)
 
 
+    -- TODO MOVE appNameAsSettingsKey =>  back to AppModule that it should've been in the first place...
     -- Delegate to the active observer if appropriate
     if activeObserver and activeObserver:appNameSettingsKey() == appNameAsSettingsKey then
         activeObserver:handlePageChange(deckName, pageNumber)

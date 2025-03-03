@@ -153,8 +153,9 @@ end
 
 ---@return string, _
 function AppObserver:appNameSettingsKey()
-    -- TODO do I really wanna use this style for saving page settings? its a third way to refer to an app (not appName and not module name)
-    return self.appName:lower():gsub(" ", "")
+    -- TODO TEST PAGE CHANGES LATER... I had to fix the app modulename lookup
+    --   TODO MAKE SURE MODULE NAME LOOKUP MATCHES MODULE NAMES IN profiles/foo.lua dir
+    return _G.APP_MODULE_LOOKUP_BY_APP_NAME[self.appName]
 end
 
 ---
