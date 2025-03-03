@@ -126,6 +126,7 @@ PptxObserver:addProfilePage(DECK_2XL, PAGE_1, function(_, deck)
         MaestroButton:new(16, deck, hsIcon(prefix .. "line-inky-blue.png" .. suffix), "6769734A-DC6E-4D4E-9E20-641AD9197005"),
         MaestroButton:new(24, deck, hsIcon(prefix .. "text-inky-blue.png" .. suffix), "7F18E471-F989-4DA0-967D-1E935E3E0FC3"),
 
+        -- TODO ADD BMPS here too:
         -- TODO verify the action for these two:
         MaestroButton:new(27, deck, hsIcon("pptx/recording/record-pptx.png"), "B0F6834D-5E1D-4E08-AD92-3C2F87886CC0"),
         MaestroButton:new(28, deck, hsIcon("pptx/recording/record-mouse-only.png"), "C998899A-74A5-4329-8B94-6E1DE875F32B"),
