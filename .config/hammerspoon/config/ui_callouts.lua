@@ -145,13 +145,16 @@ local function showTooltipForElement(element, frame)
         if skips[attrName] then goto continue end
         local attrValue = element:attributeValue(attrName)
         if attrValue == nil then goto continue end
-        if attrName == "AXHelp" and attrValue == "" then goto continue end
+        if attrValue == "" then goto continue end -- skip empty values, i.e. empty AXDescription
 
         local value = displayAttribute(attrName, attrValue) or ""
-        -- only allow 50 chars max for text
-        if not TableContains({ "AXSections" }, attrName) then
-            if #value > 50 then
-                value = value:sub(1, 50) .. "..."
+        if TableContains({ "AXValue" }, attrName) then
+            -- notoriously long values (i.e. AXValue for iTerm2 window)
+            --  and by long I mean like 30 lines (tooltip is entire screen)...
+            --  don't worry about things like CustomContent that can be 10 short lines long
+            --  I wanna see that stuff that is odd even if a smidge long
+            if #value > 80 then
+                value = value:sub(1, 80) .. " <TRUNCATED>"
             end
         end
         table.insert(attributes, attrName .. ": " .. value .. displayType(attrValue))
