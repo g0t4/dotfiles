@@ -113,6 +113,8 @@ end
 
 ---@param deck DeckController
 function AppsObserver:loadCurrentAppForDeck(deck)
+    -- FYI! ONLY USED BY DECK CONNECTED HANDLER... so let's clean this up..
+    --    AND IT DOESN'T EVEN SEEM TO WORK ON CONFIG RELOAD :)
     local currentApp = hs.application.frontmostApplication()
     if not currentApp then return end
     print("loading current app for deck", deck.name, quote(currentApp:title()))
