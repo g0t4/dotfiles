@@ -112,10 +112,10 @@ local function displayTable(name, value)
             --  SectionObject: AXScrollArea<hs.axuielement> - ** seems most important, the object itself :)
             --  SectionUniqueID: AXContent<string>
             --  SectionDescription: Toolbar<string>
-            -- ! TODO try using this to find key parts of UI (i.e. inspector panel)
             -- table values, start with new line
             local section = displayTable(k, v)
             -- trim leading "[\n  " and trailing "\n]"
+            -- AXSection value (table) s/b one line, I could actually handle the display here (only 3 attrs)
             section = section:gsub("^%[\n  ", "")
             section = section:gsub("\n]$", "")
             text = text .. k .. ": " .. section:gsub("\n", ", ")
