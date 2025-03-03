@@ -158,12 +158,7 @@ function AppObserver:loadProfileForDeck(deck, isModSetChange)
         return false
     end
 
-    if not isModSetChange then
-        -- don't reset on mod set changes (subset of buttons change is all)
-        deck.hsdeck:reset()
-    end
-    -- TODO need to compare before/after for mod set changes and clear any removed buttons (if updated they'll be replaced so its fine)
-    page:applyTo(deck)
+    page:applyTo(deck, isModSetChange)
     return true
 end
 
