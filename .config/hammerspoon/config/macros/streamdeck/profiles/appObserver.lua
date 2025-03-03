@@ -11,12 +11,12 @@ function menu(menu)
 end
 
 ---@param deckName string
----@param appModuleName string
+---@param appNameAsSettingsKey string
 ---@param page number
-function changePage(deckName, appModuleName, page)
+function changePage(deckName, appNameAsSettingsKey, page)
     local pageSettings = require("config.macros.streamdeck.settings.page")
     return function()
-        pageSettings.setSavedPageNumber(deckName, appModuleName, page)
+        pageSettings.setSavedPageNumber(deckName, appNameAsSettingsKey, page)
     end
 end
 
