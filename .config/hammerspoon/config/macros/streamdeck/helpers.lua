@@ -13,7 +13,7 @@ function hsIcon(relativePath)
     if image ~= nil then
         return image
     end
-    error("hsIcons: could not load image from path:", path)
+    error("hsIcons: could not load image from path:" .. path)
 end
 
 -- do not need to put everythin on the module...
