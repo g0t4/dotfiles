@@ -30,21 +30,35 @@ function Profile:applyTo(deck, isModSetChange)
     end
 
     if deck.buttons ~= nil then
+        print("buttons - profile:", self.name, "applying to", deck.name)
         local buttonsBefore = deck.buttons.buttons
+        local logBefore = f.concatKeys(buttonsBefore)
+        print("  buttons before", logBefore)
+
         deck.buttons:removeButtons()
         deck.buttons:addButtons(self:buttons(deck))
-        -- TODO if more than x% then reset deck instead?
-        for _, before in ipairs(buttonsBefore) do
-            if not deck.buttons.buttons[before.buttonNumber] then
-                -- clear button
-                -- TODO setup new clear button using colors instead? or image? or?
-                resetButton(before.buttonNumber, deck.hsdeck)
-            end
+
+        if isModSetChange then
+            -- only if not reset:
+            local logAfter = f.concatKeys(deck.buttons.buttons)
+            print("  buttons after", logAfter)
+            -- TODO if more than x% then reset deck instead?
+            local buttonsAfter = deck.buttons.buttons
+            f.each(buttonsBefore, function(btnNumberBefore, _btn)
+                -- DO NOT USE ipairs (each uses pairs)
+                -- PRN compare if button hasn't changed and skip it if so? i.e. modsetchanges
+                if not buttonsAfter[btnNumberBefore] then
+                    print("resetting button", btnNumberBefore)
+                    -- TODO setup new clear button using colors instead? or image? or?
+                    resetButton(btnNumberBefore, deck.hsdeck)
+                end
+            end)
+            -- TODO MOVE more of this into profile and let it handle all of this before/after
         end
-        -- TODO MOVE all of applyTo into profile and let it handle all of this before/after
         deck.buttons:start()
     end
     if deck.encoders ~= nil then
+        -- TODO clear encoders on mod set changes
         deck.encoders:removeEncoders()
         deck.encoders:addEncoders(self:encoders(deck))
         deck.encoders:start()
