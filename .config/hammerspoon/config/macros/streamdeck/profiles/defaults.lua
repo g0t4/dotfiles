@@ -177,11 +177,24 @@ local function timingHsIconFileOnly()
     print("myTestFunc took " .. GetElapsedTimeInMilliseconds(startTime) .. "ms")
 end
 
+local function timingHsIconWithText()
+    local startTime = GetTime()
+    local deck = TestXLDeck
+
+    local base = {
+        MaestroButton:new(30, deck, hsIconWithText("pptx/grouping/group-objects.png", "\nG", deck, MediumText), "D31AB7EB-3AFC-423E-8029-10C2AB5D5E33"),
+        MaestroButton:new(31, deck, hsIconWithText("pptx/grouping/ungroup-objects.png", "\n\n    UN", deck, MediumText), "5E6CF183-E907-4316-B833-04421A29A304"),
+        MaestroButton:new(32, deck, hsIconWithText("pptx/grouping/regroup-objects.png", "\nRE", deck, MediumText), "21C045E3-ACC3-4EE7-BE19-0EA2D4E68322"),
+    }
+
+    print("  took " .. GetElapsedTimeInMilliseconds(startTime) .. "ms")
+end
 FallbackProfiles:addProfilePage(DECK_2XL, PAGE_1, function(_, deck)
     return {
         -- row 4:
-        LuaButton:new(31, deck, drawTextIcon("Timing hsIcon file", deck), timingHsIconFileOnly),
-        LuaButton:new(32, deck, drawTextIcon("Timing Test", deck), timingHsCircleOnlyNoText)
+        LuaButton:new(30, deck, drawTextIcon("hsIcon WithText", deck), timingHsIconWithText),
+        LuaButton:new(31, deck, drawTextIcon("hsIcon file", deck), timingHsIconFileOnly),
+        LuaButton:new(32, deck, drawTextIcon("hsCircle", deck), timingHsCircleOnlyNoText)
     }
 end)
 
