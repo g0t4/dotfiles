@@ -31,6 +31,37 @@ function M.keys(t)
     return result
 end
 
+--- safe table concat for non-array tables
+---@generic T : string  # TODO any? using tostring(v)
+---@param t table<T, _>
+---@param separator string|nil
+---@return string
+function M.concatKeys(t, separator)
+    separator = separator or ""
+    local result = {}
+    for k, _ in pairs(t) do
+        table.insert(result, k)
+    end
+    return table.concat(result, separator)
+end
+
+--- safe table concat for non-array tables
+---@generic T : string  # TODO any? using tostring(v)
+---@param t table<_, T>
+---@param separator string|nil
+---@return string
+function M.concatValues(t, separator)
+    -- table.concat only works for array tables (integer, consecutive keys that start at 1)
+    --   so lets make the same thing but use pairs so we don't miss any items
+    --   and we concat the values
+    separator = separator or ""
+    local result = {}
+    for _, v in pairs(t) do
+        table.insert(result, v)
+    end
+    return table.concat(result, separator)
+end
+
 --- returns array of values (keys are dropped)
 ---@param t table
 ---@return table<integer, any>

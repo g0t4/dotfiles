@@ -1,3 +1,5 @@
+local f = require("config.helpers.underscore")
+
 ---@class Profile
 ---@field name string
 ---@field appName string
