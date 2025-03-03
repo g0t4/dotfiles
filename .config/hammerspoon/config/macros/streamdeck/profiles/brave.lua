@@ -18,27 +18,28 @@ local km_docs_menu_item = "B06C1815-51D0-4DD7-A22C-5A3C39C4D1E0"
 
 local MOD_SETS = {
     UNMODIFIED = "UNMODIFIED",
-    GOOGLE_DOCS = "GOOGLE-DOCS"
+    GOOGLE_DOCS = "GOOGLE-DOCS",
+    CHATGPT_COM = "CHATGPT-COM",
 }
 function getModSetNumber(url)
     if url == nil then return MOD_SETS.UNMODIFIED end
     if url:find("^https://docs.google.com") then return MOD_SETS.GOOGLE_DOCS end
+    if url:find("^https://chat.openai.com") then return MOD_SETS.CHATGPT_COM end
     return MOD_SETS.UNMODIFIED
 end
 
 ---@param deck DeckController
 ---@return PushButton[] # empty if none, never nil
-function getMyDeck3Page1Mods(deck, pageNumber)
+function deck3Page1Mods(deck, pageNumber)
     local url = getCurrentURL()
     if getModSetNumber(url) == MOD_SETS.GOOGLE_DOCS then
-        if deck.name == DECK_3XL and pageNumber == PAGE_1 then
-            return {
-                MaestroButton:new(31, deck, hsCircleIcon("#FFFF00", deck),
-                    km_docs_menu_item, "Highlight color yellow"),
-                MaestroButton:new(32, deck, hsCircleIcon("#FF0000", deck),
-                    km_docs_menu_item, "Highlight color red"),
-            }
-        end
+        return {
+            -- FYI these are just examples to test dynamic profile mods...
+            MaestroButton:new(31, deck, hsCircleIcon("#FFFF00", deck),
+                km_docs_menu_item, "Highlight color yellow"),
+            MaestroButton:new(32, deck, hsCircleIcon("#FF0000", deck),
+                km_docs_menu_item, "Highlight color red"),
+        }
     end
     return {}
 end
@@ -64,7 +65,7 @@ BraveObserver:addProfilePage(DECK_3XL, PAGE_1, function(_, deck)
 
         KeyStrokeButton:new(5, deck, drawTextIcon("⇒", deck), {}, "⇒"),
     }
-    local myMods = getMyDeck3Page1Mods(deck, PAGE_1)
+    local myMods = deck3Page1Mods(deck, PAGE_1)
     if myMods == nil then
         return base
     else
