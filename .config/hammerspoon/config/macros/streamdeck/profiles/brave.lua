@@ -221,21 +221,8 @@ function createNotificationObserver()
             end
             print(message)
 
-            do return end -- !!! STOP THIS FIRST TEST for NOW... its moved to profile page!
-            -- ! Get rid of following once I am happy with profile page approach
-            --    LEAVE AS EXAMPLE UNTIL THEN
-
-            -- TODO move elsewhere once I smoothout any issues with swapping buttons on top of the profile buttons
-            --   TODO I will want a addProfilePageMods(...) method of some sort that registers modifications
-            --      including events to observe and handler that returns list of buttons!
-            --      don't make it generic just yet, do that after I have multiple apps w/ real use cases...
-            --      for now this is just a POC...
-            --      and really I don't need this until I have more browser buttons (only a few for google docs currently)
-            --       I suspect I will make many more though with site based profiles/mods
-            --      ultimately will generate multiple sets of buttons all in one go so we don't have to call it 4 times (1 per deck)
-            --
             local deckName = DECK_3XL
-            local pageNumber = PAGE_1
+            local pageNumber = PAGE_1 -- TODO
 
             if urlTextField == nil then
                 print("no urlTextField, skipping...")
