@@ -14,15 +14,21 @@ local BraveObserver = AppObserver:new(APPS.BraveBrowserBeta)
 local km_docs_menu_item = "B06C1815-51D0-4DD7-A22C-5A3C39C4D1E0"
 
 
+local MOD_SETS = {
+    UNMODIFIED = "UNMODIFIED",
+    GOOGLE_DOCS = "GOOGLE-DOCS"
+}
 function getModSetNumber(url)
-    return url and url:find("^https://docs.google.com")
+    if url == nil then return MOD_SETS.UNMODIFIED end
+    if url:find("^https://docs.google.com") then return MOD_SETS.GOOGLE_DOCS end
+    return MOD_SETS.UNMODIFIED
 end
 
 ---@param deck DeckController
 ---@return PushButton[] # empty if none, never nil
 function getMyDeck3Page1Mods(deck, pageNumber)
     local url = getCurrentURL()
-    if getModSetNumber(url) then
+    if getModSetNumber(url) == MOD_SETS.GOOGLE_DOCS then
         if deck.name == DECK_3XL and pageNumber == PAGE_1 then
             return {
                 MaestroButton:new(31, deck, hsCircleIcon("#FFFF00", deck),
