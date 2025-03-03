@@ -100,21 +100,29 @@ local function displayType(value)
 end
 local function displayTable(name, value)
     local text = ""
+    local count = 0
     for k, v in pairs(value) do
+        count = count + 1
+        if count > 1 then
+            -- new line + indent for 2+
+            text = text .. "\n\t"
+        end
         if name == "AXSections" then
             -- FYI section entries have:
             --  SectionObject: AXScrollArea<hs.axuielement> - ** seems most important, the object itself :)
             --  SectionUniqueID: AXContent<string>
             --  SectionDescription: Toolbar<string>
             -- ! TODO try using this to find key parts of UI (i.e. inspector panel)
+            -- table values, start with new line
             text = text .. k .. ": " .. displayTable(k, v):gsub("\n", ", ")
+            text = text .. displayType(v)
         elseif type(v) == "userdata" then
             text = text .. k .. ": " .. displayUserData(k, v)
+            text = text .. displayType(v)
         else
             text = text .. k .. ": " .. tostring(v)
+            text = text .. displayType(v)
         end
-        text = text .. displayType(v)
-        text = text .. "\n"
     end
     return "[" .. text .. "]"
 end
