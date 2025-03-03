@@ -86,6 +86,11 @@ end)
 PptxObserver:addProfilePage(DECK_2XL, PAGE_1, function(_, deck)
     -- TODO try using color background instead of images w/ hex values... check perf difference (if any)
     -- FYI verified these are good (except need to test actions on two marked below)
+    --
+    -- CONVERTED WITH:
+    --   mkdir -p bmp-96; ls *.png | xargs -I_ sips -s format bmp _ --resampleHeightWidth  96 96  --out bmp-96/_.bmp
+    --   w/o even adding caching BMPs shaved 10ms+ off of overall time to change to PPTX on 2XL deck (this one)
+
     local useBmp = true
     local prefix = "pptx/colors/bmp-96/"
     local suffix = ".bmp"
@@ -93,38 +98,42 @@ PptxObserver:addProfilePage(DECK_2XL, PAGE_1, function(_, deck)
         prefix = "pptx/colors/"
         suffix = ".png"
     end
+    function hsIconBmp(name)
+        return hsIcon(prefix .. name .. suffix)
+    end
+
     return {
-        MaestroButton:new(1, deck, hsIcon(prefix .. "fill-pink.png" .. suffix), "02BF881E-47AF-4812-830F-4765B6AABC41"),
-        MaestroButton:new(9, deck, hsIcon(prefix .. "line-pink.png" .. suffix), "FBAD1498-E64F-4A26-8B41-59D4B59C4F6B"),
-        MaestroButton:new(17, deck, hsIcon(prefix .. "text-pink.png" .. suffix), "F5068DE4-4EA3-4B4E-ABE9-44A358D380B1"),
+        MaestroButton:new(1, deck, hsIconBmp("fill-pink.png"), "02BF881E-47AF-4812-830F-4765B6AABC41"),
+        MaestroButton:new(9, deck, hsIconBmp("line-pink.png"), "FBAD1498-E64F-4A26-8B41-59D4B59C4F6B"),
+        MaestroButton:new(17, deck, hsIconBmp("text-pink.png"), "F5068DE4-4EA3-4B4E-ABE9-44A358D380B1"),
 
-        MaestroButton:new(2, deck, hsIcon(prefix .. "fill-blue.png" .. suffix), "D5CD851F-5A99-46E1-A922-4EF11726BD8A"),
-        MaestroButton:new(10, deck, hsIcon(prefix .. "line-blue.png" .. suffix), "5250FA4D-74BE-4E29-8EFB-3F9DA4183923"),
-        MaestroButton:new(18, deck, hsIcon(prefix .. "text-blue.png" .. suffix), "A8963B4C-825B-4BBC-9C4B-105B1FDBB253"),
+        MaestroButton:new(2, deck, hsIconBmp("fill-blue.png"), "D5CD851F-5A99-46E1-A922-4EF11726BD8A"),
+        MaestroButton:new(10, deck, hsIconBmp("line-blue.png"), "5250FA4D-74BE-4E29-8EFB-3F9DA4183923"),
+        MaestroButton:new(18, deck, hsIconBmp("text-blue.png"), "A8963B4C-825B-4BBC-9C4B-105B1FDBB253"),
 
-        MaestroButton:new(3, deck, hsIcon(prefix .. "fill-purple.png" .. suffix), "EE2F4019-8615-4A6C-9CE8-840D9FA27778"),
-        MaestroButton:new(11, deck, hsIcon(prefix .. "line-purple.png" .. suffix), "4AD5641B-4BAF-47D6-A6B8-D8D93041F23C"),
-        MaestroButton:new(19, deck, hsIcon(prefix .. "text-purple.png" .. suffix), "09063A55-0CE1-4AE3-BAC2-8DF341AF619D"),
+        MaestroButton:new(3, deck, hsIconBmp("fill-purple.png"), "EE2F4019-8615-4A6C-9CE8-840D9FA27778"),
+        MaestroButton:new(11, deck, hsIconBmp("line-purple.png"), "4AD5641B-4BAF-47D6-A6B8-D8D93041F23C"),
+        MaestroButton:new(19, deck, hsIconBmp("text-purple.png"), "09063A55-0CE1-4AE3-BAC2-8DF341AF619D"),
 
-        MaestroButton:new(4, deck, hsIcon(prefix .. "fill-yellow.png" .. suffix), "70299E82-5094-44CD-98EB-EE783BE3FA0E"),
-        MaestroButton:new(12, deck, hsIcon(prefix .. "line-yellow.png" .. suffix), "289D7C69-74B6-4127-B7EF-4C054EADD65E"),
-        MaestroButton:new(20, deck, hsIcon(prefix .. "text-yellow.png" .. suffix), "E13771C5-F241-4C3A-8064-7765F6F30369"),
+        MaestroButton:new(4, deck, hsIconBmp("fill-yellow.png"), "70299E82-5094-44CD-98EB-EE783BE3FA0E"),
+        MaestroButton:new(12, deck, hsIconBmp("line-yellow.png"), "289D7C69-74B6-4127-B7EF-4C054EADD65E"),
+        MaestroButton:new(20, deck, hsIconBmp("text-yellow.png"), "E13771C5-F241-4C3A-8064-7765F6F30369"),
 
-        MaestroButton:new(5, deck, hsIcon(prefix .. "fill-orange.png" .. suffix), "C4E8F125-C719-4125-A3A2-1492642DC054"),
-        MaestroButton:new(13, deck, hsIcon(prefix .. "line-orange.png" .. suffix), "2AA28BE5-58A4-403C-8ABD-3FC69152E5B3"),
-        MaestroButton:new(21, deck, hsIcon(prefix .. "text-orange.png" .. suffix), "F4CB8BE1-1199-4472-948F-07D5BBF11464"),
+        MaestroButton:new(5, deck, hsIconBmp("fill-orange.png"), "C4E8F125-C719-4125-A3A2-1492642DC054"),
+        MaestroButton:new(13, deck, hsIconBmp("line-orange.png"), "2AA28BE5-58A4-403C-8ABD-3FC69152E5B3"),
+        MaestroButton:new(21, deck, hsIconBmp("text-orange.png"), "F4CB8BE1-1199-4472-948F-07D5BBF11464"),
 
-        MaestroButton:new(6, deck, hsIcon(prefix .. "fill-green.png" .. suffix), "EB427AC4-F6EE-4C4A-8972-47C7D91F1C92"),
-        MaestroButton:new(14, deck, hsIcon(prefix .. "line-green.png" .. suffix), "D1E5B8B5-3160-4FF7-B6F3-F6812576AEFD"),
-        MaestroButton:new(22, deck, hsIcon(prefix .. "text-green.png" .. suffix), "3634BCDF-9426-47ED-94DB-5A2B6AE29C66"),
+        MaestroButton:new(6, deck, hsIconBmp("fill-green.png"), "EB427AC4-F6EE-4C4A-8972-47C7D91F1C92"),
+        MaestroButton:new(14, deck, hsIconBmp("line-green.png"), "D1E5B8B5-3160-4FF7-B6F3-F6812576AEFD"),
+        MaestroButton:new(22, deck, hsIconBmp("text-green.png"), "3634BCDF-9426-47ED-94DB-5A2B6AE29C66"),
 
-        MaestroButton:new(7, deck, hsIcon(prefix .. "fill-red.png" .. suffix), "7E4D159E-F181-4D32-B567-033AD826CD6A"),
-        MaestroButton:new(15, deck, hsIcon(prefix .. "line-red.png" .. suffix), "39368956-2C5B-41B6-8ACE-AC26D8BE2BFC"),
-        MaestroButton:new(23, deck, hsIcon(prefix .. "text-red.png" .. suffix), "6D19B684-4DA2-4566-8F76-FCAACB39FED9"),
+        MaestroButton:new(7, deck, hsIconBmp("fill-red.png"), "7E4D159E-F181-4D32-B567-033AD826CD6A"),
+        MaestroButton:new(15, deck, hsIconBmp("line-red.png"), "39368956-2C5B-41B6-8ACE-AC26D8BE2BFC"),
+        MaestroButton:new(23, deck, hsIconBmp("text-red.png"), "6D19B684-4DA2-4566-8F76-FCAACB39FED9"),
 
-        MaestroButton:new(8, deck, hsIcon(prefix .. "fill-inky-blue.png" .. suffix), "796DFBC5-8B80-4422-9AA5-D19DE2A055D4"),
-        MaestroButton:new(16, deck, hsIcon(prefix .. "line-inky-blue.png" .. suffix), "6769734A-DC6E-4D4E-9E20-641AD9197005"),
-        MaestroButton:new(24, deck, hsIcon(prefix .. "text-inky-blue.png" .. suffix), "7F18E471-F989-4DA0-967D-1E935E3E0FC3"),
+        MaestroButton:new(8, deck, hsIconBmp("fill-inky-blue.png"), "796DFBC5-8B80-4422-9AA5-D19DE2A055D4"),
+        MaestroButton:new(16, deck, hsIconBmp("line-inky-blue.png"), "6769734A-DC6E-4D4E-9E20-641AD9197005"),
+        MaestroButton:new(24, deck, hsIconBmp("text-inky-blue.png"), "7F18E471-F989-4DA0-967D-1E935E3E0FC3"),
 
         -- TODO ADD BMPS here too:
         -- TODO verify the action for these two:
