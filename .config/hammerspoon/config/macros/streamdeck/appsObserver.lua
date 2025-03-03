@@ -52,7 +52,7 @@ function AppsObserver:onAppActivated(appTitle, _hsApp)
             -- BTW this app specific observer is now active EVEN IF NO DECKS ARE CLAIMED BY IT
             --    and that's good b/c a new deck may be in the process of connecting!
             activeObserver:activate(unclaimedDecks)
-            unclaimedDecks = f.where(unclaimedDecks, function(deck)
+            unclaimedDecks = f.whereValues(unclaimedDecks, function(deck)
                 return not activeObserver.claimedDecks[deck.name]
             end)
             if unclaimedDecks == {} then
@@ -72,7 +72,7 @@ function AppsObserver:onAppActivated(appTitle, _hsApp)
 
     if defaultObserver then
         defaultObserver:activate(unclaimedDecks)
-        unclaimedDecks = f.where(unclaimedDecks, function(deck)
+        unclaimedDecks = f.whereValues(unclaimedDecks, function(deck)
             return not defaultObserver.claimedDecks[deck.name]
         end)
         if unclaimedDecks == {} then

@@ -46,15 +46,23 @@ function Profile:applyTo(deck, isModSetChange)
             local buttonsAfter = deck.buttons.buttons
             f.each(buttonsBefore, function(btnNumberBefore, _btn)
                 -- DO NOT USE ipairs (each uses pairs)
-                -- PRN compare if button hasn't changed and skip it if so? i.e. modsetchanges
                 if not buttonsAfter[btnNumberBefore] then
                     print("resetting button", btnNumberBefore)
-                    -- TODO setup new clear button using colors instead? or image? or?
                     resetButton(btnNumberBefore, deck.hsdeck)
                 end
             end)
             -- TODO MOVE more of this into profile and let it handle all of this before/after
         end
+
+        -- PRN compute list of buttons that are the same so we can skip setting their image again?
+        -- local sameButtons = f.whereValues(deck.buttons.buttons, function(btn)
+        --     return buttonsBefore[btn.buttonNumber] == btn
+        -- end)
+        -- TODO don't start sameButtons, only not Same
+        --   either pass same to start, or compute notSame and call start on them and don't call overall start()
+        -- f.each(notSameButtons, function(btn)
+        --     btn:start()
+        -- end)
         deck.buttons:start()
     end
     if deck.encoders ~= nil then

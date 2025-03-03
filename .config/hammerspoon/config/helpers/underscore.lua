@@ -143,19 +143,43 @@ function M.shallowCopyTable(t)
 end
 
 --- returns a new table with only the values that pass the predicate
----@generic TKey: string|integer
+---@generic TKey: any
 ---@generic TValue: any
 ---@param t table<TKey, TValue>
----@param predicate fun(value: any): boolean
+---@param kvPredicate fun(key: TKey, value: TValue): boolean
 ---@return table<TKey, TValue>
-function M.where(t, predicate)
+function M.where(t, kvPredicate)
     local result = {}
     for k, v in pairs(t) do
-        if predicate(v) then
+        if kvPredicate(k, v) then
             result[k] = v
         end
     end
     return result
+end
+
+--- predicate on value only
+---@generic TKey: any
+---@generic TValue: any
+---@param t table<TKey, TValue>
+---@param valuePredicate fun(value: TValue): boolean
+---@return table<TKey, TValue>
+function M.whereValues(t, valuePredicate)
+    return M.where(t, function(_key, value)
+        return valuePredicate(value)
+    end)
+end
+
+--- predicate on key only
+---@generic TKey: any
+---@generic TValue: any
+---@param t table<TKey, TValue>
+---@param keyPredicate fun(key: TKey): boolean
+---@return table<TKey, TValue>
+function M.whereKeys(t, keyPredicate)
+    return M.where(t, function(key, _value)
+        return keyPredicate(key)
+    end)
 end
 
 -- *** MISC table operations
