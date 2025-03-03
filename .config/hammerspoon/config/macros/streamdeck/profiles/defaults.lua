@@ -101,46 +101,41 @@ local TestPlusDeck = {
 }
 
 -- *** 6.7ms/button - 40ms for 6 circle icons!
-local function timingHsCircleOnlyNoText()
-    -- TODO test setButtonColor
-    -- TODO test setButtonImage (precreated and perfectly sized?) images<F7>
+local function timingHsCircleOnlyNoText(deck)
     local startTime = GetTime()
     local base = {
         -- *** BINGO image creation is SLOW!!!
-        -- !!! (is it most of the time?... maybe reset sucked b/c I didn't reuse the same image instance?)
 
-        MaestroButton:new(1, TestXLDeck, memoized_hsCircleIcon("#FFFF00", TestXLDeck),
+        MaestroButton:new(1, deck, memoized_hsCircleIcon("#FFFF00", deck),
             "foo", "Highlight color yellow"),
 
-        MaestroButton:new(1, TestXLDeck, memoized_hsCircleIcon("#00FF00", TestXLDeck),
+        MaestroButton:new(1, deck, memoized_hsCircleIcon("#00FF00", deck),
             "foo", "Highlight color yellow"),
-        MaestroButton:new(1, TestXLDeck, memoized_hsCircleIcon("#00F0F0", TestXLDeck),
+        MaestroButton:new(1, deck, memoized_hsCircleIcon("#00F0F0", deck),
             "foo", "Highlight color yellow"),
-        MaestroButton:new(1, TestXLDeck, memoized_hsCircleIcon("#F0FF00", TestXLDeck),
+        MaestroButton:new(1, deck, memoized_hsCircleIcon("#F0FF00", deck),
             "foo", "Highlight color yellow"),
 
         -- #FCE5CD (highlight light orange 3) => increase saturation for button color: #FFC690
-        MaestroButton:new(2, TestXLDeck, memoized_hsCircleIcon("#FFC690", TestXLDeck, "rec"),
+        MaestroButton:new(2, deck, memoized_hsCircleIcon("#FFC690", deck, "rec"),
             "foo", "highlight light orange 3"),
 
         -- "none" == remove highlight (background color)
-        MaestroButton:new(3, TestXLDeck, memoized_hsCircleIcon("#FFFFFF", TestXLDeck, "none"),
+        MaestroButton:new(3, deck, memoized_hsCircleIcon("#FFFFFF", deck, "none"),
             "foo", "highlight none"),
     }
-    print("myTestFunc took " .. GetElapsedTimeInMilliseconds(startTime) .. "ms")
+    print("  hs circle only " .. GetElapsedTimeInMilliseconds(startTime) .. "ms")
 end
 
 
 -- *** 0.5ms/button - 10-13ms for 26 images (not a huge factor)
-local function timingHsIconFileOnly()
+-- *** 4.5ms/button setButtonImage - 110-120ms for 26 images
+local function timingHsIconFileOnly(deck)
     local startTime = GetTime()
-    local deck = TestXLDeck
-
 
     -- BTW 20ms is not inconsequential if it is easy to avoid b/c already caching other types, also super easy to memoize
     -- 3 hsIcon file loads => 2 to 4ms total... not bad (IIAC image size is a factor)
-    -- 26 => 11-13ms
-    -- TODO check image size factor (to help me size appropriately too, extra reason to get size right)
+    -- 24 => 11-13ms
     local base = {
         MaestroButton:new(1, deck, hsIcon("pptx/colors/fill-pink.png"), "02BF881E-47AF-4812-830F-4765B6AABC41"),
         MaestroButton:new(9, deck, hsIcon("pptx/colors/line-pink.png"), "FBAD1498-E64F-4A26-8B41-59D4B59C4F6B"),
@@ -174,19 +169,30 @@ local function timingHsIconFileOnly()
         MaestroButton:new(16, deck, hsIcon("pptx/colors/line-inky-blue.png"), "6769734A-DC6E-4D4E-9E20-641AD9197005"),
         MaestroButton:new(24, deck, hsIcon("pptx/colors/text-inky-blue.png"), "7F18E471-F989-4DA0-967D-1E935E3E0FC3"),
 
-        -- TODO verify the action for these two:
-        MaestroButton:new(27, deck, hsIcon("pptx/recording/record-pptx.png"), "B0F6834D-5E1D-4E08-AD92-3C2F87886CC0"),
-        MaestroButton:new(28, deck, hsIcon("pptx/recording/record-mouse-only.png"), "C998899A-74A5-4329-8B94-6E1DE875F32B"),
-
+        MaestroButton:new(25, deck, hsIcon("pptx/recording/record-pptx.png"), "B0F6834D-5E1D-4E08-AD92-3C2F87886CC0"),
+        MaestroButton:new(26, deck, hsIcon("pptx/recording/record-mouse-only.png"), "C998899A-74A5-4329-8B94-6E1DE875F32B"),
     }
+    print("  load 26x pptx icons " .. GetElapsedTimeInMilliseconds(startTime) .. "ms")
+    print()
 
-    print("myTestFunc took " .. GetElapsedTimeInMilliseconds(startTime) .. "ms")
+    -- avg 3-4ms/image for all of the above icons (which are all the same resolution/design cuz its the color buttons from pptx)
+    print("setButtonImage 10x/image")
+    for _, button in ipairs(base) do
+        startTime = GetTime()
+        local i = 1
+        for i = 1, 10 do
+            -- ipairs so they stay in order as above
+            deck.hsdeck:setButtonImage(i, button.image)
+        end
+        local ms = GetElapsedTimeInMilliseconds(startTime)
+        local avg = ms / 10
+        print("  avg: " .. avg .. "ms, total: " .. ms .. "ms - btn# " .. button.buttonNumber)
+    end
 end
 
 -- *** 8ms/button 20 to 25ms (sometimes 12-13ms) for 3 hsIconWithText!
-local function timingHsIconWithText()
+local function timingHsIconWithText(deck)
     local startTime = GetTime()
-    local deck = TestXLDeck
 
     local base = {
         MaestroButton:new(30, deck, hsIconWithText("pptx/grouping/group-objects.png", "\nG", deck, MediumText), "D31AB7EB-3AFC-423E-8029-10C2AB5D5E33"),
@@ -294,14 +300,85 @@ local function timingDoesSizeMatter(deck)
     print()
 end
 
+-- *** pre-make color images instead of setButtonColor can save 1ms/button (is there a more efficient way to make the color image?)
+-- * 4-5ms/button setButtonColor (red and black)
+---@param deck DeckController
+local function timingSetButtonColor(deck)
+    local startTime = GetTime()
+
+
+    -- FYI => objc hs code => deck.clearImage uses setColor(black)
+    --    https://github.com/Hammerspoon/hammerspoon/blob/master/extensions/streamdeck/HSStreamDeckDevice.m#L364
+    -- setColor =>
+    --   makes an image:
+    --      https://github.com/Hammerspoon/hammerspoon/blob/master/extensions/streamdeck/HSStreamDeckDevice.m#L374
+    --      imageWdith, imageHeight
+    --   then calls setImage
+    --      https://github.com/Hammerspoon/hammerspoon/blob/master/extensions/streamdeck/HSStreamDeckDevice.m#L378
+    --      unconditionally resizes with initWithSize - literally has comment in code that says this!
+    --         https://github.com/Hammerspoon/hammerspoon/blob/master/extensions/streamdeck/HSStreamDeckDevice.m#L388
+    --         LE SIGH... A TON OF TRANSFORMS ARE APPLIED... from what I can tell maybe to keep the code "simpler"... i.e. noop patterns
+    --         WHY RESIZE IF IT IS THE RIGHT SIZE ALREADY?!?!?! can't we have an optimized pathway for when we pre-selected just the right image size?!
+    --         in fact, why can't I hand off raw jpeg/bmp data (whatever the device uses?)
+    --         workaround => write my own lua bridge for a few of these operations and bypass hammerspoon for setting the image part
+    --           or fork hs...
+    --           TODO actually I neeed to make sure the ops they apply matter or if the timing is lower level (physically changing displays on device)
+
+    for i = 1, 3 do
+        for i = 1, 24 do
+            deck.hsdeck:setButtonColor(i, hs.drawing.color.black)
+        end
+    end
+    local ms = GetElapsedTimeInMilliseconds(startTime)
+    local avg = ms / 24 / 3
+    print("  setButtonColor 72x avg: " .. avg .. "ms, total: " .. ms .. "ms")
+    print()
+    print()
+    print()
+
+
+    -- LETS TRY making the color image so it can just be resized?
+    local i = { 32, 72, 96, 256, 512, 1024, 2048, 4096 }
+    for _, i in ipairs(i) do
+        deck.hsdeck:reset()
+        print("size: " .. i)
+
+        startTime = GetTime()
+        ---@type hs.canvas|nil
+        local canvas = hs.canvas.new({ x = 0, y = 0, w = i, h = i })
+        canvas[1] = {
+            type = "rectangle",
+            action = "fill",
+            fillColor = hs.drawing.color.blue,
+            frame = { x = 0, y = 0, w = i, h = i }
+        }
+        -- save 0.5ms to 1ms PER button if pre-make color (one time)
+        -- can save 50 to 100ms over 72x runs if pre-make the color image!
+        local colorImage = canvas:imageFromCanvas() -- 3ms to 5ms to create the color image
+        print("  colorImage created " .. GetElapsedTimeInMilliseconds(startTime) .. "ms")
+
+        startTime = GetTime()
+        for i = 1, 3 do
+            for i = 1, 24 do
+                deck.hsdeck:setButtonImage(i, colorImage)
+            end
+        end
+        ms = GetElapsedTimeInMilliseconds(startTime)
+        avg = ms / 24 / 3
+        print("  setButtonImage 72x avg: " .. avg .. "ms, total: " .. ms .. "ms")
+        print()
+    end
+end
+
 FallbackProfiles:addProfilePage(DECK_2XL, PAGE_1, function(_, deck)
     return {
         -- row 4:
+        LuaButton:new(27, deck, drawTextIcon("setButtonColor", deck), function() timingSetButtonColor(deck) end),
         LuaButton:new(28, deck, drawTextIcon("image size matter?", deck), function() timingDoesSizeMatter(deck) end),
         LuaButton:new(29, deck, drawTextIcon("appIcon Finder", deck), function() timingAppIconFinderFromItermProfile(deck) end),
-        LuaButton:new(30, deck, drawTextIcon("hsIcon WithText", deck), timingHsIconWithText),
-        LuaButton:new(31, deck, drawTextIcon("hsIcon file", deck), timingHsIconFileOnly),
-        LuaButton:new(32, deck, drawTextIcon("hsCircle", deck), timingHsCircleOnlyNoText)
+        LuaButton:new(30, deck, drawTextIcon("hsIcon WithText", deck), function() timingHsIconWithText(deck) end),
+        LuaButton:new(31, deck, drawTextIcon("hsIcon file", deck), function() timingHsIconFileOnly(deck) end),
+        LuaButton:new(32, deck, drawTextIcon("hsCircle", deck), function() timingHsCircleOnlyNoText(deck) end)
     }
 end)
 
