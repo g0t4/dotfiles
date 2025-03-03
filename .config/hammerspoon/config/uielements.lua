@@ -301,6 +301,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "E", function()
 
     local app = hs.application.frontmostApplication()
     DumpHtml(app)
+    ---@type hs.axuielement
     local appElement = hs.axuielement.applicationElement(app)
 
     local function testBuildTree()

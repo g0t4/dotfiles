@@ -67,7 +67,7 @@ end)
 -- Override setupWatchers to handle URL changes and other Brave-specific events
 function BraveObserver:setupWatchers()
     -- TODO plugin my AXObserver
-    -- TODO make actual watcher + handler smth like this:
+
     function tmpWatcherHandlerStartPoint()
         local url = getCurrentURL()
         if url then
