@@ -123,16 +123,21 @@ function AppsObserver:onNewDeckConnected(deck)
 
     local appName = hsApp:title()
     if not appName then return end
-    local appModuleName = appModuleLookupByAppName[appName]
 
-    if activeObserver and activeObserver:getModuleName() == (appModuleName or "") then
-        print("  using activeObserver to load profile for", deck.name)
+    if activeObserver and activeObserver.appName == appName then
         if activeObserver:loadProfileForDeck(deck) then
+            print("  loaded profile with activeObserver")
             return
         end
+        -- TODO issue is addProfilePage call happens w/o the new decks so pages are not loaded so then we have to trigger activate below
+        --    TODO fix adding a new deck to an existing observer...
+        --       TODO need to impl the logic to gracefully add it in so we don't refresh all decks 4x on every config reload!
+        --    then if I fake fire an app activate in bootrstrap then the observer will be ready and only flash that deck one time
+        --      TODO add fake app activate to bootstrap.lua (before starting this apps observer)
+        print("  could not load profile with activeObserver")
     end
 
-    -- first deck to connect triggers app activation
+    print("  trigger fake app activated to add deck")
     self:onAppActivated(appName, hsApp)
 end
 
