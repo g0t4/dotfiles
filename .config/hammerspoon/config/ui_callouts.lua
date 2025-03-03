@@ -99,13 +99,9 @@ local function displayType(value)
     return "<" .. valueType .. ">"
 end
 local function displayTable(name, value)
-    local text = ""
-    local count = 0
+    local rows = {}
     for k, v in pairs(value) do
-        count = count + 1
-        if count > 1 then
-            text = text .. "\n  "
-        end
+        local text = ""
         if name == "AXSections" then
             -- FYI section entries have 3 attrs (keep each entry on one line):
             --  SectionObject: AXScrollArea<hs.axuielement> - ** seems most important, the object itself :)
@@ -123,13 +119,14 @@ local function displayTable(name, value)
             text = text .. k .. ": " .. tostring(v)
             text = text .. displayType(v)
         end
+        table.insert(rows, text)
     end
-    if count < 2 then
+    if #rows < 2 then
         -- zero / one element => no new lines
-        return "[" .. text .. "]"
+        return "[" .. table.concat(rows, "") .. "]"
     end
     --  for multiple, then make sure first is on its own line and closing ] is on own line for readability
-    return "[\n  " .. text .. "\n]"
+    return "[\n  " .. table.concat(rows, "\n  ") .. "\n]"
 end
 local function displayAttribute(name, value)
     if value == nil then return nil end
