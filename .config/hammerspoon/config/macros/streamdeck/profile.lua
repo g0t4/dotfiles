@@ -54,16 +54,25 @@ function Profile:applyTo(deck, isModSetChange)
             -- TODO MOVE more of this into profile and let it handle all of this before/after
         end
 
+        -- TODO stop recreating buttons EVERY TIME... right now they app appear new b/c they are new tables each time...
+        --   OR add identtiy to buttons (more work)... how about try caching buttons (should speed up changes too)
+        --   TODO once same buttons between runs, then make sure not :start()ing again works
+        --
         -- PRN compute list of buttons that are the same so we can skip setting their image again?
-        -- local sameButtons = f.whereValues(deck.buttons.buttons, function(btn)
-        --     return buttonsBefore[btn.buttonNumber] == btn
-        -- end)
-        -- TODO don't start sameButtons, only not Same
-        --   either pass same to start, or compute notSame and call start on them and don't call overall start()
-        -- f.each(notSameButtons, function(btn)
-        --     btn:start()
-        -- end)
-        deck.buttons:start()
+        local notSameButtons = f.whereValues(deck.buttons.buttons, function(btn)
+            return buttonsBefore[btn.buttonNumber] ~= btn
+        end)
+        -- print("  not same buttons", f.concatKeys(notSameButtons))
+        f.eachValue(notSameButtons, function(btn)
+            btn:start()
+        end)
+        local sameButtons = f.whereValues(deck.buttons.buttons, function(btn)
+            return buttonsBefore[btn.buttonNumber] == btn
+        end)
+        if sameButtons ~= {} then
+            print("  SAME BUTTONS DETECTED, MAKE SURE TO CHECK LOGIC in profile.lua for skipping calling START() on the same buttons")
+            print("  same buttons", f.concatKeys(sameButtons))
+        end
     end
     if deck.encoders ~= nil then
         -- TODO clear encoders on mod set changes
