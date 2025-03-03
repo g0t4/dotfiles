@@ -79,7 +79,7 @@ PptxObserver:addProfilePage(DECK_2XL, PAGE_2, function(_, deck)
         -- * row 3 (buttons 17-24)
 
         -- * row 4 (buttons 25-32)
-        LuaButton:new(32, deck, pageRightImage(deck), changePage(DECK_2XL, APPS.MicrosoftPowerPoint, PAGE_1)),
+        LuaButton:new(32, deck, pageRightImage(deck), changePage(DECK_2XL, APPS.MicrosoftPowerPoint, PAGE_1, PptxObserver)),
     }
 end)
 
@@ -128,7 +128,7 @@ PptxObserver:addProfilePage(DECK_2XL, PAGE_1, function(_, deck)
         MaestroButton:new(31, deck, hsIconWithText("pptx/grouping/ungroup-objects.png", "\n\n    UN", deck, MediumText), "5E6CF183-E907-4316-B833-04421A29A304"),
         MaestroButton:new(32, deck, hsIconWithText("pptx/grouping/regroup-objects.png", "\nRE", deck, MediumText), "21C045E3-ACC3-4EE7-BE19-0EA2D4E68322"),
 
-        LuaButton:new(25, deck, pageLeftImage(deck), changePage(DECK_2XL, APPS.MicrosoftPowerPoint, PAGE_2)),
+        LuaButton:new(25, deck, pageLeftImage(deck), changePage(DECK_2XL, APPS.MicrosoftPowerPoint, PAGE_2, PptxObserver)),
     }
 end)
 

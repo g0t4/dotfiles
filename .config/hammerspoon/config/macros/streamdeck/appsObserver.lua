@@ -1,6 +1,5 @@
 local f = require("config.helpers.underscore")
 verbose = require("config.macros.streamdeck.helpers").verbose
-pageSettings = require("config.macros.streamdeck.settings.page")
 
 ---@class AppsObserver
 ---@field interAppWatcher hs.application.watcher
@@ -21,7 +20,6 @@ function AppsObserver:new(decks)
             o:onAppDeactivated(appTitle, hsApp)
         end
     end)
-    pageSettings.setAppsObserver(o)
     return o
 end
 
@@ -30,16 +28,6 @@ end
 ---@type AppObserver|nil
 local activeObserver = nil
 local defaultObserver = nil
-
-function AppsObserver:onPageNumberChanged(deckName, appTitle, pageNumber)
-    -- TODO push into appObserver (it should be able to detect its own page change and handle it there)
-    --   TODO see appObserver.setSavedPageNumber and pageSettings.getSavedPageNumber (s/b able to remove coupling in page settings!)
-
-    -- Delegate to the active observer if appropriate
-    if activeObserver and activeObserver.appTitle == appTitle then
-        activeObserver:handlePageChange(deckName, pageNumber)
-    end
-end
 
 ---@param appTitle string
 ---@param hsApp hs.application

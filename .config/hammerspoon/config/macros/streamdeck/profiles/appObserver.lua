@@ -13,9 +13,11 @@ end
 ---@param deckName string
 ---@param appTitle string
 ---@param page number
-function changePage(deckName, appTitle, page)
+---@param appObserver AppObserver
+function changePage(deckName, appTitle, page, appObserver)
     return function()
         pageSettings.setSavedPageNumber(deckName, appTitle, page)
+        appObserver:handlePageChange(deckName, page)
     end
 end
 

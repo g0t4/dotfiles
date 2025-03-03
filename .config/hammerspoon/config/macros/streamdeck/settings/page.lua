@@ -1,9 +1,6 @@
 local SETTINGS_PREFIX = "streamdeck_page_"
 
-local M = {
-    -- TODO remove later
-    appsObserver = nil,
-}
+local M = {}
 
 local function getkey(deckName, appTitle)
     print("appTitle", appTitle)
@@ -27,21 +24,12 @@ end
 ---@param pageNumber number
 function M.setSavedPageNumber(deckName, appTitle, pageNumber)
     hs.settings.set(getkey(deckName, appTitle), pageNumber)
-    if M.appsObserver ~= nil then
-        M.appsObserver:onPageNumberChanged(deckName, appTitle, pageNumber)
-    end
 end
 
 ---@param deckName string
 ---@param appTitle string
 function M.clearSavedPageNumber(deckName, appTitle)
     hs.settings.set(getkey(deckName, appTitle), nil)
-end
-
----@param observer AppsObserver
-function M.setAppsObserver(observer)
-    -- TODO decouple appsObserver from these settings (along w/ pushing decksController into AppObserver)
-    M.appsObserver = observer
 end
 
 return M
