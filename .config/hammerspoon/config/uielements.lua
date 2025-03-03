@@ -860,27 +860,20 @@ function WrapInQuotesIfNeeded(value)
     return string.find(value, "%s") and '"' .. value .. '"' or value
 end
 
+---@param elem hs.axuielement
+---@param indent boolean|nil # siblings/children are indented underneath path elements (aka toplevel)
+---@return string
 function GetElementTableRow(elem, indent)
-    indent = indent or ""
     local role = GetValueOrEmptyString(elem, "AXRole")
     local title = GetValueOrEmptyString(elem, "AXTitle")
     local subRole = GetValueOrEmptyString(elem, "AXSubrole")
     local identifier = GetValueOrEmptyString(elem, "AXIdentifier")
-    -- TODO AXHelp?
+    -- PRN AXHelp?
     local description = GetValueOrEmptyString(elem, "AXDescription")
     local roleDescription = GetValueOrEmptyString(elem, "AXRoleDescription")
     local elemIndex = GetElementSiblingIndex(elem) or ''
 
-    -- TODO conditions to clear out (not show) AXRole or otherwise
-    --    i.e. AXApplication role, desc=application...
-    --      AXWindow role, AXStandardWindow subrole... desc=standard window
-    --    basically, condense what I show in path view (make it easily decipherable... IOTW always show role and if anything hide rightmost items (i.e. desc) when it doesn't tell me anything new... that is what I dislike about other inspectors, they are hard to decipher what matters (the one thing that doesn't stand out cuz everything else is duplicated)
-    --
-    -- TODO AXValue
-    -- TODO AXValueDescription
-
-    -- TODO add back role (if I go with column view where I keep some attrs in sep columns to avoid cluttering items)
-    local col1 = indent .. roleDescription .. ' ' .. elemIndex
+    local col1 = roleDescription .. ' ' .. elemIndex
     if subRole ~= "" then
         col1 = col1 .. ' (' .. subRole .. ')'
     end
@@ -888,7 +881,6 @@ function GetElementTableRow(elem, indent)
         col1 = col1 .. ' "' .. title .. '"'
     end
 
-    -- TODO put into separate column too (details)
     local details = ""
     if description ~= "" and description ~= roleDescription then
         -- only show if AXRoleDescription doesn't already cover what AXDescription has
@@ -898,7 +890,8 @@ function GetElementTableRow(elem, indent)
         details = details .. ' id=' .. identifier
     end
 
-    return "<tr><td>" ..
+    local rowClass = indent and "indented" or "toplevel"
+    return "<tr class='" .. rowClass .. "'><td>" ..
         col1 ..
         "</td><td>" ..
         role ..
@@ -933,7 +926,7 @@ function GetDumpPath(element, expanded)
                     children = {}
                 end
                 for _, child in pairs(children) do
-                    result = result .. GetElementTableRow(child, "\t\t") .. "\n"
+                    result = result .. GetElementTableRow(child, true) .. "\n"
                 end
             end
         end
