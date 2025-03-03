@@ -24,12 +24,22 @@ function merge(defaults, overrides)
         return defaults
     end
 
-    print("FYI merge is NOT deep yet... TODO finish or remove this warning if its ok as is")
     local merged = deep_clone(defaults)
+    local clobberedKeys = {}
     for k, v in pairs(overrides) do
+        -- WARN if defaults has key too, that we aren't deep merging
+        if defaults[k] ~= nil then
+            table.insert(clobberedKeys, k)
+        end
         -- TODO nested merging, i.e. font.size only
         -- TODO don't overwrite all of nested tables? or do?
         merged[k] = v
+    end
+    if next(clobberedKeys) ~= nil then
+        print("FYI defaults keys (" .. table.concat(clobberedKeys, ", ") .. ") clobbered b/c not deep merging (yet)")
+        -- look into specific examples as needed but don't always log this
+        -- print("  defaults:", hs.inspect(defaults))
+        -- print("  overrides:", hs.inspect(overrides))
     end
     return merged
 end
@@ -187,7 +197,6 @@ function hsIconWithLargeBlackText(icon, text, deck)
     local image = hsIcon(icon)
     return drawTextIcon(text, deck, LargeBlackText, image)
 end
-
 
 ---@param deck DeckController
 ---@return hs.canvas
