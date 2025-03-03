@@ -75,17 +75,6 @@ function BraveObserver:setupIntraAppObserver()
     end
 
     self.intraAppObserver = observerFactory.createNotificationObserver(self, getMyAppElement())
-
-    function tmpHandlerStartPoint()
-        local url = getCurrentURL()
-        if url then
-            -- Store the current URL (and check it for changes?)
-            self.currentURL = url
-            -- Refresh the decks with the current URL context
-            self:refreshDecks()
-        end
-    end
-
     self.intraAppObserver:start()
 end
 

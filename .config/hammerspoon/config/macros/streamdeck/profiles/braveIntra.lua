@@ -10,10 +10,10 @@ function M.createNotificationObserver(braveAppObserver)
     notificationObserver:addWatcher(appElement, "AXFocusedWindowChanged")
     notificationObserver:callback(
     ---@param _observer hs.axuielement.observer
-    ---@param element hs.axuielement
+    ---@param eventElement hs.axuielement
     ---@param notification string
     ---@param _detailsTable table
-        function(_observer, element, notification, _detailsTable)
+        function(_observer, eventElement, notification, _detailsTable)
             -- brave browser nav slashdot - new tab - nav digg (AXWindow events only):
             --   AXTitleChanged AXWindow 'Slashdot: News for nerds, stuff that matters - Brave Beta - wes private'
             --   AXTitleChanged AXWindow 'New Tab - Brave Beta - wes private'
@@ -35,7 +35,7 @@ function M.createNotificationObserver(braveAppObserver)
 
             -- pick filters based on rarity of events (cursory testing)
             --   esp make sure any expensive checks are last
-            local role = element:attributeValue("AXRole")
+            local role = eventElement:attributeValue("AXRole")
             if role ~= "AXWindow" then
                 -- ignore non-window events
                 -- technically ignore role entirely for title changed events
@@ -48,25 +48,25 @@ function M.createNotificationObserver(braveAppObserver)
                 print("[WindowTitleChanges]unexpected notification type (did you add a notification type?): " .. notification)
                 return
             end
-            local appElement = element:attributeValue("AXParent")
-            if appElement == nil then
+            local eventAppElement = eventElement:attributeValue("AXParent")
+            if eventAppElement == nil then
                 print("[WindowTitleChanges] no parent, should never happen!")
                 return
             end
-            local focusedWindowElem = appElement:attributeValue("AXFocusedWindow")
+            local focusedWindowElem = eventAppElement:attributeValue("AXFocusedWindow")
             if focusedWindowElem == nil then
                 print("[WindowTitleChanges] no focused window, should never happen!")
                 return
             end
-            if focusedWindowElem ~= element then
+            if focusedWindowElem ~= eventElement then
                 print("[WindowTitleChanges] non-focused window title changed, skipping...")
                 return
             end
 
             local parts = {
-                axTitleQuoted(element),
-                axDescriptionQuoted(element),
-                axValueQuoted(element),
+                axTitleQuoted(eventElement),
+                axDescriptionQuoted(eventElement),
+                axValueQuoted(eventElement),
             }
             local message = table.concat(parts, " ")
 
@@ -76,6 +76,7 @@ function M.createNotificationObserver(braveAppObserver)
             --     message = message .. "\n  (may be stale) URL: " .. axDocument
             -- end
 
+            -- TODO consolidate with braveObserver's getCurrentURL
             local urlTextField = focusedWindowElem:group(1):group(1):group(1):group(1):toolbar(1):group(1):textField(1)
             if urlTextField ~= nil then
                 local value = urlTextField:attributeValue("AXValue")
