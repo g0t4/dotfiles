@@ -39,6 +39,9 @@ function AppsObserver:onAppActivated(appTitle, _hsApp)
     if defaultObserver then
         defaultObserver:deactivate()
     end
+    local startTime = GetTime() -- TMP TIMING ANALYSIS
+    print("\n\n") -- TMP TIMING ANALYSIS
+    print("onAppActivated " .. appTitle) -- TMP TIMING ANALYSIS
 
     ---@type table<string, DeckController>
     local unclaimedDecks = self.decks.deckControllers
@@ -60,6 +63,8 @@ function AppsObserver:onAppActivated(appTitle, _hsApp)
             end
         end
     end
+    print("  activeObserver:" .. GetElapsedTimeInMilliseconds(startTime) .. "ms") -- TMP TIMING ANALYSIS
+    startTime = GetTime() -- TMP TIMING ANALYSIS
 
     -- Fall back to default profiles for unclaimed decks
     if not defaultObserver then
@@ -79,11 +84,15 @@ function AppsObserver:onAppActivated(appTitle, _hsApp)
             return
         end
     end
+    print("  defaultObserver:" .. GetElapsedTimeInMilliseconds(startTime) .. "ms") -- TMP TIMING ANALYSIS
+    startTime = GetTime() -- TMP TIMING ANALYSIS
 
     -- reset any remaining unclaimed decks
     for _, deckController in pairs(unclaimedDecks) do
         deckController.buttons:resetButtons()
     end
+
+    print("  reset unclaimed decks:" .. GetElapsedTimeInMilliseconds(startTime) .. "ms") -- TMP TIMING ANALYSIS
 end
 
 ---@param deck DeckController

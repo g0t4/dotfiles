@@ -103,6 +103,7 @@ end
 
 ---@param unclaimedDecks table<string, DeckController>
 function AppObserver:activate(unclaimedDecks)
+    print("  activate " .. quote(self.appTitle)) -- TMP TIMING ANALYSIS
     f.each(unclaimedDecks, function(_, deck)
         self:tryClaimNewDeck(deck)
     end)
@@ -140,7 +141,10 @@ end
 ---@param deck DeckController
 ---@param isModSetChange boolean|nil
 function AppObserver:loadProfileForDeck(deck, isModSetChange)
+    print("    " .. deck.name) -- TMP TIMING ANALYSIS
     local pageNumber = pageSettings.getSavedPageNumber(deck.name, self.appTitle)
+
+    local startTime = GetTime() -- TMP TIMING ANALYSIS
 
     local page = self:getProfilePage(deck, pageNumber)
 
@@ -158,7 +162,9 @@ function AppObserver:loadProfileForDeck(deck, isModSetChange)
         return false
     end
 
+    startTime = GetTime() -- TMP TIMING ANALYSIS
     page:applyTo(deck, isModSetChange)
+    print("      applyTo " .. GetElapsedTimeInMilliseconds(startTime) .. "ms") -- TMP TIMING ANALYSIS
     return true
 end
 
