@@ -230,12 +230,69 @@ local function timingAppIconFinderFromItermProfile(testDeck)
 end
 
 
-local function timingDoesSizeMatter(deck)
-    local startTime = GetTime()
-    local base = {
 
-    }
+-- image size and format matter
+--   6-8ms for 3x loads 73KB of Finder.icns (original)
+--      IIAC entire file must be loaded and then pick a size
+--      AFAICT there is no way to pick that size with hs.image APIs...
+--        in testing, the image used for sdeck was 32x32 (above setButtonImage) which IIAC has to then be sized up too
+--   3-4ms for 3x loads 54KB of 256x256 png (sips converted from icns)
+--   1-3ms for 3x loads 6KB of 72x72 png (sips converted from icns)
+local function timingDoesSizeMatter(deck)
+    print("deck buttonSize:", hs.inspect(deck.buttonSize))
+
+    local startTime = GetTime()
+    local finderIcnsOriginal = hsIcon("test-image-sizes/finder/Finder-original.icns")
+    finderIcnsOriginal = hsIcon("test-image-sizes/finder/Finder-original.icns")
+    finderIcnsOriginal = hsIcon("test-image-sizes/finder/Finder-original.icns")
+    print("  load 3x icns finder " .. GetElapsedTimeInMilliseconds(startTime) .. "ms")
+
+    startTime = GetTime()
+    local finderPng256 = hsIcon("test-image-sizes/finder/Finder-sips-256.png")
+    finderPng256 = hsIcon("test-image-sizes/finder/Finder-sips-256.png")
+    finderPng256 = hsIcon("test-image-sizes/finder/Finder-sips-256.png")
+    print("  load 3x png 256 finder " .. GetElapsedTimeInMilliseconds(startTime) .. "ms")
+
+    startTime = GetTime()
+    local finderPng72 = hsIcon("test-image-sizes/finder/Finder-sips-resample-72.png")
+    finderPng72 = hsIcon("test-image-sizes/finder/Finder-sips-resample-72.png")
+    finderPng72 = hsIcon("test-image-sizes/finder/Finder-sips-resample-72.png")
+    print("  load 3x png 72 finder " .. GetElapsedTimeInMilliseconds(startTime) .. "ms")
+
+    startTime = GetTime()
+    local finderPng96 = hsIcon("test-image-sizes/finder/Finder-sips-resample-96.png")
+    finderPng96 = hsIcon("test-image-sizes/finder/Finder-sips-resample-96.png")
+    finderPng96 = hsIcon("test-image-sizes/finder/Finder-sips-resample-96.png")
+    print("  load 3x png 96 finder " .. GetElapsedTimeInMilliseconds(startTime) .. "ms")
+
+
+    -- HOLY CRAP setButtonImage does TERRIBLE ON ALL OF THEM
+    --   30ms for icns, 26.5ms for 256png, 19.8ms for 72png
+    --     96x96 (device button size) is basically same as 72x72 (sometimes better)
+    --        15ms best for 3x setButtonImage, 20ms was ~worst
+    startTime = GetTime()
+    deck.hsdeck:setButtonImage(1, finderIcnsOriginal)
+    deck.hsdeck:setButtonImage(1, finderIcnsOriginal)
+    deck.hsdeck:setButtonImage(1, finderIcnsOriginal)
+    print("  setButtonImage icns 3x " .. GetElapsedTimeInMilliseconds(startTime) .. "ms")
+    startTime = GetTime()
+    deck.hsdeck:setButtonImage(2, finderPng256)
+    deck.hsdeck:setButtonImage(2, finderPng256)
+    deck.hsdeck:setButtonImage(2, finderPng256)
+    print("  setButtonImage 256x256 3x " .. GetElapsedTimeInMilliseconds(startTime) .. "ms")
+    startTime = GetTime()
+    deck.hsdeck:setButtonImage(3, finderPng72)
+    deck.hsdeck:setButtonImage(3, finderPng72)
+    deck.hsdeck:setButtonImage(3, finderPng72)
+    print("  setButtonImage 72x72 3x " .. GetElapsedTimeInMilliseconds(startTime) .. "ms")
+    startTime = GetTime()
+    deck.hsdeck:setButtonImage(3, finderPng96)
+    deck.hsdeck:setButtonImage(3, finderPng96)
+    deck.hsdeck:setButtonImage(3, finderPng96)
+    print("  setButtonImage 96x96 3x " .. GetElapsedTimeInMilliseconds(startTime) .. "ms")
+    print()
 end
+
 FallbackProfiles:addProfilePage(DECK_2XL, PAGE_1, function(_, deck)
     return {
         -- row 4:
