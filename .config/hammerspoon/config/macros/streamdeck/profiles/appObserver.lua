@@ -32,6 +32,7 @@ function changePage(deckName, appTitle, page, appObserver)
 
         pageSettings.setSavedPageNumber(deckName, appTitle, page)
 
+        -- TODO! after load profile for second page, the original page is still present? I see it in the timing logs when I change pages left/right
         appObserver:loadProfileForDeck(deck)
     end
 end
