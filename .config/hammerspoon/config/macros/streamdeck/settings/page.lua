@@ -5,15 +5,15 @@ local M = {
     appsObserver = nil,
 }
 
-local function getkey(deckName, appModuleName)
-    return SETTINGS_PREFIX .. deckName .. "_" .. appModuleName
+local function getkey(deckName, appNameAsSettingsKey)
+    return SETTINGS_PREFIX .. deckName .. "_" .. appNameAsSettingsKey
 end
 
 ---@param deckName string
----@param appModuleName string
+---@param appNameAsSettingsKey string
 ---@return number
-function M.getSavedPageNumber(deckName, appModuleName)
-    local settings = hs.settings.get(getkey(deckName, appModuleName)) -- < 2 to 12us (microseconds)
+function M.getSavedPageNumber(deckName, appNameAsSettingsKey)
+    local settings = hs.settings.get(getkey(deckName, appNameAsSettingsKey)) -- < 2 to 12us (microseconds)
     if settings == nil then
         return 1
     end
@@ -31,9 +31,9 @@ function M.setSavedPageNumber(deckName, appNameAsSettingsKey, pageNumber)
 end
 
 ---@param deckName string
----@param appModuleName string
-function M.clearSavedPageNumber(deckName, appModuleName)
-    hs.settings.set(getkey(deckName, appModuleName), nil)
+---@param appNameAsSettingsKey string
+function M.clearSavedPageNumber(deckName, appNameAsSettingsKey)
+    hs.settings.set(getkey(deckName, appNameAsSettingsKey), nil)
 end
 
 ---@param observer AppsObserver
