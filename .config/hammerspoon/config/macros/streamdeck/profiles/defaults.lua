@@ -215,7 +215,6 @@ local function timingAppIconFinderFromItermProfile(testDeck)
     startTime = GetTime()
     -- finder icon on 4+ button1 takes 7ms for setButtonImage
     -- !!! TODO test timing on setButtonImage
-    print("  testDeck", testDeck)
     local image = base[1].image
     print("  image.size", hs.inspect(image:size())) -- h=32, w=32 (wth?)
     testDeck.hsdeck:setButtonImage(1, image)
