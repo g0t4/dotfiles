@@ -36,9 +36,13 @@ function Profile:applyTo(deck, isModSetChange)
         -- print("  buttons before", logBefore)
 
         deck.buttons:removeButtons()
+
+        local startTime = GetTime() -- TMP TIMING ANALYSIS
         deck.buttons:addButtons(self:buttons(deck))
+        print("        addButtons(buttons()) " .. GetElapsedTimeInMilliseconds(startTime) .. "ms") -- TMP TIMING ANALYSIS
 
         if isModSetChange then
+            startTime = GetTime() -- TMP TIMING ANALYSIS
             -- only if not reset:
 
             -- local logAfter = f.concatKeys(deck.buttons.buttons)
@@ -52,9 +56,12 @@ function Profile:applyTo(deck, isModSetChange)
                     resetButton(btnNumberBefore, deck.hsdeck)
                 end
             end)
+            print("        modSet resetButton()s " .. GetElapsedTimeInMilliseconds(startTime) .. "ms") -- TMP TIMING ANALYSIS
         end
 
+        startTime = GetTime() -- TMP TIMING ANALYSIS
         deck.buttons:start() -- for now just start all every time... b/c I have no button reuse logic yet (see brave profile for testing criteria and ideas)
+        print("        start() " .. GetElapsedTimeInMilliseconds(startTime) .. "ms") -- TMP TIMING ANALYSIS - heaviest hitter, esp PPTX 2XL/3XL which are mostly hsIcon files
         -- local notSameButtons = f.whereValues(deck.buttons.buttons, function(btn)
         --     return buttonsBefore[btn.buttonNumber] ~= btn
         -- end)
