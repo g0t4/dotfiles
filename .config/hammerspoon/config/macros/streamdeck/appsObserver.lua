@@ -126,11 +126,6 @@ function AppsObserver:onNewDeckConnected(deck)
     local appModuleName = appModuleLookupByAppName[appName]
 
     if activeObserver and activeObserver:getModuleName() == (appModuleName or "") then
-        -- TODO when would this happen? do I even need this here or can it be simplified?
-        --    TODO INTRA APP events is only time I could think that the app wouldn't change here
-        -- COUlD happen if deck connects (i.e. reconnectts, or new)
-
-        -- Let the active observer handle it
         if activeObserver:loadProfileForDeck(deck) then
             return
         end
