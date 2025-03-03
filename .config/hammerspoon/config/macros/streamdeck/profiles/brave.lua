@@ -266,41 +266,6 @@ function createNotificationObserver(braveAppObserver)
             else
                 tmpDeck3HasButtonMods = false
             end
-            -- * ultimately I think it makes sense to have profile loader handle the mods too
-            --   b/c it has to check the current window title when switching apps
-            --   so if it does it all for a given profile I can just trigger it and let it do the rest
-            --   I can still have special event that doesn't reload profiles UNLESS mods to make
-            --   then for mods why not just apply it after reloading the deck's profile
-            --   that way I never have to "put back" buttons from underlying profile
-
-            -- TODO make sure current app still matches? another reason to push most logic into profile loader so buttons are consistently selected
-
-            -- Consider rapid fire events
-            -- - Print warnings every # in Y short period of time?
-            --     might be obvious though when stuff locks up :)
-            -- - if rapid app changes causes issues => use debouncing (on 2nd+)
-            --   first event after long duration X, handle immediately (no debouncing)
-            --   second (within Y short duration of first), then debounce it and the rest
-            --     until quiet enough that hopefully events have stopped
-            --     think of a triggered debounce (if that makes sense)
-            --     probably could even do this for 50-100ms and not notice...
-            --       but only do this if you need a rapid fire event
-            --       ideally rare events for dynamic profile changes
-            -- - BTW the reason why I don't want the first one throttled is b/c
-            --     most of the time it's only the first one that shows up!
-            --     so, don't delay it too unless second arrives in which case first is useless
-            -- - or, maybe think of it as cancel on next event
-            --     so, if processing first event is not complete
-            --       when a second event arrives
-            --       cancel first immediatley
-            --       immediately start second
-            --     effectively debouncing (with duration based on handler duration)
-            --       a dynamic duration
-            --       think of auto-complete copilot tools... they work like this
-            --         immediately request completion
-            --         cancel if user types something else
-            --     might want a longer duration, in which case use debounce as described above
-            --
         end)
 
 
