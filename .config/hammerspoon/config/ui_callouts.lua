@@ -147,7 +147,7 @@ local function showTooltipForElement(element, frame)
         if attrValue == nil then goto continue end
         if attrName == "AXHelp" and attrValue == "" then goto continue end
 
-        local value = displayAttribute(attrName, attrValue)
+        local value = displayAttribute(attrName, attrValue) or ""
         -- only allow 50 chars max for text
         if not TableContains({ "AXSections" }, attrName) then
             if #value > 50 then
