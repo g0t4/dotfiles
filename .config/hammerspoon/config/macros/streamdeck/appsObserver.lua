@@ -2,18 +2,6 @@ local f = require("config.helpers.underscore")
 verbose = require("config.macros.streamdeck.helpers").verbose
 pageSettings = require("config.macros.streamdeck.settings.page")
 
-local appModuleLookupByAppName = {
-    [APPS.FinalCutPro] = "fcpx",
-    [APPS.Hammerspoon] = "hammerspoon",
-    [APPS.MicrosoftPowerPoint] = "pptx",
-    [APPS.Finder] = "finder",
-    [APPS.iTerm] = "iterm",
-    [APPS.BraveBrowserBeta] = "brave",
-    -- [APPS.Safari] = "safari",
-    -- [APPS.Preview] = "preview",
-}
-_G.APP_MODULE_LOOKUP_BY_APP_NAME = appModuleLookupByAppName
-
 ---@class AppsObserver
 ---@field interAppWatcher hs.application.watcher
 ---@field decks DecksController
@@ -70,7 +58,7 @@ function AppsObserver:onAppActivated(appName, hsApp)
     local unclaimedDecks = f.shallowCopyTable(self.decks.deckControllers)
 
     -- Try to load the app-specific observer module
-    local appModuleName = appModuleLookupByAppName[appName]
+    local appModuleName = AppModuleName(appName)
     if appModuleName then
         local success, module = pcall(require, "config.macros.streamdeck.profiles." .. appModuleName)
         if success and module then

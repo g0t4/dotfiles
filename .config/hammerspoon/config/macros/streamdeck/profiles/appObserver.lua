@@ -154,8 +154,7 @@ end
 ---@return string
 function AppObserver:appNameSettingsKey()
     -- TODO TEST PAGE CHANGES LATER... I had to fix the app modulename lookup
-    --   TODO MAKE SURE MODULE NAME LOOKUP MATCHES MODULE NAMES IN profiles/foo.lua dir
-    return _G.APP_MODULE_LOOKUP_BY_APP_NAME[self.appName]
+    return AppModuleName(self.appName)
 end
 
 ---

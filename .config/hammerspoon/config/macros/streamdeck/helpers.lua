@@ -31,7 +31,8 @@ local blankBlack288ElgatoPNG = hsIcon("blank/black-288x288-elgato-resized-identi
 ---@param buttonNumber number
 ---@param hsdeck hs.streamdeck
 function resetButton(buttonNumber, hsdeck)
-    error("resetButton is no longer used, using reset instead for full device wipes, reimpl one off when a need for it arises... i.e. dynamic subset of a profile might clear some buttons in which case I MAY not wanna do a full rest, though I might!")
+    error(
+        "resetButton is no longer used, using reset instead for full device wipes, reimpl one off when a need for it arises... i.e. dynamic subset of a profile might clear some buttons in which case I MAY not wanna do a full rest, though I might!")
     -- hsdeck:setButtonColor(buttonNumber, hs.drawing.color.x11.black) -- 70 to 90ms
     -- hsdeck:setButtonImage(buttonNumber, blankTransparentSVG) -- 70ms to 90ms too
     -- hsdeck:setButtonImage(buttonNumber, blankBlack720PNG) -- 190ms!!!
@@ -62,6 +63,21 @@ end
 
 function appIconHammerspoon()
     return appIcon("org.hammerspoon.Hammerspoon")
+end
+
+AppModuleLookupByAppName = {
+    [APPS.FinalCutPro] = "fcpx",
+    [APPS.Hammerspoon] = "hammerspoon",
+    [APPS.MicrosoftPowerPoint] = "pptx",
+    [APPS.Finder] = "finder",
+    [APPS.iTerm] = "iterm",
+    [APPS.BraveBrowserBeta] = "brave",
+    -- [APPS.Safari] = "safari",
+    -- [APPS.Preview] = "preview",
+}
+
+function AppModuleName(appName)
+    return AppModuleLookupByAppName[appName]
 end
 
 return M
