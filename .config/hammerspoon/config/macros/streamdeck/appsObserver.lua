@@ -76,9 +76,11 @@ function AppsObserver:onAppActivated(appName, hsApp)
             unclaimedDecks = f.where(unclaimedDecks, function(deck)
                 return not activeObserver.claimedDecks[deck.name]
             end)
+            print("app observer claimed:", hs.inspect(f.keys(activeObserver.claimedDecks)))
             if unclaimedDecks == {} then
                 return
             end
+            print("  unclaimed decks:", hs.inspect(f.keys(unclaimedDecks)))
         end
     end
 
@@ -96,10 +98,12 @@ function AppsObserver:onAppActivated(appName, hsApp)
         unclaimedDecks = f.where(unclaimedDecks, function(deck)
             return not defaultObserver.claimedDecks[deck.name]
         end)
+        print("default observer claimed:", hs.inspect(f.keys(defaultObserver.claimedDecks)))
         if unclaimedDecks == {} then
             return
         end
     end
+    print("  unclaimed decks:", hs.inspect(f.keys(unclaimedDecks)))
 
     -- reset any remaining unclaimed decks
     for _, deckController in pairs(unclaimedDecks) do
