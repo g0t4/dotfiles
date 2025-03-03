@@ -74,6 +74,15 @@ function M.each(t, fn)
     end
 end
 
+---@generic T
+---@param t table<_, T>
+---@param fn fun(value: T)
+function M.eachValue(t, fn)
+    for _, v in pairs(t) do
+        fn(v)
+    end
+end
+
 --- preserves order for arrays only (integer, consecutive keys) (uses ipairs)
 function M.ieach(t, fn)
     for i, v in ipairs(t) do
