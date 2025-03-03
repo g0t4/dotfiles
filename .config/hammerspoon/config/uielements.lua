@@ -853,6 +853,8 @@ function GetElementSiblingIndex(elem)
     return elemIndex
 end
 
+---@param value string|nil # PRN accept any type not just string?
+---@return string
 function WrapInQuotesIfNeeded(value)
     if value == nil then
         return ""
