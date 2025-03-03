@@ -134,6 +134,8 @@ local function myTimingTestHSIcon()
     local startTime = GetTime()
     local deck = TestXLDeck
 
+
+    -- BTW 20ms is not inconsequential if it is easy to avoid b/c already caching other types, also super easy to memoize
     -- 3 hsIcon file loads => 2 to 4ms total... not bad (IIAC image size is a factor)
     -- 26 => 11-13ms
     -- TODO check image size factor (to help me size appropriately too, extra reason to get size right)
