@@ -198,7 +198,8 @@ local function timingHsIconWithText()
 end
 
 -- *** ~1ms/button finder icon load
--- ***! 8 to 11ms/button finder icon setButtonImage (XL model) - SCALING with 6 buttons!
+-- ***! 8 to 11ms/button finder icon setButtonImage (XL model) - SCALING => 6 buttons => 40ms+
+-- ***     worse on 4+ => 6 buttons => 50ms+
 ---@param testDeck DeckController
 local function timingAppIconFinderFromItermProfile(testDeck)
     local startTime = GetTime()
@@ -248,6 +249,7 @@ FallbackProfiles:addProfilePage(DECK_4PLUS, PAGE_1,
             AppButton:new(1, deck, "com.apple.finder"),
             -- AppButton:new(1, deck, nil, "/System/Library/CoreServices/Finder.app"),
 
+            LuaButton:new(8, deck, drawTextIcon("appIcon Finder", deck), function() timingAppIconFinderFromItermProfile(deck) end),
 
             -- TODO app switcher
             -- *** row 2
