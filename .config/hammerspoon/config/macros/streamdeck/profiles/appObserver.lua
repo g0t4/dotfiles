@@ -88,8 +88,7 @@ end
 
 ---@param unclaimedDecks table<string, DeckController>
 function AppObserver:activate(unclaimedDecks)
-
-    f.eachv(unclaimedDecks, function(deck)
+    f.each(unclaimedDecks, function(_, deck)
         self:tryClaimNewDeck(deck)
     end)
 
