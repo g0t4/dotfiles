@@ -231,21 +231,12 @@ function createNotificationObserver(braveAppObserver)
             end
 
             local deck = thisAppsObserver.decks.deckControllers[deckName]
-            local MaestroButton = require("config.macros.streamdeck.maestroButton")
-            local buttons = {
-                MaestroButton:new(31, deck, hsCircleIcon("#FFFF00", deck),
-                    km_docs_menu_item, "Highlight color yellow"),
-                MaestroButton:new(32, deck, hsCircleIcon("#FF0000", deck),
-                    km_docs_menu_item, "Highlight color red"),
-            }
-
 
             local value = urlTextField:attributeValue("AXValue")
-
             tmpDeck3HasButtonMods = value
+
             local isNowGoogle = value:find("https://docs.google.com")
             if tmpDeck3HasButtonMods or isNowGoogle then
-
                 thisAppsObserver:loadCurrentAppForDeck(deck)
                 -- TODO setButtons or updateButtons? addButtons is kinda misleading
                 if isNowGoogle then
