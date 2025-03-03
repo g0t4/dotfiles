@@ -136,6 +136,9 @@ function getCurrentURL()
     if not window then return end
     -- print("found standard window: " .. window:attributeValue("AXTitle"))
 
+    -- FYI issue is it appears that you cannot get to the text field when find box is open...
+    --  MIGHT NOT BE POSSIBLE TO SWITCH PROFILES WHILE FIND BOX IS OPEN
+    --    OR when find is open, how about trigger a profile change every time the title changes (not often)?
     local urlTextField = window:group(1):group(1):group(1):group(1):toolbar(1):group(1):textField(1)
     if not urlTextField then return end
 
@@ -218,54 +221,58 @@ function createNotificationObserver(braveAppObserver)
             --     message = message .. "\n  (may be stale) URL: " .. axDocument
             -- end
 
-            local axURL = focusedWindowElem:group(1):attributeValue("AXURL")
-            local currentSite = nil
-            if axURL ~= nil then
-                -- first group of first standard window has AXURL (lua table, exposes NSURL)
-
-                print("found AXURL attribute: ", hs.inspect(axURL))
-                -- 2025-03-03 14:35:22: found AXURL attribute: 	{
-                --   __luaSkinType = "NSURL",
-                --   url = "https://www.google.com/"
-                -- }
-
-                -- it's a table!
-                currentSite = axURL["url"]
-                -- print("  parsed AXURL: ", url)
-                message = message .. "\n  AXURL: " .. currentSite
-                -- !!!! DING DING DING DING... IT WORKS!!!!
-                -- !!!! DING DING DING it also works when FIND IS OPEN! in that case window(2):group(1):attributeValue("AXURL") has the URL... and my code above already works to find that standard window and get this
-            end
-
-
-            -- local urlTextField = focusedWindowElem:group(1):group(1):group(1):group(1):toolbar(1):group(1):textField(1)
+            -- FYI! AXURL unfortunately turned out to not be for the current tab only nor updated...
+            --    FYI - if open new tabs it has their URLs and seems stuck on them even if move back tabs... so no good!
+            -- -- TODO don't I need to find first standard window? right now it looks like I always go off of focused and its working?
+            -- --   it should fail if I have find open at all (it is always focused window)
+            -- local axURL = focusedWindowElem:group(1):attributeValue("AXURL")
             -- local currentSite = nil
-            -- if urlTextField ~= nil then
-            --     currentSite = urlTextField:attributeValue("AXValue")
-            --     -- YAY... I am reliably finding the URL text field and it's correct even when AXDocument is stale
-            --     --
-            --     -- textbox for URL bar:
-            --     --   app:window(1):group(1):group(1):group(1):group(1):toolbar(1):group(1):textField(1)
-            --     --
-            --     -- noteworthy attributes:
-            --     --   AXDescription = "Address and search bar"
-            --     --   AXPlaceholderValue = "Search Brave or type a URL"
-            --     --   AXKeyShortcutsValue = "⌘L"
-            --     --   AXValue = "https://www.reddit.com"
-            --     --   ChromeAXNodeId = "1028"
-            --     --
-            --     --   hierarchy of this attr, super helpful if I have to go the search route in the future or have other issues!
-            --     --   AXDOMClassList = {1="BraveOmniboxViewViews"} textField(1) [THIS IS THE URL BOX]
-            --     --     AXDOMClassList = {1="BraveLocationBarView"} group(1)
-            --     --       AXDOMClassList = {1="BraveToolbarView"} toolbar(1)
-            --     --         AXDOMClassList = {1="BraveBrowserView"} group(1)
-            --     --           AXDOMClassList = {1="BrowserNonClientFrameView"} group(1)
-            --     --             AXDOMClassList = {1="NonClientView"} group(1)
-            --     --               AXDOMClassList = {1="BraveBrowserRootView"} group(1)
-            --     --                 window(1)
-            --     --                   app
-            --     message = message .. "\n  urlTextField: " .. currentSite
+            -- if axURL ~= nil then
+            --     -- first group of first standard window has AXURL (lua table, exposes NSURL)
+            --
+            --     print("found AXURL attribute: ", hs.inspect(axURL))
+            --     -- 2025-03-03 14:35:22: found AXURL attribute: 	{
+            --     --   __luaSkinType = "NSURL",
+            --     --   url = "https://www.google.com/"
+            --     -- }
+            --
+            --     -- it's a table!
+            --     currentSite = axURL["url"]
+            --     -- print("  parsed AXURL: ", url)
+            --     message = message .. "\n  AXURL: " .. currentSite
+            --     -- !!!! DING DING DING DING... IT WORKS!!!!
+            --     -- !!!! DING DING DING it also works when FIND IS OPEN! in that case window(2):group(1):attributeValue("AXURL") has the URL... and my code above already works to find that standard window and get this
             -- end
+            --
+
+            local urlTextField = focusedWindowElem:group(1):group(1):group(1):group(1):toolbar(1):group(1):textField(1)
+            local currentSite = nil
+            if urlTextField ~= nil then
+                currentSite = urlTextField:attributeValue("AXValue")
+                -- YAY... I am reliably finding the URL text field and it's correct even when AXDocument is stale
+                --
+                -- textbox for URL bar:
+                --   app:window(1):group(1):group(1):group(1):group(1):toolbar(1):group(1):textField(1)
+                --
+                -- noteworthy attributes:
+                --   AXDescription = "Address and search bar"
+                --   AXPlaceholderValue = "Search Brave or type a URL"
+                --   AXKeyShortcutsValue = "⌘L"
+                --   AXValue = "https://www.reddit.com"
+                --   ChromeAXNodeId = "1028"
+                --
+                --   hierarchy of this attr, super helpful if I have to go the search route in the future or have other issues!
+                --   AXDOMClassList = {1="BraveOmniboxViewViews"} textField(1) [THIS IS THE URL BOX]
+                --     AXDOMClassList = {1="BraveLocationBarView"} group(1)
+                --       AXDOMClassList = {1="BraveToolbarView"} toolbar(1)
+                --         AXDOMClassList = {1="BraveBrowserView"} group(1)
+                --           AXDOMClassList = {1="BrowserNonClientFrameView"} group(1)
+                --             AXDOMClassList = {1="NonClientView"} group(1)
+                --               AXDOMClassList = {1="BraveBrowserRootView"} group(1)
+                --                 window(1)
+                --                   app
+                message = message .. "\n  urlTextField: " .. currentSite
+            end
 
             -- print(message)
 
