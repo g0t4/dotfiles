@@ -248,10 +248,10 @@ function createNotificationObserver(braveAppObserver)
             -- CRUDE TRIGGER FOR NOW: if site before/after was different mod set
             -- TODO categorize mod sets and have a getmodset(variables) that I can call and use!
             local newModeSet = getModSetNumber(currentSite)
-            local modSetDifers = newModeSet ~= lastModSet
+            local modSetDiffers = newModeSet ~= lastModSet
             lastModSet = newModeSet
-            if modSetDifers then
-                braveAppObserver:refreshDecks()
+            if modSetDiffers then
+                braveAppObserver:onModSetChanged()
             end
         end)
 

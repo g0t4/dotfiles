@@ -116,7 +116,7 @@ function AppObserver:tryClaimNewDeck(deck)
     return true
 end
 
-function AppObserver:refreshDecks()
+function AppObserver:onModSetChanged()
     for _, deckController in pairs(self.claimedDecks) do
         self:loadProfileForDeck(deckController)
     end
