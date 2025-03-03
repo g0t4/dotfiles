@@ -165,6 +165,7 @@ local function showTooltipForElement(element, frame)
         for _, child in ipairs(children) do
             print(child:attributeValue("AXRole") .. ": " .. quote(child:attributeValue("AXTitle")))
             table.insert(attributes, child:attributeValue("AXRole") .. ": " .. quote(child:attributeValue("AXTitle")))
+            -- TODO flesh out what to show => one line per child is probably best
             -- local childAttributes = child:attributeValue("AXAttributes") or {}
             -- for attrName, attrValue in pairs(childAttributes) do
             --     local value = attrValue
