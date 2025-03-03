@@ -33,7 +33,7 @@ function Profile:applyTo(deck, isModSetChange)
     if deck.buttons ~= nil then
         -- print("buttons - profile:" .. self.appName .. " applying to " .. deck.name)
         local buttonsBefore = deck.buttons.buttons
-        local logBefore = f.concatKeys(buttonsBefore)
+        -- local logBefore = f.concatKeys(buttonsBefore)
         -- print("  buttons before", logBefore)
 
         deck.buttons:removeButtons()
@@ -41,7 +41,8 @@ function Profile:applyTo(deck, isModSetChange)
 
         if isModSetChange then
             -- only if not reset:
-            local logAfter = f.concatKeys(deck.buttons.buttons)
+
+            -- local logAfter = f.concatKeys(deck.buttons.buttons)
             -- print("  buttons after", logAfter)
             -- TODO if more than x% then reset deck instead?
             local buttonsAfter = deck.buttons.buttons
@@ -55,25 +56,26 @@ function Profile:applyTo(deck, isModSetChange)
             -- TODO MOVE more of this into profile and let it handle all of this before/after
         end
 
-        -- TODO stop recreating buttons EVERY TIME... right now they app appear new b/c they are new tables each time...
-        --   OR add identtiy to buttons (more work)... how about try caching buttons (should speed up changes too)
-        --   TODO once same buttons between runs, then make sure not :start()ing again works
-        --
-        -- PRN compute list of buttons that are the same so we can skip setting their image again?
-        local notSameButtons = f.whereValues(deck.buttons.buttons, function(btn)
-            return buttonsBefore[btn.buttonNumber] ~= btn
-        end)
-        -- print("  not same buttons", f.concatKeys(notSameButtons))
-        f.eachValue(notSameButtons, function(btn)
-            btn:start()
-        end)
-        local sameButtons = f.whereValues(deck.buttons.buttons, function(btn)
-            return buttonsBefore[btn.buttonNumber] == btn
-        end)
-        if f.count(sameButtons) > 0 then
-            print("  SAME BUTTONS DETECTED, MAKE SURE TO CHECK LOGIC in profile.lua for skipping calling START() on the same buttons")
-            print("  same buttons", f.concatKeys(sameButtons))
-        end
+        deck.buttons:start() -- for now just start all every time... b/c I have no button reuse logic yet (see brave profile for testing criteria and ideas)
+        -- -- TODO stop recreating buttons EVERY TIME... right now they app appear new b/c they are new tables each time...
+        -- --   OR add identtiy to buttons (more work)... how about try caching buttons (should speed up changes too)
+        -- --   TODO once same buttons between runs, then make sure not :start()ing again works
+        -- --
+        -- -- PRN compute list of buttons that are the same so we can skip setting their image again?
+        -- local notSameButtons = f.whereValues(deck.buttons.buttons, function(btn)
+        --     return buttonsBefore[btn.buttonNumber] ~= btn
+        -- end)
+        -- -- print("  not same buttons", f.concatKeys(notSameButtons))
+        -- f.eachValue(notSameButtons, function(btn)
+        --     btn:start()
+        -- end)
+        -- local sameButtons = f.whereValues(deck.buttons.buttons, function(btn)
+        --     return buttonsBefore[btn.buttonNumber] == btn
+        -- end)
+        -- if f.count(sameButtons) > 0 then
+        --     print("  SAME BUTTONS DETECTED, MAKE SURE TO CHECK LOGIC in profile.lua for skipping calling START() on the same buttons")
+        --     print("  same buttons", f.concatKeys(sameButtons))
+        -- end
     end
     if deck.encoders ~= nil then
         -- TODO clear encoders on mod set changes
