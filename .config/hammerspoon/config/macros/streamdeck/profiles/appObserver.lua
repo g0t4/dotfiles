@@ -42,7 +42,6 @@ PAGE_10 = 10
 ---@class AppObserver
 ---@field profiles table<string, Profile> @deckName -> Profile
 ---@field appTitle string
----@field isActive boolean
 ---@field intraAppObserver hs.axuielement.observer|nil
 ---@field claimedDecks table<string, DeckController> # currently controlled by this observer
 ---@field private registeredDecks table<string, boolean> # decks that have registered pages (really shouldn't be used externally)
@@ -57,7 +56,6 @@ function AppObserver:new(appTitle)
     o.registeredDecks = {}
     o.profiles = {}
     o.appTitle = appTitle
-    o.isActive = false
     return o
 end
 
@@ -90,7 +88,6 @@ end
 
 ---@param unclaimedDecks table<string, DeckController>
 function AppObserver:activate(unclaimedDecks)
-    self.isActive = true
 
     f.eachv(unclaimedDecks, function(deck)
         self:tryClaimNewDeck(deck)
@@ -114,7 +111,6 @@ function AppObserver:tryClaimNewDeck(deck)
 end
 
 function AppObserver:deactivate()
-    self.isActive = false
     if self.intraAppObserver then
         self.intraAppObserver:stop()
         self.intraAppObserver = nil
@@ -158,8 +154,6 @@ end
 ---@param deckName string
 ---@param pageNumber number
 function AppObserver:handlePageChange(deckName, pageNumber)
-    if not self.isActive then return end
-
     local deckController = self.claimedDecks[deckName]
     if not deckController then return end
 
