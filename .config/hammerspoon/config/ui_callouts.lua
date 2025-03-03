@@ -158,7 +158,30 @@ local function showTooltipForElement(element, frame)
 
         ::continue::
     end
+
+    if M.last.showChildren then
+        table.insert(attributes, "\n\nchildren:")
+        local children = element:attributeValue("AXChildren") or {}
+        for _, child in ipairs(children) do
+            print(child:attributeValue("AXRole") .. ": " .. quote(child:attributeValue("AXTitle")))
+            table.insert(attributes, child:attributeValue("AXRole") .. ": " .. quote(child:attributeValue("AXTitle")))
+            -- local childAttributes = child:attributeValue("AXAttributes") or {}
+            -- for attrName, attrValue in pairs(childAttributes) do
+            --     local value = attrValue
+            --     if type(value) == "table" then
+            --         value = table.concat(value, ", ")
+            --     end
+            --     if #value > 50 then
+            --         value = value:sub(1, 50) .. "..."
+            --     end
+            --     table.insert(attributes, attrName .. ": " .. value)
+            -- end
+            -- ::continue::
+        end
+    end
+    -- TODO add as separate section? only if need to highlight special (like diff text size)
     local attributeDump = table.concat(attributes, "\n")
+
 
     local styledSpecifier = hs.styledtext.new(specifierLua, {
         font = {
@@ -382,6 +405,7 @@ local function startElementInspector()
     -- end
     )
     table.insert(M.bindings, hs.hotkey.bind({}, "escape", stopElementInspector))
+    table.insert(M.bindings, hs.hotkey.bind({}, "c", function() M.last.showChildren = not M.last.showChildren end))
     -- table.insert(M.bindings, hs.hotkey.bind({}, "s", cycleSegments))
     -- table.insert(M.bindings, hs.hotkey.bind({}, "c", cycleChildren))
     -- table.insert(M.bindings, hs.hotkey.bind({}, "n", cycleChildrenInNavigationOrder))
