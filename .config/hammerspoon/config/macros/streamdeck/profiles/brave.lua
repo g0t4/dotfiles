@@ -81,6 +81,7 @@ function BraveObserver:setupIntraAppObserver()
     if self.intraAppObserver ~= nil then
         self.intraAppObserver:stop()
         self.intraAppObserver = nil
+        self.lastModSet = nil
     end
 
     self.intraAppObserver = createNotificationObserver(self) -- self, getMyAppElement())
@@ -125,7 +126,6 @@ function getCurrentURL()
     return urlTextField:attributeValue("AXValue")
 end
 
-local lastSiteWas = nil
 ---@param braveAppObserver AppObserver
 function createNotificationObserver(braveAppObserver)
     local appElement, hsApp = getMyAppElement()
@@ -238,11 +238,12 @@ function createNotificationObserver(braveAppObserver)
             --  or both
             -- CRUDE TRIGGER FOR NOW: if site before/after was different mod set
             -- TODO categorize mod sets and have a getmodset(variables) that I can call and use!
-            local modSetDifers = getModSetNumber(currentSite) ~= getModSetNumber(lastSiteWas)
+            local newModeSet = getModSetNumber(currentSite)
+            local modSetDifers = newModeSet ~= braveAppObserver.lastModSet
             if modSetDifers then
                 braveAppObserver:refreshDecks()
             end
-            lastSiteWas = currentSite
+            braveAppObserver.lastModSet = newModeSet
         end)
 
 
