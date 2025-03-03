@@ -50,7 +50,14 @@ function deck3Page1Mods(deck)
 end
 
 BraveObserver:addProfilePage(DECK_3XL, PAGE_1, function(_, deck)
-    -- ! TODO run some timing to find out how much would be saved if these were cached and not re-created on every profile change
+    -- on the subject of recreating... first keep in mind timing is perfectly fast currently so there is no pressing need to cache
+    --   I suspect I would get a snappier change between apps (so if that is worth it then test for it)
+    --   cache wise it would be hard b/c of dynamic nature of selecting buttons
+    --     might be better to tag each button w/ an ID string and use that to compare b/c...
+    --       identity would be messy with icon difference comparison and then button type/attr compares..
+    -- * use ID="random1" if want to test comparing for unchanged buttons
+    --    could pair this with buttonNumber, deckName, and other universal button attrs so the ID could be local to a given profile?
+    -- *** same button scenarios are gonna be INTRA-APP only... and that's still rare so let's not worry about it for now
     local base = {
         MaestroButton:new(1, deck, hsCircleIcon("#FFFF00", deck),
             KM_GOOGLE_DOCS_PERFORM_MENU_ITEM, "Highlight color yellow"),
