@@ -22,6 +22,22 @@ axuielemMT.window = function(self, index)
     return self:windows()[index]
 end
 
+---@param index number
+---@return hs.axuielement
+axuielemMT.standardWindow = function(self, index)
+    -- FYI only add standardWindows() if the need arises
+    --
+    -- and I prefer this approach for picking one by index b/c it should be more efficient
+    local windows = self:windows()
+    for i = 1, #windows do
+        local window = windows[i]
+        if window:attributeValue("AXSubrole") == "AXStandardWindow" then
+            return window
+        end
+    end
+    return nil
+end
+
 ---@return hs.axuielement[]
 axuielemMT.splitGroups = function(self)
     return self:childrenWithRole("AXSplitGroup") or {}

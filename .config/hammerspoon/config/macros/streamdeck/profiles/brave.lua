@@ -94,6 +94,21 @@ function getCurrentURL()
     local window = appElement:attributeValue("AXFocusedWindow")
     if not window then return end
 
+    print("focused AXSubrole: " .. window:attributeValue("AXSubrole"))
+    -- if not standard window then take first standard window
+    -- TODO something isn't working if focus is in find box (but if url bar focused with find box open it works)
+    --    when find box isn't focused it seems to be a group?! and a window when it is?!
+    if window:attributeValue("AXSubrole") ~= "AXStandardWindow" then
+        print("focused window is not standard window, trying to find standard window")
+        -- FYI if search box (Cmd+F) is focused then URL box isn't found:
+        --   b/c search box is window(1), and url box is window is not focused
+        --   find window => AXTitle => starts with "Find in page", AXSubrole = "AXUnknown"
+        --   AXSubrole ==> "AXStandardWindow" (for window I want)
+        window = appElement:standardWindow(1)
+    end
+    if not window then return end
+    print("found standard window: " .. window:attributeValue("AXTitle"))
+
     local urlTextField = window:group(1):group(1):group(1):group(1):toolbar(1):group(1):textField(1)
     if not urlTextField then return end
 
