@@ -14,7 +14,6 @@ end
 ---@param appTitle string
 ---@param page number
 function changePage(deckName, appTitle, page)
-    local pageSettings = require("config.macros.streamdeck.settings.page")
     return function()
         pageSettings.setSavedPageNumber(deckName, appTitle, page)
     end
