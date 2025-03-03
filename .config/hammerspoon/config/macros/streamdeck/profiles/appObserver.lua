@@ -115,13 +115,13 @@ end
 ---@param deck DeckController
 function AppObserver:loadProfileForDeck(deck)
     -- PRN! technically could load the page number on module load! and only need to save new values!
-    local pageNumber = pageSettings.getSavedPageNumber(deck.name, self:getModuleName())
+    local pageNumber = pageSettings.getSavedPageNumber(deck.name, self:appNameSettingsKey())
 
     local page = self:getProfilePage(deck, pageNumber)
 
     if page == nil and pageNumber ~= 1 then
         -- Try page 1 if the saved page # doesn't exist
-        pageSettings.clearSavedPageNumber(deck.name, self:getModuleName())
+        pageSettings.clearSavedPageNumber(deck.name, self:appNameSettingsKey())
         pageNumber = 1
         page = self:getProfilePage(deck, 1)
     end
@@ -152,7 +152,8 @@ function AppObserver:handlePageChange(deckName, pageNumber)
 end
 
 ---@return string, _
-function AppObserver:getModuleName()
+function AppObserver:appNameSettingsKey()
+    -- TODO do I really wanna use this style for saving page settings? its a third way to refer to an app (not appName and not module name)
     return self.appName:lower():gsub(" ", "")
 end
 

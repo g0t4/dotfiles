@@ -47,7 +47,7 @@ function AppsObserver:onPageNumberChanged(deckName, appModuleName, pageNumber)
     --   TODO see appObserver.setSavedPageNumber and pageSettings.getSavedPageNumber (s/b able to remove coupling in page settings!)
 
     -- Delegate to the active observer if appropriate
-    if activeObserver and activeObserver:getModuleName() == appModuleName then
+    if activeObserver and activeObserver:appNameSettingsKey() == appModuleName then
         activeObserver:handlePageChange(deckName, pageNumber)
     end
 end
