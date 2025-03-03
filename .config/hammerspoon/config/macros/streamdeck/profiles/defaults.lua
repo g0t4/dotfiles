@@ -39,6 +39,19 @@ FallbackProfiles:addProfilePage(DECK_1XL, PAGE_1, function(_, deck)
     }
 end)
 
+-- !!!! TESTING TAKEAWAYS:
+--   - memoize creating image files (hs.image) will save time (10-20% of load time every time you switch apps)
+--   - image file size can have an impact (10-20% of setButtonImage time)
+--       for a given image file, don't worry about it unless it's like the finder app icon that is SLOW AS F
+--          in that case find a way to fix it?
+--      I SUSPECT much time is lost in the unconditional resize done by hammerspoon (using highquality interpolation too)
+--         if i can find right parameters to get this to be closer to no-op then I could save some substantial setButtonImage time
+-- ! PREMAKE color objects, might shave 1ms off of setButtonColor is slightly more expensive than just calling setButtonImage(premade color rectangle hs.image)
+-- honestly biggest win would be rewriting lower level hammerspoon code
+--  esp if can run in parallel
+--  I could write an objc module that is wrapped for lua to speed it up? or submit a PR to hs?
+--    TODO check what command post does? have they optimized this at all?
+--
 function serialize_table(tbl)
     if type(tbl) ~= "table" then
         return tostring(tbl) -- Handle non-table values
@@ -219,8 +232,7 @@ local function timingAppIconFinderFromItermProfile(testDeck)
 
 
     startTime = GetTime()
-    -- finder icon on 4+ button1 takes 7ms for setButtonImage
-    -- !!! TODO test timing on setButtonImage
+
     local button = base[1]
     local image = button.image
     print("  image.size", hs.inspect(image:size())) -- h=32, w=32 (wth?)
