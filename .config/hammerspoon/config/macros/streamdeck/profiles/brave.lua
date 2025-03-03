@@ -24,7 +24,7 @@ local MOD_SETS = {
 function getModSetNumber(url)
     if url == nil then return MOD_SETS.UNMODIFIED end
     if url:find("^https://docs.google.com") then return MOD_SETS.GOOGLE_DOCS end
-    if url:find("^https://chat.openai.com") then return MOD_SETS.CHATGPT_COM end
+    if url:find("^https://chatgpt.com") then return MOD_SETS.CHATGPT_COM end
     return MOD_SETS.UNMODIFIED
 end
 
@@ -39,6 +39,11 @@ function deck3Page1Mods(deck, pageNumber)
                 km_docs_menu_item, "Highlight color yellow"),
             MaestroButton:new(32, deck, hsCircleIcon("#FF0000", deck),
                 km_docs_menu_item, "Highlight color red"),
+        }
+    end
+    if getModSetNumber(url) == MOD_SETS.CHATGPT_COM then
+        return {
+            KeyStrokeButton:new(31, deck, drawTextIcon("STOP", deck), { "ctrl", "shift" }, "s"),
         }
     end
     return {}
