@@ -133,14 +133,13 @@ PptxObserver:addProfilePage(DECK_2XL, PAGE_1, function(_, deck)
         MaestroButton:new(16, deck, hsIconBmp("pptx/colors/", "line-inky-blue.png"), "6769734A-DC6E-4D4E-9E20-641AD9197005"),
         MaestroButton:new(24, deck, hsIconBmp("pptx/colors/", "text-inky-blue.png"), "7F18E471-F989-4DA0-967D-1E935E3E0FC3"),
 
-        -- TODO ADD BMPS here too:
         -- TODO verify the action for these two:
-        MaestroButton:new(27, deck, hsIcon("pptx/recording/record-pptx.png"), "B0F6834D-5E1D-4E08-AD92-3C2F87886CC0"),
-        MaestroButton:new(28, deck, hsIcon("pptx/recording/record-mouse-only.png"), "C998899A-74A5-4329-8B94-6E1DE875F32B"),
+        MaestroButton:new(27, deck, hsIconBmp("pptx/recording/", "record-pptx.png"), "B0F6834D-5E1D-4E08-AD92-3C2F87886CC0"),
+        MaestroButton:new(28, deck, hsIconBmp("pptx/recording/", "record-mouse-only.png"), "C998899A-74A5-4329-8B94-6E1DE875F32B"),
 
-        MaestroButton:new(30, deck, hsIconWithText("pptx/grouping/group-objects.png", "\nG", deck, MediumText), "D31AB7EB-3AFC-423E-8029-10C2AB5D5E33"),
-        MaestroButton:new(31, deck, hsIconWithText("pptx/grouping/ungroup-objects.png", "\n\n    UN", deck, MediumText), "5E6CF183-E907-4316-B833-04421A29A304"),
-        MaestroButton:new(32, deck, hsIconWithText("pptx/grouping/regroup-objects.png", "\nRE", deck, MediumText), "21C045E3-ACC3-4EE7-BE19-0EA2D4E68322"),
+        MaestroButton:new(30, deck, hsIconWithText("pptx/grouping/bmp-96/group-objects.png.bmp", "\nG", deck, MediumText), "D31AB7EB-3AFC-423E-8029-10C2AB5D5E33"),
+        MaestroButton:new(31, deck, hsIconWithText("pptx/grouping/bmp-96/ungroup-objects.png.bmp", "\n\n    UN", deck, MediumText), "5E6CF183-E907-4316-B833-04421A29A304"),
+        MaestroButton:new(32, deck, hsIconWithText("pptx/grouping/bmp-96/regroup-objects.png.bmp", "\nRE", deck, MediumText), "21C045E3-ACC3-4EE7-BE19-0EA2D4E68322"),
 
         LuaButton:new(25, deck, pageLeftImage(deck), changePage(DECK_2XL, APPS.MicrosoftPowerPoint, PAGE_2, PptxObserver)),
     }
