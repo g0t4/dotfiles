@@ -93,7 +93,9 @@ local TestXLDeck = {
         h = 96
     }
 }
-local function myTimingTest()
+
+-- *** 40ms for 6 circle icons!
+local function timingHsCircleOnlyNoText()
     -- TODO test setButtonColor
     -- TODO test setButtonImage (precreated and perfectly sized?) images<F7>
     local startTime = GetTime()
@@ -106,9 +108,9 @@ local function myTimingTest()
 
         MaestroButton:new(1, TestXLDeck, memoized_hsCircleIcon("#00FF00", TestXLDeck),
             "foo", "Highlight color yellow"),
-        MaestroButton:new(1, TestXLDeck, memoized_hsCircleIcon("#00FF00", TestXLDeck),
+        MaestroButton:new(1, TestXLDeck, memoized_hsCircleIcon("#00F0F0", TestXLDeck),
             "foo", "Highlight color yellow"),
-        MaestroButton:new(1, TestXLDeck, memoized_hsCircleIcon("#00FF00", TestXLDeck),
+        MaestroButton:new(1, TestXLDeck, memoized_hsCircleIcon("#F0FF00", TestXLDeck),
             "foo", "Highlight color yellow"),
 
         -- #FCE5CD (highlight light orange 3) => increase saturation for button color: #FFC690
@@ -118,20 +120,13 @@ local function myTimingTest()
         -- "none" == remove highlight (background color)
         MaestroButton:new(3, TestXLDeck, memoized_hsCircleIcon("#FFFFFF", TestXLDeck, "none"),
             "foo", "highlight none"),
-
-        -- -- changes text color (not highlight) => looks nice! (could be veritcal middle aligned but this is FINE for now)
-        -- MaestroButton:new(9, xlDeck, drawTextIcon("dark green 2", xlDeck,
-        --         { color = { hex = "#38761D" }, font = { size = 30 } }),
-        --     "foo", "dark green 2"),
-
-        -- KeyStrokeButton:new(5, xlDeck, drawTextIcon("⇒", xlDeck), {}, "⇒"),
     }
     print("myTestFunc took " .. GetElapsedTimeInMilliseconds(startTime) .. "ms")
 end
 
 
 -- *** 10-13ms for 26 images (not a huge factor)
-local function myTimingTestHSIcon()
+local function timingHsIconFileOnly()
     local startTime = GetTime()
     local deck = TestXLDeck
 
@@ -185,8 +180,8 @@ end
 FallbackProfiles:addProfilePage(DECK_2XL, PAGE_1, function(_, deck)
     return {
         -- row 4:
-        LuaButton:new(31, deck, drawTextIcon("Timing hsIcon file", deck), myTimingTestHSIcon),
-        LuaButton:new(32, deck, drawTextIcon("Timing Test", deck), myTimingTest)
+        LuaButton:new(31, deck, drawTextIcon("Timing hsIcon file", deck), timingHsIconFileOnly),
+        LuaButton:new(32, deck, drawTextIcon("Timing Test", deck), timingHsCircleOnlyNoText)
     }
 end)
 
