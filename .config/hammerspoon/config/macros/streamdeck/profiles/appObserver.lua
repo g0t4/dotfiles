@@ -153,10 +153,10 @@ end
 ---@param deckName string
 ---@param pageNumber number
 function AppObserver:handlePageChange(deckName, pageNumber)
-    local deckController = self.claimedDecks[deckName]
-    if not deckController then return end
+    local deck = self.claimedDecks[deckName]
+    if not deck then return end
 
-    self:loadProfileForDeck(deckController)
+    self:loadProfileForDeck(deck)
 end
 
 ---
