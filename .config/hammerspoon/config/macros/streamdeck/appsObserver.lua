@@ -112,7 +112,7 @@ function AppsObserver:onAppActivated(appName, hsApp)
 end
 
 ---@param deck DeckController
-function AppsObserver:loadCurrentAppForDeck(deck)
+function AppsObserver:onNewDeckConnected(deck)
     -- FYI! ONLY USED BY DECK CONNECTED HANDLER... so let's clean this up..
     --    AND IT DOESN'T EVEN SEEM TO WORK ON CONFIG RELOAD :)
     local currentApp = hs.application.frontmostApplication()
