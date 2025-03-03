@@ -104,22 +104,18 @@ local function displayTable(name, value)
     for k, v in pairs(value) do
         count = count + 1
         if count > 1 then
-            -- new line + indent for 2+
             text = text .. "\n  "
         end
         if name == "AXSections" then
-            -- FYI section entries have:
+            -- FYI section entries have 3 attrs (keep each entry on one line):
             --  SectionObject: AXScrollArea<hs.axuielement> - ** seems most important, the object itself :)
             --  SectionUniqueID: AXContent<string>
             --  SectionDescription: Toolbar<string>
-            -- table values, start with new line
-            local section = displayTable(k, v)
-            -- trim leading "[\n  " and trailing "\n]"
-            -- AXSection value (table) s/b one line, I could actually handle the display here (only 3 attrs)
-            section = section:gsub("^%[\n  ", "")
-            section = section:gsub("\n]$", "")
-            text = text .. k .. ": " .. section:gsub("\n", ", ")
-            text = text .. displayType(v)
+            local nestedAttrs = {}
+            for k2, v2 in pairs(v) do
+                table.insert(nestedAttrs, k2 .. ": " .. tostring(v2))
+            end
+            text = text .. k .. ": " .. table.concat(nestedAttrs, ", ")
         elseif type(v) == "userdata" then
             text = text .. k .. ": " .. displayUserData(k, v)
             text = text .. displayType(v)
