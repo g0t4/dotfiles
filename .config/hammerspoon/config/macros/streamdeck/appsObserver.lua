@@ -41,7 +41,7 @@ function AppsObserver:onAppActivated(appTitle, hsApp)
     end
 
     ---@type table<string, DeckController>
-    local unclaimedDecks = f.shallowCopyTable(self.decks.deckControllers)
+    local unclaimedDecks = self.decks.deckControllers
 
     -- Try to load the app-specific observer module
     local appModuleName = AppModuleName(appTitle)
