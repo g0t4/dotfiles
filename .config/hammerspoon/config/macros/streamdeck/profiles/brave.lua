@@ -219,6 +219,7 @@ function createNotificationObserver(braveAppObserver)
             -- end
 
             local axURL = focusedWindowElem:group(1):attributeValue("AXURL")
+            local currentSite = nil
             if axURL ~= nil then
                 -- first group of first standard window has AXURL (lua table, exposes NSURL)
 
@@ -229,41 +230,43 @@ function createNotificationObserver(braveAppObserver)
                 -- }
 
                 -- it's a table!
-                local url = axURL["url"]
-                print("  parsed url: ", url)
+                currentSite = axURL["url"]
+                -- print("  parsed AXURL: ", url)
+                message = message .. "\n  AXURL: " .. currentSite
                 -- !!!! DING DING DING DING... IT WORKS!!!!
                 -- !!!! DING DING DING it also works when FIND IS OPEN! in that case window(2):group(1):attributeValue("AXURL") has the URL... and my code above already works to find that standard window and get this
             end
 
 
-            local urlTextField = focusedWindowElem:group(1):group(1):group(1):group(1):toolbar(1):group(1):textField(1)
-            local currentSite = nil
-            if urlTextField ~= nil then
-                currentSite = urlTextField:attributeValue("AXValue")
-                -- YAY... I am reliably finding the URL text field and it's correct even when AXDocument is stale
-                --
-                -- textbox for URL bar:
-                --   app:window(1):group(1):group(1):group(1):group(1):toolbar(1):group(1):textField(1)
-                --
-                -- noteworthy attributes:
-                --   AXDescription = "Address and search bar"
-                --   AXPlaceholderValue = "Search Brave or type a URL"
-                --   AXKeyShortcutsValue = "⌘L"
-                --   AXValue = "https://www.reddit.com"
-                --   ChromeAXNodeId = "1028"
-                --
-                --   hierarchy of this attr, super helpful if I have to go the search route in the future or have other issues!
-                --   AXDOMClassList = {1="BraveOmniboxViewViews"} textField(1) [THIS IS THE URL BOX]
-                --     AXDOMClassList = {1="BraveLocationBarView"} group(1)
-                --       AXDOMClassList = {1="BraveToolbarView"} toolbar(1)
-                --         AXDOMClassList = {1="BraveBrowserView"} group(1)
-                --           AXDOMClassList = {1="BrowserNonClientFrameView"} group(1)
-                --             AXDOMClassList = {1="NonClientView"} group(1)
-                --               AXDOMClassList = {1="BraveBrowserRootView"} group(1)
-                --                 window(1)
-                --                   app
-                message = message .. "\n  urlTextField: " .. currentSite
-            end
+            -- local urlTextField = focusedWindowElem:group(1):group(1):group(1):group(1):toolbar(1):group(1):textField(1)
+            -- local currentSite = nil
+            -- if urlTextField ~= nil then
+            --     currentSite = urlTextField:attributeValue("AXValue")
+            --     -- YAY... I am reliably finding the URL text field and it's correct even when AXDocument is stale
+            --     --
+            --     -- textbox for URL bar:
+            --     --   app:window(1):group(1):group(1):group(1):group(1):toolbar(1):group(1):textField(1)
+            --     --
+            --     -- noteworthy attributes:
+            --     --   AXDescription = "Address and search bar"
+            --     --   AXPlaceholderValue = "Search Brave or type a URL"
+            --     --   AXKeyShortcutsValue = "⌘L"
+            --     --   AXValue = "https://www.reddit.com"
+            --     --   ChromeAXNodeId = "1028"
+            --     --
+            --     --   hierarchy of this attr, super helpful if I have to go the search route in the future or have other issues!
+            --     --   AXDOMClassList = {1="BraveOmniboxViewViews"} textField(1) [THIS IS THE URL BOX]
+            --     --     AXDOMClassList = {1="BraveLocationBarView"} group(1)
+            --     --       AXDOMClassList = {1="BraveToolbarView"} toolbar(1)
+            --     --         AXDOMClassList = {1="BraveBrowserView"} group(1)
+            --     --           AXDOMClassList = {1="BrowserNonClientFrameView"} group(1)
+            --     --             AXDOMClassList = {1="NonClientView"} group(1)
+            --     --               AXDOMClassList = {1="BraveBrowserRootView"} group(1)
+            --     --                 window(1)
+            --     --                   app
+            --     message = message .. "\n  urlTextField: " .. currentSite
+            -- end
+
             -- print(message)
 
             local newModeSet = getModSetNumber(currentSite)
