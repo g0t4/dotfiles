@@ -118,6 +118,10 @@ function AppsObserver:onAppDeactivated(appTitle, hsApp)
 end
 
 function AppsObserver:start()
+    -- on start we need to take current app and make its observer active
+    local hsApp = hs.application.frontmostApplication()
+    if not hsApp then return end
+    self:onAppActivated(hsApp:title(), hsApp)
     self.interAppWatcher:start()
 end
 
