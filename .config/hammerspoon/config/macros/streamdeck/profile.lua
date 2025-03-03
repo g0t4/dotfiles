@@ -73,7 +73,10 @@ function Profile:applyTo(deck, isModSetChange)
         --
     end
     if deck.encoders ~= nil then
-        -- TODO clear encoders on mod set changes
+        if isModSetChange then
+            print("TODO clear encoders on mod set changes")
+            -- resetButton(encoder?)
+        end
         deck.encoders:removeEncoders()
         deck.encoders:addEncoders(self:encoders(deck))
         deck.encoders:start()
