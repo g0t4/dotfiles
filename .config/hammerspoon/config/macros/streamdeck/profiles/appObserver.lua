@@ -16,8 +16,9 @@ end
 ---@param appObserver AppObserver
 function changePage(deckName, appTitle, page, appObserver)
     return function()
-        -- TODO what about changing pages for other app/deck combos?
-        --   for now just assume to change a page it can only be for the current app (or default observer) observer, for a registered deck
+        -- pass deckName so you can use a button on a different deck to change another deck's page
+        --   so long as both decks are claimed by same observer that seems reasonable
+        --   if need to set pages across observers, will figure that out later then
         local deck = appObserver.claimedDecks[deckName]
         if not deck then
             hs.notify.show("Deck not claimed, cannot change its page, see hs console")
