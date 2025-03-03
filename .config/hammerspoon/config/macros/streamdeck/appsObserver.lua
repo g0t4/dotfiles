@@ -153,6 +153,7 @@ function AppsObserver:loadCurrentAppForDeck(deck)
     -- TODO can I remove this extra layer too? seems vestigial possibly for old integration point
     local currentApp = hs.application.frontmostApplication()
     if currentApp then
+        print("loading current app for deck", deck.name, quote(currentApp:title()))
         self:tryLoadProfileForDeck(deck, currentApp:title())
     end
 end

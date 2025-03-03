@@ -17,6 +17,8 @@ end
 
 ---@param hsdeck hs.streamdeck
 function DecksController:deckConnected(hsdeck)
+    -- TODO! FIX FOR WHEN FIRST CONNECT DECK (not showing app specific profiles, b/c activate? why does it show default ones?)
+    --    brave browser (open it), split screen so can see hammerspoon console to debug, then hit reload config button => 3XL deck goes blank
     local deckController = DeckController:new(hsdeck)
     verbose("Deck connected:", deckController)
     self.deckControllers[deckController.name] = deckController

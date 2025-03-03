@@ -130,7 +130,7 @@ function AppObserver:loadProfileForDeck(deck)
         -- PRN add any checks here?
         print("Registered deck " .. deck.name ..
             " is missing expected page #" .. pageNumber,
-            "available pages:", f.keys(self.profiles))
+            "available pages:", hs.inspect(f.keys(self.profiles)))
         return false
     end
 
