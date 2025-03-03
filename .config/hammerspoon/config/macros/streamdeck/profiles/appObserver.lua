@@ -42,7 +42,7 @@ PAGE_10 = 10
 ---@field profiles table<string, Profile> @deckName -> Profile
 ---@field appName string
 ---@field isActive boolean
----@field watcher hs.window.filter|nil
+---@field intraAppObserver hs.axuielement.observer|nil
 ---@field claimedDecks table<string, DeckController> # currently controlled by this observer
 ---@field private registeredDecks table<string, boolean> # decks that have registered pages (really shouldn't be used externally)
 local AppObserver = {}
@@ -94,15 +94,15 @@ function AppObserver:activate(unclaimedDecks)
     end)
 
     self.isActive = true
-    self:setupWatchers()
+    self:setupIntraAppObserver()
     self:refreshDecks()
 end
 
 function AppObserver:deactivate()
     self.isActive = false
-    if self.watcher then
-        self.watcher:stop()
-        self.watcher = nil
+    if self.intraAppObserver then
+        self.intraAppObserver:stop()
+        self.intraAppObserver = nil
     end
 end
 
@@ -160,7 +160,7 @@ end
 -- Override this method in app-specific observers to handle
 -- app-specific events like window changes, URL changes, etc.
 ---
-function AppObserver:setupWatchers()
+function AppObserver:setupIntraAppObserver()
     -- Base implementation does nothing
     -- App-specific observers should override this
 end

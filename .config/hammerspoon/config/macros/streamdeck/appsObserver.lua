@@ -14,7 +14,7 @@ local appModuleLookupByAppName = {
 }
 
 ---@class AppsObserver
----@field watcher hs.application.watcher
+---@field interAppWatcher hs.application.watcher
 ---@field decks DecksController
 local AppsObserver = {}
 AppsObserver.__index = AppsObserver
@@ -25,7 +25,7 @@ function AppsObserver:new(decks)
     local o = setmetatable({}, AppsObserver)
     o.decks = decks
     o.decks.appsObserver = o
-    o.watcher = hs.application.watcher.new(function(appName, eventType, hsApp)
+    o.interAppWatcher = hs.application.watcher.new(function(appName, eventType, hsApp)
         if eventType == hs.application.watcher.activated then
             o:onAppActivated(appName, hsApp)
         elseif eventType == hs.application.watcher.deactivated then
@@ -158,11 +158,11 @@ function AppsObserver:loadCurrentAppForDeck(deck)
 end
 
 function AppsObserver:start()
-    self.watcher:start()
+    self.interAppWatcher:start()
 end
 
 function AppsObserver:stop()
-    self.watcher:stop()
+    self.interAppWatcher:stop()
 end
 
 return AppsObserver
