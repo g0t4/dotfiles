@@ -3,7 +3,6 @@ local SETTINGS_PREFIX = "streamdeck_page_"
 local M = {}
 
 local function getkey(deckName, appTitle)
-    print("appTitle", appTitle)
     local appModuleName = AppModuleName(appTitle)
     return SETTINGS_PREFIX .. deckName .. "_" .. appModuleName
 end
