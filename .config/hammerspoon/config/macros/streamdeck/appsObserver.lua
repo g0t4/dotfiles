@@ -126,6 +126,7 @@ function AppsObserver:onNewDeckConnected(deck)
     local appModuleName = appModuleLookupByAppName[appName]
 
     if activeObserver and activeObserver:getModuleName() == (appModuleName or "") then
+        print("  using activeObserver to load profile for", deck.name)
         if activeObserver:loadProfileForDeck(deck) then
             return
         end
