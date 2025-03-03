@@ -163,25 +163,34 @@ local function showTooltipForElement(element, frame)
     end
 
     if M.last.showChildren then
-        table.insert(attributes, "\n\nchildren:")
-        local children = element:attributeValue("AXChildren") or {}
-        for _, child in ipairs(children) do
-            print(child:attributeValue("AXRole") .. ": " .. quote(child:attributeValue("AXTitle")))
-            table.insert(attributes, child:attributeValue("AXRole") .. ": " .. quote(child:attributeValue("AXTitle")))
-            -- TODO flesh out what to show => one line per child is probably best
-            -- local childAttributes = child:attributeValue("AXAttributes") or {}
-            -- for attrName, attrValue in pairs(childAttributes) do
-            --     local value = attrValue
-            --     if type(value) == "table" then
-            --         value = table.concat(value, ", ")
-            --     end
-            --     if #value > 50 then
-            --         value = value:sub(1, 50) .. "..."
-            --     end
-            --     table.insert(attributes, attrName .. ": " .. value)
-            -- end
-            -- ::continue::
+        function appendChildren(children)
+            for _, child in ipairs(children) do
+                local role = child:attributeValue("AXRole")
+                local subrole = child:attributeValue("AXSubrole")
+                local title = child:attributeValue("AXTitle")
+                local description = child:attributeValue("AXDescription")
+                local childText = role
+                if subrole then
+                    childText = childText .. "(" .. subrole .. ")"
+                end
+                childText = childText .. ":"
+                if title then
+                    childText = childText .. " " .. quote(title)
+                end
+                if description then
+                    childText = childText .. " desc:" .. quote(description)
+                end
+                table.insert(attributes, childText)
+            end
         end
+
+        table.insert(attributes, "\nAXChildren:")
+        appendChildren(element:attributeValue("AXChildren") or {})
+
+        table.insert(attributes, "\nAXChildrenInNavigationOrder:")
+        appendChildren(element:attributeValue("AXChildrenInNavigationOrder") or {})
+
+        -- FYI right now AXSections shows in list of attrs
     end
     -- TODO add as separate section? only if need to highlight special (like diff text size)
     local attributeDump = table.concat(attributes, "\n")
