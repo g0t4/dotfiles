@@ -175,6 +175,7 @@ local function showTooltipForElement(element, frame)
     if M.last.showChildren then
         function appendChildren(children)
             for _, child in ipairs(children) do
+                -- TODO what attrs should I show? any others?
                 local role = child:attributeValue("AXRole")
                 local subrole = child:attributeValue("AXSubrole")
                 local title = child:attributeValue("AXTitle")
@@ -201,8 +202,10 @@ local function showTooltipForElement(element, frame)
         appendChildren(element:attributeValue("AXChildrenInNavigationOrder") or {})
 
         -- FYI right now AXSections shows in list of attrs
+    else
+        -- PRN if styled text, could make it italic
+        table.insert(attributes, "\npress 'c' to show children")
     end
-    -- TODO add as separate section? only if need to highlight special (like diff text size)
     local attributeDump = table.concat(attributes, "\n")
 
 
