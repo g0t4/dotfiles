@@ -42,12 +42,13 @@ end
 local activeObserver = nil
 local defaultObserver = nil
 
-function AppsObserver:onPageNumberChanged(deckName, appModuleName, pageNumber)
+function AppsObserver:onPageNumberChanged(deckName, appNameAsSettingsKey, pageNumber)
     -- TODO push into appObserver (it should be able to detect its own page change and handle it there)
     --   TODO see appObserver.setSavedPageNumber and pageSettings.getSavedPageNumber (s/b able to remove coupling in page settings!)
 
+
     -- Delegate to the active observer if appropriate
-    if activeObserver and activeObserver:appNameSettingsKey() == appModuleName then
+    if activeObserver and activeObserver:appNameSettingsKey() == appNameAsSettingsKey then
         activeObserver:handlePageChange(deckName, pageNumber)
     end
 end

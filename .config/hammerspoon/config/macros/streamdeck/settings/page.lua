@@ -21,12 +21,12 @@ function M.getSavedPageNumber(deckName, appModuleName)
 end
 
 ---@param deckName string
----@param appModuleName string
+---@param appNameAsSettingsKey string
 ---@param pageNumber number
-function M.setSavedPageNumber(deckName, appModuleName, pageNumber)
-    hs.settings.set(getkey(deckName, appModuleName), pageNumber)
+function M.setSavedPageNumber(deckName, appNameAsSettingsKey, pageNumber)
+    hs.settings.set(getkey(deckName, appNameAsSettingsKey), pageNumber)
     if M.appsObserver ~= nil then
-        M.appsObserver:onPageNumberChanged(deckName, appModuleName, pageNumber)
+        M.appsObserver:onPageNumberChanged(deckName, appNameAsSettingsKey, pageNumber)
     end
 end
 
