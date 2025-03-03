@@ -51,13 +51,12 @@ end
 
 BraveObserver:addProfilePage(DECK_3XL, PAGE_1, function(_, deck)
     -- PRN before any optrimization ideas, need to find timing and when it would help:
-    --   - i.e. intra app mod set changes (same buttons very likely between mod sets)
-    --   - *** second load of a set of buttons (would universally be useful) => i.e. switching apps
-    --      this is where I suspect there could be benefits to caching the button creation? but need to prove that first
+    --   - it is not gonna be caching the entire button, now that I think about it... it's gonna be the image and that's it
     -- ! ALSO, I suspect benefits are limited to:
     --   - icon loading/rendering (I could easily add a cache for just this by memoizing calls to hsCircleIcon/hsIcon/etc)
     --   - icon display
-    --   MEASURE TIMING FIRST
+    --
+    --   *** MEASURE TIMING FIRST
     --
     local base = {
         MaestroButton:new(1, deck, hsCircleIcon("#FFFF00", deck),
