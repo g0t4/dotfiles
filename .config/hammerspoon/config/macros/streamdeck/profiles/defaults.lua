@@ -97,6 +97,9 @@ local function myTimingTest()
         }
     }
     local base = {
+        -- *** BINGO image creation is SLOW!!!
+        -- !!! (is it most of the time?... maybe reset sucked b/c I didn't reuse the same image instance?)
+
         MaestroButton:new(1, xlDeck, memoized_hsCircleIcon("#FFFF00", xlDeck),
             "foo", "Highlight color yellow"),
 
