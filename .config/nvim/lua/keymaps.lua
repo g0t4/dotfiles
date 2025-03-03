@@ -81,7 +81,7 @@ function OpenWebHelpHammerspoon(bigWord)
     --   hs.axuielement.observer.new  -- 3 dots => https://www.hammerspoon.org/docs/hs.axuielement.observer.html#new
     --   hs.application.get  -- 2 dots => https://www.hammerspoon.org/docs/hs.application.html#get
     --   hs.application   -- 1 dot => https://www.hammerspoon.org/docs/hs.application.html
-    --
+
     if bigWord:find("%(") then
         -- string trailing function call, take everything up until first open parens
         bigWord = bigWord:match("^(.*)%(")
