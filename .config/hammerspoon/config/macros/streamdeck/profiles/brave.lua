@@ -13,11 +13,16 @@ local BraveObserver = AppObserver:new(APPS.BraveBrowserBeta)
 
 local km_docs_menu_item = "B06C1815-51D0-4DD7-A22C-5A3C39C4D1E0"
 
+
+function isGoogleDocs(url)
+    return url and url:find("^https://docs.google.com")
+end
+
 ---@param deck DeckController
 ---@return PushButton[] # empty if none, never nil
 function getMyDeck3Page1Mods(deck, pageNumber)
     local url = getCurrentURL()
-    if url and url:find("^https://docs.google.com") then
+    if isGoogleDocs(url) then
         if deck.name == DECK_3XL and pageNumber == PAGE_1 then
             return {
                 MaestroButton:new(31, deck, hsCircleIcon("#FFFF00", deck),
@@ -114,6 +119,7 @@ function getCurrentURL()
     return urlTextField:attributeValue("AXValue")
 end
 
+local lastSiteWas = nil
 ---@param braveAppObserver AppObserver
 function createNotificationObserver(braveAppObserver)
     local appElement, hsApp = getMyAppElement()
@@ -192,8 +198,9 @@ function createNotificationObserver(braveAppObserver)
 
             -- TODO consolidate with braveObserver's getCurrentURL
             local urlTextField = focusedWindowElem:group(1):group(1):group(1):group(1):toolbar(1):group(1):textField(1)
+            local currentSite = nil
             if urlTextField ~= nil then
-                local value = urlTextField:attributeValue("AXValue")
+                currentSite = urlTextField:attributeValue("AXValue")
                 -- YAY... I am reliably finding the URL text field and it's correct even when AXDocument is stale
                 --
                 -- textbox for URL bar:
@@ -216,14 +223,20 @@ function createNotificationObserver(braveAppObserver)
                 --               AXDOMClassList = {1="BraveBrowserRootView"} group(1)
                 --                 window(1)
                 --                   app
-                message = message .. "\n  urlTextField: " .. value
+                message = message .. "\n  urlTextField: " .. currentSite
             end
             print(message)
 
             -- TODO only trigger when value indicates a change in mods is needed?
             --  or make button mods/setting idempotent (doesn't re-run unless changed)
             --  or both
-            braveAppObserver:refreshDecks()
+            -- CRUDE TRIGGER FOR NOW: if site before/after was different mod set
+            -- TODO categorize mod sets and have a getmodset(variables) that I can call and use!
+            local modSetDifers = isGoogleDocs(currentSite) ~= isGoogleDocs(lastSiteWas)
+            if modSetDifers then
+                braveAppObserver:refreshDecks()
+            end
+            lastSiteWas = currentSite
         end)
 
 
