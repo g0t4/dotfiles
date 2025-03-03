@@ -77,10 +77,10 @@ function AppsObserver:onAppActivated(appName, hsApp)
                 return not activeObserver.claimedDecks[deck.name]
             end)
             print("app observer claimed:", hs.inspect(f.keys(activeObserver.claimedDecks)))
+            print("  unclaimed decks:", hs.inspect(f.keys(unclaimedDecks)))
             if unclaimedDecks == {} then
                 return
             end
-            print("  unclaimed decks:", hs.inspect(f.keys(unclaimedDecks)))
         end
     end
 
@@ -103,7 +103,7 @@ function AppsObserver:onAppActivated(appName, hsApp)
             return
         end
     end
-    print("  unclaimed decks:", hs.inspect(f.keys(unclaimedDecks)))
+    print("  unclaimed decks (resetting):", hs.inspect(f.keys(unclaimedDecks)))
 
     -- reset any remaining unclaimed decks
     for _, deckController in pairs(unclaimedDecks) do
