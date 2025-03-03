@@ -122,7 +122,7 @@ local function displayTable(name, value)
         table.insert(rows, text)
     end
     if #rows < 2 then
-        -- zero / one element => no new lines
+        -- zero / one element => no new lines, use concat to avoid 0/1 handling
         return "[" .. table.concat(rows, "") .. "]"
     end
     --  for multiple, then make sure first is on its own line and closing ] is on own line for readability
