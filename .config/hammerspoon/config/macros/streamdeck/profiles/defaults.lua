@@ -215,7 +215,8 @@ local function timingAppIconFinderFromItermProfile(testDeck)
     startTime = GetTime()
     -- finder icon on 4+ button1 takes 7ms for setButtonImage
     -- !!! TODO test timing on setButtonImage
-    local image = base[1].image
+    local button = base[1]
+    local image = button.image
     print("  image.size", hs.inspect(image:size())) -- h=32, w=32 (wth?)
     testDeck.hsdeck:setButtonImage(1, image)
     testDeck.hsdeck:setButtonImage(2, image)
@@ -228,9 +229,17 @@ local function timingAppIconFinderFromItermProfile(testDeck)
     -- self.deck.hsdeck:setButtonImage(self.buttonNumber, self.image)
 end
 
+
+local function timingDoesSizeMatter(deck)
+    local startTime = GetTime()
+    local base = {
+
+    }
+end
 FallbackProfiles:addProfilePage(DECK_2XL, PAGE_1, function(_, deck)
     return {
         -- row 4:
+        LuaButton:new(28, deck, drawTextIcon("image size matter?", deck), function() timingDoesSizeMatter(deck) end),
         LuaButton:new(29, deck, drawTextIcon("appIcon Finder", deck), function() timingAppIconFinderFromItermProfile(deck) end),
         LuaButton:new(30, deck, drawTextIcon("hsIcon WithText", deck), timingHsIconWithText),
         LuaButton:new(31, deck, drawTextIcon("hsIcon file", deck), timingHsIconFileOnly),

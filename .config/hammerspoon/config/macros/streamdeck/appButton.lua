@@ -14,6 +14,7 @@ AppButton.__index = AppButton -- for __tostring
 ---@param appFullPath string|nil # full path "/Applications/Foo.app"
 ---@return AppButton
 function AppButton:new(buttonNumber, deck, appBundleID, appFullPath)
+    -- TODO probably wanna refactor to hsAppIcon() func (cache like rest) and then composable like the rest (can keep in here too...)
     if (not appBundleID) and appFullPath then
         -- only necessary if bundleID is not definitive
         -- TODO check timing and warn if way slower so user can update button to use bundleID?
