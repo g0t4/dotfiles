@@ -93,6 +93,12 @@ local TestXLDeck = {
         h = 96
     }
 }
+local TestPlusDeck = {
+    buttonSize = {
+        w = 120,
+        h = 120
+    }
+}
 
 -- *** 6.7ms/button - 40ms for 6 circle icons!
 local function timingHsCircleOnlyNoText()
@@ -191,9 +197,41 @@ local function timingHsIconWithText()
     print("  took " .. GetElapsedTimeInMilliseconds(startTime) .. "ms")
 end
 
+-- *** ~1ms/button finder icon load
+-- ***! 8 to 11ms/button finder icon setButtonImage (XL model) - SCALING with 6 buttons!
+---@param testDeck DeckController
+local function timingAppIconFinderFromItermProfile(testDeck)
+    local startTime = GetTime()
+    local deck = TestXLDeck
+    local base = {
+        AppButton:new(1, deck, "com.apple.finder"),
+        AppButton:new(2, deck, "com.apple.finder"),
+        AppButton:new(3, deck, "com.apple.finder"),
+    }
+    print("  load 3x appIcon Finder " .. GetElapsedTimeInMilliseconds(startTime) .. "ms")
+
+
+    startTime = GetTime()
+    -- finder icon on 4+ button1 takes 7ms for setButtonImage
+    -- !!! TODO test timing on setButtonImage
+    print("  testDeck", testDeck)
+    local image = base[1].image
+    print("  image.size", hs.inspect(image:size())) -- h=32, w=32 (wth?)
+    testDeck.hsdeck:setButtonImage(1, image)
+    testDeck.hsdeck:setButtonImage(2, image)
+    testDeck.hsdeck:setButtonImage(3, image)
+    testDeck.hsdeck:setButtonImage(4, image)
+    testDeck.hsdeck:setButtonImage(5, image)
+    testDeck.hsdeck:setButtonImage(6, image)
+    -- HOLY SHIT THIS IS 8 to 11ms!!! WTF
+    print("  show appIcon Finder " .. GetElapsedTimeInMilliseconds(startTime) .. "ms")
+    -- self.deck.hsdeck:setButtonImage(self.buttonNumber, self.image)
+end
+
 FallbackProfiles:addProfilePage(DECK_2XL, PAGE_1, function(_, deck)
     return {
         -- row 4:
+        LuaButton:new(29, deck, drawTextIcon("appIcon Finder", deck), function() timingAppIconFinderFromItermProfile(deck) end),
         LuaButton:new(30, deck, drawTextIcon("hsIcon WithText", deck), timingHsIconWithText),
         LuaButton:new(31, deck, drawTextIcon("hsIcon file", deck), timingHsIconFileOnly),
         LuaButton:new(32, deck, drawTextIcon("hsCircle", deck), timingHsCircleOnlyNoText)
