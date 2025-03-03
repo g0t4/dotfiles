@@ -13,7 +13,7 @@ local BraveObserver = AppObserver:new(APPS.BraveBrowserBeta)
 -- PRN make BraveObserver into a full-fledged class?
 local lastModSet = nil
 
-local km_docs_menu_item = "B06C1815-51D0-4DD7-A22C-5A3C39C4D1E0"
+local KM_GOOGLE_DOCS_PERFORM_MENU_ITEM = "B06C1815-51D0-4DD7-A22C-5A3C39C4D1E0"
 
 
 local MOD_SETS = {
@@ -36,9 +36,9 @@ function deck3Page1Mods(deck, pageNumber)
         return {
             -- FYI these are just examples to test dynamic profile mods...
             MaestroButton:new(31, deck, hsCircleIcon("#FFFF00", deck),
-                km_docs_menu_item, "Highlight color yellow"),
+                KM_GOOGLE_DOCS_PERFORM_MENU_ITEM, "Highlight color yellow"),
             MaestroButton:new(32, deck, hsCircleIcon("#FF0000", deck),
-                km_docs_menu_item, "Highlight color red"),
+                KM_GOOGLE_DOCS_PERFORM_MENU_ITEM, "Highlight color red"),
         }
     end
     if getModSetNumber(url) == MOD_SETS.CHATGPT_COM then
@@ -53,20 +53,20 @@ BraveObserver:addProfilePage(DECK_3XL, PAGE_1, function(_, deck)
     -- ! TODO run some timing to find out how much would be saved if these were cached and not re-created on every profile change
     local base = {
         MaestroButton:new(1, deck, hsCircleIcon("#FFFF00", deck),
-            km_docs_menu_item, "Highlight color yellow"),
+            KM_GOOGLE_DOCS_PERFORM_MENU_ITEM, "Highlight color yellow"),
 
         -- #FCE5CD (highlight light orange 3) => increase saturation for button color: #FFC690
         MaestroButton:new(2, deck, hsCircleIcon("#FFC690", deck, "rec"),
-            km_docs_menu_item, "highlight light orange 3"),
+            KM_GOOGLE_DOCS_PERFORM_MENU_ITEM, "highlight light orange 3"),
 
         -- "none" == remove highlight (background color)
         MaestroButton:new(3, deck, hsCircleIcon("#FFFFFF", deck, "none"),
-            km_docs_menu_item, "highlight none"),
+            KM_GOOGLE_DOCS_PERFORM_MENU_ITEM, "highlight none"),
 
         -- changes text color (not highlight) => looks nice! (could be veritcal middle aligned but this is FINE for now)
         MaestroButton:new(9, deck, drawTextIcon("dark green 2", deck,
                 { color = { hex = "#38761D" }, font = { size = 30 } }),
-            km_docs_menu_item, "dark green 2"),
+            KM_GOOGLE_DOCS_PERFORM_MENU_ITEM, "dark green 2"),
 
         KeyStrokeButton:new(5, deck, drawTextIcon("⇒", deck), {}, "⇒"),
     }
