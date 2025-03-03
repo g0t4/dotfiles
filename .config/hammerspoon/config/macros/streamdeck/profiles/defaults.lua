@@ -94,7 +94,7 @@ local TestXLDeck = {
     }
 }
 
--- *** 40ms for 6 circle icons!
+-- *** 6.7ms/button - 40ms for 6 circle icons!
 local function timingHsCircleOnlyNoText()
     -- TODO test setButtonColor
     -- TODO test setButtonImage (precreated and perfectly sized?) images<F7>
@@ -125,7 +125,7 @@ local function timingHsCircleOnlyNoText()
 end
 
 
--- *** 10-13ms for 26 images (not a huge factor)
+-- *** 0.5ms/button - 10-13ms for 26 images (not a huge factor)
 local function timingHsIconFileOnly()
     local startTime = GetTime()
     local deck = TestXLDeck
@@ -177,6 +177,7 @@ local function timingHsIconFileOnly()
     print("myTestFunc took " .. GetElapsedTimeInMilliseconds(startTime) .. "ms")
 end
 
+-- *** 8ms/button 20 to 25ms (sometimes 12-13ms) for 3 hsIconWithText!
 local function timingHsIconWithText()
     local startTime = GetTime()
     local deck = TestXLDeck
@@ -189,6 +190,7 @@ local function timingHsIconWithText()
 
     print("  took " .. GetElapsedTimeInMilliseconds(startTime) .. "ms")
 end
+
 FallbackProfiles:addProfilePage(DECK_2XL, PAGE_1, function(_, deck)
     return {
         -- row 4:
