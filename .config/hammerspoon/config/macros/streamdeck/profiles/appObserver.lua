@@ -133,12 +133,13 @@ end
 
 function AppObserver:onModSetChanged()
     for _, deckController in pairs(self.claimedDecks) do
-        self:loadProfileForDeck(deckController)
+        self:loadProfileForDeck(deckController, true)
     end
 end
 
 ---@param deck DeckController
-function AppObserver:loadProfileForDeck(deck)
+---@param isModSetChange boolean|nil
+function AppObserver:loadProfileForDeck(deck, isModSetChange)
     local pageNumber = pageSettings.getSavedPageNumber(deck.name, self.appTitle)
 
     local page = self:getProfilePage(deck, pageNumber)
@@ -157,8 +158,10 @@ function AppObserver:loadProfileForDeck(deck)
         return false
     end
 
-    -- load the page
-    deck.hsdeck:reset()
+    if not isModSetChange then
+        -- don't reset on mod set changes (subset of buttons change is all)
+        deck.hsdeck:reset()
+    end
     page:applyTo(deck)
     return true
 end
