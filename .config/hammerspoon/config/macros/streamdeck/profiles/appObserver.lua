@@ -90,13 +90,13 @@ end
 
 ---@param unclaimedDecks table<string, DeckController>
 function AppObserver:activate(unclaimedDecks)
-    self.claimedDecks = f.where(unclaimedDecks, function(deck)
-        return self.registeredDecks[deck.name]
+    self.isActive = true
+
+    f.eachv(unclaimedDecks, function(deck)
+        self:tryClaimNewDeck(deck)
     end)
 
-    self.isActive = true
     self:setupIntraAppObserver()
-    self:refreshDecks()
 end
 
 ---@param deck DeckController
@@ -106,6 +106,7 @@ function AppObserver:tryClaimNewDeck(deck)
         return false
     end
 
+    print("  " .. deck.name .. " claimed by " .. self.appTitle)
     -- claim deck and load its profile
     self.claimedDecks[deck.name] = deck
     self:loadProfileForDeck(deck)

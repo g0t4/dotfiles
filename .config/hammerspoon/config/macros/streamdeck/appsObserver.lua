@@ -103,7 +103,6 @@ function AppsObserver:onNewDeckConnected(deck)
     if defaultObserver then
         local claimed = defaultObserver:tryClaimNewDeck(deck)
         if claimed then
-            print("  claimed by:", defaultObserver.appTitle)
             return
         end
     end
