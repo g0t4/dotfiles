@@ -218,7 +218,19 @@ function createNotificationObserver(braveAppObserver)
             --     message = message .. "\n  (may be stale) URL: " .. axDocument
             -- end
 
-            -- TODO consolidate with braveObserver's getCurrentURL
+            -- TODO! focusedWindowElem:group(1) has an "AXURL" attribute that appaers to be NSURL type... can I use that?
+            --    if so, that group might be there when find search box/window is open
+            local axURL = focusedWindowElem:group(1):attributeValue("AXURL")
+            if axURL ~= nil then
+                -- it's a table!
+                print("found AXURL attribute: ", hs.inspect(axURL))
+                local url = axURL["url"]
+                print("  parsed url: ", url)
+                -- !!!! DING DING DING DING... IT WORKS!!!!
+                -- !!!! DING DING DING it also works when FIND IS OPEN! in that case window(2):group(1):attributeValue("AXURL") has the URL... and my code above already works to find that standard window and get this
+            end
+
+
             local urlTextField = focusedWindowElem:group(1):group(1):group(1):group(1):toolbar(1):group(1):textField(1)
             local currentSite = nil
             if urlTextField ~= nil then
