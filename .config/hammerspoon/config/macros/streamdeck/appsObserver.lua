@@ -37,7 +37,7 @@ end
 
 --- only one at a time, so I can hand off all intra app observation and deck handling to the observer!
 --- this App(s)Observer should focus only on inter app events (i.e. switching apps)
----@type AppsObserver|nil
+---@type AppObserver|nil
 local activeObserver = nil
 
 function AppsObserver:onPageNumberChanged(deckName, appModuleName, pageNumber)
