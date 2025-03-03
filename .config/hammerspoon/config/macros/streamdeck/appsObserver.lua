@@ -1,3 +1,4 @@
+local f = require("config.helpers.underscore")
 verbose = require("config.macros.streamdeck.helpers").verbose
 pageSettings = require("config.macros.streamdeck.settings.page")
 
@@ -91,6 +92,7 @@ function AppsObserver:tryLoadProfileForDeck(deck, appName)
     if activeObserver and activeObserver:getModuleName() == (appModuleName or "") then
         -- TODO when would this happen? do I even need this here or can it be simplified?
         --    TODO INTRA APP events is only time I could think that the app wouldn't change here
+        -- COUlD happen if deck connects (i.e. reconnectts, or new)
 
         -- Let the active observer handle it
         if activeObserver:loadProfileForDeck(deck) then

@@ -88,6 +88,35 @@ function M.ieachKey(t, fn)
     end
 end
 
+--- clone the table container only (keys/values are preserved)
+---@generic TKey: string|integer
+---@generic TValue: any
+---@param t table<TKey, TValue>
+---@return table<TKey, TValue>
+function M.shallowCopyTable(t)
+    local result = {}
+    for k, v in pairs(t) do
+        result[k] = v
+    end
+    return result
+end
+
+--- returns a new table with only the values that pass the predicate
+---@generic TKey: string|integer
+---@generic TValue: any
+---@param t table<TKey, TValue>
+---@param predicate fun(value: any): boolean
+---@return table<TKey, TValue>
+function M.where(t, predicate)
+    local result = {}
+    for k, v in pairs(t) do
+        if predicate(v) then
+            result[k] = v
+        end
+    end
+    return result
+end
+
 -- *** MISC table operations
 --  TODO migrate to underscore equivalents above
 --  FYI DO NOT TRY TO EXPORT THESE from this module, instead split them out if you need that.

@@ -1,5 +1,6 @@
 local Profile = require "config.macros.streamdeck.profile"
 local pageSettings = require("config.macros.streamdeck.settings.page")
+local f = require("config.helpers.underscore")
 
 --- *** LuaButton helper wrappers, though can be used in other buttons potentially (i.e. encoder buttons/gestures)
 
