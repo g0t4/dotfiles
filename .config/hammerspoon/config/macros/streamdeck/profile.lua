@@ -23,9 +23,10 @@ end
 function Profile:applyTo(deck, isModSetChange)
     if not isModSetChange then
         -- FYI ideally I would makde decision on reset based on timing of resetButton vs # of buttons removed (cleared) vs previous set of buttons
-        --    I am close to being able to do that comparison now that I have before/after logic below
         -- TODO move into profile too?
-        -- don't reset on mod set changes (subset of buttons change is all)
+        -- modSetChange is an INTRA-APP event, in which case the likelihood of changes is lower... so we only reset the removed buttons (below)
+        --   this doesn't apply to INTER-APP changes and page switches... these almost never have button overlap (wouldn't make sense to have overlap)
+        --      so we always reset for these event types
         deck.hsdeck:reset()
     end
 
