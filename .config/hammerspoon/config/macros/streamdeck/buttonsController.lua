@@ -57,7 +57,7 @@ function ButtonsController:start()
         if button then
             local startTime = GetTime() -- TMP TIMING ANALYSIS
             button:start()
-            print("          start(" .. buttonNumber .. ") " .. GetElapsedTimeInMilliseconds(startTime) .. "ms") -- TMP TIMING ANALYSIS
+            if _G.LOG_DETAILED_TIMING then print("          start(" .. buttonNumber .. ") " .. GetElapsedTimeInMilliseconds(startTime) .. "ms") end -- TMP TIMING ANALYSIS
         else
             -- reset flashes the splash screen (very noticeable)
             -- but, changes w/o reset are not noticeable

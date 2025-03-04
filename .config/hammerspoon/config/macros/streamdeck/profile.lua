@@ -18,6 +18,8 @@ function Profile:new(name, appName, deckName)
     return o
 end
 
+_G.LOG_DETAILED_TIMING = false
+
 ---@param deck DeckController
 ---@param isModSetChange boolean|nil
 function Profile:applyTo(deck, isModSetChange)
@@ -59,25 +61,9 @@ function Profile:applyTo(deck, isModSetChange)
             print("        modSet resetButton()s " .. GetElapsedTimeInMilliseconds(startTime) .. "ms") -- TMP TIMING ANALYSIS
         end
 
-        startTime = GetTime() -- TMP TIMING ANALYSIS
+        if _G.LOG_DETAILED_TIMING then startTime = GetTime() end -- TMP TIMING ANALYSIS
         deck.buttons:start() -- for now just start all every time... b/c I have no button reuse logic yet (see brave profile for testing criteria and ideas)
-        print("        start() " .. GetElapsedTimeInMilliseconds(startTime) .. "ms") -- TMP TIMING ANALYSIS - heaviest hitter, esp PPTX 2XL/3XL which are mostly hsIcon files
-        -- local notSameButtons = f.whereValues(deck.buttons.buttons, function(btn)
-        --     return buttonsBefore[btn.buttonNumber] ~= btn
-        -- end)
-        -- -- print("  not same buttons", f.concatKeys(notSameButtons))
-        -- f.eachValue(notSameButtons, function(btn)
-        --     btn:start()
-        -- end)
-        -- local sameButtons = f.whereValues(deck.buttons.buttons, function(btn)
-        --     return buttonsBefore[btn.buttonNumber] == btn
-        -- end)
-        -- if f.count(sameButtons) > 0 then
-        --     print("  SAME BUTTONS DETECTED, MAKE SURE TO CHECK LOGIC in profile.lua for skipping calling START() on the same buttons")
-        --     print("  same buttons", f.concatKeys(sameButtons))
-        -- end
-
-        --
+        if _G.LOG_DETAILED_TIMING then print("        start() " .. GetElapsedTimeInMilliseconds(startTime) .. "ms") end -- TMP TIMING ANALYSIS - heaviest hitter, esp PPTX 2XL/3XL which are mostly hsIcon files
     end
     if deck.encoders ~= nil then
         if isModSetChange then
