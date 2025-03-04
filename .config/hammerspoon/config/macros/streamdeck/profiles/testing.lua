@@ -11,6 +11,43 @@ local f = require("config.helpers.underscore")
 
 local TestingProfiles = AppObserver:new(APPS.Testing)
 
+TestingProfiles:addProfilePage(DECK_2XL, PAGE_1, function(_, deck)
+    return {
+        -- row 4:
+        LuaButton:new(27, deck, drawTextIcon("setButtonColor", deck), function() timingSetButtonColor(deck) end),
+        LuaButton:new(28, deck, drawTextIcon("image size matter?", deck), function() timingDoesSizeMatter(deck) end),
+        LuaButton:new(29, deck, drawTextIcon("appIcon Finder", deck), function() timingAppIconFinderFromItermProfile(deck) end),
+        LuaButton:new(30, deck, drawTextIcon("hsIcon WithText", deck), function() timingHsIconWithText(deck) end),
+        LuaButton:new(31, deck, drawTextIcon("hsIcon file", deck), function() timingHsIconFileOnly(deck) end),
+        LuaButton:new(32, deck, drawTextIcon("hsCircle", deck), function() timingHsCircleOnlyNoText(deck) end)
+    }
+end)
+
+TestingProfiles:addProfilePage(DECK_4PLUS, PAGE_1,
+    function(_, deck)
+        -- PRN => static app switcher buttons
+        --     => good news is can be computed once during app activation (if a neww app)
+        -- FUTURE => dynamic app switcher buttons in default profile here...
+        return {
+            -- *** row 1
+
+            LuaButton:new(8, deck, drawTextIcon("appIcon Finder", deck), function() timingAppIconFinderFromItermProfile(deck) end),
+
+            -- TODO app switcher
+            -- *** row 2
+        }
+    end,
+    function(_, deck)
+        return {
+            -- TODO setup touch screen button gesture! for corresponding encoder
+            Encoder:new(1, deck, hsIcon("test-svgs/hanging-96.png")),
+            Encoder:new(2, deck, hsIcon("test-svgs/saggy-64.png")),
+            Encoder:new(3, deck, hsIcon("test-svgs/stick.svg")),
+            Encoder:new(4, deck, hsIcon("test-svgs/purple-pink-128.png"))
+        }
+    end
+)
+
 -- TODO! TESTING AVENUES:
 --  - PASS BITMAP (uncompressed already) to setButtonImage? might shave a smidge of time off?
 --  - ideally bypass resizing altoegether
@@ -415,42 +452,5 @@ local function timingSetButtonColor(deck)
         print()
     end
 end
-
-TestingProfiles:addProfilePage(DECK_2XL, PAGE_1, function(_, deck)
-    return {
-        -- row 4:
-        LuaButton:new(27, deck, drawTextIcon("setButtonColor", deck), function() timingSetButtonColor(deck) end),
-        LuaButton:new(28, deck, drawTextIcon("image size matter?", deck), function() timingDoesSizeMatter(deck) end),
-        LuaButton:new(29, deck, drawTextIcon("appIcon Finder", deck), function() timingAppIconFinderFromItermProfile(deck) end),
-        LuaButton:new(30, deck, drawTextIcon("hsIcon WithText", deck), function() timingHsIconWithText(deck) end),
-        LuaButton:new(31, deck, drawTextIcon("hsIcon file", deck), function() timingHsIconFileOnly(deck) end),
-        LuaButton:new(32, deck, drawTextIcon("hsCircle", deck), function() timingHsCircleOnlyNoText(deck) end)
-    }
-end)
-
-TestingProfiles:addProfilePage(DECK_4PLUS, PAGE_1,
-    function(_, deck)
-        -- PRN => static app switcher buttons
-        --     => good news is can be computed once during app activation (if a neww app)
-        -- FUTURE => dynamic app switcher buttons in default profile here...
-        return {
-            -- *** row 1
-
-            LuaButton:new(8, deck, drawTextIcon("appIcon Finder", deck), function() timingAppIconFinderFromItermProfile(deck) end),
-
-            -- TODO app switcher
-            -- *** row 2
-        }
-    end,
-    function(_, deck)
-        return {
-            -- TODO setup touch screen button gesture! for corresponding encoder
-            Encoder:new(1, deck, hsIcon("test-svgs/hanging-96.png")),
-            Encoder:new(2, deck, hsIcon("test-svgs/saggy-64.png")),
-            Encoder:new(3, deck, hsIcon("test-svgs/stick.svg")),
-            Encoder:new(4, deck, hsIcon("test-svgs/purple-pink-128.png"))
-        }
-    end
-)
 
 return TestingProfiles
