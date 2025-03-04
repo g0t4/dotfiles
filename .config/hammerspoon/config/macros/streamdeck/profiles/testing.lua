@@ -53,32 +53,32 @@ end)
 -- end)
 
 
-TestingProfiles:addProfilePage(DECK_4PLUS, PAGE_1,
-    function(_, deck)
-        -- PRN => static app switcher buttons
-        --     => good news is can be computed once during app activation (if a neww app)
-        -- FUTURE => dynamic app switcher buttons in default profile here...
-        return {
-            -- *** row 1
-            LuaButton:new(7, deck, drawTextIcon("\nstart\nping", deck), function() startPingImageTest(deck) end),
-            LuaButton:new(8, deck, drawTextIcon("\nstop\nping", deck), function() stopPingImageTest(deck) end),
-
-            -- LuaButton:new(8, deck, drawTextIcon("appIcon Finder", deck), function() timingAppIconFinderFromItermProfile(deck) end),
-
-            -- TODO app switcher
-            -- *** row 2
-        }
-    end,
-    function(_, deck)
-        return {
-            -- TODO setup touch screen button gesture! for corresponding encoder
-            Encoder:new(1, deck, hsIcon("test-svgs/hanging-96.png")),
-            Encoder:new(2, deck, hsIcon("test-svgs/saggy-64.png")),
-            Encoder:new(3, deck, hsIcon("test-svgs/stick.svg")),
-            Encoder:new(4, deck, hsIcon("test-svgs/purple-pink-128.png"))
-        }
-    end
-)
+-- TestingProfiles:addProfilePage(DECK_4PLUS, PAGE_1,
+--     function(_, deck)
+--         -- PRN => static app switcher buttons
+--         --     => good news is can be computed once during app activation (if a neww app)
+--         -- FUTURE => dynamic app switcher buttons in default profile here...
+--         return {
+--             -- *** row 1
+--             LuaButton:new(7, deck, drawTextIcon("\nstart\nping", deck), function() startPingImageTest(deck) end),
+--             LuaButton:new(8, deck, drawTextIcon("\nstop\nping", deck), function() stopPingImageTest(deck) end),
+--
+--             -- LuaButton:new(8, deck, drawTextIcon("appIcon Finder", deck), function() timingAppIconFinderFromItermProfile(deck) end),
+--
+--             -- TODO app switcher
+--             -- *** row 2
+--         }
+--     end,
+--     function(_, deck)
+--         return {
+--             -- TODO setup touch screen button gesture! for corresponding encoder
+--             Encoder:new(1, deck, hsIcon("test-svgs/hanging-96.png")),
+--             Encoder:new(2, deck, hsIcon("test-svgs/saggy-64.png")),
+--             Encoder:new(3, deck, hsIcon("test-svgs/stick.svg")),
+--             Encoder:new(4, deck, hsIcon("test-svgs/purple-pink-128.png"))
+--         }
+--     end
+-- )
 
 
 -- ! setButtonImage delay is 90% USB latency (takes 1.5 to 6ms to setButtonImage)
