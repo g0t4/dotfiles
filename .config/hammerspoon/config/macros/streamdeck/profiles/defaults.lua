@@ -9,9 +9,9 @@ local AppButton = require("config.macros.streamdeck.appButton")
 local f = require("config.helpers.underscore")
 
 
-local FallbackProfiles = AppObserver:new("fallback")
+local DefaultProfiles = AppObserver:new("fallback")
 
-FallbackProfiles:addProfilePage(DECK_1XL, PAGE_1, function(_, deck)
+DefaultProfiles:addProfilePage(DECK_1XL, PAGE_1, function(_, deck)
     return {
         -- * row 1
         ClockButton:new(1, deck),
@@ -443,7 +443,7 @@ local function timingSetButtonColor(deck)
     end
 end
 
-FallbackProfiles:addProfilePage(DECK_2XL, PAGE_1, function(_, deck)
+DefaultProfiles:addProfilePage(DECK_2XL, PAGE_1, function(_, deck)
     return {
         -- row 4:
         LuaButton:new(27, deck, drawTextIcon("setButtonColor", deck), function() timingSetButtonColor(deck) end),
@@ -455,7 +455,7 @@ FallbackProfiles:addProfilePage(DECK_2XL, PAGE_1, function(_, deck)
     }
 end)
 
-FallbackProfiles:addProfilePage(DECK_4PLUS, PAGE_1,
+DefaultProfiles:addProfilePage(DECK_4PLUS, PAGE_1,
     function(_, deck)
         -- PRN => static app switcher buttons
         --     => good news is can be computed once during app activation (if a neww app)
@@ -482,4 +482,4 @@ FallbackProfiles:addProfilePage(DECK_4PLUS, PAGE_1,
     end
 )
 
-return FallbackProfiles
+return DefaultProfiles
