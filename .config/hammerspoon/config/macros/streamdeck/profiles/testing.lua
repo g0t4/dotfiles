@@ -29,8 +29,9 @@ local TestingProfiles = AppObserver:new(APPS.Testing)
 TestingProfiles:addProfilePage(DECK_2XL, PAGE_1, function(_, deck)
     return {
         -- row 1:
-        LuaButton:new(7, deck, drawTextIcon("\nstart\nping", deck), function() startPingImageTest(deck) end),
-        LuaButton:new(8, deck, drawTextIcon("\nstop\nping", deck), function() stopPingImageTest(deck) end),
+        LuaButton:new(1, deck, drawTextIcon("TEST\nPROFILE", deck), function() hs.alert.show("TEST PROFILE - NOOP button") end),
+        LuaButton:new(7, deck, drawTextIcon("start\nping", deck), function() startPingImageTest(deck) end),
+        LuaButton:new(8, deck, drawTextIcon("stop\nping", deck), function() stopPingImageTest(deck) end),
 
 
         -- row 4:
