@@ -11,19 +11,19 @@ local f = require("config.helpers.underscore")
 
 local TestingProfiles = AppObserver:new(APPS.Testing)
 
-TestingProfiles:addProfilePage(DECK_1XL, PAGE_1, function(_, deck)
-    return {
-
-        LuaButton:new(6, deck, appIconHammerspoon(), hs.openConsole),
-        LuaButton:new(7, deck, drawTextIcon("Clear Console", deck), hs.console.clearConsole),
-        LuaButton:new(8, deck, drawTextIcon("Reload Config", deck), hs.reload),
-
-        -- row 1:
-        LuaButton:new(15, deck, drawTextIcon("\nstart\nping", deck), function() startPingImageTest(deck) end),
-        LuaButton:new(16, deck, drawTextIcon("\nstop\nping", deck), function() stopPingImageTest(deck) end),
-
-    }
-end)
+-- TestingProfiles:addProfilePage(DECK_1XL, PAGE_1, function(_, deck)
+--     return {
+--
+--         LuaButton:new(6, deck, appIconHammerspoon(), hs.openConsole),
+--         LuaButton:new(7, deck, drawTextIcon("Clear Console", deck), hs.console.clearConsole),
+--         LuaButton:new(8, deck, drawTextIcon("Reload Config", deck), hs.reload),
+--
+--         -- row 1:
+--         LuaButton:new(15, deck, drawTextIcon("\nstart\nping", deck), function() startPingImageTest(deck) end),
+--         LuaButton:new(16, deck, drawTextIcon("\nstop\nping", deck), function() stopPingImageTest(deck) end),
+--
+--     }
+-- end)
 
 
 TestingProfiles:addProfilePage(DECK_2XL, PAGE_1, function(_, deck)
@@ -43,14 +43,14 @@ TestingProfiles:addProfilePage(DECK_2XL, PAGE_1, function(_, deck)
     }
 end)
 
-TestingProfiles:addProfilePage(DECK_3XL, PAGE_1, function(_, deck)
-    return {
-        -- row 1:
-        LuaButton:new(7, deck, drawTextIcon("\nstart\nping", deck), function() startPingImageTest(deck) end),
-        LuaButton:new(8, deck, drawTextIcon("\nstop\nping", deck), function() stopPingImageTest(deck) end),
-
-    }
-end)
+-- TestingProfiles:addProfilePage(DECK_3XL, PAGE_1, function(_, deck)
+--     return {
+--         -- row 1:
+--         LuaButton:new(7, deck, drawTextIcon("\nstart\nping", deck), function() startPingImageTest(deck) end),
+--         LuaButton:new(8, deck, drawTextIcon("\nstop\nping", deck), function() stopPingImageTest(deck) end),
+--
+--     }
+-- end)
 
 
 TestingProfiles:addProfilePage(DECK_4PLUS, PAGE_1,
@@ -104,7 +104,6 @@ TestingProfiles:addProfilePage(DECK_4PLUS, PAGE_1,
 
 local pingTimers = {}
 function startPingImageTest(deck)
-
     -- *** DISCOVERY => ping times are markedly lower when I have hammerspoon console open and focused (frontmost app)
     --   But, the second I switch to another app, the ping times go up
     --   It varies... but 4-6ms with HS focused, 7-10ms with other apps
@@ -115,6 +114,10 @@ function startPingImageTest(deck)
     --        TODO => BUT, b/c hammerspoon is my all apps util.. can I change it somehow? to always make it a bit higher priority for USB?
     --   and the second I switch you can see the pings shoot up/down
     --
+    -- Also, no noticeable difference in timing between any of the four units (even running simultaneous)
+    --   and I unplugged all of them and directly connected one to my mbp21's USB-C port => no difference in timing
+    --   I did cut out a USB-A hub I was using but even removing it had no impact on timing
+    --      had mbp21 TB => TB dock => USB-A hub => 3 of the streamdecks
     local pingTimer = pingTimers[deck.name]
     if pingTimer then
         print("  pingTimer already running")
