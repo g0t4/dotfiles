@@ -14,6 +14,17 @@ decks:init()
 local apps = AppsObserver:new(decks)
 apps:start()
 
+-- can make 4 non-blocking calls to this from hammerspoon CLI... which is what I want!
+-- hs -c "DoASlowThing()"
+--   now, the question is, is USB hid I/O non-blocking or blocking? if it is the former then I can
+--   trigger all four decks to update at the same time instead of serially...
+--   all hinges on if the single thread is blocked when waiting to send the hid USB packets, I suspect it is
+function DoASlowThing()
+    print("DoASlowThing")
+    hs.timer.doAfter(3, function()
+        print("DoASlowThing after 1s")
+    end)
+end
 
 -- FINDING OBSERVER NOTIFICATIONS:
 -- require("config.macros.streamdeck.profiles.tests.testAllObserverEvents")
