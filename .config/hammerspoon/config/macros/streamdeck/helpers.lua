@@ -9,8 +9,9 @@ local hsIcons = resolveHomePath("~/repos/github/g0t4/dotfiles/misc/hammerspoon-i
 hsIconCache = {}
 function hsIcon(relativePath)
     local path = hsIcons .. relativePath
-    if hsIconCache[relativePath] ~= nil then
-        return hsIconCache[path]
+    local cached = hsIconCache[relativePath]
+    if cached ~= nil then
+        return cached
     end
     local image = hs.image.imageFromPath(path)
     if image ~= nil then
