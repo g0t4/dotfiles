@@ -88,6 +88,7 @@ AppModuleLookupByAppTitle = {
     [APPS.BraveBrowserBeta] = "brave",
     -- fallback is for defaults for a deck if no app claims the deck
     [APPS.Fallback] = "defaults",
+    [APPS.Testing] = "testing",
     -- [APPS.Safari] = "safari",
     -- [APPS.Preview] = "preview",
 }

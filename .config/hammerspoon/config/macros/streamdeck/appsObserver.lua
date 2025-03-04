@@ -28,6 +28,8 @@ end
 ---@type AppObserver|nil
 local activeObserver = nil
 local defaultObserver = nil
+local testingObserver = nil
+local isTestingEnabled = true -- a set of buttons I use for testing that I can easily toggle on/off right here
 
 ---@param appTitle string
 ---@param _hsApp hs.application
@@ -63,12 +65,27 @@ function AppsObserver:onAppActivated(appTitle, _hsApp)
         end
     end
 
-    -- Fall back to default profiles for unclaimed decks
+    -- load always-on fallback observers
+    if not testingObserver and isTestingEnabled then
+        local success, testingModule = pcall(require, "config.macros.streamdeck.profiles.testing")
+        if success and testingModule then
+            testingObserver = testingModule
+        end
+    end
     if not defaultObserver then
-        -- load default observer (if not already loaded)
         local success, defaultsModule = pcall(require, "config.macros.streamdeck.profiles.defaults")
         if success and defaultsModule then
             defaultObserver = defaultsModule
+        end
+    end
+
+    if testingObserver then
+        testingObserver:activate(unclaimedDecks)
+        unclaimedDecks = f.whereValues(unclaimedDecks, function(deck)
+            return not testingObserver.claimedDecks[deck.name]
+        end)
+        if unclaimedDecks == {} then
+            return
         end
     end
 
@@ -90,10 +107,18 @@ end
 
 ---@param deck DeckController
 function AppsObserver:onNewDeckConnected(deck)
+    -- TODO setup a chain of observers and iterate over it until one claims the deck (simplifies this code):
     if activeObserver then
         local claimed = activeObserver:tryClaimNewDeck(deck)
         if claimed then
             print("  claimed by:", activeObserver.appTitle)
+            return
+        end
+    end
+
+    if testingObserver then
+        local claimed = testingObserver:tryClaimNewDeck(deck)
+        if claimed then
             return
         end
     end
