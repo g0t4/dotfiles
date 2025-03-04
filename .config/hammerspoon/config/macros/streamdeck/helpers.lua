@@ -6,11 +6,15 @@ end
 local log = require("hs.logger").new("streamdeck", verboseStreamDeckLogsOn and "verbose" or "warning")
 local hsIcons = resolveHomePath("~/repos/github/g0t4/dotfiles/misc/hammerspoon-icons/")
 
--- TODO USE MEMOIZE HERE
+hsIconCache = {}
 function hsIcon(relativePath)
     local path = hsIcons .. relativePath
+    if hsIconCache[path] ~= nil then
+        return hsIconCache[path]
+    end
     local image = hs.image.imageFromPath(path)
     if image ~= nil then
+        hsIconCache[path] = image
         return image
     end
     error("hsIcons: could not load image from path:" .. path)
