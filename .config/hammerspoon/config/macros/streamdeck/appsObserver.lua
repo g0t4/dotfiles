@@ -41,6 +41,9 @@ function AppsObserver:onAppActivated(appTitle, _hsApp)
     if defaultObserver then
         defaultObserver:deactivate()
     end
+    if testingObserver then
+        testingObserver:deactivate()
+    end
     print("\n\n") -- TMP TIMING ANALYSIS
     print("onAppActivated " .. appTitle) -- TMP TIMING ANALYSIS
 

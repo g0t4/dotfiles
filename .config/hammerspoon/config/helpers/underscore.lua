@@ -109,8 +109,9 @@ end
 ---   end)
 ---
 ---@generic TKey: string|integer
----@param t table<TKey, any>
----@param fn fun(key: TKey, value: any)
+---@generic TValue: any
+---@param t table<TKey, TValue>
+---@param fn fun(key: TKey, value: TValue)
 function M.each(t, fn)
     for k, v in pairs(t) do
         fn(k, v)

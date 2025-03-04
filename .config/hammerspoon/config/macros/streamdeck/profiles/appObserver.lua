@@ -117,6 +117,15 @@ function AppObserver:deactivate()
         self.intraAppObserver:stop()
         self.intraAppObserver = nil
     end
+    f.each(self.claimedDecks, function(_, deck)
+        -- TODO push this into deckController?
+        f.each(deck.buttons.buttons, function(_, button)
+            -- TODO push this into buttonsController?
+            -- primarily to stop buttons like ClockButton (that have a timer)
+            -- STOP does not clear/reset the image
+            button:stop()
+        end)
+    end)
 end
 
 ---@param deck DeckController
