@@ -9,13 +9,22 @@ local hsIcons = resolveHomePath("~/repos/github/g0t4/dotfiles/misc/hammerspoon-i
 hsIconCache = {}
 function hsIcon(relativePath)
     local path = hsIcons .. relativePath
+
+    local startTime = GetTime()
     local cached = hsIconCache[relativePath]
+    local ms = GetTime() - startTime
+    if ms > 0.1 then
+        -- make sure this doesn't slow way down
+        print("  time: hsIcons: cache check took", ms, "ms")
+    end
+
     if cached ~= nil then
+        -- print("HIT")
         return cached
     end
     local image = hs.image.imageFromPath(path)
     if image ~= nil then
-        hsIconCache[path] = image
+        hsIconCache[relativePath] = image
         return image
     end
     error("hsIcons: could not load image from path:" .. path)
