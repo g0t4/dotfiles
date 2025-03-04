@@ -1,5 +1,6 @@
 APPS = {
-    Fallback = "fallback",
+    Defaults = "defaults",
+    Testing = "testing",
     BraveBrowserBeta = "Brave Browser Beta",
     Safari = "Safari",
     Firefox = "Firefox",

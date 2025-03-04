@@ -9,9 +9,9 @@ local AppButton = require("config.macros.streamdeck.appButton")
 local f = require("config.helpers.underscore")
 
 
-local DefaultProfiles = AppObserver:new("fallback")
+local DefaultsProfiles = AppObserver:new("defaults")
 
-DefaultProfiles:addProfilePage(DECK_1XL, PAGE_1, function(_, deck)
+DefaultsProfiles:addProfilePage(DECK_1XL, PAGE_1, function(_, deck)
     return {
         -- * row 1
         ClockButton:new(1, deck),
@@ -39,7 +39,7 @@ DefaultProfiles:addProfilePage(DECK_1XL, PAGE_1, function(_, deck)
     }
 end)
 
-DefaultProfiles:addProfilePage(DECK_4PLUS, PAGE_1,
+DefaultsProfiles:addProfilePage(DECK_4PLUS, PAGE_1,
     function(_, deck)
         -- PRN => static app switcher buttons
         --     => good news is can be computed once during app activation (if a neww app)
@@ -55,13 +55,10 @@ DefaultProfiles:addProfilePage(DECK_4PLUS, PAGE_1,
     end,
     function(_, deck)
         return {
-            -- TODO setup touch screen button gesture! for corresponding encoder
-            Encoder:new(1, deck, hsIcon("test-svgs/hanging-96.png")),
-            Encoder:new(2, deck, hsIcon("test-svgs/saggy-64.png")),
-            Encoder:new(3, deck, hsIcon("test-svgs/stick.svg")),
-            Encoder:new(4, deck, hsIcon("test-svgs/purple-pink-128.png"))
+            -- FYI could use touch screen in some cases for app switcher! can detect 8+ buttons on it!
+            --  then no click sound?
         }
     end
 )
 
-return DefaultProfiles
+return DefaultsProfiles

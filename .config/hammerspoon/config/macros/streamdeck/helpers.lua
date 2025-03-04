@@ -86,11 +86,12 @@ AppModuleLookupByAppTitle = {
     [APPS.Finder] = "finder",
     [APPS.iTerm] = "iterm",
     [APPS.BraveBrowserBeta] = "brave",
-    -- fallback is for defaults for a deck if no app claims the deck
-    [APPS.Fallback] = "defaults",
-    [APPS.Testing] = "testing",
     -- [APPS.Safari] = "safari",
     -- [APPS.Preview] = "preview",
+
+    -- profiles that aren't app specific, but rather are "fallbacks" when an app doesn't claim a deck
+    [APPS.Testing] = "testing",
+    [APPS.Defaults] = "defaults",
 }
 
 ---@param appTitle string

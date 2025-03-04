@@ -9,35 +9,8 @@ local AppButton = require("config.macros.streamdeck.appButton")
 local f = require("config.helpers.underscore")
 
 
-local TestingProfiles = AppObserver:new("fallback")
+local TestingProfiles = AppObserver:new("testing")
 
-TestingProfiles:addProfilePage(DECK_1XL, PAGE_1, function(_, deck)
-    return {
-        -- * row 1
-        ClockButton:new(1, deck),
-
-        LuaButton:new(6, deck, appIconHammerspoon(), hs.openConsole),
-        LuaButton:new(7, deck, drawTextIcon("Clear Console", deck), hs.console.clearConsole),
-        LuaButton:new(8, deck, drawTextIcon("Reload Config", deck), hs.reload),
-
-        -- * row 2
-
-
-        -- * row 3
-
-
-        -- * row 4
-        -- open folder button
-        --   movies dir
-        --   screenshots dir
-        -- open app button
-        --   for app switcher?
-        -- CommandButton:new(31, deck, appIcon("com.apple.Finder"), { "open", "~/Pictures/Screencaps" }),
-        CommandButton:new(31, deck, hsIcon("files/camera-dir-elgato72.png"), { "open", "~/Pictures/Screencaps" }),
-        CommandButton:new(32, deck, hsIcon("files/movies-dir-elgato72.png"), { "open", "~/Movies2" }),
-
-    }
-end)
 -- TODO! TESTING AVENUES:
 --  - PASS BITMAP (uncompressed already) to setButtonImage? might shave a smidge of time off?
 --  - ideally bypass resizing altoegether
@@ -462,8 +435,6 @@ TestingProfiles:addProfilePage(DECK_4PLUS, PAGE_1,
         -- FUTURE => dynamic app switcher buttons in default profile here...
         return {
             -- *** row 1
-            AppButton:new(1, deck, "com.apple.finder"),
-            -- AppButton:new(1, deck, nil, "/System/Library/CoreServices/Finder.app"),
 
             LuaButton:new(8, deck, drawTextIcon("appIcon Finder", deck), function() timingAppIconFinderFromItermProfile(deck) end),
 
