@@ -104,6 +104,17 @@ TestingProfiles:addProfilePage(DECK_4PLUS, PAGE_1,
 
 local pingTimers = {}
 function startPingImageTest(deck)
+
+    -- *** DISCOVERY => ping times are markedly lower when I have hammerspoon console open and focused (frontmost app)
+    --   But, the second I switch to another app, the ping times go up
+    --   It varies... but 4-6ms with HS focused, 7-10ms with other apps
+    --      about 60%-70% of other app times when hammerspoon is focused
+    --      I tried changing nice -10 (no impact on numbers in other apps)
+    --      checked POWER NAP (not enabled per Activity Monitor)
+    --      IIAC there's just a higher priority given to frontmost app... makes sense
+    --        TODO => BUT, b/c hammerspoon is my all apps util.. can I change it somehow? to always make it a bit higher priority for USB?
+    --   and the second I switch you can see the pings shoot up/down
+    --
     local pingTimer = pingTimers[deck.name]
     if pingTimer then
         print("  pingTimer already running")
