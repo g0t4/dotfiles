@@ -44,8 +44,9 @@ function AppsObserver:onAppActivated(appTitle, _hsApp)
     if testingObserver then
         testingObserver:deactivate()
     end
-    print("\n\n") -- TMP TIMING ANALYSIS
-    print("onAppActivated " .. appTitle) -- TMP TIMING ANALYSIS
+
+    -- print("\n\n") -- TMP TIMING ANALYSIS
+    -- print("onAppActivated " .. appTitle) -- TMP TIMING ANALYSIS
 
     ---@type table<string, DeckController>
     local unclaimedDecks = self.decks.deckControllers

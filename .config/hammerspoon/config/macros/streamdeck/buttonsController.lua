@@ -55,9 +55,9 @@ function ButtonsController:start()
     for buttonNumber = 1, self.rows * self.cols do
         local button = self.buttons[buttonNumber]
         if button then
-            local startTime = GetTime() -- TMP TIMING ANALYSIS
+            -- local startTime = GetTime() -- TMP TIMING ANALYSIS
             button:start()
-            if _G.LOG_DETAILED_TIMING then print("          start(" .. buttonNumber .. ") " .. GetElapsedTimeInMilliseconds(startTime) .. "ms") end -- TMP TIMING ANALYSIS
+            -- if _G.LOG_DETAILED_TIMING then print("          start(" .. buttonNumber .. ") " .. GetElapsedTimeInMilliseconds(startTime) .. "ms") end -- TMP TIMING ANALYSIS
         else
             -- reset flashes the splash screen (very noticeable)
             -- but, changes w/o reset are not noticeable
