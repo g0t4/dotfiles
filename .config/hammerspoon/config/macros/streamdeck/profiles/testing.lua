@@ -13,6 +13,10 @@ local TestingProfiles = AppObserver:new(APPS.Testing)
 
 TestingProfiles:addProfilePage(DECK_2XL, PAGE_1, function(_, deck)
     return {
+        -- row 1:
+        LuaButton:new(1, deck, drawTextIcon("ping image", deck), function() timingSetButtonColor(deck) end),
+
+
         -- row 4:
         LuaButton:new(27, deck, drawTextIcon("setButtonColor", deck), function() timingSetButtonColor(deck) end),
         LuaButton:new(28, deck, drawTextIcon("image size matter?", deck), function() timingDoesSizeMatter(deck) end),
@@ -156,7 +160,7 @@ local TestPlusDeck = {
 }
 
 -- *** 6.7ms/button - 40ms for 6 circle icons!
-local function timingHsCircleOnlyNoText(deck)
+function timingHsCircleOnlyNoText(deck)
     local startTime = GetTime()
     local base = {
         -- *** BINGO image creation is SLOW!!!
@@ -182,12 +186,11 @@ local function timingHsCircleOnlyNoText(deck)
     print("  hs circle only " .. GetElapsedTimeInMilliseconds(startTime) .. "ms")
 end
 
-
 -- *** 0.5ms/button - 10-13ms for 26/24 images (not a huge factor)
 -- *** 4.5ms/button setButtonImage - 110-120ms for 26 images
 -- ! BMP setButtonImage is 20-50% faster than PNGs! (2-4ms per image for BMP 96x96, 3-7ms for PNG 144x144)
 --   HOLY CRAP, BMP is 2x to 5x faster on LOAD
-local function timingHsIconFileOnly(deck)
+function timingHsIconFileOnly(deck)
     local startTime = GetTime()
 
     -- BTW 20ms is not inconsequential if it is easy to avoid b/c already caching other types, also super easy to memoize
@@ -261,7 +264,7 @@ local function timingHsIconFileOnly(deck)
 end
 
 -- *** 8ms/button 20 to 25ms (sometimes 12-13ms) for 3 hsIconWithText!
-local function timingHsIconWithText(deck)
+function timingHsIconWithText(deck)
     local startTime = GetTime()
 
     local base = {
@@ -277,7 +280,7 @@ end
 -- ***! 8 to 11ms/button finder icon setButtonImage (XL model) - SCALING => 6 buttons => 40ms+
 -- ***     worse on 4+ => 6 buttons => 50ms+
 ---@param testDeck DeckController
-local function timingAppIconFinderFromItermProfile(testDeck)
+function timingAppIconFinderFromItermProfile(testDeck)
     local startTime = GetTime()
     local deck = TestXLDeck
     local base = {
@@ -309,7 +312,7 @@ end
 
 -- *** BMP loads fastest! 0.5 to 1.5ms vs 4 to 5ms for png and 7to9ms for icns!!!
 -- * BMP also seems to be fastest with setButtonImage (consistently 19 to 20ms vs 21 to 27 for PNGs, even more for icns)
-local function timingDoesSizeMatter(deck)
+function timingDoesSizeMatter(deck)
     -- image size and format matter, load times:
     --   6-8ms for 3x loads 73KB of Finder.icns (original)
     --      IIAC entire file must be loaded and then pick a size
@@ -386,7 +389,7 @@ end
 -- *** pre-make color images instead of setButtonColor can save 1ms/button (is there a more efficient way to make the color image?)
 -- * 4-5ms/button setButtonColor (red and black)
 ---@param deck DeckController
-local function timingSetButtonColor(deck)
+function timingSetButtonColor(deck)
     local startTime = GetTime()
 
 
