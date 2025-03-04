@@ -11,10 +11,26 @@ local f = require("config.helpers.underscore")
 
 local TestingProfiles = AppObserver:new(APPS.Testing)
 
+TestingProfiles:addProfilePage(DECK_1XL, PAGE_1, function(_, deck)
+    return {
+
+        LuaButton:new(6, deck, appIconHammerspoon(), hs.openConsole),
+        LuaButton:new(7, deck, drawTextIcon("Clear Console", deck), hs.console.clearConsole),
+        LuaButton:new(8, deck, drawTextIcon("Reload Config", deck), hs.reload),
+
+        -- row 1:
+        LuaButton:new(15, deck, drawTextIcon("\nstart\nping", deck), function() startPingImageTest(deck) end),
+        LuaButton:new(16, deck, drawTextIcon("\nstop\nping", deck), function() stopPingImageTest(deck) end),
+
+    }
+end)
+
+
 TestingProfiles:addProfilePage(DECK_2XL, PAGE_1, function(_, deck)
     return {
         -- row 1:
-        LuaButton:new(1, deck, drawTextIcon("ping image", deck), function() timingSetButtonColor(deck) end),
+        LuaButton:new(7, deck, drawTextIcon("\nstart\nping", deck), function() startPingImageTest(deck) end),
+        LuaButton:new(8, deck, drawTextIcon("\nstop\nping", deck), function() stopPingImageTest(deck) end),
 
 
         -- row 4:
@@ -27,6 +43,16 @@ TestingProfiles:addProfilePage(DECK_2XL, PAGE_1, function(_, deck)
     }
 end)
 
+TestingProfiles:addProfilePage(DECK_3XL, PAGE_1, function(_, deck)
+    return {
+        -- row 1:
+        LuaButton:new(7, deck, drawTextIcon("\nstart\nping", deck), function() startPingImageTest(deck) end),
+        LuaButton:new(8, deck, drawTextIcon("\nstop\nping", deck), function() stopPingImageTest(deck) end),
+
+    }
+end)
+
+
 TestingProfiles:addProfilePage(DECK_4PLUS, PAGE_1,
     function(_, deck)
         -- PRN => static app switcher buttons
@@ -34,8 +60,10 @@ TestingProfiles:addProfilePage(DECK_4PLUS, PAGE_1,
         -- FUTURE => dynamic app switcher buttons in default profile here...
         return {
             -- *** row 1
+            LuaButton:new(7, deck, drawTextIcon("\nstart\nping", deck), function() startPingImageTest(deck) end),
+            LuaButton:new(8, deck, drawTextIcon("\nstop\nping", deck), function() stopPingImageTest(deck) end),
 
-            LuaButton:new(8, deck, drawTextIcon("appIcon Finder", deck), function() timingAppIconFinderFromItermProfile(deck) end),
+            -- LuaButton:new(8, deck, drawTextIcon("appIcon Finder", deck), function() timingAppIconFinderFromItermProfile(deck) end),
 
             -- TODO app switcher
             -- *** row 2
@@ -52,36 +80,19 @@ TestingProfiles:addProfilePage(DECK_4PLUS, PAGE_1,
     end
 )
 
--- TODO! TESTING AVENUES:
---  - PASS BITMAP (uncompressed already) to setButtonImage? might shave a smidge of time off?
---  - ideally bypass resizing altoegether
---     - make own hammerspoon extension/module
---     - use ffi?
---
 
--- !!!! TESTING TAKEAWAYS:
--- !!! use BMP for BOTH load and setButtonImage (40-50% speedup on both)
---     convert to 96x96 BMP
---     ls *.png | xargs -I_ sips -s format bmp _ --resampleHeightWidth  96 96  --out bmp-96/_.bmp
---     PER CHATGPT, NSImage handles raw better than compressed PNG (which it has to transform, possibly to TIFF intermediate?)
---
--- ! DO NOT USE ICNS (nor App Icon thingy in hammerspoon! unless wanna covnert it in memory to BMP/PNG?)
--- *** memoize creating image files (hs.image) will save time (10-20% of load time every time you switch apps)
---
--- - image file size can have an impact (10-20% of setButtonImage time)
---     for a given image file, don't worry about it unless it's like the finder app icon that is SLOW AS F
---     in that case find a way to fix it?
---     I SUSPECT much time is lost in the unconditional resize done by hammerspoon (using highquality interpolation too)
---     if i can find right parameters to get this to be closer to no-op then I could save some substantial setButtonImage time
--- ! PREMAKE color objects, might shave 1ms off of setButtonColor is slightly more expensive than just calling setButtonImage(premade color rectangle hs.image)
--- honestly biggest win would be rewriting lower level hammerspoon code
---  esp if can run in parallel
---  I could write an objc module that is wrapped for lua to speed it up? or submit a PR to hs?
---    TODO check what command post does? have they optimized this at all?
---
---
---
---
+-- ! setButtonImage delay is 90% USB latency (takes 1.5 to 6ms to setButtonImage)
+--   I tested timing around just sending data in hammerspoon object-c code
+--      delay not predictable => random
+--      now I wonder if it is the dock/hub setup I have? literally a TB docker => USB-A hub => streamdecks
+--   I tested w/o image processing and that had no consdequential impact
+--      though, I did not time it to see
+--      also found out buttons needs to be transformed to match what decks expect so much of that pipeline (after interpolation which isn't necessary) has to happen
+--         buttons were jumbled w/o it, sometimes ok, often something wrong too (upside down, aliased, overlapping other buttons, in wrong spots, etc)
+
+-- * TESTING IDEAS:
+-- PRN use ffi to inline simple C code testing:
+--   need to find ffi module to do this, it's not OOB anyways
 -- local ffi = require("ffi")
 --
 -- ffi.cdef [[
@@ -90,13 +101,43 @@ TestingProfiles:addProfilePage(DECK_4PLUS, PAGE_1,
 --
 -- ffi.C.NSLog("Hello from Lua!")
 --
---
 
+local pingTimers = {}
+function startPingImageTest(deck)
+    local pingTimer = pingTimers[deck.name]
+    if pingTimer then
+        print("  pingTimer already running")
+        return
+    end
 
+    local image1 = "test-image-sizes/finder/Finder-sips-resample-96.bmp" -- this one is especially slow
+    local image2 = "pptx/colors/fill-pink.png"
+    local image3 = "pptx/colors/bmp-96/fill-pink.png.bmp"
+    local imageFile = image2
 
+    -- TODO how about send different images too? 10 each of 3 images => might run 400ms total
+    print("  start ping test: " .. imageFile)
+    local image = hsIcon(imageFile)
+    pingTimers[deck.name] = hs.timer.doEvery(1, function()
+        local startTime = GetTime()
+        local buttons = { 1, 2, 3, 4, 5, 1, 2, 3, 4, 5 }
+        for _, i in ipairs(buttons) do
+            deck.hsdeck:setButtonImage(i, image)
+        end
+        local ms = GetElapsedTimeInMilliseconds(startTime)
+        print("  " .. deck.name .. " avg: " .. ms / f.count(buttons) .. "ms, total: " .. ms .. "ms")
+    end)
+end
 
+function stopPingImageTest(deck)
+    local pingTimer = pingTimers[deck.name]
+    if not pingTimer then
+        return
+    end
 
-
+    pingTimer:stop()
+    pingTimers[deck.name] = nil
+end
 
 function serialize_table(tbl)
     if type(tbl) ~= "table" then
@@ -307,8 +348,6 @@ function timingAppIconFinderFromItermProfile(testDeck)
     -- self.deck.hsdeck:setButtonImage(self.buttonNumber, self.image)
     --
 end
-
-
 
 -- *** BMP loads fastest! 0.5 to 1.5ms vs 4 to 5ms for png and 7to9ms for icns!!!
 -- * BMP also seems to be fastest with setButtonImage (consistently 19 to 20ms vs 21 to 27 for PNGs, even more for icns)
