@@ -55,7 +55,7 @@ function ClockButton:start()
         if self.lastTime ~= nil and self.lastTime == now then
             return
         end
-        print("updating clock" .. now)
+        -- print("updating clock" .. now)
         self.deck.hsdeck:setButtonImage(self.buttonNumber, getTimeImage(self.deck))
     end)
     self.timer:start()
@@ -63,7 +63,7 @@ function ClockButton:start()
 end
 
 function ClockButton:stop()
-    print("ClockButton:stop")
+    -- print("ClockButton:stop")
     -- todo mechanism to stop/cleanup timer if button removed
     -- FYI let something else handle reset on the button image, behavior, etc
     self.timer:stop()
