@@ -13,7 +13,7 @@ function menu(menu)
     end
 end
 
-local FcpxObserver = AppObserver:new("Final Cut Pro")
+local FcpxObserver = AppObserver:new(APPS.FinalCutPro)
 
 FcpxObserver:addProfilePage(DECK_2XL, PAGE_1, function(_, deck)
     return {

@@ -15,7 +15,7 @@ function M.AskOpenAIStreaming()
     -- MAYBE even use context of the app (i.e. in devtools) to decide what prompt to use
     --    COULD also have diff prmopts tied to streamdeck buttons (app specific) if I find it useful to control the prompt instead of trying to guess it based on current app... (app by app basis that I care to do this for)
 
-    if app:name() == "iTerm2" then
+    if app:name() == APPS.iTerm then
         -- app:name() is < 0.5ms
         hs.alert.show("use iterm specific shortcut for ask-openai")
         return

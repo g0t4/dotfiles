@@ -82,7 +82,7 @@ end
 AppModuleLookupByAppTitle = {
     [APPS.FinalCutPro] = "fcpx",
     [APPS.Hammerspoon] = "hammerspoon",
-    [APPS.MicrosoftPowerPoint] = "pptx",
+    [APPS.PowerPoint] = "pptx",
     [APPS.Finder] = "finder",
     [APPS.iTerm] = "iterm",
     [APPS.BraveBrowserBeta] = "brave",

@@ -7,7 +7,7 @@ local LuaButton = require("config.macros.streamdeck.luaButton")
 
 
 
-local HammerspoonObserver = AppObserver:new("Final Cut Pro")
+local HammerspoonObserver = AppObserver:new(APPS.Hammerspoon)
 
 HammerspoonObserver:addProfilePage(DECK_3XL, PAGE_1, function(_, deck)
     return {

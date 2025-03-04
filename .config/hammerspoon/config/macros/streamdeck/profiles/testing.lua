@@ -9,7 +9,7 @@ local AppButton = require("config.macros.streamdeck.appButton")
 local f = require("config.helpers.underscore")
 
 
-local TestingProfiles = AppObserver:new("testing")
+local TestingProfiles = AppObserver:new(APPS.Testing)
 
 -- TODO! TESTING AVENUES:
 --  - PASS BITMAP (uncompressed already) to setButtonImage? might shave a smidge of time off?

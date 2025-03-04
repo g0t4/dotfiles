@@ -41,7 +41,7 @@ end
 function GetFcpxEditorWindow()
     local fcpx = GetFcpxAppElement()
     assert(fcpx, "GetFcpxEditorWindow: could not find Final Cut Pro")
-    if fcpx:attributeValue("AXTitle") ~= "Final Cut Pro" then
+    if fcpx:attributeValue("AXTitle") ~= APPS.FinalCutPro then
         print("GetFcpxEditorWindow: unexpected title", fcpx:attributeValue("AXTitle"))
         return nil
     end

@@ -24,7 +24,7 @@ function M.getSelectedText()
         else
             local value = focusedElement:attributeValue("AXValue") -- < 0.4ms !!
             local name = app:name()
-            if name == APPS.BraveBrowserBeta or name == APPS.MicrosoftExcel then
+            if name == APPS.BraveBrowserBeta or name == APPS.Excel then
                 -- clear the text to simulate cut behavior (clear until response starts)
                 -- could select all to simulate having copied it (so response replaces it too)
                 -- excel assume no selection == replace all too

@@ -56,7 +56,7 @@ function M.getPrompt(app)
         return { systemMessage = applescriptSystemMessage, max_tokens = 300 }
     end
 
-    if name == "Microsoft Excel" then
+    if name == APPS.Excel then
         -- 200 is more than plenty for an excel formula
         return { systemMessage = excelSystemMessage, max_tokens = 200 }
     end

@@ -538,7 +538,7 @@ end)
 
 local function testHighlightOnReloadConfig()
     -- tmp testing specific control
-    local fcpx = hs.axuielement.applicationElement(hs.application.find("Final Cut Pro"))
+    local fcpx = hs.axuielement.applicationElement(hs.application.find(APPS.FinalCutPro))
     -- local target = fcpx:window(2):splitGroup(1):group(2) -- AXTitleUIElement test case
     -- local target = fcpx
     local target = fcpx:window(2)
@@ -548,8 +548,8 @@ end
 -- testHighlightOnReloadConfig()
 
 local function testCaching()
-    local fcpx = CachedElement.forApp("Final Cut Pro")
-    -- local fcpx = hs.axuielement.applicationElement(hs.application.find("Final Cut Pro"))
+    local fcpx = CachedElement.forApp(APPS.FinalCutPro)
+    -- local fcpx = hs.axuielement.applicationElement(hs.application.find(APPS.FinalCutPro))
     local startTime = GetTime()
     for i = 1, 10 do
         -- print("caching - iteration", i)

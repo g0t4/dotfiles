@@ -9,7 +9,7 @@ local AppButton = require("config.macros.streamdeck.appButton")
 local f = require("config.helpers.underscore")
 
 
-local DefaultsProfiles = AppObserver:new("defaults")
+local DefaultsProfiles = AppObserver:new(APPS.Defaults)
 
 DefaultsProfiles:addProfilePage(DECK_1XL, PAGE_1, function(_, deck)
     return {

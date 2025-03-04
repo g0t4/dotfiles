@@ -6,7 +6,7 @@ function onAppActivated(hsApp, appName)
     if observer then
         observer:stop()
     end
-    if appName ~= "Final Cut Pro" then
+    if appName ~= APPS.FinalCutPro then
         return
     end
     -- set _group to group 2 of group 2 of splitter group 1 of ¬ window "Final Cut Pro" of application process "Final Cut Pro"
