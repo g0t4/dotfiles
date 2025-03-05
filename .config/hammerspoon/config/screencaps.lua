@@ -51,7 +51,17 @@ function getScreencaptureFileName(extension)
         filename = filename .. "." .. appName
     end
 
-    local shortFileNamePath = getCaptureDirectory() .. "/" .. filename .. "." .. extension
+    -- check if capture directory exists, if not WARN and abort
+    local captureDir = getCaptureDirectory()
+    if not hs.fs.attributes(captureDir) then
+        local message = "Screencap directory does not exist, please create it OR reset it: "
+            .. captureDir
+        hs.alert.show(message)
+        -- PRN reset to common spot?
+        error(message)
+    end
+
+    local shortFileNamePath = captureDir .. "/" .. filename .. "." .. extension
     if hs.fs.attributes(shortFileNamePath) == nil then
         return shortFileNamePath
     end
