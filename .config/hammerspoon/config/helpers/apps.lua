@@ -5,12 +5,7 @@ APPS = {
     Safari = "Safari",
     Firefox = "Firefox",
     Ghostty = "Ghostty",
-
-    -- TODO am I using app:title() or app:name()?
-    --  if I need both then add two separate mappings?
-    iTerm = "iTerm2", -- the title is coming through as iTerm2 (is it iTerm in other places?)
-    -- FYI onAppActivated passes iTerm2
-
+    iTerm = "iTerm2",
     Finder = "Finder",
     KeyboardMaestro = "Keyboard Maestro",
     Sonos = "Sonos",
