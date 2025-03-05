@@ -53,7 +53,9 @@ function AppsObserver:onAppActivated(appTitle, _hsApp)
 
     -- Try to load the app-specific observer module
     local appModuleName = AppModuleName(appTitle)
-    if appModuleName then
+    if not appModuleName then
+        print("[WARN]  no appModulueName for " .. quote(appTitle))
+    else
         local success, module = pcall(require, "config.macros.streamdeck.profiles." .. appModuleName)
         if success and module then
             activeObserver = module
