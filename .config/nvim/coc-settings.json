@@ -43,7 +43,9 @@
     // - trim trailing commas (i.e. in this file, I like it when allowed, that said often its not allowed and then fails stuff so I am on fence)
 
     // *** yaml
-    "yaml.format.enable": true,
+    // I AM SICK AND FUCKING TIRED OF YAML FORMATTERS... this one decides to remove new lines around comments and insert them... and change indents that I set on comments... so fuck it...
+    //  formatting yaml is just about indentation and that it... so vim can handle it gg=G (done)
+    "yaml.format.enable": false,
 
     // *** prettier - so far, for markdown only
     // "prettier.formatterPriority": -1, // make prettier the fallback formatter (works but not needed as I can just disable it here:)
