@@ -29,7 +29,7 @@ end
 local activeObserver = nil
 local defaultObserver = nil
 local testingObserver = nil
-local isTestingEnabled = true -- a set of buttons I use for testing that I can easily toggle on/off right here
+local isTestingEnabled = false -- a set of buttons I use for testing that I can easily toggle on/off right here
 
 ---@param appTitle string
 ---@param _hsApp hs.application
