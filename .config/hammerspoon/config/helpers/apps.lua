@@ -5,7 +5,10 @@ APPS = {
     Safari = "Safari",
     Firefox = "Firefox",
     Ghostty = "Ghostty",
-    iTerm = "iTerm",
+
+    iTerm = "iTerm2", -- the title is coming through as iTerm2 (is it iTerm in other places?)
+    -- FYI onAppActivated passes iTerm2
+
     Finder = "Finder",
     KeyboardMaestro = "Keyboard Maestro",
     Sonos = "Sonos",
