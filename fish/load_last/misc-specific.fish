@@ -929,6 +929,7 @@ if command -q watch
     # - also nukes showing time in upper right corner
     # - FYI --show-kind already enabled if multi types requested, so NBD
     abbr wak 'watch --no-title --color -- grc --colour=on kubectl get --show-kind' # using alot! I love this
+    abbr wad 'watch --no-title --color -- grc --colour=on kubectl describe --show-kind' # using alot! I love this
     abbr wakp 'watch --no-title --color -- grc --colour=on kubectl get --show-kind pods'
     abbr wac 'watch --no-title --color -- grc --colour=on curl' #? shot in the dark, I probably won't ever use this :)... just capturing an idea => perhaps wh for "watch + http(ie)"?
     abbr wal 'watch --no-title --color -- grc --colour=on ls'
