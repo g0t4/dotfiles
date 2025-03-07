@@ -189,7 +189,7 @@ if command -q kubectl
     alias kubectl "grc kubectl" # ! EVALUATING if I like this, would be sufficient for short term most likely
     export KUBECTL_EXTERNAL_DIFF="icdiff -r" # use icdiff for kubectl diff (slick!)... FYI $1 and $2 are directories to compare (hence the -r)
 
-    abbr --position=anywhere -- oy '-o yaml | yq' # format + filter with yq (plus I like yq format better than bat -l yml currently)
+    abbr --position=anywhere -- oy '-o yaml' # I used to pipe to yq... but I wrapped 'grc kubectl' to be 'kubectl' and don't need yq now
     abbr --position=anywhere -- ow '-o wide' # I don't believe this will cause collisions b/c it is not a word I expect to use in other contexts, lets see
 
     # *** get
