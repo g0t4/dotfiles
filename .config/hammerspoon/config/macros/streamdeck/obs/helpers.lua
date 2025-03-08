@@ -39,3 +39,24 @@ function ws_receive(ws, timeout)
     -- PRN what is the type on a binary frame? find example of this and test it?
     return nil, frame
 end
+
+function receiveDecoded(ws)
+    -- PRN pass timeout? to receive?
+
+    -- The opcode 0x1 will be returned as "text" and 0x2 will be returned as "binary".
+    local textFrame, binaryFrame, err, errorCode = ws_receive(ws)
+    if err then
+        local message = "error receiving frame: " .. err
+        if errorCode then
+            message = message .. ", errorCode: " .. errorCode
+        end
+        error(message)
+    end
+    if binaryFrame then
+        error("unexpected binary frame, was expecting a text frame")
+    end
+    if textFrame then
+        return json.decode(textFrame)
+    end
+    return nil
+end
