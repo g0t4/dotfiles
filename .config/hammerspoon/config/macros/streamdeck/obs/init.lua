@@ -56,6 +56,14 @@ function listenToOutputEvents()
     hs.timer.doAfter(0.1, checkForOutputs)
 end
 
+function getKeyForValue(t, value)
+    for k, v in pairs(t) do
+        if v == value then
+            return k
+        end
+    end
+end
+
 local function expectRequestResponse(response)
     -- PRN rewrite for other expects
     if not response then
@@ -65,14 +73,7 @@ local function expectRequestResponse(response)
         return
     end
 
-    local opcodeText = ""
-    for k, v in pairs(WebSocketOpCode) do
-        if v == response.requestId then
-            opcodeText = k
-            break
-        end
-    end
-
+    local opcodeText = getKeyForValue(WebSocketOpCode, response.requestId)
     error("requestId mismatch, expected " .. WebSocketOpCode.RequestResponse .. ", got " .. opcodeText .. "(" .. response.requestId .. ")")
 end
 
