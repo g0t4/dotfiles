@@ -144,38 +144,43 @@ end
 --     })
 -- end
 
-function getSceneList()
-    getAndPrint(Requests.Scenes.GetSceneList)
+Scenes = {}
+function Scenes.list()
+    return getResponseData(Requests.Scenes.GetSceneList)
 end
 
-function getProfileList()
-    getAndPrint(Requests.Config.GetProfileList)
+function Scenes.currentProgramScene()
+    return getResponseData(Requests.Scenes.GetCurrentProgramScene)
 end
 
-function getVideoSettings()
-    getAndPrint(Requests.Config.GetVideoSettings)
+function Scenes.currentPreviewScene()
+    return getResponseData(Requests.Scenes.GetCurrentPreviewScene)
 end
 
-function getRecordDirectory()
-    getAndPrint(Requests.Config.GetRecordDirectory)
+Profiles = {}
+function Profiles.list()
+    return getResponseData(Requests.Config.GetProfileList)
 end
 
-function setRecordDirectory(directory)
+Config = {}
+function Config.videoSettings()
+    return getResponseData(Requests.Config.GetVideoSettings)
+end
+
+function Config.recordDirectory()
+    return getResponseData(Requests.Config.GetRecordDirectory)
+end
+
+function Config.setRecordDirectory(directory)
+    -- todo turn into set and verify?
     getAndPrint(Requests.Config.SetRecordDirectory, {
         recordDirectory = directory,
     })
 end
 
-function getCurrentProgramScene()
-    getAndPrint(Requests.Scenes.GetCurrentProgramScene)
-end
-
-function getCurrentPreviewScene()
-    getAndPrint(Requests.Scenes.GetCurrentPreviewScene)
-end
-
-function getVersion()
-    getAndPrint(Requests.General.GetVersion)
+General = {}
+function General.getVersion()
+    return getResponseData(Requests.General.GetVersion)
 end
 
 -- function getSourceScreenshot(sourceName)
@@ -238,8 +243,9 @@ Record = {
     status = function()
         return getResponseData(Requests.Record.GetRecordStatus)
     end,
+    ---@return boolean # active or inactive after toggle
     toggle = function()
-        getAndPrint(Requests.Record.ToggleRecord)
+        return getResponseData(Requests.Record.ToggleRecord).outputActive
     end,
     start = function()
         getAndPrint(Requests.Record.StartRecord)
