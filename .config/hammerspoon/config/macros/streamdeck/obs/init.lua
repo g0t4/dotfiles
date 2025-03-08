@@ -83,6 +83,7 @@ function expectRequestStatusIsOk(response)
     end
 end
 
+--- FYI use Recording and Streaming controls instead of Outputs.Recording/Streaming unless they don't do something you need
 ---@class Output
 ---@field outputName string
 local Output = {}
@@ -234,8 +235,9 @@ Streaming = {
     end,
 }
 
+--- Prefer over Outputs.Recording
 Record = {
-    --- TODO is this duplicative of Output.Recording?
+    --- FYI YUP second set of controls for recording... I should probably prefer this over Outputs.Recording
     ---@return boolean
     status = function()
         return getResponseData(Requests.Record.GetRecordStatus)
