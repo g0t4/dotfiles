@@ -234,4 +234,36 @@ Streaming = {
     end,
 }
 
+Record = {
+    --- TODO is this duplicative of Output.Recording?
+    ---@return boolean
+    status = function()
+        return getResponseData(Requests.Record.GetRecordStatus)
+    end,
+    toggle = function()
+        getAndPrint(Requests.Record.ToggleRecord)
+    end,
+    start = function()
+        getAndPrint(Requests.Record.StartRecord)
+    end,
+    stop = function()
+        getAndPrint(Requests.Record.StopRecord)
+    end,
+    pause = function()
+        getAndPrint(Requests.Record.PauseRecord)
+    end,
+    resume = function()
+        getAndPrint(Requests.Record.ResumeRecord)
+    end,
+    togglePause = function()
+        getAndPrint(Requests.Record.ToggleRecordPause)
+    end,
+    splitRecordFile = function()
+        getAndPrint(Requests.Record.SplitRecordFile)
+    end,
+    createRecordChapter = function()
+        getAndPrint(Requests.Record.CreateRecordChapter)
+    end,
+}
+
 return M
