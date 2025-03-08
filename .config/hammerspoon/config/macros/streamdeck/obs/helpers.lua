@@ -14,7 +14,7 @@ end
 ---Wrapper around ws:receive to provide types and split second arg intelligently for consumers
 ---@param ws table
 ---@param timeout integer|nil # in SECONDS (see https://daurnimator.github.io/lua-http/0.4/#timeouts)
----@return string|nil textFrame, binary|nil binaryFrame, string|nil error, string|nil errorCode
+---@return string|nil textFrame, binary|nil binaryFrame, string|nil error, integer|nil errorCode
 function ws_receive(ws, timeout)
     -- TODO does timeout default to infinite?
     -- TODO can I wrap in coroutine and not need to worry about timeout?
@@ -26,8 +26,9 @@ function ws_receive(ws, timeout)
 
     local frame, errorOrFrameType, errorCode = ws:receive(timeout)
     if errorCode == 60 then
-        print("timeout, ignoring...")
-        return nil
+        -- FYI consumer must handle timeout, i.e. in case of waiting for events, it's not an error
+        --   whereas with authentcation, it likely is
+        return nil, nil, nil, errorCode
     end
     if errorCode then
         return nil, nil, errorOrFrameType, errorCode

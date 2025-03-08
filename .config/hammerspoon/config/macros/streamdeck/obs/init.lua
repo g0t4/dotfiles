@@ -18,6 +18,10 @@ function listenToOutputEvents()
 
     local function checkForOutputs()
         local textFrame, binaryFrame, err, errorCode = ws_receive(ws, 1)
+        if errorCode == 60 then
+            print("timeout, ignoring...")
+            return nil
+        end
         if err then
             local message = "error receiving frame: " .. err
             if errorCode then
