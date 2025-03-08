@@ -152,6 +152,7 @@ function _M.getSceneList()
     local ws = connectToOBS()
     authenticate(ws)
 
+    -- BTW list of requests: https://github.com/obsproject/obs-websocket/blob/master/docs/generated/protocol.md#requests
     local request = {
         op = WebSocketOpCode.Request,
         d = {
