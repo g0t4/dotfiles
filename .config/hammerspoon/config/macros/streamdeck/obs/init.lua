@@ -1,6 +1,7 @@
 local http_websocket = require("http.websocket")
 local json = require("dkjson")
 require("config.macros.streamdeck.obs.constants")
+local _M = {}
 
 -- ***! check OBS logs:  '/Users/wesdemos/Library/Application Support/obs-studio/logs/'
 --    it will tell you what isn't working
@@ -12,6 +13,11 @@ local function errorUnexpectedResponse(response)
 end
 
 local function connectToOBS()
+    if _M.ws then
+        -- TODO validate ws is still connected?
+        return _M.ws
+    end
+
     local ws, error1 = http_websocket.new_from_uri("ws://localhost:4455")
     if not ws then
         error("Failed to connect:" .. hs.inspect(error1))
@@ -153,16 +159,9 @@ local function authenticate(ws)
     return true
 end
 
-local _M = {}
 
 function _M.getSceneList()
-    if _M.ws then
-        -- TODO validate ws is still connected?
-        return _M.ws
-    end
-
     local ws = connectToOBS()
-    _M.ws = ws
     authenticate(ws)
 
     local request = {
