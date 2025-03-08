@@ -158,7 +158,7 @@ function _M.getSceneList()
         d = {
             -- https://github.com/obsproject/obs-websocket/blob/master/docs/generated/protocol.md#getscenelist
             requestType = "GetSceneList",
-            requestId = "1234"
+            requestId = uuid()
         }
     }
 
