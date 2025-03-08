@@ -1964,3 +1964,11 @@ function trash
         echo "TODO not implemented yet for your OS"
     end
 end
+
+if $IS_MACOS then
+    abbr find gfind
+    # gfind == GNU find, has -exeuctable arg (among other differences)
+end
+
+# mostly for fun, also a good way to remember this exists :)
+abbr fuc "fish_update_completions"

@@ -138,7 +138,6 @@ local function connect_to_obs()
     end
     error("WebSocket connection error:" .. hs.inspect(errorConnect))
 end
-
 local function receive(ws)
     local response = ws:receive()
     if not response then
