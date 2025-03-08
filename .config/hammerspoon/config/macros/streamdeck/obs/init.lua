@@ -126,18 +126,6 @@ function getOutputStatus()
     ws:close()
 end
 
-function sendOneRequest(type, data)
-    local ws = connectAndAuthenticate()
-
-    local request = createRequest(type, data)
-    ws_send(ws, request)
-
-    local response = receiveDecoded(ws)
-    expectRequestResponse(request, response)
-    expectRequestStatusIsOk(response)
-    ws:close()
-end
-
 function getOutputList()
     local outputList = sendOneRequest(Requests.Outputs.GetOutputList)
     if outputList then

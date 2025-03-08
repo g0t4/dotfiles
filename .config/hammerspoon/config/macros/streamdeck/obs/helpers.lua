@@ -101,3 +101,15 @@ function ws_send(ws, data, timeout, opcode)
     -- https://daurnimator.github.io/lua-http/0.4/#http.websocket:send
     ws:send(json.encode(data), opcode, timeout)
 end
+
+function sendOneRequest(type, data)
+    local ws = connectAndAuthenticate()
+
+    local request = createRequest(type, data)
+    ws_send(ws, request)
+
+    local response = receiveDecoded(ws)
+    expectRequestResponse(request, response)
+    expectRequestStatusIsOk(response)
+    ws:close()
+end
