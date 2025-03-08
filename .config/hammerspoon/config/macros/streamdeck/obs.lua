@@ -11,7 +11,7 @@ local function error_unexpected_response(response)
     error("Received unexpected response: " .. json.encode(response, { indent = true }))
 end
 
-local function connect_to_obs()
+local function ConnectToOBS()
     local ws, error = http_websocket.new_from_uri("ws://localhost:4455")
     if not ws then
         error("Failed to connect:" .. hs.inspect(error))
@@ -153,8 +153,8 @@ local function authenticate(ws)
     return true
 end
 
-local function get_scene_list()
-    local ws = connect_to_obs()
+function GetSceneList()
+    local ws = ConnectToOBS()
     authenticate(ws)
 
     local request = {
@@ -176,5 +176,3 @@ local function get_scene_list()
 
     ws:close()
 end
-
-get_scene_list()
