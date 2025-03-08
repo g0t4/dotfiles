@@ -33,7 +33,6 @@ local function connect_to_obs()
         error("WebSocket connection error:" .. hs.inspect(err))
     end
 
-    print("Connected to OBS WebSocket")
     return ws
 end
 
