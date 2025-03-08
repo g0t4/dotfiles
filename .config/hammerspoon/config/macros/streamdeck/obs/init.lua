@@ -100,6 +100,10 @@ function getProfileList()
     getAndPrint(Requests.Config.GetProfileList)
 end
 
+function getVideoSettings()
+    getAndPrint(Requests.Config.GetVideoSettings)
+end
+
 function getCurrentProgramScene()
     getAndPrint(Requests.Scenes.GetCurrentProgramScene)
 end

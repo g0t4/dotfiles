@@ -1,0 +1,19 @@
+{
+  "op":7,
+  "d":{
+    "requestType":"GetVideoSettings",
+    "requestId":"30d949d3-3bf0-4a9f-8a80-29a576ba72f8",
+    "responseData":{
+      "fpsNumerator":30,
+      "fpsDenominator":1,
+      "baseWidth":3840,
+      "outputHeight":2160,
+      "outputWidth":3840,
+      "baseHeight":2160
+    },
+    "requestStatus":{
+      "code":100,
+      "result":true
+    }
+  }
+}
