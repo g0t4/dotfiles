@@ -47,6 +47,8 @@ function ws_receive(ws, timeout)
     return nil, frame
 end
 
+---@param ws table
+---@return table|nil decoded
 function receiveDecoded(ws)
     -- PRN pass timeout? to receive?
 
@@ -63,7 +65,12 @@ function receiveDecoded(ws)
         error("unexpected binary frame, was expecting a text frame")
     end
     if textFrame then
-        return json.decode(textFrame)
+        ---@class table|nil decoded
+        local decoded = json.decode(textFrame)
+        if not decoded then
+            error("error decoding json: " .. textFrame)
+        end
+        return decoded
     end
     return nil
 end
