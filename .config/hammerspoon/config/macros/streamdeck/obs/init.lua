@@ -156,6 +156,7 @@ function _M.getSceneList()
     local request = {
         op = WebSocketOpCode.Request,
         d = {
+            -- https://github.com/obsproject/obs-websocket/blob/master/docs/generated/protocol.md#getscenelist
             requestType = "GetSceneList",
             requestId = "1234"
         }
