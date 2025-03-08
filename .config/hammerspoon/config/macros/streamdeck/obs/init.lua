@@ -20,10 +20,17 @@ end
 
 ---Wrapper around ws:receive to provide types and split second arg intelligently for consumers
 ---@param ws table
----@param timeout integer|nil # milliseconds???
+---@param timeout integer|nil # in SECONDS (see https://daurnimator.github.io/lua-http/0.4/#timeouts)
 ---@return string|nil textFrame, binary|nil binaryFrame, string|nil error, string|nil errorCode
 local function ws_receive(ws, timeout)
-    -- TODO types on ws and is timeout in ms?
+    -- TODO does timeout default to infinite?
+    -- TODO can I wrap in coroutine and not need to worry about timeout?
+    --    https://daurnimator.github.io/lua-http/0.4/#asynchronous-operation
+    --    mentions non-blocking in cqueue or compatible container (IIAC coroutine?)
+    --    or does this not apply to ws:receive?
+    -- TODO cqueues:  https://25thandclement.com/~william/projects/cqueues.html
+    --   ok yup, uses yielding coroutines to communicate w/ event controller
+
     local frame, errorOrFrameType, errorCode = ws:receive(timeout)
     if errorCode then
         return nil, nil, errorOrFrameType, errorCode
@@ -192,9 +199,8 @@ function listenToOutputEvents()
     local ws = connectToOBS()
     authenticate(ws)
 
-    while true do
-        -- TODO add delay between receive? or is the timeout sufficient to be non-blocking?
-        local textFrame, binaryFrame, err, errorCode = ws_receive(ws)
+    local function checkForOutputs()
+        local textFrame, binaryFrame, err, errorCode = ws_receive(ws, 1)
         if err then
             local message = "error receiving frame: " .. err
             if errorCode then
@@ -209,7 +215,11 @@ function listenToOutputEvents()
             local decoded = json.decode(textFrame)
             printJson("listenToOutputEvents response:", decoded)
         end
+        print("nothing received yet")
+        -- TODO adjust delay between checks, avoids blocking hammerspoon process (ws_receive is blocking)
+        hs.timer.doAfter(1, checkForOutputs)
     end
+    hs.timer.doAfter(0.1, checkForOutputs)
 end
 
 function getSceneList()
