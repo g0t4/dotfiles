@@ -212,26 +212,22 @@ local function authenticate(ws)
 
         -- Concatenate the websocket password with the salt provided by the server (password + salt)
         local salt = hello.d.authentication.salt
-        print("salt:", salt)
-        -- salt = salt:gsub("=$", "")
-        -- print("  salt:", salt)
         local password_plus_salt = password .. salt
-        print("  password_plus_salt:", password_plus_salt)
+        -- print("  password_plus_salt:", password_plus_salt)
 
         -- Generate an SHA256 binary hash of the result and base64 encode it, known as a base64 secret.
         local base64_secret = sha256thenbase64(password_plus_salt)
-        print("  base64_secret:", base64_secret)
+        -- print("  base64_secret:", base64_secret)
 
         -- Concatenate the base64 secret with the challenge sent by the server (base64_secret + challenge)
         local challenge = hello.d.authentication.challenge
-        -- print("  challenge:", challenge)
-        -- challenge = challenge:gsub("=$", "")
-        print("    challenge:", challenge)
         local base64_secret_plus_challenge = base64_secret .. challenge
-        print("  base64_secret_plus_challenge:", base64_secret_plus_challenge)
+        -- print("  base64_secret_plus_challenge:", base64_secret_plus_challenge)
+
         -- Generate a binary SHA256 hash of that result and base64 encode it. You now have your authentication string.
         local auth_string = sha256thenbase64(base64_secret_plus_challenge)
-        print("auth string:", auth_string)
+        -- print("  auth string:", auth_string)
+
         return auth_string
     end
 
