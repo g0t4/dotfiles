@@ -104,6 +104,16 @@ function getVideoSettings()
     getAndPrint(Requests.Config.GetVideoSettings)
 end
 
+function getRecordDirectory()
+    getAndPrint(Requests.Config.GetRecordDirectory)
+end
+
+function setRecordDirectory(directory)
+    getAndPrint(Requests.Config.SetRecordDirectory, {
+        recordDirectory = directory,
+    })
+end
+
 function getCurrentProgramScene()
     getAndPrint(Requests.Scenes.GetCurrentProgramScene)
 end
