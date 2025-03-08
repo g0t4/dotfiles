@@ -81,12 +81,50 @@ function expectRequestStatusIsOk(response)
     end
 end
 
-function getOutputStatus()
-    -- *** response.d.responseData.outputActive
-    getAndPrint(Requests.Outputs.GetOutputStatus, {
-        outputName = "simple_file_output",
-    })
-end
+Outputs = {
+    Recording = "simple_file_output",
+    Streaming = "virtualcam_output",
+    -- hs.inspect(Outputs.isActive(Outputs.Recording))
+
+    list = function()
+        return getResponseData(Requests.Outputs.GetOutputList).outputs
+    end,
+    getStatus = function(outputName)
+        return getResponseData(Requests.Outputs.GetOutputStatus, {
+            outputName = outputName,
+        })
+    end,
+    isActive = function(outputName)
+        return Outputs.getStatus(outputName).outputActive
+    end,
+    ---@return boolean # active or inactive after toggle
+    toggle = function(outputName)
+        return getResponseData(Requests.Outputs.ToggleOutput, {
+            outputName = outputName,
+        }).outputActive
+    end,
+    start = function(outputName)
+        return getResponseData(Requests.Outputs.StartOutput, {
+            outputName = outputName,
+        }).outputActive
+    end,
+    stop = function(outputName)
+        return getResponseData(Requests.Outputs.StopOutput, {
+            outputName = outputName,
+        }).outputActive
+    end,
+    settings = function(outputName)
+        -- FYI appears to show last recording file
+        -- outputSettings = {
+        --   muxer_settings = "",
+        --   path = "/Users/wes.../2025-03-08 13-27.mkv"
+        -- }
+
+        return getResponseData(Requests.Outputs.GetOutputSettings, {
+            outputName = outputName,
+        })
+    end,
+}
 
 function getOutputList()
     getAndPrint(Requests.Outputs.GetOutputList)
