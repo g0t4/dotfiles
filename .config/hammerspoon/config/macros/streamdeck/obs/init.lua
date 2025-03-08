@@ -13,16 +13,10 @@ local function errorUnexpectedResponse(response)
 end
 
 local function connectToOBS()
-    if _M.ws then
-        -- TODO validate ws is still connected?
-        return _M.ws
-    end
-
     local ws, error1 = http_websocket.new_from_uri("ws://localhost:4455")
     if not ws then
         error("Failed to connect:" .. hs.inspect(error1))
     end
-    _M.ws = ws
 
     local success, errorConnect = ws:connect()
     if success then
