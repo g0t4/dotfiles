@@ -33,7 +33,7 @@ _G.RequestBatchExecutionType = {
     Parallel = 2,
 }
 
-_G.RequestStatusUnvalidated = {
+_G.RequestStatus = {
     -- FYI these are from ChatGPT and Inception's model but I did not validate them myself yet
     Unknown = 0, -- Unknown status, should never be used.
     NoError = 10, -- For internal use to signify a successful field check.
@@ -72,7 +72,7 @@ _G.RequestStatusUnvalidated = {
 }
 
 -- BTW did not validate all of these yet
-_G.EventSubscriptionBitFlagsUnvalidated = {
+_G.EventSubscriptionBitFlags = {
     None = 0,
     General = 1,
     Config = 2,

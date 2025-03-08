@@ -24,8 +24,9 @@ local M = {}
 --   ScreenshotSaved
 --   ExitStarted  -- shut down listeners... though they will stop naturally :)
 
-function listenToOutputEvents()
-    local ws = connectAndAuthenticate()
+function listenForRelevantEvents()
+    local eventFlags = EventSubscriptionBitFlags.Outputs
+    local ws = connectAndAuthenticate(eventFlags)
 
     local function checkForOutputs()
         local textFrame, binaryFrame, err, errorCode = ws_receive(ws, 1)
@@ -85,7 +86,7 @@ function expectRequestStatusIsOk(response)
         error("no requestStatus in response")
     end
     if response.d.requestStatus.result ~= true then
-        local codeText = getFirstKeyForValue(RequestStatusUnvalidated, response.d.requestStatus.code) or ""
+        local codeText = getFirstKeyForValue(RequestStatus, response.d.requestStatus.code) or ""
 
         local commentText = response.d.requestStatus.comment or ""
 

@@ -19,7 +19,8 @@ function connectToOBS()
     error("WebSocket connection error:" .. hs.inspect(errorConnect))
 end
 
-local function authenticate(ws)
+local function authenticate(ws, eventFlags)
+    eventFlags = eventFlags or 0
     local response = receiveDecoded(ws)
     if not response or response.op ~= WebSocketOpCode.Hello then
         errorUnexpectedResponse(response)
@@ -34,7 +35,7 @@ local function authenticate(ws)
             op = WebSocketOpCode.Identify,
             d = {
                 rpcVersion = 1,
-                eventSubscriptions = 0
+                eventSubscriptions = eventFlags
             }
         }))
         response = receiveDecoded(ws)
@@ -121,7 +122,7 @@ local function authenticate(ws)
         d = {
             rpcVersion = 1,
             authentication = auth_string,
-            eventSubscriptions = EventSubscriptionBitFlagsUnvalidated.Outputs
+            eventSubscriptions = eventFlags
         }
     })
     -- print("identify:", identify)
@@ -140,9 +141,10 @@ end
 
 -- TODO ADD TYPING of ws return type
 --    CARRY OVER TO other uses like receiveDecoded
-function M.connectAndAuthenticate()
+--- @param eventFlags number|nil
+function M.connectAndAuthenticate(eventFlags)
     local ws = connectToOBS()
-    authenticate(ws)
+    authenticate(ws, eventFlags)
     return ws
 end
 
