@@ -83,70 +83,66 @@ function expectRequestStatusIsOk(response)
     end
 end
 
---- FYI use Recording and Streaming controls instead of Outputs.Recording/Streaming unless they don't do something you need
----@class Output
----@field outputName string
-local Output = {}
-
-function Output.list()
-    return getResponseData(Requests.Outputs.GetOutputList).outputs
-end
-
-function Output.new(outputName)
-    local self = setmetatable({}, { __index = Output })
-    self.outputName = outputName
-    return self
-end
-
-Outputs = {
-    Recording = Output.new("simple_file_output"),
-    Streaming = Output.new("virtualcam_output")
-}
-
-function Output:status()
-    return getResponseData(Requests.Outputs.GetOutputStatus, {
-        outputName = self.outputName,
-    })
-end
-
-function Output:isActive()
-    return self:status().outputActive
-end
-
----@return boolean # active or inactive after toggle
-function Output:toggle()
-    return getResponseData(Requests.Outputs.ToggleOutput, {
-        outputName = self.outputName,
-    }).outputActive
-end
-
-function Output:start()
-    return getResponseData(Requests.Outputs.StartOutput, {
-        outputName = self.outputName,
-    })
-end
-
-function Output:stop()
-    return getResponseData(Requests.Outputs.StopOutput, {
-        outputName = self.outputName,
-    })
-end
-
-function Output:settings()
-    -- FYI appears to show last recording file
-    -- outputSettings = {
-    --   muxer_settings = "",
-    --   path = "/Users/wes.../2025-03-08 13-27.mkv"
-    -- }
-
-    return getResponseData(Requests.Outputs.GetOutputSettings, {
-        outputName = self.outputName,
-    })
-end
-
-function getOutputList()
-    getAndPrint(Requests.Outputs.GetOutputList)
-end
+-- --- FYI use Recording and Streaming controls instead of Outputs.Recording/Streaming unless they don't do something you need
+-- ---@class Output
+-- ---@field outputName string
+-- local Output = {}
+--
+-- function Output.list()
+--     return getResponseData(Requests.Outputs.GetOutputList).outputs
+-- end
+--
+-- function Output.new(outputName)
+--     local self = setmetatable({}, { __index = Output })
+--     self.outputName = outputName
+--     return self
+-- end
+--
+-- Outputs = {
+--     Recording = Output.new("simple_file_output"),
+--     Streaming = Output.new("virtualcam_output")
+-- }
+--
+-- function Output:status()
+--     return getResponseData(Requests.Outputs.GetOutputStatus, {
+--         outputName = self.outputName,
+--     })
+-- end
+--
+-- function Output:isActive()
+--     return self:status().outputActive
+-- end
+--
+-- ---@return boolean # active or inactive after toggle
+-- function Output:toggle()
+--     return getResponseData(Requests.Outputs.ToggleOutput, {
+--         outputName = self.outputName,
+--     }).outputActive
+-- end
+--
+-- function Output:start()
+--     return getResponseData(Requests.Outputs.StartOutput, {
+--         outputName = self.outputName,
+--     })
+-- end
+--
+-- function Output:stop()
+--     return getResponseData(Requests.Outputs.StopOutput, {
+--         outputName = self.outputName,
+--     })
+-- end
+--
+-- function Output:settings()
+--     -- FYI appears to show last recording file
+--     -- outputSettings = {
+--     --   muxer_settings = "",
+--     --   path = "/Users/wes.../2025-03-08 13-27.mkv"
+--     -- }
+--
+--     return getResponseData(Requests.Outputs.GetOutputSettings, {
+--         outputName = self.outputName,
+--     })
+-- end
 
 function getSceneList()
     getAndPrint(Requests.Scenes.GetSceneList)
