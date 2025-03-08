@@ -22,6 +22,7 @@ local function connectToOBS()
     if not ws then
         error("Failed to connect:" .. hs.inspect(error1))
     end
+    _M.ws = ws
 
     local success, errorConnect = ws:connect()
     if success then
