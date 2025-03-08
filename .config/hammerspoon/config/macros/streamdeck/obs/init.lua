@@ -134,24 +134,17 @@ local function authenticate(ws)
         d = {
             rpcVersion = 1,
             authentication = auth_string,
-            eventSubscriptions = 33
+            eventSubscriptions = 0
         }
     })
-    print("identify:", identify)
+    -- print("identify:", identify)
     ws:send(identify)
-    -- EVENT SUBSCRIPTIONS:  https://github.com/obsproject/obs-websocket/blob/master/docs/generated/protocol.md#eventsubscription
+    -- TODO EVENT SUBSCRIPTIONS:  https://github.com/obsproject/obs-websocket/blob/master/docs/generated/protocol.md#eventsubscription
     --    bitmask, default on for all subscriptions except high volume
-    -- TODO I cannot get it to acknowledge the Identify request... wtf?
-    --   is that seriously how it handles incorrect auth? it just does nothing?
-    --   woa it says authentication is missing
-    --      23:40:24.260: [obs-websocket] [WebSocketServer::onClose] WebSocket client `[::ffff:127.0.0.1]:53184` has disconnected with code `4009` and reason: Your payload's data is missing an `authentication` string, however authentication is required.
 
     -- should get back opcode 2 after sending identify
     response = receive(ws)
-    print("response after identify:", json.encode(response, { indent = true }))
-
-
-    return true
+    -- print("response after identify:", json.encode(response, { indent = true }))
 end
 
 
