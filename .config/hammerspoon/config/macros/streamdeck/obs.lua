@@ -1,61 +1,7 @@
 local http_websocket = require("http.websocket")
 local json = require("dkjson")
 
--- WebSocketOpCode::Hello
 -- The initial message sent by obs-websocket to newly connected clients.
---
--- Identifier Value: 0
--- Latest Supported RPC Version: 1
--- Added in v5.0.0
--- WebSocketOpCode::Identify
--- The message sent by a newly connected client to obs-websocket in response to a Hello.
---
--- Identifier Value: 1
--- Latest Supported RPC Version: 1
--- Added in v5.0.0
--- WebSocketOpCode::Identified
--- The response sent by obs-websocket to a client after it has successfully identified with obs-websocket.
---
--- Identifier Value: 2
--- Latest Supported RPC Version: 1
--- Added in v5.0.0
--- WebSocketOpCode::Reidentify
--- The message sent by an already-identified client to update identification parameters.
---
--- Identifier Value: 3
--- Latest Supported RPC Version: 1
--- Added in v5.0.0
--- WebSocketOpCode::Event
--- The message sent by obs-websocket containing an event payload.
---
--- Identifier Value: 5
--- Latest Supported RPC Version: 1
--- Added in v5.0.0
--- WebSocketOpCode::Request
--- The message sent by a client to obs-websocket to perform a request.
---
--- Identifier Value: 6
--- Latest Supported RPC Version: 1
--- Added in v5.0.0
--- WebSocketOpCode::RequestResponse
--- The message sent by obs-websocket in response to a particular request from a client.
---
--- Identifier Value: 7
--- Latest Supported RPC Version: 1
--- Added in v5.0.0
--- WebSocketOpCode::RequestBatch
--- The message sent by a client to obs-websocket to perform a batch of requests.
---
--- Identifier Value: 8
--- Latest Supported RPC Version: 1
--- Added in v5.0.0
--- WebSocketOpCode::RequestBatchResponse
--- The message sent by obs-websocket in response to a particular batch of requests from a client.
---
--- Identifier Value: 9
--- Latest Supported RPC Version: 1
--- Added in v5.0.0
-
 local WebSocketOpCode = {
     Hello = 0,
     Identify = 1,
@@ -67,6 +13,23 @@ local WebSocketOpCode = {
     RequestBatch = 8,
     RequestBatchResponse = 9,
 }
+
+local WebSocketCloseCode = {
+    DontClose = 0,
+    UnknownReason = 4000,
+    MessageDecodeError = 4002,
+    MissingDataField = 4003,
+    InvalidDataFieldType = 4004,
+    InvalidDataFieldValue = 4005,
+    UnknownOpCode = 4006,
+    NotIdentified = 4007,
+    AlreadyIdentified = 4008,
+    AuthenticationFailed = 4009,
+    UnsupportedRpcVersion = 4010,
+    SessionInvalidated = 4011,
+    UnsupportedFeature = 4012,
+}
+
 
 local function print_json(message, table)
     print(message, json.encode(table, { indent = true }))
