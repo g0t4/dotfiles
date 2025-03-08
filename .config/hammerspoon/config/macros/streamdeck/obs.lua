@@ -248,6 +248,7 @@ local function authenticate(ws)
         -- Generate a binary SHA256 hash of that result and base64 encode it. You now have your authentication string.
         local auth_string = encode64(sha256(base64_secret_plus_challenge))
         print("auth string:", auth_string)
+        return auth_string
     end
 
     local password = "foobar"
@@ -261,19 +262,26 @@ local function authenticate(ws)
     --     "eventSubscriptions": 33
     --   }
     -- }
-    ws:send(json.encode({
+    local identify = json.encode({
         op = WebSocketOpCode.Identify,
         d = {
             rpcVersion = 1,
             authentication = auth_string,
-            eventSubscriptions = 0
+            eventSubscriptions = 33
         }
-    }))
+    })
+    print("identify:", identify)
+    ws:send(identify)
     -- EVENT SUBSCRIPTIONS:  https://github.com/obsproject/obs-websocket/blob/master/docs/generated/protocol.md#eventsubscription
     --    bitmask, default on for all subscriptions except high volume
+    -- TODO I cannot get it to acknowledge the Identify request... wtf?
+    --   is that seriously how it handles incorrect auth? it just does nothing?
+    --  check OBS logs:  '/Users/wesdemos/Library/Application Support/obs-studio/logs/'
+    --   woa it says authentication is missing
+    --      23:40:24.260: [obs-websocket] [WebSocketServer::onClose] WebSocket client `[::ffff:127.0.0.1]:53184` has disconnected with code `4009` and reason: Your payload's data is missing an `authentication` string, however authentication is required.
 
     -- should get back opcode 2 after sending identify
-    local response = ws:receive()
+    response = receive(ws)
     if not response then
         error("No response received")
     end
@@ -297,7 +305,7 @@ local function get_scene_list()
 
     ws:send(json.encode(request))
 
-    local response = ws:receive()
+    local response = receive(ws)
     if response then
         local decoded_response = json.decode(response)
         print("Received Scene List:", json.encode(decoded_response, { indent = true }))
