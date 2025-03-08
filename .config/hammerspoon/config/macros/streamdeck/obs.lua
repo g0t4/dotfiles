@@ -161,7 +161,7 @@ end
 
 local function authenticate(ws)
     local response = receive(ws)
-    if response.op ~= 0 then
+    if response.op ~= WebSocketOpCode.Hello then
         error_unexpected_response(response)
     end
     print_json("Received Hello", response)
@@ -171,14 +171,14 @@ local function authenticate(ws)
         --     with PubSub subscriptions, and session parameters
         print("success, no authentication")
         ws:send(json.encode({
-            op = 1,
+            op = WebSocketOpCode.Identify,
             d = {
                 rpcVersion = 1,
                 eventSubscriptions = 0
             }
         }))
         response = receive(ws)
-        if response.op ~= 2 then
+        if response.op ~= WebSocketOpCode.Identified then
             error_unexpected_response(response)
         end
         print_json("Received Identify Response", response)
@@ -235,7 +235,7 @@ local function authenticate(ws)
     --   }
     -- }
     ws:send(json.encode({
-        op = 1,
+        op = WebSocketOpCode.Identify,
         d = {
             rpcVersion = 1,
             authentication = auth_string,
@@ -261,7 +261,7 @@ local function get_scene_list()
     if not ws then return end
 
     local request = {
-        op = 6, -- OBS WebSocket Request type
+        op = WebSocketOpCode.Request,
         d = {
             requestType = "GetSceneList",
             requestId = "1234"
