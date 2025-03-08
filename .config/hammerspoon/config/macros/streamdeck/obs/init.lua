@@ -75,22 +75,6 @@ local function expectRequestResponse(request, response)
     if request.d.requestId ~= response.d.requestId then
         error("requestId mismatch, expected " .. request.d.requestId .. ", got " .. response.d.requestId)
     end
-
-    -- if not response.d or not response.d.requestType then
-    --     printJson("response:", response)
-    --     error("no requestType")
-    -- end
-    -- local requestType = response.d.requestType
-    -- if requestType ~= Requests.Outputs.GetOutputStatus then
-    --     return
-    -- end
-    --
-    -- local opcodeText = getFirstKeyForValue(WebSocketOpCode, requestType)
-    -- local message = "requestType mismatch, expected " .. WebSocketOpCode.RequestResponse .. ", got " .. requestType
-    -- if opcodeText then
-    --     message = message .. " (" .. opcodeText .. ")"
-    -- end
-    -- error(message)
 end
 
 function getOutputStatus()
