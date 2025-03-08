@@ -13,6 +13,17 @@ local M = {}
 -- ***! check OBS logs:  '/Users/wesdemos/Library/Application Support/obs-studio/logs/'
 --    it will tell you what isn't working
 
+-- TODO Events to handle
+--  CurrentProgramSceneChanged
+--  CurrentPreviewSceneChanged
+--  StreamStateChanged
+--  RecordStateChanged
+--  RecordFileChanged (button could show name?)
+--
+-- low priority:
+--   ScreenshotSaved
+--   ExitStarted  -- shut down listeners... though they will stop naturally :)
+
 function listenToOutputEvents()
     local ws = connectAndAuthenticate()
 
