@@ -78,3 +78,13 @@ function newRequest(requestType)
         }
     }
 end
+
+---@param ws table
+---@param data table
+---@param timeout integer|nil # in SECONDS (see https://daurnimator.github.io/lua-http/0.4/#timeouts)
+---@param opcode string|integer|nil # nil/"text" vs "binary"
+function ws_send(ws, data, timeout, opcode)
+    timeout = timeout or 3 -- default to 3 seconds
+    -- https://daurnimator.github.io/lua-http/0.4/#http.websocket:send
+    ws:send(json.encode(data), opcode, timeout)
+end

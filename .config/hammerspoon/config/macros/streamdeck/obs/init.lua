@@ -61,7 +61,7 @@ function getOutputStatus()
 
     local request = newRequest(Requests.General.GetOutputStatus)
 
-    ws:send(json.encode(request))
+    ws_send(ws, request)
 
     local response = receiveDecoded(ws)
     if response then
