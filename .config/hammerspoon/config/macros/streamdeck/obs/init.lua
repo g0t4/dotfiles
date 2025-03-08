@@ -76,7 +76,9 @@ function expectRequestStatusIsOk(response)
     if response.d.requestStatus.result ~= true then
         local codeText = getFirstKeyForValue(RequestStatusUnvalidated, response.d.requestStatus.code) or ""
 
-        error("requestStatus is not ok, comment: " .. response.d.requestStatus.comment
+        local commentText = response.d.requestStatus.comment or ""
+
+        error("requestStatus is not ok, comment: " .. commentText
             .. ", code: " .. response.d.requestStatus.code .. " (" .. codeText .. ")")
     end
 end
@@ -193,7 +195,7 @@ end
 
 VirtualCam = {
     ---@return boolean
-    getStatus = function()
+    status = function()
         return getResponseData(Requests.Outputs.GetVirtualCamStatus).outputActive
     end,
     toggle = function()
@@ -207,6 +209,28 @@ VirtualCam = {
     stop = function()
         getAndPrint(Requests.Outputs.StopVirtualCam)
         -- TODO verify stopped
+    end,
+}
+
+Streaming = {
+    ---@return boolean
+    status = function()
+        return getResponseData(Requests.Stream.GetStreamStatus)
+    end,
+    ---@return boolean # active or inactive after toggle
+    toggle = function()
+        return getResponseData(Requests.Stream.ToggleStream).outputActive
+    end,
+    start = function()
+        getAndPrint(Requests.Stream.StartStream)
+    end,
+    stop = function()
+        getAndPrint(Requests.Stream.StopStream)
+    end,
+    sendCaption = function(text)
+        getAndPrint(Requests.Stream.SendStreamCaption, {
+            caption = text,
+        })
     end,
 }
 
