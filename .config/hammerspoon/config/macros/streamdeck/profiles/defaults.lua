@@ -21,7 +21,8 @@ DefaultsProfiles:addProfilePage(DECK_1XL, PAGE_1, function(_, deck)
         LuaButton:new(8, deck, drawTextIcon("Reload Config", deck), hs.reload),
 
         -- * row 2
-        LuaButton:new(16, deck, drawTextIcon("Toggle Record", deck), function() Record:toggle() end),
+        LuaButton:new(15, deck, drawTextIcon("Toggle Record", deck), function() Record:toggle() end),
+        LuaButton:new(16, deck, drawTextIcon("Toggle Pause", deck), function() Record:togglePause() end),
 
         LuaButton:new(11, deck, drawTextIcon("Corner Camera", deck), Scenes.setScreenCornerCamera),
         LuaButton:new(12, deck, drawTextIcon("Screen Only", deck), Scenes.setScreenOnly),
