@@ -1,0 +1,20 @@
+{
+  "d":{
+    "responseData":{
+      "supportedImageFormats":["bmp","cur","heic","heif","icns","ico","jp2","jpeg","jpg","pbm","pgm","png","ppm","tif","tiff","wbmp","webp","xbm","xpm"],
+      "rpcVersion":1,
+      "platform":"macos",
+      "availableRequests":["GetMonitorList","OpenInputInteractDialog","SetMediaInputCursor","CreateRecordChapter","ToggleRecordPause","StopRecord","ToggleRecord","GetRecordStatus","SendStreamCaption","TriggerMediaInputAction","StopStream","StartStream","SetOutputSettings","GetOutputSettings","StartOutput","ToggleOutput","SaveReplayBuffer","StopReplayBuffer","StartReplayBuffer","StopVirtualCam","StartVirtualCam","SetSceneItemPrivateSettings","GetStudioModeEnabled","GetSceneItemPrivateSettings","SetSceneItemBlendMode","GetSourceFilterDefaultSettings","SetSceneItemLocked","GetLastReplayBufferReplay","GetSceneItemBlendMode","GetSceneItemTransform","GetGroupSceneItemList","GetSceneItemId","ToggleVirtualCam","GetSceneItemList","GetInputList","GetVideoSettings","DuplicateSceneItem","GetSourcePrivateSettings","GetSourceScreenshot","SetSourceFilterIndex","SetTBarPosition","GetSourceFilter","OpenInputFiltersDialog","SetSourceFilterName","RemoveSourceFilter","GetSourceFilterList","GetMediaInputStatus","TriggerStudioModeTransition","GetCurrentSceneTransitionCursor","ResumeRecord","GetInputAudioMonitorType","GetSceneItemSource","SetCurrentSceneTransitionDuration","OffsetMediaInputCursor","GetVirtualCamStatus","CreateSourceFilter","SetCurrentSceneTransition","GetTransitionKindList","SetInputAudioTracks","GetInputVolume","GetInputAudioTracks","SetCurrentProgramScene","SetInputAudioMonitorType","GetSourceFilterKindList","SetInputAudioSyncOffset","SetInputAudioBalance","GetCurrentSceneTransition","SetInputSettings","SetSourceFilterEnabled","GetInputSettings","OpenSourceProjector","SetSceneItemTransform","GetInputAudioBalance","BroadcastCustomEvent","GetPersistentData","SetInputName","GetInputKindList","CreateSceneCollection","GetOutputStatus","GetSceneSceneTransitionOverride","SetInputMute","GetSceneItemIndex","RemoveScene","SetCurrentSceneTransitionSettings","GetSceneTransitionList","PauseRecord","SetSceneSceneTransitionOverride","OpenVideoMixProjector","SetCurrentPreviewScene","GetSceneCollectionList","SetRecordDirectory","SplitRecordFile","SetSceneName","CreateScene","GetInputAudioSyncOffset","GetStreamStatus","GetGroupList","GetOutputList","GetSceneList","CreateSceneItem","GetInputMute","GetCurrentProgramScene","SetSourceFilterSettings","CallVendorRequest","SetStreamServiceSettings","SaveSourceScreenshot","GetRecordDirectory","GetInputDefaultSettings","GetStreamServiceSettings","CreateProfile","RemoveProfile","RemoveInput","OpenInputPropertiesDialog","ToggleReplayBuffer","GetHotkeyList","SetCurrentSceneCollection","GetSceneItemLocked","GetProfileList","ToggleInputMute","TriggerHotkeyByKeySequence","CreateInput","GetCurrentPreviewScene","TriggerHotkeyByName","SetStudioModeEnabled","GetSourceActive","SetVideoSettings","PressInputPropertiesButton","SetProfileParameter","SetInputVolume","ToggleStream","SetSourcePrivateSettings","Sleep","StartRecord","GetReplayBufferStatus","SetPersistentData","GetProfileParameter","SetSceneItemIndex","SetSceneItemEnabled","GetInputPropertiesListPropertyItems","GetSpecialInputs","GetStats","RemoveSceneItem","StopOutput","SetCurrentProfile","GetVersion","GetSceneItemEnabled"],
+      "obsWebSocketVersion":"5.5.4",
+      "platformDescription":"macOS 15.3",
+      "obsVersion":"31.0.1"
+    },
+    "requestId":"686f532a-343b-4b59-9227-3279e99228b5",
+    "requestType":"GetVersion",
+    "requestStatus":{
+      "code":100,
+      "result":true
+    }
+  },
+  "op":7
+}

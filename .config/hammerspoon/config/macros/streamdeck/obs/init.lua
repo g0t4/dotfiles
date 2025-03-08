@@ -122,4 +122,17 @@ function getCurrentPreviewScene()
     getAndPrint(Requests.Scenes.GetCurrentPreviewScene)
 end
 
+function getVersion()
+    getAndPrint(Requests.General.GetVersion)
+end
+
+-- function getSourceScreenshot(sourceName)
+--     getAndPrint(Requests.Sources.GetSourceScreenshot, {
+--         -- IIAC one or the other:
+--         sourceName = sourceName,
+--         sourceUuid = sourceUuid,
+--         imageFormat = ?  -- use GetVersion to get list of formats
+--     })
+-- end
+
 return M
