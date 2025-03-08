@@ -25,14 +25,12 @@ end
 local function connect_to_obs()
     local ws, err = http_websocket.new_from_uri("ws://localhost:4455")
     if not ws then
-        print("Failed to connect:", err)
-        return nil
+        error("Failed to connect:" .. hs.inspect(err))
     end
 
     local success, err = ws:connect()
     if not success then
-        print("WebSocket connection error:", err)
-        return nil
+        error("WebSocket connection error:" .. hs.inspect(err))
     end
 
     print("Connected to OBS WebSocket")
