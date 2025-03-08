@@ -23,16 +23,16 @@ local function sha256(input)
 end
 
 local function connect_to_obs()
-    local ws, err = http_websocket.new_from_uri("ws://localhost:4455")
+    local ws, error = http_websocket.new_from_uri("ws://localhost:4455")
     if not ws then
-        error("Failed to connect:" .. hs.inspect(err))
+        error("Failed to connect:" .. hs.inspect(error))
     end
 
-    local success, err = ws:connect()
+    local success, errorConnect = ws:connect()
     if success then
         return ws
     end
-    error("WebSocket connection error:" .. hs.inspect(err))
+    error("WebSocket connection error:" .. hs.inspect(errorConnect))
 end
 
 local function receive(ws)
