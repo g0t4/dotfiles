@@ -30,6 +30,7 @@ function ws_receive(ws, timeout)
         --   whereas with authentcation, it likely is
         return nil, nil, nil, errorCode
     elseif errorCode == 1001 then
+        print("websocket closed?")
         -- happens on OBS terminate
         -- TODO is there a lookup of error code explanations somewhere?
         --   Possibly related to http2 protocol?

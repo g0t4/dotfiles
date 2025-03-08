@@ -32,6 +32,7 @@ function listenToOutputEvents()
         end
         if errorCode == 60 then
             print("timeout, ignoring...")
+            hs.timer.doAfter(1, checkForOutputs)
             return
         end
         if err then
