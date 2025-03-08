@@ -79,18 +79,22 @@ local function receive_hello(ws)
     -- }
 
 
-    -- Concatenate the websocket password with the salt provided by the server (password + salt)
-    local salt = response.d.authentication.salt
+    local function get_auth_string(hello, password)
+        -- Concatenate the websocket password with the salt provided by the server (password + salt)
+        local salt = hello.d.authentication.salt
+        local challenge = hello.d.authentication.challenge
+        local password_plus_salt = password .. salt
+        -- Generate an SHA256 binary hash of the result and base64 encode it, known as a base64 secret.
+        local base64_secret = encode64(sha256(password_plus_salt))
+        -- Concatenate the base64 secret with the challenge sent by the server (base64_secret + challenge)
+        local base64_secret_plus_challenge = base64_secret .. challenge
+        -- Generate a binary SHA256 hash of that result and base64 encode it. You now have your authentication string.
+        local auth_string = encode64(sha256(base64_secret_plus_challenge))
+        print("auth string:", auth_string)
+    end
+
     local password = "foobar"
-    local challenge = response.d.authentication.challenge
-    local password_plus_salt = password .. salt
-    -- Generate an SHA256 binary hash of the result and base64 encode it, known as a base64 secret.
-    local base64_secret = encode64(sha256(password_plus_salt))
-    -- Concatenate the base64 secret with the challenge sent by the server (base64_secret + challenge)
-    local base64_secret_plus_challenge = base64_secret .. challenge
-    -- Generate a binary SHA256 hash of that result and base64 encode it. You now have your authentication string.
-    local auth_string = encode64(sha256(base64_secret_plus_challenge))
-    print("auth string:", auth_string)
+    local auth_string = get_auth_string(response, password)
     -- Identify request:
     -- {
     --   "op": 1,
