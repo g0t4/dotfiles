@@ -738,6 +738,14 @@ function nh_expand
     echo nvim
 end
 
+abbr nn --function nn_expand
+function nn_expand
+    if not string match --quiet $WES_DOTFILES/.config/nvim (pwd)
+        echo -n "cd $WES_DOTFILES/.config/nvim; "
+    end
+    echo nvim
+end
+#
 # *** screenpal
 
 abbr spkill "pkill -ilf screenpal"
