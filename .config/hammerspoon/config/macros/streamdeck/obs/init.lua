@@ -155,17 +155,55 @@ end
 --     })
 -- end
 
-Scenes = {}
+MyScenes = {
+    ScreenWithCornerCamera = "d1a6b43d-7878-4f0c-ac2d-75f50c95ff05",
+    ScreenOnly = "ffe52e1d-6831-4fb5-8afe-060c372c5791",
+    CameraOnly = "16b3b395-d25f-466f-ae8d-df28c5321eab",
+    ScreenWithHugeCamera = "a6a5bb4a-568a-49f4-ac56-36cb7266c8b6",
+}
+Scenes = {
+    setScreenCornerCamera = function()
+        Scenes.setCurrentProgramScene(MyScenes.ScreenWithCornerCamera)
+    end,
+    setScreenOnly = function()
+        Scenes.setCurrentProgramScene(MyScenes.ScreenOnly)
+    end,
+    setCameraOnly = function()
+        Scenes.setCurrentProgramScene(MyScenes.CameraOnly)
+    end,
+    setScreenWithHugeCamera = function()
+        Scenes.setCurrentProgramScene(MyScenes.ScreenWithHugeCamera)
+    end,
+}
 function Scenes.list()
     return execAndReturnData(Requests.Scenes.GetSceneList)
 end
 
+---FYI it appears the name/uuid are redundant in output
+---@return table { sceneName: string, sceneUuid: string, currentProgramSceneName: string, currentProgramSceneUuid: string }
 function Scenes.currentProgramScene()
     return execAndReturnData(Requests.Scenes.GetCurrentProgramScene)
 end
 
+---FYI it appears the name/uuid are redundant in output
+---@return table { sceneName: string, sceneUuid: string, currentPreviewSceneName: string, currentPreviewSceneUuid: string }
 function Scenes.currentPreviewScene()
+    -- TODO check if studio mode is enabled? otherwise cannot use this
     return execAndReturnData(Requests.Scenes.GetCurrentPreviewScene)
+end
+
+---@param sceneUuid string
+function Scenes.setCurrentProgramScene(sceneUuid)
+    execAndPrintResponse(Requests.Scenes.SetCurrentProgramScene, {
+        sceneUuid = sceneUuid,
+    })
+end
+
+---@param sceneUuid string
+function Scenes.setCurrentPreviewScene(sceneUuid)
+    execAndPrintResponse(Requests.Scenes.SetCurrentPreviewScene, {
+        sceneUuid = sceneUuid,
+    })
 end
 
 Profiles = {}

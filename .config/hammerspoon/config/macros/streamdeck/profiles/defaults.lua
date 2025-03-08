@@ -23,6 +23,12 @@ DefaultsProfiles:addProfilePage(DECK_1XL, PAGE_1, function(_, deck)
         -- * row 2
         LuaButton:new(16, deck, drawTextIcon("Toggle Record", deck), function() Record:toggle() end),
 
+        LuaButton:new(11, deck, drawTextIcon("Corner Camera", deck), Scenes.setScreenCornerCamera),
+        LuaButton:new(12, deck, drawTextIcon("Screen Only", deck), Scenes.setScreenOnly),
+        LuaButton:new(13, deck, drawTextIcon("Camera Only", deck), Scenes.setCameraOnly),
+        LuaButton:new(14, deck, drawTextIcon("Screen with Huge Camera", deck), Scenes.setScreenWithHugeCamera),
+
+
 
         -- * row 3
 
