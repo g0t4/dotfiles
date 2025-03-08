@@ -56,6 +56,23 @@ function listenToOutputEvents()
     hs.timer.doAfter(0.1, checkForOutputs)
 end
 
+function getOutputStatus()
+    local ws = connectAndAuthenticate()
+
+    local request = newRequest(Requests.General.GetOutputStatus)
+
+    ws:send(json.encode(request))
+
+    local response = receiveDecoded(ws)
+    if response then
+        printJson("Received Output Status:", response)
+    else
+        print("No response received")
+    end
+
+    ws:close()
+end
+
 function getSceneList()
     local ws = connectAndAuthenticate()
 

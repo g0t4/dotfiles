@@ -67,3 +67,14 @@ function receiveDecoded(ws)
     end
     return nil
 end
+
+function newRequest(requestType)
+    -- FYI https://github.com/obsproject/obs-websocket/blob/master/docs/generated/protocol.md#request-opcode-6
+    return {
+        op = WebSocketOpCode.Request,
+        d = {
+            requestType = requestType,
+            requestId = uuid()
+        }
+    }
+end
