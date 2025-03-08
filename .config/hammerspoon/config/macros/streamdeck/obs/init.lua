@@ -194,13 +194,19 @@ function listenToOutputEvents()
 
     while true do
         -- TODO add delay between receive? or is the timeout sufficient to be non-blocking?
-        local response, err = ws:receive(1000)
+        local textFrame, binaryFrame, err, errorCode = ws_receive(ws)
         if err then
-            print("listenToOutputEvents Failure:", err)
-            return
+            local message = "error receiving frame: " .. err
+            if errorCode then
+                message = message .. ", errorCode: " .. errorCode
+            end
+            error(message)
         end
-        if response then
-            local decoded = json.decode(response)
+        if binaryFrame then
+            error("unexpected binary frame, was expecting a text frame")
+        end
+        if textFrame then
+            local decoded = json.decode(textFrame)
             printJson("listenToOutputEvents response:", decoded)
         end
     end
