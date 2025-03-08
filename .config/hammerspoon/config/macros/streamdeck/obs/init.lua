@@ -141,7 +141,7 @@ local function authenticate(ws)
         d = {
             rpcVersion = 1,
             authentication = auth_string,
-            eventSubscriptions = 0
+            eventSubscriptions = EventSubscriptionBitFlagsUnvalidated.Outputs
         }
     })
     -- print("identify:", identify)
@@ -157,12 +157,27 @@ local function authenticate(ws)
     end
 end
 
+function _M.listenToOutputEvents()
+    local ws = connectToOBS()
+    authenticate(ws)
+
+    while true do
+        -- TODO add delay between receive? or is the timeout sufficient to be non-blocking?
+        local response, err = ws:receive(1000)
+        if err then
+            print("listenToOutputEvents Failure:", err)
+            return
+        end
+        if response then
+            local decoded = json.decode(response)
+            printJson("listenToOutputEvents response:", decoded)
+        end
+    end
+end
 
 function _M.getSceneList()
     local ws = connectToOBS()
     authenticate(ws)
-    -- for now use separate connection so I don't have to worry about other requests overlapping
-    --    i.e. requestId below... until I need some sort of subscription to events.. until then I don't care to stay connected
 
     -- BTW list of requests: https://github.com/obsproject/obs-websocket/blob/master/docs/generated/protocol.md#requests
     local request = {
