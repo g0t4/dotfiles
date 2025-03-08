@@ -33,18 +33,21 @@ local function connect_to_obs()
     return ws
 end
 
-local function receive_hello(ws)
+local function receive(ws)
     local response = ws:receive()
     if not response then
         error("No response received")
     end
+    return json.decode(response)
+end
 
-    local decoded_response = json.decode(response)
-    if decoded_response.op ~= 0 then
-        error("Received unexpected response: " .. json.encode(decoded_response, { indent = true }))
+local function receive_hello(ws)
+    local response = receive(ws)
+    if response.op ~= 0 then
+        error("Received unexpected response: " .. json.encode(response, { indent = true }))
     end
-    print("Received Hello:", json.encode(decoded_response, { indent = true }))
-    if not decoded_response.d.authentication then
+    print("Received Hello:", json.encode(response, { indent = true }))
+    if not response.d.authentication then
         -- FYI can send opcode 1 => https://github.com/obsproject/obs-websocket/blob/master/docs/generated/protocol.md#identify-opcode-1
         --     with PubSub subscriptions, and session parameters
 
@@ -77,9 +80,9 @@ local function receive_hello(ws)
 
 
     -- Concatenate the websocket password with the salt provided by the server (password + salt)
-    local salt = decoded_response.d.authentication.salt
+    local salt = response.d.authentication.salt
     local password = "foobar"
-    local challenge = decoded_response.d.authentication.challenge
+    local challenge = response.d.authentication.challenge
     local password_plus_salt = password .. salt
     -- Generate an SHA256 binary hash of the result and base64 encode it, known as a base64 secret.
     local base64_secret = encode64(sha256(password_plus_salt))
