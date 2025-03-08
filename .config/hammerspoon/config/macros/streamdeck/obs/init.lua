@@ -56,22 +56,38 @@ function listenToOutputEvents()
     hs.timer.doAfter(0.1, checkForOutputs)
 end
 
-local function expectRequestResponse(response)
-    -- PRN rewrite for other expects
-    if not response then
-        error("no response received")
-    end
-    if not response.requestType then
-        printJson("response:", response)
-        error("no requestType")
-    end
-    if response.requestType == WebSocketOpCode.RequestResponse then
+local function expectOpCode(message, expectedOpCode)
+    if message.op == expectedOpCode then
         return
     end
 
-    local opcodeText = getFirstKeyForValue(WebSocketOpCode, response.requestType)
-    error("requestType mismatch, expected " .. WebSocketOpCode.RequestResponse .. ", got "
-        .. opcodeText .. "(" .. response.requestType .. ")")
+    local opcodeText = getFirstKeyForValue(WebSocketOpCode, message.op) or ""
+    error("expected op to be " .. expectedOpCode .. " (RequestResponse), got " .. message.op .. " (" .. opcodeText .. ")")
+end
+
+local function expectRequestResponse(request, response)
+    if not response then
+        error("no response received")
+    end
+
+    -- first, check response.op
+    expectOpCode(response, WebSocketOpCode.RequestResponse)
+
+    -- if not response.d or not response.d.requestType then
+    --     printJson("response:", response)
+    --     error("no requestType")
+    -- end
+    -- local requestType = response.d.requestType
+    -- if requestType ~= Requests.Outputs.GetOutputStatus then
+    --     return
+    -- end
+    --
+    -- local opcodeText = getFirstKeyForValue(WebSocketOpCode, requestType)
+    -- local message = "requestType mismatch, expected " .. WebSocketOpCode.RequestResponse .. ", got " .. requestType
+    -- if opcodeText then
+    --     message = message .. " (" .. opcodeText .. ")"
+    -- end
+    -- error(message)
 end
 
 function getOutputStatus()
@@ -81,7 +97,7 @@ function getOutputStatus()
     ws_send(ws, request)
 
     local response = receiveDecoded(ws)
-    expectRequestResponse(response)
+    expectRequestResponse(request, response)
     if response then
         printJson("Received Output Status:", response)
     else
