@@ -79,7 +79,7 @@ local function expectRequestResponse(request, response)
     -- could check response.d.requestType == request.d.requestType but checking requestId s/b sufficient
 end
 
-function expectRequestStatusResultIsTrue(response)
+function expectRequestStatusIsOk(response)
     -- i.e. here is what happens when missing request parameters in requestData
     -- {
     --   "op":7,
@@ -97,7 +97,10 @@ function expectRequestStatusResultIsTrue(response)
         error("no requestStatus in response")
     end
     if response.d.requestStatus.result ~= true then
-        error("requestStatus.result is not true")
+        local codeText = getFirstKeyForValue(RequestStatusUnvalidated, response.d.requestStatus.code) or ""
+
+        error("requestStatus is not ok, comment: " .. response.d.requestStatus.comment
+            .. ", code: " .. response.d.requestStatus.code .. " (" .. codeText .. ")")
     end
 end
 
@@ -109,7 +112,7 @@ function getOutputStatus()
 
     local response = receiveDecoded(ws)
     expectRequestResponse(request, response)
-    expectRequestStatusResultIsTrue(response)
+    expectRequestStatusIsOk(response)
     if response then
         printJson("Received Output Status:", response)
     else
@@ -129,7 +132,6 @@ function getSceneList()
             -- https://github.com/obsproject/obs-websocket/blob/master/docs/generated/protocol.md#getscenelist
             requestType = "GetSceneList",
             requestId = uuid(),
-            requestData = {}
         }
     }
 

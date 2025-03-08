@@ -75,17 +75,17 @@ function receiveDecoded(ws)
     return nil
 end
 
----@param requestType string
+---@param type string
 ---@return table
-function createRequest(requestType)
-    if not requestType then
+function createRequest(type, data)
+    if not type then
         error("requestType is required")
     end
     -- FYI https://github.com/obsproject/obs-websocket/blob/master/docs/generated/protocol.md#request-opcode-6
     return {
         op = WebSocketOpCode.Request,
         d = {
-            requestType = requestType,
+            requestType = type,
             requestId = uuid()
         }
     }
