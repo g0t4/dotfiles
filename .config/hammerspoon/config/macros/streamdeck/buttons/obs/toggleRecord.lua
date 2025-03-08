@@ -16,17 +16,22 @@ function ToggleRecordButton:new(buttonNumber, deck)
     return o
 end
 
-function ToggleRecordButton:start()
-    -- todo get current state and show that icon (do in background)
-    PushButton.start(self)
+local function updateIcon(self)
     hs.timer.doAfter(0.01, function()
         local status = Record.status()
         if status.outputActive then
-            self.icon = onIcon
+            self.image = onIcon
         else
-            self.icon = offIcon
+            self.image = offIcon
         end
+        self.deck.hsdeck:setButtonImage(self.buttonNumber, self.image)
     end)
+end
+
+function ToggleRecordButton:start()
+    -- todo get current state and show that icon (do in background)
+    self.deck.hsdeck:setButtonImage(self.buttonNumber, self.image)
+    updateIcon(self)
 end
 
 function ToggleRecordButton:stop()
@@ -34,6 +39,7 @@ end
 
 function ToggleRecordButton:pressed()
     Record.toggle()
+    updateIcon(self)
 end
 
 function ToggleRecordButton:__tostring()
