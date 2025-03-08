@@ -18,14 +18,13 @@ local M = {}
 --  CurrentPreviewSceneChanged
 --  StreamStateChanged
 --  RecordStateChanged
---  RecordFileChanged (button could show name?)
 --
 -- low priority:
---   ScreenshotSaved
 --   ExitStarted  -- shut down listeners... though they will stop naturally :)
+--   RecordFileChanged (button could show name?)
 
 function listenForRelevantEvents()
-    local eventFlags = EventSubscriptionBitFlags.Outputs
+    local eventFlags = EventSubscriptionBitFlags.Outputs | EventSubscriptionBitFlags.Scenes
     local ws = connectAndAuthenticate(eventFlags)
 
     local function checkForOutputs()
@@ -43,7 +42,7 @@ function listenForRelevantEvents()
             return
         end
         if errorCode == 60 then
-            print("timeout, ignoring...")
+            -- print("timeout, ignoring...")
             hs.timer.doAfter(1, checkForOutputs)
             return
         end

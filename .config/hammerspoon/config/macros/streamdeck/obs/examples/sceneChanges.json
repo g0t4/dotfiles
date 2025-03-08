@@ -1,0 +1,24 @@
+{
+    "d": {
+        "eventType": "CurrentProgramSceneChanged",
+        "eventIntent": 4,
+        "eventData": {
+            "sceneUuid": "ffe52e1d-6831-4fb5-8afe-060c372c5791",
+            "sceneName": "screen-only"
+        }
+    },
+    "op": 5
+}
+
+{
+    "op": 5,
+    "d": {
+        "eventIntent": 4,
+        "eventType": "CurrentProgramSceneChanged",
+        "eventData": {
+            "sceneName": "screen-w-webcam-corner",
+            "sceneUuid": "0d403da9-d906-47ae-9bfa-7c77142cbb26"
+        }
+    }
+}
+
