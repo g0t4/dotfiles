@@ -124,6 +124,24 @@ function getOutputStatus()
     ws:close()
 end
 
+function getOutputList()
+    local ws = connectAndAuthenticate()
+
+    local request = createRequest(Requests.Outputs.GetOutputList)
+    ws_send(ws, request)
+
+    local response = receiveDecoded(ws)
+    expectRequestResponse(request, response)
+    expectRequestStatusIsOk(response)
+    if response then
+        printJson("Received Output List:", response)
+    else
+        print("No response received")
+    end
+
+    ws:close()
+end
+
 function getSceneList()
     local ws = connectAndAuthenticate()
 
