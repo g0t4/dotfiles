@@ -1,5 +1,6 @@
 local http_websocket = require("http.websocket")
 local json = require("dkjson")
+require("config.macros.streamdeck.obs.constants")
 
 -- ***! check OBS logs:  '/Users/wesdemos/Library/Application Support/obs-studio/logs/'
 --    it will tell you what isn't working
