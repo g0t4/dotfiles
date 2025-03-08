@@ -32,6 +32,10 @@ local function ws_receive(ws, timeout)
     --   ok yup, uses yielding coroutines to communicate w/ event controller
 
     local frame, errorOrFrameType, errorCode = ws:receive(timeout)
+    if errorCode == 60 then
+        print("timeout, ignoring...")
+        return nil
+    end
     if errorCode then
         return nil, nil, errorOrFrameType, errorCode
     end
