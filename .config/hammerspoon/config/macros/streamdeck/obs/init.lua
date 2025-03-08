@@ -56,30 +56,22 @@ function listenToOutputEvents()
     hs.timer.doAfter(0.1, checkForOutputs)
 end
 
----return first key with a given value
----@generic T : any
----@param t table <string, T>
----@param value T
----@return string|nil # nil if value is not found
-function getFirstKeyForValue(t, value)
-    for k, v in pairs(t) do
-        if v == value then
-            return k
-        end
-    end
-end
-
 local function expectRequestResponse(response)
     -- PRN rewrite for other expects
     if not response then
         error("no response received")
     end
-    if response.requestId == WebSocketOpCode.RequestResponse then
+    if not response.requestType then
+        printJson("response:", response)
+        error("no requestType")
+    end
+    if response.requestType == WebSocketOpCode.RequestResponse then
         return
     end
 
-    local opcodeText = getFirstKeyForValue(WebSocketOpCode, response.requestId)
-    error("requestId mismatch, expected " .. WebSocketOpCode.RequestResponse .. ", got " .. opcodeText .. "(" .. response.requestId .. ")")
+    local opcodeText = getFirstKeyForValue(WebSocketOpCode, response.requestType)
+    error("requestType mismatch, expected " .. WebSocketOpCode.RequestResponse .. ", got "
+        .. opcodeText .. "(" .. response.requestType .. ")")
 end
 
 function getOutputStatus()

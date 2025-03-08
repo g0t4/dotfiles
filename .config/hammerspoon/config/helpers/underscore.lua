@@ -194,6 +194,19 @@ function M.whereKeys(t, keyPredicate)
     end)
 end
 
+---return first key with a given value
+---@generic T : any
+---@param t table <string, T>
+---@param value T
+---@return string|nil # nil if value is not found
+function getFirstKeyForValue(t, value)
+    for k, v in pairs(t) do
+        if v == value then
+            return k
+        end
+    end
+end
+
 -- *** MISC table operations
 --  TODO migrate to underscore equivalents above
 --  FYI DO NOT TRY TO EXPORT THESE from this module, instead split them out if you need that.
