@@ -32,7 +32,7 @@ local function receiveDecoded(ws)
     -- PRN pass timeout? to receive?
     local response, err = ws:receive()
     if err then
-        error("receive failure", err)
+        error("receive failure" .. err)
     elseif not response then
         return nil
     end
@@ -157,7 +157,7 @@ local function authenticate(ws)
     end
 end
 
-function _M.listenToOutputEvents()
+function listenToOutputEvents()
     local ws = connectToOBS()
     authenticate(ws)
 
