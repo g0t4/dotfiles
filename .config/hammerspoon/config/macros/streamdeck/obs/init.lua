@@ -9,6 +9,9 @@ local function printJson(message, table)
     print(message, json.encode(table, { indent = true }))
 end
 local function errorUnexpectedResponse(response)
+    if not response then
+        error("Received no response")
+    end
     error("Received unexpected response: " .. json.encode(response, { indent = true }))
 end
 
@@ -24,17 +27,21 @@ local function connectToOBS()
     end
     error("WebSocket connection error:" .. hs.inspect(errorConnect))
 end
-local function receive(ws)
-    local response = ws:receive()
-    if not response then
-        error("No response received")
+
+local function receiveDecoded(ws)
+    -- PRN pass timeout? to receive?
+    local response, err = ws:receive()
+    if err then
+        error("receive failure", err)
+    elseif not response then
+        return nil
     end
     return json.decode(response)
 end
 
 local function authenticate(ws)
-    local response = receive(ws)
-    if response.op ~= WebSocketOpCode.Hello then
+    local response = receiveDecoded(ws)
+    if not response or response.op ~= WebSocketOpCode.Hello then
         errorUnexpectedResponse(response)
     end
     -- printJson("Received Hello", response)
@@ -50,8 +57,8 @@ local function authenticate(ws)
                 eventSubscriptions = 0
             }
         }))
-        response = receive(ws)
-        if response.op ~= WebSocketOpCode.Identified then
+        response = receiveDecoded(ws)
+        if not response or response.op ~= WebSocketOpCode.Identified then
             errorUnexpectedResponse(response)
         end
         -- printJson("Received Identify Response", response)
@@ -143,8 +150,11 @@ local function authenticate(ws)
     --    bitmask, default on for all subscriptions except high volume
 
     -- should get back opcode 2 after sending identify
-    response = receive(ws)
+    local identifyResponse = receiveDecoded(ws)
     -- print("response after identify:", json.encode(response, { indent = true }))
+    if not identifyResponse or identifyResponse.op ~= WebSocketOpCode.Identified then
+        errorUnexpectedResponse(identifyResponse)
+    end
 end
 
 
@@ -166,7 +176,7 @@ function _M.getSceneList()
 
     ws:send(json.encode(request))
 
-    local response = receive(ws)
+    local response = receiveDecoded(ws)
     if response then
         printJson("Received Scene List:", response)
     else
