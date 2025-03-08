@@ -125,18 +125,29 @@ local function error_unexpected_response(response)
 end
 
 local function encode64(input)
-    local pipe = io.popen("echo -n " .. string.format("%q", input) .. " | base64", "r")
+    -- see comments in sha256 about io.popen peculiarities
+    local cmd = "echo " .. string.format("%q", input) .. ' | tr -d "\n" | base64'
+    print("  encode64 cmd:", cmd)
+    local pipe = io.popen(cmd, "r")
     local result = pipe:read("*a")
     pipe:close()
-    return result:gsub("\n", "") -- Remove trailing newline
+    return result:gsub("\n$", "")
 end
 
 local function sha256(input)
+    -- FYI io.popen DOES NOT PARSE LIKE A SHELL... if I pass "echo -n foobar" it results in "-n foobar" in the output?!?
+    --   but it then does allow piping to other commands... WTF?
+    --   printf would be another choice if issues with echo
+    --   BE VERY CAREFUL ABOUT HOW YOU ALTER THIS CODE
     -- --quiet strips the trailing - (filename) which is STDOUT...
-    local pipe = io.popen("echo -n " .. string.format("%q", input) .. " | sha256sum --quiet", "r")
+    --   strip \n added by echo since I cannot pass -n to echo here
+    local cmd = "echo " .. string.format("%q", input) .. ' | tr -d "\n" | /sbin/sha256sum --quiet'
+    print("  sha256 cmd:", cmd)
+    local pipe = io.popen(cmd, "r")
     local result = pipe:read("*a")
+    print("  sha256 result:", result)
     pipe:close()
-    return result:gsub("%s+", "") -- :sub(1, 64) -- Remove whitespace and truncate to 64 characters
+    return result:gsub("\n$", "")
 end
 
 local function connect_to_obs()
@@ -216,21 +227,21 @@ local function authenticate(ws)
         -- Concatenate the websocket password with the salt provided by the server (password + salt)
         local salt = hello.d.authentication.salt
         print("salt:", salt)
-        salt = salt:gsub("=$", "")
-        print("  salt:", salt)
+        -- salt = salt:gsub("=$", "")
+        -- print("  salt:", salt)
         local password_plus_salt = password .. salt
         print("  password_plus_salt:", password_plus_salt)
 
         -- Generate an SHA256 binary hash of the result and base64 encode it, known as a base64 secret.
-        local base64_hash = sha256(password_plus_salt)
-        print("base64_hash:", base64_hash)
-        local base64_secret = encode64(base64_hash)
+        local pps_hash = sha256(password_plus_salt)
+        print("pps_hash:", pps_hash)
+        local base64_secret = encode64(pps_hash)
         print("  base64_secret:", base64_secret)
 
         -- Concatenate the base64 secret with the challenge sent by the server (base64_secret + challenge)
         local challenge = hello.d.authentication.challenge
-        print("  challenge:", challenge)
-        challenge = challenge:gsub("=$", "")
+        -- print("  challenge:", challenge)
+        -- challenge = challenge:gsub("=$", "")
         print("    challenge:", challenge)
         local base64_secret_plus_challenge = base64_secret .. challenge
         print("  base64_secret_plus_challenge:", base64_secret_plus_challenge)
