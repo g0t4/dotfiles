@@ -86,7 +86,8 @@ function createRequest(type, data)
         op = WebSocketOpCode.Request,
         d = {
             requestType = type,
-            requestId = uuid()
+            requestId = uuid(),
+            requestData = data,
         }
     }
 end

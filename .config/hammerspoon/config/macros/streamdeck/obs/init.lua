@@ -107,7 +107,9 @@ end
 function getOutputStatus()
     local ws = connectAndAuthenticate()
 
-    local request = createRequest(Requests.Outputs.GetOutputStatus)
+    local request = createRequest(Requests.Outputs.GetOutputStatus, {
+        outputName = "Recording",
+    })
     ws_send(ws, request)
 
     local response = receiveDecoded(ws)
