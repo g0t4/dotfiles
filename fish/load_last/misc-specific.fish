@@ -1968,6 +1968,7 @@ end
 if $IS_MACOS then
     abbr find gfind
     # gfind == GNU find, has -exeuctable arg (among other differences)
+    # make sure to run fish_update_completions after installing for completions
 end
 
 # mostly for fun, also a good way to remember this exists :)
