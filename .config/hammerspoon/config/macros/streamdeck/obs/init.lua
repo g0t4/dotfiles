@@ -105,25 +105,15 @@ function expectRequestStatusIsOk(response)
 end
 
 function getOutputStatus()
-    -- FYI can use getOutputList to find names, even double check?
-    local ws = connectAndAuthenticate()
-
-    local request = createRequest(Requests.Outputs.GetOutputStatus, {
+    local response = sendOneRequest(Requests.Outputs.GetOutputStatus, {
         outputName = "simple_file_output",
     })
-    ws_send(ws, request)
-
-    local response = receiveDecoded(ws)
-    expectRequestResponse(request, response)
-    expectRequestStatusIsOk(response)
     -- *** response.d.responseData.outputActive
     if response then
         printJson("Received Output Status:", response)
     else
         print("No response received")
     end
-
-    ws:close()
 end
 
 function getOutputList()
