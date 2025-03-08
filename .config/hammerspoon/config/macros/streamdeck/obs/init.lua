@@ -151,6 +151,8 @@ end
 function _M.getSceneList()
     local ws = connectToOBS()
     authenticate(ws)
+    -- for now use separate connection so I don't have to worry about other requests overlapping
+    --    i.e. requestId below... until I need some sort of subscription to events.. until then I don't care to stay connected
 
     -- BTW list of requests: https://github.com/obsproject/obs-websocket/blob/master/docs/generated/protocol.md#requests
     local request = {
@@ -171,8 +173,6 @@ function _M.getSceneList()
         print("No response received")
     end
 
-    -- TODO investigate if I want to leave the connection open (for at least a time period?)
-    --   right now seems fast enough to just open and close per operation (button press mostly)
     ws:close()
 end
 
