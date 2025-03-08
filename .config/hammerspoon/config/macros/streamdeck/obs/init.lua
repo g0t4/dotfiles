@@ -146,29 +146,29 @@ end
 
 Scenes = {}
 function Scenes.list()
-    return getResponseData(Requests.Scenes.GetSceneList)
+    return execAndReturnData(Requests.Scenes.GetSceneList)
 end
 
 function Scenes.currentProgramScene()
-    return getResponseData(Requests.Scenes.GetCurrentProgramScene)
+    return execAndReturnData(Requests.Scenes.GetCurrentProgramScene)
 end
 
 function Scenes.currentPreviewScene()
-    return getResponseData(Requests.Scenes.GetCurrentPreviewScene)
+    return execAndReturnData(Requests.Scenes.GetCurrentPreviewScene)
 end
 
 Profiles = {}
 function Profiles.list()
-    return getResponseData(Requests.Config.GetProfileList)
+    return execAndReturnData(Requests.Config.GetProfileList)
 end
 
 Config = {}
 function Config.videoSettings()
-    return getResponseData(Requests.Config.GetVideoSettings)
+    return execAndReturnData(Requests.Config.GetVideoSettings)
 end
 
 function Config.recordDirectory()
-    return getResponseData(Requests.Config.GetRecordDirectory)
+    return execAndReturnData(Requests.Config.GetRecordDirectory)
 end
 
 function Config.setRecordDirectory(directory)
@@ -180,7 +180,7 @@ end
 
 General = {}
 function General.getVersion()
-    return getResponseData(Requests.General.GetVersion)
+    return execAndReturnData(Requests.General.GetVersion)
 end
 
 -- function getSourceScreenshot(sourceName)
@@ -198,7 +198,7 @@ end
 VirtualCam = {
     ---@return boolean
     status = function()
-        return getResponseData(Requests.Outputs.GetVirtualCamStatus).outputActive
+        return execAndReturnData(Requests.Outputs.GetVirtualCamStatus).outputActive
     end,
     toggle = function()
         execAndPrintResponse(Requests.Outputs.ToggleVirtualCam)
@@ -217,11 +217,11 @@ VirtualCam = {
 Streaming = {
     ---@return boolean
     status = function()
-        return getResponseData(Requests.Stream.GetStreamStatus)
+        return execAndReturnData(Requests.Stream.GetStreamStatus)
     end,
     ---@return boolean # active or inactive after toggle
     toggle = function()
-        return getResponseData(Requests.Stream.ToggleStream).outputActive
+        return execAndReturnData(Requests.Stream.ToggleStream).outputActive
     end,
     start = function()
         execAndPrintResponse(Requests.Stream.StartStream)
@@ -241,11 +241,11 @@ Record = {
     --- FYI YUP second set of controls for recording... I should probably prefer this over Outputs.Recording
     ---@return boolean
     status = function()
-        return getResponseData(Requests.Record.GetRecordStatus)
+        return execAndReturnData(Requests.Record.GetRecordStatus)
     end,
     ---@return boolean # active or inactive after toggle
     toggle = function()
-        return getResponseData(Requests.Record.ToggleRecord).outputActive
+        return execAndReturnData(Requests.Record.ToggleRecord).outputActive
     end,
     start = function()
         execAndPrintResponse(Requests.Record.StartRecord)

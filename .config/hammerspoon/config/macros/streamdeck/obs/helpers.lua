@@ -148,7 +148,7 @@ function execAndPrintResponse(type, data)
     end
 end
 
-function getResponseData(type, data)
+function execAndReturnData(type, data)
     local response = sendOneRequest(type, data)
     if response then
         return response.d.responseData
