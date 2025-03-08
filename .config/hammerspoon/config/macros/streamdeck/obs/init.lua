@@ -56,6 +56,26 @@ function listenToOutputEvents()
     hs.timer.doAfter(0.1, checkForOutputs)
 end
 
+local function expectRequestResponse(response)
+    -- PRN rewrite for other expects
+    if not response then
+        error("no response received")
+    end
+    if response.requestId == WebSocketOpCode.RequestResponse then
+        return
+    end
+
+    local opcodeText = ""
+    for k, v in pairs(WebSocketOpCode) do
+        if v == response.requestId then
+            opcodeText = k
+            break
+        end
+    end
+
+    error("requestId mismatch, expected " .. WebSocketOpCode.RequestResponse .. ", got " .. opcodeText .. "(" .. response.requestId .. ")")
+end
+
 function getOutputStatus()
     local ws = connectAndAuthenticate()
 
@@ -63,6 +83,7 @@ function getOutputStatus()
     ws_send(ws, request)
 
     local response = receiveDecoded(ws)
+    expectRequestResponse(response)
     if response then
         printJson("Received Output Status:", response)
     else
