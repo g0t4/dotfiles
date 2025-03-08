@@ -18,9 +18,21 @@ function listenToOutputEvents()
 
     local function checkForOutputs()
         local textFrame, binaryFrame, err, errorCode = ws_receive(ws, 1)
+        if errorCode == 1001 then
+            -- FYI I quit OBS while polling and got 1001 error code
+            --  use this to terminate listening, gracefully
+            --  also later add app listener if this should resume on next OBS start
+            --    this needs to be moved into logic for buttons that depend on output events from OBS
+            --      stop in the button would stop monitoring
+            --      probably don't want all buttons to have separate listeners... so need a shared way to track listeners and stop when none are left
+            --      and also can add App Listener to start/stop websocket polling
+            print("obs quit, stopping listening")
+            ws:close()
+            return
+        end
         if errorCode == 60 then
             print("timeout, ignoring...")
-            return nil
+            return
         end
         if err then
             local message = "error receiving frame: " .. err

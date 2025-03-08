@@ -29,6 +29,11 @@ function ws_receive(ws, timeout)
         -- FYI consumer must handle timeout, i.e. in case of waiting for events, it's not an error
         --   whereas with authentcation, it likely is
         return nil, nil, nil, errorCode
+    elseif errorCode == 1001 then
+        -- happens on OBS terminate
+        -- TODO is there a lookup of error code explanations somewhere?
+        --   Possibly related to http2 protocol?
+        return nil, nil, nil, errorCode
     end
     if errorCode then
         return nil, nil, errorOrFrameType, errorCode
