@@ -70,8 +70,11 @@ local function expectRequestResponse(request, response)
         error("no response received")
     end
 
-    -- first, check response.op
     expectOpCode(response, WebSocketOpCode.RequestResponse)
+
+    if request.d.requestId ~= response.d.requestId then
+        error("requestId mismatch, expected " .. request.d.requestId .. ", got " .. response.d.requestId)
+    end
 
     -- if not response.d or not response.d.requestType then
     --     printJson("response:", response)
