@@ -4,6 +4,12 @@ require("config.macros.streamdeck.obs.constants")
 
 -- ***! check OBS logs:  '/Users/wesdemos/Library/Application Support/obs-studio/logs/'
 --    it will tell you what isn't working
+local function print_json(message, table)
+    print(message, json.encode(table, { indent = true }))
+end
+local function error_unexpected_response(response)
+    error("Received unexpected response: " .. json.encode(response, { indent = true }))
+end
 
 local function connect_to_obs()
     local ws, error = http_websocket.new_from_uri("ws://localhost:4455")

@@ -1,5 +1,5 @@
 
-local WebSocketOpCode = {
+_G.WebSocketOpCode = {
     Hello = 0,
     Identify = 1,
     Identified = 2,
@@ -11,7 +11,7 @@ local WebSocketOpCode = {
     RequestBatchResponse = 9,
 }
 
-local WebSocketCloseCode = {
+_G.WebSocketCloseCode = {
     DontClose = 0,
     UnknownReason = 4000,
     MessageDecodeError = 4002,
@@ -27,14 +27,14 @@ local WebSocketCloseCode = {
     UnsupportedFeature = 4012,
 }
 
-local RequestBatchExecutionType = {
+_G.RequestBatchExecutionType = {
     None = -1,
     SerialRealtime = 0,
     SerialFrame = 1,
     Parallel = 2,
 }
 
-local RequestStatusUnvalidated = {
+_G.RequestStatusUnvalidated = {
     -- FYI these are from ChatGPT and Inception's model but I did not validate them myself yet
     Unknown = 0,                                -- Unknown status, should never be used.
     NoError = 10,                               -- For internal use to signify a successful field check.
@@ -73,7 +73,7 @@ local RequestStatusUnvalidated = {
 }
 
 -- BTW did not validate all of these yet
-local EventSubscriptionBitFlagsUnvalidated = {
+_G.EventSubscriptionBitFlagsUnvalidated = {
     None = 0,
     General = 1,
     Config = 2,
@@ -93,7 +93,7 @@ local EventSubscriptionBitFlagsUnvalidated = {
     SceneItemTransformChanged = 524288
 }
 
-ObsMediaInputActionUnvalidated = {
+_G.ObsMediaInputActionUnvalidated = {
     OBS_WEBSOCKET_MEDIA_INPUT_ACTION_NONE = "OBS_WEBSOCKET_MEDIA_INPUT_ACTION_NONE",
     OBS_WEBSOCKET_MEDIA_INPUT_ACTION_PLAY = "OBS_WEBSOCKET_MEDIA_INPUT_ACTION_PLAY",
     OBS_WEBSOCKET_MEDIA_INPUT_ACTION_PAUSE = "OBS_WEBSOCKET_MEDIA_INPUT_ACTION_PAUSE",
@@ -103,7 +103,7 @@ ObsMediaInputActionUnvalidated = {
     OBS_WEBSOCKET_MEDIA_INPUT_ACTION_PREVIOUS = "OBS_WEBSOCKET_MEDIA_INPUT_ACTION_PREVIOUS"
 }
 
-ObsOutputStateUnvalidated = {
+_G.ObsOutputStateUnvalidated = {
     OBS_WEBSOCKET_OUTPUT_UNKNOWN = "OBS_WEBSOCKET_OUTPUT_UNKNOWN",
     OBS_WEBSOCKET_OUTPUT_STARTING = "OBS_WEBSOCKET_OUTPUT_STARTING",
     OBS_WEBSOCKET_OUTPUT_STARTED = "OBS_WEBSOCKET_OUTPUT_STARTED",
@@ -114,10 +114,4 @@ ObsOutputStateUnvalidated = {
     OBS_WEBSOCKET_OUTPUT_PAUSED = "OBS_WEBSOCKET_OUTPUT_PAUSED",
     OBS_WEBSOCKET_OUTPUT_RESUMED = "OBS_WEBSOCKET_OUTPUT_RESUMED"
 }
-local function print_json(message, table)
-    print(message, json.encode(table, { indent = true }))
-end
-local function error_unexpected_response(response)
-    error("Received unexpected response: " .. json.encode(response, { indent = true }))
-end
 
