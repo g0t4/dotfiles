@@ -77,7 +77,7 @@ end
 
 ---@param requestType string
 ---@return table
-function newRequest(requestType)
+function createRequest(requestType)
     if not requestType then
         error("requestType is required")
     end

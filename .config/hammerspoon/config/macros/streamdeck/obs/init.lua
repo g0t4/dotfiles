@@ -59,8 +59,7 @@ end
 function getOutputStatus()
     local ws = connectAndAuthenticate()
 
-    local request = newRequest(Requests.Outputs.GetOutputStatus)
-    printJson("Sending Output Status Request:", request)
+    local request = createRequest(Requests.Outputs.GetOutputStatus)
     ws_send(ws, request)
 
     local response = receiveDecoded(ws)
