@@ -124,32 +124,6 @@ local function error_unexpected_response(response)
     error("Received unexpected response: " .. json.encode(response, { indent = true }))
 end
 
-local function encode64(input)
-    -- see comments in sha256 about io.popen peculiarities
-    local cmd = "echo " .. string.format("%q", input) .. ' | tr -d "\n" | base64'
-    print("  encode64 cmd:", cmd)
-    local pipe = io.popen(cmd, "r")
-    local result = pipe:read("*a")
-    pipe:close()
-    return result:gsub("\n$", "")
-end
-
-local function sha256(input)
-    -- FYI io.popen DOES NOT PARSE LIKE A SHELL... if I pass "echo -n foobar" it results in "-n foobar" in the output?!?
-    --   but it then does allow piping to other commands... WTF?
-    --   printf would be another choice if issues with echo
-    --   BE VERY CAREFUL ABOUT HOW YOU ALTER THIS CODE
-    -- --quiet strips the trailing - (filename) which is STDOUT...
-    --   strip \n added by echo since I cannot pass -n to echo here
-    local cmd = "echo " .. string.format("%q", input) .. ' | tr -d "\n" | /sbin/sha256sum --quiet'
-    print("  sha256 cmd:", cmd)
-    local pipe = io.popen(cmd, "r")
-    local result = pipe:read("*a")
-    print("  sha256 result:", result)
-    pipe:close()
-    return result:gsub("\n$", "")
-end
-
 local function connect_to_obs()
     local ws, error = http_websocket.new_from_uri("ws://localhost:4455")
     if not ws then
@@ -205,7 +179,6 @@ local function authenticate(ws)
         -- TODO send identify w/o auth
         return true
     end
-    -- response has auth challenge:
     print("auth challenge received")
     -- auth response example:
     -- {
@@ -220,6 +193,19 @@ local function authenticate(ws)
     --   "op":0
     -- }
 
+    function sha256thenbase64(input)
+        -- FYI io.popen DOES NOT PARSE LIKE A SHELL... if I pass "echo -n foobar" it results in "-n foobar" in the output?!?
+        --   but it then does allow piping to other commands... WTF?
+        --   printf would be another choice if issues with echo
+        --   BE VERY CAREFUL ABOUT HOW YOU ALTER THIS CODE
+        -- --quiet strips the trailing - (filename) which is STDOUT...
+        --   strip \n added by echo since I cannot pass -n to echo here
+        local cmd = "echo " .. string.format("%q", input) .. ' | tr -d "\n" | openssl dgst -sha256 -binary | base64 '
+        local pipe = io.popen(cmd, "r")
+        local result = pipe:read("*a")
+        pipe:close()
+        return result:gsub("\n$", "")
+    end
 
     local function get_auth_string(hello, password)
         -- https://github.com/obsproject/obs-websocket/blob/master/docs/generated/protocol.md#creating-an-authentication-string
@@ -233,9 +219,7 @@ local function authenticate(ws)
         print("  password_plus_salt:", password_plus_salt)
 
         -- Generate an SHA256 binary hash of the result and base64 encode it, known as a base64 secret.
-        local pps_hash = sha256(password_plus_salt)
-        print("pps_hash:", pps_hash)
-        local base64_secret = encode64(pps_hash)
+        local base64_secret = sha256thenbase64(password_plus_salt)
         print("  base64_secret:", base64_secret)
 
         -- Concatenate the base64 secret with the challenge sent by the server (base64_secret + challenge)
@@ -246,7 +230,7 @@ local function authenticate(ws)
         local base64_secret_plus_challenge = base64_secret .. challenge
         print("  base64_secret_plus_challenge:", base64_secret_plus_challenge)
         -- Generate a binary SHA256 hash of that result and base64 encode it. You now have your authentication string.
-        local auth_string = encode64(sha256(base64_secret_plus_challenge))
+        local auth_string = sha256thenbase64(base64_secret_plus_challenge)
         print("auth string:", auth_string)
         return auth_string
     end
