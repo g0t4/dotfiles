@@ -132,7 +132,25 @@ end
 --         sourceName = sourceName,
 --         sourceUuid = sourceUuid,
 --         imageFormat = ?  -- use GetVersion to get list of formats
+--         imageHeight/imageWidth
 --     })
 -- end
+
+-- Inputs/Outputs/Transitions/Filters/SceneItems/
+
+VirtualCam = {
+    getStatus = function()
+        getAndPrint(Requests.Outputs.GetVirtualCamStatus)
+    end,
+    toggle = function()
+        getAndPrint(Requests.Outputs.ToggleVirtualCam)
+    end,
+    start = function()
+        getAndPrint(Requests.Outputs.StartVirtualCam)
+    end,
+    stop = function()
+        getAndPrint(Requests.Outputs.StopVirtualCam)
+    end,
+}
 
 return M
