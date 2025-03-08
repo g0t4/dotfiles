@@ -36,75 +36,77 @@ function ToggleRecordButton:start()
     -- todo get current state and show that icon (do in background)
     -- self.deck.hsdeck:setButtonImage(self.buttonNumber, self.image)
     updateIcon(self)
-    do return end -- !!! COMMENT OUT TO ENABLE
 
-    local setIconFromEvent = function(eventData)
-        -- "eventData":{
-        --   "outputActive":false,
-        --   "outputState":"OBS_WEBSOCKET_OUTPUT_STOPPING"
-        -- },
-        -- "eventData":{
-        --   "outputPath":"/Users/wesdemos/.../2025-03-08 17-20.mkv",
-        --   "outputActive":false,
-        --   "outputState":"OBS_WEBSOCKET_OUTPUT_STOPPED"
-        -- },
-        -- "eventData":{
-        --   "outputActive":false,
-        --   "outputState":"OBS_WEBSOCKET_OUTPUT_STARTING"
-        -- },
-        -- "eventData":{
-        --   "outputPath":"/Users/wesdemos/.../2025-03-08 17-24.mkv",
-        --   "outputActive":true,
-        --   "outputState":"OBS_WEBSOCKET_OUTPUT_STARTED"
-        -- },
-        if eventData.outputActive then
-            self.image = onIcon
-        else
-            self.image = offIcon
-        end
-        self.deck.hsdeck:setButtonImage(self.buttonNumber, self.image)
-    end
-
-    local eventFlags = EventSubscriptionBitFlags.Outputs
-    local ws = connectAndAuthenticate(eventFlags)
-    self.ws = ws
-
-    local function checkForOutputs()
-        self.currentTimer = nil
-        local textFrame, binaryFrame, err, errorCode = ws_receive(ws, 1)
-        if errorCode == 1001 then
-            print("obs quit, stopping listening")
-            ws:close()
-            return
-        end
-        local delay = 0.5
-        if errorCode == 60 then
-            -- print("timeout, ignoring...")
-            self.currentTimer = hs.timer.doAfter(delay, checkForOutputs)
-            return
-        end
-        if err then
-            local message = "error receiving frame: " .. err
-            if errorCode then
-                message = message .. ", errorCode: " .. errorCode
-            end
-            error(message)
-        end
-        if binaryFrame then
-            error("unexpected binary frame, was expecting a text frame")
-        end
-        if textFrame then
-            local decoded = json.decode(textFrame)
-            printJson("evt", decoded)
-            if decoded.d.eventType == "RecordStateChanged" then
-                setIconFromEvent(decoded.d.eventData)
-            end
-            -- PRN? if just got a message, immediately check for more?
-        end
-        print("nothing received yet")
-        self.currentTimer = hs.timer.doAfter(delay, checkForOutputs)
-    end
-    self.currentTimer = hs.timer.doAfter(0.1, checkForOutputs)
+    -- TODO! if I do anything with events, I can put that into a central, singleton that handles all events and not have each button do this
+    --   then I wouldn't even need this button to check the websocket on start/pressed
+    --
+    -- local setIconFromEvent = function(eventData)
+    --     -- "eventData":{
+    --     --   "outputActive":false,
+    --     --   "outputState":"OBS_WEBSOCKET_OUTPUT_STOPPING"
+    --     -- },
+    --     -- "eventData":{
+    --     --   "outputPath":"/Users/wesdemos/.../2025-03-08 17-20.mkv",
+    --     --   "outputActive":false,
+    --     --   "outputState":"OBS_WEBSOCKET_OUTPUT_STOPPED"
+    --     -- },
+    --     -- "eventData":{
+    --     --   "outputActive":false,
+    --     --   "outputState":"OBS_WEBSOCKET_OUTPUT_STARTING"
+    --     -- },
+    --     -- "eventData":{
+    --     --   "outputPath":"/Users/wesdemos/.../2025-03-08 17-24.mkv",
+    --     --   "outputActive":true,
+    --     --   "outputState":"OBS_WEBSOCKET_OUTPUT_STARTED"
+    --     -- },
+    --     if eventData.outputActive then
+    --         self.image = onIcon
+    --     else
+    --         self.image = offIcon
+    --     end
+    --     self.deck.hsdeck:setButtonImage(self.buttonNumber, self.image)
+    -- end
+    -- --
+    -- local eventFlags = EventSubscriptionBitFlags.Outputs
+    -- local ws = connectAndAuthenticate(eventFlags)
+    -- self.ws = ws
+    --
+    -- local function checkForOutputs()
+    --     self.currentTimer = nil
+    --     local textFrame, binaryFrame, err, errorCode = ws_receive(ws, 1)
+    --     if errorCode == 1001 then
+    --         print("obs quit, stopping listening")
+    --         ws:close()
+    --         return
+    --     end
+    --     local delay = 0.5
+    --     if errorCode == 60 then
+    --         -- print("timeout, ignoring...")
+    --         self.currentTimer = hs.timer.doAfter(delay, checkForOutputs)
+    --         return
+    --     end
+    --     if err then
+    --         local message = "error receiving frame: " .. err
+    --         if errorCode then
+    --             message = message .. ", errorCode: " .. errorCode
+    --         end
+    --         error(message)
+    --     end
+    --     if binaryFrame then
+    --         error("unexpected binary frame, was expecting a text frame")
+    --     end
+    --     if textFrame then
+    --         local decoded = json.decode(textFrame)
+    --         printJson("evt", decoded)
+    --         if decoded.d.eventType == "RecordStateChanged" then
+    --             setIconFromEvent(decoded.d.eventData)
+    --         end
+    --         -- PRN? if just got a message, immediately check for more?
+    --     end
+    --     print("nothing received yet")
+    --     self.currentTimer = hs.timer.doAfter(delay, checkForOutputs)
+    -- end
+    -- self.currentTimer = hs.timer.doAfter(0.1, checkForOutputs)
 end
 
 function ToggleRecordButton:stop()
@@ -120,8 +122,18 @@ function ToggleRecordButton:stop()
 end
 
 function ToggleRecordButton:pressed()
-    Record.toggle()
-    updateIcon(self)
+    local isActive = Record.toggle()
+    print("toggled record: " .. tostring(isActive))
+    -- change icon based on using this button alone... b/c the second I switch apps (if the icon is outdated b/c I clicked stop in OBS... well then, the icon updates the next time I change apps anyways!)
+    -- TODO! optimization will be to have a watcher that keeps the state mirrored and accessible and prompts button to update...
+    --    at which point I can stop asking on every start/stop of this button too... which is overhead I don't need too
+
+    if isActive then
+        self.image = onIcon
+    else
+        self.image = offIcon
+    end
+    self.deck.hsdeck:setButtonImage(self.buttonNumber, self.image)
 end
 
 function ToggleRecordButton:__tostring()
