@@ -51,7 +51,7 @@ function listenToOutputEvents()
             -- PRN? if just got a message, immediately check for more?
         end
         print("nothing received yet")
-        hs.timer.doAfter(0.1, checkForOutputs)
+        hs.timer.doAfter(0.5, checkForOutputs)
     end
     hs.timer.doAfter(0.1, checkForOutputs)
 end
