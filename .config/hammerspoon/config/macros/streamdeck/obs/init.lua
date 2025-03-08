@@ -103,28 +103,12 @@ function getOutputList()
 end
 
 function getSceneList()
-    local ws = connectAndAuthenticate()
-
-    -- BTW list of requests: https://github.com/obsproject/obs-websocket/blob/master/docs/generated/protocol.md#requests
-    local request = {
-        op = WebSocketOpCode.Request,
-        d = {
-            -- https://github.com/obsproject/obs-websocket/blob/master/docs/generated/protocol.md#getscenelist
-            requestType = "GetSceneList",
-            requestId = uuid(),
-        }
-    }
-
-    ws:send(json.encode(request))
-
-    local response = receiveDecoded(ws)
+    local response = sendOneRequest(Requests.Scenes.GetSceneList)
     if response then
         printJson("Received Scene List:", response)
     else
         print("No response received")
     end
-
-    ws:close()
 end
 
 return _M
