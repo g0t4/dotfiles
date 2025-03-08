@@ -29,11 +29,10 @@ local function connect_to_obs()
     end
 
     local success, err = ws:connect()
-    if not success then
-        error("WebSocket connection error:" .. hs.inspect(err))
+    if success then
+        return ws
     end
-
-    return ws
+    error("WebSocket connection error:" .. hs.inspect(err))
 end
 
 local function receive(ws)
