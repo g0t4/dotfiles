@@ -155,7 +155,7 @@ end
 
 local _M = {}
 
-function GetSceneList()
+function _M.getSceneList()
     if _M.ws then
         -- TODO validate ws is still connected?
         return _M.ws
