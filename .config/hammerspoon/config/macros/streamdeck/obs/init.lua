@@ -75,6 +75,8 @@ local function expectRequestResponse(request, response)
     if request.d.requestId ~= response.d.requestId then
         error("requestId mismatch, expected " .. request.d.requestId .. ", got " .. response.d.requestId)
     end
+
+    -- could check response.d.requestType == request.d.requestType but checking requestId s/b sufficient
 end
 
 function getOutputStatus()
