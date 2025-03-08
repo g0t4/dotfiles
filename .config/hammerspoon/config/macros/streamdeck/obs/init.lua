@@ -1,3 +1,6 @@
+-- FYI http.websocket:
+--   docks: https://daurnimator.github.io/lua-http/0.4/
+--   https://github.com/daurnimator/lua-http/blob/master/http/websocket.lua
 local http_websocket = require("http.websocket")
 local json = require("dkjson")
 require("config.macros.streamdeck.obs.constants")
@@ -15,6 +18,24 @@ local function errorUnexpectedResponse(response)
     error("Received unexpected response: " .. json.encode(response, { indent = true }))
 end
 
+---Wrapper around ws:receive to provide types and split second arg intelligently for consumers
+---@param ws table
+---@param timeout integer|nil # milliseconds???
+---@return string|nil textFrame, binary|nil binaryFrame, string|nil error, string|nil errorCode
+local function ws_receive(ws, timeout)
+    -- TODO types on ws and is timeout in ms?
+    local frame, errorOrFrameType, errorCode = ws:receive(timeout)
+    if errorCode then
+        return nil, nil, errorOrFrameType, errorCode
+    end
+    -- errorOrFrame holds a type string
+    if errorOrFrameType == "text" then
+        return frame
+    end
+    -- PRN what is the type on a binary frame? find example of this and test it?
+    return nil, frame
+end
+
 local function connectToOBS()
     local ws, error1 = http_websocket.new_from_uri("ws://localhost:4455")
     if not ws then
@@ -30,13 +51,23 @@ end
 
 local function receiveDecoded(ws)
     -- PRN pass timeout? to receive?
-    local response, err = ws:receive()
+
+    -- The opcode 0x1 will be returned as "text" and 0x2 will be returned as "binary".
+    local textFrame, binaryFrame, err, errorCode = ws_receive(ws)
     if err then
-        error("receive failure" .. err)
-    elseif not response then
-        return nil
+        local message = "error receiving frame: " .. err
+        if errorCode then
+            message = message .. ", errorCode: " .. errorCode
+        end
+        error(message)
     end
-    return json.decode(response)
+    if binaryFrame then
+        error("unexpected binary frame, was expecting a text frame")
+    end
+    if textFrame then
+        return json.decode(textFrame)
+    end
+    return nil
 end
 
 local function authenticate(ws)
@@ -175,7 +206,7 @@ function listenToOutputEvents()
     end
 end
 
-function _M.getSceneList()
+function getSceneList()
     local ws = connectToOBS()
     authenticate(ws)
 
