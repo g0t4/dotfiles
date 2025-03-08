@@ -271,7 +271,6 @@ end
 local function get_scene_list()
     local ws = connect_to_obs()
     authenticate(ws)
-    if not ws then return end
 
     local request = {
         op = WebSocketOpCode.Request,
@@ -285,8 +284,7 @@ local function get_scene_list()
 
     local response = receive(ws)
     if response then
-        local decoded_response = json.decode(response)
-        print("Received Scene List:", json.encode(decoded_response, { indent = true }))
+        print_json("Received Scene List:", response)
     else
         print("No response received")
     end
