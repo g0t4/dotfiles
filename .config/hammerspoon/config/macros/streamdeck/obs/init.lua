@@ -145,12 +145,15 @@ VirtualCam = {
     end,
     toggle = function()
         getAndPrint(Requests.Outputs.ToggleVirtualCam)
+        -- TODO verify toggled
     end,
     start = function()
         getAndPrint(Requests.Outputs.StartVirtualCam)
+        -- TODO verify started
     end,
     stop = function()
         getAndPrint(Requests.Outputs.StopVirtualCam)
+        -- TODO verify stopped
     end,
 }
 
