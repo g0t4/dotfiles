@@ -1,6 +1,12 @@
 local http_websocket = require("http.websocket")
 local json = require("dkjson")
-local mime = require("mime")
+
+local function print_json(message, table)
+    print(message, json.encode(table, { indent = true }))
+end
+local function error_unexpected_response(response)
+    error("Received unexpected response: " .. json.encode(response, { indent = true }))
+end
 
 local function encode64(input)
     local pipe = io.popen("echo -n " .. string.format("%q", input) .. " | base64", "r")
@@ -39,13 +45,6 @@ local function receive(ws)
         error("No response received")
     end
     return json.decode(response)
-end
-
-local function print_json(message, table)
-    print(message, json.encode(table, { indent = true }))
-end
-local function error_unexpected_response(response)
-    error("Received unexpected response: " .. json.encode(response, { indent = true }))
 end
 
 local function receive_hello(ws)
