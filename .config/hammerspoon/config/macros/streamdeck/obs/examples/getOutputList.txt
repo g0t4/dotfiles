@@ -1,0 +1,41 @@
+2025-03-08 14:08:28: Received Output List:	{
+  "d":{
+    "requestId":"c69efb2a-2829-4508-a8c9-5a749c10dd11",
+    "requestType":"GetOutputList",
+    "requestStatus":{
+      "code":100,
+      "result":true
+    },
+    "responseData":{
+      "outputs":[{
+          "outputKind":"ffmpeg_muxer",
+          "outputFlags":{
+            "OBS_OUTPUT_ENCODED":true,
+            "OBS_OUTPUT_MULTI_TRACK":true,
+            "OBS_OUTPUT_VIDEO":true,
+            "OBS_OUTPUT_AUDIO":true,
+            "OBS_OUTPUT_SERVICE":false
+          },
+          "outputName":"simple_file_output",
+          "outputActive":false,
+          "outputHeight":2160,
+          "outputWidth":3840
+        },{
+          "outputKind":"virtualcam_output",
+          "outputFlags":{
+            "OBS_OUTPUT_ENCODED":false,
+            "OBS_OUTPUT_MULTI_TRACK":false,
+            "OBS_OUTPUT_VIDEO":true,
+            "OBS_OUTPUT_AUDIO":false,
+            "OBS_OUTPUT_SERVICE":false
+          },
+          "outputName":"virtualcam_output",
+          "outputActive":false,
+          "outputHeight":2160,
+          "outputWidth":3840
+        }]
+    }
+  },
+  "op":7
+}
+

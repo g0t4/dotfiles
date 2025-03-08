@@ -105,6 +105,7 @@ function expectRequestStatusIsOk(response)
 end
 
 function getOutputStatus()
+    -- FYI can use getOutputList to find names, even double check?
     local ws = connectAndAuthenticate()
 
     local request = createRequest(Requests.Outputs.GetOutputStatus, {
