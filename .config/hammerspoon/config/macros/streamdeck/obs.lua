@@ -1,7 +1,9 @@
 local http_websocket = require("http.websocket")
 local json = require("dkjson")
 
--- The initial message sent by obs-websocket to newly connected clients.
+-- ***! check OBS logs:  '/Users/wesdemos/Library/Application Support/obs-studio/logs/'
+--    it will tell you what isn't working
+
 local WebSocketOpCode = {
     Hello = 0,
     Identify = 1,
@@ -256,7 +258,6 @@ local function authenticate(ws)
     --    bitmask, default on for all subscriptions except high volume
     -- TODO I cannot get it to acknowledge the Identify request... wtf?
     --   is that seriously how it handles incorrect auth? it just does nothing?
-    --  check OBS logs:  '/Users/wesdemos/Library/Application Support/obs-studio/logs/'
     --   woa it says authentication is missing
     --      23:40:24.260: [obs-websocket] [WebSocketServer::onClose] WebSocket client `[::ffff:127.0.0.1]:53184` has disconnected with code `4009` and reason: Your payload's data is missing an `authentication` string, however authentication is required.
 
