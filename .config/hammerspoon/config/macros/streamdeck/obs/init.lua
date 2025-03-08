@@ -176,6 +176,8 @@ function _M.getSceneList()
         print("No response received")
     end
 
+    -- TODO investigate if I want to leave the connection open (for at least a time period?)
+    --   right now seems fast enough to just open and close per operation (button press mostly)
     ws:close()
 end
 
