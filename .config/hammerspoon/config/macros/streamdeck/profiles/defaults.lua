@@ -7,6 +7,7 @@ local Encoder = require("config.macros.streamdeck.encoder")
 local CommandButton = require("config.macros.streamdeck.commandButton")
 local AppButton = require("config.macros.streamdeck.appButton")
 local f = require("config.helpers.underscore")
+local ToggleRecordButton = require("config.macros.streamdeck.buttons.obs.toggleRecord")
 
 
 local DefaultsProfiles = AppObserver:new(APPS.Defaults)
@@ -21,7 +22,7 @@ DefaultsProfiles:addProfilePage(DECK_1XL, PAGE_1, function(_, deck)
         LuaButton:new(8, deck, drawTextIcon("Reload Config", deck), hs.reload),
 
         -- * row 2
-        LuaButton:new(15, deck, drawTextIcon("Toggle Record", deck), function() Record:toggle() end),
+        ToggleRecordButton:new(15, deck),
         LuaButton:new(16, deck, drawTextIcon("Toggle Pause", deck), function() Record:togglePause() end),
 
         LuaButton:new(11, deck, drawTextIcon("Corner Camera", deck), Scenes.setScreenCornerCamera),

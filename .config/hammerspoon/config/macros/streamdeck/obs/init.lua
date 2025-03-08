@@ -288,7 +288,7 @@ Streaming = {
 --- Prefer over Outputs.Recording
 Record = {
     --- FYI YUP second set of controls for recording... I should probably prefer this over Outputs.Recording
-    ---@return boolean
+    ---@return table { outputActive: boolean, outputBytes: number, outputDuration: number, outputPaused: boolean, outputTimecode: string }
     status = function()
         return execAndReturnData(Requests.Record.GetRecordStatus)
     end,
