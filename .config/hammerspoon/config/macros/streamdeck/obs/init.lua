@@ -8,7 +8,7 @@ require("config.macros.streamdeck.obs.helpers")
 
 local connectAndAuthenticate = require("config.macros.streamdeck.obs.connect").connectAndAuthenticate
 
-local _M = {}
+local M = {}
 
 -- ***! check OBS logs:  '/Users/wesdemos/Library/Application Support/obs-studio/logs/'
 --    it will tell you what isn't working
@@ -111,4 +111,4 @@ function getSceneList()
     end
 end
 
-return _M
+return M
