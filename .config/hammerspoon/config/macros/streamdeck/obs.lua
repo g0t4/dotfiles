@@ -132,7 +132,8 @@ local function encode64(input)
 end
 
 local function sha256(input)
-    local pipe = io.popen("echo -n " .. string.format("%q", input) .. " | sha256sum", "r")
+    -- --quiet strips the trailing - (filename) which is STDOUT...
+    local pipe = io.popen("echo -n " .. string.format("%q", input) .. " | sha256sum --quiet", "r")
     local result = pipe:read("*a")
     pipe:close()
     return result:gsub("%s+", "") -- :sub(1, 64) -- Remove whitespace and truncate to 64 characters
@@ -210,14 +211,29 @@ local function authenticate(ws)
 
 
     local function get_auth_string(hello, password)
+        -- https://github.com/obsproject/obs-websocket/blob/master/docs/generated/protocol.md#creating-an-authentication-string
+
         -- Concatenate the websocket password with the salt provided by the server (password + salt)
         local salt = hello.d.authentication.salt
-        local challenge = hello.d.authentication.challenge
+        print("salt:", salt)
+        salt = salt:gsub("=$", "")
+        print("  salt:", salt)
         local password_plus_salt = password .. salt
+        print("  password_plus_salt:", password_plus_salt)
+
         -- Generate an SHA256 binary hash of the result and base64 encode it, known as a base64 secret.
-        local base64_secret = encode64(sha256(password_plus_salt))
+        local base64_hash = sha256(password_plus_salt)
+        print("base64_hash:", base64_hash)
+        local base64_secret = encode64(base64_hash)
+        print("  base64_secret:", base64_secret)
+
         -- Concatenate the base64 secret with the challenge sent by the server (base64_secret + challenge)
+        local challenge = hello.d.authentication.challenge
+        print("  challenge:", challenge)
+        challenge = challenge:gsub("=$", "")
+        print("    challenge:", challenge)
         local base64_secret_plus_challenge = base64_secret .. challenge
+        print("  base64_secret_plus_challenge:", base64_secret_plus_challenge)
         -- Generate a binary SHA256 hash of that result and base64 encode it. You now have your authentication string.
         local auth_string = encode64(sha256(base64_secret_plus_challenge))
         print("auth string:", auth_string)
