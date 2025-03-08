@@ -173,7 +173,7 @@ end
 
 function Config.setRecordDirectory(directory)
     -- todo turn into set and verify?
-    getAndPrint(Requests.Config.SetRecordDirectory, {
+    execAndPrintResponse(Requests.Config.SetRecordDirectory, {
         recordDirectory = directory,
     })
 end
@@ -201,15 +201,15 @@ VirtualCam = {
         return getResponseData(Requests.Outputs.GetVirtualCamStatus).outputActive
     end,
     toggle = function()
-        getAndPrint(Requests.Outputs.ToggleVirtualCam)
+        execAndPrintResponse(Requests.Outputs.ToggleVirtualCam)
         -- TODO verify toggled
     end,
     start = function()
-        getAndPrint(Requests.Outputs.StartVirtualCam)
+        execAndPrintResponse(Requests.Outputs.StartVirtualCam)
         -- TODO verify started
     end,
     stop = function()
-        getAndPrint(Requests.Outputs.StopVirtualCam)
+        execAndPrintResponse(Requests.Outputs.StopVirtualCam)
         -- TODO verify stopped
     end,
 }
@@ -224,13 +224,13 @@ Streaming = {
         return getResponseData(Requests.Stream.ToggleStream).outputActive
     end,
     start = function()
-        getAndPrint(Requests.Stream.StartStream)
+        execAndPrintResponse(Requests.Stream.StartStream)
     end,
     stop = function()
-        getAndPrint(Requests.Stream.StopStream)
+        execAndPrintResponse(Requests.Stream.StopStream)
     end,
     sendCaption = function(text)
-        getAndPrint(Requests.Stream.SendStreamCaption, {
+        execAndPrintResponse(Requests.Stream.SendStreamCaption, {
             caption = text,
         })
     end,
@@ -248,25 +248,25 @@ Record = {
         return getResponseData(Requests.Record.ToggleRecord).outputActive
     end,
     start = function()
-        getAndPrint(Requests.Record.StartRecord)
+        execAndPrintResponse(Requests.Record.StartRecord)
     end,
     stop = function()
-        getAndPrint(Requests.Record.StopRecord)
+        execAndPrintResponse(Requests.Record.StopRecord)
     end,
     pause = function()
-        getAndPrint(Requests.Record.PauseRecord)
+        execAndPrintResponse(Requests.Record.PauseRecord)
     end,
     resume = function()
-        getAndPrint(Requests.Record.ResumeRecord)
+        execAndPrintResponse(Requests.Record.ResumeRecord)
     end,
     togglePause = function()
-        getAndPrint(Requests.Record.ToggleRecordPause)
+        execAndPrintResponse(Requests.Record.ToggleRecordPause)
     end,
     splitRecordFile = function()
-        getAndPrint(Requests.Record.SplitRecordFile)
+        execAndPrintResponse(Requests.Record.SplitRecordFile)
     end,
     createRecordChapter = function()
-        getAndPrint(Requests.Record.CreateRecordChapter)
+        execAndPrintResponse(Requests.Record.CreateRecordChapter)
     end,
 }
 

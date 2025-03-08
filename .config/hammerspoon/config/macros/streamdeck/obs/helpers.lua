@@ -139,7 +139,7 @@ function sendOneRequest(type, data)
     return response
 end
 
-function getAndPrint(type, data)
+function execAndPrintResponse(type, data)
     local response = sendOneRequest(type, data)
     if response then
         printJson("Received " .. type .. ":", response)
