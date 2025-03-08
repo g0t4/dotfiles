@@ -44,11 +44,14 @@ end
 local function print_json(message, table)
     print(message, json.encode(table, { indent = true }))
 end
+local function error_unexpected_response(response)
+    error("Received unexpected response: " .. json.encode(response, { indent = true }))
+end
 
 local function receive_hello(ws)
     local response = receive(ws)
     if response.op ~= 0 then
-        error("Received unexpected response: " .. json.encode(response, { indent = true }))
+        error_unexpected_response(response)
     end
     print_json("Received Hello", response)
 
