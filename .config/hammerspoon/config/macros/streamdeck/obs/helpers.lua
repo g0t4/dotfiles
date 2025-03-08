@@ -147,3 +147,11 @@ function getAndPrint(type, data)
         print("No response received")
     end
 end
+
+function getResponseData(type, data)
+    local response = sendOneRequest(type, data)
+    if response then
+        return response.d.responseData
+    end
+    error("No response received")
+end

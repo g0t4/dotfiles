@@ -139,8 +139,9 @@ end
 -- Inputs/Outputs/Transitions/Filters/SceneItems/
 
 VirtualCam = {
+    ---@return boolean
     getStatus = function()
-        getAndPrint(Requests.Outputs.GetVirtualCamStatus)
+        return getResponseData(Requests.Outputs.GetVirtualCamStatus).outputActive
     end,
     toggle = function()
         getAndPrint(Requests.Outputs.ToggleVirtualCam)
