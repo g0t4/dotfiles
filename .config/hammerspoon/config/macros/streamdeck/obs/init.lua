@@ -56,7 +56,12 @@ function listenToOutputEvents()
     hs.timer.doAfter(0.1, checkForOutputs)
 end
 
-function getKeyForValue(t, value)
+---return first key with a given value
+---@generic T : any
+---@param t table <string, T>
+---@param value T
+---@return string|nil # nil if value is not found
+function getFirstKeyForValue(t, value)
     for k, v in pairs(t) do
         if v == value then
             return k
@@ -73,7 +78,7 @@ local function expectRequestResponse(response)
         return
     end
 
-    local opcodeText = getKeyForValue(WebSocketOpCode, response.requestId)
+    local opcodeText = getFirstKeyForValue(WebSocketOpCode, response.requestId)
     error("requestId mismatch, expected " .. WebSocketOpCode.RequestResponse .. ", got " .. opcodeText .. "(" .. response.requestId .. ")")
 end
 
