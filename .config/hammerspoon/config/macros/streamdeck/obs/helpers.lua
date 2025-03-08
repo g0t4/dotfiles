@@ -1,4 +1,5 @@
 local json = require("dkjson")
+local connectAndAuthenticate = require("config.macros.streamdeck.obs.connect").connectAndAuthenticate
 
 function printJson(message, table)
     print(message, json.encode(table, { indent = true }))
@@ -102,6 +103,29 @@ function ws_send(ws, data, timeout, opcode)
     ws:send(json.encode(data), opcode, timeout)
 end
 
+local function expectOpCode(message, expectedOpCode)
+    if message.op == expectedOpCode then
+        return
+    end
+
+    local opcodeText = getFirstKeyForValue(WebSocketOpCode, message.op) or ""
+    error("expected op to be " .. expectedOpCode .. " (RequestResponse), got " .. message.op .. " (" .. opcodeText .. ")")
+end
+
+local function expectRequestResponse(request, response)
+    if not response then
+        error("no response received")
+    end
+
+    expectOpCode(response, WebSocketOpCode.RequestResponse)
+
+    if request.d.requestId ~= response.d.requestId then
+        error("requestId mismatch, expected " .. request.d.requestId .. ", got " .. response.d.requestId)
+    end
+
+    -- could check response.d.requestType == request.d.requestType but checking requestId s/b sufficient
+end
+
 function sendOneRequest(type, data)
     local ws = connectAndAuthenticate()
 
@@ -112,4 +136,5 @@ function sendOneRequest(type, data)
     expectRequestResponse(request, response)
     expectRequestStatusIsOk(response)
     ws:close()
+    return response
 end
