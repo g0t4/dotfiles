@@ -36,6 +36,7 @@ function ToggleRecordButton:start()
     -- todo get current state and show that icon (do in background)
     -- self.deck.hsdeck:setButtonImage(self.buttonNumber, self.image)
     updateIcon(self)
+    do return end -- !!! COMMENT OUT TO ENABLE
 
     local setIconFromEvent = function(eventData)
         -- "eventData":{
