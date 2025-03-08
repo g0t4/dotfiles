@@ -29,36 +29,6 @@ local WebSocketCloseCode = {
     SessionInvalidated = 4011,
     UnsupportedFeature = 4012,
 }
--- RequestBatchExecutionType::None
--- Not a request batch.
---
--- Identifier Value: -1
--- Latest Supported RPC Version: 1
--- Added in v5.0.0
--- RequestBatchExecutionType::SerialRealtime
--- A request batch which processes all requests serially, as fast as possible.
---
--- Note: To introduce artificial delay, use the Sleep request and the sleepMillis request field.
---
--- Identifier Value: 0
--- Latest Supported RPC Version: 1
--- Added in v5.0.0
--- RequestBatchExecutionType::SerialFrame
--- A request batch type which processes all requests serially, in sync with the graphics thread. Designed to provide high accuracy for animations.
---
--- Note: To introduce artificial delay, use the Sleep request and the sleepFrames request field.
---
--- Identifier Value: 1
--- Latest Supported RPC Version: 1
--- Added in v5.0.0
--- RequestBatchExecutionType::Parallel
--- A request batch type which processes all requests using all available threads in the thread pool.
---
--- Note: This is mainly experimental, and only really shows its colors during requests which require lots of active processing, like GetSourceScreenshot.
---
--- Identifier Value: 2
--- Latest Supported RPC Version: 1
--- Added in v5.0.0
 
 local RequestBatchExecutionType = {
     None = -1,
