@@ -96,4 +96,16 @@ function getSceneList()
     getAndPrint(Requests.Scenes.GetSceneList)
 end
 
+function getProfileList()
+    getAndPrint(Requests.Config.GetProfileList)
+end
+
+function getCurrentProgramScene()
+    getAndPrint(Requests.Scenes.GetCurrentProgramScene)
+end
+
+function getCurrentPreviewScene()
+    getAndPrint(Requests.Scenes.GetCurrentPreviewScene)
+end
+
 return M
