@@ -37,7 +37,7 @@ local function authenticate(ws)
     if response.op ~= WebSocketOpCode.Hello then
         errorUnexpectedResponse(response)
     end
-    printJson("Received Hello", response)
+    -- printJson("Received Hello", response)
 
     if not response.d.authentication then
         -- FYI can send opcode 1 => https://github.com/obsproject/obs-websocket/blob/master/docs/generated/protocol.md#identify-opcode-1
@@ -54,7 +54,7 @@ local function authenticate(ws)
         if response.op ~= WebSocketOpCode.Identified then
             errorUnexpectedResponse(response)
         end
-        printJson("Received Identify Response", response)
+        -- printJson("Received Identify Response", response)
         -- response has no auth challenge:
         -- {
         --   "d":{
