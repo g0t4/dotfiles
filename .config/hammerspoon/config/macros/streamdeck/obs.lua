@@ -262,9 +262,7 @@ local function authenticate(ws)
 
     -- should get back opcode 2 after sending identify
     response = receive(ws)
-    if not response then
-        error("No response received")
-    end
+    print("response after identify:", json.encode(response, { indent = true }))
 
 
     return true
