@@ -138,3 +138,12 @@ function sendOneRequest(type, data)
     ws:close()
     return response
 end
+
+function getAndPrint(type, data)
+    local response = sendOneRequest(type, data)
+    if response then
+        printJson("Received " .. type .. ":", response)
+    else
+        print("No response received")
+    end
+end

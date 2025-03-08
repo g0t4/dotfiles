@@ -82,33 +82,18 @@ function expectRequestStatusIsOk(response)
 end
 
 function getOutputStatus()
-    local response = sendOneRequest(Requests.Outputs.GetOutputStatus, {
+    -- *** response.d.responseData.outputActive
+    getAndPrint(Requests.Outputs.GetOutputStatus, {
         outputName = "simple_file_output",
     })
-    -- *** response.d.responseData.outputActive
-    if response then
-        printJson("Received Output Status:", response)
-    else
-        print("No response received")
-    end
 end
 
 function getOutputList()
-    local outputList = sendOneRequest(Requests.Outputs.GetOutputList)
-    if outputList then
-        printJson("Received Output List:", outputList)
-    else
-        print("No response received")
-    end
+    getAndPrint(Requests.Outputs.GetOutputList)
 end
 
 function getSceneList()
-    local response = sendOneRequest(Requests.Scenes.GetSceneList)
-    if response then
-        printJson("Received Scene List:", response)
-    else
-        print("No response received")
-    end
+    getAndPrint(Requests.Scenes.GetSceneList)
 end
 
 return M
