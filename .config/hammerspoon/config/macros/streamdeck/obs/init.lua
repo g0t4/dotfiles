@@ -153,8 +153,16 @@ local function authenticate(ws)
     return true
 end
 
+local _M = {}
+
 function GetSceneList()
+    if _M.ws then
+        -- TODO validate ws is still connected?
+        return _M.ws
+    end
+
     local ws = connectToOBS()
+    _M.ws = ws
     authenticate(ws)
 
     local request = {
@@ -176,3 +184,5 @@ function GetSceneList()
 
     ws:close()
 end
+
+return _M
