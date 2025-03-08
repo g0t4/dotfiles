@@ -1,7 +1,6 @@
 -- FYI http.websocket:
 --   docks: https://daurnimator.github.io/lua-http/0.4/
 --   https://github.com/daurnimator/lua-http/blob/master/http/websocket.lua
-local http_websocket = require("http.websocket")
 local json = require("dkjson")
 require("config.macros.streamdeck.obs.constants")
 require("config.macros.streamdeck.obs.helpers")
