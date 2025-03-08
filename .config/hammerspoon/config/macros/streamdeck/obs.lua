@@ -53,8 +53,19 @@ local function authenticate(ws)
     if not response.d.authentication then
         -- FYI can send opcode 1 => https://github.com/obsproject/obs-websocket/blob/master/docs/generated/protocol.md#identify-opcode-1
         --     with PubSub subscriptions, and session parameters
-
         print("success, no authentication")
+        ws:send(json.encode({
+            op = 1,
+            d = {
+                rpcVersion = 1,
+                eventSubscriptions = 0
+            }
+        }))
+        response = receive(ws)
+        if response.op ~= 2 then
+            error_unexpected_response(response)
+        end
+        print_json("Received Identify Response", response)
         -- response has no auth challenge:
         -- {
         --   "d":{
