@@ -13,6 +13,9 @@ function connectToOBS()
     if success then
         return ws
     end
+    if errorConnect and errorConnect:match("Connection refused") then
+        hs.alert.show("OBS is not running or its websocket is not listening")
+    end
     error("WebSocket connection error:" .. hs.inspect(errorConnect))
 end
 
