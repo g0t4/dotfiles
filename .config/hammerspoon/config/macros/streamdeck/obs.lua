@@ -74,6 +74,26 @@ local RequestStatus = {
     CannotAct = 703 -- -- The combination of request fields cannot be used to perform an action.
 }
 
+local EventSubscriptionBitFlags = {
+    None = 0,
+    General = 1,
+    Config = 2,
+    Scenes = 4,
+    Inputs = 8,
+    Transitions = 16,
+    Filters = 32,
+    Outputs = 64,
+    SceneItems = 128,
+    MediaInputs = 256,
+    Vendors = 512,
+    Ui = 1024,
+    All = 2047, -- (1 + 2 + 4 + 8 + 16 + 32 + 64 + 128 + 256 + 512 + 1024)
+    InputVolumeMeters = 65536,
+    InputActiveStateChanged = 131072,
+    InputShowStateChanged = 262144,
+    SceneItemTransformChanged = 524288
+}
+
 local function print_json(message, table)
     print(message, json.encode(table, { indent = true }))
 end
