@@ -37,7 +37,8 @@ local RequestBatchExecutionType = {
     Parallel = 2,
 }
 
-local RequestStatus = {
+local RequestStatusUnvalidated = {
+    -- FYI these are from ChatGPT and Inception's model but I did not validate them myself yet
     Unknown = 0, -- Unknown status, should never be used.
     NoError = 10, -- For internal use to signify a successful field check.
     Success = 100, -- The request has succeeded.
@@ -74,7 +75,8 @@ local RequestStatus = {
     CannotAct = 703 -- -- The combination of request fields cannot be used to perform an action.
 }
 
-local EventSubscriptionBitFlags = {
+-- BTW did not validate all of these yet
+local EventSubscriptionBitFlagsUnvalidated = {
     None = 0,
     General = 1,
     Config = 2,
