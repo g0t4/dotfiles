@@ -108,13 +108,14 @@ function getOutputStatus()
     local ws = connectAndAuthenticate()
 
     local request = createRequest(Requests.Outputs.GetOutputStatus, {
-        outputName = "Recording",
+        outputName = "simple_file_output",
     })
     ws_send(ws, request)
 
     local response = receiveDecoded(ws)
     expectRequestResponse(request, response)
     expectRequestStatusIsOk(response)
+    -- *** response.d.responseData.outputActive
     if response then
         printJson("Received Output Status:", response)
     else
