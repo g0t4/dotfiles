@@ -4,14 +4,14 @@ require("config.macros.streamdeck.obs.constants")
 
 -- ***! check OBS logs:  '/Users/wesdemos/Library/Application Support/obs-studio/logs/'
 --    it will tell you what isn't working
-local function print_json(message, table)
+local function printJson(message, table)
     print(message, json.encode(table, { indent = true }))
 end
-local function error_unexpected_response(response)
+local function errorUnexpectedResponse(response)
     error("Received unexpected response: " .. json.encode(response, { indent = true }))
 end
 
-local function ConnectToOBS()
+local function connectToOBS()
     local ws, error1 = http_websocket.new_from_uri("ws://localhost:4455")
     if not ws then
         error("Failed to connect:" .. hs.inspect(error1))
@@ -34,9 +34,9 @@ end
 local function authenticate(ws)
     local response = receive(ws)
     if response.op ~= WebSocketOpCode.Hello then
-        error_unexpected_response(response)
+        errorUnexpectedResponse(response)
     end
-    print_json("Received Hello", response)
+    printJson("Received Hello", response)
 
     if not response.d.authentication then
         -- FYI can send opcode 1 => https://github.com/obsproject/obs-websocket/blob/master/docs/generated/protocol.md#identify-opcode-1
@@ -51,9 +51,9 @@ local function authenticate(ws)
         }))
         response = receive(ws)
         if response.op ~= WebSocketOpCode.Identified then
-            error_unexpected_response(response)
+            errorUnexpectedResponse(response)
         end
-        print_json("Received Identify Response", response)
+        printJson("Received Identify Response", response)
         -- response has no auth challenge:
         -- {
         --   "d":{
@@ -79,7 +79,7 @@ local function authenticate(ws)
     --   "op":0
     -- }
 
-    function sha256thenbase64(input)
+    function sha256ThenBase64(input)
         -- FYI io.popen DOES NOT PARSE LIKE A SHELL... if I pass "echo -n foobar" it results in "-n foobar" in the output?!?
         --   but it then does allow piping to other commands... WTF?
         --   printf would be another choice if issues with echo
@@ -93,7 +93,7 @@ local function authenticate(ws)
         return result:gsub("\n$", "")
     end
 
-    local function get_auth_string(hello, password)
+    local function getAuthenticationString(hello, password)
         -- https://github.com/obsproject/obs-websocket/blob/master/docs/generated/protocol.md#creating-an-authentication-string
 
         -- Concatenate the websocket password with the salt provided by the server (password + salt)
@@ -102,7 +102,7 @@ local function authenticate(ws)
         -- print("  password_plus_salt:", password_plus_salt)
 
         -- Generate an SHA256 binary hash of the result and base64 encode it, known as a base64 secret.
-        local base64_secret = sha256thenbase64(password_plus_salt)
+        local base64_secret = sha256ThenBase64(password_plus_salt)
         -- print("  base64_secret:", base64_secret)
 
         -- Concatenate the base64 secret with the challenge sent by the server (base64_secret + challenge)
@@ -111,14 +111,14 @@ local function authenticate(ws)
         -- print("  base64_secret_plus_challenge:", base64_secret_plus_challenge)
 
         -- Generate a binary SHA256 hash of that result and base64 encode it. You now have your authentication string.
-        local auth_string = sha256thenbase64(base64_secret_plus_challenge)
+        local auth_string = sha256ThenBase64(base64_secret_plus_challenge)
         -- print("  auth string:", auth_string)
 
         return auth_string
     end
 
     local password = "foobar"
-    local auth_string = get_auth_string(response, password)
+    local auth_string = getAuthenticationString(response, password)
     -- Identify request:
     -- {
     --   "op": 1,
@@ -154,7 +154,7 @@ local function authenticate(ws)
 end
 
 function GetSceneList()
-    local ws = ConnectToOBS()
+    local ws = connectToOBS()
     authenticate(ws)
 
     local request = {
@@ -169,7 +169,7 @@ function GetSceneList()
 
     local response = receive(ws)
     if response then
-        print_json("Received Scene List:", response)
+        printJson("Received Scene List:", response)
     else
         print("No response received")
     end
