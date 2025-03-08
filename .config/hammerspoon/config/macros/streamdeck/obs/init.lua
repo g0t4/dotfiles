@@ -79,6 +79,28 @@ local function expectRequestResponse(request, response)
     -- could check response.d.requestType == request.d.requestType but checking requestId s/b sufficient
 end
 
+function expectRequestStatusResultIsTrue(response)
+    -- i.e. here is what happens when missing request parameters in requestData
+    -- {
+    --   "op":7,
+    --   "d":{
+    --     "requestStatus":{
+    --       "comment":"Your request data is missing or invalid (non-object)",
+    --       "result":false,
+    --       "code":301
+    --     },
+    --     "requestType":"GetOutputStatus",
+    --     "requestId":"483879bc-3640-4acf-ac9f-0833de629227"
+    --   }
+    -- }
+    if not response.d.requestStatus then
+        error("no requestStatus in response")
+    end
+    if response.d.requestStatus.result ~= true then
+        error("requestStatus.result is not true")
+    end
+end
+
 function getOutputStatus()
     local ws = connectAndAuthenticate()
 
@@ -87,6 +109,7 @@ function getOutputStatus()
 
     local response = receiveDecoded(ws)
     expectRequestResponse(request, response)
+    expectRequestStatusResultIsTrue(response)
     if response then
         printJson("Received Output Status:", response)
     else
@@ -105,7 +128,8 @@ function getSceneList()
         d = {
             -- https://github.com/obsproject/obs-websocket/blob/master/docs/generated/protocol.md#getscenelist
             requestType = "GetSceneList",
-            requestId = uuid()
+            requestId = uuid(),
+            requestData = {}
         }
     }
 
