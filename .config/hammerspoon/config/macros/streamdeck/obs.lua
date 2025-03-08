@@ -41,12 +41,17 @@ local function receive(ws)
     return json.decode(response)
 end
 
+local function print_json(message, json)
+    print(message, json.encode(json, { indent = true }))
+end
+
 local function receive_hello(ws)
     local response = receive(ws)
     if response.op ~= 0 then
         error("Received unexpected response: " .. json.encode(response, { indent = true }))
     end
-    print("Received Hello:", json.encode(response, { indent = true }))
+    print_json("Received Hello", response)
+
     if not response.d.authentication then
         -- FYI can send opcode 1 => https://github.com/obsproject/obs-websocket/blob/master/docs/generated/protocol.md#identify-opcode-1
         --     with PubSub subscriptions, and session parameters
