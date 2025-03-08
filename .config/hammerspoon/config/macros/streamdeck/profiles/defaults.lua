@@ -21,6 +21,7 @@ DefaultsProfiles:addProfilePage(DECK_1XL, PAGE_1, function(_, deck)
         LuaButton:new(8, deck, drawTextIcon("Reload Config", deck), hs.reload),
 
         -- * row 2
+        LuaButton:new(16, deck, drawTextIcon("Toggle Record", deck), function() Record:toggle() end),
 
 
         -- * row 3
