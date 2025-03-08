@@ -41,8 +41,8 @@ local function receive(ws)
     return json.decode(response)
 end
 
-local function print_json(message, json)
-    print(message, json.encode(json, { indent = true }))
+local function print_json(message, table)
+    print(message, json.encode(table, { indent = true }))
 end
 
 local function receive_hello(ws)
