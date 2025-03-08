@@ -48,10 +48,10 @@ function listenToOutputEvents()
         if textFrame then
             local decoded = json.decode(textFrame)
             printJson("listenToOutputEvents response:", decoded)
+            -- PRN? if just got a message, immediately check for more?
         end
         print("nothing received yet")
-        -- TODO adjust delay between checks, avoids blocking hammerspoon process (ws_receive is blocking)
-        hs.timer.doAfter(1, checkForOutputs)
+        hs.timer.doAfter(0.1, checkForOutputs)
     end
     hs.timer.doAfter(0.1, checkForOutputs)
 end
