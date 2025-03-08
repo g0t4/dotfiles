@@ -13,7 +13,7 @@ local function sha256(input)
     local pipe = io.popen("echo -n " .. string.format("%q", input) .. " | sha256sum", "r")
     local result = pipe:read("*a")
     pipe:close()
-    return result:gsub("%s+", ""):sub(1, 64) -- Remove whitespace and truncate to 64 characters
+    return result:gsub("%s+", "") -- :sub(1, 64) -- Remove whitespace and truncate to 64 characters
 end
 
 local function connect_to_obs()
@@ -57,6 +57,7 @@ local function receive_hello(ws)
         --   },
         --   "op":0
         -- }
+        -- TODO send identify w/o auth
         return true
     end
     -- response has auth challenge:
@@ -99,12 +100,20 @@ local function receive_hello(ws)
     ws:send(json.encode({
         op = 1,
         d = {
-            -- rpcVersion = 1,
+            rpcVersion = 1,
             authentication = auth_string,
-            -- eventSubscriptions = 33
+            eventSubscriptions = 0
         }
     }))
-    -- TODO check if errored sending?
+    -- EVENT SUBSCRIPTIONS:  https://github.com/obsproject/obs-websocket/blob/master/docs/generated/protocol.md#eventsubscription
+    --    bitmask, default on for all subscriptions except high volume
+
+    -- should get back opcode 2 after sending identify
+    local response = ws:receive()
+    if not response then
+        error("No response received")
+    end
+
 
     return true
 end
