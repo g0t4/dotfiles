@@ -43,7 +43,7 @@ local function receive(ws)
     return json.decode(response)
 end
 
-local function receive_hello(ws)
+local function authenticate(ws)
     local response = receive(ws)
     if response.op ~= 0 then
         error_unexpected_response(response)
@@ -130,7 +130,7 @@ end
 
 local function get_scene_list()
     local ws = connect_to_obs()
-    receive_hello(ws)
+    authenticate(ws)
     if not ws then return end
 
     local request = {
