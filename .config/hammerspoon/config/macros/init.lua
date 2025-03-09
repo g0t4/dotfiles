@@ -401,25 +401,38 @@ function StreamDeckExcelDataTabClickSortButton()
 
     local ribbon = MicrosoftOfficeGetRibbon("Microsoft Excel")
 
-    local scrollArea = ribbon:scrollArea(1)
-    local groups = scrollArea:groups()
+    -- local scrollArea = ribbon:scrollArea(1)
+    -- local groups = scrollArea:groups()
+    -- -- *** this brittle, manual search takes 500ms to 1s!!! ... fast enough but elementSearch IS WAY FASTER
+    -- -- TODO reproduce with using search builtin to hs.axuielement as I don't think that is this slow!
+    -- --   JUST see if can improve that time and make search more flexible
+    -- local startTime = GetTime()
+    -- -- TODO rewrite as ribbon button finder! so I can reuse this! (do for filter/reapply/clear next)
+    -- for _, group in pairs(groups) do
+    --     for _, button in pairs(group:buttons()) do
+    --         print("button title: ", button:attributeValue("AXTitle"))
+    --         if button:attributeValue("AXTitle") == "Sort" then
+    --             button:performAction("AXPress")
+    --             print("time to press sort button: " .. GetElapsedTimeInMilliseconds(startTime) .. " ms")
+    --             return
+    --         end
+    --     end
+    --     print("no sort button found")
+    -- end
 
-    -- search takes 500ms to 1s ...  but seems plenty fast so leave it!
-    -- TODO reproduce with using search builtin to hs.axuielement as I don't think that is this slow!
-    --   JUST see if can improve that time and make search more flexible
-    local startTime = GetTime()
-    -- TODO rewrite as ribbon button finder! so I can reuse this! (do for filter/reapply/clear next)
-    for _, group in pairs(groups) do
-        for _, button in pairs(group:buttons()) do
-            print("button title: ", button:attributeValue("AXTitle"))
-            if button:attributeValue("AXTitle") == "Sort" then
-                button:performAction("AXPress")
-                print("time to press sort button: " .. GetElapsedTimeInMilliseconds(startTime) .. " ms")
-                return
-            end
+
+    local criteria = { attribute = "AXTitle", value = "Sort" }
+    FindOneElement(ribbon, criteria, function(_, searchTask, numResultsAdded)
+        -- WOW, 150ms to callback! much faster than manual search (which is also brittle)
+        if numResultsAdded == 0 then
+            print("no sort button found")
+            return
         end
-        print("no sort button found")
-    end
+        local found = searchTask[1]
+        print("found sort button")
+
+        found:performAction("AXPress")
+    end)
 end
 
 -- *** end excel helpers
