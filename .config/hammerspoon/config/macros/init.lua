@@ -395,8 +395,8 @@ function MicrosoftOfficeEnsureTabSelected(appName, tabName)
     return ribbon
 end
 
-function ClickTabButton(tabName, buttonTitle)
-    local ribbon = MicrosoftOfficeEnsureTabSelected("Microsoft Excel", tabName)
+function MicrosoftOfficeClickTabsButton(appName, tabName, buttonTitle)
+    local ribbon = MicrosoftOfficeEnsureTabSelected(appName, tabName)
 end
 
 function StreamDeckExcelDataTabClickSortButton()
