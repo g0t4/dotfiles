@@ -420,16 +420,16 @@ function StreamDeckExcelDataTabClickSortButton()
     --     print("no sort button found")
     -- end
 
-
-    local criteria = { attribute = "AXTitle", value = "Sort" }
+    local buttonTitle = "Sort"
+    local criteria = { attribute = "AXTitle", value = buttonTitle }
     FindOneElement(ribbon, criteria, function(_, searchTask, numResultsAdded)
         -- WOW, 150ms to callback! much faster than manual search (which is also brittle)
         if numResultsAdded == 0 then
-            print("no sort button found")
+            print("no button found with title: " .. quote(buttonTitle))
             return
         end
         local found = searchTask[1]
-        print("found sort button")
+        print("found button with title: " .. quote(buttonTitle))
 
         found:performAction("AXPress")
     end)
