@@ -395,7 +395,7 @@ function MicrosoftOfficeEnsureTabSelected(appName, tabName)
     return ribbon
 end
 
-function MicrosoftOfficeClickTabsButton(appName, tabName, buttonTitle)
+function MicrosoftOfficeClickTabButtonByTitle(appName, tabName, buttonTitle)
     local ribbon = MicrosoftOfficeEnsureTabSelected(appName, tabName)
 
     local criteria = { attribute = "AXTitle", value = buttonTitle }
@@ -417,13 +417,15 @@ function StreamDeckExcelDataTabClickSortButton()
     -- app:window(1):tabGroup(1):scrollArea(1):group(4):button(3)
     -- scrollArea(1) is only scroll area
 
-    MicrosoftOfficeClickTabsButton("Microsoft Excel", "Data", "Sort")
+    MicrosoftOfficeClickTabButtonByTitle("Microsoft Excel", "Data", "Sort")
+end
+
+function StreamDeckExcelDataTabClickReapplyButton()
+    MicrosoftOfficeClickTabButtonByTitle("Microsoft Excel", "Data", "Reapply")
 end
 
 function StreamDeckExcelDataTabClickFilterButton()
-    -- FYI leave these main entrypoints for streamdeck buttons somewhat explicit about params here...
-    --   its fine to call in button like below but also nice to see usages inline here too
-    MicrosoftOfficeClickTabsButton("Microsoft Excel", "Data", "Filter")
+    MicrosoftOfficeClickTabButtonByTitle("Microsoft Excel", "Data", "Filter")
 end
 
 -- !!! FYI CLICK INTO CELL (toedit it) and you can get a ref to it usin my inspector OR UI Element Inspector
