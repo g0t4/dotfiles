@@ -365,6 +365,9 @@ function MicrosoftOfficeGetRibbon(appName)
     return ribbonTabGroup
 end
 
+---@appName string
+---@tabName string
+---@return hs.axuielement ribbon
 function MicrosoftOfficeEnsureTabSelected(appName, tabName)
     local ribbon = MicrosoftOfficeGetRibbon(appName)
 
@@ -380,21 +383,20 @@ function MicrosoftOfficeEnsureTabSelected(appName, tabName)
         end
 
         -- PRN can add "toggle" parameter to this func and then fall through in that case?
-        return
+        return ribbon
     end
 
     -- PRN use AXTabs to enumerate just tab children elements? (instead of radio buttons?)
     local tabButton = ribbon:firstChild(function(element)
-        element:dumpAttributes()
         return element:attributeValue("AXTitle") == tabName
     end)
     assert(tabButton ~= nil, "Could not find " .. appName .. " ribbon's tab button for: " .. tabName)
     tabButton:performAction("AXPress")
+    return ribbon
 end
 
 function ClickTabButton(tabName, buttonTitle)
-    StreamDeckExcelEnsureTabOpen(tabName)
-    local ribbon = MicrosoftOfficeGetRibbon("Microsoft Excel")
+    local ribbon = MicrosoftOfficeEnsureTabSelected("Microsoft Excel", tabName)
 end
 
 function StreamDeckExcelDataTabClickSortButton()
@@ -402,8 +404,7 @@ function StreamDeckExcelDataTabClickSortButton()
     -- app:window(1):tabGroup(1):scrollArea(1):group(4):button(3)
     -- scrollArea(1) is only scroll area
 
-    StreamDeckExcelEnsureTabOpen("Data") -- 20 to 30ms when already open
-    local ribbon = MicrosoftOfficeGetRibbon("Microsoft Excel")
+    local ribbon = MicrosoftOfficeEnsureTabSelected("Microsoft Excel", "Data") -- 20 to 30ms when already open
 
     -- local scrollArea = ribbon:scrollArea(1)
     -- local groups = scrollArea:groups()
