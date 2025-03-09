@@ -428,6 +428,10 @@ function StreamDeckExcelDataTabClickFilterButton()
     MicrosoftOfficeClickTabButtonByTitle("Microsoft Excel", "Data", "Filter")
 end
 
+function StreamDeckExcelDataTabClickClearButton()
+    MicrosoftOfficeClickTabButtonByTitle("Microsoft Excel", "Data", "Clear")
+end
+
 -- !!! FYI CLICK INTO CELL (toedit it) and you can get a ref to it usin my inspector OR UI Element Inspector
 --    this was for 3rd column of row 5... COORDINATES IN VISIBLE SHEET CELLS ONLY (not overall)
 --    app:window(1) :splitGroup(1):layoutArea(1):layoutArea(1):table(2):row(5):cell(3):group(1):textArea(1)
