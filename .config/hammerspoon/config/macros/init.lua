@@ -345,12 +345,12 @@ end
 
 -- *** excel helpers
 
-function PowerPointEnsureTabOpen(tabName)
-    MicrosoftOfficeEnsureTabOpen("Microsoft PowerPoint", tabName)
+function StreamDeckPowerPointEnsureTabOpen(tabName)
+    MicrosoftOfficeEnsureTabSelected("Microsoft PowerPoint", tabName)
 end
 
-function ExcelEnsureTabOpen(tabName)
-    MicrosoftOfficeEnsureTabOpen("Microsoft Excel", tabName)
+function StreamDeckExcelEnsureTabOpen(tabName)
+    MicrosoftOfficeEnsureTabSelected("Microsoft Excel", tabName)
 end
 
 ---@return hs.axuielement
@@ -365,8 +365,8 @@ function MicrosoftOfficeGetRibbon(appName)
     return ribbonTabGroup
 end
 
-function MicrosoftOfficeEnsureTabOpen(appName, tabName)
-    local ribbon = MicrosoftOfficeGetRibbon(appName, tabName)
+function MicrosoftOfficeEnsureTabSelected(appName, tabName)
+    local ribbon = MicrosoftOfficeGetRibbon(appName)
 
     -- ribbon's AXValueDescription has current tab's name
     local isAlreadyOpen = ribbon:attributeValue("AXValueDescription") == tabName
@@ -392,13 +392,17 @@ function MicrosoftOfficeEnsureTabOpen(appName, tabName)
     tabButton:performAction("AXPress")
 end
 
-function StreamDeckExcelDataTabClickSortButton()
-    ExcelEnsureTabOpen("Data") -- 20 to 30ms when already open
+function ClickTabButton(tabName, buttonTitle)
+    StreamDeckExcelEnsureTabOpen(tabName)
+    local ribbon = MicrosoftOfficeGetRibbon("Microsoft Excel")
+end
 
+function StreamDeckExcelDataTabClickSortButton()
     -- NOTES for sort button:
     -- app:window(1):tabGroup(1):scrollArea(1):group(4):button(3)
     -- scrollArea(1) is only scroll area
 
+    StreamDeckExcelEnsureTabOpen("Data") -- 20 to 30ms when already open
     local ribbon = MicrosoftOfficeGetRibbon("Microsoft Excel")
 
     -- local scrollArea = ribbon:scrollArea(1)
