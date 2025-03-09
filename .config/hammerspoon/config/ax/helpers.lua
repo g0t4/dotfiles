@@ -192,6 +192,46 @@ axuielemMT.scrollArea = function(self, index)
     return self:scrollAreas()[index]
 end
 
+---@return hs.axuielement[]
+axuielemMT.tables = function(self)
+    return self:childrenWithRole("AXTable") or {}
+end
+---@param index number
+---@return hs.axuielement
+axuielemMT.table = function(self, index)
+    return self:tables()[index]
+end
+
+---@return hs.axuielement[]
+axuielemMT.rows = function(self)
+    return self:childrenWithRole("AXRow") or {}
+end
+---@param index number
+---@return hs.axuielement
+axuielemMT.row = function(self, index)
+    return self:rows()[index]
+end
+
+---@return hs.axuielement[]
+axuielemMT.cells = function(self)
+    return self:childrenWithRole("AXCell") or {}
+end
+---@param index number
+---@return hs.axuielement
+axuielemMT.cell = function(self, index)
+    return self:cells()[index]
+end
+
+--- layout areas
+---@return hs.axuielement[]
+axuielemMT.layoutAreas = function(self)
+    return self:childrenWithRole("AXLayoutArea") or {}
+end
+---@param index number
+---@return hs.axuielement
+axuielemMT.layoutArea = function(self, index)
+    return self:layoutAreas()[index]
+end
 
 --- first child that matches predicate
 ---@param predicate fun(element: hs.axuielement): boolean
