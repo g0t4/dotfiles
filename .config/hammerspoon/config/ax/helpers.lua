@@ -1,5 +1,6 @@
 local fun = require("fun")
 local axuielement = require("hs.axuielement") -- load to modify its metatable
+local f = require("config.helpers.underscore")
 
 -- goal here is to simplify syntax for navigating children by roles (and index)
 --    :childrenWithRole("AXWindow")[1]
@@ -13,6 +14,43 @@ local axuielement = require("hs.axuielement") -- load to modify its metatable
 ---@class hs.axuielement
 local axuielemMT = hs.getObjectMetatable("hs.axuielement")
 
+---@param appName string
+---@return hs.axuielement
+function expectAppElement(appName)
+    -- *** btw "expect" implies get + assert
+    local hsApp = hs.application.find(appName)
+    assert(hsApp ~= nil, "axUiAppTyped: could not find app")
+    local appElement = hs.axuielement.applicationElement(hsApp)
+    assert(appElement ~= nil, "axUiAppTyped: could not find app element")
+    return appElement
+end
+
+axuielemMT.dumpAttributes = function(self)
+    f.each(self:allAttributeValues() or {}, function(name, value)
+        print(name, hs.inspect(value))
+    end)
+end
+
+---@return hs.axuielement|nil
+axuielemMT.focusedWindow = function(self)
+    return self:attributeValue("AXFocusedWindow")
+end
+
+---@return hs.axuielement
+axuielemMT.expectFocusedWindow = function(self)
+    local focusedWindow = self:focusedWindow()
+    assert(focusedWindow ~= nil, "axUiAppTyped: could not find focused window")
+    return focusedWindow
+end
+
+---@return hs.axuielement
+axuielemMT.expectFocusedMainWindow = function(self)
+    local focusedWindow = self:expectFocusedWindow()
+    local axMain = focusedWindow:attributeValue("AXMain")
+    assert(axMain == true, "axUiAppTyped: focused window is not main")
+    return focusedWindow
+end
+
 axuielemMT.windows = function(self)
     return self:childrenWithRole("AXWindow")
 end
@@ -21,6 +59,27 @@ end
 axuielemMT.window = function(self, index)
     return self:windows()[index]
 end
+
+---@return hs.axuielement[]
+axuielemMT.tabGroups = function(self)
+    return self:childrenWithRole("AXTabGroup") or {}
+end
+---@param index number
+---@return hs.axuielement
+axuielemMT.tabGroup = function(self, index)
+    return self:tabGroups()[index]
+end
+
+---@return hs.axuielement[]
+axuielemMT.radioButtons = function(self)
+    return self:childrenWithRole("AXRadioButton") or {}
+end
+---@param index number
+---@return hs.axuielement
+axuielemMT.radioButton = function(self, index)
+    return self:radioButtons()[index]
+end
+
 
 ---@param index number
 ---@return hs.axuielement
@@ -106,6 +165,23 @@ end
 ---@return hs.axuielement
 axuielemMT.toolbar = function(self, index)
     return self:toolbars()[index]
+end
+
+---@return hs.axuielement[]
+axuielemMT.children = function(self)
+    return self:attributeValue("AXChildren") or {}
+end
+
+--- first child that matches predicate
+---@param predicate fun(element: hs.axuielement): boolean
+---@return hs.axuielement|nil
+axuielemMT.firstChild = function(self, predicate)
+    local children = self:children()
+    for _, child in pairs(children) do
+        if predicate(child) then
+            return child
+        end
+    end
 end
 
 function axValueQuoted(element)
