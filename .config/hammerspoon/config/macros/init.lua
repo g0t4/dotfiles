@@ -345,8 +345,16 @@ end
 
 -- *** excel helpers
 
-function ExcelOpenTab(tabName)
-    local app = expectAppElement("Microsoft Excel")
+function PowerPointEnsureTabOpen(tabName)
+    MicrosoftOfficeEnsureTabOpen("Microsoft PowerPoint", tabName)
+end
+
+function ExcelEnsureTabOpen(tabName)
+    MicrosoftOfficeEnsureTabOpen("Microsoft Excel", tabName)
+end
+
+function MicrosoftOfficeEnsureTabOpen(appName, tabName)
+    local app = expectAppElement(appName)
     local window = app:expectFocusedMainWindow()
 
     local tabGroup = window:tabGroup(1)
