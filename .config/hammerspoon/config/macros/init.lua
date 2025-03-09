@@ -397,35 +397,7 @@ end
 
 function MicrosoftOfficeClickTabsButton(appName, tabName, buttonTitle)
     local ribbon = MicrosoftOfficeEnsureTabSelected(appName, tabName)
-end
 
-function StreamDeckExcelDataTabClickSortButton()
-    -- NOTES for sort button:
-    -- app:window(1):tabGroup(1):scrollArea(1):group(4):button(3)
-    -- scrollArea(1) is only scroll area
-
-    local ribbon = MicrosoftOfficeEnsureTabSelected("Microsoft Excel", "Data") -- 20 to 30ms when already open
-
-    -- local scrollArea = ribbon:scrollArea(1)
-    -- local groups = scrollArea:groups()
-    -- -- *** this brittle, manual search takes 500ms to 1s!!! ... fast enough but elementSearch IS WAY FASTER
-    -- -- TODO reproduce with using search builtin to hs.axuielement as I don't think that is this slow!
-    -- --   JUST see if can improve that time and make search more flexible
-    -- local startTime = GetTime()
-    -- -- TODO rewrite as ribbon button finder! so I can reuse this! (do for filter/reapply/clear next)
-    -- for _, group in pairs(groups) do
-    --     for _, button in pairs(group:buttons()) do
-    --         print("button title: ", button:attributeValue("AXTitle"))
-    --         if button:attributeValue("AXTitle") == "Sort" then
-    --             button:performAction("AXPress")
-    --             print("time to press sort button: " .. GetElapsedTimeInMilliseconds(startTime) .. " ms")
-    --             return
-    --         end
-    --     end
-    --     print("no sort button found")
-    -- end
-
-    local buttonTitle = "Sort"
     local criteria = { attribute = "AXTitle", value = buttonTitle }
     FindOneElement(ribbon, criteria, function(_, searchTask, numResultsAdded)
         -- WOW, 150ms to callback! much faster than manual search (which is also brittle)
@@ -438,6 +410,14 @@ function StreamDeckExcelDataTabClickSortButton()
 
         found:performAction("AXPress")
     end)
+end
+
+function StreamDeckExcelDataTabClickSortButton()
+    -- NOTES for sort button:
+    -- app:window(1):tabGroup(1):scrollArea(1):group(4):button(3)
+    -- scrollArea(1) is only scroll area
+
+    MicrosoftOfficeClickTabsButton("Microsoft Excel", "Data", "Sort")
 end
 
 -- !!! FYI CLICK INTO CELL (toedit it) and you can get a ref to it usin my inspector OR UI Element Inspector
