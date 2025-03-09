@@ -343,22 +343,9 @@ function FindOneElement(app, criteria, callback)
     app:elementSearch(afterSearch, criteriaFunction, namedModifiers)
 end
 
---- *** excel helpers
+-- *** excel helpers
 
--- 	-- CAN COMMENT OUT THIS PART IF WANT TO COLLAPSE TOO (on second press, a toggle mode)
--- 	set _current_menu to get value of _ribbon
--- 	if exists _current_menu then
--- 		-- exists = ribbon not collapsed
--- 		if name of _current_menu is _tabName then
--- 			-- already on the desired tab
--- 			-- so, return to avoid click again which collapses the ribbon
--- 			return
--- 		end if
--- 	end if
--- 	click _tab
--- end tell
 function ExcelOpenTab(tabName)
-    -- app:window(1):tabGroup(1):radioButton(6)
     local app = expectAppElement("Microsoft Excel")
     local window = app:expectFocusedMainWindow()
 
@@ -367,10 +354,18 @@ function ExcelOpenTab(tabName)
         print("tab group name is not 'ribbon'... will proceed anyways, just heads up if there is a problem")
     end
 
-    if tabGroup:attributeValue("AXValueDescription") == tabName then
-        -- TODO proceed to allow click if ribbon is collapsed
-        -- remove this to add toggling, for now I just want this to ensure it is selected
+    -- ribbon's AXValueDescription has current tab's name
+    local isAlreadyOpen = tabGroup:attributeValue("AXValueDescription") == tabName
+    if isAlreadyOpen then
         print("tab already open: " .. tabName)
+
+        local ribbonIsCollapsed = tabGroup:attributeValue("AXValue") == nil
+        if ribbonIsCollapsed then
+            print("tab group is collapsed, clicking to expand")
+            tabGroup:performAction("AXPress")
+        end
+
+        -- PRN can add "toggle" parameter to this func and then fall through in that case?
         return
     end
 
@@ -379,10 +374,10 @@ function ExcelOpenTab(tabName)
         element:dumpAttributes()
         return element:attributeValue("AXTitle") == tabName
     end)
-    assert(tabButton ~= nil, "Could not find tab button")
+    assert(tabButton ~= nil, "Could not find Excel ribbon's tab button for: " .. tabName)
     tabButton:performAction("AXPress")
 end
 
---- *** end excel helpers
+-- *** end excel helpers
 
 return M
