@@ -71,6 +71,16 @@ axuielemMT.tabGroup = function(self, index)
 end
 
 ---@return hs.axuielement[]
+axuielemMT.buttons = function(self)
+    return self:childrenWithRole("AXButton") or {}
+end
+---@param index number
+---@return hs.axuielement
+axuielemMT.button = function(self, index)
+    return self:buttons()[index]
+end
+
+---@return hs.axuielement[]
 axuielemMT.radioButtons = function(self)
     return self:childrenWithRole("AXRadioButton") or {}
 end
@@ -171,6 +181,17 @@ end
 axuielemMT.children = function(self)
     return self:attributeValue("AXChildren") or {}
 end
+
+---@return hs.axuielement[]
+axuielemMT.scrollAreas = function(self)
+    return self:childrenWithRole("AXScrollArea") or {}
+end
+---@param index number
+---@return hs.axuielement
+axuielemMT.scrollArea = function(self, index)
+    return self:scrollAreas()[index]
+end
+
 
 --- first child that matches predicate
 ---@param predicate fun(element: hs.axuielement): boolean

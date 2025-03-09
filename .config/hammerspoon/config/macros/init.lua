@@ -353,24 +353,30 @@ function ExcelEnsureTabOpen(tabName)
     MicrosoftOfficeEnsureTabOpen("Microsoft Excel", tabName)
 end
 
-function MicrosoftOfficeEnsureTabOpen(appName, tabName)
+---@return hs.axuielement
+function MicrosoftOfficeGetRibbon(appName)
     local app = expectAppElement(appName)
     local window = app:expectFocusedMainWindow()
 
-    local tabGroup = window:tabGroup(1)
-    if tabGroup:attributeValue("AXDescription") ~= "ribbon" then
+    local ribbonTabGroup = window:tabGroup(1)
+    if ribbonTabGroup:attributeValue("AXDescription") ~= "ribbon" then
         print("tab group name is not 'ribbon'... will proceed anyways, just heads up if there is a problem")
     end
+    return ribbonTabGroup
+end
+
+function MicrosoftOfficeEnsureTabOpen(appName, tabName)
+    local ribbon = MicrosoftOfficeGetRibbon(appName, tabName)
 
     -- ribbon's AXValueDescription has current tab's name
-    local isAlreadyOpen = tabGroup:attributeValue("AXValueDescription") == tabName
+    local isAlreadyOpen = ribbon:attributeValue("AXValueDescription") == tabName
     if isAlreadyOpen then
         print("tab already open: " .. tabName)
 
-        local ribbonIsCollapsed = tabGroup:attributeValue("AXValue") == nil
+        local ribbonIsCollapsed = ribbon:attributeValue("AXValue") == nil
         if ribbonIsCollapsed then
             print("tab group is collapsed, clicking to expand")
-            tabGroup:performAction("AXPress")
+            ribbon:performAction("AXPress")
         end
 
         -- PRN can add "toggle" parameter to this func and then fall through in that case?
@@ -378,12 +384,42 @@ function MicrosoftOfficeEnsureTabOpen(appName, tabName)
     end
 
     -- PRN use AXTabs to enumerate just tab children elements? (instead of radio buttons?)
-    local tabButton = tabGroup:firstChild(function(element)
+    local tabButton = ribbon:firstChild(function(element)
         element:dumpAttributes()
         return element:attributeValue("AXTitle") == tabName
     end)
-    assert(tabButton ~= nil, "Could not find Excel ribbon's tab button for: " .. tabName)
+    assert(tabButton ~= nil, "Could not find " .. appName .. " ribbon's tab button for: " .. tabName)
     tabButton:performAction("AXPress")
+end
+
+function StreamDeckExcelDataTabClickSortButton()
+    ExcelEnsureTabOpen("Data") -- 20 to 30ms when already open
+
+    -- NOTES for sort button:
+    -- app:window(1):tabGroup(1):scrollArea(1):group(4):button(3)
+    -- scrollArea(1) is only scroll area
+
+    local ribbon = MicrosoftOfficeGetRibbon("Microsoft Excel")
+
+    local scrollArea = ribbon:scrollArea(1)
+    local groups = scrollArea:groups()
+
+    -- search takes 500ms to 1s ...  but seems plenty fast so leave it!
+    -- TODO reproduce with using search builtin to hs.axuielement as I don't think that is this slow!
+    --   JUST see if can improve that time and make search more flexible
+    local startTime = GetTime()
+    -- TODO rewrite as ribbon button finder! so I can reuse this! (do for filter/reapply/clear next)
+    for _, group in pairs(groups) do
+        for _, button in pairs(group:buttons()) do
+            print("button title: ", button:attributeValue("AXTitle"))
+            if button:attributeValue("AXTitle") == "Sort" then
+                button:performAction("AXPress")
+                print("time to press sort button: " .. GetElapsedTimeInMilliseconds(startTime) .. " ms")
+                return
+            end
+        end
+        print("no sort button found")
+    end
 end
 
 -- *** end excel helpers
