@@ -100,13 +100,22 @@ async def wes_cmd_t_override(connection, remote_tab=True):
         new_profile.set_use_custom_command("Yes")
 
     # pass command async_create_tab OR new_profile.set_command?
-    tab = await prior_window.async_create_tab(profile_customizations=new_profile)
-    if tab is None:
+    new_tab = await prior_window.async_create_tab(profile_customizations=new_profile)
+    if new_tab is None:
         raise Exception("UNEXPECTED NO TAB CREATED")
 
     if is_ssh:
-        new_session = get_current_session_throw_if_none(tab)
+        new_session = get_current_session_throw_if_none(new_tab)
         new_path = await new_session.async_get_variable("path")
         log(f"new_path: {new_path}, path: {path}")
+        log(f"new_jobName: {await new_session.async_get_variable('jobName')}")
+        log(f"new_commandLine: {await new_session.async_get_variable('commandLine')}")
+        # weird, new_path (path) isn't set yet? but if I open inspector I see it?!
         if new_path != path:
             await new_session.async_send_text(f"cd {path}; clear\n")
+            now_path_is = await new_session.async_get_variable("path")
+
+            new_session2 = get_current_session_throw_if_none(new_tab)
+            await new_session2.async_send_text(f"cd {path}; clear\n")
+            now_path_is2 = await new_session2.async_get_variable("path")
+            log(f"now_path_is: {now_path_is}, now_path_is2: {now_path_is2}")
