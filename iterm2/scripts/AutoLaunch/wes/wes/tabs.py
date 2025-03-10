@@ -50,14 +50,9 @@ async def wes_cmd_n_override(connection: iterm2.Connection):
 
 
 async def wes_cmd_t_override(connection):
-    print("wes new tab")
-    return
-    prior_window = await get_current_window(connection)
-    if prior_window is None:
-        return
+    prior_window = await get_current_window_throw_if_none(connection)
+    session = await get_session_throw_if_none(connection)
+    current_profile = await session.async_get_profile()
+    new_profile = current_profile.local_write_only_copy
 
-    # make new tab and close all other tabs in current window
-    new_tab = await prior_window.async_create_tab()
-    for tab in prior_window.tabs:
-        if tab != new_tab:
-            await tab.async_close(force=True)
+    tab = await prior_window.async_create_tab(profile_customizations=new_profile)
