@@ -18,8 +18,7 @@ async def main(connection: iterm2.Connection):
         shift = iterm2.Modifier.SHIFT in keystroke.modifiers
         command = iterm2.Modifier.COMMAND in keystroke.modifiers
 
-        print_keystroke(keystroke)
-        return
+        # print_keystroke(keystroke)
 
         # FYI keystroke monitor only works if:
         #   - Script Console is not focused
@@ -40,40 +39,51 @@ async def main(connection: iterm2.Connection):
         n = keystroke.keycode == iterm2.Keycode.ANSI_N
         if n and control and shift and command:
             await wes_cmd_n_override(connection)
+            return
 
         # FYI also had to remap Cmd+T => Cmd+Shift+Control+T in Keyboard Maestro
         t = keystroke.keycode == iterm2.Keycode.ANSI_T
         if t and control and shift and command:
             await wes_cmd_t_override(connection, remote_tab=True)
+            return
 
+        # FYI also had to remap Cmd+Shift+T in KM => Cmd+Ctrl+T
+        #    cannot remap to same keys, wouldn't work :)
         t = keystroke.keycode == iterm2.Keycode.ANSI_T
-        if t and command and shift:
+        if t and command and control:
             await wes_cmd_t_override(connection, remote_tab=False)
+            return
 
         b = keystroke.keycode == iterm2.Keycode.ANSI_B
         if b and control and shift and command:
             await ask_openai(connection)
+            return
 
         d = keystroke.keycode == iterm2.Keycode.ANSI_D
         if d and control and shift and command:
             await close_other_tabs(connection)
+            return
 
         e = keystroke.keycode == iterm2.Keycode.ANSI_E
         if e and control and shift and command:
             await new_tab_then_close_others(connection)
+            return
 
         e = keystroke.keycode == iterm2.Keycode.ANSI_F
         if e and control and shift and command:
             # TODO merge with ANSI_B? should I just use this instead of ANSI_B approach?
             await copy_screen_to_clipboard(connection, history=False)
+            return
 
         e = keystroke.keycode == iterm2.Keycode.ANSI_H
         if e and control and shift and command:
             await copy_screen_to_clipboard(connection, history=True)
+            return
 
         e = keystroke.keycode == iterm2.Keycode.F9
         if e:
             await on_f9(connection)
+            return
 
     async def keystroke_monitor(connection):
         async with iterm2.KeystrokeMonitor(connection) as mon:
