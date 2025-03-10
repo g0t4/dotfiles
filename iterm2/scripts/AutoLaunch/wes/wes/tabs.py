@@ -54,14 +54,7 @@ async def wes_cmd_n_override(connection: iterm2.Connection, remote_tab=True):
         return
 
     if is_ssh:
-        new_tab = new_window.current_tab
-        if new_tab is None:
-            log("py - No tab created, aborting...")
-            return
-        new_session = new_tab.current_session
-        if new_session is None:
-            log("py - No session created, aborting...")
-            return
+        new_session = await get_windows_current_tab_session_throw_if_none(new_window)
         await new_session.async_send_text(f"cd {path}; clear\n")
         # clear works well over remote, doesn't have scrollback so don't need Cmd+K
 
