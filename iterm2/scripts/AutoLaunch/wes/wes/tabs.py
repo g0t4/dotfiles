@@ -50,8 +50,11 @@ async def wes_cmd_n_override(connection: iterm2.Connection, remote_tab=True):
 
     if is_ssh:
         new_session = get_current_tab_session_throw_if_none(new_window)
-        await new_session.async_send_text(f"cd {path}; clear\n")
-        # clear works well over remote, doesn't have scrollback so don't need Cmd+K
+        new_path = await new_session.async_get_variable("path")
+        print(f"new_path: {new_path}, path: {path}")
+        if new_path != path:
+            await new_session.async_send_text(f"cd {path}; clear\n")
+            # clear works well over remote, doesn't have scrollback so don't need Cmd+K
 
 
 async def wes_cmd_t_override(connection, remote_tab=True):
@@ -103,5 +106,7 @@ async def wes_cmd_t_override(connection, remote_tab=True):
 
     if is_ssh:
         new_session = get_current_session_throw_if_none(tab)
-        # Todo check paths
-        await new_session.async_send_text(f"cd {path}; clear\n")
+        new_path = await new_session.async_get_variable("path")
+        print(f"new_path: {new_path}, path: {path}")
+        if new_path != path:
+            await new_session.async_send_text(f"cd {path}; clear\n")
