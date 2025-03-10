@@ -93,6 +93,7 @@ async def wes_cmd_t_override(connection):
     if is_ssh:
         new_profile.set_command(commandLine)
         new_profile.set_use_custom_command("Yes")
+    # TODO what if I want to open new tab on the local machine (not remote)
 
     # pass command async_create_tab OR new_profile.set_command?
     tab = await prior_window.async_create_tab(profile_customizations=new_profile)
