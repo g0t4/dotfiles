@@ -129,7 +129,6 @@ async def wes_cmd_t_override(connection, remote=True):
 #   Cmd+D
 #   Shift+Cmd+D
 async def wes_cmd_d_override(connection: iterm2.Connection, split_vert: bool = False, remote=True):
-    prior_window = await get_current_window_throw_if_none(connection)
     session = await get_session_throw_if_none(connection)
     current_profile = await session.async_get_profile()
     new_profile = current_profile.local_write_only_copy
