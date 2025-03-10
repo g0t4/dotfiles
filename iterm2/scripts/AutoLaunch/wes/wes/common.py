@@ -36,6 +36,7 @@ def print_keystroke(keystroke):
 
 # PRN consider renaming asyncs to async_* ?
 
+
 # if a consumer needs to work with possibility of None, then use this to at least help log details if its missing and shouldn't be
 async def get_current_window(connection: iterm2.Connection) -> typing.Optional[iterm2.Window]:
     app = await iterm2.async_get_app(connection)
@@ -124,3 +125,13 @@ def get_current_session_for_window_throw_if_none(window: iterm2.Window) -> iterm
     tab = get_current_tab_for_window_throw_if_none(window)
     session = get_current_session_for_current_tab_throw_if_none(tab)
     return session
+
+
+# *** misc other helpers
+#
+async def bring_iterm_to_front(connection: iterm2.Connection):
+    app = await iterm2.async_get_app(connection)
+    if app is None:
+        log(f"Cannot bring iTerm to front... No app from iterm2.async_get_app, got '{app}'")
+        return
+    await app.async_activate()

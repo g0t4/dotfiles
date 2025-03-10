@@ -1,13 +1,8 @@
 import iterm2
 import os
 import sys
-from pathlib import Path
+from common import *
 
-# add parent dir to sys.path so reuse "package" is available
-sys.path.append(str(Path(__file__).resolve().parent.parent))
-from reuse.iterm_helpers import *
-
- # TODO rework to use common.py and not have two copies of it (reuse.iterm_helpers)
 
 async def main(connection):
     # args
