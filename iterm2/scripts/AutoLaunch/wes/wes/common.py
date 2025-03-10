@@ -36,9 +36,7 @@ def print_keystroke(keystroke):
 
 # PRN consider renaming asyncs to async_* ?
 
-
-# avoid none soup 4 levels deep in consumer code... feels like a better way to do this (later)
-# for now just log why something is missing, if it is missing, otherwise return the level I want
+# if a consumer needs to work with possibility of None, then use this to at least help log details if its missing and shouldn't be
 async def get_current_window(connection: iterm2.Connection) -> typing.Optional[iterm2.Window]:
     app = await iterm2.async_get_app(connection)
     if app is None:
@@ -53,6 +51,8 @@ async def get_current_window(connection: iterm2.Connection) -> typing.Optional[i
     return window
 
 
+# FYI impetus is to not litter consume code with if None checks... just throw here and provide all the nice details about what is wrong
+#   that way consumers can assume happy path (or exception if not, and something else catches that for them too)
 async def get_current_window_throw_if_none(connection: iterm2.Connection) -> iterm2.Window:
     app = await iterm2.async_get_app(connection)
     if app is None:
