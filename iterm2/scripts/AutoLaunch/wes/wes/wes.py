@@ -40,22 +40,22 @@ async def main(connection: iterm2.Connection):
         # FYI also had to remap Cmd+N => Cmd+Shift+Control+N in Keyboard Maestro
         n = keystroke.keycode == iterm2.Keycode.ANSI_N
         if n and control and shift and command:
-            await wes_cmd_n_override(connection, remote=True)
+            await wes_new_window(connection, remote=True)
             return
         if n and command and control:
-            await wes_cmd_n_override(connection, remote=False)
+            await wes_new_window(connection, remote=False)
             return
 
         # *** New Tab helpers
         # FYI also had to remap Cmd+T => Cmd+Shift+Control+T in Keyboard Maestro
         t = keystroke.keycode == iterm2.Keycode.ANSI_T
         if t and control and shift and command:
-            await wes_cmd_t_override(connection, remote=True)
+            await wes_new_tab(connection, remote=True)
             return
         # FYI also had to remap Cmd+Shift+T in KM => Cmd+Ctrl+T
         #    cannot remap to same keys, wouldn't work :)
         if t and command and control:
-            await wes_cmd_t_override(connection, remote=False)
+            await wes_new_tab(connection, remote=False)
             return
 
         # *** Split panes helpers (ssh support)
@@ -68,10 +68,10 @@ async def main(connection: iterm2.Connection):
         #       (ctrl+alt+d == toggle dock)
         d = keystroke.keycode == iterm2.Keycode.ANSI_D
         if d and control and shift and command:
-            await wes_cmd_d_override(connection, split_vert=True)
+            await wes_split_pane(connection, split_vert=True)
             return
         if d and control and command and option:
-            await wes_cmd_d_override(connection, split_vert=False)
+            await wes_split_pane(connection, split_vert=False)
             return
 
         b = keystroke.keycode == iterm2.Keycode.ANSI_B

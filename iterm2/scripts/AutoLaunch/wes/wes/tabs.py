@@ -24,7 +24,7 @@ async def new_tab_then_close_others(connection):
             await tab.async_close(force=True)
 
 
-async def wes_cmd_n_override(connection: iterm2.Connection, remote=True):
+async def wes_new_window(connection: iterm2.Connection, remote=True):
     prior_window = await get_current_window(connection)
     if prior_window is None:
         log("UNEXPECTED NO PRIOR WINDOW, opening new window")
@@ -56,10 +56,10 @@ async def wes_cmd_n_override(connection: iterm2.Connection, remote=True):
     log(f"new_path: {new_path}, path: {path}")
     if new_path != path:
         await new_session.async_send_text(f"cd {path}; clear\n")
-        # clear does same as Cmd+K
+        # clear does same as Cmd+K (clears scrollback, not just screen)
 
 
-async def wes_cmd_t_override(connection, remote=True):
+async def wes_new_tab(connection, remote=True):
     prior_window = await get_current_window_throw_if_none(connection)
     session = await get_session_throw_if_none(connection)
     current_profile = await session.async_get_profile()
@@ -126,7 +126,7 @@ async def wes_cmd_t_override(connection, remote=True):
 
 
 # *** split panes:
-async def wes_cmd_d_override(connection: iterm2.Connection, split_vert: bool = False, remote=True):
+async def wes_split_pane(connection: iterm2.Connection, split_vert: bool = False, remote=True):
     session = await get_session_throw_if_none(connection)
     current_profile = await session.async_get_profile()
     new_profile = current_profile.local_write_only_copy
