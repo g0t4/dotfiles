@@ -49,7 +49,7 @@ async def wes_cmd_n_override(connection: iterm2.Connection):
     window = await iterm2.Window.async_create(connection, profile_customizations=new_profile)
 
 
-async def wes_cmd_t_override(connection):
+async def wes_cmd_t_override(connection, remote_tab=True):
     prior_window = await get_current_window_throw_if_none(connection)
     session = await get_session_throw_if_none(connection)
     current_profile = await session.async_get_profile()
@@ -90,10 +90,10 @@ async def wes_cmd_t_override(connection):
     commandLine = await session.async_get_variable("commandLine")
 
     is_ssh = jobName == "ssh"
-    if is_ssh:
+    if is_ssh and remote_tab:
         new_profile.set_command(commandLine)
         new_profile.set_use_custom_command("Yes")
-    # TODO what if I want to open new tab on the local machine (not remote)
+
 
     # pass command async_create_tab OR new_profile.set_command?
     tab = await prior_window.async_create_tab(profile_customizations=new_profile)
