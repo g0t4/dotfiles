@@ -91,3 +91,23 @@ async def get_current_window_throw_if_none(connection: iterm2.Connection):
     if window is None:
         raise Exception("No window from app.current_window (got None)")
     return window
+
+
+async def get_window_current_tab_throw_if_none(window: iterm2.Window):
+    tab = window.current_tab
+    if tab is None:
+        raise Exception("No tab from window.current_tab (got None)")
+    return tab
+
+
+async def get_tab_current_session_throw_if_none(tab: iterm2.Tab):
+    session = tab.current_session
+    if session is None:
+        raise Exception("No session from tab.current_session (got None)")
+    return session
+
+
+async def get_windows_current_tab_session_throw_if_none(window: iterm2.Window):
+    tab = await get_window_current_tab_throw_if_none(window)
+    session = await get_tab_current_session_throw_if_none(tab)
+    return session
