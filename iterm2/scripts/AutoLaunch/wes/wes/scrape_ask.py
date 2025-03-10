@@ -3,13 +3,13 @@ import platform
 import iterm2
 import itertools
 
-from common import get_session
+from common import get_current_session
 from logs import log
 from asyncs import ask_openai_async_type_response
 
 
 async def copy_screen_to_clipboard(connection: iterm2.Connection, history: bool = False):
-    session = await get_session(connection)
+    session = await get_current_session(connection)
     if session is None:
         log("No current session")
         return

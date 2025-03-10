@@ -1,5 +1,5 @@
 import iterm2
-from common import get_session
+from common import get_current_session
 
 async def on_f9(connection: iterm2.Connection):
     # this started out with how I use F9 to quit nvim
@@ -7,7 +7,7 @@ async def on_f9(connection: iterm2.Connection):
     #   yes, F9 quits nvim but it only quits the instance in the current pane (thus F9 to close pane)
 
     # TODO use optional return type to chain next operations w/o needing to check for None (see connection.current_window for alternate API)
-    session = await get_session(connection)
+    session = await get_current_session(connection)
     if session is None:
         print("No current session")
         return
