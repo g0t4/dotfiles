@@ -56,7 +56,7 @@ async def wes_cmd_n_override(connection: iterm2.Connection, remote=True):
     log(f"new_path: {new_path}, path: {path}")
     if new_path != path:
         await new_session.async_send_text(f"cd {path}; clear\n")
-        # clear works well over remote, doesn't have scrollback so don't need Cmd+K
+        # clear does same as Cmd+K
 
 
 async def wes_cmd_t_override(connection, remote=True):
