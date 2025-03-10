@@ -63,6 +63,14 @@ async def get_current_tab(connection: iterm2.Connection):
     return tab
 
 
+async def get_current_tab_throw_if_none(connection: iterm2.Connection):
+    window = await get_current_window_throw_if_none(connection)
+    tab = window.current_tab
+    if tab is None:
+        raise Exception("No tab from window.current_tab (got None)")
+    return tab
+
+
 async def get_session(connection: iterm2.Connection):
     tab = await get_current_tab(connection)
     if tab is None:

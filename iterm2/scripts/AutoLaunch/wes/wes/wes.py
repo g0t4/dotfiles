@@ -86,7 +86,7 @@ async def main(connection: iterm2.Connection):
             return
 
         # keymap doesn't matter, just update streamdeck button if change this:
-        e = keystroke.keycode == iterm2.Keycode.ANSI_E
+        e = keystroke.keycode == iterm2.Keycode.ANSI_Y
         if e and control and shift and command:
             await new_tab_then_close_others(connection)
             return
