@@ -39,8 +39,11 @@ async def wes_new_window(connection: iterm2.Connection, remote=True):
     if is_ssh:
         new_profile.set_command(commandLine)
         new_profile.set_use_custom_command("Yes")
+    if jobName == "ssh" and not remote:
+        # for when you are ssh'd and not wanna ssh into new tab/window
+        new_profile.set_use_custom_command("No")
 
-    print(f"create_window - remote: {remote}, is_ssh: {is_ssh}")
+    # print(f"create_window2 - remote: {remote}, is_ssh: {is_ssh}")
 
     new_window = await iterm2.Window.async_create(connection, profile_customizations=new_profile)
     if new_window is None:
@@ -98,8 +101,11 @@ async def wes_new_tab(connection, remote=True):
     if is_ssh:
         new_profile.set_command(commandLine)
         new_profile.set_use_custom_command("Yes")
+    if jobName == "ssh" and not remote:
+        # for when you are ssh'd and not wanna ssh into new tab/window
+        new_profile.set_use_custom_command("No")
 
-    print(f"create_tab - remote: {remote}, is_ssh: {is_ssh}")
+    # print(f"create_tab - remote: {remote}, is_ssh: {is_ssh}")
 
     # pass command async_create_tab OR new_profile.set_command?
     new_tab = await prior_window.async_create_tab(profile_customizations=new_profile)
@@ -139,8 +145,12 @@ async def wes_split_pane(connection: iterm2.Connection, split_vert: bool = False
     if is_ssh:
         new_profile.set_command(commandLine)
         new_profile.set_use_custom_command("Yes")
+    # PRN if I add split to new local pane then I need to clear commandLine if it was SSH'd
+    # if jobName == "ssh" and not remote:
+    #     # for when you are ssh'd and not wanna ssh into new tab/window
+    #     new_profile.set_use_custom_command("No")
 
-    print(f"split_pane - remote: {remote}, is_ssh: {is_ssh}")
+    # print(f"split_pane - remote: {remote}, is_ssh: {is_ssh}")
 
     new_session = await session.async_split_pane(vertical=split_vert, profile_customizations=new_profile)
     if new_session is None:
