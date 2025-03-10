@@ -135,7 +135,7 @@ return {
                 --
                 '--hidden', '-U',
                 '--ignore', '.venv/',
-                '--ignore', '.iterm2env/',
+                '--ignore', 'iterm2env',
                 '--ignore', '.git/',
                 '--ignore', 'node_modules/',
                 '--ignore', '__pycache__/',
