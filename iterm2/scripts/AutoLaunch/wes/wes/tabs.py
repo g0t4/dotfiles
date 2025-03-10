@@ -126,8 +126,6 @@ async def wes_cmd_t_override(connection, remote=True):
 
 
 # *** split panes:
-#   Cmd+D
-#   Shift+Cmd+D
 async def wes_cmd_d_override(connection: iterm2.Connection, split_vert: bool = False, remote=True):
     session = await get_session_throw_if_none(connection)
     current_profile = await session.async_get_profile()
