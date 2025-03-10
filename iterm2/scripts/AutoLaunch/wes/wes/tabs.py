@@ -55,4 +55,7 @@ async def wes_cmd_t_override(connection):
     current_profile = await session.async_get_profile()
     new_profile = current_profile.local_write_only_copy
 
+    # TODO detect if SSH'd and if so then re-establish that in new tab instead of shell
+
+    # pass command async_create_tab OR new_profile.set_command?
     tab = await prior_window.async_create_tab(profile_customizations=new_profile)
