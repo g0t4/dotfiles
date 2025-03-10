@@ -35,17 +35,6 @@ async def wes_cmd_n_override(connection: iterm2.Connection, remote_tab=True):
     current_profile = await session.async_get_profile()
     new_profile = current_profile.local_write_only_copy
 
-    # TODO isn't there a way to just copy the current_profile? I do wanna mod it so I don't mind but can I start with a clone instead of new?
-    # get current working dir?
-    # new_profile.set_custom_directory(current_profile.custom_directory)
-    # new_profile.set_initial_directory_mode(iterm2.InitialWorkingDirectory.INITIAL_WORKING_DIRECTORY_CUSTOM)
-
-    # TODO detect if SSH'd and if so => re-establish that in new window
-    # TODO for ssh sessions, set ssh command
-    # new_profile.set_command(current_profile.command)
-
-    # new_profile._simple_set("Normal Font", current_profile.normal_font)
-
     jobName = await session.async_get_variable("jobName")
     path = await session.async_get_variable("path")
     commandLine = await session.async_get_variable("commandLine")
@@ -54,6 +43,9 @@ async def wes_cmd_n_override(connection: iterm2.Connection, remote_tab=True):
     if is_ssh and remote_tab:
         new_profile.set_command(commandLine)
         new_profile.set_use_custom_command("Yes")
+        #  TODO OVER SSH, replicate path (current working dir) on remote
+        # new_profile.set_custom_directory(current_profile.custom_directory)
+        # new_profile.set_initial_directory_mode(iterm2.InitialWorkingDirectory.INITIAL_WORKING_DIRECTORY_CUSTOM)
 
     window = await iterm2.Window.async_create(connection, profile_customizations=new_profile)
 
@@ -63,9 +55,6 @@ async def wes_cmd_t_override(connection, remote_tab=True):
     session = await get_session_throw_if_none(connection)
     current_profile = await session.async_get_profile()
     new_profile = current_profile.local_write_only_copy
-
-    # TODO detect if SSH'd and if so then re-establish that in new tab instead of shell
-    print(" current command: ", current_profile.command)
 
     # vars:
     # commandLine - current foreground job
@@ -102,6 +91,7 @@ async def wes_cmd_t_override(connection, remote_tab=True):
     if is_ssh and remote_tab:
         new_profile.set_command(commandLine)
         new_profile.set_use_custom_command("Yes")
+        #  TODO copy ssh's path from new window logic
 
     # pass command async_create_tab OR new_profile.set_command?
     tab = await prior_window.async_create_tab(profile_customizations=new_profile)
