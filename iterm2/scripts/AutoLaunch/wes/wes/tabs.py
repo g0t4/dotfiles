@@ -2,9 +2,7 @@ from common import *
 
 
 async def close_other_tabs(connection):
-    current_tab = await get_current_tab(connection)
-    if current_tab is None:
-        return
+    current_tab = await get_current_tab_throw_if_none(connection)
 
     assert current_tab.window is not None
     for tab in current_tab.window.tabs:
