@@ -27,6 +27,7 @@ async def main(connection: iterm2.Connection):
         #   WORKAROUND: use keyboard maestro to remap key combos and run an exteral script that uses iterm's python API... s/b fine
         #      one benefit: I don't have to reload the builtin wes.py script!
 
+        # *** New Window helpers
         # notes:
         #   AFAICT iterm won't let me remap builtin keys using a keystroke monitor alone
         #   there is an "Ignore" in Settings => Keys but then my monitor doesn't receive it either
@@ -41,12 +42,13 @@ async def main(connection: iterm2.Connection):
             await wes_cmd_n_override(connection)
             return
 
+        # *** New Tab helpers
         # FYI also had to remap Cmd+T => Cmd+Shift+Control+T in Keyboard Maestro
         t = keystroke.keycode == iterm2.Keycode.ANSI_T
         if t and control and shift and command:
             await wes_cmd_t_override(connection, remote_tab=True)
             return
-
+        #
         # FYI also had to remap Cmd+Shift+T in KM => Cmd+Ctrl+T
         #    cannot remap to same keys, wouldn't work :)
         t = keystroke.keycode == iterm2.Keycode.ANSI_T
