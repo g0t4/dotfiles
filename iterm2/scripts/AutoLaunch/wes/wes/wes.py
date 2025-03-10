@@ -39,9 +39,9 @@ async def main(connection: iterm2.Connection):
             await wes_cmd_n_override(connection)
 
         # FYI also had to remap Cmd+T => Cmd+Shift+Control+T in Keyboard Maestro
-        # t = keystroke.keycode == iterm2.Keycode.ANSI_T
-        # if t and control and shift and command:
-        #     await wes_cmd_t_override(connection)
+        t = keystroke.keycode == iterm2.Keycode.ANSI_T
+        if t and control and shift and command:
+            await wes_cmd_t_override(connection)
 
         b = keystroke.keycode == iterm2.Keycode.ANSI_B
         if b and control and shift and command:

@@ -27,11 +27,11 @@ async def new_tab_then_close_others(connection):
 async def wes_cmd_n_override(connection: iterm2.Connection):
     prior_window = await get_current_window(connection)
     if prior_window is None:
-        print("no prior window, opening standard window with default profile")
+        print("UNEXPECTED NO PRIOR WINDOW, opening new window")
+        # this is not possible AFAIK right now b/c you have to have a window open to invoke keyboard monitor handlers
         await iterm2.Window.async_create(connection)
         return
 
-    # print("wes new window")
     window = await iterm2.Window.async_create(connection)
 
     # window = await iterm2.Window.async_create(connection, profile_customizations=new_profile)
