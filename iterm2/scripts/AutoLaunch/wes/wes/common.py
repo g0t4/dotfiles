@@ -38,7 +38,7 @@ def print_keystroke(keystroke):
 
 # avoid none soup 4 levels deep in consumer code... feels like a better way to do this (later)
 # for now just log why something is missing, if it is missing, otherwise return the level I want
-async def get_current_window(connection: iterm2.Connection):
+async def get_current_window(connection: iterm2.Connection) -> iterm2.Window:
     app = await iterm2.async_get_app(connection)
     if app is None:
         # LOG MESSAGES to help troubleshoot when None is returned...
@@ -52,7 +52,7 @@ async def get_current_window(connection: iterm2.Connection):
     return window
 
 
-async def get_current_window_throw_if_none(connection: iterm2.Connection):
+async def get_current_window_throw_if_none(connection: iterm2.Connection) -> iterm2.Window:
     app = await iterm2.async_get_app(connection)
     if app is None:
         raise Exception("No app from iterm2.async_get_app (got None)")
@@ -62,7 +62,7 @@ async def get_current_window_throw_if_none(connection: iterm2.Connection):
     return window
 
 
-async def get_current_tab(connection: iterm2.Connection):
+async def get_current_tab(connection: iterm2.Connection) -> iterm2.Tab:
     window = await get_current_window(connection)
     if window is None:
         log("No window from get_current_window (got None)")
@@ -73,7 +73,7 @@ async def get_current_tab(connection: iterm2.Connection):
     return tab
 
 
-async def get_current_tab_throw_if_none(connection: iterm2.Connection):
+async def get_current_tab_throw_if_none(connection: iterm2.Connection) -> iterm2.Tab:
     window = await get_current_window_throw_if_none(connection)
     tab = window.current_tab
     if tab is None:
@@ -81,7 +81,7 @@ async def get_current_tab_throw_if_none(connection: iterm2.Connection):
     return tab
 
 
-async def get_current_session(connection: iterm2.Connection):
+async def get_current_session(connection: iterm2.Connection) -> iterm2.Session:
     tab = await get_current_tab(connection)
     if tab is None:
         # it is fine to dup log messages here too... functions as a mini stack trace
@@ -94,7 +94,7 @@ async def get_current_session(connection: iterm2.Connection):
     return session
 
 
-async def get_session_throw_if_none(connection: iterm2.Connection):
+async def get_session_throw_if_none(connection: iterm2.Connection) -> iterm2.Session:
     tab = await get_current_tab(connection)
     if tab is None:
         raise Exception("No tab from get_current_tab (got None)")
@@ -105,21 +105,21 @@ async def get_session_throw_if_none(connection: iterm2.Connection):
 
 
 # *** sync helpers to avoid None check hell ***
-def get_current_tab_throw_if_none_on_window(window: iterm2.Window):
+def get_current_tab_throw_if_none_on_window(window: iterm2.Window) -> iterm2.Tab:
     tab = window.current_tab
     if tab is None:
         raise Exception("No tab from window.current_tab (got None)")
     return tab
 
 
-def get_current_session_throw_if_none_on_tab(tab: iterm2.Tab):
+def get_current_session_throw_if_none_on_tab(tab: iterm2.Tab) -> iterm2.Session:
     session = tab.current_session
     if session is None:
         raise Exception("No session from tab.current_session (got None)")
     return session
 
 
-def get_current_tab_session_throw_if_none_on_window(window: iterm2.Window):
+def get_current_tab_session_throw_if_none_on_window(window: iterm2.Window) -> iterm2.Session:
     tab = get_current_tab_throw_if_none_on_window(window)
     session = get_current_session_throw_if_none_on_tab(tab)
     return session
