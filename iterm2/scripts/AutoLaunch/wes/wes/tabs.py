@@ -31,9 +31,7 @@ async def wes_cmd_n_override(connection: iterm2.Connection):
         # this is not possible AFAIK right now b/c you have to have a window open to invoke keyboard monitor handlers
         await iterm2.Window.async_create(connection)
         return
-    session = await get_session(connection)
-    if session is None:
-        return
+    session = await get_session_throw_if_none(connection)
 
     window = await iterm2.Window.async_create(connection)
 
