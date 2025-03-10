@@ -66,6 +66,7 @@ async def wes_cmd_t_override(connection):
     # uname - os info
     #
     # sshIntegrationLevel https://github.com/gnachman/iterm2-website/blob/master/source/_includes/documentation-variables.md#L41
+    #    # FYI I cannot get this to set even if I have shell integration local and remote... need to read iterm codebase... it's a bit obscure about how it works (conductors stuff)
     #    https://iterm2.com/documentation-variables.html
     #    0: No ssh integration.
     #    1: Basic ssh integration.
@@ -75,12 +76,23 @@ async def wes_cmd_t_override(connection):
     #
     # shell integration vars:
     #   lastCommand
-    #   path (current working dir)
+    #   path (current working dir - on remote, or local if not remote'd)
+    #     homeDirectory - this appears to be on the HOST (local always it seems)
     #   username
     #   hostname
     #
     # iterm2/tab/user/window - vars for other objects
     #
+    # FYI another good ref for customizing the profile is `nvim.py` => iterm2/semantic-click-handler/nvim.py
+
+    jobName = await session.async_get_variable("jobName")
+    path = await session.async_get_variable("path")
+    commandLine = await session.async_get_variable("commandLine")
+
+    is_ssh = jobName == "ssh"
+    if is_ssh:
+        new_profile.set_command(commandLine)
+        new_profile.set_use_custom_command("Yes")
 
     # pass command async_create_tab OR new_profile.set_command?
     tab = await prior_window.async_create_tab(profile_customizations=new_profile)
