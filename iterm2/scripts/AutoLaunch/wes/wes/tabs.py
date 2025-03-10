@@ -24,7 +24,7 @@ async def new_tab_then_close_others(connection):
             await tab.async_close(force=True)
 
 
-async def wes_cmd_n_override(connection: iterm2.Connection, remote_tab=True):
+async def wes_cmd_n_override(connection: iterm2.Connection, remote=True):
     prior_window = await get_current_window(connection)
     if prior_window is None:
         log("UNEXPECTED NO PRIOR WINDOW, opening new window")
@@ -39,7 +39,7 @@ async def wes_cmd_n_override(connection: iterm2.Connection, remote_tab=True):
     path = await session.async_get_variable("path")
     commandLine = await session.async_get_variable("commandLine")
 
-    is_ssh = jobName == "ssh" and remote_tab
+    is_ssh = jobName == "ssh" and remote
     if is_ssh:
         new_profile.set_command(commandLine)
         new_profile.set_use_custom_command("Yes")
@@ -59,7 +59,7 @@ async def wes_cmd_n_override(connection: iterm2.Connection, remote_tab=True):
         # clear works well over remote, doesn't have scrollback so don't need Cmd+K
 
 
-async def wes_cmd_t_override(connection, remote_tab=True):
+async def wes_cmd_t_override(connection, remote=True):
     prior_window = await get_current_window_throw_if_none(connection)
     session = await get_session_throw_if_none(connection)
     current_profile = await session.async_get_profile()
@@ -96,7 +96,7 @@ async def wes_cmd_t_override(connection, remote_tab=True):
     path = await session.async_get_variable("path")
     commandLine = await session.async_get_variable("commandLine")
 
-    is_ssh = jobName == "ssh" and remote_tab
+    is_ssh = jobName == "ssh" and remote
     if is_ssh:
         new_profile.set_command(commandLine)
         new_profile.set_use_custom_command("Yes")
@@ -125,4 +125,15 @@ async def wes_cmd_t_override(connection, remote_tab=True):
     await new_session.async_send_text(f"cd {path}; clear\n")
 
 
-# TODO new pane needs to do SSH TOO!
+# *** split panes:
+#   Cmd+D
+#   Shift+Cmd+D
+async def wes_cmd_d_override(connection: iterm2.Connection, split_vert: bool = False, split_horiz: bool = False):
+    prior_window = await get_current_window_throw_if_none(connection)
+    session = await get_session_throw_if_none(connection)
+    current_profile = await session.async_get_profile()
+    new_profile = current_profile.local_write_only_copy
+
+    new_session = await session.async_split_pane(vertical=split_vert, profile_customizations=new_profile)
+
+    return

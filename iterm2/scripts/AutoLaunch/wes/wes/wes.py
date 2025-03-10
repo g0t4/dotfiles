@@ -17,6 +17,7 @@ async def main(connection: iterm2.Connection):
         control = iterm2.Modifier.CONTROL in keystroke.modifiers
         shift = iterm2.Modifier.SHIFT in keystroke.modifiers
         command = iterm2.Modifier.COMMAND in keystroke.modifiers
+        option = iterm2.Modifier.OPTION in keystroke.modifiers
 
         # print_keystroke(keystroke)
 
@@ -39,22 +40,37 @@ async def main(connection: iterm2.Connection):
         # FYI also had to remap Cmd+N => Cmd+Shift+Control+N in Keyboard Maestro
         n = keystroke.keycode == iterm2.Keycode.ANSI_N
         if n and control and shift and command:
-            await wes_cmd_n_override(connection, remote_tab=True)
+            await wes_cmd_n_override(connection, remote=True)
             return
         if n and command and control:
-            await wes_cmd_n_override(connection, remote_tab=False)
+            await wes_cmd_n_override(connection, remote=False)
             return
 
         # *** New Tab helpers
         # FYI also had to remap Cmd+T => Cmd+Shift+Control+T in Keyboard Maestro
         t = keystroke.keycode == iterm2.Keycode.ANSI_T
         if t and control and shift and command:
-            await wes_cmd_t_override(connection, remote_tab=True)
+            await wes_cmd_t_override(connection, remote=True)
             return
         # FYI also had to remap Cmd+Shift+T in KM => Cmd+Ctrl+T
         #    cannot remap to same keys, wouldn't work :)
         if t and command and control:
-            await wes_cmd_t_override(connection, remote_tab=False)
+            await wes_cmd_t_override(connection, remote=False)
+            return
+
+        # *** Split panes helpers (ssh support)
+        # TODO for split pane, do I want an option to not do remote?
+        # FYI KM => remaps Cmd+D (split vert) => Cmd+Shift+Control+D
+        # FYI   and Cmd+Shift+D (split horiz) => Cmd+Ctrl+Option+D
+        #     avoid:
+        #       (cmd+ctrl+d == define universally)
+        #       (ctrl+alt+d == toggle dock)
+        d = keystroke.keycode == iterm2.Keycode.ANSI_D
+        if d and control and shift and command:
+            await wes_cmd_d_override(connection, split_vert=True)
+            return
+        if d and control and command and option:
+            await wes_cmd_d_override(connection, split_horiz=True)
             return
 
         b = keystroke.keycode == iterm2.Keycode.ANSI_B
@@ -62,11 +78,13 @@ async def main(connection: iterm2.Connection):
             await ask_openai(connection)
             return
 
-        d = keystroke.keycode == iterm2.Keycode.ANSI_D
+        # keymap doesn't matter, just update streamdeck button if change this:
+        d = keystroke.keycode == iterm2.Keycode.ANSI_X
         if d and control and shift and command:
             await close_other_tabs(connection)
             return
 
+        # keymap doesn't matter, just update streamdeck button if change this:
         e = keystroke.keycode == iterm2.Keycode.ANSI_E
         if e and control and shift and command:
             await new_tab_then_close_others(connection)
