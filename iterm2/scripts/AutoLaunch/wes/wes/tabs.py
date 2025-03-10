@@ -43,11 +43,27 @@ async def wes_cmd_n_override(connection: iterm2.Connection, remote_tab=True):
     if is_ssh and remote_tab:
         new_profile.set_command(commandLine)
         new_profile.set_use_custom_command("Yes")
+        # do not want to change local path, want to set remote path
         #  TODO OVER SSH, replicate path (current working dir) on remote
         # new_profile.set_custom_directory(current_profile.custom_directory)
         # new_profile.set_initial_directory_mode(iterm2.InitialWorkingDirectory.INITIAL_WORKING_DIRECTORY_CUSTOM)
 
-    window = await iterm2.Window.async_create(connection, profile_customizations=new_profile)
+    new_window = await iterm2.Window.async_create(connection, profile_customizations=new_profile)
+    if new_window is None:
+        log("py - No window created, aborting...")
+        return
+
+    if is_ssh:
+        new_tab = new_window.current_tab
+        if new_tab is None:
+            log("py - No tab created, aborting...")
+            return
+        new_session = new_tab.current_session
+        if new_session is None:
+            log("py - No session created, aborting...")
+            return
+        await new_session.async_send_text(f"cd {path}; clear\n")
+        # clear works well over remote, doesn't have scrollback so don't need Cmd+K
 
 
 async def wes_cmd_t_override(connection, remote_tab=True):
