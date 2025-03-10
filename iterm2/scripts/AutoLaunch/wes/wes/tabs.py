@@ -44,7 +44,7 @@ async def wes_new_window(connection: iterm2.Connection, remote=True):
     if new_window is None:
         raise Exception("UNEXPECTED NO WINDOW CREATED")
 
-    if not is_ssh:
+    if not is_ssh or not remote:
         return
 
     new_session = get_current_session_for_window_throw_if_none(new_window)
@@ -102,7 +102,7 @@ async def wes_new_tab(connection, remote=True):
     if new_tab is None:
         raise Exception("UNEXPECTED NO TAB CREATED")
 
-    if not is_ssh:
+    if not is_ssh or not remote:
         return
 
     new_session = get_current_session_for_current_tab_throw_if_none(new_tab)
@@ -140,7 +140,7 @@ async def wes_split_pane(connection: iterm2.Connection, split_vert: bool = False
     if new_session is None:
         raise Exception("UNEXPECTED NO SESSION CREATED")
 
-    if not is_ssh:
+    if not is_ssh or not remote:
         return
 
     await new_session.async_send_text(f"cd {path}; clear\n")
