@@ -52,6 +52,16 @@ async def get_current_window(connection: iterm2.Connection):
     return window
 
 
+async def get_current_window_throw_if_none(connection: iterm2.Connection):
+    app = await iterm2.async_get_app(connection)
+    if app is None:
+        raise Exception("No app from iterm2.async_get_app (got None)")
+    window = app.current_window
+    if window is None:
+        raise Exception("No window from app.current_window (got None)")
+    return window
+
+
 async def get_current_tab(connection: iterm2.Connection):
     window = await get_current_window(connection)
     if window is None:
@@ -92,16 +102,6 @@ async def get_session_throw_if_none(connection: iterm2.Connection):
     if session is None:
         raise Exception("No session from tab.current_session (got None)")
     return session
-
-
-async def get_current_window_throw_if_none(connection: iterm2.Connection):
-    app = await iterm2.async_get_app(connection)
-    if app is None:
-        raise Exception("No app from iterm2.async_get_app (got None)")
-    window = app.current_window
-    if window is None:
-        raise Exception("No window from app.current_window (got None)")
-    return window
 
 
 # *** sync helpers to avoid None check hell ***
