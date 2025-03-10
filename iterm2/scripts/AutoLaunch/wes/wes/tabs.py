@@ -56,6 +56,31 @@ async def wes_cmd_t_override(connection):
     new_profile = current_profile.local_write_only_copy
 
     # TODO detect if SSH'd and if so then re-establish that in new tab instead of shell
+    print(" current command: ", current_profile.command)
+
+    # vars:
+    # commandLine - current foreground job
+    #    ssh foo@bar
+    # jobName - "ssh", "nvim"
+    # pid - of root process in the session
+    # uname - os info
+    #
+    # sshIntegrationLevel https://github.com/gnachman/iterm2-website/blob/master/source/_includes/documentation-variables.md#L41
+    #    https://iterm2.com/documentation-variables.html
+    #    0: No ssh integration.
+    #    1: Basic ssh integration.
+    #    2: Full ssh integration with all features available.
+    # FYI iTerm docs: https://github.com/gnachman/iterm2-website
+    #
+    #
+    # shell integration vars:
+    #   lastCommand
+    #   path (current working dir)
+    #   username
+    #   hostname
+    #
+    # iterm2/tab/user/window - vars for other objects
+    #
 
     # pass command async_create_tab OR new_profile.set_command?
     tab = await prior_window.async_create_tab(profile_customizations=new_profile)
