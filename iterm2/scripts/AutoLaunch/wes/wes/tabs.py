@@ -27,7 +27,7 @@ async def new_tab_then_close_others(connection):
 async def wes_cmd_n_override(connection: iterm2.Connection, remote_tab=True):
     prior_window = await get_current_window(connection)
     if prior_window is None:
-        print("UNEXPECTED NO PRIOR WINDOW, opening new window")
+        log("UNEXPECTED NO PRIOR WINDOW, opening new window")
         # this is not possible AFAIK right now b/c you have to have a window open to invoke keyboard monitor handlers
         await iterm2.Window.async_create(connection)
         return
@@ -51,7 +51,7 @@ async def wes_cmd_n_override(connection: iterm2.Connection, remote_tab=True):
     if is_ssh:
         new_session = get_current_tab_session_throw_if_none(new_window)
         new_path = await new_session.async_get_variable("path")
-        print(f"new_path: {new_path}, path: {path}")
+        log(f"new_path: {new_path}, path: {path}")
         if new_path != path:
             await new_session.async_send_text(f"cd {path}; clear\n")
             # clear works well over remote, doesn't have scrollback so don't need Cmd+K
@@ -107,6 +107,6 @@ async def wes_cmd_t_override(connection, remote_tab=True):
     if is_ssh:
         new_session = get_current_session_throw_if_none(tab)
         new_path = await new_session.async_get_variable("path")
-        print(f"new_path: {new_path}, path: {path}")
+        log(f"new_path: {new_path}, path: {path}")
         if new_path != path:
             await new_session.async_send_text(f"cd {path}; clear\n")
