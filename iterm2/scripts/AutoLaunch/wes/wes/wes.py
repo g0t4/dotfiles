@@ -8,6 +8,7 @@ from og_ask import *
 from tabs import *
 from semantic_daemon import *
 
+
 async def main(connection: iterm2.Connection):
 
     async def keystroke_handler(keystroke: iterm2.Keystroke):
@@ -16,6 +17,31 @@ async def main(connection: iterm2.Connection):
         control = iterm2.Modifier.CONTROL in keystroke.modifiers
         shift = iterm2.Modifier.SHIFT in keystroke.modifiers
         command = iterm2.Modifier.COMMAND in keystroke.modifiers
+
+        # FYI keystroke monitor only works if:
+        #   - Script Console is not focused
+        #   - iTerm2 window is focused
+        #   - that means, if no iTerm2 windows are open, then keystroke monitor won't work
+        #   WORKAROUND: use keyboard maestro to remap key combos and run an exteral script that uses iterm's python API... s/b fine
+        #      one benefit: I don't have to reload the builtin wes.py script!
+
+        # notes:
+        #   AFAICT iterm won't let me remap builtin keys using a keystroke monitor alone
+        #   there is an "Ignore" in Settings => Keys but then my monitor doesn't receive it either
+        #     there is a "Script function" section but I cannot find any docs about what it does
+        #     otherwise, pretty much can only remap to another existing command (limited subset too) and that sucks
+        #     they should have a python handler alterantive or "Do Nothing" vs "Ignore" which squelches it
+        #   so, in KMaestro I remap Cmd+N => Cmd+Shift+Control+N
+        #     also Cmd+T => Cmd+Shift+Control+T
+        # FYI also had to remap Cmd+N => Cmd+Shift+Control+N in Keyboard Maestro
+        n = keystroke.keycode == iterm2.Keycode.ANSI_N
+        if n and control and shift and command:
+            await wes_cmd_n_override(connection)
+
+        # FYI also had to remap Cmd+T => Cmd+Shift+Control+T in Keyboard Maestro
+        # t = keystroke.keycode == iterm2.Keycode.ANSI_T
+        # if t and control and shift and command:
+        #     await wes_cmd_t_override(connection)
 
         b = keystroke.keycode == iterm2.Keycode.ANSI_B
         if b and control and shift and command:
