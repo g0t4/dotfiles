@@ -7,6 +7,7 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 from reuse.iterm_helpers import *
 
+ # TODO rework to use common.py and not have two copies of it (reuse.iterm_helpers)
 
 async def main(connection):
     # args
