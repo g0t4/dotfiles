@@ -2,8 +2,8 @@ import json
 import hashlib
 import iterm2
 import os
-from common import get_session
-from logs import log
+from common import *
+from logs import *
 import sys
 
 # leave all args even if unused so they are always available AND always in the same order
@@ -68,7 +68,7 @@ async def open_nvim_window(connection: iterm2.Connection):
     else:
         log("py - no workspace profile found... using current window's profile")
         # PRN activate iTerm2 to make sure its on top before I try to get cut current window => tab => session here:
-        session = await get_session(connection)
+        session = await get_current_session(connection)
         if session is None:
             # TODO I had this error randomly from Finder/wes-dispatcher (back when I always looked up session)
             #   It was random, but IIAC it has smth to do with focus and apps and iterm2 not having a current window/tab
