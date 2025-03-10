@@ -95,7 +95,7 @@ async def get_current_session(connection: iterm2.Connection) -> typing.Optional[
     return session
 
 
-async def get_session_throw_if_none(connection: iterm2.Connection) -> iterm2.Session:
+async def get_current_session_throw_if_none(connection: iterm2.Connection) -> iterm2.Session:
     tab = await get_current_tab(connection)
     if tab is None:
         raise Exception("No tab from get_current_tab (got None)")

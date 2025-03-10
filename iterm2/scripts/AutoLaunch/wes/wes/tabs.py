@@ -29,7 +29,7 @@ async def wes_new_window(connection: iterm2.Connection, remote=True):
         # this is not possible AFAIK right now b/c you have to have a window open to invoke keyboard monitor handlers
         await iterm2.Window.async_create(connection)
         return
-    session = await get_session_throw_if_none(connection)
+    session = await get_current_session_throw_if_none(connection)
     current_profile = await session.async_get_profile()
     new_profile = current_profile.local_write_only_copy
 
@@ -59,7 +59,7 @@ async def wes_new_window(connection: iterm2.Connection, remote=True):
 
 async def wes_new_tab(connection, remote=True):
     prior_window = await get_current_window_throw_if_none(connection)
-    session = await get_session_throw_if_none(connection)
+    session = await get_current_session_throw_if_none(connection)
     current_profile = await session.async_get_profile()
     new_profile = current_profile.local_write_only_copy
 
@@ -125,7 +125,7 @@ async def wes_new_tab(connection, remote=True):
 
 # *** split panes:
 async def wes_split_pane(connection: iterm2.Connection, split_vert: bool = False, remote=True):
-    session = await get_session_throw_if_none(connection)
+    session = await get_current_session_throw_if_none(connection)
     current_profile = await session.async_get_profile()
     new_profile = current_profile.local_write_only_copy
 
