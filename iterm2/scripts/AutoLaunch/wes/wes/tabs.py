@@ -20,7 +20,7 @@ async def new_tab_then_close_others(connection):
             await tab.async_close(force=True)
 
 
-async def wes_new_window(connection: iterm2.Connection, remote=True):
+async def wes_new_window(connection: iterm2.Connection, force_local=False):
     prior_window = await get_current_window(connection)
     if prior_window is None:
         log("UNEXPECTED NO PRIOR WINDOW, opening new window")
@@ -34,22 +34,23 @@ async def wes_new_window(connection: iterm2.Connection, remote=True):
     jobName = await session.async_get_variable("jobName")
     path = await session.async_get_variable("path")
     commandLine = await session.async_get_variable("commandLine")
+    was_sshed = jobName == "ssh"
 
-    is_ssh = jobName == "ssh" and remote
-    if is_ssh:
-        new_profile.set_command(commandLine)
-        new_profile.set_use_custom_command("Yes")
-    if jobName == "ssh" and not remote:
-        # for when you are ssh'd and not wanna ssh into new tab/window
-        new_profile.set_use_custom_command("No")
-
-    # print(f"create_window2 - remote: {remote}, is_ssh: {is_ssh}")
+    is_ssh = was_sshed and not force_local
+    if was_sshed:
+        if force_local:
+            # for when you are ssh'd and not wanna ssh into new tab/window
+            new_profile.set_use_custom_command("No")
+        else:
+            new_profile.set_command(commandLine)
+            new_profile.set_use_custom_command("Yes")
 
     new_window = await iterm2.Window.async_create(connection, profile_customizations=new_profile)
     if new_window is None:
         raise Exception("UNEXPECTED NO WINDOW CREATED")
 
-    if not is_ssh or not remote:
+    if force_local or not is_ssh:
+        # don't cd if local (already handled by cloning the profile)
         return
 
     new_session = get_current_session_for_window_throw_if_none(new_window)
@@ -60,7 +61,7 @@ async def wes_new_window(connection: iterm2.Connection, remote=True):
         # clear does same as Cmd+K (clears scrollback, not just screen)
 
 
-async def wes_new_tab(connection, remote=True):
+async def wes_new_tab(connection, force_local=False):
     prior_window = await get_current_window_throw_if_none(connection)
     session = await get_current_session_throw_if_none(connection)
     current_profile = await session.async_get_profile()
@@ -96,23 +97,23 @@ async def wes_new_tab(connection, remote=True):
     jobName = await session.async_get_variable("jobName")
     path = await session.async_get_variable("path")
     commandLine = await session.async_get_variable("commandLine")
+    was_sshed = jobName == "ssh"
 
-    is_ssh = jobName == "ssh" and remote
-    if is_ssh:
-        new_profile.set_command(commandLine)
-        new_profile.set_use_custom_command("Yes")
-    if jobName == "ssh" and not remote:
-        # for when you are ssh'd and not wanna ssh into new tab/window
-        new_profile.set_use_custom_command("No")
-
-    # print(f"create_tab - remote: {remote}, is_ssh: {is_ssh}")
+    is_ssh = was_sshed and not force_local
+    if was_sshed:
+        if force_local:
+            # for when you are ssh'd and not wanna ssh into new tab/window
+            new_profile.set_use_custom_command("No")
+        else:
+            new_profile.set_command(commandLine)
+            new_profile.set_use_custom_command("Yes")
 
     # pass command async_create_tab OR new_profile.set_command?
     new_tab = await prior_window.async_create_tab(profile_customizations=new_profile)
     if new_tab is None:
         raise Exception("UNEXPECTED NO TAB CREATED")
 
-    if not is_ssh or not remote:
+    if force_local or not is_ssh:
         return
 
     new_session = get_current_session_for_current_tab_throw_if_none(new_tab)
@@ -132,7 +133,9 @@ async def wes_new_tab(connection, remote=True):
 
 
 # *** split panes:
-async def wes_split_pane(connection: iterm2.Connection, split_vert: bool = False, remote=True):
+async def wes_split_pane(connection: iterm2.Connection, split_vert: bool = False, force_local=False):
+    # *** FYI force_local not passed to this func yet by any wes.py handlers
+
     session = await get_current_session_throw_if_none(connection)
     current_profile = await session.async_get_profile()
     new_profile = current_profile.local_write_only_copy
@@ -140,23 +143,22 @@ async def wes_split_pane(connection: iterm2.Connection, split_vert: bool = False
     jobName = await session.async_get_variable("jobName")
     path = await session.async_get_variable("path")
     commandLine = await session.async_get_variable("commandLine")
+    was_sshed = jobName == "ssh"
 
-    is_ssh = jobName == "ssh" and remote
-    if is_ssh:
-        new_profile.set_command(commandLine)
-        new_profile.set_use_custom_command("Yes")
-    # PRN if I add split to new local pane then I need to clear commandLine if it was SSH'd
-    # if jobName == "ssh" and not remote:
-    #     # for when you are ssh'd and not wanna ssh into new tab/window
-    #     new_profile.set_use_custom_command("No")
-
-    # print(f"split_pane - remote: {remote}, is_ssh: {is_ssh}")
+    is_ssh = was_sshed and not force_local
+    if was_sshed:
+        if force_local:
+            # for when you are ssh'd and not wanna ssh into new tab/window
+            new_profile.set_use_custom_command("No")
+        else:
+            new_profile.set_command(commandLine)
+            new_profile.set_use_custom_command("Yes")
 
     new_session = await session.async_split_pane(vertical=split_vert, profile_customizations=new_profile)
     if new_session is None:
         raise Exception("UNEXPECTED NO SESSION CREATED")
 
-    if not remote or not is_ssh:
+    if force_local or not is_ssh:
         return
 
     await new_session.async_send_text(f"cd {path}; clear\n")
