@@ -1,4 +1,5 @@
 import iterm2
+import typing
 
 from logs import log
 
@@ -38,7 +39,7 @@ def print_keystroke(keystroke):
 
 # avoid none soup 4 levels deep in consumer code... feels like a better way to do this (later)
 # for now just log why something is missing, if it is missing, otherwise return the level I want
-async def get_current_window(connection: iterm2.Connection) -> iterm2.Window:
+async def get_current_window(connection: iterm2.Connection) -> typing.Optional[iterm2.Window]:
     app = await iterm2.async_get_app(connection)
     if app is None:
         # LOG MESSAGES to help troubleshoot when None is returned...
@@ -62,7 +63,7 @@ async def get_current_window_throw_if_none(connection: iterm2.Connection) -> ite
     return window
 
 
-async def get_current_tab(connection: iterm2.Connection) -> iterm2.Tab:
+async def get_current_tab(connection: iterm2.Connection) -> typing.Optional[iterm2.Tab]:
     window = await get_current_window(connection)
     if window is None:
         log("No window from get_current_window (got None)")
@@ -81,7 +82,7 @@ async def get_current_tab_throw_if_none(connection: iterm2.Connection) -> iterm2
     return tab
 
 
-async def get_current_session(connection: iterm2.Connection) -> iterm2.Session:
+async def get_current_session(connection: iterm2.Connection) -> typing.Optional[iterm2.Session]:
     tab = await get_current_tab(connection)
     if tab is None:
         # it is fine to dup log messages here too... functions as a mini stack trace
