@@ -71,8 +71,14 @@ async def main(connection: iterm2.Connection):
     async def keystroke_monitor(connection):
         async with iterm2.KeystrokeMonitor(connection) as mon:
             while True:
-                keystroke = await mon.async_get()
-                await keystroke_handler(keystroke)
+                # unhandled exceptions take down the monitor so don't let that happen anymore!
+                try:
+                    keystroke = await mon.async_get()
+                    await keystroke_handler(keystroke)
+                except Exception as e:
+                    log(f"unhandled exception in keystroke_monitor: {e}")
+                    # dump stack trace
+                    traceback.print_exc()
 
     asyncio.create_task(keystroke_monitor(connection))
     asyncio.create_task(semantic_daemon(connection))
