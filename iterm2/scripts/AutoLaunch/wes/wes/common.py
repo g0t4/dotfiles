@@ -3,6 +3,36 @@ import iterm2
 from logs import log
 
 
+def print_keystroke(keystroke):
+    debug_message = f"key:"
+    if keystroke.characters is not None:
+        chars = keystroke.characters
+        if len(chars) > 0:
+            debug_message += f" {chars}"
+    for mod in keystroke.modifiers:
+        if mod == iterm2.Modifier.COMMAND:
+            debug_message += " CMD"
+        elif mod == iterm2.Modifier.SHIFT:
+            debug_message += " SHIFT"
+        elif mod == iterm2.Modifier.CONTROL:
+            debug_message += " CTRL"
+        elif mod == iterm2.Modifier.OPTION:
+            debug_message += " ALT"
+        elif mod == iterm2.Modifier.FUNCTION:
+            debug_message += " FN"
+        elif mod == iterm2.Modifier.NUMPAD:
+            debug_message += " NUMPAD"
+        else:
+            debug_message += f" {mod}"
+    if keystroke.keycode is not None:
+        key = str(keystroke.keycode)
+        # remove leading Keycode.
+        if key.startswith("Keycode."):
+            key = key[8:]
+        debug_message += f" {key}"
+    log(debug_message)
+
+
 # avoid none soup 4 levels deep in consumer code... feels like a better way to do this (later)
 # for now just log why something is missing, if it is missing, otherwise return the level I want
 async def get_current_window(connection: iterm2.Connection):

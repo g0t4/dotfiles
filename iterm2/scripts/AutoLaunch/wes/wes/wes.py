@@ -18,6 +18,9 @@ async def main(connection: iterm2.Connection):
         shift = iterm2.Modifier.SHIFT in keystroke.modifiers
         command = iterm2.Modifier.COMMAND in keystroke.modifiers
 
+        print_keystroke(keystroke)
+        return
+
         # FYI keystroke monitor only works if:
         #   - Script Console is not focused
         #   - iTerm2 window is focused
