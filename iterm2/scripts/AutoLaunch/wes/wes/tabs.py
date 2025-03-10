@@ -24,7 +24,7 @@ async def new_tab_then_close_others(connection):
             await tab.async_close(force=True)
 
 
-async def wes_cmd_n_override(connection: iterm2.Connection):
+async def wes_cmd_n_override(connection: iterm2.Connection, remote_tab=True):
     prior_window = await get_current_window(connection)
     if prior_window is None:
         print("UNEXPECTED NO PRIOR WINDOW, opening new window")
@@ -45,6 +45,15 @@ async def wes_cmd_n_override(connection: iterm2.Connection):
     # new_profile.set_command(current_profile.command)
 
     # new_profile._simple_set("Normal Font", current_profile.normal_font)
+
+    jobName = await session.async_get_variable("jobName")
+    path = await session.async_get_variable("path")
+    commandLine = await session.async_get_variable("commandLine")
+
+    is_ssh = jobName == "ssh"
+    if is_ssh and remote_tab:
+        new_profile.set_command(commandLine)
+        new_profile.set_use_custom_command("Yes")
 
     window = await iterm2.Window.async_create(connection, profile_customizations=new_profile)
 
@@ -93,7 +102,6 @@ async def wes_cmd_t_override(connection, remote_tab=True):
     if is_ssh and remote_tab:
         new_profile.set_command(commandLine)
         new_profile.set_use_custom_command("Yes")
-
 
     # pass command async_create_tab OR new_profile.set_command?
     tab = await prior_window.async_create_tab(profile_customizations=new_profile)
