@@ -110,18 +110,19 @@ async def wes_cmd_t_override(connection, remote_tab=True):
         return
 
     new_session = get_current_session_throw_if_none(new_tab)
-    new_path = await new_session.async_get_variable("path")
 
-    log(f"new_path: {new_path}, path: {path}")
-    log(f"new_jobName: {await new_session.async_get_variable('jobName')}")
-    log(f"new_commandLine: {await new_session.async_get_variable('commandLine')}")
-    # weird, new_path (path) isn't set yet? but if I open inspector I see it?!
+    # FYI I don't need to check for SSH, just let it always CD, NBD!
+    #   right now variables are not set for what appears to be an unpredictable delay, so for SSSH tabs just CD always...
+    #   it is possible I am doing something wrong... that said,
+    #     if I introduce delays then variables appear set though it seems they go through an initialization process and I can end up catching them before they are fully set
+    #     I cannot wait 1+ second to see what the remote path is
+    # new_path = await new_session.async_get_variable("path")
+    # print(f"new_path: {new_path}, path: {path}")
+    #
+    # ALSO, the original path is not always the remote path!
+    #     must be a shell integration issue?
 
-    if new_path != path:
-        await new_session.async_send_text(f"cd {path}; clear\n")
-        now_path_is = await new_session.async_get_variable("path")
+    await new_session.async_send_text(f"cd {path}; clear\n")
 
-        new_session2 = get_current_session_throw_if_none(new_tab)
-        await new_session2.async_send_text(f"cd {path}; clear\n")
-        now_path_is2 = await new_session2.async_get_variable("path")
-        log(f"now_path_is: {now_path_is}, now_path_is2: {now_path_is2}")
+
+# TODO new pane needs to do SSH TOO!
