@@ -105,21 +105,21 @@ async def get_session_throw_if_none(connection: iterm2.Connection) -> iterm2.Ses
 
 
 # *** sync helpers to avoid None check hell ***
-def get_current_tab_throw_if_none_on_window(window: iterm2.Window) -> iterm2.Tab:
+def get_current_tab_for_window_throw_if_none(window: iterm2.Window) -> iterm2.Tab:
     tab = window.current_tab
     if tab is None:
         raise Exception("No tab from window.current_tab (got None)")
     return tab
 
 
-def get_current_session_throw_if_none_on_tab(tab: iterm2.Tab) -> iterm2.Session:
+def get_current_session_for_current_tab_throw_if_none(tab: iterm2.Tab) -> iterm2.Session:
     session = tab.current_session
     if session is None:
         raise Exception("No session from tab.current_session (got None)")
     return session
 
 
-def get_current_tab_session_throw_if_none_on_window(window: iterm2.Window) -> iterm2.Session:
-    tab = get_current_tab_throw_if_none_on_window(window)
-    session = get_current_session_throw_if_none_on_tab(tab)
+def get_current_session_for_window_throw_if_none(window: iterm2.Window) -> iterm2.Session:
+    tab = get_current_tab_for_window_throw_if_none(window)
+    session = get_current_session_for_current_tab_throw_if_none(tab)
     return session

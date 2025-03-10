@@ -49,7 +49,7 @@ async def wes_new_window(connection: iterm2.Connection, remote=True):
     if not is_ssh:
         return
 
-    new_session = get_current_tab_session_throw_if_none_on_window(new_window)
+    new_session = get_current_session_for_window_throw_if_none(new_window)
     new_path = await new_session.async_get_variable("path")
     log(f"new_path: {new_path}, path: {path}")
     if new_path != path:
@@ -107,7 +107,7 @@ async def wes_new_tab(connection, remote=True):
     if not is_ssh:
         return
 
-    new_session = get_current_session_throw_if_none_on_tab(new_tab)
+    new_session = get_current_session_for_current_tab_throw_if_none(new_tab)
 
     # FYI I don't need to check for SSH, just let it always CD, NBD!
     #   right now variables are not set for what appears to be an unpredictable delay, so for SSSH tabs just CD always...
