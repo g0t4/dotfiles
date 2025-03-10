@@ -39,8 +39,8 @@ async def wes_cmd_n_override(connection: iterm2.Connection, remote_tab=True):
     path = await session.async_get_variable("path")
     commandLine = await session.async_get_variable("commandLine")
 
-    is_ssh = jobName == "ssh"
-    if is_ssh and remote_tab:
+    is_ssh = jobName == "ssh" and remote_tab
+    if is_ssh:
         new_profile.set_command(commandLine)
         new_profile.set_use_custom_command("Yes")
 
@@ -48,13 +48,15 @@ async def wes_cmd_n_override(connection: iterm2.Connection, remote_tab=True):
     if new_window is None:
         raise Exception("UNEXPECTED NO WINDOW CREATED")
 
-    if is_ssh:
-        new_session = get_current_tab_session_throw_if_none(new_window)
-        new_path = await new_session.async_get_variable("path")
-        log(f"new_path: {new_path}, path: {path}")
-        if new_path != path:
-            await new_session.async_send_text(f"cd {path}; clear\n")
-            # clear works well over remote, doesn't have scrollback so don't need Cmd+K
+    if not is_ssh:
+        return
+
+    new_session = get_current_tab_session_throw_if_none(new_window)
+    new_path = await new_session.async_get_variable("path")
+    log(f"new_path: {new_path}, path: {path}")
+    if new_path != path:
+        await new_session.async_send_text(f"cd {path}; clear\n")
+        # clear works well over remote, doesn't have scrollback so don't need Cmd+K
 
 
 async def wes_cmd_t_override(connection, remote_tab=True):
@@ -94,8 +96,8 @@ async def wes_cmd_t_override(connection, remote_tab=True):
     path = await session.async_get_variable("path")
     commandLine = await session.async_get_variable("commandLine")
 
-    is_ssh = jobName == "ssh"
-    if is_ssh and remote_tab:
+    is_ssh = jobName == "ssh" and remote_tab
+    if is_ssh:
         new_profile.set_command(commandLine)
         new_profile.set_use_custom_command("Yes")
 
@@ -104,18 +106,22 @@ async def wes_cmd_t_override(connection, remote_tab=True):
     if new_tab is None:
         raise Exception("UNEXPECTED NO TAB CREATED")
 
-    if is_ssh:
-        new_session = get_current_session_throw_if_none(new_tab)
-        new_path = await new_session.async_get_variable("path")
-        log(f"new_path: {new_path}, path: {path}")
-        log(f"new_jobName: {await new_session.async_get_variable('jobName')}")
-        log(f"new_commandLine: {await new_session.async_get_variable('commandLine')}")
-        # weird, new_path (path) isn't set yet? but if I open inspector I see it?!
-        if new_path != path:
-            await new_session.async_send_text(f"cd {path}; clear\n")
-            now_path_is = await new_session.async_get_variable("path")
+    if not is_ssh:
+        return
 
-            new_session2 = get_current_session_throw_if_none(new_tab)
-            await new_session2.async_send_text(f"cd {path}; clear\n")
-            now_path_is2 = await new_session2.async_get_variable("path")
-            log(f"now_path_is: {now_path_is}, now_path_is2: {now_path_is2}")
+    new_session = get_current_session_throw_if_none(new_tab)
+    new_path = await new_session.async_get_variable("path")
+
+    log(f"new_path: {new_path}, path: {path}")
+    log(f"new_jobName: {await new_session.async_get_variable('jobName')}")
+    log(f"new_commandLine: {await new_session.async_get_variable('commandLine')}")
+    # weird, new_path (path) isn't set yet? but if I open inspector I see it?!
+
+    if new_path != path:
+        await new_session.async_send_text(f"cd {path}; clear\n")
+        now_path_is = await new_session.async_get_variable("path")
+
+        new_session2 = get_current_session_throw_if_none(new_tab)
+        await new_session2.async_send_text(f"cd {path}; clear\n")
+        now_path_is2 = await new_session2.async_get_variable("path")
+        log(f"now_path_is: {now_path_is}, now_path_is2: {now_path_is2}")
