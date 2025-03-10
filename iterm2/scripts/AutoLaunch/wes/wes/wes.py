@@ -60,6 +60,7 @@ async def main(connection: iterm2.Connection):
 
         # *** Split panes helpers (ssh support)
         # TODO for split pane, do I want an option to not do remote?
+        #    LETS wait for it to be annoying and for now just assume split panes are always remote
         # FYI KM => remaps Cmd+D (split vert) => Cmd+Shift+Control+D
         # FYI   and Cmd+Shift+D (split horiz) => Cmd+Ctrl+Option+D
         #     avoid:
