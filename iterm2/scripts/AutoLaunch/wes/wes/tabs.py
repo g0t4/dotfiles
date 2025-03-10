@@ -13,13 +13,11 @@ async def close_other_tabs(connection):
 
 
 async def new_tab_then_close_others(connection):
-    prior_window = await get_current_window(connection)
-    if prior_window is None:
-        return
+    window = await get_current_window_throw_if_none(connection)
 
     # make new tab and close all other tabs in current window
-    new_tab = await prior_window.async_create_tab()
-    for tab in prior_window.tabs:
+    new_tab = await window.async_create_tab()
+    for tab in window.tabs:
         if tab != new_tab:
             await tab.async_close(force=True)
 
@@ -51,7 +49,7 @@ async def wes_new_window(connection: iterm2.Connection, remote=True):
     if not is_ssh:
         return
 
-    new_session = get_current_tab_session_throw_if_none(new_window)
+    new_session = get_current_tab_session_throw_if_none_on_window(new_window)
     new_path = await new_session.async_get_variable("path")
     log(f"new_path: {new_path}, path: {path}")
     if new_path != path:
@@ -109,7 +107,7 @@ async def wes_new_tab(connection, remote=True):
     if not is_ssh:
         return
 
-    new_session = get_current_session_throw_if_none(new_tab)
+    new_session = get_current_session_throw_if_none_on_tab(new_tab)
 
     # FYI I don't need to check for SSH, just let it always CD, NBD!
     #   right now variables are not set for what appears to be an unpredictable delay, so for SSSH tabs just CD always...
