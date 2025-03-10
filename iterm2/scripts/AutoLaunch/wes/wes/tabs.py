@@ -33,16 +33,18 @@ async def wes_cmd_n_override(connection: iterm2.Connection):
         return
     session = await get_session_throw_if_none(connection)
     current_profile = await session.async_get_profile()
-    # TODO detect if SSH'd and if so => re-establish that in new window
-    # TODO clone current session
+    new_profile = current_profile.local_write_only_copy
 
-    new_profile = iterm2.LocalWriteOnlyProfile()
     # TODO isn't there a way to just copy the current_profile? I do wanna mod it so I don't mind but can I start with a clone instead of new?
-    new_profile.set_custom_directory(current_profile.custom_directory)
-    new_profile.set_initial_directory_mode(iterm2.InitialWorkingDirectory.INITIAL_WORKING_DIRECTORY_CUSTOM)
+    # get current working dir?
+    # new_profile.set_custom_directory(current_profile.custom_directory)
+    # new_profile.set_initial_directory_mode(iterm2.InitialWorkingDirectory.INITIAL_WORKING_DIRECTORY_CUSTOM)
+
+    # TODO detect if SSH'd and if so => re-establish that in new window
     # TODO for ssh sessions, set ssh command
     # new_profile.set_command(current_profile.command)
-    new_profile._simple_set("Normal Font", current_profile.normal_font)
+
+    # new_profile._simple_set("Normal Font", current_profile.normal_font)
 
     window = await iterm2.Window.async_create(connection, profile_customizations=new_profile)
 
