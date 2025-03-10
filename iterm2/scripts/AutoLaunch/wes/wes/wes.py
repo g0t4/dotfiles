@@ -70,7 +70,7 @@ async def main(connection: iterm2.Connection):
             await wes_cmd_d_override(connection, split_vert=True)
             return
         if d and control and command and option:
-            await wes_cmd_d_override(connection, split_horiz=True)
+            await wes_cmd_d_override(connection, split_vert=False)
             return
 
         b = keystroke.keycode == iterm2.Keycode.ANSI_B

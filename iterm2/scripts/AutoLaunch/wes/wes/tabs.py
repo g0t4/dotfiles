@@ -128,12 +128,26 @@ async def wes_cmd_t_override(connection, remote=True):
 # *** split panes:
 #   Cmd+D
 #   Shift+Cmd+D
-async def wes_cmd_d_override(connection: iterm2.Connection, split_vert: bool = False, split_horiz: bool = False):
+async def wes_cmd_d_override(connection: iterm2.Connection, split_vert: bool = False, remote=True):
     prior_window = await get_current_window_throw_if_none(connection)
     session = await get_session_throw_if_none(connection)
     current_profile = await session.async_get_profile()
     new_profile = current_profile.local_write_only_copy
 
-    new_session = await session.async_split_pane(vertical=split_vert, profile_customizations=new_profile)
+    jobName = await session.async_get_variable("jobName")
+    path = await session.async_get_variable("path")
+    commandLine = await session.async_get_variable("commandLine")
 
-    return
+    is_ssh = jobName == "ssh" and remote
+    if is_ssh:
+        new_profile.set_command(commandLine)
+        new_profile.set_use_custom_command("Yes")
+
+    new_session = await session.async_split_pane(vertical=split_vert, profile_customizations=new_profile)
+    if new_session is None:
+        raise Exception("UNEXPECTED NO SESSION CREATED")
+
+    if not is_ssh:
+        return
+
+    await new_session.async_send_text(f"cd {path}; clear\n")
