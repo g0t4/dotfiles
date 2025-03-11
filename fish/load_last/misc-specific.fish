@@ -1377,6 +1377,18 @@ function abbr_aio
     abbr_videos_glob_for_current_dir
 end
 
+abbr 'shift_only' 'for i in *.mkv; video_editing_just_shift_to_mp4_one_video $i; end'
+function video_editing_just_shift_to_mp4_one_video
+    # converts to mp4 + shifts by 100ms
+    set video_file (realpath $argv[1])
+    set output_file (string replace -r "\.mkv\$" ".shifted100ms.mp4" "$video_file")
+    if test -f "$output_file"
+        echo "Skipping...file already exists: $output_file"
+    else
+        ffmpeg -i "$video_file" -itsoffset 0.1 -i "$video_file" -map 0:v -map 1:a -c:v copy -c:a aac "$output_file"
+    end
+end
+
 function video_editing_aio
     set combined_file (_get_output_file_based_on_first_file combined.mp4 $argv)
 
@@ -1973,4 +1985,4 @@ if $IS_MACOS then
 end
 
 # mostly for fun, also a good way to remember this exists :)
-abbr fuc "fish_update_completions"
+abbr fuc fish_update_completions
