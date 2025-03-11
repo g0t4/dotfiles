@@ -122,3 +122,8 @@ if test -d "$HOME/repos/github/ggerganov/llama.cpp/build/bin"
     export PATH="$HOME/repos/github/ggerganov/llama.cpp/build/bin:$PATH"
     set GGUF_MODELS "$HOME/repos/github/ggerganov/llama.cpp/models"
 end
+
+# /opt/cuda/bin/
+if test -d /opt/cuda/bin
+    export PATH="/opt/cuda/bin:$PATH"
+end
