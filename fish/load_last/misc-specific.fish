@@ -685,10 +685,6 @@ abbr psfull "grc ps -o 'user,pid,pcpu,pmem,vsz,rss,tty,stat,start,time,comm' -ax
 # - keep non-format options on end of cmd to easily toggle:
 # - user:10 - limits to 10 chars (+ indicates ...) (:X ubuntu yes, macos no):
 #       ps -o "user:5,pid,pcpu,pmem,vsz,rss,tty,stat,start,time,comm" -ax
-# *** process info
-# files for a process:
-# TODO how to deal with multiple matches, I don't like using head but at least it is obvious in the expanded command so leave it for now
-abbr --set-cursor="!" lsofp 'lsof -p $(pgrep -if "!" | head -1)'
 #
 # *** pstree
 # pstreeX => pstree -l X
@@ -1377,7 +1373,7 @@ function abbr_aio
     abbr_videos_glob_for_current_dir
 end
 
-abbr 'shift_only' 'for i in *.mkv; video_editing_just_shift_to_mp4_one_video $i; end'
+abbr shift_only 'for i in *.mkv; video_editing_just_shift_to_mp4_one_video $i; end'
 function video_editing_just_shift_to_mp4_one_video
     # converts to mp4 + shifts by 100ms
     set video_file (realpath $argv[1])
@@ -1986,3 +1982,56 @@ end
 
 # mostly for fun, also a good way to remember this exists :)
 abbr fuc fish_update_completions
+
+
+
+# *** ls* abbrs
+if $IS_LINUX then
+
+    # lscpue
+    abbr lscpue "lscpu -e" # table like extended view
+    abbr lscpuon "lscpu -e --online"
+    abbr lscpuoff "lscpu -e --offline"
+
+    # lspci
+    abbr lspcit "lspci -tv" # tree, verbose
+    abbr lspcik "lspci -k" # show kernel drivers (compatible and in use)
+    #
+    # -d [<vendor>]:[<device>][:<class>]		Show only devices with specified ID's
+    # classes: https://admin.pci-ids.ucw.cz/read/PD/
+    abbr lspciu "lspci -k -d ::00xx" # unclassified
+    abbr lspcii "lspci -k -d ::01xx" # storage
+    abbr lspcin "lspci -k -d ::02xx" # network
+    abbr lspcig "lspci -k -d ::03xx" # graphics
+
+    # lsblk # PRN
+
+    # lshw
+    abbr lshw "sudo lshw"
+    abbr lshws "sudo lshw -sanitize"
+    abbr lshwb "sudo lshw -businfo"
+
+    # lsmod
+    abbr --set-cursor='!' lsmodg "sudo lsmod | grep -i '!'"
+
+    # lsmem
+    abbr lsmem "lsmem --output-all"
+
+    # lspath
+    # lstopo
+
+    # lsof
+    # *** process info
+    # files for a process:
+    # TODO how to deal with multiple matches, I don't like using head but at least it is obvious in the expanded command so leave it for now
+    abbr --set-cursor="!" lsofp 'lsof -p $(pgrep -if "!" | head -1)'
+
+    # lsusb
+    abbr lsusb "lsusb -tv" # concise tree, a few more details
+    abbr lsusbv "lsusb -v" # very detailed
+
+    # dmesg
+    abbr --set-cursor='!' dmesgg "sudo dmesg | grep -i '!'"
+
+
+end
