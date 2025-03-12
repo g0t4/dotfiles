@@ -100,7 +100,7 @@ function _convert_current_command_to_diff_command_args
     commandline --replace "diff_command_args '$user_input' "
 end
 bind f5 _convert_current_command_to_diff_command_args
-bind \e\[15\;5~ _convert_current_command_to_diff_command_args # ctrl+F5 (streamdeck button => hotkey action)
+bind ctrl-f5 _convert_current_command_to_diff_command_args # ctrl+F5 (streamdeck button => hotkey action)
 
 function _convert_current_command_to_diff_two_commands
     # use to compare w/ add and remove from current command
@@ -108,7 +108,7 @@ function _convert_current_command_to_diff_two_commands
     commandline --replace "diff_two_commands '$user_input' '$user_input' "
 end
 bind f6 _convert_current_command_to_diff_two_commands # bind to F6 for now
-bind \e\[17\;5~ _convert_current_command_to_diff_two_commands # ctrl+F6 (streamdeck button => hotkey action)
+bind ctrl-f6 _convert_current_command_to_diff_two_commands # ctrl+F6 (streamdeck button => hotkey action)
 # see which binding I prefer (F6 or streamdeck)
 #    yes I know I can reuse f6 for stremadeck too but I think I will get rid of that one and use it elsewhere so that is why I have both bound here for now
 
