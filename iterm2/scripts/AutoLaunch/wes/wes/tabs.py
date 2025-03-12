@@ -20,6 +20,8 @@ async def new_tab_then_close_others(connection):
             await tab.async_close(force=True)
 
 
+# TODO => fix for my alfred "open in terminal" from finder...  right now if its a remote ssh session on top then it opens to remote
+
 async def wes_new_window(connection: iterm2.Connection, force_local=False):
     prior_window = await get_current_window(connection)
     if prior_window is None:
