@@ -1895,7 +1895,11 @@ if command -q pacman
     # *** -Q query (local aka installed pkgs)
     abbr pmq "pacman -Q"
     abbr pmqi "pacman -Qi" # pkg (i)nfo (probably easier to just use -Si for most pkgs unless install a local dev checkout)
+    # search installed pkgs:
+    abbr pmlistinstalled "pacman -Q" # training wheels reminder for what command b/c this is all truly confusing IMO, perhaps I should better wrap my mind around the commands?
     abbr pmqs "pacman -Qs" # (s)earch ERE(regex) search installed pkgs (prolly just use `pacman -Q | grep -i`)
+    abbr --set-cursor='!' pmqg "pacman -Q | grep -i '!'" # I prefer grep, it's just easier to not need another tool specific option
+    abbr --set-cursor='!' pmqgs "pacman -Q | grep -i '^!'"
     #
     abbr pmql "pacman -Ql" # (l)ist files for pkg
     #pacman -Qk fish # verify installed files
