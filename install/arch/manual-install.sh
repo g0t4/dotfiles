@@ -47,3 +47,14 @@ git clone https://github.com/g0t4/dotfiles ~/repos/github/g0t4/dotfiles
 # nvim dev checkouts (TODO why not configure this conditionally?)
 git clone https://github.com/g0t4/ask-openai.nvim ~/repos/github/g0t4/ask-openai.nvim
 git clone https://github.com/g0t4/illuminate.nvim ~/repos/github/g0t4/illuminate.nvim
+
+
+
+# use rustup to install rust
+sudo pacman --noconfirm -S rustup
+# first needed for vllm deps
+# https://rust-lang.github.io/rustup/installation/index.html
+rustup install stable
+rustup default stable
+
+
