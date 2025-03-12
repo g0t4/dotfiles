@@ -56,8 +56,9 @@ abbr uva 'uv add'
 #
 # TODO review new set of uv commands (read a bit more to verify I understand them):
 # lockfile/dependency related:
-abbr uvau 'uv add --upgrade' # all upgrade on all packages
+abbr uvau 'uv add --upgrade' # all upgrade on all packages (within existing constraint in pyproject.toml)
 abbr uvaup 'uv add --upgrade-package' # upgrade specific package
+# just edit the pyproject.toml to change the constraint (not sure if there is a command to update the constraint, nor should there be?)
 # lock docs: https://docs.astral.sh/uv/concepts/projects/sync/
 abbr uvl 'uv lock' # create lock file (also sync does this, as well as many other commands: tree, run, etc)
 abbr uvlu 'uv lock --upgrade'
