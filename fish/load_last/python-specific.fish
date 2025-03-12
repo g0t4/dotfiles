@@ -53,10 +53,24 @@ abbr pipir "uv add -r requirements.txt && rm requirements.txt # REMINDER TO MIGR
 #   pipir is just for muscle memory b/c I used it to `pip install -r requirements.txt` previously
 
 abbr uva 'uv add'
+#
+# TODO review new set of uv commands (read a bit more to verify I understand them):
+# lockfile/dependency related:
 abbr uvau 'uv add --upgrade' # all upgrade on all packages
 abbr uvaup 'uv add --upgrade-package' # upgrade specific package
-abbr uvrm 'uv remove'
+# lock docs: https://docs.astral.sh/uv/concepts/projects/sync/
+abbr uvl 'uv lock' # create lock file (also sync does this, as well as many other commands: tree, run, etc)
+abbr uvlu 'uv lock --upgrade'
+abbr uvlup 'uv lock --upgrade-package' # <package==version> upgrade just one package
+abbr uvlc 'uv lock --check' # check if lock is up to date
 abbr uvs 'uv sync'
+# optional deps (extras):
+#   https://docs.astral.sh/uv/concepts/projects/dependencies/#optional-dependencies
+abbr uvsa 'uv sync --all-extras' # sync al extras packages
+abbr uvse 'uv sync --extra' # <pkg> sync specific extras package
+# TODO end review here
+#
+abbr uvrm 'uv remove'
 abbr uvr 'uv run'
 abbr uvt 'uv tree'
 abbr uvtree 'uv tree --outdated'
