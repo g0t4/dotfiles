@@ -98,7 +98,7 @@ function kill_all_lines
 
     commandline -r "" # replace all lines with empty string
 end
-bind \ek kill_all_lines # esc+k (historically I used this key combo exclusively for this purpose)
+bind escape,k kill_all_lines # esc+k (historically I used this key combo exclusively for this purpose)
 
 # ctrl+c clear command line instead of cancel-commandline (why pollute terminal history to cancel a command!)
 bind \cc 'commandline -r ""'
