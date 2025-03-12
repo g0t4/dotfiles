@@ -771,9 +771,8 @@ end
 # *** bindings
 #
 # ctrl+delete to delete next word (after cursor)
-#   was this added in fish v4 or did I have a pointless keymap?
-#     b/c ctrl-delete is kill-word in fish
-# bind ctrl+delete  kill-word # PRN kill-big-word?
+# bind ctrl-delete  kill-word # PRN kill-big-word?
+#    it appears that ctrl-delete is now kill-word in fish v4 (confirmed it doesn't do that in fish v3.7.1)
 #
 #
 # idea: shortcut to change to command position and replace command (type new command), i.e.:
