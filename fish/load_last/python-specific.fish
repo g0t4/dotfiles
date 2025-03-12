@@ -53,6 +53,8 @@ abbr pipir "uv add -r requirements.txt && rm requirements.txt # REMINDER TO MIGR
 #   pipir is just for muscle memory b/c I used it to `pip install -r requirements.txt` previously
 
 abbr uva 'uv add'
+abbr uvau 'uv add --upgrade' # all upgrade on all packages
+abbr uvaup 'uv add --upgrade-package' # upgrade specific package
 abbr uvrm 'uv remove'
 abbr uvs 'uv sync'
 abbr uvr 'uv run'
