@@ -1,7 +1,6 @@
 // https://zed.dev/docs/configuring-zed
 {
   // "theme": "Andromeda", // kinda like this or smth in between (todo build my own colors)
-  "show_edit_predictions": true,
   "tab_bar": {
     "show": true
   },
@@ -44,11 +43,23 @@
       "enabled": false
     }
   },
+
   "features": {
     // https://docs.google.com/document/d/1CaLVuamUQLOKkoNfXLs42lHqICNDn8BC0ROGKIFfuKw
     "edit_prediction_provider": "zed"
     // "copilot": true
   },
+  "show_edit_predictions": true,
+  "edit_predictions": {
+    "enabled_in_assistant": true,
+    "mode": "eager"
+    // PRN can I host zeta myself?
+    // "copilot": {
+    //   "proxy": null,
+    //   "proxy_no_verify": null
+    // }
+  },
+
   "cursor_blink": false, // *** I am surprised I didn't notice this sooner, then again it is not blinking block
   "toolbar": {
     "breadcrumbs": false, // save a bunch of space at top of buffer! (name already shows on tab!)
