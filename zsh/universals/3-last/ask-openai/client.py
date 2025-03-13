@@ -46,6 +46,8 @@ def get_ask_client() -> tuple[Service, AsyncOpenAI]:
                 use = use_groq(model)
             elif "--deepseek" in ask_service:
                 use = use_deepseek(model)
+            elif "--vllm" in ask_service:
+                use = use_vllm(model)
             elif "--lmstudio" in ask_service:
                 use = use_lmstudio(model)
             elif "--anthropic" in ask_service:

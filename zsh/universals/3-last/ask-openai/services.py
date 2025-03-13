@@ -24,6 +24,16 @@ class Service(NamedTuple):
         # i.e. printing (logging), DO NOT INCLUDE api_key
         return f"Service({self.name} model={self.model} chat_url={self.chat_url()})"
 
+def use_vllm(model: Optional[str] = None):
+    return Service(
+        name='vllm',
+        api_key=get_api_key('vllm', 'ask'),
+        base_url='http://ollama:8000/v1',
+        model=model if model else "Qwen/Qwen2.5-Coder-7B",
+        chat_completions_path='chat/completions',
+        # vllm https://github.com/vllm-project/vllm/blob/main/docs/api.md
+        # https://github.com/vllm-project/vllm/blob/main/docs/api.md#chat-completions
+    )
 
 def use_groq(model: Optional[str] = None):
 
@@ -186,6 +196,8 @@ def args_to_use() -> Service:
         use = use_ollama(args.model)
     elif args.deepseek:
         use = use_deepseek(args.model)
+    elif args.vllm:
+        use = use_vllm(args.model)
     elif args.anthropic:
         use = use_anthropic(args.model)
     elif args.gh_copilot:

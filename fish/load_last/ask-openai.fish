@@ -44,6 +44,10 @@ function ask_use_ollama
     _ask_write_state --ollama $argv
 end
 
+function ask_use_vllm
+    _ask_write_state --vllm $argv
+end
+
 function get_openai_models
 
     # if first arg is ollama, use that instaed:
@@ -56,6 +60,9 @@ function get_openai_models
     else if test "$argv[1]" = deepseek
         set base_url https://api.deepseek.com/v1/models
         set api_key (security find-generic-password -s deepseek -a ask -w)
+    else if test "$argv[1]" = vllm
+        set base_url http://ollama:8000/v1/models
+        set api_key (security find-generic-password -s vllm -a ask -w)
     else
         set base_url https://api.openai.com/v1/models
         set api_key (security find-generic-password -s openai -a ask -w)
