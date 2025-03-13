@@ -775,11 +775,6 @@ end
 
 # *** bindings
 #
-# ctrl+delete to delete next word (after cursor)
-# bind ctrl-delete  kill-word # PRN kill-big-word?
-#    it appears that ctrl-delete is now kill-word in fish v4 (confirmed it doesn't do that in fish v3.7.1)
-#
-#
 # idea: shortcut to change to command position and replace command (type new command), i.e.:
 #    ls /etc/docker/daemon.json
 #    # shortcut: ctrl+shift+delete
