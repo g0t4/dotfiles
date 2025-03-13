@@ -29,7 +29,7 @@ def use_vllm(model: Optional[str] = None):
         name='vllm',
         api_key="none",
         base_url='http://ollama:8000/v1',
-        model=model if model else "Qwen/Qwen2.5-Coder-7B",
+        model=model if model else "Qwen/Qwen2.5-Coder-7B-Instruct",
         chat_completions_path='chat/completions',
         # vllm https://github.com/vllm-project/vllm/blob/main/docs/api.md
         # https://github.com/vllm-project/vllm/blob/main/docs/api.md#chat-completions

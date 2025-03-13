@@ -176,7 +176,7 @@ fn get_service() -> Service {
                 model: if model.is_some() {
                     String::from(model.unwrap())
                 } else {
-                    String::from("Qwen/Qwen2.5-Coder-7B")
+                    String::from("Qwen/Qwen2.5-Coder-7B-Instruct")
                 },
                 url: String::from("http://ollama:8000/v1/chat/completions"),
             };
