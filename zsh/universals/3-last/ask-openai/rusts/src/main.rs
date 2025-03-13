@@ -159,7 +159,18 @@ fn get_service() -> Service {
                     // BTW this llama model is FAST and GOOD for simple devtool command suggestions
                     String::from("llama3.2:3b")
                 },
-                url: String::from("http://localhost:11434/v1/chat/completions"),
+                url: String::from("http://ollama:11434/v1/chat/completions"),
+            };
+        }
+        "--vllm" => {
+            return Service {
+                name: String::from("vllm"),
+                model: if model.is_some() {
+                    String::from(model.unwrap())
+                } else {
+                    String::from("Qwen/Qwen2.5-Coder-7B")
+                },
+                url: String::from("http://ollama:8000/v1/chat/completions"),
             };
         }
         _ => {
