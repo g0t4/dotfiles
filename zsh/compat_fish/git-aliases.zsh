@@ -6,10 +6,10 @@
 # `globurl`
 
 # status
-abbr gss 'git status -s'
-abbr gsb 'git status -sb'
-abbr gsu 'git status --untracked-files'
-abbr gsi 'git status --ignored'
+abbr gsts 'git status -s'
+abbr gstb 'git status -sb'
+abbr gstu 'git status --untracked-files'
+abbr gsti 'git status --ignored'
 
 # reset
 abbr grhh 'git reset --hard HEAD' # last commit hard reset

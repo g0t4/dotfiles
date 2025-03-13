@@ -1,9 +1,5 @@
 ealias g 'git'
 
-# ignored
-ealias gsi 'git status --ignored'
-ealias gwhatsignored 'git ls-files --others --directory --no-empty-directory; echo NOTE: gsa works too'
-
 # reset
 ealias grhh 'git reset --hard HEAD'
 ealias grsh 'git reset --soft HEAD~1'
@@ -97,9 +93,9 @@ ealias glg "git log --graph ${_unpushed_commits}" # graph of changes
 ealias gst "git status"
 # FYI gsl below
 ealias kgst "git status" # common typo alias (cmd+k clear > kgst)
-ealias gss "git status -s"
-ealias gsb "git status -sb"
-ealias gsu "git status --untracked-files"
+ealias gsts "git status -s"
+ealias gstb "git status -sb"
+ealias gstu "git status --untracked-files"
 function gsl(){
     # in this case I want no color to distract in the output so no log methods centrally that might change... this is custom to the need to quickly see git repo changes
     $_gst=(get-alias gst).Definition
@@ -109,6 +105,10 @@ function gsl(){
     Invoke-Expression $_glo
 }
 
+# ignored
+ealias gsti 'git status --ignored'
+ealias gwhatsignored 'git ls-files --others --directory --no-empty-directory; echo NOTE: gsa works too'
+# todo other git ls-files abbrs... maybe move under glsf?
 
 ## fetch
 ealias gf 'git fetch'
