@@ -736,6 +736,10 @@ function z
     else
         # PRN in future detect if org/repo format ($argv)... AND if z has no matching results... then attempt to clone and cd to it...?
         # otherwise just call z like normal
+        # TODO __z --delete does not take a path! it deletes curent dir...
+        #   I want to modify this to add support to delete a path
+        #   and all subpaths (maybe -R)
+
         __z $argv
     end
 end
