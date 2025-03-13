@@ -187,6 +187,8 @@ return {
                             "--glob", "!**/.venv/*",
                             "--glob", "!**/node_modules/*",
                             "--glob", "!**/iterm2env/*",
+                            "--glob", "!**/__pycache__/*",
+                            -- consider target/debug/ if issues blocking target/ dir entirely
                             "--glob", "!**/target/*",
                         },
                         -- https://github.com/nvim-telescope/telescope.nvim/wiki/Configuration-Recipes#file-and-text-search-in-hidden-files-and-directories
