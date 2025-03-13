@@ -36,6 +36,7 @@ async fn main() {
 
     let api_key = get_api_key(service.name.to_string());
 
+
     let request = ChatCompletionRequest {
         model: service.model.to_string(),
         messages: vec![
@@ -47,15 +48,16 @@ async fn main() {
                 role: "user".to_string(),
                 content: input,
             },
-            Message {
-                role: "assistant".to_string(),
-                content: "".to_string(),
-            }
+            // TODO any value in adding the assistant message last to start response (qwen2.5-coder's model has a template that adds this both in vllm and ollama)
+            //Message {
+            //    role: "assistant".to_string(),
+            //    content: "".to_string(),
+            //}
         ],
         max_tokens: 200,
     };
 
-    println!("Response: {:?}", request);
+    //println!("Response: {:?}", request);
 
     match send_openai_request(&api_key, service, request).await {
         Ok(response) => println!("{}", response.choices[0].message.content),
