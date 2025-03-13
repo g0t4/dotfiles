@@ -31,6 +31,16 @@ abbr agL 'ag -L' # print files w/o content match
 abbr agw 'ag --word-regexp' # match whole words
 abbr agz 'ag --search-zip' # search inside zip files (gz,xz only)
 
+abbr --set-cursor='!' agm 'ag "(?s)!"' # (?s) makes . match \n too
+#  example:
+#    ag -G fish "(?s)for[^(end)]*set[^(end)]*"
+#       here I was looking for for loops that use `set -`, first just `set`
+#       not sure this does what I want... it's hard to match across lines :) and not get crazy results
+#    find all for loops that set a variable (before they end)
+
+# ***rg (start to consider using this?)
+abbr rgm 'rg --multiline --multiline-dotall' # dot as \n too
+
 
 
 
