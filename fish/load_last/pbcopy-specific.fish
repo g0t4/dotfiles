@@ -100,9 +100,6 @@ function kill_all_lines
 end
 bind escape,k kill_all_lines # esc+k (historically I used this key combo exclusively for this purpose)
 
-# ctrl+c clear command line instead of cancel-commandline (why pollute terminal history to cancel a command!)
-bind \cc 'commandline -r ""'
-
 # !!! TODO USE THIS LATER...
 #function pre_exec_set_CMDLINE_env_var --on-event fish_preexec
 #    # this way the command that is running can introspect what is running!
