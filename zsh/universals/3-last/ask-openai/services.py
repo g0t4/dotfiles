@@ -27,7 +27,7 @@ class Service(NamedTuple):
 def use_vllm(model: Optional[str] = None):
     return Service(
         name='vllm',
-        api_key=get_api_key('vllm', 'ask'),
+        api_key="none",
         base_url='http://ollama:8000/v1',
         model=model if model else "Qwen/Qwen2.5-Coder-7B",
         chat_completions_path='chat/completions',
