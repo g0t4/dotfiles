@@ -139,6 +139,7 @@ return {
                 '--ignore', '.git/',
                 '--ignore', 'node_modules/',
                 '--ignore', '__pycache__/',
+                '--ignore', 'target/',
             }
             -- TODO sync the ignored/included with nvim-tree plugin too?
 
@@ -186,7 +187,7 @@ return {
                             "--glob", "!**/.venv/*",
                             "--glob", "!**/node_modules/*",
                             "--glob", "!**/iterm2env/*",
-                            "--glob",
+                            "--glob", "!**/target/*",
                         },
                         -- https://github.com/nvim-telescope/telescope.nvim/wiki/Configuration-Recipes#file-and-text-search-in-hidden-files-and-directories
                         -- PRN use git_files and fallback to find_files: Falling back to find_files if git_files can't find a .git directory, wouldn't this be missing new files?
