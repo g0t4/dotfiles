@@ -24,3 +24,8 @@ abbr agl 'ag -l' # print file name only, not matched content
 abbr agL 'ag -L' # print files w/o content match
 abbr agw 'ag --word-regexp' # match whole words
 abbr agz 'ag --search-zip' # search inside zip files (gz,xz only)
+
+
+# *** rg (start to consider using this?)
+abbr rgm 'rg --multiline --multiline-dotall' # dot as \n too
+
