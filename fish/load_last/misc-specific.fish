@@ -786,7 +786,7 @@ function custom-kill-command-word
     commandline -f kill-word
 end
 # ctrl+ins
-bind \co custom-kill-command-word # ctrl +o ([o]verwrite command)
+bind ctrl-o custom-kill-command-word # ctrl +o ([o]verwrite command)
 # bind '*' custom-kill-command-word # * alone works w/o interrupt mid suggestion
 # ctrl+o/q unbound currently IIUC
 # '[1;5H' # ctrl+home (interrupts suggestion)
@@ -817,7 +817,7 @@ function toggle-grc
     end
     # ALTERNATIVE - pull back last command, toggle-grc, run - can use if I find myself doing this two step process often
 end
-bind \cq toggle-grc # terrible key choice (ctrl+q) but it isn't used currently so yeah
+bind ctrl-q toggle-grc # terrible key choice (ctrl+q) but it isn't used currently so yeah
 
 
 if command -q apt

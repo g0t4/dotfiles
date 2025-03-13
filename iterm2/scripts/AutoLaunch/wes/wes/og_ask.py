@@ -31,7 +31,7 @@ async def ask_openai(connection):
         return
     # *** clear prompt (start)
     task_clear = session.async_send_text("\x03")  # ctrl+c (start clear commandline), seems snappier than starting this after contacting openai
-    # BTW ctrl+c must be bound in the shell to clear the line, i.e. in fish: bind \cc 'commandline -f kill'
+    # BTW ctrl+c must be bound in the shell to clear the line, i.e. in fish: bind ctrl-c 'commandline -f kill'
 
     # *** read ask_* vars:
     #   user.ask_* variables are set in the shell (on prompt redraw) using iterm2_print_user_vars/iterm2_set_user_var via iterm2 shell integration

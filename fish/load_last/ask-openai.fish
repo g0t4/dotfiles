@@ -120,7 +120,7 @@ function ask_openai
 end
 
 # how does fish handle multiple registrations? does last one win? is it an issue that \cb is preset bound to backward-char?
-bind \cb ask_openai
+bind ctrl-b ask_openai
 
 
 
@@ -197,6 +197,6 @@ bind f3 ask_openai_link
 # `bind -L` => list modes
 #   `default` mode unless -M/-m passed
 # `bind` => list bindings (add -a for all)
-# `bind \cb` => show what is bound to key sequence
+# `bind ctrl-b` => show what is bound to key sequence
 #   `bind ''` => self-insert (types key) (default key binding if seq not bound)
 #   `bind ' '` => space => self-insert & expand-abbr
