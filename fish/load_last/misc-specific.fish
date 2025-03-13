@@ -2053,7 +2053,15 @@ abbr anp 'asciinema play'
 abbr anu 'asciinema upload'
 abbr anc 'asciinema cat'
 
-abbr aggo "agg --font-size 20 --font-family 'SauceCodePro Nerd Font' --theme 17181d,c7b168,555a6c,dc3d6f,9ed279,fae67f,469cd0,8b47e5,61d2b8,c229cf test.cast test.gif"
+function abbr_agg
+    set -l cast_file *.cast
+    if test -z "$cast_file"
+        echo "no cast files"
+        return
+    end
+    echo "agg --font-size 20 --font-family 'SauceCodePro Nerd Font' --theme 17181d,c7b168,555a6c,dc3d6f,9ed279,fae67f,469cd0,8b47e5,61d2b8,c229cf" $cast_file $cast_file.gif
+end
+abbr aggo --function abbr_agg
 
 # NOTES about ROWS/COLUMNS:
 # - check current size with: echo lines: $LINES cols: $COLUMNS
