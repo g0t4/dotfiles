@@ -666,6 +666,17 @@ bind '>' expand-abbr self-insert
 bind '<' expand-abbr self-insert
 # bind --preset ')' self-insert expand-abbr
 
+# *** binds (consolidate here) ***
+# FYI fish4 OOB has:
+#   alt-. history-token-search-backward
+#   alt-up history-token-search-backward
+#   alt-down history-token-search-forward
+#
+#   if I wanna add back Esacpe,dot then:
+#     bind escape,. history-token-search-backward
+#   for now lets just remind myself and see if I can pick up alt up/down quickly... b/c I always blow past tokens and normally can't reverse so I wanna use up/down to reverse easily too!
+bind escape,. "commandline --append 'alt-up'; commandline --cursor 10000" # move cursor to end too (so can ctrl-w to wipe out inserted reminder token)
+
 # *** processes ***
 abbr psg "grc ps aux | grep -i "
 abbr pgrep "grc pgrep -ilfa" # -l long output (show what matched => process name), -f match full command line, -l show what matched (full line)
