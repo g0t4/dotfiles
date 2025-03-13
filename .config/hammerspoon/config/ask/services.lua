@@ -54,7 +54,7 @@ function M.getService()
         return {
             name = "ollama",
             api_key = "whatever",
-            url = "http://localhost:11434/v1/chat/completions",
+            url = "http://ollama:11434/v1/chat/completions",
             model = stored.model == "" and "llama3.2:3b" or stored.model,
         }
     end

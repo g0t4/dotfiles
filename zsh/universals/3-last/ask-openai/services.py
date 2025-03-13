@@ -107,7 +107,7 @@ def use_ollama(model: Optional[str] = None):
     return Service(
         name='ollama',
         api_key="whatever",
-        base_url="http://localhost:11434/v1",
+        base_url="http://ollama:11434/v1",
         # TODO can blank be used and let it pick?
         model=model if model else 'llama3.2:3b',
         chat_completions_path=None)

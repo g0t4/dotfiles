@@ -26,7 +26,7 @@ async def ask_openai_async_type_response(session, messages):
             stream=True)
     except Exception as e:
         # TODO test timeouts?
-        log(f"Error contacting Anthropic: {e}")
+        log(f"Error contacting API: {e}")
         await session.async_send_text(f"Error contacting API endpoint: {e}")
         return
 
