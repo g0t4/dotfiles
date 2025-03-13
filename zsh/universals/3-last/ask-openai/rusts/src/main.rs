@@ -47,9 +47,15 @@ async fn main() {
                 role: "user".to_string(),
                 content: input,
             },
+            Message {
+                role: "assistant".to_string(),
+                content: "".to_string(),
+            }
         ],
         max_tokens: 200,
     };
+
+    println!("Response: {:?}", request);
 
     match send_openai_request(&api_key, service, request).await {
         Ok(response) => println!("{}", response.choices[0].message.content),
