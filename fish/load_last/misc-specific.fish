@@ -2100,3 +2100,8 @@ abbr aggo --function abbr_agg
 #       nix! flake!
 #   - copilot suggests: try ttygif?
 
+
+abbr vllms "vllm serve"
+abbr vllmb "vllm bench"
+abbr vllmc "vllm chat"
+abbr vllmg "vllm complete"
