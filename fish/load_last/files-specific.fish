@@ -708,7 +708,9 @@ function nz
     z $argv
     nvim
 end
-export EDITOR="vim"
+
+export EDITOR="nvim"
+# alt+o/v allows editing current command line thanks to EDITOR variable
 
 
 #### nvim:
