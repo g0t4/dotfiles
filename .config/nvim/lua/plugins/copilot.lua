@@ -2,7 +2,7 @@ local use_ai = {
     -- "avante",
     -- "copilot",
     -- "tabnine",
-    "supermaven",
+    -- "supermaven",
     -- "llm.nvim",
     "ask-openai", -- use master branch to disable predictions
 }
