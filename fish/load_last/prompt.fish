@@ -65,6 +65,10 @@ function prompt_pwd --description 'wes mod - name of the current dir only'
     end
     # variable named
     # PRN flush out other scenarios like I have with ~/repos/github/g0t4/foo => gh:g0t4/foo
+    if set -q show_full_path_in_prompt
+        echo -n -s $PWD
+        return
+    end
 
     # truncate long course paths
     if string match --regex -q "$HOME/repos/github/g0t4/private.*ai-devops\$" $PWD
