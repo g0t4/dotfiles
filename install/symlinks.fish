@@ -9,7 +9,7 @@ ln -f -s $dotfiles_dir/.config/inputrc/.inputrc ~/.
 # editline:
 ln -f -s $dotfiles_dir/.config/editrc/.editrc ~/.
 
-if string match --quiet (uname) Darwin
+if string match --quiet Darwin (uname -s)
     # *** macOS
 
     # hammerspoon:
