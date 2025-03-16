@@ -1943,16 +1943,25 @@ if command -q pacman
 
     # *** -S sync
     abbr --set-cursor='!' pmss "sudo pacman -Ss '^!'" # (s)earch, name starts with
+    abbr --set-cursor='!' pm_search "sudo pacman -Ss '^!'" # reminder only
     # pacman -Ss regex => (s)earches desc too, can be noisy
     abbr pmsi "pacman -Si" # pkg (i)nfo
+    abbr pm_info "pacman -Si"
     # pacman -Sl [repo] # list all pkgs in repo extra
     abbr pms "sudo pacman --noconfirm -S" # install (aka sync)
+    abbr pm_install "sudo pacman --noconfirm -S" # reminder
+    abbr pmsu "sudo pacman -Syu" # think [Sy]nc + [u]pgrade
+    abbr pm_update "sudo pacman -Syu" # reminder is all
+
+    # *** -R remove
+    abbr pmr "sudo pacman -R --recursive" # -R remove, -s (--recursive) => also rm the deps that it has that are no longer needed
+    abbr pm_uninstall "sudo pacman -R --recursive" # reminder
 
     # *** -Q query (local aka installed pkgs)
     abbr pmq "pacman -Q"
+    abbr pm_listinstalled "pacman -Q" # training wheels reminder for what command b/c this is all truly confusing IMO, perhaps I should better wrap my mind around the commands?
     abbr pmqi "pacman -Qi" # pkg (i)nfo (probably easier to just use -Si for most pkgs unless install a local dev checkout)
     # search installed pkgs:
-    abbr pmlistinstalled "pacman -Q" # training wheels reminder for what command b/c this is all truly confusing IMO, perhaps I should better wrap my mind around the commands?
     abbr pmqs "pacman -Qs" # (s)earch ERE(regex) search installed pkgs (prolly just use `pacman -Q | grep -i`)
     abbr --set-cursor='!' pmqg "pacman -Q | grep -i '!'" # I prefer grep, it's just easier to not need another tool specific option
     abbr --set-cursor='!' pmqgs "pacman -Q | grep -i '^!'"
