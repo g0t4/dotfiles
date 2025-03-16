@@ -732,6 +732,8 @@ else if $IS_LINUX
     abbr pkillu 'pkill -U $USER -if'
     abbr pkill9u 'pkill -9 -U $USER -if'
 
+    # FYI I might still be missing some differences w/ linux... I didn't review all possible pgrep/pkill args
+
 end
 abbr psfull "grc ps -o 'user,pid,pcpu,pmem,vsz,rss,tty,stat,start,time,comm' -ax"
 # TODO add more in time as I encounter scenarios
