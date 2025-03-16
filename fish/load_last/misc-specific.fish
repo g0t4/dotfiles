@@ -694,17 +694,33 @@ bind escape,. "commandline --append 'alt-up'; commandline --cursor 10000" # move
 
 # *** processes ***
 abbr psg "grc ps aux | grep -i "
-abbr pgrep "grc pgrep -ilfa" # -l long output (show what matched => process name), -f match full command line, -l show what matched (full line)
+if $IS_MACOS
+    # pgrep macos:
+    #   -l long output (list process name too, also w/ -f prints arg list)
+    #   -a include pgrep's process ancestors in the match list (i.e. if using sudo pgrep) => they are hidden by default (unlike linux)
+    #      # yes include -a... for example, I might be matching on "fish" and so I wanna see that
+    #      # FYI if I use grc in front of pgrep... then that grc process always matches b/c its an ancestor... so for now lets get rid of default using grc to avoid that frustration
+    #   -f/-i - same as linux
+    abbr pgrep "pgrep -ilfa"
+    # TLDR -a is added for different reasons between macOS and linux but for now I want it on both
+else if $IS_LINUX
+    # -i ignore case (same as mac)
+    # -f match full arg list (same as mac)
+    # -l == list process name too, not just PID (mac does this too)
+    #       however, unlike a mac, -lf together doesn't include arg list
+    # -a show full command line (args too)
+    # -A ignore pgrep's ancestor processes (on by default and I hate that => always matches self)
+    #    FYI if I get rid of -a on mac variant, then I probably wanna add -A here (not remove -a here)... to mirror the exclusion of ancestors
+    abbr pgrep "pgrep -ilfa"
+
+    # TODO handle pkill differences
+
+end
 abbr pgrepu 'grc pgrep -U $USER -ilfa'
 abbr pkill "pkill -ilf" # same options as pgrep (-l (long) shows underlying kill command used per PID)
 abbr pkill9 'pkill -9 -ilf'
 abbr pkillu 'pkill -U $USER -ilf'
 abbr pkill9u 'pkill -9 -U $USER -ilf'
-if $IS_MACOS
-    abbr pshelp "man ps"
-else
-    abbr pshelp "ps --help=all"
-end
 abbr psfull "grc ps -o 'user,pid,pcpu,pmem,vsz,rss,tty,stat,start,time,comm' -ax"
 # TODO add more in time as I encounter scenarios
 #
