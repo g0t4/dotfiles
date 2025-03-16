@@ -747,9 +747,8 @@ function nn_expand
     end
     echo nvim
 end
-#
-# *** screenpal
 
+# *** screenpal
 abbr spkill "pkill -ilf screenpal"
 # abbr spkilltray "pkill -ilf 'screenpal tray'"
 abbr spkilltray "echo disable tray app in partner properties file"
@@ -757,3 +756,9 @@ abbr splog "cat ~/Library/ScreenPal-v3/app-0.log"
 abbr splogrm "rm ~/Library/ScreenPal-v3/app-0.log"
 # PRN tray-0.log ... but don't need it right now
 
+
+# *** free
+if command -q free
+    abbr free 'free -wh'
+    abbr frees 'free -whs 1' # still, prefer using watch
+end
