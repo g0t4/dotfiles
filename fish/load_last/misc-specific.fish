@@ -703,6 +703,14 @@ if $IS_MACOS
     #   -f/-i - same as linux
     abbr pgrep "pgrep -ilfa"
     # TLDR -a is added for different reasons between macOS and linux but for now I want it on both
+    #
+
+    abbr pgrepu 'grc pgrep -U $USER -ilfa'
+    abbr pkill "pkill -ilf" # same options as pgrep (-l (long) shows underlying kill command used per PID)
+    abbr pkill9 'pkill -9 -ilf'
+    abbr pkillu 'pkill -U $USER -ilf'
+    abbr pkill9u 'pkill -9 -U $USER -ilf'
+
 else if $IS_LINUX
     # -i ignore case (same as mac)
     # -f match full arg list (same as mac)
@@ -716,11 +724,6 @@ else if $IS_LINUX
     # TODO handle pkill differences
 
 end
-abbr pgrepu 'grc pgrep -U $USER -ilfa'
-abbr pkill "pkill -ilf" # same options as pgrep (-l (long) shows underlying kill command used per PID)
-abbr pkill9 'pkill -9 -ilf'
-abbr pkillu 'pkill -U $USER -ilf'
-abbr pkill9u 'pkill -9 -U $USER -ilf'
 abbr psfull "grc ps -o 'user,pid,pcpu,pmem,vsz,rss,tty,stat,start,time,comm' -ax"
 # TODO add more in time as I encounter scenarios
 #
