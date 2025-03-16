@@ -1999,7 +1999,12 @@ if command -q pacman
     abbr pmfy "sudo pacman -Fy" # reminder - download/s(y)nc fresh package databases
 
     # pactree reminder:
-    abbr pmtree pactree
+    abbr pmtree "pactree -c"
+    #
+    abbr --regex 'pmtree\d+' --function __pmtreeX _pmtreeX
+    function __pmtreeX
+        string replace --regex '^pmtree' 'pactree -c -d' $argv
+    end
 
     # TODOs (as I use and figure out what I want):
     # -R == --remove
