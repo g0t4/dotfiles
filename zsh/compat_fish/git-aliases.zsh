@@ -113,7 +113,10 @@ abbr glr 'git pull --recurse-submodules' # keep separate alias for now as its ti
 abbr gr 'git remote'
 abbr grv 'git remote -v' # * favorite
 abbr gra 'git remote add'
-abbr grset 'git remote set-url'
+abbr grao 'git remote add origin'
+abbr grau 'git remote add upstream'
+abbr grsuo 'git remote set-url origin'
+abbr grsuu 'git remote set-url upstream'
 abbr grup 'git remote update'
 
 # merge
