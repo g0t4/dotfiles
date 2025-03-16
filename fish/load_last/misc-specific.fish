@@ -1972,7 +1972,9 @@ if command -q pacman
     abbr --set-cursor='!' pmqg "pacman -Q | grep -i '!'" # I prefer grep, it's just easier to not need another tool specific option
     abbr --set-cursor='!' pmqgs "pacman -Q | grep -i '^!'"
     #
-    abbr pmql "pacman -Ql" # (l)ist files for pkg
+    abbr pmql "pacman -Ql" # (l)ist files for pkg, can list multiple too (in which case first col is pkg name)
+    abbr --set-cursor='!' pmqlt "pacman -Qlq ! | treeify " # tree like list (-q == --quiet => show less info, in this case dont list pkg name column, just file paths)
+    abbr --set-cursor='!' pm_listpkgfiles "pacman -Qlq ! | treeify" # reminder
     #pacman -Qk fish # verify installed files
     abbr pmqo "pacman -Qo" # (o)wned by pkg
     abbr pm_whoownsfile "pacman -Qo"
