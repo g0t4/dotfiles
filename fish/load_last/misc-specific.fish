@@ -2081,6 +2081,9 @@ if $IS_LINUX then
     abbr lshw "sudo lshw"
     abbr lshws "sudo lshw -sanitize"
     abbr lshwb "sudo lshw -businfo"
+    abbr lshwcd "sudo lshw -class display"
+    abbr lshwcn "sudo lshw -class network"
+    abbr lshwcs "sudo lshw -class storage"
 
     # lsmod
     abbr --set-cursor='!' lsmodg "sudo lsmod | grep -i '!'"
