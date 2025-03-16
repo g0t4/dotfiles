@@ -69,7 +69,11 @@ end
 ln -f -s $dotfiles_dir/.grc ~/. # DIR SYMLINK
 
 # *** git ***
+mkdir -p ~/.config/git
 ln -f -s $dotfiles_dir/.config/git/ignore ~/.config/git/.
+if string match --quiet Linux (uname -s)
+    ln -s ~/repos/github/g0t4/dotfiles/git/linux.gitconfig ~/.gitconfig
+end
 
 # *** hushlogin
 touch ~/.hushlogin
