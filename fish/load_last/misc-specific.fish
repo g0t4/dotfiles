@@ -1999,6 +1999,7 @@ if command -q pacman
     abbr pmfy "sudo pacman -Fy" # reminder - download/s(y)nc fresh package databases
 
     # pactree reminder:
+    #  -c/--color
     abbr pmtree "pactree -c"
     #
     abbr --regex 'pmtree\d+' --function __pmtreeX _pmtreeX
