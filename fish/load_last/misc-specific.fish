@@ -2015,6 +2015,17 @@ if command -q pacman
 
 end
 
+# if command -q nvidia-smi
+#     # PRN if all these linux commands introduce too much overhead (i.e. in the command -q part)..
+#     #   then split them into a file and bail at top if not linux as a first check $IS_LINUX
+#     #  prefix == "nv" # seems fine, might overlap with neovim at some point?
+#     #  PRN alternative => use abbr --command nvidia-smi ... command level abbrs? or perhaps just need to fix completions which don't work even with fuc on man pages)
+#     abbr nvsmi "nvidia-smi"
+#     abbr nvsmiq "nvidia-smi --query"
+#     abbr nvsmil "nvidia-smi --list-gpus"
+#     # abbr nvcclii "nvidia-container-cli info"
+#     # abbr nvcclil "nvidia-container-cli list"
+# end
 
 function zedraw
     # zedraw 1.raw
