@@ -705,9 +705,10 @@ if $IS_MACOS
     # TLDR -a is added for different reasons between macOS and linux but for now I want it on both
     #
 
-    abbr pgrepu 'grc pgrep -U $USER -ilfa'
+    abbr pgrepu 'pgrep -U $USER -ilfa'
 
     # -l is only on macOS
+    # -i/-f are same as pgrep
     abbr pkill "pkill -ilf" # same options as pgrep (-l (long) shows underlying kill command used per PID)
     abbr pkill9 'pkill -9 -ilf'
     abbr pkillu 'pkill -U $USER -ilf'
@@ -722,8 +723,10 @@ else if $IS_LINUX
     # -A ignore pgrep's ancestor processes (on by default and I hate that => always matches self)
     #    FYI if I get rid of -a on mac variant, then I probably wanna add -A here (not remove -a here)... to mirror the exclusion of ancestors
     abbr pgrep "pgrep -ilfa"
+    abbr pgrepu 'pgrep -U $USER -ilfa'
 
     # -l is NOT on linux version
+    # -i/-f are same as pgrep
     abbr pkill "pkill -if" # same options as pgrep (-l (long) shows underlying kill command used per PID)
     abbr pkill9 'pkill -9 -if'
     abbr pkillu 'pkill -U $USER -if'
