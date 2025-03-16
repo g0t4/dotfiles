@@ -1969,6 +1969,7 @@ if command -q pacman
     abbr pmql "pacman -Ql" # (l)ist files for pkg
     #pacman -Qk fish # verify installed files
     abbr pmqo "pacman -Qo" # (o)wned by pkg
+    abbr pm_whoownsfile "pacman -Qo"
     #pacman -Qo /path/to/file # find package for an installed file
     #pacman -Qo ip # owned by iproute2
     #
