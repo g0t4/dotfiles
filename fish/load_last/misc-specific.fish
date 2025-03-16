@@ -1973,8 +1973,9 @@ if command -q pacman
     abbr --set-cursor='!' pmqgs "pacman -Q | grep -i '^!'"
     #
     abbr pmql "pacman -Ql" # (l)ist files for pkg, can list multiple too (in which case first col is pkg name)
+    # TODO any reason why I wouldn't just use -Fl always? perhaps if I custom build a pkg?
     abbr --set-cursor='!' pmqlt "pacman -Qlq ! | treeify " # tree like list (-q == --quiet => show less info, in this case dont list pkg name column, just file paths)
-    abbr --set-cursor='!' pm_listpkgfiles "pacman -Qlq ! | treeify" # reminder
+    abbr --set-cursor='!' pm_listinstalledpkgfiles "pacman -Qlq ! | treeify" # reminder
     #pacman -Qk fish # verify installed files
     abbr pmqo "pacman -Qo" # (o)wned by pkg
     abbr pm_whoownsfile "pacman -Qo"
@@ -1991,7 +1992,10 @@ if command -q pacman
     # pacman -F /path/to/file # find file in remote package (i.e. not yet installed)
     # pacman -F ollama # or, w/o path => find what provides ollama command
     #
+    # FYI for -Fl vs -Ql... mostly gonna be ok to use -Fl... but, if build a pkg by hand it might only be avail in locally installed packages
     abbr pmfl "pacman -Fl" # (l)ist files for (remote) pkg
+    abbr --set-cursor='!' pmflt "pacman -Flq ! | treeify" # treeify list of files
+    abbr --set-cursor='!' pm_listremotepkgfiles "pacman -Flq ! | treeify" # reminder
     abbr pmfy "sudo pacman -Fy" # reminder - download/s(y)nc fresh package databases
 
     # pactree reminder:
