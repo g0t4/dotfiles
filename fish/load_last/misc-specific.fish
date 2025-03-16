@@ -139,7 +139,7 @@ if command -q ctr
 
     # *** containerd
     #  a few useful commands, just qualify them w.r.t. containerd full command name, rare but useful
-    abbr containerdc "containerd config default | bat -l toml"
+    abbr containerdc "containerd config dump | bat -l toml"
     abbr containerdcdefault "containerd config default | bat -l toml"
     # PRN try new abbr --command option instead:   containerd c<TAB>  ???
 
