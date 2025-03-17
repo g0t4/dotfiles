@@ -2022,6 +2022,9 @@ if command -q nvidia-smi
     #  PRN alternative => use abbr --command nvidia-smi ... command level abbrs? or perhaps just need to fix completions which don't work even with fuc on man pages)
     abbr --set-cursor='!' nv "nvidia-!" # kinda weird with space => dash but lets see how I feel as i use it and if it collides w/ anything else
 
+    # TODO can I find a better source of copmletions?
+    complete -c nvidia-container-cli --no-files -a "list info configure --help"
+
     # abbr nvsmi "nvidia-smi"
     # abbr nvsmiq "nvidia-smi --query"
     # abbr nvsmil "nvidia-smi --list-gpus"
