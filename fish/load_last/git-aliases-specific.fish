@@ -164,3 +164,13 @@ function _repo_root
     end
 
 end
+
+# *** worktrees (finally using these - linked worktrees, not just main worktree)
+abbr gwt "git worktree"
+abbr gwtls "git worktree list"
+abbr gwta "git worktree add"
+abbr gwtab "git worktree add -b" # create new branch (use -B to clobber if exists)
+abbr gwtrm "git worktree remove"
+abbr gwtm "git worktree move"
+# lock/unlock => wait until I use those
+
