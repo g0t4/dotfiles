@@ -1,4 +1,3 @@
-
 function fish_vcs_prompt --description 'Print all vcs prompts'
     # If a prompt succeeded, we assume that it's printed the correct info.
     # This is so we don't try svn if git already worked.
@@ -31,9 +30,15 @@ function prompt_login --description 'display user name for the prompt'
     #    echo -n -s (set_color cyan) \uf308 (set_color normal) " "
     #end
 
-    ## python venv indicator 
     if test -n "$VIRTUAL_ENV"
-       echo -n -s (set_color cyan) \ue73c (set_color normal) " "
+        ## venv indicator 
+        echo -n -s (set_color cyan) \ue73c
+        if set -q show_verbose_prompt
+            #  (dotfiles
+            set venv_dir (basename (dirname $VIRTUAL_ENV))
+            echo -n -s " ($venv_dir)"
+        end
+        echo -n -s (set_color normal) " "
     end
     if set -q show_verbose_prompt
         echo -n -s $USER@$hostname
@@ -49,7 +54,6 @@ function prompt_login --description 'display user name for the prompt'
         set display_hostname (string replace -r "\.lan\$|\.local\$" "" $hostname)
         echo -n -s $display_hostname
     end
-
 
     # selectively show hostname
     # if not string match -q "mbp*" $hostname
