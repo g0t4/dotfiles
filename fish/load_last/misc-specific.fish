@@ -15,18 +15,18 @@ set __fish_help_dir "" # overwrite fish help dir thus forcing the use of https:/
 # some of these might be a result of setting up iTerm2 to use xterm default keymapping (in profile), might need to adjust if key map is subsequently changed
 # bind shift-delete kill-word # shift+del to kill forward a word (otherwise its esc+d only), I have a habit of using this (not sure why, probably an old keymapping in zsh or?)
 #  dont wanna clobber new shift-delete in autosuggests... and I don't think I used shift-delete often for delete forward anyways
-function on_change_show_full_path_in_prompt --on-variable show_full_path_in_prompt
+function on_change_show_verbose_prompt --on-variable show_verbose_prompt
     commandline --function repaint
 end
-function toggle_show_full_path_in_prompt
-    if not set --query show_full_path_in_prompt
-        set --universal show_full_path_in_prompt "yes"
+function toggle_show_verbose_prompt
+    if not set --query show_verbose_prompt
+        set --universal show_verbose_prompt "yes"
     else
-        set --universal --erase show_full_path_in_prompt
+        set --universal --erase show_verbose_prompt
     end
     # commandline --function repaint
 end
-bind f4 toggle_show_full_path_in_prompt
+bind f4 toggle_show_verbose_prompt
 
 
 
