@@ -7,7 +7,6 @@
 # ******    IIRC these are the only things I did that needed to activate a venv
 # ******    FYI any scripts that also call activate.fish directly... or that path to python in the venv... also work (don't need to be ported to uv run)
 # ************************************************************************
-return
 # ************************************************************************
 # ************************************************************************
 #  FYI this takes 7ms+ to run on every startup!
