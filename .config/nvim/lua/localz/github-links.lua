@@ -21,7 +21,7 @@ vim.cmd [[
 
       let l:github_url = l:remote_url . '/blob/' . l:commit_ish . '/' . l:file_path_in_repo . '#L' . a:start_line
       if a:start_line != a:end_line
-         let l:github_url = l:github_url . '-' . a:end_line
+         let l:github_url = l:github_url . '-L' . a:end_line
       endif
 
       " trim new lines
