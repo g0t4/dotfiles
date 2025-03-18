@@ -42,6 +42,9 @@ vim.cmd [[
         " # has to be escaped, smth with vim dispatch (no alternate file name to substitute for '#')
         let l:escaped_url = substitute(l:github_url, '#', '\\#', 'g')
         execute 'silent !open "' . l:escaped_url . '"'
+        " TODO I almost wanna keep the seletion after copying/opening the link? right now on invocation of a func then selection is moved to the first line
+        "   my thought is, what if I grab the wrong range? that said I can just edit the line #s too
+        "   so for now leave this with normal behavior
     endfunction
 
     " FYI -range / <line1>,<line2> makes it possible to:
