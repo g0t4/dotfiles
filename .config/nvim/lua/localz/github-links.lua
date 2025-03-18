@@ -43,6 +43,7 @@ vim.cmd [[
     "   range is passed as a:firstline and a:lastline
     "   and interestingly, a:firstline==a:lastline when there is no range selected, thanks gain to range arg to func command
     function! OpenGitHubLink(is_permalink) range
+        " echo a:firstline ' , ' a:lastline
         let l:github_url = BuildGitHubLink(a:firstline, a:lastline, a:is_permalink)
         " # has to be escaped, smth with vim dispatch (no alternate file name to substitute for '#')
         let l:escaped_url = substitute(l:github_url, '#', '\\#', 'g')
