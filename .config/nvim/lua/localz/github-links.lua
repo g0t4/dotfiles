@@ -1,9 +1,6 @@
 
 vim.cmd [[
 
-    command! CopyGitHubLink call CopyGitHubLink(v:false)
-    command! CopyGitHubPermaLink call CopyGitHubLink(v:true)
-
     function! BuildGitHubLink(start_line, end_line, is_permalink)
 
       " current file path relative to the repo root
@@ -35,9 +32,6 @@ vim.cmd [[
         echo 'GitHub link copied: ' . l:github_url
     endfunction
 
-    command! OpenGitHubLink call OpenGitHubLink(v:false)
-    command! OpenGitHubPermaLink call OpenGitHubLink(v:true)
-
     " FYI range argument (to function) is essential, otherwise a multi-line selection triggers once per line!
     "   :h :func-range
     "   range is passed as a:firstline and a:lastline
@@ -49,6 +43,21 @@ vim.cmd [[
         let l:escaped_url = substitute(l:github_url, '#', '\\#', 'g')
         execute 'silent !open "' . l:escaped_url . '"'
     endfunction
+
+    " FYI -range / <line1>,<line2> makes it possible to:
+    "   select lines, type ":" to go into command mode and directly type just command name (instead of call CopyGitHubLink(v:false))
+    "     :'<,'>CopyGitHubLink
+    "     :'<,'>OpenGitHubLink
+    "   and, these still work too with a single line:
+    "     :CopyGitHubLink
+    "     :OpenGitHubLink
+    "   FYI the commands have nothing to do with keymaps below, these commands are just helpers to quickly invoke the func via commandline
+    "     with the keymaps, I really don't need the commands, I just used those in the past so I will have a tendency to use them again
+    "     also I may get rid of the keymaps if those cause trouble
+    command! -range CopyGitHubLink <line1>,<line2>call CopyGitHubLink(v:false)
+    command! -range CopyGitHubPermaLink <line1>,<line2>call CopyGitHubLink(v:true)
+    command! -range OpenGitHubLink <line1>,<line2>call OpenGitHubLink(v:false)
+    command! -range OpenGitHubPermaLink <line1>,<line2>call OpenGitHubLink(v:true)
 
     " PRN can use `gh` prefix if collisions w/ other needs
     "   right now I use `g` for references `gr` `gi`
