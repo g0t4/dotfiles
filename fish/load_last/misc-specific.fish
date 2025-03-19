@@ -721,6 +721,9 @@ if $IS_MACOS
     abbr pkillu 'pkill -U $USER -ilf'
     abbr pkill9u 'pkill -9 -U $USER -ilf'
 
+    abbr sed 'gsed' # encourage the use of gsed so it behaves like linux?
+    #  i.e. gnu allows `sed -i` whereas BSD requires the extension `sed -i''` be passed
+
 else if $IS_LINUX
     # -i ignore case (same as mac)
     # -f match full arg list (same as mac)
