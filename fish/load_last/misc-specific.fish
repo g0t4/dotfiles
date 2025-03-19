@@ -420,8 +420,8 @@ if command -q kubectl
     # set
     abbr kset 'kubectl set'
     # top
-    abbr ktp 'kubectl top pod --all-namespaces'
-    abbr ktn 'kubectl top node'
+    abbr ktop 'kubectl top pod --all-namespaces'
+    abbr ktopn 'kubectl top node'
     # version
     abbr kver 'kubectl version'
     # wait
