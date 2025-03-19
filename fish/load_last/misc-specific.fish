@@ -992,6 +992,7 @@ if command -q watch
     abbr wad 'watch --no-title --color -- grc --colour=on kubectl describe --show-kind' # using alot! I love this
     abbr wakp 'watch --no-title --color -- grc --colour=on kubectl get --show-kind pods'
     abbr wah 'watch --no-title --color -- http --pretty=colors'
+    abbr wahv 'watch --no-title --color -- http --pretty=colors --verbose' # == --print HhBb (headers and body for both request and response)
     abbr wal 'watch --no-title --color -- grc --colour=on ls'
     abbr wat 'watch --no-title --color -- grc --colour=on tree'
     # for k8s prefer kubectl --watch b/c grc colors the output w/o issues.. but when it is not avail to continually monitor then use watch command w/ color output:
