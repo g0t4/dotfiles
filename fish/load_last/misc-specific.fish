@@ -421,6 +421,7 @@ if command -q kubectl
     abbr kset 'kubectl set'
     # top
     abbr ktop 'kubectl top pod --all-namespaces'
+    abbr ktopw 'watch --no-title --color -- grc --colour=on kubectl top pod --all-namespaces'
     abbr ktopn 'kubectl top node'
     # version
     abbr kver 'kubectl version'
