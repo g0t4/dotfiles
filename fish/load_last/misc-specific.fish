@@ -512,7 +512,8 @@ if command -q minikube
     abbr mksls 'minikube service list' # any service type
     # PRN # minikube service --all --namespace _ # open all
     # not sure I see much of a reason to use minikube service when I can use kubectl port-forward and that is consistent across k8s-in-docker distros
-    abbr mkt 'minikube tunnel' # make LoadBalancer services routeable from host
+    abbr mkt 'minikube tunnel --cleanup' # make LoadBalancer services routeable from host
+    #   FTR tunnel allows to connect to load balanced service vs single pods w/ port-forward
     # addons
     abbr mka 'minikube addons list'
     abbr mkao 'minikube addons open'
