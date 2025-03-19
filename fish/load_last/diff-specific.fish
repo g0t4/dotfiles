@@ -144,7 +144,7 @@ bind ctrl-f6 _convert_current_command_to_diff_two_commands # ctrl+F6 (streamdeck
 # function last_history_item
 #     echo $history[1]
 # end
-# abbr -a !! --position anywhere --function last_history_item
+# abbr -a !! --position=anywhere --function last_history_item
 # # crap I need these to work as aliases :) or funcs... not as abbreviation
 # #   TODO rewrite as func only with pattern matching of func name (that's a thing right, parameterized func names? - not func params)
 # # expand !-X
@@ -152,4 +152,4 @@ bind ctrl-f6 _convert_current_command_to_diff_two_commands # ctrl+F6 (streamdeck
 #     set -l history_num (string replace '!-' '' $argv)
 #     echo $history[$history_num]
 # end
-# abbr --add bangbang --regex '\!\-\d+' --position anywhere --function expand_history_item_X
+# abbr --add bangbang --regex '\!\-\d+' --position=anywhere --function expand_history_item_X
