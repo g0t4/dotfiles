@@ -991,7 +991,6 @@ if command -q watch
     abbr wak 'watch --no-title --color -- grc --colour=on kubectl get --show-kind' # using alot! I love this
     abbr wad 'watch --no-title --color -- grc --colour=on kubectl describe --show-kind' # using alot! I love this
     abbr wakp 'watch --no-title --color -- grc --colour=on kubectl get --show-kind pods'
-    abbr wac 'watch --no-title --color -- grc --colour=on curl' #? shot in the dark, I probably won't ever use this :)... just capturing an idea => perhaps wh for "watch + http(ie)"?
     abbr wah 'watch --no-title --color -- http --pretty=colors'
     abbr wal 'watch --no-title --color -- grc --colour=on ls'
     abbr wat 'watch --no-title --color -- grc --colour=on tree'
