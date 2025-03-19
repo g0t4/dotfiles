@@ -91,8 +91,8 @@ ealias kxls='kubectl config get-contexts'
 ealias kxv='kubectl config view'
 
 # kubectl cluster-info dump
-ealias ktp='kubectl top pod --all-namespaces'
-ealias ktn='kubectl top node'
+ealias ktop='kubectl top pod --all-namespaces'
+ealias ktopn='kubectl top node'
 
 # kubectl proxy
 # kubectl debug
