@@ -721,9 +721,6 @@ if $IS_MACOS
     abbr pkillu 'pkill -U $USER -ilf'
     abbr pkill9u 'pkill -9 -U $USER -ilf'
 
-    abbr sed 'gsed' # encourage the use of gsed so it behaves like linux?
-    #  i.e. gnu allows `sed -i` whereas BSD requires the extension `sed -i''` be passed
-
 else if $IS_LINUX
     # -i ignore case (same as mac)
     # -f match full arg list (same as mac)
@@ -771,7 +768,15 @@ function pstree
 end
 # TODO look into utils like fuser (not necessarily for abbrs, though maybe) but b/c I need to shore up my knowlege here, so much easier to diagnose what an app is doing if I can look at its external interactions (ie files, ports, etc)
 
-
+if $IS_MACOS
+    abbr --set-cursor='!' sedi "gsed -i 's/!//g'"
+    abbr --set-cursor='!' sedd "gsed --debug -i 's/!//g'"
+    # abbr sed gsed # encourage the use of gsed so it behaves like linux?
+    #  i.e. gnu allows `sed -i` whereas BSD requires the extension `sed -i''` be passed
+else
+    abbr --set-cursor='!' sedi "sed -i 's/!//g'"
+    abbr --set-cursor='!' sedd "sed --debug -i 's/!//g'"
+end
 
 # TODO port more dns/arp helpers here
 function _flush_dns
