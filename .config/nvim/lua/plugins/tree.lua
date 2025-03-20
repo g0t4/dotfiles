@@ -117,6 +117,15 @@ return {
                     -- exclude = { -- show: (don't filter out)
                     -- }
                 },
+                on_attach = function(bufnr)
+                    local api = require("nvim-tree.api")
+                    -- have to provide all defaults if overriding:
+                    api.config.mappings.default_on_attach(bufnr)
+
+                    -- defaults: https://github.com/nvim-tree/nvim-tree.lua/blob/c09ff35/lua/nvim-tree/keymap.lua#L47
+
+                    vim.keymap.set('n', '<F2>', api.fs.rename)
+                end,
             })
             -- PRN telescope integration => actions menu (https://github.com/nvim-tree/nvim-tree.lua/wiki/Recipes#creating-an-actions-menu-using-telescope)
             -- FYI `g?` shows help overlay with keymaps for actions
