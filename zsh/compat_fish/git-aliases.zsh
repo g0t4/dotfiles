@@ -149,8 +149,8 @@ abbr grp 'git restore --patch' # * favorite
 abbr grss 'git restore --source'
 
 # show
-abbr gsh 'git show'
-abbr gsps 'git show --pretty=short --show-signature'
+abbr gsh 'git show --color-words'
+abbr gsps 'git show --pretty=short --show-signature --color-words'
 
 # submodules
 abbr gsm 'git submodule'
