@@ -147,8 +147,7 @@ async def wes_split_pane(connection: iterm2.Connection, split_vert: bool = False
     # *** FYI force_local not passed to this func yet by any wes.py handlers
 
     session = await get_current_session_throw_if_none(connection)
-    current_profile = await session.async_get_profile()
-    new_profile = current_profile.local_write_only_copy
+    new_profile = await prepare_new_profile(session)
 
     jobName = await session.async_get_variable("jobName")
     path = await session.async_get_variable("path")
