@@ -20,6 +20,13 @@ async def new_tab_then_close_others(connection):
             await tab.async_close(force=True)
 
 
+async def prepare_new_profile(session):
+    current_profile = await session.async_get_profile()
+    new_profile = current_profile.local_write_only_copy
+    # print(f"directories:\n  {current_profile.custom_directory},\n  {current_profile.initial_directory_mode},\n  {current_profile.advanced_working_directory_pane_directory}\n  {current_profile.advanced_working_directory_pane_setting}\n  {current_profile.advanced_working_directory_tab_directory}\n  {current_profile.advanced_working_directory_tab_setting}\n  {current_profile.advanced_working_directory_window_directory}\n  {current_profile.advanced_working_directory_window_setting}")
+    new_profile.set_initial_directory_mode(iterm2.InitialWorkingDirectory.INITIAL_WORKING_DIRECTORY_RECYCLE)
+
+
 # TODO => fix for my alfred "open in terminal" from finder...  right now if its a remote ssh session on top then it opens to remote
 
 
@@ -62,13 +69,6 @@ async def wes_new_window(connection: iterm2.Connection, force_local=False):
     if new_path != path:
         await new_session.async_send_text(f"cd {path}; clear\n")
         # clear does same as Cmd+K (clears scrollback, not just screen)
-
-
-async def prepare_new_profile(session):
-    current_profile = await session.async_get_profile()
-    new_profile = current_profile.local_write_only_copy
-    # print(f"directories:\n  {current_profile.custom_directory},\n  {current_profile.initial_directory_mode},\n  {current_profile.advanced_working_directory_pane_directory}\n  {current_profile.advanced_working_directory_pane_setting}\n  {current_profile.advanced_working_directory_tab_directory}\n  {current_profile.advanced_working_directory_tab_setting}\n  {current_profile.advanced_working_directory_window_directory}\n  {current_profile.advanced_working_directory_window_setting}")
-    new_profile.set_initial_directory_mode(iterm2.InitialWorkingDirectory.INITIAL_WORKING_DIRECTORY_RECYCLE)
 
 
 async def wes_new_tab(connection, force_local=False):
