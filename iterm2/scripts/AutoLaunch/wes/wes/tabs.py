@@ -20,8 +20,12 @@ async def new_tab_then_close_others(connection):
             await tab.async_close(force=True)
 
 
-async def prepare_new_profile(session, force_local) -> tuple[iterm2.LocalWriteOnlyProfile, bool]:
-    print(f"session_id={session.session_id}, tab_id: {session.tab.tab_id}, window_id: {session.window.window_id}")
+async def prepare_new_profile(session: iterm2.Session, force_local: bool) -> tuple[iterm2.LocalWriteOnlyProfile, bool]:
+    tab = session.tab
+    tab_id = tab.tab_id if tab is not None else "missing tab"
+    window = session.window
+    window_id = window.window_id if window is not None else "missing window"
+    print(f"session_id={session.session_id}, tab_id: {tab_id}, window: {window_id}")
 
     current_profile = await session.async_get_profile()
     new_profile = current_profile.local_write_only_copy
