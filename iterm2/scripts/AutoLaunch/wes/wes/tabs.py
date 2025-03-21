@@ -68,6 +68,9 @@ async def wes_new_tab(connection, force_local=False):
     session = await get_current_session_throw_if_none(connection)
     current_profile = await session.async_get_profile()
     new_profile = current_profile.local_write_only_copy
+    print(f"directories:\n  {current_profile.custom_directory},\n  {current_profile.initial_directory_mode},\n  {current_profile.advanced_working_directory_pane_directory}\n  {current_profile.advanced_working_directory_pane_setting}\n  {current_profile.advanced_working_directory_tab_directory}\n  {current_profile.advanced_working_directory_tab_setting}\n  {current_profile.advanced_working_directory_window_directory}\n  {current_profile.advanced_working_directory_window_setting}")
+    new_profile.set_initial_directory_mode(iterm2.InitialWorkingDirectory.INITIAL_WORKING_DIRECTORY_RECYCLE)
+    # TODO need to set path on new_profile
 
     # vars:
     # commandLine - current foreground job
@@ -98,6 +101,7 @@ async def wes_new_tab(connection, force_local=False):
 
     jobName = await session.async_get_variable("jobName")
     path = await session.async_get_variable("path")
+    print(f"using path: {path}")
     commandLine = await session.async_get_variable("commandLine")
     was_sshed = jobName == "ssh"
 
