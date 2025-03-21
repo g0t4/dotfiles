@@ -20,11 +20,12 @@ async def new_tab_then_close_others(connection):
             await tab.async_close(force=True)
 
 
-async def prepare_new_profile(session):
+async def prepare_new_profile(session) -> iterm2.LocalWriteOnlyProfile:
     current_profile = await session.async_get_profile()
     new_profile = current_profile.local_write_only_copy
     # print(f"directories:\n  {current_profile.custom_directory},\n  {current_profile.initial_directory_mode},\n  {current_profile.advanced_working_directory_pane_directory}\n  {current_profile.advanced_working_directory_pane_setting}\n  {current_profile.advanced_working_directory_tab_directory}\n  {current_profile.advanced_working_directory_tab_setting}\n  {current_profile.advanced_working_directory_window_directory}\n  {current_profile.advanced_working_directory_window_setting}")
     new_profile.set_initial_directory_mode(iterm2.InitialWorkingDirectory.INITIAL_WORKING_DIRECTORY_RECYCLE)
+    return new_profile
 
 
 # TODO => fix for my alfred "open in terminal" from finder...  right now if its a remote ssh session on top then it opens to remote
