@@ -20,12 +20,28 @@ async def new_tab_then_close_others(connection):
             await tab.async_close(force=True)
 
 
-async def prepare_new_profile(session) -> iterm2.LocalWriteOnlyProfile:
+async def prepare_new_profile(session, force_local) -> tuple[iterm2.LocalWriteOnlyProfile, bool]:
+
     current_profile = await session.async_get_profile()
     new_profile = current_profile.local_write_only_copy
+
     # print(f"directories:\n  {current_profile.custom_directory},\n  {current_profile.initial_directory_mode},\n  {current_profile.advanced_working_directory_pane_directory}\n  {current_profile.advanced_working_directory_pane_setting}\n  {current_profile.advanced_working_directory_tab_directory}\n  {current_profile.advanced_working_directory_tab_setting}\n  {current_profile.advanced_working_directory_window_directory}\n  {current_profile.advanced_working_directory_window_setting}")
     new_profile.set_initial_directory_mode(iterm2.InitialWorkingDirectory.INITIAL_WORKING_DIRECTORY_RECYCLE)
-    return new_profile
+
+    jobName = await session.async_get_variable("jobName")
+    commandLine = await session.async_get_variable("commandLine")
+    was_sshed = jobName == "ssh"
+
+    is_ssh = was_sshed and not force_local
+    if was_sshed:
+        if force_local:
+            # for when you are ssh'd and not wanna ssh into new tab/window
+            new_profile.set_use_custom_command("No")
+        else:
+            new_profile.set_command(commandLine)
+            new_profile.set_use_custom_command("Yes")
+
+    return new_profile, is_ssh
 
 
 # TODO => fix for my alfred "open in terminal" from finder...  right now if its a remote ssh session on top then it opens to remote
@@ -39,21 +55,9 @@ async def wes_new_window(connection: iterm2.Connection, force_local=False):
         await iterm2.Window.async_create(connection)
         return
     session = await get_current_session_throw_if_none(connection)
-    new_profile = await prepare_new_profile(session)
+    new_profile, is_ssh = await prepare_new_profile(session, force_local)
 
-    jobName = await session.async_get_variable("jobName")
     path = await session.async_get_variable("path")
-    commandLine = await session.async_get_variable("commandLine")
-    was_sshed = jobName == "ssh"
-
-    is_ssh = was_sshed and not force_local
-    if was_sshed:
-        if force_local:
-            # for when you are ssh'd and not wanna ssh into new tab/window
-            new_profile.set_use_custom_command("No")
-        else:
-            new_profile.set_command(commandLine)
-            new_profile.set_use_custom_command("Yes")
 
     new_window = await iterm2.Window.async_create(connection, profile_customizations=new_profile)
     if new_window is None:
@@ -105,7 +109,6 @@ async def wes_new_tab(connection, force_local=False):
 
     jobName = await session.async_get_variable("jobName")
     path = await session.async_get_variable("path")
-    print(f"using path: {path}")
     commandLine = await session.async_get_variable("commandLine")
     was_sshed = jobName == "ssh"
 
