@@ -759,6 +759,7 @@ function pstreeX
 end
 abbr pstrees --set-cursor='!' 'pstree -s "!"' # ***! NEW FAVORITE, shows all matching parents/descendants (IIUC)
 abbr pstreep 'pstree -p' # parents/descendants of PID, without -p then its just descendants
+abbr pstreet 'pstree  (ps -o pid=)' # ps gives processes w/ controlling terminal, then pstree shows their hierarchy... similar to "ps f" on *nix
 abbr pstreeU 'pstree -U' # skip root only branches
 abbr pstreeu 'pstree -u $(whoami)' # my processes
 abbr pstreew 'pstree -w' # wide output (otherwise truncated)
