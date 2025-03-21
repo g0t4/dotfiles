@@ -35,7 +35,10 @@ async def prepare_new_profile(session, force_local) -> tuple[iterm2.LocalWriteOn
     is_ssh = was_sshed and not force_local
     if was_sshed:
         if force_local:
-            # for when you are ssh'd and not wanna ssh into new tab/window
+            # force local means don't reconnect over SSH, open a local terminal
+            # FYI, might want to address what happens when was_ssh b/c the path then if the ssh window was opened directly to SSH isn't going to be useful
+            #    but, this might be where setting advanced_working_directory_* helps when I open a new window/tab/pane to track what local dir to come back to...
+            #    OR, how about open it to home dir?
             new_profile.set_use_custom_command("No")
         else:
             new_profile.set_command(commandLine)
@@ -64,7 +67,6 @@ async def wes_new_window(connection: iterm2.Connection, force_local=False):
         raise Exception("UNEXPECTED NO WINDOW CREATED")
 
     if force_local or not is_ssh:
-        # don't cd if local (already handled by cloning the profile)
         return
 
     new_session = get_current_session_for_window_throw_if_none(new_window)
@@ -82,7 +84,6 @@ async def wes_new_tab(connection, force_local=False):
 
     path = await session.async_get_variable("path")
 
-    # pass command async_create_tab OR new_profile.set_command?
     new_tab = await prior_window.async_create_tab(profile_customizations=new_profile)
     if new_tab is None:
         raise Exception("UNEXPECTED NO TAB CREATED")
