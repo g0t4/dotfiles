@@ -38,8 +38,7 @@ async def wes_new_window(connection: iterm2.Connection, force_local=False):
         await iterm2.Window.async_create(connection)
         return
     session = await get_current_session_throw_if_none(connection)
-    current_profile = await session.async_get_profile()
-    new_profile = current_profile.local_write_only_copy
+    new_profile = await prepare_new_profile(session)
 
     jobName = await session.async_get_variable("jobName")
     path = await session.async_get_variable("path")
