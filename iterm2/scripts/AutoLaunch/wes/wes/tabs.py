@@ -78,48 +78,9 @@ async def wes_new_window(connection: iterm2.Connection, force_local=False):
 async def wes_new_tab(connection, force_local=False):
     prior_window = await get_current_window_throw_if_none(connection)
     session = await get_current_session_throw_if_none(connection)
-    new_profile = await prepare_new_profile(session)
+    new_profile, is_ssh = await prepare_new_profile(session, force_local)
 
-    # vars:
-    # commandLine - current foreground job
-    #    ssh foo@bar
-    # jobName - "ssh", "nvim"
-    # pid - of root process in the session
-    # uname - os info
-    #
-    # sshIntegrationLevel https://github.com/gnachman/iterm2-website/blob/master/source/_includes/documentation-variables.md#L41
-    #    # FYI I cannot get this to set even if I have shell integration local and remote... need to read iterm codebase... it's a bit obscure about how it works (conductors stuff)
-    #    https://iterm2.com/documentation-variables.html
-    #    0: No ssh integration.
-    #    1: Basic ssh integration.
-    #    2: Full ssh integration with all features available.
-    # FYI iTerm docs: https://github.com/gnachman/iterm2-website
-    #
-    #
-    # shell integration vars:
-    #   lastCommand
-    #   path (current working dir - on remote, or local if not remote'd)
-    #     homeDirectory - this appears to be on the HOST (local always it seems)
-    #   username
-    #   hostname
-    #
-    # iterm2/tab/user/window - vars for other objects
-    #
-    # FYI another good ref for customizing the profile is `nvim.py` => iterm2/semantic-click-handler/nvim.py
-
-    jobName = await session.async_get_variable("jobName")
     path = await session.async_get_variable("path")
-    commandLine = await session.async_get_variable("commandLine")
-    was_sshed = jobName == "ssh"
-
-    is_ssh = was_sshed and not force_local
-    if was_sshed:
-        if force_local:
-            # for when you are ssh'd and not wanna ssh into new tab/window
-            new_profile.set_use_custom_command("No")
-        else:
-            new_profile.set_command(commandLine)
-            new_profile.set_use_custom_command("Yes")
 
     # pass command async_create_tab OR new_profile.set_command?
     new_tab = await prior_window.async_create_tab(profile_customizations=new_profile)
@@ -150,21 +111,9 @@ async def wes_split_pane(connection: iterm2.Connection, split_vert: bool = False
     # *** FYI force_local not passed to this func yet by any wes.py handlers
 
     session = await get_current_session_throw_if_none(connection)
-    new_profile = await prepare_new_profile(session)
+    new_profile, is_ssh = await prepare_new_profile(session, force_local)
 
-    jobName = await session.async_get_variable("jobName")
     path = await session.async_get_variable("path")
-    commandLine = await session.async_get_variable("commandLine")
-    was_sshed = jobName == "ssh"
-
-    is_ssh = was_sshed and not force_local
-    if was_sshed:
-        if force_local:
-            # for when you are ssh'd and not wanna ssh into new tab/window
-            new_profile.set_use_custom_command("No")
-        else:
-            new_profile.set_command(commandLine)
-            new_profile.set_use_custom_command("Yes")
 
     new_session = await session.async_split_pane(vertical=split_vert, profile_customizations=new_profile)
     if new_session is None:
