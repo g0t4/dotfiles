@@ -57,6 +57,17 @@ if test -e $HOME/.iterm2_shell_integration.fish
         set ask_os (uname) # Darwin, Linux, etc
     end
 
+    function split_pwd_on_path_change --on-variable PWD
+        # this is a hack to fix the fact that "path" variable is not reliable
+        #   when a program is running remotely (over SSH)
+        #   the path flips to a local path
+        #   run `sleep 60` and check Inspector to see this happen
+        #   when program halts, it reverts to a correct, remote, path
+
+        # this is for my iTerm2 split pane/tab/window and preserve path/SSH combo
+        iterm2_set_user_var split_path $PWD
+    end
+
     function iterm2_print_user_vars
         # mostly to avoid stale values after exist SSH, to set back to values the host has
         # FYI this is called by iterm2_shell_integration.fish on every prompt
