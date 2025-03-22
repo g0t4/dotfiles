@@ -5,7 +5,7 @@ from scrape_ask import *
 from f9command import *
 from common import *
 from og_ask import *
-from tabs import *
+from split import *
 from semantic_daemon import *
 
 
