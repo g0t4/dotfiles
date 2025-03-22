@@ -2037,17 +2037,29 @@ if command -q nvidia-smi
     # TODO can I find a better source of copmletions?
     complete -c nvidia-container-cli --no-files -a "list info configure --help"
 
+    # Basic commands
     abbr smi "nvidia-smi"
+    abbr smil "nvidia-smi -L" # List GPUs
     abbr smit "nvidia-smi -q -d temperature | bat -l yml" # not yaml, but close enough
     abbr smiu "nvidia-smi -q -d utilization | bat -l yml" # not yaml, but close enough
     abbr smitw "watch nvidia-smi -q -d temperature"
     abbr smiuw "watch nvidia-smi -q -d utilization"
+    abbr smim "nvidia-smi -q -d memory | bat -l yml" # Memory usage
+    abbr smip "nvidia-smi -q -d power | bat -l yml" # Power usage
+    abbr smipm "watch -n 1 nvidia-smi -q -d power,memory,utilization" # Power and memory monitoring
+    abbr smif "nvidia-smi -q -d clock | bat -l yml" # Clock frequencies
 
-    # abbr nvsmi "nvidia-smi"
-    # abbr nvsmiq "nvidia-smi --query"
-    # abbr nvsmil "nvidia-smi --list-gpus"
-    # abbr nvcclii "nvidia-container-cli info"
-    # abbr nvcclil "nvidia-container-cli list"
+    # Monitoring commands with loop
+    abbr smidmon "nvidia-smi dmon" # Device monitoring in scrolling format
+    abbr smipmon "nvidia-smi pmon" # Process monitoring in scrolling format
+    abbr smiwatch "watch -n 1 nvidia-smi" # Basic monitoring with refresh
+
+    # More specialized queries
+    abbr smipids "nvidia-smi --query-compute-apps=pid,process_name,used_memory --format=csv" # List processes using GPU
+    abbr smitopo "nvidia-smi topo -m" # GPU topology matrix
+    abbr sminvlink "nvidia-smi nvlink -s" # NVLink status
+    abbr smigpu "nvidia-smi --query-gpu=gpu_name,gpu_bus_id,vbios_version --format=csv" # GPU details
+    abbr smiall "nvidia-smi --query-gpu=timestamp,name,pci.bus_id,driver_version,pstate,pcie.link.gen.max,pcie.link.gen.current,temperature.gpu,utilization.gpu,utilization.memory,memory.total,memory.free,memory.used --format=csv" # Detailed GPU info
 end
 
 function zedraw
