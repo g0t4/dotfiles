@@ -2037,6 +2037,12 @@ if command -q nvidia-smi
     # TODO can I find a better source of copmletions?
     complete -c nvidia-container-cli --no-files -a "list info configure --help"
 
+    abbr smi "nvidia-smi"
+    abbr smit "nvidia-smi -q -d temperature | bat -l yml" # not yaml, but close enough
+    abbr smiu "nvidia-smi -q -d utilization | bat -l yml" # not yaml, but close enough
+    abbr smitw "watch nvidia-smi -q -d temperature"
+    abbr smiuw "watch nvidia-smi -q -d utilization"
+
     # abbr nvsmi "nvidia-smi"
     # abbr nvsmiq "nvidia-smi --query"
     # abbr nvsmil "nvidia-smi --list-gpus"
