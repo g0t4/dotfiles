@@ -64,9 +64,6 @@ async def prepare_new_profile(session: iterm2.Session, force_local: bool) -> tup
     return new_profile, is_ssh
 
 
-# TODO => fix for my alfred "open in terminal" from finder...  right now if its a remote ssh session on top then it opens to remote
-
-
 async def wes_new_window(connection: iterm2.Connection, force_local=False):
     prior_window = await get_current_window(connection)
     if prior_window is None:
@@ -77,7 +74,9 @@ async def wes_new_window(connection: iterm2.Connection, force_local=False):
     session = await get_current_session_throw_if_none(connection)
     new_profile, is_ssh = await prepare_new_profile(session, force_local)
 
-    path = await session.async_get_variable("path")
+    # default to using split_path to avoid issues with path being unreliable over SSH when running a program
+    split_path = await session.async_get_variable("user.split_path")
+    path = split_path or await session.async_get_variable("path")
 
     new_window = await iterm2.Window.async_create(connection, profile_customizations=new_profile)
     if new_window is None:
