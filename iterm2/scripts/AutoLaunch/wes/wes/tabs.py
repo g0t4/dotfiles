@@ -28,7 +28,19 @@ async def prepare_new_profile(session: iterm2.Session, force_local: bool) -> tup
     print(f"session_id={session.session_id}, tab_id: {tab_id}, window: {window_id}")
 
     current_profile = await session.async_get_profile()
+
+    # ** logging of font sizing to see if I can find why src font is sometimes wrong size!
+    #    i.e.  parent tiny font, open new tab and reset its font to default big, then new window/tab is wrong usually
+    #    so far cannot reproduce this
+    #
+    # smth weird is happening with font size, sometimes the font size of the current session returns a value for what might be the parent session!?
+    src_font_values = current_profile._simple_get("Normal Font")
+    src_normal_font = current_profile.normal_font
+    print(f"src profile font values:{src_font_values}, normal_font: {src_normal_font}")
+    # FYI AFAICT I do not have to set the font (its copied into new profile):
     new_profile = current_profile.local_write_only_copy
+    new_font_values = new_profile.values["Normal Font"]
+    print(f"new_profile font size: {new_font_values}")
 
     # print(f"directories:\n  {current_profile.custom_directory},\n  {current_profile.initial_directory_mode},\n  {current_profile.advanced_working_directory_pane_directory}\n  {current_profile.advanced_working_directory_pane_setting}\n  {current_profile.advanced_working_directory_tab_directory}\n  {current_profile.advanced_working_directory_tab_setting}\n  {current_profile.advanced_working_directory_window_directory}\n  {current_profile.advanced_working_directory_window_setting}")
     new_profile.set_initial_directory_mode(iterm2.InitialWorkingDirectory.INITIAL_WORKING_DIRECTORY_RECYCLE)
