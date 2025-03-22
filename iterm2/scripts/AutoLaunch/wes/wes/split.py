@@ -64,6 +64,18 @@ async def prepare_new_profile(session: iterm2.Session, force_local: bool) -> tup
     return new_profile, is_ssh
 
 
+async def get_path(session: iterm2.Session) -> str:
+    # default to using split_path to avoid issues with path being unreliable over SSH when running a program
+    split_path = await session.async_get_variable("user.split_path")
+    if split_path is not None:
+        print(f"using split_path: {split_path}")
+        return split_path
+
+    path = await session.async_get_variable("path")
+    print(f"no split_path found, using path: {path}")
+    return path
+
+
 async def wes_new_window(connection: iterm2.Connection, force_local=False):
     prior_window = await get_current_window(connection)
     if prior_window is None:
@@ -74,9 +86,7 @@ async def wes_new_window(connection: iterm2.Connection, force_local=False):
     session = await get_current_session_throw_if_none(connection)
     new_profile, is_ssh = await prepare_new_profile(session, force_local)
 
-    # default to using split_path to avoid issues with path being unreliable over SSH when running a program
-    split_path = await session.async_get_variable("user.split_path")
-    path = split_path or await session.async_get_variable("path")
+    path = await get_path(session)
 
     new_window = await iterm2.Window.async_create(connection, profile_customizations=new_profile)
     if new_window is None:
