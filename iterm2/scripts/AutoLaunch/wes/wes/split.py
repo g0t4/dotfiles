@@ -65,7 +65,10 @@ async def prepare_new_profile(session: iterm2.Session, force_local: bool) -> tup
 
 
 async def get_path(session: iterm2.Session) -> str:
-    # default to using split_path to avoid issues with path being unreliable over SSH when running a program
+    # default to using split_path to avoid issues with path being unreliable
+    #   i.e. over SSH when running a program the path changes back to a local path!
+    #     once program completes it reverts to remote path
+    #     I capture split_path myself --on-variable PWD so it is always what I want
     split_path = await session.async_get_variable("user.split_path")
     if split_path is not None:
         print(f"using split_path: {split_path}")
