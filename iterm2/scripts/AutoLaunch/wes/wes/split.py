@@ -108,7 +108,7 @@ async def wes_new_tab(connection, force_local=False):
     session = await get_current_session_throw_if_none(connection)
     new_profile, is_ssh = await prepare_new_profile(session, force_local)
 
-    path = await session.async_get_variable("path")
+    path = await get_path(session)
 
     new_tab = await prior_window.async_create_tab(profile_customizations=new_profile)
     if new_tab is None:
