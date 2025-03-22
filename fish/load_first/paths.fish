@@ -127,3 +127,8 @@ end
 if test -d /opt/cuda/bin
     export PATH="/opt/cuda/bin:$PATH"
 end
+
+# ~/.npm-global/bin
+if test -d "$HOME/.npm-global/bin"
+    export PATH="$HOME/.npm-global/bin:$PATH"
+end
