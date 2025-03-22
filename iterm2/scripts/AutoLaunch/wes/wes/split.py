@@ -140,7 +140,7 @@ async def wes_split_pane(connection: iterm2.Connection, split_vert: bool = False
     session = await get_current_session_throw_if_none(connection)
     new_profile, is_ssh = await prepare_new_profile(session, force_local)
 
-    path = await session.async_get_variable("path")
+    path = await get_path(session)
 
     new_session = await session.async_split_pane(vertical=split_vert, profile_customizations=new_profile)
     if new_session is None:
