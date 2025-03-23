@@ -33,6 +33,10 @@ return {
         --  Unsure => terminal windows, thus far I have been apprehensive and prefer iterm panes, but I can give it a try and see
         --   PRN, add motion or keymap to select a "cell"
         "Vigemus/iron.nvim",
+        enabled = true,
+        event = { "BufReadPre", "BufNewFile" },
+        dir = "~/repos/github/g0t4/iron.nvim",
+
         config = function()
             local iron = require("iron.core")
             local view = require("iron.view")
@@ -105,18 +109,11 @@ return {
                     cr = "<space>is<cr>",
                     interrupt = "<space>isi",
                     exit = "<space>isq",
-                    clear = "<space>ic", -- why isn't this clearing? just submits prompt
-                    -- FYI works fine in lua repl
-                    -- TODO why does ipython and python3 repls not work with clear?
-                    --   if i go into terminal mode then ctrl+l from me clears
-                    --   but, when iron.nvim sends FF(ctrl+l) it is submitting the prompt (not clearing)
-                    --      https://github.com/Vigemus/iron.nvim/blob/master/lua/iron/core.lua#L720
-                    -- btw, if I change to terminal, go into insert mode I can use ctrl+l to clear it
-                    --   maybe I should setup terminals so ctrl+l always clears (doesn't open nvim-tree)?
-                    --   though if I really start using builtin terminal then maybe I will want ctrl-L to open to PWD?
-                    --   btw, what is the insert mode for a terminal buffer?
-                    --      right now I can't exit this terminal insert mode... only enter it with `i`
-                    --      also doesn't show blue like regular buffer in status bar
+                    --
+                    clear = "<space>ic",
+                    -- FYI fixed clear when using bracketed_paste_python:
+                    --   https://github.com/g0t4/iron.nvim/blob/3860d7f/lua/iron/core.lua#L167
+                    --   otherwise formatter replaces FF with CR b/c it seems FF as empty line
                 },
                 highlight = {
                     -- can set hl group to control style too
