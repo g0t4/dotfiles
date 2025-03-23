@@ -85,9 +85,11 @@ return {
                     send_line = "<space>isl", -- *
                     send_paragraph = "<space>isp", -- * think {}
                     send_until_cursor = "<space>isu", -- run file to cursor
-                    send_mark = "<space>ism",
+                    --
                     send_code_block = "<space>isb", -- *** OMG YES, works with block_deviders (above)
-                    send_code_block_and_move = "<space>isn",
+                    send_code_block_and_move = "<space>isn", -- also moves to next cell
+                    --
+                    send_mark = "<space>ism",
                     mark_motion = "<space>imc",
                     mark_visual = "<space>imc",
                     remove_mark = "<space>imd",
