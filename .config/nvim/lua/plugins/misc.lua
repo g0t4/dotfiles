@@ -38,6 +38,9 @@ return {
             local view = require("iron.view")
             local common = require("iron.fts.common")
 
+            -- ok yeah, I like this... if causes issues I can readdress it later... also should move this to a terminal config section not just for iron.nvim
+            vim.keymap.set('t', '<esc>', "<C-\\><C-n>", { desc = 'exit terminal' }) -- that way Esc in terminal mode allows exiting to normal mode, I hate doing ctrl-\,ctrl-n to do that
+
             iron.setup {
                 config = {
                     scratch_repl = true, -- discard repls?
