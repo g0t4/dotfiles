@@ -47,6 +47,11 @@ return {
                             -- command: either a table, or a func that returns a table
                             command = { "fish" },
                         },
+                        lua = {
+                            command = { "lua" },
+                            -- are these not set OOB? or is it diff default for lua?
+                            block_deviders = { "-- %% ", "--%%" },
+                        },
                         python = {
                             command = { "ipython", "--no-autoindent" },
                             -- command = { "python3" },
