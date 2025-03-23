@@ -30,8 +30,7 @@ return {
         -- FULLY EVALUATE iron.nvim before touching anything else
         --  Likes => all the keymaps make 100% sense, esp `isb` for block (cell deliniator)
         --    multiple languages (i.e. python, lua, shell)
-        --  Unsure => terminal windows, thus far I have been apprehensive and prefer iterm panes, but I can give it a try and see
-        --   PRN, add motion or keymap to select a "cell"
+        --  Actually using terminal windows makes sense as most of the time I am not gonna be using that terminal, just sending commands with keymaps
         --
         -- "Vigemus/iron.nvim",
         "g0t4/iron.nvim",
