@@ -99,9 +99,9 @@ return {
                     mark_visual = "<space>imc",
                     remove_mark = "<space>imd",
                     cr = "<space>is<cr>",
-                    interrupt = "<space>is<space>",
+                    interrupt = "<space>isi",
                     exit = "<space>isq",
-                    clear = "<space>icl", -- why isn't this clearing? just submits prompt
+                    clear = "<space>ic", -- why isn't this clearing? just submits prompt
                     -- btw, if I change to terminal, go into insert mode I can use ctrl+l to clear it
                     --   maybe I should setup terminals so ctrl+l always clears (doesn't open nvim-tree)?
                     --   though if I really start using builtin terminal then maybe I will want ctrl-L to open to PWD?
