@@ -87,24 +87,30 @@ return {
                     restart_repl = "<space>iR", -- calls `IronRestart` to restart the repl
 
                     -- send keymaps (<leader>is prefix currently):
-                    send_motion = "<space>isc", -- motion right after!
-                    visual_send = "<space>isc", -- send selection
+                    send_motion = "<space>ism", -- motion right after!
+                    visual_send = "<space>isv", -- send selection
                     send_file = "<space>isf", -- *
                     send_line = "<space>isl", -- *
                     send_paragraph = "<space>isp", -- * think {}
-                    send_until_cursor = "<space>isu", -- run file to cursor
+                    send_until_cursor = "<space>isc", -- run file to cursor
                     --
                     send_code_block = "<space>isb", -- *** OMG YES, works with block_deviders (above)
                     send_code_block_and_move = "<space>isn", -- also moves to next cell
                     --
-                    send_mark = "<space>ism",
-                    mark_motion = "<space>imc",
-                    mark_visual = "<space>imc",
-                    remove_mark = "<space>imd",
+                    -- send_mark = "<space>ism",
+                    -- mark_motion = "<space>imc",
+                    -- mark_visual = "<space>imc",
+                    -- remove_mark = "<space>imd",
+                    --
                     cr = "<space>is<cr>",
                     interrupt = "<space>isi",
                     exit = "<space>isq",
                     clear = "<space>ic", -- why isn't this clearing? just submits prompt
+                    -- FYI works fine in lua repl
+                    -- TODO why does ipython and python3 repls not work with clear?
+                    --   if i go into terminal mode then ctrl+l from me clears
+                    --   but, when iron.nvim sends FF(ctrl+l) it is submitting the prompt (not clearing)
+                    --      https://github.com/Vigemus/iron.nvim/blob/master/lua/iron/core.lua#L720
                     -- btw, if I change to terminal, go into insert mode I can use ctrl+l to clear it
                     --   maybe I should setup terminals so ctrl+l always clears (doesn't open nvim-tree)?
                     --   though if I really start using builtin terminal then maybe I will want ctrl-L to open to PWD?
