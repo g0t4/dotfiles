@@ -7,20 +7,19 @@
 #   i.e. pip => pip3, python => python3
 #   global interpreter => command3 is ubiquitous AND recommended (for the default 3.X version)
 #   venv => command3 defined (for all v3 venvs!)
-abbr py 'python3'
-abbr python 'python3'
+# use ipython b/c it reminds me its REPL is VASTLY superior (color, tab completion, etc)
+abbr py 'ipython3'
+abbr python 'ipython3'
 abbr pip 'pip3'
-abbr pydoc 'pydoc3'
-abbr python-config 'python3-config'
 
 # PRN go back to python3.10/11 etc in ve* abbrs?
 ### VENV (--clear allows to recreate venv if already dir exists, --upgrade-deps makes sure pip is latest)
-abbr ve 'python3 -m venv --clear --upgrade-deps'
+abbr ve 'ipython3 -m venv --clear --upgrade-deps'
 abbr vedir 'echo $VIRTUAL_ENV'
-abbr veinit 'python3 -m venv --clear --upgrade-deps .venv && vea' # PRN follow with pip install -r requirements.txt (if req file exists)
-abbr veinitr 'python3 -m venv --clear --upgrade-deps .venv && vea && pip3 install -r requirements.txt'
+abbr veinit 'ipython3 -m venv --clear --upgrade-deps .venv && vea' # PRN follow with pip install -r requirements.txt (if req file exists)
+abbr veinitr 'ipython3 -m venv --clear --upgrade-deps .venv && vea && pip3 install -r requirements.txt'
 # PRN make install requirements.txt conditional on its presence in current dir => i.e. fish abbreviation + function
-abbr veinitl 'python3 -m venv --clear --upgrade-deps .venv.local && vea'
+abbr veinitl 'ipython3 -m venv --clear --upgrade-deps .venv.local && vea'
 
 # manually activate/deactivate a venv, remember I have my autovenv plugin that will activate on cd
 # FYI use activate.fish for fish (override is in python-specific.fish)

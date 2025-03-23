@@ -7,15 +7,13 @@
 #   i.e. pip => pip3, python => python3
 #   global interpreter => command3 is ubiquitous AND recommended (for the default 3.X version)
 #   venv => command3 defined (for all v3 venvs!)
-abbr py python3
-abbr python python3
+abbr py ipython3
+abbr python ipython3
 abbr pip pip3
-abbr pydoc pydoc3
-abbr python-config python3-config
 
 # PRN go back to python3.10/11 etc in ve* abbrs?
 ### VENV (--clear allows to recreate venv if already dir exists, --upgrade-deps makes sure pip is latest)
-abbr ve 'python3 -m venv --clear --upgrade-deps'
+abbr ve 'ipython3 -m venv --clear --upgrade-deps'
 abbr vedir 'echo $VIRTUAL_ENV'
 
 function relative_path
