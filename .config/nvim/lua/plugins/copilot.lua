@@ -321,7 +321,8 @@ vim.api.nvim_set_keymap("n", "<F13>", ":lua SwitchCopilot()<CR>", { noremap = tr
 vim.api.nvim_set_keymap("i", "<F13>", "<Esc>:lua SwitchCopilot()<CR>a", { noremap = true, silent = true })
 
 function IsAskOpenAIPredictionsAvailable()
-    return require("ask-openai.config").get_options().predictions
+    -- FYI, later, replace with final setting
+    return require("ask-openai.config").get_options().tmp.predictions
 end
 
 function EnableAllCopilots()
