@@ -32,10 +32,13 @@ return {
         --    multiple languages (i.e. python, lua, shell)
         --  Unsure => terminal windows, thus far I have been apprehensive and prefer iterm panes, but I can give it a try and see
         --   PRN, add motion or keymap to select a "cell"
-        "Vigemus/iron.nvim",
+        --
+        -- "Vigemus/iron.nvim",
+        "g0t4/iron.nvim",
+        branch = "fix-clear-repl",
+        -- dir = "~/repos/github/g0t4/iron.nvim",
         enabled = true,
         event = { "BufReadPre", "BufNewFile" },
-        dir = "~/repos/github/g0t4/iron.nvim",
 
         config = function()
             local iron = require("iron.core")
