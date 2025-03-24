@@ -77,3 +77,9 @@ end
 
 # *** hushlogin
 touch ~/.hushlogin
+
+if test -d ~/.ipython
+    mkdir -p ~/.ipython/profile_default
+    ln -f -s $dotfiles_dir/.ipython/profile_default/ipython_config.py ~/.ipython/profile_default/.
+    ln -f -s $dotfiles_dir/.ipython/profile_default/ipython_kernel_config.py ~/.ipython/profile_default/.
+end
