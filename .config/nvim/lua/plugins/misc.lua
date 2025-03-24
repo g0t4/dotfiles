@@ -166,6 +166,7 @@ return {
                             block_deviders = { "-- %% ", "--%%" },
                         },
                         python = {
+                            -- PRN if need be, create a profile for configuring how ipython runs inside of iron.nvim (only if issues with config outside of nvim), --profile foo
                             command = { "ipython", "--no-autoindent" },
                             -- command = { "python3" },
                             -- format = common.bracketed_paste_python, -- use unadulterated formatter
