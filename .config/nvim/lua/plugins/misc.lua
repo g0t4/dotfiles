@@ -55,7 +55,11 @@ return {
                 iron.clear_repl()
                 iron.send_code_block()
             end)
-
+            -- paragraph:
+            vim.keymap.set('n', '<leader>icp', function()
+                iron.clear_repl()
+                iron.send_paragraph()
+            end)
 
 
             iron.setup {
