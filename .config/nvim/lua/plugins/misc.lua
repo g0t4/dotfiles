@@ -76,6 +76,11 @@ return {
             end
 
             function my_clear()
+                -- STATUS:
+                -- - btw, this works for ipython
+                -- - works with lua to stop the empty scrollback lines after ctrl-l
+                -- - buggy for fish shell is all (so far that I have found)
+                --
                 -- clear scrollback somehow clears in lua (kinda, the lines go away but empty lines still are there in scrollback)
                 -- for almost all other shells (i.e. ipython, fish) the scrollback is still there entirely
                 iron.clear_repl()
