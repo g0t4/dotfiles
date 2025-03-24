@@ -3,6 +3,9 @@
 -- ** esc to normal mode
 -- one reason this may be a problem is using esc keymaps (binds) in fish shell (etc)
 --    one workaround is to switch to using alt+* so alt effectively becomes my meta key instead of esc (I think this will work out just fine)
+--     ya know, when I am using a terminal, a primary reason to exit terminal mode is just to switch panes... why not just click with mouse in that one case?
+--       would this obviate the need for esc to exit to normal mode?
+--       or should I suck it up and learn to use <C-\><C-n> which is not the end of the world either? or remap it?
 vim.keymap.set('t', '<esc>', "<C-\\><C-n>", { desc = 'exit terminal' }) -- that way Esc in terminal mode allows exiting to normal mode, I hate doing ctrl-\,ctrl-n to do that
 
 -- PRN later... look into using OSC codes
