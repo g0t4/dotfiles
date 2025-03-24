@@ -78,7 +78,13 @@ return {
                         python = {
                             command = { "ipython", "--no-autoindent" },
                             -- command = { "python3" },
-                            format = common.bracketed_paste_python,
+                            -- format = common.bracketed_paste_python, -- use unadulterated formatter
+                            format = function(lines, extras)
+                                result = common.bracketed_paste_python(lines, extras)
+                                -- remove lines that only contain a comment
+                                filtered = vim.tbl_filter(function(line) return not string.match(line, "^%s*#") end, result)
+                                return filtered
+                            end,
                             block_deviders = { "# %%", "#%%" }, -- TODO TRY BLOCK DIVIDERS with which motion?
 
                             -- use iterm to split pane, not sure this does what ChatGPT thought it would do :)... this just runs iterm in a nested terminal window
