@@ -46,6 +46,7 @@ return {
 
             -- ok yeah, I like this... if causes issues I can readdress it later... also should move this to a terminal config section not just for iron.nvim
             vim.keymap.set('t', '<esc>', "<C-\\><C-n>", { desc = 'exit terminal' }) -- that way Esc in terminal mode allows exiting to normal mode, I hate doing ctrl-\,ctrl-n to do that
+
             -- ok I ❤️  THESE:
             vim.keymap.set('n', '<leader>icl', function()
                 iron.clear_repl()
@@ -55,12 +56,10 @@ return {
                 iron.clear_repl()
                 iron.send_code_block()
             end)
-            -- paragraph:
             vim.keymap.set('n', '<leader>icp', function()
                 iron.clear_repl()
                 iron.send_paragraph()
             end)
-
 
             iron.setup {
                 config = {
