@@ -146,19 +146,20 @@ return {
             vim.keymap.set('n', '<leader>icl', function()
                 my_clear()
                 iron.send_line()
-            end)
+            end, { desc = 'clear => send line' })
             vim.keymap.set('n', '<leader>icb', function()
                 my_clear()
                 iron.send_code_block()
-            end)
+            end, { desc = 'clear => send block' })
             vim.keymap.set('n', '<leader>icp', function()
                 my_clear()
                 iron.send_paragraph({})
-            end)
+            end, { desc = 'clear => send paragraph' })
             vim.keymap.set('n', '<leader>icf', function()
                 my_clear()
                 iron.send_file()
-            end)
+            end, { desc = 'clear => send file' })
+
 
             iron.setup {
                 config = {
