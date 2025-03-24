@@ -1,3 +1,19 @@
+-- TERMINAL CONFIG
+-- use esc with terminal buffers too
+vim.keymap.set('t', '<esc>', "<C-\\><C-n>", { desc = 'exit terminal' }) -- that way Esc in terminal mode allows exiting to normal mode, I hate doing ctrl-\,ctrl-n to do that
+
+-- PRN later... look into using OSC codes
+--autocmd for TermRequest
+-- vim.api.nvim_create_autocmd({ "TermRequest" }, {
+--     -- https://github.com/neovim/neovim/issues/4413
+--     callback = function(evt)
+--         -- i.e. handle current dir changes (i.e. could use to show nvim-tree for that dir)
+--         --   data = "\27]1337;CurrentDir=/path/to/foo",
+--         print("termrequest: ")
+--         print("termrequest: ", vim.inspect(evt))
+--     end
+-- })
+
 return {
 
 
@@ -43,22 +59,59 @@ return {
             local iron = require("iron.core")
             local view = require("iron.view")
             local common = require("iron.fts.common")
+            local ll = require("iron.lowlevel")
 
-            -- ok yeah, I like this... if causes issues I can readdress it later... also should move this to a terminal config section not just for iron.nvim
-            vim.keymap.set('t', '<esc>', "<C-\\><C-n>", { desc = 'exit terminal' }) -- that way Esc in terminal mode allows exiting to normal mode, I hate doing ctrl-\,ctrl-n to do that
+            function my_repl()
+                local meta = vim.b[0].repl
 
+                if not meta or not ll.repl_exists(meta) then
+                    ft = ft or ll.get_buffer_ft(0)
+                    meta = ll.get(ft)
+                end
+
+                if not ll.repl_exists(meta) then
+                    return
+                end
+                return meta
+            end
+
+            function my_clear()
+                -- clear scrollback somehow clears in lua (kinda, the lines go away but empty lines still are there in scrollback)
+                -- for almost all other shells (i.e. ipython, fish) the scrollback is still there entirely
+                iron.clear_repl()
+                meta = my_repl()
+                -- vim.fn.feedkeys("^L", 'n') -- if wanna send self, need to switch buffers first vim.api.nvim_set_current_buf(bufnr) + vim.defer_fn if needed
+                -- DOES NOT FULLY WORK
+                --  interesting when I use this myself in fish terminal buffer it does work
+                --  focus and go into terminal mode
+                --  Ctrl-L
+                --  :set scrollback=1
+                --  :set scrollback=100000
+                --  FOR NOW try not to rely on too much scrolling backwards is likely best bet
+
+                local sb = vim.bo[meta.bufnr].scrollback
+                -- hack to truncate scrollback, works in ipython, half way clears in fish
+                vim.bo[meta.bufnr].scrollback = 1
+                vim.bo[meta.bufnr].scrollback = sb
+            end
+
+            -- clear and then send
             -- ok I ❤️  THESE:
             vim.keymap.set('n', '<leader>icl', function()
-                iron.clear_repl()
+                my_clear()
                 iron.send_line()
             end)
             vim.keymap.set('n', '<leader>icb', function()
-                iron.clear_repl()
+                my_clear()
                 iron.send_code_block()
             end)
             vim.keymap.set('n', '<leader>icp', function()
-                iron.clear_repl()
-                iron.send_paragraph()
+                my_clear()
+                iron.send_paragraph({})
+            end)
+            vim.keymap.set('n', '<leader>icf', function()
+                my_clear()
+                iron.send_file()
             end)
 
             iron.setup {
