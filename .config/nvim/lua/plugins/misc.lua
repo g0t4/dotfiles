@@ -182,18 +182,26 @@ return {
                             -- format = require("iron.fts.common").bracketed_paste, -- for ipython?
                             -- format = require("iron.fts.common").bracketed_paste_python, -- for python3 not ipython, right?
                             format = function(lines, extras)
-                                -- CRAP so ... I actually like interleaving each line as its own cell! b/c then I can see command1=> out1, command2=>out2... I don't have to add labels into my output!
-                                --    THAT SAID, if I could easily label output, I probably would prefer that b/c the commands are sometimes distracting and its hard to see consecutive output... GAH
-                                --    TODO can I get each line as a cell and STOP on an error? that is my only gripe about line == cell...
-                                --       WORKAROUND => wrap lines into a function (allows to group lines and stop on failure)
-                                -- result = require("iron.fts.common").bracketed_paste(lines, extras) -- cell = literal cells in the sheet (or selection if intra cell)
-                                result = require("iron.fts.common").bracketed_paste_python(lines, extras) -- *** defacto is cell per line
-                                -- remove lines that only contain a comment
-                                filtered = vim.tbl_filter(function(line) return not string.match(line, "^%s*#") end, result)
-                                return filtered
-                            end,
-                            block_deviders = { "# %%", "#%%" }, -- TODO TRY BLOCK DIVIDERS with which motion?
+                                -- TLDR:
+                                --   I really like cell per line which effectively auto labels each print statement! with the full chunk of code
+                                --     really this is one statement per cell (i.e. functions act as wrappers)
+                                --     I do not really want to label my output manually every time
+                                --     bracketed_paste => runs entire selection as one chunk (so isf => all of file in one go is impossible to discren WTF is WHAT)
+                                --   ONLY nice to have would be to stop on the first failing line (cell)  when running multiple lines (cells)
+                                --   IF I want batched lines (not interleaved):
+                                --     I can use a function which is treated as one statement/line/cell
+                                --   TBH, it did take a second to get used to the interleaved code and lines but now I really, really like it
+                                -- result = require("iron.fts.common").bracketed_paste(lines, extras) -- everything selected is one cell (yuck)
+                                result = require("iron.fts.common").bracketed_paste_python(lines, extras) -- *** defacto is cell per line (yes)
+                                --  FYI I am unsure that bracketed_paste/bracketed_paste_python differences are intended so if they "fix" the way I like it, then I should add my own version
 
+                                -- remove lines that only contain a comment
+                                -- FYI I really like this with cell per line style! b/c it makes it more compact!!!
+                                -- filtered = vim.tbl_filter(function(line) return not string.match(line, "^%s*#") end, result)
+                                -- return filtered
+                                return result
+                            end,
+                            block_deviders = { "# %%", "#%%" },
                             -- use iterm to split pane, not sure this does what ChatGPT thought it would do :)... this just runs iterm in a nested terminal window
                             -- command = { "osascript", "-e", [[tell app "iTerm" to tell the current window to create tab with default profile]] },
                         }
