@@ -99,7 +99,6 @@ return {
         config = function()
             local iron = require("iron.core")
             local view = require("iron.view")
-            local common = require("iron.fts.common")
             local ll = require("iron.lowlevel")
 
             function my_repl()
@@ -179,9 +178,16 @@ return {
                             -- PRN if need be, create a profile for configuring how ipython runs inside of iron.nvim (only if issues with config outside of nvim), --profile foo
                             command = { "ipython", "--no-autoindent" },
                             -- command = { "python3" },
-                            -- format = common.bracketed_paste_python, -- use unadulterated formatter
+                            -- FYI careful with bracketed_paste VS bracketed_paste_python!!!
+                            -- format = require("iron.fts.common").bracketed_paste, -- for ipython?
+                            -- format = require("iron.fts.common").bracketed_paste_python, -- for python3 not ipython, right?
                             format = function(lines, extras)
-                                result = common.bracketed_paste_python(lines, extras)
+                                -- CRAP so ... I actually like interleaving each line as its own cell! b/c then I can see command1=> out1, command2=>out2... I don't have to add labels into my output!
+                                --    THAT SAID, if I could easily label output, I probably would prefer that b/c the commands are sometimes distracting and its hard to see consecutive output... GAH
+                                --    TODO can I get each line as a cell and STOP on an error? that is my only gripe about line == cell...
+                                --       WORKAROUND => wrap lines into a function (allows to group lines and stop on failure)
+                                -- result = require("iron.fts.common").bracketed_paste(lines, extras) -- cell = literal cells in the sheet (or selection if intra cell)
+                                result = require("iron.fts.common").bracketed_paste_python(lines, extras) -- *** defacto is cell per line
                                 -- remove lines that only contain a comment
                                 filtered = vim.tbl_filter(function(line) return not string.match(line, "^%s*#") end, result)
                                 return filtered
@@ -190,7 +196,6 @@ return {
 
                             -- use iterm to split pane, not sure this does what ChatGPT thought it would do :)... this just runs iterm in a nested terminal window
                             -- command = { "osascript", "-e", [[tell app "iTerm" to tell the current window to create tab with default profile]] },
-                            -- format = require("iron.fts.common").bracketed_paste,
                         }
                     },
                     repl_filetype = function(bufnr, ft)
