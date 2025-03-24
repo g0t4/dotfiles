@@ -126,7 +126,7 @@ return {
                     interrupt = "<space>isi",
                     exit = "<space>isq",
                     --
-                    clear = "<space>ic",
+                    clear = "<space>icc", -- use icc so it immediately executes, if I left it at ic it hangs while waiting for any three char combos
                     -- FYI fixed clear when using bracketed_paste_python:
                     --   https://github.com/g0t4/iron.nvim/blob/3860d7f/lua/iron/core.lua#L167
                     --   otherwise formatter replaces FF with CR b/c it seems FF as empty line
