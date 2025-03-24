@@ -1,5 +1,8 @@
 -- TERMINAL CONFIG
--- use esc with terminal buffers too
+
+-- ** esc to normal mode
+-- one reason this may be a problem is using esc keymaps (binds) in fish shell (etc)
+--    one workaround is to switch to using alt+* so alt effectively becomes my meta key instead of esc (I think this will work out just fine)
 vim.keymap.set('t', '<esc>', "<C-\\><C-n>", { desc = 'exit terminal' }) -- that way Esc in terminal mode allows exiting to normal mode, I hate doing ctrl-\,ctrl-n to do that
 
 -- PRN later... look into using OSC codes
