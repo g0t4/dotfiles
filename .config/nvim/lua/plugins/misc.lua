@@ -193,13 +193,13 @@ return {
                                 --   TBH, it did take a second to get used to the interleaved code and lines but now I really, really like it
                                 -- result = require("iron.fts.common").bracketed_paste(lines, extras) -- everything selected is one cell (yuck)
                                 result = require("iron.fts.common").bracketed_paste_python(lines, extras) -- *** defacto is cell per line (yes)
+
                                 --  FYI I am unsure that bracketed_paste/bracketed_paste_python differences are intended so if they "fix" the way I like it, then I should add my own version
 
                                 -- remove lines that only contain a comment
                                 -- FYI I really like this with cell per line style! b/c it makes it more compact!!!
-                                -- filtered = vim.tbl_filter(function(line) return not string.match(line, "^%s*#") end, result)
-                                -- return filtered
-                                return result
+                                filtered = vim.tbl_filter(function(line) return not string.match(line, "^%s*#") end, result)
+                                return filtered
                             end,
                             block_deviders = { "# %%", "#%%" },
                             -- use iterm to split pane, not sure this does what ChatGPT thought it would do :)... this just runs iterm in a nested terminal window
