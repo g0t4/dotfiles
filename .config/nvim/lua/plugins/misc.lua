@@ -25,6 +25,15 @@ vim.keymap.set('t', '<esc>', "<C-\\><C-n>", { desc = 'exit terminal' }) -- that 
 -- end
 
 
+-- ** pros/cons of terminal in nvim
+-- pros:
+-- - sending lines and executing lines right out of a script so I don't have to switch tabs/panes as I build out scripts
+-- - I like path completion inside of nvim! it works well too (can see the coc completion results for actual files) => fish shell tab complete is great too, but this is like icing on top of what fish does
+-- cons:
+-- - scrollback clearing is problematic, but can likely be fixed with a bit more keymap customizations
+-- - accidentally forget and use Cmd+K, which I do often enough for just nvim/vim itself :)
+
+
 -- FEELS MUCH BETTER:
 --  switch to terminal buffer => starts in terminal mode (not normal mode which is default)
 vim.api.nvim_create_autocmd({ "BufEnter" }, {
