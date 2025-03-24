@@ -8,6 +8,32 @@
 --       or should I suck it up and learn to use <C-\><C-n> which is not the end of the world either? or remap it?
 vim.keymap.set('t', '<esc>', "<C-\\><C-n>", { desc = 'exit terminal' }) -- that way Esc in terminal mode allows exiting to normal mode, I hate doing ctrl-\,ctrl-n to do that
 
+
+-- *** switch windows (leave terminal window)
+-- TODO figure out if I wanna do smth besides click out of a terminal...
+--   honestly with iron.nvim I think I shouldn't need to spend much time (if any) in the terminal
+--   I should be sending commands is about it from scripts that I always create in files anyways!
+--   that said when building cmds, tab completion in fish shell is important
+--     yes I get LSP completions but it doesn't feel the same (can it?)
+-- for _, arrow in ipairs({ "right", "left", "up", "down" }) do
+--     -- <Cmd>wincmd == one keymap for both modes (n/i) + preserve mode after switch
+--     --   also, this adds 4 fewer keymaps overall, so when I use :map to list them all, I see fewer
+--     local dir = arrow == "left" and "h" or arrow == "right" and "l" or arrow == "up" and "k" or "j"
+--     -- disable "i" insert mode b/c I use alt+right for accept next work in suggestions
+--     -- vim.keymap.set({ "t" }, "<C-w><" .. arrow .. ">", "<Cmd>wincmd " .. dir .. "<CR>")
+--     -- CRAP Ctrl-W is not good to hijack :) as i use it to clear a word back
+-- end
+
+
+-- FEELS MUCH BETTER:
+--  switch to terminal buffer => starts in terminal mode (not normal mode which is default)
+vim.api.nvim_create_autocmd({ "BufEnter" }, {
+    pattern = "term://*",
+    callback = function()
+        vim.cmd("startinsert")
+    end
+})
+
 -- PRN later... look into using OSC codes
 --autocmd for TermRequest
 -- vim.api.nvim_create_autocmd({ "TermRequest" }, {
