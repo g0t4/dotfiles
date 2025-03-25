@@ -44,7 +44,7 @@ vim.api.nvim_create_autocmd({ "BufEnter" }, {
 })
 
 -- PRN later... look into using OSC codes
---autocmd for TermRequest
+-- autocmd for TermRequest
 -- vim.api.nvim_create_autocmd({ "TermRequest" }, {
 --     -- https://github.com/neovim/neovim/issues/4413
 --     callback = function(evt)
@@ -213,7 +213,8 @@ return {
                         -- set repl filetype (to language used)
                         return ft
                     end,
-                    repl_open_cmd = view.split.vertical("50%"),
+                    repl_open_cmd = "vertical split", -- use regular window commands
+                    -- repl_open_cmd = view.split.vertical("50%"), -- DSL style... doesn't adjust with Ctrl+W,= (have to toggle close/open to fix split at 50% after font zoom change)
                     -- When repl_open_cmd is an array table, IronRepl uses first cmd:
                     -- repl_open_cmd = {
                     --   view.split.vertical.rightbelow("%40"), -- cmd_1: open a repl to the right
