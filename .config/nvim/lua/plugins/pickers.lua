@@ -198,6 +198,13 @@ return {
                     },
                 },
                 extensions = {
+                    coc = {
+                        -- theme = 'ivy',
+                        -- prefer_locations = true, -- always use Telescope locations to preview definitions/declarations/implementations etc
+                        -- push_cursor_on_edit = true, -- save the cursor position to jump back in the future
+                        timeout = 10000, -- timeout for coc commands
+                    },
+
                     live_grep_args = {
                         -- FYI ok to leave on auto_quoting... otherwise I always have to quote when I want multiple words in search string with spaces
                         --    even with it on... I can mostly think about the prompt as command line args... and it only works by magic in special cases for me and I don't think those will throw me off as I can always use "" if I am confused
@@ -219,6 +226,21 @@ return {
                 }
             })
             -- FYI this complements <leader>s which opens live_grep with empty search query
+            -- set a keymap to builtin.lsp_document_symbols => <leader>lsp_document_symbols => <leader>lds?
+            vim.keymap.set('n', '<leader>l', function()
+                vim.cmd(":Telescope coc")
+            end, { desc = "Coc pickers" })
+            vim.keymap.set('n', '<leader>ls', function() vim.cmd(":Telescope coc document_symbols") end, { desc = "Coc document symbols" })
+            vim.keymap.set('n', '<leader>lws', function() vim.cmd(":Telescope coc workspace_symbols") end, { desc = "Coc workspace symbols" })
+            vim.keymap.set('n', '<leader>ld', function() vim.cmd(":Telescope coc diagnostics") end, { desc = "Coc diagnostics" })
+            vim.keymap.set('n', '<leader>lwd', function() vim.cmd(":Telescope coc workspace_diagnostics") end, { desc = "Coc workspace diagnostics" })
+            vim.keymap.set('n', '<leader>lr', function() vim.cmd(":Telescope coc references") end, { desc = "Coc references" })
+            vim.keymap.set('n', '<leader>li', function() vim.cmd(":Telescope coc implementations") end, { desc = "Coc implementations" })
+            vim.keymap.set('n', '<leader>lu', function() vim.cmd(":Telescope coc references_used") end, { desc = "Coc references used" })
+            -- FYI can always leave off specific sub key maps and just do <leader>lx => opens coc pickers list with x prefilled and narrowed to matching pickers, just hit Enter to start it... basically gets you keymaps w/o explicitly setting them
+            --  sometimes easier to not have to memorize the sub keymaps and just search the picker picker list... until that's annoying enough that a keymap makes sense
+
+
             vim.keymap.set('n', '<leader>w', function()
                 require('telescope.builtin').live_grep({
                     default_text = vim.fn.expand('<cword>')
@@ -226,6 +248,16 @@ return {
             end, { desc = "Live grep, starting with word under cursor" })
         end,
     },
+
+    {
+        -- use coc as the LSP client for telescope pickers (vs OOB builtin which uses nvim LSP client)
+        "fannheyward/telescope-coc.nvim",
+        dependencies = { "nvim-telescope/telescope.nvim" },
+        config = function()
+            require("telescope").load_extension("coc")
+        end,
+    },
+
     {
         -- live_grep + pass args!
         --   thus, can pass params to filter file path too (ag's -G, rg's -r glob)
