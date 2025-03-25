@@ -240,10 +240,10 @@ return {
                     send_code_block = "<space>isb", -- *** OMG YES, works with block_deviders (above)
                     send_code_block_and_move = "<space>isn", -- also moves to next cell
                     --
-                    -- send_mark = "<space>ism",
-                    -- mark_motion = "<space>imc",
-                    -- mark_visual = "<space>imc",
-                    -- remove_mark = "<space>imd",
+                    mark_motion = "<space>imm", -- mark a selection use a motion
+                    mark_visual = "<space>imv", -- set marks based on visual selection
+                    remove_mark = "<space>imd", -- remove marks
+                    send_mark = "<space>ims", -- send marked code
                     --
                     cr = "<space>is<cr>",
                     interrupt = "<space>isi",
