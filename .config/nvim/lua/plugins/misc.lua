@@ -143,12 +143,11 @@ return {
             -- clear and then send
             -- ok I ❤️  THESE:
             function clearThen(func)
-                function inner()
+                return function()
+                    -- TODO fix if not open, do not error just do nothing
                     my_clear()
                     func()
                 end
-
-                return inner
             end
 
             -- iron.send_paragraph({}) -- FYI used to be for send_paragraph, do I need the {} for any reason?
