@@ -101,7 +101,7 @@ return {
             local view = require("iron.view")
             local ll = require("iron.lowlevel")
 
-            function my_repl()
+            function get_or_open_repl()
                 local meta = vim.b[0].repl
 
                 if not meta or not ll.repl_exists(meta) then
@@ -124,7 +124,12 @@ return {
                 -- clear scrollback somehow clears in lua (kinda, the lines go away but empty lines still are there in scrollback)
                 -- for almost all other shells (i.e. ipython, fish) the scrollback is still there entirely
                 iron.clear_repl()
-                meta = my_repl()
+                -- TODO do I not wanna open it if its closed, when it comes to clear commands?
+                meta = get_or_open_repl()
+                if meta == nil then
+                    return
+                end
+
                 -- vim.fn.feedkeys("^L", 'n') -- if wanna send self, need to switch buffers first vim.api.nvim_set_current_buf(bufnr) + vim.defer_fn if needed
                 -- DOES NOT FULLY WORK
                 --  interesting when I use this myself in fish terminal buffer it does work
@@ -141,21 +146,20 @@ return {
             end
 
             -- clear and then send
-            -- ok I ❤️  THESE:
             function clearThen(func)
                 return function()
-                    -- TODO fix if not open, do not error just do nothing
                     my_clear()
                     func()
                 end
             end
 
-            -- iron.send_paragraph({}) -- FYI used to be for send_paragraph, do I need the {} for any reason?
+            -- ok I ❤️  THESE:
             vim.keymap.set('n', '<leader>icm', clearThen(function() iron.run_motion("send_motion") end), { desc = 'clear => send motion' })
             vim.keymap.set('v', '<leader>icv', clearThen(function() iron.send(nil, iron.mark_visual()) end), { desc = 'clear => send visual' })
             vim.keymap.set('n', '<leader>icf', clearThen(iron.send_file), { desc = 'clear => send file' })
             vim.keymap.set('n', '<leader>icl', clearThen(iron.send_line), { desc = 'clear => send line' })
             vim.keymap.set('n', '<leader>icp', clearThen(iron.send_paragraph), { desc = 'clear => send paragraph' })
+            -- reminder, with `isp` iron.nvim uses `iron.send_paragraph({})` ... do I need the ({}) for any reason? so far no issues
             vim.keymap.set('n', '<leader>icb', clearThen(iron.send_code_block), { desc = 'clear => send block' })
             vim.keymap.set('n', '<leader>icn', clearThen(function() iron.send_code_block(true) end), { desc = 'clear => send block and move to next block' })
 
