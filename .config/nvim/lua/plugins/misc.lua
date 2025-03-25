@@ -142,10 +142,15 @@ return {
 
             -- clear and then send
             -- ok I ❤️  THESE:
-            vim.keymap.set('n', '<leader>icl', function()
-                my_clear()
-                iron.send_line()
-            end, { desc = 'clear => send line' })
+            function clearThen(func)
+                function inner()
+                    my_clear()
+                    func()
+                end
+                return inner
+            end
+
+            vim.keymap.set('n', '<leader>icl', clearThen(iron.send_line), { desc = 'clear => send line' })
             vim.keymap.set('n', '<leader>icb', function()
                 my_clear()
                 iron.send_code_block()
