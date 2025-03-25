@@ -151,18 +151,13 @@ return {
                 return inner
             end
 
-            vim.keymap.set('n', '<leader>icl', clearThen(iron.send_line), { desc = 'clear => send line' })
-            vim.keymap.set('n', '<leader>icb', clearThen(iron.send_code_block), { desc = 'clear => send block' })
-            vim.keymap.set('n', '<leader>icp', clearThen(iron.send_paragraph), { desc = 'clear => send paragraph' })
             -- iron.send_paragraph({}) -- FYI used to be for send_paragraph, do I need the {} for any reason?
-            vim.keymap.set('n', '<leader>icf', clearThen(iron.send_file), { desc = 'clear => send file' })
             vim.keymap.set('n', '<leader>icm', clearThen(function() iron.run_motion("send_motion") end), { desc = 'clear => send motion' })
-
-            vim.keymap.set('v', '<leader>icv', function()
-                my_clear()
-                iron.send(nil, iron.mark_visual())
-            end, { desc = 'clear => send visual' })
-
+            vim.keymap.set('v', '<leader>icv', clearThen(function() iron.send(nil, iron.mark_visual()) end), { desc = 'clear => send visual' })
+            vim.keymap.set('n', '<leader>icf', clearThen(iron.send_file), { desc = 'clear => send file' })
+            vim.keymap.set('n', '<leader>icl', clearThen(iron.send_line), { desc = 'clear => send line' })
+            vim.keymap.set('n', '<leader>icp', clearThen(iron.send_paragraph), { desc = 'clear => send paragraph' })
+            vim.keymap.set('n', '<leader>icb', clearThen(iron.send_code_block), { desc = 'clear => send block' })
 
             iron.setup {
                 config = {
@@ -236,7 +231,7 @@ return {
                     send_file = "<space>isf", -- *
                     send_line = "<space>isl", -- *
                     send_paragraph = "<space>isp", -- * think {}
-                    send_until_cursor = "<space>isc", -- run file to cursor
+                    send_until_cursor = "<space>isu", -- run file [u]ntil cursor
                     --
                     send_code_block = "<space>isb", -- *** OMG YES, works with block_deviders (above)
                     send_code_block_and_move = "<space>isn", -- also moves to next cell
