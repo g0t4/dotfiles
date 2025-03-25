@@ -166,7 +166,6 @@ return {
             iron.setup {
                 config = {
                     scratch_repl = true, -- discard repls?
-                    -- TODO how can I turn of close prompt or not have to switch to repl to confirm yes/no... and why not just have a "restore" instead so no confirm to close?
                     repl_definition = {
                         sh = {
                             -- command: either a table, or a func that returns a table
