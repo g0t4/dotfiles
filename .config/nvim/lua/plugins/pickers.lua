@@ -199,10 +199,10 @@ return {
                 },
                 extensions = {
                     coc = {
-                        -- theme = 'ivy',
+                        theme = 'ivy', -- bottom layout (similar to existing coc references picker layout... but stands out better... can comment this out to go back to floating)
                         -- prefer_locations = true, -- always use Telescope locations to preview definitions/declarations/implementations etc
-                        -- push_cursor_on_edit = true, -- save the cursor position to jump back in the future
-                        timeout = 10000, -- timeout for coc commands
+                        -- push_cursor_on_edit = true, -- think mark_on_select => mark where you jump to when you make a selection (this is on by default, so only false changes this)
+                        timeout = 20000, -- timeout for coc commands
                     },
 
                     live_grep_args = {
