@@ -156,10 +156,8 @@ return {
             vim.keymap.set('n', '<leader>icp', clearThen(iron.send_paragraph), { desc = 'clear => send paragraph' })
             -- iron.send_paragraph({}) -- FYI used to be for send_paragraph, do I need the {} for any reason?
             vim.keymap.set('n', '<leader>icf', clearThen(iron.send_file), { desc = 'clear => send file' })
-            vim.keymap.set('n', '<leader>icm', function()
-                my_clear()
-                iron.run_motion("send_motion")
-            end, { desc = 'clear => send motion' })
+            vim.keymap.set('n', '<leader>icm', clearThen(function() iron.run_motion("send_motion") end), { desc = 'clear => send motion' })
+
             vim.keymap.set('v', '<leader>icv', function()
                 my_clear()
                 iron.send(nil, iron.mark_visual())
