@@ -158,6 +158,14 @@ return {
                 my_clear()
                 iron.send_file()
             end, { desc = 'clear => send file' })
+            vim.keymap.set('n', '<leader>icm', function()
+                my_clear()
+                require("iron.core").run_motion("send_motion")
+            end, { desc = 'clear => send motion' })
+            vim.keymap.set('v', '<leader>icv', function()
+                my_clear()
+                iron.send(nil, iron.mark_visual())
+            end, { desc = 'clear => send visual' })
 
 
             iron.setup {
