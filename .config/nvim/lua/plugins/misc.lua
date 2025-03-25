@@ -158,6 +158,7 @@ return {
             vim.keymap.set('n', '<leader>icl', clearThen(iron.send_line), { desc = 'clear => send line' })
             vim.keymap.set('n', '<leader>icp', clearThen(iron.send_paragraph), { desc = 'clear => send paragraph' })
             vim.keymap.set('n', '<leader>icb', clearThen(iron.send_code_block), { desc = 'clear => send block' })
+            vim.keymap.set('n', '<leader>icn', clearThen(function() iron.send_code_block(true) end), { desc = 'clear => send block and move to next block' })
 
             iron.setup {
                 config = {
