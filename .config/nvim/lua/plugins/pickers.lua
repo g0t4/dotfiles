@@ -227,9 +227,9 @@ return {
             })
             -- FYI this complements <leader>s which opens live_grep with empty search query
             -- set a keymap to builtin.lsp_document_symbols => <leader>lsp_document_symbols => <leader>lds?
-            vim.keymap.set('n', '<leader>l', function() vim.cmd(":Telescope coc") end, { desc = "Coc pickers" })
+            vim.keymap.set('n', '<leader>l', "<Cmd>Telescope coc<CR>", { desc = "Coc pickers" })
             --
-            vim.keymap.set('n', '<leader>ls', function() vim.cmd(":Telescope coc document_symbols") end, { desc = "Coc document_symbols" })
+            vim.keymap.set('n', '<leader>ls', "<Cmd>Telescope coc document_symbols<CR>", { desc = "Coc document_symbols" })
             vim.keymap.set('n', '<leader>lws', function() vim.cmd(":Telescope coc workspace_symbols") end, { desc = "Coc workspace_symbols" })
             --
             -- WIP trying 'g' for dia[g]nostics
