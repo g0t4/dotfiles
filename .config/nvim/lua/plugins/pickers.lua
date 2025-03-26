@@ -230,18 +230,18 @@ return {
             vim.keymap.set('n', '<leader>l', "<Cmd>Telescope coc<CR>", { desc = "Coc pickers" })
             --
             vim.keymap.set('n', '<leader>ls', "<Cmd>Telescope coc document_symbols<CR>", { desc = "Coc document_symbols" })
-            vim.keymap.set('n', '<leader>lws', function() vim.cmd(":Telescope coc workspace_symbols") end, { desc = "Coc workspace_symbols" })
+            vim.keymap.set('n', '<leader>lws', "<Cmd>:Telescope coc workspace_symbols<CR>", { desc = "Coc workspace_symbols" })
             --
             -- WIP trying 'g' for dia[g]nostics
-            vim.keymap.set('n', '<leader>lg', function() vim.cmd(":Telescope coc diagnostics") end, { desc = "Coc diagnostics" })
-            vim.keymap.set('n', '<leader>lwg', function() vim.cmd(":Telescope coc workspace_diagnostics") end, { desc = "Coc workspace_diagnostics" })
+            vim.keymap.set('n', '<leader>lg', "<Cmd>:Telescope coc diagnostics<CR>", { desc = "Coc diagnostics" })
+            vim.keymap.set('n', '<leader>lwg', "<Cmd>:Telescope coc workspace_diagnostics<CR>", { desc = "Coc workspace_diagnostics" })
             --
             -- TODO declarations?
-            vim.keymap.set('n', '<leader>ld', function() vim.cmd(":Telescope coc definitions") end, { desc = "Coc definitions" })
-            vim.keymap.set('n', '<leader>lr', function() vim.cmd(":Telescope coc references") end, { desc = "Coc references" })
-            vim.keymap.set('n', '<leader>li', function() vim.cmd(":Telescope coc implementations") end, { desc = "Coc_implementations" })
-            vim.keymap.set('n', '<leader>lu', function() vim.cmd(":Telescope coc references_used") end, { desc = "Coc references_used" })
-            vim.keymap.set('n', '<leader>ly', function() vim.cmd(":Telescope coc type_definitions") end, { desc = "Coc type_definitions" })
+            vim.keymap.set('n', '<leader>ld', "<Cmd>:Telescope coc definitions<CR>", { desc = "Coc definitions" })
+            vim.keymap.set('n', '<leader>lr', "<Cmd>:Telescope coc references<CR>", { desc = "Coc references" })
+            vim.keymap.set('n', '<leader>li', "<Cmd>:Telescope coc implementations<CR>", { desc = "Coc_implementations" })
+            vim.keymap.set('n', '<leader>lu', "<Cmd>:Telescope coc references_used<CR>", { desc = "Coc references_used" })
+            vim.keymap.set('n', '<leader>ly', "<Cmd>:Telescope coc type_definitions<CR>", { desc = "Coc type_definitions" })
             -- FYI can always leave off specific sub key maps and just do <leader>lx => opens coc pickers list with x prefilled and narrowed to matching pickers, just hit Enter to start it... basically gets you keymaps w/o explicitly setting them
             --  sometimes easier to not have to memorize the sub keymaps and just search the picker picker list... until that's annoying enough that a keymap makes sense
 
