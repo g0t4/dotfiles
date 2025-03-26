@@ -97,7 +97,7 @@ return {
         event = { "BufReadPre", "BufNewFile" },
 
         config = function()
-            local iron = require("iron.core")
+            local core = require("iron.core")
             local ll = require("iron.lowlevel")
 
             function get_or_open_repl()
@@ -112,7 +112,7 @@ return {
 
                 -- If the repl doesn't exist, it will be created
                 if not ll.repl_exists(meta) then
-                    meta = iron.repl_for(ft)
+                    meta = core.repl_for(ft)
                 end
 
                 return meta
@@ -126,7 +126,7 @@ return {
                 --
                 -- clear scrollback somehow clears in lua (kinda, the lines go away but empty lines still are there in scrollback)
                 -- for almost all other shells (i.e. ipython, fish) the scrollback is still there entirely
-                iron.clear_repl()
+                core.clear_repl()
                 -- TODO do I not wanna open it if its closed, when it comes to clear commands?
                 meta = get_or_open_repl()
                 if meta == nil then
@@ -171,28 +171,28 @@ return {
                 vim.cmd("norm gg")
                 -- FYI if this is jarring to jump around, then lets extract logic to get contents of a given block based on a line #
                 --     use:   https://github.com/g0t4/iron.nvim/blob/d8c2869/lua/iron/core.lua#L517-L547
-                iron.send_code_block()
+                core.send_code_block()
                 ensure_open_and_cleared()
 
                 vim.api.nvim_win_set_cursor(0, cursor_position)
 
                 -- run block user wanted run
-                iron.send_code_block()
+                core.send_code_block()
             end
 
             -- ok I ❤️  THESE:
-            vim.keymap.set('n', '<leader>icm', clear_then(function() iron.run_motion("send_motion") end), { desc = 'clear => send motion' })
-            vim.keymap.set('v', '<leader>icv', clear_then(function() iron.send(nil, iron.mark_visual()) end), { desc = 'clear => send visual' })
-            vim.keymap.set('n', '<leader>icf', clear_then(iron.send_file), { desc = 'clear => send file' })
-            vim.keymap.set('n', '<leader>icl', clear_then(iron.send_line), { desc = 'clear => send line' })
-            vim.keymap.set('n', '<leader>icp', clear_then(iron.send_paragraph), { desc = 'clear => send paragraph' })
+            vim.keymap.set('n', '<leader>icm', clear_then(function() core.run_motion("send_motion") end), { desc = 'clear => send motion' })
+            vim.keymap.set('v', '<leader>icv', clear_then(function() core.send(nil, core.mark_visual()) end), { desc = 'clear => send visual' })
+            vim.keymap.set('n', '<leader>icf', clear_then(core.send_file), { desc = 'clear => send file' })
+            vim.keymap.set('n', '<leader>icl', clear_then(core.send_line), { desc = 'clear => send line' })
+            vim.keymap.set('n', '<leader>icp', clear_then(core.send_paragraph), { desc = 'clear => send paragraph' })
             -- reminder, with `isp` iron.nvim uses `iron.send_paragraph({})` ... do I need the ({}) for any reason? so far no issues
-            vim.keymap.set('n', '<leader>icb', clear_then(iron.send_code_block), { desc = 'clear => send block' })
-            vim.keymap.set('n', '<leader>icn', clear_then(function() iron.send_code_block(true) end), { desc = 'clear => send block and move to next block' })
+            vim.keymap.set('n', '<leader>icb', clear_then(core.send_code_block), { desc = 'clear => send block' })
+            vim.keymap.set('n', '<leader>icn', clear_then(function() core.send_code_block(true) end), { desc = 'clear => send block and move to next block' })
             vim.keymap.set('n', '<leader>ict', clear_then(run_top_block_then_current_block), { desc = 'clear => run top block then current block' })
             vim.keymap.set('n', '<leader>icc', ensure_open_and_cleared, { desc = 'clear' })
 
-            iron.setup {
+            core.setup {
                 config = {
                     scratch_repl = true, -- discard repls?
                     repl_definition = {
