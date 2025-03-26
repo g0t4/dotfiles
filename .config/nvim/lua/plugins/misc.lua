@@ -100,7 +100,7 @@ return {
             local core = require("iron.core")
             local ll = require("iron.lowlevel")
 
-            function get_or_open_repl()
+            function ensure_open()
                 -- FYI based on https://github.com/g0t4/iron.nvim/blob/d8c2869/lua/iron/core.lua#L254-L274
                 local meta = vim.b[0].repl
 
@@ -128,7 +128,7 @@ return {
                 -- for almost all other shells (i.e. ipython, fish) the scrollback is still there entirely
                 core.clear_repl()
                 -- TODO do I not wanna open it if its closed, when it comes to clear commands?
-                local meta = get_or_open_repl()
+                local meta = ensure_open()
                 if meta == nil then
                     return
                 end
@@ -146,6 +146,8 @@ return {
                 -- hack to truncate scrollback, works in ipython, half way clears in fish
                 vim.bo[meta.bufnr].scrollback = 1
                 vim.bo[meta.bufnr].scrollback = sb
+
+                return meta
             end
 
             function clear_then(func)
@@ -156,8 +158,7 @@ return {
             end
 
             function run_top_block_then_current_block()
-                ensure_open_and_cleared()
-                local meta = get_or_open_repl()
+                local meta = ensure_open_and_cleared()
                 if not meta then return end
 
                 -- PRN add check for blocks before running whole file?
