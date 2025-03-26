@@ -99,6 +99,7 @@ return {
         config = function()
             local iron = require("iron.core")
             local view = require("iron.view")
+            local config = require("iron.config")
             local ll = require("iron.lowlevel")
 
             function get_or_open_repl()
@@ -162,14 +163,25 @@ return {
                 my_clear()
                 local meta = get_or_open_repl()
                 if not meta then return end
-                -- iron.send_code_block({start_line=1}) -- start at line 0
-                ll.run_lines(meta, {start_line=1})
-                vim.api.nvim_set_current_buf(vim.b[0].repl.bufnr)
-                -- NOTE: I don't need to move the cursor down a line because it is already in visual mode and moving the selection does that for me
-                local topblock = ll.get_top_block(meta) or meta.start_line
-                print(string.format("top block => start at %s", topblock))
-                vim.api.nvim_set_current_buf(vim.b[0].repl.bufnr)
-                iron.send(nil, {start_line=topblock})
+                --
+                -- PRN add check for blocks before running whole file?
+                -- FOR NOW assume user knows that there are blocks and just run it
+                --    that means the whole file runs (twice) if there are no blocks
+                --    or if cursor in top block already, it runs that twice then
+
+                -- save cursor position
+                local orig_row, orig_col = unpack(vim.api.nvim_win_get_cursor(0))
+
+                -- move cursor to top of file
+                vim.cmd("norm gg")
+                iron.send_code_block()
+                my_clear()
+
+                -- restore cursor position
+                vim.api.nvim_win_set_cursor(0, { orig_row, orig_col })
+
+                -- run block user wanted run
+                iron.send_code_block()
             end
 
             -- ok I ❤️  THESE:
