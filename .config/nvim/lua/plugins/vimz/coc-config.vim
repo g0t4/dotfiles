@@ -142,15 +142,23 @@ nmap <silent> ]g <Plug>(coc-diagnostic-next)
 " TODO try out navigation
 " GoTo code navigation
 "nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gd <leader>ld
+nmap <silent> gd <Cmd>Telescope coc definitions<CR>
+"
 "nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gy <leader>ly
+nmap <silent> gy <Cmd>Telescope coc type_definitions<CR>
+"
 "nmap <silent> <leader>gi <Plug>(coc-implementation)
-nmap <silent> <leader>gi <leader>li
+nmap <silent> <leader>gi <Cmd>Telescope coc implementations<CR>
+"
 "nmap <silent> <leader>gr <Plug>(coc-references)
-nmap <silent> <leader>gr <leader>lr
-nmap <silent> <F12> <Plug>(coc-definition) " vscode
-nmap <silent> <S-F12> <Plug>(coc-references) " vscode
+nmap <silent> <leader>gr <Cmd>Telescope coc references<CR>
+"
+"nmap <silent> <F12> <Plug>(coc-definition)
+nmap <silent> <F12> <Cmd>Telescope coc definitions<CR>
+"
+" TODO shift-F12 not working, is that chord already mapped and/or not coming across as such?
+"nmap <silent> <S-F12> <Plug>(coc-references)
+nmap <silent> <S-F12> <Cmd>Telescope coc references<CR>
 
 " Use K to show documentation in preview window (I have F1 for help pages)
 " FYI K (shift+k) normally maps to man/help pages

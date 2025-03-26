@@ -236,7 +236,8 @@ return {
             vim.keymap.set('n', '<leader>lg', function() vim.cmd(":Telescope coc diagnostics") end, { desc = "Coc diagnostics" })
             vim.keymap.set('n', '<leader>lwg', function() vim.cmd(":Telescope coc workspace_diagnostics") end, { desc = "Coc workspace_diagnostics" })
             --
-            vim.keymap.set('n', '<leader>ld', function() vim.cmd(":Telescope coc declarations") end, { desc = "Coc declarations" })
+            -- TODO declarations?
+            vim.keymap.set('n', '<leader>ld', function() vim.cmd(":Telescope coc definitions") end, { desc = "Coc definitions" })
             vim.keymap.set('n', '<leader>lr', function() vim.cmd(":Telescope coc references") end, { desc = "Coc references" })
             vim.keymap.set('n', '<leader>li', function() vim.cmd(":Telescope coc implementations") end, { desc = "Coc_implementations" })
             vim.keymap.set('n', '<leader>lu', function() vim.cmd(":Telescope coc references_used") end, { desc = "Coc references_used" })
