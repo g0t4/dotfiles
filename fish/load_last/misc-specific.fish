@@ -669,7 +669,24 @@ abbr vls "set | bat --language ini -p"
 abbr vgr "set | grep -i "
 #
 abbr --add agr --set-cursor='!' "abbr | grep -i '!'" # i.e. to find `git status` aliases
-abbr --add agrs --set-cursor='!' "abbr | grep -i '\b!'" # i.e. for finding aliases that start with `dc` or `gs` etc => useful when creating new aliases to find a "namespace" that is free
+#
+abbr --add agrs --set-cursor='!' "abbr | grep -i '\-\- !'" # AFAICT name always comes after dashes `-- name`, and dashes are not always right after -a, with --position and other args it can come later
+#
+#   abbr --list | grep -i '^an' # another avenue if I have too much trouble relying on `abbr --show` + grep
+#
+# AFAICT there's no way to lookup an abbr by name... and get its executable format
+#   Also, not straight forward to parse the executable format b/c name can appear in many different spots
+#
+#   abbr --show  # lists all, in executable format
+#   abbr --query foo # can check if name exists
+#   abbr --show --query foo # would be nice to combine query with show!
+#   abbr --list # shows just the list of names
+#
+# Nice to haves:
+#   FYI I have a feature branch hack of combining --query and --show:
+#     https://github.com/g0t4/fish-shell/tree/feature-abbr-lookup
+#     but don't work on this any more unless grep absolutely falls apart
+#
 
 # *** bind workaround ***
 # FYI known bug with new --set-cursor abbr
