@@ -128,7 +128,7 @@ return {
                 -- for almost all other shells (i.e. ipython, fish) the scrollback is still there entirely
                 core.clear_repl()
                 -- TODO do I not wanna open it if its closed, when it comes to clear commands?
-                meta = get_or_open_repl()
+                local meta = get_or_open_repl()
                 if meta == nil then
                     return
                 end
