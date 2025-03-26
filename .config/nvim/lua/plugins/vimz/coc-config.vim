@@ -141,11 +141,14 @@ nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
 " TODO try out navigation
 " GoTo code navigation
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-" TODO what to use for gi/gr since those are builtins? just replace them?
-nmap <silent> <leader>gi <Plug>(coc-implementation)
-nmap <silent> <leader>gr <Plug>(coc-references)
+"nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gd <leader>ld
+"nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gy <leader>ly
+"nmap <silent> <leader>gi <Plug>(coc-implementation)
+nmap <silent> <leader>gi <leader>li
+"nmap <silent> <leader>gr <Plug>(coc-references)
+nmap <silent> <leader>gr <leader>lr
 nmap <silent> <F12> <Plug>(coc-definition) " vscode
 nmap <silent> <S-F12> <Plug>(coc-references) " vscode
 
