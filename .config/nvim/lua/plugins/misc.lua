@@ -181,8 +181,8 @@ return {
             -- reminder, with `isp` iron.nvim uses `iron.send_paragraph({})` ... do I need the ({}) for any reason? so far no issues
             vim.keymap.set('n', '<leader>icb', clearThen(iron.send_code_block), { desc = 'clear => send block' })
             vim.keymap.set('n', '<leader>icn', clearThen(function() iron.send_code_block(true) end), { desc = 'clear => send block and move to next block' })
-            vim.keymap.set('v', '<leader>icb', clearThen(runTopBlockThenThisBlock), { desc = 'clear => run top block then current block' })
-
+            vim.keymap.set('n', '<leader>ict', clearThen(runTopBlockThenThisBlock), { desc = 'clear => run top block then current block' })
+            vim.keymap.set('n', '<leader>icc', my_clear, { desc = 'clear' })
 
             iron.setup {
                 config = {
@@ -270,7 +270,7 @@ return {
                     interrupt = "<space>isi",
                     exit = "<space>isq",
                     --
-                    clear = "<space>icc", -- use icc so it immediately executes, if I left it at ic it hangs while waiting for any three char combos
+                    -- clear = "<space>icc", -- map to my_clear above to open if not already
                     -- FYI fixed clear when using bracketed_paste_python:
                     --   https://github.com/g0t4/iron.nvim/blob/3860d7f/lua/iron/core.lua#L167
                     --   otherwise formatter replaces FF with CR b/c it seems FF as empty line
