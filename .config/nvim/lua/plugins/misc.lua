@@ -163,22 +163,20 @@ return {
                 my_clear()
                 local meta = get_or_open_repl()
                 if not meta then return end
-                --
+
                 -- PRN add check for blocks before running whole file?
                 -- FOR NOW assume user knows that there are blocks and just run it
                 --    that means the whole file runs (twice) if there are no blocks
                 --    or if cursor in top block already, it runs that twice then
 
-                -- save cursor position
-                local orig_row, orig_col = unpack(vim.api.nvim_win_get_cursor(0))
+                local cursor_position = vim.api.nvim_win_get_cursor(0)
 
                 -- move cursor to top of file
                 vim.cmd("norm gg")
                 iron.send_code_block()
                 my_clear()
 
-                -- restore cursor position
-                vim.api.nvim_win_set_cursor(0, { orig_row, orig_col })
+                vim.api.nvim_win_set_cursor(0, cursor_position)
 
                 -- run block user wanted run
                 iron.send_code_block()
