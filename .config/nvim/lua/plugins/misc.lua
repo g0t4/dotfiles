@@ -157,7 +157,11 @@ return {
                 end
             end
 
-            function run_top_block_then_current_block()
+            function send_top_block_then_current_block()
+                -- previously, I would just run whole file `isf` then `icb` for current block...
+                --  this collapses that into one command and hopefully obviates running code I don't care about if I can make top block comprise most if not all init and otherwise have each block be standalone
+                --  I could come up with more conventions for related blocks... but lets KISS for now
+
                 local meta = ensure_open_and_cleared()
                 if not meta then return end
 
@@ -190,7 +194,7 @@ return {
             -- reminder, with `isp` iron.nvim uses `iron.send_paragraph({})` ... do I need the ({}) for any reason? so far no issues
             vim.keymap.set('n', '<leader>icb', clear_then(core.send_code_block), { desc = 'clear => send block' })
             vim.keymap.set('n', '<leader>icn', clear_then(function() core.send_code_block(true) end), { desc = 'clear => send block and move to next block' })
-            vim.keymap.set('n', '<leader>ict', clear_then(run_top_block_then_current_block), { desc = 'clear => run top block then current block' })
+            vim.keymap.set('n', '<leader>ict', clear_then(send_top_block_then_current_block), { desc = 'clear => run top block then current block' })
             vim.keymap.set('n', '<leader>icc', ensure_open_and_cleared, { desc = 'clear' })
 
             core.setup {
