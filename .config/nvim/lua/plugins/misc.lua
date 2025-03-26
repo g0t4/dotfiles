@@ -102,16 +102,20 @@ return {
             local ll = require("iron.lowlevel")
 
             function get_or_open_repl()
+                -- FYI based on https://github.com/g0t4/iron.nvim/blob/d8c2869/lua/iron/core.lua#L254-L274
                 local meta = vim.b[0].repl
 
                 if not meta or not ll.repl_exists(meta) then
                     ft = ft or ll.get_buffer_ft(0)
+                    -- if data == nil then return end
                     meta = ll.get(ft)
                 end
 
+                -- If the repl doesn't exist, it will be created
                 if not ll.repl_exists(meta) then
-                    return
+                    meta = iron.repl_for(ft)
                 end
+
                 return meta
             end
 
