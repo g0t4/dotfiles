@@ -98,8 +98,6 @@ return {
 
         config = function()
             local iron = require("iron.core")
-            local view = require("iron.view")
-            local config = require("iron.config")
             local ll = require("iron.lowlevel")
 
             function get_or_open_repl()
@@ -120,7 +118,7 @@ return {
                 return meta
             end
 
-            function my_clear()
+            function ensure_open_and_cleared()
                 -- STATUS:
                 -- - btw, this works for ipython
                 -- - works with lua to stop the empty scrollback lines after ctrl-l
@@ -150,17 +148,15 @@ return {
                 vim.bo[meta.bufnr].scrollback = sb
             end
 
-            -- clear and then send
-            function clearThen(func)
+            function clear_then(func)
                 return function()
-                    my_clear()
+                    ensure_open_and_cleared()
                     func()
                 end
             end
 
-            -- clear and run top block (to this point) THEN run current block (selected text in visual mode)
-            function runTopBlockThenThisBlock()
-                my_clear()
+            function run_top_block_then_current_block()
+                ensure_open_and_cleared()
                 local meta = get_or_open_repl()
                 if not meta then return end
 
@@ -173,8 +169,10 @@ return {
 
                 -- move cursor to top of file
                 vim.cmd("norm gg")
+                -- FYI if this is jarring to jump around, then lets extract logic to get contents of a given block based on a line #
+                --     use:   https://github.com/g0t4/iron.nvim/blob/d8c2869/lua/iron/core.lua#L517-L547
                 iron.send_code_block()
-                my_clear()
+                ensure_open_and_cleared()
 
                 vim.api.nvim_win_set_cursor(0, cursor_position)
 
@@ -183,16 +181,16 @@ return {
             end
 
             -- ok I ❤️  THESE:
-            vim.keymap.set('n', '<leader>icm', clearThen(function() iron.run_motion("send_motion") end), { desc = 'clear => send motion' })
-            vim.keymap.set('v', '<leader>icv', clearThen(function() iron.send(nil, iron.mark_visual()) end), { desc = 'clear => send visual' })
-            vim.keymap.set('n', '<leader>icf', clearThen(iron.send_file), { desc = 'clear => send file' })
-            vim.keymap.set('n', '<leader>icl', clearThen(iron.send_line), { desc = 'clear => send line' })
-            vim.keymap.set('n', '<leader>icp', clearThen(iron.send_paragraph), { desc = 'clear => send paragraph' })
+            vim.keymap.set('n', '<leader>icm', clear_then(function() iron.run_motion("send_motion") end), { desc = 'clear => send motion' })
+            vim.keymap.set('v', '<leader>icv', clear_then(function() iron.send(nil, iron.mark_visual()) end), { desc = 'clear => send visual' })
+            vim.keymap.set('n', '<leader>icf', clear_then(iron.send_file), { desc = 'clear => send file' })
+            vim.keymap.set('n', '<leader>icl', clear_then(iron.send_line), { desc = 'clear => send line' })
+            vim.keymap.set('n', '<leader>icp', clear_then(iron.send_paragraph), { desc = 'clear => send paragraph' })
             -- reminder, with `isp` iron.nvim uses `iron.send_paragraph({})` ... do I need the ({}) for any reason? so far no issues
-            vim.keymap.set('n', '<leader>icb', clearThen(iron.send_code_block), { desc = 'clear => send block' })
-            vim.keymap.set('n', '<leader>icn', clearThen(function() iron.send_code_block(true) end), { desc = 'clear => send block and move to next block' })
-            vim.keymap.set('n', '<leader>ict', clearThen(runTopBlockThenThisBlock), { desc = 'clear => run top block then current block' })
-            vim.keymap.set('n', '<leader>icc', my_clear, { desc = 'clear' })
+            vim.keymap.set('n', '<leader>icb', clear_then(iron.send_code_block), { desc = 'clear => send block' })
+            vim.keymap.set('n', '<leader>icn', clear_then(function() iron.send_code_block(true) end), { desc = 'clear => send block and move to next block' })
+            vim.keymap.set('n', '<leader>ict', clear_then(run_top_block_then_current_block), { desc = 'clear => run top block then current block' })
+            vim.keymap.set('n', '<leader>icc', ensure_open_and_cleared, { desc = 'clear' })
 
             iron.setup {
                 config = {
