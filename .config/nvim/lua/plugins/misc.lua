@@ -153,6 +153,21 @@ return {
                 end
             end
 
+            -- clear and run top block (to this point) THEN run current block (selected text in visual mode)
+            function runTopBlockThenThisBlock()
+                my_clear()
+                local meta = get_or_open_repl()
+                if not meta then return end
+                -- iron.send_code_block({start_line=1}) -- start at line 0
+                ll.run_lines(meta, {start_line=1})
+                vim.api.nvim_set_current_buf(vim.b[0].repl.bufnr)
+                -- NOTE: I don't need to move the cursor down a line because it is already in visual mode and moving the selection does that for me
+                local topblock = ll.get_top_block(meta) or meta.start_line
+                print(string.format("top block => start at %s", topblock))
+                vim.api.nvim_set_current_buf(vim.b[0].repl.bufnr)
+                iron.send(nil, {start_line=topblock})
+            end
+
             -- ok I ❤️  THESE:
             vim.keymap.set('n', '<leader>icm', clearThen(function() iron.run_motion("send_motion") end), { desc = 'clear => send motion' })
             vim.keymap.set('v', '<leader>icv', clearThen(function() iron.send(nil, iron.mark_visual()) end), { desc = 'clear => send visual' })
@@ -162,6 +177,8 @@ return {
             -- reminder, with `isp` iron.nvim uses `iron.send_paragraph({})` ... do I need the ({}) for any reason? so far no issues
             vim.keymap.set('n', '<leader>icb', clearThen(iron.send_code_block), { desc = 'clear => send block' })
             vim.keymap.set('n', '<leader>icn', clearThen(function() iron.send_code_block(true) end), { desc = 'clear => send block and move to next block' })
+            vim.keymap.set('v', '<leader>icb', clearThen(runTopBlockThenThisBlock), { desc = 'clear => run top block then current block' })
+
 
             iron.setup {
                 config = {
