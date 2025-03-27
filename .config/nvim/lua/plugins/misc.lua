@@ -229,10 +229,9 @@ return {
                         print("block_line_number: " .. (block_line_number or 'none'))
                         if index == #all_lines_below_cursor_line then
                             -- if the last line is a cell devider then jump to it instead of line after
-                            vim.api.nvim_win_set_cursor(0, { block_line_number - 1, 1 })
-                        else
-                            vim.api.nvim_win_set_cursor(0, { block_line_number, 1 })
+                            block_line_number = block_line_number - 1
                         end
+                        vim.api.nvim_win_set_cursor(0, { block_line_number, 1 })
                         break
                     end
                 end
