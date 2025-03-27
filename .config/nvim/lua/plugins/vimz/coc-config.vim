@@ -160,11 +160,7 @@ nmap <silent> <F12> <Cmd>Telescope coc definitions<CR>
 "nmap <silent> <S-F12> <Plug>(coc-references)
 nmap <silent> <S-F12> <Cmd>Telescope coc references<CR>
 
-" Use K to show documentation in preview window (I have F1 for help pages)
-" FYI K (shift+k) normally maps to man/help pages
 nnoremap <silent> <S-k> :call ShowDocumentation()<CR>
-" PRN try double K to focus the float window too (i.e. to move around in it)
-"nnoremap <silent> KK :call ShowDocumentation()<CR><Plug>(coc-float-jump)
 function! ShowDocumentation()
     if CocAction('hasProvider', 'hover')
         call CocActionAsync('doHover')
