@@ -1,6 +1,27 @@
 -- FYI these are mission critical things to have during a failure
 
 
+-- timeoutlen = 1000 by default, always felt SLUGGISH... why did I not try to change this before!
+--   this affects overlapping keymaps:
+--   i.e. <S-k> and <S-k><S-k>
+--   it waits 1 second after K alone b/c it needs to see if its gonna be KK
+--   but for KK it can immediately activate b/c there's no ambiguity
+vim.o.timeoutlen = 300
+--  FYI some things will still feel slow if there's a lag to load them but the shortcut is firing after 300ms of no more keystrokes.
+--    test with <leader>l  # I have others like <leader>ls so it has to wait on just l
+--    that said first load feels slow (either telescope or coc initial load hit)
+--
+-- consider dynamic setting based on context?
+-- vim.api.nvim_create_autocmd("InsertEnter", {
+--     callback = function()
+--         vim.o.timeoutlen = 100
+--     end,
+-- })
+-- vim.api.nvim_create_autocmd("InsertLeave", {
+--     callback = function()
+--         vim.o.timeoutlen = 300
+--     end,
+-- })
 
 
 
@@ -37,7 +58,7 @@ vim.cmd("let g:mapleader = ' '") -- default is '\' which is a bit awkward to rea
 -- set this very early, will get an empty failure message from lazy load bootstrap if race conditioon is hit and this comes after some other plugins, also not setting first may change the colorscheme loaded by other plugins
 vim.opt.termguicolors = true -- s/b already enabled in most of my environments, maybe warn if not?
 
-vim.o.ignorecase = true      -- ignore case when searching
+vim.o.ignorecase = true -- ignore case when searching
 
 -- shortmess in nvim defaults to => ltToOCF
 -- set shortmess+=A " don't give ATTENTION messages if already open in another instance (swap file detected)
@@ -72,7 +93,7 @@ vim.cmd [[
 -- *** left gutter settings
 vim.o.signcolumn = 'number' -- yes=always, no=never, auto=only when needed, number=(in # column, if shown)
 vim.o.relativenumber = true -- vertical equiv of eyeliner ext (horiz jump marks) - testing if i like this
-vim.o.number = true         -- explicitly do not include absolute line #s (for now)
+vim.o.number = true -- explicitly do not include absolute line #s (for now)
 -- relative + number == absolute instead of 0 for current cursor line (rest are relative)
 
 -- *** help gutter settings (global options don't apply here)
