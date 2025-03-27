@@ -197,6 +197,11 @@ return {
             vim.keymap.set('n', '<leader>ict', clear_then(send_top_block_then_current_block), { desc = 'clear => run top block then current block' })
             vim.keymap.set('n', '<leader>icc', ensure_open_and_cleared, { desc = 'clear' })
 
+            vim.keymap.set('n', '<leader>ib', function()
+                local keys = vim.api.nvim_replace_termcodes("i#%%<CR><Esc>", true, false, true)
+                vim.api.nvim_feedkeys(keys, "n", false)
+            end, { desc = 'iron' })
+
             core.setup {
                 config = {
                     scratch_repl = true, -- discard repls?
