@@ -218,6 +218,13 @@ return {
             vim.keymap.set('n', '<leader>ib', function()
                 -- [i]nsert [b]lock divider
                 -- TODO make this per language, use lookup based on iron config that I have for block_deviders
+                if vim.bo.filetype ~= 'python' then
+                    vim.notify('block divider only intended for python currently', vim.log.levels.WARN)
+                end
+
+                local use_devider = require("iron.config").repl_definition[vim.bo.filetype].block_deviders[1]
+                print("use_devider: '" .. use_devider .. "'")
+
                 if not current_line_is_blank() then
                     -- move to after/end of paragraph
                     vim.api.nvim_feedkeys("}", "n", false)
@@ -233,7 +240,7 @@ return {
                             vim.api.nvim_feedkeys(keys, "n", false)
                         end
 
-                        local keys = vim.api.nvim_replace_termcodes("o#%%<CR><Esc>", true, false, true)
+                        local keys = vim.api.nvim_replace_termcodes("o" .. use_devider .. "<CR><Esc>", true, false, true)
                         vim.api.nvim_feedkeys(keys, "n", false)
                     end, 0)
                 else
@@ -242,7 +249,7 @@ return {
                         local keys = vim.api.nvim_replace_termcodes("o<Esc>", true, false, true)
                         vim.api.nvim_feedkeys(keys, "n", false)
                     end
-                    local keys = vim.api.nvim_replace_termcodes("i#%%<CR><Esc>", true, false, true)
+                    local keys = vim.api.nvim_replace_termcodes("i" .. use_devider .. " <CR><Esc>", true, false, true)
                     vim.api.nvim_feedkeys(keys, "n", false)
                     -- FYI b/c I use <CR> to insert a line, that ensures there is a new line after the divider
                 end
@@ -288,7 +295,7 @@ return {
                                 filtered = vim.tbl_filter(function(line) return not string.match(line, "^%s*#") end, result)
                                 return filtered
                             end,
-                            block_deviders = { "# %%", "#%%" },
+                            block_deviders = { "#%%", "# %%" },
                             -- use iterm to split pane, not sure this does what ChatGPT thought it would do :)... this just runs iterm in a nested terminal window
                             -- command = { "osascript", "-e", [[tell app "iTerm" to tell the current window to create tab with default profile]] },
                         }
