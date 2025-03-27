@@ -198,7 +198,19 @@ return {
             vim.keymap.set('n', '<leader>icc', ensure_open_and_cleared, { desc = 'clear' })
 
             vim.keymap.set('n', '<leader>ib', function()
-                local keys = vim.api.nvim_replace_termcodes("i#%%<CR><Esc>", true, false, true)
+                local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+                local current_line = vim.api.nvim_buf_get_lines(0, row - 1, row, false)[1]
+                if not current_line:match("^%s*$") then
+                    -- insert the divider after the current paragraph, if sitting on a paragraph!
+                    local keys = vim.api.nvim_replace_termcodes("}o<CR>", true, false, true)
+                    -- use CR so it inserts a new line if at end of file, which is especially likely when adding a cell!
+                    vim.api.nvim_feedkeys(keys, "n", false)
+                else
+                    -- otherwise, if on a blank line, just insert right where you are at
+                    -- PRN add a check for a blank line above this line too and insert if not? and after?
+                    vim.api.nvim_feedkeys("i", "n", false)
+                end
+                local keys = vim.api.nvim_replace_termcodes("#%%<CR><Esc>", true, false, true)
                 vim.api.nvim_feedkeys(keys, "n", false)
             end, { desc = 'iron' })
 
