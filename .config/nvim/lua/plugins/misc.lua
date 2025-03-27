@@ -204,6 +204,17 @@ return {
                 return current_line:match("^%s*$")
             end
 
+            function is_line_before_blank_or_first_in_file()
+                local row, _ = unpack(vim.api.nvim_win_get_cursor(0))
+                if row == 1 then
+                    -- edge case, could go either way, I don't intend to put delimiter at start or end of file so not that important in this case
+                    return true
+                end
+                local previous_line = vim.api.nvim_buf_get_lines(0, row - 2, row - 1, false)[1]
+                -- print("previous line: '" .. previous_line .. "'")
+                return previous_line:match("^%s*$")
+            end
+
             vim.keymap.set('n', '<leader>ib', function()
                 if not current_line_is_blank() then
                     -- move to after/end of paragraph
@@ -224,8 +235,12 @@ return {
                         vim.api.nvim_feedkeys(keys, "n", false)
                     end, 0)
                 else
-                    -- otherwise, if on a blank line, just insert right where you are at
-                    -- PRN add a check for a blank line above this line too and insert if not? and after?
+                    if not is_line_before_blank_or_first_in_file() then
+                        -- make sure blank line before divider
+                        local keys = vim.api.nvim_replace_termcodes("o<Esc>", true, false, true)
+                        vim.api.nvim_feedkeys(keys, "n", false)
+                    end
+                    -- TODO check if blank after?
                     local keys = vim.api.nvim_replace_termcodes("i#%%<CR><Esc>", true, false, true)
                     vim.api.nvim_feedkeys(keys, "n", false)
                 end
