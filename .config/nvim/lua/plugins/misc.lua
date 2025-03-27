@@ -197,21 +197,38 @@ return {
             vim.keymap.set('n', '<leader>ict', clear_then(send_top_block_then_current_block), { desc = 'clear => run top block then current block' })
             vim.keymap.set('n', '<leader>icc', ensure_open_and_cleared, { desc = 'clear' })
 
-            vim.keymap.set('n', '<leader>ib', function()
-                local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+            function current_line_is_blank()
+                local row, _ = unpack(vim.api.nvim_win_get_cursor(0))
                 local current_line = vim.api.nvim_buf_get_lines(0, row - 1, row, false)[1]
-                if not current_line:match("^%s*$") then
-                    -- insert the divider after the current paragraph, if sitting on a paragraph!
-                    local keys = vim.api.nvim_replace_termcodes("}o<CR>", true, false, true)
-                    -- use CR so it inserts a new line if at end of file, which is especially likely when adding a cell!
-                    vim.api.nvim_feedkeys(keys, "n", false)
+                -- print("current line: '" .. current_line .. "'")
+                return current_line:match("^%s*$")
+            end
+
+            vim.keymap.set('n', '<leader>ib', function()
+                if not current_line_is_blank() then
+                    -- move to after/end of paragraph
+                    vim.api.nvim_feedkeys("}", "n", false)
+
+                    vim.defer_fn(function()
+                        -- without defer, current line always the same original line
+                        -- OR am I doing something else wrong?
+
+                        if not current_line_is_blank() then
+                            -- if last line of paragraph is last line of file, then it will need a new insert afterward
+                            --  => this manifests as not being a blank line after }
+                            local keys = vim.api.nvim_replace_termcodes("o<Esc>", true, false, true)
+                            vim.api.nvim_feedkeys(keys, "n", false)
+                        end
+
+                        local keys = vim.api.nvim_replace_termcodes("o#%%<CR><Esc>", true, false, true)
+                        vim.api.nvim_feedkeys(keys, "n", false)
+                    end, 0)
                 else
                     -- otherwise, if on a blank line, just insert right where you are at
                     -- PRN add a check for a blank line above this line too and insert if not? and after?
-                    vim.api.nvim_feedkeys("i", "n", false)
+                    local keys = vim.api.nvim_replace_termcodes("i#%%<CR><Esc>", true, false, true)
+                    vim.api.nvim_feedkeys(keys, "n", false)
                 end
-                local keys = vim.api.nvim_replace_termcodes("#%%<CR><Esc>", true, false, true)
-                vim.api.nvim_feedkeys(keys, "n", false)
             end, { desc = 'iron' })
 
             core.setup {
