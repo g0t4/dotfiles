@@ -240,9 +240,9 @@ return {
                         local keys = vim.api.nvim_replace_termcodes("o<Esc>", true, false, true)
                         vim.api.nvim_feedkeys(keys, "n", false)
                     end
-                    -- TODO check if blank after?
                     local keys = vim.api.nvim_replace_termcodes("i#%%<CR><Esc>", true, false, true)
                     vim.api.nvim_feedkeys(keys, "n", false)
+                    -- FYI b/c I use <CR> to insert a line, that ensures there is a new line after the divider
                 end
             end, { desc = 'iron' })
 
