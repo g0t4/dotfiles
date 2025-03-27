@@ -217,18 +217,19 @@ return {
 
             vim.keymap.set('n', '<leader>ij', function()
                 -- move down to next cell
-                local row, _ = unpack(vim.api.nvim_win_get_cursor(0))
+                local start_line, _ = unpack(vim.api.nvim_win_get_cursor(0))
                 -- find first line below me that has cell block devider
                 -- TODO check for all deviders
                 -- PRN is there already logic in iron.nvim that I could reuse for this? (it has exec block and go to next action)
                 local cell_block_devider = require("iron.config").repl_definition[vim.bo.filetype].block_deviders[1]
                 -- does not include cursor line (that way if on a cell's devider you will jump to next cell not "current" cell
-                local all_lines_below_cursor_line = vim.api.nvim_buf_get_lines(0, row, 10000, false)
-                for index, line in ipairs(all_lines_below_cursor_line) do
+                local all_lines_below_cursor_line = vim.api.nvim_buf_get_lines(0, start_line, 10000, false)
+                for lines_below, line in ipairs(all_lines_below_cursor_line) do
                     if string.match(line, cell_block_devider) then
-                        local block_line_number = row + 1 + index
+                        -- +1 => line after devider
+                        local block_line_number = start_line + lines_below + 1
                         print("block_line_number: " .. (block_line_number or 'none'))
-                        if index == #all_lines_below_cursor_line then
+                        if lines_below == #all_lines_below_cursor_line then
                             -- if the last line is a cell devider then jump to it instead of line after
                             block_line_number = block_line_number - 1
                         end
@@ -239,14 +240,16 @@ return {
             end, { desc = 'iron' })
             vim.keymap.set('n', '<leader>ik', function()
                 -- move up to previous cell
-                local row, _ = unpack(vim.api.nvim_win_get_cursor(0))
+                local start_line, _ = unpack(vim.api.nvim_win_get_cursor(0))
                 local cell_block_devider = require("iron.config").repl_definition[vim.bo.filetype].block_deviders[1]
-                local all_lines_above_cursor_line = vim.api.nvim_buf_get_lines(0, 1, row - 2, false)
-                for index, line in ipairs(all_lines_above_cursor_line) do
+                local all_lines_above_cursor_line = vim.api.nvim_buf_get_lines(0, 1, start_line - 1, false)
+                local reversed = vim.fn.reverse(all_lines_above_cursor_line)
+                -- print(vim.inspect(reversed))
+                for lines_above, line in ipairs(reversed) do
                     if string.match(line, cell_block_devider) then
-                        -- jump to after devider (i.e. start of next cell)
-                        -- +1 => make sure cursor is on next/first row (i.e. not the actual divider)
-                        local block_line_number = index + 1
+                        -- jump to end of previous cell is fine, I think that makes more sense when moving upward?
+                        -- -1 => line before devider
+                        local block_line_number = start_line - lines_above - 1
                         vim.api.nvim_win_set_cursor(0, { block_line_number, 1 })
                         break
                     end
