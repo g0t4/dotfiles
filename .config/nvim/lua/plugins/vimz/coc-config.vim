@@ -162,8 +162,9 @@ nmap <silent> <S-F12> <Cmd>Telescope coc references<CR>
 
 " Use K to show documentation in preview window (I have F1 for help pages)
 " FYI K (shift+k) normally maps to man/help pages
-nnoremap <silent> K :call ShowDocumentation()<CR>
-
+nnoremap <silent> <S-k> :call ShowDocumentation()<CR>
+" PRN try double K to focus the float window too (i.e. to move around in it)
+"nnoremap <silent> KK :call ShowDocumentation()<CR><Plug>(coc-float-jump)
 function! ShowDocumentation()
     if CocAction('hasProvider', 'hover')
         call CocActionAsync('doHover')
@@ -171,6 +172,10 @@ function! ShowDocumentation()
         call feedkeys('K', 'in')
     endif
 endfunction
+
+
+" TODO! review more of the CocActions and API here:
+" TODO! https://github.com/neoclide/coc.nvim/blob/master/doc/coc.txt
 
 " disabled for now, multiline strings in lua aren't recognized as nested code which makes sense... so any time cursor stops in the multiline string it higlights all of it (yuck)
 " Highlight the symbol and its references when holding the cursor
