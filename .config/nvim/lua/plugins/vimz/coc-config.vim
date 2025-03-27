@@ -257,3 +257,15 @@ command! -nargs=0 OR   :call     CocActionAsync('runCommand', 'editor.action.org
 " NOTE: Please see `:h coc-status` for integrations with external plugins that
 " provide custom statusline: lightline.vim, vim-airline
 "set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+
+
+" check for watchman and warn (prominently) that its missing
+"   makes a big impact in terms of performance (otherwise fallbacks to polling)
+"   esp on large projects, so make sure its present!
+if executable('watchman') == 0
+  echohl ErrorMsg
+  echom 'Warning: watchman not found. coc.nvim may be slower without it.'
+  echom '  USE brew install watchman'
+  echohl None
+endif
+
