@@ -216,6 +216,8 @@ return {
             end
 
             vim.keymap.set('n', '<leader>ib', function()
+                -- [i]nsert [b]lock divider
+                -- TODO make this per language, use lookup based on iron config that I have for block_deviders
                 if not current_line_is_blank() then
                     -- move to after/end of paragraph
                     vim.api.nvim_feedkeys("}", "n", false)
