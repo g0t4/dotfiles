@@ -215,6 +215,32 @@ return {
                 return previous_line:match("^%s*$")
             end
 
+            vim.keymap.set('n', '<leader>ij', function()
+                -- move down to next cell
+                local row, _ = unpack(vim.api.nvim_win_get_cursor(0))
+                -- find first line below me that has cell block devider
+                local cell_block_devider = require("iron.config").repl_definition[vim.bo.filetype].block_deviders[1]
+                local all_lines_below_cursor = vim.api.nvim_buf_get_lines(0, row - 1, 10000, false)
+                local block_line_number
+                for index, line in ipairs(all_lines_below_cursor) do
+                    if string.match(line, cell_block_devider) then
+                        block_line_number = row + index
+                        print("block_line_number: " .. (block_line_number or 'none'))
+                        if index == #all_lines_below_cursor then
+                            -- if the last line is a cell devider then jump to it instead of line after
+                            vim.api.nvim_win_set_cursor(0, { block_line_number - 1, 1 })
+                        else
+                            vim.api.nvim_win_set_cursor(0, { block_line_number, 1 })
+                        end
+                        break
+                    end
+                end
+            end, { desc = 'iron' })
+            vim.keymap.set('n', '<leader>ik', function()
+                -- move up to previous cell
+            end, { desc = 'iron' })
+
+
             vim.keymap.set('n', '<leader>ib', function()
                 -- [i]nsert [b]lock divider
                 -- TODO make this per language, use lookup based on iron config that I have for block_deviders
