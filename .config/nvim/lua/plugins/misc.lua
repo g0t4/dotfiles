@@ -171,6 +171,7 @@ return {
                 --    or if cursor in top block already, it runs that twice then
 
                 local cursor_position = vim.api.nvim_win_get_cursor(0)
+                -- PRN capture scroll position and restore it after send? ... OR can I redo parts of iron.nvim to not scroll the buffer when selecting the commands that are going to be run?
 
                 -- move cursor to top of file
                 vim.cmd("norm gg")
