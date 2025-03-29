@@ -383,8 +383,8 @@ return {
                     send_mark = "<space>imr", -- ([r]e)send marked code (any other send keymap will mark the range so it can be repeated too with this)
                     --
                     cr = "<space>is<cr>",
-                    interrupt = "<space>isi",
-                    exit = "<space>isq",
+                    interrupt = "<space>iq",
+                    exit = "<space>ix",
                     --
                     -- clear = "<space>icc", -- map to my_clear above to open if not already
                     -- FYI fixed clear when using bracketed_paste_python:
