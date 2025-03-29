@@ -43,4 +43,9 @@
   ; ?|?? => comment_single_question (\\? == ?) and \\?? means optional ? (0 or 1)
   (comment) @comment_single_question (#match? @comment_single_question "^(--|\"|#|//)\\s\\?\\??[^\\?]")
 ]
-
+[
+  ; #%%! cell devider highlight (for iron REPL "notebooks")
+  (comment) @comment_cell_devider_bang (#match? @comment_cell_devider_bang "^(--|\"|#|//)\\%\\%+\!")
+  ; #%%
+  (comment) @comment_cell_devider (#match? @comment_cell_devider "^(--|\"|#|//)\\%\\%+")
+]
