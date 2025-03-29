@@ -379,7 +379,7 @@ return {
                     mark_motion = "<space>imm", -- mark a selection use a motion
                     mark_visual = "<space>imv", -- set marks based on visual selection
                     remove_mark = "<space>imd", -- remove marks
-                    send_mark = "<space>ims", -- send marked code
+                    send_mark = "<space>imr", -- ([r]e)send marked code (any other send keymap will mark the range so it can be repeated too with this)
                     --
                     cr = "<space>is<cr>",
                     interrupt = "<space>isi",
