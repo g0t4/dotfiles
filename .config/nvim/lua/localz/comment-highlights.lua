@@ -24,7 +24,6 @@ vim.api.nvim_set_hl(0, '@comment_triple_bang', { bg = "#cc0000", fg = "#ffffff",
 vim.api.nvim_set_hl(0, '@comment_single_question', { fg = "#3498DB" })                              -- ? test
 vim.api.nvim_set_hl(0, '@comment_triple_question', { bg = "#3498DB", fg = "#1f1f1f", bold = true }) -- ??? test
 
--- FYI I am not attached to blue for cell_devider, it works fine for now though if I made more use of ?? then I might want this to differ
-vim.api.nvim_set_hl(0, '@comment_cell_devider', { fg = '#3498DB' })                                    --%%
-vim.api.nvim_set_hl(0, '@comment_cell_devider_bang', { bg = '#3498DB', fg = "#1f1f1f", bold = true })  --%%! test
+vim.api.nvim_set_hl(0, '@comment_cell_devider', { underline = true })                               --%%
+vim.api.nvim_set_hl(0, '@comment_cell_devider_bang', { bold = true, underline=true})                --%%! test
 
