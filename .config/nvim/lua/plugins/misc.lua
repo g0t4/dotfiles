@@ -195,6 +195,7 @@ return {
             vim.keymap.set('n', '<leader>icb', clear_then(core.send_code_block), { desc = 'clear => send block' })
             vim.keymap.set('n', '<leader>icn', clear_then(function() core.send_code_block(true) end), { desc = 'clear => send block and move to next block' })
             vim.keymap.set('n', '<leader>ict', clear_then(send_top_block_then_current_block), { desc = 'clear => run top block then current block' })
+            vim.keymap.set('n', '<leader>ist', send_top_block_then_current_block, { desc = 'run top block then current block' })
             vim.keymap.set('n', '<leader>icc', ensure_open_and_cleared, { desc = 'clear' })
 
             function current_line_is_blank()
