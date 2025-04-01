@@ -1,4 +1,3 @@
-
 # if not status is-login
 #     return
 # end
@@ -131,4 +130,10 @@ end
 # ~/.npm-global/bin
 if test -d "$HOME/.npm-global/bin"
     export PATH="$HOME/.npm-global/bin:$PATH"
+end
+
+# Rancher Desktop (IIGC created once user creates a cluster)
+# ~/.rd/bin"
+if test -d "$HOME/.rd/bin"
+    export PATH="$HOME/.rd/bin:$PATH"
 end
