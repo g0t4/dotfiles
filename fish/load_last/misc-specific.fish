@@ -2126,12 +2126,18 @@ function trash
     end
 end
 
+
+set -l find_cmd find
 if $IS_MACOS then
+    set find_cmd gfind
     abbr find gfind
-    abbr finde gfind . -executable
     # gfind == GNU find, has -exeuctable arg (among other differences)
     # make sure to run fish_update_completions after installing for completions
 end
+abbr finde "$find_cmd . -executable"
+abbr findud --set-cursor='!' "$find_cmd '!' -user wesdemos"
+abbr finduw --set-cursor='!' "$find_cmd '!' -user wes"
+
 
 # mostly for fun, also a good way to remember this exists :)
 abbr fuc fish_update_completions
