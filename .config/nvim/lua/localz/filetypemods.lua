@@ -267,3 +267,12 @@ vim.api.nvim_create_autocmd("FileType", {
         -- vim.bo.tabstop = 4
     end,
 })
+
+
+vim.api.nvim_create_autocmd("FileType", {
+    group = "filetypemods",
+    pattern = "hcl",
+    callback = function()
+        vim.bo.commentstring = "# %s"
+    end,
+})
