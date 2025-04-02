@@ -135,5 +135,5 @@ end
 # Rancher Desktop (IIGC created once user creates a cluster)
 # ~/.rd/bin"
 if test -d "$HOME/.rd/bin"
-    export PATH="$HOME/.rd/bin:$PATH"
+    export PATH="$PATH:$HOME/.rd/bin"
 end
