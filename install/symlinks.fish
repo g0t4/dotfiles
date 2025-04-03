@@ -1,85 +1,85 @@
 #!/usr/bin/env fish
 
-mkdir -p ~/.config
+mkdir -p $HOME/.config
 
-set -l dotfiles_dir ~/repos/github/g0t4/dotfiles
+set -l dotfiles_dir $HOME/repos/github/g0t4/dotfiles
 # start moving general symlinks to dotfiles here (consolidate them?)
-ln -f -s $dotfiles_dir/.config/inputrc/.inputrc ~/.
+ln -f -s $dotfiles_dir/.config/inputrc/.inputrc $HOME/.
 
 # editline:
-ln -f -s $dotfiles_dir/.config/editrc/.editrc ~/.
+ln -f -s $dotfiles_dir/.config/editrc/.editrc $HOME/.
 
 if string match --quiet Darwin (uname -s)
     # *** macOS
 
     # hammerspoon:
-    mkdir -p ~/.hammerspoon
-    ln -f -s $dotfiles_dir/.config/hammerspoon/init.lua ~/.hammerspoon/.
-    ln -f -s $dotfiles_dir/.config/hammerspoon/config ~/.hammerspoon/. # DIR SYMLINK
+    mkdir -p $HOME/.hammerspoon
+    ln -f -s $dotfiles_dir/.config/hammerspoon/init.lua $HOME/.hammerspoon/.
+    ln -f -s $dotfiles_dir/.config/hammerspoon/config $HOME/.hammerspoon/. # DIR SYMLINK
 
     # PRN add ghostty for any linux envs?
     # ghostty
-    mkdir -p ~/.config/ghostty
-    ln -f -s $dotfiles_dir/.config/ghostty/config ~/.config/ghostty/.
+    mkdir -p $HOME/.config/ghostty
+    ln -f -s $dotfiles_dir/.config/ghostty/config $HOME/.config/ghostty/.
 
     # *** iterm2 scripts dir
-    if ! test -d ~/Library/Application\ Support/iTerm2/Scripts
-        echo "MISSING ~/Library/Application\ Support/iTerm2/Scripts, do you have iTerm2 installed, not creating to avoid issues... create it and re-run this script"
+    if ! test -d $HOME/Library/Application\ Support/iTerm2/Scripts
+        echo "MISSING $HOME/Library/Application\ Support/iTerm2/Scripts, do you have iTerm2 installed, not creating to avoid issues... create it and re-run this script"
     else
         # -n means don't follow target symlink (else recreates nested symlink)
-        ln -f -n -s $dotfiles_dir/iterm2/scripts/ ~/Library/Application\ Support/iTerm2/Scripts
+        ln -f -n -s $dotfiles_dir/iterm2/scripts/ $HOME/Library/Application\ Support/iTerm2/Scripts
     end
 
 end
 
 # *** nvim ***
 if command -q nvim
-    mkdir -p ~/.config/nvim
-    ln -f -s $dotfiles_dir/.config/nvim/init.lua ~/.config/nvim/init.lua
+    mkdir -p $HOME/.config/nvim
+    ln -f -s $dotfiles_dir/.config/nvim/init.lua $HOME/.config/nvim/init.lua
     # FYI for directory symlinks, use only . on the end, else can end up with a symlink loop (nested symlink is created if exist already)
-    ln -f -s $dotfiles_dir/.config/nvim/lua ~/.config/nvim/. # DIR SYMLINK
-    ln -f -s $dotfiles_dir/.config/nvim/queries ~/.config/nvim/. # DIR SYMLINK
-    # ln -s $dotfiles_dir/.config/nvim/spell ~/.config/nvim/spell # PRN add this
-    ln -f -s $dotfiles_dir/.config/nvim/ftplugin ~/.config/nvim/. # DIR SYMLINK
-    ln -f -s $dotfiles_dir/.config/nvim/after ~/.config/nvim/. # DIR SYMLINK
-    ln -f -s $dotfiles_dir/.config/nvim/coc-settings.json ~/.config/nvim/coc-settings.json
+    ln -f -s $dotfiles_dir/.config/nvim/lua $HOME/.config/nvim/. # DIR SYMLINK
+    ln -f -s $dotfiles_dir/.config/nvim/queries $HOME/.config/nvim/. # DIR SYMLINK
+    # ln -s $dotfiles_dir/.config/nvim/spell $HOME/.config/nvim/spell # PRN add this
+    ln -f -s $dotfiles_dir/.config/nvim/ftplugin $HOME/.config/nvim/. # DIR SYMLINK
+    ln -f -s $dotfiles_dir/.config/nvim/after $HOME/.config/nvim/. # DIR SYMLINK
+    ln -f -s $dotfiles_dir/.config/nvim/coc-settings.json $HOME/.config/nvim/coc-settings.json
 end
 #
 # FYI no longer using vimrc, but I might want it back for some envs?
-# ~/.vimrc
+# $HOME/.vimrc
 
 # *** zed
 if command -q zed
-    mkdir -p ~/.config/zed
-    ln -f -s $dotfiles_dir/.config/zed/settings.json ~/.config/zed/settings.json
+    mkdir -p $HOME/.config/zed
+    ln -f -s $dotfiles_dir/.config/zed/settings.json $HOME/.config/zed/settings.json
 end
 
 # *** bat
-mkdir -p ~/.config/bat
-ln -f -s $dotfiles_dir/.config/bat/config ~/.config/bat/config
+mkdir -p $HOME/.config/bat
+ln -f -s $dotfiles_dir/.config/bat/config $HOME/.config/bat/config
 
 # *** fish
-if ! test -d ~/.config/fish
-    echo "MISSING ~/.config/fish, do you have fish installed, not creating to avoid issues... create it and re-run this script"
+if ! test -d $HOME/.config/fish
+    echo "MISSING $HOME/.config/fish, do you have fish installed, not creating to avoid issues... create it and re-run this script"
 else
-    ln -f -s $dotfiles_dir/fish/config/config.fish ~/.config/fish/.
+    ln -f -s $dotfiles_dir/fish/config/config.fish $HOME/.config/fish/.
 end
 
 # *** grc
-ln -f -s $dotfiles_dir/.grc ~/. # DIR SYMLINK
+ln -f -s $dotfiles_dir/.grc $HOME/. # DIR SYMLINK
 
 # *** git ***
-mkdir -p ~/.config/git
-ln -f -s $dotfiles_dir/.config/git/ignore ~/.config/git/.
+mkdir -p $HOME/.config/git
+ln -f -s $dotfiles_dir/.config/git/ignore $HOME/.config/git/.
 if string match --quiet Linux (uname -s)
-    ln -s ~/repos/github/g0t4/dotfiles/git/linux.gitconfig ~/.gitconfig
+    ln -s $HOME/repos/github/g0t4/dotfiles/git/linux.gitconfig $HOME/.gitconfig
 end
 
 # *** hushlogin
-touch ~/.hushlogin
+touch $HOME/.hushlogin
 
-if test -d ~/.ipython
-    mkdir -p ~/.ipython/profile_default
-    ln -f -s $dotfiles_dir/.ipython/profile_default/ipython_config.py ~/.ipython/profile_default/.
-    ln -f -s $dotfiles_dir/.ipython/profile_default/ipython_kernel_config.py ~/.ipython/profile_default/.
+if test -d $HOME/.ipython
+    mkdir -p $HOME/.ipython/profile_default
+    ln -f -s $dotfiles_dir/.ipython/profile_default/ipython_config.py $HOME/.ipython/profile_default/.
+    ln -f -s $dotfiles_dir/.ipython/profile_default/ipython_kernel_config.py $HOME/.ipython/profile_default/.
 end
