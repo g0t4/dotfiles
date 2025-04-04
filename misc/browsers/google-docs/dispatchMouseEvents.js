@@ -24,5 +24,6 @@ function dispatchMouseDownUpEvents(targetSelector) {
     return dispatchMouseEvents(targetSelector, mouseEvents);
 }
 
-dispatchMouseDownUpEvents("#moreButton");
+// USAGE:
+//   dispatchMouseDownUpEvents("#moreButton");
 
