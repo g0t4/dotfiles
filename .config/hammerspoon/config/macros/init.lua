@@ -464,16 +464,48 @@ end
 
 
 -- *** Google Docs helpers
+local function readFile(path)
+    local file = io.open(path, "r")
+    if not file then return nil end
+    local content = file:read("*a")
+    file:close()
+    return content
+end
+
+local data = readFile("/path/to/your/file.txt")
+print(data)
+
+local gDocsJavaScriptHelpers = nil
+local function getGoogleDocsJavaScriptHelpers()
+    -- google-docs-helpers.js right next to this file
+    -- print("current directory: " .. hs.fs.currentDir())
+    -- local file = hs.fs:currentDir() .. "/google-docs-helpers.js"
+    -- "~/.hammerspoon/config/macros/google-docs-helpers.js
+    local file = hs.fs.currentDir() .. "/config/macros/google-docs-helpers.js"
+    if gDocsJavaScriptHelpers == nil then
+        gDocsJavaScriptHelpers = readFile(file)
+    end
+    return gDocsJavaScriptHelpers
+end
 
 function RunJavaScriptInBrave(script)
-    local multi = script:gsub('"', '\\"')
+    script = getGoogleDocsJavaScriptHelpers() .. "\n\n" .. script
+    print("script: \n" .. script)
+
+    local escaped = script:gsub('"', '\\"')
+    print("escaped: \n" .. escaped)
 
     hs.osascript.applescript([[
 tell application "Brave Browser Beta"
-    set code to "]] .. multi .. [["
+    set code to "]] .. escaped .. [["
     set result to execute active tab of first window javascript code
 end tell
 ]])
+end
+
+function StreamDeckGoogleDocsMoreButton()
+    local script = 'dispatchMouseDownUpEvents("#moreButton");'
+    RunJavaScriptInBrave(script)
 end
 
 function StreamDeckTestBraveJavaScript()
