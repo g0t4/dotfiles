@@ -465,22 +465,25 @@ end
 
 -- *** Google Docs helpers
 
+function RunJavaScriptInBrave(script)
+    local multi = script:gsub('"', '\\"')
+
+    hs.osascript.applescript([[
+tell application "Brave Browser Beta"
+    set code to "]] .. multi .. [["
+    set result to execute active tab of first window javascript code
+end tell
+]])
+end
+
 function StreamDeckTestBraveJavaScript()
     local script = "console.log(\"BUTTSWATCHES\");"
+    RunJavaScriptInBrave(script)
+
     local multi = [[
 console.log("multiS");
     ]]
-
-    local escaped = multi:gsub('"', '\\"')
-
-    hs.osascript.applescript([[
-
-tell application "Brave Browser Beta"
-    set code to "]] .. escaped .. [["
-    set result to execute active tab of first window javascript code
-end tell
-
-]])
+    RunJavaScriptInBrave(multi)
 end
 
 return M
