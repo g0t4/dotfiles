@@ -464,13 +464,21 @@ end
 
 
 -- *** Google Docs helpers
+function escapeAppleScriptQuotes(str)
+    return str:gsub('"', '""')
+end
 
 function StreamDeckConsoleClear()
+    local script = "console.log('foo');"
+
     hs.osascript.applescript([[
+
 tell application "Brave Browser Beta"
-    set result to execute active tab of first window javascript "console.clear();"
+    set code to "]] .. escapeAppleScriptQuotes(script) .. [["
+    set result to execute active tab of first window javascript code
 end tell
-    ]])
+
+]])
 end
 
 return M
