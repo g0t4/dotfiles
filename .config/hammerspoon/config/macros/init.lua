@@ -465,7 +465,7 @@ end
 
 -- *** Google Docs helpers
 
-function StreamDeckConsoleClear()
+function StreamDeckTestBraveJavaScript()
     local script = "console.log(\"BUTTSWATCHES\");"
     local multi = [[
 console.log("multiS");
