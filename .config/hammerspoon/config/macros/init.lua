@@ -486,4 +486,9 @@ console.log("multiS");
     RunJavaScriptInBrave(multi)
 end
 
+--
+function StreamDeckConsoleClear()
+    RunJavaScriptInBrave("console.clear();")
+end
+
 return M
