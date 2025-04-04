@@ -489,10 +489,8 @@ end
 
 function RunJavaScriptInBrave(script)
     script = getGoogleDocsJavaScriptHelpers() .. "\n\n" .. script
-    print("script: \n" .. script)
 
     local escaped = script:gsub('"', '\\"')
-    print("escaped: \n" .. escaped)
 
     hs.osascript.applescript([[
 tell application "Brave Browser Beta"
@@ -503,8 +501,7 @@ end tell
 end
 
 function StreamDeckGoogleDocsMoreButton()
-    local script = 'dispatchMouseDownUpEvents("#moreButton");'
-    RunJavaScriptInBrave(script)
+    RunJavaScriptInBrave('dispatchMouseDownUpEvents("#moreButton");')
 end
 
 function StreamDeckTestBraveJavaScript()
