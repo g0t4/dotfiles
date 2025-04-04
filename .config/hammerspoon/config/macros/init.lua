@@ -464,28 +464,26 @@ end
 
 
 -- *** Google Docs helpers
+
 local function readFile(path)
     local file = io.open(path, "r")
-    if not file then return nil end
+    if not file then
+        error("Could not read file: " .. path)
+        return nil
+    end
     local content = file:read("*a")
     file:close()
     return content
 end
 
-local data = readFile("/path/to/your/file.txt")
-print(data)
-
-local gDocsJavaScriptHelpers = nil
+local _cachedGoogleDocsJSHelpers = nil
 local function getGoogleDocsJavaScriptHelpers()
-    -- google-docs-helpers.js right next to this file
-    -- print("current directory: " .. hs.fs.currentDir())
-    -- local file = hs.fs:currentDir() .. "/google-docs-helpers.js"
     -- "~/.hammerspoon/config/macros/google-docs-helpers.js
     local file = hs.fs.currentDir() .. "/config/macros/google-docs-helpers.js"
-    if gDocsJavaScriptHelpers == nil then
-        gDocsJavaScriptHelpers = readFile(file)
+    if _cachedGoogleDocsJSHelpers == nil then
+        _cachedGoogleDocsJSHelpers = readFile(file)
     end
-    return gDocsJavaScriptHelpers
+    return _cachedGoogleDocsJSHelpers
 end
 
 function RunJavaScriptInBrave(script)
