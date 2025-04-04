@@ -8,6 +8,11 @@
 //     => logs all events (mouse move too, so its chatty)
 //
 
+
+// *** IN:
+//    https://docs.google.com/static/document/client/js/1682726510-client_js_prod_kix_core.js
+//    Sources => Page => top/docs.google.com/static/document/client/js/ ... kix_core
+
 UCe.prototype.handleEvent = function(a, c, e) {
     var f = c.target
       , g = Date.now();
