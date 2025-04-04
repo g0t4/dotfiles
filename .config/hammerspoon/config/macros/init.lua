@@ -500,6 +500,10 @@ end tell
 ]])
 end
 
+function StreamDeckGoogleDocsTextBgColorShowPalette()
+    RunJavaScriptInBrave('dispatchMouseDownUpEvents("#bgColorButton");')
+end
+
 function StreamDeckGoogleDocsCropButton()
     RunJavaScriptInBrave('dispatchMouseDownUpEvents("#cropButton");')
 end
