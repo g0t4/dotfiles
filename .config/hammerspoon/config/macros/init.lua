@@ -468,6 +468,7 @@ end
 local function readFile(path)
     local file = io.open(path, "r")
     if not file then
+        -- FYI this is bubbling up from `hs` CLI => KM => macos notification (on errors) so that's perfect
         error("Could not read file: " .. path)
         return nil
     end
