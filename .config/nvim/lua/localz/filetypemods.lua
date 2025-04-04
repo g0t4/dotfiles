@@ -276,11 +276,3 @@ vim.api.nvim_create_autocmd("FileType", {
         vim.bo.commentstring = "# %s"
     end,
 })
-
--- *** applescript
-
-vim.filetype.add({
-    extension = {
-        applescript = "applescript",
-    },
-})

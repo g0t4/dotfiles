@@ -51,6 +51,7 @@ require("lazy").setup({
         require("plugins.copilot"),
         require("plugins.debug-dap"),
         require("plugins.debug-vimspector"),
+        require("plugins.filetypeplugins"),
         require("plugins.ft-markdown"),
         require("plugins.learning"),
         require("plugins.lualine"),
