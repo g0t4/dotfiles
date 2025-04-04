@@ -5,9 +5,18 @@
 -- })
 
 return {
-    -- {
-    --     "mityu/vim-applescript"
-    -- }
+    {
+        "mityu/vim-applescript",
+        -- has filetype registration (ftdetect)
+        -- re-indent, comment options
+        -- run applescript (by line range in file)
+        --
+        config = function()
+            -- FIND a key to map! or maybe set up iron.nvim to pseudo handle just run file (not a REPL but could be kinda like an execution engine for non-REPL tools)
+            -- vim.keymap.set('n', '<leader> isf', "<cmd>AppleScriptRun<cr>", {})
+        end
+    }
+    -- OLDer repo had just syntax, and needed the following to register the filetype
     -- {
     --     -- FYI provides syntax highlighting for applescript (that's it):
     --     "vim-scripts/applescript.vim",
