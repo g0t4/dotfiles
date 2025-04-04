@@ -470,11 +470,14 @@ end
 
 function StreamDeckConsoleClear()
     local script = "console.log(\"BUTTSWATCHES\");"
+    local multi = [[
+console.log("multilineBUTTSWATCHES");
+    ]]
 
     hs.osascript.applescript([[
 
 tell application "Brave Browser Beta"
-    set code to "]] .. escapeAppleScriptQuotes(script) .. [["
+    set code to "]] .. escapeAppleScriptQuotes(multi) .. [["
     set result to execute active tab of first window javascript code
 end tell
 
