@@ -6,6 +6,9 @@
 
 " Use :syn w/in a buffer to see language element breakdown
 
+
+" FYI wes made some mods to this... todo make some more (not really liking purple/white but I need to study other syntax files I like the colors for)
+
 if version < 600
   syntax clear
 elseif exists("b:current_syntax")
