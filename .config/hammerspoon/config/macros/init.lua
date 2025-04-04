@@ -461,4 +461,22 @@ end
 
 -- *** end excel helpers
 
+
+
+-- *** Google Docs helpers
+
+function StreamDeckConsoleClear()
+    -- run some applescript
+    hs.osascript.applescript([[
+tell application "Brave Browser Beta"
+    set code to "window.alert(window.location)"
+    -- set code to "console.clear();"
+
+    set result to execute active tab of first window javascript code
+end tell
+    ]])
+
+    print("cleared console")
+end
+
 return M
