@@ -464,20 +464,19 @@ end
 
 
 -- *** Google Docs helpers
-function escapeAppleScriptQuotes(str)
-    return str:gsub('"', '\\"')
-end
 
 function StreamDeckConsoleClear()
     local script = "console.log(\"BUTTSWATCHES\");"
     local multi = [[
-console.log("multilineBUTTSWATCHES");
+console.log("multiS");
     ]]
+
+    local escaped = multi:gsub('"', '\\"')
 
     hs.osascript.applescript([[
 
 tell application "Brave Browser Beta"
-    set code to "]] .. escapeAppleScriptQuotes(multi) .. [["
+    set code to "]] .. escaped .. [["
     set result to execute active tab of first window javascript code
 end tell
 
