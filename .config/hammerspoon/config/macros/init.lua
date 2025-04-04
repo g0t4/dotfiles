@@ -500,6 +500,10 @@ end tell
 ]])
 end
 
+function StreamDeckGoogleDocsCropButton()
+    RunJavaScriptInBrave('dispatchMouseDownUpEvents("#cropButton");')
+end
+
 function StreamDeckGoogleDocsMoreButton()
     RunJavaScriptInBrave('dispatchMouseDownUpEvents("#moreButton");')
 end
