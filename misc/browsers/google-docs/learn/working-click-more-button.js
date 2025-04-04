@@ -6,6 +6,9 @@ console.clear();
 //   can use breakpoint (see breakpoint js file)... and then click button and it will show you that way too (conditional on eventType mousedown)
 const moreTarget = document.querySelector("#moreButton > div > div > div > div > div > div");
 
+// *** use Keyboard Maestro run javascript action in a macro and this will work!
+
+
 // I found that it uses mousedown in a global handler by sending all possible types and finding what works!
 //    FYI this will also trigger a breakpoint on UCe/VCe obfuscated funcs
 const mouseEvents = [
