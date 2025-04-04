@@ -1,10 +1,13 @@
-vim.filetype.add({
-    extension = {
-        applescript = "applescript",
-    },
-})
+-- vim.filetype.add({
+--     extension = {
+--         applescript = "applescript",
+--     },
+-- })
 
 return {
+    -- {
+    --     "mityu/vim-applescript"
+    -- }
     -- {
     --     -- FYI provides syntax highlighting for applescript (that's it):
     --     "vim-scripts/applescript.vim",
