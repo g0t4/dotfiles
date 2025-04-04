@@ -12,6 +12,11 @@ const moreTarget = document.querySelector("#moreButton");
 const mouseEvents = [
     "mousedown", // "mouseup", // "click", // "dblclick",
     //  "mouseover", "mouseenter", "mouseout", "mouseleave", "mousemove"
+    //
+    //  "pointerdown", "pointerup",
+    //    "pointermove", "pointerleave",
+    //  "focusin", "focus", "focusout"
+    //  "blur",
 ];
 
 mouseEvents.forEach((type) => {
