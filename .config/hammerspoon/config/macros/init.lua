@@ -465,11 +465,11 @@ end
 
 -- *** Google Docs helpers
 function escapeAppleScriptQuotes(str)
-    return str:gsub('"', '""')
+    return str:gsub('"', '\\"')
 end
 
 function StreamDeckConsoleClear()
-    local script = "console.log('foo');"
+    local script = "console.log(\"BUTTSWATCHES\");"
 
     hs.osascript.applescript([[
 
