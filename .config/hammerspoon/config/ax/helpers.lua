@@ -342,6 +342,7 @@ end
 ---@param elem hs.axuielement
 ---@return boolean
 axuielemMT.isTitleUnique = function(elem)
+    -- TODO extract into isAttributeUnique (might wanna define not-nil/not-empty in those cases?)
     local elemTitle = elem:axTitle()
     local parent = elem:axParent()
     if parent == nil then
