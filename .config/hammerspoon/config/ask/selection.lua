@@ -34,11 +34,11 @@ function M.getSelectedTextThen(callbackWithSelectedText)
                 -- TODO why is setting AXValue empty causing menu to open in dev tools?
                 -- FOR NOW allow just use cmd+a in Brave too (stops the context menu from showing... odd)
                 -- if name == APPS.MicrosoftExcel then
-                    -- AXValue replace isn't working in excel so use cmd+A is fine
-                    -- *** FYI super cool to use this prompt in excel:
-                    --   average of A1 to A12
-                    --   (F2 edit then ask... as it types into cell the range selects!)
-                    hs.eventtap.keyStroke({ "cmd" }, "a", 0) -- 0ms delay b/c by the time we get any response will be way long enoughk
+                -- AXValue replace isn't working in excel so use cmd+A is fine
+                -- *** FYI super cool to use this prompt in excel:
+                --   average of A1 to A12
+                --   (F2 edit then ask... as it types into cell the range selects!)
+                hs.eventtap.keyStroke({ "cmd" }, "a", 0) -- 0ms delay b/c by the time we get any response will be way long enoughk
                 -- end
             end
             -- print("No selection or unsupported element.")
@@ -46,6 +46,14 @@ function M.getSelectedTextThen(callbackWithSelectedText)
             return
         end
     else
+        -- trigger select all which is needed to get/replace the user prompt/question
+        -- local selected = app:selectMenuItem({ "Edit", "Select All" })
+        -- if (not selected) then
+        --     print("failed to select all")
+        --     return
+        -- end
+        hs.eventtap.keyStroke({ "cmd" }, "a", 0) -- 0ms delay b/c by the time we get any response will be way long enoughk
+
         hs.alert.show("did not find system wide element, searching instead...")
         SearchForDevToolsTextArea(callbackWithSelectedText)
         return

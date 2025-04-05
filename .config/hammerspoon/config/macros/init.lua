@@ -406,13 +406,6 @@ end
 function SearchForDevToolsTextArea(callback)
     local focusedWindow, app = GetBraveFocusedWindowElement()
 
-    -- trigger select all which is needed to get/replace the user prompt/question
-    local selected           = app:asHSApplication():selectMenuItem({ "Edit", "Select All" })
-    if (not selected) then
-        print("failed to select all")
-        return
-    end
-
     -- AXTextArea '' - Console prompt
     -- AXHighestEditableAncestor: AXTextArea '' - Console prompt<hs.axuielement>
     --    todo look for presence of AXHighestEditableAncestor?
