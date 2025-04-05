@@ -215,9 +215,10 @@ local function showTooltipForElement(element, frame)
         local advice = ""
         -- TODO some of this feels redundant vs the BuildHammerspoonLuaTo... might wanna see if I can extract shared logic?
 
+        ---@param e hs.axuielement
         local function buildAccessor(e)
-            local parent = e:attributeValue("AXParent")
-            local role = e:attributeValue("AXRole")
+            local parent = e:axParent()
+            local role = e:axRole()
 
             if role == "AXApplication" then
                 return "app"
