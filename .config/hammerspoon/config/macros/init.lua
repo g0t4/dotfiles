@@ -391,7 +391,7 @@ end
 
 function PrintAttributes(elem)
     for n, v in pairs(elem) do
-        print(n, v)
+        print(n, hs.inspect(v))
     end
 end
 
