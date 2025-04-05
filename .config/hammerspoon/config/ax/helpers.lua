@@ -371,7 +371,7 @@ axuielemMT.findUniqueReference = function(elem)
     local isTitleValueUnique = axuielemMT.isAttributeValueUnique(elem, "AXTitle")
     local title = elem:axTitle()
     if title and isTitleValueUnique then
-        return elem:singular() .. "(" .. quote(elem) .. ")"
+        return elem:singular() .. "(" .. quote(title) .. ")"
     end
 
     -- * non-empty, unique subrole
