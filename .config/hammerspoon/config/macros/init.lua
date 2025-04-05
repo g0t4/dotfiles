@@ -451,33 +451,6 @@ function SearchForDevToolsTextArea(callbackWithSelectedText)
     )
 end
 
-function SearchForDevToolsTextArea1WebAreaSelectedText(callback)
-    local focusedWindow, app = GetBraveFocusedWindowElement()
-
-    -- AXTextArea '' - Console prompt
-    -- AXHighestEditableAncestor: AXTextArea '' - Console prompt<hs.axuielement>
-    --    todo look for presence of AXHighestEditableAncestor?
-    -- local criteria = { attribute = "AXDescription", value = "Console prompt" } -- took 22s! ouch
-    -- local criteria = { attribute = "AXRole", value = "AXTextArea" }
-    -- print("searching")
-
-    -- local criteria = { attribute = "AXRole", value = "AXWebArea" } -- 50 to 100ms! from focusedWindow
-    local criteria = { attribute = "AXTitle", value = "DevTools" } -- same 50 to 100ms
-    FindOneElement(focusedWindow, criteria,
-        function(_message, results, _numResultsAdded)
-            -- if devToolsWebArea == nil then
-            --     print("did not find DevTools web area")
-            --     return
-            -- end
-            for i, elem in ipairs(results) do
-                print(i .. ": ", InspectHtml(elem))
-                print("AXSelectedText", elem:attributeValue("AXSelectedText")) -- WORKS!
-            end
-            callback(results[1])
-        end
-    )
-end
-
 -- *** fcpx helpers
 
 function StreamDeckFcpxViewerToggleComments()
