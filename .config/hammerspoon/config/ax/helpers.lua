@@ -168,6 +168,37 @@ axuielemMT.textArea = function(self, index)
 end
 
 ---@return hs.axuielement[]
+axuielemMT.menus = function(self)
+    return self:childrenWithRole("AXMenu") or {}
+end
+---@param index number
+---@return hs.axuielement
+axuielemMT.menu = function(self, index)
+    return self:menus()[index]
+end
+
+---@return hs.axuielement[]
+axuielemMT.menuButtons = function(self)
+    return self:childrenWithRole("AXMenuButton") or {}
+end
+---@param index number
+---@return hs.axuielement
+axuielemMT.menuButton = function(self, index)
+    return self:menuButtons()[index]
+end
+
+---AXMenuItem
+---@return hs.axuielement[]
+axuielemMT.menuItems = function(self)
+    return self:childrenWithRole("AXMenuItem") or {}
+end
+---@param index number
+---@return hs.axuielement
+axuielemMT.menuItem = function(self, index)
+    return self:menuItems()[index]
+end
+
+---@return hs.axuielement[]
 axuielemMT.toolbars = function(self)
     return self:childrenWithRole("AXToolbar") or {}
 end
