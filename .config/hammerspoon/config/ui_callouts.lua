@@ -236,6 +236,8 @@ local function showTooltipForElement(element, frame)
                 return singular .. "(1)"
             end
             -- TODO later deterine uniqueness within siblings (if anything to identify and return that as an accessor too, i.e. withTitle("foo"))
+            -- TODO propose search criteria of the target element too? or leave that up to using the listed attrs?
+            -- PRN could add a mode to toggle showing this like with 'c' to show children
             return nil -- ambiguous
         end
 
