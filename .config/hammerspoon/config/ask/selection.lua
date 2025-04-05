@@ -15,7 +15,10 @@ function M.getSelectedTextThen(callbackWithSelectedText)
 
     local app = hs.application.frontmostApplication()
 
-    if focusedElement then
+    -- TODO use new approach for BRAVE ONLY... and the rest should go back to using the focused ui elem unless they have trouble and need custom too
+    --
+    -- if focusedElement then
+    if false then -- !! tmp DISABLED
         print("found systemWide AXFocusedUIElement: ", BuildHammerspoonLuaTo(focusedElement))
         local selectedText = focusedElement:attributeValue("AXSelectedText") -- < 0.4ms !!
 
