@@ -210,11 +210,33 @@ local function showTooltipForElement(element, frame)
 
     -- TODO!!! add code to find where I should start an elementSearch for the current element... i.e. first spot where its ambiguous
     -- TODO and then write the code to copy/paste and copy it too
-    local function getElementSearchCode()
+    --- @param elem hs.axuielement
+    local function getElementSearchCode(elem)
+        local chain = elem:path()
+        print("start")
+
+        -- for each item in chain, get the next one to file the role to check (siblings)
+        for i, currentElement in ipairs(chain) do
+            local childElem = chain[i + 1]
+            if childElem == nil then
+                break
+            end
+            print(" cur", currentElement:attributeValue("AXRole"))
+            print("  next", childElem:attributeValue("AXRole"))
+            print("")
+            local siblings = currentElement:childrenWithRole(childElem:attributeValue("AXRole"))
+            for j, sibling in ipairs(siblings) do
+                print(" ", j, sibling:attributeValue("AXTitle"), " => ", childElem == sibling)
+            end
+            if #siblings > 1 then
+                return "start here"
+            end
+        end
+
         return "elementSearch"
     end
 
-    local elementSearchCode = getElementSearchCode()
+    local elementSearchCode = getElementSearchCode(element)
 
     attributeDump = attributeDump .. "\n" .. elementSearchCode
 
