@@ -408,10 +408,11 @@ function StreamDeckFcpxViewerToggleComments()
     -- AXTitle: View<string>
     --
     -- elementSearch: app:window(2):splitGroup(1):group(1):splitGroup(1)
+    --    FYI didn't save any time using this elementSearch vs starting at window level (arguably this elementSearch though could indicate any of the above levels to boost search though so it was helpful that it pointed out window)
 
     local criteria = { attribute = "AXDescription", value = "View Options Menu Button" }
     -- using window shaves off 200ms! (150-190ms only now!, vs 400ms if start at app level - likely b/c of menus)
-    local startSearch = GetFcpxEditorWindow():splitGroup(1):group(1):splitGroup(1)
+    local startSearch = GetFcpxEditorWindow()
     FindOneElement(startSearch, criteria, afterSearch)
 end
 
