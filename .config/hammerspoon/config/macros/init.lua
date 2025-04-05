@@ -432,10 +432,13 @@ function SearchForDevToolsTextArea(callback)
             local criteria2 = { attribute = "AXRole", value = "AXTextArea" }
             FindOneElement(results[1], criteria2,
                 function(_message, results, numResultsAdded)
+                    -- FINDING other AXTextArea's which is not surprising
                     for i, elem in ipairs(results) do
                         print(i .. ": ", InspectHtml(elem))
                         PrintActions(elem)
                         PrintAttributes(elem)
+                        -- AXEditableAncestor	<userdata 1> -- hs.axuielement: AXTextArea (0x600006278f78)
+                        -- AXHighestEditableAncestor	<userdata 1> -- hs.axuielement: AXTextArea (0x6000062780b8)
                     end
                     callback(results[1])
                 end
