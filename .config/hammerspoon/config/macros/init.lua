@@ -371,7 +371,7 @@ end
 function StreamDeckFcpxViewerToggleComments()
     local app = GetFcpxAppElement()
 
-    app.isTitleUnique()
+    app:isTitleUnique()
 
 
     do return end

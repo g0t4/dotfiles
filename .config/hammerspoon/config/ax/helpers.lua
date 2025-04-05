@@ -332,13 +332,22 @@ end
 axuielemMT.axHelp = function(elem)
     return elem:attributeValue("AXHelp") or ""
 end
-
+---@param elem hs.axuielement
+---@return hs.axuielement|nil
+axuielemMT.axParent = function(elem)
+    return elem:attributeValue("AXParent")
+end
 
 -- *** ATTRIBUTE HELPERS ***
 ---@param elem hs.axuielement
+---@return boolean
 axuielemMT.isTitleUnique = function(elem)
-    local parent = elem:parent()
-    assert(parent ~= nil)
+    local parent = elem:axParent()
+    if parent == nil then
+        -- no parent, cannot know
+        error("isTitleUnique - element w/o a parent: " .. tostring(elem))
+        return false
+    end
     -- TODO add type hints for childrenWithRole (this is hs.axuielement API right?)
     local siblings = parent:childrenWithRole(elem:axRole())
     for _, sibling in ipairs(siblings) do
