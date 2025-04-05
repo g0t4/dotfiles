@@ -248,7 +248,7 @@ local function showTooltipForElement(element, frame)
                 if advice == "" then
                     advice = accessor -- app
                 else
-                    advice = advice .. "." .. accessor
+                    advice = advice .. ":" .. accessor
                 end
             end
         end
