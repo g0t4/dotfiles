@@ -233,12 +233,12 @@ local function showTooltipForElement(element, frame)
             return uniqueRef -- nil if not unique
 
             -- TODO propose search criteria of the target element too? or leave that up to using the listed attrs?
-            -- PRN could add a mode to toggle showing this like with 'c' to show children
         end
 
         -- PRN what if I ran timing code to find the fastest element start too OR estimated this based on # of total descendents?
         --  do this at each level of possible unique path... and pick the most general one that is the closest to the fastest route?
         --  most of the time it's gonna be a window most likely and then a panel that has a subset for a second search within
+        --  probably make this a separate flag or keymap?
 
         for _i, currentElement in ipairs(chain) do
             local accessor = buildAccessor(currentElement)
