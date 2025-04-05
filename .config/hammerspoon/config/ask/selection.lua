@@ -44,6 +44,38 @@ function M.getSelectedText()
             return value
         end
     else
+        hs.alert.show("Try using new axuielement selector approach as a fallback if system wide focused element fails to find the DevTools or otherwise")
+        -- TODO WOULD HAVE TO BE APP SECIFIC:
+        -- i.e. dev tools window literally has "DevTools" in title of an element on way down the specifier chain, here's an example though it will change:
+        --
+        -- app:window(1):group(1):group(1):group(1):group(1):scrollArea(1):webArea(1):group(1):group(1):group(1):group(1):group(1)
+        --   :group(1):group(1):group(1):group(1):group(1):group(1):group(2):group(1):group(1):group(1):group(1):group(1):group(1)
+        --   :group(1):group(1):group(2)
+        --
+        -- AXBlockQuoteLevel: 0<number>
+        -- AXDOMClassList: [1: monospace<string>]
+        -- AXDOMIdentifier: console-messages<string>
+        -- AXElementBusy: false<bool>
+        -- AXEnabled: true<bool>
+        -- AXEndTextMarker: <hs.axuielement.axtextmarker>
+        -- AXFocusableAncestor: AXGroup '' - Console panel<hs.axuielement>
+        -- AXFocused: false<bool>
+        -- AXLinkedUIElements: []
+        -- AXRequired: false<bool>
+        -- AXRoleDescription: group<string>
+        -- AXSelected: false<bool>
+        -- AXSelectedRows: []
+        -- AXSelectedTextMarkerRange: <hs.axuielement.axtextmarkerrange>
+        -- AXStartTextMarker: <hs.axuielement.axtextmarker>
+        -- AXVisited: false<bool>
+        -- ChromeAXNodeId: 666<string>
+        --
+        -- unique ref: app:window('DevTools - www.hammerspoon.org/docs/hs.task.html - wes private')
+        --   :group('DevTools - www.hammerspoon.org/docs/hs.task.html - wes private'):group(''):group(''):group(''):scrollArea()
+        --   :webArea('DevTools'):group('')
+
+        -- FYI COULD SEARCH FOR title 'DevTools' and/or AXWebArea...
+
         print("No selection or unsupported element.")
         return ""
     end
