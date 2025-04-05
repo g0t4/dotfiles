@@ -367,15 +367,41 @@ end
 ---@param elem hs.axuielement
 ---@return string|nil @ lua function call to one of my axuielemMT extension methods
 axuielemMT.findUniqueReference = function(elem)
-    -- title is most common, used by most elements
-    if axuielemMT.isAttributeValueUnique(elem, "AXTitle") then
-        -- PRN? generalize axQuoted method to take an attrName?
+    -- * non-empty, unique title
+    local isTitleValueUnique = axuielemMT.isAttributeValueUnique(elem, "AXTitle")
+    local title = elem:axTitle()
+    if title and isTitleValueUnique then
         -- PRN extract ref builder funcs, refIndex(), refTitle(), refDescription(), etc?
-        return elem:singular() .. "(" .. axTitleQuoted(elem) .. ")"
+        return elem:singular() .. "(" .. quote(elem) .. ")"
     end
+
+    -- * non-empty, unique subrole
+    local isSubroleValueUnique = axuielemMT.isAttributeValueUnique(elem, "AXSubrole")
+    local subRole = elem:attributeValue("AXSubrole")
+    if isSubroleValueUnique and subRole then
+        return elem:singular() .. "(" .. quote(subRole) .. ")"
+    end
+
+    -- * non-empty, unique description
+    local isDescrptionUnique = axuielemMT.isAttributeValueUnique(elem, "AXDescription")
+    local description = elem:attributeValue("AXDescription") or ""
+    if isDescrptionUnique and description then
+        return elem:singular() .. "(" .. quote(description) .. ")"
+    end
+
+    -- ? AXHelp, AXValue
+
+    -- * now, allow unique and empty/nil values
+    if isTitleValueUnique then
+        return elem:singular() .. "(" .. quote(title) .. ")"
+    elseif isSubroleValueUnique and subRole then
+        return elem:singular() .. "(" .. quote(subRole) .. ")"
+    elseif isDescrptionUnique and description then
+        return elem:singular() .. "(" .. quote(description) .. ")"
+    end
+
     local role = elem:axRole()
     if role == "AXWindow" then
-        -- ? windows => allow AXSubrole => also allow index reference?
         -- fallback on index as unique ref (unique enough, I don't want to stop looking beneath the window level - if I did stop I'd never really look much past the window level and all this code would be pointless, maybe it is anwyays :) )
         return elem:singular() .. "(" .. GetElementSiblingIndex(elem) .. ")"
     end
