@@ -233,7 +233,7 @@ local function showTooltipForElement(element, frame)
             local parent = e:attributeValue("AXParent")
             local siblings = parent:childrenWithRole(role)
             if #siblings == 1 then
-                return singular
+                return singular .. "(1)"
             end
             -- TODO later deterine uniqueness within siblings (if anything to identify and return that as an accessor too, i.e. withTitle("foo"))
             return nil -- ambiguous
@@ -253,7 +253,7 @@ local function showTooltipForElement(element, frame)
             end
         end
 
-        return "elementSearch:" .. advice
+        return "elementSearch: " .. advice
     end
 
     local elementSearchCode = getElementSearchCode(element)

@@ -406,7 +406,6 @@ function StreamDeckFcpxViewerToggleComments()
     -- AXRoleDescription: menu button<string>
     -- AXTitle: View<string>
     --
-    -- press 'c' to show children
     -- elementSearch: app.window(2).splitGroup(1).group(1).splitGroup(1)
 
     local criteria = { attribute = "AXDescription", value = "View Options Menu Button" }
