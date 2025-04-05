@@ -230,6 +230,7 @@ local function showTooltipForElement(element, frame)
                 -- PRN call into findUniquReference anyways and then fallback to index? in this case?
                 if e:isAttributeValueUnique("AXTitle") then
                     -- prefer title over index
+                    -- also I far prefer to see a title than an index, feels like I should add this to my other lua ref that isn't just on unique! (top of ui callout)
                     return e:singular() .. "(" .. axTitleQuoted(e) .. ")"
                 end
                 return e:singular() .. "(1)"
