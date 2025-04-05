@@ -441,10 +441,11 @@ function BuildHammerspoonLuaTo(toElement)
             return ":" .. singular .. "(" .. siblingIndex .. ")"
         end)
         :totable()
-    -- todo split on line length too (minimal though)
+
+    -- split lines on length of combined specifier references
     local lines = {}
     for i, s in ipairs(refChain) do
-        if i > 1 and #lines[#lines] + string.len(s) < 120 then
+        if i > 1 and (#lines[#lines] + string.len(s) < 120) then
             lines[#lines] = lines[#lines] .. s
         else
             table.insert(lines, s)
