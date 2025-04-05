@@ -350,19 +350,36 @@ end
 -- *** fcpx helpers
 
 function StreamDeckFcpxViewerToggleComments()
-    -- app:window(1) :splitGroup(1):group(1) :splitGroup(1):group(2) :splitGroup(1):group(3):group(1):menuButton(1)
-    local criteria = { attribute = "AXDescription", value = "View Options Menu Button" } -- 270ms to 370ms w/ count=1
-    -- TODO can I get it w/o clicking View first?
+    -- TODO incorporate this into what I was doing with FCPX a month or so ago, I had some organization setup
+    -- TODO can I search in menu items for it? I didn't find in general search but menu items might have it
 
     local function afterSearch(_message, searchTask, _numResultsAdded)
         local results = searchTask
         print("results:", InspectHtml(results))
 
-        -- local ySliderCriteria = { attribute = "AXHelp", value = "Y Slider" }
-        -- FindOneElement(GetFcpxAppElement(), ySliderCriteria, afterYSliderSearch)
-    end
-    -- TODO incorporate this into what I was doing with FCPX a month or so ago, I had some organization setup
 
+        local menu = results[1]
+        menu:performAction("AXPress")
+
+        -- for i, menuItem in ipairs(menu) do
+        --     local isAlreadyChecked = menuItem:attributeValue("AXRoleDescription") == "checked menu item"
+        --     if not isAlreadyChecked then
+        --         menuItem:performAction("AXPress")
+        --     end
+        -- end
+
+        -- TODO menu items here might have it too?
+
+        -- app:window(1) :splitGroup(2):group(1) :splitGroup(1):group(2) :splitGroup(1):group(3):group(1):menuButton(1)
+        -- :menu(1):menuItem(37)
+        criteria = { attribute = "AXTitle", value = "Show Captions" }
+        FindOneElement(menu, criteria, function(_, menuButton, _)
+            print("found: ", InspectHtml(menuButton))
+        end)
+    end
+
+    -- app:window(1) :splitGroup(1):group(1) :splitGroup(1):group(2) :splitGroup(1):group(3):group(1):menuButton(1)
+    local criteria = { attribute = "AXDescription", value = "View Options Menu Button" }
     -- using window shaves off 200ms! (150-190ms only now!, vs 400ms if start at app level - likely b/c of menus)
     local startSearch = GetFcpxAppElement():window(1)
     FindOneElement(startSearch, criteria, afterSearch)
