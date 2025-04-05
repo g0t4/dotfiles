@@ -227,8 +227,7 @@ local function showTooltipForElement(element, frame)
                 -- allow window to be indexed given that is a good cue that I need to review window titles or otherwise for best way to find a window first
                 -- TODO use window titles?
                 local title = e:attributeValue("AXTitle")
-                if title then
-                    -- check if unique
+                if title ~= "" and title ~= nil and e:isTitleUnique() then
                     return "windowTitled(" .. quote(title) .. ")"
                 end
                 local index = GetElementSiblingIndex(e)
