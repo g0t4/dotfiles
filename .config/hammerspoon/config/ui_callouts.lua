@@ -425,6 +425,10 @@ end
 
 local function highlightCurrentElement()
     assert(M.last ~= nil)
+    if M.last.freeze then
+        return
+    end
+
 
     local pos = hs.mouse.absolutePosition()
     local element = hs.axuielement.systemElementAtPosition(pos)
@@ -472,8 +476,8 @@ local function startElementInspector()
 end
 
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "F", function()
-    -- freeze and leave open
-
+    -- toggle freeze to leave it open instead of needing to copy or screencap
+    M.last.freeze = not M.last.freeze
 end)
 
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "C", function()
