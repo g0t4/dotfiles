@@ -56,6 +56,7 @@ end
 axuielemMT.windows = function(self)
     return self:childrenWithRole("AXWindow") or {}
 end
+---window by title returns first match, no guarantee only one match
 ---@param index number|string @index (number) or title (string)
 ---@return hs.axuielement
 axuielemMT.window = function(self, index)
