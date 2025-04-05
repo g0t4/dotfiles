@@ -343,6 +343,10 @@ end
 ---@return boolean
 axuielemMT.isAttributeValueUnique = function(elem, attrName)
     local elemAttrValue = elem:attributeValue(attrName)
+    if elemAttrValue == nil or elemAttrValue == "" then
+        -- don't try to index by ''... reality is as soon as a sibling appears it might be nil/empty too, so this is just as useles then as index
+        return false
+    end
     local parent = elem:axParent()
     if parent == nil then
         -- no parent, cannot know
@@ -359,6 +363,26 @@ axuielemMT.isAttributeValueUnique = function(elem, attrName)
     end
     -- no matches
     return true
+end
+
+---returns nil if not unique way to refer to the element
+---@param elem hs.axuielement
+---@return string|nil @ lua function call to one of my axuielemMT extension methods
+axuielemMT.findUniqueReference = function(elem)
+    -- title is most common, used by most elements
+    if axuielemMT.isAttributeValueUnique(elem, "AXTitle") then
+        -- PRN? generalize axQuoted method to take an attrName?
+        -- PRN extract ref builder funcs, refIndex(), refTitle(), refDescription(), etc?
+        return elem:singular() .. "(" .. axTitleQuoted(elem) .. ")"
+    end
+    local role = elem:axRole()
+    if role == "AXWindow" then
+        -- TODO? windows => allow AXSubrole => also allow index reference?
+        -- fallback on index as unique ref (unique enough, I don't want to stop looking beneath the window level - if I did stop I'd never really look much past the window level and all this code would be pointless, maybe it is anwyays :) )
+        return elem:singular() .. "(" .. GetElementSiblingIndex(elem) .. ")"
+    end
+
+    return nil -- == not unique
 end
 
 -- TODO move these onto axuieleemMT as extension methods

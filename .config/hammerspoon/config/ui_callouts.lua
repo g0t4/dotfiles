@@ -209,13 +209,14 @@ local function showTooltipForElement(element, frame)
     local attributeDump = table.concat(attributes, "\n")
 
     --- @param elem hs.axuielement
-    local function getElementSearchCode(elem)
+    local function getUniqueSpecifierChainForElementSearch(elem)
         local chain = elem:path()
         assert(chain ~= nil)
         local advice = ""
         -- TODO some of this feels redundant vs the BuildHammerspoonLuaTo... might wanna see if I can extract shared logic?
 
         ---@param e hs.axuielement
+        ---@return string | nil @ nil == ambiguous (no unique ref)
         local function buildAccessor(e)
             local parent = e:axParent()
             local role = e:axRole()
@@ -223,25 +224,16 @@ local function showTooltipForElement(element, frame)
             if role == "AXApplication" then
                 return "app"
             end
-            if role == "AXWindow" then
-                local title = e:attributeValue("AXTitle")
-                if title ~= "" and title ~= nil and e:isAttributeValueUnique("AXTitle") then
-                    return "windowTitled(" .. quote(title) .. ")"
-                end
-                -- fallback to index for windows, likely is ok in many cases and most will have a title anyways
-                local index = GetElementSiblingIndex(e)
-                return "window(" .. index .. ")"
-            end
 
             local siblings = parent:childrenWithRole(role)
             if #siblings == 1 then
                 return e:singular() .. "(1)"
             end
+            local uniqueRef = e:findUniqueReference()
+            return uniqueRef -- nil if not unique
 
-            -- TODO later deterine uniqueness within siblings (if anything to identify and return that as an accessor too, i.e. withTitle("foo"))
             -- TODO propose search criteria of the target element too? or leave that up to using the listed attrs?
             -- PRN could add a mode to toggle showing this like with 'c' to show children
-            return nil -- ambiguous
         end
 
         -- PRN what if I ran timing code to find the fastest element start too OR estimated this based on # of total descendents?
@@ -262,10 +254,11 @@ local function showTooltipForElement(element, frame)
             end
         end
 
-        return "elementSearch: " .. advice
+        -- FOR ELEMENT SEARCH
+        return "unique ref: " .. advice
     end
 
-    local elementSearchCode = getElementSearchCode(element)
+    local elementSearchCode = getUniqueSpecifierChainForElementSearch(element)
 
     attributeDump = attributeDump .. "\n" .. elementSearchCode
 

@@ -839,6 +839,8 @@ function GetElementSiblingIndex(elem)
         return nil
     end
 
+    -- FYI! window index changes if you switch windows! or close them... i.e. in a browser, finder, etc
+
     -- how expensive is it to get the attribute value here (again)? same for AXParent above
     local role = GetValueOrEmptyString(elem, "AXRole")
     local roleSiblings = parent:childrenWithRole(role)
