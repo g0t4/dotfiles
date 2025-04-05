@@ -42,6 +42,7 @@ function GetFcpxAppElement()
     return GetAppElement("com.apple.FinalCut")
 end
 
+---@return hs.axuielement, hs.axuielement
 function GetFcpxEditorWindow()
     local fcpx = GetFcpxAppElement()
     assert(fcpx, "GetFcpxEditorWindow: could not find Final Cut Pro")
@@ -410,7 +411,7 @@ function StreamDeckFcpxViewerToggleComments()
 
     local criteria = { attribute = "AXDescription", value = "View Options Menu Button" }
     -- using window shaves off 200ms! (150-190ms only now!, vs 400ms if start at app level - likely b/c of menus)
-    local startSearch = GetFcpxEditorWindow()
+    local startSearch = GetFcpxEditorWindow():splitGroup(1):group(1):splitGroup(1)
     FindOneElement(startSearch, criteria, afterSearch)
 end
 
