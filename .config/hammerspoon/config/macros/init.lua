@@ -348,6 +348,21 @@ function FindOneElement(app, criteria, callback)
     app:elementSearch(afterSearch, criteriaFunction, namedModifiers)
 end
 
+-- *** streamdeck Keyboard Maestro wrapper to catch errors and log them and rethrow for KM to show too ***
+-- I want error in hammerspoon logs too
+-- I also like the notification from KM b/c that is immediately visible
+-- then when I go to look into the issue I want HS logs
+function StreamDeckKeyboardMaestroRunner(what)
+    xpcall(function()
+        local func = load(what)
+        if func == nil then
+            error("failed to load: " .. what)
+            return
+        end
+        func()
+    end, function(errorMsg) print("error: ", errorMsg) end)
+end
+
 -- *** fcpx helpers
 
 function StreamDeckFcpxViewerToggleComments()
