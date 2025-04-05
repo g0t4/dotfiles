@@ -343,6 +343,26 @@ function FindOneElement(app, criteria, callback)
     app:elementSearch(afterSearch, criteriaFunction, namedModifiers)
 end
 
+-- *** fcpx helpers
+
+function StreamDeckFcpxViewerToggleComments()
+    -- app:window(1) :splitGroup(1):group(1) :splitGroup(1):group(2) :splitGroup(1):group(3):group(1):menuButton(1)
+    local criteria = { attribute = "AXDescription", value = "View Options Menu Button" } -- 270ms to 370ms w/ count=1
+    -- TODO can I get it w/o clicking View first?
+
+    local function afterSearch(message, searchTask, numResultsAdded)
+        local results = searchTask
+        print("results:", InspectHtml(results))
+
+
+        -- local ySliderCriteria = { attribute = "AXHelp", value = "Y Slider" }
+        -- FindOneElement(GetFcpxAppElement(), ySliderCriteria, afterYSliderSearch)
+    end
+
+
+    FindOneElement(GetFcpxAppElement(), criteria, afterSearch)
+end
+
 -- *** excel helpers
 
 function StreamDeckPowerPointEnsureTabOpen(tabName)
