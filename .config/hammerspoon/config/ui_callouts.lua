@@ -215,6 +215,7 @@ local function showTooltipForElement(element, frame)
         local chain = elem:path()
         assert(chain ~= nil)
         local advice = ""
+        -- TODO some of this feels redundant vs the BuildHammerspoonLuaTo... might wanna see if I can extract shared logic?
 
         local function buildAccessor(e)
             local role = e:attributeValue("AXRole")
