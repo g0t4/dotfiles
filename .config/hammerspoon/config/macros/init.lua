@@ -366,6 +366,56 @@ function StreamDeckKeyboardMaestroRunner(what)
     -- TODO verify it still shows notification for KM?
 end
 
+-- *** ask-openai troubleshooting brave devtools randomly doesn't get selected text
+
+---@return hs.axuielement
+function GetBraveAppElement()
+    return GetAppElement("com.brave.Browser.beta")
+end
+
+---@return hs.axuielement window, hs.axuielement app
+function GetBraveFocusedWindowElement()
+    local app = GetBraveAppElement()
+    assert(app ~= nil)
+    local window = app:axFocusedWindow()
+    -- todo allow nil if not open?
+    assert(window ~= nil)
+    return window, app
+end
+
+local NOOP = function() end
+
+function StreamDeckAskBraveDevToolsTroubleshooting()
+    SearchForDevToolsTextArea(NOOP)
+end
+
+function SearchForDevToolsTextArea(callback)
+    local focusedWindow, app = GetBraveFocusedWindowElement()
+
+    -- AXTextArea '' - Console prompt
+    -- AXHighestEditableAncestor: AXTextArea '' - Console prompt<hs.axuielement>
+    --    todo look for presence of AXHighestEditableAncestor?
+    -- local criteria = { attribute = "AXDescription", value = "Console prompt" } -- took 22s! ouch
+    -- local criteria = { attribute = "AXRole", value = "AXTextArea" }
+    -- print("searching")
+
+    -- local criteria = { attribute = "AXRole", value = "AXWebArea" } -- 50 to 100ms! from focusedWindow
+    local criteria = { attribute = "AXTitle", value = "DevTools" } -- same 50 to 100ms
+    FindOneElement(focusedWindow, criteria,
+        function(_message, results, _numResultsAdded)
+            -- if devToolsWebArea == nil then
+            --     print("did not find DevTools web area")
+            --     return
+            -- end
+            for i, elem in ipairs(results) do
+                print(i .. ": ", InspectHtml(elem))
+                print("AXSelectedText", elem:attributeValue("AXSelectedText")) -- WORKS!
+            end
+            callback(results[1])
+        end
+    )
+end
+
 -- *** fcpx helpers
 
 function StreamDeckFcpxViewerToggleComments()

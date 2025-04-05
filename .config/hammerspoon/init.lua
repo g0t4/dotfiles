@@ -21,7 +21,7 @@ require("config.ax.helpers")
 AskOpenAIStreaming = require("config.ask.ask").AskOpenAIStreaming
 
 -- test w/ T
--- hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "T", function()
+-- hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "B", function()
 --     local result = require("config.ask.selection").getSelectedText()
 --     print("result:\n ", result)
 -- end)

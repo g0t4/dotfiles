@@ -337,6 +337,18 @@ end
 axuielemMT.axParent = function(elem)
     return elem:attributeValue("AXParent")
 end
+---@param elem hs.axuielement
+---@return string|nil
+axuielemMT.axSubrole = function(elem)
+    return elem:attributeValue("AXSubrole") or ""
+end
+-- AXFocusedWindow
+---@param elem hs.axuielement
+---@return hs.axuielement|nil
+axuielemMT.axFocusedWindow = function(elem)
+    return elem:attributeValue("AXFocusedWindow")
+end
+
 
 -- *** ATTRIBUTE HELPERS ***
 ---can you uniquely refer to this element with the value of the given attrName

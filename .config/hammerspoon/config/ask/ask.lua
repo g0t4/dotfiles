@@ -21,9 +21,12 @@ function M.AskOpenAIStreaming()
         return
     end
 
+    selection.getSelectedTextThen(foundUserPrompt)
+end
 
+function foundUserPrompt(userPrompt)
     -- TODO userPrompt has env details in some cases, did I use those for excel/scripteditor/devtools? look at scrfipt that called python
-    local userPrompt = selection.getSelectedText()
+
     if userPrompt == "" then
         hs.alert.show("No selection found, try again...")
         return
