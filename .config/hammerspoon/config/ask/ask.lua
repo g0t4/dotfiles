@@ -21,10 +21,12 @@ function M.AskOpenAIStreaming()
         return
     end
 
-    selection.getSelectedTextThen(foundUserPrompt)
+    selection.getSelectedTextThen(function(selectedText)
+        foundUserPrompt(selectedText, app)
+    end)
 end
 
-function foundUserPrompt(userPrompt)
+function foundUserPrompt(userPrompt, app)
     -- TODO userPrompt has env details in some cases, did I use those for excel/scripteditor/devtools? look at scrfipt that called python
 
     if userPrompt == "" then
