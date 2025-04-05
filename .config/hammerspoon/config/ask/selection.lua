@@ -14,11 +14,15 @@ function M.getSelectedTextThen(callbackWithSelectedText)
     -- FYI this comes back nil for devtools, not sure why but when I added back Emojis spoon and restarted hs => it worked again... after which I took out Emojis spoon and it kept working?
 
     local app = hs.application.frontmostApplication()
+    if app:name() == APPS.BraveBrowserBeta then
+        hs.eventtap.keyStroke({ "cmd" }, "a", 0) -- 0ms delay b/c by the time we get any response will be way long enoughk
 
-    -- TODO use new approach for BRAVE ONLY... and the rest should go back to using the focused ui elem unless they have trouble and need custom too
-    --
-    -- if focusedElement then
-    if false then -- !! tmp DISABLED
+        hs.alert.show("did not find system wide element, searching instead...")
+        SearchForDevToolsTextArea(callbackWithSelectedText)
+        return
+    end
+
+    if focusedElement then
         print("found systemWide AXFocusedUIElement: ", BuildHammerspoonLuaTo(focusedElement))
         local selectedText = focusedElement:attributeValue("AXSelectedText") -- < 0.4ms !!
 
@@ -29,7 +33,7 @@ function M.getSelectedTextThen(callbackWithSelectedText)
         else
             local value = focusedElement:attributeValue("AXValue") -- < 0.4ms !!
             local name = app:name()
-            if name == APPS.BraveBrowserBeta or name == APPS.Excel then
+            if name == APPS.Excel then
                 -- clear the text to simulate cut behavior (clear until response starts)
                 -- could select all to simulate having copied it (so response replaces it too)
                 -- excel assume no selection == replace all too
@@ -55,12 +59,6 @@ function M.getSelectedTextThen(callbackWithSelectedText)
         --     print("failed to select all")
         --     return
         -- end
-        hs.eventtap.keyStroke({ "cmd" }, "a", 0) -- 0ms delay b/c by the time we get any response will be way long enoughk
-
-        hs.alert.show("did not find system wide element, searching instead...")
-        SearchForDevToolsTextArea(callbackWithSelectedText)
-        return
-
         -- TODO WOULD HAVE TO BE APP SECIFIC:
         -- i.e. dev tools window literally has "DevTools" in title of an element on way down the specifier chain, here's an example though it will change:
         --
