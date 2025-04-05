@@ -213,27 +213,38 @@ local function showTooltipForElement(element, frame)
     --- @param elem hs.axuielement
     local function getElementSearchCode(elem)
         local chain = elem:path()
-        print("start")
+        assert(chain ~= nil)
+        local advice = ""
 
-        -- for each item in chain, get the next one to file the role to check (siblings)
-        for i, currentElement in ipairs(chain) do
-            local childElem = chain[i + 1]
-            if childElem == nil then
+        local function buildAccessor(e)
+            local role = e:attributeValue("AXRole")
+            if role == "AXApplication" then
+                return "app"
+            end
+            if role == "AXWindow" then
+                local index = GetElementSiblingIndex(e)
+                return "window(" .. index .. ")"
+            end
+            -- everything will have a parent after app level
+            local parent = e:attributeValue("AXParent")
+            local siblings = parent:childrenWithRole(role)
+            if #siblings == 1 then
+                return role
+            end
+            -- TODO later deterine uniqueness within siblings (if anything to identify and return that as an accessor too, i.e. withTitle("foo"))
+            return nil -- ambiguous
+        end
+        for _i, currentElement in ipairs(chain) do
+            local accessor = buildAccessor(currentElement)
+            if not accessor then
+                -- nothing to add to accessor b/c it was ambiguous
                 break
-            end
-            print(" cur", currentElement:attributeValue("AXRole"))
-            print("  next", childElem:attributeValue("AXRole"))
-            print("")
-            local siblings = currentElement:childrenWithRole(childElem:attributeValue("AXRole"))
-            for j, sibling in ipairs(siblings) do
-                print(" ", j, sibling:attributeValue("AXTitle"), " => ", childElem == sibling)
-            end
-            if #siblings > 1 then
-                return "start here"
+            else
+                advice = advice .. "." .. accessor
             end
         end
 
-        return "elementSearch"
+        return "elementSearch:" .. advice
     end
 
     local elementSearchCode = getElementSearchCode(element)
