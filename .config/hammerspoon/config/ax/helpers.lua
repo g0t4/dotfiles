@@ -444,11 +444,11 @@ function BuildHammerspoonLuaTo(toElement)
 
     -- split lines on length of combined specifier references
     local lines = {}
-    for i, s in ipairs(refChain) do
-        if i > 1 and (#lines[#lines] + string.len(s) < 120) then
-            lines[#lines] = lines[#lines] .. s
+    for index, ref in ipairs(refChain) do
+        if index > 1 and (#lines[#lines] + string.len(ref) < 120) then
+            lines[#lines] = lines[#lines] .. ref
         else
-            table.insert(lines, s)
+            table.insert(lines, ref)
         end
     end
     return table.concat(lines, "\n  ")
