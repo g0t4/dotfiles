@@ -339,14 +339,12 @@ axuielemMT.axParent = function(elem)
 end
 
 -- *** ATTRIBUTE HELPERS ***
+---can you uniquely refer to this element with the value of the given attrName
+---even if its value is nil or empty "", that qualifies (consumers can handle that otherwise)
 ---@param elem hs.axuielement
 ---@return boolean
 axuielemMT.isAttributeValueUnique = function(elem, attrName)
     local elemAttrValue = elem:attributeValue(attrName)
-    if elemAttrValue == nil or elemAttrValue == "" then
-        -- don't try to index by ''... reality is as soon as a sibling appears it might be nil/empty too, so this is just as useles then as index
-        return false
-    end
     local parent = elem:axParent()
     if parent == nil then
         -- no parent, cannot know
@@ -377,7 +375,7 @@ axuielemMT.findUniqueReference = function(elem)
     end
     local role = elem:axRole()
     if role == "AXWindow" then
-        -- TODO? windows => allow AXSubrole => also allow index reference?
+        -- ? windows => allow AXSubrole => also allow index reference?
         -- fallback on index as unique ref (unique enough, I don't want to stop looking beneath the window level - if I did stop I'd never really look much past the window level and all this code would be pointless, maybe it is anwyays :) )
         return elem:singular() .. "(" .. GetElementSiblingIndex(elem) .. ")"
     end
@@ -443,6 +441,7 @@ function BuildHammerspoonLuaTo(toElement)
         :totable()
 
     -- split lines on length of combined specifier references
+    -- use brave DevTools to test this (~30 refs, most are unique too)
     local lines = {}
     for index, ref in ipairs(refChain) do
         if index > 1 and (#lines[#lines] + string.len(ref) < 120) then
