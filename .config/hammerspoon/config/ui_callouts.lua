@@ -227,6 +227,11 @@ local function showTooltipForElement(element, frame)
 
             local siblings = parent:childrenWithRole(role)
             if #siblings == 1 then
+                -- PRN call into findUniquReference anyways and then fallback to index? in this case?
+                if e:isAttributeValueUnique("AXTitle") then
+                    -- prefer title over index
+                    return e:singular() .. "(" .. axTitleQuoted(e) .. ")"
+                end
                 return e:singular() .. "(1)"
             end
             local uniqueRef = e:findUniqueReference()
