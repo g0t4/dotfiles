@@ -216,7 +216,10 @@ local function showTooltipForElement(element, frame)
         -- TODO some of this feels redundant vs the BuildHammerspoonLuaTo... might wanna see if I can extract shared logic?
 
         local function buildAccessor(e)
+            local parent = e:attributeValue("AXParent")
             local role = e:attributeValue("AXRole")
+            local siblings = parent:childrenWithRole(role)
+
             if role == "AXApplication" then
                 return "app"
             end
@@ -225,6 +228,7 @@ local function showTooltipForElement(element, frame)
                 -- TODO use window titles?
                 local title = e:attributeValue("AXTitle")
                 if title then
+                    -- check if unique
                     return "windowTitled(" .. quote(title) .. ")"
                 end
                 local index = GetElementSiblingIndex(e)
@@ -232,9 +236,6 @@ local function showTooltipForElement(element, frame)
             end
 
             local singular = e:singular()
-            -- everything will have a parent after app level
-            local parent = e:attributeValue("AXParent")
-            local siblings = parent:childrenWithRole(role)
             if #siblings == 1 then
                 return singular .. "(1)"
             end
