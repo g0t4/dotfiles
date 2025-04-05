@@ -302,20 +302,55 @@ end
 
 -- *** ATTRIBUTE ACCESSOR EXTENSION METHODS ***
 --- FYI purpose is to provide strongly typed API that also replaces nil with "" as is reasonable
+---@param elem hs.axuielement
 ---@return string
-axuielemMT.axTitle = function(self)
-    return self:attributeValue("AXTitle") or ""
+axuielemMT.axTitle = function(elem)
+    return elem:attributeValue("AXTitle") or ""
 end
+---@param elem hs.axuielement
 ---@return string
-axuielemMT.axDescription = function(self)
-    return self:attributeValue("AXDescription") or ""
+axuielemMT.axDescription = function(elem)
+    return elem:attributeValue("AXDescription") or ""
 end
+---@param elem hs.axuielement
 ---@return string
-axuielemMT.axValue = function(self)
-    return self:attributeValue("AXValue") or ""
+axuielemMT.axValue = function(elem)
+    return elem:attributeValue("AXValue") or ""
+end
+---@param elem hs.axuielement
+---@return string
+axuielemMT.axRole = function(elem)
+    return elem:attributeValue("AXRole") or ""
+end
+---@param elem hs.axuielement
+---@return string
+axuielemMT.axRoleDescription = function(elem)
+    return elem:attributeValue("AXRoleDescription") or ""
+end
+---@param elem hs.axuielement
+---@return string
+axuielemMT.axHelp = function(elem)
+    return elem:attributeValue("AXHelp") or ""
 end
 
+
 -- *** ATTRIBUTE HELPERS ***
+---@param elem hs.axuielement
+axuielemMT.isTitleUnique = function(elem)
+    local parent = elem:parent()
+    assert(parent ~= nil)
+    -- TODO add type hints for childrenWithRole (this is hs.axuielement API right?)
+    local siblings = parent:childrenWithRole(elem:axRole())
+    for _, sibling in ipairs(siblings) do
+        if elem ~= sibling and elem:axTitle() == sibling:axTitle() then
+            -- found a matching title with another sibling, so not unique
+            return false
+        end
+    end
+    -- all siblings with matching role had unique title, so we're good
+    return true
+end
+
 -- TODO move these onto axuieleemMT as extension methods
 function axValueQuoted(element)
     if not element then return "" end
