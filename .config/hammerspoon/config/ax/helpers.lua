@@ -349,7 +349,7 @@ axuielemMT.isTitleUnique = function(elem)
         return false
     end
     -- TODO add type hints for childrenWithRole (this is hs.axuielement API right?)
-    local siblings = parent:childrenWithRole(elem:axRole())
+    local siblings = parent:childrenWithRole(elem:axRole()) or {}
     for _, sibling in ipairs(siblings) do
         if elem ~= sibling and elem:axTitle() == sibling:axTitle() then
             -- found a matching title with another sibling, so not unique
