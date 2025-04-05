@@ -208,8 +208,6 @@ local function showTooltipForElement(element, frame)
     end
     local attributeDump = table.concat(attributes, "\n")
 
-    -- TODO!!! add code to find where I should start an elementSearch for the current element... i.e. first spot where its ambiguous
-    -- TODO and then write the code to copy/paste and copy it too
     --- @param elem hs.axuielement
     local function getElementSearchCode(elem)
         local chain = elem:path()
