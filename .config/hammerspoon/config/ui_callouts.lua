@@ -218,7 +218,6 @@ local function showTooltipForElement(element, frame)
         local function buildAccessor(e)
             local parent = e:attributeValue("AXParent")
             local role = e:attributeValue("AXRole")
-            local siblings = parent:childrenWithRole(role)
 
             if role == "AXApplication" then
                 return "app"
@@ -236,6 +235,7 @@ local function showTooltipForElement(element, frame)
             end
 
             local singular = e:singular()
+            local siblings = parent:childrenWithRole(role)
             if #siblings == 1 then
                 return singular .. "(1)"
             end
