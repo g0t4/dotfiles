@@ -207,7 +207,7 @@ local function showTooltipForElement(element, frame)
         table.insert(attributes, "\npress 'c' to show children")
     end
     local attributeDump = table.concat(attributes, "\n")
-
+    M.last.text = attributeDump -- include everything in copy so I can get attr values without writing them down by hand! (for cmd-ctrl-alt-c)
 
     local styledSpecifier = hs.styledtext.new(specifierLua, {
         font = {
