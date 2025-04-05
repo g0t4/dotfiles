@@ -389,7 +389,15 @@ function StreamDeckAskBraveDevToolsTroubleshooting()
     SearchForDevToolsTextArea(NOOP)
 end
 
+function PrintActions(elem)
+    print("ACTIONS:")
+    for i, n in pairs(elem:actionNames() or {}) do
+        print(n)
+    end
+end
+
 function PrintAttributes(elem)
+    print("ATTRIBUTES:")
     for n, v in pairs(elem) do
         print(n, hs.inspect(v))
     end
@@ -416,6 +424,7 @@ function SearchForDevToolsTextArea(callback)
             -- end
             for i, elem in ipairs(results) do
                 print(i .. ": ", InspectHtml(elem))
+                PrintActions(elem)
                 PrintAttributes(elem)
                 print()
                 print()
@@ -425,6 +434,7 @@ function SearchForDevToolsTextArea(callback)
                 function(_message, results, numResultsAdded)
                     for i, elem in ipairs(results) do
                         print(i .. ": ", InspectHtml(elem))
+                        PrintActions(elem)
                         PrintAttributes(elem)
                     end
                     callback(results[1])
