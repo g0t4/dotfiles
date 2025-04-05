@@ -230,6 +230,7 @@ local function showTooltipForElement(element, frame)
                 if title ~= "" and title ~= nil and e:isTitleUnique() then
                     return "windowTitled(" .. quote(title) .. ")"
                 end
+                -- fallback to index for windows, likely is ok in many cases and most will have a title anyways
                 local index = GetElementSiblingIndex(e)
                 return "window(" .. index .. ")"
             end
