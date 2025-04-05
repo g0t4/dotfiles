@@ -359,8 +359,9 @@ function StreamDeckFcpxViewerToggleComments()
         -- FindOneElement(GetFcpxAppElement(), ySliderCriteria, afterYSliderSearch)
     end
 
-
-    FindOneElement(GetFcpxAppElement(), criteria, afterSearch)
+    -- using window shaves off 200ms! (150-190ms only now!, vs 400ms if start at app level - likely b/c of menus)
+    local startSearch = GetFcpxAppElement():window(1)
+    FindOneElement(startSearch, criteria, afterSearch)
 end
 
 -- *** excel helpers
