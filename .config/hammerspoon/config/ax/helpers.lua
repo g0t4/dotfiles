@@ -371,7 +371,6 @@ axuielemMT.findUniqueReference = function(elem)
     local isTitleValueUnique = axuielemMT.isAttributeValueUnique(elem, "AXTitle")
     local title = elem:axTitle()
     if title and isTitleValueUnique then
-        -- PRN extract ref builder funcs, refIndex(), refTitle(), refDescription(), etc?
         return elem:singular() .. "(" .. quote(elem) .. ")"
     end
 
@@ -379,14 +378,15 @@ axuielemMT.findUniqueReference = function(elem)
     local isSubroleValueUnique = axuielemMT.isAttributeValueUnique(elem, "AXSubrole")
     local subRole = elem:attributeValue("AXSubrole")
     if isSubroleValueUnique and subRole then
-        return elem:singular() .. "(" .. quote(subRole) .. ")"
+        -- add subrole= to make clear I need an arg or overload for that
+        return elem:singular() .. "(subrole=" .. quote(subRole) .. ")"
     end
 
     -- * non-empty, unique description
     local isDescrptionUnique = axuielemMT.isAttributeValueUnique(elem, "AXDescription")
     local description = elem:attributeValue("AXDescription") or ""
     if isDescrptionUnique and description then
-        return elem:singular() .. "(" .. quote(description) .. ")"
+        return elem:singular() .. "(desc=" .. quote(description) .. ")"
     end
 
     -- ? AXHelp, AXValue
@@ -395,9 +395,9 @@ axuielemMT.findUniqueReference = function(elem)
     if isTitleValueUnique then
         return elem:singular() .. "(" .. quote(title) .. ")"
     elseif isSubroleValueUnique and subRole then
-        return elem:singular() .. "(" .. quote(subRole) .. ")"
+        return elem:singular() .. "(subrole=" .. quote(subRole) .. ")"
     elseif isDescrptionUnique and description then
-        return elem:singular() .. "(" .. quote(description) .. ")"
+        return elem:singular() .. "(desc=" .. quote(description) .. ")"
     end
 
     local role = elem:axRole()
