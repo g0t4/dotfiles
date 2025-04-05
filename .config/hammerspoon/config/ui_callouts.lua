@@ -436,13 +436,6 @@ local function highlightCurrentElement()
     highlightThisElement(element)
 end
 
-hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "C", function()
-    -- copy last script to clipboard... maybe just do this on stop?
-    if M.last.text then
-        hs.pasteboard.setContents(M.last.text)
-    end
-end)
-
 local function stopElementInspector()
     M.moves = nil
     M.subscription:unsubscribe() -- subscription cleanup is all... really can skip this here
@@ -477,6 +470,19 @@ local function startElementInspector()
     table.insert(M.bindings, hs.hotkey.bind({}, "escape", stopElementInspector))
     table.insert(M.bindings, hs.hotkey.bind({}, "c", function() M.last.showChildren = not M.last.showChildren end))
 end
+
+hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "F", function()
+    -- freeze and leave open
+
+end)
+
+hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "C", function()
+    -- copy last script to clipboard... maybe just do this on stop?
+    if M.last.text then
+        hs.pasteboard.setContents(M.last.text)
+    end
+    stopElementInspector()
+end)
 
 M.moves = nil
 M.stop_event_source = nil
