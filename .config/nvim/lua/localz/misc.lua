@@ -162,15 +162,20 @@ end, { noremap = true, silent = true })
 
 
 -- *** clipboard keymaps
-vim.keymap.set("n", "<leader>v", "0p`[v`]", { noremap = true })
---   0p  - paste from register 0
+vim.keymap.set("n", "<leader>v", function()
+    vim.cmd("normal o") -- insert line after
+    vim.cmd("normal O") -- insert line before
+    vim.cmd("normal 0p`[v`]") -- insert clipboard
+end, { noremap = true }) --   0p  - paste from register 0
 --   `[  - goto pasted text's start mark (start of last yanked/changed text)
 --   v   - charwise visual mode
 --   `]  - goto pasted text's end mark (end of last yanked/changed text)
 vim.keymap.set("n", "<leader>vc", function()
     -- for some reason, when rhs is just the string of keys... it doesn't comment the lines (or at least not reliably)
     --   but if I call normal w/ same keys it works (so far):
-    vim.cmd("normal 0p`[v`]gc")
+    vim.cmd("normal o") -- insert line after
+    vim.cmd("normal O") -- insert line before
+    vim.cmd("normal 0p`[v`]gc") -- insert clipboard, commented out
 end, { noremap = true }) -- " and comment it out (toggle comment)
 -- PRN I could drop vc and just get in habit of vgc which is nearly the same
 
