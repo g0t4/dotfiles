@@ -300,6 +300,23 @@ axuielemMT.singular = function(element)
     return lowercaseFirstLetter(singular)
 end
 
+-- *** ATTRIBUTE ACCESSOR EXTENSION METHODS ***
+--- FYI purpose is to provide strongly typed API that also replaces nil with "" as is reasonable
+---@return string
+axuielemMT.axTitle = function(self)
+    return self:attributeValue("AXTitle") or ""
+end
+---@return string
+axuielemMT.axDescription = function(self)
+    return self:attributeValue("AXDescription") or ""
+end
+---@return string
+axuielemMT.axValue = function(self)
+    return self:attributeValue("AXValue") or ""
+end
+
+-- *** ATTRIBUTE HELPERS ***
+-- TODO move these onto axuieleemMT as extension methods
 function axValueQuoted(element)
     if not element then return "" end
     local value = element:attributeValue("AXValue")
