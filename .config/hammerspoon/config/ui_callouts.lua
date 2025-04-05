@@ -212,12 +212,10 @@ local function showTooltipForElement(element, frame)
     local function getUniqueSpecifierChainForElementSearch(elem)
         local chain = elem:path()
         assert(chain ~= nil)
-        local advice = ""
-        -- TODO some of this feels redundant vs the BuildHammerspoonLuaTo... might wanna see if I can extract shared logic?
 
         ---@param e hs.axuielement
         ---@return string | nil @ nil == ambiguous (no unique ref)
-        local function buildAccessor(e)
+        local function buildRef(e)
             local parent = e:axParent()
             local role = e:axRole()
 
@@ -231,12 +229,13 @@ local function showTooltipForElement(element, frame)
                 if e:isAttributeValueUnique("AXTitle") then
                     -- prefer title over index
                     -- also I far prefer to see a title than an index, feels like I should add this to my other lua ref that isn't just on unique! (top of ui callout)
-                    return e:singular() .. "(" .. axTitleQuoted(e) .. ")"
+                    return ":" .. e:singular() .. "(" .. axTitleQuoted(e) .. ")"
                 end
-                return e:singular() .. "(1)"
+                return ":" .. e:singular() .. "(1)"
             end
             local uniqueRef = e:findUniqueReference()
-            return uniqueRef -- nil if not unique
+            if uniqueRef == nil then return nil end
+            return ":" .. uniqueRef
 
             -- TODO propose search criteria of the target element too? or leave that up to using the listed attrs?
         end
@@ -246,22 +245,23 @@ local function showTooltipForElement(element, frame)
         --  most of the time it's gonna be a window most likely and then a panel that has a subset for a second search within
         --  probably make this a separate flag or keymap?
 
-        for _i, currentElement in ipairs(chain) do
-            local accessor = buildAccessor(currentElement)
-            if not accessor then
+        local lines = { "unique ref: " }
+        for _, currentElement in ipairs(chain) do
+            local ref = buildRef(currentElement)
+            if not ref then
                 -- nothing to add to accessor b/c it was ambiguous
                 break
             else
-                if advice == "" then
-                    advice = accessor -- app
+                if #lines[#lines] + string.len(ref) < 120 then
+                    lines[#lines] = lines[#lines] .. ref
                 else
-                    advice = advice .. ":" .. accessor
+                    table.insert(lines, ref)
                 end
             end
         end
 
         -- FOR ELEMENT SEARCH
-        return "unique ref: " .. advice
+        return table.concat(lines, "\n  ")
     end
 
     local elementSearchCode = getUniqueSpecifierChainForElementSearch(element)
