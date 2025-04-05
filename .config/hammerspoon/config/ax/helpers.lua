@@ -423,7 +423,7 @@ function axTitleQuoted(element)
 end
 
 function BuildHammerspoonLuaTo(toElement)
-    local tmp = fun.enumerate(toElement:path())
+    local refChain = fun.enumerate(toElement:path())
         :map(function(_, pathItem)
             local singular = pathItem:singular()
             if singular == "application" then
@@ -443,7 +443,7 @@ function BuildHammerspoonLuaTo(toElement)
         :totable()
     -- todo split on line length too (minimal though)
     local lines = {}
-    for i, s in ipairs(tmp) do
+    for i, s in ipairs(refChain) do
         if i > 1 and #lines[#lines] + string.len(s) < 120 then
             lines[#lines] = lines[#lines] .. s
         else
