@@ -1,5 +1,3 @@
-local fun = require("fun")
-local axuielement = require("hs.axuielement") -- load to modify its metatable
 local f = require("config.helpers.underscore")
 require("config.helpers.misc")
 
@@ -459,8 +457,8 @@ function axTitleQuoted(element)
 end
 
 function BuildHammerspoonLuaTo(toElement)
-    local refChain = fun.enumerate(toElement:path())
-        :map(function(_, pathItem)
+    local refChain = f.imap(toElement:path(),
+        function(_, pathItem)
             local singular = pathItem:singular()
             if singular == "application" then
                 -- this is just meant as a generic example, not actually using as is
@@ -476,7 +474,6 @@ function BuildHammerspoonLuaTo(toElement)
             end
             return ":" .. singular .. "(" .. siblingIndex .. ")"
         end)
-        :totable()
 
     -- split lines on length of combined specifier references
     -- use brave DevTools to test this (~30 refs, most are unique too)
