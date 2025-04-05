@@ -353,24 +353,27 @@ function StreamDeckFcpxViewerToggleComments()
     -- TODO incorporate this into what I was doing with FCPX a month or so ago, I had some organization setup
     -- TODO can I search in menu items for it? I didn't find in general search but menu items might have it
 
-    local function afterSearch(_message, searchTask, _numResultsAdded)
-        local results = searchTask
-        print("results:", InspectHtml(results))
-
+    local function afterSearch(_message, results, _numResultsAdded)
+        if menu == nil then
+            error("didn't find menu")
+            return
+        end
 
         local menu = results[1]
         menu:performAction("AXPress")
-        for i, menuItem in ipairs(menu:menu(1)) do
-            print("item ", InspectHtml(menuItem))
+        for _, menuItem in ipairs(menu:menu(1)) do
             if menuItem:attributeValue("AXTitle") == "Show Captions" then
                 menuItem:performAction("AXPress")
-                print("found it!")
             end
 
-            -- local isAlreadyChecked = menuItem:attributeValue("AXRoleDescription") == "checked menu item"
-            -- if not isAlreadyChecked then
-            --     menuItem:performAction("AXPress")
-            -- end
+            -- attributes when captions are turned ON:
+            -- AXEnabled: true<bool> -- *** doesn't change with ON/OFF
+            -- AXIdentifier: _NS:210<string>
+            -- AXMenuItemCmdModifiers: 8<number>
+            -- AXMenuItemMarkChar: ✓<string>   -- *** this is gone if OFF
+            -- AXMenuItemPrimaryUIElement: AXMenuItem 'Show Captions' _NS:210<hs.axuielement>
+            -- AXSelected: true<bool>  -- *** this doesn't change with ON/OFF
+            -- AXTitle: Show Captions<string>
         end
 
         -- TODO menu items here might have it too?
