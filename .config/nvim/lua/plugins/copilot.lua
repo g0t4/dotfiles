@@ -163,8 +163,10 @@ local llm_nvim = {
             --     :messages
 
             -- *** qwen2.5
-            model = "qwen2.5-coder:3b", -- scrappy but if I give right context it is much faster and still accurate (i.e. paste in ref files list when completing require calls in lazy setup)
-            -- model = "qwen2.5-coder:14b",
+            model = "qwen2.5-coder:14b-base-q8_0", -- scrappy but if I give right context it is much faster and still accurate (i.e. paste in ref files list when completing require calls in lazy setup)
+            -- model = "qwen2.5-coder:14b-instruct-q8_0", -- scrappy but if I give right context it is much faster and still accurate (i.e. paste in ref files list when completing require calls in lazy setup)
+            -- model = "qwen2.5-coder:7b-base-q8_0", -- scrappy but if I give right context it is much faster and still accurate (i.e. paste in ref files list when completing require calls in lazy setup)
+            -- model = "qwen2.5-coder:7b-instruct-q8_0", -- scrappy but if I give right context it is much faster and still accurate (i.e. paste in ref files list when completing require calls in lazy setup)
             -- run ollama serve in debug mode... look at output when model is first loaded, IIAC this is what I need
             -- llm_load_print_meta: general.name     = Qwen2.5 Coder 3B Instruct
             -- llm_load_print_meta: BOS token        = 1516c43 '<|endoftext|>'
