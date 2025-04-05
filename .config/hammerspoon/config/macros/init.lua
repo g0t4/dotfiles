@@ -354,12 +354,12 @@ function StreamDeckFcpxViewerToggleComments()
     -- TODO can I search in menu items for it? I didn't find in general search but menu items might have it
 
     local function afterSearch(_message, results, _numResultsAdded)
+        local menu = results[1]
         if menu == nil then
             error("didn't find menu")
             return
         end
 
-        local menu = results[1]
         menu:performAction("AXPress")
         for _, menuItem in ipairs(menu:menu(1)) do
             if menuItem:attributeValue("AXTitle") == "Show Captions" then
@@ -387,9 +387,10 @@ function StreamDeckFcpxViewerToggleComments()
     end
 
     -- app:window(1) :splitGroup(1):group(1) :splitGroup(1):group(2) :splitGroup(1):group(3):group(1):menuButton(1)
+
     local criteria = { attribute = "AXDescription", value = "View Options Menu Button" }
     -- using window shaves off 200ms! (150-190ms only now!, vs 400ms if start at app level - likely b/c of menus)
-    local startSearch = GetFcpxAppElement():window(1)
+    local startSearch = GetFcpxEditorWindow()
     FindOneElement(startSearch, criteria, afterSearch)
 end
 
