@@ -389,6 +389,12 @@ function StreamDeckAskBraveDevToolsTroubleshooting()
     SearchForDevToolsTextArea(NOOP)
 end
 
+function PrintAttributes(elem)
+    for n, v in pairs(elem) do
+        print(n, v)
+    end
+end
+
 function SearchForDevToolsTextArea(callback)
     local focusedWindow, app = GetBraveFocusedWindowElement()
 
@@ -403,15 +409,27 @@ function SearchForDevToolsTextArea(callback)
     local criteria = { attribute = "AXTitle", value = "DevTools" } -- same 50 to 100ms
     FindOneElement(focusedWindow, criteria,
         function(_message, results, _numResultsAdded)
+            -- PRN could look at message to see if completed or more to go
             -- if devToolsWebArea == nil then
             --     print("did not find DevTools web area")
             --     return
             -- end
             for i, elem in ipairs(results) do
                 print(i .. ": ", InspectHtml(elem))
-                print("AXSelectedText", elem:attributeValue("AXSelectedText")) -- WORKS!
+                PrintAttributes(elem)
+                print()
+                print()
             end
-            callback(results[1])
+            local criteria2 = { attribute = "AXRole", value = "AXTextArea" }
+            FindOneElement(results[1], criteria2,
+                function(_message, results, numResultsAdded)
+                    for i, elem in ipairs(results) do
+                        print(i .. ": ", InspectHtml(elem))
+                        PrintAttributes(elem)
+                    end
+                    callback(results[1])
+                end
+            )
         end
     )
 end
