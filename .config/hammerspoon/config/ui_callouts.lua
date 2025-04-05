@@ -266,7 +266,7 @@ local function showTooltipForElement(element, frame)
 
     local elementSearchCode = getUniqueSpecifierChainForElementSearch(element)
 
-    attributeDump = attributeDump .. "\n" .. elementSearchCode
+    attributeDump = attributeDump .. "\n\n" .. elementSearchCode
 
     -- include everything in copy so I can get attr values without writing them down by hand! (for cmd-ctrl-alt-c)
     M.last.text = specifierLua .. "\n\n" .. attributeDump
