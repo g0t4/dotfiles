@@ -218,6 +218,9 @@ local function showTooltipForElement(element, frame)
 
         local function buildAccessor(e)
             local role = e:attributeValue("AXRole")
+            local singular = role:gsub("^AX", "")
+            singular = lowercaseFirstLetter(singular)
+
             if role == "AXApplication" then
                 return "app"
             end
@@ -225,22 +228,28 @@ local function showTooltipForElement(element, frame)
                 local index = GetElementSiblingIndex(e)
                 return "window(" .. index .. ")"
             end
+
             -- everything will have a parent after app level
             local parent = e:attributeValue("AXParent")
             local siblings = parent:childrenWithRole(role)
             if #siblings == 1 then
-                return role
+                return singular
             end
             -- TODO later deterine uniqueness within siblings (if anything to identify and return that as an accessor too, i.e. withTitle("foo"))
             return nil -- ambiguous
         end
+
         for _i, currentElement in ipairs(chain) do
             local accessor = buildAccessor(currentElement)
             if not accessor then
                 -- nothing to add to accessor b/c it was ambiguous
                 break
             else
-                advice = advice .. "." .. accessor
+                if advice == "" then
+                    advice = accessor -- app
+                else
+                    advice = advice .. "." .. accessor
+                end
             end
         end
 
