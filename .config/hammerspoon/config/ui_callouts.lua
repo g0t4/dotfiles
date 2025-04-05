@@ -209,6 +209,9 @@ local function showTooltipForElement(element, frame)
     local attributeDump = table.concat(attributes, "\n")
     M.last.text = attributeDump -- include everything in copy so I can get attr values without writing them down by hand! (for cmd-ctrl-alt-c)
 
+    -- TODO!!! add code to find where I should start an elementSearch for the current element... i.e. first spot where its ambiguous
+    -- TODO and then write the code to copy/paste and copy it too
+
     local styledSpecifier = hs.styledtext.new(specifierLua, {
         font = {
             name = "SauceCodePro Nerd Font",
