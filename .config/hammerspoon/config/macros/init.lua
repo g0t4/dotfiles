@@ -397,6 +397,18 @@ function StreamDeckFcpxViewerToggleComments()
     --
     -- elementSearch:app.window(2).splitGroup.group.splitGroup
 
+    -- app:window(2) :splitGroup(1):group(1) :splitGroup(1):group(2) :splitGroup(1):group(3):group(1):menuButton(1)
+    --
+    -- AXDescription: View Options Menu Button<string>
+    -- AXEnabled: true<bool>
+    -- AXFocused: false<bool>
+    -- AXIdentifier: _NS:687<string>
+    -- AXRoleDescription: menu button<string>
+    -- AXTitle: View<string>
+    --
+    -- press 'c' to show children
+    -- elementSearch: app.window(2).splitGroup(1).group(1).splitGroup(1)
+
     local criteria = { attribute = "AXDescription", value = "View Options Menu Button" }
     -- using window shaves off 200ms! (150-190ms only now!, vs 400ms if start at app level - likely b/c of menus)
     local startSearch = GetFcpxEditorWindow()

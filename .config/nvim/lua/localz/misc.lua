@@ -176,6 +176,7 @@ vim.keymap.set("n", "<leader>vc", function()
     vim.cmd("normal o") -- insert line after
     vim.cmd("normal O") -- insert line before
     vim.cmd("normal 0p`[v`]gc") -- insert clipboard, commented out
+    vim.cmd("normal gv=") -- then reindent (reselect, indent)
 end, { noremap = true }) -- " and comment it out (toggle comment)
 -- PRN I could drop vc and just get in habit of vgc which is nearly the same
 
