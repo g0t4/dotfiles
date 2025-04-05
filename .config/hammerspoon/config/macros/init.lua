@@ -360,22 +360,27 @@ function StreamDeckFcpxViewerToggleComments()
 
         local menu = results[1]
         menu:performAction("AXPress")
+        for i, menuItem in ipairs(menu:menu(1)) do
+            print("item ", InspectHtml(menuItem))
+            if menuItem:attributeValue("AXTitle") == "Show Captions" then
+                menuItem:performAction("AXPress")
+                print("found it!")
+            end
 
-        -- for i, menuItem in ipairs(menu) do
-        --     local isAlreadyChecked = menuItem:attributeValue("AXRoleDescription") == "checked menu item"
-        --     if not isAlreadyChecked then
-        --         menuItem:performAction("AXPress")
-        --     end
-        -- end
+            -- local isAlreadyChecked = menuItem:attributeValue("AXRoleDescription") == "checked menu item"
+            -- if not isAlreadyChecked then
+            --     menuItem:performAction("AXPress")
+            -- end
+        end
 
         -- TODO menu items here might have it too?
 
         -- app:window(1) :splitGroup(2):group(1) :splitGroup(1):group(2) :splitGroup(1):group(3):group(1):menuButton(1)
         -- :menu(1):menuItem(37)
-        criteria = { attribute = "AXTitle", value = "Show Captions" }
-        FindOneElement(menu, criteria, function(_, menuButton, _)
-            print("found: ", InspectHtml(menuButton))
-        end)
+        -- criteria = { attribute = "AXTitle", value = "Show Captions" }
+        -- FindOneElement(menu, criteria, function(_, menuButton, _)
+        --     print("found: ", InspectHtml(menuButton))
+        -- end)
     end
 
     -- app:window(1) :splitGroup(1):group(1) :splitGroup(1):group(2) :splitGroup(1):group(3):group(1):menuButton(1)
