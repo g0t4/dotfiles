@@ -341,24 +341,23 @@ end
 -- *** ATTRIBUTE HELPERS ***
 ---@param elem hs.axuielement
 ---@return boolean
-axuielemMT.isTitleUnique = function(elem)
-    -- TODO extract into isAttributeUnique (might wanna define not-nil/not-empty in those cases?)
-    local elemTitle = elem:axTitle()
+axuielemMT.isAttributeValueUnique = function(elem, attrName)
+    local elemAttrValue = elem:attributeValue(attrName)
     local parent = elem:axParent()
     if parent == nil then
         -- no parent, cannot know
-        error("isTitleUnique - element w/o a parent: " .. tostring(elem))
+        error("isAttributeValueUnique(" .. elem .. ", " .. attrName .. ") called on element with no parent")
         return false
     end
     -- TODO add type hints for childrenWithRole (this is hs.axuielement API right?)
     local siblings = parent:childrenWithRole(elem:axRole()) or {}
     for _, sibling in ipairs(siblings) do
-        if elem ~= sibling and elemTitle == sibling:axTitle() then
-            -- found a matching title with another sibling, so not unique
+        if elem ~= sibling and elemAttrValue == sibling:attributeValue(attrName) then
+            -- matched a sibling
             return false
         end
     end
-    -- all siblings with matching role had unique title, so we're good
+    -- no matches
     return true
 end
 
