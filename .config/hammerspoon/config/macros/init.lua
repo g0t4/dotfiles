@@ -28,11 +28,15 @@ local function EnsureCheckboxIsUnchecked(checkbox)
     end
 end
 
+---@return hs.axuielement
 function GetAppElement(appName)
     local app = application.find(appName)
-    return hs.axuielement.applicationElement(app)
+    local appElement = hs.axuielement.applicationElement(app)
+    assert(appElement ~= nil, "could not find app element for app: " .. appName)
+    return appElement
 end
 
+---@return hs.axuielement
 function GetFcpxAppElement()
     -- 1.4ms for com.apple.FinalCut
     return GetAppElement("com.apple.FinalCut")
@@ -353,7 +357,6 @@ function StreamDeckFcpxViewerToggleComments()
     local function afterSearch(message, searchTask, numResultsAdded)
         local results = searchTask
         print("results:", InspectHtml(results))
-
 
         -- local ySliderCriteria = { attribute = "AXHelp", value = "Y Slider" }
         -- FindOneElement(GetFcpxAppElement(), ySliderCriteria, afterYSliderSearch)
