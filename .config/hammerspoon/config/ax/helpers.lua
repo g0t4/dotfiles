@@ -52,12 +52,22 @@ axuielemMT.expectFocusedMainWindow = function(self)
     return focusedWindow
 end
 
+---@return hs.axuielement[]
 axuielemMT.windows = function(self)
-    return self:childrenWithRole("AXWindow")
+    return self:childrenWithRole("AXWindow") or {}
 end
----@param index number
+---@param index number|string @index (number) or title (string)
 ---@return hs.axuielement
 axuielemMT.window = function(self, index)
+    if type(index) == "string" then
+        local windows = self:windows()
+        for _, window in ipairs(windows) do
+            local title = window:title() -- or maybe try value of first staticText descendant?
+            if title == index then return window end
+        end
+        -- easier to throw error, I can see that in hammerspoon logs easily enough then downstream doesn't have to deal with it (notably type hints and asserts)
+        error("axuielemMT.window: could not find window with title " .. tostring(index))
+    end
     return self:windows()[index]
 end
 
