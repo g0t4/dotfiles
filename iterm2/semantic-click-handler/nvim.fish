@@ -70,8 +70,13 @@ end
 
 # *** images ***
 if string match --quiet --regex "image/.*" "$_mime_type"
+    # not svgs, those open in default app (i.e. nvim)
+    and not string match --quiet "$_mime_type" image/svg+xml
+
     # find test cases:     ag -ig "jpg|gif|png"
-    open "$clicked_path" # open w/ default handler
+    # CAREFUL NOT TO GET STUCK IN LOOP, I use automator to call this for Open in Neovim in Finder... and if this uses Open directly it might just loop recursively forever
+    # that's when you have to `sudo pkill -ilf Automator` to stop the ScriptMonitor failure dialogs
+    open -a Preview "$clicked_path" # open w/ default handler
     # PRN open w/ vscode instead? I don't really mind that aside from issues with svgs
     exit 0
 end
