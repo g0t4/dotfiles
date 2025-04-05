@@ -361,6 +361,7 @@ function StreamDeckFcpxViewerToggleComments()
         -- local ySliderCriteria = { attribute = "AXHelp", value = "Y Slider" }
         -- FindOneElement(GetFcpxAppElement(), ySliderCriteria, afterYSliderSearch)
     end
+    -- TODO incorporate this into what I was doing with FCPX a month or so ago, I had some organization setup
 
     -- using window shaves off 200ms! (150-190ms only now!, vs 400ms if start at app level - likely b/c of menus)
     local startSearch = GetFcpxAppElement():window(1)
