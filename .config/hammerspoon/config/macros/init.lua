@@ -403,7 +403,7 @@ function PrintAttributes(elem)
     end
 end
 
-function SearchForDevToolsTextArea(callback)
+function SearchForDevToolsTextArea(callbackWithSelectedText)
     local focusedWindow, app = GetBraveFocusedWindowElement()
 
     -- AXTextArea '' - Console prompt
@@ -440,7 +440,9 @@ function SearchForDevToolsTextArea(callback)
                         -- AXEditableAncestor	<userdata 1> -- hs.axuielement: AXTextArea (0x600006278f78)
                         -- AXHighestEditableAncestor	<userdata 1> -- hs.axuielement: AXTextArea (0x6000062780b8)
                     end
-                    callback(results[1])
+                    -- TODO warn if multi matches?
+                    local selectedText = results[1]:attributeValue("AXSelectedText")
+                    callbackWithSelectedText(selectedText)
                 end
             )
         end
