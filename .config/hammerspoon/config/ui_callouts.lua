@@ -221,6 +221,8 @@ local function showTooltipForElement(element, frame)
                 return "app"
             end
             if role == "AXWindow" then
+                -- allow window to be indexed given that is a good cue that I need to review window titles or otherwise for best way to find a window first
+                -- TODO use window titles?
                 local index = GetElementSiblingIndex(e)
                 return "window(" .. index .. ")"
             end
