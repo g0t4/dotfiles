@@ -414,17 +414,6 @@ function StreamDeckFcpxViewerToggleComments()
     -- AXRoleDescription: menu button<string>
     -- AXTitle: View<string>
     --
-    -- elementSearch:app.window(2).splitGroup.group.splitGroup
-
-    -- app:window(2) :splitGroup(1):group(1) :splitGroup(1):group(2) :splitGroup(1):group(3):group(1):menuButton(1)
-    --
-    -- AXDescription: View Options Menu Button<string>
-    -- AXEnabled: true<bool>
-    -- AXFocused: false<bool>
-    -- AXIdentifier: _NS:687<string>
-    -- AXRoleDescription: menu button<string>
-    -- AXTitle: View<string>
-    --
     -- elementSearch: app:window(2):splitGroup(1):group(1):splitGroup(1)
     --    FYI didn't save any time using this elementSearch vs starting at window level (arguably this elementSearch though could indicate any of the above levels to boost search though so it was helpful that it pointed out window)
 
