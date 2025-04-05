@@ -233,11 +233,11 @@ local function showTooltipForElement(element, frame)
                 return "window(" .. index .. ")"
             end
 
-            local singular = e:singular()
             local siblings = parent:childrenWithRole(role)
             if #siblings == 1 then
-                return singular .. "(1)"
+                return e:singular() .. "(1)"
             end
+
             -- TODO later deterine uniqueness within siblings (if anything to identify and return that as an accessor too, i.e. withTitle("foo"))
             -- TODO propose search criteria of the target element too? or leave that up to using the listed attrs?
             -- PRN could add a mode to toggle showing this like with 'c' to show children
