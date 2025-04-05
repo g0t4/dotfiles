@@ -342,6 +342,7 @@ end
 ---@param elem hs.axuielement
 ---@return boolean
 axuielemMT.isTitleUnique = function(elem)
+    local elemTitle = elem:axTitle()
     local parent = elem:axParent()
     if parent == nil then
         -- no parent, cannot know
@@ -351,7 +352,7 @@ axuielemMT.isTitleUnique = function(elem)
     -- TODO add type hints for childrenWithRole (this is hs.axuielement API right?)
     local siblings = parent:childrenWithRole(elem:axRole()) or {}
     for _, sibling in ipairs(siblings) do
-        if elem ~= sibling and elem:axTitle() == sibling:axTitle() then
+        if elem ~= sibling and elemTitle == sibling:axTitle() then
             -- found a matching title with another sibling, so not unique
             return false
         end
