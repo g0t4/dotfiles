@@ -353,7 +353,9 @@ end
 -- I also like the notification from KM b/c that is immediately visible
 -- then when I go to look into the issue I want HS logs
 function StreamDeckKeyboardMaestroRunner(what)
+    -- anything printed/unhandled here is going to show in logs for hs CLI => only for KM notifications in the case of KM calling this
     xpcall(function()
+        -- keep all parsing inside too so I catch those errors and show in HS logs too
         local func = load(what)
         if func == nil then
             error("failed to load: " .. what)
@@ -361,6 +363,7 @@ function StreamDeckKeyboardMaestroRunner(what)
         end
         func()
     end, function(errorMsg) print("error: ", errorMsg) end)
+    -- TODO verify it still shows notification for KM?
 end
 
 -- *** fcpx helpers
