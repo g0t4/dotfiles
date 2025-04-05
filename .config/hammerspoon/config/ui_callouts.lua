@@ -210,8 +210,13 @@ local function showTooltipForElement(element, frame)
 
     -- TODO!!! add code to find where I should start an elementSearch for the current element... i.e. first spot where its ambiguous
     -- TODO and then write the code to copy/paste and copy it too
-    local getElementSearchCode = function()
+    local function getElementSearchCode()
+        return "elementSearch"
     end
+
+    local elementSearchCode = getElementSearchCode()
+
+    attributeDump = attributeDump .. "\n" .. elementSearchCode
 
     -- include everything in copy so I can get attr values without writing them down by hand! (for cmd-ctrl-alt-c)
     M.last.text = specifierLua .. "\n\n" .. attributeDump
