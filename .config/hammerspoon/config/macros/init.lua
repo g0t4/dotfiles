@@ -354,7 +354,7 @@ function StreamDeckFcpxViewerToggleComments()
     local criteria = { attribute = "AXDescription", value = "View Options Menu Button" } -- 270ms to 370ms w/ count=1
     -- TODO can I get it w/o clicking View first?
 
-    local function afterSearch(message, searchTask, numResultsAdded)
+    local function afterSearch(_message, searchTask, _numResultsAdded)
         local results = searchTask
         print("results:", InspectHtml(results))
 
