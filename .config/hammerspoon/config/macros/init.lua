@@ -417,36 +417,29 @@ function SearchForDevToolsTextArea(callbackWithSelectedText)
     local criteria = { attribute = "AXTitle", value = "DevTools" } -- same 50 to 100ms
     FindOneElement(focusedWindow, criteria,
         function(_message, results, _numResultsAdded)
-            -- PRN could look at message to see if completed or more to go
-            -- if devToolsWebArea == nil then
-            --     print("did not find DevTools web area")
-            --     return
-            -- end
-            for i, elem in ipairs(results) do
-                print(i .. ": ", InspectHtml(elem))
-                PrintActions(elem)
-                PrintAttributes(elem)
-                print()
-                print()
-                -- FYI this one is plenty to get selected text! and then we just type over the top!
-                --  somehow the selected text attrs bubble up like 20 layers in devtools!
-                local selectedText = results[1]:attributeValue("AXSelectedText")
-                callbackWithSelectedText(selectedText)
+            if #results ~= 1 then
+                print("FYI found " .. #results .. ", expected 1")
             end
-            local criteria2 = { attribute = "AXRole", value = "AXTextArea" }
-            FindOneElement(results[1], criteria2,
-                function(_message, results, numResultsAdded)
-                    -- FINDING other AXTextArea's which is not surprising
-                    for i, elem in ipairs(results) do
-                        print(i .. ": ", InspectHtml(elem))
-                        PrintActions(elem)
-                        PrintAttributes(elem)
-                        -- AXEditableAncestor	<userdata 1> -- hs.axuielement: AXTextArea (0x600006278f78)
-                        -- AXHighestEditableAncestor	<userdata 1> -- hs.axuielement: AXTextArea (0x6000062780b8)
-                    end
-                    -- TODO warn if multi matches?
-                end
-            )
+
+            -- FYI this one is plenty to get selected text! and then we just type over the top!
+            --  somehow the selected text attrs bubble up like 20 layers in devtools!
+            local selectedText = results[1]:attributeValue("AXSelectedText")
+            callbackWithSelectedText(selectedText)
+
+            -- local criteria2 = { attribute = "AXRole", value = "AXTextArea" }
+            -- FindOneElement(results[1], criteria2,
+            --     function(_message, results, numResultsAdded)
+            --         -- FINDING other AXTextArea's which is not surprising
+            --         for i, elem in ipairs(results) do
+            --             print(i .. ": ", InspectHtml(elem))
+            --             PrintActions(elem)
+            --             PrintAttributes(elem)
+            --             -- AXEditableAncestor	<userdata 1> -- hs.axuielement: AXTextArea (0x600006278f78)
+            --             -- AXHighestEditableAncestor	<userdata 1> -- hs.axuielement: AXTextArea (0x6000062780b8)
+            --         end
+            --         -- TODO warn if multi matches?
+            --     end
+            -- )
         end
     )
 end
