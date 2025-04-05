@@ -34,7 +34,6 @@ function M.getSelectedTextThen(callbackWithSelectedText)
                 -- TODO why is setting AXValue empty causing menu to open in dev tools?
                 -- FOR NOW allow just use cmd+a in Brave too (stops the context menu from showing... odd)
                 -- if name == APPS.MicrosoftExcel then
-                    -- TODO when figure out brave devtools, go back to only using cmd+a in excel
                     -- AXValue replace isn't working in excel so use cmd+A is fine
                     -- *** FYI super cool to use this prompt in excel:
                     --   average of A1 to A12
