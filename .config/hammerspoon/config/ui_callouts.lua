@@ -207,10 +207,15 @@ local function showTooltipForElement(element, frame)
         table.insert(attributes, "\npress 'c' to show children")
     end
     local attributeDump = table.concat(attributes, "\n")
-    M.last.text = attributeDump -- include everything in copy so I can get attr values without writing them down by hand! (for cmd-ctrl-alt-c)
 
     -- TODO!!! add code to find where I should start an elementSearch for the current element... i.e. first spot where its ambiguous
     -- TODO and then write the code to copy/paste and copy it too
+    local getElementSearchCode = function()
+    end
+
+    -- include everything in copy so I can get attr values without writing them down by hand! (for cmd-ctrl-alt-c)
+    M.last.text = specifierLua .. "\n\n" .. attributeDump
+
 
     local styledSpecifier = hs.styledtext.new(specifierLua, {
         font = {
