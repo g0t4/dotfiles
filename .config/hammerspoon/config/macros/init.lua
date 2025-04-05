@@ -369,7 +369,6 @@ end
 -- *** fcpx helpers
 
 function StreamDeckFcpxViewerToggleComments()
-    -- TODO incorporate this into what I was doing with FCPX a month or so ago, I had some organization setup
     -- TODO can I search in menu items for it? I didn't find in general search but menu items might have it
 
     local function afterSearch(_message, results, _numResultsAdded)
