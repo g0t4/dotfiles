@@ -1,6 +1,7 @@
 local fun = require("fun")
 local axuielement = require("hs.axuielement") -- load to modify its metatable
 local f = require("config.helpers.underscore")
+require("config.helpers.misc")
 
 -- goal here is to simplify syntax for navigating children by roles (and index)
 --    :childrenWithRole("AXWindow")[1]
@@ -276,6 +277,18 @@ axuielemMT.firstChild = function(self, predicate)
     end
 end
 
+---@param element hs.axuielement
+---@return string|nil
+axuielemMT.singular = function(element)
+    ---@type string|nil
+    local role = element:attributeValue("AXRole")
+    if not role then
+        return nil
+    end
+    local singular = role:gsub("^AX", "")
+    return lowercaseFirstLetter(singular)
+end
+
 function axValueQuoted(element)
     if not element then return "" end
     local value = element:attributeValue("AXValue")
@@ -315,14 +328,12 @@ end
 function BuildHammerspoonLuaTo(toElement)
     local tmp = fun.enumerate(toElement:path())
         :map(function(_, pathItem)
-            local role = pathItem:attributeValue("AXRole")
-            if role == "AXApplication" then
+            local singular = pathItem:singular()
+            if singular == "application" then
                 -- this is just meant as a generic example, not actually using as is
                 -- TODO could hsow hs.application.find() too (to set app)
                 return "app"
             end
-            local singular = role:gsub("^AX", "")
-            singular = lowercaseFirstLetter(singular)
             -- PRN overrides for singulars that don't match AXRole
             local siblingIndex = GetElementSiblingIndex(pathItem)
             if singular == "splitGroup" then
