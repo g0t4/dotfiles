@@ -442,7 +442,15 @@ function BuildHammerspoonLuaTo(toElement)
         end)
         :totable()
     -- todo split on line length too (minimal though)
-    return table.concat(tmp, "")
+    local lines = {}
+    for i, s in ipairs(tmp) do
+        if i > 1 and #lines[#lines] + string.len(s) < 120 then
+            lines[#lines] = lines[#lines] .. s
+        else
+            table.insert(lines, s)
+        end
+    end
+    return table.concat(lines, "\n  ")
 end
 
 function sortedAttributeNames(element)
