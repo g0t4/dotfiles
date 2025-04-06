@@ -1,8 +1,16 @@
 local M = {}
 
+---@type hs.task
 M.lastTask = nil
 
 function M.streamingRequest(url, method, headers, body, streamingCallback, completeCallback)
+    if lastTask and lastTask:isRunning() then
+        -- TODO stop handlers from reporting errors after terminated
+        --   PROBABLY should return back the task and let the caller track its status
+        lastTask:terminate()
+        lastTask = nil
+    end
+
     local args = { "-fsSL", "--no-buffer", "-X", method, url }
 
     for key, value in pairs(headers or {}) do
