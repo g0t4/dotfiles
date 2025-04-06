@@ -50,6 +50,15 @@ Respond with valid lua code.
 No explanation. No markdown. No backticks ` nor ```.
 ]]
 
+local omniBarSystemMessage = [[
+You are a brave browser omnibar autocompletion engine.
+Expert search engine that can vividly recall links.
+The user is working in Brave Browser.
+The user needs help in the omnibar.
+Whatever they have typed into the Omni Bar will be provided to you.
+Respond with a valid link or search text to submit to a search engine. Prefer a link if you know what they want.
+]]
+
 -- TODO Brave now I wanna target the addy bar sep of devtools!
 --   PUT AI WHERE IT WAS DESIGNED TO BELONG... in your search engine (addy bar) ***! ... private search if offline model :)
 --   imagine being able to ask a question about where to go for a website and have it answer without even searching!
@@ -92,6 +101,11 @@ function M.getPrompt(app, focusedElem)
     local name = app:name()
 
     if name == APPS.BraveBrowserBeta then
+        local desc = focusedElem:attributeValue('AXDescription')
+        if desc and string.lower(desc) == 'address and search bar' then
+            return { systemMessage = omniBarSystemMessage, max_tokens = 150 }
+        end
+
         return { systemMessage = devtoolsSystemMessage, max_tokens = 200 }
     end
 
