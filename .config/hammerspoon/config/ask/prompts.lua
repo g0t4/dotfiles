@@ -50,6 +50,44 @@ Respond with valid lua code.
 No explanation. No markdown. No backticks ` nor ```.
 ]]
 
+-- TODO Brave now I wanna target the addy bar sep of devtools!
+--   PUT AI WHERE IT WAS DESIGNED TO BELONG... in your search engine (addy bar) ***! ... private search if offline model :)
+--   imagine being able to ask a question about where to go for a website and have it answer without even searching!
+--   yes, I know omnibar mostly does that but there are plenty of times when it sucks at that!
+--
+-- *IMPL: Look at AXDescription? or otherwise:
+-- app:window(1):group(1):group(1):group(1):group(1):toolbar(1):group(1):textField(1)
+--
+-- most likely:
+-- AXDescription: Address and search bar<string>
+-- AXDOMClassList: [1: BraveOmniboxViewViews<string>]
+--
+-- AXAutocompleteValue: both<string>
+-- AXBlockQuoteLevel: 0<number>
+-- AXEditableAncestor: AXTextField '' - Address and search bar<hs.axuielement>
+-- AXElementBusy: false<bool>
+-- AXEnabled: true<bool>
+-- AXFocusableAncestor: AXTextField '' - Address and search bar<hs.axuielement>
+-- AXFocused: true<bool>
+-- AXHighestEditableAncestor: AXTextField '' - Address and search bar<hs.axuielement>
+-- AXInvalid: false<string>
+-- AXKeyShortcutsValue: ⌘L<string>
+-- AXPlaceholderValue: Search Brave or type a URL<string>
+-- AXRequired: false<bool>
+-- AXRoleDescription: text field<string>
+-- AXSelected: false<bool>
+-- AXSelectedRows: []
+-- AXSelectedText: https://www.hammerspoon.org/docs/hs.hotkey.html#bind<string>
+-- AXValue: https://www.hammerspoon.org/docs/hs.hotkey.html#bind<string>
+-- AXVisited: false<bool>
+-- ChromeAXNodeId: 58972<string>
+--
+-- unique ref: app:window('Hammerspoon docs: hs.hotkey - Brave Beta - wes private')
+--   :group('Hammerspoon docs: hs.hotkey - Brave Beta - wes private'):group(''):group(''):group(''):toolbar(''):group('')
+--   :textField('')
+--
+
+
 function M.getPrompt(app)
     local name = app:name()
 
