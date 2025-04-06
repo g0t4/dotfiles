@@ -11,9 +11,14 @@ M.stopObserving = function()
     M.observer = nil
 end
 
+do return end
+
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "D", function()
     M.stopObserving()
+    M.startObserving()
+end)
 
+M.startObserving = function()
     local app = hs.application.frontmostApplication()
     print("[AXObserver] Watching ax events for ask-openai for app:", app:name())
     local appPID = app:pid()
@@ -44,6 +49,6 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "D", function()
     M.observer:callback(eventHandler)
     M.observer:addWatcher(appElement, "AXValueChanged")
     M.observer:start()
-end)
+end
 
 return M
