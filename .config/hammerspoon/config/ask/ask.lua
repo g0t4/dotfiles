@@ -52,7 +52,13 @@ function adjustBoxElement(element, app, callback)
     -- FYI AXTextArea worked to get closer! ... now if I can combine with checkElem to ensure its the right one
     local criteria = { attribute = "AXRole", value = "AXTextArea" }
     local appElem = hs.axuielement.applicationElement(app)
-    FindOneElement(appElem, criteria, function(_message, results, _)
+
+    function checkElem(cElem)
+        print("checking", hs.inspect(cElem))
+        return false
+    end
+
+    FindOneElement(appElem, criteria, function(_message, results, numResults)
         -- TODO! hs.axuielement.searchCriteriaFunction(criteria)
         --   combine both criteria and secondary function
         print("done")
