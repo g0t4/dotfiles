@@ -394,12 +394,6 @@ function GetBraveFocusedWindowElement()
     return window, app
 end
 
-local NOOP = function() end
-
-function StreamDeckAskBraveDevToolsTroubleshooting()
-    SearchForDevToolsTextArea(NOOP)
-end
-
 function PrintActions(elem)
     print("ACTIONS:")
     for i, n in pairs(elem:actionNames() or {}) do
@@ -414,7 +408,7 @@ function PrintAttributes(elem)
     end
 end
 
-function SearchForDevToolsTextArea(callbackWithSelectedText)
+function SearchForDevToolsTextArea(callbackWithSelectedText, focusedElem)
     local focusedWindow, app = GetBraveFocusedWindowElement()
 
     -- TODO how about check for AXFocusedUIElement first and only fallback to the following if its not found...

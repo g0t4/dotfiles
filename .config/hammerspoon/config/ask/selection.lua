@@ -1,5 +1,16 @@
 local M = {}
 
+local function selectAllText()
+    -- select all text
+    hs.eventtap.keyStroke({ "cmd" }, "a", 0) -- 0ms delay b/c by the time we get any response will be way long enoughk
+    -- alternative:
+    -- local selected = app:selectMenuItem({ "Edit", "Select All" })
+    -- if (not selected) then
+    --     print("failed to select all")
+    --     return
+    -- end
+end
+
 function M.getSelectedTextThen(callbackWithSelectedText)
     -- FYI I have observed executing this function from within hammerspoon's Console window, leads to the Window being the focusedElement
     --   whereas with a StreamDeck button it correctly finds the textbox below the logs to be the correct focused element (when it is and I trigger the completions helper for HS lua help)
@@ -25,10 +36,9 @@ function M.getSelectedTextThen(callbackWithSelectedText)
 
     local app = hs.application.frontmostApplication()
     if app:name() == APPS.BraveBrowserBeta then
-        hs.eventtap.keyStroke({ "cmd" }, "a", 0) -- 0ms delay b/c by the time we get any response will be way long enoughk
-        -- FYI can do Edit => Select All if cmd+a isn't working for an app
+        selectAllText() -- so it can be replaced (arguably this should go into the code to inject the response text)
 
-        SearchForDevToolsTextArea(callbackWithSelectedText)
+        SearchForDevToolsTextArea(callbackWithSelectedText, focusedElement)
         return
     end
 
@@ -42,15 +52,7 @@ function M.getSelectedTextThen(callbackWithSelectedText)
         else
             local value = focusedElement:attributeValue("AXValue") -- < 0.4ms !!
 
-            -- if some app falls into this AXValue approach and I don't want to select all, then add a qualifier for it here
-            -- select all text
-            hs.eventtap.keyStroke({ "cmd" }, "a", 0) -- 0ms delay b/c by the time we get any response will be way long enoughk
-            -- alternative:
-            -- local selected = app:selectMenuItem({ "Edit", "Select All" })
-            -- if (not selected) then
-            --     print("failed to select all")
-            --     return
-            -- end
+            selectAllText() -- so it can be replaced
 
             callbackWithSelectedText(value, focusedElement)
             return
