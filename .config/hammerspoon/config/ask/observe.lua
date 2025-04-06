@@ -22,12 +22,17 @@ local M = {}
 M.skip = false
 M.observer = nil
 
-hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "D", function()
-    if M.observer then
-        M.observer:stop()
-        M.observer = nil
+M.stopObserving = function()
+    if not M.observer then
         return
     end
+    M.skip = false
+    M.observer:stop()
+    M.observer = nil
+end
+
+hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "D", function()
+    M.stopObserving()
 
     -- EACH key stroke triggers to value changed events (two sep objects)... this might be a good way to capture the element involved in devtools!
     --    one of these must be a backing field for the other?

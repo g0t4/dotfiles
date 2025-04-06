@@ -62,6 +62,7 @@ local function removeBox()
 end
 
 local function stopBox()
+    observe.stopObserving()
     removeBox()
     for _, binding in pairs(boxBindings) do
         binding:delete()
