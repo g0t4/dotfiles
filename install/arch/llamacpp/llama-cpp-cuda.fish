@@ -17,4 +17,6 @@ cmake --build build --config Release -- -j (nproc)
 #    https://github.com/ggml-org/llama.cpp/blob/master/docs/build.md#unified-memory
 #  perf tuning options:
 #    https://github.com/ggml-org/llama.cpp/blob/master/docs/build.md#performance-tuning
-#
+#    # TODO TRY?
+#      GGML_CUDA_FA_ALL_QUANTS	 # FlashAttention compilation support for all quantization type combinations... longer compile, better control over KV cache size
+#        sounds like it might be useful
