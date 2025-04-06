@@ -41,22 +41,11 @@ function M.getSelectedTextThen(callbackWithSelectedText)
             return
         else
             local value = focusedElement:attributeValue("AXValue") -- < 0.4ms !!
-            local name = app:name()
-            if name == APPS.Excel then
-                -- clear the text to simulate cut behavior (clear until response starts)
-                -- could select all to simulate having copied it (so response replaces it too)
-                -- excel assume no selection == replace all too
-                focusedElement:setAttributeValue("AXValue", "") -- TODO not working in excel
-                -- TODO why is setting AXValue empty causing menu to open in dev tools?
-                -- FOR NOW allow just use cmd+a in Brave too (stops the context menu from showing... odd)
-                -- if name == APPS.MicrosoftExcel then
-                -- AXValue replace isn't working in excel so use cmd+A is fine
-                -- *** FYI super cool to use this prompt in excel:
-                --   average of A1 to A12
-                --   (F2 edit then ask... as it types into cell the range selects!)
-                hs.eventtap.keyStroke({ "cmd" }, "a", 0) -- 0ms delay b/c by the time we get any response will be way long enoughk
-                -- end
-            end
+
+            -- if some app falls into this AXValue approach and I don't want to select all, then add a qualifier for it here
+            -- select all text
+            hs.eventtap.keyStroke({ "cmd" }, "a", 0) -- 0ms delay b/c by the time we get any response will be way long enoughk
+
             callbackWithSelectedText(value, focusedElement)
             return
         end
