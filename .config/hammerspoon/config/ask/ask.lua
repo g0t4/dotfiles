@@ -88,35 +88,6 @@ function adjustBoxElement(focusedElement, app, callback)
     -- TODO I could be doing this in the background while the response is starting...
     --   show box once it is found AND have at least one chunk of text in response
     --   then join and wait on both finishing
-
-    -- app:window(1):group(1):group(1):group(1):group(1):scrollArea(1):webArea(1):group(1):group(1):group(1):group(1):group(1)
-    --   :group(1):group(1):group(1):group(2):group(1):group(1):group(2):group(1):group(1):group(1):group(1):group(1):group(1)
-    --   :group(1):group(1):group(2)
-    --
-    -- AXBlockQuoteLevel: 0<number>
-    -- AXDOMClassList: [1: monospace<string>]
-    -- AXDOMIdentifier: console-messages<string>
-    -- AXElementBusy: false<bool>
-    -- AXEnabled: true<bool>
-    -- AXEndTextMarker: <hs.axuielement.axtextmarker>
-    -- AXFocusableAncestor: AXGroup '' - Console panel<hs.axuielement>
-    -- AXFocused: false<bool>
-    -- AXLinkedUIElements: []
-    -- AXRequired: false<bool>
-    -- AXRoleDescription: group<string>
-    -- AXSelected: false<bool>
-    -- AXSelectedRows: []
-    -- AXSelectedText: console.log('foo foo');<string>
-    -- AXSelectedTextMarkerRange: <hs.axuielement.axtextmarkerrange>
-    -- AXStartTextMarker: <hs.axuielement.axtextmarker>
-    -- AXVisited: false<bool>
-    -- ChromeAXNodeId: 739<string>
-    --
-    -- press 'c' to show children
-    --
-    -- unique ref: app:window('DevTools - www.hammerspoon.org/docs/ - wes private')
-    --   :group('DevTools - www.hammerspoon.org/docs/ - wes private'):group(''):group(''):group(''):scrollArea('')
-    --   :webArea('DevTools'):group('')
 end
 
 function AskOpenAICompletionBox()
