@@ -20,11 +20,12 @@
 -- }
 local M = {}
 M.skip = false
+M.observer = nil
 
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "D", function()
-    if _G.observer then
-        _G.observer:stop()
-        _G.observer = nil
+    if M.observer then
+        M.observer:stop()
+        M.observer = nil
         return
     end
 
@@ -84,11 +85,11 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "D", function()
         AskOpenAICompletionBox()
     end
 
-    _G.observer = hs.axuielement.observer.new(appPID)
+    M.observer = hs.axuielement.observer.new(appPID)
 
-    _G.observer:callback(eventHandler)
-    _G.observer:addWatcher(appElement, "AXValueChanged")
-    _G.observer:start()
+    M.observer:callback(eventHandler)
+    M.observer:addWatcher(appElement, "AXValueChanged")
+    M.observer:start()
 end)
 
 return M
