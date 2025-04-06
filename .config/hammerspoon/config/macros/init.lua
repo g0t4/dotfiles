@@ -485,8 +485,9 @@ function SearchForDevToolsTextArea(callbackWithSelectedText)
     end
 
     -- !! OK a fresh restart of brave... it falls through here with no AXFocusedUIElement
-    --    BUT THEN if I just inspect the window and point at the app level... then it works!
-    -- !!! and when I inspect app level it shows AXFocusedUIElement correctly
+    -- !!! BUT THEN if I just open up my UI Callout Inspector and close it... then magically it finds AXFocusedUIElement
+    --    also it finds AXTitle="DevTools" below in fallback which also doesn't work until inspector opened! WTF is going on!
+    --  and when I inspect app level it shows AXFocusedUIElement correctly
     --    is there an enumeration issue?
     hs.alert.show("FYI no appElem AXFocusedUIElement found... heads up you still need your fallback")
 
