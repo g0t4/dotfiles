@@ -63,7 +63,7 @@ function adjustBoxElement(focusedElement, app, callback)
         end
         -- hrm this found AXTextArea really fast... I wonder if order is somehow based on focused elements and that is why?
         --    also wondering if restart pooches this pathway :) as it took 22s to do the same but I might not have been focused then
-        PrintAttributes(cElem)
+        -- PrintAttributes(cElem)
         -- attrs from the one that matches right now... in case I need to find it in future:
 
         -- *** devtools input control that I directly want to target!!!

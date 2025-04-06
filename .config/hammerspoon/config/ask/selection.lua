@@ -26,21 +26,25 @@ function M.getSelectedTextThen(callbackWithSelectedText)
     --   selected text does not work in iTerm (at least not in nvim)... that'sfine as I am not using this at all in iterm... if I was I could just impl smth specific to iterm most likley...
     --   verified works in: Brave devtools, Script Debugger and Editor, (AXValue in iterm + nvim)
 
+    local app = hs.application.frontmostApplication()
+    if app:name() == APPS.BraveBrowserBeta then
+        selectAllText() -- so it can be replaced (arguably this should go into the code to inject the response text)
+
+        SearchForDevToolsTextArea(callbackWithSelectedText)
+        return
+    end
+
     -- Access the currently focused UI element
     -- ~ 6 to 10ms first call (sometimes <1ms too)
     --   then <1ms on back to back calls
     --   max was 25ms one time... still less than 30ms just to select text with keystroke!!!
     -- COOL dont even need to specify the app! just finds frontmost app's focused element!
     local focusedElement = hs.axuielement.systemWideElement():attributeValue("AXFocusedUIElement")
-    -- FYI this comes back nil for devtools, not sure why but when I added back Emojis spoon and restarted hs => it worked again... after which I took out Emojis spoon and it kept working?
-
-    local app = hs.application.frontmostApplication()
-    if app:name() == APPS.BraveBrowserBeta then
-        selectAllText() -- so it can be replaced (arguably this should go into the code to inject the response text)
-
-        SearchForDevToolsTextArea(callbackWithSelectedText, focusedElement)
-        return
-    end
+    -- FYI systemWideElement's attributeValue's "AXFocusedApplication" comes back nil for devtools
+    --   issue might be with some apps when using systemWideElement!
+    --   PRN... try using frontmost app's AXFocusedUIElement and see if it works reliably?
+    --   it appears that systemWide route is a separate macOS API, might even be this one:
+    --      https://developer.apple.com/documentation/applicationservices/1462095-axuielementcreatesystemwide
 
     if focusedElement then
         print("found systemWide AXFocusedUIElement: ", BuildHammerspoonLuaTo(focusedElement))

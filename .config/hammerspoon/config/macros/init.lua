@@ -408,16 +408,32 @@ function PrintAttributes(elem)
     end
 end
 
-function SearchForDevToolsTextArea(callbackWithSelectedText, focusedElem)
-    local focusedWindow, app = GetBraveFocusedWindowElement()
+function SearchForDevToolsTextArea(callbackWithSelectedText)
+    local focusedWindow, appElem = GetBraveFocusedWindowElement()
+
+    -- PRN also have systemWideElement's AXFocusedUIElement... which could be a fallback too if app level ever has issues, though this one was not reliable with DevTools but still two unreliables might get 90% to reliable :)
+    local appElem_FocusedUIElement = appElem:attributeValue("AXFocusedUIElement")
+    -- FYI systemwide AXFocusedUIElement randomly came back nil when using DevTools...
+    --   HOWEVER, I do not know if that's also true for appElem's AXFocusedUIElement!!! might just be a systemwide issue
 
     -- !!! bring back this primary, for now I am testing fallback mechanism
-    -- if focusedElem ~= nil then
-    --     -- FYI random issue in Brave DevTools was that AXFocusedUIElement was nil, never found out why
-    --     print("using focused elem")
-    --     callbackWithSelectedText(focusedElem)
-    --     return
-    -- end
+    if appElem_FocusedUIElement ~= nil then
+        -- FYI random issue in Brave DevTools was that AXFocusedUIElement was nil, never found out why
+        print("using focused elem")
+        local selectedText = appElem_FocusedUIElement:attributeValue("AXSelectedText")
+        -- wow finds selectedText if selected in advance...
+        --  but not if I obviously defer the Cmd+A... how about try selectMenuItem and see if its blocking?
+        --  or set selection range on controls?!
+        if selectedText == nil or selectedText == "" then
+            -- try using AXValue (when text not selected)
+            print("AXSelectedText had nothing (probably no selection), trying AXValue fallback (all text in text area)")
+            selectedText = appElem_FocusedUIElement:attributeValue("AXValue")
+        end
+        -- PRN fallthrough if attrs return nothing (unless empty?)
+        PrintAttributes(appElem_FocusedUIElement)
+        callbackWithSelectedText(selectedText, appElem_FocusedUIElement)
+        return
+    end
 
 
     -- AXTextArea '' - Console prompt
