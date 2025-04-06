@@ -68,11 +68,11 @@ function adjustBoxElement(focusedElement, app, callback)
         -- AXFocusableAncestor	<userdata 1> -- hs.axuielement: AXTextArea
         -- AXEditableAncestor	<userdata 1> -- hs.axuielement: AXTextArea
         -- AXSelectedTextRanges	{ { length = 9, location = 0 } }
-        -- AXDescription	"Console prompt"
         --
-        -- if cElem:attributeValue("AXDescription") ~= "Console panel" then
-        --     return false
-        -- end
+        -- AXDescription	"Console prompt"
+        if cElem:attributeValue("AXDescription") ~= "Console prompt" then
+            return false
+        end
 
         return true
     end
