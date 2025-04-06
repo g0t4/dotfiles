@@ -215,6 +215,7 @@ function AskOpenAICompletionBox()
 
                         table.insert(boxBindings, hs.hotkey.bind({}, "escape", stopBox))
                         table.insert(boxBindings, hs.hotkey.bind({ "cmd", "alt", "ctrl" }, hs.keycodes.map["return"], acceptBox))
+                        -- TODO enable observer mode :) use AXObserver and real time complete it!
                         -- oh holy crap... I can have it open on a button and then on every keystroke it will refersh! using this right here binding
                     end
                 end
