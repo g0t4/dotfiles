@@ -44,10 +44,12 @@ local function stopBox()
     end
     boxBindings = {}
 end
-function adjustBoxElement(element, app)
+function adjustBoxElement(element, app, callback)
     if not APPS.BraveBrowserBeta == app:name() then
-        return element
+        callback(element)
+        return
     end
+    callback(element)
     -- TODO I want to find AXTitle "Console panel" control
     -- TODO I could be doing this in the background while the response is starting...
     --   show box once it is found AND have at least one chunk of text in response
@@ -86,79 +88,80 @@ end
 function AskOpenAICompletionBox()
     local app = hs.application.frontmostApplication() -- < 0.5ms
 
-    selection.getSelectedTextThen(function(selectedText, element)
-        element = adjustBoxElement(element, app)
-        local entireResponse = ""
-        foundUserPrompt(selectedText, app, function(textChunk)
-            entireResponse = entireResponse .. textChunk
+    selection.getSelectedTextThen(function(selectedText, focusedElem)
+        adjustBoxElement(focusedElem, app, function(element)
+            local entireResponse = ""
+            foundUserPrompt(selectedText, app, function(textChunk)
+                entireResponse = entireResponse .. textChunk
 
-            if element then
-                local frame = element:axFrame()
-                local screenFrame = hs.screen.mainScreen():frame()
+                if element then
+                    local frame = element:axFrame()
+                    local screenFrame = hs.screen.mainScreen():frame()
 
-                local styledResponseText = hs.styledtext.new(entireResponse, {
-                    font = {
-                        name = "SauceCodePro Nerd Font",
-                        size = 16
-                    },
-                    color = { white = 1 },
-                })
-                ---@type { w: number, h: number } | nil
-                local specifierSize = hs.drawing.getTextDrawingSize(styledResponseText)
+                    local styledResponseText = hs.styledtext.new(entireResponse, {
+                        font = {
+                            name = "SauceCodePro Nerd Font",
+                            size = 16
+                        },
+                        color = { white = 1 },
+                    })
+                    ---@type { w: number, h: number } | nil
+                    local specifierSize = hs.drawing.getTextDrawingSize(styledResponseText)
 
-                -- add padding (don't subtract it from needed width/height)
-                local padding = 5
-                local tooltipWidth = math.max(specifierSize.w) + 2 * padding
-                local tooltipHeight = specifierSize.h + 2 * padding
-                -- TODO min width/height so its not jerky?
-                --   base min width on width of focused control?
+                    -- add padding (don't subtract it from needed width/height)
+                    local padding = 5
+                    local tooltipWidth = math.max(specifierSize.w) + 2 * padding
+                    local tooltipHeight = specifierSize.h + 2 * padding
+                    -- TODO min width/height so its not jerky?
+                    --   base min width on width of focused control?
 
-                -- Initial positioning (slightly below the element)
-                local x = frame.x
-                local y = frame.y + frame.h + 5 -- Below the element
+                    -- Initial positioning (slightly below the element)
+                    local x = frame.x
+                    local y = frame.y + frame.h + 5 -- Below the element
 
-                -- Ensure tooltip does not go off the right edge
-                if x + tooltipWidth > screenFrame.x + screenFrame.w then
-                    x = screenFrame.x + screenFrame.w - tooltipWidth - 10 -- Shift left
-                    -- IIUC the box is positioned to right of element left side so I don't think I need to worry about x being shifted left of screen
-                end
-
-                -- Ensure tooltip does not go off the bottom edge
-                if y + tooltipHeight > screenFrame.y + screenFrame.h then
-                    -- if it's off the bottom, then move it above the element
-                    y = frame.y - tooltipHeight - 5 -- Move above element
-                    if y < screenFrame.y then
-                        -- if above is also off screen, then shift it down, INSIDE the frame
-                        --   means it stays on top btw... could put it inside on bottom too
-                        y = screenFrame.y + 10 -- Shift up
+                    -- Ensure tooltip does not go off the right edge
+                    if x + tooltipWidth > screenFrame.x + screenFrame.w then
+                        x = screenFrame.x + screenFrame.w - tooltipWidth - 10 -- Shift left
+                        -- IIUC the box is positioned to right of element left side so I don't think I need to worry about x being shifted left of screen
                     end
+
+                    -- Ensure tooltip does not go off the bottom edge
+                    if y + tooltipHeight > screenFrame.y + screenFrame.h then
+                        -- if it's off the bottom, then move it above the element
+                        y = frame.y - tooltipHeight - 5 -- Move above element
+                        if y < screenFrame.y then
+                            -- if above is also off screen, then shift it down, INSIDE the frame
+                            --   means it stays on top btw... could put it inside on bottom too
+                            y = screenFrame.y + 10 -- Shift up
+                        end
+                    end
+
+                    if box then box:delete() end
+                    box = hs.canvas
+                        .new({ x = x, y = y, w = tooltipWidth, h = tooltipHeight, })
+
+                    box:appendElements({
+                        {
+                            type = "rectangle",
+                            -- todo round cornders
+                            roundedRectRadii = { xRadius = 5, yRadius = 5 },
+                            frame = { x = 0, y = 0, w = tooltipWidth, h = tooltipHeight },
+                            fillColor = { hex = "#002040" },
+                            strokeColor = nil,
+                        },
+                        {
+                            type = "text",
+                            text = styledResponseText,
+                            frame = { x = padding, y = padding, w = tooltipWidth - 2 * padding, h = specifierSize.h },
+                        },
+                    })
+                    box:show()
+
+                    table.insert(boxBindings, hs.hotkey.bind({}, "escape", stopBox))
+                    -- PRN add other bindings, i.e. to refresh or get new response ... need that to be on keystroke :)
+                    -- oh holy crap... I can have it open on a button and then on every keystroke it will refersh! using this right here binding
                 end
-
-                if box then box:delete() end
-                box = hs.canvas
-                    .new({ x = x, y = y, w = tooltipWidth, h = tooltipHeight, })
-
-                box:appendElements({
-                    {
-                        type = "rectangle",
-                        -- todo round cornders
-                        roundedRectRadii = { xRadius = 5, yRadius = 5 },
-                        frame = { x = 0, y = 0, w = tooltipWidth, h = tooltipHeight },
-                        fillColor = { hex = "#002040" },
-                        strokeColor = nil,
-                    },
-                    {
-                        type = "text",
-                        text = styledResponseText,
-                        frame = { x = padding, y = padding, w = tooltipWidth - 2 * padding, h = specifierSize.h },
-                    },
-                })
-                box:show()
-
-                table.insert(boxBindings, hs.hotkey.bind({}, "escape", stopBox))
-                -- PRN add other bindings, i.e. to refresh or get new response ... need that to be on keystroke :)
-                -- oh holy crap... I can have it open on a button and then on every keystroke it will refersh! using this right here binding
-            end
+            end)
         end)
     end)
 end
