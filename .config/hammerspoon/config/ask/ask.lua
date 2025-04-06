@@ -49,26 +49,31 @@ function adjustBoxElement(focusedElement, app, callback)
         callback(focusedElement)
         return
     end
+    -- FYI this works for Brave right now, it's a hack hack hack but I dont give a F
+
     -- FYI AXTextArea worked to get closer! ... now if I can combine with checkElem to ensure its the right one
     local criteriaFirstTextAreaSeemsToBeDumbLuck = { attribute = "AXRole", value = "AXTextArea" }
     local appElem = hs.axuielement.applicationElement(app)
 
-    -- function checkElem(cElem)
-    --     -- FYI AXTextArea alone worked (not sure if just luck)
-    --     if cElem:attributeValue("AXRole") ~= "AXTextArea" then
-    --         return false
-    --     end
-    --     print("checking", hs.inspect(cElem))
-    --     -- -- hrm this found AXTextArea really fast... I wonder if order is somehow based on focused elements and that is why?
-    --     -- PrintAttributes(cElem)
-    --     -- if cElem:attributeValue("AXDescription") ~= "Console panel" then
-    --     --     return false
-    --     -- end
-    --
-    --     return false
-    -- end
+    function checkElem(cElem)
+        -- FYI AXTextArea alone worked (not sure if just luck)
+        if cElem:attributeValue("AXRole") ~= "AXTextArea" then
+            return false
+        end
+        print("checking", hs.inspect(cElem))
+        -- -- hrm this found AXTextArea really fast... I wonder if order is somehow based on focused elements and that is why?
+        -- PrintAttributes(cElem)
+        -- if cElem:attributeValue("AXDescription") ~= "Console panel" then
+        --     return false
+        -- end
 
-    FindOneElement(focusedElement, criteriaFirstTextAreaSeemsToBeDumbLuck, function(_message, results, numResults)
+        return true
+    end
+
+    -- TODO s/b using focusedElement to narrow search... but using app is like 10x faster, must b/c smth to do with the focused input box?!
+    --   anyways for now leave it, it works using app to find right next to the input box and I'm cool with that
+    --   FYI if you dont find exactly the textarea you want or nearby enough, check what you do find for Editable attribute refs that might point at the text box from this first one
+    FindOneElement(appElem, checkElem, function(_message, results, numResults)
         -- TODO! hs.axuielement.searchCriteriaFunction(criteria)
         --   combine both criteria and secondary function
         print("done")
