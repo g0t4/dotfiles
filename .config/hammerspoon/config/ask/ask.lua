@@ -45,8 +45,8 @@ function M.AskOpenAIStreaming()
         return
     end
 
-    selection.getSelectedTextThen(function(selectedText)
-        foundUserPrompt(selectedText, app)
+    selection.getSelectedTextThen(function(selectedText, focusedElem)
+        foundUserPrompt(selectedText, app, focusedElem)
     end)
 end
 
@@ -169,7 +169,7 @@ function AskOpenAICompletionBox()
     selection.getSelectedTextThen(function(selectedText, focusedElem)
         adjustBoxElement(focusedElem, app, function(element)
             local entireResponse = ""
-            foundUserPrompt(selectedText, app, function(textChunk)
+            foundUserPrompt(selectedText, app, focusedElem, function(textChunk)
                 entireResponse = entireResponse .. textChunk
 
                 if element then
@@ -256,7 +256,7 @@ function AskOpenAICompletionBox()
     end)
 end
 
-function foundUserPrompt(userPrompt, app, appendChunk)
+function foundUserPrompt(userPrompt, app, focusedElem, appendChunk)
     if userPrompt == "" then
         hs.alert.show("No selection found, try again...")
         return
@@ -272,7 +272,7 @@ function foundUserPrompt(userPrompt, app, appendChunk)
         ["Content-Type"] = "application/json",
     }
 
-    local appParameters = prompts.getPrompt(app)
+    local appParameters = prompts.getPrompt(app, focusedElem)
     if appParameters == nil then
         print("Error: unknown app - no prompt available: " .. app:name())
         hs.alert.show("Error: unknown app - no prompt available: " .. app:name())

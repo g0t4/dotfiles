@@ -88,7 +88,7 @@ No explanation. No markdown. No backticks ` nor ```.
 --
 
 
-function M.getPrompt(app)
+function M.getPrompt(app, focusedElem)
     local name = app:name()
 
     if name == APPS.BraveBrowserBeta then
