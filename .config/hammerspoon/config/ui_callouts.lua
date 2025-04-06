@@ -251,17 +251,11 @@ local function showTooltipForElement(element, frame)
             if not ref then
                 -- nothing to add to accessor b/c it was ambiguous
                 break
-            else
-                if #lines[#lines] + string.len(ref) < 120 then
-                    lines[#lines] = lines[#lines] .. ref
-                else
-                    table.insert(lines, ref)
-                end
             end
+            table.insert(lines, ref)
         end
 
-        -- FOR ELEMENT SEARCH
-        return table.concat(lines, "\n  ")
+        return ConcatIntoLines(lines)
     end
 
     local elementSearchCode = getUniqueSpecifierChainForElementSearch(element)
