@@ -471,10 +471,6 @@ function BuildHammerspoonLuaTo(toElement)
     return ConcatIntoLines(refChain)
 end
 
-function CombineClausesWithLineContinuations(clauses)
-    return ConcatIntoLines(clauses, 80, "¬")
-end
-
 function ConcatIntoLines(refChain, maxLineLength, lineContinuation)
     maxLineLength = maxLineLength or 120
     local joinWith = (lineContinuation or "") .. "\n  "

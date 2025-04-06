@@ -454,7 +454,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "A", function()
         elementAt = hs.axuielement.systemElementAtPosition(coords)
     end
     local clauses, attrDumps = BuildAppleScriptTo(elementAt, true)
-    local applescript = CombineClausesWithLineContinuations(clauses)
+    local applescript = ConcatIntoLines(clauses, 80, "¬")
     prints(htmlPreCodeAppleScript(applescript))
     local lua = BuildHammerspoonLuaTo(elementAt)
     prints(htmlPreCodeLua(lua))
