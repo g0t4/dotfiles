@@ -97,7 +97,7 @@ function AskOpenAICompletionBox()
     end)
 end
 
-function foundUserPrompt(userPrompt, app)
+function foundUserPrompt(userPrompt, app, appendChunk)
     if userPrompt == "" then
         hs.alert.show("No selection found, try again...")
         return
@@ -152,6 +152,10 @@ function foundUserPrompt(userPrompt, app)
     --    cat ask-openai-streaming-chunk-log.txt | grep '^\s*data:' | cut -c7- | jq ".choices[] | .delta.content " -r
     --      make sure to log only once and with matching data: prefix
 
+    appendChunk = appendChunk or function(textChunk)
+        hs.eventtap.keyStrokes(textChunk, app) -- app param is optional
+    end
+
     local function processChunk(chunk)
         -- stream response is data only SSEs:
         --   https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format
@@ -181,7 +185,7 @@ function foundUserPrompt(userPrompt, app)
                 local delta = sse.choices[1].delta or {}
                 local text = delta.content
                 if text then
-                    hs.eventtap.keyStrokes(text, app) -- app param is optional
+                    appendChunk(text)
                 end
 
                 -- TODO
