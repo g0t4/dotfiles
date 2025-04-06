@@ -54,6 +54,7 @@ function adjustBoxElement(focusedElement, app, callback)
         -- FYI if this is working here... then get rid of all of this "adjustBoxElement" code...
         -- already have what I need
         callback(focusedElement)
+        return
     end
     hs.alert.show("using adjustBoxElement, heads up cuz I suspect I won't need this code anymore")
 
