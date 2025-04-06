@@ -55,10 +55,13 @@ function adjustBoxElement(element, app, callback)
 
     function checkElem(cElem)
         print("checking", hs.inspect(cElem))
-        return false
+        if cElem:attributeValue("AXRole") ~= "AXTextArea" then
+            return false
+        end
+        return true
     end
 
-    FindOneElement(appElem, criteria, function(_message, results, numResults)
+    FindOneElement(appElem, checkElem, function(_message, results, numResults)
         -- TODO! hs.axuielement.searchCriteriaFunction(criteria)
         --   combine both criteria and secondary function
         print("done")
