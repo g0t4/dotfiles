@@ -430,6 +430,56 @@ function SearchForDevToolsTextArea(callbackWithSelectedText)
         end
         -- PRN fallthrough if attrs return nothing (unless empty?)
         PrintAttributes(appElem_FocusedUIElement)
+        -- FYI here are attrs from last appElem_FocusedUIElement:
+        -- 2025-04-06 02:05:34: ATTRIBUTES:
+        -- 2025-04-06 02:05:34: AXPosition	{ x = 27.0, y = 783.0 }
+        -- 2025-04-06 02:05:34: AXSize	{ h = 32.0, w = 904.0 }
+        -- 2025-04-06 02:05:34: AXColumnHeaderUIElements	nil
+        -- 2025-04-06 02:05:34: AXTopLevelUIElement	<userdata 1> -- hs.axuielement: AXWindow (0x600000604038)
+        -- 2025-04-06 02:05:34: AXSelectedTextRange	{ length = 0, location = 12 }
+        -- 2025-04-06 02:05:34: AXLinkedUIElements	{}
+        -- 2025-04-06 02:05:34: AXBlockQuoteLevel	0
+        -- 2025-04-06 02:05:34: AXEditableAncestor	<userdata 1> -- hs.axuielement: AXTextArea (0x6000006194b8)
+        -- 2025-04-06 02:05:34: AXOwns	nil
+        -- 2025-04-06 02:05:34: AXHelp	nil
+        -- 2025-04-06 02:05:34: AXWindow	<userdata 1> -- hs.axuielement: AXWindow (0x60000061b578)
+        -- 2025-04-06 02:05:34: AXAccessKey	nil
+        -- 2025-04-06 02:05:34: AXURL	nil
+        -- 2025-04-06 02:05:34: AXDOMIdentifier	""
+        -- 2025-04-06 02:05:34: AXFrame	{ h = 32.0, w = 904.0, x = 27.0, y = 783.0 }
+        -- 2025-04-06 02:05:34: AXTitle	""
+        -- 2025-04-06 02:05:34: AXVisited	false
+        -- 2025-04-06 02:05:34: AXSelectedTextRanges	{ { length = 0, location = 12 } }
+        -- 2025-04-06 02:05:34: AXFocusableAncestor	<userdata 1> -- hs.axuielement: AXTextArea (0x60000063cf78)
+        -- 2025-04-06 02:05:34: AXChildren	{ <userdata 1> -- hs.axuielement: AXGroup (0x6000006213f8) }
+        -- 2025-04-06 02:05:34: AXInvalid	"false"
+        -- 2025-04-06 02:05:34: AXElementBusy	false
+        -- 2025-04-06 02:05:34: AXTitleUIElement	nil
+        -- 2025-04-06 02:05:34: AXSelected	false
+        -- 2025-04-06 02:05:34: AXCustomContent	nil
+        -- 2025-04-06 02:05:34: AXSelectedTextMarkerRange	<userdata 1> -- hs.axuielement.axtextmarkerrange: (0x60000062c678)
+        -- 2025-04-06 02:05:34: AXParent	<userdata 1> -- hs.axuielement: AXGroup (0x60000062e638)
+        -- 2025-04-06 02:05:34: AXStartTextMarker	<userdata 1> -- hs.axuielement.axtextmarker: (0x60000062edf8)
+        -- 2025-04-06 02:05:34: AXValue	"how do I get id=foo"
+        -- 2025-04-06 02:05:34: AXEndTextMarker	<userdata 1> -- hs.axuielement.axtextmarker: (0x60000062f138)
+        -- 2025-04-06 02:05:34: AXVisibleCharacterRange	{ length = 12, location = 0 }
+        -- 2025-04-06 02:05:34: AXEnabled	true
+        -- 2025-04-06 02:05:34: AXSelectedText	""
+        -- 2025-04-06 02:05:34: AXNumberOfCharacters	12
+        -- 2025-04-06 02:05:34: AXDOMClassList	{ "cm-content", "cm-lineWrapping" }
+        -- 2025-04-06 02:05:34: AXSubrole	nil
+        -- 2025-04-06 02:05:34: ChromeAXNodeId	"56851335"
+        -- 2025-04-06 02:05:34: AXFocused	true
+        -- 2025-04-06 02:05:34: AXPlaceholderValue	nil
+        -- 2025-04-06 02:05:34: AXHighestEditableAncestor	<userdata 1> -- hs.axuielement: AXTextArea (0x60000062af78)
+        -- 2025-04-06 02:05:34: AXValueAutofillAvailable	false
+        -- 2025-04-06 02:05:34: AXRoleDescription	"text entry area"
+        -- 2025-04-06 02:05:34: AXInsertionPointLineNumber	0
+        -- 2025-04-06 02:05:34: AXRole	"AXTextArea"
+        -- 2025-04-06 02:05:34: AXRows	{}
+        -- 2025-04-06 02:05:34: AXRequired	false
+        -- 2025-04-06 02:05:34: AXDescription	"Console prompt"
+        -- 2025-04-06 02:05:34: AXSelectedRows	{}
         callbackWithSelectedText(selectedText, appElem_FocusedUIElement)
         return
     end

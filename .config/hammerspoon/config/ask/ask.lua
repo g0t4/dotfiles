@@ -49,6 +49,14 @@ function adjustBoxElement(focusedElement, app, callback)
         callback(focusedElement)
         return
     end
+    if focusedElement:attributeValue("AXDescription") == "Console prompt" then
+        print("FYI you didn't need adjustBoxElement... do you ever use it?")
+        -- FYI if this is working here... then get rid of all of this "adjustBoxElement" code...
+        -- already have what I need
+        callback(focusedElement)
+    end
+    hs.alert.show("using adjustBoxElement, heads up cuz I suspect I won't need this code anymore")
+
     -- FYI this works for Brave right now, it's a hack hack hack but I dont give a F
 
     -- FYI AXTextArea worked to get closer! ... now if I can combine with checkElem to ensure its the right one
