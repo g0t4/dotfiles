@@ -2247,6 +2247,8 @@ abbr aggo --function abbr_agg
 
 
 abbr vllms "vllm serve"
+# PRN some common args for vllm serve?
+# abbr vllmsd "vllm serve --download-dir "
 abbr vllmb "vllm bench"
 abbr vllmc "vllm chat"
 abbr vllmg "vllm complete"
