@@ -459,7 +459,7 @@ end
 
 function BuildHammerspoonLuaTo(toElement)
     local refChain = f.imap(toElement:path(),
-        function(_, pathItem)
+        function(pathItem)
             local singular = pathItem:singular()
             if singular == "application" then
                 -- this is just meant as a generic example, not actually using as is
@@ -467,7 +467,7 @@ function BuildHammerspoonLuaTo(toElement)
                 return "app"
             end
             -- PRN overrides for singulars that don't match AXRole
-            local siblingIndex = GetElementSiblingIndex(pathItem)
+            local siblingIndex = GetElementSiblingIndex(pathItem) or "sibling index is nil? in BuildHammerspoonLuaTo"
             if singular == "splitGroup" then
                 -- add space before the colon to help split up deep specifiers
                 --   splitGroup is often "evenly" distributed
