@@ -1,6 +1,13 @@
 local M = {}
 
 function M.getSelectedTextThen(callbackWithSelectedText)
+    -- TODO! turn this into a generic class that can take text out of any selected application's focused element, or otherwise specific to app
+    --   AND then be able to turn around and edit/replace that text
+    --   I can use this for far more than just ask-openai questions...
+    --   I can actually start doing auto complete in EVERY APP! as I type in an app, if I can detect those typing events I can make my own global copilot!
+    --     maybe even show floating window with a suggestion so I don't have to rely on each app's nuances to preview completions
+    --     PLUS then it wouldn't get in the way!
+
     -- NOTES:
     --   selected text does not work in iTerm (at least not in nvim)... that'sfine as I am not using this at all in iterm... if I was I could just impl smth specific to iterm most likley...
     --   verified works in: Brave devtools, Script Debugger and Editor, (AXValue in iterm + nvim)
