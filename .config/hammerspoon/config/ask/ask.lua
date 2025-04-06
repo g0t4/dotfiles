@@ -306,7 +306,10 @@ function foundUserPrompt(userPrompt, app, appendChunk)
     --    cat ask-openai-streaming-chunk-log.txt | grep '^\s*data:' | cut -c7- | jq ".choices[] | .delta.content " -r
     --      make sure to log only once and with matching data: prefix
 
-    selectTextToReplaceIt()
+    if appendChunk == nil then
+        -- TODO rewrite this to be a pre-handler of sorts? or move it out of this spot?
+        selectTextToReplaceIt()
+    end
 
     appendChunk = appendChunk or function(textChunk)
         hs.eventtap.keyStrokes(textChunk, app) -- app param is optional
