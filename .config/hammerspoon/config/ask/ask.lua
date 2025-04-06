@@ -39,7 +39,7 @@ function AskOpenAICompletionBox()
             local styledSpecifier = hs.styledtext.new(boxText, {
                 font = {
                     name = "SauceCodePro Nerd Font",
-                    size = 14
+                    size = 16
                 },
                 color = { white = 1 },
             })
