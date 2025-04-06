@@ -472,26 +472,13 @@ function BuildHammerspoonLuaTo(toElement)
 end
 
 function CombineClausesWithLineContinuations(clauses)
-    -- assumes this is one set of clauses for a single line of code
-    -- and that I can use a line continuation between any of the consecutive clauses
-    --  - i.e. won't result in line continuation in the middle of a string literal
-    local lines = EnumTableValues(clauses)
-        :foldl(function(accum, current)
-            local last = accum[#accum]
-            if string.len(last) + string.len(current) > 80 then
-                table.insert(accum, current)
-                -- FYI don't forget return has to come last in a block (obscure detail I wanted to write down one time)
-                return accum
-            end
-            accum[#accum] = last .. current
-            return accum
-        end, { "" })
-
-    return table.concat(lines, "¬\n    ") -- four spaces on ident too
+    return ConcatIntoLines(clauses, 80, "¬")
 end
 
-function ConcatIntoLines(refChain, maxLineLength)
+function ConcatIntoLines(refChain, maxLineLength, lineContinuation)
     maxLineLength = maxLineLength or 120
+    local joinWith = (lineContinuation or "") .. "\n  "
+
     local lines = { "" }
     for _, ref in ipairs(refChain) do
         if #lines[#lines] + string.len(ref) < maxLineLength then
@@ -500,7 +487,7 @@ function ConcatIntoLines(refChain, maxLineLength)
             table.insert(lines, ref)
         end
     end
-    return table.concat(lines, "\n  ")
+    return table.concat(lines, joinWith)
 end
 
 function sortedAttributeNames(element)
