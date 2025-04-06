@@ -411,8 +411,14 @@ end
 function SearchForDevToolsTextArea(callbackWithSelectedText, focusedElem)
     local focusedWindow, app = GetBraveFocusedWindowElement()
 
-    -- TODO how about check for AXFocusedUIElement first and only fallback to the following if its not found...
-    --   focused was often working fine
+    -- TODO bring back this primary, for now I am testing fallback mechanism
+    -- if focusedElem ~= nil then
+    --     -- TODO what was issue with focused before, it came back empty right? or?
+    --     print("using focused elem")
+    --     callbackWithSelectedText(focusedElem)
+    --     return
+    -- end
+
 
     -- AXTextArea '' - Console prompt
     -- AXHighestEditableAncestor: AXTextArea '' - Console prompt<hs.axuielement>
