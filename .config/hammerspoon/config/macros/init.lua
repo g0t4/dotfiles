@@ -421,9 +421,7 @@ function SearchForDevToolsTextArea(callbackWithSelectedText)
         local selectedText = appElem_FocusedUIElement:attributeValue("AXSelectedText")
         if selectedText == nil or selectedText == "" then
             -- try AXValue (when no selection)
-            print("AXSelectedText had nothing (probably no selection), trying AXValue fallback (all text in text area)")
             selectedText = appElem_FocusedUIElement:attributeValue("AXValue")
-            print(" found AXValue:", selectedText)
         end
         -- PRN fallthrough if attrs return nothing (unless empty?)
         -- PrintAttributes(appElem_FocusedUIElement)
