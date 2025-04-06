@@ -213,9 +213,14 @@ function AskOpenAICompletionBox()
                             hs.eventtap.keyStrokes(entireResponse)
                         end
 
+                        -- function redoDifferently()
+                        --     -- same as started but tell it you didn't like the first vesrion and pass it back
+                        -- end
+
                         table.insert(boxBindings, hs.hotkey.bind({}, "escape", stopBox))
                         -- table.insert(boxBindings, hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "D", acceptBox))
                         table.insert(boxBindings, hs.hotkey.bind({ "cmd", "alt", "ctrl" }, hs.keycodes.map["return"], acceptBox))
+                        -- table.insert(boxBindings, hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "S", redoDifferently))
 
                         -- PRN add other bindings, i.e. to refresh or get new response ... need that to be on keystroke :)
                         -- oh holy crap... I can have it open on a button and then on every keystroke it will refersh! using this right here binding
