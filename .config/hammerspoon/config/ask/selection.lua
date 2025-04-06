@@ -45,6 +45,12 @@ function M.getSelectedTextThen(callbackWithSelectedText)
             -- if some app falls into this AXValue approach and I don't want to select all, then add a qualifier for it here
             -- select all text
             hs.eventtap.keyStroke({ "cmd" }, "a", 0) -- 0ms delay b/c by the time we get any response will be way long enoughk
+            -- alternative:
+            -- local selected = app:selectMenuItem({ "Edit", "Select All" })
+            -- if (not selected) then
+            --     print("failed to select all")
+            --     return
+            -- end
 
             callbackWithSelectedText(value, focusedElement)
             return
@@ -52,137 +58,6 @@ function M.getSelectedTextThen(callbackWithSelectedText)
     else
         hs.alert.show("did not find system wide element, might need an app specific fix like Brave but for ..." .. app:name())
     end
-    -- trigger select all which is needed to get/replace the user prompt/question
-    -- local selected = app:selectMenuItem({ "Edit", "Select All" })
-    -- if (not selected) then
-    --     print("failed to select all")
-    --     return
-    -- end
-    -- TODO WOULD HAVE TO BE APP SECIFIC:
-    -- i.e. dev tools window literally has "DevTools" in title of an element on way down the specifier chain, here's an example though it will change:
-    --
-    -- app:window(1):group(1):group(1):group(1):group(1):scrollArea(1):webArea(1):group(1):group(1):group(1):group(1):group(1)
-    --   :group(1):group(1):group(1):group(1):group(1):group(1):group(2):group(1):group(1):group(1):group(1):group(1):group(1)
-    --   :group(1):group(1):group(2)
-    --
-    -- AXBlockQuoteLevel: 0<number>
-    -- AXDOMClassList: [1: monospace<string>]
-    -- AXDOMIdentifier: console-messages<string>
-    -- AXElementBusy: false<bool>
-    -- AXEnabled: true<bool>
-    -- AXEndTextMarker: <hs.axuielement.axtextmarker>
-    -- AXFocusableAncestor: AXGroup '' - Console panel<hs.axuielement>
-    -- AXFocused: false<bool>
-    -- AXLinkedUIElements: []
-    -- AXRequired: false<bool>
-    -- AXRoleDescription: group<string>
-    -- AXSelected: false<bool>
-    -- AXSelectedRows: []
-    -- AXSelectedTextMarkerRange: <hs.axuielement.axtextmarkerrange>
-    -- AXStartTextMarker: <hs.axuielement.axtextmarker>
-    -- AXVisited: false<bool>
-    -- ChromeAXNodeId: 666<string>
-    --
-    -- unique ref: app:window('DevTools - www.hammerspoon.org/docs/hs.task.html - wes private')
-    --   :group('DevTools - www.hammerspoon.org/docs/hs.task.html - wes private'):group(''):group(''):group(''):scrollArea()
-    --   :webArea('DevTools'):group('')
-
-    -- this time get selected text wasn't working, then it started working UGH! and nothing changed here:
-    --    nothing changed in ATTRs either (below is what it was broken and not:
-    --
-    -- app:window(1):group(1):group(1):group(1):group(1):scrollArea(1):webArea(1):group(1):group(1):group(1):group(1):group(1)
-    --   :group(1):group(1):group(1):group(2):group(1):group(1):group(2):group(1):group(1):group(1):group(1):group(1):group(1)
-    --   :group(1):group(1):group(2)
-    --
-    -- ChromeAXNodeId: 6<string>
-    --
-    -- unique ref: app
-    --   :window('DevTools - docs.google.com/document/d//edit?tab=t.0 - wes private')
-    --   :group('DevTools - docs.google.com/document/d//edit?tab=t.0 - wes private')
-    --   :group(''):group(''):group(''):scrollArea(''):webArea('DevTools'):group('')
-
-    -- *** focused element reproduced with attrs from T inspect:
-    -- WHEN FOCUSED ELEMENT WORKS ABOVE, it returns this for BuildHammerspoonLuaTo:
-    -- 2025-04-05 16:38:39: focusedElement
-    --    app:window(1):group(1):group(1):group(1):group(1):scrollArea(1):webArea(1):group(1):group(1):group(1):group(1):group(1)
-    -- :group(1):group(1):group(1):group(2):group(1):group(1):group(2):group(1):group(1):group(1):group(1):group(1):group(1)
-    -- :group(1):group(1):group(2):group(2):group(1):group(1):group(1):group(2):textArea(1)
-    --
-    --  LITERALLY THE TEXT BOX with the current line contents... I was able to dig down into it:
-    --
-    --  app:window(1):group(1):group(1):group(1):group(1):scrollArea(1):webArea(1):group(1):group(1):group(1):group(1):group(1)
-    --   :group(1):group(1):group(1):group(2):group(1):group(1):group(2):group(1):group(1):group(1):group(1):group(1):group(1)
-    --   :group(1):group(1):group(2):group(2):group(1):group(1):group(1):group(2):textArea(1)
-    --
-    -- AXBlockQuoteLevel: 0<number>
-    -- AXDOMClassList: [
-    --   1: cm-content<string>
-    --   2: cm-lineWrapping<string>
-    -- ]
-    -- AXDescription: Console prompt<string>
-    -- AXEditableAncestor: AXTextArea '' - Console prompt<hs.axuielement>
-    -- AXElementBusy: false<bool>
-    -- AXEnabled: true<bool>
-    -- AXEndTextMarker: <hs.axuielement.axtextmarker>
-    -- AXFocusableAncestor: AXTextArea '' - Console prompt<hs.axuielement>
-    -- AXFocused: true<bool>
-    -- AXHighestEditableAncestor: AXTextArea '' - Console prompt<hs.axuielement>
-    -- AXInvalid: false<string>
-    -- AXLinkedUIElements: []
-    -- AXRequired: false<bool>
-    -- AXRoleDescription: text entry area<string>
-    -- AXSelected: false<bool>
-    -- AXSelectedRows: []
-    -- AXSelectedTextMarkerRange: <hs.axuielement.axtextmarkerrange>
-    -- AXStartTextMarker: <hs.axuielement.axtextmarker>
-    -- AXValue: document.querySelectorAll("div.docs-material-colorpalette-colorswatch")<string>
-    -- AXValueAutofillAvailable: false<bool>
-    -- AXVisited: false<bool>
-    -- ChromeAXNodeId: 174751<string>
-    --
-    -- AXChildren:
-    -- AXGroup: '' desc:''
-    --
-    -- AXChildrenInNavigationOrder:
-    -- AXGroup: '' desc:''
-    --
-    -- unique ref: app
-    --   :window('DevTools - docs.google.com/document/d/-IO-/edit?tab=t.0 - wes private')
-    --   :group('DevTools - docs.google.com/document/d/-IO-/edit?tab=t.0 - wes private')
-    --   :group(''):group(''):group(''):scrollArea(''):webArea('DevTools'):group('')       --
-    --
-
-    -- *** ok DevTools web area has selected text! (assuming its selected?)
-    -- app:window(1):group(1):group(1):group(1):group(1):scrollArea(1):webArea(1)
-    --
-    -- AXBlockQuoteLevel: 0<number>
-    -- AXDOMClassList: []
-    -- AXElementBusy: false<bool>
-    -- AXEnabled: true<bool>
-    -- AXEndTextMarker: <hs.axuielement.axtextmarker>
-    -- AXFocused: false<bool>
-    -- AXLinkedUIElements: []
-    -- AXLoaded: true<bool>
-    -- AXLoadingProgress: 1.0<number>
-    -- AXRequired: false<bool>
-    -- AXRoleDescription: HTML content<string>
-    -- AXSelected: false<bool>
-    -- AXSelectedRows: []
-    -- AXSelectedText: document.querySelectorAll("div.docs-material-colorpalette-colorswatch")<string>
-    -- AXSelectedTextMarkerRange: <hs.axuielement.axtextmarkerrange>
-    -- AXStartTextMarker: <hs.axuielement.axtextmarker>
-    -- AXTitle: DevTools<string>
-    -- AXURL: [
-    --   url: devtools://devtools/bundled/devtools_app.html?remoteBase=https://devtools.brave.com/serve_file/@/&targetType=tab&can_dock=true<string>
-    --   __luaSkinType: NSURL<string>
-    -- ]
-    -- AXVisited: false<bool>
-    -- ChromeAXNodeId: 1<string>
-    --
-    -- unique ref: app
-    --   :window('DevTools - docs.google.com/document/d/-IO-/edit?tab=t.0 - wes private')
-    --   :group('DevTools - docs.google.com/document/d/-IO-/edit?tab=t.0 - wes private')
-    --   :group(''):group(''):group(''):scrollArea(''):webArea('DevTools')
 end
 
 return M
