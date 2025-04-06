@@ -49,7 +49,8 @@ function adjustBoxElement(element, app, callback)
         callback(element)
         return
     end
-    local criteria = { attribute = "AXTitle", value = "Console panel" }
+    -- FYI AXTextArea worked to get closer! ... now if I can combine with checkElem to ensure its the right one
+    local criteria = { attribute = "AXRole", value = "AXTextArea" }
     local appElem = hs.axuielement.applicationElement(app)
     FindOneElement(appElem, criteria, function(_message, results, _)
         -- TODO! hs.axuielement.searchCriteriaFunction(criteria)
