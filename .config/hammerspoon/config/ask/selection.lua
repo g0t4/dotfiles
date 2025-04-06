@@ -35,7 +35,7 @@ function M.getSelectedTextThen(callbackWithSelectedText)
     --      https://developer.apple.com/documentation/applicationservices/1462095-axuielementcreatesystemwide
 
     if focusedElement then
-        print("found systemWide AXFocusedUIElement: ", BuildHammerspoonLuaTo(focusedElement))
+        -- print("found systemWide AXFocusedUIElement: ", BuildHammerspoonLuaTo(focusedElement))
         local selectedText = focusedElement:attributeValue("AXSelectedText") -- < 0.4ms !!
 
         if selectedText and selectedText ~= "" then
