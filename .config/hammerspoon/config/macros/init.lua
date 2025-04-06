@@ -413,7 +413,7 @@ function SearchForDevToolsTextArea(callbackWithSelectedText, focusedElem)
 
     -- !!! bring back this primary, for now I am testing fallback mechanism
     -- if focusedElem ~= nil then
-    --     -- TODO what was issue with focused before, it came back empty right? or?
+    --     -- FYI random issue in Brave DevTools was that AXFocusedUIElement was nil, never found out why
     --     print("using focused elem")
     --     callbackWithSelectedText(focusedElem)
     --     return
