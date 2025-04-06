@@ -114,14 +114,10 @@ function adjustBoxElement(focusedElement, app, callback)
     --   anyways for now leave it, it works using app to find right next to the input box and I'm cool with that
     --   FYI if you dont find exactly the textarea you want or nearby enough, check what you do find for Editable attribute refs that might point at the text box from this first one
     FindOneElement(appElem, isFirstTextArea_ThisWorks, function(_message, results, numResults)
-        -- TODO! hs.axuielement.searchCriteriaFunction(criteria)
-        --   combine both criteria and secondary function
-        print("done")
         if not results then
             callback(focusedElement)
             return
         end
-        -- TODO check multi?
         callback(results[1])
     end)
 
