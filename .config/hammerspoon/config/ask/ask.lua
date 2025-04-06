@@ -9,7 +9,12 @@ local service = services.getService()
 
 require("config.ask.preloads") -- optional
 
+--- mostly push this under a rug to keep the notes together for alternatives
+--- nothing wrong w/ inlining one approach if that makes it easier to avoid bugs with neighboring code
 local function selectTextToReplaceIt()
+    -- IDEA: if you have timing issues, use a doLater/setTimeout style delay for subsequent steps to ensure event loop clears in between
+
+    --
     -- FYI both methods (cmd+a,menu)are deferred, IOTW cannot rely on the text to be selected until later
     --   after the current callstack runs to completion
     hs.eventtap.keyStroke({ "cmd" }, "a", 0) -- 0ms delay b/c by the time we get any response will be way long enoughk
