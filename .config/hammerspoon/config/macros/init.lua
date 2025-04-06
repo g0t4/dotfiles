@@ -419,7 +419,6 @@ function SearchForDevToolsTextArea(callbackWithSelectedText)
     -- !!! bring back this primary, for now I am testing fallback mechanism
     if appElem_FocusedUIElement ~= nil then
         -- FYI random issue in Brave DevTools was that AXFocusedUIElement was nil, never found out why
-        print("using focused elem")
         local selectedText = appElem_FocusedUIElement:attributeValue("AXSelectedText")
         -- wow finds selectedText if selected in advance...
         --  but not if I obviously defer the Cmd+A... how about try selectMenuItem and see if its blocking?
@@ -434,6 +433,7 @@ function SearchForDevToolsTextArea(callbackWithSelectedText)
         callbackWithSelectedText(selectedText, appElem_FocusedUIElement)
         return
     end
+
     -- just in case app level works, I wanna heads up if it doesn't... so I know to keep/remove this code!
     hs.alert.show("FYI no appElem AXFocusedUIElement found... heads up you still need your fallback")
 
