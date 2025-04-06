@@ -23,6 +23,7 @@ function M.getSelectedTextThen(callbackWithSelectedText)
     local app = hs.application.frontmostApplication()
     if app:name() == APPS.BraveBrowserBeta then
         hs.eventtap.keyStroke({ "cmd" }, "a", 0) -- 0ms delay b/c by the time we get any response will be way long enoughk
+        -- FYI can do Edit => Select All if cmd+a isn't working for an app
 
         SearchForDevToolsTextArea(callbackWithSelectedText)
         return
