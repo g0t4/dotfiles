@@ -44,9 +44,9 @@ local function stopBox()
     end
     boxBindings = {}
 end
-function adjustBoxElement(element, app, callback)
+function adjustBoxElement(focusedElement, app, callback)
     if APPS.BraveBrowserBeta ~= app:name() then
-        callback(element)
+        callback(focusedElement)
         return
     end
     -- FYI AXTextArea worked to get closer! ... now if I can combine with checkElem to ensure its the right one
@@ -68,12 +68,12 @@ function adjustBoxElement(element, app, callback)
     --     return false
     -- end
 
-    FindOneElement(appElem, criteriaFirstTextAreaSeemsToBeDumbLuck, function(_message, results, numResults)
+    FindOneElement(focusedElement, criteriaFirstTextAreaSeemsToBeDumbLuck, function(_message, results, numResults)
         -- TODO! hs.axuielement.searchCriteriaFunction(criteria)
         --   combine both criteria and secondary function
         print("done")
         if not results then
-            callback(element)
+            callback(focusedElement)
             return
         end
         -- TODO check multi?
