@@ -1,15 +1,19 @@
 local M = {}
 
 local function selectAllText(app)
-    -- select all text
-    -- OK this is deferred which means it cannot help you with a selection immediately until event loop processes this and triggers select change which means it won't work in this invocation
-    -- hs.eventtap.keyStroke({ "cmd" }, "a", 0) -- 0ms delay b/c by the time we get any response will be way long enoughk
+    -- FYI both methods (cmd+a,menu)are deferred, IOTW cannot rely on the text to be selected until later
+    --   after the current callstack runs to completion
+    hs.eventtap.keyStroke({ "cmd" }, "a", 0) -- 0ms delay b/c by the time we get any response will be way long enoughk
+
     -- alternative:
-    local selected = app:selectMenuItem({ "Edit", "Select All" })
+    -- local selected = app:selectMenuItem({ "Edit", "Select All" })
     -- if (not selected) then
     --     print("failed to select all")
     --     return
     -- end
+
+    -- FYI it might be possible to programatically trigger selection using AXUIElement controls or selection attributes
+    --    I don't know how to do that yet but it has to be the same as settihng the AXValue's value right?
 end
 
 function M.getSelectedTextThen(callbackWithSelectedText)
