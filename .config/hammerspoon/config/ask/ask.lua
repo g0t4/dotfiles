@@ -55,14 +55,21 @@ function adjustBoxElement(focusedElement, app, callback)
     local criteriaFirstTextAreaSeemsToBeDumbLuck = { attribute = "AXRole", value = "AXTextArea" }
     local appElem = hs.axuielement.applicationElement(app)
 
-    function checkElem(cElem)
+    function isFirstTextArea_ThisWorks(cElem)
         -- FYI AXTextArea alone worked (not sure if just luck)
         if cElem:attributeValue("AXRole") ~= "AXTextArea" then
             return false
         end
-        print("checking", hs.inspect(cElem))
-        -- -- hrm this found AXTextArea really fast... I wonder if order is somehow based on focused elements and that is why?
-        -- PrintAttributes(cElem)
+        -- hrm this found AXTextArea really fast... I wonder if order is somehow based on focused elements and that is why?
+        PrintAttributes(cElem)
+        -- attrs from the one that matches right now... in case I need to find it in future:
+        -- AXRoleDescription	"text entry area"
+        -- AXEndTextMarker	<userdata 1> -- hs.axuielement.axtextmarker: (0x60000ed77d78)
+        -- AXFocusableAncestor	<userdata 1> -- hs.axuielement: AXTextArea
+        -- AXEditableAncestor	<userdata 1> -- hs.axuielement: AXTextArea
+        -- AXSelectedTextRanges	{ { length = 9, location = 0 } }
+        -- AXDescription	"Console prompt"
+        --
         -- if cElem:attributeValue("AXDescription") ~= "Console panel" then
         --     return false
         -- end
@@ -73,7 +80,7 @@ function adjustBoxElement(focusedElement, app, callback)
     -- TODO s/b using focusedElement to narrow search... but using app is like 10x faster, must b/c smth to do with the focused input box?!
     --   anyways for now leave it, it works using app to find right next to the input box and I'm cool with that
     --   FYI if you dont find exactly the textarea you want or nearby enough, check what you do find for Editable attribute refs that might point at the text box from this first one
-    FindOneElement(appElem, checkElem, function(_message, results, numResults)
+    FindOneElement(appElem, isFirstTextArea_ThisWorks, function(_message, results, numResults)
         -- TODO! hs.axuielement.searchCriteriaFunction(criteria)
         --   combine both criteria and secondary function
         print("done")
