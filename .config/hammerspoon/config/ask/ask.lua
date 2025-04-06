@@ -214,7 +214,8 @@ function AskOpenAICompletionBox()
                         end
 
                         table.insert(boxBindings, hs.hotkey.bind({}, "escape", stopBox))
-                        table.insert(boxBindings, hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "D", acceptBox))
+                        -- table.insert(boxBindings, hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "D", acceptBox))
+                        table.insert(boxBindings, hs.hotkey.bind({ "cmd", "alt", "ctrl" }, hs.keycodes.map["return"], acceptBox))
 
                         -- PRN add other bindings, i.e. to refresh or get new response ... need that to be on keystroke :)
                         -- oh holy crap... I can have it open on a button and then on every keystroke it will refersh! using this right here binding
