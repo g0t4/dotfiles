@@ -45,12 +45,24 @@ local function stopBox()
     boxBindings = {}
 end
 function adjustBoxElement(element, app, callback)
-    if not APPS.BraveBrowserBeta == app:name() then
+    if APPS.BraveBrowserBeta ~= app:name() then
         callback(element)
         return
     end
-    callback(element)
-    -- TODO I want to find AXTitle "Console panel" control
+    local criteria = { attribute = "AXTitle", value = "Console panel" }
+    local appElem = hs.axuielement.applicationElement(app)
+    FindOneElement(appElem, criteria, function(_message, results, _)
+        -- TODO! hs.axuielement.searchCriteriaFunction(criteria)
+        --   combine both criteria and secondary function
+        print("done")
+        if not results then
+            callback(element)
+            return
+        end
+        -- TODO check multi?
+        callback(results[1])
+    end)
+
     -- TODO I could be doing this in the background while the response is starting...
     --   show box once it is found AND have at least one chunk of text in response
     --   then join and wait on both finishing
