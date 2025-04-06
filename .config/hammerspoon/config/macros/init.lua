@@ -434,7 +434,8 @@ function SearchForDevToolsTextArea(callbackWithSelectedText)
         callbackWithSelectedText(selectedText, appElem_FocusedUIElement)
         return
     end
-
+    -- just in case app level works, I wanna heads up if it doesn't... so I know to keep/remove this code!
+    hs.alert.show("FYI no appElem AXFocusedUIElement found... heads up you still need your fallback")
 
     -- AXTextArea '' - Console prompt
     -- AXHighestEditableAncestor: AXTextArea '' - Console prompt<hs.axuielement>
