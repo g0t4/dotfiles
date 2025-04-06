@@ -484,7 +484,10 @@ function SearchForDevToolsTextArea(callbackWithSelectedText)
         return
     end
 
-    -- just in case app level works, I wanna heads up if it doesn't... so I know to keep/remove this code!
+    -- !! OK a fresh restart of brave... it falls through here with no AXFocusedUIElement
+    --    BUT THEN if I just inspect the window and point at the app level... then it works!
+    -- !!! and when I inspect app level it shows AXFocusedUIElement correctly
+    --    is there an enumeration issue?
     hs.alert.show("FYI no appElem AXFocusedUIElement found... heads up you still need your fallback")
 
     -- AXTextArea '' - Console prompt
