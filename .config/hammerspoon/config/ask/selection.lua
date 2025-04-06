@@ -12,8 +12,10 @@ local function selectAllText(app)
     --     return
     -- end
 
-    -- FYI it might be possible to programatically trigger selection using AXUIElement controls or selection attributes
-    --    I don't know how to do that yet but it has to be the same as settihng the AXValue's value right?
+
+    -- FYI might be an approach to immediately change selection... if not readonly:
+    -- appElem_FocusedUIElement.AXSelectedTextRange = { 0, #appElem_FocusedUIElement.AXValue }
+    -- it didn't error but it didnt do it yet either... and I don't need this now so I am stopping for now
 end
 
 function M.getSelectedTextThen(callbackWithSelectedText)
