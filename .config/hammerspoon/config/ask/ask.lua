@@ -26,17 +26,85 @@ function M.AskOpenAIStreaming()
     end)
 end
 
-function M.AskOpenAICompletionBox()
-    local app = hs.application.frontmostApplication()
-
+function AskOpenAICompletionBox()
     selection.getSelectedTextThen(function(selectedText, element)
         -- canvas that's like ui callouts
         PrintAttributes(element)
+
+        if element then
+            local frame = element:axFrame()
+            local screenFrame = hs.screen.mainScreen():frame()
+
+            -- TODO answer
+            local boxText = selectedText
+
+            -- TODO extract helper code to position the box, and share it with my UI callouts code
+            local styledSpecifier = hs.styledtext.new(boxText, {
+                font = {
+                    name = "SauceCodePro Nerd Font",
+                    size = 14
+                },
+                color = { white = 1 },
+            })
+            ---@type { w: number, h: number } | nil
+            local specifierSize = hs.drawing.getTextDrawingSize(styledSpecifier)
+
+            -- add padding (don't subtract it from needed width/height)
+            local padding = 10
+            local tooltipWidth = math.max(specifierSize.w) + 2 * padding
+            local tooltipHeight = specifierSize.h + 3 * padding
+
+            -- Initial positioning (slightly below the element)
+            local x = frame.x
+            local y = frame.y + frame.h + 5 -- Below the element
+
+            -- Ensure tooltip does not go off the right edge
+            if x + tooltipWidth > screenFrame.x + screenFrame.w then
+                x = screenFrame.x + screenFrame.w - tooltipWidth - 10 -- Shift left
+                -- IIUC the box is positioned to right of element left side so I don't think I need to worry about x being shifted left of screen
+            end
+
+            -- Ensure tooltip does not go off the bottom edge
+            if y + tooltipHeight > screenFrame.y + screenFrame.h then
+                -- if it's off the bottom, then move it above the element
+                y = frame.y - tooltipHeight - 5 -- Move above element
+                if y < screenFrame.y then
+                    -- if above is also off screen, then shift it down, INSIDE the frame
+                    --   means it stays on top btw... could put it inside on bottom too
+                    y = screenFrame.y + 10 -- Shift up
+                end
+            end
+
+            local boxFrame = {
+                x = x,
+                y = y,
+                w = tooltipWidth,
+                h = tooltipHeight,
+            }
+
+            local canvas = hs.canvas.new(boxFrame)
+            canvas:appendElements({
+                {
+                    type = "rectangle",
+                    frame = { x = 0, y = 0, w = 100, h = 50 },
+                    fillColor = { hex = "#000000" },
+                    strokeColor = nil,
+                },
+                {
+                    type = "text",
+                    text = selectedText,
+                    frame = { x = 5, y = 5, w = 90, h = 40 },
+                    textSize = 12,
+                    textColor = { hex = "#FFFFFF" },
+                    justification = "center",
+                }
+            })
+            canvas:show()
+        end
     end)
 end
 
 function foundUserPrompt(userPrompt, app)
-
     if userPrompt == "" then
         hs.alert.show("No selection found, try again...")
         return

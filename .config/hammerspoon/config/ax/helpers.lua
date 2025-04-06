@@ -347,6 +347,17 @@ end
 axuielemMT.axFocusedWindow = function(elem)
     return elem:attributeValue("AXFocusedWindow")
 end
+-- AXFrame
+---@param elem hs.axuielement
+---@return table|nil @ { x=number, y=number, w=number, h=number }
+axuielemMT.axFrame = function(elem)
+    local rawFrame = elem:attributeValue("AXFrame")
+    if not rawFrame then return nil end
+    ---@cast rawFrame table|nil @ { x=number, y=number, w=number, h=number }
+    assert(rawFrame.x and type(rawFrame.x) == "number" and rawFrame.y and type(rawFrame.y) == "number")
+    assert(rawFrame.w and type(rawFrame.w) == "number" and rawFrame.h and type(rawFrame.h) == "number")
+    return rawFrame
+end
 
 
 -- *** ATTRIBUTE HELPERS ***

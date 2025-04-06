@@ -1,6 +1,9 @@
 local M = {}
 
 function M.getSelectedTextThen(callbackWithSelectedText)
+    -- FYI I have observed executing this function from within hammerspoon's Console window, leads to the Window being the focusedElement
+    --   whereas with a StreamDeck button it correctly finds the textbox below the logs to be the correct focused element (when it is and I trigger the completions helper for HS lua help)
+
     -- TODO! turn this into a generic class that can take text out of any selected application's focused element, or otherwise specific to app
     --   AND then be able to turn around and edit/replace that text
     --   I can use this for far more than just ask-openai questions...
