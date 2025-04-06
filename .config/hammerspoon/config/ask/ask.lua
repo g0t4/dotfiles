@@ -22,7 +22,7 @@ function M.AskOpenAIStreaming()
         return
     end
 
-    selection.getSelectedTextThen(true, function(selectedText)
+    selection.getSelectedTextThen(function(selectedText)
         foundUserPrompt(selectedText, app)
     end)
 end
@@ -139,7 +139,7 @@ end
 function AskOpenAICompletionBox()
     local app = hs.application.frontmostApplication() -- < 0.5ms
 
-    selection.getSelectedTextThen(false, function(selectedText, focusedElem)
+    selection.getSelectedTextThen(function(selectedText, focusedElem)
         adjustBoxElement(focusedElem, app, function(element)
             local entireResponse = ""
             foundUserPrompt(selectedText, app, function(textChunk)
@@ -280,6 +280,9 @@ function foundUserPrompt(userPrompt, app, appendChunk)
     -- FYI double check logged lines with:
     --    cat ask-openai-streaming-chunk-log.txt | grep '^\s*data:' | cut -c7- | jq ".choices[] | .delta.content " -r
     --      make sure to log only once and with matching data: prefix
+
+    -- cmd+a
+    hs.eventtap.keyStroke({ "cmd" }, "a")
 
     appendChunk = appendChunk or function(textChunk)
         hs.eventtap.keyStrokes(textChunk, app) -- app param is optional

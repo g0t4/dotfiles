@@ -18,9 +18,8 @@ local function selectAllText(app)
     -- it didn't error but it didnt do it yet either... and I don't need this now so I am stopping for now
 end
 
----@param selectAll boolean
 ---@param callbackWithSelectedText function
-function M.getSelectedTextThen(selectAll, callbackWithSelectedText)
+function M.getSelectedTextThen(callbackWithSelectedText)
     -- FYI I have observed executing this function from within hammerspoon's Console window, leads to the Window being the focusedElement
     --   whereas with a StreamDeck button it correctly finds the textbox below the logs to be the correct focused element (when it is and I trigger the completions helper for HS lua help)
 
@@ -37,10 +36,6 @@ function M.getSelectedTextThen(selectAll, callbackWithSelectedText)
 
     local app = hs.application.frontmostApplication()
     if app:name() == APPS.BraveBrowserBeta then
-        if selectAll then
-            selectAllText(app) -- so it can be replaced (arguably this should go into the code to inject the response text)
-        end
-
         SearchForDevToolsTextArea(callbackWithSelectedText)
         return
     end
@@ -66,9 +61,6 @@ function M.getSelectedTextThen(selectAll, callbackWithSelectedText)
             return
         else
             local value = focusedElement:attributeValue("AXValue") -- < 0.4ms !!
-
-            selectAllText(app) -- so it can be replaced
-
             callbackWithSelectedText(value, focusedElement)
             return
         end
