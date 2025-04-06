@@ -58,6 +58,8 @@ function adjustBoxElement(element, app, callback)
         if cElem:attributeValue("AXRole") ~= "AXTextArea" then
             return false
         end
+        -- hrm this found AXTextArea really fast... I wonder if order is somehow based on focused elements and that is why?
+        PrintAttributes(cElem)
         return true
     end
 
