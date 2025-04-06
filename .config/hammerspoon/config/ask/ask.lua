@@ -26,12 +26,30 @@ function M.AskOpenAIStreaming()
     end)
 end
 
+local box = nil
+local boxBindings = {}
+
+local function removeBox()
+    if not box then
+        return
+    end
+    box:delete()
+    box = nil
+end
+
+local function stopBox()
+    removeBox()
+    for _, binding in pairs(boxBindings) do
+        binding:delete()
+    end
+    boxBindings = {}
+end
+
 function AskOpenAICompletionBox()
     local app = hs.application.frontmostApplication() -- < 0.5ms
 
     selection.getSelectedTextThen(function(selectedText, element)
         local entireResponse = ""
-        local box = nil
         foundUserPrompt(selectedText, app, function(textChunk)
             entireResponse = entireResponse .. textChunk
 
@@ -53,8 +71,6 @@ function AskOpenAICompletionBox()
                 local padding = 5
                 local tooltipWidth = math.max(specifierSize.w) + 2 * padding
                 local tooltipHeight = specifierSize.h + 2 * padding
-                print("tooltipWidth", tooltipWidth)
-                print("tooltipHeight", tooltipHeight)
 
                 -- Initial positioning (slightly below the element)
                 local x = frame.x
@@ -97,6 +113,10 @@ function AskOpenAICompletionBox()
                     },
                 })
                 box:show()
+
+                table.insert(boxBindings, hs.hotkey.bind({}, "escape", stopBox))
+                -- PRN add other bindings, i.e. to refresh or get new response ... need that to be on keystroke :)
+                -- oh holy crap... I can have it open on a button and then on every keystroke it will refersh! using this right here binding
             end
         end)
     end)
