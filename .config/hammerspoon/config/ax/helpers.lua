@@ -468,10 +468,10 @@ function BuildHammerspoonLuaTo(toElement)
             return ":" .. singular .. "(" .. siblingIndex .. ")"
         end)
 
-    return SplitRefsIntoLines(refChain)
+    return ConcatIntoLines(refChain)
 end
 
-function SplitRefsIntoLines(refChain)
+function ConcatIntoLines(refChain)
     local lines = { "" }
     for _, ref in ipairs(refChain) do
         if #lines[#lines] + string.len(ref) < 120 then
