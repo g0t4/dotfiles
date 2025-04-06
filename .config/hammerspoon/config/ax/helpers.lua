@@ -467,7 +467,14 @@ function BuildHammerspoonLuaTo(toElement)
                 return "app"
             end
             -- PRN overrides for singulars that don't match AXRole
-            local siblingIndex = GetElementSiblingIndex(pathItem) or "sibling index is nil? in BuildHammerspoonLuaTo"
+            local siblingIndex = GetElementSiblingIndex(pathItem)
+            if siblingIndex == nil then
+                -- happens in MSFT excel!?!
+                local parent = pathItem:axParent() or "nil"
+                return ":" .. singular
+                    .. "(sibling index is nil? in BuildHammerspoonLuaTo, and parent is " .. parent .. ")"
+            end
+
             if singular == "splitGroup" then
                 -- add space before the colon to help split up deep specifiers
                 --   splitGroup is often "evenly" distributed
