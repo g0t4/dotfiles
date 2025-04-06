@@ -471,10 +471,11 @@ function BuildHammerspoonLuaTo(toElement)
     return ConcatIntoLines(refChain)
 end
 
-function ConcatIntoLines(refChain)
+function ConcatIntoLines(refChain, maxLineLength)
+    maxLineLength = maxLineLength or 120
     local lines = { "" }
     for _, ref in ipairs(refChain) do
-        if #lines[#lines] + string.len(ref) < 120 then
+        if #lines[#lines] + string.len(ref) < maxLineLength then
             lines[#lines] = lines[#lines] .. ref
         else
             table.insert(lines, ref)
