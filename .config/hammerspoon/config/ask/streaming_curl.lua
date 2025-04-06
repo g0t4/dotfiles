@@ -1,5 +1,7 @@
 local M = {}
 
+M.lastTask = nil
+
 function M.streamingRequest(url, method, headers, body, streamingCallback, completeCallback)
     local args = { "-fsSL", "--no-buffer", "-X", method, url }
 
@@ -13,9 +15,9 @@ function M.streamingRequest(url, method, headers, body, streamingCallback, compl
         table.insert(args, body)
     end
 
-    local task = hs.task.new("/usr/bin/curl", completeCallback, streamingCallback, args)
+    lastTask = hs.task.new("/usr/bin/curl", completeCallback, streamingCallback, args)
 
-    task:start()
+    lastTask:start()
 end
 
 return M

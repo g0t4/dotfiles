@@ -162,6 +162,7 @@ end
 function AskOpenAICompletionBox()
     local app = hs.application.frontmostApplication() -- < 0.5ms
     -- TODO cancel previous request before starting new, if its still running
+    --    CANCEL s/b wired into foundUserPrompt which makes the request and so would have the task to cancel
     --    go to the hs.task object and cancel, else rewrite to use uv.pipe like I did in ask-openai streaming handlers
 
     selection.getSelectedTextThen(function(selectedText, focusedElem)
