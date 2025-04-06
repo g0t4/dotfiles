@@ -337,7 +337,9 @@ end
 
 function FindOneElement(app, criteria, callback)
     local startTime = GetTime()
-    local criteriaFunction = hs.axuielement.searchCriteriaFunction(criteria)
+    if type(criteria) ~= "function" then
+        criteria = hs.axuielement.searchCriteriaFunction(criteria)
+    end
     local namedModifiers = { count = 1 }
 
     local function afterSearch(...)
@@ -345,7 +347,7 @@ function FindOneElement(app, criteria, callback)
         callback(...)
     end
 
-    app:elementSearch(afterSearch, criteriaFunction, namedModifiers)
+    app:elementSearch(afterSearch, criteria, namedModifiers)
 end
 
 -- *** streamdeck Keyboard Maestro wrapper to catch errors and log them and rethrow for KM to show too ***
