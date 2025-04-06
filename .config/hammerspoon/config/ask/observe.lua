@@ -18,6 +18,8 @@
 --     "AXElementBusyChanged",
 --     "AXNotification",
 -- }
+local M = {}
+M.skip = false
 
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "D", function()
     if _G.observer then
@@ -61,8 +63,12 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "D", function()
     print("[AXObserver] Watching accessibility events for:", app:name())
     local appPID = app:pid()
     local appElement = hs.axuielement.applicationElement(app)
+    M.skip = false
 
     local function eventHandler(observer, element, event, event_info)
+        if M.skip then
+            return
+        end
         if event ~= "AXValueChanged" then
             return
         end
@@ -84,3 +90,5 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "D", function()
     _G.observer:addWatcher(appElement, "AXValueChanged")
     _G.observer:start()
 end)
+
+return M
