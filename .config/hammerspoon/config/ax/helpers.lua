@@ -9,6 +9,7 @@ require("config.helpers.misc")
 
 -- PRN allow index to be string? for title lookup like AppleScript? might want windowTitle("title") instead to avoid unecessary type checks and magic in what it matches on?
 
+local axuielement = hs.axuielement -- must include otherwise cannot extend its metatable
 -- mark as class so I can modify w/o diagnostics noise
 ---@class hs.axuielement
 local axuielemMT = hs.getObjectMetatable("hs.axuielement")
