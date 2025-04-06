@@ -9,12 +9,12 @@ local service = services.getService()
 
 require("config.ask.preloads") -- optional
 
-local function selectAllText(app)
+local function selectTextToReplaceIt()
     -- FYI both methods (cmd+a,menu)are deferred, IOTW cannot rely on the text to be selected until later
     --   after the current callstack runs to completion
     hs.eventtap.keyStroke({ "cmd" }, "a", 0) -- 0ms delay b/c by the time we get any response will be way long enoughk
 
-    -- alternative:
+    -- alternative (pass app for this):
     -- local selected = app:selectMenuItem({ "Edit", "Select All" })
     -- if (not selected) then
     --     print("failed to select all")
@@ -229,7 +229,7 @@ function AskOpenAICompletionBox()
                     if #boxBindings == 0 then
                         function acceptBox()
                             print("accepting")
-                            hs.eventtap.keyStroke({ "cmd" }, "a")
+                            selectTextToReplaceIt()
                             hs.eventtap.keyStrokes(entireResponse)
                         end
 
@@ -299,8 +299,7 @@ function foundUserPrompt(userPrompt, app, appendChunk)
     --    cat ask-openai-streaming-chunk-log.txt | grep '^\s*data:' | cut -c7- | jq ".choices[] | .delta.content " -r
     --      make sure to log only once and with matching data: prefix
 
-    -- cmd+a
-    hs.eventtap.keyStroke({ "cmd" }, "a")
+    selectTextToReplaceIt()
 
     appendChunk = appendChunk or function(textChunk)
         hs.eventtap.keyStrokes(textChunk, app) -- app param is optional
