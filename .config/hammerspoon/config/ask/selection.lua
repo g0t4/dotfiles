@@ -2,6 +2,7 @@ local M = {}
 
 local function selectAllText()
     -- select all text
+    -- OK this is deferred which means it cannot help you with a selection immediately until event loop processes this and triggers select change which means it won't work in this invocation
     hs.eventtap.keyStroke({ "cmd" }, "a", 0) -- 0ms delay b/c by the time we get any response will be way long enoughk
     -- alternative:
     -- local selected = app:selectMenuItem({ "Edit", "Select All" })

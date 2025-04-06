@@ -421,7 +421,7 @@ function SearchForDevToolsTextArea(callbackWithSelectedText)
         -- FYI random issue in Brave DevTools was that AXFocusedUIElement was nil, never found out why
         local selectedText = appElem_FocusedUIElement:attributeValue("AXSelectedText")
         -- wow finds selectedText if selected in advance...
-        --  but not if I obviously defer the Cmd+A... how about try selectMenuItem and see if its blocking?
+        -- however that Cmd+A is deferred (in selection.lua)
         --  or set selection range on controls?!
         if selectedText == nil or selectedText == "" then
             -- try using AXValue (when text not selected)
@@ -429,7 +429,7 @@ function SearchForDevToolsTextArea(callbackWithSelectedText)
             selectedText = appElem_FocusedUIElement:attributeValue("AXValue")
         end
         -- PRN fallthrough if attrs return nothing (unless empty?)
-        PrintAttributes(appElem_FocusedUIElement)
+        -- PrintAttributes(appElem_FocusedUIElement)
         -- FYI here are attrs from last appElem_FocusedUIElement:
         -- 2025-04-06 02:05:34: ATTRIBUTES:
         -- 2025-04-06 02:05:34: AXPosition	{ x = 27.0, y = 783.0 }
