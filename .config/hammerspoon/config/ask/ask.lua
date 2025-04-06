@@ -9,6 +9,24 @@ local service = services.getService()
 
 require("config.ask.preloads") -- optional
 
+local function selectAllText(app)
+    -- FYI both methods (cmd+a,menu)are deferred, IOTW cannot rely on the text to be selected until later
+    --   after the current callstack runs to completion
+    hs.eventtap.keyStroke({ "cmd" }, "a", 0) -- 0ms delay b/c by the time we get any response will be way long enoughk
+
+    -- alternative:
+    -- local selected = app:selectMenuItem({ "Edit", "Select All" })
+    -- if (not selected) then
+    --     print("failed to select all")
+    --     return
+    -- end
+
+
+    -- FYI might be an approach to immediately change selection... if not readonly:
+    -- appElem_FocusedUIElement.AXSelectedTextRange = { 0, #appElem_FocusedUIElement.AXValue }
+    -- it didn't error but it didnt do it yet either... and I don't need this now so I am stopping for now
+end
+
 local selection = require("config.ask.selection")
 
 function M.AskOpenAIStreaming()
