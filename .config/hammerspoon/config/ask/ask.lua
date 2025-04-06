@@ -71,6 +71,8 @@ function AskOpenAICompletionBox()
                 local padding = 5
                 local tooltipWidth = math.max(specifierSize.w) + 2 * padding
                 local tooltipHeight = specifierSize.h + 2 * padding
+                -- TODO min width/height so its not jerky?
+                --   base min width on width of focused control?
 
                 -- Initial positioning (slightly below the element)
                 local x = frame.x
