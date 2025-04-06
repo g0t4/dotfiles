@@ -28,9 +28,6 @@ end
 
 function AskOpenAICompletionBox()
     selection.getSelectedTextThen(function(selectedText, element)
-        -- canvas that's like ui callouts
-        PrintAttributes(element)
-
         if element then
             local frame = element:axFrame()
             local screenFrame = hs.screen.mainScreen():frame()
@@ -50,9 +47,11 @@ function AskOpenAICompletionBox()
             local specifierSize = hs.drawing.getTextDrawingSize(styledSpecifier)
 
             -- add padding (don't subtract it from needed width/height)
-            local padding = 10
+            local padding = 5
             local tooltipWidth = math.max(specifierSize.w) + 2 * padding
-            local tooltipHeight = specifierSize.h + 3 * padding
+            local tooltipHeight = specifierSize.h + 2 * padding
+            print("tooltipWidth", tooltipWidth)
+            print("tooltipHeight", tooltipHeight)
 
             -- Initial positioning (slightly below the element)
             local x = frame.x
