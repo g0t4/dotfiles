@@ -22,7 +22,7 @@ function M.AskOpenAIStreaming()
         return
     end
 
-    selection.getSelectedTextThen(function(selectedText)
+    selection.getSelectedTextThen(true, function(selectedText)
         foundUserPrompt(selectedText, app)
     end)
 end
@@ -139,7 +139,7 @@ end
 function AskOpenAICompletionBox()
     local app = hs.application.frontmostApplication() -- < 0.5ms
 
-    selection.getSelectedTextThen(function(selectedText, focusedElem)
+    selection.getSelectedTextThen(false, function(selectedText, focusedElem)
         adjustBoxElement(focusedElem, app, function(element)
             local entireResponse = ""
             foundUserPrompt(selectedText, app, function(textChunk)
