@@ -35,7 +35,7 @@ function M.getSelectedTextThen(callbackWithSelectedText)
 
     local app = hs.application.frontmostApplication()
     if app:name() == APPS.BraveBrowserBeta then
-        selectAllText(app) -- so it can be replaced (arguably this should go into the code to inject the response text)
+        -- selectAllText(app) -- so it can be replaced (arguably this should go into the code to inject the response text)
 
         SearchForDevToolsTextArea(callbackWithSelectedText)
         return

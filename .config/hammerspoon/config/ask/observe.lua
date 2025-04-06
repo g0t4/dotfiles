@@ -71,7 +71,8 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "D", function()
             -- PrintAttributes(element)
             --AXDescription	"Console prompt"
             if element:attributeValue("AXDescription") == "Console prompt" then
-                print("console prompt value changed", element)
+                -- print("console prompt value changed", element)
+                AskOpenAICompletionBox()
             end
         end
         -- if event_info == {} then
