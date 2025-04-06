@@ -153,7 +153,7 @@ fn get_service() -> Service {
                 model: if model.is_some() {
                     String::from(model.unwrap())
                 } else {
-                    String::from("llama-3.1-70b-versatile")
+                    String::from("meta-llama/llama-4-scout-17b-16e-instruct")
                 },
                 url: String::from("https://api.groq.com/openai/v1/chat/completions"),
             };

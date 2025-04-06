@@ -41,7 +41,7 @@ def use_groq(model: Optional[str] = None):
         name='groq',
         api_key=get_api_key('groq', 'ask'),
         base_url='https://api.groq.com/openai/v1',
-        model=model if model else 'llama-3.1-70b-versatile',
+        model=model if model else 'meta-llama/llama-4-scout-17b-16e-instruct',
         chat_completions_path=None,
         # groq https://console.groq.com/docs/models
         #   llama3-8b-8192, llama3-70b-8192, mixtral-8x7b-32768, gemma-7b-it, gemma2-9b-it
