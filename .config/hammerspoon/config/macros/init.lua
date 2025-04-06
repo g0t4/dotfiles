@@ -418,13 +418,9 @@ function SearchForDevToolsTextArea(callbackWithSelectedText)
 
     -- !!! bring back this primary, for now I am testing fallback mechanism
     if appElem_FocusedUIElement ~= nil then
-        -- FYI random issue in Brave DevTools was that AXFocusedUIElement was nil, never found out why
         local selectedText = appElem_FocusedUIElement:attributeValue("AXSelectedText")
-        -- wow finds selectedText if selected in advance...
-        -- however that Cmd+A is deferred (in selection.lua)
-        --  or set selection range on controls?!
         if selectedText == nil or selectedText == "" then
-            -- try using AXValue (when text not selected)
+            -- try AXValue (when no selection)
             print("AXSelectedText had nothing (probably no selection), trying AXValue fallback (all text in text area)")
             selectedText = appElem_FocusedUIElement:attributeValue("AXValue")
             print(" found AXValue:", selectedText)
