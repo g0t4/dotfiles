@@ -489,7 +489,7 @@ function SearchForDevToolsTextArea(callbackWithSelectedText)
     --    also it finds AXTitle="DevTools" below in fallback which also doesn't work until inspector opened! WTF is going on!
     --  and when I inspect app level it shows AXFocusedUIElement correctly
     --    is there an enumeration issue?
-    hs.alert.show("FYI no appElem AXFocusedUIElement found... heads up you still need your fallback")
+    hs.alert.show("FYI no appElem AXFocusedUIElement found... open your inspector to tmp fix")
 
     -- AXTextArea '' - Console prompt
     -- AXHighestEditableAncestor: AXTextArea '' - Console prompt<hs.axuielement>
