@@ -411,7 +411,7 @@ end
 function SearchForDevToolsTextArea(callbackWithSelectedText, focusedElem)
     local focusedWindow, app = GetBraveFocusedWindowElement()
 
-    -- TODO bring back this primary, for now I am testing fallback mechanism
+    -- !!! bring back this primary, for now I am testing fallback mechanism
     -- if focusedElem ~= nil then
     --     -- TODO what was issue with focused before, it came back empty right? or?
     --     print("using focused elem")
