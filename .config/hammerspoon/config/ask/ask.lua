@@ -211,6 +211,7 @@ function AskOpenAICompletionBox()
                     if #boxBindings == 0 then
                         function acceptBox()
                             print("accepting")
+                            hs.eventtap.keyStroke({ "cmd" }, "a")
                             hs.eventtap.keyStrokes(entireResponse)
                         end
 
