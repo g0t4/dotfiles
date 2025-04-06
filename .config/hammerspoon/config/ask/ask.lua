@@ -75,29 +75,23 @@ function AskOpenAICompletionBox()
                 end
             end
 
-            local boxFrame = {
-                x = x,
-                y = y,
-                w = tooltipWidth,
-                h = tooltipHeight,
-            }
+            local canvas = hs.canvas
+                .new({ x = x, y = y, w = tooltipWidth, h = tooltipHeight, })
 
-            local canvas = hs.canvas.new(boxFrame)
             canvas:appendElements({
                 {
                     type = "rectangle",
-                    frame = { x = 0, y = 0, w = 100, h = 50 },
-                    fillColor = { hex = "#000000" },
+                    -- todo round cornders
+                    roundedRectRadii = { xRadius = 5, yRadius = 5 },
+                    frame = { x = 0, y = 0, w = tooltipWidth, h = tooltipHeight },
+                    fillColor = { hex = "#002040" },
                     strokeColor = nil,
                 },
                 {
                     type = "text",
-                    text = selectedText,
-                    frame = { x = 5, y = 5, w = 90, h = 40 },
-                    textSize = 12,
-                    textColor = { hex = "#FFFFFF" },
-                    justification = "center",
-                }
+                    text = styledSpecifier,
+                    frame = { x = padding, y = padding, w = tooltipWidth - 2 * padding, h = specifierSize.h },
+                },
             })
             canvas:show()
         end
