@@ -42,6 +42,14 @@ No explanation. No markdown. No markdown with backticks ` nor ```.
 An example of a question could be `= sum up H4:H8` and a valid response would be `= SUM(H4:H8)`. Make sure to include the = sign if you are suggesting a formula.
 ]]
 
+local hammerspoonSystemMessage = [[
+The user is typing lua code in the Hammerspoon Console, basically a lua REPL.
+Whatever code they have so far is provided.
+Your response will replace their code.
+Respond with valid lua code.
+No explanation. No markdown. No backticks ` nor ```.
+]]
+
 function M.getPrompt(app)
     local name = app:name()
 
@@ -59,6 +67,10 @@ function M.getPrompt(app)
     if name == APPS.Excel then
         -- 200 is more than plenty for an excel formula
         return { systemMessage = excelSystemMessage, max_tokens = 200 }
+    end
+    if name == APPS.Hammerspoon then
+        -- PRN double check its the Console window?
+        return { systemMessage = hammerspoonSystemMessage, max_tokens = 200 }
     end
 
     return nil
