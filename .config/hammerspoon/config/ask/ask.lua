@@ -1,6 +1,7 @@
 local M = {}
 local prompts = require("config.ask.prompts")
 local services = require("config.ask.services")
+local observe = require("config.ask.observe")
 local service = services.getService()
 -- FYI need to restart HS if I wanna change services (rare so thats fine), good thing is the service is cached and not more overhead per use of ask!
 
