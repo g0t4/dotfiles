@@ -26,6 +26,7 @@ function M.streamingRequest(url, method, headers, body, streamingCallback, compl
     lastTask = hs.task.new("/usr/bin/curl", completeCallback, streamingCallback, args)
 
     lastTask:start()
+    return lastTask
 end
 
 return M

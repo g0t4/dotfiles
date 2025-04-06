@@ -373,8 +373,16 @@ function foundUserPrompt(userPrompt, app, appendChunk)
 
     local streamingRequest = require("config.ask.streaming_curl").streamingRequest
 
+    ---@type hs.task|nil
+    local myTask = nil
+
     -- start_time = socket.gettime()
     local function completeCallback(exitCode, stdout, stderr)
+        if myTask and myTask:terminationStatus() then
+            -- bail if terminated
+            return true
+        end
+
         logMessage("## completeCallback\n")
         logMessage("exitCode: " .. exitCode .. "\n")
         logMessage("stdout:\n" .. stdout .. "\n")
@@ -401,6 +409,11 @@ function foundUserPrompt(userPrompt, app, appendChunk)
     end
 
     local function streamingCallback(task, stdout, stderr)
+        if myTask and myTask:terminationStatus() then
+            -- bail if terminated
+            return true
+        end
+
         logMessage("## streamingCallback\n")
         logMessage("stdout:\n" .. stdout .. "\n")
         logMessage("stderr:\n" .. stderr .. "\n")
@@ -429,7 +442,7 @@ function foundUserPrompt(userPrompt, app, appendChunk)
         return true -- continue streaming, false would result in rest going to final callback (IIUC)
     end
 
-    streamingRequest(service.url, "POST", headers, body, streamingCallback, completeCallback)
+    myTask = streamingRequest(service.url, "POST", headers, body, streamingCallback, completeCallback)
 end
 
 return M
