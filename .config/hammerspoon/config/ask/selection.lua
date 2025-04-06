@@ -1,11 +1,11 @@
 local M = {}
 
-local function selectAllText()
+local function selectAllText(app)
     -- select all text
     -- OK this is deferred which means it cannot help you with a selection immediately until event loop processes this and triggers select change which means it won't work in this invocation
-    hs.eventtap.keyStroke({ "cmd" }, "a", 0) -- 0ms delay b/c by the time we get any response will be way long enoughk
+    -- hs.eventtap.keyStroke({ "cmd" }, "a", 0) -- 0ms delay b/c by the time we get any response will be way long enoughk
     -- alternative:
-    -- local selected = app:selectMenuItem({ "Edit", "Select All" })
+    local selected = app:selectMenuItem({ "Edit", "Select All" })
     -- if (not selected) then
     --     print("failed to select all")
     --     return
@@ -29,7 +29,7 @@ function M.getSelectedTextThen(callbackWithSelectedText)
 
     local app = hs.application.frontmostApplication()
     if app:name() == APPS.BraveBrowserBeta then
-        selectAllText() -- so it can be replaced (arguably this should go into the code to inject the response text)
+        selectAllText(app) -- so it can be replaced (arguably this should go into the code to inject the response text)
 
         SearchForDevToolsTextArea(callbackWithSelectedText)
         return
@@ -57,7 +57,7 @@ function M.getSelectedTextThen(callbackWithSelectedText)
         else
             local value = focusedElement:attributeValue("AXValue") -- < 0.4ms !!
 
-            selectAllText() -- so it can be replaced
+            selectAllText(app) -- so it can be replaced
 
             callbackWithSelectedText(value, focusedElement)
             return
