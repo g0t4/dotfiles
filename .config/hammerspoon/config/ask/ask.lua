@@ -50,20 +50,25 @@ function adjustBoxElement(element, app, callback)
         return
     end
     -- FYI AXTextArea worked to get closer! ... now if I can combine with checkElem to ensure its the right one
-    local criteria = { attribute = "AXRole", value = "AXTextArea" }
+    local criteriaFirstTextAreaSeemsToBeDumbLuck = { attribute = "AXRole", value = "AXTextArea" }
     local appElem = hs.axuielement.applicationElement(app)
 
-    function checkElem(cElem)
-        print("checking", hs.inspect(cElem))
-        if cElem:attributeValue("AXRole") ~= "AXTextArea" then
-            return false
-        end
-        -- hrm this found AXTextArea really fast... I wonder if order is somehow based on focused elements and that is why?
-        PrintAttributes(cElem)
-        return true
-    end
+    -- function checkElem(cElem)
+    --     -- FYI AXTextArea alone worked (not sure if just luck)
+    --     if cElem:attributeValue("AXRole") ~= "AXTextArea" then
+    --         return false
+    --     end
+    --     print("checking", hs.inspect(cElem))
+    --     -- -- hrm this found AXTextArea really fast... I wonder if order is somehow based on focused elements and that is why?
+    --     -- PrintAttributes(cElem)
+    --     -- if cElem:attributeValue("AXDescription") ~= "Console panel" then
+    --     --     return false
+    --     -- end
+    --
+    --     return false
+    -- end
 
-    FindOneElement(appElem, checkElem, function(_message, results, numResults)
+    FindOneElement(appElem, criteriaFirstTextAreaSeemsToBeDumbLuck, function(_message, results, numResults)
         -- TODO! hs.axuielement.searchCriteriaFunction(criteria)
         --   combine both criteria and secondary function
         print("done")
