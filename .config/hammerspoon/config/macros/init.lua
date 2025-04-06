@@ -505,6 +505,11 @@ function SearchForDevToolsTextArea(callbackWithSelectedText)
     -- FYI can combine criteria using a func!
     FindOneElement(focusedWindow, criteria,
         function(_message, results, _numResultsAdded)
+            if #results == 0 then
+                -- this happens on restart brave too... before I open the UI Callout Inspector as a workaround for the above issue
+                hs.alert.show("no DevTools fallback match, try open inspect tool and close it")
+                return
+            end
             if #results ~= 1 then
                 print("FYI found " .. #results .. ", expected 1")
             end
