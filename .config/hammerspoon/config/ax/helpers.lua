@@ -462,24 +462,9 @@ function BuildHammerspoonLuaTo(toElement)
         function(pathItem)
             local singular = pathItem:singular()
             if singular == "application" then
-                -- this is just meant as a generic example, not actually using as is
-                -- TODO could hsow hs.application.find() too (to set app)
                 return "app"
             end
-            -- PRN overrides for singulars that don't match AXRole
-            local siblingIndex = GetElementSiblingIndex(pathItem)
-            if siblingIndex == nil then
-                -- happens in MSFT excel!?!
-                local parent = pathItem:axParent() or "nil"
-                return ":" .. singular
-                    .. "(sibling index is nil? in BuildHammerspoonLuaTo, and parent is " .. parent .. ")"
-            end
-
-            if singular == "splitGroup" then
-                -- add space before the colon to help split up deep specifiers
-                --   splitGroup is often "evenly" distributed
-                return " :" .. singular .. "(" .. siblingIndex .. ")"
-            end
+            local siblingIndex = GetElementSiblingIndex(pathItem) or "nil"
             return ":" .. singular .. "(" .. siblingIndex .. ")"
         end)
 
