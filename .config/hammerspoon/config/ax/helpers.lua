@@ -468,8 +468,10 @@ function BuildHammerspoonLuaTo(toElement)
             return ":" .. singular .. "(" .. siblingIndex .. ")"
         end)
 
-    -- split lines on length of combined specifier references
-    -- use brave DevTools to test this (~30 refs, most are unique too)
+    return SplitRefsIntoLines(refChain)
+end
+
+function SplitRefsIntoLines(refChain)
     local lines = { "" }
     for _, ref in ipairs(refChain) do
         if #lines[#lines] + string.len(ref) < 120 then
