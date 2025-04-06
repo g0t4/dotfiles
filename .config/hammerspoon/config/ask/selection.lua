@@ -34,8 +34,7 @@ function M.getSelectedTextThen(callbackWithSelectedText)
         local selectedText = focusedElement:attributeValue("AXSelectedText") -- < 0.4ms !!
 
         if selectedText and selectedText ~= "" then
-            -- print("selected text found")
-            callbackWithSelectedText(selectedText)
+            callbackWithSelectedText(selectedText, focusedElement)
             return
         else
             local value = focusedElement:attributeValue("AXValue") -- < 0.4ms !!
@@ -55,8 +54,7 @@ function M.getSelectedTextThen(callbackWithSelectedText)
                 hs.eventtap.keyStroke({ "cmd" }, "a", 0) -- 0ms delay b/c by the time we get any response will be way long enoughk
                 -- end
             end
-            -- print("No selection or unsupported element.")
-            callbackWithSelectedText(value)
+            callbackWithSelectedText(value, focusedElement)
             return
         end
     else

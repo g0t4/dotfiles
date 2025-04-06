@@ -433,7 +433,7 @@ function SearchForDevToolsTextArea(callbackWithSelectedText)
             -- FYI this one is plenty to get selected text! and then we just type over the top!
             --  somehow the selected text attrs bubble up like 20 layers in devtools!
             local selectedText = results[1]:attributeValue("AXSelectedText")
-            callbackWithSelectedText(selectedText)
+            callbackWithSelectedText(selectedText, results[1])
 
             -- local criteria2 = { attribute = "AXRole", value = "AXTextArea" }
             -- FindOneElement(results[1], criteria2,

@@ -26,17 +26,21 @@ function M.AskOpenAIStreaming()
     end)
 end
 
+function M.AskOpenAICompletionBox()
+    local app = hs.application.frontmostApplication()
+
+    selection.getSelectedTextThen(function(selectedText, element)
+        -- canvas that's like ui callouts
+        PrintAttributes(element)
+    end)
+end
+
 function foundUserPrompt(userPrompt, app)
-    -- TODO userPrompt has env details in some cases, did I use those for excel/scripteditor/devtools? look at scrfipt that called python
 
     if userPrompt == "" then
         hs.alert.show("No selection found, try again...")
         return
     end
-
-    -- if true then
-    --     return
-    -- end
 
     if service == nil or service.api_key == nil then
         hs.alert.show("Error: No API key for ask-openai, or service config is invalid")
@@ -64,11 +68,6 @@ function foundUserPrompt(userPrompt, app)
         stream = true,
         max_tokens = appParameters.max_tokens,
     })
-    -- print_elapsed("json encode") -- < 0.2ms (from right before apiKey=nil check to here)
-
-    -- if true then
-    --     return
-    -- end
 
     local IS_LOGGING = false
     local chunkLog = nil
