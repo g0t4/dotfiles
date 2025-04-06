@@ -417,15 +417,21 @@ end
 function SearchForDevToolsTextArea(callbackWithSelectedText)
     local focusedWindow, app = GetBraveFocusedWindowElement()
 
+    -- TODO how about check for AXFocusedUIElement first and only fallback to the following if its not found...
+    --   focused was often working fine
+
     -- AXTextArea '' - Console prompt
     -- AXHighestEditableAncestor: AXTextArea '' - Console prompt<hs.axuielement>
     --    todo look for presence of AXHighestEditableAncestor?
     -- local criteria = { attribute = "AXDescription", value = "Console prompt" } -- took 22s! ouch
+    --    TODO!  DOES THIS GO FAST WHEN IT IS FOCUSED?! or was it random luck when I did same search over in adjustBoxElement? and found this immediately (4th control tested)
     -- local criteria = { attribute = "AXRole", value = "AXTextArea" }
     -- print("searching")
 
+    -- FYI AXWebArea('DevTools') => can find with both of these criteria:
     -- local criteria = { attribute = "AXRole", value = "AXWebArea" } -- 50 to 100ms! from focusedWindow
     local criteria = { attribute = "AXTitle", value = "DevTools" } -- same 50 to 100ms
+    -- FYI can combine criteria using a func!
     FindOneElement(focusedWindow, criteria,
         function(_message, results, _numResultsAdded)
             if #results ~= 1 then
@@ -437,6 +443,9 @@ function SearchForDevToolsTextArea(callbackWithSelectedText)
             local selectedText = results[1]:attributeValue("AXSelectedText")
             callbackWithSelectedText(selectedText, results[1])
 
+            -- FYI could fallback to secondary search if narrow enough
+            -- * i.e. could I quickly find a different control and navigate to DevTools input from it?
+            --
             -- local criteria2 = { attribute = "AXRole", value = "AXTextArea" }
             -- FindOneElement(results[1], criteria2,
             --     function(_message, results, numResultsAdded)

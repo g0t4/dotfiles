@@ -56,20 +56,53 @@ function adjustBoxElement(focusedElement, app, callback)
     local appElem = hs.axuielement.applicationElement(app)
 
     function isFirstTextArea_ThisWorks(cElem)
-        -- FYI AXTextArea alone worked (not sure if just luck)
+        -- FYI I bet I could optimize this by moving it to c? look at what searchCriteriaFunction factory method does with criteria object
+        --
         if cElem:attributeValue("AXRole") ~= "AXTextArea" then
             return false
         end
         -- hrm this found AXTextArea really fast... I wonder if order is somehow based on focused elements and that is why?
+        --    also wondering if restart pooches this pathway :) as it took 22s to do the same but I might not have been focused then
         PrintAttributes(cElem)
         -- attrs from the one that matches right now... in case I need to find it in future:
-        -- AXRoleDescription	"text entry area"
-        -- AXEndTextMarker	<userdata 1> -- hs.axuielement.axtextmarker: (0x60000ed77d78)
-        -- AXFocusableAncestor	<userdata 1> -- hs.axuielement: AXTextArea
-        -- AXEditableAncestor	<userdata 1> -- hs.axuielement: AXTextArea
-        -- AXSelectedTextRanges	{ { length = 9, location = 0 } }
+
+        -- *** devtools input control that I directly want to target!!!
+        -- TODO! try targeting in selection.lua instead of DevTools intermediate!!! can fallback to DevTools if say this one isn't findable?
+        -- app:window(1):group(1):group(1):group(1):group(1):scrollArea(1):webArea(1):group(1):group(1):group(1):group(1):group(1)
+        --   :group(1):group(1):group(1):group(2):group(1):group(1):group(2):group(1):group(1):group(1):group(1):group(1):group(1)
+        --   :group(1):group(1):group(2):group(2):group(1):group(1):group(1):group(2):textArea(1)
         --
-        -- AXDescription	"Console prompt"
+        -- AXBlockQuoteLevel: 0<number>
+        -- AXDOMClassList: [
+        --   1: cm-content<string>
+        --   2: cm-lineWrapping<string>
+        -- ]
+        -- AXDescription: Console prompt<string>
+        -- AXEditableAncestor: AXTextArea '' - Console prompt<hs.axuielement>
+        -- AXElementBusy: false<bool>
+        -- AXEnabled: true<bool>
+        -- AXEndTextMarker: <hs.axuielement.axtextmarker>
+        -- AXFocusableAncestor: AXTextArea '' - Console prompt<hs.axuielement>
+        -- AXFocused: true<bool>
+        -- AXHighestEditableAncestor: AXTextArea '' - Console prompt<hs.axuielement>
+        -- AXInvalid: false<string>
+        -- AXLinkedUIElements: []
+        -- AXRequired: false<bool>
+        -- AXRoleDescription: text entry area<string>
+        -- AXSelected: false<bool>
+        -- AXSelectedRows: []
+        -- AXSelectedTextMarkerRange: <hs.axuielement.axtextmarkerrange>
+        -- AXStartTextMarker: <hs.axuielement.axtextmarker>
+        -- AXValue: print foo<string>
+        -- AXValueAutofillAvailable: false<bool>
+        -- AXVisited: false<bool>
+        -- ChromeAXNodeId: 448101<string>
+        --
+        -- unique ref: app:window('DevTools - www.hammerspoon.org/docs/ - wes private')
+        --   :group('DevTools - www.hammerspoon.org/docs/ - wes private'):group(''):group(''):group(''):scrollArea('')
+        --   :webArea('DevTools'):group('')
+        --
+        -- AXSelectedTextRanges	{ { length = 9, location = 0 } }
         if cElem:attributeValue("AXDescription") ~= "Console prompt" then
             return false
         end
