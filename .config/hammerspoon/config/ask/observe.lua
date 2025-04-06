@@ -69,7 +69,6 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "D", function()
     print("[AXObserver] Watching accessibility events for:", app:name())
     local appPID = app:pid()
     local appElement = hs.axuielement.applicationElement(app)
-    M.skip = false
 
     local function eventHandler(observer, element, event, event_info)
         if M.skip then
@@ -90,6 +89,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "D", function()
         AskOpenAICompletionBox()
     end
 
+    M.skip = false
     M.observer = hs.axuielement.observer.new(appPID)
 
     M.observer:callback(eventHandler)
