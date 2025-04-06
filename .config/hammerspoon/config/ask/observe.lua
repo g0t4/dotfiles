@@ -63,23 +63,19 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "D", function()
     local appElement = hs.axuielement.applicationElement(app)
 
     local function eventHandler(observer, element, event, event_info)
-        -- TODO consider a mode to dump entire script instead of just the element specifier
-        local text = BuildHammerspoonLuaTo(element)
-        if event == "AXValueChanged" then
-            text = text .. " " .. (element:attributeValue("AXValue") or "")
-            -- PRN add more event type info dumps
-            -- PrintAttributes(element)
-            --AXDescription	"Console prompt"
-            if element:attributeValue("AXDescription") == "Console prompt" then
-                -- print("console prompt value changed", element)
-                AskOpenAICompletionBox()
-            end
+        if event ~= "AXValueChanged" then
+            return
         end
-        -- if event_info == {} then
-        --     print(string.format("[AX EVENT] %s - %s", text, event))
-        -- else
-        --     print(string.format("[AX EVENT] %s - %s\n  %s", text, event, hs.inspect(event_info)))
-        -- end
+
+        -- confirmed Brave and Excel, the focused element is marked True
+        local focused = element:attributeValue("AXFocused")
+        if not focused then
+            return
+        end
+
+        -- PRN could pass value too, only if it helps with timing though when typing which is possible (can skip reading it)
+        -- local value = element:attributeValue("AXValue")
+        AskOpenAICompletionBox()
     end
 
     _G.observer = hs.axuielement.observer.new(appPID)
