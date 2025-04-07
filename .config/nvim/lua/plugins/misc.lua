@@ -418,9 +418,13 @@ return {
                 config = {
                     scratch_repl = true, -- discard repls?
                     repl_definition = {
+                        fish = {
+                            command = { "fish" },
+                            block_deviders = { "#%%" },
+                        },
                         sh = {
                             -- command: either a table, or a func that returns a table
-                            command = { "fish" },
+                            command = { "bash" },
                         },
                         lua = {
                             command = { "lua" },
