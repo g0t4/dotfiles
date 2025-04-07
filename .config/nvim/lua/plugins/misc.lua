@@ -99,6 +99,7 @@ return {
         config = function()
             local core = require("iron.core")
             local ll = require("iron.lowlevel")
+            local marks = require("iron.marks")
 
             function ensure_open()
                 -- FYI based on https://github.com/g0t4/iron.nvim/blob/d8c2869/lua/iron/core.lua#L254-L274
@@ -210,6 +211,29 @@ return {
 
                 -- local tmpfile = vim.fn.tempname()
                 local tmpfile = "/tmp/test"
+
+                function send_line()
+                    local linenr = vim.api.nvim_win_get_cursor(0)[1] - 1
+                    local cur_line = vim.api.nvim_buf_get_lines(0, linenr, linenr + 1, 0)[1]
+                    local width = vim.fn.strwidth(cur_line)
+
+                    if width == 0 then return end
+
+                    marks.set {
+                        from_line = linenr,
+                        from_col = 0,
+                        to_line = linenr,
+                        to_col = width - 1
+                    }
+
+                    core.send(nil, cur_line)
+                end
+                send_line()
+                do return end
+
+
+
+
                 local current_buf = vim.api.nvim_get_current_buf()
 
                 local meta = ensure_open()
