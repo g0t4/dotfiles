@@ -202,8 +202,52 @@ return {
             --
 
             function WIP_test_copy_cmd_output_using_tmp_file()
-                -- local tmpfile = vim.fn.tempname()
-                local tmpfile = "/tmp/test" -- FYI can use a truly random name but why bother if I can reserve smth short and unique enough?
+                local current_buf = vim.api.nvim_get_current_buf()
+
+                local meta = ensure_open()
+                if meta == nil then
+                    return
+                end
+
+                -- local tmpfile = vim.fn.tempname() -- SO DARN LONG
+                -- test w/ fixed name (not gonna be good in parallel)
+                local tmpfile = "/tmp/test" .. current_buf
+                vim.fn.system('trash "' .. tmpfile .. '"') -- test only, nuke file first
+
+                local autocmd_id
+                autocmd_id = vim.api.nvim_create_autocmd({ 'TermRequest' }, {
+                    -- TODO    buffer = meta.bufnr,
+                    desc = 'Handles OSC 7 dir change requests',
+                    callback = function(ev)
+                        -- print("TReq", vim.v.termrequest)
+
+                        if string.sub(vim.v.termrequest, 1, 7) == '\x1b]133;D' then
+                            print("DONE")
+                            vim.api.nvim_del_autocmd(autocmd_id)
+
+                            -- read tmp file
+                            local lines = {}
+                            local file = io.open(tmpfile)
+                            for line in file:lines() do
+                                table.insert(lines, line)
+                            end
+
+                            -- Go back to original buffer and paste
+                            vim.api.nvim_set_current_buf(current_buf)
+                            vim.api.nvim_put(lines, 'l', true, true)
+                        end
+                        --TODO other fallbacks too aside from D? i.e. if prompt starts and I missed cmd end
+
+                        -- fodder from vim docs examples to cd on dir change in terminal
+                        -- local dir = string.gsub(vim.v.termrequest, '\x1b]7;file://[^/]*', '')
+                        -- vim.api.nvim_buf_set_var(ev.buf, 'osc7_dir', dir)
+                        -- if vim.o.autochdir and vim.api.nvim_get_current_buf() == ev.buf then
+                        --     vim.cmd.cd(dir)
+                        -- end
+                    end
+                })
+                -- TODO only on specific buffer?
+
 
                 function send_line()
                     local linenr = vim.api.nvim_win_get_cursor(0)[1] - 1
@@ -226,26 +270,34 @@ return {
 
                 send_line()
 
-                -- TODO how to wait?
+                -- ? for now hardcode like 500ms and call it a day, I can resolve this later, bigger things to do today
 
-                local current_buf = vim.api.nvim_get_current_buf()
+                -- FYI iron.nvim has this commment when sending command text:
+                --TODO check vim.api.nvim_chan_send
+                --TODO tool to get the progress of the chan send function
 
-                local meta = ensure_open()
-                if meta == nil then
-                    return
-                end
+                -- -- *** check status of job?
+                -- local status = vim.fn.jobwait({ meta.job }, 0)[1]
+                -- print("status: " .. status)
+                -- -- status == -1 => still running
+                -- -- status == 0  => exited successfully
+                -- -- status > 0   => exited with error
+                -- --
+                -- -- TODO if I can monitor status then I can probably get the output directly
+                -- --  ... i.e. openup a new channel if need be and route through it (basically my own tee)
+                -- --
 
-                -- read tmp file
-                local lines = {}
-                local file = io.open(tmpfile)
-                for line in file:lines() do
-                    table.insert(lines, line)
-                end
+                -- wait for first osc 133;D => indicates command finished
+                -- can use one shot autocmd or wait with separate thing that can set a flag when it sees it
 
-                -- Go back to original buffer and paste
-                vim.api.nvim_set_current_buf(current_buf)
-                vim.api.nvim_put(lines, 'l', true, true)
+                -- *** wait for file to be created? crap that means only part of the output?!
+                -- if wait_for_file(tmpfile) then
+                --     print("file exists")
+                -- else
+                --     print('timeout waiting for tmp file')
+                -- end
             end
+
             --
             -- vim.api.nvim_create_autocmd({ 'TermRequest' }, {
             --     desc = 'Handles OSC 7 dir change requests',
