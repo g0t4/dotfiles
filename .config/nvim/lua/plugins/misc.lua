@@ -216,7 +216,7 @@ return {
 
                 local autocmd_id
                 autocmd_id = vim.api.nvim_create_autocmd({ 'TermRequest' }, {
-                    -- TODO    buffer = meta.bufnr,
+                    buffer = meta.bufnr, -- only events from the terminal with the REPL
                     desc = 'Handles OSC 7 dir change requests',
                     callback = function(ev)
                         -- print("TReq", vim.v.termrequest)
