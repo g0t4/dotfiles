@@ -1,7 +1,11 @@
 local M = {}
 
--- TODO ok FYI some reason chunk processing is not quite working ... esp if the chunk contains {} curly braces... otherwise seems to work fine...
---    TODO develop a way to log the entire response so I can review it (to a file is gonna be best)... just the raw response is gonna be best me thinks
+-- TODO ... how about I format preceding user message and assistant response with the examples?! or would that bias some way toward the current conversation?
+--   systemMessage
+--   user: sample1
+--   assistant: sample1Response
+--   user: current question
+
 local devtoolsSystemMessage = [[
 You are a chrome devtools expert.
 The user is working in the DevTools Console in the Brave Beta Browser.
@@ -9,6 +13,16 @@ The user needs help completing a javascript command.
 Whatever they have typed into the Console's command line will be provided to you.
 Respond with valid javascript code. The code will replace what the user typed.
 No explanation. No markdown. No markdown with backticks ` nor ```.
+
+For example, the user might type:
+  get the time in UTC
+Your response could be:
+  new Date().toISOString()
+
+Or the user might ask:
+  find the div with style color red
+Your response could be:
+  Array.from(document.querySelectorAll("div")).find(x => x.style.color === "red")
 ]]
 
 
@@ -22,6 +36,11 @@ Your response will replace what they selected.
 Your responpse can include new lines if you have multiple lines.
 Comments are ok, but only if absolutely necessary.
 No explanation. No markdown. No markdown with backticks ` nor ```.
+
+For example, the user might type:
+  hello world notification
+Your response could be:
+  display notification "hello world" with title "example"
 ]]
 
 
@@ -34,6 +53,11 @@ They might also have a free-form question included.
 Respond with a single, valid excel formula. Their cell contents will be replaced with your response. So they can review and use it.
 Make sure to include the = sign if you are suggesting a formula.
 No explanation. No markdown. No markdown with backticks ` nor ```.
+
+For example, the user might type:
+  day of the week for cell A2
+Your response could be:
+  =TEXT(A2,"dddd")
 ]]
 
 local hammerspoonSystemMessage = [[
@@ -41,6 +65,7 @@ The user is typing lua code in the Hammerspoon Console, basically a lua REPL.
 Whatever code they have so far is provided.
 Your response will replace their code.
 Respond with valid lua code.
+Prefer a single line of lua code (avoid newline).
 No explanation. No markdown. No backticks ` nor ```.
 ]]
 
