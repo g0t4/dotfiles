@@ -201,6 +201,37 @@ return {
             vim.keymap.set('n', '<leader>icc', ensure_open_and_cleared, { desc = 'clear' })
             --
 
+
+            -- TODO LATER... try this instead for capturing terminal output:) ... out of time for now
+            -- local repl = {}
+            -- repl.last_command_output = {}
+            -- local capturing = false
+            -- local bufnr = vim.api.nvim_get_current_buf()
+            --
+            -- -- Capture TermOutput lines only for this buffer
+            -- vim.api.nvim_create_autocmd("TermOutput", {
+            --     buffer = bufnr,
+            --     callback = function(args)
+            --         if capturing then
+            --             table.insert(repl.last_command_output, args.data)
+            --         end
+            --     end,
+            -- })
+            --
+            -- -- Watch for command start and stop
+            -- vim.api.nvim_create_autocmd("TermRequest", {
+            --     buffer = bufnr,
+            --     callback = function()
+            --         local msg = vim.v.termrequest
+            --         if string.sub(msg, 1, 7) == '\x1b]133;C' then
+            --             capturing = true
+            --             repl.last_command_output = {} -- reset for new command
+            --         elseif string.sub(msg, 1, 7) == '\x1b]133;D' then
+            --             capturing = false
+            --             print("Captured lines:", #repl.last_command_output)
+            --         end
+            --     end,
+            -- })
             function WIP_test_copy_cmd_output_using_tmp_file()
                 local current_buf = vim.api.nvim_get_current_buf()
 
