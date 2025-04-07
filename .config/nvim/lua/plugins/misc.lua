@@ -226,13 +226,13 @@ return {
                         to_col = width - 1
                     }
 
-                    core.send(nil, cur_line)
+                    cur_line_teed = cur_line .. " | tee " .. tmpfile
+                    core.send(nil, cur_line_teed)
+                    -- FYI don't even need to clear repl in this case!
                 end
+
                 send_line()
                 do return end
-
-
-
 
                 local current_buf = vim.api.nvim_get_current_buf()
 
@@ -253,7 +253,6 @@ return {
                 vim.api.nvim_put(lines, 'l', true, true)
             end
 
-            -- vim.keymap.set('n', '<leader>it', clear_then(new_test), { desc = 'clear => send test' })
             vim.keymap.set('n', '<leader>it', WIP_test_copy_cmd_output_using_tmp_file, { desc = 'clear => send test' })
 
             function current_line_is_blank()
