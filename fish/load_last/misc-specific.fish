@@ -2252,3 +2252,19 @@ abbr vllms "vllm serve"
 abbr vllmb "vllm bench"
 abbr vllmc "vllm chat"
 abbr vllmg "vllm complete"
+
+
+# *** tail
+abbr tailf 'tail -F'
+abbr tailn 'tail -n 10'
+abbr tailr 'tail -r' # reverse order
+
+# tail10<space> => tail -n 10
+abbr taild --regex 'tail\d+' --function _taild
+function _taild
+    string replace 'tail' 'tail -n ' $argv[1]
+end
+
+
+
+
