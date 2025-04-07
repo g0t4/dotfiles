@@ -205,6 +205,7 @@ return {
                 -- future: run command and wait for it to finish (repl have any indicator?)
                 -- then copy and paste the output (ONLY output?)
                 -- make it more robust with definitive prompt matching... i.e. OSC codes or smth to know exactly where cmd output starts/ends
+                -- TODO RESUME later... this is not ready yet
 
                 local current_buf = vim.api.nvim_get_current_buf()
 

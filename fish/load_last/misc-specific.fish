@@ -304,6 +304,18 @@ if command -q kubectl
     abbr kgno 'kubectl get nodes' # alias: no
     abbr kgpv 'kubectl get persistentvolumes' # alias: pv
     abbr kgpvc 'kubectl get persistentvolumeclaims' # alias: pvc
+    #
+    abbr --set-cursor kgr 'kubectl get --raw /% | yq -P' # % == cursor pos
+    # abbr 'kgr/' 'kubectl get --raw / | yq -P' # todo I can use kgr/ if I want kgr for smth else
+    abbr 'kgr/a' 'kubectl get --raw /apis'
+    abbr 'kgr/h' 'kubectl get --raw /healthz'
+    abbr 'kgr/l' 'kubectl get --raw /livez'
+    abbr 'kgr/m' 'kubectl get --raw /metrics'
+    abbr 'kgr/o' 'kubectl get --raw /openapi'
+    # /openid
+    abbr 'kgr/r' 'kubectl get --raw /readyz'
+    abbr 'kgr/v' 'kubectl get --raw /version'
+    #
     abbr kgrb 'kubectl get rolebindings -o wide' # wide shows role and subject (user/group/sa) so I absolutely want this by default
     abbr kgro 'kubectl get roles'
     abbr kgrs 'kubectl get replicasets' # alias: rs
