@@ -1046,6 +1046,7 @@ if command -q yq
 
     # helper to select a document by index from multidocument yaml file
     abbr pyqi "| yq eval 'select(documentIndex == 1) | .status'"
+    abbr pyqp "| yq -P" # pretty print (clean/idiomatic yaml) == `yq '... style=""')`
     # FYI `jid < foo.json` can tab complete json property keys... but doesn't appear to support multiple documents (IIAC an put into an array to get it to work)
 
     function yq_diff_docs
