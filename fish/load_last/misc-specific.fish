@@ -289,7 +289,6 @@ if command -q kubectl
     abbr kgpaw 'kubectl get pods -A --watch'
     #
     # PRN prune list or add other resource types:
-    abbr kgcj 'kubectl get cronjobs'
     abbr kgcm 'kubectl get configmaps' # alias: cm
     abbr kgcr 'kubectl get clusterroles'
     abbr kgcrb 'kubectl get clusterrolebindings -o wide' # wide shows subject (user/group/sa) too which is critical IMO
@@ -300,7 +299,7 @@ if command -q kubectl
     abbr kgend 'kubectl get svc,endpoints,endpointslices' # PRN do I like this combo? mostly as a reminder that this is a set I like to use... can find with ctrl+S in tab completion
     abbr kgev 'kubectl get events' # alias: ev
     abbr kging 'kubectl get ingresses' # alias: ing
-    abbr kgj 'kubectl get jobs'
+    abbr kgj 'kubectl get -A jobs,cronjobs'
     abbr kgno 'kubectl get nodes' # alias: no
     abbr kgpv 'kubectl get persistentvolumes' # alias: pv
     abbr kgpvc 'kubectl get persistentvolumeclaims' # alias: pvc
@@ -348,6 +347,7 @@ if command -q kubectl
     abbr kk 'kubectl kustomize' # (sort next to kak b/c they are companions) - preview rendered yaml (≈ dry-run)
     # api-versions/resources
     abbr kar 'kubectl api-resources'
+    abbr kara 'kubectl api-resources --api-group'
     abbr karn 'kubectl api-resources --namespaced=true'
     abbr karg 'kubectl api-resources --namespaced=false' # (g)lobal
     abbr kav 'kubectl api-versions'
