@@ -211,12 +211,16 @@ return {
             --
 
             -- TODO LATER... try this instead for capturing terminal output:) ... out of time for now
-            -- local repl = {}
+            -- TODO add this to ensure_open above when making new repl (to test)
+            --    later would need to fuse (monkey patch?) with iron.nvim
             -- repl.last_command_output = {}
             -- local capturing = false
             -- local bufnr = vim.api.nvim_get_current_buf()
             --
+            --   this event approach would be much more robust and work across REPLs (terminals)
             -- -- Capture TermOutput lines only for this buffer
+            -- -- FYI this is not a real event... however see on_stdout with termopen()
+            --  or TextChanged events
             -- vim.api.nvim_create_autocmd("TermOutput", {
             --     buffer = bufnr,
             --     callback = function(args)
