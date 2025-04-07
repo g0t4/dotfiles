@@ -46,7 +46,7 @@ function M.AskOpenAIStreaming()
     end
 
     selection.getSelectedTextThen(function(selectedText, focusedElem)
-        foundUserPrompt(selectedText, app, focusedElem)
+        askAbout(selectedText, app, focusedElem)
     end)
 end
 
@@ -167,7 +167,7 @@ function AskOpenAICompletionBox()
     selection.getSelectedTextThen(function(selectedText, focusedElem)
         adjustBoxElement(focusedElem, app, function(element)
             local entireResponse = ""
-            foundUserPrompt(selectedText, app, focusedElem, function(textChunk)
+            askAbout(selectedText, app, focusedElem, function(textChunk)
                 entireResponse = entireResponse .. textChunk
 
                 if element then
@@ -254,14 +254,14 @@ function AskOpenAICompletionBox()
     end)
 end
 
-function foundUserPrompt(userPrompt, app, focusedElem, appendChunk)
-    if userPrompt == "" then
-        hs.alert.show("No selection found, try again...")
+function askAbout(userText, app, focusedElem, appendChunk)
+    if userText == "" then
+        hs.alert.show("No user text found...")
         return
     end
 
     if service == nil or service.api_key == nil then
-        hs.alert.show("Error: No API key for ask-openai, or service config is invalid")
+        hs.alert.show("Error: missing service config and/or API key")
         return
     end
 
@@ -270,8 +270,10 @@ function foundUserPrompt(userPrompt, app, focusedElem, appendChunk)
         ["Content-Type"] = "application/json",
     }
 
-    local appParameters = prompts.getPrompt(app, focusedElem)
-    if appParameters == nil then
+    local params = prompts.getAppSpecificParams(app, focusedElem)
+    if params == nil then
+        -- PRN automatic params? build system prompt off of app:name() and name of input box and then formulate a generic prompt?
+        --   and treat getAppSpecificPromptAndParameters as an override?
         print("Error: unknown app - no prompt available: " .. app:name())
         hs.alert.show("Error: unknown app - no prompt available: " .. app:name())
         return
@@ -280,11 +282,11 @@ function foundUserPrompt(userPrompt, app, focusedElem, appendChunk)
     local body = hs.json.encode({
         model = service.model,
         messages = {
-            { role = "system", content = appParameters.systemMessage },
-            { role = "user",   content = userPrompt },
+            { role = "system", content = params.systemMessage },
+            { role = "user",   content = userText },
         },
         stream = true,
-        max_tokens = appParameters.max_tokens,
+        max_tokens = params.max_tokens,
     })
 
     local IS_LOGGING = false

@@ -97,7 +97,7 @@ Respond with a valid link or search text to submit to a search engine. Prefer a 
 --
 
 
-function M.getPrompt(app, focusedElem)
+function M.getAppSpecificParams(app, focusedElem)
     local name = app:name()
 
     if name == APPS.BraveBrowserBeta then
