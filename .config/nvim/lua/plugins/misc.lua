@@ -247,6 +247,31 @@ return {
                 vim.api.nvim_put(lines, 'l', true, true)
             end
 
+            vim.api.nvim_create_autocmd({ 'TermRequest' }, {
+                desc = 'Handles OSC 7 dir change requests',
+                callback = function(ev)
+                    print("TReq", vim.v.termrequest)
+
+                    if string.sub(vim.v.termrequest, 1, 7) == '\x1b]133;A' then
+                        print("  prompt_start A")
+                    elseif string.sub(vim.v.termrequest, 1, 7) == '\x1b]133;B' then
+                        print('  ??? B')
+                    elseif string.sub(vim.v.termrequest, 1, 7) == '\x1b]133;C' then
+                        print('  command_start C')
+                        -- COMMAND started
+                    elseif string.sub(vim.v.termrequest, 1, 7) == '\x1b]133;D' then
+                        print('  command_end D')
+                        -- COMMAND finished
+                    end
+
+                    -- fodder from vim docs examples to cd on dir change in terminal
+                    -- local dir = string.gsub(vim.v.termrequest, '\x1b]7;file://[^/]*', '')
+                    -- vim.api.nvim_buf_set_var(ev.buf, 'osc7_dir', dir)
+                    -- if vim.o.autochdir and vim.api.nvim_get_current_buf() == ev.buf then
+                    --     vim.cmd.cd(dir)
+                    -- end
+                end
+            })
             vim.keymap.set('n', '<leader>it', WIP_test_copy_cmd_output_using_tmp_file, { desc = 'clear => send test' })
 
             function current_line_is_blank()
