@@ -311,6 +311,7 @@ function askAbout(userText, app, focusedElem, appendChunk)
     --    cat ask-openai-streaming-chunk-log.txt | grep '^\s*data:' | cut -c7- | jq ".choices[] | .delta.content " -r
     --      make sure to log only once and with matching data: prefix
 
+    -- TODO review prompts for when an extra end appears (i.e. in AppleScript, and/or extra/missing ) in JavaScript... must be smth in my prompt that's confusing)
     logMessage(body)
 
     if appendChunk == nil then
