@@ -305,7 +305,7 @@ if command -q kubectl
     abbr kgpv 'kubectl get persistentvolumes' # alias: pv
     abbr kgpvc 'kubectl get persistentvolumeclaims' # alias: pvc
     #
-    abbr --set-cursor kgr 'kubectl get --raw /% | yq -P' # % == cursor pos
+    abbr --set-cursor='!' kgr 'kubectl get --raw /! | yq -P'
     # abbr 'kgr/' 'kubectl get --raw / | yq -P' # todo I can use kgr/ if I want kgr for smth else
     abbr 'kgr/a' 'kubectl get --raw /apis'
     abbr 'kgr/h' 'kubectl get --raw /healthz'
