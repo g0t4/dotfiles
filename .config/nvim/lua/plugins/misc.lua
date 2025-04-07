@@ -200,17 +200,10 @@ return {
             vim.keymap.set('n', '<leader>ist', send_top_block_then_current_block, { desc = 'run top block then current block' })
             vim.keymap.set('n', '<leader>icc', ensure_open_and_cleared, { desc = 'clear' })
             --
-            --
 
             function WIP_test_copy_cmd_output_using_tmp_file()
-                -- TODO send line w/ tee /tmp/test on end
-                -- TODO how to know if REPL is running?
-                -- FYI altearntive approach:
-                -- send("command foo bar | tee /tmp/tmp1")
-                -- and then read in the command output into the curret buffer
-
                 -- local tmpfile = vim.fn.tempname()
-                local tmpfile = "/tmp/test"
+                local tmpfile = "/tmp/test" -- FYI can use a truly random name but why bother if I can reserve smth short and unique enough?
 
                 function send_line()
                     local linenr = vim.api.nvim_win_get_cursor(0)[1] - 1
@@ -232,7 +225,8 @@ return {
                 end
 
                 send_line()
-                do return end
+
+                -- TODO how to wait?
 
                 local current_buf = vim.api.nvim_get_current_buf()
 
