@@ -198,18 +198,16 @@ return {
             vim.keymap.set('n', '<leader>ict', clear_then(send_top_block_then_current_block), { desc = 'clear => run top block then current block' })
             vim.keymap.set('n', '<leader>ist', send_top_block_then_current_block, { desc = 'run top block then current block' })
             vim.keymap.set('n', '<leader>icc', ensure_open_and_cleared, { desc = 'clear' })
+            --
+            --
 
-            function WIP_test_copy_buffer_as_command_output()
-                -- assume that you already ran a command and the output is ready
-                -- and for now that you cleared the screen before running the command
-                -- future: run command and wait for it to finish (repl have any indicator?)
-                -- then copy and paste the output (ONLY output?)
-                -- make it more robust with definitive prompt matching... i.e. OSC codes or smth to know exactly where cmd output starts/ends
-                -- TODO RESUME later... this is not ready yet
-
-                -- FYI! one altearntive approach is to send the line and pipe its output to a tmp file using tee
+            function WIP_test_copy_cmd_output_using_tmp_file()
+                -- TODO how to know if REPL is running?
+                -- FYI altearntive approach:
                 -- send("command foo bar | tee /tmp/tmp1")
                 -- and then read in the command output into the curret buffer
+
+                local tmpfile = vim.fn.tempname()
 
                 local current_buf = vim.api.nvim_get_current_buf()
 
@@ -249,8 +247,59 @@ return {
                 vim.api.nvim_put(keep_lines, 'l', true, true)
             end
 
+            --
+            --
+            -- function WIP_test_copy_buffer_as_command_output()
+            --     -- assume that you already ran a command and the output is ready
+            --     -- and for now that you cleared the screen before running the command
+            --     -- future: run command and wait for it to finish (repl have any indicator?)
+            --     -- then copy and paste the output (ONLY output?)
+            --     -- make it more robust with definitive prompt matching... i.e. OSC codes or smth to know exactly where cmd output starts/ends
+            --     -- TODO RESUME later... this is not ready yet
+            --
+            --     -- send("command foo bar | tee /tmp/tmp1")
+            --     -- and then read in the command output into the curret buffer
+            --
+            --     local current_buf = vim.api.nvim_get_current_buf()
+            --
+            --     local meta = ensure_open()
+            --     if meta == nil then
+            --         return
+            --     end
+            --
+            --     -- Get REPL buffer content
+            --     local lines = vim.api.nvim_buf_get_lines(meta.bufnr, 0, -1, false)
+            --
+            --     local keep_lines = {}
+            --     for _, line in ipairs(lines) do
+            --         -- TODO need to filter out non-printable characters like those produced by vim.api.nvim_feedkeys("\r")
+            --         local filtered_string = string.gsub(line, "%c", "")
+            --         local is_empty = filtered_string == "" or filtered_string:match("^%s*$")
+            --         if not is_empty then
+            --             -- and now I wanna strip leading prompt lines
+            --             -- anything before ) is the prompt
+            --             -- CRAP... I changed to ) (right parens) for suffix on prompts...
+            --             --  so for now, lets match mac hostname only? or?
+            --             local hack_match = "mac [%w-]) "
+            --             if string.match(line, "%)") == nil then
+            --                 -- if there is no ) => its cmd output so comment it out
+            --                 filtered_string = "# " .. filtered_string
+            --             else
+            --                 -- cut out the prompt from left side of line
+            --                 filtered_string = string.gsub(filtered_string, "^mac [%w-%.]+%) ", "")
+            --             end
+            --             table.insert(keep_lines, filtered_string)
+            --         end
+            --     end
+            --     lines = keep_lines
+            --
+            --     -- Go back to original buffer and paste
+            --     vim.api.nvim_set_current_buf(current_buf)
+            --     vim.api.nvim_put(keep_lines, 'l', true, true)
+            -- end
+
             -- vim.keymap.set('n', '<leader>it', clear_then(new_test), { desc = 'clear => send test' })
-            vim.keymap.set('n', '<leader>it', WIP_test_copy_buffer_as_command_output, { desc = 'clear => send test' })
+            vim.keymap.set('n', '<leader>it', WIP_test_copy_cmd_output_using_tmp_file, { desc = 'clear => send test' })
 
             function current_line_is_blank()
                 local row, _ = unpack(vim.api.nvim_win_get_cursor(0))
