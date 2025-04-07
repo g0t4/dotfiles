@@ -269,35 +269,7 @@ return {
                 end
 
                 send_line()
-
-                -- ? for now hardcode like 500ms and call it a day, I can resolve this later, bigger things to do today
-
-                -- FYI iron.nvim has this commment when sending command text:
-                --TODO check vim.api.nvim_chan_send
-                --TODO tool to get the progress of the chan send function
-
-                -- -- *** check status of job?
-                -- local status = vim.fn.jobwait({ meta.job }, 0)[1]
-                -- print("status: " .. status)
-                -- -- status == -1 => still running
-                -- -- status == 0  => exited successfully
-                -- -- status > 0   => exited with error
-                -- --
-                -- -- TODO if I can monitor status then I can probably get the output directly
-                -- --  ... i.e. openup a new channel if need be and route through it (basically my own tee)
-                -- --
-
-                -- wait for first osc 133;D => indicates command finished
-                -- can use one shot autocmd or wait with separate thing that can set a flag when it sees it
-
-                -- *** wait for file to be created? crap that means only part of the output?!
-                -- if wait_for_file(tmpfile) then
-                --     print("file exists")
-                -- else
-                --     print('timeout waiting for tmp file')
-                -- end
             end
-
             vim.keymap.set('n', '<leader>it', WIP_test_copy_cmd_output_using_tmp_file, { desc = 'clear => send test' })
 
             function current_line_is_blank()
