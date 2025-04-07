@@ -11,12 +11,13 @@ M.stopObserving = function()
     M.observer = nil
 end
 
-do return end
-
-hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "D", function()
-    M.stopObserving()
-    M.startObserving()
-end)
+if false then
+    -- disable for now w/o comment out
+    hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "D", function()
+        M.stopObserving()
+        M.startObserving()
+    end)
+end
 
 M.startObserving = function()
     local app = hs.application.frontmostApplication()
