@@ -494,7 +494,7 @@ return {
 
         -- *** GROQ + keychain:
         -- opts = {
-        --     -- model = "llama-3.1-70b-versatile",
+        --     -- model = "meta-llama/llama-4-scout-17b-16e-instruct",
         --     model = "llama-3.2-90b-text-preview",
         --     use_api_groq = true, -- easier
         --     -- api_url = "https://api.groq.com/openai/v1/chat/completions", -- if not standard

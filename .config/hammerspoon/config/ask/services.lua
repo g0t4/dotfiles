@@ -65,7 +65,7 @@ function M.getService()
             name = "groq",
             api_key = security.getSecret("ask", "groq"),
             url = "https://api.groq.com/openai/v1/chat/completions",
-            model = stored.model == "" and "llama-3.1-70b-versatile" or stored.model,
+            model = stored.model == "" and "meta-llama/llama-4-scout-17b-16e-instruct" or stored.model,
         }
     end
 

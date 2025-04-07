@@ -44,9 +44,6 @@ def use_groq(model: Optional[str] = None):
         model=model if model else 'meta-llama/llama-4-scout-17b-16e-instruct',
         chat_completions_path=None,
         # groq https://console.groq.com/docs/models
-        #   llama3-8b-8192, llama3-70b-8192, mixtral-8x7b-32768, gemma-7b-it, gemma2-9b-it
-        #   llama-3.1-405b-reasoning, llama-3.1-70b-versatile, llama-3.1-8b-instant
-        #   llama3-groq-70b-8192-tool-use-preview, llama3-groq-8b-8192-tool-use-preview
     )
 
 
