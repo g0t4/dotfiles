@@ -6,6 +6,9 @@
 --   certainly not causing issues but I thought fish4 has it baked in now
 --   probaly leave it for now b/c some envs I still use fish 3.7 (i.e. f*#$%R ubunut/debian)
 
+-- KEEP IN MIND this is sevearl things at play... iterm shell integration is one part
+--    as the prompt is redrawn (even if no cmd submitted like with alt+left/right) the prompt is still redrawn
+
 -- *** OSC for cdless dir change (using fish alt+left/right to move left/right and redraw prompt)
 -- ^[]1337;SetUserVar=split_path=L1VzZXJzL3dlc2RlbW9zL3JlcG9zL2dpdGh1Yi9nMHQ0L2RvdGZpbGVz
 -- ^[]7;file://mbp21/Users/wesdemos/repos/github/g0t4/dotfiles
