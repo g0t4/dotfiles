@@ -14,10 +14,11 @@ uv pip install --pre torch torchvision torchaudio --index-url https://download.p
 # some deps
 uv pip install -r requirements/build.txt
 uv pip install transformers # no direct torch deps
+# FYI wow took seconds to rebuild entire venv (up to this point!)... b/c of uv cache!
 
 # FYI most cores pegged already w/o this so probably don't need MAX_JOBS
-# export MAX_JOBS=(nproc)
-# echo $MAX_JOBS
+export MAX_JOBS=(nproc)
+echo $MAX_JOBS
 uv pip install -e . --no-build-isolation # crap forgot multicpu flag
 
 # PRN ... if you need other deps, likely in one of these spots
