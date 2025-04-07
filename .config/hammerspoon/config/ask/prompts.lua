@@ -6,6 +6,10 @@ local M = {}
 --   assistant: sample1Response
 --   user: current question
 
+
+-- TODO review and apply advice from Llama 4 about System Prompts (a few paragraphs down)
+--   https://github.com/meta-llama/llama-models/blob/main/models/llama4/MODEL_CARD.md#model-level-fine-tuning
+
 local devtoolsSystemMessage = [[
 You are a chrome devtools expert.
 The user is working in the DevTools Console in the Brave Beta Browser.
