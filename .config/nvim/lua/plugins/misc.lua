@@ -207,6 +207,10 @@ return {
                 -- make it more robust with definitive prompt matching... i.e. OSC codes or smth to know exactly where cmd output starts/ends
                 -- TODO RESUME later... this is not ready yet
 
+                -- FYI! one altearntive approach is to send the line and pipe its output to a tmp file using tee
+                -- send("command foo bar | tee /tmp/tmp1")
+                -- and then read in the command output into the curret buffer
+
                 local current_buf = vim.api.nvim_get_current_buf()
 
                 local meta = ensure_open()

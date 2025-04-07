@@ -469,6 +469,9 @@ if command -q kubectl
     abbr kxls 'kubectl config get-contexts'
     abbr kxv 'kubectl config view'
 
+
+    # rancher (et al)
+    #
 end
 
 if command -q dig
