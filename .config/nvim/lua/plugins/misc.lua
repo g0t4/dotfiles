@@ -209,45 +209,41 @@ return {
                     return
                 end
 
-                -- local tmpfile = vim.fn.tempname() -- SO DARN LONG
-                -- test w/ fixed name (not gonna be good in parallel)
-                local tmpfile = "/tmp/test" .. current_buf
-                vim.fn.system('trash "' .. tmpfile .. '"') -- test only, nuke file first
+                local tmpfile = vim.fn.tempname() -- SO DARN LONG
+                --
+                -- good for testing
+                -- local tmpfile = "/tmp/test" .. current_buf -- semi-unique, per buffer name :)
+                -- vim.fn.system('trash "' .. tmpfile .. '"') -- test only, nuke file first
 
+                -- ** "one shot" autocmd fires when command finishes
                 local autocmd_id
                 autocmd_id = vim.api.nvim_create_autocmd({ 'TermRequest' }, {
                     buffer = meta.bufnr, -- only events from the terminal with the REPL
-                    desc = 'Handles OSC 7 dir change requests',
+                    desc = 'detect when REPL is done running a command so I can copy its output',
                     callback = function(ev)
+                        -- FYI ev has bufnr IIRC
                         -- print("TReq", vim.v.termrequest)
 
-                        if string.sub(vim.v.termrequest, 1, 7) == '\x1b]133;D' then
-                            print("DONE")
-                            vim.api.nvim_del_autocmd(autocmd_id)
+                        -- PRN other fallbacks too aside from D? i.e. if D is missed I s/b able to do on A/B too
+                        --   (just double check they don't happen at the wrong early time too)
 
-                            -- read tmp file
-                            local lines = {}
+                        if string.sub(vim.v.termrequest, 1, 7) == '\x1b]133;D' then
+                            vim.api.nvim_del_autocmd(autocmd_id)
+                            autocmd_id = nil -- don't run twice
+
+                            local commented_out_lines = {}
                             local file = io.open(tmpfile)
                             for line in file:lines() do
-                                table.insert(lines, line)
+                                local commented = "# " .. line
+                                table.insert(commented_out_lines, commented)
                             end
 
-                            -- Go back to original buffer and paste
+                            -- paste into original buffer
                             vim.api.nvim_set_current_buf(current_buf)
-                            vim.api.nvim_put(lines, 'l', true, true)
+                            vim.api.nvim_put(commented_out_lines, 'l', true, true)
                         end
-                        --TODO other fallbacks too aside from D? i.e. if prompt starts and I missed cmd end
-
-                        -- fodder from vim docs examples to cd on dir change in terminal
-                        -- local dir = string.gsub(vim.v.termrequest, '\x1b]7;file://[^/]*', '')
-                        -- vim.api.nvim_buf_set_var(ev.buf, 'osc7_dir', dir)
-                        -- if vim.o.autochdir and vim.api.nvim_get_current_buf() == ev.buf then
-                        --     vim.cmd.cd(dir)
-                        -- end
                     end
                 })
-                -- TODO only on specific buffer?
-
 
                 function send_line()
                     local linenr = vim.api.nvim_win_get_cursor(0)[1] - 1
@@ -270,6 +266,7 @@ return {
 
                 send_line()
             end
+
             vim.keymap.set('n', '<leader>it', WIP_test_copy_cmd_output_using_tmp_file, { desc = 'clear => send test' })
 
             function current_line_is_blank()
