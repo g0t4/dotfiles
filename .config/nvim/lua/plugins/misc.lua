@@ -372,15 +372,24 @@ return {
             end, { desc = 'iron' })
 
 
-            vim.keymap.set('n', '<leader>ib', function()
-                -- [i]nsert [b]lock divider
-                -- TODO make this per language, use lookup based on iron config that I have for block_deviders
-                if vim.bo.filetype ~= 'python' then
-                    vim.notify('block divider only intended for python currently', vim.log.levels.WARN)
+            local function get_block_deviders()
+                local config = require("iron.config")
+
+                local repl_definition = config.repl_definition[vim.bo[0].filetype]
+                if repl_definition == nil then
+                    error("No repl definition for this filetype!")
                 end
 
-                local use_devider = require("iron.config").repl_definition[vim.bo.filetype].block_deviders[1]
-                print("use_devider: '" .. use_devider .. "'")
+                local deviders = config.repl_definition[vim.bo.filetype].block_deviders[1]
+                if deviders == nil or #deviders <= 0 then
+                    error("No cell delimiting block divider(s) configured for this filetype!")
+                end
+                return deviders
+            end
+
+            vim.keymap.set('n', '<leader>ib', function()
+                -- [i]nsert [b]lock divider
+                local use_devider = get_block_deviders()
 
                 if not current_line_is_blank() then
                     -- move to after/end of paragraph
