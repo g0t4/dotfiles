@@ -34,14 +34,14 @@ vim.keymap.set('t', '<esc>', "<C-\\><C-n>", { desc = 'exit terminal' }) -- that 
 -- - accidentally forget and use Cmd+K, which I do often enough for just nvim/vim itself :)
 
 
--- FEELS MUCH BETTER:
---  switch to terminal buffer => starts in terminal mode (not normal mode which is default)
-vim.api.nvim_create_autocmd({ "BufEnter" }, {
-    pattern = "term://*",
-    callback = function()
-        vim.cmd("startinsert")
-    end
-})
+-- -- FEELS MUCH BETTER:
+-- --  switch to terminal buffer => starts in terminal mode (not normal mode which is default)
+-- vim.api.nvim_create_autocmd({ "BufEnter" }, {
+--     pattern = "term://*",
+--     callback = function()
+--         vim.cmd("startinsert")
+--     end
+-- })
 
 -- PRN later... look into using OSC codes
 -- autocmd for TermRequest
