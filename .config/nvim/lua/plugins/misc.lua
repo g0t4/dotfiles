@@ -275,6 +275,7 @@ return {
                             autocmd_id = nil -- don't run twice
 
                             local commented_out_lines = {}
+                            -- TODO add error handling, sommetimes the file isn't found... I wonder if a command timing is such that the file is just about to be written to and this gets ahead? and so it needs to wait in that case at least one time past the first failure?
                             local file = io.open(tmpfile)
                             for line in file:lines() do
                                 local commented = "# " .. line
