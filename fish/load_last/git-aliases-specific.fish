@@ -99,6 +99,16 @@ function gdlcX
     set -l prev (math $num - 1)
     echo "git log --patch --color-words HEAD~$num..HEAD~$prev"
 end
+#
+# gds - one list of files changed across range of commits
+#   vs gls - which is per commit
+abbr gds "git diff --stat $_unpushed_commits_without_last_pushed"
+abbr --regex 'gds\d+' --function gdsX _gdsX
+function gdsX
+    # too bad `git diff -X` doesn't exist (submit a PR?)
+    #   instead have to set start/stop commit refs
+    echo -n (string replace --regex '^gds' 'git diff --stat HEAD~' $argv)'..HEAD'
+end
 
 # VCS in general:
 function pwd --description "pwd for a repository => repo root in yellow + repo dir in white"
