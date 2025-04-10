@@ -509,7 +509,7 @@ return {
         opts = {
             provider = "keyless",
             -- model = "llama3.2-vision:11b", -- ollama list
-            model = "qwen2.5-coder:3b",
+            model = "qwen2.5-coder:7b-instruct-q8_0",
             use_api_ollama = true,
             api_url = "http://ollama:11434/v1/chat/completions",
 
