@@ -6,8 +6,9 @@ local default_options = { noremap = true, silent = true }
 --   as for S... I really like cc anyways... so I won't likely need S ever...
 --   as for s... cl is not at all intuitive... (it could be if I work on it)... so this is a loss but honestly I rarely used s thus far... so lets see how I feel
 --   downside to remapping is getting in wrong habit :)... for vim envs w/o my config :)
-vim.keymap.set({ "n", "v" }, "s", "/", default_options)
-vim.keymap.set({ "n", "v" }, "S", "?", default_options)
+-- vim.keymap.set({ "n", "v" }, "s", "/", default_options)
+-- TODO find new kemap, captial S conflicts with nvim-surround
+-- vim.keymap.set({ "n", "v" }, "S", "?", default_options)
 
 
 -- *** window keymaps
