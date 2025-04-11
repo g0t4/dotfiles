@@ -493,6 +493,7 @@ local llama_cpp_llama_vim = {
         --     it needs a new keymap to trigger brand new!
         --     https://github.com/ggml-org/llama.vim/blob/dafa50acc4df4fe8b173c7cbfa3c5901fb7e0dec/autoload/llama.vim#L71C43-L74C18
         --     also sounds like it caches previous completions, unsure if that includes not-accepted completions?
+        -- 3. need to config not to complete in known dialogs, i.e. dialogs telescope, rename dialogs
 
         -- set config before loading plugin (IIAC its set in stone on load)
         -- https://github.com/ggml-org/llama.vim?tab=readme-ov-file#plugin-configuration
