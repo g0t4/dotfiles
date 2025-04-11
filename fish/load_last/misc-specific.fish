@@ -1230,6 +1230,7 @@ end
 if command -q ollama
     abbr olc "ollama create"
     abbr olcp "ollama cp"
+    abbr ole "export OLLAMA_HOST='ollama:11434'"
     abbr olh "ollama help"
     abbr oll "ollama list"
     abbr olp "ollama pull"
@@ -1239,23 +1240,33 @@ if command -q ollama
     abbr olrm "ollama rm"
 
     # PRN - use grc with ollama serve too and write my own coloring config (have claude do it)... do this if I dislike using bat for this
-    set _ollama_serve "ollama serve 2>&1 | bat -pp -l log" # -pp to disable pager and use plain style (no line numbers).. w/o disable pager, on mac my pager setup prohibits streaming somehow (anyways just use this always)
+    set -l _ollama_serve "ollama serve 2>&1 | bat -pp -l log" # -pp to disable pager and use plain style (no line numbers).. w/o disable pager, on mac my pager setup prohibits streaming somehow (anyways just use this always)
     # OLLAMA_NUM_PARALLEL is to ensure maximum context size for a single request n_ctx (not split up by --parallel, which defaults to 4 on smaller qwen models)
     # OLLAMA_CONTEXT_LENGTH=8192 - num_ctx/n_ctx defaults to 2048... leads to truncation, set this here for OpenAI APIS that don't allow it as a parameter on a request
-    abbr ols "OLLAMA_NUM_PARALLEL=1 $_ollama_serve"
-    abbr olsd "OLLAMA_NUM_PARALLEL=1 OLLAMA_DEBUG=1 $_ollama_serve"
-    abbr olshg "OLLAMA_NUM_PARALLEL=1 OLLAMA_KEEP_ALIVE=30m OLLAMA_HOST='http://0.0.0.0:11434' $_ollama_serve"
-    # TODO have a shared func to expand various abbreviations based on current machine and other factors... like localhost normally except when over say SSH?
+    # OLLAMA_KEEP_ALIVE=30m
+    abbr olsl "OLLAMA_NUM_PARALLEL=1 $_ollama_serve"
+    abbr olsld "OLLAMA_NUM_PARALLEL=1 OLLAMA_DEBUG=1 $_ollama_serve"
+    #
+    abbr olsg "OLLAMA_NUM_PARALLEL=1 OLLAMA_HOST='http://0.0.0.0:11434' $_ollama_serve"
+    abbr olsgd "OLLAMA_NUM_PARALLEL=1 OLLAMA_DEBUG=1 OLLAMA_HOST='http://0.0.0.0:11434' $_ollama_serve"
+    #
     # I am starting to understand the value of just serving a single model at a time (per endpoint)... i.e. to control params through env vars and not worry about model to model differences
-    abbr olsq olsqwen
-    function olsqwen
-        OLLAMA_CONTEXT_LENGTH=8192 OLLAMA_NUM_PARALLEL=4 OLLAMA_KEEP_ALIVE=30m OLLAMA_HOST='http://0.0.0.0:11434' eval $_ollama_serve
+    abbr olsq ols_qwen
+    abbr olsqd ols_qwen_debug
+    set _ollama_qwen "OLLAMA_CONTEXT_LENGTH=8192 OLLAMA_NUM_PARALLEL=4 OLLAMA_HOST='http://0.0.0.0:11434' eval $_ollama_serve"
+    function ols_qwen_debug
+        set cmd "OLLAMA_DEBUG=1 $_ollama_qwen"
+        echo "$cmd\n" | bat -l fish
+        eval $cmd
+    end
+    function ols_qwen
+        set cmd "$_ollama_qwen"
+        echo "$cmd\n" | bat -l fish
+        eval $cmd
         # 4 requests @ 8k tokens each
         # TODO RoPE scaling params and/or impact on num_ctx?
         # model has n_ctx_training=32k but it is supposedly able to handle up to 128K tokens
     end
-    abbr olshgd "OLLAMA_NUM_PARALLEL=1 OLLAMA_KEEP_ALIVE=30m OLLAMA_DEBUG=1 OLLAMA_HOST='http://0.0.0.0:11434' $_ollama_serve"
-    abbr ole "export OLLAMA_HOST='ollama:11434'"
 
     abbr olshow "ollama show"
 end
