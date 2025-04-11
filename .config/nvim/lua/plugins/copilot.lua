@@ -494,6 +494,9 @@ local llama_cpp_llama_vim = {
         --     https://github.com/ggml-org/llama.vim/blob/dafa50acc4df4fe8b173c7cbfa3c5901fb7e0dec/autoload/llama.vim#L71C43-L74C18
         --     also sounds like it caches previous completions, unsure if that includes not-accepted completions?
         -- 3. need to config not to complete in known dialogs, i.e. dialogs telescope, rename dialogs
+        -- 4. doesn't consistently trigger, sometimes does when I move cursor (click mouse), othertimes not...
+        -- 5. I don't really like how it does FIM in middle of current line (content after)... need to adjust limit to be high is probably fine... I like what mine does that overlays the diff almost
+        --      todo => askopenai=> add diff support first in the middle of line completions!
 
         -- set config before loading plugin (IIAC its set in stone on load)
         -- https://github.com/ggml-org/llama.vim?tab=readme-ov-file#plugin-configuration
