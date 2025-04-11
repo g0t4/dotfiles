@@ -19,8 +19,12 @@
 [
   ; TODO add `;` as comment prefix? will that be a problem in languages with trailing semicolons? if so maybe set that up as specific case of this highlights.scm
   ; todo would it make sense to make each language specific? so I put -- ihn ... I'd prefer copy pasta this file and have a global catchall regex on front to match whatever comment start there is ... why is this not matching comment contents? is there a way to do that?
-  (comment) @comment_asterisks_bang (#match? @comment_asterisks_bang "^(--|\"|#|//)\\s*\\*\\*\\*!")
-  (comment) @comment_asterisks (#match? @comment_asterisks "^(--|\"|#|//)\\s*\\*+[^!]") ; TODO fix matching ***! too... damn weird regex... are these not greedy?
+  (comment) @comment_asterisks_bang (#match? @comment_asterisks_bang "\\*\\*\\*!")
+  (comment) @comment_asterisks (#match? @comment_asterisks "\\*+[^!]") ; *** example
+  ; * example
+  ; ** example
+  ; *** example
+  ; ***! example
 ]
 [
   ; not match start only:
