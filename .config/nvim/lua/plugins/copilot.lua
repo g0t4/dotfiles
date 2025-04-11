@@ -4,7 +4,8 @@ local use_ai = {
     -- "tabnine",
     -- "supermaven",
     -- "llm.nvim",
-    "ask-openai", -- use master branch to disable predictions
+    "ggml-org/llama.vim",
+    -- "ask-openai", -- use master branch to disable predictions
 }
 -- ! consider https://github.com/zbirenbaum/copilot.lua
 --    purportedly faster and less glitchy than copilot.vim
@@ -462,6 +463,71 @@ local avante =
     },
 }
 
+local llama_cpp_llama_vim = {
+    -- NOTES:
+    -- llama-server fim args:
+    --    https://github.com/ggerganov/llama.cpp/blob/8ac9f5d7/common/arg.cpp#L3148-L3164
+    --    llama-server --help | grep fim  # find compat models
+    --    --fim-qwen-7b-default  # 16+ GB VRAM
+    --    --fim-qwen-7b-spec
+    --    --fim-qwen-14b-spec ** spec dec!
+    --    TODO TRY on 5090
+    --    AFAICT these are all base models
+    --      however there are a few instruct models linked in the HF collection:
+    --      https://huggingface.co/collections/ggml-org/llamavim-6720fece33898ac10544ecf9
+
+    "ggml-org/llama.vim",
+
+    enabled = vim.tbl_contains(use_ai, "ggml-org/llama.vim"),
+    event = { "CmdlineEnter", "InsertEnter" },
+    init = function()
+        -- Notes:
+        -- *** 1. I see an eerily similar behavior when I tried to combine repo-level FIM and file-level FIM
+        --   often completions <EOT> right away, feels premature
+        --   basically often suggesting no changes...
+        --     makes me wonder if repo level FIM exhibits this behavior b/c it's all about completing the entire file
+        --     and if the file is currenlty valid then there's nothing needed to complete it?
+        --     if that's whats happening I should be able to see it behave much better if I start on new, incomplete syntax and let it complete that
+        --   I believe I saw no suggestions most often when I just jumped into insert mode in a currently valid file/spot
+        -- 2. can't get it to regen if I don't like a completion IIAC b/c of its caching
+        --     it needs a new keymap to trigger brand new!
+        --     https://github.com/ggml-org/llama.vim/blob/dafa50acc4df4fe8b173c7cbfa3c5901fb7e0dec/autoload/llama.vim#L71C43-L74C18
+        --     also sounds like it caches previous completions, unsure if that includes not-accepted completions?
+
+        -- set config before loading plugin (IIAC its set in stone on load)
+        -- https://github.com/ggml-org/llama.vim?tab=readme-ov-file#plugin-configuration
+        -- source options: https://github.com/ggml-org/llama.vim/blob/master/autoload/llama.vim#L44-L64
+        vim.g.llama_config = {
+            -- stats bar (green extmarks right of gen text)
+            -- show_info = 0, -- 2(default) == inline, 1 == status line, 0 = off
+            -- endpoint = "http://127.0.0.1:8012/infill",  (default)
+            -- \ 'api_key':            '',
+
+            -- defaults:
+            -- \ 'n_prefix':           256,
+            -- \ 'n_suffix':           64,
+            -- \ 'n_predict':          128,
+            -- TODO is it canceling completions, is that why I get nothing?
+            -- \ 't_max_prompt_ms':    500,
+            -- \ 't_max_predict_ms':   1000,
+            -- \ 'auto_fim':           v:true,
+            -- \ 'max_line_suffix':    8,
+            -- \ 'max_cache_keys':     250,
+            -- \ 'ring_n_chunks':      16,
+            -- \ 'ring_chunk_size':    64,
+            -- \ 'ring_scope':         1024,
+            -- \ 'ring_update_ms':     1000,
+
+            -- keys:
+            -- \ 'keymap_trigger':     "<C-F>", -- default
+            -- \ 'keymap_accept_full': "<Tab>", -- default
+            keymap_accept_line = "<C-right>", -- default "<S-Tab>"
+            keymap_accept_word = "<M-right>" -- default "<C-B>",
+
+        }
+    end,
+}
+
 -- avante requires 0.10+
 local version = vim.version()
 if version.major == 0 and version.minor < 10 then
@@ -470,6 +536,7 @@ end
 
 return {
     llm_nvim,
+    llama_cpp_llama_vim,
 
     {
         "g0t4/ask-openai.nvim",
