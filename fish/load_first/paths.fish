@@ -142,3 +142,6 @@ end
 if test -d /opt/watchman/bin
     export PATH="$PATH:/opt/watchman/bin"
 end
+
+# PRN lm-studio
+# set -gx PATH $PATH /Users/wesdemos/.cache/lm-studio/bin
