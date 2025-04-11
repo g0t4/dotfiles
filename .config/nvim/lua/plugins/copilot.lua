@@ -13,9 +13,8 @@ local use_ai = {
 -- *** local autocompletion plugin candidates:
 -- only focus is inline completions as I can open a chat window on my own should I need that (in a browser, or in nvim)
 --
--- - TODO llm.nvim
+-- - TODO TRY llm.nvim again! it did some stuff good
 --    *** YAY ollama backend supported (ollama's api/generate ... and via OpenAI API endpoint too!)
---
 --     - https://github.com/huggingface/llm.nvim?tab=readme-ov-file#ollama
 --   - uses llm-ls backend (very cool, a language server... much like supermaven does... makes a ton of sense to let it acess entire codebase predictably and not just one off requests w/o the ability to bring in context)
 --     - https://github.com/huggingface/llm-ls
@@ -163,7 +162,7 @@ local llm_nvim = {
             --     :messages
 
             -- *** qwen2.5
-            model = "qwen2.5-coder:14b-base-q8_0", -- scrappy but if I give right context it is much faster and still accurate (i.e. paste in ref files list when completing require calls in lazy setup)
+            model = "qwen2.5-coder:7b-base-q8_0", -- scrappy but if I give right context it is much faster and still accurate (i.e. paste in ref files list when completing require calls in lazy setup)
             -- model = "qwen2.5-coder:14b-instruct-q8_0", -- scrappy but if I give right context it is much faster and still accurate (i.e. paste in ref files list when completing require calls in lazy setup)
             -- model = "qwen2.5-coder:7b-base-q8_0", -- scrappy but if I give right context it is much faster and still accurate (i.e. paste in ref files list when completing require calls in lazy setup)
             -- model = "qwen2.5-coder:7b-instruct-q8_0", -- scrappy but if I give right context it is much faster and still accurate (i.e. paste in ref files list when completing require calls in lazy setup)
