@@ -1,11 +1,9 @@
-
 # modify delay to consider if esc key a seq or standalone
 set fish_escape_delay_ms 200 # 30ms is default and way too fast (ie esc+k is almost impossible to trigger)
 
 # PRN add a binding to clear screen + reset status of last run command
 #    OR modify prompt (type fish_prompt) as it already distinguishes (with bold) if status was carried over from previous command so perhaps I could find a way to hijack that ?
 #    OR hide status in the prompt (perhaps like zsh I could show non-zero exit code on last line before new prompt?)
-
 
 ### FISH HELP ###
 set __fish_help_dir "" # overwrite fish help dir thus forcing the use of https://fishshell.com instead of local files (which I prefer b/c I have highlighting of fishshell.com pages) # ... try it with: `help help` => opens https://fishshell.com/docs/3.6/interactive.html#help
@@ -20,16 +18,13 @@ function on_change_show_verbose_prompt --on-variable show_verbose_prompt
 end
 function toggle_show_verbose_prompt
     if not set --query show_verbose_prompt
-        set --universal show_verbose_prompt "yes"
+        set --universal show_verbose_prompt yes
     else
         set --universal --erase show_verbose_prompt
     end
     # commandline --function repaint
 end
 bind f4 toggle_show_verbose_prompt
-
-
-
 
 if command -q launchctl
     abbr lcl 'launchctl list'
@@ -206,7 +201,6 @@ if command -q k3d
     abbr k3dr 'k3d registry list'
 end
 
-
 if command -q kubectl
     alias kubectl "grc kubectl" # ! EVALUATING if I like this, would be sufficient for short term most likely
     export KUBECTL_EXTERNAL_DIFF="icdiff -r" # use icdiff for kubectl diff (slick!)... FYI $1 and $2 are directories to compare (hence the -r)
@@ -308,14 +302,14 @@ if command -q kubectl
     #
     abbr --set-cursor='!' kgr 'kubectl get --raw /! | yq -P'
     # abbr 'kgr/' 'kubectl get --raw / | yq -P' # todo I can use kgr/ if I want kgr for smth else
-    abbr 'kgr/a' 'kubectl get --raw /apis'
-    abbr 'kgr/h' 'kubectl get --raw /healthz'
-    abbr 'kgr/l' 'kubectl get --raw /livez'
-    abbr 'kgr/m' 'kubectl get --raw /metrics'
-    abbr 'kgr/o' 'kubectl get --raw /openapi'
+    abbr kgr/a 'kubectl get --raw /apis'
+    abbr kgr/h 'kubectl get --raw /healthz'
+    abbr kgr/l 'kubectl get --raw /livez'
+    abbr kgr/m 'kubectl get --raw /metrics'
+    abbr kgr/o 'kubectl get --raw /openapi'
     # /openid
-    abbr 'kgr/r' 'kubectl get --raw /readyz'
-    abbr 'kgr/v' 'kubectl get --raw /version'
+    abbr kgr/r 'kubectl get --raw /readyz'
+    abbr kgr/v 'kubectl get --raw /version'
     #
     abbr kgrb 'kubectl get rolebindings -o wide' # wide shows role and subject (user/group/sa) so I absolutely want this by default
     abbr kgro 'kubectl get roles'
@@ -340,7 +334,6 @@ if command -q kubectl
         # PRN can include other CRDs here as needed! neat way to do this!
     end
     # *** END GET related:
-
 
     # apply
     abbr kaf 'kubectl apply -f' # create or modify
@@ -470,7 +463,6 @@ if command -q kubectl
     abbr kxu 'kubectl config use-context'
     abbr kxls 'kubectl config get-contexts'
     abbr kxv 'kubectl config view'
-
 
     # rancher (et al)
     #
@@ -852,7 +844,6 @@ function z
     end
 end
 
-
 # *** terraform
 if command -q terraform
 
@@ -925,7 +916,6 @@ function toggle-grc
     # ALTERNATIVE - pull back last command, toggle-grc, run - can use if I find myself doing this two step process often
 end
 bind ctrl-q toggle-grc # terrible key choice (ctrl+q) but it isn't used currently so yeah
-
 
 if command -q apt
 
@@ -1010,7 +1000,6 @@ if command -q apt
     #         └── cups
 
 end
-
 
 if command -q watch
     # VERIFIED watch does this on both macos and ubuntu
@@ -1098,8 +1087,6 @@ abbr _reminders_docker_binfmts "docker run --privileged --rm tonistiigi/binfmt" 
 # idea for a new spot where I can locate what are essentially reminders for commands (i.e. not used often)
 # type _reminders<TAB> to see what is available
 
-
-
 # examples:
 #    tellme_about docker   # executable, symlink
 #    tellme_about ld       # executable, not symlink
@@ -1130,7 +1117,6 @@ function _indent
     sed "s/^/"(string repeat " " -n $spaces)"/"
 
 end
-
 
 if command -q act
 
@@ -1512,7 +1498,6 @@ function video_editing_aio
         trash $combined_file # be safe with rm, if it was wrong file I wanna have it be recoverable
     end
 
-
     # PRN skip if already exists?
     video_editing_gen_fcpxml $output_file
 end
@@ -1571,7 +1556,6 @@ if command -q npm
     abbr npmun 'npm uninstall'
     abbr npmup 'npm update'
 
-
 end
 
 # TODO! add mechanism to discover duplicated abbrs => on-demand check?
@@ -1621,8 +1605,6 @@ else:
 "
 end
 
-
-
 # *** man page helpers
 abbr man1 "man -S 1"
 abbr man2 "man -S 2"
@@ -1640,7 +1622,6 @@ abbr manw "man -aw" # man -w == whereis for man pages, or map to whereis?
 # PRN whereis helpers?
 # PRN apropos helpers?
 # PRN whatis helpers?
-
 
 # *** mitmproxy
 abbr mitm mitmproxy
@@ -1684,7 +1665,6 @@ abbr mitmsave "mitmproxy --save-stream-file" # # TODO do I use this?
 #   --intercept  # hard filter # maybe have option for this when using --save-stream-file since this is more likely to matter when saving
 #   --view-filter  # soft filter (view only, actually captured still) # I would rather just do this with `f` in the running instance unless I wanna persist across restarts
 
-
 function show_hex_rgb_color
 
     # TODO check if shell supports 24bit RGB true color, iTerm2 supports this (validated in my testing), but vscode doesn't (smth to do w/ color correction but don't care to fix that right now)
@@ -1724,14 +1704,10 @@ function show_hex_rgb_color
 
 end
 
-
 if command -q nvim
     abbr vim nvim
     abbr vimc command vim # fallback to vim if nvim issues
 end
-
-
-
 
 # *** macOS screenshot helpers (for alfred file action => move here)
 
@@ -2073,7 +2049,7 @@ if command -q nvidia-smi
     complete -c nvidia-container-cli --no-files -a "list info configure --help"
 
     # Basic commands
-    abbr smi "nvidia-smi"
+    abbr smi nvidia-smi
     abbr smil "nvidia-smi -L" # List GPUs
     abbr smit "nvidia-smi -q -d temperature | bat -l yml" # not yaml, but close enough
     abbr smiu "nvidia-smi -q -d utilization | bat -l yml" # not yaml, but close enough
@@ -2144,7 +2120,6 @@ function trash
     end
 end
 
-
 set -l find_cmd find
 if $IS_MACOS then
     set find_cmd gfind
@@ -2156,11 +2131,8 @@ abbr finde "$find_cmd . -executable"
 abbr findud --set-cursor='!' "$find_cmd '!' -user wesdemos"
 abbr finduw --set-cursor='!' "$find_cmd '!' -user wes"
 
-
 # mostly for fun, also a good way to remember this exists :)
 abbr fuc fish_update_completions
-
-
 
 # *** ls* abbrs
 if $IS_LINUX then
@@ -2213,9 +2185,7 @@ if $IS_LINUX then
     # dmesg
     abbr --set-cursor='!' dmesgg "sudo dmesg | grep -i '!'"
 
-
 end
-
 
 # *** asciinema
 abbr anr 'asciinema rec --overwrite test.cast' # PRN remake in fish:    abbr --set-cursor '!' --add anr 'asciinema rec --overwrite !.cast'
@@ -2263,14 +2233,12 @@ abbr aggo --function abbr_agg
 #       nix! flake!
 #   - copilot suggests: try ttygif?
 
-
 abbr vllms "vllm serve"
 # PRN some common args for vllm serve?
 # abbr vllmsd "vllm serve --download-dir "
 abbr vllmb "vllm bench"
 abbr vllmc "vllm chat"
 abbr vllmg "vllm complete"
-
 
 # *** tail
 abbr tailf 'tail -F'
@@ -2280,9 +2248,5 @@ abbr tailr 'tail -r' # reverse order
 # tail10<space> => tail -n 10
 abbr taild --regex 'tail\d+' --function _taild
 function _taild
-    string replace 'tail' 'tail -n ' $argv[1]
+    string replace tail 'tail -n ' $argv[1]
 end
-
-
-
-

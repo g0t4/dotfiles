@@ -171,6 +171,5 @@ abbr ols "`$env:OLLAMA_NUM_PARALLEL=1; $ollama_serve"
 abbr olsd "`$env:OLLAMA_NUM_PARALLEL=1; `$env:OLLAMA_DEBUG=1; $ollama_serve"
 abbr olsh "`$env:OLLAMA_NUM_PARALLEL=1; `$env:OLLAMA_KEEP_ALIVE='30m'; `$env:OLLAMA_HOST='http://0.0.0.0:11434'; $ollama_serve"
 abbr olshd "`$env:OLLAMA_NUM_PARALLEL=1; `$env:OLLAMA_KEEP_ALIVE='30m'; `$env:OLLAMA_DEBUG=1; `$env:OLLAMA_HOST='http://0.0.0.0:11434'; $ollama_serve"
-
 abbr olshow "ollama show"
 
