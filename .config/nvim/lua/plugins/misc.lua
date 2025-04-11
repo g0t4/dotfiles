@@ -407,8 +407,8 @@ return {
                             vim.api.nvim_feedkeys(keys, "n", false)
                         end
 
-                        -- TODO lets just literally insert a blank line and not use o... that way if language continues a comment on o/O then it wont add second comment line (i.e. in lua, but I don't have python configured that way)
-                        local keys = vim.api.nvim_replace_termcodes("o" .. use_devider .. "<CR><Esc>", true, false, true)
+                        local keys = vim.api.nvim_replace_termcodes("o" .. use_devider .. "<CR><Esc>cc<Esc>", true, false, true)
+                        -- FYI cc clears the current line to wipe out comment leader if added (b/c formatoptions contains "o")
                         vim.api.nvim_feedkeys(keys, "n", false)
                     end, 0)
                 else
@@ -417,8 +417,7 @@ return {
                         local keys = vim.api.nvim_replace_termcodes("o<Esc>", true, false, true)
                         vim.api.nvim_feedkeys(keys, "n", false)
                     end
-                    -- TODO also, insert blank line instead of using 'o'... and actually lets use that to insert everything and then move the cursor too?
-                    local keys = vim.api.nvim_replace_termcodes("i" .. use_devider .. " <CR><Esc>", true, false, true)
+                    local keys = vim.api.nvim_replace_termcodes("i" .. use_devider .. " <CR><Esc>cc<Esc>", true, false, true)
                     vim.api.nvim_feedkeys(keys, "n", false)
                     -- FYI b/c I use <CR> to insert a line, that ensures there is a new line after the divider
                 end
