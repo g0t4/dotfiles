@@ -1,4 +1,27 @@
 return {
+    -- {
+    --     -- FYI this works good, color mappings need adjusted, I'd prefer it map to my terminal's 3bit/4bit colors and not 8bit color (IIUC it has a 256 color mapping table)... produces very dark colors currently but that can be adjusted
+    --     -- idea is you have files / streams of text with CSI sequences (to color the text)
+    --     -- normally if you open these you'll just see plaintext w/ CSI sequences
+    --     -- so, say you want to turn the CSI sequences into actual colors over the text content
+    --     -- thus you no longer see the CSI sequences too
+    --
+    --
+    --     "m00qek/baleia.nvim",
+    --     -- turn CSI sequences (in text) and translate that into colored text in a buffer
+    --     -- i.e. log files with embedded CSI sequences
+    --     config = function()
+    --         vim.g.baleia = require("baleia").setup({})
+    --
+    --         -- Command to colorize the current buffer
+    --         vim.api.nvim_create_user_command("BaleiaColorize", function()
+    --             vim.g.baleia.once(vim.api.nvim_get_current_buf())
+    --         end, { bang = true })
+    --
+    --         -- Command to show logs
+    --         vim.api.nvim_create_user_command("BaleiaLogs", vim.g.baleia.logger.show, { bang = true })
+    --     end,
+    -- },
 
     {
         "olimorris/onedarkpro.nvim",
