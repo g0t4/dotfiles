@@ -304,7 +304,12 @@ function SwitchCopilot()
         end
         return
     end
+    if vim.tbl_contains(use_ai, "ggml-org/llama.vim") then
+        vim.cmd("LlamaToggle")
+        return
+    end
     if vim.tbl_contains(use_ai, "ask-openai") then
+        -- FYI check last b/c sometimes I use a subset of features with another predictions plugin, so give them all a chance first
         if IsAskOpenAIPredictionsAvailable() then
             local api = require("ask-openai.api")
 
@@ -344,6 +349,9 @@ function EnableAllCopilots()
             api.enable_predictions()
         end
     end
+    if vim.tbl_contains(use_ai, "ggml-org/llama.vim") then
+        vim.cmd("LlamaEnable")
+    end
 end
 
 function DisableAllCopilots()
@@ -363,6 +371,9 @@ function DisableAllCopilots()
             local api = require("ask-openai.api")
             api.disable_predictions()
         end
+    end
+    if vim.tbl_contains(use_ai, "ggml-org/llama.vim") then
+        vim.cmd("LlamaDisable")
     end
 end
 
