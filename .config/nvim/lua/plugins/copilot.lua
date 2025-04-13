@@ -406,15 +406,14 @@ function CopilotsStatus()
             end
         end
     end
+
     if vim.tbl_contains(use_ai, "ggml-org/llama.vim") then
         -- llama.vim doesn't have status AFAICT... but it does clear handlers/keymaps on disable so I can use that
         -- FYI I lazy load llama.vim so status wont show until it loads first time
-
         local llama_cmds = vim.api.nvim_get_autocmds({
             event = "CursorMovedI",
             group = "llama",
         })
-
         if #llama_cmds > 0 then
             status = status .. "!"
         else
