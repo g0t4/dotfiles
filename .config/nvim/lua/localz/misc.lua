@@ -109,6 +109,7 @@ vim.cmd [[
     "
     " vertical split help:
     cnoreabbrev h vert h
+    " TODO only expand IF not already expanded at start of command line?
     "
     " horiz split (or otherwise not prepend vert)
     cnoreabbrev H h
