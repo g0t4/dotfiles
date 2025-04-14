@@ -4,7 +4,7 @@ local use_ai = {
     -- "tabnine",
     -- "supermaven",
     -- "llm.nvim",
-    "ggml-org/llama.vim",
+    -- "ggml-org/llama.vim",
     "ask-openai", -- use master branch to disable predictions
 }
 -- ! consider https://github.com/zbirenbaum/copilot.lua
@@ -329,8 +329,7 @@ vim.api.nvim_set_keymap("i", "<F13>", "<Esc>:lua SwitchCopilot()<CR>a", { norema
 
 function IsAskOpenAIPredictionsAvailable()
     -- FYI, later, replace with final setting
-    return false
-    -- return require("ask-openai.config").get_options().tmp.predictions
+    return require("ask-openai.config").get_options().tmp.predictions
 end
 
 function EnableAllCopilots()
