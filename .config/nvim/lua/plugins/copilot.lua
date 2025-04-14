@@ -573,7 +573,7 @@ return {
     {
         "g0t4/ask-openai.nvim",
         enabled = vim.tbl_contains(use_ai, "ask-openai"),
-        event = { "CmdlineEnter", "InsertEnter" },
+        -- event = { "CmdlineEnter", "InsertEnter" }, -- always load in advance for AskToolUse et al?
         dir = "~/repos/github/g0t4/ask-openai.nvim",
 
         -- *** copilot (default):
