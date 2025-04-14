@@ -4,8 +4,8 @@ local use_ai = {
     -- "tabnine",
     -- "supermaven",
     -- "llm.nvim",
-    -- "ggml-org/llama.vim",
-    "ask-openai", -- use master branch to disable predictions
+    "ggml-org/llama.vim",
+    -- "ask-openai", -- use master branch to disable predictions
 }
 -- ! consider https://github.com/zbirenbaum/copilot.lua
 --    purportedly faster and less glitchy than copilot.vim
