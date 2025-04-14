@@ -4,7 +4,7 @@ local use_ai = {
     -- "tabnine",
     -- "supermaven",
     -- "llm.nvim",
-    -- "ggml-org/llama.vim",
+    "ggml-org/llama.vim",
     "ask-openai", -- use master branch to disable predictions
 }
 -- ! consider https://github.com/zbirenbaum/copilot.lua
