@@ -611,6 +611,12 @@ return {
             api_url = "http://ollama:11434/v1/chat/completions",
 
             verbose = true,
+
+            tmp = {
+                predictions = {
+                    enabled = false, -- turn off my predictions w/o disabling entire ask-openai plugin
+                },
+            },
         },
 
         dependencies = {
