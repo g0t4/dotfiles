@@ -614,6 +614,7 @@ return {
 
             tmp = {
                 predictions = {
+                    -- model = ? -- TODO control this here
                     enabled = false, -- turn off my predictions w/o disabling entire ask-openai plugin
                 },
             },
