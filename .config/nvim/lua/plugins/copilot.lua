@@ -4,7 +4,7 @@ local use_ai = {
     -- "tabnine",
     -- "supermaven",
     -- "llm.nvim",
-    "ggml-org/llama.vim",
+    -- "ggml-org/llama.vim",
     "ask-openai", -- use master branch to disable predictions
 }
 -- ! consider https://github.com/zbirenbaum/copilot.lua
@@ -615,7 +615,7 @@ return {
             tmp = {
                 predictions = {
                     -- model = ? -- TODO control this here
-                    enabled = false, -- turn off my predictions w/o disabling entire ask-openai plugin
+                    enabled = true, -- turn off my predictions w/o disabling entire ask-openai plugin
                 },
             },
         },
