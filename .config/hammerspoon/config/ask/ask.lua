@@ -348,7 +348,7 @@ function askAbout(userText, app, focusedElem, appendChunk)
             end
 
             local sse = hs.json.decode(dataValue)
-            if sse and sse.choices then
+            if sse and sse.choices and sse.choices[1] then
                 local delta = sse.choices[1].delta or {}
                 local text = delta.content
                 if text then
