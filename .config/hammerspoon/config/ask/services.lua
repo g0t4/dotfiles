@@ -46,6 +46,7 @@ end
 
 function M.getService()
     local stored = M.getStoredService()
+    -- print("stored", hs.inspect(stored))
     if stored == nil then
         return nil
     end
@@ -59,8 +60,16 @@ function M.getService()
         }
     end
 
+    if stored.service == "--inception" then
+        return {
+            name = "inception",
+            api_key = security.getSecret("ask", "inception"),
+            url = "https://api.inceptionlabs.ai/v1/chat/completions",
+            model = stored.model == "" and "mercury-coder-small" or stored.model,
+        }
+    end
+
     if stored.service == "--groq" then
-        -- TODO any newer models?
         return {
             name = "groq",
             api_key = security.getSecret("ask", "groq"),

@@ -27,6 +27,10 @@ function ask_use_deepseek
     _ask_write_state --deepseek $argv
 end
 
+function ask_use_inception
+    _ask_write_state --inception $argv
+end
+
 function ask_use_groq
     _ask_write_state --groq $argv
 end
@@ -63,6 +67,9 @@ function get_openai_models
     else if test "$argv[1]" = vllm
         set base_url http://ollama:8000/v1/models
         set api_key ""
+    else if test "$argv[1]" = inception
+        set base_url https://api.inceptionlabs.ai/v1/models
+        set api_key (security find-generic-password -s inception -a ask -w)
     else
         set base_url https://api.openai.com/v1/models
         set api_key (security find-generic-password -s openai -a ask -w)
@@ -77,6 +84,7 @@ end
 complete --command ask_use_ollama --no-files -a '(get_openai_models ollama)'
 complete --command ask_use_openai --no-files -a '(get_openai_models)'
 complete --command ask_use_groq --no-files -a '(get_openai_models groq)'
+complete --command ask_use_inception --no-files -a '(get_openai_models inception)'
 complete --command ask_use_deepseek --no-files -a '(get_openai_models deepseek)'
 complete --command ask_use_vllm --no-files -a '(get_openai_models vllm)'
 

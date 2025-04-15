@@ -35,6 +35,17 @@ def use_vllm(model: Optional[str] = None):
         # https://github.com/vllm-project/vllm/blob/main/docs/api.md#chat-completions
     )
 
+def use_inception(model: Optional[str] = None):
+    return Service(
+        name='inception',
+        api_key=get_api_key('inception', 'ask'),
+        base_url='https://api.inceptionlabs.ai/v1',
+        model=model if model else 'mercury-coder-small',
+        chat_completions_path=None,
+        # https://platform.inceptionlabs.ai/dashboard/
+    )
+
+
 def use_groq(model: Optional[str] = None):
 
     return Service(
@@ -176,6 +187,7 @@ def args_to_use() -> Service:
     parser.add_argument('--deepseek', action='store_true', default=False)
     parser.add_argument('--lmstudio', action='store_true', default=False)
     parser.add_argument('--groq', action='store_true', default=False)
+    parser.add_argument('--inception', action='store_true', default=False)
     parser.add_argument('--ollama', action='store_true', default=False)
     parser.add_argument('--anthropic', action='store_true', default=False)
     parser.add_argument('--gh-copilot', action='store_true', default=False)
@@ -199,6 +211,8 @@ def args_to_use() -> Service:
         use = use_anthropic(args.model)
     elif args.gh_copilot:
         use = use_gh_copilot(args.model)
+    elif args.inception:
+        use = use_inception(args.model)
     else:
         use = use_openai(args.model)
 
