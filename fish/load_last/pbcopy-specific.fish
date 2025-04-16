@@ -56,6 +56,10 @@ if not $IS_MACOS
     # don't alias on mac (b/c f_*_copy/paste uses pbcopy/paste... infinte loop fun)
 end
 
+# abbr pbp pbpaste
+abbr pb pbpaste
+abbr pbj "pbpaste | jq"
+abbr pby "pbpaste | yq"
 
 # if SSH => replace fish_clipboard_copy
 # TODO if I `sudo su` to root user, I lose env vars without `sudo -E`... and so this logic isn't injected to copy... can I just make this always the case on linux?
