@@ -92,6 +92,9 @@ inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
 " FYI <C-e> could be an alternative?
 " The else part is to pass through the original keypress <S-CR> and is working fine now
 " Might have issues if shift not detected properly so keep an eye on it
+" testing: go into insert mode, get pum to open, press Shift-Enter to close it
+"    passthru: after closing it just hit Shift-Enter again and it should insert a newline
+"    actually I haven't verified if it breaks S-Enter, pass through might just be doing enter ;)
 inoremap <silent><nowait><expr> <S-CR> coc#pum#visible() ? coc#pum#cancel() : "<S-CR>"
 
 
