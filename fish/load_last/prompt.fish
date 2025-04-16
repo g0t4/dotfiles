@@ -79,11 +79,11 @@ function prompt_pwd --description 'wes mod - name of the current dir only'
     end
 
     # truncate long course paths
-    if string match --regex -q "$HOME/repos/github/g0t4/private.*ai-devops\$" $PWD
+    if string match --regex -q "$HOME/repos/github/g0t4/private-course-rancher\$" $PWD
         echo -n -s private-course
         return
     end
-    if string match -q "$HOME/repos/github/g0t4/course-ai-devops" $PWD
+    if string match -q "$HOME/repos/github/g0t4/course-rancher" $PWD
         echo -n -s course
         return
     end
