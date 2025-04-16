@@ -84,8 +84,17 @@ set updatetime=300
 
 " Make <CR> to accept selected completion item or notify coc.nvim to format
 " <C-g>u breaks current undo, please make your own choice
+" IOTW <C-g>u ensures you can undo the selection without anything before that
 inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
             \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+" FYI wes added - hide coc to see completions behind it
+" FYI <C-e> could be an alternative?
+" The else part is to pass through the original keypress <S-CR> and is working fine now
+" Might have issues if shift not detected properly so keep an eye on it
+inoremap <silent><nowait><expr> <S-CR> coc#pum#visible() ? coc#pum#cancel() : "<S-CR>"
+
+
 
 function! CheckBackspace() abort
     let col = col('.') - 1
