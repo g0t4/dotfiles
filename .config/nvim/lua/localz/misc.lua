@@ -193,7 +193,6 @@ vim.keymap.set("n", "<leader>vj", function()
     --     or put cursor at top of block for me to type in the type?
 
     -- TODO try using vim.api.nvim_put( lines...) where lines is a table of lines -- AFAICT don't want \n in the lines
-    --   and use register type to discern linwise/charwise/blockwise yank (affects paste and new lines... i.e. yank word vs yank line(s) )
     -- ```
     vim.cmd("normal o") -- insert line after
     -- FYI don't need to worry about start of line comment in a markdown file when inserting a new codeblock, no concept of a comment AFAIK in markdown
@@ -206,7 +205,7 @@ vim.keymap.set("n", "<leader>vj", function()
     -- paste and indent
     vim.cmd("normal o") -- insert line after
     vim.cmd("normal p`[v`]=") -- while on line above paste spot... paste and indent
-    -- TODO can I detect if copied content will paste as a whole line or a chunk of text?
+    -- TODO if it comes up a lot, use regtype to detect linewise/charwise/blockwise
 
 end, { noremap = true }) -- " and comment it out (toggle comment)
 
