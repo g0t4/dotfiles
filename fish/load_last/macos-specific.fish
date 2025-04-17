@@ -9,28 +9,14 @@ if command -q security
     #   do this when I start using security command for other credential types
     abbr --set-cursor='!' securityf "security find-generic-password -w -s ! -a "
     abbr --set-cursor='!' securityrm "security delete-generic-password -s ! -a "
-    abbr --set-cursor='!' securitya "security add-generic-password -s ! -a -w "
-    function securitys # s as in set (or update)... doesn't matte
-        # USE FOR BOTH ADD NEW, and UPDATE
-        # assume called like:
-        #   security -s svcname -a accountname
-        # TODO is there a way to update w/o deleting and adding? IF NOT, add a function to take the args and call both commands
-        if security find-generic-password $argv 2>/dev/null 1>/dev/null
-            echo Found password, removing first
-            if not security delete-generic-password $argv
-                echo "Delete failed, aborting..."
-                return -1
-            end
-        end
-        # BTW -w must come last (not before -s/-a)... so dumb
-        if not security add-generic-password $argv -w
-            echo "add failed..."
-            return -1
-        end
-    end
-    complete -c securitys --short-option s --long-option service
-    complete -c securitys --short-option a --long-option account
-    # PRN other args for find/add/delete-generic-password
+    #
+    # * add passwords
+    # FYI -w truncates pasted passwords longer than 129 chars (maybe I am doing smth wrong?)
+    # abbr --set-cursor='!' securitya "security add-generic-password -U -s ! -a -w "
+    #
+    # BUT, -X hexpassword     => this allows longer than 129, and I verified this works to set from clipboard (easier than pasting twice with -w):
+    abbr --set-cursor='!' securitya "security add-generic-password -U -X (pbpaste | xxd -p | tr -d '\n') -s ! -a "
+    # -U updates if already exists! (w/o this the add fails)
 
     # had ChatGPT do this based on man page of security cmd (since fish shell generated completions dont work for security subcommadns, just its options)
     #   man -P "col -b" security
