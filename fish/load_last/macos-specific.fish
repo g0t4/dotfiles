@@ -3,8 +3,7 @@ if not $IS_MACOS
     return
 end
 
-echo 'running rest'
-
+# FYI using command -q security is a very nice way to group config! even though this is macOS and it will always have the security command
 if command -q security
     # consider securityfp (add p to end) for passwords
     #   do this when I start using security command for other credential types
