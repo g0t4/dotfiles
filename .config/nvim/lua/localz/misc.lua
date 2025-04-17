@@ -172,6 +172,7 @@ end, { noremap = true }) --   0p  - paste from register 0
 --   v   - charwise visual mode
 --   `]  - goto pasted text's end mark (end of last yanked/changed text)
 vim.keymap.set("n", "<leader>vc", function()
+    -- paste then toggle comments (on/off depending on what you are pasting and if its already commented out)
     -- for some reason, when rhs is just the string of keys... it doesn't comment the lines (or at least not reliably)
     --   but if I call normal w/ same keys it works (so far):
     vim.cmd("normal o") -- insert line after
@@ -183,7 +184,6 @@ end, { noremap = true }) -- " and comment it out (toggle comment)
 
 
 -- *** open in ... => quickly toggle to other editors
-
 vim.api.nvim_create_user_command('CodeHere', function()
     -- to trigger you!
     local filename = vim.fn.expand("%:p")
