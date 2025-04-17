@@ -12,6 +12,9 @@
 --map-syntax "*.csproj:XML"
 --map-syntax "*.nuspec:XML"
 
+# kubeconfig
+--map-syntax "**/.kube/config:YAML"
+
 # grc config files:
 --map-syntax "grc.conf:INI" # close enough for primary grc.conf (regex/file pairs, with comments)
 --map-syntax "**/.grc/**/conf.*:INI" # grc's conf.* rules format is INI-like (aside from separator ---)
