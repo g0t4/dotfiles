@@ -117,3 +117,7 @@ bind alt-k kill_all_lines # should I switch to alt for my meta key basically? ju
 #    # first arg is the cmdline
 #    export FISH_CURRENT_CMDLINE=$argv
 #end
+
+
+# *** cp
+abbr cpr "cp -r"
