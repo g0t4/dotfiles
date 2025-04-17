@@ -186,6 +186,27 @@ vim.keymap.set("n", "<leader>vc", function()
     -- PRN re-select?
 end, { noremap = true }) -- " and comment it out (toggle comment)
 -- PRN I could drop vc and just get in habit of vgc which is nearly the same
+vim.keymap.set("n", "<leader>vj", function()
+    -- paste as json codeblock in markdown... could check that and/or other file details?
+    -- PRN... would be neat to detect file type in clipboard and put appropriate name at start of block?
+    --     that way I don't need permutations of this for other languages...
+    --     or put cursor at top of block for me to type in the type?
+
+    -- ```
+    vim.cmd("normal o") -- insert line after
+    -- FYI don't need to worry about start of line comment in a markdown file when inserting a new codeblock, no concept of a comment AFAIK in markdown
+    vim.cmd("normal 0i```") -- closing markdown code block
+
+    -- ```json
+    vim.cmd("normal O") -- insert line before
+    vim.cmd("normal 0i```json") -- opening markdown code block
+
+    -- paste and indent
+    vim.cmd("normal o") -- insert line after
+    vim.cmd("normal p`[v`]=") -- while on line above paste spot... paste and indent
+    -- TODO can I detect if copied content will paste as a whole line or a chunk of text?
+
+end, { noremap = true }) -- " and comment it out (toggle comment)
 
 
 -- *** open in ... => quickly toggle to other editors
