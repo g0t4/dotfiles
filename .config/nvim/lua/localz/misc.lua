@@ -192,6 +192,8 @@ vim.keymap.set("n", "<leader>vj", function()
     --     that way I don't need permutations of this for other languages...
     --     or put cursor at top of block for me to type in the type?
 
+    -- TODO try using vim.api.nvim_put( lines...) where lines is a table of lines -- AFAICT don't want \n in the lines
+    --   and use register type to discern linwise/charwise/blockwise yank (affects paste and new lines... i.e. yank word vs yank line(s) )
     -- ```
     vim.cmd("normal o") -- insert line after
     -- FYI don't need to worry about start of line comment in a markdown file when inserting a new codeblock, no concept of a comment AFAIK in markdown
