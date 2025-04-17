@@ -166,7 +166,12 @@ end, { noremap = true, silent = true })
 vim.keymap.set("n", "<leader>v", function()
     vim.cmd("normal o") -- insert line after
     vim.cmd("normal O") -- insert line before
-    vim.cmd("normal 0p`[v`]") -- insert clipboard
+    vim.cmd("normal 0p`[v`]=") -- 0 = jump line start, p = paste,
+    -- select text => `[ = jump paste start, v = visual mode, `] = jump paste end
+    -- re-indent => =
+    vim.cmd("normal `[v`]") -- reselect text so you can further modify it
+    -- FYI leaves text selected so you can further modify it
+    -- PRN format it?
 end, { noremap = true }) --   0p  - paste from register 0
 --   `[  - goto pasted text's start mark (start of last yanked/changed text)
 --   v   - charwise visual mode
@@ -177,7 +182,7 @@ vim.keymap.set("n", "<leader>vc", function()
     --   but if I call normal w/ same keys it works (so far):
     vim.cmd("normal o") -- insert line after
     vim.cmd("normal O") -- insert line before
-    vim.cmd("normal 0p`[v`]gc") -- insert clipboard, commented out
+    vim.cmd("normal 0p`[v`]gc") -- 0 = jump line start, p = paste, `[ = jump paste start, v = visual mode, `] = jump paste end, gc = toggle comment
     vim.cmd("normal gv=") -- then reindent (reselect, indent)
 end, { noremap = true }) -- " and comment it out (toggle comment)
 -- PRN I could drop vc and just get in habit of vgc which is nearly the same
