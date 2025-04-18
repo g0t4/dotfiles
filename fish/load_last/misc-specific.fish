@@ -464,8 +464,38 @@ if command -q kubectl
     abbr kxls 'kubectl config get-contexts'
     abbr kxv 'kubectl config view'
 
-    # rancher (et al)
+    # rancher resources (fully qualify when overlapping, i.e. clusters)
+    abbr kxu 'kubectl get users.management.cattle.io'
+    # maybes:
+    #  projects
+    #  plans.upgrade.cattle.io
+    #  clusters.management.cattle.io
     #
+    #   clustergroups
+    #   groups
+    #   groupmembers
+    #   globalroles
+    #   globalrolebindings
+    #   apps
+    #   clusterrepos
+    #   addons
+    #   nodes.management.cattle.io
+    #   preferences
+    #   settings
+    #
+    #
+    # fleet
+    #   gitrepos
+    #   bundles
+    #   contents
+    #   helmapps
+    #   fleetworkspaces
+    #
+    # helm
+    #   helmcharts
+    #   helmchartconfigs
+
+
 end
 
 if command -q dig
