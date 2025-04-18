@@ -465,7 +465,7 @@ if command -q kubectl
     abbr kxv 'kubectl config view'
 
     # rancher resources (fully qualify when overlapping, i.e. clusters)
-    abbr kxu 'kubectl get users.management.cattle.io'
+    abbr kgu 'kubectl get users.management.cattle.io'
     # maybes:
     #  projects
     #  plans.upgrade.cattle.io
