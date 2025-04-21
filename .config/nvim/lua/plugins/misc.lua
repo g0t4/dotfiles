@@ -7,13 +7,16 @@
 --       would this obviate the need for esc to exit to normal mode?
 --       or should I suck it up and learn to use <C-\><C-n> which is not the end of the world either? or remap it?
 vim.keymap.set('t', '<esc>', "<C-\\><C-n>", { desc = 'exit terminal' }) -- that way Esc in terminal mode allows exiting to normal mode, I hate doing ctrl-\,ctrl-n to do that
-vim.keymap.set("n", "<leader>cd", function()
+
+
+
+-- ** coc actions exploration... wanna see how I can use this for predictions, etc
+vim.keymap.set("n", "<leader>xd", function()
     -- working actions/commands:
     BufferDump(vim.fn["CocAction"]("commands"))
     -- vim.cmd["CocCommand"]("lua.version") -- prints output
-
 end)
-vim.keymap.set("n", "<leader>cs", function()
+vim.keymap.set("n", "<leader>xs", function()
     vim.fn["CocActionAsync"]("documentSymbols", function(err, result)
         -- PRN handle err?
         BufferDump(result)
@@ -26,14 +29,6 @@ function _BufferDumpTest()
     BufferDump(splitted, splitted)
 end
 
-function BufferDump(...)
-    _BufferDump(false, ...)
-end
-
-function BufferDumpAppend(...)
-    _BufferDump(true, ...)
-end
-
 local function is_buffer_visible(bufnr)
     for _, win in ipairs(vim.api.nvim_list_wins()) do
         if vim.api.nvim_win_get_buf(win) == bufnr then
@@ -41,6 +36,14 @@ local function is_buffer_visible(bufnr)
         end
     end
     return false
+end
+
+function BufferDump(...)
+    _BufferDump(false, ...)
+end
+
+function BufferDumpAppend(...)
+    _BufferDump(true, ...)
 end
 
 local dump_bufnr = nil
