@@ -183,15 +183,14 @@ vim.keymap.set("n", "gcl", function()
 end, { expr = true })
 
 function toggle_linewise_comments_operator_func()
+    local _comment = require('vim._comment')
+
     -- [bufnum, lnum, col, off]
     local start = vim.fn.getpos("'[")
     local finish = vim.fn.getpos("']")
     -- vim.print(start, finish)
     local start_line = start[2]
     local finish_line = finish[2]
-
-    local _comment = require('vim._comment')
-
     for line = start_line, finish_line do
         _comment.toggle_lines(line, line)
     end
