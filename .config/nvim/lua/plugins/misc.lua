@@ -33,14 +33,16 @@ function BufferDump(...)
     local args = { ... }
     local lines = {}
     for _, arg in ipairs(args) do
-        -- assume each arg is an array of lines, or a string
-        -- TLDR flatten array of arrays/strings into a single array of lines
-        if type(arg) == "table" then
-            for _, line in ipairs(arg) do
+        if type(arg) == "string" then
+            -- leave strings as is
+            table.insert(lines, arg)
+        else
+            -- inspect everything else (tables, etc)
+            local inspected = vim.inspect(arg)
+            local splitted = vim.split(inspected, "\n")
+            for _, line in ipairs(splitted) do
                 table.insert(lines, line)
             end
-        else
-            table.insert(lines, arg)
         end
     end
 
