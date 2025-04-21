@@ -193,9 +193,8 @@ function toggle_linewise_comments_operator_func()
     local _comment = require('vim._comment')
 
     for line = start_line, finish_line do
-        -- PRN what would passing cursor positon as 3rd arg do?
-        --    IIAC only when var == line w/ cursor?
-        --    see ~/repos/github/g0t4/dotfiles/.config/nvim/lua/keymaps.lua
         _comment.toggle_lines(line, line)
     end
+
+    -- FYI there is a 3rd arg for cursor position, not using it so far
 end
