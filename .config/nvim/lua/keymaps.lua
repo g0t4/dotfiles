@@ -168,3 +168,32 @@ vim.cmd [[
 
     " TODO learn more about when/why to use selectmode vs visual mode, have to `:set selectmode=mouse` or key/cmd ... by default its empty for my config
 ]]
+
+
+-- define gcl (l == linewise) operator (waits for a motion to select lines to apply to)
+vim.keymap.set("x", "gcl", function()
+    vim.o.operatorfunc = "v:lua.toggle_linewise_comments"
+    return "g@"
+end, { expr = true })
+vim.keymap.set("n", "gcl", function()
+    vim.o.operatorfunc = "v:lua.toggle_linewise_comments"
+    return "g@"
+end, { expr = true })
+
+function toggle_linewise_comments()
+    -- [bufnum, lnum, col, off]
+    local start = vim.fn.getpos("'[")
+    local finish = vim.fn.getpos("']")
+    -- vim.print(start, finish)
+    local start_line = start[2]
+    local finish_line = finish[2]
+
+    local _comment = require('vim._comment')
+
+    for line = start_line, finish_line do
+        -- PRN what would passing cursor positon as 3rd arg do?
+        --    IIAC only when var == line w/ cursor?
+        --    see ~/repos/github/g0t4/dotfiles/.config/nvim/lua/keymaps.lua
+        _comment.toggle_lines(line, line)
+    end
+end
