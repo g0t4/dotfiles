@@ -8,6 +8,48 @@
 --       or should I suck it up and learn to use <C-\><C-n> which is not the end of the world either? or remap it?
 vim.keymap.set('t', '<esc>', "<C-\\><C-n>", { desc = 'exit terminal' }) -- that way Esc in terminal mode allows exiting to normal mode, I hate doing ctrl-\,ctrl-n to do that
 
+function _BufferDumpTest()
+    local inspected = vim.inspect({ a = "foo", b = "bar" })
+    splitted = vim.split(inspected, "\n")
+    BufferDump(splitted, splitted)
+end
+
+local dump_bufnr = nil
+function BufferDump(...)
+    -- TODO use with existing Dump?
+    -- dump into a buffer instead of print/echo/etc
+    --    that way I don't need to use `:mess` (and `:mess clear`, etc)
+
+    if dump_bufnr == nil then
+        dump_bufnr = vim.api.nvim_create_buf(false, true)
+    end
+
+    -- ensure buffer is visible
+    -- vim.api.nvim_win_set_buf(0, bufnr)
+    -- ? only if not already visible? I don't wannt split every time into a new buffer do I?
+    vim.api.nvim_command("vsplit")
+    vim.api.nvim_win_set_buf(0, dump_bufnr)
+
+    local args = { ... }
+    local lines = {}
+    for _, arg in ipairs(args) do
+        -- assume each arg is an array of lines, or a string
+        -- TLDR flatten array of arrays/strings into a single array of lines
+        if type(arg) == "table" then
+            for _, line in ipairs(arg) do
+                table.insert(lines, line)
+            end
+        else
+            table.insert(lines, arg)
+        end
+    end
+
+    -- overwrite buffer w/ lines
+    -- ? append instead of ovewrite?
+    vim.api.nvim_buf_set_lines(dump_bufnr, 0, -1, false, lines)
+    -- move cursor to bottom of buffer
+    vim.api.nvim_win_set_cursor(0, { #lines, 0 })
+end
 
 -- *** switch windows (leave terminal window)
 -- TODO figure out if I wanna do smth besides click out of a terminal...
