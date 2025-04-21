@@ -171,10 +171,12 @@ vim.cmd [[
 
 -- [<count>]gcl<motion>
 -- define gcl (l == linewise) operator (waits for a motion to select lines to apply to)
+
 vim.keymap.set("x", "gcl", function()
     vim.o.operatorfunc = "v:lua.toggle_linewise_comments_operator_func"
     return "g@"
 end, { expr = true })
+
 vim.keymap.set("n", "gcl", function()
     vim.o.operatorfunc = "v:lua.toggle_linewise_comments_operator_func"
     return "g@"
