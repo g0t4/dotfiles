@@ -7,6 +7,18 @@
 --       would this obviate the need for esc to exit to normal mode?
 --       or should I suck it up and learn to use <C-\><C-n> which is not the end of the world either? or remap it?
 vim.keymap.set('t', '<esc>', "<C-\\><C-n>", { desc = 'exit terminal' }) -- that way Esc in terminal mode allows exiting to normal mode, I hate doing ctrl-\,ctrl-n to do that
+vim.keymap.set("n", "<leader>cd", function()
+    -- working actions/commands:
+    BufferDump(vim.fn["CocAction"]("commands"))
+    -- vim.cmd["CocCommand"]("lua.version") -- prints output
+
+end)
+vim.keymap.set("n", "<leader>cs", function()
+    vim.fn["CocActionAsync"]("documentSymbols", function(err, result)
+        -- PRN handle err?
+        BufferDump(result)
+    end)
+end)
 
 function _BufferDumpTest()
     local inspected = vim.inspect({ a = "foo", b = "bar" })
@@ -14,8 +26,25 @@ function _BufferDumpTest()
     BufferDump(splitted, splitted)
 end
 
-local dump_bufnr = nil
 function BufferDump(...)
+    _BufferDump(false, ...)
+end
+
+function BufferDumpAppend(...)
+    _BufferDump(true, ...)
+end
+
+local function is_buffer_visible(bufnr)
+    for _, win in ipairs(vim.api.nvim_list_wins()) do
+        if vim.api.nvim_win_get_buf(win) == bufnr then
+            return true
+        end
+    end
+    return false
+end
+
+local dump_bufnr = nil
+function _BufferDump(append, ...)
     -- TODO use with existing Dump?
     -- dump into a buffer instead of print/echo/etc
     --    that way I don't need to use `:mess` (and `:mess clear`, etc)
@@ -26,9 +55,10 @@ function BufferDump(...)
 
     -- ensure buffer is visible
     -- vim.api.nvim_win_set_buf(0, bufnr)
-    -- ? only if not already visible? I don't wannt split every time into a new buffer do I?
-    vim.api.nvim_command("vsplit")
-    vim.api.nvim_win_set_buf(0, dump_bufnr)
+    if not is_buffer_visible(dump_bufnr) then
+        vim.api.nvim_command("vsplit")
+        vim.api.nvim_win_set_buf(0, dump_bufnr)
+    end
 
     local args = { ... }
     local lines = {}
@@ -46,11 +76,15 @@ function BufferDump(...)
         end
     end
 
-    -- overwrite buffer w/ lines
-    -- ? append instead of ovewrite?
-    vim.api.nvim_buf_set_lines(dump_bufnr, 0, -1, false, lines)
+    if append then
+        vim.api.nvim_buf_set_lines(dump_bufnr, -1, -1, false, lines)
+    else
+        -- overwrite
+        vim.api.nvim_buf_set_lines(dump_bufnr, 0, -1, false, lines)
+    end
+
     -- move cursor to bottom of buffer
-    vim.api.nvim_win_set_cursor(0, { #lines, 0 })
+    vim.api.nvim_feedkeys("G", "n", true)
 end
 
 -- *** switch windows (leave terminal window)
