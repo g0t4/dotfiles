@@ -138,6 +138,11 @@ if test -d "$HOME/.rd/bin"
     export PATH="$PATH:$HOME/.rd/bin"
 end
 
+if test -d "$HOME/bin"
+    # i.e. fennel-ls
+    export PATH="$PATH:$HOME/bin"
+end
+
 # /opt/watchman/bin/
 if test -d /opt/watchman/bin
     export PATH="$PATH:/opt/watchman/bin"
