@@ -185,22 +185,11 @@
         "fennel": {
             // "enable": false,
 
-            // todo how do I at least tell it not to bitch about vim global?
-
             "command": "fennel-ls", --
-            // luarocks install fennel-ls
-            // https://git.sr.ht/~xerool/fennel-ls/tree/main/docs/installation.md
-            // config:
-            //   example: https://github.com/neovim/nvim-lspconfig/blob/master/lsp/fennel_ls.lua
-            //   https://git.sr.ht/~xerool/fennel-ls/tree/HEAD/docs/manual.md#configuration
-            //      IIUC only goes into flsproject.fnl at root of project
-            //     how do these map to this json config?
-            //
-            // Yes docsets!
-            //   https://wiki.fennel-lang.org/LanguageServer
-            //   curl -o $HOME/.local/share/fennel-ls/docsets/nvim.lua https://git.sr.ht/~micampe/fennel-ls-nvim-docs/blob/main/nvim.lua
+            // see flsproject.fnl for config and notes to install, including docsets for neovim
 
 
+            // this one AFAICT has no ability to help w/ vim APIs (yuck):
             // "command": "fennel-language-server", --
             // // cargo install --git https://github.com/rydesun/fennel-language-server
 

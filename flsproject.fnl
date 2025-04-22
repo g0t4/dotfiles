@@ -6,6 +6,12 @@
 ;   btw repo keys:
 ;     https://man.sr.ht/git.sr.ht/#ssh-host-keys:
 ;
+;   https://git.sr.ht/~xerool/fennel-ls/tree/HEAD/docs/manual.md#configuration
+;
+;   Yes docsets!
+;     https://wiki.fennel-lang.org/LanguageServer
+;     curl -o $HOME/.local/share/fennel-ls/docsets/nvim.lua https://git.sr.ht/~micampe/fennel-ls-nvim-docs/blob/main/nvim.lua
+
 ;
 ;{:fennel-path "./?.fnl;./?/init.fnl;src/?.fnl;src/?/init.fnl"
 ; :macro-path "./?.fnl;./?/init-macros.fnl;./?/init.fnl;src/?.fnl;src/?/init-macros.fnl;src/?/init.fnl"
