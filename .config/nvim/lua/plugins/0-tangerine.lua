@@ -29,11 +29,20 @@ return {
                 -- },
                 compiler = {
                     verbose = false, -- default = true (I hate the windows, other than to know it worked, which can happen some other way than stealing my focus/cursor)
+                    -- FYI still shows errors in a float window, which is fine
+                    float = false, -- dont show results in floating window (prints instead, I like that... that said lately I've been thinking about using my own buffer/window to capture/dump output to refer to cuz I hate the :messages (history) UX
 
                     -- onsave = literally on save fennel file, compile it
                     -- oninit = when start nvim (or presumably call setup, as in here)
                     hooks = { "onsave", "oninit" },
+
+                    -- globals = vim.tbl_keys(_G), -- allowed globals (default)
+
+
                 },
+
+                eval = {
+                }
             }
         end,
         lazy = false,
