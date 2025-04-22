@@ -17,8 +17,13 @@ return {
                 -- config defaults:
                 --    https://github.com/udayvir-singh/tangerine.nvim#default-config
 
-                -- ok this puts files into ~/.local/share/nvim/tangerine (sounds good to me!)
+                -- vimrc = nvim_dir .. "/init.fnl", -- I'd need to re-engineer loading tangerine me thinks to use it for init.fnl... and I don't give a F about doing that any time soon
+
+                -- source = nvim_dir .. "/fnl", -- default
+
+                -- puts files into ~/.local/share/nvim/tangerine (sounds good to me!)
                 target = vim.fn.stdpath [[data]] .. "/tangerine",
+
                 -- rtpdirs = {
                 --     "fnl",
                 --     -- "$HOME/mydir" -- absolute paths are also supported
