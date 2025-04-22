@@ -181,6 +181,20 @@
                 }
             }
         },
+
+        "fennel": {
+            // cargo install --git https://github.com/rydesun/fennel-language-server
+            "command": "fennel-language-server",
+            "filetypes": [ "fennel" ],
+            //  add rootPatterns b/c fennel doesn't have the equiv of say packages.json
+            // "rootPatterns": [
+            //     ".vim/",
+            //     ".git/",
+            //     ".hg/"
+            // ],
+            "trace.server": "verbose", // woa I didn't know this existed?!
+        },
+
     },
     "snippets.ultisnips.pythonPrompt": false,
 
