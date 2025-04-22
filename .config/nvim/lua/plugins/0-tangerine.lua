@@ -53,12 +53,11 @@ return {
         config = function()
             require("tangerine").setup {
                 -- target = vim.fn.stdpath [[data]] .. "/tangerine",
-                rtpdirs = {
-                    "fnl",
-                    -- "$HOME/mydir" -- absolute paths are also supported
-                },
+                -- rtpdirs = {
+                --     "fnl",
+                --     -- "$HOME/mydir" -- absolute paths are also supported
+                -- },
                 compiler = {
-
                     -- verbose = true, -- ??
                     hooks = { "onsave", "oninit" },
                 },
