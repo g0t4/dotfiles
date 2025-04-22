@@ -38,6 +38,7 @@ if command -q nvim
     ln -f -s $dotfiles_dir/.config/nvim/init.lua $HOME/.config/nvim/init.lua
     # FYI for directory symlinks, use only . on the end, else can end up with a symlink loop (nested symlink is created if exist already)
     ln -f -s $dotfiles_dir/.config/nvim/lua $HOME/.config/nvim/. # DIR SYMLINK
+    ln -f -s $dotfiles_dir/.config/nvim/fnl $HOME/.config/nvim/. # DIR SYMLINK
     ln -f -s $dotfiles_dir/.config/nvim/queries $HOME/.config/nvim/. # DIR SYMLINK
     # ln -s $dotfiles_dir/.config/nvim/spell $HOME/.config/nvim/spell # PRN add this
     ln -f -s $dotfiles_dir/.config/nvim/ftplugin $HOME/.config/nvim/. # DIR SYMLINK
