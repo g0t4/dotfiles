@@ -29,7 +29,7 @@ return {
                 --     -- "$HOME/mydir" -- absolute paths are also supported
                 -- },
                 compiler = {
-                    -- verbose = true, -- ??
+                    verbose = false, -- default = true (I hate the windows, other than to know it worked, which can happen some other way than stealing my focus/cursor)
                     hooks = { "onsave", "oninit" },
                 },
             }
