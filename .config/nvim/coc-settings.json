@@ -183,8 +183,13 @@
         },
 
         "fennel": {
-            // cargo install --git https://github.com/rydesun/fennel-language-server
-            "command": "fennel-language-server",
+            // "enable": false,
+            "command": "fennel-ls", --
+            // luarocks install fennel-ls
+
+            // "command": "fennel-language-server", --
+            // // cargo install --git https://github.com/rydesun/fennel-language-server
+
             "filetypes": [ "fennel" ],
             //  add rootPatterns b/c fennel doesn't have the equiv of say packages.json
             // "rootPatterns": [
