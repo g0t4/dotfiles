@@ -28,6 +28,8 @@ return {
                 notification = false,  -- don't notify for disabled/restricted keys, i.e. down disabled, OR hit j repeatedly...
                 hint = true,           -- explicit that I want hints for now... i.e. `cw` instead of `dwi`
 
+                timeout = 100, -- somehow actual delay seems to be like 1 or 2 seconds more than this value?!
+
                 -- mouse considerations:
                 disable_mouse = false,
                 -- I missed occasional window resizing, yes I need to keymap that
