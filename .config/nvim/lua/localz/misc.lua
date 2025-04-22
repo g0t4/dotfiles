@@ -22,18 +22,6 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 
--- *** :Dump vim.g.foo
--- TODO completion for <args>, lua expression completion
--- Am I the only who hates typing :lua print(vim.inspect(...))?
-vim.api.nvim_create_user_command('Dump', "lua print(vim.inspect(<args>))", {
-    nargs = '*',
-    complete = "lua", -- completes like using :lua command
-})
--- vim.cmd [[
---     command! -nargs=1 -complete=lua Dump lua print(vim.inspect(<args>))
--- ]]
---
-
 -- TODO can I use nvim-dap / nvim-dap-virtual-text / etc to debug lua/vimscript running in nvim?
 function stop_watching()
     if _G.timer then

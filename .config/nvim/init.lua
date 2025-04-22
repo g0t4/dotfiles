@@ -1,12 +1,13 @@
 -- before plugin loader
 require("early")
+require('helpers.dump')
 
 require("bootstrap-lazy")
 
 -- after plugin loader
 require('localz.filetypemods') -- before werkspace else filetype mods dont fire
-require("werkspace")
-require("localz.github-links")
+require('werkspace')
+require('localz.github-links')
 require('localz.misc')
 require('keymaps')
 require('localz.clippy')
