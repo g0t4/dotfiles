@@ -41,7 +41,14 @@ return {
 
                 },
 
+                -- PRN try iron.nvim for general fennel REPL? (won't have vim APIs though)
+                --     luarocks install fennel
+
                 eval = {
+                    -- this allows testing with vim APIs
+                    -- gE = eval buffer
+                    -- gL = peek lua for buffer
+                    -- gO = go to compiled lua file
                 }
             }
         end,
@@ -55,5 +62,11 @@ return {
 -- brew install fnlfmt
 -- https://fennel-lang.org/see  -- lua => fnl
 -- LS front:
---   ouch apparently fennel-language-server doesn't support vim APIs (yet?)
---   https://git.sr.ht/~xerool/fennel-ls - not sure if it does or not, written in fennel
+--   fennel-language-server
+--     apparently? doesn't support vim APIs (yet?)
+--     cargo install --git https://github.com/rydesun/fennel-language-server
+--     s/b fast, right? native binary?
+--   https://git.sr.ht/~xerool/fennel-ls
+--     does this support vim APIs?
+--     pure fennel, suggests to me gonna be slow? or does it compile to a binary?
+
