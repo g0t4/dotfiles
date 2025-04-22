@@ -1,7 +1,10 @@
 ; https://git.sr.ht/~xerool/fennel-ls/tree/HEAD/docs/manual.md#configuration
 ;   see this page about downloading docsets and config below...
 ;   i.e. ~/.local/share/fennel-ls/docsets/nvim.lua
-;   crap I bet the version from luarocks is too old to use docsets!
+;   YUP it was too old from luarocks, use the repo to install it (build / user install):
+;     https://git.sr.ht/~xerool/fennel-ls/tree/main/docs/installation.md
+;   btw repo keys:
+;     https://man.sr.ht/git.sr.ht/#ssh-host-keys:
 ;
 ;
 ;{:fennel-path "./?.fnl;./?/init.fnl;src/?.fnl;src/?/init.fnl"
