@@ -9,7 +9,6 @@
 return {
     {
         -- FYI I just put this together myself and its working so far, mostly guess work
-        --   right now it compiles to lua on save, which is fine
         --
         "udayvir-singh/tangerine.nvim",
         config = function()
@@ -30,6 +29,9 @@ return {
                 -- },
                 compiler = {
                     verbose = false, -- default = true (I hate the windows, other than to know it worked, which can happen some other way than stealing my focus/cursor)
+
+                    -- onsave = literally on save fennel file, compile it
+                    -- oninit = when start nvim (or presumably call setup, as in here)
                     hooks = { "onsave", "oninit" },
                 },
             }
