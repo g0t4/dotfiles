@@ -281,6 +281,19 @@ local plugin_nvim_cmp = {
     },
 }
 
+-- ** coc actions exploration... wanna see how I can use this for predictions, etc
+vim.keymap.set("n", "<leader>xd", function()
+    -- working actions/commands:
+    BufferDump(vim.fn["CocAction"]("commands"))
+    -- vim.cmd["CocCommand"]("lua.version") -- prints output
+end)
+vim.keymap.set("n", "<leader>xs", function()
+    vim.fn["CocActionAsync"]("documentSymbols", function(err, result)
+        -- PRN handle err?
+        BufferDump(result)
+    end)
+end)
+
 return {
     plugin_coc,
     plugin_lspconfig,
