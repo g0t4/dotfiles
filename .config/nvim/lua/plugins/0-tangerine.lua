@@ -51,7 +51,10 @@ return {
                     -- gO = go to compiled lua file
                 }
             }
-            require("coc")
+
+            -- TODO setup as plugins w/ dep to tangerine?
+            require("coc-mods")
+
         end,
         lazy = false,
         priority = 1000,
