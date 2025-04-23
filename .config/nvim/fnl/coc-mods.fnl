@@ -16,6 +16,13 @@
                                          (fn cb_ [err_ result]
                                            ;(vim.print result)))))
                                            (each [_ v (pairs result)]
-                                             (case v.detail
+                                             ;(case ["foo " "bar" "bam"]
+                                             (case [v.detail]
                                                nil :ignore-this
-                                               a (vim.print a)))))))
+                                               [a & b] (and
+                                                      (vim.print "table!")
+                                                      (vim.print a)
+                                                      (vim.print b)
+                                                      )
+                                               _a :ignore-this-too))))))
+                                               ;a (vim.print a)))))))
