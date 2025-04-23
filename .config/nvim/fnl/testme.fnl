@@ -1,3 +1,6 @@
+; FYI quick ref https://fennel-lang.org/reference
+;
+;
 ;(print "jerkwad")
 (vim.print "ifoo")
 (fn foo [] "this does your mother a favour" (print "foo"))
@@ -25,3 +28,5 @@
   (let [msg (.. "key: " k " => value: " v)]
     (vim.print msg)
     ))
+
+
