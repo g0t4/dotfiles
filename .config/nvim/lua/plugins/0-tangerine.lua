@@ -51,6 +51,7 @@ return {
                     -- gO = go to compiled lua file
                 }
             }
+            require("coc")
         end,
         lazy = false,
         priority = 1000,
