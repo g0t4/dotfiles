@@ -95,13 +95,27 @@ vim.cmd [[
     "   PRN I could redefine h/help to call vert h... and then set command-complete too to make completion work
     " only downside is trying to use H alone in a command line also expands, can use Ctrl+V=>Space to avoid expanding it
     "
-    " vertical split help:
-    cnoreabbrev h vert h
-    " TODO only expand IF not already expanded at start of command line?
+    " * vertical split help:
+    " - always expand, anywhere in cmdline:
+    " cnoreabbrev h vert h
+    " i.e:    foo h<SPACE> => foo vert h  (YUCK)
     "
-    " horiz split (or otherwise not prepend vert)
-    cnoreabbrev H h
+    " - donesn't double expand:
+    "cabbrev <expr> h getcmdtype() == ':' && getcmdline() == 'h' ? 'vert h' : 'h'
+    "... IIAC won't work in some cases, if smth comes before h ... not sure that would ever happen, hasn't yet for me
+    "
+    "   FYI could call lua in an VimL expression (like <expr> ex above):
+    "      cabbrev <expr> h v:lua.MyHelpAbbrev()
+    "      function MyHelpAbbrev() ... end
+
+    " * horiz split (or otherwise not prepend vert)
+    "cnoreabbrev H h
     " TODO this all feels wrong, but works for now maybe
+
+
+    " FYI can use abbrs to fix common casing mistakes?
+    " cnoreabbrev DUmp Dump
+    "  could I map a regex or smth so I can match any combo of cases, in effect make my Dump command case insensitive for activation?
 ]]
 --
 -- ALTERNATIVE works fine too:
