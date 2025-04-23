@@ -287,12 +287,12 @@ vim.keymap.set("n", "<leader>xd", function()
     BufferDump(vim.fn["CocAction"]("commands"))
     -- vim.cmd["CocCommand"]("lua.version") -- prints output
 end)
-vim.keymap.set("n", "<leader>xs", function()
-    vim.fn["CocActionAsync"]("documentSymbols", function(err, result)
-        -- PRN handle err?
-        BufferDump(result)
-    end)
-end)
+-- vim.keymap.set("n", "<leader>xs", function()
+--     vim.fn["CocActionAsync"]("documentSymbols", function(err, result)
+--         -- PRN handle err?
+--         BufferDump(result)
+--     end)
+-- end)
 
 return {
     plugin_coc,
