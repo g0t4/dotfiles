@@ -111,7 +111,7 @@ vim.api.nvim_create_user_command('TroubleshootOptions', function()
     -- expandtab == true => insert spaces for tabs (used w/ < > commands and when autoindent=on)
     --
     print(
-    -- print first so it doesn't show unless :messages
+        -- print first so it doesn't show unless :messages
         "wrap:" .. tostring(vim.o.wrap),
         "wrapmargin:" .. tostring(vim.o.wrapmargin),
         "textwidth:" .. tostring(vim.o.textwidth),
@@ -310,9 +310,9 @@ vim.api.nvim_create_autocmd("FileType", {
             --   b/c its all or none for the full buffer contents...
             --   but, b/c the interface is gg=G (or otherwise) I am stuck waiting on motion
 
-                vim.o.operatorfunc = "v:lua.fennel_fmt"
-                return "g@"
-            end,
+            vim.o.operatorfunc = "v:lua.fennel_fmt"
+            return "g@"
+        end,
             { expr = true, buffer = true }) -- buffer=true => only override for current buffer (fennel file type)
     end,
 })
