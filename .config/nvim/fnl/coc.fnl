@@ -4,4 +4,4 @@
                   (vim.fn.CocActionAsync :documentSymbols
                                          (fn cb_ [err_ result]
                                            ;(vim.print result)))))
-                                           (BufferDump result)))))
+                                           (_G.BufferDump result)))))
