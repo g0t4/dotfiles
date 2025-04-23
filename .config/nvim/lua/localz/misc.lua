@@ -101,7 +101,7 @@ vim.cmd [[
     " i.e:    foo h<SPACE> => foo vert h  (YUCK)
     "
     " - donesn't double expand:
-    "cabbrev <expr> h getcmdtype() == ':' && getcmdline() == 'h' ? 'vert h' : 'h'
+    cabbrev <expr> h getcmdtype() == ':' && getcmdline() == 'h' ? 'vert h' : 'h'
     "... IIAC won't work in some cases, if smth comes before h ... not sure that would ever happen, hasn't yet for me
     "
     "   FYI could call lua in an VimL expression (like <expr> ex above):
