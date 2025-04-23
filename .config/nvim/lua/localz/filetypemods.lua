@@ -268,7 +268,21 @@ vim.api.nvim_create_autocmd("FileType", {
     end,
 })
 
+-- ** help buffers
+vim.api.nvim_create_autocmd("FileType", {
+    group = "filetypemods",
+    pattern = "help",
+    callback = function()
+        -- forward F12 to F1 ONLY in help buffer
+        --   remap=true => so this calls keymap for lhs=<F1>
+        --   buffer=true => only current (help) buffer
+        vim.keymap.set('', '<F12>', '<F1>', { remap = true, buffer = true })
+        -- equivalent:
+        --   :map <buffer> <F11> <F1>
+    end,
+})
 
+-- *** hcl
 vim.api.nvim_create_autocmd("FileType", {
     group = "filetypemods",
     pattern = "hcl",
