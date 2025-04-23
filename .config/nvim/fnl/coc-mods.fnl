@@ -16,6 +16,6 @@
                                          (fn cb_ [err_ result]
                                            ;(vim.print result)))))
                                            (each [_ v (pairs result)]
-                                             (vim.print v.detail)
-                                             )))))
-
+                                             (case v.detail
+                                               nil :ignore-this
+                                               a (vim.print a)))))))
