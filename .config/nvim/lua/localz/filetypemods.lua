@@ -294,7 +294,9 @@ vim.api.nvim_create_autocmd("FileType", {
 
 -- *** fennel
 function fennel_fmt()
-    print("ok")
+    -- FYI could use marks '[ and '] if fnlfmt supported formatting line range in overall file
+    -- for now gonna just format full buffer contents
+    vim.cmd("%!fnlfmt -")
 end
 
 vim.api.nvim_create_autocmd("FileType", {
@@ -302,6 +304,12 @@ vim.api.nvim_create_autocmd("FileType", {
     pattern = "fennel",
     callback = function()
         vim.keymap.set("n", '=', function()
+            -- unfortunately, fnlfmt doesn't support formatting a subset of lines (i.e. line range)...
+            --   nor can I just pass lines standalone...
+            --   so there's really no reason to wait for a motion...
+            --   b/c its all or none for the full buffer contents...
+            --   but, b/c the interface is gg=G (or otherwise) I am stuck waiting on motion
+
                 vim.o.operatorfunc = "v:lua.fennel_fmt"
                 return "g@"
             end,
