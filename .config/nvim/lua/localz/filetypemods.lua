@@ -290,3 +290,21 @@ vim.api.nvim_create_autocmd("FileType", {
         vim.bo.commentstring = "# %s"
     end,
 })
+
+
+-- *** fennel
+function fennel_fmt()
+    print("ok")
+end
+
+vim.api.nvim_create_autocmd("FileType", {
+    group = "filetypemods",
+    pattern = "fennel",
+    callback = function()
+        vim.keymap.set("n", '=', function()
+                vim.o.operatorfunc = "v:lua.fennel_fmt"
+                return "g@"
+            end,
+            { expr = true, buffer = true }) -- buffer=true => only override for current buffer (fennel file type)
+    end,
+})
