@@ -30,3 +30,10 @@
     ))
 
 
+; FYI select range of text to eval just that range... with gE
+(local test1 "foo")
+(vim.print test1)
+(local test1 "food")
+(vim.print test1)
+
+
