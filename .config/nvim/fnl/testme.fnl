@@ -21,6 +21,7 @@
 
 (each [k v (pairs config)]
   (vim.print k)
-  (let [msg (.. (.. (.. "key: " k) " => value: ") v)]
+  ;(let [msg (.. (.. (.. "key: " k) " => value: ") v)]
+  (let [msg (.. "key: " k " => value: " v)]
     (vim.print msg)
     ))
