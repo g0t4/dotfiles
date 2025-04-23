@@ -7,17 +7,17 @@
        :foo "bar"
        :boo "bam"
        :baz "bong"
-})
+       })
 
 (vim.print config)
 
 (local types [
-   "spicy"
-   "hot"
-   "sweet"
-   "sour"
-   "lame"
-   ])
+              "spicy"
+              "hot"
+              "sweet"
+              "sour"
+              "lame"
+              ])
 
 (each [k v (pairs config)]
   (vim.print k)
