@@ -10,3 +10,17 @@
 })
 
 (vim.print config)
+
+(local types [
+   "spicy"
+   "hot"
+   "sweet"
+   "sour"
+   "lame"
+   ])
+
+(each [k v (pairs config)]
+  (vim.print k)
+  (let [msg (.. (.. (.. "key: " k) " => value: ") v)]
+    (vim.print msg)
+    ))
