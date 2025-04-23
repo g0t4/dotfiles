@@ -10,3 +10,12 @@
                 (fn []
                   (_G.BufferDump (vim.fn.CocAction :commands))))
 
+(vim.keymap.set :n :<leader>xi
+                (fn []
+                  (vim.fn.CocActionAsync :documentSymbols
+                                         (fn cb_ [err_ result]
+                                           ;(vim.print result)))))
+                                           (each [_ v (pairs result)]
+                                             (vim.print v.detail)
+                                             )))))
+
