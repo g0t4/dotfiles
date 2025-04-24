@@ -3,8 +3,8 @@ local use_coc_completions = false
 local use_cmp_completions = false
 local use_nvim_0_11_completions = true
 -- cmdline/search completions:
-local use_cmp_cmdline_search = false -- make sure to enable wilder via its enabled property
-local use_nvim_0_11_cmdline_search = true -- IIAC this was added in 0.11 too?
+local use_cmp_cmdline_search = true -- make sure to enable wilder via its enabled property
+local use_nvim_0_11_cmdline_search = false -- IIAC this was added in 0.11 too?
 
 -- TODO! try standalone LSP in nvim 0.11! (completions, config, multi-client?, plus prev features, also LSP API looks good)
 

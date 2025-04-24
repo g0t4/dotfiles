@@ -4,6 +4,8 @@
 
 " OMG this is FAST!!!
 " verbatim copied from: https://github.com/neovim/neovim/issues/12428
+
+" BUT has some issues... Ctrl+P is selecting items when unique keys typed... show w/o select?
 function! OnCompletionDone(timer) abort
         let g:doing_update = 0
 endfunction
