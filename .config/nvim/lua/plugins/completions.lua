@@ -8,8 +8,6 @@ local use_nvim_0_11_completions = true
 local use_cmp_cmdline_search = true -- make sure to enable wilder via its enabled property
 local use_nvim_0_11_cmdline_search = false -- IIAC this was added in 0.11 too?
 
--- TODO! try standalone LSP in nvim 0.11! (completions, config, multi-client?, plus prev features, also LSP API looks good)
-
 local plugin_coc = {
     -- alternative but only has completions? https://neovimcraft.com/plugin/hrsh7th/nvim-cmp/ (example config: https://github.com/m4xshen/dotfiles/blob/main/nvim/nvim/lua/plugins/completion.lua)
     enabled = use_coc_completions,
@@ -131,7 +129,7 @@ local plugin_lspconfig = {
                     },
                     workspace = {
                         library = vim.api.nvim_get_runtime_file("", true), -- Make LSP aware of Neovim runtime files
-                        checkThirdParty = false,                           -- Prevent prompts for third-party library analysis
+                        checkThirdParty = false, -- Prevent prompts for third-party library analysis
                     },
                     telemetry = {
                         enable = false, -- Disable telemetry for privacy
@@ -288,6 +286,10 @@ local plugin_nvim_cmp = {
 
     },
 }
+
+if use_nvim_0_11_completions then
+    -- TODO! try standalone LSP in nvim 0.11! (completions, config, multi-client?, plus prev features, also LSP API looks good)
+end
 
 if use_nvim_0_11_cmdline_search then
     require("plugins.completions.nvim_cmdline_completions")
