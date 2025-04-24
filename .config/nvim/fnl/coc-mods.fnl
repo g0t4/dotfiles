@@ -1,3 +1,7 @@
+;
+; FYI if I want to keep any of this, I need to have it be dependent on toggles for which LSP client I am using (coc/cmp/nvim0.11)
+;  as well as the LSP
+
 ;vim.fn["CocActionAsync"]("documentSymbols", function(err, result)
 (vim.keymap.set :n :<leader>xs
                 (fn []
