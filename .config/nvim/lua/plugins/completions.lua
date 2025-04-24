@@ -1,8 +1,10 @@
--- boolean is simple way to toggle coc vs nvim-cmp
-local use_coc_completions = false
+--
+-- * insert mode completions:
+local use_coc_completions = true
 local use_cmp_completions = false
 local use_nvim_0_11_completions = true
--- cmdline/search completions:
+--
+-- * cmdline completions:
 local use_cmp_cmdline_search = true -- make sure to enable wilder via its enabled property
 local use_nvim_0_11_cmdline_search = false -- IIAC this was added in 0.11 too?
 
