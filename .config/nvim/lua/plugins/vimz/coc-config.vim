@@ -16,6 +16,7 @@ let g:coc_global_extensions = [
             \ 'coc-pyright',
             \ 'coc-rust-analyzer',
             \ 'coc-sh',
+            \ 'coc-snippets',
             \ 'coc-sqlfluff',
             \ 'coc-toml',
             \ 'coc-tsserver',
@@ -32,7 +33,6 @@ let g:coc_global_extensions = [
     " FYI coc-calc shows the range of what can be done... "1 + 2 = " and it suggests the result "3"
     " PRN https://github.com/iamcco/coc-diagnostic => generic integration of diagnostics tools (make LSP adapter for them, IIUC)
     " brew install zig zls " also consider https://github.com/ziglang/zig.vim
-    "\ 'coc-snippets', " TODO investigate .. probably just want copilot completions alone
     " BTW prettier formats (graphql, ...)
     " coc-sh (bash)
 
