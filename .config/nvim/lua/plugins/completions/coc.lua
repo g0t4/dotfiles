@@ -7,3 +7,5 @@
 -- vim.api.nvim_set_keymap('i', '<Left>', [[
 --     coc#jumpable(-1) ? '<C-r>=coc#rpc#request("snippetPrev", [])<CR>' : '<Left>'
 -- ]], { noremap = true, silent = true, expr = true })
+--
+-- TEST with: `writefi<ENTER>` in a python file, there are two snippet placeholders (filename and content)
