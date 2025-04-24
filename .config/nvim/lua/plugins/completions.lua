@@ -292,6 +292,7 @@ if use_nvim_0_11_completions then
 end
 
 if use_nvim_0_11_cmdline_search then
+    -- nvim had cmdline search (wildmenu, pum, etc...), is anything new for this in 0.11 (overlap with LSP completions?)
     require("plugins.completions.nvim_cmdline_completions")
 end
 
