@@ -2,6 +2,9 @@
 "
 " TODO review/modify this? I haven't yet taken time to understand and think through this for changes...
 
+" TODO :h cmdline-completion
+"   is there a key combo to just show w/o select? (like Tab but w/o complete thru all common chars of remaining options)
+
 " OMG this is FAST!!!
 " verbatim copied from: https://github.com/neovim/neovim/issues/12428
 
