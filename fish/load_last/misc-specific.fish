@@ -854,7 +854,12 @@ function z
     # FYI still uses z fish completions (b/c same name)
 
     # -- ensures $argv can have options to z (i.e. --clean)
-    if string match --quiet --regex "github.com" -- $argv
+    if string match --quiet --regex "https://(?<z_domain>[^/]+)/(?<z_repo>.+)" -- $argv
+        # TODO also work w/o https:// on front?
+        # echo $z_domain
+        # echo $z_repo
+        # that said... I am using --path-only below to map to a dir... so I don't need the capture groups
+
         # if a repo url then clone and/or cd to it
         set path (wcl --path-only $argv)
         if test -d $path
