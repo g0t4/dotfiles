@@ -287,6 +287,10 @@ local plugin_nvim_cmp = {
     },
 }
 
+if use_nvim_0_11_cmdline_search then
+    require("plugins.completions.nvim_cmdline_completions")
+end
+
 return {
     plugin_coc,
     plugin_lspconfig,
