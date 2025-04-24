@@ -1,6 +1,12 @@
 -- boolean is simple way to toggle coc vs nvim-cmp
-local use_coc_completions = true
-local use_cmp_cmdline_search = true -- make sure to enable wilder via its enabled property
+local use_coc_completions = false
+local use_cmp_completions = false
+local use_nvim_0_11_completions = true
+-- cmdline/search completions:
+local use_cmp_cmdline_search = false -- make sure to enable wilder via its enabled property
+local use_nvim_0_11_cmdline_search = true -- IIAC this was added in 0.11 too?
+
+-- TODO! try standalone LSP in nvim 0.11! (completions, config, multi-client?, plus prev features, also LSP API looks good)
 
 local plugin_coc = {
     -- alternative but only has completions? https://neovimcraft.com/plugin/hrsh7th/nvim-cmp/ (example config: https://github.com/m4xshen/dotfiles/blob/main/nvim/nvim/lua/plugins/completion.lua)
@@ -32,7 +38,7 @@ local plugin_coc = {
 -- would need to take coc-config.vim and replciate as much as it as is possible
 -- FYI also has cmdline completions, would be alternative to wilder/wildmenu?
 local plugin_lspconfig = {
-    enabled = not use_coc_completions,
+    enabled = use_cmp_completions,
     "neovim/nvim-lspconfig",
     config = function()
         local lspconfig = require("lspconfig")
@@ -147,7 +153,7 @@ local plugin_lspconfig = {
 }
 
 local plugin_nvim_cmp = {
-    enabled = true,
+    enabled = use_cmp_completions or use_cmp_cmdline_search,
     "hrsh7th/nvim-cmp",
     event = { "InsertEnter", "CmdlineEnter" }, -- https://github.com/hrsh7th/nvim-cmp/wiki/Example-mappings
     config = function()
@@ -280,19 +286,6 @@ local plugin_nvim_cmp = {
 
     },
 }
-
--- ** coc actions exploration... wanna see how I can use this for predictions, etc
--- vim.keymap.set("n", "<leader>xd", function()
---     -- working actions/commands:
---     BufferDump(vim.fn["CocAction"]("commands"))
---     -- vim.cmd["CocCommand"]("lua.version") -- prints output
--- end)
--- vim.keymap.set("n", "<leader>xs", function()
---     vim.fn["CocActionAsync"]("documentSymbols", function(err, result)
---         -- PRN handle err?
---         BufferDump(result)
---     end)
--- end)
 
 return {
     plugin_coc,
