@@ -1,0 +1,9 @@
+--
+-- * TODO try to setup snippets to tab through the parameters? I don't use these often so for now its ok to be "broken" b/c it just inserts defaulst then
+-- vim.api.nvim_set_keymap('i', '<Right>', [[
+--     coc#jumpable(1) ? '<C-r>=coc#rpc#request("snippetNext", [])<CR>' : '<Right>'
+-- ]], { noremap = true, silent = true, expr = true })
+--
+-- vim.api.nvim_set_keymap('i', '<Left>', [[
+--     coc#jumpable(-1) ? '<C-r>=coc#rpc#request("snippetPrev", [])<CR>' : '<Left>'
+-- ]], { noremap = true, silent = true, expr = true })
