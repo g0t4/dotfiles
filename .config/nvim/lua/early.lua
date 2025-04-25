@@ -1,13 +1,5 @@
 -- FYI these are mission critical things to have during a failure
 
--- FYI must have either wait:N or hit-enter, and history:N is always required
---  wait:N means show hit-enter for N seconds and then advance
---  hit-enter means stop on wrapped lines
---  THANK GOD this was added in v0.11...
-vim.cmd [[
-  set messagesopt=wait:0,history:1000
-]]
-
 -- timeoutlen = 1000 by default, always felt SLUGGISH... why did I not try to change this before!
 --   this affects overlapping keymaps:
 --   i.e. <S-k> and <S-k><S-k>
@@ -33,6 +25,12 @@ vim.o.timeoutlen = 300
 
 
 vim.cmd [[
+
+    " FYI must have either wait:N or hit-enter, and history:N is always required
+    " wait:N means show hit-enter for N seconds and then advance
+    " hit-enter means stop on wrapped lines
+    " THANK GOD this was added in v0.11...
+    set messagesopt=wait:0,history:1000
 
     " use venv specific to dotfiles repo for nvim purposes, double check with:
     "   :checkhealth provider.python
