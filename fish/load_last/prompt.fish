@@ -67,6 +67,14 @@ function prompt_login --description 'display user name for the prompt'
 end
 
 function prompt_pwd --description 'wes mod - name of the current dir only'
+    set -l color_cwd $fish_color_cwd
+    if functions -q fish_is_root_user; and fish_is_root_user
+        if set -q fish_color_cwd_root
+            set color_cwd $fish_color_cwd_root
+        end
+    end
+    echo -n -s (set_color $color_cwd)
+
     # if recording shorts, show a small prompt
     if set -q wes_recording_youtube_shorts_need_small_prompt
         return
@@ -111,16 +119,6 @@ function fish_prompt_modified --description 'Write out the prompt'
     set -q fish_color_status
     or set -g fish_color_status red
 
-    # Color the prompt differently when we're root
-    set -l color_cwd $fish_color_cwd
-    set -l suffix '>'
-    if functions -q fish_is_root_user; and fish_is_root_user
-        if set -q fish_color_cwd_root
-            set color_cwd $fish_color_cwd_root
-        end
-        set suffix '#'
-    end
-
     # Write status
     # - only if command was run in previous prompt
     # - GOAL: clear status (in prompt) simply by hitting ENTER (empty prompt), followed by CMD+K to clear screen too
@@ -154,7 +152,14 @@ function fish_prompt_modified --description 'Write out the prompt'
         #   - I don't like having it get in the way of typing my next command (ie prompt suddenly wider, then smaller)
         # FYI long ago I modified prompt to not show the prior command's exit code until the next command is run (that really drove me bonkers)
     end
-    echo -n -s (prompt_login)' ' (set_color $color_cwd) (prompt_pwd) $normal (fish_vcs_prompt) $normal $suffix " "
+
+    set -l suffix '>'
+    if functions -q fish_is_root_user; and fish_is_root_user
+        set suffix '#'
+    end
+
+    # leave $normal after components so they can add color:
+    echo -n -s (prompt_login)' ' (prompt_pwd) $normal (fish_vcs_prompt) $normal $suffix " "
 end
 
 # redefine (wrap)
