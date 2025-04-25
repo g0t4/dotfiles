@@ -15,13 +15,19 @@ function _BufferDumpTest()
     BufferDump(inspected, inspected)
 end
 
-local function is_buffer_visible(bufnr)
+local function window_id_for_buffer(bufnr)
     for _, win in ipairs(vim.api.nvim_list_wins()) do
         if vim.api.nvim_win_get_buf(win) == bufnr then
-            return true
+            return win
         end
     end
-    return false
+    -- no windows matched buffer #
+    return nil
+end
+
+local function is_buffer_visible(bufnr)
+    local window_id = window_id_for_buffer(bufnr)
+    return window_id ~= nil
 end
 
 local dump_bufnr = nil
@@ -73,6 +79,7 @@ local function buffer_dump(append, ...)
             table.insert(lines, line)
         end
     end
+    assert(dump_bufnr ~= nil)
 
     if append then
         vim.api.nvim_buf_set_lines(dump_bufnr, -1, -1, false, lines)
@@ -85,6 +92,7 @@ local function buffer_dump(append, ...)
     vim.api.nvim_feedkeys("G", "n", true)
 end
 
+--- FYI this only APPENDS (for now)
 function BufferDumpArray(array)
     -- pass an array table that explicitly should be dumped with one item per line
     -- otherwise, vim.inspect will collapse onto one line... perhaps vim.inspect has flags to pass?
@@ -111,8 +119,9 @@ function BufferDumpAppend(...)
     buffer_dump(true, ...)
 end
 
-function GetBufferDumpNumber()
+---@return integer|nil bufnr, integer|nil window_id
+function GetBufferDumpNumbers()
     ensure_buffer_is_open()
     -- for special cases where I just wanna reuse this buffer
-    return dump_bufnr
+    return dump_bufnr, window_id_for_buffer(dump_bufnr)
 end
