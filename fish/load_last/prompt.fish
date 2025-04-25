@@ -97,6 +97,18 @@ function prompt_pwd --description 'wes mod - name of the current dir only'
         return
     end
 
+    # if in repo root (not nested dir), then show org/repo
+    #   based on _pwd
+    set _rr (_repo_root)
+    if string match -q -r '(?<host_dir>.*/(bitbucket|github|gitlab))/(?<repo>.*)' $_rr
+        # make sure not in a nested dir
+        set prefix (git rev-parse --show-prefix 2>/dev/null)
+        if test $prefix = ""
+            echo -n -s (set_color cyan) $repo
+            return
+        end
+    end
+
     # ~ for home dir
     if string match -q "$HOME" $PWD
         echo -n -s "~"
