@@ -103,7 +103,7 @@ function prompt_pwd --description 'wes mod - name of the current dir only'
     if string match -q -r '(?<host_dir>.*/(bitbucket|github|gitlab))/(?<repo>.*)' $_rr
         # make sure not in a nested dir
         set prefix (git rev-parse --show-prefix 2>/dev/null)
-        if test $prefix = ""
+        if test "$prefix" = ""
             echo -n -s (set_color cyan) $repo
             return
         end
