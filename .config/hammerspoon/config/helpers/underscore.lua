@@ -1,6 +1,8 @@
 -- FYI based on https://github.com/mirven/underscore.lua/blob/master/lib/underscore.lua?
 --   but with my fixes/changes
 
+-- TODO! use vim.iter for nvim config... and perhaps port it, it feels like the right abstraction in my testing
+
 -- *** my own underscore impl
 -- define globally so I don't need to split out a module, or aggregate it into other helpers as a module
 local M = {}
