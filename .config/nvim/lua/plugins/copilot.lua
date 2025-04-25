@@ -22,7 +22,7 @@ local use_ai = {
 --   - looks promising (specifically says alternative to copilot.vim/tabnine-nvim)
 --   - formerly hfcc.nvim
 --   https://github.com/huggingface/llm.nvim
-local llm_nvim = {
+local llm_nvim_plugin = {
     enabled = vim.tbl_contains(use_ai, "llm.nvim"),
     "g0t4/llm.nvim",
     dir = "~/repos/github/g0t4/llm.nvim",
@@ -489,7 +489,7 @@ local avante =
     },
 }
 
-local llama_cpp_llama_vim = {
+local llama_cpp_llama_vim_plugin = {
     -- NOTES:
     -- llama-server fim args:
     --    https://github.com/ggerganov/llama.cpp/blob/8ac9f5d7/common/arg.cpp#L3148-L3164
@@ -623,8 +623,8 @@ if version.major == 0 and version.minor < 10 then
 end
 
 return {
-    llm_nvim,
-    llama_cpp_llama_vim,
+    llm_nvim_plugin,
+    llama_cpp_llama_vim_plugin,
     ask_openai_plugin,
 
     {
