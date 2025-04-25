@@ -1,4 +1,3 @@
-
 -- *** :Dump vim.g.foo
 -- TODO completion for <args>, lua expression completion
 -- Am I the only who hates typing :lua print(vim.inspect(...))?
@@ -34,6 +33,19 @@ function BufferDumpAppend(...)
     _BufferDump(true, ...)
 end
 
+vim.api.nvim_create_autocmd("VimLeavePre", {
+    callback = function()
+        -- FYI if this happens AFTER session save autocmd (also triggers on VimLeavePre) then the BufferDump will still restore...
+        --   lets deal with that if it happens as it will be obvious... for now the order works out fine
+        --   Alternative is to call this from werkspace VimLeavePre to ensure its called in right order
+        for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+            if vim.api.nvim_buf_get_name(buf):match("buffer_dump") then
+                vim.api.nvim_buf_delete(buf, { force = true })
+            end
+        end
+    end,
+})
+
 local dump_bufnr = nil
 function _BufferDump(append, ...)
     -- TODO use with existing Dump?
@@ -42,6 +54,7 @@ function _BufferDump(append, ...)
 
     if dump_bufnr == nil then
         dump_bufnr = vim.api.nvim_create_buf(false, true)
+        vim.api.nvim_buf_set_name(dump_bufnr, 'buffer_dump')
     end
 
     -- ensure buffer is visible
@@ -77,5 +90,3 @@ function _BufferDump(append, ...)
     -- move cursor to bottom of buffer
     vim.api.nvim_feedkeys("G", "n", true)
 end
-
-
