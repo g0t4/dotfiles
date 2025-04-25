@@ -26,6 +26,11 @@ end
 
 local dump_bufnr = nil
 
+function GetBufferDumpNumber()
+    -- for special cases where I just wanna reuse this buffer
+    return dump_bufnr
+end
+
 vim.api.nvim_create_autocmd("VimLeavePre", {
     callback = function()
         -- FYI if this happens AFTER session save autocmd (also triggers on VimLeavePre) then the BufferDump will still restore...
