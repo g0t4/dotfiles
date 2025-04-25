@@ -75,7 +75,7 @@ function prompt_pwd --description 'wes mod - name of the current dir only'
     # variable named
     # PRN flush out other scenarios like I have with ~/repos/github/g0t4/foo => gh:g0t4/foo
     if set -q show_verbose_prompt
-        echo -n -s $PWD
+        _pwd
         return
     end
 

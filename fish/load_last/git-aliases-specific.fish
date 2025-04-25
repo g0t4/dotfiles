@@ -124,6 +124,10 @@ function pwd --description "pwd for a repository => repo root in yellow + repo d
         echo -s (set_color normal) /
         return
     end
+    _pwd
+end
+
+function _pwd
 
     # FYI test w/ split pane in iterm2 (open lots of example paths, /, ~/, in a github repo, in nested repo dir) => use broadcast Cmd+Shift+I and send Cmd+K => pwd => command pwd  # compare results
     set _rr (_repo_root)
