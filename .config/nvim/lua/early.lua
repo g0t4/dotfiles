@@ -35,11 +35,15 @@ vim.cmd [[
     " ok wait:0 is not at all a fix for the issue.. b/c then all messages flash up (at least don't show them if its 0)... but there are plenty of messages I WANT to see and leave open...
     "   TODO just override printing messages and make my own implementation? based on message contents
     "     TODO better yet, route all messages to a diff interface that I make? I hate the little messages w/e it is... it's a terrible interface (not at all vim like)
+    " EVEN BETTER... can I just get this to not block startup?
+    "   I have never had a problem with hit-enter normally, just don't like that it blocks startup
     "   there s/b a way to say stop/block on errors... NOT block if line is longer than width of screen... WTF
     "   OMFG ... this applies to :messages too... WTGDF people?!??!!?!
     "         I can't use this if :messages is broken
     " wait:1000 is buggy too... first few times I run :messages it flickers and closes instantly... then later it respects my wait:1000
-    "set messagesopt=wait:1000,history:1000
+    "    also, it seems wait:0 is clearing message history? or?
+    "set messagesopt+=wait:0
+    "set messagesopt-=hit-enter
     " * discussion around messagesopt (still open) https://github.com/neovim/neovim/issues/1029
 
     " use venv specific to dotfiles repo for nvim purposes, double check with:
