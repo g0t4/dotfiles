@@ -26,23 +26,6 @@ end
 
 local dump_bufnr = nil
 
-function BufferDump(...)
-    _BufferDump(false, ...)
-end
-
-function BufferDumpClear()
-    if dump_bufnr == nil then
-        return
-    end
-    -- FYI doesn't matter if buffer is visible, just clear it even if hidden...
-    -- PRN if I want to make sure it shows too, then add that semantic, but for now clear alone is fine
-    vim.api.nvim_buf_set_lines(dump_bufnr, 0, -1, false, {})
-end
-
-function BufferDumpAppend(...)
-    _BufferDump(true, ...)
-end
-
 vim.api.nvim_create_autocmd("VimLeavePre", {
     callback = function()
         -- FYI if this happens AFTER session save autocmd (also triggers on VimLeavePre) then the BufferDump will still restore...
@@ -56,7 +39,7 @@ vim.api.nvim_create_autocmd("VimLeavePre", {
     end,
 })
 
-local function bufferEnsureOpen()
+local function ensure_buffer_is_open()
     -- create buffer first time
     if dump_bufnr == nil then
         dump_bufnr = vim.api.nvim_create_buf(false, true)
@@ -71,8 +54,8 @@ local function bufferEnsureOpen()
     end
 end
 
-function _BufferDump(append, ...)
-    bufferEnsureOpen()
+local function buffer_dump(append, ...)
+    ensure_buffer_is_open()
 
     -- TODO use with existing Dump?
     -- dump into a buffer instead of print/echo/etc
@@ -101,3 +84,21 @@ function _BufferDump(append, ...)
     -- move cursor to bottom of buffer
     vim.api.nvim_feedkeys("G", "n", true)
 end
+
+function BufferDump(...)
+    buffer_dump(false, ...)
+end
+
+function BufferDumpClear()
+    if dump_bufnr == nil then
+        return
+    end
+    -- FYI doesn't matter if buffer is visible, just clear it even if hidden...
+    -- PRN if I want to make sure it shows too, then add that semantic, but for now clear alone is fine
+    vim.api.nvim_buf_set_lines(dump_bufnr, 0, -1, false, {})
+end
+
+function BufferDumpAppend(...)
+    buffer_dump(true, ...)
+end
+
