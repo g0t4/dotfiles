@@ -85,6 +85,15 @@ local function buffer_dump(append, ...)
     vim.api.nvim_feedkeys("G", "n", true)
 end
 
+function BufferDumpArray(array)
+    -- pass an array table that explicitly should be dumped with one item per line
+    -- otherwise, vim.inspect will collapse onto one line... perhaps vim.inspect has flags to pass?
+    -- ** SUPER USEFUL vim.iter
+    vim.iter(array):each(function(_index, item)
+        BufferDumpAppend(item)
+    end)
+end
+
 function BufferDump(...)
     buffer_dump(false, ...)
 end
@@ -101,4 +110,3 @@ end
 function BufferDumpAppend(...)
     buffer_dump(true, ...)
 end
-
