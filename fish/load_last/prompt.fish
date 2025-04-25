@@ -67,13 +67,6 @@ function prompt_login --description 'display user name for the prompt'
 end
 
 function prompt_pwd --description 'wes mod - name of the current dir only'
-    set -l color_cwd $fish_color_cwd
-    if functions -q fish_is_root_user; and fish_is_root_user
-        if set -q fish_color_cwd_root
-            set color_cwd $fish_color_cwd_root
-        end
-    end
-    echo -n -s (set_color $color_cwd)
 
     # if recording shorts, show a small prompt
     if set -q wes_recording_youtube_shorts_need_small_prompt
@@ -85,6 +78,14 @@ function prompt_pwd --description 'wes mod - name of the current dir only'
         echo -n -s $PWD
         return
     end
+
+    set -l color_cwd $fish_color_cwd
+    if functions -q fish_is_root_user; and fish_is_root_user
+        if set -q fish_color_cwd_root
+            set color_cwd $fish_color_cwd_root
+        end
+    end
+    echo -n -s (set_color $color_cwd)
 
     # truncate long course paths
     if string match --regex -q "$HOME/repos/github/g0t4/private-course-rancher\$" $PWD
