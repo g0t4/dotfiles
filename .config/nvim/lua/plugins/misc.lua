@@ -433,6 +433,7 @@ return {
                         sh = {
                             -- command: either a table, or a func that returns a table
                             command = { "bash" },
+                            block_deviders = { "#%%" },
                         },
                         lua = {
                             command = { "lua" },
