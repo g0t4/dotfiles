@@ -11,9 +11,8 @@ vim.api.nvim_create_user_command('Dump', "lua print(vim.inspect(<args>))", {
 --
 
 function _BufferDumpTest()
-    local inspected = vim.inspect({ a = "foo", b = "bar" })
-    splitted = vim.split(inspected, "\n")
-    BufferDump(splitted, splitted)
+    local inspected = { a = "foo", b = "bar" }
+    BufferDump(inspected, inspected)
 end
 
 local function is_buffer_visible(bufnr)
