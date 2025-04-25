@@ -24,8 +24,19 @@ local function is_buffer_visible(bufnr)
     return false
 end
 
+local dump_bufnr = nil
+
 function BufferDump(...)
     _BufferDump(false, ...)
+end
+
+function BufferDumpClear()
+    if dump_bufnr == nil then
+        return
+    end
+    -- FYI doesn't matter if buffer is visible, just clear it even if hidden...
+    -- PRN if I want to make sure it shows too, then add that semantic, but for now clear alone is fine
+    vim.api.nvim_buf_set_lines(dump_bufnr, 0, -1, false, {})
 end
 
 function BufferDumpAppend(...)
@@ -45,7 +56,6 @@ vim.api.nvim_create_autocmd("VimLeavePre", {
     end,
 })
 
-local dump_bufnr = nil
 function _BufferDump(append, ...)
     -- TODO use with existing Dump?
     -- dump into a buffer instead of print/echo/etc
