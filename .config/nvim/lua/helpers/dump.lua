@@ -56,11 +56,8 @@ vim.api.nvim_create_autocmd("VimLeavePre", {
     end,
 })
 
-function _BufferDump(append, ...)
-    -- TODO use with existing Dump?
-    -- dump into a buffer instead of print/echo/etc
-    --    that way I don't need to use `:mess` (and `:mess clear`, etc)
-
+local function bufferEnsureOpen()
+    -- create buffer first time
     if dump_bufnr == nil then
         dump_bufnr = vim.api.nvim_create_buf(false, true)
         vim.api.nvim_buf_set_name(dump_bufnr, 'buffer_dump')
@@ -72,6 +69,14 @@ function _BufferDump(append, ...)
         vim.api.nvim_command("vsplit")
         vim.api.nvim_win_set_buf(0, dump_bufnr)
     end
+end
+
+function _BufferDump(append, ...)
+    bufferEnsureOpen()
+
+    -- TODO use with existing Dump?
+    -- dump into a buffer instead of print/echo/etc
+    --    that way I don't need to use `:mess` (and `:mess clear`, etc)
 
     local args = { ... }
     local lines = {}
