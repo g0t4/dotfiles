@@ -617,13 +617,8 @@ local ask_openai_plugin = {
     }
 }
 
-local zeta_nvim_plugin = {
-    "g0t4/zeta.nvim",
-    enabled = vim.tbl_contains(use_ai, "g0t4/zeta.nvim"),
-    -- event = { "CmdlineEnter", "InsertEnter" },
-    dir = "~/repos/github/g0t4/zeta.nvim",
-    opts = {},
-}
+local zeta_nvim_plugin = require("plugins.ai.zeta")
+zeta_nvim_plugin.enabled = vim.tbl_contains(use_ai, "g0t4/zeta.nvim")
 
 -- avante requires 0.10+
 local version = vim.version()
