@@ -559,6 +559,63 @@ local llama_cpp_llama_vim = {
     end,
 }
 
+local ask_openai_plugin = {
+    "g0t4/ask-openai.nvim",
+    enabled = vim.tbl_contains(use_ai, "ask-openai"),
+    -- event = { "CmdlineEnter", "InsertEnter" }, -- always load in advance for AskToolUse et al?
+    dir = "~/repos/github/g0t4/ask-openai.nvim",
+
+    -- *** copilot (default):
+    -- opts = {
+    --     -- verbose = true,
+    -- },
+
+    -- *** OpenAI + keychain:
+    -- opts = {
+    --     provider = function()
+    --         return require("ask-openai.config")
+    --             .get_key_from_stdout("security find-generic-password -s openai -a ask -w")
+    --     end,
+    --     -- verbose = true,
+    -- },
+
+    -- *** GROQ + keychain:
+    -- opts = {
+    --     -- model = "meta-llama/llama-4-scout-17b-16e-instruct",
+    --     model = "llama-3.2-90b-text-preview",
+    --     use_api_groq = true, -- easier
+    --     -- api_url = "https://api.groq.com/openai/v1/chat/completions", -- if not standard
+    --     provider = function()
+    --         return require("ask-openai.config")
+    --             .get_key_from_stdout("security find-generic-password -s groq -a ask -w")
+    --     end,
+    --     -- verbose = true,
+    -- },
+
+    -- *** ollama:
+    opts = {
+        provider = "keyless",
+        -- model = "llama3.2-vision:11b", -- ollama list
+        model = "qwen2.5-coder:7b-instruct-q8_0",
+        use_api_ollama = true,
+        api_url = "http://ollama:11434/v1/chat/completions",
+
+        verbose = true,
+
+        tmp = {
+            predictions = {
+                -- model = ? -- TODO control this here
+                enabled = false, -- turn off my predictions w/o disabling entire ask-openai plugin
+            },
+        },
+    },
+
+    dependencies = {
+        "nvim-lua/plenary.nvim",
+        "bjornbytes/rxlua", -- tentative for predictions only (i.e. debounce)
+    }
+}
+
 -- avante requires 0.10+
 local version = vim.version()
 if version.major == 0 and version.minor < 10 then
@@ -568,63 +625,8 @@ end
 return {
     llm_nvim,
     llama_cpp_llama_vim,
+    ask_openai_plugin,
 
-    {
-        "g0t4/ask-openai.nvim",
-        enabled = vim.tbl_contains(use_ai, "ask-openai"),
-        -- event = { "CmdlineEnter", "InsertEnter" }, -- always load in advance for AskToolUse et al?
-        dir = "~/repos/github/g0t4/ask-openai.nvim",
-
-        -- *** copilot (default):
-        -- opts = {
-        --     -- verbose = true,
-        -- },
-
-        -- *** OpenAI + keychain:
-        -- opts = {
-        --     provider = function()
-        --         return require("ask-openai.config")
-        --             .get_key_from_stdout("security find-generic-password -s openai -a ask -w")
-        --     end,
-        --     -- verbose = true,
-        -- },
-
-        -- *** GROQ + keychain:
-        -- opts = {
-        --     -- model = "meta-llama/llama-4-scout-17b-16e-instruct",
-        --     model = "llama-3.2-90b-text-preview",
-        --     use_api_groq = true, -- easier
-        --     -- api_url = "https://api.groq.com/openai/v1/chat/completions", -- if not standard
-        --     provider = function()
-        --         return require("ask-openai.config")
-        --             .get_key_from_stdout("security find-generic-password -s groq -a ask -w")
-        --     end,
-        --     -- verbose = true,
-        -- },
-
-        -- *** ollama:
-        opts = {
-            provider = "keyless",
-            -- model = "llama3.2-vision:11b", -- ollama list
-            model = "qwen2.5-coder:7b-instruct-q8_0",
-            use_api_ollama = true,
-            api_url = "http://ollama:11434/v1/chat/completions",
-
-            verbose = true,
-
-            tmp = {
-                predictions = {
-                    -- model = ? -- TODO control this here
-                    enabled = false, -- turn off my predictions w/o disabling entire ask-openai plugin
-                },
-            },
-        },
-
-        dependencies = {
-            "nvim-lua/plenary.nvim",
-            "bjornbytes/rxlua", -- tentative for predictions only (i.e. debounce)
-        }
-    },
     {
         "nvim-lua/plenary.nvim",
         config = function()
