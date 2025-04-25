@@ -67,19 +67,13 @@ function _BufferDump(append, ...)
     local args = { ... }
     local lines = {}
     for _, arg in ipairs(args) do
-        if type(arg) == "string" then
-            -- inspect string as is, just split on \n new lines
-            local splitted = vim.split(arg, "\n")
-            for _, line in ipairs(splitted) do
-                table.insert(lines, line)
-            end
-        else
-            -- inspect everything else (tables, etc)
-            local inspected = vim.inspect(arg)
-            local splitted = vim.split(inspected, "\n")
-            for _, line in ipairs(splitted) do
-                table.insert(lines, line)
-            end
+        if type(arg) ~= "string" then
+            -- inspect anything that isn't a string... inspect returns a string
+            arg = vim.inspect(arg)
+        end
+        splitted = vim.split(arg, "\n")
+        for _, line in ipairs(splitted) do
+            table.insert(lines, line)
         end
     end
 
