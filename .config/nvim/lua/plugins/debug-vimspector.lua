@@ -21,11 +21,16 @@ return {
                 " TODO keys to consider: https://puremourning.github.io/vimspector-web/#debugging
                 " TODO! finish reviewing checklist in debug-vimspector-checklist.vim (next to this file)
 
-                " always map these:
+                " * always map:
+                "  FYI yes I am probably abusing <LocalLeader> to map it all the time... for now I see it as "SecondaryLeader" until I incorporate the idea of LocalLeader better into my keymaps
                 nmap <F5> <Cmd>call vimspector#Launch()<CR>
-                " FYI :VimspectorLaunch does not respect "default" config property, always ask in my testing
-                nmap <silent> <LocalLeader>dt <Cmd>call vimspector#Reset()<CR>
+                " FYI :VimspectorLaunch cmd does not respect "default" config property, it must be passing args to Launch?
+                " FYI consider <LocalLeader>dt if you start using LocalLeader for other purposes
+                "   for now, given this is all I use LocalLeader for... I can reserve top level keymaps to simplify the "keymap namespace"
+                nmap <silent> <LocalLeader>t <Cmd>call vimspector#Reset()<CR>
                 " allow reset (close) vimspector anytime (buffer LocalLeader maps below are unmapped on stop, when debugger stops, i.e. run past end of program b/c had no breakpoints)
+                " FYI consider <LocalLeader>db
+                nmap <silent> <LocalLeader>b  <Cmd>call vimspector#ToggleBreakpoint()<CR>
 
 
                 " Custom mappings while debugging {{{
@@ -62,7 +67,6 @@ return {
                   nmap <silent> <buffer> <LocalLeader>dstop <Plug>VimspectorStop
                   " TODO can I override my F9 keymap for vimspector tab to call reset (which closes all windows, OR close all its windows, not just current window)?
 
-                  nmap <silent> <buffer> <LocalLeader>b  <Plug>VimspectorToggleBreakpoint
 
 
                   let s:mapped[ string( bufnr() ) ] = { 'modifiable': &modifiable }
@@ -97,8 +101,6 @@ return {
                         silent! xunmap <buffer> <LocalLeader>di
                         silent! xunmap <buffer> <LocalLeader>dre
                         silent! xunmap <buffer> <LocalLeader>dstop
-
-                        silent! xunmap <buffer> <LocalLeader>b
 
                         let &l:modifiable = s:mapped[ bufnr ][ 'modifiable' ]
                       endtry
