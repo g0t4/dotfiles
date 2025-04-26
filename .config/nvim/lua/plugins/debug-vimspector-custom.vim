@@ -14,6 +14,8 @@ let s:custom_process_picker = expand( '<sfile>:p:h' ) . '/vimspector_process_lis
 
 function! s:CustomiseUI()
   let wins = g:vimspector_session_windows
+  " i.e.:
+  "   {'stack_trace': 1064, 'output': 1067, 'watches': 1065, 'variables': 1066, 'code': 1063, 'eval': v:null, 'mode': 'horizontal', 'breakpoints': v:null, 'tabpage': 2}
 
   " Close the Variables window
   if has( 'nvim' )

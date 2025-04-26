@@ -16,6 +16,8 @@ function _BufferDumpTest()
 end
 
 local function window_id_for_buffer(bufnr)
+    local window_ids = vim.fn.win_findbuf(bufnr)
+
     for _, win in ipairs(vim.api.nvim_list_wins()) do
         if vim.api.nvim_win_get_buf(win) == bufnr then
             return win
@@ -91,6 +93,12 @@ local function buffer_dump(append, ...)
 
     -- move cursor to bottom of buffer
     vim.api.nvim_feedkeys("G", "n", true)
+    -- TODO try win_execute
+    -- i.e.:
+    --   vim.fn.win_execute(vim.fn.win_getid(), "normal G")
+    -- test w/:
+    --   :echo win_execute(1001, "normal G")
+    --   :call "
 end
 
 --- FYI this only APPENDS (for now)
