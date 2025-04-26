@@ -38,11 +38,16 @@ return {
                     return
                   endif
 
-                  nmap <silent> <buffer> <LocalLeader>dn <Plug>VimspectorStepOver
-                  nmap <silent> <buffer> <LocalLeader>ds <Plug>VimspectorStepInto
-                  nmap <silent> <buffer> <LocalLeader>df <Plug>VimspectorStepOut
+                  " FYI these are reviewed:
+                  " FYI LocalLeader allows overriding leader keys for current buffer (that way global <leader> keymaps aren't affected)
+                  " sn = next (better ideas?).. do I want over or out to have so?
+                  "   OR?  su (up/out), so (over), si (in/down)?
+                  nmap <silent> <buffer> <LocalLeader>sn <Plug>VimspectorStepOver
+                  nmap <silent> <buffer> <LocalLeader>si <Plug>VimspectorStepInto
+                  nmap <silent> <buffer> <LocalLeader>so <Plug>VimspectorStepOut
                   nmap <silent> <buffer> <LocalLeader>dc <Plug>VimspectorContinue
                   " instead of mouse hover, use this to show hover
+                  " TODO dh instead of di? (h for hover, vs i for inspect)
                   nmap <silent> <buffer> <LocalLeader>di <Plug>VimspectorBalloonEval
                   xmap <silent> <buffer> <LocalLeader>di <Plug>VimspectorBalloonEval
 
@@ -66,9 +71,10 @@ return {
                     for bufnr in keys( s:mapped )
                       try
                         execute 'buffer' bufnr
-                        silent! nunmap <buffer> <LocalLeader>dn
-                        silent! nunmap <buffer> <LocalLeader>ds
-                        silent! nunmap <buffer> <LocalLeader>df
+                        " TODO port to lua and use a keymaps table array to unregister so I don't duplicate keymap lhs here:
+                        silent! nunmap <buffer> <LocalLeader>sn
+                        silent! nunmap <buffer> <LocalLeader>si
+                        silent! nunmap <buffer> <LocalLeader>so
                         silent! nunmap <buffer> <LocalLeader>dc
                         silent! nunmap <buffer> <LocalLeader>di
                         silent! xunmap <buffer> <LocalLeader>di
@@ -109,10 +115,6 @@ return {
             ]]
 
             -- FYI these are from nvim dap plugin... use as a checklist for reviewing and changing the above conditional vimspector keymaps
-            -- vim.keymap.set('n', '<leader>dc', function() require('dap').continue() end) -- <F5>?
-            -- vim.keymap.set('n', '<leader>so', function() require('dap').step_over() end) -- F10?
-            -- vim.keymap.set('n', '<leader>si', function() require('dap').step_into() end) -- F11?
-            -- vim.keymap.set('n', '<leader>su', function() require('dap').step_out() end) -- F12? (s[u] == step up?)
             -- vim.keymap.set('n', '<leader>sb', function() require('dap').step_back() end)
             --
             -- vim.keymap.set('n', '<Leader>b', function() require('dap').toggle_breakpoint() end)
@@ -129,7 +131,6 @@ return {
             --     require('dap.ext.debugger').terminate()
             -- end)
             -- vim.keymap.set('n', '<Leader>d_run_last', function() require('dap').run_last() end) -- a as in again?
-            -- vim.keymap.set({ 'n', 'v' }, '<Leader>dh', function() require('dap.ui.widgets').hover() end)
             -- vim.keymap.set({ 'n', 'v' }, '<Leader>dp', function() require('dap.ui.widgets').preview() end)
             -- vim.keymap.set('n', '<Leader>df', function()
             --     local widgets = require('dap.ui.widgets')
