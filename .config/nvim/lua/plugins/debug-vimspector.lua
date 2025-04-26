@@ -31,6 +31,8 @@ return {
                 " allow reset (close) vimspector anytime (buffer LocalLeader maps below are unmapped on stop, when debugger stops, i.e. run past end of program b/c had no breakpoints)
                 " FYI consider <LocalLeader>db
                 nmap <silent> <LocalLeader>b  <Cmd>call vimspector#ToggleBreakpoint()<CR>
+                nmap <silent> <LocalLeader>bn <Cmd>call vimspector#JumpToNextBreakpoint()<CR>
+                nmap <silent> <LocalLeader>bp <Cmd>call vimspector#JumpToPreviousBreakpoint()<CR>
 
 
                 " Custom mappings while debugging {{{
