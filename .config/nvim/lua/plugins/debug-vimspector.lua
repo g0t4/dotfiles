@@ -55,7 +55,9 @@ return {
                   nmap <silent> <buffer> <LocalLeader>di <Plug>VimspectorBalloonEval
                   xmap <silent> <buffer> <LocalLeader>di <Plug>VimspectorBalloonEval
                   nmap <silent> <buffer> <LocalLeader>dre <Plug>VimspectorRestart
-                  nmap <silent> <buffer> <LocalLeader>dq <Plug>VimspectorStop
+                  nmap <silent> <buffer> <LocalLeader>dstop <Plug>VimspectorStop
+                  " t as in terminate, fully closes vimspector tab
+                  nmap <silent> <buffer> <LocalLeader>dt call vimspector#Reset()<CR>
 
                   nmap <silent> <buffer> <LocalLeader>b  <Plug>VimspectorToggleBreakpoint
 
@@ -91,7 +93,8 @@ return {
                         silent! nunmap <buffer> <LocalLeader>di
                         silent! xunmap <buffer> <LocalLeader>di
                         silent! xunmap <buffer> <LocalLeader>dre
-                        silent! xunmap <buffer> <LocalLeader>dq
+                        silent! xunmap <buffer> <LocalLeader>dstop
+                        silent! xunmap <buffer> <LocalLeader>dt
 
                         silent! xunmap <buffer> <LocalLeader>b
 
