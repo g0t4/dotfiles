@@ -26,6 +26,82 @@ return {
                 " alternatives to mouse hover which isn't likely gonna work in terminals (nor in nvim IIUC)
                 nmap <Leader>di <Plug>VimspectorBalloonEval
                 xmap <Leader>di <Plug>VimspectorBalloonEval
+
+                " Custom mappings while debugging {{{
+                let s:mapped = {}
+
+                function! s:OnJumpToFrame() abort
+                  if has_key( s:mapped, string( bufnr() ) )
+                    return
+                  endif
+
+                  nmap <silent> <buffer> <LocalLeader>dn <Plug>VimspectorStepOver
+                  nmap <silent> <buffer> <LocalLeader>ds <Plug>VimspectorStepInto
+                  nmap <silent> <buffer> <LocalLeader>df <Plug>VimspectorStepOut
+                  nmap <silent> <buffer> <LocalLeader>dc <Plug>VimspectorContinue
+                  nmap <silent> <buffer> <LocalLeader>di <Plug>VimspectorBalloonEval
+                  xmap <silent> <buffer> <LocalLeader>di <Plug>VimspectorBalloonEval
+
+                  let s:mapped[ string( bufnr() ) ] = { 'modifiable': &modifiable }
+
+                  setlocal nomodifiable
+
+                endfunction
+
+                function! s:OnDebugEnd() abort
+
+                  let original_buf = bufnr()
+                  let hidden = &hidden
+                  augroup VimspectorSwapExists
+                    au!
+                    autocmd SwapExists * let v:swapchoice='o'
+                  augroup END
+
+                  try
+                    set hidden
+                    for bufnr in keys( s:mapped )
+                      try
+                        execute 'buffer' bufnr
+                        silent! nunmap <buffer> <LocalLeader>dn
+                        silent! nunmap <buffer> <LocalLeader>ds
+                        silent! nunmap <buffer> <LocalLeader>df
+                        silent! nunmap <buffer> <LocalLeader>dc
+                        silent! nunmap <buffer> <LocalLeader>di
+                        silent! xunmap <buffer> <LocalLeader>di
+
+                        let &l:modifiable = s:mapped[ bufnr ][ 'modifiable' ]
+                      endtry
+                    endfor
+                  finally
+                    execute 'noautocmd buffer' original_buf
+                    let &hidden = hidden
+                  endtry
+
+                  au! VimspectorSwapExists
+
+                  let s:mapped = {}
+                endfunction
+
+                augroup TestCustomMappings
+                  au!
+                  autocmd User VimspectorJumpedToFrame call s:OnJumpToFrame()
+                  autocmd User VimspectorDebugEnded ++nested call s:OnDebugEnd()
+                augroup END
+
+                " }}}
+
+                " Custom mappings for special buffers {{{
+
+                let g:vimspector_mappings = {
+                      \   'stack_trace': {},
+                      \   'variables': {
+                      \    'set_value': [ '<Tab>', '<C-CR>', 'C' ],
+                      \   }
+                      \ }
+
+                " }}}
+
+
             ]]
             -- :h vimspector-custom-mappings-while-debugging -- AMEN! they already thought about custom mappings during debugging only!
             -- User autocmds:
