@@ -22,7 +22,8 @@ return {
                 " TODO! finish reviewing checklist in debug-vimspector-checklist.vim (next to this file)
 
                 " always map these:
-                nmap <F5> <Plug>VimspectorLaunch
+                nmap <F5> <Cmd>call vimspector#Launch()<CR>
+                " FYI :VimspectorLaunch does not respect "default" config property, always ask in my testing
 
                 " Custom mappings while debugging {{{
                 " :h vimspector-custom-mappings-while-debugging -- AMEN! they already thought about custom mappings during debugging only!
@@ -57,7 +58,7 @@ return {
                   nmap <silent> <buffer> <LocalLeader>dre <Plug>VimspectorRestart
                   nmap <silent> <buffer> <LocalLeader>dstop <Plug>VimspectorStop
                   " t as in terminate, fully closes vimspector tab
-                  nmap <silent> <buffer> <LocalLeader>dt call vimspector#Reset()<CR>
+                  nmap <silent> <buffer> <LocalLeader>dt <Cmd>call vimspector#Reset()<CR>
 
                   nmap <silent> <buffer> <LocalLeader>b  <Plug>VimspectorToggleBreakpoint
 
