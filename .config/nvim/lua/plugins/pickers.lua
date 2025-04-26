@@ -246,6 +246,24 @@ return {
             --  sometimes easier to not have to memorize the sub keymaps and just search the picker picker list... until that's annoying enough that a keymap makes sense
 
 
+            -- TODO good idea to make picker that searches help/docs (note not just tags)
+            --    needs some work...
+            -- vim.keymap.set('n', '<leader>hg', function()
+            --     -- this adds a custom picker that should be have like :helpgrep
+            --     -- TODO WIP help grep... might need new dirs to search
+            --     require('telescope.builtin').live_grep({
+            --         prompt_title = 'Help Live Grep',
+            --         -- default_text = vim.fn.expand('<cword>'), -- TODO do I want to start with word under cursor too?
+            --         search_dirs = {
+            --             -- vim.fn.stdpath('data') .. '/site/doc',
+            --             vim.fn.stdpath('data') .. '/lazy/vimspector/doc',
+            --             -- vim.fn.stdpath('config') .. '/doc',
+            --             -- vim.fn.expand('$VIMRUNTIME') .. '/doc',
+            --             -- ~/.local/share/nvim/lazy/vimspector/doc
+            --         },
+            --     })
+            -- end, { desc = "Help grep, think :helpgrep but with telescope" })
+
             vim.keymap.set('n', '<leader>w', function()
                 require('telescope.builtin').live_grep({
                     default_text = vim.fn.expand('<cword>')

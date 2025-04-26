@@ -33,6 +33,11 @@ return {
                 nmap <silent> <LocalLeader>b  <Cmd>call vimspector#ToggleBreakpoint()<CR>
                 nmap <silent> <LocalLeader>bn <Cmd>call vimspector#JumpToNextBreakpoint()<CR>
                 nmap <silent> <LocalLeader>bp <Cmd>call vimspector#JumpToPreviousBreakpoint()<CR>
+                " vimspector#ToggleConditionalBreakpoint() ?
+                " FYI advanced asks for values for conditional expr, hit count, log point expr using cmdline, nice Ux
+                nmap <silent> <LocalLeader>ba <Cmd>call vimspector#ToggleAdvancedBreakpoint()<CR>
+                nmap <silent> <LocalLeader>bl <Cmd>call vimspector#ListBreakpoints()<CR>
+                nmap <silent> <LocalLeader>bclear <Cmd>call vimspector#ClearBreakpoints()<CR>
 
                 " TODO how hard would it be to persist breakpoints across restarts? Would I want this?
                 "   not sure how often I would want this?
