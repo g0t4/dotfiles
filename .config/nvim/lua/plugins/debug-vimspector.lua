@@ -65,8 +65,8 @@ return {
                   nmap <silent> <buffer> <LocalLeader>dc <Plug>VimspectorContinue
                   " instead of mouse hover, use this to show hover
                   " TODO dh instead of di? (h for hover, vs i for inspect)
-                  nmap <silent> <buffer> <LocalLeader>di <Plug>VimspectorBalloonEval
-                  xmap <silent> <buffer> <LocalLeader>di <Plug>VimspectorBalloonEval
+                  nmap <silent> <buffer> <LocalLeader>i <Plug>VimspectorBalloonEval
+                  xmap <silent> <buffer> <LocalLeader>i <Plug>VimspectorBalloonEval
                   nmap <silent> <buffer> <LocalLeader>dre <Plug>VimspectorRestart
                   nmap <silent> <buffer> <LocalLeader>dstop <Plug>VimspectorStop
                   " TODO can I override my F9 keymap for vimspector tab to call reset (which closes all windows, OR close all its windows, not just current window)?
@@ -101,8 +101,8 @@ return {
                         silent! nunmap <buffer> <LocalLeader>rtc
 
                         silent! nunmap <buffer> <LocalLeader>dc
-                        silent! nunmap <buffer> <LocalLeader>di
-                        silent! xunmap <buffer> <LocalLeader>di
+                        silent! nunmap <buffer> <LocalLeader>i
+                        silent! xunmap <buffer> <LocalLeader>i
                         silent! xunmap <buffer> <LocalLeader>dre
                         silent! xunmap <buffer> <LocalLeader>dstop
 
