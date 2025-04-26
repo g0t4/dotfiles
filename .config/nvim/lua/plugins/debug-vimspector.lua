@@ -38,6 +38,9 @@ return {
                 nmap <silent> <LocalLeader>ba <Cmd>call vimspector#ToggleAdvancedBreakpoint()<CR>
                 nmap <silent> <LocalLeader>bl <Cmd>call vimspector#ListBreakpoints()<CR>
                 nmap <silent> <LocalLeader>bclear <Cmd>call vimspector#ClearBreakpoints()<CR>
+                " TODO how about a keymap to send word under cursor / selection to the console to eval it?
+                "    console doesn't truncate multi-line strings like inspect is doing
+                "    call vimspector#Evaluate[Console]("foo")
 
                 " TODO how hard would it be to persist breakpoints across restarts? Would I want this?
                 "   not sure how often I would want this?

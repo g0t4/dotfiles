@@ -522,6 +522,8 @@ return {
                     -- can set hl group to control style too
                     italic = true -- IIUC is for last line run
                 },
+                -- TODO is this stripping blank lines out of multi line strings, i.e. [[ ]] in lua? or """ in python
+                -- TODO I do know that lines that appear to be comments (but aren't) in mutli-line strings are stripped out
                 ignore_blank_lines = true, -- when sending visual select lines, IIAC to not sumbmit extra prompt lines before/after/between sent commands
             }
         end
