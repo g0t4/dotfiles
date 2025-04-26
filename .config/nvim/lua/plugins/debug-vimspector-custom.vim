@@ -1,4 +1,5 @@
 " copied from: https://raw.githubusercontent.com/puremourning/vimspector/refs/heads/master/support/custom_ui_vimrc
+"  use this as a checklist/ref to build out your config in lua... delete relevant sections once adopted/rejected...
 
 " setup boilerplate to make this file usable with vim -Nu <this file> {{{
 scriptencoding utf-8
@@ -100,7 +101,7 @@ let g:vimspector_sign_priority = {
 
 " }}}
 
-" Custom mappings while debuggins {{{
+" Custom mappings while debugging {{{
 let s:mapped = {}
 
 function! s:OnJumpToFrame() abort
