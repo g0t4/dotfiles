@@ -15,6 +15,7 @@ function _BufferDumpTest()
     BufferDump(inspected, inspected)
 end
 
+---@return integer|nil # first window_id for buffer
 local function window_id_for_buffer(bufnr)
     local window_ids = vim.fn.win_findbuf(bufnr)
     -- FYI list is empty if no matches
