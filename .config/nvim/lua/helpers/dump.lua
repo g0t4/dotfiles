@@ -87,13 +87,9 @@ local function buffer_dump(append, ...)
     end
 
     -- move cursor to bottom of buffer
-    vim.api.nvim_feedkeys("G", "n", true)
-    -- TODO try win_execute
-    -- i.e.:
-    --   vim.fn.win_execute(vim.fn.win_getid(), "normal G")
-    -- test w/:
-    --   :echo win_execute(1001, "normal G")
-    --   :call "
+    vim.fn.win_execute(vim.fn.win_getid(), "normal G")
+    -- FYI trying win_execute, see if any issues w/ this style and if so then go back to nvim_feedkeys
+    -- vim.api.nvim_feedkeys("G", "n", true)
 end
 
 --- FYI this only APPENDS (for now)
