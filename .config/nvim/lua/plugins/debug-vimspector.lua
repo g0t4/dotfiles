@@ -19,15 +19,10 @@ return {
                 " todo turn this off and see what difference it makes once debugging is working
                 "let g:vimspector_enable_mappings = 'HUMAN'
                 " TODO keys to consider: https://puremourning.github.io/vimspector-web/#debugging
-
                 " TODO! finish reviewing checklist in debug-vimspector-checklist.vim (next to this file)
 
                 " always map these:
                 nmap <F5> <Plug>VimspectorLaunch
-
-                " alternatives to mouse hover which isn't likely gonna work in terminals (nor in nvim IIUC)
-                nmap <Leader>di <Plug>VimspectorBalloonEval
-                xmap <Leader>di <Plug>VimspectorBalloonEval
 
                 " Custom mappings while debugging {{{
                 let s:mapped = {}
@@ -41,6 +36,7 @@ return {
                   nmap <silent> <buffer> <LocalLeader>ds <Plug>VimspectorStepInto
                   nmap <silent> <buffer> <LocalLeader>df <Plug>VimspectorStepOut
                   nmap <silent> <buffer> <LocalLeader>dc <Plug>VimspectorContinue
+                  " instead of mouse hover, use this to show hover
                   nmap <silent> <buffer> <LocalLeader>di <Plug>VimspectorBalloonEval
                   xmap <silent> <buffer> <LocalLeader>di <Plug>VimspectorBalloonEval
 
