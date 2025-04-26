@@ -24,6 +24,9 @@ return {
                 " always map these:
                 nmap <F5> <Cmd>call vimspector#Launch()<CR>
                 " FYI :VimspectorLaunch does not respect "default" config property, always ask in my testing
+                nmap <silent> <LocalLeader>dt <Cmd>call vimspector#Reset()<CR>
+                " allow reset (close) vimspector anytime (buffer LocalLeader maps below are unmapped on stop, when debugger stops, i.e. run past end of program b/c had no breakpoints)
+
 
                 " Custom mappings while debugging {{{
                 " :h vimspector-custom-mappings-while-debugging -- AMEN! they already thought about custom mappings during debugging only!
@@ -57,8 +60,6 @@ return {
                   xmap <silent> <buffer> <LocalLeader>di <Plug>VimspectorBalloonEval
                   nmap <silent> <buffer> <LocalLeader>dre <Plug>VimspectorRestart
                   nmap <silent> <buffer> <LocalLeader>dstop <Plug>VimspectorStop
-                  " t as in terminate, fully closes vimspector tab
-                  nmap <silent> <buffer> <LocalLeader>dt <Cmd>call vimspector#Reset()<CR>
 
                   nmap <silent> <buffer> <LocalLeader>b  <Plug>VimspectorToggleBreakpoint
 
@@ -95,7 +96,6 @@ return {
                         silent! xunmap <buffer> <LocalLeader>di
                         silent! xunmap <buffer> <LocalLeader>dre
                         silent! xunmap <buffer> <LocalLeader>dstop
-                        silent! xunmap <buffer> <LocalLeader>dt
 
                         silent! xunmap <buffer> <LocalLeader>b
 
