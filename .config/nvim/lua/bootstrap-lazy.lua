@@ -57,6 +57,7 @@ require("lazy").setup({
         require("plugins.learning"),
         require("plugins.lualine"),
         require("plugins.misc"),
+        require("plugins.terminals"),
         require("plugins.pickers"),
         require("plugins.refactor"),
         require("plugins.tree"),
