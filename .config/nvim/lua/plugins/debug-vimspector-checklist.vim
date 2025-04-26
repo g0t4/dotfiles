@@ -1,5 +1,5 @@
 " copied from: https://raw.githubusercontent.com/puremourning/vimspector/refs/heads/master/support/custom_ui_vimrc
-"  use this as a checklist/ref to build out your config in lua... delete relevant sections once adopted/rejected...
+" !!! use this as a checklist, delete items once ported or if don't wanna use
 
 " setup boilerplate to make this file usable with vim -Nu <this file> {{{
 scriptencoding utf-8

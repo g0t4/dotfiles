@@ -20,6 +20,8 @@ return {
                 "let g:vimspector_enable_mappings = 'HUMAN'
                 " TODO keys to consider: https://puremourning.github.io/vimspector-web/#debugging
 
+                " TODO! finish reviewing checklist in debug-vimspector-checklist.vim (next to this file)
+
                 " always map these:
                 nmap <F5> <Plug>VimspectorLaunch
 
