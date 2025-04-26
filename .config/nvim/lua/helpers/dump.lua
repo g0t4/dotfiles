@@ -87,7 +87,9 @@ local function buffer_dump(append, ...)
     end
 
     -- move cursor to bottom of buffer
-    vim.fn.win_execute(vim.fn.win_getid(), "normal G")
+    local dump_window_id = window_id_for_buffer(dump_bufnr)
+    assert(dump_window_id ~= nil)
+    vim.fn.win_execute(dump_window_id, "normal G")
     -- FYI trying win_execute, see if any issues w/ this style and if so then go back to nvim_feedkeys
     -- vim.api.nvim_feedkeys("G", "n", true)
 end
