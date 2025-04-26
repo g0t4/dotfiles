@@ -46,6 +46,7 @@ vim.api.nvim_create_autocmd("VimLeavePre", {
 })
 
 local function ensure_buffer_is_open()
+    -- TODO extract a buffer helper class so I can reuse a set of methods around creating and using buffers
     -- create buffer first time
     if dump_bufnr == nil then
         dump_bufnr = vim.api.nvim_create_buf(false, true)
