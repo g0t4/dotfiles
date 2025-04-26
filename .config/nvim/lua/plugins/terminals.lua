@@ -438,7 +438,7 @@ return {
                         lua = {
                             command = { "lua" },
                             -- are these not set OOB? or is it diff default for lua?
-                            block_deviders = { "-- %% ", "--%%" },
+                            block_deviders = { "--%%" },
                         },
                         python = {
                             -- PRN if need be, create a profile for configuring how ipython runs inside of iron.nvim (only if issues with config outside of nvim), --profile foo
