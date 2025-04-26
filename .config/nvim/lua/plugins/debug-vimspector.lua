@@ -13,14 +13,14 @@ return {
             -- - https://dev.to/iggredible/debugging-in-vim-with-vimspector-4n0m
             -- reference: https://puremourning.github.io/vimspector/
             -- schemas: https://puremourning.github.io/vimspector/schema/
+            -- TODO keys
+            --   review: https://puremourning.github.io/vimspector-web/#debugging
+            --   TODO finish reviewing checklist in debug-vimspector-checklist.vim (next to this file)
+            --   let g:vimspector_enable_mappings = 'HUMAN' " https://github.com/puremourning/vimspector?tab=readme-ov-file#human-mode
 
-            -- FYI, later port to lua if useful to do so
             vim.cmd [[
-                " todo turn this off and see what difference it makes once debugging is working
-                "let g:vimspector_enable_mappings = 'HUMAN'
-                " TODO keys to consider: https://puremourning.github.io/vimspector-web/#debugging
-                " TODO! finish reviewing checklist in debug-vimspector-checklist.vim (next to this file)
 
+                "
                 " * always map:
                 "  FYI yes I am probably abusing <LocalLeader> to map it all the time... for now I see it as "SecondaryLeader" until I incorporate the idea of LocalLeader better into my keymaps
                 nmap <F5> <Cmd>call vimspector#Launch()<CR>
@@ -36,7 +36,6 @@ return {
 
                 " TODO how hard would it be to persist breakpoints across restarts? Would I want this?
                 "   not sure how often I would want this?
-
 
                 " Custom mappings while debugging {{{
                 " :h vimspector-custom-mappings-while-debugging -- AMEN! they already thought about custom mappings during debugging only!
