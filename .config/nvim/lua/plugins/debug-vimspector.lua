@@ -34,6 +34,9 @@ return {
                 nmap <silent> <LocalLeader>bn <Cmd>call vimspector#JumpToNextBreakpoint()<CR>
                 nmap <silent> <LocalLeader>bp <Cmd>call vimspector#JumpToPreviousBreakpoint()<CR>
 
+                " TODO how hard would it be to persist breakpoints across restarts? Would I want this?
+                "   not sure how often I would want this?
+
 
                 " Custom mappings while debugging {{{
                 " :h vimspector-custom-mappings-while-debugging -- AMEN! they already thought about custom mappings during debugging only!
