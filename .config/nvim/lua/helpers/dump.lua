@@ -17,14 +17,8 @@ end
 
 local function window_id_for_buffer(bufnr)
     local window_ids = vim.fn.win_findbuf(bufnr)
-
-    for _, win in ipairs(vim.api.nvim_list_wins()) do
-        if vim.api.nvim_win_get_buf(win) == bufnr then
-            return win
-        end
-    end
-    -- no windows matched buffer #
-    return nil
+    -- FYI list is empty if no matches
+    return window_ids[1]
 end
 
 local function is_buffer_visible(bufnr)
