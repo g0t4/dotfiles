@@ -45,11 +45,20 @@ return {
                   nmap <silent> <buffer> <LocalLeader>sn <Plug>VimspectorStepOver
                   nmap <silent> <buffer> <LocalLeader>si <Plug>VimspectorStepInto
                   nmap <silent> <buffer> <LocalLeader>so <Plug>VimspectorStepOut
+
+                  " FYI rtc just first idea, if used alot I may hate it
+                  nmap <silent> <buffer> <LocalLeader>rtc <Plug>VimspectorRunToCursor
+
                   nmap <silent> <buffer> <LocalLeader>dc <Plug>VimspectorContinue
                   " instead of mouse hover, use this to show hover
                   " TODO dh instead of di? (h for hover, vs i for inspect)
                   nmap <silent> <buffer> <LocalLeader>di <Plug>VimspectorBalloonEval
                   xmap <silent> <buffer> <LocalLeader>di <Plug>VimspectorBalloonEval
+                  nmap <silent> <buffer> <LocalLeader>dre <Plug>VimspectorRestart
+                  nmap <silent> <buffer> <LocalLeader>dq <Plug>VimspectorStop
+
+                  nmap <silent> <buffer> <LocalLeader>b  <Plug>VimspectorToggleBreakpoint
+
 
                   let s:mapped[ string( bufnr() ) ] = { 'modifiable': &modifiable }
 
@@ -75,9 +84,16 @@ return {
                         silent! nunmap <buffer> <LocalLeader>sn
                         silent! nunmap <buffer> <LocalLeader>si
                         silent! nunmap <buffer> <LocalLeader>so
+
+                        silent! nunmap <buffer> <LocalLeader>rtc
+
                         silent! nunmap <buffer> <LocalLeader>dc
                         silent! nunmap <buffer> <LocalLeader>di
                         silent! xunmap <buffer> <LocalLeader>di
+                        silent! xunmap <buffer> <LocalLeader>dre
+                        silent! xunmap <buffer> <LocalLeader>dq
+
+                        silent! xunmap <buffer> <LocalLeader>b
 
                         let &l:modifiable = s:mapped[ bufnr ][ 'modifiable' ]
                       endtry
@@ -117,19 +133,9 @@ return {
             -- FYI these are from nvim dap plugin... use as a checklist for reviewing and changing the above conditional vimspector keymaps
             -- vim.keymap.set('n', '<leader>sb', function() require('dap').step_back() end)
             --
-            -- vim.keymap.set('n', '<Leader>b', function() require('dap').toggle_breakpoint() end)
-            -- vim.keymap.set('n', '<Leader>B', function() require('dap').set_breakpoint() end)
             -- vim.keymap.set('n', '<Leader>dl', function() require('dap').set_breakpoint(nil, nil, vim.fn.input('Log point message: ')) end)
             -- vim.keymap.set('n', '<Leader>dr', function() require('dap').repl.toggle() end) -- toggle instead of open/close
             -- -- I will likely use legendary for remembering these commands and so its fine for a few to be unrealistic to type out and just for lookup only:
-            -- vim.keymap.set('n', '<Leader>d_r', function()
-            --     require('dap').repl.open()
-            --     require('dap.ext.debugger').restart()
-            -- end)
-            -- vim.keymap.set('n', '<Leader>dt', function()
-            --     require('dap').repl.open()
-            --     require('dap.ext.debugger').terminate()
-            -- end)
             -- vim.keymap.set('n', '<Leader>d_run_last', function() require('dap').run_last() end) -- a as in again?
             -- vim.keymap.set({ 'n', 'v' }, '<Leader>dp', function() require('dap.ui.widgets').preview() end)
             -- vim.keymap.set('n', '<Leader>df', function()
