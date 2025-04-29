@@ -21,11 +21,13 @@ pacman --needed --noconfirm -S tree less neovim \
     base-devel cmake ffmpeg man-db \
     core/inetutils \
     nodejs npm \
-    dmidecode docker iotop unzip sysstat htop
+    dmidecode docker iotop unzip sysstat htop \
+    ethtool
 
 # dmidecode - bios info
 # inetutils => hostname cmd
 # sysstat => iostat
+# ethtool (link speed vs supported/advertised)
 
 # FYI older python versions, use uv to install based on .python-version in a repo dir
 
