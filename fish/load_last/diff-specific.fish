@@ -32,7 +32,7 @@ function legacy_expand_diff_last_two_commands
 end
 # abbr -a diff_old --function legacy_expand_diff_last_two_commands
 
-function expand_diff_last_two_commands_with_diff_two_commands
+function expand_diff_last_two_commands
     set last_two_commands (history | head -n 2)
     set -l command_a $last_two_commands[2]
     set -l command_b $last_two_commands[1]
@@ -44,7 +44,22 @@ function expand_diff_last_two_commands_with_diff_two_commands
     set command_b (string replace --all -- "'" "\\'" $command_b)
     echo diff_two_commands "'$command_a'" "'$command_b'"
 end
-abbr -a diff_last_two_commands --function expand_diff_last_two_commands_with_diff_two_commands
+abbr -a diff_last_two_commands --function expand_diff_last_two_commands
+
+# * append sort -h too
+# FYI make sure original variant (above) is first completion result as I won't use this one as often
+#    also, consider breaking the typical completion chain so I can tab to complete the above w/o then another tab to select it
+# when output order might differ while content is the same
+# i.e. `ls` in two diff dirs
+function expand_diff_last_two_commands_sorted
+    set last_two_commands (history | head -n 2)
+    set -l command_a $last_two_commands[2] "| sort -h"
+    set -l command_b $last_two_commands[1] "| sort -h"
+    set command_a (string replace --all -- "'" "\\'" $command_a)
+    set command_b (string replace --all -- "'" "\\'" $command_b)
+    echo diff_two_commands "'$command_a'" "'$command_b'"
+end
+abbr -a diff_last_two_commands_sorted --function expand_diff_last_two_commands_sorted
 
 function diff_two_commands
     # usage:
