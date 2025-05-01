@@ -43,6 +43,9 @@ vim.api.nvim_create_autocmd("VimLeavePre", {
 })
 
 local function ensure_buffer_is_open()
+    -- note the current window so I can switch back to it when done opening the buffer/window
+    local original_window_id = vim.api.nvim_get_current_win()
+
     -- TODO extract a buffer helper class so I can reuse a set of methods around creating and using buffers
     -- create buffer first time
     if dump_bufnr == nil then
@@ -56,6 +59,8 @@ local function ensure_buffer_is_open()
         vim.api.nvim_command("vsplit")
         vim.api.nvim_win_set_buf(0, dump_bufnr)
     end
+
+    vim.api.nvim_set_current_win(original_window_id)
 end
 
 local function buffer_dump(append, ...)
