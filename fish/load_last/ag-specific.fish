@@ -26,8 +26,37 @@ abbr --set-cursor='!' -- aggu 'ag --unrestricted -ig "!"' # match hidden files +
 #  -g and -G myself
 #  -A/-B or -C # num of context lines to show # default = 2 for both
 
+# * list file names (of matches)
 abbr agl 'ag -l' # print file name only, not matched content
-abbr agL 'ag -L' # print files w/o content match
+abbr agl 'ag -lu' # print file name only, not matched content
+abbr agl 'ag -l --hidden' # print file name only, not matched content
+abbr agL 'ag -L' # invert match (files w/o content matches)
+# * list files that are searched
+#    so you can see what is ignored vs not, what needs --unrestricted vs --hidden vs neither
+abbr agll 'ag -l # list files searched' # FYI thisis redundant but I wanna put it here so I don't forget its also in this group
+abbr aglu 'ag -lu # list files searched' #
+abbr aglh 'ag -l --hidden # list files searched, including hidden'
+# TODO can I use -L somehow to list whats not searched? would be easier than diff below
+function ag_files_searched
+    ag -ll $argv | sort -u
+end
+function ag_files_searched_hidden
+    ag -ll --hidden $argv | sort -u
+end
+function ag_files_searched_unrestricted
+    ag -ll --unrestricted $argv | sort -u
+end
+function ag_files_searched_hidden_diff
+    # show a diff of files searched with and without --hidden
+    # see what files require --hidden to show up
+    diff_two_commands 'ag -l | sort -h' 'ag -l --hidden | sort -h'
+end
+function ag_files_searched_unrestricted_diff
+    # show a diff of files searched with and without --unrestricted
+    # see what files require --unrestricted to show up
+    diff_two_commands 'ag -l | sort -h' 'ag -l --unrestricted | sort -h'
+end
+
 abbr agw 'ag --word-regexp' # match whole words
 abbr agz 'ag --search-zip' # search inside zip files (gz,xz only)
 
@@ -40,11 +69,6 @@ abbr --set-cursor='!' agm 'ag "(?s)!"' # (?s) makes . match \n too
 
 # ***rg (start to consider using this?)
 abbr rgm 'rg --multiline --multiline-dotall' # dot as \n too
-
-
-
-
-
 
 function agimages
     # usage:
