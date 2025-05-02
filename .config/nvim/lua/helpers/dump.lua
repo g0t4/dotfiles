@@ -27,7 +27,8 @@ local function is_buffer_visible(bufnr)
     return window_id ~= nil
 end
 
-local dump_bufnr = nil
+dump_bufnr = nil
+dump_channel = nil
 
 vim.api.nvim_create_autocmd("VimLeavePre", {
     callback = function()
@@ -46,11 +47,34 @@ local function ensure_buffer_is_open()
     -- note the current window so I can switch back to it when done opening the buffer/window
     local original_window_id = vim.api.nvim_get_current_win()
 
-    -- TODO extract a buffer helper class so I can reuse a set of methods around creating and using buffers
-    --   TODO! set names for these, like Zed has its Zed log, vs LSP logs, etc... I can log to in-memory buffers and open when I wanna see them
     -- create buffer first time
     if dump_bufnr == nil then
-        dump_bufnr = vim.api.nvim_create_buf(false, true)
+        dump_bufnr = vim.api.nvim_create_buf(true, false) -- listed, scratch
+
+        -- * terminal backing:
+        -- inspired by `:h TermHl` which also explains the following:
+        -- by default, there's no external process
+        --   instead it echos input to its STDOUT
+        --   STDOUT connects to the buffer so you can see the output in the buffer
+        -- KEEP IN MIND: there is no shell running, nor anything else
+        --   that would have to be started too, and then connected
+        dump_channel = vim.api.nvim_open_term(dump_bufnr, {})
+        -- why use a temrinal window?
+        --   doesn't have scroll issues like regular buffer
+        --   not stuck with scroll until last line in buffer is at topline)
+        --   supports ansi color sequences (from my inspect helper)
+        --
+        -- set modifiable, so I can programatically change (i.e. clear) the buffer
+        --   otherwise, by default, terminal buffers are not modifiable
+        vim.api.nvim_set_option_value('modifiable', true, { buf = dump_bufnr })
+
+        -- -- * non-terminal backing:
+        -- -- set nofile to avoid saving on quit
+        -- vim.api.nvim_set_option_value('buftype', 'nofile', { buf = dump_bufnr })
+
+        -- ensure listed w/ name:
+        --   I want users to easily find it should they want to
+        vim.api.nvim_set_option_value('buflisted', true, { buf = dump_bufnr })
         vim.api.nvim_buf_set_name(dump_bufnr, 'buffer_dump')
     end
 
@@ -94,12 +118,21 @@ function buffer_dump_background(append, ...)
     end
     assert(dump_bufnr ~= nil)
 
-    if append then
-        vim.api.nvim_buf_set_lines(dump_bufnr, -1, -1, false, lines)
-    else
-        -- overwrite
-        vim.api.nvim_buf_set_lines(dump_bufnr, 0, -1, false, lines)
+    if not append then
+        BufferDumpClear()
     end
+
+    -- * append new content
+    --
+    -- * terminal buffers:
+    -- send output to terminal, so it processes the ANSI color sequences
+    -- and output comes over STDOUT back to the buffer
+    vim.api.nvim_chan_send(dump_channel, table.concat(lines, "\n") .. "\n")
+    --
+    -- * non-terminal backing:
+    -- vim.api.nvim_buf_set_lines(dump_bufnr, -1, -1, false, lines)
+    --   FYI, this can still work on a terminal backed buffer, if it is modifiable
+    --   issue is it won't go through the terminal instance for ANSI color sequences to work
 
     -- move cursor to bottom of buffer
     local dump_window_id = window_id_for_buffer(dump_bufnr)
@@ -125,8 +158,8 @@ function BufferDumpClear()
     if dump_bufnr == nil then
         return
     end
-    -- FYI doesn't matter if buffer is visible, just clear it even if hidden...
-    -- PRN if I want to make sure it shows too, then add that semantic, but for now clear alone is fine
+    -- * clear the buffer first
+    -- both regular and terminal buffers, if modifiable:
     vim.api.nvim_buf_set_lines(dump_bufnr, 0, -1, false, {})
 end
 
