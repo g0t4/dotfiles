@@ -47,6 +47,7 @@ local function ensure_buffer_is_open()
     local original_window_id = vim.api.nvim_get_current_win()
 
     -- TODO extract a buffer helper class so I can reuse a set of methods around creating and using buffers
+    --   TODO! set names for these, like Zed has its Zed log, vs LSP logs, etc... I can log to in-memory buffers and open when I wanna see them
     -- create buffer first time
     if dump_bufnr == nil then
         dump_bufnr = vim.api.nvim_create_buf(false, true)
@@ -62,11 +63,12 @@ local function ensure_buffer_is_open()
 
     vim.api.nvim_set_current_win(original_window_id)
 end
-
 local function buffer_dump(append, ...)
     ensure_buffer_is_open()
-
-    -- TODO use with existing Dump?
+    buffer_dump_background(append, ...)
+end
+function buffer_dump_background(append, ...)
+    -- PRN use with my existing Dump command in nvim?
     -- dump into a buffer instead of print/echo/etc
     --    that way I don't need to use `:mess` (and `:mess clear`, etc)
 
@@ -108,7 +110,7 @@ function BufferDumpArray(array)
 end
 
 function BufferDump(...)
-    buffer_dump(false, ...)
+    buffer_dump_background(false, ...)
 end
 
 function BufferDumpClear()
@@ -121,12 +123,19 @@ function BufferDumpClear()
 end
 
 function BufferDumpAppend(...)
-    buffer_dump(true, ...)
+    -- assume buffer is open (or explicitly closed) and its fine to append w/o a care for showing it
+    buffer_dump_background(true, ...)
+end
+
+function BufferDumpOpen()
+    ensure_buffer_is_open()
 end
 
 ---@return integer|nil bufnr, integer|nil window_id
 function GetBufferDumpNumbers()
-    ensure_buffer_is_open()
+    if dump_bufnr == nil then
+        return nil, nil
+    end
     -- for special cases where I just wanna reuse this buffer
     return dump_bufnr, window_id_for_buffer(dump_bufnr)
 end
