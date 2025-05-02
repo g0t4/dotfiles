@@ -68,6 +68,9 @@ local function buffer_dump(append, ...)
     buffer_dump_background(append, ...)
 end
 function buffer_dump_background(append, ...)
+    -- TODO ok now how can I continue to write to the buffer in the background?
+    -- closing it, switching files (buffers) loses its contents since its not a real file
+
     -- PRN use with my existing Dump command in nvim?
     -- dump into a buffer instead of print/echo/etc
     --    that way I don't need to use `:mess` (and `:mess clear`, etc)
