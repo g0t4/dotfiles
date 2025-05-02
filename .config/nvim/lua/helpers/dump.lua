@@ -150,6 +150,12 @@ function BufferDumpArray(array)
     end)
 end
 
+function BufferDumpHeader(...)
+    local header = string.format("%s", table.concat({ ... }, " "))
+    header = "\n" .. "---------- " .. header .. " ----------\n"
+    buffer_dump_background(false, header)
+end
+
 function BufferDump(...)
     buffer_dump_background(false, ...)
 end
