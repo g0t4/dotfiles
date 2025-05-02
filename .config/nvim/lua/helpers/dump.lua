@@ -68,6 +68,11 @@ local function buffer_dump(append, ...)
     buffer_dump_background(append, ...)
 end
 function buffer_dump_background(append, ...)
+    -- TMP this is not here long term, just for now since my original code all assumes buffer opens if not already
+    ensure_buffer_is_open() -- TODO! once I figure out how I want it to work in background, then remove this
+
+
+
     -- TODO ok now how can I continue to write to the buffer in the background?
     -- closing it, switching files (buffers) loses its contents since its not a real file
 
