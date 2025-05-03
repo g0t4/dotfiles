@@ -9,7 +9,7 @@ vim.cmd("nnoremap <leader>tsi :Inspect<CR>") -- vim.show_pos() -- colorful captu
 vim.cmd("nnoremap <leader>tsii :Inspect!<CR>") -- vim.inspect_pos() -- detailed
 vim.keymap.set('n', '<leader>tst', ":InspectTree<CR>")
 
-vim.keymap.set('n', '<leader>pd', function()
+vim.keymap.set('n', '<leader>tsd', function()
     local node = vim.treesitter.get_node()
     local info = format_dump(node)
     dump.ensure_open()
