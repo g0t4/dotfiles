@@ -191,10 +191,12 @@ endfunction
 
 " disabled for now, multiline strings in lua aren't recognized as nested code which makes sense...
 " so any time cursor stops in the multiline string it higlights all of it (yuck)
-" TODO change style of highlight
 " TODO can I disable highlighting if there are no other matches?
+" TODO! change highlight group and bring this back is fine... though I have underline based on text matches already and thats not terrible
 " Highlight the symbol and its references when holding the cursor
-autocmd CursorHold * silent call CocActionAsync('highlight')
+"autocmd CursorHold * silent call CocActionAsync('highlight')
+
+
 
 " Symbol renaming (I love F2 for this, maybe get rid of rn if I use F2 alone)
 nmap <leader>rn <Plug>(coc-rename)
