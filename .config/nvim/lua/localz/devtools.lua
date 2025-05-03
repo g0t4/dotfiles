@@ -52,22 +52,19 @@ end, {})
 alias("windows", "Windows")
 
 
-
 local abbrevs = {
     i = {
         btw = "by the way",
         idk = "I don't know",
     },
     c = {
-        -- TODO how can I get rid of the space after expanding? in just this case?
-        lapi = "Dump vim.api",
-        lnvim = "Dump vim.api.nvim_",
+        -- lnvim = "Dump vim.api.nvim_",
 
 
-        wls = "Dump vim.api.nvim_list_wins()",
-        bls = "Dump vim.api.nvim_list_bufs()",
+        -- wls = "Dump vim.api.nvim_list_wins()",
+        -- bls = "Dump vim.api.nvim_list_bufs()",
         -- bls = "buffers",
-        tls = "tabs",
+        -- tls = "tabs",
     }
 }
 
@@ -77,15 +74,24 @@ for mode, defs in pairs(abbrevs) do
     end
 end
 
--- vim.cmd('cabbr wls Dump vim.api.nvim_list_wins()')
-
-
-
--- * abbreviations that expand on space, that then remove the space
+-- * abbreviations that expand before the space is added!
 -- ok I really like `lapi` already!
 local config = {
     prefixes = {
-        ["lapi"] = "Dump vim.api."
+        -- a regular abbreviation doesn't have aa way to not include the character after that triggered the expansion (i.e. space)
+        -- TODO do I like the " " or not...  expand before it instead? or does it feel more natural to expand/"remove" it
+        --    both are kinda odd
+        --    see what feels right
+        --    try each style for a few days and see how it feels
+        --
+        -- ["lapi"] = "Dump vim.api.",
+        ["lapi "] = "Dump vim.api.<TAB>",
+        -- ["nvim"] = "Dump vim.api.nvim_<TAB>", -- tab to auto open completion!
+        ["nvim "] = "Dump vim.api.nvim_<TAB>", -- tab to auto open completion!
+        -- FYI cannot namespace... they cannot collide at all... without a mechaism to pause and yeah not sure I wanna have that
+        -- ["nvimw"] = "Dump vim.api.nvim_win_", -- IOTW nvim here would already expand before I type the w and so
+        --     I get "Dump vim.api.nvim_w" ... but that reminds me thats fine by me! I can type the W
+        -- ["nvimb"] = "Dump vim.api.nvim_buf_",
     }
 }
 
