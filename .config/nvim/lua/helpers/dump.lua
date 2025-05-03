@@ -134,9 +134,11 @@ local function dump_background(...)
     end
 
     -- TODO not working with term backed buffer?
-    -- move cursor to bottom of buffer
+    -- if window is open, scroll to bottom
     local dump_window_id = window_id_for_buffer(M.dump_bufnr)
-    assert(dump_window_id ~= nil)
+    if dump_window_id == nil then
+        return
+    end
     vim.fn.win_execute(dump_window_id, "normal G")
 end
 
