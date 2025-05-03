@@ -14,7 +14,7 @@ vim.cmd("nnoremap <leader>pii :Inspect!<CR>") -- prefer over pd/pc I made, b/c t
 
 vim.keymap.set('n', '<leader>pd', function()
     local node = vim.treesitter.get_node()
-    local info = dump_formatter(node)
+    local info = format_dump(node)
     dump.ensure_open()
     dump.append(info)
 end)

@@ -2,7 +2,7 @@
 local M = {}
 
 
-function dump_formatter(value)
+function format_dump(value)
     -- ? bring over my inspect from zeta.nvim repo?
     -- TODO add in code to detect and extract details like known userdata type / fields, etc
     local type = type(value)
@@ -38,7 +38,7 @@ function dump_formatter(value)
         local index = mt.__index
         local what = {}
         for k, v in pairs(index) do
-            table.insert(what, k .. " = " .. dump_formatter(v))
+            table.insert(what, k .. " = " .. format_dump(v))
         end
         return "userdata: (unknown)\n\nHere are keys for on its index" .. table.concat(what, ", ")
     end
@@ -76,7 +76,7 @@ vim.api.nvim_create_user_command("Dump", function(opts)
     end
 
     M.header(":Dump " .. opts.args)
-    M.append(dump_formatter(result))
+    M.append(format_dump(result))
     --
 end, {
     nargs = '*',
