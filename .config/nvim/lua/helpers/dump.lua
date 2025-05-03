@@ -1,6 +1,15 @@
 -- * DumpBuffer module
 local M = {}
 
+-- * keymaps for messages buffer
+vim.keymap.set('n', '<leader>mx', function()
+    -- clear the messeages buffer
+    M.clear()
+end)
+vim.keymap.set('n', '<leader>mo', function()
+    M.ensure_open()
+end)
+
 
 function format_dump(value)
     -- ? bring over my inspect from zeta.nvim repo?

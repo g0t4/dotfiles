@@ -1,33 +1,19 @@
 local dump = require('helpers.dump')
--- *** treesitter helpers, i.e. for understanding highlighting issues
 
-function print_captures_at_cursor()
-    print(vim.inspect(vim.treesitter.get_captures_at_cursor()))
-end
-
-vim.cmd("nnoremap <leader>pc :lua print_captures_at_cursor()<CR>")
-
-vim.cmd("nnoremap <leader>pi :Inspect<CR>") -- prefer over pd/pc I made, b/c this shows treesitter/syntax/extmarks differences
-vim.cmd("nnoremap <leader>pii :Inspect!<CR>") -- prefer over pd/pc I made, b/c this shows treesitter/syntax/extmarks differences
-
-
+-- TODO remove once reminders not needed
+vim.cmd("nnoremap <leader>pc :lua vim.notify('use <leader>tsi now')<CR>")
+vim.cmd("nnoremap <leader>pi :lua vim.notify('use <leader>tsi now')<CR>")
+--
+-- *** treesitter <leader>ts prefix, do I like this?
+vim.cmd("nnoremap <leader>tsi :Inspect<CR>") -- vim.show_pos() -- colorful captures
+vim.cmd("nnoremap <leader>tsii :Inspect!<CR>") -- vim.inspect_pos() -- detailed
+vim.keymap.set('n', '<leader>tst', ":InspectTree<CR>")
 
 vim.keymap.set('n', '<leader>pd', function()
     local node = vim.treesitter.get_node()
     local info = format_dump(node)
     dump.ensure_open()
     dump.append(info)
-end)
-vim.keymap.set('n', '<leader>px', function()
-    -- clear the messeages buffer
-    dump.clear()
-end)
-
-vim.keymap.set('n', '<leader>pt', function()
-    -- show treesitter node text for node under cursor
-    local node = vim.treesitter.get_node()
-    local text = vim.treesitter.get_node_text(node, 0)
-    print(text)
 end)
 
 vim.api.nvim_set_hl(0, '@comment_todo', { fg = '#ffcc00' }) -- TODO test
