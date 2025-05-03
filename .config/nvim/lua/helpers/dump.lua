@@ -1,34 +1,31 @@
---
+-- * DumpBuffer module
+local M = {}
 
 -- FYI if you want an nvim user_command that takes a lua expression
 --    and it gets the evaluated value... this is how you can do it
 --
--- vim.api.nvim_create_user_command("EvalExpr", function(opts)
---     -- FYI should only be one expression
---     --   there wouldn't be completion for multiple
---     --   what would a commma mean?
---     --   conversely, can pass a table for multiple expressions
---
---     local chunk, err = load("return " .. opts.args)
---     if not chunk then
---         error("Invalid expression: " .. err)
---     end
---     local ok, result = pcall(chunk)
---     if not ok then
---         error("Error during evaluation: " .. result)
---     end
---     -- Your handler logic here
---     print(vim.inspect(result)) -- example usage
--- end, {
---     nargs = "+",
---     complete = "lua"
--- })
+vim.api.nvim_create_user_command("Dump", function(opts)
+    M.ensure_open()
 
-vim.api.nvim_create_user_command('Dump', function()
-    -- ! RETIRING MY :Dump command, I like := as the same
-    --  much less typing
-    --
-    vim.print("use :=")
+    -- PRN retire this message later on
+    M.append("FYI use `:=` command to dump to the command line, instead of here")
+
+    -- FYI should only be one expression
+    --   there wouldn't be completion for multiple
+    --   what would a commma mean?
+    --   conversely, can pass a table for multiple expressions
+
+    local chunk, err = load("return " .. opts.args)
+    if not chunk then
+        error("Invalid expression: " .. err)
+    end
+    local ok, result = pcall(chunk)
+    if not ok then
+        error("Error during evaluation: " .. result)
+    end
+
+
+    M.append("Result: " .. vim.inspect(result))
 end, {
     nargs = '*',
     complete = "lua", -- completes like using :lua command!
@@ -43,8 +40,6 @@ vim.cmd [[ cabbrev DUmp Dump ]] -- frequently mistype, b/c I have to capitalize 
 
 
 
--- * DumpBuffer module
-local M = {}
 
 M.dump_bufnr = nil
 M.dump_channel = nil
