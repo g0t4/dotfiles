@@ -71,29 +71,26 @@ for mode, defs in pairs(abbrevs) do
     end
 end
 
--- * abbreviations that expand before the space is added!
--- ok I really like `lapi` already!
+-- * space-less expansions (abbreviations)
 local config = {
     prefixes = {
+        -- FYI nvim-cmp already setup to show completions as you type
+        --   so no need for <TAB> on end if using nvim-cmp
+        --
         -- a regular abbreviation doesn't have aa way to not include the character after that triggered the expansion (i.e. space)
         -- TODO do I like the " " or not...  expand before it instead? or does it feel more natural to expand/"remove" it
         --    both are kinda odd
         --    see what feels right
         --    try each style for a few days and see how it feels
         --
-        -- DO NOT USE command abbreviations for other commands (i.e. lvim => lvimgrep
-        -- ? wtf is going on... why does "lvim" suck here...
-        --   ["lvim "] = "Dump vim.<TAB>", => recursively invokes this handler (smth that is being typed into the field or?)
-        --   all the rest are fine
-        --
         -- FYI config PLEBS... you want "lua <vim>.<TAB>" ... if you can't handle my :Dump
-        ["dvim "] = "Dump vim.<TAB>",
-        ["dts "] = "Dump vim.treesitter.<TAB>",
+        ["dvim "] = "Dump vim.",
+        ["dts "] = "Dump vim.treesitter.",
         ["=ts "] = "= vim.treesitter.", -- buggy w/o <C-S-U> fix below
-        ["dapi "] = "Dump vim.api.<TAB>",
-        ["dfn "] = "Dump vim.fn.<TAB>",
-        -- ["nvim"] = "Dump vim.api.nvim_<TAB>", -- tab to auto open completion!
-        ["nvim "] = "Dump vim.api.nvim_<TAB>", -- tab to auto open completion!
+        ["dapi "] = "Dump vim.api.",
+        ["dfn "] = "Dump vim.fn.",
+        -- ["nvim"] = "Dump vim.api.nvim_", -- tab to auto open completion!
+        ["nvim "] = "Dump vim.api.nvim_", -- tab to auto open completion!
         -- FYI cannot namespace... they cannot collide at all... without a mechaism to pause and yeah not sure I wanna have that
         -- ["nvimw"] = "Dump vim.api.nvim_win_", -- IOTW nvim here would already expand before I type the w and so
         --     I get "Dump vim.api.nvim_w" ... but that reminds me thats fine by me! I can type the W
