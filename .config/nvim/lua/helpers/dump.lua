@@ -1,16 +1,34 @@
 --
--- * :Dump vim.g.foo
--- Am I the only who hates typing :lua print(vim.inspect(...))?
---
--- TODO completion for <args>, lua expression completion
--- vim.lua_omnifunc() for lua expression completion
---
-function wes_dump(...)
-    print(vim.inspect(...))
-end
 
-vim.api.nvim_create_user_command('Dump', function(args)
-    wes_dump(args.fargs)
+-- FYI if you want an nvim user_command that takes a lua expression
+--    and it gets the evaluated value... this is how you can do it
+--
+-- vim.api.nvim_create_user_command("EvalExpr", function(opts)
+--     -- FYI should only be one expression
+--     --   there wouldn't be completion for multiple
+--     --   what would a commma mean?
+--     --   conversely, can pass a table for multiple expressions
+--
+--     local chunk, err = load("return " .. opts.args)
+--     if not chunk then
+--         error("Invalid expression: " .. err)
+--     end
+--     local ok, result = pcall(chunk)
+--     if not ok then
+--         error("Error during evaluation: " .. result)
+--     end
+--     -- Your handler logic here
+--     print(vim.inspect(result)) -- example usage
+-- end, {
+--     nargs = "+",
+--     complete = "lua"
+-- })
+
+vim.api.nvim_create_user_command('Dump', function()
+    -- ! RETIRING MY :Dump command, I like := as the same
+    --  much less typing
+    --
+    vim.print("use :=")
 end, {
     nargs = '*',
     complete = "lua", -- completes like using :lua command!
@@ -113,11 +131,6 @@ local function dump_background(...)
     -- TMP this is not here long term, just for now since my original code all assumes buffer opens if not already
     ensure_buffer_exists()
     assert(M.dump_bufnr ~= nil)
-
-    -- PRN use with my existing Dump command in nvim?
-    -- dump into a buffer instead of print/echo/etc
-    --    that way I don't need to use `:mess` (and `:mess clear`, etc)
-    -- maybe, make a new :BufferDump command?
 
     local args = { ... }
     for _, arg in ipairs(args) do
