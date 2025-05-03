@@ -138,12 +138,8 @@ inoremap <silent><expr> <C-f> coc#pum#visible() ? coc#pum#scroll(0) : "\<C-f>"
 
 
 
-" Use <c-space> to trigger completion
-if has('nvim')
-    inoremap <silent><expr> <c-space> coc#refresh()
-else
-    inoremap <silent><expr> <c-@> coc#refresh()
-endif
+" Use <c-space> to trigger/refresh completion
+inoremap <silent><expr> <c-space> coc#refresh()
 
 " TODO try out diagnostics
 " Use `[g` and `]g` to navigate diagnostics
