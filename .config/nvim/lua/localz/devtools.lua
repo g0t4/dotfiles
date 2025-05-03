@@ -108,13 +108,20 @@ vim.api.nvim_create_autocmd("CmdlineChanged", {
                     -- FYI! this is a good demo of my message buffer dump tool
                     --   handlers would otherwise require to open messages after every event you want to test
                     --   notify is an alternative but clutters up the screen
-                    dump.open_append("activated: " .. prefix .. " -> " .. expansion)
+                    -- dump.open_append("activated: " .. prefix .. " -> " .. expansion)
                     -- nvim-cmp has <C-u> for smth...
+
                     -- anyways, I need capital U so if I add shift this seems to work fine
                     -- w/o -S then I get <C-U> activating weird behavior (loops on activating completions w/ nvim-cmp)
                     --    I picked -S... b/c IIUC <C-U>(capital U) should remove all chars from cursor, back to the start of the line
                     --    only happens on some mappings (see above)
-                    vim.fn.feedkeys(vim.api.nvim_replace_termcodes("<C-S-U>" .. expansion, true, false, true))
+                    -- vim.fn.feedkeys(vim.api.nvim_replace_termcodes("<C-S-U>" .. expansion, true, false, true))
+                    -- FYI if setcmdline works, lets get rid of feedkeys
+
+                    -- FYI alternative... just set the damn commandline
+                    vim.fn.setcmdline(expansion)
+                    -- PRN could add feeding keys if needed, but I don't need that right now
+                    -- and, nvim-cmp still shows completions after setcmdline!
                 end)
                 break
             end
