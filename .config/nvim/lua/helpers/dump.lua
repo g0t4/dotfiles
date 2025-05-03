@@ -14,7 +14,25 @@ function dump_formatter(value)
         end
         return "'' -- empty string"
     elseif type == "userdata" then
-        return "userdata"
+        if value.sexpr and value.root then
+            -- * treesitter node
+            -- TODO split out these userdata handlers into a chain (list) and keep this simple
+            local info = {
+                named = value:named(),
+                sexpr = value:sexpr(),
+                -- root = value:root(),
+                type = value:type(),
+            }
+            return "~= treesitter node: " .. vim.inspect(info)
+        end
+
+        local mt = getmetatable(value)
+        local index = mt.__index
+        local what = {}
+        for k, v in pairs(index) do
+            table.insert(what, k .. " = " .. dump_formatter(v))
+        end
+        return "userdata: (unknown)\n\nHere are keys for on its index" .. table.concat(what, ", ")
     end
 
     return vim.inspect(value)
