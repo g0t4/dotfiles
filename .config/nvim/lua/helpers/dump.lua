@@ -7,12 +7,16 @@
 --
 vim.api.nvim_create_user_command('Dump', "lua print(vim.inspect(<args>))", {
     nargs = '*',
-    complete = "lua", -- completes like using :lua command
+    complete = "lua", -- completes like using :lua command!
 })
+-- b/c not allowed to use lowercase command names:
+vim.cmd [[ cabbrev dump Dump ]]
+vim.cmd [[ cabbrev DUmp Dump ]] -- frequently mistype, b/c I have to capitalize the goddamn D
+-- FYI original vimscript definition:
 -- vim.cmd [[
 --     command! -nargs=1 -complete=lua Dump lua print(vim.inspect(<args>))
 -- ]]
---
+
 
 
 -- * DumpBuffer module
