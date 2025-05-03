@@ -4,12 +4,13 @@
 
 ;vim.fn["CocActionAsync"]("documentSymbols", function(err, result)
 ; TODO update for dump.append rewrite in helpers.dump
+(local helpers (require "helpers.dump"))
 (vim.keymap.set :n :<leader>xs
                 (fn []
                   (vim.fn.CocActionAsync :documentSymbols
                                          (fn cb_ [err_ result]
                                            ;(vim.print result)))))
-                                           (_G.BufferDump result)))))
+                                           (helpers.append result)))))
 
 (vim.keymap.set :n :<leader>xd
                 (fn []
