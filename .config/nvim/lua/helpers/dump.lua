@@ -99,19 +99,15 @@ local function ensure_buffer_is_open()
     vim.api.nvim_set_current_win(original_window_id)
 end
 
-local function dump_background(append, ...)
+local function dump_background(...)
     -- TMP this is not here long term, just for now since my original code all assumes buffer opens if not already
-    ensure_buffer_is_open() -- TODO! once I figure out how I want it to work in background, then remove this
+    ensure_buffer_exists()
+    assert(M.dump_bufnr ~= nil)
 
     -- PRN use with my existing Dump command in nvim?
     -- dump into a buffer instead of print/echo/etc
     --    that way I don't need to use `:mess` (and `:mess clear`, etc)
-
-    assert(M.dump_bufnr ~= nil)
-
-    if not append then
-        M.clear()
-    end
+    -- maybe, make a new :BufferDump command?
 
     local args = { ... }
     for _, arg in ipairs(args) do
@@ -150,24 +146,32 @@ function M.header(...)
     local header = string.format("%s", table.concat({ ... }, " "))
     header = "\n" .. "---------- " .. header .. " ----------\n"
     dump_background(true, header)
+
+    return M
 end
 
 function M.clear()
     if M.dump_bufnr == nil then
         return
     end
-    -- * clear the buffer first
+
     -- both regular and terminal buffers, if modifiable:
     vim.api.nvim_buf_set_lines(M.dump_bufnr, 0, -1, false, {})
+
+    return M
 end
 
 function M.append(...)
     -- assume buffer is open (or explicitly closed) and its fine to append w/o a care for showing it
     dump_background(true, ...)
+
+    return M
 end
 
 function M.ensure_open()
     ensure_buffer_is_open()
+
+    return M
 end
 
 ---@return integer|nil bufnr, integer|nil window_id
