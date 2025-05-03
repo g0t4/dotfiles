@@ -11,6 +11,7 @@ vim.keymap.set('n', '<leader>tst', ":InspectTree<CR>")
 
 vim.keymap.set('n', '<leader>tsd', function()
     local node = vim.treesitter.get_node()
+    -- TODO add color to output
     local info = format_dump(node)
     dump.ensure_open()
     dump.append(info)
