@@ -256,9 +256,13 @@ vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(
 
 " Use CTRL-S for selections ranges
 " Requires 'textDocument/selectionRange' support of language server
-" TODO fix this interferes with my ctrl-S save keymap
-nmap <silent> <C-s> <Plug>(coc-range-select)
-xmap <silent> <C-s> <Plug>(coc-range-select)
+"   luals doesn't have this
+" default suggests <C-s> which I want for saving...
+" use <C-S-s> (shift+s) to use this...
+"   incrementally expands selection outward (higher scopes)
+"   coc-range-select-backward is inward (reduces selection to nested scopes)
+nmap <silent> <C-S-s> <Plug>(coc-range-select)
+xmap <silent> <C-S-s> <Plug>(coc-range-select)
 
 " Add `:Format` command to format current buffer
 command! -nargs=0 Format :call CocActionAsync('format')
