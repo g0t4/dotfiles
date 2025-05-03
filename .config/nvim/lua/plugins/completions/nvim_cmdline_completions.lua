@@ -1,34 +1,42 @@
-    vim.cmd [[
-"
-" TODO review/modify this? I haven't yet taken time to understand and think through this for changes...
+-- FYI this is for using cmdline completion baked into neovim
+--   NOT for when I am using nvim-cmp command line completions
+--   see completions.lua for whether or not this is enabled
 
-" TODO :h cmdline-completion
-"   is there a key combo to just show w/o select? (like Tab but w/o complete thru all common chars of remaining options)
+-- this was an attempt to get a more nvim-cmp like experience w/o nvim-cmp command line completions
+-- however this is buggy, and was just an idea I haven't fully explored so for now..
+-- I am gonna comment this out, maybe revisit it later
+-- I want a record of this if I stumble back onto the subject
 
-" OMG this is FAST!!!
-" verbatim copied from: https://github.com/neovim/neovim/issues/12428
-
-" BUT has some issues... Ctrl+P is selecting items when unique keys typed... show w/o select?
-function! OnCompletionDone(timer) abort
-        let g:doing_update = 0
-endfunction
-
-function! OnTimeoutTriggered(timer) abort
-        if pumvisible()
-                call nvim_input('<C-p>')
-        endif
-        call timer_start(5, 'OnCompletionDone')
-endfunction
-
-function! OnCmdlineChanged() abort
-        if !exists('g:doing_update') || !g:doing_update
-                let g:doing_update = 1
-                call nvim_input('<C-n>')
-                call timer_start(5, 'OnTimeoutTriggered')
-        endif
-endfunction
-
-set wildchar=<C-n>
-au CmdlineChanged * call OnCmdlineChanged()
-        ]]
-
+-- vim.cmd [[
+-- "
+-- " TODO review/modify this? I haven't yet taken time to understand and think through this for changes...
+--
+-- " TODO :h cmdline-completion
+-- "   is there a key combo to just show w/o select? (like Tab but w/o complete thru all common chars of remaining options)
+--
+-- " OMG this is FAST!!!
+-- " verbatim copied from: https://github.com/neovim/neovim/issues/12428
+--
+-- " BUT has some issues... Ctrl+P is selecting items when unique keys typed... show w/o select?
+-- function! OnCompletionDone(timer) abort
+--         let g:doing_update = 0
+-- endfunction
+--
+-- function! OnTimeoutTriggered(timer) abort
+--         if pumvisible()
+--                 call nvim_input('<C-p>')
+--         endif
+--         call timer_start(5, 'OnCompletionDone')
+-- endfunction
+--
+-- function! OnCmdlineChanged() abort
+--         if !exists('g:doing_update') || !g:doing_update
+--                 let g:doing_update = 1
+--                 call nvim_input('<C-n>')
+--                 call timer_start(5, 'OnTimeoutTriggered')
+--         endif
+-- endfunction
+--
+-- set wildchar=<C-n>
+-- au CmdlineChanged * call OnCmdlineChanged()
+--         ]]
