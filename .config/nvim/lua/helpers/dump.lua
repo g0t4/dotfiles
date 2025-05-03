@@ -25,7 +25,7 @@ vim.api.nvim_create_user_command("Dump", function(opts)
         error("Error during evaluation: " .. result)
     end
 
-    M.header("Expression: " .. opts.args)
+    M.header(":Dump " .. opts.args)
     M.append(vim.inspect(result))
     --
 end, {
