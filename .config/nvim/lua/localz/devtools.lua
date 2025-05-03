@@ -21,7 +21,6 @@ vim.api.nvim_create_user_command("Windows", function()
     local info    = vim.iter(windows)
         :map(function(w)
             local config = vim.api.nvim_win_get_config(w)
-            -- return { w, config.split }
             return w .. " " .. config.split
         end)
         :join("\n")
