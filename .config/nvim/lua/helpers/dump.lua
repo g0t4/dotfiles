@@ -171,7 +171,7 @@ function M.ensure_open()
 end
 
 ---@return integer|nil bufnr, integer|nil window_id
-function M.get_numbers()
+function M.get_ids()
     if M.dump_bufnr == nil then
         return nil, nil
     end
