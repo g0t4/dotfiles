@@ -23,7 +23,15 @@ function dump_formatter(value)
                 -- root = value:root(),
                 type = value:type(),
             }
-            return "~= treesitter node: " .. vim.inspect(info)
+            local text = vim.treesitter.get_node_text(value, 0)
+            local last = ""
+            if not text:find("\n") then
+                info.text = text
+            else
+                -- only need to break it out if its multiple lines so we can see lines and not \n
+                last = "\n\nText: " .. text
+            end
+            return "~= treesitter node: " .. vim.inspect(info) .. last
         end
 
         local mt = getmetatable(value)
