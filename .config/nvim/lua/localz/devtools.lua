@@ -104,25 +104,3 @@ vim.api.nvim_create_autocmd("CmdlineChanged", {
         end
     end,
 })
-
--- vim.keymap.set('c', 'jj', function()
---     --- getcmdline is empty... needs to use <C-\>e to eval expression right?
---     local line = vim.fn.getcmdline()
---     local pos = vim.fn.getcmdpos()
---     vim.schedule(function()
---         vim.notify(line)
---     end)
---     if line:sub(pos - 2, pos - 1) == 'jj' then
---         return vim.api.nvim_replace_termcodes('<C-U>bar', true, false, true)
---     end
---     return 'jj'
--- end, { expr = true })
-
--- vim.keymap.set('i', 'jj', function()
---     local col = vim.fn.col('.') - 1
---     local line = vim.fn.getline('.')
---     if col >= 2 and line:sub(col - 1, col) == 'jj' then
---         return vim.api.nvim_replace_termcodes('<BS><BS>bar', true, false, true)
---     end
---     return 'jj'
--- end, { expr = true })
