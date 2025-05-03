@@ -167,7 +167,7 @@ function M.header(...)
 
     local header = string.format("%s", table.concat({ ... }, " "))
     header = "\n" .. "---------- " .. header .. " ----------\n"
-    dump_background(true, header)
+    dump_background(header)
 
     return M
 end
@@ -185,7 +185,7 @@ end
 
 function M.append(...)
     -- assume buffer is open (or explicitly closed) and its fine to append w/o a care for showing it
-    dump_background(true, ...)
+    dump_background(...)
 
     return M
 end
