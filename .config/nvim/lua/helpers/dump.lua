@@ -2,8 +2,7 @@
 local M = {}
 
 -- * keymaps for messages buffer
-vim.keymap.set('n', '<leader>mx', function()
-    -- clear the messeages buffer
+vim.keymap.set('n', '<leader>mc', function()
     M.clear()
 end)
 vim.keymap.set('n', '<leader>mo', function()
