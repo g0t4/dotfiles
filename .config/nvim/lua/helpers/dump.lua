@@ -104,34 +104,37 @@ function buffer_dump_background(append, ...)
     -- dump into a buffer instead of print/echo/etc
     --    that way I don't need to use `:mess` (and `:mess clear`, etc)
 
+    assert(dump_bufnr ~= nil)
+
     if not append then
         BufferDumpClear()
     end
 
     local args = { ... }
-    local formatted_args = {}
     for _, arg in ipairs(args) do
         if type(arg) ~= "string" then
             -- inspect anything that isn't a string... inspect returns a string
             arg = vim.inspect(arg)
         end
-        -- FYI if I go back to non-terminal backing, need to split on "\n" in each arg too
-        table.insert(formatted_args, arg)
+
+
+        -- * append new content
+        -- ** terminal buffers:
+        -- send output to terminal, so it processes the ANSI color sequences
+        -- and output comes over STDOUT back to the buffer
+        -- vim.api.nvim_chan_send(dump_channel, table.concat(formatted_args, "\n") .. "\n")
+        vim.api.nvim_chan_send(dump_channel, arg .. "\n")
+
+        -- * non-terminal backing:
+        -- FYI had to split on "\n" for each arg too, so every line is separate
+        --   vim.api.nvim_buf_set_lines(dump_bufnr, -1, -1, false, lines)
+        -- OR can try using nvim_buf_
+        --   vim.api.nvim_buf_set_text(dump_bufnr, -1, 0, { arg })
+        -- FYI, this can still work on a terminal backed buffer, if it is modifiable
+        --   issue is it won't go through the terminal instance for ANSI color sequences to work
     end
-    assert(dump_bufnr ~= nil)
 
-    -- * append new content
-    --
-    -- * terminal buffers:
-    -- send output to terminal, so it processes the ANSI color sequences
-    -- and output comes over STDOUT back to the buffer
-    vim.api.nvim_chan_send(dump_channel, table.concat(formatted_args, "\n") .. "\n")
-    --
-    -- * non-terminal backing:
-    -- vim.api.nvim_buf_set_lines(dump_bufnr, -1, -1, false, lines)
-    --   FYI, this can still work on a terminal backed buffer, if it is modifiable
-    --   issue is it won't go through the terminal instance for ANSI color sequences to work
-
+    -- TODO not working with term backed buffer?
     -- move cursor to bottom of buffer
     local dump_window_id = window_id_for_buffer(dump_bufnr)
     assert(dump_window_id ~= nil)
