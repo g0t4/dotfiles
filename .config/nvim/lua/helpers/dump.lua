@@ -1,14 +1,38 @@
 -- * DumpBuffer module
 local M = {}
 
+
+function dump_formatter(value)
+    -- ? bring over my inspect from zeta.nvim repo?
+    -- TODO add in code to detect and extract details like known userdata type / fields, etc
+    local type = type(value)
+    if type == "table" then
+        return vim.inspect(value)
+    elseif type == "string" then
+        if value:len() > 0 then
+            return value
+        end
+        return "'' -- empty string"
+    elseif type == "userdata" then
+        return "userdata"
+    end
+
+    return vim.inspect(value)
+end
+
 -- FYI if you want an nvim user_command that takes a lua expression
 --    and it gets the evaluated value... this is how you can do it
 --
+local reminded_once = false
+
 vim.api.nvim_create_user_command("Dump", function(opts)
     M.ensure_open()
 
-    -- PRN retire this message later on
-    M.append("FYI use `:=` command to dump to the command line, instead of here")
+    if not reminded_once then
+        -- PRN retire this message later on
+        M.append("FYI use `:=` command to dump to the command line, instead of here")
+        reminded_once = true
+    end
 
     -- FYI should only be one expression
     --   there wouldn't be completion for multiple
@@ -26,7 +50,7 @@ vim.api.nvim_create_user_command("Dump", function(opts)
     end
 
     M.header(":Dump " .. opts.args)
-    M.append(vim.inspect(result))
+    M.append(dump_formatter(result))
     --
 end, {
     nargs = '*',
@@ -166,7 +190,7 @@ function M.header(...)
     ensure_buffer_exists()
 
     local header = string.format("%s", table.concat({ ... }, " "))
-    header = "\n" .. "---------- " .. header .. " ----------\n"
+    header = "\n" .. "---------- " .. header .. " ----------"
     dump_background(header)
 
     return M
