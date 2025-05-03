@@ -9,6 +9,7 @@ local abbrevs = {
     },
     c = {
         wls = "Dump vim.api.nvim_list_wins()",
+        bls = "buffers"
     }
 }
 
