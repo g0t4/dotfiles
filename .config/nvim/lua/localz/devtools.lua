@@ -84,8 +84,15 @@ local config = {
         --    see what feels right
         --    try each style for a few days and see how it feels
         --
-        -- ["lapi"] = "Dump vim.api.",
-        ["lapi "] = "Dump vim.api.<TAB>",
+        -- DO NOT USE command abbreviations for other commands (i.e. lvim => lvimgrep
+        -- ? wtf is going on... why does "lvim" suck here...
+        --   ["lvim "] = "Dump vim.<TAB>", => recursively invokes this handler (smth that is being typed into the field or?)
+        --   all the rest are fine
+        --
+        -- FYI config PLEBS... you want "lua <vim>.<TAB>" ... if you can't handle my :Dump
+        ["dvim "] = "Dump vim.<TAB>",
+        ["dapi "] = "Dump vim.api.<TAB>",
+        ["dfn "] = "Dump vim.fn.<TAB>",
         -- ["nvim"] = "Dump vim.api.nvim_<TAB>", -- tab to auto open completion!
         ["nvim "] = "Dump vim.api.nvim_<TAB>", -- tab to auto open completion!
         -- FYI cannot namespace... they cannot collide at all... without a mechaism to pause and yeah not sure I wanna have that
@@ -103,6 +110,7 @@ vim.api.nvim_create_autocmd("CmdlineChanged", {
             if line:match("^" .. prefix .. "$") then
                 -- Replace whole cmdline with "bar"
                 vim.schedule(function()
+                    print("activated: " .. prefix .. " -> " .. expansion)
                     vim.fn.feedkeys(vim.api.nvim_replace_termcodes("<C-U>" .. expansion, true, false, true))
                 end)
                 break
