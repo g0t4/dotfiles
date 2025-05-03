@@ -150,24 +150,28 @@ nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
 
 " * GoTo code navigation
-"nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gd <Cmd>Telescope coc definitions<CR>
+nmap <silent> gd <Plug>(coc-definition)
+"nmap <silent> gd <Cmd>Telescope coc definitions<CR>
 "
-"nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gy <Cmd>Telescope coc type_definitions<CR>
+nmap <silent> gy <Plug>(coc-type-definition)
+"nmap <silent> gy <Cmd>Telescope coc type_definitions<CR>
 "
-"nmap <silent> <leader>gi <Plug>(coc-implementation)
-nmap <silent> <leader>gi <Cmd>Telescope coc implementations<CR>
+nmap <silent> <leader>gi <Plug>(coc-implementation)
+"nmap <silent> <leader>gi <Cmd>Telescope coc implementations<CR>
 "
-"nmap <silent> <leader>gr <Plug>(coc-references)
-nmap <silent> <leader>gr <Cmd>Telescope coc references<CR>
-"
-"nmap <silent> <F12> <Plug>(coc-definition)
-nmap <silent> <F12> <Cmd>Telescope coc definitions<CR>
-"
+" FYI I am going back to coc's references picker, unfortunately
+"  when I use telescope's ... it doesn't support :CocResume/:CocNext/:CocPrev (see keymaps below)
+"  so I have to redo search each time! ouch
+"  applies to all coc pickers
+"  TODO investigate if I can get resume w/ telescope's picker which I prefer in some ways
+nmap <silent> <leader>gr <Plug>(coc-references)
+"nmap <silent> <leader>gr <Cmd>Telescope coc references<CR>
 " TODO shift-F12 not working, is that chord already mapped and/or not coming across as such?
-"nmap <silent> <S-F12> <Plug>(coc-references)
-nmap <silent> <S-F12> <Cmd>Telescope coc references<CR>
+nmap <silent> <S-F12> <Plug>(coc-references)
+"nmap <silent> <S-F12> <Cmd>Telescope coc references<CR>
+"
+nmap <silent> <F12> <Plug>(coc-definition)
+"nmap <silent> <F12> <Cmd>Telescope coc definitions<CR>
 
 nnoremap <silent> <S-k> :call ShowDocumentation()<CR>
 function! ShowDocumentation()
@@ -286,20 +290,20 @@ command! -nargs=0 OR   :call     CocActionAsync('runCommand', 'editor.action.org
 "     :CocNext/:CocPrev
 "" Show all diagnostics
 "nnoremap <silent><nowait> <space>a  :<C-u>CocList diagnostics<cr>
-"" Manage extensions
-"nnoremap <silent><nowait> <space>e  :<C-u>CocList extensions<cr>
-"" Show commands
-"nnoremap <silent><nowait> <space>c  :<C-u>CocList commands<cr>
 " Find symbol of current document
 "nnoremap <silent><nowait> <space>o  :<C-u>CocList outline<cr>
 "" Search workspace symbols
 "nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
-"" Do default action for next item
-"nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
-"" Do default action for previous item
-"nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
-"" Resume latest coc list
-"nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
+" Do default action for next item
+nnoremap <silent><nowait> <space>cj  :<C-u>CocNext<CR>
+" Do default action for previous item
+nnoremap <silent><nowait> <space>ck  :<C-u>CocPrev<CR>
+" Resume latest coc list
+nnoremap <silent><nowait> <space>cr  :<C-u>CocListResume<CR>
+"
+" rejected mapping suggestions:
+"nnoremap <silent><nowait> <space>e  :<C-u>CocList extensions<cr>
+"nnoremap <silent><nowait> <space>c  :<C-u>CocList commands<cr>
 
 
 
