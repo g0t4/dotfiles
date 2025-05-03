@@ -283,7 +283,7 @@ command! -nargs=0 OR   :call     CocActionAsync('runCommand', 'editor.action.org
 " provide custom statusline: lightline.vim, vim-airline
 "set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 
-" * CoCList
+" * CoCList related keymaps
 " TODO habituate
 "   this is like loclist and quickfix, but specific to CoC
 "   i.e. if you find refs => go to first one => wanna go next in list:
@@ -293,7 +293,8 @@ command! -nargs=0 OR   :call     CocActionAsync('runCommand', 'editor.action.org
 " CocList has fuzzy matchers, so a nice way to grok the relevant info (i.e. diagnostics or outline)
 "
 nnoremap <silent><nowait> <space>ca  :<C-u>CocList diagnostics<cr>
-" Find symbol of current document
+" Find symbol of current document (outline)
+" wow this is a nice way to jump to where I want for symobls in current file
 nnoremap <silent><nowait> <space>co  :<C-u>CocList outline<cr>
 " Search workspace symbols
 nnoremap <silent><nowait> <space>cs  :<C-u>CocList -I symbols<cr>
