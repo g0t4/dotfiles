@@ -89,6 +89,7 @@ local config = {
         -- FYI config PLEBS... you want "lua <vim>.<TAB>" ... if you can't handle my :Dump
         ["dvim "] = "Dump vim.<TAB>",
         ["dts "] = "Dump vim.treesitter.<TAB>",
+        ["=ts "] = "= vim.treesitter.", -- buggy w/o <C-S-U> fix below
         ["dapi "] = "Dump vim.api.<TAB>",
         ["dfn "] = "Dump vim.fn.<TAB>",
         -- ["nvim"] = "Dump vim.api.nvim_<TAB>", -- tab to auto open completion!
@@ -108,7 +109,12 @@ vim.api.nvim_create_autocmd("CmdlineChanged", {
             if line:match("^" .. prefix .. "$") then
                 vim.schedule(function()
                     dump.open_append("activated: " .. prefix .. " -> " .. expansion)
-                    vim.fn.feedkeys(vim.api.nvim_replace_termcodes("<C-U>" .. expansion, true, false, true))
+                    -- nvim-cmp has <C-u> for smth...
+                    -- anyways, I need capital U so if I add shift this seems to work fine
+                    -- w/o -S then I get <C-U> activating weird behavior (loops on activating completions w/ nvim-cmp)
+                    --    I picked -S... b/c IIUC <C-U>(capital U) should remove all chars from cursor, back to the start of the line
+                    --    only happens on some mappings (see above)
+                    vim.fn.feedkeys(vim.api.nvim_replace_termcodes("<C-S-U>" .. expansion, true, false, true))
                 end)
                 break
             end
