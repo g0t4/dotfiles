@@ -104,30 +104,28 @@ function buffer_dump_background(append, ...)
     -- dump into a buffer instead of print/echo/etc
     --    that way I don't need to use `:mess` (and `:mess clear`, etc)
 
+    if not append then
+        BufferDumpClear()
+    end
+
     local args = { ... }
-    local lines = {}
+    local formatted_args = {}
     for _, arg in ipairs(args) do
         if type(arg) ~= "string" then
             -- inspect anything that isn't a string... inspect returns a string
             arg = vim.inspect(arg)
         end
-        splitted = vim.split(arg, "\n")
-        for _, line in ipairs(splitted) do
-            table.insert(lines, line)
-        end
+        -- FYI if I go back to non-terminal backing, need to split on "\n" in each arg too
+        table.insert(formatted_args, arg)
     end
     assert(dump_bufnr ~= nil)
-
-    if not append then
-        BufferDumpClear()
-    end
 
     -- * append new content
     --
     -- * terminal buffers:
     -- send output to terminal, so it processes the ANSI color sequences
     -- and output comes over STDOUT back to the buffer
-    vim.api.nvim_chan_send(dump_channel, table.concat(lines, "\n") .. "\n")
+    vim.api.nvim_chan_send(dump_channel, table.concat(formatted_args, "\n") .. "\n")
     --
     -- * non-terminal backing:
     -- vim.api.nvim_buf_set_lines(dump_bufnr, -1, -1, false, lines)
