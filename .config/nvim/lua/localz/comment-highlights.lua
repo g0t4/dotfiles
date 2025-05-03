@@ -10,11 +10,17 @@ vim.cmd("nnoremap <leader>pc :lua print_captures_at_cursor()<CR>")
 vim.cmd("nnoremap <leader>pi :Inspect<CR>") -- prefer over pd/pc I made, b/c this shows treesitter/syntax/extmarks differences
 vim.cmd("nnoremap <leader>pii :Inspect!<CR>") -- prefer over pd/pc I made, b/c this shows treesitter/syntax/extmarks differences
 
+
+
 vim.keymap.set('n', '<leader>pd', function()
     local node = vim.treesitter.get_node()
     local info = dump_formatter(node)
     dump.ensure_open()
     dump.append(info)
+end)
+vim.keymap.set('n', '<leader>px', function()
+    -- clear the messeages buffer
+    dump.clear()
 end)
 
 vim.keymap.set('n', '<leader>pt', function()
