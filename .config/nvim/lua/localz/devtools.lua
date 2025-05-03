@@ -1,8 +1,11 @@
 --
 -- * think of this as devtools for neovim
--- yes abbrs will be part of it
--- also wanna add things to inspect easily... like
--- :windows command
+
+local function alias(lower, original)
+    vim.cmd(string.format("cabbrev %s %s", lower, original))
+end
+
+-- * :windows
 vim.api.nvim_create_user_command("Windows", function()
     local windows = vim.api.nvim_list_wins()
 
@@ -26,16 +29,10 @@ vim.api.nvim_create_user_command("Windows", function()
         :join("\n")
 
     vim.print(info)
-    -- vim.print(windows)
 end, {})
-local function alias(lower, original)
-    vim.cmd(string.format("cabbrev %s %s", lower, original))
-end
 alias("windows", "Windows")
 
--- I wanna build a list of abbreviations that expand in the command line (mostly to lua) for common things I wanna look up
-
--- do a video about this too, I only recently realized :abbreviate is a thing (just like fish shell's abbr)
+-- ! do a video about this too, I only recently realized :abbreviate is a thing (just like fish shell's abbr)
 
 local abbrevs = {
     i = {
