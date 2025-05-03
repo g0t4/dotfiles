@@ -263,6 +263,7 @@ vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(
 "   coc-range-select-backward is inward (reduces selection to nested scopes)
 nmap <silent> <C-S-s> <Plug>(coc-range-select)
 xmap <silent> <C-S-s> <Plug>(coc-range-select)
+"   PRN map coc-range-select-backward ?
 
 " Add `:Format` command to format current buffer
 command! -nargs=0 Format :call CocActionAsync('format')
