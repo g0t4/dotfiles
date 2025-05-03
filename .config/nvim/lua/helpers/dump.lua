@@ -246,6 +246,14 @@ function M.ensure_open()
     return M
 end
 
+-- FYI I hate this name but it works for now
+function M.open_append(...)
+    ensure_buffer_is_open()
+    dump_background(...)
+
+    return M
+end
+
 ---@return integer|nil bufnr, integer|nil window_id
 function M.get_ids()
     if M.dump_bufnr == nil then

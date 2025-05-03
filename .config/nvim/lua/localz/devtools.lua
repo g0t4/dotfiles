@@ -1,14 +1,11 @@
+local dump = require("helpers.dump")
 --
 -- * think of this as devtools for neovim
--- ***! STOP FUMBLING AROUND with typing :Dump/:lua vim.api... nonsense
-
 
 -- !! TODO I still stringly feel like the command line in nvim is not right...
 --   it needs love somehow... everything feels difficult
 --   tab completion doesn't seem to be well thought out...
 --   TODO ctrl+R mode (see whole command line not next token?)
-
--- ! do a video about this too, I only recently realized :abbreviate is a thing (just like fish shell's abbr)
 
 local function alias(lower, original)
     vim.cmd(string.format("cabbrev %s %s", lower, original))
@@ -109,9 +106,8 @@ vim.api.nvim_create_autocmd("CmdlineChanged", {
         local line = vim.fn.getcmdline()
         for prefix, expansion in pairs(config.prefixes) do
             if line:match("^" .. prefix .. "$") then
-                -- Replace whole cmdline with "bar"
                 vim.schedule(function()
-                    print("activated: " .. prefix .. " -> " .. expansion)
+                    dump.open_append("activated: " .. prefix .. " -> " .. expansion)
                     vim.fn.feedkeys(vim.api.nvim_replace_termcodes("<C-U>" .. expansion, true, false, true))
                 end)
                 break
