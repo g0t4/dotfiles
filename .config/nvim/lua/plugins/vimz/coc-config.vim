@@ -145,7 +145,10 @@ inoremap <silent><expr> <c-space> coc#refresh()
 " Use `:CocDiagnostics` to get all diagnostics of current buffer in location list
 nmap <silent> [g <Plug>(coc-diagnostic-prev)
 nmap <silent> ]g <Plug>(coc-diagnostic-next)
-"
+nmap <silent> [e <Plug>(coc-diagnostic-prev-error)
+nmap <silent> ]e <Plug>(coc-diagnostic-next-error)
+nmap <silent> [r CocNext
+nmap <silent> ]r CocPrev
 
 
 
@@ -298,11 +301,10 @@ nnoremap <silent><nowait> <space>ca  :<C-u>CocList diagnostics<cr>
 nnoremap <silent><nowait> <space>co  :<C-u>CocList outline<cr>
 " Search workspace symbols
 nnoremap <silent><nowait> <space>cs  :<C-u>CocList -I symbols<cr>
-" Do default action for next item
-nnoremap <silent><nowait> <space>cj  :<C-u>CocNext<CR>
-" Do default action for previous item
-nnoremap <silent><nowait> <space>ck  :<C-u>CocPrev<CR>
-" Resume latest coc list
+nnoremap <silent><nowait> <space>cf  :<C-u>CocFirst<CR>
+nnoremap <silent><nowait> <space>cl  :<C-u>CocLast<CR>
+nnoremap <silent><nowait> <space>cn  :<C-u>CocNext<CR>
+nnoremap <silent><nowait> <space>cp  :<C-u>CocPrev<CR>
 nnoremap <silent><nowait> <space>cr  :<C-u>CocListResume<CR>
 "
 " not that important to me, can remove:
