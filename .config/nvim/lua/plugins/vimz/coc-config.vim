@@ -288,12 +288,15 @@ command! -nargs=0 OR   :call     CocActionAsync('runCommand', 'editor.action.org
 "   this is like loclist and quickfix, but specific to CoC
 "   i.e. if you find refs => go to first one => wanna go next in list:
 "     :CocNext/:CocPrev
-"" Show all diagnostics
-"nnoremap <silent><nowait> <space>a  :<C-u>CocList diagnostics<cr>
+" FYI using <leader>c as prefix for now, that way these are "namespaced"
+"   means WhichKey will help me recall them
+" CocList has fuzzy matchers, so a nice way to grok the relevant info (i.e. diagnostics or outline)
+"
+nnoremap <silent><nowait> <space>ca  :<C-u>CocList diagnostics<cr>
 " Find symbol of current document
-"nnoremap <silent><nowait> <space>o  :<C-u>CocList outline<cr>
-"" Search workspace symbols
-"nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
+nnoremap <silent><nowait> <space>co  :<C-u>CocList outline<cr>
+" Search workspace symbols
+nnoremap <silent><nowait> <space>cs  :<C-u>CocList -I symbols<cr>
 " Do default action for next item
 nnoremap <silent><nowait> <space>cj  :<C-u>CocNext<CR>
 " Do default action for previous item
@@ -301,9 +304,9 @@ nnoremap <silent><nowait> <space>ck  :<C-u>CocPrev<CR>
 " Resume latest coc list
 nnoremap <silent><nowait> <space>cr  :<C-u>CocListResume<CR>
 "
-" rejected mapping suggestions:
-"nnoremap <silent><nowait> <space>e  :<C-u>CocList extensions<cr>
-"nnoremap <silent><nowait> <space>c  :<C-u>CocList commands<cr>
+" not that important to me, can remove:
+nnoremap <silent><nowait> <space>ce  :<C-u>CocList extensions<cr>
+nnoremap <silent><nowait> <space>cc  :<C-u>CocList commands<cr>
 
 
 
