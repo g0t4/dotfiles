@@ -15,6 +15,7 @@ vim.api.nvim_create_user_command("Dump", function(opts)
     --   what would a commma mean?
     --   conversely, can pass a table for multiple expressions
 
+    -- * evaluate lua expression
     local chunk, err = load("return " .. opts.args)
     if not chunk then
         error("Invalid expression: " .. err)
@@ -23,7 +24,6 @@ vim.api.nvim_create_user_command("Dump", function(opts)
     if not ok then
         error("Error during evaluation: " .. result)
     end
-
 
     M.append("Result: " .. vim.inspect(result))
 end, {
