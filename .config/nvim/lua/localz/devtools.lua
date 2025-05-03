@@ -18,13 +18,14 @@ vim.api.nvim_create_user_command("Windows", function()
     --   width = 120
     -- }
 
-    local info    = vim.iter(windows):map(function(w)
-        local config = vim.api.nvim_win_get_config(w)
-        -- return { w, config.split }
-        return w .. " " .. config.split
-    end):fold("", function(acc, v)
-        return acc .. "\n" .. v
-    end)
+    local info    = vim.iter(windows)
+        :map(function(w)
+            local config = vim.api.nvim_win_get_config(w)
+            -- return { w, config.split }
+            return w .. " " .. config.split
+        end)
+        :join("\n")
+
     vim.print(info)
     -- vim.print(windows)
 end, {})
