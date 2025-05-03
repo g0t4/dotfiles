@@ -18,18 +18,6 @@ vim.api.nvim_create_user_command('Dump', "lua print(vim.inspect(<args>))", {
 -- * DumpBuffer module
 local M = {}
 
----@return integer|nil # first window_id for buffer
-local function window_id_for_buffer(bufnr)
-    local window_ids = vim.fn.win_findbuf(bufnr)
-    -- FYI list is empty if no matches
-    return window_ids[1]
-end
-
-function M.is_visible(bufnr)
-    local window_id = window_id_for_buffer(bufnr)
-    return window_id ~= nil
-end
-
 M.dump_bufnr = nil
 M.dump_channel = nil
 
@@ -45,6 +33,18 @@ vim.api.nvim_create_autocmd("VimLeavePre", {
         end
     end,
 })
+
+---@return integer|nil # first window_id for buffer
+local function window_id_for_buffer(bufnr)
+    local window_ids = vim.fn.win_findbuf(bufnr)
+    -- FYI list is empty if no matches
+    return window_ids[1]
+end
+
+function M.is_visible(bufnr)
+    local window_id = window_id_for_buffer(bufnr)
+    return window_id ~= nil
+end
 
 --- does not open the buffer
 --- only creates it if it doesn't already exist
@@ -176,6 +176,7 @@ function M.get_ids()
         return nil, nil
     end
     -- for special cases where I just wanna reuse this buffer
+    -- probably shouldn't be using it for other things :)
     return M.dump_bufnr, window_id_for_buffer(M.dump_bufnr)
 end
 
