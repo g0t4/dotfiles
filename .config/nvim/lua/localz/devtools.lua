@@ -2,6 +2,14 @@
 -- * think of this as devtools for neovim
 -- ***! STOP FUMBLING AROUND with typing :Dump/:lua vim.api... nonsense
 
+
+-- !! TODO I still stringly feel like the command line in nvim is not right...
+--   it needs love somehow... everything feels difficult
+--   tab completion doesn't seem to be well thought out...
+--   TODO ctrl+R mode (see whole command line not next token?)
+
+-- ! do a video about this too, I only recently realized :abbreviate is a thing (just like fish shell's abbr)
+
 local function alias(lower, original)
     vim.cmd(string.format("cabbrev %s %s", lower, original))
 end
@@ -43,7 +51,7 @@ vim.api.nvim_create_user_command("Windows", function()
 end, {})
 alias("windows", "Windows")
 
--- ! do a video about this too, I only recently realized :abbreviate is a thing (just like fish shell's abbr)
+
 
 local abbrevs = {
     i = {
@@ -51,6 +59,11 @@ local abbrevs = {
         idk = "I don't know",
     },
     c = {
+        -- TODO how can I get rid of the space after expanding? in just this case?
+        lapi = "Dump vim.api",
+        lnvim = "Dump vim.api.nvim_",
+
+
         wls = "Dump vim.api.nvim_list_wins()",
         bls = "Dump vim.api.nvim_list_bufs()",
         -- bls = "buffers",
@@ -65,3 +78,51 @@ for mode, defs in pairs(abbrevs) do
 end
 
 -- vim.cmd('cabbr wls Dump vim.api.nvim_list_wins()')
+
+
+
+-- * abbreviations that expand on space, that then remove the space
+-- ok I really like `lapi` already!
+local config = {
+    prefixes = {
+        ["lapi"] = "Dump vim.api."
+    }
+}
+
+vim.api.nvim_create_autocmd("CmdlineChanged", {
+    pattern = ":",
+    callback = function()
+        local line = vim.fn.getcmdline()
+        for prefix, expansion in pairs(config.prefixes) do
+            if line:match("^" .. prefix .. "$") then
+                -- Replace whole cmdline with "bar"
+                vim.schedule(function()
+                    vim.fn.feedkeys(vim.api.nvim_replace_termcodes("<C-U>" .. expansion, true, false, true))
+                end)
+                break
+            end
+        end
+    end,
+})
+
+-- vim.keymap.set('c', 'jj', function()
+--     --- getcmdline is empty... needs to use <C-\>e to eval expression right?
+--     local line = vim.fn.getcmdline()
+--     local pos = vim.fn.getcmdpos()
+--     vim.schedule(function()
+--         vim.notify(line)
+--     end)
+--     if line:sub(pos - 2, pos - 1) == 'jj' then
+--         return vim.api.nvim_replace_termcodes('<C-U>bar', true, false, true)
+--     end
+--     return 'jj'
+-- end, { expr = true })
+
+-- vim.keymap.set('i', 'jj', function()
+--     local col = vim.fn.col('.') - 1
+--     local line = vim.fn.getline('.')
+--     if col >= 2 and line:sub(col - 1, col) == 'jj' then
+--         return vim.api.nvim_replace_termcodes('<BS><BS>bar', true, false, true)
+--     end
+--     return 'jj'
+-- end, { expr = true })
