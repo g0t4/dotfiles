@@ -22,9 +22,19 @@ vim.api.nvim_create_user_command("Windows", function()
     -- }
 
     local info    = vim.iter(windows)
-        :map(function(w)
-            local config = vim.api.nvim_win_get_config(w)
-            return w .. " " .. config.split
+        :map(function(window_id)
+            local config = vim.api.nvim_win_get_config(window_id)
+            local bufnr = vim.api.nvim_win_get_buf(window_id)
+            -- PRN based on buf/filetype ... display different info?
+            -- local buftype = vim.bo[bufnr].buftype
+            -- local filetype = vim.bo[bufnr].filetype
+            local buflines = vim.api.nvim_buf_line_count(bufnr)
+            local name = vim.api.nvim_buf_get_name(bufnr)
+            local row, col = unpack(vim.api.nvim_win_get_cursor(window_id))
+            return window_id .. " " .. config.split
+                .. " → buf " .. bufnr .. ": " .. name
+                .. " @ row: " .. row .. "/" .. buflines
+                .. "  col: " .. col
         end)
         :join("\n")
 
