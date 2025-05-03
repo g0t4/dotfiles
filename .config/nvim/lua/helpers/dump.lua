@@ -84,12 +84,13 @@ local function ensure_buffer_exists()
 end
 
 local function ensure_buffer_is_open()
+    ensure_buffer_exists()
+
     -- TODO! test this works here after creating buffer (before opening it in a window)
     -- note the current window so I can switch back to it when done opening the buffer/window
     local original_window_id = vim.api.nvim_get_current_win()
 
     -- ensure buffer is visible
-    -- vim.api.nvim_win_set_buf(0, bufnr)
     if not M.is_visible(M.dump_bufnr) then
         vim.api.nvim_command("vsplit")
         vim.api.nvim_win_set_buf(0, M.dump_bufnr)
@@ -98,7 +99,7 @@ local function ensure_buffer_is_open()
     vim.api.nvim_set_current_win(original_window_id)
 end
 
-local function buffer_dump_background(append, ...)
+local function dump_background(append, ...)
     -- TMP this is not here long term, just for now since my original code all assumes buffer opens if not already
     ensure_buffer_is_open() -- TODO! once I figure out how I want it to work in background, then remove this
 
@@ -148,7 +149,7 @@ function M.header(...)
 
     local header = string.format("%s", table.concat({ ... }, " "))
     header = "\n" .. "---------- " .. header .. " ----------\n"
-    buffer_dump_background(true, header)
+    dump_background(true, header)
 end
 
 function M.clear()
@@ -162,7 +163,7 @@ end
 
 function M.append(...)
     -- assume buffer is open (or explicitly closed) and its fine to append w/o a care for showing it
-    buffer_dump_background(true, ...)
+    dump_background(true, ...)
 end
 
 function M.ensure_open()
