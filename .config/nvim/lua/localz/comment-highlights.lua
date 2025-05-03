@@ -7,7 +7,14 @@ end
 vim.cmd("nnoremap <leader>pc :lua print_captures_at_cursor()<CR>")
 
 vim.cmd("nnoremap <leader>pi :Inspect<CR>") -- prefer over pd/pc I made, b/c this shows treesitter/syntax/extmarks differences
+vim.cmd("nnoremap <leader>pii :Inspect!<CR>") -- prefer over pd/pc I made, b/c this shows treesitter/syntax/extmarks differences
 
+vim.keymap.set('n', '<leader>pt', function()
+    -- show treesitter node text for node under cursor
+    local node = vim.treesitter.get_node()
+    local text = vim.treesitter.get_node_text(node, 0)
+    print(text)
+end)
 
 vim.api.nvim_set_hl(0, '@comment_todo', { fg = '#ffcc00' })                                         -- TODO test
 vim.api.nvim_set_hl(0, '@comment_todo_bang', { bg = '#ffcc00', fg = "#1f1f1f", bold = true })       -- TODO! test

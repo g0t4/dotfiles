@@ -91,6 +91,7 @@ local config = {
         --
         -- FYI config PLEBS... you want "lua <vim>.<TAB>" ... if you can't handle my :Dump
         ["dvim "] = "Dump vim.<TAB>",
+        ["dts "] = "Dump vim.treesitter.<TAB>",
         ["dapi "] = "Dump vim.api.<TAB>",
         ["dfn "] = "Dump vim.fn.<TAB>",
         -- ["nvim"] = "Dump vim.api.nvim_<TAB>", -- tab to auto open completion!
