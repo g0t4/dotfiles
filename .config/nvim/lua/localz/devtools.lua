@@ -105,6 +105,9 @@ vim.api.nvim_create_autocmd("CmdlineChanged", {
         for prefix, expansion in pairs(config.prefixes) do
             if line:match("^" .. prefix .. "$") then
                 vim.schedule(function()
+                    -- FYI! this is a good demo of my message buffer dump tool
+                    --   handlers would otherwise require to open messages after every event you want to test
+                    --   notify is an alternative but clutters up the screen
                     dump.open_append("activated: " .. prefix .. " -> " .. expansion)
                     -- nvim-cmp has <C-u> for smth...
                     -- anyways, I need capital U so if I add shift this seems to work fine
