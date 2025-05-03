@@ -25,7 +25,9 @@ vim.api.nvim_create_user_command("Dump", function(opts)
         error("Error during evaluation: " .. result)
     end
 
-    M.append("Result: " .. vim.inspect(result))
+    M.header("Expression: " .. opts.args)
+    M.append(vim.inspect(result))
+    --
 end, {
     nargs = '*',
     complete = "lua", -- completes like using :lua command!
