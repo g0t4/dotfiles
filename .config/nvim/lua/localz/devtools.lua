@@ -5,7 +5,28 @@
 -- :windows command
 vim.api.nvim_create_user_command("Windows", function()
     local windows = vim.api.nvim_list_wins()
-    vim.print(windows)
+
+    -- vim.api.nvim_win_get_config(0)
+    -- {
+    --   external = false,
+    --   focusable = true,
+    --   height = 56,
+    --   hide = false,
+    --   mouse = true,
+    --   relative = "",
+    --   split = "left",
+    --   width = 120
+    -- }
+
+    local info    = vim.iter(windows):map(function(w)
+        local config = vim.api.nvim_win_get_config(w)
+        -- return { w, config.split }
+        return w .. " " .. config.split
+    end):fold("", function(acc, v)
+        return acc .. "\n" .. v
+    end)
+    vim.print(info)
+    -- vim.print(windows)
 end, {})
 local function alias(lower, original)
     vim.cmd(string.format("cabbrev %s %s", lower, original))
