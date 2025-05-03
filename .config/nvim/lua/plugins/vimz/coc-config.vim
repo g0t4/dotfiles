@@ -141,14 +141,15 @@ inoremap <silent><expr> <C-f> coc#pum#visible() ? coc#pum#scroll(0) : "\<C-f>"
 " Use <c-space> to trigger/refresh completion
 inoremap <silent><expr> <c-space> coc#refresh()
 
-" TODO try out diagnostics
-" Use `[g` and `]g` to navigate diagnostics
+" * prev/next navigation using ][
 " Use `:CocDiagnostics` to get all diagnostics of current buffer in location list
 nmap <silent> [g <Plug>(coc-diagnostic-prev)
 nmap <silent> ]g <Plug>(coc-diagnostic-next)
+"
 
-" TODO try out navigation
-" GoTo code navigation
+
+
+" * GoTo code navigation
 "nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gd <Cmd>Telescope coc definitions<CR>
 "
@@ -181,9 +182,12 @@ endfunction
 " TODO! review more of the CocActions and API here:
 " TODO! https://github.com/neoclide/coc.nvim/blob/master/doc/coc.txt
 
-" disabled for now, multiline strings in lua aren't recognized as nested code which makes sense... so any time cursor stops in the multiline string it higlights all of it (yuck)
+" disabled for now, multiline strings in lua aren't recognized as nested code which makes sense...
+" so any time cursor stops in the multiline string it higlights all of it (yuck)
+" TODO change style of highlight
+" TODO can I disable highlighting if there are no other matches?
 " Highlight the symbol and its references when holding the cursor
-"autocmd CursorHold * silent call CocActionAsync('highlight')
+autocmd CursorHold * silent call CocActionAsync('highlight')
 
 " Symbol renaming (I love F2 for this, maybe get rid of rn if I use F2 alone)
 nmap <leader>rn <Plug>(coc-rename)
