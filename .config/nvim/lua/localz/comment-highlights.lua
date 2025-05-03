@@ -1,3 +1,4 @@
+local dump = require('helpers.dump')
 -- *** treesitter helpers, i.e. for understanding highlighting issues
 
 function print_captures_at_cursor()
@@ -8,6 +9,13 @@ vim.cmd("nnoremap <leader>pc :lua print_captures_at_cursor()<CR>")
 
 vim.cmd("nnoremap <leader>pi :Inspect<CR>") -- prefer over pd/pc I made, b/c this shows treesitter/syntax/extmarks differences
 vim.cmd("nnoremap <leader>pii :Inspect!<CR>") -- prefer over pd/pc I made, b/c this shows treesitter/syntax/extmarks differences
+
+vim.keymap.set('n', '<leader>pd', function()
+    local node = vim.treesitter.get_node()
+    local info = dump_formatter(node)
+    dump.ensure_open()
+    dump.append(info)
+end)
 
 vim.keymap.set('n', '<leader>pt', function()
     -- show treesitter node text for node under cursor
