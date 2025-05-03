@@ -1,5 +1,6 @@
 --
 -- * think of this as devtools for neovim
+-- ***! STOP FUMBLING AROUND with typing :Dump/:lua vim.api... nonsense
 
 local function alias(lower, original)
     vim.cmd(string.format("cabbrev %s %s", lower, original))
