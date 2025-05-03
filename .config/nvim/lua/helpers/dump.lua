@@ -5,7 +5,13 @@
 -- TODO completion for <args>, lua expression completion
 -- vim.lua_omnifunc() for lua expression completion
 --
-vim.api.nvim_create_user_command('Dump', "lua print(vim.inspect(<args>))", {
+function wes_dump(...)
+    print(vim.inspect(...))
+end
+
+vim.api.nvim_create_user_command('Dump', function(args)
+    wes_dump(args.fargs)
+end, {
     nargs = '*',
     complete = "lua", -- completes like using :lua command!
 })
