@@ -230,7 +230,12 @@ nmap <silent> <leader>r  <Plug>(coc-codeaction-refactor-selected)
 " Run the Code Lens action on the current line
 nmap <leader>cl  <Plug>(coc-codelens-action)
 
-" Map function and class text objects
+" * Map function and class text objects
+" TODO habituate if/of
+" in visual and operator pending modes
+" if = inner function
+" of = outer function
+" same idea w/ classes
 " NOTE: Requires 'textDocument.documentSymbol' support from the language server
 xmap if <Plug>(coc-funcobj-i)
 omap if <Plug>(coc-funcobj-i)
