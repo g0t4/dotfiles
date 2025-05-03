@@ -153,7 +153,7 @@ end
 function BufferDumpHeader(...)
     local header = string.format("%s", table.concat({ ... }, " "))
     header = "\n" .. "---------- " .. header .. " ----------\n"
-    buffer_dump_background(false, header)
+    buffer_dump_background(true, header)
 end
 
 function BufferDump(...)
