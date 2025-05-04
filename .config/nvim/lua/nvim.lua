@@ -1,6 +1,5 @@
 local M = {}
-
--- *** nvim argv detection
+-- ? is it a problem to call this module "nvim"? perhaps move it into a nested dir at least so it's "namespaced"
 
 function M.is_nvim_noplugin()
     return vim.tbl_contains(vim.v.argv, '--noplugin')
