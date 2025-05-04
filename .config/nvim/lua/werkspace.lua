@@ -1,3 +1,8 @@
+if is_nvim_headless() then
+    print("werkspace will not load in headless mode")
+    return
+end
+
 function is_lazy_open()
     local win_ids = vim.api.nvim_list_wins()
 

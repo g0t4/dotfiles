@@ -25,6 +25,12 @@ return {
         --   and just point at this same dotfiles repo like the example here:
         --     https://github.com/LazyVim/LazyVim/blob/ec5981dfb1222c3bf246d9bcaa713d5cfa486fbd/lua/lazyvim/plugins/init.lua#L15
         --
+        -- FYI one way to test for race conditions is to use <Plug>PlenaryTestFile, i.e. in zeta.nvim repo
+        --   to understand what might be going wrong, helps to look at how it works:
+        --   https://github.com/nvim-lua/plenary.nvim/blob/master/lua/plenary/test_harness.lua#L1
+        --   btw, the tests still work but theres a bunch of misleading errors in the output (in some cases)
+        --   this was the primary motivation for me to finally setup this virtual plugin b/c of the copious config I have outside of plugins
+        --
         dependencies = {
             "g0t4/devtools.nvim",
         },
