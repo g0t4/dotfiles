@@ -120,22 +120,6 @@ vim.cmd [[
 -- vim.opt.splitbelow = true -- i.e. help opens below then
 vim.opt.splitright = true -- :vsplit now opens new window on the right, I def want that as I always flip them, also Ctrl+V in telescope opens file to the right
 
--- *** WIP CmdCapture
--- TODO how is this not a builtin thing? or is it? (redir + cmd + paste?)
--- i.e. `:CmdCapture nmap <leader>` => new buffer, then :sort if desired to find what keymaps are avail
--- this is like :Dump, a command means its just one word before what I want to run to add this special behavior below
-vim.api.nvim_create_user_command('CmdCapture', "lua CaptureCommandOutput(<q-args>)", {
-    nargs = '*',
-    -- TODO can I specify the entire argument is a command and get completion on the ex command args too?
-    -- FOR now, type command first and then prepend :CmdCapture (maybe add a keybind to do this)
-    complete = "command", -- :help :command-complete
-})
-function CaptureCommandOutput(cmd)
-    vim.cmd('new')
-    local output = vim.fn.execute(cmd)
-    vim.api.nvim_buf_set_lines(0, 0, -1, false, vim.split(output, '\n'))
-end
-
 vim.keymap.set("n", "<leader>ml", function()
     -- turn the current big Word into a markdown link
     --    use link in the clipboard
