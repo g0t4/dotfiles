@@ -3,7 +3,7 @@
 ;  as well as the LSP
 
 ;vim.fn["CocActionAsync"]("documentSymbols", function(err, result)
-(local helpers (require "devtools.messasges"))
+(local helpers (require "devtools.messages"))
 (vim.keymap.set :n :<leader>xs
                 (fn []
                   (vim.fn.CocActionAsync :documentSymbols
