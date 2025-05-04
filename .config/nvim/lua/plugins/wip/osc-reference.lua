@@ -83,7 +83,18 @@ vim.api.nvim_create_autocmd({ 'TermRequest' }, {
     desc = 'Handles OSC 7 dir change requests',
     callback = function(ev)
         print("TReq", vim.v.termrequest)
-        messages.ensure_open()
+        -- messages.ensure_open() - even if I manually open the messages buffer... still failing
+        -- FYI something is buggy about capturing OSC codes, seems like it might have to do with switching to the messages window and scrolling down maybe?
+        --  not surprising given the messages buffer uses a terminal buffer too (and I have those setup to auto enter on switch, IIRC)
+        --
+        -- Error detected while processing TermRequest Autocommands for "*":
+        -- Error executing lua callback: TermRequest Autocommands for "*": Vim(normal):Can't re-enter normal mode from terminal mode
+        -- stack traceback:
+        --         [C]: in function 'win_execute'
+        --         ...epos/github/g0t4/devtools.nvim/lua/devtools/messages.lua:231: in function 'dump_background'
+        --         ...epos/github/g0t4/devtools.nvim/lua/devtools/messages.lua:257: in function 'append'
+        --         .../wesdemos/.config/nvim/lua/plugins/wip/osc-reference.lua:91: in function <.../wesdemos/.config/nvim/lua/plugins/wip/osc-reference.lua:84>       --
+        --
 
         if string.sub(vim.v.termrequest, 1, 7) == '\x1b]133;A' then
             messages.append("  prompt_start A")
