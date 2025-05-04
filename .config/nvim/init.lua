@@ -10,8 +10,6 @@ require('non-plugins.filetypemods') -- before werkspace else filetype mods dont 
 require('werkspace')
 require('non-plugins.misc')
 require('non-plugins.keymaps')
-require('non-plugins.clippy')
-require('non-plugins.devtools-wip')
 
 vim.cmd [[
     " TODO where should I consolidate these?
