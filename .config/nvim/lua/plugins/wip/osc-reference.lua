@@ -1,3 +1,4 @@
+local messages = require("devtools.messages")
 --
 
 -- FYI ^[ == \x1b
@@ -82,17 +83,21 @@ vim.api.nvim_create_autocmd({ 'TermRequest' }, {
     desc = 'Handles OSC 7 dir change requests',
     callback = function(ev)
         print("TReq", vim.v.termrequest)
+        messages.ensure_open()
 
         if string.sub(vim.v.termrequest, 1, 7) == '\x1b]133;A' then
-            print("  prompt_start A")
+            messages.append("  prompt_start A")
         elseif string.sub(vim.v.termrequest, 1, 7) == '\x1b]133;B' then
-            print('  ??? B')
+            messages.append('  ??? B')
         elseif string.sub(vim.v.termrequest, 1, 7) == '\x1b]133;C' then
-            print('  command_start C')
+            messages.append('  command_start C')
             -- COMMAND started
         elseif string.sub(vim.v.termrequest, 1, 7) == '\x1b]133;D' then
-            print('  command_end D')
+            messages.append('  command_end D')
             -- COMMAND finished
+        else
+            messages.append('  ???', tostring(vim.v.termrequest))
+            print(tostring(vim.v.termrequest))
         end
 
         -- fodder from vim docs examples to cd on dir change in terminal
