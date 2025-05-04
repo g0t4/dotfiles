@@ -543,7 +543,7 @@ local llama_cpp_llama_vim_plugin = {
             -- \ 't_max_prompt_ms':    500,
             -- \ 't_max_predict_ms':   1000,
             -- \ 'auto_fim':           v:true,
-            -- \ 'max_line_suffix':    8,
+            max_line_suffix = 100, -- default = 8
             -- \ 'max_cache_keys':     250,
             -- \ 'ring_n_chunks':      16,
             -- \ 'ring_chunk_size':    64,
