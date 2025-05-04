@@ -3,7 +3,9 @@ require("early")
 
 require("bootstrap-lazy")
 
--- after plugin loader
+-- TODO! move any non-plugin config into the virtual plugin in g0t4.lua plugin spec set, esp if it needs to run after a plugin
+-- TODO! goal is to push all config into expressing its dependencies and loading as a plugin... to avoid race conditions hell
+-- after plugin loader (but not guaranteed to be after specific plugins)
 require('localz.filetypemods') -- before werkspace else filetype mods dont fire
 require('werkspace')
 require('localz.github-links')
