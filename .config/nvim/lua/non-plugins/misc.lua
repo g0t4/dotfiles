@@ -196,7 +196,6 @@ vim.keymap.set("n", "<leader>vj", function()
     vim.cmd("normal o") -- insert line after
     vim.cmd("normal p`[v`]=") -- while on line above paste spot... paste and indent
     -- TODO if it comes up a lot, use regtype to detect linewise/charwise/blockwise
-
 end, { noremap = true }) -- " and comment it out (toggle comment)
 
 
