@@ -60,7 +60,7 @@ require("lazy").setup({
         require("plugins.colors"),
         require("plugins.comments"),
         require("plugins.completions"),
-        require("plugins.copilot"),
+        require("plugins.ai.copilot"),
         require("plugins.debug-dap"),
         require("plugins.debug-vimspector"),
         require("plugins.filetypeplugins"),
