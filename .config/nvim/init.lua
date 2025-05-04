@@ -8,7 +8,6 @@ require("bootstrap-lazy")
 -- after plugin loader (but not guaranteed to be after specific plugins)
 require('localz.filetypemods') -- before werkspace else filetype mods dont fire
 require('werkspace')
-require('localz.github-links')
 require('localz.misc')
 require('localz.keymaps')
 require('localz.clippy')

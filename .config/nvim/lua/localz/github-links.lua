@@ -1,4 +1,3 @@
-
 vim.cmd [[
 
     function! BuildGitHubLink(start_line, end_line, is_permalink)
@@ -74,5 +73,3 @@ vim.cmd [[
     vnoremap <silent> <leader>gp :call CopyGitHubLink(v:true)<CR>
 
 ]]
-
-
