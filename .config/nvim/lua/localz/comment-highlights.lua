@@ -1,4 +1,4 @@
-local dump = require('helpers.dump')
+local dump = require("devtools.messages")
 
 -- TODO remove once reminders not needed
 vim.cmd("nnoremap <leader>pc :lua vim.notify('use <leader>tsi now')<CR>")

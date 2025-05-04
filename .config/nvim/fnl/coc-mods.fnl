@@ -3,8 +3,7 @@
 ;  as well as the LSP
 
 ;vim.fn["CocActionAsync"]("documentSymbols", function(err, result)
-; TODO update for dump.append rewrite in helpers.dump
-(local helpers (require "helpers.dump"))
+(local helpers (require "devtools.messasges"))
 (vim.keymap.set :n :<leader>xs
                 (fn []
                   (vim.fn.CocActionAsync :documentSymbols

@@ -1,4 +1,4 @@
-local dump = require("helpers.dump")
+local dump = require("devtools.messages")
 --
 -- * think of this as devtools for neovim
 

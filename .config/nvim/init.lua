@@ -1,6 +1,5 @@
 -- before plugin loader
 require("early")
-require('helpers.dump')
 
 require("bootstrap-lazy")
 
