@@ -19,7 +19,7 @@ local plugin_coc = {
     -- sample config: https://raw.githubusercontent.com/neoclide/coc.nvim/master/doc/coc-example-config.vim
 
     -- FYI its ok to load this always, that said it might be nice to only load this on specific filetypes that I configure it to work with
-    event = require('event-triggers').buffer_with_content_events,
+    event = { "BufRead", "InsertEnter" },
 
     config = function()
         vim.cmd('source ~/.config/nvim/lua/plugins/vimz/coc-config.vim')

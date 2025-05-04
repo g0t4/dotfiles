@@ -5,10 +5,9 @@ return {
         'nvim-treesitter/nvim-treesitter',
         build = ":TSUpdate",
 
-        event = require('event-triggers').buffer_with_content_events,
+        event = { "BufRead", "InsertEnter" },
 
         config = function()
-
             require 'nvim-treesitter.configs'.setup {
                 ensure_installed = { "c", "lua", "python", "javascript", "typescript", "html", "css", "json", "yaml", "markdown", "vim" }, -- one of "all", "maintained" (parsers with maintainers), or a list of languages
                 sync_install = false,

@@ -1,11 +1,9 @@
-local buffer_with_content_events = require("event-triggers").buffer_with_content_events
-
 return {
 
     {
         -- surround with - add/rm () {} [] `` '' "" etc - like vscode, I really like that in vscode, esp in markdown to use code blocks on existing content
         'kylechui/nvim-surround', -- dot repeat! (wrap multiple things), jump to nearest pair?
-        event = buffer_with_content_events,
+        event = { "BufRead", "InsertEnter" },
         config = function()
             require('nvim-surround').setup({})
         end
@@ -22,7 +20,7 @@ return {
     -- highlight selections like vscode, w/o limits (200 chars in vscode + no new lines)
     {
         "aaron-p1/match-visual.nvim",
-        event = buffer_with_content_events,
+        event = { "BufRead", "InsertEnter" },
         enabled = false,
     }, -- will help me practice using visual mode too
     -- FYI g,Ctrl-g to show selection length (aside from just highlighting occurrenes of selection)
@@ -50,7 +48,7 @@ return {
     {
         "jinh0/eyeliner.nvim", -- lua impl, validated this actually works good and the color is blue OOB which is nicely subtle, super useful on long lines!
         enabled = true,
-        event = buffer_with_content_events,
+        event = { "BufRead", "InsertEnter" },
         config = function()
             -- highlight customization:
             --   https://github.com/jinh0/eyeliner.nvim?tab=readme-ov-file#-customize-highlight-colors
@@ -92,7 +90,7 @@ return {
     {
         -- *** smooth scrolling
         "karb94/neoscroll.nvim",
-        event = buffer_with_content_events,
+        event = { "BufRead", "InsertEnter" },
         config = function()
             local neoscroll = require('neoscroll')
             -- additional/custom keybindings, why aren't PageUp/Down OOB? any reason why I shouldn't remap those too?

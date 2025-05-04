@@ -80,7 +80,7 @@ return {
     {
         "norcalli/nvim-colorizer.lua", -- colorize hex codes, etc
         enabled = true,
-        event = require("event-triggers").buffer_with_content_events,
+        event = { "BufRead", "InsertEnter" },
         config = function()
             require("colorizer").setup()
         end,
