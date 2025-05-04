@@ -10,7 +10,6 @@ require('localz.github-links')
 require('localz.misc')
 require('keymaps')
 require('localz.clippy')
-require('localz.comment-highlights')
 require('localz.devtools-wip')
 
 vim.cmd [[
