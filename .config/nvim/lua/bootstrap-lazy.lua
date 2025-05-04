@@ -1,6 +1,10 @@
 require("early")
 
 if is_nvim_noplugin() then
+    if is_nvim_running_plenary_test_harness() then
+        -- don't log extra messages when testing
+        return
+    end
     print("skipping lazy.nvim b/c --noplugin was passed to nvim command")
     return
 end

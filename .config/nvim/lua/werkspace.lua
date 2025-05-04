@@ -1,6 +1,10 @@
 require("early")
 
 if is_nvim_headless() then
+    if is_nvim_running_plenary_test_harness() then
+        -- don't log extra messages when testing
+        return
+    end
     print("werkspace will not load in headless mode")
     return
 end

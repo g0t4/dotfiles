@@ -143,3 +143,10 @@ function is_nvim_headless()
     --     FYI if I need to detect plenary only, look for "plenary.busted" in vim.v.argv
     return vim.tbl_contains(vim.v.argv, '--headless')
 end
+
+function is_nvim_running_plenary_test_harness()
+    return vim.iter(vim.v.argv)
+        :any(function(arg)
+            return arg:find("plenary%.busted") ~= nil
+        end)
+end
