@@ -543,7 +543,11 @@ local llama_cpp_llama_vim_plugin = {
             -- \ 't_max_prompt_ms':    500,
             -- \ 't_max_predict_ms':   1000,
             -- \ 'auto_fim':           v:true,
-            max_line_suffix = 100, -- default = 8
+            --
+            -- how much of the end of the current line (after cursor) will be FIM'd (else FIM won't happen)
+            max_line_suffix = 10, -- default = 8 -- FYI 100 way too much!
+            --  FYI part of the issue might be when in smaller windowws and it appers to clobber what comes after your cursor but it's not clobbered...  but you cannot tell if you say tab and do clobber it vs don't
+            --
             -- \ 'max_cache_keys':     250,
             -- \ 'ring_n_chunks':      16,
             -- \ 'ring_chunk_size':    64,
