@@ -11,7 +11,7 @@ require('localz.misc')
 require('keymaps')
 require('localz.clippy')
 require('localz.comment-highlights')
-require('localz.devtools')
+require('localz.devtools-wip')
 
 vim.cmd [[
     " TODO where should I consolidate these?
