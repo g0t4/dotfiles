@@ -39,7 +39,7 @@ return {
                     component_separators = "",
                     -- globalstatus  -- only one status line? hrm... might work now that I have inactive windows dimmed in onedarkpro theme
                     --
-                    theme = require("non-plugins.lualine-theme").theme(),
+                    theme = require("plugins.lualine.theme").theme(),
 
                 },
                 -- FYI =>    :lua print(vim.inspect(require('lualine').get_config()))

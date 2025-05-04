@@ -66,7 +66,7 @@ require("lazy").setup({
         require("plugins.filetypeplugins"),
         require("plugins.ft-markdown"),
         require("plugins.learning"),
-        require("plugins.lualine"),
+        require("plugins.lualine.lualine"),
         require("plugins.misc"),
         require("plugins.terminals"),
         require("plugins.pickers"),
