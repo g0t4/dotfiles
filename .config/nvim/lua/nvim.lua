@@ -1,12 +1,12 @@
 local M = {}
 -- ? is it a problem to call this module "nvim"? perhaps move it into a nested dir at least so it's "namespaced"
 
-function M.is_nvim_noplugin()
+function M.is_noplugin()
     return vim.tbl_contains(vim.v.argv, '--noplugin')
     -- return vim.iter(vim.v.argv):any(function(arg) return arg == "--noplugin" end)
 end
 
-function M.is_nvim_headless()
+function M.is_headless()
     -- i.e. why I don't want to run during headless mode, plenary tests uses it:
     --   <Plug>PlenaryTestFile => test harness:
     --     https://github.com/nvim-lua/plenary.nvim/blob/857c5ac/lua/plenary/test_harness.lua#L84-L87
@@ -20,7 +20,7 @@ function M.is_nvim_headless()
     return vim.tbl_contains(vim.v.argv, '--headless')
 end
 
-function M.is_nvim_running_plenary_test_harness()
+function M.is_running_plenary_test_harness()
     return vim.iter(vim.v.argv)
         :any(function(arg)
             return arg:find("plenary%.busted") ~= nil

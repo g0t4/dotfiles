@@ -1,7 +1,7 @@
 local nvim = require("nvim")
 
-if nvim.is_nvim_noplugin() then
-    if nvim.is_nvim_running_plenary_test_harness() then
+if nvim.is_noplugin() then
+    if nvim.is_running_plenary_test_harness() then
         -- don't log extra messages when testing
         return
     end
