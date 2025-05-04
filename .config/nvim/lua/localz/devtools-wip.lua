@@ -91,6 +91,7 @@ local config = {
         ["dfn "] = "Dump vim.fn.",
         -- ["nvim"] = "Dump vim.api.nvim_", -- tab to auto open completion!
         ["nvim "] = "Dump vim.api.nvim_", -- tab to auto open completion!
+        ["nml"] = "nmap <leader>",
         -- FYI cannot namespace... they cannot collide at all... without a mechaism to pause and yeah not sure I wanna have that
         -- ["nvimw"] = "Dump vim.api.nvim_win_", -- IOTW nvim here would already expand before I type the w and so
         --     I get "Dump vim.api.nvim_w" ... but that reminds me thats fine by me! I can type the W
