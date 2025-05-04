@@ -1,3 +1,5 @@
+-- FYI if I use this again, merge it into the plugin config/setup for nvim-tree (et al)
+
 -- TODO => I dont like that it takes up full screen and is invoked in the editor too (clobbers ctrl+space coc completions)
     local tree_actions = {
         {
