@@ -1,3 +1,8 @@
+if is_nvim_noplugin() then
+    print("disabling lazy.nvim b/c --noplugin was passed to nvim command")
+    return
+end
+
 -- benefits/differences:
 -- stellar panel overview of plugins
 --  aside rom lazy loading
