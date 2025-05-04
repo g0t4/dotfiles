@@ -6,7 +6,7 @@ require("bootstrap-lazy")
 -- TODO! move any non-plugin config into the virtual plugin in g0t4.lua plugin spec set, esp if it needs to run after a plugin
 -- TODO! goal is to push all config into expressing its dependencies and loading as a plugin... to avoid race conditions hell
 -- after plugin loader (but not guaranteed to be after specific plugins)
-require('werkspace')
+require('non-plugins.werkspaces.werkspace')
 
 vim.cmd [[
     " TODO where should I consolidate these?

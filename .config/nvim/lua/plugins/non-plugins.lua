@@ -30,7 +30,6 @@ return {
             require('non-plugins.github-links')
             require('non-plugins.clippy')
             require('non-plugins.devtools-wip')
-            require('non-plugins.filetypemods') -- before werkspace else filetype mods dont fire
             require('non-plugins.misc')
             require('non-plugins.keymaps')
         end,

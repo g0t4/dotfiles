@@ -1,3 +1,7 @@
+require('non-plugins.werkspaces.filetypemods') -- FYI! must load  before werkspace else filetype mods dont fire for initial opened buffer
+-- actually not the end of the world to tie these two together, they are similar in what they acccomplish
+-- TODO can I fix so filetypmods are applied to existing buffers on load?
+
 local nvim = require("non-plugins.nvim")
 
 if nvim.is_headless() then
@@ -141,11 +145,12 @@ function setup_workspace()
             if ! exists('$IS_SEMANTIC_WINDOW')
                 return
             endif
+            " TODO! confirm still works after rearranging nvim non-plugin config
 
             " 20ms+ to send via new python process, not surprising
             "!uv run "/Users/wes/repos/github/g0t4/dotfiles/iterm2/semantic-click-handler/quit-client.py" $ITERM_SESSION_ID
             " ZERO lag using lua to send the notification... as expected
-            lua require("non-plugins.semantic-client").NotifyDaemonOfSessionQuit()
+            lua require("non-plugins.werkspaces.semantic-client").NotifyDaemonOfSessionQuit()
         endfunction
     ]]
     --
