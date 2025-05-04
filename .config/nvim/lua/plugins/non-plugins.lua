@@ -31,6 +31,8 @@ return {
             require('non-plugins.clippy')
             require('non-plugins.devtools-wip')
             require('non-plugins.filetypemods') -- before werkspace else filetype mods dont fire
+            require('non-plugins.misc')
+            require('non-plugins.keymaps')
         end,
     },
     -- -- FYI tested that I can have a second plugin with same dir and it works too

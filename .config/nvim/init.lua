@@ -7,8 +7,6 @@ require("bootstrap-lazy")
 -- TODO! goal is to push all config into expressing its dependencies and loading as a plugin... to avoid race conditions hell
 -- after plugin loader (but not guaranteed to be after specific plugins)
 require('werkspace')
-require('non-plugins.misc')
-require('non-plugins.keymaps')
 
 vim.cmd [[
     " TODO where should I consolidate these?
