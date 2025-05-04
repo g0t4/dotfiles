@@ -1,3 +1,5 @@
+require("early")
+
 if is_nvim_headless() then
     print("werkspace will not load in headless mode")
     return
