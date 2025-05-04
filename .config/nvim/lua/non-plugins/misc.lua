@@ -1,3 +1,10 @@
+--
+-- TODO split this out into domain speicific OR:
+--   keymaps.lua
+--   commands.lua
+--   etc
+
+
 -- cursor block in insert:
 vim.cmd(":set guicursor=i:block")
 
