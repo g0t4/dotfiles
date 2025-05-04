@@ -10,7 +10,7 @@ require('localz.filetypemods') -- before werkspace else filetype mods dont fire
 require('werkspace')
 require('localz.github-links')
 require('localz.misc')
-require('keymaps')
+require('localz.keymaps')
 require('localz.clippy')
 require('localz.devtools-wip')
 
