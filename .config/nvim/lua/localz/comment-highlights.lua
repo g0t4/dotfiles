@@ -1,3 +1,5 @@
+local messages = require("devtools.messages")
+local inspect = require("devtools.inspect")
 -- TODO remove once reminders not needed
 vim.cmd("nnoremap <leader>pc :lua vim.notify('use <leader>tsi now')<CR>")
 vim.cmd("nnoremap <leader>pi :lua vim.notify('use <leader>tsi now')<CR>")
@@ -8,13 +10,32 @@ vim.cmd("nnoremap <leader>tsii :Inspect!<CR>") -- vim.inspect_pos() -- detailed
 vim.keymap.set('n', '<leader>tst', ":InspectTree<CR>")
 
 vim.keymap.set('n', '<leader>tsd', function()
-    local dump = require("devtools.messages")
+    local messages = require("devtools.messages")
     local node = vim.treesitter.get_node()
     -- TODO add color to output
     local info = format_dump(node)
-    dump.ensure_open()
-    dump.append(info)
+    messages.ensure_open()
+    messages.append(info)
 end)
+
+local query = vim.treesitter.query
+
+vim.keymap.set('n', '<leader>tsc', function()
+    local current_node = vim.treesitter.get_node():root()
+    messages.open_append(inspect(current_node))
+
+    -- local bufnr = vim.api.nvim_get_current_buf()
+    -- for id, node, metadata, match in query:iter_captures(current_node, bufnr, first, last) do
+    --     local name = query.captures[id] -- name of the capture in the query
+    --     -- typically useful info about the node:
+    --     local type = node:type() -- type of the captured node
+    --     local row1, col1, row2, col2 = node:range() -- range of the capture
+    --     -- ... use the info here ...
+    -- end
+end)
+
+
+
 
 vim.api.nvim_set_hl(0, '@comment_todo', { fg = '#ffcc00' }) -- TODO test
 vim.api.nvim_set_hl(0, '@comment_todo_bang', { bg = '#ffcc00', fg = "#1f1f1f", bold = true }) -- TODO! test
