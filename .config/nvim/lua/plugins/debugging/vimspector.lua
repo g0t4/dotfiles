@@ -15,7 +15,7 @@ return {
             -- schemas: https://puremourning.github.io/vimspector/schema/
             -- TODO keys
             --   review: https://puremourning.github.io/vimspector-web/#debugging
-            --   TODO finish reviewing checklist in debug-vimspector-checklist.vim (next to this file)
+            --   TODO finish reviewing checklist in vimspector-checklist.vim (next to this file)
             --   let g:vimspector_enable_mappings = 'HUMAN' " https://github.com/puremourning/vimspector?tab=readme-ov-file#human-mode
 
             vim.cmd [[
