@@ -38,8 +38,8 @@ return {
             -- FYI just put the plugins here even if no deps
             --   don't note deps in here, look at the file for that!
             --   don't worry about breaking out other non-plugin virtual plugins unless actual use case arises
-            require('localz.github-links')
-            require('localz.comment-highlights')
+            require('non-plugins.github-links')
+            require('non-plugins.comment-highlights')
         end,
     },
     -- -- FYI tested that I can have a second plugin with same dir and it works too

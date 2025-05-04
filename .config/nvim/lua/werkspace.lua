@@ -1,4 +1,4 @@
-local nvim = require("localz.nvim")
+local nvim = require("non-plugins.nvim")
 
 if nvim.is_headless() then
     if nvim.is_running_plenary_test_harness() then
@@ -145,7 +145,7 @@ function setup_workspace()
             " 20ms+ to send via new python process, not surprising
             "!uv run "/Users/wes/repos/github/g0t4/dotfiles/iterm2/semantic-click-handler/quit-client.py" $ITERM_SESSION_ID
             " ZERO lag using lua to send the notification... as expected
-            lua require("localz.semantic-client").NotifyDaemonOfSessionQuit()
+            lua require("non-plugins.semantic-client").NotifyDaemonOfSessionQuit()
         endfunction
     ]]
     --

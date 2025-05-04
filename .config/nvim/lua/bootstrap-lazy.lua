@@ -1,4 +1,4 @@
-local nvim = require("localz.nvim")
+local nvim = require("non-plugins.nvim")
 
 if nvim.is_noplugin() then
     if nvim.is_running_plenary_test_harness() then
