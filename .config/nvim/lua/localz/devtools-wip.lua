@@ -1,6 +1,6 @@
-local dump = require("devtools.messages")
 --
 -- * think of this as devtools for neovim
+-- FYI move stable ideas into devtools.nvim repo
 
 -- !! TODO I still stringly feel like the command line in nvim is not right...
 --   it needs love somehow... everything feels difficult

@@ -1,5 +1,3 @@
-local dump = require("devtools.messages")
-
 -- TODO remove once reminders not needed
 vim.cmd("nnoremap <leader>pc :lua vim.notify('use <leader>tsi now')<CR>")
 vim.cmd("nnoremap <leader>pi :lua vim.notify('use <leader>tsi now')<CR>")
@@ -10,6 +8,7 @@ vim.cmd("nnoremap <leader>tsii :Inspect!<CR>") -- vim.inspect_pos() -- detailed
 vim.keymap.set('n', '<leader>tst', ":InspectTree<CR>")
 
 vim.keymap.set('n', '<leader>tsd', function()
+    local dump = require("devtools.messages")
     local node = vim.treesitter.get_node()
     -- TODO add color to output
     local info = format_dump(node)
