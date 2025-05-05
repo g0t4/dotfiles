@@ -829,6 +829,7 @@ end
 
 if $IS_MACOS
     abbr --set-cursor='!' sedi "gsed -i 's/!//g'"
+    # todo make sede the default now that I am using gsed on macOS?
     abbr --set-cursor='!' sede "gsed -Ei 's/!//g'"
     abbr --set-cursor='!' sedd "gsed --debug -i 's/!//g'"
     # abbr sed gsed # encourage the use of gsed so it behaves like linux?
