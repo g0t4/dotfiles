@@ -124,7 +124,7 @@ return {
 
                     -- defaults: https://github.com/nvim-tree/nvim-tree.lua/blob/c09ff35/lua/nvim-tree/keymap.lua#L47
 
-                    vim.keymap.set('n', '<F2>', api.fs.rename)
+                    vim.keymap.set('n', '<F2>', api.fs.rename, { buffer = bufnr })
                 end,
             })
             -- PRN telescope integration => actions menu (https://github.com/nvim-tree/nvim-tree.lua/wiki/Recipes#creating-an-actions-menu-using-telescope)
