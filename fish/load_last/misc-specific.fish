@@ -496,7 +496,6 @@ if command -q kubectl
     #   helmcharts
     #   helmchartconfigs
 
-
 end
 
 if command -q dig
@@ -829,7 +828,14 @@ end
 
 if $IS_MACOS
     abbr --set-cursor='!' sedi "gsed -i 's/!//g'"
+    #
+    # two approaches to making it easier to target specific files...
+    # 1. dedicated abbr per file type(s)
     abbr --set-cursor='!' sedl "gsed -Ei 's/!//g' **/*.lua"
+    # 2. use command specific abbrs to expand the **/*.lua on end with just *l (or smth else)
+    abbr --command gsed --position=anywhere "*l" "**/*.lua"
+    #    so, gsed *l<SPACE> => gsed **/*.lua
+    #
     # todo make sede the default now that I am using gsed on macOS?
     abbr --set-cursor='!' sede "gsed -Ei 's/!//g'"
     abbr --set-cursor='!' sedd "gsed --debug -i 's/!//g'"
