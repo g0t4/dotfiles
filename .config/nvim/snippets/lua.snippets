@@ -1,15 +1,12 @@
 # TODO setup keymap to tab through args so I can support more than $1
-
-# FYI, could easily be: setmetatable({}, ${1})
-#  using :new means self is instantiated to a new table already
-#  and users can call .new(foo_self) to pass the new self object (i.e. for subclassing)
+# TODO revisit wtf is what in how setmetatable and __index works... then can add back setmetatable(self) or otherwise...
 snippet class "Lua class pattern"
 ---@class ${1:ClassName}
 local ${1:ClassName} = {}
 ${1}.__index = ${1}
 
 function ${1}:new()
-    self = setmetatable(self, ${1})
+    self = setmetatable({}, ${1})
     ${0}
     return self
 end
