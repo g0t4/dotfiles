@@ -829,11 +829,13 @@ end
 
 if $IS_MACOS
     abbr --set-cursor='!' sedi "gsed -i 's/!//g'"
+    abbr --set-cursor='!' sede "gsed -Ei 's/!//g'"
     abbr --set-cursor='!' sedd "gsed --debug -i 's/!//g'"
     # abbr sed gsed # encourage the use of gsed so it behaves like linux?
     #  i.e. gnu allows `sed -i` whereas BSD requires the extension `sed -i''` be passed
 else
     abbr --set-cursor='!' sedi "sed -i 's/!//g'"
+    abbr --set-cursor='!' sede "sed -Ei 's/!//g'"
     abbr --set-cursor='!' sedd "sed --debug -i 's/!//g'"
 end
 
