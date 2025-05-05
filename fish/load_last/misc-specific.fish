@@ -835,6 +835,11 @@ if $IS_MACOS
     # 2. use command specific abbrs to expand the **/*.lua on end with just *l (or smth else)
     abbr --command gsed --position=anywhere "*l" "**/*.lua"
     #    so, gsed *l<SPACE> => gsed **/*.lua
+    abbr --set-cursor='!' sedm "gsed -Ei 's/!//g' **/*.md"
+    abbr --command gsed --position=anywhere "*m" "**/*.md"
+    # use brace expansion for multiple file types
+    abbr --set-cursor='!' seda "gsed -Ei 's/!//g' **/{*.lua,*.md}"
+    abbr --command gsed --position=anywhere "*a" "**/{*.lua,*.md}"
     #
     # todo make sede the default now that I am using gsed on macOS?
     abbr --set-cursor='!' sede "gsed -Ei 's/!//g'"
@@ -844,9 +849,13 @@ if $IS_MACOS
 else
     abbr --set-cursor='!' sedi "sed -i 's/!//g'"
     #
-    # alternatives:
+    # alternatives (mirror from above for mac)
     abbr --set-cursor='!' sedl "sed -Ei 's/!//g' **/*.lua"
     abbr --command sed --position=anywhere "*l" "**/*.lua"
+    abbr --set-cursor='!' sedm "sed -Ei 's/!//g' **/*.md"
+    abbr --command sed --position=anywhere "*m" "**/*.md"
+    abbr --set-cursor='!' seda "sed -Ei 's/!//g' **/{*.lua,*.md}"
+    abbr --command sed --position=anywhere "*a" "**/{*.lua,*.md}"
     #
     abbr --set-cursor='!' sede "sed -Ei 's/!//g'"
     abbr --set-cursor='!' sedd "sed --debug -i 's/!//g'"
