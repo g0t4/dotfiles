@@ -835,9 +835,13 @@ if $IS_MACOS
     # 2. use command specific abbrs to expand the **/*.lua on end with just *l (or smth else)
     abbr --command gsed --position=anywhere "*l" "**/*.lua"
     #    so, gsed *l<SPACE> => gsed **/*.lua
+    # md
     abbr --set-cursor='!' sedm "gsed -Ei 's/!//g' **/*.md"
     abbr --command gsed --position=anywhere "*m" "**/*.md"
-    # use brace expansion for multiple file types
+    # python
+    abbr --set-cursor='!' sedp "gsed -Ei 's/!//g' **/*.py"
+    abbr --command gsed --position=anywhere "*p" "**/*.py"
+    # all - use brace expansion for multiple file types
     abbr --set-cursor='!' seda "gsed -Ei 's/!//g' **/{*.lua,*.md}"
     abbr --command gsed --position=anywhere "*a" "**/{*.lua,*.md}"
     #
@@ -854,6 +858,8 @@ else
     abbr --command sed --position=anywhere "*l" "**/*.lua"
     abbr --set-cursor='!' sedm "sed -Ei 's/!//g' **/*.md"
     abbr --command sed --position=anywhere "*m" "**/*.md"
+    abbr --set-cursor='!' sedp "sed -Ei 's/!//g' **/*.py"
+    abbr --command sed --position=anywhere "*p" "**/*.py"
     abbr --set-cursor='!' seda "sed -Ei 's/!//g' **/{*.lua,*.md}"
     abbr --command sed --position=anywhere "*a" "**/{*.lua,*.md}"
     #
