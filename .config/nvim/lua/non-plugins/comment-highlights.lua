@@ -1,9 +1,6 @@
 local messages = require("devtools.messages")
 local inspect = require("devtools.inspect")
--- TODO remove once reminders not needed
-vim.cmd("nnoremap <leader>pc :lua vim.notify('use <leader>tsi now')<CR>")
-vim.cmd("nnoremap <leader>pi :lua vim.notify('use <leader>tsi now')<CR>")
---
+
 -- *** treesitter <leader>ts prefix, do I like this?
 vim.cmd("nnoremap <leader>tsi :Inspect<CR>") -- vim.show_pos() -- colorful captures
 vim.cmd("nnoremap <leader>tsii :Inspect!<CR>") -- vim.inspect_pos() -- detailed
