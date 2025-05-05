@@ -97,19 +97,19 @@
         "?.lua",
         "?/init.lua",
     ],
-    // call snippets = for LS completions (of your functions):
+    // * call snippets = automatic function call snippets vs just func name completion
     // - Disable = just complete the function name
     // - Replace = complete the function name and step through args as if it were a snippet template
     // - Both = two entries per completion, f == function name only, S = snippet args
-    // * lets try both b/c it shows the style I am used to first (function name only)
+    // TRY BOTH b/c it shows the style I am used to first (function name only)
     //    - so I can opt in by selecting the second style when I want it
     "Lua.completion.callSnippet": "Both", // default is "Disable"
-    // keyword snippets
+    // * keyword snippets - builtin snippets for keywords and/or keyword name completion
     // - Disable = just complete the keyword "name" only
     // - Replace = replace keyword snippets, with 1+ snippets with live arg tab stops
     //   - i.e. `for` => `for .. pairs`, `for .. ipairs`, `fori`
     // - Both = add back the keyword name only snippet
-    // * I probably prefer the "Replace" snippets only (don't waste space with name only?)
+    // TRY "Replace" snippets only (don't waste space with name only?)
     "Lua.completion.keywordSnippet": "Replace", // default is "Replace"
     // lua LSP server has formatter builtin:
     // - LSP: https://github.com/LuaLS/lua-language-server/wiki/Formatter
