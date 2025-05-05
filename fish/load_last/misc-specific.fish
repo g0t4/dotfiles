@@ -843,7 +843,11 @@ if $IS_MACOS
     #  i.e. gnu allows `sed -i` whereas BSD requires the extension `sed -i''` be passed
 else
     abbr --set-cursor='!' sedi "sed -i 's/!//g'"
+    #
+    # alternatives:
     abbr --set-cursor='!' sedl "sed -Ei 's/!//g' **/*.lua"
+    abbr --command sed --position=anywhere "*l" "**/*.lua"
+    #
     abbr --set-cursor='!' sede "sed -Ei 's/!//g'"
     abbr --set-cursor='!' sedd "sed --debug -i 's/!//g'"
 end
