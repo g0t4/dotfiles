@@ -1,4 +1,3 @@
-
 # grvcp (copy remote url)
 abbr --add grvcp --function _grvcp
 function _grvcp
@@ -25,13 +24,21 @@ function mark
     git status
 end
 
-
 # - w/ message
 abbr --set-cursor='!' gcmsg 'git commit -m "!"'
 abbr --set-cursor='!' gcam 'git commit -a -m "!"'
 
-
 abbr --set-cursor='!' yolo 'git commit --all -m "!" && git push'
+
+# * git push
+# push up to the last X commits, IOTW all but the last X commits
+abbr --regex 'gp_upto\d+' --function gp_uptoX _gp_uptoX
+function gp_uptoX
+    set -l num (string replace --regex '^gp_upto' '' $argv)
+    # TODO revisit refspec here and change for any branch?
+    # TODO also use default remote?
+    echo "git push origin HEAD~$num:master"
+end
 
 # TODO why do I need _glX? isn't regex doing the same thing => read docs on why
 abbr --regex 'gl\d+' --function glX _glX
@@ -187,4 +194,3 @@ abbr gwtab "git worktree add -b" # create new branch (use -B to clobber if exist
 abbr gwtrm "git worktree remove"
 abbr gwtm "git worktree move"
 # lock/unlock => wait until I use those
-
