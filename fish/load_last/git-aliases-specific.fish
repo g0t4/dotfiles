@@ -40,10 +40,14 @@ function gp_uptoX
     echo "git push origin HEAD~$num:master"
 end
 
-# TODO why do I need _glX? isn't regex doing the same thing => read docs on why
 abbr --regex 'gl\d+' --function glX _glX
+abbr --regex 'g\d+' --function glX _gX
 function glX
-    string replace --regex '^gl' 'git log -' $argv
+    # support both
+    #   gl10
+    #   g10
+    #   hence l? => optional l after the g
+    string replace --regex '^gl?' 'git log -' $argv
 end
 
 set _unpushed_commits "HEAD@{push}~1..HEAD" # always show last pushed commit too (so if nothing unpushed the output isn't empty as if maybe broken)
