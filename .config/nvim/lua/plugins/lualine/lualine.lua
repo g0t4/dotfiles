@@ -57,7 +57,7 @@ return {
                         -- relative path, 4 filename+parentdir sounds interesting
                     } }, -- filename includes modified
                     -- lualine_c = { "filetype" },
-                    lualine_c = { statusline_filetype, CopilotsStatus, require("zeta.config").lualine(), },
+                    lualine_c = { statusline_filetype, unpack(CopilotsStatus()), },
                     lualine_x = {}, -- todo move copilot back here?
                     lualine_y = {
                         {

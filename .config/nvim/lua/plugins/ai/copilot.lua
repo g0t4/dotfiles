@@ -379,49 +379,84 @@ function DisableAllCopilots()
 end
 
 function CopilotsStatus()
+    -- use component per and dynamic color so I don't need a complimentary icon for off for all of these
+    -- local enabled_color = '#33aa88'
+    -- local disabled_color = '#aa3355'
+    local enabled_color = '' -- use default color
+    local disabled_color = '#333333'
+
+    local components = {}
+
     local status = ""
     if vim.tbl_contains(use_ai, "supermaven") then
+        -- reference: " " " "
         local supermavenapi = require("supermaven-nvim.api")
-        if supermavenapi.is_running() then
-            status = status .. " "
-        else
-            status = status .. " "
-        end
+        table.insert(components, {
+            function()
+                return " "
+            end,
+            color = function()
+                return { fg = supermavenapi.is_running() and enabled_color or disabled_color }
+            end,
+        })
     end
+
     if vim.tbl_contains(use_ai, "copilot") then
         -- "   \uEC1E -   \uF4B8 -   \uF4B9 -   \uF4BA
-        if vim.fn.exists("*copilot#Enabled") and vim.fn["copilot#Enabled"]() == 1 then
-            status = status .. " "
-        else
-            status = status .. " "
-        end
+        table.insert(components, {
+            function()
+                return " "
+            end,
+            color = function()
+                local copilot_enabled = vim.fn.exists("*copilot#Enabled") and vim.fn["copilot#Enabled"]() == 1
+                return { fg = copilot_enabled and enabled_color or disabled_color }
+            end,
+        })
     end
+
     if vim.tbl_contains(use_ai, "ask-openai") then
-        if IsAskOpenAIPredictionsAvailable() then
-            local api = require("ask-openai.api")
-            if api.is_enabled() then
-                status = status .. "󰼇"
-            else
-                status = status .. "󰼈"
-            end
-        end
+        -- reference: "󰼇" "󰼈"
+        local api = require("ask-openai.api")
+        table.insert(components, {
+            function()
+                return "󰼇"
+            end,
+            color = function()
+                -- TODO toggling predictions on/off seems borked, but this works to show the correct state (dont look here for enable/disable ask-openai predictions)
+                local ask_enabled = IsAskOpenAIPredictionsAvailable() and api.is_enabled()
+                return { fg = ask_enabled and enabled_color or disabled_color }
+            end,
+        })
     end
 
     if vim.tbl_contains(use_ai, "ggml-org/llama.vim") then
         -- llama.vim doesn't have status AFAICT... but it does clear handlers/keymaps on disable so I can use that
         -- FYI I lazy load llama.vim so status wont show until it loads first time
-        local llama_cmds = vim.api.nvim_get_autocmds({
-            event = "CursorMovedI",
-            group = "llama",
+        table.insert(components, {
+            function()
+                return "llama"
+            end,
+            color = function()
+                -- local messages = require("devtools.messages")
+                -- TODO what is call overhead here? this is firing every second (not sure if thats configurable in lualine or?)
+                local ok, handlers = pcall(vim.api.nvim_get_autocmds, {
+                    event = "CursorMovedI",
+                    group = "llama",
+                })
+                local enabled = ok and #handlers > 0
+                -- messages.append("llama.vim: ok=" .. tostring(ok) .. " #handlers=" .. tostring(#handlers) .. " enabled=" .. tostring(enabled))
+                -- messages.append(vim.inspect(handlers))
+                return { fg = enabled and enabled_color or disabled_color }
+            end,
         })
-        if #llama_cmds > 0 then
-            status = status .. "!"
-        else
-            status = status .. "X"
-        end
     end
 
-    return status
+    if vim.tbl_contains(use_ai, "g0t4/zeta.nvim") then
+        table.insert(components,
+            require("zeta.config").lualine())
+    end
+
+    return components
 end
 
 local avante =
