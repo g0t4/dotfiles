@@ -24,3 +24,9 @@ return ${1}
 # lua, bail early from a function (can't just return)
 snippet drend "do return end"
 do return end
+
+
+snippet schedule "schedule(func)"
+vim.schedule(function()
+    ${0}
+end)
