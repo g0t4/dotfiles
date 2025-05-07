@@ -1293,6 +1293,18 @@ if command -q az
 
 end
 
+# llama-server args for llama.[vim|vscode] FIM predictions
+abbr llamasf 'llama-server --fim-qwen-7b-default --host 0.0.0.0'
+abbr llamasfv 'llama-server --fim-qwen-7b-default --host 0.0.0.0 --verbose'
+abbr llamasfs 'llama-server --fim-qwen-7b-spec --host 0.0.0.0'
+abbr llamasfsv 'llama-server --fim-qwen-7b-spec --host 0.0.0.0 --verbose'
+abbr llamasf14s 'llama-server --fim-qwen-14b-spec --host 0.0.0.0'
+abbr llamasf14sv 'llama-server --fim-qwen-14b-spec --host 0.0.0.0 --verbose'
+#   PRN periodically check:
+#   llama-server --help | grep -i fim
+#   --fim-qwen-14b-spec
+#   --fim-qwen-7b-spec
+
 if command -q ollama
     abbr olc "ollama create"
     abbr olcp "ollama cp"
