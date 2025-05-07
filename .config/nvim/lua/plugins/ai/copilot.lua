@@ -438,7 +438,12 @@ function CopilotsStatus()
             end,
             color = function()
                 -- local messages = require("devtools.messages")
-                -- TODO what is call overhead here? this is firing every second (not sure if thats configurable in lualine or?)
+                -- TODO what is call overhead here?
+                -- TODO wrap all of this into a static cache if the overhead is too much
+                --   that way if lualine updates frequently, this stuff isn't called every time
+                --   i.e. can call lualine.refresh() in toggle for copilots button that I have!
+                --   and let the cache invalidate once every 5 seconds or smth like that
+                -- TODO! step one look at overhead by profiling existing refresh
                 local ok, handlers = pcall(vim.api.nvim_get_autocmds, {
                     event = "CursorMovedI",
                     group = "llama",
