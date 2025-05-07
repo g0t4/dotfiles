@@ -30,3 +30,8 @@ snippet schedule "schedule(func)"
 vim.schedule(function()
     ${0}
 end)
+
+snippet defer_fn "vim.defer(func, ms)"
+vim.defer_fn(function()
+    ${0}
+end,${1:1000})
