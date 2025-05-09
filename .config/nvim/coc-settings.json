@@ -25,6 +25,10 @@
     //
     //     // "{based_on_style: pep8, indent_width: 4}"
     // ],
+    // *** ruff/coc-ruff
+    //   uv add ruff / pip install... per venv (naturally)
+    //     check :CocCommand ruff.<TAB> to make sure its recognized by coc-ruff
+    // TODO! how does ruff do as a formatter, I viscerally hate most python formatters (over complicated, obsession with fucking up my code, nonsense)
 
 
 
