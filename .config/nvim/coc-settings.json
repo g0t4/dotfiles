@@ -28,7 +28,10 @@
     // *** ruff/coc-ruff
     //   uv add ruff / pip install... per venv (naturally)
     //     check :CocCommand ruff.<TAB> to make sure its recognized by coc-ruff
+    //     try formatting a document!
+    //       ruff.executeFormat
     // TODO! how does ruff do as a formatter, I viscerally hate most python formatters (over complicated, obsession with fucking up my code, nonsense)
+
 
 
 
