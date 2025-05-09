@@ -387,7 +387,6 @@ function CopilotsStatus()
 
     local components = {}
 
-    local status = ""
     if vim.tbl_contains(use_ai, "supermaven") then
         -- reference: " " " "
         local supermavenapi = require("supermaven-nvim.api")
