@@ -10,7 +10,9 @@
     // "inlayHint.enableParameter": false, // can remove just param hints
 
 
-    // *** pyright/python
+    // *** pyright/python (w/ coc-pyright)
+    //    by the way nothing was wrong with coc-pyright, AND it supports ruff as formatter/linter/etc
+    //    TODO long term I wanna port over to builtin LSP client... see ruff docs for that https://docs.astral.sh/ruff/editors/setup/#vim
     // // code lens like inlay hints are a hot mess of slow to update and so when editing python they remain as if real code and not and you cannot tell until they refresh and leave and that is if you dont have a mistake in your indentation or code in which case they wont update
     // "pyright.inlayHints.variableTypes": false,
     // "pyright.inlayHints.parameterTypes": false,
@@ -23,6 +25,7 @@
     //
     //     // "{based_on_style: pep8, indent_width: 4}"
     // ],
+
 
 
     // *** json
