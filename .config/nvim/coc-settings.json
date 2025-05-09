@@ -36,14 +36,15 @@
     //  https://docs.astral.sh/ruff/configuration/
     "ruff.lineLength": 320, // wtf why is there a max for the max lineLength?! ... I want a way to toggle changing lines off but I get it that's half of what all formatters do, tell you how to wrap lines...
     // FYI can override (globally here) individual settings from the ruff.toml file using this style:
-    //    ruff format zsh/compat_fish/pythons/wcl.py --config "format.quote-style = 'single'"
+    //    ruff format zsh/compat_fish/pythons/wcl.py --config "format.quote-style = 'preserve'"
     //    from the ruff format command's --config option
     // FFS... it does not respect --config... jesus christ fucking POS
-    //      "ruff.format.args": [ "--config \"format.quote-style = 'single'\"" ]
+    //      "ruff.format.args": [ "--config \"format.quote-style = 'preserve'\"" ]
     //    this literally works fine at the CLI... but not fucking here... I'll have to put this into every goddamn ruff.toml file
     // use pyproject.toml/ruff.toml for other settings
     //     setup a user specific pyproject.toml to share settings across projects
     //     example => quote-style
+    // leave default quote-style of double is fine actually... only if I want `preserve` do I need ruff.toml or fix the broken shit above with --config
 
 
 
