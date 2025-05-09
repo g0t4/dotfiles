@@ -21,7 +21,8 @@
     // https://github.com/fannheyward/coc-pyright?tab=readme-ov-file#configurations
     "python.formatting.provider": "yapf",
     "python.formatting.yapfArgs": [
-        "--style", "{column_limit: 400, ALLOW_SPLIT_BEFORE_DICT_VALUE: False, blank_lines_around_top_level_definition: 1}"
+        // join_multiple_lines: False apparently doesn't apply to dictionary values... FUCK really... in that cas though PUT A TRAILING COMMA ON LAST ITEM IN DICT/LIST and it wont join then
+        "--style", "{column_limit: 400, allow_split_before_dict_value: False, blank_lines_around_top_level_definition: 1, join_multiple_lines: False}"
         // "{based_on_style: pep8, indent_width: 4}"
     ],
     // // *** ruff/coc-ruff
