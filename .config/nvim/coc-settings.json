@@ -9,18 +9,20 @@
     // "inlayHint.position": "eol", // terrible idea! stick with inline, or none
     // "inlayHint.enableParameter": false, // can remove just param hints
 
-    // code lens like inlay hints are a hot mess of slow to update and so when editing python they remain as if real code and not and you cannot tell until they refresh and leave and that is if you dont have a mistake in your indentation or code in which case they wont update
-    "pyright.inlayHints.variableTypes": false,
-    "pyright.inlayHints.parameterTypes": false,
-    "pyright.inlayHints.functionReturnTypes": false,
-    // coc-pyright provides formatters too
-    // https://github.com/fannheyward/coc-pyright?tab=readme-ov-file#configurations
-    "python.formatting.provider": "yapf",
-    "python.formatting.yapfArgs": [
-        "--style", "{column_limit: 200, ALLOW_SPLIT_BEFORE_DICT_VALUE: False}"
 
-        // "{based_on_style: pep8, indent_width: 4}"
-    ],
+    // *** pyright/python
+    // // code lens like inlay hints are a hot mess of slow to update and so when editing python they remain as if real code and not and you cannot tell until they refresh and leave and that is if you dont have a mistake in your indentation or code in which case they wont update
+    // "pyright.inlayHints.variableTypes": false,
+    // "pyright.inlayHints.parameterTypes": false,
+    // "pyright.inlayHints.functionReturnTypes": false,
+    // // coc-pyright provides formatters too
+    // // https://github.com/fannheyward/coc-pyright?tab=readme-ov-file#configurations
+    // "python.formatting.provider": "yapf",
+    // "python.formatting.yapfArgs": [
+    //     "--style", "{column_limit: 200, ALLOW_SPLIT_BEFORE_DICT_VALUE: False}"
+    //
+    //     // "{based_on_style: pep8, indent_width: 4}"
+    // ],
 
 
     // *** json
@@ -257,6 +259,8 @@
     //    uses: https://github.com/sql-formatter-org/sql-formatter
     //          https://sql-formatter-org.github.io/sql-formatter/
     //          holy crap, this formatter has no option to NOT split a line on every single column in the select clause
+
+
 
 
 
