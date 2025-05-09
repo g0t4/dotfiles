@@ -19,3 +19,8 @@ dependencies = [
     "ruff>=0.11.8",
     "yapf>=0.43.0",
 ]
+
+#
+# [tool.ruff.format]
+# quote-style = "single"
+
