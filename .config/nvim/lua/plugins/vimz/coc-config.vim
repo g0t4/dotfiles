@@ -13,7 +13,7 @@ let g:coc_global_extensions = [
             \ 'coc-json',
             \ 'coc-lua',
             \ 'coc-prettier',
-            \ '@yaegassy/coc-ruff',
+            \ 'coc-pyright',
             \ 'coc-rust-analyzer',
             \ 'coc-sh',
             \ 'coc-snippets',

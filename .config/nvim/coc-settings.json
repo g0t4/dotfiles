@@ -10,42 +10,42 @@
     // "inlayHint.enableParameter": false, // can remove just param hints
 
 
-    // *** pyright/python (w/ coc-pyright)
-    //    by the way nothing was wrong with coc-pyright, AND it supports ruff as formatter/linter/etc
-    //    TODO long term I wanna port over to builtin LSP client... see ruff docs for that https://docs.astral.sh/ruff/editors/setup/#vim
-    // // code lens like inlay hints are a hot mess of slow to update and so when editing python they remain as if real code and not and you cannot tell until they refresh and leave and that is if you dont have a mistake in your indentation or code in which case they wont update
-    // "pyright.inlayHints.variableTypes": false,
-    // "pyright.inlayHints.parameterTypes": false,
-    // "pyright.inlayHints.functionReturnTypes": false,
-    // // coc-pyright provides formatters too
-    // // https://github.com/fannheyward/coc-pyright?tab=readme-ov-file#configurations
-    // "python.formatting.provider": "yapf",
-    // "python.formatting.yapfArgs": [
-    //     "--style", "{column_limit: 200, ALLOW_SPLIT_BEFORE_DICT_VALUE: False}"
-    //
-    //     // "{based_on_style: pep8, indent_width: 4}"
-    // ],
-    // *** ruff/coc-ruff
-    //   uv add ruff / pip install... per venv (naturally)
-    //     check :CocCommand ruff.<TAB> to make sure its recognized by coc-ruff
-    //     try formatting a document!
-    //       ruff.executeFormat
-    // TODO! how does ruff do as a formatter, I viscerally hate most python formatters (over complicated, obsession with fucking up my code, nonsense)
-    //  see ruff-vscode for more settings: https://github.com/astral-sh/ruff-vscode
-    // ok so GLOBAL ruff settings only here:
-    //  https://docs.astral.sh/ruff/configuration/
-    "ruff.lineLength": 320, // wtf why is there a max for the max lineLength?! ... I want a way to toggle changing lines off but I get it that's half of what all formatters do, tell you how to wrap lines...
-    // FYI can override (globally here) individual settings from the ruff.toml file using this style:
-    //    ruff format zsh/compat_fish/pythons/wcl.py --config "format.quote-style = 'preserve'"
-    //    from the ruff format command's --config option
-    // FFS... it does not respect --config... jesus christ fucking POS
-    //      "ruff.format.args": [ "--config \"format.quote-style = 'preserve'\"" ]
-    //    this literally works fine at the CLI... but not fucking here... I'll have to put this into every goddamn ruff.toml file
-    // use pyproject.toml/ruff.toml for other settings
-    //     setup a user specific pyproject.toml to share settings across projects
-    //     example => quote-style
-    // leave default quote-style of double is fine actually... only if I want `preserve` do I need ruff.toml or fix the broken shit above with --config
+    *** pyright/python (w/ coc-pyright)
+       by the way nothing was wrong with coc-pyright, AND it supports ruff as formatter/linter/etc
+       TODO long term I wanna port over to builtin LSP client... see ruff docs for that https: //docs.astral.sh/ruff/editors/setup/#vim
+    // code lens like inlay hints are a hot mess of slow to update and so when editing python they remain as if real code and not and you cannot tell until they refresh and leave and that is if you dont have a mistake in your indentation or code in which case they wont update
+    "pyright.inlayHints.variableTypes": false,
+    "pyright.inlayHints.parameterTypes": false,
+    "pyright.inlayHints.functionReturnTypes": false,
+    // coc-pyright provides formatters too
+    // https://github.com/fannheyward/coc-pyright?tab=readme-ov-file#configurations
+    "python.formatting.provider": "yapf",
+    "python.formatting.yapfArgs": [
+        "--style", "{column_limit: 400, ALLOW_SPLIT_BEFORE_DICT_VALUE: False}"
 
+        // "{based_on_style: pep8, indent_width: 4}"
+    ],
+    // // *** ruff/coc-ruff
+    // //   uv add ruff / pip install... per venv (naturally)
+    // //     check :CocCommand ruff.<TAB> to make sure its recognized by coc-ruff
+    // //     try formatting a document!
+    // //       ruff.executeFormat
+    // // TODO! how does ruff do as a formatter, I viscerally hate most python formatters (over complicated, obsession with fucking up my code, nonsense)
+    // //  see ruff-vscode for more settings: https://github.com/astral-sh/ruff-vscode
+    // // ok so GLOBAL ruff settings only here:
+    // //  https://docs.astral.sh/ruff/configuration/
+    // "ruff.lineLength": 320, // wtf why is there a max for the max lineLength?! ... I want a way to toggle changing lines off but I get it that's half of what all formatters do, tell you how to wrap lines...
+    // // FYI can override (globally here) individual settings from the ruff.toml file using this style:
+    // //    ruff format zsh/compat_fish/pythons/wcl.py --config "format.quote-style = 'preserve'"
+    // //    from the ruff format command's --config option
+    // // FFS... it does not respect --config... jesus christ fucking POS
+    // //      "ruff.format.args": [ "--config \"format.quote-style = 'preserve'\"" ]
+    // //    this literally works fine at the CLI... but not fucking here... I'll have to put this into every goddamn ruff.toml file
+    // // use pyproject.toml/ruff.toml for other settings
+    // //     setup a user specific pyproject.toml to share settings across projects
+    // //     example => quote-style
+    // // leave default quote-style of double is fine actually... only if I want `preserve` do I need ruff.toml or fix the broken shit above with --config
+    //
 
 
 
