@@ -2236,3 +2236,7 @@ abbr taild --regex 'tail\d+' --function _taild
 function _taild
     string replace tail 'tail -n ' $argv[1]
 end
+
+# do not use if command -q b/c yapf is often installed per venv
+abbr -- yapfs "yapf --style-help"
+abbr --command yapf -- sh "--style-help"
