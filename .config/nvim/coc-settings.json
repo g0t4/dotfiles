@@ -31,6 +31,10 @@
     //     try formatting a document!
     //       ruff.executeFormat
     // TODO! how does ruff do as a formatter, I viscerally hate most python formatters (over complicated, obsession with fucking up my code, nonsense)
+    //  see ruff-vscode for more settings: https://github.com/astral-sh/ruff-vscode
+    // ok so GLOBAL ruff settings only here:
+    //  https://docs.astral.sh/ruff/configuration/
+    "ruff.lineLength": 320, // wtf why is there a max for the max lineLength?! ... I want a way to toggle changing lines off but I get it that's half of what all formatters do, tell you how to wrap lines...
 
 
 
