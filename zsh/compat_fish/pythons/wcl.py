@@ -29,7 +29,6 @@ def wcl(args):
     else:
         os.makedirs(org_dir, exist_ok=True)
 
-
     if is_executable_present("zsh"):
         ### add dir to z ahead of cloning so I can CD to it while cloning
         # - or if dir already exists, then add to the stats count for it
@@ -41,7 +40,7 @@ def wcl(args):
             print("# zsh z add:")
             print(z_add_zsh, "\n")
         else:
-            subprocess.run(['zsh', '-il', '-c', z_add_zsh], check=IGNORE_FAILURE)
+            subprocess.run(["zsh", "-il", "-c", z_add_zsh], check=IGNORE_FAILURE)
 
     if os.path.isdir(repo_dir):
         print("repo_dir found, attempt pull latest", "\n")
@@ -59,7 +58,6 @@ def wcl(args):
         else:
             subprocess.run(clone, check=STOP_ON_FAILURE)
 
-
     is_pwsh_present = is_windows()
     if is_pwsh_present:
         # dir must exist b/c I am just using z command to add the path (AFAICT there is no --add arg in pwsh version and even if it existed, so in the future, check to see if it works like fish version and requires the path to exist)
@@ -73,7 +71,7 @@ def wcl(args):
             print("# pwsh z add:")
             print(z_add_pwsh, "\n")
         else:
-            subprocess.run(['pwsh', '-NoProfile', '-Command', z_add_pwsh], check=IGNORE_FAILURE)
+            subprocess.run(["pwsh", "-NoProfile", "-Command", z_add_pwsh], check=IGNORE_FAILURE)
 
     if is_executable_present("fish"):
         ### add to fish's z:
@@ -81,12 +79,13 @@ def wcl(args):
         # - fish has __z_add which uses $PWD hence set cwd
         # - fish doesn't need interactive for z to be loaded (installed in functions dir)
         # - FYI I had issues w/ auto-venv (calling deactivate) in fish but not zsh, so I am not using interactive for fish and I disabled auto-venv for non-interactive fish shells
-        z_add_fish = ['fish', '-c', "__z_add"]
+        z_add_fish = ["fish", "-c", "__z_add"]
         if dry_run:
             print("# fish z add:")
-            print(z_add_fish, f"cwd={repo_dir}","\n")
+            print(z_add_fish, f"cwd={repo_dir}", "\n")
         else:
             subprocess.run(z_add_fish, cwd=repo_dir, check=IGNORE_FAILURE)
+
 
 def is_executable_present(cmd) -> bool:
     if is_windows():
@@ -95,12 +94,13 @@ def is_executable_present(cmd) -> bool:
     result = subprocess.run(f"which {cmd}", shell=True, check=IGNORE_FAILURE, stdout=subprocess.DEVNULL)
     return result.returncode == 0
 
+
 def clone_url(parsed) -> str:
     # probably don't recreate url if not a major player? (bitbucket, github, gitlab)
     # PRN don't recreate url if is https and want https?
     # PRN also any cases where I want more than org/repo dir structure?
     # todo multi level namespaces => https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/
-    use_https = parsed.domain in ["gitlab.gnome.org","sourceware.org", "git.kernel.org", "huggingface.co", "git.sr.ht"]
+    use_https = parsed.domain in ["gitlab.gnome.org", "sourceware.org", "git.kernel.org", "huggingface.co", "git.sr.ht"]
     # TODO change to default to https and override for github and specific others where I want ssh
     if use_https:
         return f"https://{parsed.domain}/{parsed.repo}"
@@ -124,7 +124,6 @@ def relative_repo_dir(parsed) -> str:
 
 
 class ParsedRepo:
-
     def __init__(self, domain, repo):
         self.domain = domain
         self.repo = repo
@@ -132,8 +131,8 @@ class ParsedRepo:
     def __str__(self):
         return f"ParsedRepo(domain={self.domain}, repo={self.repo})"
 
-def parse_repo(url: str) -> ParsedRepo|None:
 
+def parse_repo(url: str) -> ParsedRepo | None:
     url = url.strip()
 
     from urllib.parse import urlparse
@@ -178,11 +177,12 @@ def parse_repo(url: str) -> ParsedRepo|None:
 
     return None  # Unable to parse
 
+
 def is_windows():
-    return os.name == 'nt'
+    return os.name == "nt"
+
 
 if __name__ == "__main__":
-
     parser = argparse.ArgumentParser(description="(w)es (cl)one", prog="wcl")
     parser.add_argument("url", type=str, help="repository clone url")
     # --dry-run flag:
