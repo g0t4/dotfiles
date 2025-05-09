@@ -18,7 +18,7 @@
     //   ]
     // }
   },
-  "assistant": {
+  "agent": {
     "default_model": {
       "provider": "zed.dev",
       "model": "claude-3-5-sonnet-20240620-fast-edit"
@@ -51,7 +51,7 @@
   },
   "show_edit_predictions": true,
   "edit_predictions": {
-    "enabled_in_assistant": true,
+    "enabled_in_text_threads": true,
     "mode": "eager"
     // PRN can I host zeta myself?
     // "copilot": {
