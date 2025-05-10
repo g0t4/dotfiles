@@ -90,20 +90,52 @@ return {
     --   "kiyoon/jupynium.nvim", -- probably best option if I wanna try full jupyter integration (drives a separate, synchronized nb instance)
     --   "jupyter-vim/jupyter-vim"
     --
-    {
-        -- https://github.com/benlubas/molten-nvim molten supposedly supports inline images
-        "benlubas/molten-nvim",
-        -- enabled = false,
-        init = function()
-            -- this is an example, not a default. Please see the readme for more configuration options
-            vim.g.molten_output_win_max_height = 12
-        end,
-        -- config = function()
-        --     -- TODO any settings I wanna configure?
-        --     require('???').setup({
-        --     });
-        -- end
-    },
+    -- TODO later resume trying molten w/ images
+    --   TODO OR, can I just get iron.nvim to work with images instead?
+    --   TODO or better yet use a full blown jupyter notebook sync plugin cuz why not?
+    --     iron.nvim can be great for non-gui examples
+    -- {
+    --     -- https://github.com/benlubas/molten-nvim molten supposedly supports inline images
+    --     "benlubas/molten-nvim",
+    --     enabled = false,
+    --     build = ":UpdateRemotePlugins",
+    --     init = function()
+    --         -- FYI need a few deps added to the venv used by neovim:
+    --         -- first, run :UpdateRemotePlugins and if there are missing modules, it will report those
+    --         -- venv for:   vim.g.python3_host_prog
+    --         --    uv add pynvim ipykernel
+    --         -- then manually run :UpdateRemotePlugins (test that no more missing deps)
+    --         -- check remote plugin definitions:
+    --         --    cat ~/.local/share/nvim/rplugin.vim
+    --         --    should find lots of :Molten* commands
+    --         -- restart nvim
+    --         -- check :Molten* command!
+    --         -- profit
+    --         -- :MoltenInfo " shows kernels and activation status
+    --         --    check path of the given project's venv here
+    --         -- :MoltenInit " pick kernel
+    --         --
+    --         -- ok so this works but for images... need:
+    --         --   https://github.com/3rd/image.nvim?tab=readme-ov-file
+    --         --   and this seems to be kitty only...
+    --         --   sixel support is WIP...  could try that
+    --         --   or can I use imgcat?
+    --         --   or https://github.com/ueber-devel/ueberzug
+    --         --     but I cannot find the package ... so gotta manually build?
+    --         -- TODO RESUME LATER... gotta find a way to get image support to evaluate what I think about that
+    --         --   OR could I wire up images support with ipython REPL and iron.nvim?
+    --
+    --         -- vim.g.molten_output_win_max_height = 12
+    --     end,
+    --     -- config = function()
+    --     --     -- TODO any settings I wanna configure?
+    --     --     require('???').setup({
+    --     --     });
+    --     -- end
+    --     dependencies = {
+    --         -- https://github.com/3rd/image.nvim
+    --     }
+    -- },
 
     --
     -- *** WIP iron.nvim ***
