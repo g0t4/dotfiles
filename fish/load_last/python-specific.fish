@@ -74,7 +74,10 @@ abbr uvr 'uv run'
 abbr uvt 'uv tree'
 abbr uvtree 'uv tree --outdated'
 abbr uvv 'uv venv'
-abbr uvi 'uv init'
+#
+# FYI cannot configure no-description/readme by default, so just use them here in my abbr instead
+#   unfortunately I cannot tell it no hello.py too
+abbr uvi 'uv init --no-description --no-readme'
 #
 abbr uvp 'uv pip'
 abbr uvpi 'uv pip install'

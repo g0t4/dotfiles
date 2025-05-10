@@ -85,3 +85,7 @@ if test -d $HOME/.ipython
     ln -f -s $dotfiles_dir/.ipython/profile_default/ipython_config.py $HOME/.ipython/profile_default/.
     ln -f -s $dotfiles_dir/.ipython/profile_default/ipython_kernel_config.py $HOME/.ipython/profile_default/.
 end
+
+# *** uv.toml
+mkdir -p $HOME/.config/uv
+ln -f -s $dotfiles_dir/.config/uv/uv.toml $HOME/.config/uv/.

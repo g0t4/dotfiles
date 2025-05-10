@@ -1,0 +1,6 @@
+# https://docs.astral.sh/uv/configuration/files/
+# settings ref:
+#   https://docs.astral.sh/uv/reference/settings/
+#
+# crap, AFAICT you cannot control the `uv init` command's options like `--no-readme` WTF MAN?
+
