@@ -1,4 +1,19 @@
+
 snippet fun "function call"
 function ${1:name}
+	${0}
+end
+
+
+
+# TODO review
+# https://github.com/davidcelis/language-fish-shell/blob/master/snippets/language-fish-shell.cson
+#   convert more:
+
+#'for ... in ... end':
+#  'prefix': 'for'
+#  'body': 'for ${1:element} in #{2:array}\n\t$0\nend'
+snippet for "for ... in ... end"
+for ${1:element} in ${2:array}
 	${0}
 end
