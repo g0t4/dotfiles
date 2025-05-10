@@ -1590,6 +1590,50 @@ function _ffmpeg_concat
         -c copy $combined_file
 end
 
+function _find_first_video_file_for_extension
+    set ext $argv[1]
+    set -f paths (fd --max-depth 1 --type f --extension $ext)
+    if test (count $paths) -gt 0
+        echo $paths[1]
+        return
+    end
+    return 1
+end
+
+function _find_first_video_file_any_type
+    # todo other types
+    for ext in mp4 mkv mov
+        set path (_find_first_video_file_for_extension $ext)
+        if test "$path" != ""
+            echo $path
+            return
+        end
+    end
+    return 1
+end
+
+abbr --add _ffprobe --function abbr_ffprobe
+function abbr_ffprobe
+    echo -n "ffprobe -i "
+    # if one is available, just dump it, else show a placeholder
+    _find_first_video_file_any_type; or echo _
+end
+
+abbr --add _ffmpeg --function abbr_ffmpeg
+function abbr_ffmpeg
+    echo -n "ffmpeg -i "
+    # if one is available, just dump it, else show a placeholder
+    _find_first_video_file_any_type; or echo _
+end
+
+abbr --add _ffmpeg_range --function abbr_ffmpeg_range
+function abbr_ffmpeg_range
+    set input (_find_first_video_file_any_type; or echo _)
+    set output (string replace -r "\.mp4\$" ".trimmed.mp4" $input)
+    # echo -n "ffmpeg -i combined.shifted100ms.mp4 -ss 00:08:52 -to 00:09:22 -c:v copy -c:a copy trimmed-5m10s_to_5m40s.mp4"
+    echo -n "ffmpeg -i $input -ss 00:00 -to 00:30 -c:v copy -c:a copy $output"
+end
+
 abbr --add _aio --function abbr_aio
 function abbr_aio
     echo -n "video_editing_aio "
