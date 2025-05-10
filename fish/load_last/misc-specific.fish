@@ -2269,7 +2269,7 @@ abbr -- yapfs "yapf --style-help"
 abbr --command yapf -- sh --style-help
 
 # * idea is to have rebuilders listed here
-function rebuild_ollama
+function rebuild_llama_cpp
 
     if not test -d ~/repos/github/ggerganov/llama.cpp
         echo llama.cpp not checked out, aborting...
