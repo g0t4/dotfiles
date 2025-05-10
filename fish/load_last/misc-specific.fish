@@ -983,6 +983,33 @@ function toggle-grc
 end
 bind ctrl-q toggle-grc # terrible key choice (ctrl+q) but it isn't used currently so yeah
 
+function toggle-git_commit_command
+    # toggle wrapping current command line in a git commit
+    # to commit changes w.r.t. running a command
+    # for example:
+    #   uv add ipykernel
+    #   => git commit -m 'uv add ipykernel'
+    set -f cmd (commandline)
+    if test -z "$cmd"
+        # if empty cmd, then use last command
+        # pull back last non git command (so I can stage files and then commit)
+        set cmd (history | grep -v '^git\s' | head -n 1)
+    end
+
+    if string match --quiet --regex "^git\scommit\s-m\s" -- $cmd
+        # unwrap
+        # use regex capture group to extract the message part only (strip quotes too)
+        set cmd (string replace --regex -- "^git\scommit\s-m\s'(.*)'" "\1" -- $cmd)
+        commandline -r $cmd
+    else
+        # wrap
+        commandline -r "git commit -m '$cmd'"
+        return
+    end
+end
+bind ctrl-f12 toggle-git_commit_command
+
+
 if command -q apt
 
     # start on apt helpers now that I have fish in almost all of my ubuntu environments
