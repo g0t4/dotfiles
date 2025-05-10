@@ -91,6 +91,20 @@ return {
     --   "jupyter-vim/jupyter-vim"
     --
     -- TODO! https://github.com/benlubas/molten-nvim molten supposedly supports inline images
+    {
+        "benlubas/molten-nvim",
+        -- enabled = false,
+        init = function()
+            -- this is an example, not a default. Please see the readme for more configuration options
+            vim.g.molten_output_win_max_height = 12
+        end,
+        -- config = function()
+        --     -- TODO any settings I wanna configure?
+        --     require('???').setup({
+        --     });
+        -- end
+    },
+
     --
     -- *** WIP iron.nvim ***
     {
