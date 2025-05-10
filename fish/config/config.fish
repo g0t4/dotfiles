@@ -65,7 +65,9 @@ if test -e $HOME/.iterm2_shell_integration.fish
         #   when program halts, it reverts to a correct, remote, path
 
         # this is for my iTerm2 split pane/tab/window and preserve path/SSH combo
-        iterm2_set_user_var split_path $PWD
+        if functions -q iterm2_set_user_var
+            iterm2_set_user_var split_path $PWD
+        end
     end
 
     function iterm2_print_user_vars
