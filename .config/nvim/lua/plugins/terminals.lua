@@ -90,6 +90,8 @@ return {
     --   "kiyoon/jupynium.nvim", -- probably best option if I wanna try full jupyter integration (drives a separate, synchronized nb instance)
     --   "jupyter-vim/jupyter-vim"
     --
+    -- TODO! https://github.com/benlubas/molten-nvim molten supposedly supports inline images
+    --
     -- *** WIP iron.nvim ***
     {
         -- FULLY EVALUATE iron.nvim before touching anything else
