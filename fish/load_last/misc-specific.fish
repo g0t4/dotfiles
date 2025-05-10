@@ -1007,6 +1007,7 @@ function toggle-git_commit_command
         return
     end
 end
+# todo do I want a diff keymap? really should just have some command pallette this resides in only...
 bind ctrl-f12 toggle-git_commit_command
 
 
