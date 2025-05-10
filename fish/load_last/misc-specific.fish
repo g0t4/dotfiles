@@ -1010,7 +1010,6 @@ end
 # todo do I want a diff keymap? really should just have some command pallette this resides in only...
 bind ctrl-f12 toggle-git_commit_command
 
-
 if command -q apt
 
     # start on apt helpers now that I have fish in almost all of my ubuntu environments
@@ -2267,4 +2266,27 @@ end
 
 # do not use if command -q b/c yapf is often installed per venv
 abbr -- yapfs "yapf --style-help"
-abbr --command yapf -- sh "--style-help"
+abbr --command yapf -- sh --style-help
+
+# * idea is to have rebuilders listed here
+function rebuild_ollama
+
+    if not test -d ~/repos/github/ggerganov/llama.cpp
+        echo llama.cpp not checked out, aborting...
+        return 1
+    end
+
+    cd ~/repos/github/ggerganov/llama.cpp
+
+    if not git pull --rebase
+        echo pull failed, aborting...
+        return 1
+    end
+
+    echo REBUILDING
+
+    # PRN enable cuda if present on machine or based on machine name
+    cmake -B build -DGGML_CUDA=ON -DLLAMA_CURL=on
+    cmake --build build --config Release -- -j (nproc)
+
+end
