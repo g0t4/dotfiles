@@ -7,47 +7,6 @@
 --   tab completion doesn't seem to be well thought out...
 --   TODO ctrl+R mode (see whole command line not next token?)
 
-local function alias(lower, original)
-    vim.cmd(string.format("cabbrev %s %s", lower, original))
-end
-
--- * :windows
-vim.api.nvim_create_user_command("Windows", function()
-    local windows = vim.api.nvim_list_wins()
-
-    -- vim.api.nvim_win_get_config(0)
-    -- {
-    --   external = false,
-    --   focusable = true,
-    --   height = 56,
-    --   hide = false,
-    --   mouse = true,
-    --   relative = "",
-    --   split = "left",
-    --   width = 120
-    -- }
-
-    local info    = vim.iter(windows)
-        :map(function(window_id)
-            local config = vim.api.nvim_win_get_config(window_id)
-            local bufnr = vim.api.nvim_win_get_buf(window_id)
-            -- PRN based on buf/filetype ... display different info?
-            -- local buftype = vim.bo[bufnr].buftype
-            -- local filetype = vim.bo[bufnr].filetype
-            local buflines = vim.api.nvim_buf_line_count(bufnr)
-            local name = vim.api.nvim_buf_get_name(bufnr)
-            local row, col = unpack(vim.api.nvim_win_get_cursor(window_id))
-            return window_id .. " " .. config.split
-                .. " → buf " .. bufnr .. ": " .. name
-                .. " @ row: " .. row .. "/" .. buflines
-                .. "  col: " .. col
-        end)
-        :join("\n")
-
-    vim.print(info)
-end, {})
-alias("windows", "Windows")
-
 
 local abbrevs = {
     i = {
