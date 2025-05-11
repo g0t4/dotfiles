@@ -2328,9 +2328,18 @@ function rebuild_llama_cpp
     end
 
     echo REBUILDING
+    # trash build ? add step
+    # LLAMA_CURL=on allows downloading models
+    if $IS_MACOS
+        # FYI metal is enabled by default on macOS
+        #   https://github.com/ggerganov/llama.cpp/blob/3eac2093/docs/build.md#L111
+        cmake -B build -DLLAMA_CURL=on
+    else
+        # https://github.com/ggerganov/llama.cpp/blob/3eac2093/docs/build.md#L148
+        cmake -B build -DGGML_CUDA=ON -DLLAMA_CURL=on
+    end
 
     # PRN enable cuda if present on machine or based on machine name
-    cmake -B build -DGGML_CUDA=ON -DLLAMA_CURL=on
     cmake --build build --config Release -- -j (nproc)
 
 end
