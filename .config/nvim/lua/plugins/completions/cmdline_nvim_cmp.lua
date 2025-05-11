@@ -32,6 +32,8 @@ function M.setup()
     --     return vim.o.lines - vim.o.cmdheight
     -- end
 
+    mapping['<up>'] = cmp.mapping(cmp.mapping.select_prev_item(), { 'c' })
+    mapping['<down>'] = cmp.mapping(cmp.mapping.select_next_item(), { 'c' })
     mapping['<C-d>'] = cmp.mapping(cmp.mapping.select_next_item({ count = get_half_screen_height_lines() }),
         { 'c' })
     mapping['<C-u>'] = cmp.mapping(cmp.mapping.select_prev_item({ count = get_half_screen_height_lines() }),
