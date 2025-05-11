@@ -251,7 +251,7 @@ local plugin_nvim_cmp = {
             -- print(vim.inspect(mapping))
 
             cmp.setup.cmdline({ '/', '?' }, {
-                -- FYI will use mappings from ':' below
+                mapping = mapping, -- FYI have to set here too, else <TAB> won't work to tab complete or step through the list
                 sources = {
                     { name = 'buffer' }
                 }
