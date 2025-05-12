@@ -829,12 +829,10 @@ end
 # *** sed ***
 # TODO create all from array, and create individuals off of array too
 set sed_all "**/{*.lua,*.md,*.py,*.sh,*.fish}"
-set --global sed_cmd "sed"
+set --global sed_cmd sed
 if $IS_MACOS
-    set sed_cmd "gsed"
+    set sed_cmd gsed
 
-    abbr --set-cursor='!' sedi "gsed -i 's/!//g'"
-    #
     # two approaches to making it easier to target specific files...
     # 1. dedicated abbr per file type(s)
     abbr --set-cursor='!' sedl "gsed -Ei 's/!//g' **/*.lua"
@@ -857,8 +855,6 @@ if $IS_MACOS
     # abbr sed gsed # encourage the use of gsed so it behaves like linux?
     #  i.e. gnu allows `sed -i` whereas BSD requires the extension `sed -i''` be passed
 else
-    abbr --set-cursor='!' sedi "sed -i 's/!//g'"
-    #
     # alternatives (mirror from above for mac)
     abbr --set-cursor='!' sedl "sed -Ei 's/!//g' **/*.lua"
     abbr --command sed --position=anywhere "*l" "**/*.lua"
@@ -872,6 +868,8 @@ else
     abbr --set-cursor='!' sede "sed -Ei 's/!//g'"
     abbr --set-cursor='!' sedd "sed --debug -i 's/!//g'"
 end
+abbr --set-cursor='!' sedi "$sed_cmd -i 's/!//g'"
+#
 abbr _catr --function _catr_abbr --regex "catr\d+_\d+"
 function _catr_abbr
     set matches (string match --regex "catr(\d+)_(\d+)" $argv[1])
