@@ -23,6 +23,7 @@ let g:coc_global_extensions = [
             \ 'coc-vimlsp',
             \ 'coc-xml',
             \ 'coc-yaml',
+            \ 'coc-fish',
             \ 'coc-zig',
             \ '@yaegassy/coc-nginx',
             \ ]
