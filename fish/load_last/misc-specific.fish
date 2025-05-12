@@ -871,9 +871,10 @@ else
 end
 abbr --set-cursor='!' sedi "$sed_cmd -i 's/!//g'"
 #
-abbr _catr --function _catr_abbr --regex "catr\d+_\d+"
-function _catr_abbr
-    set matches (string match --regex "catr(\d+)_(\d+)" $argv[1])
+abbr _cat_range --function _cat_range_abbr --regex "(catr|catrange|sedr|sedrange)\d+_\d+"
+function _cat_range_abbr
+    # purpose:   cat range -n '10,25p' foo.txt
+    set matches (string match --regex "(\d+)_(\d+)" $argv[1])
     set start $matches[2]
     set end $matches[3]
     echo "$sed_cmd -n '$start,$end""p'"
