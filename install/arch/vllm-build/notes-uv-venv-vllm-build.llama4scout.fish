@@ -1,8 +1,14 @@
+#!/usr/bin/env fish
+
 # THIS TIME I GOT vllm built w/ uv! which is awesome b/c I can wipe the .venv at any time and really quickly rebuild it from scratchusing uv caches
+cd "$HOME/repos/github/vllm-project/vllm-latest" || exit
 
-cd ~/repos/github/vllm-project/vllm-latest
+if command -q trash
+    trash .venv
+else
+    rm -rf .venv # wipe out venv to be safe
+end
 
-rm -rf .venv # wipe out venv to be safe
 uv venv # since already have pyproject, create the venv but DO NOT SYNC deps
 # this will use pyproject's constraints for python version and selected 3.11 last time I did this 👍
 python use_existing_torch.py # do not uv run else it installs deps liseted in pyproject and fubars your venv
@@ -26,4 +32,3 @@ uv pip install -e . --no-build-isolation # crap forgot multicpu flag
 # PRN ... if you need other deps, likely in one of these spots
 # uv pip install -r requirements/common.txt ?
 # uv pip install xformers --no-deps? # careful this has a dep to torch
-
