@@ -826,6 +826,8 @@ function pstree
 end
 # TODO look into utils like fuser (not necessarily for abbrs, though maybe) but b/c I need to shore up my knowlege here, so much easier to diagnose what an app is doing if I can look at its external interactions (ie files, ports, etc)
 
+# TODO create all from array, and create individuals off of array too
+set sed_all "**/{*.lua,*.md,*.py,*.sh,*.fish}"
 if $IS_MACOS
     abbr --set-cursor='!' sedi "gsed -i 's/!//g'"
     #
@@ -842,8 +844,8 @@ if $IS_MACOS
     abbr --set-cursor='!' sedp "gsed -Ei 's/!//g' **/*.py"
     abbr --command gsed --position=anywhere "*p" "**/*.py"
     # all - use brace expansion for multiple file types
-    abbr --set-cursor='!' seda "gsed -Ei 's/!//g' **/{*.lua,*.md,*.py}"
-    abbr --command gsed --position=anywhere "*a" "**/{*.lua,*.md,*.py}"
+    abbr --set-cursor='!' seda "gsed -Ei 's/!//g' $sed_all"
+    abbr --command gsed --position=anywhere "*a" "$sed_all"
     #
     # todo make sede the default now that I am using gsed on macOS?
     abbr --set-cursor='!' sede "gsed -Ei 's/!//g'"
@@ -860,8 +862,8 @@ else
     abbr --command sed --position=anywhere "*m" "**/*.md"
     abbr --set-cursor='!' sedp "sed -Ei 's/!//g' **/*.py"
     abbr --command sed --position=anywhere "*p" "**/*.py"
-    abbr --set-cursor='!' seda "sed -Ei 's/!//g' **/{*.lua,*.md,*.py}"
-    abbr --command sed --position=anywhere "*a" "**/{*.lua,*.md,*.py}"
+    abbr --set-cursor='!' seda "sed -Ei 's/!//g' $sed_all"
+    abbr --command sed --position=anywhere "*a" "$sed_all"
     #
     abbr --set-cursor='!' sede "sed -Ei 's/!//g'"
     abbr --set-cursor='!' sedd "sed --debug -i 's/!//g'"
