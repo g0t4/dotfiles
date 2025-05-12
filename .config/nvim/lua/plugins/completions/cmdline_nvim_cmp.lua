@@ -16,9 +16,11 @@ function M.setup()
     local mapping = {}
     mapping['<Tab>'] = suggested_mapping['<Tab>']
     mapping['<S-Tab>'] = suggested_mapping['<S-Tab>']
-    -- * if this messes up command history, then fix this to conditionally move up/down (see below examples from preset mappings)
-    mapping['<Up>'] = cmp.mapping(cmp.mapping.select_prev_item(), { 'c' })
-    mapping['<Down>'] = cmp.mapping(cmp.mapping.select_next_item(), { 'c' })
+    --
+    -- CRAP that's right... these steal my ability to move up/down in command history when completion is visible.. which is like always
+    -- mapping['<Up>'] = cmp.mapping(cmp.mapping.select_prev_item(), { 'c' })
+    -- mapping['<Down>'] = cmp.mapping(cmp.mapping.select_next_item(), { 'c' })
+    --
     -- move up/down by half screen height # of lines
     mapping['<C-D>'] = cmp.mapping(cmp.mapping.select_next_item({ count = get_half_screen_height_lines() }), { 'c' })
     mapping['<C-U>'] = cmp.mapping(cmp.mapping.select_prev_item({ count = get_half_screen_height_lines() }), { 'c' })
