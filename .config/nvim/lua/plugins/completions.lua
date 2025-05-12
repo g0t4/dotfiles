@@ -212,7 +212,7 @@ local plugin_nvim_cmp = {
         end
 
         if use_cmp_cmdline_search then
-            require("plugins.completions.cmdline_nvim_cmp").setup()
+            require("plugins.completions.cmdline_cmp").setup()
         end
     end,
     dependencies = {
