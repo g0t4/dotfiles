@@ -24,3 +24,15 @@ snippet warning "GitHub Markdown Warning"
 > [!WARNING]
 > ${1:content}
 
+snippet link "[text](link)"
+[${1:text}](${2:link})$0
+
+snippet link_same "[text](text)"
+[${1:link}](${1:link})$0
+
+snippet link_image "Markdown image link" b
+![${1:alt text}](${2:image_url})$0
+
+snippet link_auto "Markdown auto link (not needed on GitHub)" b
+<${1:absolute url}>$0
+

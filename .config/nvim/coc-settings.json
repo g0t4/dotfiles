@@ -1,5 +1,24 @@
 {
 
+    // " FYI for snippets:
+    // :h coc-snippets
+    //    => Jump snippet placeholders default to:
+    //      g:coc_snippet_next (ctrl-j)
+    //      g:coc_snippet_prev (ctrl-k)
+    //      added on snippet expansion, then removed once snippet "completed"
+    //      makes sense too, j = down = advance, k = up = reverse
+    //      b:coc_snippet_active " check if current active snippet
+    //
+    //      jump to final placeholder $0 deactivates the snippet keymaps
+    //
+    // :h coc-config-snippets
+    "snippet.highlight": true, // false (default)
+    // "snippet.statusText": "SNIP" (default)
+    // "snippet.nextPlaceholderOnDelete": false (default)
+    // "suggest.snippetsSupport": false // true (default)
+    // "suggest.snippetIndicator": "~" (default)
+
+
     // *** coc settings:
     //   :h coc-config
     //
