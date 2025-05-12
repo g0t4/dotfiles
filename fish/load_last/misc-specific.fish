@@ -826,9 +826,13 @@ function pstree
 end
 # TODO look into utils like fuser (not necessarily for abbrs, though maybe) but b/c I need to shore up my knowlege here, so much easier to diagnose what an app is doing if I can look at its external interactions (ie files, ports, etc)
 
+# *** sed ***
 # TODO create all from array, and create individuals off of array too
 set sed_all "**/{*.lua,*.md,*.py,*.sh,*.fish}"
+set --global sed_cmd "sed"
 if $IS_MACOS
+    set sed_cmd "gsed"
+
     abbr --set-cursor='!' sedi "gsed -i 's/!//g'"
     #
     # two approaches to making it easier to target specific files...
@@ -868,7 +872,15 @@ else
     abbr --set-cursor='!' sede "sed -Ei 's/!//g'"
     abbr --set-cursor='!' sedd "sed --debug -i 's/!//g'"
 end
+abbr _catr --function _catr_abbr --regex "catr\d+_\d+"
+function _catr_abbr
+    set matches (string match --regex "catr(\d+)_(\d+)" $argv[1])
+    set start $matches[2]
+    set end $matches[3]
+    echo "$sed_cmd -n '$start,$end""p'"
+end
 
+# *** dns
 # TODO port more dns/arp helpers here
 function _flush_dns
     # PRN check if macos, if not use different command or warn
