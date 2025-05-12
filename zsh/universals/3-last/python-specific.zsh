@@ -8,8 +8,9 @@
 #   global interpreter => command3 is ubiquitous AND recommended (for the default 3.X version)
 #   venv => command3 defined (for all v3 venvs!)
 # use ipython b/c it reminds me its REPL is VASTLY superior (color, tab completion, etc)
-abbr py 'ipython3'
-abbr python 'ipython3'
+abbr ipy 'ipython3' # ipython is much slower to start so don't default to it unless I explicitly want it
+# TODO why is ipython startup like seconds longer?
+abbr py 'python3'
 abbr pip 'pip3'
 
 # PRN go back to python3.10/11 etc in ve* abbrs?
