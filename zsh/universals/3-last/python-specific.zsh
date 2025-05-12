@@ -11,16 +11,17 @@
 abbr ipy 'ipython3' # ipython is much slower to start so don't default to it unless I explicitly want it
 # TODO why is ipython startup like seconds longer?
 abbr py 'python3'
+abbr python 'python3'
 abbr pip 'pip3'
 
 # PRN go back to python3.10/11 etc in ve* abbrs?
 ### VENV (--clear allows to recreate venv if already dir exists, --upgrade-deps makes sure pip is latest)
-abbr ve 'ipython3 -m venv --clear --upgrade-deps'
+abbr ve 'python3 -m venv --clear --upgrade-deps'
 abbr vedir 'echo $VIRTUAL_ENV'
-abbr veinit 'ipython3 -m venv --clear --upgrade-deps .venv && vea' # PRN follow with pip install -r requirements.txt (if req file exists)
-abbr veinitr 'ipython3 -m venv --clear --upgrade-deps .venv && vea && pip3 install -r requirements.txt'
+abbr veinit 'python3 -m venv --clear --upgrade-deps .venv && vea' # PRN follow with pip install -r requirements.txt (if req file exists)
+abbr veinitr 'python3 -m venv --clear --upgrade-deps .venv && vea && pip3 install -r requirements.txt'
 # PRN make install requirements.txt conditional on its presence in current dir => i.e. fish abbreviation + function
-abbr veinitl 'ipython3 -m venv --clear --upgrade-deps .venv.local && vea'
+abbr veinitl 'python3 -m venv --clear --upgrade-deps .venv.local && vea'
 
 # manually activate/deactivate a venv, remember I have my autovenv plugin that will activate on cd
 # FYI use activate.fish for fish (override is in python-specific.fish)
