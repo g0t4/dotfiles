@@ -832,6 +832,7 @@ set sed_all "**/{*.lua,*.md,*.py,*.sh,*.fish}"
 set --global sed_cmd sed
 if $IS_MACOS
     set sed_cmd gsed
+    # TODO move rest of these to sed_cmd outside of if block, if args are all the same
 
     # two approaches to making it easier to target specific files...
     # 1. dedicated abbr per file type(s)
