@@ -19,6 +19,7 @@ dependencies = [
     "rich>=13.9.4",
     "rope>=1.13.0",
     "ruff>=0.11.8",
+    "typer>=0.15.3",
     "yapf>=0.43.0",
 ]
 
