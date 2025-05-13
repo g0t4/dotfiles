@@ -15,23 +15,6 @@ abbr icr "icdiff --recursive" # diff all files in two dirs
 abbr icg git-icdiff
 # configure git-icdiff via git config: git config --global icdiff.options '--line-numbers'
 
-# For example:
-# > echo foo\nbar
-# > echo bar
-# > diff_last_two_commands<SPACE> # expands to:
-# > icdiff -L "echo foo\nbar" (echo foo\nbar | psub) -L "echo bar" (echo bar | psub)
-function legacy_expand_diff_last_two_commands
-    # FYI this is original (pre expand into diff_two_commands)
-    set last_two_commands (history | head -n 2)
-    set -l command_a $last_two_commands[2]
-    set -l command_b $last_two_commands[1]
-    # set command_a "echo foo\nbar"
-    # set command_b "echo bar"
-    echo icdiff -L "'$command_a'" "($command_a | psub)" -L "'$command_b'" "($command_b | psub)"
-    # https://fishshell.com/docs/current/cmds/psub.html
-end
-# abbr -a diff_old --function legacy_expand_diff_last_two_commands
-
 function expand_diff_last_two_commands
     set last_two_commands (history | head -n 2)
     set -l command_a $last_two_commands[2]
