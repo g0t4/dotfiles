@@ -264,11 +264,29 @@ return {
             --     })
             -- end, { desc = "Help grep, think :helpgrep but with telescope" })
 
-            vim.keymap.set('n', '<leader>w', function()
+            function live_grep_word_under_cursor_same_file_type()
+                -- get file extension from current buffer
+                local file_extension = vim.fn.expand('%:e')
+                print(file_extension)
+                -- local default = vim.fn.expand('<cword>') .. '.' .. file_extension
+                local default = "-G '" .. file_extension .. "' '" .. vim.fn.expand('<cword>') .. "'"
+
+                require('telescope.builtin').live_grep({
+                    default_text = default
+                })
+            end
+
+            vim.keymap.set('n', '<leader>wf', live_grep_word_under_cursor_same_file_type)
+
+            function live_grep_word_under_cursor()
                 require('telescope.builtin').live_grep({
                     default_text = vim.fn.expand('<cword>')
                 })
-            end, { desc = "Live grep, starting with word under cursor" })
+            end
+
+            -- use ww if I am impatient w.r.t. the delay b/c of wf keymap
+            vim.keymap.set('n', '<leader>w', live_grep_word_under_cursor)
+            vim.keymap.set('n', '<leader>ww', live_grep_word_under_cursor)
         end,
     },
 
