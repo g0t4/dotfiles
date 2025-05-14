@@ -31,6 +31,10 @@ function ask_use_inception
     _ask_write_state --inception $argv
 end
 
+function ask_use_xai
+    _ask_write_state --xai $argv
+end
+
 function ask_use_groq
     _ask_write_state --groq $argv
 end
@@ -70,6 +74,9 @@ function get_openai_models
     else if test "$argv[1]" = inception
         set base_url https://api.inceptionlabs.ai/v1/models
         set api_key (security find-generic-password -s inception -a ask -w)
+    else if test "$argv[1]" = xai
+        set base_url https://api.x.ai/v1/models
+        set api_key (security find-generic-password -s xai -a ask -w)
     else
         set base_url https://api.openai.com/v1/models
         set api_key (security find-generic-password -s openai -a ask -w)
@@ -87,6 +94,7 @@ complete --command ask_use_groq --no-files -a '(get_openai_models groq)'
 complete --command ask_use_inception --no-files -a '(get_openai_models inception)'
 complete --command ask_use_deepseek --no-files -a '(get_openai_models deepseek)'
 complete --command ask_use_vllm --no-files -a '(get_openai_models vllm)'
+complete --command ask_use_xai --no-files -a '(get_openai_models xai)'
 
 function ask_openai
 

@@ -54,8 +54,14 @@ def get_ask_client() -> tuple[Service, AsyncOpenAI]:
                 use = use_anthropic(model)
             elif "--gh-copilot" in ask_service:
                 use = use_gh_copilot(model)
-            else:
+            elif "--inception" in ask_service:
+                use = use_inception(model)
+            elif "--xai" in ask_service:
+                use = use_xai(model)
+            elif "--openai" in ask_service:
                 use = use_openai(model)
+            else:
+                raise Exception("invalid ask_service: " + str(ask_service))
 
     # 20ms to create client... YUCK, almost no time to read file above (<2ms)
     client = AsyncOpenAI(api_key=use.api_key, base_url=use.base_url, timeout=15)

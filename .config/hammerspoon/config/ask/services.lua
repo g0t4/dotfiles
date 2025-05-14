@@ -78,6 +78,15 @@ function M.getService()
         }
     end
 
+    if stored.service == "--xai" then
+        return {
+            name = "xai",
+            api_key = security.getSecret("ask", "xai"),
+            url = "https://api.xai.com/v1/chat/completions",
+            model = stored.model == "" and "grok-3-mini-beta" or stored.model,
+        }
+    end
+
     return {
         name = "openai",
         model = stored.model == "" and "gpt-4o" or stored.model,

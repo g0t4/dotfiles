@@ -181,7 +181,18 @@ fn get_service() -> Service {
                 url: String::from("http://ollama:8000/v1/chat/completions"),
             };
         }
-        _ => {
+        "--xai" => {
+            return Service {
+                name: String::from("xai"),
+                model: if model.is_some() {
+                    String::from(model.unwrap())
+                } else {
+                    String::from("grok-3-mini-beta")
+                },
+                url: String::from("https://api.xai.com/v1/chat/completions"),
+            };
+        }
+        "--openai" => {
             return Service {
                 name: String::from("openai"),
                 model: if model.is_some() {
@@ -192,6 +203,9 @@ fn get_service() -> Service {
                 url: String::from("https://api.openai.com/v1/chat/completions"),
             };
         }
+        // stop defaulting, it is confusing when I setup a new provider and I can't tell if it's misconfigured or just using openai instead!
+        //  without turning on logging
+        _ => panic!("No service found"),
     }
 }
 

@@ -45,7 +45,6 @@ def use_inception(model: Optional[str] = None):
         # https://platform.inceptionlabs.ai/dashboard/
     )
 
-
 def use_groq(model: Optional[str] = None):
 
     return Service(
@@ -135,6 +134,14 @@ def use_deepseek(model: Optional[str] = None):
         chat_completions_path=None,
     )
 
+def use_xai(model: Optional[str] = None):
+    return Service(
+        name='xai',
+        api_key=get_api_key('xai', 'ask'),
+        base_url="https://api.xai.com/v1",
+        model=model if model else 'grok-3-mini-beta',
+        chat_completions_path=None,
+    )
 
 def get_api_key(service_name, account_name):
 
@@ -191,6 +198,8 @@ def args_to_use() -> Service:
     parser.add_argument('--ollama', action='store_true', default=False)
     parser.add_argument('--anthropic', action='store_true', default=False)
     parser.add_argument('--gh-copilot', action='store_true', default=False)
+    parser.add_argument('--xai', action='store_true', default=False)
+    parser.add_argument('--vllm', action='store_true', default=False)
 
     # optional model name (for all services):
     parser.add_argument("model", type=str, const=None, nargs='?')
@@ -213,7 +222,11 @@ def args_to_use() -> Service:
         use = use_gh_copilot(args.model)
     elif args.inception:
         use = use_inception(args.model)
-    else:
+    elif args.xai:
+        use = use_xai(args.model)
+    elif args.openai:
         use = use_openai(args.model)
+    else:
+        raise Exception("invalid service: " + str(args))
 
     return use
