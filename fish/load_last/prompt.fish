@@ -40,6 +40,7 @@ function prompt_login --description 'display user name for the prompt'
         # end
         if set -q show_verbose_prompt
             #  (dotfiles
+            set base (basename $VIRTUAL_ENV)
             set venv_dir (basename (dirname $VIRTUAL_ENV))
             echo -n -s " ($venv_dir"
             echo -n -s "/$base)"
