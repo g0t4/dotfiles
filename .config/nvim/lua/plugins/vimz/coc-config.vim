@@ -142,15 +142,6 @@ inoremap <silent><expr> <C-f> coc#pum#visible() ? coc#pum#scroll(0) : "\<C-f>"
 " Use <c-space> to trigger/refresh completion
 inoremap <silent><expr> <c-space> coc#refresh()
 
-" * prev/next navigation using ][
-" Use `:CocDiagnostics` to get all diagnostics of current buffer in location list
-nmap <silent> [g <Plug>(coc-diagnostic-prev)
-nmap <silent> ]g <Plug>(coc-diagnostic-next)
-nmap <silent> [e <Plug>(coc-diagnostic-prev-error)
-nmap <silent> ]e <Plug>(coc-diagnostic-next-error)
-nmap <silent> [r CocNext
-nmap <silent> ]r CocPrev
-
 
 
 " * GoTo code navigation
@@ -290,7 +281,7 @@ command! -nargs=0 OR   :call     CocActionAsync('runCommand', 'editor.action.org
 " provide custom statusline: lightline.vim, vim-airline
 "set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 
-" * CoCList related keymaps
+" * CoCList/goto related keymaps
 " TODO habituate
 "   this is like loclist and quickfix, but specific to CoC
 "   i.e. if you find refs => go to first one => wanna go next in list:
@@ -311,11 +302,19 @@ nnoremap <silent><nowait> <space>cl  :<C-u>CocLast<CR>
 nnoremap <silent><nowait> <space>cn  :<C-u>CocNext<CR>
 nnoremap <silent><nowait> <space>cp  :<C-u>CocPrev<CR>
 nnoremap <silent><nowait> <space>cr  :<C-u>CocListResume<CR>
+" mnemonic coc [r]esume, coc[n]ext, coc[p]rev
 "
 " not that important to me, can remove:
 nnoremap <silent><nowait> <space>ce  :<C-u>CocList extensions<cr>
 nnoremap <silent><nowait> <space>cc  :<C-u>CocList commands<cr>
-
+"
+"
+" * prev/next navigation using ][ (careful with these)
+" Use `:CocDiagnostics` to get all diagnostics of current buffer in location list
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
+nmap <silent> [e <Plug>(coc-diagnostic-prev-error)
+nmap <silent> ]e <Plug>(coc-diagnostic-next-error)
 
 
 
