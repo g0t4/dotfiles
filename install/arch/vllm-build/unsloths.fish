@@ -1,5 +1,12 @@
 #!/usr/bin/env fish
 
+# TODO! I installed into .venv for vllm... lets test that w/ the notebook
+uv pip install unsloth[cu128-torch270]
+
+
+
+
+
 # appears I can use unsloth[cu128-torch270] with torch 2.7.0
 uv pip install unsloth[cu128-torch270] --dry-run
 #  find extras "sets" here:
@@ -40,13 +47,13 @@ Would install 25 packages
 #  from `uv tree` it appears like it might be innocuous to drop down... tensorizer depends on it
 
 # BTW... cu128-torch270 extras has no differences (currently) vs base package:
+#   AT LEAST w.r.t. what I already have setup with vllm's build from source which no doubt influences the final package list (i.e. versions)
 diff_two_commands 'uv pip install unsloth[cu128-torch270] --dry-run 2>&1' 'uv pip install unsloth --dry-run 2>&1'
 
-# TODO lets just install unsloth into vllm venv directly... I can always reverse the list above!
 #   and put back the 3 removed deps
 
 # * test copying the venv and modifying it too
-# FYI NOT WORKING! runnning python3 --version fails on finding a library
+# FYI! NOT WORKING! runnning python3 --version fails on finding a library
 # test in same dir to avoid some pathing issues (if any)
 cp -r .venv .venv-unsloth
 cd .venv-unsloth
