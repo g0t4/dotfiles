@@ -33,10 +33,15 @@ function prompt_login --description 'display user name for the prompt'
     if test -n "$VIRTUAL_ENV"
         ## venv indicator 
         echo -n -s (set_color cyan) \ue73c
+        set base (basename $VIRTUAL_ENV)
+        if test "$base" != ".venv"
+            echo -n -s "$base"
+        end
         if set -q show_verbose_prompt
             #  (dotfiles
             set venv_dir (basename (dirname $VIRTUAL_ENV))
-            echo -n -s " ($venv_dir)"
+            echo -n -s " ($venv_dir"
+            echo -n -s "/$base)"
         end
         echo -n -s (set_color normal) " "
     end
