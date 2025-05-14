@@ -16,15 +16,15 @@ local resume_keys = vim.iter({ 1, 2, 3, 4, 5, 6, 7, 8, 9 })
 
 local telescope_keys =
 {
-    { '<C-p>',       ':Telescope find_files<CR>', mode = 'n' },
-    { '<leader>t',   ':Telescope<CR>',            mode = 'n' }, -- list pickers, select one opens it (like if :Telescope<CR>), shows keymaps too
+    { '<C-p>',        ':Telescope find_files<CR>', mode = 'n' },
+    { '<leader>t',    ':Telescope<CR>',            mode = 'n' }, -- list pickers, select one opens it (like if :Telescope<CR>), shows keymaps too
     -- PRN if tr is cumbersome, find a new top level keymap like <leader>r (but I use that for refactoring)
-    { '<leader>tr',  ':Telescope resume<CR>',     mode = 'n' },
-    { '<leader>tp',  ':Telescope pickers<CR>',    mode = 'n' }, -- *** LIST and select a cached picker session, instead of guessing the number and using <leader>tr#
+    { '<leader>tr',   ':Telescope resume<CR>',     mode = 'n' },
+    { '<leader>tp',   ':Telescope pickers<CR>',    mode = 'n' }, -- *** LIST and select a cached picker session, instead of guessing the number and using <leader>tr#
 
     -- TODO! move all telescope less used pickers to <leader>t* to free up other <leader> lhs
-    { '<leader>tb',  ':Telescope buffers<CR>',    mode = 'n' },
-    { '<leader>tk',  ':Telescope keymaps<CR>',    mode = 'n' },
+    { '<leader>tb',   ':Telescope buffers<CR>',    mode = 'n' },
+    { '<leader>tk',   ':Telescope keymaps<CR>',    mode = 'n' },
     -- { '<leader>s',   ':Telescope live_grep<CR>',  mode = 'n' }, -- keep top level w/o submapping collision so this is snappy fast
 
     -- FYI <leader>tg => will open picker of pickers and g will select the git ones... DO NOT MAP OVER THAT! .. probably best way to pick from multiple git pickers is to not have each one keymapped
@@ -193,10 +193,16 @@ return {
                             ["<C-Down>"] = require("telescope.actions").cycle_history_next,
 
                             -- * closing and using both insert/normal mode
-                            -- ["<C-c>"] = require("telescope.actions").close,  -- DEFAULT <C-c> == close (insert mode)
-                            --   this way, you can use Escape to go to normal mode on pickers
-                            --   while also having a convenient way to quickly close the picker without escape twice
-                            --   another benefit of normal mode is you can inspect the keymaps and other details of the popup window/buffer
+                            ["<C-c>"] = require("telescope.actions").close, -- FYI the DEFAULT is <C-c> == close (insert mode), setting here to make it obvious
+                            -- how to use normal mode:
+                            --   * Esc => normal mode like normal!
+                            --   * Ctrl+C to close in both insert/normal mode
+                            --     * that way don't need double escape to close it
+                            -- pros of using normal mode on pickers:
+                            --   * Esc => j/k to move up/down the list! YES
+                            --   * PRN? can I setup "Telescope resume" to open in normal mode so I can j/k right away?
+                            --      does this feel right if so?
+                            --   - run commands on picker, i.e. :nmap ...
                             -- ["<Esc>"] = require("telescope.actions").close, -- NOT DEFAULT, use if want to close on Esc though
                         },
                         n = {
