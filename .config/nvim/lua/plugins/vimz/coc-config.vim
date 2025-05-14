@@ -165,6 +165,7 @@ nmap <silent> <leader>gi <Plug>(coc-implementation)
 "
 " FYI I am going back to coc's references picker, unfortunately
 "  when I use telescope's ... it doesn't support :CocResume/:CocNext/:CocPrev (see keymaps below)
+"   actually it does have ":Telescope resume" but AFAIK that is all, to resume last search, not specifically my references search (can use cache_picker but still no CocNext/CocPrev)
 "  so I have to redo search each time! ouch
 "  applies to all coc pickers
 "  TODO investigate if I can get resume w/ telescope's picker which I prefer in some ways

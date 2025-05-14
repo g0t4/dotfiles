@@ -24,6 +24,10 @@ class Service(NamedTuple):
         # i.e. printing (logging), DO NOT INCLUDE api_key
         return f"Service({self.name} model={self.model} chat_url={self.chat_url()})"
 
+    def log_safe_string(self):
+        # make it abundantly clear this is safe to log, don't rely on __repr__ for logging when there's an api key that could slip out
+        return f"Service({self.name} model={self.model} chat_url={self.chat_url()})"
+
 def use_vllm(model: Optional[str] = None):
     return Service(
         name='vllm',

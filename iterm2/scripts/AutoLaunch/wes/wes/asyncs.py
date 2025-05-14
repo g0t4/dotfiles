@@ -2,9 +2,9 @@ import re
 from client import get_ask_client
 from logs import log
 
-
 async def ask_openai_async_type_response(session, messages):
     use, client = get_ask_client()
+    log(f"using {use.log_safe_string()}")
 
     if use.name == "anthropic":
         # PRN impl streaming anthropic here based on httpx only

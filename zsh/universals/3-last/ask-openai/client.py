@@ -32,7 +32,7 @@ def get_ask_client() -> tuple[Service, AsyncOpenAI]:
         # extract ask_service variable:
         ask_service_raw = next((line for line in lines if "ask_service" in line), None)
         if ask_service_raw is None:
-            log("ask_service not found in fish universal variables file")
+            log("ask_service not found in fish universal variables file, using openai")
             use = use_openai(None)
         else:
             ask_service = ask_service_raw.encode('utf-8').decode('unicode_escape').strip()  # strip trailing \n
