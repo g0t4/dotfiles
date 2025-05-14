@@ -1,8 +1,20 @@
+# FYI good references for snippet formats:
+#   format is like snipmate/textmate IIUC... but still unique?
+#   examples here: https://github.com/honza/vim-snippets/blob/master/snippets/bash.snippets
+#   this appears to overlap at least:
+#      https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#snippet_syntax
+#
+# FYI indent with tab is stripped
+# - AFAICT, the line w/ least tabs is used as strip amount, not based on first line alone
+# - obviously, must use indent w/ shebang expansion, else # is interpreted as a comment
+snippet shefish "#!/usr/bin/env fish"
+	#!/usr/bin/env fish
+
 
 snippet fun "function call"
-function ${1:name}
-	${0}
-end
+	function ${1:name}
+		${0}
+	end
 
 
 
@@ -14,6 +26,6 @@ end
 #  'prefix': 'for'
 #  'body': 'for ${1:element} in #{2:array}\n\t$0\nend'
 snippet for "for ... in ... end"
-for ${1:element} in ${2:array}
-	${0}
-end
+	for ${1:element} in ${2:array}
+		${0}
+	end
