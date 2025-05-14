@@ -37,7 +37,30 @@ Would install 25 packages
  + xxhash==3.5.0
 
 # OK so... only concern would be the protobuf drop to 3.20.3?!
+#  from `uv tree` it appears like it might be innocuous to drop down... tensorizer depends on it
 
+# BTW... cu128-torch270 extras has no differences (currently) vs base package:
+diff_two_commands 'uv pip install unsloth[cu128-torch270] --dry-run 2>&1' 'uv pip install unsloth --dry-run 2>&1'
+
+# TODO lets just install unsloth into vllm venv directly... I can always reverse the list above!
+#   and put back the 3 removed deps
+
+# * test copying the venv and modifying it too
+# FYI NOT WORKING! runnning python3 --version fails on finding a library
+# test in same dir to avoid some pathing issues (if any)
+cp -r .venv .venv-unsloth
+cd .venv-unsloth
+# find possible issues:
+ag --unrestricted  -i ".venv\/" --color | grep -v "Binary file"
+ag --unrestricted -i "vllm-latest/.venv" --color  | grep -v "Binary file"
+# targeted changes:
+cd .venv-unsloth/bin
+sed -Ei 's/vllm-latest\/\.venv/vllm-latest\/.venv-unsloth/g' **/*
+deactivate # currrent venv
+# keep in mind you auto activate venvs on moving dirs
+source .venv-unsloth/bin/activate.fish
+echo $VIRTUAL_ENV # double check
+# PRN add VIRTUAL_ENV to path temporarily
 
 # tips from someone that has unsloth working on 50 series:
 #   https://github.com/unslothai/unsloth/issues/1679#issuecomment-2776622643
@@ -48,3 +71,4 @@ Would install 25 packages
 #  yeah in dry run,see unsloth is 2025.5.2
 #    seems to match to https://github.com/unslothai/unsloth/releases/tag/May-2025
 #    qwen3 rollout too
+
