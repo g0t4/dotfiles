@@ -307,6 +307,7 @@ nnoremap <silent><nowait> <space>co  :<C-u>CocList outline<cr>
 nnoremap <silent><nowait> <space>cs  :<C-u>CocList -I symbols<cr>
 nnoremap <silent><nowait> <space>cf  :<C-u>CocFirst<CR>
 nnoremap <silent><nowait> <space>cl  :<C-u>CocLast<CR>
+" * resume last list/search (i.e. goto refs)
 nnoremap <silent><nowait> <space>cn  :<C-u>CocNext<CR>
 nnoremap <silent><nowait> <space>cp  :<C-u>CocPrev<CR>
 nnoremap <silent><nowait> <space>cr  :<C-u>CocListResume<CR>
