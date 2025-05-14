@@ -3,6 +3,15 @@
 # TODO! I installed into .venv for vllm... lets test that w/ the notebook
 uv pip install unsloth[cu128-torch270]
 
+cd ~/repos/github/unslothai/notebooks
+source ~/repos/github/vllm-project/vllm-latest/.venv/bin/activate.fish
+
+# needed for notebook (only adds packages)
+uv pip install jupyter
+
+jupyter notebook --ip 0.0.0.0
+
+
 
 
 
