@@ -189,7 +189,7 @@ fn get_service() -> Service {
                 } else {
                     String::from("grok-3-mini-beta")
                 },
-                url: String::from("https://api.xai.com/v1/chat/completions"),
+                url: String::from("https://api.x.ai/v1/chat/completions"),
             };
         }
         "--openai" => {
