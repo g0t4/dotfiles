@@ -290,23 +290,23 @@ command! -nargs=0 OR   :call     CocActionAsync('runCommand', 'editor.action.org
 "   means WhichKey will help me recall them
 " CocList has fuzzy matchers, so a nice way to grok the relevant info (i.e. diagnostics or outline)
 "
-nnoremap <silent><nowait> <space>ca  :<C-u>CocList diagnostics<cr>
+nnoremap <silent><nowait> <leader>ca  :<C-u>CocList diagnostics<cr>
 " Find symbol of current document (outline)
 " wow this is a nice way to jump to where I want for symobls in current file
-nnoremap <silent><nowait> <space>co  :<C-u>CocList outline<cr>
+nnoremap <silent><nowait> <leader>co  :<C-u>CocList outline<cr>
 " Search workspace symbols
-nnoremap <silent><nowait> <space>cs  :<C-u>CocList -I symbols<cr>
-nnoremap <silent><nowait> <space>cf  :<C-u>CocFirst<CR>
-nnoremap <silent><nowait> <space>cl  :<C-u>CocLast<CR>
+nnoremap <silent><nowait> <leader>cs  :<C-u>CocList -I symbols<cr>
+nnoremap <silent><nowait> <leader>cf  :<C-u>CocFirst<CR>
+nnoremap <silent><nowait> <leader>cl  :<C-u>CocLast<CR>
 " * resume last list/search (i.e. goto refs)
-nnoremap <silent><nowait> <space>cn  :<C-u>CocNext<CR>
-nnoremap <silent><nowait> <space>cp  :<C-u>CocPrev<CR>
-nnoremap <silent><nowait> <space>cr  :<C-u>CocListResume<CR>
+nnoremap <silent><nowait> <leader>cn  :<C-u>CocNext<CR>
+nnoremap <silent><nowait> <leader>cp  :<C-u>CocPrev<CR>
+nnoremap <silent><nowait> <leader>cr  :<C-u>CocListResume<CR>
 " mnemonic coc [r]esume, coc[n]ext, coc[p]rev
 "
 " not that important to me, can remove:
-nnoremap <silent><nowait> <space>ce  :<C-u>CocList extensions<cr>
-nnoremap <silent><nowait> <space>cc  :<C-u>CocList commands<cr>
+nnoremap <silent><nowait> <leader>ce  :<C-u>CocList extensions<cr>
+nnoremap <silent><nowait> <leader>cc  :<C-u>CocList commands<cr>
 "
 "
 " * prev/next navigation using ][ (careful with these)
