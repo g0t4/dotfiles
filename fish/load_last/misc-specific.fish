@@ -2376,3 +2376,7 @@ function test_vllm_v1_completions
       "temperature": 0.0
     }' | http localhost:8000/v1/completions
 end
+function test_vllm_v1_completions_raw_text
+    # if want a crude check of validity of generated text
+    test_vllm_v1_completions | jq .choices[0].text -r
+end
