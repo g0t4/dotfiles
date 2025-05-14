@@ -173,6 +173,10 @@ return {
                         },
 
                     },
+                    cache_picker = {
+                        num_pickers = 10, -- default 1
+                        limit_entries = 100, -- default 1000... I only really need this when I am stepping through meaninngfully filtered lists of results, so 100 is way overkill too
+                    },
                 },
                 pickers = {
                     live_grep = {
