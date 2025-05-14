@@ -1,3 +1,39 @@
+local function telescope_resume(num)
+    return {
+        '<leader>tr' .. num,
+        function()
+            require('telescope.builtin').resume({ cache_index = num })
+        end,
+        mode = 'n',
+    }
+end
+
+local resume_keys = vim.iter({ 1, 2, 3, 4, 5, 6, 7, 8, 9 })
+    :map(function(num)
+        return telescope_resume(num)
+    end)
+    :totable()
+
+local telescope_keys =
+{
+    { '<C-p>',       ':Telescope find_files<CR>', mode = 'n' },
+    { '<leader>t',   ':Telescope<CR>',            mode = 'n' }, -- list pickers, select one opens it (like if :Telescope<CR>), shows keymaps too
+    -- PRN if tr is cumbersome, find a new top level keymap like <leader>r (but I use that for refactoring)
+    { '<leader>tr',  ':Telescope resume<CR>',     mode = 'n' },
+    { '<leader>tp',  ':Telescope pickers<CR>',    mode = 'n' }, -- *** LIST and select a cached picker session, instead of guessing the number and using <leader>tr#
+
+    -- TODO! move all telescope less used pickers to <leader>t* to free up other <leader> lhs
+    { '<leader>tb',  ':Telescope buffers<CR>',    mode = 'n' },
+    { '<leader>tk',  ':Telescope keymaps<CR>',    mode = 'n' },
+    -- { '<leader>s',   ':Telescope live_grep<CR>',  mode = 'n' }, -- keep top level w/o submapping collision so this is snappy fast
+
+    -- FYI <leader>tg => will open picker of pickers and g will select the git ones... DO NOT MAP OVER THAT! .. probably best way to pick from multiple git pickers is to not have each one keymapped
+    { '<leader>tgst', ':Telescope git_status<CR>', mode = 'n' }, -- like gst abbr/alias
+    unpack(resume_keys), -- FYI keep this at end of this table ctor for telescope_keys... otherwise, it will effectively only unpack the first item in resume_keys, use vim.list_extend to reliably merge the lists
+    -- DO NOT PUT ANY keymaps here after the unpack
+}
+-- vim.list_extend(telescope_keys, resume_keymaps)
+
 return {
 
     {
@@ -95,17 +131,7 @@ return {
             -- TODO popup.nvim?
         },
         cmd = { 'Telescope' }, -- lazy load on command used
-        keys = {
-            { '<C-p>',       ':Telescope find_files<CR>', mode = 'n' },
-            { '<leader>t',   ':Telescope<CR>',            mode = 'n' }, -- list pickers, select one opens it (like if :Telescope<CR>), shows keymaps too
-            -- PRN if tr is cumbersome, find a new top level keymap like <leader>r (but I use that for refactoring)
-            { '<leader>tr',   ':Telescope resume<CR>',            mode = 'n' },
-            -- TODO! move all telescope less used pickers to <leader>t* to free up other <leader> lhs
-            { '<leader>tb',   ':Telescope buffers<CR>',            mode = 'n' },
-            { '<leader>tk',   ':Telescope keymaps<CR>',            mode = 'n' },
-            -- { '<leader>s',   ':Telescope live_grep<CR>',  mode = 'n' }, -- keep top level w/o submapping collision so this is snappy fast
-            { '<leader>gst', ':Telescope git_status<CR>', mode = 'n' }, -- like gst abbr/alias
-        },
+        keys = telescope_keys,
         config = function()
             local telescopeConfig = require('telescope.config')
 
