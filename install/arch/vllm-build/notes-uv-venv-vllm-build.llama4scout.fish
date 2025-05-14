@@ -17,7 +17,7 @@ python use_existing_torch.py # do not uv run else it installs deps liseted in py
 # now install latest torch using cu128
 uv pip install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/cu128
 # can use 2.7.0 stable now with 12.8:
-# uv pip3 install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu128
+# uv pip install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu128
 #
 # some deps
 uv pip install -r requirements/build.txt
