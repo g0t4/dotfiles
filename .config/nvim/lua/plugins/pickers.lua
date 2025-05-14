@@ -98,6 +98,8 @@ return {
         keys = {
             { '<C-p>',       ':Telescope find_files<CR>', mode = 'n' },
             { '<leader>t',   ':Telescope<CR>',            mode = 'n' }, -- list pickers, select one opens it (like if :Telescope<CR>), shows keymaps too
+            -- PRN if tr is cumbersome, find a new top level keymap like <leader>r (but I use that for refactoring)
+            { '<leader>tr',   ':Telescope resume<CR>',            mode = 'n' },
             -- { '<leader>s',   ':Telescope live_grep<CR>',  mode = 'n' }, -- keep top level w/o submapping collision so this is snappy fast
             { '<leader>gst', ':Telescope git_status<CR>', mode = 'n' }, -- like gst abbr/alias
         },
