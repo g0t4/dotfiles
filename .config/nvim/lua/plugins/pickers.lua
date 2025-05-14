@@ -187,16 +187,22 @@ return {
                     vimgrep_arguments = vimgrep_arguments,
                     mappings = {
                         i = {
-                            -- close on esc, otherwise have to double press esc to close (also this prevents me from going to normal mode which I don't want in this picker - at least not yet)
-                            -- FYI registers for the popup/float window only (confirmed by disabling this and using Esc into normal mode to check with :verbose nmap <Esc>)
-                            -- FYI testing popup key maps without leaving insert mode (and losing popup in some case): inoremap <C-c> <Cmd>verbose map \<Up\><CR>
-                            --    also `:messages clear` ... but some of verbose map doesn't show up in :messages (todo is there some sort of <Cmd> caveat that loses some of the messages?)
-                            ["<Esc>"] = require("telescope.actions").close,
                             -- CYCLE history of previous searches: (like command line history)
                             --  use Ctrl-Up/Down so arrows can move through results of current search
                             ["<C-Up>"] = require("telescope.actions").cycle_history_prev,
                             ["<C-Down>"] = require("telescope.actions").cycle_history_next,
+
+                            -- * closing and using both insert/normal mode
+                            -- ["<C-c>"] = require("telescope.actions").close,  -- DEFAULT <C-c> == close (insert mode)
+                            --   this way, you can use Escape to go to normal mode on pickers
+                            --   while also having a convenient way to quickly close the picker without escape twice
+                            --   another benefit of normal mode is you can inspect the keymaps and other details of the popup window/buffer
+                            -- ["<Esc>"] = require("telescope.actions").close, -- NOT DEFAULT, use if want to close on Esc though
                         },
+                        n = {
+                            -- also map Ctrl-c to close in normal mode, that way it matches the default <C-c> in insert mode
+                            ["<C-c>"] = require("telescope.actions").close,
+                        }
 
                     },
                     cache_picker = {
