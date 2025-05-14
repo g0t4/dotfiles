@@ -187,7 +187,7 @@ fn get_service() -> Service {
                 model: if model.is_some() {
                     String::from(model.unwrap())
                 } else {
-                    String::from("grok-3-mini-beta")
+                    String::from("grok-3-beta")
                 },
                 url: String::from("https://api.x.ai/v1/chat/completions"),
             };

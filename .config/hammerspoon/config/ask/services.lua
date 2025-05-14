@@ -83,7 +83,7 @@ function M.getService()
             name = "xai",
             api_key = security.getSecret("ask", "xai"),
             url = "https://api.x.ai/v1/chat/completions",
-            model = stored.model == "" and "grok-3-mini-beta" or stored.model,
+            model = stored.model == "" and "grok-3-beta" or stored.model,
         }
     end
 

@@ -143,7 +143,7 @@ def use_xai(model: Optional[str] = None):
         name='xai',
         api_key=get_api_key('xai', 'ask'),
         base_url="https://api.x.ai/v1",
-        model=model if model else 'grok-3-mini-beta',
+        model=model if model else 'grok-3-beta',
         chat_completions_path=None,
     )
 
