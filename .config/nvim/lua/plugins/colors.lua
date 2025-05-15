@@ -69,6 +69,12 @@ return {
                     -- transparency = true,
                 },
                 colors = {
+                    onedark_dark = {
+                        bg = "#1f2229", -- 282c34", -- this feels better (is my new terminal bg I made)
+                    },
+                    onedark_vivid = {
+                        bg = "#1f2229", -- 282c34", -- this feels better (is my new terminal bg I made)
+                    },
                     onedark = {
                         -- override bg to not be so washed out (bright) for a dark bg... felt glowing and like it conflicted with reading the code
                         bg = "#1f2229", -- 282c34", -- this feels better (is my new terminal bg I made)
@@ -77,7 +83,11 @@ return {
             }
             -- FYI get colors =>    :lua print(vim.inspect(require("onedarkpro.helpers").get_colors()))
             vim.cmd [[
-                colorscheme onedark
+                colorscheme onedark " primary used
+                "colorscheme onelight " font on comments is yuck
+                "colorscheme vaporwave " blue-y yuck
+                "colorscheme onedark_vivid " FYI this looks ok actually
+                "colorscheme onedark_dark " too high contrast, but ok w/ my bg override (in fact almost looks same as vivid w/ new bg color)
                 set termguicolors
             ]]
         end,
@@ -90,6 +100,7 @@ return {
     -- {
     --     -- I like this theme, could modify it to my liking later when I figure out highlight issues
     --     -- https://github.com/navarasu/onedark.nvim
+    --     enabled = false,
     --     'navarasu/onedark.nvim',
     --     config = function()
     --         require('onedark').setup {
