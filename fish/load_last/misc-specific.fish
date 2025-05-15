@@ -2243,12 +2243,6 @@ if $IS_LINUX then
     # lspath
     # lstopo
 
-    # lsof
-    # *** process info
-    # files for a process:
-    # TODO how to deal with multiple matches, I don't like using head but at least it is obvious in the expanded command so leave it for now
-    abbr --set-cursor="!" lsofp 'lsof -p $(pgrep -if "!" | head -1)'
-
     # lsusb
     abbr lsusb "lsusb -tv" # concise tree, a few more details
     abbr lsusbv "lsusb -v" # very detailed
@@ -2257,6 +2251,36 @@ if $IS_LINUX then
     abbr --set-cursor='!' dmesgg "sudo dmesg | grep -i '!'"
 
 end
+
+# *** lsof
+if command -q lsof
+
+    # find app for a given port
+    # sudo lsof -i :8080 (for now hardcode 8080 as reminder, once that's annoying I can remove it)
+    abbr --set-cursor="!" lsofi 'lsof -i :8080!'
+    abbr --set-cursor="!" lsof_process_for_port 'lsof -i :8080!' # reminder (so I can tab complete it when I inevitably forget the lsof options again)
+
+    # files for a process:
+    # TODO how to deal with multiple matches, I don't like using head but at least it is obvious in the expanded command so leave it for now
+    abbr --set-cursor="!" lsofp 'lsof -p $(pgrep -if "!" | head -1)'
+    abbr --set-cursor="!" lsof_ports_for_process_pgrep 'lsof -p $(pgrep -if "!" | head -1)' # reminder
+    abbr --set-cursor="!" lsofpi 'lsof -p $(pgrep -if "!" | head -1) -a -i'
+    abbr --set-cursor="!" lsof_ports_for_pid 'lsof -p ! -a -i' # reminder
+    # -p PID
+    # -i == internet files (ports)
+    # -a == AND constraints
+
+end
+
+# TODO
+# *** netstat
+# if command -q netstat
+# end
+
+# TODO
+# *** ss
+# if command -q ss
+# end
 
 # *** asciinema
 abbr anr 'asciinema rec --overwrite test.cast' # PRN remake in fish:    abbr --set-cursor '!' --add anr 'asciinema rec --overwrite !.cast'
