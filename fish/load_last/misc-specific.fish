@@ -2412,5 +2412,6 @@ end
 if command -q wscat
     abbr wscatc 'wscat --connect -L --slash --show-ping-pong ws://localhost:8000'
     abbr wscatl 'wscat --listen 8000' # run an echo server locally
+    #  FYI --show-ping-pong ONLY applies when using -c/--connect (the client)
     abbr wscat_echo_org 'wscat --connect -L --slash --show-ping-pong ws://echo.websocket.org'
 end
