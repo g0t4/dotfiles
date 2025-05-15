@@ -2272,6 +2272,10 @@ if command -q lsof
 
 end
 
+# TODO wireshark
+# start listening on intereface X and then with filter, i.e.:
+#   !mdns and !db-lsp-disc and !nbns and tcp.port==62750
+
 # TODO
 # *** netstat
 # if command -q netstat
@@ -2403,4 +2407,10 @@ end
 function test_vllm_v1_completions_raw_text
     # if want a crude check of validity of generated text
     test_vllm_v1_completions | jq .choices[0].text -r
+end
+
+if command -q wscat
+    abbr wscatc 'wscat --connect -L --slash --show-ping-pong ws://localhost:8000'
+    abbr wscatl 'wscat --listen 8000' # run an echo server locally
+    abbr wscat_echo_org 'wscat --connect -L --slash --show-ping-pong ws://echo.websocket.org'
 end
