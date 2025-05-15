@@ -22,8 +22,42 @@ return {
     --         vim.api.nvim_create_user_command("BaleiaLogs", vim.g.baleia.logger.show, { bang = true })
     --     end,
     -- },
+    {
+        enabled = false,
+        "folke/tokyonight.nvim",
+        priority = 1000,
+        opts = {},
+        config = function()
+            require("tokyonight").setup({
+                on_colors = function(colors)
+                    -- vim.print(colors)
+                    colors.hint = colors.orange
+                    -- colors.error = "#ff0000"
+                    -- colors.bg = "#1f2229" (the color I have on onedarkpro's bg)
+                end
+            })
+            -- PRN would need to adjust lualine to use corresponding theme
+
+
+            vim.cmd [[
+                " see this is the issue, too many color schemes are over saturated (white washed) but when you alter the background then the contrast with text color is either:
+                "   way too little for grayed out text like comments
+                "   way too much versus bright colors
+
+                "colorscheme tokyonight " ok
+                "colorscheme tokyonight-night " ok (darkest, not ideal contrast ratios between text colors and background)
+                colorscheme tokyonight-storm " ok (blue, but honestly not terrible.. however it feels washed out)
+                "colorscheme tokyonight-day " light purple is hard to read on white background
+                "colorscheme tokyonight-moon " NO
+
+                set termguicolors
+            ]]
+        end,
+
+    },
 
     {
+        -- enabled = false,
         "olimorris/onedarkpro.nvim",
         priority = 1000,
         config = function()
