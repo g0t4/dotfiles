@@ -8,7 +8,7 @@
 
 # FYI colors are defined by fish/zsh respectively in color-specific.{fish,zsh}
 function ag
-    command ag --nogroup --color-match "$__color_matching_text" $argv
+    command ag --nogroup --color-match "$__color_matching_text" --column $argv
 end
 # FYI can defer expand color variable so order of startup files is irrelevant
 # --nogroup => disable grouping to show file/line per match to click to open in vscode (via iterm links)
