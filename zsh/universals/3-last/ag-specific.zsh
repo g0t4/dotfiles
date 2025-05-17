@@ -25,32 +25,3 @@ abbr agL 'ag -L' # print files w/o content match
 abbr agw 'ag --word-regexp' # match whole words
 abbr agz 'ag --search-zip' # search inside zip files (gz,xz only)
 abbr agfiles 'ag -g ""'  # show all files that would be searched, like rg's --files
-
-# *** rg (start to consider using this?)
-abbr rgi 'rg -i' # same as -i in ag
-# abbr rgig # TODO equiv
-abbr rgh 'rg --hidden -i'
-abbr rgu 'rg -u' # unrestricted (not sure exactly the same as ag's unrestricted, has to be close)
-abbr rgfiles 'rg --files' # list files that would be searched
-
-abbr rgm 'rg --multiline --multiline-dotall' # dot as \n too
-
-# shared args:
-# -i to ignore case
-# --hidden (note ag also uses -h whereas rg does not)
-# -u/--unrestricteda (not 100% same, still some filtering in rg)
-#
-# *** FYI use these to find differences:
-#   diff_two_commands 'ag -g \'\'| sort' 'rg --files | sort'
-#   ag -g ''
-#   rg --files
-#   # diff there is gonna show differences in args
-#
-
-# cd dotfiles (this repo):
-#   diff_two_commands 'rg --hidden -i telescope -l | sort' 'ag --hidden -i telescope -l | sort'
-#     matches
-#   diff_two_commands 'ag --unrestricted -i telescope -l | sort' 'rg --unrestricted -i telescope -l | sort'
-#     does not match, far fewer matches from rg
-#     notably --hidden files are gone
-#     and binaries (libs)
