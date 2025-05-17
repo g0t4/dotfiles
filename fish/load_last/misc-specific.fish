@@ -709,7 +709,8 @@ abbr vgr "set | grep -i "
 #
 abbr --add agr --set-cursor='!' "abbr | grep -i '!'" # i.e. to find `git status` aliases
 #
-abbr --add agrs --set-cursor='!' "abbr | grep -i '\-\- !'" # AFAICT name always comes after dashes `-- name`, and dashes are not always right after -a, with --position and other args it can come later
+# abbr --add agrs --set-cursor='!' "abbr | grep -i '\-\- !'" # AFAICT name always comes after dashes `-- name`, and dashes are not always right after -a, with --position and other args it can come later
+abbr --set-cursor agrs "complete -C '%' # show completions for current commandline "
 #
 #   abbr --list | grep -i '^an' # another avenue if I have too much trouble relying on `abbr --show` + grep
 #
