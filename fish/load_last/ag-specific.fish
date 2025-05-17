@@ -6,6 +6,114 @@
 #     --color-path # Default is 1;32. (fg: bold, green)
 #
 
+# ***! rg START
+# ??? try rg for daily driver (replace in ag abbrs)...
+# - faster
+# - has config file (can I configure it to not consider some dotfiles as 'hidden')
+
+abbr rgi 'rg -i' # same as -i in ag
+# abbr rgig # TODO equiv
+abbr rgh 'rg --hidden -i'
+abbr rgu 'rg -u' # unrestricted (not sure exactly the same as ag's unrestricted, has to be close)
+#
+# *** troubleshooting
+abbr rg_files_searched 'rg --files' # * list files that would be searched
+abbr rg_files_no_match 'rg --files-without-match' # ag -L
+abbr rg_files_with_matches 'rg --files-with-matches' # ag -l
+abbr rg_debug 'rg --debug'
+abbr rg_trace 'rg --trace'
+abbr rg_stats 'rg --stats'
+
+abbr rgm 'rg --multiline --multiline-dotall' # dot as \n too
+
+# TODO! switch to using % (default for --set-cursor)... makes abbrs cleaner => GLOBAL FIND REPLACE
+
+abbr --set-cursor rgd 'rg -d "%"'
+abbr --set-cursor rgv 'rg -v "%"' # -v/--invert-match
+abbr --set-cursor rgo 'rg -o "%"' # -o/--only-matching
+abbr --set-cursor rgF 'rg -F "%"' # -F/--fixed-strings
+abbr --set-cursor rgw 'rg -w "%"' # -F/--fixed-strings
+# TODO! LEARN rgr (replace, think sed)
+# -r, --replace: Replace matches with given text.
+abbr --set-cursor rgr 'rg --replace "%"' # -r/--replace # REPLACE MATCHES!!!
+abbr --set-cursor rg_replace 'rg --replace "%"' # -r/--replace # REPLACE MATCHES!!!
+
+function rg
+    # TODO! rg config instead of function override?
+    #   --column # I think I want this on by default so file "links" include the column too! when I click to open (semantic history in iterm2)
+    #   --no-heading
+    rg --column --no-heading $argv
+    # TODO add  --color-match
+end
+
+#
+# TODO! review and build abbrs/habituate rg options
+#
+# --mmap                     (Search with memory maps when possible.)
+#
+### multiline search:
+#  --multiline-dotall               (Make '.' match line terminators.)
+# * -U  --multiline            (Enable searching across multiple lines.)
+#
+### config related?
+# --no-config                       (Never read configuration files.)
+# -j  --threads        (Set the approximate number of threads to use.)
+# --hyperlink-format                         (Set the format of hyperlinks.)  - this is super cool, can include WSL distro on windows for clickable links into linux distros!
+#
+### ignores related:
+# --no-ignore                               (Don't use ignore files.)
+# --no-ignore-dot             (Don't use .ignore or .rgignore files.)
+# --no-ignore-exclude              (Don't use local exclusion files.)
+# --no-ignore-files              (Don't use --ignore-file arguments.)
+# --no-ignore-global                 (Don't use global ignore files.)
+# --no-ignore-vcs       (Don't use ignore files from source control.)
+# --no-ignore-parent  (Don't use ignore files in parent directories.)
+# --iglob                        (Include/exclude paths case insensitively.)
+# --ignore-file                           (Specify additional ignore files.)
+# -g  --glob                          (Include or exclude file paths.)
+#
+# -d  --max-depth                   (Descend at most NUM directories.)
+#
+# --passthru            (Print both matching and non-matching lines.)
+#
+# --sort                           (Sort results in ascending order.)
+# --sortr                         (Sort results in descending order.)
+# --sort-files              ((DEPRECATED) Sort results by file path.)
+#
+# --engine                              (Specify which regex engine to use.)
+# -e  --regexp                              (A pattern to search for.)
+# -P  --pcre2                                 (Enable PCRE2 matching.)
+#
+##
+# --type-add                        (Add a new glob for a file type.)
+# --type-clear                         (Clear globs for a file type.)
+# -T  --type-not                  (Do not search files matching TYPE.)
+# -t  --type                        (Only search files matching TYPE.)
+
+
+# * rg/ag shared args:
+# -i to ignore case
+# --hidden (note ag also uses -h whereas rg does not)
+# -u/--unrestricteda (not 100% same, still some filtering in rg)
+# ag --[no-]group == rg --[no-]heading   # whether to filename on every line or to group matches per file and show name only above group, important for it to be per line for clickable "links" in iTerm2 semantic history
+#
+# *** FYI use these to find differences:
+#   diff_two_commands 'ag -g \'\'| sort' 'rg --files | sort'
+#   ag -g ''
+#   rg --files
+#   # diff there is gonna show differences in args
+#
+
+# cd dotfiles (this repo):
+#   diff_two_commands 'rg --hidden -i telescope -l | sort' 'ag --hidden -i telescope -l | sort'
+#     matches
+#   diff_two_commands 'ag --unrestricted -i telescope -l | sort' 'rg --unrestricted -i telescope -l | sort'
+#     does not match, far fewer matches from rg
+#     notably --hidden files are gone
+#     and binaries (libs)
+
+# ***! rg END
+
 # FYI colors are defined by fish/zsh respectively in color-specific.{fish,zsh}
 function ag
     command ag --nogroup --color-match "$__color_matching_text" --column $argv
