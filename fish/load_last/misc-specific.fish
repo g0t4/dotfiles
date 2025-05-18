@@ -894,6 +894,7 @@ function kill_hung_grc
     pkill -ilf grcat
 end
 
+abbr z_clean 'z --clean' # mostly a reminder, removes non-existant directories from z history file
 function z
     # TLDR = wcl + z
     # FYI still uses z fish completions (b/c same name)
