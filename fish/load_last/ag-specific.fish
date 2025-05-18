@@ -74,6 +74,17 @@ abbr --set-cursor rgo 'rg -o "%"' # -o/--only-matching
 abbr --set-cursor rgF 'rg -F "%"' # -F/--fixed-strings
 abbr --set-cursor rgw 'rg -w "%"' # -F/--fixed-strings
 
+function diff_rg_files
+    # diff_rg_files '--hidden'
+    # runs:
+    # KEEP IN MIND, ripgreprc applies to both sides
+    diff_two_commands 'rg --files | sort' "rg --files $argv | sort"
+end
+
+function diff_rg_files_no_config
+    diff_two_commands 'rg --files --no-config' "rg --files --no-config $argv | sort"
+end
+
 # MOVED thes to ripgreprc file
 # function rg
 #     command rg --column --no-heading $argv
