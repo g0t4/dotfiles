@@ -1,9 +1,17 @@
 
 # *** ls
 # still not using exa/eza (not worth hassle, esp b/c fish builtin ls/la colors work well enough)
-abbr lat "ls -alht" # -t == sort by time
-abbr las "ls -alhS" # -S == sort by size
-abbr la "la -h" # use fish builtin `la` and pass -h by default now
+abbr lat "ls -alht" # -t == sort by time # PRN move to fd?
+abbr las "ls -alhS" # -S == sort by size # PRN move to fd?
+# abbr la "la -h" # use fish builtin `la` and pass -h by default now
+# *** why do I use ls at all?
+# - globs suck (esp shell specific, very, very limited and nervewracking)
+# - fd works across nested dirs (always wanted ls to do that)
+#   - strong point of fish shell is ability to do partial matches like f/d/e => foo/and/expose.md
+#   - fd can just do `fd expose.md`!
+# - want only current dir... fine `fd -d 1` (fd1 below)
+abbr ls 'fd -d=1' # does this make me feel 🥰 or 😡 ???
+abbr la 'fd -d=1 -l'
 
 # this was in release notes for 3.6.0! regex just added (among other changes)
 #    https://fishshell.com/docs/3.6/relnotes.html

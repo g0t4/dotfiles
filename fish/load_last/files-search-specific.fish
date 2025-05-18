@@ -8,14 +8,6 @@
 
 # TODO! adopt fd for searching file paths
 #  i.e. fd | fzf scenarios
-# *** why do I use ls at all?
-# - globs suck (esp shell specific, very, very limited and nervewracking)
-# - fd works across nested dirs (always wanted ls to do that)
-#   - strong point of fish shell is ability to do partial matches like f/d/e => foo/and/expose.md
-#   - fd can just do `fd expose.md`!
-# - want only current dir... fine `fd -d 1` (fd1 below)
-abbr ls fd # does this make me feel 🥰 or 😡 ???
-abbr la 'fd -l'
 
 # *** fd general options
 abbr fdnh 'fd --no-hidden' # include hidden
