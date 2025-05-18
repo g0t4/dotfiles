@@ -816,7 +816,7 @@ abbr --add _pstreeX --regex "pstree\d+" --function pstreeX
 function pstreeX
     string replace pstree 'pstree -l' $argv
 end
-abbr pstrees --set-cursor 'pstree -s "%"' # ***! NEW FAVORITE, shows all matching parents/descendants (IIUC)
+abbr pstrees --set-cursor 'pstree -s "%"' # *** NEW FAVORITE, shows all matching parents/descendants (IIUC)
 abbr pstreep 'pstree -p' # parents/descendants of PID, without -p then its just descendants
 abbr pstreet 'pstree  (ps -o pid=)' # ps gives processes w/ controlling terminal, then pstree shows their hierarchy... similar to "ps f" on *nix
 abbr pstreeU 'pstree -U' # skip root only branches
@@ -1242,7 +1242,7 @@ if command -q act
 
     end
 
-    abbr --add actw --set-cursor --function actw_expanded # ! so we can tab complete workflow file/path
+    abbr --add actw --set-cursor --function actw_expanded
 
     # GENERATED COMPLETIONS (finagled chatgpt to spit this out):
     #
