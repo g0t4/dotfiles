@@ -140,9 +140,14 @@ return {
                 -- local args = { unpack(telescopeConfig.values.vimgrep_arguments) }
                 -- -- FYI right now:        { "rg", "--color=never", "--no-heading", "--with-filename", "--line-number", "--column", "--smart-case" }
 
+                -- FYI use ripgreprc for universal overrides
                 local args = { "rg", "--color=never", "--no-heading", "--with-filename", "--line-number", "--column",
-                    "--hidden", -- needed for .config and other dotfiles (PRN can I just configure rg to always search in SOME dotfiles or ALL and then denylist the ones I dont want (at least)
-                    "--glob", "!**/.git/*", -- --hidden allows .git dir searching
+
+                    -- ripgreprc has these
+                    -- "--hidden", -- for dotfiles/dirs
+                    -- "--glob", "!.git", -- --hidden allows .git dir searching, so block it
+
+                    -- FYI these I think are if I wanna use --unrestricted/-U as default option in args:
                     -- "--no-ignore" -- allows gitignored files
                     -- "--glob", "!**/.venv/*", -- --hidden doesn't match .venv
                     -- "--glob", "!**/node_modules/*",
