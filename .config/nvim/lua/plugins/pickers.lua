@@ -279,7 +279,6 @@ return {
                     }
                 }
             })
-            -- FYI this complements <leader>s which opens live_grep with empty search query
             -- set a keymap to builtin.lsp_document_symbols => <leader>lsp_document_symbols => <leader>lds?
             vim.keymap.set('n', '<leader>l', "<Cmd>Telescope coc<CR>", { desc = "Coc pickers" })
             --
