@@ -10,8 +10,10 @@ abbr las "ls -alhS" # -S == sort by size # PRN move to fd?
 #   - strong point of fish shell is ability to do partial matches like f/d/e => foo/and/expose.md
 #   - fd can just do `fd expose.md`!
 # - want only current dir... fine `fd -d 1` (fd1 below)
-abbr ls 'fd -d=1' # does this make me feel 🥰 or 😡 ???
-abbr la 'fd -d=1 -l'
+# ls usually shows all dirs, not ignored ones... that makes sense to do here
+#  but now fd will show me hidden items b/c I have --hidden in my fd alias... and I like this, I don't like needing ls -a
+abbr ls 'fd -d=1 -u' # does this make me feel 🥰 or 😡 ???
+abbr la 'fd -d=1 -u -l'
 
 # this was in release notes for 3.6.0! regex just added (among other changes)
 #    https://fishshell.com/docs/3.6/relnotes.html
