@@ -89,3 +89,8 @@ end
 # *** uv.toml
 mkdir -p $HOME/.config/uv
 ln -f -s $dotfiles_dir/.config/uv/uv.toml $HOME/.config/uv/.
+
+# *** fd command
+mkdir -p $HOME/.config/fd
+ln -f -s $dotfiles_dir/.config/fd/ignore $HOME/.config/fd/.
+

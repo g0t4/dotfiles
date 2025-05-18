@@ -762,3 +762,34 @@ if command -q free
     abbr free 'free -wh'
     abbr frees 'free -whs 1' # still, prefer using watch
 end
+
+# *** fzf "widgets" for selecting a file to pass to a command
+function _fzf-nested-dir-widget -d "Paste selected directory into command line"
+    set -l dir (fd --type d . | fzf --height 50% --border)
+    if test -n "$dir"
+        commandline -i -- (string escape -- "$dir")
+    end
+    commandline -f repaint
+end
+
+function _fzf-nested-file-widget -d "Paste selected file into command line"
+    set -l file (fd --type f . | fzf --height 50% --border)
+    if test -n "$file"
+        commandline -i -- (string escape -- "$file")
+    end
+    commandline -f repaint
+end
+
+function _fzf-nested-both-file-and-dirs-widget -d "Paste selected file or directory into command line"
+    # btw `diff_two_commands 'fd --type f --type d' 'fd'` differ in symlinks (at least)
+    set -l file (fd . | fzf --height 50% --border)
+    if test -n "$file"
+        commandline -i -- (string escape -- "$file")
+    end
+    commandline -f repaint
+end
+
+bind alt-shift-d _fzf-nested-dir-widget
+bind alt-shift-f _fzf-nested-file-widget
+bind alt-shift-b _fzf-nested-both-file-and-dirs-widget
+

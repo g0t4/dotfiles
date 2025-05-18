@@ -6,6 +6,25 @@
 #     --color-path # Default is 1;32. (fg: bold, green)
 #
 
+# TODO! adopt fd for searching file paths
+#  i.e. fd | fzf scenarios
+# *** fd general options
+abbr fdh 'fd --hidden' # include hidden
+abbr fdni 'fd --no-ignore' # no ignores applied
+# *** fd --type
+abbr fdb 'fd --type block-device'
+abbr fdc 'fd --type char-device'
+abbr fdd 'fd --type dir'
+abbr fde 'fd --type empty'
+abbr fdf 'fd --type file'
+abbr fdl 'fd --type symlink'
+abbr fdp 'fd --type pipe'
+abbr fdt 'fd --type socket'
+abbr fdx 'fd --type executable'
+# TODO pass default options (in addition to ~/.config/fd/ignore)
+
+
+
 # ***! rg START
 # - much faster, ~2x+
 # - syntax highlighting of grep results
