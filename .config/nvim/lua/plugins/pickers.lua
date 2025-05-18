@@ -136,7 +136,6 @@ return {
             local telescopeConfig = require('telescope.config')
 
             local function rg_search()
-
                 -- FYI use ripgreprc for universal overrides
                 local args = { "rg", "--color=never", "--no-heading", "--with-filename", "--line-number", "--column",
 
@@ -144,11 +143,12 @@ return {
                     -- "--hidden", -- for dotfiles/dirs
                     -- "--glob", "!.git", -- --hidden allows .git dir searching, so block it
 
-                    -- FYI these I think are if I wanna use --unrestricted/-U as default option in args:
+                    -- UNUSED:
                     -- "--no-ignore" -- allows gitignored files
-                    -- "--glob", "!**/.venv/*", -- --hidden doesn't match .venv
-                    -- "--glob", "!**/node_modules/*",
-                    -- "--glob", "!**/iterm2env/*",
+                    -- FYI use these if you enable -U by default, which is probably not a good idea...
+                    -- "--glob", "!.venv/", -- --hidden doesn't match .venv
+                    -- "--glob", "!node_modules/", -- --hidden doesn't match node_modules
+                    -- "--glob", "!iterm2env/", -- --hidden doesn't match iterm2env
                 }
                 return args
 
