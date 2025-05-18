@@ -135,36 +135,33 @@ return {
         config = function()
             local telescopeConfig = require('telescope.config')
 
-            -- *** use rg
-            -- Clone the default Telescope configuration
-            -- local vimgrep_arguments = { unpack(telescopeConfig.values.vimgrep_arguments) }
-            -- -- FYI right now:        { "rg", "--color=never", "--no-heading", "--with-filename", "--line-number", "--column", "--smart-case" }
-            -- --    can just set these myself and make sure of it...
-            -- -- I want to search in hidden/dot files.
-            -- table.insert(vimgrep_arguments, "--hidden")
-            -- table.insert(vimgrep_arguments, "--no-ignore") -- allow so gitignored files
-            -- -- dirs to exclude now:
-            -- table.insert(vimgrep_arguments, "--glob")
-            -- table.insert(vimgrep_arguments, "!**/.git/*")
-            -- table.insert(vimgrep_arguments, "--glob")
-            -- table.insert(vimgrep_arguments, "!**/.venv/*")
-            -- table.insert(vimgrep_arguments, "--glob")
-            -- table.insert(vimgrep_arguments, "!**/node_modules/*")
-            -- table.insert(vimgrep_arguments, "--glob")
-            -- table.insert(vimgrep_arguments, "!**/iterm2env/*")
-            -- print(vim.inspect(vimgrep_arguments))
-            --
-            -- *** use ag
-            --    btw `ag -G lua` == `rg -g "*.lua"` -- YUCK... I shouldn't need *.lua to do lua... FUCK YUCK and then ALSO motherfucking "" or escaping *...no way
-            local vimgrep_arguments = { 'ag', '--nocolor', '--nogroup', '--numbers', '--column', '--smart-case',
-                -- FYI unrestricted = hidden + no ignores... nope... -u appears to ignore my --ignore... whereas -U doesn't....
+            local function rg_search()
+                -- OOB telescope uses ripgrep, can see defaults:
+                -- local args = { unpack(telescopeConfig.values.vimgrep_arguments) }
+                -- -- FYI right now:        { "rg", "--color=never", "--no-heading", "--with-filename", "--line-number", "--column", "--smart-case" }
+
+                local args = { "rg", "--color=never", "--no-heading", "--with-filename", "--line-number", "--column", "--smart-case" }
+
+                -- I want to search in hidden/dot files.
+                -- table.insert(args, "--hidden")
+                -- table.insert(args, "--no-ignore") -- allow so gitignored files
+                -- -- dirs to exclude now:
+                -- table.insert(args, "--glob")
+                -- table.insert(args, "!**/.git/*")
+                -- table.insert(args, "--glob")
+                -- table.insert(args, "!**/.venv/*")
+                -- table.insert(args, "--glob")
+                -- table.insert(args, "!**/node_modules/*")
+                -- table.insert(args, "--glob")
+                -- table.insert(args, "!**/iterm2env/*")
+                -- vim.print(args)
+                return args
+            end
+
+
+            local ag_vimgrep_args = { 'ag', '--nocolor', '--nogroup', '--numbers', '--column', '--smart-case',
                 --   btw --hidden is needed to be able to search dotfiles (any file with leading dot, or dir)
-                --   --ignore PATTERN ~= rg's --glob
-                --   ag -U --ignore "iterm2env" -i "local"  # this works, doesn't show iterm2env paths
-                --   ag -u --ignore "iterm2env" -i "local"  # this still shows iterm2env paths
-                --   what is odd, is that -U is supposed to be about not consider .gitignore/.hgignore... and -u does that too plus .ignore files... so I don't know why the latter wouldn't also work for iterm2env filter?
-                --
-                '--hidden', '-U',
+                '--hidden',
                 '--ignore', '.venv/',
                 '--ignore', 'iterm2env',
                 '--ignore', '.git/',
@@ -184,7 +181,8 @@ return {
                         horizontal = { width = 0.9 },
                         vertical = { width = 0.9 },
                     },
-                    vimgrep_arguments = vimgrep_arguments,
+                    vimgrep_arguments = rg_search(),
+                    -- vimgrep_arguments = ag_vimgrep_args,
                     mappings = {
                         i = {
                             -- CYCLE history of previous searches: (like command line history)
