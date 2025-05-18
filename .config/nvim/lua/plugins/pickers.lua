@@ -140,21 +140,14 @@ return {
                 -- local args = { unpack(telescopeConfig.values.vimgrep_arguments) }
                 -- -- FYI right now:        { "rg", "--color=never", "--no-heading", "--with-filename", "--line-number", "--column", "--smart-case" }
 
-                local args = { "rg", "--color=never", "--no-heading", "--with-filename", "--line-number", "--column" }
-
-                -- I want to search in hidden/dot files.
-                table.insert(args, "--hidden")
-                -- table.insert(args, "--no-ignore") -- allow so gitignored files
-                -- dirs to exclude now:
-                table.insert(args, "--glob")
-                table.insert(args, "!**/.git/*")  -- --hidden allows .git dir searching
-                -- table.insert(args, "--glob")
-                -- table.insert(args, "!**/.venv/*") -- --hidden doesn't match .venv
-                -- table.insert(args, "--glob")
-                -- table.insert(args, "!**/node_modules/*")
-                -- table.insert(args, "--glob")
-                -- table.insert(args, "!**/iterm2env/*")
-                -- vim.print(args)
+                local args = { "rg", "--color=never", "--no-heading", "--with-filename", "--line-number", "--column",
+                    "--hidden", -- needed for .config and other dotfiles (PRN can I just configure rg to always search in SOME dotfiles or ALL and then denylist the ones I dont want (at least)
+                    "--glob", "!**/.git/*", -- --hidden allows .git dir searching
+                    -- "--no-ignore" -- allows gitignored files
+                    -- "--glob", "!**/.venv/*", -- --hidden doesn't match .venv
+                    -- "--glob", "!**/node_modules/*",
+                    -- "--glob", "!**/iterm2env/*",
+                }
                 return args
             end
 
