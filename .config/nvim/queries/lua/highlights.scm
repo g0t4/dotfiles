@@ -14,7 +14,7 @@
   ;   hl group ordering doesn't matter here, if I fliop bang after non-bang, then the fg comes from the non-bang even on the bangs... flip it and then the bang wins b/c it sets both fg and bg... and I tried flipping hlgroup definitioon ordering and that did not matter
   ; TODO - both FYI and TODO are not matching first comment in a file, has to be content before it... fix these to match on any comment in file like I do with others here
   (comment) @comment_todo_bang (#match? @comment_todo_bang "TODO!")
-  (comment) @comment_todo (#match? @comment_todo "TODO[^!]")
+  (comment) @comment_todo (#match? @comment_todo "TODO[^!]*")
 ]
 [
   ; TODO add `;` as comment prefix? will that be a problem in languages with trailing semicolons? if so maybe set that up as specific case of this highlights.scm
