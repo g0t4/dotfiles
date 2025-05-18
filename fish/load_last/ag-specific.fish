@@ -7,29 +7,53 @@
 #
 
 # ***! rg START
-# - OK show stopper... `ag -g pattern`  and `ag -G pattern contents_pattern` don't seem to exist with rg...
-#    rg has a -g glob but not -g regex...
-#    and cannot do `ag -g regex` to list matching filenames only? seems to require contents pattern filtering
-# - faster
-# - has config file (can I configure it to not consider some dotfiles as 'hidden')
+# - much faster, ~2x+
+# - syntax highlighting of grep results
+# - has config file
 #
 ## notable differences
 # -e foo -e bar => OR multiple search terms together
 # - another config consideration... it uses rust regex format (not sure how all that differs from say PCRE2... can set pcre2 though)
+# - `rg -g` => `rg --files | rg`
+# - `rg -G foo bar` => `rg -g foo bar` # BUT, -g glob # is a glob not a regex
+#    note: can always use `rg --files | rg foo | xargs rg bar` # to get back to regex
 
-abbr rgi 'rg -i' # same as -i in ag
-# abbr rgig # TODO equiv
-abbr rgh 'rg --hidden -i'
-abbr rgu 'rg -u' # unrestricted (not sure exactly the same as ag's unrestricted, has to be close)
+# * basic file content search
+abbr --set-cursor rgi 'rg -i "%"'
+abbr --set-cursor agi 'rg -i "%"'
+abbr --set-cursor rgh 'rg --hidden -i "%"'
+abbr --set-cursor agh 'rg --hidden -i "%"'
+abbr --set-cursor rgu 'rg -u "%"' # unrestricted
+abbr --set-cursor agu 'rg -u "%"' # unrestricted
+#
+# * filename/path search (not contents)
+abbr --set-cursor rgg 'rg --files | rg -i "%"' # * mirror `ag -g` (search filepaths not content)
+abbr --set-cursor agg 'rg --files | rg -i "%"' # * mirror `ag -g` (search filepaths not content)
+abbr --set-cursor rggi 'rg --files | rg -i "%"'
+abbr --set-cursor rggh 'rg --files -h | rg -i "%"'
+abbr --set-cursor aggh 'rg --files -h | rg -i "%"'
+abbr --set-cursor rggu 'rg --files -u | rg -i "%"'
+abbr --set-cursor aggu 'rg --files -u | rg -i "%"'
+
+# * TODO filename + content search
+abbr --set-cursor rg_G 'rg -g fileglob "%"' # use as a reminder for now
+
+# * syntax highlighting of grep results
+abbr --set-cursor rgjd 'rg --json "%" | delta'
+abbr --set-cursor rg_delta 'rg --json "%" | delta' # reminder format (use command_what as a way to easily lookup new abbrs that I am trying to habituate)
+abbr --set-cursor rgj 'rg --json "%"'
 #
 # *** troubleshooting
-abbr rg_files_searched 'rg --files' # * list files that would be searched
+abbr rg_files 'rg --files' # * list files that would be searched
 abbr rg_files_no_match 'rg --files-without-match' # ag -L
 abbr rg_files_with_matches 'rg --files-with-matches' # ag -l
 abbr rg_debug 'rg --debug'
 abbr rg_trace 'rg --trace'
 abbr rg_stats 'rg --stats'
 
+abbr rgm 'rg --multiline --multiline-dotall' # dot as \n too
+
+# ***rg (start to consider using this?)
 abbr rgm 'rg --multiline --multiline-dotall' # dot as \n too
 
 # TODO! switch to using % (default for --set-cursor)... makes abbrs cleaner => GLOBAL FIND REPLACE
@@ -46,6 +70,7 @@ function rg
     #   --no-heading
     command rg --column --no-heading $argv
     # TODO add smth for ag's --color-match
+    # (can I configure it to not consider some dotfiles as 'hidden'?)
 end
 
 #
@@ -94,7 +119,6 @@ end
 # -T  --type-not                  (Do not search files matching TYPE.)
 # -t  --type                        (Only search files matching TYPE.)
 
-
 # * rg/ag shared args:
 # -i to ignore case
 # --hidden (note ag also uses -h whereas rg does not)
@@ -121,34 +145,33 @@ end
 # FYI colors are defined by fish/zsh respectively in color-specific.{fish,zsh}
 function ag
     command ag --nogroup --color-match "$__color_matching_text" --column $argv
+    # --nogroup => disable grouping to show file/line per match to click to open in vscode (via iterm links)
 end
 # FYI can defer expand color variable so order of startup files is irrelevant
-# --nogroup => disable grouping to show file/line per match to click to open in vscode (via iterm links)
 
-abbr --set-cursor='!' -- agi 'ag -i "!"'
-abbr --set-cursor='!' -- agg 'ag -ig "!"'
-abbr --set-cursor='!' -- agh 'ag --hidden -i "!"' # match hidden files, but not ignored files
-abbr --set-cursor='!' -- aggh 'ag --hidden -ig "!"' # match hidden files, but not ignored files
-abbr --set-cursor='!' -- agu 'ag --unrestricted -i "!"' # match hidden files + ignored files
-abbr --set-cursor='!' -- aggu 'ag --unrestricted -ig "!"' # match hidden files + ignored files
+# # FYI uncomment to go back to ag
+# abbr --set-cursor='!' -- agi 'ag -i "!"'
+# abbr --set-cursor='!' -- agg 'ag -ig "!"'
+# abbr --set-cursor='!' -- agh 'ag --hidden -i "!"' # match hidden files, but not ignored files
+# abbr --set-cursor='!' -- agu 'ag --unrestricted -i "!"' # match hidden files + ignored files
+# abbr --set-cursor='!' -- aggh 'ag --hidden -ig "!"' # match hidden files, but not ignored files
+# abbr --set-cursor='!' -- aggu 'ag --unrestricted -ig "!"' # match hidden files + ignored files
+
 # ignored files: .ignore, .gitignore, --ignore, etc
 # hidden files: .config, .git (dotfiles/dirs)
 
-# I am used to these params, don't currently need to alias them:
-#  -g and -G myself
-#  -A/-B or -C # num of context lines to show # default = 2 for both
-
-# * list file names (of matches)
-abbr agl 'ag -l' # print file name only, not matched content
-abbr agl 'ag -lu' # print file name only, not matched content
-abbr agl 'ag -l --hidden' # print file name only, not matched content
-abbr agL 'ag -L' # invert match (files w/o content matches)
-# * list files that are searched
-#    so you can see what is ignored vs not, what needs --unrestricted vs --hidden vs neither
-abbr agll 'ag -l # list files searched' # FYI thisis redundant but I wanna put it here so I don't forget its also in this group
-abbr aglu 'ag -lu # list files searched' #
-abbr aglh 'ag -l --hidden # list files searched, including hidden'
-# TODO can I use -L somehow to list whats not searched? would be easier than diff below
+# # FYI uncomment to go back to ag
+# # * list file names (of matches)
+# abbr agl 'ag -l' # print file name only, not matched content
+# abbr agl 'ag -lu' # print file name only, not matched content
+# abbr agl 'ag -l --hidden' # print file name only, not matched content
+# abbr agL 'ag -L' # invert match (files w/o content matches)
+# # * list files that are searched
+# #    so you can see what is ignored vs not, what needs --unrestricted vs --hidden vs neither
+# abbr agll 'ag -l # list files searched' # FYI thisis redundant but I wanna put it here so I don't forget its also in this group
+# abbr aglu 'ag -lu # list files searched' #
+# abbr aglh 'ag -l --hidden # list files searched, including hidden'
+# # ? can I use -L somehow to list whats not searched? would be easier than diff below
 function ag_files_searched
     ag -ll $argv | sort -u
 end
@@ -169,18 +192,17 @@ function ag_files_searched_unrestricted_diff
     diff_two_commands 'ag -l | sort -h' 'ag -l --unrestricted | sort -h'
 end
 
-abbr agw 'ag --word-regexp' # match whole words
-abbr agz 'ag --search-zip' # search inside zip files (gz,xz only)
-
-abbr --set-cursor='!' agm 'ag "(?s)!"' # (?s) makes . match \n too
-#  example:
-#    ag -G fish "(?s)for[^(end)]*set[^(end)]*"
-#       here I was looking for for loops that use `set -`, first just `set`
-#       not sure this does what I want... it's hard to match across lines :) and not get crazy results
-#    find all for loops that set a variable (before they end)
-
-# ***rg (start to consider using this?)
-abbr rgm 'rg --multiline --multiline-dotall' # dot as \n too
+# # FYI uncomment to go back to ag
+# abbr agw 'ag --word-regexp' # match whole words
+# abbr agz 'ag --search-zip' # search inside zip files (gz,xz only)
+#
+# # * multiline
+# abbr --set-cursor='!' agm 'ag "(?s)!"' # (?s) makes . match \n too
+# #  example:
+# #    ag -G fish "(?s)for[^(end)]*set[^(end)]*"
+# #       here I was looking for for loops that use `set -`, first just `set`
+# #       not sure this does what I want... it's hard to match across lines :) and not get crazy results
+# #    find all for loops that set a variable (before they end)
 
 function agimages
     # usage:
