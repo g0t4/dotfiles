@@ -15,6 +15,7 @@
 #
 ## notable differences
 # -e foo -e bar => OR multiple search terms together
+# - another config consideration... it uses rust regex format (not sure how all that differs from say PCRE2... can set pcre2 though)
 
 abbr rgi 'rg -i' # same as -i in ag
 # abbr rgig # TODO equiv
