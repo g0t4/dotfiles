@@ -2365,12 +2365,12 @@ abbr --command yapf -- sh --style-help
 # * idea is to have rebuilders listed here
 function rebuild_llama_cpp
 
-    if not test -d ~/repos/github/ggerganov/llama.cpp
+    if not test -d ~/repos/github/ggml-org/llama.cpp
         echo llama.cpp not checked out, aborting...
         return 1
     end
 
-    cd ~/repos/github/ggerganov/llama.cpp
+    cd ~/repos/github/ggml-org/llama.cpp
 
     git fetch origin
     # show any commits reachable by `origin` (upstream) and not (^) readable by `^HEAD`
@@ -2393,10 +2393,10 @@ function rebuild_llama_cpp
     # LLAMA_CURL=on allows downloading models
     if $IS_MACOS
         # FYI metal is enabled by default on macOS
-        #   https://github.com/ggerganov/llama.cpp/blob/3eac2093/docs/build.md#L111
+        #   https://github.com/ggml-org/llama.cpp/blob/3eac2093/docs/build.md#L111
         cmake -B build -DLLAMA_CURL=on
     else
-        # https://github.com/ggerganov/llama.cpp/blob/3eac2093/docs/build.md#L148
+        # https://github.com/ggml-org/llama.cpp/blob/3eac2093/docs/build.md#L148
         cmake -B build -DGGML_CUDA=ON -DLLAMA_CURL=on
     end
 
