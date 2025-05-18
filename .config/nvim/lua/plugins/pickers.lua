@@ -159,17 +159,21 @@ return {
             end
 
 
-            local ag_vimgrep_args = { 'ag', '--nocolor', '--nogroup', '--numbers', '--column', '--smart-case',
-                --   btw --hidden is needed to be able to search dotfiles (any file with leading dot, or dir)
-                '--hidden',
-                '--ignore', '.venv/',
-                '--ignore', 'iterm2env',
-                '--ignore', '.git/',
-                '--ignore', 'node_modules/',
-                '--ignore', '__pycache__/',
-                '--ignore', 'target/',
-            }
-            -- TODO sync the ignored/included with nvim-tree plugin too?
+            ---@diagnostic disable-next-line: unused-function, unused-local
+            local function ag_search()
+                local ag_vimgrep_args = { 'ag', '--nocolor', '--nogroup', '--numbers', '--column', '--smart-case',
+                    --   btw --hidden is needed to be able to search dotfiles (any file with leading dot, or dir)
+                    '--hidden',
+                    '--ignore', '.venv/',
+                    '--ignore', 'iterm2env',
+                    '--ignore', '.git/',
+                    '--ignore', 'node_modules/',
+                    '--ignore', '__pycache__/',
+                    '--ignore', 'target/',
+                }
+                return ag_vimgrep_args
+                -- TODO sync the i"vimgrep" -g "*lua*"gnored/included with nvim-tree plugin too?
+            end
 
             require('telescope').setup({
                 defaults = {
@@ -182,7 +186,7 @@ return {
                         vertical = { width = 0.9 },
                     },
                     vimgrep_arguments = rg_search(),
-                    -- vimgrep_arguments = ag_vimgrep_args,
+                    -- vimgrep_arguments = ag_search(),
                     mappings = {
                         i = {
                             -- CYCLE history of previous searches: (like command line history)
