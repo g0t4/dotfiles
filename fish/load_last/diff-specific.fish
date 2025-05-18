@@ -44,7 +44,8 @@ function _abbr_expand_diff_last_two_commands_sorted
 end
 abbr -a diff_last_two_commands_sorted --function _abbr_expand_diff_last_two_commands_sorted
 
-function diff_two_commands
+
+function diff_two_commands --wraps icdiff
     # usage:
     #   diff_two_commands "ls -al" "ls -al | sort -h"
     #   don't really need -- support here b/c there are only ever two args (commands to diff) and so any other options are clearly for icdiff (thus far)
@@ -57,7 +58,7 @@ function diff_two_commands
         -L "'$argv[2]'" (eval $argv[2] | psub)
 end
 
-function diff_command_args
+function diff_command_args --wraps icdiff
 
     # FYI to unambiguously pass icdiff options too, use --
     #   diff_command_args [icdiff options] -- [diff args...]
