@@ -27,6 +27,7 @@ abbr --set-cursor rgu 'rg -u "%"' # unrestricted
 abbr --set-cursor agu 'rg -u "%"' # unrestricted
 #
 # * filename/path search (not contents)
+abbr --set-cursor rgf 'rg --files'
 abbr --set-cursor rgg 'rg --files | rg -i "%"' # * mirror `ag -g` (search filepaths not content)
 abbr --set-cursor agg 'rg --files | rg -i "%"' # * mirror `ag -g` (search filepaths not content)
 abbr --set-cursor rggi 'rg --files | rg -i "%"'
