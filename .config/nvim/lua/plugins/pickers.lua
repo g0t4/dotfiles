@@ -138,6 +138,8 @@ return {
             local function rg_search()
                 -- FYI use ripgreprc for universal overrides
                 local args = { "rg", "--color=never", "--no-heading", "--with-filename", "--line-number", "--column",
+                    -- consider either --smart-case or --ignore-case by default? I can add an arg to override either and it will take precedence since its at the end of the args list IIUC how livegrep args + rg worsk
+                    "--smart-case"
 
                     -- ripgreprc has these
                     -- "--hidden", -- for dotfiles/dirs
