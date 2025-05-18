@@ -74,18 +74,12 @@ abbr --set-cursor rgo 'rg -o "%"' # -o/--only-matching
 abbr --set-cursor rgF 'rg -F "%"' # -F/--fixed-strings
 abbr --set-cursor rgw 'rg -w "%"' # -F/--fixed-strings
 
-function rg
-    # TODO rg config instead of function override?
-    #   --column # I think I want this on by default so file "links" include the column too! when I click to open (semantic history in iterm2)
-    #   --no-heading
-    command rg --column --no-heading $argv
-    # TODO add smth for ag's --color-match
-    # (can I configure it to not consider some dotfiles as 'hidden'?)
-end
+# MOVED thes to ripgreprc file
+# function rg
+#     command rg --column --no-heading $argv
+#     # TODO add smth for ag's --color-match
+# end
 
-#
-# TODO review and build abbrs/habituate rg options
-#
 # * --mmap                     (Search with memory maps when possible.)
 #
 ### multiline search:
