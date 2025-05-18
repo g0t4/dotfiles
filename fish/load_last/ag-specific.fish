@@ -21,22 +21,24 @@
 export RIPGREP_CONFIG_PATH=$WES_DOTFILES/.config/ripgrep/ripgreprc
 
 # * basic file content search
+# TODO habituate --smart-case as I have long used in telescope's live grep even with ag command?
+abbr --set-cursor rgs 'rg --smart-case "%"'
 abbr --set-cursor rgi 'rg -i "%"'
 abbr --set-cursor agi 'rg -i "%"'
-abbr --set-cursor rgh 'rg --hidden -i "%"'
-abbr --set-cursor agh 'rg --hidden -i "%"'
+abbr --set-cursor rgh 'rg --hidden --smart-case "%"'
+abbr --set-cursor agh 'rg --hidden --smart-case "%"'
 abbr --set-cursor rgu 'rg -u "%"' # unrestricted
 abbr --set-cursor agu 'rg -u "%"' # unrestricted
 #
 # * filename/path search (not contents)
 abbr --set-cursor rgf 'rg --files'
-abbr --set-cursor rgg 'rg --files | rg -i "%"' # * mirror `ag -g` (search filepaths not content)
-abbr --set-cursor agg 'rg --files | rg -i "%"' # * mirror `ag -g` (search filepaths not content)
-abbr --set-cursor rggi 'rg --files | rg -i "%"'
-abbr --set-cursor rggh 'rg --files -h | rg -i "%"'
-abbr --set-cursor aggh 'rg --files -h | rg -i "%"'
-abbr --set-cursor rggu 'rg --files -u | rg -i "%"'
-abbr --set-cursor aggu 'rg --files -u | rg -i "%"'
+abbr --set-cursor rgg 'rg --files | rg --smart-case "%"' # * mirror `ag -g` (search filepaths not content)
+abbr --set-cursor agg 'rg --files | rg --smart-case "%"' # * mirror `ag -g` (search filepaths not content)
+abbr --set-cursor rggi 'rg --files | rg --smart-case "%"'
+abbr --set-cursor rggh 'rg --files -h | rg --smart-case "%"'
+abbr --set-cursor aggh 'rg --files -h | rg --smart-case "%"'
+abbr --set-cursor rggu 'rg --files -u | rg --smart-case "%"'
+abbr --set-cursor aggu 'rg --files -u | rg --smart-case "%"'
 
 # * TODO filename + content search
 abbr --set-cursor rg_G 'rg -g fileglob "%"' # use as a reminder for now
@@ -176,11 +178,11 @@ end
 
 # # FYI uncomment to go back to ag
 # abbr --set-cursor -- agi 'ag -i "%"'
-# abbr --set-cursor -- agg 'ag -ig "%"'
-# abbr --set-cursor -- agh 'ag --hidden -i "%"' # match hidden files, but not ignored files
-# abbr --set-cursor -- agu 'ag --unrestricted -i "%"' # match hidden files + ignored files
-# abbr --set-cursor -- aggh 'ag --hidden -ig "%"' # match hidden files, but not ignored files
-# abbr --set-cursor -- aggu 'ag --unrestricted -ig "%"' # match hidden files + ignored files
+# abbr --set-cursor -- agg 'ag --smart-case -g "%"'
+# abbr --set-cursor -- agh 'ag --hidden --smart-case "%"' # match hidden files, but not ignored files
+# abbr --set-cursor -- agu 'ag --unrestricted --smart-case "%"' # match hidden files + ignored files
+# abbr --set-cursor -- aggh 'ag --hidden --smart-case -g "%"' # match hidden files, but not ignored files
+# abbr --set-cursor -- aggu 'ag --unrestricted --smart-case -g "%"' # match hidden files + ignored files
 
 # ignored files: .ignore, .gitignore, --ignore, etc
 # hidden files: .config, .git (dotfiles/dirs)
@@ -239,9 +241,9 @@ function agimages
     set secondary_path_filter $argv[2]
     # cannot filter paths with -g and -G with ag command, so use grep as secondary filter to get subset of matching image files
     if test -z "$secondary_path_filter"
-        set cmd "ag --unrestricted -i -g '\.(png|jpg|jpeg|gif|bmp|tiff|webp|svg|icns|ico)' $look_in_dir"
+        set cmd "ag --unrestricted --smart-case -g '\.(png|jpg|jpeg|gif|bmp|tiff|webp|svg|icns|ico)' $look_in_dir"
     else
-        set cmd "ag --unrestricted -i -g '\.(png|jpg|jpeg|gif|bmp|tiff|webp|svg|icns|ico)' $look_in_dir | grep -i '$secondary_path_filter'"
+        set cmd "ag --unrestricted --smart-case -g '\.(png|jpg|jpeg|gif|bmp|tiff|webp|svg|icns|ico)' $look_in_dir | grep -i '$secondary_path_filter'"
     end
 
     for f in (eval $cmd)
