@@ -27,12 +27,12 @@ function _abbr_expand_fdX
 end
 
 # *** by modification time
-abbr --set-cursor fd_within 'fd --changed-within "%"'
-abbr --set-cursor fd_within_hours 'fd --changed-within "% h"'
-abbr --set-cursor fd_within_days 'fd --changed-within "% d"'
-abbr --set-cursor fd_within_weeks 'fd --changed-within "% weeks"'
-abbr --set-cursor fd_within_months 'fd --changed-within "% months"'
-abbr --set-cursor fd_within_years 'fd --changed-within "% years"'
+abbr --set-cursor fd_changed_within 'fd --changed-within "%"'
+abbr --set-cursor fd_changed_within_hours 'fd --changed-within "% h"'
+abbr --set-cursor fd_changed_within_days 'fd --changed-within "% d"'
+abbr --set-cursor fd_changed_within_weeks 'fd --changed-within "% weeks"'
+abbr --set-cursor fd_changed_within_months 'fd --changed-within "% months"'
+abbr --set-cursor fd_changed_within_years 'fd --changed-within "% years"'
 abbr --set-cursor fd_changed_before 'fd --changed-before "%"'
 # PRN do more with fd_changed_before if I use it
 
