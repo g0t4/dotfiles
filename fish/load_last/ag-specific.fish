@@ -7,9 +7,14 @@
 #
 
 # ***! rg START
-# ??? try rg for daily driver (replace in ag abbrs)...
+# - OK show stopper... `ag -g pattern`  and `ag -G pattern contents_pattern` don't seem to exist with rg...
+#    rg has a -g glob but not -g regex...
+#    and cannot do `ag -g regex` to list matching filenames only? seems to require contents pattern filtering
 # - faster
 # - has config file (can I configure it to not consider some dotfiles as 'hidden')
+#
+## notable differences
+# -e foo -e bar => OR multiple search terms together
 
 abbr rgi 'rg -i' # same as -i in ag
 # abbr rgig # TODO equiv
@@ -35,17 +40,17 @@ abbr --set-cursor rgF 'rg -F "%"' # -F/--fixed-strings
 abbr --set-cursor rgw 'rg -w "%"' # -F/--fixed-strings
 
 function rg
-    # TODO! rg config instead of function override?
+    # TODO rg config instead of function override?
     #   --column # I think I want this on by default so file "links" include the column too! when I click to open (semantic history in iterm2)
     #   --no-heading
     command rg --column --no-heading $argv
-    # TODO add  --color-match
+    # TODO add smth for ag's --color-match
 end
 
 #
-# TODO! review and build abbrs/habituate rg options
+# TODO review and build abbrs/habituate rg options
 #
-# --mmap                     (Search with memory maps when possible.)
+# * --mmap                     (Search with memory maps when possible.)
 #
 ### multiline search:
 #  --multiline-dotall               (Make '.' match line terminators.)
@@ -64,8 +69,9 @@ end
 # --no-ignore-global                 (Don't use global ignore files.)
 # --no-ignore-vcs       (Don't use ignore files from source control.)
 # --no-ignore-parent  (Don't use ignore files in parent directories.)
-# --iglob                        (Include/exclude paths case insensitively.)
 # --ignore-file                           (Specify additional ignore files.)
+#
+# --iglob                        (Include/exclude paths case insensitively.)
 # -g  --glob                          (Include or exclude file paths.)
 #
 # -d  --max-depth                   (Descend at most NUM directories.)
