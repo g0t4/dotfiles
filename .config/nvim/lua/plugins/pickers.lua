@@ -144,6 +144,7 @@ return {
 
                 -- I want to search in hidden/dot files.
                 table.insert(args, "--hidden")
+                -- TODO the following IIRC were only needed when I added -U ... and that is smth I don't think I need anymore as --hidden is sufficient.. try overriding to add files instead of -U to remove all restrictions
                 -- table.insert(args, "--no-ignore") -- allow so gitignored files
                 -- -- dirs to exclude now:
                 -- table.insert(args, "--glob")
