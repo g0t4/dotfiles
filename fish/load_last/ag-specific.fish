@@ -56,8 +56,6 @@ abbr rgm 'rg --multiline --multiline-dotall' # dot as \n too
 # ***rg (start to consider using this?)
 abbr rgm 'rg --multiline --multiline-dotall' # dot as \n too
 
-# TODO! switch to using % (default for --set-cursor)... makes abbrs cleaner => GLOBAL FIND REPLACE
-
 abbr --set-cursor rgd 'rg -d "%"'
 abbr --set-cursor rgv 'rg -v "%"' # -v/--invert-match
 abbr --set-cursor rgo 'rg -o "%"' # -o/--only-matching
