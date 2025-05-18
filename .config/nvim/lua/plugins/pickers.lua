@@ -370,6 +370,8 @@ return {
         config = function()
             require('telescope').load_extension('live_grep_args')
             vim.keymap.set('n', '<leader>s', function()
+                -- TODO add a <leader>si/sg maybe... open with -i on front plus current word? or -g "*filetype*" already in there?
+                --   TODO OR... add abbreviations specific to JUST the live_grep window to expand these for me
                 -- FYI! live grep args is  finnicky arg parsing...
                 --  You would think these would do the same thing:
                 --    "vimgrep" -g "*lua*"
