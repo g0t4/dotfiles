@@ -2078,8 +2078,15 @@ if command -q pacman
     #pacman -Qo ip # owned by iproute2
     #
     # *** explicit / implicit installed pkgs
-    abbr pmqe "pacman -Qe" # list (e)xplicitly installed pkgs
+    abbr pmqe "pacman -Q --explicit" # list (e)xplicitly installed pkgs
+    abbr pmqd "pacman -Q --deps" # list (e)xplicitly installed pkgs
+    abbr pm_list_explicit_installs "pacman -Q --explict" # -e/--explicit
+    abbr pm_list_implicit_installs_aka_deps "pacman -Q --deps" # -d/--deps
+    #
     #pacman -Qet # explicit installed packages (not required as deps of another package)
+    #   IIUC, minimal set of packages to install to get back to where I am not
+    #   IOTW -Qe == all packages I asked to install
+    #        -Qet == if I asked for A and B, and B is a dep of A, then only A shows here (b/c A would trigger B's install)
     #pacman -Qdt # orphans (not explicitly installed, also no longer a dep of another package)
 
     # *** Files database
