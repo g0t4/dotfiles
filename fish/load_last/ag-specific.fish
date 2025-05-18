@@ -12,8 +12,8 @@
 # - has config file
 #
 ## notable differences
-# -e foo -e bar => OR multiple search terms together
-# - another config consideration... it uses rust regex format (not sure how all that differs from say PCRE2... can set pcre2 though)
+# - -e foo -e bar => OR multiple search terms together
+# - btw --engine=auto => defaults to rust regex format, tries to select when to use PCRE2
 # - `rg -g` => `rg --files | rg`
 # - `rg -G foo bar` => `rg -g foo bar` # BUT, -g glob # is a glob not a regex
 #    note: can always use `rg --files | rg foo | xargs rg bar` # to get back to regex
@@ -74,15 +74,20 @@ abbr --set-cursor rgo 'rg -o "%"' # -o/--only-matching
 abbr --set-cursor rgF 'rg -F "%"' # -F/--fixed-strings
 abbr --set-cursor rgw 'rg -w "%"' # -F/--fixed-strings
 
-function diff_rg_files
-    # diff_rg_files '--hidden'
-    # runs:
-    # KEEP IN MIND, ripgreprc applies to both sides
+function rg_diff_files
+    # usage:
+    #   rg_diff_files '--hidden'
+
+    # KEEP IN MIND, ripgreprc applies to both sides in this case
     diff_two_commands 'rg --files | sort' "rg --files $argv | sort"
 end
 
-function diff_rg_files_no_config
-    diff_two_commands 'rg --files --no-config' "rg --files --no-config $argv | sort"
+function rg_diff_files_no_config
+    # usage:
+    #   rg_diff_files_no_config --hidden
+
+    # TLDR exclude ripgreprc
+    diff_two_commands 'rg --files --no-config | sort' "rg --files --no-config $argv | sort"
 end
 
 # MOVED thes to ripgreprc file
