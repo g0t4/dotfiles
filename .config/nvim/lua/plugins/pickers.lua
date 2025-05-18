@@ -136,9 +136,6 @@ return {
             local telescopeConfig = require('telescope.config')
 
             local function rg_search()
-                -- OOB telescope uses ripgrep, can see defaults:
-                -- local args = { unpack(telescopeConfig.values.vimgrep_arguments) }
-                -- -- FYI right now:        { "rg", "--color=never", "--no-heading", "--with-filename", "--line-number", "--column", "--smart-case" }
 
                 -- FYI use ripgreprc for universal overrides
                 local args = { "rg", "--color=never", "--no-heading", "--with-filename", "--line-number", "--column",
@@ -154,6 +151,16 @@ return {
                     -- "--glob", "!**/iterm2env/*",
                 }
                 return args
+
+                -- * NOTES:
+                -- OOB telescope uses ripgrep, can see defaults:
+                -- local args = { unpack(telescopeConfig.values.vimgrep_arguments) }
+                -- defaults: { "rg", "--color=never", "--no-heading", "--with-filename", "--line-number", "--column", "--smart-case" }
+
+                -- should I check if env var is set since I depend on it here?
+                --   if I launch nvim outside of a shell, I wouldn't have the env var then (necessarily)
+                --   just tested wes-dispatcher.app (automator) for Open in Neovim... has en var set (uses fish shell script to open those nvim instances)
+                --
             end
 
 
