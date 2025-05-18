@@ -2372,10 +2372,21 @@ function rebuild_llama_cpp
 
     cd ~/repos/github/ggerganov/llama.cpp
 
-    if not git pull --rebase
-        echo pull failed, aborting...
-        return 1
+    git fetch origin
+    # show any commits reachable by `origin` (upstream) and not (^) readable by `^HEAD`
+    if test -n "$(git rev-list origin ^HEAD)"
+        # TODO address current branch vs its tracked? or is that implicit in this already?
+        #    TLDR read up on git rev-list args
+        log_ --red --bold "Upstream has new commits, pull if needed\n\n"
     end
+
+    # warn user if any upstream commits, but don't stop build
+    # b/c I might not want to build latest version!
+
+    # if not git pull --rebase
+    #     echo pull failed, aborting...
+    #     return 1
+    # end
 
     echo REBUILDING
     # trash build ? add step
