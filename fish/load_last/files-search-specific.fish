@@ -8,22 +8,83 @@
 
 # TODO! adopt fd for searching file paths
 #  i.e. fd | fzf scenarios
+# *** why do I use ls at all?
+# - globs suck (esp shell specific, very, very limited and nervewracking)
+# - fd works across nested dirs (always wanted ls to do that)
+#   - strong point of fish shell is ability to do partial matches like f/d/e => foo/and/expose.md
+#   - fd can just do `fd expose.md`!
+# - want only current dir... fine `fd -d 1` (fd1 below)
+abbr ls fd # does this make me feel 🥰 or 😡 ???
+abbr la 'fd -l'
+
 # *** fd general options
-abbr fdh 'fd --hidden' # include hidden
-abbr fdni 'fd --no-ignore' # no ignores applied
+abbr fdnh 'fd --no-hidden' # include hidden
+abbr fdu 'fd --unrestricted'# no ignores applied
+abbr fdi 'fd --ignore-case' # --ignore-case
+abbr fdF 'fd --fixed-strings' # same as rg
+abbr fd_ext 'fd --extension'
+abbr fdE 'fd --exclude'
+abbr --command fd --position anywhere -- and --and # expand and, mostly a reminder
+abbr --command fd --position anywhere -- abs --absolute-path
+abbr fdabs 'fd --absolute-path'
+abbr fdls 'fd --list-details' # think => fd + ls -al
+abbr fdfp 'fd --full-path' # default matches on basename only, this matches full path
+abbr --set-cursor _fdX --regex 'fd\d+' --function _abbr_expand_fdX
+function _abbr_expand_fdX
+    string replace --regex 'fd(\d+)' 'fd --max-depth=\1' $argv
+end
+
+# *** by modification time
+abbr --set-cursor fd_within 'fd --changed-within "%"'
+abbr --set-cursor fd_within_hours 'fd --changed-within "% h"'
+abbr --set-cursor fd_within_days 'fd --changed-within "% d"'
+abbr --set-cursor fd_within_weeks 'fd --changed-within "% weeks"'
+abbr --set-cursor fd_within_months 'fd --changed-within "% months"'
+abbr --set-cursor fd_within_years 'fd --changed-within "% years"'
+abbr --set-cursor fd_changed_before 'fd --changed-before "%"'
+# PRN do more with fd_changed_before if I use it
+
+# *** execution
+abbr fdx 'fd --exec' # per result, in parallel
+abbr fdxb 'fd --exec-batch' # per batch (basically not per result)
+# PRN --batch-size
+
+# * --quiet
+abbr fdq 'fd --quiet' # --quiet exits with 0 if finds a match... detect if a file exists (i.e. in any nested dir)
+# if fd -q foo; echo "foo exists"; end
+
+# * expand abbrevated options? (don't do for super common and easily remembered ones)
+abbr --command fd --position anywhere -- -F --fixed-strings
+# for some of these, seeing what it is might help too, can undo or ctrl+w to delete expansion if its wrong, and this way if it is wrong I can see that!
+
+# FYI fd/rg/ag all have --hidden and --unrestricted concepts/impls that are nearly identical
 # *** fd --type
-abbr fdb 'fd --type block-device'
-abbr fdc 'fd --type char-device'
+# FYI using `fdt_` for niche expands... vs `fd_` for common ones... if that is confusing, move all to one/other
+abbr fdtb 'fd --type block-device'
+abbr fdtc 'fd --type char-device'
 abbr fdd 'fd --type dir'
-abbr fde 'fd --type empty'
+abbr fdte 'fd --type empty'
 abbr fdf 'fd --type file'
-abbr fdl 'fd --type symlink'
-abbr fdp 'fd --type pipe'
-abbr fdt 'fd --type socket'
-abbr fdx 'fd --type executable'
-# TODO pass default options (in addition to ~/.config/fd/ignore)
+abbr fdtl 'fd --type symlink'
+abbr fdtp 'fd --type pipe'
+abbr fdts 'fd --type socket'
+abbr fdtx 'fd --type executable'
 
+# *** default args
+function fd
+    # KEEP in mind ~/.config/fd/ignore is the global ignores dir and impacts how fd behaves
+    # BTW... passing --no-hidden will override --hidden b/c it comes later
+    # allow hidden files, for dotfiles/dirs
+    command fd \
+        --hidden \
+        # --color always \
+        $argv
+    # TODO do I want --color always?!
+    #  i.e. for `fd --type dir | grep nvim` => would keep color for grep output
 
+    # PRN:
+    # --ignore-file path
+end
 
 # ***! rg START
 # - much faster, ~2x+
