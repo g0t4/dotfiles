@@ -38,7 +38,7 @@ function rg
     # TODO! rg config instead of function override?
     #   --column # I think I want this on by default so file "links" include the column too! when I click to open (semantic history in iterm2)
     #   --no-heading
-    rg --column --no-heading $argv
+    command rg --column --no-heading $argv
     # TODO add  --color-match
 end
 
