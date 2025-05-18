@@ -2423,3 +2423,6 @@ if command -q wscat
     #  FYI --show-ping-pong ONLY applies when using -c/--connect (the client)
     abbr wscat_echo_org 'wscat --connect -L --slash --show-ping-pong ws://echo.websocket.org'
 end
+
+# * uname
+abbr una "uname -a"
