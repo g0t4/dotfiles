@@ -33,10 +33,6 @@ abbr --set-cursor rgv 'rg -v "%"' # -v/--invert-match
 abbr --set-cursor rgo 'rg -o "%"' # -o/--only-matching
 abbr --set-cursor rgF 'rg -F "%"' # -F/--fixed-strings
 abbr --set-cursor rgw 'rg -w "%"' # -F/--fixed-strings
-# TODO! LEARN rgr (replace, think sed)
-# -r, --replace: Replace matches with given text.
-abbr --set-cursor rgr 'rg --replace "%"' # -r/--replace # REPLACE MATCHES!!!
-abbr --set-cursor rg_replace 'rg --replace "%"' # -r/--replace # REPLACE MATCHES!!!
 
 function rg
     # TODO! rg config instead of function override?
@@ -85,6 +81,7 @@ end
 # -P  --pcre2                                 (Enable PCRE2 matching.)
 #
 ##
+# --type-list
 # --type-add                        (Add a new glob for a file type.)
 # --type-clear                         (Clear globs for a file type.)
 # -T  --type-not                  (Do not search files matching TYPE.)
