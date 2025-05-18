@@ -571,7 +571,7 @@ local llama_cpp_llama_vim_plugin = {
             -- stats bar (green extmarks right of gen text)
             -- show_info = 0, -- 2(default) == inline, 1 == status line, 0 = off
             -- endpoint = "http://127.0.0.1:8012/infill",  (default)
-            endpoint = "http://build21:8012/infill",
+            endpoint = "http://llama-vim-fim:8012/infill",
             -- \ 'api_key':            '',
 
             -- defaults:
