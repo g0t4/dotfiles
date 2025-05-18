@@ -107,8 +107,8 @@ if command -q ctr
 
     # images:
     abbr ctri 'sudo ctr image ls'
-    abbr ctripull --set-cursor='!' 'sudo ctr image pull docker.io/library/!'
-    abbr ctrirm --set-cursor='!' 'sudo ctr image rm docker.io/library/!'
+    abbr ctripull --set-cursor 'sudo ctr image pull docker.io/library/%'
+    abbr ctrirm --set-cursor 'sudo ctr image rm docker.io/library/%'
 
     # tasks:
     abbr ctrtls 'sudo ctr task ls'
@@ -300,7 +300,7 @@ if command -q kubectl
     abbr kgpv 'kubectl get persistentvolumes' # alias: pv
     abbr kgpvc 'kubectl get persistentvolumeclaims' # alias: pvc
     #
-    abbr --set-cursor='!' kgr 'kubectl get --raw /! | yq -P'
+    abbr --set-cursor kgr 'kubectl get --raw /% | yq -P'
     # abbr 'kgr/' 'kubectl get --raw / | yq -P' # todo I can use kgr/ if I want kgr for smth else
     abbr kgr/a 'kubectl get --raw /apis'
     abbr kgr/h 'kubectl get --raw /healthz'
@@ -452,8 +452,8 @@ if command -q kubectl
     #   => muscle memory: `dxls`=`docker context ls`, so => kxls
     abbr kx 'kubectl config'
     #
-    # abbr --set-cursor='!' -- kxs 'kubectl config set-context --current --namespace=!' # kxsn if want more set abbr's
-    # abbr --set-cursor='!' -- kns 'kubectl config set-context --current --namespace=!' # this is easier to remember BUT does not fit into kx abbr "namespacing" (pun intended)
+    # abbr --set-cursor -- kxs 'kubectl config set-context --current --namespace=%' # kxsn if want more set abbr's
+    # abbr --set-cursor -- kns 'kubectl config set-context --current --namespace=%' # this is easier to remember BUT does not fit into kx abbr "namespacing" (pun intended)
     function kns
         # use kns so I can add namespace completion (below) => PRN could attempt fix to kubectl completion (doesn't work on --namespace flag)
         kubectl config set-context --current --namespace $argv
@@ -606,7 +606,7 @@ if command -q helm
     abbr hgh 'helm get hooks'
     #    manifest    download the manifest for a named release
     abbr hgm 'helm get manifest' # likely to use often
-    abbr --set-cursor="!" -- hgk 'helm get manifest ! | kubectl get -f -'
+    abbr --set-cursor -- hgk 'helm get manifest % | kubectl get -f -'
     #  hgk j<TAB> =>   helm get manifest jenkins | kubectl get -f -
     #    metadata    This command fetches metadata for a given release
     abbr hgmetadata 'helm get metadata' # likely won't use often
@@ -660,18 +660,18 @@ if command -q helm
     abbr hi 'helm inspect'
     #    all         show all information of the chart
     #    chart       show the chart's definition
-    abbr --set-cursor='!' -- hic "helm show chart ! | yq"
+    abbr --set-cursor -- hic "helm show chart % | yq"
     #    crds        show the chart's CRDs
     #    readme      show the chart's README
-    abbr --set-cursor='!' -- hir "helm show readme ! | bat -l md"
+    abbr --set-cursor -- hir "helm show readme % | bat -l md"
     #    values      show the chart's values
-    abbr --set-cursor='!' -- hiv "helm show values ! | yq"
+    abbr --set-cursor -- hiv "helm show values % | yq"
     #
     # status      display the status of the named release
     abbr hst 'helm status'
     #
     # template    locally render templates
-    # abbr --set-cursor='!' -- ht 'helm template ! | yq' # repo/chart-name
+    # abbr --set-cursor -- ht 'helm template % | yq' # repo/chart-name
     abbr ht 'helm template'
     function helm_template_diff
         # usage:
@@ -708,8 +708,8 @@ abbr vls "set | bat --language ini -p"
 abbr vgr "set | grep -i "
 #
 # abbr's
-abbr --add agr --set-cursor='!' "abbr | grep -i '!'"
-abbr --add agrs --set-cursor='!' "abbr | grep -i '\-\- !'" # starts with b/c `-- name` is consistent format of abbr's list output
+abbr --add agr --set-cursor "abbr | grep -i '%'"
+abbr --add agrs --set-cursor "abbr | grep -i '\-\- %'" # starts with b/c `-- name` is consistent format of abbr's list output
 #
 # complete's
 abbr --set-cursor completeC "complete -C '%'"
@@ -816,7 +816,7 @@ abbr --add _pstreeX --regex "pstree\d+" --function pstreeX
 function pstreeX
     string replace pstree 'pstree -l' $argv
 end
-abbr pstrees --set-cursor='!' 'pstree -s "!"' # ***! NEW FAVORITE, shows all matching parents/descendants (IIUC)
+abbr pstrees --set-cursor 'pstree -s "%"' # ***! NEW FAVORITE, shows all matching parents/descendants (IIUC)
 abbr pstreep 'pstree -p' # parents/descendants of PID, without -p then its just descendants
 abbr pstreet 'pstree  (ps -o pid=)' # ps gives processes w/ controlling terminal, then pstree shows their hierarchy... similar to "ps f" on *nix
 abbr pstreeU 'pstree -U' # skip root only branches
@@ -839,40 +839,40 @@ if $IS_MACOS
 
     # two approaches to making it easier to target specific files...
     # 1. dedicated abbr per file type(s)
-    abbr --set-cursor='!' sedl "gsed -Ei 's/!//g' **/*.lua"
+    abbr --set-cursor sedl "gsed -Ei 's/%//g' **/*.lua"
     # 2. use command specific abbrs to expand the **/*.lua on end with just *l (or smth else)
     abbr --command gsed --position=anywhere "*l" "**/*.lua"
     #    so, gsed *l<SPACE> => gsed **/*.lua
     # md
-    abbr --set-cursor='!' sedm "gsed -Ei 's/!//g' **/*.md"
+    abbr --set-cursor sedm "gsed -Ei 's/%//g' **/*.md"
     abbr --command gsed --position=anywhere "*m" "**/*.md"
     # python
-    abbr --set-cursor='!' sedp "gsed -Ei 's/!//g' **/*.py"
+    abbr --set-cursor sedp "gsed -Ei 's/%//g' **/*.py"
     abbr --command gsed --position=anywhere "*p" "**/*.py"
     # all - use brace expansion for multiple file types
-    abbr --set-cursor='!' seda "gsed -Ei 's/!//g' $sed_all"
+    abbr --set-cursor seda "gsed -Ei 's/%//g' $sed_all"
     abbr --command gsed --position=anywhere "*a" "$sed_all"
     #
     # todo make sede the default now that I am using gsed on macOS?
-    abbr --set-cursor='!' sede "gsed -Ei 's/!//g'"
-    abbr --set-cursor='!' sedd "gsed --debug -i 's/!//g'"
+    abbr --set-cursor sede "gsed -Ei 's/%//g'"
+    abbr --set-cursor sedd "gsed --debug -i 's/%//g'"
     # abbr sed gsed # encourage the use of gsed so it behaves like linux?
     #  i.e. gnu allows `sed -i` whereas BSD requires the extension `sed -i''` be passed
 else
     # alternatives (mirror from above for mac)
-    abbr --set-cursor='!' sedl "sed -Ei 's/!//g' **/*.lua"
+    abbr --set-cursor sedl "sed -Ei 's/%//g' **/*.lua"
     abbr --command sed --position=anywhere "*l" "**/*.lua"
-    abbr --set-cursor='!' sedm "sed -Ei 's/!//g' **/*.md"
+    abbr --set-cursor sedm "sed -Ei 's/%//g' **/*.md"
     abbr --command sed --position=anywhere "*m" "**/*.md"
-    abbr --set-cursor='!' sedp "sed -Ei 's/!//g' **/*.py"
+    abbr --set-cursor sedp "sed -Ei 's/%//g' **/*.py"
     abbr --command sed --position=anywhere "*p" "**/*.py"
-    abbr --set-cursor='!' seda "sed -Ei 's/!//g' $sed_all"
+    abbr --set-cursor seda "sed -Ei 's/%//g' $sed_all"
     abbr --command sed --position=anywhere "*a" "$sed_all"
     #
-    abbr --set-cursor='!' sede "sed -Ei 's/!//g'"
-    abbr --set-cursor='!' sedd "sed --debug -i 's/!//g'"
+    abbr --set-cursor sede "sed -Ei 's/%//g'"
+    abbr --set-cursor sedd "sed --debug -i 's/%//g'"
 end
-abbr --set-cursor='!' sedi "$sed_cmd -i 's/!//g'"
+abbr --set-cursor sedi "$sed_cmd -i 's/%//g'"
 #
 abbr _cat_range --function _cat_range_abbr --regex "(catr|catrange|sedr|sedrange)\d+_\d+"
 function _cat_range_abbr
@@ -1242,7 +1242,7 @@ if command -q act
 
     end
 
-    abbr --add actw --set-cursor='!' --function actw_expanded # ! so we can tab complete workflow file/path
+    abbr --add actw --set-cursor --function actw_expanded # ! so we can tab complete workflow file/path
 
     # GENERATED COMPLETIONS (finagled chatgpt to spit this out):
     #
@@ -1978,7 +1978,7 @@ if command --query virsh
     # virsh destroy - missing completions (completes files, needs --no-files and needs to complete domain names like `virsh start`)
     #    others: domstate, domstats, ... find and contribute other fixes (fish shell completions)
 
-    abbr --set-cursor='!' -- vshn 'virsh net-!' # complete the net subcommand, might be cool to hit TAB too automatically... could an abbreviation generate any sort of keyboard input?
+    abbr --set-cursor -- vshn 'virsh net-%' # complete the net subcommand, might be cool to hit TAB too automatically... could an abbreviation generate any sort of keyboard input?
     abbr virshnl "virsh net-list"
     # abbr virshndx "virsh net-dumpxml"
     abbr virshndl "virsh net-dhcp-leases" # mostly as reminder if Ctrl+S in virsh abbrs
@@ -2046,8 +2046,8 @@ if command -q pacman
     abbr pm pacman
 
     # *** -S sync
-    abbr --set-cursor='!' pmss "sudo pacman -Ss '^!'" # (s)earch, name starts with
-    abbr --set-cursor='!' pm_search "sudo pacman -Ss '^!'" # reminder only
+    abbr --set-cursor pmss "sudo pacman -Ss '^%'" # (s)earch, name starts with
+    abbr --set-cursor pm_search "sudo pacman -Ss '^%'" # reminder only
     # pacman -Ss regex => (s)earches desc too, can be noisy
     abbr pmsi "pacman -Si" # pkg (i)nfo
     abbr pm_info "pacman -Si"
@@ -2067,13 +2067,13 @@ if command -q pacman
     abbr pmqi "pacman -Qi" # pkg (i)nfo (probably easier to just use -Si for most pkgs unless install a local dev checkout)
     # search installed pkgs:
     abbr pmqs "pacman -Qs" # (s)earch ERE(regex) search installed pkgs (prolly just use `pacman -Q | grep -i`)
-    abbr --set-cursor='!' pmqg "pacman -Q | grep -i '!'" # I prefer grep, it's just easier to not need another tool specific option
-    abbr --set-cursor='!' pmqgs "pacman -Q | grep -i '^!'"
+    abbr --set-cursor pmqg "pacman -Q | grep -i '%'" # I prefer grep, it's just easier to not need another tool specific option
+    abbr --set-cursor pmqgs "pacman -Q | grep -i '^%'"
     #
     abbr pmql "pacman -Ql" # (l)ist files for pkg, can list multiple too (in which case first col is pkg name)
     # TODO any reason why I wouldn't just use -Fl always? perhaps if I custom build a pkg?
-    abbr --set-cursor='!' pmqlt "pacman -Qlq ! | treeify " # tree like list (-q == --quiet => show less info, in this case dont list pkg name column, just file paths)
-    abbr --set-cursor='!' pm_listinstalledpkgfiles "pacman -Qlq ! | treeify" # reminder
+    abbr --set-cursor pmqlt "pacman -Qlq % | treeify " # tree like list (-q == --quiet => show less info, in this case dont list pkg name column, just file paths)
+    abbr --set-cursor pm_listinstalledpkgfiles "pacman -Qlq % | treeify" # reminder
     #pacman -Qk fish # verify installed files
     abbr pmqo "pacman -Qo" # (o)wned by pkg
     abbr pm_whoownsfile "pacman -Qo"
@@ -2099,8 +2099,8 @@ if command -q pacman
     #
     # FYI for -Fl vs -Ql... mostly gonna be ok to use -Fl... but, if build a pkg by hand it might only be avail in locally installed packages
     abbr pmfl "pacman -Fl" # (l)ist files for (remote) pkg
-    abbr --set-cursor='!' pmflt "pacman -Flq ! | treeify" # treeify list of files
-    abbr --set-cursor='!' pm_listremotepkgfiles "pacman -Flq ! | treeify" # reminder
+    abbr --set-cursor pmflt "pacman -Flq % | treeify" # treeify list of files
+    abbr --set-cursor pm_listremotepkgfiles "pacman -Flq % | treeify" # reminder
     abbr pmfy "sudo pacman -Fy" # reminder - download/s(y)nc fresh package databases
 
     # pactree reminder:
@@ -2125,7 +2125,7 @@ if command -q nvidia-smi
     #   then split them into a file and bail at top if not linux as a first check $IS_LINUX
     #  prefix == "nv" # seems fine, might overlap with neovim at some point?
     #  PRN alternative => use abbr --command nvidia-smi ... command level abbrs? or perhaps just need to fix completions which don't work even with fuc on man pages)
-    abbr --set-cursor='!' nv "nvidia-!" # kinda weird with space => dash but lets see how I feel as i use it and if it collides w/ anything else
+    abbr --set-cursor nv "nvidia-%" # kinda weird with space => dash but lets see how I feel as i use it and if it collides w/ anything else
 
     # TODO can I find a better source of copmletions?
     complete -c nvidia-container-cli --no-files -a "list info configure --help"
@@ -2210,8 +2210,8 @@ if $IS_MACOS then
     # make sure to run fish_update_completions after installing for completions
 end
 abbr finde "$find_cmd . -executable"
-abbr findud --set-cursor='!' "$find_cmd '!' -user wesdemos"
-abbr finduw --set-cursor='!' "$find_cmd '!' -user wes"
+abbr findud --set-cursor "$find_cmd '%' -user wesdemos"
+abbr finduw --set-cursor "$find_cmd '%' -user wes"
 
 # mostly for fun, also a good way to remember this exists :)
 abbr fuc fish_update_completions
@@ -2246,7 +2246,7 @@ if $IS_LINUX then
     abbr lshwcs "sudo lshw -class storage"
 
     # lsmod
-    abbr --set-cursor='!' lsmodg "sudo lsmod | grep -i '!'"
+    abbr --set-cursor lsmodg "sudo lsmod | grep -i '%'"
 
     # lsmem
     abbr lsmem "lsmem --output-all"
@@ -2259,7 +2259,7 @@ if $IS_LINUX then
     abbr lsusbv "lsusb -v" # very detailed
 
     # dmesg
-    abbr --set-cursor='!' dmesgg "sudo dmesg | grep -i '!'"
+    abbr --set-cursor dmesgg "sudo dmesg | grep -i '%'"
 
 end
 
@@ -2268,15 +2268,15 @@ if command -q lsof
 
     # find app for a given port
     # sudo lsof -i :8080 (for now hardcode 8080 as reminder, once that's annoying I can remove it)
-    abbr --set-cursor="!" lsofi 'lsof -i :8080!'
-    abbr --set-cursor="!" lsof_process_for_port 'lsof -i :8080!' # reminder (so I can tab complete it when I inevitably forget the lsof options again)
+    abbr --set-cursor lsofi 'lsof -i :8080%'
+    abbr --set-cursor lsof_process_for_port 'lsof -i :8080%' # reminder (so I can tab complete it when I inevitably forget the lsof options again)
 
     # files for a process:
     # TODO how to deal with multiple matches, I don't like using head but at least it is obvious in the expanded command so leave it for now
-    abbr --set-cursor="!" lsofp 'lsof -p $(pgrep -if "!" | head -1)'
-    abbr --set-cursor="!" lsof_ports_for_process_pgrep 'lsof -p $(pgrep -if "!" | head -1)' # reminder
-    abbr --set-cursor="!" lsofpi 'lsof -p $(pgrep -if "!" | head -1) -a -i'
-    abbr --set-cursor="!" lsof_ports_for_pid 'lsof -p ! -a -i' # reminder
+    abbr --set-cursor lsofp 'lsof -p $(pgrep -if "%" | head -1)'
+    abbr --set-cursor lsof_ports_for_process_pgrep 'lsof -p $(pgrep -if "%" | head -1)' # reminder
+    abbr --set-cursor lsofpi 'lsof -p $(pgrep -if "%" | head -1) -a -i'
+    abbr --set-cursor lsof_ports_for_pid 'lsof -p % -a -i' # reminder
     # -p PID
     # -i == internet files (ports)
     # -a == AND constraints
@@ -2298,7 +2298,7 @@ end
 # end
 
 # *** asciinema
-abbr anr 'asciinema rec --overwrite test.cast' # PRN remake in fish:    abbr --set-cursor '!' --add anr 'asciinema rec --overwrite !.cast'
+abbr anr 'asciinema rec --overwrite test.cast' # PRN remake in fish:    abbr --set-cursor --add anr 'asciinema rec --overwrite %.cast'
 abbr anp 'asciinema play'
 abbr anu 'asciinema upload'
 abbr anc 'asciinema cat'

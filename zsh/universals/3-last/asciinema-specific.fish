@@ -1,4 +1,4 @@
-abbr anr 'asciinema rec --overwrite test.cast' # PRN remake in fish:    abbr --set-cursor '!' --add anr 'asciinema rec --overwrite !.cast'
+abbr anr 'asciinema rec --overwrite test.cast' # PRN remake in fish:    abbr --set-cursor --add anr 'asciinema rec --overwrite %.cast'
 abbr anp 'asciinema play'
 abbr anu 'asciinema upload'
 abbr anc 'asciinema cat'

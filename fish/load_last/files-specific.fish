@@ -595,8 +595,8 @@ end
 ##### find helpers #####
 # WIP - new ideas to consider (added when trying to find ~/Library/Application\ Support/*elgato* dirs for streamdeck config)
 # find directories by name
-abbr --add findd --set-cursor=! 'find . -type d -iname "*!*"'
-abbr --add finddr --set-cursor=! 'find . -type d -iregex ".*!.*"' # another idea to consider
+abbr --add findd --set-cursor 'find . -type d -iname "*%*"'
+abbr --add finddr --set-cursor 'find . -type d -iregex ".*%.*"' # another idea to consider
 # IDEAs: tree command for dirs? or exa?
 
 

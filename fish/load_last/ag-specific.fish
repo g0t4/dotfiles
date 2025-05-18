@@ -150,12 +150,12 @@ end
 # FYI can defer expand color variable so order of startup files is irrelevant
 
 # # FYI uncomment to go back to ag
-# abbr --set-cursor='!' -- agi 'ag -i "!"'
-# abbr --set-cursor='!' -- agg 'ag -ig "!"'
-# abbr --set-cursor='!' -- agh 'ag --hidden -i "!"' # match hidden files, but not ignored files
-# abbr --set-cursor='!' -- agu 'ag --unrestricted -i "!"' # match hidden files + ignored files
-# abbr --set-cursor='!' -- aggh 'ag --hidden -ig "!"' # match hidden files, but not ignored files
-# abbr --set-cursor='!' -- aggu 'ag --unrestricted -ig "!"' # match hidden files + ignored files
+# abbr --set-cursor -- agi 'ag -i "%"'
+# abbr --set-cursor -- agg 'ag -ig "%"'
+# abbr --set-cursor -- agh 'ag --hidden -i "%"' # match hidden files, but not ignored files
+# abbr --set-cursor -- agu 'ag --unrestricted -i "%"' # match hidden files + ignored files
+# abbr --set-cursor -- aggh 'ag --hidden -ig "%"' # match hidden files, but not ignored files
+# abbr --set-cursor -- aggu 'ag --unrestricted -ig "%"' # match hidden files + ignored files
 
 # ignored files: .ignore, .gitignore, --ignore, etc
 # hidden files: .config, .git (dotfiles/dirs)
@@ -197,7 +197,7 @@ end
 # abbr agz 'ag --search-zip' # search inside zip files (gz,xz only)
 #
 # # * multiline
-# abbr --set-cursor='!' agm 'ag "(?s)!"' # (?s) makes . match \n too
+# abbr --set-cursor agm 'ag "(?s)%"' # (?s) makes . match \n too
 # #  example:
 # #    ag -G fish "(?s)for[^(end)]*set[^(end)]*"
 # #       here I was looking for for loops that use `set -`, first just `set`

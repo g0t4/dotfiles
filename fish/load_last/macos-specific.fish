@@ -7,15 +7,15 @@ end
 if command -q security
     # consider securityfp (add p to end) for passwords
     #   do this when I start using security command for other credential types
-    abbr --set-cursor='!' securityf "security find-generic-password -w -s ! -a "
-    abbr --set-cursor='!' securityrm "security delete-generic-password -s ! -a "
+    abbr --set-cursor securityf "security find-generic-password -w -s % -a "
+    abbr --set-cursor securityrm "security delete-generic-password -s % -a "
     #
     # * add passwords
     # FYI -w truncates pasted passwords longer than 129 chars (maybe I am doing smth wrong?)
-    # abbr --set-cursor='!' securitya "security add-generic-password -U -s ! -a -w "
+    # abbr --set-cursor securitya "security add-generic-password -U -s % -a -w "
     #
     # BUT, -X hexpassword     => this allows longer than 129, and I verified this works to set from clipboard (easier than pasting twice with -w):
-    abbr --set-cursor='!' securitya "security add-generic-password -U -X (pbpaste | xxd -p | tr -d '\n') -s ! -a "
+    abbr --set-cursor securitya "security add-generic-password -U -X (pbpaste | xxd -p | tr -d '\n') -s % -a "
     # -U updates if already exists! (w/o this the add fails)
 
     # had ChatGPT do this based on man page of security cmd (since fish shell generated completions dont work for security subcommadns, just its options)
