@@ -367,16 +367,17 @@ return {
         config = function()
             require('telescope').load_extension('live_grep_args')
             vim.keymap.set('n', '<leader>s', function()
-                -- FYI! live grep args is very finnicky with rg command it seems...
-                --  or maybe with ag too...
+                -- FYI! live grep args is  finnicky arg parsing...
                 --  You would think these would do the same thing:
-                --  "vimgrep" -g "*lua*"
-                --  vimgrep -g "*lua*"
-                --  but they don't, the latter looks for all of that in the file contents...
-                --  if you don't start with '" then it treats it all as one arg..
-                --  PRN rewrite how this thing works to make more sense?
-                --  I swear it wasn't this bad with the ag command
-                --  ALSO, remember with rg, it uses a glob for the file path match... so no partial matches... you have to do -g "*lua*" not `-g lua` which SUCKS but w/e
+                --    "vimgrep" -g "*lua*"
+                --    vimgrep -g "*lua*"
+                --    -g "*lua*" vimgrep
+                --    the first and last work, the middle is treated as one giant content match arg! hence it doesn't work
+                --  start with '/"/- to have it parse and use args to ag/rg command
+                --  ALSO, remember with rg, it uses a glob for the file path match
+                --    so no partial matches
+                --    you have to do -g "*lua*" not `-g lua` which SUCKS but w/e
+                --  PRN rewrite this extension to behave more logically how I'd prefer it?
                 require("telescope").extensions.live_grep_args.live_grep_args()
             end, { desc = "Live grep with custom args or empty search query" })
             --
