@@ -83,6 +83,11 @@ function rg_diff_files
 end
 
 function rg_diff_files_no_config
+    # TODO READ UP on --no-config... it isn't just disabling config
+    #   for exampe, these s/b similar and they are not:
+    #     rg --files --no-config --unrestricted
+    #     rg --files --unrestricted
+    #
     # usage:
     #   rg_diff_files_no_config --hidden
 
