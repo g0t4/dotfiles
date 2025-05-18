@@ -50,16 +50,17 @@ function diff_two_commands --wraps icdiff
     #   diff_two_commands "ls -al" "ls -al | sort -h"
     #   don't really need -- support here b/c there are only ever two args (commands to diff) and so any other options are clearly for icdiff (thus far)
 
-    # FYI strips -- and parses/strips icdiff options
-    argparse --ignore-unknown 'H/highlight' 'W/whole-file' -- $argv
+    set command_a $argv[1]
+    set command_b $argv[2]
+    set icdiff_argv $argv[3..]
 
-    icdiff $_flag_highlight $_flag_whole_file \
-        -L "'$argv[1]'" (eval $argv[1] | psub) \
-        -L "'$argv[2]'" (eval $argv[2] | psub)
+    icdiff $icdiff_argv \
+        -L "'$command_a'" (eval $command_a | psub) \
+        -L "'$command_b'" (eval $command_b | psub)
+
 end
 
 function diff_command_args --wraps icdiff
-
     # FYI to unambiguously pass icdiff options too, use --
     #   diff_command_args [icdiff options] -- [diff args...]
     #   diff_command_args -H -- "ls -al" -t
@@ -70,6 +71,7 @@ function diff_command_args --wraps icdiff
     #    e.g. diff_command_args "echo foo\nbar" "--line-numbers" "| grep foo"
     # ALSO, if there is no diff (and no error) then its very likely not this code but the output is literally the same :)... sometimes when testing you don't always get what you expect... run commands separately to verify if they are the same
 
+    # *** cannot do like diff_two_commands above b/c there are more 2+ args possible to the diff here and cannot differentiate which would be for icdiff vs comparison so just allowing the two special icdiff options
     # FYI argparse strips specified options (i.e. -H/--highlight) AND strips -- (if present)...  so if you remove this then you will no longer be able to use --
     argparse --ignore-unknown 'H/highlight' 'W/whole-file' -- $argv
     # --ignore-unknown is necessary to avoid parsing args when "--" is not used
@@ -77,7 +79,6 @@ function diff_command_args --wraps icdiff
     icdiff $_flag_highlight $_flag_whole_file \
         -L "'$argv[1]'" (eval $argv[1] | psub) \
         -L "'$argv[1] $argv[2..-1]'" (eval $argv[1] $argv[2..-1] | psub)
-
 end
 
 function _current_command_or_previous
