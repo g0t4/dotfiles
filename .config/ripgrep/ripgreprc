@@ -1,0 +1,7 @@
+# show dotfiles/dirs by default:
+--hidden
+# but, not these:
+--glob=!.git
+# DO NOT QUOTE ARGS
+
+

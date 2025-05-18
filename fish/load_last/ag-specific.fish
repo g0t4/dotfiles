@@ -18,6 +18,8 @@
 # - `rg -G foo bar` => `rg -g foo bar` # BUT, -g glob # is a glob not a regex
 #    note: can always use `rg --files | rg foo | xargs rg bar` # to get back to regex
 
+export RIPGREP_CONFIG_PATH=$WES_DOTFILES/.config/ripgrep/ripgreprc
+
 # * basic file content search
 abbr --set-cursor rgi 'rg -i "%"'
 abbr --set-cursor agi 'rg -i "%"'
