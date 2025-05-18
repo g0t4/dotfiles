@@ -39,8 +39,17 @@ abbr --set-cursor aggu 'rg --files -u | rg -i "%"'
 abbr --set-cursor rg_G 'rg -g fileglob "%"' # use as a reminder for now
 
 # * syntax highlighting of grep results
-abbr --set-cursor rgjd 'rg --json "%" | delta'
-abbr --set-cursor rg_delta 'rg --json "%" | delta' # reminder format (use command_what as a way to easily lookup new abbrs that I am trying to habituate)
+function delta_rg --wraps delta
+    # add wrapper to keep command shorter, mostly so I can modify last search command without arrowing a million times back
+    delta --features rg
+end
+#
+# alternative... type `jd<SPACE>` on end of an rg command and it expands into the json delta for you!
+abbr --command rg --position anywhere -- jd '--json | delta_rg'
+# OR, have it start w/ json delta:
+abbr --set-cursor rgjd 'rg --json "%" | delta_rg'
+abbr --set-cursor rg_delta 'rg --json "%" | delta_rg' # reminder format (use command_what as a way to easily lookup new abbrs that I am trying to habituate)
+#
 abbr --set-cursor rgj 'rg --json "%"'
 #
 # *** troubleshooting

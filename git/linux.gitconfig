@@ -80,3 +80,32 @@
 #		pager = diff-so-fancy
 
 #### END diff-so-fancy ####
+
+
+# *** delta ***
+[delta]
+    # see all config options (default values too):
+    #   delta --show-config
+    # test with:
+    #   git log --patch HEAD~1..HEAD | delta
+    #   rg --json foo | delta
+    #   TODO have separate theme for rg b/c its not dif in that case
+    #
+    # No "features" arg == default
+
+[delta "rg"]
+    # colors for rg --json output only:
+    # delta calls this a "feature"
+    #
+    # for delta, matches seem to all be plus-emph style
+    # how to use this grouping of settings (add features arg):
+    #   rg --json "openai.com" | delta --features rg
+    #
+    # color formats:
+    #   delta --help => colors section  (diff ways to provide color, hex, rgb, ansi 3/4bit, ansi 256 color #s
+    #
+    plus-emph-style = "normal 162" # ansi 256 color value
+    # match this to GREP_COLOR!
+
+# *** end delta ***
+
