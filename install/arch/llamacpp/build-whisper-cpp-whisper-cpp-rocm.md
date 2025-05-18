@@ -60,7 +60,7 @@
 
                 TODO TRY?  (did not need, yet)
                     -DAMDGPU_TARGETS="gfx" -DGGML_HIPBLAS=ON
-                    from: https://github.com/ggerganov/whisper.cpp/issues/2202#issuecomment-2227107601
+                    from: https://github.com/ggml-org/whisper.cpp/issues/2202#issuecomment-2227107601
 
 
 		cmake --build build -j --config Release
@@ -74,7 +74,7 @@
 initial test of samle jfk audio was approx 350ms both for rocm AMD GPU and m1 max CoreML
 	first coreml apple silicon run takes 3s b/c has to compile (IIUC) model IIRC
 
-https://github.com/ggerganov/whisper.cpp
+https://github.com/ggml-org/whisper.cpp
 
 ```
 whisper-bench # check encoder timings alone

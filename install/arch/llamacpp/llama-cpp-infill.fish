@@ -11,7 +11,7 @@ wget "https://huggingface.co/Qwen/Qwen2.5-Coder-7B-Instruct-GGUF/resolve/main/qw
 wget "https://huggingface.co/Qwen/Qwen2.5-Coder-3B-Instruct-GGUF/resolve/main/qwen2.5-coder-3b-instruct-q8_0.gguf"
 #
 # FYI for now store here:
-ls ~/repos/github/ggerganov/llama.cpp/models/qwen2.5*
+ls ~/repos/github/ggml-org/llama.cpp/models/qwen2.5*
 
 # TODO other models... what about serve multiple models too?
 # -hf ggml-org/Qwen2.5-Coder-7B-Q8_0-GGUF \
@@ -27,7 +27,7 @@ ls ~/repos/github/ggerganov/llama.cpp/models/qwen2.5*
 
 
 # FYI api endpoint regisrations:
-#    https://github.com/ggerganov/llama.cpp/blob/master/examples/server/server.cpp#L4355
+#    https://github.com/ggml-org/llama.cpp/blob/master/examples/server/server.cpp#L4355
 
 # TODO test /infill
 #   --spm-infill
@@ -38,7 +38,7 @@ curl http://ollama:8012/v1/models
 # id => "/home/wes/.cache/llama.cpp/ggml-org_Qwen2.5-Coder-7B-Q8_0-GGUF_qwen2.5-coder-7b-q8_0.gguf"
 
 
-# src: https://github.com/ggerganov/llama.cpp/blob/master/examples/server/server.cpp#L3942
+# src: https://github.com/ggml-org/llama.cpp/blob/master/examples/server/server.cpp#L3942
 # TODO use model alias to avoid filename path
 curl -X POST http://ollama:8012/infill \
     -d '{
@@ -59,7 +59,7 @@ curl -X POST http://ollama:8012/infill \
 # {"id":0,"id_task":0,"n_ctx":32768,"speculative":false,"is_processing":false,"non_causal":false,"params":{"n_predict":-1,"seed":4294967295,"temperature":0.800000011920929,"dynatemp_range":0.0,"dynatemp_exponent":1.0,"top_k":40,"top_p":0.949999988079071,"min_p":0.05000000074505806,"xtc_probability":0.0,"xtc_threshold":0.10000000149011612,"typical_p":1.0,"repeat_last_n":64,"repeat_penalty":1.0,"presence_penalty":0.0,"frequency_penalty":0.0,"dry_multiplier":0.0,"dry_base":1.75,"dry_allowed_length":2,"dry_penalty_last_n":32768,"dry_sequence_breakers":["\n",":","\"","*"],"mirostat":0,"mirostat_tau":5.0,"mirostat_eta":0.10000000149011612,"stop":[],"max_tokens":-1,"n_keep":0,"n_discard":0,"ignore_eos":false,"stream":true,"logit_bias":[],"n_probs":0,"min_keep":0,"grammar":"","grammar_trigger_tokens":[],"samplers":["penalties","dry","top_k","typ_p","top_p","min_p","xtc","temperature"],"speculative.n_max":16,"speculative.n_min":5,"speculative.p_min":0.8999999761581421,"timings_per_token":false,"post_sampling_probs":false,"lora":[]},"prompt":"<|repo_name|>myproject\n<|file_sep|>filename\n<|fim_prefix|>a = 1 + 2<|fim_suffix|>c = a + b<|fim_middle|>","next_token":{"has_next_token":true,"has_new_line":false,"n_remain":-1,"n_decoded":0,"stopping_word":""}}
 #      "prompt": "<|repo_name|>myproject\n<|file_sep|>filename\n<|fim_prefix|>a = 1 + 2<|fim_suffix|>c = a + b<|fim_middle|>",
 
-#   format_infill:  https://github.com/ggerganov/llama.cpp/blob/master/examples/server/utils.hpp#L252
+#   format_infill:  https://github.com/ggml-org/llama.cpp/blob/master/examples/server/utils.hpp#L252
 
 
 # prompt is optional - TODO try it

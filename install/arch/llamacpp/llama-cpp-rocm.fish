@@ -2,7 +2,7 @@
 
 # *** building llama.cpp
 
-cd ~/repos/github/ggerganov/llama.cpp
+cd ~/repos/github/ggml-org/llama.cpp
 
 rm -rf build # get rid of full dir first
 
@@ -23,7 +23,7 @@ export LDFLAGS="-L/opt/rocm/lib"
 
 
 # docs for llama.cpp w/ hip(blas)
-# https://github.com/ggerganov/llama.cpp/blob/master/docs/build.md#hip
+# https://github.com/ggml-org/llama.cpp/blob/master/docs/build.md#hip
 HIPCXX="$(hipconfig -l)/clang" HIP_PATH="$(hipconfig -R)" \
     cmake -S . -B build -DGGML_HIP=ON -DAMDGPU_TARGETS=gfx1030 -DCMAKE_BUILD_TYPE=Release \
     -DLLAMA_CURL=ON \

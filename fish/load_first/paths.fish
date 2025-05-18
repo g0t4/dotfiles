@@ -116,10 +116,10 @@ if test -d /opt/homebrew/share/google-cloud-sdk/bin
     export PATH="/opt/homebrew/share/google-cloud-sdk/bin:$PATH"
 end
 
-if test -d "$HOME/repos/github/ggerganov/llama.cpp/build/bin"
+if test -d "$HOME/repos/github/ggml-org/llama.cpp/build/bin"
     # TODO is this what I want?
-    export PATH="$HOME/repos/github/ggerganov/llama.cpp/build/bin:$PATH"
-    set GGUF_MODELS "$HOME/repos/github/ggerganov/llama.cpp/models"
+    export PATH="$HOME/repos/github/ggml-org/llama.cpp/build/bin:$PATH"
+    set GGUF_MODELS "$HOME/repos/github/ggml-org/llama.cpp/models"
 end
 
 # /opt/cuda/bin/

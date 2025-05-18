@@ -1,4 +1,4 @@
-cd ~/repos/github/ggerganov/whisper.cpp
+cd ~/repos/github/ggml-org/whisper.cpp
 
 rm -rf build # get rid of full dir first
 #  git status --ignored   # review previous build artifacts

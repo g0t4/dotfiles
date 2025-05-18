@@ -281,7 +281,7 @@ local llm_nvim_plugin = {
 --
 -- Seprate notes:
 --   - investigate GPU/CPU usage for models... is ollama utilizing GPU for the models I run this for... that could explain the issue I had with bigger models not running even if there is room on GPU still:
---      if it isn't, consider using llama.cpp directly to force it : https://github.com/ggerganov/llama.cpp/blob/master/examples/server/README.md
+--      if it isn't, consider using llama.cpp directly to force it : https://github.com/ggml-org/llama.cpp/blob/master/examples/server/README.md
 --
 --
 --
@@ -532,7 +532,7 @@ local avante =
 local llama_cpp_llama_vim_plugin = {
     -- NOTES:
     -- llama-server fim args:
-    --    https://github.com/ggerganov/llama.cpp/blob/8ac9f5d7/common/arg.cpp#L3148-L3164
+    --    https://github.com/ggml-org/llama.cpp/blob/8ac9f5d7/common/arg.cpp#L3148-L3164
     --    llama-server --help | grep fim  # find compat models
     --    --fim-qwen-7b-default  # 16+ GB VRAM
     --    --fim-qwen-7b-spec

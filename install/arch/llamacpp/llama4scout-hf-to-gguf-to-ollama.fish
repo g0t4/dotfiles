@@ -1,7 +1,7 @@
 #
 # * prepare llamal.cpp tools
 # FYI IIUC it uses python scripts for conversion, UNSURE if it also uses compiled executables too (hence setup that too)
-cd ~/repos/github/ggerganov/llama.cpp
+cd ~/repos/github/ggml-org/llama.cpp
 # see build steps for llama+CUDA in sep file
 
 uv venv # create venv (not sync though)

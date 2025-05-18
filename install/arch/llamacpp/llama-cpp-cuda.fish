@@ -1,4 +1,4 @@
-cd ~/repos/github/ggerganov/llama.cpp
+cd ~/repos/github/ggml-org/llama.cpp
 rm -rf build # get rid of full dir first
 
 # steps to use w/ nvidia 5090
