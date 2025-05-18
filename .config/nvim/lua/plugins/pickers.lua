@@ -140,10 +140,10 @@ return {
                 -- local args = { unpack(telescopeConfig.values.vimgrep_arguments) }
                 -- -- FYI right now:        { "rg", "--color=never", "--no-heading", "--with-filename", "--line-number", "--column", "--smart-case" }
 
-                local args = { "rg", "--color=never", "--no-heading", "--with-filename", "--line-number", "--column", "--smart-case" }
+                local args = { "rg", "--color=never", "--no-heading", "--with-filename", "--line-number", "--column" }
 
                 -- I want to search in hidden/dot files.
-                -- table.insert(args, "--hidden")
+                table.insert(args, "--hidden")
                 -- table.insert(args, "--no-ignore") -- allow so gitignored files
                 -- -- dirs to exclude now:
                 -- table.insert(args, "--glob")
@@ -362,6 +362,16 @@ return {
         config = function()
             require('telescope').load_extension('live_grep_args')
             vim.keymap.set('n', '<leader>s', function()
+                -- FYI! live grep args is very finnicky with rg command it seems...
+                --  or maybe with ag too...
+                --  You would think these would do the same thing:
+                --  "vimgrep" -g "*lua*"
+                --  vimgrep -g "*lua*"
+                --  but they don't, the latter looks for all of that in the file contents...
+                --  if you don't start with '" then it treats it all as one arg..
+                --  PRN rewrite how this thing works to make more sense?
+                --  I swear it wasn't this bad with the ag command
+                --  ALSO, remember with rg, it uses a glob for the file path match... so no partial matches... you have to do -g "*lua*" not `-g lua` which SUCKS but w/e
                 require("telescope").extensions.live_grep_args.live_grep_args()
             end, { desc = "Live grep with custom args or empty search query" })
             --
