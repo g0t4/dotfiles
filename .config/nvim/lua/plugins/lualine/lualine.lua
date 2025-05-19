@@ -73,9 +73,9 @@ return {
                         { "progress", padding = { right = 1 } },
                     },
                     lualine_z = {
-                        {
-                            workspace_name,
-                        }
+                        -- PRN if a github repo, show org dir too (one above worskpace)... like I do in fish shell prompt now
+                        --  perhaps truncate it if there's not enough space for other components (or mark deprioritzed)
+                        { workspace_name, }
                     },
                     -- search shows #/total in commandline so don't need that here
                 },
