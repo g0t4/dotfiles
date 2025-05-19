@@ -50,12 +50,11 @@ return {
                     -- lualine_a = { 'buffers' }, -- TODO "buffers" looks interesting! shows tabs for each file... might be what I've been wanting?
                     --    also has tabs/windows... interesting (is that for tab strip,  or?)
                     lualine_a = { '' },
-                    lualine_b = { { -- FYI wrap in {} to customize component options
-                        --   https://github.com/nvim-lualine/lualine.nvim#filename-component-options
-                        "filename",
-                        path = 1, -- 1 = relative path, 4 = filename+parentdir sounds interesting
-                        -- relative path, 4 filename+parentdir sounds interesting
-                    } }, -- filename includes modified
+                    lualine_b = {
+                        -- https://github.com/nvim-lualine/lualine.nvim#filename-component-options
+                        -- 1 = relative path
+                        { "filename", path = 1 }
+                    },
                     -- lualine_c = { "filetype" },
                     lualine_c = { statusline_filetype, unpack(CopilotsStatus()), },
                     lualine_x = {}, -- todo move copilot back here?
@@ -82,7 +81,9 @@ return {
                 },
                 inactive_sections = {
                     lualine_a = {}, -- default ""
-                    lualine_b = { "filename" }, -- default ""
+                    lualine_b = {
+                        { "filename", path = 1 },
+                    }, -- default ""
                     lualine_c = { "" }, -- default "filename"
                     lualine_x = { "location" }, -- default "location"
                     lualine_y = {}, -- default ""
