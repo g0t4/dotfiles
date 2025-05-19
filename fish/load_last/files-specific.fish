@@ -803,3 +803,5 @@ bind alt-shift-d _fzf-nested-dir-widget
 bind alt-shift-f _fzf-nested-file-widget
 bind alt-shift-b _fzf-nested-both-file-and-dirs-widget
 
+# *** chmod,chgrp,chown,chsh
+abbr chmx "chmod +x"
