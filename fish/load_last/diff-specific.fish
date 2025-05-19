@@ -44,6 +44,15 @@ function _abbr_expand_diff_last_two_commands_sorted
 end
 abbr -a diff_last_two_commands_sorted --function _abbr_expand_diff_last_two_commands_sorted
 
+abbr -a diff_last_two_commands_redir_stderr_too --function _abbr_expand_diff_last_two_commands_redir_stderr_too
+function _abbr_expand_diff_last_two_commands_redir_stderr_too
+    set last_two_commands (history | head -n 2)
+    set -l command_a $last_two_commands[2] " 2>&1"
+    set -l command_b $last_two_commands[1] " 2>&1"
+    set command_a (string replace --all -- "'" "\\'" $command_a)
+    set command_b (string replace --all -- "'" "\\'" $command_b)
+    echo diff_two_commands "'$command_a'" "'$command_b'"
+end
 
 function diff_two_commands --wraps icdiff
     # usage:
