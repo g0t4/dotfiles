@@ -115,10 +115,12 @@ function setup_workspace()
 
         " TODO add keymap for save session? (think save conventional session file)
         function OnLeaveSaveSession()
+            " TODO move all window close logic to the lua func below
             " if :NvimTreeClose command is defined, call it:
             if exists(":NvimTreeClose")
                 NvimTreeClose
             endif
+            lua werkspaces_close_tmp_windows_to_not_reopen_them()
 
             call SaveSession()
         endfunction

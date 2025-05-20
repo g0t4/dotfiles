@@ -1,3 +1,14 @@
+function werkspaces_close_tmp_windows_to_not_reopen_them()
+    vim.iter(vim.api.nvim_list_wins()):each(function(win)
+        local buf = vim.api.nvim_win_get_buf(win)
+        local buf_name = vim.api.nvim_buf_get_name(buf)
+        if buf_name:match('coc%-nvim%.log') then
+            print("found coc window")
+            vim.api.nvim_win_close(win, true)
+        end
+    end)
+end
+
 return {
 
     -- *** TESTING ***
