@@ -186,6 +186,23 @@
     // FYI another persons' config: https://raw.githubusercontent.com/oppara/dotfiles/611ea809e380d5b4e3e374568a85e52e744a429e/config/nvim/coc-settings.json
     "languageserver": {
 
+        // TODO! revisit if this works enough to replace pyright (this is faster by far)
+        // // *** facebook / pyrefly
+        // // TODO try neovim builtin LS support => https://pyrefly.org/en/docs/IDE/#neovim-011
+        // "pyrefly": {
+        //     // uv tool install pyrefly
+        //     // https://github.com/facebook/pyrefly/commit/de0302c63a32424fe9d810b7dd17110fc591acf7
+        //     "command": "pyrefly",
+        //     "args": [ "lsp" ],
+        //     "filetypes": [ "python" ],
+        //     "rootPatterns": [ "pyrefly.toml", "pyproject.toml", ".git/" ],
+        //     "trace.server": "verbose"
+        //
+        // },
+        // // KINDA working... can't resolve definition of import os module though!! and os.remove (F12 on it => nothing)... can jump to defs of packages... I wonder if the issue is using uv package manger or? s/b fine but who knows
+        // pyright is fine for now
+
+
         // *** csharp-ls ***
         // PRN try omnisharp-roslyn instead of csharp-ls (download archive from https://github.com/OmniSharp/omnisharp-roslyn/releases)
         //     and dotnet-format for formatting?
