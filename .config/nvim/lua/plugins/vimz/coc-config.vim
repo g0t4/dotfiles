@@ -1,5 +1,8 @@
 " *** FYI coc.nvim doesn't modify key-mappings nor vim options, hence the need to specify config explicitly, fine by me!
 
+" todo setup keymap to open output of current file's LSP? ala:
+"   :CocCommand workspace.showOutput Pyright
+
 " FYI see coc-settings for manually added LSPs like for fish
 " TODO try other coc extensions / manual LSP registrations...
 " TODO and vet this list too
