@@ -6,3 +6,10 @@
 
 --column
 --no-heading
+
+# match current behavior of my config for neovim telescope live grep plugins
+--smart-case
+# makes sense... lower case => match all as I likely haven't specified what I want... upper usually means strict match...
+#  means I need helpers for:
+#  -i => ignore case always
+#  -s/--case-sensitive => case sensitive (for lowercase only searches)

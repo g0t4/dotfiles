@@ -93,24 +93,25 @@ end
 export RIPGREP_CONFIG_PATH=$WES_DOTFILES/.config/ripgrep/ripgreprc
 
 # * basic file content search
-# TODO habituate --smart-case as I have long used in telescope's live grep even with ag command?
-abbr --set-cursor rgs 'rg --smart-case "%"'
+# abbr --set-cursor rgs 'rg --smart-case "%"' # making this the default, to match what I am doing in neovim's telescope live grep [args] plugins
+abbr --set-cursor rgc 'rg --case-sensitive "%"'
+# abbr --set-cursor agc 'rg --case-sensitive "%"' # mostly set this as a reminder if I go back to ag (and need its abbrs again)
 abbr --set-cursor rgi 'rg -i "%"'
 abbr --set-cursor agi 'rg -i "%"'
-abbr --set-cursor rgh 'rg --hidden --smart-case "%"'
-abbr --set-cursor agh 'rg --hidden --smart-case "%"'
+abbr --set-cursor rgh 'rg --hidden "%"'
+abbr --set-cursor agh 'rg --hidden "%"'
 abbr --set-cursor rgu 'rg -u "%"' # unrestricted
 abbr --set-cursor agu 'rg -u "%"' # unrestricted
 #
 # * filename/path search (not contents)
 abbr --set-cursor rgf 'rg --files'
-abbr --set-cursor rgg 'rg --files | rg --smart-case "%"' # * mirror `ag -g` (search filepaths not content)
-abbr --set-cursor agg 'rg --files | rg --smart-case "%"' # * mirror `ag -g` (search filepaths not content)
-abbr --set-cursor rggi 'rg --files | rg --smart-case "%"'
-abbr --set-cursor rggh 'rg --files -h | rg --smart-case "%"'
-abbr --set-cursor aggh 'rg --files -h | rg --smart-case "%"'
-abbr --set-cursor rggu 'rg --files -u | rg --smart-case "%"'
-abbr --set-cursor aggu 'rg --files -u | rg --smart-case "%"'
+abbr --set-cursor rgg 'rg --files | rg "%"' # * mirror `ag -g` (search filepaths not content)
+abbr --set-cursor agg 'rg --files | rg "%"' # * mirror `ag -g` (search filepaths not content)
+abbr --set-cursor rggi 'rg --files | rg "%"'
+abbr --set-cursor rggh 'rg --files -h | rg "%"'
+abbr --set-cursor aggh 'rg --files -h | rg "%"'
+abbr --set-cursor rggu 'rg --files -u | rg "%"'
+abbr --set-cursor aggu 'rg --files -u | rg "%"'
 
 # * TODO filename + content search
 abbr --set-cursor rg_G 'rg -g fileglob "%"' # use as a reminder for now
@@ -243,7 +244,7 @@ end
 
 # FYI colors are defined by fish/zsh respectively in color-specific.{fish,zsh}
 function ag
-    command ag --nogroup --color-match "$__color_matching_text" --column $argv
+    command ag --nogroup --color-match "$__color_matching_text" --column $argv --smart-case
     # --nogroup => disable grouping to show file/line per match to click to open in vscode (via iterm links)
 end
 # FYI can defer expand color variable so order of startup files is irrelevant
