@@ -22,8 +22,8 @@ local plugin_coc = {
     event = { "BufRead", "InsertEnter" },
 
     config = function()
-        vim.cmd('source ~/.config/nvim/lua/plugins/vimz/coc-config.vim')
-        require("plugins.completions.coc") -- move all customizations here long term
+        vim.cmd('source ~/.config/nvim/lua/plugins/completions/coc/keymaps.vim')
+        require("plugins.completions.coc.keymaps")
     end,
     -- CocConfig (opens coc-settings.json in buffer to edit) => from ~/.config/nvim/coc-settings.json
     --   https://github.com/neoclide/coc.nvim/wiki/Install-coc.nvim#add-some-configuration
