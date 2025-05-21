@@ -11,10 +11,9 @@
 -- TEST with: `writefi<ENTER>` in a python file, there are two snippet placeholders (filename and content)
 --
 
--- " Add `:Format` command to format current buffer
-vim.api.nvim_command([[
-command! -nargs=0 Format :call CocActionAsync('format')
-]])
+vim.api.nvim_create_user_command('FormatBuffer', function()
+    vim.fn.CocActionAsync('format')
+end, { nargs = 0 })
 
 -- " Add `:Fold` command to fold current buffer
 vim.api.nvim_command([[
