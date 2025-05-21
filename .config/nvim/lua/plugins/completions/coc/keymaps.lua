@@ -9,3 +9,21 @@
 -- ]], { noremap = true, silent = true, expr = true })
 --
 -- TEST with: `writefi<ENTER>` in a python file, there are two snippet placeholders (filename and content)
+--
+
+-- " Add `:Format` command to format current buffer
+vim.api.nvim_command([[
+command! -nargs=0 Format :call CocActionAsync('format')
+]])
+
+-- " Add `:Fold` command to fold current buffer
+vim.api.nvim_command([[
+command! -nargs=? Fold :call     CocAction('fold', <f-args>)
+]])
+
+-- " Add `:OR` command for organize imports of the current buffer
+vim.api.nvim_command([[
+command! -nargs=0 OR   :call     CocActionAsync('runCommand', 'editor.action.organizeImport')
+]])
+
+vim.keymap.set('n', '<leader>oi', ':CocCommand editor.action.organizeImport<cr>', { silent = true })
