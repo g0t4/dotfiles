@@ -15,14 +15,8 @@ vim.api.nvim_create_user_command('FormatBuffer', function()
     vim.fn.CocActionAsync('format')
 end, { nargs = 0 })
 
--- " Add `:Fold` command to fold current buffer
-vim.api.nvim_command([[
-command! -nargs=? Fold :call     CocAction('fold', <f-args>)
-]])
+vim.api.nvim_create_user_command('OrganizeImports', function()
+    vim.fn.CocActionAsync('runCommand', 'editor.action.organizeImport')
+end, { nargs = 0 })
 
--- " Add `:OR` command for organize imports of the current buffer
-vim.api.nvim_command([[
-command! -nargs=0 OR   :call     CocActionAsync('runCommand', 'editor.action.organizeImport')
-]])
-
-vim.keymap.set('n', '<leader>oi', ':CocCommand editor.action.organizeImport<cr>', { silent = true })
+vim.keymap.set('n', '<leader>oi', ':OrganizeImports<cr>', { silent = true })
