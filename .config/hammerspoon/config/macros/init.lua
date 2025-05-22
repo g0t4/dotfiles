@@ -591,6 +591,19 @@ function StreamDeckFcpxViewerToggleComments()
     FindOneElement(startSearch, criteria, afterSearch)
 end
 
+-- * published parameters (for titles)
+
+-- TODO center X
+-- TODO center Y
+-- TODO x width
+-- TODO y height
+-- TODO increment by 0.01 sounds like a useful feature... read box, add 0.01 ... that's the sweet spot for adjustments
+--    or maybe 0.02/0.05... TBD
+
+function StreamDeckFcpx_PublishedParams_CenterX()
+    print("FUCK YOU")
+end
+
 -- *** excel helpers
 
 function StreamDeckPowerPointEnsureTabOpen(tabName)
