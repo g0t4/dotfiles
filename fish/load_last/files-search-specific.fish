@@ -11,7 +11,7 @@
 
 # *** fd general options
 abbr fdnh 'fd --no-hidden' # include hidden
-abbr fdu 'fd --unrestricted'# no ignores applied
+abbr fdu 'fd --unrestricted' # no ignores applied
 abbr fdi 'fd --ignore-case' # --ignore-case
 abbr fdF 'fd --fixed-strings' # same as rg
 abbr fd_ext 'fd --extension'
@@ -108,8 +108,8 @@ abbr --set-cursor rgf 'rg --files'
 abbr --set-cursor rgg 'rg --files | rg "%"' # * mirror `ag -g` (search filepaths not content)
 abbr --set-cursor agg 'rg --files | rg "%"' # * mirror `ag -g` (search filepaths not content)
 abbr --set-cursor rggi 'rg --files | rg "%"'
-abbr --set-cursor rggh 'rg --files -h | rg "%"'
-abbr --set-cursor aggh 'rg --files -h | rg "%"'
+abbr --set-cursor rggh 'rg --files --hidden | rg "%"'
+abbr --set-cursor aggh 'rg --files --hidden | rg "%"'
 abbr --set-cursor rggu 'rg --files -u | rg "%"'
 abbr --set-cursor aggu 'rg --files -u | rg "%"'
 
