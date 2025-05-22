@@ -1,18 +1,15 @@
-
 # *** ls
-abbr lat "ls -alht" # -t == sort by time # PRN move to fd?
-abbr las "ls -alhS" # -S == sort by size # PRN move to fd?
-# abbr la "la -h" # use fish builtin `la` and pass -h by default now
-# *** why do I use ls at all?
-# - globs suck (esp shell specific, very, very limited and nervewracking)
-# - fd works across nested dirs (always wanted ls to do that)
-#   - strong point of fish shell is ability to do partial matches like f/d/e => foo/and/expose.md
-#   - fd can just do `fd expose.md`!
-# - want only current dir... fine `fd -d 1` (fd1 below)
-# ls usually shows all dirs, not ignored ones... that makes sense to do here
-#  but now fd will show me hidden items b/c I have --hidden in my fd alias... and I like this, I don't like needing ls -a
-abbr ls 'fd -d=1 -u'
-abbr la 'fd -d=1 -u -l'
+abbr lat "ls -alht" # -t == sort by time
+abbr las "ls -alhS" # -S == sort by size
+abbr la "ls -alh" # use fish builtin `la` and pass -h by default now
+function ls
+    # if command -q eza
+    #     eza --group-directories-first $argv
+    # try lsd for a bit, as daily primary, fallback to eza if not happy
+    if command -q lsd
+        lsd --group-directories-first $argv
+    end
+end
 
 # this was in release notes for 3.6.0! regex just added (among other changes)
 #    https://fishshell.com/docs/3.6/relnotes.html
