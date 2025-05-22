@@ -1,6 +1,5 @@
 
 # *** ls
-# still not using exa/eza (not worth hassle, esp b/c fish builtin ls/la colors work well enough)
 abbr lat "ls -alht" # -t == sort by time # PRN move to fd?
 abbr las "ls -alhS" # -S == sort by size # PRN move to fd?
 # abbr la "la -h" # use fish builtin `la` and pass -h by default now
@@ -12,7 +11,7 @@ abbr las "ls -alhS" # -S == sort by size # PRN move to fd?
 # - want only current dir... fine `fd -d 1` (fd1 below)
 # ls usually shows all dirs, not ignored ones... that makes sense to do here
 #  but now fd will show me hidden items b/c I have --hidden in my fd alias... and I like this, I don't like needing ls -a
-abbr ls 'fd -d=1 -u' # does this make me feel 🥰 or 😡 ???
+abbr ls 'fd -d=1 -u'
 abbr la 'fd -d=1 -u -l'
 
 # this was in release notes for 3.6.0! regex just added (among other changes)
