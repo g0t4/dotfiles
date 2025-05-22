@@ -601,8 +601,19 @@ end
 --    or maybe 0.02/0.05... TBD
 
 function StreamDeckFcpx_PublishedParams_CenterX()
-    print("FUCK YOU")
+    -- app:window(3):splitGroup(1):group(1):splitGroup(1):group(1):splitGroup(1):group(3):group(1):group(1):scrollArea(1)
+    --   :textField(2)
+    --
+    -- AXDescription: center x scrubber<string>
+    -- AXEnabled: true<bool>
+    -- AXFocused: true<bool>
+    -- AXHelp: Center X Scrubber<string>
+    -- AXRoleDescription: text field<string>
+    -- AXValue: -0.6<string>
+    --
+    -- unique ref: app:window('Final Cut Pro'):splitGroup():group():splitGroup()
 end
+
 
 -- *** excel helpers
 
