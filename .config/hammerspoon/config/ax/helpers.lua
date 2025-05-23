@@ -504,3 +504,20 @@ function sortedAttributeNames(element)
     table.sort(attributes)
     return attributes
 end
+
+function FindOneElement(app, criteria, callback)
+    local startTime = GetTime()
+    if type(criteria) ~= "function" then
+        criteria = hs.axuielement.searchCriteriaFunction(criteria)
+    end
+    local namedModifiers = { count = 1 }
+
+    local function afterSearch(...)
+        print("time to callback: " .. GetElapsedTimeInMilliseconds(startTime) .. " ms")
+        callback(...)
+    end
+
+    app:elementSearch(afterSearch, criteria, namedModifiers)
+end
+
+
