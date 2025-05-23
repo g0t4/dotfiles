@@ -1,3 +1,5 @@
+local FcpxInspectorPanel = require("config.macros.fcpx.inspector_panel")
+
 ---@return hs.axuielement
 function GetFcpxAppElement()
     -- 1.4ms for com.apple.FinalCut
@@ -37,7 +39,6 @@ FcpxEditorWindow = {}
 FcpxEditorWindow.__index = FcpxEditorWindow
 
 function FcpxEditorWindow:new()
-    local FcpxInspectorPanel = require("config.macros.fcpx.inspector_panel")
     local o = {}
     setmetatable(o, self)
     o.window, o.fcpx = GetFcpxEditorWindow()
