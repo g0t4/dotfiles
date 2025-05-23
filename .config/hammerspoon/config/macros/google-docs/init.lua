@@ -15,7 +15,7 @@ end
 local _cachedGoogleDocsJSHelpers = nil
 local function getGoogleDocsJavaScriptHelpers()
     -- "~/.hammerspoon/config/macros/google-docs-helpers.js
-    local file = hs.fs.currentDir() .. "/config/macros/google-docs-helpers.js"
+    local file = hs.fs.currentDir() .. "/config/macros/google-docs/google-docs-helpers.js"
     if _cachedGoogleDocsJSHelpers == nil then
         _cachedGoogleDocsJSHelpers = readFile(file)
     end
