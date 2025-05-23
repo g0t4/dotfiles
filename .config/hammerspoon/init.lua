@@ -16,6 +16,9 @@
 --       https://github.com/Hammerspoon/hammerspoon/blob/master/Hammerspoon/MJLua.m#L790
 --       does it use the same log cocept I've seen in some modules that would allow a threshold to be set?
 --
+-- *** USE `hs -C` REPL for debugging now, it reconnects on reload config!
+--   TODO add in console history? I think this might work: asmagill
+--   https://github.com/asmagill/hammerspoon-config-take2/blob/master/utils/_actions/consoleHistory.lua
 
 require("config.helpers.all") -- globals, import once
 
