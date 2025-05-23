@@ -1,4 +1,4 @@
-local FcpxInspectorPanel = require("config.macros.fcpx.inspector_panel")
+local FcpxEditorWindow = require("config.macros.fcpx.editor_window")
 
 ---@return hs.axuielement
 function GetFcpxAppElement()
@@ -28,78 +28,6 @@ function GetFcpxEditorWindow()
     -- AXTitle = "Final Cut Pro"
 
     return fcpx:attributeValue("AXFocusedWindow"), fcpx
-end
-
----@class FcpxEditorWindow
----@field window hs.axuielement
----@field fcpx hs.axuielement
----@field topToolbar FcpxTopToolbar
----@field inspector FcpxInspectorPanel
-FcpxEditorWindow = {}
-FcpxEditorWindow.__index = FcpxEditorWindow
-
-function FcpxEditorWindow:new()
-    local o = {}
-    setmetatable(o, self)
-    o.window, o.fcpx = GetFcpxEditorWindow()
-    o.topToolbar = FcpxTopToolbar:new(o.window:childrenWithRole("AXToolbar")[1])
-    -- everything below top toolbar
-    -- use _ to signal that it's not guaranteed to be there
-    o._mainSplitGroup = o.window:childrenWithRole("AXSplitGroup")[1]
-    print("main split group", hs.inspect(o._mainSplitGroup))
-    o.inspector = FcpxInspectorPanel:new(o)
-    return o
-end
-
-function FcpxEditorWindow:rightSidePanel()
-    -- FYI if overhead in lookup on every use, can memoize this... but not until I have proof its an issue.. and probabaly only for situations where 10ms is a problem
-    -- FOR NOW... defer everything beyond the window!
-    -- TODO this group is varying...  CAN I query smth like # elements and find what I want that way?
-    return self._mainSplitGroup:group(2)
-end
-
-function FcpxEditorWindow:rightSidePanelTopBar()
-    -- TODO this group is varying...
-    return self:rightSidePanel():group(2)
-end
-
-function FcpxEditorWindow:leftSideEverythingElse()
-    -- TODO use and rename this... b/c its not a left side panel, it's the rest of the UI (browser,timeline,events viewer,titles,generators,etc) - everything except the inspector (in my current layout)
-    -- TODO this group is varying...
-    return self._mainSplitGroup:group(1)
-end
-
----@class FcpxTopToolbar
-FcpxTopToolbar = {}
-FcpxTopToolbar.__index = FcpxTopToolbar
-function FcpxTopToolbar:new(topToolbarElement)
-    local o = {}
-    setmetatable(o, self)
-    o.topToolbarElement = topToolbarElement
-    -- TODO consider a toggle for troubleshooting... that will check more carefully (i.e. for desc here)... but not when toggle is off, like an assertion (enabled in dev, disabled in prod)
-    local checkboxes = o.topToolbarElement:childrenWithRole("AXCheckBox")
-    o.btnInspector = checkboxes[5]
-    o.btnBrowser = checkboxes[3]
-    o.btnTimeline = checkboxes[4]
-    -- PRN use :matchCriteria w/ AXDescription instead of index?
-    --    TODO time the difference
-    --    FYI for tooggling a panel... it's perfectly fine to be slower (i.e. even 10ms is NBD)...
-    --    VERSUS, siturations where I might repeat a key to change a slider in which case then speed is critical
-    --
-    -- o.btnBrowser = o.topToolbarElement:childrenWithRole("AXCheckBox")[3]
-    -- o.btnTimeline = o.topToolbarElement:childrenWithRole("AXCheckBox")[4]
-    --
-    -- toolbar 1	AXToolbar		toolbar 1 of
-    --     button 1	AXButton	desc="Import media from a device, camera, or archive"	button 1 of
-    --     checkbox 1	AXCheckBox	desc="Show or hide the Keyword Editor"	checkbox 1 of
-    --     checkbox 2	AXCheckBox		checkbox 2 of
-    --     group 1	AXGroup		group 1 of
-    --     checkbox 3	AXCheckBox	desc="Show or hide the Browser"	checkbox 3 of
-    --     checkbox 4	AXCheckBox	desc="Show or hide the Timeline"	checkbox 4 of
-    --     checkbox 5	AXCheckBox	desc="Show or hide the Inspector"	checkbox 5 of
-    --     button 2	AXButton	desc="Share the project, event clip, or Timeline range"	button 2 of
-
-    return o
 end
 
 -- function StreamDeckFcpxInspectorTitlePanelEnsureClosed()
