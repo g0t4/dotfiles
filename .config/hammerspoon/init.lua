@@ -12,6 +12,8 @@ local loggers = require("config.loggers") -- s/b early to mute core messages
 -- FOR NOW, leave my log supression off and see how I feel about things
 --   perhaps study the hs code to find what it is doing and see if there is a workaround
 --    or maybe build your own hs... OR, submit a patch with a toggle config option to supress more logs?
+-- OR, just leave my print override in place? b/c then it works!
+-- TODO or can I defer my print override partially?
 
 require("config.helpers.all") -- globals, import once
 
@@ -102,6 +104,7 @@ require("config.macros.init")
 hs.loadSpoon("EmmyLua") -- <2ms to check is fine... NBD to run all the time
 
 -- now that we're done with init, put back regular print?
+-- this pooches `hs -C` but I am going to leave it all off anyways, and see how I feel about using REPL for debug
 -- loggers.unmuteCoreMessages()
 
 
