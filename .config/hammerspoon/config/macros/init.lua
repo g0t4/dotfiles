@@ -2,6 +2,9 @@ local M = {}
 
 -- *** streamdeck Keyboard Maestro wrapper to catch errors and log them and rethrow for KM to show too ***
 function StreamDeckKeyboardMaestroRunner(what)
+    -- USED in KM Macros => look at kmsync file:
+    --    plutil -p Keyboard\ Maestro\ Macros.kmsync  | grep "StreamDeckKeyboardMaestroRunner"
+
     -- I want error in hammerspoon logs too
     -- I also like the notification from KM b/c that is immediately visible
     --   FYI AFAICT KM will use exit code to decide when to show for NOTIFICATIONS
