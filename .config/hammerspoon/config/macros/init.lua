@@ -1,58 +1,4 @@
 local M = {}
-
-function FcpxTitlePanelFocusOnElementByAttr(attrName, attrValue)
-    FcpxFindTitlePanelCheckbox(function(checkbox)
-        local grandparent = checkbox:attributeValue("AXParent"):attributeValue("AXParent")
-        local scrollarea1 = grandparent:attributeValue("AXChildren")[1][1][1]
-        GetChildWithAttr(scrollarea1, attrName, attrValue):setAttributeValue("AXFocused", true)
-    end)
-end
-
-function FcpxTitlePanelFocusOnElementByDescription(description)
-    -- FYI it is ok to just assume the control is there, it will mostly just work and when it doesn't then I can troubleshoot
-    --    that is how most of my applescripts work too!
-    --    LATER, PRN, I can develop automatic troubleshooting too... even when using these presumptive [1][1][2] et
-    FcpxTitlePanelFocusOnElementByAttr("AXDescription", description)
-end
-
-function TestBack2BackElementSearch()
-    EnsureClearedWebView()
-
-    local function afterYSliderSearch(_, searchTask, numResultsAdded)
-        PrintToWebView("results: ", numResultsAdded)
-        DumpHtml(searchTask)
-    end
-
-    local function afterSearch(_, searchTask, numResultsAdded)
-        PrintToWebView("results: ", numResultsAdded)
-        DumpHtml(searchTask)
-
-        -- SHIT I forgot I needed to nest the next search! interesting that it goes faster still...
-        --   also now I can't recall if slider is neseted under title panel button... I think it's not! :)
-        local ySliderCriteria = { attribute = "AXHelp", value = "Y Slider" }
-        FindOneElement(GetFcpxAppElement(), ySliderCriteria, afterYSliderSearch)
-    end
-
-    -- OMG finding button to show panels is nearly instant!! I can use this as a first search (Fallback) if fixed path doesn't work!
-    --     OR Can I just search every time?
-    --     FYI must set count = 1 to be fast
-    local criteria = { attribute = "AXDescription", value = "Title Inspector" } -- 270ms to 370ms w/ count=1
-
-    -- slider (deeply nested)
-    -- local criteria = { attribute = "AXHelp", value = "Y Slider" } -- 2.5s w/ count=1 (~10+ w/o)
-
-    FindOneElement(GetFcpxAppElement(), criteria, afterSearch)
-
-    -- NOTES:
-    -- takes < half time if I know there's only one item I want to find!
-    --   taking 5 seconds for a full search in FCPX...
-    --   deosn't mean I can't search but I need to narrow my search scope (i.e. find panel I want and search there instead of globally in app!)
-    --     search can be used to provide some flexibility when controls rearrange or otherwise aren't consistently in same spots
-    --     IDEA => find a fixed scope (i.e. panel) and search within it (the dynamic scope)... OR...
-    --        trigger search if fixed element specifier no longer works and if search works then alert use to update to new specifier!
-    --        SO maybe search should be on demand so I can search when something moves? and then I would want app wide search most likely
-end
-
 -- *** streamdeck Keyboard Maestro wrapper to catch errors and log them and rethrow for KM to show too ***
 function StreamDeckKeyboardMaestroRunner(what)
     -- I want error in hammerspoon logs too
@@ -237,7 +183,6 @@ function SearchForDevToolsTextArea(callbackWithSelectedText)
         end
     )
 end
-
 
 require("config.macros.google-docs")
 require("config.macros.msft_office")
