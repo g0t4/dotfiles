@@ -4,16 +4,18 @@
 -- TLDR => hs.* was not built for LS to work, you just have to know what to use (or look at docs)
 -- JUST PUT hs global into lua LS config and be done with that
 
--- *** suppress hard coded `Loading extension:` on hs startup
-local loggers = require("config.loggers") -- s/b early to mute core messages
--- TODO can I suppress the keymap logs without interferring with the `hs -C` console mirroring to REPL?
---   if not, maybe add a toggle to disable my loggers
---   OR, do I care if I plan to just use the repl to debug now?
--- FOR NOW, leave my log supression off and see how I feel about things
---   perhaps study the hs code to find what it is doing and see if there is a workaround
---    or maybe build your own hs... OR, submit a patch with a toggle config option to supress more logs?
--- OR, just leave my print override in place? b/c then it works!
--- TODO or can I defer my print override partially?
+-- *** suppresses hard coded `Loading extension:` on hs startup
+-- local loggers = require("config.loggers") -- s/b early to mute core messages
+-- FYI this inteferes with `hs -C`... so I commented it out b/c if I use `hs -C` for debugging
+--   then I am fine b/c the extension load messages don't show up there on reload config!
+--   smth with reattaching on reload, which is fine by me!
+--   otherwise, if the messages get in way when using console, then look into how print is overridden in hs:
+--     https://github.com/Hammerspoon/hammerspoon/blob/master/extensions/_coresetup/_coresetup.lua#L219
+--     it uses hs._logmessage... is there a way to configure logging somewhere to supress the "Loading extension" message w/o override print?
+--     _logmessage is a c function:
+--       https://github.com/Hammerspoon/hammerspoon/blob/master/Hammerspoon/MJLua.m#L790
+--       does it use the same log cocept I've seen in some modules that would allow a threshold to be set?
+--
 
 require("config.helpers.all") -- globals, import once
 
