@@ -4,7 +4,8 @@
 -- TLDR => hs.* was not built for LS to work, you just have to know what to use (or look at docs)
 -- JUST PUT hs global into lua LS config and be done with that
 
--- local loggers = require("config.loggers") -- s/b early to mute core messages
+-- *** suppress hard coded `Loading extension:` on hs startup
+local loggers = require("config.loggers") -- s/b early to mute core messages
 -- TODO can I suppress the keymap logs without interferring with the `hs -C` console mirroring to REPL?
 --   if not, maybe add a toggle to disable my loggers
 --   OR, do I care if I plan to just use the repl to debug now?
