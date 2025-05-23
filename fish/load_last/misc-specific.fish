@@ -2464,10 +2464,11 @@ if command -q hs
     abbr hs_clone_from_console "hs -C"
     # mirroring from console => hs cmd/repl
     abbr hs_clone_to_console "hs -P"
-    #*** TODO why isn't -C/-P working? I can't get anything to go either way...
-    #  ALSO, if I use print, it shows here in REPL output
-    #  BUT, if I call a function (that has a print), it goes into the console?
-    #  what is the logic for these? is print overloaded just for the REPL? if so how is it not showing stuff from functions too?
+    # FYI -C/-P won't work with my hack to suppress the hard coded print("-- Loading extension: "..key)
+    #   which is baked into hammerspoon's code:
+    #     https://github.com/Hammerspoon/hammerspoon/blob/master/extensions/_coresetup/_coresetup.lua#L456
+    #   so my override (which temporarily overrides print, probably means -C/-P patches my print override
+    #   so when I put the original print back then the override is gone!
 
     # running commands
     abbr hsc "hs -c" # run a command

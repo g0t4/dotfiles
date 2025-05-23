@@ -4,7 +4,14 @@
 -- TLDR => hs.* was not built for LS to work, you just have to know what to use (or look at docs)
 -- JUST PUT hs global into lua LS config and be done with that
 
-local loggers = require("config.loggers") -- s/b early to mute core messages
+-- local loggers = require("config.loggers") -- s/b early to mute core messages
+-- TODO can I suppress the keymap logs without interferring with the `hs -C` console mirroring to REPL?
+--   if not, maybe add a toggle to disable my loggers
+--   OR, do I care if I plan to just use the repl to debug now?
+-- FOR NOW, leave my log supression off and see how I feel about things
+--   perhaps study the hs code to find what it is doing and see if there is a workaround
+--    or maybe build your own hs... OR, submit a patch with a toggle config option to supress more logs?
+
 require("config.helpers.all") -- globals, import once
 
 local start_time = hs.timer.secondsSinceEpoch()
@@ -94,7 +101,7 @@ require("config.macros.init")
 hs.loadSpoon("EmmyLua") -- <2ms to check is fine... NBD to run all the time
 
 -- now that we're done with init, put back regular print?
-loggers.unmuteCoreMessages()
+-- loggers.unmuteCoreMessages()
 
 
 -- require("config.learn.metatables")
