@@ -1,4 +1,5 @@
 local M = {}
+
 -- *** streamdeck Keyboard Maestro wrapper to catch errors and log them and rethrow for KM to show too ***
 function StreamDeckKeyboardMaestroRunner(what)
     -- I want error in hammerspoon logs too
@@ -26,6 +27,8 @@ function StreamDeckKeyboardMaestroRunner(what)
     -- TODO verify it still shows notification for KM?
 end
 
+require("config.macros.brave")
+require("config.macros.fcpx")
 require("config.macros.google-docs")
 require("config.macros.msft_office")
 
