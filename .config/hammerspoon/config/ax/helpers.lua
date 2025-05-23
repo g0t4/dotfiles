@@ -520,4 +520,11 @@ function FindOneElement(app, criteria, callback)
     app:elementSearch(afterSearch, criteria, namedModifiers)
 end
 
-
+local application = require("hs.application")
+---@return hs.axuielement
+function GetAppElement(appName)
+    local app = application.find(appName)
+    local appElement = hs.axuielement.applicationElement(app)
+    assert(appElement ~= nil, "could not find app element for app: " .. appName)
+    return appElement
+end
