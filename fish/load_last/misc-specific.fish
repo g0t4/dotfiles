@@ -2455,10 +2455,12 @@ if command -q hs
     # hs [-i]  # REPL
     # echo script | hs # run script
 
+    # * interactive REPL mode:
+    # -i is default on, so don't need to pass it
     # let this annoy me as a reminder that it exists (type hs<space> expands to hs -C)
-    abbr hs "hs -iC" # interactive, is default mode
-    abbr hs_interactive "hs -iC" # mostly a reminder that interactive mode exists!
-    abbr hsiq "hs -iq"
+    abbr hs "hs -C" # interactive, is default mode
+    abbr hs_interactive "hs -C" # mostly a reminder that interactive mode exists!
+    abbr hsq "hs -q"
     #
     # REPL + mirroring?
     # mirroring hs cmd/repl => hs console
@@ -2473,6 +2475,6 @@ if command -q hs
 
     # running commands
     abbr hsc "hs -c" # run a command
-    abbr hscq "hs -cq" # quiet mode (only errors and final result)
+    abbr hscq "hs -c -q" # quiet mode (only errors and final result)
 
 end
