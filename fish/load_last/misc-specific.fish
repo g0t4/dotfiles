@@ -2446,3 +2446,31 @@ end
 
 # * uname
 abbr una "uname -a"
+
+if command -q hs
+    # hammerspoon
+
+    # hs command usage:
+    # hs -c foo -c bar # run foo => then bar
+    # hs [-i]  # REPL
+    # echo script | hs # run script
+
+    # abbr hsi "hs -i" # interactive, is default mode
+    abbr hs_interactive "hs -i" # mostly a reminder that interactive mode exists!
+    abbr hsiq "hs -iq"
+    #
+    # REPL + mirroring?
+    # mirroring hs cmd/repl => hs console
+    abbr hs_clone_from_console "hs -C"
+    # mirroring from console => hs cmd/repl
+    abbr hs_clone_to_console "hs -P"
+    #*** TODO why isn't -C/-P working? I can't get anything to go either way...
+    #  ALSO, if I use print, it shows here in REPL output
+    #  BUT, if I call a function (that has a print), it goes into the console?
+    #  what is the logic for these? is print overloaded just for the REPL? if so how is it not showing stuff from functions too?
+
+    # running commands
+    abbr hsc "hs -c" # run a command
+    abbr hscq "hs -cq" # quiet mode (only errors and final result)
+
+end
