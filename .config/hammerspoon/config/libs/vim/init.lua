@@ -8,10 +8,11 @@
 --   https://github.com/neovim/neovim/blob/master/src/gen/preload_nlua.lua#L12
 --   which imports shared as starting point:
 --     https://github.com/neovim/neovim/blob/master/runtime/lua/vim/shared.lua
---
-local vim = {}
+local vim = require("config.libs.vim.shared")
 vim.iter  = require("config.libs.vim.iter")
--- TODO add more things I love!
+vim.inspect = require("config.libs.vim.inspect")
+-- TODO add more things I love from:  https://github.com/neovim/neovim/blob/master/runtime/lua/vim
+
 
 
 return vim
