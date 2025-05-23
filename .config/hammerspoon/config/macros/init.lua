@@ -1,9 +1,6 @@
 local application = require("hs.application")
 local M = {}
 
--- TODO impement cancelation of search task(s)?
-M.searchTasks = {}
-
 ---@return hs.axuielement
 function GetAppElement(appName)
     local app = application.find(appName)
