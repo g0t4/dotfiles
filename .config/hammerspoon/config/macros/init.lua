@@ -1,12 +1,4 @@
 local M = {}
-function GetChildWithAttr(parent, attrName, attrValue)
-    for _, child in ipairs(parent) do
-        if child:attributeValue(attrName) == attrValue then
-            return child
-        end
-    end
-    return nil
-end
 
 function FcpxTitlePanelFocusOnElementByAttr(attrName, attrValue)
     FcpxFindTitlePanelCheckbox(function(checkbox)

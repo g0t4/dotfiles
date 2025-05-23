@@ -528,3 +528,12 @@ function GetAppElement(appName)
     assert(appElement ~= nil, "could not find app element for app: " .. appName)
     return appElement
 end
+
+function GetChildWithAttr(parent, attrName, attrValue)
+    for _, child in ipairs(parent) do
+        if child:attributeValue(attrName) == attrValue then
+            return child
+        end
+    end
+    return nil
+end
