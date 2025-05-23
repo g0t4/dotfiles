@@ -2455,8 +2455,9 @@ if command -q hs
     # hs [-i]  # REPL
     # echo script | hs # run script
 
-    # abbr hsi "hs -i" # interactive, is default mode
-    abbr hs_interactive "hs -i" # mostly a reminder that interactive mode exists!
+    # let this annoy me as a reminder that it exists (type hs<space> expands to hs -C)
+    abbr hs "hs -iC" # interactive, is default mode
+    abbr hs_interactive "hs -iC" # mostly a reminder that interactive mode exists!
     abbr hsiq "hs -iq"
     #
     # REPL + mirroring?
