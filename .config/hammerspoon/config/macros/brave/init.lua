@@ -15,14 +15,14 @@ function GetBraveFocusedWindowElement()
     return window, app
 end
 
-function PrintActions(elem)
+local function PrintActions(elem)
     print("ACTIONS:")
     for i, n in pairs(elem:actionNames() or {}) do
         print(n)
     end
 end
 
-function PrintAttributes(elem)
+local function PrintAttributes(elem)
     print("ATTRIBUTES:")
     for n, v in pairs(elem) do
         print(n, hs.inspect(v))
