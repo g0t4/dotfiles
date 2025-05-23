@@ -33,3 +33,15 @@ axbrowse.browse(hs.axuielement.applicationElement(hs.application("Final Cut Pro"
 -- * inspectors
 local inspectors = require("config.libs.asmagill.inspectors")
 print(hs.inspect(inspectors))
+
+
+-- * hs.noises
+-- FYI, again, import so type hints work, else won't on things like :start() below
+local hs_noises = require("hs.noises")
+-- using hs.noises global provides some type hints
+--  but nowhere near as complete as what you get with require'd modules
+--  IIRC someone had to add the hs.noises global type hints via "definition" files
+local handler = hs_noises.new(function(noise_type)
+    print("noise type", noise_type)
+end)
+handler:start()
