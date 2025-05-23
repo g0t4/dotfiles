@@ -1,4 +1,155 @@
--- TODO! move all config for FCPX streamdeck macros and other automations here)
+
+---@return hs.axuielement
+function GetFcpxAppElement()
+    -- 1.4ms for com.apple.FinalCut
+    return GetAppElement("com.apple.FinalCut")
+end
+
+---@return hs.axuielement, hs.axuielement
+function GetFcpxEditorWindow()
+    local fcpx = GetFcpxAppElement()
+    assert(fcpx, "GetFcpxEditorWindow: could not find Final Cut Pro")
+    if fcpx:attributeValue("AXTitle") ~= APPS.FinalCutPro then
+        print("GetFcpxEditorWindow: unexpected title", fcpx:attributeValue("AXTitle"))
+        return nil
+    end
+
+    -- IIRC this is from the main window (not app) element:
+    -- AXMain = true
+    -- AXMinimized = false
+    -- AXModal = false
+    -- AXRole = "AXWindow"
+    -- AXRoleDescription = "standard window"
+    -- AXSections = {1={SectionDescription="Toolbar", SectionUniqueID="AXToolbar", SectionObject= (AXToolbar)}, 2={SectionDescription="Content", SectionUniqueID="AXContent", SectionObject= (AXScrollArea)}, 3={SectionUniqueID="AXContainer", SectionObject= (AXGroup)}, 4={SectionUniqueID="AXContainer", SectionObject= (AXGroup)}, 5={SectionUniqueID="AXContainer", SectionObject= (AXGroup)}, 6={SectionUniqueID="AXContainer", SectionObject= (AXGroup)}, 7={SectionUniqueID="AXContainer", SectionObject= (AXGroup)}, 8={SectionUniqueID="AXContainer", SectionObject= (AXGroup)}, 9={SectionUniqueID="AXContainer", SectionObject= (AXGroup)}, 10={SectionUniqueID="AXContainer", SectionObject= (AXGroup)}, 11={SectionUniqueID="AXContainer", SectionObject= (AXGroup)}, 12={SectionUniqueID="AXContainer", SectionObject= (AXGroup)}, 13={SectionUniqueID="AXContainer", SectionObject= (AXGroup)}, 14={SectionUniqueID="AXContainer", SectionObject= (AXGroup)}, 15={SectionUniqueID="AXContainer", SectionObject= (AXGroup)}, 16={SectionUniqueID="AXContainer", SectionObject= (AXGroup)}}
+    --   TODO AXSections are AXSections reusable entry points? in predictable order? ... that would rock if I could find panels using that, I bet I can
+    -- AXSize = {h=1080.0, w=1920.0}
+    -- AXSubrole = "AXStandardWindow"
+    -- AXTitle = "Final Cut Pro"
+
+    return fcpx:attributeValue("AXFocusedWindow"), fcpx
+end
+
+---@class FcpxEditorWindow
+---@field window hs.axuielement
+---@field fcpx hs.axuielement
+---@field topToolbar FcpxTopToolbar
+---@field inspector FcpxInspectorPanel
+FcpxEditorWindow = {}
+FcpxEditorWindow.__index = FcpxEditorWindow
+
+function FcpxEditorWindow:new()
+    local FcpxInspectorPanel = require("config.macros.fcpx.inspector_panel")
+    local o = {}
+    setmetatable(o, self)
+    o.window, o.fcpx = GetFcpxEditorWindow()
+    o.topToolbar = FcpxTopToolbar:new(o.window:childrenWithRole("AXToolbar")[1])
+    -- everything below top toolbar
+    -- use _ to signal that it's not guaranteed to be there
+    o._mainSplitGroup = o.window:childrenWithRole("AXSplitGroup")[1]
+    print("main split group", hs.inspect(o._mainSplitGroup))
+    o.inspector = FcpxInspectorPanel:new(o)
+    return o
+end
+
+function FcpxEditorWindow:rightSidePanel()
+    -- FYI if overhead in lookup on every use, can memoize this... but not until I have proof its an issue.. and probabaly only for situations where 10ms is a problem
+    -- FOR NOW... defer everything beyond the window!
+    -- TODO this group is varying...  CAN I query smth like # elements and find what I want that way?
+    return self._mainSplitGroup:group(2)
+end
+
+function FcpxEditorWindow:rightSidePanelTopBar()
+    -- TODO this group is varying...
+    return self:rightSidePanel():group(2)
+end
+
+function FcpxEditorWindow:leftSideEverythingElse()
+    -- TODO use and rename this... b/c its not a left side panel, it's the rest of the UI (browser,timeline,events viewer,titles,generators,etc) - everything except the inspector (in my current layout)
+    -- TODO this group is varying...
+    return self._mainSplitGroup:group(1)
+end
+
+---@class FcpxTopToolbar
+FcpxTopToolbar = {}
+FcpxTopToolbar.__index = FcpxTopToolbar
+function FcpxTopToolbar:new(topToolbarElement)
+    local o = {}
+    setmetatable(o, self)
+    o.topToolbarElement = topToolbarElement
+    -- TODO consider a toggle for troubleshooting... that will check more carefully (i.e. for desc here)... but not when toggle is off, like an assertion (enabled in dev, disabled in prod)
+    local checkboxes = o.topToolbarElement:childrenWithRole("AXCheckBox")
+    o.btnInspector = checkboxes[5]
+    o.btnBrowser = checkboxes[3]
+    o.btnTimeline = checkboxes[4]
+    -- PRN use :matchCriteria w/ AXDescription instead of index?
+    --    TODO time the difference
+    --    FYI for tooggling a panel... it's perfectly fine to be slower (i.e. even 10ms is NBD)...
+    --    VERSUS, siturations where I might repeat a key to change a slider in which case then speed is critical
+    --
+    -- o.btnBrowser = o.topToolbarElement:childrenWithRole("AXCheckBox")[3]
+    -- o.btnTimeline = o.topToolbarElement:childrenWithRole("AXCheckBox")[4]
+    --
+    -- toolbar 1	AXToolbar		toolbar 1 of
+    --     button 1	AXButton	desc="Import media from a device, camera, or archive"	button 1 of
+    --     checkbox 1	AXCheckBox	desc="Show or hide the Keyword Editor"	checkbox 1 of
+    --     checkbox 2	AXCheckBox		checkbox 2 of
+    --     group 1	AXGroup		group 1 of
+    --     checkbox 3	AXCheckBox	desc="Show or hide the Browser"	checkbox 3 of
+    --     checkbox 4	AXCheckBox	desc="Show or hide the Timeline"	checkbox 4 of
+    --     checkbox 5	AXCheckBox	desc="Show or hide the Inspector"	checkbox 5 of
+    --     button 2	AXButton	desc="Share the project, event clip, or Timeline range"	button 2 of
+
+    return o
+end
+
+-- function StreamDeckFcpxInspectorTitlePanelEnsureClosed()
+--     not using
+--     local window = FcpxEditorWindow:new()
+--     window.inspector:ensureClosed()
+-- end
+
+function StreamDeckFcpxInspectorTitlePanelEnsureOpen()
+    local window = FcpxEditorWindow:new()
+    window.inspector:showTitleInspector()
+end
+
+function FcpxFindTitlePanelCheckbox(doWithTitlePanel)
+    local fcpx = GetFcpxAppElement()
+    local window = fcpx:attributeValue("AXFocusedWindow")
+    local checkbox = window:childrenWithRole("AXSplitGroup")[1]:childrenWithRole("AXGroup")[1]:childrenWithRole("AXSplitGroup")[1]:childrenWithRole("AXGroup")[2]:childrenWithRole("AXSplitGroup")[1]
+        :childrenWithRole("AXGroup")[5]:childrenWithRole("AXGroup")[2]:childrenWithRole("AXCheckBox")[1]
+    if checkbox ~= nil and checkbox:attributeValue("AXDescription") == "Title Inspector" then
+        print("found fixed path to title panel checkbox")
+
+        -- ensure title panel is visible!
+        if checkbox:attributeValue("AXValue") == 0 then
+            checkbox:performAction("AXPress")
+        end
+
+        doWithTitlePanel(checkbox)
+        return
+    end
+    print("[WARNING] no fixed path to title panel checkbox found, falling back to search which is going to be slower, fix the fixed path to speed things up!")
+
+    local criteria = { attribute = "AXDescription", value = "Title Inspector" } -- 270ms to 370ms w/ count=1
+    FindOneElement(fcpx, criteria, function(_, searchTask, numResultsAdded)
+        if numResultsAdded == 0 then
+            print("no title panel found")
+            return
+        end
+        local foundCheckbox = searchTask[1]
+
+        -- ensure title panel is visible!
+        if foundCheckbox:attributeValue("AXValue") == 0 then
+            foundCheckbox:performAction("AXPress")
+        end
+
+        doWithTitlePanel(foundCheckbox)
+    end)
+end
+
+
+
 
 -- * published parameters (for titles)
 
