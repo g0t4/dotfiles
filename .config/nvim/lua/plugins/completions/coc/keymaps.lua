@@ -42,11 +42,13 @@ vim.keymap.set('n', '<leader>cl', ':<C-u>CocLast<CR>', { noremap = true, silent 
 vim.keymap.set('n', '<leader>cn', ':<C-u>CocNext<CR>', { noremap = true, silent = true, nowait = true })
 vim.keymap.set('n', '<leader>cp', ':<C-u>CocPrev<CR>', { noremap = true, silent = true, nowait = true })
 vim.keymap.set('n', '<leader>cr', ':<C-u>CocListResume<CR>', { noremap = true, silent = true, nowait = true })
---
+
 vim.keymap.set('n', '<leader>ce', ':<C-u>CocList extensions<CR>', { noremap = true, silent = true, nowait = true })
 -- habituating this should be helpful while I learn more about coc commands I am not yet using:
 --   right after this opens, I can type to filter the list to a command so this is a super efficient way to not need keymaps for most commands
 vim.keymap.set('n', '<leader>cc', ':<C-u>CocList commands<CR>', { noremap = true, silent = true, nowait = true })
+
+-- * coc-callHierarchy related:
 -- show hierarchy of incoming/outgoing calls
 vim.keymap.set('n', '<leader>cci', ':<C-u>CocCommand document.showIncomingCalls<cr>', { noremap = true, silent = true, nowait = true })
 vim.keymap.set('n', '<leader>cco', ':<C-u>CocCommand document.showOutgoingCalls<cr>', { noremap = true, silent = true, nowait = true })

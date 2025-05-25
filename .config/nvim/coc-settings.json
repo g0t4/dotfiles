@@ -27,6 +27,10 @@
     "inlayHint.enable": false, // slow and get in the way (i.e. type hints that aren't in actual code)
     // "inlayHint.position": "eol", // terrible idea! stick with inline, or none
     // "inlayHint.enableParameter": false, // can remove just param hints
+    //
+    // coc-config-callHierarchy
+    // "callHierarchy.enableTooltip": true, // default false // show hover on cursor on item
+    "callHierarchy.splitCommand": "botright 60vs", // default "botright 30vs"
 
 
     *** pyright/python (w/ coc-pyright)
