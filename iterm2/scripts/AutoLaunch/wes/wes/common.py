@@ -133,7 +133,7 @@ async def get_font_details(session):
     font_size = splits[-1]
     return font_name, int(font_size)
 
-async def set_font_size(session, new_size):
+async def set_font_size(session: iterm2.Session, new_size):
     profile = await session.async_get_profile()
     print("set font size", new_size)
     font_name, _ = await get_font_details(session)
