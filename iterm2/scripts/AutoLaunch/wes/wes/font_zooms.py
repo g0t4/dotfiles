@@ -16,6 +16,7 @@ async def get_font_details(profile):
     return font_name, font_size
 
 async def set_font_size(profile, new_size):
+    print("set font size", new_size)
     font_name, _ = await get_font_details(profile)
     await profile.async_set_normal_font(f"{font_name} {new_size}")
 
@@ -26,7 +27,6 @@ async def smaller_font_wes_stops(connection: iterm2.Connection):
     # find font size smaller than current size
     new_font_size = [f for f in reversed(font_size_stops) if int(f) < int(font_size)]
     new_font_size = new_font_size[0] if len(new_font_size) > 0 else min(font_size_stops)
-    print(f"change font size from {font_size} to {new_font_size}")
     await profile.async_set_normal_font(font_name + " " + str(new_font_size))
 
 async def bigger_font_wes_stops(connection: iterm2.Connection):
@@ -36,5 +36,4 @@ async def bigger_font_wes_stops(connection: iterm2.Connection):
     # find font size bigger than current size
     new_font_size = [f for f in font_size_stops if int(f) > int(font_size)]
     new_font_size = new_font_size[0] if len(new_font_size) > 0 else max(font_size_stops)
-    print(f"change font size from {font_size} to {new_font_size}")
     await profile.async_set_normal_font(font_name + " " + str(new_font_size))
