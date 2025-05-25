@@ -801,3 +801,38 @@ bind alt-shift-b _fzf-nested-both-file-and-dirs-widget
 
 # *** chmod,chgrp,chown,chsh
 abbr chmx "chmod +x"
+
+function prepend_line_to_file
+    set line "$argv[2]"
+
+    # uses ed command to prepend a line
+    # 0a specifies to add at beginning of buffer
+    printf "0a\\n$line\n.\nwq\n" | ed -- "$argv[1]"
+end
+
+function shebangify
+    # chmod +x + shebang
+
+    set script_file $argv[1]
+    set extension (string lower $(path extension $script_file))
+
+    touch $script_file
+    chmod +x $script_file
+
+    if not string match --regex --quiet '.(sh|zsh|fish|bash)$' $extension
+        echo "not known script type"
+        return 1
+    end
+
+    if string match --quiet --regex '^#!.*' (head --lines=1 -- $script_file)
+        echo "shebang already present"
+        return 0
+    end
+
+    # strip leading .
+    set dotless_extension (string replace "." "" $extension)
+
+    # first prepend empty line (so its between shebang and contents of file)
+    prepend_line_to_file "$script_file" ""
+    prepend_line_to_file "$script_file" "#!/usr/bin/env $dotless_extension"
+end
