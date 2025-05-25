@@ -43,3 +43,29 @@ snippet a1 "array of array"
 
 snippet a2 "array of array"
 {{ ${0} }}
+
+
+# *** busted style testing (i.e. plenary)
+
+snippet busted_file
+local assert = require("luassert")
+describe("$1", function()
+    it("$2", function()
+        $0
+    end)
+end)
+
+# describe for busted tests
+snippet busted_describe_it
+describe("$1", function()
+    it("$2", function()
+        $0
+    end)
+end)
+
+# describe + it
+snippet busted_it
+it("$1", function()
+    $0
+end)
+
