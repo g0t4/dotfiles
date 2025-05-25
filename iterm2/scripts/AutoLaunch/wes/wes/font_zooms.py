@@ -24,7 +24,6 @@ async def smaller_font_wes_stops(connection: iterm2.Connection):
     session = await get_current_session_throw_if_none(connection)
     profile = await session.async_get_profile()
     _, font_size = await get_font_details(profile)
-    # find font size smaller than current size
     smaller_font_size = [f for f in reversed(font_size_stops) if int(f) < int(font_size)]
     smaller_font_size = smaller_font_size[0] if len(smaller_font_size) > 0 else min(font_size_stops)
     await set_font_size(profile, smaller_font_size)
@@ -33,7 +32,6 @@ async def bigger_font_wes_stops(connection: iterm2.Connection):
     session = await get_current_session_throw_if_none(connection)
     profile = await session.async_get_profile()
     _, font_size = await get_font_details(profile)
-    # find font size bigger than current size
     bigger_font_size = [f for f in font_size_stops if int(f) > int(font_size)]
     bigger_font_size = bigger_font_size[0] if len(bigger_font_size) > 0 else max(font_size_stops)
     await set_font_size(profile, bigger_font_size)
