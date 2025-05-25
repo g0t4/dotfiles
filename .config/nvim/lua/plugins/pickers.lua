@@ -323,11 +323,14 @@ return {
                 -- get file extension from current buffer
                 local file_extension = vim.fn.expand('%:e')
                 print(file_extension)
-                -- local default = vim.fn.expand('<cword>') .. '.' .. file_extension
-                local default = "-G '" .. file_extension .. "' '" .. vim.fn.expand('<cword>') .. "'"
+
+                local current_word = vim.fn.expand('<cword>')
+                -- local default_ag = "-G " .. file_extension .. " '" .. current_word .. "'"
+                local default_rg = "-g *.lua '" .. current_word .. "'"
+
 
                 require('telescope.builtin').live_grep({
-                    default_text = default
+                    default_text = default_rg
                 })
             end
 
