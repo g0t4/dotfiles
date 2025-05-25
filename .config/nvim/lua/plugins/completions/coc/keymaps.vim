@@ -276,32 +276,6 @@ xmap <silent> <C-S-s> <Plug>(coc-range-select)
 " provide custom statusline: lightline.vim, vim-airline
 "set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 
-" * CoCList/goto related keymaps
-" TODO habituate
-"   this is like loclist and quickfix, but specific to CoC
-"   i.e. if you find refs => go to first one => wanna go next in list:
-"     :CocNext/:CocPrev
-" FYI using <leader>c as prefix for now, that way these are "namespaced"
-"   means WhichKey will help me recall them
-" CocList has fuzzy matchers, so a nice way to grok the relevant info (i.e. diagnostics or outline)
-"
-nnoremap <silent><nowait> <leader>ca  :<C-u>CocList diagnostics<cr>
-" Find symbol of current document (outline)
-" wow this is a nice way to jump to where I want for symobls in current file
-nnoremap <silent><nowait> <leader>co  :<C-u>CocList outline<cr>
-" Search workspace symbols
-nnoremap <silent><nowait> <leader>cs  :<C-u>CocList -I symbols<cr>
-nnoremap <silent><nowait> <leader>cf  :<C-u>CocFirst<CR>
-nnoremap <silent><nowait> <leader>cl  :<C-u>CocLast<CR>
-" * resume last list/search (i.e. goto refs)
-nnoremap <silent><nowait> <leader>cn  :<C-u>CocNext<CR>
-nnoremap <silent><nowait> <leader>cp  :<C-u>CocPrev<CR>
-nnoremap <silent><nowait> <leader>cr  :<C-u>CocListResume<CR>
-" mnemonic coc [r]esume, coc[n]ext, coc[p]rev
-"
-" not that important to me, can remove:
-nnoremap <silent><nowait> <leader>ce  :<C-u>CocList extensions<cr>
-nnoremap <silent><nowait> <leader>cc  :<C-u>CocList commands<cr>
 "
 "
 " * prev/next navigation using ][ (careful with these)
