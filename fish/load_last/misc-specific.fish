@@ -1373,10 +1373,13 @@ if command -q ollama
     abbr olsg "OLLAMA_NUM_PARALLEL=1 OLLAMA_HOST='http://0.0.0.0:11434' $_ollama_serve"
     abbr olsgd "OLLAMA_NUM_PARALLEL=1 OLLAMA_DEBUG=1 OLLAMA_HOST='http://0.0.0.0:11434' $_ollama_serve"
     #
+    # * ollama config code: https://github.com/ollama/ollama/blob/main/envconfig/config.go
+    #    i.e. OLLAMA_KEEP_ALIVE=10m0s
+    #
     # I am starting to understand the value of just serving a single model at a time (per endpoint)... i.e. to control params through env vars and not worry about model to model differences
     abbr olsq ols_qwen
     abbr olsqd ols_qwen_debug
-    set _ollama_qwen "OLLAMA_CONTEXT_LENGTH=8192 OLLAMA_NUM_PARALLEL=4 OLLAMA_HOST='http://0.0.0.0:11434' eval $_ollama_serve"
+    set _ollama_qwen "OLLAMA_CONTEXT_LENGTH=8192 OLLAMA_KEEP_ALIVE=10m OLLAMA_NUM_PARALLEL=4 OLLAMA_HOST='http://0.0.0.0:11434' eval $_ollama_serve"
     function ols_qwen_debug
         set cmd "OLLAMA_DEBUG=1 $_ollama_qwen"
         echo "$cmd\n" | bat -l fish
