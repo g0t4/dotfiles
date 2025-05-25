@@ -320,21 +320,16 @@ return {
             -- end, { desc = "Help grep, think :helpgrep but with telescope" })
 
             function live_grep_word_under_cursor_same_file_type()
-                -- get file extension from current buffer
-                local file_extension = vim.fn.expand('%:e')
-                print(file_extension)
-
+                local buffers_file_extension = vim.fn.expand('%:e')
                 local current_word = vim.fn.expand('<cword>')
-                -- local default_ag = "-G " .. file_extension .. " '" .. current_word .. "'"
-                local default_rg = "-g *.lua '" .. current_word .. "'"
-
 
                 require('telescope.builtin').live_grep({
-                    default_text = default_rg
+                    -- default_text = "-G " .. file_extension .. " '" .. current_word .. "'" -- ag
+                    default_text = "-g *." .. buffers_file_extension .. " '" .. current_word .. "'" -- rg
                 })
             end
 
-            vim.keymap.set('n', '<leader>wf', live_grep_word_under_cursor_same_file_type)
+            vim.keymap.set('n', '<leader>wt', live_grep_word_under_cursor_same_file_type)
 
             function live_grep_word_under_cursor()
                 require('telescope.builtin').live_grep({
