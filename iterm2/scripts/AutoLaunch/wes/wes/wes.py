@@ -7,7 +7,7 @@ from common import *
 from og_ask import *
 from split import *
 from semantic_daemon import *
-
+from font_zooms import *
 
 async def main(connection: iterm2.Connection):
 
@@ -107,6 +107,15 @@ async def main(connection: iterm2.Connection):
             await on_f9(connection)
             return
 
+        e = keystroke.keycode == iterm2.Keycode.ANSI_MINUS
+        if e and control and shift and command:
+            await smaller_font_wes_stops(connection)
+            return
+        e = keystroke.keycode == iterm2.Keycode.ANSI_EQUAL
+        if e and control and shift and command:
+            await bigger_font_wes_stops(connection)
+            return
+
     async def keystroke_monitor(connection):
         async with iterm2.KeystrokeMonitor(connection) as mon:
             while True:
@@ -121,7 +130,6 @@ async def main(connection: iterm2.Connection):
 
     asyncio.create_task(keystroke_monitor(connection))
     asyncio.create_task(semantic_daemon(connection))
-
 
 iterm2.run_forever(main)
 
