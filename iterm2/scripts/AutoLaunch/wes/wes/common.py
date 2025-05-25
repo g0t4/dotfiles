@@ -131,7 +131,7 @@ async def get_font_details(session):
     splits = str(font).split(' ')
     font_name = ' '.join(splits[:-1])
     font_size = splits[-1]
-    return font_name, font_size
+    return font_name, int(font_size)
 
 async def set_font_size(session, new_size):
     profile = await session.async_get_profile()
