@@ -3,9 +3,8 @@
 
 
 local os = require("os")
--- local uv = vim.loop
 local uv = require("luv")
--- ? does it matter if I use luv or vim.loop?
+-- ? does it matter if I use luv or vim.uv?
 
 local socket_path = os.getenv("HOME") .. "/.config/wes-iterm2/run/semantic-click-handler.sock"
 

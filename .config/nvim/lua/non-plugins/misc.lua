@@ -30,7 +30,7 @@ function stop_watching()
 end
 
 function start_watching(func)
-    local uv = vim.loop
+    local uv = vim.uv
     _G.timer = uv.new_timer()
 
     _G.timer:start(0, 1000, vim.schedule_wrap(function()
