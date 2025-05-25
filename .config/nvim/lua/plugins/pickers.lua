@@ -319,20 +319,34 @@ return {
             --     })
             -- end, { desc = "Help grep, think :helpgrep but with telescope" })
 
+
+
+            function live_grep_current_file_only()
+                -- think of this as an alternative to / searching
+                local current_file_path = vim.fn.expand('%')
+                local current_word = vim.fn.expand('<cword>')
+
+                require("telescope").extensions.live_grep_args.live_grep_args({
+                    default_text = "-g '" .. current_file_path .. "' " .. current_word .. "" -- rg
+                })
+            end
+
+            vim.keymap.set('n', '<leader>wf', live_grep_current_file_only)
+
             function live_grep_word_under_cursor_same_file_type()
                 local buffers_file_extension = vim.fn.expand('%:e')
                 local current_word = vim.fn.expand('<cword>')
 
-                require('telescope.builtin').live_grep({
+                require("telescope").extensions.live_grep_args.live_grep_args({
                     -- default_text = "-G " .. file_extension .. " '" .. current_word .. "'" -- ag
-                    default_text = "-g *." .. buffers_file_extension .. " '" .. current_word .. "'" -- rg
+                    default_text = "-g *." .. buffers_file_extension .. " " .. current_word .. "" -- rg
                 })
             end
 
             vim.keymap.set('n', '<leader>wt', live_grep_word_under_cursor_same_file_type)
 
             function live_grep_word_under_cursor()
-                require('telescope.builtin').live_grep({
+                require("telescope").extensions.live_grep_args.live_grep_args({
                     default_text = vim.fn.expand('<cword>')
                 })
             end
