@@ -320,11 +320,11 @@ return {
             -- end, { desc = "Help grep, think :helpgrep but with telescope" })
 
 
-
-            function live_grep_current_file_only()
+            function live_grep_current_file_only(big_word)
                 -- think of this as an alternative to / searching
                 local current_file_path = vim.fn.expand('%')
-                local current_word = vim.fn.expand('<cword>')
+
+                local current_word = vim.fn.expand(big_word and '<cWORD>' or '<cword>')
 
                 require("telescope").extensions.live_grep_args.live_grep_args({
                     default_text = "-g '" .. current_file_path .. "' " .. current_word .. "" -- rg
@@ -332,10 +332,11 @@ return {
             end
 
             vim.keymap.set('n', '<leader>wf', live_grep_current_file_only)
+            vim.keymap.set('n', '<leader>Wf', function() live_grep_current_file_only(true) end)
 
-            function live_grep_word_under_cursor_same_file_type()
+            function live_grep_word_under_cursor_same_file_type(big_word)
                 local buffers_file_extension = vim.fn.expand('%:e')
-                local current_word = vim.fn.expand('<cword>')
+                local current_word = vim.fn.expand(big_word and '<cWORD>' or '<cword>')
 
                 require("telescope").extensions.live_grep_args.live_grep_args({
                     -- default_text = "-G " .. file_extension .. " '" .. current_word .. "'" -- ag
@@ -344,16 +345,19 @@ return {
             end
 
             vim.keymap.set('n', '<leader>wt', live_grep_word_under_cursor_same_file_type)
+            vim.keymap.set('n', '<leader>Wt', function() live_grep_word_under_cursor_same_file_type(true) end)
 
-            function live_grep_word_under_cursor()
+            function live_grep_word_under_cursor(big_word)
                 require("telescope").extensions.live_grep_args.live_grep_args({
-                    default_text = vim.fn.expand('<cword>')
+                    default_text = vim.fn.expand(big_word and '<cWORD>' or '<cword>'),
                 })
             end
 
             -- use ww if I am impatient w.r.t. the delay b/c of wf keymap
             vim.keymap.set('n', '<leader>w', live_grep_word_under_cursor)
+            vim.keymap.set('n', '<leader>W', function() live_grep_word_under_cursor(true) end)
             vim.keymap.set('n', '<leader>ww', live_grep_word_under_cursor)
+            vim.keymap.set('n', '<leader>WW', function() live_grep_word_under_cursor(true) end)
         end,
     },
 
