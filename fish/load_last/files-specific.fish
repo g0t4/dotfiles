@@ -807,11 +807,9 @@ function prepend_to_file
     # uses ed command to prepend a line
     # 0a specifies to add at beginning of buffer
     # ok to be multiple lines... . is effectively marks when to stop appending content and then wq commands save and quit (just like vim which is based on ed)
-    # printf "0a\\n$line\n.\nwq\n" | ed -- "$argv[1]"
 
-    # read stdin to prepend
-    read what
-    printf "0a\\n$what\n.\nwq\n" | ed -- "$argv[1]"
+    read _stdin
+    printf "0a\\n$_stdin\n.\nwq\n" | ed -- "$argv[1]"
 
 end
 
@@ -837,10 +835,6 @@ function shebangify
     # strip leading .
     set dotless_extension (string replace "." "" $extension)
 
-    # first prepend empty line (so its between shebang and contents of file)
-    # prepend_line_to_file "$script_file" ""
-    # prepend_line_to_file "$script_file" "#!/usr/bin/env $dotless_extension"
     echo "#!/usr/bin/env $dotless_extension\n" | prepend_to_file $script_file
-
 
 end
