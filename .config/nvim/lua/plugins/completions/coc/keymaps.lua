@@ -76,7 +76,8 @@ vim.keymap.set('n', '<leader>gi', '<Plug>(coc-implementation)', { silent = true 
 vim.keymap.set('n', '<leader>gr', '<Plug>(coc-references)', { silent = true })
 -- vim.keymap.set('n', '<leader>gr', '<Cmd>Telescope coc references<CR>', { silent = true })
 
--- TODO shift-F12 not working, is that chord already mapped and/or not coming across as such?
+-- FYI S-F12 doesn't work b/c IIRC my profile in iTerm2 remaps it to a diff escape sequence... not sure what that was for anymore but if it was fish-shell I can probably reverse it?!
+--   by the way <F12> and <S-M-F12> all work, and I see the entry in the profile => keys so yeah that has to be it
 vim.keymap.set('n', '<S-F12>', '<Plug>(coc-references)', { silent = true })
 -- vim.keymap.set('n', '<S-F12>', '<Cmd>Telescope coc references<CR>', { silent = true })
 
