@@ -52,6 +52,11 @@ local config = {
         ["nvim "] = "Dump vim.api.nvim_", -- tab to auto open completion!
         ["nma"] = "nmap", -- for now just setup to type the p for me... since I need nml for leader keys
         ["nml"] = "nmap <leader>",
+        ["ima"] = "imap",
+        ["iml"] = "imap <leader>",
+        ["vma"] = "vmap",
+        ["vml"] = "vmap <leader>",
+
         -- FYI cannot namespace... they cannot collide at all... without a mechaism to pause and yeah not sure I wanna have that
         -- ["nvimw"] = "Dump vim.api.nvim_win_", -- IOTW nvim here would already expand before I type the w and so
         --     I get "Dump vim.api.nvim_w" ... but that reminds me thats fine by me! I can type the W
