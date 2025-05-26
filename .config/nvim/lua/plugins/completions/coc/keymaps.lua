@@ -52,3 +52,34 @@ vim.keymap.set('n', '<leader>cc', ':<C-u>CocList commands<CR>', { noremap = true
 -- show hierarchy of incoming/outgoing calls
 vim.keymap.set('n', '<leader>cci', ':<C-u>CocCommand document.showIncomingCalls<cr>', { noremap = true, silent = true, nowait = true })
 vim.keymap.set('n', '<leader>cco', ':<C-u>CocCommand document.showOutgoingCalls<cr>', { noremap = true, silent = true, nowait = true })
+
+
+
+-- * GoTo code navigation
+
+vim.keymap.set('n', 'gd', '<Plug>(coc-definition)', { silent = true })
+-- vim.keymap.set('n', 'gd', '<Cmd>Telescope coc definitions<CR>', { silent = true })
+
+vim.keymap.set('n', 'gy', '<Plug>(coc-type-definition)', { silent = true })
+-- vim.keymap.set('n', 'gy', '<Cmd>Telescope coc type_definitions<CR>', { silent = true })
+
+vim.keymap.set('n', '<leader>gi', '<Plug>(coc-implementation)', { silent = true })
+-- vim.keymap.set('n', '<leader>gi', '<Cmd>Telescope coc implementations<CR>', { silent = true })
+
+-- FYI I am going back to coc's references picker, unfortunately
+--  when I use telescope's ... it doesn't support :CocResume/:CocNext/:CocPrev (see keymaps below)
+--   actually it does have ":Telescope resume" but AFAIK that is all, to resume last search, not specifically my references search (can use cache_picker but still no CocNext/CocPrev)
+--  so I have to redo search each time! ouch
+--  applies to all coc pickers
+--  PRN investigate if I can get resume w/ telescope's picker which I prefer in some ways
+
+vim.keymap.set('n', '<leader>gr', '<Plug>(coc-references)', { silent = true })
+-- vim.keymap.set('n', '<leader>gr', '<Cmd>Telescope coc references<CR>', { silent = true })
+
+-- TODO shift-F12 not working, is that chord already mapped and/or not coming across as such?
+vim.keymap.set('n', '<S-F12>', '<Plug>(coc-references)', { silent = true })
+-- vim.keymap.set('n', '<S-F12>', '<Cmd>Telescope coc references<CR>', { silent = true })
+
+vim.keymap.set('n', '<F12>', '<Plug>(coc-definition)', { silent = true })
+-- vim.keymap.set('n', '<F12>', '<Cmd>Telescope coc definitions<CR>', { silent = true })
+

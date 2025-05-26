@@ -147,31 +147,6 @@ inoremap <silent><expr> <c-space> coc#refresh()
 
 
 
-" * GoTo code navigation
-nmap <silent> gd <Plug>(coc-definition)
-"nmap <silent> gd <Cmd>Telescope coc definitions<CR>
-"
-nmap <silent> gy <Plug>(coc-type-definition)
-"nmap <silent> gy <Cmd>Telescope coc type_definitions<CR>
-"
-nmap <silent> <leader>gi <Plug>(coc-implementation)
-"nmap <silent> <leader>gi <Cmd>Telescope coc implementations<CR>
-"
-" FYI I am going back to coc's references picker, unfortunately
-"  when I use telescope's ... it doesn't support :CocResume/:CocNext/:CocPrev (see keymaps below)
-"   actually it does have ":Telescope resume" but AFAIK that is all, to resume last search, not specifically my references search (can use cache_picker but still no CocNext/CocPrev)
-"  so I have to redo search each time! ouch
-"  applies to all coc pickers
-"  TODO investigate if I can get resume w/ telescope's picker which I prefer in some ways
-nmap <silent> <leader>gr <Plug>(coc-references)
-"nmap <silent> <leader>gr <Cmd>Telescope coc references<CR>
-" TODO shift-F12 not working, is that chord already mapped and/or not coming across as such?
-nmap <silent> <S-F12> <Plug>(coc-references)
-"nmap <silent> <S-F12> <Cmd>Telescope coc references<CR>
-"
-nmap <silent> <F12> <Plug>(coc-definition)
-"nmap <silent> <F12> <Cmd>Telescope coc definitions<CR>
-
 nnoremap <silent> <S-k> :call ShowDocumentation()<CR>
 function! ShowDocumentation()
     if CocAction('hasProvider', 'hover')
