@@ -12,7 +12,7 @@
 abbr ipy 'ipython3' # ipython is much slower to start so don't default to it unless I explicitly want it
 # TODO why is ipython startup like seconds longer?
 abbr py python3
-abbr pym python3 -m
+# abbr pym python3 -m
 abbr python python3
 abbr pip pip3
 
