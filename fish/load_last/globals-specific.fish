@@ -17,7 +17,8 @@ abbr --position=anywhere -- hC '| hexdump -C'
 abbr --position=anywhere -- pcp '| pbcopy' # copy to clipboard
 # i.e.    echo -n $IFS | hexdump -C
 
-abbr --position=anywhere -- pxargs '| xargs -I {} -- echo {}'
+# use `pxargs` if `px` is a problem
+abbr --set-cursor --position=anywhere -- px '| xargs -I_ -- % _'
 # PRN helper for multiple commands or complex commands pased to xargs
 #   dpkg -L cups-browsed | xargs -I {} sh -c 'test -d "{}" && echo "{}"'
 #     lightning fast in bash relative to fish -c overhead
