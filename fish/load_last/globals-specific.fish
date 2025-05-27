@@ -18,7 +18,9 @@ abbr --position=anywhere -- pcp '| pbcopy' # copy to clipboard
 # i.e.    echo -n $IFS | hexdump -C
 
 # use `pxargs` if `px` is a problem
-abbr --set-cursor --position=anywhere -- px '| xargs -I_ -- % _'
+# TODO I would like to wrap xargs with some more features... i.e. show command colorfully / bold so it is clear vs regular output
+abbr --set-cursor --position=anywhere -- px '| xargs --verbose -I_ -- % _' # --verbose == show command before running it
+abbr --set-cursor --position=anywhere -- pxi '| xargs --interactive -I_ -- % _' # --interactive == show cmd and approve yes/no each one
 # PRN helper for multiple commands or complex commands pased to xargs
 #   dpkg -L cups-browsed | xargs -I {} sh -c 'test -d "{}" && echo "{}"'
 #     lightning fast in bash relative to fish -c overhead
