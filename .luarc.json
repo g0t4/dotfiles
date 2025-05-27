@@ -28,6 +28,7 @@
     "workspace.library": [
         "$VIMRUNTIME",
         "${3rd}/luv/library", // for vim.uv usages => from lua-language-server's bundled type hints: https://github.com/LuaLS/lua-language-server/tree/master/meta/3rd
+        "${3rd}/luassert/library",
 
         "/Applications/Hammerspoon.app/Contents/Resources/extensions",
         // "/Applications/Hammerspoon.app/Contents/Frameworks", // do I need this for any LSP features, these are dylib modules
