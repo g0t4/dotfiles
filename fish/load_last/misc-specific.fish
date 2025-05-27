@@ -2481,17 +2481,3 @@ if command -q hs
     abbr hscq "hs -c -q" # quiet mode (only errors and final result)
 
 end
-
-function pym
-    # usage:
-    #  pym foo/bar.py
-    #
-    #  translates to:
-    #  python3 -m foo.bar
-
-    set file $argv[1]
-    set extension (path extension $file)
-    set module (string replace --all "/" "." (string trim --chars $extension $file))
-    python3 -m $module
-end
-
