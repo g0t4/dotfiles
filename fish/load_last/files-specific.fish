@@ -801,6 +801,7 @@ bind alt-shift-b _fzf-nested-both-file-and-dirs-widget
 
 # *** chmod,chgrp,chown,chsh
 abbr chmx "chmod +x"
+abbr chmR "chmod -R"
 
 function prepend_to_file
 
