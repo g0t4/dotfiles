@@ -21,6 +21,10 @@ end
 abbr finde "$find_cmd . -executable"
 abbr findud --set-cursor "$find_cmd '%' -user wesdemos"
 abbr finduw --set-cursor "$find_cmd '%' -user wes"
+abbr --add g=w --command $find_cmd --position anywhere -- "-not -perm -g=w"
+abbr --add o=w --command $find_cmd --position anywhere -- "-not -perm -o=w"
+# u=w   g=r   g=x   g=rw  g=rwx etc
+# TODO expand to generic [ugo]=[rwx]+ regex and expand abbr to cover all cases of g=w
 
 
 # TODO! adopt fd for searching file paths
