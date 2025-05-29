@@ -6,6 +6,23 @@
 #     --color-path # Default is 1;32. (fg: bold, green)
 #
 
+# *** find
+#  sometimes, AFAIK, fd doesn't support a few cases that find/gfind does...
+
+set -l find_cmd find
+if $IS_MACOS then
+    # * gfind on macOS
+    set find_cmd gfind
+    abbr find gfind
+    # gfind == GNU find, has -exeuctable arg (among other differences)
+    # make sure to run fish_update_completions after installing for completions
+end
+
+abbr finde "$find_cmd . -executable"
+abbr findud --set-cursor "$find_cmd '%' -user wesdemos"
+abbr finduw --set-cursor "$find_cmd '%' -user wes"
+
+
 # TODO! adopt fd for searching file paths
 #  i.e. fd | fzf scenarios
 
