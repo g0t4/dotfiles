@@ -1,7 +1,7 @@
 # curl aliases
 abbr curlv "curl -sLv" # -v show request&response + headers&body! # -s hides progress bar when piping output, -L follows redirects
 abbr curlI "curl -sSI" # HEAD request only # -S shows error on failure when using -s (silent)
-abbr curls "curl -fsSL" # quiet/silent output
+abbr curls "curl --fail-with-body -sSL" # quiet/silent output
 # FYI keep only key curl aliases in here...
 
 # httpie aliases
