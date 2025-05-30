@@ -90,6 +90,19 @@ end
 #
 #   for p in $fish_complete_path ; fd curl $p; end
 
+function find_fish_completion_for_cmd_regex
+    # usage:
+    # find_fish_completion_for_cmd_regex "pgrep"
+    # find_fish_completion_for_cmd_regex "pg.*"
+    set cmd $argv[1]
+    for dir in $fish_complete_path
+        if not test -d $dir
+            continue
+        end
+
+        fd --full-path completions/$cmd.fish $dir
+    end
+end
 function list_terrible_completions_present
     echo "completions with issues in the past (empty list == good):"
     fd --full-path completions/curl.fish /opt/homebrew/Cellar/fish
