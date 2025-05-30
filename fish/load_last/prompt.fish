@@ -94,12 +94,8 @@ function prompt_pwd --description 'wes mod - name of the current dir only'
     end
     echo -n -s (set_color $color_cwd)
 
-    # truncate long course paths
-    if string match --regex -q "$HOME/repos/github/g0t4/private-course-rancher\$" $PWD
-        echo -n -s private-course
-        return
-    end
-    if string match -q "$HOME/repos/github/g0t4/course-rancher" $PWD
+    # truncate course repo to just "course" to save prompt space
+    if string match -q "$HOME/repos/github/g0t4/course-fastapi" $PWD
         echo -n -s course
         return
     end
