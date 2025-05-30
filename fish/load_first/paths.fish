@@ -79,17 +79,35 @@ if test -d "$HOME/.dotnet/tools"
 end
 
 ### COMPLETIONS path:
+# TODO find a way to block bundled completions when they suck, like this one for curl:
+#   trash /opt/homebrew/Cellar/fish/4.0.2/share/fish/completions/curl.fish
+#   it is missing dozens of flags and yet...
+#    for example: --fail-with-body
+#   and yet the one from fuc works great (at least with missing options like --fail-with-body):
+#     /Users/wesdemos/.cache/fish/generated_completions/curl.fish
+#   for now I trashed the above one, but I should come up with a more viable approach
+#    maybe symlink fuc ones to my completions dir or a second completions dir? OR just put all fuc ones in front of bundled completions?
+#
+#   for p in $fish_complete_path ; fd curl $p; end
+
+function list_terrible_completions_present
+    echo "completions with issues in the past (empty list == good):"
+    fd --full-path completions/curl.fish /opt/homebrew/Cellar/fish
+    # TODO long term find a way around this issue... i.e. submit a patch to upstream or... put just this one from fuc ahead of bundled?
+    # issue is the bundled ones should be superior to fuc generated ones...  so I cannot just put fuc first
+    # by the way  fuc == fish_update_completions
+end
 if test -d $WES_DOTFILES/fish/completions/
     # - FYI autoloaded at Completion Time per command name (foo<TAB> loads foo.fish)
     # - Use for complex completions (i.e. ensure slow completions are lazy loaded)
     # - Use to override other completions
     # - Otherwise it's ok to inline completions (where command is defined)
-    set fish_complete_path $WES_DOTFILES/fish/completions/ $fish_complete_path
+    set fish_complete_path $fish_complete_path $WES_DOTFILES/fish/completions/
 end
 
 if test -d $WES_DOTFILES/fish/functions/
     # - FYI autoloaded when respective command name is first run (and periodically reloaded)
-    set fish_function_path $WES_DOTFILES/fish/functions/ $fish_function_path
+    set fish_function_path $fish_function_path $WES_DOTFILES/fish/functions/
 end
 
 # ghcup (haskell)
