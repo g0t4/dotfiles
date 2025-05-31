@@ -14,7 +14,7 @@ function _brew_analytics_formula_annual
     end
 
     if ! test -e $tmp_formula_json
-        curl -fsSL https://formulae.brew.sh/api/analytics/install/365d.json >$tmp_formula_json
+        curl --fail-with-body -sSL https://formulae.brew.sh/api/analytics/install/365d.json >$tmp_formula_json
     end
     cat $tmp_formula_json
 end
@@ -26,7 +26,7 @@ function _brew_analytics_cask_annual
     end
 
     if ! test -e $tmp_cask_json
-        curl -fsSL https://formulae.brew.sh/api/analytics/cask-install/365d.json >$tmp_cask_json
+        curl --fail-with-body -sSL https://formulae.brew.sh/api/analytics/cask-install/365d.json >$tmp_cask_json
     end
     cat $tmp_cask_json
 end

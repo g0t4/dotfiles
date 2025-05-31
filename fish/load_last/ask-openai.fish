@@ -83,7 +83,8 @@ function get_openai_models
     end
 
     curl -H "Authorization: Bearer $api_key" \
-        -fsSL $base_url \
+        --fail-with-body \
+        -sSL $base_url \
         | jq ".data[].id" -r
 
 end

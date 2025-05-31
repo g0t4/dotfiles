@@ -10,7 +10,7 @@ ssh_bitbucket_known_hosts() {
     url="https://bitbucket.org/site/ssh"
     {
         echo "# $url"
-        curl -fsSL "$url"
+        curl --fail-with-body -sSL "$url"
     } | bat -l known_hosts
 }
 

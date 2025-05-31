@@ -12,10 +12,10 @@ abbr p6 'ping -d -6'
 
 # *** what is my ip ***
 function _my_ip4
-    curl -fsSL 'https://api.ipify.org?format=raw'
+    curl --fail-with-body -sSL 'https://api.ipify.org?format=raw'
 end
 function _my_ip6
-    curl -fsSL 'https://api64.ipify.org?format=raw'
+    curl --fail-with-body -sSL 'https://api64.ipify.org?format=raw'
 end
 #
 # FYI alternate API with more details
