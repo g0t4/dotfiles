@@ -13,10 +13,10 @@ ealias p6='ping -d -6'
 
 # *** what is my ip ***
 _my_ip4() {
-    curl -fsSL 'https://api.ipify.org?format=raw'
+    curl --fail-with-body -sSL 'https://api.ipify.org?format=raw'
 }
 _my_ip6() {
-    curl -fsSL 'https://api64.ipify.org?format=raw'
+    curl --fail-with-body -sSL 'https://api64.ipify.org?format=raw'
 }
 #
 # FYI alternate API with more details
