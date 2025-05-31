@@ -440,8 +440,7 @@ function askAbout(userText, app, focusedElem, appendChunk)
 
         processChunk(stdout)
 
-        -- FTR when I wasn't checking stderr and not passing -fsSL to curl, there was a stdout error object for ollama API if model is invalid, might want to parse that too
-        --  this is --fail-with-body too
+        -- FTR when I wasn't checking stderr there was a stdout error object for ollama API if model is invalid, might want to parse that too, esp now that I am using --fail-with-body instead of -f
         -- {"error":{"message":"model \"llama-3.2:3b\" not found, try pulling it first","type":"api_error","param":null,"code":null}}
 
         return true -- continue streaming, false would result in rest going to final callback (IIUC)
