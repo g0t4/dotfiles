@@ -12,7 +12,7 @@ indent_size = 2
 
 
 [*.lua]
-# https://github.com/CppCXY/EmmyLuaCodeStyle/blob/master/docs/format_config.md
+# https://github.com/CppCXY/EmmyLuaCodeStyle/blob/master/docs/format_config_EN.md
 # https://github.com/CppCXY/EmmyLuaCodeStyle/blob/master/lua.template.editorconfig
 #   FYI using editorconfig for the formatter in the lua LS I am using (couldn't get defaultConfig to work in coc-settings.json)
 #  OK, IIUC luarc s/b per workspace/repo and coc-settings.json is gonna be global fallbacks, so I should add some of this over there
