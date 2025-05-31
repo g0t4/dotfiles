@@ -11,7 +11,7 @@ function M.streamingRequest(url, method, headers, body, streamingCallback, compl
         lastTask = nil
     end
 
-    local args = { "-fsSL", "--no-buffer", "-X", method, url }
+    local args = { "--fail-with-body", "-sSL", "--no-buffer", "-X", method, url }
 
     for key, value in pairs(headers or {}) do
         table.insert(args, "-H")
