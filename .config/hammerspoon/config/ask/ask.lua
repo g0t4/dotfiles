@@ -395,7 +395,7 @@ function askAbout(userText, app, focusedElem, appendChunk)
         logClose()
 
         if exitCode ~= 0 then
-            -- test this: ollama set invalid url (delete c in completion)... then curl w/ -fsSL will use STDERR to print error and that is detected here! ... fyi non-zero exit code is also picked up in complete callback which is fine (shown twice, NBD)
+            -- test this: ollama set invalid url (delete c in completion)... then curl with --fail-with-body and see if can capture the error
             -- print_elapsed("complete callback")
             -- GOOD TEST CASE use ollama and make sure its not running! works nicely as is:
             hs.alert.show("Error in streaming request: " .. exitCode .. " see hammerspoon console logs")
