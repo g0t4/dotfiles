@@ -4,9 +4,9 @@ local use_ai = {
     -- "tabnine",
     -- "supermaven",
     -- "llm.nvim",
-    "ggml-org/llama.vim",
+    -- "ggml-org/llama.vim",
     "ask-openai", -- use master branch to disable predictions
-    "g0t4/zeta.nvim",
+    -- "g0t4/zeta.nvim",
 }
 -- ! consider https://github.com/zbirenbaum/copilot.lua
 --    purportedly faster and less glitchy than copilot.vim
@@ -649,7 +649,7 @@ local ask_openai_plugin = {
         tmp = {
             predictions = {
                 -- model = ? -- TODO control this here
-                enabled = false, -- turn off my predictions w/o disabling entire ask-openai plugin
+                enabled = true, -- turn off my predictions w/o disabling entire ask-openai plugin
             },
         },
     },
