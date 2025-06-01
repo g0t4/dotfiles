@@ -10,10 +10,6 @@
             "hs",
             // nvim:
             "vim",
-            "describe",
-            "it",
-            "assert",
-            // TODO is it possible to point these globals at a require("..") call so I get completions and what not and don't get bogus diag failures when using them
         ],
         "disable": [
             "lowercase-global",
@@ -40,6 +36,8 @@
         // hammerspoon stubs (based on my custom checkout dir):
         "~/repos/github/Hammerspoon/Spoons/Source/EmmyLua.spoon/annotations/",
         "~/repos/github/g0t4/devtools.nvim",
+
+        "~/.local/share/nvim/lazy/plenary.nvim", // adds globals for describe, it, before_each, etc
     ],
 
     // darn warning in nvim about luv... picking 3 (dont show again) sets this!
