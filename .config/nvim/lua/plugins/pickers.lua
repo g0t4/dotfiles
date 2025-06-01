@@ -28,7 +28,8 @@ local telescope_keys =
     -- { '<leader>s',   ':Telescope live_grep<CR>',  mode = 'n' }, -- keep top level w/o submapping collision so this is snappy fast
 
     -- FYI <leader>tg => will open picker of pickers and g will select the git ones... DO NOT MAP OVER THAT! .. probably best way to pick from multiple git pickers is to not have each one keymapped
-    { '<leader>tgst', ':Telescope git_status<CR>', mode = 'n' }, -- like gst abbr/alias
+    -- * habituate <SPACE>gst ... I like it... so I don't have to exit nvim to check gst (or open terminal inside)
+    { '<leader>gst', ':Telescope git_status<CR>', mode = 'n' }, -- like gst abbr/alias
     unpack(resume_keys), -- FYI keep this at end of this table ctor for telescope_keys... otherwise, it will effectively only unpack the first item in resume_keys, use vim.list_extend to reliably merge the lists
     -- DO NOT PUT ANY keymaps here after the unpack
 }
