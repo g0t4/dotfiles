@@ -11,7 +11,7 @@ return {
 
     {
         enabled = true,
-        'm4xshen/hardtime.nvim',    -- tons of features, recommends, block repeated key use, etc
+        'm4xshen/hardtime.nvim', -- tons of features, recommends, block repeated key use, etc
         dependencies = {
             "MunifTanjim/nui.nvim", -- for report float window
             "nvim-lua/plenary.nvim"
@@ -25,8 +25,8 @@ return {
             require("hardtime").setup({
 
                 -- messages (via cmdline OR nvim-notify popups) =>  I find the disabled/restricted notify popups useless, the key not working / stopping is enough for me to knock it off
-                notification = false,  -- don't notify for disabled/restricted keys, i.e. down disabled, OR hit j repeatedly...
-                hint = true,           -- explicit that I want hints for now... i.e. `cw` instead of `dwi`
+                notification = false, -- don't notify for disabled/restricted keys, i.e. down disabled, OR hit j repeatedly...
+                hint = true, -- explicit that I want hints for now... i.e. `cw` instead of `dwi`
 
                 timeout = 100, -- somehow actual delay seems to be like 1 or 2 seconds more than this value?!
 
