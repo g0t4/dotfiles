@@ -27,13 +27,15 @@ end
 
 -- *** tab keymaps
 vim.keymap.set({ "n", "i", "v" }, "<C-t>", "<Cmd>tabnew<CR>", default_options)
--- <C-M-arrow> == move tabs
-vim.keymap.set({ "n", "i", "v" }, "<C-M-left>", "<Cmd>tabprevious<CR>", default_options)
-vim.keymap.set({ "n", "i", "v" }, "<C-M-right>", "<Cmd>tabnext<CR>", default_options)
-
--- TODO buffer keymaps?
-
-
+-- FYI F8 maps to close window (repeat to close all windows in a tab is fine in most cases)
+--
+-- switch tabs (use defaults, they all seem reasonable):
+--   <C-PageUp/Down> *** switches tabs, default!
+--   gt/gT # * goto next/prev
+--     2gt # * goto tab # (i.e. 2)
+--     g<Tab> # ** last tab
+--   :tabp[revious] :tabN[ext] :tabfir[st] :tabl[ast]
+--   :tabm[ove] [+/-]N   # move to after tab N, or -N/+N relative move
 
 -- *** Ctrl+S to save http://vim.wikia.com/wiki/Saving_a_file
 -- <cmd> preserves mode and is independent of initial mode
