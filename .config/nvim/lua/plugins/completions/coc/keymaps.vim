@@ -265,10 +265,10 @@ nmap <silent> ]e <Plug>(coc-diagnostic-next-error)
 " check for watchman and warn (prominently) that its missing
 "   makes a big impact in terms of performance (otherwise fallbacks to polling)
 "   esp on large projects, so make sure its present!
-if executable('watchman') == 0
-  echohl ErrorMsg
-  echom 'Warning: watchman not found. coc.nvim may be slower without it.'
-  echom '  USE brew install watchman'
-  echohl None
-endif
+"if executable('watchman') == 0
+"  echohl ErrorMsg
+"  echom 'Warning: watchman not found. coc.nvim may be slower without it.'
+"  echom '  USE brew install watchman'
+"  echohl None
+"endif
 
