@@ -17,13 +17,11 @@
   (comment) @comment_todo (#match? @comment_todo "TODO[^!]*")
 ]
 [
-  ; TODO add `;` as comment prefix? will that be a problem in languages with trailing semicolons? if so maybe set that up as specific case of this highlights.scm
-  ; todo would it make sense to make each language specific? so I put -- ihn ... I'd prefer copy pasta this file and have a global catchall regex on front to match whatever comment start there is ... why is this not matching comment contents? is there a way to do that?
-  (comment) @comment_asterisks_bang (#match? @comment_asterisks_bang "^(--|\"|#|//|;)\\s*\\*\\*\\*!"); *** test
-  (comment) @comment_asterisks (#match? @comment_asterisks "^(--|\"|#|//|;)\\s*\\*+[^!]") ; ***! test (trailing comments should highlight too)
+  (comment) @comment_asterisks_bang (#match? @comment_asterisks_bang "\\s*\\*\\*\\*!") ; ***! test
+  (comment) @comment_asterisks (#match? @comment_asterisks "\\s*\\*+[^!]") ; *** w/o !
+  ; now this matches the entire line even if only in a secondary nested comment -- ** like this
   ; foo the bar * example (really shouldn't light up, I only want *** at start of comment
   ; foo the ; *** bar  (ok not to lightup)
-  ;      *** foo thebar
   ; * example
   ; ** example
   ; *** example
