@@ -42,6 +42,7 @@ vim.opt.rtp:prepend(lazypath)
 -- loading lazy.nvim so that mappings are correct.
 -- This is also a good place to setup other settings (vim.opt)
 vim.g.mapleader = " "
+vim.keymap.set("n", "<Space>", "<Nop>", { silent = true }) -- disable space alone, so it doesn't move the cursor if I don't get my leader keymap all pressed in time...
 vim.g.maplocalleader = "\\"
 
 require("lazy").setup({

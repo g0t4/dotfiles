@@ -206,3 +206,4 @@ vim.api.nvim_create_user_command('ZedHere', function()
     local command = "zed " .. filename .. ":" .. row_1based .. ":" .. (col_0based + 1)
     vim.fn.system(command)
 end, {})
+
