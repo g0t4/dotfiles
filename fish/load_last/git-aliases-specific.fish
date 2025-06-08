@@ -124,6 +124,9 @@ function gdsX
     echo -n (string replace --regex '^gds' 'git diff --stat HEAD~' $argv)'..HEAD'
 end
 
+abbr --set-cursor glgrep 'git log --grep="%"'
+
+
 # VCS in general:
 function pwd --description "pwd for a repository => repo root in yellow + repo dir in white"
     # if this causes grief, go back to just prd

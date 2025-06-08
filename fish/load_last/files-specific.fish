@@ -795,9 +795,28 @@ function _fzf-nested-both-file-and-dirs-widget -d "Paste selected file or direct
     commandline -f repaint
 end
 
+function _fzf-nested-git-commit-widget -d "Pick a git commit_hash"
+    # TODO look at commandline! and decide based on the git subcommand?!
+    #  git diff => pick a commit_hash
+    #   heck I could do this and add defaults for all sorts of commands (and fallback could ask AI to pick a picker!)
+
+    set log_format "%C(white)%h%Creset %Cblue%cr%Creset%C(auto)%d%Creset %s"
+    set -l commit_hash $(
+        git log --reverse --format="$log_format" \
+        | fzf --height 50% --border --ansi --accept-nth=1
+    )
+    if test -n "$commit_hash"
+        commandline -i -- (string escape -- "$commit_hash")
+    end
+    commandline -f repaint
+end
+
 bind alt-shift-d _fzf-nested-dir-widget
 bind alt-shift-f _fzf-nested-file-widget
 bind alt-shift-b _fzf-nested-both-file-and-dirs-widget
+# TODO what all pickers for git history might I want?
+bind alt-shift-g _fzf-nested-git-commit-widget
+
 
 # *** chmod,chgrp,chown,chsh
 abbr chmx "chmod +x"
