@@ -126,6 +126,9 @@ end
 
 abbr --set-cursor glgrep 'git log --grep="%"'
 
+# WIP => disable pager and color for generating a unified diff
+abbr gd_patch "git --no-pager diff --no-color"
+
 
 # VCS in general:
 function pwd --description "pwd for a repository => repo root in yellow + repo dir in white"
