@@ -82,11 +82,15 @@ abbr uvv 'uv venv'
 #
 # FYI cannot configure no-description/readme by default, so just use them here in my abbr instead
 #   unfortunately I cannot tell it no hello.py too
+abbr uvb 'uv init --no-description --no-readme && uv add yapf' # bootstrap my preferred deps (i.e. formatter, ipython REPL)... things I inevitably add to all my python projects
+#   todo add `ipykernel` or `ipython` to all projects too? I like to run code adhoc in nvim with iron.nvim, that requires ipython at a minimum
+#   also I prefer the ipython REPL over python's builtin REPL
 abbr uvi 'uv init --no-description --no-readme'
 #
 abbr uvp 'uv pip'
 abbr uvpi 'uv pip install'
 abbr uvpir 'uv pip install -r requirements.txt'
+abbr uvls 'uv pip list' # or do I want `uv tree` here?.... what else would I do with `uv list == uvl` basically?
 abbr uvpls 'uv pip list'
 abbr uvplo 'uv pip list --outdated'
 # TODO add back other pip commands as `uv pip` commands now that I wrapped my mind around using uv for my projects and not for other projects that are just using requirements.txt
