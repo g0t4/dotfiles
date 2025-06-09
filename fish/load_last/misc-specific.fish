@@ -1336,17 +1336,89 @@ if command -q az
 
 end
 
-# llama-server args for llama.[vim|vscode] FIM predictions
-abbr llamasf 'llama-server --fim-qwen-7b-default --host 0.0.0.0'
-abbr llamasfv 'llama-server --fim-qwen-7b-default --host 0.0.0.0 --verbose'
-abbr llamasfs 'llama-server --fim-qwen-7b-spec --host 0.0.0.0'
-abbr llamasfsv 'llama-server --fim-qwen-7b-spec --host 0.0.0.0 --verbose'
-abbr llamasf14s 'llama-server --fim-qwen-14b-spec --host 0.0.0.0'
-abbr llamasf14sv 'llama-server --fim-qwen-14b-spec --host 0.0.0.0 --verbose'
-#   PRN periodically check:
-#   llama-server --help | grep -i fim
-#   --fim-qwen-14b-spec
-#   --fim-qwen-7b-spec
+# ** llama-cpp / llama-server related
+
+# huggingface cli via huggingface_hub pypi package (no need to install it)
+function huggingface-cli
+    # great for model cleanup... just run delete-cache and it shows everything in ~/.cache/huggingface ... lets you pick what to cleanup
+    #   and it removes metadata too
+    #   can always nuke individual dirs too but this is faster-ish
+
+    uv tool run --from "huggingface_hub[cli]" huggingface-cli $argv
+    # uv tool run --from huggingface_hub huggingface-cli delete-cache
+    # delete-cache
+end
+abbr hugginface-cli_delete-cache "huggingface-cli delete-cache"
+
+# FYI... llama-server's fim options, here is an example for spec dec:
+#
+# add_opt(common_arg(
+#     {"--fim-qwen-14b-spec"},
+#     string_format("use Qwen 2.5 Coder 14B + 0.5B draft for speculative decoding (note: can download weights from the internet)"),
+#     [](common_params & params) {
+#         params.model.hf_repo = "ggml-org/Qwen2.5-Coder-14B-Q8_0-GGUF";
+#         params.model.hf_file = "qwen2.5-coder-14b-q8_0.gguf";
+#         params.speculative.model.hf_repo = "ggml-org/Qwen2.5-Coder-0.5B-Q8_0-GGUF";
+#         params.speculative.model.hf_file = "qwen2.5-coder-0.5b-q8_0.gguf";
+#         params.speculative.n_gpu_layers = 99;
+#         params.port = 8012;
+#         params.n_gpu_layers = 99;
+#         params.flash_attn = true;
+#         params.n_ubatch = 1024;
+#         params.n_batch = 1024;
+#         params.n_ctx = 0;
+#         params.n_cache_reuse = 256;
+#     }
+# ).set_examples({LLAMA_EXAMPLE_SERVER}));
+#
+# FYI to map name params.n_ctx => --ctx-size / env var... use the common/arg.cpp
+#   https://github.com/ggml-org/llama.cpp/blob/056eb745/common/arg.cpp#L1424-L1431
+# n_batch == https://github.com/ggml-org/llama.cpp/blob/056eb745/common/arg.cpp#L1442-L1448
+
+if command -q llama-server
+    function _setup_llama_server
+        #   basically changes to the presetes --fim* for my plugin's differences... i.e. bigger batch size (limits to 1K tokens with --fim presets!!!)
+        # FYI I want abbrs so I can see the params I am overriding...and that I am using spec or not
+        set verbose --verbose --verbose-prompt
+        set batch_size --batch-size 8192 --ubatch-size 8192
+        set _spec7 llama-server --fim-qwen-7b-spec --host 0.0.0.0 $batch_size
+        set _spec14 llama-server --fim-qwen-14b-spec --host 0.0.0.0 $batch_size
+        set _default7 llama-server --fim-qwen-7b-default --host 0.0.0.0 $batch_size
+
+        # TODO verify last args override previous if same used twice...
+        #  TODO and verify passing args overrides preset options.. else need to inline the presets here:
+        #  https://github.com/ggml-org/llama.cpp/blob/056eb745/common/arg.cpp#L3326
+
+        # FYI first one is the default that I wanna use, can override to try new params
+        #   meant for me to not have to even pick b/w my presets
+        #   it should just work
+        abbr llama_ask "$_spec7"
+
+        # other presets to select from with tab completion
+        abbr llama_ask7default $_default7
+        abbr llama_ask7spec $_spec7
+        # FYI no 14-default
+        abbr llama_ask14spec $_spec14
+        abbr llama_ask_verbose_7 $_default7 $verbose
+        abbr llama_ask_verbose_7_spec $_spec7 $verbose
+        abbr llama_ask_verbose_14_spec $_spec14 $verbose
+
+        # * llama-server args for llama.[vim|vscode] FIM predictions
+        #   diff settings, keep more of presets given the presets were designed for llama.vim
+        set _spec7 'llama-server --fim-qwen-7b-spec --host 0.0.0.0'
+        set _spec14 'llama-server --fim-qwen-14b-spec --host 0.0.0.0'
+        set _default7 'llama-server --fim-qwen-7b-default --host 0.0.0.0'
+
+        abbr llama_vim $_default7
+        abbr llama_vim_7 $_default7
+        abbr llama_vim_7_verbose $_default7 $verbose
+        abbr llama_vim_7_spec $_spec7
+        abbr llama_vim_7_spec_verbose $_spec7 $verbose
+        abbr llama_vim_14spec $_spec14
+        abbr llama_vim_14spec_verbose $_spec14 $verbose
+    end
+    _setup_llama_server
+end
 
 if command -q ollama
     abbr olc "ollama create"
