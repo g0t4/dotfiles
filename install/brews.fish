@@ -23,3 +23,4 @@ end
 
 brew_install_if_missing fd fd
 brew_install_if_missing ctags universal-ctags
+# fuc fish update completions works nicely with universal-ctags (man page)
