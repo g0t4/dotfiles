@@ -22,3 +22,4 @@ function brew_install_if_missing
 end
 
 brew_install_if_missing fd fd
+brew_install_if_missing ctags universal-ctags
