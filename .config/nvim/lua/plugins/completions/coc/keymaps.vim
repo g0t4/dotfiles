@@ -261,6 +261,15 @@ nmap <silent> [e <Plug>(coc-diagnostic-prev-error)
 nmap <silent> ]e <Plug>(coc-diagnostic-next-error)
 
 
+" FYI pumvisible(), complete_info(), et al .. are for native nvim ins-completion-menu pum (picker)...
+"   coc has its own picker... so it has separate funcs to do the same stuff, i.e.
+"   coc#pum#visible()
+"   TBD... I have yet to find a way to get the items visible in coc's PUM...
+"      b/c vim's native pum has complete_info() => returns items and other properties in a table
+"inoremap <expr> <C-;> complete_info() " FYI this is a convenient way to run a func in insert mode, the output is typed into the buffer
+"inoremap <expr> <C-;> coc#pum#info()
+"inoremap <expr> <C-;> pumvisible() ? "NATIVE PUM" : "NOPE"
+" FYI I wanted the complete_info() => items for my ask-openai context for FIM completions
 
 " check for watchman and warn (prominently) that its missing
 "   makes a big impact in terms of performance (otherwise fallbacks to polling)
