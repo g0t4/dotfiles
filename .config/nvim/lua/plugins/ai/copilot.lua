@@ -687,7 +687,8 @@ return {
         "bjornbytes/rxlua",
         config = function()
             -- rx.lua is in repo root (not in lua dir), so modify package path to support that
-            local plugin_path = vim.fn.stdpath("data") .. "/lazy/RxLua/"
+            -- CAREFUL with casing (RxLua is not gonna work if its rxlua, on a case sensitive fs... as all should be)
+            local plugin_path = vim.fn.stdpath("data") .. "/lazy/rxlua/"
             package.path = package.path .. ";" .. plugin_path .. "?.lua"
         end
     },
