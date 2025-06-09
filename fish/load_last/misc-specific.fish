@@ -1377,6 +1377,8 @@ abbr hugginface-cli_delete-cache "huggingface-cli delete-cache"
 
 if command -q llama-server
     function _setup_llama_server
+        # PRN add some abbrs for higher ram usage if you frequently want that... and/or GET ANOTHER 5090 and max it all out!
+
         #   basically changes to the presetes --fim* for my plugin's differences... i.e. bigger batch size (limits to 1K tokens with --fim presets!!!)
         # FYI I want abbrs so I can see the params I am overriding...and that I am using spec or not
         set verbose --verbose --verbose-prompt
