@@ -1378,6 +1378,7 @@ abbr hugginface-cli_delete-cache "huggingface-cli delete-cache"
 if command -q llama-server
     function _setup_llama_server
         # PRN add some abbrs for higher ram usage if you frequently want that... and/or GET ANOTHER 5090 and max it all out!
+        # TODO alter --cache-reuse ? 256 on --fim- presets... smaller, bigger? (how does it work with RoPE scaling? https://ggml.ai/f0.png)
 
         #   basically changes to the presetes --fim* for my plugin's differences... i.e. bigger batch size (limits to 1K tokens with --fim presets!!!)
         # FYI I want abbrs so I can see the params I am overriding...and that I am using spec or not
