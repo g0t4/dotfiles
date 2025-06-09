@@ -1385,13 +1385,9 @@ if command -q llama-server
         set _spec14 llama-server --fim-qwen-14b-spec --host 0.0.0.0 $batch_size
         set _default7 llama-server --fim-qwen-7b-default --host 0.0.0.0 $batch_size
 
-        # TODO verify last args override previous if same used twice...
-        #  TODO and verify passing args overrides preset options.. else need to inline the presets here:
-        #  https://github.com/ggml-org/llama.cpp/blob/056eb745/common/arg.cpp#L3326
+        # FYI I confirmed args override any earlier usages (including in preset combos)
 
-        # FYI first one is the default that I wanna use, can override to try new params
-        #   meant for me to not have to even pick b/w my presets
-        #   it should just work
+        # First one is for mindlessly saying "just make it work"
         abbr llama_ask "$_spec7"
 
         # other presets to select from with tab completion
