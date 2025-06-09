@@ -1380,7 +1380,10 @@ if command -q llama-server
         #   basically changes to the presetes --fim* for my plugin's differences... i.e. bigger batch size (limits to 1K tokens with --fim presets!!!)
         # FYI I want abbrs so I can see the params I am overriding...and that I am using spec or not
         set verbose --verbose --verbose-prompt
-        set batch_size --batch-size 8192 --ubatch-size 8192
+        # recommend sane defaults b/c it reserves this much GPU RAM upfront!
+        #   IIAC, if I go over, I'll know b/c predictions will be terrible!... maybe find a way to catch that warning in the API call if possible (I know ollama shows in CLI output, at least... and IIAC that is from llama-cpp)
+        set batch_size --batch-size 2048 --ubatch-size 2048
+        set batch_size_spec --batch-size 2048 --ubatch-size 2048
         set _spec7 llama-server --fim-qwen-7b-spec --host 0.0.0.0 $batch_size
         set _spec14 llama-server --fim-qwen-14b-spec --host 0.0.0.0 $batch_size
         set _default7 llama-server --fim-qwen-7b-default --host 0.0.0.0 $batch_size
