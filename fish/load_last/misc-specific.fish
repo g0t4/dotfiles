@@ -2543,3 +2543,18 @@ if command -q hs
     abbr hscq "hs -c -q" # quiet mode (only errors and final result)
 
 end
+
+if command -q ctags
+    abbr ct ctags
+    abbr ctags_stdout_only_lua "ctags --languages=lua -f -"
+    abbr --set-cursor ctl ctags --list-%
+    abbr ctle ctags --list-excludes
+    abbr ctll ctags --list-languages
+    abbr ctlf ctags --list-fields
+    abbr ctlx ctags --list-extras
+    abbr ctags_stdout ctags -f -
+    # helpers to review what was swept up (or not)
+    abbr ctags_list_not_files "cat tags  | sort | uniq | grep -v -E '\.(zsh|lua|py|rs|c|md|json|vim|plist|js|ps1)' | bat -l csv"
+
+end
+

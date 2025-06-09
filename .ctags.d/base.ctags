@@ -1,0 +1,27 @@
+#  TODO allowlist the languages I want to build for?
+#    TODO break up sub dirs too? i.e. hammerspoon separate of nvim
+# --languages=lua
+# --languages=python
+# --languages=fish
+# --languages=zsh
+# -R
+# --extras=+q
+# --fields=+S
+#
+# FYI only include global ignores in here?
+#  then build multiple tags files... per language/scenario
+# --exclude=*tests*
+--exclude=target
+--exclude=iterm2env
+--exclude=.venv
+--exclude=node_modules
+--exclude=*.md
+--exclude=*.patch
+--exclude=Makefile
+# for now exclude json files
+--exclude=*.json
+# and at least luarc
+--exclude=.luarc.json
+--exclude=*.plist
+--exclude=*.svg
+--exclude=*/tests/shelling*
