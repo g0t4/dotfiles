@@ -2558,4 +2558,10 @@ if command -q ctags
 
 end
 
-abbr awk4 "awk '{print $4}'"
+# abbr awk4 "awk '{print $4}'"
+abbr --add _awkd --regex 'awk\d+' --function _abbr_expand_awk
+function _abbr_expand_awk
+    string replace --regex "(\d+)" " '{print \\\$\$1}'" $argv[1]
+end
+
+# TODO add other common delimiters?
