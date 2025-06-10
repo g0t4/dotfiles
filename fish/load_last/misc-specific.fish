@@ -2558,10 +2558,25 @@ if command -q ctags
 
 end
 
+# lets see how I feel about awk being auto '' quoted... I can change later if this upsets me
+#   i.e. if I find myself often wanting to set args -F ... then this might be annoying
+abbr --set-cursor awk "awk '%'"
+
 # abbr awk4 "awk '{print $4}'"
 abbr --add _awkd --regex 'awk\d+' --function _abbr_expand_awk
 function _abbr_expand_awk
     string replace --regex "(\d+)" " '{print \\\$\$1}'" $argv[1]
 end
 
-# TODO add other common delimiters?
+# awk4,
+abbr --add _awkd_comma --regex 'awk\d+,' --function _abbr_expand_awk_comma
+function _abbr_expand_awk_comma
+    string replace --regex "(\d+)," " \-F, '{print \\\$\$1}'" $argv[1]
+end
+
+# awk4p (as in pipe | delimiter)
+#  cannot type | in an abbr b/c its a command delimiter
+abbr --add _awkd_pipe --regex 'awk\d+p' --function _abbr_expand_awk_pipe
+function _abbr_expand_awk_pipe
+    string replace --regex "(\d+)p" " \-F'\|' '{print \\\$\$1}'" $argv[1]
+end
