@@ -2593,3 +2593,16 @@ abbr --add _awk_pipe --regex 'awk\d+p' --function _abbr_expand_awk_pipe
 function _abbr_expand_awk_pipe
     string replace --regex "(\d+)p" " \-F'\|' '{print \\\$\$1}'" $argv[1]
 end
+
+# * token counting
+function count_tokens_qwen25_coder
+    # usage:
+    # cat foo.txt | count_tokens_qwen25_coder
+    $WES_DOTFILES/.venv/bin/python3 -c "
+import sys
+from transformers import AutoTokenizer
+tokenizer = AutoTokenizer.from_pretrained('Qwen/Qwen2.5-Coder-7B-Instruct')
+text = sys.stdin.read()
+print(len(tokenizer.encode(text)))
+"
+end
