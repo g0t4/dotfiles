@@ -2575,15 +2575,21 @@ end
 #     string replace --regex "(\d+)([a-zA-Z])" " \-F\$2 '{print \\\$\$1}'" $argv[1]
 # end
 
+# awk4t
+abbr --add _awk_tab --regex 'awk\d+t' --function _abbr_expand_awk_tab
+function _abbr_expand_awk_tab
+    string replace --regex "(\d+)t" " \-F'\t' '{print \\\$\$1}'" $argv[1]
+end
+
 # awk4,
-abbr --add _awkd_comma --regex 'awk\d+,' --function _abbr_expand_awk_comma
+abbr --add _awk_comma --regex 'awk\d+,' --function _abbr_expand_awk_comma
 function _abbr_expand_awk_comma
     string replace --regex "(\d+)," " \-F, '{print \\\$\$1}'" $argv[1]
 end
 
 # awk4p (as in pipe | delimiter)
 #  cannot type | in an abbr b/c its a command delimiter
-abbr --add _awkd_pipe --regex 'awk\d+p' --function _abbr_expand_awk_pipe
+abbr --add _awk_pipe --regex 'awk\d+p' --function _abbr_expand_awk_pipe
 function _abbr_expand_awk_pipe
     string replace --regex "(\d+)p" " \-F'\|' '{print \\\$\$1}'" $argv[1]
 end
