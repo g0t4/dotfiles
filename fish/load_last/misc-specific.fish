@@ -2568,6 +2568,12 @@ function _abbr_expand_awk
     string replace --regex "(\d+)" " '{print \\\$\$1}'" $argv[1]
 end
 
+# abbr awk4_ where _ is any character you want
+abbr --add _awkd_char --regex 'awk\d+([a-zA-Z])' --function _abbr_expand_awk_char
+function _abbr_expand_awk_char
+    string replace --regex "(\d+)([a-zA-Z])" " \-F\$2 '{print \\\$\$1}'" $argv[1]
+end
+
 # awk4,
 abbr --add _awkd_comma --regex 'awk\d+,' --function _abbr_expand_awk_comma
 function _abbr_expand_awk_comma
