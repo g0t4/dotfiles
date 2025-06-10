@@ -2558,3 +2558,4 @@ if command -q ctags
 
 end
 
+abbr awk4 "awk '{print $4}'"
