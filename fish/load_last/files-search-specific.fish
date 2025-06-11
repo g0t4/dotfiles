@@ -121,8 +121,17 @@ abbr --set-cursor rgi 'rg -i "%"'
 abbr --set-cursor agi 'rg -i "%"'
 abbr --set-cursor rgh 'rg --hidden "%"'
 abbr --set-cursor agh 'rg --hidden "%"'
-abbr --set-cursor rgu 'rg -u "%"' # unrestricted
-abbr --set-cursor agu 'rg -u "%"' # unrestricted
+# abbr --set-cursor rgu 'rg -u "%"' # unrestricted
+abbr --set-cursor rgu --function _abbr_expand_rgu
+abbr --set-cursor agu --function _abbr_expand_rgu
+function _abbr_expand_rgu
+    # TODO use commandline and if there's anything after the cursor, don't add ""? or if "" is after? right after?
+    set -l pattern "$argv"
+    # keep in mind, % sets cursor position, works in dynamic abbr funcs too!
+    #  that means I could start to decide WHERE to place the cursor based on the full commandline!
+    echo rg -u '"%"'
+end
+
 #
 # * filename/path search (not contents)
 abbr --set-cursor rgf 'rg --files'
