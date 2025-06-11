@@ -133,22 +133,12 @@ end
 
 abbr --set-cursor rgu --function _abbr_expand_rgu
 function _abbr_expand_rgu
-    # $argv has abbr unexpanded abbr prefix
-    # % sets cursor position
-
     if command_line_has_a_double_quote_after_cursor
-        # rgu<SPACE> "foo" => rg -u "foo"
-        # if I already have "" then don't add that AND don't move cursor (%)
-        #  often I do this with an `rg "foo"` search first and double back to `rgu`
         echo rg -u
         return
     end
 
     echo rg -u '"%"'
-
-    # FYI static version:
-    # abbr --set-cursor rgu 'rg -u "%"'
-    # always inserts "" even if I already have it!
 end
 
 #
