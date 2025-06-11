@@ -1024,7 +1024,9 @@ function toggle-git_commit_command
     end
 end
 # todo do I want a diff keymap? really should just have some command pallette this resides in only...
-bind ctrl-f12 toggle-git_commit_command
+bind -M normal ctrl-f12 toggle-git_commit_command
+bind -M insert ctrl-f12 toggle-git_commit_command
+# FYI -M normal applies to both vi/emacs modes... insert is only vi-mode and is why I have to call this twice to set it too
 
 if command -q apt
 
