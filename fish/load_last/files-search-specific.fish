@@ -133,7 +133,6 @@ end
 
 abbr --set-cursor rgu --function _abbr_expand_rgu
 function _abbr_expand_rgu
-    # TODO would be nice to clean this up a bit with a helper to make some of this reusable... i.e. if_double_quote_after_cursor() func
     # $argv has abbr unexpanded abbr prefix
     # % sets cursor position
 
