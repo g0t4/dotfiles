@@ -2606,3 +2606,6 @@ text = sys.stdin.read()
 print(len(tokenizer.encode(text)))
 "
 end
+
+# * fix commands with stupid abbreviations
+abbr common comm # why didn't they just call it co
