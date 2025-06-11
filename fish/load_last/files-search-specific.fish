@@ -137,10 +137,7 @@ function _abbr_expand_rgu
     # $argv has abbr unexpanded abbr prefix
     # % sets cursor position
 
-    set cursor_position (commandline --cursor)
-    set cmd (commandline -b)
-    set cmd_after_cursor (string trim (string sub --start $cursor_position $cmd))
-    if string match --quiet --regex "^\s*\".*\"" -- $cmd_after_cursor
+    if if_double_quote_after_cursor
         # rgu<SPACE> "foo" => rg -u "foo"
         # if I already have "" then don't add that AND don't move cursor (%)
         #  often I do this with an `rg "foo"` search first and double back to `rgu`
