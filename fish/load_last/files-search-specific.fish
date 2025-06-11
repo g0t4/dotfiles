@@ -26,7 +26,6 @@ abbr --add o=w --command $find_cmd --position anywhere -- "-not -perm -o=w"
 # u=w   g=r   g=x   g=rw  g=rwx etc
 # TODO expand to generic [ugo]=[rwx]+ regex and expand abbr to cover all cases of g=w
 
-
 # TODO! adopt fd for searching file paths
 #  i.e. fd | fzf scenarios
 
@@ -125,10 +124,21 @@ abbr --set-cursor agh 'rg --hidden "%"'
 abbr --set-cursor rgu --function _abbr_expand_rgu
 abbr --set-cursor agu --function _abbr_expand_rgu
 function _abbr_expand_rgu
-    # TODO use commandline and if there's anything after the cursor, don't add ""? or if "" is after? right after?
-    set -l pattern "$argv"
-    # keep in mind, % sets cursor position, works in dynamic abbr funcs too!
-    #  that means I could start to decide WHERE to place the cursor based on the full commandline!
+    # TODO would be nice to clean this up a bit with a helper to make some of this reusable... i.e. if_double_quote_after_cursor() func
+    # $argv has abbr unexpanded abbr prefix
+    # % sets cursor position
+
+    set cursor_position (commandline --cursor)
+    set cmd (commandline -b)
+    set cmd_after_cursor (string trim (string sub --start $cursor_position $cmd))
+    if string match --quiet --regex "^\s*\".*\"" -- $cmd_after_cursor
+        # rgu<SPACE> "foo" => rg -u "foo"
+        # if I already have "" then don't add that AND don't move cursor (%)
+        #  often I do this with an `rg "foo"` search first and double back to `rgu`
+        echo rg -u
+        return
+    end
+
     echo rg -u '"%"'
 end
 
