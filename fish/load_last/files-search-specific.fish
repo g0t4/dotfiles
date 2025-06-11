@@ -121,8 +121,6 @@ abbr --set-cursor agi 'rg -i "%"'
 abbr --set-cursor rgh 'rg --hidden "%"'
 abbr --set-cursor agh 'rg --hidden "%"'
 
-
-# abbr --set-cursor rgu 'rg -u "%"' # unrestricted
 abbr --set-cursor rgu --function _abbr_expand_rgu
 function _abbr_expand_rgu
     # TODO would be nice to clean this up a bit with a helper to make some of this reusable... i.e. if_double_quote_after_cursor() func
@@ -141,6 +139,10 @@ function _abbr_expand_rgu
     end
 
     echo rg -u '"%"'
+
+    # FYI static version:
+    # abbr --set-cursor rgu 'rg -u "%"'
+    # always inserts "" even if I already have it!
 end
 
 #
