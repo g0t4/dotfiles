@@ -121,7 +121,7 @@ abbr --set-cursor agi 'rg -i "%"'
 abbr --set-cursor rgh 'rg --hidden "%"'
 abbr --set-cursor agh 'rg --hidden "%"'
 
-function if_double_quote_after_cursor
+function command_line_has_a_double_quote_after_cursor
     set cursor_position (commandline --cursor)
     set cmd (commandline -b)
     set cmd_after_cursor (string trim (string sub --start $cursor_position $cmd))
@@ -137,7 +137,7 @@ function _abbr_expand_rgu
     # $argv has abbr unexpanded abbr prefix
     # % sets cursor position
 
-    if if_double_quote_after_cursor
+    if command_line_has_a_double_quote_after_cursor
         # rgu<SPACE> "foo" => rg -u "foo"
         # if I already have "" then don't add that AND don't move cursor (%)
         #  often I do this with an `rg "foo"` search first and double back to `rgu`
