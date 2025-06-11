@@ -1,3 +1,14 @@
+# # TODO after I get used to vi-mode drop the mode reminder (at left of prompt) by uncommenting this:
+# function fish_mode_prompt
+#     # by default, if you have vi-mode enabled in fish, it will show the mode
+#     #  TODO long term I think I should just turn this off altogether, for now, put it in right prompt?
+#     # do I really need to see the mode? we have what: [I]nsert, [N]ormal, [V]isual...
+#     #   Insert has diff cursor (sliver) so that's already obvious
+#     #   N has fat cursor block, also obvious
+#     #   V visual... well when I use that I probably have a selection! so that's also obvious
+#     # LETS leave this off? or?
+# end
+
 function fish_vcs_prompt --description 'Print all vcs prompts'
     # If a prompt succeeded, we assume that it's printed the correct info.
     # This is so we don't try svn if git already worked.
