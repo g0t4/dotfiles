@@ -83,12 +83,25 @@ return {
             "nvim-tree/nvim-web-devicons",
         },
         keys = {
-            { "<C-l>",     ":lua NvimTreeFindFileOrClose()<CR>", mode = "n", noremap = true, silent = true },
-            { "<C-S-l>",   ":NvimTreeFindFileToggle<CR>",        mode = "n", noremap = true, silent = true },
+            { "<C-l>",   ":lua NvimTreeFindFileOrClose()<CR>", mode = "n", noremap = true, silent = true },
+            { "<C-S-l>", ":NvimTreeFindFileToggle<CR>",        mode = "n", noremap = true, silent = true },
         },
         config = function()
             require("nvim-tree").setup({
-                -- seems to work OOB?
+                view = {
+                    -- ** none of this works to stop resizing on file open... UGH
+                    --   := require("nvim-tree").config.view
+                    -- width = 50 -- by default this is 30... setting this does determine width
+                    -- width = {
+                    --     -- min = 30 -- overriding this still triggers a resize to 30 every time.. not acting as a minimum
+                    -- },
+                    -- adaptive_size is for floating window only, AFAICT in code:
+                    --    https://github.com/nvim-tree/nvim-tree.lua/blob/1c733e8c1957dc67f47580fe9c458a13b5612d5b/lua/nvim-tree/view.lua#L351C24-L352C54
+                    -- also doesn't do what it suggests:
+                    -- preserve window size ... allegedly when OPENING a file (else it reverts to auto size, defaulting to override any resizes I've done)
+                    -- preserve_window_proportions = true,
+
+                },
                 notify = {
                     -- stop the INFO notices espeically (when create/delete a file and it works... it blocked my screen! yuck)
                     threshold = vim.log.levels.WARN,
