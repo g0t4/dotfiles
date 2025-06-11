@@ -2607,5 +2607,13 @@ print(len(tokenizer.encode(text)))
 "
 end
 
-# * fix commands with stupid abbreviations
+# * comm(on) command
+#  honestly this makes me wanna write some of my own commands that aren't abbreviated for 32KB tech from 70 years ago
+#  fish like fashion: `lines intersect` `lines union` `lines left-only` `lines right-only`
+#     maybe even `lines diff` should be here too? maybe not
 abbr common comm # why didn't they just call it co
+# FYI -1 = left only, -2 = both, -3 = right only
+abbr common_left_only comm -2 -3
+abbr common_right_only comm -1 -2
+abbr common_both comm -1 -3
+abbr intersection comm -1 -3
