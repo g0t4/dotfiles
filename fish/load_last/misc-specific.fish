@@ -2644,3 +2644,13 @@ function screencapture_ocr
 
     trash $tmp_dir
 end
+
+function use_nvim_from_source
+
+    set repo "$HOME/repos/github/neovim/neovim"
+
+    export PATH="$repo/build/bin:$PATH" # nvim source dir
+    export MANPATH="$repo/build/share/man:$MANPATH" # man pages for neovim
+    export VIMRUNTIME="$repo/runtime" # so we have all the vim scripts
+
+end
