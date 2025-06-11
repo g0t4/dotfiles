@@ -126,9 +126,6 @@ function if_double_quote_after_cursor
     set cmd (commandline -b)
     set cmd_after_cursor (string trim (string sub --start $cursor_position $cmd))
     if string match --quiet --regex "^\s*\".*\"" -- $cmd_after_cursor
-        # rgu<SPACE> "foo" => rg -u "foo"
-        # if I already have "" then don't add that AND don't move cursor (%)
-        #  often I do this with an `rg "foo"` search first and double back to `rgu`
         return 0
     end
     return 1
