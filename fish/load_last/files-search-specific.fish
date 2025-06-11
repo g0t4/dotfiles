@@ -135,11 +135,9 @@ abbr --set-cursor rgu --function _abbr_expand_rgu
 function _abbr_expand_rgu
     echo -n rg -u
 
-    if command_line_has_a_double_quote_after_cursor
-        return
+    if not command_line_has_a_double_quote_after_cursor
+        echo ' "%"'
     end
-
-    echo ' "%"'
 end
 
 #
