@@ -1774,7 +1774,7 @@ function video_editing_gen_fcpxml
     $python3 $script $video_file
 end
 
-abbr --add 7db --regex '\d+db' --function abbr_db
+abbr --add _Xdb --regex '\d+db' --function abbr_db
 function abbr_db
     set boost $argv[1] # i.e. 7db (do not need to have dB captial B... db is fine)
 
@@ -1784,7 +1784,10 @@ function abbr_db
     if test (count $video_files) -eq 1
         set video_file $video_files[1]
     end
-    echo "video_editing_boost_audio_dB_by $boost $video_file"
+    # TODO make a helper to deal with escaping, esp edge cases, have smth like:
+    #   escape_for_echo_quoted ?
+    set escaped_video_file (string replace "'" "\\'" $video_file)
+    echo "video_editing_boost_audio_dB_by $boost '$escaped_video_file'"
 end
 #abbr 7db "video_editing_boost_audio_dB_by 7dB"
 
