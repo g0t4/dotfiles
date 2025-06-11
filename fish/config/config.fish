@@ -3,8 +3,8 @@
 # - https://fishshell.com/docs/current/language.html#configuration
 # - https://fishshell.com/docs/current/tutorial.html#tut-config
 
-# ok lets do it! I want vi bindings!
-#   TODO move shit you need, don't just switch back to emacs crap
+# * ok lets do it! I want vi bindings!
+# https://fishshell.com/docs/current/interactive.html#vi-mode
 fish_vi_key_bindings
 
 # TODO review feature flags: https://fishshell.com/docs/current/language.html#future-feature-flags
