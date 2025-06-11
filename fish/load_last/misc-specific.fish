@@ -2617,3 +2617,22 @@ abbr common_left_only comm -2 -3
 abbr common_right_only comm -1 -2
 abbr common_both comm -1 -3
 abbr intersection comm -1 -3
+
+# * screencapture + tesseract to OCR
+function screencapture_ocr
+    # tmp dir first
+    set tmp_dir (mktemp -d)
+    # echo $tmp_dir
+
+    set img_file "$tmp_dir/cap.png"
+    # F'in tesseract wants to add .txt to the file name... FUUUU seriously... so just do this here
+    set text_file "$tmp_dir/ocr"
+
+    # Let user select area for screenshot
+    screencapture -s -x "$img_file"
+
+    # OCR
+    tesseract "$img_file" "$text_file" >/dev/null 2>&1
+
+    cat "$text_file.txt"
+end
