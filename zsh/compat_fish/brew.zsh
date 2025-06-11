@@ -18,8 +18,10 @@ abbr bp 'brew --prefix'
 # abbr bs 'brew search' # fish has bs impl that uses analytics, not yet porting that to zsh so for now just get rid of what would otherwise become a duplicated alias in fish AND... this is a reminder to port to zsh if I ever find myself wanting it there
 abbr bsvc 'brew services' # list state of brew installed services (daemons)
 
-abbr bus 'brew uses --eval-all' # ... depends on X
-abbr bde 'brew deps' # X depends on ...
+abbr bus 'brew uses --installed _this_pkg_' # ... ? depends on _pkg_
+abbr bde 'brew deps _of_this_pkg_' # _this_pkg_ depends on ...
+abbr brew_list_installed 'brew leaves --installed-on-request' # leaves that I explicitly asked to install
+abbr brew_leaves_dangling_deps 'brew leaves --installed-as-dependency' # leaves that I didn't explicitly install... IOTW left overs from other packages I've since removed
 
 abbr bar 'brew autoremove'
 abbr bcl 'brew cleanup'
