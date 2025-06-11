@@ -2635,4 +2635,6 @@ function screencapture_ocr
     tesseract "$img_file" "$text_file" >/dev/null 2>&1
 
     cat "$text_file.txt"
+
+    trash $tmp_dir
 end
