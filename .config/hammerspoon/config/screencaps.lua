@@ -108,6 +108,11 @@ hs.hotkey.bind({ "shift", "cmd" }, "3", function()
     --      windowsToCapture / uidWIDs
 end)
 
+hs.hotkey.bind({ "shift", "cmd", "ctrl" }, "2", function()
+    hs.task.new("/opt/homebrew/bin/fish", nil, { "-c", "screencapture_ocr" }):start()
+end)
+
+
 hs.hotkey.bind({ "shift", "cmd", "ctrl" }, "3", function()
     hs.task.new("/usr/sbin/screencapture", nil, { "-c" }):start()
 end)

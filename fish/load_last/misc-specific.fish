@@ -2634,7 +2634,8 @@ function screencapture_ocr
     # OCR
     tesseract "$img_file" "$text_file" >/dev/null 2>&1
 
-    cat "$text_file.txt"
+    cat "$text_file.txt" # dump for interactive terminals
+    cat "$text_file.txt" | pbcopy # and copy to clipboard
 
     trash $tmp_dir
 end
