@@ -181,6 +181,3 @@ end
 ## TO HABITUATE
 
 
-## PROMPT
-# fish_prompt is the default prompt function, also fish_right_prompt
-#   default uses prompt_login, prompt_pwd, fish_vcs_prompt (override to change/hide)
