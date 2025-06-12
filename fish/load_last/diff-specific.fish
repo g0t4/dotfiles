@@ -109,13 +109,6 @@ function _convert_current_command_to_diff_command_args
     commandline --replace "diff_command_args '$user_input' "
 end
 
-function bind_both_modes_default_and_insert
-    # FYI this is for using vi-mode, to bind in both normal and default modes
-    #  default also works in non-vi-mode (emacs like)
-    #  NOTE default == normal in vi-mode
-    bind -M default $argv
-    bind -M insert $argv
-end
 bind_both_modes_default_and_insert f5 _convert_current_command_to_diff_command_args
 bind_both_modes_default_and_insert ctrl-f5 _convert_current_command_to_diff_command_args # ctrl+F5 (streamdeck button => hotkey action)
 
