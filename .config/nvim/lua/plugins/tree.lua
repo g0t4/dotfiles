@@ -87,6 +87,14 @@ return {
             { "<C-S-l>", ":NvimTreeFindFileToggle<CR>",        mode = "n", noremap = true, silent = true },
         },
         config = function()
+            -- TODO! is this still an issue? I commented this out and it doesn't change cursorline:
+            vim.cmd [[
+                " without this, the cursor line in NvimTree is blindingly bright...
+                " and for some reason once it is used it sets CursorLine in subsequently opened files...
+                "   so add this in EARLY!
+                highlight! link NvimTreeCursorLine CursorLine
+            ]]
+
             require("nvim-tree").setup({
                 view = {
                     -- ** none of this works to stop resizing on file open... UGH
