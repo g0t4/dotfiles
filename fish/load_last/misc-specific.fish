@@ -11,7 +11,7 @@ set __fish_help_dir "" # overwrite fish help dir thus forcing the use of https:/
 
 ### BINDINGS ###
 # some of these might be a result of setting up iTerm2 to use xterm default keymapping (in profile), might need to adjust if key map is subsequently changed
-# bind shift-delete kill-word # shift+del to kill forward a word (otherwise its esc+d only), I have a habit of using this (not sure why, probably an old keymapping in zsh or?)
+# bind_both_modes_default_and_insert shift-delete kill-word # shift+del to kill forward a word (otherwise its esc+d only), I have a habit of using this (not sure why, probably an old keymapping in zsh or?)
 #  dont wanna clobber new shift-delete in autosuggests... and I don't think I used shift-delete often for delete forward anyways
 function on_change_show_verbose_prompt --on-variable show_verbose_prompt
     commandline --function repaint
@@ -24,7 +24,7 @@ function toggle_show_verbose_prompt
     end
     # commandline --function repaint
 end
-bind f4 toggle_show_verbose_prompt
+bind_both_modes_default_and_insert f4 toggle_show_verbose_prompt
 
 if command -q launchctl
     abbr lcl 'launchctl list'
@@ -735,9 +735,9 @@ abbr --set-cursor completeC "complete -C '%'"
 #   alt-down history-token-search-forward
 #
 #   if I wanna add back Esacpe,dot then:
-#     bind escape,. history-token-search-backward
+#     bind_both_modes_default_and_insert escape,. history-token-search-backward
 #   for now lets just remind myself and see if I can pick up alt up/down quickly... b/c I always blow past tokens and normally can't reverse so I wanna use up/down to reverse easily too!
-bind escape,. "commandline --append 'alt-up'; commandline --cursor 10000" # move cursor to end too (so can ctrl-w to wipe out inserted reminder token)
+bind_both_modes_default_and_insert escape,. "commandline --append 'alt-up'; commandline --cursor 10000" # move cursor to end too (so can ctrl-w to wipe out inserted reminder token)
 
 # *** processes ***
 abbr psg "grc ps aux | grep -i "
@@ -948,8 +948,8 @@ function custom-kill-command-word
     commandline -f kill-word
 end
 # ctrl+ins
-bind ctrl-o custom-kill-command-word # ctrl +o ([o]verwrite command)
-# bind '*' custom-kill-command-word # * alone works w/o interrupt mid suggestion
+bind_both_modes_default_and_insert ctrl-o custom-kill-command-word # ctrl +o ([o]verwrite command)
+# bind_both_modes_default_and_insert  '*' custom-kill-command-word # * alone works w/o interrupt mid suggestion
 # ctrl+o/q unbound currently IIUC
 # '[1;5H' # ctrl+home (interrupts suggestion)
 # '[1;6H' # ctrl+shift+home (rest seem to interrupt too, likely b/c bound to smth else and triggering two bindings, maybe? i.e. home moves to home)
@@ -979,7 +979,7 @@ function toggle-grc
     end
     # ALTERNATIVE - pull back last command, toggle-grc, run - can use if I find myself doing this two step process often
 end
-bind ctrl-q toggle-grc # terrible key choice (ctrl+q) but it isn't used currently so yeah
+bind_both_modes_default_and_insert ctrl-q toggle-grc # terrible key choice (ctrl+q) but it isn't used currently so yeah
 
 function toggle-git_commit_command
     # toggle wrapping current command line in a git commit
@@ -1006,8 +1006,7 @@ function toggle-git_commit_command
     end
 end
 
-bind -M default ctrl-f12 toggle-git_commit_command
-bind -M insert ctrl-f12 toggle-git_commit_command
+bind_both_modes_default_and_insert ctrl-f12 toggle-git_commit_command
 # FYI -M default applies to both vi/emacs modes... default==normal in vi-mode
 
 if command -q apt

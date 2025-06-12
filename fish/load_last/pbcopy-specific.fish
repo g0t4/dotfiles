@@ -102,10 +102,8 @@ function kill_all_lines
 
     commandline -r "" # replace all lines with empty string
 end
-bind -M default escape,k kill_all_lines # esc+k (historically I used this key combo exclusively for this purpose)
-bind -M insert escape,k kill_all_lines # esc+k (historically I used this key combo exclusively for this purpose)
-bind -M default alt-k kill_all_lines # should I switch to alt for my meta key basically? just explicitly set it for all shortcuts I used to use with esc (very few)?
-bind -M insert  alt-k kill_all_lines # should I switch to alt for my meta key basically? just explicitly set it for all shortcuts I used to use with esc (very few)?
+bind_both_modes_default_and_insert escape,k kill_all_lines # esc+k (historically I used this key combo exclusively for this purpose)
+bind_both_modes_default_and_insert alt-k kill_all_lines # should I switch to alt for my meta key basically? just explicitly set it for all shortcuts I used to use with esc (very few)?
 # one reason to switch to alt is b/c nvim then can use esc to exit to normal mode from terminal mode
 
 # !!! TODO USE THIS LATER...

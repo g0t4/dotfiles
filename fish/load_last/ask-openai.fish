@@ -137,7 +137,7 @@ function ask_openai
 end
 
 # how does fish handle multiple registrations? does last one win? is it an issue that \cb is preset bound to backward-char?
-bind ctrl-b ask_openai
+bind_both_modes_default_and_insert ctrl-b ask_openai
 
 
 
@@ -168,7 +168,7 @@ function ask_openai_explain
     # `fish_commandline_append` doesn't use repaint, so I assume I don't need to
 end
 
-bind f2 ask_openai_explain
+bind_both_modes_default_and_insert f2 ask_openai_explain
 
 
 function ask_openai_link
@@ -199,7 +199,7 @@ function ask_openai_link
 end
 
 
-bind f3 ask_openai_link
+bind_both_modes_default_and_insert f3 ask_openai_link
 # urls? shotgun style! open up to 5 tabs!?
 
 ## NOTES
