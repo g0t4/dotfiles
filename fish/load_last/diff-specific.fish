@@ -124,8 +124,8 @@ function _convert_current_command_to_diff_two_commands
     set user_input (_current_command_or_previous)
     commandline --replace "diff_two_commands '$user_input' '$user_input' "
 end
-bind f6 _convert_current_command_to_diff_two_commands # bind to F6 for now
-bind ctrl-f6 _convert_current_command_to_diff_two_commands # ctrl+F6 (streamdeck button => hotkey action)
+bind_default_and_insert f6 _convert_current_command_to_diff_two_commands # bind to F6 for now
+bind_default_and_insert ctrl-f6 _convert_current_command_to_diff_two_commands # ctrl+F6 (streamdeck button => hotkey action)
 # see which binding I prefer (F6 or streamdeck)
 #    yes I know I can reuse f6 for stremadeck too but I think I will get rid of that one and use it elsewhere so that is why I have both bound here for now
 
