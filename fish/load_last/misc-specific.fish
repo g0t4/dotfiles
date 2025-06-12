@@ -733,11 +733,9 @@ abbr --set-cursor completeC "complete -C '%'"
 #   alt-. history-token-search-backward
 #   alt-up history-token-search-backward
 #   alt-down history-token-search-forward
-#
-#   if I wanna add back Esacpe,dot then:
-#     bind_both_modes_default_and_insert escape,. history-token-search-backward
-#   for now lets just remind myself and see if I can pick up alt up/down quickly... b/c I always blow past tokens and normally can't reverse so I wanna use up/down to reverse easily too!
-bind_both_modes_default_and_insert escape,. "commandline --append 'alt-up'; commandline --cursor 10000" # move cursor to end too (so can ctrl-w to wipe out inserted reminder token)
+#   FYI other shells use Escape-. but fish 4 has up/down which is superior, so use that
+#   should I want to retrain myself on escape-. then add this back:
+#   bind_both_modes_default_and_insert escape,. history-token-search-backward
 
 # *** processes ***
 abbr psg "grc ps aux | grep -i "
