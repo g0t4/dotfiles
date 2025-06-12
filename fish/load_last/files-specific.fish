@@ -830,11 +830,11 @@ function _fzf-nested-git-commit-widget -d "Pick a git commit_hash"
     commandline -f repaint
 end
 
-bind alt-shift-d _fzf-nested-dir-widget
-bind alt-shift-f _fzf-nested-file-widget
-bind alt-shift-b _fzf-nested-both-file-and-dirs-widget
+bind_both_modes_default_and_insert alt-shift-d _fzf-nested-dir-widget
+bind_both_modes_default_and_insert alt-shift-f _fzf-nested-file-widget
+bind_both_modes_default_and_insert alt-shift-b _fzf-nested-both-file-and-dirs-widget
 # TODO what all pickers for git history might I want?
-bind alt-shift-g _fzf-nested-git-commit-widget
+bind_both_modes_default_and_insert alt-shift-g _fzf-nested-git-commit-widget
 
 
 # *** chmod,chgrp,chown,chsh
