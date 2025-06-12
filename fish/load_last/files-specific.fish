@@ -721,6 +721,19 @@ export EDITOR="nvim"
 
 #### nvim:
 
+# nvim server mode
+abbr nvim_start_server_attached "nvim --listen localhost:6666" # and attach to its UI
+abbr nvim_start_server_not_attached "nvim --listen localhost:6666 --embed" # don't attach to its UI
+# note headless is not the same as embed, embed allows remote UI connections
+abbr nvim_client_attach_ui "nvim --server localhost:6666 --remote-ui" # pass files too, to open
+abbr nvim_client_send_command "nvim --server localhost:6666 --remote-send"
+abbr nvim_client_eval_expr "nvim --server localhost:6666 --remote-expr"
+abbr nvim_client_open_files_in_new_tabs "nvim --server localhost:6666 --remote-tab" # open file(s) in new tab(s)
+# fyi :detach when done, or :quit will kill server
+# server is useful for test automation
+# TODO consider porting some/all "open with" functionality to using a server?
+# not yet in NVIM: --remote*-wait variants, and servername/list (from vim)
+
 # FYI I changed session restore to use passed files/paths to open after session restored, so now I want that to only be if I explicitly ask for a file to be opened and not show dir every time I open, show last file open in most cases... I might need to alter this later
 abbr n nvim # n<space> is perfect now
 abbr nr --function nr_expand
