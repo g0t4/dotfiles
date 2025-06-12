@@ -720,6 +720,7 @@ export EDITOR="nvim"
 
 
 #### nvim:
+
 # FYI I changed session restore to use passed files/paths to open after session restored, so now I want that to only be if I explicitly ask for a file to be opened and not show dir every time I open, show last file open in most cases... I might need to alter this later
 abbr n nvim # n<space> is perfect now
 abbr nr --function nr_expand
@@ -752,6 +753,11 @@ function nn_expand
         echo -n "cd $WES_DOTFILES/.config/nvim; "
     end
     echo nvim
+end
+
+if command -q nvim
+    abbr vim nvim
+    abbr vi nvim
 end
 
 # *** screenpal

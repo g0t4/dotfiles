@@ -1973,11 +1973,6 @@ function show_hex_rgb_color
 
 end
 
-if command -q nvim
-    abbr vim nvim
-    abbr vimc command vim # fallback to vim if nvim issues
-end
-
 # *** macOS screenshot helpers (for alfred file action => move here)
 
 function _screenshots_trash_secondary_display
