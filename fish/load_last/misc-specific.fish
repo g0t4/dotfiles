@@ -728,24 +728,6 @@ abbr --set-cursor completeC "complete -C '%'"
 #     but don't work on this any more unless grep absolutely falls apart
 #
 
-# *** bind workaround ***
-# FYI known bug with new --set-cursor abbr
-#    https://github.com/fish-shell/fish-shell/issues/9730
-# bind --preset ' ' self-insert expand-abbr
-bind ' ' self-insert expand-abbr # self-insert first since it doesn't matter before/after on " " and then --set-cursor abbr's work with ' ' trigger
-# rest work with vanilla abbrs but not --set-cursor abbrs:
-# bind --preset ';' self-insert expand-abbr
-bind ';' expand-abbr self-insert
-# bind --preset '|' self-insert expand-abbr
-bind '|' expand-abbr self-insert
-# bind --preset '&' self-insert expand-abbr
-bind '&' expand-abbr self-insert
-# bind --preset '>' self-insert expand-abbr
-bind '>' expand-abbr self-insert
-# bind --preset '<' self-insert expand-abbr
-bind '<' expand-abbr self-insert
-# bind --preset ')' self-insert expand-abbr
-
 # *** binds (consolidate here) ***
 # FYI fish4 OOB has:
 #   alt-. history-token-search-backward
