@@ -108,10 +108,16 @@ function _convert_current_command_to_diff_command_args
     set user_input (_current_command_or_previous)
     commandline --replace "diff_command_args '$user_input' "
 end
-bind -M default f5 _convert_current_command_to_diff_command_args
-bind -M insert f5 _convert_current_command_to_diff_command_args
-bind -M default ctrl-f5 _convert_current_command_to_diff_command_args # ctrl+F5 (streamdeck button => hotkey action)
-bind -M insert ctrl-f5 _convert_current_command_to_diff_command_args # ctrl+F5 (streamdeck button => hotkey action)
+
+function bind_default_and_insert
+    # FYI this is for using vi-mode, to bind in both normal and default modes
+    #  default also works in non-vi-mode (emacs like)
+    #  NOTE default == normal in vi-mode
+    bind -M default $argv
+    bind -M insert $argv
+end
+bind_default_and_insert f5 _convert_current_command_to_diff_command_args
+bind_default_and_insert ctrl-f5 _convert_current_command_to_diff_command_args # ctrl+F5 (streamdeck button => hotkey action)
 
 function _convert_current_command_to_diff_two_commands
     # use to compare w/ add and remove from current command
