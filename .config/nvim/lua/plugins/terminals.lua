@@ -393,7 +393,7 @@ return {
                 return all_deviders
             end
 
-            function is_line_matching_devider(line)
+            local function is_line_matching_devider(line)
                 return vim.iter(get_all_block_deviders()):any(function(devider)
                     return string.match(line, devider)
                 end)
