@@ -402,9 +402,13 @@ return {
                 -- does not include cursor line (that way if on a cell's devider you will jump to next cell not "current" cell
                 local all_lines_below_cursor_line = vim.api.nvim_buf_get_lines(0, start_line, 10000, false)
                 for lines_below, line in ipairs(all_lines_below_cursor_line) do
-                    if vim.iter(get_all_block_deviders()):any(function(divider)
+                    function is_line_matching_divider(line)
+                        return vim.iter(get_all_block_deviders()):any(function(divider)
                             return string.match(line, divider)
-                        end) then
+                        end)
+                    end
+
+                    if is_line_matching_divider(line) then
                         -- +1 => line after devider
                         local block_line_number = start_line + lines_below + 1
                         print("block_line_number: " .. (block_line_number or 'none'))
