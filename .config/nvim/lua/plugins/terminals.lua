@@ -399,11 +399,13 @@ return {
                 -- find first line below me that has cell block devider
                 -- TODO check for all deviders
                 -- PRN is there already logic in iron.nvim that I could reuse for this? (it has exec block and go to next action)
-                local cell_block_devider = get_all_block_deviders()
+                local cell_block_deviders = get_all_block_deviders()
                 -- does not include cursor line (that way if on a cell's devider you will jump to next cell not "current" cell
                 local all_lines_below_cursor_line = vim.api.nvim_buf_get_lines(0, start_line, 10000, false)
                 for lines_below, line in ipairs(all_lines_below_cursor_line) do
-                    if string.match(line, cell_block_devider) then
+                    if vim.iter(cell_block_deviders):any(function(divider)
+                            return string.match(line, divider)
+                        end) then
                         -- +1 => line after devider
                         local block_line_number = start_line + lines_below + 1
                         print("block_line_number: " .. (block_line_number or 'none'))
