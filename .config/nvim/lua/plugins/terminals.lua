@@ -378,13 +378,28 @@ return {
                 return previous_line:match("^%s*$")
             end
 
+            local function get_all_block_deviders()
+                local config = require("iron.config")
+
+                local repl_definition = config.repl_definition[vim.bo[0].filetype]
+                if repl_definition == nil then
+                    error("No repl definition for this filetype!")
+                end
+
+                local all_deviders = config.repl_definition[vim.bo.filetype].block_deviders[1]
+                if all_deviders == nil or #all_deviders <= 0 then
+                    error("No cell delimiting block divider(s) configured for this filetype!")
+                end
+                return all_deviders
+            end
+
             vim.keymap.set('n', '<leader>ij', function()
                 -- move down to next cell
                 local start_line, _ = unpack(vim.api.nvim_win_get_cursor(0))
                 -- find first line below me that has cell block devider
                 -- TODO check for all deviders
                 -- PRN is there already logic in iron.nvim that I could reuse for this? (it has exec block and go to next action)
-                local cell_block_devider = require("iron.config").repl_definition[vim.bo.filetype].block_deviders[1]
+                local cell_block_devider = get_all_block_deviders()
                 -- does not include cursor line (that way if on a cell's devider you will jump to next cell not "current" cell
                 local all_lines_below_cursor_line = vim.api.nvim_buf_get_lines(0, start_line, 10000, false)
                 for lines_below, line in ipairs(all_lines_below_cursor_line) do
@@ -404,7 +419,7 @@ return {
             vim.keymap.set('n', '<leader>ik', function()
                 -- move up to previous cell
                 local start_line, _ = unpack(vim.api.nvim_win_get_cursor(0))
-                local cell_block_devider = require("iron.config").repl_definition[vim.bo.filetype].block_deviders[1]
+                local cell_block_devider = get_all_block_deviders()
                 local all_lines_above_cursor_line = vim.api.nvim_buf_get_lines(0, 1, start_line - 1, false)
                 local reversed = vim.fn.reverse(all_lines_above_cursor_line)
                 -- print(vim.inspect(reversed))
@@ -432,11 +447,11 @@ return {
                     error("No repl definition for this filetype!")
                 end
 
-                local deviders = config.repl_definition[vim.bo.filetype].block_deviders[1]
-                if deviders == nil or #deviders <= 0 then
+                local first_devider = config.repl_definition[vim.bo.filetype].block_deviders[1]
+                if first_devider == nil or #first_devider <= 0 then
                     error("No cell delimiting block divider(s) configured for this filetype!")
                 end
-                return deviders
+                return first_devider
             end
 
             vim.keymap.set('n', '<leader>ib', function()
