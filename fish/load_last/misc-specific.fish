@@ -2646,6 +2646,7 @@ abbr rsync_list_only_source_files rsync --recursive --dry-run .
 # FYI! always use trailing slash... so its always contents of foo/ to contents bar/ dir
 #
 # most or all of my abbrs should have --dry-run at the end, I can easily remove it when ready
+# FYI if copied smth already with say macos... use --recurisve (instead of --archive which also has --recursive) ... that way you only compare the file contents and not owner/group/mod-time/perms too
 # quick = default size/mod-time check
 abbr rsync_quick rsync --archive --delete --progress --stats --dry-run
 abbr rsync_quick_dry_run rsync --archive --delete --itemize-changes --dry-run

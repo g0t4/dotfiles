@@ -90,10 +90,31 @@ return {
     --   "kiyoon/jupynium.nvim", -- probably best option if I wanna try full jupyter integration (drives a separate, synchronized nb instance)
     --   "jupyter-vim/jupyter-vim"
     {
+        -- FYI! this works fine, I will leave it off until I have achance to use it more
+        -- a few things: make sure to install requirements: firefox (not chrome), geckodriver
+        -- uv add ipykernel jupynium jupytext nbclassic notebook selenium
+        --   FYI I had to add selenium to my dotfiles repo, whereas the rest worked in my venv for the examples I was trying, in a diff repo.... it is possible at first I had wrong venv activated (or none) and it defautled to my dotfiles .venv
+        -- :JupyniumStartAndAttachToServer # to start server (open firefox)
+        -- :JupyniumStartSync # start sync process (mirror changes in nvim to browser)
+        --   by the way changes in browser don't get synced to neovim... for that you can save and then reopen file in neovim (b/c behind scenes it is using jupytext and auto syncing on changes
+        --
         "kiyoon/jupynium.nvim",
-        opt = {},
-
+        enabled = false,
+        config = function()
+            require("jupynium").setup({
+                notify = {
+                    ignore = {
+                        "download_ipynb",
+                        -- "error_download_ipynb",
+                        "attach_and_init",
+                        -- "error_close_main_page",
+                        "notebook_closed",
+                    },
+                },
+            })
+        end,
     },
+
     --
     -- TODO later resume trying molten w/ images
     --   TODO OR, can I just get iron.nvim to work with images instead?
