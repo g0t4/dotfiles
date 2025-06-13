@@ -53,15 +53,15 @@ vim.keymap.set('t', '<esc>', "<C-\\><C-n>", { desc = 'exit terminal' }) -- that 
 --         print("termrequest: ", vim.inspect(evt))
 --     end
 -- })
-
-function LogTermRequestEventsToSeeOscCodes()
-    vim.api.nvim_create_autocmd({ 'TermRequest' }, {
-        desc = 'Dump OSC codes for learning',
-        callback = function(ev)
-            print(vim.v.termrequest)
-        end
-    })
-end
+--
+-- local function LogTermRequestEventsToSeeOscCodes()
+--     vim.api.nvim_create_autocmd({ 'TermRequest' }, {
+--         desc = 'Dump OSC codes for learning',
+--         callback = function(ev)
+--             print(vim.v.termrequest)
+--         end
+--     })
+-- end
 
 return {
 
@@ -157,7 +157,7 @@ return {
             local ll = require("iron.lowlevel")
             local marks = require("iron.marks")
 
-            function ensure_open()
+            local function ensure_open()
                 -- FYI based on https://github.com/g0t4/iron.nvim/blob/d8c2869/lua/iron/core.lua#L254-L274
                 local meta = vim.b[0].repl
 
@@ -175,7 +175,7 @@ return {
                 return meta
             end
 
-            function ensure_open_and_cleared()
+            local function ensure_open_and_cleared()
                 -- STATUS:
                 -- - btw, this works for ipython
                 -- - works with lua to stop the empty scrollback lines after ctrl-l
@@ -207,14 +207,14 @@ return {
                 return meta
             end
 
-            function clear_then(func)
+            local function clear_then(func)
                 return function()
                     ensure_open_and_cleared()
                     func()
                 end
             end
 
-            function send_top_block_then_current_block()
+            local function send_top_block_then_current_block()
                 -- previously, I would just run whole file `isf` then `icb` for current block...
                 --  this collapses that into one command and hopefully obviates running code I don't care about if I can make top block comprise most if not all init and otherwise have each block be standalone
                 --  I could come up with more conventions for related blocks... but lets KISS for now
@@ -291,7 +291,7 @@ return {
             --         end
             --     end,
             -- })
-            function WIP_test_copy_cmd_output_using_tmp_file()
+            local function WIP_test_copy_cmd_output_using_tmp_file()
                 local current_buf = vim.api.nvim_get_current_buf()
 
                 local meta = ensure_open()
@@ -336,7 +336,7 @@ return {
                     end
                 })
 
-                function send_line()
+                local function send_line()
                     local linenr = vim.api.nvim_win_get_cursor(0)[1] - 1
                     local cur_line = vim.api.nvim_buf_get_lines(0, linenr, linenr + 1, 0)[1]
                     local width = vim.fn.strwidth(cur_line)
