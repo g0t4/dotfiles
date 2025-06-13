@@ -2615,3 +2615,42 @@ function use_nvim_from_source
     export VIMRUNTIME="$repo/runtime" # so we have all the vim scripts
 
 end
+
+# * rsync
+# key args...
+# --dry-run/-n
+#   --list-only (implied if no destination dir):
+abbr rsync_list_only_source_files rsync --recursive --dry-run .
+# --verbose (-v),
+# --archive (-a == -Dgloprt)
+#   --group/-g - set group on dest
+#   --links/-l - tx symbolic links
+#   --owner/-o - set owner on dest
+#   -p - set perms on dest
+#   -r - --recursive/-r
+#   -t - set mod-times
+# --dirs/-d (instead of --recursive, copy dirs... need trailing slash/ or . to copy dir contents too)
+# --checksum (-c) - compare checksum, instead of quick check (file size / mod-time)
+# --compress/-z - during tx
+# --delete (with -r only)
+# --exclude/--include
+# --extended-attributes - macos specific
+# --force
+# --fuzzy/-y - look for files that might be the same
+# --ignore-existing
+#   --ingnore-non-existing/--existing
+# --quiet/-q - only print errors
+# --progress - print periodic updates
+#   --stats - at end
+#
+# FYI! always use trailing slash... so its always contents of foo/ to contents bar/ dir
+#
+# most or all of my abbrs should have --dry-run at the end, I can easily remove it when ready
+# quick = default size/mod-time check
+abbr rsync_quick rsync --archive --delete --progress --stats --dry-run
+abbr rsync_quick_dry_run rsync --archive --delete --verbose --dry-run
+# checksum = compare contents
+abbr rsync_checksum rsync --archive --delete --checksum --progress --stats --dry-run
+abbr rsync_checksum_dry_run rsync --archive --delete --checksum --verbose --stats --dry-run
+# FYI add _dry_run b/c w/ dry-run I want --verbose output... whereas w/ a real copy I want --progress...
+#   that said, all have --dry-run just to be safe on end
