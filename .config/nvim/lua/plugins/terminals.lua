@@ -420,7 +420,11 @@ return {
             end, { desc = 'iron' })
 
 
-            local function get_block_deviders()
+            --- return the first block devider
+            ---  if there are multiple, it is assumed the first is the preferred one
+            local function get_preferred_block_devider()
+                -- BTW I am keeping misspelling of devider so as to easily find relevant code
+
                 local config = require("iron.config")
 
                 local repl_definition = config.repl_definition[vim.bo[0].filetype]
@@ -437,7 +441,7 @@ return {
 
             vim.keymap.set('n', '<leader>ib', function()
                 -- [i]nsert [b]lock divider
-                local use_devider = get_block_deviders()
+                local preferred_devider = get_preferred_block_devider()
 
                 if not current_line_is_blank() then
                     -- move to after/end of paragraph
@@ -454,7 +458,7 @@ return {
                             vim.api.nvim_feedkeys(keys, "n", false)
                         end
 
-                        local keys = vim.api.nvim_replace_termcodes("o" .. use_devider .. "<CR><Esc>cc<Esc>", true, false, true)
+                        local keys = vim.api.nvim_replace_termcodes("o" .. preferred_devider .. "<CR><Esc>cc<Esc>", true, false, true)
                         -- FYI cc clears the current line to wipe out comment leader if added (b/c formatoptions contains "o")
                         vim.api.nvim_feedkeys(keys, "n", false)
                     end, 0)
@@ -464,7 +468,7 @@ return {
                         local keys = vim.api.nvim_replace_termcodes("o<Esc>", true, false, true)
                         vim.api.nvim_feedkeys(keys, "n", false)
                     end
-                    local keys = vim.api.nvim_replace_termcodes("i" .. use_devider .. " <CR><Esc>cc<Esc>", true, false, true)
+                    local keys = vim.api.nvim_replace_termcodes("i" .. preferred_devider .. " <CR><Esc>cc<Esc>", true, false, true)
                     vim.api.nvim_feedkeys(keys, "n", false)
                     -- FYI b/c I use <CR> to insert a line, that ensures there is a new line after the divider
                 end
