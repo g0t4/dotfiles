@@ -414,18 +414,8 @@ function CopilotsStatus()
     end
 
     if vim.tbl_contains(use_ai, "ask-openai") then
-        -- reference: "󰼇" "󰼈"
-        local api = require("ask-openai.api")
-        table.insert(components, {
-            function()
-                return "󰼇"
-            end,
-            color = function()
-                -- TODO toggling predictions on/off seems borked, but this works to show the correct state (dont look here for enable/disable ask-openai predictions)
-                local ask_enabled = IsAskOpenAIPredictionsAvailable() and api.is_enabled()
-                return { fg = ask_enabled and enabled_color or disabled_color }
-            end,
-        })
+        table.insert(components,
+            require("ask-openai.local_config").lualine())
     end
 
     if vim.tbl_contains(use_ai, "ggml-org/llama.vim") then
