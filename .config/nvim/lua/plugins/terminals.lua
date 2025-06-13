@@ -428,9 +428,7 @@ return {
                 local reversed = vim.fn.reverse(all_lines_above_cursor_line)
                 -- print(vim.inspect(reversed))
                 for lines_above, line in ipairs(reversed) do
-                    if vim.iter(get_all_block_deviders()):any(function(divider)
-                            return string.match(line, divider)
-                        end) then
+                    if is_line_matching_devider(line) then
                         -- jump to end of previous cell is fine, I think that makes more sense when moving upward?
                         -- -1 => line before devider
                         local block_line_number = start_line - lines_above - 1
