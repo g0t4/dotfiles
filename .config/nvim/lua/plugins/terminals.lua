@@ -360,14 +360,14 @@ return {
 
             vim.keymap.set('n', '<leader>it', WIP_test_copy_cmd_output_using_tmp_file, { desc = 'clear => send test' })
 
-            function current_line_is_blank()
+            local function current_line_is_blank()
                 local row, _ = unpack(vim.api.nvim_win_get_cursor(0))
                 local current_line = vim.api.nvim_buf_get_lines(0, row - 1, row, false)[1]
                 -- print("current line: '" .. current_line .. "'")
                 return current_line:match("^%s*$")
             end
 
-            function is_line_before_blank_or_first_in_file()
+            local function is_line_before_blank_or_first_in_file()
                 local row, _ = unpack(vim.api.nvim_win_get_cursor(0))
                 if row == 1 then
                     -- edge case, could go either way, I don't intend to put delimiter at start or end of file so not that important in this case
