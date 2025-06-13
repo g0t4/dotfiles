@@ -476,17 +476,17 @@ return {
                     repl_definition = {
                         fish = {
                             command = { "fish" },
-                            block_deviders = { "#%%" },
+                            block_deviders = { "# %%" },
                         },
                         sh = {
                             -- command: either a table, or a func that returns a table
                             command = { "bash" },
-                            block_deviders = { "#%%" },
+                            block_deviders = { "# %%" },
                         },
                         lua = {
                             command = { "lua" },
                             -- are these not set OOB? or is it diff default for lua?
-                            block_deviders = { "--%%" },
+                            block_deviders = { "-- %%" },
                         },
                         python = {
                             -- PRN if need be, create a profile for configuring how ipython runs inside of iron.nvim (only if issues with config outside of nvim), --profile foo
@@ -515,7 +515,7 @@ return {
                                 filtered = vim.tbl_filter(function(line) return not string.match(line, "^%s*#") end, result)
                                 return filtered
                             end,
-                            block_deviders = { "#%%" }, -- "# %%" (just use one devider, can always find/replace if I need them changed)
+                            block_deviders = { "# %%" }, -- "# %%" (just use one devider, can always find/replace if I need them changed)
                             -- use iterm to split pane, not sure this does what ChatGPT thought it would do :)... this just runs iterm in a nested terminal window
                             -- command = { "osascript", "-e", [[tell app "iTerm" to tell the current window to create tab with default profile]] },
                         }
