@@ -2648,9 +2648,9 @@ abbr rsync_list_only_source_files rsync --recursive --dry-run .
 # most or all of my abbrs should have --dry-run at the end, I can easily remove it when ready
 # quick = default size/mod-time check
 abbr rsync_quick rsync --archive --delete --progress --stats --dry-run
-abbr rsync_quick_dry_run rsync --archive --delete --verbose --dry-run
+abbr rsync_quick_dry_run rsync --archive --delete --itemize-changes --dry-run
 # checksum = compare contents
 abbr rsync_checksum rsync --archive --delete --checksum --progress --stats --dry-run
-abbr rsync_checksum_dry_run rsync --archive --delete --checksum --verbose --stats --dry-run
-# FYI add _dry_run b/c w/ dry-run I want --verbose output... whereas w/ a real copy I want --progress...
+abbr rsync_checksum_dry_run rsync --archive --delete --checksum --itemize-changes --stats --dry-run
+# FYI add _dry_run b/c w/ dry-run I want --itemize-changes output... whereas w/ a real copy I want --progress...
 #   that said, all have --dry-run just to be safe on end
