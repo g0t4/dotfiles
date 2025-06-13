@@ -174,6 +174,21 @@ if test -d "$HOME/bin"
     export PATH="$PATH:$HOME/bin"
 end
 
+# *** PATH(s)
+
+function _path_list
+    # think which, but not limited to the which command you are using
+    #   i.e. zsh's builtin which is not same as system /usr/bin/which which other shells like fish use
+    for dir in $PATH
+        if test -e $dir
+            for item in $dir/*
+                echo $dir$item
+            end
+            # PRN any filtering or additional info to show? i.e. file type? dir? etc...?
+        end
+    end
+end
+
 # # /opt/watchman/bin/
 # if test -d /opt/watchman/bin
 #     export PATH="$PATH:/opt/watchman/bin"

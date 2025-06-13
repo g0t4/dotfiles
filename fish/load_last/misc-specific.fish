@@ -1535,19 +1535,6 @@ function elgato_kill_other_account_streamdeck
     # just open other account's streamdeck next time you switch to it
 end
 
-# *** PATH(s)
-
-function _path_list
-    for dir in $PATH
-        if test -e $dir
-            for item in $dir/*
-                echo $dir$item
-            end
-            # PRN any filtering or additional info to show? i.e. file type? dir? etc...?
-        end
-    end
-end
-
 # *** video editing wrappers ***
 
 function quote_paths
