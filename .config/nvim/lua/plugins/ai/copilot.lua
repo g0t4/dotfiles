@@ -314,7 +314,7 @@ function SwitchCopilot()
         if IsAskOpenAIPredictionsAvailable() then
             local api = require("ask-openai.api")
 
-            if api.is_enabled() then
+            if api.are_predictions_enabled() then
                 DisableAllCopilots()
             else
                 EnableAllCopilots()
