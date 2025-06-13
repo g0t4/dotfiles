@@ -394,8 +394,8 @@ return {
             end
 
             function is_line_matching_divider(line)
-                return vim.iter(get_all_block_deviders()):any(function(divider)
-                    return string.match(line, divider)
+                return vim.iter(get_all_block_deviders()):any(function(devider)
+                    return string.match(line, devider)
                 end)
             end
 
