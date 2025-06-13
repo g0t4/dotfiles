@@ -515,7 +515,7 @@ return {
                                 filtered = vim.tbl_filter(function(line) return not string.match(line, "^%s*#") end, result)
                                 return filtered
                             end,
-                            block_deviders = { "# %%" }, -- "# %%" (just use one devider, can always find/replace if I need them changed)
+                            block_deviders = { "# %%", "#%%", }, -- allow both, I have old files with no space and for now I can use both
                             -- use iterm to split pane, not sure this does what ChatGPT thought it would do :)... this just runs iterm in a nested terminal window
                             -- command = { "osascript", "-e", [[tell app "iTerm" to tell the current window to create tab with default profile]] },
                         }
