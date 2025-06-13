@@ -386,7 +386,7 @@ return {
                     error("No repl definition for this filetype!")
                 end
 
-                local all_deviders = config.repl_definition[vim.bo.filetype].block_deviders[1]
+                local all_deviders = config.repl_definition[vim.bo.filetype].block_deviders
                 if all_deviders == nil or #all_deviders <= 0 then
                     error("No cell delimiting block divider(s) configured for this filetype!")
                 end
@@ -419,12 +419,14 @@ return {
             vim.keymap.set('n', '<leader>ik', function()
                 -- move up to previous cell
                 local start_line, _ = unpack(vim.api.nvim_win_get_cursor(0))
-                local cell_block_devider = get_all_block_deviders()
+                local cell_block_deviders = get_all_block_deviders()
                 local all_lines_above_cursor_line = vim.api.nvim_buf_get_lines(0, 1, start_line - 1, false)
                 local reversed = vim.fn.reverse(all_lines_above_cursor_line)
                 -- print(vim.inspect(reversed))
                 for lines_above, line in ipairs(reversed) do
-                    if string.match(line, cell_block_devider) then
+                    if vim.iter(cell_block_deviders):any(function(divider)
+                            return string.match(line, divider)
+                        end) then
                         -- jump to end of previous cell is fine, I think that makes more sense when moving upward?
                         -- -1 => line before devider
                         local block_line_number = start_line - lines_above - 1
