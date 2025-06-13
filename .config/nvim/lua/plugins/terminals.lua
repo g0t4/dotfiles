@@ -89,6 +89,11 @@ return {
     --   JUPYTER notebook support:
     --   "kiyoon/jupynium.nvim", -- probably best option if I wanna try full jupyter integration (drives a separate, synchronized nb instance)
     --   "jupyter-vim/jupyter-vim"
+    {
+        "kiyoon/jupynium.nvim",
+        opt = {},
+
+    },
     --
     -- TODO later resume trying molten w/ images
     --   TODO OR, can I just get iron.nvim to work with images instead?
