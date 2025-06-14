@@ -135,7 +135,7 @@ struct Service {
 
 fn get_service() -> Service {
     let home_dir = dirs::home_dir().expect("Could not find home directory");
-    let file_path = home_dir.join(".local/share/ask/service");
+    let file_path = home_dir.join(".local/share/ask-openai/service");
     let contents = std::fs::read_to_string(file_path).expect("Could not read file");
     // contents looks like:
     // --ollama model-1

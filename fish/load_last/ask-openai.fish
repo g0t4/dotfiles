@@ -4,14 +4,14 @@ function _ask_write_state
     # TODO get rid of fish universal variable? or? what is file read overhead? <2ms??? hopefully if so then get rid of fish universal variable to simplify logic
     set --universal ask_service $argv
 
-    mkdir -p ~/.local/share/ask/
-    echo "$argv" >~/.local/share/ask/service
+    mkdir -p ~/.local/share/ask-openai/
+    echo "$argv" >~/.local/share/ask-openai/service
     ask_dump_config
 end
 
 function ask_dump_config
     echo "ask_service: $ask_service"
-    echo "file: $(cat ~/.local/share/ask/service)"
+    echo "file: $(cat ~/.local/share/ask-openai/service)"
     # PRN I could add pythons script to create client and dump use like before, but lets see if I even need it
 end
 

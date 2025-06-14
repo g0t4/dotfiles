@@ -2,7 +2,7 @@ local security = require("config.ask.security")
 
 local M = {}
 
-local filePath = os.getenv("HOME") .. "/.local/share/ask/service"
+local filePath = os.getenv("HOME") .. "/.local/share/ask-openai/service"
 
 function M.logSafeService(service)
     -- DO NOT LOG API KEY, log the rest:
