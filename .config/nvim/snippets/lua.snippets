@@ -69,3 +69,50 @@ it("$1", function()
     $0
 end)
 
+
+snippet annotate_table_array
+${1:ValueType}[]
+
+# just cancel filling placeholders when you have enough
+snippet annotate_table_literal
+{ ${1:key1}: ${2:ValueType}, ${3:key2}: ${4:ValueType} }
+
+snippet annotate_table_key_value
+table<${1:KeyType}, ${2:ValueType}>
+
+# I prefer the table<string syntax...
+# instead of this recommendation on luals annotations page:
+#{ [string]: ${1:ValueType} }
+snippet annotate_table_dictionary
+table<string, ${1:ValueType}>
+
+# https://luals.github.io/wiki/annotations/#cast
+snippet annotate_cast
+---@cast ${1:variable} ${2:type}
+snippet annotate_cast_add_type
+---@cast ${1:variable} +${2:type}
+snippet annotate_cast_remove_type
+---@cast ${1:variable} -${2:type}
+# skipped:
+#   cast multiple types
+#   cast possibly nil
+
+
+snippet annotate_class
+---@class ${1:ClassName}
+snippet annotate_class_extends
+---@class ${1:ClassName}: ${2:ParentClassName}
+
+# skipped: @enum, @generic, @meta,
+# skipped@field  (FIM does a good job w/ these)
+
+snippet annotate_module_simulated_require
+---@module "${1:module_name}"
+
+# skipped: @nodiscard (force consumers to use result of function)
+
+snippet annotate_vararg
+---@vararg ${1:type}
+
+
+
