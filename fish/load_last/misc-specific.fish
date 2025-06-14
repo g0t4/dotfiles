@@ -2180,6 +2180,7 @@ if command -q nvidia-smi
     abbr nstw "watch nvidia-smi -q -d temperature"
     abbr nsuw "watch nvidia-smi -q -d utilization"
     abbr nsm "nvidia-smi -q -d memory | bat -l yml" # Memory usage
+    abbr nsmw "watch nvidia-smi -q -d memory"
     abbr nsp "nvidia-smi -q -d power | bat -l yml" # Power usage
     abbr nspm "watch -n 1 nvidia-smi -q -d power,memory,utilization" # Power and memory monitoring
     abbr nsf "nvidia-smi -q -d clock | bat -l yml" # Clock frequencies
