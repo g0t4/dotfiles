@@ -2240,6 +2240,8 @@ function trash
                 command trash -F $file
             end
         end
+    else if command -q trash
+        command trash $argv
     else
         echo "TODO not implemented yet for your OS"
     end
