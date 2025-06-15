@@ -126,11 +126,12 @@ abbr --set-cursor agi 'rg -i "%"'
 abbr --set-cursor rgh 'rg --hidden "%"'
 abbr --set-cursor agh 'rg --hidden "%"'
 
-function command_line_has_a_double_quote_after_cursor
+function command_line_after_cursor_is_not_an_option_dash
     set cursor_position (commandline --cursor)
     set cmd (commandline -b)
     set cmd_after_cursor (string trim (string sub --start $cursor_position $cmd))
-    if string match --quiet --regex "^\s*\".*\"" -- $cmd_after_cursor
+    # if string match --quiet --regex "^\s*\".*\"" -- $cmd_after_cursor
+    if string match --quiet --regex "^\s*[^-]+" -- $cmd_after_cursor
         return 0
     end
     return 1
@@ -138,7 +139,7 @@ end
 
 abbr --set-cursor rgu --function _abbr_expand_rgu
 function _abbr_expand_rgu
-    if command_line_has_a_double_quote_after_cursor
+    if command_line_after_cursor_is_not_an_option_dash
         echo rg -u
         return
     end
