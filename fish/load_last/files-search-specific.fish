@@ -99,9 +99,14 @@ function fd
 end
 
 # ***! rg START
+# rg pros:
 # - much faster, ~2x+
 # - syntax highlighting of grep results
 # - has config file
+# - can combine `rg -u --glob "!foo" bar`... to narrow down --unrestricted...
+#   vs. ag which ignores excludes when you pass -u
+# rg cons:
+# - --glob for includes and excludes, globs are inferior to regex...
 #
 ## notable differences
 # - -e foo -e bar => OR multiple search terms together
