@@ -2665,3 +2665,16 @@ abbr rsync_checksum_dry_run rsync --archive --delete --checksum --itemize-change
 # * history command
 abbr hist "history | bat -l fish --color always | less -F"
 
+# * mdfind
+#  useful to test query performance next time alfred/spotlight seems sluggish
+#  FYI must use asterisks like: *foo* for FSName search
+#  TODO refine these later if/when I use them more... just a few initial ideas
+#   I need to review attributes available to find more useful queries
+abbr --set-cursor mdfind_name "mdfind 'kMDItemFSName == \"*%*\"'"
+abbr --set-cursor mdfind_live "mdfind -live 'kMDItemFSName == \"*%*\"'" # think file watcher like events globally for given query
+abbr --set-cursor mdfind_-name "mdfind -name '%'"
+abbr --set-cursor mdfind_contents "mdfind 'kMDItemTextContent == \"*%*\"'" # this worked, freaky fast too for an obscure pattern in a file I recently moved about an hour before (and yet the index was up to date)
+# abbr --set-cursor mdfind_tree "mdfind 'kMDItemContentTypeTree == \"com.adobe.pdf%\"'"
+# TODO set date by current date in an function abbr... and if I really want that, for now use example only:
+# abbr --set-cursor mdfind_date "mdfind ''kMDItemFSCreationDate >= \"2025-1-1%T00:00:00Z\"'"
+
