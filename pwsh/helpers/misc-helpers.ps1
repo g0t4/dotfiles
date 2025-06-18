@@ -164,12 +164,12 @@ abbr olpush "ollama push"
 abbr olr "ollama run --verbose"
 abbr olrm "ollama rm"
 
-#$env:OLLAMA_HOST="http://0.0.0.0:11434"; $env:OLLAMA_DEBUG=1; ollama serve | bat -l log
+#$env:OLLAMA_HOST="http://0.0.0.0:11434"; $env:OLLAMA_DEBUG=2; ollama serve | bat -l log
 # PRN - use grc with ollama serve too and write my own coloring config (have claude do it)... do this if I dislike using bat for this
 $ollama_serve="ollama serve 2>&1 | bat -pp -l log" # -pp to disable pager and use plain style (no line numbers).. w/o disable pager, on mac my pager setup prohibits streaming somehow (anyways just use this always)
 abbr ols "`$env:OLLAMA_NUM_PARALLEL=1; $ollama_serve"
-abbr olsd "`$env:OLLAMA_NUM_PARALLEL=1; `$env:OLLAMA_DEBUG=1; $ollama_serve"
+abbr olsd "`$env:OLLAMA_NUM_PARALLEL=1; `$env:OLLAMA_DEBUG=2; $ollama_serve"
 abbr olsh "`$env:OLLAMA_NUM_PARALLEL=1; `$env:OLLAMA_KEEP_ALIVE='30m'; `$env:OLLAMA_HOST='http://0.0.0.0:11434'; $ollama_serve"
-abbr olshd "`$env:OLLAMA_NUM_PARALLEL=1; `$env:OLLAMA_KEEP_ALIVE='30m'; `$env:OLLAMA_DEBUG=1; `$env:OLLAMA_HOST='http://0.0.0.0:11434'; $ollama_serve"
+abbr olshd "`$env:OLLAMA_NUM_PARALLEL=1; `$env:OLLAMA_KEEP_ALIVE='30m'; `$env:OLLAMA_DEBUG=2; `$env:OLLAMA_HOST='http://0.0.0.0:11434'; $ollama_serve"
 abbr olshow "ollama show"
 

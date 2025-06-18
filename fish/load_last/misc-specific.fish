@@ -1422,10 +1422,10 @@ if command -q ollama
     # OLLAMA_CONTEXT_LENGTH=8192 - num_ctx/n_ctx defaults to 2048... leads to truncation, set this here for OpenAI APIS that don't allow it as a parameter on a request
     # OLLAMA_KEEP_ALIVE=30m
     abbr olsl "OLLAMA_NUM_PARALLEL=1 $_ollama_serve"
-    abbr olsld "OLLAMA_NUM_PARALLEL=1 OLLAMA_DEBUG=1 $_ollama_serve"
+    abbr olsld "OLLAMA_NUM_PARALLEL=1 OLLAMA_DEBUG=2 $_ollama_serve"
     #
     abbr olsg "OLLAMA_NUM_PARALLEL=1 OLLAMA_HOST='http://0.0.0.0:11434' $_ollama_serve"
-    abbr olsgd "OLLAMA_NUM_PARALLEL=1 OLLAMA_DEBUG=1 OLLAMA_HOST='http://0.0.0.0:11434' $_ollama_serve"
+    abbr olsgd "OLLAMA_NUM_PARALLEL=1 OLLAMA_DEBUG=2 OLLAMA_HOST='http://0.0.0.0:11434' $_ollama_serve"
     #
     # * ollama config code: https://github.com/ollama/ollama/blob/main/envconfig/config.go
     #    i.e. OLLAMA_KEEP_ALIVE=10m0s
@@ -1435,7 +1435,8 @@ if command -q ollama
     abbr olsqd ols_qwen_debug
     set _ollama_qwen "OLLAMA_CONTEXT_LENGTH=8192 OLLAMA_KEEP_ALIVE=10m OLLAMA_NUM_PARALLEL=4 OLLAMA_HOST='http://0.0.0.0:11434' eval $_ollama_serve"
     function ols_qwen_debug
-        set cmd "OLLAMA_DEBUG=1 $_ollama_qwen"
+        # FYI need new "TRACE" level OLLAMA_DEBUG=2 (previously =1 worked) to see prompts: https://github.com/ollama/ollama/pull/10650
+        set cmd "OLLAMA_DEBUG=2 $_ollama_qwen"
         echo "$cmd\n" | bat -l fish
         eval $cmd
     end
