@@ -25,14 +25,14 @@ function _abbr_expand_head_pipe_d
 end
 #
 # * tail abbrs
-# ph<SPACE> => | head
-#  I would use pipe_head for this abbr but you cannot tab complete abbrs outside of command position... so have to add | myself then I can tab complete the h10 below
-abbr --position=anywhere --add _head_pipe_d --regex 'ph\d+' --function _abbr_expand_head_pipe_d
+# ph<SPACE> => | tail
+#  I would use pipe_tail for this abbr but you cannot tab complete abbrs outside of command position... so have to add | myself then I can tab complete the h10 below
+abbr --position=anywhere --add _tail_pipe_d --regex 'ph\d+' --function _abbr_expand_tail_pipe_d
 # h10<SPACE> in cmd position
-abbr --add _head_d --regex 'h\d+' --function _abbr_expand_head_pipe_d
-function _abbr_expand_head_pipe_d
+abbr --add _tail_d --regex 'h\d+' --function _abbr_expand_tail_pipe_d
+function _abbr_expand_tail_pipe_d
     set text (string replace --regex "^p" "| " $argv[1]) # replace p => |
-    set text (string replace --regex 'h(\d+)$' 'head -\1' $text) # h10 => head -10
+    set text (string replace --regex 'h(\d+)$' 'tail -\1' $text) # h10 => tail -10
     echo $text
 end
 
