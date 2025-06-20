@@ -28,15 +28,14 @@ if command -q mdfind
     abbr --set-cursor md_list_item_attrs "mdls '%'"
     # abbr --set-cursor md_diagnose 'mddiagnose' # reminder (same command basically but shows it with my other md_ abbrs)
 
-    # TODO! build a z like helper that can at least take in a name search component (ideally match on path with regex/wildcard)
-    #   then open in finder and/or terminal
-    #   ACTUALLY put this into zo/oz helpers (haha I have two already, as a fallback?)
-    #   sort on attr last access date to resolve multiple matches?
-    #   and/or pop open fzf to resolve multiple matches?
-    #   it looks like mdls on dirs and files, has plenty of attrs to rank recency/frequency at least to somewhat simulate that, if desired too
-    #
-    function mdz
-        set results (mdfind "kMDItemFSName == '$argv'"  | string split0 )
+    abbr mdo md_open
+    function md_open
+        # think mdfind + open
+        #
+        # STOP using FINDER altogether!
+        # ... and don't need spotlight either to quickly open dirs I usually only touch in Finder
+
+        set results (mdfind "kMDItemFSName == '$argv'"  | string split0)
         if test (count $results) -eq 0
             open $results
             return
