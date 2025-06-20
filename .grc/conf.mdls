@@ -1,0 +1,36 @@
+# test with:
+#    grc mdls /Users/wesdemos/repos/github/g0t4/dotfiles
+
+## First column (KEY)
+regexp=^([^\s=]*)\s*=
+colours=unchanged,green
+====
+
+# BTW
+#  key = value
+#  OR, value can be on own line in an array/list attr value
+#
+## Date Values
+regexp=(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} \+\d{4})
+colours=unchanged,cyan
+=====
+## Integer Values
+regexp=^.*? = (\d+)$
+colours=unchanged,yellow
+=====
+# PRN detect integer on line all by itself and color it too, no examples so far so don't do until enounter an example
+
+
+
+# TODO find which of the myriad of duplicates are the ones I want to underscore...
+# i.e. also an kMDItemDateAdded, kMDItemFSCreationDate, etc (lots of what appear to be the same attrs)
+#
+## Medium importance attrs
+regexp=^\s*(kMDItemContentCreationDate|kMDItemContentModificationDate|kMDItemLastUsedDate)\s*=
+colours=unchanged,bold green
+====
+
+## Prominent Attrs
+regexp=^(\s*kMDItemFSName)
+colours=bold
+====
