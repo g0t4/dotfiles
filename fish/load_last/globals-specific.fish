@@ -1,4 +1,3 @@
-
 # use p(ext) unless prominent, in which use shortened p(e) format (ensure not gonna need to not expand that often)
 abbr --position=anywhere -- pbat '| bat -l'
 abbr --position=anywhere -- pgr '| grep -i'
@@ -27,4 +26,3 @@ abbr --set-cursor --position=anywhere -- pxi '| xargs --interactive -I_ -- % _' 
 #   dpkg -L cups-browsed | xargs -I {} sh -c 'test -d "{}" && echo "{}"'
 #     lightning fast in bash relative to fish -c overhead
 #     *** just use bash or /bin/sh -c # plenty fast and likely suits my needs most of the time
-
