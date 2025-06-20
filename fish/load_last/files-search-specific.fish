@@ -35,6 +35,20 @@ if command -q mdfind
     #   and/or pop open fzf to resolve multiple matches?
     #   it looks like mdls on dirs and files, has plenty of attrs to rank recency/frequency at least to somewhat simulate that, if desired too
     #
+    function mdz
+        set results (mdfind "kMDItemFSName == '$argv'"  | string split0 )
+        if test (count $results) -eq 0
+            open $results
+            return
+        end
+        set picked (echo $results| fzf --height 50% --border)
+        if test -n "$picked"
+            open $picked
+            return
+        end
+        echo NOTHING PICKED...
+    end
+
 end
 
 # *** find
