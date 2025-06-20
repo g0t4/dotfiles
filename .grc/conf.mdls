@@ -19,6 +19,12 @@ regexp=^.*? = (\d+)$
 colours=unchanged,yellow
 =====
 # PRN detect integer on line all by itself and color it too, no examples so far so don't do until enounter an example
+====
+## (null)
+regexp=\(null\)
+colours=black
+====
+
 
 
 
