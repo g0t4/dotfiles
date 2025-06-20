@@ -61,6 +61,7 @@ abbr pb pbpaste
 abbr pbj "pbpaste | jq"
 abbr pby "pbpaste | yq"
 abbr pbw "pbpaste | wordcount"
+abbr pbn "pbpaste | string split '\n'"
 
 # if SSH => replace fish_clipboard_copy
 # TODO if I `sudo su` to root user, I lose env vars without `sudo -E`... and so this logic isn't injected to copy... can I just make this always the case on linux?

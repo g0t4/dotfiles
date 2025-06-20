@@ -2660,8 +2660,6 @@ abbr rsync_checksum_dry_run rsync --archive --delete --checksum --itemize-change
 # FYI add _dry_run b/c w/ dry-run I want --itemize-changes output... whereas w/ a real copy I want --progress...
 #   that said, all have --dry-run just to be safe on end
 
-
-
 # * history command
 abbr hist "history | bat -l fish --color always | less -F"
 
@@ -2678,3 +2676,18 @@ abbr --set-cursor mdfind_contents "mdfind 'kMDItemTextContent == \"*%*\"'" # thi
 # TODO set date by current date in an function abbr... and if I really want that, for now use example only:
 # abbr --set-cursor mdfind_date "mdfind ''kMDItemFSCreationDate >= \"2025-1-1%T00:00:00Z\"'"
 
+# * string abbrs
+#
+# pipe => string split
+# FYI won't tab complete, except in command position... so just drop | and see if I like that way?
+abbr strs_lines "string split '\n'"
+abbr strs_comma "string split ','"
+abbr strs_space "string split ' '"
+abbr strs_tab "string split '\t'"
+abbr strs_colon "string split ':'"
+abbr strs_pipe "string split '|'"
+#
+abbr strjoin_lines "string join '\n'"
+#
+#
+# TODO other string * abbrs
