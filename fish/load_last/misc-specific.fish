@@ -2233,7 +2233,7 @@ function trash
         return 1
     end
 
-    if $IS_MACOS then
+    if $IS_MACOS
         # -F => use finder to ensure `Put Back` works
         #   otherwise item is in trash but have to manually restore location
         for file in $argv

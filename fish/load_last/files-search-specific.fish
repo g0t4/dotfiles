@@ -41,7 +41,7 @@ end
 #  sometimes, AFAIK, fd doesn't support a few cases that find/gfind does...
 
 set -l find_cmd find
-if $IS_MACOS then
+if $IS_MACOS
     # * gfind on macOS
     set find_cmd gfind
     abbr find gfind
