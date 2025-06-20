@@ -15,6 +15,7 @@ if command -q mdfind
     #  TODO refine these later if/when I use them more... just a few initial ideas
     #   I need to review attributes available to find more useful queries
     abbr --set-cursor mdfind_name "mdfind 'kMDItemFSName == \"*%*\"'"
+    abbr --set-cursor mdfind_path "mdfind 'kMDItemFSPath == \"*%*\"'"
     abbr --set-cursor mdfind_dir "mdfind 'kMDItemContentType == \"public.folder\" && kMDItemFSName == \"*%*\" '"
     abbr --set-cursor mdfind_live "mdfind -live 'kMDItemFSName == \"*%*\"'" # think file watcher like events globally for given query
     abbr --set-cursor mdfind_-name "mdfind -name '%'"
@@ -22,6 +23,18 @@ if command -q mdfind
     # abbr --set-cursor mdfind_tree "mdfind 'kMDItemContentTypeTree == \"com.adobe.pdf%\"'"
     # TODO set date by current date in an function abbr... and if I really want that, for now use example only:
     # abbr --set-cursor mdfind_date "mdfind ''kMDItemFSCreationDate >= \"2025-1-1%T00:00:00Z\"'"
+
+    abbr --set-cursor md_list_available_attrs "mdimport -A | grep -i '%'"
+    abbr --set-cursor md_list_item_attrs "mdls '%'"
+    # abbr --set-cursor md_diagnose 'mddiagnose' # reminder (same command basically but shows it with my other md_ abbrs)
+
+    # TODO! build a z like helper that can at least take in a name search component (ideally match on path with regex/wildcard)
+    #   then open in finder and/or terminal
+    #   ACTUALLY put this into zo/oz helpers (haha I have two already, as a fallback?)
+    #   sort on attr last access date to resolve multiple matches?
+    #   and/or pop open fzf to resolve multiple matches?
+    #   it looks like mdls on dirs and files, has plenty of attrs to rank recency/frequency at least to somewhat simulate that, if desired too
+    #
 end
 
 # *** find
