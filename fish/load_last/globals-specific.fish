@@ -26,10 +26,10 @@ end
 #
 # * tail abbrs
 abbr --position=anywhere --add _tail_pipe_d --regex 'pt\d+' --function _abbr_expand_tail_pipe_d
-abbr --add _tail_d --regex 'h\d+' --function _abbr_expand_tail_pipe_d
+abbr --add _tail_d --regex 't\d+' --function _abbr_expand_tail_pipe_d
 function _abbr_expand_tail_pipe_d
     set text (string replace --regex "^p" "| " $argv[1]) # replace p => |
-    set text (string replace --regex 'h(\d+)$' 'tail -\1' $text) # h10 => tail -10
+    set text (string replace --regex 't(\d+)$' 'tail -\1' $text) # t10 => tail -10
     echo $text
 end
 
