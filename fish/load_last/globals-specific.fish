@@ -25,9 +25,9 @@ function _abbr_expand_head_pipe_d
 end
 #
 # * tail abbrs
-# ph<SPACE> => | tail
+# pt<SPACE> => | tail
 #  I would use pipe_tail for this abbr but you cannot tab complete abbrs outside of command position... so have to add | myself then I can tab complete the h10 below
-abbr --position=anywhere --add _tail_pipe_d --regex 'ph\d+' --function _abbr_expand_tail_pipe_d
+abbr --position=anywhere --add _tail_pipe_d --regex 'pt\d+' --function _abbr_expand_tail_pipe_d
 # h10<SPACE> in cmd position
 abbr --add _tail_d --regex 'h\d+' --function _abbr_expand_tail_pipe_d
 function _abbr_expand_tail_pipe_d
