@@ -61,9 +61,11 @@ if string match --quiet --regex "\.car\$" "$clicked_path"
     exit 0
 end
 
-# *** pdfs ***
-if string match --quiet "$_mime_type" application/pdf
-    # find test cases:     ag -ig "pdf\$"
+# PRN perhaps re-workt his to just use defaults in macOS (i.e. open, except when I wanna override what open would do... why have second hierarchy here?)
+
+# * pdfs, msft office
+if string match --quiet application/pdf "$_mime_type"
+    or string match --regex --quiet "vnd.openxmlformats-officedocument" "$_mime_type"
     open "$clicked_path" # open w/ default handler
     exit 0
 end
