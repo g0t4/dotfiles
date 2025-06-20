@@ -5,6 +5,23 @@
 #     --color-match # Default is 30;43. (fg: default, bg: yellow)
 #     --color-path # Default is 1;32. (fg: bold, green)
 #
+# * mdfind
+if command -q mdfind
+    #  this actually performs very well for system wide searches
+    #  yes, fd is faster if I give it say my entire dropbox dir, but that isn't a full system search, from my user dir alone, fd is mutliple slower (obviously w/o an index)
+    #
+    #  useful to test query performance next time alfred/spotlight seems sluggish
+    #  FYI must use asterisks like: *foo* for FSName search
+    #  TODO refine these later if/when I use them more... just a few initial ideas
+    #   I need to review attributes available to find more useful queries
+    abbr --set-cursor mdfind_name "mdfind 'kMDItemFSName == \"*%*\"'"
+    abbr --set-cursor mdfind_live "mdfind -live 'kMDItemFSName == \"*%*\"'" # think file watcher like events globally for given query
+    abbr --set-cursor mdfind_-name "mdfind -name '%'"
+    abbr --set-cursor mdfind_contents "mdfind 'kMDItemTextContent == \"*%*\"'" # this worked, freaky fast too for an obscure pattern in a file I recently moved about an hour before (and yet the index was up to date)
+    # abbr --set-cursor mdfind_tree "mdfind 'kMDItemContentTypeTree == \"com.adobe.pdf%\"'"
+    # TODO set date by current date in an function abbr... and if I really want that, for now use example only:
+    # abbr --set-cursor mdfind_date "mdfind ''kMDItemFSCreationDate >= \"2025-1-1%T00:00:00Z\"'"
+end
 
 # *** find
 #  sometimes, AFAIK, fd doesn't support a few cases that find/gfind does...
