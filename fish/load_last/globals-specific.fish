@@ -12,6 +12,17 @@ abbr --position=anywhere -- psh '| bat -pl sh'
 abbr --position=anywhere -- pxml '| bat -l xml' # shortened
 abbr --position=anywhere -- pyml '| bat -l yml' # shortened
 
+# ph<SPACE> => | head
+#  I would use pipe_head for this abbr but you cannot tab complete abbrs outside of command position... so have to add | myself then I can tab complete the h10 below
+abbr --position=anywhere --add _head_pipe_d --regex 'ph\d+' --function _abbr_expand_head_pipe_d
+# h10<SPACE> in cmd position
+abbr --add _head_d --regex 'h\d+' --function _abbr_expand_head_pipe_d
+function _abbr_expand_head_pipe_d
+    set text (string replace --regex "^p" "| " $argv[1]) # replace p => |
+    set text (string replace --regex 'h(\d+)$' 'head -\1' $text) # h10 => head -10
+    echo $text
+end
+
 abbr --position=anywhere -- pwc '| wordcount'
 
 abbr --position=anywhere -- hC '| hexdump -C'
