@@ -28,6 +28,8 @@ if command -q mdfind
     abbr --set-cursor md_list_item_attrs "mdls '%'"
     # abbr --set-cursor md_diagnose 'mddiagnose' # reminder (same command basically but shows it with my other md_ abbrs)
 
+    # FYI maybe don't use --set-cursor... b/c then it fucks up using up arrow to recall last command, just use command history instead
+    #  which for what I plan to do, command history should usually have the few files/dirs I access this way... it's not a unique search each time, it's a lot of overlap
     abbr mdo md_open
     function md_open
         # think mdfind + open
@@ -35,12 +37,15 @@ if command -q mdfind
         # STOP using FINDER altogether!
         # ... and don't need spotlight either to quickly open dirs I usually only touch in Finder
 
-        set results (mdfind "kMDItemFSName == '$argv'"  | string split0)
-        if test (count $results) -eq 0
-            open $results
+        set results (mdfind "kMDItemFSName == '$argv'")
+        if test (count $results) -eq 1
+            open "$results"
+            return
+        else if test (count $results) -lt 1
+            echo NO mdfind matches...
             return
         end
-        set picked (echo $results| fzf --height 50% --border)
+        set picked (printf '%s\n' $results | fzf --height 50% --border)
         if test -n "$picked"
             open $picked
             return
