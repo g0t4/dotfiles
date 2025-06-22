@@ -1699,6 +1699,14 @@ function abbr_ffmpeg_range
     echo -n "ffmpeg -i $input -ss 00:00 -to 00:30 -c:v copy -c:a copy $output"
 end
 
+# IDEAS (make reusable?)... maybe just have a lookup of these in a file somewhere and grep it?
+#
+# * trim, slow down and label:
+# ffmpeg -ss 00:00:14.5 -to 00:00:14.9 -i approve-what-dialog-plugin-mixpre6.mov -an \
+#   -filter_complex "[0:v]setpts=20.0*PTS,drawtext=text='20x slow down':fontcolor=white:fontsize=200:x=1500:y=2000:box=1:boxcolor=black@0.5[v]" \
+#   -map "[v]" output.mp4
+#
+
 abbr --add _aio --function abbr_aio
 function abbr_aio
     echo -n "video_editing_aio "
