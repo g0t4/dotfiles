@@ -1450,6 +1450,7 @@ if command -q ollama
     end
 
     abbr olshow "ollama show"
+    abbr --set-cursor olshow_modelfile "ollama show --modelfile % | bat -l go" # go, jinja both seem ok
 end
 
 # TODO point cd => cd2?
