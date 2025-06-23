@@ -2,10 +2,10 @@ local use_ai = {
     -- "avante",
     -- "copilot",
     -- "tabnine",
-    -- "supermaven",
+    "supermaven",
     -- "llm.nvim",
     -- "ggml-org/llama.vim",
-    "ask-openai", -- use master branch to disable predictions
+    -- "ask-openai", -- use master branch to disable predictions
     -- "g0t4/zeta.nvim",
 }
 -- ! consider https://github.com/zbirenbaum/copilot.lua
