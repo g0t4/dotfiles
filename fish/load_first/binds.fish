@@ -29,6 +29,53 @@ end
 
 # * half baked ideas:
 #
+# you surround like
+bind -M default y,s,i,w _ysiw
+function _ysiw
+    set cmd (commandline)
+    set cursor_0based (commandline --cursor)
+
+    # TODO what to do when cursor is on whitespace? for now it grabs two words (one before and one after) which might be actually useful
+
+    # Find word boundaries
+    # set before (string sub --length $cursor_0based -- "$cmd")
+    # set after (string sub --start (math $cursor_0based + 1) -- "$cmd")
+
+    # # Use regex to find word under cursor
+    set start_1based (string match --all --index --regex '\s\w' "foo the bar" | cut -d' ' -f1 | awk "\$1 <= $cursor_0based" | tail -n1)
+    set end_1based (string match --all --index --regex '\w\s' "foo the bar" | cut -d' ' -f1 | awk "\$1 > $cursor_0based" | head -n1)
+
+    # btw end_1based is the last char of the word
+    if test "$end_1based" = ""
+        set end_1based (string length $cmd)
+    end
+
+    if test "$start_1based" = ""
+        set start_1based 1
+    else
+        # whitespace is the first char in the start_1based match
+        # ... so, add one to get start of word
+        set start_1based (math $start_1based + 1)
+    end
+
+    set word (string sub --start $start_1based --end $end_1based "$cmd")
+
+    set before (string sub --start 1 --length (math $start_1based - 1) -- "$cmd")
+    set after (string sub --start (math $end_1based + 1) -- "$cmd")
+
+    # TODO handle '/" => multiple binds? ysiw' and ysiw" ? for now just use '
+    set new_cmd "$before'$word'$after"
+
+    # # testing
+    # commandline --append "'s$start_1based/c$cursor_0based/e$end_1based'"
+    # commandline --append " '$word'"
+    # commandline --append " '$before' '$after'"
+
+    commandline --replace -- $new_cmd
+    commandline --cursor (math $cursor_0based + 2) # Move cursor forward after opening quote
+end
+#
+#
 bind -M default v,i,w _viw
 function _viw
     set fish_bind_mode visual
