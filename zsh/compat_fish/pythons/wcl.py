@@ -2,6 +2,7 @@ import argparse
 import os
 import re
 import subprocess
+from rich import print
 
 # set a constant to name False (for subprocess.run) to make it more readable:
 IGNORE_FAILURE = False
