@@ -108,8 +108,10 @@ async def wes_new_window(connection: iterm2.Connection, force_local=False):
 
 async def wes_new_tab(connection, force_local=False):
     prior_window = await get_current_window_throw_if_none(connection)
+    print(f"{prior_window.window_id=}")
     session = await get_current_session_throw_if_none(connection)
     new_profile, is_ssh = await prepare_new_profile(session, force_local)
+    print()
 
     path = await get_path(session)
 
