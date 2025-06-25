@@ -14,3 +14,13 @@ abbr httpv "http --print HhBbm " # show request&response headers&body all! + m =
 # http localhost:8080 name='bob' # submit JSON => COOL
 # http example.org X-MyHeader:123 # add a header
 # https://github.com/httpie/cli#installation
+
+# example websites for testing curl/httpie
+abbr curl_test_github "curl https://api.github.com/users/g0t4"
+abbr http_test_github "https api.github.com/users/g0t4"
+abbr http_test_httpbin "http httpbin.org/get" # http: w/o redirect
+#
+abbr curl_test_icanhazdadjoke "curl https://icanhazdadjoke.com/"
+abbr http_test_icanhazdadjoke "https icanhazdadjoke.com Accept:application/json"
+abbr curl_test_wtfismyip "curl https://wtfismyip.com/json"
+abbr http_test_wtfismyip "https wtfismyip.com/json"
