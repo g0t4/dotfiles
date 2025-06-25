@@ -207,3 +207,11 @@ abbr gwtab "git worktree add -b" # create new branch (use -B to clobber if exist
 abbr gwtrm "git worktree remove"
 abbr gwtm "git worktree move"
 # lock/unlock => wait until I use those
+
+# rebasing
+abbr grb 'git rebase'
+abbr grbi 'git rebase -i'
+abbr grba 'git rebase --abort'
+abbr grbc 'git rebase --continue'
+abbr grbs 'git rebase --skip'
+

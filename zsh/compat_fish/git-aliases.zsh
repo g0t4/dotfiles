@@ -125,13 +125,6 @@ abbr gma 'git merge --abort'
 abbr gmc 'git merge --continue'
 abbr gmff 'git merge --ff-only'
 
-# rebasing
-abbr grb 'git rebase'
-abbr grbi 'git rebase -i'
-abbr grba 'git rebase --abort'
-abbr grbc 'git rebase --continue'
-abbr grbs 'git rebase --skip'
-
 # reverting
 abbr grev 'git revert'
 
