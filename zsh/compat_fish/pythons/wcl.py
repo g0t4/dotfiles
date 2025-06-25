@@ -44,7 +44,7 @@ def wcl(args):
             subprocess.run(["zsh", "-il", "-c", z_add_zsh], check=IGNORE_FAILURE)
 
     if os.path.isdir(repo_dir):
-        print("repo_dir found, attempt pull latest", "\n")
+        print(f"repo_dir exists {repo_dir}, attempt pull latest", "\n")
         pull = ["git", "-C", repo_dir, "pull"]
         if dry_run:
             print(pull, "\n")
