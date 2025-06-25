@@ -120,12 +120,12 @@ abbr uvpy 'uv python list'
 
 # *** wcl wrappers
 function wcl
+    log_ --red --bold "this is NOT wcl from course files, just heads up in case you use the wrong one habitually"
 
     set -l _python3 "$WES_DOTFILES/.venv/bin/python3"
     set -l _script_py "$WES_DOTFILES/zsh/compat_fish/pythons/wcl.py"
 
     $_python3 $_script_py $argv
-
 end
 
 # completions:
