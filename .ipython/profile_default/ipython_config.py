@@ -6,6 +6,9 @@ c = get_config()  #noqa
 
 c.TerminalInteractiveShell.confirm_exit = False
 
+# https://github.com/asteppke/ipython/blob/000929ad8c4893d7fb73bee9c431352383dfce6f/IPython/terminal/interactiveshell.py#L320
+c.TerminalInteractiveShell.autosuggestions_provider = None
+
 # turn off that banner w/ version info when first open REPL (i.e. in nvim)
 c.TerminalIPythonApp.display_banner = False
 
