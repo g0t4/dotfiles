@@ -12,6 +12,15 @@ function werkspaces_close_tmp_windows_to_not_reopen_them()
     end)
 end
 
+-- ** neovide **
+-- -- no.. just no...
+-- if vim.g.neovide then
+--     vim.g.neovide_cursor_animation_length = 0
+--     vim.g.neovide_scroll_animation_length = 0
+--     -- FYI paste is broken OOB w/ CMD+V
+--     -- ALSO, need to disable my scroll plugin that adds the animation for nvim
+-- end
+
 return {
 
     -- *** TESTING ***
