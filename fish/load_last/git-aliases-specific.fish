@@ -129,7 +129,6 @@ abbr --set-cursor glgrep 'git log --grep="%"'
 # WIP => disable pager and color for generating a unified diff
 abbr gd_patch "git --no-pager diff --no-color"
 
-
 # VCS in general:
 function pwd --description "pwd for a repository => repo root in yellow + repo dir in white"
     # if this causes grief, go back to just prd
@@ -210,8 +209,12 @@ abbr gwtm "git worktree move"
 
 # rebasing
 abbr grb 'git rebase'
-abbr grbi 'git rebase -i'
 abbr grba 'git rebase --abort'
 abbr grbc 'git rebase --continue'
 abbr grbs 'git rebase --skip'
-
+abbr grbi 'git rebase -i'
+#
+abbr --add _grbi_d --regex 'grbi\d+' --function _abbr_expand_grbi_d
+function _abbr_expand_grbi_d
+    string replace --regex "grbi(\d+)" "git rebase -i HEAD~\1" $argv[1]
+end
