@@ -26,7 +26,12 @@ return {
 
             local function workspace_name()
                 -- wait to show more (above) the CWD, but I suspect I might want to see a github org/repo name... not sure... could I check what other instances of nvim are running and if two have diff CWDs but same last component then show dir above? i.e. open upstream + fork at same time (again, wait to be confused before adding any of this)
-                return vim.fn.fnamemodify(vim.fn.getcwd(), ":t")
+                local dir_name = vim.fn.fnamemodify(vim.fn.getcwd(), ":t")
+                if dir_name == "course-python-functions-modules" then
+                    -- name s/b short in statusline... and fullname is something I avoid showing so course name can change if need be
+                    return "course"
+                end
+                return dir_name
             end
 
             require("lualine").setup {
