@@ -10,6 +10,9 @@ function bind_both_modes_default_and_insert
     bind -M insert $argv
 end
 
+# * add back ctrl-R? or should I just get used to /?
+bind_both_modes_default_and_insert ctrl-r history-pager
+
 # * idea... to simulate my favorite vim motions/command combos
 #   unfortunately, "word" doesn't match between fish and vim... fish treats - as a boundary too
 #   so I am going with word == bigword
