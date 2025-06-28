@@ -13,3 +13,23 @@
 #  means I need helpers for:
 #  -i => ignore case always
 #  -s/--case-sensitive => case sensitive (for lowercase only searches)
+
+# non-gitignored files that I don't want to see by default
+#  FYI if you remove these from here, at least move them into your nvim config for telescope
+#  NOTE static entries supposedly are faster for matching than say *.lock... though I should probably verify that!
+--glob=!uv.lock
+--glob=!package-lock.json
+--glob=!yarn.lock
+--glob=!pnpm-lock.yaml
+--glob=!poetry.lock
+--glob=!Pipfile.lock
+--glob=!Cargo.lock
+--glob=!Gemfile.lock
+--glob=!composer.lock
+--glob=!go.sum
+--glob=!packages.lock.json
+--glob=!pubspec.lock
+--glob=!mix.lock
+--glob=!cabal.project.freeze
+--glob=!stack.yaml.lock
+
