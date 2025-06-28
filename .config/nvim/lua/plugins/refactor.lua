@@ -81,7 +81,7 @@ return {
             -- vim.keymap.set({ "n", "x" }, "<leader>rif", function() return require('refactoring').refactor('Inline Function') end, { expr = true })
             --
             -- * extract
-            vim.keymap.set({ "n", "x" }, "<leader>re", ":Refactor extract_var<Cr>") -- TODO how can I get input box to be in insert mode by default (currently its in normal mode)
+            vim.keymap.set({ "n", "x" }, "<leader>re", ":Refactor extract_var<Cr>i") -- FYI `i` on end is to put input box into insert mode (starts in normal mode)... so I can immediately type the name (w/o `i` myself)
             vim.keymap.set({ "n", "x" }, "<leader>ref", function() return require('refactoring').refactor('Extract Function') end, { expr = true })
             vim.keymap.set({ "n", "x" }, "<leader>retf", ":Refactor extract_to_file<Cr>") -- PERHAPs use refactor menu for this one?
             vim.keymap.set({ "n", "x" }, "<leader>reb", ":Refactor extract_block<Cr>")
