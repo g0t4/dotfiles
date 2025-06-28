@@ -190,23 +190,25 @@ augroup mygroup
     autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 augroup end
 
-" Applying code actions to the selected code block
-" Example: `<leader>aap` for current paragraph
-xmap <leader>a  <Plug>(coc-codeaction-selected)
-nmap <leader>a  <Plug>(coc-codeaction-selected)
-
-" Remap keys for applying code actions at the cursor position
-nmap <leader>ac  <Plug>(coc-codeaction-cursor)
-" Remap keys for apply code actions affect whole buffer
-nmap <leader>as  <Plug>(coc-codeaction-source)
 " Apply the most preferred quickfix action to fix diagnostic on the current line
 nmap <leader>qf  <Plug>(coc-fix-current)
 
-" Remap keys for applying refactor code actions
-nmap <silent> <leader>re <Plug>(coc-codeaction-refactor)
-xmap <silent> <leader>r  <Plug>(coc-codeaction-refactor-selected)
-nmap <silent> <leader>r  <Plug>(coc-codeaction-refactor-selected)
+" <leader>ca => coc'a [c]ode [a]ctions
+"
+" default context for code action (selected or cursor):
+xmap <leader>ca  <Plug>(coc-codeaction-selected)
+nmap <leader>ca  <Plug>(coc-codeaction-selected)
+nmap <leader>ca  <Plug>(coc-codeaction-cursor)
+"
+" specify the context too:
+nmap <leader>cal  <Plug>(coc-codeaction-line)
+nmap <leader>cas  <Plug>(coc-codeaction-source)
+"
+" refactoring
+nmap <leader>car <Plug>(coc-codeaction-refactor)
+xmap <leader>car <Plug>(coc-codeaction-refactor-selected)
 
+" FYI I don't use code lens currently
 " Run the Code Lens action on the current line
 nmap <leader>cl  <Plug>(coc-codelens-action)
 

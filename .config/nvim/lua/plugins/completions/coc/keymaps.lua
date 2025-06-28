@@ -33,7 +33,7 @@ vim.keymap.set('n', '<leader>oi', ':OrganizeImports<cr>', { silent = true })
 --   means WhichKey will help me recall them
 -- CocList has fuzzy matchers, so a nice way to grok the relevant info (i.e. diagnostics or outline)
 --
-vim.keymap.set('n', '<leader>ca', ':<C-u>CocList diagnostics<CR>', { noremap = true, silent = true, nowait = true })
+vim.keymap.set('n', '<leader>cd', ':<C-u>CocList diagnostics<CR>', { noremap = true, silent = true, nowait = true })
 vim.keymap.set('n', '<leader>co', ':<C-u>CocList outline<CR>', { noremap = true, silent = true, nowait = true })
 -- Search workspace symbols
 vim.keymap.set('n', '<leader>cs', ':<C-u>CocList -I symbols<CR>', { noremap = true, silent = true, nowait = true })
