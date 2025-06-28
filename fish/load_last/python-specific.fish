@@ -86,6 +86,10 @@ abbr uvb 'uv init --no-description --no-readme && uv add yapf' # bootstrap my pr
 #   todo add `ipykernel` or `ipython` to all projects too? I like to run code adhoc in nvim with iron.nvim, that requires ipython at a minimum
 #   also I prefer the ipython REPL over python's builtin REPL
 abbr uvi 'uv init --no-description --no-readme'
+# ipykernel is for ipython
+abbr uvi_common 'uv init --no-description --no-readme && uv add ipython ipykernel yapf rope rich httpx'
+abbr uvi_cli 'uv init --no-description --no-readme && uv add ipython ipykernel yapf rope rich httpx typer'
+abbr uvi_web 'uv init --no-description --no-readme && uv add ipython ipykernel yapf rope rich httpx fastapi'
 #
 abbr uvp 'uv pip'
 abbr uvpi 'uv pip install'
