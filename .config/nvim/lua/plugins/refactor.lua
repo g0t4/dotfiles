@@ -9,27 +9,83 @@ return {
         },
         lazy = false,
         config = function()
-            require("refactoring").setup()
+            require("refactoring").setup({
 
-            -- not a huge fan of this menu style but it works, would rather have some shortcut keys to pick which submenu (an align them with the below specific keymaps so <leader>rr <letter>
-            -- prompt for a refactor to apply when the remap is triggered
+                --
+                -- TODO try these print debug statements and cleanup... sounds good to me
+                -- print_var_statements = {
+                --     -- add a custom print var statement for cpp
+                --     cpp = {
+                --         'printf("a custom statement %%s %s", %s)'
+                --     }
+                -- }
+                --
+                -- extract_var_statements = {
+                --     go = "%s := %s // poggers"
+                -- }
+                --
+                -- TODO enable prompt for placeholders in some cases (w/o this it just inserts placeholder text w/o stepping to it IIUC):
+                -- https://github.com/ThePrimeagen/refactoring.nvim#configuration-for-type-prompt-operations
+                -- prompt_func_return_type = {
+                --     go = true,
+                --     cpp = true,
+                --     c = true,
+                --     java = true,
+                -- },
+                -- -- prompt for function parameters
+                -- prompt_func_param_type = {
+                --     go = true,
+                --     cpp = true,
+                --     c = true,
+                --     java = true,
+                -- },
+                --
+
+            })
+
+            -- TODO try print feature:
+            -- -- You can also use below = true here to to change the position of the printf
+            -- -- statement (or set two remaps for either one). This remap must be made in normal mode.
+            -- -- vim.keymap.set("n", "<leader>rp", function() require('refactoring').debug.printf({ below = false }) end)
+            -- -- Print var
+            -- vim.keymap.set({ "x", "n" }, "<leader>rv", function() require('refactoring').debug.print_var() end)
+            -- vim.keymap.set("n", "<leader>rc", function() require('refactoring').debug.cleanup({}) end)
+
+            -- easiest to trigger...
+            -- * refactor menu
+            -- require("telescope").load_extension("refactoring") -- ONLY if using telescope picker
             vim.keymap.set(
                 { "n", "x" },
                 "<leader>rr",
-                function() require('refactoring').select_refactor() end
+                -- diff selectors:
+                -- TODO can I merge prefer_ex_cmd with telescope picker?
+                -- function() require('telescope').extensions.refactoring.refactors() end -- telescope picker
+                -- function() require('refactoring').select_refactor() end -- vim.ui.input picker
+
+                -- I like this style! i.e. to see preview when extracting a variable, while typing new name!
+                --   should show if extracting from two spots too
+                function() require('refactoring').select_refactor({ prefer_ex_cmd = true }) end -- show preview of changes
             )
-            -- Note that not all refactor support both normal and visual mode
 
-            -- FYI right now coc maps: <leader>r,rn,re though I am not sure any extensions support these for any laguages I am using
-
-            vim.keymap.set("x", "<leader>rx", ":Refactor extract ")
-            vim.keymap.set("x", "<leader>rf", ":Refactor extract_to_file ")
-            vim.keymap.set("x", "<leader>rv", ":Refactor extract_var ")
-
-            vim.keymap.set({ "n", "x" }, "<leader>ri", ":Refactor inline_var")
-            vim.keymap.set("n", "<leader>rI", ":Refactor inline_func")
-            vim.keymap.set("n", "<leader>rb", ":Refactor extract_block")
-            vim.keymap.set("n", "<leader>rbf", ":Refactor extract_block_to_file")
+            -- TODO what needs x (visual) vs just [n]ormal mode?
+            -- get list of refactorings:
+            --    =require("refactoring").get_refactors()
+            --
+            -- FYI Lua API - https://github.com/ThePrimeagen/refactoring.nvim#lua-api-
+            --
+            -- * inline
+            vim.keymap.set({ "n", "x" }, "<leader>ri", ":Refactor inline_var<Cr>") -- no added params, hence <Cr> to submit
+            vim.keymap.set({ "n", "x" }, "<leader>rif", ":Refactor inline_func<Cr>") -- no added params
+            -- alternative via Lua API:
+            -- vim.keymap.set({ "n", "x" }, "<leader>ri", function() return require('refactoring').refactor('Inline Variable') end, { expr = true })
+            -- vim.keymap.set({ "n", "x" }, "<leader>rif", function() return require('refactoring').refactor('Inline Function') end, { expr = true })
+            --
+            -- * extract
+            vim.keymap.set({ "n", "x" }, "<leader>re", ":Refactor extract_var<Cr>") -- TODO how can I get input box to be in insert mode by default (currently its in normal mode)
+            vim.keymap.set({ "n", "x" }, "<leader>ref", function() return require('refactoring').refactor('Extract Function') end, { expr = true })
+            vim.keymap.set({ "n", "x" }, "<leader>retf", ":Refactor extract_to_file<Cr>") -- PERHAPs use refactor menu for this one?
+            vim.keymap.set({ "n", "x" }, "<leader>reb", ":Refactor extract_block<Cr>")
+            vim.keymap.set({ "n", "x" }, "<leader>rebtf", ":Refactor extract_block_to_file<Cr>") -- PERHAPS use refactor menu for this one?
         end,
     },
 
