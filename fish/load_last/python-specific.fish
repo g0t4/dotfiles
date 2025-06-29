@@ -118,13 +118,12 @@ abbr uvpy 'uv python list'
 #abbr uvpyi 'uv python install'
 # FYI just put .python-version file in repo and run `uv venv` and it will install the version (if needed!)
 
-
-
-
-
 # *** wcl wrappers
 function wcl
-    log_ --red --bold "this is NOT wcl from course files, just heads up in case you use the wrong one habitually"
+    if test -t 1
+        # only warn if using directly, don't mess up z command that uses this
+        log_ --red --bold "this is NOT wcl from course files, just heads up in case you use the wrong one habitually"
+    end
 
     set -l _python3 "$WES_DOTFILES/.venv/bin/python3"
     set -l _script_py "$WES_DOTFILES/zsh/compat_fish/pythons/wcl.py"
