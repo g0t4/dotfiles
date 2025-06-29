@@ -157,16 +157,14 @@ abbr gsmi 'git submodule init'
 abbr gsmu 'git submodule update --remote --recursive'
 abbr gsmst 'git submodule status --recursive'
 
-# # stashing
-# abbr gsta 'git stash push'
-# abbr gstaa 'git stash apply'
-# abbr gstc 'git stash clear'
-# abbr gstd 'git stash drop'
-# abbr gstl 'git stash list'
-# abbr gstp 'git stash pop'
-# abbr gsts 'git stash show --text'
-# abbr gstu 'git stash --include-untracked'
-# abbr gstall 'git stash --all'
+# stashing # TODO find what I want for these abbrs... this might be fine for now too:
+# FYI can do gstashl<TAB> or gashl<TAB>
+abbr gstash_list 'git stash list'
+abbr gstash_show 'git stash show --text'
+abbr gstash_drop 'git stash drop'
+abbr gstash_pop 'git stash pop'
+abbr gstash_apply 'git stash apply'
+# abbr gstash_untracked_too 'git stash --include-untracked'
 
 # switching branches
 abbr gsw 'git switch'
