@@ -41,6 +41,8 @@ function gp_uptoX
     echo "git push origin HEAD~$num:$(git_current_branch)"
 end
 
+abbr gl git log
+
 abbr --regex 'gl\d+' --function glX _glX
 abbr --regex 'g\d+' --function glX _gX
 function glX

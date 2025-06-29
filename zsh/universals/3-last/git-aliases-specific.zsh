@@ -21,7 +21,7 @@ ealias gcam='git commit -a -m "' --NoSpaceAfter
 #         @{u}~1..                  # shortest form
 #
 # *** USE git config pretty.format to set default style!!!
-ealias glf='git log'
+ealias gl='git log'
 for i in {1..10}; do ealias gl$i="git log -$i"; done # last N commits # !FISHISSUE => use abbr + regex + func to expand this to any number and not need a loop! # split zsh specific loop out and keep in zsh files only
 # ! fish like: (super fast hack to test it)
 # # gl11 => git log -11 # YEAH!

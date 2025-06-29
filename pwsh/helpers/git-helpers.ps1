@@ -78,7 +78,7 @@ ealias gdlc 'git diff --color-words HEAD~1 HEAD'
 # Show changes in last commit by diffing with previous commit
 
 # LOGS
-ealias glf "git log" # used to inline format
+ealias gl "git log" # used to inline format
 1..10 | ForEach-Object { ealias "gl$_" "git log -$_" } # last N commits
 #
 $_unpushed_commits="'HEAD@{push}~1..HEAD'"
