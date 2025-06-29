@@ -2,12 +2,33 @@ local use_ai = {
     -- "avante",
     -- "copilot",
     -- "tabnine",
-    "supermaven",
+    -- "supermaven",
     -- "llm.nvim",
     -- "ggml-org/llama.vim",
-    -- "ask-openai", -- use master branch to disable predictions
+    "ask-openai", -- use master branch to disable predictions
     -- "g0t4/zeta.nvim",
 }
+
+
+local lsp_ask_openai = {
+    enabled = true,
+    "neovim/nvim-lspconfig",
+    config = function()
+        local lspconfig = require("lspconfig")
+        local capabilities = require("cmp_nvim_lsp").default_capabilities()
+        require('lspconfig').my_lua_server = {
+            default_config = {
+                cmd = { "python3", "/path/to/my_lsp.py" },
+                filetypes = { "lua" },
+                root_dir = require("lspconfig.util").root_pattern(".git", "."),
+            }
+        }
+
+        require('lspconfig').my_lua_server.setup {}
+    end
+}
+
+
 -- ! consider https://github.com/zbirenbaum/copilot.lua
 --    purportedly faster and less glitchy than copilot.vim
 --    has panel too with completion preview, is that useful?
@@ -660,6 +681,7 @@ if version.major == 0 and version.minor < 10 then
 end
 
 return {
+    lsp_ask_openai,
     llm_nvim_plugin,
     llama_cpp_llama_vim_plugin,
     ask_openai_plugin,
