@@ -38,7 +38,6 @@ def wcl(args):
         # zsh -i => interactive which is where I load z command
         # check if zsh / * nix
         if dry_run:
-            print("# zsh z add:")
             print(z_add_zsh, "\n")
         else:
             subprocess.run(["zsh", "-il", "-c", z_add_zsh], check=IGNORE_FAILURE)
@@ -52,7 +51,7 @@ def wcl(args):
             subprocess.run(pull, check=IGNORE_FAILURE)
     else:
         clone_from = clone_url(parsed)
-        print(f"# cloning {clone_from}...")
+        print(f"# cloning [bold cyan]{clone_from}[reset]...")
         clone = ["git", "clone", "--recurse-submodules", clone_from, repo_dir]
         if dry_run:
             print(clone, "\n")
@@ -69,7 +68,6 @@ def wcl(args):
         z_add_pwsh = f"z '{repo_dir}'"
 
         if dry_run:
-            print("# pwsh z add:")
             print(z_add_pwsh, "\n")
         else:
             subprocess.run(["pwsh", "-NoProfile", "-Command", z_add_pwsh], check=IGNORE_FAILURE)
@@ -82,7 +80,6 @@ def wcl(args):
         # - FYI I had issues w/ auto-venv (calling deactivate) in fish but not zsh, so I am not using interactive for fish and I disabled auto-venv for non-interactive fish shells
         z_add_fish = ["fish", "-c", "__z_add"]
         if dry_run:
-            print("# fish z add:")
             print(z_add_fish, f"cwd={repo_dir}", "\n")
         else:
             subprocess.run(z_add_fish, cwd=repo_dir, check=IGNORE_FAILURE)
