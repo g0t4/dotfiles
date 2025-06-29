@@ -106,8 +106,8 @@ abbr gpf 'git push --force'
 # abbr gpoat 'git push origin --all && git push origin --tags'
 #
 # pulling
-abbr gl 'git pull'
-abbr glr 'git pull --recurse-submodules' # keep separate alias for now as its time consuming to pull multiple submodules
+abbr gpull 'git pull'
+abbr gpullr 'git pull --recurse-submodules' # keep separate alias for now as its time consuming to pull multiple submodules
 #
 #
 # remotes
