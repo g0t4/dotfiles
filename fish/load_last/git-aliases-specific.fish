@@ -38,7 +38,7 @@ function gp_uptoX
     set -l num (string replace --regex '^gp_upto' '' $argv)
     # TODO revisit refspec here and change for any branch?
     # TODO also use default remote?
-    echo "git push origin HEAD~$num:master"
+    echo "git push origin HEAD~$num:$(git_current_branch)"
 end
 
 abbr --regex 'gl\d+' --function glX _glX
