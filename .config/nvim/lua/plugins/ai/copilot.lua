@@ -33,24 +33,44 @@ local lsp_ask_openai = {
         end
 
         vim.keymap.set("n", "<leader>lc", function()
-          local params = vim.lsp.util.make_position_params()
-          vim.lsp.buf_request(0, "textDocument/completion", params, function(err, result)
-            if err then
-              vim.notify("LSP error: " .. err.message, vim.log.levels.ERROR)
-              return
-            end
+            local params = vim.lsp.util.make_position_params()
+            vim.lsp.buf_request(0, "textDocument/completion", params, function(err, result)
+                if err then
+                    vim.notify("LSP error: " .. err.message, vim.log.levels.ERROR)
+                    return
+                end
 
-            -- Simple output to message area (or replace this with custom UI)
-            if result and result.items then
-              local labels = vim.tbl_map(function(item) return item.label end, result.items)
-              print("Completions:", table.concat(labels, ", "))
-            elseif vim.tbl_islist(result) then
-              local labels = vim.tbl_map(function(item) return item.label end, result)
-              print("Completions:", table.concat(labels, ", "))
-            else
-              print("No completions.")
-            end
-          end)
+                -- FYI select this line and invoke this keymap and you will get completions in telescope picker:
+                -- hello.
+
+                local labels
+                if result and result.items then
+                    labels = vim.tbl_map(function(item) return item.label end, result.items)
+                    print("Completions:", table.concat(labels, ", "))
+                elseif vim.islist(result) then
+                    labels = vim.tbl_map(function(item) return item.label end, result)
+                    print("Completions:", table.concat(labels, ", "))
+                else
+                    print("No completions.")
+                    return
+                end
+
+                require("telescope.pickers").new({}, {
+                    prompt_title = "LSP Completions",
+                    finder = require("telescope.finders").new_table {
+                        results = labels,
+                    },
+                    sorter = require("telescope.config").values.generic_sorter({}),
+                    attach_mappings = function(_, map)
+                        map("i", "<CR>", function(prompt_bufnr)
+                            local choice = require("telescope.actions.state").get_selected_entry()
+                            require("telescope.actions").close(prompt_bufnr)
+                            vim.api.nvim_put({ choice[1] }, "c", true, true)
+                        end)
+                        return true
+                    end,
+                }):find()
+            end)
         end, { desc = "LSP Completions", noremap = true })
 
         lspconfig.ask_language_server.setup({})
