@@ -12,19 +12,48 @@ local use_ai = {
 
 local lsp_ask_openai = {
     enabled = true,
+    -- TODO make sure I don't double define nvim-lspconfig plugin? have one spot register it and then just config server here?
     "neovim/nvim-lspconfig",
     config = function()
         local lspconfig = require("lspconfig")
-        local capabilities = require("cmp_nvim_lsp").default_capabilities()
-        require('lspconfig').my_lua_server = {
-            default_config = {
-                cmd = { "python3", "/path/to/my_lsp.py" },
-                filetypes = { "lua" },
-                root_dir = require("lspconfig.util").root_pattern(".git", "."),
-            }
-        }
+        local configs = require("lspconfig.configs")
 
-        require('lspconfig').my_lua_server.setup {}
+        if not configs.ask_language_server then
+            configs.ask_language_server = {
+                default_config = {
+                    cmd = {
+                        os.getenv("HOME") .. "/repos/github/g0t4/ask-openai.nvim/.venv/bin/python",
+                        os.getenv("HOME") .. "/repos/github/g0t4/ask-openai.nvim/lua/ask-openai/rag/lsp/server.py",
+                    },
+                    filetypes = { "lua" },
+                    root_dir = require("lspconfig.util").root_pattern(".git", "."),
+
+                },
+            }
+        end
+
+        vim.keymap.set("n", "<leader>lc", function()
+          local params = vim.lsp.util.make_position_params()
+          vim.lsp.buf_request(0, "textDocument/completion", params, function(err, result)
+            if err then
+              vim.notify("LSP error: " .. err.message, vim.log.levels.ERROR)
+              return
+            end
+
+            -- Simple output to message area (or replace this with custom UI)
+            if result and result.items then
+              local labels = vim.tbl_map(function(item) return item.label end, result.items)
+              print("Completions:", table.concat(labels, ", "))
+            elseif vim.tbl_islist(result) then
+              local labels = vim.tbl_map(function(item) return item.label end, result)
+              print("Completions:", table.concat(labels, ", "))
+            else
+              print("No completions.")
+            end
+          end)
+        end, { desc = "LSP Completions", noremap = true })
+
+        lspconfig.ask_language_server.setup({})
     end
 }
 
