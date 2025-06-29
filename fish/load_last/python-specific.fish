@@ -3,6 +3,10 @@
 #    - complete pkg names way more valuable
 #  - con: OOB zsh completions are not complete arg wise and I'm not sure how often they are updated... I should familiarize myself with making a contrib for this (I saw that github clone of zsh supports completion contribs... sounds like listserve is where most do it)
 
+
+# * profiling
+abbr py_profile_import_time PYTHONPROFILEIMPORTTIME=1 python -c "from sentence_transformers import SentenceTransformer"
+
 # why `command` => `command3`?
 #   i.e. pip => pip3, python => python3
 #   global interpreter => command3 is ubiquitous AND recommended (for the default 3.X version)
