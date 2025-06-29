@@ -121,6 +121,7 @@ abbr uvpy 'uv python list'
 # *** wcl wrappers
 function wcl
     if test -t 1
+        # TODO remove this when course is done
         # only warn if using directly, don't mess up z command that uses this
         log_ --red --bold "this is NOT wcl from course files, just heads up in case you use the wrong one habitually"
     end
