@@ -116,8 +116,8 @@ ealias gfa "git fetch --all --prune --jobs 10"
 ealias gfo 'git fetch origin'
 
 ## pull
-ealias gl "git pull"
-ealias glr "git pull --recurse-submodules" # keep separate alias for now as its time consuming to pull multiple submodules
+ealias gpull "git pull"
+ealias gpullr "git pull --recurse-submodules" # keep separate alias for now as its time consuming to pull multiple submodules
 
 ## push
 ealias gp 'git push'
