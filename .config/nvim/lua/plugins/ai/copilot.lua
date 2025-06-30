@@ -23,8 +23,10 @@ local lsp_ask_openai = {
                 default_config = {
                     cmd = {
                         os.getenv("HOME") .. "/repos/github/g0t4/ask-openai.nvim/.venv/bin/python",
-                        os.getenv("HOME") .. "/repos/github/g0t4/ask-openai.nvim/lua/ask-openai/rag/lsp/server.py",
+                        "-m",
+                        "lsp.server",
                     },
+                    cmd_cwd = os.getenv("HOME") .. "/repos/github/g0t4/ask-openai.nvim/lua/ask-openai/rag",
                     filetypes = { "lua" },
                     root_dir = require("lspconfig.util").root_pattern(".git", "."),
 
