@@ -12,9 +12,10 @@ local use_ai = {
 
 local lsp_ask_openai = {
     enabled = true,
-    -- TODO make sure I don't double define nvim-lspconfig plugin? have one spot register it and then just config server here?
     "neovim/nvim-lspconfig",
     config = function()
+        -- TODO make sure I don't double define nvim-lspconfig plugin? have one spot register it and then just config server here?
+        -- FYI! this is needed for ask-openai test LSP to work (for RAG)
     end
 }
 
