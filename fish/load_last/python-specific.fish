@@ -15,7 +15,7 @@ abbr py_profile_import_time PYTHONPROFILEIMPORTTIME=1 python -c "from sentence_t
 # ipython repl is FAR superior in terms of colors and other features
 abbr ipy 'ipython3' # ipython is much slower to start so don't default to it unless I explicitly want it
 # TODO why is ipython startup like seconds longer?
-abbr py ipython3 # temp reminder I want to use ipython3 REPL in next course (that way I can still type out python and not expand it)
+abbr py python3
 # abbr pym python3 -m
 abbr python python3
 abbr pip pip3
