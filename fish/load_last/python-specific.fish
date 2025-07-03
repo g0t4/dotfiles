@@ -86,7 +86,7 @@ abbr uvv 'uv venv'
 #
 # FYI cannot configure no-description/readme by default, so just use them here in my abbr instead
 #   unfortunately I cannot tell it no hello.py too
-abbr uvb 'uv init --no-description --no-readme && uv add yapf' # bootstrap my preferred deps (i.e. formatter, ipython REPL)... things I inevitably add to all my python projects
+abbr uvi_bootstrap 'uv init --no-description --no-readme && uv add yapf rope ipython rich' # bootstrap my preferred deps (i.e. formatter, ipython REPL)... things I inevitably add to all my python projects
 #   todo add `ipykernel` or `ipython` to all projects too? I like to run code adhoc in nvim with iron.nvim, that requires ipython at a minimum
 #   also I prefer the ipython REPL over python's builtin REPL
 abbr uvi 'uv init --no-description --no-readme'
@@ -97,6 +97,7 @@ abbr uvi_web 'uv init --no-description --no-readme && uv add ipython ipykernel y
 #
 abbr uvp 'uv pip'
 abbr uvpi 'uv pip install'
+abbr uvpie 'uv pip install --editable .'
 abbr uvpir 'uv pip install -r requirements.txt'
 abbr uvls 'uv pip list' # or do I want `uv tree` here?.... what else would I do with `uv list == uvl` basically?
 abbr uvpls 'uv pip list'
@@ -121,6 +122,12 @@ abbr uvx 'uv tool run' # uvx is an alias for `uv tool run`
 abbr uvpy 'uv python list'
 #abbr uvpyi 'uv python install'
 # FYI just put .python-version file in repo and run `uv venv` and it will install the version (if needed!)
+
+abbr uv_build 'uv build --no-sources' # TODO do I want --no-sources? by default
+abbr uv_publish 'uv publish'
+abbr uv_clean 'uv clean'
+
+
 
 # *** wcl wrappers
 function wcl
