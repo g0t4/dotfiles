@@ -1885,8 +1885,8 @@ abbr mitmr "mitmproxy --no-server --rfile" # when reading, dont start server (th
 # orphaned server:
 # - sometimes mitmproxy server becomes orphaned (quit CLI doesn't stop it... so I need to find/stop it)
 # - ignore if --no-server
-abbr mitmpgrep 'pgrep -ilf mitmproxy | grep -v "\--no-server" || true' # don't error if not found, avoid confusion
-abbr mitmkill 'pgrep -ilf mitmproxy | grep -v "\--no-server" | awk "{print $1}" | xargs sudo kill -9 || true'
+abbr mitm_pgrep 'pgrep -ilf mitmproxy | grep -v "\--no-server" || true' # don't error if not found, avoid confusion
+abbr mitm_kill 'pgrep -ilf mitmproxy | grep -v "\--no-server" | awk "{print $1}" | xargs sudo kill -9 || true'
 #
 # program specific
 abbr mitmlc "mitmproxy --mode=local:'Visual Studio Code.app'" # capture just vscode (note not insiders)

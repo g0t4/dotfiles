@@ -19,6 +19,11 @@ abbr py python3
 # abbr pym python3 -m
 abbr python python3
 abbr pip pip3
+#
+# attempt to target REPLs that aren't responding to Ctrl+D (nor typing)... usually are latest version which is 3.13.5 currently
+#   PRN - do not have "iterm" in the command args
+abbr py_pgrep 'pgrep -lf "python.*3.13.5"'
+abbr py_kill 'pkill -ilf "python.*3.13.5"'
 
 # PRN go back to python3.10/11 etc in ve* abbrs?
 ### VENV (--clear allows to recreate venv if already dir exists, --upgrade-deps makes sure pip is latest)
