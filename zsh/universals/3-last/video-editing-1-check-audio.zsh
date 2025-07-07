@@ -13,14 +13,14 @@ function video_editing_1_check_audio() {
     log_blue "\n## ${clip:t} "
     
     # CASES
-    # - end silence < 0.5 seconds
-    # - end silence > 1 second
-    # - no silence at end (IIUC this means < 0.5 since that is my threshold for silencedetect duration (d=0.5))
+    # - end silence < 0.8 seconds
+    # - end silence > 1.3 second
+    # - no silence at end (IIUC this means < 0.8 since that is my threshold for silencedetect duration (d=0.8))
     # START SILENCE CHECK
-    # read in first 2 seconds else it will always find end at 1 second or less :) 
+    # read in first 2 seconds else it will always find end at 1.3 second or less :)
     # FYI -t is duration to read at start, -to is position (so if timecodes are off then it doesn't take first 2 seconds)... IIUC from docs https://ffmpeg.org/ffmpeg-all.html#Main-options
     start_silence_detects=$( ffmpeg -hide_banner -t 2 -i "$clip" \
-      -af "silencedetect=d=0.5" \
+      -af "silencedetect=d=0.8" \
       -f null /dev/null 2>&1 )
     start_silence_ends=$( echo $start_silence_detects  | grep -o "silence_end:.*" | head -n 1 )
     # ffmpeg output goes to stderr so redir to stdout (2>&1) and then grep for silence_end
@@ -28,13 +28,13 @@ function video_editing_1_check_audio() {
     _ends_at=$( echo $start_silence_ends | cut -d' ' -f2 )
     _duration=$( echo $start_silence_ends | cut -d' ' -f5 )
     if [ -z "$start_silence_ends" ]; then
-      # no silence_end records => less than 0.5 seconds
-      log_error "@start no silence > 0.5 seconds detected"
+      # no silence_end records => less than 0.8 seconds
+      log_error "@start no silence > 0.8 seconds detected"
     else
-      # silence detect records => greater than 0.5 seconds, so now just check for > 1.0 second
-      # NOTE: use end at (silence_end) b/c that will catch duration > 1 AND/OR if first silence isn't at start of file
-      if (( $_ends_at > 1.0 )); then
-        log_error "@start silence greater than 1 second"
+      # silence detect records => greater than 0.8 seconds, so now just check for > 1.3 second
+      # NOTE: use end at (silence_end) b/c that will catch duration > 1.3 AND/OR if first silence isn't at start of file
+      if (( $_ends_at > 1.3 )); then
+        log_error "@start silence greater than 1.3 second"
       fi
       echo "[@start] ${start_silence_ends}"
     fi
@@ -42,17 +42,17 @@ function video_editing_1_check_audio() {
     # END SILENCE CHECK
     # look at silence in last 2 seconds... should enough to assume that duration as a check is all I need
     end_silence_detects=$( ffmpeg -hide_banner -sseof -2 -i "$clip" \
-      -af "silencedetect=d=0.5" \
+      -af "silencedetect=d=0.8" \
       -f null /dev/null 2>&1 )
     end_silence_duration=$( echo $end_silence_detects | grep -o "silence_end:.*" | tail -n 1 )
     _end_ends_at=$( echo $end_silence_duration | cut -d' ' -f2 )
     _end_duration=$( echo $end_silence_duration | cut -d' ' -f5 )
     if [ -z "$end_silence_duration" ]; then
-      # no silence_end records => less than 0.5 seconds
-      log_error "@end no silence > 0.5 seconds detected"
-    else 
-      if (( $_end_duration > 1.0 )); then
-        log_error "@end silence greater than 1.0 seconds"
+      # no silence_end records => less than 0.8 seconds
+      log_error "@end no silence > 0.8 seconds detected"
+    else
+      if (( $_end_duration > 1.3 )); then
+        log_error "@end silence greater than 1.3 seconds"
       fi
       # PRN 1.95 might not always work depending on the video but I think it will, maybe drop to 1.92 if false positive
       if (( $_end_ends_at < 1.95 )); then
