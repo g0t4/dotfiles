@@ -33,6 +33,9 @@
     "callHierarchy.splitCommand": "botright 60vs", // default "botright 30vs"
 
 
+    // TODO! try ty from astral instead of pyright
+    //    https://github.com/astral-sh/ty
+    //
     // *** pyright/python (w/ coc-pyright)
     //    by the way nothing was wrong with coc-pyright, AND it supports ruff as formatter/linter/etc
     //    TODO long term I wanna port over to builtin LSP client... see ruff docs for that https: //docs.astral.sh/ruff/editors/setup/#vim
