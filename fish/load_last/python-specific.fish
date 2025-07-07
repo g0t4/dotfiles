@@ -135,18 +135,18 @@ abbr uv_clean 'uv clean'
 
 
 # *** wcl wrappers
-function wcl
-    if test -t 1
-        # TODO remove this when course is done
-        # only warn if using directly, don't mess up z command that uses this
-        log_ --red --bold "this is NOT wcl from course files, just heads up in case you use the wrong one habitually"
-    end
-
-    set -l _python3 "$WES_DOTFILES/.venv/bin/python3"
-    set -l _script_py "$WES_DOTFILES/zsh/compat_fish/pythons/wcl.py"
-
-    $_python3 $_script_py $argv
-end
+# function wcl
+#     if test -t 1
+#         # TODO remove this when course is done
+#         # only warn if using directly, don't mess up z command that uses this
+#         log_ --red --bold "this is NOT wcl from course files, just heads up in case you use the wrong one habitually"
+#     end
+#
+#     set -l _python3 "$WES_DOTFILES/.venv/bin/python3"
+#     set -l _script_py "$WES_DOTFILES/zsh/compat_fish/pythons/wcl.py"
+#
+#     $_python3 $_script_py $argv
+# end
 
 # completions:
 complete -c wcl --no-files
