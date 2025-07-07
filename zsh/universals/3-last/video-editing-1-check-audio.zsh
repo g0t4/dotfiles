@@ -11,7 +11,8 @@ function video_editing_1_check_audio() {
   for clip in ${search_in}; do
 
     log_blue "\n## ${clip:t} "
-    
+
+    # TODO review that I changed everything correctly from 0.5-1s => 0.8s-1.3s
     # CASES
     # - end silence < 0.8 seconds
     # - end silence > 1.3 second
