@@ -10,7 +10,7 @@ return {
     --
 
     {
-        enabled = true,
+        enabled = false,
         'm4xshen/hardtime.nvim', -- tons of features, recommends, block repeated key use, etc
         dependencies = {
             "MunifTanjim/nui.nvim", -- for report float window
