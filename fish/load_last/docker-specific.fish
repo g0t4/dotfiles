@@ -12,6 +12,19 @@ end
 
 abbr din 'docker inspect'
 
+# model runner
+abbr dmo 'docker model'
+abbr dmols 'docker model list'
+abbr dmoi 'docker model inspect'
+abbr dmol 'docker model logs'
+abbr dmopull 'docker model pull'
+abbr dmopush 'docker model push'
+abbr dmor 'docker model run'
+abbr dmorm 'docker model rm'
+abbr dmot 'docker model tag'
+abbr dmost 'docker model status'
+abbr dmov 'docker model version'
+
 # stack
 abbr dst 'docker stack'
 abbr dstd 'docker stack deploy -c'
@@ -205,8 +218,6 @@ abbr dcolsa (grcify 'docker compose ls -a') # stopped too
 # abbr dcoviz 'docker compose alpha viz'
 # abbr dcopublish 'docker compose alpha publish'
 
-
-
 abbr dcopull 'docker compose pull'
 abbr dcopush 'docker compose push'
 abbr dcorm 'docker compose rm'
@@ -300,11 +311,6 @@ complete -c hub-tool -a version -d "Version information about this tool"
 complete -c hub-tool --long-option help --short-option h --description "help for hub-tool"
 complete -c hub-tool --long-option verbose --description "Print logs"
 complete -c hub-tool --long-option version --description "Display the version of this tool"
-
-
-
-
-
 
 # FYI hub APIs:
 # check docker/hub-tool source for endpoints
