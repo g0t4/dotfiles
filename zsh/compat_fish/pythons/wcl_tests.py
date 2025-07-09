@@ -1,34 +1,18 @@
-import unittest
-
 import pytest
 
 from wcl import clone_url, parse_repo, relative_repo_dir
 
-class TestMapToRepoDir(unittest.TestCase):
-
-    def test_github(self):
-        repo_dir = relative_repo_dir(parse_repo('git@github.com:g0t4/dotfiles.git'))
-        self.assertEqual(repo_dir, 'github/g0t4/dotfiles')
-
-    def test_bitbucket(self):
-        repo_dir = relative_repo_dir(parse_repo('git@bitbucket.org:g0t4/dotfiles.git'))
-        self.assertEqual(repo_dir, 'bitbucket/g0t4/dotfiles')
-
-    def test_gitlab(self):
-        repo_dir = relative_repo_dir(parse_repo('git@gitlab.com:g0t4/dotfiles.git'))
-        self.assertEqual(repo_dir, 'gitlab/g0t4/dotfiles')
-
-    def test_repo_only(self):
-        repo_dir = relative_repo_dir(parse_repo('dotfiles'))
-        self.assertEqual(repo_dir, 'github/g0t4/dotfiles')
-
-    def test_org_repo_only(self):
-        repo_dir = relative_repo_dir(parse_repo('g0t4/dotfiles'))
-        self.assertEqual(repo_dir, 'github/g0t4/dotfiles')
-
-    def test_sourceware_org(self):
-        repo_dir = relative_repo_dir(parse_repo('https://sourceware.org/git/glibc.git'))
-        self.assertEqual(repo_dir, 'sourceware.org/git/glibc')
+@pytest.mark.parametrize("input_url, expected_url", [
+    pytest.param('git@github.com:g0t4/dotfiles.git', 'github/g0t4/dotfiles', id="test_github"),
+    pytest.param('git@bitbucket.org:g0t4/dotfiles.git', 'bitbucket/g0t4/dotfiles', id="test_bitbucket"),
+    pytest.param('git@gitlab.com:g0t4/dotfiles.git', 'gitlab/g0t4/dotfiles', id="test_gitlab"),
+    pytest.param('dotfiles', 'github/g0t4/dotfiles', id="test_repo_only"),
+    pytest.param('g0t4/dotfiles', 'github/g0t4/dotfiles', id="test_org_repo_only"),
+    pytest.param('https://sourceware.org/git/glibc.git', 'sourceware.org/git/glibc', id="test_sourceware_org"),
+])
+def test_map_to_repo_dir(self, input_url, expected_url):
+    repo_dir = relative_repo_dir(parse_repo(input_url))
+    self.assertEqual(repo_dir, expected_url)
 
 @pytest.mark.parametrize(
     "input_url, expected_url",
@@ -102,6 +86,5 @@ def test_parse_repo(repo_location, expected_domain, expected_repo):
 #  hg.nginx.org/nginx.org
 
 if __name__ == '__main__':
-    # don't port everything, just run both sets
     import sys
     pytest.main([sys.argv[0]])
