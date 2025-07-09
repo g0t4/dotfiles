@@ -122,18 +122,6 @@ class TestParseGitLab(unittest.TestCase):
         self.assertEqual(parsed.domain, 'gitlab.com')
         self.assertEqual(parsed.repo, 'g0t4/dotfiles')
 
-class TestDefaultToGitHub(unittest.TestCase):
-
-    def test_repoOnly_assumes_github_g0t4(self):
-        parsed = parse_repo('dotfiles')
-        self.assertEqual(parsed.domain, 'github.com')
-        self.assertEqual(parsed.repo, 'g0t4/dotfiles')
-
-    def test_orgRepoOnly_assumes_github(self):
-        parsed = parse_repo('g0t4/dotfiles')
-        self.assertEqual(parsed.domain, 'github.com')
-        self.assertEqual(parsed.repo, 'g0t4/dotfiles')
-
 class TestParseHuggingFace(unittest.TestCase):
 
     # IIRC hf.co / huggingface.co are interchangeable (though huggingface.co website shows https+huggingface.co and git+hf.co only)
@@ -150,6 +138,10 @@ class TestParseHuggingFace(unittest.TestCase):
 @pytest.mark.parametrize(
     "repo_location, expected_domain, expected_repo",
     [
+        # non-URL locations
+        pytest.param('dotfiles', 'github.com', 'g0t4/dotfiles', id="test_repoOnly_assumes_github_g0t4"),
+        pytest.param('g0t4/dotfiles', 'github.com', 'g0t4/dotfiles', id="test_orgRepoOnly_assumes_github_g0t4"),
+        #
         pytest.param('https://huggingface.co/datasets/PleIAs/common_corpus', 'huggingface.co', 'datasets/PleIAs/common_corpus', id="hf three level repo"),
         pytest.param('https://huggingface.co/datasets/PleIAs/common_corpus/tree/main', 'huggingface.co', 'datasets/PleIAs/common_corpus', id="hf three level repo w/ blob"),
         pytest.param('https://huggingface.co/datasets/PleIAs/common_corpus/blob/main/README.md', 'huggingface.co', 'datasets/PleIAs/common_corpus', id="hf three level repo w/ blob + file"),
