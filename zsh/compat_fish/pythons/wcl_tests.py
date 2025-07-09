@@ -34,23 +34,19 @@ class TestMapToRepoDir(unittest.TestCase):
         repo_dir = relative_repo_dir(parse_repo('https://github.com/Hammerspoon/Spoons/'))
         self.assertEqual(repo_dir, 'github/Hammerspoon/Spoons')
 
-class TestNormalizedCloneUrl(unittest.TestCase):
+import pytest
 
-    def test_git_uses_git(self):
-        url = clone_url(parse_repo('git@github.com:g0t4/dotfiles.git'))
-        self.assertEqual(url, 'git@github.com:g0t4/dotfiles')  # drop .git
-
-    def test_https_uses_git(self):
-        url = clone_url(parse_repo('https://github.com/g0t4/dotfiles.git'))
-        self.assertEqual(url, 'git@github.com:g0t4/dotfiles')  # drop .git
-
-    def test_sourceware_uses_https(self):
-        url = clone_url(parse_repo('https://sourceware.org/git/glibc.git'))
-        self.assertEqual(url, 'https://sourceware.org/git/glibc')
-
-    def test_huggingface_uses_https(self):
-        url = clone_url(parse_repo('https://huggingface.co/g0t4/dotfiles'))
-        self.assertEqual(url, 'https://huggingface.co/g0t4/dotfiles')
+@pytest.mark.parametrize(
+    "input_url, expected_url",
+    [
+        ('git@github.com:g0t4/dotfiles.git', 'git@github.com:g0t4/dotfiles'),  # drop .git
+        ('https://github.com/g0t4/dotfiles.git', 'git@github.com:g0t4/dotfiles'),  # drop .git
+        ('https://sourceware.org/git/glibc.git', 'https://sourceware.org/git/glibc'),
+        ('https://huggingface.co/g0t4/dotfiles', 'https://huggingface.co/g0t4/dotfiles')
+    ])
+def test_clone_url_normalization(input_url, expected_url):
+    url = clone_url(parse_repo(input_url))
+    assert url == expected_url
 
 @pytest.mark.parametrize(
     "repo_location, expected_domain, expected_repo",
