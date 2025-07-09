@@ -72,8 +72,7 @@ def test_clone_url_normalization(input_url, expected_url):
         pytest.param('https://huggingface.co/datasets/PleIAs/common_corpus/tree/main', 'huggingface.co', 'datasets/PleIAs/common_corpus', id="hf three level repo w/ blob"),
         pytest.param('https://huggingface.co/datasets/PleIAs/common_corpus/blob/main/README.md', 'huggingface.co', 'datasets/PleIAs/common_corpus', id="hf three level repo w/ blob + file"),
 
-        # TODO impl later, if I care to, currently broken
-        # TODO turn into some special case for github that never allows for more than org/repo
+        # TODO add more testing of two vs three+ components to repo namespace
         pytest.param('https://github.com/foo/bar/pulls', 'github.com', 'foo/bar', id="github pulls with nothing after pulls"),
         pytest.param('https://github.com/foo/bar/pulls/1', 'github.com', 'foo/bar', id="github pulls/1 should not be seen as repo"),
         pytest.param('https://github.com/foo/bar/issues', 'github.com', 'foo/bar', id="github issues with nothing after issues"),
