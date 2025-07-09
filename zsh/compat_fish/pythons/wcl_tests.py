@@ -1,6 +1,8 @@
 import unittest
-from wcl import parse_repo, relative_repo_dir, clone_url
+
 import pytest
+
+from wcl import clone_url, parse_repo, relative_repo_dir
 
 class TestParseGeneral(unittest.TestCase):
 
@@ -63,56 +65,28 @@ class TestNormalizedCloneUrl(unittest.TestCase):
         url = clone_url(parse_repo('https://huggingface.co/g0t4/dotfiles'))
         self.assertEqual(url, 'https://huggingface.co/g0t4/dotfiles')
 
-class TestParseGitHub(unittest.TestCase):
-
-    def test_github_urls(self):
-        parsed = parse_repo('git@github.com:g0t4/dotfiles.git')
-        self.assertEqual(parsed.domain, 'github.com')
-        self.assertEqual(parsed.repo, 'g0t4/dotfiles')
-
-    def test_github_https(self):
-        parsed = parse_repo('https://github.com/g0t4/dotfiles')
-        self.assertEqual(parsed.domain, 'github.com')
-        self.assertEqual(parsed.repo, 'g0t4/dotfiles')
-
-    def test_https_includes_branch_and_path(self):
-        # this use case is NICE-TO-HAVE and not mission critical
-        # - I rarely use a file link to trigger a clone
-        # - if it gets too complicated, remove it
-
-        parsed = parse_repo('https://github.com/g0t4/dotfiles/blob/master/git/linux.gitconfig')
-        self.assertEqual(parsed.domain, 'github.com')
-        self.assertEqual(parsed.repo, 'g0t4/dotfiles')
-
-    # PRN map githubusercontent.com => github
-    # def test_map_githubusercontent_to_github(self):
-    #     parsed = parse_repo(
-    #         'https://raw.githubusercontent.com/g0t4/dotfiles/master/git/linux.gitconfig')
-    #     self.assertEqual(parsed.domain, 'github.com')
-    #     self.assertEqual(parsed.repo, 'g0t4/dotfiles')
-
-class TestParseHuggingFace(unittest.TestCase):
-
-    # IIRC hf.co / huggingface.co are interchangeable (though huggingface.co website shows https+huggingface.co and git+hf.co only)
-    # git@hf.co:microsoft/speecht5_tts
-    # https://huggingface.co/microsoft/speecht5_tts
-    #   PRN https+hf.co?
-    #   PRN git@huggingface.co?
-
-    def test_huggingface(self):
-        parsed = parse_repo('https://huggingface.co/microsoft/speecht5_tts')
-        self.assertEqual(parsed.domain, 'huggingface.co')
-        self.assertEqual(parsed.repo, 'microsoft/speecht5_tts')
-
 @pytest.mark.parametrize(
     "repo_location, expected_domain, expected_repo",
     [
+        # github
+        pytest.param('https://github.com/g0t4/dotfiles', 'github.com', 'g0t4/dotfiles', id="test_github_https"),
+        pytest.param('git@github.com:g0t4/dotfiles.git', 'github.com', 'g0t4/dotfiles', id="test_github_ssh"),
+        # PRN map githubusercontent.com => github
+        # pytest.param('https://raw.githubusercontent.com/g0t4/dotfiles/master/git/linux.gitconfig', 'github.com', 'g0t4/dotfiles', id="test_githubusercontent.com => github.com"),
+
+        # huggingface
+        pytest.param('https://huggingface.co/microsoft/speecht5_tts', 'huggingface.co', 'microsoft/speecht5_tts', id="test_huggingface_https"),
+        # git@hf.co:microsoft/speecht5_tts
+        # https://huggingface.co/microsoft/speecht5_tts
+        #   PRN https+hf.co?
+        #   PRN git@huggingface.co?
+        #
         # bitbucket
         pytest.param('https://bitbucket.org/g0t4/dotfiles', 'bitbucket.org', 'g0t4/dotfiles', id="test_bitbucket_https"),
         pytest.param('git@bitbucket.org:g0t4/dotfiles.git', 'bitbucket.org', 'g0t4/dotfiles', id="test_bitbucket_ssh"),
         #
         # sourceware
-        pytest.param('https://sourceware.org/git/glibc.git', 'sourceware.org', 'git/glibc', id="test_sourceware_org"),
+        pytest.param('https://sourceware.org/git/glibc.git', 'sourceware.org', 'git/glibc', id="test_sourceware_org_https"),
         #
         # gitlab
         pytest.param('https://gitlab.com/g0t4/dotfiles', 'gitlab.com', 'g0t4/dotfiles', id="test_gitlab_https"),
@@ -121,6 +95,9 @@ class TestParseHuggingFace(unittest.TestCase):
         # non-URL locations
         pytest.param('dotfiles', 'github.com', 'g0t4/dotfiles', id="test_repoOnly_assumes_github_g0t4"),
         pytest.param('g0t4/dotfiles', 'github.com', 'g0t4/dotfiles', id="test_orgRepoOnly_assumes_github_g0t4"),
+        #
+        # ignore path after repo location
+        pytest.param('https://github.com/g0t4/dotfiles/blob/master/git/linux.gitconfig', 'github.com', 'g0t4/dotfiles', id="test_ignore_path_after_repo_location"),
         #
         pytest.param('https://huggingface.co/datasets/PleIAs/common_corpus', 'huggingface.co', 'datasets/PleIAs/common_corpus', id="hf three level repo"),
         pytest.param('https://huggingface.co/datasets/PleIAs/common_corpus/tree/main', 'huggingface.co', 'datasets/PleIAs/common_corpus', id="hf three level repo w/ blob"),
