@@ -147,33 +147,23 @@ class TestParseHuggingFace(unittest.TestCase):
         self.assertEqual(parsed.domain, 'huggingface.co')
         self.assertEqual(parsed.repo, 'microsoft/speecht5_tts')
 
-@pytest.mark.parametrize("repo_location, expected_domain, expected_repo", [
-    pytest.param('https://huggingface.co/datasets/PleIAs/common_corpus', 'huggingface.co', 'datasets/PleIAs/common_corpus', id="hf three level repo"),
-])
-def test_more_than_org_repo(repo_location, expected_domain, expected_repo):
+@pytest.mark.parametrize(
+    "repo_location, expected_domain, expected_repo",
+    [
+        pytest.param('https://huggingface.co/datasets/PleIAs/common_corpus', 'huggingface.co', 'datasets/PleIAs/common_corpus', id="hf three level repo"),
+        pytest.param('https://huggingface.co/datasets/PleIAs/common_corpus/tree/main', 'huggingface.co', 'datasets/PleIAs/common_corpus', id="hf three level repo w/ blob"),
+        pytest.param('https://huggingface.co/datasets/PleIAs/common_corpus/blob/main/README.md', 'huggingface.co', 'datasets/PleIAs/common_corpus', id="hf three level repo w/ blob + file"),
+
+        # TODO impl later, if I care to, currently broken
+        # TODO turn into some special case for github that never allows for more than org/repo
+        # pytest.param('https://github.com/foo/bar/pulls', 'github.com', 'foo/bar', id="github pulls should not be seen as repo"),
+        # pytest.param('https://github.com/foo/bar/issues', 'github.com', 'foo/bar', id="github issues should not be seen as repo"),
+    ])
+def test_parse_repo(repo_location, expected_domain, expected_repo):
     parsed = parse_repo(repo_location)
     assert parsed is not None
     assert parsed.domain == expected_domain
     assert parsed.repo == expected_repo
-
-class TestMoreThanOrgRepo(unittest.TestCase):
-
-    def test_huggingface_three_levels_with_tree(self):
-        parsed = parse_repo('https://huggingface.co/datasets/PleIAs/common_corpus/tree/main')
-        self.assertEqual(parsed.domain, 'huggingface.co')
-        self.assertEqual(parsed.repo, 'datasets/PleIAs/common_corpus')
-
-    def test_huggingface_three_levels_with_blob(self):
-        parsed = parse_repo('https://huggingface.co/datasets/PleIAs/common_corpus/blob/main/README.md')
-        self.assertEqual(parsed.domain, 'huggingface.co')
-        self.assertEqual(parsed.repo, 'datasets/PleIAs/common_corpus')
-
-    def TODO_test_github_pulls(self):
-        # TODO impl later, if I care to, currently broken
-        # TODO turn into some special case for github that never allows for more than org/repo
-        parsed = parse_repo('https://github.com/datasets/PleIAs/pulls')
-        self.assertEqual(parsed.domain, 'github.com')
-        self.assertEqual(parsed.repo, 'datasets/PleIAs')
 
 # TODO support hg (mercurial)?
 #  hg.nginx.org/nginx
