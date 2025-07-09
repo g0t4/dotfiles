@@ -4,19 +4,6 @@ import pytest
 
 from wcl import clone_url, parse_repo, relative_repo_dir
 
-class TestParseGeneral(unittest.TestCase):
-
-    def test_https_dotgit_suffix(self):
-        # .git suffix shown in the various "clone" popups (confirmed: github,bitbucket,gitlab)
-        parsed = parse_repo('https://gitlab.com/g0t4/dotfiles.git')
-        self.assertEqual(parsed.domain, 'gitlab.com')
-        self.assertEqual(parsed.repo, 'g0t4/dotfiles')
-
-    def test_space_padding_ignores(self):
-        parsed = parse_repo('  https://gitlab.com/g0t4/dotfiles.git  ')
-        self.assertEqual(parsed.domain, 'gitlab.com')
-        self.assertEqual(parsed.repo, 'g0t4/dotfiles')
-
 class TestMapToRepoDir(unittest.TestCase):
 
     def test_github(self):
@@ -68,6 +55,11 @@ class TestNormalizedCloneUrl(unittest.TestCase):
 @pytest.mark.parametrize(
     "repo_location, expected_domain, expected_repo",
     [
+
+        # general
+        pytest.param('https://gitlab.com/g0t4/dotfiles.git', 'gitlab.com', 'g0t4/dotfiles', id="test_https_dotgit_suffix"),
+        pytest.param('  https://gitlab.com/g0t4/dotfiles.git   ', 'gitlab.com', 'g0t4/dotfiles', id="test_space_padding_ignores"),
+
         # github
         pytest.param('https://github.com/g0t4/dotfiles', 'github.com', 'g0t4/dotfiles', id="test_github_https"),
         pytest.param('git@github.com:g0t4/dotfiles.git', 'github.com', 'g0t4/dotfiles', id="test_github_ssh"),
@@ -80,22 +72,22 @@ class TestNormalizedCloneUrl(unittest.TestCase):
         # https://huggingface.co/microsoft/speecht5_tts
         #   PRN https+hf.co?
         #   PRN git@huggingface.co?
-        #
+
         # bitbucket
         pytest.param('https://bitbucket.org/g0t4/dotfiles', 'bitbucket.org', 'g0t4/dotfiles', id="test_bitbucket_https"),
         pytest.param('git@bitbucket.org:g0t4/dotfiles.git', 'bitbucket.org', 'g0t4/dotfiles', id="test_bitbucket_ssh"),
-        #
+
         # sourceware
         pytest.param('https://sourceware.org/git/glibc.git', 'sourceware.org', 'git/glibc', id="test_sourceware_org_https"),
-        #
+
         # gitlab
         pytest.param('https://gitlab.com/g0t4/dotfiles', 'gitlab.com', 'g0t4/dotfiles', id="test_gitlab_https"),
         pytest.param('git@gitlab.com:g0t4/dotfiles.git', 'gitlab.com', 'g0t4/dotfiles', id="test_gitlab_ssh"),
-        #
+
         # non-URL locations
         pytest.param('dotfiles', 'github.com', 'g0t4/dotfiles', id="test_repoOnly_assumes_github_g0t4"),
         pytest.param('g0t4/dotfiles', 'github.com', 'g0t4/dotfiles', id="test_orgRepoOnly_assumes_github_g0t4"),
-        #
+
         # ignore path after repo location
         pytest.param('https://github.com/g0t4/dotfiles/blob/master/git/linux.gitconfig', 'github.com', 'g0t4/dotfiles', id="test_ignore_path_after_repo_location"),
         #
