@@ -2,14 +2,17 @@ import pytest
 
 from wcl import clone_url, parse_repo, relative_repo_dir
 
-@pytest.mark.parametrize("input_url, expected_url", [
-    pytest.param('git@github.com:g0t4/dotfiles.git', 'github/g0t4/dotfiles', id="test_github"),
-    pytest.param('git@bitbucket.org:g0t4/dotfiles.git', 'bitbucket/g0t4/dotfiles', id="test_bitbucket"),
-    pytest.param('git@gitlab.com:g0t4/dotfiles.git', 'gitlab/g0t4/dotfiles', id="test_gitlab"),
-    pytest.param('dotfiles', 'github/g0t4/dotfiles', id="test_repo_only"),
-    pytest.param('g0t4/dotfiles', 'github/g0t4/dotfiles', id="test_org_repo_only"),
-    pytest.param('https://sourceware.org/git/glibc.git', 'sourceware.org/git/glibc', id="test_sourceware_org"),
-])
+@pytest.mark.parametrize(
+    "input_url, expected_url",
+    [
+        pytest.param('git@github.com:g0t4/dotfiles.git', 'github/g0t4/dotfiles', id="test_github"),
+        pytest.param('git@bitbucket.org:g0t4/dotfiles.git', 'bitbucket/g0t4/dotfiles', id="test_bitbucket"),
+        pytest.param('git@gitlab.com:g0t4/dotfiles.git', 'gitlab/g0t4/dotfiles', id="test_gitlab"),
+        pytest.param('dotfiles', 'github/g0t4/dotfiles', id="test_repo_only"),
+        pytest.param('g0t4/dotfiles', 'github/g0t4/dotfiles', id="test_org_repo_only"),
+        pytest.param('https://sourceware.org/git/glibc.git', 'sourceware.org/git/glibc', id="test_sourceware_org"),
+        pytest.param('https://github.com/Hammerspoon/Spoons/', 'github/Hammerspoon/Spoons', id="test_trailing_slash"),  # trailing slash
+    ])
 def test_map_to_repo_dir(input_url, expected_url):
     repo_dir = relative_repo_dir(parse_repo(input_url))
     assert repo_dir == expected_url
@@ -21,7 +24,6 @@ def test_map_to_repo_dir(input_url, expected_url):
         pytest.param('https://github.com/g0t4/dotfiles.git', 'git@github.com:g0t4/dotfiles', id="test_https_uses_git"),  # drop .git
         pytest.param('https://sourceware.org/git/glibc.git', 'https://sourceware.org/git/glibc', id="test_sourceware_uses_https"),
         pytest.param('https://huggingface.co/g0t4/dotfiles', 'https://huggingface.co/g0t4/dotfiles', id="test_huggingface_uses_https"),
-        pytest.param('https://github.com/Hammerspoon/Spoons/', 'github/Hammerspoon/Spoons', id="test_trailing_slash"),  # trailing slash
     ])
 def test_clone_url_normalization(input_url, expected_url):
     url = clone_url(parse_repo(input_url))
