@@ -2399,6 +2399,9 @@ abbr vllmg "vllm complete"
 abbr tailf 'tail -F'
 abbr tailn 'tail -n 10'
 abbr tailr 'tail -r' # reverse order
+# *** frequently tailed files
+abbr tail_ask_ls 'tail -F ~/.local/share/ask-openai/language.server.log' # python LS
+abbr tail_ask_predictions 'tail  -F ~/.local/share/nvim/ask-openai/ask-predictions.log' # nvim plugin
 
 # tail10<space> => tail -n 10
 abbr taild --regex 'tail\d+' --function _taild
