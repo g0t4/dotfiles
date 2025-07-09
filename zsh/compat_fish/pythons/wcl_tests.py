@@ -63,13 +63,6 @@ class TestNormalizedCloneUrl(unittest.TestCase):
         url = clone_url(parse_repo('https://huggingface.co/g0t4/dotfiles'))
         self.assertEqual(url, 'https://huggingface.co/g0t4/dotfiles')
 
-class TestParseThirdParty(unittest.TestCase):
-
-    def test_sourceware_org_urls(self):
-        parsed = parse_repo('https://sourceware.org/git/glibc.git')
-        self.assertEqual(parsed.domain, 'sourceware.org')
-        self.assertEqual(parsed.repo, 'git/glibc')
-
 class TestParseGitHub(unittest.TestCase):
 
     def test_github_urls(self):
@@ -98,30 +91,6 @@ class TestParseGitHub(unittest.TestCase):
     #     self.assertEqual(parsed.domain, 'github.com')
     #     self.assertEqual(parsed.repo, 'g0t4/dotfiles')
 
-class TestParseBitbucket(unittest.TestCase):
-
-    def test_bitbucket_https(self):
-        parsed = parse_repo('https://bitbucket.org/g0t4/dotfiles')
-        self.assertEqual(parsed.domain, 'bitbucket.org')
-        self.assertEqual(parsed.repo, 'g0t4/dotfiles')
-
-    def test_bitbucket_ssh(self):
-        parsed = parse_repo('git@bitbucket.org:g0t4/dotfiles.git')
-        self.assertEqual(parsed.domain, 'bitbucket.org')
-        self.assertEqual(parsed.repo, 'g0t4/dotfiles')
-
-class TestParseGitLab(unittest.TestCase):
-
-    def test_gitlab_https(self):
-        parsed = parse_repo('https://gitlab.com/g0t4/dotfiles')
-        self.assertEqual(parsed.domain, 'gitlab.com')
-        self.assertEqual(parsed.repo, 'g0t4/dotfiles')
-
-    def test_gitlab_ssh(self):
-        parsed = parse_repo('git@gitlab.com:g0t4/dotfiles.git')
-        self.assertEqual(parsed.domain, 'gitlab.com')
-        self.assertEqual(parsed.repo, 'g0t4/dotfiles')
-
 class TestParseHuggingFace(unittest.TestCase):
 
     # IIRC hf.co / huggingface.co are interchangeable (though huggingface.co website shows https+huggingface.co and git+hf.co only)
@@ -138,6 +107,17 @@ class TestParseHuggingFace(unittest.TestCase):
 @pytest.mark.parametrize(
     "repo_location, expected_domain, expected_repo",
     [
+        # bitbucket
+        pytest.param('https://bitbucket.org/g0t4/dotfiles', 'bitbucket.org', 'g0t4/dotfiles', id="test_bitbucket_https"),
+        pytest.param('git@bitbucket.org:g0t4/dotfiles.git', 'bitbucket.org', 'g0t4/dotfiles', id="test_bitbucket_ssh"),
+        #
+        # sourceware
+        pytest.param('https://sourceware.org/git/glibc.git', 'sourceware.org', 'git/glibc', id="test_sourceware_org"),
+        #
+        # gitlab
+        pytest.param('https://gitlab.com/g0t4/dotfiles', 'gitlab.com', 'g0t4/dotfiles', id="test_gitlab_https"),
+        pytest.param('git@gitlab.com:g0t4/dotfiles.git', 'gitlab.com', 'g0t4/dotfiles', id="test_gitlab_ssh"),
+        #
         # non-URL locations
         pytest.param('dotfiles', 'github.com', 'g0t4/dotfiles', id="test_repoOnly_assumes_github_g0t4"),
         pytest.param('g0t4/dotfiles', 'github.com', 'g0t4/dotfiles', id="test_orgRepoOnly_assumes_github_g0t4"),
