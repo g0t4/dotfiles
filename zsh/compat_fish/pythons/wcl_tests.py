@@ -30,10 +30,6 @@ class TestMapToRepoDir(unittest.TestCase):
         repo_dir = relative_repo_dir(parse_repo('https://sourceware.org/git/glibc.git'))
         self.assertEqual(repo_dir, 'sourceware.org/git/glibc')
 
-    def test_trailing_slash(self):
-        repo_dir = relative_repo_dir(parse_repo('https://github.com/Hammerspoon/Spoons/'))
-        self.assertEqual(repo_dir, 'github/Hammerspoon/Spoons')
-
 @pytest.mark.parametrize(
     "input_url, expected_url",
     [
@@ -41,6 +37,7 @@ class TestMapToRepoDir(unittest.TestCase):
         pytest.param('https://github.com/g0t4/dotfiles.git', 'git@github.com:g0t4/dotfiles', id="test_https_uses_git"),  # drop .git
         pytest.param('https://sourceware.org/git/glibc.git', 'https://sourceware.org/git/glibc', id="test_sourceware_uses_https"),
         pytest.param('https://huggingface.co/g0t4/dotfiles', 'https://huggingface.co/g0t4/dotfiles', id="test_huggingface_uses_https"),
+        pytest.param('https://github.com/Hammerspoon/Spoons/', 'github/Hammerspoon/Spoons', id="test_trailing_slash"),  # trailing slash
     ])
 def test_clone_url_normalization(input_url, expected_url):
     url = clone_url(parse_repo(input_url))
