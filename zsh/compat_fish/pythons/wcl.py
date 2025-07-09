@@ -156,8 +156,9 @@ def parse_repo(url: str) -> ParsedRepo | None:
 
         # org/repo/blob/branch/path/to/file, strip blob+ (must have org/repo before blob)
         # PRN if it happens to be that a repo is named blob/tree then we have issues!
+        # TODO I should add checks for domain... and have diff logic based on # of namespace components allowed instead of just regex
         if re.search(r"[^/]+/[^/]+/(blob|tree|pulls|issues)(/|$)", path):
-           path = re.sub(r"([^/]+/[^/]+)/(blob|tree|pulls|issues).*", "\\1", path)
+            path = re.sub(r"([^/]+/[^/]+)/(blob|tree|pulls|issues).*", "\\1", path)
 
         return ParsedRepo(domain=parsed.netloc, repo=path)
 
