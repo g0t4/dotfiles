@@ -15,22 +15,18 @@ class TestParseGeneral(unittest.TestCase):
         self.assertEqual(parsed.domain, 'gitlab.com')
         self.assertEqual(parsed.repo, 'g0t4/dotfiles')
 
-
 class TestMapToRepoDir(unittest.TestCase):
 
     def test_github(self):
-        repo_dir = relative_repo_dir(
-            parse_repo('git@github.com:g0t4/dotfiles.git'))
+        repo_dir = relative_repo_dir(parse_repo('git@github.com:g0t4/dotfiles.git'))
         self.assertEqual(repo_dir, 'github/g0t4/dotfiles')
 
     def test_bitbucket(self):
-        repo_dir = relative_repo_dir(
-            parse_repo('git@bitbucket.org:g0t4/dotfiles.git'))
+        repo_dir = relative_repo_dir(parse_repo('git@bitbucket.org:g0t4/dotfiles.git'))
         self.assertEqual(repo_dir, 'bitbucket/g0t4/dotfiles')
 
     def test_gitlab(self):
-        repo_dir = relative_repo_dir(
-            parse_repo('git@gitlab.com:g0t4/dotfiles.git'))
+        repo_dir = relative_repo_dir(parse_repo('git@gitlab.com:g0t4/dotfiles.git'))
         self.assertEqual(repo_dir, 'gitlab/g0t4/dotfiles')
 
     def test_repo_only(self):
@@ -42,16 +38,12 @@ class TestMapToRepoDir(unittest.TestCase):
         self.assertEqual(repo_dir, 'github/g0t4/dotfiles')
 
     def test_sourceware_org(self):
-        repo_dir = relative_repo_dir(
-            parse_repo('https://sourceware.org/git/glibc.git'))
+        repo_dir = relative_repo_dir(parse_repo('https://sourceware.org/git/glibc.git'))
         self.assertEqual(repo_dir, 'sourceware.org/git/glibc')
 
     def test_trailing_slash(self):
-        repo_dir = relative_repo_dir(
-            parse_repo('https://github.com/Hammerspoon/Spoons/'))
+        repo_dir = relative_repo_dir(parse_repo('https://github.com/Hammerspoon/Spoons/'))
         self.assertEqual(repo_dir, 'github/Hammerspoon/Spoons')
-
-
 
 class TestNormalizedCloneUrl(unittest.TestCase):
 
@@ -95,8 +87,7 @@ class TestParseGitHub(unittest.TestCase):
         # - I rarely use a file link to trigger a clone
         # - if it gets too complicated, remove it
 
-        parsed = parse_repo(
-            'https://github.com/g0t4/dotfiles/blob/master/git/linux.gitconfig')
+        parsed = parse_repo('https://github.com/g0t4/dotfiles/blob/master/git/linux.gitconfig')
         self.assertEqual(parsed.domain, 'github.com')
         self.assertEqual(parsed.repo, 'g0t4/dotfiles')
 
@@ -106,7 +97,6 @@ class TestParseGitHub(unittest.TestCase):
     #         'https://raw.githubusercontent.com/g0t4/dotfiles/master/git/linux.gitconfig')
     #     self.assertEqual(parsed.domain, 'github.com')
     #     self.assertEqual(parsed.repo, 'g0t4/dotfiles')
-
 
 class TestParseBitbucket(unittest.TestCase):
 
@@ -120,7 +110,6 @@ class TestParseBitbucket(unittest.TestCase):
         self.assertEqual(parsed.domain, 'bitbucket.org')
         self.assertEqual(parsed.repo, 'g0t4/dotfiles')
 
-
 class TestParseGitLab(unittest.TestCase):
 
     def test_gitlab_https(self):
@@ -133,7 +122,6 @@ class TestParseGitLab(unittest.TestCase):
         self.assertEqual(parsed.domain, 'gitlab.com')
         self.assertEqual(parsed.repo, 'g0t4/dotfiles')
 
-
 class TestDefaultToGitHub(unittest.TestCase):
 
     def test_repoOnly_assumes_github_g0t4(self):
@@ -145,7 +133,6 @@ class TestDefaultToGitHub(unittest.TestCase):
         parsed = parse_repo('g0t4/dotfiles')
         self.assertEqual(parsed.domain, 'github.com')
         self.assertEqual(parsed.repo, 'g0t4/dotfiles')
-
 
 class TestParseHuggingFace(unittest.TestCase):
 
