@@ -78,6 +78,8 @@ def test_clone_url_normalization(input_url, expected_url):
         pytest.param('https://github.com/foo/bar/pulls/1', 'github.com', 'foo/bar', id="github pulls/1 should not be seen as repo"),
         pytest.param('https://github.com/foo/bar/issues', 'github.com', 'foo/bar', id="github issues with nothing after issues"),
         pytest.param('https://github.com/foo/bar/issues/1', 'github.com', 'foo/bar', id="github issues/1 should not be seen as repo"),
+        #
+        pytest.param('https://github.com/foo/pulls/pulls', 'github.com', 'foo/pulls', id="github pulls in repo name should not be filtered out"),
     ])
 def test_parse_repo(repo_location, expected_domain, expected_repo):
     parsed = parse_repo(repo_location)
