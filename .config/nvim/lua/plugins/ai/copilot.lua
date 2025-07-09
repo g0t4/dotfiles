@@ -11,7 +11,7 @@ local use_ai = {
 
 
 local lsp_ask_openai = {
-    enabled = false,
+    enabled = true,
     "neovim/nvim-lspconfig",
     config = function()
         -- TODO make sure I don't double define nvim-lspconfig plugin? have one spot register it and then just config server here?
