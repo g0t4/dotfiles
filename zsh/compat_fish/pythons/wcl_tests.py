@@ -34,15 +34,13 @@ class TestMapToRepoDir(unittest.TestCase):
         repo_dir = relative_repo_dir(parse_repo('https://github.com/Hammerspoon/Spoons/'))
         self.assertEqual(repo_dir, 'github/Hammerspoon/Spoons')
 
-import pytest
-
 @pytest.mark.parametrize(
     "input_url, expected_url",
     [
-        ('git@github.com:g0t4/dotfiles.git', 'git@github.com:g0t4/dotfiles'),  # drop .git
-        ('https://github.com/g0t4/dotfiles.git', 'git@github.com:g0t4/dotfiles'),  # drop .git
-        ('https://sourceware.org/git/glibc.git', 'https://sourceware.org/git/glibc'),
-        ('https://huggingface.co/g0t4/dotfiles', 'https://huggingface.co/g0t4/dotfiles')
+        pytest.param('git@github.com:g0t4/dotfiles.git', 'git@github.com:g0t4/dotfiles', id="test_github_uses_git"),  # drop .git
+        pytest.param('https://github.com/g0t4/dotfiles.git', 'git@github.com:g0t4/dotfiles', id="test_https_uses_git"),  # drop .git
+        pytest.param('https://sourceware.org/git/glibc.git', 'https://sourceware.org/git/glibc', id="test_sourceware_uses_https"),
+        pytest.param('https://huggingface.co/g0t4/dotfiles', 'https://huggingface.co/g0t4/dotfiles', id="test_huggingface_uses_https"),
     ])
 def test_clone_url_normalization(input_url, expected_url):
     url = clone_url(parse_repo(input_url))
