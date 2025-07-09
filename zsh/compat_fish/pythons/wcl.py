@@ -8,7 +8,6 @@ from rich import print
 IGNORE_FAILURE = False
 STOP_ON_FAILURE = True
 
-
 def wcl(args):
     url: str = args.url
     dry_run: bool = args.dry_run
@@ -84,14 +83,12 @@ def wcl(args):
         else:
             subprocess.run(z_add_fish, cwd=repo_dir, check=IGNORE_FAILURE)
 
-
 def is_executable_present(cmd) -> bool:
     if is_windows():
         return False
 
     result = subprocess.run(f"which {cmd}", shell=True, check=IGNORE_FAILURE, stdout=subprocess.DEVNULL)
     return result.returncode == 0
-
 
 def clone_url(parsed) -> str:
     # probably don't recreate url if not a major player? (bitbucket, github, gitlab)
@@ -107,7 +104,6 @@ def clone_url(parsed) -> str:
     # prefer ssh for git repos (simple, standard, supports ssh auth), plus I've been using this forever now and it's been great.
     return f"git@{parsed.domain}:{parsed.repo}"
 
-
 def relative_repo_dir(parsed) -> str:
     # BTW for major players, I am dropping TLD (.com, .org)... everyone else includes it (i.e. nginx.org, sourceware.org, etc.)
     host = parsed.domain
@@ -120,15 +116,14 @@ def relative_repo_dir(parsed) -> str:
     # switch to host b/c platform is not the same as host, i.e. sourceware.org has gitlab as platform (IIGC that is the underlying private host that it runs, but I want repos organized based on domain they are hosted on)... in many cases platform==host so that is why that originally worked but no longer suffices.
     return host + "/" + parsed.repo
 
-
 class ParsedRepo:
+
     def __init__(self, domain, repo):
         self.domain = domain
         self.repo = repo
 
     def __str__(self):
         return f"ParsedRepo(domain={self.domain}, repo={self.repo})"
-
 
 def parse_repo(url: str) -> ParsedRepo | None:
     url = url.strip()
@@ -155,7 +150,7 @@ def parse_repo(url: str) -> ParsedRepo | None:
         path = path.rstrip("/")  # Remove trailing '/' => wcl https://github.com/Hammerspoon/Spoons/
 
         # org/repo/blob/branch/path/to/file, strip blob+ (must have org/repo before blob)
-        # PRN if it happens to be that a repo is named blob/tree then we have issues!
+        # PRN if it happens to be that a repo is named blob/tree then we have issues... on third+ component (fixed for 1/2)
         # TODO I should add checks for domain... and have diff logic based on # of namespace components allowed instead of just regex
         if re.search(r"[^/]+/[^/]+/(blob|tree|pulls|issues)(/|$)", path):
             path = re.sub(r"([^/]+/[^/]+)/(blob|tree|pulls|issues).*", "\\1", path)
@@ -176,10 +171,8 @@ def parse_repo(url: str) -> ParsedRepo | None:
 
     return None  # Unable to parse
 
-
 def is_windows():
     return os.name == "nt"
-
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="(w)es (cl)one", prog="wcl")
@@ -189,6 +182,5 @@ if __name__ == "__main__":
     parser.add_argument("--path-only", action="store_true", help="return path (do not clone)")
     parsed_args = parser.parse_args()
     wcl(parsed_args)
-
 
 # TODO add some tests that i can run on demand
