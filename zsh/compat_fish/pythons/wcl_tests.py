@@ -1,6 +1,6 @@
 import unittest
 from wcl import parse_repo, relative_repo_dir, clone_url
-
+import pytest
 
 class TestParseGeneral(unittest.TestCase):
 
@@ -160,12 +160,16 @@ class TestParseHuggingFace(unittest.TestCase):
         self.assertEqual(parsed.domain, 'huggingface.co')
         self.assertEqual(parsed.repo, 'microsoft/speecht5_tts')
 
-class TestMoreThanOrgReop(unittest.TestCase):
+@pytest.mark.parametrize("repo_location, expected_domain, expected_repo", [
+    pytest.param('https://huggingface.co/datasets/PleIAs/common_corpus', 'huggingface.co', 'datasets/PleIAs/common_corpus', id="hf three level repo"),
+])
+def test_more_than_org_repo(repo_location, expected_domain, expected_repo):
+    parsed = parse_repo(repo_location)
+    assert parsed is not None
+    assert parsed.domain == expected_domain
+    assert parsed.repo == expected_repo
 
-    def test_huggingface_three_levels(self):
-        parsed = parse_repo('https://huggingface.co/datasets/PleIAs/common_corpus')
-        self.assertEqual(parsed.domain, 'huggingface.co')
-        self.assertEqual(parsed.repo, 'datasets/PleIAs/common_corpus')
+class TestMoreThanOrgRepo(unittest.TestCase):
 
     def test_huggingface_three_levels_with_tree(self):
         parsed = parse_repo('https://huggingface.co/datasets/PleIAs/common_corpus/tree/main')
@@ -189,4 +193,6 @@ class TestMoreThanOrgReop(unittest.TestCase):
 #  hg.nginx.org/nginx.org
 
 if __name__ == '__main__':
-    unittest.main()
+    # don't port everything, just run both sets
+    import sys
+    pytest.main([sys.argv[0]])
