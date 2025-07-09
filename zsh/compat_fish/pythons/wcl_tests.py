@@ -10,9 +10,9 @@ from wcl import clone_url, parse_repo, relative_repo_dir
     pytest.param('g0t4/dotfiles', 'github/g0t4/dotfiles', id="test_org_repo_only"),
     pytest.param('https://sourceware.org/git/glibc.git', 'sourceware.org/git/glibc', id="test_sourceware_org"),
 ])
-def test_map_to_repo_dir(self, input_url, expected_url):
+def test_map_to_repo_dir(input_url, expected_url):
     repo_dir = relative_repo_dir(parse_repo(input_url))
-    self.assertEqual(repo_dir, expected_url)
+    assert repo_dir == expected_url
 
 @pytest.mark.parametrize(
     "input_url, expected_url",
