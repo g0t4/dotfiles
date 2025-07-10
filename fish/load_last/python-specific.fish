@@ -13,7 +13,7 @@ abbr py_profile_import_time PYTHONPROFILEIMPORTTIME=1 python -c "from sentence_t
 #   venv => command3 defined (for all v3 venvs!)
 #
 # ipython repl is FAR superior in terms of colors and other features
-abbr ipy 'ipython3' # ipython is much slower to start so don't default to it unless I explicitly want it
+abbr ip 'ipython3' # ipython is much slower to start so don't default to it unless I explicitly want it
 # TODO why is ipython startup like seconds longer?
 abbr py python3
 # abbr pym python3 -m
