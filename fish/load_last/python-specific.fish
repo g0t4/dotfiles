@@ -136,7 +136,7 @@ abbr uv_clean 'uv clean'
 
 function detect_encoding
     set -l _python3 "$WES_DOTFILES/.venv/bin/python3"
-    set -l _script_py "$WES_DOTFILES/zsh/compat_fish/pythons/chardetect.py"
+    set -l _script_py "$WES_DOTFILES/zsh/compat_fish/pythons/detect_encoding.py"
 
     $_python3 $_script_py $argv
 
