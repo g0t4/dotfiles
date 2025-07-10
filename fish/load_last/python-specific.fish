@@ -12,12 +12,14 @@ abbr py_profile_import_time PYTHONPROFILEIMPORTTIME=1 python -c "from sentence_t
 #   venv => command3 defined (for all v3 venvs!)
 #
 # ipython repl is FAR superior in terms of colors and other features
-abbr ip ipython3 # ipython is much slower to start so don't default to it unless I explicitly want it
-abbr ipy ipython3 # ipython is much slower to start so don't default to it unless I explicitly want it
-# TODO why is ipython startup like seconds longer?
-abbr py python3
-# abbr pym python3 -m
+abbr ipy ipython3
+abbr py ipython3
+# make python ONE more char longer than ipython py abbr, but don't make it so I have to type full thing or tab complete it
+abbr pyt python3
+abbr pyth python3
+abbr pytho python3
 abbr python python3
+# abbr pym python3 -m
 abbr pip pip3
 #
 # attempt to target REPLs that aren't responding to Ctrl+D (nor typing)... usually are latest version which is 3.13.5 currently
