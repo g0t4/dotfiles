@@ -2401,7 +2401,13 @@ abbr tailn 'tail -n 10'
 abbr tailr 'tail -r' # reverse order
 # *** frequently tailed files
 abbr tail_ask_ls 'tail -F ~/.local/share/ask-openai/language.server.log' # python LS
-abbr tail_ask_predictions 'tail  -F ~/.local/share/nvim/ask-openai/ask-predictions.log' # nvim plugin
+abbr trash_n_tail_ask_ls 'trash_ask_logs && tail -F ~/.local/share/ask-openai/language.server.log' # python LS
+abbr tail_ask_predictions 'tail -F ~/.local/share/nvim/ask-openai/ask-predictions.log' # nvim plugin
+abbr trash_n_tail_ask_predictions 'trash_ask_logs && tail -F ~/.local/share/nvim/ask-openai/ask-predictions.log' # nvim plugin
+function trash_ask_logs
+    trash ~/.local/share/ask-openai/language.server.log \
+        ~/.local/share/nvim/ask-openai/ask-predictions.log
+end
 
 # tail10<space> => tail -n 10
 abbr taild --regex 'tail\d+' --function _taild
