@@ -137,9 +137,14 @@ abbr uv_clean 'uv clean'
 function detect_encoding
     set -l _python3 "$WES_DOTFILES/.venv/bin/python3"
     set -l _script_py "$WES_DOTFILES/zsh/compat_fish/pythons/detect_encoding.py"
-
     $_python3 $_script_py $argv
+end
 
+function rag_indexer
+    set ASK_REPO "$HOME/repos/github/g0t4/ask-openai.nvim"
+    set -l _python3 "$ASK_REPO/.venv/bin/python3"
+    set -l _script_py "$ASK_REPO/lua/ask-openai/rag/indexer.py"
+    $_python3 $_script_py $argv
 end
 
 # *** wcl wrappers
