@@ -2125,7 +2125,17 @@ if command -q pacman
     #
     abbr pmql "pacman -Ql" # (l)ist files for pkg, can list multiple too (in which case first col is pkg name)
     # TODO any reason why I wouldn't just use -Fl always? perhaps if I custom build a pkg?
-    abbr --set-cursor pmqlt "pacman -Qlq % | treeify " # tree like list (-q == --quiet => show less info, in this case dont list pkg name column, just file paths)
+    abbr --set-cursor pmqlt "pacman -Qlq % | treeify_with_icons " # tree like list (-q == --quiet => show less info, in this case dont list pkg name column, just file paths)
+    function treeify_with_icons
+        # just a quick take on this... would like color too but treeify would need an option to support that too
+        pacman -Ql procs | awk '{print $2}' | while read -l path
+            if test -f "$path"
+                set icon (lsd --icon=always "$path" 2>/dev/null | awk '{print $1}')
+                echo "$path $icon"
+            end
+        end | treeify
+    end
+
     abbr --set-cursor pm_listinstalledpkgfiles "pacman -Qlq % | treeify" # reminder
     #pacman -Qk fish # verify installed files
     abbr pmqo "pacman -Qo" # (o)wned by pkg
