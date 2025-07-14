@@ -45,6 +45,7 @@ if command -q nvim
     ln -f -s $dotfiles_dir/.config/nvim/after $HOME/.config/nvim/. # DIR SYMLINK
     ln -f -s $dotfiles_dir/.config/nvim/coc-settings.json $HOME/.config/nvim/coc-settings.json
     ln -f -s $dotfiles_dir/.config/nvim/snippets $HOME/.config/nvim/. # DIR SYMLINK
+    ln -f -s $dotfiles_dir/.config/nvim/UltiSnips $HOME/.config/nvim/. # DIR SYMLINK
 end
 #
 # FYI no longer using vimrc, but I might want it back for some envs?
