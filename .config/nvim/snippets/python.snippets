@@ -5,9 +5,10 @@ with open('${1:filename}.txt', 'w') as f:
 snippet richprint
 from rich import print
 
+# TODO do I like using i as prefix on all import snippets? or maybe f in the case of from * import *
+snippet inp
+import numpy as np
+
 snippet f=
 print(f'{${1:string}=}')
 
-
-snippet fromrich
-from rich import print
