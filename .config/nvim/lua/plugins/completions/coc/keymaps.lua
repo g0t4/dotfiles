@@ -15,11 +15,12 @@ vim.api.nvim_create_user_command('FormatBuffer', function()
     vim.fn.CocActionAsync('format')
 end, { nargs = 0 })
 
-vim.api.nvim_create_user_command('OrganizeImports', function()
-    vim.fn.CocActionAsync('runCommand', 'editor.action.organizeImport')
-end, { nargs = 0 })
+-- vim.api.nvim_create_user_command('OrganizeImports', function()
+--     vim.fn.CocActionAsync('runCommand', 'editor.action.organizeImport')
+-- end, { nargs = 0 })
 
-vim.keymap.set('n', '<leader>oi', ':OrganizeImports<cr>', { silent = true })
+-- NO NO NO NO NO... this will rearrange and fuck up legit side effects (i.e. torch needs to come before faiss... stop using this nonsese.. import order should NEVER be willy nilly rearranged)
+-- vim.keymap.set('n', '<leader>oi', ':OrganizeImports<cr>', { silent = true })
 
 
 
