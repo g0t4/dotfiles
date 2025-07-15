@@ -2347,10 +2347,15 @@ end
 # if command -q netstat
 # end
 
-# TODO
 # *** ss
-# if command -q ss
-# end
+if command -q ss
+    # -n # not resolve
+    # -t -u # tcp+udp
+    # -l # listening
+    abbr ss_listening_ports "sudo ss -tunl" # listening are ommited by default
+    abbr ss_notlistening_ports "sudo ss -tun"
+    abbr ss_all_ports "sudo ss -tuna" # listening and not
+end
 
 # *** asciinema
 abbr anr 'asciinema rec --overwrite test.cast' # PRN remake in fish:    abbr --set-cursor --add anr 'asciinema rec --overwrite %.cast'
