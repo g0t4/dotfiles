@@ -339,6 +339,10 @@ end
 -- *** switch copilot keymaps:
 vim.api.nvim_set_keymap("n", "<F13>", ":lua SwitchCopilot()<CR>", { noremap = true, silent = true })
 vim.api.nvim_set_keymap("i", "<F13>", "<Esc>:lua SwitchCopilot()<CR>a", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("n", "<F17>", ":lua require('ask-openai.api').toggle_rag()<CR>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("i", "<F17>", "<Esc>:lua require('ask-openai.api').toggle_rag()<CR>a", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("n", "<F16>", ":lua require('ask-openai.api').toggle_verbose_logs()<CR>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("i", "<F16>", "<Esc>:lua require('ask-openai.api').toggle_verbose_logs()<CR>a", { noremap = true, silent = true })
 
 function IsAskOpenAIPredictionsAvailable()
     -- FYI, later, replace with final setting
