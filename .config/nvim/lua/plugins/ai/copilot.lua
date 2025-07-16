@@ -612,9 +612,7 @@ local ask_openai_plugin = {
     dir = "~/repos/github/g0t4/ask-openai.nvim",
 
     -- *** copilot (default):
-    -- opts = {
-    --     -- verbose = true,
-    -- },
+    -- opts = { },
 
     -- *** OpenAI + keychain:
     -- opts = {
@@ -622,7 +620,6 @@ local ask_openai_plugin = {
     --         return require("ask-openai.config")
     --             .get_key_from_stdout("security find-generic-password -s openai -a ask -w")
     --     end,
-    --     -- verbose = true,
     -- },
 
     -- *** GROQ + keychain:
@@ -635,7 +632,6 @@ local ask_openai_plugin = {
     --         return require("ask-openai.config")
     --             .get_key_from_stdout("security find-generic-password -s groq -a ask -w")
     --     end,
-    --     -- verbose = true,
     -- },
 
     -- *** ollama:
@@ -645,8 +641,6 @@ local ask_openai_plugin = {
         model = "qwen2.5-coder:7b-instruct-q8_0",
         use_api_ollama = true,
         api_url = "http://ollama:11434/v1/chat/completions",
-
-        verbose = false, -- ask predictions logs verbosity flag (trace vs not)
 
         tmp = {
             predictions = {
