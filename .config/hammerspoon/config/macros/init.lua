@@ -32,6 +32,7 @@ end
 
 require("config.macros.brave")
 require("config.macros.fcpx")
+require("config.macros.iterm")
 require("config.macros.google-docs")
 require("config.macros.msft_office")
 
