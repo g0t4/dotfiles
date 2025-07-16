@@ -646,7 +646,7 @@ local ask_openai_plugin = {
         use_api_ollama = true,
         api_url = "http://ollama:11434/v1/chat/completions",
 
-        verbose = true,
+        verbose = false, -- ask predictions logs verbosity flag (trace vs not)
 
         tmp = {
             predictions = {
