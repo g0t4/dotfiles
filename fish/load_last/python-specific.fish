@@ -142,10 +142,12 @@ end
 
 function rag_indexer
     set ASK_REPO "$HOME/repos/github/g0t4/ask-openai.nvim"
-    set -l _python3 "$ASK_REPO/.venv/bin/python3"
-    set -l _script_py "$ASK_REPO/lua/ask-openai/rag/indexer.py"
+    set _python3 "$ASK_REPO/.venv/bin/python3"
+    set _script_py "$ASK_REPO/lua/ask-openai/rag/indexer.py"
     $_python3 $_script_py $argv
 end
+
+abbr rag_rebuilder 'rag_indexer --rebuild'
 
 # *** wcl wrappers
 function wcl
