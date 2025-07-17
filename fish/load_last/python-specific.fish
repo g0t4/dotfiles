@@ -147,7 +147,7 @@ function rag_indexer
     $_python3 $_script_py $argv
 end
 
-abbr rag_rebuilder 'rag_indexer --rebuild'
+abbr rag_rebuilder 'rag_indexer --rebuild --info'
 
 # *** wcl wrappers
 function wcl
