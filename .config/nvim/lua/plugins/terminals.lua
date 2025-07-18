@@ -524,6 +524,12 @@ return {
             end
             vim.keymap.set('n', '<leader>irj', open_repl_below, { desc = 'open repl split below' })
 
+            bash_repl_definition = {
+                -- command: either a table, or a func that returns a table
+                command = { "bash" },
+                block_deviders = { "# %%" },
+            }
+
             core.setup {
                 config = {
                     scratch_repl = true, -- discard repls?
@@ -532,11 +538,8 @@ return {
                             command = { "fish" },
                             block_deviders = { "# %%" },
                         },
-                        sh = {
-                            -- command: either a table, or a func that returns a table
-                            command = { "bash" },
-                            block_deviders = { "# %%" },
-                        },
+                        sh = bash_repl_definition,
+                        bash = bash_repl_definition,
                         lua = {
                             command = { "lua" },
                             -- are these not set OOB? or is it diff default for lua?
