@@ -517,12 +517,10 @@ return {
             end, { desc = 'iron' })
 
             local function open_repl_below()
-                local meta = ensure_open()
-                if meta == nil then
-                    return
-                end
+                vim.cmd("IronRepl") -- toggles open/closed which is fine!
                 -- focus stays on current window, so move it to the top which then moves REPL to bottom half
-                vim.cmd("wincmd K")
+                -- TODO read if open and don't trigger wincmd K if not open?
+                vim.cmd("wincmd K") -- if repl toggles close, this might mess up other windows open, let's wait and see if it bothers me
             end
             vim.keymap.set('n', '<leader>irj', open_repl_below, { desc = 'open repl split below' })
 
