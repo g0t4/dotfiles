@@ -137,6 +137,11 @@ function prompt_pwd --description 'wes mod - name of the current dir only'
         echo -n -s course
         return
     end
+    if string match -q "$HOME/repos/github/g0t4/private-prep-course-bash-series" $PWD
+        echo -n -s NOTFISH
+        return
+    end
+
 
     # if in repo root (not nested dir), then show org/repo
     #   based on _pwd
