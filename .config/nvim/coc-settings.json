@@ -328,6 +328,11 @@
     //          holy crap, this formatter has no option to NOT split a line on every single column in the select clause
 
 
+    // *** coc-sh ***
+    // "bashIde.globPattern": "**/*@(.sh|.inc|.bash|.command)",
+    /// F... just leave .sh + coc-sh for now... b/c coc-sh won't activate on anything except .sh
+    //    https://github.com/josa42/coc-sh/blob/7839442ee3820303de123cd3a437a2c70d3ee559/package.json#L31-L33
+
 
 
 

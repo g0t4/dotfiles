@@ -38,7 +38,10 @@ vim.filetype.add({
         --
         -- override bash as bash...
         -- FYI this should be the case from the nvim runtime files (but somehow nvim runtime seems to assign sh instead)
-        bash = "bash",
+        -- bash = "bash",
+        -- fuck.. coc-sh only recognizes .sh ... leave this off for now ... I need to just use bash LS directly
+        --   and then also setup format to use shfmt (just override keymap for .bash files is fine IMO)
+        --   see more notes in coc-settings.json...
     },
 })
 
