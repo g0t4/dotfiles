@@ -516,6 +516,16 @@ return {
                 end
             end, { desc = 'iron' })
 
+            local function open_repl_below()
+                local meta = ensure_open()
+                if meta == nil then
+                    return
+                end
+                -- focus stays on current window, so move it to the top which then moves REPL to bottom half
+                vim.cmd("wincmd K")
+            end
+            vim.keymap.set('n', '<leader>irj', open_repl_below, { desc = 'open repl split below' })
+
             core.setup {
                 config = {
                     scratch_repl = true, -- discard repls?
