@@ -77,6 +77,7 @@ def test_clone_url_normalization(input_url, expected_url):
         #   ssh://git.savannah.gnu.org/srv/git/sed.git
         #
         pytest.param('git://git.sv.gnu.org/sed', 'https.git.savannah.gnu.org', 'git/sed', id="git.sv.gnu.org/sed => cgit https"),
+        pytest.param('git://git.git.savannah.gnu.org/sed', 'https.git.savannah.gnu.org', 'git/sed', id="git.git.savannah.gnu.org/sed => cgit https"),
         pytest.param('git://git.savannah.gnu.org/sed', 'https.git.savannah.gnu.org', 'git/sed', id="git.savannah.gnu.org/sed => cgit https"),
 
         # non-URL locations
