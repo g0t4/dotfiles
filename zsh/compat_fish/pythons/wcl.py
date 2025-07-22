@@ -119,7 +119,8 @@ def relative_repo_dir(parsed) -> str:
 class ParsedRepo:
 
     def __init__(self, domain, repo):
-        if domain == "git.sv.gnu.org" or domain == "git.savannah.gnu.org" or domain == "git.git.savannah.gnu.org":
+
+        if domain in ["git.sv.gnu.org", "git.savannah.gnu.org", "git.git.savannah.gnu.org"]:
             domain = "https.git.savannah.gnu.org"
             repo = f"git/{repo}"
 
