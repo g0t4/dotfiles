@@ -118,9 +118,13 @@ def relative_repo_dir(parsed) -> str:
 
 class ParsedRepo:
 
-    def __init__(self, domain, repo):
+    def __init__(self, domain: str, repo: str):
 
         if domain in ["git.sv.gnu.org", "git.savannah.gnu.org", "git.git.savannah.gnu.org"]:
+            if domain == "git.savannah.gnu.org":
+                # they map them to /srv/git/sed here.. ugh, strip of prefix /src/git
+                # i.e. /srv/git/sed
+                repo = repo.replace("srv/git/", "")
             domain = "https.git.savannah.gnu.org"
             repo = f"git/{repo}"
 
@@ -149,7 +153,7 @@ def parse_repo(url: str) -> ParsedRepo | None:
             host, path = match.groups()
             return ParsedRepo(domain=host, repo=path)
 
-    elif url.startswith("https://") or url.startswith("git://"):  # HTTPS or similar
+    elif url.startswith("https://") or url.startswith("git://") or url.startswith("ssh://"):  # HTTPS or similar
         parsed = urlparse(url)
         path = parsed.path.lstrip("/")  # Remove leading '/'
         path = path.rstrip("/")  # Remove trailing '/' => wcl https://github.com/Hammerspoon/Spoons/
