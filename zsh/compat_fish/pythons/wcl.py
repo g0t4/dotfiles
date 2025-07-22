@@ -144,7 +144,7 @@ def parse_repo(url: str) -> ParsedRepo | None:
             host, path = match.groups()
             return ParsedRepo(domain=host, repo=path)
 
-    elif url.startswith("https://"):  # HTTPS or similar
+    elif url.startswith("https://") or url.startswith("git://"):  # HTTPS or similar
         parsed = urlparse(url)
         path = parsed.path.lstrip("/")  # Remove leading '/'
         path = path.rstrip("/")  # Remove trailing '/' => wcl https://github.com/Hammerspoon/Spoons/

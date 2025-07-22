@@ -20,6 +20,7 @@ def test_map_to_repo_dir(input_url, expected_url):
 @pytest.mark.parametrize(
     "input_url, expected_url",
     [
+        pytest.param('git://github.com/g0t4/dotfiles', 'git@github.com:g0t4/dotfiles', id="unauthenticated git:// => use git@ ssh"),
         pytest.param('git@github.com:g0t4/dotfiles.git', 'git@github.com:g0t4/dotfiles', id="test_github_uses_git"),  # drop .git
         pytest.param('https://github.com/g0t4/dotfiles.git', 'git@github.com:g0t4/dotfiles', id="test_https_uses_git"),  # drop .git
         pytest.param('https://sourceware.org/git/glibc.git', 'https://sourceware.org/git/glibc', id="test_sourceware_uses_https"),
