@@ -812,6 +812,11 @@ end
 set sed_all "**/{*.lua,*.md,*.py,*.sh,*.fish}"
 set --global sed_cmd sed
 if $IS_MACOS
+    function sed
+        echo use 'command sed' to access macOS/BSD sed
+        echo prefer gsed while working on your bash series of courses
+        echo blocking use to avoid mistakes
+    end
     set sed_cmd gsed
     # TODO move rest of these to sed_cmd outside of if block, if args are all the same
 
