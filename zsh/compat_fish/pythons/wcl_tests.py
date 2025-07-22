@@ -63,8 +63,8 @@ def test_clone_url_normalization(input_url, expected_url):
         pytest.param('git@gitlab.com:g0t4/dotfiles.git', 'gitlab.com', 'g0t4/dotfiles', id="test_gitlab_ssh"),
 
         # git://git.sv.gnu.org => gnu.org's cgit server
-        pytest.param('git://git.sv.gnu.org/sed', 'cgit.git.savannah.gnu.org', 'sed', id="git.sv.gnu.org/sed => cgit"),
-        pytest.param('git://git.savannah.gnu.org/sed', 'cgit.git.savannah.gnu.org', 'sed', id="git.savannah.gnu.org/sed => cgit"),
+        pytest.param('git://git.sv.gnu.org/sed', 'cgit.git.savannah.gnu.org', 'cgit/sed', id="git.sv.gnu.org/sed => cgit"),
+        pytest.param('git://git.savannah.gnu.org/sed', 'cgit.git.savannah.gnu.org', 'cgit/sed', id="git.savannah.gnu.org/sed => cgit"),
 
         # non-URL locations
         pytest.param('dotfiles', 'github.com', 'g0t4/dotfiles', id="test_repoOnly_assumes_github_g0t4"),
