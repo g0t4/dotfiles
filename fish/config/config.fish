@@ -1,8 +1,6 @@
-
 # fish startup:
 # - https://fishshell.com/docs/current/language.html#configuration
 # - https://fishshell.com/docs/current/tutorial.html#tut-config
-
 
 # TODO review feature flags: https://fishshell.com/docs/current/language.html#future-feature-flags
 # TODO review options, i.e.:
@@ -177,7 +175,12 @@ end
 
 ## TO HABITUATE
 
-
 ## PROMPT
 # fish_prompt is the default prompt function, also fish_right_prompt
 #   default uses prompt_login, prompt_pwd, fish_vcs_prompt (override to change/hide)
+
+# TMP use bash if CWD is course dir
+#  KEEP THIS AT END OF startup files so it doesn't block loading something else that might matter... just in case
+if string match --quiet --regex "g0t4/.*course.*-bash.*" "$(_repo_root)"
+    bash
+end
