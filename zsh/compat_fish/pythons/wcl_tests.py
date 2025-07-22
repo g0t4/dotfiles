@@ -28,9 +28,10 @@ def test_map_to_repo_dir(input_url, expected_url):
         #
         # use https for cgit:
         # ensure use https for all of gnu.org repos, the first two tests here are redundant but whatever they don't hurt if I were to change the IMPL in the future:
-        pytest.param('git://git.savannah.gnu.org/sed', 'https://https.git.savannah.gnu.org/git/sed', id="git.savannah.gnu.org/sed => cgit"),
-        pytest.param('git://git.sv.gnu.org/sed', 'https://https.git.savannah.gnu.org/git/sed', id="git.sv.gnu.org/sed => cgit"),
         pytest.param('https://cgit.git.savannah.gnu.org/cgit/sed', 'https://https.git.savannah.gnu.org/git/sed', id="git.sv.gnu.org/sed => cgit"),
+        pytest.param('git://git.git.savannah.gnu.org/sed.git', 'https://https.git.savannah.gnu.org/git/sed', id="git://git.git.savannah.gnu.org/sed.git => cgit"),
+        pytest.param('ssh://git.savannah.gnu.org/srv/git/sed.git', 'https://https.git.savannah.gnu.org/git/sed', id="ssh://git.savannah.gnu.org/srv/git/sed.git => cgit"),
+        pytest.param('git://git.sv.gnu.org/sed', 'https://https.git.savannah.gnu.org/git/sed', id="git://git.sv.gnu.org/sed => cgit"),
     ])
 def test_clone_url_normalization(input_url, expected_url):
     url = clone_url(parse_repo(input_url))
@@ -79,6 +80,7 @@ def test_clone_url_normalization(input_url, expected_url):
         pytest.param('git://git.git.savannah.gnu.org/sed.git', 'https.git.savannah.gnu.org', 'git/sed', id="git.git.savannah.gnu.org/sed.git => cgit https"),
         pytest.param('ssh://git.savannah.gnu.org/srv/git/sed.git', 'https.git.savannah.gnu.org', 'git/sed', id="git.savannah.gnu.org/srv/git/sed.git => cgit https"),
         pytest.param('git://git.sv.gnu.org/sed', 'https.git.savannah.gnu.org', 'git/sed', id="git.sv.gnu.org/sed => cgit https"),
+        pytest.param('https://cgit.git.savannah.gnu.org/cgit/sed', 'https.git.savannah.gnu.org', 'git/sed', id="https://cgit.git.savannah.gnu.org/cgit/sed => cgit https"),
 
         # non-URL locations
         pytest.param('dotfiles', 'github.com', 'g0t4/dotfiles', id="test_repoOnly_assumes_github_g0t4"),
