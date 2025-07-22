@@ -120,8 +120,8 @@ class ParsedRepo:
 
     def __init__(self, domain, repo):
         if domain == "git.sv.gnu.org" or domain == "git.savannah.gnu.org":
-            domain = "cgit.git.savannah.gnu.org"
-            repo = f"cgit/{repo}"
+            domain = "https.git.savannah.gnu.org"
+            repo = f"git/{repo}"
 
         self.domain = domain
         self.repo = repo
