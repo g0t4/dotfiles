@@ -28,9 +28,9 @@ def test_map_to_repo_dir(input_url, expected_url):
         #
         # use https for cgit:
         # ensure use https for all of gnu.org repos, the first two tests here are redundant but whatever they don't hurt if I were to change the IMPL in the future:
-        pytest.param('git://git.savannah.gnu.org/sed', 'https://cgit.git.savannah.gnu.org/cgit/sed', id="git.savannah.gnu.org/sed => cgit"),
-        pytest.param('git://git.sv.gnu.org/sed', 'https://cgit.git.savannah.gnu.org/cgit/sed', id="git.sv.gnu.org/sed => cgit"),
-        pytest.param('https://cgit.git.savannah.gnu.org/cgit/sed', 'https://cgit.git.savannah.gnu.org/cgit/sed', id="git.sv.gnu.org/sed => cgit"),
+        pytest.param('git://git.savannah.gnu.org/sed', 'https://https.git.savannah.gnu.org/git/sed', id="git.savannah.gnu.org/sed => cgit"),
+        pytest.param('git://git.sv.gnu.org/sed', 'https://https.git.savannah.gnu.org/git/sed', id="git.sv.gnu.org/sed => cgit"),
+        pytest.param('https://cgit.git.savannah.gnu.org/cgit/sed', 'https://https.git.savannah.gnu.org/git/sed', id="git.sv.gnu.org/sed => cgit"),
     ])
 def test_clone_url_normalization(input_url, expected_url):
     url = clone_url(parse_repo(input_url))
