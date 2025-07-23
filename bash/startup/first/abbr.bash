@@ -51,5 +51,12 @@ abbr() {
     abbrs["${1}"]="${2}"
 }
 
+abbr gp "git push"
+abbr gap "git add --patch"
+abbr gcmsg "git commit -m '" # PRN could add the '' and cursor between... like zsh impl
+abbr gdc "git diff --cached --color-words"
+
+abbr n nvim
+
 abbr dils "docker image ls"
 abbr dcls "docker container ls"
