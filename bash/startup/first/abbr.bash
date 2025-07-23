@@ -26,8 +26,6 @@ expand_abbr() {
 bind -x '" ": expand_abbr " "'
 
 # * expand on <Return>
-# hack - composite keymap to invoke both funcs
-#  FYI if issues quoting this.. just inline the keys and don't use variables :)
 expand_hack='\C-x\C-['
 acceptline_hack='\C-x\C-]'
 bind -x "\"$expand_hack\": expand_abbr enter"
