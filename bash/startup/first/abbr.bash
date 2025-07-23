@@ -2,6 +2,7 @@ declare -A abbrs=(
     [gst]="git status"
     [gdlc]="git log --patch HEAD~1..HEAD"
 )
+declare -A abbrs_no_space_after=()
 expand_abbr() {
     local key="$1"
     local cmd=$READLINE_LINE
@@ -11,6 +12,9 @@ expand_abbr() {
     fi
     local add_char=" "
     if [[ "$key" == "enter" ]]; then
+        add_char=""
+    fi
+    if [[ "${abbrs_no_space_after["$cmd"]}" ]]; then
         add_char=""
     fi
     if [[ "$expanded" != "" ]]; then
@@ -53,9 +57,29 @@ abbr() {
     abbrs["${1}"]="${2}"
 }
 
-abbr gp "git push"
+ealias() {
+    # compat layer, also this is where I'll accept --NoSpaceAfter
+    # FORMAT
+    #   key=value
+    #   key=value --NoSpaceAfter
+    #   PRN other options
+
+    local key="${1%=*}"
+    local value="${1#*=}"
+    abbr "$key" "$value"
+
+    # FYI check with:
+    #     declare -p abbrs_no_space_after
+
+    if indexed_array_contains "--NoSpaceAfter" "${@}"; then
+        abbrs_no_space_after["$key"]=yes
+    fi
+}
+
+ealias gcmsg='git commit -m "' --NoSpaceAfter
+ealias gp="git push"
+
 abbr gap "git add --patch"
-abbr gcmsg "git commit -m '" # PRN could add the '' and cursor between... like zsh impl
 abbr gdc "git diff --cached --color-words"
 abbr gl "git log"
 abbr gl10 "git log -10"
@@ -73,3 +97,5 @@ abbr declarep "declare -p"
 #     and I had an IMPL of that in zsh prior
 # shellcheck disable=SC2016 # expressions in single quotes don't expand, yup that's the point here!
 abbr ea 'echo "${name[@]}"'
+
+abbr pIFS "echo -n \"\${IFS}\" | hexdump -C" # block word splitting, or it will split it's own characters :)
