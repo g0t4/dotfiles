@@ -58,6 +58,7 @@ expand_abbr() {
 }
 # bind -x '"\C-a":expand_abbr'
 bind -x '" ":expand_abbr' # on space works!
+# TODO intercept ENTER too and expand before submit command
 
 abbr() {
     # PRN handle options (if any) when I add abbrs that use them
