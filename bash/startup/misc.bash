@@ -58,3 +58,9 @@ expand_abbr() {
 }
 # bind -x '"\C-a":expand_abbr'
 bind -x '" ":expand_abbr' # on space works!
+
+abbr() {
+    # PRN handle options (if any) when I add abbrs that use them
+    # PRN do I need to slice all remaining args?
+    abbrs["${1}"]="${2}"
+}
