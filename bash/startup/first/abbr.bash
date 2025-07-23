@@ -30,18 +30,17 @@ expand_hack='\C-x\C-['
 # acceptline_hack='\C-x\C-]'
 acceptline_hack='\C-j' # OOB accept-line
 bind -x "\"$expand_hack\": expand_abbr enter"
-bind "\"$acceptline_hack\": accept-line"   # bind -p # lists readline actions
+bind "\"$acceptline_hack\": accept-line"          # bind -p # lists readline actions
 bind "\"\C-m\": \"$expand_hack$acceptline_hack\"" # bind -s # lists macro actions
 
 command_not_found_handle() {
-    # TODO would be nice to use bind -x to expand the abbr TOO and then have that submit the command with bind's `accept-line`...
-    # just haven't figured out how to trigger that yet!
-    # inserting $'\n' literally adds a new line
-
     # TODO capture existing command_not_found_handle func and call it too?
+
     local expanded="${abbrs[$1]}"
     if [[ "$expanded" != "" ]]; then
-        eval "$expanded"
+        # FYI use `gst --short` Ctrl-j to submit and test this w/o expanding:
+        shift # pop first arg which is expanded
+        $expanded "$@"
     else
         echo "command not found: '$1'"
         return 127
