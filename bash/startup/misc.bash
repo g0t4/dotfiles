@@ -39,3 +39,14 @@ last_status() {
         echo "❌ Failed with exit code $last_rc"
     fi
 }
+
+modify_command() {
+    local cmd=$READLINE_LINE
+    READLINE_LINE="${cmd^^} "         # convert to uppercase, append space too for demo binding to space
+    READLINE_POINT=${#READLINE_LINE} # then, move cursor to end too
+}
+
+# TODO on space
+# bind -x '"\C-x":modify_command'
+# bind -x '"\C-a":modify_command'
+bind -x '" ":modify_command'   # on space works!
