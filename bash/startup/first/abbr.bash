@@ -3,19 +3,31 @@ declare -A abbrs=(
     [gdlc]="git log --patch HEAD~1..HEAD"
 )
 expand_abbr() {
+    # local key=$1
     local cmd=$READLINE_LINE
-    local expanded="${abbrs[$cmd]}"
+    local expanded=""
+    if [[ "$cmd" != "" ]]; then
+        expanded="${abbrs[$cmd]}"
+    fi
+    local add_char=" "
+    # if [[ "$key" == "enter" ]]; then
+    #     add_char=$'\n'
+    # fi
     if [[ "$expanded" != "" ]]; then
         # expand and add space:
-        READLINE_LINE="${expanded} " # $'\n'  # this inserts new line like multiline! close but not yet
+        READLINE_LINE="${expanded}${add_char}"
     else
         # otherwise just add space:
-        READLINE_LINE="${cmd} "
+        READLINE_LINE="${cmd}${add_char}"
     fi
     READLINE_POINT=${#READLINE_LINE} # then, move cursor to end too
-    # bind has an accept-line! I wish I could trigger it... why can't I?!
 }
-bind -x '" ":expand_abbr " "' # on space works!
+bind -x '" ": expand_abbr " "'
+
+# hack - composite keymap to invoke both funcs
+bind -x '"\C-]": expand_abbr "enter"'
+bind '"\C-t": accept-line'
+bind '"\C-m": "\C-]\C-t"'
 
 command_not_found_handle() {
     # TODO would be nice to use bind -x to expand the abbr TOO and then have that submit the command with bind's `accept-line`...
