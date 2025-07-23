@@ -18,12 +18,17 @@ expand_abbr() {
     fi
     READLINE_POINT=${#READLINE_LINE} # then, move cursor to end too
 }
+# * expand on <Space>
 bind -x '" ": expand_abbr " "'
 
+# * expand on <Return>
 # hack - composite keymap to invoke both funcs
-bind -x '"\C-]": expand_abbr "enter"'
-bind '"\C-t": accept-line'
-bind '"\C-m": "\C-]\C-t"'
+#  FYI if issues quoting this.. just inline the keys and don't use variables :)
+expand_hack='\C-x\C-['
+acceptline_hack='\C-x\C-]'
+bind -x "\"$expand_hack\": expand_abbr enter"
+bind "\"$acceptline_hack\": accept-line"
+bind "\"\C-m\": \"$expand_hack$acceptline_hack\""
 
 command_not_found_handle() {
     # TODO would be nice to use bind -x to expand the abbr TOO and then have that submit the command with bind's `accept-line`...
