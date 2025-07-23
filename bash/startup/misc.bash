@@ -49,10 +49,11 @@ modify_command() {
     local expanded="${abbrs[$cmd]}"
     if [[ "$expanded" != "" ]]; then
         READLINE_LINE="${expanded} "
-        READLINE_POINT=${#READLINE_LINE} # then, move cursor to end too
         # READLINE_LINE="${cmd^^} "        # convert to uppercase, append space too for demo binding to space
-        # READLINE_POINT=${#READLINE_LINE} # then, move cursor to end too
+    else
+        READLINE_LINE="${cmd} " # otherwise add space
     fi
+    READLINE_POINT=${#READLINE_LINE} # then, move cursor to end too
 }
 
 # TODO on space
