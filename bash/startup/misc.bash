@@ -64,3 +64,6 @@ abbr() {
     # PRN do I need to slice all remaining args?
     abbrs["${1}"]="${2}"
 }
+
+abbr dils "docker image ls"
+abbr dcls "docker container ls"
