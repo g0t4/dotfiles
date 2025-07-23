@@ -6,6 +6,7 @@ my_loc=$(dirname "$(realpath "${BASH_SOURCE[0]}")")
 # unset PROMPT_COMMAND # remove default for xtrace, when also comment out the return here:
 # return
 
+source "$my_loc/startup/abbr.bash"
 source "$my_loc/startup/misc.bash"
 source "$my_loc/startup/prompt.bash"
 source "$my_loc/startup/repos.bash"
