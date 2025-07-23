@@ -44,19 +44,17 @@ declare -A abbrs=(
     [gst]="git status"
     [gdlc]="git log --patch HEAD~1..HEAD"
 )
-modify_command() {
+expand_abbr() {
     local cmd=$READLINE_LINE
     local expanded="${abbrs[$cmd]}"
     if [[ "$expanded" != "" ]]; then
+        # expand and add space:
         READLINE_LINE="${expanded} "
-        # READLINE_LINE="${cmd^^} "        # convert to uppercase, append space too for demo binding to space
     else
-        READLINE_LINE="${cmd} " # otherwise add space
+        # otherwise just add space:
+        READLINE_LINE="${cmd} "
     fi
     READLINE_POINT=${#READLINE_LINE} # then, move cursor to end too
 }
-
-# TODO on space
-# bind -x '"\C-x":modify_command'
-# bind -x '"\C-a":modify_command'
-bind -x '" ":modify_command' # on space works!
+# bind -x '"\C-a":expand_abbr'
+bind -x '" ":expand_abbr' # on space works!
