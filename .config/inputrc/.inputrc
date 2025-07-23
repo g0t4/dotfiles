@@ -1,8 +1,38 @@
-# incremental search (prefix match)
-# up/down arrow prefix match from history (added for using gdb, though would work with any command that uses readline)
-"\e[A": history-search-backward
-"\e[B": history-search-forward
+# FYI see inputrc/NOTES.md in dotfiles repo for more
+
+# FYI see man bash => /Commands for Manipulating the History
+# - I setup the up/down for gdb and bash originally:
+# "\e[A": history-search-backward
+# "\e[B": history-search-forward
+"\e[A": history-substring-search-backward
+"\e[B": history-substring-search-forward
+#
+# search-ignore-case # default (off) - case insensitive searches
+
+set show-all-if-ambiguous on # immediately show completions, don't wait for second tab
+# show-all-if-unmodified # TODO I think I want this but need to double check
+
+# set page-completions on # TODO can I change pager to not print to screen and then copy prompt down to next line?
+
+# set editing-mode "vi" # default "emacs" # TODO need to setup keymaps for ins/cmd or both ... i.e. history-search-* above
+# set keymap "vi-command" # can set the mode w/in emacs/vi ... vi-command/vi-insert
+# set show-mode-in-prompt # off default (puts txt at start of line cmd/ins for vi modes by default)
+# set vi-ins-mode-string INS # "ins" default
+# set vi-cmd-mode-string CMD # "cmd" default
+
+set menu-complete-display-prefix on
 
 set bell-style none
 
+# set expand-tilde on # off default, tilde expansion on word completion
+#  TODO word completion docs?!
 
+# set active-region-start-color ?
+# enable-active-region (On)
+#
+# tab completion related:
+set colored-completion-prefix on # tab completion - color matching prefix
+set colored-stats on # tab completion - file type colors
+#
+# set completion-ignore-case on
+# set completion-map-case on # treat -/_ as the same for insensitive completion (if completion-ignore-case also set)
