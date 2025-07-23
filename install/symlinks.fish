@@ -95,3 +95,6 @@ ln -f -s $dotfiles_dir/.config/uv/uv.toml $HOME/.config/uv/.
 mkdir -p $HOME/.config/fd
 ln -f -s $dotfiles_dir/.config/fd/ignore $HOME/.config/fd/.
 
+# *** bash
+ln -f -s $dotfiles_dir/bash/bashrc $HOME/.bashrc
+# PRN profile? or somehow make sure bashrc is symlinked into profile? OR?
