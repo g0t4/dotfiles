@@ -3,16 +3,12 @@ declare -A abbrs=(
     [gdlc]="git log --patch HEAD~1..HEAD"
 )
 expand_abbr() {
-    # local key=$1
     local cmd=$READLINE_LINE
     local expanded=""
     if [[ "$cmd" != "" ]]; then
         expanded="${abbrs[$cmd]}"
     fi
     local add_char=" "
-    # if [[ "$key" == "enter" ]]; then
-    #     add_char=$'\n'
-    # fi
     if [[ "$expanded" != "" ]]; then
         # expand and add space:
         READLINE_LINE="${expanded}${add_char}"
