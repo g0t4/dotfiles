@@ -30,8 +30,8 @@ expand_hack='\C-x\C-['
 # acceptline_hack='\C-x\C-]'
 acceptline_hack='\C-j' # OOB accept-line
 bind -x "\"$expand_hack\": expand_abbr enter"
-bind "\"$acceptline_hack\": accept-line"   # bind -p lists this
-bind "\"\C-m\": \"$expand_hack$acceptline_hack\""
+bind "\"$acceptline_hack\": accept-line"   # bind -p # lists readline actions
+bind "\"\C-m\": \"$expand_hack$acceptline_hack\"" # bind -s # lists macro actions
 
 command_not_found_handle() {
     # TODO would be nice to use bind -x to expand the abbr TOO and then have that submit the command with bind's `accept-line`...
