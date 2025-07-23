@@ -58,6 +58,8 @@ abbr gp "git push"
 abbr gap "git add --patch"
 abbr gcmsg "git commit -m '" # PRN could add the '' and cursor between... like zsh impl
 abbr gdc "git diff --cached --color-words"
+abbr gl "git log"
+abbr gl10 "git log -10"
 
 abbr n nvim
 
