@@ -37,7 +37,7 @@ bind -x '"\C-x": single_bash_function' # NOT quoted, MUST ADD -x
 # * confirm keymaps:
 # bind -p # view keymaps that call readline funcs
 # bind -s # view keymaps that call macros
-# TODO is there any way to see keymaps that call bash functions (single_bash_function)?
+# bind -X # view keymaps that call bash shell funcs
 #   I do not see mine listed anywhere (i.e. for expand_abbr via space, nor the composite I use for "enter" from abbr.bash)
 
 ```
