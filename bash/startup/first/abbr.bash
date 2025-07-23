@@ -43,7 +43,7 @@ command_not_found_handle() {
     if [[ "$expanded" != "" ]]; then
         eval "$expanded"
     else
-        echo "command not found"
+        echo "command not found: '$1'"
         return 127
     fi
 }

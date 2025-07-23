@@ -17,7 +17,10 @@ These are from my work on abbr.bash to get Return to trigger abbr expand AND the
 #   - or to _a_ shell command # SINGLE
 #
 # TLDR, use a macro with embedded key sequences to trigger multiple OTHER keymaps
-# - same conclusion here: https://stackoverflow.com/questions/22224657/custom-readline-functions-in-bash-commandline
+# - same conclusions:
+#   - https://stackoverflow.com/questions/22224657/custom-readline-functions-in-bash-commandline
+#   - https://stackoverflow.com/questions/8366450/complex-keybinding-in-bash
+
 
 # * keymap to macro:
 bind '"\C-x": "macro"' # macros are quoted
