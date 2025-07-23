@@ -26,6 +26,9 @@ command_not_found_handle() {
     local expanded="${abbrs[$1]}"
     if [[ "$expanded" != "" ]]; then
         eval "$expanded"
+    else
+        echo "command not found"
+        return 127
     fi
 }
 
