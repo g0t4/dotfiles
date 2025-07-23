@@ -46,8 +46,13 @@ declare -A abbrs=(
 )
 modify_command() {
     local cmd=$READLINE_LINE
-    READLINE_LINE="${cmd^^} "        # convert to uppercase, append space too for demo binding to space
-    READLINE_POINT=${#READLINE_LINE} # then, move cursor to end too
+    local expanded="${abbrs[$cmd]}"
+    if [[ "$expanded" != "" ]]; then
+        READLINE_LINE="${expanded} "
+        READLINE_POINT=${#READLINE_LINE} # then, move cursor to end too
+        # READLINE_LINE="${cmd^^} "        # convert to uppercase, append space too for demo binding to space
+        # READLINE_POINT=${#READLINE_LINE} # then, move cursor to end too
+    fi
 }
 
 # TODO on space
