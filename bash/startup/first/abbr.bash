@@ -6,6 +6,8 @@ declare -A abbrs_no_space_after=()
 expand_abbr() {
     local key="$1"
     local cmd=$READLINE_LINE
+    # TODO take cursor position and get word before, including offsets, so I can replace anywhere in commandline...
+    #    then when I have that, I can add a global (-g) flag like I have in ealias in zsh
     local expanded=""
     if [[ "$cmd" != "" ]]; then
         expanded="${abbrs[$cmd]}"
