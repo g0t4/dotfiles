@@ -21,6 +21,8 @@ command_not_found_handle() {
     # TODO would be nice to use bind -x to expand the abbr TOO and then have that submit the command with bind's `accept-line`...
     # just haven't figured out how to trigger that yet!
     # inserting $'\n' literally adds a new line
+
+    # TODO capture existing command_not_found_handle func and call it too?
     local expanded="${abbrs[$1]}"
     if [[ "$expanded" != "" ]]; then
         eval "$expanded"
