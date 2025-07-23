@@ -6,6 +6,9 @@ my_loc=$(dirname "$(realpath "${BASH_SOURCE[0]}")")
 # unset PROMPT_COMMAND # remove default for xtrace, when also comment out the return here:
 # return
 
-for script in "$my_loc/startup/"*; do
+for script in "$my_loc/startup/first/"*.bash; do
+    source "$script"
+done
+for script in "$my_loc/startup/"*.bash; do
     source "$script"
 done
