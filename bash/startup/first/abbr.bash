@@ -27,9 +27,10 @@ bind -x '" ": expand_abbr " "'
 
 # * expand on <Return>
 expand_hack='\C-x\C-['
-acceptline_hack='\C-x\C-]'
+# acceptline_hack='\C-x\C-]'
+acceptline_hack='\C-j' # OOB accept-line
 bind -x "\"$expand_hack\": expand_abbr enter"
-bind "\"$acceptline_hack\": accept-line"
+bind "\"$acceptline_hack\": accept-line"   # bind -p lists this
 bind "\"\C-m\": \"$expand_hack$acceptline_hack\""
 
 command_not_found_handle() {
