@@ -773,6 +773,24 @@ if command -q nvim
     abbr vi nvim
 end
 
+function nvselect
+    #    use with :CopyFileSystemLink cmd
+    # nvselect ~/repos/github/g0t4/dotfiles/.config/nvim/lua/non-plugins/github-links.lua:83
+
+    set link $argv[1] # path/too/foo.txt:10-20
+    set file (string split ':' $link)[1]
+    set range (string split ':' $link)[2]
+    set start_line (string split '-' $range)[1]
+    set end_line (string split '-' $range)[2]
+
+    if test -z "$end_line"
+        set end_line $start_line
+    end
+
+    set line_count (math "$end_line - $start_line")
+    nvim +$start_line +"normal! V{$line_count}jzz" "$file"
+end
+
 # *** screenpal
 abbr spkill "pkill -ilf screenpal"
 # abbr spkilltray "pkill -ilf 'screenpal tray'"
