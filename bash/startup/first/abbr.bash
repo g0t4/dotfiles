@@ -175,6 +175,13 @@ ealias() {
 
 # ealias --set-cursor -t -f
 
+reset_abbrs() {
+    abbrs=()
+    abbrs_no_space_after=()
+    abbrs_set_cursor=()
+    abbrs_anywhere=()
+}
+
 start_test() {
     # TLDR show the line of code and execute it
     echo
@@ -184,15 +191,15 @@ start_test() {
 
 test_ealias() {
     expect_equal() {
-        local expected="$1"
-        local actual="$2"
+        local actual="$1"
+        local expected="$2"
         local message="${3:-Expected '$expected', got '$actual'}"
         if [[ "$expected" != "$actual" ]]; then
             local caller_file="${BASH_SOURCE[1]}"
             local caller_line="${BASH_LINENO[0]}"
             echo "FAIL at $caller_file:$caller_line — $message"
             echo -n "  "
-            cat $caller_file | head -$caller_line | tail -1
+            head "-$caller_line" "$caller_file" | tail -1
             return 1
         fi
     }
@@ -201,6 +208,13 @@ test_ealias() {
     expect_equal "${abbrs[foo]}" "bar"
     expect_equal "${abbrs_set_cursor[foo]}" "yes"
 
+    start_test reset_abbrs
+    expect_equal "${abbrs[foo]}" ""
+    expect_equal "${abbrs_set_cursor[foo]}" ""
+
+    start_test ealias foo=bar --NoSpaceAfter
+    expect_equal "${abbrs[foo]}" "bar"
+    expect_equal "${abbrs_no_space_after[foo]}" "yes"
 }
 test_ealias
 
