@@ -30,11 +30,11 @@ expand_abbr() {
     if [[ "${abbrs_set_cursor["$cmd"]}" ]]; then
         # find % in expanded text
         # remove it and put cursor there
-        local cursor_pos="${expanded%%\%*}"  # everything before %
+        local before_cursor="${expanded%%\%*}"  # everything before %
         local after_cursor="${expanded#*\%}" # everything after %
 
-        READLINE_LINE="${cursor_pos}${after_cursor}${add_char}"
-        READLINE_POINT="${#cursor_pos}"
+        READLINE_LINE="${before_cursor}${after_cursor}${add_char}"
+        READLINE_POINT="${#before_cursor}"
     else
         READLINE_POINT=${#READLINE_LINE}
     fi
