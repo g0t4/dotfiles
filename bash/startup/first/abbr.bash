@@ -100,10 +100,30 @@ exec_abbr() {
     fi
 }
 
+command_exists() {
+    command -v "$1" 1>/dev/null
+}
+
 abbr() {
     # PRN handle options (if any) when I add abbrs that use them
     # PRN do I need to slice all remaining args?
     abbrs["${1}"]="${2}"
+
+    # if command -v "$1" 1>/dev/null; then
+    if command_exists "$1"; then
+        # i.e.
+        #   abbr ls lsd
+        echo WARN "$1" is a real command and will be shadowed by the fallback function
+        # TODO I don't need the fallback function if the abbr maps to a command that already exists
+        #
+        # WHY this matters, say I have:
+        # abbr ls lsd
+        # abbr la "ls -alh"
+        #
+        # user types `la` and this is what's run:
+        # ls -alh
+        #   # in this case the ls function is called from ls abbr, not the ls command
+    fi
 
     # define function for tab completion
     # - thus, body is irrelevant for tab completion purposes (can be no-op :;, or true; )
