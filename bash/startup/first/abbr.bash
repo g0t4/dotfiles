@@ -179,7 +179,7 @@ reset_abbrs() {
     abbrs=()
     abbrs_no_space_after=()
     abbrs_set_cursor=()
-    abbrs_anywhere=()
+    # abbrs_anywhere=()
 }
 
 start_test() {
@@ -224,6 +224,12 @@ test_ealias() {
     start_test ealias foo=bar --NoSpaceAfter
     expect_equal "${abbrs[foo]}" "bar"
     expect_equal "${abbrs_no_space_after[foo]}" "yes"
+
+    start_test reset_abbrs
+    expect_equal "${abbrs_no_space_after[foo]}" ""
+
+    # exit when testing completes, that way you can easily run bash again to test again
+    exit
 }
 test_ealias
 
