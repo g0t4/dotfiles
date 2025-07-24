@@ -29,7 +29,17 @@ expand_abbr() {
         add_char=""
     fi
 
-    if [[ "$expanded" == "" ]]; then
+    local anywhere="no"
+    if [[ "$word_before_cursor" && "${abbrs_anywhere["$word_before_cursor"]}" ]]; then
+        anywhere="yes"
+    fi
+
+    local allowed_position="no"
+    if [[ $word_start_offset -eq 0 || $anywhere == "yes" ]]; then
+        allowed_position=yes
+    fi
+
+    if [[ "$expanded" == "" || $allowed_position == "no" ]]; then
         # no expansion => insert char and return early
         READLINE_LINE="${prefix}${word_before_cursor}${add_char}${suffix}"
         READLINE_POINT=$((${#prefix} + ${#word_before_cursor} + ${#add_char}))
@@ -128,7 +138,7 @@ ealias() {
     fi
     if indexed_array_contains "-g" "${@}" ||
         indexed_array_contains "--position=anywhere" "${@}"; then
-        # PRN move -g to --position=anywhere like in fish shell?
+        # TODO remove -g support?
         abbrs_anywhere["$key"]=yes
     fi
     if indexed_array_contains "--set-cursor" "${@}"; then
@@ -161,6 +171,6 @@ abbr declarep "declare -p"
 #     I could do this with cursor positioning like --set-cursor in fish abbrs
 #     and I had an IMPL of that in zsh prior
 # shellcheck disable=SC2016 # expressions in single quotes don't expand, yup that's the point here!
-abbr ea 'echo "${name[@]}"'
+ealias ea='echo "${name[@]}"' -g
 
 abbr pIFS "echo -n \"\${IFS}\" | hexdump -C" # block word splitting, or it will split it's own characters :)
