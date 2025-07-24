@@ -232,8 +232,8 @@ test_ealias() {
     expect_equal "${abbrs[foo]}" "bar"
     expect_equal "${abbrs_anywhere[foo]}" "yes"
 
-    # start_test reset_abbrs
-    # expect_equal "${abbrs_anywhere[foo]}" ""
+    start_test reset_abbrs
+    expect_equal "${abbrs_anywhere[foo]}" ""
 
     # exit when testing completes, that way you can easily run bash again to test again
     exit
