@@ -4,32 +4,45 @@ declare -A abbrs_set_cursor=()
 declare -A abbrs_anywhere=()
 expand_abbr() {
     local key="$1"
-    local cmd=$READLINE_LINE
+    # local command_line=$READLINE_LINE # full line
+    local line_before_cursor="${READLINE_LINE:0:READLINE_POINT}"
+    local word_before_cursor="${line_before_cursor##* }"
+    local word_start_offset=$((READLINE_POINT - ${#word_before_cursor}))
+    local prefix="${READLINE_LINE:0:word_start_offset}"
+    local suffix="${READLINE_LINE:READLINE_POINT}"
+
+    # echo $word_before_cursor
+
     # TODO take cursor position and get word before, including offsets, so I can replace anywhere in commandline...
     #    then when I have that, I can add a global (-g) flag like I have in ealias in zsh
     local expanded=""
-    if [[ "$cmd" != "" ]]; then
-        expanded="${abbrs[$cmd]}"
+    if [[ "$word_before_cursor" != "" ]]; then
+        expanded="${abbrs[$word_before_cursor]}"
     fi
+
+    # * add_char
     local add_char=" "
     if [[ "$key" == "enter" ]]; then
         add_char=""
     fi
-    if [[ "${abbrs_no_space_after["$cmd"]}" ]]; then
+    if [[ "$word_before_cursor" && "${abbrs_no_space_after["$word_before_cursor"]}" ]]; then
         add_char=""
     fi
+
     if [[ "$expanded" != "" ]]; then
         # expand and add space:
         READLINE_LINE="${expanded}${add_char}"
     else
-        # otherwise just add space:
-        READLINE_LINE="${cmd}${add_char}"
+        # no expansion => insert char and return early
+        READLINE_LINE="${prefix}${word_before_cursor}${add_char}${suffix}"
+        READLINE_POINT=$((${#prefix} + ${#word_before_cursor} + ${#add_char}))
+        return 0
     fi
 
     # * position cursor
-    if [[ "${abbrs_set_cursor["$cmd"]}" ]]; then
-        local before_cursor="${expanded%%\%*}"  # everything before %
-        local after_cursor="${expanded#*\%}" # everything after %
+    if [[ "${abbrs_set_cursor["$word_before_cursor"]}" ]]; then
+        local before_cursor="${expanded%%\%*}" # everything before %
+        local after_cursor="${expanded#*\%}"   # everything after %
         # effectively strips the % char (b/c its the cursor marker)
         # PRN map diff char than % ONLY IF issues with %... i.e. would mean I need an abbr that has % in the expanded text AND --set-cursor at same time
 
