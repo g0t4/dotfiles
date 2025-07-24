@@ -29,15 +29,14 @@ expand_abbr() {
         add_char=""
     fi
 
-    if [[ "$expanded" != "" ]]; then
-        # expand and add space:
-        READLINE_LINE="${expanded}${add_char}"
-    else
+    if [[ "$expanded" == "" ]]; then
         # no expansion => insert char and return early
         READLINE_LINE="${prefix}${word_before_cursor}${add_char}${suffix}"
         READLINE_POINT=$((${#prefix} + ${#word_before_cursor} + ${#add_char}))
         return 0
     fi
+    # expand and add space:
+    READLINE_LINE="${expanded}${add_char}"
 
     # * position cursor
     if [[ "${abbrs_set_cursor["$word_before_cursor"]}" ]]; then
