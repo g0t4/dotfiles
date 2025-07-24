@@ -28,10 +28,10 @@ expand_abbr() {
 
     # * position cursor
     if [[ "${abbrs_set_cursor["$cmd"]}" ]]; then
-        # find % in expanded text
-        # remove it and put cursor there
         local before_cursor="${expanded%%\%*}"  # everything before %
         local after_cursor="${expanded#*\%}" # everything after %
+        # effectively strips the % char (b/c its the cursor marker)
+        # PRN map diff char than % ONLY IF issues with %... i.e. would mean I need an abbr that has % in the expanded text AND --set-cursor at same time
 
         READLINE_LINE="${before_cursor}${after_cursor}${add_char}"
         READLINE_POINT="${#before_cursor}"
