@@ -126,7 +126,8 @@ abbr() {
         # - passing $@ too means whatever options come after an abbreviation are passed to exec_abbr
         # FYI this can fire if user bypasses abbr expansion (i.e. Ctrl-j)
         #   i.e. `gst --short`
-        eval "function ${1} { exec_abbr '${1}' \"\$@\"; }"
+        # eval "function ${1} { exec_abbr '${1}' \"\$@\"; }"
+        eval "function ${1} { echo 'abbrs are never intended to be executed directly, do not exec abbrs (i.e. if you disable abbr expansion)'; }"
 
     # else
     #     # i.e.
