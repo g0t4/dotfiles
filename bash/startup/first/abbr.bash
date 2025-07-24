@@ -41,14 +41,21 @@ bind "\"\C-m\": \"$expand_hack$acceptline_hack\"" # bind -s # lists macro action
 
 command_not_found_handle() {
     # TODO capture existing command_not_found_handle func and call it too?
+    # FYI type out `gst --short` and use Ctrl-j to submit and test this w/o expanding:
+    exec_abbr "$@"
+}
 
-    local expanded="${abbrs[$1]}"
+exec_abbr() {
+    # usage:
+    #   exec_abbr gst # pass abbr name
+    #   exec_abbr gst --short # can pass args too!
+    name="$1"
+    local expanded="${abbrs[$name]}"
     if [[ "$expanded" != "" ]]; then
-        # FYI use `gst --short` Ctrl-j to submit and test this w/o expanding:
         shift # pop first arg which is expanded
         $expanded "$@"
     else
-        echo "command not found: '$1'"
+        echo "abbr not found: '$name'"
         return 127
     fi
 }
