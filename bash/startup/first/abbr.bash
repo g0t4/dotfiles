@@ -4,6 +4,8 @@ declare -A abbrs_set_cursor=()
 declare -A abbrs_anywhere=()
 expand_abbr() {
     local key="$1"
+
+    # * pseudo-tokenize (prefix / word_before_cursor / cursor / suffix)
     local line_before_cursor="${READLINE_LINE:0:READLINE_POINT}"
     local word_before_cursor="${line_before_cursor##* }"
     local word_start_offset=$((READLINE_POINT - ${#word_before_cursor}))
