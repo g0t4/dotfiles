@@ -1,7 +1,4 @@
-declare -A abbrs=(
-    [gst]="git status"
-    [gdlc]="git log --patch HEAD~1..HEAD"
-)
+declare -A abbrs=()
 declare -A abbrs_no_space_after=()
 expand_abbr() {
     local key="$1"
@@ -88,6 +85,9 @@ ealias() {
         abbrs_no_space_after["$key"]=yes
     fi
 }
+
+abbr gst "git status"
+abbr gdlc "git log --patch HEAD~1..HEAD"
 
 ealias gcmsg='git commit -m "' --NoSpaceAfter
 ealias gp="git push"
