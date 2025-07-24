@@ -13,3 +13,5 @@
 abbr ls lsd
 
 abbr la "ls -alh"
+
+alias cat=bat
