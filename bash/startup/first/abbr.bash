@@ -128,6 +128,7 @@ abbr() {
         #   i.e. `gst --short`
         # eval "function ${1} { exec_abbr '${1}' \"\$@\"; }"
         eval "function ${1} { echo 'abbrs are never intended to be executed directly, do not exec abbrs (i.e. if you disable abbr expansion)'; }"
+        # TODO final alternative is to have this stub func see if another command exists and dispatch to that just incase an underlying command is made available AFTER loading abbrs (i.e. altering PATH)
 
     # else
     #     # i.e.
