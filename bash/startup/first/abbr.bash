@@ -173,6 +173,39 @@ ealias() {
     fi
 }
 
+# ealias --set-cursor -t -f
+
+start_test() {
+    # TLDR show the line of code and execute it
+    echo
+    echo "TEST: $*"
+    "$@"
+}
+
+test_ealias() {
+    expect_equal() {
+        local expected="$1"
+        local actual="$2"
+        local message="${3:-Expected '$expected', got '$actual'}"
+        if [[ "$expected" != "$actual" ]]; then
+            local caller_file="${BASH_SOURCE[1]}"
+            local caller_line="${BASH_LINENO[0]}"
+            echo "FAIL at $caller_file:$caller_line — $message"
+            echo -n "  "
+            cat $caller_file | head -$caller_line | tail -1
+            return 1
+        fi
+    }
+
+    start_test ealias foo=bar --set-cursor
+    expect_equal "${abbrs[foo]}" "bar"
+    expect_equal "${abbrs_set_cursor[foo]}" "yes"
+
+}
+test_ealias
+
+return
+
 abbr gst "git status"
 abbr gdlc "git log --patch HEAD~1..HEAD"
 
