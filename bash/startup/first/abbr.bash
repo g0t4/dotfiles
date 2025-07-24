@@ -36,23 +36,21 @@ expand_abbr() {
         return 0
     fi
 
-    # replace word w/ expanded text
-    READLINE_LINE="${prefix}${expanded}${add_char}${suffix}"
-
     # * position cursor
     if [[ "${abbrs_set_cursor["$word_before_cursor"]}" ]]; then
+
+        # locate % in the expanded text
         local before_cursor="${expanded%%\%*}" # everything before %
         local after_cursor="${expanded#*\%}"   # everything after %
         # effectively strips the % char (b/c its the cursor marker)
         # PRN map diff char than % ONLY IF issues with %... i.e. would mean I need an abbr that has % in the expanded text AND --set-cursor at same time
 
-        # TODO do replace and calculate within ${expanded} ONLY... not entrie cmdline
-        #   for now full will be fine, but if I have the % in the prefix/suffix then it might be an issue (esp in prefix)
-        #   as that would have nohting to do with the current expansion
-
-        READLINE_LINE="${before_cursor}${after_cursor}${add_char}"
-        READLINE_POINT="${#before_cursor}"
+        READLINE_LINE="${prefix}${before_cursor}${after_cursor}${add_char}${suffix}"
+        READLINE_POINT=$((${#before_cursor} + ${#prefix}))
     else
+
+        # TODO should I position the mouse after add_char and not just at end?
+        READLINE_LINE="${prefix}${expanded}${add_char}${suffix}"
         READLINE_POINT=${#READLINE_LINE}
     fi
 
