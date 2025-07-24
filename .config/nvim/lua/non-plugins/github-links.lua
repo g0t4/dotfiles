@@ -60,6 +60,7 @@ vim.cmd [[
     command! -range CopyGitHubPermaLink <line1>,<line2>call CopyGitHubLink(v:true)
     command! -range OpenGitHubLink <line1>,<line2>call OpenGitHubLink(v:false)
     command! -range OpenGitHubPermaLink <line1>,<line2>call OpenGitHubLink(v:true)
+    command! -range CopyFileSystemLink <line1>,<line2>call CopyFileSystemLink()
 
     " PRN can use `gh` prefix if collisions w/ other needs
     "   right now I use `g` for references `gr` `gi`
@@ -71,5 +72,20 @@ vim.cmd [[
     vnoremap <silent> <leader>gl :call CopyGitHubLink(v:false)<CR>
     nnoremap <silent> <leader>gp :call CopyGitHubLink(v:true)<CR>
     vnoremap <silent> <leader>gp :call CopyGitHubLink(v:true)<CR>
+    nnoremap <silent> <leader>gf :call CopyFileSystemLink()<CR>
+    vnoremap <silent> <leader>gf :call CopyFileSystemLink()<CR>
+
+    function! CopyFileSystemLink() range
+        let l:range = a:firstline
+        if a:firstline != a:lastline
+           let l:range = l:range . '-' . a:lastline
+        endif
+
+        " make sure tilde collapsed (not expanded)... that way it works across user home dirs that follow the same checkout convention (i.e. from my wcl.py)
+        let l:link = fnamemodify(expand('%:p'), ':~') . ":" . l:range
+
+        let @+ = l:link  " copy to clipboard register
+        echo 'Copied: ' . l:link
+    endfunction
 
 ]]
