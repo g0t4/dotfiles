@@ -41,8 +41,9 @@ expand_abbr() {
         # * --set-cursor
 
         # locate % in the expanded text
-        local before_cursor="${expanded%%\%*}" # everything before %
-        local after_cursor="${expanded#*\%}"   # everything after %
+        local expand_char="%"
+        local before_cursor="${expanded%%"${expand_char}"*}" # everything before %
+        local after_cursor="${expanded#*"${expand_char}"}"   # everything after %
         # effectively strips the % char (b/c its the cursor marker)
         # PRN map diff char than % ONLY IF issues with %... i.e. would mean I need an abbr that has % in the expanded text AND --set-cursor at same time
 
