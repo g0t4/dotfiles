@@ -109,7 +109,6 @@ abbr() {
     # PRN do I need to slice all remaining args?
     abbrs["${1}"]="${2}"
 
-    # if command -v "$1" 1>/dev/null; then
     if command_exists "$1"; then
         # i.e.
         #   abbr ls lsd
