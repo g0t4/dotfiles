@@ -179,7 +179,7 @@ reset_abbrs() {
     abbrs=()
     abbrs_no_space_after=()
     abbrs_set_cursor=()
-    # abbrs_anywhere=()
+    abbrs_anywhere=()
 }
 
 start_test() {
