@@ -1,5 +1,7 @@
 declare -A abbrs=()
 declare -A abbrs_no_space_after=()
+declare -A abbrs_set_cursor=()
+declare -A abbrs_anywhere=()
 expand_abbr() {
     local key="$1"
     local cmd=$READLINE_LINE
@@ -88,8 +90,19 @@ ealias() {
     # FYI check with:
     #     declare -p abbrs_no_space_after
 
+    shift # avoid matching on the name=value positional arg $1
+    # remaining args are all for abbr registration, not part of expanded text
     if indexed_array_contains "--NoSpaceAfter" "${@}"; then
         abbrs_no_space_after["$key"]=yes
+    fi
+    if indexed_array_contains "-g" "${@}" ||
+        indexed_array_contains "--position=anywhere" "${@}"; then
+        # PRN move -g to --position=anywhere like in fish shell?
+        abbrs_anywhere["$key"]=yes
+    fi
+    if indexed_array_contains "--set-cursor" "${@}"; then
+        # FYI for now we will only work with % (fish default) that way I don't have to parse that here too
+        abbrs_set_cursor["$key"]=yes
     fi
 }
 
