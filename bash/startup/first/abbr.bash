@@ -228,6 +228,13 @@ test_ealias() {
     start_test reset_abbrs
     expect_equal "${abbrs_no_space_after[foo]}" ""
 
+    start_test ealias foo=bar --position=anywhere
+    expect_equal "${abbrs[foo]}" "bar"
+    expect_equal "${abbrs_anywhere[foo]}" "yes"
+
+    # start_test reset_abbrs
+    # expect_equal "${abbrs_anywhere[foo]}" ""
+
     # exit when testing completes, that way you can easily run bash again to test again
     exit
 }
