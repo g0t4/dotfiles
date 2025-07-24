@@ -189,7 +189,7 @@ start_test() {
     "$@"
 }
 
-relative_path() {
+_relative_path() {
     # examle of using python! especially useful for advanced scripts
     python3 -c 'import os,sys; print(os.path.relpath(sys.argv[1]))' "$1"
 }
@@ -202,7 +202,7 @@ test_ealias() {
         local message="${3:-Expected '$expected', got '$actual'}"
         if [[ "$expected" != "$actual" ]]; then
             local caller_file
-            caller_file=$(relative_path "${BASH_SOURCE[1]}")
+            caller_file=$(_relative_path "${BASH_SOURCE[1]}")
             local caller_line_num="${BASH_LINENO[0]}"
 
             echo "  ❌ $caller_file:$caller_line_num — $message" >&2
