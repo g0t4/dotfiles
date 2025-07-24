@@ -22,8 +22,10 @@ expand_abbr() {
 
     # * add_char
     local add_char=" "
+    local no_expand_add_char=" " # -NoSpaceAfter does not apply if no expansion
     if [[ "$key" == "enter" ]]; then
         add_char=""
+        no_expand_add_char=""
     fi
     if [[ "$word_before_cursor" && "${abbrs_no_space_after["$word_before_cursor"]}" ]]; then
         add_char=""
@@ -41,8 +43,8 @@ expand_abbr() {
 
     if [[ "$expanded" == "" || $allowed_position == "no" ]]; then
         # no expansion => insert char and return early
-        READLINE_LINE="${prefix}${word_before_cursor}${add_char}${suffix}"
-        READLINE_POINT=$((${#prefix} + ${#word_before_cursor} + ${#add_char}))
+        READLINE_LINE="${prefix}${word_before_cursor}${no_expand_add_char}${suffix}"
+        READLINE_POINT=$((${#prefix} + ${#word_before_cursor} + ${#no_expand_add_char}))
         return 0
     fi
 
