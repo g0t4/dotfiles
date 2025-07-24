@@ -111,6 +111,12 @@ abbr() {
 
     if ! command_exists "$1"; then
 
+        # if a command exists, then we don't want to mask it, the whole point of an abbr is to alter what is typed
+        # - and if the command exists then the abbr is naturally tab completable
+        # if a command doesn't exist, then we need at least a stub to get tab completion
+        # - and I am allowing for fallback to execute the abbr since it IS NOT shadowing another underlying command
+        # - FYI another choice is to have the stub WARN that abbrs are NEVER executable and only attach those to abbrs that don't shadow a command
+
         # define function for tab completion
         # - thus, body is irrelevant for tab completion purposes (can be no-op :;, or true; )
         # - i.e. g<TAB> includes abbrs starting with g!
