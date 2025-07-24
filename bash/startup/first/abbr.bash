@@ -208,7 +208,7 @@ test_ealias() {
             echo "  ❌ $caller_file:$caller_line_num — $message" >&2
             echo -n "  "
             # print the calling line:
-            sed -n "${caller_line_num}p" "$caller_file"
+            sed -n "${caller_line_num}p" "$caller_file" | bat -l bash
             return 1
         fi
     }
