@@ -182,10 +182,10 @@ reset_abbrs() {
     abbrs_anywhere=()
 }
 
+# pipx install rich-cli
 start_test() {
-    # TLDR show the line of code and execute it
     echo
-    echo "TEST: $*"
+    rich -p "[bold green]TEST[/bold green]: $*"
     "$@"
 }
 
