@@ -109,31 +109,35 @@ abbr() {
     # PRN do I need to slice all remaining args?
     abbrs["${1}"]="${2}"
 
-    if command_exists "$1"; then
-        # i.e.
-        #   abbr ls lsd
-        echo WARN "$1" is a real command and will be shadowed by the fallback function
-        # TODO I don't need the fallback function if the abbr maps to a command that already exists
-        #
-        # WHY this matters, say I have:
-        # abbr ls lsd
-        # abbr la "ls -alh"
-        #
-        # user types `la` and this is what's run:
-        # ls -alh
-        #   # in this case the ls function is called from ls abbr, not the ls command
+    if ! command_exists "$1"; then
+
+        # define function for tab completion
+        # - thus, body is irrelevant for tab completion purposes (can be no-op :;, or true; )
+        # - i.e. g<TAB> includes abbrs starting with g!
+        # AND, have body call exec_abbr instead of command_not_found_handle global fallback
+        # - leave this to exec_abbr, don't try to fully inline ${2} as weird cases will arise and break creating the function
+        #   - i.e. gcmsg that inserts only opening " ... user would need `gcmsg foo\"` to get it to form a working command with the abbr prefix
+        # - passing $@ too means whatever options come after an abbreviation are passed to exec_abbr
+        # FYI this can fire if user bypasses abbr expansion (i.e. Ctrl-j)
+        #   i.e. `gst --short`
+        eval "function ${1} { exec_abbr '${1}' \"\$@\"; }"
+
+    # else
+    #     # i.e.
+    #     #   abbr ls lsd
+    #     echo WARN "$1" is a real command and will be shadowed by the fallback function
+    #     # TODO I don't need the fallback function if the abbr maps to a command that already exists
+    #     #
+    #     # WHY this matters, say I have:
+    #     # abbr ls lsd
+    #     # abbr la "ls -alh"
+    #     #
+    #     # user types `la` and this is what's run:
+    #     # ls -alh
+    #     #   # in this case the ls function is called from ls abbr, not the ls command
+
     fi
 
-    # define function for tab completion
-    # - thus, body is irrelevant for tab completion purposes (can be no-op :;, or true; )
-    # - i.e. g<TAB> includes abbrs starting with g!
-    # AND, have body call exec_abbr instead of command_not_found_handle global fallback
-    # - leave this to exec_abbr, don't try to fully inline ${2} as weird cases will arise and break creating the function
-    #   - i.e. gcmsg that inserts only opening " ... user would need `gcmsg foo\"` to get it to form a working command with the abbr prefix
-    # - passing $@ too means whatever options come after an abbreviation are passed to exec_abbr
-    # FYI this can fire if user bypasses abbr expansion (i.e. Ctrl-j)
-    #   i.e. `gst --short`
-    eval "function ${1} { exec_abbr '${1}' \"\$@\"; }"
 }
 
 ealias() {
