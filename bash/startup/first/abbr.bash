@@ -21,6 +21,7 @@ expand_abbr() {
     local add_char=" "
     local no_expand_add_char=" " # -NoSpaceAfter does not apply if no expansion
     if [[ "$key" == "enter" ]]; then
+        # for enter we have the \C-j in the bind macro, not doing that here
         add_char=""
         no_expand_add_char=""
     fi
