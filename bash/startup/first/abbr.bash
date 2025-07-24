@@ -189,17 +189,26 @@ start_test() {
     "$@"
 }
 
+relative_path() {
+    # examle of using python! especially useful for advanced scripts
+    python3 -c 'import os,sys; print(os.path.relpath(sys.argv[1]))' "$1"
+}
+
 test_ealias() {
+
     expect_equal() {
         local actual="$1"
         local expected="$2"
         local message="${3:-Expected '$expected', got '$actual'}"
         if [[ "$expected" != "$actual" ]]; then
-            local caller_file="${BASH_SOURCE[1]}"
-            local caller_line="${BASH_LINENO[0]}"
-            echo "FAIL at $caller_file:$caller_line — $message"
+            local caller_file
+            caller_file=$(relative_path "${BASH_SOURCE[1]}")
+            local caller_line_num="${BASH_LINENO[0]}"
+
+            echo "  ❌ $caller_file:$caller_line_num — $message" >&2
             echo -n "  "
-            head "-$caller_line" "$caller_file" | tail -1
+            # print the calling line:
+            sed -n "${caller_line_num}p" "$caller_file"
             return 1
         fi
     }
