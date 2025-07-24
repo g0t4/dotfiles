@@ -57,6 +57,10 @@ abbr() {
     # PRN handle options (if any) when I add abbrs that use them
     # PRN do I need to slice all remaining args?
     abbrs["${1}"]="${2}"
+
+    # define stub function so I get tab completion of abbr names
+    #  i.e. g<TAB> includes my g* abbrs
+    eval "function ${1} { true; }"
 }
 
 ealias() {
