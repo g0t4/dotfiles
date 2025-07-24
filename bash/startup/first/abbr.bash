@@ -25,7 +25,20 @@ expand_abbr() {
         # otherwise just add space:
         READLINE_LINE="${cmd}${add_char}"
     fi
-    READLINE_POINT=${#READLINE_LINE} # then, move cursor to end too
+
+    # * position cursor
+    if [[ "${abbrs_set_cursor["$cmd"]}" ]]; then
+        # find % in expanded text
+        # remove it and put cursor there
+        local cursor_pos="${expanded%%\%*}"  # everything before %
+        local after_cursor="${expanded#*\%}" # everything after %
+
+        READLINE_LINE="${cursor_pos}${after_cursor}${add_char}"
+        READLINE_POINT="${#cursor_pos}"
+    else
+        READLINE_POINT=${#READLINE_LINE}
+    fi
+
 }
 # * expand on <Space>
 bind -x '" ": expand_abbr " "'
@@ -109,7 +122,8 @@ ealias() {
 abbr gst "git status"
 abbr gdlc "git log --patch HEAD~1..HEAD"
 
-ealias gcmsg='git commit -m "' --NoSpaceAfter
+# ealias gcmsg='git commit -m "' --NoSpaceAfter
+ealias gcmsg='git commit -m "%"' --NoSpaceAfter --set-cursor
 ealias gp="git push"
 
 abbr gap "git add --patch"
