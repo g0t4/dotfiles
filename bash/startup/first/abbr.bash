@@ -171,6 +171,6 @@ abbr declarep "declare -p"
 #     I could do this with cursor positioning like --set-cursor in fish abbrs
 #     and I had an IMPL of that in zsh prior
 # shellcheck disable=SC2016 # expressions in single quotes don't expand, yup that's the point here!
-ealias ea='echo "${name[@]}"' -g
+ealias ea='echo "${%[@]}"' -g --set-cursor
 
 abbr pIFS "echo -n \"\${IFS}\" | hexdump -C" # block word splitting, or it will split it's own characters :)
