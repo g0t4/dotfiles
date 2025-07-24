@@ -36,8 +36,9 @@ expand_abbr() {
         return 0
     fi
 
-    # * position cursor
+    # * inject expansion and move cursor
     if [[ "${abbrs_set_cursor["$word_before_cursor"]}" ]]; then
+        # * --set-cursor
 
         # locate % in the expanded text
         local before_cursor="${expanded%%\%*}" # everything before %
@@ -48,6 +49,7 @@ expand_abbr() {
         READLINE_LINE="${prefix}${before_cursor}${after_cursor}${add_char}${suffix}"
         READLINE_POINT=$((${#before_cursor} + ${#prefix}))
     else
+        # * cursor moves afte expanded/add_char
 
         READLINE_LINE="${prefix}${expanded}${add_char}${suffix}"
         # move cursor right AFTER add_char (so if in middle of line, won't go to end)
