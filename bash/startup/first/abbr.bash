@@ -36,11 +36,11 @@ bind -x "\"$expand_hack\": expand_abbr enter"
 bind "\"$acceptline_hack\": accept-line"          # bind -p # lists readline actions
 bind "\"\C-m\": \"$expand_hack$acceptline_hack\"" # bind -s # lists macro actions
 
-command_not_found_handle() {
-    # TODO capture existing command_not_found_handle func and call it too?
-    # FYI type out `gst --short` and use Ctrl-j to submit and test this w/o expanding:
-    exec_abbr "$@"
-}
+# command_not_found_handle() {
+#     # TODO capture existing command_not_found_handle func and call it too?
+#     # FYI type out `gst --short` and use Ctrl-j to submit and test this w/o expanding:
+#     exec_abbr "$@"
+# }
 
 exec_abbr() {
     # usage:
@@ -62,9 +62,15 @@ abbr() {
     # PRN do I need to slice all remaining args?
     abbrs["${1}"]="${2}"
 
-    # define stub function so I get tab completion of abbr names
-    #  i.e. g<TAB> includes my g* abbrs
-    eval "function ${1} { true; }"
+    # define function for tab completion
+    # - shouldn't be executed assuming abbr expansion is bug free
+    # - thus, body is irrelevant for tab completion purposes (can be no-op :;, or true; )
+    # - i.e. g<TAB> includes abbrs starting with g!
+    # AND, have body call exec_abbr instead of command_not_found_handle global fallback
+    # - leave this to exec_abbr, don't try to fully inline ${2} as weird cases will arise and break creating the function
+    # - passing $@ too means whatever options come after an abbreviation are passed to exec_abbr
+    #   i.e. `gst --short`
+    eval "function ${1} { exec_abbr '${1}' \"\$@\"; }"
 }
 
 ealias() {
