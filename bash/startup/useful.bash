@@ -12,5 +12,4 @@
 # advanced courses
 abbr ls lsd
 
-
-
+abbr la "ls -alh"
