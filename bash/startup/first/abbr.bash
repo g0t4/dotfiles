@@ -49,9 +49,9 @@ expand_abbr() {
         READLINE_POINT=$((${#before_cursor} + ${#prefix}))
     else
 
-        # TODO should I position the mouse after add_char and not just at end?
         READLINE_LINE="${prefix}${expanded}${add_char}${suffix}"
-        READLINE_POINT=${#READLINE_LINE}
+        # move cursor right AFTER add_char (so if in middle of line, won't go to end)
+        READLINE_POINT=$((${#prefix} + ${#expanded} + ${#add_char}))
     fi
 
 }
