@@ -63,12 +63,13 @@ abbr() {
     abbrs["${1}"]="${2}"
 
     # define function for tab completion
-    # - shouldn't be executed assuming abbr expansion is bug free
     # - thus, body is irrelevant for tab completion purposes (can be no-op :;, or true; )
     # - i.e. g<TAB> includes abbrs starting with g!
     # AND, have body call exec_abbr instead of command_not_found_handle global fallback
     # - leave this to exec_abbr, don't try to fully inline ${2} as weird cases will arise and break creating the function
+    #   - i.e. gcmsg that inserts only opening " ... user would need `gcmsg foo\"` to get it to form a working command with the abbr prefix
     # - passing $@ too means whatever options come after an abbreviation are passed to exec_abbr
+    # FYI this can fire if user bypasses abbr expansion (i.e. Ctrl-j)
     #   i.e. `gst --short`
     eval "function ${1} { exec_abbr '${1}' \"\$@\"; }"
 }
