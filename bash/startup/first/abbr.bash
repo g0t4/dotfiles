@@ -109,41 +109,36 @@ abbr() {
     # PRN do I need to slice all remaining args?
     abbrs["${1}"]="${2}"
 
+    # if a command/func exists, don't shadow it, the whole point of an abbr is to alter what is _typed_
+    # - thankfully tab completion works fine if it already exists as a command/func!
+    # if a command/func doesn't exist, then we need a stub func (or smth else) to get tab completion
     if ! command_exists "$1"; then
 
-        # if a command exists, then we don't want to mask it, the whole point of an abbr is to alter what is typed
-        # - and if the command exists then the abbr is naturally tab completable
-        # if a command doesn't exist, then we need at least a stub to get tab completion
-        # - and I am allowing for fallback to execute the abbr since it IS NOT shadowing another underlying command
-        # - FYI another choice is to have the stub WARN that abbrs are NEVER executable and only attach those to abbrs that don't shadow a command
-
         # define function for tab completion
-        # - thus, body is irrelevant for tab completion purposes (can be no-op :;, or true; )
         # - i.e. g<TAB> includes abbrs starting with g!
-        # AND, have body call exec_abbr instead of command_not_found_handle global fallback
-        # - leave this to exec_abbr, don't try to fully inline ${2} as weird cases will arise and break creating the function
-        #   - i.e. gcmsg that inserts only opening " ... user would need `gcmsg foo\"` to get it to form a working command with the abbr prefix
-        # - passing $@ too means whatever options come after an abbreviation are passed to exec_abbr
-        # FYI this can fire if user bypasses abbr expansion (i.e. Ctrl-j)
-        #   i.e. `gst --short`
-        # eval "function ${1} { exec_abbr '${1}' \"\$@\"; }"
-        eval "function ${1} { echo 'abbrs are never intended to be executed directly, do not exec abbrs (i.e. if you disable abbr expansion)'; }"
-        # TODO final alternative is to have this stub func see if another command exists and dispatch to that just incase an underlying command is made available AFTER loading abbrs (i.e. altering PATH)
+        # eval "function ${1} { exec_abbr '${1}' \"\$@\"; }" # old design with fallback execution of abbr... would be ok to use again if I really find myself needing this
+        eval "function ${1} { echo 'abbrs are not intended to be executed directly (i.e. if you disable abbr expansion)... if you think this is masking a real command, restart your shell to re-create abbrs and this warning will go away'; }"
 
-    # else
-    #     # i.e.
-    #     #   abbr ls lsd
-    #     echo WARN "$1" is a real command and will be shadowed by the fallback function
-    #     # TODO I don't need the fallback function if the abbr maps to a command that already exists
-    #     #
-    #     # WHY this matters, say I have:
-    #     # abbr ls lsd
-    #     # abbr la "ls -alh"
-    #     #
-    #     # user types `la` and this is what's run:
-    #     # ls -alh
-    #     #   # in this case the ls function is called from ls abbr, not the ls command
-
+        # FYI, for now I am happy checking for shadowed command/function at abbr definition time
+        #  if user later:
+        #  - adds to the PATH in a way that results in the stub func shadowing a new command
+        #    mostly meh b/c, the next time they launch the shell it will fix itself
+        #    and I added a warning to the stub func (when it's executed) to warn the user about this!
+        #    this all beats trying to detect shadowing at execution time in smth like an updated exec_abbr
+        #  - defines new function (will work fine b/c it will shadow the stub func!)
+        #
+        # * example of shadowing real commands/functions with the stub func:
+        #
+        # say I define:
+        #   abbr ls lsd
+        #   abbr la "ls -alh"
+        #
+        # then I type `la` which expands into:
+        #   ls -alh
+        # and I run this...
+        #   if I don't check for command/func shadowing then the stub func will be run b/c of my first abbr
+        #   - this is 100% not what I want
+        #   I am happy to settle on an abbr definition time check to avoid this, and warning to user
     fi
 
 }
