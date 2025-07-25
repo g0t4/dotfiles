@@ -20,7 +20,6 @@ expect_equal() {
     fi
 }
 
-# pipx install rich-cli
 start_test() {
     label_test "$@"
     "$@"
