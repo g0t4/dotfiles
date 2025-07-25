@@ -150,6 +150,58 @@ ealias() {
     #   key=value --NoSpaceAfter
     #   PRN other options
 
+    local set_cursor=""
+    local no_space_after=false
+    local position=""
+    local args=()
+
+    # getopt SUCKS.. just use a while loop, it will work FINE
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+        --set-cursor=*)
+            set_cursor="${1#*=}"
+            shift
+            ;;
+        --set-cursor)
+            set_cursor="$1"
+            shift
+            ;;
+        --no-space-after)
+            no_space_after=true
+            shift
+            ;;
+        --position=*)
+            position="${1#*=}"
+            shift
+            ;;
+        -g)
+            position="anywhere"
+            shift
+            ;;
+        --) # explicit end of options
+            shift
+            break
+            ;;
+        -*)
+            echo "Unknown option: $1" >&2
+            return 1
+            ;;
+        *)
+            args+=("$1")
+            shift
+            ;;
+        esac
+    done
+
+    # Collect remaining args
+    args+=("$@")
+
+    # Result
+    echo "set_cursor=$set_cursor"
+    echo "no_space_after=$no_space_after"
+    echo "position=$position"
+    echo "Remaining args: ${args[*]}"
+
     local key="${1%=*}"
     local value="${1#*=}"
     abbr "$key" "$value"
