@@ -71,21 +71,12 @@ expand_abbr() {
     local expand_func=$(lookup_function "$word_before_cursor")
     if [[ -n $expand_func ]]; then
         # s/b fine to run this here, unless an issue arises don't defer
-        # expanded=$("$expand_func" "$READLINE_LINE")
-        expanded=$("$expand_func") # FYI I don't think any of these use cmdline! the ones that do are the regex matches!
-        # non-regex functions are for cases where other context is used, i.e. CWD, files, time, etc
-        #  BUT, not the commandline itself... there's no "argument" coming from what the user keyed in
-        #  I suppose it is possible to take cmdline as arg... no problemo if so
-        #  but that might be weird to have to type before/after the abbr word params
-        #  though would that alleviate a regex match perf issue?
+        expanded=$("$expand_func" "$READLINE_LINE" "$READLINE_POINT")
+        # TODO try using non-regex --function expansions instead of regex based ones!
+        #  only diff is whether or not you can parameterize the abbr word itself!
         #  10 gl<SPACE> => git log -10 ?! ok that might be cool!
-
-        # PRN pass cursor position?
+        #  FTR fish does pass cmdline as $argv
     fi
-    # TODO --function:
-    #   PRN check if func exists and warn if not?
-    #   so probably just migrate those abbrs by hand anyways?
-    #   then... get func name out and eval "$func_name $READLINE_LINE" or READLINE_LINE would already be in scope anyways so don't pass it
 
     # * add_char
     local add_char="$key"
