@@ -132,7 +132,8 @@ expand_abbr() {
 }
 # * expand on <Space>
 bind -x '" ": expand_abbr " "'
-bind -x '";": expand_abbr ";"' # TODO add test first # gst; should expand
+bind -x '";": expand_abbr ";"'
+bind -x '"|": expand_abbr "|"'
 
 # * expand on <Return>
 expand_hack='\C-x\C-['
@@ -545,7 +546,17 @@ test_expand_abbr() {
     READLINE_LINE="foo"
     READLINE_POINT=3
     expand_abbr ";"
-    expect_equal "$READLINE_LINE" "bar;" # PRN also insert space after ?
+    expect_equal "$READLINE_LINE" "bar;"
+    expect_equal "$READLINE_POINT" 4
+
+    # * | semicolon trigger tests
+    label_test "pipeline trigger instead of space"
+    reset_abbrs
+    abbr foo bar
+    READLINE_LINE="foo"
+    READLINE_POINT=3
+    expand_abbr "|"
+    expect_equal "$READLINE_LINE" "bar|"
     expect_equal "$READLINE_POINT" 4
 
     # PRN intercept ; too so `gst;` expands, else just insert ;
