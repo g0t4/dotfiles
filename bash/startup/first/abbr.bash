@@ -32,9 +32,18 @@ lookup_cursor_set_char() {
     local word="$1"
     if [[ -z "$word" ]]; then
         echo ""
-        return
+        return 1
     fi
     echo "${abbrs_set_cursor["$word_before_cursor"]}"
+}
+
+lookup_expanded() {
+    local word="$1"
+    if [[ -z "$word" ]]; then
+        echo ""
+        return 1
+    fi
+    echo "${abbrs[$word]}"
 }
 
 expand_abbr() {
@@ -49,13 +58,10 @@ expand_abbr() {
     local prefix="${READLINE_LINE:0:word_start_offset}"
     local suffix="${READLINE_LINE:READLINE_POINT}"
 
-    local expanded=""
-    if [[ "$word_before_cursor" != "" ]]; then
-        expanded="${abbrs[$word_before_cursor]}"
-        # PRN for --function would require the function to exist in bash (manually migrate)
-        #   so probably just migrate those abbrs by hand anyways?
-        #   then... get func name out and eval "$func_name $READLINE_LINE" or READLINE_LINE would already be in scope anyways so don't pass it
-    fi
+    local expanded=$(lookup_expanded "$word_before_cursor")
+    # TODO --function would require the function to exist in bash (manually migrate)
+    #   so probably just migrate those abbrs by hand anyways?
+    #   then... get func name out and eval "$func_name $READLINE_LINE" or READLINE_LINE would already be in scope anyways so don't pass it
 
     # * add_char
     local add_char="$key"
