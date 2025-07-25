@@ -8,8 +8,8 @@ declare -A abbrs_function=()
 declare -A abbrs_command=()
 expand_abbr() {
     local key="$1"
-    echo "READLINE_LINE: $READLINE_LINE"
-    echo "READLINE_POINT: $READLINE_POINT"
+    # echo "READLINE_LINE: $READLINE_LINE"
+    # echo "READLINE_POINT: $READLINE_POINT"
 
     # * pseudo-tokenize (prefix / word_before_cursor / cursor / suffix)
     local line_before_cursor="${READLINE_LINE:0:READLINE_POINT}"
@@ -37,6 +37,8 @@ expand_abbr() {
     if [[ "$word_before_cursor" && "${abbrs_no_space_after["$word_before_cursor"]}" = "yes" ]]; then
         add_char=""
     fi
+    # echo "word_before_cursor: _${word_before_cursor}_"
+    # echo "add_char: _${add_char}_"
 
     local anywhere="no"
     if [[ "$word_before_cursor" && "${abbrs_anywhere["$word_before_cursor"]}" ]]; then
