@@ -105,7 +105,7 @@ command_exists() {
     command -v "$1" 1>/dev/null
 }
 
-abbr() {
+_abbr() {
     # PRN handle options (if any) when I add abbrs that use them
     # PRN do I need to slice all remaining args?
     abbrs["${1}"]="${2}"
@@ -145,7 +145,7 @@ abbr() {
 }
 
 # shellcheck disable=SC2317 # sick of it complaining about unused options in while loop
-ealias() {
+abbr() {
 
     # compat layer, also this is where I'll accept --no-space-after
     # FORMAT
@@ -231,7 +231,7 @@ ealias() {
     fi
     # echo "  key: $key"
     # echo "  value: $value"
-    abbr "$key" "$value"
+    _abbr "$key" "$value"
 
     # FYI check with:
     #     declare -p abbrs_no_space_after
@@ -247,8 +247,6 @@ ealias() {
         abbrs_set_cursor["$key"]="$set_cursor"
     fi
 }
-
-# ealias --set-cursor -t -f
 
 reset_abbrs() {
     abbrs=()
@@ -268,7 +266,7 @@ _relative_path() {
     python3 -c 'import os,sys; print(os.path.relpath(sys.argv[1]))' "$1"
 }
 
-test_ealias() {
+test_abbr() {
 
     expect_equal() {
         local actual="$1"
@@ -288,11 +286,11 @@ test_ealias() {
     }
 
     # * tests --set-cursor
-    start_test ealias foo=bar --set-cursor
+    start_test abbr foo=bar --set-cursor
     expect_equal "${abbrs[foo]}" "bar"
     expect_equal "${abbrs_set_cursor[foo]}" "%"
 
-    start_test ealias --set-cursor hello=world
+    start_test abbr --set-cursor hello=world
     expect_equal "${abbrs[hello]}" "world"
     expect_equal "${abbrs_set_cursor[hello]}" "%"
 
@@ -304,11 +302,11 @@ test_ealias() {
     expect_equal "${abbrs_set_cursor[hello]}" ""
 
     # * tests --no-space-after
-    start_test ealias foo=bar --no-space-after
+    start_test abbr foo=bar --no-space-after
     expect_equal "${abbrs[foo]}" "bar"
     expect_equal "${abbrs_no_space_after[foo]}" "yes"
 
-    start_test ealias --no-space-after hello=world
+    start_test abbr --no-space-after hello=world
     expect_equal "${abbrs[hello]}" "world"
     expect_equal "${abbrs_no_space_after[hello]}" "yes"
 
@@ -317,7 +315,7 @@ test_ealias() {
     expect_equal "${abbrs_no_space_after[hello]}" ""
 
     # * tests --position
-    start_test ealias foo=bar --position=anywhere
+    start_test abbr foo=bar --position=anywhere
     expect_equal "${abbrs[foo]}" "bar"
     expect_equal "${abbrs_anywhere[foo]}" "yes"
 
@@ -325,24 +323,24 @@ test_ealias() {
     expect_equal "${abbrs_anywhere[foo]}" ""
 
     # * tests "position anywhere" where no = means it MUST have value in next word
-    start_test ealias --position anywhere foo=bar
+    start_test abbr --position anywhere foo=bar
     expect_equal "${abbrs[foo]}" "bar"
     expect_equal "${abbrs_anywhere[foo]}" "yes"
     reset_abbrs
 
     # * tests -g works too
-    start_test ealias hello=world -g
+    start_test abbr hello=world -g
     expect_equal "${abbrs[hello]}" "world"
     expect_equal "${abbrs_anywhere[hello]}" "yes"
     reset_abbrs
 
     # * tests -- works
-    start_test ealias -g -- hello=world
+    start_test abbr -g -- hello=world
     expect_equal "${abbrs[hello]}" "world"
     expect_equal "${abbrs_anywhere[hello]}" "yes"
     reset_abbrs
 
-    start_test ealias -- hello=world # * no options, just -- and positional
+    start_test abbr -- hello=world # * no options, just -- and positional
     expect_equal "${abbrs[hello]}" "world"
     reset_abbrs
 
@@ -351,14 +349,14 @@ test_ealias() {
     # exit when testing completes, that way you can easily run bash again to test again
     exit
 }
-test_ealias
+test_abbr
 
 abbr gst "git status"
 abbr gdlc "git log --patch HEAD~1..HEAD"
 
-# ealias gcmsg='git commit -m "' --no-space-after
-ealias gcmsg='git commit -m "%"' --no-space-after --set-cursor
-ealias gp="git push"
+# abbr gcmsg='git commit -m "' --no-space-after
+abbr gcmsg='git commit -m "%"' --no-space-after --set-cursor
+abbr gp="git push"
 
 abbr gap "git add --patch"
 abbr gdc "git diff --cached --color-words"
@@ -377,6 +375,6 @@ abbr declarep "declare -p"
 #     I could do this with cursor positioning like --set-cursor in fish abbrs
 #     and I had an IMPL of that in zsh prior
 # shellcheck disable=SC2016 # expressions in single quotes don't expand, yup that's the point here!
-ealias ea='echo "${%[@]}"' -g --set-cursor
+abbr ea='echo "${%[@]}"' -g --set-cursor
 
 abbr pIFS "echo -n \"\${IFS}\" | hexdump -C" # block word splitting, or it will split it's own characters :)
