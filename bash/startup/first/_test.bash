@@ -8,6 +8,13 @@ expect_equal() {
     local expected="$2"
     local message="${3:-Expected '$expected', got '$actual'}"
     if [[ "$expected" != "$actual" ]]; then
+
+        # tmp check how things line up and fix issue with source and lines when run in shell
+        for i in "${!BASH_SOURCE[@]}"; do
+            echo "Index $i: ${BASH_SOURCE[$i]}"
+            echo "          ${FUNCNAME[$i]}"
+        done
+
         local caller_file
         caller_file=$(_relative_path "${BASH_SOURCE[1]}")
         local caller_line_num="${BASH_LINENO[0]}"
