@@ -42,6 +42,10 @@ expect_function_exists() {
             echo "  ❌ $file:$line — Function definition (for '$name') does not contain: $must_contain" >&2
             echo -n "  "
             bat --line-range "$line" "$file"
+
+            echo "body:"
+            echo "$body"
+            # PRN would be nice to indent all lines of definition but how I lable tests (bold/color) also differentiates good enough for now
             return 1
         fi
     fi
