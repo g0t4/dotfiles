@@ -385,47 +385,47 @@ test_parse_abbr_args() {
 
 test_expand_abbr() {
 
-    # * vanilla abbr
+    label_test "vanilla abbr"
     reset_abbrs
     abbr foo bar
     READLINE_LINE=foo
     READLINE_POINT=3
-    start_test expand_abbr " "
+    expand_abbr " "
     expect_equal "$READLINE_LINE" "bar "
     expect_equal "$READLINE_POINT" 4
 
-    # * vanilla w/ --no-space-after
+    label_test "vanilla w/ --no-space-after"
     reset_abbrs
     abbr foo bar --no-space-after
     READLINE_LINE=foo
     READLINE_POINT=3
-    start_test expand_abbr " "
+    expand_abbr " "
     expect_equal "$READLINE_LINE" "bar"
     expect_equal "$READLINE_POINT" 3
 
-    # * --set-cursor
+    label_test "--set-cursor"
     reset_abbrs
     abbr foo "echo '%'" --set-cursor
     READLINE_LINE=foo
     READLINE_POINT=3
-    start_test expand_abbr " "
+    expand_abbr " "
     expect_equal "$READLINE_LINE" "echo '' "
     expect_equal "$READLINE_POINT" 6
 
-    # * --no-space-after + --set-cursor (might not be useful together but lets just verify behavior)
+    label_test "--no-space-after + --set-cursor"
     reset_abbrs
     abbr foo "echo '%'" --set-cursor --no-space-after
     READLINE_LINE=foo
     READLINE_POINT=3
-    start_test expand_abbr " "
+    expand_abbr " "
     expect_equal "$READLINE_LINE" "echo ''"
     expect_equal "$READLINE_POINT" 6
 
-    # * not an abbr
+    label_test "space still works when not an abbr"
     reset_abbrs
     READLINE_LINE=foo
     READLINE_POINT=3
-    start_test expand_abbr " "
+    expand_abbr " "
     expect_equal "$READLINE_LINE" "foo "
     expect_equal "$READLINE_POINT" 4
 

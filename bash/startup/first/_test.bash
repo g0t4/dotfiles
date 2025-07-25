@@ -22,6 +22,10 @@ expect_equal() {
 
 # pipx install rich-cli
 start_test() {
-    echo "TEST: $*"
+    label_test "$@"
     "$@"
+}
+
+label_test() {
+    echo "TEST: $*"
 }
