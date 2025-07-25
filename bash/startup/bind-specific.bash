@@ -19,10 +19,10 @@ abbr d@#='"${#%[@]}"' --position=anywhere --set-cursor
 abbr d*='"${%[*]}"' --position=anywhere --set-cursor
 abbr dx='"${%}"' --position=anywhere --set-cursor
 abbr dxu='${%}' --position=anywhere --set-cursor
-abbr ed@='echo "${%[@]}"' --position=anywhere --set-cursor
-abbr ed@#='echo "${#%[@]}"' --position=anywhere --set-cursor
-abbr edx='echo "${%}"' --position=anywhere --set-cursor
-abbr edxu='echo ${%}' --position=anywhere --set-cursor
-abbr f@='for item in "${%[@]}"; do echo $item; done' --position=anywhere --set-cursor
+abbr ed*='declare -p'
+abbr ed@#='echo ${#%[@]}' --set-cursor
+abbr edx='echo _"${%}"_' --set-cursor
+abbr edxu='echo _${%}_' --set-cursor
+abbr f@='for item in "${%[@]}"; do echo $item; done' --set-cursor
 
 abbr pIFS "echo -n \"\${IFS}\" | hexdump -C" # block word splitting, or it will split it's own characters :)

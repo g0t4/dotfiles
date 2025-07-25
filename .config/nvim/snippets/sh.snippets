@@ -48,10 +48,10 @@ for ${2:item} in "\${${1:ARRAY}[@]}"; do
 done
 
 # * echo variants (keep dx/d@ snippet suffix, e becomes a "namespace" for echo snippets that reuse the inner snippet from non-echo variants)
-snippet edx 'echo expanded variable"
-echo "\${${1:SCALAR}}"
+snippet edx 'echo variable"
+echo _"\${${1:SCALAR}}"_
 
-snippet ed@ 'echo expanded array"
-echo "\${${1:ARRAY}[@]}"
+snippet ed* 'echo array"
+declare -p ${name}
 
 
