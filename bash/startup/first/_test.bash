@@ -45,9 +45,28 @@ expect_function_exists() {
 
             echo "body:"
             echo "$body" | bat -l bash
-            # PRN would be nice to indent all lines of definition but how I lable tests (bold/color) also differentiates good enough for now
+
             return 1
         fi
+    fi
+}
+
+expect_function_not_defined() {
+    # do not need to check body, just verify an obscure name in test cases so you don't have to over complicate this!
+
+    local name="$1"
+    if declare -F "$name" >/dev/null; then
+        local file=$(_relative_path "${BASH_SOURCE[1]}")
+        local line="${BASH_LINENO[0]}"
+        echo "  ❌ $file:$line — Function should not exist, named: '$name'" >&2
+        echo -n "  "
+        bat --line-range "$line" "$file"
+
+        local body=$(declare -f "$name")
+        echo "body:"
+        echo "$body" | bat -l bash
+
+        return 1
     fi
 }
 
