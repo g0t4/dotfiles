@@ -549,7 +549,7 @@ test_expand_abbr() {
     expect_equal "$READLINE_LINE" "bar;"
     expect_equal "$READLINE_POINT" 4
 
-    # * | semicolon trigger tests
+    # * | pipeline trigger tests
     label_test "pipeline trigger instead of space"
     reset_abbrs
     abbr foo bar
