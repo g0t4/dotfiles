@@ -364,8 +364,11 @@ test_parse_abbr_args() {
     expect_equal "${abbrs_set_cursor[foo]}" ""
     expect_equal "${abbrs[hello]}" ""
     expect_equal "${abbrs_set_cursor[hello]}" ""
-    expect_equal "${abbrs_stub_func_names[foo]}" "" # ensure foo removed from array
+    # ensure stub functions removed:
+    expect_equal "${abbrs_stub_func_names[foo]}" ""
     expect_function_not_defined "foo"
+    expect_equal "${abbrs_stub_func_names[hello]}" ""
+    expect_function_not_defined "hello"
 
     # * --set-cursor=_
     start_test abbr foo='b_ar' --set-cursor='_'
