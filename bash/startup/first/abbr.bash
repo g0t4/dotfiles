@@ -158,6 +158,8 @@ ealias() {
     local args=()
 
     # getopt SUCKS.. just use a while loop, it will work FINE
+    #  ONE requirement will be to use an = to provide values for options...
+    #  so I don't have to statefully parse options (yet)
     while [[ $# -gt 0 ]]; do
         case "$1" in
         --set-cursor=*)
