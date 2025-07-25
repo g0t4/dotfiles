@@ -21,9 +21,9 @@ lookup_only_cmd() {
     local word="$1"
     if [[ -z "$word" ]]; then
         # key lookup fails if word is empty
-        echo ""
+        echo -n ""
     fi
-    echo "${abbrs_command["$word"]}"
+    echo -n "${abbrs_command["$word"]}"
 }
 
 expand_abbr() {
