@@ -20,7 +20,7 @@ is_anywhere_allowed() {
 lookup_only_cmd() {
     local word="$1"
     if [[ -z "$word" ]]; then
-        # key lookup fails if word is empty
+        # key lookup fails if subscript is empty b/c it's treated as passing no subscript! foo[""] => foo[]
         echo -n ""
     fi
     echo -n "${abbrs_command["$word"]}"
