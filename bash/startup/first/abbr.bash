@@ -184,8 +184,7 @@ reset_abbrs() {
 
 # pipx install rich-cli
 start_test() {
-    rich -p "[bold green]TEST[/bold green]: [italic]$*[/italic]"
-    # rich -p --emoji ":test_tube: [italic]$*[/italic]"
+    echo "TEST: $*"
     "$@"
 }
 
