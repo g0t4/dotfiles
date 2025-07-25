@@ -108,6 +108,7 @@ expand_abbr() {
     fi
 
     # * inject expansion and move cursor
+    # shellcheck disable=SC2155
     local set_cursor=$(lookup_cursor_set_char "$word_before_cursor")
     if [[ $set_cursor ]]; then
         # * --set-cursor
