@@ -17,6 +17,15 @@ is_anywhere_allowed() {
     [[ -n "$word" && "${abbrs_anywhere["$word"]}" = "yes" ]]
 }
 
+lookup_only_cmd() {
+    local word="$1"
+    if [[ -z "$word" ]]; then
+        # key lookup fails if word is empty
+        echo ""
+    fi
+    echo "${abbrs_command["$word"]}"
+}
+
 expand_abbr() {
     local key="$1"
     # echo "READLINE_LINE: $READLINE_LINE"
@@ -64,15 +73,6 @@ expand_abbr() {
         # TODO lists (sequential commands - check position relative to current 'simple command')...
         #  need something that can tokenize the line... for now these will just work in simple commands only which is 90% of what I want anyways
     fi
-
-    lookup_only_cmd() {
-        local word="$1"
-        if [[ -z "$word" ]]; then
-            # key lookup fails if word is empty
-            echo ""
-        fi
-        echo "${abbrs_command["$word"]}"
-    }
 
     # shellcheck disable=SC2155
     local only_cmd=$(lookup_only_cmd "$word_before_cursor")
