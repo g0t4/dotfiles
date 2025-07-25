@@ -103,6 +103,7 @@ expand_abbr() {
 }
 # * expand on <Space>
 bind -x '" ": expand_abbr " "'
+# bind -x '";": expand_abbr ";"' # TODO add test first # gst; should expand
 
 # * expand on <Return>
 expand_hack='\C-x\C-['
@@ -387,6 +388,21 @@ test_expand_abbr() {
     start_test expand_abbr " "
     expect_equal "$READLINE_LINE" "bar "
     expect_equal "$READLINE_POINT" 4
+
+    # PRN intercept ; too so `gst;` expands, else just insert ;
+
+    # TODO assume separators for pipelines/lists indicate next word is in command position
+    # simple command is what I have now:
+    #   gst<SPACE> => git status
+    # pipelines (| or |& separator, sequence of commands)
+    #   command1 | command2
+    # lists (sequence of pipelines - ; & && or ||)
+    #   command1; command2; cmda | cmdb; command_n
+    # compound commands
+    #   ( list ) # subshell
+    #   { list; } # group command
+    #   (( arithmetic_expr ))
+    #   [[ conditional_expr ]]
 
 }
 test_expand_abbr
