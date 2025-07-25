@@ -112,7 +112,6 @@ expand_abbr() {
     local set_cursor_char=$(lookup_cursor_set_char "$word_before_cursor")
     if [[ $set_cursor_char ]]; then
         # locate set_cursor char (i.e. %) in the expanded text
-        local set_cursor_char="$set_cursor_char"
         local before_cursor="${expanded%%"${set_cursor_char}"*}" # everything before %
         local after_cursor="${expanded#*"${set_cursor_char}"}"   # everything after %
         # effectively strips the % char (b/c its the cursor marker)
