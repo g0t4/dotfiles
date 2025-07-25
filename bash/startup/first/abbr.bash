@@ -110,7 +110,7 @@ expand_abbr() {
     # * inject expansion and move cursor
     # shellcheck disable=SC2155
     local set_cursor_char=$(lookup_cursor_set_char "$word_before_cursor")
-    if [[ $set_cursor_char ]]; then
+    if [[ -n "$set_cursor_char" ]]; then
         # locate set_cursor char (i.e. %) in the expanded text
         local before_cursor_char="${expanded%%"${set_cursor_char}"*}" # everything before %
         local after_cursor_char="${expanded#*"${set_cursor_char}"}"   # everything after %
