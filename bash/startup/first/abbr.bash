@@ -143,7 +143,9 @@ abbr() {
 
 }
 
+# shellcheck disable=SC2317 # sick of it complaining about unused options in while loop
 ealias() {
+
     # compat layer, also this is where I'll accept --NoSpaceAfter
     # FORMAT
     #   key=value
