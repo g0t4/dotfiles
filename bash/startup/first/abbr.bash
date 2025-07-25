@@ -348,6 +348,13 @@ test_parse_abbr_args() {
     expect_equal "${abbrs[hello]}" ""
     expect_equal "${abbrs_set_cursor[hello]}" ""
 
+    # * --set-cursor=!
+    start_test abbr foo='b!ar' --set-cursor='!'
+    expect_equal "${abbrs[foo]}" "b!ar"
+    expect_equal "${abbrs_set_cursor[foo]}" '!'
+    expect_equal "${abbrs_no_space_after[foo]}" ""
+    reset_abbrs
+
     # * tests --no-space-after
     start_test abbr foo=bar --no-space-after
     expect_equal "${abbrs[foo]}" "bar"
