@@ -565,7 +565,7 @@ test_expand_abbr() {
     # expect_equal "$READLINE_LINE" "cmd hello "
     # expect_equal "$READLINE_POINT" 10
 
-    # * middle of commandline
+    # * middle of commandline (command position, abbr)
     label_test "middle of commandline: on abbr in command position"
     reset_abbrs
     abbr foo bar
@@ -575,8 +575,18 @@ test_expand_abbr() {
     expect_equal "$READLINE_LINE" "bar  the car" # YES it adds a space too, so there are two... that is 100% expected
     expect_equal "$READLINE_POINT" 4
 
+    # * middle of commandline (command position, abbr, BUT not at end of abbr => adds space)
+    label_test "middle of commandline: on abbr in command position, but NOT at end of abbr: adds space only"
+    reset_abbrs
+    abbr foo bar
+    READLINE_LINE="foo the car"
+    READLINE_POINT=2 # cursor after `fo` which is not full abbr text
+    expand_abbr " "
+    expect_equal "$READLINE_LINE" "fo o the car"
+    expect_equal "$READLINE_POINT" 3
+
     # * middle of commandline
-    label_test "middle of commandline: not on abbr, does nothing"
+    label_test "middle of commandline: not on abbr, adds space only"
     reset_abbrs
     abbr foo bar
     READLINE_LINE="foo the car"
