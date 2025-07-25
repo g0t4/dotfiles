@@ -5,4 +5,8 @@
 
 #  BTW... some things may "run" but not work the same if there's a runtime discrepancy
 
-abbr | sort | grep -vE '\-\-(function|regex|command)' | grep -v "\\\'" >aliases.bash
+# skip options I am not ready to parse yet
+abbr | sort | grep -vE '\-\-(function|regex|command).* -- ' | grep -v "\\\'" >aliases.bash
+
+# sort both just to be safe, else comm won't work
+comm -23 (abbr | sort | psub) (sort aliases.bash | psub) >skipped.bash
