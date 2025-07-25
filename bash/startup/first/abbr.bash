@@ -116,7 +116,7 @@ expand_abbr() {
         # i.e. foo%bar => before=foo after=bar
 
         READLINE_LINE="${prefix}${before_cursor_char}${after_cursor_char}${add_char}${suffix}"
-        READLINE_POINT=$((${#before_cursor_char} + ${#prefix}))
+        READLINE_POINT=$((${#prefix} + ${#before_cursor_char}))
     else
         # * cursor moves after expanded/add_char
 
