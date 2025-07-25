@@ -447,6 +447,42 @@ test_expand_abbr() {
     expect_equal "$READLINE_LINE" "limited bar "
     expect_equal "$READLINE_POINT" 12
 
+    label_test "position not set - works in command position"
+    reset_abbrs
+    abbr foo bar
+    READLINE_LINE="foo"
+    READLINE_POINT=3
+    expand_abbr " "
+    expect_equal "$READLINE_LINE" "bar "
+    expect_equal "$READLINE_POINT" 4
+
+    label_test "position not set - DOES NOT work in NON command position"
+    reset_abbrs
+    abbr foo bar
+    READLINE_LINE="cmd foo"
+    READLINE_POINT=7
+    expand_abbr " "
+    expect_equal "$READLINE_LINE" "cmd foo "
+    expect_equal "$READLINE_POINT" 8
+
+    label_test "--position=anywhere - works in command position"
+    reset_abbrs
+    abbr foo bar --position=anywhere
+    READLINE_LINE="foo"
+    READLINE_POINT=3
+    expand_abbr " "
+    expect_equal "$READLINE_LINE" "bar "
+    expect_equal "$READLINE_POINT" 4
+
+    label_test "--position=anywhere - works in NON command position"
+    reset_abbrs
+    abbr foo bar --position=anywhere
+    READLINE_LINE="cmd foo"
+    READLINE_POINT=7
+    expand_abbr " "
+    expect_equal "$READLINE_LINE" "cmd bar "
+    expect_equal "$READLINE_POINT" 8
+
     # PRN intercept ; too so `gst;` expands, else just insert ;
 
     # TODO assume separators for pipelines/lists indicate next word is in command position
