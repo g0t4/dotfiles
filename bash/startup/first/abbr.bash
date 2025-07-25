@@ -40,7 +40,7 @@ expand_abbr() {
     # * add_char
     local add_char=" "
     local no_expand_add_char=" " # -no-space-after does not apply if no expansion
-    if [[ "$key" == "enter" ]]; then
+    if [[ "$key" = "enter" ]]; then
         # for enter we have the \C-j in the bind macro, not doing that here
         add_char=""
         no_expand_add_char=""
@@ -59,7 +59,7 @@ expand_abbr() {
     fi
 
     local allowed_position="no"
-    if [[ $word_start_offset -eq 0 || $anywhere == "yes" ]]; then
+    if [[ $word_start_offset -eq 0 || $anywhere = "yes" ]]; then
         allowed_position=yes
         # TODO pipelines
         # TODO lists (sequential commands - check position relative to current 'simple command')...
@@ -82,7 +82,7 @@ expand_abbr() {
         # return
     fi
 
-    if [[ "$expanded" == "" || $allowed_position == "no" ]]; then
+    if [[ "$expanded" = "" || $allowed_position = "no" ]]; then
         # no expansion => insert char and return early
         READLINE_LINE="${prefix}${word_before_cursor}${no_expand_add_char}${suffix}"
         READLINE_POINT=$((${#prefix} + ${#word_before_cursor} + ${#no_expand_add_char}))
@@ -282,10 +282,10 @@ abbr() {
     # FYI check with:
     #     declare -p abbrs_no_space_after
 
-    if [[ "$no_space_after" == "yes" ]]; then
+    if [[ "$no_space_after" = "yes" ]]; then
         abbrs_no_space_after["$key"]=yes
     fi
-    if [[ "$position" == "anywhere" ]]; then
+    if [[ "$position" = "anywhere" ]]; then
         abbrs_anywhere["$key"]=yes
     fi
     if [[ "$set_cursor" ]]; then
