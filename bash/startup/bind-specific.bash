@@ -21,6 +21,7 @@ abbr dx='"${%}"' --position=anywhere --set-cursor
 abbr dxu='${%}' --position=anywhere --set-cursor
 abbr ed*='declare -p'
 abbr ed@#='echo ${#%[@]}' --set-cursor
+abbr edi='echo _"${%[0]}"_' --set-cursor   # array item, adds [0] as a convenience
 abbr edx='echo _"${%}"_' --set-cursor
 abbr edxu='echo _${%}_' --set-cursor
 abbr f@='for item in "${%[@]}"; do echo $item; done' --set-cursor
