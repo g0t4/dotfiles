@@ -538,6 +538,15 @@ test_expand_abbr() {
     expect_equal "$READLINE_LINE" "cmd hello "
     expect_equal "$READLINE_POINT" 10
 
+    label_test "--function=hello - expands to result of function"
+    reset_abbrs
+    abbr foo bar --function=hello
+    READLINE_LINE="foo"
+    READLINE_POINT=3
+    expand_abbr " "
+    expect_equal "$READLINE_LINE" "cmd hello "
+    expect_equal "$READLINE_POINT" 10
+
     # PRN intercept ; too so `gst;` expands, else just insert ;
 
     # TODO assume separators for pipelines/lists indicate next word is in command position
