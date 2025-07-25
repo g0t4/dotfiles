@@ -12,6 +12,11 @@ is_no_space_after_set() {
     [[ -n "$word" && "${abbrs_no_space_after["$word"]}" = "yes" ]]
 }
 
+is_anywhere_allowed() {
+    local word="$1"
+    [[ -n "$word" && "${abbrs_anywhere["$word"]}" = "yes" ]]
+}
+
 expand_abbr() {
     local key="$1"
     # echo "READLINE_LINE: $READLINE_LINE"
@@ -47,11 +52,6 @@ expand_abbr() {
 
     # echo "word_before_cursor: _${word_before_cursor}_"
     # echo "add_char: _${add_char}_"
-
-    is_anywhere_allowed() {
-        local word="$1"
-        [[ -n "$word" && "${abbrs_anywhere["$word"]}" == "yes" ]]
-    }
 
     local anywhere="no"
     if is_anywhere_allowed "${word_before_cursor}"; then
