@@ -48,6 +48,9 @@ snippet d@ "expand array, element-preserving expansion (quoted)"
 snippet d* "expand array, join elements with IFS, but preserve elements (quoted)"
 "\${${1:ARRAY}[*]}"
 
+snippet di
+"\${${1:SCALAR}[${2:INDEX}]}"
+
 snippet d@# "expand array length"
 \${#${1:ARRAY}[@]}
 
@@ -64,5 +67,8 @@ echo "${1}: _\${${1:SCALAR}}_"
 # only issue with declare -p is if it isn't assigned, blows up... fine for now, might change here later
 snippet ed* 'echo array"
 declare -p ${name}
+
+snippet edi
+echo "${1}[${2}]: _\${${1:SCALAR}[${2:INDEX}]}_"
 
 
