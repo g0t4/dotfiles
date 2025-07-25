@@ -179,6 +179,11 @@ ealias() {
             position="${1#*=}"
             shift
             ;;
+        --position)
+            # required value is thus next arg => $2
+            position="${2}"
+            shift 2
+            ;;
         -g)
             # TODO remove -g support?
             position="anywhere"
