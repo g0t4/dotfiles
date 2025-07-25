@@ -8,6 +8,8 @@ declare -A abbrs_function=()
 declare -A abbrs_command=()
 expand_abbr() {
     local key="$1"
+    echo "READLINE_LINE: $READLINE_LINE"
+    echo "READLINE_POINT: $READLINE_POINT"
 
     # * pseudo-tokenize (prefix / word_before_cursor / cursor / suffix)
     local line_before_cursor="${READLINE_LINE:0:READLINE_POINT}"
@@ -88,6 +90,10 @@ expand_abbr() {
         READLINE_POINT=$((${#before_cursor} + ${#prefix}))
     else
         # * cursor moves afte expanded/add_char
+
+        echo "#prefix: ${#prefix} '${prefix}'"
+        echo "#expanded: ${#expanded} '${expanded}'"
+        echo "#add_char: ${#add_char} '${add_char}'"
 
         READLINE_LINE="${prefix}${expanded}${add_char}${suffix}"
         # move cursor right AFTER add_char (so if in middle of line, won't go to end)
@@ -372,3 +378,15 @@ test_parse_abbr_args() {
     # exit
 }
 # test_parse_abbr_args
+
+test_expand_abbr() {
+
+    abbr foo bar
+    READLINE_LINE=foo
+    READLINE_POINT=3
+    start_test expand_abbr " "
+    expect_equal "$READLINE_LINE" "bar "
+    expect_equal "$READLINE_POINT" 4
+
+}
+test_expand_abbr
