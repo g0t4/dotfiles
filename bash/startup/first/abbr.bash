@@ -397,7 +397,7 @@ test_parse_abbr_args() {
     # exit when testing completes, that way you can easily run bash again to test again
     # exit
 }
-test_parse_abbr_args
+# test_parse_abbr_args
 
 abbr gst "git status"
 abbr gdlc "git log --patch HEAD~1..HEAD"

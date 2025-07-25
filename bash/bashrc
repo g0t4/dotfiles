@@ -9,6 +9,7 @@ my_loc=$(dirname "$(realpath "${BASH_SOURCE[0]}")")
 for script in "$my_loc/startup/first/"*.bash; do
     source "$script"
 done
+source "$my_loc/.generated.aliases.bash"
 for script in "$my_loc/startup/"*.bash; do
     source "$script"
 done
