@@ -539,6 +539,8 @@ test_expand_abbr() {
     expect_equal "$READLINE_LINE" "cmd hello "
     expect_equal "$READLINE_POINT" 10
 
+    # TODO expand in middle of a commandline, do I have tests of this? it should work fine
+
     # * ; semicolon trigger tests
     label_test "semicolon trigger instead of space"
     reset_abbrs
@@ -559,7 +561,15 @@ test_expand_abbr() {
     expect_equal "$READLINE_LINE" "bar|"
     expect_equal "$READLINE_POINT" 4
 
-    # PRN intercept ; too so `gst;` expands, else just insert ;
+    # *** multi-command commandline tests
+    label_test "should expand command position after a pipe"
+    reset_abbrs
+    abbr foo bar
+    READLINE_LINE="echo hello | foo"
+    READLINE_POINT=16
+    expand_abbr "|"
+    expect_equal "$READLINE_LINE" "echo hello | bar "
+    expect_equal "$READLINE_POINT" 17
 
     # TODO assume separators for pipelines/lists indicate next word is in command position
     # simple command is what I have now:
