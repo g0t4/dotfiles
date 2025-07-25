@@ -5,13 +5,14 @@ abbr gcmsg='git commit -m "%"' --no-space-after --set-cursor
 abbr gl10 "git log -10"
 
 # declare -p abbrs  # sanity check
-abbr declarep "declare -p"
+abbr declarep "declare -p % | bat -l bash" --set-cursor
 
 # TODO mirror with sh.snippets from my nvim config...
-# would be cool to get a full blown snippet system in bash (and other shells)...
+# * would be cool to get a full blown snippet system in bash (and other shells)...
 #  ea => echo "${placeholder1[@]}" # put cursor on placeholder1 slot
 #     I could do this with cursor positioning like --set-cursor in fish abbrs
 #     and I had an IMPL of that in zsh prior
+#     jump positions too with Ctrl-J or similar (like nvim)
 # shellcheck disable=SC2016 # expressions in single quotes don't expand, yup that's the point here!
 abbr d@='"${%[@]}"' --position=anywhere --set-cursor
 abbr d@#='"${#%[@]}"' --position=anywhere --set-cursor

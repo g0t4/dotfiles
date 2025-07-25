@@ -89,7 +89,7 @@ expand_abbr() {
         READLINE_LINE="${prefix}${before_cursor}${after_cursor}${add_char}${suffix}"
         READLINE_POINT=$((${#before_cursor} + ${#prefix}))
     else
-        # * cursor moves afte expanded/add_char
+        # * cursor moves after expanded/add_char
 
         echo "#prefix: ${#prefix} '${prefix}'"
         echo "#expanded: ${#expanded} '${expanded}'"
