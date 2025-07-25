@@ -22,8 +22,18 @@ lookup_only_cmd() {
     if [[ -z "$word" ]]; then
         # key lookup fails if subscript is empty b/c it's treated as passing no subscript! foo[""] => foo[]
         echo -n ""
+        return
     fi
     echo -n "${abbrs_command["$word"]}"
+}
+
+lookup_cursor_set_char() {
+    local word="$1"
+    if [[ -z "$word" ]]; then
+        echo ""
+        return
+    fi
+    echo "${abbrs_set_cursor["$word_before_cursor"]}"
 }
 
 expand_abbr() {
@@ -98,7 +108,7 @@ expand_abbr() {
     fi
 
     # * inject expansion and move cursor
-    local set_cursor="${abbrs_set_cursor["$word_before_cursor"]}"
+    local set_cursor=$(lookup_cursor_set_char "$word_before_cursor")
     if [[ $set_cursor ]]; then
         # * --set-cursor
 
