@@ -26,6 +26,14 @@ start_test() {
     "$@"
 }
 
+# Text attributes
+RESET="\e[0m"
+BOLD="\e[1m"
+DIM="\e[2m"
+ITALIC="\e[3m" # Not supported in all terminals
+UNDERLINE="\e[4m"
+REVERSED="\e[7m"
+
 # * Regular colors
 BLACK="\e[30m"
 RED="\e[31m"
@@ -37,17 +45,18 @@ CYAN="\e[36m"
 WHITE="\e[37m"
 
 # * Bold + color (single merged sequence)
-BOLD_BLACK="\e[1;30m"
-BOLD_RED="\e[1;31m"
-BOLD_GREEN="\e[1;32m"
-BOLD_YELLOW="\e[1;33m"
-BOLD_BLUE="\e[1;34m"
-BOLD_MAGENTA="\e[1;35m"
-BOLD_CYAN="\e[1;36m"
-BOLD_WHITE="\e[1;37m"
+BOLD_BLACK="${BOLD}\e[30m"
+BOLD_RED="${BOLD}\e[31m"
+BOLD_GREEN="${BOLD}\e[32m"
+BOLD_YELLOW="${BOLD}\e[33m"
+BOLD_BLUE="${BOLD}\e[34m"
+BOLD_MAGENTA="${BOLD}\e[35m"
+BOLD_CYAN="${BOLD}\e[36m"
+BOLD_WHITE="${BOLD}\e[37m"
 
-# Reset
-RESET="\e[0m"
+# 256 colors - 8-bit color
+# ESC[38;5;{ID}m	Set foreground color.
+# ESC[48;5;{ID}m	Set background color.
 
 # Example usage
 label_test() {
