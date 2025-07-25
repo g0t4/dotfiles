@@ -266,7 +266,7 @@ _relative_path() {
     python3 -c 'import os,sys; print(os.path.relpath(sys.argv[1]))' "$1"
 }
 
-test_abbr() {
+test_parse_abbr_args() {
 
     expect_equal() {
         local actual="$1"
@@ -349,7 +349,7 @@ test_abbr() {
     # exit when testing completes, that way you can easily run bash again to test again
     exit
 }
-# test_abbr
+# test_parse_abbr_args
 
 abbr gst "git status"
 abbr gdlc "git log --patch HEAD~1..HEAD"
