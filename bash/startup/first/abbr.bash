@@ -45,7 +45,6 @@ expand_abbr() {
         add_char=""
         no_expand_add_char=""
     fi
-
     if is_no_space_after_set "$word_before_cursor"; then
         add_char=""
     fi
