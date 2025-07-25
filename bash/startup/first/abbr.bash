@@ -6,6 +6,12 @@ declare -A abbrs_set_cursor=()
 declare -A abbrs_anywhere=()
 declare -A abbrs_function=()
 declare -A abbrs_command=()
+
+is_no_space_after_set() {
+    local word="$1"
+    [[ -n "$word" && "${abbrs_no_space_after["$word"]}" = "yes" ]]
+}
+
 expand_abbr() {
     local key="$1"
     # echo "READLINE_LINE: $READLINE_LINE"
@@ -34,11 +40,6 @@ expand_abbr() {
         add_char=""
         no_expand_add_char=""
     fi
-
-    is_no_space_after_set() {
-        local word="$1"
-        [[ -n "$word" && "${abbrs_no_space_after["$word"]}" = "yes" ]]
-    }
 
     if is_no_space_after_set "$word_before_cursor"; then
         add_char=""
