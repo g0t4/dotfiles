@@ -385,6 +385,7 @@ test_parse_abbr_args() {
 
 test_expand_abbr() {
 
+    # * vanilla abbr
     reset_abbrs
     abbr foo bar
     READLINE_LINE=foo
@@ -393,12 +394,31 @@ test_expand_abbr() {
     expect_equal "$READLINE_LINE" "bar "
     expect_equal "$READLINE_POINT" 4
 
+    # * vanilla w/ --no-space-after
+    reset_abbrs
+    abbr foo bar --no-space-after
+    READLINE_LINE=foo
+    READLINE_POINT=3
+    start_test expand_abbr " "
+    expect_equal "$READLINE_LINE" "bar"
+    expect_equal "$READLINE_POINT" 3
+
+    # * --set-cursor
     reset_abbrs
     abbr foo "echo '%'" --set-cursor
     READLINE_LINE=foo
     READLINE_POINT=3
     start_test expand_abbr " "
     expect_equal "$READLINE_LINE" "echo '' "
+    expect_equal "$READLINE_POINT" 6
+
+    # * --no-space-after + --set-cursor (might not be useful together but lets just verify behavior)
+    reset_abbrs
+    abbr foo "echo '%'" --set-cursor --no-space-after
+    READLINE_LINE=foo
+    READLINE_POINT=3
+    start_test expand_abbr " "
+    expect_equal "$READLINE_LINE" "echo ''"
     expect_equal "$READLINE_POINT" 6
 
     # PRN intercept ; too so `gst;` expands, else just insert ;
