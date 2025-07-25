@@ -450,6 +450,15 @@ test_expand_abbr() {
     expect_equal "$READLINE_LINE" "echo '' "
     expect_equal "$READLINE_POINT" 6
 
+    label_test "--set-cursor='_'"
+    reset_abbrs
+    abbr foo "echo '_'" --set-cursor='_'
+    READLINE_LINE=foo
+    READLINE_POINT=3
+    expand_abbr " "
+    expect_equal "$READLINE_LINE" "echo '' "
+    expect_equal "$READLINE_POINT" 6
+
     label_test "--no-space-after + --set-cursor"
     reset_abbrs
     abbr foo "echo '%'" --set-cursor --no-space-after
