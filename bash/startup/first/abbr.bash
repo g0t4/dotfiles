@@ -264,10 +264,10 @@ abbr() {
 
     local key
     local value
-    if [[ ${#positional_args[@]} == 1 ]]; then
+    if [[ ${#positional_args[@]} -eq 1 ]]; then
         key="${positional_args%=*}"   # strip '=' thru end
         value="${positional_args#*=}" # strip prefix to '='
-    elif [[ ${#positional_args[@]} == 2 ]]; then
+    elif [[ ${#positional_args[@]} -eq 2 ]]; then
         key="${positional_args[0]}"
         value="${positional_args[1]}"
     else
