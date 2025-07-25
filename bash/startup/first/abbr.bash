@@ -39,6 +39,25 @@ expand_abbr() {
     local allowed_position="no"
     if [[ $word_start_offset -eq 0 || $anywhere == "yes" ]]; then
         allowed_position=yes
+        # TODO pipelines
+        # TODO lists (sequential commands - check position relative to current 'simple command')...
+        #  need something that can tokenize the line... for now these will just work in simple commands only which is 90% of what I want anyways
+    fi
+
+    local only_cmd=""
+    if [[ "$word_before_cursor" && "${abbrs_command["$word_before_cursor"]}" ]]; then
+        only_cmd="${abbrs_command["$word_before_cursor"]}"
+        #  cmd (at start of line) matches --command... use this to set allowed_position (override other checks above)
+        # TODO consider pipelines / lists for what is current command (vs just simple command)
+        first_word="${READLINE_LINE%% *}" # greedy strip end of line until first space in line => thus first command
+        if [[ "$only_cmd" = "$first_word" ]]; then
+            allowed_position=yes
+        else
+            allowed_position=no
+        fi
+        # echo "READLINE_LINE: $READLINE_LINE" # leave as reminder, echo prints above prompt, great for troubleshooting!
+        # echo "first_word: $first_word"
+        # return
     fi
 
     if [[ "$expanded" == "" || $allowed_position == "no" ]]; then
@@ -251,7 +270,6 @@ abbr() {
         abbrs_function["$key"]="$func"
     fi
     if [[ "$cmd" ]]; then
-        # TODO use --command, currently ONLY parsing it
         abbrs_command["$key"]="$cmd"
     fi
 
