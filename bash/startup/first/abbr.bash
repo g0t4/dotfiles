@@ -318,6 +318,11 @@ abbr() {
 }
 
 reset_abbrs() {
+    if ((${#abbrs[@]} >= 10)); then
+        # most tests have one abbr (maybe two?) ... so use 10 as a threshold to assume you ran tests in a real shell (after real abbrs loaded) and reset them and that's not wise to then use for real
+        echo -e "${BOLD_RED} resetting ${#abbrs[@]} abbrs... restart shell after tests run, do not continue to use shell beyond test runs ${RESET}"
+    fi
+
     abbrs=()
     abbrs_no_space_after=()
     abbrs_set_cursor=()

@@ -28,7 +28,7 @@ if ((\${#${1:variable}} >= 1)); then
 fi
 
 snippet check_array_length
-if ((\${#${1:array}} >= 1)); then
+if ((\${#${1:array}[@]} >= 1)); then
     ${0:declare -p ${1}}
 fi
 
