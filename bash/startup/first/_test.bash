@@ -22,15 +22,28 @@ expect_equal() {
 
 expect_function_exists() {
     local name="$1"
-    if ! declare -F "$name" >/dev/null; then
-        local caller_file
-        caller_file=$(_relative_path "${BASH_SOURCE[1]}")
-        local caller_line_num="${BASH_LINENO[0]}"
+    local must_contain="$2" # OPTIONAL ARG to verify definition contains this string (i.e. subset of code)
 
-        echo "  ❌ $caller_file:$caller_line_num — Expected function '$name' to exist" >&2
+    if ! declare -F "$name" >/dev/null; then
+        local file=$(_relative_path "${BASH_SOURCE[1]}")
+        local line="${BASH_LINENO[0]}"
+        echo "  ❌ $file:$line — Expected function '$name' to exist" >&2
         echo -n "  "
-        bat --line-range "${caller_line_num}" "$caller_file"
+        bat --line-range "$line" "$file"
         return 1
+    fi
+
+    if [[ -n "$must_contain" ]]; then
+        local body
+        body=$(declare -f "$name")
+        if [[ "$body" != *"$must_contain"* ]]; then
+            local file=$(_relative_path "${BASH_SOURCE[1]}")
+            local line="${BASH_LINENO[0]}"
+            echo "  ❌ $file:$line — Function definition (for '$name') does not contain: $must_contain" >&2
+            echo -n "  "
+            bat --line-range "$line" "$file"
+            return 1
+        fi
     fi
 }
 

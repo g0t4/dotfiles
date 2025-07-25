@@ -344,7 +344,7 @@ test_parse_abbr_args() {
     expect_equal "${abbrs_set_cursor[foo]}" "%"
     expect_equal "${abbrs_no_space_after[foo]}" ""
     # * validate stub function created
-    expect_function_exists foo
+    expect_function_exists foo "echo 'abbrs are not intended to be executed directly"
     expect_equal "${abbrs_stub_func_names[foo]}" "foo" # foo should have a stub function (for tab completion)
 
     start_test abbr --set-cursor hello=world
