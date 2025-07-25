@@ -269,11 +269,6 @@ abbr() {
             # ignore -a, it's a meaningless option from fish's abbr
             shift
             ;;
-        -g)
-            echo "-g is DEPRECATED please remove it in favor of --position=anywhere"
-            position="anywhere"
-            shift
-            ;;
         --) # explicit end of options
             shift
             break # stop checking for options (rest are positional)
