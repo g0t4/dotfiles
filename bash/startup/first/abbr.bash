@@ -148,9 +148,9 @@ command_exists() {
 }
 
 _abbr() {
-    # PRN handle options (if any) when I add abbrs that use them
-    # PRN do I need to slice all remaining args?
     abbrs["${1}"]="${2}"
+
+    # PRN handle replace gracefully... not sure I need to do anything special?
 
     # if a command/func exists, don't shadow it, the whole point of an abbr is to alter what is _typed_
     # - thankfully tab completion works fine if it already exists as a command/func!
