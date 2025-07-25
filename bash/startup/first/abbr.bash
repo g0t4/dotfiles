@@ -161,6 +161,7 @@ _abbr() {
         # - i.e. g<TAB> includes abbrs starting with g!
         # eval "function ${1} { exec_abbr '${1}' \"\$@\"; }" # old design with fallback execution of abbr... would be ok to use again if I really find myself needing this
         eval "function ${1} { echo 'abbrs are not intended to be executed directly (i.e. if you disable abbr expansion)... if you think this is masking a real command, restart your shell to re-create abbrs and this warning will go away'; }"
+        abbrs_stub_func_names["$1"]="$1"
 
         # FYI, for now I am happy checking for shadowed command/function at abbr definition time
         #  if user later:
