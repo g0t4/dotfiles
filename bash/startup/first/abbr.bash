@@ -120,9 +120,9 @@ expand_abbr() {
     else
         # * cursor moves after expanded/add_char
 
-        echo "#prefix: ${#prefix} '${prefix}'"
-        echo "#expanded: ${#expanded} '${expanded}'"
-        echo "#add_char: ${#add_char} '${add_char}'"
+        # echo "#prefix: ${#prefix} '${prefix}'"
+        # echo "#expanded: ${#expanded} '${expanded}'"
+        # echo "#add_char: ${#add_char} '${add_char}'"
 
         READLINE_LINE="${prefix}${expanded}${add_char}${suffix}"
         # move cursor right AFTER add_char (so if in middle of line, won't go to end)
