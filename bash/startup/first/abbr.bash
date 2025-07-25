@@ -372,31 +372,3 @@ test_parse_abbr_args() {
     # exit
 }
 # test_parse_abbr_args
-
-abbr gst "git status"
-abbr gdlc "git log --patch HEAD~1..HEAD"
-
-# abbr gcmsg='git commit -m "' --no-space-after
-abbr gcmsg='git commit -m "%"' --no-space-after --set-cursor
-abbr gp="git push"
-
-abbr gap "git add --patch"
-abbr gdc "git diff --cached --color-words"
-abbr gl "git log"
-abbr gl10 "git log -10"
-
-abbr n nvim
-
-abbr dils "docker image ls"
-abbr dcls "docker container ls"
-
-# declare -p abbrs  # sanity check
-abbr declarep "declare -p"
-# would be cool to get a full blown snippet system in bash (and other shells)...
-#  ea => echo "${placeholder1[@]}" # put cursor on placeholder1 slot
-#     I could do this with cursor positioning like --set-cursor in fish abbrs
-#     and I had an IMPL of that in zsh prior
-# shellcheck disable=SC2016 # expressions in single quotes don't expand, yup that's the point here!
-abbr ea='echo "${%[@]}"' -g --set-cursor
-
-abbr pIFS "echo -n \"\${IFS}\" | hexdump -C" # block word splitting, or it will split it's own characters :)
