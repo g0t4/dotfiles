@@ -58,7 +58,7 @@ expand_abbr() {
     fi
 
     local allowed_position="no"
-    if [[ $word_start_offset -eq 0 || $anywhere = "yes" ]]; then
+    if [[ $word_start_offset -eq 0 || "$anywhere" = "yes" ]]; then
         allowed_position=yes
         # TODO pipelines
         # TODO lists (sequential commands - check position relative to current 'simple command')...
@@ -81,7 +81,7 @@ expand_abbr() {
         # return
     fi
 
-    if [[ "$expanded" = "" || $allowed_position = "no" ]]; then
+    if [[ "$expanded" = "" || "$allowed_position" = "no" ]]; then
         # no expansion => insert char and return early
         READLINE_LINE="${prefix}${word_before_cursor}${no_expand_add_char}${suffix}"
         READLINE_POINT=$((${#prefix} + ${#word_before_cursor} + ${#no_expand_add_char}))
