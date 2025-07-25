@@ -158,6 +158,15 @@ abbr() {
     local position=""
     local positional_args=()
 
+    # * fish abbr:
+    # abbr --add NAME [--position command | anywhere] [-r | --regex PATTERN] [-c | --command COMMAND]
+    #                 [--set-cursor[=MARKER]] ([-f | --function FUNCTION] | EXPANSION)
+    # abbr --erase NAME ...
+    # abbr --rename OLD_WORD NEW_WORD
+    # abbr --show
+    # abbr --list
+    # abbr --query NAME ...
+
     # getopt SUCKS.. just use a while loop, it will work FINE
     #  ONE requirement will be to use an = to provide values for options...
     #  so I don't have to statefully parse options (yet)
