@@ -324,9 +324,9 @@ abbr() {
     fi
     if [[ "$func" ]]; then
         # PRN check for the function? and warn?
-        if ! declare -f "$func"; then
-            echo "MISSING FUNCTION for abbr: $func"
-        fi
+        # if ! declare -f "$func"; then
+        #     echo "MISSING FUNCTION for abbr: $func"
+        # fi
 
         abbrs_function["$key"]="$func"
     fi
