@@ -54,12 +54,6 @@ snippet di
 snippet d@# "expand array length"
 \${#${1:ARRAY}[@]}
 
-# [a]rray [f]or-loop
-snippet f@ "loop over array elements - preserve elements (quoted)" b
-for ${2:item} in "\${${1:ARRAY}[@]}"; do
-  ${0:codes}
-done
-
 # * echo variants (keep dx/d@ snippet suffix, e becomes a "namespace" for echo snippets that reuse the inner snippet from non-echo variants)
 snippet edx 'echo variable: ${variable} # labeled"
 echo "${1}: _\${${1:SCALAR}}_"
@@ -70,5 +64,24 @@ declare -p ${name}
 
 snippet edi
 echo "${1}[${2}]: _\${${1:SCALAR}[${2:INDEX}]}_"
+
+
+# * FOR LOOPS
+# [a]rray [f]or-loop
+snippet f@ "loop over array elements - preserve elements (quoted)" b
+for ${2:item} in "\${${1:ARRAY}[@]}"; do
+    ${0:codes}
+done
+
+snippet for_in_range "for in loop, over range of numbers"
+for i in {${2:1}..${1:10}}; do
+    echo "\$${0:i}"
+done
+
+snippet for_in_range_array "for int loop over range of element indexes in an array"
+for i in "\${!${1:ARRAY}[@]}"; do
+    echo "Index \$i: \${${1}[\$i]}"
+done
+
 
 
