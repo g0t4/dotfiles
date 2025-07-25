@@ -34,9 +34,16 @@ expand_abbr() {
         add_char=""
         no_expand_add_char=""
     fi
-    if [[ "$word_before_cursor" && "${abbrs_no_space_after["$word_before_cursor"]}" = "yes" ]]; then
+
+    is_no_space_after_set() {
+        local word="$1"
+        [[ -n "$word" && "${abbrs_no_space_after["$word"]}" = "yes" ]]
+    }
+
+    if is_no_space_after_set "$word_before_cursor"; then
         add_char=""
     fi
+
     # echo "word_before_cursor: _${word_before_cursor}_"
     # echo "add_char: _${add_char}_"
 
