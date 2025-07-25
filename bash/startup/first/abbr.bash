@@ -49,7 +49,7 @@ expand_abbr() {
     # echo "add_char: _${add_char}_"
 
     local anywhere="no"
-    if [[ "$word_before_cursor" && "${abbrs_anywhere["$word_before_cursor"]}" ]]; then
+    if [[ "$word_before_cursor" && "${abbrs_anywhere["$word_before_cursor"]}" == "yes" ]]; then
         anywhere="yes"
     fi
 
