@@ -15,7 +15,7 @@ abbr declarep "declare -p % | bat -l bash" --set-cursor
 #     jump positions too with Ctrl-J or similar (like nvim)
 # shellcheck disable=SC2016 # expressions in single quotes don't expand, yup that's the point here!
 abbr d@='"${%[@]}"' --position=anywhere --set-cursor
-abbr d@#='"${#%[@]}"' --position=anywhere --set-cursor
+abbr d@#='${#%[@]}' --position=anywhere --set-cursor
 abbr d*='"${%[*]}"' --position=anywhere --set-cursor
 abbr dx='"${%}"' --position=anywhere --set-cursor
 abbr dxu='${%}' --position=anywhere --set-cursor
