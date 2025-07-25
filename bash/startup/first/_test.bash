@@ -9,11 +9,15 @@ expect_equal() {
     local message="${3:-Expected '$expected', got '$actual'}"
     if [[ "$expected" != "$actual" ]]; then
 
-        # tmp check how things line up and fix issue with source and lines when run in shell
-        for i in "${!BASH_SOURCE[@]}"; do
-            echo "Index $i: ${BASH_SOURCE[$i]}"
-            echo "          ${FUNCNAME[$i]}"
-        done
+        # FYI something is off when I call test_expand_abbr in a shell (vs via bashrc)... via bashrc is working so use that for now
+        #   something about line numbers is funky per `man bash` and just looking at the output here:
+        #   IIUC there is a diff formula for correlating line to file/func depending on how smth was invoked... UGH to say the least
+        #
+        # for i in "${!BASH_SOURCE[@]}"; do
+        #     echo "Index $i: ${BASH_SOURCE[$i]}"
+        #     echo "          ${FUNCNAME[$i]}"
+        #     echo "          ${BASH_LINENO[$i]}"
+        # done
 
         local caller_file
         caller_file=$(_relative_path "${BASH_SOURCE[1]}")
