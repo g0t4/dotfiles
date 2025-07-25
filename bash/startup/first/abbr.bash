@@ -202,10 +202,10 @@ ealias() {
     # treat remaining args as positional
     positional_args+=("$@")
 
-    echo "  set_cursor=$set_cursor"
-    echo "  no_space_after=$no_space_after"
-    echo "  position=$position"
-    echo "  positional args: ${positional_args[*]}"
+    # echo "  set_cursor=$set_cursor"
+    # echo "  no_space_after=$no_space_after"
+    # echo "  position=$position"
+    # echo "  positional args: ${positional_args[*]}"
 
     local key
     local value
@@ -220,8 +220,8 @@ ealias() {
         echo "but got ${#positional_args[@]} args: ${positional_args[*]}"
         return 1
     fi
-    echo "  key: $key"
-    echo "  value: $value"
+    # echo "  key: $key"
+    # echo "  value: $value"
     abbr "$key" "$value"
 
     # FYI check with:
@@ -334,9 +334,9 @@ test_ealias() {
     # TODO test w/ fish -c "abbr" output and see what works and doesn't work
 
     # exit when testing completes, that way you can easily run bash again to test again
-    # exit
+    exit
 }
-test_ealias
+# test_ealias
 
 abbr gst "git status"
 abbr gdlc "git log --patch HEAD~1..HEAD"
