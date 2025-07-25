@@ -334,8 +334,11 @@ reset_abbrs() {
 
     # * clear stub functions (from tab completion)
     for name in "${abbrs_stub_func_names[@]}"; do
-        unset "$name"
-        # TODO add defensive check of body before remove
+        local body=$(declare -f "$name")
+        local must_contain="echo 'abbrs are not intended to be executed directly"
+        if [[ "$body" == *"$must_contain"* ]]; then
+            unset "$name"
+        fi
     done
     abbrs_stub_func_names=()
 }
