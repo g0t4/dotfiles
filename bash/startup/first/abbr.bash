@@ -47,11 +47,12 @@ expand_abbr() {
     fi
 
     # * inject expansion and move cursor
-    if [[ "${abbrs_set_cursor["$word_before_cursor"]}" ]]; then
+    local set_cursor="${abbrs_set_cursor["$word_before_cursor"]}"
+    if [[ $set_cursor ]]; then
         # * --set-cursor
 
-        # locate % in the expanded text
-        local expand_char="%"
+        # locate set_cursor char (i.e. %) in the expanded text
+        local expand_char="$set_cursor"
         local before_cursor="${expanded%%"${expand_char}"*}" # everything before %
         local after_cursor="${expanded#*"${expand_char}"}"   # everything after %
         # effectively strips the % char (b/c its the cursor marker)
@@ -179,6 +180,7 @@ ealias() {
             shift
             ;;
         -g)
+            # TODO remove -g support?
             position="anywhere"
             shift
             ;;
@@ -225,19 +227,15 @@ ealias() {
     # FYI check with:
     #     declare -p abbrs_no_space_after
 
-    shift # avoid matching on the name=value positional arg $1
-    # remaining args are all for abbr registration, not part of expanded text
-    if indexed_array_contains "--NoSpaceAfter" "${@}"; then
+    if [[ "$no_space_after" ]]; then
         abbrs_no_space_after["$key"]=yes
     fi
-    if indexed_array_contains "-g" "${@}" ||
-        indexed_array_contains "--position=anywhere" "${@}"; then
-        # TODO remove -g support?
+    if [[ "$position" == "anywhere" ]]; then
         abbrs_anywhere["$key"]=yes
     fi
-    if indexed_array_contains "--set-cursor" "${@}"; then
+    if [[ "$set_cursor" ]]; then
         # FYI for now we will only work with % (fish default) that way I don't have to parse that here too
-        abbrs_set_cursor["$key"]=yes
+        abbrs_set_cursor["$key"]="$set_cursor"
     fi
 }
 
@@ -282,7 +280,7 @@ test_ealias() {
 
     start_test ealias foo=bar --set-cursor
     expect_equal "${abbrs[foo]}" "bar"
-    expect_equal "${abbrs_set_cursor[foo]}" "yes"
+    expect_equal "${abbrs_set_cursor[foo]}" "%"
 
     start_test reset_abbrs
     expect_equal "${abbrs[foo]}" ""
