@@ -132,7 +132,7 @@ expand_abbr() {
 }
 # * expand on <Space>
 bind -x '" ": expand_abbr " "'
-# bind -x '";": expand_abbr ";"' # TODO add test first # gst; should expand
+bind -x '";": expand_abbr ";"' # TODO add test first # gst; should expand
 
 # * expand on <Return>
 expand_hack='\C-x\C-['
