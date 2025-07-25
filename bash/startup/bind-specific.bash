@@ -1,5 +1,3 @@
-
-
 # --no-space-after must be defined here, no way to port that b/c it's not part of fish's abbrs
 abbr gcmsg='git commit -m "%"' --no-space-after --set-cursor
 
@@ -8,12 +6,22 @@ abbr gl10 "git log -10"
 
 # declare -p abbrs  # sanity check
 abbr declarep "declare -p"
+
+# TODO mirror with sh.snippets from my nvim config...
 # would be cool to get a full blown snippet system in bash (and other shells)...
 #  ea => echo "${placeholder1[@]}" # put cursor on placeholder1 slot
 #     I could do this with cursor positioning like --set-cursor in fish abbrs
 #     and I had an IMPL of that in zsh prior
 # shellcheck disable=SC2016 # expressions in single quotes don't expand, yup that's the point here!
-abbr ea='echo "${%[@]}"' -g --set-cursor
+abbr d@='"${%[@]}"' --position=anywhere --set-cursor
+abbr d@#='"${#%[@]}"' --position=anywhere --set-cursor
+abbr d*='"${%[*]}"' --position=anywhere --set-cursor
+abbr dx='"${%}"' --position=anywhere --set-cursor
+abbr dxu='${%}' --position=anywhere --set-cursor
+abbr ed@='echo "${%[@]}"' --position=anywhere --set-cursor
+abbr ed@#='echo "${#%[@]}"' --position=anywhere --set-cursor
+abbr edx='echo "${%}"' --position=anywhere --set-cursor
+abbr edxu='echo ${%}' --position=anywhere --set-cursor
+abbr f@='for item in "${%[@]}"; do echo $item; done' --position=anywhere --set-cursor
 
 abbr pIFS "echo -n \"\${IFS}\" | hexdump -C" # block word splitting, or it will split it's own characters :)
-
