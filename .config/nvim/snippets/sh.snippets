@@ -1,0 +1,57 @@
+# FYI I am riffing on this w/o verifying everything! notably descriptions might be wrong as I make changes...
+#  and some may not work... double check if you want to use these! just a quick idea session
+
+# * d == $   (mostly applies to scalars by the way, but focus on the $ which is MEMORABLE and the first char)
+# [d]ollar $ - e[x]pand
+snippet dx "dollar expand quoted (no word splitting)" b
+"\${${1:variable}}"
+
+snippet dxu "dollar expand unquoted (split words)" b
+\${${1:variable}}
+
+snippet d? "dollar expand w/ default fallback - quoted (no word splitting)" b
+"\${${1:variable}:-${2:default}}"
+
+# I hate everything about using this to set variables!
+#snippet d= "Assign if unset: \${var:=default}" b
+#"\${${1:variable}:=${2:default}}"
+
+#snippet d+ "Use alt if set: \${var:+alt}" b
+#"\${${1:variable}:+${2:default}}"
+
+snippet d# "dollar expand length" b
+\${#${1:variable}}
+
+snippet d_strip_prefix "Prefix strip: \${var#pattern}" b
+\${${1:VAR}#${2:pattern}}
+#\${${1:VAR#${2:pattern}}}
+
+snippet d_strip_suffix "Suffix strip: \${var%pattern}" b
+\${${1:VAR}%${2:pattern}}
+#\${${1:VAR%${2:pattern}}}
+
+# * arrays
+# [a]rray e[x]pand
+snippet d@ "expand array, element-preserving expansion (quoted)"
+"\${${1:ARRAY}[@]}"
+
+snippet d* "expand array, join elements with IFS, but preserve elements (quoted)"
+"\${${1:ARRAY}[*]}"
+
+snippet d@# "expand array length"
+\${#${1:ARRAY}[@]}
+
+# [a]rray [f]or-loop
+snippet f@ "Loop over array elements - preserve elements (quoted)" b
+for ${2:item} in "\${${1:ARRAY}[@]}"; do
+  ${0:codes}
+done
+
+# * echo variants (keep dx/d@ snippet suffix, e becomes a "namespace" for echo snippets that reuse the inner snippet from non-echo variants)
+snippet edx 'echo expanded variable"
+echo "\${${1:SCALAR}}"
+
+snippet ed@ 'echo expanded array"
+echo "\${${1:ARRAY}[@]}"
+
+
