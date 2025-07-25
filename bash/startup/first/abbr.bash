@@ -565,7 +565,15 @@ test_expand_abbr() {
     # expect_equal "$READLINE_LINE" "cmd hello "
     # expect_equal "$READLINE_POINT" 10
 
-    # TODO expand in middle of a commandline, do I have tests of this? it should work fine
+    # * expand in middle of a line, not just cursor at end
+    label_test "expand command position, with cursor in MIDDLE of command line, not at end"
+    reset_abbrs
+    abbr foo bar
+    READLINE_LINE="foo the car"
+    READLINE_POINT=3 # cursor after foo, not end of line
+    expand_abbr " "
+    expect_equal "$READLINE_LINE" "bar  the car" # YES it adds a space too, so there are two... that is 100% expected
+    expect_equal "$READLINE_POINT" 4
 
     # * ; semicolon trigger tests
     label_test "semicolon trigger instead of space"
