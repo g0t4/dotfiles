@@ -429,6 +429,15 @@ test_expand_abbr() {
     expect_equal "$READLINE_LINE" "foo "
     expect_equal "$READLINE_POINT" 4
 
+    label_test "current command does not match '--command limited'"
+    reset_abbrs
+    abbr foo bar --command limited
+    READLINE_LINE="other foo"
+    READLINE_POINT=9
+    expand_abbr " "
+    expect_equal "$READLINE_LINE" "other foo "
+    expect_equal "$READLINE_POINT" 10
+
     # PRN intercept ; too so `gst;` expands, else just insert ;
 
     # TODO assume separators for pipelines/lists indicate next word is in command position
