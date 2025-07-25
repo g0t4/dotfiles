@@ -315,6 +315,12 @@ test_ealias() {
     start_test reset_abbrs
     expect_equal "${abbrs_anywhere[foo]}" ""
 
+    # * tests "position anywhere" where no = means it MUST have value in next word
+    start_test ealias --position anywhere foo=bar
+    expect_equal "${abbrs[foo]}" "bar"
+    expect_equal "${abbrs_anywhere[foo]}" "yes"
+    reset_abbrs
+
     # * tests -g works too
     start_test ealias hello=world -g
     expect_equal "${abbrs[hello]}" "world"
