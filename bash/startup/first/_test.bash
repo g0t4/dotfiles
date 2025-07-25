@@ -20,6 +20,20 @@ expect_equal() {
     fi
 }
 
+expect_function_exists() {
+    local name="$1"
+    if ! declare -F "$name" >/dev/null; then
+        local caller_file
+        caller_file=$(_relative_path "${BASH_SOURCE[1]}")
+        local caller_line_num="${BASH_LINENO[0]}"
+
+        echo "  ❌ $caller_file:$caller_line_num — Expected function '$name' to exist" >&2
+        echo -n "  "
+        bat --line-range "${caller_line_num}" "$caller_file"
+        return 1
+    fi
+}
+
 start_test() {
     label_test "$@"
     "$@"
