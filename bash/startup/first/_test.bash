@@ -26,6 +26,9 @@ start_test() {
     "$@"
 }
 
+CYAN="\e[36m"
+BOLD="\e[1m"
+RESET="\e[0m"
 label_test() {
-    echo "TEST: $*"
+    echo -e "${BOLD}${CYAN}TEST:${RESET} $*"
 }
