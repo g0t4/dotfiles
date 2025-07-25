@@ -538,14 +538,15 @@ test_expand_abbr() {
     expect_equal "$READLINE_LINE" "cmd hello "
     expect_equal "$READLINE_POINT" 10
 
-    label_test "--function=hello - expands to result of function"
+    # * ; semicolon trigger tests
+    label_test "semicolon trigger instead of space"
     reset_abbrs
-    abbr foo bar --function=hello
+    abbr foo bar
     READLINE_LINE="foo"
     READLINE_POINT=3
-    expand_abbr " "
-    expect_equal "$READLINE_LINE" "cmd hello "
-    expect_equal "$READLINE_POINT" 10
+    expand_abbr ";"
+    expect_equal "$READLINE_LINE" "bar;" # PRN also insert space after ?
+    expect_equal "$READLINE_POINT" 4
 
     # PRN intercept ; too so `gst;` expands, else just insert ;
 
