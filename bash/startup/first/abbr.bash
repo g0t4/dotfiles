@@ -429,19 +429,13 @@ test_parse_abbr_args() {
     expect_equal "${abbrs_anywhere[foo]}" "yes"
     reset_abbrs
 
-    # * tests -g works too
-    start_test abbr hello=world -g
+    # * -- w/ options before
+    start_test abbr --position=anywhere -- hello=world
     expect_equal "${abbrs[hello]}" "world"
     expect_equal "${abbrs_anywhere[hello]}" "yes"
     reset_abbrs
 
-    # * tests -- works
-    start_test abbr -g -- hello=world
-    expect_equal "${abbrs[hello]}" "world"
-    expect_equal "${abbrs_anywhere[hello]}" "yes"
-    reset_abbrs
-
-    # * no options, just -- and positional
+    # * ONLY -- key=value (no options)
     start_test abbr -- hello=world
     expect_equal "${abbrs[hello]}" "world"
     reset_abbrs
