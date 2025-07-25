@@ -111,12 +111,10 @@ expand_abbr() {
     # shellcheck disable=SC2155
     local set_cursor=$(lookup_cursor_set_char "$word_before_cursor")
     if [[ $set_cursor ]]; then
-        # * --set-cursor
-
         # locate set_cursor char (i.e. %) in the expanded text
-        local expand_char="$set_cursor"
-        local before_cursor="${expanded%%"${expand_char}"*}" # everything before %
-        local after_cursor="${expanded#*"${expand_char}"}"   # everything after %
+        local set_cursor_char="$set_cursor"
+        local before_cursor="${expanded%%"${set_cursor_char}"*}" # everything before %
+        local after_cursor="${expanded#*"${set_cursor_char}"}"   # everything after %
         # effectively strips the % char (b/c its the cursor marker)
         # PRN map diff char than % ONLY IF issues with %... i.e. would mean I need an abbr that has % in the expanded text AND --set-cursor at same time
 
