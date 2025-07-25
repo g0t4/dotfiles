@@ -403,6 +403,8 @@ test_expand_abbr() {
     #   { list; } # group command
     #   (( arithmetic_expr ))
     #   [[ conditional_expr ]]
+    #
+    # ultimately it would be nice to have a parser that can tokenize and identify command positions for me
 
 }
 test_expand_abbr
