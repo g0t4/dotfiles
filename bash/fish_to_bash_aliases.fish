@@ -7,7 +7,7 @@
 
 # skip options I am not ready to parse yet
 #  ' -- ' after arg ensures not a match in the abbr's "key value" positional args
-abbr | sort | grep -vE '\-\-(function|regex).* -- ' | grep -v "\\\'" >.generated.aliases.bash
+abbr | sort | grep -vE '\-\-(function|regex).* -- ' | grep -v "\\\'" | grep -v "\-- -F" >.generated.aliases.bash
 # TODO I have --function parsed.. just need to impl them before I allow them to cross over
 
 # sort both just to be safe, else comm won't work
