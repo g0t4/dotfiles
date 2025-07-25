@@ -48,8 +48,13 @@ expand_abbr() {
     # echo "word_before_cursor: _${word_before_cursor}_"
     # echo "add_char: _${add_char}_"
 
+    is_anywhere_allowed() {
+        local word="$1"
+        [[ -n "$word" && "${abbrs_anywhere["$word"]}" == "yes" ]]
+    }
+
     local anywhere="no"
-    if [[ "$word_before_cursor" && "${abbrs_anywhere["$word_before_cursor"]}" == "yes" ]]; then
+    if is_anywhere_allowed "${word_before_cursor}"; then
         anywhere="yes"
     fi
 
