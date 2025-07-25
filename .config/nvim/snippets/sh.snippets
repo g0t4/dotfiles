@@ -22,6 +22,16 @@ snippet d? "dollar expand w/ default fallback - quoted (no word splitting)" b
 snippet d# "dollar expand length" b
 \${#${1:variable}}
 
+snippet check_string_length
+if ((\${#${1:variable}} >= 1)); then
+    ${0:echo ___}
+fi
+
+snippet check_array_length
+if ((\${#${1:array}} >= 1)); then
+    ${0:declare -p ${1}}
+fi
+
 snippet d_strip_prefix "Prefix strip: \${var#pattern}" b
 \${${1:VAR}#${2:pattern}}
 #\${${1:VAR#${2:pattern}}}
