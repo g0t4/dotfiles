@@ -1,19 +1,19 @@
 # Colors
-RESET="\[\e[0m\]"
-RED="\[\e[31m\]"
-GREEN="\[\e[32m\]"
-YELLOW="\[\e[33m\]"
-BLUE="\[\e[34m\]"
-MAGENTA="\[\e[35m\]"
-CYAN="\[\e[36m\]"
-BOLD="\[\e[1m\]"
-UNDERLINE="\[\e[4m\]"
+PROMPT_RESET="\[\e[0m\]"
+PROMPT_RED="\[\e[31m\]"
+PROMPT_GREEN="\[\e[32m\]"
+PROMPT_YELLOW="\[\e[33m\]"
+PROMPT_BLUE="\[\e[34m\]"
+PROMPT_MAGENTA="\[\e[35m\]"
+PROMPT_CYAN="\[\e[36m\]"
+PROMPT_BOLD="\[\e[1m\]"
+PROMPT_UNDERLINE="\[\e[4m\]"
 
 # Components
-# USER_COLOR="$GREEN\u$RESET"
-USER_COLOR=""
-# HOST_COLOR="$BLUE@\h$RESET"
-HOST_COLOR=""
+# PROMPT_USER_COLOR="$PROMPT_GREEN\u$PROMPT_RESET"
+PROMPT_USER_COLOR=""
+# PROMPT_HOST_COLOR="$PROMPT_BLUE@\h$PROMPT_RESET"
+PROMPT_HOST_COLOR=""
 
 prompt_current_dir() {
     current_dir="${PWD##*/}"
@@ -41,14 +41,14 @@ show_rc_when_last_cmd_failed() {
 }
 
 PROMPT_COMMAND="show_rc_when_last_cmd_failed;prompt_current_dir"
-PS1="${CYAN}${BOLD}${UNDERLINE}\${current_dir}${RESET} \$ "
+PS1="${PROMPT_CYAN}${PROMPT_BOLD}${PROMPT_UNDERLINE}\${current_dir}${PROMPT_RESET} \$ "
 
-# DIR_COLOR="${CYAN}${BOLD}${UNDERLINE}\W${RESET}"
+# PROMPT_DIR_COLOR="${PROMPT_CYAN}${PROMPT_BOLD}${PROMPT_UNDERLINE}\W${PROMPT_RESET}"
 
 # LAST_CMDLINE_STATUS=' [PIPE: ${PIPESTATUS[*]} ] $?'
 
 # # Prompt
-# PS1="${USER_COLOR}${HOST_COLOR}${DIR_COLOR}${LAST_CMDLINE_STATUS} \$ "
+# PS1="${PROMPT_USER_COLOR}${PROMPT_HOST_COLOR}${PROMPT_DIR_COLOR}${LAST_CMDLINE_STATUS} \$ "
 #
 # Optional: export for subshells
 export PS1
