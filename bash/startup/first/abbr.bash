@@ -155,7 +155,7 @@ ealias() {
     local set_cursor=""
     local no_space_after=false
     local position=""
-    local args=()
+    local positional_args=()
 
     # getopt SUCKS.. just use a while loop, it will work FINE
     #  ONE requirement will be to use an = to provide values for options...
@@ -163,11 +163,11 @@ ealias() {
     while [[ $# -gt 0 ]]; do
         case "$1" in
         --set-cursor=*)
-            set_cursor="${1#*=}"
+            set_cursor="${1#*=}" # strip (non-greedy) first matching part (through =)
             shift
             ;;
         --set-cursor)
-            set_cursor="$1"
+            set_cursor="%" # uses default of %
             shift
             ;;
         --no-space-after)
@@ -184,30 +184,42 @@ ealias() {
             ;;
         --) # explicit end of options
             shift
-            break
+            break # stop checking for options (rest are positional)
             ;;
         -*)
             echo "Unknown option: $1" >&2
             return 1
             ;;
         *)
-            args+=("$1")
+            positional_args+=("$1") # scoop up non-option args to treat as positional later
             shift
             ;;
         esac
     done
 
-    # Collect remaining args
-    args+=("$@")
+    # treat remaining args as positional
+    positional_args+=("$@")
 
-    # Result
-    echo "set_cursor=$set_cursor"
-    echo "no_space_after=$no_space_after"
-    echo "position=$position"
-    echo "Remaining args: ${args[*]}"
+    echo "  set_cursor=$set_cursor"
+    echo "  no_space_after=$no_space_after"
+    echo "  position=$position"
+    echo "  positional args: ${positional_args[*]}"
 
-    local key="${1%=*}"
-    local value="${1#*=}"
+    local key
+    local value
+    if [[ ${#positional_args[@]} == 1 ]]; then
+        key="${positional_args%=*}"   # strip '=' thru end
+        value="${positional_args#*=}" # strip prefix to '='
+    elif [[ ${#positional_args[@]} == 2 ]]; then
+        key="${positional_args[0]}"
+        value="${positional_args[1]}"
+    else
+        echo "unexpected positional args, should only be one (name=value) or two (name value)"
+        echo "but got ${#positional_args[@]} args: ${positional_args[*]}"
+        return 1
+    fi
+    echo "  key: $key"
+    echo "  value: $value"
     abbr "$key" "$value"
 
     # FYI check with:
@@ -294,8 +306,6 @@ test_ealias() {
     exit
 }
 test_ealias
-
-return
 
 abbr gst "git status"
 abbr gdlc "git log --patch HEAD~1..HEAD"
