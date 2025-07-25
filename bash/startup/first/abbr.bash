@@ -46,6 +46,15 @@ lookup_expanded() {
     echo "${abbrs[$word]}"
 }
 
+lookup_function() {
+    local word="$1"
+    if [[ -z "$word" ]]; then
+        echo ""
+        return 1
+    fi
+    echo "${abbrs_function[$word]}"
+}
+
 expand_abbr() {
     local key="$1"
     # echo "READLINE_LINE: $READLINE_LINE"
@@ -59,7 +68,15 @@ expand_abbr() {
     local suffix="${READLINE_LINE:READLINE_POINT}"
 
     local expanded=$(lookup_expanded "$word_before_cursor")
-    # TODO --function would require the function to exist in bash (manually migrate)
+    local expand_func=$(lookup_function "$word_before_cursor")
+    if [[ -n $expand_func ]]; then
+        # s/b fine to run this here, unless an issue arises don't defer
+        # TODO get a test case that uses cmdline too
+        expanded=$("$expand_func" "$READLINE_LINE")
+        # PRN pass cursor position?
+    fi
+    # TODO --function:
+    #   PRN check if func exists and warn if not?
     #   so probably just migrate those abbrs by hand anyways?
     #   then... get func name out and eval "$func_name $READLINE_LINE" or READLINE_LINE would already be in scope anyways so don't pass it
 
@@ -313,7 +330,6 @@ abbr() {
         abbrs_set_cursor["$key"]="$set_cursor"
     fi
     if [[ "$func" ]]; then
-        # TODO use --function, currently ONLY parsing it
         abbrs_function["$key"]="$func"
     fi
     if [[ "$cmd" ]]; then
@@ -558,15 +574,15 @@ test_expand_abbr() {
     expect_equal "$READLINE_LINE" "cmd bar "
     expect_equal "$READLINE_POINT" 8
 
-    # TODO --function not yet IMPLEMENTED
-    # label_test "--function=hello - expands to result of function"
-    # reset_abbrs
-    # abbr foo bar --function=hello
-    # READLINE_LINE="foo"
-    # READLINE_POINT=3
-    # expand_abbr " "
-    # expect_equal "$READLINE_LINE" "cmd hello "
-    # expect_equal "$READLINE_POINT" 10
+    label_test "--function=hello - expands to result of function"
+    reset_abbrs
+    abbr foo bar --function=hello
+    READLINE_LINE="foo"
+    READLINE_POINT=3
+    expand_abbr " "
+    expect_equal "$READLINE_LINE" "cmd hello "
+    expect_equal "$READLINE_POINT" 10
+    # TODO other function tests, i.e. regex! (by the way on regex me thinks fixed prefix would help with perf if that is an issue b/c have to check every regex on every trigger-i.e. space)
 
     # * middle of commandline (command position, abbr)
     label_test "middle of commandline: on abbr in command position"
