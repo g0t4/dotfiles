@@ -34,7 +34,7 @@ expand_abbr() {
         add_char=""
         no_expand_add_char=""
     fi
-    if [[ "$word_before_cursor" && "${abbrs_no_space_after["$word_before_cursor"]}" ]]; then
+    if [[ "$word_before_cursor" && "${abbrs_no_space_after["$word_before_cursor"]}" = "yes" ]]; then
         add_char=""
     fi
 
@@ -166,7 +166,7 @@ abbr() {
     #   PRN other options
 
     local set_cursor=""
-    local no_space_after=false
+    local no_space_after="no"
     local position=""
     local positional_args=()
     local func=""
@@ -195,7 +195,7 @@ abbr() {
             shift
             ;;
         --no-space-after)
-            no_space_after=true
+            no_space_after="yes"
             shift
             ;;
         --position=*)
@@ -267,7 +267,7 @@ abbr() {
     # FYI check with:
     #     declare -p abbrs_no_space_after
 
-    if [[ "$no_space_after" ]]; then
+    if [[ "$no_space_after" == "yes" ]]; then
         abbrs_no_space_after["$key"]=yes
     fi
     if [[ "$position" == "anywhere" ]]; then
@@ -302,6 +302,7 @@ test_parse_abbr_args() {
     start_test abbr foo=bar --set-cursor
     expect_equal "${abbrs[foo]}" "bar"
     expect_equal "${abbrs_set_cursor[foo]}" "%"
+    expect_equal "${abbrs_no_space_after[foo]}" ""
 
     start_test abbr --set-cursor hello=world
     expect_equal "${abbrs[hello]}" "world"
