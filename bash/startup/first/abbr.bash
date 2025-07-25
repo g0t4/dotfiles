@@ -65,9 +65,18 @@ expand_abbr() {
         #  need something that can tokenize the line... for now these will just work in simple commands only which is 90% of what I want anyways
     fi
 
-    local only_cmd=""
-    if [[ "$word_before_cursor" && "${abbrs_command["$word_before_cursor"]}" ]]; then
-        only_cmd="${abbrs_command["$word_before_cursor"]}"
+    lookup_only_cmd() {
+        local word="$1"
+        if [[ -z "$word" ]]; then
+            # key lookup fails if word is empty
+            echo ""
+        fi
+        echo "${abbrs_command["$word"]}"
+    }
+
+    # shellcheck disable=SC2155
+    local only_cmd=$(lookup_only_cmd "$word_before_cursor")
+    if [[ -n "$only_cmd" ]]; then
         #  cmd (at start of line) matches --command... use this to set allowed_position (override other checks above)
         # TODO consider pipelines / lists for what is current command (vs just simple command)
         first_word="${READLINE_LINE%% *}" # greedy strip end of line until first space in line => thus first command
