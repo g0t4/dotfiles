@@ -332,7 +332,7 @@ reset_abbrs() {
     abbrs_function=()
     abbrs_command=()
 
-    # abbrs_stub_func_names=()
+    abbrs_stub_func_names=()
     # WIP clear dynamic functions
 }
 
