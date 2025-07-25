@@ -60,5 +60,5 @@ BOLD_WHITE="${BOLD}\e[37m"
 
 # Example usage
 label_test() {
-    echo -e "${BOLD_CYAN}TEST:${RESET} $*"
+    echo -e "${BOLD_CYAN}TEST:${RESET} ${BOLD}${ITALIC}$*${RESET}"
 }
