@@ -26,9 +26,30 @@ start_test() {
     "$@"
 }
 
+# * Regular colors
+BLACK="\e[30m"
+RED="\e[31m"
+GREEN="\e[32m"
+YELLOW="\e[33m"
+BLUE="\e[34m"
+MAGENTA="\e[35m"
 CYAN="\e[36m"
+WHITE="\e[37m"
+
+# * Bold + color (single merged sequence)
+BOLD_BLACK="\e[1;30m"
+BOLD_RED="\e[1;31m"
+BOLD_GREEN="\e[1;32m"
+BOLD_YELLOW="\e[1;33m"
+BOLD_BLUE="\e[1;34m"
+BOLD_MAGENTA="\e[1;35m"
 BOLD_CYAN="\e[1;36m"
+BOLD_WHITE="\e[1;37m"
+
+# Reset
 RESET="\e[0m"
+
+# Example usage
 label_test() {
     echo -e "${BOLD_CYAN}TEST:${RESET} $*"
 }
