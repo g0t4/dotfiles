@@ -329,6 +329,10 @@ reset_abbrs() {
     abbrs_anywhere=()
     abbrs_function=()
     abbrs_command=()
+
+    abbrs_stub_func_names=()
+    # PRN clear dynamic functions
+    # s/b fine to skip this b/c tests ARE NOT INTENDED to be run in a real shell that you later use for real tasks beyond test runs
 }
 
 test_parse_abbr_args() {
