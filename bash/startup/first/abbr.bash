@@ -270,7 +270,7 @@ abbr() {
             shift
             ;;
         -g)
-            # TODO remove -g support?
+            echo "-g is DEPRECATED please remove it in favor of --position=anywhere"
             position="anywhere"
             shift
             ;;
@@ -441,7 +441,8 @@ test_parse_abbr_args() {
     expect_equal "${abbrs_anywhere[hello]}" "yes"
     reset_abbrs
 
-    start_test abbr -- hello=world # * no options, just -- and positional
+    # * no options, just -- and positional
+    start_test abbr -- hello=world
     expect_equal "${abbrs[hello]}" "world"
     reset_abbrs
 
