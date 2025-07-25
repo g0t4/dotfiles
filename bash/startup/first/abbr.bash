@@ -54,7 +54,7 @@ expand_abbr() {
     # echo "add_char: _${add_char}_"
 
     local anywhere="no"
-    if is_anywhere_allowed "${word_before_cursor}"; then
+    if is_anywhere_allowed "$word_before_cursor"; then
         anywhere="yes"
     fi
 
