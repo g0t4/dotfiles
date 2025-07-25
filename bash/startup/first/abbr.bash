@@ -373,10 +373,8 @@ test_parse_abbr_args() {
     start_test reset_abbrs
     expect_equal "${abbrs_command[cmd]}" ""
 
-    # TODO test w/ fish -c "abbr" output and see what works and doesn't work
-
     # exit when testing completes, that way you can easily run bash again to test again
-    exit
+    # exit
 }
 test_parse_abbr_args
 
