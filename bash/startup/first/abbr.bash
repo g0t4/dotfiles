@@ -356,10 +356,12 @@ test_parse_abbr_args() {
     expect_equal "${abbrs[foo]}" "bar"
     expect_equal "${abbrs_no_space_after[foo]}" "yes"
 
+    # * --no-space-after before positionals
     start_test abbr --no-space-after hello=world
     expect_equal "${abbrs[hello]}" "world"
     expect_equal "${abbrs_no_space_after[hello]}" "yes"
 
+    # * test reset of no space after
     start_test reset_abbrs
     expect_equal "${abbrs_no_space_after[foo]}" ""
     expect_equal "${abbrs_no_space_after[hello]}" ""
@@ -369,6 +371,7 @@ test_parse_abbr_args() {
     expect_equal "${abbrs[foo]}" "bar"
     expect_equal "${abbrs_anywhere[foo]}" "yes"
 
+    # * test reset of abbrs_anywhere
     start_test reset_abbrs
     expect_equal "${abbrs_anywhere[foo]}" ""
 
