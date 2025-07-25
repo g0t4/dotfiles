@@ -6,6 +6,7 @@ declare -A abbrs_set_cursor=()
 declare -A abbrs_anywhere=()
 declare -A abbrs_function=()
 declare -A abbrs_command=()
+declare -A abbrs_stub_func_names=()
 
 is_no_space_after_set() {
     local word="$1"
@@ -331,7 +332,7 @@ reset_abbrs() {
     abbrs_function=()
     abbrs_command=()
 
-    abbrs_stub_func_names=()
+    # abbrs_stub_func_names=()
     # WIP clear dynamic functions
 }
 
@@ -344,7 +345,7 @@ test_parse_abbr_args() {
     expect_equal "${abbrs_no_space_after[foo]}" ""
     # * validate stub function created
     expect_function_exists foo "echo 'abbrs are not intended to be executed directly"
-    expect_equal "${abbrs_stub_func_names[foo]}" "foo" # foo should have a stub function (for tab completion)
+    expect_equal "${abbrs_stub_func_names[foo]}" "foo"
 
     start_test abbr --set-cursor hello=world
     expect_equal "${abbrs[hello]}" "world"
