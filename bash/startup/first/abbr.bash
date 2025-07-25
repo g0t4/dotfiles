@@ -332,8 +332,7 @@ reset_abbrs() {
     abbrs_command=()
 
     abbrs_stub_func_names=()
-    # PRN clear dynamic functions
-    # s/b fine to skip this b/c tests ARE NOT INTENDED to be run in a real shell that you later use for real tasks beyond test runs
+    # WIP clear dynamic functions
 }
 
 test_parse_abbr_args() {
@@ -357,6 +356,8 @@ test_parse_abbr_args() {
     expect_equal "${abbrs_set_cursor[foo]}" ""
     expect_equal "${abbrs[hello]}" ""
     expect_equal "${abbrs_set_cursor[hello]}" ""
+    expect_equal "${abbrs_stub_func_names[foo]}" "" # ensure foo removed from array
+    # # ENSURE foo function removed
 
     # * --set-cursor=_
     start_test abbr foo='b_ar' --set-cursor='_'
