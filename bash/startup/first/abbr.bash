@@ -332,8 +332,12 @@ reset_abbrs() {
     abbrs_function=()
     abbrs_command=()
 
+    # * clear stub functions (from tab completion)
+    for name in "${abbrs_stub_func_names[@]}"; do
+        unset "$name"
+        # TODO add defensive check of body before remove
+    done
     abbrs_stub_func_names=()
-    # WIP clear dynamic functions
 }
 
 test_parse_abbr_args() {
