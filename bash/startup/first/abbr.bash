@@ -2,6 +2,8 @@ declare -A abbrs=()
 declare -A abbrs_no_space_after=()
 declare -A abbrs_set_cursor=()
 declare -A abbrs_anywhere=()
+declare -A abbrs_function=()
+declare -A abbrs_command=()
 expand_abbr() {
     local key="$1"
 
@@ -157,6 +159,8 @@ abbr() {
     local no_space_after=false
     local position=""
     local positional_args=()
+    local func=""
+    local cmd=""
 
     # * fish abbr:
     # abbr --add NAME [--position command | anywhere] [-r | --regex PATTERN] [-c | --command COMMAND]
@@ -191,6 +195,14 @@ abbr() {
         --position)
             # required value is thus next arg => $2
             position="${2}"
+            shift 2
+            ;;
+        --command)
+            cmd="${2}"
+            shift 2
+            ;;
+        --function)
+            func="${2}"
             shift 2
             ;;
         -a)
@@ -255,6 +267,15 @@ abbr() {
         # FYI for now we will only work with % (fish default) that way I don't have to parse that here too
         abbrs_set_cursor["$key"]="$set_cursor"
     fi
+    if [[ "$func" ]]; then
+        # TODO use --function, currently ONLY parsing it
+        abbrs_function["$key"]="$func"
+    fi
+    if [[ "$cmd" ]]; then
+        # TODO use --command, currently ONLY parsing it
+        abbrs_command["$key"]="$cmd"
+    fi
+
 }
 
 reset_abbrs() {
@@ -262,6 +283,8 @@ reset_abbrs() {
     abbrs_no_space_after=()
     abbrs_set_cursor=()
     abbrs_anywhere=()
+    abbrs_function=()
+    abbrs_command=()
 }
 
 # pipx install rich-cli
@@ -353,12 +376,30 @@ test_parse_abbr_args() {
     expect_equal "${abbrs[hello]}" "world"
     reset_abbrs
 
+    # * --function
+    start_test abbr --function call_func -- func ify
+    expect_equal "${abbrs[func]}" "ify"
+    expect_equal "${abbrs_function[func]}" "call_func"
+
+    # ensure clears abbrs_function
+    start_test reset_abbrs
+    expect_equal "${abbrs_function[func]}" ""
+
+    # * --command
+    start_test abbr --command only_this_cmd -- cmd only
+    expect_equal "${abbrs[cmd]}" "only"
+    expect_equal "${abbrs_command[cmd]}" "only_this_cmd"
+
+    # ensure clears abbrs_command
+    start_test reset_abbrs
+    expect_equal "${abbrs_command[cmd]}" ""
+
     # TODO test w/ fish -c "abbr" output and see what works and doesn't work
 
     # exit when testing completes, that way you can easily run bash again to test again
     exit
 }
-# test_parse_abbr_args
+test_parse_abbr_args
 
 abbr gst "git status"
 abbr gdlc "git log --patch HEAD~1..HEAD"
