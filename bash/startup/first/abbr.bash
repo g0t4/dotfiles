@@ -113,11 +113,11 @@ expand_abbr() {
     if [[ $set_cursor_char ]]; then
         # locate set_cursor char (i.e. %) in the expanded text
         local before_cursor_char="${expanded%%"${set_cursor_char}"*}" # everything before %
-        local after_cursor="${expanded#*"${set_cursor_char}"}"   # everything after %
+        local after_cursor_char="${expanded#*"${set_cursor_char}"}"   # everything after %
         # effectively strips the % char (b/c its the cursor marker)
         # PRN map diff char than % ONLY IF issues with %... i.e. would mean I need an abbr that has % in the expanded text AND --set-cursor at same time
 
-        READLINE_LINE="${prefix}${before_cursor_char}${after_cursor}${add_char}${suffix}"
+        READLINE_LINE="${prefix}${before_cursor_char}${after_cursor_char}${add_char}${suffix}"
         READLINE_POINT=$((${#before_cursor_char} + ${#prefix}))
     else
         # * cursor moves after expanded/add_char
