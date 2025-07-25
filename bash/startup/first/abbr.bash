@@ -17,6 +17,9 @@ expand_abbr() {
     local expanded=""
     if [[ "$word_before_cursor" != "" ]]; then
         expanded="${abbrs[$word_before_cursor]}"
+        # PRN for --function would require the function to exist in bash (manually migrate)
+        #   so probably just migrate those abbrs by hand anyways?
+        #   then... get func name out and eval "$func_name $READLINE_LINE" or READLINE_LINE would already be in scope anyways so don't pass it
     fi
 
     # * add_char
