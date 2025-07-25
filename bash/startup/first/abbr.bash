@@ -278,30 +278,63 @@ test_ealias() {
         fi
     }
 
+    # * tests --set-cursor
     start_test ealias foo=bar --set-cursor
     expect_equal "${abbrs[foo]}" "bar"
     expect_equal "${abbrs_set_cursor[foo]}" "%"
 
+    start_test ealias --set-cursor hello=world
+    expect_equal "${abbrs[hello]}" "world"
+    expect_equal "${abbrs_set_cursor[hello]}" "%"
+
+    # * test reset
     start_test reset_abbrs
     expect_equal "${abbrs[foo]}" ""
     expect_equal "${abbrs_set_cursor[foo]}" ""
+    expect_equal "${abbrs[hello]}" ""
+    expect_equal "${abbrs_set_cursor[hello]}" ""
 
+    # * tests --no-space-after
     start_test ealias foo=bar --no-space-after
     expect_equal "${abbrs[foo]}" "bar"
     expect_equal "${abbrs_no_space_after[foo]}" "yes"
 
+    start_test ealias --no-space-after hello=world
+    expect_equal "${abbrs[hello]}" "world"
+    expect_equal "${abbrs_no_space_after[hello]}" "yes"
+
     start_test reset_abbrs
     expect_equal "${abbrs_no_space_after[foo]}" ""
+    expect_equal "${abbrs_no_space_after[hello]}" ""
 
+    # * tests --position
     start_test ealias foo=bar --position=anywhere
     expect_equal "${abbrs[foo]}" "bar"
     expect_equal "${abbrs_anywhere[foo]}" "yes"
 
+    # * tests -g works too
+    start_test ealias hello=world -g
+    expect_equal "${abbrs[hello]}" "world"
+    expect_equal "${abbrs_anywhere[hello]}" "yes"
+
     start_test reset_abbrs
     expect_equal "${abbrs_anywhere[foo]}" ""
+    expect_equal "${abbrs_anywhere[hello]}" ""
+
+    # * tests -- works
+    start_test ealias -g -- hello=world
+    expect_equal "${abbrs[hello]}" "world"
+    expect_equal "${abbrs_anywhere[hello]}" "yes"
+    reset_abbrs
+
+    start_test ealias -- hello=world # * no options, just -- and positional
+    expect_equal "${abbrs[hello]}" "world"
+    reset_abbrs
+
+    # TODO test w/ fish -c "abbr" output and see what works and doesn't work
 
     # exit when testing completes, that way you can easily run bash again to test again
-    exit
+    # exit
 }
 test_ealias
 
