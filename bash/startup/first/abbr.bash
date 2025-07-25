@@ -312,14 +312,14 @@ test_ealias() {
     expect_equal "${abbrs[foo]}" "bar"
     expect_equal "${abbrs_anywhere[foo]}" "yes"
 
+    start_test reset_abbrs
+    expect_equal "${abbrs_anywhere[foo]}" ""
+
     # * tests -g works too
     start_test ealias hello=world -g
     expect_equal "${abbrs[hello]}" "world"
     expect_equal "${abbrs_anywhere[hello]}" "yes"
-
-    start_test reset_abbrs
-    expect_equal "${abbrs_anywhere[foo]}" ""
-    expect_equal "${abbrs_anywhere[hello]}" ""
+    reset_abbrs
 
     # * tests -- works
     start_test ealias -g -- hello=world
@@ -336,7 +336,7 @@ test_ealias() {
     # exit when testing completes, that way you can easily run bash again to test again
     exit
 }
-# test_ealias
+test_ealias
 
 abbr gst "git status"
 abbr gdlc "git log --patch HEAD~1..HEAD"
