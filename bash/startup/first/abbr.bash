@@ -567,14 +567,16 @@ test_expand_abbr() {
     expect_equal "$READLINE_LINE" "cmd bar "
     expect_equal "$READLINE_POINT" 8
 
-    label_test "--function=hello - expands to result of function"
+    # TODO --function only needs abbr name (not value) in positionals
+    label_test "--function hello - expands to result of function"
     reset_abbrs
-    abbr foo bar --function=hello
+    function hello { echo world; }
+    abbr foo bar --function hello # TODO drop faux bar from positional definition
     READLINE_LINE="foo"
     READLINE_POINT=3
     expand_abbr " "
-    expect_equal "$READLINE_LINE" "cmd hello "
-    expect_equal "$READLINE_POINT" 10
+    expect_equal "$READLINE_LINE" "world "
+    expect_equal "$READLINE_POINT" 6
     # TODO other function tests, i.e. regex! (by the way on regex me thinks fixed prefix would help with perf if that is an issue b/c have to check every regex on every trigger-i.e. space)
 
     # * middle of commandline (command position, abbr)
