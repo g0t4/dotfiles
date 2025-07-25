@@ -19,7 +19,7 @@ expand_abbr() {
 
     # * add_char
     local add_char=" "
-    local no_expand_add_char=" " # -NoSpaceAfter does not apply if no expansion
+    local no_expand_add_char=" " # -no-space-after does not apply if no expansion
     if [[ "$key" == "enter" ]]; then
         # for enter we have the \C-j in the bind macro, not doing that here
         add_char=""
@@ -147,10 +147,10 @@ abbr() {
 # shellcheck disable=SC2317 # sick of it complaining about unused options in while loop
 ealias() {
 
-    # compat layer, also this is where I'll accept --NoSpaceAfter
+    # compat layer, also this is where I'll accept --no-space-after
     # FORMAT
     #   key=value
-    #   key=value --NoSpaceAfter
+    #   key=value --no-space-after
     #   PRN other options
 
     local set_cursor=""
@@ -286,7 +286,7 @@ test_ealias() {
     expect_equal "${abbrs[foo]}" ""
     expect_equal "${abbrs_set_cursor[foo]}" ""
 
-    start_test ealias foo=bar --NoSpaceAfter
+    start_test ealias foo=bar --no-space-after
     expect_equal "${abbrs[foo]}" "bar"
     expect_equal "${abbrs_no_space_after[foo]}" "yes"
 
@@ -308,8 +308,8 @@ test_ealias
 abbr gst "git status"
 abbr gdlc "git log --patch HEAD~1..HEAD"
 
-# ealias gcmsg='git commit -m "' --NoSpaceAfter
-ealias gcmsg='git commit -m "%"' --NoSpaceAfter --set-cursor
+# ealias gcmsg='git commit -m "' --no-space-after
+ealias gcmsg='git commit -m "%"' --no-space-after --set-cursor
 ealias gp="git push"
 
 abbr gap "git add --patch"
