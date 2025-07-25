@@ -184,6 +184,10 @@ ealias() {
             position="${2}"
             shift 2
             ;;
+        -a)
+            # ignore -a, it's a meaningless option from fish's abbr
+            shift
+            ;;
         -g)
             # TODO remove -g support?
             position="anywhere"
