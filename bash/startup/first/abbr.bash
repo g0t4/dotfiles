@@ -421,6 +421,14 @@ test_expand_abbr() {
     expect_equal "$READLINE_LINE" "echo ''"
     expect_equal "$READLINE_POINT" 6
 
+    # * not an abbr
+    reset_abbrs
+    READLINE_LINE=foo
+    READLINE_POINT=3
+    start_test expand_abbr " "
+    expect_equal "$READLINE_LINE" "foo "
+    expect_equal "$READLINE_POINT" 4
+
     # PRN intercept ; too so `gst;` expands, else just insert ;
 
     # TODO assume separators for pipelines/lists indicate next word is in command position
