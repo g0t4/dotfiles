@@ -385,12 +385,21 @@ test_parse_abbr_args() {
 
 test_expand_abbr() {
 
+    reset_abbrs
     abbr foo bar
     READLINE_LINE=foo
     READLINE_POINT=3
     start_test expand_abbr " "
     expect_equal "$READLINE_LINE" "bar "
     expect_equal "$READLINE_POINT" 4
+
+    reset_abbrs
+    abbr foo "echo '%'" --set-cursor
+    READLINE_LINE=foo
+    READLINE_POINT=3
+    start_test expand_abbr " "
+    expect_equal "$READLINE_LINE" "echo '' "
+    expect_equal "$READLINE_POINT" 6
 
     # PRN intercept ; too so `gst;` expands, else just insert ;
 
