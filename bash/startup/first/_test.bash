@@ -44,7 +44,7 @@ expect_function_exists() {
             bat --line-range "$line" "$file"
 
             echo "body:"
-            echo "$body"
+            echo "$body" | bat -l bash
             # PRN would be nice to indent all lines of definition but how I lable tests (bold/color) also differentiates good enough for now
             return 1
         fi
