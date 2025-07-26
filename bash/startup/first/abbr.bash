@@ -142,9 +142,9 @@ expand_abbr() {
     local set_cursor_char=$(lookup_cursor_set_char "$word_before_cursor")
     if [[ -n "$set_cursor_char" ]]; then
         # * --set-cursor too
+        # i.e. foo%bar => before=foo after=bar
         local before_cursor_char="${expanded%%"${set_cursor_char}"*}" # %% is greedy strip suffix back to first %
         local after_cursor_char="${expanded#*"${set_cursor_char}"}"   # # is (not greedy) strip prefix, up to first %
-        # i.e. foo%bar => before=foo after=bar
 
         READLINE_LINE="${prefix}${before_cursor_char}${after_cursor_char}${add_char}${suffix}"
         READLINE_POINT=$((${#prefix} + ${#before_cursor_char}))
