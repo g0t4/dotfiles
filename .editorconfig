@@ -22,3 +22,7 @@ max_line_length = 200
 align_continuous_inline_comment = false
 align_continuous_assign_statement = false
 # BTW zed lua extension works with this (as long as I load entire repo dir and not a subdir), cool
+
+[*.{bash,sh}]
+# shfmt uses editorconfig (and/or bash LS does)
+switch_case_indent = true
