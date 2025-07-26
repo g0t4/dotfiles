@@ -12,12 +12,12 @@ snippet dxu "dollar expand unquoted (split words)" b
 snippet d? "dollar expand w/ default fallback - quoted (no word splitting)" b
 "\${${1:variable}:-${2:default}}"
 
-# I hate everything about using this to set variables!
-#snippet d= "Assign if unset: \${var:=default}" b
-#"\${${1:variable}:=${2:default}}"
+snippet d= "default AND assign variable"
+"\${${1:variable}:=${2:assign_default_if_not_set}}"
 
-#snippet d+ "Use alt if set: \${var:+alt}" b
-#"\${${1:variable}:+${2:default}}"
+# useful way to decide if smth is unset vs set empty
+snippet d+ "replace variable's value with substitute_if_set... but NOT if variable is unset/null"
+"\${${1:variable}:+${2:substitute_if_set}}"
 
 snippet d# "dollar expand length" b
 \${#${1:variable}}
