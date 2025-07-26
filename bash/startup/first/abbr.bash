@@ -86,7 +86,7 @@ _dump_expand_locals() {
     _dump_var line_before_cursor
     _dump_var word_before_cursor
     _dump_var word_start_offset
-    _dump_var last_token
+    _dump_var previous_word
     _dump_var prefix
     _dump_var suffix
     echo
@@ -150,11 +150,11 @@ expand_abbr() {
     fi
 
     local allowed_position="no"
-    tmp_prefix_for_last_token="${READLINE_LINE:0:$word_start_offset}"
-    last_token=$(echo "$tmp_prefix_for_last_token" | awk '{print $NF}')
-    # echo "last_token: _${last_token}_"
-    # TODO add test of ; semicolon for last_token too and others that I add support for in regex:
-    if [[ $word_start_offset -eq 0 || ${command_separators["$last_token"]} || "$anywhere" = "yes" ]]; then
+    tmp_prefix_for_previous_word="${READLINE_LINE:0:$word_start_offset}"
+    previous_word=$(echo "$tmp_prefix_for_previous_word" | awk '{print $NF}')
+    # echo "previous_word: _${previous_word}_"
+    # TODO add test of ; semicolon for previous_word too and others that I add support for in regex:
+    if [[ $word_start_offset -eq 0 || ${command_separators["$previous_word"]} || "$anywhere" = "yes" ]]; then
         allowed_position=yes
     fi
 
