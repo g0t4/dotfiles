@@ -20,6 +20,12 @@ abbr d@='"${%[@]}"' --position=anywhere --set-cursor
 abbr d_array_length='${#%[@]}' --position=anywhere --set-cursor
 abbr d*='"${%[*]}"' --position=anywhere --set-cursor
 abbr dx='"${%}"' --position=anywhere --set-cursor
+#
+abbr d_default_value_if_unset='"${%:-default_value}"' --position=anywhere --set-cursor
+abbr d_swap_if_set '"${%:+use_this_if_set}"' --position=anywhere --set-cursor
+abbr d_assign_if_unset '"${%:=assign_this_if_unset}"' --position=anywhere --set-cursor
+abbr d_error_if_unset '"${%:?error_message_if_unset}"' --position=anywhere --set-cursor
+#
 abbr dxu='${%}' --position=anywhere --set-cursor
 abbr echo_array_length='echo ${#%[@]}' --set-cursor
 abbr echo_scalar='echo _"${%}"_' --set-cursor

@@ -9,15 +9,16 @@ snippet dx "dollar expand quoted (no word splitting)" b
 snippet dxu "dollar expand unquoted (split words)" b
 \${${1:variable}}
 
-snippet d? "dollar expand w/ default fallback - quoted (no word splitting)" b
-"\${${1:variable}:-${2:default}}"
-
-snippet d= "default AND assign variable"
-"\${${1:variable}:=${2:assign_default_if_not_set}}"
-
+# * dollar sub operators
+snippet d_default_value_if_unset "default value - substitute if unset"
+"\${${1:variable}:-${2:default_value}}"
 # useful way to decide if smth is unset vs set empty
-snippet d+ "replace variable's value with substitute_if_set... but NOT if variable is unset/null"
-"\${${1:variable}:+${2:substitute_if_set}}"
+snippet d_swap_if_set "change value IF variable is SET... unset remains unset"
+"\${${1:variable}:+${2:use_this_if_set}}"
+snippet d_assign_if_unset "assign if unset (only assignment operator that changes variable's value)"
+"\${${1:variable}:=${2:assign_this_if_unset}}"
+snippet d_error_if_unset "error if unset"
+"\${${1:variable}:?${2:error_message_if_unset}}"
 
 snippet d# "dollar expand length" b
 \${#${1:variable}}
