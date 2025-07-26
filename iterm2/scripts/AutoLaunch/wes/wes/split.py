@@ -1,6 +1,5 @@
 from common import *
 
-
 async def close_other_tabs(connection):
     current_tab = await get_current_tab_throw_if_none(connection)
 
@@ -8,7 +7,6 @@ async def close_other_tabs(connection):
     for tab in current_tab.window.tabs:
         if tab != current_tab:
             await tab.async_close()
-
 
 async def new_tab_then_close_others(connection):
     window = await get_current_window_throw_if_none(connection)
@@ -18,7 +16,6 @@ async def new_tab_then_close_others(connection):
     for tab in window.tabs:
         if tab != new_tab:
             await tab.async_close(force=True)
-
 
 async def prepare_new_profile(session: iterm2.Session, force_local: bool) -> tuple[iterm2.LocalWriteOnlyProfile, bool]:
     tab = session.tab
@@ -60,14 +57,17 @@ async def prepare_new_profile(session: iterm2.Session, force_local: bool) -> tup
         else:
             new_profile.set_command(commandLine)
             new_profile.set_use_custom_command("Yes")
-
-    # idea - in some cases replicate a non-fish shell or command?
-    # was_bash = jobName == "bash"
-    # if was_bash:
-    #     # if using bash (locally) then mirror that in new tab
-    #     new_profile.set_command("/opt/homebrew/bin/bash")
-    #     new_profile.set_use_custom_command("Yes")
-    #     # lsof -p 86215 | awk '$4 == "txt" { print $9 }' | grep '/bash$'
+            # TODO also replicate bash over ssh on build21 for stract demos there?
+    else:
+        # * at least for duration of course, launch bash shell... when in bash in current session
+        # that way no accidents when I don't realize I'm not in bash b/c I've replicated all my abbrs bash can feel like fish at times ;)
+        was_bash = jobName == "bash"
+        if was_bash:
+            # if using bash (locally) then mirror that in new tab
+            new_profile.set_command("/opt/homebrew/bin/bash")  # assume on mac I always want brew installed bash
+            new_profile.set_use_custom_command("Yes")
+            # how to get full path to bash executable on macOS... don't need right now but just FYI
+            # lsof -p 86215 | awk '$4 == "txt" { print $9 }' | grep '/bash$'
 
     return new_profile, is_ssh
 
@@ -84,7 +84,6 @@ async def get_path(session: iterm2.Session) -> str:
     path = await session.async_get_variable("path")
     print(f"no split_path found, using path: {path}")
     return path
-
 
 async def wes_new_window(connection: iterm2.Connection, force_local=False):
     prior_window = await get_current_window(connection)
@@ -111,7 +110,6 @@ async def wes_new_window(connection: iterm2.Connection, force_local=False):
     if new_path != path:
         await new_session.async_send_text(f"cd {path}; clear\n")
         # clear does same as Cmd+K (clears scrollback, not just screen)
-
 
 async def wes_new_tab(connection, force_local=False):
     prior_window = await get_current_window_throw_if_none(connection)
@@ -143,7 +141,6 @@ async def wes_new_tab(connection, force_local=False):
     #     must be a shell integration issue?
 
     await new_session.async_send_text(f"cd {path}; clear\n")
-
 
 # *** split panes:
 async def wes_split_pane(connection: iterm2.Connection, split_vert: bool = False, force_local=False):
