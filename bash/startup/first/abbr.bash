@@ -67,12 +67,12 @@ lookup_expanded() {
     fi
 
     # look at all regexes since we don't have a match yet!
-    # local name
-    # for name in "${!abbrs_regex[@]}"; do
-    #     echo "$name"
-    #     regex="${abbrs_regex["$name"]}"
-    #     echo "  $regex"
-    # done
+    local name
+    for name in "${!abbrs_regex[@]}"; do
+        declare -p name >&2
+        regex="${abbrs_regex["$name"]}"
+        declare -p regex >&2
+    done
 }
 
 declare -A command_separators=(
