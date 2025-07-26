@@ -64,41 +64,48 @@ declare -A command_separators=(
     # TODO newline too? first command on line?
 )
 
-_dump_expand_locals() {
-    echo
-    echo -e "${UNDERLINE}${ITALIC}FYI unassigned variables will show as blank... ${RESET}"
-    echo
+_dump_var() {
+    # FYI defined as a function so I can add error handling
+    #   and so not tied to declare -p
 
-    echo "READLINE_LINE: _${READLINE_LINE}_"
-    echo "READLINE_POINT: _${READLINE_POINT}_"
+    declare -p "${1}"
+    # FYI I want to see difference between empty/not defined:
+    #   declare -- only_cmd=""
+    #   bash: declare: first_word: not found
+}
+
+_dump_expand_locals() {
+
+    _dump_var READLINE_LINE
+    _dump_var READLINE_POINT
     echo
 
     # rely on bash's dynamic scope to access caller's variables w/o explicitly passing them
-    echo "line_before_cursor: _${line_before_cursor}_"
-    echo "word_before_cursor: _${word_before_cursor}_"
-    echo "word_start_offset: _${word_start_offset}_"
-    echo "prefix: _${prefix}_"
-    echo "suffix: _${suffix}_"
+    _dump_var line_before_cursor
+    _dump_var word_before_cursor
+    _dump_var word_start_offset
+    _dump_var prefix
+    _dump_var suffix
     echo
 
-    echo "expanded: _${expanded}_"
-    echo "expand_func: _${expand_func}_"
+    _dump_var expanded
+    _dump_var expand_func
     echo
 
-    echo "add_char: _${add_char}_"
-    echo "add_char_if_no_expansion: _${add_char_if_no_expansion}_"
+    _dump_var add_char
+    _dump_var add_char_if_no_expansion
     echo
 
-    echo "anywhere: _${anywhere}_"
-    echo "allowed_position: _${allowed_position}_"
-    echo "last_token: _${last_token}_"
+    _dump_var anywhere
+    _dump_var allowed_position
+    _dump_var last_token
     echo
 
-    echo "only_cmd: _${only_cmd}_"
-    echo "first_word: _${first_word}_"
+    _dump_var only_cmd
+    _dump_var first_word
     echo
 
-    echo "set_cursor_char: _${set_cursor_char}_"
+    _dump_var set_cursor_char
 
 }
 
