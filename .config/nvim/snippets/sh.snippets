@@ -29,7 +29,7 @@ fi
 
 snippet check_array_length
 if ((\${#${1:array}[@]} >= 1)); then
-    ${0:declare -p ${1}}
+    ${0:declare -p ${1}} | bat -l bash
 fi
 
 snippet d_strip_prefix "Prefix strip: \${var#pattern}" b
@@ -83,5 +83,11 @@ for i in "\${!${1:ARRAY}[@]}"; do
     echo "Index \$i: \${${1}[\$i]}"
 done
 
+snippet declarep "print attributes and value of VAR"
+declare -p ${1:VAR} | bat -l bash
 
+snippet declareA "associative array"
+declare -A ${1:ARRAY}
 
+snippet declarea "indexed array"
+declare -a ${1:ARRAY}

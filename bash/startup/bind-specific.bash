@@ -6,6 +6,8 @@ abbr gl10 "git log -10"
 
 # declare -p abbrs  # sanity check
 abbr declarep "declare -p % | bat -l bash" --set-cursor
+abbr declareA "declare -A"
+abbr declarea "declare -a"
 
 # TODO mirror with sh.snippets from my nvim config...
 # * would be cool to get a full blown snippet system in bash (and other shells)...
