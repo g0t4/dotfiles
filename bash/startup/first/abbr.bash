@@ -453,6 +453,10 @@ reset_abbrs() {
 
 test_parse_abbr_args() {
 
+    if [[ -z "$ABBR_TESTS" ]]; then
+        return
+    fi
+
     # * tests --set-cursor
     start_test abbr foo=bar --set-cursor
     expect_equal "${abbrs[foo]}" "bar"
@@ -560,6 +564,10 @@ test_parse_abbr_args() {
 test_parse_abbr_args
 
 test_expand_abbr() {
+
+    if [[ -z "$ABBR_TESTS" ]]; then
+        return
+    fi
 
     label_test "vanilla abbr"
     reset_abbrs
