@@ -640,10 +640,11 @@ test_expand_abbr() {
     expect_equal "$READLINE_LINE" "cmd bar "
     expect_equal "$READLINE_POINT" 8
 
+    # * --function
     label_test "--function hello - expands to result of function"
     reset_abbrs
     function hello { echo world; }
-    abbr foo bar --function hello # TODO drop faux bar from positional definition
+    abbr foo --function hello # only need abbr name (not value)
     READLINE_LINE="foo"
     READLINE_POINT=3
     expand_abbr " "
