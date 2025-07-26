@@ -86,6 +86,7 @@ _dump_expand_locals() {
     # rely on bash's dynamic scope to access caller's variables w/o explicitly passing them
     _dump_var line_before_cursor
     _dump_var word_before_cursor
+    _dump_var last_token
     _dump_var word_start_offset
     _dump_var prefix
     _dump_var suffix
@@ -101,7 +102,6 @@ _dump_expand_locals() {
 
     _dump_var anywhere
     _dump_var allowed_position
-    _dump_var last_token
     echo
 
     _dump_var only_cmd
