@@ -53,3 +53,9 @@ _expand_git_log() {
     echo "git log"
 }
 abbr git_log_num --regex 'gl[0-9]*' --function _expand_git_log
+
+
+# * trap
+abbr trapl "trap -l"
+abbr trapp "trap -p"
+abbr trapP "trap -P"
