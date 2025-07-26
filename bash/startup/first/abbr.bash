@@ -59,7 +59,7 @@ declare -A command_separators=(
     ['|']='|' ['|&']='|&'                       # simple command separator (within pipeline)
     [';']=';' ['||']='||' ['&']='&' ['&&']='&&' # pipeline separator (within lists)
     # \n (newline)
-    ['\)']=')' ['}']='}'    # compound commands
+    [')']=')' ['}']='}'    # compound commands
     ['((']='((' ['[[']='[[' # compound arithmethic, conditional exprsesions
 )
 
