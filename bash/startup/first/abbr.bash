@@ -677,15 +677,18 @@ test_expand_abbr() {
     expect_equal "$READLINE_POINT" 4
 
     # # TODO perf wise if it matters, I could add --non-regex-prefix for the part that matches verbatim to speed up initial comparisons before apply regex check for all regex abbrs (on every word typed)
-    # label_test "regex: match on regex"
-    # reset_abbrs
-    # function expand_for_regex { echo reggy; }
-    # abbr foo --function expand_for_regex --regex patty
-    # READLINE_LINE="foo"
-    # READLINE_POINT=3
-    # expand_abbr " "
-    # expect_equal "$READLINE_LINE" "reggy "
-    # expect_equal "$READLINE_POINT" 6
+    label_test "regex: match on regex (but not name)"
+    reset_abbrs
+    function expand_for_regex { echo reggy; }
+    abbr foo --function expand_for_regex --regex patty
+    READLINE_LINE="patty"
+    READLINE_POINT=5
+    expand_abbr " "
+    expect_equal "$READLINE_LINE" "reggy "
+    expect_equal "$READLINE_POINT" 6
+
+    # TODO later match on digits?
+    # TODO also add a test with multiple regexes?
 
     # * middle of commandline (command position, abbr)
     label_test "middle of commandline: on abbr in command position"
