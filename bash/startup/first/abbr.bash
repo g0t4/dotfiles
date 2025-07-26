@@ -455,6 +455,9 @@ test_parse_abbr_args() {
     start_test reset_abbrs
     expect_equal "${abbrs_function[func]}" ""
 
+    # * --regex / --function COMBO
+    # TODO same test as --function, only need the abbr name (not the =value)
+
     # * --command
     start_test abbr --command only_this_cmd -- cmd only
     expect_equal "${abbrs[cmd]}" "only"
