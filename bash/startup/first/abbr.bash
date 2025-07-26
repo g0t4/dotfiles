@@ -5,6 +5,7 @@ declare -A abbrs_no_space_after=()
 declare -A abbrs_set_cursor=()
 declare -A abbrs_anywhere=()
 declare -A abbrs_function=()
+declare -A abbrs_regex=()
 declare -A abbrs_command=()
 declare -A abbrs_stub_func_names=()
 
@@ -268,6 +269,7 @@ abbr() {
     local position=""
     local positional_args=()
     local func=""
+    local regex=""
     local cmd=""
 
     # * fish abbr:
@@ -309,6 +311,10 @@ abbr() {
             cmd="${2}"
             shift 2
             ;;
+        --regex)
+            regex="${2}"
+            shift 2
+            ;;
         --function)
             func="${2}"
             shift 2
@@ -348,9 +354,9 @@ abbr() {
             # if = is present then just parse both, it won't hurt scenarios where I don't need the value (i.e. --function)
             key="${only_arg%=*}"   # strip '=' thru end
             value="${only_arg#*=}" # strip prefix to '='
-        elif [[ -n "$func" ]]; then
-            # TODO also IIRC same is true for regex, only key not value
+        elif [[ -n "$func" || -n "$regex" ]]; then
             # --function only needs key (not value) part
+            # regex depends on --function too so --function s/b enough  of a check
             key="$only_arg"
             value=""
         fi
@@ -362,12 +368,7 @@ abbr() {
         echo "but got ${#positional_args[@]} args: ${positional_args[*]}"
         return 1
     fi
-    # echo "  key: $key"
-    # echo "  value: $value"
     _abbr "$key" "$value"
-
-    # FYI check with:
-    #     declare -p abbrs_no_space_after
 
     if [[ "$no_space_after" = "yes" ]]; then
         abbrs_no_space_after["$key"]=yes
@@ -375,8 +376,10 @@ abbr() {
     if [[ "$position" = "anywhere" ]]; then
         abbrs_anywhere["$key"]=yes
     fi
+    if [[ "$regex" ]]; then
+        abbrs_regex["$key"]="$regex"
+    fi
     if [[ "$set_cursor" ]]; then
-        # FYI for now we will only work with % (fish default) that way I don't have to parse that here too
         abbrs_set_cursor["$key"]="$set_cursor"
     fi
     if [[ "$func" ]]; then
@@ -407,6 +410,7 @@ reset_abbrs() {
     abbrs_anywhere=()
     abbrs_function=()
     abbrs_command=()
+    abbrs_regex=()
 
     # * clear stub functions (from tab completion)
     for name in "${abbrs_stub_func_names[@]}"; do
@@ -504,7 +508,14 @@ test_parse_abbr_args() {
     expect_equal "${abbrs_function[func]}" ""
 
     # * --regex / --function COMBO
-    # TODO same test as --function, only need the abbr name (not the =value)
+    start_test abbr --function call_func --regex "gl\d" -- func
+    expect_equal "${abbrs[func]}" ""
+    expect_equal "${abbrs_function[func]}" "call_func"
+    expect_equal "${abbrs_regex[func]}" "gl\d"
+
+    # ensure clears abbrs_regex
+    start_test reset_abbrs
+    expect_equal "${abbrs_regex[func]}" ""
 
     # * --command
     start_test abbr --command only_this_cmd -- cmd only
@@ -629,7 +640,6 @@ test_expand_abbr() {
     expect_equal "$READLINE_LINE" "cmd bar "
     expect_equal "$READLINE_POINT" 8
 
-    # TODO --function only needs abbr name (not value) in positionals
     label_test "--function hello - expands to result of function"
     reset_abbrs
     function hello { echo world; }
