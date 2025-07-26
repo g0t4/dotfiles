@@ -127,10 +127,6 @@ expand_abbr() {
     if [[ -n $expand_func ]]; then
         # s/b fine to run this here, unless an issue arises don't defer
         expanded=$("$expand_func" "$READLINE_LINE" "$READLINE_POINT")
-        # TODO try using non-regex --function expansions instead of regex based ones!
-        #  only diff is whether or not you can parameterize the abbr word itself!
-        #  10 gl<SPACE> => git log -10 ?! ok that might be cool!
-        #  FTR fish does pass cmdline as $argv
     fi
 
     # * add_char
