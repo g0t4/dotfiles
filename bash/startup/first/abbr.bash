@@ -118,17 +118,14 @@ expand_abbr() {
     # shellcheck disable=SC2155
     local only_cmd=$(lookup_only_cmd "$word_before_cursor")
     if [[ -n "$only_cmd" ]]; then
-        #  cmd (at start of line) matches --command... use this to set allowed_position (override other checks above)
-        # TODO consider pipelines / lists for what is current command (vs just simple command)
-        first_word="${READLINE_LINE%% *}" # greedy strip end of line until first space in line => thus first command
+        #  cmd (at start of line) matches --command...
+        #  use this to set allowed_position (override other checks above)
+        first_word="${READLINE_LINE%% *}" # greedy strip from first space to end of line => thus first command
         if [[ "$only_cmd" = "$first_word" ]]; then
             allowed_position=yes
         else
             allowed_position=no
         fi
-        # echo "READLINE_LINE: $READLINE_LINE" # leave as reminder, echo prints above prompt, great for troubleshooting!
-        # echo "first_word: $first_word"
-        # return
     fi
 
     if [[ "$expanded" = "" || "$allowed_position" = "no" ]]; then
@@ -150,10 +147,6 @@ expand_abbr() {
         READLINE_POINT=$((${#prefix} + ${#before_cursor_char}))
     else
         # * cursor moves after expanded/add_char
-
-        # echo "#prefix: ${#prefix} '${prefix}'"
-        # echo "#expanded: ${#expanded} '${expanded}'"
-        # echo "#add_char: ${#add_char} '${add_char}'"
 
         READLINE_LINE="${prefix}${expanded}${add_char}${suffix}"
         # move cursor right AFTER add_char (so if in middle of line, won't go to end)
