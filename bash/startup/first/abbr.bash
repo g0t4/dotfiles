@@ -650,7 +650,28 @@ test_expand_abbr() {
     expand_abbr " "
     expect_equal "$READLINE_LINE" "world "
     expect_equal "$READLINE_POINT" 6
-    # TODO other function tests, i.e. regex! (by the way on regex me thinks fixed prefix would help with perf if that is an issue b/c have to check every regex on every trigger-i.e. space)
+
+    # * --regex
+    label_test "regex: abbr name matches but regex does not, AND should not just invoke function without testing regex first"
+    reset_abbrs
+    function expand_for_regex { echo reggy; }
+    abbr foo --function expand_for_regex --regex patty
+    READLINE_LINE="foo"
+    READLINE_POINT=3
+    expand_abbr " "
+    expect_equal "$READLINE_LINE" "foo " # this would have to be patty and its foo, don't match on name for regex abbrs!
+    expect_equal "$READLINE_POINT" 4
+
+    # # TODO perf wise if it matters, I could add --non-regex-prefix for the part that matches verbatim to speed up initial comparisons before apply regex check for all regex abbrs (on every word typed)
+    # label_test "regex: match on regex"
+    # reset_abbrs
+    # function expand_for_regex { echo reggy; }
+    # abbr foo --function expand_for_regex --regex patty
+    # READLINE_LINE="foo"
+    # READLINE_POINT=3
+    # expand_abbr " "
+    # expect_equal "$READLINE_LINE" "reggy "
+    # expect_equal "$READLINE_POINT" 6
 
     # * middle of commandline (command position, abbr)
     label_test "middle of commandline: on abbr in command position"
