@@ -76,7 +76,7 @@ lookup_expanded() {
         if [[ "$word" =~ $regex ]]; then
             # lookup func FOR this abbr (not one above)
             local func="${abbrs_function["$name"]}"
-            # declare -p func >&2
+            # declare -p func >&2 # * SUPER helpful to see when expanding regexes!
             if [[ -n "$func" ]]; then
                 "$func" "$READLINE_LINE" "$READLINE_POINT"
                 return
