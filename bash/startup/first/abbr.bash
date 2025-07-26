@@ -64,6 +64,44 @@ declare -A command_separators=(
     # TODO newline too? first command on line?
 )
 
+_dump_expand_locals() {
+    echo
+    echo -e "${UNDERLINE}${ITALIC}FYI unassigned variables will show as blank... ${RESET}"
+    echo
+
+    echo "READLINE_LINE: _${READLINE_LINE}_"
+    echo "READLINE_POINT: _${READLINE_POINT}_"
+    echo
+
+    # rely on bash's dynamic scope to access caller's variables w/o explicitly passing them
+    echo "line_before_cursor: _${line_before_cursor}_"
+    echo "word_before_cursor: _${word_before_cursor}_"
+    echo "word_start_offset: _${word_start_offset}_"
+    echo "prefix: _${prefix}_"
+    echo "suffix: _${suffix}_"
+    echo
+
+    echo "expanded: _${expanded}_"
+    echo "expand_func: _${expand_func}_"
+    echo
+
+    echo "add_char: _${add_char}_"
+    echo "add_char_if_no_expansion: _${add_char_if_no_expansion}_"
+    echo
+
+    echo "anywhere: _${anywhere}_"
+    echo "allowed_position: _${allowed_position}_"
+    echo "last_token: _${last_token}_"
+    echo
+
+    echo "only_cmd: _${only_cmd}_"
+    echo "first_word: _${first_word}_"
+    echo
+
+    echo "set_cursor_char: _${set_cursor_char}_"
+
+}
+
 expand_abbr() {
     local key="$1"
 
@@ -116,7 +154,7 @@ expand_abbr() {
     if [[ -n "$only_cmd" ]]; then
         #  cmd (at start of line) matches --command...
         #  use this to set allowed_position (override other checks above)
-        first_word="${READLINE_LINE%% *}" # greedy strip from first space to end of line => thus first command
+        local first_word="${READLINE_LINE%% *}" # greedy strip from first space to end of line => thus first command
         if [[ "$only_cmd" = "$first_word" ]]; then
             allowed_position=yes
         else
@@ -124,11 +162,7 @@ expand_abbr() {
         fi
     fi
 
-    # echo "expanded: _${expanded}_"
-    # echo "prefix: _${prefix}_"
-    # echo "suffix: _${suffix}_"
-    # echo "word_before_cursor: _${word_before_cursor}_"
-    # echo "add_char_if_no_expansion: _${add_char_if_no_expansion}_"
+    _dump_expand_locals
 
     if [[ "$expanded" = "" || "$allowed_position" = "no" ]]; then
         # no expansion => insert char and return early
