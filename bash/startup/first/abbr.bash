@@ -162,9 +162,8 @@ expand_abbr() {
         fi
     fi
 
-    _dump_expand_locals
-
     if [[ "$expanded" = "" || "$allowed_position" = "no" ]]; then
+        _dump_expand_locals
         # no expansion => insert char and return early
         READLINE_LINE="${prefix}${word_before_cursor}${add_char_if_no_expansion}${suffix}"
         READLINE_POINT=$((${#prefix} + ${#word_before_cursor} + ${#add_char_if_no_expansion}))
@@ -174,6 +173,7 @@ expand_abbr() {
     # * inject expansion and move cursor
     # shellcheck disable=SC2155
     local set_cursor_char=$(lookup_cursor_set_char "$word_before_cursor")
+    _dump_expand_locals
     if [[ -n "$set_cursor_char" ]]; then
         # * --set-cursor too
         # i.e. foo%bar => before=foo after=bar
