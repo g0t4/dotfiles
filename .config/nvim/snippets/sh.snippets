@@ -52,19 +52,14 @@ snippet d* "expand array, join elements with IFS, but preserve elements (quoted)
 snippet d_array_element
 "\${${1:SCALAR}[${2:INDEX}]}"
 
-snippet d_array_length "expand array length"
+snippet d_array_length
 \${#${1:ARRAY}[@]}
 
-# * echo variants (keep dx/d@ snippet suffix, e becomes a "namespace" for echo snippets that reuse the inner snippet from non-echo variants)
-snippet echo_scalar 'echo variable: ${variable} # labeled"
-echo "${1}: _\${${1:SCALAR}}_"
-
-# only issue with declare -p is if it isn't assigned, blows up... fine for now, might change here later
-snippet echo_array
-declare -p ${name} | bat -l bash
+snippet echo_variable "BOTH arrays and scalars"
+declare -p ${1:VAR} | bat -l bash
 
 snippet echo_array_element
-echo "${1}[${2}]: _\${${1:SCALAR}[${2:INDEX}]}_"
+echo "${1}[${2}]: _\${${1:ARRAY}[${2:INDEX_OR_KEY}]}_"
 
 
 # * FOR LOOPS

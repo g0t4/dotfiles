@@ -27,10 +27,9 @@ abbr d_assign_if_unset '"${%:=assign_this_if_unset}"' --position=anywhere --set-
 abbr d_error_if_unset '"${%:?error_message_if_unset}"' --position=anywhere --set-cursor
 #
 abbr dxu='${%}' --position=anywhere --set-cursor
+abbr echo_variable='declare -p % | bat -l bash' # arrays and scalars
+abbr echo_array_element='echo _"${%[0]}"_' --set-cursor # array item, adds [0] as a convenience (could be a 2nd placeholder in a future snippets system)
 abbr echo_array_length='echo ${#%[@]}' --set-cursor
-abbr echo_scalar='echo _"${%}"_' --set-cursor
-abbr echo_array='declare -p % | bat -l bash'
-abbr echo_array_element='echo _"${%[0]}"_' --set-cursor # array item, adds [0] as a convenience
 #
 # aliased, see which I prefer
 abbr for_in_array='for item in "${%[@]}"; do echo $item; done' --set-cursor
