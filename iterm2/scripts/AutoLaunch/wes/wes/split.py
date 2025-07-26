@@ -69,9 +69,12 @@ async def prepare_new_profile(session: iterm2.Session, force_local: bool) -> tup
             pass
         elif was_bash:
             # if using bash (locally) then mirror that in new tab
-            use_iterms_path = f"{os.environ['PATH']}"
-            bash_inherit_path = f"env PATH='{use_iterms_path}' IS_SEMANTIC_WINDOW=yes /opt/homebrew/bin/bash"
-            new_profile.set_command(bash_inherit_path)
+            # allow inheriting a few key env vars
+            # TODO move this into a script so I can re-use it anywhere I launch bash?
+            home = os.environ['HOME']
+            bash_minimal_env = f"env -i HOME='{home}' /opt/homebrew/bin/bash --login"
+            print(f'{bash_minimal_env=}')
+            new_profile.set_command(bash_minimal_env)
             new_profile.set_use_custom_command("Yes")
 
     return new_profile, is_ssh
