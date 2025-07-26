@@ -56,11 +56,11 @@ lookup_function() {
 }
 
 declare -A command_separators=(
-    ["|"]="|" ["|&"]="|&"                       # simple command separator (within pipeline)
-    [";"]=";" ["||"]="||" ["&"]="&" ["&&"]="&&" # pipeline separator (within lists)
+    ['|']='|' ['|&']='|&'                       # simple command separator (within pipeline)
+    [';']=';' ['||']='||' ['&']='&' ['&&']='&&' # pipeline separator (within lists)
     # \n (newline)
-    [")"]=")" ["}"]="}"     # compound commands
-    ["(("]="((" ["[["]="[[" # compound arithmethic, conditional exprsesions
+    ['\)']=')' ['}']='}'    # compound commands
+    ['((']='((' ['[[']='[[' # compound arithmethic, conditional exprsesions
 )
 
 expand_abbr() {
