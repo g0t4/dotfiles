@@ -295,6 +295,9 @@ abbr() {
     local key
     local value
     if ((${#positional_args[@]} == 1)); then
+        # TODO --function only requires key part, not value... function name is basically the value
+        # TODO also IIRC same is true for regex, only key not value
+        # TODO ADD TESTS FOR THIS before IMPL
         key="${positional_args%=*}"   # strip '=' thru end
         value="${positional_args#*=}" # strip prefix to '='
     elif ((${#positional_args[@]} == 2)); then
@@ -438,8 +441,8 @@ test_parse_abbr_args() {
     reset_abbrs
 
     # * --function
-    start_test abbr --function call_func -- func ify
-    expect_equal "${abbrs[func]}" "ify"
+    start_test abbr --function call_func -- func
+    expect_equal "${abbrs[func]}" ""
     expect_equal "${abbrs_function[func]}" "call_func"
 
     # ensure clears abbrs_function
