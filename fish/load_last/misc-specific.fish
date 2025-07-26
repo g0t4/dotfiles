@@ -2717,3 +2717,9 @@ abbr strjoin_lines "string join '\n'"
 #
 #
 # TODO other string * abbrs
+
+# * BASH
+
+abbr b bash
+abbr basht "ABBR_TESTS=1 bash"
+abbr bashtd "ABBR_TESTS=1 ABBR_DEBUG=1 bash"
