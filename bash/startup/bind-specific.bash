@@ -24,6 +24,9 @@ abbr ed@#='echo ${#%[@]}' --set-cursor
 abbr edi='echo _"${%[0]}"_' --set-cursor # array item, adds [0] as a convenience
 abbr edx='echo _"${%}"_' --set-cursor
 abbr edxu='echo _${%}_' --set-cursor
+#
+# aliased, see which I prefer
+abbr for_in_array='for item in "${%[@]}"; do echo $item; done' --set-cursor
 abbr f@='for item in "${%[@]}"; do echo $item; done' --set-cursor
 
 abbr pIFS "echo -n \"\${IFS}\" | hexdump -C" # block word splitting, or it will split it's own characters :)
