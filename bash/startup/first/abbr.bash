@@ -100,9 +100,9 @@ expand_abbr() {
     words_usually_before_cmd=('|' ';') # TODO add more
     tmp_prefix_for_last_token="${READLINE_LINE:0:$word_start_offset}"
     last_token=$(echo "$tmp_prefix_for_last_token" | awk '{print $NF}')
-    echo "last_token: _${last_token}_"
+    # echo "last_token: _${last_token}_"
 
-    if [[ $word_start_offset -eq 0 || $last_token = "|" || "$anywhere" = "yes" ]]; then
+    if [[ $word_start_offset -eq 0 || $last_token =~ ^(\||;)$ || "$anywhere" = "yes" ]]; then
         allowed_position=yes
         # TODO pipelines
         # TODO lists (sequential commands - check position relative to current 'simple command')...
