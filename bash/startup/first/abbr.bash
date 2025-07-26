@@ -73,8 +73,15 @@ lookup_expanded() {
         regex="${abbrs_regex["$name"]}"
         declare -p regex >&2
         if [[ "$word" =~ "$regex" ]]; then
-            echo FOUND IT
-            return
+            # lookup func FOR this abbr (not one above)
+            local func="${abbrs_function["$name"]}"
+            if [[ -n "$func" ]]; then
+                "$func" "$READLINE_LINE" "$READLINE_POINT"
+                return
+            else
+                echo "UNEXPECTED FAILURE: matching regex has NO function"
+                return 2
+            fi
         fi
     done
     return 1
