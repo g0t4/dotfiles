@@ -62,8 +62,13 @@ async def prepare_new_profile(session: iterm2.Session, force_local: bool) -> tup
         # * at least for duration of course, launch bash shell... when in bash in current session
         # that way no accidents when I don't realize I'm not in bash b/c I've replicated all my abbrs bash can feel like fish at times ;)
         was_bash = jobName == "bash"
-        if was_bash:
+        if force_local:
+            # assume this means use fish
+            # so I can ctrl+cmd+shift+t to open new tab to fish (just like I can do when ssh'ed to get back to fish local)
+            pass
+        elif was_bash:
             # if using bash (locally) then mirror that in new tab
+            # TODO PATH
             new_profile.set_command("/opt/homebrew/bin/bash")  # assume on mac I always want brew installed bash
             new_profile.set_use_custom_command("Yes")
             # how to get full path to bash executable on macOS... don't need right now but just FYI
