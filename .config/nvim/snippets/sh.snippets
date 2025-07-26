@@ -3,10 +3,10 @@
 
 # * d == $   (mostly applies to scalars by the way, but focus on the $ which is MEMORABLE and the first char)
 # [d]ollar $ - e[x]pand
-snippet dx "dollar expand quoted (no word splitting)" b
+snippet dx "dollar expand quoted (no word splitting)"
 "\${${1:variable}}"
 
-snippet dxu "dollar expand unquoted (split words)" b
+snippet dxu "dollar expand unquoted (split words)"
 \${${1:variable}}
 
 # * dollar sub operators
@@ -20,7 +20,7 @@ snippet d_assign_if_unset "assign if unset (only assignment operator that change
 snippet d_error_if_unset "error if unset"
 "\${${1:variable}:?${2:error_message_if_unset}}"
 
-snippet d# "dollar expand length" b
+snippet d# "dollar expand length"
 \${#${1:variable}}
 
 snippet check_string_length
@@ -33,11 +33,11 @@ if ((\${#${1:array}[@]} >= 1)); then
     ${0:declare -p ${1}} | bat -l bash
 fi
 
-snippet d_strip_prefix "Prefix strip: \${var#pattern}" b
+snippet d_strip_prefix "Prefix strip: \${var#pattern}"
 \${${1:VAR}#${2:pattern}}
 #\${${1:VAR#${2:pattern}}}
 
-snippet d_strip_suffix "Suffix strip: \${var%pattern}" b
+snippet d_strip_suffix "Suffix strip: \${var%pattern}"
 \${${1:VAR}%${2:pattern}}
 #\${${1:VAR%${2:pattern}}}
 
@@ -64,7 +64,7 @@ echo "${1}[${2}]: _\${${1:ARRAY}[${2:INDEX_OR_KEY}]}_"
 
 # * FOR LOOPS
 # [a]rray [f]or-loop
-snippet for_in_array "loop over array elements - preserve elements (quoted)" b
+snippet for_in_array "loop over array elements - preserve elements (quoted)"
 for ${2:item} in "\${${1:ARRAY}[@]}"; do
     ${0:codes}
 done
