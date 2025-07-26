@@ -27,7 +27,7 @@ abbr d_assign_if_unset '"${%:=assign_this_if_unset}"' --position=anywhere --set-
 abbr d_error_if_unset '"${%:?error_message_if_unset}"' --position=anywhere --set-cursor
 #
 abbr dxu='${%}' --position=anywhere --set-cursor
-abbr echo_variable='declare -p % | bat -l bash' # arrays and scalars
+abbr echo_variable='declare -p % | bat -l bash'         # arrays and scalars
 abbr echo_array_element='echo _"${%[0]}"_' --set-cursor # array item, adds [0] as a convenience (could be a 2nd placeholder in a future snippets system)
 abbr echo_array_length='echo ${#%[@]}' --set-cursor
 #
@@ -44,3 +44,12 @@ _grvcp() {
     # FYI second half has the link visible, first half shows command used and copying it
     echo "git remote get-url $first_remote | pbcopy # $(git remote get-url "$first_remote")"
 }
+
+_expand_git_log() {
+    if [[ "$1" =~ gl([0-9]+) ]]; then
+        echo "git log -${BASH_REMATCH[1]}"
+        return
+    fi
+    echo "git log"
+}
+abbr foo --regex 'gl[0-9]*' --function _expand_git_log
