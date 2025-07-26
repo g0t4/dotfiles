@@ -72,7 +72,12 @@ lookup_expanded() {
         declare -p name >&2
         regex="${abbrs_regex["$name"]}"
         declare -p regex >&2
+        if [[ "$word" =~ "$regex" ]]; then
+            echo FOUND IT
+            return
+        fi
     done
+    return 1
 }
 
 declare -A command_separators=(
