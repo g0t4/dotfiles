@@ -72,7 +72,7 @@ async def prepare_new_profile(session: iterm2.Session, force_local: bool) -> tup
             # allow inheriting a few key env vars
             # TODO move this into a script so I can re-use it anywhere I launch bash?
             home = os.environ['HOME']
-            bash_minimal_env = f"env -i HOME='{home}' /opt/homebrew/bin/bash --login"
+            bash_minimal_env = f"env -i HOME='{home}' /opt/homebrew/bin/bash --login" # --login => will source profile startup files => i.e. /etc/profile (which on macOS sets up PATH (via /usr/libexec/path_helper -s)
             print(f'{bash_minimal_env=}')
             new_profile.set_command(bash_minimal_env)
             new_profile.set_use_custom_command("Yes")
