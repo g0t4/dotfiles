@@ -1,11 +1,3 @@
-is_set() {
-    # [n]on-zero == not empty == set
-    test -n "$1"
-}
-is_not_set() {
-    # [z]ero == empty
-    test -z "$1"
-}
 
 indexed_array_contains() {
 
