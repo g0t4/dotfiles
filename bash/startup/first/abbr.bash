@@ -86,11 +86,11 @@ expand_abbr() {
 
     # * add_char
     local add_char="$key"
-    local no_expand_add_char=" " # -no-space-after does not apply if no expansion
+    local add_char_if_no_expansion="$key" # --no-space-after does not apply if no expansion
     if [[ "$key" = "enter" ]]; then
         # for enter we have the \C-j in the bind macro, not doing that here
         add_char=""
-        no_expand_add_char=""
+        add_char_if_no_expansion=""
     fi
     if is_no_space_after_set "$word_before_cursor"; then
         add_char=""
@@ -128,10 +128,16 @@ expand_abbr() {
         fi
     fi
 
+    # echo "expanded: _${expanded}_"
+    # echo "prefix: _${prefix}_"
+    # echo "suffix: _${suffix}_"
+    # echo "word_before_cursor: _${word_before_cursor}_"
+    # echo "add_char_if_no_expansion: _${add_char_if_no_expansion}_"
+
     if [[ "$expanded" = "" || "$allowed_position" = "no" ]]; then
         # no expansion => insert char and return early
-        READLINE_LINE="${prefix}${word_before_cursor}${no_expand_add_char}${suffix}"
-        READLINE_POINT=$((${#prefix} + ${#word_before_cursor} + ${#no_expand_add_char}))
+        READLINE_LINE="${prefix}${word_before_cursor}${add_char_if_no_expansion}${suffix}"
+        READLINE_POINT=$((${#prefix} + ${#word_before_cursor} + ${#add_char_if_no_expansion}))
         return 0
     fi
 
