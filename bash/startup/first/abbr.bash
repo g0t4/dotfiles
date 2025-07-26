@@ -96,7 +96,13 @@ expand_abbr() {
     fi
 
     local allowed_position="no"
-    if [[ $word_start_offset -eq 0 || "$anywhere" = "yes" ]]; then
+    # TODO:   cmd_pos = offset == 0 || word before in ( '{' '|' ';' etc)
+    words_usually_before_cmd=('|' ';') # TODO add more
+    tmp_prefix_for_last_token="${READLINE_LINE:0:$word_start_offset}"
+    last_token=$(echo "$tmp_prefix_for_last_token" | awk '{print $NF}')
+    echo "last_token: _${last_token}_"
+
+    if [[ $word_start_offset -eq 0 || $last_token = "|" || "$anywhere" = "yes" ]]; then
         allowed_position=yes
         # TODO pipelines
         # TODO lists (sequential commands - check position relative to current 'simple command')...
@@ -649,7 +655,7 @@ test_expand_abbr() {
     abbr foo bar
     READLINE_LINE="echo hello | foo"
     READLINE_POINT=16
-    expand_abbr "|"
+    expand_abbr " "
     expect_equal "$READLINE_LINE" "echo hello | bar "
     expect_equal "$READLINE_POINT" 17
 
