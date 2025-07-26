@@ -69,14 +69,14 @@ lookup_expanded() {
     # look at all regexes since we don't have a match yet!
     local name
     for name in "${!abbrs_regex[@]}"; do
-        declare -p name >&2
+        # declare -p name >&2
         regex="${abbrs_regex["$name"]}"
-        declare -p regex >&2
+        # declare -p regex >&2
         # FYI careful with "" around $regex... will force literal match on regex variable's expanded text value (including [0-9] wildcards)
         if [[ "$word" =~ $regex ]]; then
             # lookup func FOR this abbr (not one above)
             local func="${abbrs_function["$name"]}"
-            declare -p func >&2
+            # declare -p func >&2
             if [[ -n "$func" ]]; then
                 "$func" "$READLINE_LINE" "$READLINE_POINT"
                 return
