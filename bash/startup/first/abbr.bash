@@ -85,7 +85,7 @@ _dump_expand_locals() {
     _dump_var READLINE_POINT
     _dump_var line_before_cursor
     _dump_var word_before_cursor
-    _dump_var word_start_offset
+    _dump_var word_before_start_offset
     _dump_var previous_word
     _dump_var prefix
     _dump_var suffix
@@ -117,8 +117,8 @@ expand_abbr() {
     # * pseudo-tokenize (prefix / word_before_cursor / cursor / suffix)
     local line_before_cursor="${READLINE_LINE:0:READLINE_POINT}"
     local word_before_cursor="${line_before_cursor##* }"
-    local word_start_offset=$((READLINE_POINT - ${#word_before_cursor}))
-    local prefix="${READLINE_LINE:0:word_start_offset}"
+    local word_before_start_offset=$((READLINE_POINT - ${#word_before_cursor}))
+    local prefix="${READLINE_LINE:0:word_before_start_offset}"
     local suffix="${READLINE_LINE:READLINE_POINT}"
 
     local expanded=$(lookup_expanded "$word_before_cursor")
@@ -150,11 +150,11 @@ expand_abbr() {
     fi
 
     local allowed_position="no"
-    tmp_prefix_for_previous_word="${READLINE_LINE:0:$word_start_offset}"
+    tmp_prefix_for_previous_word="${READLINE_LINE:0:$word_before_start_offset}"
     previous_word=$(echo "$tmp_prefix_for_previous_word" | awk '{print $NF}')
     # echo "previous_word: _${previous_word}_"
     # TODO add test of ; semicolon for previous_word too and others that I add support for in regex:
-    if [[ $word_start_offset -eq 0 || ${command_separators["$previous_word"]} || "$anywhere" = "yes" ]]; then
+    if [[ $word_before_start_offset -eq 0 || ${command_separators["$previous_word"]} || "$anywhere" = "yes" ]]; then
         allowed_position=yes
     fi
 
