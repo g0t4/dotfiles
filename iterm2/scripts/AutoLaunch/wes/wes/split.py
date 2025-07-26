@@ -1,3 +1,4 @@
+import os
 from common import *
 
 async def close_other_tabs(connection):
@@ -68,11 +69,10 @@ async def prepare_new_profile(session: iterm2.Session, force_local: bool) -> tup
             pass
         elif was_bash:
             # if using bash (locally) then mirror that in new tab
-            # TODO PATH
-            new_profile.set_command("/opt/homebrew/bin/bash")  # assume on mac I always want brew installed bash
+            use_iterms_path = f"{os.environ['PATH']}"
+            bash_inherit_path = f"env PATH='{use_iterms_path}' IS_SEMANTIC_WINDOW=yes /opt/homebrew/bin/bash"
+            new_profile.set_command(bash_inherit_path)
             new_profile.set_use_custom_command("Yes")
-            # how to get full path to bash executable on macOS... don't need right now but just FYI
-            # lsof -p 86215 | awk '$4 == "txt" { print $9 }' | grep '/bash$'
 
     return new_profile, is_ssh
 
