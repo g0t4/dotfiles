@@ -323,7 +323,7 @@ abbr() {
         abbrs_set_cursor["$key"]="$set_cursor"
     fi
     if [[ "$func" ]]; then
-        # PRN check for the function? and warn?
+
         if [[ -n "$ABBR_DEBUG" ]]; then
             if ! declare -f "$func"; then
                 echo "MISSING FUNCTION for abbr: $func"
