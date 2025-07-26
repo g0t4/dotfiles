@@ -75,6 +75,9 @@ _dump_var() {
 }
 
 _dump_expand_locals() {
+    if [[ -z "$ABBR_DEBUG" ]]; then
+        return
+    fi
 
     _dump_var READLINE_LINE
     _dump_var READLINE_POINT
