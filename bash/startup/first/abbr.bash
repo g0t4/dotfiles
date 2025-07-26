@@ -295,11 +295,17 @@ abbr() {
     local key
     local value
     if ((${#positional_args[@]} == 1)); then
-        # TODO --function only requires key part, not value... function name is basically the value
-        # TODO also IIRC same is true for regex, only key not value
-        # TODO ADD TESTS FOR THIS before IMPL
-        key="${positional_args%=*}"   # strip '=' thru end
-        value="${positional_args#*=}" # strip prefix to '='
+        local only_arg="${positional_args[0]}"
+        if [[ "$only_arg" == *\=* ]]; then
+            # if = is present then just parse both, it won't hurt scenarios where I don't need the value (i.e. --function)
+            key="${only_arg%=*}"   # strip '=' thru end
+            value="${only_arg#*=}" # strip prefix to '='
+        elif [[ -n "$func" ]]; then
+            # TODO also IIRC same is true for regex, only key not value
+            # --function only needs key (not value) part
+            key="$only_arg"
+            value=""
+        fi
     elif ((${#positional_args[@]} == 2)); then
         key="${positional_args[0]}"
         value="${positional_args[1]}"
