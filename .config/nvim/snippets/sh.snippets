@@ -48,27 +48,27 @@ snippet d@ "expand array, element-preserving expansion (quoted)"
 snippet d* "expand array, join elements with IFS, but preserve elements (quoted)"
 "\${${1:ARRAY}[*]}"
 
-snippet di
+snippet d_array_element
 "\${${1:SCALAR}[${2:INDEX}]}"
 
-snippet d@# "expand array length"
+snippet d_array_length "expand array length"
 \${#${1:ARRAY}[@]}
 
 # * echo variants (keep dx/d@ snippet suffix, e becomes a "namespace" for echo snippets that reuse the inner snippet from non-echo variants)
-snippet edx 'echo variable: ${variable} # labeled"
+snippet echo_scalar 'echo variable: ${variable} # labeled"
 echo "${1}: _\${${1:SCALAR}}_"
 
 # only issue with declare -p is if it isn't assigned, blows up... fine for now, might change here later
-snippet ed* 'echo array"
-declare -p ${name}
+snippet echo_array
+declare -p ${name} | bat -l bash
 
-snippet edi
+snippet echo_array_element
 echo "${1}[${2}]: _\${${1:SCALAR}[${2:INDEX}]}_"
 
 
 # * FOR LOOPS
 # [a]rray [f]or-loop
-snippet f@ "loop over array elements - preserve elements (quoted)" b
+snippet for_in_array "loop over array elements - preserve elements (quoted)" b
 for ${2:item} in "\${${1:ARRAY}[@]}"; do
     ${0:codes}
 done
@@ -78,7 +78,7 @@ for i in {${2:1}..${1:10}}; do
     echo "\$${0:i}"
 done
 
-snippet for_in_range_array "for int loop over range of element indexes in an array"
+snippet for_in_array_indicies "for int loop over range of element indexes in an array"
 for i in "\${!${1:ARRAY}[@]}"; do
     echo "Index \$i: \${${1}[\$i]}"
 done
