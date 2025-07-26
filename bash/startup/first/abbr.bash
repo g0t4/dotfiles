@@ -44,16 +44,32 @@ lookup_expanded() {
         echo ""
         return 1
     fi
-    echo "${abbrs[$word]}"
-}
-
-lookup_function() {
-    local word="$1"
-    if [[ -z "$word" ]]; then
-        echo ""
-        return 1
+    local is_regex="${abbrs_regex["$word"]}"
+    # cannot match name for regex abbrs
+    local abbr_value="${abbrs["$word"]}"
+    local func="${abbrs_function["$word"]}"
+    if [[ -n "$abbr_value" && -z "$is_regex" ]]; then
+        # FYI regex value shouldn't be set so -z "$is_regex" is likely redundant, NBD leave it
+        # found a match on name and it is NOT a regex...
+        # declare -p is_regex
+        # declare -p abbr_value
+        # declare -p func
+        if [[ -n "$func" ]]; then
+            # if abbr has a function, use it
+            "$func" "$READLINE_LINE" "$READLINE_POINT"
+            return
+        fi
+        echo "$abbr_value"
+        return
     fi
-    echo "${abbrs_function[$word]}"
+
+    # look at all regexes since we don't have a match yet!
+    # local name
+    # for name in "${!abbrs_regex[@]}"; do
+    #     echo "$name"
+    #     regex="${abbrs_regex["$name"]}"
+    #     echo "  $regex"
+    # done
 }
 
 declare -A command_separators=(
@@ -124,11 +140,6 @@ expand_abbr() {
     local suffix="${READLINE_LINE:READLINE_POINT}"
 
     local expanded=$(lookup_expanded "$word_before_cursor")
-    local expand_func=$(lookup_function "$word_before_cursor")
-    if [[ -n $expand_func ]]; then
-        # s/b fine to run this here, unless an issue arises don't defer
-        expanded=$("$expand_func" "$READLINE_LINE" "$READLINE_POINT")
-    fi
 
     # * add_char
     local add_char="$key"
