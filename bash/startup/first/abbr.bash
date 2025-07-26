@@ -699,8 +699,15 @@ test_expand_abbr() {
     expect_equal "$READLINE_LINE" "reggy "
     expect_equal "$READLINE_POINT" 6
 
-    # TODO later match on digits?
-    # TODO also add a test with multiple regexes?
+    label_test "regex: match on regex with digit wildcard"
+    reset_abbrs
+    function expand_for_regex { echo patty "$1"; }
+    abbr foo --function expand_for_regex --regex pat[0-9]+
+    READLINE_LINE="pat10"
+    READLINE_POINT=5
+    expand_abbr " "
+    expect_equal "$READLINE_LINE" "patty pat10 "
+    expect_equal "$READLINE_POINT" 12
 
     # * middle of commandline (command position, abbr)
     label_test "middle of commandline: on abbr in command position"
