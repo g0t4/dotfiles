@@ -44,23 +44,26 @@ lookup_expanded() {
         echo ""
         return 1
     fi
-    local is_regex="${abbrs_regex["$word"]}"
+    local regex_value="${abbrs_regex["$word"]}"
+    # declare -p regex_value >&2 # use STDERR so don't mess up caller capturing STDOUT
     # cannot match name for regex abbrs
     local abbr_value="${abbrs["$word"]}"
+    # declare -p abbr_value >&2 # use STDERR so don't mess up caller capturing STDOUT
     local func="${abbrs_function["$word"]}"
-    if [[ -n "$abbr_value" && -z "$is_regex" ]]; then
-        # FYI regex value shouldn't be set so -z "$is_regex" is likely redundant, NBD leave it
-        # found a match on name and it is NOT a regex...
-        # declare -p is_regex
-        # declare -p abbr_value
-        # declare -p func
+    # declare -p func >&2 # use STDERR so don't mess up caller capturing STDOUT
+    if [[ -z "$regex_value" ]]; then
+        # abbr matched on NAME is NOT a regex
         if [[ -n "$func" ]]; then
-            # if abbr has a function, use it
+            # 1. prioritize expand function
             "$func" "$READLINE_LINE" "$READLINE_POINT"
             return
         fi
-        echo "$abbr_value"
-        return
+        if [[ -n "$abbr_value" ]]; then
+            # 2. if abbr's value is set...
+            echo "$abbr_value"
+            return
+        fi
+        # 3. else fall through now to look through all regexes
     fi
 
     # look at all regexes since we don't have a match yet!
