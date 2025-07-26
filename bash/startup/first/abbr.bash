@@ -59,8 +59,9 @@ declare -A command_separators=(
     ['|']='|' ['|&']='|&'                       # simple command separator (within pipeline)
     [';']=';' ['||']='||' ['&']='&' ['&&']='&&' # pipeline separator (within lists)
     # \n (newline)
-    [')']=')' ['}']='}'    # compound commands
+    [')']=')' ['}']='}'     # compound commands
     ['((']='((' ['[[']='[[' # compound arithmethic, conditional exprsesions
+    # TODO newline too? first command on line?
 )
 
 expand_abbr() {
@@ -102,17 +103,12 @@ expand_abbr() {
     fi
 
     local allowed_position="no"
-    # TODO:   cmd_pos = offset == 0 || word before in ( '{' '|' ';' etc)
-    # TODO add more
     tmp_prefix_for_last_token="${READLINE_LINE:0:$word_start_offset}"
     last_token=$(echo "$tmp_prefix_for_last_token" | awk '{print $NF}')
     # echo "last_token: _${last_token}_"
     # TODO add test of ; semicolon for last_token too and others that I add support for in regex:
     if [[ $word_start_offset -eq 0 || $last_token =~ ^(\||;)$ || "$anywhere" = "yes" ]]; then
         allowed_position=yes
-        # TODO pipelines
-        # TODO lists (sequential commands - check position relative to current 'simple command')...
-        #  need something that can tokenize the line... for now these will just work in simple commands only which is 90% of what I want anyways
     fi
 
     # shellcheck disable=SC2155
