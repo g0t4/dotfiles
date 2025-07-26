@@ -2721,5 +2721,7 @@ abbr strjoin_lines "string join '\n'"
 # * BASH
 
 abbr b bash
+# FYI capture bash in fish shell PATH... s/b brew bash on macOS
+abbr bash_env_minimal "env -i $(which bash) --noprofile --norc"
 abbr basht "ABBR_TESTS=1 bash"
 abbr bashtd "ABBR_TESTS=1 ABBR_DEBUG=1 bash"
