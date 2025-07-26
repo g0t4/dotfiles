@@ -101,7 +101,7 @@ expand_abbr() {
     tmp_prefix_for_last_token="${READLINE_LINE:0:$word_start_offset}"
     last_token=$(echo "$tmp_prefix_for_last_token" | awk '{print $NF}')
     # echo "last_token: _${last_token}_"
-
+    # TODO add test of ; semicolon for last_token too and others that I add support for in regex:
     if [[ $word_start_offset -eq 0 || $last_token =~ ^(\||;)$ || "$anywhere" = "yes" ]]; then
         allowed_position=yes
         # TODO pipelines
