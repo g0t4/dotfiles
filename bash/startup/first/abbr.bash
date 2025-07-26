@@ -79,15 +79,14 @@ _dump_expand_locals() {
         return
     fi
 
+    # rely on bash's dynamic scope to access caller's variables w/o explicitly passing them
+
     _dump_var READLINE_LINE
     _dump_var READLINE_POINT
-    echo
-
-    # rely on bash's dynamic scope to access caller's variables w/o explicitly passing them
     _dump_var line_before_cursor
     _dump_var word_before_cursor
-    _dump_var last_token
     _dump_var word_start_offset
+    _dump_var last_token
     _dump_var prefix
     _dump_var suffix
     echo
