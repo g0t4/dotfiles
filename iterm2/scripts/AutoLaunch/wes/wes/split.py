@@ -61,8 +61,15 @@ async def prepare_new_profile(session: iterm2.Session, force_local: bool) -> tup
             new_profile.set_command(commandLine)
             new_profile.set_use_custom_command("Yes")
 
-    return new_profile, is_ssh
+    # idea - in some cases replicate a non-fish shell or command?
+    # was_bash = jobName == "bash"
+    # if was_bash:
+    #     # if using bash (locally) then mirror that in new tab
+    #     new_profile.set_command("/opt/homebrew/bin/bash")
+    #     new_profile.set_use_custom_command("Yes")
+    #     # lsof -p 86215 | awk '$4 == "txt" { print $9 }' | grep '/bash$'
 
+    return new_profile, is_ssh
 
 async def get_path(session: iterm2.Session) -> str:
     # default to using split_path to avoid issues with path being unreliable
