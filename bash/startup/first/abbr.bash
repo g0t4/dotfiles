@@ -55,10 +55,16 @@ lookup_function() {
     echo "${abbrs_function[$word]}"
 }
 
+declare -A command_separators=(
+    ["|"]="|" ["|&"]="|&"                       # simple command separator (within pipeline)
+    [";"]=";" ["||"]="||" ["&"]="&" ["&&"]="&&" # pipeline separator (within lists)
+    # \n (newline)
+    [")"]=")" ["}"]="}"     # compound commands
+    ["(("]="((" ["[["]="[[" # compound arithmethic, conditional exprsesions
+)
+
 expand_abbr() {
     local key="$1"
-    # echo "READLINE_LINE: $READLINE_LINE"
-    # echo "READLINE_POINT: $READLINE_POINT"
 
     # * pseudo-tokenize (prefix / word_before_cursor / cursor / suffix)
     local line_before_cursor="${READLINE_LINE:0:READLINE_POINT}"
@@ -97,7 +103,7 @@ expand_abbr() {
 
     local allowed_position="no"
     # TODO:   cmd_pos = offset == 0 || word before in ( '{' '|' ';' etc)
-    words_usually_before_cmd=('|' ';') # TODO add more
+    # TODO add more
     tmp_prefix_for_last_token="${READLINE_LINE:0:$word_start_offset}"
     last_token=$(echo "$tmp_prefix_for_last_token" | awk '{print $NF}')
     # echo "last_token: _${last_token}_"
