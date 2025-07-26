@@ -2,7 +2,6 @@
 abbr gcmsg='git commit -m "%"' --no-space-after --set-cursor
 
 # TODO temporary until I port regex expansions
-abbr gl10 "git log -10"
 
 # declare -p abbrs  # sanity check
 abbr declarep "declare -p % | bat -l bash" --set-cursor
