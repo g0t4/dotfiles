@@ -665,6 +665,16 @@ test_expand_abbr() {
     expect_equal "$READLINE_LINE" "echo hello | bar "
     expect_equal "$READLINE_POINT" 17
 
+    # *** multi-command commandline tests
+    label_test "should expand command position after a pipe"
+    reset_abbrs
+    abbr other other
+    READLINE_LINE="echo foo "
+    READLINE_POINT=9
+    expand_abbr "|"
+    expect_equal "$READLINE_LINE" "echo foo |"
+    expect_equal "$READLINE_POINT" 10
+
     # TODO assume separators for pipelines/lists indicate next word is in command position
     # simple command is what I have now:
     #   gst<SPACE> => git status
