@@ -2745,7 +2745,8 @@ function bash_env_iterm_inherit_without_path
         LC_TERMINAL="$LC_TERMINAL" \
         LC_TERMINAL_VERSION="$LC_TERMINAL_VERSION" \
         __CF_USER_TEXT_ENCODING="$__CF_USER_TEXT_ENCODING" \
-        "$(which bash)"
+        "$(which bash)" \
+        $argv
 end
 
 #
