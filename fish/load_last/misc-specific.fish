@@ -2569,7 +2569,7 @@ end
 
 # lets see how I feel about awk being auto '' quoted... I can change later if this upsets me
 #   i.e. if I find myself often wanting to set args -F ... then this might be annoying
-abbr --set-cursor awk "awk '%'"
+abbr --set-cursor awk "awk '/%/ { print }'"
 
 # abbr awk4 "awk '{print $4}'"
 abbr --add _awkd --regex 'awk\d+' --function _abbr_expand_awk
