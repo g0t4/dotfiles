@@ -2751,8 +2751,8 @@ end
 #
 # FTR --login bash shell does not invoke ~/.bashrc so --norc is redundant
 #
-abbr basht "ABBR_TESTS=1 bash"
-abbr bashtd "ABBR_TESTS=1 ABBR_DEBUG=1 bash"
+abbr bash_abbr_tests "ABBR_TESTS=1 bash"
+abbr bash_abbr_tests_debug "ABBR_TESTS=1 ABBR_DEBUG=1 bash"
 # trace startup (and everything else):
 #  note this won't show what is executed in files that have no commands (i.e. blank ~/.bash_profile)
 abbr bash_startup_trace 'PS4="+ \${BASH_SOURCE}:\${LINENO}: " bash -x -l'
