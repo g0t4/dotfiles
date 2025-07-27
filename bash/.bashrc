@@ -1,5 +1,7 @@
 ( IFS="<"; echo "sourcing ${BASH_SOURCE[*]}")
 
+# ! KEEP THIS FILE MINIMAL, only critical, early config should be in here
+
 # * uncomment for xtrace-ing (fyi.. can inherit path from outer shell)
 # export PS1="$ "
 # unset PROMPT_COMMAND # remove default for xtrace, when also comment out the return here:
@@ -8,6 +10,7 @@
 UNAME_S=$(uname -s)
 is_macos() { [[ "$UNAME_S" = "Darwin" ]] }
 is_linux() { [[ "$UNAME_S" = "Linux" ]] }
+
 
 # * RUN BEFORE any path mods...
 BASH_DOTFILES="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
