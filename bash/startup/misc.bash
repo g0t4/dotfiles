@@ -3,7 +3,7 @@
 #
 # match ** matches all files + zero+ directories (basically search all nested dirs)
 # shopt -s globstar
-
+shopt -s autocd # cd to a dir with just its name in command position
 
 #
 # * env vars (without a different home)
