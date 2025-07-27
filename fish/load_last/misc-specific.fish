@@ -2745,3 +2745,6 @@ abbr bash_env_login "env -i HOME=$HOME \$(which bash) --login --norc" # go with 
 #
 abbr basht "ABBR_TESTS=1 bash"
 abbr bashtd "ABBR_TESTS=1 ABBR_DEBUG=1 bash"
+# trace startup (and everything else):
+#  note this won't show what is executed in files that have no commands (i.e. blank ~/.bash_profile)
+abbr bash_startup_trace 'PS4="+ \${BASH_SOURCE}:\${LINENO}: " bash -x -l'
