@@ -48,7 +48,6 @@ if command -q nvim
     ln -f -s $dotfiles_dir/.config/nvim/UltiSnips $HOME/.config/nvim/. # DIR SYMLINK
 end
 
-
 #
 # FYI no longer using vimrc, but I might want it back for some envs?
 # $HOME/.vimrc
@@ -99,4 +98,6 @@ ln -f -s $dotfiles_dir/.config/fd/ignore $HOME/.config/fd/.
 
 # *** bash
 ln -f -s $dotfiles_dir/bash/bashrc $HOME/.bashrc
-# PRN profile? or somehow make sure bashrc is symlinked into profile? OR?
+# I chose ~/.bash_profile b/c it wins over ~/.profile and ~/.bash_login
+ln -f -s $dotfiles_dir/bash/.bash_profile $HOME/.bash_profile
+ln -f -s $dotfiles_dir/bash/.bash_logout $HOME/.bash_logout

@@ -77,7 +77,17 @@ async def prepare_new_profile(session: iterm2.Session, force_local: bool) -> tup
             #   ITERM_SESSION_ID='{ITERM_SESSION_ID}'
             #
             HOME = os.environ['HOME']
-            bash_minimal_env = f"env -i HOME='{HOME}' /opt/homebrew/bin/bash --login"  # --login => will source profile startup files => i.e. /etc/profile (which on macOS sets up PATH (via /usr/libexec/path_helper -s)
+            bash_minimal_env = f"env -i HOME='{HOME}' /opt/homebrew/bin/bash --login"
+            # --login => will source profile startup files => i.e. /etc/profile (which on macOS sets up PATH (via /usr/libexec/path_helper -s)
+            # as login shell:
+            #   bash sources:
+            #     /etc/profile (macOS if PS1 not set then also /etc/profile sources /etc/bashrc)
+            #        # confusing yes... b/c its an _rc_ file and yet it's only loaded from profile!
+            #     then, first of: ~/.bash_profile|~/.bash_login|~/~/.profile
+            #
+            #   ~/.bashrc is sourced for interactive, non-login shells
+            #
+            # top level bash shell should be a login shell else profile will never be loaded! and nothing "above" this bash shell process (which is iTerm) can share what would've been shared if starting a child bash shell
             print(f'{bash_minimal_env=}')
 
             new_profile.set_command(bash_minimal_env)
