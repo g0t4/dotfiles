@@ -1,5 +1,19 @@
 ( IFS="<"; echo "sourcing ${BASH_SOURCE[*]}")
 
+
+UNAME_S=$(uname -s)
+is_macos() {
+    [[ "$UNAME_S" = "Darwin" ]]
+}
+
+# * ensure path is consistenly setup regardless if login shell or not
+#  normally this is only run in /etc/profile for login shells
+#  I'd prefer I handle it here and just cache when it was run with an env var
+if is_macos && [[ -z "$__PATH_HELPER_RAN" ]]; then
+  eval "$(/usr/libexec/path_helper -s)"
+  export __PATH_HELPER_RAN=1
+fi
+
 # resolve path to this script so I can import others nearby
 my_loc=$(dirname "$(realpath "${BASH_SOURCE[0]}")")
 

@@ -10,4 +10,5 @@
 source "$HOME/.bashrc"
 
 # use is_login and is_interactive if you need to limit config to a particular env!
+# FYI I moved path setup into bashrc too, don't rely on a login shell to ensure a consistent path
 
