@@ -6,16 +6,33 @@ is_macos() {
     [[ "$UNAME_S" = "Darwin" ]]
 }
 
-# * ensure path is consistenly setup regardless if login shell or not
-#  normally this is only run in /etc/profile for login shells
-#  I'd prefer I handle it here and just cache when it was run with an env var
-if is_macos && [[ -z "$__PATH_HELPER_RAN" ]]; then
-  eval "$(/usr/libexec/path_helper -s)"
-  export __PATH_HELPER_RAN=1
+# * RUN BEFORE any path mods...
+my_loc=$(dirname "$(realpath "${BASH_SOURCE[0]}")")
+source "$my_loc/early/path-init.bash"
+
+
+# TODO decide if/when to set these (i.e. mac vs linux envs...)
+# PRN will iterm2 shell integration script setup this if I don't?
+# TERM=xterm-256color
+if is_macos; then
+    # hardcoded version of:
+    #   eval $(brew shellenv bash)
+    #
+    #   another way to approach would be to run this once (in top level shell)
+    #     using variable to determine if run when subshells launch...
+    #     like I did with path init
+
+    prepend_path "/opt/homebrew/bin"
+    prepend_path "/opt/homebrew/sbin"
+
+    export HOMEBREW_PREFIX="/opt/homebrew"
+    export HOMEBREW_CELLAR="/opt/homebrew/Cellar"
+    export HOMEBREW_REPOSITORY="/opt/homebrew"
+
+    [ -z "${MANPATH-}" ] || export MANPATH=":${MANPATH#:}"
+    export INFOPATH="/opt/homebrew/share/info:${INFOPATH:-}"
 fi
 
-# resolve path to this script so I can import others nearby
-my_loc=$(dirname "$(realpath "${BASH_SOURCE[0]}")")
 
 # * uncomment for xtrace-ing
 # export PS1="$ "

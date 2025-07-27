@@ -20,3 +20,13 @@ prepend_path() {
             PATH="$1${PATH:+:$PATH}"
     esac
 }
+
+# * ensure path is consistenly setup regardless if login shell or not
+#  normally this is only run in /etc/profile for login shells
+#  I'd prefer I handle it here and just cache when it was run with an env var
+if is_macos && [[ -z "$__PATH_HELPER_RAN" ]]; then
+    # ** REPLACES PATH, DO THIS BEFORE ANY OTHER PATH CHANGES
+    eval "$(/usr/libexec/path_helper -s)"
+    export __PATH_HELPER_RAN=1
+fi
+
