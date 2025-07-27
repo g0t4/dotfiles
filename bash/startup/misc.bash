@@ -6,6 +6,8 @@
 shopt -s autocd # cd to a dir with just its name in command position
 shopt -s histreedit # failed history expansions - put back into cmdline to edit (otherwise they are lost)
 
+abbr options_list_set "echo \$-"
+
 #
 # * env vars (without a different home)
 [[ -z "$TERM" || "$TERM" = dumb ]] && TERM=xterm-256color
@@ -107,6 +109,7 @@ abbr bind_list_bash_funcs "bind -X"
 # *** diff
 
 _abbr_expand_diff_last_two_commands() {
+
     if ! is-history-expansion-enabled; then
         echo "HISTORY EXPANSION MUST BE ENABLED, use 'set -B' to do so" >&2
     fi
