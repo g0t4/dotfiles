@@ -1,6 +1,7 @@
 
 #
 # * env vars (without a different home)
+[[ -z "$TERM" || "$TERM" = dumb ]] && TERM=xterm-256color
 export EDITOR=nvim
 export GREP_COLOR="1;38;5;162"
 export RIPGREP_CONFIG_PATH="$WES_DOTFILES/.config/ripgrep/ripgreprc"

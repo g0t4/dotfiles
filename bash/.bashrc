@@ -6,18 +6,13 @@
 # return
 
 UNAME_S=$(uname -s)
-is_macos() {
-    [[ "$UNAME_S" = "Darwin" ]]
-}
+is_macos() { [[ "$UNAME_S" = "Darwin" ]] }
+is_linux() { [[ "$UNAME_S" = "Linux" ]] }
 
 # * RUN BEFORE any path mods...
 BASH_DOTFILES="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 source "$BASH_DOTFILES/early/path-init.bash"
-export WES_DOTFILES="$(realpath $BASH_DOTFILES/..)"
-
-# * essential env vars (if not inherited)... i.e. if I `env -i` and don't pass any env vars
-[[ -z "$TERM" || "$TERM" = dumb ]] && TERM=xterm-256color
-
+export WES_DOTFILES="$(realpath "$BASH_DOTFILES"/..)"
 
 
 
