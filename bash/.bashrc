@@ -18,17 +18,6 @@ export WES_DOTFILES="$(realpath $BASH_DOTFILES/..)"
 # * essential env vars (if not inherited)... i.e. if I `env -i` and don't pass any env vars
 [[ -z "$TERM" || "$TERM" = dumb ]] && TERM=xterm-256color
 
-export EDITOR=nvim
-export GREP_COLOR="1;38;5;162"
-export RIPGREP_CONFIG_PATH="$WES_DOTFILES/.config/ripgrep/ripgreprc"
-export DOCKER_HIDE_LEGACY_COMMANDS=1
-export KUBECTL_EXTERNAL_DIFF="icdiff -r"
-# export NODE_OPTIONS=--disable-warning=ExperimentalWarning
-# export ICDIFF_OPTIONS="--highlight"
-# VAGRANT_BOX_UPDATE_CHECK_DISABLE=
-# VAGRANT_EXPERIMENTAL=
-# VAGRANT_PROVIDER=
-
 
 
 

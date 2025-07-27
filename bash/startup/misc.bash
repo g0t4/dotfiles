@@ -1,3 +1,23 @@
+
+#
+# * env vars (without a different home)
+export EDITOR=nvim
+export GREP_COLOR="1;38;5;162"
+export RIPGREP_CONFIG_PATH="$WES_DOTFILES/.config/ripgrep/ripgreprc"
+export DOCKER_HIDE_LEGACY_COMMANDS=1
+export KUBECTL_EXTERNAL_DIFF="icdiff -r"
+# export NODE_OPTIONS=--disable-warning=ExperimentalWarning
+# export ICDIFF_OPTIONS="--highlight"
+# VAGRANT_BOX_UPDATE_CHECK_DISABLE=
+# VAGRANT_EXPERIMENTAL=
+# VAGRANT_PROVIDER=
+
+
+
+
+
+
+#
 function help_bat() {
     help "$@" | bat -l help
 }
