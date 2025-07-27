@@ -69,11 +69,17 @@ async def prepare_new_profile(session: iterm2.Session, force_local: bool) -> tup
             pass
         elif was_bash:
             # if using bash (locally) then mirror that in new tab
-            # allow inheriting a few key env vars
-            # TODO move this into a script so I can re-use it anywhere I launch bash?
-            home = os.environ['HOME']
-            bash_minimal_env = f"env -i HOME='{home}' /opt/homebrew/bin/bash --login" # --login => will source profile startup files => i.e. /etc/profile (which on macOS sets up PATH (via /usr/libexec/path_helper -s)
+
+            # inherit ONLY select Env Vars
+            #
+            # ITERM_SESSION_ID = os.environ['ITERM_SESSION_ID']  # ITERM_SESSION_ID=w0t1p0:F32B62FE-6BFB-4149-BACC-D9CDCFBF5508
+            #   TODO does this come from shell integration script?
+            #   ITERM_SESSION_ID='{ITERM_SESSION_ID}'
+            #
+            HOME = os.environ['HOME']
+            bash_minimal_env = f"env -i HOME='{HOME}' /opt/homebrew/bin/bash --login"  # --login => will source profile startup files => i.e. /etc/profile (which on macOS sets up PATH (via /usr/libexec/path_helper -s)
             print(f'{bash_minimal_env=}')
+
             new_profile.set_command(bash_minimal_env)
             new_profile.set_use_custom_command("Yes")
 

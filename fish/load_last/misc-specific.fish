@@ -2724,8 +2724,23 @@ abbr b bash
 # FYI capture bash in fish shell PATH... s/b brew bash on macOS
 # $HOME is essential to propagate (won't be set otherwise!)
 
+# TODO TERM=xterm-256color
+# TODO ITERM_SESSION_ID # or will shell integration handle that?
+# ? COLORTERM=truecolor
+# ? USER=wesdemos
+# ? LANG=en_US.UTF-8
 abbr bash_env_minimal "env -i HOME=$HOME \$(which bash) --noprofile --norc"
 abbr bash_env_login "env -i HOME=$HOME \$(which bash) --login --norc" # go with login shell so profile is setup (which includes /usr/libexec/path_helper -s via /etc/profile)
+#
+# TODO move these to MY bashrc:
+#   EDITOR=nvim
+#   PAGER=less
+#   LESS=-I -F -R
+#   GREP_COLOR=1;38;5;162
+#   WES_DOTFILES=$HOME/repos/github/g0t4/dotfiles
+#   RIPGREP_CONFIG_PATH=$WES_DOTFILES/.config/ripgrep/ripgreprc
+#   and review others in config.fish et al
+#
 # FTR --login bash shell does not invoke ~/.bashrc so --norc is redundant
 #
 abbr basht "ABBR_TESTS=1 bash"
