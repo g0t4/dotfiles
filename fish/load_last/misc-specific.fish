@@ -2730,11 +2730,8 @@ abbr b bash
 abbr bash_env_no_inherit "env -i HOME=$HOME \$(which bash)"
 abbr bash_env_no_inherit_no_startup "env -i HOME=$HOME \$(which bash) --noprofile --norc"
 function bash_env_iterm_inherit_without_path
-    # pass env vars set by iterm that are mostly benign
-    # but do NOT inherit PATH... let my bashrc handle that
-    # FYI I am not opposed to inheriting path I just wanna be able to demo a non-polluted, minimal bash shell in course
-    # so techincally I don't need this either... though I want to test w/ a somewhat functional bash shell (i.e. color support) so that is why I have this
-    # and viewers would have a terminal app setting many of these too
+    # restrict env vars inherited..
+    # mostly to ensure my bashrc can run independent of parent fish shell's env vars
     env -i \
         LANG="$LANG" \
         TERM="$TERM" \
@@ -2755,11 +2752,7 @@ function bash_env_iterm_inherit_without_path
         $argv
 end
 
-#
-# FTR --login bash shell does not invoke ~/.bashrc so --norc is redundant
-#
 abbr bash_abbr_tests "ABBR_TESTS=1 bash"
 abbr bash_abbr_tests_debug "ABBR_TESTS=1 ABBR_DEBUG=1 bash"
-# trace startup (and everything else):
-#  note this won't show what is executed in files that have no commands (i.e. blank ~/.bash_profile)
+#
 abbr bash_startup_trace 'PS4="+ \${BASH_SOURCE}:\${LINENO}: " bash -x -l'
