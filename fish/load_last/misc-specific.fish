@@ -2721,6 +2721,12 @@ abbr strjoin_lines "string join '\n'"
 # * BASH
 
 abbr b bash
+#
+# FYI these alternate bash invocations are mostly for test/demo purposes
+#   only material diff is the env vars passed
+#   99% of the time it's ok to just use `bash` from fish shell... and inherit the env
+#     also ok to not use --login on these too as my startup files don't differentiate
+#
 abbr bash_env_no_inherit "env -i HOME=$HOME \$(which bash)"
 abbr bash_env_no_inherit_no_startup "env -i HOME=$HOME \$(which bash) --noprofile --norc"
 function bash_env_iterm_inherit_without_path
