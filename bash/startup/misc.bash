@@ -8,6 +8,7 @@ shopt -s histreedit # failed history expansions - put back into cmdline to edit 
 
 abbr options_list_set "echo \$-"
 abbr options_list_shopt "shopt"
+abbr options_list_shopt_executable "shopt -p"
 
 #
 # * env vars (without a different home)
