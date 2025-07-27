@@ -36,6 +36,8 @@ abbr for_in_range='for i in "{1..10%}"; do echo $i; done' --set-cursor
 abbr for_in_array_indicies='for i in "${!%[@]}"; do echo "${i} ${name[$i]}"; done' --set-cursor
 
 abbr pIFS "echo -n \"\${IFS}\" | hexdump -C" # block word splitting, or it will split it's own characters :)
+abbr pPATH '(IFS=:; for p in ${PATH}; do echo $p; done)'
+
 
 _grvcp() {
     # see fish IMPL for latest version and notes
