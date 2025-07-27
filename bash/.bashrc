@@ -23,22 +23,25 @@ if is_macos; then
     # iterm's CLI tools  - i.e. imgcat
     prepend_path "/Applications/iTerm.app/Contents/Resources/utilities"
 
-    # hardcoded version of:
+    # optional brew:
+    export HOMEBREW_BAT=1
+
+    # * below is hardcoded version of:
     #   eval $(brew shellenv bash)
     #
     #   another way to approach would be to run this once (in top level shell)
     #     using variable to determine if run when subshells launch...
     #     like I did with path init
-
     prepend_path "/opt/homebrew/bin"
     prepend_path "/opt/homebrew/sbin"
-
+    #
     export HOMEBREW_PREFIX="/opt/homebrew"
     export HOMEBREW_CELLAR="/opt/homebrew/Cellar"
     export HOMEBREW_REPOSITORY="/opt/homebrew"
-
+    #
     [ -z "${MANPATH-}" ] || export MANPATH=":${MANPATH#:}"
     export INFOPATH="/opt/homebrew/share/info:${INFOPATH:-}"
+
 fi
 
 for script in "$my_loc/startup/first/"*.bash; do
