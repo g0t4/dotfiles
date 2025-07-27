@@ -1,5 +1,9 @@
 ( IFS="<"; echo "sourcing ${BASH_SOURCE[*]}")
 
+# * uncomment for xtrace-ing (fyi.. can inherit path from outer shell)
+# export PS1="$ "
+# unset PROMPT_COMMAND # remove default for xtrace, when also comment out the return here:
+# return
 
 UNAME_S=$(uname -s)
 is_macos() {
@@ -32,12 +36,6 @@ if is_macos; then
     [ -z "${MANPATH-}" ] || export MANPATH=":${MANPATH#:}"
     export INFOPATH="/opt/homebrew/share/info:${INFOPATH:-}"
 fi
-
-
-# * uncomment for xtrace-ing
-# export PS1="$ "
-# unset PROMPT_COMMAND # remove default for xtrace, when also comment out the return here:
-# return
 
 for script in "$my_loc/startup/first/"*.bash; do
     source "$script"
