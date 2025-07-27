@@ -4,6 +4,7 @@
 # match ** matches all files + zero+ directories (basically search all nested dirs)
 # shopt -s globstar
 shopt -s autocd # cd to a dir with just its name in command position
+shopt -s histreedit # failed history expansions - put back into cmdline to edit (otherwise they are lost)
 
 #
 # * env vars (without a different home)
