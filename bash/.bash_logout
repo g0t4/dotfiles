@@ -1,1 +1,1 @@
-echo \~/.bash_logout
+# ( IFS="<"; echo "sourcing ${BASH_SOURCE[*]}")

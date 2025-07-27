@@ -1,4 +1,4 @@
-echo \~/.bashrc # display when run
+# ( IFS="<"; echo "sourcing ${BASH_SOURCE[*]}")
 
 # resolve path to this script so I can import others nearby
 my_loc=$(dirname "$(realpath "${BASH_SOURCE[0]}")")

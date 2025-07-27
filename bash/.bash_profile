@@ -1,1 +1,1 @@
-echo \~/.bash_profile # troubleshooting
+# ( IFS="<"; echo "sourcing ${BASH_SOURCE[*]}")
