@@ -36,8 +36,17 @@ abbr for_in_range='for i in "{1..10%}"; do echo $i; done' --set-cursor
 abbr for_in_array_indicies='for i in "${!%[@]}"; do echo "${i} ${name[$i]}"; done' --set-cursor
 
 abbr pIFS "echo -n \"\${IFS}\" | hexdump -C" # block word splitting, or it will split it's own characters :)
+#
+# print path one per line... two ways to do it
 abbr pPATH '(IFS=:; for p in ${PATH}; do echo $p; done)'
-
+#
+# for fun... here's a diff variant:
+# echo "${PATH//:/$'\n'}"
+abbr pPATH "echo \"\${PATH//:/\$'\n'}\""
+#  FYI remove outermost "" around expanded arg to echo... shows how IFS works and stopping it with quoting
+#
+# PRN add variant using printf?
+# PRN add variant using read
 
 _grvcp() {
     # see fish IMPL for latest version and notes
