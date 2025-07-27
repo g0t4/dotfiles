@@ -14,6 +14,7 @@ export KUBECTL_EXTERNAL_DIFF="icdiff -r"
 # VAGRANT_PROVIDER=
 
 
+alias grep="grep --color=auto"
 
 
 
