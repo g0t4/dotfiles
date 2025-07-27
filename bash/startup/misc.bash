@@ -96,3 +96,12 @@ abbr bind_list_macros "bind -s"
 #
 abbr bind_list_bash_funcs "bind -X"
 # TODO bind -x doesn't work to give executable format... is there another way to match -s/-p (little s/p) ... -S/-P/-X are all "human readable" ... why isn't there an exec format for -X?!
+
+# *** diff
+
+_abbr_expand_diff_last_two_commands() {
+    if [[ $- != *B* ]]; then
+        echo "HISTORY EXPANSION MUST BE ENABLED, use 'set -B' to do so" >&2
+    fi
+    echo 'icdiff <(!-1) <(!-2)'
+}
