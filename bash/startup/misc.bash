@@ -1,3 +1,9 @@
+#
+# * shell options
+#
+# match ** matches all files + zero+ directories (basically search all nested dirs)
+# shopt -s globstar
+
 
 #
 # * env vars (without a different home)
