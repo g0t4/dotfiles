@@ -97,7 +97,7 @@ mkdir -p $HOME/.config/fd
 ln -f -s $dotfiles_dir/.config/fd/ignore $HOME/.config/fd/.
 
 # *** bash
-ln -f -s $dotfiles_dir/bash/bashrc $HOME/.bashrc
+ln -f -s $dotfiles_dir/bash/.bashrc $HOME/.bashrc
 # I chose ~/.bash_profile b/c it wins over ~/.profile and ~/.bash_login
 ln -f -s $dotfiles_dir/bash/.bash_profile $HOME/.bash_profile
 ln -f -s $dotfiles_dir/bash/.bash_logout $HOME/.bash_logout
