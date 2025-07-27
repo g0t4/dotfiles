@@ -2729,8 +2729,8 @@ abbr b bash
 # ? COLORTERM=truecolor
 # ? USER=wesdemos
 # ? LANG=en_US.UTF-8
-abbr bash_env_minimal "env -i HOME=$HOME \$(which bash) --noprofile --norc"
-abbr bash_env_login "env -i HOME=$HOME \$(which bash) --login --norc" # go with login shell so profile is setup (which includes /usr/libexec/path_helper -s via /etc/profile)
+abbr bash_env_no_inherit "env -i HOME=$HOME \$(which bash)"
+abbr bash_env_no_inherit_no_startup "env -i HOME=$HOME \$(which bash) --noprofile --norc"
 #
 # TODO move these to MY bashrc:
 #   EDITOR=nvim
