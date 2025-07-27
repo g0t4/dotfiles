@@ -32,5 +32,5 @@ is-interactive() {
 }
 
 is-history-expansion-enabled() {
-    [[ $- == *B* ]]
+    [[ $- == *H* ]]
 }
