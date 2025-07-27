@@ -69,28 +69,10 @@ async def prepare_new_profile(session: iterm2.Session, force_local: bool) -> tup
             pass
         elif was_bash:
             # if using bash (locally) then mirror that in new tab
-
-            # inherit ONLY select Env Vars
-            #
-            # ITERM_SESSION_ID = os.environ['ITERM_SESSION_ID']  # ITERM_SESSION_ID=w0t1p0:F32B62FE-6BFB-4149-BACC-D9CDCFBF5508
-            #   TODO does this come from shell integration script?
-            #   ITERM_SESSION_ID='{ITERM_SESSION_ID}'
-            #
-            HOME = os.environ['HOME']
-            bash_minimal_env = f"env -i HOME='{HOME}' /opt/homebrew/bin/bash --login"
-            # --login => will source profile startup files => i.e. /etc/profile (which on macOS sets up PATH (via /usr/libexec/path_helper -s)
-            # as login shell:
-            #   bash sources:
-            #     /etc/profile (macOS if PS1 not set then also /etc/profile sources /etc/bashrc)
-            #        # confusing yes... b/c its an _rc_ file and yet it's only loaded from profile!
-            #     then, first of: ~/.bash_profile|~/.bash_login|~/~/.profile
-            #
-            #   ~/.bashrc is sourced for interactive, non-login shells
-            #
-            # top level bash shell should be a login shell else profile will never be loaded! and nothing "above" this bash shell process (which is iTerm) can share what would've been shared if starting a child bash shell
-            print(f'{bash_minimal_env=}')
-
-            new_profile.set_command(bash_minimal_env)
+            # ALLOW iterm to pass env vars that are crucial for a new top-level shell
+            #   your startup files can override as needed (i.e. currently they will change path to be consistent)
+            bash_cmd = f"/opt/homebrew/bin/bash --login"
+            new_profile.set_command(bash_cmd)
             new_profile.set_use_custom_command("Yes")
 
     return new_profile, is_ssh
