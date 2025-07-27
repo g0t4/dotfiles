@@ -2732,6 +2732,7 @@ abbr bash_env_no_inherit_no_startup "env -i HOME=$HOME \$(which bash) --noprofil
 function bash_env_iterm_inherit_without_path
     # restrict env vars inherited..
     # mostly to ensure my bashrc can run independent of parent fish shell's env vars
+    # skip PATH so I know its setup consistently
     env -i \
         LANG="$LANG" \
         TERM="$TERM" \
