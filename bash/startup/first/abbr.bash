@@ -176,8 +176,8 @@ expand_abbr() {
     fi
 
     local allowed_position="no"
-    tmp_prefix_for_previous_word="${READLINE_LINE:0:$word_before_start_offset}"
-    previous_word=$(echo "$tmp_prefix_for_previous_word" | awk '{print $NF}')
+    local tmp_prefix_for_previous_word="${READLINE_LINE:0:$word_before_start_offset}"
+    local previous_word=$(echo "$tmp_prefix_for_previous_word" | awk '{print $NF}')
     # echo "previous_word: _${previous_word}_"
     # TODO add test of ; semicolon for previous_word too and others that I add support for in regex:
     if [[ $word_before_start_offset -eq 0 || ${command_separators["$previous_word"]} || "$anywhere" = "yes" ]]; then
