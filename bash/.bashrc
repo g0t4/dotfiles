@@ -19,14 +19,10 @@ export WES_DOTFILES="$(realpath $BASH_DOTFILES/..)"
 [[ -z "$TERM" || "$TERM" = dumb ]] && TERM=xterm-256color
 
 export EDITOR=nvim
-export PAGER=less
-export LESS="-I -F -R"
 export GREP_COLOR="1;38;5;162"
-export WES_DOTFILES="$HOME/repos/github/g0t4/dotfiles"
 export RIPGREP_CONFIG_PATH="$WES_DOTFILES/.config/ripgrep/ripgreprc"
 export DOCKER_HIDE_LEGACY_COMMANDS=1
 export KUBECTL_EXTERNAL_DIFF="icdiff -r"
-export WATCH_INTERVAL=0.5
 # export NODE_OPTIONS=--disable-warning=ExperimentalWarning
 # export ICDIFF_OPTIONS="--highlight"
 # VAGRANT_BOX_UPDATE_CHECK_DISABLE=
