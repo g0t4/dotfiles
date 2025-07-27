@@ -1,1 +1,1 @@
-# ( IFS="<"; echo "sourcing ${BASH_SOURCE[*]}")
+( IFS="<"; echo "sourcing ${BASH_SOURCE[*]}")
