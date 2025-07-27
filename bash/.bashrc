@@ -14,11 +14,15 @@ is_macos() {
 my_loc=$(dirname "$(realpath "${BASH_SOURCE[0]}")")
 source "$my_loc/early/path-init.bash"
 
+# * essential env vars (if not inherited)... i.e. if I `env -i` and don't pass any env vars
+[ -z "$TERM" ] && TERM=xterm-256color
 
-# TODO decide if/when to set these (i.e. mac vs linux envs...)
 # PRN will iterm2 shell integration script setup this if I don't?
-# TERM=xterm-256color
 if is_macos; then
+
+    # iterm's CLI tools  - i.e. imgcat
+    prepend_path "/Applications/iTerm.app/Contents/Resources/utilities"
+
     # hardcoded version of:
     #   eval $(brew shellenv bash)
     #

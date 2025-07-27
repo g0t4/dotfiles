@@ -2731,6 +2731,31 @@ abbr b bash
 # ? LANG=en_US.UTF-8
 abbr bash_env_no_inherit "env -i HOME=$HOME \$(which bash)"
 abbr bash_env_no_inherit_no_startup "env -i HOME=$HOME \$(which bash) --noprofile --norc"
+function bash_env_iterm_inherit_without_path
+    # pass env vars set by iterm that are mostly benign
+    # but do NOT inherit PATH... let my bashrc handle that
+    # FYI I am not opposed to inheriting path I just wanna be able to demo a non-polluted, minimal bash shell in course
+    # so techincally I don't need this either... though I want to test w/ a somewhat functional bash shell (i.e. color support) so that is why I have this
+    # and viewers would have a terminal app setting many of these too
+    env -i \
+        LANG="$LANG" \
+        TERM="$TERM" \
+        COLORTERM="$COLORTERM" \
+        SHELL="$SHELL" \
+        USER="$USER" \
+        LOGNAME="$LOGNAME" \
+        TMPDIR="$TMPDIR" \
+        HOME="$HOME" \
+        SSH_AUTH_SOCK="$SSH_AUTH_SOCK" \
+        DISPLAY="$DISPLAY" \
+        TERM_PROGRAM="$TERM_PROGRAM" \
+        TERM_PROGRAM_VERSION="$TERM_PROGRAM_VERSION" \
+        LC_TERMINAL="$LC_TERMINAL" \
+        LC_TERMINAL_VERSION="$LC_TERMINAL_VERSION" \
+        __CF_USER_TEXT_ENCODING="$__CF_USER_TEXT_ENCODING" \
+        "$(which bash)"
+end
+
 #
 # TODO move these to MY bashrc:
 #   EDITOR=nvim
