@@ -2721,14 +2721,6 @@ abbr strjoin_lines "string join '\n'"
 # * BASH
 
 abbr b bash
-# FYI capture bash in fish shell PATH... s/b brew bash on macOS
-# $HOME is essential to propagate (won't be set otherwise!)
-
-# TODO TERM=xterm-256color
-# TODO ITERM_SESSION_ID # or will shell integration handle that?
-# ? COLORTERM=truecolor
-# ? USER=wesdemos
-# ? LANG=en_US.UTF-8
 abbr bash_env_no_inherit "env -i HOME=$HOME \$(which bash)"
 abbr bash_env_no_inherit_no_startup "env -i HOME=$HOME \$(which bash) --noprofile --norc"
 function bash_env_iterm_inherit_without_path
@@ -2756,15 +2748,6 @@ function bash_env_iterm_inherit_without_path
         "$(which bash)"
 end
 
-#
-# TODO move these to MY bashrc:
-#   EDITOR=nvim
-#   PAGER=less
-#   LESS=-I -F -R
-#   GREP_COLOR=1;38;5;162
-#   WES_DOTFILES=$HOME/repos/github/g0t4/dotfiles
-#   RIPGREP_CONFIG_PATH=$WES_DOTFILES/.config/ripgrep/ripgreprc
-#   and review others in config.fish et al
 #
 # FTR --login bash shell does not invoke ~/.bashrc so --norc is redundant
 #
