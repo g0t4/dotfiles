@@ -1,11 +1,10 @@
 # useful for understanding word splitting + quoting:
 inspect() {
-    # this intermediate function is JUST to auto enable/disable xtrace...
-    # totally fine to  set-x yourself and just call _inspect directly...
-    # much less mental overhead to understand what's going on!
-    # which for beginners is superior to hand waving away what this mess does:
-
+    # goal enable xtrace such that the output is the same as what you'd see with any set of args
+    # inspect ${foo[@]}
+    # _inspect ${foo[@]}
     ( set -x; _inspect "$@" )
+    # FYI if passing "$@" seems confusing early on in demos, just set -x and call _inspect directly...
 }
 
 _inspect() {
