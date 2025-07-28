@@ -4,6 +4,7 @@ inspect() {
     # totally fine to  set-x yourself and just call _inspect directly...
     # much less mental overhead to understand what's going on!
     # which for beginners is superior to hand waving away what this mess does:
+
     ( set -x; _inspect "$@" )
 }
 
@@ -66,4 +67,27 @@ is-no-clobber-enabled() {
 is-pathname-expansion-disabled() {
     # aka globbing
     [[ $- == *f* ]]
+}
+
+explain-set-option() {
+    declare -A set_options=(
+        "a" "Auto-export variables"
+        "b" "Job term. notify"
+        "e" "Exit on error"
+        "f" "No globbing (pathname exp.)"
+        "h" "Hash commands"
+        "k" "Env vars on assign?"
+        "m" "Job control"
+        "n" "Read commands, no exec"
+
+        # TODO -o
+    )
+
+    local -i count
+    local num_options="${#-}"
+    for ((count = 0; count < num_options; count++)); do
+        local char="${-:$count:1}" #$ name:start:length
+        echo "$count: $char"
+    done
+
 }
