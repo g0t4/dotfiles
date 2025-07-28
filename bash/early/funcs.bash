@@ -1,11 +1,26 @@
 # useful for understanding word splitting + quoting:
 inspect() {
+    # this intermediate function is JUST to auto enable/disable xtrace...
+    # totally fine to  set-x yourself and just call _inspect directly...
+    # much less mental overhead to understand what's going on!
+    # which for beginners is superior to hand waving away what this mess does:
+    local xtrace_was_on
+    [[ $- == *x* ]] && xtrace_was_on=ffoo || xtrace_was_on=0
+    set -x
+    _inspect "$@"
+    ((xtrace_was_on)) || set +x
+}
+
+_inspect() {
     declare count=0
     for a in "$@"; do
-        echo $count: $a
+        echo "$count: $a"
         ((count++))
     done
 }
+
+foo=(a "b c" d e fg)
+inspect "${foo[@]}"
 
 # * status command
 # status
