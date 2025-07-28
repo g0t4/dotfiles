@@ -87,3 +87,7 @@ declare -A ${1:ARRAY}
 
 snippet declarea "indexed array"
 declare -a ${1:ARRAY}
+
+# keep once space before # so its not treated as comment:
+snippet disable_shellcheck
+ # shellcheck disable=SC${1:2127}
