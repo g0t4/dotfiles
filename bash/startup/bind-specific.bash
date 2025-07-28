@@ -26,6 +26,7 @@ abbr declaref "declare -f" # function name/definition
 # shellcheck disable=SC2016 # expressions in single quotes don't expand, yup that's the point here!
 abbr d@='"${%[@]}"' --position=anywhere --set-cursor
 abbr d_array_length='${#%[@]}' --position=anywhere --set-cursor
+abbr d_string_length='${#%}' --position=anywhere --set-cursor
 abbr d*='"${%[*]}"' --position=anywhere --set-cursor
 abbr dx='"${%}"' --position=anywhere --set-cursor
 #

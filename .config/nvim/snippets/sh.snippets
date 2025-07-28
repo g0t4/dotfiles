@@ -55,6 +55,9 @@ snippet d_array_element
 snippet d_array_length
 \${#${1:ARRAY}[@]}
 
+snippet d_string_length
+\${#${1:STRING}}
+
 snippet echo_variable "BOTH arrays and scalars"
 declare -p ${1:VAR} | bat -l bash
 
