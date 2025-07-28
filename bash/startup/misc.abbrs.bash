@@ -17,6 +17,25 @@ abbr declareu "declare -u"
 abbr declaref "declare -f" # function name/definition
 # abbr declareF "declare -F" # function name only # basically a way to check if function is defined
 
+# * printf
+abbr --set-cursor='!' pfv 'printf -v ! "%s"'              # capture in variable
+abbr pf 'printf "%s\n"'                                   # Basic safe string output
+abbr pf_exec_bash_format 'printf "%q\n"'                  # Exec-safe escaping
+abbr pf_decimal 'printf "%d\n"'                           # Decimal
+abbr pf_octal 'printf "%o\n"'                             # Octal
+abbr pf_hex 'printf "0x%x\n"'                             # Hexadecimal with 0x prefix
+abbr pf_float 'printf "%f\n"'                             # Floating point
+abbr pf_scientific_notation 'printf "%e\n"'               # Scientific notation
+abbr --set-cursor='!' pf_repeat 'printf "%0.s=" {1..30!}' # Print 30 '=' chars
+# * echo
+abbr --set-cursor ee "echo -e '%'"
+abbr --set-cursor echoe "echo -e '%'"
+# * read
+abbr --set-cursor rr 'read -r <<<\"%\"'
+abbr --set-cursor readr 'read -r <<<\"%\"'
+abbr read_prompt 'read -rp "Prompt: "'                               # Prompted read
+abbr read_array 'read -ra arr'                                       # Read into array, splitting on $IFS
+abbr read_loop_demo 'while IFS= read -r line; do echo "$line"; done' # Loop over lines (think cat, for demo purposes)
 
 # TODO mirror with sh.snippets from my nvim config...
 # * would be cool to get a full blown snippet system in bash (and other shells)...
@@ -75,7 +94,6 @@ _expand_git_log() {
     echo "git log"
 }
 abbr git_log_num --regex 'gl[0-9]*' --function _expand_git_log
-
 
 # * trap
 abbr trapl "trap -l"
