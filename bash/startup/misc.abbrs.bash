@@ -6,6 +6,7 @@ abbr gcmsg='git commit -m "%"' --no-space-after --set-cursor
 # declare -p abbrs  # sanity check
 abbr declarep "declare -p % | bat -l bash" --set-cursor
 abbr dp "declare -p % | bat -l bash" --set-cursor
+abbr dp_REPLY "declare -p REPLY% | bat -l bash" --set-cursor
 abbr declareA "declare -A"
 abbr dA "declare -A %"
 abbr declarea "declare -a"
