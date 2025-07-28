@@ -1,6 +1,14 @@
 #
 # *** vi mode
 set -o vi
+# FYI find differences:
+#    icdiff <((set -o vi; bind -p)) <((set -o emacs; bind -p))
+#
+# FIX self-insert differences
+#    icdiff <((set -o vi; bind -p | grep -i self-insert)) <((set -o emacs; bind -p | grep -i self-insert))
+#
+bind '"\\": self-insert' # missing in vi mode?! found in emacs mode:   bind -p | grep '\\"'
+#
 # FYI make sure to bind keymaps for vi mode too (-m vi-insert) (-m vi-command)
 # choices: emacs, emacs-standard, emacs-meta, emacs-ctlx, vi, vi-move, vi-command, and vi-insert
 
