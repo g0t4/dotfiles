@@ -113,4 +113,4 @@ take() {
 }
 
 # *** lsof
-abbr 'lsof_dollar_dollar' 'sudo lsof -p $$'
+abbr 'lsof_bash_shell' 'sudo lsof -p $$'

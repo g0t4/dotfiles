@@ -41,6 +41,8 @@ abbr mapfile_lines 'mapfile -t lines <' # Common pattern for lines[]
 abbr --set-cursor mapfile_str 'mapfile -t <<<"$%"' # From a multiline string
 abbr --set-cursor mapfile_cmd 'mapfile -t < <(%)'   # From command output
 
+abbr pstree_bash_shell 'pstree -p $$'
+
 # TODO mirror with sh.snippets from my nvim config...
 # * would be cool to get a full blown snippet system in bash (and other shells)...
 #  ea => echo "${placeholder1[@]}" # put cursor on placeholder1 slot
