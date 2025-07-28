@@ -103,7 +103,8 @@ _dump_var() {
     # FYI defined as a function so I can add error handling
     #   and so not tied to declare -p
 
-    declare -p "${1}"
+    declare -p "${1}" | bat -l bash
+
     # FYI I want to see difference between empty/not defined:
     #   declare -- only_cmd=""
     #   bash: declare: first_word: not found
