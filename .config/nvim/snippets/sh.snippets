@@ -79,15 +79,44 @@ for i in "\${!${1:ARRAY}[@]}"; do
     echo "Index \$i: \${${1}[\$i]}"
 done
 
+
 snippet declarep "print attributes and value of VAR"
+declare -p ${1:VAR} | bat -l bash
+# alias declarep b/c I use this all the time
+snippet dp
 declare -p ${1:VAR} | bat -l bash
 
 snippet declareA "associative array"
 declare -A ${1:ARRAY}
 
+snippet dA "associative array"
+declare -A ${1:ARRAY}
+
 snippet declarea "indexed array"
 declare -a ${1:ARRAY}
 
+snippet da "indexed array"
+declare -a ${1:ARRAY}
+
+snippet delcarei "arithmetic exp (to integer) on assign"
+declare -i ${1:INTEGER}
+
+snippet declare_lowercase "lowercase on assign"
+declare -l ${1:always_lowercase_string}
+
+snippet declare_uppercase "uppercase on assign"
+declare -l ${1:ALWAYS_UPPERCASE_STRING}
+
 # keep once space before # so its not treated as comment:
-snippet disable_shellcheck
+snippet shellcheck_disable_code
  # shellcheck disable=SC${1:2127}
+
+snippet shellcheck_disable_all
+ # shellcheck disable=all
+
+# * common shell check one-off disables
+#Elements in associative arrays need index, e.g. array=( [index]=value ) . (shellcheck SC2190)
+snippet shellcheck_disable_array_no_index
+ # shellcheck disable=SC2190 # allow for declare -A foo=(key2 value1 ... keyN valueN) syntax in 5.1+
+
+
