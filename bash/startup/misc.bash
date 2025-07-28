@@ -111,3 +111,6 @@ take() {
     mkdir -p "$1"
     cd "$1"
 }
+
+# *** lsof
+abbr 'lsof_dollar_dollar' 'sudo lsof -p $$'
