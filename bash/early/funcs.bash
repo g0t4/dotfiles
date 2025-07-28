@@ -1,9 +1,9 @@
 # useful for understanding word splitting + quoting:
 inspect() {
-    declare -i count=0
+    declare count=0
     for a in "$@"; do
         echo $count: $a
-        count=count+1
+        ((count++))
     done
 }
 
