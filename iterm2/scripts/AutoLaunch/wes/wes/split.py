@@ -18,7 +18,7 @@ async def new_tab_then_close_others(connection):
         if tab != new_tab:
             await tab.async_close(force=True)
 
-async def prepare_new_profile(session: iterm2.Session, force_local: bool) -> tuple[iterm2.LocalWriteOnlyProfile, bool]:
+async def prepare_new_profile(session: iterm2.Session, force_local_fish: bool) -> tuple[iterm2.LocalWriteOnlyProfile, bool]:
     tab = session.tab
     tab_id = tab.tab_id if tab is not None else "missing tab"
     window = session.window
@@ -47,9 +47,10 @@ async def prepare_new_profile(session: iterm2.Session, force_local: bool) -> tup
     commandLine = await session.async_get_variable("commandLine")
     was_sshed = jobName == "ssh"
 
-    is_ssh = was_sshed and not force_local
+    is_ssh = was_sshed and not force_local_fish
+    print(f"{force_local_fish=}, {is_ssh=}")
     if was_sshed:
-        if force_local:
+        if force_local_fish:
             # force local means don't reconnect over SSH, open a local terminal
             # FYI, might want to address what happens when was_ssh b/c the path then if the ssh window was opened directly to SSH isn't going to be useful
             #    but, this might be where setting advanced_working_directory_* helps when I open a new window/tab/pane to track what local dir to come back to...
@@ -63,10 +64,11 @@ async def prepare_new_profile(session: iterm2.Session, force_local: bool) -> tup
         # * at least for duration of course, launch bash shell... when in bash in current session
         # that way no accidents when I don't realize I'm not in bash b/c I've replicated all my abbrs bash can feel like fish at times ;)
         was_bash = jobName == "bash"
-        if force_local:
-            # assume this means use fish
-            # so I can ctrl+cmd+shift+t to open new tab to fish (just like I can do when ssh'ed to get back to fish local)
-            pass
+        if force_local_fish:
+            # when I force local, assume I want fish (similar to how I override SSH with force_local above)
+            new_profile.set_command("/opt/homebrew/bin/fish --login")
+            new_profile.set_use_custom_command("Yes")
+            print("FISH FORCE LOCAL")
         elif was_bash:
             # if using bash (locally) then mirror that in new tab
             # ALLOW iterm to pass env vars that are crucial for a new top-level shell
@@ -74,6 +76,7 @@ async def prepare_new_profile(session: iterm2.Session, force_local: bool) -> tup
             bash_cmd = f"/opt/homebrew/bin/bash --login"
             new_profile.set_command(bash_cmd)
             new_profile.set_use_custom_command("Yes")
+            print("BASH LOCAL")
 
     return new_profile, is_ssh
 
