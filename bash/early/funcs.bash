@@ -4,11 +4,7 @@ inspect() {
     # totally fine to  set-x yourself and just call _inspect directly...
     # much less mental overhead to understand what's going on!
     # which for beginners is superior to hand waving away what this mess does:
-    local xtrace_was_on
-    [[ $- == *x* ]] && xtrace_was_on=ffoo || xtrace_was_on=0
-    set -x
-    _inspect "$@"
-    ((xtrace_was_on)) || set +x
+    ( set -x; _inspect "$@" )
 }
 
 _inspect() {
