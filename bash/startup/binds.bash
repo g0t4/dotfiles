@@ -29,11 +29,41 @@ bind -m vi-insert -x '"\ek": copy_and_clear_line'
 
 # *** bind
 
-# bind reminder abbrs:
-#  "reminder" abbrs b/c they help quickly find commands/options I forgot about
-#  tab complete shows these bind_<TAB> => pick one => expands!
-abbr bind_list_all "bind -p; bind -s; bind -X"
-abbr bind_list_macros "bind -s"
+# * readline variables
+abbr bind_current_keymap "bind -v | grep keymap"
+abbr bind_list_readline_variables "bind -v" # exec format
+abbr bindv "bind -v"
+
+
+# * key sequences
 #
-abbr bind_list_bash_funcs "bind -X"
-# TODO bind -x doesn't work to give executable format... is there another way to match -s/-p (little s/p) ... -S/-P/-X are all "human readable" ... why isn't there an exec format for -X?!
+# bind maps key sequences to one of three actions:
+# 1. readline function (same as in ~/.inputrc)
+# 2. macro (text to insert including further key sequences, same as in ~/.inputrc)
+# 3. bash shell function (bash specific, not in ~/.inputrc)
+#
+abbr binds_all "bind -p; bind -s; bind -X"
+#
+abbr binds_to_readline_funcs "bind -p"
+abbr bindp "bind -p" # readline func key sequences - exec format
+#
+abbr binds_to_macros "bind -s"
+abbr binds "bind -s" # macro key sequences - exec format
+#
+abbr binds_to_bash_funcs "bind -X"
+abbr bindX "bind -X" # list bash func key sequences
+abbr bindx "bind -x" # to add key seq. to bash functions
+abbr bindx_shell_cmd_colon "bind -x '\"%\": shell_func arg1 arg2'"
+# abbr bindx_shell_cmd_whitespace "bind -x \"%\" shell_func arg1 arg2" #
+# TODO later format supports backslash-escape expansion (in readline)... is that for args?
+#
+# list readline funcs:
+abbr bindl "bind -l"
+abbr bind_list_readline_func_names "bind -l"
+
+# * query key sequence for readline func
+abbr bindq "bind -q" # keys mapped to function name:  bind -q yank-last-arg
+
+
+
+# keep in mind, longer abbrs are reminder abbrs

@@ -229,11 +229,12 @@ expand_abbr() {
 }
 # * expand on <Space>
 bind -x '" ": expand_abbr " "'
-bind -x '";": expand_abbr ";"'
-bind -x '"|": expand_abbr "|"'
+bind -x '";": expand_abbr ";"' # so you can:   gst<;> => git status;
+bind -x '"|": expand_abbr "|"' # same as ;
 bind -m vi-insert -x '" ": expand_abbr " "'
 bind -m vi-insert -x '";": expand_abbr ";"'
 bind -m vi-insert -x '"|": expand_abbr "|"'
+# TODO intercept tab and expand on tab complete too (else right now you have to backup (backspace) and then hit space again)
 
 # * expand on <Return>
 expand_hack='\C-x\C-['
