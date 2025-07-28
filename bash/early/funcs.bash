@@ -34,3 +34,16 @@ is-interactive() {
 is-history-expansion-enabled() {
     [[ $- == *H* ]]
 }
+
+is-brace-expansion-enabled() {
+    [[ $- == *B* ]]
+}
+
+is-no-clobber-enabled() {
+    [[ $- == *C* ]]
+}
+
+is-pathname-expansion-disabled() {
+    # aka globbing
+    [[ $- == *f* ]]
+}
