@@ -1,6 +1,6 @@
 #
 # *** vi mode
-# set -o vi
+set -o vi
 # fix vi-insert vs emacs differences:
 #   icdiff <((bind -m vi-insert -p)) <((bind -m emacs -p ))
 #
@@ -11,8 +11,8 @@
 
 # vi-unix-word-rubout doesn't work inside ""...
 #  so just rebind to emacs version?
-bind '"\C-w": unix-word-rubout'
-# "\C-w": vi-unix-word-rubout
+bind -m vi-insert '"\C-w": unix-word-rubout'
+# "\C-w": vi-unix-word-rubout # original binding in vi-insert keymap
 
 #
 # FYI make sure to bind keymaps for vi mode too (-m vi-insert) (-m vi-command)
