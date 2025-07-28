@@ -13,6 +13,8 @@ abbr da "declare -a %"
 abbr declarei "declare -i"
 abbr declarel "declare -l"
 abbr declareu "declare -u"
+abbr declaref "declare -f" # function name/definition
+# abbr declareF "declare -F" # function name only # basically a way to check if function is defined
 
 
 # TODO mirror with sh.snippets from my nvim config...

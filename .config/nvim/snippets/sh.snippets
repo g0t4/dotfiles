@@ -107,6 +107,9 @@ declare -l ${1:always_lowercase_string}
 snippet declare_uppercase "uppercase on assign"
 declare -l ${1:ALWAYS_UPPERCASE_STRING}
 
+snippet declare_function_definition_lookup
+declare -f ${1:FUNCTION_NAME}
+
 # keep once space before # so its not treated as comment:
 snippet shellcheck_disable_code
  # shellcheck disable=SC${1:2127}
