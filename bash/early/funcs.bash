@@ -15,26 +15,8 @@ _inspect() {
     done
 }
 
-# challenge to write down what you will see _inspect _____ before run them
-# set -x
-foo=(a "b c" d " " fg)
-echo
-echo "quoted @"
-inspect "${foo[@]}"
-# _inspect a 'b c' d ' ' fg
-echo
-echo "quoted *"
-inspect "${foo[*]}"
-# _inspect 'a b c d   fg' # take quoted @ version and put outer quoutes around all of it and leave space between each arg
-echo
-echo unquoted @
-inspect ${foo[@]}
-# _inspect a b c d fg   # take quoted @ version and delete all quotes around elements, then word split all of it (no quotes)
-echo
-echo unquoted *
-inspect ${foo[*]}
-# _inspect a b c d fg  # strip all quotes from quoted @ version and then split words on everything (within and between elements)
-
+# foo=(a "b c" d e fg)
+# inspect "${foo[@]}"
 
 # * status command
 # status
