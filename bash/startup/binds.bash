@@ -1,5 +1,7 @@
+set -o vi
+
 copy_and_clear_line() {
-    # current line only
+    # current line only, FYI in vi mode you can use `yy` or `dd` to copy/nuke entire line
     echo -n "$READLINE_LINE" | pbcopy
     READLINE_LINE=
 }
@@ -17,3 +19,5 @@ abbr bind_list_macros "bind -s"
 #
 abbr bind_list_bash_funcs "bind -X"
 # TODO bind -x doesn't work to give executable format... is there another way to match -s/-p (little s/p) ... -S/-P/-X are all "human readable" ... why isn't there an exec format for -X?!
+
+
