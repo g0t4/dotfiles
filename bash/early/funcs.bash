@@ -1,3 +1,12 @@
+# useful for understanding word splitting + quoting:
+inspect() {
+    declare -i count=0
+    for a in "$@"; do
+        echo $count: $a
+        count=count+1
+    done
+}
+
 # * status command
 # status
 # status is-interactive-read
