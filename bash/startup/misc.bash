@@ -117,3 +117,8 @@ _abbr_expand_diff_last_two_commands() {
     fi
     echo 'icdiff <(!-1) <(!-2)'
 }
+
+take() {
+    mkdir -p "$1"
+    cd "$1"
+}
