@@ -1,4 +1,4 @@
-# useful for understanding word splitting + quoting:
+# useful for understanding expansion + word splitting + quoting:
 inspect() {
     # goal enable xtrace such that the output is the same as what you'd see with any set of args
     # inspect ${foo[@]}
