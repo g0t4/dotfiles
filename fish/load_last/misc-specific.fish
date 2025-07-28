@@ -2341,6 +2341,8 @@ if command -q lsof
     # -i == internet files (ports)
     # -a == AND constraints
 
+    abbr --set-cursor lsofp_watch 'watch "sudo lsof -p \$(pgrep -if \"%\" | head -1)"'
+
 end
 
 # TODO wireshark
@@ -2757,3 +2759,32 @@ abbr bash_abbr_tests "ABBR_TESTS=1 bash"
 abbr bash_abbr_tests_debug "ABBR_TESTS=1 ABBR_DEBUG=1 bash"
 #
 abbr bash_startup_trace 'PS4="+ \${BASH_SOURCE}:\${LINENO}: " bash -x -l'
+
+# * strace
+# --trace=syscall
+# --trace=/regex_syscall
+# categories
+abbr --set-cursor strace_process "strace -f -e trace=process bash"
+abbr --set-cursor strace_file "strace -f -e trace=file bash"
+abbr --set-cursor strace_network "strace -f -e trace=network bash"
+abbr --set-cursor strace_signal "strace -f -e trace=signal bash"
+abbr --set-cursor strace_desc "strace -f -e trace=desc bash"
+abbr --set-cursor strace_ipc "strace -f -e trace=ipc bash"
+abbr --set-cursor strace_memory "strace -f -e trace=memory bash"
+abbr --set-cursor strace_all "strace -f -e trace=all bash"
+# fds=
+abbr --set-cursor strace_fds "strace -f -e fds=0,1,2 bash"
+abbr --set-cursor strace_fdSTDIN "strace -f -e fds=0 bash"
+abbr --set-cursor strace_fdSTDOUT "strace -f -e fds=1 bash"
+abbr --set-cursor strace_fdSTDERR "strace -f -e fds=2 bash"
+# use fdSTDERR to see where the shell writes the prompt!
+#
+# syscalls / regex
+abbr --set-cursor strace_open "strace -f -e trace=/open bash"
+abbr --set-cursor strace_read "strace -f -e trace=/read bash"
+abbr --set-cursor strace_write "strace -f -e trace=/write bash"
+#
+# count / summary
+abbr --set-cursor stracec "strace -c -e trace=all sleep 1"
+abbr --set-cursor straceC "strace -C -e trace=all sleep 1"
+
