@@ -179,7 +179,7 @@ expand_abbr() {
 
     local allowed_position="no"
     local tmp_prefix_for_previous_word="${READLINE_LINE:0:$word_before_start_offset}"
-    local previous_word=$(echo "$tmp_prefix_for_previous_word" | awk '{print $NF}')
+    local previous_word=$(echo "$tmp_prefix_for_previous_word" | awk '{print $NF}') # TODO! just take last char of prior word, not entire word... b/c echo foo;  # trailing semicolon doesn't need a space to terminate the echo
     # TODO add test of ; semicolon for previous_word too and others that I add support for in regex:
     if [[ $word_before_start_offset -eq 0 || ${command_separators["$previous_word"]} || "$anywhere" = "yes" ]]; then
         allowed_position=yes
