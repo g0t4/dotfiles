@@ -15,8 +15,8 @@ _inspect() {
     done
 }
 
-foo=(a "b c" d e fg)
-inspect "${foo[@]}"
+# foo=(a "b c" d e fg)
+# inspect "${foo[@]}"
 
 # * status command
 # status
