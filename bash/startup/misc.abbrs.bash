@@ -36,6 +36,10 @@ abbr --set-cursor readr 'read -r <<<\"%\"'
 abbr read_prompt 'read -rp "Prompt: "'                               # Prompted read
 abbr read_array 'read -ra arr'                                       # Read into array, splitting on $IFS
 abbr read_loop_demo 'while IFS= read -r line; do echo "$line"; done' # Loop over lines (think cat, for demo purposes)
+# * mapfile/readarray
+abbr mapfile_lines 'mapfile -t lines <' # Common pattern for lines[]
+abbr --set-cursor mapfile_str 'mapfile -t <<<"$%"' # From a multiline string
+abbr --set-cursor mapfile_cmd 'mapfile -t < <(%)'   # From command output
 
 # TODO mirror with sh.snippets from my nvim config...
 # * would be cool to get a full blown snippet system in bash (and other shells)...
