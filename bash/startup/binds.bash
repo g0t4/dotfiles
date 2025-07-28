@@ -8,6 +8,12 @@
 #    icdiff <((bind -m vi-insert -p)) <((bind -m emacs -p )) | grep -i self-insert
 #    ok and now this isn't an issue... WTH? maybe one of my bindings was wrong when testing and I deleted \\?
 # bind -m vi-insert '"\\": self-insert' # missing in vi mode?! found in emacs mode:   bind -p | grep '\\"'
+
+# vi-unix-word-rubout doesn't work inside ""...
+#  so just rebind to emacs version?
+bind '"\C-w": unix-word-rubout'
+# "\C-w": vi-unix-word-rubout
+
 #
 # FYI make sure to bind keymaps for vi mode too (-m vi-insert) (-m vi-command)
 # choices: emacs, emacs-standard, emacs-meta, emacs-ctlx, vi, vi-move, vi-command, and vi-insert
