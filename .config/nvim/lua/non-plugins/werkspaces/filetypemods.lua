@@ -251,8 +251,6 @@ vim.api.nvim_create_autocmd("FileType", {
     end
 })
 
-
-
 vim.api.nvim_create_autocmd("BufEnter", {
     group = "filetypemods",
     pattern = "*.gitconfig",
@@ -261,9 +259,6 @@ vim.api.nvim_create_autocmd("BufEnter", {
         vim.bo.commentstring = "# %s" -- %s is original tex
     end,
 })
-
-
-
 
 vim.api.nvim_create_autocmd("FileType", {
     group = "filetypemods",
