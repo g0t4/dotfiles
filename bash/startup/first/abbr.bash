@@ -272,31 +272,26 @@ _expand_on_enter() {
 _expand_on_enter
 
 __expand_abbr_tab() {
-    # special function for intercepted tab expand step
     # PRN I might have to call and capture the CMDLINE before complete and after (here) and compare to decide if complete happened or not
     #   ** can put another bash func ahead of complete to capture READLINE_LINE and READLINE_POINT and then compare them here
-    #   if it didn't I don't need to do anything
-    #   if it did then I need to remove space and compare word
 
-    # TODO remove space (if any)
-    #  for now assume space means completion accepted (else why tab w/ completion with no word (space) already in front of cursor?
+    #  for now assume space means completion accepted
     local char_before
     ((char_before = READLINE_POINT - 1))
     if ((char_before < 0)); then
-        # bail b/c at start of line
-        # nothing to even complete
-        echo nothing to expand at start of line
+        # bail b/c at start of line... nothing to complete
+        # echo nothing to expand at start of line
         return
     fi
     local char_before_cursor="${READLINE_LINE:$char_before:1}"
-    declare -p char_before char_before_cursor READLINE_LINE READLINE_POINT | bat -l bash
+    # declare -p char_before char_before_cursor READLINE_LINE READLINE_POINT | bat -l bash
     if [[ "$char_before_cursor" == " " ]]; then
         # ? use regex ^\s$
         # remove space (without destroying rest of cmdline)
         # TODO add tests of this using my test fwk
         READLINE_LINE="${READLINE_LINE:0:$char_before}${READLINE_LINE:$READLINE_POINT}"
         ((READLINE_POINT = READLINE_POINT - 1))
-        declare -p READLINE_LINE READLINE_POINT
+        # declare -p READLINE_LINE READLINE_POINT
         expand_abbr tab_space_regardless
         # TODO two tests: one on expand, one on not expand (test spacing results on both)
     else
@@ -304,7 +299,7 @@ __expand_abbr_tab() {
         expand_abbr tab_space_if_expand_only
         # TODO tests that handle adding space on expand, another that does not on not expand
     fi
-    echo "------------"
+    # echo "------------"
 }
 
 _expand_on_tab() {
