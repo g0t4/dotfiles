@@ -255,15 +255,15 @@ _expand_on_enter() {
     key_seq_expand_abbr_enter='\C-x\C-['
     #
     # key_seq_accept_line='\C-x\C-]' # if I want my own key seq again for accept-line
-    key_seq_accept_line='\C-j' # OOB accept-line, don't need another virtual key seq
+    key_seq_accept_line='\C-j' # OOB accept-line bound to BOTH \C-j & \C-m, so I don't need another virtual key seq
     #
     # emacs keymap:
-    bind -m emacs "\"\C-m\": \"$key_seq_expand_abbr_enter$key_seq_accept_line\""
+    bind -m emacs "\"\C-m\": \"$key_seq_expand_abbr_enter$key_seq_accept_line\"" # * intercept Enter (Ctrl-M)
     bind -m emacs -x "\"$key_seq_expand_abbr_enter\": expand_abbr enter"
     bind -m emacs "\"$key_seq_accept_line\": accept-line" # redundant if using \C-j, uncomment if change key seq
     #
     # vi-insert keymap:
-    bind -m vi-insert "\"\C-m\": \"$key_seq_expand_abbr_enter$key_seq_accept_line\""
+    bind -m vi-insert "\"\C-m\": \"$key_seq_expand_abbr_enter$key_seq_accept_line\"" # * intercept Enter (Ctrl-M)
     bind -m vi-insert -x "\"$key_seq_expand_abbr_enter\": expand_abbr enter"
     bind -m vi-insert "\"$key_seq_accept_line\": accept-line" # redundant if using \C-j, uncomment if change key seq
 }
@@ -286,15 +286,15 @@ _expand_on_tab() {
     #
     key_seq_expand_abbr_tab='\C-x\C-t'
     #
-    key_seq_complete='\C-x\C-i' # use this for a new complete key seq since I wanna replace the only one which is Ctrl-i
+    key_seq_complete='\C-x\C-i' # need new key seq b/c I am going to intercept \C-i
     #
     # emacs keymap:
-    bind -m emacs "\"\C-i\": \"$key_seq_expand_abbr_tab$key_seq_complete\""
+    bind -m emacs "\"\C-i\": \"$key_seq_expand_abbr_tab$key_seq_complete\"" # * intercept Tab (Ctrl-i)
     bind -m emacs -x "\"$key_seq_expand_abbr_tab\": expand_abbr tab"
     bind -m emacs "\"$key_seq_complete\": complete"
     #
     # vi-insert keymap:
-    bind -m vi-insert "\"\C-i\": \"$key_seq_expand_abbr_tab$key_seq_complete\""
+    bind -m vi-insert "\"\C-i\": \"$key_seq_expand_abbr_tab$key_seq_complete\"" # * intercept Tab (Ctrl-i)
     bind -m vi-insert -x "\"$key_seq_expand_abbr_tab\": expand_abbr tab"
     bind -m vi-insert "\"$key_seq_complete\": complete"
 }
