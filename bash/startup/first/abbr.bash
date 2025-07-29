@@ -388,6 +388,10 @@ _abbr() {
 }
 
 list_abbrs() {
+    _list_abbrs | bat -l bash
+}
+
+_list_abbrs() {
     local name
     for name in "${!abbrs[@]}"; do
         local set_cursor value regex func cmd_only no_space_after anywhere
@@ -434,7 +438,7 @@ list_abbrs() {
 abbr() {
     # if called with no args, list abbrs like fish shell
     if (($# == 0)); then
-        list_abbrs | bat -l bash
+        list_abbrs
         return
     fi
 
