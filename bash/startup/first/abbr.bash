@@ -393,7 +393,9 @@ list_abbrs() {
     for name in "${!abbrs[@]}"; do
         local value
         value="${abbrs[$name]}"
-        echo abbr --add -- "$name" "$value"
+        # TODO if value has ' single quote, then cannot use ' to surround value...
+        # in that case use double quotes and escape special chars like $ ! \ " and newline
+        echo abbr --add -- "$name" "'$value'"
     done
 }
 
