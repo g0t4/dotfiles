@@ -107,7 +107,29 @@ _abbr_expand_diff_last_two_commands() {
     echo 'icdiff <(!-1) <(!-2)'
 }
 
+# *** dirs
+
 take() {
+    #     if test -z "$argv[1]"
+    #         echo "takefiles requires at least a new directory to create and usually files to move into it"
+    #         echo "usage:"
+    #         echo "'takefiles newdir file1 [file2 ...]'"
+    #         return
+    #     end
+    #
+    #     # not only create the dir, move the files passed as args 2+
+    #     mkdir -p $argv[1]
+    #     # strip arg1
+    #     set files $argv[2..]
+    #     if test -z "$files"
+    #         # with 1 arg, effectively works the asme as 'take'
+    #         cd $argv[1]
+    #         return
+    #     end
+    #     mv $files[1..] $argv[1]
+    #     cd $argv[1]
+    #     # PRN what if I don't wanna cd into the final dir? maybe have an alternative version of this that drops the final cd?
+
     mkdir -p "$1"
     cd "$1"
 }
