@@ -269,22 +269,35 @@ _expand_on_enter() {
 }
 _expand_on_enter
 
-# TODO! "tab" in expand_abbr => map to $'\t'
+_expand_on_tab() {
+    # TODO! "tab" in expand_abbr => map to $'\t'
 
-# * expand on <Tab>
-key_seq_expand_abbr_tab='\C-x\C-['
-#
-key_seq_complete='\C-x\C-i' # use this for a new complete key seq since I wanna replace the only one which is Ctrl-i
-#
-# emacs keymap:
-bind -m emacs -x "\"$key_seq_expand_abbr_tab\": expand_abbr tab"
-bind -m emacs "\"$key_seq_complete\": complete" # this appears redundant given I am using OOB \C-j but it doesn't hurt to leave it
-bind -m emacs "\"\C-m\": \"$key_seq_expand_abbr_tab$key_seq_complete\""
-#
-# vi-insert keymap:
-bind -m vi-insert -x "\"$key_seq_expand_abbr_tab\": expand_abbr tab"
-bind -m vi-insert "\"$key_seq_complete\": complete"
-bind -m vi-insert "\"\C-m\": \"$key_seq_expand_abbr_tab$key_seq_complete\""
+    # STEPS:
+    # 1. intercept tab
+    # 2. call complete
+    #   - if completed, remove space
+    #     TODO when does space get added? Always or only sometimes?
+    #   - attempt abbr-expand
+    #   - follow up with space ONLY IF expanded
+    #   - leave no space if not expanded so user can further modify and/or tab complete
+    #
+    # TODO does \C-x\C-t work for emacs keymap (fine for vi-insert)
+    key_seq_expand_abbr_tab='\C-x\C-t'
+    #
+    # TODO does \C-x\C-i work for emacs keymap (fine for vi-insert)
+    key_seq_complete='\C-x\C-i' # use this for a new complete key seq since I wanna replace the only one which is Ctrl-i
+    #
+    # emacs keymap:
+    bind -m emacs -x "\"$key_seq_expand_abbr_tab\": expand_abbr tab"
+    bind -m emacs "\"$key_seq_complete\": complete" # this appears redundant given I am using OOB \C-j but it doesn't hurt to leave it
+    bind -m emacs "\"\C-i\": \"$key_seq_expand_abbr_tab$key_seq_complete\""
+    #
+    # vi-insert keymap:
+    bind -m vi-insert -x "\"$key_seq_expand_abbr_tab\": expand_abbr tab"
+    bind -m vi-insert "\"$key_seq_complete\": complete"
+    bind -m vi-insert "\"\C-i\": \"$key_seq_expand_abbr_tab$key_seq_complete\""
+}
+_expand_on_tab
 
 command_exists() {
     command -v "$1" 1>/dev/null
