@@ -5,3 +5,13 @@ function gdlcX {
     ((prev = num - 1))
     echo "git log --patch HEAD~$num..HEAD~$prev"
 }
+
+function find_missing_abbr_functions {
+    for f in "${abbrs_function[@]}"; do
+        # FYI declare -F will show name if it exists, otherwise show "MISSING" with name!
+        #  yeah this is a bit much trickery but w/e
+        if ! declare -F "$f"; then
+            echo MISSING $f
+        fi
+    done
+}
