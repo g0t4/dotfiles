@@ -109,3 +109,29 @@ is_stderr_a_terminal() {
 is_stdout_a_terminal() {
     is_a_terminal "$FD_STDOUT"
 }
+
+# * repeat
+
+function repeat() {
+    # repeat . 3
+    # repeat ../ 4
+
+    local string="$1"
+    local times="$2"
+    local -i count
+    for ((count = 0; count < "$times"; count++)); do
+        echo -n "$string"
+    done
+}
+
+tests_for_repeat() {
+
+    label_test repeat ../ 3
+    repeated="$(repeat ../ 3)"
+    expect_equal "$repeated" "../../../"
+
+    label_test repeat . 0
+    repeated="$(repeat . 0)"
+    expect_equal "$repeated" ""
+
+}

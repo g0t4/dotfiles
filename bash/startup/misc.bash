@@ -130,18 +130,6 @@ take() {
 # *** lsof
 abbr 'lsof_bash_shell' 'sudo lsof -p $$'
 
-function repeat() {
-    # repeat . 3
-    # repeat ../ 4
-
-    local string="$1"
-    local times="$2"
-    local -i count
-    for ((count = 0; count < "$times"; count++)); do
-        echo -n "$string"
-    done
-}
-
 function multicd {
     local -i num_dots
     num_dots="${#1}"
