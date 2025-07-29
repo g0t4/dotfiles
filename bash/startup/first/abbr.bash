@@ -256,16 +256,16 @@ bind -m vi-insert "\"\C-m\": \"$key_seq_expand_abbr_enter$key_seq_accept_line\""
 key_seq_expand_abbr_tab='\C-x\C-['
 #
 # key_seq_complete='\C-x\C-]' # if I want my own key seq again for accept-line
-key_seq_complete='\C-j' # OOB accept-line, don't need another virtual key seq
+key_seq_complete='\C-i' # OOB complete, don't need another virtual key seq
 #
 # emacs keymap:
 bind -m emacs -x "\"$key_seq_expand_abbr_tab\": expand_abbr enter"
-bind -m emacs "\"$key_seq_complete\": accept-line" # this appears redundant given I am using OOB \C-j but it doesn't hurt to leave it
+# bind -m emacs "\"$key_seq_complete\": complete" # this appears redundant given I am using OOB \C-j but it doesn't hurt to leave it
 bind -m emacs "\"\C-m\": \"$key_seq_expand_abbr_tab$key_seq_complete\""
 #
 # vi-insert keymap:
 bind -m vi-insert -x "\"$key_seq_expand_abbr_tab\": expand_abbr enter"
-bind -m vi-insert "\"$key_seq_complete\": accept-line"
+# bind -m vi-insert "\"$key_seq_complete\": complete"
 bind -m vi-insert "\"\C-m\": \"$key_seq_expand_abbr_tab$key_seq_complete\""
 
 command_exists() {
