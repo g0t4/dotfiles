@@ -259,12 +259,12 @@ _expand_on_enter() {
     #
     # emacs keymap:
     bind -m emacs -x "\"$key_seq_expand_abbr_enter\": expand_abbr enter"
-    bind -m emacs "\"$key_seq_accept_line\": accept-line" # this appears redundant given I am using OOB \C-j but it doesn't hurt to leave it
+    # bind -m emacs "\"$key_seq_accept_line\": accept-line" # this appears redundant given I am using OOB \C-j but it doesn't hurt to leave it
     bind -m emacs "\"\C-m\": \"$key_seq_expand_abbr_enter$key_seq_accept_line\""
     #
     # vi-insert keymap:
     bind -m vi-insert -x "\"$key_seq_expand_abbr_enter\": expand_abbr enter"
-    bind -m vi-insert "\"$key_seq_accept_line\": accept-line"
+    # bind -m vi-insert "\"$key_seq_accept_line\": accept-line"
     bind -m vi-insert "\"\C-m\": \"$key_seq_expand_abbr_enter$key_seq_accept_line\""
 }
 _expand_on_enter
