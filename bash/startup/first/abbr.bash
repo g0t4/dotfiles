@@ -388,7 +388,6 @@ _abbr() {
 }
 
 list_abbrs() {
-    echo TODO list abbrs
     local name
     for name in "${!abbrs[@]}"; do
         local set_cursor value regex func cmd_only no_space_after anywhere
