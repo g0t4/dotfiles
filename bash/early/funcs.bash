@@ -90,3 +90,22 @@ explain-set-option() {
     done
 
 }
+
+# *** STDIO
+
+readonly FD_STDIN=0
+readonly FD_STDOUT=1
+readonly FD_STDERR=2
+
+is_a_terminal() {
+    test -t "$1"
+}
+is_stdin_a_terminal() {
+    is_a_terminal "$FD_STDIN"
+}
+is_stderr_a_terminal() {
+    is_a_terminal "$FD_STDERR"
+}
+is_stdout_a_terminal() {
+    is_a_terminal "$FD_STDOUT"
+}
