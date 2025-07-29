@@ -1,6 +1,14 @@
 #
 # *** vi mode
-set -o vi
+# set -o vi
+# TODO! later I am having trouble remapping \C-w unix-word-rubout below
+#   vi-unix-word-rubout doesn't work inside "" like
+#   git commit -m "foo the bar<CURSOR><Ctrl-W>" # should remove words inside...
+#   I swear a few times I got this to work
+#   but I cannot reproduce it... maybe I am confusing ctrl-w outside "" which does work
+#   anyways I need to use emacs mode for course anyways so leave this for later
+#   TODO is it not possible to override readline key sequences?
+#
 # fix vi-insert vs emacs differences:
 #   icdiff <((bind -m vi-insert -p)) <((bind -m emacs -p ))
 #
