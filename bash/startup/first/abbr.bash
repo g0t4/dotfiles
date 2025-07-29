@@ -258,14 +258,14 @@ _expand_on_enter() {
     key_seq_accept_line='\C-j' # OOB accept-line, don't need another virtual key seq
     #
     # emacs keymap:
+    bind -m emacs "\"\C-m\": \"$key_seq_expand_abbr_enter$key_seq_accept_line\""
     bind -m emacs -x "\"$key_seq_expand_abbr_enter\": expand_abbr enter"
     bind -m emacs "\"$key_seq_accept_line\": accept-line" # redundant if using \C-j, uncomment if change key seq
-    bind -m emacs "\"\C-m\": \"$key_seq_expand_abbr_enter$key_seq_accept_line\""
     #
     # vi-insert keymap:
+    bind -m vi-insert "\"\C-m\": \"$key_seq_expand_abbr_enter$key_seq_accept_line\""
     bind -m vi-insert -x "\"$key_seq_expand_abbr_enter\": expand_abbr enter"
     bind -m vi-insert "\"$key_seq_accept_line\": accept-line" # redundant if using \C-j, uncomment if change key seq
-    bind -m vi-insert "\"\C-m\": \"$key_seq_expand_abbr_enter$key_seq_accept_line\""
 }
 _expand_on_enter
 
@@ -289,14 +289,14 @@ _expand_on_tab() {
     key_seq_complete='\C-x\C-i' # use this for a new complete key seq since I wanna replace the only one which is Ctrl-i
     #
     # emacs keymap:
+    bind -m emacs "\"\C-i\": \"$key_seq_expand_abbr_tab$key_seq_complete\""
     bind -m emacs -x "\"$key_seq_expand_abbr_tab\": expand_abbr tab"
     bind -m emacs "\"$key_seq_complete\": complete"
-    bind -m emacs "\"\C-i\": \"$key_seq_expand_abbr_tab$key_seq_complete\""
     #
     # vi-insert keymap:
+    bind -m vi-insert "\"\C-i\": \"$key_seq_expand_abbr_tab$key_seq_complete\""
     bind -m vi-insert -x "\"$key_seq_expand_abbr_tab\": expand_abbr tab"
     bind -m vi-insert "\"$key_seq_complete\": complete"
-    bind -m vi-insert "\"\C-i\": \"$key_seq_expand_abbr_tab$key_seq_complete\""
 }
 _expand_on_tab
 
