@@ -114,16 +114,16 @@ take() {
         return 1
     fi
 
-    mkdir -p "$dir"
+    mkdir -p -- "$dir"
 
     # strip arg1
     shift
 
     if (($# > 0)); then
-        mv "$@" "$dir"
+        mv -- "$@" "$dir"
     fi
 
-    cd "$dir"
+    cd -- "$dir"
 }
 
 # *** lsof
