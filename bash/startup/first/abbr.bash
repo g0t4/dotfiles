@@ -404,6 +404,9 @@ list_abbrs() {
         # FYI some values are empty b/c they are regex+function
         # TODO show function
         local -a opts=()
+        if [[ -n "$set_cursor" ]]; then
+            opts+=("--set-cursor=$set_cursor")
+        fi
         if [[ -n "$regex" ]]; then
             # TODO do I like how printf is working, is it slow? fast? I can always escape things myself too, just wanted to try this
             quoted_regex=$(printf "%q" "$regex")
@@ -416,9 +419,6 @@ list_abbrs() {
         fi
         if [[ -n "${cmd_only}" ]]; then
             opts+=("--command" "$cmd_only")
-        fi
-        if [[ -n "$set_cursor" ]]; then
-            opts+=("--set-cursor=$set_cursor")
         fi
         echo abbr -a "${opts[*]}" -- "$name" "'$value'"
     done
