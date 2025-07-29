@@ -55,8 +55,8 @@ bind -m vi-insert -x '"\ek": copy_and_clear_line'
 # *** bind
 
 # * readline variables
-abbr bind_current_keymap "bind -v | grep keymap"
-abbr bind_list_readline_variables "bind -v" # exec format
+abbr bind-current-keymap "bind -v | grep keymap"
+abbr bind-list-readline-variables "bind -v" # exec format
 abbr bindv "bind -v"
 
 
@@ -67,22 +67,22 @@ abbr bindv "bind -v"
 # 2. macro (text to insert including further key sequences, same as in ~/.inputrc)
 # 3. bash shell function (bash specific, not in ~/.inputrc)
 #
-abbr binds_all "bind -p; bind -s; bind -X"
+abbr binds-all "bind -p; bind -s; bind -X"
 #
-abbr binds_to_readline_funcs "bind -p"
+abbr binds-to-readline-funcs "bind -p"
 abbr bindp "bind -p" # readline func key sequences - exec format
 abbr bindp_vi_insert "bind -m vi-insert -p"
 abbr bindp_vi_command "bind -m vi-command -p"
 abbr bindp_emacs "bind -m emacs -p"
 #
-abbr binds_to_macros "bind -s"
+abbr binds-to-macros "bind -s"
 abbr binds "bind -s" # macro key sequences - exec format
 #
-abbr binds_to_bash_funcs "bind -X"
+abbr binds-to-bash-funcs "bind -X"
 abbr bindX "bind -X" # list bash func key sequences
 abbr bindx "bind -x" # to add key seq. to bash functions
-abbr --set-cursor bindx_shell_cmd_colon "bind -x '\"%\": shell_func arg1 arg2'"
-# abbr --set-cursor bindx_shell_cmd_whitespace "bind -x \"%\" shell_func arg1 arg2" #
+abbr --set-cursor bindx-shell-cmd-colon "bind -x '\"%\": example_bash_func arg1 arg2'"
+# abbr --set-cursor bindx-shell-cmd-whitespace "bind -x \"%\" example_bash_func arg1 arg2" #
 # TODO later format supports backslash-escape expansion (in readline)... is that for args?
 #
 # list readline funcs:
