@@ -163,6 +163,12 @@ expand_abbr() {
     # * add_char
     local add_char="$key"
     local add_char_if_no_expansion="$key" # --no-space-after does not apply if no expansion
+    if [[ "$key" = "tab" ]]; then
+        # for tab completion don't add any chars... I need to handle all that in the virtual key seq
+        #  note it is different versus enter too but still all handled in bind/keyseqs.
+        add_char=""
+        add_char_if_no_expansion=""
+    fi
     if [[ "$key" = "enter" ]]; then
         # for enter we have the \C-j in the bind macro, not doing that here
         add_char=""
@@ -251,6 +257,8 @@ bind -m emacs "\"\C-m\": \"$key_seq_expand_abbr_enter$key_seq_accept_line\""
 bind -m vi-insert -x "\"$key_seq_expand_abbr_enter\": expand_abbr enter"
 bind -m vi-insert "\"$key_seq_accept_line\": accept-line"
 bind -m vi-insert "\"\C-m\": \"$key_seq_expand_abbr_enter$key_seq_accept_line\""
+
+# TODO! "tab" in expand_abbr => map to $'\t'
 
 # * expand on <Tab>
 key_seq_expand_abbr_tab='\C-x\C-['
