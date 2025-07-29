@@ -116,8 +116,9 @@ take() {
 
     mkdir -p "$dir"
 
-    #     # strip arg1
-    #     set files $argv[2..]
+    # strip arg1
+    shift
+
     #     if test -z "$files"
     #         # with 1 arg, effectively works the asme as 'take'
     #         cd $argv[1]
