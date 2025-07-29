@@ -258,12 +258,12 @@ key_seq_expand_abbr_tab='\C-x\C-['
 key_seq_complete='\C-x\C-i' # use this for a new complete key seq since I wanna replace the only one which is Ctrl-i
 #
 # emacs keymap:
-bind -m emacs -x "\"$key_seq_expand_abbr_tab\": expand_abbr enter"
+bind -m emacs -x "\"$key_seq_expand_abbr_tab\": expand_abbr tab"
 bind -m emacs "\"$key_seq_complete\": complete" # this appears redundant given I am using OOB \C-j but it doesn't hurt to leave it
 bind -m emacs "\"\C-m\": \"$key_seq_expand_abbr_tab$key_seq_complete\""
 #
 # vi-insert keymap:
-bind -m vi-insert -x "\"$key_seq_expand_abbr_tab\": expand_abbr enter"
+bind -m vi-insert -x "\"$key_seq_expand_abbr_tab\": expand_abbr tab"
 bind -m vi-insert "\"$key_seq_complete\": complete"
 bind -m vi-insert "\"\C-m\": \"$key_seq_expand_abbr_tab$key_seq_complete\""
 
