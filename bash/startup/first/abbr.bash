@@ -405,6 +405,11 @@ list_abbrs() {
         # TODO show regex
         # TODO show function
         local -a opts=()
+        if [[ -n "$regex" ]]; then
+            # TODO check for single quote in regex '... and use double quotes then...
+            # use printf to safely quote?
+            opts+=("--regex" "'${regex}'")
+        fi
         if [[ -n "$set_cursor" ]]; then
             opts+=("--set-cursor=$set_cursor")
         fi
