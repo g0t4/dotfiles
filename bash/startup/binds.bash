@@ -1,9 +1,10 @@
 #
 # *** vi mode
-# set -o vi
+set -o vi
 # TODO! later I am having trouble remapping \C-w unix-word-rubout below
 #   vi-unix-word-rubout doesn't work inside "" like
 #   git commit -m "foo the bar<CURSOR><Ctrl-W>" # should remove words inside...
+#      by the way it only doesn't work if cursor is on char right before end of string (before ending ")
 #   I swear a few times I got this to work
 #   but I cannot reproduce it... maybe I am confusing ctrl-w outside "" which does work
 #   anyways I need to use emacs mode for course anyways so leave this for later
@@ -21,7 +22,16 @@
 #  so just rebind to emacs version?
 bind -m vi-insert '"\C-w": unix-word-rubout'
 bind -m vi-command '"\C-w": unix-word-rubout'
+# TODO why isn't this working in vi-insert mode?
 # "\C-w": vi-unix-word-rubout # original binding in vi-insert keymap
+
+# up/down arrows (some of this is from my ~/.inputrc, to mirror it in vi mode)
+bind -m vi-insert '"\e[A": history-substring-search-backward'
+bind -m vi-insert '"\e[B": history-substring-search-forward'
+bind -m vi-command '"\e[A": history-substring-search-backward'
+bind -m vi-command '"\e[B": history-substring-search-forward'
+
+
 
 #
 # FYI make sure to bind keymaps for vi mode too (-m vi-insert) (-m vi-command)
