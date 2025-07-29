@@ -387,16 +387,16 @@ _abbr() {
 
 }
 
-pipe_to_bat() {
+pretty_bash() {
     if is_stdout_a_terminal && command_exists bat; then
-        "$@" | bat -l bash
+        bat -l bash
     else
-        "$@"
+        cat
     fi
 }
 
 list_abbrs() {
-    pipe_to_bat _list_abbrs
+    _list_abbrs | pretty_bash
 }
 
 _list_abbrs() {
