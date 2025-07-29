@@ -87,6 +87,18 @@ vim.keymap.set('n', '<F12>', '<Plug>(coc-definition)', { silent = true })
 
 
 -- * formatting
-vim.keymap.set('x', '<S-M-f>', '<Plug>(coc-format-selected)')
-vim.keymap.set('i', '<S-M-f>', '<Esc>:call CocAction("format")<CR>a')
-vim.keymap.set('n', '<S-M-f>', ':call CocAction("format")<CR>')
+local function format_selected()
+    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Plug>(coc-format-selected)", true, true, true), "x", false)
+end
+
+local function format_insert()
+    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>:call CocAction('format')<CR>a", true, false, true), "i", false)
+end
+
+local function format_normal()
+    vim.cmd([[call CocAction('format')]])
+end
+
+vim.keymap.set('x', '<S-M-f>', format_selected)
+vim.keymap.set('i', '<S-M-f>', format_insert)
+vim.keymap.set('n', '<S-M-f>', format_normal)
