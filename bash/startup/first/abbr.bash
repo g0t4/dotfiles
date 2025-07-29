@@ -390,9 +390,9 @@ _abbr() {
 pipe_to_bat() {
     if is_stdout_a_terminal && command_exists bat; then
         "$@" | bat -l bash
-        return
+    else
+        "$@"
     fi
-    "$@"
 }
 
 list_abbrs() {
