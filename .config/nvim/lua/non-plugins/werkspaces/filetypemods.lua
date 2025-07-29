@@ -257,6 +257,13 @@ vim.api.nvim_create_autocmd("BufEnter", {
     callback = function()
         -- FYI this could be FileType autocmd if I wasn't fighting with coc's global format key maps
         vim.bo.commentstring = "# %s" -- %s is original tex
+
+        -- setup to match indent that git config uses when using git config command...
+        -- seems to match at least on mac
+        vim.bo.expandtab = false -- Use tabs, not spaces
+        vim.bo.tabstop = 4 -- Display width of a tab
+        vim.bo.shiftwidth = 4 -- Indent size
+        vim.bo.softtabstop = 4 -- Tab key behavior
     end,
 })
 
