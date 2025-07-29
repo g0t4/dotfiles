@@ -388,11 +388,9 @@ _abbr() {
 }
 
 pipe_to_bat() {
-    if is_stdout_a_terminal; then
-        if command_exists bat; then
-            "$@" | bat -l bash
-            return
-        fi
+    if is_stdout_a_terminal && command_exists bat; then
+        "$@" | bat -l bash
+        return
     fi
     "$@"
 }
