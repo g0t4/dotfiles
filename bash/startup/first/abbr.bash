@@ -237,10 +237,9 @@ bind -m vi-insert -x '"|": expand_abbr "|"'
 # TODO intercept tab and expand on tab complete too (else right now you have to backup (backspace) and then hit space again)
 
 # * expand on <Return>
-# logical key seq. to trigger expand_abber enter
 key_seq_expand_abbr_enter='\C-x\C-['
 #
-# key_seq_accept_line='\C-x\C-]' # if need be I can use this as a new key seq my multi-seq macro below
+# key_seq_accept_line='\C-x\C-]' # if I want my own key seq again for accept-line
 key_seq_accept_line='\C-j' # OOB accept-line, don't need another virtual key seq
 #
 # emacs keymap:
