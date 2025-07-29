@@ -86,8 +86,7 @@ vim.keymap.set('n', '<F12>', '<Plug>(coc-definition)', { silent = true })
 -- vim.keymap.set('n', '<F12>', '<Cmd>Telescope coc definitions<CR>', { silent = true })
 
 
-
-
+-- * formatting
 vim.keymap.set('x', '<leader>f', '<Plug>(coc-format-selected)')
 vim.keymap.set('n', '<leader>f', '<Plug>(coc-format-selected')
 
