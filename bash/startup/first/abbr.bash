@@ -411,6 +411,9 @@ list_abbrs() {
             # still need to add "" though and to expand the quoted var requires "" so... just yeah:
             opts+=("--regex" "\"$quoted_regex\"")
         fi
+        if [[ -n "${cmd_only}" ]]; then
+            opts+=("--command" "$cmd_only")
+        fi
         if [[ -n "$set_cursor" ]]; then
             opts+=("--set-cursor=$set_cursor")
         fi

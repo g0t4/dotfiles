@@ -82,6 +82,15 @@ for i in "\${!${1:ARRAY}[@]}"; do
     echo "Index \$i: \${${1}[\$i]}"
 done
 
+snippet if_not_empty
+if [[ -n "${${1:VAR}}" ]]; then
+	$0
+fi
+
+snippet if_empty
+if [[ -z "${${1:VAR}}" ]]; then
+	$0
+fi
 
 snippet declarep "print attributes and value of VAR"
 declare -p ${1:VAR} | bat -l bash
