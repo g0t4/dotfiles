@@ -576,13 +576,6 @@ abbr() {
         abbrs_set_cursor["$key"]="$set_cursor"
     fi
     if [[ "$func" ]]; then
-
-        if [[ -n "$ABBR_DEBUG" ]]; then
-            if ! declare -f "$func"; then
-                echo "MISSING FUNCTION for abbr: $func"
-            fi
-        fi
-
         abbrs_function["$key"]="$func"
     fi
     if [[ "$cmd" ]]; then
