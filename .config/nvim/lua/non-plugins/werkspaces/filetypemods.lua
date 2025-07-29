@@ -254,6 +254,16 @@ vim.api.nvim_create_autocmd("FileType", {
 
 
 
+vim.api.nvim_create_autocmd("FileType", {
+    group = "filetypemods",
+    pattern = "gitconfig",
+    callback = function()
+        vim.bo.commentstring = "# %s" -- %s is original text
+    end,
+})
+
+
+
 
 vim.api.nvim_create_autocmd("FileType", {
     group = "filetypemods",
