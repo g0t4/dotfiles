@@ -40,3 +40,14 @@ string__join() {
         echo "${parts[*]}"
     fi
 }
+
+tests_for_string_join() {
+
+    label_test string__join positional args
+    joined="$(string__join ':' foo bar baz)"
+    expect_equal "$joined" "foo:bar:baz"
+
+    label_test string__join args via STDIN
+    joined="$(echo -e "hello\nworld\nwes" | string__join ':')"
+    expect_equal "$joined" "hello:world:wes"
+}
