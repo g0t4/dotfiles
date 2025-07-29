@@ -10,5 +10,8 @@
 # | grep -vE '\-\-(regex).* -- '
 abbr | sort | grep -v "\\\'" | grep -v "\-- -F" >.generated.aliases.bash
 
+# gsed -n 's/\\\\d/[0-9]/gp'    .generated.aliases.bash # preview w/ drop -i, add -n... add p => /gp
+gsed -i 's/\\\\d/[0-9]/g' .generated.aliases.bash
+
 # sort both just to be safe, else comm won't work
 comm -23 (abbr | sort | psub) (sort .generated.aliases.bash | psub) >.generated.skipped.bash
