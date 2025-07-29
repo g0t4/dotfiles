@@ -388,6 +388,7 @@ _abbr() {
 }
 
 colorful() {
+    # TLDR pipe STDOUT to this function so STDIN here is mapped into one of two commands in a subshell:
     if is_stdout_a_terminal && command_exists bat; then
         bat -l "$1"
     else
