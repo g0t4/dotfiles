@@ -88,16 +88,40 @@ vim.keymap.set('n', '<F12>', '<Plug>(coc-definition)', { silent = true })
 
 -- * formatting
 local function format_selected()
-    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Plug>(coc-format-selected)", true, true, true), "x", false)
+    if vim.bo.filetype == "gitconfig" then
+        vim.cmd("normal! gg=G")
+    else
+        vim.api.nvim_feedkeys(
+            vim.api.nvim_replace_termcodes("<Plug>(coc-format-selected)", true, true, true),
+            "x",
+            false
+        )
+    end
 end
 
 local function format_insert()
-    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>:call CocAction('format')<CR>a", true, false, true), "i", false)
+    if vim.bo.filetype == "gitconfig" then
+        vim.cmd("normal! gg=G")
+    else
+        vim.api.nvim_feedkeys(
+            vim.api.nvim_replace_termcodes("<Esc>:call CocAction('format')<CR>a", true, false, true),
+            "i",
+            false
+        )
+    end
 end
 
 local function format_normal()
-    vim.cmd([[call CocAction('format')]])
+    if vim.bo.filetype == "gitconfig" then
+        vim.cmd("normal! gg=G")
+    else
+        vim.cmd("call CocAction('format')")
+    end
 end
+
+vim.keymap.set('x', '<S-M-f>', format_selected)
+vim.keymap.set('i', '<S[<8;11;21m-M-f>', format_insert)
+vim.keymap.set('n', '<S-M-f>', format_normal)
 
 vim.keymap.set('x', '<S-M-f>', format_selected)
 vim.keymap.set('i', '<S-M-f>', format_insert)

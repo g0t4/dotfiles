@@ -259,7 +259,6 @@ vim.api.nvim_create_autocmd("BufEnter", {
     callback = function()
         -- FYI this could be FileType autocmd if I wasn't fighting with coc's global format key maps
         vim.bo.commentstring = "# %s" -- %s is original tex
-        vim.keymap.set("i", "<S-M-f>", function() vim.cmd("gg=G") end)
     end,
 })
 
