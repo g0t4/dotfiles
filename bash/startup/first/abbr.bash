@@ -388,13 +388,13 @@ _abbr() {
 }
 
 pipe_to_bat() {
-    local cmd="$1"
     if is_stdout_a_terminal; then
         if command_exists bat; then
-            cmd+=" | bat -l bash"
+            "$@" | bat -l bash
+            return
         fi
     fi
-    eval "$cmd"
+    "$@"
 }
 
 list_abbrs() {
