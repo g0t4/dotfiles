@@ -289,12 +289,12 @@ _expand_on_tab() {
     key_seq_complete='\C-x\C-i' # need new key seq b/c I am going to intercept \C-i
     #
     # emacs keymap:
-    bind -m emacs "\"\C-i\": \"$key_seq_expand_abbr_tab$key_seq_complete\"" # * intercept Tab (Ctrl-i)
+    bind -m emacs "\"\C-i\": \"$key_seq_complete$key_seq_expand_abbr_tab\"" # * intercept Tab (Ctrl-i)
     bind -m emacs -x "\"$key_seq_expand_abbr_tab\": expand_abbr tab"
     bind -m emacs "\"$key_seq_complete\": complete"
     #
     # vi-insert keymap:
-    bind -m vi-insert "\"\C-i\": \"$key_seq_expand_abbr_tab$key_seq_complete\"" # * intercept Tab (Ctrl-i)
+    bind -m vi-insert "\"\C-i\": \"$key_seq_complete$key_seq_expand_abbr_tab\"" # * intercept Tab (Ctrl-i)
     bind -m vi-insert -x "\"$key_seq_expand_abbr_tab\": expand_abbr tab"
     bind -m vi-insert "\"$key_seq_complete\": complete"
 }
