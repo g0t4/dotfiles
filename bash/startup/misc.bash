@@ -131,11 +131,10 @@ take() {
 abbr 'lsof_bash_shell' 'sudo lsof -p $$'
 
 function multicd {
+    # for abbr
     local -i num_dots
     num_dots="${#1}"
     ((up_dirs = num_dots - 1))
     echo -n "cd "
     repeat ../ $up_dirs
 }
-
-abbr dotdot --regex '^\.\.+$' --function multicd

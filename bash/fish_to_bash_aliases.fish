@@ -18,6 +18,13 @@ abbr | sort | grep -v "\\\'" | grep -v "\-- -F" >.generated.aliases.bash
 # gsed -n 's/\\\\\\\\d/[0-9]/gp'    .generated.aliases.bash # preview w/ drop -i, add -n... add p => /gp
 gsed -i 's/\\\\\\\\d/[0-9]/g' .generated.aliases.bash
 #
+gsed -i 's/\\\\\\\\\./\\\\\./g' .generated.aliases.bash
+# ==> fix \\. to be \. only... which is escaped dot char in regex
+# NOTE there's an extra (9th) \ for \. in this regex! so we don't match on ANY char after \\!
+#
+gsed -i 's/\\\\\\\\b/\\\\b/g' .generated.aliases.bash
+# ==> fix \\b to be \b only in regex
+#
 # bash version (\ is literal in '' => hence four \ works)
 # gsed -n 's/\\\\d/[0-9]/gp'    .generated.aliases.bash
 #
