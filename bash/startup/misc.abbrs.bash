@@ -93,11 +93,9 @@ _grvcp() {
 }
 
 glX() {
-    if [[ "$1" =~ gl([0-9]+) ]]; then
-        echo "git log -${BASH_REMATCH[1]}"
-        return
-    fi
-    echo "git log"
+    #  gl10 / gl
+    local expanded="${1/gl/git log -}"
+    echo "${expanded% -}" # strip trailing ' -' if no number passed
 }
 # abbr git_log_num --regex 'gl[0-9]*' --function _expand_git_log
 
