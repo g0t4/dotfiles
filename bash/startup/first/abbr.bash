@@ -420,6 +420,9 @@ list_abbrs() {
         if [[ -n "${cmd_only}" ]]; then
             opts+=("--command" "$cmd_only")
         fi
+        if [[ -n "${anywhere}" ]]; then
+            opts+=("--position" "anywhere")
+        fi
         echo abbr -a "${opts[*]}" -- "$name" "'$value'"
     done
 }
