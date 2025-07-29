@@ -322,55 +322,55 @@ abbr() {
     #  so I don't have to statefully parse options (yet)
     while [[ $# -gt 0 ]]; do
         case "$1" in
-        --set-cursor=*)
-            set_cursor="${1#*=}" # strip (non-greedy) first matching part (through =)
-            shift
-            ;;
-        --set-cursor)
-            set_cursor="%" # uses default of %
-            shift
-            ;;
-        --no-space-after)
-            no_space_after="yes"
-            shift
-            ;;
-        --position=*)
-            position="${1#*=}"
-            shift
-            ;;
-        --position)
-            # required value is thus next arg => $2
-            position="${2}"
-            shift 2
-            ;;
-        --command)
-            cmd="${2}"
-            shift 2
-            ;;
-        --regex)
-            regex="${2}"
-            shift 2
-            ;;
-        --function)
-            func="${2}"
-            shift 2
-            ;;
-        -a)
-            # ignore -a, it's a meaningless option from fish's abbr
-            shift
-            ;;
-        --) # explicit end of options
-            shift
-            break # stop checking for options (rest are positional)
-            ;;
-        -*)
-            echo "Unknown option: $1" >&2
-            return 1
-            ;;
-        *)
-            positional_args+=("$1") # scoop up non-option args to treat as positional later
-            shift
-            ;;
+            --set-cursor=*)
+                set_cursor="${1#*=}" # strip (non-greedy) first matching part (through =)
+                shift
+                ;;
+            --set-cursor)
+                set_cursor="%" # uses default of %
+                shift
+                ;;
+            --no-space-after)
+                no_space_after="yes"
+                shift
+                ;;
+            --position=*)
+                position="${1#*=}"
+                shift
+                ;;
+            --position)
+                # required value is thus next arg => $2
+                position="${2}"
+                shift 2
+                ;;
+            --command)
+                cmd="${2}"
+                shift 2
+                ;;
+            --regex)
+                regex="${2}"
+                shift 2
+                ;;
+            --function)
+                func="${2}"
+                shift 2
+                ;;
+            -a)
+                # ignore -a, it's a meaningless option from fish's abbr
+                shift
+                ;;
+            --) # explicit end of options
+                shift
+                break # stop checking for options (rest are positional)
+                ;;
+            -*)
+                echo "Unknown option: $1" >&2
+                return 1
+                ;;
+            *)
+                positional_args+=("$1") # scoop up non-option args to treat as positional later
+                shift
+                ;;
         esac
     done
 
