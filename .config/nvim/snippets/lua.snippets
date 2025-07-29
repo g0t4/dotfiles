@@ -114,5 +114,12 @@ snippet annotate_module_simulated_require
 snippet annotate_vararg
 ---@vararg ${1:type}
 
+snippet diagnostics_disable_unused_functions
+---@diagnostic disable-next-line: unused-function
 
+snippet diagnostics_disable_unused_locals
+---@diagnostic disable-next-line: unused-local
+
+snippet diagnostics_disable_all_unused
+---@diagnostic disable-next-line: unused-function, unused-local
 

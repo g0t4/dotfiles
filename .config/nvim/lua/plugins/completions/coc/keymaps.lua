@@ -111,8 +111,23 @@ local function format_insert()
     end
 end
 
+
+---@diagnostic disable-next-line: unused-function
+local function suck_a_dick_formatter()
+    -- I can't throw this away! ChatGPT made it for me!
+    local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+    math.randomseed(os.time())
+    for i = 1, #lines do
+        lines[i] = lines[i]:gsub("%S", function(c)
+            return math.random() > 0.5 and c:upper() or c:lower()
+        end)
+    end
+    vim.api.nvim_buf_set_lines(0, 0, -1, false, lines)
+end
+
 local function format_normal()
     if vim.bo.filetype == "gitconfig" then
+        -- suck_a_dick_formatter()
         vim.cmd("normal! gg=G")
     else
         vim.cmd("call CocAction('format')")
