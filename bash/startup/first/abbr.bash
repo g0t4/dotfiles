@@ -241,11 +241,11 @@ expand_hack_enter='\C-x\C-['
 # acceptline_hack='\C-x\C-]'
 acceptline_hack='\C-j' # OOB accept-line
 bind -x "\"$expand_hack_enter\": expand_abbr enter"
-bind "\"$acceptline_hack\": accept-line"          # bind -p # lists readline actions
-bind "\"\C-m\": \"$expand_hack_enter$acceptline_hack\"" # bind -s # lists macro actions
+bind "\"$acceptline_hack\": accept-line"
+bind "\"\C-m\": \"$expand_hack_enter$acceptline_hack\""
 bind -m vi-insert -x "\"$expand_hack_enter\": expand_abbr enter"
-bind -m vi-insert "\"$acceptline_hack\": accept-line"          # bind -p # lists readline actions
-bind -m vi-insert "\"\C-m\": \"$expand_hack_enter$acceptline_hack\"" # bind -s # lists macro actions
+bind -m vi-insert "\"$acceptline_hack\": accept-line"
+bind -m vi-insert "\"\C-m\": \"$expand_hack_enter$acceptline_hack\""
 
 command_exists() {
     command -v "$1" 1>/dev/null
