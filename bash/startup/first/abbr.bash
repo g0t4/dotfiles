@@ -387,8 +387,17 @@ _abbr() {
 
 }
 
+list_abbrs() {
+    echo TODO list abbrs
+}
+
 # shellcheck disable=SC2317 # sick of it complaining about unused options in while loop
 abbr() {
+    # if called with no args, list abbrs like fish shell
+    if (($# == 0)); then
+        list_abbrs
+        return
+    fi
 
     # compat layer, also this is where I'll accept --no-space-after
     # FORMAT
