@@ -414,7 +414,7 @@ list_abbrs() {
         if [[ -n "$set_cursor" ]]; then
             opts+=("--set-cursor=$set_cursor")
         fi
-        echo abbr --add "${opts[*]}" -- "$name" "'$value'"
+        echo abbr -a "${opts[*]}" -- "$name" "'$value'"
     done
 }
 
