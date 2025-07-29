@@ -110,12 +110,13 @@ _abbr_expand_diff_last_two_commands() {
 # *** dirs
 
 take() {
-    #     if test -z "$argv[1]"
-    #         echo "takefiles requires at least a new directory to create and usually files to move into it"
-    #         echo "usage:"
-    #         echo "'takefiles newdir file1 [file2 ...]'"
-    #         return
-    #     end
+    local dir="${1}"
+    if [[ -z "$dir" ]]; then
+        echo "take requires at least a new directory to create and optionally files to move into it"
+        echo "usage:"
+        echo "'take newdir [file1 file2 ...]'"
+        return 1
+    fi
     #
     #     # not only create the dir, move the files passed as args 2+
     #     mkdir -p $argv[1]
@@ -130,8 +131,8 @@ take() {
     #     cd $argv[1]
     #     # PRN what if I don't wanna cd into the final dir? maybe have an alternative version of this that drops the final cd?
 
-    mkdir -p "$1"
-    cd "$1"
+    mkdir -p "$dir"
+    cd "$dir"
 }
 
 # *** lsof
