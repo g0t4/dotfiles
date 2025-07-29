@@ -237,19 +237,21 @@ bind -m vi-insert -x '"|": expand_abbr "|"'
 # TODO intercept tab and expand on tab complete too (else right now you have to backup (backspace) and then hit space again)
 
 # * expand on <Return>
-expand_hack_enter='\C-x\C-['
-# acceptline_hack_enter='\C-x\C-]'
-acceptline_hack_enter='\C-j' # OOB accept-line
+# logical key seq. to trigger expand_abber enter
+key_seq_expand_abbr_enter='\C-x\C-['
+#
+# acceptline_hack_enter='\C-x\C-]' # if need be I can use this as a new key seq my multi-seq macro below
+acceptline_hack_enter='\C-j' # OOB accept-line, don't need another virtual key seq
 #
 # emacs keymap:
-bind -m emacs -x "\"$expand_hack_enter\": expand_abbr enter"
-bind -m emacs "\"$acceptline_hack_enter\": accept-line"
-bind -m emacs "\"\C-m\": \"$expand_hack_enter$acceptline_hack_enter\""
+bind -m emacs -x "\"$key_seq_expand_abbr_enter\": expand_abbr enter"
+bind -m emacs "\"$acceptline_hack_enter\": accept-line" # this appears redundant given I am using OOB \C-j but it doesn't hurt to leave it
+bind -m emacs "\"\C-m\": \"$key_seq_expand_abbr_enter$acceptline_hack_enter\""
 #
 # vi-insert keymap:
-bind -m vi-insert -x "\"$expand_hack_enter\": expand_abbr enter"
+bind -m vi-insert -x "\"$key_seq_expand_abbr_enter\": expand_abbr enter"
 bind -m vi-insert "\"$acceptline_hack_enter\": accept-line"
-bind -m vi-insert "\"\C-m\": \"$expand_hack_enter$acceptline_hack_enter\""
+bind -m vi-insert "\"\C-m\": \"$key_seq_expand_abbr_enter$acceptline_hack_enter\""
 
 command_exists() {
     command -v "$1" 1>/dev/null
