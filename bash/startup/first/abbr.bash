@@ -399,10 +399,6 @@ list_abbrs() {
         cmd_only="${abbrs_command[$name]}"
         anywhere="${abbrs_anywhere[$name]}"
         no_space_after="${abbrs_no_space_after[$name]}"
-        # TODO if value has ' single quote, then cannot use ' to surround value... printf or?
-        # in that case use double quotes and escape special chars like $ ! \ " and newline
-        # FYI some values are empty b/c they are regex+function
-        # TODO show function
         local -a opts=()
         if [[ -n "$set_cursor" ]]; then
             opts+=("--set-cursor=$set_cursor")
@@ -427,6 +423,10 @@ list_abbrs() {
             # echo "# WARNING --no-space-after is not compabile with fish abbrs"
             opts+=("--no-space-after")
         fi
+
+        # TODO if value has ' single quote, then cannot use ' to surround value... printf or?
+        # in that case use double quotes and escape special chars like $ ! \ " and newline
+        # FYI some values are empty b/c they are regex+function
         echo abbr -a "${opts[*]}" -- "$name" "'$value'"
     done
 }
