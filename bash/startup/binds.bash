@@ -73,7 +73,7 @@ _abbrs_bind() {
     # 3. bash shell function (bash specific, not in ~/.inputrc)
     #
     abbr bind-all "bind -psX "
-    abbr bindviins-all "bind -m vi-insert -psX % $bind_bat"
+    abbr bindviins-all "bind -m vi-insert -psX $bind_bat"
     abbr bindvicmd-all "bind -m vi-command -psX $bind_bat"
     abbr bindemacs-all "bind -m emacs -psX $bind_bat"
     #
