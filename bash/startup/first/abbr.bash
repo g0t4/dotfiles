@@ -163,10 +163,12 @@ expand_abbr() {
     # * add_char
     local add_char="$key"
     local add_char_if_no_expansion="$key" # --no-space-after does not apply if no expansion
-    if [[ "$key" = "tab" ]]; then
-        # for tab completion don't add any chars... I need to handle all that in the virtual key seq
-        #  note it is different versus enter too but still all handled in bind/keyseqs.
-        add_char=""
+    if [[ "$key" = "tab_space_regardless" ]]; then
+        add_char=" "
+        add_char_if_no_expansion=" "
+    fi
+    if [[ "$key" = "tab_space_if_expand_only" ]]; then
+        add_char=" "
         add_char_if_no_expansion=""
     fi
     if [[ "$key" = "enter" ]]; then
@@ -269,6 +271,42 @@ _expand_on_enter() {
 }
 _expand_on_enter
 
+__expand_abbr_tab() {
+    # special function for intercepted tab expand step
+    # PRN I might have to call and capture the CMDLINE before complete and after (here) and compare to decide if complete happened or not
+    #   ** can put another bash func ahead of complete to capture READLINE_LINE and READLINE_POINT and then compare them here
+    #   if it didn't I don't need to do anything
+    #   if it did then I need to remove space and compare word
+
+    # TODO remove space (if any)
+    #  for now assume space means completion accepted (else why tab w/ completion with no word (space) already in front of cursor?
+    local char_before
+    ((char_before = READLINE_POINT - 1))
+    if ((char_before < 0)); then
+        # bail b/c at start of line
+        # nothing to even complete
+        echo nothing to expand at start of line
+        return
+    fi
+    local char_before_cursor="${READLINE_LINE:$char_before:1}"
+    declare -p char_before char_before_cursor READLINE_LINE READLINE_POINT | bat -l bash
+    if [[ "$char_before_cursor" == " " ]]; then
+        # ? use regex ^\s$
+        # remove space (without destroying rest of cmdline)
+        # TODO add tests of this using my test fwk
+        READLINE_LINE="${READLINE_LINE:0:$char_before}${READLINE_LINE:$READLINE_POINT}"
+        ((READLINE_POINT = READLINE_POINT - 1))
+        declare -p READLINE_LINE READLINE_POINT
+        expand_abbr tab_space_regardless
+        # TODO two tests: one on expand, one on not expand (test spacing results on both)
+    else
+        # then call regular expand_abbr
+        expand_abbr tab_space_if_expand_only
+        # TODO tests that handle adding space on expand, another that does not on not expand
+    fi
+    echo "------------"
+}
+
 _expand_on_tab() {
     # TODO! "tab" in expand_abbr => map to $'\t'
 
@@ -291,12 +329,22 @@ _expand_on_tab() {
     # emacs keymap:
     bind -m emacs "\"\C-i\": \"$key_seq_complete$key_seq_expand_abbr_tab\"" # * intercept Tab (Ctrl-i)
     bind -m emacs "\"$key_seq_complete\": complete"
-    bind -m emacs -x "\"$key_seq_expand_abbr_tab\": expand_abbr tab"
+    bind -m emacs -x "\"$key_seq_expand_abbr_tab\": __expand_abbr_tab"
     #
     # vi-insert keymap:
+    # bind -m vi-insert "\"\C-i\": \"$key_seq_expand_abbr_tab\"" # * intercept Tab (Ctrl-i) TESTING: only call expand_abbr_tab (no complete first)
     bind -m vi-insert "\"\C-i\": \"$key_seq_complete$key_seq_expand_abbr_tab\"" # * intercept Tab (Ctrl-i)
     bind -m vi-insert "\"$key_seq_complete\": complete"
-    bind -m vi-insert -x "\"$key_seq_expand_abbr_tab\": expand_abbr tab"
+    bind -m vi-insert -x "\"$key_seq_expand_abbr_tab\": __expand_abbr_tab"
+    # tests:
+    # - tab completes an abbr
+    #   bind_show<TAB>  # unique prefix so it tab completes right away => should expand out the abbr too!
+    # - tab completes a NON abbr
+    #   whi<TAB> # should leave tab there and show completions only...
+    #     TODO broken ... inserts a space... ugh
+    # - tab after a completed abbr:
+    #   gst <CURSOR><TAB>bar # should expand into `git status bar`
+    #
 }
 _expand_on_tab
 
