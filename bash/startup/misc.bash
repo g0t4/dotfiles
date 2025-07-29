@@ -38,10 +38,11 @@ HISTSIZE=1000000
 
 alias cdr='cd "$(_repo_root)"'
 
-alias ..="cd .."
-alias ...="cd ..."
-alias ....="cd ...."
-alias .....="cd ....."
+# * leave these for demo examples and then remove when course series is done:
+# alias ..="cd .."
+# alias ...="cd ..."
+# alias ....="cd ...."
+# alias .....="cd ....."
 
 if [[ "$(uname)" = "Darwin" ]]; then
     alias sed=gsed
