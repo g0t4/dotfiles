@@ -92,15 +92,14 @@ _grvcp() {
     echo "git remote get-url $first_remote | pbcopy # $(git remote get-url "$first_remote")"
 }
 
-_expand_git_log() {
+glX() {
     if [[ "$1" =~ gl([0-9]+) ]]; then
-
         echo "git log -${BASH_REMATCH[1]}"
         return
     fi
     echo "git log"
 }
-abbr git_log_num --regex 'gl[0-9]*' --function _expand_git_log
+# abbr git_log_num --regex 'gl[0-9]*' --function _expand_git_log
 
 # * trap
 abbr trapl "trap -l"
