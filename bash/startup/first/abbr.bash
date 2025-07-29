@@ -389,14 +389,14 @@ _abbr() {
 
 colorful() {
     if is_stdout_a_terminal && command_exists bat; then
-        bat -l bash
+        bat -l "$1"
     else
         cat
     fi
 }
 
 list_abbrs() {
-    _list_abbrs | colorful
+    _list_abbrs | colorful bash
 }
 
 _list_abbrs() {
