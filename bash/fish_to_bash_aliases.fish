@@ -10,8 +10,17 @@
 # | grep -vE '\-\-(regex).* -- '
 abbr | sort | grep -v "\\\'" | grep -v "\-- -F" >.generated.aliases.bash
 
-# gsed -n 's/\\\\d/[0-9]/gp'    .generated.aliases.bash # preview w/ drop -i, add -n... add p => /gp
-gsed -i 's/\\\\d/[0-9]/g' .generated.aliases.bash
+# ** MAKE SURE TO TEST THIS IN SAME SHELL (fish, see shebang above)...
+#   b/c bash treats \ as literal inside  '' but fish doesn't
+#   hence 4 \ => 8 \ in fish
+#
+# *fish versions:
+# gsed -n 's/\\\\\\\\d/[0-9]/gp'    .generated.aliases.bash # preview w/ drop -i, add -n... add p => /gp
+gsed -i 's/\\\\\\\\d/[0-9]/g' .generated.aliases.bash
+#
+# bash version (\ is literal in '' => hence four \ works)
+# gsed -n 's/\\\\d/[0-9]/gp'    .generated.aliases.bash
+#
 
 # sort both just to be safe, else comm won't work
 comm -23 (abbr | sort | psub) (sort .generated.aliases.bash | psub) >.generated.skipped.bash
