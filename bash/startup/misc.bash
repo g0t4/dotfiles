@@ -116,8 +116,6 @@ take() {
 
     mkdir -p "$dir"
 
-    #     # not only create the dir, move the files passed as args 2+
-    #     mkdir -p $argv[1]
     #     # strip arg1
     #     set files $argv[2..]
     #     if test -z "$files"
@@ -126,8 +124,6 @@ take() {
     #         return
     #     end
     #     mv $files[1..] $argv[1]
-    #     cd $argv[1]
-    #     # PRN what if I don't wanna cd into the final dir? maybe have an alternative version of this that drops the final cd?
 
     cd "$dir"
 }
