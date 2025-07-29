@@ -41,7 +41,7 @@ string__join() {
     fi
 }
 
-tests_for_string_join() {
+tests_for_string__() {
 
     label_test string__join positional args
     joined="$(string__join ':' foo bar baz)"
