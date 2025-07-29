@@ -406,9 +406,11 @@ list_abbrs() {
         # TODO show function
         local -a opts=()
         if [[ -n "$regex" ]]; then
-            # TODO check for single quote in regex '... and use double quotes then...
-            # use printf to safely quote?
-            opts+=("--regex" "'${regex}'")
+            # TODO do I like how printf is working, is it slow? fast? I can always escape things myself too, just wanted to try this
+            quoted_regex=$(printf "%q" "$regex")
+            # printf will return escaped chars for double quoted string
+            # still need to add "" though and to expand the quoted var requires "" so... just yeah:
+            opts+=("--regex" "\"$quoted_regex\"")
         fi
         if [[ -n "$set_cursor" ]]; then
             opts+=("--set-cursor=$set_cursor")
