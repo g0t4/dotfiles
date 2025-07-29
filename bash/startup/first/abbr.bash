@@ -241,11 +241,12 @@ expand_hack_enter='\C-x\C-['
 # acceptline_hack_enter='\C-x\C-]'
 acceptline_hack_enter='\C-j' # OOB accept-line
 #
-# emacs
+# emacs keymap:
 bind -m emacs -x "\"$expand_hack_enter\": expand_abbr enter"
 bind -m emacs "\"$acceptline_hack_enter\": accept-line"
 bind -m emacs "\"\C-m\": \"$expand_hack_enter$acceptline_hack_enter\""
 #
+# vi-insert keymap:
 bind -m vi-insert -x "\"$expand_hack_enter\": expand_abbr enter"
 bind -m vi-insert "\"$acceptline_hack_enter\": accept-line"
 bind -m vi-insert "\"\C-m\": \"$expand_hack_enter$acceptline_hack_enter\""
