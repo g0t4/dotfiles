@@ -71,6 +71,9 @@ abbr binds_all "bind -p; bind -s; bind -X"
 #
 abbr binds_to_readline_funcs "bind -p"
 abbr bindp "bind -p" # readline func key sequences - exec format
+abbr bindp_vi_insert "bind -m vi-insert -p"
+abbr bindp_vi_command "bind -m vi-command -p"
+abbr bindp_emacs "bind -m emacs -p"
 #
 abbr binds_to_macros "bind -s"
 abbr binds "bind -s" # macro key sequences - exec format
