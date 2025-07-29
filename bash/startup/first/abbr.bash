@@ -276,20 +276,20 @@ __expand_abbr_tab() {
     #   ** can put another bash func ahead of complete to capture READLINE_LINE and READLINE_POINT and then compare them here
 
     #  for now assume space means completion accepted
-    local char_before
-    ((char_before = READLINE_POINT - 1))
-    if ((char_before < 0)); then
+    local char_before_index
+    ((char_before_index = READLINE_POINT - 1))
+    if ((char_before_index < 0)); then
         # bail b/c at start of line... nothing to complete
         # echo nothing to expand at start of line
         return
     fi
-    local char_before_cursor="${READLINE_LINE:$char_before:1}"
-    # declare -p char_before char_before_cursor READLINE_LINE READLINE_POINT | bat -l bash
+    local char_before_cursor="${READLINE_LINE:$char_before_index:1}"
+    # declare -p char_before_index char_before_cursor READLINE_LINE READLINE_POINT | bat -l bash
     if [[ "$char_before_cursor" == " " ]]; then
         # ? use regex ^\s$
         # remove space (without destroying rest of cmdline)
         # TODO add tests of this using my test fwk
-        READLINE_LINE="${READLINE_LINE:0:$char_before}${READLINE_LINE:$READLINE_POINT}"
+        READLINE_LINE="${READLINE_LINE:0:$char_before_index}${READLINE_LINE:$READLINE_POINT}"
         ((READLINE_POINT = READLINE_POINT - 1))
         # declare -p READLINE_LINE READLINE_POINT
         expand_abbr tab_space_regardless
