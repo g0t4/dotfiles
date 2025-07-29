@@ -12,6 +12,7 @@ set -o vi
 # vi-unix-word-rubout doesn't work inside ""...
 #  so just rebind to emacs version?
 bind -m vi-insert '"\C-w": unix-word-rubout'
+bind -m vi-command '"\C-w": unix-word-rubout'
 # "\C-w": vi-unix-word-rubout # original binding in vi-insert keymap
 
 #
@@ -47,8 +48,9 @@ copy_and_clear_line() {
     READLINE_LINE=
 }
 
-bind -x '"\ek": copy_and_clear_line'
+bind -m emacs -x '"\ek": copy_and_clear_line'
 bind -m vi-insert -x '"\ek": copy_and_clear_line'
+bind -m vi-command -x '"\ek": copy_and_clear_line'
 # FYI I should be using yy/dd in vi mode... but I am going to leave Esc-k too just to have it be consistent...
 # FYI use \C-k for Ctrl-k vs \ek for Esc-k ... cannot do: \Ck nor \e-k
 
