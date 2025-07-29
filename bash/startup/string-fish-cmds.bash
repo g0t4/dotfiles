@@ -28,7 +28,7 @@ string__join() {
     local IFS="$1"
     shift
 
-    if [[ -t 0 ]]; then
+    if is_stdin_a_terminal; then
         # string__join | foo bar bam
         # each argument is an item (after $1, hence shift above)
         # CAREFUL with word splitting if passing strings as args!
