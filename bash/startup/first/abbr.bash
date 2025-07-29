@@ -388,13 +388,13 @@ _abbr() {
 }
 
 list_abbrs() {
+    local cmd=_list_abbrs
     if is_stdout_a_terminal; then
         if command_exists bat; then
-            _list_abbrs | bat -l bash
-            return
+            cmd+=" | bat -l bash"
         fi
     fi
-    _list_abbrs
+    eval "$cmd"
 }
 
 _list_abbrs() {
