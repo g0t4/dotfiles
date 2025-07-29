@@ -240,9 +240,12 @@ bind -m vi-insert -x '"|": expand_abbr "|"'
 expand_hack_enter='\C-x\C-['
 # acceptline_hack_enter='\C-x\C-]'
 acceptline_hack_enter='\C-j' # OOB accept-line
-bind -x "\"$expand_hack_enter\": expand_abbr enter"
-bind "\"$acceptline_hack_enter\": accept-line"
-bind "\"\C-m\": \"$expand_hack_enter$acceptline_hack_enter\""
+#
+# emacs
+bind -m emacs -x "\"$expand_hack_enter\": expand_abbr enter"
+bind -m emacs "\"$acceptline_hack_enter\": accept-line"
+bind -m emacs "\"\C-m\": \"$expand_hack_enter$acceptline_hack_enter\""
+#
 bind -m vi-insert -x "\"$expand_hack_enter\": expand_abbr enter"
 bind -m vi-insert "\"$acceptline_hack_enter\": accept-line"
 bind -m vi-insert "\"\C-m\": \"$expand_hack_enter$acceptline_hack_enter\""
