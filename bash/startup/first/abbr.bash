@@ -387,7 +387,7 @@ _abbr() {
 
 }
 
-pretty_bash() {
+colorful() {
     if is_stdout_a_terminal && command_exists bat; then
         bat -l bash
     else
@@ -396,7 +396,7 @@ pretty_bash() {
 }
 
 list_abbrs() {
-    _list_abbrs | pretty_bash
+    _list_abbrs | colorful
 }
 
 _list_abbrs() {
