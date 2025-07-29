@@ -173,15 +173,6 @@ endfunction
 nmap <leader>rn <Plug>(coc-rename)
 nmap <F2> <Plug>(coc-rename)
 
-" Formatting selected code
-xmap <leader>f  <Plug>(coc-format-selected)
-nmap <leader>f  <Plug>(coc-format-selected)
-"
-" My formatting additions:
-xmap <S-M-f> <Plug>(coc-format-selected)
-imap <S-M-f> <Esc>:call CocAction('format')<CR>a
-nmap <S-M-f> :call CocAction('format')<CR>
-
 augroup mygroup
     autocmd!
     " Setup formatexpr specified filetype(s)
