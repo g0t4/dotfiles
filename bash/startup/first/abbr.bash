@@ -434,7 +434,7 @@ list_abbrs() {
 abbr() {
     # if called with no args, list abbrs like fish shell
     if (($# == 0)); then
-        list_abbrs
+        list_abbrs | bat -l bash
         return
     fi
 
