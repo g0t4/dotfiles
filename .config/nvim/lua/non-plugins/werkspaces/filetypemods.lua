@@ -253,12 +253,13 @@ vim.api.nvim_create_autocmd("FileType", {
 
 
 
-
-vim.api.nvim_create_autocmd("FileType", {
+vim.api.nvim_create_autocmd("BufEnter", {
     group = "filetypemods",
-    pattern = "gitconfig",
+    pattern = "*.gitconfig",
     callback = function()
-        vim.bo.commentstring = "# %s" -- %s is original text
+        -- FYI this could be FileType autocmd if I wasn't fighting with coc's global format key maps
+        vim.bo.commentstring = "# %s" -- %s is original tex
+        vim.keymap.set("i", "<S-M-f>", function() vim.cmd("gg=G") end)
     end,
 })
 
