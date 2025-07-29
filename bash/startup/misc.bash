@@ -119,12 +119,9 @@ take() {
     # strip arg1
     shift
 
-    #     if test -z "$files"
-    #         # with 1 arg, effectively works the asme as 'take'
-    #         cd $argv[1]
-    #         return
-    #     end
-    #     mv $files[1..] $argv[1]
+    if (($# > 0)); then
+        mv "$@" "$dir"
+    fi
 
     cd "$dir"
 }
