@@ -3,7 +3,7 @@
 #
 # match ** matches all files + zero+ directories (basically search all nested dirs)
 # shopt -s globstar
-shopt -s autocd # cd to a dir with just its name in command position
+shopt -s autocd     # cd to a dir with just its name in command position
 shopt -s histreedit # failed history expansions - put back into cmdline to edit (otherwise they are lost)
 
 abbr options_list_set "echo \$-"
@@ -25,11 +25,7 @@ export DOTNET_CLI_TELEMETRY_OPTOUT=1
 # VAGRANT_EXPERIMENTAL=
 # VAGRANT_PROVIDER=
 
-
 alias grep="grep --color=auto"
-
-
-
 
 #
 function help_bat() {
@@ -117,7 +113,9 @@ take() {
         echo "'take newdir [file1 file2 ...]'"
         return 1
     fi
-    #
+
+    mkdir -p "$dir"
+
     #     # not only create the dir, move the files passed as args 2+
     #     mkdir -p $argv[1]
     #     # strip arg1
@@ -131,7 +129,6 @@ take() {
     #     cd $argv[1]
     #     # PRN what if I don't wanna cd into the final dir? maybe have an alternative version of this that drops the final cd?
 
-    mkdir -p "$dir"
     cd "$dir"
 }
 
