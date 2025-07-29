@@ -236,7 +236,7 @@ expand_abbr() {
 
 }
 
-_expand_on() {
+_setup_intercepts_for_rest_of_keys() {
     # * expand on <Space>
     bind -x '" ": expand_abbr " "'
     bind -x '";": expand_abbr ";"' # so you can:   gst<;> => git status;
@@ -246,9 +246,9 @@ _expand_on() {
     bind -m vi-insert -x '"|": expand_abbr "|"'
     # TODO intercept tab and expand on tab complete too (else right now you have to backup (backspace) and then hit space again)
 }
-_expand_on
+_setup_intercepts_for_rest_of_keys
 
-_expand_on_enter() {
+_setup_intercept_for_enter() {
     # Steps
     # 1. intercept Enter
     # 2. (attempt) abbr-expand
@@ -269,7 +269,7 @@ _expand_on_enter() {
     bind -m vi-insert -x "\"$key_seq_expand_abbr_enter\": expand_abbr enter"
     bind -m vi-insert "\"$key_seq_accept_line\": accept-line" # redundant if using \C-j, uncomment if change key seq
 }
-_expand_on_enter
+_setup_intercept_for_enter
 
 __expand_abbr_tab() {
     # PRN I might have to call and capture the CMDLINE before complete and after (here) and compare to decide if complete happened or not
@@ -302,7 +302,7 @@ __expand_abbr_tab() {
     # echo "------------"
 }
 
-_expand_on_tab() {
+_setup_intercept_for_tab() {
     # TODO! "tab" in expand_abbr => map to $'\t'
 
     # STEPS:
@@ -341,7 +341,7 @@ _expand_on_tab() {
     #   gst <CURSOR><TAB>bar # should expand into `git status bar`
     #
 }
-_expand_on_tab
+_setup_intercept_for_tab
 
 command_exists() {
     command -v "$1" 1>/dev/null
