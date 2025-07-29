@@ -14,7 +14,12 @@ abbr | sort | grep -v "\\\'" | grep -v "\-- -F" >.generated.aliases.bash
 #   b/c bash treats \ as literal inside  '' but fish doesn't
 #   hence 4 \ => 8 \ in fish
 #
+#
+# FYI! you may need to do more conversions in th efuture depending on new regexes setup in fish abbrs
+#   avoid a batch convert is likely wise as there aren't many char classes you may be using and they're all somewhat unique in how they map over
+#
 # *fish versions:
+# ==> fix \\d to be [0-9]
 # gsed -n 's/\\\\\\\\d/[0-9]/gp'    .generated.aliases.bash # preview w/ drop -i, add -n... add p => /gp
 gsed -i 's/\\\\\\\\d/[0-9]/g' .generated.aliases.bash
 #
@@ -25,7 +30,7 @@ gsed -i 's/\\\\\\\\\./\\\\\./g' .generated.aliases.bash
 gsed -i 's/\\\\\\\\b/\\\\b/g' .generated.aliases.bash
 # ==> fix \\b to be \b only in regex
 #
-# bash version (\ is literal in '' => hence four \ works)
+# FYI bash version of \\d (\ is literal in '' => hence four \ works)
 # gsed -n 's/\\\\d/[0-9]/gp'    .generated.aliases.bash
 #
 
