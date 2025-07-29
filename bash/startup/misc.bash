@@ -123,7 +123,7 @@ take() {
         mv -- "$@" "$dir"
     fi
 
-    cd -- "$dir"
+    cd -- "$dir" || return # || return for shellcheck
 }
 
 # *** lsof
