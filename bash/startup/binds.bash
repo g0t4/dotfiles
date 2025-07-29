@@ -53,45 +53,44 @@ bind -m vi-insert -x '"\ek": copy_and_clear_line'
 # FYI use \C-k for Ctrl-k vs \ek for Esc-k ... cannot do: \Ck nor \e-k
 
 # *** bind
+_abbrs_bind() {
+    # syntax highlight bind mappings
+    local bind_bat="| bat -l yaml"
+    # FYI chose yaml b/c it highlights escape sequences which are key in keymaps!
 
-# * readline variables
-abbr bind-current-keymap "bind -v | grep keymap"
-abbr bind-list-readline-variables "bind -v" # exec format
-abbr bindv "bind -v"
+    # * readline variables
+    abbr bind-current-keymap "bind -v | grep keymap"
+    abbr bind-list-readline-variables "bind -v $bind_bat" # exec format
+    abbr bindv "bind -v $bind_bat"
 
-# * key sequences
-#
-# bind maps key sequences to one of three actions:
-# 1. readline function (same as in ~/.inputrc)
-# 2. macro (text to insert including further key sequences, same as in ~/.inputrc)
-# 3. bash shell function (bash specific, not in ~/.inputrc)
-#
-abbr bind-all "bind -psX"
-abbr bindviins-all "bind -m vi-insert -psX"
-abbr bindvicmd-all "bind -m vi-command -psX"
-abbr bindemacs-all "bind -m emacs -psX"
-#
-abbr bind-to-readline-funcs "bind -p"
-abbr bindp "bind -p" # readline func key sequences - exec format
-abbr bindviins "bind -m vi-insert"
-abbr bindviins_p "bind -m vi-insert -p"
-abbr bindvicmd "bind -m vi-command"
-abbr bindvicmd_p "bind -m vi-command -p"
-abbr bindemacs "bind -m emacs"
-abbr bindemacs_p "bind -m emacs -p"
-#
-abbr bind-to-macros "bind -s"
-abbr binds "bind -s" # macro key sequences - exec format
-#
-abbr bind-to-bash-funcs "bind -X"
-abbr bindX "bind -X" # list bash func key sequences
-abbr bindx "bind -x" # to add key seq. to bash functions
-#
-# list readline funcs:
-abbr bindl "bind -l"
-abbr bind-list-readline-func-names "bind -l"
+    # * key sequences
+    #
+    # bind maps key sequences to one of three actions:
+    # 1. readline function (same as in ~/.inputrc)
+    # 2. macro (text to insert including further key sequences, same as in ~/.inputrc)
+    # 3. bash shell function (bash specific, not in ~/.inputrc)
+    #
+    abbr bind-all "bind -psX "
+    abbr bindviins-all "bind -m vi-insert -psX % $bind_bat"
+    abbr bindvicmd-all "bind -m vi-command -psX $bind_bat"
+    abbr bindemacs-all "bind -m emacs -psX $bind_bat"
+    #
+    abbr bind-to-readline-funcs "bind -p $bind_bat"
+    abbr bindp "bind -p $bind_bat" # readline func key sequences - exec format
+    #
+    abbr bind-to-macros "bind -s $bind_bat"
+    abbr binds "bind -s $bind_bat" # macro key sequences - exec format
+    #
+    abbr bind-to-bash-funcs "bind -X $bind_bat"
+    abbr bindX "bind -X $bind_bat" # list bash func key sequences
+    abbr bindx "bind -x $bind_bat" # to add key seq. to bash functions
+    #
+    # list readline funcs:
+    abbr bindl "bind -l"
+    abbr bind-list-readline-func-names "bind -l"
 
-# * query key sequence for readline func
-abbr bindq "bind -q" # keys mapped to function name:  bind -q yank-last-arg
+    # * query key sequence for readline func
+    abbr bindq "bind -q" # keys mapped to function name:  bind -q yank-last-arg
 
-# keep in mind, longer abbrs are reminder abbrs
+}
+_abbrs_bind
