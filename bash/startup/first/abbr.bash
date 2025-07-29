@@ -423,6 +423,10 @@ list_abbrs() {
         if [[ -n "${anywhere}" ]]; then
             opts+=("--position" "anywhere")
         fi
+        if [[ -n "${no_space_after}" ]]; then
+            # echo "# WARNING --no-space-after is not compabile with fish abbrs"
+            opts+=("--no-space-after")
+        fi
         echo abbr -a "${opts[*]}" -- "$name" "'$value'"
     done
 }
