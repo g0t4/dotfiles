@@ -64,6 +64,7 @@ _abbrs_bind() {
     abbr bind-current-keymap "bind -v | grep keymap"
     abbr bind-list-readline-variables "bind -v $bind_bat" # exec format
     abbr bindv "bind -v $bind_bat"
+    abbr bind_show_mode 'bind "set show-mode-in-prompt on"'
 
     # * key sequences
     #
