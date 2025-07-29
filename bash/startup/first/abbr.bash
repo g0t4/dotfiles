@@ -388,7 +388,11 @@ _abbr() {
 }
 
 list_abbrs() {
-    _list_abbrs | bat -l bash
+    if is_stdout_a_terminal; then
+        _list_abbrs | bat -l bash
+    else
+        _list_abbrs
+    fi
 }
 
 _list_abbrs() {
