@@ -237,15 +237,15 @@ bind -m vi-insert -x '"|": expand_abbr "|"'
 # TODO intercept tab and expand on tab complete too (else right now you have to backup (backspace) and then hit space again)
 
 # * expand on <Return>
-expand_hack='\C-x\C-['
+expand_hack_enter='\C-x\C-['
 # acceptline_hack='\C-x\C-]'
 acceptline_hack='\C-j' # OOB accept-line
-bind -x "\"$expand_hack\": expand_abbr enter"
+bind -x "\"$expand_hack_enter\": expand_abbr enter"
 bind "\"$acceptline_hack\": accept-line"          # bind -p # lists readline actions
-bind "\"\C-m\": \"$expand_hack$acceptline_hack\"" # bind -s # lists macro actions
-bind -m vi-insert -x "\"$expand_hack\": expand_abbr enter"
+bind "\"\C-m\": \"$expand_hack_enter$acceptline_hack\"" # bind -s # lists macro actions
+bind -m vi-insert -x "\"$expand_hack_enter\": expand_abbr enter"
 bind -m vi-insert "\"$acceptline_hack\": accept-line"          # bind -p # lists readline actions
-bind -m vi-insert "\"\C-m\": \"$expand_hack$acceptline_hack\"" # bind -s # lists macro actions
+bind -m vi-insert "\"\C-m\": \"$expand_hack_enter$acceptline_hack\"" # bind -s # lists macro actions
 
 command_exists() {
     command -v "$1" 1>/dev/null
