@@ -281,15 +281,16 @@ _expand_on_tab() {
     #   - follow up with space ONLY IF expanded
     #   - leave no space if not expanded so user can further modify and/or tab complete
     #
-    # TODO does \C-x\C-t work for emacs keymap (fine for vi-insert)
+    # FYI Ctrl-x,Ctrl-* is mostly clear in even emacs mode
+    #    bind -m emacs -p | grep -i "C-x\\\C"
+    #
     key_seq_expand_abbr_tab='\C-x\C-t'
     #
-    # TODO does \C-x\C-i work for emacs keymap (fine for vi-insert)
     key_seq_complete='\C-x\C-i' # use this for a new complete key seq since I wanna replace the only one which is Ctrl-i
     #
     # emacs keymap:
     bind -m emacs -x "\"$key_seq_expand_abbr_tab\": expand_abbr tab"
-    bind -m emacs "\"$key_seq_complete\": complete" # this appears redundant given I am using OOB \C-j but it doesn't hurt to leave it
+    bind -m emacs "\"$key_seq_complete\": complete"
     bind -m emacs "\"\C-i\": \"$key_seq_expand_abbr_tab$key_seq_complete\""
     #
     # vi-insert keymap:
