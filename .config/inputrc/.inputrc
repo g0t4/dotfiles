@@ -1,5 +1,6 @@
 # FYI see inputrc/NOTES.md in dotfiles repo for more
 
+# *** MAKE SURE TO SYNC WITH other bash bind modes like vi-insert/vi-command/etc
 # FYI see man bash => /Commands for Manipulating the History
 # - I setup the up/down for gdb and bash originally:
 # "\e[A": history-search-backward

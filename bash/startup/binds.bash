@@ -30,10 +30,9 @@ bind -m vi-insert '"\e[A": history-substring-search-backward'
 bind -m vi-insert '"\e[B": history-substring-search-forward'
 bind -m vi-command '"\e[A": history-substring-search-backward'
 bind -m vi-command '"\e[B": history-substring-search-forward'
+# PRN map emacs here just in case?
 
 
-
-#
 # FYI make sure to bind keymaps for vi mode too (-m vi-insert) (-m vi-command)
 # choices: emacs, emacs-standard, emacs-meta, emacs-ctlx, vi, vi-move, vi-command, and vi-insert
 # also emacs keymaps I like, rebound for vi-insert
