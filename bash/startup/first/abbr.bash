@@ -252,7 +252,7 @@ bind -m vi-insert -x "\"$key_seq_expand_abbr_enter\": expand_abbr enter"
 bind -m vi-insert "\"$key_seq_accept_line\": accept-line"
 bind -m vi-insert "\"\C-m\": \"$key_seq_expand_abbr_enter$key_seq_accept_line\""
 
-# * expand on <Return>
+# * expand on <Tab>
 key_seq_expand_abbr_tab='\C-x\C-['
 #
 # key_seq_complete='\C-x\C-]' # if I want my own key seq again for accept-line
