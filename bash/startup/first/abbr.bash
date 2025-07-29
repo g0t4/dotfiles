@@ -238,14 +238,14 @@ bind -m vi-insert -x '"|": expand_abbr "|"'
 
 # * expand on <Return>
 expand_hack_enter='\C-x\C-['
-# acceptline_hack='\C-x\C-]'
-acceptline_hack='\C-j' # OOB accept-line
+# acceptline_hack_enter='\C-x\C-]'
+acceptline_hack_enter='\C-j' # OOB accept-line
 bind -x "\"$expand_hack_enter\": expand_abbr enter"
-bind "\"$acceptline_hack\": accept-line"
-bind "\"\C-m\": \"$expand_hack_enter$acceptline_hack\""
+bind "\"$acceptline_hack_enter\": accept-line"
+bind "\"\C-m\": \"$expand_hack_enter$acceptline_hack_enter\""
 bind -m vi-insert -x "\"$expand_hack_enter\": expand_abbr enter"
-bind -m vi-insert "\"$acceptline_hack\": accept-line"
-bind -m vi-insert "\"\C-m\": \"$expand_hack_enter$acceptline_hack\""
+bind -m vi-insert "\"$acceptline_hack_enter\": accept-line"
+bind -m vi-insert "\"\C-m\": \"$expand_hack_enter$acceptline_hack_enter\""
 
 command_exists() {
     command -v "$1" 1>/dev/null
