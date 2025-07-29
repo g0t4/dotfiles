@@ -78,8 +78,8 @@ abbr binds "bind -s" # macro key sequences - exec format
 abbr binds_to_bash_funcs "bind -X"
 abbr bindX "bind -X" # list bash func key sequences
 abbr bindx "bind -x" # to add key seq. to bash functions
-abbr bindx_shell_cmd_colon "bind -x '\"%\": shell_func arg1 arg2'"
-# abbr bindx_shell_cmd_whitespace "bind -x \"%\" shell_func arg1 arg2" #
+abbr --set-cursor bindx_shell_cmd_colon "bind -x '\"%\": shell_func arg1 arg2'"
+# abbr --set-cursor bindx_shell_cmd_whitespace "bind -x \"%\" shell_func arg1 arg2" #
 # TODO later format supports backslash-escape expansion (in readline)... is that for args?
 #
 # list readline funcs:
