@@ -389,6 +389,12 @@ _abbr() {
 
 list_abbrs() {
     echo TODO list abbrs
+    local name
+    for name in "${!abbrs[@]}"; do
+        local value
+        value="${abbrs[$name]}"
+        echo abbr --add -- "$name" "$value"
+    done
 }
 
 # shellcheck disable=SC2317 # sick of it complaining about unused options in while loop
