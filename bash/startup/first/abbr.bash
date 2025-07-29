@@ -391,11 +391,24 @@ list_abbrs() {
     echo TODO list abbrs
     local name
     for name in "${!abbrs[@]}"; do
-        local value
+        local set_cursor value regex func cmd_only no_space_after anywhere
         value="${abbrs[$name]}"
+        set_cursor="${abbrs_set_cursor[$name]}"
+        regex="${abbrs_regex[$name]}"
+        func="${abbrs_function[$name]}"
+        cmd_only="${abbrs_command[$name]}"
+        anywhere="${abbrs_anywhere[$name]}"
+        no_space_after="${abbrs_no_space_after[$name]}"
         # TODO if value has ' single quote, then cannot use ' to surround value...
         # in that case use double quotes and escape special chars like $ ! \ " and newline
-        echo abbr --add -- "$name" "'$value'"
+        # FYI some values are empty b/c they are regex+function
+        # TODO show regex
+        # TODO show function
+        local -a opts=()
+        if [[ -n "$set_cursor" ]]; then
+            opts+=("--set-cursor=$set_cursor")
+        fi
+        echo abbr --add "${opts[*]}" -- "$name" "'$value'"
     done
 }
 
