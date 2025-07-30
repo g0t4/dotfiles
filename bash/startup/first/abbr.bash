@@ -742,7 +742,7 @@ test_expand_abbr() {
     abbr foo bar
     READLINE_LINE=foo
     READLINE_POINT=3
-    expand_abbr " "
+    expand_abbr " " # akin to typing SPACE
     expect_equal "$READLINE_LINE" "bar "
     expect_equal "$READLINE_POINT" 4
 
