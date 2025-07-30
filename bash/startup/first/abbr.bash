@@ -785,10 +785,10 @@ test_expand_abbr() {
     expect_equal "$READLINE_POINT" 8
 
     # * --function
-    label_test "--function hello - expands to result of function"
+    label_test "--function hello_dash_dash_function_test - expands to result of function"
     reset_abbrs
-    function hello { echo world; }
-    abbr foo --function hello # only need abbr name (not value)
+    function hello_dash_dash_function_test { echo world; }
+    abbr foo --function hello_dash_dash_function_test # only need abbr name (not value)
     READLINE_LINE="foo"
     READLINE_POINT=3
     expand_abbr " "
