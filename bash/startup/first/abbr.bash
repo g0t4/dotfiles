@@ -117,6 +117,7 @@ _dump_expand_locals() {
     _dump_var word_before_cursor
     _dump_var word_before_start_offset
     _dump_var previous_word
+    _dump_var check_if_this_is_a_cmd_separator
     _dump_var prefix
     _dump_var suffix
     echo
@@ -179,15 +180,15 @@ expand_abbr() {
     local allowed_position="no"
     local tmp_prefix_for_previous_word="${READLINE_LINE:0:$word_before_start_offset}"
     local previous_word=$(echo "$tmp_prefix_for_previous_word" | awk '{print $NF}')
-    local check_if_is_cmd_separator="$previous_word"
-    if [[ "$check_if_is_cmd_separator" == *\; ]]; then
+    local check_if_this_is_a_cmd_separator="$previous_word"
+    if [[ "$check_if_this_is_a_cmd_separator" == *\; ]]; then
         # TODO what other chars should be the same?
         # if ends in semicolon, treat command separator lookup as semicolon
         # NOTE some separators must be standalone words
         # PRN should I build regex in command_separators array and just check all of them?
-        check_if_is_cmd_separator=";"
+        check_if_this_is_a_cmd_separator=";"
     fi
-    if [[ $word_before_start_offset -eq 0 || ${command_separators["$check_if_is_cmd_separator"]} || "$anywhere" = "yes" ]]; then
+    if [[ $word_before_start_offset -eq 0 || ${command_separators["$check_if_this_is_a_cmd_separator"]} || "$anywhere" = "yes" ]]; then
         allowed_position=yes
     fi
 
