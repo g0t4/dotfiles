@@ -44,17 +44,15 @@ function gdlcX {
 }
 
 function glpX {
-    # string replace --regex '^glp' 'git log --patch -' $argv
-    local expanded=${1/glp/git log --patch -}
-    echo "$expanded"
-    # FYI right now glp is not mapped here
+    # local expanded=${1/glp/git log --patch -}
+    # echo "$expanded"
+    fish -c "glpX $1"
 }
 
 function glsX {
-    # string replace --regex '^gls' 'git log --stat -' $argv
-    local expanded=${1/gls/git log --stat -}
-    echo "$expanded"
-    # FYI right now gls is not mapped here
+    # local expanded=${1/gls/git log --stat -}
+    # echo "$expanded"
+    fish -c "glsX $1"
 }
 
 # function gdsX
