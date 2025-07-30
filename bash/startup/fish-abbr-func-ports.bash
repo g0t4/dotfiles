@@ -15,12 +15,14 @@ _grvcp() {
     fish -c "_grvcp"
 }
 
-# #function gp_uptoX
-#     set -l num (string replace --regex '^gp_upto' '' $argv)
-#     # refspec has object:dest_ref
-#     # TODO also use default remote? or?
-#     echo "git push origin HEAD~$num:$(git_current_branch)"
-# end
+function gp_uptoX {
+    # TODO! drop arg2 READLINE_POINT from abbr calling code?
+    # TODO what does fish pass? just cmdline?
+    # FYI arg 2 is cursor position which isn't used here... in fact I probably shouldn't pass that given fish shell doesn't?
+    #  or I could use READLINE_POINT which yes I shouldn't do but I could when it is crucial
+    local cmdline="$1"
+    fish -c "gp_uptoX $cmdline"
+}
 
 function git_unpushed_commits {
     fish -c "git_unpushed_commits"
