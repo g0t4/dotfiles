@@ -973,7 +973,7 @@ test_expand_abbr
 # shellcheck disable=SC2155 # don't care about local define and assign together
 function generate_func_wrappers {
     local func_file="${BASH_DOTFILES}/.generated.fish_func_wrappers.bash"
-    rm "$func_file"
+    echo >"$func_file" # reset file
 
     local name
     for name in "${!abbrs_function[@]}"; do
