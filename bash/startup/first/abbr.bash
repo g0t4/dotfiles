@@ -1032,7 +1032,7 @@ function look_for_non_abbr_functions {
         fi
         if [[ -n "${fish_funcs_hash["$abbr_value"]}" ]]; then
             if [[ -n "${already_identified_hash["$abbr_value"]}" ]]; then
-                echo "already function: '$abbr_value' from abbr: '$abbr_name'"
+                # echo "already function: '$abbr_value' from abbr: '$abbr_name'"
                 continue
             fi
             echo "possible function: '$abbr_value' from abbr: '$abbr_name'"
