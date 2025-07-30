@@ -1008,16 +1008,25 @@ EOF
     done
 }
 
-declare -A manual_functions_hashed
-manual_functions_hashed=(
-    # TODO port these and mark ported here too
-    ['cd_dir_of_path']='1'    # does a cd... needs manual wrapper
-    ['cd_dir_of_command']='1' # manual
+ignore_functions=(
+    # TODO manual ports: (mark when done)
+    cd_dir_of_path    # does a cd... needs manual wrapper
+    cd_dir_of_command # manual
+
+    #FISH ONLY:
+    fish_update_completions
 )
 # TODO remove once testing done:
 non_abbr_functions=(
-    'git_unpushed_commits'
-    'bitmaths'
+    git_unpushed_commits
+    bitmaths
+    touchp
+    gitignores_for # lol this is a zsh wrapped fish func ;) bash => fish => zsh
+    wordcount
+    # gh_repo_create_private # might have cd
+    md_open
+    ffplay
+    cppath
 
 )
 
@@ -1025,6 +1034,8 @@ function look_for_non_abbr_functions {
 
     mapfile -t fish_function_names <<<"$(fish -c "functions")"
     # declare -p fish_function_names | bat -l bash
+
+    # BUILDING assoc arrays only:
     declare -A fish_funcs_hash=()
     for n in "${fish_function_names[@]}"; do
         fish_funcs_hash["$n"]="$n"
@@ -1032,6 +1043,10 @@ function look_for_non_abbr_functions {
     declare -A already_identified_hash=()
     for n in "${non_abbr_functions[@]}"; do
         already_identified_hash["$n"]="$n"
+    done
+    declare -A ignore_functions_hash=()
+    for n in "${ignore_functions[@]}"; do
+        ignore_functions_hash["$n"]="$n"
     done
 
     local abbr_name
@@ -1042,7 +1057,7 @@ function look_for_non_abbr_functions {
             continue
         fi
         if [[ -n "${fish_funcs_hash["$abbr_value"]}" ]]; then
-            if [[ -n "${manual_functions_hashed["$abbr_value"]}" ]]; then
+            if [[ -n "${ignore_functions_hash["$abbr_value"]}" ]]; then
                 # echo "already function: '$abbr_value' from abbr: '$abbr_name'"
                 continue
             fi
