@@ -1047,7 +1047,7 @@ function PLACEHOLDER_FUNC_NAME {
   fish_args=""
   for arg in "$@"; do
     printf -v escaped_arg '%q' "$arg" # Quote the argument for bash interpretation
-    fish_args+=" $(printf '%s' "$escaped_arg")"
+    fish_args+=" $escaped_arg"
   done
 
   fish -c "PLACEHOLDER_FUNC_NAME $fish_args"
