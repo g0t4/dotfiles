@@ -13,7 +13,7 @@ expect_equal() {
         # FYI something is off when I call test_expand_abbr in a shell (REPL)
         #   something about line numbers is funky per `man bash` and just looking at the output here:
         #   IIUC there is a diff formula for correlating line to file/func depending on how smth was invoked... UGH to say the least
-        declare -p BASH_SOURCE BASH_LINENO FUNCNAME BASH_ARGC BASH_ARGV BASH_ARGV1 | bat -l bash
+        declare -p BASH_SOURCE BASH_LINENO FUNCNAME BASH_ARGC BASH_ARGV BASH_ARGV0 | bat -l bash
         local last_index last_funcname
         ((last_index = ${#FUNCNAME[@]} - 1))
         last_funcname="${FUNCNAME[$((${#FUNCNAME[@]} - 1))]}"
