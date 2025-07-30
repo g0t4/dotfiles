@@ -11,10 +11,8 @@ function find_missing_abbr_functions {
 # *** ports of functions for fish abbrs... both regex and non-regex abbrs
 
 _grvcp() {
-    # see fish IMPL for latest version and notes
-    first_remote=$(git remote | head -n 1)
-    # FYI second half has the link visible, first half shows command used and copying it
-    echo "git remote get-url $first_remote | pbcopy # $(git remote get-url "$first_remote")"
+    # * DO NOT MIGRATE ANYTHING YOU CAN JUST CALL!
+    fish -c "_grvcp"
 }
 
 # #function gp_uptoX
@@ -23,6 +21,10 @@ _grvcp() {
 #     # TODO also use default remote? or?
 #     echo "git push origin HEAD~$num:$(git_current_branch)"
 # end
+
+function git_unpushed_commits {
+    fish -c "git_unpushed_commits"
+}
 
 glX() {
     #  gl10 / gl
