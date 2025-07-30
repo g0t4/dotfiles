@@ -974,7 +974,7 @@ test_expand_abbr
 function find_missing_abbr_functions {
     local name
     for name in "${!abbrs_function[@]}"; do
-        local func_name="${abbrs_function[name]}"
+        local func_name="${abbrs_function[$name]}"
         local definition="$(_print_abbr_definition "$name")"
 
         cat <<EOF >>"${BASH_DOTFILES}/.generated.funcs.bash"
