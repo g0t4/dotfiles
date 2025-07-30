@@ -1005,8 +1005,28 @@ function $func_name {
 }
 
 EOF
-
-
-
     done
+}
+
+function look_for_non_abbr_functions {
+
+    mapfile -t fish_function_names <<<"$(fish -c "functions")"
+    # declare -p fish_function_names | bat -l bash
+    declare -A assoc_funs=()
+    for n in "${fish_function_names[@]}"; do
+        assoc_funs["$n"]="$n"
+    done
+
+    local abbr_name
+    for abbr_name in "${!abbrs[@]}"; do
+        local abbr_value="${abbrs["$abbr_name"]}"
+        if [[ -z "$abbr_value" ]]; then
+            # echo "empty value '$abbr_value' from abbr: '$abbr_name'"
+            continue
+        fi
+        if [[ -n "${assoc_funs["$abbr_value"]}" ]]; then
+            echo "possible function: '$abbr_value' from abbr: '$abbr_name'"
+        fi
+    done
+
 }
