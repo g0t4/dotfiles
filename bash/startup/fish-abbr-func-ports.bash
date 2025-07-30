@@ -19,11 +19,17 @@ function gdlcX {
 function glsX {
     # string replace --regex '^gls' 'git log --stat -' $argv
     local expanded=${1/gls/git log --stat -}
-    echo "${expanded# -}" # strip trailing ' -' if no # provided
-    # TODO gls right now is standalone alias, that is a bit diff... do I want to merge it here and have it behave like gls1 etc?
+    echo "$expanded"
+    # FYI right now gls is not mapped here
 }
 
-# glpX
+function glpX {
+    # string replace --regex '^glp' 'git log --patch -' $argv
+    local expanded=${1/glp/git log --patch -}
+    echo "$expanded"
+    # FYI right now glp is not mapped here
+}
+
 # gp_uptoX
 # treehX
 # pstreeX
