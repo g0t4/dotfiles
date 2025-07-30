@@ -972,6 +972,8 @@ test_expand_abbr
 
 # shellcheck disable=SC2155 # don't care about local define and assign together
 function generate_func_wrappers {
+    rm "${BASH_DOTFILES}/.generated.funcs.bash"
+
     local name
     for name in "${!abbrs_function[@]}"; do
         local func_name="${abbrs_function[$name]}"
