@@ -31,7 +31,6 @@ function git_unpushed_commits {
 glX() {
     fish -c "glX $1"
 }
-# abbr git_log_num --regex 'gl[0-9]*' --function _expand_git_log
 
 function gdlcX {
     local -i num prev
