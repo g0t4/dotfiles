@@ -1037,6 +1037,9 @@ function look_for_non_abbr_functions {
                 continue
             fi
             echo "possible function: '$abbr_value' from abbr: '$abbr_name'"
+            # show fish func:
+            fish -c "functions $abbr_value"
+            echo
         fi
     done
 
