@@ -923,7 +923,7 @@ test_expand_abbr() {
     expect_equal "$READLINE_LINE" "echo hello ; bar "
     expect_equal "$READLINE_POINT" 17
 
-    label_test "should expand command position after a standalone ; on end of word"
+    label_test "should expand command position after a ; on end of word"
     reset_abbrs
     abbr foo bar
     READLINE_LINE="echo hello; foo"
@@ -941,6 +941,14 @@ test_expand_abbr() {
     expect_equal "$READLINE_LINE" "echo hello ( bar "
     expect_equal "$READLINE_POINT" 17
 
+    label_test "should expand command position after a ( on start of word"
+    reset_abbrs
+    abbr foo bar
+    READLINE_LINE="echo hello (foo"
+    READLINE_POINT=15
+    expand_abbr " "
+    expect_equal "$READLINE_LINE" "echo hello (bar "
+    expect_equal "$READLINE_POINT" 16
 
     # TODO assume separators for pipelines/lists indicate next word is in command position
     # simple command is what I have now:
