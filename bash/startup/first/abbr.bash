@@ -1039,38 +1039,35 @@ EOF
         #    `touch "foo the"` => create a file w/ a space in the name
         #    also ffmpeg/ffplay to play a file w/ space would be broken
 
-        # for func_name in "${non_abbr_functions[@]}"; do
-        #   # This part is generating the content of your bash wrapper functions.
-        #   # We'll use a placeholder for func_name and then replace it.
-        #
-        #   wrapper_template=$(cat <<'EOF_WRAPPER'
-        # function PLACEHOLDER_FUNC_NAME {
-        #   fish_args=""
-        #   for arg in "$@"; do
-        #     printf -v escaped_arg '%q' "$arg" # Quote the argument for bash interpretation
-        #     fish_args+=" $(printf '%s' "$escaped_arg")"
-        #   done
-        #
-        #   fish -c "PLACEHOLDER_FUNC_NAME $fish_args"
-        # }
-        # EOF_WRAPPER
-        # )
-        #
-        #   # Replace the placeholder with the actual function name
-        #   generated_wrapper="${wrapper_template//PLACEHOLDER_FUNC_NAME/$func_name}"
-        #
-        #   # Append the generated wrapper to the file
-        #   echo "$generated_wrapper" >>"$func_file"
-        # done
-        #
+        # This part is generating the content of your bash wrapper functions.
+        # We'll use a placeholder for func_name and then replace it.
+        wrapper_template=$(
+            cat <<'EOF_WRAPPER'
+function PLACEHOLDER_FUNC_NAME {
+  fish_args=""
+  for arg in "$@"; do
+    printf -v escaped_arg '%q' "$arg" # Quote the argument for bash interpretation
+    fish_args+=" $(printf '%s' "$escaped_arg")"
+  done
 
-        cat <<EOF >>"$func_file"
-
-function $func_name {
-    fish -c "$func_name \$@"
+  fish -c "PLACEHOLDER_FUNC_NAME $fish_args"
 }
+EOF_WRAPPER
+        )
 
-EOF
+        # Replace the placeholder with the actual function name
+        generated_wrapper="${wrapper_template//PLACEHOLDER_FUNC_NAME/$func_name}"
+
+        # Append the generated wrapper to the file
+        echo "$generated_wrapper" >>"$func_file"
+
+        #         cat <<EOF >>"$func_file"
+        #
+        # function $func_name {
+        #     fish -c "$func_name \$@"
+        # }
+        #
+        # EOF
     done
 
     # shellcheck disable=SC2317
