@@ -1006,81 +1006,82 @@ function $func_name {
 
 EOF
     done
-}
 
-ignore_functions=(
-    # TODO manual ports: (mark when done)
-    cd_dir_of_path    # does a cd... needs manual wrapper
-    cd_dir_of_command # manual
+    ignore_functions=(
+        # TODO manual ports: (mark when done)
+        cd_dir_of_path    # does a cd... needs manual wrapper
+        cd_dir_of_command # manual
 
-    #FISH ONLY:
-    fish_update_completions
-)
-# TODO MOVE back to inside generate above once done with initial review:
-non_abbr_functions=(
-    git_unpushed_commits
-    bitmaths
-    touchp
-    gitignores_for # lol this is a zsh wrapped fish func ;) bash => fish => zsh
-    wordcount
-    md_open
-    ffplay
-    cppath
-    commit_gitignores_for
-    append_gitignores_for
-    gitignore_init
-    # icdiff ??? basically alias for icdiff options
-    # ffmpeg ??? basically ffmpeg alias
-    # ffprobe ??? alias
-    #
-    # TODO check if ok:
-    # gh_repo_create_public
-    # __gh_repo_create_clone_with_ignores # ??
-    # gh_repo_create_private # might have cd
+        #FISH ONLY:
+        fish_update_completions
+    )
+    # TODO MOVE back to inside generate above once done with initial review:
+    non_abbr_functions=(
+        git_unpushed_commits
+        bitmaths
+        touchp
+        gitignores_for # lol this is a zsh wrapped fish func ;) bash => fish => zsh
+        wordcount
+        md_open
+        ffplay
+        cppath
+        commit_gitignores_for
+        append_gitignores_for
+        gitignore_init
+        # icdiff ??? basically alias for icdiff options
+        # ffmpeg ??? basically ffmpeg alias
+        # ffprobe ??? alias
+        #
+        # TODO check if ok:
+        # gh_repo_create_public
+        # __gh_repo_create_clone_with_ignores # ??
+        # gh_repo_create_private # might have cd
 
-)
+    )
 
-function look_for_non_abbr_functions {
+    function look_for_non_abbr_functions {
 
-    mapfile -t fish_function_names <<<"$(fish -c "functions")"
-    # declare -p fish_function_names | bat -l bash
+        mapfile -t fish_function_names <<<"$(fish -c "functions")"
+        # declare -p fish_function_names | bat -l bash
 
-    # BUILDING assoc arrays only:
-    declare -A fish_funcs_hash=()
-    for n in "${fish_function_names[@]}"; do
-        fish_funcs_hash["$n"]="$n"
-    done
-    declare -A already_identified_hash=()
-    for n in "${non_abbr_functions[@]}"; do
-        already_identified_hash["$n"]="$n"
-    done
-    declare -A ignore_functions_hash=()
-    for n in "${ignore_functions[@]}"; do
-        ignore_functions_hash["$n"]="$n"
-    done
+        # BUILDING assoc arrays only:
+        declare -A fish_funcs_hash=()
+        for n in "${fish_function_names[@]}"; do
+            fish_funcs_hash["$n"]="$n"
+        done
+        declare -A already_identified_hash=()
+        for n in "${non_abbr_functions[@]}"; do
+            already_identified_hash["$n"]="$n"
+        done
+        declare -A ignore_functions_hash=()
+        for n in "${ignore_functions[@]}"; do
+            ignore_functions_hash["$n"]="$n"
+        done
 
-    local abbr_name
-    for abbr_name in "${!abbrs[@]}"; do
-        local abbr_value="${abbrs["$abbr_name"]}"
-        if [[ -z "$abbr_value" ]]; then
-            # echo "empty value '$abbr_value' from abbr: '$abbr_name'"
-            continue
-        fi
-        if [[ -n "${fish_funcs_hash["$abbr_value"]}" ]]; then
-            if [[ -n "${ignore_functions_hash["$abbr_value"]}" ]]; then
-                # echo "already function: '$abbr_value' from abbr: '$abbr_name'"
+        local abbr_name
+        for abbr_name in "${!abbrs[@]}"; do
+            local abbr_value="${abbrs["$abbr_name"]}"
+            if [[ -z "$abbr_value" ]]; then
+                # echo "empty value '$abbr_value' from abbr: '$abbr_name'"
                 continue
             fi
-            if [[ -n "${already_identified_hash["$abbr_value"]}" ]]; then
-                # echo "already function: '$abbr_value' from abbr: '$abbr_name'"
-                continue
-            fi
+            if [[ -n "${fish_funcs_hash["$abbr_value"]}" ]]; then
+                if [[ -n "${ignore_functions_hash["$abbr_value"]}" ]]; then
+                    # echo "already function: '$abbr_value' from abbr: '$abbr_name'"
+                    continue
+                fi
+                if [[ -n "${already_identified_hash["$abbr_value"]}" ]]; then
+                    # echo "already function: '$abbr_value' from abbr: '$abbr_name'"
+                    continue
+                fi
 
-            echo "possible function: '$abbr_value' from abbr: '$abbr_name'"
-            # show fish func:
-            fish -c "functions $abbr_value"
-            echo
-        fi
-    done
+                echo "possible function: '$abbr_value' from abbr: '$abbr_name'"
+                # show fish func:
+                fish -c "functions $abbr_value"
+                echo
+            fi
+        done
+
+    }
 
 }
