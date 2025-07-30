@@ -28,7 +28,7 @@ function git_unpushed_commits {
     fish -c "git_unpushed_commits"
 }
 
-glX() {
+function glX {
     # FYI quoting shouldn't be an issue with passign $1 b/c expansion name has to be all one word
     #   so spaces won't happen within the name
     fish -c "glX $1"
