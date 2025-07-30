@@ -517,7 +517,7 @@ abbr() {
                 func="${2}"
                 shift 2
                 ;;
-            -a)
+            -a|--add)
                 # ignore -a, it's a meaningless option from fish's abbr
                 shift
                 ;;
@@ -644,6 +644,16 @@ test_parse_abbr_args() {
     expect_function_not_defined "foo"
     expect_equal "${abbrs_stub_func_names[hello]}" ""
     expect_function_not_defined "hello"
+
+    # * test -a (basically ignore this)
+    start_test abbr -a uses "dash_a"
+    expect_equal "${abbrs[uses]}" "dash_a"
+    reset_abbrs
+
+    # * test --add (basically ignore this)
+    start_test abbr --add uses "dash_dash_add"
+    expect_equal "${abbrs[uses]}" "dash_dash_add"
+    reset_abbrs
 
     # * --set-cursor=_
     start_test abbr foo='b_ar' --set-cursor='_'
