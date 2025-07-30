@@ -1009,7 +1009,7 @@ EOF
 }
 
 # TODO remove once testing done:
-non_abbr_functions=("git_unpushed_commits")
+non_abbr_functions=("git_unpushed_commits" "bitmaths")
 
 function look_for_non_abbr_functions {
 
