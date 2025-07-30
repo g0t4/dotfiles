@@ -866,6 +866,16 @@ test_expand_abbr() {
     expect_equal "$READLINE_LINE" "bar;"
     expect_equal "$READLINE_POINT" 4
 
+    # * user types ; semicolon which triggers abbr
+    label_test "semicolon trigger instead of space"
+    reset_abbrs
+    abbr foo bar
+    READLINE_LINE="foo"
+    READLINE_POINT=3
+    expand_abbr ";"
+    expect_equal "$READLINE_LINE" "bar;"
+    expect_equal "$READLINE_POINT" 4
+
     # * user types | in a pipeline which triggers abbr
     label_test "pipeline trigger instead of space"
     reset_abbrs
