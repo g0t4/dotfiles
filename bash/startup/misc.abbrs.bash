@@ -1,9 +1,8 @@
 # --no-space-after must be defined here, no way to port that b/c it's not part of fish's abbrs
 abbr gcmsg='git commit -m "%"' --no-space-after --set-cursor
 
-# TODO temporary until I port regex expansions
-
-# declare -p abbrs  # sanity check
+# * declare -p abbrs  # sanity check
+# TODO some of these collide with docker, for now just let it happen until I find myself annoyed by using docker in bash :)... I don't think I'll be doing that... this is all just for the course series (for now)
 abbr declarep "declare -p % | bat -l bash" --set-cursor
 abbr dp "declare -p % | bat -l bash" --set-cursor
 abbr dp_REPLY "declare -p REPLY% | bat -l bash" --set-cursor
