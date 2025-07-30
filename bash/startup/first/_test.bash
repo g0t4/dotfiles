@@ -12,7 +12,9 @@ expect_equal() {
         # FYI something is off when I call test_expand_abbr in a shell (vs via bashrc)... via bashrc is working so use that for now
         #   something about line numbers is funky per `man bash` and just looking at the output here:
         #   IIUC there is a diff formula for correlating line to file/func depending on how smth was invoked... UGH to say the least
+        # declare -p BASH_SOURCE BASH_LINENO FUNCNAME BASH_ARGC BASH_ARGV BASH_ARGV0  | bat -l bash
         #
+        # # FYI FUNCNAME is shifted by 1 - b/c it has caller's funcname for each "stack frame"
         # for i in "${!BASH_SOURCE[@]}"; do
         #     echo "Index $i: ${BASH_SOURCE[$i]}"
         #     echo "          ${FUNCNAME[$i]}"
