@@ -842,6 +842,12 @@ if $IS_MACOS
     # abbr sed gsed # encourage the use of gsed so it behaves like linux?
     #  i.e. gnu allows `sed -i` whereas BSD requires the extension `sed -i''` be passed
 else
+    # FYI mostly just for a few scripts I have where I want to know I am using the same version of sed regardless so I alias gsed to sed on arch and other linux distros
+    function gsed --wraps sed
+        # make gsed appear avail too, i.e. for scripting
+        sed $argv
+    end
+
     # alternatives (mirror from above for mac)
     abbr --set-cursor sedl "sed -Ei 's/%//g' **/*.lua"
     abbr --command sed --position=anywhere "*l" "**/*.lua"
@@ -2790,4 +2796,3 @@ abbr --set-cursor straceC "strace -C -e trace=all sleep 1"
 
 # *** fish
 abbr --set-cursor -- fishc "fish -c '%'"
-
