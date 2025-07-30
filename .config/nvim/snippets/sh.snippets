@@ -3,11 +3,14 @@
 
 # * d == $   (mostly applies to scalars by the way, but focus on the $ which is MEMORABLE and the first char)
 # [d]ollar $ - e[x]pand
-snippet dx "dollar expand quoted (no word splitting)"
-"\${${1:variable}}"
+snippet dx "dollar expand quoted (no word splitting) - no curly braces by default"
+"$${1:variable}"
+
+snippet dxb "dx w/ {} to delineate"
+"${${1:variable}}"
 
 snippet dxu "dollar expand unquoted (split words)"
-\${${1:variable}}
+${${1:variable}}
 
 # * dollar sub operators
 snippet d_default_value_if_unset "default value - substitute if unset"

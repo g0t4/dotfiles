@@ -55,7 +55,9 @@ abbr d@='"${%[@]}"' --position=anywhere --set-cursor
 abbr d_array_length='${#%[@]}' --position=anywhere --set-cursor
 abbr d_string_length='${#%}' --position=anywhere --set-cursor
 abbr d*='"${%[*]}"' --position=anywhere --set-cursor
-abbr dx='"${%}"' --position=anywhere --set-cursor
+# do not always need {}
+abbr dx='"$%"' --position=anywhere --set-cursor
+abbr dxb='"${%}"' --position=anywhere --set-cursor
 #
 abbr d_default_value_if_unset='"${%:-default_value}"' --position=anywhere --set-cursor
 abbr d_swap_if_set '"${%:+use_this_if_set}"' --position=anywhere --set-cursor
