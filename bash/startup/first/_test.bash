@@ -9,10 +9,22 @@ expect_equal() {
     local message="${3:-Expected '$expected', got '$actual'}"
     if [[ "$expected" != "$actual" ]]; then
 
-        # FYI something is off when I call test_expand_abbr in a shell (vs via bashrc)... via bashrc is working so use that for now
+        # * warn if line #s are wrong
+        # FYI something is off when I call test_expand_abbr in a shell (REPL)
         #   something about line numbers is funky per `man bash` and just looking at the output here:
         #   IIUC there is a diff formula for correlating line to file/func depending on how smth was invoked... UGH to say the least
-        # declare -p BASH_SOURCE BASH_LINENO FUNCNAME BASH_ARGC BASH_ARGV BASH_ARGV0  | bat -l bash
+        declare -p BASH_SOURCE BASH_LINENO FUNCNAME BASH_ARGC BASH_ARGV BASH_ARGV1 | bat -l bash
+        local last_index last_funcname
+        ((last_index = ${#FUNCNAME[@]} - 1))
+        last_funcname="${FUNCNAME[$((${#FUNCNAME[@]} - 1))]}"
+        declare -p last_index last_funcname | bat -l bash
+        if [[ "$last_funcname" != "source" ]]; then
+            # IOTW if test_expand_abbr called directly in REPL... then line #s are off
+            echo "WARNING line #s are probably wrong, just affects the source dump below..."
+            echo "  ABBR_DEBUG=1 ABBR_TESTS=1 bash"
+            echo "  ABBR_DEBUG=1 ABBR_TESTS=1 source '$HOME/repos/github/g0t4/dotfiles/bash/startup/first/abbr.bash'"
+            true
+        fi
         #
         # # FYI FUNCNAME is shifted by 1 - b/c it has caller's funcname for each "stack frame"
         # for i in "${!BASH_SOURCE[@]}"; do
