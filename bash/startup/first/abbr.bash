@@ -975,6 +975,7 @@ function generate_func_wrappers {
     local func_file="${BASH_DOTFILES}/.generated.fish_func_wrappers.bash"
     echo >"$func_file" # reset file
 
+    # * abbr functions
     local name
     for name in "${!abbrs_function[@]}"; do
         local func_name="${abbrs_function[$name]}"
@@ -989,5 +990,23 @@ function $func_name {
 }
 
 EOF
+    done
+
+    # * non-abbr functions
+    # generate other functions too, i.e. some abbrs are shortened aliases to a function
+    #   so they abbr doesn't use a function, the expanded text just calls a function
+    local non_abbr_functions=("git_unpushed_commits")
+    for func_name in "${non_abbr_functions[@]}"; do
+
+        cat <<EOF >>"$func_file"
+
+function $func_name {
+    fish -c "$func_name \$1"
+}
+
+EOF
+
+
+
     done
 }
