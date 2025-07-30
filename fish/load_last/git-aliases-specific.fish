@@ -33,9 +33,9 @@ abbr --set-cursor yolo 'git commit --all -m "%" && git push'
 
 # * git push
 # push up to the last X commits, IOTW all but the last X commits
-abbr --regex 'gp_upto\d+' --function gp_uptoX _gp_uptoX
-function gp_uptoX
-    set -l num (string replace --regex '^gp_upto' '' $argv)
+abbr --regex 'gpupto\d+' --function gpuptoX _gpuptoX
+function gpuptoX
+    set -l num (string replace --regex '^gpupto' '' $argv)
     # refspec has object:dest_ref
     # TODO also use default remote? or?
     echo "git push origin HEAD~$num:$(git_current_branch)"
@@ -107,7 +107,7 @@ function git_current_branch_upstream
     # this is the value you set with:
     #   git branch --set-upstream-to=origin/<branch>
     git rev-parse --abbrev-ref --symbolic-full-name @{upstream}
-    # PRN use this to figure out the upstream remote name, i.e. if gp_uptoX is not to remote named 'origin'
+    # PRN use this to figure out the upstream remote name, i.e. if gpuptoX is not to remote named 'origin'
 end
 abbr ggsup 'git branch --set-upstream-to=origin/$(git_current_branch)'
 
