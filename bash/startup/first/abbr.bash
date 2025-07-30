@@ -294,18 +294,17 @@ __expand_abbr_tab() {
 }
 
 _setup_intercept_for_tab() {
-    # TODO! "tab" in expand_abbr => map to $'\t'
 
     # STEPS:
     # 1. intercept tab
     # 2. call complete
     #   - if completed, remove space
-    #     TODO when does space get added? Always or only sometimes?
-    #   - attempt abbr-expand
-    #   - follow up with space ONLY IF expanded
-    #   - leave no space if not expanded so user can further modify and/or tab complete
+    # 3. attempt abbr-expand
+    #   - if expanded => add space
+    #   - else no space so user can further modify and/or tab complete
     #
-    # FYI Ctrl-x,Ctrl-* is mostly clear in even emacs mode
+    # FYI Ctrl-x,Ctrl-* shortcuts are mostly unused in emacs/vi-insert modes
+    #    IOTW use this as a "namespace" of key sequences for my automations
     #    bind -m emacs -p | grep -i "C-x\\\C"
     #
     key_seq_expand_abbr_tab='\C-x\C-t'
@@ -492,7 +491,7 @@ abbr() {
                 func="${2}"
                 shift 2
                 ;;
-            -a|--add)
+            -a | --add)
                 # ignore -a, it's a meaningless option from fish's abbr
                 shift
                 ;;
