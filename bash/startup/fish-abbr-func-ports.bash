@@ -55,11 +55,9 @@ function glsX {
     fish -c "glsX $1"
 }
 
-# function gdsX
-#     # too bad `git diff -X` doesn't exist (submit a PR?)
-#     #   instead have to set start/stop commit refs
-#     echo -n (string replace --regex '^gds' 'git diff --stat HEAD~' $argv)'..HEAD'
-# end
+function gdsX {
+    fish -c "gdsX $1"
+}
 
 # treehX
 # pstreeX
