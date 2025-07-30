@@ -15,3 +15,20 @@ function gdlcX {
     ((prev = num - 1))
     echo "git log --patch HEAD~$num..HEAD~$prev"
 }
+
+function glsX {
+    # string replace --regex '^gls' 'git log --stat -' $argv
+    local expanded=${1/gls/git log --stat -}
+    echo "${expanded# -}" # strip trailing ' -' if no # provided
+    # TODO gls right now is standalone alias, that is a bit diff... do I want to merge it here and have it behave like gls1 etc?
+}
+
+# glpX
+# gp_uptoX
+# treehX
+# pstreeX
+# treeuX
+# treeX
+# _grvcp
+# gdsX
+# treedX
