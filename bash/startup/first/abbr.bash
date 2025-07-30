@@ -1016,7 +1016,7 @@ ignore_functions=(
     #FISH ONLY:
     fish_update_completions
 )
-# TODO remove once testing done:
+# TODO MOVE back to inside generate above once done with initial review:
 non_abbr_functions=(
     git_unpushed_commits
     bitmaths
