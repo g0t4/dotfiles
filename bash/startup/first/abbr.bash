@@ -148,7 +148,8 @@ expand_abbr() {
 
     # * pseudo-tokenize (prefix / word_before_cursor / cursor / suffix)
     local line_before_cursor="${READLINE_LINE:0:READLINE_POINT}"
-    local word_before_cursor="${line_before_cursor##* }"
+    # allowing space and ( to delineate word
+    local word_before_cursor="${line_before_cursor##*[( ]}"
     local word_before_start_offset=$((READLINE_POINT - ${#word_before_cursor}))
     # prefix/suffix are w.r.t. word_before_cursor
     local prefix="${READLINE_LINE:0:word_before_start_offset}"
