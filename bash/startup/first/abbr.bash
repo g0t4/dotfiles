@@ -1039,6 +1039,7 @@ EOF
 
     )
 
+    # shellcheck disable=SC2317
     function look_for_non_abbr_functions {
 
         mapfile -t fish_function_names <<<"$(fish -c "functions")"
@@ -1083,5 +1084,6 @@ EOF
         done
 
     }
+    # look_for_non_abbr_functions
 
 }
