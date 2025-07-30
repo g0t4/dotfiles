@@ -456,12 +456,6 @@ abbr() {
         return
     fi
 
-    # compat layer, also this is where I'll accept --no-space-after
-    # FORMAT
-    #   key=value
-    #   key=value --no-space-after
-    #   PRN other options
-
     local set_cursor=""
     local no_space_after="no"
     local position=""
