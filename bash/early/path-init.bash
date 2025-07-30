@@ -29,4 +29,3 @@ if is_macos && [[ -z "$__PATH_HELPER_RAN" ]]; then
     eval "$(/usr/libexec/path_helper -s)"
     export __PATH_HELPER_RAN=1
 fi
-
