@@ -971,7 +971,7 @@ test_expand_abbr() {
 test_expand_abbr
 
 # shellcheck disable=SC2155 # don't care about local define and assign together
-function find_missing_abbr_functions {
+function generate_func_wrappers {
     local name
     for name in "${!abbrs_function[@]}"; do
         local func_name="${abbrs_function[$name]}"
