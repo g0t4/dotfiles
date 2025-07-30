@@ -1031,22 +1031,18 @@ EOF
 
     )
 
-    # generate other functions too, i.e. some abbrs are shortened aliases to a function
-    #   so they abbr doesn't use a function, the expanded text just calls a function
     for func_name in "${non_abbr_functions[@]}"; do
 
-        # FYI EXAMPLE of broken wrapper func b/c of missing quoting of args
+        # Example of wrapped function w/ args that can't be passed w/o quoting:
         #    `touch "foo the"` => create a file w/ a space in the name
         #    also ffmpeg/ffplay to play a file w/ space would be broken
 
-        # This part is generating the content of your bash wrapper functions.
-        # We'll use a placeholder for func_name and then replace it.
         wrapper_template=$(
             cat <<'EOF_WRAPPER'
 function PLACEHOLDER_FUNC_NAME {
   fish_args=""
   for arg in "$@"; do
-    printf -v escaped_arg '%q' "$arg" # Quote the argument for bash interpretation
+    printf -v escaped_arg '%q' "$arg" # quote arg: "foo the bar" => foo\ the\ bar
     fish_args+=" $escaped_arg"
   done
 
@@ -1069,7 +1065,7 @@ EOF_WRAPPER
         mapfile -t fish_function_names <<<"$(fish -c "functions")"
         # declare -p fish_function_names | bat -l bash
 
-        # BUILDING assoc arrays only:
+        # BUILDING associative arrays for simplified code below:
         declare -A fish_funcs_hash=()
         for n in "${fish_function_names[@]}"; do
             fish_funcs_hash["$n"]="$n"
@@ -1092,7 +1088,7 @@ EOF_WRAPPER
             fi
             if [[ -n "${fish_funcs_hash["$abbr_value"]}" ]]; then
                 if [[ -n "${ignore_functions_hash["$abbr_value"]}" ]]; then
-                    # echo "already function: '$abbr_value' from abbr: '$abbr_name'"
+                    # echo "ignored function: '$abbr_value' from abbr: '$abbr_name'"
                     continue
                 fi
                 if [[ -n "${already_identified_hash["$abbr_value"]}" ]]; then
