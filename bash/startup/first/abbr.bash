@@ -88,6 +88,7 @@ declare -A command_separators=(
     ['|']='|' ['|&']='|&'                       # simple command separator (within pipeline)
     [';']=';' ['||']='||' ['&']='&' ['&&']='&&' # pipeline separator (within lists)
     # \n (newline)
+    ['(']='(' ['{']='{' # openings that should denote start of command afterward
     [')']=')' ['}']='}'     # compound commands
     ['((']='((' ['[[']='[[' # compound arithmethic, conditional exprsesions
     # TODO newline too? first command on line?
@@ -934,21 +935,21 @@ test_expand_abbr() {
 
     label_test "should expand command position after a standalone ( subshell opener"
     reset_abbrs
-    abbr foo bar
-    READLINE_LINE="echo hello ( foo"
-    READLINE_POINT=16
+    abbr foo1 bar1
+    READLINE_LINE="echo hello ( foo1"
+    READLINE_POINT=17
     expand_abbr " "
-    expect_equal "$READLINE_LINE" "echo hello ( bar "
-    expect_equal "$READLINE_POINT" 17
+    expect_equal "$READLINE_LINE" "echo hello ( bar1 "
+    expect_equal "$READLINE_POINT" 18
 
     label_test "should expand command position after a ( on start of word"
     reset_abbrs
-    abbr foo bar
-    READLINE_LINE="echo hello (foo"
-    READLINE_POINT=15
+    abbr foo2 bar2
+    READLINE_LINE="echo hello (foo2"
+    READLINE_POINT=16
     expand_abbr " "
-    expect_equal "$READLINE_LINE" "echo hello (bar "
-    expect_equal "$READLINE_POINT" 16
+    expect_equal "$READLINE_LINE" "echo hello (bar2 "
+    expect_equal "$READLINE_POINT" 17
 
     # TODO assume separators for pipelines/lists indicate next word is in command position
     # simple command is what I have now:
