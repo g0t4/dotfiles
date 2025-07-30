@@ -73,7 +73,7 @@ abbr for_in_array_indicies='for i in "${!%[@]}"; do echo "${i} ${name[$i]}"; don
 abbr pIFS "echo -n \"\${IFS}\" | hexdump -C" # block word splitting, or it will split it's own characters :)
 #
 # print path one per line... two ways to do it
-abbr pPATH '(IFS=:; for p in $PATH; do echo $p; done)'
+abbr pPATH2 '(IFS=:; for p in $PATH; do echo $p; done)'
 #
 # for fun... here's a diff variant:
 # echo "${PATH//:/$'\n'}"
