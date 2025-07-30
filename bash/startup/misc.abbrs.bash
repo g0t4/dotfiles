@@ -85,20 +85,6 @@ abbr pPATH "echo \"\${PATH//:/\$'\n'}\""
 # PRN add variant using printf?
 # PRN add variant using read
 
-_grvcp() {
-    # see fish IMPL for latest version and notes
-    first_remote=$(git remote | head -n 1)
-    # FYI second half has the link visible, first half shows command used and copying it
-    echo "git remote get-url $first_remote | pbcopy # $(git remote get-url "$first_remote")"
-}
-
-glX() {
-    #  gl10 / gl
-    local expanded="${1/gl/git log -}"
-    echo "${expanded% -}" # strip trailing ' -' if no number passed
-}
-# abbr git_log_num --regex 'gl[0-9]*' --function _expand_git_log
-
 # * trap
 abbr trapl "trap -l"
 abbr trapp "trap -p"
