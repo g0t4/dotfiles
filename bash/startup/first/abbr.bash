@@ -934,6 +934,7 @@ test_expand_abbr() {
     expect_equal "$READLINE_LINE" "echo hello; bar "
     expect_equal "$READLINE_POINT" 16
 
+    # TODO! add more tests of other chars to consider for word boundary besides ( and space
     label_test "should expand command position after a standalone ( subshell opener"
     reset_abbrs
     abbr foo1 bar1
