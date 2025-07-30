@@ -970,15 +970,17 @@ test_expand_abbr() {
 }
 test_expand_abbr
 
+# shellcheck disable=SC2155 # don't care about local define and assign together
 function find_missing_abbr_functions {
     local name
     for name in "${!abbrs_function[@]}"; do
         local func_name="${abbrs_function[name]}"
+        local definition="$(_print_abbr_definition "$name")"
 
-cat <<EOF >>"${BASH_DOTFILES}/.generated.funcs.bash"
+        cat <<EOF >>"${BASH_DOTFILES}/.generated.funcs.bash"
 
 function $func_name {
-    # TODO! add full abbreviation like with abbr dump command
+    # $definition
     # $name
     fish -c "$func_name \$1"
 }
@@ -986,4 +988,3 @@ function $func_name {
 EOF
     done
 }
-
