@@ -1,20 +1,3 @@
-function find_missing_abbr_functions {
-    local name
-    for name in "${!abbrs_function[@]}"; do
-        local func_name="${abbrs_function[name]}"
-
-cat <<EOF >>"${BASH_DOTFILES}/.generated.funcs.bash"
-
-function $func_name {
-    # TODO! add full abbreviation like with abbr dump command
-    # $name
-    fish -c "$func_name \$1"
-}
-
-EOF
-    done
-}
-
 # *** ports of functions for fish abbrs... both regex and non-regex abbrs
 
 _grvcp() {
