@@ -38,4 +38,5 @@ gsed -i 's/\\\\\\\\b/\\\\b/g' "$file_aliases"
 # gsed -n 's/\\\\d/[0-9]/gp'    "$file_aliases"
 #
 
-# bash -c "generate_func_wrappers"
+# generate wrapper functions (both abbr and non-abbr)
+bash --login -c "generate_func_wrappers"
