@@ -917,7 +917,7 @@ test_expand_abbr() {
     expect_equal "$READLINE_LINE" "foo the  car" # ONLY adds space!
     expect_equal "$READLINE_POINT" 8
 
-    # * ; semicolon trigger tests
+    # * user types ; semicolon which triggers abbr
     label_test "semicolon trigger instead of space"
     reset_abbrs
     abbr foo bar
@@ -927,7 +927,7 @@ test_expand_abbr() {
     expect_equal "$READLINE_LINE" "bar;"
     expect_equal "$READLINE_POINT" 4
 
-    # * | pipeline trigger tests
+    # * user types | in a pipeline which triggers abbr
     label_test "pipeline trigger instead of space"
     reset_abbrs
     abbr foo bar
@@ -937,13 +937,13 @@ test_expand_abbr() {
     expect_equal "$READLINE_LINE" "bar|"
     expect_equal "$READLINE_POINT" 4
 
-    # *** regression - no expansion => inserts typed character (i.e. pipe)
+    # *** regression - no expansion => inserts typed character (i.e. pipe, but applies to others too)
     label_test "no expansion => inserts | pipe"
     reset_abbrs
     abbr other other
     READLINE_LINE="echo foo "
     READLINE_POINT=9
-    expand_abbr "|"
+    expand_abbr "|" # PRN parameterize this?
     expect_equal "$READLINE_LINE" "echo foo |"
     expect_equal "$READLINE_POINT" 10
 
