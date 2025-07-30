@@ -400,49 +400,50 @@ list_abbrs() {
     _list_abbrs | colorful bash
 }
 
+_print_abbr_definition() {
+    local name="$1"
+    local set_cursor value regex func cmd_only no_space_after anywhere
+    value="${abbrs[$name]}"
+    set_cursor="${abbrs_set_cursor[$name]}"
+    regex="${abbrs_regex[$name]}"
+    func="${abbrs_function[$name]}"
+    cmd_only="${abbrs_command[$name]}"
+    anywhere="${abbrs_anywhere[$name]}"
+    no_space_after="${abbrs_no_space_after[$name]}"
+    local -a opts=()
+    if [[ -n "$set_cursor" ]]; then
+        opts+=("--set-cursor=$set_cursor")
+    fi
+    if [[ -n "$regex" ]]; then
+        # TODO do I like how printf is working, is it slow? fast? I can always escape things myself too, just wanted to try this
+        quoted_regex=$(printf "%q" "$regex")
+        # printf will return escaped chars for double quoted string
+        # still need to add "" though and to expand the quoted var requires "" so... just yeah:
+        opts+=("--regex" "\"$quoted_regex\"")
+    fi
+    if [[ -n "${func}" ]]; then
+        opts+=("--function" "$func")
+    fi
+    if [[ -n "${cmd_only}" ]]; then
+        opts+=("--command" "$cmd_only")
+    fi
+    if [[ -n "${anywhere}" ]]; then
+        opts+=("--position" "anywhere")
+    fi
+    if [[ -n "${no_space_after}" ]]; then
+        # echo "# WARNING --no-space-after is not compabile with fish abbrs"
+        opts+=("--no-space-after")
+    fi
+
+    # TODO if value has ' single quote, then cannot use ' to surround value... printf or?
+    # in that case use double quotes and escape special chars like $ ! \ " and newline
+    # FYI some values are empty b/c they are regex+function
+    echo abbr -a "${opts[*]}" -- "$name" "'$value'"
+}
+
 _list_abbrs() {
     local name
     for name in "${!abbrs[@]}"; do
-        _print_abbr_definition() {
-            local name="$1"
-            local set_cursor value regex func cmd_only no_space_after anywhere
-            value="${abbrs[$name]}"
-            set_cursor="${abbrs_set_cursor[$name]}"
-            regex="${abbrs_regex[$name]}"
-            func="${abbrs_function[$name]}"
-            cmd_only="${abbrs_command[$name]}"
-            anywhere="${abbrs_anywhere[$name]}"
-            no_space_after="${abbrs_no_space_after[$name]}"
-            local -a opts=()
-            if [[ -n "$set_cursor" ]]; then
-                opts+=("--set-cursor=$set_cursor")
-            fi
-            if [[ -n "$regex" ]]; then
-                # TODO do I like how printf is working, is it slow? fast? I can always escape things myself too, just wanted to try this
-                quoted_regex=$(printf "%q" "$regex")
-                # printf will return escaped chars for double quoted string
-                # still need to add "" though and to expand the quoted var requires "" so... just yeah:
-                opts+=("--regex" "\"$quoted_regex\"")
-            fi
-            if [[ -n "${func}" ]]; then
-                opts+=("--function" "$func")
-            fi
-            if [[ -n "${cmd_only}" ]]; then
-                opts+=("--command" "$cmd_only")
-            fi
-            if [[ -n "${anywhere}" ]]; then
-                opts+=("--position" "anywhere")
-            fi
-            if [[ -n "${no_space_after}" ]]; then
-                # echo "# WARNING --no-space-after is not compabile with fish abbrs"
-                opts+=("--no-space-after")
-            fi
-
-            # TODO if value has ' single quote, then cannot use ' to surround value... printf or?
-            # in that case use double quotes and escape special chars like $ ! \ " and newline
-            # FYI some values are empty b/c they are regex+function
-            echo abbr -a "${opts[*]}" -- "$name" "'$value'"
-        }
         _print_abbr_definition "$name"
     done
 }
