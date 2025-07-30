@@ -995,7 +995,6 @@ EOF
     # * non-abbr functions
     # generate other functions too, i.e. some abbrs are shortened aliases to a function
     #   so they abbr doesn't use a function, the expanded text just calls a function
-    local non_abbr_functions=("git_unpushed_commits")
     for func_name in "${non_abbr_functions[@]}"; do
         # TODO vet something with multiple args just to be safe that $@ is correct below
 
