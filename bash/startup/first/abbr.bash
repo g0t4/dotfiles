@@ -993,19 +993,6 @@ EOF
     done
 
     # * non-abbr functions
-    # generate other functions too, i.e. some abbrs are shortened aliases to a function
-    #   so they abbr doesn't use a function, the expanded text just calls a function
-    for func_name in "${non_abbr_functions[@]}"; do
-        # TODO vet something with multiple args just to be safe that $@ is correct below
-
-        cat <<EOF >>"$func_file"
-
-function $func_name {
-    fish -c "$func_name \$@"
-}
-
-EOF
-    done
 
     ignore_functions=(
         # TODO manual ports: (mark when done)
@@ -1038,6 +1025,20 @@ EOF
         # gh_repo_create_private # might have cd
 
     )
+
+    # generate other functions too, i.e. some abbrs are shortened aliases to a function
+    #   so they abbr doesn't use a function, the expanded text just calls a function
+    for func_name in "${non_abbr_functions[@]}"; do
+        # TODO vet something with multiple args just to be safe that $@ is correct below
+
+        cat <<EOF >>"$func_file"
+
+function $func_name {
+    fish -c "$func_name \$@"
+}
+
+EOF
+    done
 
     # shellcheck disable=SC2317
     function look_for_non_abbr_functions {
