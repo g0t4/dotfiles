@@ -88,7 +88,7 @@ declare -A command_separators=(
     ['|']='|' ['|&']='|&'                       # simple command separator (within pipeline)
     [';']=';' ['||']='||' ['&']='&' ['&&']='&&' # pipeline separator (within lists)
     # \n (newline)
-    ['(']='(' ['{']='{' # openings that should denote start of command afterward
+    ['(']='(' ['{']='{'     # openings that should denote start of command afterward
     [')']=')' ['}']='}'     # compound commands
     ['((']='((' ['[[']='[[' # compound arithmethic, conditional exprsesions
     # TODO newline too? first command on line?
