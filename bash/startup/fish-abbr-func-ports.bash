@@ -1,10 +1,17 @@
 function find_missing_abbr_functions {
-    for f in "${abbrs_function[@]}"; do
-        # FYI declare -F will show name if it exists, otherwise show "MISSING" with name!
-        #  yeah this is a bit much trickery but w/e
-        if ! declare -F "$f"; then
-            echo MISSING $f
-        fi
+    local name
+    for name in "${!abbrs_function[@]}"; do
+        local func_name="${abbrs_function[name]}"
+
+cat <<EOF >>"${BASH_DOTFILES}/.generated.funcs.bash"
+
+function $func_name {
+    # TODO! add full abbreviation like with abbr dump command
+    # $name
+    fish -c "$func_name \$1"
+}
+
+EOF
     done
 }
 
