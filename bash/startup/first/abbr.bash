@@ -981,12 +981,17 @@ function generate_func_wrappers {
         local func_name="${abbrs_function[$name]}"
         local definition="$(_print_abbr_definition "$name")"
 
+        if [[ "$1" == *\"* ]]; then
+            # FYI I had to quote the \"$1\" below for expand_zsh_equals which was triggering on typing this: "(IFS=,;" FTR
+            # TODO add tests of the generated wrappers so I know if I broke any edge cases - start with expand_zsh_equals
+            echo "ALERT - generate_func_wrappers doesn't yet escape \" and just found one in your cmdline to expand"
+        fi
         cat <<EOF >>"$func_file"
 
 function $func_name {
     # $definition
     # $name
-    fish -c "$func_name \$1"
+    fish -c "$func_name \"\$1\""
 }
 
 EOF
