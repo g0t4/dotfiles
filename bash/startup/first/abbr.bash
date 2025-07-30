@@ -1008,13 +1008,19 @@ EOF
     done
 }
 
+non_abbr_functions=("git_unpushed_commits")
+
 function look_for_non_abbr_functions {
 
     mapfile -t fish_function_names <<<"$(fish -c "functions")"
     # declare -p fish_function_names | bat -l bash
-    declare -A assoc_funs=()
+    declare -A fish_funcs_hash=()
     for n in "${fish_function_names[@]}"; do
-        assoc_funs["$n"]="$n"
+        fish_funcs_hash["$n"]="$n"
+    done
+    declare -A already_identified_hash=()
+    for n in "${non_abbr_functions[@]}"; do
+        already_identified_hash["$n"]="$n"
     done
 
     local abbr_name
@@ -1024,7 +1030,11 @@ function look_for_non_abbr_functions {
             # echo "empty value '$abbr_value' from abbr: '$abbr_name'"
             continue
         fi
-        if [[ -n "${assoc_funs["$abbr_value"]}" ]]; then
+        if [[ -n "${fish_funcs_hash["$abbr_value"]}" ]]; then
+            if [[ -n "${already_identified_hash["$abbr_value"]}" ]]; then
+                echo "already function: '$abbr_value' from abbr: '$abbr_name'"
+                continue
+            fi
             echo "possible function: '$abbr_value' from abbr: '$abbr_name'"
         fi
     done
