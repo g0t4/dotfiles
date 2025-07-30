@@ -35,6 +35,8 @@ if is_macos; then
 
 fi
 
+prepend_path_if_exists ~/.local/bin
+
 for script in "$BASH_DOTFILES/startup/first/"*.bash; do
     source "$script"
 done
