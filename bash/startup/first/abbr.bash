@@ -1061,13 +1061,6 @@ EOF_WRAPPER
         # Append the generated wrapper to the file
         echo "$generated_wrapper" >>"$func_file"
 
-        #         cat <<EOF >>"$func_file"
-        #
-        # function $func_name {
-        #     fish -c "$func_name \$@"
-        # }
-        #
-        # EOF
     done
 
     # shellcheck disable=SC2317
