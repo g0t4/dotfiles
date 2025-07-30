@@ -20,9 +20,12 @@ expect_equal() {
         declare -p last_index last_funcname | bat -l bash
         if [[ "$last_funcname" != "source" ]]; then
             # IOTW if test_expand_abbr called directly in REPL... then line #s are off
+            echo
+            echo
             echo "WARNING line #s are probably wrong, just affects the source dump below..."
             echo "  ABBR_DEBUG=1 ABBR_TESTS=1 bash"
             echo "  ABBR_DEBUG=1 ABBR_TESTS=1 source '$HOME/repos/github/g0t4/dotfiles/bash/startup/first/abbr.bash'"
+            echo
             true
         fi
         #
