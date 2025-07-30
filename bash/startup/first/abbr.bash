@@ -1034,7 +1034,35 @@ EOF
     # generate other functions too, i.e. some abbrs are shortened aliases to a function
     #   so they abbr doesn't use a function, the expanded text just calls a function
     for func_name in "${non_abbr_functions[@]}"; do
-        # TODO vet something with multiple args just to be safe that $@ is correct below
+
+        # FYI EXAMPLE of broken wrapper func b/c of missing quoting of args
+        #    `touch "foo the"` => create a file w/ a space in the name
+        #    also ffmpeg/ffplay to play a file w/ space would be broken
+
+        # for func_name in "${non_abbr_functions[@]}"; do
+        #   # This part is generating the content of your bash wrapper functions.
+        #   # We'll use a placeholder for func_name and then replace it.
+        #
+        #   wrapper_template=$(cat <<'EOF_WRAPPER'
+        # function PLACEHOLDER_FUNC_NAME {
+        #   fish_args=""
+        #   for arg in "$@"; do
+        #     printf -v escaped_arg '%q' "$arg" # Quote the argument for bash interpretation
+        #     fish_args+=" $(printf '%s' "$escaped_arg")"
+        #   done
+        #
+        #   fish -c "PLACEHOLDER_FUNC_NAME $fish_args"
+        # }
+        # EOF_WRAPPER
+        # )
+        #
+        #   # Replace the placeholder with the actual function name
+        #   generated_wrapper="${wrapper_template//PLACEHOLDER_FUNC_NAME/$func_name}"
+        #
+        #   # Append the generated wrapper to the file
+        #   echo "$generated_wrapper" >>"$func_file"
+        # done
+        #
 
         cat <<EOF >>"$func_file"
 
