@@ -403,6 +403,7 @@ list_abbrs() {
 _list_abbrs() {
     local name
     for name in "${!abbrs[@]}"; do
+        _print_abbr_definition() {
             local set_cursor value regex func cmd_only no_space_after anywhere
             value="${abbrs[$name]}"
             set_cursor="${abbrs_set_cursor[$name]}"
@@ -440,6 +441,8 @@ _list_abbrs() {
             # in that case use double quotes and escape special chars like $ ! \ " and newline
             # FYI some values are empty b/c they are regex+function
             echo abbr -a "${opts[*]}" -- "$name" "'$value'"
+        }
+        _print_abbr_definition
     done
 }
 
