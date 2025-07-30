@@ -29,9 +29,7 @@ function git_unpushed_commits {
 }
 
 glX() {
-    #  gl10 / gl
-    local expanded="${1/gl/git log -}"
-    echo "${expanded% -}" # strip trailing ' -' if no number passed
+    fish -c "glX $1"
 }
 # abbr git_log_num --regex 'gl[0-9]*' --function _expand_git_log
 
