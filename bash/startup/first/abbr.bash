@@ -1008,8 +1008,18 @@ EOF
     done
 }
 
+declare -A manual_functions_hashed
+manual_functions_hashed=(
+    # TODO port these and mark ported here too
+    ['cd_dir_of_path']='1'    # does a cd... needs manual wrapper
+    ['cd_dir_of_command']='1' # manual
+)
 # TODO remove once testing done:
-non_abbr_functions=("git_unpushed_commits" "bitmaths")
+non_abbr_functions=(
+    'git_unpushed_commits'
+    'bitmaths'
+
+)
 
 function look_for_non_abbr_functions {
 
@@ -1032,10 +1042,15 @@ function look_for_non_abbr_functions {
             continue
         fi
         if [[ -n "${fish_funcs_hash["$abbr_value"]}" ]]; then
+            if [[ -n "${manual_functions_hashed["$abbr_value"]}" ]]; then
+                # echo "already function: '$abbr_value' from abbr: '$abbr_name'"
+                continue
+            fi
             if [[ -n "${already_identified_hash["$abbr_value"]}" ]]; then
                 # echo "already function: '$abbr_value' from abbr: '$abbr_name'"
                 continue
             fi
+
             echo "possible function: '$abbr_value' from abbr: '$abbr_name'"
             # show fish func:
             fish -c "functions $abbr_value"
