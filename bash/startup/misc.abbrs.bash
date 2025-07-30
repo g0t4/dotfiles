@@ -83,6 +83,8 @@ abbr pPATH "echo \"\${PATH//:/\$'\n'}\""
 # PRN add variant using printf?
 # PRN add variant using read
 
+abbr --set-cursor -- fishc "fish -c '%'"
+
 # * trap
 abbr trapl "trap -l"
 abbr trapp "trap -p"
