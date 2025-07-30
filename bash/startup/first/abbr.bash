@@ -492,6 +492,7 @@ abbr() {
                 set_cursor="%" # uses default of %
                 shift
                 ;;
+            # TODO removee --no-space-after, this was originally added to zsh/pwsh b/c I didn't have --set-cursor!
             --no-space-after)
                 no_space_after="yes"
                 shift
