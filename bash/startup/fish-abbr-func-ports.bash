@@ -29,14 +29,18 @@ function git_unpushed_commits {
 }
 
 glX() {
+    # FYI quoting shouldn't be an issue with passign $1 b/c expansion name has to be all one word
+    #   so spaces won't happen within the name
     fish -c "glX $1"
 }
 
 function gdlcX {
-    local -i num prev
-    num="${1/gdlc/}"
-    ((prev = num - 1))
-    echo "git log --patch HEAD~$num..HEAD~$prev"
+    # leave bash impl as example but lets defer to fish:
+    # local -i num prev
+    # num="${1/gdlc/}"
+    # ((prev = num - 1))
+    # echo "git log --patch HEAD~$num..HEAD~$prev"
+    fish -c "gdlcX $1"
 }
 
 function glpX {
