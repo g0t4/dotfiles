@@ -2788,3 +2788,6 @@ abbr --set-cursor strace_write "strace -f -e trace=/write bash"
 abbr --set-cursor stracec "strace -c -e trace=all sleep 1"
 abbr --set-cursor straceC "strace -C -e trace=all sleep 1"
 
+# *** fish
+abbr --set-cursor -- fishc "fish -c '%'"
+
