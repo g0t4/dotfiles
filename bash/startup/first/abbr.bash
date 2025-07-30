@@ -1024,10 +1024,20 @@ non_abbr_functions=(
     touchp
     gitignores_for # lol this is a zsh wrapped fish func ;) bash => fish => zsh
     wordcount
-    # gh_repo_create_private # might have cd
     md_open
     ffplay
     cppath
+    commit_gitignores_for
+    append_gitignores_for
+    gitignore_init
+    # icdiff ??? basically alias for icdiff options
+    # ffmpeg ??? basically ffmpeg alias
+    # ffprobe ??? alias
+    #
+    # TODO check if ok:
+    # gh_repo_create_public
+    # __gh_repo_create_clone_with_ignores # ??
+    # gh_repo_create_private # might have cd
 
 )
 
