@@ -997,11 +997,12 @@ EOF
     #   so they abbr doesn't use a function, the expanded text just calls a function
     local non_abbr_functions=("git_unpushed_commits")
     for func_name in "${non_abbr_functions[@]}"; do
+        # TODO vet something with multiple args just to be safe that $@ is correct below
 
         cat <<EOF >>"$func_file"
 
 function $func_name {
-    fish -c "$func_name \$1"
+    fish -c "$func_name \$@"
 }
 
 EOF
