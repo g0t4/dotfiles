@@ -1,18 +1,12 @@
 source _test.bash 2>/dev/null || true # ignore load failure, source is for bash LS (i.e. F12) and shellcheck
 
 declare -A abbrs=()
-declare -A abbrs_no_space_after=()
 declare -A abbrs_set_cursor=()
 declare -A abbrs_anywhere=()
 declare -A abbrs_function=()
 declare -A abbrs_regex=()
 declare -A abbrs_command=()
 declare -A abbrs_stub_func_names=()
-
-is_no_space_after_set() {
-    local word="$1"
-    [[ -n "$word" && "${abbrs_no_space_after["$word"]}" = "yes" ]]
-}
 
 is_anywhere_allowed() {
     local word="$1"
@@ -162,7 +156,7 @@ expand_abbr() {
 
     # * add_char
     local add_char="$key"
-    local add_char_if_no_expansion="$key" # --no-space-after does not apply if no expansion
+    local add_char_if_no_expansion="$key"
     if [[ "$key" = "tab_space_regardless" ]]; then
         add_char=" "
         add_char_if_no_expansion=" "
@@ -175,9 +169,6 @@ expand_abbr() {
         # for enter we have the \C-j in the bind macro, not doing that here
         add_char=""
         add_char_if_no_expansion=""
-    fi
-    if is_no_space_after_set "$word_before_cursor"; then
-        add_char=""
     fi
 
     local anywhere="no"
@@ -402,14 +393,13 @@ list_abbrs() {
 
 _print_abbr_definition() {
     local name="$1"
-    local set_cursor value regex func cmd_only no_space_after anywhere
+    local set_cursor value regex func cmd_only anywhere
     value="${abbrs[$name]}"
     set_cursor="${abbrs_set_cursor[$name]}"
     regex="${abbrs_regex[$name]}"
     func="${abbrs_function[$name]}"
     cmd_only="${abbrs_command[$name]}"
     anywhere="${abbrs_anywhere[$name]}"
-    no_space_after="${abbrs_no_space_after[$name]}"
     local -a opts=()
     if [[ -n "$set_cursor" ]]; then
         opts+=("--set-cursor=$set_cursor")
@@ -429,10 +419,6 @@ _print_abbr_definition() {
     fi
     if [[ -n "${anywhere}" ]]; then
         opts+=("--position" "anywhere")
-    fi
-    if [[ -n "${no_space_after}" ]]; then
-        # echo "# WARNING --no-space-after is not compabile with fish abbrs"
-        opts+=("--no-space-after")
     fi
 
     # TODO if value has ' single quote, then cannot use ' to surround value... printf or?
@@ -457,7 +443,6 @@ abbr() {
     fi
 
     local set_cursor=""
-    local no_space_after="no"
     local position=""
     local positional_args=()
     local func=""
@@ -484,11 +469,6 @@ abbr() {
                 ;;
             --set-cursor)
                 set_cursor="%" # uses default of %
-                shift
-                ;;
-            # TODO removee --no-space-after, this was originally added to zsh/pwsh b/c I didn't have --set-cursor!
-            --no-space-after)
-                no_space_after="yes"
                 shift
                 ;;
             --position=*)
@@ -535,7 +515,6 @@ abbr() {
     positional_args+=("$@")
 
     # echo "  set_cursor=$set_cursor"
-    # echo "  no_space_after=$no_space_after"
     # echo "  position=$position"
     # echo "  positional args: ${positional_args[*]}"
 
@@ -563,9 +542,6 @@ abbr() {
     fi
     _abbr "$key" "$value"
 
-    if [[ "$no_space_after" = "yes" ]]; then
-        abbrs_no_space_after["$key"]=yes
-    fi
     if [[ "$position" = "anywhere" ]]; then
         abbrs_anywhere["$key"]=yes
     fi
@@ -591,7 +567,6 @@ reset_abbrs() {
     fi
 
     abbrs=()
-    abbrs_no_space_after=()
     abbrs_set_cursor=()
     abbrs_anywhere=()
     abbrs_function=()
@@ -619,7 +594,6 @@ test_parse_abbr_args() {
     start_test abbr foo=bar --set-cursor
     expect_equal "${abbrs[foo]}" "bar"
     expect_equal "${abbrs_set_cursor[foo]}" "%"
-    expect_equal "${abbrs_no_space_after[foo]}" ""
     # * validate stub function created
     expect_function_exists foo "echo 'abbrs are not intended to be executed directly"
     expect_equal "${abbrs_stub_func_names[foo]}" "foo"
@@ -654,23 +628,7 @@ test_parse_abbr_args() {
     start_test abbr foo='b_ar' --set-cursor='_'
     expect_equal "${abbrs[foo]}" "b_ar"
     expect_equal "${abbrs_set_cursor[foo]}" '_'
-    expect_equal "${abbrs_no_space_after[foo]}" ""
     reset_abbrs
-
-    # * tests --no-space-after
-    start_test abbr foo=bar --no-space-after
-    expect_equal "${abbrs[foo]}" "bar"
-    expect_equal "${abbrs_no_space_after[foo]}" "yes"
-
-    # * --no-space-after before positionals
-    start_test abbr --no-space-after hello=world
-    expect_equal "${abbrs[hello]}" "world"
-    expect_equal "${abbrs_no_space_after[hello]}" "yes"
-
-    # * test reset of no space after
-    start_test reset_abbrs
-    expect_equal "${abbrs_no_space_after[foo]}" ""
-    expect_equal "${abbrs_no_space_after[hello]}" ""
 
     # * tests --position
     start_test abbr foo=bar --position=anywhere
@@ -746,15 +704,6 @@ test_expand_abbr() {
     expect_equal "$READLINE_LINE" "bar "
     expect_equal "$READLINE_POINT" 4
 
-    label_test "vanilla w/ --no-space-after"
-    reset_abbrs
-    abbr foo bar --no-space-after
-    READLINE_LINE=foo
-    READLINE_POINT=3
-    expand_abbr " "
-    expect_equal "$READLINE_LINE" "bar"
-    expect_equal "$READLINE_POINT" 3
-
     label_test "--set-cursor"
     reset_abbrs
     abbr foo "echo '%'" --set-cursor
@@ -771,15 +720,6 @@ test_expand_abbr() {
     READLINE_POINT=3
     expand_abbr " "
     expect_equal "$READLINE_LINE" "echo '' "
-    expect_equal "$READLINE_POINT" 6
-
-    label_test "--no-space-after + --set-cursor"
-    reset_abbrs
-    abbr foo "echo '%'" --set-cursor --no-space-after
-    READLINE_LINE=foo
-    READLINE_POINT=3
-    expand_abbr " "
-    expect_equal "$READLINE_LINE" "echo ''"
     expect_equal "$READLINE_POINT" 6
 
     label_test "space still works when not an abbr"
