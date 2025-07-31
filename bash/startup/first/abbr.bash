@@ -413,7 +413,7 @@ _print_abbr_definition() {
     fi
     if [[ -n "$regex" ]]; then
         # TODO do I like how printf is working, is it slow? fast? I can always escape things myself too, just wanted to try this
-        quoted_regex=$(printf "%q" "$regex")
+        local quoted_regex=$(printf "%q" "$regex")
         # printf will return escaped chars for double quoted string
         # still need to add "" though and to expand the quoted var requires "" so... just yeah:
         opts+=("--regex" "\"$quoted_regex\"")
@@ -1030,6 +1030,7 @@ EOF
 
     )
 
+    local func_name
     for func_name in "${non_abbr_functions[@]}"; do
 
         # Example of wrapped function w/ args that can't be passed w/o quoting:
@@ -1037,7 +1038,7 @@ EOF
         #    also ffmpeg/ffplay to play a file w/ space would be broken
 
         # block expansion with 'EOF_WRAPPER' b/c its easier to use find replace than quote all the $ in the template!
-        wrapper_template=$(
+        local wrapper_template=$(
             cat <<'EOF_WRAPPER'
 function PLACEHOLDER_FUNC_NAME {
   fish_args=""
@@ -1051,7 +1052,7 @@ function PLACEHOLDER_FUNC_NAME {
 EOF_WRAPPER
         )
 
-        generated_wrapper="${wrapper_template//PLACEHOLDER_FUNC_NAME/$func_name}"
+        local generated_wrapper="${wrapper_template//PLACEHOLDER_FUNC_NAME/$func_name}"
 
         echo "$generated_wrapper" >>"$func_file"
 
