@@ -38,7 +38,7 @@ prepend_path_if_exists ~/.local/bin
 for script in "$BASH_DOTFILES/startup/vetted-benign/first/"*.bash; do
     source "$script"
 done
-# source "$BASH_DOTFILES/.generated.aliases.bash"
+source "$BASH_DOTFILES/.generated.paredabbrs.bash"
 source "$BASH_DOTFILES/.generated.fish_func_wrappers.bash"
 
 for script in "$BASH_DOTFILES/startup/vetted-benign/"*.bash; do
