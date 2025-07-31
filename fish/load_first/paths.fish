@@ -174,6 +174,11 @@ if test -d "$HOME/bin"
     export PATH="$PATH:$HOME/bin"
 end
 
+# * bash from source
+if test -x $HOME/repos/github/g0t4/bash/bash
+    export PATH="$HOME/repos/github/g0t4/bash:$PATH"
+end
+
 # *** PATH(s)
 
 function _path_list

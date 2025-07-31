@@ -2813,3 +2813,4 @@ abbr --set-cursor straceC "strace -C -e trace=all sleep 1"
 
 # *** fish
 abbr --set-cursor -- fishc "fish -c '%'"
+abbr pPATH 'for p in $PATH; echo $p; end'
