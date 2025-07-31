@@ -38,8 +38,6 @@ abbr --set-cursor mapfile_n_lines 'mapfile -n % -t lines <' # read N lines
 abbr --set-cursor mapfile_str 'mapfile -t <<<"$%"'          # From a multiline string
 abbr --set-cursor mapfile_cmd 'mapfile -t < <(%)'           # From command output
 
-abbr pstree_bash_shell 'pstree -p $$'
-
 # TODO mirror with sh.snippets from my nvim config...
 # * would be cool to get a full blown snippet system in bash (and other shells)...
 #  ea => echo "${placeholder1[@]}" # put cursor on placeholder1 slot
@@ -74,14 +72,9 @@ abbr pIFS "echo -n \"\${IFS}\" | hexdump -C" # block word splitting, or it will 
 #
 # print path one per line... two ways to do it
 abbr pPATH2 '(IFS=:; for p in $PATH; do echo $p; done)'
-#
 # for fun... here's a diff variant:
 # echo "${PATH//:/$'\n'}"
 abbr pPATH "echo \"\${PATH//:/\$'\n'}\""
-#  FYI remove outermost "" around expanded arg to echo... shows how IFS works and stopping it with quoting
-#
-# PRN add variant using printf?
-# PRN add variant using read
 
 # * trap
 abbr trapl "trap -l"
