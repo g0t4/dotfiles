@@ -24,7 +24,7 @@ expect_equal() {
             echo
             echo "WARNING line #s are probably wrong, just affects the source dump below..."
             echo "  ABBR_DEBUG=1 ABBR_TESTS=1 bash"
-            echo "  ABBR_DEBUG=1 ABBR_TESTS=1 source '$HOME/repos/github/g0t4/dotfiles/bash/startup/first/abbr.bash'"
+            echo "  ABBR_DEBUG=1 ABBR_TESTS=1 source '$HOME/repos/github/g0t4/dotfiles/bash/startup/first/_abbr.bash'"
             echo
             true
         fi
