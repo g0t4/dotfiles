@@ -239,22 +239,37 @@ expand_abbr() {
 
 _setup_intercepts_for_rest_of_keys() {
     # * expand on <Space>
-    # TODO drop \C- when course is done, then space auto expands
-    # FYI Ctrl-| doesn't work!... which is fine
-    #  OR just use tab! I will leave tab complete on (or enter) b/c both of those are "visually violent" enough usually that it doesn't matter if there is a flicker
-    # USE CTRL-SPACE for all expansion in course... that's fine!
-    #  don't need the other ctrl overloads
-    # TODO I am curious if I could patch bash to fix this too
-    #  the issue is I can see the cursor literally go to start of the line, draw the prompt, then move to char after prompt and then finally wherever READLINE_POINT sets it... it is a redraw issue entirely
-    #    and it will redraw even if my bind -x does nothing (doesn't even read READLINE_LINE/POINT let alone change them)
-    bind -x '"\C- ": expand_abbr " "'
-    # uncomment to bring back bindings
-    # bind -x '" ": expand_abbr " "'
-    # bind -x '";": expand_abbr ";"' # so you can:   gst<;> => git status;
-    # bind -x '"|": expand_abbr "|"' # same as ;
-    bind -m vi-insert -x '" ": expand_abbr " "'
-    bind -m vi-insert -x '";": expand_abbr ";"'
-    bind -m vi-insert -x '"|": expand_abbr "|"'
+
+    # * flicker issues in bind -x
+    # bashline.c: ~/repos/https.git.savannah.gnu.org/git/bash.git/bashline.c:4601-4726
+    #    int bash_execute_unix_command (int count, int key)
+    #
+    #  problem is, bash clears the line (moves cursor to start too) BEFORE executing the shell handler defined in `bind -x`
+    #    then runs shell handler
+    #    then final redraw/updates
+    #
+    #  - this is why even a NOOP still causes flicker
+    #  - by moving clear code to AFTER shell handler, the flicker is barely noticeable
+    #  - TODO next is to try to check for a change in READLINE_LINE/POINT and not even update anything if not
+    #  - TODO try special 124 return code that triggers a different display update
+    #
+
+    # local manual_trigger="yes"
+    local manual_trigger=""
+    if [[ -n $manual_trigger ]]; then
+        # use this to control expansion explicitly (aside from tab/enter too)
+        bind -x '"\C- ": expand_abbr " "'
+        bind -m vi-insert -x '"\C- ": expand_abbr " "'
+    else
+        # as you type, perform expands naturally
+        bind -x '" ": expand_abbr " "'
+        bind -x '";": expand_abbr ";"' # so you can:   gst<;> => git status;
+        bind -x '"|": expand_abbr "|"' # same as ;
+        #
+        bind -m vi-insert -x '" ": expand_abbr " "'
+        bind -m vi-insert -x '";": expand_abbr ";"'
+        bind -m vi-insert -x '"|": expand_abbr "|"'
+    fi
 }
 _setup_intercepts_for_rest_of_keys
 
