@@ -34,3 +34,23 @@ export PAGER="less"
 
 export WATCH_INTERVAL=0.5 # default to half second so I dont have to pass watch -n0.5!!!! # confirm by run watch cmd and see upper left what interval is
 #  see `man watch`
+
+#
+# * env vars (without a different home)
+[[ -z "$TERM" || "$TERM" = dumb ]] && TERM=xterm-256color
+export EDITOR=nvim
+export GREP_COLOR="1;38;5;162"
+export RIPGREP_CONFIG_PATH="$WES_DOTFILES/.config/ripgrep/ripgreprc"
+export DOCKER_HIDE_LEGACY_COMMANDS=1
+export KUBECTL_EXTERNAL_DIFF="icdiff -r"
+export DOTNET_CLI_TELEMETRY_OPTOUT=1
+# export NODE_OPTIONS=--disable-warning=ExperimentalWarning
+# export ICDIFF_OPTIONS="--highlight"
+# VAGRANT_BOX_UPDATE_CHECK_DISABLE=
+# VAGRANT_EXPERIMENTAL=
+# VAGRANT_PROVIDER=
+
+# BTW HISTFILESIZE defaults to HISTSIZE (controls # entries in ~/.bash_history)
+HISTSIZE=1000000
+# set | grep -i HIST   # to review values
+

@@ -2,37 +2,18 @@
 # * shell options
 #
 # shopt -s globstar # match ** matches all files + zero+ directories (basically search all nested dirs)
-shopt -s autocd     # cd to a dir with just its name in command position
+shopt -s autocd # cd to a dir with just its name in command position
 # shopt -s histreedit # failed history expansions - put back into cmdline to edit (otherwise they are lost)
 
 # abbr options_list_set "echo \$-"
 # abbr options_list_shopt "shopt"
 # abbr options_list_shopt_executable "shopt -p"
 
-#
-# * env vars (without a different home)
-[[ -z "$TERM" || "$TERM" = dumb ]] && TERM=xterm-256color
-export EDITOR=nvim
-export GREP_COLOR="1;38;5;162"
-export RIPGREP_CONFIG_PATH="$WES_DOTFILES/.config/ripgrep/ripgreprc"
-export DOCKER_HIDE_LEGACY_COMMANDS=1
-export KUBECTL_EXTERNAL_DIFF="icdiff -r"
-export DOTNET_CLI_TELEMETRY_OPTOUT=1
-# export NODE_OPTIONS=--disable-warning=ExperimentalWarning
-# export ICDIFF_OPTIONS="--highlight"
-# VAGRANT_BOX_UPDATE_CHECK_DISABLE=
-# VAGRANT_EXPERIMENTAL=
-# VAGRANT_PROVIDER=
-
 alias grep="grep --color=auto"
 
 function help_bat() {
     help "$@" | bat -l help
 }
-
-# BTW HISTFILESIZE defaults to HISTSIZE (controls # entries in ~/.bash_history)
-HISTSIZE=1000000
-# set | grep -i HIST   # to review values
 
 alias cdr='cd "$(_repo_root)"'
 
