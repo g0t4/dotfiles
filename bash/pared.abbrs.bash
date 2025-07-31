@@ -3,6 +3,13 @@
 original_file="$WES_DOTFILES/bash/.generated.aliases.bash"
 pared_file="$WES_DOTFILES/bash/.generated.paredabbrs.bash"
 
+cmd=sed
+if [[ "$OSTYPE" == *darwin* ]]; then
+    # gnu sed for this script
+    cmd=gsed
+    echo using gsed on mac
+fi
+
 cp "$original_file" "$pared_file"
 
 # optin_filters=(
@@ -50,10 +57,10 @@ deletes=(
 
 # * delete lines from pared file
 for f in "${deletes[@]}"; do
-    gsed -i "/${f}/d" "$pared_file"
+    "$cmd" -i "/${f}/d" "$pared_file"
 done
 
 echo
 echo
 echo FINAL SIZE:
-wordcount "$pared_file"
+fish -c "wordcount '$pared_file'"

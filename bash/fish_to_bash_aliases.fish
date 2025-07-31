@@ -39,4 +39,5 @@ gsed -i 's/\\\\\\\\b/\\\\b/g' "$file_aliases"
 #
 
 # generate wrapper functions (both abbr and non-abbr)
-bash --login -c "generate_func_wrappers"
+bash --login -c generate_func_wrappers
+bash --login -c "$WES_DOTFILES/bash/pared.abbrs.bash"
