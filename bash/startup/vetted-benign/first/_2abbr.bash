@@ -241,8 +241,8 @@ _setup_intercepts_for_rest_of_keys() {
     # * expand on <Space>
     # bind -x '" ": expand_abbr " "'
     bind -x '"\C- ": expand_abbr " "'
-    bind -x '";": expand_abbr ";"' # so you can:   gst<;> => git status;
-    bind -x '"|": expand_abbr "|"' # same as ;
+    bind -x '"\C-;": expand_abbr ";"' # so you can:   gst<;> => git status;
+    bind -x '"\C-|": expand_abbr "|"' # same as ;
     bind -m vi-insert -x '" ": expand_abbr " "'
     bind -m vi-insert -x '";": expand_abbr ";"'
     bind -m vi-insert -x '"|": expand_abbr "|"'
