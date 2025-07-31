@@ -32,7 +32,7 @@ show_rc_when_last_cmd_failed() {
     fi
 }
 
-PROMPT_COMMAND="show_rc_when_last_cmd_failed;prompt_current_dir"
-PS1="${PROMPT_CYAN}${PROMPT_BOLD}${PROMPT_UNDERLINE}\${current_dir}${PROMPT_RESET} \$ "
+PROMPT_COMMAND="show_rc_when_last_cmd_failed" # FYI can chain multiple prompt cmds just like regular commands!
+PS1="${PROMPT_CYAN}${PROMPT_BOLD}${PROMPT_UNDERLINE}\W${PROMPT_RESET} \$ "
 
 export PS1
