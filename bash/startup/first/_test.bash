@@ -104,11 +104,5 @@ start_test() {
 }
 
 label_test() {
-    # KEEP AS LOCAL variables for now, use PROMPT_* if you want colors in other spots b/c that's an easy name to grep codebase
-    local RESET="\e[0m"
-    local BOLD="\e[1m"
-    local ITALIC="\e[3m"
-    local CYAN="\e[36m"
-
-    echo -e "${CYAN}TEST:${RESET} ${BOLD}${ITALIC}$*${RESET}"
+    echo -e "${PROMPT_CYAN}TEST:${PROMPT_RESET} ${PROMPT_BOLD}${PROMPT_ITALIC}$*${PROMPT_RESET}"
 }
