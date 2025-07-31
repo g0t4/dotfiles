@@ -1863,14 +1863,30 @@ else:
 end
 
 # *** man page helpers
-abbr man1 "man -S 1"
-abbr man2 "man -S 2"
-# abbr mans "man -S 2" # maybe? or just learn 2 is syscalls
-abbr man3 "man -S 3"
-abbr man4 "man -S 4"
-abbr man5 "man -S 5"
-abbr man6 "man -S 6"
-abbr man7 "man -S 7"
+abbr man_commands_1 "man 1"
+abbr man_syscalls_2 "man 2"
+abbr man_c_stdlib_3 "man 3"
+abbr man_kernel_interfaces_4 "man 4"
+abbr man_file_formats_5 "man 5"
+abbr man_misc_7 "man 7"
+abbr man_system_8 "man 8"
+abbr man_kernel_dev_9 "man 9"
+# list all pages in a section:
+abbr --regex "manlist[0-9]" --function manlistX -- manlistX
+function manlistX
+    set section $(string replace manlist "" $argv[1])
+    echo "man -k . | grep '($section)'"
+end
+abbr man1 "man 1"
+abbr man2 "man 2"
+abbr man3 "man 3"
+abbr man4 "man 4"
+abbr man5 "man 5"
+abbr man6 "man 6"
+abbr man7 "man 7"
+abbr man7 "man 8"
+abbr man7 "man 9"
+#
 abbr mana "man -a" # open all matching pages
 abbr mank apropos # man -k ~= apropos
 abbr manf whatis # man -f == whatis
