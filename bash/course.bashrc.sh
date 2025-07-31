@@ -40,9 +40,6 @@ for script in "$BASH_DOTFILES/startup/vetted-benign/first/"*.bash; do
 done
 # source "$BASH_DOTFILES/.generated.aliases.bash"
 # source "$BASH_DOTFILES/.generated.fish_func_wrappers.bash"
-# for script in "$BASH_DOTFILES/startup/"*.bash; do
-#     source "$script"
-# done
 
 for script in "$BASH_DOTFILES/startup/vetted-benign/"*.bash; do
     source "$script"
