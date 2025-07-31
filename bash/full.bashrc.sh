@@ -2,10 +2,12 @@
 
 # ! KEEP THIS FILE MINIMAL, only critical, early config should be in here
 
-# * uncomment for xtrace-ing (fyi.. can inherit path from outer shell)
-export PS1="$ "
-unset PROMPT_COMMAND # remove default for xtrace, when also comment out the return here:
-return
+echo WARNING THIS IS YOUR FULL BASHRC
+
+# # * uncomment for xtrace-ing (fyi.. can inherit path from outer shell)
+# export PS1="$ "
+# unset PROMPT_COMMAND # remove default for xtrace, when also comment out the return here:
+# return
 
 UNAME_S=$(uname -s)
 is_macos() { [[ "$UNAME_S" = "Darwin" ]]; }
