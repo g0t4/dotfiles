@@ -35,9 +35,9 @@ source "$BASH_DOTFILES/startup/vetted-benign/early/path-init.bash"
 #
 # prepend_path_if_exists ~/.local/bin
 #
-# for script in "$BASH_DOTFILES/startup/first/"*.bash; do
-#     source "$script"
-# done
+for script in "$BASH_DOTFILES/startup/vetted-benign/first/"*.bash; do
+    source "$script"
+done
 # source "$BASH_DOTFILES/.generated.aliases.bash"
 # source "$BASH_DOTFILES/.generated.fish_func_wrappers.bash"
 # for script in "$BASH_DOTFILES/startup/"*.bash; do
@@ -50,6 +50,3 @@ done
 for script in "$BASH_DOTFILES/startup/course-only/"*.bash; do
     source "$script"
 done
-
-
-

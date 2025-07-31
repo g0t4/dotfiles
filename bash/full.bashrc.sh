@@ -39,7 +39,7 @@ fi
 
 prepend_path_if_exists ~/.local/bin
 
-for script in "$BASH_DOTFILES/startup/first/"*.bash; do
+for script in "$BASH_DOTFILES/startup/vetted-benign/first/"*.bash; do
     source "$script"
 done
 source "$BASH_DOTFILES/.generated.aliases.bash"
