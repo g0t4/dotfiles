@@ -27,3 +27,11 @@ abbr --set-cursor='!' pf_repeat 'printf "%0.s=" {1..30!}' # Print 30 '=' chars
 # * echo
 abbr --set-cursor echoe "echo -e '%'"
 
+# * p(rint) * helpers
+abbr pIFS "echo -n \"\${IFS}\" | hexdump -C" # block word splitting, or it will split it's own characters :)
+#
+# print path one per line... two ways to do it
+abbr pPATH2 '(IFS=:; for p in $PATH; do echo $p; done)'
+# for fun... here's a diff variant:
+# echo "${PATH//:/$'\n'}"
+abbr pPATH "echo \"\${PATH//:/\$'\n'}\""
