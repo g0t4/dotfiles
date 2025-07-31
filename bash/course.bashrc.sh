@@ -52,7 +52,6 @@ done
 source ~/.iterm2_shell_integration.bash
 # curl -L https://iterm2.com/shell_integration/bash -o ~/.iterm2_shell_integration.bash
 
-
 # * testing macro:
 # function test {
 #     READLINE_LINE="echo hello"
@@ -61,4 +60,7 @@ source ~/.iterm2_shell_integration.bash
 # }
 # bind -x '"\C-g": "test"'
 
-echo "$BASH_VERSION"
+# ** warn if not using custom build:
+[[ "$BASH_VERSION" == 5.3.3* ]] || echo "unexpected bash version: $BASH_VERSION"
+[[ "$BASH" == ~/repos/github/g0t4/bash/bash ]] || echo "NOT USING CUSTOM BUILD OF BASH: $BASH"
+# echo "$BASH_VERSION"
