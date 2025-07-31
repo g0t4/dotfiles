@@ -50,6 +50,6 @@ done
 for script in "$BASH_DOTFILES/startup/vetted-benign/"*.bash; do
     source "$script"
 done
-
-
-
+for script in "$BASH_DOTFILES/startup/full-only/"*.bash; do
+    source "$script"
+done
