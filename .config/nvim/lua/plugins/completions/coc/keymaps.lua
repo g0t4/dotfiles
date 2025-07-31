@@ -126,7 +126,7 @@ local function suck_a_dick_formatter()
 end
 
 local function format_normal()
-    if vim.bo.filetype == "gitconfig" or vim.bo.filetype == "make" then
+    if vim.tbl_contains({ "gitconfig", "make" }, vim.bo.filetype) then
         -- suck_a_dick_formatter()
         vim.cmd("normal! gg=G")
     else
