@@ -17,6 +17,8 @@ PROMPT_USER_COLOR=""
 PROMPT_HOST_COLOR=""
 
 prompt_current_dir() {
+    # FYI! NOT INTENDED FOR DEMOS IN COURSE
+    #  JUST ADDED THIS TO shorten dir name a bit
     current_dir="${PWD##*/}"
     current_dir="${current_dir/pri*course-bash*/pri-bash}"
 }
