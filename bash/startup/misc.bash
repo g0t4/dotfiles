@@ -1,14 +1,13 @@
 #
 # * shell options
 #
-# match ** matches all files + zero+ directories (basically search all nested dirs)
-# shopt -s globstar
+# shopt -s globstar # match ** matches all files + zero+ directories (basically search all nested dirs)
 shopt -s autocd     # cd to a dir with just its name in command position
-shopt -s histreedit # failed history expansions - put back into cmdline to edit (otherwise they are lost)
+# shopt -s histreedit # failed history expansions - put back into cmdline to edit (otherwise they are lost)
 
-abbr options_list_set "echo \$-"
-abbr options_list_shopt "shopt"
-abbr options_list_shopt_executable "shopt -p"
+# abbr options_list_set "echo \$-"
+# abbr options_list_shopt "shopt"
+# abbr options_list_shopt_executable "shopt -p"
 
 #
 # * env vars (without a different home)
@@ -27,7 +26,6 @@ export DOTNET_CLI_TELEMETRY_OPTOUT=1
 
 alias grep="grep --color=auto"
 
-#
 function help_bat() {
     help "$@" | bat -l help
 }
@@ -44,9 +42,11 @@ alias cdr='cd "$(_repo_root)"'
 # alias ....="cd ...."
 # alias .....="cd ....."
 
-if [[ "$(uname)" = "Darwin" ]]; then
-    alias sed=gsed
-fi
+# add if needed later, this could mess me up if I forget I set this
+# FYI do your sed demos on a linux machine?
+# if [[ "$(uname)" = "Darwin" ]]; then
+#     alias sed=gsed
+# fi
 
 # * z wrapper around fish's z command!
 z_echo() {
