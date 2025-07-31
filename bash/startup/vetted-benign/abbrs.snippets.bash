@@ -10,7 +10,7 @@ abbr da "declare -a %"
 abbr declarei "declare -i"
 abbr declarel "declare -l"
 abbr declareu "declare -u"
-abbr declaref "declare -f" # function name/definition
+abbr --set-cursor declaref "declare -f % | bat -l bash" # function name/definition
 # abbr declareF "declare -F" # function name only # basically a way to check if function is defined
 
 # * printf
