@@ -239,10 +239,19 @@ expand_abbr() {
 
 _setup_intercepts_for_rest_of_keys() {
     # * expand on <Space>
-    # bind -x '" ": expand_abbr " "'
+    # TODO drop \C- when course is done, then space auto expands
+    # FYI Ctrl-| doesn't work!... which is fine
+    #  OR just use tab! I will leave tab complete on (or enter) b/c both of those are "visually violent" enough usually that it doesn't matter if there is a flicker
+    # USE CTRL-SPACE for all expansion in course... that's fine!
+    #  don't need the other ctrl overloads
+    # TODO I am curious if I could patch bash to fix this too
+    #  the issue is I can see the cursor literally go to start of the line, draw the prompt, then move to char after prompt and then finally wherever READLINE_POINT sets it... it is a redraw issue entirely
+    #    and it will redraw even if my bind -x does nothing (doesn't even read READLINE_LINE/POINT let alone change them)
     bind -x '"\C- ": expand_abbr " "'
-    bind -x '"\C-;": expand_abbr ";"' # so you can:   gst<;> => git status;
-    bind -x '"\C-|": expand_abbr "|"' # same as ;
+    # uncomment to bring back bindings
+    # bind -x '" ": expand_abbr " "'
+    # bind -x '";": expand_abbr ";"' # so you can:   gst<;> => git status;
+    # bind -x '"|": expand_abbr "|"' # same as ;
     bind -m vi-insert -x '" ": expand_abbr " "'
     bind -m vi-insert -x '";": expand_abbr ";"'
     bind -m vi-insert -x '"|": expand_abbr "|"'
