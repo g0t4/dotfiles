@@ -43,3 +43,7 @@ BASH_DOTFILES="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 # for script in "$BASH_DOTFILES/startup/"*.bash; do
 #     source "$script"
 # done
+
+for script in "$BASH_DOTFILES/startup/vetted-benign/"*.bash; do
+    source "$script"
+done
