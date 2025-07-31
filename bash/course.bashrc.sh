@@ -14,27 +14,27 @@ BASH_DOTFILES="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 source "$BASH_DOTFILES/startup/vetted-benign/early/funcs.bash"
 source "$BASH_DOTFILES/startup/vetted-benign/early/path-init.bash"
 export WES_DOTFILES="$(realpath "$BASH_DOTFILES"/..)"
-#
-# if is_macos; then
-#
-#     prepend_path "/Applications/iTerm.app/Contents/Resources/utilities"
-#
-#     export HOMEBREW_BAT=1
-#
-#     # * below is hardcoded version of:
-#     #   eval $(brew shellenv bash)
-#     prepend_path "/opt/homebrew/bin"
-#     prepend_path "/opt/homebrew/sbin"
-#     export HOMEBREW_PREFIX="/opt/homebrew"
-#     export HOMEBREW_CELLAR="/opt/homebrew/Cellar"
-#     export HOMEBREW_REPOSITORY="/opt/homebrew"
-#     [ -z "${MANPATH-}" ] || export MANPATH=":${MANPATH#:}"
-#     export INFOPATH="/opt/homebrew/share/info:${INFOPATH:-}"
-#
-# fi
-#
-# prepend_path_if_exists ~/.local/bin
-#
+
+if is_macos; then
+
+    prepend_path "/Applications/iTerm.app/Contents/Resources/utilities"
+
+    export HOMEBREW_BAT=1
+
+    # * below is hardcoded version of:
+    #   eval $(brew shellenv bash)
+    prepend_path "/opt/homebrew/bin"
+    prepend_path "/opt/homebrew/sbin"
+    export HOMEBREW_PREFIX="/opt/homebrew"
+    export HOMEBREW_CELLAR="/opt/homebrew/Cellar"
+    export HOMEBREW_REPOSITORY="/opt/homebrew"
+    [ -z "${MANPATH-}" ] || export MANPATH=":${MANPATH#:}"
+    export INFOPATH="/opt/homebrew/share/info:${INFOPATH:-}"
+
+fi
+
+prepend_path_if_exists ~/.local/bin
+
 for script in "$BASH_DOTFILES/startup/vetted-benign/first/"*.bash; do
     source "$script"
 done
