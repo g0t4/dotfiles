@@ -1,0 +1,14 @@
+# Colors
+PROMPT_RESET="\[\e[0m\]"
+PROMPT_RED="\[\e[31m\]"
+PROMPT_GREEN="\[\e[32m\]"
+PROMPT_YELLOW="\[\e[33m\]"
+PROMPT_BLUE="\[\e[34m\]"
+PROMPT_MAGENTA="\[\e[35m\]"
+PROMPT_CYAN="\[\e[36m\]"
+PROMPT_BOLD="\[\e[1m\]"
+PROMPT_UNDERLINE="\[\e[4m\]"
+
+PS1="${PROMPT_CYAN}${PROMPT_BOLD}${PROMPT_UNDERLINE}\W${PROMPT_RESET} \$ "
+
+export PS1
