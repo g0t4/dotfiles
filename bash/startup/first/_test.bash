@@ -103,39 +103,12 @@ start_test() {
     "$@"
 }
 
-# Text attributes
-RESET="\e[0m"
-BOLD="\e[1m"
-DIM="\e[2m"
-ITALIC="\e[3m" # Not supported in all terminals
-UNDERLINE="\e[4m"
-REVERSED="\e[7m"
-
-# * Regular colors
-BLACK="\e[30m"
-RED="\e[31m"
-GREEN="\e[32m"
-YELLOW="\e[33m"
-BLUE="\e[34m"
-MAGENTA="\e[35m"
-CYAN="\e[36m"
-WHITE="\e[37m"
-
-# * Bold + color (single merged sequence)
-BOLD_BLACK="${BOLD}\e[30m"
-BOLD_RED="${BOLD}\e[31m"
-BOLD_GREEN="${BOLD}\e[32m"
-BOLD_YELLOW="${BOLD}\e[33m"
-BOLD_BLUE="${BOLD}\e[34m"
-BOLD_MAGENTA="${BOLD}\e[35m"
-BOLD_CYAN="${BOLD}\e[36m"
-BOLD_WHITE="${BOLD}\e[37m"
-
-# 256 colors - 8-bit color
-# ESC[38;5;{ID}m	Set foreground color.
-# ESC[48;5;{ID}m	Set background color.
-
-# Example usage
 label_test() {
-    echo -e "${BOLD_CYAN}TEST:${RESET} ${BOLD}${ITALIC}$*${RESET}"
+    # KEEP AS LOCAL variables for now, use PROMPT_* if you want colors in other spots b/c that's an easy name to grep codebase
+    local RESET="\e[0m"
+    local BOLD="\e[1m"
+    local ITALIC="\e[3m"
+    local CYAN="\e[36m"
+
+    echo -e "${CYAN}TEST:${RESET} ${BOLD}${ITALIC}$*${RESET}"
 }
