@@ -1,6 +1,7 @@
 #
 # * shell options
-#
+# FYI! careful about adding any shopt overrides... just make sure to cover in course where appropriate
+#  and like autocd, don't rely on it w/o first explaning it... but otherwise it is fine to have some trivial changes that would require a demo you wouldn't normally do (i.e. cd w/o cd)
 # shopt -s globstar # match ** matches all files + zero+ directories (basically search all nested dirs)
 shopt -s autocd # cd to a dir with just its name in command position
 # shopt -s histreedit # failed history expansions - put back into cmdline to edit (otherwise they are lost)
@@ -22,12 +23,6 @@ alias cdr='cd "$(_repo_root)"'
 # alias ...="cd ..."
 # alias ....="cd ...."
 # alias .....="cd ....."
-
-# add if needed later, this could mess me up if I forget I set this
-# FYI do your sed demos on a linux machine?
-# if [[ "$(uname)" = "Darwin" ]]; then
-#     alias sed=gsed
-# fi
 
 # * z wrapper around fish's z command!
 z_echo() {
