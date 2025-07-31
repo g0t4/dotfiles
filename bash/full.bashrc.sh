@@ -50,3 +50,6 @@ done
 for script in "$BASH_DOTFILES/startup/full-only/"*.bash; do
     source "$script"
 done
+
+# remove if any issues:
+source ~/.iterm2_shell_integration.bash

@@ -47,3 +47,6 @@ done
 for script in "$BASH_DOTFILES/startup/course-only/"*.bash; do
     source "$script"
 done
+
+# remove if any issues:
+source ~/.iterm2_shell_integration.bash
