@@ -245,7 +245,6 @@ _setup_intercepts_for_rest_of_keys() {
     bind -m vi-insert -x '" ": expand_abbr " "'
     bind -m vi-insert -x '";": expand_abbr ";"'
     bind -m vi-insert -x '"|": expand_abbr "|"'
-    # TODO intercept tab and expand on tab complete too (else right now you have to backup (backspace) and then hit space again)
 }
 _setup_intercepts_for_rest_of_keys
 
@@ -402,13 +401,12 @@ list_abbrs() {
 
 _print_abbr_definition() {
     local name="$1"
-    local set_cursor value regex func cmd_only anywhere
-    value="${abbrs[$name]}"
-    set_cursor="${abbrs_set_cursor[$name]}"
-    regex="${abbrs_regex[$name]}"
-    func="${abbrs_function[$name]}"
-    cmd_only="${abbrs_command[$name]}"
-    anywhere="${abbrs_anywhere[$name]}"
+    local value="${abbrs[$name]}"
+    local set_cursor="${abbrs_set_cursor[$name]}"
+    local regex="${abbrs_regex[$name]}"
+    local func="${abbrs_function[$name]}"
+    local cmd_only="${abbrs_command[$name]}"
+    local anywhere="${abbrs_anywhere[$name]}"
     local -a opts=()
     if [[ -n "$set_cursor" ]]; then
         opts+=("--set-cursor=$set_cursor")
