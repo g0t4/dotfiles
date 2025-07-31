@@ -34,8 +34,8 @@ z_echo() {
     fish -c "z --echo $*"
 }
 z() {
-    dir="$(z_echo "$@")"
-    last_rc=$?
+    local dir="$(z_echo "$@")"
+    local last_rc=$?
     if ((last_rc != 0)); then
         echo "$dir" # show fail message from z command
         return $last_rc
@@ -107,9 +107,6 @@ take() {
 
     cd -- "$dir" || return # || return for shellcheck
 }
-
-# *** lsof
-abbr 'lsof_bash_shell' 'sudo lsof -p $$'
 
 function multicd {
     # for abbr
