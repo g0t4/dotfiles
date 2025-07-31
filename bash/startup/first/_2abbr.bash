@@ -1,4 +1,4 @@
-source _test.bash 2>/dev/null || true # ignore load failure, source is for bash LS (i.e. F12) and shellcheck
+source _1test.bash 2>/dev/null || true # ignore load failure, source is for bash LS (i.e. F12) and shellcheck
 
 declare -A abbrs=()
 declare -A abbrs_set_cursor=()
