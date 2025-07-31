@@ -33,6 +33,9 @@ if is_macos; then
 
 fi
 
+# * Force prepend custom build of bash
+force_prepend_path ~/repos/github/g0t4/bash
+
 prepend_path_if_exists ~/.local/bin
 
 for script in "$BASH_DOTFILES/startup/vetted-benign/first/"*.bash; do

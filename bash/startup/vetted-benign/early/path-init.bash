@@ -35,6 +35,16 @@ prepend_path_if_exists() {
     fi
 }
 
+force_prepend_path() {
+    # make sure it is at the front of the list
+
+    # TODO remove if in list already
+
+    # for now stick it on front no matter what
+    # can result in duplicates, which is NBD
+    PATH="$1${PATH:+:$PATH}"
+}
+
 # * ensure path is consistenly setup regardless if login shell or not
 #  normally this is only run in /etc/profile for login shells
 #  I'd prefer I handle it here and just cache when it was run with an env var
