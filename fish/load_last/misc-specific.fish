@@ -2751,6 +2751,7 @@ abbr b bash
 #   99% of the time it's ok to just use `bash` from fish shell... and inherit the env
 #     also ok to not use --login on these too as my startup files don't differentiate
 #
+abbr bash_full_rc 'bash --rcfile "$WES_DOTFILES/bash/full.bashrc.sh"'
 abbr bash_env_no_inherit "env -i HOME=$HOME \$(which bash)"
 abbr bash_env_no_inherit_no_startup "env -i HOME=$HOME \$(which bash) --noprofile --norc"
 function bash_env_iterm_inherit_without_path
