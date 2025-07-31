@@ -51,3 +51,14 @@ done
 # remove if any issues:
 source ~/.iterm2_shell_integration.bash
 # curl -L https://iterm2.com/shell_integration/bash -o ~/.iterm2_shell_integration.bash
+
+
+# * testing macro:
+# function test {
+#     READLINE_LINE="echo hello"
+#     READLINE_POINT=11
+#     return 124
+# }
+# bind -x '"\C-g": "test"'
+
+echo "$BASH_VERSION"
