@@ -70,13 +70,15 @@ async def prepare_new_profile(session: iterm2.Session, force_local_fish: bool) -
             new_profile.set_use_custom_command("Yes")
             print("FISH FORCE LOCAL")
         elif was_bash:
+            HOME = os.getenv("HOME")
             # if using bash (locally) then mirror that in new tab
             # ALLOW iterm to pass env vars that are crucial for a new top-level shell
             #   your startup files can override as needed (i.e. currently they will change path to be consistent)
-            bash_cmd = f"/opt/homebrew/bin/bash --login"
+            # PRN would be nice to use fish shell path precedence for this
+            bash_cmd = f"{HOME}/repos/github/g0t4/bash/bash --login"
+            print(f"BASH LOCAL: {bash_cmd}")
             new_profile.set_command(bash_cmd)
             new_profile.set_use_custom_command("Yes")
-            print("BASH LOCAL")
 
     return new_profile, is_ssh
 
