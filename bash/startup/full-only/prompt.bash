@@ -1,4 +1,5 @@
 # Colors
+# FYI I use these in other spots since its an easy prefix to hunt down should I want to remove/rename it
 PROMPT_RESET="\[\e[0m\]"
 PROMPT_RED="\[\e[31m\]"
 PROMPT_GREEN="\[\e[32m\]"
@@ -9,12 +10,6 @@ PROMPT_CYAN="\[\e[36m\]"
 PROMPT_BOLD="\[\e[1m\]"
 PROMPT_UNDERLINE="\[\e[4m\]"
 PROMPT_ITALIC="\e[3m"
-
-# Components
-# PROMPT_USER_COLOR="$PROMPT_GREEN\u$PROMPT_RESET"
-PROMPT_USER_COLOR=""
-# PROMPT_HOST_COLOR="$PROMPT_BLUE@\h$PROMPT_RESET"
-PROMPT_HOST_COLOR=""
 
 prompt_current_dir() {
     # FYI! NOT INTENDED FOR DEMOS IN COURSE
@@ -49,9 +44,5 @@ PS1="${PROMPT_CYAN}${PROMPT_BOLD}${PROMPT_UNDERLINE}\${current_dir}${PROMPT_RESE
 # PROMPT_DIR_COLOR="${PROMPT_CYAN}${PROMPT_BOLD}${PROMPT_UNDERLINE}\W${PROMPT_RESET}"
 
 # LAST_CMDLINE_STATUS=' [PIPE: ${PIPESTATUS[*]} ] $?'
-
-# # Prompt
 # PS1="${PROMPT_USER_COLOR}${PROMPT_HOST_COLOR}${PROMPT_DIR_COLOR}${LAST_CMDLINE_STATUS} \$ "
-#
-# Optional: export for subshells
 export PS1
