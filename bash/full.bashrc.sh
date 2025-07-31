@@ -15,8 +15,8 @@ is_linux() { [[ "$UNAME_S" = "Linux" ]]; }
 
 # * RUN BEFORE any path mods...
 BASH_DOTFILES="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
-source "$BASH_DOTFILES/early/funcs.bash"
-source "$BASH_DOTFILES/early/path-init.bash"
+source "$BASH_DOTFILES/startup/vetted-benign/early/funcs.bash"
+source "$BASH_DOTFILES/startup/vetted-benign/early/path-init.bash"
 export WES_DOTFILES="$(realpath "$BASH_DOTFILES"/..)"
 
 if is_macos; then
