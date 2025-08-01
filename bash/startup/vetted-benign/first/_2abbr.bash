@@ -1152,7 +1152,8 @@ EOF_WRAPPER
 function look_at_all_fish_functions_to_find_wrappables {
     readarray -t funcs <<<"$(fish -c functions)"
     for name in "${funcs[@]}"; do
-        # TODO look at what I can add
-        echo "$name"
+        if ! declare -f "$name" >/dev/null 2>&1; then
+            echo "$name"
+        fi
     done
 }
