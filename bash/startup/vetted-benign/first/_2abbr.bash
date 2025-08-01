@@ -65,10 +65,16 @@ lookup_expanded() {
     local name
     for name in "${!abbrs_regex[@]}"; do
         # declare -p name >&2
-        regex="${abbrs_regex["$name"]}"
+        #
+        # * regex value w/ implicit pattern behavior:
+        # FYI ^ on front is for implicit pattern start requirement
+        # TODO? implicit $ on end of pattern?
+        # TODO look into fish's pattern requirements, it seems to have an implicit ^ at least... try `atail1` in fish, it won't expand
+        regex="^${abbrs_regex["$name"]}"
+        #
         # declare -p regex >&2
         # FYI careful with "" around $regex... will force literal match on regex variable's expanded text value (including [0-9] wildcards)
-        if [[ "$word" =~ ^$regex ]]; then
+        if [[ "$word" =~ $regex ]]; then
             # lookup func FOR this abbr (not one above)
             local func="${abbrs_function["$name"]}"
             # declare -p func >&2 # * SUPER helpful to see when expanding regexes!
