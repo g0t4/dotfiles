@@ -12,27 +12,31 @@ regexp=^(?:(\S+)\/)*(\S+):(\S+)\s
 colours=default,yellow,bright_white,blue
 =====
 
-# TODO verify these work with ollama size column (these are unchanged from docker image ls)
 # *** SIZES
+#  FYI sizes are adjusted for typical model sizes
 # Size 'K'
 regexp=(?<=\s)\d+[.,]?\d*\s?(KB?|B)
-colours=bold green
-======
-# Size 'M', 2 digits
-regexp=(?<=\s)\d{1,2}[.,]?\d*\s?MB?
 colours=green
 ======
-# Size 'M' 3+ digits
+# Size 'M' 3+ digits (> 100MB)
 regexp=(?<=\s)\d{3,4}[.,]?\d*\s?MB?
+colours=green
+======
+# Size GB (base color, IOTW for all lines except that match below)
+regexp=(?<=\s)\d+[.,]?\d*\s?GB?
 colours=yellow
 ======
-# Size 'G'
-regexp=(?<=\s)\d+[.,]?\d*\s?GB?
+# Size 10-19 GB
+regexp=(?<=\s)[1]\d[.,]?\d*\s?GB?
 colours=red
 =====
-# Size 2+ GB
-regexp=(?<=\s)[23456789]+[.,]?\d*\s?GB?
+# Size 20-29 GB
+regexp=(?<=\s)[2]\d[.,]?\d*\s?GB?
 colours=bold red
+=====
+# Size 30+ GB
+regexp=(?<=\s)[3456789]\d+[.,]?\d*\s?GB?
+colours=bold magenta
 # todo >= 10 GB => i.e. windows images... though I wouldn't be using zsh to list them!
 =====
 
