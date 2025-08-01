@@ -985,7 +985,7 @@ test_expand_abbr() {
     label_test "should prefix regex with ^... fish appears to do this - quick stop gap for expanding anything that matches a regex on the end of it!"
     reset_abbrs
     # FYI I could add this to parser too if need be
-    function reggy { echo 'expanded';  }
+    function reggy { echo 'expanded'; }
     abbr reggy --regex 'tail[0-9]' --function reggy
     READLINE_LINE="othertail1"
     READLINE_POINT=10
@@ -1147,4 +1147,12 @@ EOF_WRAPPER
     }
     # look_for_non_abbr_functions
 
+}
+
+function look_at_all_fish_functions_to_find_wrappables {
+    readarray -t funcs <<<"$(fish -c functions)"
+    for name in "${funcs[@]}"; do
+        # TODO look at what I can add
+        echo "$name"
+    done
 }
