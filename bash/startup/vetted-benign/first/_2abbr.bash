@@ -1154,7 +1154,7 @@ function look_at_all_fish_functions_to_find_wrappables {
     for name in "${funcs[@]}"; do
         if ! declare -f "$name" >/dev/null 2>&1; then
             echo -e "\033[0;31m$name\033[0m"
-            fish -c "functions $name"
+            fish -c "functions $name" | head -5
         fi
     done
 }
