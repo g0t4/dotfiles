@@ -1153,7 +1153,7 @@ function look_at_all_fish_functions_to_find_wrappables {
     readarray -t funcs <<<"$(fish -c functions)"
     for name in "${funcs[@]}"; do
         if ! declare -f "$name" >/dev/null 2>&1; then
-            echo "$name"
+            echo -e "\033[0;31m$name\033[0m"
             fish -c "functions $name"
         fi
     done
