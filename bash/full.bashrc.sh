@@ -37,6 +37,9 @@ if is_macos; then
 
 fi
 
+# * Force prepend custom build of bash
+force_prepend_path ~/repos/github/g0t4/bash
+
 prepend_path_if_exists ~/.local/bin
 
 for script in "$BASH_DOTFILES/startup/vetted-benign/first/"*.bash; do
@@ -47,9 +50,11 @@ source "$BASH_DOTFILES/.generated.fish_func_wrappers.bash"
 for script in "$BASH_DOTFILES/startup/vetted-benign/"*.bash; do
     source "$script"
 done
+
+# remove if any issues:
+source ~/.iterm2_shell_integration.bash
+
 for script in "$BASH_DOTFILES/startup/full-only/"*.bash; do
     source "$script"
 done
 
-# remove if any issues:
-source ~/.iterm2_shell_integration.bash

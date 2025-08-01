@@ -47,9 +47,6 @@ source "$BASH_DOTFILES/.generated.fish_func_wrappers.bash"
 for script in "$BASH_DOTFILES/startup/vetted-benign/"*.bash; do
     source "$script"
 done
-for script in "$BASH_DOTFILES/startup/course-only/"*.bash; do
-    source "$script"
-done
 
 # remove if any issues:
 source ~/.iterm2_shell_integration.bash
@@ -67,3 +64,7 @@ source ~/.iterm2_shell_integration.bash
 [[ "$BASH_VERSION" == 5.3.3* ]] || echo "unexpected bash version: $BASH_VERSION"
 [[ "$BASH" == ~/repos/github/g0t4/bash/bash ]] || echo "NOT USING CUSTOM BUILD OF BASH: $BASH"
 # echo "$BASH_VERSION"
+
+for script in "$BASH_DOTFILES/startup/course-only/"*.bash; do
+    source "$script"
+done
