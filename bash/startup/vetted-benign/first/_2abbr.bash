@@ -68,7 +68,7 @@ lookup_expanded() {
         regex="${abbrs_regex["$name"]}"
         # declare -p regex >&2
         # FYI careful with "" around $regex... will force literal match on regex variable's expanded text value (including [0-9] wildcards)
-        if [[ "$word" =~ $regex ]]; then
+        if [[ "$word" =~ ^$regex ]]; then
             # lookup func FOR this abbr (not one above)
             local func="${abbrs_function["$name"]}"
             # declare -p func >&2 # * SUPER helpful to see when expanding regexes!
