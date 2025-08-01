@@ -976,6 +976,17 @@ test_expand_abbr() {
     expect_equal "$READLINE_LINE" "echo hello (bar2 "
     expect_equal "$READLINE_POINT" 17
 
+    label_test "should prefix regex with ^... fish appears to do this - quick stop gap for expanding anything that matches a regex on the end of it!"
+    reset_abbrs
+    # FYI I could add this to parser too if need be
+    function reggy { echo 'expanded';  }
+    abbr reggy --regex 'tail[0-9]' --function reggy
+    READLINE_LINE="othertail1"
+    READLINE_POINT=10
+    expand_abbr " "
+    expect_equal "$READLINE_LINE" "othertail1 "
+    expect_equal "$READLINE_POINT" 11
+
     # TODO assume separators for pipelines/lists indicate next word is in command position
     # simple command is what I have now:
     #   gst<SPACE> => git status
