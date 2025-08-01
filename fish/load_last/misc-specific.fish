@@ -1420,7 +1420,7 @@ if command -q ollama
     abbr olcp "ollama cp"
     abbr ole "export OLLAMA_HOST='ollama:11434'"
     abbr olh "ollama help"
-    abbr oll "ollama list"
+    abbr oll "grc ollama list"
     abbr olp "ollama pull"
     abbr olps "ollama ps"
     abbr olpush "ollama push"
@@ -1460,7 +1460,7 @@ if command -q ollama
         # model has n_ctx_training=32k but it is supposedly able to handle up to 128K tokens
     end
 
-    abbr olshow "ollama show"
+    abbr olshow "grc ollama show"
     abbr --set-cursor olshow_template "ollama show --template % | bat -l go" # go, jinja both seem ok
     abbr --set-cursor olshow_modelfile "ollama show --modelfile % | bat -l Dockerfile"
 end

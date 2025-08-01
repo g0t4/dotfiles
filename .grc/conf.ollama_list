@@ -1,0 +1,76 @@
+# FYI largely a copy of `docker images [ls]` output because:
+# - both have image name:tag formats
+# - both have age of entries
+# - both have sizes, i.e. ending in GB/MB
+
+# ID column (12 alphanumerics in a row w/ whitespace around but not within)
+regexp=\s+([a-z0-9]{12})\s+
+colours=unchanged,bright_cyan
+=====
+# Model Name:Tag
+regexp=^(?:(\S+)\/)*(\S+):(\S+)\s
+colours=default,yellow,bright_white,blue
+=====
+
+# TODO verify these work with ollama size column (these are unchanged from docker image ls)
+# *** SIZES
+# Size 'K'
+regexp=(?<=\s)\d+[.,]?\d*\s?(KB?|B)
+colours=bold green
+======
+# Size 'M', 2 digits
+regexp=(?<=\s)\d{1,2}[.,]?\d*\s?MB?
+colours=green
+======
+# Size 'M' 3+ digits
+regexp=(?<=\s)\d{3,4}[.,]?\d*\s?MB?
+colours=yellow
+======
+# Size 'G'
+regexp=(?<=\s)\d+[.,]?\d*\s?GB?
+colours=red
+=====
+# Size 2+ GB
+regexp=(?<=\s)[23456789]+[.,]?\d*\s?GB?
+colours=bold red
+# todo >= 10 GB => i.e. windows images... though I wouldn't be using zsh to list them!
+=====
+
+# *** AGES:
+# TODO verify these work with ollama modified column (these are unchanged from docker image ls)
+# CREATED seconds/minutes
+regexp=[\da-f]{12}\s+((?:About a|\d+) (?:seconds?|minutes?) ago)
+colours=unchanged,bold green
+======
+# CREATED About a minute ago
+regexp=\s+(About a minute ago)\s\w+
+colours=unchanged,on_green bold white
+======
+# CREATED About an hour ago
+regexp=\s+(About an hour ago)\s
+colours=unchanged,green
+======
+# CREATED hours
+regexp=\s+(\d+\shours\s\w+)
+colours=unchanged,bright_green
+======
+# CREATED days
+regexp=\s+(\d+\sdays\s\w+)
+colours=unchanged,green
+======
+# CREATED weeks
+regexp=\s+(\d+\sweeks\s\w+)
+colours=unchanged,yellow
+======
+# CREATED months
+regexp=\s+(\d+\smonths\s\w+)
+colours=unchanged,dark yellow
+======
+# CREATED years ago
+regexp=\s+(\d+\syears ago\s)
+colours=unchanged,black
+
+=====
+# HEADERS
+regexp=(?:\s|^)(NAME|ID|SIZE|MODIFIED)(?:\s|$)
+colours=default,underline
