@@ -1012,15 +1012,17 @@ test_expand_abbr() {
     reset_abbrs
     # FYI I could add this to parser too if need be
     abbr getrid ofme
+    expect_equal "${abbrs['getrid']}" "ofme"
+    expect_equal "$(declare -F getrid)" "getrid" # returns name if defined, else empty, also non-zero RC
     # * first make sure it expands
     READLINE_LINE="getrid"
     READLINE_POINT=6
     expand_abbr " "
-    expect_equal "${abbrs['getrid']}" "ofme"
     expect_equal "$READLINE_POINT" 5
     # * then test removing it:
     abbr --remove getrid
     expect_equal "${abbrs['getrid']}" ""
+    expect_equal "$(declare -F getrid)" "" # returns name if defined, else empty, also non-zero RC
     READLINE_LINE="getrid"
     READLINE_POINT=6
     expand_abbr " "
