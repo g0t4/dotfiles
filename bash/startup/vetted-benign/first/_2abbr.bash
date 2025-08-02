@@ -993,6 +993,24 @@ test_expand_abbr() {
     expect_equal "$READLINE_LINE" "othertail1 "
     expect_equal "$READLINE_POINT" 11
 
+    label_test "remove abbr"
+    reset_abbrs
+    # FYI I could add this to parser too if need be
+    abbr getrid ofme
+    # * first make sure it expands
+    READLINE_LINE="getrid"
+    READLINE_POINT=6
+    expand_abbr " "
+    expect_equal "$READLINE_LINE" "ofme "
+    expect_equal "$READLINE_POINT" 5
+    # * then test removing it:
+    abbr --remove getrid
+    READLINE_LINE="getrid"
+    READLINE_POINT=6
+    expand_abbr " "
+    expect_equal "$READLINE_LINE" "getrid "
+    expect_equal "$READLINE_POINT" 7
+
     # TODO assume separators for pipelines/lists indicate next word is in command position
     # simple command is what I have now:
     #   gst<SPACE> => git status
