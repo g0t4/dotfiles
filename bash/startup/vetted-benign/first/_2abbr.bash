@@ -1016,10 +1016,11 @@ test_expand_abbr() {
     READLINE_LINE="getrid"
     READLINE_POINT=6
     expand_abbr " "
-    expect_equal "$READLINE_LINE" "ofme "
+    expect_equal "${abbrs['getrid']}" "ofme"
     expect_equal "$READLINE_POINT" 5
     # * then test removing it:
     abbr --remove getrid
+    expect_equal "${abbrs['getrid']}" ""
     READLINE_LINE="getrid"
     READLINE_POINT=6
     expand_abbr " "
