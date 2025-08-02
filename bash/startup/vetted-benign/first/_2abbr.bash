@@ -472,11 +472,10 @@ _list_abbrs() {
     done
 }
 
-remove_abbr() {
+_remove_abbr() {
     name="$1"
-    echo "removing abbr $name"
     abbrs["$name"]=
-    # TODO remove func too
+    _remove_abbr_function "$name"
 }
 
 # shellcheck disable=SC2317 # sick of it complaining about unused options in while loop
@@ -513,7 +512,7 @@ abbr() {
                 # abbr --remove foo
                 shift
                 # only next arg is the name
-                remove_abbr "$1"
+                _remove_abbr "$1"
                 return
                 ;;
             --set-cursor=*)
@@ -613,6 +612,17 @@ abbr() {
 
 }
 
+_remove_abbr_function() {
+    name="$1"
+    local body=$(declare -f "$name")
+    local must_contain="echo 'abbrs are not intended to be executed directly"
+    if [[ "$body" == *"$must_contain"* ]]; then
+        unset "$name"
+    else
+        return 1
+    fi
+}
+
 reset_abbrs() {
     if ((${#abbrs[@]} >= 10)); then
         # most tests have one abbr (maybe two?) ... so use 10 as a threshold to assume you ran tests in a real shell (after real abbrs loaded) and reset them and that's not wise to then use for real
@@ -628,11 +638,7 @@ reset_abbrs() {
 
     # * clear stub functions (from tab completion)
     for name in "${abbrs_stub_func_names[@]}"; do
-        local body=$(declare -f "$name")
-        local must_contain="echo 'abbrs are not intended to be executed directly"
-        if [[ "$body" == *"$must_contain"* ]]; then
-            unset "$name"
-        fi
+        _remove_abbr_function "$name"
     done
     abbrs_stub_func_names=()
 }
@@ -1008,6 +1014,7 @@ test_expand_abbr() {
     expect_equal "$READLINE_LINE" "othertail1 "
     expect_equal "$READLINE_POINT" 11
 
+    # * --remove name
     label_test "remove abbr"
     reset_abbrs
     # FYI I could add this to parser too if need be
