@@ -1062,6 +1062,8 @@ EOF
         video_editing_just_shift_to_mp4_one_video
         video_editing_total_duration
 
+        wcl
+
         git_unpushed_commits
         bitmaths
         touchp
