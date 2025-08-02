@@ -689,6 +689,10 @@ test_parse_abbr_args() {
     expect_equal "${abbrs_set_cursor[foo]}" '_'
     reset_abbrs
 
+    # TODO warn if set-cursor char is NOT in a static abbr value?
+    #  can't really do that here though, not reliably?
+    #  if its dynamic have to check when triggered
+
     # * tests --position
     start_test abbr foo=bar --position=anywhere
     expect_equal "${abbrs[foo]}" "bar"
