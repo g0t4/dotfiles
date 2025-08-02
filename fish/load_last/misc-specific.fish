@@ -1640,7 +1640,7 @@ end
 
 function _get_first_file_extension
     # PRN move to top level fish function?
-    echo $argv[1] | sed 's/.*\.//'
+    echo $argv[1] | gsed 's/.*\.//'
 end
 
 function _get_first_file_dir
