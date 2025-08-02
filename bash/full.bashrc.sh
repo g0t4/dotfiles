@@ -11,3 +11,7 @@ source "$BASH_DOTFILES/.generated.abbrs.bash"
 for script in "$BASH_DOTFILES/startup/full-only/"*.bash; do
     source "$script"
 done
+
+# would be interesting to get this working fully with abbr:
+#   https://github.com/akinomyoga/ble.sh
+#   just a few issues with how spaces trigger but otherwise looks ok:
