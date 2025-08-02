@@ -472,6 +472,13 @@ _list_abbrs() {
     done
 }
 
+remove_abbr() {
+    name="$1"
+    echo "removing abbr $name"
+    abbrs["$name"]=
+    # TODO remove func too
+}
+
 # shellcheck disable=SC2317 # sick of it complaining about unused options in while loop
 abbr() {
     # if called with no args, list abbrs like fish shell
@@ -501,6 +508,14 @@ abbr() {
     #  so I don't have to statefully parse options (yet)
     while [[ $# -gt 0 ]]; do
         case "$1" in
+            --erase | --remove)
+                # abbr --erase foo
+                # abbr --remove foo
+                shift
+                # only next arg is the name
+                remove_abbr "$1"
+                return
+                ;;
             --set-cursor=*)
                 set_cursor="${1#*=}" # strip (non-greedy) first matching part (through =)
                 shift
