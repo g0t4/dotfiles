@@ -54,7 +54,9 @@ abbr echo_array_length='echo ${#%[@]}' --set-cursor
 
 # * for loops
 abbr for_in_array='for item in "${%[@]}"; do echo $item; done' --set-cursor
-abbr for_in_range='for i in "{1..10%}"; do echo $i; done' --set-cursor
+abbr for_in_range_brace_expansion='for i in {1..10%}; do echo $i; done' --set-cursor
+abbr for_in_nums_brace_expansion='for i in {1,3,5%}; do echo $i; done' --set-cursor
+abbr for_in_seq='for i in $(seq 1 10%); do echo $i; done' --set-cursor
 abbr for_in_array_indicies='for i in "${!%[@]}"; do echo "${i} ${name[$i]}"; done' --set-cursor
 
 # * p(rint) * helpers
