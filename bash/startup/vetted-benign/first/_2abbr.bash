@@ -1051,7 +1051,6 @@ EOF
     # TODO MOVE back to inside generate above once done with initial review:
     non_abbr_functions=(
 
-
         # via look_at_all_fish_functions_to_find_wrappables
         video_editing_1_check_audio
         video_editing_2_convert_30fps
@@ -1063,6 +1062,8 @@ EOF
         video_editing_total_duration
 
         wcl
+        prd
+        # pwd # not yet for course
 
         git_unpushed_commits
         bitmaths
