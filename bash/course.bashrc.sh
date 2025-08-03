@@ -12,3 +12,6 @@ source "$BASH_DOTFILES/.generated.abbrs.bash"
 for script in "$BASH_DOTFILES/startup/course-only/"*.bash; do
     source "$script"
 done
+
+# some things to remove for first course:
+abbr --remove wc
