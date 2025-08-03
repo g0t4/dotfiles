@@ -1413,6 +1413,15 @@ if command -q llama-server
         abbr llama_vim_7_spec_verbose $_spec7 $verbose
         abbr llama_vim_14spec $_spec14
         abbr llama_vim_14spec_verbose $_spec14 $verbose
+
+        # TODO will there be a separte base model for FIM?
+        set qwen3_q4 "llama-server -hf unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF:Q4_K_M $host --batch-size 2048 --ubatch-size 2048 --flash-attn --n-gpu-layers 99"
+        set qwen3_q8 "llama-server -hf unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF:Q8_0 $host --batch-size 2048 --ubatch-size 2048 --flash-attn --n-gpu-layers 99"
+        abbr llama_ask_qwen3q4 $qwen3_q4
+        abbr llama_ask_qwen3q4_verbose $qwen3_q4 $verbose
+        abbr llama_ask_qwen3q8 $qwen3_q8
+        abbr llama_ask_qwen3q8_verbose $qwen3_q8 $verbose
+
     end
     _setup_llama_server
 end
