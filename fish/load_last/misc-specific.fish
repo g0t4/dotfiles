@@ -841,6 +841,9 @@ if $IS_MACOS
     abbr --set-cursor sedd "gsed --debug -i 's/%//g'"
     # abbr sed gsed # encourage the use of gsed so it behaves like linux?
     #  i.e. gnu allows `sed -i` whereas BSD requires the extension `sed -i''` be passed
+
+    abbr sed_duplicate_lines 'sed \'N; /^\(.*\)\n\1$/!P; D\' file'
+
 else
     # FYI mostly just for a few scripts I have where I want to know I am using the same version of sed regardless so I alias gsed to sed on arch and other linux distros
     function gsed --wraps sed
