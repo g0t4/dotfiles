@@ -917,6 +917,26 @@ function z
     end
 end
 
+# * z --echo
+abbr --position=anywhere --set-cursor --function _abbr_ze -- ze
+function _abbr_ze
+    # intended to easily select a directory for another outer command, or just print a path
+    # i.e.:
+    #    mv foo.txt ze<SPACE> => mv (z --echo _)
+    #    ze<SPACE> => z --echo _
+    #       # or ... what about:
+    #       echo (z --echo _)?
+    #
+    # echo "'"(commandline -b)"'"
+    # return
+    if string match --quiet --regex '^ze $' (commandline -b)
+        # only 'ze ' at start of line, then don't use cmd substitution
+        echo 'z --echo'
+        return
+    end
+    echo '(z --echo %)' # insert z --echo so you can pick a path to include in another outer command
+end
+
 # *** terraform
 if command -q terraform
 
