@@ -1412,16 +1412,15 @@ if command -q llama-server
         # FYI I confirmed args override any earlier usages (including in preset combos)
 
         # First one is for mindlessly saying "just make it work"
-        abbr llama_ask "$_spec7"
-
+        abbr lsq25 $_spec7
         # other presets to select from with tab completion
-        abbr llama_ask7default $_default7
-        abbr llama_ask7spec $_spec7
-        # FYI no 14-default
-        abbr llama_ask14spec $_spec14
-        abbr llama_ask_verbose_7 $_default7 $verbose
-        abbr llama_ask_verbose_7_spec $_spec7 $verbose
-        abbr llama_ask_verbose_14_spec $_spec14 $verbose
+        abbr lsq25nonspec $_default7
+        abbr lsq25spec7 $_spec7
+        # FYI no 14-default (non-spec)
+        abbr lsq25spec14 $_spec14
+        abbr lsverbose_q25nonspec $_default7 $verbose
+        abbr lsverbose_q25spec7 $_spec7 $verbose
+        abbr lsverbose_q25spec14 $_spec14 $verbose
 
         # * llama-server args for llama.[vim|vscode] FIM predictions
         #   diff settings, keep more of presets given the presets were designed for llama.vim
@@ -1429,21 +1428,12 @@ if command -q llama-server
         set _spec14 "llama-server --fim-qwen-14b-spec $host"
         set _default7 "llama-server --fim-qwen-7b-default $host"
 
-        abbr llama_vim $_default7
-        abbr llama_vim_7 $_default7
-        abbr llama_vim_7_verbose $_default7 $verbose
-        abbr llama_vim_7_spec $_spec7
-        abbr llama_vim_7_spec_verbose $_spec7 $verbose
-        abbr llama_vim_14spec $_spec14
-        abbr llama_vim_14spec_verbose $_spec14 $verbose
-
-        # TODO will there be a separte base model for FIM?
         set qwen3_q4 "llama-server -hf unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF:Q4_K_M $host --batch-size 2048 --ubatch-size 2048 --flash-attn --n-gpu-layers 99"
         set qwen3_q8 "llama-server -hf unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF:Q8_0 $host --batch-size 2048 --ubatch-size 2048 --flash-attn --n-gpu-layers 99"
-        abbr llama_ask_qwen3q4 $qwen3_q4
-        abbr llama_ask_qwen3q4_verbose $qwen3_q4 $verbose
-        abbr llama_ask_qwen3q8 $qwen3_q8
-        abbr llama_ask_qwen3q8_verbose $qwen3_q8 $verbose
+        abbr lsqwen3q4 $qwen3_q4
+        abbr lsqwen3q4_verbose $qwen3_q4 $verbose
+        abbr lsqwen3q8 $qwen3_q8
+        abbr lsqwen3q8_verbose $qwen3_q8 $verbose
 
         # TODO --batch-size / --ubatch-size # memory impact?
         # --ctx-size 0 => means load from model or default 4096
