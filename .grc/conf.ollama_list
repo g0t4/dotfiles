@@ -7,8 +7,8 @@
 regexp=\s+([a-z0-9]{12})\s+
 colours=unchanged,bright_cyan
 =====
-# Model Name:Tag
-regexp=^(?:(\S+)\/)*(\S+):(\S+)\s
+# Model repo/name:tag (:tag makes this unique for ollama list output)
+regexp=(?:(\S+)\/)*(\S+):(\S+)\s
 colours=default,yellow,bright_white,blue
 =====
 
