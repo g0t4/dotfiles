@@ -1453,8 +1453,21 @@ if command -q ollama
     abbr olc "ollama create"
     abbr olcp "ollama cp"
     abbr ole "export OLLAMA_HOST='ollama:11434'"
+
+    # * list
     abbr olh "ollama help"
-    abbr oll "grc ollama list"
+    #
+    # abbr oll "grc ollama list"
+    # until I get colors worked out so they're not positional (i.e. column X) then I'll default to bat coloring:
+    abbr --set-cursor -- oll 'ollama list | awk \'{OFS="\t" } /%/ { print $3$4,$1,$2,$5" "$6" "$7" "$8" "$9 }\' | sort -h | bat -l tsv --color=always | column -t'
+    abbr --set-cursor -- ollg 'ollama list | awk \'{OFS="\t" } // { print $3$4,$1,$2,$5" "$6" "$7" "$8" "$9 }\' | sort -h | column -t | grcat conf.ollama_list'
+    #
+    abbr ollqwen3coder "grc ollama list qwen3-coder"
+    abbr ollqwen25coder "grc ollama list qwen2.5-coder"
+    abbr ollqwen25 "grc ollama list qwen2.5:"
+    abbr ollqwen3 "grc ollama list qwen3:"
+    abbr ollgptoss "grc ollama list gpt-oss"
+
     abbr olp "ollama pull"
     abbr olps "ollama ps"
     abbr olpush "ollama push"
