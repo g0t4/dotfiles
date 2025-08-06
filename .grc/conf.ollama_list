@@ -41,37 +41,34 @@ colours=bold magenta
 =====
 
 # *** AGES:
-# TODO verify these work with ollama modified column (these are unchanged from docker image ls)
-# CREATED seconds/minutes
-regexp=[\da-f]{12}\s+((?:About a|\d+) (?:seconds?|minutes?) ago)
-colours=unchanged,bold green
+# TODO review color choices for age? not sure hours is threshold for green!
+#  very recent only likely matters for building my own models in which case they'll show as white text anyways!
+# CREATED seconds
+regexp=\b(\d+\s+seconds\s+\w+)
+colours=unchanged,bright_green
 ======
-# CREATED About a minute ago
-regexp=\s+(About a minute ago)\s\w+
-colours=unchanged,on_green bold white
-======
-# CREATED About an hour ago
-regexp=\s+(About an hour ago)\s
-colours=unchanged,green
+# CREATED minutes
+regexp=\b(\d+\s+minutes\s+\w+)
+colours=unchanged,bright_green
 ======
 # CREATED hours
-regexp=\s+(\d+\shours\s\w+)
+regexp=\b(\d+\s+hours\s+\w+)
 colours=unchanged,bright_green
 ======
 # CREATED days
-regexp=\s+(\d+\sdays\s\w+)
+regexp=\b(\d+\s+days\s+\w+)
 colours=unchanged,green
 ======
 # CREATED weeks
-regexp=\s+(\d+\sweeks\s\w+)
+regexp=\b(\d+\s+weeks\s+\w+)
 colours=unchanged,yellow
 ======
 # CREATED months
-regexp=\s+(\d+\smonths\s\w+)
+regexp=\b(\d+\s+months\s+\w+)
 colours=unchanged,dark yellow
 ======
 # CREATED years ago
-regexp=\s+(\d+\syears ago\s)
+regexp=\b(\d+\syears\s+\w+)
 colours=unchanged,black
 
 =====
