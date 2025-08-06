@@ -1446,7 +1446,8 @@ if command -q llama-server
         abbr llama_ask_qwen3q8_verbose $qwen3_q8 $verbose
 
         # TODO --batch-size / --ubatch-size # memory impact?
-        abbr lsgptoss "llama-server -hf ggml-org/gpt-oss-20b-GGUF $host --c 0 --jinja --flash-attn --n-gpu-layers 99 --reasoning-format none"
+        # --ctx-size 0 => means load from model or default 4096
+        abbr lsgptoss "llama-server -hf ggml-org/gpt-oss-20b-GGUF $host --ctx-size 0 --jinja --flash-attn --n-gpu-layers 99 --reasoning-format none"
         # TODO speculative decoding with ngram?!
         #  already at 260 tokens/sec but why not get more!!!
 
