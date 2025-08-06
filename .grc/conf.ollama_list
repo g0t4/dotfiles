@@ -15,27 +15,27 @@ colours=default,yellow,bright_white,blue
 # *** SIZES
 #  FYI sizes are adjusted for typical model sizes
 # Size 'K'
-regexp=(?<=\s)\d+[.,]?\d*\s?(KB?|B)
+regexp=\b\d+[.,]?\d*\s?(KB|B)\b
 colours=green
 ======
 # Size 'M' 3+ digits (> 100MB)
-regexp=(?<=\s)\d{3,4}[.,]?\d*\s?MB?
+regexp=\b\d{3,4}[.,]?\d*\s?MB\b
 colours=green
 ======
 # Size GB (base color, IOTW for all lines except that match below)
-regexp=(?<=\s)\d+[.,]?\d*\s?GB?
+regexp=\b\d+[.,]?\d*\s?GB\b
 colours=yellow
 ======
 # Size 10-19 GB
-regexp=(?<=\s)[1]\d[.,]?\d*\s?GB?
+regexp=\b[1]\d[.,]?\d*\s?GB\b
 colours=red
 =====
 # Size 20-29 GB
-regexp=(?<=\s)[2]\d[.,]?\d*\s?GB?
+regexp=\b[2]\d[.,]?\d*\s?GB\b
 colours=bold red
 =====
 # Size 30+ GB
-regexp=(?<=\s)[3456789]\d+[.,]?\d*\s?GB?
+regexp=\b[3456789]\d+[.,]?\d*\s?GB\b
 colours=bold magenta
 # todo >= 10 GB => i.e. windows images... though I wouldn't be using zsh to list them!
 =====
