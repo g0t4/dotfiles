@@ -2860,3 +2860,9 @@ abbr --set-cursor straceC "strace -C -e trace=all sleep 1"
 # *** fish
 abbr --set-cursor -- fishc "fish -c '%'"
 abbr pPATH 'for p in $PATH; echo $p; end'
+
+# *** openai completions helpers
+
+# not just psse b/c I can't get tab completion of --position=anywhere abbreviations
+abbr -- sse_jq 'string replace --regex "^data: " "" | jq --compact-output'
+abbr --position=anywhere -- psse '| string replace --regex "^data: " "" | jq --compact-output'
