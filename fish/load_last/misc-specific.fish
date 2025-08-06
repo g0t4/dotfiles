@@ -1462,7 +1462,7 @@ if command -q ollama
     # * list
     abbr olh "ollama help"
     #
-    # abbr oll "grc ollama list"
+    abbr ollnaked "grc ollama list"
     # until I get colors worked out so they're not positional (i.e. column X) then I'll default to bat coloring:
     abbr --set-cursor -- oll 'ollama list | awk \'{OFS="\t" } /%/ { print $3$4,$1,$2,$5" "$6" "$7" "$8" "$9 }\' | sort -h | bat -l tsv --color=always | column -t'
     abbr --set-cursor -- ollg 'ollama list | awk \'{OFS="\t" } // { print $3$4,$1,$2,$5" "$6" "$7" "$8" "$9 }\' | sort -h | column -t | grcat conf.ollama_list'
