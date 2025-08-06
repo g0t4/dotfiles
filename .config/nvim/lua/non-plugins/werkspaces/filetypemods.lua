@@ -267,6 +267,14 @@ vim.api.nvim_create_autocmd("BufEnter", {
     end,
 })
 
+vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+    -- otherwise conf.* are treated as conf files by default and there's no good coloring of that... so use ini
+    pattern = "**/.grc/conf.*",
+    callback = function()
+        vim.bo.filetype = "ini"
+    end,
+})
+
 vim.api.nvim_create_autocmd("FileType", {
     group = "filetypemods",
     pattern = "graphql",
