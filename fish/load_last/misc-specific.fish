@@ -1464,8 +1464,9 @@ if command -q ollama
     #
     abbr ollnaked "grc ollama list"
     # until I get colors worked out so they're not positional (i.e. column X) then I'll default to bat coloring:
-    abbr --set-cursor -- oll 'ollama list | awk \'{OFS="\t" } /%/ { print $3$4,$1,$2,$5" "$6" "$7" "$8" "$9 }\' | sort -h | bat -l tsv --color=always | column -t'
-    abbr --set-cursor -- ollg 'ollama list | awk \'{OFS="\t" } // { print $3$4,$1,$2,$5" "$6" "$7" "$8" "$9 }\' | sort -h | column -t | grcat conf.ollama_list'
+    # abbr --set-cursor -- oll 'ollama list | awk \'{OFS="\t" } /%/ { print $3$4,$1,$2,$5" "$6" "$7" "$8" "$9 }\' | sort -h | bat -l tsv --color=always | column -t'
+    # FYI CURSOR is between // in awk so I can filter too!!!
+    abbr --set-cursor -- oll 'ollama list | awk \'{OFS="\t" } /%/ { print $3$4,$1,$2,$5" "$6" "$7" "$8" "$9 }\' | sort -h | column -t | grcat conf.ollama_list'
     #
     abbr ollqwen3coder "grc ollama list qwen3-coder"
     abbr ollqwen25coder "grc ollama list qwen2.5-coder"
