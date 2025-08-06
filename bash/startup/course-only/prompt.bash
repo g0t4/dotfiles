@@ -32,6 +32,7 @@ PROMPT_ITALIC="\e[3m"
 # }
 #
 # PROMPT_COMMAND="show_rc_when_last_cmd_failed" # FYI can chain multiple prompt cmds just like regular commands!
+# PS1="\$(uname) ${PROMPT_CYAN}${PROMPT_BOLD}${PROMPT_UNDERLINE}\W${PROMPT_RESET} \$ "
 
 PS1="${PROMPT_CYAN}${PROMPT_BOLD}${PROMPT_UNDERLINE}\W${PROMPT_RESET} \$ "
 export PS1
