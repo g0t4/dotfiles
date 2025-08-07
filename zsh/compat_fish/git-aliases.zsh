@@ -81,6 +81,9 @@ abbr gcob 'git checkout -b'
 
 # I'm always flumoxed to find the scope of config options to edit with confidence
 abbr gconf 'grc git config --list --show-origin --show-scope' # show files where set (ie scope's file)
+abbr gnoconf 'env GIT_CONFIG_GLOBAL=/dev/null GIT_CONFIG_SYSTEM=/dev/null grc git config --list --show-origin --show-scope' # show files where set (ie scope's file)
+abbr gnoconf_export 'export GIT_CONFIG_GLOBAL=/dev/null GIT_CONFIG_SYSTEM=/dev/null' # show files where set (ie scope's file)
+#  FYI alternative is GIT_CONFIG_NOSYSTEM but /dev/null seems fine above...  though I don't have system level config (yet?)
 
 # clone
 abbr gcl 'git clone --recurse-submodules'
