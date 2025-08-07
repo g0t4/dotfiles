@@ -32,10 +32,10 @@ return {
     {
         -- FYI use `:Notifications` to see history of notifications
         "rcarriga/nvim-notify",
-        enabled = false,
+        -- enabled = false,
         config = function()
             -- actually this was useful-ish for hardtime cuz I would see the notices... but I hated it on everything else + disappearing messages are yuck (that I have to lookup special) AND often I want them gone (when recording) and I have to wait 5 sec
-            --   I probaboly should learn commands for this AND bind some keymaps :)
+            --   TODO learn commands and/or bind keymaps
             vim.notify = require("notify") -- route all notifications through this (plugins can use vim.notify none the wiser)
             require("notify").setup({
                 -- stages = "fade",
