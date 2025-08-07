@@ -1437,8 +1437,8 @@ if command -q llama-server
 
         # TODO --batch-size / --ubatch-size # memory impact?
         # --ctx-size 0 => means load from model or default 4096
-        set _gptoss "llama-server -hf ggml-org/gpt-oss-20b-GGUF $host --ctx-size 0 --jinja --flash-attn --n-gpu-layers 99 --reasoning-format none"
-        set _gptoss120b_best "llama-server -hf ggml-org/gpt-oss-120b-GGUF $host --ctx-size 0 --jinja --flash-attn --n-gpu-layers 99 --reasoning-format none --n-cpu-moe 2"
+        set _gptoss "llama-server -hf ggml-org/gpt-oss-20b-GGUF $host --batch-size 2048 --ubatch-size 2048 --ctx-size 0 --jinja --flash-attn --n-gpu-layers 99 --reasoning-format none"
+        set _gptoss120b_best "llama-server -hf ggml-org/gpt-oss-120b-GGUF $host --batch-size 2048 --ubatch-size 2048 --ctx-size 0 --jinja --flash-attn --n-gpu-layers 99 --reasoning-format none --n-cpu-moe 2"
         # FYI --n-cpu-moe readings:
         # 2 => 120 T/s
         # 3 => 108 T/s
