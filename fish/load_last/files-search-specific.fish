@@ -406,17 +406,11 @@ function agimages
 
     set look_in_dir $argv[1] # optional
     set secondary_path_filter $argv[2]
-    # cannot filter paths with -g and -G with ag command, so use grep as secondary filter to get subset of matching image files
-    if test -z "$secondary_path_filter"
-        set cmd "ag --unrestricted --smart-case -g '\.(png|jpg|jpeg|gif|bmp|tiff|webp|svg|icns|ico)' $look_in_dir"
-    else
-        set cmd "ag --unrestricted --smart-case -g '\.(png|jpg|jpeg|gif|bmp|tiff|webp|svg|icns|ico)' $look_in_dir | grep -i '$secondary_path_filter'"
-    end
 
-    for f in (eval $cmd)
-        echo $f
-        imgcat $f
-    end
+    # combine regex + ext regex into one filter, works great
+    fd --unrestricted --regex "$secondary_path_filter"".*\.(png|jpg|jpeg|gif|bmp|tiff|webp|svg|icns|ico)" \
+        --exec bash -c 'echo {}; imgcat "{}"' \
+        -- $look_in_dir
 
     # printf "\x1B]1337;File=name=Tray-Win32.ico;inline=1:$(cat Contents/Resources/Tray-Win32.ico | base64)\x07"
     #   width=100 paramerter is avail
@@ -425,8 +419,7 @@ function agimages
     # https://iterm2.com/utilities/imgcat
 
     ## TODOS
-    # TODO why does imgcat fail on some svgs? can I detect and avoid that? => look at ~/Applications/DataSpell.app/Contents/plugins/pycharm-ds-customization/jupyter-web/fontawesome-webfont.svg
-    # TODO can I limit size of image?
+    # imgcat hangs on some files, TODO figure out criteria and avoid those? might be svgs though it stopped hanging last time I tried to check
 end
 
 function agimages-global
