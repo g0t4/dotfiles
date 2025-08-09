@@ -1627,6 +1627,17 @@ function video_editing_total_duration
     echo $hours:$minutes:$seconds
 
 end
+# *** thumbnails
+abbr --add _150 --function abbr_thumbnail_check
+function abbr_thumbnail_check
+    set suffix "150px.png"
+    set first_image (ls *.png | grep -v $suffix | head -1)
+    set input_file (quote_paths "$first_image")
+    set output_file (quote_paths "$(path basename --no-extension "$first_image").$suffix")
+    echo "magick $input_file -resize 150 $output_file"
+    echo "imgcat $output_file"
+    # TODO apply quote_paths to more parts of similar abbrs
+end
 
 # *** #1 check audio ***
 abbr --add _1 --function abbr_check
