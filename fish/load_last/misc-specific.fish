@@ -807,22 +807,8 @@ function pstree
 end
 # TODO look into utils like fuser (not necessarily for abbrs, though maybe) but b/c I need to shore up my knowlege here, so much easier to diagnose what an app is doing if I can look at its external interactions (ie files, ports, etc)
 
-
-
-
-
-
-
 # *** sed ***
-set sed_all "**/*.{js,jsx,py,java,cs,php,cpp,hpp,h,cc,cxx,hxx,ts,tsx,c,rb,go,swift,kt,kts,rs,dart,scala,pl,pm,hs,lhs,lua,sh,bash,zsh,ksh,fish,md}"
-
-
-
-
-
-
-
-
+set sed_all "**/*.{bash,c,cc,cpp,cs,cxx,dart,fish,go,h,hpp,hs,hxx,java,js,jsx,ksh,kt,kts,lhs,lua,md,php,pl,pm,py,rb,rs,scala,sh,swift,ts,tsx,zsh}"
 
 set --global sed_cmd sed
 if $IS_MACOS
@@ -1838,7 +1824,7 @@ function abbr_db
 
     # if only one video in current dir, select it
     # exclude previous boosted vides i.e. .7dB.m4v
-    set video_files (ls *.{mp4,m4v} | grep -vE "dB\.[a-z0-9]{3}\$")
+    set video_files (ls *.{mp4,m4v,mov} | grep -vE "dB\.[a-z0-9]{3}\$")
     if test (count $video_files) -eq 1
         set video_file $video_files[1]
     end
