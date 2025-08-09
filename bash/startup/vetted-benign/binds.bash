@@ -1,3 +1,6 @@
+if ! is_interactive; then
+    return
+fi
 # *** custom yank
 
 copy_and_clear_line() {

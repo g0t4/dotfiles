@@ -1,3 +1,8 @@
+if ! is_interactive; then
+    # abbr is ONLY for interactive
+    return
+fi
+
 #
 # * declare
 # TODO some of these collide with docker, for now just let it happen until I find myself annoyed by using docker in bash :)... I don't think I'll be doing that... this is all just for the course series (for now)

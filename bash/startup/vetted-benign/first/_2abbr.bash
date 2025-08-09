@@ -1,3 +1,12 @@
+if ! is_interactive; then
+    # in the event I start a login shell that is not interactive then abbr should not be used
+    #   this can happen if you want default bash extensions for a script (i.e. bash -lc my_special_func)
+    #   in which case, abbr should not be used, so warn if it is called
+
+    # return early to avoid using bind which will fail when non-interactive
+    return 1
+fi
+
 source _1test.bash 2>/dev/null || true # ignore load failure, source is for bash LS (i.e. F12) and shellcheck
 
 declare -A abbrs=()

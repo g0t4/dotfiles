@@ -1,3 +1,7 @@
+if ! is_interactive; then
+    return
+fi
+
 # Colors
 # FYI I use these in other spots since its an easy prefix to hunt down should I want to remove/rename it
 PROMPT_RESET="\[\e[0m\]"

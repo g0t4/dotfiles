@@ -1,3 +1,7 @@
+if ! is_interactive; then
+    return
+fi
+
 # * read
 abbr --set-cursor rr 'read -r <<<\"%\"'
 abbr --set-cursor readr 'read -r <<<\"%\"'

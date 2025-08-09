@@ -1,3 +1,7 @@
+if ! is_interactive; then
+    return
+fi
+
 #
 # *** vi mode
 set -o vi

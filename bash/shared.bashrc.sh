@@ -36,12 +36,14 @@ force_prepend_path ~/repos/github/g0t4/bash
 
 prepend_path_if_exists ~/.local/bin
 
-for script in "$BASH_DOTFILES/startup/vetted-benign/first/"*.bash; do
-    source "$script"
-done
-# load generated abbrs first so I can override in later scripts
-source "$BASH_DOTFILES/.generated.abbrs.bash"
+if is_interactive; then
+    # FYI use `bash -lc ls` to test non-interactive + login shell (make sure no failures b/c code needs to check is_interactive)
+    source "$BASH_DOTFILES/startup/vetted-benign/first/_2abbr.bash"
+    # load generated abbrs first so I can override in later scripts
+    source "$BASH_DOTFILES/.generated.abbrs.bash"
+fi
 
+# fish function wrappers can always be loaded, regardless interactive
 source "$BASH_DOTFILES/.generated.fish_func_wrappers.bash"
 
 for script in "$BASH_DOTFILES/startup/vetted-benign/"*.bash; do

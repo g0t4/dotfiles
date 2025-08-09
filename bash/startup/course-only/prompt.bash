@@ -1,3 +1,7 @@
+if ! is_interactive; then
+    return
+fi
+
 # Colors
 PROMPT_RESET="\[\e[0m\]"
 PROMPT_RED="\[\e[31m\]"

@@ -11,5 +11,7 @@ for script in "$BASH_DOTFILES/startup/course-only/"*.bash; do
     source "$script"
 done
 
-# some things to remove for first course:
-abbr --remove wc
+if is_interactive; then
+    # some things to remove for first course, but leave in my full bashrc
+    abbr --remove wc
+fi
