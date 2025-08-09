@@ -39,6 +39,8 @@ prepend_path_if_exists ~/.local/bin
 for script in "$BASH_DOTFILES/startup/vetted-benign/first/"*.bash; do
     source "$script"
 done
+# load generated abbrs first so I can override in later scripts
+source "$BASH_DOTFILES/.generated.abbrs.bash"
 
 source "$BASH_DOTFILES/.generated.fish_func_wrappers.bash"
 

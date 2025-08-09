@@ -6,8 +6,6 @@ echo WARNING THIS IS YOUR FULL BASHRC
 
 source "$BASH_DOTFILES/shared.bashrc.sh"
 
-source "$BASH_DOTFILES/.generated.abbrs.bash"
-
 for script in "$BASH_DOTFILES/startup/full-only/"*.bash; do
     source "$script"
 done
