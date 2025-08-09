@@ -807,9 +807,23 @@ function pstree
 end
 # TODO look into utils like fuser (not necessarily for abbrs, though maybe) but b/c I need to shore up my knowlege here, so much easier to diagnose what an app is doing if I can look at its external interactions (ie files, ports, etc)
 
+
+
+
+
+
+
 # *** sed ***
-# TODO create all from array, and create individuals off of array too
-set sed_all "**/{*.lua,*.md,*.py,*.sh,*.fish}"
+set sed_all "**/*.{js,jsx,py,java,cs,php,cpp,hpp,h,cc,cxx,hxx,ts,tsx,c,rb,go,swift,kt,kts,rs,dart,scala,pl,pm,hs,lhs,lua,sh,bash,zsh,ksh,fish,md}"
+
+
+
+
+
+
+
+
+
 set --global sed_cmd sed
 if $IS_MACOS
     function sed
