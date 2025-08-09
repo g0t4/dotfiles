@@ -2,6 +2,11 @@ UNAME_S=$(uname -s)
 is_macos() { [[ "$UNAME_S" = "Darwin" ]]; }
 is_linux() { [[ "$UNAME_S" = "Linux" ]]; }
 
+# ** warn if not using custom build:
+[[ "$BASH_VERSION" == 5.3.3* ]] || echo "unexpected bash version: $BASH_VERSION"
+[[ "$BASH" == ~/repos/github/g0t4/bash/bash ]] || echo "NOT USING CUSTOM BUILD OF BASH: $BASH"
+# echo "$BASH_VERSION"
+
 # * RUN BEFORE any path mods...
 BASH_DOTFILES="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 source "$BASH_DOTFILES/startup/vetted-benign/early/funcs.bash"
@@ -52,9 +57,3 @@ source ~/.iterm2_shell_integration.bash
 #     return 124
 # }
 # bind -x '"\C-g": "test"'
-
-# ** warn if not using custom build:
-[[ "$BASH_VERSION" == 5.3.3* ]] || echo "unexpected bash version: $BASH_VERSION"
-[[ "$BASH" == ~/repos/github/g0t4/bash/bash ]] || echo "NOT USING CUSTOM BUILD OF BASH: $BASH"
-# echo "$BASH_VERSION"
-
