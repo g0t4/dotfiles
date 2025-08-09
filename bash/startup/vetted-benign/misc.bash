@@ -74,7 +74,7 @@ nvselect() {
 
 _abbr_expand_diff_last_two_commands() {
 
-    if ! is-history-expansion-enabled; then
+    if ! is_history_expansion_enabled; then
         echo "HISTORY EXPANSION MUST BE ENABLED, use 'set -B' to do so" >&2
     fi
     echo 'icdiff <(!-1) <(!-2)'

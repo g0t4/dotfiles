@@ -41,29 +41,29 @@ _inspect() {
 # status test-feature FEATURE
 # status buildinfo
 
-# is-login && echo yes
-is-login() {
+# is_login && echo yes
+is_login() {
     shopt -q login_shell
 }
 
-# is-interactive && echo yes
-is-interactive() {
+# is_interactive && echo yes
+is_interactive() {
     [[ $- == *i* ]]
 }
 
-is-history-expansion-enabled() {
+is_history_expansion_enabled() {
     [[ $- == *H* ]]
 }
 
-is-brace-expansion-enabled() {
+is_brace_expansion_enabled() {
     [[ $- == *B* ]]
 }
 
-is-no-clobber-enabled() {
+is_no_clobber_enabled() {
     [[ $- == *C* ]]
 }
 
-is-pathname-expansion-disabled() {
+is_pathname_expansion_disabled() {
     # aka globbing
     [[ $- == *f* ]]
 }
