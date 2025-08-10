@@ -781,6 +781,10 @@ else if $IS_LINUX
 
 end
 abbr psfull "grc ps -o 'user,pid,pcpu,pmem,vsz,rss,tty,stat,start,time,comm' -ax"
+if $IS_LINUX
+    # not sure I wanna even try to replicate this on mac as then I might habituate wanting a different command, I like this alot on linux for showing current shells and their hierarchy of processes
+    abbr psf "grc ps f" # i.e. current shells in tree view on linux
+end
 # TODO add more in time as I encounter scenarios
 #
 # NOTES:
