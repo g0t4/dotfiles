@@ -81,8 +81,9 @@ HIGHLIGHT = f"\x1b[{GREP_COLOR}m"
 def highlight_match(text, regex):
     # if not sys.stdout.isatty():
     #     return text
+
     if GREP_COLOR:
-        return HIGHLIGHT + text + RESET
+        return regex.sub(lambda m: f"{HIGHLIGHT}{m.group(0)}{RESET}", text)
     else:
         return BOLD + text + RESET
 
