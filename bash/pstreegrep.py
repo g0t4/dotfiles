@@ -21,7 +21,7 @@ def proc_snap():
         try:
             info = p.info
             pid = info["pid"]
-            ppid = info["ppid"] or 0 # is 0 a good default?
+            ppid = info["ppid"] or 0  # is 0 a good default?
             cmdl = info.get("cmdline") or []  # full argv if allowed
             name = (info.get("name") or "").strip()
             cmd = " ".join(cmdl).strip() or name or f"[pid:{pid}]"
@@ -34,7 +34,9 @@ def proc_snap():
                 "cmd": cmd,
             }
             children[ppid].append(pid)
-        except (psutil.NoSuchProcess, psutil.AccessDenied):
+        except psutil.NoSuchProcess:
+            continue
+        except psutil.AccessDenied:
             continue
     for k in list(children.keys()):
         children[k].sort(key=lambda x: (procs.get(x, {}).get("name", ""), x))
