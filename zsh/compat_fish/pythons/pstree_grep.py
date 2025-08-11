@@ -72,7 +72,7 @@ def prune_to_rootmost_match(matching_pids, all_processes):
     ]
     return only_rootmost_matches
 
-def highlight_match(text):
+def highlight_match(text, regex):
     GREP_COLOR = os.getenv("GREP_COLOR")
     # if not sys.stdout.isatty():
     #     return text
@@ -106,7 +106,7 @@ def part(text):
         case _:
             raise NotImplementedError("no mapping for ASCII: ", text)
 
-def draw_rootmost_tree(rootmost_match_pid, all_processes, children_by_ppid, matching_pids):
+def draw_rootmost_tree(rootmost_match_pid, all_processes, children_by_ppid, matching_pids, regex):
 
     def _draw_tree(pid, prefix="", is_last_child=True):
         process = all_processes.get(pid)
@@ -122,7 +122,7 @@ def draw_rootmost_tree(rootmost_match_pid, all_processes, children_by_ppid, matc
             connector = part("└─")
         text = label(process)
         if pid in matching_pids:
-            text = highlight_match(text)
+            text = highlight_match(text, regex)
         print(f"{prefix}{connector} {text}" if connector else text)
 
         children = [k for k in children_by_ppid.get(pid, []) if k in all_processes]
@@ -171,7 +171,7 @@ def main():
         if not first:
             print()
         first = False
-        draw_rootmost_tree(rootmost_match_pid, procs, children_by_ppid, matching_pids)
+        draw_rootmost_tree(rootmost_match_pid, procs, children_by_ppid, matching_pids, r)
 
 if __name__ == "__main__":
     main()
