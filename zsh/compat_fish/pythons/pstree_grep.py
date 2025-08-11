@@ -101,8 +101,6 @@ def part(text):
             return text
 
 def draw_tree(rootmost_match, all_processes, children_by_ppid, match, ascii_lines=False, show_full_cmd=False):
-    # if ascii_lines:
-    #     V, T, L, S = ("|", "+--", "`--", "   ")
 
     def _draw_tree(pid, prefix="", is_last=True):
         process = all_processes.get(pid)
