@@ -34,8 +34,8 @@ def proc_snap():
                 "cmd": cmd,
             }
             children[ppid].append(pid)
-        except psutil.NoSuchProcess:
-            # TODO warn
+        except psutil.NoSuchProcess as e:
+            print(f"NoSuchProcess for process {pid}:", e)
             continue
         except psutil.AccessDenied as e:
             print(f"AccessDenied for process {pid}:", e)
