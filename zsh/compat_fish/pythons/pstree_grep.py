@@ -159,20 +159,20 @@ def main():
 
     procs, children_by_ppid = proc_snap()
     r = re.compile(args.pattern, re.IGNORECASE if args.ignore_case else 0)
-    matches = get_matches(procs, r)
-    if not matches:
+    matching_pids = get_matches(procs, r)
+    if not matching_pids:
         print("No matches.")
         return
 
-    rootmost_matches = prune_to_rootmost_match(matches, procs)
+    rootmost_matches = prune_to_rootmost_match(matching_pids, procs)
 
-    print(f"# matches: {len(matches)}  roots: {len(rootmost_matches)}  (matched nodes are bold and marked with *)")
+    print(f"# matches: {len(matching_pids)}  roots: {len(rootmost_matches)}  (matched nodes are bold and marked with *)")
     first = True
     for rootmost_match_pid in rootmost_matches:
         if not first:
             print()
         first = False
-        draw_tree(rootmost_match_pid, procs, children_by_ppid, matches)
+        draw_tree(rootmost_match_pid, procs, children_by_ppid, matching_pids)
 
 if __name__ == "__main__":
     main()
