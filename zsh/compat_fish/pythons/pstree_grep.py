@@ -96,13 +96,13 @@ def label(p, show_full_cmd):
         return f"{p.cmd} [{f"{p.name}({p.pid} / pgid: {p.pgid})"}]"
     return f"{p.name}({p.pid} / pgid: {p.pgid})"
 
-def draw_tree(rootmost_match, procs, children, match, ascii_lines=False, show_full_cmd=False):
+def draw_tree(rootmost_match, all_processes, children, match, ascii_lines=False, show_full_cmd=False):
     V, T, L, S = ("│", "├─", "└─", "   ")
     if ascii_lines:
         V, T, L, S = ("|", "+--", "`--", "   ")
 
     def rec(pid, prefix="", is_last=True):
-        p = procs.get(pid)
+        p = all_processes.get(pid)
         if not p:
             return
         connector = "" if prefix == "" else (L if is_last else T)
@@ -110,7 +110,7 @@ def draw_tree(rootmost_match, procs, children, match, ascii_lines=False, show_fu
         if pid in match:
             text = highlight_match(text) + " *"
         print(f"{prefix}{connector} {text}" if connector else text)
-        kids = [k for k in children.get(pid, []) if k in procs]
+        kids = [k for k in children.get(pid, []) if k in all_processes]
         if not kids:
             return
         next_prefix = prefix + (S if is_last else V + "  ")
