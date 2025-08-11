@@ -10,34 +10,28 @@ def getpgid(pid):
     except Exception:
         return None
 
+# prefer full cmdline; fall back to name only if cmdline unavailable
 def proc_snap():
-    procs = {}
-    children = defaultdict(list)
+    procs, children = {}, defaultdict(list)
     for p in psutil.process_iter(["pid","ppid","name","cmdline"]):
         try:
             info = p.info
-            pid = info["pid"]; ppid = info["ppid"] or 0
-            name = info.get("name") or ""
-            cmdline = info.get("cmdline") or []
-            pgid = getpgid(pid)
-            cmd = " ".join(cmdline) if cmdline else name
-            procs[pid] = {"pid": pid, "ppid": ppid, "pgid": pgid, "name": name, "cmd": cmd}
+            pid, ppid = info["pid"], info["ppid"] or 0
+            cmdl = info.get("cmdline") or []   # full argv if allowed
+            name = (info.get("name") or "").strip()
+            cmd  = " ".join(cmdl).strip() or name or f"[pid:{pid}]"
+            procs[pid] = {"pid": pid, "ppid": ppid, "pgid": getpgid(pid),
+                          "name": name, "cmd": cmd}
             children[ppid].append(pid)
         except (psutil.NoSuchProcess, psutil.AccessDenied):
             continue
-    # stable sort children
     for k in list(children.keys()):
         children[k].sort(key=lambda x: (procs.get(x,{}).get("name",""), x))
     return procs, children
 
 def match_set(procs, pattern, ignore_case):
-    flags = re.IGNORECASE if ignore_case else 0
-    r = re.compile(pattern, flags)
-    m = set()
-    for pid, p in procs.items():
-        if r.search(p["name"]) or r.search(p["cmd"]):
-            m.add(pid)
-    return m
+    r = re.compile(pattern, re.IGNORECASE if ignore_case else 0)
+    return {pid for pid, p in procs.items() if r.search(p["cmd"]) or (p["cmd"] == p["name"] and r.search(p["name"]))}
 
 def has_ancestor_in_set(pid, procs, match):
     seen=set()
