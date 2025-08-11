@@ -101,25 +101,27 @@ def part(text):
             # PRN warn?
             return text
 
-def draw_tree(pid, all_processes, children_by_ppid, matches, prefix="", is_last=True):
+def draw_tree(rootmost_match_pid, all_processes, children_by_ppid, matches):
 
-    process = all_processes.get(pid)
-    if not process:
-        return
+    def _draw_tree(pid, prefix="", is_last=True):
+        process = all_processes.get(pid)
+        if not process:
+            return
 
-    connector = "" if prefix == "" else (part("└─") if is_last else part("├─"))
-    text = label(process)
-    if pid in matches:
-        text = highlight_match(text)
-    print(f"{prefix}{connector} {text}" if connector else text)
-    kids = [k for k in children_by_ppid.get(pid, []) if k in all_processes]
-    if not kids:
-        return
+        connector = "" if prefix == "" else (part("└─") if is_last else part("├─"))
+        text = label(process)
+        if pid in matches:
+            text = highlight_match(text)
+        print(f"{prefix}{connector} {text}" if connector else text)
+        kids = [k for k in children_by_ppid.get(pid, []) if k in all_processes]
+        if not kids:
+            return
 
-    next_prefix = prefix + ("   " if is_last else part("│") + "  ")
-    for i, k in enumerate(kids):
-        draw_tree(k, all_processes, children_by_ppid, matches, next_prefix, i == len(kids) - 1)
+        next_prefix = prefix + ("   " if is_last else part("│") + "  ")
+        for i, k in enumerate(kids):
+            _draw_tree(k, next_prefix, i == len(kids) - 1)
 
+    _draw_tree(rootmost_match_pid)
 
 
 args = None
