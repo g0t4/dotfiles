@@ -50,8 +50,8 @@ def proc_snap():
 def match_set(procs, pattern, ignore_case):
     r = re.compile(pattern, re.IGNORECASE if ignore_case else 0)
     return {
-        pid for pid, p in procs.items()
-        if r.search(p["cmd"]) or r.search(p["name"])
+        pid for pid, process in procs.items()
+        if r.search(process["cmd"]) or r.search(process["name"])
     }
 
 def has_ancestor_in_set(pid, procs, match):
