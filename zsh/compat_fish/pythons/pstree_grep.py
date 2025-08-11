@@ -79,7 +79,7 @@ def highlight_match(text):
 def label(p):
     assert args is not None # change args to never see it as None
     if args.show_full_cmd:
-        return f"{p.cmd} [{f"{p.name}({p.pid})"}]"
+        return f"{p.cmd} [{f'{p.name}({p.pid})'}]"
     return f"{p.name}({p.pid})"
 
 def part(text):
