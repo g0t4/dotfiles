@@ -84,8 +84,7 @@ def highlight_match(text):
         return f"\x1b[1m" + text + "\x1b[0m"
 
 def label(p, full_cmd):
-    base = f"{p['name']}({p['pid']})"
-    return f"{p['cmd']} [{base}]" if full_cmd else base
+    return f"{p['cmd']} [{f"{p['name']}({p['pid']})"}]" if full_cmd else f"{p['name']}({p['pid']})"
 
 def draw_tree(root, procs, children, match, ascii_lines=False, full_cmd=False):
     V, T, L, S = ("│", "├─", "└─", "   ")
