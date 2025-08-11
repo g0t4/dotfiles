@@ -61,11 +61,11 @@ def match_set(procs, pattern, ignore_case):
         if r.search(process.cmd) or r.search(process.name)
     }
 
-def has_ancestor_in_set(pid, procs, matches):
+def has_ancestor_in_set(pid, all_processes, matches):
     seen = set()
     while pid and pid not in seen:
         seen.add(pid)
-        process = procs.get(pid)
+        process = all_processes.get(pid)
         if not process:
             return False
         parent = process.ppid
