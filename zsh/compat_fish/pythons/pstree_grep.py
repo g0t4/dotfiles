@@ -134,15 +134,15 @@ def main():
         print("No matches.")
         return
 
-    roots = prune_to_rootmost_match(matches, procs)
+    rootmost_matches = prune_to_rootmost_match(matches, procs)
 
-    print(f"# matches: {len(matches)}  roots: {len(roots)}  (matched nodes are bold and marked with *)")
+    print(f"# matches: {len(matches)}  roots: {len(rootmost_matches)}  (matched nodes are bold and marked with *)")
     first = True
-    for r in roots:
+    for rootmost_match in rootmost_matches:
         if not first:
             print()
         first = False
-        draw_tree(r, procs, children, matches, ascii_lines=args.ascii, show_full_cmd=args.show_full_cmd)
+        draw_tree(rootmost_match, procs, children, matches, ascii_lines=args.ascii, show_full_cmd=args.show_full_cmd)
 
 if __name__ == "__main__":
     main()
