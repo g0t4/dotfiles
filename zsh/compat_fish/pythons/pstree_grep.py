@@ -78,7 +78,12 @@ def prune_to_rootmost_match(matches, all_processes):
     only_rootmost_matches = [pid for pid in matches if not has_ancestor_in_matches(pid, all_processes, matches)]
     return only_rootmost_matches
 
+# TODO figure out what the F I want for the implementation here... this is confusing IMO:
 def dedupe_by_pgid(pids, procs):
+    # IIUC this makes sure I don't draw children branches a second time...
+    # but when tested with bash subshells this doesn't make any difference... w/o this there are no children branches
+    #   even w/o passing --pgid-dedupe I don't have duplicated bash subshells as sep branches, they're only in there once
+    # bash -c ":{ sleep 100; } | { sleep 100; }"
     seen = set()
     out = []
     for pid in sorted(pids):
