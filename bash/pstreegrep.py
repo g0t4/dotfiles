@@ -101,17 +101,19 @@ def main():
     procs, children = proc_snap()
     matches = match_set(procs, args.pattern, args.ignore_case)
     if not matches:
-        print("No matches."); return
+        print("No matches.")
+        return
 
     roots = prune_to_roots(matches, procs)
     if args.pgid_dedupe:
         roots = dedupe_by_pgid(roots, procs)
 
     print(f"# matches: {len(matches)}  roots: {len(roots)}  (matched nodes are bold and marked with *)")
-    first=True
+    first = True
     for r in roots:
-        if not first: print()
-        first=False
+        if not first:
+            print()
+        first = False
         draw_tree(r, procs, children, matches, ascii_lines=args.ascii, full_cmd=args.full_cmd)
 
 if __name__ == "__main__":
