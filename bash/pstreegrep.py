@@ -73,12 +73,15 @@ def dedupe_by_pgid(pids, procs):
         out.append(pid)
     return out
 
-def bold(text):
+def highlight_match(text):
     GREP_COLOR = os.getenv("GREP_COLOR")
-    if not sys.stdout.isatty():
-        return text
+    # if not sys.stdout.isatty():
+    #     return text
     if GREP_COLOR:
         return f"\x1b[{GREP_COLOR}m" + text + "\x1b[0m"
+    else:
+        # use bold by default if no GREP_COLOR
+        return f"\x1b[1m" + text + "\x1b[0m"
 
 def label(p, full_cmd):
     base = f"{p['name']}({p['pid']})"
@@ -96,7 +99,7 @@ def draw_tree(root, procs, children, match, ascii_lines=False, full_cmd=False):
         connector = "" if prefix == "" else (L if is_last else T)
         text = label(p, full_cmd)
         if pid in match:
-            text = bold(text) + " *"
+            text = highlight_match(text) + " *"
         print(f"{prefix}{connector} {text}" if connector else text)
         kids = [k for k in children.get(pid, []) if k in procs]
         if not kids:
