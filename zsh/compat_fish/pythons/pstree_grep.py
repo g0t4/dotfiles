@@ -21,7 +21,7 @@ from typing import Dict, List, Tuple
 class ProcessInfo:
     pid: int
     ppid: int
-    pgid: int
+    pgid: int|None
     name: str
     cmd: str
 
