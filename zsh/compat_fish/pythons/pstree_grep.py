@@ -103,14 +103,14 @@ def part(text):
 
 def draw_tree(rootmost_match_pid, all_processes, children_by_ppid, matches):
 
-    def _draw_tree(pid, prefix="", is_last=True):
+    def _draw_tree(pid, prefix="", is_last_child=True):
         process = all_processes.get(pid)
         if not process:
             return
 
         if prefix == "":
             connector = ""
-        elif is_last:
+        elif is_last_child:
             connector = part("└─")
         else:
             connector = part("├─")
@@ -123,7 +123,7 @@ def draw_tree(rootmost_match_pid, all_processes, children_by_ppid, matches):
         if not children:
             return
 
-        if is_last:
+        if is_last_child:
             next_prefix = prefix + "   "
         else:
             next_prefix = prefix + part("│") + "  "
