@@ -94,8 +94,8 @@ def highlight_match(text):
 
 def label(p, show_full_cmd):
     if show_full_cmd:
-        return f"{p.cmd} [{f"{p.name}({p.pid} / pgid: {p.pgid})"}]"
-    return f"{p.name}({p.pid} / pgid: {p.pgid})"
+        return f"{p.cmd} [{f"{p.name}({p.pid} pgid={p.pgid})"}]"
+    return f"{p.name}({p.pid} pgid={p.pgid})"
 
 def draw_tree(rootmost_match, all_processes, children_by_ppid, match, ascii_lines=False, show_full_cmd=False):
     V, T, L, S = ("│", "├─", "└─", "   ")
