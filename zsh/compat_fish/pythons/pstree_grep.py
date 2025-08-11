@@ -102,11 +102,11 @@ def draw_tree(rootmost_match, all_processes, children_by_ppid, match, ascii_line
         V, T, L, S = ("|", "+--", "`--", "   ")
 
     def rec(pid, prefix="", is_last=True):
-        p = all_processes.get(pid)
-        if not p:
+        process = all_processes.get(pid)
+        if not process:
             return
         connector = "" if prefix == "" else (L if is_last else T)
-        text = label(p, show_full_cmd)
+        text = label(process, show_full_cmd)
         if pid in match:
             text = highlight_match(text) + " *"
         print(f"{prefix}{connector} {text}" if connector else text)
