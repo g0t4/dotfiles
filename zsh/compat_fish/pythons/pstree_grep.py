@@ -44,7 +44,7 @@ def proc_snap() -> Tuple[Dict[int, ProcessInfo], Dict[int, List[int]]]:
 def match_set(procs, r):
     return {
         pid for pid, process in procs.items()
-        if r.search(process.cmd) or r.search(process.name)
+        if r.search(process.cmd) or r.search(process.name) \
     }
 
 def has_ancestor_in_matches(pid, all_processes, matches):
