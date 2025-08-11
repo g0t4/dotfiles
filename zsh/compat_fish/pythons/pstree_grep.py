@@ -92,12 +92,13 @@ def highlight_match(text):
         # use bold by default if no GREP_COLOR
         return f"\x1b[1m" + text + "\x1b[0m"
 
-def label(p, show_full_cmd):
+def label(p, show_full_cmd, show_pgid):
+    pgid = f" pgid={p.pgid}" if show_pgid else ""
     if show_full_cmd:
-        return f"{p.cmd} [{f"{p.name}({p.pid} pgid={p.pgid})"}]"
-    return f"{p.name}({p.pid} pgid={p.pgid})"
+        return f"{p.cmd} [{f"{p.name}({p.pid}{pgid})"}]"
+    return f"{p.name}({p.pid}{pgid})"
 
-def draw_tree(rootmost_match, all_processes, children_by_ppid, match, ascii_lines=False, show_full_cmd=False):
+def draw_tree(rootmost_match, all_processes, children_by_ppid, match, ascii_lines=False, show_full_cmd=False, show_pgid=False):
     V, T, L, S = ("│", "├─", "└─", "   ")
     if ascii_lines:
         V, T, L, S = ("|", "+--", "`--", "   ")
@@ -108,7 +109,7 @@ def draw_tree(rootmost_match, all_processes, children_by_ppid, match, ascii_line
             return
 
         connector = "" if prefix == "" else (L if is_last else T)
-        text = label(process, show_full_cmd)
+        text = label(process, show_full_cmd, show_pgid)
         if pid in match:
             text = highlight_match(text)
         print(f"{prefix}{connector} {text}" if connector else text)
@@ -126,6 +127,7 @@ def main():
     ap.add_argument("pattern", help="regex matched against process name and full cmdline")
     ap.add_argument("-i", "--ignore-case", action="store_true", help="case-insensitive matching")
     ap.add_argument("--ascii", action="store_true", help="use ASCII connectors")
+    ap.add_argument("--show-pgid", action="store_true", help="show process group id (PGID)")
     # ok -f rubs up against usage of -f in pgrep but I don't care... I don't think I care to ever not match on full command line so I wouldn't need both -f and -l which are not easy to remember anyways
     ap.add_argument("-f", "--show-full-cmd", action="store_true", help="show full command instead of name(pid)")
     args = ap.parse_args()
@@ -144,7 +146,7 @@ def main():
         if not first:
             print()
         first = False
-        draw_tree(rootmost_match, procs, children_by_ppid, matches, ascii_lines=args.ascii, show_full_cmd=args.show_full_cmd)
+        draw_tree(rootmost_match, procs, children_by_ppid, matches, ascii_lines=args.ascii, show_full_cmd=args.show_full_cmd, show_pgid=args.show_pgid)
 
 if __name__ == "__main__":
     main()
