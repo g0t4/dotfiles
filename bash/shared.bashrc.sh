@@ -38,6 +38,7 @@ prepend_path_if_exists ~/.local/bin
 
 if is_interactive; then
     # FYI use `bash -lc ls` to test non-interactive + login shell (make sure no failures b/c code needs to check is_interactive)
+    source "$BASH_DOTFILES/startup/vetted-benign/first/_1test.bash"
     source "$BASH_DOTFILES/startup/vetted-benign/first/_2abbr.bash"
     # load generated abbrs first so I can override in later scripts
     source "$BASH_DOTFILES/.generated.abbrs.bash"
