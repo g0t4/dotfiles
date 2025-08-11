@@ -118,7 +118,7 @@ def draw_tree(rootmost_match, all_processes, children_by_ppid, match, ascii_line
         if not kids:
             return
 
-        next_prefix = prefix + ("   " if is_last else "│" + "  ")
+        next_prefix = prefix + ("   " if is_last else part("│") + "  ")
         for i, k in enumerate(kids):
             _draw_tree(k, next_prefix, i == len(kids) - 1)
 
