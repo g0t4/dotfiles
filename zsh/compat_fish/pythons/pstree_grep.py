@@ -101,7 +101,7 @@ def part(text):
             # PRN warn?
             return text
 
-def draw_tree(rootmost_match, all_processes, children_by_ppid, match):
+def draw_tree(rootmost_match, all_processes, children_by_ppid, matches):
 
     def _draw_tree(pid, prefix="", is_last=True):
         process = all_processes.get(pid)
@@ -110,7 +110,7 @@ def draw_tree(rootmost_match, all_processes, children_by_ppid, match):
 
         connector = "" if prefix == "" else (part("└─") if is_last else part("├─"))
         text = label(process)
-        if pid in match:
+        if pid in matches:
             text = highlight_match(text)
         print(f"{prefix}{connector} {text}" if connector else text)
         kids = [k for k in children_by_ppid.get(pid, []) if k in all_processes]
