@@ -62,7 +62,6 @@ def match_set(procs, pattern, ignore_case):
     }
 
 
-# TODO! left off review here... I am out of time for now, everything below should be reviewed yet
 
 def has_ancestor_in_matches(pid, all_processes, matches):
     seen = set()
@@ -80,23 +79,6 @@ def has_ancestor_in_matches(pid, all_processes, matches):
 def prune_to_rootmost_match(matches, all_processes):
     only_rootmost_matches = [pid for pid in matches if not has_ancestor_in_matches(pid, all_processes, matches)]
     return only_rootmost_matches
-
-# TODO figure out what the F I want for the implementation here... this is confusing IMO:
-def dedupe_by_pgid(pids, procs):
-    # IIUC this makes sure I don't draw children branches a second time...
-    # but when tested with bash subshells this doesn't make any difference... w/o this there are no children branches
-    #   even w/o passing --pgid-dedupe I don't have duplicated bash subshells as sep branches, they're only in there once
-    # bash -c ":{ sleep 100; } | { sleep 100; }"
-    seen = set()
-    out = []
-    for pid in sorted(pids):
-        process = procs.get(pid)
-        pg = process.pgid
-        if pg in seen:
-            continue
-        seen.add(pg)
-        out.append(pid)
-    return out
 
 def highlight_match(text):
     GREP_COLOR = os.getenv("GREP_COLOR")
@@ -140,8 +122,6 @@ def main():
     ap = argparse.ArgumentParser(description="pstree-like grep using pure Python (psutil).")
     ap.add_argument("pattern", help="regex matched against process name and full cmdline")
     ap.add_argument("-i", "--ignore-case", action="store_true", help="case-insensitive matching")
-    # TODO enable pgid-dedupe by default?
-    ap.add_argument("--pgid-dedupe", action="store_true", help="keep one root per PGID among matches")
     ap.add_argument("--ascii", action="store_true", help="use ASCII connectors")
     # ok -f rubs up against usage of -f in pgrep but I don't care... I don't think I care to ever not match on full command line so I wouldn't need both -f and -l which are not easy to remember anyways
     ap.add_argument("-f", "--show-full-cmd", action="store_true", help="show full command instead of name(pid)")
@@ -154,8 +134,6 @@ def main():
         return
 
     roots = prune_to_rootmost_match(matches, procs)
-    if args.pgid_dedupe:
-        roots = dedupe_by_pgid(roots, procs)
 
     print(f"# matches: {len(matches)}  roots: {len(roots)}  (matched nodes are bold and marked with *)")
     first = True
