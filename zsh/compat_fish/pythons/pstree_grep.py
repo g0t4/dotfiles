@@ -39,10 +39,6 @@ def proc_snap() -> Tuple[Dict[int, ProcessInfo], Dict[int, List[int]]]:
             rich.print(f"AccessDenied for process {pid}:", e)
             continue
 
-    # sort processes by name, within each PPID
-    for ppid in list(children_by_ppid.keys()):
-        # TODO what sort do I want? should it happen here or elsewhere?
-        children_by_ppid[ppid].sort(key=lambda x: (procs[x].name, x))
     return procs, children_by_ppid
 
 def match_set(procs, pattern, ignore_case):
