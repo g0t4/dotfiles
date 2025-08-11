@@ -3,6 +3,7 @@
 import argparse, os, re, sys
 from collections import defaultdict
 import psutil
+import rich
 
 def getpgid(pid):
     try:
@@ -35,10 +36,10 @@ def proc_snap():
             }
             children[ppid].append(pid)
         except psutil.NoSuchProcess as e:
-            print(f"NoSuchProcess for process {pid}:", e)
+            rich.print(f"NoSuchProcess for process {pid}:", e)
             continue
         except psutil.AccessDenied as e:
-            print(f"AccessDenied for process {pid}:", e)
+            rich.print(f"AccessDenied for process {pid}:", e)
             continue
     for k in list(children.keys()):
         children[k].sort(key=lambda x: (procs.get(x, {}).get("name", ""), x))
