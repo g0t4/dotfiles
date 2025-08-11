@@ -61,6 +61,9 @@ def match_set(procs, pattern, ignore_case):
         if r.search(process.cmd) or r.search(process.name)
     }
 
+
+# TODO! left off review here... I am out of time for now, everything below should be reviewed yet
+
 def has_ancestor_in_matches(pid, all_processes, matches):
     seen = set()
     while pid and pid not in seen:
