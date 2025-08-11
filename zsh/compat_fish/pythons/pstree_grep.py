@@ -131,6 +131,7 @@ def main():
     ap = argparse.ArgumentParser(description="pstree-like grep using pure Python (psutil).")
     ap.add_argument("pattern", help="regex matched against process name and full cmdline")
     ap.add_argument("-i", "--ignore-case", action="store_true", help="case-insensitive matching")
+    # TODO enable pgid-dedupe by default?
     ap.add_argument("--pgid-dedupe", action="store_true", help="keep one root per PGID among matches")
     ap.add_argument("--ascii", action="store_true", help="use ASCII connectors")
     # ok -f rubs up against usage of -f in pgrep but I don't care... I don't think I care to ever not match on full command line so I wouldn't need both -f and -l which are not easy to remember anyways
