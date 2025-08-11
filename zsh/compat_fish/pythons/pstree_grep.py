@@ -11,27 +11,38 @@ def getpgid(pid):
         return None
 
 # prefer full cmdline; fall back to name only if cmdline unavailable
-def proc_snap():
-    procs, children_by_ppid = {}, defaultdict(list)
-    # https://psutil.readthedocs.io/en/latest/index.html#psutil.process_iter
-    # - possible issues with when it gets process info... and if IDs are reused (i.e. macOS PIDs)
-    #   but IIUC pgrep would have the same problem, there's no atomic way to get process info for all or a subset of processes?
+import psutil
+from collections import defaultdict
+from dataclasses import dataclass
+from os import getpgid
+from typing import Dict, List, Tuple
+
+@dataclass(frozen=True)
+class ProcessInfo:
+    pid: int
+    ppid: int
+    pgid: int
+    name: str
+    cmd: str
+
+def proc_snap() -> Tuple[Dict[int, ProcessInfo], Dict[int, List[int]]]:
+    procs: Dict[int, ProcessInfo] = {}
+    children_by_ppid: Dict[int, List[int]] = defaultdict(list)
     for process in psutil.process_iter(["pid", "ppid", "name", "cmdline"]):
         info = process.info
         pid = info["pid"]
         try:
-            ppid = info["ppid"] or 0  # is 0 a good default?
-            cmdline_full = info.get("cmdline") or []  # full argv if allowed
+            ppid = info["ppid"] or 0
+            cmdline_full = info.get("cmdline") or []
             name = (info.get("name") or "").strip()
             use_cmd = " ".join(cmdline_full).strip() or name or f"[pid:{pid}]"
-            procs[pid] = {
-                "pid": pid,
-                "ppid": ppid,
-                # another opportunity for a race condition:
-                "pgid": getpgid(pid),
-                "name": name,
-                "cmd": use_cmd,
-            }
+            procs[pid] = ProcessInfo(
+                pid=pid,
+                ppid=ppid,
+                pgid=getpgid(pid),
+                name=name,
+                cmd=use_cmd,
+            )
             children_by_ppid[ppid].append(pid)
         except psutil.NoSuchProcess as e:
             rich.print(f"NoSuchProcess for process {pid}:", e)
@@ -39,12 +50,8 @@ def proc_snap():
         except psutil.AccessDenied as e:
             rich.print(f"AccessDenied for process {pid}:", e)
             continue
-
-    # sort processes by name, within each PPID
     for ppid in list(children_by_ppid.keys()):
-        # TODO what sort do I want? should it happen here or elsewhere?
-        children_by_ppid[ppid].sort(key=lambda x: (procs.get(x, {}).get("name", ""), x))
-
+        children_by_ppid[ppid].sort(key=lambda x: (procs.get(x, ProcessInfo(0,0,0,"","")).name, x))
     return procs, children_by_ppid
 
 def match_set(procs, pattern, ignore_case):
