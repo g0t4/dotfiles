@@ -1144,7 +1144,9 @@ if command -q watch
 
     # TODO do I like w mapping to watch? So far `w` isn't used otherwise
     export WATCH_INTERVAL=0.5 # I almost always set to 0.5
-    abbr wa watch # prn add back "-n0.5" if issues w/ WATCH_INTERVAL
+    # FYI DO NOT NEED --color (infact wont work with it... which is why I can't replace my abbrs yet b/c I wanna keep them intact for watch too... why didn't they just implement --color?!)
+    abbr watch viddy
+    abbr wa viddy # prn add back "-n0.5" if issues w/ WATCH_INTERVAL
     abbr wag 'watch --no-title --color -- grc --colour=on'
     # to support --no-title, add --show-kind to kubectl get output
     # - saves top title line and blank line after it for screen realestate!
