@@ -118,8 +118,8 @@ def draw_tree(rootmost_match_pid, all_processes, children_by_ppid, matches):
             return
 
         next_prefix = prefix + ("   " if is_last else part("│") + "  ")
-        for i, k in enumerate(kids):
-            _draw_tree(k, next_prefix, i == len(kids) - 1)
+        for index, child_pid in enumerate(kids):
+            _draw_tree(child_pid, next_prefix, index == len(kids) - 1)
 
     _draw_tree(rootmost_match_pid)
 
