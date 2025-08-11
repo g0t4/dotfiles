@@ -77,8 +77,9 @@ def highlight_match(text):
         # use bold by default if no GREP_COLOR
         return f"\x1b[1m" + text + "\x1b[0m"
 
-def label(p, show_full_cmd):
-    if show_full_cmd:
+def label(p):
+    assert args is not None # change args to never see it as None
+    if args.show_full_cmd:
         return f"{p.cmd} [{f"{p.name}({p.pid})"}]"
     return f"{p.name}({p.pid})"
 
@@ -100,7 +101,7 @@ def part(text):
             # PRN warn?
             return text
 
-def draw_tree(rootmost_match, all_processes, children_by_ppid, match, show_full_cmd=False):
+def draw_tree(rootmost_match, all_processes, children_by_ppid, match):
 
     def _draw_tree(pid, prefix="", is_last=True):
         process = all_processes.get(pid)
@@ -108,7 +109,7 @@ def draw_tree(rootmost_match, all_processes, children_by_ppid, match, show_full_
             return
 
         connector = "" if prefix == "" else (part("└─") if is_last else part("├─"))
-        text = label(process, show_full_cmd)
+        text = label(process)
         if pid in match:
             text = highlight_match(text)
         print(f"{prefix}{connector} {text}" if connector else text)
@@ -153,7 +154,7 @@ def main():
         if not first:
             print()
         first = False
-        draw_tree(rootmost_match, procs, children_by_ppid, matches, show_full_cmd=args.show_full_cmd)
+        draw_tree(rootmost_match, procs, children_by_ppid, matches)
 
 if __name__ == "__main__":
     main()
