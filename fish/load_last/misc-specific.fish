@@ -793,6 +793,10 @@ end
 # - user:10 - limits to 10 chars (+ indicates ...) (:X ubuntu yes, macos no):
 #       ps -o "user:5,pid,pcpu,pmem,vsz,rss,tty,stat,start,time,comm" -ax
 #
+# *** MY pstree
+abbr --set-cursor -- pstreeg "pstree_grep '%'"
+abbr --set-cursor -- pstreeg_watch "viddy --shell fish 'pstree_grep \"%\"'"
+
 # *** pstree
 # pstreeX => pstree -l X
 abbr --add _pstreeX --regex "pstree\d+" --function pstreeX
