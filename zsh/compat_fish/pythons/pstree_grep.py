@@ -29,8 +29,8 @@ def proc_snap() -> Tuple[Dict[int, ProcessInfo], Dict[int, List[int]]]:
         info = process.info
         pid = info["pid"]
         try:
-            ppid = info["ppid"] or 0
-            cmdline_full = info.get("cmdline") or []
+            ppid = info["ppid"] or 0 # is 0 a good default?
+            cmdline_full = info.get("cmdline") or [] # full argv if allowed
             name = (info.get("name") or "").strip()
             use_cmd = " ".join(cmdline_full).strip() or name or f"[pid:{pid}]"
             procs[pid] = ProcessInfo(
@@ -47,7 +47,10 @@ def proc_snap() -> Tuple[Dict[int, ProcessInfo], Dict[int, List[int]]]:
         except psutil.AccessDenied as e:
             rich.print(f"AccessDenied for process {pid}:", e)
             continue
+
+    # sort processes by name, within each PPID
     for ppid in list(children_by_ppid.keys()):
+        # TODO what sort do I want? should it happen here or elsewhere?
         children_by_ppid[ppid].sort(key=lambda x: (procs.get(x, ProcessInfo(0,0,0,"","")).name, x))
     return procs, children_by_ppid
 
