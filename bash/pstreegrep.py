@@ -13,6 +13,9 @@ def getpgid(pid):
 # prefer full cmdline; fall back to name only if cmdline unavailable
 def proc_snap():
     procs, children = {}, defaultdict(list)
+    # https://psutil.readthedocs.io/en/latest/index.html#psutil.process_iter
+    # - possible issues with when it gets process info... and if IDs are reused (i.e. macOS PIDs)
+    #   but IIUC pgrep would have the same problem, there's no atomic way to get process info for all or a subset of processes?
     for p in psutil.process_iter(["pid","ppid","name","cmdline"]):
         try:
             info = p.info
@@ -20,8 +23,13 @@ def proc_snap():
             cmdl = info.get("cmdline") or []   # full argv if allowed
             name = (info.get("name") or "").strip()
             cmd  = " ".join(cmdl).strip() or name or f"[pid:{pid}]"
-            procs[pid] = {"pid": pid, "ppid": ppid, "pgid": getpgid(pid),
-                          "name": name, "cmd": cmd}
+            procs[pid] = {
+                "pid": pid,
+                "ppid": ppid,
+                "pgid": getpgid(pid),
+                "name": name,
+                "cmd": cmd,
+            }
             children[ppid].append(pid)
         except (psutil.NoSuchProcess, psutil.AccessDenied):
             continue
@@ -67,7 +75,7 @@ def draw_tree(root, procs, children, match, ascii_lines=False, full_cmd=False):
     if ascii_lines: V,T,L,S = ("|","+--","`--","   ")
 
     def rec(pid, prefix="", is_last=True):
-        p = procs.get(pid); 
+        p = procs.get(pid);
         if not p: return
         connector = "" if prefix=="" else (L if is_last else T)
         text = label(p, full_cmd)
