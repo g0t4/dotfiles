@@ -18,9 +18,9 @@ def proc_snap():
     # - possible issues with when it gets process info... and if IDs are reused (i.e. macOS PIDs)
     #   but IIUC pgrep would have the same problem, there's no atomic way to get process info for all or a subset of processes?
     for p in psutil.process_iter(["pid", "ppid", "name", "cmdline"]):
+        info = p.info
+        pid = info["pid"]
         try:
-            info = p.info
-            pid = info["pid"]
             ppid = info["ppid"] or 0  # is 0 a good default?
             cmdl = info.get("cmdline") or []  # full argv if allowed
             name = (info.get("name") or "").strip()
@@ -35,8 +35,10 @@ def proc_snap():
             }
             children[ppid].append(pid)
         except psutil.NoSuchProcess:
+            # TODO warn
             continue
-        except psutil.AccessDenied:
+        except psutil.AccessDenied as e:
+            print(f"AccessDenied for process {pid}:", e)
             continue
     for k in list(children.keys()):
         children[k].sort(key=lambda x: (procs.get(x, {}).get("name", ""), x))
