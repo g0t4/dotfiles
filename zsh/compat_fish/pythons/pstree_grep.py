@@ -41,8 +41,7 @@ def proc_snap() -> Tuple[Dict[int, ProcessInfo], Dict[int, List[int]]]:
 
     return procs, children_by_ppid
 
-def match_set(procs, pattern, ignore_case):
-    r = re.compile(pattern, re.IGNORECASE if ignore_case else 0)
+def match_set(procs, r):
     return {
         pid for pid, process in procs.items()
         if r.search(process.cmd) or r.search(process.name)
@@ -151,7 +150,8 @@ def main():
         return
 
     procs, children_by_ppid = proc_snap()
-    matches = match_set(procs, args.pattern, args.ignore_case)
+    r = re.compile(args.pattern, re.IGNORECASE if args.ignore_case else 0)
+    matches = match_set(procs, r)
     if not matches:
         print("No matches.")
         return
