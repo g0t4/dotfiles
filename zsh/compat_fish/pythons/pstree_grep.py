@@ -114,6 +114,10 @@ def main():
     # ok -f rubs up against usage of -f in pgrep but I don't care... I don't think I care to ever not match on full command line so I wouldn't need both -f and -l which are not easy to remember anyways
     ap.add_argument("-f", "--show-full-cmd", action="store_true", help="show full command instead of name(pid)")
     args = ap.parse_args()
+    if args.pattern == "":
+        print("Pattern CANNOT BE EMPTY")
+        ap.print_help()
+        return
 
     procs, children_by_ppid = proc_snap()
     matches = match_set(procs, args.pattern, args.ignore_case)
