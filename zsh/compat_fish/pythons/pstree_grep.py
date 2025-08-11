@@ -68,10 +68,10 @@ def has_ancestor_in_matches(pid, all_processes, matches):
         process = all_processes.get(pid)
         if not process:
             return False
-        parent = process.ppid
-        if parent in matches:
+        parent_pid = process.ppid
+        if parent_pid in matches:
             return True
-        pid = parent
+        pid = parent_pid
     return False
 
 def prune_to_roots(matches, all_processes):
