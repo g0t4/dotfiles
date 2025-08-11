@@ -110,10 +110,10 @@ def draw_tree(rootmost_match_pid, all_processes, children_by_ppid, matches):
 
         if prefix == "":
             connector = ""
-        elif is_last_child:
-            connector = part("└─")
-        else:
+        elif not is_last_child:
             connector = part("├─")
+        else:
+            connector = part("└─")
 
         text = label(process)
         if pid in matches:
