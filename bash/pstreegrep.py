@@ -8,6 +8,7 @@ def getpgid(pid):
     try:
         return os.getpgid(pid)
     except Exception:
+        # windows?
         return None
 
 # prefer full cmdline; fall back to name only if cmdline unavailable
