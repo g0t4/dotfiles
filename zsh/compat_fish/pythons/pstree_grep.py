@@ -23,14 +23,14 @@ def proc_snap():
             ppid = info["ppid"] or 0  # is 0 a good default?
             cmdline_full = info.get("cmdline") or []  # full argv if allowed
             name = (info.get("name") or "").strip()
-            cmd = " ".join(cmdline_full).strip() or name or f"[pid:{pid}]"
+            use_cmd = " ".join(cmdline_full).strip() or name or f"[pid:{pid}]"
             procs[pid] = {
                 "pid": pid,
                 "ppid": ppid,
                 # another opportunity for a race condition:
                 "pgid": getpgid(pid),
                 "name": name,
-                "cmd": cmd,
+                "cmd": use_cmd,
             }
             children_by_ppid[ppid].append(pid)
         except psutil.NoSuchProcess as e:
