@@ -1960,6 +1960,7 @@ abbr mana "man -a" # open all matching pages
 abbr mank apropos # man -k ~= apropos
 abbr manf whatis # man -f == whatis
 abbr manw "man -aw" # man -w == whereis for man pages, or map to whereis?
+abbr man_list_all "man -aw" # -a = all, -w = list path(s)
 # abbr manw "whereis" ???
 # PRN whereis helpers?
 # PRN apropos helpers?
