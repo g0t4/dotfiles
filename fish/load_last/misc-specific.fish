@@ -1961,6 +1961,18 @@ abbr mank apropos # man -k ~= apropos
 abbr manf whatis # man -f == whatis
 abbr manw "man -aw" # man -w == whereis for man pages, or map to whereis?
 abbr man_list_all "man -aw" # -a = all, -w = list path(s)
+abbr manbash "man $HOME/repos/github/g0t4/bash/doc/bash.1"
+# use newest build of bash man page (at least don't use 3.2 from apple!)
+abbr mbash "man $HOME/repos/github/g0t4/bash/doc/bash.1"
+#
+# force pages in homebrew installed manpages to WIN
+#  that way the manpage there for bash always takes precedence
+#  and I NEVER see bash 3.2 from Apple's crap
+#    that you cannot DELETE EITHER in /usr/share/man/man1/bash.1
+# NOTE : colon on end means this is PREPENDED to std MANPATH (so I don't lose other pages, I just put these first)
+#
+# must use set b/c fish has special handling for PATH vars, so cannot just use trailing : like in bash
+set -x MANPATH "/opt/homebrew/share/man" ""
 # abbr manw "whereis" ???
 # PRN whereis helpers?
 # PRN apropos helpers?

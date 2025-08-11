@@ -111,3 +111,12 @@ function multicd {
     echo -n "cd "
     repeat ../ $up_dirs
 }
+
+# force pages in homebrew installed manpages to WIN
+#  that way the manpage there for bash always takes precedence
+#  and I NEVER see bash 3.2 from Apple's crap
+#    that you cannot DELETE EITHER in /usr/share/man/man1/bash.1
+# NOTE : colon on end means this is PREPENDED to std MANPATH (so I don't lose other pages, I just put these first)
+#
+export MANPATH="/opt/homebrew/share/man:"
+
