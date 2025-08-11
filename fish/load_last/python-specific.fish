@@ -134,6 +134,13 @@ abbr uv_build 'uv build --no-sources' # TODO do I want --no-sources? by default
 abbr uv_publish 'uv publish'
 abbr uv_clean 'uv clean'
 
+function pstree_grep
+    set -l _python3 "$WES_DOTFILES/.venv/bin/python3"
+    set -l _script_py "$WES_DOTFILES/zsh/compat_fish/pythons/pstree_grep.py"
+    $_python3 $_script_py $argv
+end
+
+
 function detect_encoding
     set -l _python3 "$WES_DOTFILES/.venv/bin/python3"
     set -l _script_py "$WES_DOTFILES/zsh/compat_fish/pythons/detect_encoding.py"
