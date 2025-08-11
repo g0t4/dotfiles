@@ -73,11 +73,12 @@ def dedupe_by_pgid(pids, procs):
         out.append(pid)
     return out
 
-def is_tty():
-    return sys.stdout.isatty()
-
-def bold(s):
-    return f"\x1b[1m{s}\x1b[0m" if is_tty() else s
+def bold(text):
+    GREP_COLOR = os.getenv("GREP_COLOR")
+    if not sys.stdout.isatty():
+        return text
+    if GREP_COLOR:
+        return f"\x1b[{GREP_COLOR}m" + text + "\x1b[0m"
 
 def label(p, full_cmd):
     base = f"{p['name']}({p['pid']})"
