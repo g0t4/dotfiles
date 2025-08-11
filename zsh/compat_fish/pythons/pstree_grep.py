@@ -47,6 +47,8 @@ def match_set(procs, r):
         if r.search(process.cmd) or r.search(process.name)
         \
     }
+    # by the way.. note about yapf, if it makes no changes it won't show a status message in vim commandline
+    #  that's a different outcome vs it showing yellow warning because it failed
 
 def has_ancestor_in_matches(pid, all_processes, matches):
     seen = set()
