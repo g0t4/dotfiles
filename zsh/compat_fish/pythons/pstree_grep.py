@@ -93,10 +93,10 @@ def part(text):
             return "`--"
         case "├─":
             return "+--"
-        case "│":
+        case "│  ":
             return "|"
-        # case "   ":
-        #     return text
+        case "   ":
+            return text
         case _:
             # PRN warn?
             return text
@@ -124,9 +124,9 @@ def draw_tree(rootmost_match_pid, all_processes, children_by_ppid, matches):
             return
 
         if not is_last_child:
-            next_prefix = prefix + part("│") + "  "
+            next_prefix = prefix + part("│  ")
         else:
-            next_prefix = prefix + "   "
+            next_prefix = prefix + part("   ")
 
         for index, child_pid in enumerate(children):
             _draw_tree(child_pid, next_prefix, index == len(children) - 1)
