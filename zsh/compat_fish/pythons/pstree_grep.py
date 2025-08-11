@@ -66,8 +66,7 @@ def has_ancestor_in_matches(pid, all_processes, matches):
 def prune_to_rootmost_match(matching_pids, all_processes):
     # that way we don't show nested matches in a separate, top-level branch too
     only_rootmost_matches = [
-        pid
-        for pid in matching_pids
+        pid for pid in matching_pids
         if not has_ancestor_in_matches(pid, all_processes, matching_pids)
         \
     ]
