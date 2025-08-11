@@ -94,8 +94,8 @@ def part(text):
             return "+--"
         case "│":
             return "|"
-        case "   ":
-            return text
+        # case "   ":
+        #     return text
         case _:
             # PRN warn?
             return text
