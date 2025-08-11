@@ -113,13 +113,13 @@ def draw_tree(rootmost_match_pid, all_processes, children_by_ppid, matches):
         if pid in matches:
             text = highlight_match(text)
         print(f"{prefix}{connector} {text}" if connector else text)
-        kids = [k for k in children_by_ppid.get(pid, []) if k in all_processes]
-        if not kids:
+        children = [k for k in children_by_ppid.get(pid, []) if k in all_processes]
+        if not children:
             return
 
         next_prefix = prefix + ("   " if is_last else part("│") + "  ")
-        for index, child_pid in enumerate(kids):
-            _draw_tree(child_pid, next_prefix, index == len(kids) - 1)
+        for index, child_pid in enumerate(children):
+            _draw_tree(child_pid, next_prefix, index == len(children) - 1)
 
     _draw_tree(rootmost_match_pid)
 
