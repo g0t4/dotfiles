@@ -96,7 +96,7 @@ def label(p, show_full_cmd):
         return f"{p.cmd} [{f"{p.name}({p.pid} / pgid: {p.pgid})"}]"
     return f"{p.name}({p.pid} / pgid: {p.pgid})"
 
-def draw_tree(root, procs, children, match, ascii_lines=False, show_full_cmd=False):
+def draw_tree(rootmost_match, procs, children, match, ascii_lines=False, show_full_cmd=False):
     V, T, L, S = ("│", "├─", "└─", "   ")
     if ascii_lines:
         V, T, L, S = ("|", "+--", "`--", "   ")
@@ -117,7 +117,7 @@ def draw_tree(root, procs, children, match, ascii_lines=False, show_full_cmd=Fal
         for i, k in enumerate(kids):
             rec(k, next_prefix, i == len(kids) - 1)
 
-    rec(root)
+    rec(rootmost_match)
 
 def main():
     ap = argparse.ArgumentParser(description="pstree-like grep using pure Python (psutil).")
