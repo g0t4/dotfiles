@@ -101,7 +101,7 @@ def draw_tree(rootmost_match, all_processes, children_by_ppid, match, ascii_line
     if ascii_lines:
         V, T, L, S = ("|", "+--", "`--", "   ")
 
-    def rec(pid, prefix="", is_last=True):
+    def _draw_tree(pid, prefix="", is_last=True):
         process = all_processes.get(pid)
         if not process:
             return
@@ -115,9 +115,9 @@ def draw_tree(rootmost_match, all_processes, children_by_ppid, match, ascii_line
             return
         next_prefix = prefix + (S if is_last else V + "  ")
         for i, k in enumerate(kids):
-            rec(k, next_prefix, i == len(kids) - 1)
+            _draw_tree(k, next_prefix, i == len(kids) - 1)
 
-    rec(rootmost_match)
+    _draw_tree(rootmost_match)
 
 def main():
     ap = argparse.ArgumentParser(description="pstree-like grep using pure Python (psutil).")
