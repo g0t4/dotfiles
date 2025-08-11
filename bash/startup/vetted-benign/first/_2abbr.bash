@@ -422,6 +422,10 @@ _abbr() {
         #   if I don't check for command/func shadowing then the stub func will be run b/c of my first abbr
         #   - this is 100% not what I want
         #   I am happy to settle on an abbr definition time check to avoid this, and warning to user
+
+    # else
+    #     # quick check what doesn't need the abbr func b/c a command already exists to achieve same goal
+    #     echo command exists for "$1"
     fi
 
 }
@@ -627,9 +631,11 @@ _remove_abbr_function() {
     local must_contain="echo 'abbrs are not intended to be executed directly"
     if [[ "$body" == *"$must_contain"* ]]; then
         unset "$name"
-    else
-        return 1
     fi
+    # FYI if no function found, no need to return non-zero exit status
+    #   b/c some abbrs are named same as real command and so I never create a stub func to get tab completion
+    #   that said, I could check the abbrs_stub_func_names to decide when to error vs function body?
+    #      if I do this, add a test first
 }
 
 reset_abbrs() {
