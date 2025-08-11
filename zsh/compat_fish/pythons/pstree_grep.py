@@ -91,8 +91,7 @@ def draw_tree(rootmost_match, all_processes, children_by_ppid, match, ascii_line
         if not process:
             return
 
-        T, L = ("├─", "└─")
-        connector = "" if prefix == "" else (L if is_last else T)
+        connector = "" if prefix == "" else ("└─" if is_last else "├─")
         text = label(process, show_full_cmd)
         if pid in match:
             text = highlight_match(text)
@@ -101,8 +100,7 @@ def draw_tree(rootmost_match, all_processes, children_by_ppid, match, ascii_line
         if not kids:
             return
 
-        V, S = ("│", "   ")
-        next_prefix = prefix + (S if is_last else V + "  ")
+        next_prefix = prefix + ("   " if is_last else "│" + "  ")
         for i, k in enumerate(kids):
             _draw_tree(k, next_prefix, i == len(kids) - 1)
 
