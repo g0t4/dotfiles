@@ -108,7 +108,11 @@ def draw_tree(rootmost_match, all_processes, children_by_ppid, match, ascii_line
 
     _draw_tree(rootmost_match)
 
+
+args = None
 def main():
+    global args # so I don't have to pass to every function
+
     ap = argparse.ArgumentParser(description="pstree-like grep using pure Python (psutil).")
     ap.add_argument("pattern", help="regex matched against process name and full cmdline")
     ap.add_argument("-i", "--ignore-case", action="store_true", help="case-insensitive matching")
