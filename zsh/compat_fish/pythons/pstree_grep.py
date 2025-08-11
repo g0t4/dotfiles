@@ -74,7 +74,7 @@ def has_ancestor_in_matches(pid, all_processes, matches):
         pid = parent_pid
     return False
 
-def prune_to_roots(matches, all_processes):
+def prune_to_rootmost_match(matches, all_processes):
     return sorted(pid for pid in matches if not has_ancestor_in_matches(pid, all_processes, matches))
 
 def dedupe_by_pgid(pids, procs):
@@ -144,7 +144,7 @@ def main():
         print("No matches.")
         return
 
-    roots = prune_to_roots(matches, procs)
+    roots = prune_to_rootmost_match(matches, procs)
     if args.pgid_dedupe:
         roots = dedupe_by_pgid(roots, procs)
 
