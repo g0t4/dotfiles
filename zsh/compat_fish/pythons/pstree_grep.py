@@ -150,11 +150,11 @@ def main():
 
     print(f"# matches: {len(matches)}  roots: {len(rootmost_matches)}  (matched nodes are bold and marked with *)")
     first = True
-    for rootmost_match in rootmost_matches:
+    for rootmost_match_pid in rootmost_matches:
         if not first:
             print()
         first = False
-        draw_tree(rootmost_match, procs, children_by_ppid, matches)
+        draw_tree(rootmost_match_pid, procs, children_by_ppid, matches)
 
 if __name__ == "__main__":
     main()
