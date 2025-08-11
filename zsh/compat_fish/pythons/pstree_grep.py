@@ -74,6 +74,7 @@ def prune_to_rootmost_match(matching_pids, all_processes):
 
 RESET = "\x1b[0m"
 BOLD = "\x1b[1m"
+UNDERLINE = "\x1b[4m"
 
 GREP_COLOR = os.getenv("GREP_COLOR")
 HIGHLIGHT = f"\x1b[{GREP_COLOR}m"
