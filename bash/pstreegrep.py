@@ -1,118 +1,107 @@
 #!/usr/bin/env python3
-import argparse, subprocess, sys, shlex, collections
+import argparse, subprocess, sys, shlex, collections, os
 
 def run(cmd):
     p = subprocess.run(cmd, shell=True, text=True, capture_output=True)
     if p.returncode != 0:
-        sys.stderr.write(p.stderr or f"command failed: {cmd}\n")
-        sys.exit(1)
+        sys.stderr.write(p.stderr or f"command failed: {cmd}\n"); sys.exit(1)
     return p.stdout
 
 def get_match_pids(pattern):
-    out = run(f"pgrep -f {shlex.quote(pattern)}")
-    return {int(x) for x in out.split()}
+    out = run(f"pgrep -f {shlex.quote(pattern)} || true")
+    return {int(x) for x in out.split()} if out.strip() else set()
 
 def build_proc_table():
-    # Portable columns on Linux/macOS
-    # (macOS may not have SID; we skip it)
-    out = run("ps -Ao pid=,ppid=,pgid=,command=")
-    procs = {}
-    children = collections.defaultdict(list)
+    # comm: short executable name (pstree-like); command: full argv
+    out = run("ps -Ao pid=,ppid=,pgid=,comm=,command=")
+    procs, children = {}, collections.defaultdict(list)
     for line in out.splitlines():
-        parts = line.strip().split(None, 3)
-        if len(parts) < 4:
-            continue
-        pid, ppid, pgid, cmd = int(parts[0]), int(parts[1]), int(parts[2]), parts[3]
-        procs[pid] = {"pid": pid, "ppid": ppid, "pgid": pgid, "cmd": cmd}
+        parts = line.strip().split(None, 4)
+        if len(parts) < 5: continue
+        pid, ppid, pgid = map(int, parts[:3])
+        comm, command = parts[3], parts[4]
+        procs[pid] = {"pid": pid, "ppid": ppid, "pgid": pgid, "comm": comm, "cmd": command}
         children[ppid].append(pid)
+    # stable sort: by comm then pid
+    for k in list(children.keys()):
+        children[k].sort(key=lambda x: (procs.get(x, {}).get("comm",""), x))
     return procs, children
 
-def has_ancestor_in_set(pid, procs, match_set):
-    seen = set()
-    while True:
-        if pid in seen:  # safety against cycles
-            return False
+def has_ancestor_in_set(pid, procs, match):
+    seen=set()
+    while pid and pid not in seen:
         seen.add(pid)
-        p = procs.get(pid)
-        if not p:
-            return False
-        ppid = p["ppid"]
-        if ppid == 0:
-            return False
-        if ppid in match_set:
-            return True
-        pid = ppid
+        p = procs.get(pid); 
+        if not p: return False
+        pid = p["ppid"]
+        if pid in match: return True
+    return False
 
-def prune_to_roots(match_pids, procs):
-    return sorted(pid for pid in match_pids if not has_ancestor_in_set(pid, procs, match_pids))
+def prune_to_roots(match, procs):
+    return sorted(pid for pid in match if not has_ancestor_in_set(pid, procs, match))
 
 def dedupe_by_pgid(pids, procs):
-    seen = set()
-    out = []
+    seen=set(); out=[]
     for pid in sorted(pids):
-        pg = procs.get(pid, {}).get("pgid")
-        if pg in seen:
-            continue
-        seen.add(pg)
-        out.append(pid)
+        pg=procs.get(pid,{}).get("pgid")
+        if pg in seen: continue
+        seen.add(pg); out.append(pid)
     return out
 
-def print_tree(pid, procs, children, match_set, prefix=""):
-    p = procs.get(pid)
-    if not p:
-        return
-    mark = "*" if pid in match_set else " "
-    line = f"{prefix}{mark} pid={p['pid']} pgid={p['pgid']}  {p['cmd']}"
-    print(line)
-    kids = sorted(children.get(pid, []))
-    for i, k in enumerate(kids):
-        last = (i == len(kids)-1)
-        branch = "└─ " if last else "├─ "
-        cont   = "   " if last else "│  "
-        print_tree(k, procs, children, match_set, prefix + branch)
-        prefix = prefix  # (prefix for siblings is handled by recursion path)
-        # Adjust prefix for children-of-children:
-        if kids:
-            # update the prefix passed deeper down via recursion call above
-            pass
+def is_tty():
+    return sys.stdout.isatty()
 
-def print_tree2(pid, procs, children, match_set, prefix="", is_last=True):
-    p = procs.get(pid)
-    if not p: return
-    connector = "" if prefix == "" else ("└─ " if is_last else "├─ ")
-    mark = "*" if pid in match_set else " "
-    print(f"{prefix}{connector}{mark} pid={p['pid']} pgid={p['pgid']}  {p['cmd']}")
-    kids = sorted(children.get(pid, []))
-    for i, k in enumerate(kids):
-        child_prefix = prefix + ("" if prefix=="" else ("   " if is_last else "│  "))
-        print_tree2(k, procs, children, match_set, child_prefix, i == len(kids)-1)
+def style_match(s):
+    return f"\x1b[1m{s}\x1b[0m" if is_tty() else s  # bold if TTY
+
+def node_label(p, show_full):
+    base = f"{p['comm']}({p['pid']})"
+    return f"{p['cmd']} [{base}]" if show_full else base
+
+def draw_tree(root, procs, children, match, ascii_lines=False, show_full=False):
+    # classic pstree connectors
+    V, T, L, S = ("│","├─","└─","   ")
+    if ascii_lines: V, T, L, S = ("|","+--","`--","   ")
+
+    def rec(pid, prefix="", is_last=True):
+        p = procs.get(pid); 
+        if not p: return
+        connector = "" if prefix == "" else (L if is_last else T)
+        label = node_label(p, show_full)
+        if pid in match: label = style_match(label) + " *"
+        print(f"{prefix}{connector} {label}" if connector else f"{label}")
+        kids = children.get(pid, [])
+        if not kids: return
+        next_prefix = prefix + (S if is_last else V + "  ")
+        for i, k in enumerate(kids):
+            rec(k, next_prefix, i == len(kids)-1)
+
+    rec(root)
 
 def main():
-    ap = argparse.ArgumentParser(description="pgrep-driven pstree that dedupes descendants.")
+    ap = argparse.ArgumentParser(description="pgrep-driven pstree that keeps full nesting and dedupes descendants.")
     ap.add_argument("pattern", help="pgrep -f pattern")
-    ap.add_argument("--pgid-dedupe", action="store_true",
-                    help="Keep only one root per PGID among matches.")
-    ap.add_argument("--show-all", action="store_true",
-                    help="Show the full tree under each root (default).")
+    ap.add_argument("--pgid-dedupe", action="store_true", help="Keep one root per PGID among matches")
+    ap.add_argument("--ascii", action="store_true", help="Use ASCII tree lines")
+    ap.add_argument("--full-cmd", action="store_true", help="Show full command instead of comm(pid)")
     args = ap.parse_args()
 
     match = get_match_pids(args.pattern)
-    if not match:
-        print("No matches.")
-        return
-
     procs, children = build_proc_table()
+
+    if not match:
+        print("No matches."); return
 
     roots = prune_to_roots(match, procs)
     if args.pgid_dedupe:
         roots = dedupe_by_pgid(roots, procs)
 
-    # Header
-    print(f"# matches: {len(match)}  roots: {len(roots)}  (matched nodes marked with *)")
-    for idx, r in enumerate(roots):
-        if idx: print("")  # blank line between trees
-        # print tree rooted at r
-        print_tree2(r, procs, children, match)
+    print(f"# matches: {len(match)}  roots: {len(roots)}  (matched nodes are bold and marked with *)")
+    first=True
+    for r in roots:
+        if not first: print("")
+        first=False
+        draw_tree(r, procs, children, match, ascii_lines=args.ascii, show_full=args.full_cmd)
 
 if __name__ == "__main__":
     main()
