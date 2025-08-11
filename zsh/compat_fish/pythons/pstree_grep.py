@@ -77,7 +77,7 @@ BOLD = "\x1b[1m"
 UNDERLINE = "\x1b[4m"
 
 GREP_COLOR = os.getenv("GREP_COLOR")
-HIGHLIGHT = f"\x1b[{GREP_COLOR}m"
+GREP_HIGHLIGHT = f"\x1b[{GREP_COLOR}m"
 
 def highlight_match(text, regex):
     # if not sys.stdout.isatty():
@@ -87,7 +87,7 @@ def highlight_match(text, regex):
         # text doesn't match regex (which means full command line is not visible and so it won't match always)... lets then underline it
         if not regex.search(text):
             return text + "*"
-        return regex.sub(lambda m: f"{HIGHLIGHT}{m.group(0)}{RESET}", text)
+        return regex.sub(lambda m: f"{GREP_HIGHLIGHT}{m.group(0)}{RESET}", text)
     else:
         return BOLD + text + RESET
 
