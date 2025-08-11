@@ -96,7 +96,7 @@ def label(p, show_full_cmd):
         return f"{p.cmd} [{f"{p.name}({p.pid} / pgid: {p.pgid})"}]"
     return f"{p.name}({p.pid} / pgid: {p.pgid})"
 
-def draw_tree(rootmost_match, all_processes, children, match, ascii_lines=False, show_full_cmd=False):
+def draw_tree(rootmost_match, all_processes, children_by_ppid, match, ascii_lines=False, show_full_cmd=False):
     V, T, L, S = ("│", "├─", "└─", "   ")
     if ascii_lines:
         V, T, L, S = ("|", "+--", "`--", "   ")
@@ -110,7 +110,7 @@ def draw_tree(rootmost_match, all_processes, children, match, ascii_lines=False,
         if pid in match:
             text = highlight_match(text) + " *"
         print(f"{prefix}{connector} {text}" if connector else text)
-        kids = [k for k in children.get(pid, []) if k in all_processes]
+        kids = [k for k in children_by_ppid.get(pid, []) if k in all_processes]
         if not kids:
             return
         next_prefix = prefix + (S if is_last else V + "  ")
@@ -128,7 +128,7 @@ def main():
     ap.add_argument("-f", "--show-full-cmd", action="store_true", help="show full command instead of name(pid)")
     args = ap.parse_args()
 
-    procs, children = proc_snap()
+    procs, children_by_ppid = proc_snap()
     matches = match_set(procs, args.pattern, args.ignore_case)
     if not matches:
         print("No matches.")
@@ -142,7 +142,7 @@ def main():
         if not first:
             print()
         first = False
-        draw_tree(rootmost_match, procs, children, matches, ascii_lines=args.ascii, show_full_cmd=args.show_full_cmd)
+        draw_tree(rootmost_match, procs, children_by_ppid, matches, ascii_lines=args.ascii, show_full_cmd=args.show_full_cmd)
 
 if __name__ == "__main__":
     main()
