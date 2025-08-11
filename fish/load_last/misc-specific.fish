@@ -2320,18 +2320,18 @@ if command -q nvidia-smi
     abbr nsl "nvidia-smi -L" # List GPUs
     abbr nst "nvidia-smi -q -d temperature | bat -l yml" # not yaml, but close enough
     abbr nsu "nvidia-smi -q -d utilization | bat -l yml" # not yaml, but close enough
-    abbr nstw "watch nvidia-smi -q -d temperature"
-    abbr nsuw "watch nvidia-smi -q -d utilization"
+    abbr nstw "viddy nvidia-smi -q -d temperature"
+    abbr nsuw "viddy nvidia-smi -q -d utilization"
     abbr nsm "nvidia-smi -q -d memory | bat -l yml" # Memory usage
-    abbr nsmw "watch nvidia-smi -q -d memory"
+    abbr nsmw "viddy nvidia-smi -q -d memory"
     abbr nsp "nvidia-smi -q -d power | bat -l yml" # Power usage
-    abbr nspm "watch -n 1 nvidia-smi -q -d power,memory,utilization" # Power and memory monitoring
+    abbr nspm "viddy -n 1 nvidia-smi -q -d power,memory,utilization" # Power and memory monitoring
     abbr nsf "nvidia-smi -q -d clock | bat -l yml" # Clock frequencies
 
     # Monitoring commands with loop
     abbr nsdmon "nvidia-smi dmon" # Device monitoring in scrolling format
     abbr nspmon "nvidia-smi pmon" # Process monitoring in scrolling format
-    abbr nswatch "watch -n 1 nvidia-smi" # Basic monitoring with refresh
+    abbr nswatch "viddy -n 1 nvidia-smi" # Basic monitoring with refresh
 
     # More specialized queries
     abbr nspids "nvidia-smi --query-compute-apps=pid,process_name,used_memory --format=csv" # List processes using GPU
@@ -2458,7 +2458,7 @@ if command -q lsof
     # -i == internet files (ports)
     # -a == AND constraints
 
-    abbr --set-cursor lsofp_watch 'watch "sudo lsof -p \$(pgrep -if \"%\" | head -1)"'
+    abbr --set-cursor lsofp_watch 'viddy "sudo lsof -p \$(pgrep -if \"%\" | head -1)"'
 
 end
 
