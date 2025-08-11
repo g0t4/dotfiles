@@ -85,6 +85,7 @@ def highlight_match(text):
     GREP_COLOR = os.getenv("GREP_COLOR")
     # if not sys.stdout.isatty():
     #     return text
+    # TODO consider * on end if --no-color option added
     if GREP_COLOR:
         return f"\x1b[{GREP_COLOR}m" + text + "\x1b[0m"
     else:
@@ -105,10 +106,11 @@ def draw_tree(rootmost_match, all_processes, children_by_ppid, match, ascii_line
         process = all_processes.get(pid)
         if not process:
             return
+
         connector = "" if prefix == "" else (L if is_last else T)
         text = label(process, show_full_cmd)
         if pid in match:
-            text = highlight_match(text) + " *"
+            text = highlight_match(text)
         print(f"{prefix}{connector} {text}" if connector else text)
         kids = [k for k in children_by_ppid.get(pid, []) if k in all_processes]
         if not kids:
