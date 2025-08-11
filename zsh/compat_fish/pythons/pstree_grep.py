@@ -68,7 +68,7 @@ def has_ancestor_in_set(pid, procs, match):
         process = procs.get(pid)
         if not process:
             return False
-        parent = process["ppid"]
+        parent = process.ppid
         if parent in match:
             return True
         pid = parent
@@ -81,7 +81,8 @@ def dedupe_by_pgid(pids, procs):
     seen = set()
     out = []
     for pid in sorted(pids):
-        pg = procs.get(pid, {}).get("pgid")
+        process = procs.get(pid)
+        pg = process.pgid
         if pg in seen:
             continue
         seen.add(pg)
@@ -99,9 +100,9 @@ def highlight_match(text):
         return f"\x1b[1m" + text + "\x1b[0m"
 
 def label(p, full_cmd):
-    return f"{p['cmd']} [{f"{p['name']}({p['pid']})"}]"  \
+    return f"{p.cmd} [{f"{p.name}({p.pid})"}]"  \
         if full_cmd \
-        else f"{p['name']}({p['pid']})"
+        else f"{p.name}({p.pid})"
 
 def draw_tree(root, procs, children, match, ascii_lines=False, full_cmd=False):
     V, T, L, S = ("│", "├─", "└─", "   ")
