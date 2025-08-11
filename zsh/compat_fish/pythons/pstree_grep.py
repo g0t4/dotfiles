@@ -123,10 +123,10 @@ def draw_tree(rootmost_match_pid, all_processes, children_by_ppid, matches):
         if not children:
             return
 
-        if is_last_child:
-            next_prefix = prefix + "   "
-        else:
+        if not is_last_child:
             next_prefix = prefix + part("│") + "  "
+        else:
+            next_prefix = prefix + "   "
 
         for index, child_pid in enumerate(children):
             _draw_tree(child_pid, next_prefix, index == len(children) - 1)
