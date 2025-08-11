@@ -101,7 +101,7 @@ def part(text):
             # PRN warn?
             return text
 
-def draw_tree(rootmost_match, all_processes, children_by_ppid, matches):
+def draw_tree(rootmost_match_pid, all_processes, children_by_ppid, matches):
 
     def _draw_tree(pid, prefix="", is_last=True):
         process = all_processes.get(pid)
@@ -121,7 +121,7 @@ def draw_tree(rootmost_match, all_processes, children_by_ppid, matches):
         for i, k in enumerate(kids):
             _draw_tree(k, next_prefix, i == len(kids) - 1)
 
-    _draw_tree(rootmost_match)
+    _draw_tree(rootmost_match_pid)
 
 
 args = None
