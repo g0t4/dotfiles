@@ -44,7 +44,8 @@ def proc_snap() -> Tuple[Dict[int, ProcessInfo], Dict[int, List[int]]]:
 def match_set(procs, r):
     return {
         pid for pid, process in procs.items()
-        if r.search(process.cmd) or r.search(process.name) \
+        if r.search(process.cmd) or r.search(process.name)
+        \
     }
 
 def has_ancestor_in_matches(pid, all_processes, matches):
@@ -63,8 +64,10 @@ def has_ancestor_in_matches(pid, all_processes, matches):
 def prune_to_rootmost_match(matches, all_processes):
     # that way we don't show nested matches in a separate, top-level branch too
     only_rootmost_matches = [
-        pid for pid in matches
-        if not has_ancestor_in_matches(pid, all_processes, matches) \
+        pid
+        for pid in matches
+        if not has_ancestor_in_matches(pid, all_processes, matches)
+        \
     ]
     return only_rootmost_matches
 
