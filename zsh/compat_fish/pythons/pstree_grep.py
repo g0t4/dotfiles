@@ -65,10 +65,10 @@ def has_ancestor_in_set(pid, procs, match):
     seen = set()
     while pid and pid not in seen:
         seen.add(pid)
-        p = procs.get(pid)
-        if not p:
+        process = procs.get(pid)
+        if not process:
             return False
-        parent = p["ppid"]
+        parent = process["ppid"]
         if parent in match:
             return True
         pid = parent
