@@ -14,7 +14,7 @@ def getpgid(pid):
 
 # prefer full cmdline; fall back to name only if cmdline unavailable
 def proc_snap():
-    procs, children = {}, defaultdict(list)
+    procs, children_by_ppid = {}, defaultdict(list)
     # https://psutil.readthedocs.io/en/latest/index.html#psutil.process_iter
     # - possible issues with when it gets process info... and if IDs are reused (i.e. macOS PIDs)
     #   but IIUC pgrep would have the same problem, there's no atomic way to get process info for all or a subset of processes?
@@ -34,16 +34,16 @@ def proc_snap():
                 "name": name,
                 "cmd": cmd,
             }
-            children[ppid].append(pid)
+            children_by_ppid[ppid].append(pid)
         except psutil.NoSuchProcess as e:
             rich.print(f"NoSuchProcess for process {pid}:", e)
             continue
         except psutil.AccessDenied as e:
             rich.print(f"AccessDenied for process {pid}:", e)
             continue
-    for k in list(children.keys()):
-        children[k].sort(key=lambda x: (procs.get(x, {}).get("name", ""), x))
-    return procs, children
+    for k in list(children_by_ppid.keys()):
+        children_by_ppid[k].sort(key=lambda x: (procs.get(x, {}).get("name", ""), x))
+    return procs, children_by_ppid
 
 def match_set(procs, pattern, ignore_case):
     r = re.compile(pattern, re.IGNORECASE if ignore_case else 0)
