@@ -39,4 +39,5 @@ gsed -i 's/\\\\\\\\b/\\\\b/g' "$file_abbrs"
 #
 
 # generate wrapper functions (both abbr and non-abbr)
-bash --login -c generate_func_wrappers
+bash --login -i -c generate_func_wrappers
+# FORCE -i interactive otherwise generate_func_wrappers is not avail, I should fix my config on that?
