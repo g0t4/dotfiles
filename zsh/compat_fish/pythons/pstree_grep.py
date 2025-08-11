@@ -61,7 +61,7 @@ def match_set(procs, pattern, ignore_case):
         if r.search(process.cmd) or r.search(process.name)
     }
 
-def has_ancestor_in_set(pid, all_processes, matches):
+def has_ancestor_in_matches(pid, all_processes, matches):
     seen = set()
     while pid and pid not in seen:
         seen.add(pid)
@@ -75,7 +75,7 @@ def has_ancestor_in_set(pid, all_processes, matches):
     return False
 
 def prune_to_roots(matches, all_processes):
-    return sorted(pid for pid in matches if not has_ancestor_in_set(pid, all_processes, matches))
+    return sorted(pid for pid in matches if not has_ancestor_in_matches(pid, all_processes, matches))
 
 def dedupe_by_pgid(pids, procs):
     seen = set()
