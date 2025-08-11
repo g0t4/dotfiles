@@ -41,7 +41,7 @@ def proc_snap() -> Tuple[Dict[int, ProcessInfo], Dict[int, List[int]]]:
 
     return procs, children_by_ppid
 
-def get_matches(procs, r):
+def get_matches(procs, r) -> set[int]:
     return {
         pid for pid, process in procs.items()
         if r.search(process.cmd) or r.search(process.name)
