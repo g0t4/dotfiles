@@ -1,6 +1,4 @@
-#!/usr/bin/env python3
-# pip install psutil
-import argparse, os, re, sys
+import argparse, os, re
 from collections import defaultdict
 import psutil
 import rich
