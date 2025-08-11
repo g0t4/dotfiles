@@ -21,9 +21,9 @@ def proc_snap():
         pid = info["pid"]
         try:
             ppid = info["ppid"] or 0  # is 0 a good default?
-            cmdl = info.get("cmdline") or []  # full argv if allowed
+            cmdline_full = info.get("cmdline") or []  # full argv if allowed
             name = (info.get("name") or "").strip()
-            cmd = " ".join(cmdl).strip() or name or f"[pid:{pid}]"
+            cmd = " ".join(cmdline_full).strip() or name or f"[pid:{pid}]"
             procs[pid] = {
                 "pid": pid,
                 "ppid": ppid,
