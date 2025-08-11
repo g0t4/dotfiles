@@ -84,6 +84,9 @@ def highlight_match(text, regex):
     #     return text
 
     if GREP_COLOR:
+        # text doesn't match regex (which means full command line is not visible and so it won't match always)... lets then underline it
+        if not regex.search(text):
+            return UNDERLINE + text + RESET
         return regex.sub(lambda m: f"{HIGHLIGHT}{m.group(0)}{RESET}", text)
     else:
         return BOLD + text + RESET
