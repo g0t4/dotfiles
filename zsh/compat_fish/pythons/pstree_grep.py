@@ -133,6 +133,7 @@ def main():
     ap.add_argument("-i", "--ignore-case", action="store_true", help="case-insensitive matching")
     ap.add_argument("--pgid-dedupe", action="store_true", help="keep one root per PGID among matches")
     ap.add_argument("--ascii", action="store_true", help="use ASCII connectors")
+    # ok -f rubs up against usage of -f in pgrep but I don't care... I don't think I care to ever not match on full command line so I wouldn't need both -f and -l which are not easy to remember anyways
     ap.add_argument("-f", "--show-full-cmd", action="store_true", help="show full command instead of name(pid)")
     args = ap.parse_args()
 
