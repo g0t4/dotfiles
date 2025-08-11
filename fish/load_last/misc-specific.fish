@@ -426,7 +426,8 @@ if command -q kubectl
     abbr kset 'kubectl set'
     # top
     abbr ktop 'kubectl top pod --all-namespaces'
-    abbr ktopw 'watch --no-title --color -- grc --colour=on kubectl top pod --all-namespaces'
+    #
+    abbr ktopw 'viddy --no-title -- grc --colour=on kubectl top pod --all-namespaces'
     abbr ktopn 'kubectl top node'
     # version
     abbr kver 'kubectl version'
@@ -1147,18 +1148,19 @@ if command -q watch
     # FYI DO NOT NEED --color (infact wont work with it... which is why I can't replace my abbrs yet b/c I wanna keep them intact for watch too... why didn't they just implement --color?!)
     abbr watch viddy
     abbr wa viddy # prn add back "-n0.5" if issues w/ WATCH_INTERVAL
-    abbr wag 'watch --no-title --color -- grc --colour=on'
+    # FYI if you go back to watch... add --color to appropriate abbrs
+    abbr wag 'viddy --no-title -- grc --colour=on'
     # to support --no-title, add --show-kind to kubectl get output
     # - saves top title line and blank line after it for screen realestate!
     # - also nukes showing time in upper right corner
     # - FYI --show-kind already enabled if multi types requested, so NBD
-    abbr wak 'watch --no-title --color -- grc --colour=on kubectl get --show-kind' # using alot! I love this
-    abbr wad 'watch --no-title --color -- grc --colour=on kubectl describe --show-kind' # using alot! I love this
-    abbr wakp 'watch --no-title --color -- grc --colour=on kubectl get --show-kind pods'
-    abbr wah 'watch --no-title --color -- http --pretty=colors'
-    abbr wahv 'watch --no-title --color -- http --pretty=colors --verbose' # == --print HhBb (headers and body for both request and response)
-    abbr wal 'watch --no-title --color -- grc --colour=on ls'
-    abbr wat 'watch --no-title --color -- grc --colour=on tree'
+    abbr wak 'viddy --no-title -- grc --colour=on kubectl get --show-kind' # using alot! I love this
+    abbr wad 'viddy --no-title -- grc --colour=on kubectl describe --show-kind' # using alot! I love this
+    abbr wakp 'viddy --no-title -- grc --colour=on kubectl get --show-kind pods'
+    abbr wah 'viddy --no-title -- http --pretty=colors'
+    abbr wahv 'viddy --no-title -- http --pretty=colors --verbose' # == --print HhBb (headers and body for both request and response)
+    abbr wal 'viddy --no-title -- grc --colour=on ls'
+    abbr wat 'viddy --no-title -- grc --colour=on tree'
     # for k8s prefer kubectl --watch b/c grc colors the output w/o issues.. but when it is not avail to continually monitor then use watch command w/ color output:
     #   watch -n0.5 --color -- grc --colour=on kubectl rollout status deployments
 
