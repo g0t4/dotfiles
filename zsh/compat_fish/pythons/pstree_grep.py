@@ -133,7 +133,7 @@ def main():
     ap.add_argument("-i", "--ignore-case", action="store_true", help="case-insensitive matching")
     ap.add_argument("--pgid-dedupe", action="store_true", help="keep one root per PGID among matches")
     ap.add_argument("--ascii", action="store_true", help="use ASCII connectors")
-    ap.add_argument("--show-full-cmd", action="store_true", help="show full command instead of name(pid)")
+    ap.add_argument("-f", "--show-full-cmd", action="store_true", help="show full command instead of name(pid)")
     args = ap.parse_args()
 
     procs, children = proc_snap()
