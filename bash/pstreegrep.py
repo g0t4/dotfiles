@@ -20,7 +20,8 @@ def proc_snap():
     for p in psutil.process_iter(["pid", "ppid", "name", "cmdline"]):
         try:
             info = p.info
-            pid, ppid = info["pid"], info["ppid"] or 0
+            pid = info["pid"]
+            ppid = info["ppid"] or 0
             cmdl = info.get("cmdline") or []  # full argv if allowed
             name = (info.get("name") or "").strip()
             cmd = " ".join(cmdl).strip() or name or f"[pid:{pid}]"
