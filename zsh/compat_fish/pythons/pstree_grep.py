@@ -101,8 +101,8 @@ def highlight_match(text):
 
 def label(p, show_full_cmd):
     if show_full_cmd:
-        return f"{p.cmd} [{f"({p.pid} / pgid: {p.pgid}) {p.name}"}]"
-    return f"({p.pid} / pgid: {p.pgid}) {p.name}"
+        return f"{p.cmd} [{f"{p.name}({p.pid} / pgid: {p.pgid})"}]"
+    return f"{p.name}({p.pid} / pgid: {p.pgid})"
 
 def draw_tree(root, procs, children, match, ascii_lines=False, show_full_cmd=False):
     V, T, L, S = ("│", "├─", "└─", "   ")
