@@ -41,8 +41,8 @@ def proc_snap():
         except psutil.AccessDenied as e:
             rich.print(f"AccessDenied for process {pid}:", e)
             continue
-    for k in list(children_by_ppid.keys()):
-        children_by_ppid[k].sort(key=lambda x: (procs.get(x, {}).get("name", ""), x))
+    for ppid in list(children_by_ppid.keys()):
+        children_by_ppid[ppid].sort(key=lambda x: (procs.get(x, {}).get("name", ""), x))
     return procs, children_by_ppid
 
 def match_set(procs, pattern, ignore_case):
