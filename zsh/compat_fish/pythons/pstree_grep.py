@@ -16,8 +16,8 @@ def proc_snap():
     # https://psutil.readthedocs.io/en/latest/index.html#psutil.process_iter
     # - possible issues with when it gets process info... and if IDs are reused (i.e. macOS PIDs)
     #   but IIUC pgrep would have the same problem, there's no atomic way to get process info for all or a subset of processes?
-    for p in psutil.process_iter(["pid", "ppid", "name", "cmdline"]):
-        info = p.info
+    for process in psutil.process_iter(["pid", "ppid", "name", "cmdline"]):
+        info = process.info
         pid = info["pid"]
         try:
             ppid = info["ppid"] or 0  # is 0 a good default?
