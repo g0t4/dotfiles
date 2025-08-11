@@ -100,7 +100,7 @@ def part(text):
             # PRN warn?
             return text
 
-def draw_tree(rootmost_match, all_processes, children_by_ppid, match, ascii_lines=False, show_full_cmd=False):
+def draw_tree(rootmost_match, all_processes, children_by_ppid, match, show_full_cmd=False):
 
     def _draw_tree(pid, prefix="", is_last=True):
         process = all_processes.get(pid)
@@ -153,7 +153,7 @@ def main():
         if not first:
             print()
         first = False
-        draw_tree(rootmost_match, procs, children_by_ppid, matches, ascii_lines=args.ascii, show_full_cmd=args.show_full_cmd)
+        draw_tree(rootmost_match, procs, children_by_ppid, matches, show_full_cmd=args.show_full_cmd)
 
 if __name__ == "__main__":
     main()
