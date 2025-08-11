@@ -1143,6 +1143,15 @@ if command -q watch
         # watch -n 0.5 --color -- "grc --colour=on kubectl describe pod/web"
     end
 
+    function viddy
+        # look in args for `-n` and then don't pass if found
+        if contains -- -n $argv
+            command viddy $argv
+        else
+            command viddy -n $WATCH_INTERVAL $argv
+        end
+    end
+
     # TODO do I like w mapping to watch? So far `w` isn't used otherwise
     export WATCH_INTERVAL=0.5 # I almost always set to 0.5
     # FYI DO NOT NEED --color (infact wont work with it... which is why I can't replace my abbrs yet b/c I wanna keep them intact for watch too... why didn't they just implement --color?!)
