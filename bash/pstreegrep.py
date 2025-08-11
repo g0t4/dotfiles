@@ -16,13 +16,13 @@ def proc_snap():
     # https://psutil.readthedocs.io/en/latest/index.html#psutil.process_iter
     # - possible issues with when it gets process info... and if IDs are reused (i.e. macOS PIDs)
     #   but IIUC pgrep would have the same problem, there's no atomic way to get process info for all or a subset of processes?
-    for p in psutil.process_iter(["pid","ppid","name","cmdline"]):
+    for p in psutil.process_iter(["pid", "ppid", "name", "cmdline"]):
         try:
             info = p.info
             pid, ppid = info["pid"], info["ppid"] or 0
-            cmdl = info.get("cmdline") or []   # full argv if allowed
+            cmdl = info.get("cmdline") or []  # full argv if allowed
             name = (info.get("name") or "").strip()
-            cmd  = " ".join(cmdl).strip() or name or f"[pid:{pid}]"
+            cmd = " ".join(cmdl).strip() or name or f"[pid:{pid}]"
             procs[pid] = {
                 "pid": pid,
                 "ppid": ppid,
@@ -34,7 +34,7 @@ def proc_snap():
         except (psutil.NoSuchProcess, psutil.AccessDenied):
             continue
     for k in list(children.keys()):
-        children[k].sort(key=lambda x: (procs.get(x,{}).get("name",""), x))
+        children[k].sort(key=lambda x: (procs.get(x, {}).get("name", ""), x))
     return procs, children
 
 def match_set(procs, pattern, ignore_case):
@@ -42,13 +42,15 @@ def match_set(procs, pattern, ignore_case):
     return {pid for pid, p in procs.items() if r.search(p["cmd"]) or (p["cmd"] == p["name"] and r.search(p["name"]))}
 
 def has_ancestor_in_set(pid, procs, match):
-    seen=set()
+    seen = set()
     while pid and pid not in seen:
         seen.add(pid)
         p = procs.get(pid)
-        if not p: return False
+        if not p:
+            return False
         parent = p["ppid"]
-        if parent in match: return True
+        if parent in match:
+            return True
         pid = parent
     return False
 
@@ -56,36 +58,46 @@ def prune_to_roots(match, procs):
     return sorted(pid for pid in match if not has_ancestor_in_set(pid, procs, match))
 
 def dedupe_by_pgid(pids, procs):
-    seen=set(); out=[]
+    seen = set()
+    out = []
     for pid in sorted(pids):
-        pg = procs.get(pid,{}).get("pgid")
-        if pg in seen: continue
-        seen.add(pg); out.append(pid)
+        pg = procs.get(pid, {}).get("pgid")
+        if pg in seen:
+            continue
+        seen.add(pg)
+        out.append(pid)
     return out
 
-def is_tty(): return sys.stdout.isatty()
-def bold(s): return f"\x1b[1m{s}\x1b[0m" if is_tty() else s
+def is_tty():
+    return sys.stdout.isatty()
+
+def bold(s):
+    return f"\x1b[1m{s}\x1b[0m" if is_tty() else s
 
 def label(p, full_cmd):
     base = f"{p['name']}({p['pid']})"
     return f"{p['cmd']} [{base}]" if full_cmd else base
 
 def draw_tree(root, procs, children, match, ascii_lines=False, full_cmd=False):
-    V,T,L,S = ("│","├─","└─","   ")
-    if ascii_lines: V,T,L,S = ("|","+--","`--","   ")
+    V, T, L, S = ("│", "├─", "└─", "   ")
+    if ascii_lines:
+        V, T, L, S = ("|", "+--", "`--", "   ")
 
     def rec(pid, prefix="", is_last=True):
-        p = procs.get(pid);
-        if not p: return
-        connector = "" if prefix=="" else (L if is_last else T)
+        p = procs.get(pid)
+        if not p:
+            return
+        connector = "" if prefix == "" else (L if is_last else T)
         text = label(p, full_cmd)
-        if pid in match: text = bold(text) + " *"
+        if pid in match:
+            text = bold(text) + " *"
         print(f"{prefix}{connector} {text}" if connector else text)
         kids = [k for k in children.get(pid, []) if k in procs]
-        if not kids: return
+        if not kids:
+            return
         next_prefix = prefix + (S if is_last else V + "  ")
-        for i,k in enumerate(kids):
-            rec(k, next_prefix, i == len(kids)-1)
+        for i, k in enumerate(kids):
+            rec(k, next_prefix, i == len(kids) - 1)
 
     rec(root)
 
