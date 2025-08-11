@@ -81,11 +81,9 @@ HIGHLIGHT = f"\x1b[{GREP_COLOR}m"
 def highlight_match(text, regex):
     # if not sys.stdout.isatty():
     #     return text
-    # TODO consider * on end if --no-color option added
     if GREP_COLOR:
         return HIGHLIGHT + text + RESET
     else:
-        # use bold by default if no GREP_COLOR
         return BOLD + text + RESET
 
 def label(process):
