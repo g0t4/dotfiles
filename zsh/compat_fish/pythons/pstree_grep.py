@@ -74,8 +74,8 @@ def has_ancestor_in_set(pid, procs, matches):
         pid = parent
     return False
 
-def prune_to_roots(matches, procs):
-    return sorted(pid for pid in matches if not has_ancestor_in_set(pid, procs, matches))
+def prune_to_roots(matches, all_processes):
+    return sorted(pid for pid in matches if not has_ancestor_in_set(pid, all_processes, matches))
 
 def dedupe_by_pgid(pids, procs):
     seen = set()
