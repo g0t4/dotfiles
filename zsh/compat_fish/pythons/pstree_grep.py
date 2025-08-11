@@ -72,16 +72,20 @@ def prune_to_rootmost_match(matching_pids, all_processes):
     ]
     return only_rootmost_matches
 
+RESET = "\x1b[0m"
+BOLD = "\x1b[1m"
+
+GREP_COLOR = os.getenv("GREP_COLOR")
+
 def highlight_match(text, regex):
-    GREP_COLOR = os.getenv("GREP_COLOR")
     # if not sys.stdout.isatty():
     #     return text
     # TODO consider * on end if --no-color option added
     if GREP_COLOR:
-        return f"\x1b[{GREP_COLOR}m" + text + "\x1b[0m"
+        return f"\x1b[{GREP_COLOR}m" + text + RESET
     else:
         # use bold by default if no GREP_COLOR
-        return f"\x1b[1m" + text + "\x1b[0m"
+        return BOLD + text + RESET
 
 def label(process):
     assert args is not None  # change args to never see it as None
