@@ -27,6 +27,7 @@ def proc_snap():
             procs[pid] = {
                 "pid": pid,
                 "ppid": ppid,
+                # another opportunity for a race condition:
                 "pgid": getpgid(pid),
                 "name": name,
                 "cmd": cmd,
