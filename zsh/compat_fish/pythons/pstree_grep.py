@@ -83,11 +83,11 @@ def highlight_match(text):
         # use bold by default if no GREP_COLOR
         return f"\x1b[1m" + text + "\x1b[0m"
 
-def label(p):
+def label(process):
     assert args is not None  # change args to never see it as None
     if args.show_full_cmd:
-        return f"{p.cmd} [{f'{p.name}({p.pid})'}]"
-    return f"{p.name}({p.pid})"
+        return f"{process.cmd} [{f'{process.name}({process.pid})'}]"
+    return f"{process.name}({process.pid})"
 
 def part(text):
     assert args is not None
