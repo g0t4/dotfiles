@@ -98,8 +98,7 @@ def part(text):
         case "   ":
             return text
         case _:
-            # PRN warn?
-            return text
+            raise NotImplementedError("no mapping for ASCII: ", text)
 
 def draw_tree(rootmost_match_pid, all_processes, children_by_ppid, matches):
 
