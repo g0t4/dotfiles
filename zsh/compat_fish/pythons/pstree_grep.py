@@ -82,6 +82,24 @@ def label(p, show_full_cmd):
         return f"{p.cmd} [{f"{p.name}({p.pid})"}]"
     return f"{p.name}({p.pid})"
 
+def part(text):
+    assert args is not None
+    if not args.ascii:
+        return text
+
+    match text:
+        case "└─":
+            return "`--"
+        case "├─":
+            return "+--"
+        case "│":
+            return "|"
+        case "   ":
+            return text
+        case _:
+            # PRN warn?
+            return text
+
 def draw_tree(rootmost_match, all_processes, children_by_ppid, match, ascii_lines=False, show_full_cmd=False):
     # if ascii_lines:
     #     V, T, L, S = ("|", "+--", "`--", "   ")
