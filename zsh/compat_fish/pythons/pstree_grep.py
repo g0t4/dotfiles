@@ -125,7 +125,7 @@ def draw_tree(rootmost_match_pid, all_processes, children_by_ppid, matches):
 
         # * print process's children
         if not is_last_child:
-            next_prefix = prefix + part("│  ")
+            next_prefix = prefix + part("│  ") # connector comes after this for children
         else:
             next_prefix = prefix + part("   ")
         for index, child_pid in enumerate(children):
