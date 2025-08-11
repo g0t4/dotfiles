@@ -50,7 +50,7 @@ def get_matching_pids(procs, r) -> set[int]:
     # by the way.. note about yapf, if it makes no changes it won't show a status message in vim commandline
     #  that's a different outcome vs it showing yellow warning because it failed
 
-def has_ancestor_in_matches(pid, all_processes, matches):
+def has_ancestor_in_matches(pid, all_processes, matching_pids):
     seen = set()
     while pid and pid not in seen:
         seen.add(pid)
@@ -58,7 +58,7 @@ def has_ancestor_in_matches(pid, all_processes, matches):
         if not process:
             return False
         parent_pid = process.ppid
-        if parent_pid in matches:
+        if parent_pid in matching_pids:
             return True
         pid = parent_pid
     return False
@@ -106,7 +106,7 @@ def part(text):
         case _:
             raise NotImplementedError("no mapping for ASCII: ", text)
 
-def draw_tree(rootmost_match_pid, all_processes, children_by_ppid, matches):
+def draw_tree(rootmost_match_pid, all_processes, children_by_ppid, matching_pids):
 
     def _draw_tree(pid, prefix="", is_last_child=True):
         process = all_processes.get(pid)
@@ -121,7 +121,7 @@ def draw_tree(rootmost_match_pid, all_processes, children_by_ppid, matches):
         else:
             connector = part("└─")
         text = label(process)
-        if pid in matches:
+        if pid in matching_pids:
             text = highlight_match(text)
         print(f"{prefix}{connector} {text}" if connector else text)
 
@@ -163,11 +163,11 @@ def main():
         print("No matches.")
         return
 
-    rootmost_matches = prune_to_rootmost_match(matching_pids, procs)
+    rootmost_matching_pids = prune_to_rootmost_match(matching_pids, procs)
 
-    print(f"# matches: {len(matching_pids)}  roots: {len(rootmost_matches)}  (matched nodes are bold and marked with *)")
+    print(f"# matches: {len(matching_pids)}  roots: {len(rootmost_matching_pids)}  (matched nodes are bold and marked with *)")
     first = True
-    for rootmost_match_pid in rootmost_matches:
+    for rootmost_match_pid in rootmost_matching_pids:
         if not first:
             print()
         first = False
