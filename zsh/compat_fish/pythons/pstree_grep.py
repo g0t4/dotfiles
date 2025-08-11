@@ -109,7 +109,7 @@ def draw_tree(rootmost_match, all_processes, children_by_ppid, match, ascii_line
         if not process:
             return
 
-        connector = "" if prefix == "" else (part("└─") if is_last else "├─")
+        connector = "" if prefix == "" else (part("└─") if is_last else part("├─"))
         text = label(process, show_full_cmd)
         if pid in match:
             text = highlight_match(text)
