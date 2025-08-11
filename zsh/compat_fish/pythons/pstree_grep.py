@@ -106,7 +106,7 @@ def part(text):
         case _:
             raise NotImplementedError("no mapping for ASCII: ", text)
 
-def draw_tree(rootmost_match_pid, all_processes, children_by_ppid, matching_pids):
+def draw_rootmost_tree(rootmost_match_pid, all_processes, children_by_ppid, matching_pids):
 
     def _draw_tree(pid, prefix="", is_last_child=True):
         process = all_processes.get(pid)
@@ -171,7 +171,7 @@ def main():
         if not first:
             print()
         first = False
-        draw_tree(rootmost_match_pid, procs, children_by_ppid, matching_pids)
+        draw_rootmost_tree(rootmost_match_pid, procs, children_by_ppid, matching_pids)
 
 if __name__ == "__main__":
     main()
