@@ -1,5 +1,7 @@
 import argparse, os, re
+from dataclasses import dataclass
 from collections import defaultdict
+from typing import Dict, List, Tuple
 import psutil
 import rich
 
@@ -11,11 +13,6 @@ def getpgid(pid):
         return None
 
 # prefer full cmdline; fall back to name only if cmdline unavailable
-import psutil
-from collections import defaultdict
-from dataclasses import dataclass
-from os import getpgid
-from typing import Dict, List, Tuple
 
 @dataclass(frozen=True)
 class ProcessInfo:
