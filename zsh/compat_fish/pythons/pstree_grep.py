@@ -21,8 +21,8 @@ def proc_snap() -> Tuple[Dict[int, ProcessInfo], Dict[int, List[int]]]:
         info = process.info
         pid = info["pid"]
         try:
-            ppid = info["ppid"] or 0 # is 0 a good default?
-            cmdline_full = info.get("cmdline") or [] # full argv if allowed
+            ppid = info["ppid"] or 0  # is 0 a good default?
+            cmdline_full = info.get("cmdline") or []  # full argv if allowed
             name = (info.get("name") or "").strip()
             use_cmd = " ".join(cmdline_full).strip() or name or f"[pid:{pid}]"
             procs[pid] = ProcessInfo(
@@ -77,7 +77,7 @@ def highlight_match(text):
         return f"\x1b[1m" + text + "\x1b[0m"
 
 def label(p):
-    assert args is not None # change args to never see it as None
+    assert args is not None  # change args to never see it as None
     if args.show_full_cmd:
         return f"{p.cmd} [{f'{p.name}({p.pid})'}]"
     return f"{p.name}({p.pid})"
@@ -124,7 +124,7 @@ def draw_tree(rootmost_match_pid, all_processes, children_by_ppid, matches):
 
         # * print process's children
         if not is_last_child:
-            next_prefix = prefix + part("│  ") # connector comes after this for children
+            next_prefix = prefix + part("│  ")  # connector comes after this for children
         else:
             next_prefix = prefix + part("   ")
         for index, child_pid in enumerate(children):
@@ -132,10 +132,10 @@ def draw_tree(rootmost_match_pid, all_processes, children_by_ppid, matches):
 
     _draw_tree(rootmost_match_pid)
 
-
 args = None
+
 def main():
-    global args # so I don't have to pass to every function
+    global args  # so I don't have to pass to every function
 
     ap = argparse.ArgumentParser(description="pstree-like grep using pure Python (psutil).")
     ap.add_argument("pattern", help="regex matched against process name and full cmdline")
