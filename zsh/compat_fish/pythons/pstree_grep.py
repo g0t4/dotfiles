@@ -99,12 +99,12 @@ def highlight_match(text):
         # use bold by default if no GREP_COLOR
         return f"\x1b[1m" + text + "\x1b[0m"
 
-def label(p, full_cmd):
-    if full_cmd:
+def label(p, display_full_cmd):
+    if display_full_cmd:
         return f"{p.cmd} [{f"{p.name}({p.pid})"}]"
     return f"{p.name}({p.pid})"
 
-def draw_tree(root, procs, children, match, ascii_lines=False, full_cmd=False):
+def draw_tree(root, procs, children, match, ascii_lines=False, display_full_cmd=False):
     V, T, L, S = ("│", "├─", "└─", "   ")
     if ascii_lines:
         V, T, L, S = ("|", "+--", "`--", "   ")
@@ -114,7 +114,7 @@ def draw_tree(root, procs, children, match, ascii_lines=False, full_cmd=False):
         if not p:
             return
         connector = "" if prefix == "" else (L if is_last else T)
-        text = label(p, full_cmd)
+        text = label(p, display_full_cmd)
         if pid in match:
             text = highlight_match(text) + " *"
         print(f"{prefix}{connector} {text}" if connector else text)
@@ -152,7 +152,7 @@ def main():
         if not first:
             print()
         first = False
-        draw_tree(r, procs, children, matches, ascii_lines=args.ascii, full_cmd=args.full_cmd)
+        draw_tree(r, procs, children, matches, ascii_lines=args.ascii, display_full_cmd=args.full_cmd)
 
 if __name__ == "__main__":
     main()
