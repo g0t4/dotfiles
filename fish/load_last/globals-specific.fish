@@ -3,14 +3,16 @@ abbr --position=anywhere -- pbat '| bat -l'
 abbr --position=anywhere -- pgr '| grep -i'
 abbr --position=anywhere -- phelp '| bat -l help'
 abbr --position=anywhere -- pini '| bat -pl ini'
-abbr --position=anywhere -- pjq '| jq .' # shortened
-abbr --position=anywhere -- pjqr '| jq -r .' # shortened
+abbr --position=anywhere -- pjq '| jq .'
+abbr --position=anywhere -- pjqr '| jq -r .'
 abbr --position=anywhere -- pjqj '| jq --join-output .' # shortened (-r w/o trailing newline)
-abbr --position=anywhere -- pmd '| bat -pl md' # shortened
+abbr --position=anywhere -- pmd '| bat -pl md'
 abbr --position=anywhere -- prb '| bat -pl rb'
 abbr --position=anywhere -- psh '| bat -pl sh'
-abbr --position=anywhere -- pxml '| bat -l xml' # shortened
-abbr --position=anywhere -- pyml '| bat -l yml' # shortened
+abbr --position=anywhere -- pxml '| bat -l xml'
+abbr --position=anywhere -- pyml '| bat -l yml'
+abbr --position=anywhere -- puniq '| sort | uniq -c'
+abbr --position=anywhere -- psort '| sort -h' # TODO? include -h or not by default?
 
 # * head abbrs
 # ph<SPACE> => | head
