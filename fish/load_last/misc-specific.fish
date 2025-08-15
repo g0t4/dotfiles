@@ -2917,5 +2917,13 @@ abbr pPATH 'for p in $PATH; echo $p; end'
 # *** openai completions helpers
 
 # not just psse b/c I can't get tab completion of --position=anywhere abbreviations
-abbr -- sse_jq 'string replace --regex "^data: " "" | jq --compact-output'
-abbr --position=anywhere -- psse '| string replace --regex "^data: " "" | jq --compact-output'
+set --local sse_jq 'string replace --regex "^data: " "" | jq'
+abbr --position=anywhere -- psse "| $sse_jq"
+abbr --position=anywhere -- pssec "| $sse_jq --compact-output"
+abbr --position=command -- pbsse "pbpaste | $sse_jq"
+abbr --position=command -- pbssec "pbpaste | $sse_jq --compact-output"
+
+
+# * date
+abbr date_s "date +%s"
+reminder_abbr date_unixtime "date +%s" # reminder abbr
