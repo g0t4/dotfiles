@@ -1949,38 +1949,45 @@ else:
 end
 
 # *** man page helpers
-abbr man_commands_1 "man 1"
-abbr man_syscalls_2 "man 2"
-abbr man_c_stdlib_3 "man 3"
-abbr man_kernel_interfaces_4 "man 4"
-abbr man_file_formats_5 "man 5"
-abbr man_misc_7 "man 7"
-abbr man_system_8 "man 8"
-abbr man_kernel_dev_9 "man 9"
+set --local man_cmd man
+if $IS_MACOS
+    # brew install man-db
+    set man_cmd gman
+    abbr man gman
+end
+abbr man_commands_1 "$man_cmd 1"
+abbr man_syscalls_2 "$man_cmd 2"
+abbr man_c_stdlib_3 "$man_cmd 3"
+abbr man_kernel_interfaces_4 "$man_cmd 4"
+abbr man_file_formats_5 "$man_cmd 5"
+abbr man_misc_7 "$man_cmd 7"
+abbr man_system_8 "$man_cmd 8"
+abbr man_kernel_dev_9 "$man_cmd 9"
 # list all pages in a section:
 abbr --regex "manlist[0-9]" --function manlistX -- manlistX
 function manlistX
     set section $(string replace manlist "" $argv[1])
-    echo "man -k . | grep '($section)'"
+    echo "$man_cmd -k . | grep '($section)'"
 end
-abbr man1 "man 1"
-abbr man2 "man 2"
-abbr man3 "man 3"
-abbr man4 "man 4"
-abbr man5 "man 5"
-abbr man6 "man 6"
-abbr man7 "man 7"
-abbr man7 "man 8"
-abbr man7 "man 9"
+abbr man1 "$man_cmd 1"
+abbr man2 "$man_cmd 2"
+abbr man3 "$man_cmd 3"
+abbr man4 "$man_cmd 4"
+abbr man5 "$man_cmd 5"
+abbr man6 "$man_cmd 6"
+abbr man7 "$man_cmd 7"
+abbr man7 "$man_cmd 8"
+abbr man7 "$man_cmd 9"
 #
-abbr mana "man -a" # open all matching pages
+# gman has --regex among other improvements
+abbr mana "$man_cmd --all --regex" ## -a = all, -w = list path(s) open all matching pages
 abbr mank apropos # man -k ~= apropos
 abbr manf whatis # man -f == whatis
-abbr manw "man -aw" # man -w == whereis for man pages, or map to whereis?
-abbr man_list_all "man -aw" # -a = all, -w = list path(s)
-abbr manbash "man $HOME/repos/github/g0t4/bash/doc/bash.1"
+abbr manw "$man_cmd --where --regex" # man -w == whereis for man pages, or map to whereis?
+reminder_abbr man_list_all "$man_cmd --where --regex"
+abbr manbash "$man_cmd $HOME/repos/github/g0t4/bash/doc/bash.1"
 # use newest build of bash man page (at least don't use 3.2 from apple!)
-abbr mbash "man $HOME/repos/github/g0t4/bash/doc/bash.1"
+abbr mbash "$man_cmd $HOME/repos/github/g0t4/bash/doc/bash.1"
 #
 # force pages in homebrew installed manpages to WIN
 #  that way the manpage there for bash always takes precedence
@@ -1989,7 +1996,7 @@ abbr mbash "man $HOME/repos/github/g0t4/bash/doc/bash.1"
 # NOTE : colon on end means this is PREPENDED to std MANPATH (so I don't lose other pages, I just put these first)
 #
 # must use set b/c fish has special handling for PATH vars, so cannot just use trailing : like in bash
-set -x MANPATH "/opt/homebrew/share/man" ""
+set -x MANPATH /opt/homebrew/share/man ""
 # abbr manw "whereis" ???
 # PRN whereis helpers?
 # PRN apropos helpers?
@@ -2922,6 +2929,7 @@ abbr --position=anywhere -- psse "| $sse_jq"
 abbr --position=anywhere -- pssec "| $sse_jq --compact-output"
 abbr --position=command -- pbsse "pbpaste | $sse_jq"
 abbr --position=command -- pbssec "pbpaste | $sse_jq --compact-output"
+# ? --join-output
 
 
 # * date
