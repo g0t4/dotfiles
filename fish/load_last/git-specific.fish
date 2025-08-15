@@ -18,8 +18,7 @@ end
 
 function mark
     # for review commits that I don't need to step by step commit, instead just make a commit of all changes and dump the diff for my optional review
-    # git diff --color-words HEAD # make sure to compare to HEAD as we will stage everything and commit the index too
-    git diff HEAD # put back --color-words if you get rid of core.pager = diff-so-fancy
+    git diff HEAD
     git add . # assumes no other work, but yeah I'm calling this explicitly
     git commit -m mark-review
     git status
@@ -111,17 +110,15 @@ function git_current_branch_upstream
 end
 abbr ggsup 'git branch --set-upstream-to=origin/$(git_current_branch)'
 
-# diff
+# * diff
 abbr -- git_delta_side_by_side "git -c delta.side-by-side=true"
 abbr -- git_delta_unified "git -c delta.side-by-side=false"
-# abbr gdlc "git log --patch --color-words HEAD~1..HEAD"
-abbr gdlc "git log --patch HEAD~1..HEAD" # put back --color-words if you get rid of core.pager = diff-so-fancy
+abbr gdlc "git log --patch HEAD~1..HEAD"
 abbr --regex 'gdlc\d+' --function gdlcX _gdlcX
 function gdlcX
     set -l num (string replace --regex '^gdlc' '' $argv)
     set -l prev (math $num - 1)
-    # echo "git log --patch --color-words HEAD~$num..HEAD~$prev"
-    echo "git log --patch HEAD~$num..HEAD~$prev" # put back --color-words if you get rid of core.pager = diff-so-fancy
+    echo "git log --patch HEAD~$num..HEAD~$prev"
 end
 #
 # gds - one list of files changed across range of commits
