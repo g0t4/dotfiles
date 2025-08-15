@@ -112,6 +112,8 @@ end
 abbr ggsup 'git branch --set-upstream-to=origin/$(git_current_branch)'
 
 # diff
+abbr -- git_delta_side_by_side "git -c delta.side-by-side=true"
+abbr -- git_delta_unified "git -c delta.side-by-side=false"
 # abbr gdlc "git log --patch --color-words HEAD~1..HEAD"
 abbr gdlc "git log --patch HEAD~1..HEAD" # put back --color-words if you get rid of core.pager = diff-so-fancy
 abbr --regex 'gdlc\d+' --function gdlcX _gdlcX
