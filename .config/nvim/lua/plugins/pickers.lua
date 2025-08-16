@@ -378,6 +378,7 @@ return {
         event = { "VeryLazy" },
         opts = {},
         config = function()
+            -- not required, but makes it possible to do `:Telescope p<TAB>` and see it in list of choices
             require("telescope").load_extension("picker_picker")
         end
     },
