@@ -373,9 +373,13 @@ return {
 
     {
         "g0t4/telescope-picker-picker.nvim",
-        dir = "~/repos/github/g0t4/ask-openai.nvim",
+        enabled = true,
+        dir = "~/repos/github/g0t4/telescope-picker-picker.nvim",
         -- event = { "CmdlineEnter", "InsertEnter" }, -- always load in advance for AskToolUse et al?
         opts = {},
+        config = function()
+            require("telescope").load_extension("picker_picker")
+        end
     },
 
     {
