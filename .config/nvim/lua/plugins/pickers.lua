@@ -375,7 +375,7 @@ return {
         "g0t4/telescope-picker-picker.nvim",
         enabled = true,
         -- dir = "~/repos/github/g0t4/telescope-picker-picker.nvim",
-        -- event = { "CmdlineEnter", "InsertEnter" }, -- always load in advance for AskToolUse et al?
+        event = { "VeryLazy" },
         opts = {},
         config = function()
             require("telescope").load_extension("picker_picker")
