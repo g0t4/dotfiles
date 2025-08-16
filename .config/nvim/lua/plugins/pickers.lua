@@ -372,6 +372,13 @@ return {
     },
 
     {
+        "g0t4/telescope-picker-picker.nvim",
+        dir = "~/repos/github/g0t4/ask-openai.nvim",
+        -- event = { "CmdlineEnter", "InsertEnter" }, -- always load in advance for AskToolUse et al?
+        opts = {},
+    },
+
+    {
         -- live_grep + pass args!
         --   thus, can pass params to filter file path too (ag's -G, rg's -r glob)
         --   TLDR removes the "--" in the upstream live_grep (lolz)
