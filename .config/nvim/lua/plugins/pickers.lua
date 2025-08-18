@@ -123,6 +123,12 @@ return {
             }
         end,
     },
+    {
+        'nvim-telescope/telescope-smart-history.nvim',
+        config = function()
+            require('telescope').load_extension('smart_history')
+        end,
+    },
 
     {
         'nvim-telescope/telescope.nvim',
@@ -185,6 +191,11 @@ return {
 
             require('telescope').setup({
                 defaults = {
+                    history = {
+                        path = vim.fn.stdpath("data") .. "/databases/telescope-smart-history.sqlite3",
+                        limit = 1000,
+                    },
+
                     layout_strategy = 'flex', -- based on width (kinda like this actually and it resizes with the window perfectly)
                     -- layout_strategy = 'vertical', -- default is horizontal (files+prompt left, preview right)
                     -- layout_strategy = 'horizontal', -- vertical = (preview top, files middle, prompt bottom) -- maximizes both list of files and preview content
