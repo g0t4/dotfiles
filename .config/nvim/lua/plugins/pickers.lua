@@ -16,15 +16,15 @@ local resume_keys = vim.iter({ 1, 2, 3, 4, 5, 6, 7, 8, 9 })
 
 local telescope_keys =
 {
-    { '<C-p>',        ':Telescope find_files<CR>', mode = 'n' },
-    { '<leader>t',    ':Telescope<CR>',            mode = 'n' }, -- list pickers, select one opens it (like if :Telescope<CR>), shows keymaps too
+    { '<C-p>',       ':Telescope find_files<CR>', mode = 'n' },
+    { '<leader>t',   ':Telescope<CR>',            mode = 'n' }, -- list pickers, select one opens it (like if :Telescope<CR>), shows keymaps too
     -- PRN if tr is cumbersome, find a new top level keymap like <leader>r (but I use that for refactoring)
-    { '<leader>tr',   ':Telescope resume<CR>',     mode = 'n' },
-    { '<leader>tp',   ':Telescope pickers<CR>',    mode = 'n' }, -- *** LIST and select a cached picker session, instead of guessing the number and using <leader>tr#
+    { '<leader>tr',  ':Telescope resume<CR>',     mode = 'n' },
+    { '<leader>tp',  ':Telescope pickers<CR>',    mode = 'n' }, -- *** LIST and select a cached picker session, instead of guessing the number and using <leader>tr#
 
     -- TODO! move all telescope less used pickers to <leader>t* to free up other <leader> lhs
-    { '<leader>tb',   ':Telescope buffers<CR>',    mode = 'n' },
-    { '<leader>tk',   ':Telescope keymaps<CR>',    mode = 'n' },
+    { '<leader>tb',  ':Telescope buffers<CR>',    mode = 'n' },
+    { '<leader>tk',  ':Telescope keymaps<CR>',    mode = 'n' },
     -- { '<leader>s',   ':Telescope live_grep<CR>',  mode = 'n' }, -- keep top level w/o submapping collision so this is snappy fast
 
     -- FYI <leader>tg => will open picker of pickers and g will select the git ones... DO NOT MAP OVER THAT! .. probably best way to pick from multiple git pickers is to not have each one keymapped
