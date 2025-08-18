@@ -13,7 +13,7 @@ return {
         dir = "~/repos/github/g0t4/devtools.nvim",
         opts = {
             messages = {
-                open_on_startup = true,
+                -- open_on_startup = true,
             }
         }
     },
