@@ -129,6 +129,14 @@ return {
             require('telescope').load_extension('smart_history')
         end,
     },
+    --
+    -- {
+    --     -- TODO try telescope for selection lists (i.e. code actions)
+    --     'nvim-telescope/telescope-ui-select.nvim',
+    --     config = function()
+    --         require('telescope').load_extension('ui-select')
+    --     end
+    -- },
 
     {
         'nvim-telescope/telescope.nvim',
