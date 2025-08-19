@@ -140,7 +140,6 @@ function pstree_grep
     $_python3 $_script_py $argv
 end
 
-
 function detect_encoding
     set -l _python3 "$WES_DOTFILES/.venv/bin/python3"
     set -l _script_py "$WES_DOTFILES/zsh/compat_fish/pythons/detect_encoding.py"
@@ -194,3 +193,6 @@ function wrc
     $_python3 $_script_py $argv
 
 end
+
+# setup % so I can easily change matching python code files for tests to run
+abbr --set-cursor -- ptw_logs 'ptw *%_tests.py -- --capture=no --log-cli-level=INFO'
