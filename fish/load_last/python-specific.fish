@@ -165,7 +165,7 @@ function rag_validate_index
     fish -c "cd '$ASK_REPO/lua/ask-openai/rag'; '$_python3' -m index.validate '$rag_dir'"
 end
 
-abbr rag_rebuilder 'rag_indexer --rebuild --info'
+abbr rag_rebuilder 'time rag_indexer --rebuild --info'
 
 # *** wcl wrappers
 function wcl
