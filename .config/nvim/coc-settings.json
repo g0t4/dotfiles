@@ -43,6 +43,11 @@
     "pyright.inlayHints.variableTypes": false,
     "pyright.inlayHints.parameterTypes": false,
     "pyright.inlayHints.functionReturnTypes": false,
+    //
+    // setting both of these kills hints, i.e. the stupid hint about unused variables/params when pyright already has diagnostics I've disabled and so the hint always fucking shows it anyways
+    "diagnostic.hintSign": "Hint",
+    "diagnostic.infoSign": "BREAK", // unset this for Hint to show in gutter on hints so you at least know b/c fucking >> which is default for hintSign/infoSign... as if that fucking makes any motherfucking sense
+    //
     // coc-pyright provides formatters too
     // https://github.com/fannheyward/coc-pyright?tab=readme-ov-file#configurations
     "python.formatting.provider": "yapf",
