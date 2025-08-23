@@ -199,6 +199,8 @@ return {
 
             require('telescope').setup({
                 defaults = {
+                    dynamic_preview_title = true,
+
                     history = {
                         path = vim.fn.stdpath("data") .. "/databases/telescope-smart-history.sqlite3",
                         limit = 1000,
