@@ -45,8 +45,9 @@
     "pyright.inlayHints.functionReturnTypes": false,
     //
     // setting both of these kills hints, i.e. the stupid hint about unused variables/params when pyright already has diagnostics I've disabled and so the hint always fucking shows it anyways
-    "diagnostic.hintSign": "Hint",
-    "diagnostic.infoSign": "BREAK", // unset this for Hint to show in gutter on hints so you at least know b/c fucking >> which is default for hintSign/infoSign... as if that fucking makes any motherfucking sense
+    // "diagnostic.hintSign": "Hint", // gutter now says Hint (or Hi if 2 chars wide)
+    // "diagnostic.infoSign": "BREAK", // unset this for Hint to show in gutter on hints so you at least know b/c fucking >> which is default for hintSign/infoSign... as if that fucking makes any motherfucking sense
+    "diagnostic.level": "information", // shuts up hints about unused variables in pyright ... by blocking all hints... https://github.com/neoclide/coc.nvim/blob/911d33a56f901d2ca53a5c5895b56e75079e2b44/data/schema.json#L1054
     //
     // coc-pyright provides formatters too
     // https://github.com/fannheyward/coc-pyright?tab=readme-ov-file#configurations
