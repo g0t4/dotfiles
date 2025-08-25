@@ -291,6 +291,31 @@
             // ],
             "trace.server": "verbose", // woa I didn't know this existed?!
         },
+        //  TODO try again (uninstall pyright first)
+        // starting to work but not finding local "first-party" modules in my packages
+        //    has to be a bug b/c I setup a new codebase and finally got it to find 3rd party venv packages... but not local modules (yet)?
+        //
+        // "ty": {
+        //     "command": "ty",
+        //     "args": [ "server" ],
+        //     "filetypes": [ "python" ],
+        //     "rootPatterns": [ "pyproject.toml", "uv.lock", "ruff.toml", ".git" ],
+        //     "initializationOptions": {
+        //         "logLevel": "info"
+        //     },
+        //     "settings": {
+        //         "ty": {
+        //             "diagnosticMode": "openFilesOnly",
+        //             "inlayHints": {
+        //                 "variableTypes": true,
+        //                 "callArgumentNames": true
+        //             }
+        //             /* If you keep coc-pyright for LS features, let ty do ONLY type-checking:
+        //      "disableLanguageServices": true */
+        //         }
+        //     },
+        //     "trace.server": "off"
+        // }
 
     },
     "snippets.ultisnips.pythonPrompt": false,
