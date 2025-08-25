@@ -32,4 +32,5 @@
 --glob=!mix.lock
 --glob=!cabal.project.freeze
 --glob=!stack.yaml.lock
+--glob=!.rag
 
