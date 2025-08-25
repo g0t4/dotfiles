@@ -642,9 +642,9 @@ local ask_openai_plugin = {
     opts = {
         provider = "keyless",
         -- model = "llama3.2-vision:11b", -- ollama list
-        model = "qwen2.5-coder:7b-instruct-q8_0",
+        model = "llamaservernomatters",
         use_api_ollama = true,
-        api_url = "http://ollama:11434/v1/chat/completions",
+        api_url = "http://ollama:8013/v1/chat/completions",
 
         tmp = {
             predictions = {
