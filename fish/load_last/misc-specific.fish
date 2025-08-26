@@ -1464,6 +1464,13 @@ if command -q llama-server
         abbr lsgptoss120b "$_gptoss_shared -hf ggml-org/gpt-oss-120b-GGUF"
         # TODO speculative decoding with ngram?! or 20b draft feeds 120b judge
 
+        # * Seed-Coder
+        set _bytedance_host "--host 0.0.0.0 --port 8012"
+        set _bytedance_shared "z base; llama-server $_bytedance_host --batch-size 2048 --ubatch-size 2048 --ctx-size 0 --jinja --flash-attn --n-gpu-layers 99"
+        abbr lsbytedance_seed_coder_4 "$_bytedance_shared --model ByteDance-Seed-Coder-8B-Base-Q4_K_M.gguf"
+        abbr lsbytedance_seed_coder_8 "$_bytedance_shared --model ByteDance-Seed-Coder-8B-Base-Q8_0.gguf"
+        abbr lsbytedance_seed_coder_f16 "$_bytedance_shared --model ByteDance-Seed-Coder-8B-Base-f16.gguf"
+
     end
     _setup_llama_server
 end
@@ -2922,7 +2929,6 @@ abbr --position=anywhere -- pssec "| $sse_jq --compact-output"
 abbr --position=command -- pbsse "pbpaste | $sse_jq"
 abbr --position=command -- pbssec "pbpaste | $sse_jq --compact-output"
 # ? --join-output
-
 
 # * date
 abbr date_s "date +%s"
