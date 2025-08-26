@@ -1435,7 +1435,7 @@ if command -q llama-server
         # First one is for mindlessly saying "just make it work"
         abbr lsq25 $_spec7
         # other presets to select from with tab completion
-        abbr lsq25nonspec $_default7
+        abbr lsq25nonspec7 $_default7
         abbr lsq25spec7 $_spec7
         # FYI no 14-default (non-spec)
         abbr lsq25spec14 $_spec14
@@ -1459,18 +1459,10 @@ if command -q llama-server
         # TODO --batch-size / --ubatch-size # memory impact?
         # --ctx-size 0 => means load from model or default 4096
         set _gptoss_host "--host 0.0.0.0 --port 8013"
-        set _gptoss "llama-server -hf ggml-org/gpt-oss-20b-GGUF $_gptoss_host --batch-size 2048 --ubatch-size 2048 --ctx-size 0 --jinja --flash-attn --n-gpu-layers 99 --reasoning-format none"
-        set _gptoss120b_best "llama-server -hf ggml-org/gpt-oss-120b-GGUF $_gptoss_host --batch-size 2048 --ubatch-size 2048 --ctx-size 0 --jinja --flash-attn --n-gpu-layers 99 --reasoning-format none --n-cpu-moe 2"
-        # FYI --n-cpu-moe readings:
-        # 2 => 120 T/s
-        # 3 => 108 T/s
-        # 20 => 24 T/s  # bare minimum if I have RAG Qwen3-Embeddings-0.6B (full precision) model loaded on GPU RAM
-        abbr lsgptoss $_gptoss
-        abbr lsgptoss_verbose $_gptoss $verbose
-        abbr lsgptoss120b $_gptoss120b_best
-        abbr lsgptoss120b_verbose $_gptoss120b_best $verbose
-        # TODO speculative decoding with ngram?!
-        #  already at 260 tokens/sec but why not get more!!!
+        set _gptoss_shared "llama-server $_gptoss_host --batch-size 2048 --ubatch-size 2048 --ctx-size 0 --jinja --flash-attn --n-gpu-layers 99 --reasoning-format none"
+        abbr lsgptoss20b "$_gptoss_shared -hf ggml-org/gpt-oss-20b-GGUF"
+        abbr lsgptoss120b "$_gptoss_shared -hf ggml-org/gpt-oss-120b-GGUF"
+        # TODO speculative decoding with ngram?! or 20b draft feeds 120b judge
 
     end
     _setup_llama_server
