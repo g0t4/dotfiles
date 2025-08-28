@@ -3,25 +3,15 @@ local eventtap = require("hs.eventtap")
 local timer = require("hs.timer")
 local vim = require("config.libs.vim") -- reuse nvim lua modules in hammerspoon
 
--- * timeline scrollbar (only when zoomed)
+-- * timeline scrollbar (only shows when zoomed)
 -- app:window(4):scrollBar(4)
---
--- AXEnabled: true<bool>
--- AXFocused: false<bool>
 -- AXFocusedUIElement: AXScrollBar<hs.axuielement>
 -- AXIndex: 0<number>
 -- AXMaxValue: 219094<number>
 -- AXMinValue: 0<number>
 -- AXOrientation: AXHorizontalOrientation<string>
 -- AXRoleDescription: scroll bar<string>
--- AXSelected: false<bool>
 -- AXValue: 216820<number>
---
--- AXChildren:
--- AXButton: desc:'zero button'
--- AXButton: desc:'zero button'
---
--- unique ref: app:window('ScreenPal - 3.19.4')
 
 local function getScreenPalAppElementOrThrow()
     return getAppElementOrThrow("ScreenPal")
@@ -40,52 +30,54 @@ end
 
 function StreamDeckScreenPalTimelineJumpToStart()
     local win = getEditorWindowOrThrow()
-
-    -- TODO check if zoomed, won't work otherwise (or if doesn't find scrollbar for timeline)
-    --    if not zoomed, then  skip to move playhead only!
-    local timeline_scrollbar = win:scrollBar(4)
-    if not timeline_scrollbar then
-        print("No timeline scrollbar found, aborting...")
-        return
-    end
-    -- btw, AXOrientation is AXHorizontalOrientation
-
-    local frame = timeline_scrollbar:axFrame()
-    -- by the way AXFrame here returns { h = 50.0, w = 1839.0, x = 14.0, y = 814.0 }
-    --   which is unlike AppleScript where the value is x_left/x_right, y_top/y_bottom
-    -- print(hs.inspect(frame))
-
     local original_mouse_pos = mouse.absolutePosition()
-    -- print("mouse pos", hs.inspect(pos))
     --  mouse pos	{ __luaSkinType = "NSPoint", x = 1396.0, y = 877.10546875 }
 
-    local function clickUntilTimelineAtStart()
-        local lastValue = nil
-        while true do
-            local value = timeline_scrollbar:axValue()
-            -- print("Scroll bar value is now: " .. value)
+    local is_zoomed = vim.iter(win:buttons())
+        :any(function(button)
+            -- if any of the zoom buttons are visible, then the timeline is zoomed
+            return button:axDescription() == "Minimum Zoom"
+        end)
 
-            local numValue = tonumber(value)
-            if not numValue then break end
-
-            if numValue <= 0 then
-                break
-            end
-
-            if lastValue ~= nil and numValue == lastValue then
-                print("Value unchanged, stopping.")
-                break
-            end
-
-            lastValue = numValue
-
-            eventtap.leftClick({ x = frame.x, y = frame.y + frame.h / 2 })
-            -- eventtap.leftClick({ x = frame.x, y = frame.y + frame.h / 2 }) -- could click twice if value doesn't change
-            -- timer.usleep(10000) -- don't need pause b/c hs seems to block while clicking
+    if is_zoomed then
+        local timeline_scrollbar = win:scrollBar(4)
+        if not timeline_scrollbar then
+            print("No timeline scrollbar found, aborting...")
+            return
         end
-    end
 
-    clickUntilTimelineAtStart()
+        local frame = timeline_scrollbar:axFrame()
+        -- by the way AXFrame here returns { h = 50.0, w = 1839.0, x = 14.0, y = 814.0 }
+        --   which is unlike AppleScript where the value is x_left/x_right, y_top/y_bottom
+
+        local function clickUntilTimelineAtStart()
+            local lastValue = nil
+            while true do
+                local value = timeline_scrollbar:axValue()
+                -- print("Scroll bar value is now: " .. value)
+
+                local numValue = tonumber(value)
+                if not numValue then break end
+
+                if numValue <= 0 then
+                    break
+                end
+
+                if lastValue ~= nil and numValue == lastValue then
+                    print("Value unchanged, stopping.")
+                    break
+                end
+
+                lastValue = numValue
+
+                eventtap.leftClick({ x = frame.x, y = frame.y + frame.h / 2 })
+                -- eventtap.leftClick({ x = frame.x, y = frame.y + frame.h / 2 }) -- could click twice if value doesn't change
+                -- timer.usleep(10000) -- don't need pause b/c hs seems to block while clicking
+            end
+        end
+
+        clickUntilTimelineAtStart()
+    end
 
     -- * move playhead to start (0) by clicking leftmost part of position slider (aka timeline)
     --   keep in mind, scrollbar below is like a pager, so it has to be all the way left, first
