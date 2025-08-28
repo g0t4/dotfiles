@@ -18,10 +18,10 @@ local function getEditorWindowOrThrow()
     error("No ScreenPal editor window found, aborting...")
 end
 
-ScreenPalTimeline = {}
-function ScreenPalTimeline:new()
-    local timeline = {}
-    setmetatable(timeline, self)
+ScreenPalEditorWindow = {}
+function ScreenPalEditorWindow:new()
+    local editor_window = {}
+    setmetatable(editor_window, self)
     self.__index = self
     self.win = getEditorWindowOrThrow()
 
@@ -44,7 +44,7 @@ function ScreenPalTimeline:new()
             end
 
             -- print("invalidate check ", self._btn_minimum_zoom:isValid())
-            print("timeline cache invalidated")
+            print("editor window cache invalidated")
         end
 
         local start = GetTime()
@@ -55,6 +55,7 @@ function ScreenPalTimeline:new()
                 -- not extra expensive to cache each one relative to time to enumerate / get description (has to be done to find even one button)
                 local description = ui_elem:axDescription()
                 local role = ui_elem:axRole()
+                -- TODO! split out editor window class? with all controls there? this is bastardized here but is fine for now
 
                 if role == "AXButton" then
                     if description == "Minimum Zoom" then
@@ -123,7 +124,7 @@ function ScreenPalTimeline:new()
         PrintTook("caching controls took: ", start)
     end
 
-    function timeline:isZoomed()
+    function editor_window:isZoomed()
         ensure_cached_controls()
         if not self._btn_minimum_zoom then
             error("No zoom button found, aborting...")
@@ -133,29 +134,29 @@ function ScreenPalTimeline:new()
         return position.x > 0 and position.y > 0
     end
 
-    function timeline:zoom_in()
+    function editor_window:zoom_in()
         if self:isZoomed() then return end
         -- FYI typing m is faster now... must be b/c of the native Apple Silicon app
         eventtap.keyStroke({}, "m", 0, getScreenPalAppElementOrThrow())
     end
 
-    function timeline:zoom_out()
+    function editor_window:zoom_out()
         if not self:isZoomed() then return end
         eventtap.keyStroke({}, "m", 0, getScreenPalAppElementOrThrow())
     end
 
-    function timeline:get_scrollbar_or_throw()
+    function editor_window:get_scrollbar_or_throw()
         -- PRN search for big AXMaxValues? that might uniquely identify it if I have issues in the future with other scrollbars visible
         -- OR by position on screen (toward bottom of window is telling)
         ensure_cached_controls()
         local scrollbar = self._scrollbars[4]
         if not scrollbar then
-            error("No timeline scrollbar found, aborting...")
+            error("No editor_window scrollbar found, aborting...")
         end
         return scrollbar
     end
 
-    function timeline:get_timeline_slider_or_throw()
+    function editor_window:get_timeline_slider_or_throw()
         ensure_cached_controls()
         if not self._btn_position_slider then
             error("No timeline slider found, aborting...")
@@ -163,48 +164,48 @@ function ScreenPalTimeline:new()
         return self._btn_position_slider
     end
 
-    function timeline:zoom1()
+    function editor_window:zoom1()
         ensure_cached_controls()
         self:zoom_in()
         self._btn_minimum_zoom:performAction("AXPress")
     end
 
-    function timeline:zoom2()
+    function editor_window:zoom2()
         ensure_cached_controls()
         self:zoom_in()
         self._btn_medium_zoom:performAction("AXPress")
     end
 
-    function timeline:zoom3()
+    function editor_window:zoom3()
         ensure_cached_controls()
         self:zoom_in()
         self._btn_maximum_zoom:performAction("AXPress")
     end
 
-    return timeline
+    return editor_window
 end
 
-local _cached_timeline = nil
-function get_cached_timeline()
-    if not _cached_timeline then
-        _cached_timeline = ScreenPalTimeline:new()
+local _cached_editor_window = nil
+function get_cached_editor_window()
+    if not _cached_editor_window then
+        _cached_editor_window = ScreenPalEditorWindow:new()
     end
-    return _cached_timeline
+    return _cached_editor_window
 end
 
 function StreamDeckScreenPalTimelineZoomAndJumpToStart()
-    local timeline = get_cached_timeline()
-    timeline:zoom2()
+    local win = get_cached_editor_window()
+    win:zoom2()
     timer.usleep(10000)
     StreamDeckScreenPalTimelineJumpToStart()
 end
 
 function StreamDeckScreenPalTimelineJumpToStart()
     local original_mouse_pos = mouse.absolutePosition()
-    local timeline = get_cached_timeline()
+    local win = get_cached_editor_window()
 
-    if timeline:isZoomed() then
-        local timeline_scrollbar = timeline:get_scrollbar_or_throw()
+    if win:isZoomed() then
+        local timeline_scrollbar = win:get_scrollbar_or_throw()
         local frame = timeline_scrollbar:axFrame()
         local min_value = timeline_scrollbar:axMinValue()
 
@@ -238,7 +239,7 @@ function StreamDeckScreenPalTimelineJumpToStart()
     -- * move playhead to start (0) by clicking leftmost part of position slider (aka timeline)
     --   keep in mind, scrollbar below is like a pager, so it has to be all the way left, first
     --   PRN add delay if this is not registering, but use it first to figure that out
-    local slider = timeline:get_timeline_slider_or_throw()
+    local slider = win:get_timeline_slider_or_throw()
     eventtap.leftClick({ x = slider:axFrame().x, y = slider:axFrame().y })
 
     mouse.absolutePosition(original_mouse_pos)
@@ -246,10 +247,10 @@ end
 
 function StreamDeckScreenPalTimelineJumpToEnd()
     local original_mouse_pos = mouse.absolutePosition()
-    local timeline = get_cached_timeline()
+    local win = get_cached_editor_window()
 
-    if timeline:isZoomed() then
-        local timeline_scrollbar = timeline:get_scrollbar_or_throw()
+    if win:isZoomed() then
+        local timeline_scrollbar = win:get_scrollbar_or_throw()
         local frame = timeline_scrollbar:axFrame()
         local max_value = timeline_scrollbar:axMaxValue()
 
@@ -279,7 +280,7 @@ function StreamDeckScreenPalTimelineJumpToEnd()
     end
 
     -- move playhead to end by clicking the right‑most part of the timeline slider
-    local slider = timeline:get_timeline_slider_or_throw()
+    local slider = win:get_timeline_slider_or_throw()
     local sframe = slider:axFrame()
     eventtap.leftClick({ x = sframe.x + sframe.w - 1, y = sframe.y })
 
@@ -290,12 +291,12 @@ function StreamDeckScreenPalTimelineRestorePosition()
     -- approximate restore
     -- can only click timeline before/after the slider's bar... so this won't be precise unless I find a way to move it exactly
 
-    local timeline = get_cached_timeline()
-    if not timeline:isZoomed() then
+    local win = get_cached_editor_window()
+    if not win:isZoomed() then
         return -- nothing to do, yet
     end
 
-    local timeline_scrollbar = timeline:get_scrollbar_or_throw()
+    local timeline_scrollbar = win:get_scrollbar_or_throw()
     local frame = timeline_scrollbar:axFrame()
     local min_value = timeline_scrollbar:axMinValue()
 
@@ -334,6 +335,9 @@ function StreamDeckScreenPalTimelineRestorePosition()
     end
 
 
+    function StreamDeckScreenPalCloseProject()
+
+    end
 
     --
 end
