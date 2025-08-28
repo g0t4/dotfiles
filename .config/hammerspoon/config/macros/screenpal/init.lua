@@ -49,29 +49,52 @@ function ScreenPalTimeline:new()
     end
 
     function timeline:isZoomed()
-        return vim.iter(win:buttons())
-            :any(function(button)
-                -- AXPosition == 0,0 ==> not zoomed
-                -- print(hs.inspect(button:axPosition()))
-                return button:axDescription() == "Minimum Zoom"
-                    and button:axPosition().y ~= 0 -- position not 0,0
-            end)
+        -- TODO run timing and find out why this SUCKS so bad to enumerate 30 UI elements...
+        --  TODO can it be improved by using element search?
+        -- FYI caching add in act of desperation to speed up subsequent runs... still all sucks...
+        if not self._min_zoom_button then
+            self._min_zoom_button = vim.iter(win:buttons())
+                :filter(function(button)
+                    --  THIS IS LAGGING HARD CORE to find the button...
+                    return button:axDescription() == "Minimum Zoom"
+                    -- position not 0,0
+                end)
+                :totable()[1]
+            if not self._min_zoom_button then
+                error("No zoom button found, aborting...")
+            end
+        end
+        -- AXPosition == 0,0 ==> not zoomed
+        local position = self._min_zoom_button:axPosition()
+        return position.x > 0 and position.y > 0
     end
 
     local function getToggleZoomButtonOrThrow()
-        local toggle_zoom_button = vim.iter(win:buttons())
-            :filter(function(button)
-                return button:axDescription() == "Toggle Magnify"
-            end)[1]
-        if not toggle_zoom_button then
-            error("No toggle zoom button found, aborting...")
+        -- FYI caching add in act of desperation to speed up subsequent runs... still all sucks...
+        if not self._toggle_zoom_button then
+            self._toggle_zoom_button = vim.iter(win:buttons())
+                :filter(function(button)
+                    return button:axDescription() == "Toggle Magnify"
+                end)
+                :totable()[1]
+            if not self._toggle_zoom_button then
+                error("No toggle zoom button found, aborting...")
+            end
         end
-        return toggle_zoom_button
+        return self._toggle_zoom_button
     end
 
     function timeline:ensure_zoomed()
         if self:isZoomed() then return end
-        getToggleZoomButtonOrThrow():performAction("AXPress")
+        -- FYI I could use "m" shortcut but that often has a little lag to it so prefer clicking the actual button
+        -- type m:
+        eventtap.keyStroke({}, "m", 0, getScreenPalAppElementOrThrow())
+        -- local button = getToggleZoomButtonOrThrow()
+        -- -- cannot AXPress. must use mouse apparently to click it, FFS
+        -- local frame = button:axFrame()
+        -- local original = mouse.absolutePosition()
+        -- eventtap.leftClick({ x = frame.x + frame.w / 2, y = frame.y + frame.h / 2 })
+        -- mouse.absolutePosition(original)
     end
 
     function timeline:ensure_not_zoomed()
