@@ -1,3 +1,4 @@
+local mouse = require("hs.mouse")
 local eventtap = require("hs.eventtap")
 local timer = require("hs.timer")
 local vim = require("config.libs.vim") -- reuse nvim lua modules in hammerspoon
@@ -28,17 +29,13 @@ end
 
 local function getEditorWindowOrThrow()
     local app = getScreenPalAppElementOrThrow()
-
     -- print("windows", hs.inspect(app:windows()))
     for _, win in ipairs(app:windows()) do
         if win:axTitle():match("^ScreenPal -") then
-            -- print("Found window", win:axTitle())
             return win
         end
     end
-    if not app then
-        error("No ScreenPal editor window found, aborting...")
-    end
+    error("No ScreenPal editor window found, aborting...")
 end
 
 function StreamDeckScreenPalTimelineJumpToStart()
@@ -58,7 +55,6 @@ function StreamDeckScreenPalTimelineJumpToStart()
     --   which is unlike AppleScript where the value is x_left/x_right, y_top/y_bottom
     -- print(hs.inspect(frame))
 
-    local mouse = require("hs.mouse")
     local original_mouse_pos = mouse.absolutePosition()
     -- print("mouse pos", hs.inspect(pos))
     --  mouse pos	{ __luaSkinType = "NSPoint", x = 1396.0, y = 877.10546875 }
