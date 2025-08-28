@@ -215,7 +215,7 @@ function ScreenPalEditorWindow:new()
         local win = get_cached_editor_window()
         local timeline_scrollbar = win:get_scrollbar_or_throw()
         local current_zoom_scrollbar_position = timeline_scrollbar:axValue() -- current value
-        local current_zoomed = timeline_scrollbar:isZoomed()
+        local current_zoomed = win:isZoomed()
         print("timeline scroll", timeline_scrollbar)
         print("isZoomed", current_zoomed)
         print("zoom scrollbar position:", current_zoom_scrollbar_position)
@@ -253,9 +253,9 @@ function ScreenPalEditorWindow:new()
             print("NOT zoomed before, skipping zoom restore")
             return
         end
-        scrollbar_timeline = win:get_scrollbar_or_throw()
-        scrollbar_timeline:zoom2()
-        StreamDeckScreenPalTimelineRestorePosition(current_zoom_scrollbar_position)
+        win:zoom2()
+        timer.usleep(100000)
+        StreamDeckScreenPalTimelineApproxRestorePosition(current_zoom_scrollbar_position)
     end
 
     return editor_window
@@ -376,7 +376,7 @@ function StreamDeckScreenPalTimelineJumpToEnd()
     -- mouse.absolutePosition(original_mouse_pos) -- try not restoring, might be better!
 end
 
-function StreamDeckScreenPalTimelineRestorePosition(restore_position)
+function StreamDeckScreenPalTimelineApproxRestorePosition(restore_position_value)
     -- approximate restore
     -- can only click timeline before/after the slider's bar... so this won't be precise unless I find a way to move it exactly
 
@@ -389,25 +389,24 @@ function StreamDeckScreenPalTimelineRestorePosition(restore_position)
     local frame = timeline_scrollbar:axFrame()
     local min_value = timeline_scrollbar:axMinValue()
 
-    local target_value = 126938 -- of 185454 for m1-02
     local limit_count = 0
 
-    while limit_count > 50 -- save me if smth goes awry in my maths :)
-    do
+    while limit_count < 50 do
+        limit_count = limit_count + 1 -- just in case approx isn't working :) in some edge case
         local value = timeline_scrollbar:axValue()
         local current_value = tonumber(value)
         if not current_value
-            or current_value == target_value
+            or current_value == restore_position_value
         then
             break
         end
 
-        if current_value < target_value then
+        if current_value < restore_position_value then
             -- click right‑most side of the scrollbar to advance toward the end
             eventtap.leftClick({ x = frame.x + frame.w - 1, y = frame.y + frame.h / 2 })
             -- once I blow past the value, stop
             current_value = tonumber(timeline_scrollbar:axValue())
-            if current_value >= target_value then
+            if current_value >= restore_position_value then
                 break
             end
         else
@@ -415,12 +414,10 @@ function StreamDeckScreenPalTimelineRestorePosition(restore_position)
             eventtap.leftClick({ x = frame.x, y = frame.y + frame.h / 2 })
             -- once I blow past the value, stop
             current_value = tonumber(timeline_scrollbar:axValue())
-            if current_value <= target_value then
+            if current_value <= restore_position_value then
                 break
             end
         end
-
-        -- eventtap.leftClick({ x = frame.x + frame.w - 1, y = frame.y + frame.h / 2 })
     end
 end
 
