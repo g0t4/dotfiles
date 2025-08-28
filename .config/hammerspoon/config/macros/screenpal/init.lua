@@ -97,13 +97,13 @@ function ScreenPalTimeline:new()
         return position.x > 0 and position.y > 0
     end
 
-    function timeline:ensure_zoomed()
+    function timeline:zoom_in()
         if self:isZoomed() then return end
         -- FYI typing m is faster now... must be b/c of the native Apple Silicon app
         eventtap.keyStroke({}, "m", 0, getScreenPalAppElementOrThrow())
     end
 
-    function timeline:ensure_not_zoomed()
+    function timeline:zoom_out()
         if not self:isZoomed() then return end
         eventtap.keyStroke({}, "m", 0, getScreenPalAppElementOrThrow())
     end
@@ -127,19 +127,19 @@ function ScreenPalTimeline:new()
 
     function timeline:zoom1()
         ensure_cached_controls()
-        self:ensure_zoomed()
+        self:zoom_in()
         self._btn_minimum_zoom:performAction("AXPress")
     end
 
     function timeline:zoom2()
         ensure_cached_controls()
-        self:ensure_zoomed()
+        self:zoom_in()
         self._btn_medium_zoom:performAction("AXPress")
     end
 
     function timeline:zoom3()
         ensure_cached_controls()
-        self:ensure_zoomed()
+        self:zoom_in()
         self._btn_maximum_zoom:performAction("AXPress")
     end
 
@@ -156,7 +156,7 @@ end
 
 function StreamDeckScreenPalTimelineZoomAndJumpToStart()
     local timeline = get_cached_timeline()
-    timeline:ensure_zoomed()
+    timeline:zoom_in()
     timer.usleep(10000)
     StreamDeckScreenPalTimelineJumpToStart()
 end
