@@ -85,9 +85,7 @@ function StreamDeckScreenPalTimelineJumpToStart()
     --  mouse pos	{ __luaSkinType = "NSPoint", x = 1396.0, y = 877.10546875 }
     local timeline = ScreenPalTimeline:new()
 
-    local is_timeline_zoomed = timeline:isZoomed()
-
-    if is_timeline_zoomed then
+    if timeline:isZoomed() then
         local timeline_scrollbar = win:scrollBar(4)
         -- PRN search for big AXMaxValues? that might uniquely identify it if I have issues in the future with other scrollbars visible
         if not timeline_scrollbar then
