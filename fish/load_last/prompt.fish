@@ -36,6 +36,9 @@ function fish_mode_prompt
     # echo -n ' '
 end
 
+# default is line and I hate that in insert mode, so override it:
+set fish_cursor_insert block
+
 function fish_vcs_prompt --description 'Print all vcs prompts'
     # If a prompt succeeded, we assume that it's printed the correct info.
     # This is so we don't try svn if git already worked.
