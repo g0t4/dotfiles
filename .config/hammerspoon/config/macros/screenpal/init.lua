@@ -33,13 +33,13 @@ function StreamDeckScreenPalTimelineJumpToStart()
     local original_mouse_pos = mouse.absolutePosition()
     --  mouse pos	{ __luaSkinType = "NSPoint", x = 1396.0, y = 877.10546875 }
 
-    local is_zoomed = vim.iter(win:buttons())
+    local is_timeline_zoomed = vim.iter(win:buttons())
         :any(function(button)
             -- if any of the zoom buttons are visible, then the timeline is zoomed
             return button:axDescription() == "Minimum Zoom"
         end)
 
-    if is_zoomed then
+    if is_timeline_zoomed then
         local timeline_scrollbar = win:scrollBar(4)
         if not timeline_scrollbar then
             print("No timeline scrollbar found, aborting...")
