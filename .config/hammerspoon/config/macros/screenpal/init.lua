@@ -182,6 +182,14 @@ function ScreenPalEditorWindow:new()
         self._btn_maximum_zoom:performAction("AXPress")
     end
 
+    function editor_window:back_to_projects()
+        ensure_cached_controls()
+        if not self._btn_back_to_projects then
+            error("No back to projects button found, aborting...")
+        end
+        self._btn_back_to_projects:performAction("AXPress")
+    end
+
     return editor_window
 end
 
@@ -346,11 +354,11 @@ function StreamDeckScreenPalTimelineRestorePosition()
 
         -- eventtap.leftClick({ x = frame.x + frame.w - 1, y = frame.y + frame.h / 2 })
     end
+end
 
-
-    function StreamDeckScreenPalCloseProject()
-
-    end
-
-    --
+function StreamDeckScreenPalReopenProject()
+    local win = get_cached_editor_window()
+    win:back_to_projects()
+    -- -- local title = win._textfield_title:axValue()
+    -- win._btn_back_to_projects:performAction("AXPress")
 end
