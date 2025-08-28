@@ -41,6 +41,7 @@ function StreamDeckScreenPalTimelineJumpToStart()
 
     if is_timeline_zoomed then
         local timeline_scrollbar = win:scrollBar(4)
+        -- PRN search for big AXMaxValues? that might uniquely identify it if I have issues in the future with other scrollbars visible
         if not timeline_scrollbar then
             print("No timeline scrollbar found, aborting...")
             return
