@@ -214,9 +214,11 @@ function ScreenPalEditorWindow:new()
         -- * store info about current project/position
         local win = get_cached_editor_window()
         local timeline_scrollbar = win:get_scrollbar_or_throw()
-        local current_position = timeline_scrollbar:axValue() -- current value
+        local current_zoom_scrollbar_position = timeline_scrollbar:axValue() -- current value
+        local current_zoomed = timeline_scrollbar:isZoomed()
         print("timeline scroll", timeline_scrollbar)
-        print("current timeline position value:", current_position)
+        print("isZoomed", current_zoomed)
+        print("zoom scrollbar position:", current_zoom_scrollbar_position)
         -- TODO save zoom level? can I even figure that out? JUST assume its 2 for now?
 
         if not self._textfield_title then
@@ -245,6 +247,15 @@ function ScreenPalEditorWindow:new()
         end
         btn:performAction("AXPress")
         timer.usleep(10000) -- PRN is this needed?
+
+        -- restore zoom / scroll bar position
+        if not current_zoomed then
+            print("NOT zoomed before, skipping zoom restore")
+            return
+        end
+        scrollbar_timeline = win:get_scrollbar_or_throw()
+        scrollbar_timeline:zoom2()
+        StreamDeckScreenPalTimelineRestorePosition(current_zoom_scrollbar_position)
     end
 
     return editor_window
@@ -365,7 +376,7 @@ function StreamDeckScreenPalTimelineJumpToEnd()
     -- mouse.absolutePosition(original_mouse_pos) -- try not restoring, might be better!
 end
 
-function StreamDeckScreenPalTimelineRestorePosition()
+function StreamDeckScreenPalTimelineRestorePosition(restore_position)
     -- approximate restore
     -- can only click timeline before/after the slider's bar... so this won't be precise unless I find a way to move it exactly
 
