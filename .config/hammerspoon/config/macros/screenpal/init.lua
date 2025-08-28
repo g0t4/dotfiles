@@ -85,7 +85,8 @@ function StreamDeckScreenPalTimelineJumpToStart()
             lastValue = numValue
 
             eventtap.leftClick({ x = frame.x, y = frame.y + frame.h / 2 })
-            timer.usleep(100000) -- 0.1 s pause to let UI update
+            -- eventtap.leftClick({ x = frame.x, y = frame.y + frame.h / 2 }) -- could click twice if value doesn't change
+            -- timer.usleep(10000) -- don't need pause b/c hs seems to block while clicking
         end
     end
 
