@@ -42,9 +42,10 @@ local function getEditorWindowOrThrow()
 end
 
 function StreamDeckScreenPalTimelineJumpToStart()
-    -- TODO check if zoomed, won't work otherwise (or if doesn't find scrollbar for timeline)
     local win = getEditorWindowOrThrow()
 
+    -- TODO check if zoomed, won't work otherwise (or if doesn't find scrollbar for timeline)
+    --    if not zoomed, then  skip to move playhead only!
     local timeline_scrollbar = win:scrollBar(4)
     if not timeline_scrollbar then
         print("No timeline scrollbar found, aborting...")
