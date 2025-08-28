@@ -3,21 +3,8 @@ local eventtap = require("hs.eventtap")
 local timer = require("hs.timer")
 local vim = require("config.libs.vim") -- reuse nvim lua modules in hammerspoon
 
--- * timeline scrollbar (only shows when zoomed)
--- app:window(4):scrollBar(4)
--- AXFocusedUIElement: AXScrollBar<hs.axuielement>
--- AXIndex: 0<number>
--- AXMaxValue: 219094<number>
--- AXMinValue: 0<number>
--- AXOrientation: AXHorizontalOrientation<string>
--- AXRoleDescription: scroll bar<string>
--- AXValue: 216820<number>
-
 local function getScreenPalAppElementOrThrow()
-    -- local start = GetTime()
-    local app = getAppElementOrThrow("com.screenpal.app")
-    -- PrintTook("getting screen pal app took: ", start) -- < 1ms each time
-    return app
+    return getAppElementOrThrow("com.screenpal.app") -- < 1 ms
 end
 
 local function getEditorWindowOrThrow()
@@ -63,7 +50,6 @@ function ScreenPalTimeline:new()
         end
 
         local start = GetTime()
-        local buttons = win:buttons()
         -- enumerating all children and getting role and description is no diff than just buttons with description only...
         vim.iter(win:children())
             :each(function(button)
