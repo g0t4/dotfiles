@@ -77,6 +77,8 @@ function ScreenPalEditorWindow:new()
                     elseif description == "Back to Video Projects" then
                         self._btn_back_to_projects = ui_elem
                         return
+                    else
+                        print(description)
                     end
                 elseif role == "AXTextField" then
                     -- accessibility description => AXDescription in hs apis... is empty only for the title name field (upper left)
