@@ -35,5 +35,6 @@ require("config.macros.fcpx")
 require("config.macros.iterm")
 require("config.macros.google-docs")
 require("config.macros.msft_office")
+require("config.macros.screenpal")
 
 return M
