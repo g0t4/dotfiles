@@ -25,6 +25,12 @@ function getAppElementOrThrow(appName)
     return appElement
 end
 
+axuielemMT.dumpActions = function(self)
+    f.each(self:actionNames() or {}, function(index, name)
+        print(name, self:actionDescription(name))
+    end)
+end
+
 axuielemMT.dumpAttributes = function(self)
     f.each(self:allAttributeValues() or {}, function(name, value)
         print(name, hs.inspect(value))
