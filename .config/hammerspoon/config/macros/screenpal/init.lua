@@ -57,7 +57,7 @@ function StreamDeckScreenPalTimelineJumpToStart()
     local frame = timeline_scrollbar:axFrame()
     -- by the way AXFrame here returns { h = 50.0, w = 1839.0, x = 14.0, y = 814.0 }
     --   which is unlike AppleScript where the value is x_left/x_right, y_top/y_bottom
-    print(hs.inspect(frame))
+    -- print(hs.inspect(frame))
 
     local mouse = require("hs.mouse")
     local original_mouse_pos = mouse.absolutePosition()
@@ -68,7 +68,7 @@ function StreamDeckScreenPalTimelineJumpToStart()
         local lastValue = nil
         while true do
             local value = timeline_scrollbar:axValue()
-            print("Scroll bar value is now: " .. value)
+            -- print("Scroll bar value is now: " .. value)
 
             local numValue = tonumber(value)
             if not numValue then break end
@@ -104,7 +104,7 @@ function StreamDeckScreenPalTimelineJumpToStart()
             return button:axDescription() == "Position Slider"
         end)
         :each(function(button)
-            print("Found the position slider")
+            -- print("Found the position slider")
             eventtap.leftClick({ x = button:axFrame().x, y = button:axFrame().y })
             clickUntilTimelineAtStart()
         end)
