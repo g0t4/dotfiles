@@ -14,7 +14,7 @@ local vim = require("config.libs.vim") -- reuse nvim lua modules in hammerspoon
 -- AXValue: 216820<number>
 
 local function getScreenPalAppElementOrThrow()
-    return getAppElementOrThrow("ScreenPal")
+    return getAppElementOrThrow("com.screenpal.app")
 end
 
 local function getEditorWindowOrThrow()
