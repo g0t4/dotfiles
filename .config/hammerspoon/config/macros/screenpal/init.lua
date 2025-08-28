@@ -49,23 +49,41 @@ function ScreenPalTimeline:new()
     end
 
     function timeline:isZoomed()
-        -- TODO run timing and find out why this SUCKS so bad to enumerate 30 UI elements...
-        --  TODO can it be improved by using element search?
-        -- FYI caching add in act of desperation to speed up subsequent runs... still all sucks...
-        local start = GetTime()
-        button = vim.iter(win:buttons())
-            :filter(function(button)
-                --  THIS IS LAGGING HARD CORE to find the button...
-                return button:axDescription() == "Minimum Zoom"
-                -- position not 0,0
-            end)
-            :totable()[1]
-        PrintTook("Find zoom button", start)
-        if not button then
-            error("No zoom button found, aborting...")
+        if not self._min_button then
+            -- TODO run timing and find out why this SUCKS so bad to enumerate 30 UI elements...
+            --  TODO can it be improved by using element search?
+            -- IF NOT, add back caching and keep a reference to this object as long as possible? how can I invalidate (on error?)
+            local start = GetTime()
+            self._min_button = win:button(42) -- 42, 43, 44 are usually zoom buttons, let's see if they stay relatively stable
+            -- by AXIndex? 3?
+            -- button = vim.iter(win:buttons())
+            --     :filter(function(button)
+            --         --  THIS IS LAGGING HARD CORE to find the button...
+            --         return button:axDescription() == "Minimum Zoom"
+            --         -- return button:axHelp() == "Toggle Timeline Magnify"
+            --         -- AXDescription: Toggle Magnify<string>
+            --         -- AXFocusedUIElement: AXButton - Toggle Magnify<hs.axuielement>
+            --         -- AXHelp: Toggle Timeline Magnify<string>
+            --         -- AXIndex: 3<number>
+            --         -- AXMaxValue: 1<number>
+            --         -- AXMinValue: 0<number>
+            --         -- AXOrientation: AXUnknownOrientation<string>
+            --         -- AXRoleDescription: button<string>
+            --         -- AXSelected: false<bool>
+            --         --
+            --         -- press 'c' to show children
+            --         --
+            --         -- unique ref: app:window('ScreenPal - 3.19.4'):button(desc='Toggle Magnify')               --
+            --         --
+            --     end)
+            --     :totable()[1]
+            PrintTook("Find2 zoom button", start)
+            if not self._min_button then
+                error("No zoom button found, aborting...")
+            end
         end
         -- AXPosition == 0,0 ==> not zoomed
-        local position = button:axPosition()
+        local position = self._min_button:axPosition()
         return position.x > 0 and position.y > 0
     end
 
@@ -116,8 +134,16 @@ function ScreenPalTimeline:new()
     return timeline
 end
 
+local _cached_timeline = nil
+local function get_cached_timeline()
+    if not _cached_timeline then
+        _cached_timeline = ScreenPalTimeline:new()
+    end
+    return _cached_timeline
+end
+
 function StreamDeckScreenPalTimelineZoomAndJumpToStart()
-    local timeline = ScreenPalTimeline:new()
+    local timeline = get_cached_timeline()
     timeline:ensure_zoomed()
     timer.usleep(10000)
     StreamDeckScreenPalTimelineJumpToStart()
@@ -125,7 +151,7 @@ end
 
 function StreamDeckScreenPalTimelineJumpToStart()
     local original_mouse_pos = mouse.absolutePosition()
-    local timeline = ScreenPalTimeline:new()
+    local timeline = get_cached_timeline()
 
     if timeline:isZoomed() then
         local timeline_scrollbar = timeline:get_scrollbar_or_throw()
@@ -170,7 +196,7 @@ end
 
 function StreamDeckScreenPalTimelineJumpToEnd()
     local original_mouse_pos = mouse.absolutePosition()
-    local timeline = ScreenPalTimeline:new()
+    local timeline = get_cached_timeline()
 
     if timeline:isZoomed() then
         local timeline_scrollbar = timeline:get_scrollbar_or_throw()
