@@ -28,13 +28,25 @@ local function getEditorWindowOrThrow()
     error("No ScreenPal editor window found, aborting...")
 end
 
-local ScreenPalTimeline = {}
+ScreenPalTimeline = {}
 function ScreenPalTimeline:new()
     local timeline = {}
     setmetatable(timeline, self)
     self.__index = self
     -- PRN allow passing win if lookup is slow by just letting this class find it
     local win = getEditorWindowOrThrow()
+    self.win = win -- for testing
+
+    -- TODO FIX THIS missing maxn ELSEWHERE!!!!
+    -- hammerspoon uses lua 5.4 and that must not have table.maxn that you do have in vim w/ lua 5.1
+    table.maxn = function(t)
+        -- TODO! lookup what else this might need to implement beyond the vim.iter use case
+        local max = 0
+        for k, v in pairs(t) do
+            if k > max then max = k end
+        end
+        return max
+    end
 
     function timeline:isZoomed()
         return vim.iter(win:buttons())
@@ -75,15 +87,21 @@ function ScreenPalTimeline:new()
     end
 
     function timeline:get_timeline_slider_or_throw()
-        return vim.iter(win:buttons())
+        local slider = vim.iter(win:buttons())
             :filter(function(button)
                 -- AXDescription: Position Slider<string>
                 -- AXHelp: This shows the current position of the animation.<string>
                 -- AXIndex: 3<number>
                 -- unique ref: app:window('ScreenPal - 3.19.4'):button(desc='Position Slider')
-                -- print("Found the position slider")
                 return button:axDescription() == "Position Slider"
-            end)[1]
+            end)
+            :totable()[1]
+        -- print("timeline: ", hs.inspect(slider))
+        if not slider then
+            error("No timeline slider found, aborting...")
+        end
+        -- print("Found slider!")
+        return slider
     end
 
     function timeline:zoom1() end
