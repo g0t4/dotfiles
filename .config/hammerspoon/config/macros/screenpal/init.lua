@@ -65,21 +65,29 @@ function ScreenPalTimeline:new()
                 local description = button:axDescription()
                 local role = button:axRole()
 
-                if description == "Minimum Zoom" then
-                    -- AXIndex: 3, #42 in array in my testing (could change)
-                    self._btn_minimum_zoom = button
-                    return -- continue early so I can add more complex checks below and avoid them when possible
-                elseif description == "Maximum Zoom" then
-                    self._btn_maximum_zoom = button
-                    return
-                elseif description == "Medium Zoom" then
-                    self._btn_medium_zoom = button
-                    return
-                elseif description == "Toggle Magnify" then
-                    self._btn_toggle_magnify = button
-                    return
-                elseif description == "Position Slider" then
-                    self._btn_position_slider = button
+                if role == "AXButton" then
+                    if description == "Minimum Zoom" then
+                        -- AXIndex: 3, #42 in array in my testing (could change)
+                        self._btn_minimum_zoom = button
+                        return -- continue early so I can add more complex checks below and avoid them when possible
+                    elseif description == "Maximum Zoom" then
+                        self._btn_maximum_zoom = button
+                        return
+                    elseif description == "Medium Zoom" then
+                        self._btn_medium_zoom = button
+                        return
+                    elseif description == "Toggle Magnify" then
+                        self._btn_toggle_magnify = button
+                        return
+                    elseif description == "Position Slider" then
+                        self._btn_position_slider = button
+                        return
+                    end
+                elseif role == "AXScrollBar" then
+                    -- have to match on position...FML... I could use coords too I think
+                    self._scrollbars = self._scrollbars or {}
+                    table.insert(self._scrollbars, button)
+                    -- BTW tracking these has nil impact... even if I use prints in here it's not material vs the 100ms overall to enumerate all ui elements of the window
                     return
                 end
             end)
