@@ -42,10 +42,11 @@ function ScreenPalEditorWindow:new()
                 -- assume all controls are still valid, if you have issues with one control going in and out, don't destroy cache of everything for that one... add a special check in its code path and send in an override here to flush cache then
                 return
             end
-
-            -- print("invalidate check ", self._btn_minimum_zoom:isValid())
             print("editor window cache invalidated")
         end
+
+        -- TODO! fully invalidate cache... rewrite so you can create a new cache object for the window
+        self._scrollbars = {} -- fixes finding scrollbar when refresh cache
 
         local start = GetTime()
         -- enumerating all children and getting role and description is no diff than just buttons with description only...
