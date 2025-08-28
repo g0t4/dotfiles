@@ -118,10 +118,9 @@ function ScreenPalTimeline:new()
 
     function timeline:get_scrollbar_or_throw()
         -- PRN search for big AXMaxValues? that might uniquely identify it if I have issues in the future with other scrollbars visible
+        -- OR by position on screen (toward bottom of window is telling)
         ensure_cached_controls()
-        local start = GetTime()
         local scrollbar = self._scrollbars[4]
-        PrintTook("getting timeline scrollbar took: ", start)
         if not scrollbar then
             error("No timeline scrollbar found, aborting...")
         end
