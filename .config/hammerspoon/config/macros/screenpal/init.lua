@@ -131,9 +131,17 @@ function ScreenPalTimeline:new()
         self._btn_minimum_zoom:performAction("AXPress")
     end
 
-    function timeline:zoom2() end
+    function timeline:zoom2()
+        ensure_cached_controls()
+        self:ensure_zoomed()
+        self._btn_medium_zoom:performAction("AXPress")
+    end
 
-    function timeline:zoom3() end
+    function timeline:zoom3()
+        ensure_cached_controls()
+        self:ensure_zoomed()
+        self._btn_maximum_zoom:performAction("AXPress")
+    end
 
     return timeline
 end
