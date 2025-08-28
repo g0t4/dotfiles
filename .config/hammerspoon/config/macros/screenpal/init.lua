@@ -92,8 +92,23 @@ function StreamDeckScreenPalTimelineJumpToStart()
 
     clickUntilTimelineAtStart()
 
-    -- y position 1/3 of the way down
-    -- local y_click = frame.y + frame.h / 3
+    -- * move playhead to start (0) by clicking leftmost part of position slider (aka timeline)
+    --   keep in mind, scrollbar below is like a pager, so it has to be all the way left, first
+    --   PRN add delay if this is not registering, but use it first to figure that out
+    buttons = win:buttons()
+    for i = 1, #buttons do
+        local button = buttons[i]
+        if button:axDescription() == "Position Slider" then
+            print("Found the position slider")
+            eventtap.leftClick({ x = button:axFrame().x, y = button:axFrame().y })
+            -- clickUntilTimelineAtStart()
+            break
+        end
+    end
+    -- AXDescription: Position Slider<string>
+    -- AXHelp: This shows the current position of the animation.<string>
+    -- AXIndex: 3<number>
+    -- unique ref: app:window('ScreenPal - 3.19.4'):button(desc='Position Slider')
 end
 
 -- * TODO! JUMP to END
