@@ -136,9 +136,8 @@ function StreamDeckScreenPalTimelineJumpToStart()
                 -- print("Scroll bar value is now: " .. value)
 
                 local numValue = tonumber(value)
-                if not numValue then break end
-
-                if numValue <= 0 then
+                if not numValue
+                    or numValue <= 0 then
                     break
                 end
 
