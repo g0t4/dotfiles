@@ -119,35 +119,29 @@ end
 
 function StreamDeckScreenPalTimelineJumpToStart()
     local original_mouse_pos = mouse.absolutePosition()
-    --  mouse pos	{ __luaSkinType = "NSPoint", x = 1396.0, y = 877.10546875 }
     local timeline = ScreenPalTimeline:new()
 
     if timeline:isZoomed() then
         local timeline_scrollbar = timeline:get_scrollbar_or_throw()
-
         local frame = timeline_scrollbar:axFrame()
-        -- by the way AXFrame here returns { h = 50.0, w = 1839.0, x = 14.0, y = 814.0 }
-        --   which is unlike AppleScript where the value is x_left/x_right, y_top/y_bottom
+        local min_value = timeline_scrollbar:axMinValue()
 
-        local function clickUntilTimelineAtStart()
-            local lastValue = nil
+        local function clickUntilTimelineAtEnd()
+            local prior_value = nil
             while true do
                 local value = timeline_scrollbar:axValue()
-                -- print("Scroll bar value is now: " .. value)
-
-                local numValue = tonumber(value)
-                if not numValue
-                    or numValue <= 0 then
+                local current_value = tonumber(value)
+                if not current_value
+                    or current_value <= min_value
+                then
                     break
                 end
 
-                if lastValue ~= nil and numValue == lastValue then
+                if prior_value ~= nil and current_value == prior_value then
                     print("Value unchanged, stopping.")
                     break
                 end
-
-                lastValue = numValue
-
+                prior_value = current_value
 
                 -- click left-most side of timeline's scrollbar to get to zero
                 eventtap.leftClick({ x = frame.x, y = frame.y + frame.h / 2 })
@@ -156,7 +150,7 @@ function StreamDeckScreenPalTimelineJumpToStart()
             end
         end
 
-        clickUntilTimelineAtStart()
+        clickUntilTimelineAtEnd()
     end
 
     -- * move playhead to start (0) by clicking leftmost part of position slider (aka timeline)
@@ -169,5 +163,47 @@ function StreamDeckScreenPalTimelineJumpToStart()
 end
 
 -- * TODO! JUMP to END
+
+function StreamDeckScreenPalTimelineJumpToEnd()
+    local original_mouse_pos = mouse.absolutePosition()
+    local timeline = ScreenPalTimeline:new()
+
+    if timeline:isZoomed() then
+        local timeline_scrollbar = timeline:get_scrollbar_or_throw()
+        local frame = timeline_scrollbar:axFrame()
+        local max_value = timeline_scrollbar:axMaxValue()
+
+        local function clickUntilTimelineAtEnd()
+            local prior_value = nil
+            while true do
+                local value = timeline_scrollbar:axValue()
+                local current_value = tonumber(value)
+                if not current_value
+                    or current_value >= max_value
+                then
+                    break
+                end
+
+                if prior_value ~= nil and current_value == prior_value then
+                    print("Value unchanged, stopping.")
+                    break
+                end
+                prior_value = current_value
+
+                -- click right‑most side of the scrollbar to advance toward the end
+                eventtap.leftClick({ x = frame.x + frame.w - 1, y = frame.y + frame.h / 2 })
+            end
+        end
+
+        clickUntilTimelineAtEnd()
+    end
+
+    -- move playhead to end by clicking the right‑most part of the timeline slider
+    local slider = timeline:get_timeline_slider_or_throw()
+    local sframe = slider:axFrame()
+    eventtap.leftClick({ x = sframe.x + sframe.w - 1, y = sframe.y })
+
+    mouse.absolutePosition(original_mouse_pos)
+end
 
 -- * TODO! JUMP to Restore (attempt to click around until get there)

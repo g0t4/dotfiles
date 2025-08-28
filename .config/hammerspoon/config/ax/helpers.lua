@@ -328,6 +328,16 @@ axuielemMT.axValue = function(elem)
 end
 ---@param elem hs.axuielement
 ---@return string
+axuielemMT.axMaxValue = function(elem)
+    return elem:attributeValue("AXMaxValue") or ""
+end
+---@param elem hs.axuielement
+---@return string
+axuielemMT.axMinValue = function(elem)
+    return elem:attributeValue("AXMinValue") or ""
+end
+---@param elem hs.axuielement
+---@return string
 axuielemMT.axRole = function(elem)
     return elem:attributeValue("AXRole") or ""
 end
