@@ -1948,7 +1948,7 @@ else:
 end
 
 # *** man page helpers
-set --local man_cmd man
+set man_cmd man
 if $IS_MACOS
     # brew install man-db
     set man_cmd gman
