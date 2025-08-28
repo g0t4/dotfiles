@@ -54,29 +54,29 @@ function ScreenPalTimeline:new()
             --  TODO can it be improved by using element search?
             -- IF NOT, add back caching and keep a reference to this object as long as possible? how can I invalidate (on error?)
             local start = GetTime()
-            self._min_button = win:button(42) -- 42, 43, 44 are usually zoom buttons, let's see if they stay relatively stable
+            -- self._min_button = win:button(42) -- 42, 43, 44 are usually zoom buttons, let's see if they stay relatively stable
             -- by AXIndex? 3?
-            -- button = vim.iter(win:buttons())
-            --     :filter(function(button)
-            --         --  THIS IS LAGGING HARD CORE to find the button...
-            --         return button:axDescription() == "Minimum Zoom"
-            --         -- return button:axHelp() == "Toggle Timeline Magnify"
-            --         -- AXDescription: Toggle Magnify<string>
-            --         -- AXFocusedUIElement: AXButton - Toggle Magnify<hs.axuielement>
-            --         -- AXHelp: Toggle Timeline Magnify<string>
-            --         -- AXIndex: 3<number>
-            --         -- AXMaxValue: 1<number>
-            --         -- AXMinValue: 0<number>
-            --         -- AXOrientation: AXUnknownOrientation<string>
-            --         -- AXRoleDescription: button<string>
-            --         -- AXSelected: false<bool>
-            --         --
-            --         -- press 'c' to show children
-            --         --
-            --         -- unique ref: app:window('ScreenPal - 3.19.4'):button(desc='Toggle Magnify')               --
-            --         --
-            --     end)
-            --     :totable()[1]
+            self._min_button = vim.iter(win:buttons())
+                :filter(function(button)
+                    --  THIS IS LAGGING HARD CORE to find the button...
+                    return button:axDescription() == "Minimum Zoom"
+                    -- return button:axHelp() == "Toggle Timeline Magnify"
+                    -- AXDescription: Toggle Magnify<string>
+                    -- AXFocusedUIElement: AXButton - Toggle Magnify<hs.axuielement>
+                    -- AXHelp: Toggle Timeline Magnify<string>
+                    -- AXIndex: 3<number>
+                    -- AXMaxValue: 1<number>
+                    -- AXMinValue: 0<number>
+                    -- AXOrientation: AXUnknownOrientation<string>
+                    -- AXRoleDescription: button<string>
+                    -- AXSelected: false<bool>
+                    --
+                    -- press 'c' to show children
+                    --
+                    -- unique ref: app:window('ScreenPal - 3.19.4'):button(desc='Toggle Magnify')               --
+                    --
+                end)
+                :totable()[1]
             PrintTook("Find2 zoom button", start)
             if not self._min_button then
                 error("No zoom button found, aborting...")
