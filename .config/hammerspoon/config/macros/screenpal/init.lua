@@ -74,6 +74,18 @@ function ScreenPalTimeline:new()
         return scrollbar
     end
 
+    function timeline:get_timeline_slider_or_throw()
+        return vim.iter(win:buttons())
+            :filter(function(button)
+                -- AXDescription: Position Slider<string>
+                -- AXHelp: This shows the current position of the animation.<string>
+                -- AXIndex: 3<number>
+                -- unique ref: app:window('ScreenPal - 3.19.4'):button(desc='Position Slider')
+                -- print("Found the position slider")
+                return button:axDescription() == "Position Slider"
+            end)[1]
+    end
+
     function timeline:zoom1() end
 
     function timeline:zoom2() end
@@ -131,19 +143,8 @@ function StreamDeckScreenPalTimelineJumpToStart()
     -- * move playhead to start (0) by clicking leftmost part of position slider (aka timeline)
     --   keep in mind, scrollbar below is like a pager, so it has to be all the way left, first
     --   PRN add delay if this is not registering, but use it first to figure that out
-    vim.iter(win:buttons())
-        :filter(function(button)
-            -- AXDescription: Position Slider<string>
-            -- AXHelp: This shows the current position of the animation.<string>
-            -- AXIndex: 3<number>
-            -- unique ref: app:window('ScreenPal - 3.19.4'):button(desc='Position Slider')
-            return button:axDescription() == "Position Slider"
-        end)
-        :each(function(button)
-            -- print("Found the position slider")
-            eventtap.leftClick({ x = button:axFrame().x, y = button:axFrame().y })
-            clickUntilTimelineAtStart()
-        end)
+    local slider = timeline:get_timeline_slider_or_throw()
+    eventtap.leftClick({ x = slider:axFrame().x, y = slider:axFrame().y })
 
     mouse.absolutePosition(original_mouse_pos)
 end
