@@ -47,6 +47,13 @@ function ScreenPalEditorWindow:new()
 
         -- TODO! fully invalidate cache... rewrite so you can create a new cache object for the window
         self._scrollbars = {} -- fixes finding scrollbar when refresh cache
+        self._btn_back_to_projects = nil
+        self._btn_maximum_zoom = nil
+        self._btn_medium_zoom = nil
+        self._btn_minimum_zoom = nil
+        self._btn_position_slider = nil
+        self._btn_toggle_magnify = nil
+        self._textfield_title = nil
 
         local start = GetTime()
         -- enumerating all children and getting role and description is no diff than just buttons with description only...
