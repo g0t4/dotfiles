@@ -116,9 +116,11 @@ function ScreenPalTimeline:new()
     return timeline
 end
 
-function StreamDeckScreenPalTimelineZoom()
+function StreamDeckScreenPalTimelineZoomAndJumpToStart()
     local timeline = ScreenPalTimeline:new()
     timeline:ensure_zoomed()
+    timer.usleep(10000)
+    StreamDeckScreenPalTimelineJumpToStart()
 end
 
 function StreamDeckScreenPalTimelineJumpToStart()
