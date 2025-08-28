@@ -23,9 +23,7 @@ function ScreenPalTimeline:new()
     local timeline = {}
     setmetatable(timeline, self)
     self.__index = self
-    -- PRN allow passing win if lookup is slow by just letting this class find it
-    local win = getEditorWindowOrThrow()
-    self.win = win -- for testing
+    self.win = getEditorWindowOrThrow()
 
     -- TODO FIX THIS missing maxn ELSEWHERE!!!!
     -- hammerspoon uses lua 5.4 and that must not have table.maxn that you do have in vim w/ lua 5.1
@@ -51,7 +49,7 @@ function ScreenPalTimeline:new()
 
         local start = GetTime()
         -- enumerating all children and getting role and description is no diff than just buttons with description only...
-        vim.iter(win:children())
+        vim.iter(self.win:children())
             :each(function(button)
                 -- one time hit, just cache all buttons when I have to find one of them
                 -- not extra expensive to cache each one relative to time to enumerate / get description (has to be done to find even one button)
