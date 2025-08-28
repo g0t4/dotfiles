@@ -69,36 +69,15 @@ function ScreenPalTimeline:new()
         return position.x > 0 and position.y > 0
     end
 
-    local function getToggleZoomButtonOrThrow()
-        -- FYI caching add in act of desperation to speed up subsequent runs... still all sucks...
-        if not self._toggle_zoom_button then
-            self._toggle_zoom_button = vim.iter(win:buttons())
-                :filter(function(button)
-                    return button:axDescription() == "Toggle Magnify"
-                end)
-                :totable()[1]
-            if not self._toggle_zoom_button then
-                error("No toggle zoom button found, aborting...")
-            end
-        end
-        return self._toggle_zoom_button
-    end
-
     function timeline:ensure_zoomed()
         if self:isZoomed() then return end
         -- FYI typing m is faster now... must be b/c of the native Apple Silicon app
         eventtap.keyStroke({}, "m", 0, getScreenPalAppElementOrThrow())
-        -- local button = getToggleZoomButtonOrThrow()
-        -- -- cannot AXPress. must use mouse apparently to click it, FFS
-        -- local frame = button:axFrame()
-        -- local original = mouse.absolutePosition()
-        -- eventtap.leftClick({ x = frame.x + frame.w / 2, y = frame.y + frame.h / 2 })
-        -- mouse.absolutePosition(original)
     end
 
     function timeline:ensure_not_zoomed()
         if not self:isZoomed() then return end
-        getToggleZoomButtonOrThrow():performAction("AXPress")
+        eventtap.keyStroke({}, "m", 0, getScreenPalAppElementOrThrow())
     end
 
     function timeline:get_scrollbar_or_throw()
