@@ -14,7 +14,10 @@ local vim = require("config.libs.vim") -- reuse nvim lua modules in hammerspoon
 -- AXValue: 216820<number>
 
 local function getScreenPalAppElementOrThrow()
-    return getAppElementOrThrow("com.screenpal.app")
+    -- local start = GetTime()
+    local app = getAppElementOrThrow("com.screenpal.app")
+    -- PrintTook("getting screen pal app took: ", start) -- < 1ms each time
+    return app
 end
 
 local function getEditorWindowOrThrow()
