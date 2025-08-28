@@ -217,6 +217,7 @@ function ScreenPalEditorWindow:new()
         local current_position = timeline_scrollbar:axValue() -- current value
         print("timeline scroll", timeline_scrollbar)
         print("current timeline position value:", current_position)
+        -- TODO save zoom level? can I even figure that out? JUST assume its 2 for now?
 
         if not self._textfield_title then
             error("No title found, aborting...")
