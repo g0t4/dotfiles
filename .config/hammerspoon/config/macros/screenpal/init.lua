@@ -67,12 +67,12 @@ function ScreenPalTimeline:new()
         return toggle_zoom_button
     end
 
-    function timeline:enable_zoom()
+    function timeline:ensure_zoomed()
         if self:isZoomed() then return end
         getToggleZoomButtonOrThrow():performAction("AXPress")
     end
 
-    function timeline:enable_unzoom()
+    function timeline:ensure_not_zoomed()
         if not self:isZoomed() then return end
         getToggleZoomButtonOrThrow():performAction("AXPress")
     end
@@ -115,6 +115,11 @@ function ScreenPalTimeline:new()
     function timeline:jumpToEnd() end
 
     return timeline
+end
+
+function StreamDeckScreenPalTimelineZoom()
+    local timeline = ScreenPalTimeline:new()
+    timeline:ensure_zoomed()
 end
 
 function StreamDeckScreenPalTimelineJumpToStart()
