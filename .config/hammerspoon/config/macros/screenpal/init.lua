@@ -73,6 +73,9 @@ function ScreenPalTimeline:new()
                     elseif description == "Position Slider" then
                         self._btn_position_slider = button
                         return
+                    elseif description == "Back to Video Projects" then
+                        self._btn_back_to_projects = button
+                        return
                     end
                 elseif role == "AXScrollBar" then
                     -- have to match on position...FML... I could use coords too I think
