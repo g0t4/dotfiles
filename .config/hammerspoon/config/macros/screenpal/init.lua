@@ -195,6 +195,8 @@ end
 
 function StreamDeckScreenPalTimelineZoomAndJumpToStart()
     local win = get_cached_editor_window()
+    win:zoom_out() -- zoom out first means just click end and zoom in... no slider necessary!
+    timer.usleep(10000)
     StreamDeckScreenPalTimelineJumpToStart()
     -- zoom after so if I am initially not zoomed, I can move faster
     -- PRN zoom out before move and then zoom in when done?
@@ -204,6 +206,8 @@ end
 
 function StreamDeckScreenPalTimelineZoomAndJumpToEnd()
     local win = get_cached_editor_window()
+    win:zoom_out() -- zoom out first means just click end and zoom in... no slider necessary!
+    timer.usleep(10000)
     StreamDeckScreenPalTimelineJumpToEnd()
     timer.usleep(10000)
     win:zoom2()
