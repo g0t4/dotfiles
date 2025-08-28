@@ -24,7 +24,7 @@ local vim = require("config.libs.vim") -- reuse nvim lua modules in hammerspoon
 -- unique ref: app:window('ScreenPal - 3.19.4')
 
 local function getScreenPalAppElementOrThrow()
-    return getAppElementOrThrow("ScreePal")
+    return getAppElementOrThrow("ScreenPal")
 end
 
 local function getEditorWindowOrThrow()
