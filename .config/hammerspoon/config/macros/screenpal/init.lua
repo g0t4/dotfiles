@@ -125,7 +125,16 @@ function ScreenPalTimeline:new()
         return self._btn_position_slider
     end
 
-    function timeline:zoom1() end
+    function timeline:zoom1()
+        ensure_cached_controls()
+        self:ensure_zoomed()
+        local min_zoom = self._btn_minimum_zoom
+        min_zoom:dumpAttributes()
+        print("ACTIONS")
+        min_zoom:dumpActions()
+        print("DONE")
+        min_zoom:performAction("AXPress")
+    end
 
     function timeline:zoom2() end
 
@@ -135,7 +144,7 @@ function ScreenPalTimeline:new()
 end
 
 local _cached_timeline = nil
-local function get_cached_timeline()
+function get_cached_timeline()
     if not _cached_timeline then
         _cached_timeline = ScreenPalTimeline:new()
     end
