@@ -200,6 +200,13 @@ function StreamDeckScreenPalTimelineZoomAndJumpToStart()
     StreamDeckScreenPalTimelineJumpToStart()
 end
 
+function StreamDeckScreenPalTimelineZoomAndJumpToEnd()
+    local win = get_cached_editor_window()
+    win:zoom2()
+    timer.usleep(10000)
+    StreamDeckScreenPalTimelineJumpToEnd()
+end
+
 function StreamDeckScreenPalTimelineJumpToStart()
     -- local original_mouse_pos = mouse.absolutePosition()
     local win = get_cached_editor_window()
