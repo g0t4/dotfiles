@@ -184,6 +184,20 @@ function ScreenPalEditorWindow:new()
         self._btn_maximum_zoom:performAction("AXPress")
     end
 
+    function ensure_cached_controls_for_project_list_view()
+        vim.iter(self.win:children())
+            :each(function(ui_elem)
+                -- one time hit, just cache all buttons when I have to find one of them
+                -- not extra expensive to cache each one relative to time to enumerate / get description (has to be done to find even one button)
+                local description = ui_elem:axDescription()
+                local role = ui_elem:axRole()
+                -- TODO! split out editor window class? with all controls there? this is bastardized here but is fine for now
+                if role == "AXScrollArea" then
+                    self._scrollarea_list = ui_elem
+                end
+            end)
+    end
+
     function editor_window:back_to_projects()
         ensure_cached_controls()
         if not self._textfield_title then
@@ -195,8 +209,12 @@ function ScreenPalEditorWindow:new()
             error("No back to projects button found, aborting...")
         end
         self._btn_back_to_projects:performAction("AXPress")
+        timer.usleep(10000) -- slight delay else won't find scroll area / list of projects
 
         -- TODO check if went back?
+        -- FYI ok to take a hit here to find controls and not use cachehd scroll area of clips?
+        ensure_cached_controls_for_project_list_view() -- run again for main editor?
+        print("list", self._scrollarea_list)
     end
 
     return editor_window
