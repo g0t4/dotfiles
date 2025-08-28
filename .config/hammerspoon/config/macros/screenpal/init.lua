@@ -22,16 +22,17 @@ local vim = require("config.libs.vim") -- reuse nvim lua modules in hammerspoon
 --
 -- unique ref: app:window('ScreenPal - 3.19.4')
 
-local function getScreenPalAppElement()
+local function getScreenPalAppElementOrThrow()
     -- TODO disable warning about hs.application.enableSpotlightForNameSearches
-    return expectAppElement("ScreenPal")
-end
-
-local function getEditorWindowOrThrow()
-    local app = getScreenPalAppElement()
+    local app = expectAppElement("ScreenPal")
     if not app then
         error("No ScreenPal App Element found, aborting...")
     end
+    return app
+end
+
+local function getEditorWindowOrThrow()
+    local app = getScreenPalAppElementOrThrow()
 
     -- print("windows", hs.inspect(app:windows()))
     for _, win in ipairs(app:windows()) do
