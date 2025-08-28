@@ -64,23 +64,32 @@ function StreamDeckScreenPalTimelineJumpToStart()
     -- print("mouse pos", hs.inspect(pos))
     --  mouse pos	{ __luaSkinType = "NSPoint", x = 1396.0, y = 877.10546875 }
 
-    local function clickUntilZero()
+    local function clickUntilTimelineAtStart()
+        local lastValue = nil
         while true do
             local value = timeline_scrollbar:axValue()
             print("Scroll bar value is now: " .. value)
 
-            if tonumber(value) <= 0 then
+            local numValue = tonumber(value)
+            if not numValue then break end
+
+            if numValue <= 0 then
                 break
             end
+
+            if lastValue ~= nil and numValue == lastValue then
+                print("Value unchanged, stopping.")
+                break
+            end
+
+            lastValue = numValue
 
             eventtap.leftClick({ x = frame.x, y = frame.y + frame.h / 2 })
             timer.usleep(100000) -- 0.1 s pause to let UI update
         end
     end
 
-    clickUntilZero()
-
-
+    clickUntilTimelineAtStart()
 
     -- y position 1/3 of the way down
     -- local y_click = frame.y + frame.h / 3
