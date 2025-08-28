@@ -156,7 +156,7 @@ end
 
 function StreamDeckScreenPalTimelineZoomAndJumpToStart()
     local timeline = get_cached_timeline()
-    timeline:zoom_in()
+    timeline:zoom2()
     timer.usleep(10000)
     StreamDeckScreenPalTimelineJumpToStart()
 end
