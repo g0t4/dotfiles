@@ -235,6 +235,16 @@ axuielemMT.scrollArea = function(self, index)
 end
 
 ---@return hs.axuielement[]
+axuielemMT.scrollBars = function(self)
+    return self:childrenWithRole("AXScrollBar") or {}
+end
+---@param index number
+---@return hs.axuielement
+axuielemMT.scrollBar = function(self, index)
+    return self:scrollBars()[index]
+end
+
+---@return hs.axuielement[]
 axuielemMT.tables = function(self)
     return self:childrenWithRole("AXTable") or {}
 end
