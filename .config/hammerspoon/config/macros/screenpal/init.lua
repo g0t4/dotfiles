@@ -57,21 +57,27 @@ function ScreenPalTimeline:new()
 
         local start = GetTime()
         local buttons = win:buttons()
-        vim.iter(buttons)
+        -- enumerating all children and getting role and description is no diff than just buttons with description only...
+        vim.iter(win:children())
             :each(function(button)
                 -- one time hit, just cache all buttons when I have to find one of them
                 -- not extra expensive to cache each one relative to time to enumerate / get description (has to be done to find even one button)
                 local description = button:axDescription()
+                local role = button:axRole()
 
                 if description == "Minimum Zoom" then
                     -- AXIndex: 3, #42 in array in my testing (could change)
                     self._btn_minimum_zoom = button
+                    return -- continue early so I can add more complex checks below and avoid them when possible
                 elseif description == "Maximum Zoom" then
                     self._btn_maximum_zoom = button
+                    return
                 elseif description == "Medium Zoom" then
                     self._btn_medium_zoom = button
+                    return
                 elseif description == "Toggle Magnify" then
                     self._btn_toggle_magnify = button
+                    return
                 end
             end)
         self._cached_buttons = true
