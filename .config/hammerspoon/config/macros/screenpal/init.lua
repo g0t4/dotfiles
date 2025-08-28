@@ -210,7 +210,7 @@ function ScreenPalEditorWindow:new()
             end)
     end
 
-    function editor_window:back_to_projects()
+    function editor_window:reopen_project()
         -- * store info about current project/position
         local win = get_cached_editor_window()
         local timeline_scrollbar = win:get_scrollbar_or_throw()
@@ -414,7 +414,7 @@ end
 
 function StreamDeckScreenPalReopenProject()
     local win = get_cached_editor_window()
-    win:back_to_projects()
+    win:reopen_project()
     -- -- local title = win._textfield_title:axValue()
     -- win._btn_back_to_projects:performAction("AXPress")
 end
