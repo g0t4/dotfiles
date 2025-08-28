@@ -52,6 +52,15 @@ function ScreenPalTimeline:new()
         -- PRN break out diff sets of controls based on type or otherwise...
         --   ?   when I do childrenWithRole("AXButton") ... is that enumeating all children?! if so lets do them all in one go then! instead of by type
         if self._cached_buttons then
+            -- check button still exists to determine if cache is invalidated
+            print("invalidate check", self._btn_minimum_zoom)
+            -- interesting... this prints:
+            --   s.axuielement: *element invalid* (0x600000139178)
+            -- can I see that "element invalid" somehow?! that's in the AXRole position?
+            local start = GetTime()
+            print("invalidate check role", self._btn_minimum_zoom:axRole()) -- works! 0.4ms is AWESOME!
+            print("invalidate check position", self._btn_minimum_zoom:axPosition()) -- works! 0.4ms is AWESOME!
+            PrintTook("invalidate check took: ", start)
             return
         end
 
