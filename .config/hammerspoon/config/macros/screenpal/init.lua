@@ -28,8 +28,59 @@ local function getEditorWindowOrThrow()
     error("No ScreenPal editor window found, aborting...")
 end
 
-function StreamDeckScreenPalTimelineJumpToStart()
+local ScreenPalTimeline = {}
+function ScreenPalTimeline:new()
+    local timeline = {}
+    setmetatable(timeline, self)
+    self.__index = self
+    -- PRN allow passing win if lookup is slow by just letting this class find it
     local win = getEditorWindowOrThrow()
+
+    function timeline:isZoomed()
+        return vim.iter(win:buttons())
+            :any(function(button)
+                -- if any of the zoom buttons are visible, then the timeline is zoomed
+                return button:axDescription() == "Minimum Zoom"
+            end)
+    end
+
+    local function getToggleZoomButtonOrThrow()
+        local toggle_zoom_button = vim.iter(win:buttons())
+            :filter(function(button)
+                return button:axDescription() == "Toggle Magnify"
+            end)[1]
+        if not toggle_zoom_button then
+            error("No toggle zoom button found, aborting...")
+        end
+        return toggle_zoom_button
+    end
+
+    function timeline:enable_zoom()
+        if self:isZoomed() then return end
+        getToggleZoomButtonOrThrow():performAction("AXPress")
+    end
+
+    function timeline:enable_unzoom()
+        if not self:isZoomed() then return end
+        getToggleZoomButtonOrThrow():performAction("AXPress")
+    end
+
+    function timeline:zoom1()
+
+    end
+
+    function timeline:zoom2() end
+
+    function timeline:zoom3() end
+
+    function timeline:jumpToStart() end
+
+    function timeline:jumpToEnd() end
+
+    return timeline
+end
+
+function StreamDeckScreenPalTimelineJumpToStart()
     local original_mouse_pos = mouse.absolutePosition()
     --  mouse pos	{ __luaSkinType = "NSPoint", x = 1396.0, y = 877.10546875 }
 
