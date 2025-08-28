@@ -211,7 +211,13 @@ function ScreenPalEditorWindow:new()
     end
 
     function editor_window:back_to_projects()
-        ensure_cached_controls()
+        -- * store info about current project/position
+        local win = get_cached_editor_window()
+        local timeline_scrollbar = win:get_scrollbar_or_throw()
+        local current_position = timeline_scrollbar:axValue() -- current value
+        print("timeline scroll", timeline_scrollbar)
+        print("current timeline position value:", current_position)
+
         if not self._textfield_title then
             error("No title found, aborting...")
         end
@@ -237,6 +243,7 @@ function ScreenPalEditorWindow:new()
             error("cannot find project to re-open, aborting...")
         end
         btn:performAction("AXPress")
+        timer.usleep(10000) -- PRN is this needed?
     end
 
     return editor_window
