@@ -162,8 +162,6 @@ function StreamDeckScreenPalTimelineJumpToStart()
     mouse.absolutePosition(original_mouse_pos)
 end
 
--- * TODO! JUMP to END
-
 function StreamDeckScreenPalTimelineJumpToEnd()
     local original_mouse_pos = mouse.absolutePosition()
     local timeline = ScreenPalTimeline:new()
