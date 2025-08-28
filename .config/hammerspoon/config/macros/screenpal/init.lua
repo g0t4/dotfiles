@@ -249,4 +249,54 @@ function StreamDeckScreenPalTimelineJumpToEnd()
     mouse.absolutePosition(original_mouse_pos)
 end
 
--- * TODO! JUMP to Restore (attempt to click around until get there)
+function StreamDeckScreenPalTimelineRestorePosition()
+    -- approximate restore
+    -- can only click timeline before/after the slider's bar... so this won't be precise unless I find a way to move it exactly
+
+    local timeline = get_cached_timeline()
+    if not timeline:isZoomed() then
+        return -- nothing to do, yet
+    end
+
+    local timeline_scrollbar = timeline:get_scrollbar_or_throw()
+    local frame = timeline_scrollbar:axFrame()
+    local min_value = timeline_scrollbar:axMinValue()
+
+    local target_value = 126938 -- of 185454 for m1-02
+    local limit_count = 0
+
+    while limit_count > 50 -- save me if smth goes awry in my maths :)
+    do
+        local value = timeline_scrollbar:axValue()
+        local current_value = tonumber(value)
+        if not current_value
+            or current_value == target_value
+        then
+            break
+        end
+
+        if current_value < target_value then
+            -- click right‑most side of the scrollbar to advance toward the end
+            eventtap.leftClick({ x = frame.x + frame.w - 1, y = frame.y + frame.h / 2 })
+            -- once I blow past the value, stop
+            current_value = tonumber(timeline_scrollbar:axValue())
+            if current_value >= target_value then
+                break
+            end
+        else
+            -- click left‑most side of the scrollbar to advance toward the end
+            eventtap.leftClick({ x = frame.x, y = frame.y + frame.h / 2 })
+            -- once I blow past the value, stop
+            current_value = tonumber(timeline_scrollbar:axValue())
+            if current_value <= target_value then
+                break
+            end
+        end
+
+        -- eventtap.leftClick({ x = frame.x + frame.w - 1, y = frame.y + frame.h / 2 })
+    end
+
+
+
+    --
+end
