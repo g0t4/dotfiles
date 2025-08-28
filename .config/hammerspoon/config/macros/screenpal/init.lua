@@ -128,12 +128,7 @@ function ScreenPalTimeline:new()
     function timeline:zoom1()
         ensure_cached_controls()
         self:ensure_zoomed()
-        local min_zoom = self._btn_minimum_zoom
-        min_zoom:dumpAttributes()
-        print("ACTIONS")
-        min_zoom:dumpActions()
-        print("DONE")
-        min_zoom:performAction("AXPress")
+        self._btn_minimum_zoom:performAction("AXPress")
     end
 
     function timeline:zoom2() end
