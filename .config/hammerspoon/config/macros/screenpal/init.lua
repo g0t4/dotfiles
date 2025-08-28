@@ -82,12 +82,20 @@ function ScreenPalTimeline:new()
                     -- ALSO most of the time it will have an mX in it :)
                     --
 
-                    print("ui_elem", hs.inspect({
-                        description = description,
-                        role = role,
-                        value = ui_elem:axValue(),
-                        frame = ui_elem:axFrame(),
-                    }))
+                    if description == "" then
+                        -- so far, the text input for the title on the edit video page is the only text field with no description!
+                        --    by the way this maps to accessibility description IIUC in script debugger
+                        self._textfield_title = ui_elem
+                    end
+
+                    -- PRN capture all text fields? or eliminate some and then pick the most liklely remaining?
+                    -- print("ui_elem", hs.inspect({
+                    --     description = description,
+                    --     role = role,
+                    --     value = ui_elem:axValue(),
+                    --     frame = ui_elem:axFrame(),
+                    --     roleDesc = ui_elem:axRoleDescription(),
+                    -- }))
 
                     -- app:window(2):textField(11)
                     --
