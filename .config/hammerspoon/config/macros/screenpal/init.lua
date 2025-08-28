@@ -113,10 +113,6 @@ function ScreenPalTimeline:new()
 
     function timeline:zoom3() end
 
-    function timeline:jumpToStart() end
-
-    function timeline:jumpToEnd() end
-
     return timeline
 end
 
