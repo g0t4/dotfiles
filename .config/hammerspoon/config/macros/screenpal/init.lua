@@ -86,8 +86,7 @@ function ScreenPalTimeline:new()
 
     function timeline:ensure_zoomed()
         if self:isZoomed() then return end
-        -- FYI I could use "m" shortcut but that often has a little lag to it so prefer clicking the actual button
-        -- type m:
+        -- FYI typing m is faster now... must be b/c of the native Apple Silicon app
         eventtap.keyStroke({}, "m", 0, getScreenPalAppElementOrThrow())
         -- local button = getToggleZoomButtonOrThrow()
         -- -- cannot AXPress. must use mouse apparently to click it, FFS
