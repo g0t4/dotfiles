@@ -193,7 +193,11 @@ function ScreenPalEditorWindow:new()
                 local role = ui_elem:axRole()
                 -- TODO! split out editor window class? with all controls there? this is bastardized here but is fine for now
                 if role == "AXScrollArea" then
-                    self._scrollarea_list = ui_elem
+                    self._scrollarea_list = ui_elem -- s/b only scroll area in the scorll area
+                    print("sa", hs.inspect(self._scrollarea_list))
+                    print("sa.sa", hs.inspect(self._scrollarea_list:scrollAreas()[1]))
+                    self._scrollarea_list = self._scrollarea_list:scrollAreas()[1]
+                    -- PRN I could cache a list of the projects if that would be useful
                 end
             end)
     end
@@ -214,7 +218,17 @@ function ScreenPalEditorWindow:new()
         -- TODO check if went back?
         -- FYI ok to take a hit here to find controls and not use cachehd scroll area of clips?
         ensure_cached_controls_for_project_list_view() -- run again for main editor?
-        print("list", self._scrollarea_list)
+        local btn = vim.iter(self._scrollarea_list:buttons())
+            :filter(function(button)
+                print("  btn", hs.inspect(button))
+                local desc = button:axDescription()
+                return desc == title
+            end)
+            :totable()[1]
+        if not btn then
+            error("cannot find project to re-open, aborting...")
+        end
+        btn:performAction("AXPress")
     end
 
     return editor_window
