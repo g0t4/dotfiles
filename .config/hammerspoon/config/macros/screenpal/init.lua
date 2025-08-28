@@ -51,8 +51,10 @@ function ScreenPalTimeline:new()
     function timeline:isZoomed()
         return vim.iter(win:buttons())
             :any(function(button)
-                -- if any of the zoom buttons are visible, then the timeline is zoomed
+                -- AXPosition == 0,0 ==> not zoomed
+                -- print(hs.inspect(button:axPosition()))
                 return button:axDescription() == "Minimum Zoom"
+                    and button:axPosition().y ~= 0 -- position not 0,0
             end)
     end
 

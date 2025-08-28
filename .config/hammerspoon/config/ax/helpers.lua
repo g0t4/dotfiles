@@ -378,7 +378,24 @@ axuielemMT.axFrame = function(elem)
     assert(rawFrame.w and type(rawFrame.w) == "number" and rawFrame.h and type(rawFrame.h) == "number")
     return rawFrame
 end
-
+-- AXPosition
+---@param elem hs.axuielement
+---@return table|nil @ { x=number, y=number }
+axuielemMT.axPosition = function(elem)
+    local rawPos = elem:attributeValue("AXPosition")
+    if not rawPos then return nil end
+    assert(rawPos.x and type(rawPos.x) == "number" and rawPos.y and type(rawPos.y) == "number")
+    return rawPos
+end
+-- AXSize
+---@param elem hs.axuielement
+---@return table|nil @ { w=number, h=number }
+axuielemMT.axSize = function(elem)
+    local rawSize = elem:attributeValue("AXSize")
+    if not rawSize then return nil end
+    assert(rawSize.w and type(rawSize.w) == "number" and rawSize.h and type(rawSize.h) == "number")
+    return rawSize
+end
 
 -- *** ATTRIBUTE HELPERS ***
 ---can you uniquely refer to this element with the value of the given attrName
