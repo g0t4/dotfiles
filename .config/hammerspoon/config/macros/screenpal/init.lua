@@ -52,20 +52,20 @@ function ScreenPalTimeline:new()
         -- TODO run timing and find out why this SUCKS so bad to enumerate 30 UI elements...
         --  TODO can it be improved by using element search?
         -- FYI caching add in act of desperation to speed up subsequent runs... still all sucks...
-        if not self._min_zoom_button then
-            self._min_zoom_button = vim.iter(win:buttons())
-                :filter(function(button)
-                    --  THIS IS LAGGING HARD CORE to find the button...
-                    return button:axDescription() == "Minimum Zoom"
-                    -- position not 0,0
-                end)
-                :totable()[1]
-            if not self._min_zoom_button then
-                error("No zoom button found, aborting...")
-            end
+        local start = GetTime()
+        button = vim.iter(win:buttons())
+            :filter(function(button)
+                --  THIS IS LAGGING HARD CORE to find the button...
+                return button:axDescription() == "Minimum Zoom"
+                -- position not 0,0
+            end)
+            :totable()[1]
+        PrintTook("Find zoom button", start)
+        if not button then
+            error("No zoom button found, aborting...")
         end
         -- AXPosition == 0,0 ==> not zoomed
-        local position = self._min_zoom_button:axPosition()
+        local position = button:axPosition()
         return position.x > 0 and position.y > 0
     end
 

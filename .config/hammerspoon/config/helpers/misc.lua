@@ -85,6 +85,11 @@ function GetElapsedTimeInNanoseconds(start_time)
     return math.floor(elapsed_time_seconds * 1000000000)
 end
 
+function PrintTook(message, start_time)
+    local elapsed_time_milliseconds = GetElapsedTimeInMilliseconds(start_time)
+    print(message .. " took " .. elapsed_time_milliseconds .. " ms")
+end
+
 function StartProfiler()
     local ProFi = require("ProFi")
     ProFi:start()
