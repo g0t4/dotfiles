@@ -186,12 +186,17 @@ function ScreenPalEditorWindow:new()
 
     function editor_window:back_to_projects()
         ensure_cached_controls()
+        if not self._textfield_title then
+            error("No title found, aborting...")
+        end
         local title = self._textfield_title:axValue()
         print("title: ", title)
         if not self._btn_back_to_projects then
             error("No back to projects button found, aborting...")
         end
         self._btn_back_to_projects:performAction("AXPress")
+
+        -- TODO check if went back?
     end
 
     return editor_window
