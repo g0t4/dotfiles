@@ -78,10 +78,13 @@ function ScreenPalTimeline:new()
                 elseif description == "Toggle Magnify" then
                     self._btn_toggle_magnify = button
                     return
+                elseif description == "Position Slider" then
+                    self._btn_position_slider = button
+                    return
                 end
             end)
         self._cached_buttons = true
-        PrintTook("cache_all_controls took: ", start)
+        PrintTook("caching controls took: ", start)
     end
 
     function timeline:isZoomed()
@@ -115,21 +118,11 @@ function ScreenPalTimeline:new()
     end
 
     function timeline:get_timeline_slider_or_throw()
-        local slider = vim.iter(win:buttons())
-            :filter(function(button)
-                -- AXDescription: Position Slider<string>
-                -- AXHelp: This shows the current position of the animation.<string>
-                -- AXIndex: 3<number>
-                -- unique ref: app:window('ScreenPal - 3.19.4'):button(desc='Position Slider')
-                return button:axDescription() == "Position Slider"
-            end)
-            :totable()[1]
-        -- print("timeline: ", hs.inspect(slider))
-        if not slider then
+        ensure_cached_controls()
+        if not self._btn_position_slider then
             error("No timeline slider found, aborting...")
         end
-        -- print("Found slider!")
-        return slider
+        return self._btn_position_slider
     end
 
     function timeline:zoom1() end
