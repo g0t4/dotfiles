@@ -26,7 +26,7 @@ end
 --    this was for 3rd column of row 5... COORDINATES IN VISIBLE SHEET CELLS ONLY (not overall)
 --    app:window(1) :splitGroup(1):layoutArea(1):layoutArea(1):table(2):row(5):cell(3):group(1):textArea(1)
 function StreamDeckExcelTestCellAccess()
-    local app = expectAppElement("Microsoft Excel")
+    local app = getAppElementOrThrow("Microsoft Excel")
     local currentSheet = app:window(1):splitGroup(1):layoutArea(1):layoutArea(1):table(2)
     -- :row(5):cell(3):group(1):textArea(1)
     local function row(rowNum)

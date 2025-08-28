@@ -3,7 +3,7 @@
 
 ---@return hs.axuielement
 function MicrosoftOfficeGetRibbon(appName)
-    local app = expectAppElement(appName)
+    local app = getAppElementOrThrow(appName)
     local window = app:expectFocusedMainWindow()
 
     local ribbonTabGroup = window:tabGroup(1)

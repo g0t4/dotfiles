@@ -16,10 +16,8 @@ local axuielemMT = hs.getObjectMetatable("hs.axuielement")
 
 ---@param appName string
 ---@return hs.axuielement
-function expectAppElement(appName)
+function getAppElementOrThrow(appName)
     -- TODO disable warning about hs.application.enableSpotlightForNameSearches
-    -- *** btw "expect" implies get + assert
-    -- TODO rename OrThrow?
     local hsApp = hs.application.find(appName)
     assert(hsApp ~= nil, "axUiAppTyped: could not find app")
     local appElement = hs.axuielement.applicationElement(hsApp)
