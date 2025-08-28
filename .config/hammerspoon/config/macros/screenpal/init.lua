@@ -27,8 +27,11 @@ local function getScreenPalAppElement()
     return expectAppElement("ScreenPal")
 end
 
-local function getEditorWindow()
+local function getEditorWindowOrThrow()
     local app = getScreenPalAppElement()
+    if not app then
+        error("No ScreenPal App Element found, aborting...")
+    end
 
     -- print("windows", hs.inspect(app:windows()))
     for _, win in ipairs(app:windows()) do
@@ -37,15 +40,14 @@ local function getEditorWindow()
             return win
         end
     end
+    if not app then
+        error("No ScreenPal editor window found, aborting...")
+    end
 end
 
 function StreamDeckScreenPalTimelineJumpToStart()
     -- TODO check if zoomed, won't work otherwise (or if doesn't find scrollbar for timeline)
-    local win = getEditorWindow()
-    if not win then
-        print("No ScreenPal window found, aborting...")
-        return
-    end
+    local win = getEditorWindowOrThrow()
 
     local timeline_scrollbar = win:scrollBar(4)
     if not timeline_scrollbar then
