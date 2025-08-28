@@ -201,7 +201,7 @@ function StreamDeckScreenPalTimelineZoomAndJumpToStart()
 end
 
 function StreamDeckScreenPalTimelineJumpToStart()
-    local original_mouse_pos = mouse.absolutePosition()
+    -- local original_mouse_pos = mouse.absolutePosition()
     local win = get_cached_editor_window()
 
     if win:isZoomed() then
@@ -242,11 +242,11 @@ function StreamDeckScreenPalTimelineJumpToStart()
     local slider = win:get_timeline_slider_or_throw()
     eventtap.leftClick({ x = slider:axFrame().x, y = slider:axFrame().y })
 
-    mouse.absolutePosition(original_mouse_pos)
+    -- mouse.absolutePosition(original_mouse_pos) -- umm I feel like I want to NOT restore so I can move mouse easily at start!
 end
 
 function StreamDeckScreenPalTimelineJumpToEnd()
-    local original_mouse_pos = mouse.absolutePosition()
+    -- local original_mouse_pos = mouse.absolutePosition()
     local win = get_cached_editor_window()
 
     if win:isZoomed() then
@@ -284,7 +284,7 @@ function StreamDeckScreenPalTimelineJumpToEnd()
     local sframe = slider:axFrame()
     eventtap.leftClick({ x = sframe.x + sframe.w - 1, y = sframe.y })
 
-    mouse.absolutePosition(original_mouse_pos)
+    -- mouse.absolutePosition(original_mouse_pos) -- try not restoring, might be better!
 end
 
 function StreamDeckScreenPalTimelineRestorePosition()
