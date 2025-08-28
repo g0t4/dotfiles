@@ -65,9 +65,16 @@ function ScreenPalTimeline:new()
         getToggleZoomButtonOrThrow():performAction("AXPress")
     end
 
-    function timeline:zoom1()
-
+    function timeline:get_scrollbar_or_throw()
+        -- PRN search for big AXMaxValues? that might uniquely identify it if I have issues in the future with other scrollbars visible
+        local scrollbar = win:scrollBar(4)
+        if not scrollbar then
+            error("No timeline scrollbar found, aborting...")
+        end
+        return scrollbar
     end
+
+    function timeline:zoom1() end
 
     function timeline:zoom2() end
 
@@ -86,12 +93,7 @@ function StreamDeckScreenPalTimelineJumpToStart()
     local timeline = ScreenPalTimeline:new()
 
     if timeline:isZoomed() then
-        local timeline_scrollbar = win:scrollBar(4)
-        -- PRN search for big AXMaxValues? that might uniquely identify it if I have issues in the future with other scrollbars visible
-        if not timeline_scrollbar then
-            print("No timeline scrollbar found, aborting...")
-            return
-        end
+        local timeline_scrollbar = timeline:get_scrollbar_or_throw()
 
         local frame = timeline_scrollbar:axFrame()
         -- by the way AXFrame here returns { h = 50.0, w = 1839.0, x = 14.0, y = 814.0 }
