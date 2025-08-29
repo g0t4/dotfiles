@@ -409,20 +409,20 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "E", function()
     -- test_my_own_filter_function()
 end)
 
-local function htmlCodeAppleScript(script)
+local function html_code_applescript(script)
     return "<code class='language-applescript'>" .. script .. "</code>"
 end
 
-local function htmlCodeLua(script)
+local function html_code_lua(script)
     return "<code class='language-lua'>" .. script .. "</code>"
 end
 
-local function htmlPreCodeAppleScript(script)
-    return "<pre>" .. htmlCodeAppleScript(script) .. "</pre>"
+local function html_pre_code_applescript(script)
+    return "<pre>" .. html_code_applescript(script) .. "</pre>"
 end
 
-local function htmlPreCodeLua(script)
-    return "<pre>" .. htmlCodeLua(script) .. "</pre>"
+local function html_pre_code_lua(script)
+    return "<pre>" .. html_code_lua(script) .. "</pre>"
 end
 
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "A", function()
@@ -457,9 +457,9 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "A", function()
     end
     local clauses, attrDumps = BuildAppleScriptTo(elementAt, true)
     local applescript = ConcatIntoLines(clauses, 80, "¬")
-    prints(htmlPreCodeAppleScript(applescript))
+    prints(html_pre_code_applescript(applescript))
     local lua = BuildHammerspoonLuaTo(elementAt)
-    prints(htmlPreCodeLua(lua))
+    prints(html_pre_code_lua(lua))
     prints(BuildActionExamples(elementAt))
     prints(GetDumpPath(elementAt, true))
     prints(table.unpack(attrDumps))
@@ -777,7 +777,7 @@ end
 function GetDumpAXAttributes(element, skips)
     skips = skips or {}
 
-    local result = { '<h4>' .. htmlCodeAppleScript(ElementSpecifierFor(element)) .. '</h4>' }
+    local result = { '<h4>' .. html_code_applescript(ElementSpecifierFor(element)) .. '</h4>' }
 
     local sortedAttrs = {}
     for attrName, attrValue in pairs(element) do
@@ -813,7 +813,7 @@ function BuildActionExamples(element)
             script = script .. "perform action \"" .. action .. "\" of " .. identifer .. "<br>"
         end
     end
-    return htmlPreCodeAppleScript(script)
+    return html_pre_code_applescript(script)
 end
 
 function GetElementSiblingIndex(elem)
@@ -883,7 +883,7 @@ function GetElementTableRow(elem, indent)
         "</td><td>" ..
         role ..
         "</td><td>" ..
-        details .. "</td><td>" .. htmlCodeAppleScript(ElementSpecifierFor(elem)) .. "</td></tr>"
+        details .. "</td><td>" .. html_code_applescript(ElementSpecifierFor(elem)) .. "</td></tr>"
 end
 
 -- PRN try to get nested @language annotations to work and provide syntax highlighting (etc) for nested language, i.e. html:
