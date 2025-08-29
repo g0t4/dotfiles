@@ -354,7 +354,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "E", function()
         -- leave timing info in here b/c I will be running into more complex test cases and I wanna understand the overall timinmg implications of some of the apps I use
         prints("time to display: " .. get_elapsed_time_in_milliseconds(start_time) .. " ms")
     end
-    local function testElementSearchWithFilter()
+    local function test_element_search_with_filter()
         -- searchCriteriaFunction takes same arg as matchCriteria:
         --  www.hammerspoon.org/docs/hs.axuielement.html#matchesCriteria
         --  => single string (AXRole) matches exactly
@@ -384,7 +384,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "E", function()
         local searchTask = appElement:elementSearch(afterSearch, criteriaFunction, namedModifiers)
         -- CAN check progress/cancel/see results even with searchTask outside of the callback
     end
-    testElementSearchWithFilter()
+    test_element_search_with_filter()
 
 
     local function testMyOwnFilterFunction()
