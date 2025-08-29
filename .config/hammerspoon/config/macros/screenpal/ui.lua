@@ -14,16 +14,16 @@ end
 function AppWindows:_refresh()
     -- FTR refresh takes 5-11ms (not terrible) so its not a huge time savings except maybe when aggregated with other savings
     local start = GetTime()
-    print("REFRESH")
+    -- print("REFRESH")
     local windows = self.app:windows()
-    local newCache = {}
+    local new_cache = {}
     for _, win in ipairs(windows) do
         local title = win:axTitle()
-        newCache[title] = win
-        print("  title: " .. tostring(title))
+        new_cache[title] = win
+        -- print("  title: " .. tostring(title))
     end
-    self.windows_by_title = newCache
-    PrintTook("  refresh took", start)
+    self.windows_by_title = new_cache
+    print_took("  refresh took", start)
 end
 
 function AppWindows:_ensure_loaded()
@@ -40,6 +40,7 @@ function AppWindows:get_window_by_title(titlePattern)
     local win = self:_get_window_by_title(titlePattern)
     -- crude, for now the window you want to lookup, if it is not valid anymore then try refresh cache
     if not win or not win:isValid() then
+        -- one attempt to refresh if not found or invalid
         -- rare to ask for non-existant window, so it's fine as a fallback (s/b rare to hit)
         self:_refresh()
         win = self:_get_window_by_title(titlePattern)
@@ -51,15 +52,14 @@ end
 ---@return hs.axuielement editor_window
 function AppWindows:_get_window_by_title(titlePattern)
     local start = GetTime()
-    print("GET WIN")
     for title, win in pairs(self.windows_by_title) do
-        print("  title: " .. tostring(title))
+        -- print("  title: " .. tostring(title))
         if title:match(titlePattern) then
-            PrintTook("  getWindowByTitle took", start)
+            print_took("  getWindowByTitle took", start)
             return win
         end
     end
-    PrintTook("  getWindowByTitle failed", start)
+    print_took("  getWindowByTitle failed", start)
 end
 
 ---@return hs.axuielement editor_window

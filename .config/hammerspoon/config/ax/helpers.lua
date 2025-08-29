@@ -595,7 +595,7 @@ function waitForElement(searchFunc, intervalMs, maxCycles)
     while cycles < maxCycles do
         local elem = searchFunc()
         if elem then
-            PrintTook("WaitForElement total time:", start)
+            print_took("WaitForElement total time:", start)
             return elem
         end
         timer.usleep(intervalMs * 1000)

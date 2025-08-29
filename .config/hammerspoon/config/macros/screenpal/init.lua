@@ -126,7 +126,7 @@ function ScreenPalEditorWindow:new()
                 end
             end)
         self._cached_buttons = true
-        PrintTook("caching controls took: ", start)
+        print_took("caching controls took: ", start)
     end
 
     function editor_window:playhead_position()
