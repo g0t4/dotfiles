@@ -306,7 +306,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "E", function()
     ---@type hs.axuielement
     local appElement = hs.axuielement.applicationElement(app)
 
-    local function testBuildTree()
+    local function test_build_tree()
         local start_time = get_time()
         -- wow this is everything on the Hammerspoon app (all nested windows) and it took < 500ms until callback and then <200ms to display (of which some is probably lag to render page or to start rendering it?)
         -- serializing all the output to HTML was not at all expensive <200ms part!
@@ -330,7 +330,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "E", function()
             prints("time to display: " .. get_elapsed_time_in_milliseconds(start_time) .. " ms")
         end)
     end
-    -- testBuildTree()
+    -- test_build_tree()
 
     local start_time = get_time()
 
