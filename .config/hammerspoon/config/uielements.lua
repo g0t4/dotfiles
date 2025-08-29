@@ -1,5 +1,5 @@
 local fun = require "fun"
-local print_web_view  = nil
+local print_web_view = nil
 local print_web_window = nil
 local print_html_buffer = {}
 local print_web_view_user_content_controller = nil
@@ -31,7 +31,7 @@ end
 local function prints(...)
     -- PRN www.jstree.com - if I want a tree view that has collapsed sections that hide details initially ... only use this if use case arises from daily use... my hope is generated AppleScript works most of the time
     for _, arg in ipairs({ ... }) do
-        if print_web_view  == nil then
+        if print_web_view == nil then
             -- if no web view to print to, then print to console
 
             -- user visible line break == <br>, html src line break == \n
@@ -51,7 +51,7 @@ local function prints(...)
             end
         end
     end
-    if print_web_view  then
+    if print_web_view then
         if not html_page then
             -- basically the <head> section with js/css, don't worry about proper body ... just print after this
             html_page = read_entire_file("config/uielements.html")
@@ -60,7 +60,7 @@ local function prints(...)
             end
         end
         local html = html_page .. table.concat(print_html_buffer, "<br/>")
-        print_web_view :html(html)
+        print_web_view:html(html)
     end
 end
 
@@ -96,7 +96,7 @@ local function ensureWebview()
         -- print("left rect:", hs.inspect(rect))
     end
 
-    if print_web_view  == nil then
+    if print_web_view == nil then
         -- how to make sure not a new tab in previous browser webview instance?
 
         -- Enable inspect element (and thus dev tools) in the webview
@@ -111,18 +111,18 @@ local function ensureWebview()
         print_web_view_user_content_controller:injectScript({ source = jsCode })
 
 
-        print_web_view  = require("hs.webview").newBrowser(rect, prefs, print_web_view_user_content_controller)
+        print_web_view = require("hs.webview").newBrowser(rect, prefs, print_web_view_user_content_controller)
 
         -- webview:url("https://google.com")
-        print_web_view :windowTitle("Inspector")
-        print_web_view :show()
-        print_web_window = print_web_view :hswindow()
-        print_web_view :titleVisibility("hidden")
+        print_web_view:windowTitle("Inspector")
+        print_web_view:show()
+        print_web_window = print_web_view:hswindow()
+        print_web_view:titleVisibility("hidden")
 
-        print_web_view :windowCallback(function(action, _, _)
+        print_web_view:windowCallback(function(action, _, _)
             -- FYI 2nd arg is webview, 3rd arg is state/frame (depending on action type)
             if action == "closing" then
-                print_web_view  = nil
+                print_web_view = nil
                 print_web_view_user_content_controller = nil
                 print_web_window = nil
             end
@@ -137,7 +137,7 @@ local function ensureWebview()
         prints("no webview window, aborting")
         return
     end
-    print_web_view :frame(rect)
+    print_web_view:frame(rect)
     print_web_window:raise() -- ensure on top for Hammerspoon app
     print_web_window:application():activate() -- ensure Hammerspoon app is front most too (else all app windows remain in the background)
 end
@@ -242,7 +242,7 @@ function DumpHtml(value)
 end
 
 function EnsureClearedWebView()
-    if print_web_view  then
+    if print_web_view then
         print_html_buffer = {}
     end
     ensureWebview()
