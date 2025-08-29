@@ -130,12 +130,20 @@ function ScreenPalEditorWindow:new()
     end
 
     function editor_window:playhead_position()
+        ensure_cached_controls()
         -- playhead's time field is a separate window, but treat it like a child control
         -- lookup as needed so it can be refreshed, but it is NOT expensive if cached!
         local win = self.windows:get_playhead_window_or_throw()
 
         local frame = win:axFrame()
         print(vim.inspect({ frame = frame }))
+
+        -- TODO capture zoom state? to restore it?
+        self:zoom_off()
+
+
+
+        -- self._btn_position_slider
 
         -- return position where to click to restore the playhead on reopen
     end
@@ -150,13 +158,13 @@ function ScreenPalEditorWindow:new()
         return position.x > 0 and position.y > 0
     end
 
-    function editor_window:zoom_in()
+    function editor_window:zoom_on()
         if self:isZoomed() then return end
         -- FYI typing m is faster now... must be b/c of the native Apple Silicon app
         eventtap.keyStroke({}, "m", 0, getScreenPalAppElementOrThrow())
     end
 
-    function editor_window:zoom_out()
+    function editor_window:zoom_off()
         if not self:isZoomed() then return end
         eventtap.keyStroke({}, "m", 0, getScreenPalAppElementOrThrow())
     end
@@ -182,19 +190,19 @@ function ScreenPalEditorWindow:new()
 
     function editor_window:zoom1()
         ensure_cached_controls()
-        self:zoom_in()
+        self:zoom_on()
         self._btn_minimum_zoom:performAction("AXPress")
     end
 
     function editor_window:zoom2()
         ensure_cached_controls()
-        self:zoom_in()
+        self:zoom_on()
         self._btn_medium_zoom:performAction("AXPress")
     end
 
     function editor_window:zoom3()
         ensure_cached_controls()
-        self:zoom_in()
+        self:zoom_on()
         self._btn_maximum_zoom:performAction("AXPress")
     end
 
@@ -278,7 +286,7 @@ end
 
 function StreamDeckScreenPalTimelineZoomAndJumpToStart()
     local win = get_cached_editor_window()
-    win:zoom_out() -- zoom out first means just click end and zoom in... no slider necessary!
+    win:zoom_off() -- zoom out first means just click end and zoom in... no slider necessary!
     timer.usleep(10000)
     StreamDeckScreenPalTimelineJumpToStart()
     -- zoom after so if I am initially not zoomed, I can move faster
@@ -289,7 +297,7 @@ end
 
 function StreamDeckScreenPalTimelineZoomAndJumpToEnd()
     local win = get_cached_editor_window()
-    win:zoom_out() -- zoom out first means just click end and zoom in... no slider necessary!
+    win:zoom_off() -- zoom out first means just click end and zoom in... no slider necessary!
     timer.usleep(10000)
     StreamDeckScreenPalTimelineJumpToEnd()
     timer.usleep(10000)
