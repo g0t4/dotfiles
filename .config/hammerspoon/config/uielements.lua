@@ -780,23 +780,23 @@ function GetDumpAXAttributes(element, skips)
 
     local result = { '<h4>' .. html_code_applescript(element_specifier_for(element)) .. '</h4>' }
 
-    local sortedAttrs = {}
-    for attrName, attrValue in pairs(element) do
+    local sorted_attrs = {}
+    for attr_name, attr_value in pairs(element) do
         -- TODO skip nil attrValue?
-        if not skips[attrName] then
-            table.insert(sortedAttrs, attrName)
+        if not skips[attr_name] then
+            table.insert(sorted_attrs, attr_name)
         end
     end
-    table.sort(sortedAttrs)
-    for _, attrName in ipairs(sortedAttrs) do
-        local attrValue = element[attrName]
-        local displayName = attrName
-        local displayValue = DisplayAttr(attrValue)
-        if displayValue == "nil" or displayValue == '""' then
-            table.insert(result, "\t<span class='not-set-attribute'>" .. displayName .. ' = ' .. displayValue .. "</span><br>")
+    table.sort(sorted_attrs)
+    for _, attr_name in ipairs(sorted_attrs) do
+        local attr_value = element[attr_name]
+        local display_name = attr_name
+        local display_value = DisplayAttr(attr_value)
+        if display_value == "nil" or display_value == '""' then
+            table.insert(result, "\t<span class='not-set-attribute'>" .. display_name .. ' = ' .. display_value .. "</span><br>")
         else
-            local displayNameClass = string.lower(attrName) -- used for styling important attributes (i.e. AXTitle)
-            table.insert(result, "\t<span class='" .. displayNameClass .. "'>" .. displayName .. ' = ' .. displayValue .. "</span><br>")
+            local display_name_class = string.lower(attr_name) -- used for styling important attributes (i.e. AXTitle)
+            table.insert(result, "\t<span class='" .. display_name_class .. "'>" .. display_name .. ' = ' .. display_value .. "</span><br>")
         end
     end
     return table.concat(result)
