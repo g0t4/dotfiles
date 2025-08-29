@@ -136,33 +136,33 @@ function _G.camel_to_snake(str)
     return res
 end
 
-vim.api.nvim_create_user_command('SnakeCase', function(opts)
-    local bufnr = vim.api.nvim_get_current_buf()
-    local start_line, end_line
-
-    if opts.line1 and opts.line2 then
-        start_line = opts.line1 - 1 -- zero‑based indexing
-        end_line = opts.line2 - 1
-    else
-        start_line = vim.api.nvim_win_get_cursor(0)[1] - 1
-        end_line = start_line
-    end
-
-    local lines = vim.api.nvim_buf_get_lines(bufnr, start_line, end_line + 1, false)
-    for i, line in ipairs(lines) do
-        lines[i] = camel_to_snake(line)
-    end
-    vim.api.nvim_buf_set_lines(bufnr, start_line, end_line + 1, false, lines)
-end, { range = true, nargs = 0 })
-
+-- vim.api.nvim_create_user_command('SnakeCase', function(opts)
+--     local bufnr = vim.api.nvim_get_current_buf()
+--     local start_line, end_line
+--
+--     if opts.line1 and opts.line2 then
+--         start_line = opts.line1 - 1 -- zero‑based indexing
+--         end_line = opts.line2 - 1
+--     else
+--         start_line = vim.api.nvim_win_get_cursor(0)[1] - 1
+--         end_line = start_line
+--     end
+--
+--     local lines = vim.api.nvim_buf_get_lines(bufnr, start_line, end_line + 1, false)
+--     for i, line in ipairs(lines) do
+--         lines[i] = camel_to_snake(line)
+--     end
+--     vim.api.nvim_buf_set_lines(bufnr, start_line, end_line + 1, false, lines)
+-- end, { range = true, nargs = 0 })
 
 
 vim.api.nvim_create_user_command('SnakeCase', function()
     local bufnr = vim.api.nvim_get_current_buf()
     local row_1indexed, col_0indexed = unpack(vim.api.nvim_win_get_cursor(0))
-    local line_0indexed = row_1indexed - 1
 
-    local line = vim.api.nvim_buf_get_lines(bufnr, line_0indexed, line_0indexed + 1, false)[1]
+    -- PRN get text selection?
+    local line = vim.fn.getline(row_1indexed)
+    print("line", line)
     if not line then return end
 
     -- find the big word (keyword) under the cursor
