@@ -79,6 +79,13 @@ vim.opt.termguicolors = true -- s/b already enabled in most of my environments, 
 
 vim.o.ignorecase = true -- ignore case when searching (i.e. lowercase/mixing case... all are ignored)
 vim.o.smartcase = true -- then, smart case means if you mix case then it will trigger noignorecase like behavior
+-- helpers for finding naming styles
+
+vim.api.nvim_create_user_command('CamelCase', function()
+    vim.fn.feedkeys('/\\<[a-z]\\+\\u[a-zA-Z0-9]*\\>', 'c')
+end, {})
+
+
 
 -- shortmess in nvim defaults to => ltToOCF
 -- set shortmess+=A " don't give ATTENTION messages if already open in another instance (swap file detected)
