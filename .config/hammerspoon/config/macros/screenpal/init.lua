@@ -211,14 +211,14 @@ function ScreenPalEditorWindow:new()
     end
 
     function editor_window:reopen_project()
-        -- * store info about current project/position
+        -- FYI keep prints so as I encounter issues I know where things are blowing up
         local win = get_cached_editor_window()
         local timeline_scrollbar = win:get_scrollbar_or_throw()
-        local current_zoom_scrollbar_position = timeline_scrollbar:axValue() -- current value
-        local current_zoomed = win:isZoomed()
         print("timeline scroll", timeline_scrollbar)
+        local current_zoom_scrollbar_position = timeline_scrollbar:axValue() -- current value
+        print("zoom scrollbar position", current_zoom_scrollbar_position)
+        local current_zoomed = win:isZoomed()
         print("isZoomed", current_zoomed)
-        print("zoom scrollbar position:", current_zoom_scrollbar_position)
         -- TODO save zoom level? can I even figure that out? JUST assume its 2 for now?
 
         if not self._textfield_title then
@@ -230,7 +230,7 @@ function ScreenPalEditorWindow:new()
             error("No back to projects button found, aborting...")
         end
         self._btn_back_to_projects:performAction("AXPress")
-        timer.usleep(10000) -- slight delay else won't find scroll area / list of projects
+        timer.usleep(500000) -- slight delay else won't find scroll area / list of projects
 
         -- TODO check if went back?
         -- FYI ok to take a hit here to find controls and not use cachehd scroll area of clips?
@@ -246,7 +246,7 @@ function ScreenPalEditorWindow:new()
             error("cannot find project to re-open, aborting...")
         end
         btn:performAction("AXPress")
-        timer.usleep(10000) -- PRN is this needed?
+        timer.usleep(100000) -- PRN is this needed?
 
         -- restore zoom / scroll bar position
         if not current_zoomed then
