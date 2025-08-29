@@ -85,6 +85,10 @@ vim.api.nvim_create_user_command('CamelCase', function()
     vim.fn.feedkeys('/\\<[a-z]\\+\\u[a-zA-Z0-9]*\\>', 'c')
 end, {})
 
+vim.api.nvim_create_user_command('PascalCase', function()
+    vim.fn.feedkeys('/\\<[A-Z][a-zA-Z0-9]*\\>', 'c')
+end, {})
+
 
 
 -- shortmess in nvim defaults to => ltToOCF
