@@ -2,25 +2,11 @@ local mouse = require("hs.mouse")
 local eventtap = require("hs.eventtap")
 local timer = require("hs.timer")
 local vim = require("config.libs.vim") -- reuse nvim lua modules in hammerspoon
+require("config.macros.screenpal.ui")
 
 ---@return hs.axuielement app_element
 local function getScreenPalAppElementOrThrow()
     return getAppElementOrThrow("com.screenpal.app") -- < 1 ms
-end
-
----@param app hs.axuielement
----@return hs.axuielement editor_window
-local function getEditorWindowOrThrow(app)
-    local start = GetTime()
-    -- print("windows", hs.inspect(app:windows()))
-    for _, win in ipairs(app:windows()) do
-        if win:axTitle():match("^ScreenPal -") then
-            PrintTook("getEditorWindowOrThrow", start)
-            return win
-        end
-    end
-    PrintTook("getEditorWindowOrThrow failed", start)
-    error("No ScreenPal editor window found, aborting...")
 end
 
 -- fix for vim.iter:totable() - IIUC with non-array tables
@@ -41,7 +27,8 @@ function ScreenPalEditorWindow:new()
     setmetatable(editor_window, self)
     self.__index = self
     self.app = getScreenPalAppElementOrThrow()
-    self.win = getEditorWindowOrThrow(self.app) -- 7ms for editor_window
+    self.windows = AppWindows:new(self.app)
+    self.win = self.windows:editor_window_or_throw()
 
     local function ensure_cached_controls()
         if self._cached_buttons then
