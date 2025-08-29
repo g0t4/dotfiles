@@ -12,17 +12,18 @@ function AppWindows:new(app)
 end
 
 function AppWindows:_refresh()
+    -- FTR refresh takes 5-11ms (not terrible) so its not a huge time savings except maybe when aggregated with other savings
     local start = GetTime()
+    print("REFRESH")
     local windows = self.app:windows()
     local newCache = {}
     for _, win in ipairs(windows) do
         local title = win:axTitle()
-        if title and title:match("^ScreenPal -") then
-            newCache[title] = win
-        end
+        newCache[title] = win
+        print("  title: " .. tostring(title))
     end
     self.windows_by_title = newCache
-    PrintTook("refresh took", start)
+    PrintTook("  refresh took", start)
 end
 
 function AppWindows:_ensure_loaded()
@@ -34,37 +35,54 @@ end
 
 ---@param titlePattern string # lua pattern
 ---@return hs.axuielement editor_window
-function AppWindows:get_window_by_title_or_throw(titlePattern)
+function AppWindows:get_window_by_title(titlePattern)
     self:_ensure_loaded()
-    local win = self:_get_window_by_title_or_throw(titlePattern)
+    local win = self:_get_window_by_title(titlePattern)
     -- crude, for now the window you want to lookup, if it is not valid anymore then try refresh cache
-    if not win:isValid() then
+    if not win or not win:isValid() then
+        -- rare to ask for non-existant window, so it's fine as a fallback (s/b rare to hit)
         self:_refresh()
-        win = self:_get_window_by_title_or_throw(titlePattern)
-    end
-    if not win then
-        error("No window found matching pattern '" .. titlePattern .. "'")
+        win = self:_get_window_by_title(titlePattern)
     end
     return win
 end
 
 ---@param titlePattern string # lua pattern
 ---@return hs.axuielement editor_window
-function AppWindows:_get_window_by_title_or_throw(titlePattern)
+function AppWindows:_get_window_by_title(titlePattern)
     local start = GetTime()
+    print("GET WIN")
     for title, win in pairs(self.windows_by_title) do
+        print("  title: " .. tostring(title))
         if title:match(titlePattern) then
-            PrintTook("getWindowByTitle took", start)
+            PrintTook("  getWindowByTitle took", start)
             return win
         end
     end
-    PrintTook("getWindowByTitle failed", start)
-    error("No ScreenPal window matching pattern '" .. titlePattern .. "' found")
+    PrintTook("  getWindowByTitle failed", start)
 end
 
 ---@return hs.axuielement editor_window
 function AppWindows:editor_window_or_throw()
-    return self:get_window_by_title_or_throw("^ScreenPal -")
+    local win = self:get_window_by_title("^ScreenPal -")
+    if win then return win end
+    error("No Screenpal editor window found")
+end
+
+---@return hs.axuielement editor_window
+function AppWindows:get_playhead_window_or_throw()
+    -- app:window(2)
+    -- AXFocused: false<bool>
+    -- AXMain: false<bool>
+    -- AXMinimized: false<bool>
+    -- AXModal: false<bool>
+    -- AXRoleDescription: window<string>
+    -- AXSections: [1: SectionUniqueID: AXContent, SectionObject: hs.axuielement: AXTextField (0x60000ac6b1f8), SectionDescription: Content]
+    -- AXTitle: SOM-FloatingWindow-Type=edit2.posbar-ZOrder=1(Undefined+1)<string>
+    local win = self:get_window_by_title("^SOM%-FloatingWindow%-Type=edit2.posbar%-ZOrder=1")
+    -- if not present, should I try once to load? like what if windows list cached before it was ever visible?
+    if win then return win end
+    error("No playhead window found")
 end
 
 -- Example usage:

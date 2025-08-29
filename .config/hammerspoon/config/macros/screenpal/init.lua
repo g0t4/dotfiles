@@ -129,6 +129,17 @@ function ScreenPalEditorWindow:new()
         PrintTook("caching controls took: ", start)
     end
 
+    function editor_window:playhead_position()
+        -- playhead's time field is a separate window, but treat it like a child control
+        -- lookup as needed so it can be refreshed, but it is NOT expensive if cached!
+        local win = self.windows:get_playhead_window_or_throw()
+
+        local frame = win:axFrame()
+        print(vim.inspect({ frame = frame }))
+
+        -- return position where to click to restore the playhead on reopen
+    end
+
     function editor_window:isZoomed()
         ensure_cached_controls()
         if not self._btn_minimum_zoom then
