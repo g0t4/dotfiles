@@ -83,16 +83,16 @@ local function ensure_web_view()
     -- print("frame", hs.inspect(frame))
 
     local rect = nil
-    local halfWidth = frame.w / 2
-    local midX = halfWidth + frame.x
+    local half_width = frame.w / 2
+    local midX = half_width + frame.x
     -- FYI assumes frame might not start at 0,0
     if mouseAt.x < midX then
         -- mouse is on left side of screen, show webview on right side
-        rect = hs.geometry.rect(midX, frame.y, halfWidth, frame.h)
+        rect = hs.geometry.rect(midX, frame.y, half_width, frame.h)
         -- print("right rect:", hs.inspect(rect))
     else
         -- mouse is on right, show webview on left
-        rect = hs.geometry.rect(frame.x, frame.y, halfWidth, frame.h)
+        rect = hs.geometry.rect(frame.x, frame.y, half_width, frame.h)
         -- print("left rect:", hs.inspect(rect))
     end
 
@@ -107,8 +107,8 @@ local function ensure_web_view()
 
         print_web_view_user_content_controller = require("hs.webview.usercontent").new("testmessageport")
 
-        local jsCode = read_entire_file("config/uielements.js")
-        print_web_view_user_content_controller:injectScript({ source = jsCode })
+        local js_code = read_entire_file("config/uielements.js")
+        print_web_view_user_content_controller:injectScript({ source = js_code })
 
 
         print_web_view = require("hs.webview").newBrowser(rect, prefs, print_web_view_user_content_controller)
@@ -146,9 +146,9 @@ end
 function inspect_html(value, completed)
     completed = completed or {}
 
-    local isBuildTreeTableOfAxUiElement = type(value) == "table" and value["_element"]
-    local referenceName = ""
-    if isBuildTreeTableOfAxUiElement then
+    local is_build_tree_table_of_ax_ui_element = type(value) == "table" and value["_element"]
+    local reference_name = ""
+    if is_build_tree_table_of_ax_ui_element then
         -- PRN add back:
         --    type(value) == "userdata" or
         --    IF AND WHEN I add _inspectUserData pathway that recursively calls inspect_html (for some child attr/property)
@@ -156,15 +156,15 @@ function inspect_html(value, completed)
         -- don't repeat showing same objects (userdata, or tables of axuielement info from buildTree)
         -- FYI do not ban all dup tables b/c then coordinates are a mess for example, will only show first time
         if completed[value] then
-            referenceName = type(value) .. completed[value]
-            return "<span style='color:red'>Repeated #" .. referenceName .. "</span>"
+            reference_name = type(value) .. completed[value]
+            return "<span style='color:red'>Repeated #" .. reference_name .. "</span>"
         end
 
         -- this way I can use the index into completed tabl as an identifier to know which is the first time it was dumped
-        local completedNumber = completed.nextNumber or 1 -- track # as extra field so it is passed too (effectively by ref)
-        completed[value] = completedNumber
-        completed.nextNumber = completedNumber + 1
-        referenceName = type(value) .. completedNumber -- so I can link back to the first time the reference is displayed, in future occurences
+        local completed_number = completed.nextNumber or 1 -- track # as extra field so it is passed too (effectively by ref)
+        completed[value] = completed_number
+        completed.nextNumber = completed_number + 1
+        reference_name = type(value) .. completed_number -- so I can link back to the first time the reference is displayed, in future occurences
         -- prints(referenceName)
     end
 
@@ -172,9 +172,9 @@ function inspect_html(value, completed)
         -- helper only for InspectHTML, don't use this directly
         -- FYI I like that this prints each level (unlike hs.inspect which consolidates tables with one item in them,  mine shows the actual index of each, within each table)
         local html = "<ul>"
-        if referenceName ~= "" then
+        if reference_name ~= "" then
             -- show right before the table's nested list (ul)
-            html = referenceName .. "<ul>"
+            html = reference_name .. "<ul>"
         end
 
         for k, v in pairs(tbl) do
@@ -210,16 +210,16 @@ function inspect_html(value, completed)
             local axTitle = WrapInQuotesIfNeeded(userdata["AXTitle"])
             local axDesc = WrapInQuotesIfNeeded(userdata["AXDescription"])
             -- FYI in this case, do not show hs.axuielement b/c AX* indicates that already so save the space
-            return string.format("%s %s %s %s", referenceName, axType, axTitle, axDesc)
+            return string.format("%s %s %s %s", reference_name, axType, axTitle, axDesc)
         elseif userdataType == "hs.application" then
             local appName = userdata:name()
             local appBundleID = userdata:bundleID()
             -- in this case, app name alone isn't enough of hint so show the type 'hs.application'
-            return string.format("hs.application(%s) - %s %s", referenceName, appName, appBundleID)
+            return string.format("hs.application(%s) - %s %s", reference_name, appName, appBundleID)
         end
 
         -- TODO handle other hammerspoon userdata types
-        return referenceName .. hs.inspect(userdata) .. " - TODO add this hs type to inspectHTML"
+        return reference_name .. hs.inspect(userdata) .. " - TODO add this hs type to inspectHTML"
     end
 
     if value == nil then
