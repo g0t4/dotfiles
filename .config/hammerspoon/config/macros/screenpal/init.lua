@@ -18,23 +18,24 @@ local function getEditorWindowOrThrow()
     error("No ScreenPal editor window found, aborting...")
 end
 
+-- fix for vim.iter:totable() - IIUC with non-array tables
+-- TODO FIX THIS missing maxn ELSEWHERE!!!!
+-- hammerspoon uses lua 5.4 and that must not have table.maxn that you do have in vim w/ lua 5.1
+table.maxn = function(t)
+    -- TODO! lookup what else this might need to implement beyond the vim.iter use case
+    local max = 0
+    for k, v in pairs(t) do
+        if k > max then max = k end
+    end
+    return max
+end
+
 ScreenPalEditorWindow = {}
 function ScreenPalEditorWindow:new()
     local editor_window = {}
     setmetatable(editor_window, self)
     self.__index = self
     self.win = getEditorWindowOrThrow()
-
-    -- TODO FIX THIS missing maxn ELSEWHERE!!!!
-    -- hammerspoon uses lua 5.4 and that must not have table.maxn that you do have in vim w/ lua 5.1
-    table.maxn = function(t)
-        -- TODO! lookup what else this might need to implement beyond the vim.iter use case
-        local max = 0
-        for k, v in pairs(t) do
-            if k > max then max = k end
-        end
-        return max
-    end
 
     local function ensure_cached_controls()
         if self._cached_buttons then
