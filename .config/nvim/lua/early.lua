@@ -136,7 +136,7 @@ function _G.camel_to_snake(str)
     return res
 end
 
-vim.api.nvim_create_user_command('snake_case', function(opts)
+vim.api.nvim_create_user_command('SnakeCase', function(opts)
     local bufnr = vim.api.nvim_get_current_buf()
     local start_line, end_line
 
