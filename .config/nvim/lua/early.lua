@@ -125,6 +125,37 @@ vim.api.nvim_create_user_command('PascalCase', function()
         , 'n', false)
 end, {})
 
+function _G.camel_to_snake(str)
+    -- Insert an underscore before each uppercase letter (except at the start)
+    -- then lowercase the whole string.
+    local res = str:gsub('([A-Z])', function(c)
+        return '_' .. c:lower()
+    end)
+    -- Remove a leading underscore that may have been added for the first character
+    res = res:gsub('^_', '')
+    return res
+end
+
+vim.api.nvim_create_user_command('snake_case', function(opts)
+    local bufnr = vim.api.nvim_get_current_buf()
+    local start_line, end_line
+
+    if opts.line1 and opts.line2 then
+        start_line = opts.line1 - 1 -- zero‑based indexing
+        end_line = opts.line2 - 1
+    else
+        start_line = vim.api.nvim_win_get_cursor(0)[1] - 1
+        end_line = start_line
+    end
+
+    local lines = vim.api.nvim_buf_get_lines(bufnr, start_line, end_line + 1, false)
+    for i, line in ipairs(lines) do
+        lines[i] = camel_to_snake(line)
+    end
+    vim.api.nvim_buf_set_lines(bufnr, start_line, end_line + 1, false, lines)
+end, { range = true, nargs = 0 })
+
+
 
 
 -- shortmess in nvim defaults to => ltToOCF
