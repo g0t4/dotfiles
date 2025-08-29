@@ -1,9 +1,9 @@
 local fun = require "fun"
-local printWebView = nil
-local printWebWindow = nil
-local printHtmlBuffer = {}
-local printWebViewUserContentController = nil
-local htmlPage
+local print_web_view  = nil
+local print_web_window = nil
+local print_html_buffer = {}
+local print_web_view_user_content_controller = nil
+local html_page
 
 -- TODO RENAME TO SNAKE_CASE IN LUA
 
@@ -31,7 +31,7 @@ end
 local function prints(...)
     -- PRN www.jstree.com - if I want a tree view that has collapsed sections that hide details initially ... only use this if use case arises from daily use... my hope is generated AppleScript works most of the time
     for _, arg in ipairs({ ... }) do
-        if printWebView == nil then
+        if print_web_view  == nil then
             -- if no web view to print to, then print to console
 
             -- user visible line break == <br>, html src line break == \n
@@ -42,25 +42,25 @@ local function prints(...)
         else
             if type(arg) == "string" then
                 arg = arg:gsub("\t", "&nbsp;&nbsp;")
-                table.insert(printHtmlBuffer, arg)
+                table.insert(print_html_buffer, arg)
             elseif type(arg) == "number" then
-                table.insert(printHtmlBuffer, tostring(arg))
+                table.insert(print_html_buffer, tostring(arg))
             else
                 print("WARN: unexpected prints arg type: " .. type(arg))
-                table.insert(printHtmlBuffer, tostring(arg))
+                table.insert(print_html_buffer, tostring(arg))
             end
         end
     end
-    if printWebView then
-        if not htmlPage then
+    if print_web_view  then
+        if not html_page then
             -- basically the <head> section with js/css, don't worry about proper body ... just print after this
-            htmlPage = read_entire_file("config/uielements.html")
-            if not htmlPage then
-                htmlPage = "<h1>FAILED TO LOAD uielements.html</h1>"
+            html_page = read_entire_file("config/uielements.html")
+            if not html_page then
+                html_page = "<h1>FAILED TO LOAD uielements.html</h1>"
             end
         end
-        local html = htmlPage .. table.concat(printHtmlBuffer, "<br/>")
-        printWebView:html(html)
+        local html = html_page .. table.concat(print_html_buffer, "<br/>")
+        print_web_view :html(html)
     end
 end
 
@@ -96,7 +96,7 @@ local function ensureWebview()
         -- print("left rect:", hs.inspect(rect))
     end
 
-    if printWebView == nil then
+    if print_web_view  == nil then
         -- how to make sure not a new tab in previous browser webview instance?
 
         -- Enable inspect element (and thus dev tools) in the webview
@@ -105,26 +105,26 @@ local function ensureWebview()
         --    USE THIS TO TEST JS FIRST!
         local prefs = { ["developerExtrasEnabled"] = true }
 
-        printWebViewUserContentController = require("hs.webview.usercontent").new("testmessageport")
+        print_web_view_user_content_controller = require("hs.webview.usercontent").new("testmessageport")
 
         local jsCode = read_entire_file("config/uielements.js")
-        printWebViewUserContentController:injectScript({ source = jsCode })
+        print_web_view_user_content_controller:injectScript({ source = jsCode })
 
 
-        printWebView = require("hs.webview").newBrowser(rect, prefs, printWebViewUserContentController)
+        print_web_view  = require("hs.webview").newBrowser(rect, prefs, print_web_view_user_content_controller)
 
         -- webview:url("https://google.com")
-        printWebView:windowTitle("Inspector")
-        printWebView:show()
-        printWebWindow = printWebView:hswindow()
-        printWebView:titleVisibility("hidden")
+        print_web_view :windowTitle("Inspector")
+        print_web_view :show()
+        print_web_window = print_web_view :hswindow()
+        print_web_view :titleVisibility("hidden")
 
-        printWebView:windowCallback(function(action, _, _)
+        print_web_view :windowCallback(function(action, _, _)
             -- FYI 2nd arg is webview, 3rd arg is state/frame (depending on action type)
             if action == "closing" then
-                printWebView = nil
-                printWebViewUserContentController = nil
-                printWebWindow = nil
+                print_web_view  = nil
+                print_web_view_user_content_controller = nil
+                print_web_window = nil
             end
         end)
     else
@@ -133,13 +133,13 @@ local function ensureWebview()
         -- right now lets leave it alone if it still exists, that way I can hide it if I don't want it on top
         --   might be useful to have it in background until I capture the element I want and then I can switch to it
     end
-    if not printWebWindow then
+    if not print_web_window then
         prints("no webview window, aborting")
         return
     end
-    printWebView:frame(rect)
-    printWebWindow:raise() -- ensure on top for Hammerspoon app
-    printWebWindow:application():activate() -- ensure Hammerspoon app is front most too (else all app windows remain in the background)
+    print_web_view :frame(rect)
+    print_web_window:raise() -- ensure on top for Hammerspoon app
+    print_web_window:application():activate() -- ensure Hammerspoon app is front most too (else all app windows remain in the background)
 end
 
 
@@ -242,8 +242,8 @@ function DumpHtml(value)
 end
 
 function EnsureClearedWebView()
-    if printWebView then
-        printHtmlBuffer = {}
+    if print_web_view  then
+        print_html_buffer = {}
     end
     ensureWebview()
 end
