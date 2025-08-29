@@ -767,10 +767,11 @@ function CompactTableAttrValue(tbl)
         return "nil"
     end
     local result = {}
-    for attrName, attrValue in pairs(tbl) do
-        local displayValue = DisplayAttr(attrValue)
-        table.insert(result, string.format("%s=%s", tostring(attrName), displayValue))
+    for attr_name, attr_value in pairs(tbl) do
+        local display_value = DisplayAttr(attr_value)
+        table.insert(result, string.format("%s=%s", tostring(attr_name), display_value))
     end
+
     return "{" .. table.concat(result, ", ") .. "}"
 end
 
