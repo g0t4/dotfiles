@@ -204,18 +204,18 @@ function inspect_html(value, completed)
     end
 
     local function _inspectUserData(userdata)
-        local userdataType = userdata["__type"] -- nil if not set (i.e. non hammerspoon userdata types)
-        if userdataType == "hs.axuielement" then
-            local axType = userdata["AXRole"] or ""
-            local axTitle = WrapInQuotesIfNeeded(userdata["AXTitle"])
-            local axDesc = WrapInQuotesIfNeeded(userdata["AXDescription"])
+        local userdata_type = userdata["__type"] -- nil if not set (i.e. non hammerspoon userdata types)
+        if userdata_type == "hs.axuielement" then
+            local ax_type = userdata["AXRole"] or ""
+            local ax_title = WrapInQuotesIfNeeded(userdata["AXTitle"])
+            local ax_desc = WrapInQuotesIfNeeded(userdata["AXDescription"])
             -- FYI in this case, do not show hs.axuielement b/c AX* indicates that already so save the space
-            return string.format("%s %s %s %s", reference_name, axType, axTitle, axDesc)
-        elseif userdataType == "hs.application" then
-            local appName = userdata:name()
-            local appBundleID = userdata:bundleID()
+            return string.format("%s %s %s %s", reference_name, ax_type, ax_title, ax_desc)
+        elseif userdata_type == "hs.application" then
+            local app_name = userdata:name()
+            local app_bundle_id = userdata:bundleID()
             -- in this case, app name alone isn't enough of hint so show the type 'hs.application'
-            return string.format("hs.application(%s) - %s %s", reference_name, appName, appBundleID)
+            return string.format("hs.application(%s) - %s %s", reference_name, app_name, app_bundle_id)
         end
 
         -- TODO handle other hammerspoon userdata types
