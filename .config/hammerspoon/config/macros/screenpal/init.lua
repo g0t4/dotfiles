@@ -232,7 +232,7 @@ function ScreenPalEditorWindow:new()
         local current_zoom_scrollbar_position = timeline_scrollbar:axValue() -- current value
         print("zoom scrollbar position", current_zoom_scrollbar_position)
         local current_zoomed = win:is_zoomed()
-        print("isZoomed", current_zoomed)
+        print("current_zoomed", current_zoomed)
         -- TODO save zoom level? can I even figure that out? JUST assume its 2 for now?
 
         if not self._textfield_title then
@@ -245,7 +245,7 @@ function ScreenPalEditorWindow:new()
         end
         self._btn_back_to_projects:performAction("AXPress")
 
-        local btn = waitForElement(function()
+        local btn = wait_for_element(function()
             cache_project_view_controls()
             if not self._scrollarea_list then return end
             return vim.iter(self._scrollarea_list:buttons())
@@ -313,7 +313,7 @@ function StreamDeckScreenPalTimelineJumpToStart()
         local frame = timeline_scrollbar:axFrame()
         local min_value = timeline_scrollbar:axMinValue()
 
-        local function clickUntilTimelineAtEnd()
+        local function click_until_timeline_at_end()
             local prior_value = nil
             while true do
                 local value = timeline_scrollbar:axValue()
@@ -337,7 +337,7 @@ function StreamDeckScreenPalTimelineJumpToStart()
             end
         end
 
-        clickUntilTimelineAtEnd()
+        click_until_timeline_at_end()
     end
 
     -- * move playhead to start (0) by clicking leftmost part of position slider (aka timeline)

@@ -589,7 +589,7 @@ end
 --   if smth is buggy, fix it... don't try to shrink wait interval
 --   set wait interval on max amount of time to expect for the app UI to catch up
 
-function waitForElement(searchFunc, intervalMs, maxCycles)
+function wait_for_element(searchFunc, intervalMs, maxCycles)
     local start = get_time()
     local cycles = 0
     while cycles < maxCycles do
