@@ -95,35 +95,34 @@ local word_start = '\\<'
 local word_end = '\\>'
 
 vim.api.nvim_create_user_command('CamelCase', function()
-    vim.fn.feedkeys(
-        '/' .. word_start
-        .. lower .. one_or_more
-        .. upper
-        .. word .. '*'
-        .. word_end,
-        'c')
+    vim.api.nvim_feedkeys(
+        vim.api.nvim_replace_termcodes(
+            '/' .. word_start
+            .. lower .. one_or_more
+            .. upper
+            .. word .. '*'
+            .. word_end
+            .. "<CR>", true, false, true)
+        , 'n', false)
 end, {})
 
 vim.api.nvim_create_user_command('PascalCase', function()
-    -- : /character-classes
+    -- :h /character-classes
     --   \U = non-upper case, \u = upper case
     --   \L = non-lower case, \l = lower case
-    --   \+ = 1+
-    --   * = 0+
+    --   OR condition (basically needs all chars escaped): \(\d\|\l\)
 
-    vim.fn.feedkeys('/' .. word_start
-        .. upper
-        .. lower_or_digit .. one_or_more
-        .. upper
-        .. lower
-        .. word .. '*'
-        .. word_end,
-        'c')
-
-
-    -- FYI or condition:
-    --  \(\d\|\l\)
-    --  pretty much everything has to be escaped
+    vim.api.nvim_feedkeys(
+        vim.api.nvim_replace_termcodes(
+            '/' .. word_start
+            .. upper
+            .. lower_or_digit .. one_or_more
+            .. upper
+            .. lower
+            .. word .. '*'
+            .. word_end
+            .. "<CR>", true, false, true)
+        , 'n', false)
 end, {})
 
 
