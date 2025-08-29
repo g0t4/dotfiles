@@ -231,6 +231,8 @@ function ScreenPalEditorWindow:new()
         end
         self._btn_back_to_projects:performAction("AXPress")
         timer.usleep(500000) -- slight delay else won't find scroll area / list of projects
+        -- TODO instead of long waits, how about check every 100ms if its ready (up to 2 sec or w/e) like I do in my applescript helpers
+        --   that way I don't wait excessively and/or randomly not wait enough
 
         -- TODO check if went back?
         -- FYI ok to take a hit here to find controls and not use cachehd scroll area of clips?
@@ -379,6 +381,13 @@ end
 function StreamDeckScreenPalTimelineApproxRestorePosition(restore_position_value)
     -- approximate restore
     -- can only click timeline before/after the slider's bar... so this won't be precise unless I find a way to move it exactly
+
+    -- PRN turn this into precise calculations:
+    --   how far does the value move after first click
+    --   divide pixels by that value and estimate where to click for closer next step
+    -- OR... how about zoom out, click to move playhead, then zoom back in?
+    --    can read time of playhead (confirmed)
+    --    can I read start/end times? if so I can know range and just do maths for any time to jump to
 
     local win = get_cached_editor_window()
     if not win:isZoomed() then
