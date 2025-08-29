@@ -207,8 +207,8 @@ function inspect_html(value, completed)
         local userdata_type = userdata["__type"] -- nil if not set (i.e. non hammerspoon userdata types)
         if userdata_type == "hs.axuielement" then
             local ax_type = userdata["AXRole"] or ""
-            local ax_title = WrapInQuotesIfNeeded(userdata["AXTitle"])
-            local ax_desc = WrapInQuotesIfNeeded(userdata["AXDescription"])
+            local ax_title = wrap_in_quotes_if_needed(userdata["AXTitle"])
+            local ax_desc = wrap_in_quotes_if_needed(userdata["AXDescription"])
             -- FYI in this case, do not show hs.axuielement b/c AX* indicates that already so save the space
             return string.format("%s %s %s %s", reference_name, ax_type, ax_title, ax_desc)
         elseif userdata_type == "hs.application" then
@@ -461,7 +461,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "A", function()
     local lua = BuildHammerspoonLuaTo(element_at)
     prints(html_pre_code_lua(lua))
     prints(build_action_examples(element_at))
-    prints(GetDumpPath(element_at, true))
+    prints(get_dump_path(element_at, true))
     prints(table.unpack(attr_dumps))
 end)
 
@@ -841,7 +841,7 @@ end
 
 ---@param value string|nil # PRN accept any type not just string?
 ---@return string
-function WrapInQuotesIfNeeded(value)
+function wrap_in_quotes_if_needed(value)
     if value == nil then
         return ""
     end
@@ -851,7 +851,7 @@ end
 ---@param elem hs.axuielement
 ---@param indent boolean|nil # siblings/children are indented underneath path elements (aka toplevel)
 ---@return string
-function GetElementTableRow(elem, indent)
+function get_element_table_row(elem, indent)
     local role = get_value_or_empty_string(elem, "AXRole")
     local title = get_value_or_empty_string(elem, "AXTitle")
     local sub_role = get_value_or_empty_string(elem, "AXSubrole")
@@ -872,7 +872,7 @@ function GetElementTableRow(elem, indent)
     local details = ""
     if description ~= "" and description ~= role_description then
         -- only show if AXRoleDescription doesn't already cover what AXDescription has
-        details = details .. ' desc=' .. WrapInQuotesIfNeeded(description)
+        details = details .. ' desc=' .. wrap_in_quotes_if_needed(description)
     end
     if identifier ~= "" then
         details = details .. ' id=' .. identifier
@@ -899,13 +899,13 @@ local path_table_start = [[
         <th>specifier</th>
     </tr>
 ]]
-function GetDumpPath(element, expanded)
+function get_dump_path(element, expanded)
     expanded = expanded or false
     local path = element:path()
     if #path > 0 then
         local result = path_table_start
         for _, elem in ipairs(path) do
-            local current = GetElementTableRow(elem)
+            local current = get_element_table_row(elem)
             result = result .. current .. '\n' -- \n is for html formatting in src
 
             if expanded then
@@ -914,7 +914,7 @@ function GetDumpPath(element, expanded)
                     children = {}
                 end
                 for _, child in pairs(children) do
-                    result = result .. GetElementTableRow(child, true) .. "\n"
+                    result = result .. get_element_table_row(child, true) .. "\n"
                 end
             end
         end
