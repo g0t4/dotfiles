@@ -387,8 +387,8 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "E", function()
     test_element_search_with_filter()
 
 
-    local function testMyOwnFilterFunction()
-        local function myFilterFunction(element)
+    local function test_my_own_filter_function()
+        local function my_filter_function(element)
             -- SKY IS THE LIMIT HERE
             -- wow checking both role (all elements have role) and title on all matching AXMenuItems (>200)... takes no more or less time in fact its takeing 260ms (hammerspoon full app/windows/) for the callback to start! that is 80-100ms less than using the above filters, why?
             -- WOW I CAN ENUMERATE EVERYTHING AND FIND WHAT I WANT... SO DARN COOL... even better if I have a way to take the frontmost app and the primary/main window.. that can help chisel away at extra stuff to avoid enumerating... I love it!
@@ -404,9 +404,9 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "E", function()
             return false
         end
 
-        local searchTask = appElement:elementSearch(afterSearch, myFilterFunction)
+        local search_task = appElement:elementSearch(afterSearch, my_filter_function)
     end
-    -- testMyOwnFilterFunction()
+    -- test_my_own_filter_function()
 end)
 
 local function htmlCodeAppleScript(script)
