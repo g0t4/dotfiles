@@ -77,7 +77,8 @@ vim.cmd("let g:mapleader = ' '") -- default is '\' which is a bit awkward to rea
 -- set this very early, will get an empty failure message from lazy load bootstrap if race conditioon is hit and this comes after some other plugins, also not setting first may change the colorscheme loaded by other plugins
 vim.opt.termguicolors = true -- s/b already enabled in most of my environments, maybe warn if not?
 
-vim.o.ignorecase = true -- ignore case when searching
+vim.o.ignorecase = true -- ignore case when searching (i.e. lowercase/mixing case... all are ignored)
+vim.o.smartcase = true -- then, smart case means if you mix case then it will trigger noignorecase like behavior
 
 -- shortmess in nvim defaults to => ltToOCF
 -- set shortmess+=A " don't give ATTENTION messages if already open in another instance (swap file detected)
