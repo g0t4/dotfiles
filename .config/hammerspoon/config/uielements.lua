@@ -264,7 +264,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "S", function()
 
     -- PRN anything worth doing to enumerate the menus?
     -- for _, item in ipairs(menu_items) do
-    --     -- local title = GetValueOrEmptyString(item)
+    --     -- local title = get_value_or_empty_string(item)
     --     prints(hs.inspect(item), "<br>")
     -- end
 end)
@@ -289,7 +289,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "M", function()
 
     -- PRN anything worth doing to enumerate the menus?
     -- for _, item in ipairs(menu_items) do
-    --     -- local title = GetValueOrEmptyString(item)
+    --     -- local title = get_value_or_empty_string(item)
     --     prints(hs.inspect(item), "<br>")
     -- end
 end)
@@ -473,10 +473,10 @@ function element_specifier_for(elem)
         end
     end
 
-    local role = GetValueOrEmptyString(elem, "AXRole")
-    local subrole = GetValueOrEmptyString(elem, "AXSubrole")
-    local role_description = GetValueOrEmptyString(elem, "AXRoleDescription")
-    local title = GetValueOrEmptyString(elem, "AXTitle")
+    local role = get_value_or_empty_string(elem, "AXRole")
+    local subrole = get_value_or_empty_string(elem, "AXSubrole")
+    local role_description = get_value_or_empty_string(elem, "AXRoleDescription")
+    local title = get_value_or_empty_string(elem, "AXTitle")
     if role == "AXApplication" then
         warn_on_empty_title(title, role)
         -- PRN if duplicated title, use AXParent to get other child windows?
@@ -641,13 +641,13 @@ function element_specifier_for(elem)
 end
 
 local function get_identifier(to_element)
-    local identifier = GetValueOrEmptyString(to_element, "AXTitle")
+    local identifier = get_value_or_empty_string(to_element, "AXTitle")
     if identifier == "" then
-        identifier = GetValueOrEmptyString(to_element, "AXDescription")
+        identifier = get_value_or_empty_string(to_element, "AXDescription")
     end
     if identifier == "" then
         -- prepend "_" b/c role description often overlaps with class (and cannot use that as name)
-        identifier = "_" .. GetValueOrEmptyString(to_element, "AXRoleDescription")
+        identifier = "_" .. get_value_or_empty_string(to_element, "AXRoleDescription")
     end
     if identifier == "" then
         -- TODO does this make sense, ever?
@@ -656,7 +656,7 @@ local function get_identifier(to_element)
 
         -- UMM... while testing FCPX (restarts, close panels and quit, reopen... AXIdentifier seems stable for at least this version?!
         --   # 10 (title inspect cbox), 18 (video), 21 (color), 24 (info), 84 (static text 1 - title bar on inspector panel)
-        identifier = GetValueOrEmptyString(to_element, "AXIdentifier")
+        identifier = get_value_or_empty_string(to_element, "AXIdentifier")
     end
     -- TODO last fallback to AXRole? and prepend _?
     if identifier == "" then
@@ -721,7 +721,7 @@ function build_applescript_to(to_element, include_attr_dumps)
     --    i.e. text area => get/set value, button =>click
 end
 
-function GetValueOrEmptyString(element, attribute)
+function get_value_or_empty_string(element, attribute)
     local value = element:attributeValue(attribute)
     if value then
         return value
@@ -742,8 +742,8 @@ function CompactUserData(userdata)
         prints("UNEXPECTED userdata type, consider adding it to display helpers: " .. tostring(userdata))
         return "UNEXPECTED: " .. tostring(userdata)
     end
-    local title = GetValueOrEmptyString(userdata, "AXTitle")
-    local role = GetValueOrEmptyString(userdata, "AXRole")
+    local title = get_value_or_empty_string(userdata, "AXTitle")
+    local role = get_value_or_empty_string(userdata, "AXRole")
     return title .. ' (' .. role .. ')'
 end
 
@@ -826,7 +826,7 @@ function GetElementSiblingIndex(elem)
     -- FYI! window index changes if you switch windows! or close them... i.e. in a browser, finder, etc
 
     -- how expensive is it to get the attribute value here (again)? same for AXParent above
-    local role = GetValueOrEmptyString(elem, "AXRole")
+    local role = get_value_or_empty_string(elem, "AXRole")
     local role_siblings = parent:childrenWithRole(role)
     local elem_index = 1
     if #role_siblings > 1 then
@@ -852,13 +852,13 @@ end
 ---@param indent boolean|nil # siblings/children are indented underneath path elements (aka toplevel)
 ---@return string
 function GetElementTableRow(elem, indent)
-    local role = GetValueOrEmptyString(elem, "AXRole")
-    local title = GetValueOrEmptyString(elem, "AXTitle")
-    local sub_role = GetValueOrEmptyString(elem, "AXSubrole")
-    local identifier = GetValueOrEmptyString(elem, "AXIdentifier")
+    local role = get_value_or_empty_string(elem, "AXRole")
+    local title = get_value_or_empty_string(elem, "AXTitle")
+    local sub_role = get_value_or_empty_string(elem, "AXSubrole")
+    local identifier = get_value_or_empty_string(elem, "AXIdentifier")
     -- PRN AXHelp?
-    local description = GetValueOrEmptyString(elem, "AXDescription")
-    local role_description = GetValueOrEmptyString(elem, "AXRoleDescription")
+    local description = get_value_or_empty_string(elem, "AXDescription")
+    local role_description = get_value_or_empty_string(elem, "AXRoleDescription")
     local elem_index = GetElementSiblingIndex(elem) or ''
 
     local col1 = role_description .. ' ' .. elem_index
