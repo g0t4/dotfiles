@@ -7,19 +7,19 @@ local html_page
 
 -- TODO RENAME TO SNAKE_CASE IN LUA
 
-local skipAttrsWhenInspectForPathBuilding = {
+local skip_attrs_when_inspect_for_path_building = {
     -- PRN truncate long values instead? could pass max length here
     AXTopLevelUIElement = true,
     AXWindow = true,
     AXParent = true,
 }
 
-local function read_entire_file(configRelativePath)
-    local fullPath = hs.configdir .. "/" .. configRelativePath
-    local file = io.open(fullPath, "r")
+local function read_entire_file(config_relative_path)
+    local full_path = hs.configdir .. "/" .. config_relative_path
+    local file = io.open(full_path, "r")
 
     if not file then
-        error("Unable to read file: " .. fullPath)
+        error("Unable to read file: " .. full_path)
         return nil
     end
 
@@ -694,7 +694,7 @@ function BuildAppleScriptTo(toElement, includeAttrDumps)
     for _, elem in pairs(toElement:path()) do
         if includeAttrDumps then
             -- for testing, don't even run this if not needed (has to have a good perf hit)
-            local attrDump = GetDumpAXAttributes(elem, skipAttrsWhenInspectForPathBuilding)
+            local attrDump = GetDumpAXAttributes(elem, skip_attrs_when_inspect_for_path_building)
             table.insert(attrDumps, attrDump)
         end
 
