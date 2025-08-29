@@ -237,7 +237,7 @@ function inspect_html(value, completed)
     end
 end
 
-function DumpHtml(value)
+function dump_html(value)
     prints(inspect_html(value))
 end
 
@@ -257,10 +257,10 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "S", function()
     print("starting potentially slow element search of: " .. app:name())
 
     local menu_items = app:findMenuItem("Activity Monitor", true)
-    DumpHtml(menu_items)
+    dump_html(menu_items)
 
     -- BUT IMO is easier just to use elementSearch (which I bet is used under the hood here too on findMenuItem.. as does I bet getMenuItems use elementSearch, IIGC)
-    -- DumpHtml(menu_items)
+    -- dump_html(menu_items)
 
     -- PRN anything worth doing to enumerate the menus?
     -- for _, item in ipairs(menu_items) do
@@ -285,7 +285,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "M", function()
     --  can be slow with more menu items (i.e. FCPX)
 
     -- Dump(menu_items)
-    DumpHtml(menu_items)
+    dump_html(menu_items)
 
     -- PRN anything worth doing to enumerate the menus?
     -- for _, item in ipairs(menu_items) do
@@ -302,7 +302,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "E", function()
     ensure_cleared_web_view()
 
     local app = hs.application.frontmostApplication()
-    DumpHtml(app)
+    dump_html(app)
     ---@type hs.axuielement
     local app_element = hs.axuielement.applicationElement(app)
 

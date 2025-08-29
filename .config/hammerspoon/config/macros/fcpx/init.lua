@@ -96,12 +96,12 @@ function TestBack2BackElementSearch()
 
     local function afterYSliderSearch(_, searchTask, numResultsAdded)
         print_to_web_view("results: ", numResultsAdded)
-        DumpHtml(searchTask)
+        dump_html(searchTask)
     end
 
     local function afterSearch(_, searchTask, numResultsAdded)
         print_to_web_view("results: ", numResultsAdded)
-        DumpHtml(searchTask)
+        dump_html(searchTask)
 
         -- SHIT I forgot I needed to nest the next search! interesting that it goes faster still...
         --   also now I can't recall if slider is neseted under title panel button... I think it's not! :)
