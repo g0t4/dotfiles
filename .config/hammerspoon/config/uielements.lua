@@ -455,7 +455,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "A", function()
         --   alternatively, could use an app element and ask for its elementAtPosition specific to just that app
         element_at = hs.axuielement.systemElementAtPosition(coords)
     end
-    local clauses, attr_dumps = BuildAppleScriptTo(element_at, true)
+    local clauses, attr_dumps = build_applescript_to(element_at, true)
     local applescript = ConcatIntoLines(clauses, 80, "¬")
     prints(html_pre_code_applescript(applescript))
     local lua = BuildHammerspoonLuaTo(element_at)
@@ -640,7 +640,7 @@ function element_specifier_for(elem)
     return role_description .. " " .. elem_index .. " of "
 end
 
-local function getIdentifier(to_element)
+local function get_identifier(to_element)
     local identifier = GetValueOrEmptyString(to_element, "AXTitle")
     if identifier == "" then
         identifier = GetValueOrEmptyString(to_element, "AXDescription")
@@ -685,7 +685,7 @@ local function getIdentifier(to_element)
     return applescript_sanitize_identifier(identifier)
 end
 
-function BuildAppleScriptTo(to_element, include_attr_dumps)
+function build_applescript_to(to_element, include_attr_dumps)
     include_attr_dumps = include_attr_dumps or false
 
     local specifier_chain = {}
@@ -708,7 +708,7 @@ function BuildAppleScriptTo(to_element, include_attr_dumps)
     -- TODO use description if not title?
     -- TODO hungarian notation if title/desc are "too short" or?
     -- TODO build up some test cases would be helpful as you encounter real work examples
-    local variable_name = getIdentifier(to_element)
+    local variable_name = get_identifier(to_element)
     -- return "<br>set " .. variable_name .. " to " .. specifierChain, attrDumps
     local set_command = "set " .. variable_name .. " to "
     table_prepend(specifier_chain, set_command)
@@ -803,7 +803,7 @@ function GetDumpAXAttributes(element, skips)
 end
 
 function BuildActionExamples(element)
-    local identifer = getIdentifier(element)
+    local identifer = get_identifier(element)
     local actions = element:actionNames()
     local script = "" -- leave empty if none is likely fine
     if #actions > 0 then
