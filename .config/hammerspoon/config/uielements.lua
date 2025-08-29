@@ -203,7 +203,7 @@ function inspect_html(value, completed)
         return html .. "</ul>"
     end
 
-    local function _inspectUserData(userdata)
+    local function _inspect_user_data(userdata)
         local userdata_type = userdata["__type"] -- nil if not set (i.e. non hammerspoon userdata types)
         if userdata_type == "hs.axuielement" then
             local ax_type = userdata["AXRole"] or ""
@@ -231,7 +231,7 @@ function inspect_html(value, completed)
     elseif type(value) == "number" or type(value) == "boolean" then
         return tostring(value)
     elseif type(value) == "userdata" then
-        return _inspectUserData(value)
+        return _inspect_user_data(value)
     else
         return hs.inspect(value)
     end
