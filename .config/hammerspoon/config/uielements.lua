@@ -5,7 +5,7 @@ local print_html_buffer = {}
 local print_web_view_user_content_controller = nil
 local html_page
 
--- TODO RENAME TO SNAKE_CASE IN LUA
+-- TODO RENAME TO SNAKE_CASE IN LUA - should just need to do global functions used/defined in this file
 
 local skip_attrs_when_inspect_for_path_building = {
     -- PRN truncate long values instead? could pass max length here
