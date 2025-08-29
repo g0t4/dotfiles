@@ -256,14 +256,14 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "S", function()
     local app = hs.application.frontmostApplication()
     print("starting potentially slow element search of: " .. app:name())
 
-    local menuItems = app:findMenuItem("Activity Monitor", true)
-    DumpHtml(menuItems)
+    local menu_items = app:findMenuItem("Activity Monitor", true)
+    DumpHtml(menu_items)
 
     -- BUT IMO is easier just to use elementSearch (which I bet is used under the hood here too on findMenuItem.. as does I bet getMenuItems use elementSearch, IIGC)
-    -- DumpHtml(menuItems)
+    -- DumpHtml(menu_items)
 
     -- PRN anything worth doing to enumerate the menus?
-    -- for _, item in ipairs(menuItems) do
+    -- for _, item in ipairs(menu_items) do
     --     -- local title = GetValueOrEmptyString(item)
     --     prints(hs.inspect(item), "<br>")
     -- end
@@ -279,16 +279,16 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "M", function()
     local app = hs.application.frontmostApplication()
     print("starting potentially slow element search of: " .. app:name())
     -- FYI can use app:getMenuItems(callback) instead (called when done, non-blocking too) - callback gets same object and then the return here is the app object (when cb provided)
-    local menuItems = app:getMenuItems()
+    local menu_items = app:getMenuItems()
     -- timings:
     --  41ms (feels super fast) with hammerspoon's menus (~120 entries) at least
     --  can be slow with more menu items (i.e. FCPX)
 
-    -- Dump(menuItems)
-    DumpHtml(menuItems)
+    -- Dump(menu_items)
+    DumpHtml(menu_items)
 
     -- PRN anything worth doing to enumerate the menus?
-    -- for _, item in ipairs(menuItems) do
+    -- for _, item in ipairs(menu_items) do
     --     -- local title = GetValueOrEmptyString(item)
     --     prints(hs.inspect(item), "<br>")
     -- end
@@ -304,7 +304,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "E", function()
     local app = hs.application.frontmostApplication()
     DumpHtml(app)
     ---@type hs.axuielement
-    local appElement = hs.axuielement.applicationElement(app)
+    local app_element = hs.axuielement.applicationElement(app)
 
     local function test_build_tree()
         local start_time = get_time()
@@ -315,7 +315,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "E", function()
         --       !!! WHICH means SEARCH is viable to find and build scripts for me!!!
         -- WOW FCPX everything is 2672.4ms ... and that's with transform to tables!!!wow...that is the craziest app I have used for elements
         --
-        appElement:buildTree(function(message, results)
+        app_element:buildTree(function(message, results)
             prints("time to callback: " .. get_elapsed_time_in_milliseconds(start_time) .. " ms")
             start_time = get_time() -- reset
 
@@ -334,7 +334,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "E", function()
 
     local start_time = get_time()
 
-    local function afterSearch(message, searchTask, numResultsAdded)
+    local function after_search(message, search_task, num_results_added)
         -- numResultsAdded is the number of results added to the searchTask since elementSearch/next called (not overall #)
         -- FYI if you pass namedModifiers = { count: 3 } then it "pauses" search if you will and calls this callback and then you can resume with results:next() here, and then this callback is invoked after 3 more items are found, and you can continue until all elements are searched
         --    result object has cumulative results across each search run
@@ -346,9 +346,9 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "E", function()
         if message ~= "completed" then
             print("SOMETHING WENT WRONG b/c message is not 'completed'")
         end
-        prints("numResultsAdded: " .. numResultsAdded)
-        prints("matched: " .. searchTask:matched())
-        local results = searchTask -- just a reminder, enumerate the task (result) to get items
+        prints("numResultsAdded: " .. num_results_added)
+        prints("matched: " .. search_task:matched())
+        local results = search_task -- just a reminder, enumerate the task (result) to get items
         prints("results: ", inspect_html(results))
 
         -- leave timing info in here b/c I will be running into more complex test cases and I wanna understand the overall timinmg implications of some of the apps I use
@@ -365,7 +365,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "E", function()
         --
         -- filter on common roles for menu type elements:
         --  - FYI value has the string, key is int, so have to filter/map on value
-        local elementCriteria = EnumTableValues(hs.axuielement.roles)
+        local element_criteria = EnumTableValues(hs.axuielement.roles)
             :filter(function(e) return string.find(e, "Menu") end)
             :totable()
         --
@@ -373,15 +373,15 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "E", function()
         -- FYI when I re-run this shortcut (2nd time+) it takes 6.7 seconds to run elementSearch! ODD?! but reload hammerspoon config (wipes out state) and its back down to 300ms!
         --  => table of key/value pairs
         --  => array table of key/value pairs (logical AND of all criteria)
-        prints("elementCriteria:", inspect_html(elementCriteria))
+        prints("element_criteria:", inspect_html(element_criteria))
 
         -- this is a function builder that IIAC transforms the elementCriteria into element API calls
-        local criteriaFunction = hs.axuielement.searchCriteriaFunction(elementCriteria)
+        local criteria_function = hs.axuielement.searchCriteriaFunction(element_criteria)
 
 
-        local namedModifiers = nil -- optional settings
+        local named_modifiers = nil -- optional settings
         -- local namedModifiers = { count = 3 } -- TODO try this with nested element, use to show progress updates after each X items and then call resume
-        local searchTask = appElement:elementSearch(afterSearch, criteriaFunction, namedModifiers)
+        local search_task = app_element:elementSearch(after_search, criteria_function, named_modifiers)
         -- CAN check progress/cancel/see results even with searchTask outside of the callback
     end
     test_element_search_with_filter()
@@ -404,7 +404,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "E", function()
             return false
         end
 
-        local search_task = appElement:elementSearch(afterSearch, my_filter_function)
+        local search_task = app_element:elementSearch(after_search, my_filter_function)
     end
     -- test_my_own_filter_function()
 end)
