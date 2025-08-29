@@ -484,8 +484,8 @@ function element_specifier_for(elem)
         return 'application process "' .. title .. '"'
     end
 
-    local elemIndex = GetElementSiblingIndex(elem)
-    if elemIndex == nil then
+    local elem_index = GetElementSiblingIndex(elem)
+    if elem_index == nil then
         return " should not happen - failed to get sibling index for "
             .. role .. " " .. title
     end
@@ -500,7 +500,7 @@ function element_specifier_for(elem)
         if title ~= "" then
             return asClass .. ' "' .. title .. '" of '
         end
-        return asClass .. " " .. elemIndex .. " of "
+        return asClass .. " " .. elem_index .. " of "
     end
 
     -- FYI element specifier logic, my current understanding:
@@ -538,7 +538,7 @@ function element_specifier_for(elem)
     elseif role == "AXBrowser" then
         -- FYI Finder columns view uses browser control:
         --    FYI finder example had issues when I used the title of "", whereas index worked
-        return "browser " .. elemIndex .. " of "
+        return "browser " .. elem_index .. " of "
     elseif role == "AXButton" then
         -- FYI UI Browser - tested a button with title as name and it worked! lets just wait and see if I encounter any issues...
         --    if issues arise... then how about switch to: `whose value of attribute "AXTitle" is __`
@@ -546,38 +546,38 @@ function element_specifier_for(elem)
         --    could use tested fallback too or just show multiple options for button if last elem?
         return preferTitleOverIndexSpecifier("button")
     elseif role == "AXScrollBar" then
-        return "scroll bar " .. elemIndex .. " of "
+        return "scroll bar " .. elem_index .. " of "
     elseif role == "AXMenuBar" then
         -- s/b fine to use index here.. esp b/c menu item would have title as name
-        return "menu bar " .. elemIndex .. " of "
+        return "menu bar " .. elem_index .. " of "
     elseif role == "AXTextField" then
-        return "text field " .. elemIndex .. " of "
+        return "text field " .. elem_index .. " of "
     elseif role == "AXScrollArea" then
-        return "scroll area " .. elemIndex .. " of "
+        return "scroll area " .. elem_index .. " of "
     elseif role == "AXSplitter" then
-        return "splitter " .. elemIndex .. " of "
+        return "splitter " .. elem_index .. " of "
     elseif role == "AXSplitGroup" then
-        return "splitter group " .. elemIndex .. " of "
+        return "splitter group " .. elem_index .. " of "
     elseif role == "AXToolbar" then
-        return "toolbar " .. elemIndex .. " of "
+        return "toolbar " .. elem_index .. " of "
     elseif role == "AXTextArea" then
-        return "text area " .. elemIndex .. " of "
+        return "text area " .. elem_index .. " of "
     elseif role == "AXIncrementor" then
-        return "incrementor " .. elemIndex .. " of "
+        return "incrementor " .. elem_index .. " of "
     elseif role == "AXPopover" then
-        return "pop over " .. elemIndex .. " of "
+        return "pop over " .. elem_index .. " of "
     elseif role == "AXPopUpButton" then
-        return "pop up button " .. elemIndex .. " of "
+        return "pop up button " .. elem_index .. " of "
     elseif role == "AXList" then
         -- TODO I might have had a special case of AXSubrole == "AXSectionList" ... and then used "section 1" instead of "list 1" (find and repro if so)
         if subrole == "AXSectionList" then
             prints("WARNING: AXSubrole is AXSectionList, using 'list' but might need 'section' instead? double check and then update this warning in code and change if needed")
         end
-        return "list " .. elemIndex .. " of "
+        return "list " .. elem_index .. " of "
     elseif role == "AXStaticText" then
-        return "static text " .. elemIndex .. " of "
+        return "static text " .. elem_index .. " of "
     elseif role == "AXRadioButton" then
-        return "radio button " .. elemIndex .. " of "
+        return "radio button " .. elem_index .. " of "
     elseif role == "AXMenuItem" then
         -- FCPX show captions menu item (in expanded menu)
         -- set Show_Captions to menu item 37 of menu 1 of menu button 1 of group 1 of group 4 of splitter group 1 of group 2 of splitter group 1 of group 1 of splitter group 1 of window "Final Cut Pro" of application process "Final Cut Pro"
@@ -603,10 +603,10 @@ function element_specifier_for(elem)
         --             dont forget I can always build nested () with where/whose clauses for each element (at all levels)
         -- !!! TODO find a way to test a reference before suggesting it? might slow things down but I should consider that...  and use a fallback strategy until something works... need some sort of builder that can test top to bottom elements and at each level have fallback and warn if nothing works
         --
-        return "group " .. elemIndex .. " of "
+        return "group " .. elem_index .. " of "
     elseif role == "AXCheckBox" then
         -- FYI in powerpoint, color picker dropper button is subrole=AXToggle + roleDesc == "toggle button" but "toggle button 1" doesn't work.. put it back to "checkbox 1" and that worked
-        return "checkbox " .. elemIndex .. " of "
+        return "checkbox " .. elem_index .. " of "
     elseif role == "AXWebArea" then
         -- brave browser had one of these, "web area 1" does not work... generic works and in the case I found title == name
         return preferTitleOverIndexSpecifier("UI element")
@@ -617,27 +617,27 @@ function element_specifier_for(elem)
         return preferTitleOverIndexSpecifier("UI element")
     elseif role == "AXTabGroup" then
         -- confirmed, see separate scpt files
-        return "tab group " .. elemIndex .. " of "
+        return "tab group " .. elem_index .. " of "
     elseif role == "AXTable" then
         -- confirmed, see separate scpt files
-        return "table " .. elemIndex .. " of "
+        return "table " .. elem_index .. " of "
     elseif role == "AXRow" then
         -- confirmed, see separate scpt files
-        return "row " .. elemIndex .. " of "
+        return "row " .. elem_index .. " of "
     elseif role == "AXColumn" then
         -- confirmed, see separate scpt files
-        return "column " .. elemIndex .. " of "
+        return "column " .. elem_index .. " of "
     elseif role == "AXCell" then
         -- so, AXTable/Row/Column all work, so AXCell is just a standalone concept that intersects but doesn't have a class to correspond
-        return "UI element " .. elemIndex .. " of "
+        return "UI element " .. elem_index .. " of "
     elseif role == "AXLink" then
         -- not working as "link 1", use generic
-        return "UI element " .. elemIndex .. " of "
+        return "UI element " .. elem_index .. " of "
         -- TODO AXHelpTag (subrole AXUknown) => saw in brave browser when pointed at links, couldn't repo in Script Debugger though
     end
     prints("SUGGESTION: using roleDescription \"" .. roleDescription .. "\" as class (error prone in some cases), add an explicit mapping for AXRole: " .. role)
     -- FYI pattern, class == roleDesc - AX => split on captial letters (doesn't work for AXApplication, though actually it probably does work as ref to application class in Standard Suite?
-    return roleDescription .. " " .. elemIndex .. " of "
+    return roleDescription .. " " .. elem_index .. " of "
 end
 
 local function getIdentifier(toElement)
@@ -827,15 +827,15 @@ function GetElementSiblingIndex(elem)
     -- how expensive is it to get the attribute value here (again)? same for AXParent above
     local role = GetValueOrEmptyString(elem, "AXRole")
     local roleSiblings = parent:childrenWithRole(role)
-    local elemIndex = 1
+    local elem_index = 1
     if #roleSiblings > 1 then
         for i, sibling in ipairs(roleSiblings) do
             if sibling == elem then
-                elemIndex = i
+                elem_index = i
             end
         end
     end
-    return elemIndex
+    return elem_index
 end
 
 ---@param value string|nil # PRN accept any type not just string?
@@ -858,9 +858,9 @@ function GetElementTableRow(elem, indent)
     -- PRN AXHelp?
     local description = GetValueOrEmptyString(elem, "AXDescription")
     local roleDescription = GetValueOrEmptyString(elem, "AXRoleDescription")
-    local elemIndex = GetElementSiblingIndex(elem) or ''
+    local elem_index = GetElementSiblingIndex(elem) or ''
 
-    local col1 = roleDescription .. ' ' .. elemIndex
+    local col1 = roleDescription .. ' ' .. elem_index
     if subRole ~= "" then
         col1 = col1 .. ' (' .. subRole .. ')'
     end
