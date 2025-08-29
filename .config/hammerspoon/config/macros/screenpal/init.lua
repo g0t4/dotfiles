@@ -8,13 +8,16 @@ local function getScreenPalAppElementOrThrow()
 end
 
 local function getEditorWindowOrThrow()
+    local start = GetTime()
     local app = getScreenPalAppElementOrThrow()
     -- print("windows", hs.inspect(app:windows()))
     for _, win in ipairs(app:windows()) do
         if win:axTitle():match("^ScreenPal -") then
+            PrintTook("getEditorWindowOrThrow", start)
             return win
         end
     end
+    PrintTook("getEditorWindowOrThrow failed", start)
     error("No ScreenPal editor window found, aborting...")
 end
 
@@ -35,7 +38,7 @@ function ScreenPalEditorWindow:new()
     local editor_window = {}
     setmetatable(editor_window, self)
     self.__index = self
-    self.win = getEditorWindowOrThrow()
+    self.win = getEditorWindowOrThrow() -- 7ms for editor_window
 
     local function ensure_cached_controls()
         if self._cached_buttons then
