@@ -231,23 +231,6 @@ function ScreenPalEditorWindow:new()
         end
         self._btn_back_to_projects:performAction("AXPress")
 
-        -- timer.usleep(500000) -- slight delay else won't find scroll area / list of projects
-
-        function waitForElement(searchFunc, intervalMs, maxCycles)
-            local start = GetTime()
-            local cycles = 0
-            while cycles < maxCycles do
-                local elem = searchFunc()
-                if elem then
-                    PrintTook("WaitForElement total time:", start)
-                    return elem
-                end
-                timer.usleep(intervalMs * 1000)
-                cycles = cycles + 1
-            end
-            return nil
-        end
-
         local btn = waitForElement(function()
             ensure_cached_controls_for_project_list_view()
             if not self._scrollarea_list then return end

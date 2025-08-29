@@ -580,3 +580,25 @@ function GetChildWithAttr(parent, attrName, attrValue)
     end
     return nil
 end
+
+-- * helpers to wait until, click if exists, etc... like I use in AppleScript
+-- idea is simple: try right away (no fat delays)... and keep trying for a while until you find it
+--   that way you can have the fastest possible response w/o brittle delays
+--   timeout after fixed # cycles so not going on forever
+--   if smth is buggy, fix it... don't try to shrink wait interval
+--   set wait interval on max amount of time to expect for the app UI to catch up
+
+function waitForElement(searchFunc, intervalMs, maxCycles)
+    local start = GetTime()
+    local cycles = 0
+    while cycles < maxCycles do
+        local elem = searchFunc()
+        if elem then
+            PrintTook("WaitForElement total time:", start)
+            return elem
+        end
+        timer.usleep(intervalMs * 1000)
+        cycles = cycles + 1
+    end
+    return nil
+end
