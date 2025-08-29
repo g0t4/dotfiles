@@ -239,10 +239,14 @@ function ScreenPalEditorWindow:new()
         ensure_cached_controls_for_project_list_view() -- run again for main editor?
 
         function waitForElement(searchFunc, intervalMs, maxCycles)
+            local start = GetTime()
             local cycles = 0
             while cycles < maxCycles do
                 local elem = searchFunc()
-                if elem then return elem end
+                if elem then
+                    PrintTook("WaitForElement total time:", start)
+                    return elem
+                end
                 timer.usleep(intervalMs * 1000)
                 cycles = cycles + 1
             end
