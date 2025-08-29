@@ -143,7 +143,7 @@ local function ensure_web_view()
 end
 
 
-function InspectHtml(value, completed)
+function inspect_html(value, completed)
     completed = completed or {}
 
     local isBuildTreeTableOfAxUiElement = type(value) == "table" and value["_element"]
@@ -151,7 +151,7 @@ function InspectHtml(value, completed)
     if isBuildTreeTableOfAxUiElement then
         -- PRN add back:
         --    type(value) == "userdata" or
-        --    IF AND WHEN I add _inspectUserData pathway that recursively calls InspectHtml (for some child attr/property)
+        --    IF AND WHEN I add _inspectUserData pathway that recursively calls inspect_html (for some child attr/property)
         --
         -- don't repeat showing same objects (userdata, or tables of axuielement info from buildTree)
         -- FYI do not ban all dup tables b/c then coordinates are a mess for example, will only show first time
@@ -197,7 +197,7 @@ function InspectHtml(value, completed)
             -- if isBuildTreeTableOfAxUiElement and isHsInspectSkippedKey then
             --     html = html .. string.format("<li>%s: %s</li>", hs.inspect(k), "SKIPPED")
             -- else
-            html = html .. string.format("<li>%s: %s</li>", hs.inspect(k), InspectHtml(v, completed))
+            html = html .. string.format("<li>%s: %s</li>", hs.inspect(k), inspect_html(v, completed))
             -- end
         end
         return html .. "</ul>"
@@ -238,10 +238,10 @@ function InspectHtml(value, completed)
 end
 
 function DumpHtml(value)
-    prints(InspectHtml(value))
+    prints(inspect_html(value))
 end
 
-function EnsureClearedWebView()
+function ensure_cleared_web_view()
     if print_web_view then
         print_html_buffer = {}
     end
@@ -251,7 +251,7 @@ end
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "S", function()
     -- [S]earch menu items
 
-    EnsureClearedWebView()
+    ensure_cleared_web_view()
 
     local app = hs.application.frontmostApplication()
     print("starting potentially slow element search of: " .. app:name())
@@ -274,7 +274,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "M", function()
     -- USEFUL to quick check for a menu item
     -- FYI could use this to replace app - Paletro (use canvas to draw menu control)
 
-    EnsureClearedWebView()
+    ensure_cleared_web_view()
 
     local app = hs.application.frontmostApplication()
     print("starting potentially slow element search of: " .. app:name())
@@ -299,7 +299,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "E", function()
     -- test drive element search
     -- TODO try menu item search (like app.getMenuItems() above)
 
-    EnsureClearedWebView()
+    ensure_cleared_web_view()
 
     local app = hs.application.frontmostApplication()
     DumpHtml(app)
@@ -324,7 +324,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "E", function()
                 print("SOMETHING WENT WRONG b/c message is not 'completed'")
             end
             print(hs.inspect(results))
-            prints("results: ", InspectHtml(results))
+            prints("results: ", inspect_html(results))
 
             -- leave timing info in here b/c I will be running into more complex test cases and I wanna understand the overall timinmg implications of some of the apps I use
             prints("time to display: " .. get_elapsed_time_in_milliseconds(start_time) .. " ms")
@@ -349,7 +349,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "E", function()
         prints("numResultsAdded: " .. numResultsAdded)
         prints("matched: " .. searchTask:matched())
         local results = searchTask -- just a reminder, enumerate the task (result) to get items
-        prints("results: ", InspectHtml(results))
+        prints("results: ", inspect_html(results))
 
         -- leave timing info in here b/c I will be running into more complex test cases and I wanna understand the overall timinmg implications of some of the apps I use
         prints("time to display: " .. get_elapsed_time_in_milliseconds(start_time) .. " ms")
@@ -373,7 +373,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "E", function()
         -- FYI when I re-run this shortcut (2nd time+) it takes 6.7 seconds to run elementSearch! ODD?! but reload hammerspoon config (wipes out state) and its back down to 300ms!
         --  => table of key/value pairs
         --  => array table of key/value pairs (logical AND of all criteria)
-        prints("elementCriteria:", InspectHtml(elementCriteria))
+        prints("elementCriteria:", inspect_html(elementCriteria))
 
         -- this is a function builder that IIAC transforms the elementCriteria into element API calls
         local criteriaFunction = hs.axuielement.searchCriteriaFunction(elementCriteria)
@@ -426,7 +426,7 @@ local function htmlPreCodeLua(script)
 end
 
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "A", function()
-    EnsureClearedWebView()
+    ensure_cleared_web_view()
 
     -- [A]ppleScript
     -- FYI "A" is easy to invoke with left hand alone (after position mouse with right--trackpad)

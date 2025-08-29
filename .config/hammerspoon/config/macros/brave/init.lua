@@ -143,7 +143,7 @@ function SearchForDevToolsTextArea(callbackWithSelectedText)
             --     function(_message, results, numResultsAdded)
             --         -- FINDING other AXTextArea's which is not surprising
             --         for i, elem in ipairs(results) do
-            --             print(i .. ": ", InspectHtml(elem))
+            --             print(i .. ": ", inspect_html(elem))
             --             PrintActions(elem)
             --             PrintAttributes(elem)
             --             -- AXEditableAncestor	<userdata 1> -- hs.axuielement: AXTextArea (0x600006278f78)

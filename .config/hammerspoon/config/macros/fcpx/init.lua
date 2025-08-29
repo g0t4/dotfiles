@@ -92,7 +92,7 @@ function FcpxTitlePanelFocusOnElementByDescription(description)
 end
 
 function TestBack2BackElementSearch()
-    EnsureClearedWebView()
+    ensure_cleared_web_view()
 
     local function afterYSliderSearch(_, searchTask, numResultsAdded)
         print_to_web_view("results: ", numResultsAdded)
@@ -201,7 +201,7 @@ function StreamDeckFcpxViewerToggleComments()
         -- :menu(1):menuItem(37)
         -- criteria = { attribute = "AXTitle", value = "Show Captions" }
         -- FindOneElement(menu, criteria, function(_, menuButton, _)
-        --     print("found: ", InspectHtml(menuButton))
+        --     print("found: ", inspect_html(menuButton))
         -- end)
     end
 
