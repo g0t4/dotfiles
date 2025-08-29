@@ -617,14 +617,14 @@ end
 local function testCaching()
     local fcpx = CachedElement.forApp(APPS.FinalCutPro)
     -- local fcpx = hs.axuielement.applicationElement(hs.application.find(APPS.FinalCutPro))
-    local startTime = GetTime()
+    local startTime = get_time()
     for i = 1, 10 do
         -- print("caching - iteration", i)
         local attrs = fcpx:attributes() -- 100 calls => ~8ms avg
         -- local attrs = fcpx:allAttributeValues() -- 100 calls => 90ms avg (no caching), 1000 calls => 2,500ms!
     end
     print("fcpx", fcpx)
-    print("caching - took", GetTime() - startTime)
+    print("caching - took", get_time() - startTime)
 end
 
 -- testCaching()

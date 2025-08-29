@@ -49,7 +49,7 @@ function ScreenPalEditorWindow:new()
         self._btn_toggle_magnify = nil
         self._textfield_title = nil
 
-        local start = GetTime()
+        local start = get_time()
         -- enumerating all children and getting role and description is no diff than just buttons with description only...
         vim.iter(self.win:children())
             :each(function(ui_elem)

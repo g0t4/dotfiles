@@ -13,7 +13,7 @@ end
 
 function AppWindows:_refresh()
     -- FTR refresh takes 5-11ms (not terrible) so its not a huge time savings except maybe when aggregated with other savings
-    local start = GetTime()
+    local start = get_time()
     -- print("REFRESH")
     local windows = self.app:windows()
     local new_cache = {}
@@ -51,7 +51,7 @@ end
 ---@param titlePattern string # lua pattern
 ---@return hs.axuielement editor_window
 function AppWindows:_get_window_by_title(titlePattern)
-    local start = GetTime()
+    local start = get_time()
     for title, win in pairs(self.windows_by_title) do
         -- print("  title: " .. tostring(title))
         if title:match(titlePattern) then

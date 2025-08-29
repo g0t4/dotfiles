@@ -49,7 +49,7 @@ function FcpxInspectorPanel:ensureClosed()
 end
 
 function FcpxInspectorPanel:topBarCheckboxByDescription(matchDescription)
-    local startTime = GetTime()
+    local startTime = get_time()
 
     local candidates = self.window:rightSidePanel():group(2):checkBoxes()
     -- OUCH 11ms! ... IIUC b/c its cloning axuielements using CopyAttributeValue("AXChildren") every time!

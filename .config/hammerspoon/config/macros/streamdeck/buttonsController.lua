@@ -55,7 +55,7 @@ function ButtonsController:start()
     for buttonNumber = 1, self.rows * self.cols do
         local button = self.buttons[buttonNumber]
         if button then
-            -- local startTime = GetTime() -- TMP TIMING ANALYSIS
+            -- local startTime = get_time() -- TMP TIMING ANALYSIS
             button:start()
             -- if _G.LOG_DETAILED_TIMING then print("          start(" .. buttonNumber .. ") " .. GetElapsedTimeInMilliseconds(startTime) .. "ms") end -- TMP TIMING ANALYSIS
         else
@@ -79,7 +79,7 @@ function ButtonsController:start()
 end
 
 function ButtonsController:resetButtons()
-    -- local startTime = GetTime()
+    -- local startTime = get_time()
     self:removeButtons() -- EMPTY the LIST of buttons
     self.deck.hsdeck:reset() -- ~0.3ms
     -- print("rm in", GetElapsedTimeInMilliseconds(startTime), "ms")

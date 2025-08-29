@@ -305,7 +305,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "E", function()
     local appElement = hs.axuielement.applicationElement(app)
 
     local function testBuildTree()
-        local start_time = GetTime()
+        local start_time = get_time()
         -- wow this is everything on the Hammerspoon app (all nested windows) and it took < 500ms until callback and then <200ms to display (of which some is probably lag to render page or to start rendering it?)
         -- serializing all the output to HTML was not at all expensive <200ms part!
         --   objectOnly=false (default with buildTree) means axuielement is transformed into a table (per element) and that means the
@@ -315,7 +315,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "E", function()
         --
         appElement:buildTree(function(message, results)
             prints("time to callback: " .. GetElapsedTimeInMilliseconds(start_time) .. " ms")
-            start_time = GetTime() -- reset
+            start_time = get_time() -- reset
 
             prints("message: " .. message)
             if message ~= "completed" then
@@ -330,7 +330,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "E", function()
     end
     -- testBuildTree()
 
-    local start_time = GetTime()
+    local start_time = get_time()
 
     local function afterSearch(message, searchTask, numResultsAdded)
         -- numResultsAdded is the number of results added to the searchTask since elementSearch/next called (not overall #)
@@ -338,7 +338,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "E", function()
         --    result object has cumulative results across each search run
         --    use this to build a more interactive/responsive search experience
         prints("time to callback: " .. GetElapsedTimeInMilliseconds(start_time) .. " ms")
-        start_time = GetTime() -- reset
+        start_time = get_time() -- reset
 
         prints("message: " .. message)
         if message ~= "completed" then

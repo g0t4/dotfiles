@@ -550,7 +550,7 @@ function sortedAttributeNames(element)
 end
 
 function FindOneElement(app, criteria, callback)
-    local startTime = GetTime()
+    local startTime = get_time()
     if type(criteria) ~= "function" then
         criteria = hs.axuielement.searchCriteriaFunction(criteria)
     end
@@ -590,7 +590,7 @@ end
 --   set wait interval on max amount of time to expect for the app UI to catch up
 
 function waitForElement(searchFunc, intervalMs, maxCycles)
-    local start = GetTime()
+    local start = get_time()
     local cycles = 0
     while cycles < maxCycles do
         local elem = searchFunc()

@@ -66,12 +66,12 @@ function get_function_source(func)
 end
 
 -- PRN setup a timing module? and pass a block of code to be timed?
-function GetTime()
+function get_time()
     return hs.timer.secondsSinceEpoch()
 end
 
 function GetElapsedTimeSince(start_time)
-    return GetTime() - start_time
+    return get_time() - start_time
 end
 
 function GetElapsedTimeInMilliseconds(start_time)

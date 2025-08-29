@@ -10,9 +10,9 @@ hsIconCache = {}
 function hsIcon(relativePath)
     local path = hsIcons .. relativePath
 
-    local startTime = GetTime()
+    local startTime = get_time()
     local cached = hsIconCache[relativePath]
-    local ms = GetTime() - startTime
+    local ms = get_time() - startTime
     if ms > 0.1 then
         -- make sure this doesn't slow way down
         print("  time: hsIcons: cache check took", ms, "ms")

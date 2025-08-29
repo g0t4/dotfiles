@@ -154,7 +154,7 @@ function AppObserver:loadProfileForDeck(deck, isModSetChange)
     -- print("    " .. deck.name) -- TMP TIMING ANALYSIS
     local pageNumber = pageSettings.getSavedPageNumber(deck.name, self.appTitle)
 
-    -- local startTime = GetTime() -- TMP TIMING ANALYSIS
+    -- local startTime = get_time() -- TMP TIMING ANALYSIS
 
     local page = self:getProfilePage(deck, pageNumber)
 
@@ -172,7 +172,7 @@ function AppObserver:loadProfileForDeck(deck, isModSetChange)
         return false
     end
 
-    -- startTime = GetTime() -- TMP TIMING ANALYSIS
+    -- startTime = get_time() -- TMP TIMING ANALYSIS
     page:applyTo(deck, isModSetChange)
     -- print("      applyTo " .. GetElapsedTimeInMilliseconds(startTime) .. "ms") -- TMP TIMING ANALYSIS
     return true
