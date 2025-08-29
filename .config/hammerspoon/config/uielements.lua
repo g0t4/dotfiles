@@ -475,7 +475,7 @@ function element_specifier_for(elem)
 
     local role = GetValueOrEmptyString(elem, "AXRole")
     local subrole = GetValueOrEmptyString(elem, "AXSubrole")
-    local roleDescription = GetValueOrEmptyString(elem, "AXRoleDescription")
+    local role_description = GetValueOrEmptyString(elem, "AXRoleDescription")
     local title = GetValueOrEmptyString(elem, "AXTitle")
     if role == "AXApplication" then
         warn_on_empty_title(title, role)
@@ -495,7 +495,7 @@ function element_specifier_for(elem)
     --      set sg2 to first splitter group of (first splitter group of window 1 of application process "Script Debugger" whose it is it)
     --      of course, `it is it` s/b a useful boolean specifier
 
-    local function preferTitleOverIndexSpecifier(asClass)
+    local function prefer_title_over_index_specifier(asClass)
         -- FYI AXTitle is a proxy (often, always?) for the name of the element in AppleScript
         if title ~= "" then
             return asClass .. ' "' .. title .. '" of '
@@ -544,7 +544,7 @@ function element_specifier_for(elem)
         --    if issues arise... then how about switch to: `whose value of attribute "AXTitle" is __`
         --    FYI button in hierarchy is almost always gonna be the control at the bottom... just FYI
         --    could use tested fallback too or just show multiple options for button if last elem?
-        return preferTitleOverIndexSpecifier("button")
+        return prefer_title_over_index_specifier("button")
     elseif role == "AXScrollBar" then
         return "scroll bar " .. elem_index .. " of "
     elseif role == "AXMenuBar" then
@@ -588,9 +588,9 @@ function element_specifier_for(elem)
         --      ALSO: in the case of a menu item, to click it in this way, we should recommend opening the menu first (so find its menu parend generate a click on it + delay 0.1... yes!)
         --      ALSO: is it sometimes possible to click the menu items even if menu isn't visible and if that is the case (confirmed in code) can we prefer that first?
         -- TODO use preferTitle in other places (as it makes sense)
-        return preferTitleOverIndexSpecifier("menu item")
+        return prefer_title_over_index_specifier("menu item")
     elseif role == "AXMenuButton" then
-        return preferTitleOverIndexSpecifier("menu button")
+        return prefer_title_over_index_specifier("menu button")
     elseif role == "AXGroup" then
         -- FYI AXGroup in powerpoint fill color picker in Format Background tab has roleDescription == "Pane" and that did not work to select the item b/c it became "pane 1" and only "group 1" works
         --   I am not sure if that is a one off or if others fail like this...
@@ -609,12 +609,12 @@ function element_specifier_for(elem)
         return "checkbox " .. elem_index .. " of "
     elseif role == "AXWebArea" then
         -- brave browser had one of these, "web area 1" does not work... generic works and in the case I found title == name
-        return preferTitleOverIndexSpecifier("UI element")
+        return prefer_title_over_index_specifier("UI element")
     elseif role == "AXHeading" then
         -- BTW you could filter (whose) on UI element here.. though then I have to redo the clasuses thing :)... maybe? or have pairs of before/afterclauses
         -- AFAICT can only refer to it as "UI element"...
         --   can use title as name, at least in one test I did
-        return preferTitleOverIndexSpecifier("UI element")
+        return prefer_title_over_index_specifier("UI element")
     elseif role == "AXTabGroup" then
         -- confirmed, see separate scpt files
         return "tab group " .. elem_index .. " of "
@@ -635,19 +635,19 @@ function element_specifier_for(elem)
         return "UI element " .. elem_index .. " of "
         -- TODO AXHelpTag (subrole AXUknown) => saw in brave browser when pointed at links, couldn't repo in Script Debugger though
     end
-    prints("SUGGESTION: using roleDescription \"" .. roleDescription .. "\" as class (error prone in some cases), add an explicit mapping for AXRole: " .. role)
+    prints("SUGGESTION: using roleDescription \"" .. role_description .. "\" as class (error prone in some cases), add an explicit mapping for AXRole: " .. role)
     -- FYI pattern, class == roleDesc - AX => split on captial letters (doesn't work for AXApplication, though actually it probably does work as ref to application class in Standard Suite?
-    return roleDescription .. " " .. elem_index .. " of "
+    return role_description .. " " .. elem_index .. " of "
 end
 
-local function getIdentifier(toElement)
-    local identifier = GetValueOrEmptyString(toElement, "AXTitle")
+local function getIdentifier(to_element)
+    local identifier = GetValueOrEmptyString(to_element, "AXTitle")
     if identifier == "" then
-        identifier = GetValueOrEmptyString(toElement, "AXDescription")
+        identifier = GetValueOrEmptyString(to_element, "AXDescription")
     end
     if identifier == "" then
         -- prepend "_" b/c role description often overlaps with class (and cannot use that as name)
-        identifier = "_" .. GetValueOrEmptyString(toElement, "AXRoleDescription")
+        identifier = "_" .. GetValueOrEmptyString(to_element, "AXRoleDescription")
     end
     if identifier == "" then
         -- TODO does this make sense, ever?
@@ -656,7 +656,7 @@ local function getIdentifier(toElement)
 
         -- UMM... while testing FCPX (restarts, close panels and quit, reopen... AXIdentifier seems stable for at least this version?!
         --   # 10 (title inspect cbox), 18 (video), 21 (color), 24 (info), 84 (static text 1 - title bar on inspector panel)
-        identifier = GetValueOrEmptyString(toElement, "AXIdentifier")
+        identifier = GetValueOrEmptyString(to_element, "AXIdentifier")
     end
     -- TODO last fallback to AXRole? and prepend _?
     if identifier == "" then
@@ -664,15 +664,15 @@ local function getIdentifier(toElement)
         identifier = "foo"
     end
     -- todo ensure not reserved word:
-    local appleScriptReservedWords = { "length", "if", "then", "else", "end", "repeat",
+    local apple_script_reserved_words = { "length", "if", "then", "else", "end", "repeat",
         "until", "for", "in", "do", "while", "function", "local", "return", "break",
         "goto", "and", "or", "not", "true", "false" }
-    if EnumTableValues(appleScriptReservedWords):any(function(word) return word == identifier end) then
+    if EnumTableValues(apple_script_reserved_words):any(function(word) return word == identifier end) then
         -- alternatively I could put _ on the front of all generated identifiers... so I always know when it was a name I made vs actual keywords
         identifier = "_" .. identifier
     end
 
-    local function applescriptSanitizeIdentifier(text)
+    local function applescript_sanitize_identifier(text)
         -- Replace non-alphanumeric characters with underscores
         local identifier = text:gsub("%W", "_")
         -- Ensure the identifier starts with a letter or underscore
@@ -682,23 +682,23 @@ local function getIdentifier(toElement)
         return identifier
     end
 
-    return applescriptSanitizeIdentifier(identifier)
+    return applescript_sanitize_identifier(identifier)
 end
 
-function BuildAppleScriptTo(toElement, includeAttrDumps)
-    includeAttrDumps = includeAttrDumps or false
+function BuildAppleScriptTo(to_element, include_attr_dumps)
+    include_attr_dumps = include_attr_dumps or false
 
-    local specifierChain = {}
-    local attrDumps = {}
+    local specifier_chain = {}
+    local attr_dumps = {}
     -- REMEMBER toElement is last item in :path() list/table so dont need special handling for it outside of list
-    for _, elem in pairs(toElement:path()) do
-        if includeAttrDumps then
+    for _, elem in pairs(to_element:path()) do
+        if include_attr_dumps then
             -- for testing, don't even run this if not needed (has to have a good perf hit)
-            local attrDump = GetDumpAXAttributes(elem, skip_attrs_when_inspect_for_path_building)
-            table.insert(attrDumps, attrDump)
+            local attr_dump = GetDumpAXAttributes(elem, skip_attrs_when_inspect_for_path_building)
+            table.insert(attr_dumps, attr_dump)
         end
 
-        table_prepend(specifierChain, element_specifier_for(elem))
+        table_prepend(specifier_chain, element_specifier_for(elem))
     end
 
     -- IDEAS:
@@ -708,15 +708,15 @@ function BuildAppleScriptTo(toElement, includeAttrDumps)
     -- TODO use description if not title?
     -- TODO hungarian notation if title/desc are "too short" or?
     -- TODO build up some test cases would be helpful as you encounter real work examples
-    local variableName = getIdentifier(toElement)
-    -- return "<br>set " .. variableName .. " to " .. specifierChain, attrDumps
-    local setCommand = "set " .. variableName .. " to "
-    table_prepend(specifierChain, setCommand)
+    local variable_name = getIdentifier(to_element)
+    -- return "<br>set " .. variable_name .. " to " .. specifierChain, attrDumps
+    local set_command = "set " .. variable_name .. " to "
+    table_prepend(specifier_chain, set_command)
 
     -- FYI I could change the result to have more than one element item per specifierChain location (IOTW list of lists)...
     --   then could combine items at each location... so if two options in one location => then two final scripts
     --   two options w/ two each => 4 combinations
-    return specifierChain, attrDumps
+    return specifier_chain, attr_dumps
     -- PRN add suggestions section for actions to use and properties to get/set? as examples to copy/pasta
     --    i.e. text area => get/set value, button =>click
 end
