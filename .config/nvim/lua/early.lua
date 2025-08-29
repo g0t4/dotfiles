@@ -158,10 +158,10 @@ end
 
 vim.api.nvim_create_user_command('SnakeCase', function()
     local bufnr = vim.api.nvim_get_current_buf()
-    local row_1indexed, col_0indexed = unpack(vim.api.nvim_win_get_cursor(0))
+    local line_1indexed, col_0indexed = unpack(vim.api.nvim_win_get_cursor(0))
 
     -- PRN get text selection?
-    local line = vim.fn.getline(row_1indexed)
+    local line = vim.fn.getline(line_1indexed)
     print("line", line)
     if not line then return end
 
@@ -176,6 +176,7 @@ vim.api.nvim_create_user_command('SnakeCase', function()
     local snake = camel_to_snake(word)
 
     local new_line = line:sub(1, start_col) .. snake .. line:sub(end_col + 1)
+    local line_0indexed = line_1indexed - 1
     vim.api.nvim_buf_set_lines(bufnr, line_0indexed, line_0indexed + 1, false, { new_line })
 end, { range = true, nargs = 0 })
 
