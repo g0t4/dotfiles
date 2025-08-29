@@ -469,7 +469,7 @@ axuielemMT.findUniqueReference = function(elem)
     local role = elem:axRole()
     if role == "AXWindow" then
         -- fallback on index as unique ref (unique enough, I don't want to stop looking beneath the window level - if I did stop I'd never really look much past the window level and all this code would be pointless, maybe it is anwyays :) )
-        return elem:singular() .. "(" .. GetElementSiblingIndex(elem) .. ")"
+        return elem:singular() .. "(" .. get_element_sibling_index(elem) .. ")"
     end
 
     return nil -- == not unique
@@ -519,7 +519,7 @@ function BuildHammerspoonLuaTo(toElement)
             if singular == "application" then
                 return "app"
             end
-            local siblingIndex = GetElementSiblingIndex(pathItem) or "nil"
+            local siblingIndex = get_element_sibling_index(pathItem) or "nil"
             return ":" .. singular .. "(" .. siblingIndex .. ")"
         end)
 

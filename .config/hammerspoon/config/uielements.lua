@@ -460,7 +460,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "A", function()
     prints(html_pre_code_applescript(applescript))
     local lua = BuildHammerspoonLuaTo(element_at)
     prints(html_pre_code_lua(lua))
-    prints(BuildActionExamples(element_at))
+    prints(build_action_examples(element_at))
     prints(GetDumpPath(element_at, true))
     prints(table.unpack(attr_dumps))
 end)
@@ -484,7 +484,7 @@ function element_specifier_for(elem)
         return 'application process "' .. title .. '"'
     end
 
-    local elem_index = GetElementSiblingIndex(elem)
+    local elem_index = get_element_sibling_index(elem)
     if elem_index == nil then
         return " should not happen - failed to get sibling index for "
             .. role .. " " .. title
@@ -694,7 +694,7 @@ function build_applescript_to(to_element, include_attr_dumps)
     for _, elem in pairs(to_element:path()) do
         if include_attr_dumps then
             -- for testing, don't even run this if not needed (has to have a good perf hit)
-            local attr_dump = GetDumpAXAttributes(elem, skip_attrs_when_inspect_for_path_building)
+            local attr_dump = get_dump_ax_attributes(elem, skip_attrs_when_inspect_for_path_building)
             table.insert(attr_dumps, attr_dump)
         end
 
@@ -730,7 +730,7 @@ function get_value_or_empty_string(element, attribute)
     end
 end
 
-function CompactUserData(userdata)
+function compact_user_data(userdata)
     if userdata.__name == "hs.axuielement.axtextmarker"
         or userdata.__name == "hs.axuielement.axtextmarkerrange" then
         -- FYI nothing material to show, also don't wanna risk slowing anything down to get length/content (bytes).. unless that is useful and right now I don't think it is
@@ -747,14 +747,14 @@ function CompactUserData(userdata)
     return title .. ' (' .. role .. ')'
 end
 
-function DisplayAttr(attr_value)
+function display_attr(attr_value)
     if attr_value == nil then
         return 'nil'
     elseif type(attr_value) == "userdata" then
-        return CompactUserData(attr_value)
+        return compact_user_data(attr_value)
     elseif type(attr_value) == "table" then
         -- i.e. AXSize, AXPosition, AXFrame, AXVisibleCharacterRange
-        return CompactTableAttrValue(attr_value)
+        return compact_table_attr_value(attr_value)
     elseif type(attr_value) == 'string' then
         return '"' .. attr_value .. '"'
     else
@@ -762,20 +762,20 @@ function DisplayAttr(attr_value)
     end
 end
 
-function CompactTableAttrValue(tbl)
+function compact_table_attr_value(tbl)
     if tbl == nil then
         return "nil"
     end
     local result = {}
     for attr_name, attr_value in pairs(tbl) do
-        local display_value = DisplayAttr(attr_value)
+        local display_value = display_attr(attr_value)
         table.insert(result, string.format("%s=%s", tostring(attr_name), display_value))
     end
 
     return "{" .. table.concat(result, ", ") .. "}"
 end
 
-function GetDumpAXAttributes(element, skips)
+function get_dump_ax_attributes(element, skips)
     skips = skips or {}
 
     local result = { '<h4>' .. html_code_applescript(element_specifier_for(element)) .. '</h4>' }
@@ -791,7 +791,7 @@ function GetDumpAXAttributes(element, skips)
     for _, attr_name in ipairs(sorted_attrs) do
         local attr_value = element[attr_name]
         local display_name = attr_name
-        local display_value = DisplayAttr(attr_value)
+        local display_value = display_attr(attr_value)
         if display_value == "nil" or display_value == '""' then
             table.insert(result, "\t<span class='not-set-attribute'>" .. display_name .. ' = ' .. display_value .. "</span><br>")
         else
@@ -802,7 +802,7 @@ function GetDumpAXAttributes(element, skips)
     return table.concat(result)
 end
 
-function BuildActionExamples(element)
+function build_action_examples(element)
     local identifer = get_identifier(element)
     local actions = element:actionNames()
     local script = "" -- leave empty if none is likely fine
@@ -817,7 +817,7 @@ function BuildActionExamples(element)
     return html_pre_code_applescript(script)
 end
 
-function GetElementSiblingIndex(elem)
+function get_element_sibling_index(elem)
     local parent = elem:attributeValue("AXParent")
     if parent == nil then
         return nil
@@ -859,7 +859,7 @@ function GetElementTableRow(elem, indent)
     -- PRN AXHelp?
     local description = get_value_or_empty_string(elem, "AXDescription")
     local role_description = get_value_or_empty_string(elem, "AXRoleDescription")
-    local elem_index = GetElementSiblingIndex(elem) or ''
+    local elem_index = get_element_sibling_index(elem) or ''
 
     local col1 = role_description .. ' ' .. elem_index
     if sub_role ~= "" then
