@@ -80,7 +80,7 @@ function get_elapsed_time_in_milliseconds(start_time)
     return math.floor(elapsed_time_seconds * 10000 + 0.5) / 10
 end
 
-function GetElapsedTimeInNanoseconds(start_time)
+function get_elapsed_time_in_nanoseconds(start_time)
     local elapsed_time_seconds = get_elapsed_time_since(start_time)
     return math.floor(elapsed_time_seconds * 1000000000)
 end
