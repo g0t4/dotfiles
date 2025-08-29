@@ -5,8 +5,8 @@ local vim = require("config.libs.vim") -- reuse nvim lua modules in hammerspoon
 require("config.macros.screenpal.ui")
 
 ---@return hs.axuielement app_element
-local function getScreenPalAppElementOrThrow()
-    return getAppElementOrThrow("com.screenpal.app") -- < 1 ms
+local function get_screenpal_app_element_or_throw()
+    return get_app_element_or_throw("com.screenpal.app") -- < 1 ms
 end
 
 -- fix for vim.iter:totable() - IIUC with non-array tables
@@ -26,7 +26,7 @@ function ScreenPalEditorWindow:new()
     local editor_window = {}
     setmetatable(editor_window, self)
     self.__index = self
-    self.app = getScreenPalAppElementOrThrow()
+    self.app = get_screenpal_app_element_or_throw()
     self.windows = AppWindows:new(self.app)
     self.win = self.windows:editor_window_or_throw()
 
@@ -148,7 +148,7 @@ function ScreenPalEditorWindow:new()
         -- return position where to click to restore the playhead on reopen
     end
 
-    function editor_window:isZoomed()
+    function editor_window:is_zoomed()
         ensure_cached_controls()
         if not self._btn_minimum_zoom then
             error("No zoom button found, aborting...")
@@ -159,14 +159,14 @@ function ScreenPalEditorWindow:new()
     end
 
     function editor_window:zoom_on()
-        if self:isZoomed() then return end
+        if self:is_zoomed() then return end
         -- FYI typing m is faster now... must be b/c of the native Apple Silicon app
-        eventtap.keyStroke({}, "m", 0, getScreenPalAppElementOrThrow())
+        eventtap.keyStroke({}, "m", 0, get_screenpal_app_element_or_throw())
     end
 
     function editor_window:zoom_off()
-        if not self:isZoomed() then return end
-        eventtap.keyStroke({}, "m", 0, getScreenPalAppElementOrThrow())
+        if not self:is_zoomed() then return end
+        eventtap.keyStroke({}, "m", 0, get_screenpal_app_element_or_throw())
     end
 
     function editor_window:get_scrollbar_or_throw()
@@ -231,7 +231,7 @@ function ScreenPalEditorWindow:new()
         print("timeline scroll", timeline_scrollbar)
         local current_zoom_scrollbar_position = timeline_scrollbar:axValue() -- current value
         print("zoom scrollbar position", current_zoom_scrollbar_position)
-        local current_zoomed = win:isZoomed()
+        local current_zoomed = win:is_zoomed()
         print("isZoomed", current_zoomed)
         -- TODO save zoom level? can I even figure that out? JUST assume its 2 for now?
 
@@ -308,7 +308,7 @@ function StreamDeckScreenPalTimelineJumpToStart()
     -- local original_mouse_pos = mouse.absolutePosition()
     local win = get_cached_editor_window()
 
-    if win:isZoomed() then
+    if win:is_zoomed() then
         local timeline_scrollbar = win:get_scrollbar_or_throw()
         local frame = timeline_scrollbar:axFrame()
         local min_value = timeline_scrollbar:axMinValue()
@@ -353,7 +353,7 @@ function StreamDeckScreenPalTimelineJumpToEnd()
     -- local original_mouse_pos = mouse.absolutePosition()
     local win = get_cached_editor_window()
 
-    if win:isZoomed() then
+    if win:is_zoomed() then
         local timeline_scrollbar = win:get_scrollbar_or_throw()
         local frame = timeline_scrollbar:axFrame()
         local max_value = timeline_scrollbar:axMaxValue()
@@ -403,7 +403,7 @@ function StreamDeckScreenPalTimelineApproxRestorePosition(restore_position_value
     --    can I read start/end times? if so I can know range and just do maths for any time to jump to
 
     local win = get_cached_editor_window()
-    if not win:isZoomed() then
+    if not win:is_zoomed() then
         return -- nothing to do, yet
     end
 

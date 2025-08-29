@@ -17,7 +17,7 @@ local axuielemMT = hs.getObjectMetatable("hs.axuielement")
 
 ---@param appName string
 ---@return hs.axuielement
-function getAppElementOrThrow(appName)
+function get_app_element_or_throw(appName)
     -- TODO disable warning about hs.application.enableSpotlightForNameSearches
     local hsApp = hs.application.find(appName)
     assert(hsApp ~= nil, "axUiAppTyped: could not find app: " .. appName)
