@@ -86,7 +86,22 @@ vim.o.smartcase = true -- then, smart case means if you mix case then it will tr
 -- snake_case
 
 vim.api.nvim_create_user_command('CamelCase', function()
-    vim.fn.feedkeys('/\\<\\l\\+\\u[a-zA-Z0-9]*\\>', 'c')
+    local upper = "\\u"
+    local lower = "\\l"
+    local lower_plus = lower .. "\\+"
+    local word = "\\w"
+    local digit_or_lower = "\\(\\l\\|\\d\\)"
+    local digit_or_lower_plus = digit_or_lower .. "\\+"
+    local word_start = '\\<'
+    local word_end = '\\>'
+
+    vim.fn.feedkeys(
+        '/' .. word_start
+        .. lower_plus
+        .. upper
+        .. word .. '*'
+        .. word_end,
+        'c')
 end, {})
 
 vim.api.nvim_create_user_command('PascalCase', function()
@@ -96,11 +111,14 @@ vim.api.nvim_create_user_command('PascalCase', function()
     --   \L = non-lower case, \l = lower case
     --   \+ = 1+
     --   * = 0+
-    upper = "\\u"
-    lower = "\\l"
-    word = "\\w"
-    digit_or_lower = "\\(\\l\\|\\d\\)"
-    digit_or_lower_plus = digit_or_lower .. "\\+"
+    local upper = "\\u"
+    local lower = "\\l"
+    local lower_plus = lower .. "\\+"
+    local word = "\\w"
+    local digit_or_lower = "\\(\\l\\|\\d\\)"
+    local digit_or_lower_plus = digit_or_lower .. "\\+"
+    local word_start = '\\<'
+    local word_end = '\\>'
 
     vim.fn.feedkeys('/\\<' .. upper
         .. digit_or_lower_plus
