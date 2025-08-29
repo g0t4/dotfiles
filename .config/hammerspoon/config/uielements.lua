@@ -924,20 +924,3 @@ function GetDumpPath(element, expanded)
         return "NO PATH - should not happen, even AXApplication (top level) has self as path"
     end
 end
-
---
--- OLD code, keep in case needed
---
--- -- scrolling the webview to bottom:
---     require("hs.timer").doAfter(0.1, function()
---         local scrollToBottom = [[
---             window.scrollTo(0,document.body.scrollHeight);
---         ]]
---         printWebView:evaluateJavaScript(scrollToBottom, function(result, nsError)
---             -- AFAICT error is NSError https://developer.apple.com/documentation/foundation/nserror
---             --   error s/b nil if no error... but I also am getting { code = 0 } on successes, so ignore based on code too:
---             if nsError and nsError.code ~= 0 then
---                 hs.showError("js failed: " .. hs.inspect(nsError))
---             end
---         end)
---     end)
