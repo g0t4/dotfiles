@@ -444,30 +444,30 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "A", function()
     --
 
     local callouts = require("config.ui_callouts")
-    local elementAt = nil
+    local element_at = nil
     if callouts.moves then
         print("using last callout element for report")
         -- run dump on current element from callouts, this way I can nav around with arrows + pick parent elements that aren't selected by systemElementAtPosition, also children item sometimes aren't selected (i.e. SOM image buttons on toolbars)
-        elementAt = callouts.last.element
+        element_at = callouts.last.element
     else
         local coords = hs.mouse.absolutePosition()
         -- FYI systemElementAtPosition(coords) => hs.axuielement.systemWideElement():elementAtPosition(coords)
         --   alternatively, could use an app element and ask for its elementAtPosition specific to just that app
-        elementAt = hs.axuielement.systemElementAtPosition(coords)
+        element_at = hs.axuielement.systemElementAtPosition(coords)
     end
-    local clauses, attrDumps = BuildAppleScriptTo(elementAt, true)
+    local clauses, attr_dumps = BuildAppleScriptTo(element_at, true)
     local applescript = ConcatIntoLines(clauses, 80, "¬")
     prints(html_pre_code_applescript(applescript))
-    local lua = BuildHammerspoonLuaTo(elementAt)
+    local lua = BuildHammerspoonLuaTo(element_at)
     prints(html_pre_code_lua(lua))
-    prints(BuildActionExamples(elementAt))
-    prints(GetDumpPath(elementAt, true))
-    prints(table.unpack(attrDumps))
+    prints(BuildActionExamples(element_at))
+    prints(GetDumpPath(element_at, true))
+    prints(table.unpack(attr_dumps))
 end)
 
 -- see AppleScript The Definitive Guide, page 197 about Element Specifier forms (name, index, ID, some, every, range, relative, bool test [whose?],...?)
-function ElementSpecifierFor(elem)
-    local function warnOnEmptyTitle(title, role)
+function element_specifier_for(elem)
+    local function warn_on_empty_title(title, role)
         if title == "" then
             prints("[WARN] title is empty for " .. role .. ", script might not work")
         end
@@ -478,7 +478,7 @@ function ElementSpecifierFor(elem)
     local roleDescription = GetValueOrEmptyString(elem, "AXRoleDescription")
     local title = GetValueOrEmptyString(elem, "AXTitle")
     if role == "AXApplication" then
-        warnOnEmptyTitle(title, role)
+        warn_on_empty_title(title, role)
         -- PRN if duplicated title, use AXParent to get other child windows?
         -- FYI AXApplication is the root most object, aka "object string specifier" (see Definitive Guide book, page 206-207)
         return 'application process "' .. title .. '"'
@@ -530,7 +530,7 @@ function ElementSpecifierFor(elem)
     -- 	           application process "Brave Beta") whose role is equal to "AXHeading")
     --
     if role == "AXWindow" then
-        warnOnEmptyTitle(title, role)
+        warn_on_empty_title(title, role)
         -- TODO handle duplicate titles (windows) => revert to use index?
         -- FYI title is an issue in some scenarios (i.e. if title is based on current document, like in Script Debugger)
         -- PRN consider using AXSubrole  (i.e. AXStandardWindow) as a filter too? get index relative to it?
@@ -698,7 +698,7 @@ function BuildAppleScriptTo(toElement, includeAttrDumps)
             table.insert(attrDumps, attrDump)
         end
 
-        table_prepend(specifierChain, ElementSpecifierFor(elem))
+        table_prepend(specifierChain, element_specifier_for(elem))
     end
 
     -- IDEAS:
@@ -777,7 +777,7 @@ end
 function GetDumpAXAttributes(element, skips)
     skips = skips or {}
 
-    local result = { '<h4>' .. html_code_applescript(ElementSpecifierFor(element)) .. '</h4>' }
+    local result = { '<h4>' .. html_code_applescript(element_specifier_for(element)) .. '</h4>' }
 
     local sortedAttrs = {}
     for attrName, attrValue in pairs(element) do
@@ -883,7 +883,7 @@ function GetElementTableRow(elem, indent)
         "</td><td>" ..
         role ..
         "</td><td>" ..
-        details .. "</td><td>" .. html_code_applescript(ElementSpecifierFor(elem)) .. "</td></tr>"
+        details .. "</td><td>" .. html_code_applescript(element_specifier_for(elem)) .. "</td></tr>"
 end
 
 -- PRN try to get nested @language annotations to work and provide syntax highlighting (etc) for nested language, i.e. html:
