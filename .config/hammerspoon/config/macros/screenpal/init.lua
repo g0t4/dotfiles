@@ -90,7 +90,8 @@ function ScreenPalEditorWindow:new()
                         self._btn_back_to_projects = ui_elem
                         return
                     else
-                        print(description)
+                        -- find new controls, uncomment this:
+                        -- print(description)
                     end
                 elseif role == "AXTextField" then
                     -- accessibility description => AXDescription in hs apis... is empty only for the title name field (upper left)
