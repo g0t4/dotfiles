@@ -237,18 +237,34 @@ function ScreenPalEditorWindow:new()
         -- TODO check if went back?
         -- FYI ok to take a hit here to find controls and not use cachehd scroll area of clips?
         ensure_cached_controls_for_project_list_view() -- run again for main editor?
-        local btn = vim.iter(self._scrollarea_list:buttons())
-            :filter(function(button)
-                print("  btn", hs.inspect(button))
-                local desc = button:axDescription()
-                return desc == title
-            end)
-            :totable()[1]
+
+        function waitForElement(searchFunc, intervalMs, maxCycles)
+            local cycles = 0
+            while cycles < maxCycles do
+                local elem = searchFunc()
+                if elem then return elem end
+                timer.usleep(intervalMs * 1000)
+                cycles = cycles + 1
+            end
+            return nil
+        end
+
+        -- Example usage
+        local btn = waitForElement(function()
+            return vim.iter(self._scrollarea_list:buttons())
+                :filter(function(button)
+                    local desc = button:axDescription()
+                    return desc == title
+                end)
+                :totable()[1]
+        end, 100, 20)
+
         if not btn then
             error("cannot find project to re-open, aborting...")
         end
+
         btn:performAction("AXPress")
-        timer.usleep(100000) -- PRN is this needed?
+        timer.usleep(100000)
 
         -- restore zoom / scroll bar position
         if not current_zoomed then
