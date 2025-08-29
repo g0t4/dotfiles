@@ -14,7 +14,7 @@ local skipAttrsWhenInspectForPathBuilding = {
     AXParent = true,
 }
 
-local function readEntireFile(configRelativePath)
+local function read_entire_file(configRelativePath)
     local fullPath = hs.configdir .. "/" .. configRelativePath
     local file = io.open(fullPath, "r")
 
@@ -54,7 +54,7 @@ local function prints(...)
     if printWebView then
         if not htmlPage then
             -- basically the <head> section with js/css, don't worry about proper body ... just print after this
-            htmlPage = readEntireFile("config/uielements.html")
+            htmlPage = read_entire_file("config/uielements.html")
             if not htmlPage then
                 htmlPage = "<h1>FAILED TO LOAD uielements.html</h1>"
             end
@@ -107,7 +107,7 @@ local function ensureWebview()
 
         printWebViewUserContentController = require("hs.webview.usercontent").new("testmessageport")
 
-        local jsCode = readEntireFile("config/uielements.js")
+        local jsCode = read_entire_file("config/uielements.js")
         printWebViewUserContentController:injectScript({ source = jsCode })
 
 
