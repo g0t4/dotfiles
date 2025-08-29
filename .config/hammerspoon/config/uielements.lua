@@ -827,10 +827,10 @@ function GetElementSiblingIndex(elem)
 
     -- how expensive is it to get the attribute value here (again)? same for AXParent above
     local role = GetValueOrEmptyString(elem, "AXRole")
-    local roleSiblings = parent:childrenWithRole(role)
+    local role_siblings = parent:childrenWithRole(role)
     local elem_index = 1
-    if #roleSiblings > 1 then
-        for i, sibling in ipairs(roleSiblings) do
+    if #role_siblings > 1 then
+        for i, sibling in ipairs(role_siblings) do
             if sibling == elem then
                 elem_index = i
             end
@@ -854,23 +854,23 @@ end
 function GetElementTableRow(elem, indent)
     local role = GetValueOrEmptyString(elem, "AXRole")
     local title = GetValueOrEmptyString(elem, "AXTitle")
-    local subRole = GetValueOrEmptyString(elem, "AXSubrole")
+    local sub_role = GetValueOrEmptyString(elem, "AXSubrole")
     local identifier = GetValueOrEmptyString(elem, "AXIdentifier")
     -- PRN AXHelp?
     local description = GetValueOrEmptyString(elem, "AXDescription")
-    local roleDescription = GetValueOrEmptyString(elem, "AXRoleDescription")
+    local role_description = GetValueOrEmptyString(elem, "AXRoleDescription")
     local elem_index = GetElementSiblingIndex(elem) or ''
 
-    local col1 = roleDescription .. ' ' .. elem_index
-    if subRole ~= "" then
-        col1 = col1 .. ' (' .. subRole .. ')'
+    local col1 = role_description .. ' ' .. elem_index
+    if sub_role ~= "" then
+        col1 = col1 .. ' (' .. sub_role .. ')'
     end
     if title ~= "" then
         col1 = col1 .. ' "' .. title .. '"'
     end
 
     local details = ""
-    if description ~= "" and description ~= roleDescription then
+    if description ~= "" and description ~= role_description then
         -- only show if AXRoleDescription doesn't already cover what AXDescription has
         details = details .. ' desc=' .. WrapInQuotesIfNeeded(description)
     end
@@ -878,8 +878,8 @@ function GetElementTableRow(elem, indent)
         details = details .. ' id=' .. identifier
     end
 
-    local rowClass = indent and "indented" or "toplevel"
-    return "<tr class='" .. rowClass .. "'><td>" ..
+    local row_class = indent and "indented" or "toplevel"
+    return "<tr class='" .. row_class .. "'><td>" ..
         col1 ..
         "</td><td>" ..
         role ..
@@ -890,7 +890,7 @@ end
 -- PRN try to get nested @language annotations to work and provide syntax highlighting (etc) for nested language, i.e. html:
 --    https://emmylua.github.io/annotations/language.html
 ---@language HTML
-local pathTableStart = [[
+local path_table_start = [[
 <table class="path">
     <tr>
         <th>PATH</th>
@@ -903,7 +903,7 @@ function GetDumpPath(element, expanded)
     expanded = expanded or false
     local path = element:path()
     if #path > 0 then
-        local result = pathTableStart
+        local result = path_table_start
         for _, elem in ipairs(path) do
             local current = GetElementTableRow(elem)
             result = result .. current .. '\n' -- \n is for html formatting in src
