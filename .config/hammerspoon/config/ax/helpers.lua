@@ -313,7 +313,7 @@ axuielemMT.singular = function(element)
         return nil
     end
     local singular = role:gsub("^AX", "")
-    return lowercaseFirstLetter(singular)
+    return lowercase_first_letter(singular)
 end
 
 -- *** ATTRIBUTE ACCESSOR EXTENSION METHODS ***

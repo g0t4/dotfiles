@@ -11,8 +11,8 @@ function M.streamStdout()
     -- ! keep around as a good example of streaming from a command's output (instead of http response used for ask-openai)... both are useful to recall (and this concept is somewhat novel in my automations so I don't wanna let it slip my mind)
 
     local function streamingHandler(_task, stdout, stderr)
-        pasteText(stdout)
-        -- pasteText("...")
+        paste_text(stdout)
+        -- paste_text("...")
         return true
     end
     --

@@ -1,13 +1,13 @@
 local inspect = require("hs.inspect")
 
-function pasteText(text, app)
+function paste_text(text, app)
     -- TODO if need be, can I track the app that was active when triggering the ask-openai action... so I can make sure to pass it to type into it only... would allow me to switch apps (or more important, if some other app / window pops up... wouldn't steal typing focus)
     --     hs.eventtap.keyStrokes(text[, application])
     -- FYI no added delay here like keyStroke (interesting)
     hs.eventtap.keyStrokes(text, app) -- app param is optional
 end
 
-function typeText(text, delay)
+function type_text(text, delay)
     delay = delay or 10000
 
     for char in text:gmatch(".") do
@@ -27,7 +27,7 @@ function Dump(...)
     print(inspect({ ... }))
 end
 
-function DumpWithMetatables(...)
+function dump_with_metatables(...)
     -- TODO is this useful, need to find an example where I find it helpful...
     -- added this in theory to be useful
     print(inspect({ ... }, { metatables = true }))
@@ -90,27 +90,27 @@ function print_took(message, start_time)
     print(message .. " took " .. elapsed_time_milliseconds .. " ms")
 end
 
-function StartProfiler()
+function start_profiler()
     local ProFi = require("ProFi")
     ProFi:start()
 end
 
-function StopProfiler(path)
-    print("StopProfiler", path)
+function stop_profiler(path)
+    print("stop_profiler", path)
     path = path or "profi.txt"
     local ProFi = require("ProFi")
     ProFi:stop()
     ProFi:writeReport(path)
 end
 
-function resolveHomePath(path)
+function resolve_home_path(path)
     if path:sub(1, 1) == "~" then
         return os.getenv("HOME") .. path:sub(2)
     end
     return path
 end
 
-function lowercaseFirstLetter(str)
+function lowercase_first_letter(str)
     if str == nil then
         return nil
     end
@@ -118,7 +118,7 @@ function lowercaseFirstLetter(str)
 end
 
 -- *** type helpers
-function isUserData(value, name)
+function is_user_data(value, name)
     local valueType = type(value)
     if valueType ~= "userdata" then
         return false
@@ -126,8 +126,8 @@ function isUserData(value, name)
     return value.__name == name
 end
 
-function isStyledText(value)
-    return isUserData(value, "hs.styledtext")
+function is_styled_text(value)
+    return is_user_data(value, "hs.styledtext")
 end
 
 function quote(str)

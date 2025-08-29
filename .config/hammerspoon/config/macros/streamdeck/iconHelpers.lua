@@ -136,7 +136,7 @@ function drawTextIcon(text, deck, passedStyle, backgroundImage)
             text = styledText,
             frame = { x = 0, y = y, w = width, h = height },
         })
-    elseif isStyledText(text) then
+    elseif is_styled_text(text) then
         table.insert(canvas, {
             type = "text",
             text = text,

@@ -4,7 +4,7 @@ if not verboseStreamDeckLogsOn then
     print("streamdeck: VERBOSE LOGGING IS OFF")
 end
 local log = require("hs.logger").new("streamdeck", verboseStreamDeckLogsOn and "verbose" or "warning")
-local hsIcons = resolveHomePath("~/repos/github/g0t4/dotfiles/misc/hammerspoon-icons/")
+local hsIcons = resolve_home_path("~/repos/github/g0t4/dotfiles/misc/hammerspoon-icons/")
 
 hsIconCache = {}
 function hsIcon(relativePath)

@@ -49,7 +49,7 @@ function selectMenuItemWithFailureTroubleshooting(menu)
             local debugFile = "~/.hammerspoon/menu-dump.lua"
             hs.alert.show("Failed to find menu item, dumping all menu items to " .. debugFile)
             frontmostApp:getMenuItems(function(items)
-                local file = io.open(resolveHomePath(debugFile), "w")
+                local file = io.open(resolve_home_path(debugFile), "w")
                 file:write(hs.inspect(items))
                 file:close()
             end)
