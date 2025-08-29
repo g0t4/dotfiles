@@ -5,6 +5,8 @@ local printHtmlBuffer = {}
 local printWebViewUserContentController = nil
 local htmlPage
 
+-- TODO RENAME TO SNAKE_CASE IN LUA
+
 local skipAttrsWhenInspectForPathBuilding = {
     -- PRN truncate long values instead? could pass max length here
     AXTopLevelUIElement = true,
