@@ -120,9 +120,10 @@ vim.api.nvim_create_user_command('PascalCase', function()
     local word_start = '\\<'
     local word_end = '\\>'
 
-    vim.fn.feedkeys('/\\<' .. upper
+    vim.fn.feedkeys('/' .. word_start .. upper
         .. digit_or_lower_plus
-        .. upper .. lower .. word .. '*\\>', 'c')
+        .. upper .. lower .. word .. '*' .. word_end, 'c')
+
 
     -- FYI or condition:
     --  \(\d\|\l\)
