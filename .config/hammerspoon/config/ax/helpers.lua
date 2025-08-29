@@ -1,4 +1,5 @@
 local f = require("config.helpers.underscore")
+local timer = require("hs.timer")
 require("config.helpers.misc")
 
 -- goal here is to simplify syntax for navigating children by roles (and index)
