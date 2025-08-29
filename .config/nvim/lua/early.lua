@@ -81,12 +81,31 @@ vim.o.ignorecase = true -- ignore case when searching (i.e. lowercase/mixing cas
 vim.o.smartcase = true -- then, smart case means if you mix case then it will trigger noignorecase like behavior
 -- helpers for finding naming styles
 
+-- camelCase
+-- PascalCase
+-- snake_case
+
 vim.api.nvim_create_user_command('CamelCase', function()
     vim.fn.feedkeys('/\\<[a-z]\\+\\u[a-zA-Z0-9]*\\>', 'c')
 end, {})
 
 vim.api.nvim_create_user_command('PascalCase', function()
-    vim.fn.feedkeys('/\\<[A-Z][a-zA-Z0-9]*\\>', 'c')
+    -- : /character-classes
+    --   note: magic vs nomagic
+    --   \U = non-upper case, \u = upper case
+    --   \L = non-lower case, \l = lower case
+    --   \+ = 1+
+    --   * = 0+
+    upper = "\\u"
+    digit_or_lower = "\\(\\l\\|\\d\\)"
+    digit_or_lower_plus = digit_or_lower .. "\\+"
+    vim.fn.feedkeys('/\\<' .. upper
+        .. digit_or_lower_plus
+        .. upper .. digit_or_lower .. '*\\>', 'c')
+
+    -- FYI or condition:
+    --  \(\d\|\l\)
+    --  pretty much everything has to be escaped
 end, {})
 
 
