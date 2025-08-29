@@ -64,11 +64,11 @@ local function prints(...)
     end
 end
 
-function PrintToWebView(...)
+function print_to_web_view(...)
     prints(...)
 end
 
-local function ensureWebview()
+local function ensure_web_view()
     -- do return end -- disable using html printer
 
     local mouseAt = hs.mouse.absolutePosition() -- {"NSPoint", x = 786.484375, y = 612.0546875 }
@@ -245,7 +245,7 @@ function EnsureClearedWebView()
     if print_web_view then
         print_html_buffer = {}
     end
-    ensureWebview()
+    ensure_web_view()
 end
 
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "S", function()

@@ -95,12 +95,12 @@ function TestBack2BackElementSearch()
     EnsureClearedWebView()
 
     local function afterYSliderSearch(_, searchTask, numResultsAdded)
-        PrintToWebView("results: ", numResultsAdded)
+        print_to_web_view("results: ", numResultsAdded)
         DumpHtml(searchTask)
     end
 
     local function afterSearch(_, searchTask, numResultsAdded)
-        PrintToWebView("results: ", numResultsAdded)
+        print_to_web_view("results: ", numResultsAdded)
         DumpHtml(searchTask)
 
         -- SHIT I forgot I needed to nest the next search! interesting that it goes faster still...
