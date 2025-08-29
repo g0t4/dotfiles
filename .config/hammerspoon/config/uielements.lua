@@ -747,18 +747,18 @@ function CompactUserData(userdata)
     return title .. ' (' .. role .. ')'
 end
 
-function DisplayAttr(attrValue)
-    if attrValue == nil then
+function DisplayAttr(attr_value)
+    if attr_value == nil then
         return 'nil'
-    elseif type(attrValue) == "userdata" then
-        return CompactUserData(attrValue)
-    elseif type(attrValue) == "table" then
+    elseif type(attr_value) == "userdata" then
+        return CompactUserData(attr_value)
+    elseif type(attr_value) == "table" then
         -- i.e. AXSize, AXPosition, AXFrame, AXVisibleCharacterRange
-        return CompactTableAttrValue(attrValue)
-    elseif type(attrValue) == 'string' then
-        return '"' .. attrValue .. '"'
+        return CompactTableAttrValue(attr_value)
+    elseif type(attr_value) == 'string' then
+        return '"' .. attr_value .. '"'
     else
-        return tostring(attrValue)
+        return tostring(attr_value)
     end
 end
 
