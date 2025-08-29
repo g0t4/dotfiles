@@ -159,14 +159,14 @@ end, { range = true, nargs = 0 })
 
 vim.api.nvim_create_user_command('SnakeCase', function()
     local bufnr = vim.api.nvim_get_current_buf()
-    local row, col = unpack(vim.api.nvim_win_get_cursor(0))
-    local line_nr = row - 1
+    local row_1indexed, col_0indexed = unpack(vim.api.nvim_win_get_cursor(0))
+    local line_0indexed = row_1indexed - 1
 
-    local line = vim.api.nvim_buf_get_lines(bufnr, line_nr, line_nr + 1, false)[1]
+    local line = vim.api.nvim_buf_get_lines(bufnr, line_0indexed, line_0indexed + 1, false)[1]
     if not line then return end
 
     -- find the big word (keyword) under the cursor
-    local match = vim.fn.matchstrpos(line, '\\k\\+', col)
+    local match = vim.fn.matchstrpos(line, '\\k\\+', col_0indexed)
     local start_col = match[2]
     local end_col = match[3]
 
@@ -176,7 +176,7 @@ vim.api.nvim_create_user_command('SnakeCase', function()
     local snake = camel_to_snake(word)
 
     local new_line = line:sub(1, start_col) .. snake .. line:sub(end_col + 1)
-    vim.api.nvim_buf_set_lines(bufnr, line_nr, line_nr + 1, false, { new_line })
+    vim.api.nvim_buf_set_lines(bufnr, line_0indexed, line_0indexed + 1, false, { new_line })
 end, { range = true, nargs = 0 })
 
 
