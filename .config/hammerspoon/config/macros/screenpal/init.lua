@@ -230,13 +230,8 @@ function ScreenPalEditorWindow:new()
             error("No back to projects button found, aborting...")
         end
         self._btn_back_to_projects:performAction("AXPress")
-        timer.usleep(500000) -- slight delay else won't find scroll area / list of projects
-        -- TODO instead of long waits, how about check every 100ms if its ready (up to 2 sec or w/e) like I do in my applescript helpers
-        --   that way I don't wait excessively and/or randomly not wait enough
 
-        -- TODO check if went back?
-        -- FYI ok to take a hit here to find controls and not use cachehd scroll area of clips?
-        ensure_cached_controls_for_project_list_view() -- run again for main editor?
+        -- timer.usleep(500000) -- slight delay else won't find scroll area / list of projects
 
         function waitForElement(searchFunc, intervalMs, maxCycles)
             local start = GetTime()
@@ -253,8 +248,9 @@ function ScreenPalEditorWindow:new()
             return nil
         end
 
-        -- Example usage
         local btn = waitForElement(function()
+            ensure_cached_controls_for_project_list_view()
+            if not self._scrollarea_list then return end
             return vim.iter(self._scrollarea_list:buttons())
                 :filter(function(button)
                     local desc = button:axDescription()
