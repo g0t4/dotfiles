@@ -557,7 +557,7 @@ function FindOneElement(app, criteria, callback)
     local namedModifiers = { count = 1 }
 
     local function afterSearch(...)
-        print("time to callback: " .. GetElapsedTimeInMilliseconds(startTime) .. " ms")
+        print("time to callback: " .. get_elapsed_time_in_milliseconds(startTime) .. " ms")
         callback(...)
     end
 

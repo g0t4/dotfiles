@@ -139,7 +139,7 @@ function startPingImageTest(deck)
         for _, i in ipairs(buttons) do
             deck.hsdeck:setButtonImage(i, image)
         end
-        local ms = GetElapsedTimeInMilliseconds(startTime)
+        local ms = get_elapsed_time_in_milliseconds(startTime)
         print("  " .. deck.name .. " avg: " .. ms / f.count(buttons) .. "ms, total: " .. ms .. "ms")
     end)
 end
@@ -239,7 +239,7 @@ function timingHsCircleOnlyNoText(deck)
         MaestroButton:new(3, deck, memoized_hsCircleIcon("#FFFFFF", deck, "none"),
             "foo", "highlight none"),
     }
-    print("  hs circle only " .. GetElapsedTimeInMilliseconds(startTime) .. "ms")
+    print("  hs circle only " .. get_elapsed_time_in_milliseconds(startTime) .. "ms")
 end
 
 -- *** 0.5ms/button - 10-13ms for 26/24 images (not a huge factor)
@@ -296,7 +296,7 @@ function timingHsIconFileOnly(deck)
             MaestroButton:new(24, deck, hsIcon(prefix .. "text-inky-blue.png" .. suffix), "7F18E471-F989-4DA0-967D-1E935E3E0FC3"),
 
         }
-        print("  load 24x pptx icons " .. GetElapsedTimeInMilliseconds(startTime) .. "ms")
+        print("  load 24x pptx icons " .. get_elapsed_time_in_milliseconds(startTime) .. "ms")
         print()
 
         -- avg 3-4ms/image for all of the above icons (which are all the same resolution/design cuz its the color buttons from pptx)
@@ -309,7 +309,7 @@ function timingHsIconFileOnly(deck)
                 -- ipairs so they stay in order as above
                 deck.hsdeck:setButtonImage(i, button.image)
             end
-            local ms = GetElapsedTimeInMilliseconds(startTime)
+            local ms = get_elapsed_time_in_milliseconds(startTime)
             local avg = ms / 10
             totalMs = totalMs + ms
             print("  avg: " .. avg .. "ms, total: " .. ms .. "ms - btn# " .. button.buttonNumber)
@@ -329,7 +329,7 @@ function timingHsIconWithText(deck)
         MaestroButton:new(32, deck, hsIconWithText("pptx/grouping/regroup-objects.png", "\nRE", deck, MediumText), "21C045E3-ACC3-4EE7-BE19-0EA2D4E68322"),
     }
 
-    print("  took " .. GetElapsedTimeInMilliseconds(startTime) .. "ms")
+    print("  took " .. get_elapsed_time_in_milliseconds(startTime) .. "ms")
 end
 
 -- *** ~1ms/button finder icon load
@@ -344,7 +344,7 @@ function timingAppIconFinderFromItermProfile(testDeck)
         AppButton:new(2, deck, "com.apple.finder"),
         AppButton:new(3, deck, "com.apple.finder"),
     }
-    print("  load 3x appIcon Finder " .. GetElapsedTimeInMilliseconds(startTime) .. "ms")
+    print("  load 3x appIcon Finder " .. get_elapsed_time_in_milliseconds(startTime) .. "ms")
 
 
     startTime = get_time()
@@ -359,7 +359,7 @@ function timingAppIconFinderFromItermProfile(testDeck)
     testDeck.hsdeck:setButtonImage(5, image)
     testDeck.hsdeck:setButtonImage(6, image)
     -- HOLY SHIT THIS IS 8 to 11ms!!! WTF
-    print("  show appIcon Finder " .. GetElapsedTimeInMilliseconds(startTime) .. "ms")
+    print("  show appIcon Finder " .. get_elapsed_time_in_milliseconds(startTime) .. "ms")
     -- self.deck.hsdeck:setButtonImage(self.buttonNumber, self.image)
     --
 end
@@ -381,32 +381,32 @@ function timingDoesSizeMatter(deck)
     local finderIcnsOriginal = hsIcon("test-image-sizes/finder/Finder-original.icns")
     finderIcnsOriginal = hsIcon("test-image-sizes/finder/Finder-original.icns")
     finderIcnsOriginal = hsIcon("test-image-sizes/finder/Finder-original.icns")
-    print("  load 3x icns finder " .. GetElapsedTimeInMilliseconds(startTime) .. "ms")
+    print("  load 3x icns finder " .. get_elapsed_time_in_milliseconds(startTime) .. "ms")
 
     startTime = get_time()
     local finderPng256 = hsIcon("test-image-sizes/finder/Finder-sips-256.png")
     finderPng256 = hsIcon("test-image-sizes/finder/Finder-sips-256.png")
     finderPng256 = hsIcon("test-image-sizes/finder/Finder-sips-256.png")
-    print("  load 3x png 256 finder " .. GetElapsedTimeInMilliseconds(startTime) .. "ms")
+    print("  load 3x png 256 finder " .. get_elapsed_time_in_milliseconds(startTime) .. "ms")
 
     startTime = get_time()
     local finderPng72 = hsIcon("test-image-sizes/finder/Finder-sips-resample-72.png")
     finderPng72 = hsIcon("test-image-sizes/finder/Finder-sips-resample-72.png")
     finderPng72 = hsIcon("test-image-sizes/finder/Finder-sips-resample-72.png")
-    print("  load 3x png 72 finder " .. GetElapsedTimeInMilliseconds(startTime) .. "ms")
+    print("  load 3x png 72 finder " .. get_elapsed_time_in_milliseconds(startTime) .. "ms")
 
     startTime = get_time()
     local finderPng96 = hsIcon("test-image-sizes/finder/Finder-sips-resample-96.png")
     finderPng96 = hsIcon("test-image-sizes/finder/Finder-sips-resample-96.png")
     finderPng96 = hsIcon("test-image-sizes/finder/Finder-sips-resample-96.png")
-    print("  load 3x png 96 finder " .. GetElapsedTimeInMilliseconds(startTime) .. "ms")
+    print("  load 3x png 96 finder " .. get_elapsed_time_in_milliseconds(startTime) .. "ms")
 
     -- BMP test '/Users/wesdemos/repos/github/g0t4/dotfiles/misc/hammerspoon-icons/test-image-sizes/finder/Finder-sips-resample-96.bmp'
     startTime = get_time()
     local finderBmp96 = hsIcon("test-image-sizes/finder/Finder-sips-resample-96.bmp")
     finderBmp96 = hsIcon("test-image-sizes/finder/Finder-sips-resample-96.bmp")
     finderBmp96 = hsIcon("test-image-sizes/finder/Finder-sips-resample-96.bmp")
-    print("  load 3x bmp 96 finder " .. GetElapsedTimeInMilliseconds(startTime) .. "ms")
+    print("  load 3x bmp 96 finder " .. get_elapsed_time_in_milliseconds(startTime) .. "ms")
 
     -- HOLY CRAP setButtonImage does TERRIBLE ON ALL OF THEM
     --   30ms for icns, 26.5ms for 256png, 19.8ms for 72png
@@ -416,27 +416,27 @@ function timingDoesSizeMatter(deck)
     deck.hsdeck:setButtonImage(1, finderIcnsOriginal)
     deck.hsdeck:setButtonImage(1, finderIcnsOriginal)
     deck.hsdeck:setButtonImage(1, finderIcnsOriginal)
-    print("  setButtonImage icns 3x " .. GetElapsedTimeInMilliseconds(startTime) .. "ms")
+    print("  setButtonImage icns 3x " .. get_elapsed_time_in_milliseconds(startTime) .. "ms")
     startTime = get_time()
     deck.hsdeck:setButtonImage(2, finderPng256)
     deck.hsdeck:setButtonImage(2, finderPng256)
     deck.hsdeck:setButtonImage(2, finderPng256)
-    print("  setButtonImage 256x256 3x " .. GetElapsedTimeInMilliseconds(startTime) .. "ms")
+    print("  setButtonImage 256x256 3x " .. get_elapsed_time_in_milliseconds(startTime) .. "ms")
     startTime = get_time()
     deck.hsdeck:setButtonImage(3, finderPng72)
     deck.hsdeck:setButtonImage(3, finderPng72)
     deck.hsdeck:setButtonImage(3, finderPng72)
-    print("  setButtonImage 72x72 3x " .. GetElapsedTimeInMilliseconds(startTime) .. "ms")
+    print("  setButtonImage 72x72 3x " .. get_elapsed_time_in_milliseconds(startTime) .. "ms")
     startTime = get_time()
     deck.hsdeck:setButtonImage(3, finderPng96)
     deck.hsdeck:setButtonImage(3, finderPng96)
     deck.hsdeck:setButtonImage(3, finderPng96)
-    print("  setButtonImage 96x96 3x " .. GetElapsedTimeInMilliseconds(startTime) .. "ms")
+    print("  setButtonImage 96x96 3x " .. get_elapsed_time_in_milliseconds(startTime) .. "ms")
     startTime = get_time()
     deck.hsdeck:setButtonImage(3, finderBmp96)
     deck.hsdeck:setButtonImage(3, finderBmp96)
     deck.hsdeck:setButtonImage(3, finderBmp96)
-    print("  setButtonImage 96x96 3x " .. GetElapsedTimeInMilliseconds(startTime) .. "ms")
+    print("  setButtonImage 96x96 3x " .. get_elapsed_time_in_milliseconds(startTime) .. "ms")
     print()
 end
 
@@ -469,7 +469,7 @@ function timingSetButtonColor(deck)
             deck.hsdeck:setButtonColor(i, hs.drawing.color.black)
         end
     end
-    local ms = GetElapsedTimeInMilliseconds(startTime)
+    local ms = get_elapsed_time_in_milliseconds(startTime)
     local avg = ms / 24 / 3
     print("  setButtonColor 72x avg: " .. avg .. "ms, total: " .. ms .. "ms")
     print()
@@ -495,7 +495,7 @@ function timingSetButtonColor(deck)
         -- save 0.5ms to 1ms PER button if pre-make color (one time)
         -- can save 50 to 100ms over 72x runs if pre-make the color image!
         local colorImage = canvas:imageFromCanvas() -- 3ms to 5ms to create the color image
-        print("  colorImage created " .. GetElapsedTimeInMilliseconds(startTime) .. "ms")
+        print("  colorImage created " .. get_elapsed_time_in_milliseconds(startTime) .. "ms")
 
         startTime = get_time()
         for i = 1, 3 do
@@ -503,7 +503,7 @@ function timingSetButtonColor(deck)
                 deck.hsdeck:setButtonImage(i, colorImage)
             end
         end
-        ms = GetElapsedTimeInMilliseconds(startTime)
+        ms = get_elapsed_time_in_milliseconds(startTime)
         avg = ms / 24 / 3
         print("  setButtonImage 72x avg: " .. avg .. "ms, total: " .. ms .. "ms")
         print()

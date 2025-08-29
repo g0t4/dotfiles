@@ -174,7 +174,7 @@ function AppObserver:loadProfileForDeck(deck, isModSetChange)
 
     -- startTime = get_time() -- TMP TIMING ANALYSIS
     page:applyTo(deck, isModSetChange)
-    -- print("      applyTo " .. GetElapsedTimeInMilliseconds(startTime) .. "ms") -- TMP TIMING ANALYSIS
+    -- print("      applyTo " .. get_elapsed_time_in_milliseconds(startTime) .. "ms") -- TMP TIMING ANALYSIS
     return true
 end
 

@@ -57,7 +57,7 @@ function ButtonsController:start()
         if button then
             -- local startTime = get_time() -- TMP TIMING ANALYSIS
             button:start()
-            -- if _G.LOG_DETAILED_TIMING then print("          start(" .. buttonNumber .. ") " .. GetElapsedTimeInMilliseconds(startTime) .. "ms") end -- TMP TIMING ANALYSIS
+            -- if _G.LOG_DETAILED_TIMING then print("          start(" .. buttonNumber .. ") " .. get_elapsed_time_in_milliseconds(startTime) .. "ms") end -- TMP TIMING ANALYSIS
         else
             -- reset flashes the splash screen (very noticeable)
             -- but, changes w/o reset are not noticeable
@@ -82,7 +82,7 @@ function ButtonsController:resetButtons()
     -- local startTime = get_time()
     self:removeButtons() -- EMPTY the LIST of buttons
     self.deck.hsdeck:reset() -- ~0.3ms
-    -- print("rm in", GetElapsedTimeInMilliseconds(startTime), "ms")
+    -- print("rm in", get_elapsed_time_in_milliseconds(startTime), "ms")
 
     -- TO get rid of elgato splash screen:
     -- => elgato app => prefs => devices => pick each deck => advanced btn (lower right)

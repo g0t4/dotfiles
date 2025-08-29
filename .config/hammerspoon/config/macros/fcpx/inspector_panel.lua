@@ -54,17 +54,17 @@ function FcpxInspectorPanel:topBarCheckboxByDescription(matchDescription)
     local candidates = self.window:rightSidePanel():group(2):checkBoxes()
     -- OUCH 11ms! ... IIUC b/c its cloning axuielements using CopyAttributeValue("AXChildren") every time!
     print("candidates: ", hs.inspect(candidates))
-    print("time to index cbox: " .. GetElapsedTimeInMilliseconds(startTime) .. " ms")
+    print("time to index cbox: " .. get_elapsed_time_in_milliseconds(startTime) .. " ms")
 
     for _, candidate in ipairs(candidates) do
         if candidate:attributeValue("AXDescription") == matchDescription then
-            print("time to found cbox: " .. GetElapsedTimeInMilliseconds(startTime) .. " ms")
+            print("time to found cbox: " .. get_elapsed_time_in_milliseconds(startTime) .. " ms")
             print("found fixed path to title panel checkbox")
             return candidate
         end
     end
 
-    print("time to search failed: " .. GetElapsedTimeInMilliseconds(startTime) .. " ms")
+    print("time to search failed: " .. get_elapsed_time_in_milliseconds(startTime) .. " ms")
     error("Could not find checkbox for description: " .. matchDescription)
 end
 

@@ -42,7 +42,7 @@ function Profile:applyTo(deck, isModSetChange)
         -- local startTime = get_time() -- TMP TIMING ANALYSIS
 
         deck.buttons:addButtons(self:buttons(deck))
-        -- print("        addButtons(buttons()) " .. GetElapsedTimeInMilliseconds(startTime) .. "ms") -- TMP TIMING ANALYSIS
+        -- print("        addButtons(buttons()) " .. get_elapsed_time_in_milliseconds(startTime) .. "ms") -- TMP TIMING ANALYSIS
 
         if isModSetChange then
             -- startTime = get_time() -- TMP TIMING ANALYSIS
@@ -59,12 +59,12 @@ function Profile:applyTo(deck, isModSetChange)
                     resetButton(btnNumberBefore, deck.hsdeck)
                 end
             end)
-            -- print("        modSet resetButton()s " .. GetElapsedTimeInMilliseconds(startTime) .. "ms") -- TMP TIMING ANALYSIS
+            -- print("        modSet resetButton()s " .. get_elapsed_time_in_milliseconds(startTime) .. "ms") -- TMP TIMING ANALYSIS
         end
 
         -- if _G.LOG_DETAILED_TIMING then startTime = get_time() end -- TMP TIMING ANALYSIS
         deck.buttons:start() -- for now just start all every time... b/c I have no button reuse logic yet (see brave profile for testing criteria and ideas)
-        -- if _G.LOG_DETAILED_TIMING then print("        start() " .. GetElapsedTimeInMilliseconds(startTime) .. "ms") end -- TMP TIMING ANALYSIS - heaviest hitter, esp PPTX 2XL/3XL which are mostly hsIcon files
+        -- if _G.LOG_DETAILED_TIMING then print("        start() " .. get_elapsed_time_in_milliseconds(startTime) .. "ms") end -- TMP TIMING ANALYSIS - heaviest hitter, esp PPTX 2XL/3XL which are mostly hsIcon files
     end
     if deck.encoders ~= nil then
         if isModSetChange then

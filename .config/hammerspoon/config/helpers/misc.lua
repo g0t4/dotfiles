@@ -74,7 +74,7 @@ function get_elapsed_time_since(start_time)
     return get_time() - start_time
 end
 
-function GetElapsedTimeInMilliseconds(start_time)
+function get_elapsed_time_in_milliseconds(start_time)
     local elapsed_time_seconds = get_elapsed_time_since(start_time)
     -- round to 1 decimal place
     return math.floor(elapsed_time_seconds * 10000 + 0.5) / 10
@@ -86,7 +86,7 @@ function GetElapsedTimeInNanoseconds(start_time)
 end
 
 function print_took(message, start_time)
-    local elapsed_time_milliseconds = GetElapsedTimeInMilliseconds(start_time)
+    local elapsed_time_milliseconds = get_elapsed_time_in_milliseconds(start_time)
     print(message .. " took " .. elapsed_time_milliseconds .. " ms")
 end
 

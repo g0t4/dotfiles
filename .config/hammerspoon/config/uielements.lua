@@ -314,7 +314,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "E", function()
         -- WOW FCPX everything is 2672.4ms ... and that's with transform to tables!!!wow...that is the craziest app I have used for elements
         --
         appElement:buildTree(function(message, results)
-            prints("time to callback: " .. GetElapsedTimeInMilliseconds(start_time) .. " ms")
+            prints("time to callback: " .. get_elapsed_time_in_milliseconds(start_time) .. " ms")
             start_time = get_time() -- reset
 
             prints("message: " .. message)
@@ -325,7 +325,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "E", function()
             prints("results: ", InspectHtml(results))
 
             -- leave timing info in here b/c I will be running into more complex test cases and I wanna understand the overall timinmg implications of some of the apps I use
-            prints("time to display: " .. GetElapsedTimeInMilliseconds(start_time) .. " ms")
+            prints("time to display: " .. get_elapsed_time_in_milliseconds(start_time) .. " ms")
         end)
     end
     -- testBuildTree()
@@ -337,7 +337,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "E", function()
         -- FYI if you pass namedModifiers = { count: 3 } then it "pauses" search if you will and calls this callback and then you can resume with results:next() here, and then this callback is invoked after 3 more items are found, and you can continue until all elements are searched
         --    result object has cumulative results across each search run
         --    use this to build a more interactive/responsive search experience
-        prints("time to callback: " .. GetElapsedTimeInMilliseconds(start_time) .. " ms")
+        prints("time to callback: " .. get_elapsed_time_in_milliseconds(start_time) .. " ms")
         start_time = get_time() -- reset
 
         prints("message: " .. message)
@@ -350,7 +350,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "E", function()
         prints("results: ", InspectHtml(results))
 
         -- leave timing info in here b/c I will be running into more complex test cases and I wanna understand the overall timinmg implications of some of the apps I use
-        prints("time to display: " .. GetElapsedTimeInMilliseconds(start_time) .. " ms")
+        prints("time to display: " .. get_elapsed_time_in_milliseconds(start_time) .. " ms")
     end
     local function testElementSearchWithFilter()
         -- searchCriteriaFunction takes same arg as matchCriteria:
