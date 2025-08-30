@@ -13,14 +13,11 @@ if command -q mdfind
     abbr mdfind_killall "killall mds mds_stores mds_worker Spotlight"
     abbr killall_spotlight "killall mds mds_stores mds_worker Spotlight"
 
-    # NSPredicate syntax: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/Predicates/Articles/pSyntax.html
-    #   seems to use some serialization of NSPredicate for some matches
-    #     i.e. the 'c' for case insensitive (default comparison is case sensitive)
-    #       mdfind 'kMDItemFSName == "*_ROG_*"c' # case-insensitive
-    #       mdfind 'kMDItemFSName == "*_ROG_*"' # case-sensitive
-    #
-    #   FIND available attributes using mdls
-    #      mdls foo.txt
+    # GOOD EXAMPLES: https://ss64.com/mac/mdfind.html
+    # - shows "foo"c syntax for case-insensitive
+    #   mdfind 'kMDItemFSName == "*_ROG_*"c' # case-insensitive
+    #   mdfind 'kMDItemFSName == "*_ROG_*"' # case-sensitive
+    # - FYI it shows ==[c] but that is NOT working for me
     #
     abbr --set-cursor mdfind_name "mdfind 'kMDItemFSName == \"*%*\"c'" # c for case-insensitive on end
     abbr --set-cursor mdfind_path "mdfind 'kMDItemFSPath == \"*%*\"c'"
@@ -29,14 +26,28 @@ if command -q mdfind
     abbr --set-cursor mdfind_-name "mdfind -name '%'" # -name is case-insensitive by default
     abbr --set-cursor mdfind_contents "mdfind 'kMDItemTextContent == \"*%*\"c'" # this worked, freaky fast too for an obscure pattern in a file I recently moved about an hour before (and yet the index was up to date)
     # abbr --set-cursor mdfind_tree "mdfind 'kMDItemContentTypeTree == \"com.adobe.pdf%\"c'"
-    # TODO set date by current date in an function abbr... and if I really want that, for now use example only:
     # abbr --set-cursor mdfind_date "mdfind ''kMDItemFSCreationDate >= \"2025-1-1%T00:00:00Z\"'"
+    #
+    # * date
+    # FYI '' on end is fine, won't limit result if left empty so that is why I add it here
+    # date:today    $time.today()
+    abbr --set-cursor -- mdfind_today "mdfind date:today '%'"
+    # date:yesterday .yesterday()
+    abbr --set-cursor -- mdfind_yesterday "mdfind date:yesterday '%'"
+    # date:this week  .this_week()
+    abbr --set-cursor -- mdfind_week "mdfind date:week '%'"
+    # date:this month .this_month()
+    abbr --set-cursor -- mdfind_month "mdfind date:month '%'"
+    # date:this year  .this_year()
+    abbr --set-cursor -- mdfind_year "mdfind date:year '%'"
 
     abbr --set-cursor mdimport_list_attrs "mdimport -A | grep -i '%'"
     abbr --set-cursor mdimport_list_importers "mdimport -L | grep -i '%'"
     abbr --set-cursor mdimport_dump_schema "mdimport -X | grep -i '%'"
 
-    # mdls can output plist format with `-plist -`    # `-` means stdout
+    # * mdls (list file's attrs)
+    # - `mdls foo.txt`
+    # - output plist with `-plist -`
     abbr --set-cursor mdls_item_attrs "mdls -plist - '%' | bat -l xml"
 
     abbr --set-cursor md_diagnose 'sudo mddiagnose' # reminder (same command basically but shows it with my other md_ abbrs)
