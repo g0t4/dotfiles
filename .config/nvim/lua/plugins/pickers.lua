@@ -197,12 +197,18 @@ return {
                 -- TODO sync the i"vimgrep" -g "*lua*"gnored/included with nvim-tree plugin too?
             end
 
+            local db_file = vim.fn.stdpath("data") .. "/databases/telescope-smart-history.sqlite3"
+            local db_dir = vim.fn.fnamemodify(db_file, ":h")
+            if vim.fn.isdirectory(db_dir) == 0 then
+                vim.fn.mkdir(db_dir, "p")
+            end
+
             require('telescope').setup({
                 defaults = {
                     dynamic_preview_title = true,
 
                     history = {
-                        path = vim.fn.stdpath("data") .. "/databases/telescope-smart-history.sqlite3",
+                        path = db_file,
                         limit = 1000,
                     },
 
