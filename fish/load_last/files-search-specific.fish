@@ -45,6 +45,8 @@ if command -q mdfind
     #  which for what I plan to do, command history should usually have the few files/dirs I access this way... it's not a unique search each time, it's a lot of overlap
     abbr mdo md_open
     function md_open
+        # TODO find better format for search... cannot do "*foo*bar*" ... seems like asterisk is start/end only
+        # TODO can I use regex MATCHES operator?
         # think mdfind + open
         #
         # STOP using FINDER altogether!
