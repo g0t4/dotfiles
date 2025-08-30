@@ -161,19 +161,15 @@ vim.api.nvim_create_user_command('SnakeCase', function()
     -- hello_there TestTheFooBar out of this
     local bufnr = vim.api.nvim_get_current_buf()
     local cursor_line_1indexed, cursor_col_0indexed = unpack(vim.api.nvim_win_get_cursor(0))
-    vim.print({ cursor_line_1indexed = cursor_line_1indexed, cursor_col_0indexed = cursor_col_0indexed })
 
     local line = vim.fn.getline(cursor_line_1indexed)
-    print("line: '" .. line .. "'")
     if not line then return end
 
     -- find the big word (keyword) under the cursor
     local line_after = line:sub(cursor_col_0indexed + 1) -- include char under cursor
-    -- vim.print({ line_before = line_before, line_after = line_after })
     local match_after = vim.fn.matchstrpos(line_after, '\\k\\+')
     local start_col_after_b0 = match_after[2]
     local end_col_after_b0_exclusive = match_after[3]
-    vim.print({ start_col_after_b0 = start_col_after_b0, end_col_after_b0_exclusive = end_col_after_b0_exclusive })
 
     -- by the way will take the first word after cursor if cursor is not on a word, that sounds useful to me
     local actual_start_col_b0 = 0
@@ -183,29 +179,29 @@ vim.api.nvim_create_user_command('SnakeCase', function()
         local match_before = vim.fn.matchstrpos(line_before:reverse(), '\\k\\+')
         local start_col_before_b0 = match_before[2]
         local end_col_before_b0 = match_before[3]
-        vim.print({
-            line_before = line_before,
-            match_before = match_before,
-            start_col_before_b0 = start_col_before_b0,
-            end_col_before_b0 = end_col_before_b0
-        })
+        -- vim.print({
+        --     line_before = line_before,
+        --     match_before = match_before,
+        --     start_col_before_b0 = start_col_before_b0,
+        --     end_col_before_b0 = end_col_before_b0
+        -- })
         if start_col_before_b0 ~= 0 then
             error("when looking before - should not happen, only reason to  look back is if cusror char is part of word which would then match at 0 from before string reversed")
         end
         -- starts in line_before, X (end of match) chars before cursor position
         local start_b0 = cursor_col_0indexed - end_col_before_b0 + 1 -- offset 1 for cursor char
         start_b1 = start_b0 + 1
-        print("looking before: start_b1: " .. start_b1)
+        -- print("looking before: start_b1: " .. start_b1)
     else
         -- word after cursor, so no looking back
         actual_start_col_b0 = cursor_col_0indexed + start_col_after_b0
         start_b1 = actual_start_col_b0 + 1
-        print("after cursor: start_b1" .. start_b1)
+        -- print("after cursor: start_b1" .. start_b1)
     end
 
     stop_b1 = actual_end_col_b0_exclusive -- stop is inclusive for sub, so dont add 1
     local word = line:sub(start_b1, stop_b1)
-    vim.print({ word = word })
+    -- vim.print({ word = word })
 
     if word == "" then
         error("no word found around, nor after, cursor")
