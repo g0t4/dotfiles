@@ -7,6 +7,12 @@
 #
 # * mdfind
 if command -q mdfind
+
+    # * killall (restart) spotlight and related md* processes
+    # this appears to have helped at least once with alfred/spotlight not returning results
+    abbr mdfind_killall "killall mds mds_stores mds_worker Spotlight"
+    abbr killall_spotlight "killall mds mds_stores mds_worker Spotlight"
+
     #  this actually performs very well for system wide searches
     #  yes, fd is faster if I give it say my entire dropbox dir, but that isn't a full system search, from my user dir alone, fd is mutliple slower (obviously w/o an index)
     #
