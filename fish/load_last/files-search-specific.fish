@@ -24,7 +24,7 @@ if command -q mdfind
     #
     abbr --set-cursor mdfind_name "mdfind 'kMDItemFSName == \"*%*\"c'" # c for case-insensitive on end
     abbr --set-cursor mdfind_path "mdfind 'kMDItemFSPath == \"*%*\"c'"
-    abbr --set-cursor mdfind_dir "mdfind 'kMDItemContentType == \"public.folder\" && kMDItemFSName == \"*%*\" '"
+    abbr --set-cursor mdfind_dir "mdfind 'kMDItemContentType == \"public.folder\" && kMDItemFSName == \"*%*\"c'"
     abbr --set-cursor mdfind_live "mdfind -live 'kMDItemFSName == \"*%*\"'" # think file watcher like events globally for given query
     abbr --set-cursor mdfind_-name "mdfind -name '%'"
     abbr --set-cursor mdfind_contents "mdfind 'kMDItemTextContent == \"*%*\"'" # this worked, freaky fast too for an obscure pattern in a file I recently moved about an hour before (and yet the index was up to date)
