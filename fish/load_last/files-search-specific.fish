@@ -13,11 +13,17 @@ if command -q mdfind
     abbr mdfind_killall "killall mds mds_stores mds_worker Spotlight"
     abbr killall_spotlight "killall mds mds_stores mds_worker Spotlight"
 
-    # predicate syntax: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/Predicates/Articles/pSyntax.html
-    #   i.e. the 'c' for case insensitive
+    # NSPredicate syntax: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/Predicates/Articles/pSyntax.html
+    #   seems to use some serialization of NSPredicate for some matches
+    #     i.e. the 'c' for case insensitive (default comparison is case sensitive)
+    #       mdfind 'kMDItemFSName == "*_ROG_*"c' # case-insensitive
+    #       mdfind 'kMDItemFSName == "*_ROG_*"' # case-sensitive
     #
-    abbr --set-cursor mdfind_name "mdfind 'kMDItemFSName == \"*%*\"'"
-    abbr --set-cursor mdfind_path "mdfind 'kMDItemFSPath == \"*%*\"'"
+    #   FIND available attributes using mdls
+    #      mdls foo.txt
+    #
+    abbr --set-cursor mdfind_name "mdfind 'kMDItemFSName == \"*%*\"c'" # c for case-insensitive on end
+    abbr --set-cursor mdfind_path "mdfind 'kMDItemFSPath == \"*%*\"c'"
     abbr --set-cursor mdfind_dir "mdfind 'kMDItemContentType == \"public.folder\" && kMDItemFSName == \"*%*\" '"
     abbr --set-cursor mdfind_live "mdfind -live 'kMDItemFSName == \"*%*\"'" # think file watcher like events globally for given query
     abbr --set-cursor mdfind_-name "mdfind -name '%'"
@@ -30,7 +36,8 @@ if command -q mdfind
     abbr --set-cursor mdimport_list_importers "mdimport -L | grep -i '%'"
     abbr --set-cursor mdimport_dump_schema "mdimport -X | grep -i '%'"
 
-    abbr --set-cursor mdls_item_attrs "mdls '%'"
+    # mdls can output plist format with `-plist -`    # `-` means stdout
+    abbr --set-cursor mdls_item_attrs "mdls -plist - '%' | bat -l xml"
 
     abbr --set-cursor md_diagnose 'sudo mddiagnose' # reminder (same command basically but shows it with my other md_ abbrs)
 
