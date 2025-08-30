@@ -1,18 +1,22 @@
-# lua code preferences
+# Lua Code Preferences
 
-- Default to snake_case naming, i.e. for functions and variables.
+## Naming
+- Use snake_case for functions and variables.
 - Use PascalCase for classes.
 
-## type hints
-
-Use EmmyLua/LuaLS style annotations, especially when type inference is ambiguous or not possible.
+## Type Hints
+- Prefer EmmyLua/LuaLS style annotations
+- Always annotate when type inference would be ambiguous, or for public APIs.
 
 Examples:
 ---@param names string[]
----@param checker fun(PARAM: TYPE): RETURN_TYPE
+---@param checker fun(name: string): boolean
 ---@return table<string, integer>
+function process_names(names, checker) end
 
 ---@class WindowController
 ---@field window hs.axuielement
 ---@field title? string
 ---@field size { w: number, h: number }
+local WindowController = {}
+
