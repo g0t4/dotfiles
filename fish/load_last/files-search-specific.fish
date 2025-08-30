@@ -13,13 +13,9 @@ if command -q mdfind
     abbr mdfind_killall "killall mds mds_stores mds_worker Spotlight"
     abbr killall_spotlight "killall mds mds_stores mds_worker Spotlight"
 
-    #  this actually performs very well for system wide searches
-    #  yes, fd is faster if I give it say my entire dropbox dir, but that isn't a full system search, from my user dir alone, fd is mutliple slower (obviously w/o an index)
+    # predicate syntax: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/Predicates/Articles/pSyntax.html
+    #   i.e. the 'c' for case insensitive
     #
-    #  useful to test query performance next time alfred/spotlight seems sluggish
-    #  FYI must use asterisks like: *foo* for FSName search
-    #  TODO refine these later if/when I use them more... just a few initial ideas
-    #   I need to review attributes available to find more useful queries
     abbr --set-cursor mdfind_name "mdfind 'kMDItemFSName == \"*%*\"'"
     abbr --set-cursor mdfind_path "mdfind 'kMDItemFSPath == \"*%*\"'"
     abbr --set-cursor mdfind_dir "mdfind 'kMDItemContentType == \"public.folder\" && kMDItemFSName == \"*%*\" '"
