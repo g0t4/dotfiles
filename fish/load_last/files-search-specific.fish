@@ -25,6 +25,8 @@ if command -q mdfind
     abbr --set-cursor mdfind_live "mdfind -live 'kMDItemFSName == \"*%*\"c'" # think file watcher like events globally for given query
     abbr --set-cursor mdfind_-name "mdfind -name '%'" # -name is case-insensitive by default
     abbr --set-cursor mdfind_contents "mdfind 'kMDItemTextContent == \"*%*\"c'" # this worked, freaky fast too for an obscure pattern in a file I recently moved about an hour before (and yet the index was up to date)
+    abbr --set-cursor mdfind_interpret_spotlight "mdfind -interpret '%'" # as if typed into spotlight
+
     # abbr --set-cursor mdfind_tree "mdfind 'kMDItemContentTypeTree == \"com.adobe.pdf%\"c'"
     # abbr --set-cursor mdfind_date "mdfind ''kMDItemFSCreationDate >= \"2025-1-1%T00:00:00Z\"'"
     #
@@ -40,6 +42,41 @@ if command -q mdfind
     abbr --set-cursor -- mdfind_this_month "mdfind 'date:this month' '%'"
     # date:this year  .this_year()
     abbr --set-cursor -- mdfind_this_year "mdfind 'date:this year' '%'"
+
+    # * examples (meant to remind what is doable)
+    abbr -- mdfind_example_images_yesterday 'mdfind "kind:image date:yesterday"' # can combine conditions with this style... why all these stupid syntaxes?
+    abbr -- mdfind_example_installed_apps "mdfind kMDItemAppStoreHasReceipt=1"
+    #
+    # file tags:
+    abbr -- mdfind_example_tagged_green 'mdfind "kMDItemUserTags = Green"'
+    abbr -- mdfind_example_tagged_red 'mdfind "kMDItemUserTags = Red"'
+    abbr -- mdfind_example_tagged_yellow 'mdfind "kMDItemUserTags = Yellow"'
+    abbr -- mdfind_example_tagged_blue 'mdfind "kMDItemUserTags = Blue"'
+    abbr -- mdfind_example_count_readmes "mdfind -name readme.txt -count"
+    # orange
+    # purple
+    # gray
+    #
+    # limit to directory
+    abbr -- mdfind_example_homdir_last3days "mdfind -onlyin ~ 'kMDItemFSContentChangeDate >= $time.today(-3)'"
+    abbr -- mdfind_example_onlyin_PWD "mdfind -onlyin . -name pyproject.toml"
+    abbr -- mdfind_example_images_keywords 'mdfind "kind:images curl"' # keyword curl somewhere in attrs (IIAC searches all or prevalent attrs for curl in this case)
+
+    #   FYI seems like you CANNOT mix `kind:contact` with attribute predicates?
+    # * kinds
+    abbr --set-cursor -- mdfind_kind_app "mdfind kind:app '%'"
+    abbr -- mdfind_kind_preferences 'mdfind "kind:preferences"'
+    abbr -- mdfind_kind_folder 'mdfind "kind:folder"'
+    abbr -- mdfind_kind_image 'mdfind "kind:image"'
+    abbr -- mdfind_kind_movie 'mdfind "kind:movie"'
+    abbr -- mdfind_kind_pdf 'mdfind "kind:pdf"'
+    abbr --set-cursor -- mdfind_kind_ 'mdfind "kind:%"'
+    #
+    # TODO how do I combine kMDItemDisplayName + kind: filters?
+    #   fails entirely if kind:contact comes first
+    #   if kind:contact comes second, it seems to be ignored? or is it an OR?
+    abbr --set-cursor -- mdfind_kind_contact "kind:contact" # this would be more useful if could do name too, haven't figured that out yet:
+    # abbr --set-cursor -- mdfind_kind_contact "mdfind 'kMDItemKind == \"Contacts Card Data\" kMDItemDisplayName = \"*%*\"c'"  # NOT WORKING, seems to union OR?
 
     abbr --set-cursor mdimport_list_attrs "mdimport -A | grep -i '%'"
     abbr --set-cursor mdimport_list_importers "mdimport -L | grep -i '%'"
