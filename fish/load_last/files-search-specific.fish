@@ -35,11 +35,11 @@ if command -q mdfind
     # date:yesterday .yesterday()
     abbr --set-cursor -- mdfind_yesterday "mdfind date:yesterday '%'"
     # date:this week  .this_week()
-    abbr --set-cursor -- mdfind_week "mdfind date:week '%'"
+    abbr --set-cursor -- mdfind_this_week "mdfind 'date:this week' '%'"
     # date:this month .this_month()
-    abbr --set-cursor -- mdfind_month "mdfind date:month '%'"
+    abbr --set-cursor -- mdfind_this_month "mdfind 'date:this month' '%'"
     # date:this year  .this_year()
-    abbr --set-cursor -- mdfind_year "mdfind date:year '%'"
+    abbr --set-cursor -- mdfind_this_year "mdfind 'date:this year' '%'"
 
     abbr --set-cursor mdimport_list_attrs "mdimport -A | grep -i '%'"
     abbr --set-cursor mdimport_list_importers "mdimport -L | grep -i '%'"
