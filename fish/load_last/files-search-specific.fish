@@ -30,9 +30,13 @@ if command -q mdfind
     # TODO set date by current date in an function abbr... and if I really want that, for now use example only:
     # abbr --set-cursor mdfind_date "mdfind ''kMDItemFSCreationDate >= \"2025-1-1%T00:00:00Z\"'"
 
-    abbr --set-cursor md_list_available_attrs "mdimport -A | grep -i '%'"
-    abbr --set-cursor md_list_item_attrs "mdls '%'"
-    # abbr --set-cursor md_diagnose 'mddiagnose' # reminder (same command basically but shows it with my other md_ abbrs)
+    abbr --set-cursor mdimport_list_attrs "mdimport -A | grep -i '%'"
+    abbr --set-cursor mdimport_list_importers "mdimport -L | grep -i '%'"
+    abbr --set-cursor mdimport_dump_schema "mdimport -X | grep -i '%'"
+
+    abbr --set-cursor mdls_item_attrs "mdls '%'"
+
+    abbr --set-cursor md_diagnose 'sudo mddiagnose' # reminder (same command basically but shows it with my other md_ abbrs)
 
     # FYI maybe don't use --set-cursor... b/c then it fucks up using up arrow to recall last command, just use command history instead
     #  which for what I plan to do, command history should usually have the few files/dirs I access this way... it's not a unique search each time, it's a lot of overlap
