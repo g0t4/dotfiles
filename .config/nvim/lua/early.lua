@@ -126,39 +126,21 @@ vim.api.nvim_create_user_command('PascalCase', function()
 end, {})
 
 function _G.camel_to_snake(str)
-    -- Insert an underscore before each uppercase letter (except at the start)
-    -- then lowercase the whole string.
+    -- PRN add tests if I wanna work on this further
+    -- insert underscore before each uppercase letter
     local res = str:gsub('([A-Z])', function(c)
+        -- then lowercase the whole string.
         return '_' .. c:lower()
     end)
-    -- Remove a leading underscore that may have been added for the first character
+    -- Remove leading underscore (if added for initial capital letter)
     res = res:gsub('^_', '')
     return res
 end
 
--- vim.api.nvim_create_user_command('SnakeCase', function(opts)
---     local bufnr = vim.api.nvim_get_current_buf()
---     local start_line, end_line
---
---     if opts.line1 and opts.line2 then
---         start_line = opts.line1 - 1 -- zero‑based indexing
---         end_line = opts.line2 - 1
---     else
---         start_line = vim.api.nvim_win_get_cursor(0)[1] - 1
---         end_line = start_line
---     end
---
---     local lines = vim.api.nvim_buf_get_lines(bufnr, start_line, end_line + 1, false)
---     for i, line in ipairs(lines) do
---         lines[i] = camel_to_snake(line)
---     end
---     vim.api.nvim_buf_set_lines(bufnr, start_line, end_line + 1, false, lines)
--- end, { range = true, nargs = 0 })
-
-
--- char 17 in rev, 16 base0
 vim.api.nvim_create_user_command('SnakeCase', function()
+    -- PRN add tests if I wanna work on this further
     -- hello_there TestTheFooBar out of this
+
     local bufnr = vim.api.nvim_get_current_buf()
     local cursor_line_1indexed, cursor_col_0indexed = unpack(vim.api.nvim_win_get_cursor(0))
 
