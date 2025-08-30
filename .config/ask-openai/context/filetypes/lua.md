@@ -5,7 +5,7 @@
 
 ## type hints
 
-Use EmmyLua/LuaLS style annotations. Especially when implicit typing would be ambiguous.
+Use EmmyLua/LuaLS style annotations, especially when type inference is ambiguous or not possible.
 
 Examples:
 ---@param names string[]
