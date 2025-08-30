@@ -25,10 +25,10 @@ if command -q mdfind
     abbr --set-cursor mdfind_name "mdfind 'kMDItemFSName == \"*%*\"c'" # c for case-insensitive on end
     abbr --set-cursor mdfind_path "mdfind 'kMDItemFSPath == \"*%*\"c'"
     abbr --set-cursor mdfind_dir "mdfind 'kMDItemContentType == \"public.folder\" && kMDItemFSName == \"*%*\"c'"
-    abbr --set-cursor mdfind_live "mdfind -live 'kMDItemFSName == \"*%*\"'" # think file watcher like events globally for given query
-    abbr --set-cursor mdfind_-name "mdfind -name '%'"
-    abbr --set-cursor mdfind_contents "mdfind 'kMDItemTextContent == \"*%*\"'" # this worked, freaky fast too for an obscure pattern in a file I recently moved about an hour before (and yet the index was up to date)
-    # abbr --set-cursor mdfind_tree "mdfind 'kMDItemContentTypeTree == \"com.adobe.pdf%\"'"
+    abbr --set-cursor mdfind_live "mdfind -live 'kMDItemFSName == \"*%*\"c'" # think file watcher like events globally for given query
+    abbr --set-cursor mdfind_-name "mdfind -name '%'" # -name is case-insensitive by default
+    abbr --set-cursor mdfind_contents "mdfind 'kMDItemTextContent == \"*%*\"c'" # this worked, freaky fast too for an obscure pattern in a file I recently moved about an hour before (and yet the index was up to date)
+    # abbr --set-cursor mdfind_tree "mdfind 'kMDItemContentTypeTree == \"com.adobe.pdf%\"c'"
     # TODO set date by current date in an function abbr... and if I really want that, for now use example only:
     # abbr --set-cursor mdfind_date "mdfind ''kMDItemFSCreationDate >= \"2025-1-1%T00:00:00Z\"'"
 
@@ -50,7 +50,7 @@ if command -q mdfind
         # STOP using FINDER altogether!
         # ... and don't need spotlight either to quickly open dirs I usually only touch in Finder
 
-        set results (mdfind "kMDItemFSName == '$argv'")
+        set results (mdfind "kMDItemFSName == \"*$argv*\"c")
         if test (count $results) -eq 1
             open "$results"
             return
@@ -60,7 +60,7 @@ if command -q mdfind
         end
         set picked (printf '%s\n' $results | fzf --height 50% --border)
         if test -n "$picked"
-            open $picked
+            open "$picked"
             return
         end
         echo NOTHING PICKED...
