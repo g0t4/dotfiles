@@ -133,10 +133,9 @@ function ScreenPalEditorWindow:new()
         ensure_cached_controls()
         -- playhead's time field is a separate window, but treat it like a child control
         -- lookup as needed so it can be refreshed, but it is NOT expensive if cached!
-        local win = self.windows:get_playhead_window_or_throw()
-
-        local frame = win:axFrame()
-        print("playhead time window", vim.inspect({ frame = frame }))
+        local time_window = self.windows:get_playhead_window_or_throw()
+        local time_window_frame = time_window:axFrame()
+        print("time_window_frame", vim.inspect(time_window_frame))
 
         -- AFAICT nothing differs on zoom level buttons...
         -- - thus cannot know which is clicked (zoomed)
@@ -144,20 +143,33 @@ function ScreenPalEditorWindow:new()
         --   print(vim.inspect(self._btn_medium_zoom:dumpAttributes()))
         self:zoom_off()
 
-        local pos_slider_frame = self._btn_position_slider:axFrame()
-        print("pos_slider_frame", vim.inspect(pos_slider_frame))
+        local timeline_frame = self._btn_position_slider:axFrame()
+        print("timeline_frame", vim.inspect(timeline_frame))
         -- use width and then position relative to sides to create restore point at least... assuming NO zoom
         -- then use time on playhead plus position to compute total clip time!
         --    from this... and given zooms AFAICT are fixed levels... I can likely compute where to click when zoomed too :)
 
-        local percent_playhead = (frame.x - pos_slider_frame.x) / pos_slider_frame.w
-        print("percent_playhead", percent_playhead)
+        local time_window_x_center = time_window_frame.x + (time_window_frame.w / 2)
+        local playhead_percent = (time_window_x_center - timeline_frame.x) / timeline_frame.w
+        print("percent_playhead", playhead_percent)
 
-        return percent_playhead -- then will reverse this into a position on resume (that way if window is resized/moved it still works)
+        return playhead_percent -- then will reverse this into a position on resume (that way if window is resized/moved it still works)
     end
 
-    function editor_window:restore_playhead_position(percent)
+    ---@param playhead_percent number
+    function editor_window:restore_playhead_position(playhead_percent)
+        ensure_cached_controls()
+        local time_window = self.windows:get_playhead_window_or_throw()
+        local time_window_frame = time_window:axFrame()
+        print("time_window_frame", vim.inspect(time_window_frame))
 
+        self:zoom_off() -- do not restore when zoomed
+
+        local timeline_frame = self._btn_position_slider:axFrame()
+        print("timeline_frame", vim.inspect(timeline_frame))
+
+        local time_window_x_center = timeline_frame.x + playhead_percent * timeline_frame.w
+        local time_window_x_left = vim.fn.round(time_window_x_center - time_window_frame.w / 2)
     end
 
     function editor_window:is_zoomed()
