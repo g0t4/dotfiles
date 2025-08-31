@@ -138,13 +138,11 @@ function ScreenPalEditorWindow:new()
         local frame = win:axFrame()
         print("playhead time window", vim.inspect({ frame = frame }))
 
-        -- TODO capture zoom state? to restore it?
-        -- - AFAICT nothing differs on the button for the current zoom level... so no way to capture current zoom level...
-        --   that's fine I mostly use medium(2)
-        -- print(vim.inspect(self._btn_medium_zoom:dumpAttributes()))
-        --
+        -- AFAICT nothing differs on zoom level buttons...
+        -- - thus cannot know which is clicked (zoomed)
+        -- - NBD I mostly use 2 and can re-zoom myself (and I'll be using not zoomed to restore playhead position)
+        --   print(vim.inspect(self._btn_medium_zoom:dumpAttributes()))
         self:zoom_off()
-
 
         local pos_slider_frame = self._btn_position_slider:axFrame()
         print("pos_slider_frame", vim.inspect(pos_slider_frame))
@@ -155,10 +153,7 @@ function ScreenPalEditorWindow:new()
         local percent_playhead = (frame.x - pos_slider_frame.x) / pos_slider_frame.w
         print("percent_playhead", percent_playhead)
 
-
-        -- self._btn_position_slider
-
-        -- return position where to click to restore the playhead on reopen
+        return percent_playhead -- then will reverse this into a position on resume (that way if window is resized/moved it still works)
     end
 
     function editor_window:is_zoomed()
