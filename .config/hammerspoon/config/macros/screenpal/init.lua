@@ -136,9 +136,13 @@ function ScreenPalEditorWindow:new()
         local win = self.windows:get_playhead_window_or_throw()
 
         local frame = win:axFrame()
-        print(vim.inspect({ frame = frame }))
+        print("playhead time window", vim.inspect({ frame = frame }))
 
         -- TODO capture zoom state? to restore it?
+        -- - AFAICT nothing differs on the button for the current zoom level... so no way to capture current zoom level...
+        --   that's fine I mostly use medium(2)
+        -- print(vim.inspect(self._btn_medium_zoom:dumpAttributes()))
+        --
         self:zoom_off()
 
 
