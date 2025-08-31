@@ -21,8 +21,11 @@ table.maxn = function(t)
     return max
 end
 
+---@class ScreenPalEditorWindow
+---@field windows AppWindows
 ScreenPalEditorWindow = {}
 function ScreenPalEditorWindow:new()
+    ---@type ScreenPalEditorWindow
     local editor_window = {}
     setmetatable(editor_window, self)
     self.__index = self
@@ -129,7 +132,8 @@ function ScreenPalEditorWindow:new()
         print_took("caching controls took: ", start)
     end
 
-    function editor_window:playhead_position()
+    ---@return number percent
+    function editor_window:playhead_position_percent()
         ensure_cached_controls()
         -- playhead's time field is a separate window, but treat it like a child control
         -- lookup as needed so it can be refreshed, but it is NOT expensive if cached!
@@ -151,14 +155,14 @@ function ScreenPalEditorWindow:new()
 
         local time_window_x_center = time_window_frame.x + (time_window_frame.w / 2)
         local playhead_percent = (time_window_x_center - timeline_frame.x) / timeline_frame.w
-        print("percent_playhead", playhead_percent)
-
-        return playhead_percent -- then will reverse this into a position on resume (that way if window is resized/moved it still works)
+        print("playhead_percent", playhead_percent)
+        return playhead_percent
     end
 
     ---@param playhead_percent number
     function editor_window:restore_playhead_position(playhead_percent)
         ensure_cached_controls()
+        ---@type hs.axuielement
         local time_window = self.windows:get_playhead_window_or_throw()
         local time_window_frame = time_window:axFrame()
         print("time_window_frame", vim.inspect(time_window_frame))
@@ -170,6 +174,7 @@ function ScreenPalEditorWindow:new()
 
         local time_window_x_center = timeline_frame.x + playhead_percent * timeline_frame.w
 
+        -- TODO validate
         eventtap.leftClick({
             x = time_window_x_center,
             y = timeline_frame.y + timeline_frame.h / 2
@@ -261,7 +266,12 @@ function ScreenPalEditorWindow:new()
         print("zoom scrollbar position", current_zoom_scrollbar_position)
         local current_zoomed = win:is_zoomed()
         print("current_zoomed", current_zoomed)
-        -- TODO save zoom level? can I even figure that out? JUST assume its 2 for now?
+        -- cannot find a way (yet) to save zoom level
+        --   one idea, could store maxvalue of position_slider
+        --   and compare to each zoom level (try 2 first, then 1/3) on restore
+        --   until find match for maxvalue and then you know you found the level!
+
+        local playhead_percent = self:playhead_position_percent()
 
         if not self._textfield_title then
             error("No title found, aborting...")
@@ -289,14 +299,17 @@ function ScreenPalEditorWindow:new()
         end
 
         btn:performAction("AXPress")
-        timer.usleep(100000)
+        timer.usleep(100000) -- TODO replace w/ wait_for_element
+
+        -- restore playhead
+        self:restore_playhead_position(playhead_percent)
 
         -- restore zoom / scroll bar position
         if not current_zoomed then
             print("NOT zoomed before, skipping zoom restore")
             return
         end
-        win:zoom2()
+
         timer.usleep(100000)
         StreamDeckScreenPalTimelineApproxRestorePosition(current_zoom_scrollbar_position)
     end
