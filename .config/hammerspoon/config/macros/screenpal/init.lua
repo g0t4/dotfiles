@@ -169,7 +169,11 @@ function ScreenPalEditorWindow:new()
         print("timeline_frame", vim.inspect(timeline_frame))
 
         local time_window_x_center = timeline_frame.x + playhead_percent * timeline_frame.w
-        local time_window_x_left = vim.fn.round(time_window_x_center - time_window_frame.w / 2)
+
+        eventtap.leftClick({
+            x = time_window_x_center,
+            y = timeline_frame.y + timeline_frame.h / 2
+        })
     end
 
     function editor_window:is_zoomed()
