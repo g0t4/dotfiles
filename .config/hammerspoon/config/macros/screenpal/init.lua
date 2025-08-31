@@ -156,6 +156,10 @@ function ScreenPalEditorWindow:new()
         return percent_playhead -- then will reverse this into a position on resume (that way if window is resized/moved it still works)
     end
 
+    function editor_window:restore_playhead_position(percent)
+
+    end
+
     function editor_window:is_zoomed()
         ensure_cached_controls()
         if not self._btn_minimum_zoom then
