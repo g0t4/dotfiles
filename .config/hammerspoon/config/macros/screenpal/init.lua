@@ -146,6 +146,15 @@ function ScreenPalEditorWindow:new()
         self:zoom_off()
 
 
+        local pos_slider_frame = self._btn_position_slider:axFrame()
+        print("pos_slider_frame", vim.inspect(pos_slider_frame))
+        -- use width and then position relative to sides to create restore point at least... assuming NO zoom
+        -- then use time on playhead plus position to compute total clip time!
+        --    from this... and given zooms AFAICT are fixed levels... I can likely compute where to click when zoomed too :)
+
+        local percent_playhead = (frame.x - pos_slider_frame.x) / pos_slider_frame.w
+        print("percent_playhead", percent_playhead)
+
 
         -- self._btn_position_slider
 
