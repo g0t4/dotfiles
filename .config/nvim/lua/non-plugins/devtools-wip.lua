@@ -125,6 +125,10 @@ if enable_test_cmdline_text then
                 local char_count = other_end_pos[3] - cursor_pos[3] + 1
                 return string.format("visual (charwise) - Selected %d chars (on a single line)", char_count)
             end
+        else
+            -- TODO other cases?
+            -- Visual Block mode? normally shows 2x3 (lines x cols)
+            -- Insert mode shows -- INSERT -- (nothing else AFAICT)
         end
         -- FYI could show "Last Selection 10 lines"? outside of visual modes? i.e. to know when I accidentally changed modes
         return ""
