@@ -94,3 +94,70 @@ vim.api.nvim_create_autocmd("CmdlineChanged", {
         end
     end,
 })
+
+-- *** change messages shown when selecting text
+-- default shows #chars if in v visual model and only selecting text on one line
+--    if multiple lines it shows # lines even though its visual charwise
+-- V (linewise visual) shows # lines always
+-- AND, all of this is confusing b/c it only shows a # and no units... so no "lines" or "chars" shown
+local enable_test_cmdline_text = false
+if enable_test_cmdline_text then
+    function custom_show_mode_message()
+        local mode = vim.fn.mode()
+        if mode == 'V' then
+            local cursor_line = vim.fn.line(".")
+            local select_start_line = vim.fn.line("v")
+            local line_count = select_start_line - cursor_line + 1
+            return string.format("Visual (linewise) - Selected %d lines", line_count)
+        end
+        if mode == 'v' then
+            -- PRN use my selection helper here?
+            local other_end_pos = vim.fn.getcharpos("v")
+            local cursor_pos = vim.fn.getcharpos(".")
+            local other_line = other_end_pos[2]
+            local cursor_line = cursor_pos[2]
+            if other_line ~= cursor_line then
+                local line_count = other_line - cursor_line + 1
+                return string.format("visual (charwise) - Selected across %d lines", line_count)
+            else
+                local char_count = other_end_pos[3] - cursor_pos[3] + 1
+                return string.format("visual (charwise) - Selected %d chars (on a single line)", char_count)
+            end
+        end
+        -- FYI could show "Last Selection 10 lines"? outside of visual modes? i.e. to know when I accidentally changed modes
+        return ""
+    end
+
+    vim.cmd("set noshowcmd ")
+    vim.cmd("set noshowmode ") -- hide -- * --
+    -- show mode shows -- VISUAL -- or -- VISUAL LINE -- or -- INSERT --
+    vim.cmd("set cmdheight=3 ") -- use this for testing if smth else is "interfering" ... i.e. if showmode is on
+
+
+    vim.api.nvim_create_autocmd({ "ModeChanged" }, {
+        pattern = "*:V",
+        callback = function()
+            vim.opt.showcmd = false
+            vim.api.nvim_echo({ { custom_show_mode_message(), "Normal" } }, false, {})
+            -- by the way if you leave showmode on.. and you enter V mode (first line is selected) but it won't show the selection if you are using nvim_echo... it will show it once you expand to another line above/below
+        end,
+    })
+
+    vim.api.nvim_create_autocmd({ "ModeChanged" }, {
+        pattern = "V:*",
+        callback = function()
+            vim.opt.showcmd = true
+            vim.api.nvim_echo({ { "", "Normal" } }, false, {})
+        end,
+    })
+
+    vim.api.nvim_create_autocmd({ "CursorMoved" }, {
+        pattern = "*",
+        callback = function()
+            -- if vim.fn.mode():match("v") or vim.fn.mode():match("V") then
+            -- vim.opt.showcmd = false
+            vim.api.nvim_echo({ { custom_show_mode_message(), "Normal" } }, false, {})
+            -- end
+        end,
+    })
+end
