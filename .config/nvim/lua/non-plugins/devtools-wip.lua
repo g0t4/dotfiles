@@ -102,6 +102,9 @@ vim.api.nvim_create_autocmd("CmdlineChanged", {
 -- AND, all of this is confusing b/c it only shows a # and no units... so no "lines" or "chars" shown
 local enable_test_cmdline_text = false
 if enable_test_cmdline_text then
+    -- TODO! before you enable this, make sure you understand what will be missing...
+    -- TODO! otherwise, you will forget that you did this and pooch smth important :)
+
     function custom_show_mode_message()
         local mode = vim.fn.mode()
         if mode == 'V' then
