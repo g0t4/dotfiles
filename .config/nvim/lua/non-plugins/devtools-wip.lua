@@ -100,7 +100,8 @@ vim.api.nvim_create_autocmd("CmdlineChanged", {
 --    if multiple lines it shows # lines even though its visual charwise
 -- V (linewise visual) shows # lines always
 -- AND, all of this is confusing b/c it only shows a # and no units... so no "lines" or "chars" shown
-local enable_test_cmdline_text = false
+local enable_test_cmdline_text = true
+require("ask-openai.helpers.wrap_getpos")
 if enable_test_cmdline_text then
     -- TODO! before you enable this, make sure you understand what will be missing...
     -- TODO! otherwise, you will forget that you did this and pooch smth important :)
@@ -108,9 +109,11 @@ if enable_test_cmdline_text then
     function custom_show_mode_message()
         local mode = vim.fn.mode()
         if mode == 'V' then
-            local cursor_line = vim.fn.line(".")
-            local select_start_line = vim.fn.line("v")
-            local line_count = select_start_line - cursor_line + 1
+            local sel = GetPos.CurrentSelection()
+            -- local cursor_line = vim.fn.line(".")
+            -- local select_start_line = vim.fn.line("v")
+            -- local line_count = select_start_line - cursor_line + 1
+            local line_count = sel.end_line_b1 - sel.start_line_b1 + 1
             return string.format("Visual (linewise) - Selected %d lines", line_count)
         elseif mode == 'v' then
             -- PRN use my selection helper here?
