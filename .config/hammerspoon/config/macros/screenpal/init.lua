@@ -273,7 +273,9 @@ function ScreenPalEditorWindow:new()
         --   and compare to each zoom level (try 2 first, then 1/3) on restore
         --   until find match for maxvalue and then you know you found the level!
         self:zoom_off()
-        -- PRN pause?
+        -- PRN pause.. if have trouble reliably restoring same position
+        -- timer.usleep(100000)
+
 
         local playhead_percent = self:playhead_position_percent()
 
