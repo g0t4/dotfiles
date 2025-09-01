@@ -194,6 +194,8 @@ abbr fdtp 'fd --type pipe'
 abbr fdts 'fd --type socket'
 abbr fdtx 'fd --type executable'
 
+abbr list_filetype_extensions 'fd | path extension | sort | uniq -c | sort'
+
 # *** default args
 function fd
     # KEEP in mind ~/.config/fd/ignore is the global ignores dir and impacts how fd behaves

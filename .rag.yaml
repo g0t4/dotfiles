@@ -1,0 +1,21 @@
+include:
+  - lua
+  - py
+  - fish
+  - zsh
+  - bash
+  - json
+  - ps1
+  - applescript
+  - snippets
+  - rs
+ignores:
+  - "notes/"
+all_languages:
+  - lua
+  - py
+  - fish
+  - bash
+  - zsh
+  - ps1
+  # TODO just use all, always?
