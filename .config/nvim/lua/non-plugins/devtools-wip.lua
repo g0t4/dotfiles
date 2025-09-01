@@ -129,6 +129,8 @@ if enable_test_cmdline_text then
             -- TODO other cases?
             -- Visual Block mode? normally shows 2x3 (lines x cols)
             -- Insert mode shows -- INSERT -- (nothing else AFAICT)
+            -- Save messages?
+            -- last command ran?
         end
         -- FYI could show "Last Selection 10 lines"? outside of visual modes? i.e. to know when I accidentally changed modes
         return ""
