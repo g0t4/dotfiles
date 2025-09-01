@@ -108,24 +108,16 @@ if enable_test_cmdline_text then
 
     function custom_show_mode_message()
         local mode = vim.fn.mode()
+        local sel = GetPos.CurrentSelection()
+        -- TODO move line count to GetPos return type
+        local line_count = sel.end_line_b1 - sel.start_line_b1 + 1
         if mode == 'V' then
-            local sel = GetPos.CurrentSelection()
-            -- local cursor_line = vim.fn.line(".")
-            -- local select_start_line = vim.fn.line("v")
-            -- local line_count = select_start_line - cursor_line + 1
-            local line_count = sel.end_line_b1 - sel.start_line_b1 + 1
             return string.format("Visual (linewise) - Selected %d lines", line_count)
         elseif mode == 'v' then
-            -- PRN use my selection helper here?
-            local other_end_pos = vim.fn.getcharpos("v")
-            local cursor_pos = vim.fn.getcharpos(".")
-            local other_line = other_end_pos[2]
-            local cursor_line = cursor_pos[2]
-            if other_line ~= cursor_line then
-                local line_count = other_line - cursor_line + 1
+            if sel.start_line_b1 ~= sel.end_line_b1 then
                 return string.format("visual (charwise) - Selected across %d lines", line_count)
             else
-                local char_count = other_end_pos[3] - cursor_pos[3] + 1
+                local char_count = sel.end_col_b1 - sel.start_col_b1 + 1
                 return string.format("visual (charwise) - Selected %d chars (on a single line)", char_count)
             end
         else
