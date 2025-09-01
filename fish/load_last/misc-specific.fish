@@ -1449,12 +1449,13 @@ if command -q llama-server
         set _spec14 "llama-server --fim-qwen-14b-spec $host"
         set _default7 "llama-server --fim-qwen-7b-default $host"
 
-        set qwen3_q4 "llama-server -hf unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF:Q4_K_M $host --batch-size 2048 --ubatch-size 2048 --flash-attn --n-gpu-layers 99"
-        set qwen3_q8 "llama-server -hf unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF:Q8_0 $host --batch-size 2048 --ubatch-size 2048 --flash-attn --n-gpu-layers 99"
-        abbr lsqwen3q4 $qwen3_q4
-        abbr lsqwen3q4_verbose $qwen3_q4 $verbose
-        abbr lsqwen3q8 $qwen3_q8
-        abbr lsqwen3q8_verbose $qwen3_q8 $verbose
+        set qwen3coder_q4 "llama-server -hf unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF:Q4_K_M $host --batch-size 2048 --ubatch-size 2048 --flash-attn --n-gpu-layers 99"
+        set qwen3coder_q8 "llama-server -hf unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF:Q8_0 $host --batch-size 2048 --ubatch-size 2048 --flash-attn --n-gpu-layers 99"
+        abbr lsqwen3coderq4 $qwen3coder_q4
+        abbr lsqwen3coderq4_verbose $qwen3coder_q4 $verbose
+        abbr lsqwen3coderq8 $qwen3coder_q8
+        abbr lsqwen3coderq8_verbose $qwen3coder_q8 $verbose
+        # TODO qwen3 specdec using qwen2.5-coder 0.5B? if so then maybe go FP16 for qwen3-coder to have best fidelity?
 
         # TODO --batch-size / --ubatch-size # memory impact?
         # --ctx-size 0 => means load from model or default 4096
