@@ -1452,10 +1452,10 @@ if command -q llama-server
         # FYI 4k --context-size if not specified
         set _qwen3coder_host "--host 0.0.0.0 --port 8013"
         set qwen3coder_shared "llama-server --ctx-size 65536 --batch-size 2048 --ubatch-size 2048 --flash-attn --n-gpu-layers 99"
-        set qwen3coder_q4 "$qwen3coder_shared -hf unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF:Q4_K_M $_qwen3coder_host"
-        set qwen3coder_q8 "$qwen3coder_shared -hf unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF:Q8_0 $_qwen3coder_host"
-        abbr lsqwen3coderq4 $qwen3coder_q4
-        abbr lsqwen3coderq4_verbose $qwen3coder_q4 $verbose
+        # set qwen3coder_q4 "$qwen3coder_shared -hf TODO make myself? $_qwen3coder_host"
+        set qwen3coder_q8 "$qwen3coder_shared -hf ggml-org/Qwen3-Coder-30B-A3B-Instruct-Q8_0-GGUF $_qwen3coder_host"
+        # abbr lsqwen3coderq4 $qwen3coder_q4
+        # abbr lsqwen3coderq4_verbose $qwen3coder_q4 $verbose
         abbr lsqwen3coderq8 $qwen3coder_q8
         abbr lsqwen3coderq8_verbose $qwen3coder_q8 $verbose
 
