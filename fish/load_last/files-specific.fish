@@ -31,6 +31,9 @@ abbr --add cd- 'cd -'
 #
 # abbr --add cp- --regex 'cp-' --function _cp-
 
+## *** ask-openai related
+
+abbr ask_status "git -C (z --echo dotfiles) status; git -C (z --echo ask-openai.nvim) status; git -C (z --echo devtools.nvim) status"
 
 ## *** fish related
 
