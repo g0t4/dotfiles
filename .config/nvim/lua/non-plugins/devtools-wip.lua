@@ -100,7 +100,7 @@ vim.api.nvim_create_autocmd("CmdlineChanged", {
 --    if multiple lines it shows # lines even though its visual charwise
 -- V (linewise visual) shows # lines always
 -- AND, all of this is confusing b/c it only shows a # and no units... so no "lines" or "chars" shown
-local enable_test_cmdline_text = true
+local enable_test_cmdline_text = false
 require("ask-openai.helpers.wrap_getpos")
 if enable_test_cmdline_text then
     -- TODO! before you enable this, make sure you understand what will be missing...
