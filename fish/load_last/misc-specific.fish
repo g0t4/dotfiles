@@ -1454,6 +1454,7 @@ if command -q llama-server
         set _qwen3coder_shared "llama-server $_qwen3coder_host --ctx-size 65536 --batch-size 2048 --ubatch-size 2048 --flash-attn --n-gpu-layers 99"
         # IIUC both qwen2.5-coder and qwen3-coder models share the same vocab though I should double check
         # set _draft_fimq25_05b "--hf-repo-draft ggml-org/Qwen2.5-Coder-0.5B-Q8_0-GGUF"
+        # TODO! try ncache reuse arg at 256? which is in llama-server repo's arg for this
         # set qwen3coder_q4 "$qwen3coder_shared -hf TODO make myself? $_qwen3coder_host"
         set qwen3coder_q8 "$_qwen3coder_shared -hf ggml-org/Qwen3-Coder-30B-A3B-Instruct-Q8_0-GGUF"
         # set qwen3coder_q8_spec "$_qwen3coder_shared $_draft_fimq25_05b -hf ggml-org/Qwen3-Coder-30B-A3B-Instruct-Q8_0-GGUF"
