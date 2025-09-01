@@ -1,6 +1,7 @@
 local f = require("config.helpers.underscore")
 local timer = require("hs.timer")
 require("config.helpers.misc")
+require("config.helpers.perf")
 
 -- goal here is to simplify syntax for navigating children by roles (and index)
 --    :childrenWithRole("AXWindow")[1]
