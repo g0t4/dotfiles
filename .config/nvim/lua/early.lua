@@ -128,9 +128,10 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 -- * package.path mods
-local luarocks_path = os.getenv("HOME") .. "/.luarocks/share/lua/5.1/?.lua"
-    .. ";" .. os.getenv("HOME") .. "/.luarocks/share/lua/5.1/?/init.lua"
-local luarocks_cpath = os.getenv("HOME") .. "/.luarocks/lib/lua/5.1/?.so"
+local home_dir = os.getenv("HOME")
+local luarocks_share = home_dir .. "/.luarocks/share/lua/5.1/"
+local luarocks_path = luarocks_share .. "?.lua" .. ";" .. luarocks_share .. "?/init.lua"
+local luarocks_cpath = home_dir .. "/.luarocks/lib/lua/5.1/?.so"
 package.path = package.path .. ";" .. luarocks_path
 package.cpath = package.cpath .. ";" .. luarocks_cpath
 -- i.e. I use ProFi for profiles (devtools performance module uses it)
