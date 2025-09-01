@@ -112,8 +112,7 @@ if enable_test_cmdline_text then
             local select_start_line = vim.fn.line("v")
             local line_count = select_start_line - cursor_line + 1
             return string.format("Visual (linewise) - Selected %d lines", line_count)
-        end
-        if mode == 'v' then
+        elseif mode == 'v' then
             -- PRN use my selection helper here?
             local other_end_pos = vim.fn.getcharpos("v")
             local cursor_pos = vim.fn.getcharpos(".")
