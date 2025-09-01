@@ -1453,14 +1453,15 @@ if command -q llama-server
         set _qwen3coder_host "--host 0.0.0.0 --port 8013"
         set _qwen3coder_shared "llama-server $_qwen3coder_host --ctx-size 65536 --batch-size 2048 --ubatch-size 2048 --flash-attn --n-gpu-layers 99"
         # IIUC both qwen2.5-coder and qwen3-coder models share the same vocab though I should double check
-        set _draft_fimq25_05b "--hf-repo-draft ggml-org/Qwen2.5-Coder-0.5B-Q8_0-GGUF"
+        # set _draft_fimq25_05b "--hf-repo-draft ggml-org/Qwen2.5-Coder-0.5B-Q8_0-GGUF"
         # set qwen3coder_q4 "$qwen3coder_shared -hf TODO make myself? $_qwen3coder_host"
         set qwen3coder_q8 "$_qwen3coder_shared -hf ggml-org/Qwen3-Coder-30B-A3B-Instruct-Q8_0-GGUF"
-        set qwen3coder_q8_spec "$_qwen3coder_shared $_draft_fimq25_05b -hf ggml-org/Qwen3-Coder-30B-A3B-Instruct-Q8_0-GGUF"
+        # set qwen3coder_q8_spec "$_qwen3coder_shared $_draft_fimq25_05b -hf ggml-org/Qwen3-Coder-30B-A3B-Instruct-Q8_0-GGUF"
+        # lol ok spec dec sometimes is fast, othertimes is terribly slow, qwen2.5coder must not be a good fit for this?
         # abbr lsqwen3coderq4 $qwen3coder_q4
         # abbr lsqwen3coderq4_verbose $qwen3coder_q4 $verbose
         abbr lsqwen3coderq8 $qwen3coder_q8
-        abbr lsqwen3coderq8_spec $qwen3coder_q8_spec
+        # abbr lsqwen3coderq8_spec $qwen3coder_q8_spec
         abbr lsqwen3coderq8_verbose $qwen3coder_q8 $verbose
 
         # TODO qwen3 specdec using qwen2.5-coder 0.5B? if so then maybe go FP16 for qwen3-coder to have best fidelity?
