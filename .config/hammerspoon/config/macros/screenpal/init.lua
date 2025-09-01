@@ -272,6 +272,8 @@ function ScreenPalEditorWindow:new()
         --   one idea, could store maxvalue of position_slider
         --   and compare to each zoom level (try 2 first, then 1/3) on restore
         --   until find match for maxvalue and then you know you found the level!
+        self:zoom_off()
+        -- PRN pause?
 
         local playhead_percent = self:playhead_position_percent()
 
@@ -312,8 +314,9 @@ function ScreenPalEditorWindow:new()
             return
         end
 
-        timer.usleep(100000)
-        StreamDeckScreenPalTimelineApproxRestorePosition(current_zoom_scrollbar_position)
+        self:zoom2()
+        -- timer.usleep(100000)
+        -- StreamDeckScreenPalTimelineApproxRestorePosition(current_zoom_scrollbar_position)
     end
 
     return editor_window
