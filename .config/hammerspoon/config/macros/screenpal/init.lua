@@ -174,11 +174,13 @@ function ScreenPalEditorWindow:new()
 
         local time_window_x_center = timeline_frame.x + playhead_percent * timeline_frame.w
 
-        -- TODO validate
+        local hold_down_before_release = 1000 -- default is 200ms, will matter if chaining more actions!
+        -- I ran into trouble with 0ms hold delay
         eventtap.leftClick({
-            x = time_window_x_center,
+            -- +1 pixel stops leftward drift by 1 frame (good test is back to back reopen, albeit not a normal workflow)
+            x = time_window_x_center + 1,
             y = timeline_frame.y + timeline_frame.h / 2
-        })
+        }, hold_down_before_release)
     end
 
     function editor_window:is_zoomed()
