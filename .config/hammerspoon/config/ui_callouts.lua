@@ -502,17 +502,22 @@ function capture_element_under_mouse()
     end
     local frame = element:axFrame()
 
-    local role = element:axRole()
+    local role = element:axRole() or ""
     local identifier = element:attributeValue("AXIdentifier") or ""
     local value = element:attributeValue("AXValue") or ""
     local title = element:attributeValue("AXTitle") or ""
     local desc = element:attributeValue("AXDescription") or ""
-    local image_tag = ""
-    if role ~= "" then image_tag = image_tag .. " role=" .. role end
-    if identifier ~= "" then image_tag = image_tag .. " id=" .. identifier end
-    if value ~= "" then image_tag = image_tag .. " value=" .. value end
-    if title ~= "" then image_tag = image_tag .. " title=" .. title end
-    if desc ~= "" then image_tag = image_tag .. " desc=" .. desc end
+    local image_tag = role
+    if identifier then image_tag = image_tag .. "_id_" .. identifier end
+    if value then image_tag = image_tag .. "_value_" .. value end
+    if title then image_tag = image_tag .. "_title_" .. title end
+    if desc then image_tag = image_tag .. "_desc_" .. desc end
+
+    -- Sanitize image_tag for use in filename
+    image_tag = image_tag:gsub("[^%w%-%.]", "_")
+    image_tag = image_tag:gsub("^%s+", "")
+    image_tag = image_tag:gsub("%s+$", "")
+
     hs.alert.show(image_tag, 3)
 
     local was_highlighting = is_highlighting_now()
