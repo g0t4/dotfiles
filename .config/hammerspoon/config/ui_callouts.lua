@@ -431,6 +431,26 @@ local function highlightCurrentElement()
     highlightThisElement(element)
 end
 
+---@return { x: number, y: number, w: number, h: number }? frame
+local function get_current_element_frame()
+    if M.last.freeze then
+        return
+    end
+
+    local pos = hs.mouse.absolutePosition()
+    ---@type hs.axuielement?
+    local element = hs.axuielement.systemElementAtPosition(pos)
+    if element == nil then
+        print("no current element")
+        return
+    end
+
+    -- TODO use my axFrame() helper function
+    -- TODO can I get axFrame() to return strongly typed result or does it already?
+    -- TODO merge with frame finding logic for highlightCurrentElement / highlightThisElement
+    return element:attributeValue("AXFrame")
+end
+
 local function stopElementInspector()
     M.moves = nil
     M.subscription:unsubscribe() -- subscription cleanup is all... really can skip this here
@@ -471,12 +491,28 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "F", function()
     M.last.freeze = not M.last.freeze
 end)
 
-hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "C", function()
-    -- copy last script to clipboard... maybe just do this on stop?
-    if M.last.text then
-        hs.pasteboard.setContents(M.last.text)
+hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "p", function()
+    local frame = get_current_element_frame()
+    if frame == nil then
+        print("no frame found for current element, cannot capture it")
+        return
     end
-    stopElementInspector()
+    -- -R<x,y,w,h> capture screen rect
+    local rectangle = string.format("-%d,%d,%d,%d", frame.x, frame.y, frame.w, frame.h)
+    filename = "~/Downloads/test.png"
+    -- -P open in preview (not save to disk then)
+    local where_to = "-P" -- preview
+    where_to = filename -- to disk
+    function callback(result, stdOut, stdErr)
+        if result == 0 then
+            -- success
+        else
+            -- error
+            hs.alert.show("Error with capture: " .. stdErr)
+        end
+    end
+
+    hs.task.new("/usr/sbin/screencapture", nil, callback, { "-o", "-R", rectangle, where_to }):start()
 end)
 
 M.moves = nil
