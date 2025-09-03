@@ -356,6 +356,11 @@ local function showTooltipForElement(element, frame)
         :show()
 end
 
+---@return boolean
+local function is_highlighting_now()
+    return M.last.tooltip ~= nil
+end
+
 local function removeHighlight()
     if not M.last.element then
         return
@@ -492,27 +497,38 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "F", function()
 end)
 
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "p", function()
+    -- this can work w/o using highlighter!
     local frame = get_current_element_frame()
     if frame == nil then
         print("no frame found for current element, cannot capture it")
         return
     end
-    -- -R<x,y,w,h> capture screen rect
-    local rectangle = string.format("-%d,%d,%d,%d", frame.x, frame.y, frame.w, frame.h)
-    filename = "~/Downloads/test.png"
-    -- -P open in preview (not save to disk then)
-    local where_to = "-P" -- preview
-    where_to = filename -- to disk
+
+    local was_highlighting = is_highlighting_now()
+    removeHighlight()
+
     function callback(result, stdOut, stdErr)
-        if result == 0 then
-            -- success
-        else
-            -- error
-            hs.alert.show("Error with capture: " .. stdErr)
+        if result ~= 0 then
+            hs.alert.show("capture failed: " .. stdErr)
+            print("capture failed", stdErr)
+        end
+        if was_highlighting then
+            highlightCurrentElement()
         end
     end
 
-    hs.task.new("/usr/sbin/screencapture", nil, callback, { "-o", "-R", rectangle, where_to }):start()
+    -- * rectangle
+    -- screencapture uses `-R <x,y,w,h>`
+    local rectangle = string.format("%d,%d,%d,%d", frame.x, frame.y, frame.w, frame.h)
+    print("rectange: " .. rectangle)
+
+    -- * save to
+    filename = os.getenv("HOME") .. "/Downloads/test.png"
+    -- -P open in preview (not save to disk then)
+    local where_to = "-P" -- preview
+    where_to = filename -- to disk
+
+    hs.task.new("/usr/sbin/screencapture", callback, { "-o", "-R", rectangle, where_to }):start()
 end)
 
 M.moves = nil
