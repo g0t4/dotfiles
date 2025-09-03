@@ -14,7 +14,7 @@ local ppt = hs.application.applicationsForBundleID("com.microsoft.PowerPoint") -
 dump("ppt", ppt) -- FYI so far... not showing ppt instance that is running... must be bundle id difference?
 -- TODO how can I lookup bundle id of running apps?
 -- local pptInfo = hs.application.infoForBundleID("com.microsoft.PowerPoint") -- returns hs.application object
--- Dump("pptInfo", pptInfo) -- UTT infos, etc -- IIAC Info.plist(s) are used to make this
+-- dump("pptInfo", pptInfo) -- UTT infos, etc -- IIAC Info.plist(s) are used to make this
 
 -- IIUC use name in App Switcher
 --   == open -a "foo"
@@ -22,17 +22,17 @@ dump("ppt", ppt) -- FYI so far... not showing ppt instance that is running... mu
 -- hs.application.launchOrFocus("Microsoft PowerPoint") -- works
 -- hs.application.launchOrFocus("vlc") -- works
 -- local worked = hs.application.launchOrFocus("/Applications/Microsoft PowerPoint.app") -- WORKS too
--- Dump("worked", worked) -- false means no app found, else true for launch/focus
+-- dump("worked", worked) -- false means no app found, else true for launch/focus
 
 -- -- DERP ... doesn't return a name that works... lol for launchOrFocus... (at least not for ppt)
 -- local nameForBundleID = hs.application.nameForBundleID("com.microsoft.PowerPoint") -- returns "PowerPoint"
--- Dump("nameForBundleID(com.microsoft.PowerPoint)", nameForBundleID)
+-- dump("nameForBundleID(com.microsoft.PowerPoint)", nameForBundleID)
 -- local pathForBundleID = hs.application.pathForBundleID("com.microsoft.PowerPoint") -- returns "/Applications/Microsoft PowerPoint.app"
--- Dump("pathForBundleID(com.microsoft.PowerPoint)", pathForBundleID) -- "/Applications/Microsoft PowerPoint.app"
+-- dump("pathForBundleID(com.microsoft.PowerPoint)", pathForBundleID) -- "/Applications/Microsoft PowerPoint.app"
 
 -- -- running apps:
 -- local running = hs.application.runningApplications()
--- Dump("running", running)
+-- dump("running", running)
 
 
 -- *** find

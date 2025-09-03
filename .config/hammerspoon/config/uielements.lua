@@ -284,7 +284,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "M", function()
     --  41ms (feels super fast) with hammerspoon's menus (~120 entries) at least
     --  can be slow with more menu items (i.e. FCPX)
 
-    -- Dump(menu_items)
+    -- dump(menu_items)
     dump_html(menu_items)
 
     -- PRN anything worth doing to enumerate the menus?

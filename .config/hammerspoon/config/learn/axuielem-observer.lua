@@ -1,6 +1,6 @@
 local axuielement = require("hs.axuielement")
 local observer = axuielement.observer
--- Dump("observer", observer)
+-- dump("observer", observer)
 -- observer.new():start()
 --
 -- *** constants ***
@@ -46,7 +46,7 @@ local mainWinElem = axuielement.windowElement(mainWin)
 -- -- acObserver:addWatcher(mainWinElem, "AXCreated")
 -- -- acObserver:addWatcher(mainWinElem, "AXDestroyed")
 -- winObserver:callback(function(_observer, elem, notification, detailsTable)
---     Dump("cb", _observer, elem, notification, detailsTable)
+--     dump("cb", _observer, elem, notification, detailsTable)
 -- end)
 -- winObserver:start()
 --
@@ -56,11 +56,11 @@ local mainWinElem = axuielement.windowElement(mainWin)
 -- PRN would like to know if I can subscribe to focus changed across all apps (akin to system wide element's focused element)... might have to first swap the focused app/window then element?
 --    applicationActivated/Deactivated, focusedWindowChanged,focusedUIElementChanged ... and so I would change observer to most recent activate app as I switch apps
 -- local systemWideElem = axuielement.systemWideElement()
--- Dump("swElem", systemWideElem)
+-- dump("swElem", systemWideElem)
 -- local focusedObserver = observer.new(pptAppElem:pid())
 -- focusedObserver:addWatcher(pptAppElem, "AXFocusedUIElementChanged")
 -- focusedObserver:callback(function(_observer, elem, notification, detailsTable)
---     Dump("cb", _observer, elem, notification, detailsTable)
+--     dump("cb", _observer, elem, notification, detailsTable)
 -- end)
 -- focusedObserver:start()
 -- can I capture typing into focused element?
@@ -71,7 +71,7 @@ if true then
     local textObserverAppElem = scriptDebuggerAppElem
     -- local textObserver = observer.new(textObserverAppElem:pid())
     -- textObserver:callback(function(_observer, elem, notification, detailsTable)
-    --     Dump("textObserver", _observer, elem, notification, detailsTable)
+    --     dump("textObserver", _observer, elem, notification, detailsTable)
     -- end)
     -- textObserver:start()
     --

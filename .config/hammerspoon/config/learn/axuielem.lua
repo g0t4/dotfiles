@@ -49,9 +49,9 @@ if false then
 end
 
 -- local pptHsApp = hs.application.find("PowerPoint")
--- Dump("pptHsApp", pptHsApp)
+-- dump("pptHsApp", pptHsApp)
 -- local pptAxAppElem = hs.axuielement.applicationElement(pptHsApp)
--- Dump("pptAxAppElem", pptAxAppElem)
+-- dump("pptAxAppElem", pptAxAppElem)
 
 
 -- -- ***! hs.axuielement.systemElementAtPosition(x, y | pointTable)
