@@ -496,7 +496,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "F", function()
     M.last.freeze = not M.last.freeze
 end)
 
-hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "p", function()
+function capture_element_under_mouse()
     -- this can work w/o using highlighter!
     local frame = get_current_element_frame()
     if frame == nil then
@@ -529,7 +529,9 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "p", function()
     where_to = filename -- to disk
 
     hs.task.new("/usr/sbin/screencapture", callback, { "-o", "-R", rectangle, where_to }):start()
-end)
+end
+
+hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "p", capture_element_under_mouse)
 
 M.moves = nil
 M.stop_event_source = nil
