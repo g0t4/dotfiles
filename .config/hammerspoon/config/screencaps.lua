@@ -34,7 +34,10 @@ local function getCaptureDirectory()
     return hs.settings.get(CAPTURE_DIR_SETTINGS_KEY) or getDefaultPhotosDir()
 end
 
-function getScreencaptureFileName(extension)
+---@param extension? string
+---@param image_tag? string -- added to filename, to give context about what was captured
+---@return string filename
+function getScreencaptureFileName(extension, image_tag)
     extension = extension or "png"
 
     -- FYI file sizes verified to match macOS keyboard shortcuts for screencap
