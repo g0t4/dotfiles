@@ -321,6 +321,51 @@ function ScreenPalEditorWindow:new()
         -- StreamDeckScreenPalTimelineApproxRestorePosition(current_zoom_scrollbar_position)
     end
 
+    function editor_window:estimate_time_per_pixel()
+        -- app:window(2):textField(1)
+        --
+        -- AXDescription: text/html<string>
+        -- AXEdited: true<bool>
+        -- AXEnabled: true<bool>
+        -- AXFocused: false<bool>
+        -- AXFocusedUIElement: AXTextField - text/html<hs.axuielement>
+        -- AXHelp: text/html<string>
+        -- AXIndex: -1<number>
+        -- AXMaxValue: 0<number>
+        -- AXMinValue: 0<number>
+        -- AXOrientation: AXUnknownOrientation<string>
+        -- AXRoleDescription: text field<string>
+        -- AXSelected: false<bool>
+        --
+        -- press 'c' to show children
+        --
+        -- unique ref: app:window('SOM-FloatingWindow-Type=edit2.posbar-ZOrder=1(Undefined+1)'):textField(1)
+
+        local time_window = self.windows:get_playhead_window_or_throw()
+        local time_window_frame = time_window:axFrame()
+        Dump("time_window_frame", time_window_frame)
+
+        local text_field = time_window:textField(1)
+        ---@type string
+        local time = text_field:axValue()
+        Dump({ time = time })
+        time = time:gsub("\n", "")
+        Dump({ time = time })
+
+
+
+
+
+        -- set posbar_window to first window of procSpal whose name starts with "SOM-FloatingWindow-Type=edit2.posbar-ZOrder"
+        -- set playhead_time to value of text field 1 of item 1 of posbar_window
+        -- -- TODO parse time as needed
+        -- -- examples:
+        -- -- "\n\r1:03.40" -- when pasted it shows \n\ then a new line... IIAC that is \r? so I added r... not sure but
+        -- return playhead_time
+    end
+
+    -- PRN can I use a library to parse out pauses and add my own padding to them when cutting them?! that would ROCK
+
     return editor_window
 end
 
