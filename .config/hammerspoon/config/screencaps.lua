@@ -54,6 +54,10 @@ function getScreencaptureFileName(extension, image_tag)
         filename = filename .. "." .. appName
     end
 
+    if image_tag ~= nil then
+        filename = filename .. "." .. image_tag
+    end
+
     -- check if capture directory exists, if not WARN and abort
     local captureDir = getCaptureDirectory()
     if not hs.fs.attributes(captureDir) then
@@ -80,6 +84,10 @@ function getScreencaptureFileName(extension, image_tag)
 
     if appName ~= nil then
         longerPath = longerPath .. "." .. appName
+    end
+
+    if image_tag ~= nil then
+        longerPath = longerPath .. "." .. image_tag
     end
 
     return longerPath .. "." .. extension
