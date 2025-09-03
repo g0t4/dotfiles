@@ -56,14 +56,10 @@ end
 
 -- -- ***! hs.axuielement.systemElementAtPosition(x, y | pointTable)
 -- local elementAt = hs.axuielement.systemElementAtPosition(0, 0)
--- Dump("elementAt", elementAt)
--- DumpAXAttributes(elementAt)
---
 
 if false then
     -- *** system wide info (focused element/app!)
     dump(hs.axuielement.systemWideElement())
-    DumpAXAttributes(hs.axuielement.systemWideElement())
     -- HAS:
     -- 2025-01-13 03:20:44: AXFocusedApplication	hs.axuielement: AXApplication (0x6000023b1778)
     -- 2025-01-13 03:20:44: AXFocusedUIElement	hs.axuielement: AXTextArea (0x6000023b1638)
@@ -71,8 +67,6 @@ if false then
     -- 2025-01-13 03:20:44: AXRoleDescription
     local focused = hs.axuielement.systemWideElement():attributeValue("AXFocusedUIElement")
     dump('focused', focused)
-    DumpAXAttributes(focused)
-    DumpAXActions(focused)
 end
 
 if false then
