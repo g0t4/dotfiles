@@ -509,7 +509,7 @@ function capture_element_under_mouse()
     removeHighlight()
 
     -- * save to
-    local where_to = getScreencaptureFileName()
+    local where_to = getScreencaptureFileName("png", role)
     -- local where_to = "-P" -- -P == open in preview (does not save to disk)
 
     function when_done(result, stdOut, stdErr)
