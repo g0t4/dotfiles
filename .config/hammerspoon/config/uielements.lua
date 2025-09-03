@@ -709,7 +709,7 @@ function build_applescript_to(to_element, include_attr_dumps)
     -- TODO hungarian notation if title/desc are "too short" or?
     -- TODO build up some test cases would be helpful as you encounter real work examples
     local variable_name = get_identifier(to_element)
-    -- return "<br>set " .. variable_name .. " to " .. specifierChain, attrDumps
+    -- return "<br>set " .. variable_name .. " to " .. specifier_chain, attr_dumps
     local set_command = "set " .. variable_name .. " to "
     table_prepend(specifier_chain, set_command)
 

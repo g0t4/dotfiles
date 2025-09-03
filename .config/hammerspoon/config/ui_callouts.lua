@@ -206,7 +206,7 @@ local function showTooltipForElement(element, frame)
         -- PRN if styled text, could make it italic
         table.insert(attributes, "\npress 'c' to show children")
     end
-    local attributeDump = table.concat(attributes, "\n")
+    local attribute_dump = table.concat(attributes, "\n")
 
     --- @param elem hs.axuielement
     local function getUniqueSpecifierChainForElementSearch(elem)
@@ -260,10 +260,10 @@ local function showTooltipForElement(element, frame)
 
     local elementSearchCode = getUniqueSpecifierChainForElementSearch(element)
 
-    attributeDump = attributeDump .. "\n\n" .. elementSearchCode
+    attribute_dump = attribute_dump .. "\n\n" .. elementSearchCode
 
     -- include everything in copy so I can get attr values without writing them down by hand! (for cmd-ctrl-alt-c)
-    M.last.text = specifierLua .. "\n\n" .. attributeDump
+    M.last.text = specifierLua .. "\n\n" .. attribute_dump
 
 
     local styledSpecifier = hs.styledtext.new(specifierLua, {
@@ -274,7 +274,7 @@ local function showTooltipForElement(element, frame)
         color = { white = 1 },
     })
 
-    local styledAttributes = hs.styledtext.new(attributeDump, {
+    local styledAttributes = hs.styledtext.new(attribute_dump, {
         font = {
             name = "SauceCodePro Nerd Font",
             size = 10
