@@ -320,7 +320,7 @@ if status --is-interactive
             # PRN if multiple items => show each $path first?
 
             if test -f $path
-                if file --mime-type --brief $path | grep -qE 'image/(jpeg|png|gif|bmp|tiff|webp)'
+                if string match -q 'image/*' (file --mime-type --brief $path)
                     if command -q imgcat
                         imgcat $path
                     else
