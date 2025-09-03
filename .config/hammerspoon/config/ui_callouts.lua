@@ -436,8 +436,8 @@ local function highlightCurrentElement()
     highlightThisElement(element)
 end
 
----@return { x: number, y: number, w: number, h: number }? frame
-local function get_current_element_frame()
+---@return hs.axuielement? element
+local function get_current_element()
     if M.last.freeze then
         return
     end
@@ -450,10 +450,7 @@ local function get_current_element_frame()
         return
     end
 
-    -- TODO use my axFrame() helper function
-    -- TODO can I get axFrame() to return strongly typed result or does it already?
-    -- TODO merge with frame finding logic for highlightCurrentElement / highlightThisElement
-    return element:attributeValue("AXFrame")
+    return element
 end
 
 local function stopElementInspector()
@@ -498,16 +495,24 @@ end)
 
 function capture_element_under_mouse()
     -- this can work w/o using highlighter!
-    local frame = get_current_element_frame()
-    if frame == nil then
+    local element = get_current_element()
+    if element == nil then
         print("no frame found for current element, cannot capture it")
         return
     end
+    local frame = element:axFrame()
+
+    -- TODO get identifiers to tag filename
+    local role = element:axRole()
 
     local was_highlighting = is_highlighting_now()
     removeHighlight()
 
-    function callback(result, stdOut, stdErr)
+    -- * save to
+    local where_to = getScreencaptureFileName()
+    -- local where_to = "-P" -- -P == open in preview (does not save to disk)
+
+    function when_done(result, stdOut, stdErr)
         if result ~= 0 then
             hs.alert.show("capture failed: " .. stdErr)
             print("capture failed", stdErr)
@@ -515,6 +520,8 @@ function capture_element_under_mouse()
         if was_highlighting then
             highlightCurrentElement()
         end
+
+        print("element captured to " .. where_to)
     end
 
     -- * rectangle
@@ -522,13 +529,7 @@ function capture_element_under_mouse()
     local rectangle = string.format("%d,%d,%d,%d", frame.x, frame.y, frame.w, frame.h)
     print("rectange: " .. rectangle)
 
-    -- * save to
-    filename = os.getenv("HOME") .. "/Downloads/test.png"
-    -- -P open in preview (not save to disk then)
-    local where_to = "-P" -- preview
-    where_to = filename -- to disk
-
-    hs.task.new("/usr/sbin/screencapture", callback, { "-o", "-R", rectangle, where_to }):start()
+    hs.task.new("/usr/sbin/screencapture", when_done, { "-o", "-R", rectangle, where_to }):start()
 end
 
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "p", capture_element_under_mouse)
