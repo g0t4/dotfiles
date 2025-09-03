@@ -62,7 +62,7 @@ end
 
 if false then
     -- *** system wide info (focused element/app!)
-    Dump(hs.axuielement.systemWideElement())
+    dump(hs.axuielement.systemWideElement())
     DumpAXAttributes(hs.axuielement.systemWideElement())
     -- HAS:
     -- 2025-01-13 03:20:44: AXFocusedApplication	hs.axuielement: AXApplication (0x6000023b1778)
@@ -70,7 +70,7 @@ if false then
     -- 2025-01-13 03:20:44: AXRole	AXSystemWide
     -- 2025-01-13 03:20:44: AXRoleDescription
     local focused = hs.axuielement.systemWideElement():attributeValue("AXFocusedUIElement")
-    Dump('focused', focused)
+    dump('focused', focused)
     DumpAXAttributes(focused)
     DumpAXActions(focused)
 end
@@ -81,7 +81,7 @@ if false then
     local app = hs.application("Script Debugger")
     app:activate()
     local item = app:findMenuItem("Compose...")
-    Dump("item", hs.inspect(item)) -- item is a table, not an hs.axuielementObject
+    dump("item", hs.inspect(item)) -- item is a table, not an hs.axuielementObject
     app:selectMenuItem("Compose...")
 end
 

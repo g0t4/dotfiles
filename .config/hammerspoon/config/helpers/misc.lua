@@ -21,7 +21,7 @@ function type_text(text, delay)
     end
 end
 
-function Dump(...)
+function dump(...)
     -- ... declares 0+ args
     --  {... } collects the args into a var, so this is actually the rest like operator
     print(inspect({ ... }))

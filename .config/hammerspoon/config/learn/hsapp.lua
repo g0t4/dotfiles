@@ -6,12 +6,12 @@
 -- FYI
 --     defaults domains | string split "," | grep -i "foo"
 local vlc = hs.application.applicationsForBundleID("org.videolan.vlc") -- returns hs.application object
-Dump(vlc)
+dump(vlc)
 -- FYI vlc will basically be empty table if no app instance is running
 -- IF app running:
 --    { <userdata 1> -- hs.application: VLC }
 local ppt = hs.application.applicationsForBundleID("com.microsoft.PowerPoint") -- returns hs.application object
-Dump("ppt", ppt) -- FYI so far... not showing ppt instance that is running... must be bundle id difference?
+dump("ppt", ppt) -- FYI so far... not showing ppt instance that is running... must be bundle id difference?
 -- TODO how can I lookup bundle id of running apps?
 -- local pptInfo = hs.application.infoForBundleID("com.microsoft.PowerPoint") -- returns hs.application object
 -- Dump("pptInfo", pptInfo) -- UTT infos, etc -- IIAC Info.plist(s) are used to make this
@@ -38,9 +38,9 @@ Dump("ppt", ppt) -- FYI so far... not showing ppt instance that is running... mu
 -- *** find
 local pptFind = hs.application.find("PowerPoint") -- YAY THIS WORKS!
 -- hint can match any of: PID, bundle ID, name, window title
-Dump("pptFind", pptFind)
+dump("pptFind", pptFind)
 local vlcFind = hs.applicatn("VLC") -- convenience method on top level module too
-Dump("vlcFind", vlcFind)
+dump("vlcFind", vlcFind)
 -- FYI nil (IIUC) when not running, multiple if more than one instance of app
 -- FYI a warning when using find:
 --  -- Some applications have alternate names which can also be checked if you enable Spotlight support with `hs.application.enableSpotlightForNameSearches(true)`.

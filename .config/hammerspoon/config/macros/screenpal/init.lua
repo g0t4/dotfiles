@@ -343,14 +343,14 @@ function ScreenPalEditorWindow:new()
 
         local time_window = self.windows:get_playhead_window_or_throw()
         local time_window_frame = time_window:axFrame()
-        Dump("time_window_frame", time_window_frame)
+        dump("time_window_frame", time_window_frame)
 
         local text_field = time_window:textField(1)
         ---@type string
         local time = text_field:axValue()
-        Dump({ time = time })
+        dump({ time = time })
         time = time:gsub("\n", "")
-        Dump({ time = time })
+        dump({ time = time })
 
 
 

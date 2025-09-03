@@ -4,7 +4,7 @@ local observer = axuielement.observer
 -- observer.new():start()
 --
 -- *** constants ***
-Dump("notifications", observer.notifications)
+dump("notifications", observer.notifications)
 -- interesting: applicationActivated, applicationDeactivated
 --    applicationHidden, applicationShown
 --    created, drawerCreated
@@ -81,7 +81,7 @@ if true then
     focusedObserver:addWatcher(textObserverAppElem, "AXFocusedUIElementChanged")
     focusedObserver:addWatcher(textObserverAppElem, "AXValueChanged") -- FYI CAN DIRECTLY OBSERVE FOR ENTIRE APP, DO NOT NEED TO SUBSCRIBE on each element
     focusedObserver:callback(function(_observer, elem, notification, detailsTable)
-        Dump("fObs", _observer, elem, notification, detailsTable)
+        dump("fObs", _observer, elem, notification, detailsTable)
         -- DumpAXEverything(elem)
         -- DumpAXPath(elem)
         -- for elem, notifications in pairs(textObserver:watching()) do
