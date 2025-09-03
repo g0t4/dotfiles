@@ -320,6 +320,14 @@ if status --is-interactive
             # PRN if multiple items => show each $path first?
 
             if test -f $path
+                if file --mime-type --brief $path | grep -qE 'image/(jpeg|png|gif|bmp|tiff|webp)'
+                    if command -q imgcat
+                        imgcat $path
+                    else
+                        echo "error, missing imgcat and $path is an image, aborting cat..."
+                    end
+                    return
+                end
                 # for plain text files I wanna color them too.. cat would normally show the file so no harm in coloring the output, color would even be dropped if piped/non-interactive
                 _batls_file $path
             else if test -d $path
