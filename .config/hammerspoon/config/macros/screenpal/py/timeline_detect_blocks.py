@@ -3,7 +3,7 @@ from PIL import Image
 import numpy as np, json, sys
 
 # capture_path = sys.argv[1]
-capture_path = '/Users/wesdemos/Downloads/screenpal-caps/Position.png'
+capture_path = '/Users/wesdemos/Downloads/screenpal-caps/Position-m2-02.png'
 
 S_MAX   = float(sys.argv[2]) if len(sys.argv)>2 else 30   # tweak
 V_MIN   = int(sys.argv[3])  if len(sys.argv)>3 else 60
