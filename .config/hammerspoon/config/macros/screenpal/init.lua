@@ -1,6 +1,5 @@
 local mouse = require("hs.mouse")
 local eventtap = require("hs.eventtap")
-local timer = require("hs.timer")
 local vim = require("config.libs.vim") -- reuse nvim lua modules in hammerspoon
 require("config.macros.screenpal.ui")
 
@@ -302,6 +301,7 @@ function ScreenPalEditorWindow:new()
         --   until find match for maxvalue and then you know you found the level!
         self:zoom_off()
         -- PRN pause.. if have trouble reliably restoring same position
+        -- TODO! use doAfter
         -- timer.usleep(100000)
 
 
@@ -333,7 +333,8 @@ function ScreenPalEditorWindow:new()
         end
 
         btn:performAction("AXPress")
-        timer.usleep(100000) -- TODO replace w/ wait_for_element
+        -- TODO! use doAfter instead! this is blocking
+        hs.timer.usleep(100000) -- TODO replace w/ wait_for_element
 
         -- restore playhead
         self:restore_playhead_position(playhead_percent)
@@ -345,6 +346,7 @@ function ScreenPalEditorWindow:new()
         end
 
         self:zoom2()
+        -- TODO! use doAfter
         -- timer.usleep(100000)
         -- StreamDeckScreenPalTimelineApproxRestorePosition(current_zoom_scrollbar_position)
     end
@@ -414,10 +416,12 @@ end
 function StreamDeckScreenPalTimelineZoomAndJumpToStart()
     local win = get_cached_editor_window()
     win:zoom_off() -- zoom out first means just click end and zoom in... no slider necessary!
+    -- TODO! use doAfter
     timer.usleep(10000)
     StreamDeckScreenPalTimelineJumpToStart()
     -- zoom after so if I am initially not zoomed, I can move faster
     -- PRN zoom out before move and then zoom in when done?
+    -- TODO! use doAfter
     timer.usleep(10000)
     win:zoom2()
 end
@@ -425,8 +429,10 @@ end
 function StreamDeckScreenPalTimelineZoomAndJumpToEnd()
     local win = get_cached_editor_window()
     win:zoom_off() -- zoom out first means just click end and zoom in... no slider necessary!
+    -- TODO! use doAfter
     timer.usleep(10000)
     StreamDeckScreenPalTimelineJumpToEnd()
+    -- TODO! use doAfter
     timer.usleep(10000)
     win:zoom2()
 end
