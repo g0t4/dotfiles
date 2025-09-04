@@ -1,7 +1,6 @@
 require('config.tests.setup')
 require('config.macros.screenpal.helpers')
 -- require('config.macros.screenpal')
-require('rx')
 
 -- !!! see run_unit_tests.fish for more about testing
 
