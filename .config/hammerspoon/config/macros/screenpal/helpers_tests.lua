@@ -1,5 +1,6 @@
--- require("config.macros.screenpal")
-require("config.macros.screenpal.helpers")
+require('config.tests.setup')
+require('config.macros.screenpal.helpers')
+-- require('config.macros.screenpal')
 
 -- !!! see run_unit_tests.fish for more about testing
 
