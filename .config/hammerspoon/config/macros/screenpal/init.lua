@@ -351,16 +351,22 @@ function ScreenPalEditorWindow:new()
         local pixels_per_second = playhead_relative_timeline_x / playhead_seconds
         local estimated_total_seconds = timeline_frame.w / pixels_per_second
         -- F!!! NAILED it for total seconds!!!
+        dump({ estimated_total_seconds = estimated_total_seconds })
+
+
+        local est_x_one_second = timeline_frame.x + pixels_per_second
+        local pixels_per_frame = pixels_per_second / 25 -- spal uses 25 fps
         dump({
-            estimated_total_seconds = estimated_total_seconds
+            est_x_one_second = est_x_one_second,
+            pixels_per_frame = pixels_per_frame
         })
 
-
-        local estimate_one_second_in = timeline_frame.x + pixels_per_second
         local hold_down_before_release = 1000
         hs.eventtap.leftClick({
             -- +1 pixel stops leftward drift by 1 frame (good test is back to back reopen, albeit not a normal workflow)
-            x = estimate_one_second_in, -- TODO + 1 here tooo?
+            x = est_x_one_second + 1, -- for 1 sec its slightly off (NBD => could arrow over if consistently off))
+            -- +1 => 1.04 sec (1 frame past), +0 => 0.92 sec (2 frames before)
+            -- FYI I DO NOT NEED PRECISE! silence ranges for example will be paddeed anyways! can always padd an extra frame!
             y = timeline_frame.y + timeline_frame.h / 2
         }, hold_down_before_release)
 
