@@ -192,14 +192,27 @@ function ScreenPalEditorWindow:new()
     end
 
     function editor_window:zoom_on()
-        if self:is_zoomed() then return end
+        if self:is_zoomed() then
+            return
+        end
+
         -- FYI typing m is faster now... must be b/c of the native Apple Silicon app
         hs.eventtap.keyStroke({}, "m", 0, get_screenpal_app_element_or_throw())
+
+        -- wait here so you don't want in consumers AND to NOT wait when already zoomed out
+        -- hs.timer.waitUntil -- TODO try waitUntil!
+        hs.timer.usleep(200000)
     end
 
     function editor_window:zoom_off()
-        if not self:is_zoomed() then return end
+        if not self:is_zoomed() then
+            return
+        end
+
         hs.eventtap.keyStroke({}, "m", 0, get_screenpal_app_element_or_throw())
+        -- wait here so you don't want in consumers AND to NOT wait when already zoomed out
+        -- hs.timer.waitUntil -- TODO try waitUntil!
+        hs.timer.usleep(200000)
     end
 
     function editor_window:get_scrollbar_or_throw()
@@ -322,9 +335,8 @@ function ScreenPalEditorWindow:new()
         -- StreamDeckScreenPalTimelineApproxRestorePosition(current_zoom_scrollbar_position)
     end
 
-
     function editor_window:estimate_time_per_pixel()
-        -- ensure_cached_controls() -- prn do I need this early on here?
+        ensure_cached_controls() -- prn do I need this early on here?
 
         -- NOT A PRIORITY
         --   Can use this when want to add sleep w/o callbacks
@@ -337,14 +349,15 @@ function ScreenPalEditorWindow:new()
         --     print("after sleep")
         -- end)
 
+        print("min zoom frame", hs.inspect(self._btn_minimum_zoom:axFrame())) -- (x,y) == (0,0) == not zoomed
         -- must be zoomed out, else cannot know that start of time line is 0 and end is the end of the video
-        self:zoom_off() -- PRN modify logic internally to wait for zoom off? (NOT HERE, rather put it in zoom_off to be reusable, and only call if is zoomed)
-        hs.timer.usleep(200000) -- TODO! WAIT UNTIL LOGIC would REALLY HELP!!!... OR at end check if timecode is one second and re-run some of this if not... that might help reduce delays from waiting for UI to catch up
+        self:zoom_off()
 
         local playhead_window = self.windows:get_playhead_window_or_throw()
         -- DO NOT get frames until UI is stable, zoome din frame is different than zoomed out
         local playhead_window_frame = playhead_window:axFrame()
 
+        print("min zoom frame", hs.inspect(self._btn_minimum_zoom:axFrame()))
 
         local time_text_field = playhead_window:textField(1)
         local time = time_text_field:axValue()
