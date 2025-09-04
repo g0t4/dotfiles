@@ -322,13 +322,15 @@ function ScreenPalEditorWindow:new()
         -- StreamDeckScreenPalTimelineApproxRestorePosition(current_zoom_scrollbar_position)
     end
 
-    require("config.macros.screenpal.co")
 
     function editor_window:estimate_time_per_pixel()
+        -- ensure_cached_controls() -- prn do I need this early on here?
+
         -- NOT A PRIORITY
         --   Can use this when want to add sleep w/o callbacks
         --   ALSO can make smth new like sleep_ms for other callbacks and make them elegant too
         --   BTW it is super easy for errors to be swallowed... add error handling else will be super confusing!
+        -- require("config.macros.screenpal.co")
         -- run_async(function()
         --     print("before sleep")
         --     sleep_ms(1000)
@@ -340,6 +342,7 @@ function ScreenPalEditorWindow:new()
         hs.timer.usleep(200000) -- TODO! WAIT UNTIL LOGIC would REALLY HELP!!!... OR at end check if timecode is one second and re-run some of this if not... that might help reduce delays from waiting for UI to catch up
 
         local playhead_window = self.windows:get_playhead_window_or_throw()
+        -- DO NOT get frames until UI is stable, zoome din frame is different than zoomed out
         local playhead_window_frame = playhead_window:axFrame()
 
 
