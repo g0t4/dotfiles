@@ -323,18 +323,31 @@ function ScreenPalEditorWindow:new()
     end
 
     function editor_window:estimate_time_per_pixel()
-        local time_window = self.windows:get_playhead_window_or_throw()
-        local time_window_frame = time_window:axFrame()
+        local playhead_window = self.windows:get_playhead_window_or_throw()
+        local playhead_window_frame = playhead_window:axFrame()
 
         -- must be zoomed out, else cannot know that start of time line is 0 and end is the end of the video
         self:zoom_off() -- PRN modify logic internally to wait for zoom off? (NOT HERE, rather put it in zoom_off to be reusable, and only call if is zoomed)
 
-        local time_text_field = time_window:textField(1)
+        local time_text_field = playhead_window:textField(1)
         local time = time_text_field:axValue()
         time = time:gsub("\n", "")
 
         local seconds = parse_time_to_seconds(time)
-        dump({ time = time, seconds = seconds, time_window_frame = time_window_frame })
+        dump({ time = time, seconds = seconds, })
+
+        -- possible issue => what if timeline stops part way when editing a short video? Is that even possible? if so this may not work well and OH well if I can't adjust in that rare case
+        local timeline_frame = self._btn_position_slider:axFrame()
+
+        local playhead_x = playhead_window_frame.x + playhead_window_frame.w / 2
+        local playhead_relative_timeline_x = playhead_x - timeline_frame.x
+        dump({
+            playhead_window_frame = playhead_window_frame,
+            playhead_x = playhead_x,
+            playhead_relative_timeline_x = playhead_relative_timeline_x
+        })
+        -- - timeline_frame.x
+
 
         -- ***! attempt to click at 1 second mark!
 
