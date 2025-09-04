@@ -109,3 +109,5 @@
 
 # *** end delta ***
 
+[merge]
+	tool = nvimdiff
