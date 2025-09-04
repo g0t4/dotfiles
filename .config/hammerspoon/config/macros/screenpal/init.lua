@@ -356,9 +356,16 @@ function ScreenPalEditorWindow:new()
         dump({ time = time, seconds = seconds })
 
 
-        -- #21253B -- detected silence periods
-
-
+        -- TODO!!! parse screen shots of position slider and find the silence ranges
+        -- TODO!!!   to automate selecting them using my own padding!
+        -- TODO!!!   and other cool helpers
+        -- TODO      test w/ cmd+ctrl+alt + "p" hammerspoon shortcut that screencaps individual elements and then can use that to test with (i.e. pos slider capture)
+        -- TODO      the color for silence is reliably showing up as this
+        --              #21253B -- detected silence periods
+        -- TODO         I confirmed this in both the running app and in my screencap
+        -- TODO         !!! slice the top of the image off (or maybe 3 pixels down) b/c then you won't have any interference with waveform
+        --              THEN move left to right through the pixels and look at the color
+        --              OR do something more sophisticated (reliable)
 
 
 
