@@ -375,10 +375,15 @@ function ScreenPalEditorWindow:new()
             }, hold_duration_ms)
         end
 
-        click_at(692)
-        hs.eventtap.keyStroke({}, "c", 0, get_screenpal_app_element_or_throw())
+        click_at(692+20)
+        hs.eventtap.keyStroke({}, "c", 0, get_screenpal_app_element_or_throw()) -- alone selects the cut region! I can then pull back each side
+        -- FYI I could also have it scan for the red selection and use that to pull back the current selection (pad it or expand it)
         hs.timer.usleep(100000)
-        click_at(692)
+        hs.eventtap.keyStroke({}, "s", 0, get_screenpal_app_element_or_throw()) -- OPTIONAL TO FORCE START AT clicked point for auto selected cuts
+        hs.timer.usleep(100000)
+        click_at(845-20)
+        hs.timer.usleep(100000)
+        hs.eventtap.keyStroke({}, "e", 0, get_screenpal_app_element_or_throw())
     end
 
     function editor_window:estimate_time_per_pixel()
