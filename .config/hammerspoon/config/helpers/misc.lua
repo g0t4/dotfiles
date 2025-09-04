@@ -107,3 +107,13 @@ function uuid()
         return string.format('%x', v)
     end)
 end
+
+---@param image_tag string
+---@return string
+function sanitize_image_tag(image_tag)
+    -- Sanitize image_tag for use in filename
+    image_tag = image_tag:gsub("[^%w%-%.]", "_")
+    image_tag = image_tag:gsub("^%s+", "")
+    image_tag = image_tag:gsub("%s+$", "")
+    return image_tag
+end

@@ -493,16 +493,6 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "F", function()
     M.last.freeze = not M.last.freeze
 end)
 
----@param image_tag string
----@return string
-function sanitize_image_tag(image_tag)
-    -- Sanitize image_tag for use in filename
-    image_tag = image_tag:gsub("[^%w%-%.]", "_")
-    image_tag = image_tag:gsub("^%s+", "")
-    image_tag = image_tag:gsub("%s+$", "")
-    return image_tag
-end
-
 function capture_element_under_mouse()
     -- this can work w/o using highlighter!
     local element = get_current_element()
