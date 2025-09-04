@@ -106,6 +106,7 @@ abbr uvp 'uv pip'
 abbr uvpi 'uv pip install'
 abbr uvpie 'uv pip install --editable .'
 abbr uvpir 'uv pip install -r requirements.txt'
+abbr uv_pip_install_upgrade 'uv pip install --upgrade $(uv pip list --outdated | tail +3 | cut -d' ' -f1)'
 abbr uvls 'uv pip list' # or do I want `uv tree` here?.... what else would I do with `uv list == uvl` basically?
 abbr uvpls 'uv pip list'
 abbr uvplo 'uv pip list --outdated'
