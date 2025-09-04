@@ -24,9 +24,8 @@ local function add_devtools_to_package_path()
     add_plugin_to_package_path(os.getenv("HOME") .. "/repos/github/g0t4/devtools.nvim/lua/")
 end
 
-function M.modify_package_path()
-    add_devtools_to_package_path()
-    add_rxlua_to_package_path()
-end
+-- immediately modify package path on import (require)
+add_devtools_to_package_path()
+add_rxlua_to_package_path()
 
 return M
