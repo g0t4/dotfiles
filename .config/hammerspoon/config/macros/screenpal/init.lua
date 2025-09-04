@@ -333,8 +333,8 @@ function ScreenPalEditorWindow:new()
         local time = time_text_field:axValue()
         time = time:gsub("\n", "")
 
-        local seconds = parse_time_to_seconds(time)
-        dump({ time = time, seconds = seconds, })
+        local playhead_seconds = parse_time_to_seconds(time)
+        dump({ time = time, seconds = playhead_seconds, })
 
         -- possible issue => what if timeline stops part way when editing a short video? Is that even possible? if so this may not work well and OH well if I can't adjust in that rare case
         local timeline_frame = self._btn_position_slider:axFrame()
@@ -347,6 +347,13 @@ function ScreenPalEditorWindow:new()
             playhead_relative_timeline_x = playhead_relative_timeline_x
         })
         -- - timeline_frame.x
+
+        local pixels_per_second = playhead_relative_timeline_x / playhead_seconds
+        local estimated_total_seconds = timeline_frame.w / pixels_per_second
+        -- F!!! NAILED it for total seconds!!!
+        dump({
+            estimated_total_seconds = estimated_total_seconds
+        })
 
 
         -- ***! attempt to click at 1 second mark!
