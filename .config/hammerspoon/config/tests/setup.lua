@@ -9,6 +9,8 @@ function M.dump_package_paths()
     print()
 end
 
+-- M.dump_package_paths() -- uncomment to test
+
 local function add_plugin_to_package_path(plugin_path)
     package.path = package.path .. ";" .. plugin_path .. "?.lua"
     package.path = package.path .. ";" .. plugin_path .. "?/init.lua"
@@ -25,6 +27,15 @@ local function add_rxlua_to_package_path()
     add_plugin_to_package_path(vim.fn.stdpath("data") .. "/lazy/RxLua/")
     -- other possibilities:
     --   -- vim.opt.runtimepath:append("~/.local/share/nvim/lazy/rxlua")
+end
+
+local function add_src_for_vim()
+    if vim == nil then return end
+    -- add_plugin_to_package_path("./")
+    -- ./?.lua
+    -- FYI vim already has ./?.lua (so skip doing both)
+    -- ./?/init.lua
+    package.path = package.path .. ";" .. "./?/init.lua"
 end
 
 local function add_devtools_to_package_path()
@@ -45,5 +56,6 @@ end
 -- immediately modify package path on import (require)
 add_devtools_to_package_path()
 add_rxlua_to_package_path()
+add_src_for_vim()
 
 return M
