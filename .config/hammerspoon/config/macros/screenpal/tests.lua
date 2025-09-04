@@ -1,8 +1,17 @@
 require('config.tests.setup')
 require('config.macros.screenpal') -- TODO test more of the logic in here
 -- require('config.macros.screenpal.helpers') -- FYI testing this is already imported via screenpal/init.lua
+require("config.macros.screenpal.co")
 
 -- !!! see run_unit_tests.fish for more about testing
+
+describe("cos", function()
+    it("test cos", function()
+        print("before sleep")
+        sleep_ms(250)
+        print("after sleep")
+    end)
+end)
 
 describe("parse_time_to_seconds", function()
     it("should parse seconds only", function()
