@@ -325,14 +325,16 @@ function ScreenPalEditorWindow:new()
     require("config.macros.screenpal.co")
 
     function editor_window:estimate_time_per_pixel()
-        run_async(function()
-            print("before sleep")
-            sleep_ms(1000)
-            print("after sleep")
-        end)
-    end
+        -- NOT A PRIORITY
+        --   Can use this when want to add sleep w/o callbacks
+        --   ALSO can make smth new like sleep_ms for other callbacks and make them elegant too
+        --   BTW it is super easy for errors to be swallowed... add error handling else will be super confusing!
+        -- run_async(function()
+        --     print("before sleep")
+        --     sleep_ms(1000)
+        --     print("after sleep")
+        -- end)
 
-    function editor_window:estimate_time_per_pixel_()
         local playhead_window = self.windows:get_playhead_window_or_throw()
         local playhead_window_frame = playhead_window:axFrame()
 
