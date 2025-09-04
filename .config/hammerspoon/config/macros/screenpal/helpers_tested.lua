@@ -12,16 +12,17 @@ function parse_time_to_seconds(time_string)
     if time_string:find(":") then
         local parts = {}
         for part in time_string:gmatch("([^:]+)") do
-            table.insert(parts, part)
+            -- insert in reverse order so smallest is first (seconds => minutes => hours)
+            table.insert(parts, 1, part)
         end
 
-        local minutes = tonumber(parts[1]) or 0
-        local seconds = tonumber(parts[2]) or 0
+        local seconds = tonumber(parts[1]) or 0
+        local minutes = tonumber(parts[2]) or 0
         total_seconds = minutes * 60 + seconds
-        if #parts > 3 then
+        if #parts > 2 then
             local hours = tonumber(parts[3]) or 0
             total_seconds = total_seconds + hours * 3600
-            if #parts > 4 then
+            if #parts > 3 then
                 error("Cannot have time component bigger than hours  (h:m:s): " .. time_string)
             end
         end
