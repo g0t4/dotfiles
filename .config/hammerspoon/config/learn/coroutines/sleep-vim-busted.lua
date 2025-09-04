@@ -5,9 +5,10 @@
 -- end
 
 function sleep_ms(duration)
-    local _co = coroutine.running()
+    local co = coroutine.running()
+    assert(co, "sleep can only be called within a coroutine")
     vim.defer_fn(function()
-        coroutine.resume(_co)
+        coroutine.resume(co)
     end, duration)
     coroutine.yield()
 end
