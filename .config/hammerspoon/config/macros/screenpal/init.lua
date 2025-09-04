@@ -330,9 +330,10 @@ function ScreenPalEditorWindow:new()
 
         function sleep_ms(ms)
             seconds = ms / 1000
-            local _co = coroutine.running()
+            local co = coroutine.running()
+            assert(co, "sleep can only be called within a coroutine")
             hs.timer.doAfter(seconds, function()
-                coroutine.resume(_co)
+                coroutine.resume(co)
             end)
             coroutine.yield()
         end
