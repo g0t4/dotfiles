@@ -1,0 +1,17 @@
+require("config.macros.screenpal.co")
+
+describe("cos", function()
+    it("test w/o run_async because test already has a coroutine", function()
+        print("before sleep")
+        sleep_ms(250)
+        print("after sleep")
+    end)
+
+    it("test run_async works too, bypasses creating coroutine", function()
+        run_async(function()
+            print("before sleep")
+            sleep_ms(250)
+            print("after sleep")
+        end)
+    end)
+end)

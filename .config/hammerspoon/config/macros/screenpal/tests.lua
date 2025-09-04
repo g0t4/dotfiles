@@ -1,26 +1,8 @@
 require('config.tests.setup')
 require('config.macros.screenpal') -- TODO test more of the logic in here
 -- require('config.macros.screenpal.helpers') -- FYI testing this is already imported via screenpal/init.lua
-require("config.macros.screenpal.co")
 
 -- !!! see run_unit_tests.fish for more about testing
-
-describe("cos", function()
-    it("test w/o run_async because test already has a coroutine", function()
-        print("before sleep")
-        sleep_ms(250)
-        print("after sleep")
-    end)
-
-    it("test run_async works too, bypasses creating coroutine", function()
-        run_async(function()
-            print("before sleep")
-            sleep_ms(250)
-            print("after sleep")
-        end)
-    end)
-end)
-
 describe("parse_time_to_seconds", function()
     it("should parse seconds only", function()
         assert.equal(42, parse_time_to_seconds("42"))
