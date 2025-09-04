@@ -357,10 +357,15 @@ function ScreenPalEditorWindow:new()
                     table.insert(parts, part)
                 end
 
-                if #parts >= 2 then
-                    local minutes = tonumber(parts[1]) or 0
-                    local seconds = tonumber(parts[2]) or 0
-                    total_seconds = minutes * 60 + seconds
+                local minutes = tonumber(parts[1]) or 0
+                local seconds = tonumber(parts[2]) or 0
+                total_seconds = minutes * 60 + seconds
+                if #parts > 3 then
+                    local hours = tonumber(parts[3]) or 0
+                    total_seconds = total_seconds + hours * 3600
+                    if #parts > 4 then
+                        error("Hours cannot exceed 24")
+                    end
                 end
             else
                 total_seconds = tonumber(time_string) or 0
