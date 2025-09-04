@@ -361,18 +361,24 @@ function ScreenPalEditorWindow:new()
         print("_btn_position_slider", self._btn_position_slider)
         local timeline_frame = self._btn_position_slider:axFrame()
 
-        local reading = 692
-        local rel_click_x = reading / 2 -- divide by 2 for 4k resolution of screencaps, b/c screen cords are 1080p... THIS WORKS! SPOT ON
-        local click_x = timeline_frame.x + rel_click_x
+        function click_at(reading)
+            local rel_click_x = reading / 2 -- divide by 2 for 4k resolution of screencaps, b/c screen cords are 1080p... THIS WORKS! SPOT ON
+            local click_x = timeline_frame.x + rel_click_x
 
-        local hold_duration_ms = 10000
-        hs.eventtap.leftClick({
-            -- +1 pixel stops leftward drift by 1 frame (good test is back to back reopen, albeit not a normal workflow)
-            x = click_x + 1, -- for 1 sec its slightly off (NBD => could arrow over if consistently off))
-            -- +1 => 1.04 sec (1 frame past), +0 => 0.92 sec (2 frames before)
-            -- FYI I DO NOT NEED PRECISE! silence ranges for example will be paddeed anyways! can always padd an extra frame!
-            y = timeline_frame.y + timeline_frame.h / 2
-        }, hold_duration_ms)
+            local hold_duration_ms = 10000
+            hs.eventtap.leftClick({
+                -- +1 pixel stops leftward drift by 1 frame (good test is back to back reopen, albeit not a normal workflow)
+                x = click_x + 1, -- for 1 sec its slightly off (NBD => could arrow over if consistently off))
+                -- +1 => 1.04 sec (1 frame past), +0 => 0.92 sec (2 frames before)
+                -- FYI I DO NOT NEED PRECISE! silence ranges for example will be paddeed anyways! can always padd an extra frame!
+                y = timeline_frame.y + timeline_frame.h / 2
+            }, hold_duration_ms)
+        end
+
+        click_at(692)
+        hs.eventtap.keyStroke({}, "c", 0, get_screenpal_app_element_or_throw())
+        hs.timer.usleep(100000)
+        click_at(692)
     end
 
     function editor_window:estimate_time_per_pixel()
