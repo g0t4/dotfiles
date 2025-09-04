@@ -348,9 +348,13 @@ function ScreenPalEditorWindow:new()
         local text_field = time_window:textField(1)
         ---@type string
         local time = text_field:axValue()
-        dump({ time = time })
         time = time:gsub("\n", "")
         dump({ time = time })
+        -- time = "3:23.28"
+
+        -- draw box around time and posbar
+        --
+
 
 
 
