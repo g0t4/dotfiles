@@ -210,9 +210,24 @@ function ScreenPalEditorWindow:new()
         end
 
         hs.eventtap.keyStroke({}, "m", 0, get_screenpal_app_element_or_throw())
+
         -- wait here so you don't want in consumers AND to NOT wait when already zoomed out
-        -- hs.timer.waitUntil -- TODO try waitUntil!
         hs.timer.usleep(200000)
+        -- TODO I do not think waitUntil is blocking either so it would let consumer code keep running, right?
+        -- PRN loop on usleep and poll something useful to tell you when you can be ready to click in the UI
+        -- -- FYI waitUntil is always already 0,0 on first run, so I would need a diff test  to use this
+        -- print("waitUNTIL")
+        -- hs.timer.waitUntil(function()
+        --     print("tick")
+        --     if self._btn_minimum_zoom then
+        --         local frame = self._btn_minimum_zoom:axFrame()
+        --         print("  frame", hs.inspect(frame))
+        --         return frame.x == 0 and frame.y == 0
+        --     end
+        --     return false
+        -- end, function()
+        --     print("DONE")
+        -- end, 0.05)
     end
 
     function editor_window:get_scrollbar_or_throw()
