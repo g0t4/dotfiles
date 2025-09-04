@@ -321,6 +321,34 @@ function ScreenPalEditorWindow:new()
         -- StreamDeckScreenPalTimelineApproxRestorePosition(current_zoom_scrollbar_position)
     end
 
+    local function parse_time_to_seconds(time_string)
+        ---@type number
+        local total_seconds = 0
+        -- time = "3:23.28"
+
+        if time_string:find(":") then
+            local parts = {}
+            for part in time_string:gmatch("([^:]+)") do
+                table.insert(parts, part)
+            end
+
+            local minutes = tonumber(parts[1]) or 0
+            local seconds = tonumber(parts[2]) or 0
+            total_seconds = minutes * 60 + seconds
+            if #parts > 3 then
+                local hours = tonumber(parts[3]) or 0
+                total_seconds = total_seconds + hours * 3600
+                if #parts > 4 then
+                    error("Hours cannot exceed 24")
+                end
+            end
+        else
+            total_seconds = tonumber(time_string) or 0
+        end
+
+        return total_seconds
+    end
+
     function editor_window:estimate_time_per_pixel()
         -- app:window(2):textField(1)
         --
@@ -347,40 +375,12 @@ function ScreenPalEditorWindow:new()
 
         local text_field = time_window:textField(1)
 
-        local function parse_time_to_seconds(time_string)
-            ---@type number
-            local total_seconds = 0
-
-            if time_string:find(":") then
-                local parts = {}
-                for part in time_string:gmatch("([^:]+)") do
-                    table.insert(parts, part)
-                end
-
-                local minutes = tonumber(parts[1]) or 0
-                local seconds = tonumber(parts[2]) or 0
-                total_seconds = minutes * 60 + seconds
-                if #parts > 3 then
-                    local hours = tonumber(parts[3]) or 0
-                    total_seconds = total_seconds + hours * 3600
-                    if #parts > 4 then
-                        error("Hours cannot exceed 24")
-                    end
-                end
-            else
-                total_seconds = tonumber(time_string) or 0
-            end
-
-            return total_seconds
-        end
 
         local time = text_field:axValue()
         time = time:gsub("\n", "")
-        dump({ time = time })
-        -- time = "3:23.28"
 
         local seconds = parse_time_to_seconds(time)
-        dump({ seconds = seconds })
+        dump({ time = time, seconds = seconds })
 
 
         -- #21253B -- detected silence periods
