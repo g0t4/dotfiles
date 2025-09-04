@@ -1,7 +1,14 @@
-function run_async(what)
+function run_async(what, ...)
+    if coroutine.running() then
+        what(...)
+        return
+    end
+
     local co = coroutine.create(what)
-    coroutine.resume(co)
-    return co
+    local ok, err = coroutine.resume(co, ...)
+    if not ok then
+        error(err)
+    end
 end
 
 function sleep_ms(ms)
@@ -13,6 +20,8 @@ function sleep_ms(ms)
     end
 
     if vim.defer_fn ~= nil then
+        -- useful in nvim lua code
+        -- ALSO useful for plenary test runs
         print("sleep found vim")
         vim.defer_fn(callback, ms)
         coroutine.yield()
