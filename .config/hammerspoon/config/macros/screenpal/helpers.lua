@@ -1,8 +1,5 @@
--- !!! DO NOT USE HAMMERSPOON APIS in here
--- setup any dependencies you ABSOLUTELY need
--- otherwise keep this code separate of your hs code
--- DO NOT use anything that cannot be loaded from package.path
--- ! ALSO! can run this with plenary unit test runner IF code executing is VANILLA JS code
+-- isolated code, mostly for testing purposes
+-- don't do require("hs.*") top level in here at all
 
 function parse_time_to_seconds(time_string)
     ---@type number

@@ -1,11 +1,7 @@
 -- require("config.macros.screenpal")
-require("config.macros.screenpal.helpers_tested")
+require("config.macros.screenpal.helpers")
 
--- using busted for testing
---   luarocks install busted
--- TODO can I get this to work from plenary's file runner in neovim, I like that UX (not necessary but might be nice)...
---   issue would be package.path (notably hs deps)
---   also static refs to hs apis hs.timer...
+-- !!! see run_unit_tests.fish for more about testing
 
 describe("parse_time_to_seconds", function()
     it("should parse seconds only", function()
