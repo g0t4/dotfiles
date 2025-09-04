@@ -349,6 +349,7 @@ function ScreenPalEditorWindow:new()
         -- TODO         !!! slice the top of the image off (or maybe 3 pixels down) b/c then you won't have any interference with waveform
         --              THEN move left to right through the pixels and look at the color
         --              OR do something more sophisticated (reliable)
+        --   ! see config/macros/screenpal/py/timeline_detect_blocks.py for initial idea to find gray silence areas
 
 
 
