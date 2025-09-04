@@ -323,37 +323,20 @@ function ScreenPalEditorWindow:new()
     end
 
     function editor_window:estimate_time_per_pixel()
-        -- app:window(2):textField(1)
-        --
-        -- AXDescription: text/html<string>
-        -- AXEdited: true<bool>
-        -- AXEnabled: true<bool>
-        -- AXFocused: false<bool>
-        -- AXFocusedUIElement: AXTextField - text/html<hs.axuielement>
-        -- AXHelp: text/html<string>
-        -- AXIndex: -1<number>
-        -- AXMaxValue: 0<number>
-        -- AXMinValue: 0<number>
-        -- AXOrientation: AXUnknownOrientation<string>
-        -- AXRoleDescription: text field<string>
-        -- AXSelected: false<bool>
-        --
-        -- press 'c' to show children
-        --
-        -- unique ref: app:window('SOM-FloatingWindow-Type=edit2.posbar-ZOrder=1(Undefined+1)'):textField(1)
-
         local time_window = self.windows:get_playhead_window_or_throw()
         local time_window_frame = time_window:axFrame()
-        dump("time_window_frame", time_window_frame)
 
-        local text_field = time_window:textField(1)
+        -- must be zoomed out, else cannot know that start of time line is 0 and end is the end of the video
+        self:zoom_off() -- PRN modify logic internally to wait for zoom off? (NOT HERE, rather put it in zoom_off to be reusable, and only call if is zoomed)
 
-
-        local time = text_field:axValue()
+        local time_text_field = time_window:textField(1)
+        local time = time_text_field:axValue()
         time = time:gsub("\n", "")
 
         local seconds = parse_time_to_seconds(time)
-        dump({ time = time, seconds = seconds })
+        dump({ time = time, seconds = seconds, time_window_frame = time_window_frame })
+
+        -- ***! attempt to click at 1 second mark!
 
 
         -- TODO!!! parse screen shots of position slider and find the silence ranges
