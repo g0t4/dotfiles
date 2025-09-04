@@ -10,10 +10,10 @@ describe("cos", function()
         sleep_ms(250)
         local _end = get_ms()
         local actual_ms = _end - _start
-        if actual_ms < 200 then
+        if actual_ms < 240 then
             error("sleep was not long enough: " .. actual_ms .. " ms")
         end
-        if actual_ms > 300 then
+        if actual_ms > 260 then
             error("sleep was too long: " .. actual_ms .. " ms")
         end
     end)
