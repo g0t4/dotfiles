@@ -378,6 +378,7 @@ function ScreenPalEditorWindow:new()
         dump({ seconds = seconds })
 
 
+        -- #21253B -- detected silence periods
 
 
 
