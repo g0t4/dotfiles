@@ -323,6 +323,28 @@ function ScreenPalEditorWindow:new()
     end
 
     function editor_window:estimate_time_per_pixel()
+        function run_async(what)
+            local co = coroutine.create(what)
+            coroutine.resume(co)
+        end
+
+        function sleep_ms(ms)
+            seconds = ms / 1000
+            local _co = coroutine.running()
+            hs.timer.doAfter(seconds, function()
+                coroutine.resume(_co)
+            end)
+            coroutine.yield()
+        end
+
+        run_async(function()
+            print("before sleep")
+            sleep_ms(1000)
+            print("after sleep")
+        end)
+    end
+
+    function editor_window:estimate_time_per_pixel_()
         local playhead_window = self.windows:get_playhead_window_or_throw()
         local playhead_window_frame = playhead_window:axFrame()
 
