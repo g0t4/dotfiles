@@ -54,6 +54,11 @@ ranges
 # sample! it is working!!!
 #   open image in preview
 #   drag selection from left side to various points and compare to changes below:
+#   RANGES manually detected:
+#   - 692 => 845
+#   - 2150 => 2304 (white dash line) 2306 => 2370
+#   - 2978 => 3198
+#   FYI when zoomed in, can see some borders/shadows between sections, almost all a few pixels wide max... can skip those based on width
 #
 # V: 57 looks like it works
 #
