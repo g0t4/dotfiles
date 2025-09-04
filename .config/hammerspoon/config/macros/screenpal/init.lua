@@ -1,5 +1,6 @@
 local vim = require("config.libs.vim") -- reuse nvim lua modules in hammerspoon
 require("config.macros.screenpal.ui")
+require('config.macros.screenpal.helpers')
 
 ---@return hs.axuielement app_element
 local function get_screenpal_app_element_or_throw()

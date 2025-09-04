@@ -1,6 +1,3 @@
--- isolated code, mostly for testing purposes
--- don't do require("hs.*") top level in here at all
-
 function parse_time_to_seconds(time_string)
     ---@type number
     local total_seconds = 0
