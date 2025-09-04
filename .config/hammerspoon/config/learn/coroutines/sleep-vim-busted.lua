@@ -4,7 +4,7 @@
 --     return co
 -- end
 
-function sleep(duration)
+function sleep_ms(duration)
     local _co = coroutine.running()
     vim.defer_fn(function()
         coroutine.resume(_co)
@@ -16,6 +16,6 @@ it("test sleep", function()
     -- busted/plenary uses coroutines
     --  so I don't need to create one w/ run_async
     print("before sleep")
-    sleep(1000)
+    sleep_ms(1000)
     print("after sleep")
 end)

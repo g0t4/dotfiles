@@ -3,9 +3,10 @@ function run_async(what)
     coroutine.resume(co)
 end
 
-function sleep(duration)
+function sleep_ms(ms)
+    seconds = ms / 1000
     local _co = coroutine.running()
-    hs.timer.doAfter(duration, function()
+    hs.timer.doAfter(seconds, function()
         coroutine.resume(_co)
     end)
     coroutine.yield()
@@ -13,6 +14,6 @@ end
 
 run_async(function()
     print("before sleep")
-    sleep(1000)
+    sleep_ms(1001)
     print("after sleep")
 end)
