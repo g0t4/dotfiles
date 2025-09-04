@@ -356,6 +356,15 @@ function ScreenPalEditorWindow:new()
         })
 
 
+        local estimate_one_second_in = timeline_frame.x + pixels_per_second
+        local hold_down_before_release = 1000
+        hs.eventtap.leftClick({
+            -- +1 pixel stops leftward drift by 1 frame (good test is back to back reopen, albeit not a normal workflow)
+            x = estimate_one_second_in, -- TODO + 1 here tooo?
+            y = timeline_frame.y + timeline_frame.h / 2
+        }, hold_down_before_release)
+
+
         -- ***! attempt to click at 1 second mark!
 
 
