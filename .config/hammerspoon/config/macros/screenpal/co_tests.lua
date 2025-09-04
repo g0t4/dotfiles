@@ -28,7 +28,7 @@ function TestTimer:throw_if_time_not_acceptable(msg)
     local max_time = self.allowed_time + tolerance
 
     if elapsed < min_time or elapsed > max_time then
-        error(msg .. " - actual: " .. elapsed .. "ms, expected: " .. self.allowed_time .. "ms ±" .. tolerance .. "ms")
+        error(msg .. " - actual: " .. string.format("%.1f", elapsed) .. "ms, expected: " .. self.allowed_time .. "ms ±" .. tolerance .. "ms")
     end
 end
 
