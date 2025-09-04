@@ -1451,7 +1451,7 @@ if command -q llama-server
 
         # FYI 4k --context-size if not specified
         set _qwen3coder_host "--host 0.0.0.0 --port 8013"
-        set _qwen3coder_shared "llama-server $_qwen3coder_host --ctx-size 65536 --batch-size 2048 --ubatch-size 2048 --flash-attn --n-gpu-layers 99"
+        set _qwen3coder_shared "llama-server $_qwen3coder_host --ctx-size 65536 --batch-size 2048 --ubatch-size 2048 --flash-attn on --n-gpu-layers 99"
         # IIUC both qwen2.5-coder and qwen3-coder models share the same vocab though I should double check
         # set _draft_fimq25_05b "--hf-repo-draft ggml-org/Qwen2.5-Coder-0.5B-Q8_0-GGUF"
         # TODO! try ncache reuse arg at 256? which is in llama-server repo's arg for this
@@ -1470,14 +1470,14 @@ if command -q llama-server
         # TODO --batch-size / --ubatch-size # memory impact?
         # --ctx-size 0 => means load from model or default 4096
         set _gptoss_host "--host 0.0.0.0 --port 8013"
-        set _gptoss_shared "llama-server $_gptoss_host --batch-size 2048 --ubatch-size 2048 --ctx-size 0 --jinja --flash-attn --n-gpu-layers 99 --reasoning-format none"
+        set _gptoss_shared "llama-server $_gptoss_host --batch-size 2048 --ubatch-size 2048 --ctx-size 0 --jinja --flash-attn on --n-gpu-layers 99 --reasoning-format none"
         abbr lsgptoss20b "$_gptoss_shared -hf ggml-org/gpt-oss-20b-GGUF"
         abbr lsgptoss120b "$_gptoss_shared -hf ggml-org/gpt-oss-120b-GGUF"
         # TODO speculative decoding with ngram?! or 20b draft feeds 120b judge
 
         # * Seed-Coder
         set _bytedance_host "--host 0.0.0.0 --port 8012"
-        set _bytedance_shared "z base; llama-server $_bytedance_host --batch-size 2048 --ubatch-size 2048 --ctx-size 0 --jinja --flash-attn --n-gpu-layers 99"
+        set _bytedance_shared "z base; llama-server $_bytedance_host --batch-size 2048 --ubatch-size 2048 --ctx-size 0 --jinja --flash-attn on --n-gpu-layers 99"
         abbr lsbytedance_seed_coder_4 "$_bytedance_shared --model ByteDance-Seed-Coder-8B-Base-Q4_K_M.gguf"
         abbr lsbytedance_seed_coder_8 "$_bytedance_shared --model ByteDance-Seed-Coder-8B-Base-Q8_0.gguf"
         abbr lsbytedance_seed_coder_f16 "$_bytedance_shared --model ByteDance-Seed-Coder-8B-Base-f16.gguf"
