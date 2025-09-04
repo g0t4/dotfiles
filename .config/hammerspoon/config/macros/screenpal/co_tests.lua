@@ -1,7 +1,7 @@
 require("config.macros.screenpal.co")
 local TestTimer = require("config.macros.screenpal.test_timing")
 
-describe("cos", function()
+describe("coroutine helper tests", function()
     it("test w/o run_async because test already has a coroutine", function()
         local timer = TestTimer:new(250)
         sleep_ms(250)

@@ -1,5 +1,9 @@
 local function get_ms()
-    return vim.uv.hrtime() / 1e6
+    -- FYI hammerspoon can import luv if its installed with luarocks (or otherwise)
+    -- vim => uses vim.uv
+    -- hs/busted => uses luv
+    local luv = (vim and vim.uv) or require("luv")
+    return luv.hrtime() / 1e6
 end
 
 ---@class TestTimer
