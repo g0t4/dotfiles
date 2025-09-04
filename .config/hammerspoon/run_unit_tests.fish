@@ -4,7 +4,7 @@
 cd $WES_DOTFILES/.config/hammerspoon
 
 # add more test files here:
-busted config/macros/screenpal/helpers_tests.lua
+busted config/macros/screenpal/tests.lua
 
 # !!! OR use plenary unit test runner in nvim!
 # as long as it can find deps it will work
