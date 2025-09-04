@@ -21,6 +21,34 @@ table.maxn = function(t)
     return max
 end
 
+function parse_time_to_seconds(time_string)
+    ---@type number
+    local total_seconds = 0
+    -- time = "3:23.28"
+
+    if time_string:find(":") then
+        local parts = {}
+        for part in time_string:gmatch("([^:]+)") do
+            table.insert(parts, part)
+        end
+
+        local minutes = tonumber(parts[1]) or 0
+        local seconds = tonumber(parts[2]) or 0
+        total_seconds = minutes * 60 + seconds
+        if #parts > 3 then
+            local hours = tonumber(parts[3]) or 0
+            total_seconds = total_seconds + hours * 3600
+            if #parts > 4 then
+                error("Cannot have time component bigger than hours  (h:m:s): " .. time_string)
+            end
+        end
+    else
+        total_seconds = tonumber(time_string) or 0
+    end
+
+    return total_seconds
+end
+
 ---@class ScreenPalEditorWindow
 ---@field windows AppWindows
 ScreenPalEditorWindow = {}
@@ -319,34 +347,6 @@ function ScreenPalEditorWindow:new()
         self:zoom2()
         -- timer.usleep(100000)
         -- StreamDeckScreenPalTimelineApproxRestorePosition(current_zoom_scrollbar_position)
-    end
-
-    local function parse_time_to_seconds(time_string)
-        ---@type number
-        local total_seconds = 0
-        -- time = "3:23.28"
-
-        if time_string:find(":") then
-            local parts = {}
-            for part in time_string:gmatch("([^:]+)") do
-                table.insert(parts, part)
-            end
-
-            local minutes = tonumber(parts[1]) or 0
-            local seconds = tonumber(parts[2]) or 0
-            total_seconds = minutes * 60 + seconds
-            if #parts > 3 then
-                local hours = tonumber(parts[3]) or 0
-                total_seconds = total_seconds + hours * 3600
-                if #parts > 4 then
-                    error("Cannot have time component bigger than hours  (h:m:s): " .. time_string)
-                end
-            end
-        else
-            total_seconds = tonumber(time_string) or 0
-        end
-
-        return total_seconds
     end
 
     function editor_window:estimate_time_per_pixel()
