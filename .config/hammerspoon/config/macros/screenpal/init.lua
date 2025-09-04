@@ -273,7 +273,7 @@ function ScreenPalEditorWindow:new()
         self:zoom_off()
         -- PRN pause.. if have trouble reliably restoring same position
         -- TODO! use doAfter
-        -- timer.usleep(100000)
+        -- hs.timer.usleep(100000)
 
 
         local playhead_percent = self:playhead_position_percent()
@@ -318,7 +318,7 @@ function ScreenPalEditorWindow:new()
 
         self:zoom2()
         -- TODO! use doAfter
-        -- timer.usleep(100000)
+        -- hs.timer.usleep(100000)
         -- StreamDeckScreenPalTimelineApproxRestorePosition(current_zoom_scrollbar_position)
     end
 
@@ -426,12 +426,12 @@ function StreamDeckScreenPalTimelineZoomAndJumpToStart()
     local win = get_cached_editor_window()
     win:zoom_off() -- zoom out first means just click end and zoom in... no slider necessary!
     -- TODO! use doAfter
-    timer.usleep(10000)
+    hs.timer.usleep(10000)
     StreamDeckScreenPalTimelineJumpToStart()
     -- zoom after so if I am initially not zoomed, I can move faster
     -- PRN zoom out before move and then zoom in when done?
     -- TODO! use doAfter
-    timer.usleep(10000)
+    hs.timer.usleep(10000)
     win:zoom2()
 end
 
@@ -439,10 +439,10 @@ function StreamDeckScreenPalTimelineZoomAndJumpToEnd()
     local win = get_cached_editor_window()
     win:zoom_off() -- zoom out first means just click end and zoom in... no slider necessary!
     -- TODO! use doAfter
-    timer.usleep(10000)
+    hs.timer.usleep(10000)
     StreamDeckScreenPalTimelineJumpToEnd()
     -- TODO! use doAfter
-    timer.usleep(10000)
+    hs.timer.usleep(10000)
     win:zoom2()
 end
 
@@ -475,7 +475,7 @@ function StreamDeckScreenPalTimelineJumpToStart()
                 -- click left-most side of timeline's scrollbar to get to zero
                 hs.eventtap.leftClick({ x = frame.x, y = frame.y + frame.h / 2 })
                 -- hs.eventtap.leftClick({ x = frame.x, y = frame.y + frame.h / 2 }) -- could click twice if value doesn't change
-                -- timer.usleep(10000) -- don't need pause b/c hs seems to block while clicking
+                -- hs.timer.usleep(10000) -- don't need pause b/c hs seems to block while clicking
             end
         end
 
