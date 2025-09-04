@@ -335,11 +335,13 @@ function ScreenPalEditorWindow:new()
         --     print("after sleep")
         -- end)
 
+        -- must be zoomed out, else cannot know that start of time line is 0 and end is the end of the video
+        self:zoom_off() -- PRN modify logic internally to wait for zoom off? (NOT HERE, rather put it in zoom_off to be reusable, and only call if is zoomed)
+        hs.timer.usleep(200000) -- TODO! WAIT UNTIL LOGIC would REALLY HELP!!!... OR at end check if timecode is one second and re-run some of this if not... that might help reduce delays from waiting for UI to catch up
+
         local playhead_window = self.windows:get_playhead_window_or_throw()
         local playhead_window_frame = playhead_window:axFrame()
 
-        -- must be zoomed out, else cannot know that start of time line is 0 and end is the end of the video
-        self:zoom_off() -- PRN modify logic internally to wait for zoom off? (NOT HERE, rather put it in zoom_off to be reusable, and only call if is zoomed)
 
         local time_text_field = playhead_window:textField(1)
         local time = time_text_field:axValue()
@@ -349,6 +351,7 @@ function ScreenPalEditorWindow:new()
         dump({ time = time, seconds = playhead_seconds, })
 
         -- possible issue => what if timeline stops part way when editing a short video? Is that even possible? if so this may not work well and OH well if I can't adjust in that rare case
+        print("_btn_position_slider", self._btn_position_slider)
         local timeline_frame = self._btn_position_slider:axFrame()
 
         local playhead_x = playhead_window_frame.x + playhead_window_frame.w / 2
