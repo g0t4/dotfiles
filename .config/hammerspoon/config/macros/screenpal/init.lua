@@ -339,7 +339,7 @@ function ScreenPalEditorWindow:new()
                 local hours = tonumber(parts[3]) or 0
                 total_seconds = total_seconds + hours * 3600
                 if #parts > 4 then
-                    error("Hours cannot exceed 24")
+                    error("Cannot have time component bigger than hours  (h:m:s): " .. time_string)
                 end
             end
         else
