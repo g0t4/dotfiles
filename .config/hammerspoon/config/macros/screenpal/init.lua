@@ -346,14 +346,38 @@ function ScreenPalEditorWindow:new()
         dump("time_window_frame", time_window_frame)
 
         local text_field = time_window:textField(1)
-        ---@type string
+
+        local function parse_time_to_seconds(time_string)
+            ---@type number
+            local total_seconds = 0
+
+            if time_string:find(":") then
+                local parts = {}
+                for part in time_string:gmatch("([^:]+)") do
+                    table.insert(parts, part)
+                end
+
+                if #parts >= 2 then
+                    local minutes = tonumber(parts[1]) or 0
+                    local seconds = tonumber(parts[2]) or 0
+                    total_seconds = minutes * 60 + seconds
+                end
+            else
+                total_seconds = tonumber(time_string) or 0
+            end
+
+            return total_seconds
+        end
+
         local time = text_field:axValue()
         time = time:gsub("\n", "")
         dump({ time = time })
         -- time = "3:23.28"
 
-        -- draw box around time and posbar
-        --
+        local seconds = parse_time_to_seconds(time)
+        dump({ seconds = seconds })
+
+
 
 
 
