@@ -6,7 +6,7 @@
 
 function sleep(duration)
     local _co = coroutine.running()
-    vim.defer_fn(function(timer)
+    vim.defer_fn(function()
         coroutine.resume(_co)
     end, duration)
     coroutine.yield()
