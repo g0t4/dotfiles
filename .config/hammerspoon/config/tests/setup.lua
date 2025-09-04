@@ -40,6 +40,7 @@ end
 -- - hammerspoon itself
 --   yet another runtime (for prod code in my case)
 -- * KEEP IN MIND that each one may need different mods to package path
+-- - GOOD test case is to add `require('rx')` to a test file... (remove when done)
 
 -- immediately modify package path on import (require)
 add_devtools_to_package_path()
