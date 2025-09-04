@@ -1,5 +1,3 @@
-local mouse = require("hs.mouse")
-local eventtap = require("hs.eventtap")
 local vim = require("config.libs.vim") -- reuse nvim lua modules in hammerspoon
 require("config.macros.screenpal.ui")
 
@@ -175,7 +173,7 @@ function ScreenPalEditorWindow:new()
 
         local hold_down_before_release = 1000 -- default is 200ms, will matter if chaining more actions!
         -- I ran into trouble with 0ms hold delay
-        eventtap.leftClick({
+        hs.eventtap.leftClick({
             -- +1 pixel stops leftward drift by 1 frame (good test is back to back reopen, albeit not a normal workflow)
             x = time_window_x_center + 1,
             y = timeline_frame.y + timeline_frame.h / 2
@@ -195,12 +193,12 @@ function ScreenPalEditorWindow:new()
     function editor_window:zoom_on()
         if self:is_zoomed() then return end
         -- FYI typing m is faster now... must be b/c of the native Apple Silicon app
-        eventtap.keyStroke({}, "m", 0, get_screenpal_app_element_or_throw())
+        hs.eventtap.keyStroke({}, "m", 0, get_screenpal_app_element_or_throw())
     end
 
     function editor_window:zoom_off()
         if not self:is_zoomed() then return end
-        eventtap.keyStroke({}, "m", 0, get_screenpal_app_element_or_throw())
+        hs.eventtap.keyStroke({}, "m", 0, get_screenpal_app_element_or_throw())
     end
 
     function editor_window:get_scrollbar_or_throw()
@@ -410,7 +408,7 @@ function StreamDeckScreenPalTimelineZoomAndJumpToEnd()
 end
 
 function StreamDeckScreenPalTimelineJumpToStart()
-    -- local original_mouse_pos = mouse.absolutePosition()
+    -- local original_mouse_pos = hs.mouse.absolutePosition()
     local win = get_cached_editor_window()
 
     if win:is_zoomed() then
@@ -436,8 +434,8 @@ function StreamDeckScreenPalTimelineJumpToStart()
                 prior_value = current_value
 
                 -- click left-most side of timeline's scrollbar to get to zero
-                eventtap.leftClick({ x = frame.x, y = frame.y + frame.h / 2 })
-                -- eventtap.leftClick({ x = frame.x, y = frame.y + frame.h / 2 }) -- could click twice if value doesn't change
+                hs.eventtap.leftClick({ x = frame.x, y = frame.y + frame.h / 2 })
+                -- hs.eventtap.leftClick({ x = frame.x, y = frame.y + frame.h / 2 }) -- could click twice if value doesn't change
                 -- timer.usleep(10000) -- don't need pause b/c hs seems to block while clicking
             end
         end
@@ -449,13 +447,13 @@ function StreamDeckScreenPalTimelineJumpToStart()
     --   keep in mind, scrollbar below is like a pager, so it has to be all the way left, first
     --   PRN add delay if this is not registering, but use it first to figure that out
     local slider = win:get_timeline_slider_or_throw()
-    eventtap.leftClick({ x = slider:axFrame().x, y = slider:axFrame().y })
+    hs.eventtap.leftClick({ x = slider:axFrame().x, y = slider:axFrame().y })
 
-    -- mouse.absolutePosition(original_mouse_pos) -- umm I feel like I want to NOT restore so I can move mouse easily at start!
+    -- hs.mouse.absolutePosition(original_mouse_pos) -- umm I feel like I want to NOT restore so I can move mouse easily at start!
 end
 
 function StreamDeckScreenPalTimelineJumpToEnd()
-    -- local original_mouse_pos = mouse.absolutePosition()
+    -- local original_mouse_pos = hs.mouse.absolutePosition()
     local win = get_cached_editor_window()
 
     if win:is_zoomed() then
@@ -481,7 +479,7 @@ function StreamDeckScreenPalTimelineJumpToEnd()
                 prior_value = current_value
 
                 -- click right‑most side of the scrollbar to advance toward the end
-                eventtap.leftClick({ x = frame.x + frame.w - 1, y = frame.y + frame.h / 2 })
+                hs.eventtap.leftClick({ x = frame.x + frame.w - 1, y = frame.y + frame.h / 2 })
             end
         end
 
@@ -491,9 +489,9 @@ function StreamDeckScreenPalTimelineJumpToEnd()
     -- move playhead to end by clicking the right‑most part of the timeline slider
     local slider = win:get_timeline_slider_or_throw()
     local sframe = slider:axFrame()
-    eventtap.leftClick({ x = sframe.x + sframe.w - 1, y = sframe.y })
+    hs.eventtap.leftClick({ x = sframe.x + sframe.w - 1, y = sframe.y })
 
-    -- mouse.absolutePosition(original_mouse_pos) -- try not restoring, might be better!
+    -- hs.mouse.absolutePosition(original_mouse_pos) -- try not restoring, might be better!
 end
 
 function StreamDeckScreenPalTimelineApproxRestorePosition(restore_position_value)
@@ -530,7 +528,7 @@ function StreamDeckScreenPalTimelineApproxRestorePosition(restore_position_value
 
         if current_value < restore_position_value then
             -- click right‑most side of the scrollbar to advance toward the end
-            eventtap.leftClick({ x = frame.x + frame.w - 1, y = frame.y + frame.h / 2 })
+            hs.eventtap.leftClick({ x = frame.x + frame.w - 1, y = frame.y + frame.h / 2 })
             -- once I blow past the value, stop
             current_value = tonumber(timeline_scrollbar:axValue())
             if current_value >= restore_position_value then
@@ -538,7 +536,7 @@ function StreamDeckScreenPalTimelineApproxRestorePosition(restore_position_value
             end
         else
             -- click left‑most side of the scrollbar to advance toward the end
-            eventtap.leftClick({ x = frame.x, y = frame.y + frame.h / 2 })
+            hs.eventtap.leftClick({ x = frame.x, y = frame.y + frame.h / 2 })
             -- once I blow past the value, stop
             current_value = tonumber(timeline_scrollbar:axValue())
             if current_value <= restore_position_value then
