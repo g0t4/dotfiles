@@ -6,7 +6,13 @@ require("config.macros.screenpal.co")
 -- !!! see run_unit_tests.fish for more about testing
 
 describe("cos", function()
-    it("test cos", function()
+    it("test w/o run_async because test already has a coroutine", function()
+        print("before sleep")
+        sleep_ms(250)
+        print("after sleep")
+    end)
+
+    it("test run_async works too, bypasses creating coroutine", function()
         run_async(function()
             print("before sleep")
             sleep_ms(250)

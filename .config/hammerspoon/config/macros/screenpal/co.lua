@@ -1,6 +1,6 @@
 function run_async(what, ...)
     if coroutine.running() then
-        what(...)
+        what(...) -- equivalent of resume below
         return
     end
 
@@ -22,7 +22,7 @@ function sleep_ms(ms)
     if vim.defer_fn ~= nil then
         -- useful in nvim lua code
         -- ALSO useful for plenary test runs
-        print("sleep found vim")
+        -- print("sleep found vim")
         vim.defer_fn(callback, ms)
         coroutine.yield()
         return
@@ -30,7 +30,8 @@ function sleep_ms(ms)
 
     local is_hs = hs ~= nil and hs.timer ~= nil and hs.timer.doAfter ~= nil
     if is_hs then
-        print("sleep found hs")
+        -- useful in my hammerspoon "prod" config
+        -- print("sleep found hs")
         seconds = ms / 1000
         hs.timer.doAfter(seconds, callback)
         coroutine.yield()
