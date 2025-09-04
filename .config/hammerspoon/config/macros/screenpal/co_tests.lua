@@ -1,6 +1,6 @@
 require("config.macros.screenpal.co")
 
-function get_ms()
+local function get_ms()
     return vim.uv.hrtime() / 1e6
 end
 
