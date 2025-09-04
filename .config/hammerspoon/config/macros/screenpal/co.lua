@@ -45,14 +45,8 @@ function sleep_ms(ms)
 
     local luv = require("luv")
     if luv then
-        -- NOT working... smth with luv.run... event loop
-        -- print("LUV")
-        -- print(coroutine.running())
         luv.new_timer():start(ms, 0, callback)
-        -- print(coroutine.running())
-        -- print(coroutine.status(co))
-        error("FFS use plenary for running these coroutine tests, do not waste time implementing this in luv with busted")
-        coroutine.yield() -- throws nonsense about no coroutine when coroutine.status() returns "running"
+        coroutine.yield()
         return
     end
 
