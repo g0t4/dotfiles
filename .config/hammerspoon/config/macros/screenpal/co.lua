@@ -1,5 +1,10 @@
 function run_async(what, ...)
-    if coroutine.running() then
+    local running, ismain = coroutine.running()
+    -- print("running:", running)
+    -- print("ismain:", ismain)
+    -- DO not try to reuse main thread (coroutine), it is not yield/resumable
+    if running and not ismain then
+        -- print("already have running, non-main coroutine, reusing its thread")
         what(...) -- equivalent of resume below
         return
     end
