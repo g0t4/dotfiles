@@ -29,23 +29,21 @@ else if test -f /usr/local/bin/brew
     echo "brew shellenv not implemented yet, do this if you ever use an intel mac again"
 end
 
-# export PATH="$HOME/bin:$PATH"
-# export PATH="$HOME/go/bin:$PATH"
-# export PATH="$HOME/.local/bin:$PATH"
-
-# ~/bin
 if test -d "$HOME/bin"
+    # fennel-ls
+    # jattach
     export PATH="$HOME/bin:$PATH"
 end
-# ~/go/bin
+
 if test -d "$HOME/go/bin"
     export PATH="$HOME/go/bin:$PATH"
 end
+
 if test -d /usr/local/go/bin
     # from wget install (see fish/install/install.fish)
     export PATH="/usr/local/go/bin:$PATH"
 end
-# ~/.local/bin
+
 if test -d "$HOME/.local/bin"
     export PATH="$HOME/.local/bin:$PATH"
 end
@@ -167,11 +165,6 @@ end
 # ~/.rd/bin"
 if test -d "$HOME/.rd/bin"
     export PATH="$PATH:$HOME/.rd/bin"
-end
-
-if test -d "$HOME/bin"
-    # i.e. fennel-ls
-    export PATH="$PATH:$HOME/bin"
 end
 
 # * bash from source
