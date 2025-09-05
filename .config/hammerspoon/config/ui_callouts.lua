@@ -376,7 +376,7 @@ local function removeHighlight()
     M.last.callout = nil
 end
 
-local function highlightThisElement(element)
+local function highlight_this_element(element)
     removeHighlight()
     if not element then
         return
@@ -435,7 +435,7 @@ local function highlightCurrentElement(redo_highlight)
         return
     end
 
-    highlightThisElement(element)
+    highlight_this_element(element)
 end
 
 ---@return hs.axuielement? element
@@ -599,7 +599,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "up", function()
         print("unexpected: no parent")
         return
     end
-    highlightThisElement(parent)
+    highlight_this_element(parent)
 end)
 
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "down", function()
@@ -616,7 +616,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "down", function()
         onlyAlert("no " .. cycle)
         return
     end
-    highlightThisElement(children[1])
+    highlight_this_element(children[1])
 end)
 
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "right", function()
@@ -646,7 +646,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "right", function()
         onlyAlert("no next sibling " .. M.last.cycle)
         return
     end
-    highlightThisElement(next)
+    highlight_this_element(next)
 end)
 
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "left", function()
@@ -671,7 +671,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "left", function()
         onlyAlert("no previous sibling " .. M.last.cycle)
         return
     end
-    highlightThisElement(prev)
+    highlight_this_element(prev)
 end)
 
 local function testHighlightOnReloadConfig()
@@ -680,7 +680,7 @@ local function testHighlightOnReloadConfig()
     -- local target = fcpx:window(2):splitGroup(1):group(2) -- AXTitleUIElement test case
     -- local target = fcpx
     local target = fcpx:window(2)
-    highlightThisElement(target)
+    highlight_this_element(target)
 end
 
 -- testHighlightOnReloadConfig()
