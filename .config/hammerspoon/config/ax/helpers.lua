@@ -16,15 +16,15 @@ local axuielement = hs.axuielement -- must include otherwise cannot extend its m
 ---@class hs.axuielement
 local axuielemMT = hs.getObjectMetatable("hs.axuielement")
 
----@param appName string
+---@param app_name string
 ---@return hs.axuielement
-function get_app_element_or_throw(appName)
+function get_app_element_or_throw(app_name)
     -- TODO disable warning about hs.application.enableSpotlightForNameSearches
-    local hsApp = hs.application.find(appName)
-    assert(hsApp ~= nil, "axUiAppTyped: could not find app: " .. appName)
-    local appElement = hs.axuielement.applicationElement(hsApp)
-    assert(appElement ~= nil, "axUiAppTyped: could not find app element: " .. appName)
-    return appElement
+    local hs_app = hs.application.find(app_name)
+    assert(hs_app ~= nil, "axUiAppTyped: could not find app: " .. app_name)
+    local app_element = hs.axuielement.applicationElement(hs_app)
+    assert(app_element ~= nil, "axUiAppTyped: could not find app element: " .. app_name)
+    return app_element
 end
 
 axuielemMT.dumpActions = function(self)
@@ -551,32 +551,32 @@ function sorted_attribute_names(element)
 end
 
 function FindOneElement(app, criteria, callback)
-    local startTime = get_time()
+    local start_time = get_time()
     if type(criteria) ~= "function" then
         criteria = hs.axuielement.searchCriteriaFunction(criteria)
     end
-    local namedModifiers = { count = 1 }
+    local named_modifiers = { count = 1 }
 
-    local function afterSearch(...)
-        print("time to callback: " .. get_elapsed_time_in_milliseconds(startTime) .. " ms")
+    local function after_search(...)
+        print("time to callback: " .. get_elapsed_time_in_milliseconds(start_time) .. " ms")
         callback(...)
     end
 
-    app:elementSearch(afterSearch, criteria, namedModifiers)
+    app:elementSearch(after_search, criteria, named_modifiers)
 end
 
 local application = require("hs.application")
 ---@return hs.axuielement
-function GetAppElement(appName)
-    local app = application.find(appName)
-    local appElement = hs.axuielement.applicationElement(app)
-    assert(appElement ~= nil, "could not find app element for app: " .. appName)
-    return appElement
+function GetAppElement(app_name)
+    local app = application.find(app_name)
+    local app_element = hs.axuielement.applicationElement(app)
+    assert(app_element ~= nil, "could not find app element for app: " .. app_name)
+    return app_element
 end
 
-function GetChildWithAttr(parent, attrName, attrValue)
+function GetChildWithAttr(parent, attr_name, attr_value)
     for _, child in ipairs(parent) do
-        if child:attributeValue(attrName) == attrValue then
+        if child:attributeValue(attr_name) == attr_value then
             return child
         end
     end
@@ -590,16 +590,16 @@ end
 --   if smth is buggy, fix it... don't try to shrink wait interval
 --   set wait interval on max amount of time to expect for the app UI to catch up
 
-function wait_for_element(searchFunc, intervalMs, maxCycles)
+function wait_for_element(search_func, interval_ms, max_cycles)
     local start = get_time()
     local cycles = 0
-    while cycles < maxCycles do
-        local elem = searchFunc()
+    while cycles < max_cycles do
+        local elem = search_func()
         if elem then
             print_took("WaitForElement total time:", start)
             return elem
         end
-        timer.usleep(intervalMs * 1000)
+        timer.usleep(interval_ms * 1000)
         cycles = cycles + 1
     end
     return nil
