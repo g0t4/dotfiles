@@ -346,7 +346,7 @@ function ScreenPalEditorWindow:new()
     local TimelineDetails = {}
 
     ---@param self TimelineDetails
-    function TimelineDetails:calculate()
+    function TimelineDetails:new()
         self.pixels_per_second = self.playhead_relative_timeline_x / self.playhead_seconds
         self.estimated_total_seconds = self.timeline_frame.w / self.pixels_per_second
         return self
@@ -377,7 +377,7 @@ function ScreenPalEditorWindow:new()
             playhead_seconds = playhead_seconds,
         }
 
-        return TimelineDetails.calculate(details)
+        return TimelineDetails.new(details)
     end
 
     function editor_window:figure_out_zoom2_fixed_pixels_per_second()
