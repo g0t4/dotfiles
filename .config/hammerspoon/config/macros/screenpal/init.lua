@@ -385,7 +385,7 @@ function ScreenPalEditorWindow:new()
 
     ---@param self TimelineDetails
     ---@param seconds number
-    function TimelineDetails:move_playhead_to(seconds)
+    function TimelineDetails:move_playhead_to_seconds(seconds)
         local playhead_x = self.timeline_frame.x + (seconds * self.pixels_per_second) + 1
         self:_move_playhead_to_x(playhead_x)
     end
@@ -405,7 +405,7 @@ function ScreenPalEditorWindow:new()
         --   i.e. get_playhead_time
 
         local details = self:_timeline_details()
-        details:move_playhead_to(3)
+        details:move_playhead_to_seconds(8)
     end
 
     function editor_window:toggle_AXEnhancedUserInterface()
