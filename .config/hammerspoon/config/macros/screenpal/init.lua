@@ -373,6 +373,21 @@ function ScreenPalEditorWindow:new()
         return self
     end
 
+    ---@param self TimelineDetails
+    ---@param seconds number
+    function TimelineDetails:move_playhead_to(seconds)
+        local timeline_frame = self.timeline_frame
+        local playhead_x = timeline_frame.x + (seconds * self.pixels_per_second)
+        local playhead_window = editor_window.windows:get_playhead_window_or_throw()
+        local playhead_frame = playhead_window:axFrame()
+        playhead_window:setFrame({
+            x = playhead_x - playhead_frame.w / 2,
+            y = playhead_frame.y,
+            w = playhead_frame.w,
+            h = playhead_frame.h
+        })
+    end
+
     ---@return TimelineDetails
     function editor_window:_timeline_details()
         return TimelineDetails:new(self)
