@@ -339,7 +339,7 @@ function ScreenPalEditorWindow:new()
     ---@field timeline_frame { x: number, y: number, w: number, h: number }
     ---@field _playhead_window_frame { x: number, y: number, w: number, h: number }
     ---@field playhead_x number
-    ---@field playhead_relative_timeline_x number
+    ---@field _playhead_relative_timeline_x number
     ---@field playhead_seconds number
     ---@field pixels_per_second number
     ---@field estimated_total_seconds number
@@ -347,7 +347,7 @@ function ScreenPalEditorWindow:new()
 
     ---@param self TimelineDetails
     function TimelineDetails:new()
-        self.pixels_per_second = self.playhead_relative_timeline_x / self.playhead_seconds
+        self.pixels_per_second = self._playhead_relative_timeline_x / self.playhead_seconds
         self.estimated_total_seconds = self.timeline_frame.w / self.pixels_per_second
         return self
     end
@@ -367,13 +367,13 @@ function ScreenPalEditorWindow:new()
         local playhead_seconds = parse_time_to_seconds(time_string)
 
         local playhead_x = _playhead_window_frame.x + _playhead_window_frame.w / 2
-        local playhead_relative_timeline_x = playhead_x - timeline_frame.x
+        local _playhead_relative_timeline_x = playhead_x - timeline_frame.x
 
         local details = {
             timeline_frame = timeline_frame,
             _playhead_window_frame = _playhead_window_frame,
             playhead_x = playhead_x,
-            playhead_relative_timeline_x = playhead_relative_timeline_x,
+            _playhead_relative_timeline_x = _playhead_relative_timeline_x,
             playhead_seconds = playhead_seconds,
         }
 
