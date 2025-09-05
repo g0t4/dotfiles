@@ -380,14 +380,20 @@ function ScreenPalEditorWindow:new()
         ensure_cached_controls()
         local primary_window = self.win
 
+        -- FYI alternative to using Voice Over, theoretically, to trigger showing more controls (if the app supports it)
         -- FYI first pass I am not seeing any new direct descendents of edtior_window (64 before and after)...
-        --   do I need to set AXEnhancedUserInterface on other (child) objects or just the app?
+
+        -- PRN, click / focus any controls?
+        -- TODO try:
+        --  print(hs.axuielement.parameterizedAttributeNames(el)) -- might have hidden values  when not enhanced moe
+        --  press items (AXPress)
+        --  focus (right arrow?)
+
+        --  do I need to set AXEnhancedUserInterface on other (child) objects or just the app?
         -- self.app:dumpAttributes()
         print("before - app.AXEnhancedUserInterface:", self.app.AXEnhancedUserInterface)
-        -- toggle it
         self.app.AXEnhancedUserInterface = not self.app.AXEnhancedUserInterface
         print("after - app.AXEnhancedUserInterface:", self.app.AXEnhancedUserInterface)
-        -- print("win.AXEnhancedUserInterface:", self.win.AXEnhancedUserInterface) -- nil on editor window
 
         do return end
 
