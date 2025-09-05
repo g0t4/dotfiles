@@ -273,17 +273,12 @@ function ScreenPalEditorWindow:new()
     end
 
     function editor_window:reopen_project()
-        -- FYI keep prints so as I encounter issues I know where things are blowing up
         run_async(function()
-            -- TODO address unhandled exceptions that bubble up here, wrap in run_async to catch them?
             local win = get_cached_editor_window()
             local timeline_scrollbar = win:get_scrollbar_or_throw()
-            print("timeline scroll", timeline_scrollbar)
             local current_zoom_scrollbar_position = timeline_scrollbar:axValue() -- current value
-            print("zoom scrollbar position", current_zoom_scrollbar_position)
             local current_zoomed = win:is_zoomed()
-            print("current_zoomed", current_zoomed)
-            -- cannot find a way (yet) to save zoom level
+            -- cannot find a way (yet) to determine zoom level
             --   one idea, could store maxvalue of position_slider
             --   and compare to each zoom level (try 2 first, then 1/3) on restore
             --   until find match for maxvalue and then you know you found the level!
