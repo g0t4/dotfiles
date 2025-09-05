@@ -477,7 +477,7 @@ axuielemMT.findUniqueReference = function(elem)
 end
 
 -- TODO move these onto axuieleemMT as extension methods
-function axValueQuoted(element)
+function ax_value_quoted(element)
     if not element then return "" end
     local value = element:attributeValue("AXValue")
     if not value then
@@ -488,7 +488,7 @@ function axValueQuoted(element)
     end
 end
 
-function axDescriptionQuoted(element)
+function ax_description_quoted(element)
     if not element then return "" end
     local description = element:attributeValue("AXDescription")
     if not description then

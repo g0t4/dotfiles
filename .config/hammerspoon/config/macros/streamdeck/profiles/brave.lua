@@ -210,8 +210,8 @@ function createNotificationObserver(braveAppObserver)
 
             local parts = {
                 ax_title_quoted(eventElement),
-                axDescriptionQuoted(eventElement),
-                axValueQuoted(eventElement),
+                ax_description_quoted(eventElement),
+                ax_value_quoted(eventElement),
             }
             local message = table.concat(parts, " ")
 
