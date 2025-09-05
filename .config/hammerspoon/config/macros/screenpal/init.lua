@@ -275,8 +275,6 @@ function ScreenPalEditorWindow:new()
     function editor_window:reopen_project()
         run_async(function()
             local win = get_cached_editor_window()
-            local timeline_scrollbar = win:get_scrollbar_or_throw()
-            local current_zoom_scrollbar_position = timeline_scrollbar:axValue() -- current value
             local current_zoomed = win:is_zoomed()
             -- cannot find a way (yet) to determine zoom level
             --   one idea, could store maxvalue of position_slider
