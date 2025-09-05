@@ -275,6 +275,7 @@ function ScreenPalEditorWindow:new()
     function editor_window:reopen_project()
         -- FYI keep prints so as I encounter issues I know where things are blowing up
         run_async(function()
+            -- TODO address unhandled exceptions that bubble up here, wrap in run_async to catch them?
             local win = get_cached_editor_window()
             local timeline_scrollbar = win:get_scrollbar_or_throw()
             print("timeline scroll", timeline_scrollbar)
