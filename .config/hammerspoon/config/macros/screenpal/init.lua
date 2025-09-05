@@ -1,6 +1,7 @@
 local vim = require("config.libs.vim") -- reuse nvim lua modules in hammerspoon
 require("config.macros.screenpal.ui")
 require('config.macros.screenpal.helpers')
+require("config.macros.screenpal.co")
 local TimelineDetails = require('config.macros.screenpal.timeline')
 
 ---@return hs.axuielement app_element
@@ -273,67 +274,69 @@ function ScreenPalEditorWindow:new()
 
     function editor_window:reopen_project()
         -- FYI keep prints so as I encounter issues I know where things are blowing up
-        local win = get_cached_editor_window()
-        local timeline_scrollbar = win:get_scrollbar_or_throw()
-        print("timeline scroll", timeline_scrollbar)
-        local current_zoom_scrollbar_position = timeline_scrollbar:axValue() -- current value
-        print("zoom scrollbar position", current_zoom_scrollbar_position)
-        local current_zoomed = win:is_zoomed()
-        print("current_zoomed", current_zoomed)
-        -- cannot find a way (yet) to save zoom level
-        --   one idea, could store maxvalue of position_slider
-        --   and compare to each zoom level (try 2 first, then 1/3) on restore
-        --   until find match for maxvalue and then you know you found the level!
-        self:zoom_off()
-        -- PRN pause.. if have trouble reliably restoring same position
-        -- TODO! use doAfter
-        -- hs.timer.usleep(100000)
+        run_async(function()
+            local win = get_cached_editor_window()
+            local timeline_scrollbar = win:get_scrollbar_or_throw()
+            print("timeline scroll", timeline_scrollbar)
+            local current_zoom_scrollbar_position = timeline_scrollbar:axValue() -- current value
+            print("zoom scrollbar position", current_zoom_scrollbar_position)
+            local current_zoomed = win:is_zoomed()
+            print("current_zoomed", current_zoomed)
+            -- cannot find a way (yet) to save zoom level
+            --   one idea, could store maxvalue of position_slider
+            --   and compare to each zoom level (try 2 first, then 1/3) on restore
+            --   until find match for maxvalue and then you know you found the level!
+            self:zoom_off()
+            -- PRN pause.. if have trouble reliably restoring same position
+            -- TODO! use doAfter
+            -- hs.timer.usleep(100000)
 
 
-        local playhead_percent = self:playhead_position_percent()
+            local playhead_percent = self:playhead_position_percent()
 
-        if not self._textfield_title then
-            error("No title found, aborting...")
-        end
-        local title = self._textfield_title:axValue()
-        print("title: ", title)
-        if not self._btn_back_to_projects then
-            error("No back to projects button found, aborting...")
-        end
-        self._btn_back_to_projects:performAction("AXPress")
+            if not self._textfield_title then
+                error("No title found, aborting...")
+            end
+            local title = self._textfield_title:axValue()
+            print("title: ", title)
+            if not self._btn_back_to_projects then
+                error("No back to projects button found, aborting...")
+            end
+            self._btn_back_to_projects:performAction("AXPress")
 
-        local btn = wait_for_element(function()
-            cache_project_view_controls()
-            if not self._scrollarea_list then return end
-            return vim.iter(self._scrollarea_list:buttons())
-                :filter(function(button)
-                    local desc = button:axDescription()
-                    return desc == title
-                end)
-                :totable()[1]
-        end, 100, 20)
+            local btn = wait_for_element(function()
+                cache_project_view_controls()
+                if not self._scrollarea_list then return end
+                return vim.iter(self._scrollarea_list:buttons())
+                    :filter(function(button)
+                        local desc = button:axDescription()
+                        return desc == title
+                    end)
+                    :totable()[1]
+            end, 100, 20)
 
-        if not btn then
-            error("cannot find project to re-open, aborting...")
-        end
+            if not btn then
+                error("cannot find project to re-open, aborting...")
+            end
 
-        btn:performAction("AXPress")
-        -- TODO! use doAfter instead! this is blocking
-        hs.timer.usleep(100000) -- TODO replace w/ wait_for_element
+            btn:performAction("AXPress")
+            -- TODO! use doAfter instead! this is blocking
+            hs.timer.usleep(100000) -- TODO replace w/ wait_for_element
 
-        -- restore playhead
-        self:restore_playhead_position(playhead_percent)
+            -- restore playhead
+            self:restore_playhead_position(playhead_percent)
 
-        -- restore zoom / scroll bar position
-        if not current_zoomed then
-            print("NOT zoomed before, skipping zoom restore")
-            return
-        end
+            -- restore zoom / scroll bar position
+            if not current_zoomed then
+                print("NOT zoomed before, skipping zoom restore")
+                return
+            end
 
-        self:zoom2()
-        -- TODO! use doAfter
-        -- hs.timer.usleep(100000)
-        -- StreamDeckScreenPalTimelineApproxRestorePosition(current_zoom_scrollbar_position)
+            self:zoom2()
+            -- TODO! use doAfter
+            -- hs.timer.usleep(100000)
+            -- StreamDeckScreenPalTimelineApproxRestorePosition(current_zoom_scrollbar_position)
+        end)
     end
 
     ---@return TimelineDetails
