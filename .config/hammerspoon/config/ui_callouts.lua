@@ -58,13 +58,13 @@ local skips = {
     AXWindows = true,
 }
 
-local function onlyAlert(message)
+local function only_alert(message)
     alert.closeAll()
     alert.show(message)
     print(message)
 end
 
-local function displayUserData(name, value)
+local function display_user_data(name, value)
     if value.__name == "hs.axuielement" then
         local role = value:attributeValue("AXRole")
         local title = value:attributeValue("AXTitle")
@@ -83,22 +83,22 @@ local function displayUserData(name, value)
         return text
     end
 end
-local function displayType(value)
+local function display_type(value)
     -- do return "" end -- uncomment to quickly turn off/on type display
-    local valueType = type(value)
-    if valueType == "boolean" then
+    local value_type = type(value)
+    if value_type == "boolean" then
         return "<bool>"
     end
-    if valueType == "table" then
+    if value_type == "table" then
         -- tables are implicit with surrounding [ ]
         return ""
     end
-    if valueType == "userdata" then
-        valueType = value.__name
+    if value_type == "userdata" then
+        value_type = value.__name
     end
-    return "<" .. valueType .. ">"
+    return "<" .. value_type .. ">"
 end
-local function displayTable(name, value)
+local function display_table(name, value)
     local rows = {}
     for k, v in pairs(value) do
         local text = ""
@@ -107,17 +107,17 @@ local function displayTable(name, value)
             --  SectionObject: AXScrollArea<hs.axuielement> - ** seems most important, the object itself :)
             --  SectionUniqueID: AXContent<string>
             --  SectionDescription: Toolbar<string>
-            local nestedAttrs = {}
+            local nested_attrs = {}
             for k2, v2 in pairs(v) do
-                table.insert(nestedAttrs, k2 .. ": " .. tostring(v2))
+                table.insert(nested_attrs, k2 .. ": " .. tostring(v2))
             end
-            text = text .. k .. ": " .. table.concat(nestedAttrs, ", ")
+            text = text .. k .. ": " .. table.concat(nested_attrs, ", ")
         elseif type(v) == "userdata" then
-            text = text .. k .. ": " .. displayUserData(k, v)
-            text = text .. displayType(v)
+            text = text .. k .. ": " .. display_user_data(k, v)
+            text = text .. display_type(v)
         else
             text = text .. k .. ": " .. tostring(v)
-            text = text .. displayType(v)
+            text = text .. display_type(v)
         end
         table.insert(rows, text)
     end
@@ -131,10 +131,10 @@ end
 local function displayAttribute(name, value)
     if value == nil then return nil end
     if type(value) == "userdata" then
-        return displayUserData(name, value)
+        return display_user_data(name, value)
     end
     if type(value) == "table" then
-        return displayTable(name, value)
+        return display_table(name, value)
     end
     return tostring(value)
 end
@@ -167,7 +167,7 @@ local function showTooltipForElement(element, frame)
                 value = value:sub(1, 80) .. " <TRUNCATED>"
             end
         end
-        table.insert(attributes, attrName .. ": " .. value .. displayType(attrValue))
+        table.insert(attributes, attrName .. ": " .. value .. display_type(attrValue))
 
         ::continue::
     end
@@ -391,7 +391,7 @@ local function highlight_this_element(element)
         -- frame = hs.screen.mainScreen():frame() -- this makes it cover whole screen... another option, that might be confusing
         -- perhaps special color for app/window levels vs other elements?
     elseif not frame then
-        onlyAlert("no frame: " .. role)
+        only_alert("no frame: " .. role)
         print("no frame: " .. role)
         return
     end
@@ -586,13 +586,13 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "up", function()
 
     local role = M.last.element:attributeValue("AXRole")
     if role == "AXApplication" then
-        onlyAlert("already at top: AXApplication")
+        only_alert("already at top: AXApplication")
         return
     end
 
     local parent = M.last.element:attributeValue("AXParent")
     if parent == M.last.element then
-        onlyAlert("already at top")
+        only_alert("already at top")
         return
     end
     if not parent then
@@ -613,7 +613,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "down", function()
     local children = M.last.element:attributeValue(cycle)
     if not children or #children == 0 then
         print("no " .. cycle, children)
-        onlyAlert("no " .. cycle)
+        only_alert("no " .. cycle)
         return
     end
     highlight_this_element(children[1])
@@ -643,7 +643,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "right", function()
     end
     local next = nextSibling(M.last.element)
     if not next then
-        onlyAlert("no next sibling " .. M.last.cycle)
+        only_alert("no next sibling " .. M.last.cycle)
         return
     end
     highlight_this_element(next)
@@ -668,7 +668,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "left", function()
     end
     local prev = previousSibling(M.last.element)
     if not prev then
-        onlyAlert("no previous sibling " .. M.last.cycle)
+        only_alert("no previous sibling " .. M.last.cycle)
         return
     end
     highlight_this_element(prev)
