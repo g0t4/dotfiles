@@ -452,7 +452,7 @@ function StreamDeckScreenPalTimelineZoomAndJumpToStart()
     win:zoom_off() -- zoom out first means just click end and zoom in... no slider necessary!
     -- TODO! use coroutines
     hs.timer.usleep(10000)
-    StreamDeckScreenPalTimelineJumpToStart()
+    StreamDeckScreenPalTimelineScrollOrJumpToStart()
     -- zoom after so if I am initially not zoomed, I can move faster
     -- PRN zoom out before move and then zoom in when done?
     -- TODO! use coroutines
@@ -465,13 +465,13 @@ function StreamDeckScreenPalTimelineZoomAndJumpToEnd()
     win:zoom_off() -- zoom out first means just click end and zoom in... no slider necessary!
     -- TODO! use doAfter
     hs.timer.usleep(10000)
-    StreamDeckScreenPalTimelineJumpToEnd()
+    StreamDeckScreenPalTimelineScrollOrJumpToEnd()
     -- TODO! use doAfter
     hs.timer.usleep(10000)
     win:zoom2()
 end
 
-function StreamDeckScreenPalTimelineJumpToStart()
+function StreamDeckScreenPalTimelineScrollOrJumpToStart()
     -- local original_mouse_pos = hs.mouse.absolutePosition()
     local win = get_cached_editor_window()
 
@@ -479,7 +479,7 @@ function StreamDeckScreenPalTimelineJumpToStart()
     --  RIGHT?
 
     if win:is_zoomed() then
-        function scroll_to_start(win)
+        function scroll_to_end(win)
             local timeline_scrollbar = win:get_scrollbar_or_throw()
             local frame = timeline_scrollbar:axFrame()
             local min_value = timeline_scrollbar:axMinValue()
@@ -511,7 +511,7 @@ function StreamDeckScreenPalTimelineJumpToStart()
             click_until_timeline_at_start()
         end
 
-        scroll_to_start(win)
+        scroll_to_end(win)
     end
 
     -- * move playhead to start (0) by clicking leftmost part of position slider (aka timeline)
@@ -523,38 +523,42 @@ function StreamDeckScreenPalTimelineJumpToStart()
     -- hs.mouse.absolutePosition(original_mouse_pos) -- umm I feel like I want to NOT restore so I can move mouse easily at start!
 end
 
-function StreamDeckScreenPalTimelineJumpToEnd()
+function StreamDeckScreenPalTimelineScrollOrJumpToEnd()
     -- local original_mouse_pos = hs.mouse.absolutePosition()
     local win = get_cached_editor_window()
 
     if win:is_zoomed() then
-        local timeline_scrollbar = win:get_scrollbar_or_throw()
-        local frame = timeline_scrollbar:axFrame()
-        local max_value = timeline_scrollbar:axMaxValue()
+        function scroll_to_end(win)
+            local timeline_scrollbar = win:get_scrollbar_or_throw()
+            local frame = timeline_scrollbar:axFrame()
+            local max_value = timeline_scrollbar:axMaxValue()
 
-        local function click_until_timeline_at_end()
-            local prior_value = nil
-            while true do
-                local value = timeline_scrollbar:axValue()
-                local current_value = tonumber(value)
-                if not current_value
-                    or current_value >= max_value
-                then
-                    break
+            local function click_until_timeline_at_end()
+                local prior_value = nil
+                while true do
+                    local value = timeline_scrollbar:axValue()
+                    local current_value = tonumber(value)
+                    if not current_value
+                        or current_value >= max_value
+                    then
+                        break
+                    end
+
+                    if prior_value ~= nil and current_value == prior_value then
+                        print("Value unchanged, stopping.")
+                        break
+                    end
+                    prior_value = current_value
+
+                    -- click right‑most side of the scrollbar to advance toward the end
+                    hs.eventtap.leftClick({ x = frame.x + frame.w - 1, y = frame.y + frame.h / 2 })
                 end
-
-                if prior_value ~= nil and current_value == prior_value then
-                    print("Value unchanged, stopping.")
-                    break
-                end
-                prior_value = current_value
-
-                -- click right‑most side of the scrollbar to advance toward the end
-                hs.eventtap.leftClick({ x = frame.x + frame.w - 1, y = frame.y + frame.h / 2 })
             end
+
+            click_until_timeline_at_end()
         end
 
-        click_until_timeline_at_end()
+        scroll_to_end(win)
     end
 
     -- move playhead to end by clicking the right‑most part of the timeline slider
