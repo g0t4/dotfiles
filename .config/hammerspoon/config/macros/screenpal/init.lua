@@ -287,9 +287,6 @@ function ScreenPalEditorWindow:new()
             --   and compare to each zoom level (try 2 first, then 1/3) on restore
             --   until find match for maxvalue and then you know you found the level!
             self:zoom_off()
-            -- PRN pause.. if have trouble reliably restoring same position
-            -- TODO! use doAfter
-            -- hs.timer.usleep(100000)
 
 
             local playhead_percent = self:playhead_position_percent()
@@ -320,8 +317,7 @@ function ScreenPalEditorWindow:new()
             end
 
             btn:performAction("AXPress")
-            -- TODO! use doAfter instead! this is blocking
-            hs.timer.usleep(100000) -- TODO replace w/ wait_for_element
+            sleep_ms(100) -- PRN if possible, and useful, replace w/ wait_for_element, which one to look for?
 
             -- restore playhead
             self:restore_playhead_position(playhead_percent)
@@ -333,8 +329,8 @@ function ScreenPalEditorWindow:new()
             end
 
             self:zoom2()
-            -- TODO! use doAfter
-            -- hs.timer.usleep(100000)
+
+            -- TODO strip out now uneeded scroll to restore trick, I think that's what this was doing?
             -- StreamDeckScreenPalTimelineApproxRestorePosition(current_zoom_scrollbar_position)
         end)
     end
