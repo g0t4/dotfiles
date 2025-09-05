@@ -387,9 +387,9 @@ function ScreenPalEditorWindow:new()
     end
 
     ---@param self TimelineDetails
-    ---@param reading number
-    function TimelineDetails:left_click(reading)
-        local rel_click_x = reading / 2
+    ---@param x number
+    function TimelineDetails:left_click(x)
+        local rel_click_x = x / 2
         local click_x = self.timeline_frame.x + rel_click_x
         local hold_duration_ms = 10000
         hs.eventtap.leftClick({
@@ -397,7 +397,6 @@ function ScreenPalEditorWindow:new()
             y = self.timeline_frame.y + self.timeline_frame.h / 2
         }, hold_duration_ms)
     end
-
 
     ---@return TimelineDetails
     function editor_window:_timeline_details()
