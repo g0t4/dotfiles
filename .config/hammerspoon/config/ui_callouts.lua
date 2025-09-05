@@ -419,7 +419,9 @@ local function highlightThisElement(element)
     showTooltipForElement(element, frame)
 end
 
-local function highlightCurrentElement()
+---@param redo_highlight? boolean
+local function highlightCurrentElement(redo_highlight)
+    redo_highlight = redo_highlight or false
     assert(M.last ~= nil)
     if M.last.freeze then
         return
@@ -428,7 +430,7 @@ local function highlightCurrentElement()
 
     local pos = hs.mouse.absolutePosition()
     local element = hs.axuielement.systemElementAtPosition(pos)
-    if element == M.last.element then
+    if element == M.last.element and not redo_highlight then
         -- skip if same element
         return
     end
@@ -469,6 +471,11 @@ local function stopElementInspector()
     M.bindings = {}
 end
 
+local function toggle_show_children()
+    M.last.showChildren = not M.last.showChildren
+    highlightCurrentElement(true)
+end
+
 local function startElementInspector()
     M.moves, M.stop_event_source = require("config.rx.mouse").mouseMovesThrottledObservable(50)
     M.subscription = M.moves:subscribe(
@@ -485,7 +492,7 @@ local function startElementInspector()
     -- end
     )
     table.insert(M.bindings, hs.hotkey.bind({}, "escape", stopElementInspector))
-    table.insert(M.bindings, hs.hotkey.bind({}, "c", function() M.last.showChildren = not M.last.showChildren end))
+    table.insert(M.bindings, hs.hotkey.bind({}, "c", toggle_show_children))
 end
 
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "F", function()
