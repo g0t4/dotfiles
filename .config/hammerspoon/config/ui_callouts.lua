@@ -420,7 +420,7 @@ local function highlight_this_element(element)
 end
 
 ---@param redo_highlight? boolean
-local function highlightCurrentElement(redo_highlight)
+local function highlight_current_element(redo_highlight)
     redo_highlight = redo_highlight or false
     assert(M.last ~= nil)
     if M.last.freeze then
@@ -473,7 +473,7 @@ end
 
 local function toggle_show_children()
     M.last.showChildren = not M.last.showChildren
-    highlightCurrentElement(true)
+    highlight_current_element(true)
 end
 
 local function startElementInspector()
@@ -481,7 +481,7 @@ local function startElementInspector()
     M.subscription = M.moves:subscribe(
         function()
             -- stream is just move alert not position
-            highlightCurrentElement()
+            highlight_current_element()
         end
     -- function(error)
     --     -- right now my sources don't levearge error (nor complete) events... so just ignore
@@ -534,7 +534,7 @@ function capture_element_under_mouse()
             print("capture failed", stdErr)
         end
         if was_highlighting then
-            highlightCurrentElement()
+            highlight_current_element()
         end
 
         print("element captured to " .. where_to)
@@ -556,7 +556,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "T", function()
     alert.closeAll()
     if not M.moves then
         startElementInspector()
-        highlightCurrentElement() -- don't need to move mouse to highlight first element
+        highlight_current_element() -- don't need to move mouse to highlight first element
     else
         stopElementInspector()
     end
