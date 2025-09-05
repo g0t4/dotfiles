@@ -448,27 +448,25 @@ function get_cached_editor_window()
 end
 
 function StreamDeckScreenPalTimelineZoomAndJumpToStart()
-    local win = get_cached_editor_window()
-    win:zoom_off() -- zoom out first means just click end and zoom in... no slider necessary!
-    -- TODO! use coroutines
-    hs.timer.usleep(10000)
-    StreamDeckScreenPalTimelineScrollOrJumpToStart()
-    -- zoom after so if I am initially not zoomed, I can move faster
-    -- PRN zoom out before move and then zoom in when done?
-    -- TODO! use coroutines
-    hs.timer.usleep(10000)
-    win:zoom2()
+    run_async(function()
+        local win = get_cached_editor_window()
+        win:zoom_off() -- zoom out first means just click end and zoom in... no slider necessary!
+        sleep_ms(10)
+        StreamDeckScreenPalTimelineScrollOrJumpToStart()
+        sleep_ms(10)
+        win:zoom2()
+    end)
 end
 
 function StreamDeckScreenPalTimelineZoomAndJumpToEnd()
-    local win = get_cached_editor_window()
-    win:zoom_off() -- zoom out first means just click end and zoom in... no slider necessary!
-    -- TODO! use doAfter
-    hs.timer.usleep(10000)
-    StreamDeckScreenPalTimelineScrollOrJumpToEnd()
-    -- TODO! use doAfter
-    hs.timer.usleep(10000)
-    win:zoom2()
+    run_async(function()
+        local win = get_cached_editor_window()
+        win:zoom_off() -- zoom out first means just click end and zoom in... no slider necessary!
+        sleep_ms(10)
+        StreamDeckScreenPalTimelineScrollOrJumpToEnd()
+        sleep_ms(10)
+        win:zoom2()
+    end)
 end
 
 function StreamDeckScreenPalTimelineScrollOrJumpToStart()
