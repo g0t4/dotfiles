@@ -630,14 +630,17 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "P", function()
         action = "fill",
         fillColor = { red = 0, green = 0, blue = 0, alpha = 0.7 }
     })
+    local x_pos = round(mouse_pos.x, 1)
+    local y_pos = round(mouse_pos.y, 1)
     canvas:appendElements({
         type = "text",
-        text = "X: " .. mouse_pos.x .. ", Y: " .. mouse_pos.y,
+        text = "X: " .. x_pos .. ", Y: " .. y_pos,
         textSize = 12,
         textColor = { red = 1, green = 1, blue = 1, alpha = 1 },
         textAlignment = "center",
         frame = { x = 0, y = 0, w = 200, h = 50 }
     })
+
     canvas:show()
     hs.timer.doAfter(2, function() canvas:delete() end)
 end)

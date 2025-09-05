@@ -387,7 +387,6 @@ function ScreenPalEditorWindow:new()
         --   i.e. get_playhead_time
 
         local details = self:_timeline_details()
-
     end
 
     function editor_window:toggle_AXEnhancedUserInterface()
