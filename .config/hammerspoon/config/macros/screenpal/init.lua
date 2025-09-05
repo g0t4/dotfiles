@@ -300,6 +300,7 @@ function ScreenPalEditorWindow:new()
                 if not self._scrollarea_list then return end
                 return vim.iter(self._scrollarea_list:buttons())
                     :filter(function(button)
+                        -- look for the project open button to re-open, wait until find this
                         local desc = button:axDescription()
                         return desc == title
                     end)
