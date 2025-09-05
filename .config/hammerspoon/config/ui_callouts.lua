@@ -128,7 +128,7 @@ local function display_table(name, value)
     --  for multiple, then make sure first is on its own line and closing ] is on own line for readability
     return "[\n  " .. table.concat(rows, "\n  ") .. "\n]"
 end
-local function displayAttribute(name, value)
+local function display_attribute(name, value)
     if value == nil then return nil end
     if type(value) == "userdata" then
         return display_user_data(name, value)
@@ -139,26 +139,26 @@ local function displayAttribute(name, value)
     return tostring(value)
 end
 
-local function showTooltipForElement(element, frame)
+local function show_tooltip_for_element(element, frame)
     if not element then
         return
     end
 
-    local specifierLua = BuildHammerspoonLuaTo(element)
-    M.last.text = specifierLua
+    local specifier_lua = BuildHammerspoonLuaTo(element)
+    M.last.text = specifier_lua
 
     local attributes = {}
     -- GOAL is to quickly see attrs that I can use to target elements
     --   hide the noise (nil, "", lists, attrs I dont care about)
     --   everything else => use html report
-    for _, attrName in pairs(sortedAttributeNames(element)) do
-        if skips[attrName] then goto continue end
-        local attrValue = element:attributeValue(attrName)
-        if attrValue == nil then goto continue end
-        if attrValue == "" then goto continue end -- skip empty values, i.e. empty AXDescription
+    for _, attr_name in pairs(sortedAttributeNames(element)) do
+        if skips[attr_name] then goto continue end
+        local attr_value = element:attributeValue(attr_name)
+        if attr_value == nil then goto continue end
+        if attr_value == "" then goto continue end -- skip empty values, i.e. empty AXDescription
 
-        local value = displayAttribute(attrName, attrValue) or ""
-        if TableContains({ "AXValue" }, attrName) then
+        local value = display_attribute(attr_name, attr_value) or ""
+        if TableContains({ "AXValue" }, attr_name) then
             -- notoriously long values (i.e. AXValue for iTerm2 window)
             --  and by long I mean like 30 lines (tooltip is entire screen)...
             --  don't worry about things like CustomContent that can be 10 short lines long
@@ -167,39 +167,39 @@ local function showTooltipForElement(element, frame)
                 value = value:sub(1, 80) .. " <TRUNCATED>"
             end
         end
-        table.insert(attributes, attrName .. ": " .. value .. display_type(attrValue))
+        table.insert(attributes, attr_name .. ": " .. value .. display_type(attr_value))
 
         ::continue::
     end
 
     if M.last.showChildren then
-        function appendChildren(children)
+        function append_children(children)
             for _, child in ipairs(children) do
                 -- TODO what attrs should I show? any others?
                 local role = child:attributeValue("AXRole")
                 local subrole = child:attributeValue("AXSubrole")
                 local title = child:attributeValue("AXTitle")
                 local description = child:attributeValue("AXDescription")
-                local childText = role
+                local child_text = role
                 if subrole then
-                    childText = childText .. "(" .. subrole .. ")"
+                    child_text = child_text .. "(" .. subrole .. ")"
                 end
-                childText = childText .. ":"
+                child_text = child_text .. ":"
                 if title then
-                    childText = childText .. " " .. quote(title)
+                    child_text = child_text .. " " .. quote(title)
                 end
                 if description then
-                    childText = childText .. " desc:" .. quote(description)
+                    child_text = child_text .. " desc:" .. quote(description)
                 end
-                table.insert(attributes, childText)
+                table.insert(attributes, child_text)
             end
         end
 
         table.insert(attributes, "\nAXChildren:")
-        appendChildren(element:attributeValue("AXChildren") or {})
+        append_children(element:attributeValue("AXChildren") or {})
 
         table.insert(attributes, "\nAXChildrenInNavigationOrder:")
-        appendChildren(element:attributeValue("AXChildrenInNavigationOrder") or {})
+        append_children(element:attributeValue("AXChildrenInNavigationOrder") or {})
 
         -- FYI right now AXSections shows in list of attrs
     else
@@ -209,13 +209,13 @@ local function showTooltipForElement(element, frame)
     local attribute_dump = table.concat(attributes, "\n")
 
     --- @param elem hs.axuielement
-    local function getUniqueSpecifierChainForElementSearch(elem)
+    local function get_unique_specifier_chain_for_element_search(elem)
         local chain = elem:path()
         assert(chain ~= nil)
 
         ---@param e hs.axuielement
         ---@return string | nil @ nil == ambiguous (no unique ref)
-        local function buildRef(e)
+        local function build_ref(e)
             local parent = e:axParent()
             local role = e:axRole()
 
@@ -247,7 +247,7 @@ local function showTooltipForElement(element, frame)
 
         local lines = { "unique ref: " }
         for _, currentElement in ipairs(chain) do
-            local ref = buildRef(currentElement)
+            local ref = build_ref(currentElement)
             if not ref then
                 -- nothing to add to accessor b/c it was ambiguous
                 break
@@ -258,15 +258,15 @@ local function showTooltipForElement(element, frame)
         return ConcatIntoLines(lines)
     end
 
-    local elementSearchCode = getUniqueSpecifierChainForElementSearch(element)
+    local elementSearchCode = get_unique_specifier_chain_for_element_search(element)
 
     attribute_dump = attribute_dump .. "\n\n" .. elementSearchCode
 
     -- include everything in copy so I can get attr values without writing them down by hand! (for cmd-ctrl-alt-c)
-    M.last.text = specifierLua .. "\n\n" .. attribute_dump
+    M.last.text = specifier_lua .. "\n\n" .. attribute_dump
 
 
-    local styledSpecifier = hs.styledtext.new(specifierLua, {
+    local styledSpecifier = hs.styledtext.new(specifier_lua, {
         font = {
             name = "SauceCodePro Nerd Font",
             size = 14
@@ -416,7 +416,7 @@ local function highlight_this_element(element)
             strokeWidth = 4,
         }):show()
 
-    showTooltipForElement(element, frame)
+    show_tooltip_for_element(element, frame)
 end
 
 ---@param redo_highlight? boolean
