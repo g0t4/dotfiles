@@ -467,32 +467,14 @@ function ScreenPalEditorWindow:new()
         print("min zoom frame", hs.inspect(self._btn_minimum_zoom:axFrame())) -- (x,y) == (0,0) == not zoomed
         -- must be zoomed out, else cannot know that start of time line is 0 and end is the end of the video
         self:zoom_off()
-
-        local playhead_window = self.windows:get_playhead_window_or_throw()
-        -- DO NOT get frames until UI is stable, zoome din frame is different than zoomed out
-        local playhead_window_frame = playhead_window:axFrame()
-
         print("min zoom frame", hs.inspect(self._btn_minimum_zoom:axFrame()))
 
-        local time_text_field = playhead_window:textField(1)
-        local time = time_text_field:axValue()
-        time = time:gsub("\n", "")
-
-        local playhead_seconds = parse_time_to_seconds(time)
-        dump({ time = time, seconds = playhead_seconds, })
-
-        -- possible issue => what if timeline stops part way when editing a short video? Is that even possible? if so this may not work well and OH well if I can't adjust in that rare case
-        print("_btn_position_slider", self._btn_position_slider)
-        local timeline_frame = self._btn_position_slider:axFrame()
-
-        local playhead_x = playhead_window_frame.x + playhead_window_frame.w / 2
-        local playhead_relative_timeline_x = playhead_x - timeline_frame.x
-        dump({
-            playhead_window_frame = playhead_window_frame,
-            playhead_x = playhead_x,
-            playhead_relative_timeline_x = playhead_relative_timeline_x
-        })
-        -- - timeline_frame.x
+        -- TODO new _timeline_details
+        -- TODO inline tmp variables that effectively hold rename onto details
+        local details = self:_timeline_details()
+        local playhead_seconds = details.playhead_seconds
+        local playhead_relative_timeline_x = details.playhead_relative_timeline_x
+        local timeline_frame = details.timeline_frame
 
         local pixels_per_second = playhead_relative_timeline_x / playhead_seconds
         local estimated_total_seconds = timeline_frame.w / pixels_per_second
