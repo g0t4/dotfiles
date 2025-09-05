@@ -381,13 +381,10 @@ function ScreenPalEditorWindow:new()
         local primary_window = self.win
 
         -- self.app:dumpAttributes()
-        print(self.app.AXEnhancedUserInterface)
-        print(self.app.AXRole) -- I had no idea you could get attributes this way!
-        -- I prefer my :axRole() b/c it can default inside and handle other nuances... also symbols for completion... with just .AXRole consumers have to handle nil/empty/etc
-        print(self.app:axRole()) -- I had no idea you could get attributes this way!
-        print()
-        print("win")
-        print(self.win.AXRole) -- works
+        print("app.AXEnhancedUserInterface:", self.app.AXEnhancedUserInterface)
+        self.app.AXEnhancedUserInterface = true
+        print("app.AXEnhancedUserInterface:", self.app.AXEnhancedUserInterface)
+        -- print("win.AXEnhancedUserInterface:", self.win.AXEnhancedUserInterface) -- nil on editor window
 
         do return end
 
