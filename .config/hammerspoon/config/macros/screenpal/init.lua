@@ -481,7 +481,7 @@ function StreamDeckScreenPalTimelineZoomAndJumpToEnd()
     end)
 end
 
-function StreamDeckScreenPalTimelineScrollOrJumpToStart()
+function RETIRED_StreamDeckScreenPalTimelineScrollOrJumpToStart()
     -- local original_mouse_pos = hs.mouse.absolutePosition()
     local win = get_cached_editor_window()
 
@@ -531,7 +531,7 @@ function StreamDeckScreenPalTimelineScrollOrJumpToStart()
     -- hs.mouse.absolutePosition(original_mouse_pos) -- umm I feel like I want to NOT restore so I can move mouse easily at start!
 end
 
-function StreamDeckScreenPalTimelineScrollOrJumpToEnd()
+function RETIRED_StreamDeckScreenPalTimelineScrollOrJumpToEnd()
     -- local original_mouse_pos = hs.mouse.absolutePosition()
     local win = get_cached_editor_window()
 
@@ -578,7 +578,7 @@ function StreamDeckScreenPalTimelineScrollOrJumpToEnd()
     -- hs.mouse.absolutePosition(original_mouse_pos) -- try not restoring, might be better!
 end
 
-function UNUSED_StreamDeckScreenPalTimelineApproxRestorePosition(restore_position_value)
+function RETIRED_StreamDeckScreenPalTimelineApproxRestorePosition(restore_position_value)
     -- TODO do I even need this anymore?
     --   I am zooming out to get overall playhead position now in full clip
     --   and restoring that on reopen, so I don't think I need (nor want) to use zoomed in scrolling to restore
