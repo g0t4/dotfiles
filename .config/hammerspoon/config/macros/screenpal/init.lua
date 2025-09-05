@@ -374,6 +374,9 @@ function ScreenPalEditorWindow:new()
 
         -- TODO break apart functions out of the other get time function below
         --   i.e. get_playhead_time
+
+        local details = self:_timeline_details()
+
     end
 
     function editor_window:toggle_AXEnhancedUserInterface()
