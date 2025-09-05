@@ -361,7 +361,7 @@ local function is_highlighting_now()
     return M.last.tooltip ~= nil
 end
 
-local function removeHighlight()
+local function remove_highlight()
     if not M.last.element then
         return
     end
@@ -377,7 +377,7 @@ local function removeHighlight()
 end
 
 local function highlight_this_element(element)
-    removeHighlight()
+    remove_highlight()
     if not element then
         return
     end
@@ -455,10 +455,10 @@ local function get_current_element()
     return element
 end
 
-local function stopElementInspector()
+local function stop_element_inspector()
     M.moves = nil
     M.subscription:unsubscribe() -- subscription cleanup is all... really can skip this here
-    removeHighlight() -- clear the callout/tooltips
+    remove_highlight() -- clear the callout/tooltips
     if M.stop_event_source then
         -- separately need to stop the upstream event source (do not comingle unsub w/ stop source, usually you might have multiple subs and would want to separately control the subs vs source)
         M.stop_event_source()
@@ -476,7 +476,7 @@ local function toggle_show_children()
     highlight_current_element(true)
 end
 
-local function startElementInspector()
+local function start_element_inspector()
     M.moves, M.stop_event_source = require("config.rx.mouse").mouseMovesThrottledObservable(50)
     M.subscription = M.moves:subscribe(
         function()
@@ -491,7 +491,7 @@ local function startElementInspector()
     --     print("[COMPLETE] what to do here?")
     -- end
     )
-    table.insert(M.bindings, hs.hotkey.bind({}, "escape", stopElementInspector))
+    table.insert(M.bindings, hs.hotkey.bind({}, "escape", stop_element_inspector))
     table.insert(M.bindings, hs.hotkey.bind({}, "c", toggle_show_children))
 end
 
@@ -522,10 +522,10 @@ function capture_element_under_mouse()
     image_tag = sanitize_image_tag(image_tag)
 
     local was_highlighting = is_highlighting_now()
-    removeHighlight()
+    remove_highlight()
 
     -- * save to
-    local where_to = getScreencaptureFileName("png", image_tag)
+    local where_to = get_screencapture_filename("png", image_tag)
     -- local where_to = "-P" -- -P == open in preview (does not save to disk)
 
     function when_done(result, stdOut, stdErr)
@@ -555,10 +555,10 @@ M.stop_event_source = nil
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "T", function()
     alert.closeAll()
     if not M.moves then
-        startElementInspector()
+        start_element_inspector()
         highlight_current_element() -- don't need to move mouse to highlight first element
     else
-        stopElementInspector()
+        stop_element_inspector()
     end
 end)
 

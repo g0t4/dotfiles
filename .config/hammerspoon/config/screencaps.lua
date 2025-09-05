@@ -37,7 +37,7 @@ end
 ---@param extension? string
 ---@param image_tag? string -- added to filename, to give context about what was captured
 ---@return string filename
-function getScreencaptureFileName(extension, image_tag)
+function get_screencapture_filename(extension, image_tag)
     extension = extension or "png"
 
     -- FYI file sizes verified to match macOS keyboard shortcuts for screencap
@@ -106,7 +106,7 @@ end
 
 
 hs.hotkey.bind({ "shift", "cmd" }, "3", function()
-    local filename = getScreencaptureFileName()
+    local filename = get_screencapture_filename()
     -- PRN add "-m" if secondary screen is captured... right now it isn't so I don't need it (yet?)
     hs.task.new("/usr/sbin/screencapture", nil, { filename }):start()
 
@@ -129,7 +129,7 @@ hs.hotkey.bind({ "shift", "cmd", "ctrl" }, "3", function()
 end)
 
 hs.hotkey.bind({ "shift", "cmd" }, "4", function()
-    local filename = getScreencaptureFileName()
+    local filename = get_screencapture_filename()
     -- FYI -J window => b/c I like window almost always when use region/interactive selection
     -- -o => don't capture shadow (and cannot use option to add it either, which is fine, use software to add it if needed)
     --   shadow adds 300KB+ to each image! good riddance
@@ -146,7 +146,7 @@ hs.hotkey.bind({ "shift", "cmd" }, "5", function()
 
     -- TODO hrm... must need to be interactive to work? or can I pass a thing to show a toolbar or smth?
     --   or non-interactive can that only be when I set a fixed duration
-    local filename = getScreencaptureFileName("mp4")
+    local filename = get_screencapture_filename("mp4")
     -- TODO defaults?
     --   TODO alt bindings for other combos (instead of ctrl to copy to clippy, or could I do that?)
     -- TODO `-G` and device id for MixPre6v2
