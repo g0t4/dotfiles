@@ -10,6 +10,7 @@ include:
   - snippets
   - rs
   - vim
+  # - yaml # not many, yet?
 ignores:
   - "notes/"
 all_languages:
