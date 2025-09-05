@@ -152,7 +152,12 @@ local function show_tooltip_for_element(element, frame)
     --   hide the noise (nil, "", lists, attrs I dont care about)
     --   everything else => use html report
     for _, attr_name in pairs(sorted_attribute_names(element)) do
-        if skips[attr_name] then goto continue end
+        if skips[attr_name] then
+            if M.last.show_everything then
+                table.insert(attributes, "skip " .. attr_name)
+            end
+            goto continue
+        end
         local attr_value = element:attributeValue(attr_name)
         if attr_value == nil then goto continue end
         if attr_value == "" then goto continue end -- skip empty values, i.e. empty AXDescription
@@ -209,7 +214,7 @@ local function show_tooltip_for_element(element, frame)
         -- FYI right now AXSections shows in list of attrs
     else
         -- PRN if styled text, could make it italic
-        table.insert(attributes, "\npress 'c' to show children")
+        table.insert(attributes, "\npress 'c' children, 'e' everything")
     end
     local attribute_dump = table.concat(attributes, "\n")
 
@@ -476,6 +481,12 @@ local function stop_element_inspector()
     M.bindings = {}
 end
 
+local function toggle_show_everything()
+    M.last.show_everything = not M.last.show_everything
+    highlight_current_element(true)
+end
+
+
 local function toggle_show_children()
     M.last.show_children = not M.last.show_children
     highlight_current_element(true)
@@ -498,6 +509,7 @@ local function start_element_inspector()
     )
     table.insert(M.bindings, hs.hotkey.bind({}, "escape", stop_element_inspector))
     table.insert(M.bindings, hs.hotkey.bind({}, "c", toggle_show_children))
+    table.insert(M.bindings, hs.hotkey.bind({}, "e", toggle_show_everything))
 end
 
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "F", function()
