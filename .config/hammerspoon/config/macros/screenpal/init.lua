@@ -469,18 +469,15 @@ function ScreenPalEditorWindow:new()
         self:zoom_off()
         print("min zoom frame", hs.inspect(self._btn_minimum_zoom:axFrame()))
 
-        -- TODO new _timeline_details
-        -- TODO inline tmp variables that effectively hold rename onto details
         local details = self:_timeline_details()
-        local timeline_frame = details.timeline_frame
 
         local pixels_per_second = details.playhead_relative_timeline_x / details.playhead_seconds
-        local estimated_total_seconds = timeline_frame.w / pixels_per_second
+        local estimated_total_seconds = details.timeline_frame.w / pixels_per_second
         -- F!!! NAILED it for total seconds!!!
         dump({ estimated_total_seconds = estimated_total_seconds })
 
 
-        local est_x_one_second = timeline_frame.x + pixels_per_second
+        local est_x_one_second = details.timeline_frame.x + pixels_per_second
         local pixels_per_frame = pixels_per_second / 25 -- spal uses 25 fps
         dump({
             est_x_one_second = est_x_one_second,
@@ -493,7 +490,7 @@ function ScreenPalEditorWindow:new()
             x = est_x_one_second + 1, -- for 1 sec its slightly off (NBD => could arrow over if consistently off))
             -- +1 => 1.04 sec (1 frame past), +0 => 0.92 sec (2 frames before)
             -- FYI I DO NOT NEED PRECISE! silence ranges for example will be paddeed anyways! can always padd an extra frame!
-            y = timeline_frame.y + timeline_frame.h / 2
+            y = details.timeline_frame.y + details.timeline_frame.h / 2
         }, hold_down_before_release)
 
 
