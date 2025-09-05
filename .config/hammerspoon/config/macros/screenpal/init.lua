@@ -485,10 +485,8 @@ function StreamDeckScreenPalTimelineScrollOrJumpToStart()
     -- local original_mouse_pos = hs.mouse.absolutePosition()
     local win = get_cached_editor_window()
 
-    -- TODO don't scroll to move to start! just out and then over and back in!
-    --  RIGHT?
-
     if win:is_zoomed() then
+        -- if zoomed, and wanna keep zoom then can use scroll, but really no reason to do that anymore
         function scroll_to_end(win)
             local timeline_scrollbar = win:get_scrollbar_or_throw()
             local frame = timeline_scrollbar:axFrame()
@@ -538,6 +536,7 @@ function StreamDeckScreenPalTimelineScrollOrJumpToEnd()
     local win = get_cached_editor_window()
 
     if win:is_zoomed() then
+        -- if zoomed, and wanna keep zoom then can use scroll, but really no reason to do that anymore
         function scroll_to_end(win)
             local timeline_scrollbar = win:get_scrollbar_or_throw()
             local frame = timeline_scrollbar:axFrame()
