@@ -352,13 +352,8 @@ function ScreenPalEditorWindow:new()
         return self
     end
 
-    ---@class EditorWindow
-    ---@field _btn_position_slider hs.axuielement
-    ---@field windows WindowController
-    local EditorWindow = {}
-
     ---@return TimelineDetails
-    function EditorWindow:_timeline_details()
+    function editor_window:_timeline_details()
         local timeline_frame = self._btn_position_slider:axFrame()
 
         local playhead_window = self.windows:get_playhead_window_or_throw()
