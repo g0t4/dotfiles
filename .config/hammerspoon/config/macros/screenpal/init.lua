@@ -335,7 +335,30 @@ function ScreenPalEditorWindow:new()
         -- StreamDeckScreenPalTimelineApproxRestorePosition(current_zoom_scrollbar_position)
     end
 
-    function editor_window:_timeline_details()
+    ---@class TimelineDetails
+    ---@field timeline_frame { x: number, y: number, w: number, h: number }
+    ---@field playhead_window_frame { x: number, y: number, w: number, h: number }
+    ---@field playhead_x number
+    ---@field playhead_relative_timeline_x number
+    ---@field playhead_seconds number
+    ---@field pixels_per_second number
+    ---@field estimated_total_seconds number
+    local TimelineDetails = {}
+
+    ---@param self TimelineDetails
+    function TimelineDetails:calculate()
+        self.pixels_per_second = self.playhead_relative_timeline_x / self.playhead_seconds
+        self.estimated_total_seconds = self.timeline_frame.w / self.pixels_per_second
+        return self
+    end
+
+    ---@class EditorWindow
+    ---@field _btn_position_slider hs.axuielement
+    ---@field windows WindowController
+    local EditorWindow = {}
+
+    ---@return TimelineDetails
+    function EditorWindow:_timeline_details()
         local timeline_frame = self._btn_position_slider:axFrame()
 
         local playhead_window = self.windows:get_playhead_window_or_throw()
@@ -351,19 +374,15 @@ function ScreenPalEditorWindow:new()
         local playhead_x = playhead_window_frame.x + playhead_window_frame.w / 2
         local playhead_relative_timeline_x = playhead_x - timeline_frame.x
 
-
-        local pixels_per_second = playhead_relative_timeline_x / playhead_seconds
-        local estimated_total_seconds = timeline_frame.w / pixels_per_second
-        -- F!!! NAILED it for total seconds!!!
-        dump({ estimated_total_seconds = estimated_total_seconds })
-
-        return {
+        local details = {
             timeline_frame = timeline_frame,
-            playhead_window_frame = playhead_window_frame, -- TODO is this used, if not can keep it hidden until needed elsewhere?
+            playhead_window_frame = playhead_window_frame,
             playhead_x = playhead_x,
             playhead_relative_timeline_x = playhead_relative_timeline_x,
             playhead_seconds = playhead_seconds,
         }
+
+        return TimelineDetails:calculate(details)
     end
 
     function editor_window:figure_out_zoom2_fixed_pixels_per_second()
