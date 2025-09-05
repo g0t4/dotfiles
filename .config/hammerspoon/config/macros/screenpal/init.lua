@@ -377,7 +377,7 @@ function ScreenPalEditorWindow:new()
             playhead_seconds = playhead_seconds,
         }
 
-        return TimelineDetails:calculate(details)
+        return TimelineDetails.calculate(details)
     end
 
     function editor_window:figure_out_zoom2_fixed_pixels_per_second()
