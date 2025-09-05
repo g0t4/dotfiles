@@ -452,7 +452,13 @@ function StreamDeckScreenPalTimelineZoomAndJumpToStart()
         local win = get_cached_editor_window()
         win:zoom_off() -- zoom out first means just click end and zoom in... no slider necessary!
         sleep_ms(10)
-        StreamDeckScreenPalTimelineScrollOrJumpToStart()
+
+        -- StreamDeckScreenPalTimelineScrollOrJumpToStart()
+        local slider = win:get_timeline_slider_or_throw()
+        local sframe = slider:axFrame()
+        -- move playhead to end by clicking the left‑most part of the timeline slider
+        hs.eventtap.leftClick({ x = sframe.x, y = sframe.y })
+
         sleep_ms(10)
         win:zoom2()
     end)
@@ -461,9 +467,15 @@ end
 function StreamDeckScreenPalTimelineZoomAndJumpToEnd()
     run_async(function()
         local win = get_cached_editor_window()
-        win:zoom_off() -- zoom out first means just click end and zoom in... no slider necessary!
+        win:zoom_off()
         sleep_ms(10)
-        StreamDeckScreenPalTimelineScrollOrJumpToEnd()
+
+        -- StreamDeckScreenPalTimelineScrollOrJumpToEnd()
+        local slider = win:get_timeline_slider_or_throw()
+        local sframe = slider:axFrame()
+        -- move playhead to end by clicking the right‑most part of the timeline slider
+        hs.eventtap.leftClick({ x = sframe.x + sframe.w - 1, y = sframe.y })
+
         sleep_ms(10)
         win:zoom2()
     end)
