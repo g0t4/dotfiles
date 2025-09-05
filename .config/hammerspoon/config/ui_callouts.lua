@@ -151,7 +151,7 @@ local function show_tooltip_for_element(element, frame)
     -- GOAL is to quickly see attrs that I can use to target elements
     --   hide the noise (nil, "", lists, attrs I dont care about)
     --   everything else => use html report
-    for _, attr_name in pairs(sortedAttributeNames(element)) do
+    for _, attr_name in pairs(sorted_attribute_names(element)) do
         if skips[attr_name] then goto continue end
         local attr_value = element:attributeValue(attr_name)
         if attr_value == nil then goto continue end

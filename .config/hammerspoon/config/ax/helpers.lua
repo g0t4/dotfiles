@@ -542,8 +542,8 @@ function ConcatIntoLines(refChain, maxLineLength, lineContinuation)
     return table.concat(lines, joinWith)
 end
 
-function sortedAttributeNames(element)
-    -- TODO can I make an enumerator like pairs(sortedAttributeNames(element))?
+function sorted_attribute_names(element)
+    -- TODO can I make an enumerator like pairs(sorted_attribute_names(element))?
     if not element or not element.attributeNames then return {} end
     local attributes = element:attributeNames()
     table.sort(attributes)
