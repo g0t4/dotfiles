@@ -376,12 +376,11 @@ function ScreenPalEditorWindow:new()
     ---@param self TimelineDetails
     ---@param seconds number
     function TimelineDetails:move_playhead_to(seconds)
-        local timeline_frame = self.timeline_frame
-        local playhead_x = timeline_frame.x + (seconds * self.pixels_per_second)
+        local playhead_x = self.timeline_frame.x + (seconds * self.pixels_per_second)
         local hold_duration_ms = 10000
         hs.eventtap.leftClick({
             x = playhead_x,
-            y = timeline_frame.y + timeline_frame.h / 2
+            y = self.timeline_frame.y + self.timeline_frame.h / 2
         }, hold_duration_ms)
     end
 
