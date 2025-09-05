@@ -283,6 +283,7 @@ function ScreenPalEditorWindow:new()
             self:zoom_off()
 
 
+            -- use percent, that way if the width changes, it's still the same timecode
             local playhead_percent = self:playhead_position_percent()
 
             if not self._textfield_title then
