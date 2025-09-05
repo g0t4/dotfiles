@@ -297,7 +297,7 @@ function ScreenPalEditorWindow:new()
             end
             self._btn_back_to_projects:performAction("AXPress")
 
-            local btn = wait_for_element(function()
+            local btn_reopen_project = wait_for_element(function()
                 cache_project_view_controls()
                 if not self._scrollarea_list then return end
                 return vim.iter(self._scrollarea_list:buttons())
@@ -308,11 +308,11 @@ function ScreenPalEditorWindow:new()
                     :totable()[1]
             end, 100, 20)
 
-            if not btn then
+            if not btn_reopen_project then
                 error("cannot find project to re-open, aborting...")
             end
 
-            btn:performAction("AXPress")
+            btn_reopen_project:performAction("AXPress")
             sleep_ms(100) -- PRN if possible, and useful, replace w/ wait_for_element, which one to look for?
 
             -- restore playhead
