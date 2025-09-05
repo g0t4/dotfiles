@@ -28,7 +28,7 @@ local skips = {
     AXWindow = true,
     AXParent = true,
 
-    AXFrame = true,
+    AXFrame = true, -- redone in compact format manually
     AXPosition = true,
     AXActivationPoint = true,
     AXSize = true,
@@ -171,6 +171,11 @@ local function show_tooltip_for_element(element, frame)
 
         ::continue::
     end
+
+    -- * frame
+    local f = element:axFrame() -- retrieve again b/c frame variable isn't always for the element
+    local compact_frame = string.format("frame: %s,%s,%s,%s", f.x, f.y, f.w, f.h)
+    table.insert(attributes, compact_frame)
 
     if M.last.show_children then
         function append_children(children)
