@@ -448,6 +448,7 @@ function get_cached_editor_window()
 end
 
 function StreamDeckScreenPalTimelineZoomAndJumpToStart()
+    -- FYI using run_async (coroutines under hood) to avoid blocking (i.e. during sleep calls)
     run_async(function()
         local win = get_cached_editor_window()
         win:zoom_off() -- zoom out first means just click end and zoom in... no slider necessary!
