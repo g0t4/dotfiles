@@ -373,27 +373,21 @@ function ScreenPalEditorWindow:new()
         return self
     end
 
+    ---@param self table
+    ---@param playhead_x number
+    function TimelineDetails:_move_playhead_to_x(playhead_x)
+        local hold_duration_ms = 10
+        hs.eventtap.leftClick({
+            x = playhead_x,
+            y = self.timeline_frame.y + self.timeline_frame.h / 2
+        }, hold_duration_ms * 1000)
+    end
+
     ---@param self TimelineDetails
     ---@param seconds number
     function TimelineDetails:move_playhead_to(seconds)
         local playhead_x = self.timeline_frame.x + (seconds * self.pixels_per_second) + 1
-        local hold_duration_ms = 10000
-        hs.eventtap.leftClick({
-            x = playhead_x,
-            y = self.timeline_frame.y + self.timeline_frame.h / 2
-        }, hold_duration_ms)
-    end
-
-    ---@param self TimelineDetails
-    ---@param x number
-    function TimelineDetails:left_click(x)
-        local rel_click_x = x / 2
-        local click_x = self.timeline_frame.x + rel_click_x
-        local hold_duration_ms = 10000
-        hs.eventtap.leftClick({
-            x = click_x + 1,
-            y = self.timeline_frame.y + self.timeline_frame.h / 2
-        }, hold_duration_ms)
+        self:_move_playhead_to_x(playhead_x)
     end
 
     ---@return TimelineDetails
