@@ -341,7 +341,7 @@ function ScreenPalEditorWindow:new()
         --   i.e. get_playhead_time
 
         local details = self:_timeline_details()
-        details:move_playhead_to_seconds(3)
+        details:move_playhead_to_seconds(2)
 
         -- *** PIXELS PER SECOND for each ZOOM level (fixed for each level)
         print(details.pixels_per_second)
@@ -349,11 +349,13 @@ function ScreenPalEditorWindow:new()
         --   jump to a specific timecode and measure the time from there
         --   should be more reliable than clicking any spot and doing it from there which maybe cursor is in the middle between actual frames and so its slightly off b/c it says time as of a few pixels left/right
         --   repeatedly push the jump to 3 (or w/e value) an
-        -- zoom1 => ~25 => 25.164473684211 (converges for 3s jump)
-        --  => IOTW 1 frame per pixel
-        -- zoom2 => 64.1875 (seems to converge exactly to this)
-        --  => IOTW 1 frame per 2+ pixels (just over 2)
-        -- zoom3 => 150.16666666667 (appears exact)
+        --
+        --   change width of screen (timeline) and confirm PPS remains the same
+        --   MAKE SURE 0 is on left, sometimes it shifts slightly off screen, that will cause issues in the PPS
+        --   SLIGHT discrepency when clicking on a spot is fractions of a pixel in the calc... IOTW I don't have ultra precise fractions but 25/75/150 are correct parts
+        -- zoom1 => 25.164473684211 PPS
+        -- zoom2 => 75.166666666667 PPS
+        -- zoom3 => 150.16666666667 PPS
     end
 
     function editor_window:toggle_AXEnhancedUserInterface()
