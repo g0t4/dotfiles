@@ -35,8 +35,7 @@ abbr tarc 'tar --xz -cf' # create xz (todo use set-position to put cursor in nam
 abbr tarcg 'tar --gzip -cf' # create gzip (todo use set-position to put cursor in name that already has .tgz extension)
 abbr tarcb 'tar --bzip2 -cf' # create bzip2 (todo use set-position to put cursor in name that already has .tbz2 extension)
 
-# *** java (zip)
-# jar:
+# *** jar (zip)
 abbr jarx 'jar -xf' # e(x)tract
 abbr jart 'jar -tf' # lis(t) / (t)est
 abbr jaru 'jar -uf' # u(n)pack
@@ -48,3 +47,7 @@ abbr unzipx_stdout 'unzip -p' # e(x)tract to std(O)ut
 abbr unzipl 'unzip -l' # lis(t) / (t)est
 # TODO flesh out later, FYI use zip for create equivalaents
 #   PRN make all these abbrs via zip and unzip? same set and just use respective command based on action? (unlike tar which has one command for all ops)
+
+
+# *** java abbrs
+abbr java19 'export PATH="$(/usr/libexec/java_home -v 19)/bin:$PATH"'
