@@ -365,6 +365,13 @@ function ScreenPalEditorWindow:new()
 
         local playhead_x = playhead_window_frame.x + playhead_window_frame.w / 2
         local playhead_relative_timeline_x = playhead_x - timeline_frame.x
+
+
+        local pixels_per_second = playhead_relative_timeline_x / playhead_seconds
+        local estimated_total_seconds = timeline_frame.w / pixels_per_second
+        -- F!!! NAILED it for total seconds!!!
+        dump({ estimated_total_seconds = estimated_total_seconds })
+
         return {
             timeline_frame = timeline_frame,
             playhead_window_frame = playhead_window_frame,
@@ -471,25 +478,17 @@ function ScreenPalEditorWindow:new()
 
         local details = self:_timeline_details()
 
-        local pixels_per_second = details.playhead_relative_timeline_x / details.playhead_seconds
-        local estimated_total_seconds = details.timeline_frame.w / pixels_per_second
-        -- F!!! NAILED it for total seconds!!!
-        dump({ estimated_total_seconds = estimated_total_seconds })
-
-
-        local est_x_one_second = details.timeline_frame.x + pixels_per_second
-        local pixels_per_frame = pixels_per_second / 25 -- spal uses 25 fps
-        dump({
-            est_x_one_second = est_x_one_second,
-            pixels_per_frame = pixels_per_frame
-        })
+        -- TODO add function to _timeline_details return type... that takes a time value (seconds) and returns x value?
+        local estimated_one_second_x_value = details.timeline_frame.x + details.pixels_per_second
+        -- local pixels_per_frame = pixels_per_second / 25 -- spal uses 25 fps
+        -- dump({ est_x_one_second = estimated_one_second_x_value, pixels_per_frame = pixels_per_frame })
 
         -- * FYI clicking at 1 second mark is just a demo, not a part of getting the time!
         -- TODO extract click timeline logic, maybe add it to the _timeline_details return type
         local hold_down_before_release = 10000 -- 1K had issues, TODO find a value and set it global
         hs.eventtap.leftClick({
             -- +1 pixel stops leftward drift by 1 frame (good test is back to back reopen, albeit not a normal workflow)
-            x = est_x_one_second + 1, -- for 1 sec its slightly off (NBD => could arrow over if consistently off))
+            x = estimated_one_second_x_value + 1, -- for 1 sec its slightly off (NBD => could arrow over if consistently off))
             -- +1 => 1.04 sec (1 frame past), +0 => 0.92 sec (2 frames before)
             -- FYI I DO NOT NEED PRECISE! silence ranges for example will be paddeed anyways! can always padd an extra frame!
             y = details.timeline_frame.y + details.timeline_frame.h / 2
