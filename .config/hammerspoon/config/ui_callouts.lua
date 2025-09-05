@@ -528,10 +528,10 @@ function capture_element_under_mouse()
     local where_to = get_screencapture_filename("png", image_tag)
     -- local where_to = "-P" -- -P == open in preview (does not save to disk)
 
-    function when_done(result, stdOut, stdErr)
+    function when_done(result, std_out, std_err)
         if result ~= 0 then
-            hs.alert.show("capture failed: " .. stdErr)
-            print("capture failed", stdErr)
+            hs.alert.show("capture failed: " .. std_err)
+            print("capture failed", std_err)
         end
         if was_highlighting then
             highlight_current_element()
@@ -562,7 +562,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "T", function()
     end
 end)
 
-local function getSiblings(element)
+local function get_siblings(element)
     if not element then
         print("no element to move")
         return
@@ -625,8 +625,8 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "right", function()
     if not M.moves then
         return
     end
-    local function nextSibling(element)
-        local siblings = getSiblings(element)
+    local function next_sibling(element)
+        local siblings = get_siblings(element)
         if not siblings then
             print("no sibling " .. M.last.cycle)
             return
@@ -641,7 +641,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "right", function()
         --   this is needed for cycling AXSections
         print("no next sibling " .. M.last.cycle)
     end
-    local next = nextSibling(M.last.element)
+    local next = next_sibling(M.last.element)
     if not next then
         only_alert("no next sibling " .. M.last.cycle)
         return
@@ -654,8 +654,8 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "left", function()
     if not M.moves then
         return
     end
-    local function previousSibling(element)
-        local siblings = getSiblings(element)
+    local function previous_sibling(element)
+        local siblings = get_siblings(element)
         if not siblings then
             print("no siblings " .. M.last.cycle)
             return
@@ -666,7 +666,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "left", function()
             end
         end
     end
-    local prev = previousSibling(M.last.element)
+    local prev = previous_sibling(M.last.element)
     if not prev then
         only_alert("no previous sibling " .. M.last.cycle)
         return
@@ -674,7 +674,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "left", function()
     highlight_this_element(prev)
 end)
 
-local function testHighlightOnReloadConfig()
+local function test_highlight_on_reload_config()
     -- tmp testing specific control
     local fcpx = hs.axuielement.applicationElement(hs.application.find(APPS.FinalCutPro))
     -- local target = fcpx:window(2):splitGroup(1):group(2) -- AXTitleUIElement test case
@@ -683,22 +683,18 @@ local function testHighlightOnReloadConfig()
     highlight_this_element(target)
 end
 
--- testHighlightOnReloadConfig()
-
-local function testCaching()
+local function test_caching()
     local fcpx = CachedElement.forApp(APPS.FinalCutPro)
     -- local fcpx = hs.axuielement.applicationElement(hs.application.find(APPS.FinalCutPro))
-    local startTime = get_time()
+    local start_time = get_time()
     for i = 1, 10 do
         -- print("caching - iteration", i)
         local attrs = fcpx:attributes() -- 100 calls => ~8ms avg
         -- local attrs = fcpx:allAttributeValues() -- 100 calls => 90ms avg (no caching), 1000 calls => 2,500ms!
     end
     print("fcpx", fcpx)
-    print("caching - took", get_time() - startTime)
+    print("caching - took", get_time() - start_time)
 end
-
--- testCaching()
 
 return M
 
