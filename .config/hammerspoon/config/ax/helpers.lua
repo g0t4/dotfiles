@@ -46,17 +46,17 @@ end
 
 ---@return hs.axuielement
 axuielemMT.expectFocusedWindow = function(self)
-    local focusedWindow = self:focusedWindow()
-    assert(focusedWindow ~= nil, "axUiAppTyped: could not find focused window")
-    return focusedWindow
+    local focused_window = self:focusedWindow()
+    assert(focused_window ~= nil, "axUiAppTyped: could not find focused window")
+    return focused_window
 end
 
 ---@return hs.axuielement
 axuielemMT.expectFocusedMainWindow = function(self)
-    local focusedWindow = self:expectFocusedWindow()
-    local axMain = focusedWindow:attributeValue("AXMain")
-    assert(axMain == true, "axUiAppTyped: focused window is not main")
-    return focusedWindow
+    local focused_window = self:expectFocusedWindow()
+    local ax_main = focused_window:attributeValue("AXMain")
+    assert(ax_main == true, "axUiAppTyped: focused window is not main")
+    return focused_window
 end
 
 ---@return hs.axuielement[]
@@ -379,30 +379,30 @@ end
 ---@param elem hs.axuielement
 ---@return table|nil @ { x=number, y=number, w=number, h=number }
 axuielemMT.axFrame = function(elem)
-    local rawFrame = elem:attributeValue("AXFrame")
-    if not rawFrame then return nil end
-    ---@cast rawFrame table|nil @ { x=number, y=number, w=number, h=number }
-    assert(rawFrame.x and type(rawFrame.x) == "number" and rawFrame.y and type(rawFrame.y) == "number")
-    assert(rawFrame.w and type(rawFrame.w) == "number" and rawFrame.h and type(rawFrame.h) == "number")
-    return rawFrame
+    local raw_frame = elem:attributeValue("AXFrame")
+    if not raw_frame then return nil end
+    ---@cast raw_frame table|nil @ { x=number, y=number, w=number, h=number }
+    assert(raw_frame.x and type(raw_frame.x) == "number" and raw_frame.y and type(raw_frame.y) == "number")
+    assert(raw_frame.w and type(raw_frame.w) == "number" and raw_frame.h and type(raw_frame.h) == "number")
+    return raw_frame
 end
 -- AXPosition
 ---@param elem hs.axuielement
 ---@return table|nil @ { x=number, y=number }
 axuielemMT.axPosition = function(elem)
-    local rawPos = elem:attributeValue("AXPosition")
-    if not rawPos then return nil end
-    assert(rawPos.x and type(rawPos.x) == "number" and rawPos.y and type(rawPos.y) == "number")
-    return rawPos
+    local raw_pos = elem:attributeValue("AXPosition")
+    if not raw_pos then return nil end
+    assert(raw_pos.x and type(raw_pos.x) == "number" and raw_pos.y and type(raw_pos.y) == "number")
+    return raw_pos
 end
 -- AXSize
 ---@param elem hs.axuielement
 ---@return table|nil @ { w=number, h=number }
 axuielemMT.axSize = function(elem)
-    local rawSize = elem:attributeValue("AXSize")
-    if not rawSize then return nil end
-    assert(rawSize.w and type(rawSize.w) == "number" and rawSize.h and type(rawSize.h) == "number")
-    return rawSize
+    local raw_size = elem:attributeValue("AXSize")
+    if not raw_size then return nil end
+    assert(raw_size.w and type(raw_size.w) == "number" and raw_size.h and type(raw_size.h) == "number")
+    return raw_size
 end
 
 -- *** ATTRIBUTE HELPERS ***
@@ -410,18 +410,18 @@ end
 ---even if its value is nil or empty "", that qualifies (consumers can handle that otherwise)
 ---@param elem hs.axuielement
 ---@return boolean
-axuielemMT.isAttributeValueUnique = function(elem, attrName)
-    local elemAttrValue = elem:attributeValue(attrName)
+axuielemMT.isAttributeValueUnique = function(elem, attr_name)
+    local elem_attr_value = elem:attributeValue(attr_name)
     local parent = elem:axParent()
     if parent == nil then
         -- no parent, cannot know
-        error("isAttributeValueUnique(" .. elem .. ", " .. attrName .. ") called on element with no parent")
+        error("isAttributeValueUnique(" .. elem .. ", " .. attr_name .. ") called on element with no parent")
         return false
     end
     -- TODO add type hints for childrenWithRole (this is hs.axuielement API right?)
     local siblings = parent:childrenWithRole(elem:axRole()) or {}
     for _, sibling in ipairs(siblings) do
-        if elem ~= sibling and elemAttrValue == sibling:attributeValue(attrName) then
+        if elem ~= sibling and elem_attr_value == sibling:attributeValue(attr_name) then
             -- matched a sibling
             return false
         end
@@ -435,35 +435,35 @@ end
 ---@return string|nil @ lua function call to one of my axuielemMT extension methods
 axuielemMT.findUniqueReference = function(elem)
     -- * non-empty, unique title
-    local isTitleValueUnique = axuielemMT.isAttributeValueUnique(elem, "AXTitle")
+    local is_title_value_unique = axuielemMT.isAttributeValueUnique(elem, "AXTitle")
     local title = elem:axTitle()
-    if title and isTitleValueUnique then
+    if title and is_title_value_unique then
         return elem:singular() .. "(" .. quote(title) .. ")"
     end
 
     -- * non-empty, unique subrole
-    local isSubroleValueUnique = axuielemMT.isAttributeValueUnique(elem, "AXSubrole")
-    local subRole = elem:attributeValue("AXSubrole")
-    if isSubroleValueUnique and subRole then
+    local is_subrole_value_unique = axuielemMT.isAttributeValueUnique(elem, "AXSubrole")
+    local sub_role = elem:attributeValue("AXSubrole")
+    if is_subrole_value_unique and sub_role then
         -- add subrole= to make clear I need an arg or overload for that
-        return elem:singular() .. "(subrole=" .. quote(subRole) .. ")"
+        return elem:singular() .. "(subrole=" .. quote(sub_role) .. ")"
     end
 
     -- * non-empty, unique description
-    local isDescrptionUnique = axuielemMT.isAttributeValueUnique(elem, "AXDescription")
+    local is_descrption_unique = axuielemMT.isAttributeValueUnique(elem, "AXDescription")
     local description = elem:attributeValue("AXDescription") or ""
-    if isDescrptionUnique and description then
+    if is_descrption_unique and description then
         return elem:singular() .. "(desc=" .. quote(description) .. ")"
     end
 
     -- ? AXHelp, AXValue
 
     -- * now, allow unique and empty/nil values
-    if isTitleValueUnique then
+    if is_title_value_unique then
         return elem:singular() .. "(" .. quote(title) .. ")"
-    elseif isSubroleValueUnique and subRole then
-        return elem:singular() .. "(subrole=" .. quote(subRole) .. ")"
-    elseif isDescrptionUnique and description then
+    elseif is_subrole_value_unique and sub_role then
+        return elem:singular() .. "(subrole=" .. quote(sub_role) .. ")"
+    elseif is_descrption_unique and description then
         return elem:singular() .. "(desc=" .. quote(description) .. ")"
     end
 
