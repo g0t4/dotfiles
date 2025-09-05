@@ -561,7 +561,10 @@ function StreamDeckScreenPalTimelineJumpToEnd()
 end
 
 function StreamDeckScreenPalTimelineApproxRestorePosition(restore_position_value)
-    -- approximate restore
+    -- TODO do I even need this anymore?
+    --   I am zooming out to get overall playhead position now in full clip
+    --   and restoring that on reopen, so I don't think I need (nor want) to use zoomed in scrolling to restore
+
     -- can only click timeline before/after the slider's bar... so this won't be precise unless I find a way to move it exactly
 
     -- PRN turn this into precise calculations:
