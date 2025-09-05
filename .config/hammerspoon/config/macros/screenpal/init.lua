@@ -475,36 +475,43 @@ function StreamDeckScreenPalTimelineJumpToStart()
     -- local original_mouse_pos = hs.mouse.absolutePosition()
     local win = get_cached_editor_window()
 
+    -- TODO don't scroll to move to start! just out and then over and back in!
+    --  RIGHT?
+
     if win:is_zoomed() then
-        local timeline_scrollbar = win:get_scrollbar_or_throw()
-        local frame = timeline_scrollbar:axFrame()
-        local min_value = timeline_scrollbar:axMinValue()
+        function scroll_to_start()
+            local timeline_scrollbar = win:get_scrollbar_or_throw()
+            local frame = timeline_scrollbar:axFrame()
+            local min_value = timeline_scrollbar:axMinValue()
 
-        local function click_until_timeline_at_end()
-            local prior_value = nil
-            while true do
-                local value = timeline_scrollbar:axValue()
-                local current_value = tonumber(value)
-                if not current_value
-                    or current_value <= min_value
-                then
-                    break
+            local function click_until_timeline_at_end()
+                local prior_value = nil
+                while true do
+                    local value = timeline_scrollbar:axValue()
+                    local current_value = tonumber(value)
+                    if not current_value
+                        or current_value <= min_value
+                    then
+                        break
+                    end
+
+                    if prior_value ~= nil and current_value == prior_value then
+                        print("Value unchanged, stopping.")
+                        break
+                    end
+                    prior_value = current_value
+
+                    -- click left-most side of timeline's scrollbar to get to zero
+                    hs.eventtap.leftClick({ x = frame.x, y = frame.y + frame.h / 2 })
+                    -- hs.eventtap.leftClick({ x = frame.x, y = frame.y + frame.h / 2 }) -- could click twice if value doesn't change
+                    -- hs.timer.usleep(10000) -- don't need pause b/c hs seems to block while clicking
                 end
-
-                if prior_value ~= nil and current_value == prior_value then
-                    print("Value unchanged, stopping.")
-                    break
-                end
-                prior_value = current_value
-
-                -- click left-most side of timeline's scrollbar to get to zero
-                hs.eventtap.leftClick({ x = frame.x, y = frame.y + frame.h / 2 })
-                -- hs.eventtap.leftClick({ x = frame.x, y = frame.y + frame.h / 2 }) -- could click twice if value doesn't change
-                -- hs.timer.usleep(10000) -- don't need pause b/c hs seems to block while clicking
             end
+
+            click_until_timeline_at_end()
         end
 
-        click_until_timeline_at_end()
+        scroll_to_start()
     end
 
     -- * move playhead to start (0) by clicking leftmost part of position slider (aka timeline)
