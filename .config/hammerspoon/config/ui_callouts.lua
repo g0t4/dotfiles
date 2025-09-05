@@ -182,8 +182,13 @@ local function show_tooltip_for_element(element, frame)
     local compact_frame = string.format("frame: %s,%s,%s,%s", f.x, f.y, f.w, f.h)
     table.insert(attributes, compact_frame)
 
+    -- * show children
     if M.last.show_children then
-        function append_children(children)
+        function append_children(children_attr_name)
+            local children = element:attributeValue(children_attr_name) or {}
+            table.insert(attributes, "\n" .. children_attr_name .. ": (" .. tostring(#children) .. ")")
+
+            -- TODO is it possible children are missing b/c pairs vs ipairs? (array table vs not array table?)
             for _, child in ipairs(children) do
                 -- TODO what attrs should I show? any others?
                 local role = child:attributeValue("AXRole")
@@ -205,13 +210,11 @@ local function show_tooltip_for_element(element, frame)
             end
         end
 
-        table.insert(attributes, "\nAXChildren:")
-        append_children(element:attributeValue("AXChildren") or {})
-
-        table.insert(attributes, "\nAXChildrenInNavigationOrder:")
-        append_children(element:attributeValue("AXChildrenInNavigationOrder") or {})
-
-        -- FYI right now AXSections shows in list of attrs
+        -- TODO consider a special mode that runs the allDescendantElements to get everything! => 'd' for all descendents! (separate mode?)
+        append_children("AXChildren")
+        append_children("AXChildrenInNavigationOrder")
+        -- ? add AXVisibleChildren?
+        -- not including AXSections, b/c it shows in list of attrs
     else
         -- PRN if styled text, could make it italic
         table.insert(attributes, "\npress 'c' children, 'e' everything")
