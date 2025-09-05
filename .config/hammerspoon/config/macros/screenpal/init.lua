@@ -155,7 +155,7 @@ function ScreenPalEditorWindow:new()
 
         local details = self:_timeline_details()
 
-        -- TODO move time_window_x_center to _timeline_details
+        -- TODO _timeline_details():move_playhead_to_percent(percent)
         local time_window_x_center = details.timeline_frame.x + playhead_percent * details.timeline_frame.w
 
         local hold_down_before_release = 10000 -- default is 200ms, will matter if chaining more actions!
