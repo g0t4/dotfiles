@@ -9,6 +9,7 @@ include:
   - applescript
   - snippets
   - rs
+  - vim
 ignores:
   - "notes/"
 all_languages:
@@ -18,4 +19,5 @@ all_languages:
   - bash
   - zsh
   - ps1
+  - vim
   # TODO just use all, always?
