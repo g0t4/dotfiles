@@ -408,6 +408,7 @@ function ScreenPalEditorWindow:new()
                 x = click_x + 1, -- for 1 sec its slightly off (NBD => could arrow over if consistently off))
                 -- +1 => 1.04 sec (1 frame past), +0 => 0.92 sec (2 frames before)
                 -- FYI I DO NOT NEED PRECISE! silence ranges for example will be paddeed anyways! can always padd an extra frame!
+                -- FYI for round numbers, i.e. 2 seconds, I can read playhead after move and if within a second I can use Shift+Arrow to jump w/e distance
                 y = timeline_frame.y + timeline_frame.h / 2
             }, hold_duration_ms)
         end
