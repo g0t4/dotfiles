@@ -13,6 +13,7 @@ let g:coc_global_extensions = [
             \ 'coc-docker',
             \ 'coc-go',
             \ 'coc-html',
+            \ 'coc-java',
             \ 'coc-json',
             \ 'coc-lua',
             \ 'coc-prettier',
