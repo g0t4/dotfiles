@@ -154,17 +154,16 @@ function ScreenPalEditorWindow:new()
         self:zoom_off() -- do not restore when zoomed
 
         local details = self:_timeline_details()
-        local timeline_frame = details.timeline_frame
 
         -- TODO move time_window_x_center to _timeline_details
-        local time_window_x_center = timeline_frame.x + playhead_percent * timeline_frame.w
+        local time_window_x_center = details.timeline_frame.x + playhead_percent * details.timeline_frame.w
 
         local hold_down_before_release = 1000 -- default is 200ms, will matter if chaining more actions!
         -- I ran into trouble with 0ms hold delay
         hs.eventtap.leftClick({
             -- +1 pixel stops leftward drift by 1 frame (good test is back to back reopen, albeit not a normal workflow)
             x = time_window_x_center + 1,
-            y = timeline_frame.y + timeline_frame.h / 2
+            y = details.timeline_frame.y + details.timeline_frame.h / 2
         }, hold_down_before_release)
     end
 
