@@ -315,19 +315,14 @@ function ScreenPalEditorWindow:new()
             btn_reopen_project:performAction("AXPress")
             sleep_ms(100) -- PRN if possible, and useful, replace w/ wait_for_element, which one to look for?
 
-            -- restore playhead
             self:restore_playhead_position(playhead_percent)
 
-            -- restore zoom / scroll bar position
             if not current_zoomed then
                 print("NOT zoomed before, skipping zoom restore")
                 return
             end
 
             self:zoom2()
-
-            -- TODO strip out now uneeded scroll to restore trick, I think that's what this was doing?
-            -- StreamDeckScreenPalTimelineApproxRestorePosition(current_zoom_scrollbar_position)
         end)
     end
 
