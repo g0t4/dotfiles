@@ -484,6 +484,8 @@ function ScreenPalEditorWindow:new()
             pixels_per_frame = pixels_per_frame
         })
 
+        -- * FYI clicking at 1 second mark is just a demo, not a part of getting the time!
+        -- TODO extract click timeline logic, maybe add it to the _timeline_details return type
         local hold_down_before_release = 10000 -- 1K had issues, TODO find a value and set it global
         hs.eventtap.leftClick({
             -- +1 pixel stops leftward drift by 1 frame (good test is back to back reopen, albeit not a normal workflow)
