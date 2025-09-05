@@ -337,7 +337,7 @@ function ScreenPalEditorWindow:new()
 
     ---@class TimelineDetails
     ---@field timeline_frame { x: number, y: number, w: number, h: number }
-    ---@field playhead_window_frame { x: number, y: number, w: number, h: number }
+    ---@field _playhead_window_frame { x: number, y: number, w: number, h: number }
     ---@field playhead_x number
     ---@field playhead_relative_timeline_x number
     ---@field playhead_seconds number
@@ -358,7 +358,7 @@ function ScreenPalEditorWindow:new()
 
         local playhead_window = self.windows:get_playhead_window_or_throw()
         -- DO NOT get frames until UI is stable, zoome din frame is different than zoomed out
-        local playhead_window_frame = playhead_window:axFrame()
+        local _playhead_window_frame = playhead_window:axFrame()
 
         local time_text_field = playhead_window:textField(1)
         local time_string = time_text_field:axValue()
@@ -366,12 +366,12 @@ function ScreenPalEditorWindow:new()
 
         local playhead_seconds = parse_time_to_seconds(time_string)
 
-        local playhead_x = playhead_window_frame.x + playhead_window_frame.w / 2
+        local playhead_x = _playhead_window_frame.x + _playhead_window_frame.w / 2
         local playhead_relative_timeline_x = playhead_x - timeline_frame.x
 
         local details = {
             timeline_frame = timeline_frame,
-            playhead_window_frame = playhead_window_frame,
+            _playhead_window_frame = _playhead_window_frame,
             playhead_x = playhead_x,
             playhead_relative_timeline_x = playhead_relative_timeline_x,
             playhead_seconds = playhead_seconds,
