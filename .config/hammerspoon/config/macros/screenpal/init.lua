@@ -472,10 +472,9 @@ function ScreenPalEditorWindow:new()
         -- TODO new _timeline_details
         -- TODO inline tmp variables that effectively hold rename onto details
         local details = self:_timeline_details()
-        local playhead_relative_timeline_x = details.playhead_relative_timeline_x
         local timeline_frame = details.timeline_frame
 
-        local pixels_per_second = playhead_relative_timeline_x / details.playhead_seconds
+        local pixels_per_second = details.playhead_relative_timeline_x / details.playhead_seconds
         local estimated_total_seconds = timeline_frame.w / pixels_per_second
         -- F!!! NAILED it for total seconds!!!
         dump({ estimated_total_seconds = estimated_total_seconds })
