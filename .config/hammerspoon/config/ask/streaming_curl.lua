@@ -1,14 +1,14 @@
 local M = {}
 
 ---@type hs.task
-M.lastTask = nil
+M.last_task = nil
 
-function M.streamingRequest(url, method, headers, body, streamingCallback, completeCallback)
-    if lastTask and lastTask:isRunning() then
+function M.streamingRequest(url, method, headers, body, streaming_callback, complete_callback)
+    if last_task and last_task:isRunning() then
         -- TODO stop handlers from reporting errors after terminated
         --   PROBABLY should return back the task and let the caller track its status
-        lastTask:terminate()
-        lastTask = nil
+        last_task:terminate()
+        last_task = nil
     end
 
     local args = { "--fail-with-body", "-sSL", "--no-buffer", "-X", method, url }
@@ -23,10 +23,10 @@ function M.streamingRequest(url, method, headers, body, streamingCallback, compl
         table.insert(args, body)
     end
 
-    lastTask = hs.task.new("/usr/bin/curl", completeCallback, streamingCallback, args)
+    last_task = hs.task.new("/usr/bin/curl", complete_callback, streaming_callback, args)
 
-    lastTask:start()
-    return lastTask
+    last_task:start()
+    return last_task
 end
 
 return M
