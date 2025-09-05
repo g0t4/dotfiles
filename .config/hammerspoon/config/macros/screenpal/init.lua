@@ -376,14 +376,17 @@ function ScreenPalEditorWindow:new()
         --   i.e. get_playhead_time
     end
 
-    function editor_window:try_AXEnhancedUserInterface()
+    function editor_window:toggle_AXEnhancedUserInterface()
         ensure_cached_controls()
         local primary_window = self.win
 
+        -- FYI first pass I am not seeing any new direct descendents of edtior_window (64 before and after)...
+        --   do I need to set AXEnhancedUserInterface on other (child) objects or just the app?
         -- self.app:dumpAttributes()
-        print("app.AXEnhancedUserInterface:", self.app.AXEnhancedUserInterface)
-        self.app.AXEnhancedUserInterface = true
-        print("app.AXEnhancedUserInterface:", self.app.AXEnhancedUserInterface)
+        print("before - app.AXEnhancedUserInterface:", self.app.AXEnhancedUserInterface)
+        -- toggle it
+        self.app.AXEnhancedUserInterface = not self.app.AXEnhancedUserInterface
+        print("after - app.AXEnhancedUserInterface:", self.app.AXEnhancedUserInterface)
         -- print("win.AXEnhancedUserInterface:", self.win.AXEnhancedUserInterface) -- nil on editor window
 
         do return end
