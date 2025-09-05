@@ -172,7 +172,7 @@ local function show_tooltip_for_element(element, frame)
         ::continue::
     end
 
-    if M.last.showChildren then
+    if M.last.show_children then
         function append_children(children)
             for _, child in ipairs(children) do
                 -- TODO what attrs should I show? any others?
@@ -472,7 +472,7 @@ local function stop_element_inspector()
 end
 
 local function toggle_show_children()
-    M.last.showChildren = not M.last.showChildren
+    M.last.show_children = not M.last.show_children
     highlight_current_element(true)
 end
 

@@ -513,8 +513,8 @@ function ax_title_quoted(element)
     end
 end
 
-function BuildHammerspoonLuaTo(toElement)
-    local ref_chain = f.imap(toElement:path(),
+function BuildHammerspoonLuaTo(to_element)
+    local ref_chain = f.imap(to_element:path(),
         function(path_item)
             local singular = path_item:singular()
             if singular == "application" then
