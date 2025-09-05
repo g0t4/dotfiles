@@ -560,7 +560,7 @@ function StreamDeckScreenPalTimelineJumpToEnd()
     -- hs.mouse.absolutePosition(original_mouse_pos) -- try not restoring, might be better!
 end
 
-function StreamDeckScreenPalTimelineApproxRestorePosition(restore_position_value)
+function UNUSED_StreamDeckScreenPalTimelineApproxRestorePosition(restore_position_value)
     -- TODO do I even need this anymore?
     --   I am zooming out to get overall playhead position now in full clip
     --   and restoring that on reopen, so I don't think I need (nor want) to use zoomed in scrolling to restore
