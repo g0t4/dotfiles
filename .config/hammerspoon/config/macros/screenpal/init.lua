@@ -507,7 +507,7 @@ function ScreenPalEditorWindow:new()
             pixels_per_frame = pixels_per_frame
         })
 
-        local hold_down_before_release = 1000
+        local hold_down_before_release = 10000 -- 1K had issues, TODO find a value and set it global
         hs.eventtap.leftClick({
             -- +1 pixel stops leftward drift by 1 frame (good test is back to back reopen, albeit not a normal workflow)
             x = est_x_one_second + 1, -- for 1 sec its slightly off (NBD => could arrow over if consistently off))
