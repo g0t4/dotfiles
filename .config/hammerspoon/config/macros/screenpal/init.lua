@@ -350,8 +350,69 @@ function ScreenPalEditorWindow:new()
         -- StreamDeckScreenPalTimelineApproxRestorePosition(current_zoom_scrollbar_position)
     end
 
-    -- FYI! KEEP IN MIND, zoom levels are FIXED # seconds/frames regardless of video length... so when zoom 2 you know exactly where to click to move over 1 second relative to current position... or to move to X seconds along from start/end of the visible timeline
-    --  eyeballing => roughly 43 pixels per second on zoom 2 => ~23 seconds visible in timeline... and not quite full width of screen (est 1000 px) => 1000/23 ~+ 43 pixels per second?
+    function editor_window:_timeline_details()
+        local timeline_frame = self._btn_position_slider:axFrame()
+
+        local playhead_window = self.windows:get_playhead_window_or_throw()
+        -- DO NOT get frames until UI is stable, zoome din frame is different than zoomed out
+        local playhead_window_frame = playhead_window:axFrame()
+
+        local time_text_field = playhead_window:textField(1)
+        local time_string = time_text_field:axValue()
+        time_string = time_string:gsub("\n", "")
+
+        local playhead_seconds = parse_time_to_seconds(time_string)
+
+        local playhead_x = playhead_window_frame.x + playhead_window_frame.w / 2
+        local playhead_relative_timeline_x = playhead_x - timeline_frame.x
+        return {
+            timeline_frame = timeline_frame,
+            playhead_window_frame = playhead_window_frame,
+            playhead_x = playhead_x,
+            playhead_relative_timeline_x = playhead_relative_timeline_x,
+            playhead_seconds = playhead_seconds,
+        }
+    end
+
+    function editor_window:figure_out_zoom2_fixed_pixels_per_second()
+        ensure_cached_controls()
+
+        -- FYI! KEEP IN MIND, zoom levels are FIXED # seconds/frames regardless of video length... so when zoom 2 you know exactly where to click to move over 1 second relative to current position... or to move to X seconds along from start/end of the visible timeline
+        --  eyeballing => roughly 43 pixels per second on zoom 2 => ~23 seconds visible in timeline... and not quite full width of screen (est 1000 px) => 1000/23 ~+ 43 pixels per second?
+
+        -- TODO break apart functions out of the other get time function below
+        --   i.e. get_playhead_time
+    end
+
+    function editor_window:try_AXEnhancedUserInterface()
+        ensure_cached_controls()
+        local primary_window = self.win
+
+        -- self.app:dumpAttributes()
+        print(self.app.AXEnhancedUserInterface)
+        print(self.app.AXRole) -- I had no idea you could get attributes this way!
+        -- I prefer my :axRole() b/c it can default inside and handle other nuances... also symbols for completion... with just .AXRole consumers have to handle nil/empty/etc
+        print(self.app:axRole()) -- I had no idea you could get attributes this way!
+        print()
+        print("win")
+        print(self.win.AXRole) -- works
+
+        do return end
+
+        local children = primary_window:children()
+        -- ?? try allDescendantElements + callback to avoid navigating manualy
+
+        -- local app = hs.appfinder.appFromName("YourJavaApp")
+        -- local ax = hs.axuielement.applicationElement(app)
+        -- if ax:isAttributeSettable("AXEnhancedUserInterface") then
+        --   ax:setAttributeValue("AXEnhancedUserInterface", true)
+        -- end
+        --
+
+        for i, child in ipairs(children) do
+            print(hs.inspect(child))
+        end
+    end
 
     function editor_window:test_select_range()
         ensure_cached_controls()
