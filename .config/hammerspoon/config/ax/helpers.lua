@@ -500,7 +500,7 @@ function axDescriptionQuoted(element)
     end
 end
 
-function axTitleQuoted(element)
+function ax_title_quoted(element)
     if not element then return "" end
 
     local title = element:attributeValue("AXTitle")

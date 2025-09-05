@@ -209,7 +209,7 @@ function createNotificationObserver(braveAppObserver)
             end
 
             local parts = {
-                axTitleQuoted(eventElement),
+                ax_title_quoted(eventElement),
                 axDescriptionQuoted(eventElement),
                 axValueQuoted(eventElement),
             }

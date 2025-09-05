@@ -229,13 +229,13 @@ local function show_tooltip_for_element(element, frame)
                 if e:isAttributeValueUnique("AXTitle") then
                     -- prefer title over index
                     -- also I far prefer to see a title than an index, feels like I should add this to my other lua ref that isn't just on unique! (top of ui callout)
-                    return ":" .. e:singular() .. "(" .. axTitleQuoted(e) .. ")"
+                    return ":" .. e:singular() .. "(" .. ax_title_quoted(e) .. ")"
                 end
                 return ":" .. e:singular() .. "(1)"
             end
-            local uniqueRef = e:findUniqueReference()
-            if uniqueRef == nil then return nil end
-            return ":" .. uniqueRef
+            local unique_ref = e:findUniqueReference()
+            if unique_ref == nil then return nil end
+            return ":" .. unique_ref
 
             -- TODO propose search criteria of the target element too? or leave that up to using the listed attrs?
         end
@@ -246,8 +246,8 @@ local function show_tooltip_for_element(element, frame)
         --  probably make this a separate flag or keymap?
 
         local lines = { "unique ref: " }
-        for _, currentElement in ipairs(chain) do
-            local ref = build_ref(currentElement)
+        for _, current_element in ipairs(chain) do
+            local ref = build_ref(current_element)
             if not ref then
                 -- nothing to add to accessor b/c it was ambiguous
                 break
@@ -258,15 +258,15 @@ local function show_tooltip_for_element(element, frame)
         return ConcatIntoLines(lines)
     end
 
-    local elementSearchCode = get_unique_specifier_chain_for_element_search(element)
+    local element_search_code = get_unique_specifier_chain_for_element_search(element)
 
-    attribute_dump = attribute_dump .. "\n\n" .. elementSearchCode
+    attribute_dump = attribute_dump .. "\n\n" .. element_search_code
 
     -- include everything in copy so I can get attr values without writing them down by hand! (for cmd-ctrl-alt-c)
     M.last.text = specifier_lua .. "\n\n" .. attribute_dump
 
 
-    local styledSpecifier = hs.styledtext.new(specifier_lua, {
+    local styled_specifier = hs.styledtext.new(specifier_lua, {
         font = {
             name = "SauceCodePro Nerd Font",
             size = 14
@@ -274,7 +274,7 @@ local function show_tooltip_for_element(element, frame)
         color = { white = 1 },
     })
 
-    local styledAttributes = hs.styledtext.new(attribute_dump, {
+    local styled_attributes = hs.styledtext.new(attribute_dump, {
         font = {
             name = "SauceCodePro Nerd Font",
             size = 10
@@ -284,36 +284,36 @@ local function show_tooltip_for_element(element, frame)
 
     --- PRN move to a common definition file (helpers/hammerspoon.lua?)
     ---@type { w: number, h: number } | nil
-    local specifierSize = hs.drawing.getTextDrawingSize(styledSpecifier)
+    local specifier_size = hs.drawing.getTextDrawingSize(styled_specifier)
     ---@type { w: number, h: number } | nil
-    local attributeSize = hs.drawing.getTextDrawingSize(styledAttributes)
+    local attribute_size = hs.drawing.getTextDrawingSize(styled_attributes)
     -- BTW switching to styled text returns much more accurate dimensions (even if not monospaced font)
 
     -- add padding (don't subtract it from needed width/height)
     local padding = 10
-    local tooltipWidth = math.max(specifierSize.w, attributeSize.w) + 2 * padding
-    local tooltipHeight = specifierSize.h + attributeSize.h + 3 * padding
+    local tooltip_width = math.max(specifier_size.w, attribute_size.w) + 2 * padding
+    local tooltip_height = specifier_size.h + attribute_size.h + 3 * padding
 
-    local screenFrame = hs.screen.mainScreen():frame() -- Gets the current screen dimensions
+    local screen_frame = hs.screen.mainScreen():frame() -- Gets the current screen dimensions
 
     -- Initial positioning (slightly below the element)
     local x = frame.x
     local y = frame.y + frame.h + 5 -- Below the element
 
     -- Ensure tooltip does not go off the right edge
-    if x + tooltipWidth > screenFrame.x + screenFrame.w then
-        x = screenFrame.x + screenFrame.w - tooltipWidth - 10 -- Shift left
+    if x + tooltip_width > screen_frame.x + screen_frame.w then
+        x = screen_frame.x + screen_frame.w - tooltip_width - 10 -- Shift left
         -- IIUC the box is positioned to right of element left side so I don't think I need to worry about x being shifted left of screen
     end
 
     -- Ensure tooltip does not go off the bottom edge
-    if y + tooltipHeight > screenFrame.y + screenFrame.h then
+    if y + tooltip_height > screen_frame.y + screen_frame.h then
         -- if it's off the bottom, then move it above the element
-        y = frame.y - tooltipHeight - 5 -- Move above element
-        if y < screenFrame.y then
+        y = frame.y - tooltip_height - 5 -- Move above element
+        if y < screen_frame.y then
             -- if above is also off screen, then shift it down, INSIDE the frame
             --   means it stays on top btw... could put it inside on bottom too
-            y = screenFrame.y + 10 -- Shift up
+            y = screen_frame.y + 10 -- Shift up
         end
     end
 
@@ -327,29 +327,29 @@ local function show_tooltip_for_element(element, frame)
         -- dark blue
         background = { hex = "#002040", alpha = 1 }
     end
-    M.last.tooltip = canvas.new({ x = x, y = y, w = tooltipWidth, h = tooltipHeight })
+    M.last.tooltip = canvas.new({ x = x, y = y, w = tooltip_width, h = tooltip_height })
         :appendElements({
             -- padding
             {
                 -- background
                 type = "rectangle",
                 action = "fill",
-                frame = { x = 0, y = 0, w = tooltipWidth, h = tooltipHeight },
+                frame = { x = 0, y = 0, w = tooltip_width, h = tooltip_height },
                 fillColor = background,
                 roundedRectRadii = { xRadius = 8, yRadius = 8 }
             },
             {
                 -- specifier
                 type = "text",
-                text = styledSpecifier,
-                frame = { x = padding, y = padding, w = tooltipWidth - 2 * padding, h = specifierSize.h },
+                text = styled_specifier,
+                frame = { x = padding, y = padding, w = tooltip_width - 2 * padding, h = specifier_size.h },
             },
             -- padding
             {
                 -- attributes
                 type = "text",
-                text = styledAttributes,
-                frame = { x = padding, y = 2 * padding + specifierSize.h, w = tooltipWidth - 2 * padding, h = attributeSize.h },
+                text = styled_attributes,
+                frame = { x = padding, y = 2 * padding + specifier_size.h, w = tooltip_width - 2 * padding, h = attribute_size.h },
             },
             -- padding
         })
