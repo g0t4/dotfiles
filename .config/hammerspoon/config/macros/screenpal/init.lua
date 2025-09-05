@@ -159,7 +159,6 @@ function ScreenPalEditorWindow:new()
         local time_window_x_center = details.timeline_frame.x + playhead_percent * details.timeline_frame.w
 
         local hold_down_before_release = 10000 -- default is 200ms, will matter if chaining more actions!
-        -- I ran into trouble with 0ms hold delay
         hs.eventtap.leftClick({
             -- +1 pixel stops leftward drift by 1 frame (good test is back to back reopen, albeit not a normal workflow)
             x = time_window_x_center + 1,
