@@ -369,6 +369,7 @@ function ScreenPalEditorWindow:new()
         self.playhead_seconds = playhead_seconds
         self.pixels_per_second = _playhead_relative_timeline_x / playhead_seconds
         self.estimated_total_seconds = timeline_frame.w / self.pixels_per_second
+        print(vim.inspect(self))
         return self
     end
 
