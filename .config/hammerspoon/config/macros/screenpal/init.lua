@@ -346,17 +346,10 @@ function ScreenPalEditorWindow:new()
     local TimelineDetails = {}
 
     ---@param self TimelineDetails
-    function TimelineDetails:new()
-        self.pixels_per_second = self._playhead_relative_timeline_x / self.playhead_seconds
-        self.estimated_total_seconds = self.timeline_frame.w / self.pixels_per_second
-        return self
-    end
+    function TimelineDetails:new(editor_window)
+        local timeline_frame = editor_window._btn_position_slider:axFrame()
 
-    ---@return TimelineDetails
-    function editor_window:_timeline_details()
-        local timeline_frame = self._btn_position_slider:axFrame()
-
-        local playhead_window = self.windows:get_playhead_window_or_throw()
+        local playhead_window = editor_window.windows:get_playhead_window_or_throw()
         -- DO NOT get frames until UI is stable, zoome din frame is different than zoomed out
         local _playhead_window_frame = playhead_window:axFrame()
 
@@ -369,15 +362,19 @@ function ScreenPalEditorWindow:new()
         local playhead_x = _playhead_window_frame.x + _playhead_window_frame.w / 2
         local _playhead_relative_timeline_x = playhead_x - timeline_frame.x
 
-        local details = {
-            timeline_frame = timeline_frame,
-            _playhead_window_frame = _playhead_window_frame,
-            playhead_x = playhead_x,
-            _playhead_relative_timeline_x = _playhead_relative_timeline_x,
-            playhead_seconds = playhead_seconds,
-        }
+        self.timeline_frame = timeline_frame
+        self._playhead_window_frame = _playhead_window_frame
+        self.playhead_x = playhead_x
+        self._playhead_relative_timeline_x = _playhead_relative_timeline_x
+        self.playhead_seconds = playhead_seconds
+        self.pixels_per_second = _playhead_relative_timeline_x / playhead_seconds
+        self.estimated_total_seconds = timeline_frame.w / self.pixels_per_second
+        return self
+    end
 
-        return TimelineDetails.new(details)
+    ---@return TimelineDetails
+    function editor_window:_timeline_details()
+        return TimelineDetails:new(self)
     end
 
     function editor_window:figure_out_zoom2_fixed_pixels_per_second()
