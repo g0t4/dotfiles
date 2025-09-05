@@ -1,5 +1,10 @@
 local inspect = require("hs.inspect")
 
+function round(num, dp)
+    local mult = 10 ^ (dp or 0)
+    return math.floor(num * mult + 0.5) / mult
+end
+
 function paste_text(text, app)
     -- TODO if need be, can I track the app that was active when triggering the ask-openai action... so I can make sure to pass it to type into it only... would allow me to switch apps (or more important, if some other app / window pops up... wouldn't steal typing focus)
     --     hs.eventtap.keyStrokes(text[, application])
