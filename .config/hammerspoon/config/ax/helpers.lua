@@ -514,32 +514,32 @@ function ax_title_quoted(element)
 end
 
 function BuildHammerspoonLuaTo(toElement)
-    local refChain = f.imap(toElement:path(),
-        function(pathItem)
-            local singular = pathItem:singular()
+    local ref_chain = f.imap(toElement:path(),
+        function(path_item)
+            local singular = path_item:singular()
             if singular == "application" then
                 return "app"
             end
-            local siblingIndex = get_element_sibling_index(pathItem) or "nil"
-            return ":" .. singular .. "(" .. siblingIndex .. ")"
+            local sibling_index = get_element_sibling_index(path_item) or "nil"
+            return ":" .. singular .. "(" .. sibling_index .. ")"
         end)
 
-    return ConcatIntoLines(refChain)
+    return ConcatIntoLines(ref_chain)
 end
 
-function ConcatIntoLines(refChain, maxLineLength, lineContinuation)
-    maxLineLength = maxLineLength or 120
-    local joinWith = (lineContinuation or "") .. "\n  "
+function ConcatIntoLines(ref_chain, max_line_length, line_continuation)
+    max_line_length = max_line_length or 120
+    local join_with = (line_continuation or "") .. "\n  "
 
     local lines = { "" }
-    for _, ref in ipairs(refChain) do
-        if #lines[#lines] + string.len(ref) < maxLineLength then
+    for _, ref in ipairs(ref_chain) do
+        if #lines[#lines] + string.len(ref) < max_line_length then
             lines[#lines] = lines[#lines] .. ref
         else
             table.insert(lines, ref)
         end
     end
-    return table.concat(lines, joinWith)
+    return table.concat(lines, join_with)
 end
 
 function sorted_attribute_names(element)
