@@ -412,6 +412,7 @@ function ScreenPalEditorWindow:new()
             }, hold_duration_ms)
         end
 
+        -- READINGS from 4k screencap coordinates of first major silence period
         click_at(692 + 20)
         hs.eventtap.keyStroke({}, "c", 0, get_screenpal_app_element_or_throw()) -- alone selects the cut region! I can then pull back each side
         -- FYI I could also have it scan for the red selection and use that to pull back the current selection (pad it or expand it)
@@ -426,43 +427,10 @@ function ScreenPalEditorWindow:new()
     function editor_window:estimate_time_per_pixel()
         ensure_cached_controls() -- prn do I need this early on here?
 
-        -- NOT A PRIORITY
-        --   Can use this when want to add sleep w/o callbacks
-        --   ALSO can make smth new like sleep_ms for other callbacks and make them elegant too
-        --   BTW it is super easy for errors to be swallowed... add error handling else will be super confusing!
-        -- require("config.macros.screenpal.co")
-        -- run_async(function()
-        --     print("before sleep")
-        --     sleep_ms(1000)
-        --     print("after sleep")
-        -- end)
-
         print("min zoom frame", hs.inspect(self._btn_minimum_zoom:axFrame())) -- (x,y) == (0,0) == not zoomed
         -- must be zoomed out, else cannot know that start of time line is 0 and end is the end of the video
         self:zoom_off()
         print("min zoom frame", hs.inspect(self._btn_minimum_zoom:axFrame()))
-
-        local details = self:_timeline_details()
-
-        -- TODO add function to _timeline_details return type... that takes a time value (seconds) and returns x value?
-        local estimated_one_second_x_value = details.timeline_frame.x + details.pixels_per_second
-        -- local pixels_per_frame = pixels_per_second / 25 -- spal uses 25 fps
-        -- dump({ est_x_one_second = estimated_one_second_x_value, pixels_per_frame = pixels_per_frame })
-
-        -- * FYI clicking at 1 second mark is just a demo, not a part of getting the time!
-        -- TODO extract click timeline logic, maybe add it to the _timeline_details return type
-        local hold_down_before_release = 10000 -- 1K had issues, TODO find a value and set it global
-        hs.eventtap.leftClick({
-            -- +1 pixel stops leftward drift by 1 frame (good test is back to back reopen, albeit not a normal workflow)
-            x = estimated_one_second_x_value + 1, -- for 1 sec its slightly off (NBD => could arrow over if consistently off))
-            -- +1 => 1.04 sec (1 frame past), +0 => 0.92 sec (2 frames before)
-            -- FYI I DO NOT NEED PRECISE! silence ranges for example will be paddeed anyways! can always padd an extra frame!
-            y = details.timeline_frame.y + details.timeline_frame.h / 2
-        }, hold_down_before_release)
-
-
-        -- ***! attempt to click at 1 second mark!
-
 
         -- TODO!!! parse screen shots of position slider and find the silence ranges
         -- TODO!!!   to automate selecting them using my own padding!
@@ -475,16 +443,6 @@ function ScreenPalEditorWindow:new()
         --              THEN move left to right through the pixels and look at the color
         --              OR do something more sophisticated (reliable)
         --   ! see config/macros/screenpal/py/timeline_detect_blocks.py for initial idea to find gray silence areas
-
-
-
-
-        -- set posbar_window to first window of procSpal whose name starts with "SOM-FloatingWindow-Type=edit2.posbar-ZOrder"
-        -- set playhead_time to value of text field 1 of item 1 of posbar_window
-        -- -- TODO parse time as needed
-        -- -- examples:
-        -- -- "\n\r1:03.40" -- when pasted it shows \n\ then a new line... IIAC that is \r? so I added r... not sure but
-        -- return playhead_time
     end
 
     -- PRN can I use a library to parse out pauses and add my own padding to them when cutting them?! that would ROCK
@@ -503,12 +461,12 @@ end
 function StreamDeckScreenPalTimelineZoomAndJumpToStart()
     local win = get_cached_editor_window()
     win:zoom_off() -- zoom out first means just click end and zoom in... no slider necessary!
-    -- TODO! use doAfter
+    -- TODO! use coroutines
     hs.timer.usleep(10000)
     StreamDeckScreenPalTimelineJumpToStart()
     -- zoom after so if I am initially not zoomed, I can move faster
     -- PRN zoom out before move and then zoom in when done?
-    -- TODO! use doAfter
+    -- TODO! use coroutines
     hs.timer.usleep(10000)
     win:zoom2()
 end
