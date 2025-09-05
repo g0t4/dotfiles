@@ -133,25 +133,17 @@ function ScreenPalEditorWindow:new()
     ---@return number percent
     function editor_window:playhead_position_percent()
         ensure_cached_controls()
-        -- playhead's time field is a separate window, but treat it like a child control
-        -- lookup as needed so it can be refreshed, but it is NOT expensive if cached!
-        local time_window = self.windows:get_playhead_window_or_throw()
-        local time_window_frame = time_window:axFrame()
-        print("time_window_frame", vim.inspect(time_window_frame))
 
         -- AFAICT nothing differs on zoom level buttons...
         -- - thus cannot know which is clicked (zoomed)
         -- - NBD I mostly use 2 and can re-zoom myself (and I'll be using not zoomed to restore playhead position)
-        --   print(vim.inspect(self._btn_medium_zoom:dumpAttributes()))
         self:zoom_off()
 
-        local timeline_frame = self._btn_position_slider:axFrame()
-        print("timeline_frame", vim.inspect(timeline_frame))
-        -- use width and then position relative to sides to create restore point at least... assuming NO zoom
-        -- then use time on playhead plus position to compute total clip time!
-        --    from this... and given zooms AFAICT are fixed levels... I can likely compute where to click when zoomed too :)
+        local details = self:_timeline_details()
+        local timeline_frame = details.timeline_frame
 
-        local time_window_x_center = time_window_frame.x + (time_window_frame.w / 2)
+        local time_window_x_center = details.playhead_x
+        -- TODO move percent calculation to _timeline_details
         local playhead_percent = (time_window_x_center - timeline_frame.x) / timeline_frame.w
         print("playhead_percent", playhead_percent)
         return playhead_percent
@@ -160,16 +152,13 @@ function ScreenPalEditorWindow:new()
     ---@param playhead_percent number
     function editor_window:restore_playhead_position(playhead_percent)
         ensure_cached_controls()
-        ---@type hs.axuielement
-        local time_window = self.windows:get_playhead_window_or_throw()
-        local time_window_frame = time_window:axFrame()
-        print("time_window_frame", vim.inspect(time_window_frame))
 
         self:zoom_off() -- do not restore when zoomed
 
-        local timeline_frame = self._btn_position_slider:axFrame()
-        print("timeline_frame", vim.inspect(timeline_frame))
+        local details = self:_timeline_details()
+        local timeline_frame = details.timeline_frame
 
+        -- TODO move time_window_x_center to _timeline_details
         local time_window_x_center = timeline_frame.x + playhead_percent * timeline_frame.w
 
         local hold_down_before_release = 1000 -- default is 200ms, will matter if chaining more actions!
@@ -374,7 +363,7 @@ function ScreenPalEditorWindow:new()
 
         return {
             timeline_frame = timeline_frame,
-            playhead_window_frame = playhead_window_frame,
+            playhead_window_frame = playhead_window_frame, -- TODO is this used, if not can keep it hidden until needed elsewhere?
             playhead_x = playhead_x,
             playhead_relative_timeline_x = playhead_relative_timeline_x,
             playhead_seconds = playhead_seconds,
@@ -426,11 +415,8 @@ function ScreenPalEditorWindow:new()
 
         self:zoom_on() -- assume is m2-02 for now
 
-        -- local playhead_window = self.windows:get_playhead_window_or_throw()
-        -- local playhead_window_frame = playhead_window:axFrame()
-
-        print("_btn_position_slider", self._btn_position_slider)
-        local timeline_frame = self._btn_position_slider:axFrame()
+        local details = self:_timeline_details()
+        local timeline_frame = details.timeline_frame
 
         function click_at(reading)
             local rel_click_x = reading / 2 -- divide by 2 for 4k resolution of screencaps, b/c screen cords are 1080p... THIS WORKS! SPOT ON
