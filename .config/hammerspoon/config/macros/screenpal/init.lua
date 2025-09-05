@@ -142,9 +142,8 @@ function ScreenPalEditorWindow:new()
         local details = self:_timeline_details()
         local timeline_frame = details.timeline_frame
 
-        local time_window_x_center = details.playhead_x
         -- TODO move percent calculation to _timeline_details
-        local playhead_percent = (time_window_x_center - timeline_frame.x) / timeline_frame.w
+        local playhead_percent = (details.playhead_x - timeline_frame.x) / timeline_frame.w
         print("playhead_percent", playhead_percent)
         return playhead_percent
     end
