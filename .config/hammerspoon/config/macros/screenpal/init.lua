@@ -479,12 +479,12 @@ function StreamDeckScreenPalTimelineJumpToStart()
     --  RIGHT?
 
     if win:is_zoomed() then
-        function scroll_to_start()
+        function scroll_to_start(win)
             local timeline_scrollbar = win:get_scrollbar_or_throw()
             local frame = timeline_scrollbar:axFrame()
             local min_value = timeline_scrollbar:axMinValue()
 
-            local function click_until_timeline_at_end()
+            local function click_until_timeline_at_start()
                 local prior_value = nil
                 while true do
                     local value = timeline_scrollbar:axValue()
@@ -508,10 +508,10 @@ function StreamDeckScreenPalTimelineJumpToStart()
                 end
             end
 
-            click_until_timeline_at_end()
+            click_until_timeline_at_start()
         end
 
-        scroll_to_start()
+        scroll_to_start(win)
     end
 
     -- * move playhead to start (0) by clicking leftmost part of position slider (aka timeline)
@@ -532,7 +532,7 @@ function StreamDeckScreenPalTimelineJumpToEnd()
         local frame = timeline_scrollbar:axFrame()
         local max_value = timeline_scrollbar:axMaxValue()
 
-        local function clickUntilTimelineAtEnd()
+        local function click_until_timeline_at_end()
             local prior_value = nil
             while true do
                 local value = timeline_scrollbar:axValue()
@@ -554,7 +554,7 @@ function StreamDeckScreenPalTimelineJumpToEnd()
             end
         end
 
-        clickUntilTimelineAtEnd()
+        click_until_timeline_at_end()
     end
 
     -- move playhead to end by clicking the right‑most part of the timeline slider
