@@ -34,7 +34,9 @@ end
 function M.send_visual()
     local start_pos = vim.fn.getpos("'<")
     local end_pos = vim.fn.getpos("'>")
-    local lines = vim.api.nvim_buf_get_lines(0, start_pos[2] - 1, end_pos[2], false)
+    local start_line = start_pos[2] - 1
+    local end_line = end_pos[2]
+    local lines = vim.api.nvim_buf_get_lines(0, start_line, end_line, false)
     if #lines == 0 then return end
     lines[1] = string.sub(lines[1], start_pos[3])
     lines[#lines] = string.sub(lines[#lines], 1, end_pos[3])
