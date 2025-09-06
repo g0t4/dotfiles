@@ -2985,6 +2985,7 @@ abbr tarcb 'tar --bzip2 -cf' # create bzip2 (todo use set-position to put cursor
 # *** jar (zip)
 abbr jarx 'jar -xf' # e(x)tract
 abbr jart 'jar -tf' # lis(t) / (t)est
+abbr --set-cursor -- jartree 'jar -tf %.jar | treeify'
 abbr jaru 'jar -uf' # u(n)pack
 abbr jarc 'jar -cf' # create
 # TODO more based on jar/zip/unzip (FYI bsdtar supports zip, not gnu tar)
