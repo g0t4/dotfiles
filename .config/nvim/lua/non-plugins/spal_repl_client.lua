@@ -30,8 +30,10 @@ local function send_code_to_run(body)
                 tcp:shutdown(function() tcp:close() end)
                 local resp = (table.concat(chunks)):gsub("%s+$", "")
                 -- vim.notify("REPL: " .. resp)
-                messages.header("send_visual_response")
-                messages.append(resp)
+                vim.schedule(function()
+                    messages.header("send_visual_response")
+                    messages.append(resp)
+                end)
             end
         end)
     end)
@@ -48,7 +50,7 @@ function M.send_selected_lines()
     local stop_before_b0 = selection.end_line_b1
     local lines = vim.api.nvim_buf_get_lines(0, start_line_b0, stop_before_b0, false) -- 0-based, end-exclusive
 
-    messages.append(lines)
+    -- messages.append(lines)
 
     if #lines == 0 then
         print("No lines selected to send")
