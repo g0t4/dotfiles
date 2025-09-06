@@ -36,6 +36,7 @@
         // hammerspoon stubs (based on my custom checkout dir):
         "~/repos/github/Hammerspoon/Spoons/Source/EmmyLua.spoon/annotations/",
         "~/repos/github/g0t4/devtools.nvim",
+        "~/repos/github/g0t4/ask-openai.nvim",
 
         "~/.local/share/nvim/lazy/plenary.nvim", // adds globals for describe, it, before_each, etc
     ],

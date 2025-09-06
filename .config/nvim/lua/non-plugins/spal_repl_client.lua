@@ -1,3 +1,7 @@
+-- lua/ask-openai/helpers/wrap_getpos.lua
+require("ask-openai.helpers.wrap_getpos")
+local messages = require("devtools.messages")
+
 local M = {}
 
 -- Set these from repl-agent startup log
@@ -25,21 +29,32 @@ local function send_code_to_run(body)
             else
                 tcp:shutdown(function() tcp:close() end)
                 local resp = (table.concat(chunks)):gsub("%s+$", "")
-                vim.notify("REPL: " .. resp)
+                -- vim.notify("REPL: " .. resp)
+                messages.header("send_visual_response")
+                messages.append(resp)
             end
         end)
     end)
 end
 
-function M.send_visual()
-    local start_pos = vim.fn.getpos("'<")
-    local end_pos = vim.fn.getpos("'>")
-    local start_line = start_pos[2] - 1
-    local end_line = end_pos[2]
-    local lines = vim.api.nvim_buf_get_lines(0, start_line, end_line, false)
-    if #lines == 0 then return end
-    lines[1] = string.sub(lines[1], start_pos[3])
-    lines[#lines] = string.sub(lines[#lines], 1, end_pos[3])
+function M.send_selected_lines()
+    local selection = GetPos.LastSelection()
+
+    -- messages.header("send_visual")
+    -- messages.ensure_open()
+    -- messages.append(selection)
+
+    local start_line_b0 = selection.start_line_b1 - 1
+    local stop_before_b0 = selection.end_line_b1
+    local lines = vim.api.nvim_buf_get_lines(0, start_line_b0, stop_before_b0, false)
+
+    messages.append(lines)
+
+    if #lines == 0 then
+        print("No lines selected to send")
+        return
+    end
+
     send_code_to_run(table.concat(lines, "\n"))
 end
 
@@ -48,7 +63,7 @@ function M.send_buffer()
     send_code_to_run(table.concat(lines, "\n"))
 end
 
-vim.api.nvim_create_user_command("ReplSend", function() M.send_visual() end, { range = true })
+vim.api.nvim_create_user_command("ReplSend", function() M.send_selected_lines() end, { range = true })
 vim.api.nvim_create_user_command("ReplSendFile", function() M.send_buffer() end, {})
 
 return M
