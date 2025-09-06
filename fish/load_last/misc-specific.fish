@@ -2998,6 +2998,9 @@ abbr unzipl 'unzip -l' # lis(t) / (t)est
 # *** java abbrs
 abbr java19 'export PATH="$(/usr/libexec/java_home -v 19)/bin:$PATH"'
 
+# *** jcmd
+abbr jcmd_screenpal "jcmd \$(screenpal_pid) " # get PID with `jcmd` or `jps` or `ps aux | grep ScreenPal`
+
 # *** mvn
 abbr mvnls 'mvn dependenices:list'
 abbr mvntree 'mvn dependenices:tree'
@@ -3012,5 +3015,7 @@ abbr spkilltray "echo disable tray app in partner properties file"
 abbr splog "cat ~/Library/ScreenPal-v3/app-0.log"
 abbr splogrm "rm ~/Library/ScreenPal-v3/app-0.log"
 # PRN tray-0.log ... but don't need it right now
-abbr sp_PID "jcmd | grep ScreenPal | head -1 | cut -d' ' -f1"
-
+function screenpal_pid
+    set --local pid (jcmd | grep ScreenPal | head -1 | cut -d' ' -f1)
+    echo $pid
+end
