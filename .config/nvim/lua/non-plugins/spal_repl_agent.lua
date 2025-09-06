@@ -3,8 +3,8 @@ local M = {}
 
 -- Set these from your agent log
 M.host = "127.0.0.1"
-M.port = 49535
-M.token = "3a2f954e-2d3f-4e6c-af82-555ee7d7d5a7"
+M.port = 8200
+-- M.token = "3a2f954e-2d3f-4e6c-af82-555ee7d7d5a7"
 
 local function send_text(body)
     local uv = vim.loop
@@ -13,7 +13,10 @@ local function send_text(body)
         if err then
             vim.notify("REPL connect failed: " .. err, vim.log.levels.ERROR); return
         end
-        local payload = table.concat({ M.token, body, "." }, "\n") .. "\n"
+        local payload = table.concat({
+            -- M.token,
+            body, "."
+        }, "\n") .. "\n"
         tcp:write(payload)
         local chunks = {}
         tcp:read_start(function(read_err, chunk)
