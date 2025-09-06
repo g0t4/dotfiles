@@ -1,11 +1,11 @@
 local M = {}
 
--- Set these from your agent log
+-- Set these from repl-agent startup log
 M.host = "127.0.0.1"
 M.port = 8200
 -- M.token = "3a2f954e-2d3f-4e6c-af82-555ee7d7d5a7"
 
-local function send_text(body)
+local function send_code_to_run(body)
     local uv = vim.loop
     local tcp = uv.new_tcp()
     tcp:connect(M.host, M.port, function(err)
@@ -38,12 +38,12 @@ function M.send_visual()
     if #lines == 0 then return end
     lines[1] = string.sub(lines[1], start_pos[3])
     lines[#lines] = string.sub(lines[#lines], 1, end_pos[3])
-    send_text(table.concat(lines, "\n"))
+    send_code_to_run(table.concat(lines, "\n"))
 end
 
 function M.send_buffer()
     local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
-    send_text(table.concat(lines, "\n"))
+    send_code_to_run(table.concat(lines, "\n"))
 end
 
 vim.api.nvim_create_user_command("ReplSend", function() M.send_visual() end, { range = true })
