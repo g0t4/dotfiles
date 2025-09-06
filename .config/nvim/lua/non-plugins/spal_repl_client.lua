@@ -29,7 +29,7 @@ local function send_code_to_run(body)
             else
                 tcp:shutdown(function() tcp:close() end)
                 local resp = (table.concat(chunks)):gsub("%s+$", "")
-                -- vim.notify("REPL: " .. resp)
+                vim.notify("REPL: " .. resp)
                 vim.schedule(function()
                     messages.header("send_visual_response")
                     messages.append(resp)
