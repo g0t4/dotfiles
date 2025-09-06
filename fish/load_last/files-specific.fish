@@ -809,7 +809,7 @@ abbr spkilltray "echo disable tray app in partner properties file"
 abbr splog "cat ~/Library/ScreenPal-v3/app-0.log"
 abbr splogrm "rm ~/Library/ScreenPal-v3/app-0.log"
 # PRN tray-0.log ... but don't need it right now
-
+abbr sp_PID "jcmd | grep ScreenPal | head -1 | cut -d' ' -f1"
 
 # *** free
 if command -q free
