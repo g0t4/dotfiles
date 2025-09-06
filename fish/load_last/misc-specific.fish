@@ -2945,7 +2945,6 @@ abbr --position=command -- pbssec "pbpaste | $sse_jq --compact-output"
 abbr date_s "date +%s"
 reminder_abbr date_unixtime "date +%s" # reminder abbr
 
-
 ## general cd
 abbr cdr 'cd "$(_repo_root)"' # * favorite
 
@@ -3001,4 +3000,8 @@ abbr java19 'export PATH="$(/usr/libexec/java_home -v 19)/bin:$PATH"'
 
 # *** mvn
 abbr mvnls 'mvn dependenices:list'
+abbr mvntree 'mvn dependenices:tree'
+abbr mvnc 'mvn compile'
+abbr mvnp 'mvn package'
+abbr mvnt 'mvn test'
 
