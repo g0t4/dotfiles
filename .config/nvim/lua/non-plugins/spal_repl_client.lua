@@ -46,7 +46,7 @@ function M.send_selected_lines()
 
     local start_line_b0 = selection.start_line_b1 - 1
     local stop_before_b0 = selection.end_line_b1
-    local lines = vim.api.nvim_buf_get_lines(0, start_line_b0, stop_before_b0, false)
+    local lines = vim.api.nvim_buf_get_lines(0, start_line_b0, stop_before_b0, false) -- 0-based, end-exclusive
 
     messages.append(lines)
 
