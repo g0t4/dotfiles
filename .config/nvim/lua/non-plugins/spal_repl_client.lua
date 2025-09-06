@@ -1,4 +1,3 @@
--- lua/repl_client.lua
 local M = {}
 
 -- Set these from your agent log

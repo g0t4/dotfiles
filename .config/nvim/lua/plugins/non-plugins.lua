@@ -32,7 +32,7 @@ return {
             require('non-plugins.devtools-wip')
             require('non-plugins.misc')
             require('non-plugins.keymaps')
-            require('non-plugins.spal_repl_agent')
+            require('non-plugins.spal_repl_client')
         end,
     },
     -- -- FYI tested that I can have a second plugin with same dir and it works too
