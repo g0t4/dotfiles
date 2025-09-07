@@ -1,5 +1,18 @@
 {
 
+    // **** JAVA
+    // BTW changes here are immediately picked up by other open instances, don't need to restart
+    //
+    // "java.format.enabled": false,
+    // https://github.com/redhat-developer/vscode-java/wiki/Formatter-settings
+    //
+    // "java.format.settings.profile": "GoogleStyle",
+    // "java.format.settings.url": "/Users/wesdemos/repos/github/g0t4/examples/eclipse-java-google-style.xml",
+    //
+    "java.format.settings.url": "/Users/wesdemos/repos/github/g0t4/examples/java/uidump/screenpal/repl-agent/formatter.xml",
+    "java.format.settings.profile": "NoWrap",
+
+
     // " FYI for snippets:
     // :h coc-snippets
     //    => Jump snippet placeholders default to:
@@ -363,8 +376,6 @@
     // "bashIde.globPattern": "**/*@(.sh|.inc|.bash|.command)",
     /// F... just leave .sh + coc-sh for now... b/c coc-sh won't activate on anything except .sh
     //    https://github.com/josa42/coc-sh/blob/7839442ee3820303de123cd3a437a2c70d3ee559/package.json#L31-L33
-
-
 
 
 
