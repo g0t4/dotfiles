@@ -328,7 +328,14 @@ function ScreenPalEditorWindow:new()
 
     ---@return TimelineDetails
     function editor_window:_timeline_details()
+        -- PRN move ensure_cached_controls() here?
         return TimelineDetails:new(self)
+    end
+
+    function editor_window:get_time_string()
+        ensure_cached_controls()
+        local details = self:_timeline_details()
+        return details.time_string
     end
 
     function editor_window:figure_out_zoom2_fixed_pixels_per_second()
@@ -496,6 +503,12 @@ function StreamDeckScreenPalTimelineZoomAndJumpToEnd()
         sleep_ms(10)
         win:zoom2()
     end)
+end
+
+function StreamDeck_ScreenPal_CopyPlayheadTimeText()
+    local win = get_cached_editor_window()
+    local time_string = win:get_time_string()
+    hs.pasteboard.setContents(time_string)
 end
 
 function RETIRED_StreamDeckScreenPalTimelineScrollOrJumpToStart()

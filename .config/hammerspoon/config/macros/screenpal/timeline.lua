@@ -45,6 +45,7 @@ function TimelineDetails:new(editor_window)
     self._playhead_window_frame = _playhead_window_frame
     self.playhead_x = playhead_x
     self._playhead_relative_timeline_x = _playhead_relative_timeline_x
+    self.time_string = time_string
     self.playhead_seconds = playhead_seconds
     self.pixels_per_second = _playhead_relative_timeline_x / playhead_seconds
     self.estimated_total_seconds = timeline_frame.w / self.pixels_per_second
