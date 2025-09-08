@@ -501,7 +501,7 @@ function show_silences(silences, slider)
 end
 
 function StreamDeck_ScreenPal_SelectNextSilence()
-    function select_next(slider, silences)
+    function select_next(win, slider, silences)
         --TODO
     end
 
@@ -509,7 +509,7 @@ function StreamDeck_ScreenPal_SelectNextSilence()
 end
 
 function StreamDeck_ScreenPal_SelectPreviousSilence()
-    function select_prev(slider, silences)
+    function select_prev(win, slider, silences)
         --TODO
     end
 
@@ -527,7 +527,7 @@ function StreamDeck_ScreenPal_ShowSilenceRegions()
 
     ---@param slider any
     ---@param silences any
-    local function show_them(slider, silences)
+    local function show_them(win, slider, silences)
         print("silence regions: " .. hs.inspect(silences))
         show_silences(silences, slider)
     end
@@ -541,7 +541,7 @@ function detect_silences_and_then(on_done)
 
     capture_this_element(slider, function(where_to)
         detect_silence_boxes(where_to, function(silences)
-            on_done(slider, silences)
+            on_done(win, slider, silences)
         end)
     end)
 end
