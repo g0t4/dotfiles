@@ -8,7 +8,8 @@ from rich import print
 
 # TODO make into arg
 file = Path(os.getenv("WES_DOTFILES") or "") \
-    / ".config/hammerspoon/config/macros/screenpal/py/timeline03a.png"
+    / ".config/hammerspoon/config/macros/screenpal/py/timeline03a-2.png"
+    # / ".config/hammerspoon/config/macros/screenpal/py/timeline03a.png"
 
 image = cv.imread(str(file), cv.IMREAD_COLOR)  # BGR
 if image is None:
