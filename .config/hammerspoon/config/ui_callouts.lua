@@ -180,7 +180,7 @@ local function show_tooltip_for_element(element, frame)
 
     -- * frame
     local f = element:axFrame() -- retrieve again b/c frame variable isn't always for the element
-    local compact_frame = string.format("frame: %s,%s,%s,%s", f.x, f.y, f.w, f.h)
+    local compact_frame = string.format("frame: x=%s,y=%s,w=%s,h=%s", f.x, f.y, f.w, f.h)
     table.insert(attributes, compact_frame)
 
     -- * show children
