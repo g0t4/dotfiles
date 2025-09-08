@@ -104,7 +104,7 @@ if DEBUG:
 
 # Static label-to-color mapping (BGR format for OpenCV)
 label_colors = {
-    0: (0, 128, 128),  # teal
+    # 0: (0, 0, 0),  # black
     1: (0, 255, 0),  # green
     2: (255, 0, 0),  # blue
     3: (0, 0, 255),  # red
@@ -114,6 +114,7 @@ label_colors = {
     7: (128, 0, 128),  # purple
     8: (255, 165, 0),  # orange
     9: (128, 128, 0),  # olive
+    0: (0, 128, 128),  # teal
 }
 
 def visualize_labeled_regions(labels):
@@ -121,7 +122,8 @@ def visualize_labeled_regions(labels):
     output = np.zeros((h, w, 3), dtype=np.uint8)
 
     for label, color in label_colors.items():
-        output[labels % 10 == label] = color
+        mask = (labels % 10 == label) & (labels != 0)
+        output[mask] = color
 
     return output
 
