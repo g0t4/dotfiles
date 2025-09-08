@@ -527,6 +527,20 @@ function capture_element_under_mouse()
         print("no frame found for current element, cannot capture it")
         return
     end
+
+    local was_highlighting = is_highlighting_now()
+    remove_highlight()
+
+    function when_done(result)
+        if was_highlighting then
+            highlight_current_element()
+        end
+    end
+
+    capture_this_element(element, when_done)
+end
+
+function capture_this_element(element, callback)
     local frame = element:axFrame()
 
     local role = element:axRole() or ""
@@ -541,9 +555,6 @@ function capture_element_under_mouse()
     if desc then image_tag = image_tag .. "_desc_" .. desc end
     image_tag = sanitize_image_tag(image_tag)
 
-    local was_highlighting = is_highlighting_now()
-    remove_highlight()
-
     -- * save to
     local where_to = get_screencapture_filename("png", image_tag)
     -- local where_to = "-P" -- -P == open in preview (does not save to disk)
@@ -553,10 +564,7 @@ function capture_element_under_mouse()
             hs.alert.show("capture failed: " .. std_err)
             print("capture failed", std_err)
         end
-        if was_highlighting then
-            highlight_current_element()
-        end
-
+        callback(result)
         print("element captured to " .. where_to)
     end
 
