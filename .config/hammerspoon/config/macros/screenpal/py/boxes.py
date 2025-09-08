@@ -4,6 +4,7 @@ from typing import NamedTuple
 import cv2 as cv
 import numpy as np
 from pathlib import Path
+from rich import print
 
 # TODO make into arg
 file = Path(os.getenv("WES_DOTFILES") or "") \
