@@ -13,12 +13,10 @@ if DEBUG:
     print(f'{sys.argv=}')
     from rich import print
 
-file = sys.argv[1] if len(sys.argv) > 1 else None
-# if DEBUG:
-#     file = Path(os.getenv("WES_DOTFILES") or "") \
-#         / ".config/hammerspoon/config/macros/screenpal/py/timeline03a.png"
+# z screenpal/py
+# time python3 dark-boxes.py samples/playhead-darkblue1.png --debug
 
-# / ".config/hammerspoon/config/macros/screenpal/py/timeline03a-2.png"
+file = sys.argv[1] if len(sys.argv) > 1 else None
 
 image = cv.imread(str(file), cv.IMREAD_COLOR)  # BGR
 if image is None:
@@ -45,7 +43,8 @@ def color_mask(img, color, tol):
     diff = np.abs(img.astype(np.int16) - color.astype(np.int16))
     return (diff <= tol).all(axis=2).astype(np.uint8) * 255
 
-gray_box_direct_mask = color_mask(image, colors_bgr.silence_gray, tolerance)  # skip ROI b/c the image is ONLY the timeline so there's no reason to spot the timeline!
+# gray_box_direct_mask = color_mask(image, colors_bgr.silence_gray, tolerance)  # skip ROI b/c the image is ONLY the timeline so there's no reason to spot the timeline!
+# gray_box_direct_mask = color_mask(image, colors_bgr.silence_gray, tolerance)  # skip ROI b/c the image is ONLY the timeline so there's no reason to spot the timeline!
 timeline_mask = color_mask(image, colors_bgr.timeline_bg, tolerance)  # leave so you can come back to this later for additional detection (i.e. unmarked silences, < 1 second)
 playhead_mask = color_mask(image, colors_bgr.playhead, tolerance)
 
@@ -80,17 +79,17 @@ def blend_mask_over_image(image, mask, alpha=0.7, highlight_color=RED) -> np.nda
 if DEBUG:
     images = [
         # image, # include image but not really necessary
-        blend_mask_over_image(image, gray_box_direct_mask),
-        mask_only(image, gray_box_direct_mask),
         blend_mask_over_image(image, timeline_mask),
         mask_only(image, timeline_mask),
         blend_mask_over_image(image, playhead_mask, alpha=0.5, highlight_color=YELLOW),
         mask_only(image, playhead_mask, highlight_color=YELLOW),
     ]
-    # stacked = np.vstack(images)
-    # cv.imshow("stacked", stacked)
-    # cv.waitKey(0)
-    # cv.destroyAllWindows()
+    stacked = np.vstack(images)
+    cv.imshow("stacked", stacked)
+    cv.waitKey(0)
+    cv.destroyAllWindows()
+
+exit()
 
 # %%
 
