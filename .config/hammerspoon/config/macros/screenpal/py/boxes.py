@@ -47,18 +47,13 @@ def blend_highlights_on_mask(image, mask) -> None:
     return blended
 
 gray_box_direct_highlighted = blend_highlights_on_mask(image, gray_box_direct_mask)
-timeline_highlighted = blend_highlights_on_mask(image, timeline_mask)
-stacked = np.vstack([timeline_highlighted, gray_box_direct_highlighted])  # type: ignore
-cv.imshow("stacked", stacked)
-cv.waitKey(0)
-cv.destroyAllWindows()
+# timeline_highlighted = blend_highlights_on_mask(image, timeline_mask) # leave so you can come back to this later for additional detection (i.e. unmarked silences, < 1 second)
+# stacked = np.vstack([timeline_highlighted, gray_box_direct_highlighted])  # type: ignore
+# cv.imshow("stacked", stacked)
+# cv.waitKey(0)
+# cv.destroyAllWindows()
 
 # %%
-
-num_labels, labels, stats, _ = cv.connectedComponentsWithStats(timeline_mask, connectivity=8)
-print(f'{num_labels=}')
-print(f'{labels=}')
-print(f'{stats=}')
 
 # Static label-to-color mapping (BGR format for OpenCV)
 label_colors = {
@@ -88,36 +83,14 @@ def visualize_labeled_regions(labels):
 
     return output
 
-# static_labels = visualize_labeled_regions(labels)
-# cv.imshow("static_labels", static_labels)
-# cv.waitKey(0)
-# cv.destroyAllWindows()
-
-# %%
-
-largest_label = 1 + np.argmax(stats[1:, cv.CC_STAT_AREA])
-tx, ty, tw, th, _ = stats[largest_label]
-print(f"tx={tx}, ty={ty}, tw={tw}, th={th}")
-timeline_roi = image[ty:ty + th, tx:tx + tw]
-stacked = np.vstack([timeline_roi])  # type: ignore
-
-# %%
-
-# cv.imshow("stacked", stacked)
-# cv.waitKey(0)
-# cv.destroyAllWindows()
-
-# ROI
-# gray_box_mask = color_mask(timeline_roi, colors_bgr.silence_gray, tolerance + 2)  # slightly looser for AA edges
-# gray_box_mask_smooth = cv.morphologyEx(gray_box_mask, cv.MORPH_OPEN, np.ones((3, 3), np.uint8)) # smooth out, skip freckled matches
-
 # *** DIRECT ( THIS IS REALLY GOOD IN MY TESTING!!!) ...
 #   it does detect the playhead and the white dashed vertical line from recording mark, but I could skip over those with a n algorithm of some sort to connect sections with tiny tiny gaps (<4 pixels wide) assuming both sides are silence
 gray_box_mask = color_mask(image, colors_bgr.silence_gray, tolerance + 2)  # slightly looser for AA edges
 gray_box_mask_smooth = cv.morphologyEx(gray_box_mask, cv.MORPH_OPEN, np.ones((3, 3), np.uint8))  # smooth out, skip freckled matches
-
 stacked = np.vstack([gray_box_mask, gray_box_mask_smooth])  # type: ignore
 cv.imshow("stacked", stacked)
+cv.waitKey(0)
+cv.destroyAllWindows()
 
 num_labels, labels, stats, _ = cv.connectedComponentsWithStats(gray_box_mask_smooth, connectivity=8)
 labeled_mask = visualize_labeled_regions(labels)
@@ -125,9 +98,9 @@ cv.imshow("labeled_mask", labeled_mask)
 cv.waitKey(0)
 cv.destroyAllWindows()
 
+# TODO finalize regions! and return json object to lua code!
+
 box_label = 1 + np.argmax(stats[1:, cv.CC_STAT_AREA])
 bx, by, bw, bh, _ = stats[box_label]
 
-# Position of box center as fraction of the full timeline width
-center_fraction = (bx + bw / 2.0) / float(tw)
-print(f"center_fraction={center_fraction:.4f}")  # e.g., 0.3721
+
