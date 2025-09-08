@@ -123,10 +123,28 @@ if idx is not None:
     R = 1493
 
     band = image[look_start:look_end, L:R + 1]
-    wtf = hunt_mask[look_start:look_end, L:R + 1]
-    cv.imshow("hunt_mask", np.vstack([wtf]))
-    cv.imshow("band", np.vstack([band]))
+    hunt_mask_matched = hunt_mask[look_start:look_end, L:R + 1]
+    print(f'{band.shape=}')
+    print(f'{hunt_mask_matched.shape=}')
+    print(f'{hunt_mask_matched[:,:,None].shape=}')
+    print(f'{hunt_mask_matched[:,:,None]=}')
+    hunt_mask_matched_color = np.repeat(hunt_mask_matched[:, :, None], 3, 2)
+    hmmc2 = np.stack([hunt_mask_matched[:, :, None]] * 3, 2)
+    hmmc3 = np.tile(hunt_mask_matched[:, :, None], 3)
+    print(f'{hmmc2=}')
+    print(f'{hmmc3=}')
+    print(f'{np.array_equal(hmmc2, hunt_mask_matched_color)=}')
+    print(f'{np.array_equal(hmmc3, hunt_mask_matched_color)=}')
+    print(f'{hunt_mask_matched_color=}')
+    # cv.imshow("hunt_mask", np.vstack([hunt_mask_matched_color, band]))
+
+    zoom_factor = 4
+    zoomed = cv.resize(hunt_mask_matched_color, None, fx=zoom_factor, fy=zoom_factor, interpolation=cv.INTER_LINEAR)
+    cv.imshow("hunt_mask_zoomed", zoomed)
+
     cv.waitKey(0)
+
+exit()
 
 # Highlight colors (BGR order for OpenCV)
 RED = (0, 0, 255)
