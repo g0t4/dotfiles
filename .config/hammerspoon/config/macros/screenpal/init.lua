@@ -520,9 +520,8 @@ function StreamDeck_ScreenPal_ShowSilenceRegions()
 
 
     ---@param slider any
-    ---@param where_to any
     ---@param silences any
-    local function handle_silence_detection(slider, where_to, silences)
+    local function handle_silence_detection(slider, silences)
         print("silence regions: " .. hs.inspect(silences))
         show_silences(silences, slider)
     end
@@ -532,7 +531,7 @@ function StreamDeck_ScreenPal_ShowSilenceRegions()
 
     capture_this_element(slider, function(where_to)
         detect_silence_boxes(where_to, function(silences)
-            handle_silence_detection(slider, where_to, silences)
+            handle_silence_detection(slider, silences)
         end)
     end)
 end
