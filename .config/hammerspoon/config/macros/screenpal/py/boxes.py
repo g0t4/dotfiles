@@ -1,3 +1,4 @@
+import json
 import os
 import sys
 from typing import NamedTuple
@@ -170,7 +171,10 @@ sorted_indicies = np.argsort(x_regions[:, 0])
 x_sorted_regions = x_regions[sorted_indicies]
 
 print(f'{x_sorted_regions=}')
-# PRN throw if any regions overlap?
+# PRN throw if any regions overlap...
+# AND throw if they aren't basically the full height of the image?
+#   or filter these out?
+#   see what happens with real usage and then add if I encounter issues
 
 def mine(accum, current):
     print(f'{accum=}   {current=}')
@@ -203,3 +207,10 @@ stack = np.vstack([image, final_preview_mask])
 cv.imshow("final_preview_mask", stack)
 cv.waitKey(0)
 cv.destroyAllWindows()
+
+# * serialize response to json in STDOUT
+ranges = [{
+    "x_start": int(x_start),
+    "x_end": int(x_start + width),
+} for x_start, width in final_x_regions]
+print(json.dumps(ranges))  # output to STDOUT for hs to consume
