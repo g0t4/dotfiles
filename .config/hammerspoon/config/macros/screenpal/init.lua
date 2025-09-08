@@ -481,7 +481,7 @@ local silences_canvas = nil
 function show_silences(silences, slider)
     -- example silences (also for testing):
     ---@type SilencesList
-    silences = { { x_end = 1132, x_start = 1034 }, { x_end = 1372, x_start = 1223 }, { x_end = 1687, x_start = 1562 } }
+    -- silences = { { x_end = 1132, x_start = 1034 }, { x_end = 1372, x_start = 1223 }, { x_end = 1687, x_start = 1562 } }
 
     local slider_frame = slider:axFrame()
     local canvas = hs.canvas.new(slider_frame)
