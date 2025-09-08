@@ -137,333 +137,334 @@ function ScreenPalEditorWindow:new()
 
     return editor_window
 end
-    ---@return number percent
-    function editor_window:playhead_position_percent()
-        ensure_cached_controls()
 
-        -- AFAICT nothing differs on zoom level buttons...
-        -- - thus cannot know which is clicked (zoomed)
-        -- - NBD I mostly use 2 and can re-zoom myself (and I'll be using not zoomed to restore playhead position)
-        self:zoom_off()
+---@return number percent
+function editor_window:playhead_position_percent()
+    ensure_cached_controls()
 
-        local details = self:_timeline_details()
+    -- AFAICT nothing differs on zoom level buttons...
+    -- - thus cannot know which is clicked (zoomed)
+    -- - NBD I mostly use 2 and can re-zoom myself (and I'll be using not zoomed to restore playhead position)
+    self:zoom_off()
 
-        -- TODO move percent calculation to _timeline_details
-        local playhead_percent = (details.playhead_x - details.timeline_frame.x) / details.timeline_frame.w
-        print("playhead_percent", playhead_percent)
-        return playhead_percent
+    local details = self:_timeline_details()
+
+    -- TODO move percent calculation to _timeline_details
+    local playhead_percent = (details.playhead_x - details.timeline_frame.x) / details.timeline_frame.w
+    print("playhead_percent", playhead_percent)
+    return playhead_percent
+end
+
+---@param playhead_percent number
+function editor_window:restore_playhead_position(playhead_percent)
+    ensure_cached_controls()
+
+    self:zoom_off() -- do not restore when zoomed
+
+    local details = self:_timeline_details()
+
+    -- TODO _timeline_details():move_playhead_to_percent(percent)
+    local time_window_x_center = details.timeline_frame.x + playhead_percent * details.timeline_frame.w
+
+    local hold_down_before_release = 10000 -- default is 200ms, will matter if chaining more actions!
+    hs.eventtap.leftClick({
+        -- +1 pixel stops leftward drift by 1 frame (good test is back to back reopen, albeit not a normal workflow)
+        x = time_window_x_center + 1,
+        y = details.timeline_frame.y + details.timeline_frame.h / 2
+    }, hold_down_before_release)
+end
+
+function editor_window:is_zoomed()
+    ensure_cached_controls()
+    if not self._btn_minimum_zoom then
+        error("No zoom button found, aborting...")
+    end
+    -- AXPosition == 0,0 ==> not zoomed
+    local position = self._btn_minimum_zoom:axPosition()
+    return position.x > 0 and position.y > 0
+end
+
+function editor_window:zoom_on()
+    if self:is_zoomed() then
+        return
     end
 
-    ---@param playhead_percent number
-    function editor_window:restore_playhead_position(playhead_percent)
-        ensure_cached_controls()
+    -- FYI typing m is faster now... must be b/c of the native Apple Silicon app
+    hs.eventtap.keyStroke({}, "m", 0, get_screenpal_app_element_or_throw())
 
-        self:zoom_off() -- do not restore when zoomed
+    -- wait here so you don't want in consumers AND to NOT wait when already zoomed out
+    -- hs.timer.waitUntil -- TODO try waitUntil!
+    hs.timer.usleep(200000)
+end
 
-        local details = self:_timeline_details()
+function editor_window:zoom_off()
+    if not self:is_zoomed() then
+        return
+    end
 
-        -- TODO _timeline_details():move_playhead_to_percent(percent)
-        local time_window_x_center = details.timeline_frame.x + playhead_percent * details.timeline_frame.w
+    hs.eventtap.keyStroke({}, "m", 0, get_screenpal_app_element_or_throw())
 
-        local hold_down_before_release = 10000 -- default is 200ms, will matter if chaining more actions!
+    -- wait here so you don't want in consumers AND to NOT wait when already zoomed out
+    hs.timer.usleep(200000)
+    -- TODO I do not think waitUntil is blocking either so it would let consumer code keep running, right?
+    -- PRN loop on usleep and poll something useful to tell you when you can be ready to click in the UI
+    -- -- FYI waitUntil is always already 0,0 on first run, so I would need a diff test  to use this
+    -- print("waitUNTIL")
+    -- hs.timer.waitUntil(function()
+    --     print("tick")
+    --     if self._btn_minimum_zoom then
+    --         local frame = self._btn_minimum_zoom:axFrame()
+    --         print("  frame", hs.inspect(frame))
+    --         return frame.x == 0 and frame.y == 0
+    --     end
+    --     return false
+    -- end, function()
+    --     print("DONE")
+    -- end, 0.05)
+end
+
+function editor_window:get_scrollbar_or_throw()
+    -- PRN search for big AXMaxValues? that might uniquely identify it if I have issues in the future with other scrollbars visible
+    -- OR by position on screen (toward bottom of window is telling)
+    ensure_cached_controls()
+    local scrollbar = self._scrollbars[4]
+    if not scrollbar then
+        error("No editor_window scrollbar found, aborting...")
+    end
+    return scrollbar
+end
+
+---@return hs.axuielement
+function editor_window:get_timeline_slider_or_throw()
+    ensure_cached_controls()
+    if not self._btn_position_slider then
+        error("No timeline slider found, aborting...")
+    end
+    return self._btn_position_slider
+end
+
+function editor_window:zoom1()
+    ensure_cached_controls()
+    self:zoom_on()
+    self._btn_minimum_zoom:performAction("AXPress")
+end
+
+function editor_window:zoom2()
+    ensure_cached_controls()
+    self:zoom_on()
+    self._btn_medium_zoom:performAction("AXPress")
+end
+
+function editor_window:zoom3()
+    ensure_cached_controls()
+    self:zoom_on()
+    self._btn_maximum_zoom:performAction("AXPress")
+end
+
+function cache_project_view_controls()
+    vim.iter(self.win:children())
+        :each(function(ui_elem)
+            -- one time hit, just cache all buttons when I have to find one of them
+            -- not extra expensive to cache each one relative to time to enumerate / get description (has to be done to find even one button)
+            local description = ui_elem:axDescription()
+            local role = ui_elem:axRole()
+            -- TODO! split out editor window class? with all controls there? this is bastardized here but is fine for now
+            if role == "AXScrollArea" then
+                self._scrollarea_list = ui_elem -- s/b only scroll area in the scorll area
+                print("sa", hs.inspect(self._scrollarea_list))
+                print("sa.sa", hs.inspect(self._scrollarea_list:scrollAreas()[1]))
+                self._scrollarea_list = self._scrollarea_list:scrollAreas()[1]
+                -- PRN I could cache a list of the projects if that would be useful
+            end
+        end)
+end
+
+function editor_window:reopen_project()
+    run_async(function()
+        local win = get_cached_editor_window()
+        local current_zoomed = win:is_zoomed()
+        -- cannot find a way (yet) to determine zoom level
+        --   one idea, could store maxvalue of position_slider
+        --   and compare to each zoom level (try 2 first, then 1/3) on restore
+        --   until find match for maxvalue and then you know you found the level!
+        self:zoom_off()
+
+
+        -- use percent, that way if the width changes, it's still the same timecode
+        local playhead_percent = self:playhead_position_percent()
+
+        if not self._textfield_title then
+            error("No title found, aborting...")
+        end
+        local title = self._textfield_title:axValue()
+        print("title: ", title)
+        if not self._btn_back_to_projects then
+            error("No back to projects button found, aborting...")
+        end
+        self._btn_back_to_projects:performAction("AXPress")
+
+        local btn_reopen_project = wait_for_element(function()
+            cache_project_view_controls()
+            if not self._scrollarea_list then return end
+            return vim.iter(self._scrollarea_list:buttons())
+                :filter(function(button)
+                    -- look for the project open button to re-open, wait until find this
+                    local desc = button:axDescription()
+                    return desc == title
+                end)
+                :totable()[1]
+        end, 100, 20)
+
+        if not btn_reopen_project then
+            error("cannot find project to re-open, aborting...")
+        end
+
+        btn_reopen_project:performAction("AXPress")
+        sleep_ms(100) -- PRN if possible, and useful, replace w/ wait_for_element, which one to look for?
+
+        self:restore_playhead_position(playhead_percent)
+
+        if not current_zoomed then
+            print("NOT zoomed before, skipping zoom restore")
+            return
+        end
+
+        self:zoom2()
+    end)
+end
+
+---@return TimelineDetails
+function editor_window:_timeline_details()
+    -- PRN move ensure_cached_controls() here?
+    return TimelineDetails:new(self)
+end
+
+function editor_window:get_time_string()
+    ensure_cached_controls()
+    local details = self:_timeline_details()
+    return details.time_string
+end
+
+function editor_window:figure_out_zoom2_fixed_pixels_per_second()
+    ensure_cached_controls()
+
+    -- FYI! KEEP IN MIND, zoom levels are FIXED # seconds/frames regardless of video length... so when zoom 2 you know exactly where to click to move over 1 second relative to current position... or to move to X seconds along from start/end of the visible timeline
+    --  eyeballing => roughly 43 pixels per second on zoom 2 => ~23 seconds visible in timeline... and not quite full width of screen (est 1000 px) => 1000/23 ~+ 43 pixels per second?
+
+    -- TODO break apart functions out of the other get time function below
+    --   i.e. get_playhead_time
+
+    local details = self:_timeline_details()
+    details:move_playhead_to_seconds(2)
+
+    -- *** PIXELS PER SECOND for each ZOOM level (fixed for each level)
+    print(details.pixels_per_second)
+    -- FYI make sure time left side of timeline is still at 0 else will be off
+    --   jump to a specific timecode and measure the time from there
+    --   should be more reliable than clicking any spot and doing it from there which maybe cursor is in the middle between actual frames and so its slightly off b/c it says time as of a few pixels left/right
+    --   repeatedly push the jump to 3 (or w/e value) an
+    --
+    --   change width of screen (timeline) and confirm PPS remains the same
+    --   MAKE SURE 0 is on left, sometimes it shifts slightly off screen, that will cause issues in the PPS
+    --   SLIGHT discrepency when clicking on a spot is fractions of a pixel in the calc... IOTW I don't have ultra precise fractions but 25/75/150 are correct parts
+    -- zoom1 => 25.164473684211 PPS
+    -- zoom2 => 75.166666666667 PPS
+    -- zoom3 => 150.16666666667 PPS
+end
+
+function editor_window:toggle_AXEnhancedUserInterface()
+    ensure_cached_controls()
+    local primary_window = self.win
+
+    -- FYI alternative to using Voice Over, theoretically, to trigger showing more controls (if the app supports it)
+    -- FYI first pass I am not seeing any new direct descendents of edtior_window (64 before and after)...
+
+    -- PRN, click / focus any controls?
+    -- TODO try:
+    --  print(hs.axuielement.parameterizedAttributeNames(el)) -- might have hidden values  when not enhanced moe
+    --  press items (AXPress)
+    --  focus (right arrow?)
+
+    --  do I need to set AXEnhancedUserInterface on other (child) objects or just the app?
+    -- self.app:dumpAttributes()
+    print("before - app.AXEnhancedUserInterface:", self.app.AXEnhancedUserInterface)
+    self.app.AXEnhancedUserInterface = not self.app.AXEnhancedUserInterface
+    print("after - app.AXEnhancedUserInterface:", self.app.AXEnhancedUserInterface)
+
+    do return end
+
+    local children = primary_window:children()
+    -- ?? try allDescendantElements + callback to avoid navigating manualy
+
+    -- local app = hs.appfinder.appFromName("YourJavaApp")
+    -- local ax = hs.axuielement.applicationElement(app)
+    -- if ax:isAttributeSettable("AXEnhancedUserInterface") then
+    --   ax:setAttributeValue("AXEnhancedUserInterface", true)
+    -- end
+    --
+
+    for i, child in ipairs(children) do
+        print(hs.inspect(child))
+    end
+end
+
+function editor_window:test_select_range()
+    ensure_cached_controls()
+
+    self:zoom_on() -- assume is m2-02 for now
+
+    local details = self:_timeline_details()
+    local timeline_frame = details.timeline_frame
+
+    function click_at(reading)
+        local rel_click_x = reading / 2 -- divide by 2 for 4k resolution of screencaps, b/c screen cords are 1080p... THIS WORKS! SPOT ON
+        local click_x = timeline_frame.x + rel_click_x
+
+        local hold_duration_ms = 10000
         hs.eventtap.leftClick({
             -- +1 pixel stops leftward drift by 1 frame (good test is back to back reopen, albeit not a normal workflow)
-            x = time_window_x_center + 1,
-            y = details.timeline_frame.y + details.timeline_frame.h / 2
-        }, hold_down_before_release)
+            x = click_x + 1, -- for 1 sec its slightly off (NBD => could arrow over if consistently off))
+            -- +1 => 1.04 sec (1 frame past), +0 => 0.92 sec (2 frames before)
+            -- FYI I DO NOT NEED PRECISE! silence ranges for example will be paddeed anyways! can always padd an extra frame!
+            -- FYI for round numbers, i.e. 2 seconds, I can read playhead after move and if within a second I can use Shift+Arrow to jump w/e distance
+            y = timeline_frame.y + timeline_frame.h / 2
+        }, hold_duration_ms)
     end
 
-    function editor_window:is_zoomed()
-        ensure_cached_controls()
-        if not self._btn_minimum_zoom then
-            error("No zoom button found, aborting...")
-        end
-        -- AXPosition == 0,0 ==> not zoomed
-        local position = self._btn_minimum_zoom:axPosition()
-        return position.x > 0 and position.y > 0
-    end
+    -- READINGS from 4k screencap coordinates of first major silence period
+    click_at(692 + 20)
+    hs.eventtap.keyStroke({}, "c", 0, get_screenpal_app_element_or_throw()) -- alone selects the cut region! I can then pull back each side
+    -- FYI I could also have it scan for the red selection and use that to pull back the current selection (pad it or expand it)
+    hs.timer.usleep(100000)
+    hs.eventtap.keyStroke({}, "s", 0, get_screenpal_app_element_or_throw()) -- OPTIONAL TO FORCE START AT clicked point for auto selected cuts
+    hs.timer.usleep(100000)
+    click_at(845 - 20)
+    hs.timer.usleep(100000)
+    hs.eventtap.keyStroke({}, "e", 0, get_screenpal_app_element_or_throw())
+end
 
-    function editor_window:zoom_on()
-        if self:is_zoomed() then
-            return
-        end
+function editor_window:estimate_time_per_pixel()
+    ensure_cached_controls() -- prn do I need this early on here?
 
-        -- FYI typing m is faster now... must be b/c of the native Apple Silicon app
-        hs.eventtap.keyStroke({}, "m", 0, get_screenpal_app_element_or_throw())
+    print("min zoom frame", hs.inspect(self._btn_minimum_zoom:axFrame())) -- (x,y) == (0,0) == not zoomed
+    -- must be zoomed out, else cannot know that start of time line is 0 and end is the end of the video
+    self:zoom_off()
+    print("min zoom frame", hs.inspect(self._btn_minimum_zoom:axFrame()))
 
-        -- wait here so you don't want in consumers AND to NOT wait when already zoomed out
-        -- hs.timer.waitUntil -- TODO try waitUntil!
-        hs.timer.usleep(200000)
-    end
+    -- TODO!!! parse screen shots of position slider and find the silence ranges
+    -- TODO!!!   to automate selecting them using my own padding!
+    -- TODO!!!   and other cool helpers
+    -- TODO      test w/ cmd+ctrl+alt + "p" hammerspoon shortcut that screencaps individual elements and then can use that to test with (i.e. pos slider capture)
+    -- TODO      the color for silence is reliably showing up as this
+    --              #21253B -- detected silence periods
+    -- TODO         I confirmed this in both the running app and in my screencap
+    -- TODO         !!! slice the top of the image off (or maybe 3 pixels down) b/c then you won't have any interference with waveform
+    --              THEN move left to right through the pixels and look at the color
+    --              OR do something more sophisticated (reliable)
+    --   ! see config/macros/screenpal/py/timeline_detect_blocks.py for initial idea to find gray silence areas
+end
 
-    function editor_window:zoom_off()
-        if not self:is_zoomed() then
-            return
-        end
-
-        hs.eventtap.keyStroke({}, "m", 0, get_screenpal_app_element_or_throw())
-
-        -- wait here so you don't want in consumers AND to NOT wait when already zoomed out
-        hs.timer.usleep(200000)
-        -- TODO I do not think waitUntil is blocking either so it would let consumer code keep running, right?
-        -- PRN loop on usleep and poll something useful to tell you when you can be ready to click in the UI
-        -- -- FYI waitUntil is always already 0,0 on first run, so I would need a diff test  to use this
-        -- print("waitUNTIL")
-        -- hs.timer.waitUntil(function()
-        --     print("tick")
-        --     if self._btn_minimum_zoom then
-        --         local frame = self._btn_minimum_zoom:axFrame()
-        --         print("  frame", hs.inspect(frame))
-        --         return frame.x == 0 and frame.y == 0
-        --     end
-        --     return false
-        -- end, function()
-        --     print("DONE")
-        -- end, 0.05)
-    end
-
-    function editor_window:get_scrollbar_or_throw()
-        -- PRN search for big AXMaxValues? that might uniquely identify it if I have issues in the future with other scrollbars visible
-        -- OR by position on screen (toward bottom of window is telling)
-        ensure_cached_controls()
-        local scrollbar = self._scrollbars[4]
-        if not scrollbar then
-            error("No editor_window scrollbar found, aborting...")
-        end
-        return scrollbar
-    end
-
-    ---@return hs.axuielement
-    function editor_window:get_timeline_slider_or_throw()
-        ensure_cached_controls()
-        if not self._btn_position_slider then
-            error("No timeline slider found, aborting...")
-        end
-        return self._btn_position_slider
-    end
-
-    function editor_window:zoom1()
-        ensure_cached_controls()
-        self:zoom_on()
-        self._btn_minimum_zoom:performAction("AXPress")
-    end
-
-    function editor_window:zoom2()
-        ensure_cached_controls()
-        self:zoom_on()
-        self._btn_medium_zoom:performAction("AXPress")
-    end
-
-    function editor_window:zoom3()
-        ensure_cached_controls()
-        self:zoom_on()
-        self._btn_maximum_zoom:performAction("AXPress")
-    end
-
-    function cache_project_view_controls()
-        vim.iter(self.win:children())
-            :each(function(ui_elem)
-                -- one time hit, just cache all buttons when I have to find one of them
-                -- not extra expensive to cache each one relative to time to enumerate / get description (has to be done to find even one button)
-                local description = ui_elem:axDescription()
-                local role = ui_elem:axRole()
-                -- TODO! split out editor window class? with all controls there? this is bastardized here but is fine for now
-                if role == "AXScrollArea" then
-                    self._scrollarea_list = ui_elem -- s/b only scroll area in the scorll area
-                    print("sa", hs.inspect(self._scrollarea_list))
-                    print("sa.sa", hs.inspect(self._scrollarea_list:scrollAreas()[1]))
-                    self._scrollarea_list = self._scrollarea_list:scrollAreas()[1]
-                    -- PRN I could cache a list of the projects if that would be useful
-                end
-            end)
-    end
-
-    function editor_window:reopen_project()
-        run_async(function()
-            local win = get_cached_editor_window()
-            local current_zoomed = win:is_zoomed()
-            -- cannot find a way (yet) to determine zoom level
-            --   one idea, could store maxvalue of position_slider
-            --   and compare to each zoom level (try 2 first, then 1/3) on restore
-            --   until find match for maxvalue and then you know you found the level!
-            self:zoom_off()
-
-
-            -- use percent, that way if the width changes, it's still the same timecode
-            local playhead_percent = self:playhead_position_percent()
-
-            if not self._textfield_title then
-                error("No title found, aborting...")
-            end
-            local title = self._textfield_title:axValue()
-            print("title: ", title)
-            if not self._btn_back_to_projects then
-                error("No back to projects button found, aborting...")
-            end
-            self._btn_back_to_projects:performAction("AXPress")
-
-            local btn_reopen_project = wait_for_element(function()
-                cache_project_view_controls()
-                if not self._scrollarea_list then return end
-                return vim.iter(self._scrollarea_list:buttons())
-                    :filter(function(button)
-                        -- look for the project open button to re-open, wait until find this
-                        local desc = button:axDescription()
-                        return desc == title
-                    end)
-                    :totable()[1]
-            end, 100, 20)
-
-            if not btn_reopen_project then
-                error("cannot find project to re-open, aborting...")
-            end
-
-            btn_reopen_project:performAction("AXPress")
-            sleep_ms(100) -- PRN if possible, and useful, replace w/ wait_for_element, which one to look for?
-
-            self:restore_playhead_position(playhead_percent)
-
-            if not current_zoomed then
-                print("NOT zoomed before, skipping zoom restore")
-                return
-            end
-
-            self:zoom2()
-        end)
-    end
-
-    ---@return TimelineDetails
-    function editor_window:_timeline_details()
-        -- PRN move ensure_cached_controls() here?
-        return TimelineDetails:new(self)
-    end
-
-    function editor_window:get_time_string()
-        ensure_cached_controls()
-        local details = self:_timeline_details()
-        return details.time_string
-    end
-
-    function editor_window:figure_out_zoom2_fixed_pixels_per_second()
-        ensure_cached_controls()
-
-        -- FYI! KEEP IN MIND, zoom levels are FIXED # seconds/frames regardless of video length... so when zoom 2 you know exactly where to click to move over 1 second relative to current position... or to move to X seconds along from start/end of the visible timeline
-        --  eyeballing => roughly 43 pixels per second on zoom 2 => ~23 seconds visible in timeline... and not quite full width of screen (est 1000 px) => 1000/23 ~+ 43 pixels per second?
-
-        -- TODO break apart functions out of the other get time function below
-        --   i.e. get_playhead_time
-
-        local details = self:_timeline_details()
-        details:move_playhead_to_seconds(2)
-
-        -- *** PIXELS PER SECOND for each ZOOM level (fixed for each level)
-        print(details.pixels_per_second)
-        -- FYI make sure time left side of timeline is still at 0 else will be off
-        --   jump to a specific timecode and measure the time from there
-        --   should be more reliable than clicking any spot and doing it from there which maybe cursor is in the middle between actual frames and so its slightly off b/c it says time as of a few pixels left/right
-        --   repeatedly push the jump to 3 (or w/e value) an
-        --
-        --   change width of screen (timeline) and confirm PPS remains the same
-        --   MAKE SURE 0 is on left, sometimes it shifts slightly off screen, that will cause issues in the PPS
-        --   SLIGHT discrepency when clicking on a spot is fractions of a pixel in the calc... IOTW I don't have ultra precise fractions but 25/75/150 are correct parts
-        -- zoom1 => 25.164473684211 PPS
-        -- zoom2 => 75.166666666667 PPS
-        -- zoom3 => 150.16666666667 PPS
-    end
-
-    function editor_window:toggle_AXEnhancedUserInterface()
-        ensure_cached_controls()
-        local primary_window = self.win
-
-        -- FYI alternative to using Voice Over, theoretically, to trigger showing more controls (if the app supports it)
-        -- FYI first pass I am not seeing any new direct descendents of edtior_window (64 before and after)...
-
-        -- PRN, click / focus any controls?
-        -- TODO try:
-        --  print(hs.axuielement.parameterizedAttributeNames(el)) -- might have hidden values  when not enhanced moe
-        --  press items (AXPress)
-        --  focus (right arrow?)
-
-        --  do I need to set AXEnhancedUserInterface on other (child) objects or just the app?
-        -- self.app:dumpAttributes()
-        print("before - app.AXEnhancedUserInterface:", self.app.AXEnhancedUserInterface)
-        self.app.AXEnhancedUserInterface = not self.app.AXEnhancedUserInterface
-        print("after - app.AXEnhancedUserInterface:", self.app.AXEnhancedUserInterface)
-
-        do return end
-
-        local children = primary_window:children()
-        -- ?? try allDescendantElements + callback to avoid navigating manualy
-
-        -- local app = hs.appfinder.appFromName("YourJavaApp")
-        -- local ax = hs.axuielement.applicationElement(app)
-        -- if ax:isAttributeSettable("AXEnhancedUserInterface") then
-        --   ax:setAttributeValue("AXEnhancedUserInterface", true)
-        -- end
-        --
-
-        for i, child in ipairs(children) do
-            print(hs.inspect(child))
-        end
-    end
-
-    function editor_window:test_select_range()
-        ensure_cached_controls()
-
-        self:zoom_on() -- assume is m2-02 for now
-
-        local details = self:_timeline_details()
-        local timeline_frame = details.timeline_frame
-
-        function click_at(reading)
-            local rel_click_x = reading / 2 -- divide by 2 for 4k resolution of screencaps, b/c screen cords are 1080p... THIS WORKS! SPOT ON
-            local click_x = timeline_frame.x + rel_click_x
-
-            local hold_duration_ms = 10000
-            hs.eventtap.leftClick({
-                -- +1 pixel stops leftward drift by 1 frame (good test is back to back reopen, albeit not a normal workflow)
-                x = click_x + 1, -- for 1 sec its slightly off (NBD => could arrow over if consistently off))
-                -- +1 => 1.04 sec (1 frame past), +0 => 0.92 sec (2 frames before)
-                -- FYI I DO NOT NEED PRECISE! silence ranges for example will be paddeed anyways! can always padd an extra frame!
-                -- FYI for round numbers, i.e. 2 seconds, I can read playhead after move and if within a second I can use Shift+Arrow to jump w/e distance
-                y = timeline_frame.y + timeline_frame.h / 2
-            }, hold_duration_ms)
-        end
-
-        -- READINGS from 4k screencap coordinates of first major silence period
-        click_at(692 + 20)
-        hs.eventtap.keyStroke({}, "c", 0, get_screenpal_app_element_or_throw()) -- alone selects the cut region! I can then pull back each side
-        -- FYI I could also have it scan for the red selection and use that to pull back the current selection (pad it or expand it)
-        hs.timer.usleep(100000)
-        hs.eventtap.keyStroke({}, "s", 0, get_screenpal_app_element_or_throw()) -- OPTIONAL TO FORCE START AT clicked point for auto selected cuts
-        hs.timer.usleep(100000)
-        click_at(845 - 20)
-        hs.timer.usleep(100000)
-        hs.eventtap.keyStroke({}, "e", 0, get_screenpal_app_element_or_throw())
-    end
-
-    function editor_window:estimate_time_per_pixel()
-        ensure_cached_controls() -- prn do I need this early on here?
-
-        print("min zoom frame", hs.inspect(self._btn_minimum_zoom:axFrame())) -- (x,y) == (0,0) == not zoomed
-        -- must be zoomed out, else cannot know that start of time line is 0 and end is the end of the video
-        self:zoom_off()
-        print("min zoom frame", hs.inspect(self._btn_minimum_zoom:axFrame()))
-
-        -- TODO!!! parse screen shots of position slider and find the silence ranges
-        -- TODO!!!   to automate selecting them using my own padding!
-        -- TODO!!!   and other cool helpers
-        -- TODO      test w/ cmd+ctrl+alt + "p" hammerspoon shortcut that screencaps individual elements and then can use that to test with (i.e. pos slider capture)
-        -- TODO      the color for silence is reliably showing up as this
-        --              #21253B -- detected silence periods
-        -- TODO         I confirmed this in both the running app and in my screencap
-        -- TODO         !!! slice the top of the image off (or maybe 3 pixels down) b/c then you won't have any interference with waveform
-        --              THEN move left to right through the pixels and look at the color
-        --              OR do something more sophisticated (reliable)
-        --   ! see config/macros/screenpal/py/timeline_detect_blocks.py for initial idea to find gray silence areas
-    end
-
-    -- PRN can I use a library to parse out pauses and add my own padding to them when cutting them?! that would ROCK
+-- PRN can I use a library to parse out pauses and add my own padding to them when cutting them?! that would ROCK
 
 
 local _cached_editor_window = nil
