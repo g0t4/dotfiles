@@ -116,7 +116,8 @@ def full_column_span(mask: np.ndarray, start_idx: int, max_gap: int = 0) -> tupl
 
     return left, right
 
-if idx is not None:
+# FYI disabled this section so I can scan full timeline for all of these short silences (dark blue bg), not just around playhead
+if idx is not None and False:
     # actual hunting w/ best mask:
     L, R = full_column_span(hunt_mask_CLOSED, idx, max_gap=0)  # set >0 to tolerate small holes
     print(f'{L=} {R=}')
