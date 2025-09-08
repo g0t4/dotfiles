@@ -56,7 +56,9 @@ function ScreenPalEditorWindow:new()
         local start = get_time()
         -- enumerating all children and getting role and description is no diff than just buttons with description only...
         vim.iter(self.win:children())
-            :each(function(ui_elem)
+            :each(
+            ---@param ui_elem hs.axuielement
+            function(ui_elem)
                 -- one time hit, just cache all buttons when I have to find one of them
                 -- not extra expensive to cache each one relative to time to enumerate / get description (has to be done to find even one button)
                 local description = ui_elem:axDescription()
@@ -229,6 +231,7 @@ function ScreenPalEditorWindow:new()
         return scrollbar
     end
 
+    ---@return hs.axuielement
     function editor_window:get_timeline_slider_or_throw()
         ensure_cached_controls()
         if not self._btn_position_slider then
@@ -471,10 +474,12 @@ function get_cached_editor_window()
     return _cached_editor_window
 end
 
+---@alias SilencesList {x_start: number, x_end: number}[]
 local silences_canvas = nil
 function show_silences(silences, slider)
     -- example silences (also for testing):
-    -- silences = { { x_end = 1132, x_start = 1034 }, { x_end = 1372, x_start = 1223 }, { x_end = 1687, x_start = 1562 } }
+    ---@type SilencesList
+    silences = { { x_end = 1132, x_start = 1034 }, { x_end = 1372, x_start = 1223 }, { x_end = 1687, x_start = 1562 } }
 
     local slider_frame = slider:axFrame()
     local canvas = hs.canvas.new(slider_frame)
@@ -501,6 +506,9 @@ function show_silences(silences, slider)
 end
 
 function StreamDeck_ScreenPal_SelectNextSilence()
+    ---@param win ScreenPalEditorWindow
+    ---@param slider hs.axuielement
+    ---@param silences SilencesList
     function select_next(win, slider, silences)
         --TODO
     end
@@ -509,6 +517,9 @@ function StreamDeck_ScreenPal_SelectNextSilence()
 end
 
 function StreamDeck_ScreenPal_SelectPreviousSilence()
+    ---@param win ScreenPalEditorWindow
+    ---@param slider hs.axuielement
+    ---@param silences SilencesList
     function select_prev(win, slider, silences)
         --TODO
     end
@@ -525,8 +536,9 @@ function StreamDeck_ScreenPal_ShowSilenceRegions()
     -- show_silences(nil, slider) -- testing only
     -- return
 
-    ---@param slider any
-    ---@param silences any
+    ---@param win ScreenPalEditorWindow
+    ---@param slider hs.axuielement
+    ---@param silences SilencesList
     local function show_them(win, slider, silences)
         print("silence regions: " .. hs.inspect(silences))
         show_silences(silences, slider)
@@ -535,6 +547,7 @@ function StreamDeck_ScreenPal_ShowSilenceRegions()
     detect_silences_and_then(show_them)
 end
 
+---@param on_done fun(win: ScreenPalEditorWindow, slider: hs.axuielement, silences: SilencesList)
 function detect_silences_and_then(on_done)
     local win = get_cached_editor_window()
     local slider = win:get_timeline_slider_or_throw()
