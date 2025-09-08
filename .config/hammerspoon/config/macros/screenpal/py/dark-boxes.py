@@ -128,36 +128,38 @@ if idx is not None:
     # R = 1493
 
     # my inspection estimates:
-    # L = 1407 (literally first column of dark blue pixels)
+    # L (base1) = 1407 (literally first column of dark blue pixels)
     #      column 1406 is the last part of the waveform (albeit the blurry edge of lowest part of visible waveform)
-    # R = 1488 (last column of dark blue pixels)
-    # CLOSED => 1406 to 1487 ... THAT WORKS!
+    # R (base1) = 1488 (last column of dark blue pixels)
+    # results:
+    #   CLOSED: L(base0)=1406, R(base0)=1487
 
-    band = image[look_start:look_end, L:R + 1]
-    hunt_mask_matched = hunt_mask[look_start:look_end, L:R + 1]
-    hunt_mask_CLOSED_matched = hunt_mask_CLOSED[look_start:look_end, L:R + 1]
-    hunt_mask_DILATE_ONLY_matched = hunt_mask_DILATE_ONLY[look_start:look_end, L:R + 1]
-    print(f'{band.shape=}')
-    print(f'{hunt_mask_matched.shape=}')
-    print(f'{hunt_mask_matched[:,:,None].shape=}')
-    print(f'{hunt_mask_matched[:,:,None]=}')
-    hunt_mask_matched_color = np.repeat(hunt_mask_matched[:, :, None], 3, 2)
-    hmmc2 = np.stack([hunt_mask_matched[:, :, None]] * 3, 2)
-    hmmc3 = np.tile(hunt_mask_matched[:, :, None], 3)
-    print(f'{hmmc2=}')
-    print(f'{hmmc3=}')
-    print(f'{np.array_equal(hmmc2, hunt_mask_matched_color)=}')
-    print(f'{np.array_equal(hmmc3, hunt_mask_matched_color)=}')
-    print(f'{hunt_mask_matched_color=}')
-    hmCLOSED_matched_color = np.repeat(hunt_mask_CLOSED_matched[:, :, None], 3, 2)  # None adds new dimension, then repeat 2nd axis (innermost) 3 times => single 8bit => RGB 8:8:8 value
-    hmDILATE_ONLY_matched_color = np.repeat(hunt_mask_DILATE_ONLY_matched[:, :, None], 3, 2)  # None adds new dimension, then repeat 2nd axis (innermost) 3 times => single 8bit => RGB 8:8:8 value
-    cv.imshow("hunt_mask", np.vstack([hunt_mask_matched_color, hmCLOSED_matched_color, hmDILATE_ONLY_matched_color, band]))
+    if DEBUG:
+        band = image[look_start:look_end, L:R + 1]
+        hunt_mask_matched = hunt_mask[look_start:look_end, L:R + 1]
+        hunt_mask_CLOSED_matched = hunt_mask_CLOSED[look_start:look_end, L:R + 1]
+        hunt_mask_DILATE_ONLY_matched = hunt_mask_DILATE_ONLY[look_start:look_end, L:R + 1]
+        print(f'{band.shape=}')
+        print(f'{hunt_mask_matched.shape=}')
+        print(f'{hunt_mask_matched[:,:,None].shape=}')
+        print(f'{hunt_mask_matched[:,:,None]=}')
+        hunt_mask_matched_color = np.repeat(hunt_mask_matched[:, :, None], 3, 2)
+        hmmc2 = np.stack([hunt_mask_matched[:, :, None]] * 3, 2)
+        hmmc3 = np.tile(hunt_mask_matched[:, :, None], 3)
+        print(f'{hmmc2=}')
+        print(f'{hmmc3=}')
+        print(f'{np.array_equal(hmmc2, hunt_mask_matched_color)=}')
+        print(f'{np.array_equal(hmmc3, hunt_mask_matched_color)=}')
+        print(f'{hunt_mask_matched_color=}')
+        hmCLOSED_matched_color = np.repeat(hunt_mask_CLOSED_matched[:, :, None], 3, 2)  # None adds new dimension, then repeat 2nd axis (innermost) 3 times => single 8bit => RGB 8:8:8 value
+        hmDILATE_ONLY_matched_color = np.repeat(hunt_mask_DILATE_ONLY_matched[:, :, None], 3, 2)  # None adds new dimension, then repeat 2nd axis (innermost) 3 times => single 8bit => RGB 8:8:8 value
+        cv.imshow("hunt_mask", np.vstack([hunt_mask_matched_color, hmCLOSED_matched_color, hmDILATE_ONLY_matched_color, band]))
 
-    # zoom_factor = 4
-    # zoomed = cv.resize(hunt_mask_matched_color, None, fx=zoom_factor, fy=zoom_factor, interpolation=cv.INTER_LINEAR)
-    # cv.imshow("hunt_mask_zoomed", zoomed)
+        # zoom_factor = 4
+        # zoomed = cv.resize(hunt_mask_matched_color, None, fx=zoom_factor, fy=zoom_factor, interpolation=cv.INTER_LINEAR)
+        # cv.imshow("hunt_mask_zoomed", zoomed)
 
-    cv.waitKey(0)
+        cv.waitKey(0)
 
 exit()
 
