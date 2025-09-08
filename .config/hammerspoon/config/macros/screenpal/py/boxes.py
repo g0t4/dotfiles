@@ -9,7 +9,7 @@ from rich import print
 # TODO make into arg
 file = Path(os.getenv("WES_DOTFILES") or "") \
     / ".config/hammerspoon/config/macros/screenpal/py/timeline03a.png"
-    # / ".config/hammerspoon/config/macros/screenpal/py/timeline03a-2.png"
+# / ".config/hammerspoon/config/macros/screenpal/py/timeline03a-2.png"
 
 image = cv.imread(str(file), cv.IMREAD_COLOR)  # BGR
 if image is None:
@@ -132,9 +132,9 @@ stacked = np.vstack(images)
 
 num_labels, labels, stats, _ = cv.connectedComponentsWithStats(gray_box_mask_smooth, connectivity=8)
 labeled_mask = visualize_labeled_regions(labels)
-cv.imshow("labeled_mask", labeled_mask)
-cv.waitKey(0)
-cv.destroyAllWindows()
+# cv.imshow("labeled_mask", labeled_mask)
+# cv.waitKey(0)
+# cv.destroyAllWindows()
 
 # # *** add playhead to gray_box_mask (will be fine b/c I won't take any region like the playhead that is only 2 pixels wide anyways)
 # gray_box_with_playhead_mask = cv.bitwise_or(gray_box_mask, playhead_mask)
@@ -161,8 +161,43 @@ stats_1080p[:, 4] //= 4
 print("1080p stats:")
 print(stats_1080p)
 
-print(f'{labels=}')
-# TODO left off here
+# ** lets join consecutive boxes that are 1 pixel apart x2_start = x1_end + 1
+x_regions = stats_1080p[1:, [0, 2]]
+print(f'{x_regions=}')
+# ensure sorted by x_started
+sorted_indicies = np.argsort(x_regions[:, 0])
+x_sorted_regions = x_regions[sorted_indicies]
+
+print(f'{x_sorted_regions=}')
+# PRN throw if any regions overlap?
+
+def mine(accum, current):
+    print(f'{accum=}   {current=}')
+    accum = accum or []
+    current = current.copy()
+    if len(accum) == 0:
+        accum.append(current)
+        return accum
+    last = accum[-1]
+    last_x_start = last[0]
+    last_width = last[1]
+    last_x_end = last_x_start + last_width
+    current_x_start = current[0]
+    if current_x_start == last_x_end + 1:
+        current_width = current[1]
+        last[1] += 1 + current_width
+    else:
+        accum.append(current)
+    return accum
+
+import itertools
+x_combined = list(itertools.accumulate(x_sorted_regions, mine, initial=[]))
+print(f'{x_combined[-1]=}')
+
+from functools import reduce
+
+final = reduce(mine, x_sorted_regions, [])
+print(f'{final=}')
 
 box_label = 1 + np.argmax(stats[1:, cv.CC_STAT_AREA])
 bx, by, bw, bh, _ = stats[box_label]
