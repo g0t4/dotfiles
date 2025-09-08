@@ -128,7 +128,7 @@ function show_current_mouse_position()
     local mouse_pos = hs.mouse.absolutePosition()
 
     local width = 150
-    local height = 30
+    local height = 25
 
     local x_pos = mouse_pos.x
     local y_pos = mouse_pos.y
@@ -145,11 +145,27 @@ function show_current_mouse_position()
         end
     end
 
-    -- TODO any adjustments to x_pos, y_pos to make sure it stays on screen near edges?
+    local canvas_x = x_pos - width
+    local canvas_y = y_pos - height
+
+    -- * make sure the canvas is on screen
+    local screen_frame = hs.screen.mainScreen():frame()
+    if canvas_x < screen_frame.x then
+        canvas_x = screen_frame.x + 10
+    end
+    if canvas_y < screen_frame.y then
+        canvas_y = screen_frame.y + 10
+    end
+    if canvas_x + width > screen_frame.x + screen_frame.w then
+        canvas_x = screen_frame.x + screen_frame.w - width - 10
+    end
+    if canvas_y + height > screen_frame.y + screen_frame.h then
+        canvas_y = screen_frame.y + screen_frame.h - height - 10
+    end
 
     local canvas_frame = {
-        x = x_pos - width,
-        y = y_pos - height,
+        x = canvas_x,
+        y = canvas_y - 5, -- shift slighlty up so not covering mouse pointer position... ignore in calcs above
         w = width,
         h = height,
     }
