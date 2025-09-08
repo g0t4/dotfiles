@@ -500,6 +500,16 @@ function show_silences(silences, slider)
     silences_canvas = canvas
 end
 
+function StreamDeck_ScreenPal_SelectNextSilence()
+    function on_select_next()
+    end
+end
+
+function StreamDeck_ScreenPal_SelectPreviousSilence()
+    function on_select_prev()
+    end
+end
+
 function StreamDeck_ScreenPal_ShowSilenceRegions()
     if silences_canvas then
         silences_canvas:delete()
