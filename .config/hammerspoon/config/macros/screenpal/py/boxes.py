@@ -134,8 +134,23 @@ cv.imshow("labeled_mask", labeled_mask)
 cv.waitKey(0)
 cv.destroyAllWindows()
 
-print(stats)
+# *** scale down to 1080p for returning to hs
 
+print("4k stats:")
+print(stats)
+print("1080p stats:")
+# first four stats are: left, top, width, height
+# fifth is area
+# to get to 1080p I need to divide first four by 2
+# then the fifth is area so I need to divide that by 4
+# assume 1080p scaling is 2x (because 1920x1080 -> 960x540)
+stats_1080p = stats.copy()
+stats_1080p[:, :4] //= 2
+stats_1080p[:, 4] //= 4
+print("1080p stats:")
+print(stats_1080p)
+
+print(f'{labels=}')
 # TODO left off here
 
 box_label = 1 + np.argmax(stats[1:, cv.CC_STAT_AREA])
