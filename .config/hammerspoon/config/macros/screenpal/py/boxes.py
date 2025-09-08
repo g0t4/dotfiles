@@ -35,7 +35,7 @@ def color_mask(img, color, tol):
     return (diff <= tol).all(axis=2).astype(np.uint8) * 255
 
 gray_box_direct_mask = color_mask(image, colors_bgr.silence_gray, tolerance)  # skip ROI b/c the image is ONLY the timeline so there's no reason to spot the timeline!
-timeline_mask = color_mask(image, colors_bgr.timeline_bg, tolerance)
+timeline_mask = color_mask(image, colors_bgr.timeline_bg, tolerance)  # leave so you can come back to this later for additional detection (i.e. unmarked silences, < 1 second)
 playhead_mask = color_mask(image, colors_bgr.playhead, tolerance)
 
 # Highlight colors (BGR order for OpenCV)
@@ -50,20 +50,31 @@ BLACK = (0, 0, 0)
 ORANGE = (0, 165, 255)
 PURPLE = (128, 0, 128)
 
-def blend_highlights_on_mask(image, mask, alpha=0.7, highlight_color=RED) -> None:
-    beta = 1.0 - alpha
+def mask_only(image, mask, highlight_color=RED) -> np.ndarray:
 
     highlight_overlay = np.zeros_like(image)  # same shape as image
     highlight_overlay[mask > 0] = highlight_color
+
+    return highlight_overlay
+
+def blend_mask_over_image(image, mask, alpha=0.7, highlight_color=RED) -> np.ndarray:
+    beta = 1.0 - alpha
+
+    highlight_overlay = mask_only(image, mask, highlight_color)
 
     # Blend image with overlay
     blended = cv.addWeighted(image, alpha, highlight_overlay, beta, 0)
     return blended
 
-gray_box_direct_highlighted = blend_highlights_on_mask(image, gray_box_direct_mask)
-timeline_highlighted = blend_highlights_on_mask(image, timeline_mask)  # leave so you can come back to this later for additional detection (i.e. unmarked silences, < 1 second)
-playhead_highlighted = blend_highlights_on_mask(image, playhead_mask, alpha=0.5, highlight_color=YELLOW)
-stacked = np.vstack([timeline_highlighted, gray_box_direct_highlighted, playhead_highlighted])  # type: ignore
+stacked = np.vstack([
+    # image, # include image but not really necessary
+    blend_mask_over_image(image, gray_box_direct_mask),
+    mask_only(image, gray_box_direct_mask),
+    blend_mask_over_image(image, timeline_mask),
+    mask_only(image, timeline_mask),
+    blend_mask_over_image(image, playhead_mask, alpha=0.5, highlight_color=YELLOW),
+    mask_only(image, playhead_mask, highlight_color=YELLOW),
+])
 cv.imshow("stacked", stacked)
 cv.waitKey(0)
 cv.destroyAllWindows()
