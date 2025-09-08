@@ -5,6 +5,7 @@ import cv2 as cv
 import numpy as np
 from pathlib import Path
 from rich import print
+from functools import reduce
 
 # TODO make into arg
 file = Path(os.getenv("WES_DOTFILES") or "") \
@@ -190,12 +191,5 @@ def mine(accum, current):
         accum.append(current)
     return accum
 
-from functools import reduce
-
-final = reduce(mine, x_sorted_regions, [])
-print(f'{final=}')
-
-box_label = 1 + np.argmax(stats[1:, cv.CC_STAT_AREA])
-bx, by, bw, bh, _ = stats[box_label]
-
-# TODO finalize regions! and return json object to lua code!
+final_x_regions = reduce(mine, x_sorted_regions, [])
+print(f'{final_x_regions=}')
