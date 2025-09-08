@@ -79,6 +79,7 @@ def full_column_span(mask: np.ndarray, start_idx: int, max_gap: int = 0) -> tupl
     Expand left/right from start_idx to include adjacent columns where all values are non-zero.
     If max_gap>0, allow up to `max_gap` consecutive zero-columns while expanding.
     """
+    mask = mask[72:-7] # subset that should have full, dark blue columns
     full = (mask != 0).all(axis=0)
     w = full.size
     if not full[start_idx]:
@@ -110,6 +111,7 @@ def full_column_span(mask: np.ndarray, start_idx: int, max_gap: int = 0) -> tupl
 
 if idx is not None:
     L, R = full_column_span(hunt_mask, idx, max_gap=0)  # set >0 to tolerate small holes
+    print(f'{L=} {R=}')
     band = image[:, L:R + 1]
     cv.imshow("band", band)
     cv.waitKey(0)
