@@ -13,10 +13,10 @@ if DEBUG:
     print(f'{sys.argv=}')
     from rich import print
 
+# z screenpal/py
+# time python3 boxes.py samples/timeline03a.png --debug
+
 file = sys.argv[1] if len(sys.argv) > 1 else None
-# if DEBUG:
-#     file = Path(os.getenv("WES_DOTFILES") or "") \
-#         / ".config/hammerspoon/config/macros/screenpal/py/timeline03a.png"
 
 # / ".config/hammerspoon/config/macros/screenpal/py/timeline03a-2.png"
 
