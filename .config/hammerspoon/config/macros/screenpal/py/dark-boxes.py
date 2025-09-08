@@ -76,7 +76,7 @@ hunt_mask = cv.bitwise_or(timeline_mask, playhead_mask)
 hunt_mask_CLOSED = cv.morphologyEx(hunt_mask, cv.MORPH_CLOSE, np.ones((3, 3), np.uint8))
 hunt_mask_DILATE_ONLY = cv.morphologyEx(hunt_mask, cv.MORPH_DILATE, np.ones((3, 3), np.uint8))
 
-look_start = 72
+look_start = 0
 look_end = -1
 
 def full_column_span(mask: np.ndarray, start_idx: int, max_gap: int = 0) -> tuple[int, int]:
