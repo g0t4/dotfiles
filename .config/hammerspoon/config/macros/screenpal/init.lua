@@ -501,13 +501,19 @@ function show_silences(silences, slider)
 end
 
 function StreamDeck_ScreenPal_SelectNextSilence()
-    function on_select_next()
+    function on_select_next(slider, silences)
+        --TODO
     end
+
+    detect_silences_and_then(on_select_next)
 end
 
 function StreamDeck_ScreenPal_SelectPreviousSilence()
-    function on_select_prev()
+    function on_select_prev(slider, silences)
+        --TODO
     end
+
+    detect_silences_and_then(on_select_prev)
 end
 
 function StreamDeck_ScreenPal_ShowSilenceRegions()
