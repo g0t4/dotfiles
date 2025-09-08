@@ -116,6 +116,30 @@ def full_column_span(mask: np.ndarray, start_idx: int, max_gap: int = 0) -> tupl
 
     return left, right
 
+def scan_for_all_short_silences(mask: np.ndarray):
+    # verify assumption (just to be safe)
+    assert np.all((mask == 0) | (mask == 255)), "FAILURE - Mask contains values other than 0 or 255"
+    mask = mask[:, 1400:1490]  # TODO remove/comment out, test on subset of columns near playhead that I know well
+    mask = mask / 255  # scale to 0/1
+    print(f"{mask=}")
+    col_sums = mask.sum(0)
+    print(f"{col_sums=}")
+    short_silences = col_sums == (mask.shape[0])
+    print(f"{short_silences=}")
+    # pad 1 column extra to start/end (num_start, num_end)
+    #   uses value from start/end column (false/0 in my case so I get extra 0 on each end in padded)
+    #   useful for diff to scan left to right for consecutive silence columns including through the start/end columns
+    padded = np.pad(short_silences.astype(np.int8), (1, 1))
+    print(f"{padded=}")
+    diff = np.diff(padded, 1, -1) # diff[n] = padded[n+1] - padded[n]
+    print(f"{diff=}")
+    # THUS 1 => start of silence range, -1 => end of silence range!
+    pass
+
+if idx is not None:
+    scan_for_all_short_silences(hunt_mask_CLOSED)
+exit()
+
 # FYI disabled this section so I can scan full timeline for all of these short silences (dark blue bg), not just around playhead
 if idx is not None and False:
     # actual hunting w/ best mask:
