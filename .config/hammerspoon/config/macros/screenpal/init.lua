@@ -58,79 +58,79 @@ function ScreenPalEditorWindow:new()
         vim.iter(self.win:children())
             :each(
             ---@param ui_elem hs.axuielement
-            function(ui_elem)
-                -- one time hit, just cache all buttons when I have to find one of them
-                -- not extra expensive to cache each one relative to time to enumerate / get description (has to be done to find even one button)
-                local description = ui_elem:axDescription()
-                local role = ui_elem:axRole()
-                -- TODO! split out editor window class? with all controls there? this is bastardized here but is fine for now
+                function(ui_elem)
+                    -- one time hit, just cache all buttons when I have to find one of them
+                    -- not extra expensive to cache each one relative to time to enumerate / get description (has to be done to find even one button)
+                    local description = ui_elem:axDescription()
+                    local role = ui_elem:axRole()
+                    -- TODO! split out editor window class? with all controls there? this is bastardized here but is fine for now
 
-                if role == "AXButton" then
-                    if description == "Minimum Zoom" then
-                        -- AXIndex: 3, #42 in array in my testing (could change)
-                        self._btn_minimum_zoom = ui_elem
-                        return -- continue early so I can add more complex checks below and avoid them when possible
-                    elseif description == "Maximum Zoom" then
-                        self._btn_maximum_zoom = ui_elem
+                    if role == "AXButton" then
+                        if description == "Minimum Zoom" then
+                            -- AXIndex: 3, #42 in array in my testing (could change)
+                            self._btn_minimum_zoom = ui_elem
+                            return -- continue early so I can add more complex checks below and avoid them when possible
+                        elseif description == "Maximum Zoom" then
+                            self._btn_maximum_zoom = ui_elem
+                            return
+                        elseif description == "Medium Zoom" then
+                            self._btn_medium_zoom = ui_elem
+                            return
+                        elseif description == "Toggle Magnify" then
+                            self._btn_toggle_magnify = ui_elem
+                            return
+                        elseif description == "Position Slider" then
+                            self._btn_position_slider = ui_elem
+                            return
+                        elseif description == "Back to Video Projects" then
+                            self._btn_back_to_projects = ui_elem
+                            return
+                        else
+                            -- find new controls, uncomment this:
+                            -- print(description)
+                        end
+                    elseif role == "AXTextField" then
+                        -- accessibility description => AXDescription in hs apis... is empty only for the title name field (upper left)
+                        -- ALSO most of the time it will have an mX in it :)
+                        --
+
+                        if description == "" then
+                            -- so far, the text input for the title on the edit video page is the only text field with no description!
+                            --    by the way this maps to accessibility description IIUC in script debugger
+                            self._textfield_title = ui_elem
+                        end
+
+                        -- PRN capture all text fields? or eliminate some and then pick the most liklely remaining?
+                        -- print("ui_elem", hs.inspect({
+                        --     description = description,
+                        --     role = role,
+                        --     value = ui_elem:axValue(),
+                        --     frame = ui_elem:axFrame(),
+                        --     roleDesc = ui_elem:axRoleDescription(),
+                        -- }))
+
+                        -- app:window(2):textField(11)
+                        --
+                        -- AXEdited: true<bool>
+                        -- AXEnabled: true<bool>
+                        -- AXFocused: true<bool>
+                        -- AXFocusedUIElement: AXTextField<hs.axuielement>
+                        -- AXIndex: 0<number>
+                        -- AXMaxValue: 0<number>
+                        -- AXMinValue: 0<number>
+                        -- AXOrientation: AXUnknownOrientation<string>
+                        -- AXRoleDescription: text field<string>
+                        -- AXSelected: false<bool>
+                        -- AXSelectedText: m1-02 Use Curly Braces to Deliniate the Parameter Name<string>
+                        -- AXValue: m1-02 Use Curly Braces to Deliniate the Parameter Name<string>
+                    elseif role == "AXScrollBar" then
+                        -- have to match on position...FML... I could use coords too I think
+                        self._scrollbars = self._scrollbars or {}
+                        table.insert(self._scrollbars, ui_elem)
+                        -- BTW tracking these has nil impact... even if I use prints in here it's not material vs the 100ms overall to enumerate all ui elements of the window
                         return
-                    elseif description == "Medium Zoom" then
-                        self._btn_medium_zoom = ui_elem
-                        return
-                    elseif description == "Toggle Magnify" then
-                        self._btn_toggle_magnify = ui_elem
-                        return
-                    elseif description == "Position Slider" then
-                        self._btn_position_slider = ui_elem
-                        return
-                    elseif description == "Back to Video Projects" then
-                        self._btn_back_to_projects = ui_elem
-                        return
-                    else
-                        -- find new controls, uncomment this:
-                        -- print(description)
                     end
-                elseif role == "AXTextField" then
-                    -- accessibility description => AXDescription in hs apis... is empty only for the title name field (upper left)
-                    -- ALSO most of the time it will have an mX in it :)
-                    --
-
-                    if description == "" then
-                        -- so far, the text input for the title on the edit video page is the only text field with no description!
-                        --    by the way this maps to accessibility description IIUC in script debugger
-                        self._textfield_title = ui_elem
-                    end
-
-                    -- PRN capture all text fields? or eliminate some and then pick the most liklely remaining?
-                    -- print("ui_elem", hs.inspect({
-                    --     description = description,
-                    --     role = role,
-                    --     value = ui_elem:axValue(),
-                    --     frame = ui_elem:axFrame(),
-                    --     roleDesc = ui_elem:axRoleDescription(),
-                    -- }))
-
-                    -- app:window(2):textField(11)
-                    --
-                    -- AXEdited: true<bool>
-                    -- AXEnabled: true<bool>
-                    -- AXFocused: true<bool>
-                    -- AXFocusedUIElement: AXTextField<hs.axuielement>
-                    -- AXIndex: 0<number>
-                    -- AXMaxValue: 0<number>
-                    -- AXMinValue: 0<number>
-                    -- AXOrientation: AXUnknownOrientation<string>
-                    -- AXRoleDescription: text field<string>
-                    -- AXSelected: false<bool>
-                    -- AXSelectedText: m1-02 Use Curly Braces to Deliniate the Parameter Name<string>
-                    -- AXValue: m1-02 Use Curly Braces to Deliniate the Parameter Name<string>
-                elseif role == "AXScrollBar" then
-                    -- have to match on position...FML... I could use coords too I think
-                    self._scrollbars = self._scrollbars or {}
-                    table.insert(self._scrollbars, ui_elem)
-                    -- BTW tracking these has nil impact... even if I use prints in here it's not material vs the 100ms overall to enumerate all ui elements of the window
-                    return
-                end
-            end)
+                end)
         self._cached_buttons = true
         print_took("caching controls took: ", start)
     end
