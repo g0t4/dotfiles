@@ -75,9 +75,9 @@ stacked = np.vstack([
     blend_mask_over_image(image, playhead_mask, alpha=0.5, highlight_color=YELLOW),
     mask_only(image, playhead_mask, highlight_color=YELLOW),
 ])
-cv.imshow("stacked", stacked)
-cv.waitKey(0)
-cv.destroyAllWindows()
+# cv.imshow("stacked", stacked)
+# cv.waitKey(0)
+# cv.destroyAllWindows()
 
 # %%
 
