@@ -475,19 +475,31 @@ function show_silences(silences, slider)
     -- example silences:
     silences = { { x_end = 1132, x_start = 1034 }, { x_end = 1372, x_start = 1223 }, { x_end = 1687, x_start = 1562 } }
 
+    slider_frame = slider:axFrame()
+    for _, silence in ipairs(silences) do
+        local start_x = slider_frame.x + silence.x_start
+        local end_x = slider_frame.x + silence.x_end
+        local width = end_x - start_x
+        -- Create a rectangle to visualize the silence
+        local rect = hs.drawing.rectangle(hs.geometry.rect(start_x, slider_frame.y, width, slider_frame.h))
+        rect:setFillColor({ red = 1, green = 0, blue = 0, alpha = 0.3 })
+        rect:setStrokeColor({ red = 1, green = 0, blue = 0, alpha = 1 })
+        rect:show()
+    end
 end
 
 function StreamDeck_ScreenPal_GetSilenceRegions()
     local win = get_cached_editor_window()
     local slider = win:get_timeline_slider_or_throw()
+    show_silences(nil, slider) -- testing only
 
-    capture_this_element(slider, function(where_to)
-        -- local sample_image = os.getenv("HOME") .. "/repos/github/g0t4/dotfiles/.config/hammerspoon/config/macros/screenpal/py/timeline03a.png"
-        detect_silence_boxes(where_to, function(silences)
-            print("silence regions: " .. hs.inspect(silences))
-            show_silences(silences, slider)
-        end)
-    end)
+    -- capture_this_element(slider, function(where_to)
+    --     -- local sample_image = os.getenv("HOME") .. "/repos/github/g0t4/dotfiles/.config/hammerspoon/config/macros/screenpal/py/timeline03a.png"
+    --     detect_silence_boxes(where_to, function(silences)
+    --         print("silence regions: " .. hs.inspect(silences))
+    --         show_silences(silences, slider)
+    --     end)
+    -- end)
 end
 
 function StreamDeckScreenPalTimelineZoomAndJumpToStart()
