@@ -521,11 +521,17 @@ function StreamDeck_ScreenPal_ShowSilenceRegions()
     local slider = win:get_timeline_slider_or_throw()
     -- show_silences(nil, slider) -- testing only
 
+    ---@param slider any
+    ---@param where_to any
+    ---@param silences any
+    local function handle_silence_detection(slider, where_to, silences)
+        print("silence regions: " .. hs.inspect(silences))
+        show_silences(silences, slider)
+    end
+
     capture_this_element(slider, function(where_to)
-        -- local sample_image = os.getenv("HOME") .. "/repos/github/g0t4/dotfiles/.config/hammerspoon/config/macros/screenpal/py/timeline03a.png"
         detect_silence_boxes(where_to, function(silences)
-            print("silence regions: " .. hs.inspect(silences))
-            show_silences(silences, slider)
+            handle_silence_detection(slider, where_to, silences)
         end)
     end)
 end
