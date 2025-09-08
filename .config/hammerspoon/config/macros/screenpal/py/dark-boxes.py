@@ -75,12 +75,15 @@ print(f'playhead {idx=}')
 hunt_mask = cv.bitwise_or(timeline_mask, playhead_mask)
 print(f'{hunt_mask=}')
 
+look_start = 72
+look_end = -1
+
 def full_column_span(mask: np.ndarray, start_idx: int, max_gap: int = 0) -> tuple[int, int]:
     """
     Expand left/right from start_idx to include adjacent columns where all values are non-zero.
     If max_gap>0, allow up to `max_gap` consecutive zero-columns while expanding.
     """
-    mask = mask[72:-7]  # subset that should have full, dark blue columns
+    mask = mask[look_start:look_end]  # subset that should have full, dark blue columns
     cv.imshow("mask", np.vstack([mask]))
 
     full = (mask != 0).all(axis=0)
@@ -116,11 +119,13 @@ if idx is not None:
     L, R = full_column_span(hunt_mask, idx, max_gap=0)  # set >0 to tolerate small holes
     print(f'{L=} {R=}')
 
-    band = image[:, L:R + 1]
-    wtf = hunt_mask[72:-7, L:R + 1]
-    print(f'{wtf=}')
+    L = 1405
+    R = 1493
+
+    band = image[look_start:look_end, L:R + 1]
+    wtf = hunt_mask[look_start:look_end, L:R + 1]
     cv.imshow("hunt_mask", np.vstack([wtf]))
-    # cv.imshow("band", np.vstack([band]))
+    cv.imshow("band", np.vstack([band]))
     cv.waitKey(0)
 
 # Highlight colors (BGR order for OpenCV)
