@@ -33,9 +33,9 @@ print("removed top/botom borders:", image.shape)
 # 96 pixels high
 #
 # image = image[48:] # bottom half
-image = image[64:]  # bottom third 2/3*96=64
+# image = image[64:]  # bottom third 2/3*96=64
 # image = image[72:] # bottom third 3/4*96=72
-print(image.shape)
+# print(image.shape)
 
 class TimelineColorsBGR(NamedTuple):
     timeline_bg: np.ndarray
@@ -62,6 +62,57 @@ def color_mask(img, color, tol):
 # gray_box_direct_mask = color_mask(image, colors_bgr.silence_gray, tolerance)  # skip ROI b/c the image is ONLY the timeline so there's no reason to spot the timeline!
 timeline_mask = color_mask(image, colors_bgr.timeline_bg, tolerance)  # leave so you can come back to this later for additional detection (i.e. unmarked silences, < 1 second)
 playhead_mask = color_mask(image, colors_bgr.playhead, tolerance)
+
+def first_full_column(mask: np.ndarray) -> int | None:
+    # mask is 2D, nonzero means "on"
+    col_has_all = (mask != 0).all(axis=0)  # boolean per column
+    cols = np.where(col_has_all)[0]
+    return int(cols[0]) if cols.size > 0 else None
+
+idx = first_full_column(playhead_mask)
+print(f'playhead {idx=}')
+
+hunt_mask = timeline_mask + playhead_mask
+
+def full_column_span(mask: np.ndarray, start_idx: int, max_gap: int = 0) -> tuple[int, int]:
+    """
+    Expand left/right from start_idx to include adjacent columns where all values are non-zero.
+    If max_gap>0, allow up to `max_gap` consecutive zero-columns while expanding.
+    """
+    full = (mask != 0).all(axis=0)
+    w = full.size
+    if not full[start_idx]:
+        raise ValueError("start_idx is not an all-nonzero column")
+
+    left = start_idx
+    gap = 0
+    i = start_idx - 1
+    while i >= 0 and gap <= max_gap:
+        if full[i]:
+            left = i
+            gap = 0
+        else:
+            gap += 1
+        i -= 1
+
+    right = start_idx
+    gap = 0
+    i = start_idx + 1
+    while i < w and gap <= max_gap:
+        if full[i]:
+            right = i
+            gap = 0
+        else:
+            gap += 1
+        i += 1
+
+    return left, right
+
+if idx is not None:
+    L, R = full_column_span(hunt_mask, idx, max_gap=0)  # set >0 to tolerate small holes
+    band = image[:, L:R + 1]
+    cv.imshow("band", band)
+    cv.waitKey(0)
 
 # Highlight colors (BGR order for OpenCV)
 RED = (0, 0, 255)
@@ -143,7 +194,7 @@ if DEBUG:
 
     # take half height divider:
     black_divider = black_divider[:image.shape[0] // 2, :image.shape[1]]  # first half of image
-    print(images)
+    # print(images)
     images.append(black_divider)
     images.append(mask_only(image, timeline_bg_box_mask))
     images.append(mask_only(image, timeline_bg_box_mask_smooth))
