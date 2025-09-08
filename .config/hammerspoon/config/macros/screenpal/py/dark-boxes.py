@@ -153,7 +153,12 @@ if idx is not None:
         print(f'{hunt_mask_matched_color=}')
         hmCLOSED_matched_color = np.repeat(hunt_mask_CLOSED_matched[:, :, None], 3, 2)  # None adds new dimension, then repeat 2nd axis (innermost) 3 times => single 8bit => RGB 8:8:8 value
         hmDILATE_ONLY_matched_color = np.repeat(hunt_mask_DILATE_ONLY_matched[:, :, None], 3, 2)  # None adds new dimension, then repeat 2nd axis (innermost) 3 times => single 8bit => RGB 8:8:8 value
-        cv.imshow("hunt_mask", np.vstack([hunt_mask_matched_color, hmCLOSED_matched_color, hmDILATE_ONLY_matched_color, band]))
+        cv.imshow("hunt_mask", np.vstack([
+            hunt_mask_matched_color,
+            hmCLOSED_matched_color,
+            hmDILATE_ONLY_matched_color,
+            band,
+        ]))
 
         # zoom_factor = 4
         # zoomed = cv.resize(hunt_mask_matched_color, None, fx=zoom_factor, fy=zoom_factor, interpolation=cv.INTER_LINEAR)
