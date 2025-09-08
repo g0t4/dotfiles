@@ -22,6 +22,17 @@ image = cv.imread(str(file), cv.IMREAD_COLOR)  # BGR
 if image is None:
     raise ValueError(f"Could not load image from {file}")
 
+# * take the bottom of the timeline
+# that way audio waveform is most likely to partition dark blue silence periods entirely
+# should make it easier to spot them with timeline bg alone
+#
+# 96 pixels high
+#
+# image = image[48:] # bottom half
+image = image[64:] # bottom third 2/3*96=64
+# image = image[72:] # bottom third 3/4*96=72
+print(image.shape)
+
 class TimelineColorsBGR(NamedTuple):
     timeline_bg: np.ndarray
     silence_gray: np.ndarray
