@@ -540,6 +540,8 @@ function capture_element_under_mouse()
     capture_this_element(element, when_done)
 end
 
+---@param element hs.axuielement
+---@param callback fun(path: string)
 function capture_this_element(element, callback)
     local frame = element:axFrame()
 

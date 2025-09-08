@@ -1,3 +1,5 @@
+---@param imagePath string
+---@param callback fun(data: SilencesList)
 function detect_silence_boxes(imagePath, callback)
     local python_exe = os.getenv("HOME") .. "/repos/github/g0t4/dotfiles/.venv/bin/python3"
     local script = os.getenv("HOME") .. "/repos/github/g0t4/dotfiles/.config/hammerspoon/config/macros/screenpal/py/boxes.py"
@@ -5,9 +7,9 @@ function detect_silence_boxes(imagePath, callback)
 
     local task = hs.task.new(python_exe, function(exitCode, stdout, stderr)
         if exitCode == 0 and stdout then
-            local ok, data = pcall(hs.json.decode, stdout)
+            local ok, silences = pcall(hs.json.decode, stdout)
             if ok then
-                callback(data)
+                callback(silences)
             else
                 print("JSON decode error: " .. tostring(stdout))
             end
