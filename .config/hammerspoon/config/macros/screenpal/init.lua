@@ -34,112 +34,112 @@ function ScreenPalEditorWindow:new()
     self.windows = AppWindows:new(self.app)
     self.win = self.windows:editor_window_or_throw()
 
-    local function ensure_cached_controls()
-        if self._cached_buttons then
-            if self._btn_minimum_zoom:isValid() then
-                -- assume all controls are still valid, if you have issues with one control going in and out, don't destroy cache of everything for that one... add a special check in its code path and send in an override here to flush cache then
-                return
-            end
-            print("editor window cache invalidated")
-        end
-
-        -- TODO! fully invalidate cache... rewrite so you can create a new cache object for the window
-        self._scrollbars = {} -- fixes finding scrollbar when refresh cache
-        self._btn_back_to_projects = nil
-        self._btn_maximum_zoom = nil
-        self._btn_medium_zoom = nil
-        self._btn_minimum_zoom = nil
-        self._btn_position_slider = nil
-        self._btn_toggle_magnify = nil
-        self._textfield_title = nil
-
-        local start = get_time()
-        -- enumerating all children and getting role and description is no diff than just buttons with description only...
-        vim.iter(self.win:children())
-            :each(
-            ---@param ui_elem hs.axuielement
-                function(ui_elem)
-                    -- one time hit, just cache all buttons when I have to find one of them
-                    -- not extra expensive to cache each one relative to time to enumerate / get description (has to be done to find even one button)
-                    local description = ui_elem:axDescription()
-                    local role = ui_elem:axRole()
-                    -- TODO! split out editor window class? with all controls there? this is bastardized here but is fine for now
-
-                    if role == "AXButton" then
-                        if description == "Minimum Zoom" then
-                            -- AXIndex: 3, #42 in array in my testing (could change)
-                            self._btn_minimum_zoom = ui_elem
-                            return -- continue early so I can add more complex checks below and avoid them when possible
-                        elseif description == "Maximum Zoom" then
-                            self._btn_maximum_zoom = ui_elem
-                            return
-                        elseif description == "Medium Zoom" then
-                            self._btn_medium_zoom = ui_elem
-                            return
-                        elseif description == "Toggle Magnify" then
-                            self._btn_toggle_magnify = ui_elem
-                            return
-                        elseif description == "Position Slider" then
-                            self._btn_position_slider = ui_elem
-                            return
-                        elseif description == "Back to Video Projects" then
-                            self._btn_back_to_projects = ui_elem
-                            return
-                        else
-                            -- find new controls, uncomment this:
-                            -- print(description)
-                        end
-                    elseif role == "AXTextField" then
-                        -- accessibility description => AXDescription in hs apis... is empty only for the title name field (upper left)
-                        -- ALSO most of the time it will have an mX in it :)
-                        --
-
-                        if description == "" then
-                            -- so far, the text input for the title on the edit video page is the only text field with no description!
-                            --    by the way this maps to accessibility description IIUC in script debugger
-                            self._textfield_title = ui_elem
-                        end
-
-                        -- PRN capture all text fields? or eliminate some and then pick the most liklely remaining?
-                        -- print("ui_elem", hs.inspect({
-                        --     description = description,
-                        --     role = role,
-                        --     value = ui_elem:axValue(),
-                        --     frame = ui_elem:axFrame(),
-                        --     roleDesc = ui_elem:axRoleDescription(),
-                        -- }))
-
-                        -- app:window(2):textField(11)
-                        --
-                        -- AXEdited: true<bool>
-                        -- AXEnabled: true<bool>
-                        -- AXFocused: true<bool>
-                        -- AXFocusedUIElement: AXTextField<hs.axuielement>
-                        -- AXIndex: 0<number>
-                        -- AXMaxValue: 0<number>
-                        -- AXMinValue: 0<number>
-                        -- AXOrientation: AXUnknownOrientation<string>
-                        -- AXRoleDescription: text field<string>
-                        -- AXSelected: false<bool>
-                        -- AXSelectedText: m1-02 Use Curly Braces to Deliniate the Parameter Name<string>
-                        -- AXValue: m1-02 Use Curly Braces to Deliniate the Parameter Name<string>
-                    elseif role == "AXScrollBar" then
-                        -- have to match on position...FML... I could use coords too I think
-                        self._scrollbars = self._scrollbars or {}
-                        table.insert(self._scrollbars, ui_elem)
-                        -- BTW tracking these has nil impact... even if I use prints in here it's not material vs the 100ms overall to enumerate all ui elements of the window
-                        return
-                    end
-                end)
-        self._cached_buttons = true
-        print_took("caching controls took: ", start)
-    end
-
     return editor_window
 end
 
+function ScreenPalEditorWindow:ensure_cached_controls()
+    if self._cached_buttons then
+        if self._btn_minimum_zoom:isValid() then
+            -- assume all controls are still valid, if you have issues with one control going in and out, don't destroy cache of everything for that one... add a special check in its code path and send in an override here to flush cache then
+            return
+        end
+        print("editor window cache invalidated")
+    end
+
+    -- TODO! fully invalidate cache... rewrite so you can create a new cache object for the window
+    self._scrollbars = {} -- fixes finding scrollbar when refresh cache
+    self._btn_back_to_projects = nil
+    self._btn_maximum_zoom = nil
+    self._btn_medium_zoom = nil
+    self._btn_minimum_zoom = nil
+    self._btn_position_slider = nil
+    self._btn_toggle_magnify = nil
+    self._textfield_title = nil
+
+    local start = get_time()
+    -- enumerating all children and getting role and description is no diff than just buttons with description only...
+    vim.iter(self.win:children())
+        :each(
+        ---@param ui_elem hs.axuielement
+            function(ui_elem)
+                -- one time hit, just cache all buttons when I have to find one of them
+                -- not extra expensive to cache each one relative to time to enumerate / get description (has to be done to find even one button)
+                local description = ui_elem:axDescription()
+                local role = ui_elem:axRole()
+                -- TODO! split out editor window class? with all controls there? this is bastardized here but is fine for now
+
+                if role == "AXButton" then
+                    if description == "Minimum Zoom" then
+                        -- AXIndex: 3, #42 in array in my testing (could change)
+                        self._btn_minimum_zoom = ui_elem
+                        return -- continue early so I can add more complex checks below and avoid them when possible
+                    elseif description == "Maximum Zoom" then
+                        self._btn_maximum_zoom = ui_elem
+                        return
+                    elseif description == "Medium Zoom" then
+                        self._btn_medium_zoom = ui_elem
+                        return
+                    elseif description == "Toggle Magnify" then
+                        self._btn_toggle_magnify = ui_elem
+                        return
+                    elseif description == "Position Slider" then
+                        self._btn_position_slider = ui_elem
+                        return
+                    elseif description == "Back to Video Projects" then
+                        self._btn_back_to_projects = ui_elem
+                        return
+                    else
+                        -- find new controls, uncomment this:
+                        -- print(description)
+                    end
+                elseif role == "AXTextField" then
+                    -- accessibility description => AXDescription in hs apis... is empty only for the title name field (upper left)
+                    -- ALSO most of the time it will have an mX in it :)
+                    --
+
+                    if description == "" then
+                        -- so far, the text input for the title on the edit video page is the only text field with no description!
+                        --    by the way this maps to accessibility description IIUC in script debugger
+                        self._textfield_title = ui_elem
+                    end
+
+                    -- PRN capture all text fields? or eliminate some and then pick the most liklely remaining?
+                    -- print("ui_elem", hs.inspect({
+                    --     description = description,
+                    --     role = role,
+                    --     value = ui_elem:axValue(),
+                    --     frame = ui_elem:axFrame(),
+                    --     roleDesc = ui_elem:axRoleDescription(),
+                    -- }))
+
+                    -- app:window(2):textField(11)
+                    --
+                    -- AXEdited: true<bool>
+                    -- AXEnabled: true<bool>
+                    -- AXFocused: true<bool>
+                    -- AXFocusedUIElement: AXTextField<hs.axuielement>
+                    -- AXIndex: 0<number>
+                    -- AXMaxValue: 0<number>
+                    -- AXMinValue: 0<number>
+                    -- AXOrientation: AXUnknownOrientation<string>
+                    -- AXRoleDescription: text field<string>
+                    -- AXSelected: false<bool>
+                    -- AXSelectedText: m1-02 Use Curly Braces to Deliniate the Parameter Name<string>
+                    -- AXValue: m1-02 Use Curly Braces to Deliniate the Parameter Name<string>
+                elseif role == "AXScrollBar" then
+                    -- have to match on position...FML... I could use coords too I think
+                    self._scrollbars = self._scrollbars or {}
+                    table.insert(self._scrollbars, ui_elem)
+                    -- BTW tracking these has nil impact... even if I use prints in here it's not material vs the 100ms overall to enumerate all ui elements of the window
+                    return
+                end
+            end)
+    self._cached_buttons = true
+    print_took("caching controls took: ", start)
+end
+
 ---@return number percent
-function editor_window:playhead_position_percent()
+function ScreenPalEditorWindow:playhead_position_percent()
     ensure_cached_controls()
 
     -- AFAICT nothing differs on zoom level buttons...
@@ -156,7 +156,7 @@ function editor_window:playhead_position_percent()
 end
 
 ---@param playhead_percent number
-function editor_window:restore_playhead_position(playhead_percent)
+function ScreenPalEditorWindow:restore_playhead_position(playhead_percent)
     ensure_cached_controls()
 
     self:zoom_off() -- do not restore when zoomed
@@ -174,7 +174,7 @@ function editor_window:restore_playhead_position(playhead_percent)
     }, hold_down_before_release)
 end
 
-function editor_window:is_zoomed()
+function ScreenPalEditorWindow:is_zoomed()
     ensure_cached_controls()
     if not self._btn_minimum_zoom then
         error("No zoom button found, aborting...")
@@ -184,7 +184,7 @@ function editor_window:is_zoomed()
     return position.x > 0 and position.y > 0
 end
 
-function editor_window:zoom_on()
+function ScreenPalEditorWindow:zoom_on()
     if self:is_zoomed() then
         return
     end
@@ -197,7 +197,7 @@ function editor_window:zoom_on()
     hs.timer.usleep(200000)
 end
 
-function editor_window:zoom_off()
+function ScreenPalEditorWindow:zoom_off()
     if not self:is_zoomed() then
         return
     end
@@ -223,7 +223,7 @@ function editor_window:zoom_off()
     -- end, 0.05)
 end
 
-function editor_window:get_scrollbar_or_throw()
+function ScreenPalEditorWindow:get_scrollbar_or_throw()
     -- PRN search for big AXMaxValues? that might uniquely identify it if I have issues in the future with other scrollbars visible
     -- OR by position on screen (toward bottom of window is telling)
     ensure_cached_controls()
@@ -235,7 +235,7 @@ function editor_window:get_scrollbar_or_throw()
 end
 
 ---@return hs.axuielement
-function editor_window:get_timeline_slider_or_throw()
+function ScreenPalEditorWindow:get_timeline_slider_or_throw()
     ensure_cached_controls()
     if not self._btn_position_slider then
         error("No timeline slider found, aborting...")
@@ -243,19 +243,19 @@ function editor_window:get_timeline_slider_or_throw()
     return self._btn_position_slider
 end
 
-function editor_window:zoom1()
+function ScreenPalEditorWindow:zoom1()
     ensure_cached_controls()
     self:zoom_on()
     self._btn_minimum_zoom:performAction("AXPress")
 end
 
-function editor_window:zoom2()
+function ScreenPalEditorWindow:zoom2()
     ensure_cached_controls()
     self:zoom_on()
     self._btn_medium_zoom:performAction("AXPress")
 end
 
-function editor_window:zoom3()
+function ScreenPalEditorWindow:zoom3()
     ensure_cached_controls()
     self:zoom_on()
     self._btn_maximum_zoom:performAction("AXPress")
@@ -279,7 +279,7 @@ function cache_project_view_controls()
         end)
 end
 
-function editor_window:reopen_project()
+function ScreenPalEditorWindow:reopen_project()
     run_async(function()
         local win = get_cached_editor_window()
         local current_zoomed = win:is_zoomed()
@@ -334,18 +334,18 @@ function editor_window:reopen_project()
 end
 
 ---@return TimelineDetails
-function editor_window:_timeline_details()
+function ScreenPalEditorWindow:_timeline_details()
     -- PRN move ensure_cached_controls() here?
     return TimelineDetails:new(self)
 end
 
-function editor_window:get_time_string()
+function ScreenPalEditorWindow:get_time_string()
     ensure_cached_controls()
     local details = self:_timeline_details()
     return details.time_string
 end
 
-function editor_window:figure_out_zoom2_fixed_pixels_per_second()
+function ScreenPalEditorWindow:figure_out_zoom2_fixed_pixels_per_second()
     ensure_cached_controls()
 
     -- FYI! KEEP IN MIND, zoom levels are FIXED # seconds/frames regardless of video length... so when zoom 2 you know exactly where to click to move over 1 second relative to current position... or to move to X seconds along from start/end of the visible timeline
@@ -372,7 +372,7 @@ function editor_window:figure_out_zoom2_fixed_pixels_per_second()
     -- zoom3 => 150.16666666667 PPS
 end
 
-function editor_window:toggle_AXEnhancedUserInterface()
+function ScreenPalEditorWindow:toggle_AXEnhancedUserInterface()
     ensure_cached_controls()
     local primary_window = self.win
 
@@ -408,7 +408,7 @@ function editor_window:toggle_AXEnhancedUserInterface()
     end
 end
 
-function editor_window:test_select_range()
+function ScreenPalEditorWindow:test_select_range()
     ensure_cached_controls()
 
     self:zoom_on() -- assume is m2-02 for now
@@ -443,7 +443,7 @@ function editor_window:test_select_range()
     hs.eventtap.keyStroke({}, "e", 0, get_screenpal_app_element_or_throw())
 end
 
-function editor_window:estimate_time_per_pixel()
+function ScreenPalEditorWindow:estimate_time_per_pixel()
     ensure_cached_controls() -- prn do I need this early on here?
 
     print("min zoom frame", hs.inspect(self._btn_minimum_zoom:axFrame())) -- (x,y) == (0,0) == not zoomed
