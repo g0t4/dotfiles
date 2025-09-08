@@ -193,3 +193,13 @@ def mine(accum, current):
 
 final_x_regions = reduce(mine, x_sorted_regions, [])
 print(f'{final_x_regions=}')
+
+# * final preview mask
+final_preview_mask = np.zeros_like(image)
+for x_start, width in final_x_regions:
+    x_end = x_start + width
+    final_preview_mask[:, x_start * 2:x_end * 2] = 255
+stack = np.vstack([image, final_preview_mask])
+cv.imshow("final_preview_mask", stack)
+cv.waitKey(0)
+cv.destroyAllWindows()
