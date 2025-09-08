@@ -517,6 +517,7 @@ function StreamDeck_ScreenPal_ShowSilenceRegions()
         return
     end
     -- show_silences(nil, slider) -- testing only
+    -- return
 
     ---@param slider any
     ---@param silences any
