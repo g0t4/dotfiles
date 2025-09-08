@@ -16,15 +16,16 @@ if image is None:
 class TimelineColorsBGR(NamedTuple):
     timeline_bg: np.ndarray
     silence_gray: np.ndarray
+    playhead: np.ndarray
 
 # FYI use colors.py to deterine colors to use and then inline values here:
 
 colors_bgr = TimelineColorsBGR(
     # opencv values!
-    # timeline_bg_opencv=array([41, 19, 16])
-    # silence_gray_opencv=array([57, 37, 34])
     timeline_bg=np.array([41, 19, 16]),
-    silence_gray=np.array([57, 37, 34]))
+    silence_gray=np.array([57, 37, 34]),
+    playhead=np.array([255, 157, 37]),
+)
 
 # Tiny tolerance may handle edge pixels
 tolerance = 4
@@ -35,6 +36,7 @@ def color_mask(img, color, tol):
 
 gray_box_direct_mask = color_mask(image, colors_bgr.silence_gray, tolerance)  # skip ROI b/c the image is ONLY the timeline so there's no reason to spot the timeline!
 timeline_mask = color_mask(image, colors_bgr.timeline_bg, tolerance)
+playhead_mask = color_mask(image, colors_bgr.playhead, tolerance)
 
 def blend_highlights_on_mask(image, mask) -> None:
 
@@ -47,11 +49,12 @@ def blend_highlights_on_mask(image, mask) -> None:
     return blended
 
 gray_box_direct_highlighted = blend_highlights_on_mask(image, gray_box_direct_mask)
-# timeline_highlighted = blend_highlights_on_mask(image, timeline_mask) # leave so you can come back to this later for additional detection (i.e. unmarked silences, < 1 second)
-# stacked = np.vstack([timeline_highlighted, gray_box_direct_highlighted])  # type: ignore
-# cv.imshow("stacked", stacked)
-# cv.waitKey(0)
-# cv.destroyAllWindows()
+timeline_highlighted = blend_highlights_on_mask(image, timeline_mask)  # leave so you can come back to this later for additional detection (i.e. unmarked silences, < 1 second)
+playhead_highlighted = blend_highlights_on_mask(image, playhead_mask)
+stacked = np.vstack([timeline_highlighted, gray_box_direct_highlighted, playhead_highlighted])  # type: ignore
+cv.imshow("stacked", stacked)
+cv.waitKey(0)
+cv.destroyAllWindows()
 
 # %%
 
