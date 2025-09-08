@@ -471,12 +471,14 @@ function get_cached_editor_window()
     return _cached_editor_window
 end
 
+local silences_canvas = nil
 function show_silences(silences, slider)
     -- example silences:
     silences = { { x_end = 1132, x_start = 1034 }, { x_end = 1372, x_start = 1223 }, { x_end = 1687, x_start = 1562 } }
 
     local slider_frame = slider:axFrame()
     local canvas = hs.canvas.new(slider_frame)
+    assert(canvas)
     canvas:show()
     local elements = {}
     for _, silence in ipairs(silences) do
@@ -495,9 +497,16 @@ function show_silences(silences, slider)
         })
     end
     canvas:appendElements(elements)
+    silences_canvas = canvas
 end
 
-function StreamDeck_ScreenPal_GetSilenceRegions()
+function StreamDeck_ScreenPal_ShowSilenceRegions()
+    if silences_canvas then
+        silences_canvas:delete()
+        silences_canvas = nil
+        return
+    end
+
     local win = get_cached_editor_window()
     local slider = win:get_timeline_slider_or_throw()
     show_silences(nil, slider) -- testing only
