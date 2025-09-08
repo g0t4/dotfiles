@@ -153,10 +153,14 @@ if idx is not None:
         print(f'{hunt_mask_matched_color=}')
         hmCLOSED_matched_color = np.repeat(hunt_mask_CLOSED_matched[:, :, None], 3, 2)  # None adds new dimension, then repeat 2nd axis (innermost) 3 times => single 8bit => RGB 8:8:8 value
         hmDILATE_ONLY_matched_color = np.repeat(hunt_mask_DILATE_ONLY_matched[:, :, None], 3, 2)  # None adds new dimension, then repeat 2nd axis (innermost) 3 times => single 8bit => RGB 8:8:8 value
+        separator = np.full([5, band.shape[1], 3], [60, 49, 44], np.uint8)
         cv.imshow("hunt_mask", np.vstack([
             hunt_mask_matched_color,
+            separator,
             hmCLOSED_matched_color,
+            separator,
             hmDILATE_ONLY_matched_color,
+            separator,
             band,
         ]))
 
