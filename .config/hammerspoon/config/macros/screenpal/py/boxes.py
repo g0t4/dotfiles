@@ -33,43 +33,90 @@ def color_mask(img, color, tol):
     diff = np.abs(img.astype(np.int16) - color.astype(np.int16))
     return (diff <= tol).all(axis=2).astype(np.uint8) * 255
 
+gray_box_direct_mask = color_mask(image, colors_bgr.silence_gray, tolerance)  # skip ROI b/c the image is ONLY the timeline so there's no reason to spot the timeline!
 timeline_mask = color_mask(image, colors_bgr.timeline_bg, tolerance)
 
-def show_mask(mask) -> None:
+def blend_highlights_on_mask(image, mask) -> None:
 
-    # Create a colored overlay for better visualization
-    overlay = np.zeros_like(image)
+    highlight_overlay = np.zeros_like(image)
     # overlay[mask > 0] = [255, 255, 255]  # White overlay
-    overlay[mask > 0] = [0, 0, 255]  # red overlay
+    highlight_overlay[mask > 0] = [0, 0, 255]  # red overlay
 
-    # Blend original image with overlay
-    result = cv.addWeighted(image, 0.7, overlay, 0.3, 0)
+    # Blend image with overlay
+    blended = cv.addWeighted(image, 0.7, highlight_overlay, 0.3, 0)
+    return blended
 
-    # Display the result
-    cv.imshow('Timeline Mask', result)
-
-show_mask(timeline_mask)
+gray_box_direct_highlighted = blend_highlights_on_mask(image, gray_box_direct_mask)
+timeline_highlighted = blend_highlights_on_mask(image, timeline_mask)
+stacked = np.vstack([timeline_highlighted, gray_box_direct_highlighted])  # type: ignore
+cv.imshow("stacked", stacked)
 cv.waitKey(0)
 cv.destroyAllWindows()
 
 # %%
 
 num_labels, labels, stats, _ = cv.connectedComponentsWithStats(timeline_mask, connectivity=8)
+print(f'{num_labels=}')
+print(f'{labels=}')
+print(f'{stats=}')
+
+# Static label-to-color mapping (BGR format for OpenCV)
+label_colors = {
+    0: (0, 0, 0),  # background (black)
+    1: (255, 0, 0),  # blue
+    2: (0, 255, 0),  # green
+    3: (0, 0, 255),  # red
+    4: (255, 255, 0),  # cyan
+    5: (255, 0, 255),  # magenta
+    6: (0, 255, 255),  # yellow
+    7: (128, 0, 128),  # purple
+    8: (255, 165, 0),  # orange
+    9: (128, 128, 0),  # olive
+    10: (0, 128, 128),  # teal
+}
+
+def visualize_labeled_regions(labels):
+    h, w = labels.shape
+    output = np.zeros((h, w, 3), dtype=np.uint8)
+
+    # make sure none over 10
+    if np.any(labels > len(label_colors) - 1):
+        raise ValueError("Labels exceed 10, can only color up to 10 unless you expand list of label_colors")  # or handle appropriately for your use case
+
+    for label, color in label_colors.items():
+        output[labels == label] = color
+
+    return output
+
+# static_labels = visualize_labeled_regions(labels)
+# cv.imshow("static_labels", static_labels)
+# cv.waitKey(0)
+# cv.destroyAllWindows()
+
+# %%
+
 largest_label = 1 + np.argmax(stats[1:, cv.CC_STAT_AREA])
 tx, ty, tw, th, _ = stats[largest_label]
 print(f"tx={tx}, ty={ty}, tw={tw}, th={th}")
 timeline_roi = image[ty:ty + th, tx:tx + tw]
+stacked = np.vstack([timeline_roi])  # type: ignore
 
-gray_box_mask = color_mask(timeline_roi, colors_bgr.silence_gray, tolerance + 2)  # slightly looser for AA edges
-show_mask(gray_box_mask)
+# %%
 
-# Clean tiny speckles just in case
-gray_box_mask = cv.morphologyEx(gray_box_mask, cv.MORPH_OPEN, np.ones((3, 3), np.uint8))
-# show_mask(gray_box_mask)
+# cv.imshow("stacked", stacked)
 # cv.waitKey(0)
 # cv.destroyAllWindows()
 
-num_labels, labels, stats, _ = cv.connectedComponentsWithStats(gray_box_mask, connectivity=8)
+gray_box_mask = color_mask(timeline_roi, colors_bgr.silence_gray, tolerance + 2)  # slightly looser for AA edges
+
+# Clean tiny speckles just in case
+gray_box_mask_smooth = cv.morphologyEx(gray_box_mask, cv.MORPH_OPEN, np.ones((3, 3), np.uint8))
+stacked = np.vstack([gray_box_mask, gray_box_mask_smooth])  # type: ignore
+cv.imshow("stacked", stacked)
+cv.waitKey(0)
+cv.destroyAllWindows()
+
+num_labels, labels, stats, _ = cv.connectedComponentsWithStats(gray_box_mask_smooth, connectivity=8)
 box_label = 1 + np.argmax(stats[1:, cv.CC_STAT_AREA])
 bx, by, bw, bh, _ = stats[box_label]
 
