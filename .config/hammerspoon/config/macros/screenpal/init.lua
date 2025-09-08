@@ -135,7 +135,7 @@ function ScreenPalEditorWindow:ensure_cached_controls()
                 end
             end)
     self._cached_buttons = true
-    print_took("caching controls took: ", start)
+    -- print_took("caching controls took: ", start)
 end
 
 ---@return number percent
@@ -151,7 +151,7 @@ function ScreenPalEditorWindow:playhead_position_percent()
 
     -- TODO move percent calculation to _timeline_details
     local playhead_percent = (details.playhead_x - details.timeline_frame.x) / details.timeline_frame.w
-    print("playhead_percent", playhead_percent)
+    -- print("playhead_percent", playhead_percent)
     return playhead_percent
 end
 
@@ -297,7 +297,7 @@ function ScreenPalEditorWindow:reopen_project()
             error("No title found, aborting...")
         end
         local title = self._textfield_title:axValue()
-        print("title: ", title)
+        -- print("title: ", title)
         if not self._btn_back_to_projects then
             error("No back to projects button found, aborting...")
         end
@@ -549,7 +549,7 @@ function StreamDeck_ScreenPal_ShowSilenceRegions()
     ---@param slider hs.axuielement
     ---@param silences SilencesList
     local function show_them(win, slider, silences)
-        print("silence regions: " .. hs.inspect(silences))
+        -- print("silence regions: " .. hs.inspect(silences))
         show_silences(silences, slider)
     end
 
