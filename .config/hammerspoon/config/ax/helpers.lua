@@ -375,9 +375,8 @@ end
 axuielemMT.axFocusedWindow = function(elem)
     return elem:attributeValue("AXFocusedWindow")
 end
--- AXFrame
 ---@param elem hs.axuielement
----@return table|nil @ { x=number, y=number, w=number, h=number }
+---@return { x:number, y:number, w:number, h:number }
 axuielemMT.axFrame = function(elem)
     local raw_frame = elem:attributeValue("AXFrame")
     if not raw_frame then return nil end
@@ -386,9 +385,8 @@ axuielemMT.axFrame = function(elem)
     assert(raw_frame.w and type(raw_frame.w) == "number" and raw_frame.h and type(raw_frame.h) == "number")
     return raw_frame
 end
--- AXPosition
 ---@param elem hs.axuielement
----@return table|nil @ { x=number, y=number }
+---@return { x:number, y:number }
 axuielemMT.axPosition = function(elem)
     local raw_pos = elem:attributeValue("AXPosition")
     if not raw_pos then return nil end
@@ -397,7 +395,7 @@ axuielemMT.axPosition = function(elem)
 end
 -- AXSize
 ---@param elem hs.axuielement
----@return table|nil @ { w=number, h=number }
+---@return { w:number, h:number }
 axuielemMT.axSize = function(elem)
     local raw_size = elem:attributeValue("AXSize")
     if not raw_size then return nil end
