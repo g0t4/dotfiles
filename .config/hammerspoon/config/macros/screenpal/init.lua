@@ -475,17 +475,26 @@ function show_silences(silences, slider)
     -- example silences:
     silences = { { x_end = 1132, x_start = 1034 }, { x_end = 1372, x_start = 1223 }, { x_end = 1687, x_start = 1562 } }
 
-    slider_frame = slider:axFrame()
+    local slider_frame = slider:axFrame()
+    local canvas = hs.canvas.new(slider_frame)
+    canvas:show()
+    local elements = {}
     for _, silence in ipairs(silences) do
-        local start_x = slider_frame.x + silence.x_start
-        local end_x = slider_frame.x + silence.x_end
-        local width = end_x - start_x
-        -- Create a rectangle to visualize the silence
-        local rect = hs.drawing.rectangle(hs.geometry.rect(start_x, slider_frame.y, width, slider_frame.h))
-        rect:setFillColor({ red = 1, green = 0, blue = 0, alpha = 0.3 })
-        rect:setStrokeColor({ red = 1, green = 0, blue = 0, alpha = 1 })
-        rect:show()
+        local width = silence.x_end - silence.x_start
+        table.insert(elements, {
+            type = "rectangle",
+            action = "fill",
+            fillColor = { red = 1, green = 0, blue = 0, alpha = 0.3 },
+            frame = { x = silence.x_start, y = 0, w = width, h = slider_frame.h }
+        })
+        table.insert(elements, {
+            type = "rectangle",
+            action = "stroke",
+            strokeColor = { red = 1, green = 0, blue = 0, alpha = 1 },
+            frame = { x = silence.x_start, y = 0, w = width, h = slider_frame.h }
+        })
     end
+    canvas:appendElements(elements)
 end
 
 function StreamDeck_ScreenPal_GetSilenceRegions()
