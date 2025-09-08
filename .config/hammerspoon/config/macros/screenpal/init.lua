@@ -516,10 +516,8 @@ function StreamDeck_ScreenPal_ShowSilenceRegions()
         silences_canvas = nil
         return
     end
-
-    local win = get_cached_editor_window()
-    local slider = win:get_timeline_slider_or_throw()
     -- show_silences(nil, slider) -- testing only
+
 
     ---@param slider any
     ---@param where_to any
@@ -528,6 +526,9 @@ function StreamDeck_ScreenPal_ShowSilenceRegions()
         print("silence regions: " .. hs.inspect(silences))
         show_silences(silences, slider)
     end
+
+    local win = get_cached_editor_window()
+    local slider = win:get_timeline_slider_or_throw()
 
     capture_this_element(slider, function(where_to)
         detect_silence_boxes(where_to, function(silences)
