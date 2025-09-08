@@ -22,6 +22,10 @@ image = cv.imread(str(file), cv.IMREAD_COLOR)  # BGR
 if image is None:
     raise ValueError(f"Could not load image from {file}")
 
+# take off top and bottom borders
+image = image[2:-2]
+print("removed top/botom borders:", image.shape)
+
 # * take the bottom of the timeline
 # that way audio waveform is most likely to partition dark blue silence periods entirely
 # should make it easier to spot them with timeline bg alone
