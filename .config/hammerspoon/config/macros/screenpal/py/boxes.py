@@ -190,10 +190,6 @@ def mine(accum, current):
         accum.append(current)
     return accum
 
-import itertools
-x_combined = list(itertools.accumulate(x_sorted_regions, mine, initial=[]))
-print(f'{x_combined[-1]=}')
-
 from functools import reduce
 
 final = reduce(mine, x_sorted_regions, [])
