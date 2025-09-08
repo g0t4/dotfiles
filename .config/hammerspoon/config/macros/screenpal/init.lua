@@ -140,7 +140,7 @@ end
 
 ---@return number percent
 function ScreenPalEditorWindow:playhead_position_percent()
-    ensure_cached_controls()
+    self:ensure_cached_controls()
 
     -- AFAICT nothing differs on zoom level buttons...
     -- - thus cannot know which is clicked (zoomed)
@@ -157,7 +157,7 @@ end
 
 ---@param playhead_percent number
 function ScreenPalEditorWindow:restore_playhead_position(playhead_percent)
-    ensure_cached_controls()
+    self:ensure_cached_controls()
 
     self:zoom_off() -- do not restore when zoomed
 
@@ -175,7 +175,7 @@ function ScreenPalEditorWindow:restore_playhead_position(playhead_percent)
 end
 
 function ScreenPalEditorWindow:is_zoomed()
-    ensure_cached_controls()
+    self:ensure_cached_controls()
     if not self._btn_minimum_zoom then
         error("No zoom button found, aborting...")
     end
@@ -226,7 +226,7 @@ end
 function ScreenPalEditorWindow:get_scrollbar_or_throw()
     -- PRN search for big AXMaxValues? that might uniquely identify it if I have issues in the future with other scrollbars visible
     -- OR by position on screen (toward bottom of window is telling)
-    ensure_cached_controls()
+    self:ensure_cached_controls()
     local scrollbar = self._scrollbars[4]
     if not scrollbar then
         error("No editor_window scrollbar found, aborting...")
@@ -236,7 +236,7 @@ end
 
 ---@return hs.axuielement
 function ScreenPalEditorWindow:get_timeline_slider_or_throw()
-    ensure_cached_controls()
+    self:ensure_cached_controls()
     if not self._btn_position_slider then
         error("No timeline slider found, aborting...")
     end
@@ -244,19 +244,19 @@ function ScreenPalEditorWindow:get_timeline_slider_or_throw()
 end
 
 function ScreenPalEditorWindow:zoom1()
-    ensure_cached_controls()
+    self:ensure_cached_controls()
     self:zoom_on()
     self._btn_minimum_zoom:performAction("AXPress")
 end
 
 function ScreenPalEditorWindow:zoom2()
-    ensure_cached_controls()
+    self:ensure_cached_controls()
     self:zoom_on()
     self._btn_medium_zoom:performAction("AXPress")
 end
 
 function ScreenPalEditorWindow:zoom3()
-    ensure_cached_controls()
+    self:ensure_cached_controls()
     self:zoom_on()
     self._btn_maximum_zoom:performAction("AXPress")
 end
@@ -335,18 +335,18 @@ end
 
 ---@return TimelineDetails
 function ScreenPalEditorWindow:_timeline_details()
-    -- PRN move ensure_cached_controls() here?
+    -- PRN move self:ensure_cached_controls() here?
     return TimelineDetails:new(self)
 end
 
 function ScreenPalEditorWindow:get_time_string()
-    ensure_cached_controls()
+    self:ensure_cached_controls()
     local details = self:_timeline_details()
     return details.time_string
 end
 
 function ScreenPalEditorWindow:figure_out_zoom2_fixed_pixels_per_second()
-    ensure_cached_controls()
+    self:ensure_cached_controls()
 
     -- FYI! KEEP IN MIND, zoom levels are FIXED # seconds/frames regardless of video length... so when zoom 2 you know exactly where to click to move over 1 second relative to current position... or to move to X seconds along from start/end of the visible timeline
     --  eyeballing => roughly 43 pixels per second on zoom 2 => ~23 seconds visible in timeline... and not quite full width of screen (est 1000 px) => 1000/23 ~+ 43 pixels per second?
@@ -373,7 +373,7 @@ function ScreenPalEditorWindow:figure_out_zoom2_fixed_pixels_per_second()
 end
 
 function ScreenPalEditorWindow:toggle_AXEnhancedUserInterface()
-    ensure_cached_controls()
+    self:ensure_cached_controls()
     local primary_window = self.win
 
     -- FYI alternative to using Voice Over, theoretically, to trigger showing more controls (if the app supports it)
@@ -409,7 +409,7 @@ function ScreenPalEditorWindow:toggle_AXEnhancedUserInterface()
 end
 
 function ScreenPalEditorWindow:test_select_range()
-    ensure_cached_controls()
+    self:ensure_cached_controls()
 
     self:zoom_on() -- assume is m2-02 for now
 
@@ -444,7 +444,7 @@ function ScreenPalEditorWindow:test_select_range()
 end
 
 function ScreenPalEditorWindow:estimate_time_per_pixel()
-    ensure_cached_controls() -- prn do I need this early on here?
+    self:ensure_cached_controls() -- prn do I need this early on here?
 
     print("min zoom frame", hs.inspect(self._btn_minimum_zoom:axFrame())) -- (x,y) == (0,0) == not zoomed
     -- must be zoomed out, else cannot know that start of time line is 0 and end is the end of the video
