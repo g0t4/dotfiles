@@ -98,9 +98,11 @@ cv.imshow("labeled_mask", labeled_mask)
 cv.waitKey(0)
 cv.destroyAllWindows()
 
-# TODO finalize regions! and return json object to lua code!
+print(stats)
+
+# TODO left off here
 
 box_label = 1 + np.argmax(stats[1:, cv.CC_STAT_AREA])
 bx, by, bw, bh, _ = stats[box_label]
 
-
+# TODO finalize regions! and return json object to lua code!
