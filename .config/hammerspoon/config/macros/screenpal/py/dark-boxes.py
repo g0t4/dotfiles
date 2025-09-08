@@ -73,9 +73,8 @@ idx = first_full_column(playhead_mask)
 print(f'playhead {idx=}')
 
 hunt_mask = cv.bitwise_or(timeline_mask, playhead_mask)
-hunt_mask_smoothed = cv.morphologyEx(hunt_mask, cv.MORPH_CLOSE, np.ones((3, 3), np.uint8))
-print(f'{hunt_mask=}')
-print(f'{hunt_mask_smoothed=}')
+hunt_mask_CLOSED = cv.morphologyEx(hunt_mask, cv.MORPH_CLOSE, np.ones((3, 3), np.uint8))
+hunt_mask_DILATE_ONLY = cv.morphologyEx(hunt_mask, cv.MORPH_DILATE, np.ones((3, 3), np.uint8))
 
 look_start = 72
 look_end = -1
@@ -126,7 +125,8 @@ if idx is not None:
 
     band = image[look_start:look_end, L:R + 1]
     hunt_mask_matched = hunt_mask[look_start:look_end, L:R + 1]
-    hunt_mask_smoothed_matched = hunt_mask_smoothed[look_start:look_end, L:R + 1]
+    hunt_mask_CLOSED_matched = hunt_mask_CLOSED[look_start:look_end, L:R + 1]
+    hunt_mask_DILATE_ONLY_matched = hunt_mask_DILATE_ONLY[look_start:look_end, L:R + 1]
     print(f'{band.shape=}')
     print(f'{hunt_mask_matched.shape=}')
     print(f'{hunt_mask_matched[:,:,None].shape=}')
@@ -139,8 +139,9 @@ if idx is not None:
     print(f'{np.array_equal(hmmc2, hunt_mask_matched_color)=}')
     print(f'{np.array_equal(hmmc3, hunt_mask_matched_color)=}')
     print(f'{hunt_mask_matched_color=}')
-    hms_matched_color = np.repeat(hunt_mask_smoothed_matched[:, :, None], 3, 2)  # None adds new dimension, then repeat 2nd axis (innermost) 3 times => single 8bit => RGB 8:8:8 value
-    cv.imshow("hunt_mask", np.vstack([hunt_mask_matched_color, hms_matched_color, band]))
+    hmCLOSED_matched_color = np.repeat(hunt_mask_CLOSED_matched[:, :, None], 3, 2)  # None adds new dimension, then repeat 2nd axis (innermost) 3 times => single 8bit => RGB 8:8:8 value
+    hmDILATE_ONLY_matched_color = np.repeat(hunt_mask_DILATE_ONLY_matched[:, :, None], 3, 2)  # None adds new dimension, then repeat 2nd axis (innermost) 3 times => single 8bit => RGB 8:8:8 value
+    cv.imshow("hunt_mask", np.vstack([hunt_mask_matched_color, hmCLOSED_matched_color, hmDILATE_ONLY_matched_color, band]))
 
     # zoom_factor = 4
     # zoomed = cv.resize(hunt_mask_matched_color, None, fx=zoom_factor, fy=zoom_factor, interpolation=cv.INTER_LINEAR)
