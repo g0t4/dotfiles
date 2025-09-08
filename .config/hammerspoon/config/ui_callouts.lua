@@ -531,7 +531,7 @@ function capture_element_under_mouse()
     local was_highlighting = is_highlighting_now()
     remove_highlight()
 
-    function when_done(result)
+    function when_done(_where_to)
         if was_highlighting then
             highlight_current_element()
         end
@@ -564,7 +564,7 @@ function capture_this_element(element, callback)
             hs.alert.show("capture failed: " .. std_err)
             print("capture failed", std_err)
         end
-        callback(result)
+        callback(where_to)
         print("element captured to " .. where_to)
     end
 

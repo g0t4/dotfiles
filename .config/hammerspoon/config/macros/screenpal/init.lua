@@ -471,10 +471,22 @@ function get_cached_editor_window()
     return _cached_editor_window
 end
 
+function show_silences(silences, slider)
+    -- example silences:
+    silences = { { x_end = 1132, x_start = 1034 }, { x_end = 1372, x_start = 1223 }, { x_end = 1687, x_start = 1562 } }
+
+end
+
 function StreamDeck_ScreenPal_GetSilenceRegions()
-    local sample_image = os.getenv("HOME") .. "/repos/github/g0t4/dotfiles/.config/hammerspoon/config/macros/screenpal/py/timeline03a.png"
-    detect_silence_boxes(sample_image, function(result)
-        print("silence regions: " .. hs.inspect(result))
+    local win = get_cached_editor_window()
+    local slider = win:get_timeline_slider_or_throw()
+
+    capture_this_element(slider, function(where_to)
+        -- local sample_image = os.getenv("HOME") .. "/repos/github/g0t4/dotfiles/.config/hammerspoon/config/macros/screenpal/py/timeline03a.png"
+        detect_silence_boxes(where_to, function(silences)
+            print("silence regions: " .. hs.inspect(silences))
+            show_silences(silences, slider)
+        end)
     end)
 end
 
