@@ -38,13 +38,23 @@ gray_box_direct_mask = color_mask(image, colors_bgr.silence_gray, tolerance)  # 
 timeline_mask = color_mask(image, colors_bgr.timeline_bg, tolerance)
 playhead_mask = color_mask(image, colors_bgr.playhead, tolerance)
 
+# Highlight colors (BGR order for OpenCV)
+RED = (0, 0, 255)
+GREEN = (0, 255, 0)
+BLUE = (255, 0, 0)
+YELLOW = (0, 255, 255)
+CYAN = (255, 255, 0)
+MAGENTA = (255, 0, 255)
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+ORANGE = (0, 165, 255)
+PURPLE = (128, 0, 128)
 
-def blend_highlights_on_mask(image, mask, alpha=0.7) -> None:
+def blend_highlights_on_mask(image, mask, alpha=0.7, highlight_color=RED) -> None:
     beta = 1.0 - alpha
 
-    highlight_overlay = np.zeros_like(image)
-    # overlay[mask > 0] = [255, 255, 255]  # White overlay
-    highlight_overlay[mask > 0] = [0, 0, 255]  # red overlay
+    highlight_overlay = np.zeros_like(image)  # same shape as image
+    highlight_overlay[mask > 0] = highlight_color
 
     # Blend image with overlay
     blended = cv.addWeighted(image, alpha, highlight_overlay, beta, 0)
@@ -52,7 +62,7 @@ def blend_highlights_on_mask(image, mask, alpha=0.7) -> None:
 
 gray_box_direct_highlighted = blend_highlights_on_mask(image, gray_box_direct_mask)
 timeline_highlighted = blend_highlights_on_mask(image, timeline_mask)  # leave so you can come back to this later for additional detection (i.e. unmarked silences, < 1 second)
-playhead_highlighted = blend_highlights_on_mask(image, playhead_mask, 0.5)
+playhead_highlighted = blend_highlights_on_mask(image, playhead_mask, alpha=0.5, highlight_color=YELLOW)
 stacked = np.vstack([timeline_highlighted, gray_box_direct_highlighted, playhead_highlighted])  # type: ignore
 cv.imshow("stacked", stacked)
 cv.waitKey(0)
