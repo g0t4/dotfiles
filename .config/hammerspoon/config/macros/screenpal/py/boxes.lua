@@ -1,25 +1,20 @@
-local json = require("hs.json")
+function detect_silence_boxes(imagePath, callback)
+    local python_exe = os.getenv("HOME") .. "/repos/github/g0t4/dotfiles/.venv/bin/python3"
+    local script = os.getenv("HOME") .. "/repos/github/g0t4/dotfiles/.config/hammerspoon/config/macros/screenpal/py/boxes.py"
+    local args = { script, imagePath }
 
-function runDetection(imagePath, callback)
-    local script = "/usr/local/bin/python3"
-    local args = { "/path/to/detect_box.py", imagePath }
-
-    local task = hs.task.new(script, function(exitCode, stdout, stderr)
+    local task = hs.task.new(python_exe, function(exitCode, stdout, stderr)
         if exitCode == 0 and stdout then
-            local ok, data = pcall(json.decode, stdout)
+            local ok, data = pcall(hs.json.decode, stdout)
             if ok then
                 callback(data)
             else
-                hs.alert.show("JSON decode error: " .. tostring(stdout))
+                print("JSON decode error: " .. tostring(stdout))
             end
         else
-            hs.alert.show("Python error: " .. tostring(stderr))
+            print("Python error: " .. tostring(stderr))
         end
     end, args)
 
     task:start()
 end
-
-runDetection("/Users/wesdemos/Pictures/Screencaps/timeline03a.png", function(result)
-    print("Box center fraction: " .. tostring(result.center_fraction))
-end)

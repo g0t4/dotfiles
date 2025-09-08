@@ -2,6 +2,7 @@ local vim = require("config.libs.vim") -- reuse nvim lua modules in hammerspoon
 require("config.macros.screenpal.ui")
 require('config.macros.screenpal.helpers')
 require("config.macros.screenpal.co")
+require("config.macros.screenpal.py.boxes")
 local TimelineDetails = require('config.macros.screenpal.timeline')
 
 ---@return hs.axuielement app_element
@@ -468,6 +469,13 @@ function get_cached_editor_window()
         _cached_editor_window = ScreenPalEditorWindow:new()
     end
     return _cached_editor_window
+end
+
+function StreamDeck_ScreenPal_GetSilenceRegions()
+    local sample_image = os.getenv("HOME") .. "/repos/github/g0t4/dotfiles/.config/hammerspoon/config/macros/screenpal/py/timeline03a.png"
+    detect_silence_boxes(sample_image, function(result)
+        print("silence regions: " .. hs.inspect(result))
+    end)
 end
 
 function StreamDeckScreenPalTimelineZoomAndJumpToStart()
