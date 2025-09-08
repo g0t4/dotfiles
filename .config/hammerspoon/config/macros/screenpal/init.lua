@@ -478,6 +478,8 @@ end
 ---@alias Silence {x_start: number, x_end: number}
 ---@alias SilencesList Silence[]
 local silences_canvas = nil
+---@param silences SilencesList
+---@param slider hs.axuielement
 function show_silences(silences, slider)
     -- example silences (also for testing):
     -- silences = { { x_end = 1132, x_start = 1034 }, { x_end = 1372, x_start = 1223 }, { x_end = 1687, x_start = 1562 } }
