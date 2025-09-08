@@ -66,7 +66,7 @@ def blend_mask_over_image(image, mask, alpha=0.7, highlight_color=RED) -> np.nda
     blended = cv.addWeighted(image, alpha, highlight_overlay, beta, 0)
     return blended
 
-stacked = np.vstack([
+images = [
     # image, # include image but not really necessary
     blend_mask_over_image(image, gray_box_direct_mask),
     mask_only(image, gray_box_direct_mask),
@@ -74,7 +74,8 @@ stacked = np.vstack([
     mask_only(image, timeline_mask),
     blend_mask_over_image(image, playhead_mask, alpha=0.5, highlight_color=YELLOW),
     mask_only(image, playhead_mask, highlight_color=YELLOW),
-])
+]
+# stacked = np.vstack(images)
 # cv.imshow("stacked", stacked)
 # cv.waitKey(0)
 # cv.destroyAllWindows()
@@ -112,8 +113,11 @@ def visualize_labeled_regions(labels):
 # *** DIRECT ( THIS IS REALLY GOOD IN MY TESTING!!!) ...
 #   it does detect the playhead and the white dashed vertical line from recording mark, but I could skip over those with a n algorithm of some sort to connect sections with tiny tiny gaps (<4 pixels wide) assuming both sides are silence
 gray_box_mask = color_mask(image, colors_bgr.silence_gray, tolerance + 2)  # slightly looser for AA edges
+print(gray_box_mask.shape)
 gray_box_mask_smooth = cv.morphologyEx(gray_box_mask, cv.MORPH_OPEN, np.ones((3, 3), np.uint8))  # smooth out, skip freckled matches
-stacked = np.vstack([gray_box_mask, gray_box_mask_smooth])  # type: ignore
+images.append(mask_only(image, gray_box_mask))
+images.append(mask_only(image, gray_box_mask_smooth))
+stacked = np.vstack(images)
 cv.imshow("stacked", stacked)
 cv.waitKey(0)
 cv.destroyAllWindows()
