@@ -110,11 +110,17 @@ def visualize_labeled_regions(labels):
 
     return output
 
+# make a divider like the background color #2C313C
+black_divider = np.zeros_like(image)
+black_divider[:] = [60, 49, 44]  # BGR for #2C313C
+# take half height divider:
+black_divider = black_divider[:image.shape[0] // 2, :image.shape[1]]  # first half of image
+
 # *** DIRECT ( THIS IS REALLY GOOD IN MY TESTING!!!) ...
 #   it does detect the playhead and the white dashed vertical line from recording mark, but I could skip over those with a n algorithm of some sort to connect sections with tiny tiny gaps (<4 pixels wide) assuming both sides are silence
 gray_box_mask = color_mask(image, colors_bgr.silence_gray, tolerance + 2)  # slightly looser for AA edges
-print(gray_box_mask.shape)
 gray_box_mask_smooth = cv.morphologyEx(gray_box_mask, cv.MORPH_OPEN, np.ones((3, 3), np.uint8))  # smooth out, skip freckled matches
+images.append(black_divider)
 images.append(mask_only(image, gray_box_mask))
 images.append(mask_only(image, gray_box_mask_smooth))
 stacked = np.vstack(images)
