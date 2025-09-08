@@ -104,9 +104,9 @@ if DEBUG:
 
 # Static label-to-color mapping (BGR format for OpenCV)
 label_colors = {
-    0: (0, 0, 0),  # background (black)
-    1: (255, 0, 0),  # blue
-    2: (0, 255, 0),  # green
+    0: (0, 128, 128),  # teal
+    1: (0, 255, 0),  # green
+    2: (255, 0, 0),  # blue
     3: (0, 0, 255),  # red
     4: (255, 255, 0),  # cyan
     5: (255, 0, 255),  # magenta
@@ -114,7 +114,6 @@ label_colors = {
     7: (128, 0, 128),  # purple
     8: (255, 165, 0),  # orange
     9: (128, 128, 0),  # olive
-    10: (0, 128, 128),  # teal
 }
 
 def visualize_labeled_regions(labels):
@@ -138,20 +137,21 @@ if DEBUG:
 
     # take half height divider:
     black_divider = black_divider[:image.shape[0] // 2, :image.shape[1]]  # first half of image
-    images = images or []
+    print(images)
     images.append(black_divider)
     images.append(mask_only(image, timeline_bg_box_mask))
     images.append(mask_only(image, timeline_bg_box_mask_smooth))
     stacked = np.vstack(images)
-    cv.imshow("stacked", stacked)
-    cv.waitKey(0)
-    cv.destroyAllWindows()
+    # cv.imshow("stacked", stacked)
+    # cv.waitKey(0)
+    # cv.destroyAllWindows()
 
 num_labels, labels, stats, _ = cv.connectedComponentsWithStats(timeline_bg_box_mask_smooth, connectivity=8)
 if DEBUG:
     pass
     labeled_mask = visualize_labeled_regions(labels)
-    cv.imshow("labeled_mask", labeled_mask)
+    images.append(labeled_mask)
+    cv.imshow("labeled_mask", np.vstack(images))
     cv.waitKey(0)
     cv.destroyAllWindows()
 
