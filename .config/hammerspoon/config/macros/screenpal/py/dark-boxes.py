@@ -117,12 +117,21 @@ def full_column_span(mask: np.ndarray, start_idx: int, max_gap: int = 0) -> tupl
     return left, right
 
 if idx is not None:
-    L, R = full_column_span(hunt_mask, idx, max_gap=0)  # set >0 to tolerate small holes
+    # actual hunting w/ best mask:
+    L, R = full_column_span(hunt_mask_CLOSED, idx, max_gap=0)  # set >0 to tolerate small holes
     print(f'{L=} {R=}')
 
-    # tmp fix the range so I can find the right hunting mask (get rid of triangle edges on playhead)
-    L = 1405
-    R = 1493
+    # # tmp fix the range so I can find the right hunting mask (get rid of triangle edges on playhead)
+    # # uncomment this to fix range for reviewing regardless what matches above
+    # # then comment this out to look at matched range
+    # L = 1405
+    # R = 1493
+
+    # my inspection estimates:
+    # L = 1407 (literally first column of dark blue pixels)
+    #      column 1406 is the last part of the waveform (albeit the blurry edge of lowest part of visible waveform)
+    # R = 1488 (last column of dark blue pixels)
+    # CLOSED => 1406 to 1487 ... THAT WORKS!
 
     band = image[look_start:look_end, L:R + 1]
     hunt_mask_matched = hunt_mask[look_start:look_end, L:R + 1]
