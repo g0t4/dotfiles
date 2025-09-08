@@ -5,10 +5,15 @@ from typing import NamedTuple
 import cv2 as cv
 import numpy as np
 from pathlib import Path
-from rich import print
 from functools import reduce
 
-# TODO make into arg
+DEBUG = "--debug" in sys.argv
+
+if DEBUG:
+    print(f'{sys.argv=}')
+    from rich import print
+
+# TODO! make into arg
 file = Path(os.getenv("WES_DOTFILES") or "") \
     / ".config/hammerspoon/config/macros/screenpal/py/timeline03a.png"
 # / ".config/hammerspoon/config/macros/screenpal/py/timeline03a-2.png"
@@ -70,19 +75,20 @@ def blend_mask_over_image(image, mask, alpha=0.7, highlight_color=RED) -> np.nda
     blended = cv.addWeighted(image, alpha, highlight_overlay, beta, 0)
     return blended
 
-images = [
-    # image, # include image but not really necessary
-    blend_mask_over_image(image, gray_box_direct_mask),
-    mask_only(image, gray_box_direct_mask),
-    blend_mask_over_image(image, timeline_mask),
-    mask_only(image, timeline_mask),
-    blend_mask_over_image(image, playhead_mask, alpha=0.5, highlight_color=YELLOW),
-    mask_only(image, playhead_mask, highlight_color=YELLOW),
-]
-# stacked = np.vstack(images)
-# cv.imshow("stacked", stacked)
-# cv.waitKey(0)
-# cv.destroyAllWindows()
+if DEBUG:
+    images = [
+        # image, # include image but not really necessary
+        blend_mask_over_image(image, gray_box_direct_mask),
+        mask_only(image, gray_box_direct_mask),
+        blend_mask_over_image(image, timeline_mask),
+        mask_only(image, timeline_mask),
+        blend_mask_over_image(image, playhead_mask, alpha=0.5, highlight_color=YELLOW),
+        mask_only(image, playhead_mask, highlight_color=YELLOW),
+    ]
+    # stacked = np.vstack(images)
+    # cv.imshow("stacked", stacked)
+    # cv.waitKey(0)
+    # cv.destroyAllWindows()
 
 # %%
 
@@ -114,23 +120,26 @@ def visualize_labeled_regions(labels):
 
     return output
 
-# make a divider like the background color #2C313C
-black_divider = np.zeros_like(image)
-black_divider[:] = [60, 49, 44]  # BGR for #2C313C
-# take half height divider:
-black_divider = black_divider[:image.shape[0] // 2, :image.shape[1]]  # first half of image
-
 # *** DIRECT ( THIS IS REALLY GOOD IN MY TESTING!!!) ...
 #   it does detect the playhead and the white dashed vertical line from recording mark, but I could skip over those with a n algorithm of some sort to connect sections with tiny tiny gaps (<4 pixels wide) assuming both sides are silence
 gray_box_mask = color_mask(image, colors_bgr.silence_gray, tolerance + 2)  # slightly looser for AA edges
 gray_box_mask_smooth = cv.morphologyEx(gray_box_mask, cv.MORPH_OPEN, np.ones((3, 3), np.uint8))  # smooth out, skip freckled matches
-images.append(black_divider)
-images.append(mask_only(image, gray_box_mask))
-images.append(mask_only(image, gray_box_mask_smooth))
-stacked = np.vstack(images)
-# cv.imshow("stacked", stacked)
-# cv.waitKey(0)
-# cv.destroyAllWindows()
+
+if DEBUG:
+    # make a divider like the background color #2C313C
+    black_divider = np.zeros_like(image)
+    black_divider[:] = [60, 49, 44]  # BGR for #2C313C
+
+    # take half height divider:
+    black_divider = black_divider[:image.shape[0] // 2, :image.shape[1]]  # first half of image
+    images = images or []
+    images.append(black_divider)
+    images.append(mask_only(image, gray_box_mask))
+    images.append(mask_only(image, gray_box_mask_smooth))
+    stacked = np.vstack(images)
+    # cv.imshow("stacked", stacked)
+    # cv.waitKey(0)
+    # cv.destroyAllWindows()
 
 num_labels, labels, stats, _ = cv.connectedComponentsWithStats(gray_box_mask_smooth, connectivity=8)
 labeled_mask = visualize_labeled_regions(labels)
@@ -149,9 +158,6 @@ labeled_mask = visualize_labeled_regions(labels)
 
 # *** scale down to 1080p for returning to hs
 
-print("4k stats:")
-print(stats)
-print("1080p stats:")
 # first four stats are: left, top, width, height
 # fifth is area
 # to get to 1080p I need to divide first four by 2
@@ -160,24 +166,30 @@ print("1080p stats:")
 stats_1080p = stats.copy()
 stats_1080p[:, :4] //= 2
 stats_1080p[:, 4] //= 4
-print("1080p stats:")
-print(stats_1080p)
+if DEBUG:
+    print("4k stats:")
+    print(stats)
+    print("1080p stats:")
+    print(stats_1080p)
 
 # ** lets join consecutive boxes that are 1 pixel apart x2_start = x1_end + 1
 x_regions = stats_1080p[1:, [0, 2]]
-print(f'{x_regions=}')
+if DEBUG:
+    print(f'{x_regions=}')
+
 # ensure sorted by x_started
 sorted_indicies = np.argsort(x_regions[:, 0])
 x_sorted_regions = x_regions[sorted_indicies]
 
-print(f'{x_sorted_regions=}')
+if DEBUG:
+    print(f'{x_sorted_regions=}')
 # PRN throw if any regions overlap...
 # AND throw if they aren't basically the full height of the image?
 #   or filter these out?
 #   see what happens with real usage and then add if I encounter issues
 
-def mine(accum, current):
-    print(f'{accum=}   {current=}')
+def merge_if_one_pixel_apart(accum, current):
+    # print(f'{accum=}   {current=}')
     accum = accum or []
     current = current.copy()
     if len(accum) == 0:
@@ -195,18 +207,19 @@ def mine(accum, current):
         accum.append(current)
     return accum
 
-final_x_regions = reduce(mine, x_sorted_regions, [])
-print(f'{final_x_regions=}')
+final_x_regions = reduce(merge_if_one_pixel_apart, x_sorted_regions, [])
+# print(f'{final_x_regions=}')
 
 # * final preview mask
-final_preview_mask = np.zeros_like(image)
-for x_start, width in final_x_regions:
-    x_end = x_start + width
-    final_preview_mask[:, x_start * 2:x_end * 2] = 255
-stack = np.vstack([image, final_preview_mask])
-cv.imshow("final_preview_mask", stack)
-cv.waitKey(0)
-cv.destroyAllWindows()
+if DEBUG:
+    final_preview_mask = np.zeros_like(image)
+    for x_start, width in final_x_regions:
+        x_end = x_start + width
+        final_preview_mask[:, x_start * 2:x_end * 2] = 255
+    stack = np.vstack([image, final_preview_mask])
+    cv.imshow("final_preview_mask", stack)
+    cv.waitKey(0)
+    cv.destroyAllWindows()
 
 # * serialize response to json in STDOUT
 ranges = [{
