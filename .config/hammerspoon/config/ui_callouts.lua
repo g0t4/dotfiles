@@ -567,13 +567,13 @@ function capture_this_element(element, callback)
             print("capture failed", std_err)
         end
         callback(where_to)
-        print("element captured to " .. where_to)
+        -- print("element captured to " .. where_to)
     end
 
     -- * rectangle
     -- screencapture uses `-R <x,y,w,h>`
     local rectangle = string.format("%d,%d,%d,%d", frame.x, frame.y, frame.w, frame.h)
-    print("rectange: " .. rectangle)
+    -- print("rectange: " .. rectangle)
 
     hs.task.new("/usr/sbin/screencapture", when_done, { "-o", "-R", rectangle, where_to }):start()
 end
