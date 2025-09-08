@@ -120,6 +120,7 @@ if idx is not None:
     L, R = full_column_span(hunt_mask, idx, max_gap=0)  # set >0 to tolerate small holes
     print(f'{L=} {R=}')
 
+    # tmp fix the range so I can find the right hunting mask (get rid of triangle edges on playhead)
     L = 1405
     R = 1493
 
