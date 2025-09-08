@@ -135,6 +135,8 @@ function ScreenPalEditorWindow:new()
         print_took("caching controls took: ", start)
     end
 
+    return editor_window
+end
     ---@return number percent
     function editor_window:playhead_position_percent()
         ensure_cached_controls()
@@ -463,8 +465,6 @@ function ScreenPalEditorWindow:new()
 
     -- PRN can I use a library to parse out pauses and add my own padding to them when cutting them?! that would ROCK
 
-    return editor_window
-end
 
 local _cached_editor_window = nil
 function get_cached_editor_window()
