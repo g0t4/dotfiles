@@ -29,7 +29,7 @@ if image is None:
 # 96 pixels high
 #
 # image = image[48:] # bottom half
-image = image[64:] # bottom third 2/3*96=64
+image = image[64:]  # bottom third 2/3*96=64
 # image = image[72:] # bottom third 3/4*96=72
 print(image.shape)
 
@@ -96,11 +96,9 @@ if DEBUG:
         mask_only(image, playhead_mask, highlight_color=YELLOW),
     ]
     stacked = np.vstack(images)
-    cv.imshow("stacked", stacked)
-    cv.waitKey(0)
-    cv.destroyAllWindows()
-
-exit()
+    # cv.imshow("stacked", stacked)
+    # cv.waitKey(0)
+    # cv.destroyAllWindows()
 
 # %%
 
@@ -123,19 +121,15 @@ def visualize_labeled_regions(labels):
     h, w = labels.shape
     output = np.zeros((h, w, 3), dtype=np.uint8)
 
-    # make sure none over 10
-    if np.any(labels > len(label_colors) - 1):
-        raise ValueError("Labels exceed 10, can only color up to 10 unless you expand list of label_colors")  # or handle appropriately for your use case
-
     for label, color in label_colors.items():
-        output[labels == label] = color
+        output[labels % 10 == label] = color
 
     return output
 
 # *** DIRECT ( THIS IS REALLY GOOD IN MY TESTING!!!) ...
 #   it does detect the playhead and the white dashed vertical line from recording mark, but I could skip over those with a n algorithm of some sort to connect sections with tiny tiny gaps (<4 pixels wide) assuming both sides are silence
-gray_box_mask = color_mask(image, colors_bgr.silence_gray, tolerance + 2)  # slightly looser for AA edges
-gray_box_mask_smooth = cv.morphologyEx(gray_box_mask, cv.MORPH_OPEN, np.ones((3, 3), np.uint8))  # smooth out, skip freckled matches
+timeline_bg_box_mask = color_mask(image, colors_bgr.timeline_bg, tolerance + 2)  # slightly looser for AA edges
+timeline_bg_box_mask_smooth = cv.morphologyEx(timeline_bg_box_mask, cv.MORPH_OPEN, np.ones((3, 3), np.uint8))  # smooth out, skip freckled matches
 
 if DEBUG:
     # make a divider like the background color #2C313C
@@ -146,20 +140,20 @@ if DEBUG:
     black_divider = black_divider[:image.shape[0] // 2, :image.shape[1]]  # first half of image
     images = images or []
     images.append(black_divider)
-    images.append(mask_only(image, gray_box_mask))
-    images.append(mask_only(image, gray_box_mask_smooth))
+    images.append(mask_only(image, timeline_bg_box_mask))
+    images.append(mask_only(image, timeline_bg_box_mask_smooth))
     stacked = np.vstack(images)
-    # cv.imshow("stacked", stacked)
-    # cv.waitKey(0)
-    # cv.destroyAllWindows()
+    cv.imshow("stacked", stacked)
+    cv.waitKey(0)
+    cv.destroyAllWindows()
 
-num_labels, labels, stats, _ = cv.connectedComponentsWithStats(gray_box_mask_smooth, connectivity=8)
+num_labels, labels, stats, _ = cv.connectedComponentsWithStats(timeline_bg_box_mask_smooth, connectivity=8)
 if DEBUG:
     pass
-    # labeled_mask = visualize_labeled_regions(labels)
-    # cv.imshow("labeled_mask", labeled_mask)
-    # cv.waitKey(0)
-    # cv.destroyAllWindows()
+    labeled_mask = visualize_labeled_regions(labels)
+    cv.imshow("labeled_mask", labeled_mask)
+    cv.waitKey(0)
+    cv.destroyAllWindows()
 
     # # *** add playhead to gray_box_mask (will be fine b/c I won't take any region like the playhead that is only 2 pixels wide anyways)
     # gray_box_with_playhead_mask = cv.bitwise_or(gray_box_mask, playhead_mask)
@@ -169,6 +163,8 @@ if DEBUG:
     # cv.imshow("labeled_mask_with_playhead", labeled_mask)
     # cv.waitKey(0)
     # cv.destroyAllWindows()
+
+exit()
 
 # *** scale down to 1080p for returning to hs
 
