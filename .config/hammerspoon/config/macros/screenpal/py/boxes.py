@@ -107,16 +107,24 @@ stacked = np.vstack([timeline_roi])  # type: ignore
 # cv.waitKey(0)
 # cv.destroyAllWindows()
 
-gray_box_mask = color_mask(timeline_roi, colors_bgr.silence_gray, tolerance + 2)  # slightly looser for AA edges
+# ROI
+# gray_box_mask = color_mask(timeline_roi, colors_bgr.silence_gray, tolerance + 2)  # slightly looser for AA edges
+# gray_box_mask_smooth = cv.morphologyEx(gray_box_mask, cv.MORPH_OPEN, np.ones((3, 3), np.uint8)) # smooth out, skip freckled matches
 
-# Clean tiny speckles just in case
-gray_box_mask_smooth = cv.morphologyEx(gray_box_mask, cv.MORPH_OPEN, np.ones((3, 3), np.uint8))
+# *** DIRECT ( THIS IS REALLY GOOD IN MY TESTING!!!) ...
+#   it does detect the playhead and the white dashed vertical line from recording mark, but I could skip over those with a n algorithm of some sort to connect sections with tiny tiny gaps (<4 pixels wide) assuming both sides are silence
+gray_box_mask = color_mask(image, colors_bgr.silence_gray, tolerance + 2)  # slightly looser for AA edges
+gray_box_mask_smooth = cv.morphologyEx(gray_box_mask, cv.MORPH_OPEN, np.ones((3, 3), np.uint8))  # smooth out, skip freckled matches
+
 stacked = np.vstack([gray_box_mask, gray_box_mask_smooth])  # type: ignore
 cv.imshow("stacked", stacked)
+
+num_labels, labels, stats, _ = cv.connectedComponentsWithStats(gray_box_mask_smooth, connectivity=8)
+labeled_mask = visualize_labeled_regions(labels)
+cv.imshow("labeled_mask", labeled_mask)
 cv.waitKey(0)
 cv.destroyAllWindows()
 
-num_labels, labels, stats, _ = cv.connectedComponentsWithStats(gray_box_mask_smooth, connectivity=8)
 box_label = 1 + np.argmax(stats[1:, cv.CC_STAT_AREA])
 bx, by, bw, bh, _ = stats[box_label]
 
