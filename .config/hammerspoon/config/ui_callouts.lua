@@ -545,12 +545,12 @@ end
 function capture_this_element(element, callback, image_tag)
     local frame = element:axFrame()
 
-    if not image_tag then
+    if image_tag == nil or image_tag == "" then
         local role = element:axRole() or ""
-        local identifier = element:attributeValue("AXIdentifier") or ""
-        local value = element:attributeValue("AXValue") or ""
-        local title = element:attributeValue("AXTitle") or ""
-        local desc = element:attributeValue("AXDescription") or ""
+        local identifier = element:attributeValue("AXIdentifier")
+        local value = element:attributeValue("AXValue")
+        local title = element:attributeValue("AXTitle")
+        local desc = element:attributeValue("AXDescription")
 
         image_tag = role
         if identifier then image_tag = image_tag .. "_id_" .. identifier end
