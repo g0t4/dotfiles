@@ -48,6 +48,7 @@ function TimelineDetails:new(editor_window)
     self.time_string = time_string
     self.playhead_seconds = playhead_seconds
     self.pixels_per_second = _playhead_relative_timeline_x / playhead_seconds
+    self.pixels_per_frame = self.pixels_per_second / 25
     self.estimated_total_seconds = timeline_frame.w / self.pixels_per_second
     print(vim.inspect(self))
     return self

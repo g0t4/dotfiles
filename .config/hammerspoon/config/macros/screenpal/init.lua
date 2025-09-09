@@ -546,8 +546,7 @@ function StreamDeck_ScreenPal_SelectNextSilence()
             _timeline = win:_timeline_details() -- refresh
             print("iteration " .. i .. " playhead_x=" .. _timeline.playhead_x) -- debug
             -- frame issue, will move to nearest frame's pixel value
-            local pixels_per_frame = _timeline.pixels_per_second / 25
-            if math.abs(_timeline.playhead_x - playhead_to_x) <= pixels_per_frame then
+            if math.abs(_timeline.playhead_x - playhead_to_x) <= _timeline.pixels_per_frame then
                 break
             end
         end
