@@ -24,7 +24,7 @@ if image is None:
 
 # take off top and bottom borders
 image = image[2:-2]
-print("removed top/botom borders:", image.shape)
+# print("removed top/botom borders:", image.shape)
 
 # * take the bottom of the timeline
 # that way audio waveform is most likely to partition dark blue silence periods entirely
@@ -70,7 +70,7 @@ def first_full_column(mask: np.ndarray) -> int | None:
     return int(cols[0]) if cols.size > 0 else None
 
 idx = first_full_column(playhead_mask)
-print(f'playhead {idx=}')
+# print(f'playhead {idx=}')
 
 hunt_mask = cv.bitwise_or(timeline_mask, playhead_mask)
 hunt_mask_CLOSED = cv.morphologyEx(hunt_mask, cv.MORPH_CLOSE, np.ones((3, 3), np.uint8))
@@ -122,28 +122,28 @@ def scan_for_all_short_silences(mask: np.ndarray):
     assert np.all((mask == 0) | (mask == 255)), "FAILURE - Mask contains values other than 0 or 255"
     # mask = mask[:, 1400:1490]  # TODO remove/comment out, test on subset of columns near playhead that I know well
     mask = mask / 255  # scale to 0/1
-    print(f"{mask=}")
+    # print(f"{mask=}")
     col_sums = mask.sum(0)
-    print(f"{col_sums=}")
+    # print(f"{col_sums=}")
     short_silences = col_sums == (mask.shape[0])
-    print(f"{short_silences=}")
+    # print(f"{short_silences=}")
     # pad 1 column extra to start/end (num_start, num_end)
     #   uses value from start/end column (false/0 in my case so I get extra 0 on each end in padded)
     #   useful for diff to scan left to right for consecutive silence columns including through the start/end columns
     padded = np.pad(short_silences.astype(np.int8), (1, 1))
-    print(f"{padded=}")
+    # print(f"{padded=}")
     diff = np.diff(padded, 1, -1)  # diff[n] = padded[n+1] - padded[n]
-    print(f"{diff=}")
+    # print(f"{diff=}")
     # THUS 1 => start of silence range, -1 => end of silence range!
     edges = np.flatnonzero(diff)
-    print(f'{edges=}')
+    # print(f'{edges=}')
     # PRN why the !=0 in the ChatGPT example
     # print(f'{np.flatnonzero(np.diff(padded)!=0)=}')
     # print(f'{np.flatnonzero(diff != 0)=}')
     runs = [(edges[i], edges[i + 1] - 1) for i in range(0, len(edges), 2)]
-    print("## runs:")
-    for r in runs:
-        print(r)
+    # print("## runs:")
+    # for r in runs:
+    #     print(r)
 
     return runs
 
@@ -218,22 +218,6 @@ BLACK = (0, 0, 0)
 ORANGE = (0, 165, 255)
 PURPLE = (128, 0, 128)
 
-def mask_only(image, mask, highlight_color=RED) -> np.ndarray:
-
-    highlight_overlay = np.zeros_like(image)  # same shape as image
-    highlight_overlay[mask > 0] = highlight_color
-
-    return highlight_overlay
-
-def blend_mask_over_image(image, mask, alpha=0.7, highlight_color=RED) -> np.ndarray:
-    beta = 1.0 - alpha
-
-    highlight_overlay = mask_only(image, mask, highlight_color)
-
-    # Blend image with overlay
-    blended = cv.addWeighted(image, alpha, highlight_overlay, beta, 0)
-    return blended
-
 if DEBUG:
     final_mask = np.zeros_like(image)
     print(f'{final_mask=}')
@@ -241,11 +225,15 @@ if DEBUG:
         start = r[0]
         end = r[1]
         final_mask[:, start:end + 1] = RED
-    print(f'{final_mask[0,0:20]=}')
 
     images = [
-        image,
-        final_mask,
+        # both full size:
+        # image,
+        # final_mask,
+
+        # zoom in on run (where playhead is) => can zoom in then and compare edges to see if it lines up!
+        image[:, 1300:1500],
+        final_mask[:, 1300:1500],
     ]
     stacked = np.vstack(images)
     cv.imshow("stacked", stacked)
@@ -255,6 +243,6 @@ if DEBUG:
 # * serialize response to json in STDOUT
 ranges = [{
     "x_start": int(x_start),
-    "x_end": int(x_start + width),
-} for x_start, width in final_x_regions]
+    "x_end": int(x_end),
+} for x_start, x_end in runs]
 print(json.dumps(ranges))  # output to STDOUT for hs to consume
