@@ -1,6 +1,6 @@
 ---@param imagePath string
 ---@param callback fun(data: SilencesList)
-function detect_silence_boxes(imagePath, callback, script)
+function detect_silence_boxes(imagePath, callback, filename)
     filename = filename or "boxes.py"
     local python_exe = os.getenv("HOME") .. "/repos/github/g0t4/dotfiles/.venv/bin/python3"
     local script = os.getenv("HOME") .. "/repos/github/g0t4/dotfiles/.config/hammerspoon/config/macros/screenpal/py/" .. filename
