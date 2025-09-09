@@ -71,7 +71,6 @@ if DEBUG:
     cv.destroyAllWindows()
 
 # *** downscale to 1080p
-
 # first four stats are: left, top, width, height (divide by 2)
 # fifth is area (divide by 4)
 stats_1080p = stats.copy()
@@ -83,7 +82,7 @@ if DEBUG:
     print("1080p stats:")
     print(stats_1080p)
 
-# ** join nearly adjacent boxes that are 1 pixel apart x2_start = x1_end + 1
+# skip first stat (0) b/c it is the background (not a range)
 x_ranges = stats_1080p[1:, [0, 2]]
 if DEBUG:
     print(f'{x_ranges=}')
@@ -123,6 +122,7 @@ def merge_if_one_pixel_apart(accum, current):
         accum.append(current)
     return accum
 
+# ** join nearly adjacent boxes that are 1 pixel apart x2_start = x1_end + 1
 final_x_regions = reduce(merge_if_one_pixel_apart, x_sorted_ranges, [])
 # print(f'{final_x_regions=}')
 
