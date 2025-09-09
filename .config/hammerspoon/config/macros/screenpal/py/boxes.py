@@ -132,10 +132,12 @@ if DEBUG:
 
 # * serialize response to json in STDOUT
 results = {
-    "silences": [{
-        "x_start": int(x_start),
-        "x_end": int(x_end),
-    } for x_start, x_end in final_x_ranges]
+    "silences": [
+        {
+            "x_start": int(x_start),  # int() is serializable
+            "x_end": int(x_end),
+        } for x_start, x_end in final_x_ranges
+    ]
 }
 print(json.dumps(results))  # output to STDOUT for hs to consume
 
