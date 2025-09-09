@@ -96,10 +96,6 @@ def merge_if_one_pixel_apart(accum, current):
 # ** join adjacent boxes that are 1 pixel apart x2_start = x1_end + 1
 merged_x_ranges = reduce(merge_if_one_pixel_apart, x_sorted_ranges, [])
 
-if DEBUG:
-    # * final preview mask
-    show_and_wait(image, build_range_mask(merged_x_ranges, image))
-
 # * serialize response to json in STDOUT
 results = {
     "silences": [
@@ -120,3 +116,6 @@ if DEBUG and file == "samples/timeline03a.png":
     expected = {"silences": [{"x_start": 754, "x_end": 891}, {"x_start": 1450, "x_end": 1653}]}
     assert results["silences"] == expected["silences"]
     print("\n[bold underline green]MATCHED REGULAR SILENCE TEST CASE!")
+
+    # * final preview mask
+    show_and_wait(image, build_range_mask(merged_x_ranges, image))
