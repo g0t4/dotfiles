@@ -27,11 +27,9 @@ def find_playhead_x(mask: np.ndarray) -> int | None:
     return int(cols[0]) if cols.size > 0 else None
 
 idx = find_playhead_x(playhead_mask)
-# print(f'playhead {idx=}')
 
 hunt_mask = cv.bitwise_or(timeline_mask, playhead_mask)
 hunt_mask_CLOSED = cv.morphologyEx(hunt_mask, cv.MORPH_CLOSE, np.ones((3, 3), np.uint8))
-hunt_mask_DILATE_ONLY = cv.morphologyEx(hunt_mask, cv.MORPH_DILATE, np.ones((3, 3), np.uint8))
 
 look_start = 0
 look_end = -1
@@ -131,7 +129,6 @@ if idx is not None and False:
         band = image[look_start:look_end, L:R + 1]
         hunt_mask_matched = hunt_mask[look_start:look_end, L:R + 1]
         hunt_mask_CLOSED_matched = hunt_mask_CLOSED[look_start:look_end, L:R + 1]
-        hunt_mask_DILATE_ONLY_matched = hunt_mask_DILATE_ONLY[look_start:look_end, L:R + 1]
         print(f'{band.shape=}')
         print(f'{hunt_mask_matched.shape=}')
         print(f'{hunt_mask_matched[:,:,None].shape=}')
@@ -145,14 +142,11 @@ if idx is not None and False:
         print(f'{np.array_equal(hmmc3, hunt_mask_matched_color)=}')
         print(f'{hunt_mask_matched_color=}')
         hmCLOSED_matched_color = np.repeat(hunt_mask_CLOSED_matched[:, :, None], 3, 2)  # None adds new dimension, then repeat 2nd axis (innermost) 3 times => single 8bit => RGB 8:8:8 value
-        hmDILATE_ONLY_matched_color = np.repeat(hunt_mask_DILATE_ONLY_matched[:, :, None], 3, 2)  # None adds new dimension, then repeat 2nd axis (innermost) 3 times => single 8bit => RGB 8:8:8 value
         separator = np.full([5, band.shape[1], 3], [60, 49, 44], np.uint8)
         cv.imshow("hunt_mask", np.vstack([
             hunt_mask_matched_color,
             separator,
             hmCLOSED_matched_color,
-            separator,
-            hmDILATE_ONLY_matched_color,
             separator,
             band,
         ]))
