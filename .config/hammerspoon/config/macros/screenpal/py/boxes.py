@@ -226,8 +226,10 @@ if DEBUG:
     cv.destroyAllWindows()
 
 # * serialize response to json in STDOUT
-ranges = [{
-    "x_start": int(x_start),
-    "x_end": int(x_start + width),
-} for x_start, width in final_x_regions]
-print(json.dumps(ranges))  # output to STDOUT for hs to consume
+results = {
+    "silences": [{
+        "x_start": int(x_start),
+        "x_end": int(x_start + width),
+    } for x_start, width in final_x_regions]
+}
+print(json.dumps(results))  # output to STDOUT for hs to consume

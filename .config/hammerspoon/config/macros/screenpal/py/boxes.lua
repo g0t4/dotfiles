@@ -8,10 +8,10 @@ function detect_silence_boxes(imagePath, callback, filename)
 
     local task = hs.task.new(python_exe, function(exitCode, stdout, stderr)
         if exitCode == 0 and stdout then
-            local ok, silences = pcall(hs.json.decode, stdout)
+            local ok, results = pcall(hs.json.decode, stdout)
             if ok then
-                print("silences", hs.inspect(silences))
-                callback(silences)
+                print("silences", hs.inspect(results))
+                callback(results["silences"] or results["short_silences"])
             else
                 print("JSON decode error: " .. tostring(stdout))
             end

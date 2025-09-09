@@ -242,11 +242,13 @@ if DEBUG:
     cv.destroyAllWindows()
 
 # * serialize response to json in STDOUT
-ranges = [
-    {
-        # divide by 2 for non-retina resolution
-        "x_start": int(x_start / 2),
-        "x_end": int(x_end / 2),
-    } for x_start, x_end in runs
-]
-print(json.dumps(ranges))  # output to STDOUT for hs to consume
+results = {
+    "short_silences": [
+        {
+            # divide by 2 for non-retina resolution
+            "x_start": int(x_start / 2),
+            "x_end": int(x_end / 2),
+        } for x_start, x_end in runs
+    ]
+}
+print(json.dumps(results))  # output to STDOUT for hs to consume
