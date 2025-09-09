@@ -47,13 +47,13 @@ def display_colorful_labeled_regions(labels):
 
     return output
 
-def build_range_mask(x_ranges, image):
+def build_range_mask(x_ranges_1080p, image_4k):
     """ x-axis ranges over image
         NOTE: each range is [x_start, x_end]
         ALSO assumes 1080p ranges need scaled up to 4k
     """
-    range_mask = np.zeros_like(image)
-    for start, end in x_ranges:
+    range_mask = np.zeros_like(image_4k)
+    for start, end in x_ranges_1080p:
         # *2 for 1080p => 4k
         range_mask[:, start * 2:end * 2] = 255
     return range_mask
