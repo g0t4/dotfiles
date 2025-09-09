@@ -38,19 +38,19 @@ def get_silences():
         x_start_col + x_width_col,  # x_end
     ))
 
-# * sort by x_start
-#   b/c there is no guarantee that ranges (stats) are sorted
-def sort_ranges(ranges: np.ndarray) -> np.ndarray:
-    """ assumed that each row starts with x_start """
-    x_start_column = ranges[:, 0]
-    sorted_row_indicies = np.argsort(x_start_column)
-    return ranges[sorted_row_indicies]
+    # * sort by x_start
+    #   b/c there is no guarantee that ranges (stats) are sorted
+    def sort_ranges(ranges: np.ndarray) -> np.ndarray:
+        """ assumed that each row starts with x_start """
+        x_start_column = ranges[:, 0]
+        sorted_row_indicies = np.argsort(x_start_column)
+        return ranges[sorted_row_indicies]
 
-x_sorted_ranges = sort_ranges(x_ranges)
+    x_sorted_ranges = sort_ranges(x_ranges)
 
-# PRN throw if any regions overlap?
-# OR, throw if they aren't basically the full height of the image?
-# see what happens with real usage and then add if I encounter issues
+    # PRN throw if any regions overlap?
+    # OR, throw if they aren't basically the full height of the image?
+    # see what happens with real usage and then add if I encounter issues
 
 def merge_if_one_pixel_apart(accum, current):
     # TODO! I switched to 4k so make sure this still works!!
