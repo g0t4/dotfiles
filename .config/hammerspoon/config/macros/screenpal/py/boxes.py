@@ -70,13 +70,10 @@ if DEBUG:
     cv.waitKey(0)
     cv.destroyAllWindows()
 
-# *** scale down to 1080p for returning to hs
+# *** downscale to 1080p
 
-# first four stats are: left, top, width, height
-# fifth is area
-# to get to 1080p I need to divide first four by 2
-# then the fifth is area so I need to divide that by 4
-# assume 1080p scaling is 2x (because 1920x1080 -> 960x540)
+# first four stats are: left, top, width, height (divide by 2)
+# fifth is area (divide by 4)
 stats_1080p = stats.copy()
 stats_1080p[:, :4] //= 2
 stats_1080p[:, 4] //= 4
@@ -86,7 +83,7 @@ if DEBUG:
     print("1080p stats:")
     print(stats_1080p)
 
-# ** lets join consecutive boxes that are 1 pixel apart x2_start = x1_end + 1
+# ** join nearly adjacent boxes that are 1 pixel apart x2_start = x1_end + 1
 x_regions = stats_1080p[1:, [0, 2]]
 if DEBUG:
     print(f'{x_regions=}')
