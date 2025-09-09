@@ -29,44 +29,43 @@ def get_silences():
         cols = np.where(col_has_all)[0]
         return int(cols[0]) if cols.size > 0 else None
 
-playhead_leftmost_index = find_playhead_x(playhead_mask)
+    playhead_leftmost_index = find_playhead_x(playhead_mask)
 
-hunt_mask = cv.bitwise_or(timeline_mask, playhead_mask)
-hunt_mask_CLOSED = cv.morphologyEx(hunt_mask, cv.MORPH_CLOSE, np.ones((3, 3), np.uint8))
+    hunt_mask = cv.bitwise_or(timeline_mask, playhead_mask)
+    hunt_mask_CLOSED = cv.morphologyEx(hunt_mask, cv.MORPH_CLOSE, np.ones((3, 3), np.uint8))
 
-look_start = 0
-look_end = -1
+    look_start = 0
+    look_end = -1
 
-def scan_for_all_short_silences(mask: np.ndarray):
-    # verify assumption (just to be safe)
-    # FYI ends have curved edges, wait until this is an issue... could make mask around curved corners and then pad with neighboring pixels or smth else and add if they are empty nearby or not
-    assert np.all((mask == 0) | (mask == 255)), "FAILURE - Mask contains values other than 0 or 255"
-    # mask = mask[:, 1400:1490]  # TODO remove/comment out, test on subset of columns near playhead that I know well
-    mask = mask / 255  # scale to 0/1
-    # print(f"{mask=}")
-    col_sums = mask.sum(0)
-    # print(f"{col_sums=}")
-    short_silences = col_sums == (mask.shape[0])
-    # print(f"{short_silences=}")
-    # pad 1 column extra to start/end (num_start, num_end)
-    #   uses value from start/end column (false/0 in my case so I get extra 0 on each end in padded)
-    #   useful for diff to scan left to right for consecutive silence columns including through the start/end columns
-    padded = np.pad(short_silences.astype(np.int8), (1, 1))
-    # print(f"{padded=}")
-    diff = np.diff(padded, 1, -1)  # diff[n] = padded[n+1] - padded[n]
-    # print(f"{diff=}")
-    # THUS 1 => start of silence range, -1 => end of silence range!
-    edges = np.flatnonzero(diff)
-    # print(f'{edges=}')
-    # PRN why the !=0 in the ChatGPT example
-    # print(f'{np.flatnonzero(np.diff(padded)!=0)=}')
-    # print(f'{np.flatnonzero(diff != 0)=}')
-    runs = [(edges[i], edges[i + 1] - 1) for i in range(0, len(edges), 2)]
-    # print("## runs:")
-    # for r in runs:
-    #     print(r)
-
-    return runs
+    def scan_for_all_short_silences(mask: np.ndarray):
+        # verify assumption (just to be safe)
+        # FYI ends have curved edges, wait until this is an issue... could make mask around curved corners and then pad with neighboring pixels or smth else and add if they are empty nearby or not
+        assert np.all((mask == 0) | (mask == 255)), "FAILURE - Mask contains values other than 0 or 255"
+        # mask = mask[:, 1400:1490]  # TODO remove/comment out, test on subset of columns near playhead that I know well
+        mask = mask / 255  # scale to 0/1
+        # print(f"{mask=}")
+        col_sums = mask.sum(0)
+        # print(f"{col_sums=}")
+        short_silences = col_sums == (mask.shape[0])
+        # print(f"{short_silences=}")
+        # pad 1 column extra to start/end (num_start, num_end)
+        #   uses value from start/end column (false/0 in my case so I get extra 0 on each end in padded)
+        #   useful for diff to scan left to right for consecutive silence columns including through the start/end columns
+        padded = np.pad(short_silences.astype(np.int8), (1, 1))
+        # print(f"{padded=}")
+        diff = np.diff(padded, 1, -1)  # diff[n] = padded[n+1] - padded[n]
+        # print(f"{diff=}")
+        # THUS 1 => start of silence range, -1 => end of silence range!
+        edges = np.flatnonzero(diff)
+        # print(f'{edges=}')
+        # PRN why the !=0 in the ChatGPT example
+        # print(f'{np.flatnonzero(np.diff(padded)!=0)=}')
+        # print(f'{np.flatnonzero(diff != 0)=}')
+        runs = [(edges[i], edges[i + 1] - 1) for i in range(0, len(edges), 2)]
+        # print("## runs:")
+        # for r in runs:
+        #     print(r)
+        return runs
 
 runs = []
 if playhead_leftmost_index is not None:
