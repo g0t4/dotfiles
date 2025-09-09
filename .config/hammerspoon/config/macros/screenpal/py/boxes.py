@@ -73,7 +73,7 @@ if DEBUG:
 # skip first stat (0) b/c it is the background (not a range)
 # columns: left, top, width, height, area
 #   only take left (0) and width (2) columns
-x_ranges_1080p = stats_4k[1:, [0, 2]] / 2
+x_ranges_1080p = stats_4k[1:, [0, 2]] // 2
 # / 2 b/c stats is 4k resolution (of captured image) but I need 1080p for hammerspoon
 if DEBUG:
     print(f'{x_ranges_1080p=}')
