@@ -89,12 +89,12 @@ if DEBUG:
     print(f'{x_ranges=}')
 
 # ensure sorted by x_started
-first_column_x_start = x_ranges[:, 0]
-sorted_indicies = np.argsort(first_column_x_start)
-x_sorted_regions = x_ranges[sorted_indicies]
+x_start_column = x_ranges[:, 0]
+sorted_row_indicies = np.argsort(x_start_column)
+x_sorted_ranges = x_ranges[sorted_row_indicies]
 
 if DEBUG:
-    print(f'{x_sorted_regions=}')
+    print(f'{x_sorted_ranges=}')
 # PRN throw if any regions overlap...
 # AND throw if they aren't basically the full height of the image?
 #   or filter these out?
@@ -119,7 +119,7 @@ def merge_if_one_pixel_apart(accum, current):
         accum.append(current)
     return accum
 
-final_x_regions = reduce(merge_if_one_pixel_apart, x_sorted_regions, [])
+final_x_regions = reduce(merge_if_one_pixel_apart, x_sorted_ranges, [])
 # print(f'{final_x_regions=}')
 
 # * final preview mask
