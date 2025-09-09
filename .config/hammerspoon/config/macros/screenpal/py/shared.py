@@ -29,6 +29,11 @@ if DEBUG:
     print(f'{sys.argv=}')
     from rich import print
 
+def create_separator_for(image):
+    separator = np.zeros((5, image.shape[1], 3), dtype=np.uint8)
+    separator[:, :] = WINDOW_BG_COLOR
+    return separator
+
 def load_image() -> np.ndarray:
 
     file = sys.argv[1] if len(sys.argv) > 1 else None
@@ -43,19 +48,16 @@ def load_image() -> np.ndarray:
 
     # * take off top and bottom borders (leave leading/trailing else have to adjust x values)
     # image = image[2:-2]
-    separator = np.zeros((5, image.shape[1], 3), dtype=np.uint8)
-    separator[:, :] = WINDOW_BG_COLOR
-
     #0x282828 (40,40,40)
 
     show_and_wait(
-        separator[:, 1400:1500],
+        create_separator_for(image)[:, 1400:1500],
         image[2:, 1400:1500],
-        separator[:, 1400:1500],
+        create_separator_for(image)[:, 1400:1500],
         image[2:-1, 1400:1500],
-        separator[:, 1400:1500],
+        create_separator_for(image)[:, 1400:1500],
         image[2:-2, 1400:1500],
-        separator[:, 1400:1500],
+        create_separator_for(image)[:, 1400:1500],
     )
     exit()
 
