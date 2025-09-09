@@ -80,3 +80,10 @@ colors_bgr = TimelineColorsBGR(
 def color_mask(img, color, tol):
     diff = np.abs(img.astype(np.int16) - color.astype(np.int16))
     return (diff <= tol).all(axis=2).astype(np.uint8) * 255
+
+image = load_image()
+
+# Tiny tolerance may handle edge pixels
+tolerance = 4
+timeline_mask = color_mask(image, colors_bgr.timeline_bg, tolerance)  # leave so you can come back to this later for additional detection (i.e. unmarked silences, < 1 second)
+playhead_mask = color_mask(image, colors_bgr.playhead, tolerance)

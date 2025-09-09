@@ -9,15 +9,7 @@ from shared import *
 from visualize import *
 
 # z screenpal/py
-# time python3 boxes.py samples/timeline03a.png --debug
-
-# Tiny tolerance may handle edge pixels
-tolerance = 4
-
-image = load_image()
-
-timeline_mask = color_mask(image, colors_bgr.timeline_bg, tolerance)  # leave so you can come back to this later for additional detection (i.e. unmarked silences, < 1 second)
-playhead_mask = color_mask(image, colors_bgr.playhead, tolerance)
+# time python3 regular_silences.py samples/timeline03a.png --debug
 
 def get_regular_silences():
 
