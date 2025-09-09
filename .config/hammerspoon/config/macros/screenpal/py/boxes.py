@@ -22,6 +22,7 @@ playhead_mask = color_mask(image, colors_bgr.playhead, tolerance)
 gray_box_mask = color_mask(image, colors_bgr.silence_gray, tolerance + 2)  # slightly looser for AA edges
 #   it does detect the playhead and the white dashed vertical line from recording mark, but I could skip over those with a n algorithm of some sort to connect sections with tiny tiny gaps (<4 pixels wide) assuming both sides are silence
 gray_box_mask_smooth = cv.morphologyEx(gray_box_mask, cv.MORPH_OPEN, np.ones((3, 3), np.uint8))  # smooth out, skip freckled matches
+num_labels, labels, stats_4k, _ = cv.connectedComponentsWithStats(gray_box_mask_smooth, connectivity=8)
 
 if DEBUG:
     # make a divider like the background color #2C313C
@@ -42,9 +43,6 @@ if DEBUG:
         display_mask_only(image, gray_box_mask_smooth),
     )
 
-num_labels, labels, stats_4k, _ = cv.connectedComponentsWithStats(gray_box_mask_smooth, connectivity=8)
-if DEBUG:
-    pass
     labeled_mask = display_colorful_labeled_regions(labels)
 
     # *** idea - add playhead to gray_box_mask
