@@ -10,6 +10,7 @@ function detect_silence_boxes(imagePath, callback, filename)
         if exitCode == 0 and stdout then
             local ok, silences = pcall(hs.json.decode, stdout)
             if ok then
+                print("silences", hs.inspect(silences))
                 callback(silences)
             else
                 print("JSON decode error: " .. tostring(stdout))
