@@ -76,7 +76,8 @@ end
 function TimelineDetails:is_playhead_at_target(target_x)
     -- within one frame either way
     -- PRN make more precise later on if I know the target in terms of a frame value
-    return math.abs(self.playhead_x - target_x) <= self.pixels_per_frame
+    local pixel_gap = math.abs(self.playhead_x - target_x)
+    return pixel_gap <= self.pixels_per_frame
 end
 
 return TimelineDetails
