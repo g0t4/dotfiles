@@ -67,6 +67,7 @@ def color_mask(img, color, tol):
     diff = np.abs(img.astype(np.int16) - color.astype(np.int16))
     return (diff <= tol).all(axis=2).astype(np.uint8) * 255
 
+# RUN ONE TIME for all detection scripts
 image = load_image()
 
 # Tiny tolerance may handle edge pixels
