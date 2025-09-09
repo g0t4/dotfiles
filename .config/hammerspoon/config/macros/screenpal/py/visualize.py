@@ -46,3 +46,10 @@ def display_colorful_labeled_regions(labels):
         output[labels == label] = color
 
     return output
+
+def build_range_mask(final_x_ranges, image):
+    final_preview_mask = np.zeros_like(image)
+    for start, width in final_x_ranges:
+        end = start + width
+        final_preview_mask[:, start * 2:end * 2] = 255
+    return final_preview_mask
