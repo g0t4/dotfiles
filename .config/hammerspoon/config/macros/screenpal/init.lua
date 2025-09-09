@@ -450,22 +450,7 @@ function ScreenPalEditorWindow:estimate_time_per_pixel()
     -- must be zoomed out, else cannot know that start of time line is 0 and end is the end of the video
     self:zoom_off()
     print("min zoom frame", hs.inspect(self._btn_minimum_zoom:axFrame()))
-
-    -- TODO!!! parse screen shots of position slider and find the silence ranges
-    -- TODO!!!   to automate selecting them using my own padding!
-    -- TODO!!!   and other cool helpers
-    -- TODO      test w/ cmd+ctrl+alt + "p" hammerspoon shortcut that screencaps individual elements and then can use that to test with (i.e. pos slider capture)
-    -- TODO      the color for silence is reliably showing up as this
-    --              #21253B -- detected silence periods
-    -- TODO         I confirmed this in both the running app and in my screencap
-    -- TODO         !!! slice the top of the image off (or maybe 3 pixels down) b/c then you won't have any interference with waveform
-    --              THEN move left to right through the pixels and look at the color
-    --              OR do something more sophisticated (reliable)
-    --   ! see config/macros/screenpal/py/timeline_detect_blocks.py for initial idea to find gray silence areas
 end
-
--- PRN can I use a library to parse out pauses and add my own padding to them when cutting them?! that would ROCK
-
 
 local _cached_editor_window = nil
 function get_cached_editor_window()
