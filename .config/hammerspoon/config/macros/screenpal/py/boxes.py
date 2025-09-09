@@ -75,10 +75,8 @@ if DEBUG:
 #   only take left (0) and width (2) columns
 x_ranges_1080p = stats_4k[1:, [0, 2]] // 2
 # / 2 b/c stats is 4k resolution (of captured image) but I need 1080p for hammerspoon
-if DEBUG:
-    print(f'{x_ranges_1080p=}')
 
-# * [x_start,x_width] => [x_start, x_end]
+# * [x_start, x_width] => [x_start, x_end]
 # x_ranges_1080p = [(start, start + width) for (start, width) in x_ranges_1080p]
 x_start_col = x_ranges_1080p[:, 0]
 x_width_col = x_ranges_1080p[:, 1]
@@ -86,8 +84,9 @@ x_ranges_with_end = np.column_stack((
     x_start_col,
     x_start_col + x_width_col,
 ))
-print(f'{x_ranges_with_end=}')
-exit()
+if DEBUG:
+    print(f'{x_ranges_1080p=}')
+    print(f'{x_ranges_with_end=}')
 
 # * sort by x_start
 #   no guarantee that ranges (stats) are sorted
@@ -97,7 +96,7 @@ def sort_ranges(ranges: np.ndarray) -> np.ndarray:
     sorted_row_indicies = np.argsort(x_start_column)
     return ranges[sorted_row_indicies]
 
-x_sorted_ranges = sort_ranges(x_ranges_1080p)
+x_sorted_ranges = sort_ranges(x_ranges_with_end)
 if DEBUG:
     print(f'{x_sorted_ranges=}')
 
