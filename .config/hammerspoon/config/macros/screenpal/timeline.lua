@@ -77,6 +77,8 @@ local function _get_updated_playhead_x(self)
     -- keep hidden so I am not tempted to use it elsewhere
     --  should help me push needed functionality into this class
     --  also this specific behavior is a conern that should not bleed into consumers
+
+    -- FYI 0.1ms typically to get new frame
     local new_playhead_window_frame = self._playhead_window:axFrame()
     return new_playhead_window_frame.x + new_playhead_window_frame.w / 2
 end

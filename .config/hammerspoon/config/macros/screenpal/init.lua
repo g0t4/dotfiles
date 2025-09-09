@@ -546,11 +546,9 @@ function StreamDeck_ScreenPal_SelectNextSilence()
             hs.timer.usleep(10000)
 
             print("iteration " .. i)
-            start_at_target = get_time()
             if _timeline:is_playhead_now_at_target(target_playhead_x) then
                 break
             end
-            print_took("  is at target", start_at_target) -- debug
         end
         print_took("** move playhead to cut start", start)
 
