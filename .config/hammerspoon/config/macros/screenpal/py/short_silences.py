@@ -8,8 +8,7 @@ from functools import reduce
 from shared import *
 from visualize import *
 
-# z screenpal/py
-# time python3 short_silences.py samples/playhead-darkblue1.png --debug
+# TODO! OPTIMIZE FOR ONE LOAD OF ANY SHARED ASSETS (i.e. image load)
 
 def get_short_silences():
 
@@ -99,7 +98,6 @@ def get_short_silences():
 
     # PRN hardcode results for test case
     if DEBUG and file == "samples/playhead-darkblue1.png":
-        # time python3 dark-boxes.py samples/playhead-darkblue1.png --debug
         # PRN use unit test assertions so we can see what differs
         # TODO verify these are correct values (I just captured these off of the last test run I did by inspecting the image overlays)
         expected = {"playhead_x": 1452, "short_silences": [{"x_start": 4, "x_end": 5}, {"x_start": 31, "x_end": 32}, {"x_start": 217, "x_end": 218}, {"x_start": 319, "x_end": 320}, {"x_start": 376, "x_end": 378}, {"x_start": 403,
@@ -114,7 +112,8 @@ def get_short_silences():
     return results
 
 if __name__ == "__main__":
+    # time python3 short_silences.py samples/playhead-darkblue1.png --debug
 
     results = get_short_silences()
 
-    print(json.dumps(results))  # output to STDOUT for hs to consume
+    print(json.dumps(results))

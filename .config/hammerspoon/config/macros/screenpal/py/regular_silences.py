@@ -8,8 +8,7 @@ from functools import reduce
 from shared import *
 from visualize import *
 
-# z screenpal/py
-# time python3 regular_silences.py samples/timeline03a.png --debug
+# TODO! OPTIMIZE FOR ONE LOAD OF ANY SHARED ASSETS (i.e. image load)
 
 def get_regular_silences():
 
@@ -104,7 +103,6 @@ def get_regular_silences():
         )
 
         if file == "samples/timeline03a.png":
-            # time python3 boxes.py samples/timeline03a.png --debug
             # PRN use unit test assertions so we can see what differs
             expected = {"silences": [{"x_start": 754, "x_end": 891}, {"x_start": 1450, "x_end": 1653}]}
             assert results["silences"] == expected["silences"]
@@ -116,7 +114,9 @@ def get_regular_silences():
     return results
 
 if __name__ == "__main__":
+    # z screenpal/py
+    # time python3 regular_silences.py samples/timeline03a.png --debug
 
     results = get_regular_silences()
 
-    print(json.dumps(results))  # output to STDOUT for hs to consume
+    print(json.dumps(results))
