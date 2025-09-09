@@ -115,13 +115,13 @@ def merge_if_one_pixel_apart(accum, current):
     return accum
 
 # ** join nearly adjacent boxes that are 1 pixel apart x2_start = x1_end + 1
-final_x_regions = reduce(merge_if_one_pixel_apart, x_sorted_ranges, [])
+final_x_ranges = reduce(merge_if_one_pixel_apart, x_sorted_ranges, [])
 # print(f'{final_x_regions=}')
 
 # * final preview mask
 if DEBUG:
     final_preview_mask = np.zeros_like(image)
-    for x_start, width in final_x_regions:
+    for x_start, width in final_x_ranges:
         x_end = x_start + width
         final_preview_mask[:, x_start * 2:x_end * 2] = 255
     stack = np.vstack([image, final_preview_mask])
@@ -134,6 +134,6 @@ results = {
     "silences": [{
         "x_start": int(x_start),
         "x_end": int(x_start + width),
-    } for x_start, width in final_x_regions]
+    } for x_start, width in final_x_ranges]
 }
 print(json.dumps(results))  # output to STDOUT for hs to consume
