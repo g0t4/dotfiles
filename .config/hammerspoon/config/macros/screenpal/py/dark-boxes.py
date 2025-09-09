@@ -11,29 +11,22 @@ from shared import *
 # time python3 dark-boxes.py samples/playhead-darkblue1.png # regular output (non-debug)
 # time python3 dark-boxes.py samples/playhead-darkblue1.png --debug
 
-image = load_image()
-
-# print("removed top/botom borders:", image.shape)
-
 # Tiny tolerance may handle edge pixels
 tolerance = 4
 
-def color_mask(img, color, tol):
-    diff = np.abs(img.astype(np.int16) - color.astype(np.int16))
-    return (diff <= tol).all(axis=2).astype(np.uint8) * 255
+image = load_image()
 
-# gray_box_direct_mask = color_mask(image, colors_bgr.silence_gray, tolerance)  # skip ROI b/c the image is ONLY the timeline so there's no reason to spot the timeline!
-# gray_box_direct_mask = color_mask(image, colors_bgr.silence_gray, tolerance)  # skip ROI b/c the image is ONLY the timeline so there's no reason to spot the timeline!
 timeline_mask = color_mask(image, colors_bgr.timeline_bg, tolerance)  # leave so you can come back to this later for additional detection (i.e. unmarked silences, < 1 second)
 playhead_mask = color_mask(image, colors_bgr.playhead, tolerance)
 
-def first_full_column(mask: np.ndarray) -> int | None:
-    # mask is 2D, nonzero means "on"
+def find_playhead_x(mask: np.ndarray) -> int | None:
+    # returns LEFTMOST edge of playhead, PRN could find centermost column
+    # mask is 2D, nonzero (255) means "on"
     col_has_all = (mask != 0).all(axis=0)  # boolean per column
     cols = np.where(col_has_all)[0]
     return int(cols[0]) if cols.size > 0 else None
 
-idx = first_full_column(playhead_mask)
+idx = find_playhead_x(playhead_mask)
 # print(f'playhead {idx=}')
 
 hunt_mask = cv.bitwise_or(timeline_mask, playhead_mask)

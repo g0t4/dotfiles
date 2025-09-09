@@ -73,3 +73,10 @@ colors_bgr = TimelineColorsBGR(
     silence_gray=np.array([57, 37, 34]),
     playhead=np.array([255, 157, 37]),
 )
+
+# returns 2D array, where each pixel is either 0 or 255
+# 0 = NOT A MATCH (1+ components does not match w/in tolerance)
+# 255 = MATCH (all components BGR match w/in tolerance)
+def color_mask(img, color, tol):
+    diff = np.abs(img.astype(np.int16) - color.astype(np.int16))
+    return (diff <= tol).all(axis=2).astype(np.uint8) * 255
