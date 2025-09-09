@@ -540,7 +540,6 @@ function StreamDeck_ScreenPal_SelectNextSilence()
         local target_playhead_x = next.x_start + 10 + slider_frame.x
         print("moving playhead to " .. target_playhead_x) -- debug
         _timeline:_move_playhead_to_x(target_playhead_x)
-        _timeline:wait_until_playhead_at(target_playhead_x)
 
         hs.eventtap.keyStroke({}, "c", 0, get_screenpal_app_element_or_throw())
         hs.timer.usleep(100000)

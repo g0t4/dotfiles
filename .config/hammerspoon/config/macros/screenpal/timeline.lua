@@ -63,6 +63,7 @@ function TimelineDetails:_move_playhead_to_x(playhead_x)
         x = playhead_x,
         y = self.timeline_frame.y + self.timeline_frame.h / 2
     }, hold_duration_ms * 1000)
+    self:wait_until_playhead_at(playhead_x)
 end
 
 ---@param self TimelineDetails
