@@ -72,12 +72,23 @@ function TimelineDetails:move_playhead_to_seconds(seconds)
     self:_move_playhead_to_x(playhead_x)
 end
 
+---@return number
+local function _get_updated_playhead_x(self)
+    -- keep hidden so I am not tempted to use it elsewhere
+    --  should help me push needed functionality into this class
+    --  also this specific behavior is a conern that should not bleed into consumers
+    local new_playhead_window_frame = self._playhead_window:axFrame()
+    return new_playhead_window_frame.x + new_playhead_window_frame.w / 2
+end
+
 ---@param target_x number
 ---@return boolean
-function TimelineDetails:is_playhead_at_target(target_x)
+function TimelineDetails:is_playhead_now_at_target(target_x)
     -- within one frame either way
     -- PRN make more precise later on if I know the target in terms of a frame value
-    local pixel_gap = math.abs(self.playhead_x - target_x)
+    local new_x = _get_updated_playhead_x(self) -- in case we just moved the playhead
+    print("  new_x", new_x, "target_x", target_x)
+    local pixel_gap = math.abs(new_x - target_x)
     return pixel_gap <= self.pixels_per_frame
 end
 
