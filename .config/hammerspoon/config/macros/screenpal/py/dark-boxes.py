@@ -228,12 +228,12 @@ if DEBUG:
 
     images = [
         # both full size:
-        # image,
-        # final_mask,
+        image,
+        final_mask,
 
         # zoom in on run (where playhead is) => can zoom in then and compare edges to see if it lines up!
-        image[:, 1300:1500],
-        final_mask[:, 1300:1500],
+        # image[:, 1300:1500],
+        # final_mask[:, 1300:1500],
     ]
     stacked = np.vstack(images)
     cv.imshow("stacked", stacked)
