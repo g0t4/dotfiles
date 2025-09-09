@@ -537,7 +537,15 @@ function StreamDeck_ScreenPal_SelectNextSilence()
         --    could even show prev/next of each type in diff colors
         print("FOUND: " .. hs.inspect(next))
         -- TODO _move_playhead_to_x_relative()
-        _timeline:_move_playhead_to_x(next.x_start + slider_frame.x)
+        _timeline:_move_playhead_to_x(next.x_start + 10 + slider_frame.x)
+        hs.timer.usleep(100000)
+        hs.eventtap.keyStroke({}, "c", 0, get_screenpal_app_element_or_throw())
+        hs.timer.usleep(100000)
+        hs.eventtap.keyStroke({}, "s", 0, get_screenpal_app_element_or_throw())
+        hs.timer.usleep(100000)
+        _timeline:_move_playhead_to_x(next.x_end - 10 + slider_frame.x)
+        hs.timer.usleep(100000)
+        hs.eventtap.keyStroke({}, "e", 0, get_screenpal_app_element_or_throw())
     end
 
     detect_silences_and_then(select_next)
