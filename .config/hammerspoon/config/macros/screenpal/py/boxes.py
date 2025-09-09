@@ -47,15 +47,6 @@ if DEBUG:
         labeled_mask,
     )
 
-    # *** idea - add playhead to gray_box_mask
-    gray_box_with_playhead_mask = cv.bitwise_or(gray_box_mask, playhead_mask)
-    gray_box_with_playhead_mask_smooth = cv.morphologyEx(gray_box_with_playhead_mask, cv.MORPH_OPEN, np.ones((3, 3), np.uint8))  # smooth out, skip freckled matches
-    num_labels, labels, stats_4k, _ = cv.connectedComponentsWithStats(gray_box_with_playhead_mask_smooth, connectivity=8)
-    labeled_mask_with_playhead_merged = display_colorful_labeled_regions(labels)
-    cv.imshow("labels", np.vstack([labeled_mask, labeled_mask_with_playhead_merged]))
-    cv.waitKey(0)
-    cv.destroyAllWindows()
-
 # skip first stat (0) b/c it is the background (not a range)
 # columns: left, top, width, height, area
 #   only take left (0) and width (2) columns
