@@ -119,7 +119,7 @@ def full_column_span(mask: np.ndarray, start_idx: int, max_gap: int = 0) -> tupl
 def scan_for_all_short_silences(mask: np.ndarray):
     # verify assumption (just to be safe)
     assert np.all((mask == 0) | (mask == 255)), "FAILURE - Mask contains values other than 0 or 255"
-    mask = mask[:, 1400:1490]  # TODO remove/comment out, test on subset of columns near playhead that I know well
+    # mask = mask[:, 1400:1490]  # TODO remove/comment out, test on subset of columns near playhead that I know well
     mask = mask / 255  # scale to 0/1
     print(f"{mask=}")
     col_sums = mask.sum(0)
