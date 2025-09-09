@@ -18,25 +18,25 @@ image = load_image()
 
 def get_silences():
 
-timeline_mask = color_mask(image, colors_bgr.timeline_bg, tolerance)  # leave so you can come back to this later for additional detection (i.e. unmarked silences, < 1 second)
-playhead_mask = color_mask(image, colors_bgr.playhead, tolerance)
+    timeline_mask = color_mask(image, colors_bgr.timeline_bg, tolerance)  # leave so you can come back to this later for additional detection (i.e. unmarked silences, < 1 second)
+    playhead_mask = color_mask(image, colors_bgr.playhead, tolerance)
 
-gray_box_mask = color_mask(image, colors_bgr.silence_gray, tolerance + 2)  # slightly looser for AA edges
-#   it does detect the playhead and the white dashed vertical line from recording mark, but I could skip over those with a n algorithm of some sort to connect sections with tiny tiny gaps (<4 pixels wide) assuming both sides are silence
-gray_box_mask_smooth = cv.morphologyEx(gray_box_mask, cv.MORPH_OPEN, np.ones((3, 3), np.uint8))  # smooth out, skip freckled matches
-num_labels, labels, stats, _ = cv.connectedComponentsWithStats(gray_box_mask_smooth, connectivity=8)
+    gray_box_mask = color_mask(image, colors_bgr.silence_gray, tolerance + 2)  # slightly looser for AA edges
+    #   it does detect the playhead and the white dashed vertical line from recording mark, but I could skip over those with a n algorithm of some sort to connect sections with tiny tiny gaps (<4 pixels wide) assuming both sides are silence
+    gray_box_mask_smooth = cv.morphologyEx(gray_box_mask, cv.MORPH_OPEN, np.ones((3, 3), np.uint8))  # smooth out, skip freckled matches
+    num_labels, labels, stats, _ = cv.connectedComponentsWithStats(gray_box_mask_smooth, connectivity=8)
 
-# * project to ranges
-# columns: left, top, width, height, area
-#   only take left (0) and width (2) columns
-#   skip first stat row (0) b/c it is the background (not a range)
-#     1: means take row 1+ (skip row 0)
-x_start_col = stats[1:, [0]]
-x_width_col = stats[1:, [2]]
-x_ranges = np.column_stack((
-    x_start_col,  # x_start
-    x_start_col + x_width_col,  # x_end
-))
+    # * project to ranges
+    # columns: left, top, width, height, area
+    #   only take left (0) and width (2) columns
+    #   skip first stat row (0) b/c it is the background (not a range)
+    #     1: means take row 1+ (skip row 0)
+    x_start_col = stats[1:, [0]]
+    x_width_col = stats[1:, [2]]
+    x_ranges = np.column_stack((
+        x_start_col,  # x_start
+        x_start_col + x_width_col,  # x_end
+    ))
 
 # * sort by x_start
 #   b/c there is no guarantee that ranges (stats) are sorted
