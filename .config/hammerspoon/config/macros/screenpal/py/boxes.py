@@ -87,7 +87,6 @@ def get_silences():
             } for x_start, x_end in merged_x_ranges
         ]
     }
-    print(json.dumps(results))  # output to STDOUT for hs to consume
 
     if DEBUG:
         # make a divider like the background color #2C313C
@@ -122,4 +121,8 @@ def get_silences():
             # * final preview mask
             show_and_wait(image, build_range_mask(merged_x_ranges, image))
 
-get_silences()
+    return results
+
+results = get_silences()
+
+print(json.dumps(results))  # output to STDOUT for hs to consume
