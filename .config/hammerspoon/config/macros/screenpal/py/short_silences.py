@@ -8,8 +8,6 @@ from functools import reduce
 from shared import *
 from visualize import *
 
-# TODO! OPTIMIZE FOR ONE LOAD OF ANY SHARED ASSETS (i.e. image load)
-
 DEBUG = __name__ == "__main__"
 
 def get_short_silences():

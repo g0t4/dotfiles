@@ -2,8 +2,6 @@ import json
 from regular_silences import get_regular_silences
 from short_silences import get_short_silences
 
-# TODO! OPTIMIZE FOR ONE LOAD OF ANY SHARED ASSETS (i.e. image load)
-
 if __name__ == "__main__":
 
     # time python3 both.py samples/playhead-darkblue1.png --debug
