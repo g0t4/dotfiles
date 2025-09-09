@@ -29,7 +29,7 @@ if DEBUG:
     divider = divider[:image.shape[0] // 2, :image.shape[1]]  # first half of image
     divider[:] = [60, 49, 44]  # BGR for #2C313C
 
-    images = [
+    show_and_wait(
         # image, # include image but not really necessary
         display_mask_over_image(image, gray_box_mask),
         display_mask_only(image, gray_box_mask),
@@ -40,9 +40,7 @@ if DEBUG:
         divider,
         display_mask_only(image, gray_box_mask),
         display_mask_only(image, gray_box_mask_smooth),
-    ]
-
-    show_and_wait(*images)
+    )
 
 num_labels, labels, stats_4k, _ = cv.connectedComponentsWithStats(gray_box_mask_smooth, connectivity=8)
 if DEBUG:
