@@ -491,18 +491,21 @@ function show_silences(silences, slider)
     local elements = {}
     for _, silence in ipairs(silences) do
         local width = silence.x_end - silence.x_start
-        table.insert(elements, {
-            type = "rectangle",
-            action = "fill",
-            fillColor = { red = 1, green = 0, blue = 0, alpha = 0.3 },
-            frame = { x = silence.x_start, y = 0, w = width, h = slider_frame.h }
-        })
-        table.insert(elements, {
-            type = "rectangle",
-            action = "stroke",
-            strokeColor = { red = 1, green = 0, blue = 0, alpha = 1 },
-            frame = { x = silence.x_start, y = 0, w = width, h = slider_frame.h }
-        })
+        -- print("start=" .. silence.x_start .. " end=" .. silence.x_end)
+        if width > 0 then
+            table.insert(elements, {
+                type = "rectangle",
+                action = "fill",
+                fillColor = { red = 1, green = 0, blue = 0, alpha = 0.3 },
+                frame = { x = silence.x_start, y = 0, w = width, h = slider_frame.h }
+            })
+            table.insert(elements, {
+                type = "rectangle",
+                action = "stroke",
+                strokeColor = { red = 1, green = 0, blue = 0, alpha = 1 },
+                frame = { x = silence.x_start, y = 0, w = width, h = slider_frame.h }
+            })
+        end
     end
     canvas:appendElements(elements)
     silences_canvas = canvas
