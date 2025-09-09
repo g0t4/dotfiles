@@ -72,26 +72,18 @@ if idx is not None:
 
 if DEBUG:
     built = build_range_mask(runs, image)
-    final_mask = np.zeros_like(image)
-    print(f'{final_mask=}')
-    for r in runs:
-        start = r[0]
-        end = r[1]
-        final_mask[:, start:end + 1] = RED
 
     stacked = np.vstack([
         # both full size:
-        # image,
-        # final_mask,
-        # built,
+        image,
+        built,
 
-        # zoom in on run (where playhead is) => can zoom in then and compare edges to see if it lines up!
-        image[:, 1300:1500],
-        final_mask[:, 1300:1500],
-        built[:, 1300:1500],
+        # zoom in on run (where playhead is) => can zoom in then
+        # and compare edges to see if it lines up!
+        # image[:, 1300:1500],
+        # built[:, 1300:1500],
     ])
     show_and_wait(stacked)
-    assert (np.array_equal(final_mask[:, 1300:1500], built[:, 1300:1500]))
 
 # * serialize response to json in STDOUT
 results = {
