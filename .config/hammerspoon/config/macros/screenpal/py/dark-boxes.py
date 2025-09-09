@@ -20,6 +20,8 @@ image = load_image()
 timeline_mask = color_mask(image, colors_bgr.timeline_bg, tolerance)  # leave so you can come back to this later for additional detection (i.e. unmarked silences, < 1 second)
 playhead_mask = color_mask(image, colors_bgr.playhead, tolerance)
 
+def get_silences():
+
 def find_playhead_x(mask: np.ndarray) -> int | None:
     # returns LEFTMOST edge of playhead, PRN could find centermost column
     # mask is 2D, nonzero (255) means "on"

@@ -16,10 +16,10 @@ tolerance = 4
 
 image = load_image()
 
-def get_silences():
+timeline_mask = color_mask(image, colors_bgr.timeline_bg, tolerance)  # leave so you can come back to this later for additional detection (i.e. unmarked silences, < 1 second)
+playhead_mask = color_mask(image, colors_bgr.playhead, tolerance)
 
-    timeline_mask = color_mask(image, colors_bgr.timeline_bg, tolerance)  # leave so you can come back to this later for additional detection (i.e. unmarked silences, < 1 second)
-    playhead_mask = color_mask(image, colors_bgr.playhead, tolerance)
+def get_silences():
 
     gray_box_mask = color_mask(image, colors_bgr.silence_gray, tolerance + 2)  # slightly looser for AA edges
     #   it does detect the playhead and the white dashed vertical line from recording mark, but I could skip over those with a n algorithm of some sort to connect sections with tiny tiny gaps (<4 pixels wide) assuming both sides are silence
