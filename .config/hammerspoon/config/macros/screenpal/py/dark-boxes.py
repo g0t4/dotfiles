@@ -27,7 +27,7 @@ def find_playhead_x(mask: np.ndarray) -> int | None:
     cols = np.where(col_has_all)[0]
     return int(cols[0]) if cols.size > 0 else None
 
-idx = find_playhead_x(playhead_mask)
+playhead_leftmost_index = find_playhead_x(playhead_mask)
 
 hunt_mask = cv.bitwise_or(timeline_mask, playhead_mask)
 hunt_mask_CLOSED = cv.morphologyEx(hunt_mask, cv.MORPH_CLOSE, np.ones((3, 3), np.uint8))
@@ -67,7 +67,7 @@ def scan_for_all_short_silences(mask: np.ndarray):
     return runs
 
 runs = []
-if idx is not None:
+if playhead_leftmost_index is not None:
     runs = scan_for_all_short_silences(hunt_mask_CLOSED)
 
 if DEBUG:
@@ -89,6 +89,9 @@ if DEBUG:
 
 # * serialize response to json in STDOUT
 results = {
+    # PRN find playhead_center_index if this needs to be accurate
+    # PRN for now I may use this in lua to compare captured vs actual as canary
+    "playhead_x": playhead_leftmost_index,
     "short_silences": [
         {
             # FYI for now off by one won't matter much but I should resolve this
