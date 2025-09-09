@@ -30,6 +30,8 @@ if DEBUG:
     divider = divider[:image.shape[0] // 2, :image.shape[1]]  # first half of image
     divider[:] = [60, 49, 44]  # BGR for #2C313C
 
+    labeled_mask = display_colorful_labeled_regions(labels)
+
     show_and_wait(
         # image, # include image but not really necessary
         display_mask_over_image(image, gray_box_mask),
@@ -41,9 +43,9 @@ if DEBUG:
         divider,
         display_mask_only(image, gray_box_mask),
         display_mask_only(image, gray_box_mask_smooth),
+        divider,
+        labeled_mask,
     )
-
-    labeled_mask = display_colorful_labeled_regions(labels)
 
     # *** idea - add playhead to gray_box_mask
     gray_box_with_playhead_mask = cv.bitwise_or(gray_box_mask, playhead_mask)
