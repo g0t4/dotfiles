@@ -56,14 +56,15 @@ function TimelineDetails:new(editor_window)
 end
 
 ---@param self table
----@param playhead_x number
-function TimelineDetails:_move_playhead_to_x(playhead_x)
+---@param target_x number
+function TimelineDetails:_move_playhead_to_x(target_x)
     local hold_duration_ms = 10
     hs.eventtap.leftClick({
-        x = playhead_x,
+        x = target_x,
         y = self.timeline_frame.y + self.timeline_frame.h / 2
     }, hold_duration_ms * 1000)
-    self:wait_until_playhead_at(playhead_x)
+    -- PRN round to nearest frame? is that doable?
+    self:wait_until_playhead_at(target_x)
 end
 
 ---@param self TimelineDetails
