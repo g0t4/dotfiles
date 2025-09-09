@@ -546,7 +546,6 @@ function StreamDeck_ScreenPal_SelectNextSilence()
         hs.eventtap.keyStroke({}, "s", 0, get_screenpal_app_element_or_throw())
         hs.timer.usleep(100000)
         _timeline:_move_playhead_to_x(next.x_end - 10 + slider_frame.x)
-        hs.timer.usleep(100000)
         hs.eventtap.keyStroke({}, "e", 0, get_screenpal_app_element_or_throw())
     end
 
