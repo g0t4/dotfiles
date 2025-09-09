@@ -88,7 +88,8 @@ x_ranges = stats_1080p[1:, [0, 2]]
 if DEBUG:
     print(f'{x_ranges=}')
 
-# ensure sorted by x_started
+# * sort by x_start
+#   no guarantee that ranges (stats) are sorted
 x_start_column = x_ranges[:, 0]
 sorted_row_indicies = np.argsort(x_start_column)
 x_sorted_ranges = x_ranges[sorted_row_indicies]
