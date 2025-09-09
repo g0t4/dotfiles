@@ -121,3 +121,5 @@ def get_silences():
 
             # * final preview mask
             show_and_wait(image, build_range_mask(merged_x_ranges, image))
+
+get_silences()
