@@ -70,20 +70,11 @@ if DEBUG:
     cv.waitKey(0)
     cv.destroyAllWindows()
 
-# *** downscale to 1080p
-# first four stats are: left, top, width, height (divide by 2)
-# fifth is area (divide by 4)
-stats_1080p = stats.copy()
-stats_1080p[:, :4] //= 2
-stats_1080p[:, 4] //= 4
-if DEBUG:
-    print("4k stats:")
-    print(stats)
-    print("1080p stats:")
-    print(stats_1080p)
-
 # skip first stat (0) b/c it is the background (not a range)
-x_ranges = stats_1080p[1:, [0, 2]]
+# columns: left, top, width, height, area
+#   only take left (0) and width (2) columns
+x_ranges = stats[1:, [0, 2]] / 2
+# / 2 b/c stats is 4k resolution (of captured image) but I need 1080p for hammerspoon
 if DEBUG:
     print(f'{x_ranges=}')
 
