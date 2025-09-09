@@ -85,7 +85,7 @@ if DEBUG:
     # ]
 
     stacked = np.vstack(full)
-    cv.imshow("stacked", stacked)
+    show_and_wait(stacked)
 
 # * serialize response to json in STDOUT
 results = {
