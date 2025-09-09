@@ -6,25 +6,16 @@ import cv2 as cv
 import numpy as np
 from pathlib import Path
 from functools import reduce
-
-DEBUG = "--debug" in sys.argv
-
-if DEBUG:
-    print(f'{sys.argv=}')
-    from rich import print
+from shared import *
 
 # z screenpal/py
 # time python3 dark-boxes.py samples/playhead-darkblue1.png # regular output (non-debug)
 # time python3 dark-boxes.py samples/playhead-darkblue1.png --debug
 
-file = sys.argv[1] if len(sys.argv) > 1 else None
-
-image = cv.imread(str(file), cv.IMREAD_COLOR)  # BGR
-if image is None:
-    raise ValueError(f"Could not load image from {file}")
-
 # take off top and bottom borders
 image = image[2:-2]
+show_and_wait(image)
+
 # print("removed top/botom borders:", image.shape)
 
 # * take the bottom of the timeline
@@ -207,18 +198,6 @@ if idx is not None and False:
 
         cv.waitKey(0)
 
-# Highlight colors (BGR order for OpenCV)
-RED = (0, 0, 255)
-GREEN = (0, 255, 0)
-BLUE = (255, 0, 0)
-YELLOW = (0, 255, 255)
-CYAN = (255, 255, 0)
-MAGENTA = (255, 0, 255)
-WHITE = (255, 255, 255)
-BLACK = (0, 0, 0)
-ORANGE = (0, 165, 255)
-PURPLE = (128, 0, 128)
-
 if DEBUG:
     final_mask = np.zeros_like(image)
     print(f'{final_mask=}')
@@ -237,9 +216,7 @@ if DEBUG:
         # final_mask[:, 1300:1500],
     ]
     stacked = np.vstack(images)
-    cv.imshow("stacked", stacked)
-    cv.waitKey(0)
-    cv.destroyAllWindows()
+    show_and_wait(stacked)
 
 # * serialize response to json in STDOUT
 results = {

@@ -6,23 +6,10 @@ import cv2 as cv
 import numpy as np
 from pathlib import Path
 from functools import reduce
-
-DEBUG = "--debug" in sys.argv
-
-if DEBUG:
-    print(f'{sys.argv=}')
-    from rich import print
+from shared import *
 
 # z screenpal/py
 # time python3 boxes.py samples/timeline03a.png --debug
-
-file = sys.argv[1] if len(sys.argv) > 1 else None
-
-# / ".config/hammerspoon/config/macros/screenpal/py/timeline03a-2.png"
-
-image = cv.imread(str(file), cv.IMREAD_COLOR)  # BGR
-if image is None:
-    raise ValueError(f"Could not load image from {file}")
 
 class TimelineColorsBGR(NamedTuple):
     timeline_bg: np.ndarray
@@ -48,18 +35,6 @@ def color_mask(img, color, tol):
 gray_box_direct_mask = color_mask(image, colors_bgr.silence_gray, tolerance)  # skip ROI b/c the image is ONLY the timeline so there's no reason to spot the timeline!
 timeline_mask = color_mask(image, colors_bgr.timeline_bg, tolerance)  # leave so you can come back to this later for additional detection (i.e. unmarked silences, < 1 second)
 playhead_mask = color_mask(image, colors_bgr.playhead, tolerance)
-
-# Highlight colors (BGR order for OpenCV)
-RED = (0, 0, 255)
-GREEN = (0, 255, 0)
-BLUE = (255, 0, 0)
-YELLOW = (0, 255, 255)
-CYAN = (255, 255, 0)
-MAGENTA = (255, 0, 255)
-WHITE = (255, 255, 255)
-BLACK = (0, 0, 0)
-ORANGE = (0, 165, 255)
-PURPLE = (128, 0, 128)
 
 def mask_only(image, mask, highlight_color=RED) -> np.ndarray:
 
