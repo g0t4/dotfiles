@@ -122,5 +122,8 @@ def get_silences():
 
     return results
 
-results = get_silences()
-print(json.dumps(results))  # output to STDOUT for hs to consume
+if __name__ == "__main__":
+
+    results = get_silences()
+
+    print(json.dumps(results))  # output to STDOUT for hs to consume
