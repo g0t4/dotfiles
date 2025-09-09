@@ -6,6 +6,7 @@ import numpy as np
 from pathlib import Path
 from functools import reduce
 from shared import *
+from visualize import *
 
 # z screenpal/py
 # time python3 dark-boxes.py samples/playhead-darkblue1.png # regular output (non-debug)
@@ -70,6 +71,7 @@ if idx is not None:
     runs = scan_for_all_short_silences(hunt_mask_CLOSED)
 
 if DEBUG:
+    built = build_range_mask(runs, image)
     final_mask = np.zeros_like(image)
     print(f'{final_mask=}')
     for r in runs:
