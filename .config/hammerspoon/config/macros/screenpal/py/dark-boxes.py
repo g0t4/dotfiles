@@ -14,6 +14,7 @@ if DEBUG:
     from rich import print
 
 # z screenpal/py
+# time python3 dark-boxes.py samples/playhead-darkblue1.png # regular output (non-debug)
 # time python3 dark-boxes.py samples/playhead-darkblue1.png --debug
 
 file = sys.argv[1] if len(sys.argv) > 1 else None
