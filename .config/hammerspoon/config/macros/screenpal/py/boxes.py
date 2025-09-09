@@ -80,10 +80,10 @@ if DEBUG:
 
 # * sort by x_start
 #   no guarantee that ranges (stats) are sorted
-def sort_ranges(x_ranges: np.ndarray) -> np.ndarray:
-    x_start_column = x_ranges[:, 0]
+def sort_ranges(ranges: np.ndarray) -> np.ndarray:
+    x_start_column = ranges[:, 0]
     sorted_row_indicies = np.argsort(x_start_column)
-    return x_ranges[sorted_row_indicies]
+    return ranges[sorted_row_indicies]
 
 x_sorted_ranges = sort_ranges(x_ranges_1080p)
 
