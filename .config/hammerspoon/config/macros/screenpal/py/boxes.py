@@ -16,6 +16,8 @@ tolerance = 4
 
 image = load_image()
 
+def get_silences():
+
 timeline_mask = color_mask(image, colors_bgr.timeline_bg, tolerance)  # leave so you can come back to this later for additional detection (i.e. unmarked silences, < 1 second)
 playhead_mask = color_mask(image, colors_bgr.playhead, tolerance)
 
