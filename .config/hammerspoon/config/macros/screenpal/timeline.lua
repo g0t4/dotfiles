@@ -42,6 +42,7 @@ function TimelineDetails:new(editor_window)
     local _playhead_relative_timeline_x = playhead_x - timeline_frame.x
 
     self.timeline_frame = timeline_frame
+    self._playhead_window = playhead_window
     self._playhead_window_frame = _playhead_window_frame
     self.playhead_x = playhead_x
     self._playhead_relative_timeline_x = _playhead_relative_timeline_x

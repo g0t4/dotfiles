@@ -544,7 +544,16 @@ function StreamDeck_ScreenPal_SelectNextSilence()
         for i = 1, 10 do
             -- watch for playhead_x to be moved instead of fixed pause
             hs.timer.usleep(10000) -- 50 mostly works but 100 is reliable
-            _timeline = win:_timeline_details() -- refresh
+            -- _timeline = win:_timeline_details() -- refresh
+            print("recompute01 frame (wont work)",
+                _timeline._playhead_window_frame.x + _timeline._playhead_window_frame.w / 2)
+
+            r2_frame = _timeline._playhead_window:axFrame()
+            print("recompute02 from window", r2_frame.x + r2_frame.w / 2)
+
+            -- PRN get window if it changed which I think it did dammit
+            -- r3_win = _timelineget_playhead_window_or_throw
+
             print("iteration " .. i .. " playhead_x=" .. _timeline.playhead_x) -- debug
             if _timeline:is_playhead_at_target(target_playhead_x) then
                 break
