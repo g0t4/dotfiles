@@ -537,16 +537,15 @@ function StreamDeck_ScreenPal_SelectNextSilence()
         --    could even show prev/next of each type in diff colors
         print("FOUND: " .. hs.inspect(next))
         -- TODO _move_playhead_to_x_relative()
-        local playhead_to_x = next.x_start + 10 + slider_frame.x
-        print("moving playhead to " .. playhead_to_x) -- debug
-        _timeline:_move_playhead_to_x(playhead_to_x)
+        local target_playhead_x = next.x_start + 10 + slider_frame.x
+        print("moving playhead to " .. target_playhead_x) -- debug
+        _timeline:_move_playhead_to_x(target_playhead_x)
         for i = 1, 10 do
             -- watch for playhead_x to be moved instead of fixed pause
             hs.timer.usleep(10000) -- 50 mostly works but 100 is reliable
             _timeline = win:_timeline_details() -- refresh
             print("iteration " .. i .. " playhead_x=" .. _timeline.playhead_x) -- debug
-            -- frame issue, will move to nearest frame's pixel value
-            if math.abs(_timeline.playhead_x - playhead_to_x) <= _timeline.pixels_per_frame then
+            if _timeline:is_playhead_at_target(target_playhead_x) then
                 break
             end
         end

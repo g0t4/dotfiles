@@ -71,4 +71,12 @@ function TimelineDetails:move_playhead_to_seconds(seconds)
     self:_move_playhead_to_x(playhead_x)
 end
 
+---@param target_x number
+---@return boolean
+function TimelineDetails:is_playhead_at_target(target_x)
+    -- within one frame either way
+    -- PRN make more precise later on if I know the target in terms of a frame value
+    return math.abs(self.playhead_x - target_x) <= self.pixels_per_frame
+end
+
 return TimelineDetails
