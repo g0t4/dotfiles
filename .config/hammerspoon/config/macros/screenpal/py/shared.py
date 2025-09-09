@@ -49,14 +49,13 @@ def load_image() -> np.ndarray:
 
     # PRN any assertions about size so if it changes I know that I might need to adjust some logic (i.e. top/bottom borders)?
 
-    if DEBUG:
-        separator = create_separator_for(image)
-        show_and_wait(
-            separator[:, 1400:1500],
-            image[2:, 1400:1500],
-            separator[:, 1400:1500],
-        )
-        exit()
+    # if DEBUG:
+    #     separator = create_separator_for(image)
+    #     show_and_wait(
+    #         separator[:, 1400:1500],
+    #         image[2:, 1400:1500],
+    #         separator[:, 1400:1500],
+    #     )
 
     # * take off top and bottom borders (leave leading/trailing else have to adjust x values)
     return image[2:-2]
