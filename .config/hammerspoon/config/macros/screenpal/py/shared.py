@@ -46,10 +46,6 @@ def load_image() -> np.ndarray:
     if image is None:
         raise ValueError(f"Could not load image from {file}")
 
-    # * take off top and bottom borders (leave leading/trailing else have to adjust x values)
-    # image = image[2:-2]
-    #0x282828 (40,40,40)
-
     if DEBUG:
         separator = create_separator_for(image)
         show_and_wait(
@@ -59,4 +55,5 @@ def load_image() -> np.ndarray:
         )
         exit()
 
-    return image
+    # * take off top and bottom borders (leave leading/trailing else have to adjust x values)
+    return image[2:-2]
