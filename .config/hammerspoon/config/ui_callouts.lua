@@ -542,20 +542,23 @@ end
 
 ---@param element hs.axuielement
 ---@param callback fun(path: string)
-function capture_this_element(element, callback)
+function capture_this_element(element, callback, image_tag)
     local frame = element:axFrame()
 
-    local role = element:axRole() or ""
-    local identifier = element:attributeValue("AXIdentifier") or ""
-    local value = element:attributeValue("AXValue") or ""
-    local title = element:attributeValue("AXTitle") or ""
-    local desc = element:attributeValue("AXDescription") or ""
-    local image_tag = role
-    if identifier then image_tag = image_tag .. "_id_" .. identifier end
-    if value then image_tag = image_tag .. "_value_" .. value end
-    if title then image_tag = image_tag .. "_title_" .. title end
-    if desc then image_tag = image_tag .. "_desc_" .. desc end
-    image_tag = sanitize_image_tag(image_tag)
+    if not image_tag then
+        local role = element:axRole() or ""
+        local identifier = element:attributeValue("AXIdentifier") or ""
+        local value = element:attributeValue("AXValue") or ""
+        local title = element:attributeValue("AXTitle") or ""
+        local desc = element:attributeValue("AXDescription") or ""
+
+        image_tag = role
+        if identifier then image_tag = image_tag .. "_id_" .. identifier end
+        if value then image_tag = image_tag .. "_value_" .. value end
+        if title then image_tag = image_tag .. "_title_" .. title end
+        if desc then image_tag = image_tag .. "_desc_" .. desc end
+        image_tag = sanitize_image_tag(image_tag)
+    end
 
     -- * save to
     local where_to = get_screencapture_filename("png", image_tag)

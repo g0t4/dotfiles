@@ -564,11 +564,12 @@ function detect_silences_and_then(on_done)
     local win = get_cached_editor_window()
     local slider = win:get_timeline_slider_or_throw()
 
+    local image_tag = "trash_me_silence_detect"
     capture_this_element(slider, function(where_to)
         detect_short_silences_runs(where_to, function(silences)
             on_done(win, slider, silences)
         end)
-    end)
+    end, image_tag)
 end
 
 function StreamDeckScreenPalTimelineZoomAndJumpToStart()
