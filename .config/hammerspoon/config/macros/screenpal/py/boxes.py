@@ -125,9 +125,7 @@ if DEBUG:
         end = start + width
         final_preview_mask[:, start * 2:end * 2] = 255
     stack = np.vstack([image, final_preview_mask])
-    cv.imshow("final_preview_mask", stack)
-    cv.waitKey(0)
-    cv.destroyAllWindows()
+    show_and_wait(stack)
 
 # * serialize response to json in STDOUT
 results = {
