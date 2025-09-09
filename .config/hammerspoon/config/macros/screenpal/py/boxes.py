@@ -124,11 +124,11 @@ def merge_if_one_pixel_apart(accum, current):
     return accum
 
 # ** join adjacent boxes that are 1 pixel apart x2_start = x1_end + 1
-final_x_ranges = reduce(merge_if_one_pixel_apart, x_sorted_ranges, [])
+merged_x_ranges = reduce(merge_if_one_pixel_apart, x_sorted_ranges, [])
 
 # * final preview mask
 if DEBUG:
-    show_and_wait(image, build_range_mask(final_x_ranges, image))
+    show_and_wait(image, build_range_mask(merged_x_ranges, image))
 
 # * serialize response to json in STDOUT
 results = {
@@ -136,7 +136,7 @@ results = {
         {
             "x_start": int(x_start),  # int() is serializable
             "x_end": int(x_end),
-        } for x_start, x_end in final_x_ranges
+        } for x_start, x_end in merged_x_ranges
     ]
 }
 print(json.dumps(results))  # output to STDOUT for hs to consume
