@@ -78,6 +78,17 @@ x_ranges_1080p = stats_4k[1:, [0, 2]] // 2
 if DEBUG:
     print(f'{x_ranges_1080p=}')
 
+# * [x_start,x_width] => [x_start, x_end]
+# x_ranges_1080p = [(start, start + width) for (start, width) in x_ranges_1080p]
+x_start_col = x_ranges_1080p[:, 0]
+x_width_col = x_ranges_1080p[:, 1]
+x_ranges_with_end = np.column_stack((
+    x_start_col,
+    x_start_col + x_width_col,
+))
+print(f'{x_ranges_with_end=}')
+exit()
+
 # * sort by x_start
 #   no guarantee that ranges (stats) are sorted
 def sort_ranges(ranges: np.ndarray) -> np.ndarray:
