@@ -114,9 +114,8 @@ def merge_if_one_pixel_apart(accum, current):
         accum.append(current)
     return accum
 
-# ** join nearly adjacent boxes that are 1 pixel apart x2_start = x1_end + 1
+# ** join adjacent boxes that are 1 pixel apart x2_start = x1_end + 1
 final_x_ranges = reduce(merge_if_one_pixel_apart, x_sorted_ranges, [])
-# print(f'{final_x_regions=}')
 
 # * final preview mask
 if DEBUG:
