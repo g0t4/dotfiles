@@ -50,13 +50,11 @@ def load_image() -> np.ndarray:
 
     show_and_wait(
         separator[:, 1400:1500],
-        image[0:-2, 1400:1500],
+        image[2:, 1400:1500],
         separator[:, 1400:1500],
-        image[1:-2, 1400:1500],
+        image[2:-1, 1400:1500],
         separator[:, 1400:1500],
         image[2:-2, 1400:1500],
-        separator[:, 1400:1500],
-        image[:, 1400:1500],
         separator[:, 1400:1500],
     )
     exit()
