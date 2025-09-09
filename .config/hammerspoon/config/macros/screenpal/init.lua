@@ -518,13 +518,27 @@ function StreamDeck_ScreenPal_SelectNextSilence()
     ---@param slider hs.axuielement
     ---@param results DetectionResults
     function select_next(win, slider, results)
+        local assume_sorted_silences = results.regular_silences
         local slider_frame = slider:axFrame()
-        win:_timeline_details()
-        vim.iter(results)
+        local _timeline = win:_timeline_details()
+        -- -- PRN move logic into a ctor in detect_silence to build sorted lists for everything so consumers don't have to
+        -- local sorted_silences = table.sort(silences, function(a, b) return a.x_start > b.x_start end)
+        local next = vim.iter(assume_sorted_silences)
             :filter( ---@param silence Silence
                 function(silence)
-                    return silence.x_start + slider_frame.x > 10
+                    -- TODO get relative playhead position so I don't have to add slider (timeline)'s frame.x?
+                    return silence.x_start + slider_frame.x > _timeline.playhead_x
                 end)
+            :next()
+        if next == nil then
+            print("no silence found after playhead")
+            return
+        end
+        -- TODO select it
+        -- TODO verify is next (show just the one?)
+        -- TODO PRN maybe move next and prev logic into DetectionResults and have it each color diff in show selection view?
+        --    could even show prev/next of each type in diff colors
+        print("FOUND: " .. hs.inspect(next))
     end
 
     detect_silences_and_then(select_next)
