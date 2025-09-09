@@ -60,6 +60,9 @@ def get_short_silences():
     runs = []
     if playhead_leftmost_index is not None:
         runs = scan_for_all_short_silences(hunt_mask_CLOSED)
+        # TODO! this is actually fine b/c I can scroll the playhead off screen
+        #   and it doesn't matter now that we use the timeline bg to find ranges and the playhead
+        #   is just to smooth over the one range it overlaps with (if it does)
 
     if DEBUG:
         built = build_range_mask(runs, image)
