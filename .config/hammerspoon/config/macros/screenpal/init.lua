@@ -459,31 +459,23 @@ function ScreenPalEditorWindow:start_cut()
     hs.timer.usleep(100000)
     -- closed
     -- app:window(1)
-    -- AXFocused: false<bool>
-    -- AXMain: false<bool>
-    -- AXMinimized: false<bool>
-    -- AXModal: false<bool>
     -- AXRoleDescription: window<string>
     -- AXSections: [1: SectionObject: hs.axuielement: AXButton (0x60000020b438), SectionUniqueID: AXContent, SectionDescription: Content]
-    -- AXSubrole: AXUnknown<string>
     -- AXTitle: SOM-FloatingWindow-Type=edit2.addedit.toolbar.menu.window-ZOrder=1(Undefined+1)<string>
     -- frame: x=725.0,y=628.0,w=274.0,h=94.0
-    -- unique ref: app:window('SOM-FloatingWindow-Type=edit2.addedit.toolbar.menu.window-ZOrder=1(Undefined+1)')
-
+    -- unique ref:
+    start = get_time()
+    -- FYI getting window anew (OR should I use cache?)
+    local win = self.app:window('SOM-FloatingWindow-Type=edit2.addedit.toolbar.menu.window-ZOrder=1(Undefined+1)')
+    print_took("get toolbar window", start)
 
     -- open
     -- app:window(2)
-    -- AXFocused: false<bool>
-    -- AXMain: false<bool>
-    -- AXMinimized: false<bool>
-    -- AXModal: false<bool>
     -- AXRoleDescription: window<string>
     -- AXSections: [1: SectionObject: hs.axuielement: AXTextField (0x6000005a25f8), SectionUniqueID: AXContent, SectionDescription: Content]
-    -- AXSubrole: AXUnknown<string>
     -- AXTitle: SOM-FloatingWindow-Type=edit2.addedit.toolbar.menu.window-ZOrder=1(Undefined+1)<string>
     -- frame: x=687.0,y=628.0,w=428.0,h=94.0
     -- unique ref: app:window('SOM-FloatingWindow-Type=edit2.addedit.toolbar.menu.window-ZOrder=1(Undefined+1)')
-
 end
 
 local _cached_editor_window = nil
