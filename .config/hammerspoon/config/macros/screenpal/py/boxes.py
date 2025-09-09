@@ -52,25 +52,25 @@ def get_silences():
     # OR, throw if they aren't basically the full height of the image?
     # see what happens with real usage and then add if I encounter issues
 
-def merge_if_one_pixel_apart(accum, current):
-    # TODO! I switched to 4k so make sure this still works!!
-    # print(f'{accum=}   {current=}')
-    accum = accum or []
-    current = current.copy()
-    if len(accum) == 0:
-        accum.append(current)
+    def merge_if_one_pixel_apart(accum, current):
+        # TODO! I switched to 4k so make sure this still works!!
+        # print(f'{accum=}   {current=}')
+        accum = accum or []
+        current = current.copy()
+        if len(accum) == 0:
+            accum.append(current)
+            return accum
+        last = accum[-1]
+        last_start = last[0]
+        last_end = last[1]
+        current_start = current[0]
+        # 4k => 2 pixels, 1080p => 1 pixel
+        if current_start - last_end <= 2:
+            current_end = current[1]
+            last[1] = current_end
+        else:
+            accum.append(current)
         return accum
-    last = accum[-1]
-    last_start = last[0]
-    last_end = last[1]
-    current_start = current[0]
-    # 4k => 2 pixels, 1080p => 1 pixel
-    if current_start - last_end <= 2:
-        current_end = current[1]
-        last[1] = current_end
-    else:
-        accum.append(current)
-    return accum
 
 # ** join adjacent boxes that are 1 pixel apart x2_start = x1_end + 1
 merged_x_ranges = reduce(merge_if_one_pixel_apart, x_sorted_ranges, [])
