@@ -79,16 +79,16 @@ if DEBUG:
         end = r[1]
         final_mask[:, start:end + 1] = RED
 
-    images = [
+    stacked = np.vstack([
         # both full size:
         image,
         final_mask,
+        built,
 
         # zoom in on run (where playhead is) => can zoom in then and compare edges to see if it lines up!
         # image[:, 1300:1500],
         # final_mask[:, 1300:1500],
-    ]
-    stacked = np.vstack(images)
+    ])
     show_and_wait(stacked)
 
 # * serialize response to json in STDOUT
