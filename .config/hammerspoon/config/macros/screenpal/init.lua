@@ -542,7 +542,6 @@ function StreamDeck_ScreenPal_SelectNextSilence()
         _timeline:_move_playhead_to_x(target_playhead_x)
         _timeline:wait_until_playhead_at(target_playhead_x)
 
-        hs.timer.usleep(100000) -- 50 mostly works but 100 is reliable
         hs.eventtap.keyStroke({}, "c", 0, get_screenpal_app_element_or_throw())
         hs.timer.usleep(100000)
         hs.eventtap.keyStroke({}, "s", 0, get_screenpal_app_element_or_throw())

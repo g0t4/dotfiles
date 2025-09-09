@@ -106,7 +106,12 @@ function TimelineDetails:wait_until_playhead_at(target_x)
             break
         end
     end
-    print_took("** move playhead to cut start", start)
+    print_took("wait_until_playhead_at", start)
+    -- FYI it is still possible you need some slight fixed delay
+    --   i.e. if the window coords are updated ahead of something else
+    --   that would intefere with typical next actions (i.e. typing 'c'to trigger cut)
+    --   if so, add that here so everyone benefits from it
+    --   if it's specific to a given automation then that fixed delay can live in consumer code
 end
 
 return TimelineDetails
