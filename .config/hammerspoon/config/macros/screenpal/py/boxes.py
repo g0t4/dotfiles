@@ -89,7 +89,8 @@ if DEBUG:
     print(f'{x_ranges=}')
 
 # ensure sorted by x_started
-sorted_indicies = np.argsort(x_ranges[:, 0])
+first_column_x_start = x_ranges[:, 0]
+sorted_indicies = np.argsort(first_column_x_start)
 x_sorted_regions = x_ranges[sorted_indicies]
 
 if DEBUG:
