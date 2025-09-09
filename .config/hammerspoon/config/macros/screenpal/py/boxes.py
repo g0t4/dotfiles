@@ -120,12 +120,15 @@ final_x_ranges = reduce(merge_if_one_pixel_apart, x_sorted_ranges, [])
 
 # * final preview mask
 if DEBUG:
-    final_preview_mask = np.zeros_like(image)
-    for start, width in final_x_ranges:
-        end = start + width
-        final_preview_mask[:, start * 2:end * 2] = 255
 
-    show_and_wait(image, final_preview_mask)
+    def build_range_mask(final_x_ranges, image):
+        final_preview_mask = np.zeros_like(image)
+        for start, width in final_x_ranges:
+            end = start + width
+            final_preview_mask[:, start * 2:end * 2] = 255
+        return final_preview_mask
+
+    show_and_wait(image, build_range_mask(final_x_ranges, image))
 
 # * serialize response to json in STDOUT
 results = {
