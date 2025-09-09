@@ -14,11 +14,6 @@ from shared import *
 
 image = load_image()
 
-# take off top and bottom borders
-# image = image[2:-2]
-show_and_wait(image[2:-2, 1400:1500], image[:, 1400:1500])
-exit()
-
 # print("removed top/botom borders:", image.shape)
 
 # * take the bottom of the timeline

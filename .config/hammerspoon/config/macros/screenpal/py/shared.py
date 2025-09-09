@@ -15,6 +15,8 @@ BLACK = (0, 0, 0)
 ORANGE = (0, 165, 255)
 PURPLE = (128, 0, 128)
 
+WINDOW_BG_COLOR = (40, 40, 40)  # default background color which when used makes it appear transparent / unset
+
 def show_and_wait(*images):
     cv.imshow("images", np.vstack(images))
     cv.moveWindow("images", 0, 0)
@@ -38,4 +40,25 @@ def load_image() -> np.ndarray:
     image = cv.imread(str(file), cv.IMREAD_COLOR)  # BGR
     if image is None:
         raise ValueError(f"Could not load image from {file}")
+
+    # * take off top and bottom borders (leave leading/trailing else have to adjust x values)
+    # image = image[2:-2]
+    separator = np.zeros((5, image.shape[1], 3), dtype=np.uint8)
+    separator[:, :] = WINDOW_BG_COLOR
+
+    #0x282828 (40,40,40)
+
+    show_and_wait(
+        separator[:, 1400:1500],
+        image[0:-2, 1400:1500],
+        separator[:, 1400:1500],
+        image[1:-2, 1400:1500],
+        separator[:, 1400:1500],
+        image[2:-2, 1400:1500],
+        separator[:, 1400:1500],
+        image[:, 1400:1500],
+        separator[:, 1400:1500],
+    )
+    exit()
+
     return image
