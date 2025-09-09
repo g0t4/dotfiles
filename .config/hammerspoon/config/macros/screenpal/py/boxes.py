@@ -16,45 +16,33 @@ tolerance = 4
 
 image = load_image()
 
-gray_box_direct_mask = color_mask(image, colors_bgr.silence_gray, tolerance)  # skip ROI b/c the image is ONLY the timeline so there's no reason to spot the timeline!
 timeline_mask = color_mask(image, colors_bgr.timeline_bg, tolerance)  # leave so you can come back to this later for additional detection (i.e. unmarked silences, < 1 second)
 playhead_mask = color_mask(image, colors_bgr.playhead, tolerance)
-if DEBUG:
-    images = [
-        # image, # include image but not really necessary
-        display_mask_over_image(image, gray_box_direct_mask),
-        display_mask_only(image, gray_box_direct_mask),
-        display_mask_over_image(image, timeline_mask),
-        display_mask_only(image, timeline_mask),
-        display_mask_over_image(image, playhead_mask, alpha=0.5, highlight_color=YELLOW),
-        display_mask_only(image, playhead_mask, highlight_color=YELLOW),
-    ]
-    # stacked = np.vstack(images)
-    # cv.imshow("stacked", stacked)
-    # cv.waitKey(0)
-    # cv.destroyAllWindows()
 
-# %%
-# *** DIRECT ( THIS IS REALLY GOOD IN MY TESTING!!!) ...
-#   it does detect the playhead and the white dashed vertical line from recording mark, but I could skip over those with a n algorithm of some sort to connect sections with tiny tiny gaps (<4 pixels wide) assuming both sides are silence
 gray_box_mask = color_mask(image, colors_bgr.silence_gray, tolerance + 2)  # slightly looser for AA edges
+#   it does detect the playhead and the white dashed vertical line from recording mark, but I could skip over those with a n algorithm of some sort to connect sections with tiny tiny gaps (<4 pixels wide) assuming both sides are silence
 gray_box_mask_smooth = cv.morphologyEx(gray_box_mask, cv.MORPH_OPEN, np.ones((3, 3), np.uint8))  # smooth out, skip freckled matches
 
 if DEBUG:
     # make a divider like the background color #2C313C
-    black_divider = np.zeros_like(image)
-    black_divider[:] = [60, 49, 44]  # BGR for #2C313C
+    divider = np.zeros_like(image)
+    divider = divider[:image.shape[0] // 2, :image.shape[1]]  # first half of image
+    divider[:] = [60, 49, 44]  # BGR for #2C313C
 
-    # take half height divider:
-    black_divider = black_divider[:image.shape[0] // 2, :image.shape[1]]  # first half of image
-    images = images or []
-    images.append(black_divider)
-    images.append(display_mask_only(image, gray_box_mask))
-    images.append(display_mask_only(image, gray_box_mask_smooth))
-    stacked = np.vstack(images)
-    # cv.imshow("stacked", stacked)
-    # cv.waitKey(0)
-    # cv.destroyAllWindows()
+    images = [
+        # image, # include image but not really necessary
+        display_mask_over_image(image, gray_box_mask),
+        display_mask_only(image, gray_box_mask),
+        display_mask_over_image(image, timeline_mask),
+        display_mask_only(image, timeline_mask),
+        display_mask_over_image(image, playhead_mask, alpha=0.5, highlight_color=YELLOW),
+        display_mask_only(image, playhead_mask, highlight_color=YELLOW),
+        divider,
+        display_mask_only(image, gray_box_mask),
+        display_mask_only(image, gray_box_mask_smooth),
+    ]
+
+    show_and_wait(*images)
 
 num_labels, labels, stats_4k, _ = cv.connectedComponentsWithStats(gray_box_mask_smooth, connectivity=8)
 if DEBUG:
