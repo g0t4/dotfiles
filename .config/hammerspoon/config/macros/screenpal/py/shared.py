@@ -27,10 +27,15 @@ if DEBUG:
     print(f'{sys.argv=}')
     from rich import print
 
-file = sys.argv[1] if len(sys.argv) > 1 else None
+def load_image() -> np.ndarray:
 
-# / ".config/hammerspoon/config/macros/screenpal/py/timeline03a-2.png"
+    file = sys.argv[1] if len(sys.argv) > 1 else None
+    if not file:
+        raise ValueError("No image file provided, pass as first argument")
 
-image = cv.imread(str(file), cv.IMREAD_COLOR)  # BGR
-if image is None:
-    raise ValueError(f"Could not load image from {file}")
+    # / ".config/hammerspoon/config/macros/screenpal/py/timeline03a-2.png"
+
+    image = cv.imread(str(file), cv.IMREAD_COLOR)  # BGR
+    if image is None:
+        raise ValueError(f"Could not load image from {file}")
+    return image

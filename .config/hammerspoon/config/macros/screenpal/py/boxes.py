@@ -32,6 +32,8 @@ def color_mask(img, color, tol):
     diff = np.abs(img.astype(np.int16) - color.astype(np.int16))
     return (diff <= tol).all(axis=2).astype(np.uint8) * 255
 
+image = load_image()
+
 gray_box_direct_mask = color_mask(image, colors_bgr.silence_gray, tolerance)  # skip ROI b/c the image is ONLY the timeline so there's no reason to spot the timeline!
 timeline_mask = color_mask(image, colors_bgr.timeline_bg, tolerance)  # leave so you can come back to this later for additional detection (i.e. unmarked silences, < 1 second)
 playhead_mask = color_mask(image, colors_bgr.playhead, tolerance)
