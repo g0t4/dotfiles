@@ -87,13 +87,12 @@ def sort_ranges(ranges: np.ndarray) -> np.ndarray:
     return ranges[sorted_row_indicies]
 
 x_sorted_ranges = sort_ranges(x_ranges_1080p)
-
 if DEBUG:
     print(f'{x_sorted_ranges=}')
-# PRN throw if any regions overlap...
-# AND throw if they aren't basically the full height of the image?
-#   or filter these out?
-#   see what happens with real usage and then add if I encounter issues
+
+# PRN throw if any regions overlap?
+# OR, throw if they aren't basically the full height of the image?
+# see what happens with real usage and then add if I encounter issues
 
 def merge_if_one_pixel_apart(accum, current):
     # FYI if you use 4k resolution here, then skip up to 2 pixels apart
