@@ -102,6 +102,8 @@ def get_regular_silences():
             labeled_mask,
         )
 
+        print(json.dumps(results))
+
         if file == "samples/timeline03a.png":
             # PRN use unit test assertions so we can see what differs
             expected = {"silences": [{"x_start": 754, "x_end": 891}, {"x_start": 1450, "x_end": 1653}]} # yapf: disable
@@ -117,7 +119,4 @@ if DEBUG:
     # z screenpal/py
     # time python3 regular_silences.py samples/timeline03a.png --debug
     from rich import print
-
-    results = get_regular_silences()
-
-    print(json.dumps(results))
+    get_regular_silences()

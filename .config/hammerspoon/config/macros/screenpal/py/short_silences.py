@@ -98,24 +98,23 @@ def get_short_silences():
     }
 
     # PRN hardcode results for test case
-    if DEBUG and file == "samples/playhead-darkblue1.png":
-        # PRN use unit test assertions so we can see what differs
-        # TODO verify these are correct values (I just captured these off of the last test run I did by inspecting the image overlays)
-        expected = {"playhead_x": 1452, "short_silences": [{"x_start": 4, "x_end": 5}, {"x_start": 31, "x_end": 32}, {"x_start": 217, "x_end": 218}, {"x_start": 319, "x_end": 320}, {"x_start": 376, "x_end": 378}, {"x_start": 403,
-        "x_end": 404}, {"x_start": 703, "x_end": 743}, {"x_start": 1024, "x_end": 1025}, {"x_start": 1228, "x_end": 1229}, {"x_start": 1423, "x_end": 1464}, {"x_start": 1561, "x_end": 1562}, {"x_start": 1741, "x_end":
-        1744}]} # yapf: disable
-        # TODO verify that the x_end is what I want... zoom in on a few
-        # TODO also verify start is lined up by zooming in and checking a few
-        assert results["playhead_x"] == expected["playhead_x"]
-        assert results["short_silences"] == expected["short_silences"]
-        print("\n[bold underline green]MATCHED SHORT SILENCE TEST CASE!")
+    if DEBUG:
+        print(json.dumps(results))
+        if file == "samples/playhead-darkblue1.png":
+            # PRN use unit test assertions so we can see what differs
+            # TODO verify these are correct values (I just captured these off of the last test run I did by inspecting the image overlays)
+            expected = {"playhead_x": 1452, "short_silences": [{"x_start": 4, "x_end": 5}, {"x_start": 31, "x_end": 32}, {"x_start": 217, "x_end": 218}, {"x_start": 319, "x_end": 320}, {"x_start": 376, "x_end": 378}, {"x_start": 403,
+            "x_end": 404}, {"x_start": 703, "x_end": 743}, {"x_start": 1024, "x_end": 1025}, {"x_start": 1228, "x_end": 1229}, {"x_start": 1423, "x_end": 1464}, {"x_start": 1561, "x_end": 1562}, {"x_start": 1741, "x_end":
+            1744}]} # yapf: disable
+            # TODO verify that the x_end is what I want... zoom in on a few
+            # TODO also verify start is lined up by zooming in and checking a few
+            assert results["playhead_x"] == expected["playhead_x"]
+            assert results["short_silences"] == expected["short_silences"]
+            print("\n[bold underline green]MATCHED SHORT SILENCE TEST CASE!")
 
     return results
 
 if DEBUG:
     # time python3 short_silences.py samples/playhead-darkblue1.png --debug
     from rich import print
-
-    results = get_short_silences()
-
-    print(json.dumps(results))
+    get_short_silences()
