@@ -562,7 +562,7 @@ function detect_silences_and_then(on_done)
     local slider = win:get_timeline_slider_or_throw()
 
     capture_this_element(slider, function(where_to)
-        detect_silence_boxes(where_to, function(silences)
+        detect_short_silences_runs(where_to, function(silences)
             on_done(win, slider, silences)
         end)
     end)
