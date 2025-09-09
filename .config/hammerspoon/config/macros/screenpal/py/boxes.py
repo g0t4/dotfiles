@@ -121,9 +121,9 @@ final_x_ranges = reduce(merge_if_one_pixel_apart, x_sorted_ranges, [])
 # * final preview mask
 if DEBUG:
     final_preview_mask = np.zeros_like(image)
-    for x_start, width in final_x_ranges:
-        x_end = x_start + width
-        final_preview_mask[:, x_start * 2:x_end * 2] = 255
+    for start, width in final_x_ranges:
+        end = start + width
+        final_preview_mask[:, start * 2:end * 2] = 255
     stack = np.vstack([image, final_preview_mask])
     cv.imshow("final_preview_mask", stack)
     cv.waitKey(0)
