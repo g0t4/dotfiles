@@ -56,7 +56,7 @@ if DEBUG:
     # cv.waitKey(0)
     # cv.destroyAllWindows()
 
-num_labels, labels, stats, _ = cv.connectedComponentsWithStats(gray_box_mask_smooth, connectivity=8)
+num_labels, labels, stats_4k, _ = cv.connectedComponentsWithStats(gray_box_mask_smooth, connectivity=8)
 if DEBUG:
     pass
     labeled_mask = display_colorful_labeled_regions(labels)
@@ -64,7 +64,7 @@ if DEBUG:
     # *** idea - add playhead to gray_box_mask
     gray_box_with_playhead_mask = cv.bitwise_or(gray_box_mask, playhead_mask)
     gray_box_with_playhead_mask_smooth = cv.morphologyEx(gray_box_with_playhead_mask, cv.MORPH_OPEN, np.ones((3, 3), np.uint8))  # smooth out, skip freckled matches
-    num_labels, labels, stats, _ = cv.connectedComponentsWithStats(gray_box_with_playhead_mask_smooth, connectivity=8)
+    num_labels, labels, stats_4k, _ = cv.connectedComponentsWithStats(gray_box_with_playhead_mask_smooth, connectivity=8)
     labeled_mask_with_playhead_merged = display_colorful_labeled_regions(labels)
     cv.imshow("labels", np.vstack([labeled_mask, labeled_mask_with_playhead_merged]))
     cv.waitKey(0)
@@ -73,10 +73,10 @@ if DEBUG:
 # skip first stat (0) b/c it is the background (not a range)
 # columns: left, top, width, height, area
 #   only take left (0) and width (2) columns
-x_ranges = stats[1:, [0, 2]] / 2
+x_ranges_1080p = stats_4k[1:, [0, 2]] / 2
 # / 2 b/c stats is 4k resolution (of captured image) but I need 1080p for hammerspoon
 if DEBUG:
-    print(f'{x_ranges=}')
+    print(f'{x_ranges_1080p=}')
 
 # * sort by x_start
 #   no guarantee that ranges (stats) are sorted
@@ -85,7 +85,7 @@ def sort_ranges(x_ranges: np.ndarray) -> np.ndarray:
     sorted_row_indicies = np.argsort(x_start_column)
     return x_ranges[sorted_row_indicies]
 
-x_sorted_ranges = sort_ranges(x_ranges)
+x_sorted_ranges = sort_ranges(x_ranges_1080p)
 
 if DEBUG:
     print(f'{x_sorted_ranges=}')
