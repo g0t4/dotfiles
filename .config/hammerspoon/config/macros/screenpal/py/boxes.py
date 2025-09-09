@@ -133,6 +133,9 @@ if DEBUG:
 results = {
     "silences": [
         {
+            # FYI for now off by one won't matter much but I should resolve this
+            # TODO! MAKE SURE you are using end inclusivity correctly
+            # TODO!  IOTW figure out which you are using and rename your DTO here
             "x_start": int(x_start / 2),  # int() is serializable
             "x_end": int(x_end / 2),
         } for x_start, x_end in merged_x_ranges

@@ -53,5 +53,6 @@ def build_range_mask(x_ranges, image):
     """
     range_mask = np.zeros_like(image)
     for start, end in x_ranges:
-        range_mask[:, start:end] = 255
+        # TODO do you want the end to be inclusive or exclusive?
+        range_mask[:, start:end + 1] = RED
     return range_mask

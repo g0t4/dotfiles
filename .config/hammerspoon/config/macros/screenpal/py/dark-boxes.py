@@ -81,20 +81,25 @@ if DEBUG:
 
     stacked = np.vstack([
         # both full size:
-        image,
-        final_mask,
-        built,
+        # image,
+        # final_mask,
+        # built,
 
         # zoom in on run (where playhead is) => can zoom in then and compare edges to see if it lines up!
-        # image[:, 1300:1500],
-        # final_mask[:, 1300:1500],
+        image[:, 1300:1500],
+        final_mask[:, 1300:1500],
+        built[:, 1300:1500],
     ])
     show_and_wait(stacked)
+    assert (np.array_equal(final_mask[:, 1300:1500], built[:, 1300:1500]))
 
 # * serialize response to json in STDOUT
 results = {
     "short_silences": [
         {
+            # FYI for now off by one won't matter much but I should resolve this
+            # TODO! MAKE SURE you are using end inclusivity correctly
+            # TODO!  IOTW figure out which you are using and rename your DTO here
             # divide by 2 for non-retina resolution
             "x_start": int(x_start / 2),
             "x_end": int(x_end / 2),
