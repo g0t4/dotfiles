@@ -15,8 +15,9 @@ BLACK = (0, 0, 0)
 ORANGE = (0, 165, 255)
 PURPLE = (128, 0, 128)
 
-def show_and_wait(images):
-    cv.imshow("images", images)
+def show_and_wait(*images):
+    cv.imshow("images", np.vstack(images))
+    cv.moveWindow("images", 0, 0)
     cv.waitKey(0)
     cv.destroyAllWindows()
 
