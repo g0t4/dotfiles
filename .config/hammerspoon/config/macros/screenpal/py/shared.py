@@ -50,14 +50,12 @@ def load_image() -> np.ndarray:
     # image = image[2:-2]
     #0x282828 (40,40,40)
 
+    separator = create_separator_for(image)
+
     show_and_wait(
-        create_separator_for(image)[:, 1400:1500],
+        separator[:, 1400:1500],
         image[2:, 1400:1500],
-        create_separator_for(image)[:, 1400:1500],
-        image[2:-1, 1400:1500],
-        create_separator_for(image)[:, 1400:1500],
-        image[2:-2, 1400:1500],
-        create_separator_for(image)[:, 1400:1500],
+        separator[:, 1400:1500],
     )
     exit()
 
