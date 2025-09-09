@@ -6,6 +6,7 @@ import numpy as np
 from pathlib import Path
 from functools import reduce
 from shared import *
+from visualize import *
 
 # z screenpal/py
 # time python3 boxes.py samples/timeline03a.png --debug
@@ -18,23 +19,6 @@ image = load_image()
 gray_box_direct_mask = color_mask(image, colors_bgr.silence_gray, tolerance)  # skip ROI b/c the image is ONLY the timeline so there's no reason to spot the timeline!
 timeline_mask = color_mask(image, colors_bgr.timeline_bg, tolerance)  # leave so you can come back to this later for additional detection (i.e. unmarked silences, < 1 second)
 playhead_mask = color_mask(image, colors_bgr.playhead, tolerance)
-
-def display_mask_only(image, mask, highlight_color=RED) -> np.ndarray:
-
-    highlight_overlay = np.zeros_like(image)  # same shape as image
-    highlight_overlay[mask > 0] = highlight_color
-
-    return highlight_overlay
-
-def display_mask_over_image(image, mask, alpha=0.7, highlight_color=RED) -> np.ndarray:
-    beta = 1.0 - alpha
-
-    highlight_overlay = display_mask_only(image, mask, highlight_color)
-
-    # Blend image with overlay
-    blended = cv.addWeighted(image, alpha, highlight_overlay, beta, 0)
-    return blended
-
 if DEBUG:
     images = [
         # image, # include image but not really necessary
@@ -51,35 +35,6 @@ if DEBUG:
     # cv.destroyAllWindows()
 
 # %%
-
-# Static label-to-color mapping (BGR format for OpenCV)
-label_colors = {
-    0: (0, 0, 0),  # background (black)
-    1: (255, 0, 0),  # blue
-    2: (0, 255, 0),  # green
-    3: (0, 0, 255),  # red
-    4: (255, 255, 0),  # cyan
-    5: (255, 0, 255),  # magenta
-    6: (0, 255, 255),  # yellow
-    7: (128, 0, 128),  # purple
-    8: (255, 165, 0),  # orange
-    9: (128, 128, 0),  # olive
-    10: (0, 128, 128),  # teal
-}
-
-def display_colorful_labeled_regions(labels):
-    h, w = labels.shape
-    output = np.zeros((h, w, 3), dtype=np.uint8)
-
-    # make sure none over 10
-    if np.any(labels > len(label_colors) - 1):
-        raise ValueError("Labels exceed 10, can only color up to 10 unless you expand list of label_colors")  # or handle appropriately for your use case
-
-    for label, color in label_colors.items():
-        output[labels == label] = color
-
-    return output
-
 # *** DIRECT ( THIS IS REALLY GOOD IN MY TESTING!!!) ...
 #   it does detect the playhead and the white dashed vertical line from recording mark, but I could skip over those with a n algorithm of some sort to connect sections with tiny tiny gaps (<4 pixels wide) assuming both sides are silence
 gray_box_mask = color_mask(image, colors_bgr.silence_gray, tolerance + 2)  # slightly looser for AA edges
