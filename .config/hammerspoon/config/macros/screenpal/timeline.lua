@@ -94,4 +94,17 @@ function TimelineDetails:is_playhead_now_at_target(target_x)
     return pixel_gap <= self.pixels_per_frame
 end
 
+---avoid fixed pauses!
+---@param target_x number
+function TimelineDetails:wait_until_playhead_at(target_x)
+    for i = 1, 30 do
+        hs.timer.usleep(10000)
+
+        print("iteration " .. i)
+        if self:is_playhead_now_at_target(target_x) then
+            break
+        end
+    end
+end
+
 return TimelineDetails

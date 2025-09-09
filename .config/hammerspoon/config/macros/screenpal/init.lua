@@ -541,19 +541,15 @@ function StreamDeck_ScreenPal_SelectNextSilence()
         print("moving playhead to " .. target_playhead_x) -- debug
         _timeline:_move_playhead_to_x(target_playhead_x)
         start = get_time()
-        ---@param target number
-        function _timeline:wait_until_playhead_at(target)
-            for i = 1, 10 do
-                -- watch for playhead_x to be moved instead of fixed pause
-                hs.timer.usleep(10000)
+        for i = 1, 10 do
+            -- watch for playhead_x to be moved instead of fixed pause
+            hs.timer.usleep(10000)
 
-                print("iteration " .. i)
-                if self:is_playhead_now_at_target(target) then
-                    break
-                end
+            print("iteration " .. i)
+            if _timeline:is_playhead_now_at_target(target_playhead_x) then
+                break
             end
         end
-
         print_took("** move playhead to cut start", start)
 
         hs.timer.usleep(100000) -- 50 mostly works but 100 is reliable
