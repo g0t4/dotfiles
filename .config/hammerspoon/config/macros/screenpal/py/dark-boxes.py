@@ -140,17 +140,16 @@ def scan_for_all_short_silences(mask: np.ndarray):
     # PRN why the !=0 in the ChatGPT example
     # print(f'{np.flatnonzero(np.diff(padded)!=0)=}')
     # print(f'{np.flatnonzero(diff != 0)=}')
-    runs  = [(edges[i], edges[i+1]-1) for i in range(0,len(edges),2)]
+    runs = [(edges[i], edges[i + 1] - 1) for i in range(0, len(edges), 2)]
     print("## runs:")
     for r in runs:
         print(r)
 
+    return runs
 
-    pass
-
+runs = []
 if idx is not None:
-    scan_for_all_short_silences(hunt_mask_CLOSED)
-exit()
+    runs = scan_for_all_short_silences(hunt_mask_CLOSED)
 
 # FYI disabled this section so I can scan full timeline for all of these short silences (dark blue bg), not just around playhead
 if idx is not None and False:
@@ -207,8 +206,6 @@ if idx is not None and False:
 
         cv.waitKey(0)
 
-exit()
-
 # Highlight colors (BGR order for OpenCV)
 RED = (0, 0, 255)
 GREEN = (0, 255, 0)
@@ -238,139 +235,20 @@ def blend_mask_over_image(image, mask, alpha=0.7, highlight_color=RED) -> np.nda
     return blended
 
 if DEBUG:
+    final_mask = np.zeros_like(image)
+    print(f'{final_mask=}')
+    for r in runs:
+        start = r[0]
+        end = r[1]
+        final_mask[:, start:end + 1] = RED
+    print(f'{final_mask[0,0:20]=}')
+
     images = [
-        # image, # include image but not really necessary
-        blend_mask_over_image(image, timeline_mask),
-        mask_only(image, timeline_mask),
-        blend_mask_over_image(image, playhead_mask, alpha=0.5, highlight_color=YELLOW),
-        mask_only(image, playhead_mask, highlight_color=YELLOW),
+        image,
+        final_mask,
     ]
     stacked = np.vstack(images)
-    # cv.imshow("stacked", stacked)
-    # cv.waitKey(0)
-    # cv.destroyAllWindows()
-
-# %%
-
-# Static label-to-color mapping (BGR format for OpenCV)
-label_colors = {
-    # 0: (0, 0, 0),  # black
-    1: (0, 255, 0),  # green
-    2: (255, 0, 0),  # blue
-    3: (0, 0, 255),  # red
-    4: (255, 255, 0),  # cyan
-    5: (255, 0, 255),  # magenta
-    6: (0, 255, 255),  # yellow
-    7: (128, 0, 128),  # purple
-    8: (255, 165, 0),  # orange
-    9: (128, 128, 0),  # olive
-    0: (0, 128, 128),  # teal
-}
-
-def visualize_labeled_regions(labels):
-    h, w = labels.shape
-    output = np.zeros((h, w, 3), dtype=np.uint8)
-
-    for label, color in label_colors.items():
-        mask = (labels % 10 == label) & (labels != 0)
-        output[mask] = color
-
-    return output
-
-# *** DIRECT ( THIS IS REALLY GOOD IN MY TESTING!!!) ...
-#   it does detect the playhead and the white dashed vertical line from recording mark, but I could skip over those with a n algorithm of some sort to connect sections with tiny tiny gaps (<4 pixels wide) assuming both sides are silence
-timeline_bg_box_mask = color_mask(image, colors_bgr.timeline_bg, tolerance + 2)  # slightly looser for AA edges
-timeline_bg_box_mask_smooth = cv.morphologyEx(timeline_bg_box_mask, cv.MORPH_OPEN, np.ones((3, 3), np.uint8))  # smooth out, skip freckled matches
-
-if DEBUG:
-    # make a divider like the background color #2C313C
-    black_divider = np.zeros_like(image)
-    black_divider[:] = [60, 49, 44]  # BGR for #2C313C
-
-    # take half height divider:
-    black_divider = black_divider[:image.shape[0] // 2, :image.shape[1]]  # first half of image
-    # print(images)
-    images.append(black_divider)
-    images.append(mask_only(image, timeline_bg_box_mask))
-    images.append(mask_only(image, timeline_bg_box_mask_smooth))
-    stacked = np.vstack(images)
-    # cv.imshow("stacked", stacked)
-    # cv.waitKey(0)
-    # cv.destroyAllWindows()
-
-num_labels, labels, stats, _ = cv.connectedComponentsWithStats(timeline_bg_box_mask_smooth, connectivity=8)
-if DEBUG:
-    pass
-    labeled_mask = visualize_labeled_regions(labels)
-    images.append(labeled_mask)
-    cv.imshow("labeled_mask", np.vstack(images))
-    cv.waitKey(0)
-    cv.destroyAllWindows()
-
-exit()
-
-# *** scale down to 1080p for returning to hs
-
-# first four stats are: left, top, width, height
-# fifth is area
-# to get to 1080p I need to divide first four by 2
-# then the fifth is area so I need to divide that by 4
-# assume 1080p scaling is 2x (because 1920x1080 -> 960x540)
-stats_1080p = stats.copy()
-stats_1080p[:, :4] //= 2
-stats_1080p[:, 4] //= 4
-if DEBUG:
-    print("4k stats:")
-    print(stats)
-    print("1080p stats:")
-    print(stats_1080p)
-
-# ** lets join consecutive boxes that are 1 pixel apart x2_start = x1_end + 1
-x_regions = stats_1080p[1:, [0, 2]]
-if DEBUG:
-    print(f'{x_regions=}')
-
-# ensure sorted by x_started
-sorted_indicies = np.argsort(x_regions[:, 0])
-x_sorted_regions = x_regions[sorted_indicies]
-
-if DEBUG:
-    print(f'{x_sorted_regions=}')
-# PRN throw if any regions overlap...
-# AND throw if they aren't basically the full height of the image?
-#   or filter these out?
-#   see what happens with real usage and then add if I encounter issues
-
-def merge_if_one_pixel_apart(accum, current):
-    # print(f'{accum=}   {current=}')
-    accum = accum or []
-    current = current.copy()
-    if len(accum) == 0:
-        accum.append(current)
-        return accum
-    last = accum[-1]
-    last_x_start = last[0]
-    last_width = last[1]
-    last_x_end = last_x_start + last_width
-    current_x_start = current[0]
-    if current_x_start == last_x_end + 1:
-        current_width = current[1]
-        last[1] += 1 + current_width
-    else:
-        accum.append(current)
-    return accum
-
-final_x_regions = reduce(merge_if_one_pixel_apart, x_sorted_regions, [])
-# print(f'{final_x_regions=}')
-
-# * final preview mask
-if DEBUG:
-    final_preview_mask = np.zeros_like(image)
-    for x_start, width in final_x_regions:
-        x_end = x_start + width
-        final_preview_mask[:, x_start * 2:x_end * 2] = 255
-    stack = np.vstack([image, final_preview_mask])
-    cv.imshow("final_preview_mask", stack)
+    cv.imshow("stacked", stacked)
     cv.waitKey(0)
     cv.destroyAllWindows()
 
