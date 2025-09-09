@@ -34,43 +34,6 @@ hunt_mask_CLOSED = cv.morphologyEx(hunt_mask, cv.MORPH_CLOSE, np.ones((3, 3), np
 look_start = 0
 look_end = -1
 
-def full_column_span(mask: np.ndarray, start_idx: int, max_gap: int = 0) -> tuple[int, int]:
-    """
-    Expand left/right from start_idx to include adjacent columns where all values are non-zero.
-    If max_gap>0, allow up to `max_gap` consecutive zero-columns while expanding.
-    """
-    mask = mask[look_start:look_end]  # subset that should have full, dark blue columns
-    cv.imshow("mask", np.vstack([mask]))
-
-    full = (mask != 0).all(axis=0)
-    w = full.size
-    if not full[start_idx]:
-        raise ValueError("start_idx is not an all-nonzero column")
-
-    left = start_idx
-    gap = 0
-    i = start_idx - 1
-    while i >= 0 and gap <= max_gap:
-        if full[i]:
-            left = i
-            gap = 0
-        else:
-            gap += 1
-        i -= 1
-
-    right = start_idx
-    gap = 0
-    i = start_idx + 1
-    while i < w and gap <= max_gap:
-        if full[i]:
-            right = i
-            gap = 0
-        else:
-            gap += 1
-        i += 1
-
-    return left, right
-
 def scan_for_all_short_silences(mask: np.ndarray):
     # verify assumption (just to be safe)
     # FYI ends have curved edges, wait until this is an issue... could make mask around curved corners and then pad with neighboring pixels or smth else and add if they are empty nearby or not
@@ -105,57 +68,6 @@ def scan_for_all_short_silences(mask: np.ndarray):
 runs = []
 if idx is not None:
     runs = scan_for_all_short_silences(hunt_mask_CLOSED)
-
-# FYI disabled this section so I can scan full timeline for all of these short silences (dark blue bg), not just around playhead
-if idx is not None and False:
-    # actual hunting w/ best mask:
-    L, R = full_column_span(hunt_mask_CLOSED, idx, max_gap=0)  # set >0 to tolerate small holes
-    print(f'{L=} {R=}')
-
-    # # tmp fix the range so I can find the right hunting mask (get rid of triangle edges on playhead)
-    # # uncomment this to fix range for reviewing regardless what matches above
-    # # then comment this out to look at matched range
-    # L = 1405
-    # R = 1493
-
-    # my inspection estimates:
-    # L (base1) = 1407 (literally first column of dark blue pixels)
-    #      column 1406 is the last part of the waveform (albeit the blurry edge of lowest part of visible waveform)
-    # R (base1) = 1488 (last column of dark blue pixels)
-    # results:
-    #   CLOSED: L(base0)=1406, R(base0)=1487
-
-    if DEBUG:
-        band = image[look_start:look_end, L:R + 1]
-        hunt_mask_matched = hunt_mask[look_start:look_end, L:R + 1]
-        hunt_mask_CLOSED_matched = hunt_mask_CLOSED[look_start:look_end, L:R + 1]
-        print(f'{band.shape=}')
-        print(f'{hunt_mask_matched.shape=}')
-        print(f'{hunt_mask_matched[:,:,None].shape=}')
-        print(f'{hunt_mask_matched[:,:,None]=}')
-        hunt_mask_matched_color = np.repeat(hunt_mask_matched[:, :, None], 3, 2)
-        hmmc2 = np.stack([hunt_mask_matched[:, :, None]] * 3, 2)
-        hmmc3 = np.tile(hunt_mask_matched[:, :, None], 3)
-        print(f'{hmmc2=}')
-        print(f'{hmmc3=}')
-        print(f'{np.array_equal(hmmc2, hunt_mask_matched_color)=}')
-        print(f'{np.array_equal(hmmc3, hunt_mask_matched_color)=}')
-        print(f'{hunt_mask_matched_color=}')
-        hmCLOSED_matched_color = np.repeat(hunt_mask_CLOSED_matched[:, :, None], 3, 2)  # None adds new dimension, then repeat 2nd axis (innermost) 3 times => single 8bit => RGB 8:8:8 value
-        separator = np.full([5, band.shape[1], 3], [60, 49, 44], np.uint8)
-        cv.imshow("hunt_mask", np.vstack([
-            hunt_mask_matched_color,
-            separator,
-            hmCLOSED_matched_color,
-            separator,
-            band,
-        ]))
-
-        # zoom_factor = 4
-        # zoomed = cv.resize(hunt_mask_matched_color, None, fx=zoom_factor, fy=zoom_factor, interpolation=cv.INTER_LINEAR)
-        # cv.imshow("hunt_mask_zoomed", zoomed)
-
-        cv.waitKey(0)
 
 if DEBUG:
     final_mask = np.zeros_like(image)
