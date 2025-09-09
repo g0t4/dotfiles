@@ -97,6 +97,7 @@ end
 ---avoid fixed pauses!
 ---@param target_x number
 function TimelineDetails:wait_until_playhead_at(target_x)
+    start = get_time()
     for i = 1, 30 do
         hs.timer.usleep(10000)
 
@@ -105,6 +106,7 @@ function TimelineDetails:wait_until_playhead_at(target_x)
             break
         end
     end
+    print_took("** move playhead to cut start", start)
 end
 
 return TimelineDetails
