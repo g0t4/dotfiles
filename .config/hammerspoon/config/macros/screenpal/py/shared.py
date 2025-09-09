@@ -35,11 +35,11 @@ def create_separator_for(image):
     separator[:, :] = WINDOW_BG_COLOR
     return separator
 
-def load_image() -> np.ndarray:
+file = sys.argv[1] if len(sys.argv) > 1 else None
+if not file:
+    raise ValueError("No image file provided, pass as first argument")
 
-    file = sys.argv[1] if len(sys.argv) > 1 else None
-    if not file:
-        raise ValueError("No image file provided, pass as first argument")
+def load_image() -> np.ndarray:
 
     # / ".config/hammerspoon/config/macros/screenpal/py/timeline03a-2.png"
 

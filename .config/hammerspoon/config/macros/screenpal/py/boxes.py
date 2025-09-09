@@ -129,3 +129,10 @@ results = {
     } for x_start, width in final_x_ranges]
 }
 print(json.dumps(results))  # output to STDOUT for hs to consume
+
+if DEBUG and file == "samples/timeline03a.png":
+    # time python3 boxes.py samples/timeline03a.png --debug
+    # PRN use unit test assertions so we can see what differs
+    expected = {"silences": [{"x_start": 754, "x_end": 891}, {"x_start": 1450, "x_end": 1653}]}
+    assert results["silences"] == expected["silences"]
+    print("\n[bold underline green]MATCHED!")
