@@ -105,7 +105,6 @@ def get_silences():
                if x_start < x_end # skip 0 width silences (TODO find a unit test case)
         ]
     }
-    print(json.dumps(results))  # output to STDOUT for hs to consume
 
     # PRN hardcode results for test case
     if DEBUG and file == "samples/playhead-darkblue1.png":
@@ -120,3 +119,8 @@ def get_silences():
         assert results["playhead_x"] == expected["playhead_x"]
         assert results["short_silences"] == expected["short_silences"]
         print("\n[bold underline green]MATCHED SHORT SILENCE TEST CASE!")
+
+    return results
+
+results = get_silences()
+print(json.dumps(results))  # output to STDOUT for hs to consume
