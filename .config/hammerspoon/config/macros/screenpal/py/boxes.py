@@ -148,4 +148,4 @@ if DEBUG and file == "samples/timeline03a.png":
     # PRN use unit test assertions so we can see what differs
     expected = {"silences": [{"x_start": 754, "x_end": 891}, {"x_start": 1450, "x_end": 1653}]}
     assert results["silences"] == expected["silences"]
-    print("\n[bold underline green]MATCHED!")
+    print("\n[bold underline green]MATCHED REGULAR SILENCE TEST CASE!")
