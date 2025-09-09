@@ -513,12 +513,21 @@ local function start_element_inspector()
     table.insert(M.bindings, hs.hotkey.bind({}, "escape", stop_element_inspector))
     table.insert(M.bindings, hs.hotkey.bind({}, "c", toggle_show_children))
     table.insert(M.bindings, hs.hotkey.bind({}, "e", toggle_show_everything))
+    table.insert(M.bindings, hs.hotkey.bind({}, "y", copy_last_element_summary))
 end
 
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "F", function()
     -- toggle freeze to leave it open instead of needing to copy or screencap
     M.last.freeze = not M.last.freeze
 end)
+
+function copy_last_element_summary()
+    -- text that shows in tooltip (attrs, etc)
+    if M.last.text then
+        hs.pasteboard.setContents(M.last.text)
+    end
+    stop_element_inspector()
+end
 
 function capture_element_under_mouse()
     -- this can work w/o using highlighter!
