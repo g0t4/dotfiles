@@ -81,6 +81,7 @@ if DEBUG:
 # * sort by x_start
 #   no guarantee that ranges (stats) are sorted
 def sort_ranges(ranges: np.ndarray) -> np.ndarray:
+    """ assumed that each row (range) has [ x_start, ... ] """
     x_start_column = ranges[:, 0]
     sorted_row_indicies = np.argsort(x_start_column)
     return ranges[sorted_row_indicies]
