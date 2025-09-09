@@ -2,7 +2,7 @@ local vim = require("config.libs.vim") -- reuse nvim lua modules in hammerspoon
 require("config.macros.screenpal.ui")
 require('config.macros.screenpal.helpers')
 require("config.macros.screenpal.co")
-require("config.macros.screenpal.py.silences")
+require("config.macros.screenpal.py.opencv")
 local TimelineDetails = require('config.macros.screenpal.timeline')
 
 ---@return hs.axuielement app_element
@@ -476,20 +476,21 @@ function get_cached_editor_window()
 end
 
 ---@alias Silence {x_start: number, x_end: number}
----@alias SilencesList Silence[]
+---@alias DetectionResults { short_silences: Silence[], regular_silences: Silence[], playhead_x: integer }
 local silences_canvas = nil
----@param silences SilencesList
+---@param results DetectionResults
 ---@param slider hs.axuielement
-function show_silences(silences, slider)
+function show_silences(results, slider)
     -- example silences (also for testing):
-    -- silences = { { x_end = 1132, x_start = 1034 }, { x_end = 1372, x_start = 1223 }, { x_end = 1687, x_start = 1562 } }
+    -- regular_silences = { { x_end = 1132, x_start = 1034 }, { x_end = 1372, x_start = 1223 }, { x_end = 1687, x_start = 1562 } }
 
     local slider_frame = slider:axFrame()
     local canvas = hs.canvas.new(slider_frame)
     assert(canvas)
     canvas:show()
     local elements = {}
-    for _, silence in ipairs(silences) do
+    local regular_silences = results.regular_silences
+    for _, silence in ipairs(regular_silences) do
         local width = silence.x_end - silence.x_start
         -- print("start=" .. silence.x_start .. " end=" .. silence.x_end)
         if width > 0 then
@@ -514,11 +515,11 @@ end
 function StreamDeck_ScreenPal_SelectNextSilence()
     ---@param win ScreenPalEditorWindow
     ---@param slider hs.axuielement
-    ---@param silences SilencesList
-    function select_next(win, slider, silences)
+    ---@param results DetectionResults
+    function select_next(win, slider, results)
         local slider_frame = slider:axFrame()
         win:_timeline_details()
-        vim.iter(silences)
+        vim.iter(results)
             :filter( ---@param silence Silence
                 function(silence)
                     return silence.x_start + slider_frame.x > 10
@@ -531,8 +532,8 @@ end
 function StreamDeck_ScreenPal_SelectPreviousSilence()
     ---@param win ScreenPalEditorWindow
     ---@param slider hs.axuielement
-    ---@param silences SilencesList
-    function select_prev(win, slider, silences)
+    ---@param results DetectionResults
+    function select_prev(win, slider, results)
         local slider_frame = slider:axFrame()
     end
 
@@ -550,24 +551,24 @@ function StreamDeck_ScreenPal_ShowSilenceRegions()
 
     ---@param win ScreenPalEditorWindow
     ---@param slider hs.axuielement
-    ---@param silences SilencesList
-    local function show_them(win, slider, silences)
+    ---@param results DetectionResults
+    local function show_them(win, slider, results)
         -- print("silence regions: " .. hs.inspect(silences))
-        show_silences(silences, slider)
+        show_silences(results, slider)
     end
 
     detect_silences_and_then(show_them)
 end
 
----@param on_done fun(win: ScreenPalEditorWindow, slider: hs.axuielement, silences: SilencesList)
+---@param on_done fun(win: ScreenPalEditorWindow, slider: hs.axuielement, results: DetectionResults)
 function detect_silences_and_then(on_done)
     local win = get_cached_editor_window()
     local slider = win:get_timeline_slider_or_throw()
 
     local image_tag = "trash_me_silence_detect"
     capture_this_element(slider, function(where_to)
-        detect_short_silences_runs(where_to, function(silences)
-            on_done(win, slider, silences)
+        detect_short_silences_runs(where_to, function(results)
+            on_done(win, slider, results)
         end)
     end, image_tag)
 end
