@@ -131,9 +131,20 @@ def scan_for_all_short_silences(mask: np.ndarray):
     #   useful for diff to scan left to right for consecutive silence columns including through the start/end columns
     padded = np.pad(short_silences.astype(np.int8), (1, 1))
     print(f"{padded=}")
-    diff = np.diff(padded, 1, -1) # diff[n] = padded[n+1] - padded[n]
+    diff = np.diff(padded, 1, -1)  # diff[n] = padded[n+1] - padded[n]
     print(f"{diff=}")
     # THUS 1 => start of silence range, -1 => end of silence range!
+    edges = np.flatnonzero(diff)
+    print(f'{edges=}')
+    # PRN why the !=0 in the ChatGPT example
+    # print(f'{np.flatnonzero(np.diff(padded)!=0)=}')
+    # print(f'{np.flatnonzero(diff != 0)=}')
+    runs  = [(edges[i], edges[i+1]-1) for i in range(0,len(edges),2)]
+    print("## runs:")
+    for r in runs:
+        print(r)
+
+
     pass
 
 if idx is not None:
