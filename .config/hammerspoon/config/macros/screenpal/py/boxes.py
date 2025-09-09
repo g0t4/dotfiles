@@ -1,7 +1,6 @@
 import json
 import os
 import sys
-from typing import NamedTuple
 import cv2 as cv
 import numpy as np
 from pathlib import Path
@@ -10,20 +9,6 @@ from shared import *
 
 # z screenpal/py
 # time python3 boxes.py samples/timeline03a.png --debug
-
-class TimelineColorsBGR(NamedTuple):
-    timeline_bg: np.ndarray
-    silence_gray: np.ndarray
-    playhead: np.ndarray
-
-# FYI use colors.py to deterine colors to use and then inline values here:
-
-colors_bgr = TimelineColorsBGR(
-    # opencv values!
-    timeline_bg=np.array([41, 19, 16]),
-    silence_gray=np.array([57, 37, 34]),
-    playhead=np.array([255, 157, 37]),
-)
 
 # Tiny tolerance may handle edge pixels
 tolerance = 4
