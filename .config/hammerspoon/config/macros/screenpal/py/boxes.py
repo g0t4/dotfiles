@@ -47,14 +47,12 @@ if DEBUG:
         labeled_mask,
     )
 
-# skip first stat (0) b/c it is the background (not a range)
 # columns: left, top, width, height, area
 #   only take left (0) and width (2) columns
-x_ranges = stats[1:, [0, 2]]
-
-# * x_ranges[x_start, x_width] => x_ranges_with_end[x_start, x_end]
-x_start_col = x_ranges[:, 0]
-x_width_col = x_ranges[:, 1]
+#   skip first stat row (0) b/c it is the background (not a range)
+#     1: means take row 1+ (skip row 0)
+x_start_col = stats[1:, [0]]
+x_width_col = stats[1:, [2]]
 x_ranges_with_end = np.column_stack((
     x_start_col,
     x_start_col + x_width_col,
