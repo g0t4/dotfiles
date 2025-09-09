@@ -489,8 +489,9 @@ function show_silences(results, slider)
     assert(canvas)
     canvas:show()
     local elements = {}
-    local regular_silences = results.regular_silences
-    for _, silence in ipairs(regular_silences) do
+
+    local all = vim.list_extend(results.regular_silences, results.short_silences)
+    for _, silence in ipairs(all) do
         local width = silence.x_end - silence.x_start
         -- print("start=" .. silence.x_start .. " end=" .. silence.x_end)
         if width > 0 then
