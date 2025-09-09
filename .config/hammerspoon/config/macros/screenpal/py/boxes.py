@@ -114,11 +114,10 @@ def merge_if_one_pixel_apart(accum, current):
         return accum
     last = accum[-1]
     last_start = last[0]
-    last_width = last[1]
-    last_end = last_start + last_width
+    last_end = last[1]
     current_start = current[0]
     if current_start - last_end == 1:
-        current_width = current[1]
+        current_width = current[1] - current[0]
         last[1] += 1 + current_width
     else:
         accum.append(current)
