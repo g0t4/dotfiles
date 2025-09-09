@@ -124,8 +124,8 @@ if DEBUG:
     for start, width in final_x_ranges:
         end = start + width
         final_preview_mask[:, start * 2:end * 2] = 255
-    stack = np.vstack([image, final_preview_mask])
-    show_and_wait(stack)
+
+    show_and_wait(image, final_preview_mask)
 
 # * serialize response to json in STDOUT
 results = {
