@@ -67,26 +67,26 @@ def get_silences():
         #     print(r)
         return runs
 
-runs = []
-if playhead_leftmost_index is not None:
-    runs = scan_for_all_short_silences(hunt_mask_CLOSED)
+    runs = []
+    if playhead_leftmost_index is not None:
+        runs = scan_for_all_short_silences(hunt_mask_CLOSED)
 
-if DEBUG:
-    built = build_range_mask(runs, image)
+    if DEBUG:
+        built = build_range_mask(runs, image)
 
-    full = [
-        image,
-        built,
-    ]
+        full = [
+            image,
+            built,
+        ]
 
-    # around_playhead = [
-    #     # can zoom in and compare edges
-    #     image[:, 1300:1500],
-    #     built[:, 1300:1500],
-    # ]
+        # around_playhead = [
+        #     # can zoom in and compare edges
+        #     image[:, 1300:1500],
+        #     built[:, 1300:1500],
+        # ]
 
-    stacked = np.vstack(full)
-    show_and_wait(stacked)
+        stacked = np.vstack(full)
+        show_and_wait(stacked)
 
 # * serialize response to json in STDOUT
 results = {
