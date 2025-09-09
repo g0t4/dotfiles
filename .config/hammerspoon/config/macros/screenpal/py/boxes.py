@@ -19,17 +19,17 @@ gray_box_direct_mask = color_mask(image, colors_bgr.silence_gray, tolerance)  # 
 timeline_mask = color_mask(image, colors_bgr.timeline_bg, tolerance)  # leave so you can come back to this later for additional detection (i.e. unmarked silences, < 1 second)
 playhead_mask = color_mask(image, colors_bgr.playhead, tolerance)
 
-def mask_only(image, mask, highlight_color=RED) -> np.ndarray:
+def display_mask_only(image, mask, highlight_color=RED) -> np.ndarray:
 
     highlight_overlay = np.zeros_like(image)  # same shape as image
     highlight_overlay[mask > 0] = highlight_color
 
     return highlight_overlay
 
-def blend_mask_over_image(image, mask, alpha=0.7, highlight_color=RED) -> np.ndarray:
+def display_mask_over_image(image, mask, alpha=0.7, highlight_color=RED) -> np.ndarray:
     beta = 1.0 - alpha
 
-    highlight_overlay = mask_only(image, mask, highlight_color)
+    highlight_overlay = display_mask_only(image, mask, highlight_color)
 
     # Blend image with overlay
     blended = cv.addWeighted(image, alpha, highlight_overlay, beta, 0)
@@ -38,12 +38,12 @@ def blend_mask_over_image(image, mask, alpha=0.7, highlight_color=RED) -> np.nda
 if DEBUG:
     images = [
         # image, # include image but not really necessary
-        blend_mask_over_image(image, gray_box_direct_mask),
-        mask_only(image, gray_box_direct_mask),
-        blend_mask_over_image(image, timeline_mask),
-        mask_only(image, timeline_mask),
-        blend_mask_over_image(image, playhead_mask, alpha=0.5, highlight_color=YELLOW),
-        mask_only(image, playhead_mask, highlight_color=YELLOW),
+        display_mask_over_image(image, gray_box_direct_mask),
+        display_mask_only(image, gray_box_direct_mask),
+        display_mask_over_image(image, timeline_mask),
+        display_mask_only(image, timeline_mask),
+        display_mask_over_image(image, playhead_mask, alpha=0.5, highlight_color=YELLOW),
+        display_mask_only(image, playhead_mask, highlight_color=YELLOW),
     ]
     # stacked = np.vstack(images)
     # cv.imshow("stacked", stacked)
@@ -67,7 +67,7 @@ label_colors = {
     10: (0, 128, 128),  # teal
 }
 
-def visualize_labeled_regions(labels):
+def display_colorful_labeled_regions(labels):
     h, w = labels.shape
     output = np.zeros((h, w, 3), dtype=np.uint8)
 
@@ -94,8 +94,8 @@ if DEBUG:
     black_divider = black_divider[:image.shape[0] // 2, :image.shape[1]]  # first half of image
     images = images or []
     images.append(black_divider)
-    images.append(mask_only(image, gray_box_mask))
-    images.append(mask_only(image, gray_box_mask_smooth))
+    images.append(display_mask_only(image, gray_box_mask))
+    images.append(display_mask_only(image, gray_box_mask_smooth))
     stacked = np.vstack(images)
     # cv.imshow("stacked", stacked)
     # cv.waitKey(0)
@@ -104,7 +104,7 @@ if DEBUG:
 num_labels, labels, stats, _ = cv.connectedComponentsWithStats(gray_box_mask_smooth, connectivity=8)
 if DEBUG:
     pass
-    # labeled_mask = visualize_labeled_regions(labels)
+    # labeled_mask = display_colorful_labeled_regions(labels)
     # cv.imshow("labeled_mask", labeled_mask)
     # cv.waitKey(0)
     # cv.destroyAllWindows()
@@ -113,7 +113,7 @@ if DEBUG:
     # gray_box_with_playhead_mask = cv.bitwise_or(gray_box_mask, playhead_mask)
     # gray_box_with_playhead_mask_smooth = cv.morphologyEx(gray_box_with_playhead_mask, cv.MORPH_OPEN, np.ones((3, 3), np.uint8))  # smooth out, skip freckled matches
     # num_labels, labels, stats, _ = cv.connectedComponentsWithStats(gray_box_with_playhead_mask_smooth, connectivity=8)
-    # labeled_mask = visualize_labeled_regions(labels)
+    # labeled_mask = display_colorful_labeled_regions(labels)
     # cv.imshow("labeled_mask_with_playhead", labeled_mask)
     # cv.waitKey(0)
     # cv.destroyAllWindows()
