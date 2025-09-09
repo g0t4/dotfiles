@@ -1,15 +1,15 @@
 ---@param imagePath string
 ---@param callback fun(data: SilencesList)
-function detect_silence_boxes(imagePath, callback, filename)
-    filename = filename or "boxes.py"
+function detect_silence_boxes(imagePath, callback)
     local python_exe = os.getenv("HOME") .. "/repos/github/g0t4/dotfiles/.venv/bin/python3"
-    local script = os.getenv("HOME") .. "/repos/github/g0t4/dotfiles/.config/hammerspoon/config/macros/screenpal/py/" .. filename
+    local script = os.getenv("HOME") .. "/repos/github/g0t4/dotfiles/.config/hammerspoon/config/macros/screenpal/py/both.py"
     local args = { script, imagePath }
 
     local task = hs.task.new(python_exe, function(exitCode, stdout, stderr)
         if exitCode == 0 and stdout then
             local ok, results = pcall(hs.json.decode, stdout)
             if ok then
+                -- TODO! RETURN BOTH and let consumer pick what they want
                 print("silences", hs.inspect(results))
                 callback(results["silences"] or results["short_silences"])
             else
