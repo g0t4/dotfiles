@@ -84,13 +84,13 @@ if DEBUG:
     print(stats_1080p)
 
 # ** join nearly adjacent boxes that are 1 pixel apart x2_start = x1_end + 1
-x_regions = stats_1080p[1:, [0, 2]]
+x_ranges = stats_1080p[1:, [0, 2]]
 if DEBUG:
-    print(f'{x_regions=}')
+    print(f'{x_ranges=}')
 
 # ensure sorted by x_started
-sorted_indicies = np.argsort(x_regions[:, 0])
-x_sorted_regions = x_regions[sorted_indicies]
+sorted_indicies = np.argsort(x_ranges[:, 0])
+x_sorted_regions = x_ranges[sorted_indicies]
 
 if DEBUG:
     print(f'{x_sorted_regions=}')
