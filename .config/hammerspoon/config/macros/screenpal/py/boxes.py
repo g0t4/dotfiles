@@ -59,9 +59,6 @@ x_ranges_with_end = np.column_stack((
     x_start_col,
     x_start_col + x_width_col,
 ))
-if DEBUG:
-    print(f'{x_ranges=}')
-    print(f'{x_ranges_with_end=}')
 
 # * sort by x_start
 #   no guarantee that ranges (stats) are sorted
@@ -72,8 +69,6 @@ def sort_ranges(ranges: np.ndarray) -> np.ndarray:
     return ranges[sorted_row_indicies]
 
 x_sorted_ranges = sort_ranges(x_ranges_with_end)
-if DEBUG:
-    print(f'{x_sorted_ranges=}')
 
 # PRN throw if any regions overlap?
 # OR, throw if they aren't basically the full height of the image?
