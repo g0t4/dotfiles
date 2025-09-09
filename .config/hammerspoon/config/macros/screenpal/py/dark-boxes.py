@@ -73,16 +73,18 @@ if idx is not None:
 if DEBUG:
     built = build_range_mask(runs, image)
 
-    stacked = np.vstack([
-        # both full size:
+    full = [
         image,
         built,
+    ]
 
-        # zoom in on run (where playhead is) => can zoom in then
-        # and compare edges to see if it lines up!
-        # image[:, 1300:1500],
-        # built[:, 1300:1500],
-    ])
+    # around_playhead = [
+    #     # can zoom in and compare edges
+    #     image[:, 1300:1500],
+    #     built[:, 1300:1500],
+    # ]
+
+    stacked = np.vstack(full)
     show_and_wait(stacked)
 
 # * serialize response to json in STDOUT
