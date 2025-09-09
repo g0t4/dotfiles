@@ -47,6 +47,7 @@ if DEBUG:
         labeled_mask,
     )
 
+# * project to ranges
 # columns: left, top, width, height, area
 #   only take left (0) and width (2) columns
 #   skip first stat row (0) b/c it is the background (not a range)
@@ -54,14 +55,14 @@ if DEBUG:
 x_start_col = stats[1:, [0]]
 x_width_col = stats[1:, [2]]
 x_ranges_with_end = np.column_stack((
-    x_start_col,
-    x_start_col + x_width_col,
+    x_start_col,  # x_start
+    x_start_col + x_width_col,  # x_end
 ))
 
 # * sort by x_start
-#   no guarantee that ranges (stats) are sorted
+#   b/c there is no guarantee that ranges (stats) are sorted
 def sort_ranges(ranges: np.ndarray) -> np.ndarray:
-    """ assumed that each row (range) has [ x_start, ... ] """
+    """ assumed that each row starts with x_start """
     x_start_column = ranges[:, 0]
     sorted_row_indicies = np.argsort(x_start_column)
     return ranges[sorted_row_indicies]
