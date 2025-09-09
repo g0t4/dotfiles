@@ -22,12 +22,12 @@ playhead_mask = color_mask(image, colors_bgr.playhead, tolerance)
 
 def get_silences():
 
-def find_playhead_x(mask: np.ndarray) -> int | None:
-    # returns LEFTMOST edge of playhead, PRN could find centermost column
-    # mask is 2D, nonzero (255) means "on"
-    col_has_all = (mask != 0).all(axis=0)  # boolean per column
-    cols = np.where(col_has_all)[0]
-    return int(cols[0]) if cols.size > 0 else None
+    def find_playhead_x(mask: np.ndarray) -> int | None:
+        # returns LEFTMOST edge of playhead, PRN could find centermost column
+        # mask is 2D, nonzero (255) means "on"
+        col_has_all = (mask != 0).all(axis=0)  # boolean per column
+        cols = np.where(col_has_all)[0]
+        return int(cols[0]) if cols.size > 0 else None
 
 playhead_leftmost_index = find_playhead_x(playhead_mask)
 
