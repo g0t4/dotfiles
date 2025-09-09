@@ -58,6 +58,7 @@ end
 ---@param self table
 ---@param target_x number
 function TimelineDetails:_move_playhead_to_x(target_x)
+    print("moving playhead to " .. target_x)
     local hold_duration_ms = 10
     hs.eventtap.leftClick({
         x = target_x,
@@ -103,12 +104,12 @@ function TimelineDetails:wait_until_playhead_at(target_x)
     for i = 1, 30 do
         hs.timer.usleep(10000)
 
-        print("iteration " .. i)
+        print("  iteration " .. i)
         if self:is_playhead_now_at_target(target_x) then
             break
         end
     end
-    print_took("wait_until_playhead_at", start)
+    print_took("  wait_until_playhead_at", start)
     -- FYI it is still possible you need some slight fixed delay
     --   i.e. if the window coords are updated ahead of something else
     --   that would intefere with typical next actions (i.e. typing 'c'to trigger cut)
