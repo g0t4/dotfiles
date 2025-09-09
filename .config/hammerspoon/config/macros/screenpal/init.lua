@@ -452,6 +452,13 @@ function ScreenPalEditorWindow:estimate_time_per_pixel()
     print("min zoom frame", hs.inspect(self._btn_minimum_zoom:axFrame()))
 end
 
+function ScreenPalEditorWindow:start_cut()
+    -- PRN determine if in a diff edit and bail
+    hs.eventtap.keyStroke({}, "c", 0, self.app)
+    -- TODO find a way to detect when cut is open (tool popup?)
+    hs.timer.usleep(100000)
+end
+
 local _cached_editor_window = nil
 function get_cached_editor_window()
     if not _cached_editor_window then
@@ -541,8 +548,7 @@ function StreamDeck_ScreenPal_SelectNextSilence()
         print("moving playhead to " .. target_playhead_x) -- debug
         _timeline:_move_playhead_to_x(target_playhead_x)
 
-        hs.eventtap.keyStroke({}, "c", 0, win.app)
-        hs.timer.usleep(100000)
+        win:start_cut()
         hs.eventtap.keyStroke({}, "s", 0, win.app)
         hs.timer.usleep(100000)
         _timeline:_move_playhead_to_x(next.x_end - 10 + slider_frame.x)
