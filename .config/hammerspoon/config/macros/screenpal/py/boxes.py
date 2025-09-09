@@ -72,22 +72,22 @@ def get_silences():
             accum.append(current)
         return accum
 
-# ** join adjacent boxes that are 1 pixel apart x2_start = x1_end + 1
-merged_x_ranges = reduce(merge_if_one_pixel_apart, x_sorted_ranges, [])
+    # ** join adjacent boxes that are 1 pixel apart x2_start = x1_end + 1
+    merged_x_ranges = reduce(merge_if_one_pixel_apart, x_sorted_ranges, [])
 
-# * serialize response to json in STDOUT
-results = {
-    "silences": [
-        {
-            # FYI for now off by one won't matter much but I should resolve this
-            # TODO! MAKE SURE you are using end inclusivity correctly
-            # TODO!  IOTW figure out which you are using and rename your DTO here
-            "x_start": int(x_start / 2),  # int() is serializable
-            "x_end": int(x_end / 2),
-        } for x_start, x_end in merged_x_ranges
-    ]
-}
-print(json.dumps(results))  # output to STDOUT for hs to consume
+    # * serialize response to json in STDOUT
+    results = {
+        "silences": [
+            {
+                # FYI for now off by one won't matter much but I should resolve this
+                # TODO! MAKE SURE you are using end inclusivity correctly
+                # TODO!  IOTW figure out which you are using and rename your DTO here
+                "x_start": int(x_start / 2),  # int() is serializable
+                "x_end": int(x_end / 2),
+            } for x_start, x_end in merged_x_ranges
+        ]
+    }
+    print(json.dumps(results))  # output to STDOUT for hs to consume
 
 if DEBUG:
     # make a divider like the background color #2C313C
