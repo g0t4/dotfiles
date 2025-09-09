@@ -10,6 +10,8 @@ from visualize import *
 
 # TODO! OPTIMIZE FOR ONE LOAD OF ANY SHARED ASSETS (i.e. image load)
 
+DEBUG = __name__ == "__main__"
+
 def get_regular_silences():
 
     gray_box_mask = color_mask(image, colors_bgr.silence_gray, tolerance + 2)  # slightly looser for AA edges
@@ -113,9 +115,10 @@ def get_regular_silences():
 
     return results
 
-if __name__ == "__main__":
+if DEBUG:
     # z screenpal/py
     # time python3 regular_silences.py samples/timeline03a.png --debug
+    from rich import print
 
     results = get_regular_silences()
 

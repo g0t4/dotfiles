@@ -10,6 +10,8 @@ from visualize import *
 
 # TODO! OPTIMIZE FOR ONE LOAD OF ANY SHARED ASSETS (i.e. image load)
 
+DEBUG = __name__ == "__main__"
+
 def get_short_silences():
 
     def find_playhead_x(mask: np.ndarray) -> int | None:
@@ -111,8 +113,9 @@ def get_short_silences():
 
     return results
 
-if __name__ == "__main__":
+if DEBUG:
     # time python3 short_silences.py samples/playhead-darkblue1.png --debug
+    from rich import print
 
     results = get_short_silences()
 
