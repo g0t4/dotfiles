@@ -463,12 +463,14 @@ end
 ---@alias Silence {x_start: number, x_end: number}
 ---@alias DetectionResults { short_silences: Silence[], regular_silences: Silence[], playhead_x: integer }
 local silences_canvas = nil
+---@param win ScreenPalEditorWindow
 ---@param results DetectionResults
 ---@param slider hs.axuielement
-function show_silences(results, slider)
+function show_silences(win, results, slider)
     -- example silences (also for testing):
     -- regular_silences = { { x_end = 1132, x_start = 1034 }, { x_end = 1372, x_start = 1223 }, { x_end = 1687, x_start = 1562 } }
 
+    local _timeline = win:_timeline_details()
     local slider_frame = slider:axFrame()
     local canvas = hs.canvas.new(slider_frame)
     assert(canvas)
@@ -480,16 +482,24 @@ function show_silences(results, slider)
         local width = silence.x_end - silence.x_start
         -- print("start=" .. silence.x_start .. " end=" .. silence.x_end)
         if width > 0 then
+            local fill_color = { red = 1, green = 0, blue = 0, alpha = 0.3 }
+            local border_color = { red = 1, green = 0, blue = 0, alpha = 1 }
+            if silence.x_start + slider_frame.x > _timeline.playhead_x then
+                fill_color = { red = 0, green = 0, blue = 1, alpha = 0.3 }
+                border_color = { red = 0, green = 0, blue = 1, alpha = 1 }
+            end
+
+
             table.insert(elements, {
                 type = "rectangle",
                 action = "fill",
-                fillColor = { red = 1, green = 0, blue = 0, alpha = 0.3 },
+                fillColor = fill_color,
                 frame = { x = silence.x_start, y = 0, w = width, h = slider_frame.h }
             })
             table.insert(elements, {
                 type = "rectangle",
                 action = "stroke",
-                strokeColor = { red = 1, green = 0, blue = 0, alpha = 1 },
+                strokeColor = border_color,
                 frame = { x = silence.x_start, y = 0, w = width, h = slider_frame.h }
             })
         end
@@ -546,15 +556,13 @@ function StreamDeck_ScreenPal_ShowSilenceRegions()
         silences_canvas = nil
         return
     end
-    -- show_silences(nil, slider) -- testing only
-    -- return
 
     ---@param win ScreenPalEditorWindow
     ---@param slider hs.axuielement
     ---@param results DetectionResults
     local function show_them(win, slider, results)
         -- print("silence regions: " .. hs.inspect(silences))
-        show_silences(results, slider)
+        show_silences(win, results, slider)
     end
 
     detect_silences_and_then(show_them)
