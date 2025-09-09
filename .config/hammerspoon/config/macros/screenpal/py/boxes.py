@@ -95,6 +95,7 @@ if DEBUG:
 #   see what happens with real usage and then add if I encounter issues
 
 def merge_if_one_pixel_apart(accum, current):
+    # FYI if you use 4k resolution here, then skip up to 2 pixels apart
     # print(f'{accum=}   {current=}')
     accum = accum or []
     current = current.copy()
