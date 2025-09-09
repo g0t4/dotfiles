@@ -73,19 +73,17 @@ if DEBUG:
 # skip first stat (0) b/c it is the background (not a range)
 # columns: left, top, width, height, area
 #   only take left (0) and width (2) columns
-x_ranges_1080p = stats_4k[1:, [0, 2]] // 2
-# / 2 b/c stats is 4k resolution (of captured image) but I need 1080p for hammerspoon
+x_ranges = stats_4k[1:, [0, 2]]
 
-# * [x_start, x_width] => [x_start, x_end]
-# x_ranges_1080p = [(start, start + width) for (start, width) in x_ranges_1080p]
-x_start_col = x_ranges_1080p[:, 0]
-x_width_col = x_ranges_1080p[:, 1]
+# * x_ranges[x_start, x_width] => x_ranges_with_end[x_start, x_end]
+x_start_col = x_ranges[:, 0]
+x_width_col = x_ranges[:, 1]
 x_ranges_with_end = np.column_stack((
     x_start_col,
     x_start_col + x_width_col,
 ))
 if DEBUG:
-    print(f'{x_ranges_1080p=}')
+    print(f'{x_ranges=}')
     print(f'{x_ranges_with_end=}')
 
 # * sort by x_start
@@ -105,7 +103,7 @@ if DEBUG:
 # see what happens with real usage and then add if I encounter issues
 
 def merge_if_one_pixel_apart(accum, current):
-    # FYI if you use 4k resolution here, then skip up to 2 pixels apart
+    # TODO! I switched to 4k so make sure this still works!!
     # print(f'{accum=}   {current=}')
     accum = accum or []
     current = current.copy()
@@ -116,7 +114,8 @@ def merge_if_one_pixel_apart(accum, current):
     last_start = last[0]
     last_end = last[1]
     current_start = current[0]
-    if current_start - last_end == 1:
+    # 4k => 2 pixels, 1080p => 1 pixel
+    if current_start - last_end <= 2:
         current_end = current[1]
         last[1] = current_end
     else:
@@ -126,16 +125,16 @@ def merge_if_one_pixel_apart(accum, current):
 # ** join adjacent boxes that are 1 pixel apart x2_start = x1_end + 1
 merged_x_ranges = reduce(merge_if_one_pixel_apart, x_sorted_ranges, [])
 
-# * final preview mask
 if DEBUG:
+    # * final preview mask
     show_and_wait(image, build_range_mask(merged_x_ranges, image))
 
 # * serialize response to json in STDOUT
 results = {
     "silences": [
         {
-            "x_start": int(x_start),  # int() is serializable
-            "x_end": int(x_end),
+            "x_start": int(x_start / 2),  # int() is serializable
+            "x_end": int(x_end / 2),
         } for x_start, x_end in merged_x_ranges
     ]
 }
