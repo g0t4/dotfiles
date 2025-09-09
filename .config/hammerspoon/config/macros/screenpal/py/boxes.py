@@ -61,7 +61,7 @@ if DEBUG:
     pass
     labeled_mask = display_colorful_labeled_regions(labels)
 
-    # # *** add playhead to gray_box_mask (will be fine b/c I won't take any region like the playhead that is only 2 pixels wide anyways)
+    # *** idea - add playhead to gray_box_mask
     gray_box_with_playhead_mask = cv.bitwise_or(gray_box_mask, playhead_mask)
     gray_box_with_playhead_mask_smooth = cv.morphologyEx(gray_box_with_playhead_mask, cv.MORPH_OPEN, np.ones((3, 3), np.uint8))  # smooth out, skip freckled matches
     num_labels, labels, stats, _ = cv.connectedComponentsWithStats(gray_box_with_playhead_mask_smooth, connectivity=8)
