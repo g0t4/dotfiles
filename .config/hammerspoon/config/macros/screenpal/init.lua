@@ -485,8 +485,8 @@ function show_silences(win, results, slider)
             local fill_color = { red = 1, green = 0, blue = 0, alpha = 0.3 }
             local border_color = { red = 1, green = 0, blue = 0, alpha = 1 }
             if silence.x_start + slider_frame.x > _timeline.playhead_x then
-                fill_color = { red = 0, green = 0, blue = 1, alpha = 0.3 }
-                border_color = { red = 0, green = 0, blue = 1, alpha = 1 }
+                fill_color = { red = 1, green = 1, blue = 0, alpha = 0.3 }
+                border_color = { red = 1, green = 1, blue = 0, alpha = 1 }
             end
 
 
