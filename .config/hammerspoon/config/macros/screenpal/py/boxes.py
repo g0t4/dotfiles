@@ -22,7 +22,7 @@ playhead_mask = color_mask(image, colors_bgr.playhead, tolerance)
 gray_box_mask = color_mask(image, colors_bgr.silence_gray, tolerance + 2)  # slightly looser for AA edges
 #   it does detect the playhead and the white dashed vertical line from recording mark, but I could skip over those with a n algorithm of some sort to connect sections with tiny tiny gaps (<4 pixels wide) assuming both sides are silence
 gray_box_mask_smooth = cv.morphologyEx(gray_box_mask, cv.MORPH_OPEN, np.ones((3, 3), np.uint8))  # smooth out, skip freckled matches
-num_labels, labels, stats_4k, _ = cv.connectedComponentsWithStats(gray_box_mask_smooth, connectivity=8)
+num_labels, labels, stats, _ = cv.connectedComponentsWithStats(gray_box_mask_smooth, connectivity=8)
 
 if DEBUG:
     # make a divider like the background color #2C313C
@@ -50,7 +50,7 @@ if DEBUG:
 # skip first stat (0) b/c it is the background (not a range)
 # columns: left, top, width, height, area
 #   only take left (0) and width (2) columns
-x_ranges = stats_4k[1:, [0, 2]]
+x_ranges = stats[1:, [0, 2]]
 
 # * x_ranges[x_start, x_width] => x_ranges_with_end[x_start, x_end]
 x_start_col = x_ranges[:, 0]
