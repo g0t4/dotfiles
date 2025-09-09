@@ -460,6 +460,9 @@ function get_cached_editor_window()
     return _cached_editor_window
 end
 
+-- PRN events to detect playhead moving (and other UI changes) that might affect what to show for silences (or otherwise affect tooling automations)
+-- require("config.macros.screenpal.observer")
+
 ---@alias Silence {x_start: number, x_end: number}
 ---@alias DetectionResults { short_silences: Silence[], regular_silences: Silence[], playhead_x: integer }
 local silences_canvas = nil
@@ -488,7 +491,6 @@ function show_silences(win, results, slider)
                 fill_color = { red = 1, green = 1, blue = 0, alpha = 0.3 }
                 border_color = { red = 1, green = 1, blue = 0, alpha = 1 }
             end
-
 
             table.insert(elements, {
                 type = "rectangle",

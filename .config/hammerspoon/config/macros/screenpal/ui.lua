@@ -86,7 +86,7 @@ function AppWindows:get_playhead_window_or_throw()
 end
 
 -- Example usage:
--- local app = getScreenPalAppElementOrThrow()
+-- local app = get_screenpal_app_element_or_throw()
 -- local spCache = ScreenPalCache:new(app)
 -- local editorWin = spCache:getEditorWindowOrThrow()
 -- -- use editorWin as needed.
