@@ -148,7 +148,7 @@ describe("test", function()
             end
 
             print("1. start building report.... before crunch_data called")
-            api_crunch_data(then_create_report)
+            callbacker(api_crunch_data, then_create_report)
         end
 
         build_report()
