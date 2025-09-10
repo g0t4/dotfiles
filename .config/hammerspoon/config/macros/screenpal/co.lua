@@ -58,7 +58,7 @@ function sleep_ms(ms)
 end
 
 --- wrap a callback based method to appear synchronous using coroutines
----PRN could have callbacker_lastarg(...,fun(...)) that takes callback as last arg
+-- PRN add type hints to syncify so it just works based on called method and its callback?
 ---@param call_this fun(fun(...), ...)  -- assumes callback is first arg then args are after
 ---@vararg any ...
 ---@return any ...

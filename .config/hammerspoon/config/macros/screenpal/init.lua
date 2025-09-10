@@ -576,15 +576,16 @@ end
 function detect_silences(callback)
     local win = get_cached_editor_window()
     local timeline_slider_axuielement = win:get_timeline_slider_or_throw()
-
     local image_tag = "trash_me_silence_detect"
-    capture_this_element(timeline_slider_axuielement, function(where_to)
-        detect_silence_ranges(where_to, function(results)
-            timeline = win:timeline_controller_ok_skip_pps()
-            silences = SilencesController:new(results, timeline)
-            callback(win, silences)
-        end)
-    end, image_tag)
+
+    run_async(function()
+        local where_to = syncify(capture_this_element, timeline_slider_axuielement, image_tag)
+
+        local detected = syncify(detect_silence, where_to)
+        local timeline = win:timeline_controller_ok_skip_pps()
+        local silences = SilencesController:new(detected, timeline)
+        callback(win, silences)
+    end)
 end
 
 function StreamDeckScreenPalTimelineZoomAndJumpToStart()

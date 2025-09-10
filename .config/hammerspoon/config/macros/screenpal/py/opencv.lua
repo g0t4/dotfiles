@@ -1,6 +1,6 @@
 ---@param imagePath string
 ---@param callback fun(results: DetectionResults)
-function detect_silence(imagePath, callback)
+function detect_silence(callback, imagePath)
     local python_exe = os.getenv("HOME") .. "/repos/github/g0t4/dotfiles/.venv/bin/python3"
     local script = os.getenv("HOME") .. "/repos/github/g0t4/dotfiles/.config/hammerspoon/config/macros/screenpal/py/both.py"
     local args = { script, imagePath }
@@ -24,8 +24,4 @@ function detect_silence(imagePath, callback)
     end, args)
 
     task:start()
-end
-
-function detect_silence_ranges(imagePath, callback, script)
-    detect_silence(imagePath, callback, "dark-boxes.py")
 end

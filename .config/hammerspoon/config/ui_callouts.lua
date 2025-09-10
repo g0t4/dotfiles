@@ -546,12 +546,12 @@ function capture_element_under_mouse()
         end
     end
 
-    capture_this_element(element, when_done)
+    capture_this_element(when_done, element)
 end
 
 ---@param element hs.axuielement
 ---@param callback fun(path: string)
-function capture_this_element(element, callback, image_tag)
+function capture_this_element(callback, element, image_tag)
     local frame = element:axFrame()
 
     if image_tag == nil or image_tag == "" then
