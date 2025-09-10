@@ -478,8 +478,7 @@ function StreamDeck_ScreenPal_SelectNextSilence()
         -- TODO! remove passing slider once that refactor is done for all callbacks
         -- FYI I don't need to pass slider anymore (assming I use relative positions and let timeline handle slider position)
         local assume_sorted_silences = results.regular_silences
-        -- TODO! allow pps nil
-        local _timeline = win:_timeline_details()
+        local _timeline = win:timeline_details_ok_to_skip_pps() -- movement is x coordinate based, no PPS needed
         -- -- PRN move logic into a ctor in detect_silence to build sorted lists for everything so consumers don't have to
         -- local sorted_silences = table.sort(silences, function(a, b) return a.x_start > b.x_start end)
         local next_silence = vim.iter(assume_sorted_silences)
