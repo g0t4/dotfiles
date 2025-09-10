@@ -20,37 +20,8 @@ function TimelineDetails:new(editor_window, ok_to_skip_pps)
     local time_text_field = playhead_window:textField(1)
     local time_string = time_text_field:axValue()
     time_string = time_string:gsub("\n", "")
-
     local playhead_seconds = parse_time_to_seconds(time_string)
-    if playhead_seconds == 0 then
-        -- *** FOR NOW just arrow over at start of video, IS FINE!
-        -- NO WAY TO KNOW ZOOM LEVEL
-        -- NO WAY TO CACHE last used b/c zoom can change
-        -- PRN have consumers pass a flag like (skip pps)?
-        --   --  JUMP to START/END DOES NOT NEED THIS!
-        --   --  SO those ones can say it doesn't matter and still work
-        --   --  JUMP to START/END is one of the most likely things I would do at start of video
-        --      everything else I think I can fix with arrowing over one frame
-        -- TIMES THIS MATTERS
-
-        -- -- TODO cannot estimate times from 0, so lets jump to 1?
-        -- -- FYI cannot use move_playhead (based on PPS) yet
-        -- -- hs.eventtap.keyStroke({}, hs.keycodes.map["right"]) -- right only (1 frame right)
-        -- hs.eventtap.keyStroke({ "shift" }, hs.keycodes.map["right"]) -- nearest second to the right
-        -- hs.timer.usleep(10000)
-        --
-        -- -- update for new position after moving right
-        -- playhead_window = editor_window.windows:get_playhead_window_or_throw()
-        -- -- DO NOT get frames until UI is stable, zoome din frame is different than zoomed out
-        -- _playhead_window_frame = playhead_window:axFrame()
-        -- time_string = time_text_field:axValue()
-        -- time_string = time_string:gsub("\n", "")
-        -- playhead_seconds = parse_time_to_seconds(time_string)
-        --
-        -- -- move back
-        -- hs.eventtap.keyStroke({ "shift" }, hs.keycodes.map["left"]) -- nearest second to the right
-        -- hs.timer.usleep(10000)
-    end
+    -- PRN? throw if not ok_to_skip_pps?
 
     local playhead_x = _playhead_window_frame.x + _playhead_window_frame.w / 2
     local _playhead_relative_timeline_x = playhead_x - timeline_frame.x
