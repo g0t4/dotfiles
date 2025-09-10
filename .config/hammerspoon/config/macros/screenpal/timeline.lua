@@ -139,6 +139,7 @@ end
 function TimelineDetails:move_to_timeline_end()
     hs.eventtap.leftClick({
         -- click the rightmost part of the timeline slider
+        -- -1 works best for the end (in my testing)
         x = self.timeline_frame.x + self.timeline_frame.w - 1,
         y = self.timeline_frame.y,
     })
