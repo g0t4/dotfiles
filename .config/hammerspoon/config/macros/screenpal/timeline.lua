@@ -154,3 +154,30 @@ function TimelineDetails:move_playhead_to_position_percent(percent)
 end
 
 return TimelineDetails
+
+
+-- FYI zoom levels and pixels per second (calculated just so I can refer to them)
+--  right now I am not using this for any automations
+--  and a few reasons why I can't use these (at least not yet):
+--  - I cannot determine zoom1 vs zoom2 vs zoom3
+--  - Can only tell zoomed vs not zoomed
+--  - Therefore these are mostly for reasoning about scale
+--
+--  I am using PPS for checking if the playhead is moved to the new spot yet
+--  - because it will move nearby (closest frame)
+--  - so I use PPS as a tolerance (within one frame either way)
+--
+--  BTW I can calculate PPS in every case EXCEPT when playhead is at time 0
+--
+-- *** PIXELS PER SECOND for each ZOOM level (fixed for each level)
+-- Calculation:
+-- 1 Move timeline to start of video, left side must be 0
+-- 2 Move to nearby second mark (left side of timeline must remain at 0)
+-- 3 pixels_apart / time_in_seconds = PPS
+--   zoom1 => 25.164473684211 PPS
+--   zoom2 => 75.166666666667 PPS
+--   zoom3 => 150.16666666667 PPS
+--
+--   * KEEP IN MIND, zoom levels are FIXED # seconds/frames regardless of video length...
+--   so when zoom 2 you know exactly where to click to move over 1 second relative to current position...
+--   or to move to X seconds along from start/end of the visible timeline
