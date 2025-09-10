@@ -460,12 +460,7 @@ function StreamDeck_ScreenPal_SelectNextSilence()
         local timeline = win:timeline_controller_ok_skip_pps() -- movement is x coordinate based, no PPS needed
         -- -- PRN move logic into a ctor in detect_silence to build sorted lists for everything so consumers don't have to
         -- local sorted_silences = table.sort(silences, function(a, b) return a.x_start > b.x_start end)
-        local next_silence = vim.iter(assume_sorted_silences)
-            :filter( ---@param silence Silence
-                function(silence)
-                    return silence.x_start > timeline._playhead_timeline_relative_x
-                end)
-            :next()
+        local next_silence = silences:get_next_silence()
         if next_silence == nil then
             print("no silence found after playhead")
             return
