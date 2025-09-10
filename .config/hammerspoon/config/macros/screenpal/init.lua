@@ -482,6 +482,23 @@ function act_on_silence(win, silence, action_keystroke)
     -- TODO check if mute button is muted icon? or w/e else to determine if I should click mute the first time?
 end
 
+---@param callback fun(win: ScreenPalEditorWindow, silences SilencesController)
+local function detect_silences(callback)
+    run_async(function()
+        local win = get_cached_editor_window()
+
+        local timeline_element = win:get_timeline_slider_or_throw()
+        local image_tag = "trash_me_silence_detect"
+        local where_to = syncify(capture_this_element, timeline_element, image_tag)
+
+        local detected = syncify(detect_silence, where_to)
+
+        local timeline = win:timeline_controller_ok_skip_pps()
+        local silences = SilencesController:new(detected, timeline)
+        callback(win, silences)
+    end)
+end
+
 function StreamDeck_ScreenPal_SelectNextSilence(action_keystroke)
     run_async(function()
         ---@type ScreenPalEditorWindow, SilencesController
@@ -538,23 +555,6 @@ function StreamDeck_ScreenPal_ShowSilenceRegions()
 
         local win, silences = syncify(detect_silences)
         show_silences(win, silences)
-    end)
-end
-
----@param callback fun(win: ScreenPalEditorWindow, silences SilencesController)
-local function detect_silences(callback)
-    run_async(function()
-        local win = get_cached_editor_window()
-
-        local timeline_element = win:get_timeline_slider_or_throw()
-        local image_tag = "trash_me_silence_detect"
-        local where_to = syncify(capture_this_element, timeline_element, image_tag)
-
-        local detected = syncify(detect_silence, where_to)
-
-        local timeline = win:timeline_controller_ok_skip_pps()
-        local silences = SilencesController:new(detected, timeline)
-        callback(win, silences)
     end)
 end
 
