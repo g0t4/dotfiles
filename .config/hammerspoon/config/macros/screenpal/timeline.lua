@@ -128,4 +128,17 @@ function TimelineDetails:move_playhead_to_seconds(seconds)
     _move_playhead_to_screen_x(self, playhead_x)
 end
 
+--- jump to start of CURRENT view (not entire timeline)
+function TimelineDetails:move_to_current_start()
+    hs.eventtap.leftClick({
+        -- click the left‑most part of the timeline slider
+        --  NOT necessarily the video start unless timeline is not zoomed
+        x = self.timeline_frame.x,
+        y = self.timeline_frame.y,
+    })
+end
+
+-- TODO move_to_video_start()
+-- TODO move_to_video_end()
+
 return TimelineDetails

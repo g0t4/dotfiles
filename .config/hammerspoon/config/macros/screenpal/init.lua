@@ -631,14 +631,12 @@ function StreamDeckScreenPalTimelineZoomAndJumpToStart()
     -- FYI using run_async (coroutines under hood) to avoid blocking (i.e. during sleep calls)
     run_async(function()
         local win = get_cached_editor_window()
-        win:zoom_off() -- zoom out first means just click end and zoom in... no slider necessary!
+        -- TODO move zoom controls to timeline class?
+        -- TODO then can add move_to_video_start() for this, to the timeline too
+        win:zoom_off() -- zoom out so start is visible w/o scrolling
         sleep_ms(10)
 
-        -- StreamDeckScreenPalTimelineScrollOrJumpToStart()
-        local slider = win:get_timeline_slider_or_throw()
-        local sframe = slider:axFrame()
-        -- move playhead to end by clicking the left‑most part of the timeline slider
-        hs.eventtap.leftClick({ x = sframe.x, y = sframe.y })
+        win:_timeline_details():move_to_current_start()
 
         sleep_ms(10)
         win:zoom2()
