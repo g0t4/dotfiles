@@ -142,13 +142,11 @@ describe("test", function()
         local test_co = coroutine.running()
 
         function build_report()
-            function then_create_report(data)
-                print("4. creating report with data: " .. vim.inspect(data))
-                coroutine.resume(test_co) -- triggers test to complete
-            end
-
             print("1. start building report.... before crunch_data called")
             callbacker(api_crunch_data, then_create_report)
+
+            print("4. creating report with data: " .. vim.inspect(data))
+            coroutine.resume(test_co) -- triggers test to complete
         end
 
         build_report()
