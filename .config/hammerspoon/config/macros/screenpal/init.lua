@@ -314,9 +314,7 @@ end
 
 function ScreenPalEditorWindow:get_time_string()
     self:ensure_cached_controls()
-    local timeline = self:timeline_controller_ok_skip_pps()
-    -- ONLY reading the time_string!
-    return timeline.time_string
+    return self:timeline_controller_ok_skip_pps().time_string
 end
 
 function ScreenPalEditorWindow:toggle_AXEnhancedUserInterface()
