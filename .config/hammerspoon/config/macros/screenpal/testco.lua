@@ -152,7 +152,6 @@ describe("test", function()
         end
 
         main()
-        coroutine.yield() -- yield test_co
         print("5. test done")
     end)
 end)
