@@ -12,11 +12,11 @@ function TimelineController:new(editor_window, ok_to_skip_pps)
 
     local _timeline_frame = editor_window._btn_position_slider:axFrame()
 
-    local playhead_window = editor_window.windows:get_playhead_window_or_throw()
+    local _playhead_window = editor_window.windows:get_playhead_window_or_throw()
     -- DO NOT get frames until UI is stable, zoome din frame is different than zoomed out
-    local _playhead_window_frame = playhead_window:axFrame()
+    local _playhead_window_frame = _playhead_window:axFrame()
 
-    local time_text_field = playhead_window:textField(1)
+    local time_text_field = _playhead_window:textField(1)
     local time_string = time_text_field:axValue()
     time_string = time_string:gsub("\n", "")
     local _playhead_seconds = parse_time_to_seconds(time_string)
@@ -25,7 +25,7 @@ function TimelineController:new(editor_window, ok_to_skip_pps)
     local _playhead_timeline_relative_x = playhead_screen_x - _timeline_frame.x
 
     self._timeline_frame = _timeline_frame
-    self._playhead_window = playhead_window
+    self._playhead_window = _playhead_window
     self._playhead_window_frame = _playhead_window_frame
     self._playhead_screen_x = playhead_screen_x
     self._playhead_timeline_relative_x = _playhead_timeline_relative_x
