@@ -454,14 +454,13 @@ end
 
 ---@param win ScreenPalEditorWindow
 ---@param next_silence { x_start: number, x_end: number }
-function cut_silence(win, next_silence)
+function act_on_silence(win, next_silence)
     -- TODO +/- padding => what to use? is too crude, especially if zoomed out
     --  ideally I could compute this based on # frames (just handle not knowing case)
     --  OR set this based on MOST of the time I will be doing this with zoom 2... vs unzoomed (MAYBE)
     --    so set # pixels based on 1 frame @ zoom2 => 75 pps zoom 2
     --    how much buffer do I want too? I will need to use it to get a feel for it
     --    7.5 / 75 == 100ms by the way
-
 
     -- TODO padding param?
     local timeline_relative_x = next_silence.x_start -- + 10
@@ -493,7 +492,7 @@ function StreamDeck_ScreenPal_SelectNextSilence()
             return
         end
 
-        cut_silence(win, silence)
+        act_on_silence(win, silence)
     end)
 end
 
@@ -521,7 +520,7 @@ function StreamDeck_ScreenPal_SelectThisSilence()
             return
         end
 
-        cut_silence(win, silence)
+        act_on_silence(win, silence)
     end)
 end
 
@@ -536,7 +535,7 @@ function StreamDeck_ScreenPal_SelectPrevSilence()
             return
         end
 
-        cut_silence(win, silence)
+        act_on_silence(win, silence)
     end)
 end
 
