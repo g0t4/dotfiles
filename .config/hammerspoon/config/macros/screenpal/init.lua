@@ -453,117 +453,71 @@ function show_silences(win, silences)
 end
 
 ---@param win ScreenPalEditorWindow
----@param next_silence { x_start: number, x_end: number }
-function act_on_silence(win, next_silence)
-    -- TODO +/- padding => what to use? is too crude, especially if zoomed out
-    --  ideally I could compute this based on # frames (just handle not knowing case)
-    --  OR set this based on MOST of the time I will be doing this with zoom 2... vs unzoomed (MAYBE)
-    --    so set # pixels based on 1 frame @ zoom2 => 75 pps zoom 2
-    --    how much buffer do I want too? I will need to use it to get a feel for it
-    --    7.5 / 75 == 100ms by the way
+---@param silence? Silence
+---@param action_keystroke string
+--- PRN @param padding?
+function act_on_silence(win, silence, action_keystroke)
+    if not silence then
+        -- might be easier to check here, in one spot, than in all the callers
+        print("no silence to act on")
+        return
+    end
 
-    -- TODO padding param?
-    local timeline_relative_x = next_silence.x_start -- + 10
+    -- set padding and what not AS YOU EDIT
+
+    local timeline_relative_x = silence.x_start -- + 10
     local timeline = win:timeline_controller_ok_skip_pps()
     timeline:move_playhead_to(timeline_relative_x)
 
-    -- win:start_cut()
-    hs.eventtap.keyStroke({}, "v", 0, win.app)
+    hs.eventtap.keyStroke({}, action_keystroke, 0, win.app)
     hs.timer.usleep(100000)
 
     hs.eventtap.keyStroke({}, "s", 0, win.app)
     hs.timer.usleep(100000)
 
-    timeline_relative_x = next_silence.x_end -- - 10
+    timeline_relative_x = silence.x_end -- - 10
     timeline:move_playhead_to(timeline_relative_x)
     hs.eventtap.keyStroke({}, "e", 0, win.app)
 
     -- TODO check if mute button is muted icon? or w/e else to determine if I should click mute the first time?
 end
 
-function StreamDeck_ScreenPal_SelectNextSilence()
+function StreamDeck_ScreenPal_SelectNextSilence(action_keystroke)
     run_async(function()
         ---@type ScreenPalEditorWindow, SilencesController
         local win, silences = syncify(detect_silences)
-
         local silence = silences:get_next_silence()
-        if silence == nil then
-            print("no silence found after playhead")
-            return
-        end
-
-        act_on_silence(win, silence)
+        act_on_silence(win, silence, action_keystroke)
     end)
-end
-
--- Naming Pattern (revise as needed)
--- action_prev_silence
--- action_this_silence_thru_start
--- action_this_silence
--- action_this_silence_thru_end
--- action_next_silence
-
-function StreamDeck_ScreenPal_SelectThisSilence_ThruEnd()
 end
 
 function StreamDeck_ScreenPal_SelectThisSilence_ThruStart()
+    -- PRN could create synthetic silence
 end
 
-function StreamDeck_ScreenPal_SelectThisSilence()
+function StreamDeck_ScreenPal_SelectThisSilence(action_keystroke)
     run_async(function()
         ---@type ScreenPalEditorWindow, SilencesController
         local win, silences = syncify(detect_silences)
-
         local silence = silences:get_this_silence()
-        if silence == nil then
-            print("no silence found after playhead")
-            return
-        end
-
-        act_on_silence(win, silence)
+        act_on_silence(win, silence, action_keystroke)
     end)
 end
 
-function StreamDeck_ScreenPal_SelectPrevSilence()
+function StreamDeck_ScreenPal_SelectThisSilence_ThruEnd()
+    -- PRN could create synthetic silence
+end
+
+function StreamDeck_ScreenPal_SelectPrevSilence(action_keystroke)
     run_async(function()
         ---@type ScreenPalEditorWindow, SilencesController
         local win, silences = syncify(detect_silences)
-
         local silence = silences:get_prev_silence()
-        if silence == nil then
-            print("no silence found after playhead")
-            return
-        end
-
-        act_on_silence(win, silence)
+        act_on_silence(win, silence, action_keystroke)
     end)
 end
 
--- * muting (select + mute)
-function StreamDeck_ScreenPal_MuteThisSilence()
-    -- select the region
-    -- then, hit V key
-    --   KEEP volume tool bug, if a detected silence period, V selects full range, but Ok won't work until adjust either in/out point
-    --   s/b NBD cuz I will select both now with my tool
-    -- probably wait for my review
-    --
-    -- start review automatically? ('p' or... go back X seconds myself?)
-    --   PRN I could replace how 'p' works to do diff style previews, might be nice to have diff range of preview
-end
-
-function StreamDeck_ScreenPal_MuteThisSilence_ThruEnd()
-end
-
-function StreamDeck_ScreenPal_MuteThisSilence_ThruStart()
-end
-
-function StreamDeck_ScreenPal_MuteNextSilence()
-end
-
-function StreamDeck_ScreenPal_MutePrevSilence()
-end
-
-function hide_silences()
+local function hide_silences()
     if silences_canvas == nil then return end
 
     silences_canvas:delete()
@@ -571,7 +525,7 @@ function hide_silences()
 end
 
 ---@return boolean
-function silences_are_visible()
+local function silences_are_visible()
     return silences_canvas ~= nil
 end
 
@@ -588,7 +542,7 @@ function StreamDeck_ScreenPal_ShowSilenceRegions()
 end
 
 ---@param callback fun(win: ScreenPalEditorWindow, silences SilencesController)
-function detect_silences(callback)
+local function detect_silences(callback)
     run_async(function()
         local win = get_cached_editor_window()
 
