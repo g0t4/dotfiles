@@ -261,7 +261,7 @@ function ScreenPalEditorWindow:zoom3()
     self._btn_maximum_zoom:performAction("AXPress")
 end
 
-function cache_project_view_controls()
+function ScreenPalEditorWindow:cache_project_view_controls()
     vim.iter(self.win:children())
         :each(function(ui_elem)
             -- one time hit, just cache all buttons when I have to find one of them
@@ -304,7 +304,7 @@ function ScreenPalEditorWindow:reopen_project()
         self._btn_back_to_projects:performAction("AXPress")
 
         local btn_reopen_project = wait_for_element(function()
-            cache_project_view_controls()
+            self:cache_project_view_controls()
             if not self._scrollarea_list then return end
             return vim.iter(self._scrollarea_list:buttons())
                 :filter(function(button)
