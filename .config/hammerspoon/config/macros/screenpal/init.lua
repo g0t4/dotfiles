@@ -549,13 +549,19 @@ function StreamDeck_ScreenPal_MutePrevSilence()
 end
 
 function StreamDeck_ScreenPal_ShowSilenceRegions()
-    if silences_canvas then
-        silences_canvas:delete()
-        silences_canvas = nil
-        return
-    end
+    run_async(function()
+        if silences_canvas then
+            silences_canvas:delete()
+            silences_canvas = nil
+            return
+        end
 
-    detect_silences_and_then(show_silences)
+        local win, silences = callbacker(detect_silences_and_then)
+        -- print("win:", vim.inspect(win))
+        -- print("silences", vim.inspect(silences))
+
+        show_silences(win, silences)
+    end)
 end
 
 ---@param on_done fun(win: ScreenPalEditorWindow, silences SilencesController)

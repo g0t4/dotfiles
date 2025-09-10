@@ -1,3 +1,6 @@
+-- FYI! always check resume result for failure!!!
+--   else wind up swallowing errors!
+
 function run_async(what, ...)
     local running, ismain = coroutine.running()
     -- print("running:", running)
@@ -52,4 +55,33 @@ function sleep_ms(ms)
     end
 
     error("NOT SUPPORTED TEST ENV... USE _PLENARY_")
+end
+
+---PRN could have callbacker_lastarg(...,fun(...)) that takes callback as last arg
+---@param call_this fun(fun(...), ...)  -- assumes callback is first arg then args are after
+---@vararg any ...
+---@return any ...
+function callbacker(call_this, ...)
+    local co, is_main = coroutine.running()
+    assert(co, "callbacker can only be called within a coroutine")
+    assert(not is_main, "callbacker cannot be called in a main thread (coroutine)")
+    -- cannot yield main thread... hence this won't work
+    -- I suppose I could start a coroutine if is_main is true
+
+    local captured_args = nil
+    call_this(function(...)
+        captured_args = { ... }
+        -- print("cap", ...)
+        local status, err = coroutine.resume(co)
+        if not status then
+            -- print("callbacker - resume failed", err)
+        end
+    end, ...)
+
+    coroutine.yield()
+    -- print("cap2", captured_args)
+    if unpack then
+        return unpack(captured_args)
+    end
+    return table.unpack(captured_args)
 end
