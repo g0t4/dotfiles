@@ -57,7 +57,7 @@ end
 
 ---@param self table
 ---@param target_x number
-function TimelineDetails:_move_playhead_to_x(target_x)
+function TimelineDetails:_move_playhead_to_screen_x(target_x)
     print("moving playhead to " .. target_x)
     local hold_duration_ms = 10
     hs.eventtap.leftClick({
@@ -72,14 +72,14 @@ end
 ---@param relative_target_x number # pixel value relative to timeline's position
 function TimelineDetails:_move_playhead_to_relative(relative_target_x)
     local screen_x = relative_target_x + self.timeline_frame.x
-    self:_move_playhead_to_x(screen_x)
+    self:_move_playhead_to_screen_x(screen_x)
 end
 
 ---@param self TimelineDetails
 ---@param seconds number
 function TimelineDetails:move_playhead_to_seconds(seconds)
     local playhead_x = self.timeline_frame.x + (seconds * self.pixels_per_second) + 1
-    self:_move_playhead_to_x(playhead_x)
+    self:_move_playhead_to_screen_x(playhead_x)
 end
 
 ---@return number
