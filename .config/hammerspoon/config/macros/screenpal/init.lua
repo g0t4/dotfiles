@@ -144,17 +144,7 @@ function ScreenPalEditorWindow:restore_playhead_position(playhead_percent)
 
     self:zoom_off() -- do not restore when zoomed
 
-    local details = self:_timeline_details()
-
-    -- TODO _timeline_details():move_playhead_to_percent(percent)
-    local time_window_x_center = details.timeline_frame.x + playhead_percent * details.timeline_frame.w
-
-    local hold_down_before_release = 10000 -- default is 200ms, will matter if chaining more actions!
-    hs.eventtap.leftClick({
-        -- +1 pixel stops leftward drift by 1 frame (good test is back to back reopen, albeit not a normal workflow)
-        x = time_window_x_center + 1,
-        y = details.timeline_frame.y + details.timeline_frame.h / 2
-    }, hold_down_before_release)
+    self:_timeline_details():move_playhead_to_position_percent(playhead_percent)
 end
 
 function ScreenPalEditorWindow:is_zoomed()

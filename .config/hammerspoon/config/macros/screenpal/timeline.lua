@@ -165,9 +165,15 @@ end
 -- TODO move_to_video_start()
 -- TODO move_to_video_end()
 
----@return number
+---@return number # 0 to 1
 function TimelineDetails:get_position_percent()
     return (self.playhead_x - self.timeline_frame.x) / self.timeline_frame.w
+end
+
+---@param percent # 0 to 1
+function TimelineDetails:move_playhead_to_position_percent(percent)
+    -- +1 pixel stops leftward drift by 1 frame (good test is back to back reopen, albeit not a normal workflow)
+    self:move_playhead_to(percent * self.timeline_frame.w + 1)
 end
 
 return TimelineDetails
