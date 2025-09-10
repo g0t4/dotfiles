@@ -1,7 +1,7 @@
 ---@class TimelineDetails
 ---@field timeline_frame { x: number, y: number, w: number, h: number }
 ---@field _playhead_window_frame { x: number, y: number, w: number, h: number }
----@field playhead_x number
+---@field _playhead_screen_x number
 ---@field _playhead_relative_timeline_x number
 ---@field playhead_seconds number
 ---@field pixels_per_second? number
@@ -22,13 +22,13 @@ function TimelineDetails:new(editor_window, ok_to_skip_pps)
     time_string = time_string:gsub("\n", "")
     local playhead_seconds = parse_time_to_seconds(time_string)
 
-    local playhead_x = _playhead_window_frame.x + _playhead_window_frame.w / 2
-    local _playhead_relative_timeline_x = playhead_x - timeline_frame.x
+    local playhead_screen_x = _playhead_window_frame.x + _playhead_window_frame.w / 2
+    local _playhead_relative_timeline_x = playhead_screen_x - timeline_frame.x
 
     self.timeline_frame = timeline_frame
     self._playhead_window = playhead_window
     self._playhead_window_frame = _playhead_window_frame
-    self.playhead_x = playhead_x
+    self._playhead_screen_x = playhead_screen_x
     self._playhead_relative_timeline_x = _playhead_relative_timeline_x
     self.time_string = time_string
     self.playhead_seconds = playhead_seconds
@@ -143,7 +143,7 @@ end
 
 ---@return number # 0 to 1
 function TimelineDetails:get_position_percent()
-    return (self.playhead_x - self.timeline_frame.x) / self.timeline_frame.w
+    return (self._playhead_screen_x - self.timeline_frame.x) / self.timeline_frame.w
 end
 
 ---@param percent # 0 to 1
