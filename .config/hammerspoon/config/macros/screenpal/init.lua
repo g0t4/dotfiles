@@ -347,7 +347,8 @@ end
 
 function ScreenPalEditorWindow:get_time_string()
     self:ensure_cached_controls()
-    local details = self:_timeline_details()
+    local details = self:timeline_details_ok_to_skip_pps()
+    -- ONLY reading the time_string!
     return details.time_string
 end
 
@@ -642,7 +643,8 @@ function StreamDeckScreenPalTimelineZoomAndJumpToStart()
         win:zoom_off() -- zoom out so start is visible w/o scrolling
         sleep_ms(10)
 
-        win:_timeline_details():move_to_timeline_start()
+        -- FYI jumping to start/end unzoomed doesn't need PPS:
+        win:timeline_details_ok_to_skip_pps():move_to_timeline_start()
 
         sleep_ms(10)
         win:zoom2()
@@ -655,7 +657,7 @@ function StreamDeckScreenPalTimelineZoomAndJumpToEnd()
         win:zoom_off()
         sleep_ms(10)
 
-        win:_timeline_details():move_to_timeline_end()
+        win:timeline_details_ok_to_skip_pps():move_to_timeline_end()
 
         sleep_ms(10)
         win:zoom2()
