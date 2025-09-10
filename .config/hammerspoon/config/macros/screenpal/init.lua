@@ -142,7 +142,7 @@ end
 function ScreenPalEditorWindow:restore_playhead_position(playhead_percent)
     self:ensure_cached_controls()
 
-    self:zoom_off() -- do not restore when zoomed
+    self:zoom_off() -- position % is relative to unzoomed timeline
 
     self:_timeline_details():move_playhead_to_position_percent(playhead_percent)
 end
