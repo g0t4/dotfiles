@@ -337,7 +337,8 @@ function ScreenPalEditorWindow:figure_out_zoom2_fixed_pixels_per_second()
     --   i.e. get_playhead_time
 
     local details = self:_timeline_details()
-    details:move_playhead_to_seconds(2)
+    -- shift+right takes me one second over (doesn't need to be 1 exactly to find PPS)
+    hs.eventtap.keyStroke({ "shift" }, hs.keycodes.map["right"])
 
     -- *** PIXELS PER SECOND for each ZOOM level (fixed for each level)
     print(details.pixels_per_second)

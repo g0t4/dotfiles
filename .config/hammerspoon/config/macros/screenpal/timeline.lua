@@ -149,12 +149,6 @@ function TimelineDetails:move_playhead_to(timeline_x)
     _move_playhead_to_screen_x(self, screen_x)
 end
 
----@param seconds number
-function TimelineDetails:move_playhead_to_seconds(seconds)
-    local playhead_x = self.timeline_frame.x + (seconds * self.pixels_per_second) + 1
-    _move_playhead_to_screen_x(self, playhead_x)
-end
-
 --- jump to start of CURRENT view (not entire timeline)
 function TimelineDetails:move_to_timeline_start()
     hs.eventtap.leftClick({
