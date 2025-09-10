@@ -122,7 +122,7 @@ describe("test", function()
     it("crunch_data with callback", function()
         local test_co = coroutine.running()
 
-        function build_report()
+        function main()
             function then_create_report(data)
                 print("4. creating report with data: " .. vim.inspect(data))
                 coroutine.resume(test_co) -- triggers test to complete
@@ -132,7 +132,7 @@ describe("test", function()
             api_crunch_data(then_create_report)
         end
 
-        build_report()
+        main()
         coroutine.yield() -- yield test_co
         print("5. test done")
     end)
@@ -142,7 +142,7 @@ describe("test", function()
 
         local test_co = coroutine.running()
 
-        function build_report()
+        function main()
             print("1. start building report.... before crunch_data called")
             local data = callbacker(api_crunch_data, then_create_report)
 
@@ -150,7 +150,7 @@ describe("test", function()
             coroutine.resume(test_co) -- triggers test to complete
         end
 
-        build_report()
+        main()
         coroutine.yield() -- yield test_co
         print("5. test done")
     end)
