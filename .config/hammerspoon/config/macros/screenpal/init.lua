@@ -457,19 +457,13 @@ function ScreenPalEditorWindow:start_cut()
     hs.eventtap.keyStroke({}, "c", 0, self.app)
     -- TODO find a way to detect when cut is open (tool popup?)
 
-    -- -- IDEA: get btnTools BEFORE type 'c' and then can you check if it is invalid after to approximate when cut tool is open?:
-    --   OR would that work wth the cached window for the toolbar window?
-    -- btn_tools:isValid()
-
     -- PRN see below for notes about waiting until tool is open
     --  for now I am just going to use fixed wait time
-    hs.timer.usleep(100000)
+    hs.timer.usleep(50000) -- FYI! 100ms is overkill in my initial testing
 
-    -- ** closed (cut tool is not open) window
+    -- ** closed (cut tool is not open) window, regular toolbar with "Tools" button is visible
     -- app:window(1)
     -- AXSections: [1: SectionObject: hs.axuielement: AXButton (0x60000020b438), SectionUniqueID: AXContent, SectionDescription: Content]
-    -- frame: x=725.0,y=628.0,w=274.0,h=94.0
-    -- unique ref:
 
     -- start = get_time()
     -- -- FYI getting window anew (OR should I use cache?)
@@ -491,10 +485,10 @@ function ScreenPalEditorWindow:start_cut()
     -- print_took("get tools btn", start_btn_tools)
     -- print('btnTools', hs.inspect(btn))
 
-    -- ** open cut tool
+    -- ** once cut toolbar is open
     -- app:window(2)
     -- AXSections: [1: SectionObject: hs.axuielement: AXTextField (0x6000005a25f8), SectionUniqueID: AXContent, SectionDescription: Content]
-    -- frame: x=687.0,y=628.0,w=428.0,h=94.0
+    -- FYI first button has smth about help text
 end
 
 local _cached_editor_window = nil
