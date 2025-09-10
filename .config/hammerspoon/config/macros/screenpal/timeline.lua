@@ -55,6 +55,28 @@ function TimelineDetails:new(editor_window)
     return self
 end
 
+---avoid fixed pauses!
+---@param target_x number
+---@param max_loops integer
+local function _wait_until_playhead_at(self, target_x, max_loops)
+    max_loops = max_loops or 30
+    start = get_time()
+    for i = 1, max_loops do
+        hs.timer.usleep(10000)
+
+        print("  iteration " .. i)
+        if self:is_playhead_now_at_target(target_x) then
+            break
+        end
+    end
+    print_took("  _wait_until_playhead_at", start)
+    -- FYI it is still possible you need some slight fixed delay
+    --   i.e. if the window coords are updated ahead of something else
+    --   that would intefere with typical next actions (i.e. typing 'c'to trigger cut)
+    --   if so, add that here so everyone benefits from it
+    --   if it's specific to a given automation then that fixed delay can live in consumer code
+end
+
 ---@param self table
 ---@param screen_x number
 local function _move_playhead_to_screen_x(self, screen_x)
@@ -102,28 +124,6 @@ function TimelineDetails:is_playhead_now_at_target(target_x)
     print("  new_x", new_x, "target_x", target_x)
     local pixel_gap = math.abs(new_x - target_x)
     return pixel_gap <= self.pixels_per_frame
-end
-
----avoid fixed pauses!
----@param target_x number
----@param max_loops integer
-local function _wait_until_playhead_at(self, target_x, max_loops)
-    max_loops = max_loops or 30
-    start = get_time()
-    for i = 1, max_loops do
-        hs.timer.usleep(10000)
-
-        print("  iteration " .. i)
-        if self:is_playhead_now_at_target(target_x) then
-            break
-        end
-    end
-    print_took("  _wait_until_playhead_at", start)
-    -- FYI it is still possible you need some slight fixed delay
-    --   i.e. if the window coords are updated ahead of something else
-    --   that would intefere with typical next actions (i.e. typing 'c'to trigger cut)
-    --   if so, add that here so everyone benefits from it
-    --   if it's specific to a given automation then that fixed delay can live in consumer code
 end
 
 return TimelineDetails
