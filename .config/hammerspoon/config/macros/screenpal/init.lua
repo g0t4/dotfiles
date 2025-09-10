@@ -563,6 +563,8 @@ function StreamDeck_ScreenPal_SelectNextSilence()
             :filter( ---@param silence Silence
                 function(silence)
                     -- TODO get relative playhead position so I don't have to add slider (timeline)'s frame.x?
+                    --  TODO then get rid of using slider_frame here!
+                    --  _timeline.playhead_relative_x -- lack of better name
                     return silence.x_start + slider_frame.x > _timeline.playhead_x
                 end)
             :next()
@@ -570,11 +572,9 @@ function StreamDeck_ScreenPal_SelectNextSilence()
             print("no silence found after playhead")
             return
         end
-        print("FOUND: " .. hs.inspect(next))
-        -- TODO _move_playhead_to_x_relative()
-        local target_playhead_x = next.x_start + 10 + slider_frame.x
-        print("moving playhead to " .. target_playhead_x) -- debug
-        _timeline:_move_playhead_to_x(target_playhead_x)
+
+        print("FOUND silence: " .. hs.inspect(next))
+        _timeline:_move_playhead_to_relative(next.x_start + 10)
 
         win:start_cut()
         hs.eventtap.keyStroke({}, "s", 0, win.app)

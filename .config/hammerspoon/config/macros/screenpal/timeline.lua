@@ -68,6 +68,13 @@ function TimelineDetails:_move_playhead_to_x(target_x)
     self:wait_until_playhead_at(target_x)
 end
 
+--- Do not need to add offset of timeline position!
+---@param relative_target_x number # pixel value relative to timeline's position
+function TimelineDetails:_move_playhead_to_relative(relative_target_x)
+    local screen_x = relative_target_x + self.timeline_frame.x
+    self:_move_playhead_to_x(screen_x)
+end
+
 ---@param self TimelineDetails
 ---@param seconds number
 function TimelineDetails:move_playhead_to_seconds(seconds)
