@@ -492,36 +492,16 @@ end
 -- action_next_silence
 
 function StreamDeck_ScreenPal_SelectThisSilence_ThruEnd()
-    -- do not adjust backwards
-    -- keep current mouse position and possibly restore that?
-    -- either regular or short silence
-    -- 'v' to start
-    -- click end position and type e (extend)
-    --  BTW if I click both start and end I don't have to worry about if I do this in a detected silence period or short... even though regular one will highlight full silence on v... clicking ends and extend (e/s) is effectively the same as not auto-select
-    -- PRN if silence starts at 0 then don't pad front
-
-
-    ---@param win ScreenPalEditorWindow
-    ---@param silences SilencesController
-    function select_this_silence(win, silences)
-    end
-
-    detect_silences(select_this_silence)
 end
 
 function StreamDeck_ScreenPal_SelectThisSilence_ThruStart()
 end
 
 function StreamDeck_ScreenPal_SelectThisSilence()
+
 end
 
 function StreamDeck_ScreenPal_SelectPrevSilence()
-    ---@param win ScreenPalEditorWindow
-    ---@param silences SilencesController
-    function select_prev(win, silences)
-    end
-
-    detect_silences(select_prev)
 end
 
 -- * muting (select + mute)
