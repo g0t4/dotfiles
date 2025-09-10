@@ -423,9 +423,8 @@ function show_silences(win, results)
     -- example silences (also for testing):
     -- regular_silences = { { x_end = 1132, x_start = 1034 }, { x_end = 1372, x_start = 1223 }, { x_end = 1687, x_start = 1562 } }
 
-    -- TODO rename relative_timeline_x to timeline_relative_x (latter reads better)
     local _timeline = win:_timeline_details()
-    local _playhead_timeline_relative_x = _timeline._playhead_relative_timeline_x
+    local _playhead_timeline_relative_x = _timeline._playhead_timeline_relative_x
     local timeline_frame = _timeline:get_timeline_frame()
     local canvas = hs.canvas.new(timeline_frame)
     assert(canvas)
@@ -473,8 +472,7 @@ function StreamDeck_ScreenPal_SelectNextSilence()
         local next_silence = vim.iter(assume_sorted_silences)
             :filter( ---@param silence Silence
                 function(silence)
-                    -- TODO revisit _playhead_relative_timeline_x name
-                    return silence.x_start > _timeline._playhead_relative_timeline_x
+                    return silence.x_start > _timeline._playhead_timeline_relative_x
                 end)
             :next()
         if next_silence == nil then

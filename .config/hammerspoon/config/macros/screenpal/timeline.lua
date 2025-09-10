@@ -2,7 +2,7 @@
 ---@field timeline_frame { x: number, y: number, w: number, h: number }
 ---@field _playhead_window_frame { x: number, y: number, w: number, h: number }
 ---@field _playhead_screen_x number
----@field _playhead_relative_timeline_x number
+---@field _playhead_timeline_relative_x number
 ---@field playhead_seconds number
 ---@field pixels_per_second? number
 local TimelineDetails = {}
@@ -23,13 +23,13 @@ function TimelineDetails:new(editor_window, ok_to_skip_pps)
     local playhead_seconds = parse_time_to_seconds(time_string)
 
     local playhead_screen_x = _playhead_window_frame.x + _playhead_window_frame.w / 2
-    local _playhead_relative_timeline_x = playhead_screen_x - timeline_frame.x
+    local _playhead_timeline_relative_x = playhead_screen_x - timeline_frame.x
 
     self.timeline_frame = timeline_frame
     self._playhead_window = playhead_window
     self._playhead_window_frame = _playhead_window_frame
     self._playhead_screen_x = playhead_screen_x
-    self._playhead_relative_timeline_x = _playhead_relative_timeline_x
+    self._playhead_timeline_relative_x = _playhead_timeline_relative_x
     self.time_string = time_string
     self.playhead_seconds = playhead_seconds
     if self.playhead_seconds == 0 then
@@ -40,7 +40,7 @@ function TimelineDetails:new(editor_window, ok_to_skip_pps)
         -- consumers of these values should handle case when nil
         self.pixels_per_second = nil
     else
-        self.pixels_per_second = _playhead_relative_timeline_x / playhead_seconds
+        self.pixels_per_second = _playhead_timeline_relative_x / playhead_seconds
     end
     -- print(vim.inspect(self))
     return self
