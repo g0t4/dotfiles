@@ -457,6 +457,10 @@ function ScreenPalEditorWindow:start_cut()
     hs.eventtap.keyStroke({}, "c", 0, self.app)
     -- TODO find a way to detect when cut is open (tool popup?)
 
+    -- -- IDEA: get btnTools BEFORE type 'c' and then can you check if it is invalid after to approximate when cut tool is open?:
+    --   OR would that work wth the cached window for the toolbar window?
+    -- btn_tools:isValid()
+
     -- PRN see below for notes about waiting until tool is open
     --  for now I am just going to use fixed wait time
     hs.timer.usleep(100000)
