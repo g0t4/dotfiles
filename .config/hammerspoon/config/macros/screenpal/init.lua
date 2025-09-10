@@ -452,6 +452,9 @@ function show_silences(win, silences)
     silences_canvas = canvas
 end
 
+_G.MUTE = 'v'
+_G.CUT = 'c'
+
 ---@param win ScreenPalEditorWindow
 ---@param silence? Silence
 ---@param action_keystroke string
@@ -499,20 +502,20 @@ local function detect_silences(callback)
     end)
 end
 
-function StreamDeck_ScreenPal_SelectNextSilence(action_keystroke)
+function StreamDeck_ScreenPal_ActOnPrevSilence(action_keystroke)
     run_async(function()
         ---@type ScreenPalEditorWindow, SilencesController
         local win, silences = syncify(detect_silences)
-        local silence = silences:get_next_silence()
+        local silence = silences:get_prev_silence()
         act_on_silence(win, silence, action_keystroke)
     end)
 end
 
-function StreamDeck_ScreenPal_SelectThisSilence_ThruStart()
+function StreamDeck_ScreenPal_ActOnThisSilence_ThruStart(action_keystroke)
     -- PRN could create synthetic silence
 end
 
-function StreamDeck_ScreenPal_SelectThisSilence(action_keystroke)
+function StreamDeck_ScreenPal_ActOnThisSilence(action_keystroke)
     run_async(function()
         ---@type ScreenPalEditorWindow, SilencesController
         local win, silences = syncify(detect_silences)
@@ -521,15 +524,15 @@ function StreamDeck_ScreenPal_SelectThisSilence(action_keystroke)
     end)
 end
 
-function StreamDeck_ScreenPal_SelectThisSilence_ThruEnd()
+function StreamDeck_ScreenPal_ActOnThisSilence_ThruEnd(action_keystroke)
     -- PRN could create synthetic silence
 end
 
-function StreamDeck_ScreenPal_SelectPrevSilence(action_keystroke)
+function StreamDeck_ScreenPal_ActOnNextSilence(action_keystroke)
     run_async(function()
         ---@type ScreenPalEditorWindow, SilencesController
         local win, silences = syncify(detect_silences)
-        local silence = silences:get_prev_silence()
+        local silence = silences:get_next_silence()
         act_on_silence(win, silence, action_keystroke)
     end)
 end
