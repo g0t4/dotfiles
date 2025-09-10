@@ -9,10 +9,11 @@ function run_async(what, ...)
         return
     end
 
+    -- ONLY call resume once, let what then manage yield/resume on its own (or delegate it to helpers like sleep_ms and callbacker below)
     local co = coroutine.create(what)
     local ok, err = coroutine.resume(co, ...)
     if not ok then
-        error(err)
+        error("Failed resuming coroutine:" .. tostring(err))
     end
 end
 
