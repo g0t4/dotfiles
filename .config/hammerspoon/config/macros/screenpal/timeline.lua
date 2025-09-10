@@ -65,13 +65,13 @@ local function _move_playhead_to_screen_x(self, screen_x)
         y = self.timeline_frame.y + self.timeline_frame.h / 2
     }, hold_duration_ms * 1000)
     -- PRN round to nearest frame? is that doable?
-    self:wait_until_playhead_at(screen_x)
+    self:_wait_until_playhead_at(screen_x)
 end
 
 ---Do not need to add offset of timeline position!
----@param relative_x number # pixel value relative to timeline's position
-function TimelineDetails:_move_playhead_to(relative_x)
-    local screen_x = relative_x + self.timeline_frame.x
+---@param timeline_x number # x value w/in the timeline (not screen)
+function TimelineDetails:_move_playhead_to(timeline_x)
+    local screen_x = timeline_x + self.timeline_frame.x
     _move_playhead_to_screen_x(self, screen_x)
 end
 
@@ -107,7 +107,7 @@ end
 ---avoid fixed pauses!
 ---@param target_x number
 ---@param max_loops integer
-function TimelineDetails:wait_until_playhead_at(target_x, max_loops)
+function TimelineDetails:_wait_until_playhead_at(target_x, max_loops)
     max_loops = max_loops or 30
     start = get_time()
     for i = 1, max_loops do
@@ -118,7 +118,7 @@ function TimelineDetails:wait_until_playhead_at(target_x, max_loops)
             break
         end
     end
-    print_took("  wait_until_playhead_at", start)
+    print_took("  _wait_until_playhead_at", start)
     -- FYI it is still possible you need some slight fixed delay
     --   i.e. if the window coords are updated ahead of something else
     --   that would intefere with typical next actions (i.e. typing 'c'to trigger cut)
