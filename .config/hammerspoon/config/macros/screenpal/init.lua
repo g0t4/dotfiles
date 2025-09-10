@@ -456,17 +456,11 @@ function StreamDeck_ScreenPal_SelectNextSilence()
     ---@param win ScreenPalEditorWindow
     ---@param silences SilencesController
     function select_next(win, silences)
-        local assume_sorted_silences = silences.regular -- TODO change to all?
-        local timeline = win:timeline_controller_ok_skip_pps() -- movement is x coordinate based, no PPS needed
-        -- -- PRN move logic into a ctor in detect_silence to build sorted lists for everything so consumers don't have to
-        -- local sorted_silences = table.sort(silences, function(a, b) return a.x_start > b.x_start end)
         local next_silence = silences:get_next_silence()
         if next_silence == nil then
             print("no silence found after playhead")
             return
         end
-
-        print("FOUND silence: " .. hs.inspect(next_silence))
 
         -- TODO +/- padding => what to use? is too crude, especially if zoomed out
         --  ideally I could compute this based on # frames (just handle not knowing case)
@@ -475,6 +469,7 @@ function StreamDeck_ScreenPal_SelectNextSilence()
         --    how much buffer do I want too? I will need to use it to get a feel for it
         --    7.5 / 75 == 100ms by the way
         local timeline_relative_x = next_silence.x_start + 10
+        local timeline = win:timeline_controller_ok_skip_pps() -- movement is x coordinate based, no PPS needed
         timeline:move_playhead_to(timeline_relative_x)
 
         win:start_cut()
