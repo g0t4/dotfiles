@@ -636,7 +636,7 @@ function StreamDeckScreenPalTimelineZoomAndJumpToStart()
         win:zoom_off() -- zoom out so start is visible w/o scrolling
         sleep_ms(10)
 
-        win:_timeline_details():move_to_current_start()
+        win:_timeline_details():move_to_timeline_start()
 
         sleep_ms(10)
         win:zoom2()
@@ -649,11 +649,7 @@ function StreamDeckScreenPalTimelineZoomAndJumpToEnd()
         win:zoom_off()
         sleep_ms(10)
 
-        -- StreamDeckScreenPalTimelineScrollOrJumpToEnd()
-        local slider = win:get_timeline_slider_or_throw()
-        local sframe = slider:axFrame()
-        -- move playhead to end by clicking the right‑most part of the timeline slider
-        hs.eventtap.leftClick({ x = sframe.x + sframe.w - 1, y = sframe.y })
+        win:_timeline_details():move_to_timeline_end()
 
         sleep_ms(10)
         win:zoom2()
