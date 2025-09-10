@@ -2,7 +2,7 @@
 ---@field timeline_frame { x: number, y: number, w: number, h: number }
 ---@field _playhead_window_frame { x: number, y: number, w: number, h: number }
 ---@field _playhead_screen_x number
----@field _playhead_timeline_relative_x number
+---@field _playhead_timeline_relative_x number -- TODO make this public? a few uses externally that seem fine (i.e. showing detected silence ranges)
 ---@field playhead_seconds number
 ---@field pixels_per_second? number
 local TimelineDetails = {}
