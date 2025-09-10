@@ -1,5 +1,5 @@
 ---@class TimelineController
----@field timeline_frame { x: number, y: number, w: number, h: number }
+---@field _timeline_frame { x: number, y: number, w: number, h: number }
 ---@field _playhead_window_frame { x: number, y: number, w: number, h: number }
 ---@field _playhead_screen_x number
 ---@field _playhead_timeline_relative_x number -- TODO make this public? a few uses externally that seem fine (i.e. showing detected silence ranges)
@@ -11,7 +11,7 @@ local TimelineController = {}
 function TimelineController:new(editor_window, ok_to_skip_pps)
     ok_to_skip_pps = ok_to_skip_pps or false
 
-    local timeline_frame = editor_window._btn_position_slider:axFrame()
+    local _timeline_frame = editor_window._btn_position_slider:axFrame()
 
     local playhead_window = editor_window.windows:get_playhead_window_or_throw()
     -- DO NOT get frames until UI is stable, zoome din frame is different than zoomed out
@@ -23,9 +23,9 @@ function TimelineController:new(editor_window, ok_to_skip_pps)
     local playhead_seconds = parse_time_to_seconds(time_string)
 
     local playhead_screen_x = _playhead_window_frame.x + _playhead_window_frame.w / 2
-    local _playhead_timeline_relative_x = playhead_screen_x - timeline_frame.x
+    local _playhead_timeline_relative_x = playhead_screen_x - _timeline_frame.x
 
-    self.timeline_frame = timeline_frame
+    self._timeline_frame = _timeline_frame
     self._playhead_window = playhead_window
     self._playhead_window_frame = _playhead_window_frame
     self._playhead_screen_x = playhead_screen_x
@@ -113,7 +113,7 @@ local function _move_playhead_to_screen_x(self, playhead_screen_x)
     local hold_duration_ms = 10
     hs.eventtap.leftClick({
         x = playhead_screen_x,
-        y = self.timeline_frame.y + self.timeline_frame.h / 2
+        y = self._timeline_frame.y + self._timeline_frame.h / 2
     }, hold_duration_ms * 1000)
     _wait_until_playhead_at_screen_x(self, playhead_screen_x)
 end
@@ -121,7 +121,7 @@ end
 --- RELATIVE to the TIMELINE (not the screen)
 ---@param timeline_relative_x number # x value _WITHIN_ the timeline (not screen_x)
 function TimelineController:move_playhead_to(timeline_relative_x)
-    local screen_x = timeline_relative_x + self.timeline_frame.x
+    local screen_x = timeline_relative_x + self._timeline_frame.x
     _move_playhead_to_screen_x(self, screen_x)
 end
 
@@ -130,8 +130,8 @@ function TimelineController:move_playhead_to_timeline_start()
     hs.eventtap.leftClick({
         -- click the left‑most part of the timeline slider
         --  NOT necessarily the video start unless timeline is not zoomed
-        x = self.timeline_frame.x,
-        y = self.timeline_frame.y,
+        x = self._timeline_frame.x,
+        y = self._timeline_frame.y,
     })
 end
 
@@ -140,8 +140,8 @@ function TimelineController:move_playhead_to_timeline_end()
     hs.eventtap.leftClick({
         -- click the rightmost part of the timeline slider
         -- -1 works best for the end (in my testing)
-        x = self.timeline_frame.x + self.timeline_frame.w - 1,
-        y = self.timeline_frame.y,
+        x = self._timeline_frame.x + self._timeline_frame.w - 1,
+        y = self._timeline_frame.y,
     })
 end
 
@@ -150,14 +150,14 @@ end
 
 ---@return number ratio # 0 to 1, "percent" is a terrible name b/c it's not 0 to 100% ... not sure what I like better
 function TimelineController:get_position_percent()
-    local timeline_relative_x = self._playhead_screen_x - self.timeline_frame.x
-    return timeline_relative_x / self.timeline_frame.w
+    local timeline_relative_x = self._playhead_screen_x - self._timeline_frame.x
+    return timeline_relative_x / self._timeline_frame.w
 end
 
 ---@param ratio number # 0 to 1, "percent" is a terrible name b/c it's not 0 to 100% ... not sure what I like better
 function TimelineController:move_playhead_to_position_percent(ratio)
     -- +1 pixel stops leftward drift by 1 frame (good test is back to back reopen, albeit not a normal workflow)
-    local timeline_relative_x = ratio * self.timeline_frame.w + 1
+    local timeline_relative_x = ratio * self._timeline_frame.w + 1
     self:move_playhead_to(timeline_relative_x)
 end
 
@@ -166,7 +166,7 @@ end
 function TimelineController:get_timeline_frame()
     -- this accessor makes it easier to see external usage
     -- AND I can now make the storage private (and can change it too)
-    return self.timeline_frame
+    return self._timeline_frame
 end
 
 return TimelineController
