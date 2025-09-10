@@ -122,8 +122,8 @@ describe("test", function()
         local test_co = coroutine.running()
 
         function build_report()
-            function then_create_report()
-                print("4. creating report")
+            function then_create_report(data)
+                print("4. creating report with data: " .. vim.inspect(data))
                 coroutine.resume(test_co) -- triggers test to complete
             end
 
@@ -142,8 +142,8 @@ describe("test", function()
         local test_co = coroutine.running()
 
         function build_report()
-            function then_create_report()
-                print("4. creating report")
+            function then_create_report(data)
+                print("4. creating report with data: " .. vim.inspect(data))
                 coroutine.resume(test_co) -- triggers test to complete
             end
 
