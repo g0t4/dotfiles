@@ -14,13 +14,11 @@ end
 function AppWindows:_refresh()
     -- FTR refresh takes 5-11ms (not terrible) so its not a huge time savings except maybe when aggregated with other savings
     local start = get_time()
-    -- print("REFRESH")
     local windows = self.app:windows()
     local new_cache = {}
     for _, win in ipairs(windows) do
         local title = win:axTitle()
         new_cache[title] = win
-        -- print("  title: " .. tostring(title))
     end
     self.windows_by_title = new_cache
     print_took("  refresh took", start)
@@ -35,22 +33,22 @@ end
 
 ---@param titlePattern string # lua pattern
 ---@return hs.axuielement editor_window
-function AppWindows:get_window_by_title(titlePattern)
+function AppWindows:get_window_by_title_pattern(titlePattern)
     self:_ensure_loaded()
-    local win = self:_get_window_by_title(titlePattern)
+    local win = self:_get_window_by_title_pattern(titlePattern)
     -- crude, for now the window you want to lookup, if it is not valid anymore then try refresh cache
     if not win or not win:isValid() then
         -- one attempt to refresh if not found or invalid
         -- rare to ask for non-existant window, so it's fine as a fallback (s/b rare to hit)
         self:_refresh()
-        win = self:_get_window_by_title(titlePattern)
+        win = self:_get_window_by_title_pattern(titlePattern)
     end
     return win
 end
 
 ---@param titlePattern string # lua pattern
 ---@return hs.axuielement editor_window
-function AppWindows:_get_window_by_title(titlePattern)
+function AppWindows:_get_window_by_title_pattern(titlePattern)
     local start = get_time()
     for title, win in pairs(self.windows_by_title) do
         -- print("  title: " .. tostring(title))
@@ -64,7 +62,7 @@ end
 
 ---@return hs.axuielement editor_window
 function AppWindows:editor_window_or_throw()
-    local win = self:get_window_by_title("^ScreenPal -")
+    local win = self:get_window_by_title_pattern("^ScreenPal -")
     if win then return win end
     error("No Screenpal editor window found")
 end
@@ -79,7 +77,7 @@ function AppWindows:get_playhead_window_or_throw()
     -- AXRoleDescription: window<string>
     -- AXSections: [1: SectionUniqueID: AXContent, SectionObject: hs.axuielement: AXTextField (0x60000ac6b1f8), SectionDescription: Content]
     -- AXTitle: SOM-FloatingWindow-Type=edit2.posbar-ZOrder=1(Undefined+1)<string>
-    local win = self:get_window_by_title("^SOM%-FloatingWindow%-Type=edit2.posbar%-ZOrder=1")
+    local win = self:get_window_by_title_pattern("^SOM%-FloatingWindow%-Type=edit2.posbar%-ZOrder=1")
     -- if not present, should I try once to load? like what if windows list cached before it was ever visible?
     if win then return win end
     error("No playhead window found")
