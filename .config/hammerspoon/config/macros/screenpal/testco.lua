@@ -137,13 +137,14 @@ describe("test", function()
         print("5. test done")
     end)
 
-    it("TODO crunch_data with callbacker", function()
+    it("crunch_data with callbacker", function()
         -- TREAT AS BLACKBOX, just takes callback and you wanna call it w/o callbacker in a sync looking style
 
         local test_co = coroutine.running()
 
         function main()
             print("1. start building report.... before crunch_data called")
+            -- sync-like code:
             local data = callbacker(api_crunch_data, then_create_report)
 
             print("4. creating report with data: " .. vim.inspect(data))
