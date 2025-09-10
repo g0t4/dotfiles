@@ -572,12 +572,12 @@ function StreamDeck_ScreenPal_SelectNextSilence()
 
         print("FOUND silence: " .. hs.inspect(next))
 
-        _timeline:_move_playhead_to(next.x_start + 10)
+        _timeline:move_playhead_to(next.x_start + 10)
 
         win:start_cut()
         hs.eventtap.keyStroke({}, "s", 0, win.app)
         hs.timer.usleep(100000)
-        _timeline:_move_playhead_to(next.x_end - 10)
+        _timeline:move_playhead_to(next.x_end - 10)
         hs.eventtap.keyStroke({}, "e", 0, win.app)
     end
 
