@@ -427,7 +427,9 @@ function show_silences(win, results, slider)
     -- TODO! allow PPS nil
     --   REMOVE slider param and move to asking timeline to show silence period, let it handle the details of coords
     --     OR ask it for coordinates timline.screen_x_for(silence.start_x)
-    local _timeline = win:_timeline_details()
+
+    -- TODO rename relative_timeline_x to timeline_relative_x (latter reads better)
+    local _playhead_timeline_relative_x = win:_timeline_details()._playhead_relative_timeline_x
     local slider_frame = slider:axFrame()
     local canvas = hs.canvas.new(slider_frame)
     assert(canvas)
@@ -441,7 +443,7 @@ function show_silences(win, results, slider)
         if width > 0 then
             local fill_color = { red = 1, green = 0, blue = 0, alpha = 0.3 }
             local border_color = { red = 1, green = 0, blue = 0, alpha = 1 }
-            if silence.x_start + slider_frame.x > _timeline._playhead_screen_x then
+            if silence.x_start > _playhead_timeline_relative_x then
                 fill_color = { red = 1, green = 1, blue = 0, alpha = 0.3 }
                 border_color = { red = 1, green = 1, blue = 0, alpha = 1 }
             end
