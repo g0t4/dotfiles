@@ -10,10 +10,10 @@ local SilencesController = {}
 ---@return SilencesController
 function SilencesController:new(results, timeline)
     ---@type Silence[]
-    local regular = vim.tbl_deep_extend("force", {}, results.regular_silences)
+    local regular_shallow_clone = { table.unpack(results.regular_silences) }
 
     ---@type Silence[]
-    local short = vim.iter(results.short_silences)
+    local short_shallow_clone = vim.iter(results.short_silences)
         :filter(function(s)
             --   can always put in a new list if useful
             --   zoom2 => 3 pixels per frame
@@ -24,22 +24,22 @@ function SilencesController:new(results, timeline)
         end)
         :totable()
 
-    table.sort(regular, function(a, b)
+    table.sort(regular_shallow_clone, function(a, b)
         return a.x_start < b.x_start
     end)
-    table.sort(short, function(a, b)
+    table.sort(short_shallow_clone, function(a, b)
         return a.x_start < b.x_start
     end)
 
     ---@type Silence[]
-    local all = vim.tbl_extend("force", regular, short)
+    local all = vim.list_extend(regular_shallow_clone, short_shallow_clone)
     table.sort(all, function(a, b)
         return a.x_start < b.x_start
     end)
 
     local obj = {
-        regular = regular,
-        short = short,
+        regular = regular_shallow_clone,
+        short = short_shallow_clone,
         all = all,
         _timeline = timeline,
     }
