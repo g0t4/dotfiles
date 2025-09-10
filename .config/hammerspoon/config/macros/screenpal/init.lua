@@ -144,7 +144,8 @@ function ScreenPalEditorWindow:restore_playhead_position(playhead_percent)
 
     self:zoom_off() -- position % is relative to unzoomed timeline
 
-    self:_timeline_details():move_playhead_to_position_percent(playhead_percent)
+    -- FYI working w/ unzoomed percentages (not pixel spacing), thus ok to skip here too
+    self:timeline_details_ok_to_skip_pps():move_playhead_to_position_percent(playhead_percent)
 end
 
 function ScreenPalEditorWindow:is_zoomed()
