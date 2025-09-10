@@ -62,6 +62,8 @@ end
 ---@vararg any ...
 ---@return any ...
 function callbacker(call_this, ...)
+    -- TODO add unit tests (see learning notes if needed, but try to add these later on and jog your memory of coroutines before turning to notes)
+
     local co, is_main = coroutine.running()
     assert(co, "callbacker can only be called within a coroutine")
     assert(not is_main, "callbacker cannot be called in a main thread (coroutine)")
