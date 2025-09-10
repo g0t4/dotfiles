@@ -548,11 +548,22 @@ end
 function StreamDeck_ScreenPal_MutePrevSilence()
 end
 
+function hide_silences()
+    if silences_canvas == nil then return end
+
+    silences_canvas:delete()
+    silences_canvas = nil
+end
+
+---@return boolean
+function silences_are_visible()
+    return silences_canvas ~= nil
+end
+
 function StreamDeck_ScreenPal_ShowSilenceRegions()
     run_async(function()
-        if silences_canvas then
-            silences_canvas:delete()
-            silences_canvas = nil
+        if silences_are_visible() then
+            hide_silences()
             return
         end
 
