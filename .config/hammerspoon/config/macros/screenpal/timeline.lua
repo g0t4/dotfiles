@@ -16,8 +16,7 @@ function TimelineController:new(editor_window, ok_to_skip_pps)
     -- DO NOT get frames until UI is stable, zoome din frame is different than zoomed out
     local _playhead_window_frame = _playhead_window:axFrame()
 
-    local time_text_field = _playhead_window:textField(1)
-    local time_string = time_text_field:axValue()
+    local time_string = _playhead_window:textField(1):axValue()
     time_string = time_string:gsub("\n", "")
     local _playhead_seconds = parse_time_to_seconds(time_string)
 
