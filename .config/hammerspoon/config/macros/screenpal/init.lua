@@ -423,9 +423,9 @@ function show_silences(win, results)
     -- example silences (also for testing):
     -- regular_silences = { { x_end = 1132, x_start = 1034 }, { x_end = 1372, x_start = 1223 }, { x_end = 1687, x_start = 1562 } }
 
-    local _timeline = win:timeline_controller()
-    local _playhead_timeline_relative_x = _timeline._playhead_timeline_relative_x
-    local timeline_frame = _timeline:get_timeline_frame()
+    local timeline = win:timeline_controller()
+    local _playhead_timeline_relative_x = timeline._playhead_timeline_relative_x
+    local timeline_frame = timeline:get_timeline_frame()
     local canvas = hs.canvas.new(timeline_frame)
     assert(canvas)
     canvas:show()
@@ -466,13 +466,13 @@ function StreamDeck_ScreenPal_SelectNextSilence()
     ---@param results DetectionResults
     function select_next(win, results)
         local assume_sorted_silences = results.regular_silences
-        local _timeline = win:timeline_controller_ok_skip_pps() -- movement is x coordinate based, no PPS needed
+        local timeline = win:timeline_controller_ok_skip_pps() -- movement is x coordinate based, no PPS needed
         -- -- PRN move logic into a ctor in detect_silence to build sorted lists for everything so consumers don't have to
         -- local sorted_silences = table.sort(silences, function(a, b) return a.x_start > b.x_start end)
         local next_silence = vim.iter(assume_sorted_silences)
             :filter( ---@param silence Silence
                 function(silence)
-                    return silence.x_start > _timeline._playhead_timeline_relative_x
+                    return silence.x_start > timeline._playhead_timeline_relative_x
                 end)
             :next()
         if next_silence == nil then
@@ -489,14 +489,14 @@ function StreamDeck_ScreenPal_SelectNextSilence()
         --    how much buffer do I want too? I will need to use it to get a feel for it
         --    7.5 / 75 == 100ms by the way
         local timeline_relative_x = next_silence.x_start + 10
-        _timeline:move_playhead_to(timeline_relative_x)
+        timeline:move_playhead_to(timeline_relative_x)
 
         win:start_cut()
         hs.eventtap.keyStroke({}, "s", 0, win.app)
         hs.timer.usleep(100000)
 
         timeline_relative_x = next_silence.x_end - 10
-        _timeline:move_playhead_to(timeline_relative_x)
+        timeline:move_playhead_to(timeline_relative_x)
         hs.eventtap.keyStroke({}, "e", 0, win.app)
     end
 
@@ -602,7 +602,7 @@ function StreamDeckScreenPalTimelineZoomAndJumpToStart()
         sleep_ms(10)
 
         -- FYI jumping to start/end unzoomed doesn't need PPS:
-        win:timeline_controller_ok_skip_pps():move_to_timeline_start()
+        win:timeline_controller_ok_skip_pps():move_playhead_to_timeline_start()
 
         sleep_ms(10)
         win:zoom2()
@@ -615,7 +615,7 @@ function StreamDeckScreenPalTimelineZoomAndJumpToEnd()
         win:zoom_off()
         sleep_ms(10)
 
-        win:timeline_controller_ok_skip_pps():move_to_timeline_end()
+        win:timeline_controller_ok_skip_pps():move_playhead_to_timeline_end()
 
         sleep_ms(10)
         win:zoom2()

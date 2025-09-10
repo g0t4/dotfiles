@@ -126,7 +126,7 @@ function TimelineController:move_playhead_to(timeline_relative_x)
 end
 
 --- jump to start of CURRENT view (not entire timeline)
-function TimelineController:move_to_timeline_start()
+function TimelineController:move_playhead_to_timeline_start()
     hs.eventtap.leftClick({
         -- click the left‑most part of the timeline slider
         --  NOT necessarily the video start unless timeline is not zoomed
@@ -136,7 +136,7 @@ function TimelineController:move_to_timeline_start()
 end
 
 --- jump to end of CURRENT view (not entire timeline)
-function TimelineController:move_to_timeline_end()
+function TimelineController:move_playhead_to_timeline_end()
     hs.eventtap.leftClick({
         -- click the rightmost part of the timeline slider
         -- -1 works best for the end (in my testing)
