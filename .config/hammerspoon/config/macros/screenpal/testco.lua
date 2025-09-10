@@ -66,7 +66,7 @@ describe("test", function()
     --     coroutine.yield() -- test_co
     -- end)
 
-    it("test coroutine", function()
+    it("figure out sleeper, callbacker and sleeper+callbacker==sleeper2", function()
         function callbacker(call_this, ...)
             --- cooperative sleeper (non-blocking)
             local co, is_main = coroutine.running()
