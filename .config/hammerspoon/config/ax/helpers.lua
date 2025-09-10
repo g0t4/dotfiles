@@ -64,19 +64,20 @@ axuielemMT.windows = function(self)
     return self:childrenWithRole("AXWindow") or {}
 end
 ---window by title returns first match, no guarantee only one match
----@param index number|string @index (number) or title (string)
+---@param index_or_title number|string @index (number) or title (string)
 ---@return hs.axuielement
-axuielemMT.window = function(self, index)
-    if type(index) == "string" then
+axuielemMT.window = function(self, index_or_title)
+    if type(index_or_title) == "string" then
         local windows = self:windows()
         for _, window in ipairs(windows) do
-            local title = window:title() -- or maybe try value of first staticText descendant?
-            if title == index then return window end
+            local title = window:axTitle() -- or maybe try value of first staticText descendant?
+            print("title", title)
+            if title == index_or_title then return window end
         end
         -- easier to throw error, I can see that in hammerspoon logs easily enough then downstream doesn't have to deal with it (notably type hints and asserts)
-        error("axuielemMT.window: could not find window with title " .. tostring(index))
+        error("axuielemMT.window: could not find window with title " .. tostring(index_or_title))
     end
-    return self:windows()[index]
+    return self:windows()[index_or_title]
 end
 
 ---@return hs.axuielement[]
