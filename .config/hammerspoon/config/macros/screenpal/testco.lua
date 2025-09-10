@@ -110,32 +110,30 @@ describe("test", function()
     end)
 
     it("use callbacker with crunch_data", function()
+        -- TREAT AS BLACKBOX, just takes callback and you wanna call it w/o callbacker in a sync looking style
         function api_crunch_data(callback)
-            print("start crunch data")
+            print("2. start crunch data")
             vim.defer_fn(function()
-                print("end crunch data")
-                callback()
-                print("callback called")
+                print("3. end crunch data")
+                callback({ 1, 5, 10 })
+                print("?. after callback - test finishes before this b/c callback resumes and finishes it... this may keep running if test runner doesn't stop first")
             end, 100)
         end
 
-        local co = coroutine.running()
-        print("co initial status", coroutine.status(co))
+        local test_co = coroutine.running()
 
         function build_report()
             function then_create_report()
-                print("creating report")
-                coroutine.resume(co)
+                print("4. creating report")
+                coroutine.resume(test_co) -- triggers test to complete
             end
 
-            print("start building report.... before crunch_data called")
+            print("1. start building report.... before crunch_data called")
             api_crunch_data(then_create_report)
         end
 
-        -- coroutine.resume(co)
-        -- print("co2 status", coroutine.status(co))
         build_report()
-        coroutine.yield()
-        -- resume must be called (on co, the current/running coroutine) before we get here
+        coroutine.yield() -- yield test_co
+        print("5. test done")
     end)
 end)
