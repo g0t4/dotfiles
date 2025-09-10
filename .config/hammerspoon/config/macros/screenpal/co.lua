@@ -66,16 +66,22 @@ function callbacker(call_this, ...)
     assert(co, "callbacker can only be called within a coroutine")
     assert(not is_main, "callbacker cannot be called in a main thread (coroutine)")
     -- cannot yield main thread... hence this won't work
-    -- I suppose I could start a coroutine if is_main is true
+    -- i suppose i could start a coroutine if is_main is true
 
     local captured_args = nil
     call_this(function(...)
+        -- PRN guard against double callback
         captured_args = { ... }
         -- print("cap", ...)
-        local status, err = coroutine.resume(co)
-        if not status then
-            -- print("callbacker - resume failed", err)
-        end
+        -- TODO make this work with vim/hs/lua(luv) like sleep above - when I need it in other envs
+        hs.timer.doAfter(0, function()
+            -- schedule the resume, to avoid "cannot resume non-suspended coroutine"
+            -- which happens if call_this calls this callback synchronously
+            local status, err = coroutine.resume(co)
+            if not status then
+                print("callbacker - resume failed", err)
+            end
+        end)
     end, ...)
 
     coroutine.yield()
