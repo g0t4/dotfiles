@@ -148,13 +148,13 @@ end
 -- TODO move_to_video_start()
 -- TODO move_to_video_end()
 
----@return number ratio # 0 to 1
+---@return number ratio # 0 to 1, "percent" is a terrible name b/c it's not 0 to 100% ... not sure what I like better
 function TimelineDetails:get_position_percent()
     local timeline_relative_x = self._playhead_screen_x - self.timeline_frame.x
     return timeline_relative_x / self.timeline_frame.w
 end
 
----@param ratio number # 0 to 1
+---@param ratio number # 0 to 1, "percent" is a terrible name b/c it's not 0 to 100% ... not sure what I like better
 function TimelineDetails:move_playhead_to_position_percent(ratio)
     -- +1 pixel stops leftward drift by 1 frame (good test is back to back reopen, albeit not a normal workflow)
     local timeline_relative_x = ratio * self.timeline_frame.w + 1

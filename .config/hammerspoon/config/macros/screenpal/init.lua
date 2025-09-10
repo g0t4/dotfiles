@@ -254,6 +254,7 @@ function ScreenPalEditorWindow:reopen_project()
         self:zoom_off()
 
 
+        -- * capture position
         -- use percent, that way if the width changes, it's still the same timecode
         self:ensure_cached_controls() -- TODO do I need this here? I only put it here when I inlined position % helper function
         local playhead_percent = self:timeline_details_ok_to_skip_pps():get_position_percent()
@@ -287,7 +288,7 @@ function ScreenPalEditorWindow:reopen_project()
         btn_reopen_project:performAction("AXPress")
         sleep_ms(100) -- PRN if possible, and useful, replace w/ wait_for_element, which one to look for?
 
-        -- restore position percent (ratio)
+        -- * restore position
         self:ensure_cached_controls()
         self:zoom_off()
         self:timeline_details_ok_to_skip_pps():move_playhead_to_position_percent(playhead_percent)
