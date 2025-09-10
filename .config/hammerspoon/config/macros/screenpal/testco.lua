@@ -98,7 +98,7 @@ describe("test", function()
         local test_co = coroutine.running()
         function test_code()
             print("  2. before sleeper")
-            sleeper(500)
+            sleeper2(500)
             print("  4. after sleeper")
             coroutine.resume(test_co)
         end
