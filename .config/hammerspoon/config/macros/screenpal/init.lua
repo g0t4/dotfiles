@@ -232,13 +232,11 @@ function ScreenPalEditorWindow:cache_project_view_controls()
             -- not extra expensive to cache each one relative to time to enumerate / get description (has to be done to find even one button)
             local description = ui_elem:axDescription()
             local role = ui_elem:axRole()
-            -- TODO! split out editor window class? with all controls there? this is bastardized here but is fine for now
             if role == "AXScrollArea" then
                 self._scrollarea_list = ui_elem -- s/b only scroll area in the scorll area
-                print("sa", hs.inspect(self._scrollarea_list))
-                print("sa.sa", hs.inspect(self._scrollarea_list:scrollAreas()[1]))
+                -- print("sa", hs.inspect(self._scrollarea_list))
+                -- print("sa.sa", hs.inspect(self._scrollarea_list:scrollAreas()[1]))
                 self._scrollarea_list = self._scrollarea_list:scrollAreas()[1]
-                -- PRN I could cache a list of the projects if that would be useful
             end
         end)
 end
