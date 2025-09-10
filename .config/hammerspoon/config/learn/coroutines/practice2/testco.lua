@@ -67,7 +67,6 @@ describe("test", function()
     -- end)
 
     function callbacker(call_this, ...)
-        --- cooperative sleeper (non-blocking)
         local co, is_main = coroutine.running()
 
         local captured_args = nil -- TODO only need this for a callbacker equivalent
