@@ -114,7 +114,7 @@ abbr ggsup 'git branch --set-upstream-to=origin/$(git_current_branch)'
 # FYI no way to tab complete --command git so just leave it top level for complettion's sake
 abbr -- delta_side_by_side "git -c delta.side-by-side=true"
 abbr -- delta_unified "git -c delta.side-by-side=false"
-abbr -- delta_no_line_numbers "-c delta.line-numbers=false"
+abbr -- delta_no_line_numbers "git -c delta.line-numbers=false"
 #
 abbr gdlc "git log --patch HEAD~1..HEAD"
 abbr gdlcu "git -c delta.side-by-side=false log --patch HEAD~1..HEAD"
