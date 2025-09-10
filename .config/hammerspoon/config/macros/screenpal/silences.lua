@@ -27,6 +27,12 @@ function SilencesController:new(results, timeline)
         return a.x_start < b.x_start
     end)
 
+    -- TODO filter out silences that are too short to care about?
+    --   can always put them in a new list at some point if I want them
+    --   zoom2 => 3 pixels per frame
+    --   zoom3 => 6 pixels per frame
+    --   so maybe filter out any silence < 6 pixels? that would cover both and get two frames worth minimum in zoom 2?
+
     local obj = {
         regular = regular,
         short = short,
