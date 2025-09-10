@@ -476,17 +476,16 @@ end
 
 function StreamDeck_ScreenPal_SelectNextSilence()
     run_async(function()
-        ---@type SilencesController silences
-        ---@type ScreenPalEditorWindow win
+        ---@type ScreenPalEditorWindow, SilencesController
         local win, silences = syncify(detect_silences)
 
-        local next_silence = silences:get_next_silence()
-        if next_silence == nil then
+        local silence = silences:get_next_silence()
+        if silence == nil then
             print("no silence found after playhead")
             return
         end
 
-        cut_silence(win, next_silence)
+        cut_silence(win, silence)
     end)
 end
 
@@ -504,10 +503,33 @@ function StreamDeck_ScreenPal_SelectThisSilence_ThruStart()
 end
 
 function StreamDeck_ScreenPal_SelectThisSilence()
+    run_async(function()
+        ---@type ScreenPalEditorWindow, SilencesController
+        local win, silences = syncify(detect_silences)
 
+        local silence = silences:get_this_silence()
+        if silence == nil then
+            print("no silence found after playhead")
+            return
+        end
+
+        cut_silence(win, silence)
+    end)
 end
 
 function StreamDeck_ScreenPal_SelectPrevSilence()
+    run_async(function()
+        ---@type ScreenPalEditorWindow, SilencesController
+        local win, silences = syncify(detect_silences)
+
+        local silence = silences:get_prev_silence()
+        if silence == nil then
+            print("no silence found after playhead")
+            return
+        end
+
+        cut_silence(win, silence)
+    end)
 end
 
 -- * muting (select + mute)

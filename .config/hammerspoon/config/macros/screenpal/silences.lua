@@ -71,8 +71,19 @@ function SilencesController:get_next_silence()
 end
 
 ---@return Silence?
-function SilencesController:get_previous_silence()
+function SilencesController:get_prev_silence()
     return self:get_silences_that_end_before_playhead():last()
+end
+
+---@return Silence?
+function SilencesController:get_this_silence()
+    local playhead_x = self._timeline._playhead_timeline_relative_x
+    return vim.iter(self.all)
+        :filter(function(silence)
+            return silence.x_start <= playhead_x
+                and playhead_x <= silence.x_end
+        end)
+        :next() -- first one is fine, should only ever be one anyways
 end
 
 -- TODO highlight canvas elements should probably move here
