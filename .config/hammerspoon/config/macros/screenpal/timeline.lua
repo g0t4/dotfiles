@@ -118,8 +118,8 @@ local function _move_playhead_to_screen_x(self, playhead_screen_x)
     _wait_until_playhead_at_screen_x(self, playhead_screen_x)
 end
 
----Do not need to add offset of timeline position!
----@param timeline_relative_x number # x value _WITHIN_ the timeline (not screen)
+--- RELATIVE to the TIMELINE (not the screen)
+---@param timeline_relative_x number # x value _WITHIN_ the timeline (not screen_x)
 function TimelineDetails:move_playhead_to(timeline_relative_x)
     local screen_x = timeline_relative_x + self.timeline_frame.x
     _move_playhead_to_screen_x(self, screen_x)
