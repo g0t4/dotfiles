@@ -481,7 +481,7 @@ function StreamDeck_ScreenPal_SelectNextSilence()
         hs.eventtap.keyStroke({}, "e", 0, win.app)
     end
 
-    detect_silences_and_then(select_next)
+    detect_silences(select_next)
 end
 
 -- Naming Pattern (revise as needed)
@@ -506,7 +506,7 @@ function StreamDeck_ScreenPal_SelectThisSilence_ThruEnd()
     function select_this_silence(win, silences)
     end
 
-    detect_silences_and_then(select_this_silence)
+    detect_silences(select_this_silence)
 end
 
 function StreamDeck_ScreenPal_SelectThisSilence_ThruStart()
@@ -521,7 +521,7 @@ function StreamDeck_ScreenPal_SelectPrevSilence()
     function select_prev(win, silences)
     end
 
-    detect_silences_and_then(select_prev)
+    detect_silences(select_prev)
 end
 
 -- * muting (select + mute)
@@ -567,13 +567,13 @@ function StreamDeck_ScreenPal_ShowSilenceRegions()
             return
         end
 
-        local win, silences = syncify(detect_silences_and_then)
+        local win, silences = syncify(detect_silences)
         show_silences(win, silences)
     end)
 end
 
 ---@param on_done fun(win: ScreenPalEditorWindow, silences SilencesController)
-function detect_silences_and_then(on_done)
+function detect_silences(on_done)
     local win = get_cached_editor_window()
     local timeline_slider_axuielement = win:get_timeline_slider_or_throw()
 
