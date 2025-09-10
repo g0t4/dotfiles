@@ -65,7 +65,7 @@ local function _move_playhead_to_screen_x(self, screen_x)
         y = self.timeline_frame.y + self.timeline_frame.h / 2
     }, hold_duration_ms * 1000)
     -- PRN round to nearest frame? is that doable?
-    self:_wait_until_playhead_at(screen_x)
+    _wait_until_playhead_at(self, screen_x)
 end
 
 ---Do not need to add offset of timeline position!
@@ -107,7 +107,7 @@ end
 ---avoid fixed pauses!
 ---@param target_x number
 ---@param max_loops integer
-function TimelineDetails:_wait_until_playhead_at(target_x, max_loops)
+local function _wait_until_playhead_at(self, target_x, max_loops)
     max_loops = max_loops or 30
     start = get_time()
     for i = 1, max_loops do
