@@ -452,6 +452,28 @@ function show_silences(win, silences)
     silences_canvas = canvas
 end
 
+---@param win ScreenPalEditorWindow
+---@param next_silence { x_start: number, x_end: number }
+function cut_silence(win, next_silence)
+    -- TODO +/- padding => what to use? is too crude, especially if zoomed out
+    --  ideally I could compute this based on # frames (just handle not knowing case)
+    --  OR set this based on MOST of the time I will be doing this with zoom 2... vs unzoomed (MAYBE)
+    --    so set # pixels based on 1 frame @ zoom2 => 75 pps zoom 2
+    --    how much buffer do I want too? I will need to use it to get a feel for it
+    --    7.5 / 75 == 100ms by the way
+    local timeline_relative_x = next_silence.x_start + 10
+    local timeline = win:timeline_controller_ok_skip_pps()
+    timeline:move_playhead_to(timeline_relative_x)
+
+    win:start_cut()
+    hs.eventtap.keyStroke({}, "s", 0, win.app)
+    hs.timer.usleep(100000)
+
+    timeline_relative_x = next_silence.x_end - 10
+    timeline:move_playhead_to(timeline_relative_x)
+    hs.eventtap.keyStroke({}, "e", 0, win.app)
+end
+
 function StreamDeck_ScreenPal_SelectNextSilence()
     run_async(function()
         ---@type SilencesController silences
@@ -464,23 +486,7 @@ function StreamDeck_ScreenPal_SelectNextSilence()
             return
         end
 
-        -- TODO +/- padding => what to use? is too crude, especially if zoomed out
-        --  ideally I could compute this based on # frames (just handle not knowing case)
-        --  OR set this based on MOST of the time I will be doing this with zoom 2... vs unzoomed (MAYBE)
-        --    so set # pixels based on 1 frame @ zoom2 => 75 pps zoom 2
-        --    how much buffer do I want too? I will need to use it to get a feel for it
-        --    7.5 / 75 == 100ms by the way
-        local timeline_relative_x = next_silence.x_start + 10
-        local timeline = win:timeline_controller_ok_skip_pps() -- movement is x coordinate based, no PPS needed
-        timeline:move_playhead_to(timeline_relative_x)
-
-        win:start_cut()
-        hs.eventtap.keyStroke({}, "s", 0, win.app)
-        hs.timer.usleep(100000)
-
-        timeline_relative_x = next_silence.x_end - 10
-        timeline:move_playhead_to(timeline_relative_x)
-        hs.eventtap.keyStroke({}, "e", 0, win.app)
+        cut_silence(win, next_silence)
     end)
 end
 
