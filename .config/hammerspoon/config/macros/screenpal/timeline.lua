@@ -19,7 +19,7 @@ function TimelineController:new(editor_window, ok_to_skip_pps)
     local time_text_field = playhead_window:textField(1)
     local time_string = time_text_field:axValue()
     time_string = time_string:gsub("\n", "")
-    local playhead_seconds = parse_time_to_seconds(time_string)
+    local _playhead_seconds = parse_time_to_seconds(time_string)
 
     local playhead_screen_x = _playhead_window_frame.x + _playhead_window_frame.w / 2
     local _playhead_timeline_relative_x = playhead_screen_x - _timeline_frame.x
@@ -30,7 +30,7 @@ function TimelineController:new(editor_window, ok_to_skip_pps)
     self._playhead_screen_x = playhead_screen_x
     self._playhead_timeline_relative_x = _playhead_timeline_relative_x
     self.time_string = time_string
-    if playhead_seconds == 0 then
+    if _playhead_seconds == 0 then
         if not ok_to_skip_pps then
             print("WARNING = timeline controller accessed w/o declaring it can handle nil PPS (ok_to_skip_pps)... review and adjust accordingly")
             -- NOT a failure, just a warning
@@ -38,7 +38,7 @@ function TimelineController:new(editor_window, ok_to_skip_pps)
         -- consumers of these values should handle case when nil
         self.pixels_per_second = nil
     else
-        self.pixels_per_second = _playhead_timeline_relative_x / playhead_seconds
+        self.pixels_per_second = _playhead_timeline_relative_x / _playhead_seconds
     end
     -- print(vim.inspect(self))
     return self
