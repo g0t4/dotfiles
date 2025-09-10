@@ -497,6 +497,10 @@ function StreamDeck_ScreenPal_SelectNextSilence()
 
         -- TODO +/- padding => what to use? is too crude, especially if zoomed out
         --  ideally I could compute this based on # frames (just handle not knowing case)
+        --  OR set this based on MOST of the time I will be doing this with zoom 2... vs unzoomed (MAYBE)
+        --    so set # pixels based on 1 frame @ zoom2 => 75 pps zoom 2
+        --    how much buffer do I want too? I will need to use it to get a feel for it
+        --    7.5 / 75 == 100ms by the way
         _timeline:move_playhead_to(next_silence.x_start + 10)
 
         win:start_cut()
