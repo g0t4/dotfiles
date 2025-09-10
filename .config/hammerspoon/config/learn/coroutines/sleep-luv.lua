@@ -9,7 +9,10 @@ function sleep_ms(duration)
     local co = coroutine.running()
     assert(co, "sleep can only be called within a coroutine")
     uv.new_timer():start(duration, 0, function(timer)
-        coroutine.resume(co)
+        local ok, err = coroutine.resume(co)
+        if not ok then
+            print("sleep_ms: resume failed after timer elapsed: " .. tostring(err))
+        end
     end)
     coroutine.yield()
 end
