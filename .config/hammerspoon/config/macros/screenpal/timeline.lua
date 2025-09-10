@@ -1,14 +1,14 @@
----@class TimelineDetails
+---@class TimelineController
 ---@field timeline_frame { x: number, y: number, w: number, h: number }
 ---@field _playhead_window_frame { x: number, y: number, w: number, h: number }
 ---@field _playhead_screen_x number
 ---@field _playhead_timeline_relative_x number -- TODO make this public? a few uses externally that seem fine (i.e. showing detected silence ranges)
 ---@field playhead_seconds number
 ---@field pixels_per_second? number
-local TimelineDetails = {}
+local TimelineController = {}
 
----@param self TimelineDetails
-function TimelineDetails:new(editor_window, ok_to_skip_pps)
+---@param self TimelineController
+function TimelineController:new(editor_window, ok_to_skip_pps)
     ok_to_skip_pps = ok_to_skip_pps or false
 
     local timeline_frame = editor_window._btn_position_slider:axFrame()
@@ -34,7 +34,7 @@ function TimelineDetails:new(editor_window, ok_to_skip_pps)
     self.playhead_seconds = playhead_seconds
     if self.playhead_seconds == 0 then
         if not ok_to_skip_pps then
-            print("WARNING = timeline details accessed w/o declaring it can handle nil PPS (ok_to_skip_pps)... review and adjust accordingly")
+            print("WARNING = timeline controller accessed w/o declaring it can handle nil PPS (ok_to_skip_pps)... review and adjust accordingly")
             -- NOT a failure, just a warning
         end
         -- consumers of these values should handle case when nil
@@ -46,7 +46,7 @@ function TimelineDetails:new(editor_window, ok_to_skip_pps)
     return self
 end
 
----@param self TimelineDetails
+---@param self TimelineController
 ---@return number
 local function _get_current_playhead_screen_x(self)
     -- this behavior should not bleed into consumers!
@@ -62,7 +62,7 @@ local function _get_current_playhead_screen_x(self)
 end
 
 ---@param desired_playhead_screen_x number
----@param self TimelineDetails
+---@param self TimelineController
 ---@return boolean
 local function _is_playhead_now_at_screen_x(self, desired_playhead_screen_x)
     -- within one frame either way
@@ -84,7 +84,7 @@ local function _is_playhead_now_at_screen_x(self, desired_playhead_screen_x)
 end
 
 ---avoid fixed pauses!
----@param self TimelineDetails
+---@param self TimelineController
 ---@param desired_playhead_screen_x number
 ---@param max_loops? integer
 local function _wait_until_playhead_at_screen_x(self, desired_playhead_screen_x, max_loops)
@@ -106,7 +106,7 @@ local function _wait_until_playhead_at_screen_x(self, desired_playhead_screen_x,
     --   if it's specific to a given automation then that fixed delay can live in consumer code
 end
 
----@param self TimelineDetails
+---@param self TimelineController
 ---@param playhead_screen_x number
 local function _move_playhead_to_screen_x(self, playhead_screen_x)
     print("moving playhead to screen_x=" .. tostring(playhead_screen_x))
@@ -120,13 +120,13 @@ end
 
 --- RELATIVE to the TIMELINE (not the screen)
 ---@param timeline_relative_x number # x value _WITHIN_ the timeline (not screen_x)
-function TimelineDetails:move_playhead_to(timeline_relative_x)
+function TimelineController:move_playhead_to(timeline_relative_x)
     local screen_x = timeline_relative_x + self.timeline_frame.x
     _move_playhead_to_screen_x(self, screen_x)
 end
 
 --- jump to start of CURRENT view (not entire timeline)
-function TimelineDetails:move_to_timeline_start()
+function TimelineController:move_to_timeline_start()
     hs.eventtap.leftClick({
         -- click the left‑most part of the timeline slider
         --  NOT necessarily the video start unless timeline is not zoomed
@@ -136,7 +136,7 @@ function TimelineDetails:move_to_timeline_start()
 end
 
 --- jump to end of CURRENT view (not entire timeline)
-function TimelineDetails:move_to_timeline_end()
+function TimelineController:move_to_timeline_end()
     hs.eventtap.leftClick({
         -- click the rightmost part of the timeline slider
         -- -1 works best for the end (in my testing)
@@ -149,13 +149,13 @@ end
 -- TODO move_to_video_end()
 
 ---@return number ratio # 0 to 1, "percent" is a terrible name b/c it's not 0 to 100% ... not sure what I like better
-function TimelineDetails:get_position_percent()
+function TimelineController:get_position_percent()
     local timeline_relative_x = self._playhead_screen_x - self.timeline_frame.x
     return timeline_relative_x / self.timeline_frame.w
 end
 
 ---@param ratio number # 0 to 1, "percent" is a terrible name b/c it's not 0 to 100% ... not sure what I like better
-function TimelineDetails:move_playhead_to_position_percent(ratio)
+function TimelineController:move_playhead_to_position_percent(ratio)
     -- +1 pixel stops leftward drift by 1 frame (good test is back to back reopen, albeit not a normal workflow)
     local timeline_relative_x = ratio * self.timeline_frame.w + 1
     self:move_playhead_to(timeline_relative_x)
@@ -163,13 +163,13 @@ end
 
 --- bounding box (frame) around timeline
 ---@return frame
-function TimelineDetails:get_timeline_frame()
+function TimelineController:get_timeline_frame()
     -- this accessor makes it easier to see external usage
     -- AND I can now make the storage private (and can change it too)
     return self.timeline_frame
 end
 
-return TimelineDetails
+return TimelineController
 
 
 -- FYI zoom levels and pixels per second (calculated just so I can refer to them)

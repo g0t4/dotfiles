@@ -3,7 +3,7 @@ require("config.macros.screenpal.ui")
 require('config.macros.screenpal.helpers')
 require("config.macros.screenpal.co")
 require("config.macros.screenpal.py.opencv")
-local TimelineDetails = require('config.macros.screenpal.timeline')
+local TimelineController = require('config.macros.screenpal.timeline')
 
 ---@return hs.axuielement app_element
 local function get_screenpal_app_element_or_throw()
@@ -255,7 +255,7 @@ function ScreenPalEditorWindow:reopen_project()
         -- * capture position
         -- use percent, that way if the width changes, it's still the same timecode
         self:ensure_cached_controls() -- TODO do I need this here? I only put it here when I inlined position % helper function
-        local playhead_percent = self:timeline_details_ok_to_skip_pps():get_position_percent()
+        local playhead_percent = self:timeline_controller_ok_skip_pps():get_position_percent()
 
         if not self._textfield_title then
             error("No title found, aborting...")
@@ -289,7 +289,7 @@ function ScreenPalEditorWindow:reopen_project()
         -- * restore position
         self:ensure_cached_controls()
         self:zoom_off()
-        self:timeline_details_ok_to_skip_pps():move_playhead_to_position_percent(playhead_percent)
+        self:timeline_controller_ok_skip_pps():move_playhead_to_position_percent(playhead_percent)
 
         if not current_zoomed then
             print("NOT zoomed before, skipping zoom restore")
@@ -300,23 +300,23 @@ function ScreenPalEditorWindow:reopen_project()
     end)
 end
 
----@return TimelineDetails
-function ScreenPalEditorWindow:_timeline_details()
+---@return TimelineController
+function ScreenPalEditorWindow:timeline_controller()
     -- PRN move self:ensure_cached_controls() here?
-    return TimelineDetails:new(self)
+    return TimelineController:new(self)
 end
 
----@return TimelineDetails
-function ScreenPalEditorWindow:timeline_details_ok_to_skip_pps()
+---@return TimelineController
+function ScreenPalEditorWindow:timeline_controller_ok_skip_pps()
     -- PRN move self:ensure_cached_controls() here?
-    return TimelineDetails:new(self, true)
+    return TimelineController:new(self, true)
 end
 
 function ScreenPalEditorWindow:get_time_string()
     self:ensure_cached_controls()
-    local details = self:timeline_details_ok_to_skip_pps()
+    local timeline = self:timeline_controller_ok_skip_pps()
     -- ONLY reading the time_string!
-    return details.time_string
+    return timeline.time_string
 end
 
 function ScreenPalEditorWindow:toggle_AXEnhancedUserInterface()
@@ -423,7 +423,7 @@ function show_silences(win, results)
     -- example silences (also for testing):
     -- regular_silences = { { x_end = 1132, x_start = 1034 }, { x_end = 1372, x_start = 1223 }, { x_end = 1687, x_start = 1562 } }
 
-    local _timeline = win:_timeline_details()
+    local _timeline = win:timeline_controller()
     local _playhead_timeline_relative_x = _timeline._playhead_timeline_relative_x
     local timeline_frame = _timeline:get_timeline_frame()
     local canvas = hs.canvas.new(timeline_frame)
@@ -466,7 +466,7 @@ function StreamDeck_ScreenPal_SelectNextSilence()
     ---@param results DetectionResults
     function select_next(win, results)
         local assume_sorted_silences = results.regular_silences
-        local _timeline = win:timeline_details_ok_to_skip_pps() -- movement is x coordinate based, no PPS needed
+        local _timeline = win:timeline_controller_ok_skip_pps() -- movement is x coordinate based, no PPS needed
         -- -- PRN move logic into a ctor in detect_silence to build sorted lists for everything so consumers don't have to
         -- local sorted_silences = table.sort(silences, function(a, b) return a.x_start > b.x_start end)
         local next_silence = vim.iter(assume_sorted_silences)
@@ -523,7 +523,7 @@ function StreamDeck_ScreenPal_SelectThisSilence_ThruEnd()
     ---@param win ScreenPalEditorWindow
     ---@param results DetectionResults
     function select_this_silence(win, results)
-        local timeline = win:timeline_details_ok_to_skip_pps()
+        local timeline = win:timeline_controller_ok_skip_pps()
         local silence_x_start = timeline._playhead_timeline_relative_x -- keep to restore?
     end
 
@@ -602,7 +602,7 @@ function StreamDeckScreenPalTimelineZoomAndJumpToStart()
         sleep_ms(10)
 
         -- FYI jumping to start/end unzoomed doesn't need PPS:
-        win:timeline_details_ok_to_skip_pps():move_to_timeline_start()
+        win:timeline_controller_ok_skip_pps():move_to_timeline_start()
 
         sleep_ms(10)
         win:zoom2()
@@ -615,7 +615,7 @@ function StreamDeckScreenPalTimelineZoomAndJumpToEnd()
         win:zoom_off()
         sleep_ms(10)
 
-        win:timeline_details_ok_to_skip_pps():move_to_timeline_end()
+        win:timeline_controller_ok_skip_pps():move_to_timeline_end()
 
         sleep_ms(10)
         win:zoom2()
