@@ -554,18 +554,15 @@ function StreamDeck_ScreenPal_SelectNextSilence()
     ---@param slider hs.axuielement
     ---@param results DetectionResults
     function select_next(win, slider, results)
+        -- FYI I don't need to pass slider anymore (assming I use relative positions and let timeline handle slider position)
         local assume_sorted_silences = results.regular_silences
-        local slider_frame = slider:axFrame()
         local _timeline = win:_timeline_details()
         -- -- PRN move logic into a ctor in detect_silence to build sorted lists for everything so consumers don't have to
         -- local sorted_silences = table.sort(silences, function(a, b) return a.x_start > b.x_start end)
         local next = vim.iter(assume_sorted_silences)
             :filter( ---@param silence Silence
                 function(silence)
-                    -- TODO get relative playhead position so I don't have to add slider (timeline)'s frame.x?
-                    --  TODO then get rid of using slider_frame here!
-                    --  _timeline.playhead_relative_x -- lack of better name
-                    return silence.x_start + slider_frame.x > _timeline.playhead_x
+                    return silence.x_start > _timeline._playhead_relative_timeline_x
                 end)
             :next()
         if next == nil then
@@ -574,12 +571,13 @@ function StreamDeck_ScreenPal_SelectNextSilence()
         end
 
         print("FOUND silence: " .. hs.inspect(next))
+
         _timeline:_move_playhead_to_relative(next.x_start + 10)
 
         win:start_cut()
         hs.eventtap.keyStroke({}, "s", 0, win.app)
         hs.timer.usleep(100000)
-        _timeline:_move_playhead_to_x(next.x_end - 10 + slider_frame.x)
+        _timeline:_move_playhead_to_relative(next.x_end - 10)
         hs.eventtap.keyStroke({}, "e", 0, win.app)
     end
 
@@ -591,7 +589,6 @@ function StreamDeck_ScreenPal_SelectPreviousSilence()
     ---@param slider hs.axuielement
     ---@param results DetectionResults
     function select_prev(win, slider, results)
-        local slider_frame = slider:axFrame()
     end
 
     detect_silences_and_then(select_prev)
@@ -608,6 +605,8 @@ function StreamDeck_ScreenPal_ShowSilenceRegions()
     ---@param slider hs.axuielement
     ---@param results DetectionResults
     local function show_them(win, slider, results)
+        -- TODO STOP PASSING SLIDER ALTOGETHER! for any of the callbacks
+        --   TODO need to update show_them to work without slider
         -- print("silence regions: " .. hs.inspect(silences))
         show_silences(win, results, slider)
     end
