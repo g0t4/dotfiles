@@ -557,9 +557,6 @@ function StreamDeck_ScreenPal_ShowSilenceRegions()
         end
 
         local win, silences = callbacker(detect_silences_and_then)
-        -- print("win:", vim.inspect(win))
-        -- print("silences", vim.inspect(silences))
-
         show_silences(win, silences)
     end)
 end
