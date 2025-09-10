@@ -110,7 +110,7 @@ describe("test", function()
     end)
 
     it("use callbacker with crunch_data", function()
-        function crunch_data(callback)
+        function api_crunch_data(callback)
             print("start crunch data")
             vim.defer_fn(function()
                 print("end crunch data")
@@ -129,7 +129,7 @@ describe("test", function()
             end
 
             print("start building report.... before crunch_data called")
-            crunch_data(then_create_report)
+            api_crunch_data(then_create_report)
         end
 
         -- coroutine.resume(co)
