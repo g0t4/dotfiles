@@ -66,36 +66,36 @@ describe("test", function()
     --     coroutine.yield() -- test_co
     -- end)
 
+    function callbacker(call_this, ...)
+        --- cooperative sleeper (non-blocking)
+        local co, is_main = coroutine.running()
+
+        local captured_args = nil -- TODO only need this for a callbacker equivalent
+        call_this(function(...)
+            captured_args = ...
+            coroutine.resume(co)
+        end, ...)
+
+        coroutine.yield()
+        print("    3. callbacker captured args:", captured_args)
+    end
+
+    function sleeper2(ms)
+        callbacker(vim.defer_fn, ms)
+    end
+
+    function sleeper(ms)
+        --- cooperative sleeper (non-blocking)
+        local co, is_main = coroutine.running()
+        -- TODO create if not exist? or if is main?
+        vim.defer_fn(function()
+            coroutine.resume(co)
+        end, ms)
+        coroutine.yield()
+        print("    3. sleeper done")
+    end
+
     it("figure out sleeper, callbacker and sleeper+callbacker==sleeper2", function()
-        function callbacker(call_this, ...)
-            --- cooperative sleeper (non-blocking)
-            local co, is_main = coroutine.running()
-
-            local captured_args = nil -- TODO only need this for a callbacker equivalent
-            call_this(function(...)
-                captured_args = ...
-                coroutine.resume(co)
-            end, ...)
-
-            coroutine.yield()
-            print("    3. callbacker captured args:", captured_args)
-        end
-
-        function sleeper2(ms)
-            callbacker(vim.defer_fn, ms)
-        end
-
-        function sleeper(ms)
-            --- cooperative sleeper (non-blocking)
-            local co, is_main = coroutine.running()
-            -- TODO create if not exist? or if is main?
-            vim.defer_fn(function()
-                coroutine.resume(co)
-            end, ms)
-            coroutine.yield()
-            print("    3. sleeper done")
-        end
-
         local test_co = coroutine.running()
         function test_code()
             print("  2. before sleeper")
