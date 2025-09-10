@@ -138,23 +138,6 @@ function ScreenPalEditorWindow:ensure_cached_controls()
     -- print_took("caching controls took: ", start)
 end
 
----@return number percent
-function ScreenPalEditorWindow:playhead_position_percent()
-    self:ensure_cached_controls()
-
-    -- AFAICT nothing differs on zoom level buttons...
-    -- - thus cannot know which is clicked (zoomed)
-    -- - NBD I mostly use 2 and can re-zoom myself (and I'll be using not zoomed to restore playhead position)
-    self:zoom_off()
-
-    local details = self:_timeline_details()
-
-    -- TODO move percent calculation to _timeline_details
-    local playhead_percent = (details.playhead_x - details.timeline_frame.x) / details.timeline_frame.w
-    -- print("playhead_percent", playhead_percent)
-    return playhead_percent
-end
-
 ---@param playhead_percent number
 function ScreenPalEditorWindow:restore_playhead_position(playhead_percent)
     self:ensure_cached_controls()
@@ -291,7 +274,8 @@ function ScreenPalEditorWindow:reopen_project()
 
 
         -- use percent, that way if the width changes, it's still the same timecode
-        local playhead_percent = self:playhead_position_percent()
+        self:ensure_cached_controls() -- TODO do I need this here? I only put it here when I inlined position % helper function
+        local playhead_percent = self:timeline_details_ok_to_skip_pps():get_position_percent()
 
         if not self._textfield_title then
             error("No title found, aborting...")

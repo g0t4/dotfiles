@@ -165,4 +165,9 @@ end
 -- TODO move_to_video_start()
 -- TODO move_to_video_end()
 
+---@return number
+function TimelineDetails:get_position_percent()
+    return (self.playhead_x - self.timeline_frame.x) / self.timeline_frame.w
+end
+
 return TimelineDetails
