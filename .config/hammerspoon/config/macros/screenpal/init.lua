@@ -454,8 +454,8 @@ end
 
 function StreamDeck_ScreenPal_SelectNextSilence()
     run_async(function()
-        ---@type ScreenPalEditorWindow win
         ---@type SilencesController silences
+        ---@type ScreenPalEditorWindow win
         local win, silences = syncify(detect_silences)
 
         local next_silence = silences:get_next_silence()
