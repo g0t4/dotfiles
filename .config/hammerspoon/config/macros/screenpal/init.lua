@@ -496,6 +496,8 @@ function StreamDeck_ScreenPal_SelectNextSilence()
 
         print("FOUND silence: " .. hs.inspect(next_silence))
 
+        -- TODO +/- padding => what to use? is too crude, especially if zoomed out
+        --  ideally I could compute this based on # frames (just handle not knowing case)
         _timeline:move_playhead_to(next_silence.x_start + 10)
 
         win:start_cut()
