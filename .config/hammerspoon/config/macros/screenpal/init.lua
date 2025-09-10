@@ -419,12 +419,9 @@ end
 local silences_canvas = nil
 ---@param win ScreenPalEditorWindow
 ---@param results DetectionResults
----@param slider hs.axuielement
-function show_silences(win, results, slider)
+function show_silences(win, results)
     -- example silences (also for testing):
     -- regular_silences = { { x_end = 1132, x_start = 1034 }, { x_end = 1372, x_start = 1223 }, { x_end = 1687, x_start = 1562 } }
-
-    --   REMOVE slider param
 
     -- TODO rename relative_timeline_x to timeline_relative_x (latter reads better)
     local _timeline = win:_timeline_details()
@@ -467,11 +464,8 @@ end
 
 function StreamDeck_ScreenPal_SelectNextSilence()
     ---@param win ScreenPalEditorWindow
-    ---@param slider hs.axuielement
     ---@param results DetectionResults
-    function select_next(win, slider, results)
-        -- TODO! remove passing slider once that refactor is done for all callbacks
-        -- FYI I don't need to pass slider anymore (assming I use relative positions and let timeline handle slider position)
+    function select_next(win, results)
         local assume_sorted_silences = results.regular_silences
         local _timeline = win:timeline_details_ok_to_skip_pps() -- movement is x coordinate based, no PPS needed
         -- -- PRN move logic into a ctor in detect_silence to build sorted lists for everything so consumers don't have to
@@ -513,9 +507,8 @@ end
 
 function StreamDeck_ScreenPal_SelectPreviousSilence()
     ---@param win ScreenPalEditorWindow
-    ---@param slider hs.axuielement
     ---@param results DetectionResults
-    function select_prev(win, slider, results)
+    function select_prev(win, results)
     end
 
     detect_silences_and_then(select_prev)
@@ -528,28 +521,18 @@ function StreamDeck_ScreenPal_ShowSilenceRegions()
         return
     end
 
-    ---@param win ScreenPalEditorWindow
-    ---@param slider hs.axuielement
-    ---@param results DetectionResults
-    local function show_them(win, slider, results)
-        -- TODO STOP PASSING SLIDER ALTOGETHER! for any of the callbacks
-        --   TODO need to update show_them to work without slider
-        -- print("silence regions: " .. hs.inspect(silences))
-        show_silences(win, results, slider)
-    end
-
-    detect_silences_and_then(show_them)
+    detect_silences_and_then(show_silences)
 end
 
----@param on_done fun(win: ScreenPalEditorWindow, slider: hs.axuielement, results: DetectionResults)
+---@param on_done fun(win: ScreenPalEditorWindow, results: DetectionResults)
 function detect_silences_and_then(on_done)
     local win = get_cached_editor_window()
-    local slider = win:get_timeline_slider_or_throw()
+    local timeline_slider_axuielement = win:get_timeline_slider_or_throw()
 
     local image_tag = "trash_me_silence_detect"
-    capture_this_element(slider, function(where_to)
+    capture_this_element(timeline_slider_axuielement, function(where_to)
         detect_short_silences_runs(where_to, function(results)
-            on_done(win, slider, results)
+            on_done(win, results)
         end)
     end, image_tag)
 end
