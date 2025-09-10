@@ -390,41 +390,6 @@ function ScreenPalEditorWindow:toggle_AXEnhancedUserInterface()
     end
 end
 
-function ScreenPalEditorWindow:test_select_range()
-    self:ensure_cached_controls()
-
-    self:zoom_on() -- assume is m2-02 for now
-
-    local details = self:_timeline_details()
-    local timeline_frame = details.timeline_frame
-
-    function click_at(reading)
-        local rel_click_x = reading / 2 -- divide by 2 for 4k resolution of screencaps, b/c screen cords are 1080p... THIS WORKS! SPOT ON
-        local click_x = timeline_frame.x + rel_click_x
-
-        local hold_duration_ms = 10000
-        hs.eventtap.leftClick({
-            -- +1 pixel stops leftward drift by 1 frame (good test is back to back reopen, albeit not a normal workflow)
-            x = click_x + 1, -- for 1 sec its slightly off (NBD => could arrow over if consistently off))
-            -- +1 => 1.04 sec (1 frame past), +0 => 0.92 sec (2 frames before)
-            -- FYI I DO NOT NEED PRECISE! silence ranges for example will be paddeed anyways! can always padd an extra frame!
-            -- FYI for round numbers, i.e. 2 seconds, I can read playhead after move and if within a second I can use Shift+Arrow to jump w/e distance
-            y = timeline_frame.y + timeline_frame.h / 2
-        }, hold_duration_ms)
-    end
-
-    -- READINGS from 4k screencap coordinates of first major silence period
-    click_at(692 + 20)
-    hs.eventtap.keyStroke({}, "c", 0, get_screenpal_app_element_or_throw()) -- alone selects the cut region! I can then pull back each side
-    -- FYI I could also have it scan for the red selection and use that to pull back the current selection (pad it or expand it)
-    hs.timer.usleep(100000)
-    hs.eventtap.keyStroke({}, "s", 0, get_screenpal_app_element_or_throw()) -- OPTIONAL TO FORCE START AT clicked point for auto selected cuts
-    hs.timer.usleep(100000)
-    click_at(845 - 20)
-    hs.timer.usleep(100000)
-    hs.eventtap.keyStroke({}, "e", 0, get_screenpal_app_element_or_throw())
-end
-
 function ScreenPalEditorWindow:estimate_time_per_pixel()
     self:ensure_cached_controls() -- prn do I need this early on here?
 
