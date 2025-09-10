@@ -57,6 +57,7 @@ function sleep_ms(ms)
     error("NOT SUPPORTED TEST ENV... USE _PLENARY_")
 end
 
+--- wrap a callback based method to appear synchronous using coroutines
 ---PRN could have callbacker_lastarg(...,fun(...)) that takes callback as last arg
 ---@param call_this fun(fun(...), ...)  -- assumes callback is first arg then args are after
 ---@vararg any ...
