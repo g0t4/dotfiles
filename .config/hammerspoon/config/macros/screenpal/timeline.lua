@@ -21,7 +21,6 @@ function TimelineDetails:new(editor_window, ok_to_skip_pps)
     local time_string = time_text_field:axValue()
     time_string = time_string:gsub("\n", "")
     local playhead_seconds = parse_time_to_seconds(time_string)
-    -- PRN? throw if not ok_to_skip_pps?
 
     local playhead_x = _playhead_window_frame.x + _playhead_window_frame.w / 2
     local _playhead_relative_timeline_x = playhead_x - timeline_frame.x
@@ -35,6 +34,13 @@ function TimelineDetails:new(editor_window, ok_to_skip_pps)
     self.playhead_seconds = playhead_seconds
     if self.playhead_seconds == 0 then
         -- consumers of these values should handle case when nil
+        if not ok_to_skip_pps then
+            error(
+                "ERROR... you are using timeline in a way that may fail due to "
+                .. "missing pixels_per_second, review your use case and allow it "
+                .. "ok_to_skip_pps after you make any adjustments for pixels_per_second being nil"
+            )
+        end
         self.pixels_per_second = nil
     else
         self.pixels_per_second = _playhead_relative_timeline_x / playhead_seconds
