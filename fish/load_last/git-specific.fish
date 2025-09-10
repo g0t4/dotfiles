@@ -114,11 +114,17 @@ abbr ggsup 'git branch --set-upstream-to=origin/$(git_current_branch)'
 abbr -- git_delta_side_by_side "git -c delta.side-by-side=true"
 abbr -- git_delta_unified "git -c delta.side-by-side=false"
 abbr gdlc "git log --patch HEAD~1..HEAD"
-abbr --regex 'gdlc\d+' --function gdlcX _gdlcX
+abbr gdlcu "git -c delta.side-by-side=false log --patch HEAD~1..HEAD"
+abbr --regex 'gdlc[u]?\d+' --function gdlcX _gdlcX
 function gdlcX
-    set -l num (string replace --regex '^gdlc' '' $argv)
+    echo -n git
+    if string match --quiet --regex '^gdlcu' $argv
+        # u == unified (not side by side) diff
+        echo -n " delta.side-by-side=false "
+    end
+    set -l num (string replace --regex '^gdlc[u]?' '' $argv)
     set -l prev (math $num - 1)
-    echo "git log --patch HEAD~$num..HEAD~$prev"
+    echo " log --patch HEAD~$num..HEAD~$prev"
 end
 #
 # gds - one list of files changed across range of commits
