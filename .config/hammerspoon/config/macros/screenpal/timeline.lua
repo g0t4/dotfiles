@@ -3,7 +3,7 @@
 ---@field _playhead_window_frame { x: number, y: number, w: number, h: number }
 ---@field _playhead_screen_x number
 ---@field _playhead_timeline_relative_x number -- TODO make this public? a few uses externally that seem fine (i.e. showing detected silence ranges)
----@field pixels_per_second? number
+---@field _pixels_per_second? number
 local TimelineController = {}
 
 ---@param self TimelineController
@@ -36,9 +36,9 @@ function TimelineController:new(editor_window, ok_to_skip_pps)
             -- NOT a failure, just a warning
         end
         -- consumers of these values should handle case when nil
-        self.pixels_per_second = nil
+        self._pixels_per_second = nil
     else
-        self.pixels_per_second = _playhead_timeline_relative_x / _playhead_seconds
+        self._pixels_per_second = _playhead_timeline_relative_x / _playhead_seconds
     end
     -- print(vim.inspect(self))
     return self
@@ -68,7 +68,7 @@ local function _is_playhead_now_at_screen_x(self, desired_playhead_screen_x)
     local current_playhead_screen_x = _get_current_playhead_screen_x(self) -- in case we just moved the playhead
     print("  current_playhead_screen_x", current_playhead_screen_x, "desired_playhead_screen_x", desired_playhead_screen_x)
     local pixel_gap = math.abs(current_playhead_screen_x - desired_playhead_screen_x)
-    if self.pixels_per_second == nil then
+    if self._pixels_per_second == nil then
         -- * ONLY happens @0:00 on timeline + when trigger move of playhead
         --  and would only matter for a short jump of ~5 pixels which should be rare
         --  chose 6 b/c 3x zoom is 150 pixels/second => 150/25 = 6 pixels_per_frame at highest zoom
@@ -76,7 +76,7 @@ local function _is_playhead_now_at_screen_x(self, desired_playhead_screen_x)
         print("WARNING - HAD TO GUESS PIXELS PER FRAME for pixel_gap b/c you're @0:00 on the timeline, avoid this by moving anywhere else on timeline")
         return pixel_gap <= 6
     else
-        local pixels_per_frame = self.pixels_per_second / 25
+        local pixels_per_frame = self._pixels_per_second / 25
         return pixel_gap <= pixels_per_frame
     end
 end
