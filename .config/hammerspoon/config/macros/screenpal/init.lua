@@ -482,25 +482,26 @@ function StreamDeck_ScreenPal_SelectNextSilence()
         local _timeline = win:_timeline_details()
         -- -- PRN move logic into a ctor in detect_silence to build sorted lists for everything so consumers don't have to
         -- local sorted_silences = table.sort(silences, function(a, b) return a.x_start > b.x_start end)
-        local next = vim.iter(assume_sorted_silences)
+        local next_silence = vim.iter(assume_sorted_silences)
             :filter( ---@param silence Silence
                 function(silence)
+                    -- TODO revisit _playhead_relative_timeline_x name
                     return silence.x_start > _timeline._playhead_relative_timeline_x
                 end)
             :next()
-        if next == nil then
+        if next_silence == nil then
             print("no silence found after playhead")
             return
         end
 
-        print("FOUND silence: " .. hs.inspect(next))
+        print("FOUND silence: " .. hs.inspect(next_silence))
 
-        _timeline:move_playhead_to(next.x_start + 10)
+        _timeline:move_playhead_to(next_silence.x_start + 10)
 
         win:start_cut()
         hs.eventtap.keyStroke({}, "s", 0, win.app)
         hs.timer.usleep(100000)
-        _timeline:move_playhead_to(next.x_end - 10)
+        _timeline:move_playhead_to(next_silence.x_end - 10)
         hs.eventtap.keyStroke({}, "e", 0, win.app)
     end
 
