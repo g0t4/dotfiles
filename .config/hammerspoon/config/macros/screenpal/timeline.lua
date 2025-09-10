@@ -99,9 +99,11 @@ end
 
 ---avoid fixed pauses!
 ---@param target_x number
-function TimelineDetails:wait_until_playhead_at(target_x)
+---@param max_loops integer
+function TimelineDetails:wait_until_playhead_at(target_x, max_loops)
+    max_loops = max_loops or 30
     start = get_time()
-    for i = 1, 30 do
+    for i = 1, max_loops do
         hs.timer.usleep(10000)
 
         print("  iteration " .. i)
