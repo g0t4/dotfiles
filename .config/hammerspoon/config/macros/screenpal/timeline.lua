@@ -34,13 +34,6 @@ function TimelineDetails:new(editor_window, ok_to_skip_pps)
     self.playhead_seconds = playhead_seconds
     if self.playhead_seconds == 0 then
         -- consumers of these values should handle case when nil
-        if not ok_to_skip_pps then
-            error(
-                "ERROR... you are using timeline in a way that may fail due to "
-                .. "missing pixels_per_second, review your use case and allow it "
-                .. "ok_to_skip_pps after you make any adjustments for pixels_per_second being nil"
-            )
-        end
         self.pixels_per_second = nil
     else
         self.pixels_per_second = _playhead_relative_timeline_x / playhead_seconds
@@ -71,6 +64,12 @@ local function _is_playhead_now_at_target(self, target_x)
     print("  new_x", new_x, "target_x", target_x)
     local pixel_gap = math.abs(new_x - target_x)
     if self.pixels_per_second == nil then
+        error(
+            "ERROR... you are using timeline in a way that may fail due to "
+            .. "missing pixels_per_second, review your use case and allow it "
+            .. "ok_to_skip_pps after you make any adjustments for pixels_per_second being nil"
+        )
+
         -- * ONLY happens @0:00 on timeline + when trigger move of playhead
         --  and would only matter for a short jump of ~5 pixels which should be rare
         --  chose 6 b/c 3x zoom is 150 pixels/second => 150/25 = 6 pixels_per_frame at highest zoom
