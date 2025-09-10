@@ -13,7 +13,17 @@ function SilencesController:new(results, timeline)
     local regular = vim.tbl_deep_extend("force", {}, results.regular_silences)
 
     ---@type Silence[]
-    local short = vim.tbl_deep_extend("force", {}, results.short_silences)
+    local short = vim.iter(results.short_silences)
+        :filter(function(s)
+            --   can always put in a new list if useful
+            --   zoom2 => 3 pixels per frame
+            --   zoom3 => 6 pixels per frame
+            --   so lets skip 6 pixels is reasonable (2 frames in zoom2)
+            --   I won't be using silences when zoom is off, nor likely in zoom1
+            return s.x_end - s.x_start >= 6
+        end)
+        :totable()
+
     table.sort(regular, function(a, b)
         return a.x_start < b.x_start
     end)
@@ -26,12 +36,6 @@ function SilencesController:new(results, timeline)
     table.sort(all, function(a, b)
         return a.x_start < b.x_start
     end)
-
-    -- TODO filter out silences that are too short to care about?
-    --   can always put them in a new list at some point if I want them
-    --   zoom2 => 3 pixels per frame
-    --   zoom3 => 6 pixels per frame
-    --   so maybe filter out any silence < 6 pixels? that would cover both and get two frames worth minimum in zoom 2?
 
     local obj = {
         regular = regular,
