@@ -778,9 +778,6 @@ function RETIRED_StreamDeckScreenPalTimelineApproxRestorePosition(restore_positi
     end
 end
 
-function StreamDeckScreenPalReopenProject()
-    local win = get_cached_editor_window()
-    win:reopen_project()
-    -- -- local title = win._textfield_title:axValue()
-    -- win._btn_back_to_projects:performAction("AXPress")
+function StreamDeck_ScreenPal_ReopenProject()
+    get_cached_editor_window():reopen_project()
 end
