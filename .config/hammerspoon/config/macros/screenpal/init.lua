@@ -138,16 +138,6 @@ function ScreenPalEditorWindow:ensure_cached_controls()
     -- print_took("caching controls took: ", start)
 end
 
----@param playhead_percent number
-function ScreenPalEditorWindow:restore_playhead_position(playhead_percent)
-    self:ensure_cached_controls()
-
-    self:zoom_off() -- position % is relative to unzoomed timeline
-
-    -- FYI working w/ unzoomed percentages (not pixel spacing), thus ok to skip here too
-    self:timeline_details_ok_to_skip_pps():move_playhead_to_position_percent(playhead_percent)
-end
-
 function ScreenPalEditorWindow:is_zoomed()
     self:ensure_cached_controls()
     if not self._btn_minimum_zoom then
@@ -297,7 +287,10 @@ function ScreenPalEditorWindow:reopen_project()
         btn_reopen_project:performAction("AXPress")
         sleep_ms(100) -- PRN if possible, and useful, replace w/ wait_for_element, which one to look for?
 
-        self:restore_playhead_position(playhead_percent)
+        -- restore position percent (ratio)
+        self:ensure_cached_controls()
+        self:zoom_off()
+        self:timeline_details_ok_to_skip_pps():move_playhead_to_position_percent(playhead_percent)
 
         if not current_zoomed then
             print("NOT zoomed before, skipping zoom restore")
