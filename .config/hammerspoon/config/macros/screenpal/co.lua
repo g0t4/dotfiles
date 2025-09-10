@@ -70,8 +70,13 @@ function callbacker(call_this, ...)
 
     local captured_args = nil
     local resumed = false
+    local yielded = false
     local function resume_once()
         if resumed then return end
+        if not yielded then
+            print("WARNING - callback invoked resume before yielded, allowing resume")
+            -- do not stop the resume, just note it to look into
+        end
         resumed = true
 
         -- schedule the resume, to avoid "cannot resume non-suspended coroutine"
@@ -92,10 +97,13 @@ function callbacker(call_this, ...)
         resume_once()
     end, ...)
 
-    coroutine.yield()
-    -- print("cap2", captured_args)
-    if unpack then
-        return unpack(captured_args)
+    yielded = true
+    if not resumed then
+        -- don't call yield if resume already triggered, no point
+        --  again this would have to be due to synchronous callback
+        coroutine.yield()
     end
-    return table.unpack(captured_args)
+
+    local _unpack = unpack or table.unpack
+    return _unpack(captured_args)
 end
