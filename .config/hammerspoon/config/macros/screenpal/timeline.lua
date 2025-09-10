@@ -57,6 +57,8 @@ local function _get_current_playhead_screen_x(self)
     local current_playhead_window_frame = self._playhead_window:axFrame()
     local current_playhead_screen_x = current_playhead_window_frame.x + current_playhead_window_frame.w / 2
     return current_playhead_screen_x
+    -- BTW, better to be explicit in names w.r.t. x values to avoid all confusion about what the purpose is
+    --   the names are hidden away in this class, so who cares?
 end
 
 ---@param desired_playhead_screen_x number
