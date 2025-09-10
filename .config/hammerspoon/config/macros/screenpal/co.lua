@@ -61,7 +61,7 @@ end
 ---@param call_this fun(fun(...), ...)  -- assumes callback is first arg then args are after
 ---@vararg any ...
 ---@return any ...
-function callbacker(call_this, ...)
+function syncify(call_this, ...)
     -- TODO add unit tests (see learning notes if needed, but try to add these later on and jog your memory of coroutines before turning to notes)
 
     local co, is_main = coroutine.running()

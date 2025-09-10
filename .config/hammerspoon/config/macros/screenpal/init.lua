@@ -567,7 +567,7 @@ function StreamDeck_ScreenPal_ShowSilenceRegions()
             return
         end
 
-        local win, silences = callbacker(detect_silences_and_then)
+        local win, silences = syncify(detect_silences_and_then)
         show_silences(win, silences)
     end)
 end
