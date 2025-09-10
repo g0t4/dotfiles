@@ -4,7 +4,7 @@
 ---@field playhead_x number
 ---@field _playhead_relative_timeline_x number
 ---@field playhead_seconds number
----@field pixels_per_second number
+---@field pixels_per_second? number
 local TimelineDetails = {}
 
 ---@param self TimelineDetails
@@ -62,8 +62,12 @@ function TimelineDetails:new(editor_window, ok_to_skip_pps)
     self._playhead_relative_timeline_x = _playhead_relative_timeline_x
     self.time_string = time_string
     self.playhead_seconds = playhead_seconds
-    self.pixels_per_second = _playhead_relative_timeline_x / playhead_seconds
-    self.pixels_per_frame = self.pixels_per_second / 25
+    if self.playhead_seconds == 0 then
+        -- consumers of these values should handle case when nil
+        self.pixels_per_second = nil
+    else
+        self.pixels_per_second = _playhead_relative_timeline_x / playhead_seconds
+    end
     -- print(vim.inspect(self))
     return self
 end
@@ -89,7 +93,17 @@ local function _is_playhead_now_at_target(self, target_x)
     local new_x = _get_updated_playhead_x(self) -- in case we just moved the playhead
     print("  new_x", new_x, "target_x", target_x)
     local pixel_gap = math.abs(new_x - target_x)
-    return pixel_gap <= self.pixels_per_frame
+    if self.pixels_per_second == nil then
+        -- * ONLY happens @0:00 on timeline + when trigger move of playhead
+        --  and would only matter for a short jump of ~5 pixels which should be rare
+        --  chose 6 b/c 3x zoom is 150 pixels/second => 150/25 = 6 pixels_per_frame at highest zoom
+        --  this could cause issues with zoomed out view too if 6 is a long distance... again only from 0 starting
+        print("WARNING - HAD TO GUESS PIXELS PER FRAME for pixel_gap b/c you're @0:00 on the timeline, avoid this by moving anywhere else on timeline")
+        return pixel_gap <= 6
+    else
+        local pixels_per_frame = self.pixels_per_second / 25
+        return pixel_gap <= pixels_per_frame
+    end
 end
 
 ---avoid fixed pauses!
