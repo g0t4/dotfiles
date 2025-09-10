@@ -423,7 +423,7 @@ end
 -- require("config.macros.screenpal.observer")
 
 ---@alias Silence {x_start: number, x_end: number}
----@alias DetectionResults { short_silences: Silence[], regular_silences: Silence[], playhead_x: integer }
+---@alias DetectionResults { short_silences: Silence[], regular_silences: Silence[]}
 local silences_canvas = nil
 ---@param win ScreenPalEditorWindow
 ---@param results DetectionResults

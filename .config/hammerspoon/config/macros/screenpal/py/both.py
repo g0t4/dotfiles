@@ -13,5 +13,6 @@ if __name__ == "__main__":
 
     # merge into short object since it has multiple keys currently
     combined["regular_silences"] = regular["silences"]
+    combined["playhead_x"] = None  # don't pass this back until I have a real use for it
 
     print(json.dumps(combined))  # output to STDOUT for hs to consume
