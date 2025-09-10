@@ -432,7 +432,7 @@ function show_silences(win, results, slider)
     -- example silences (also for testing):
     -- regular_silences = { { x_end = 1132, x_start = 1034 }, { x_end = 1372, x_start = 1223 }, { x_end = 1687, x_start = 1562 } }
 
-    -- TODO I DO NOT THINK I NEED PPS here... all pixel based, RIGHT?
+    -- TODO! allow PPS nil
     local _timeline = win:_timeline_details()
     local slider_frame = slider:axFrame()
     local canvas = hs.canvas.new(slider_frame)
@@ -475,8 +475,10 @@ function StreamDeck_ScreenPal_SelectNextSilence()
     ---@param slider hs.axuielement
     ---@param results DetectionResults
     function select_next(win, slider, results)
+        -- TODO! remove passing slider once that refactor is done for all callbacks
         -- FYI I don't need to pass slider anymore (assming I use relative positions and let timeline handle slider position)
         local assume_sorted_silences = results.regular_silences
+        -- TODO! allow pps nil
         local _timeline = win:_timeline_details()
         -- -- PRN move logic into a ctor in detect_silence to build sorted lists for everything so consumers don't have to
         -- local sorted_silences = table.sort(silences, function(a, b) return a.x_start > b.x_start end)
