@@ -33,6 +33,10 @@ function TimelineDetails:new(editor_window, ok_to_skip_pps)
     self.time_string = time_string
     self.playhead_seconds = playhead_seconds
     if self.playhead_seconds == 0 then
+        if not ok_to_skip_pps then
+            print("WARNING = timeline details accessed w/o declaring it can handle nil PPS (ok_to_skip_pps)... review and adjust accordingly")
+            -- NOT a failure, just a warning
+        end
         -- consumers of these values should handle case when nil
         self.pixels_per_second = nil
     else
@@ -44,25 +48,26 @@ end
 
 ---@param self TimelineDetails
 ---@return number
-local function _get_updated_playhead_x(self)
-    -- keep hidden so I am not tempted to use it elsewhere
-    --  should help me push needed functionality into this class
-    --  also this specific behavior is a conern that should not bleed into consumers
+local function _get_current_playhead_screen_x(self)
+    -- this behavior should not bleed into consumers!
 
-    -- FYI 0.1ms typically to get new frame
-    local new_playhead_window_frame = self._playhead_window:axFrame()
-    return new_playhead_window_frame.x + new_playhead_window_frame.w / 2
+    -- FYI ~0.1ms to get new axFrame()
+    --   don't forget, attributes are copied when accessed, hence have to get new axFrame()
+    --   BUT, axuielements are passed by reference, and thus reusable (assuming they are still valid / not destroyed)
+    local current_playhead_window_frame = self._playhead_window:axFrame()
+    local current_playhead_screen_x = current_playhead_window_frame.x + current_playhead_window_frame.w / 2
+    return current_playhead_screen_x
 end
 
----@param target_x number
+---@param desired_playhead_screen_x number
 ---@param self TimelineDetails
 ---@return boolean
-local function _is_playhead_now_at_target(self, target_x)
+local function _is_playhead_now_at_screen_x(self, desired_playhead_screen_x)
     -- within one frame either way
     -- PRN make more precise later on if I know the target in terms of a frame value
-    local new_x = _get_updated_playhead_x(self) -- in case we just moved the playhead
-    print("  new_x", new_x, "target_x", target_x)
-    local pixel_gap = math.abs(new_x - target_x)
+    local current_playhead_screen_x = _get_current_playhead_screen_x(self) -- in case we just moved the playhead
+    print("  current_playhead_screen_x", current_playhead_screen_x, "desired_playhead_screen_x", desired_playhead_screen_x)
+    local pixel_gap = math.abs(current_playhead_screen_x - desired_playhead_screen_x)
     if self.pixels_per_second == nil then
         -- * ONLY happens @0:00 on timeline + when trigger move of playhead
         --  and would only matter for a short jump of ~5 pixels which should be rare
@@ -78,20 +83,20 @@ end
 
 ---avoid fixed pauses!
 ---@param self TimelineDetails
----@param target_x number
+---@param desired_playhead_screen_x number
 ---@param max_loops? integer
-local function _wait_until_playhead_at(self, target_x, max_loops)
+local function _wait_until_playhead_at_screen_x(self, desired_playhead_screen_x, max_loops)
     max_loops = max_loops or 30
     start = get_time()
     for i = 1, max_loops do
         hs.timer.usleep(10000)
 
         print("  iteration " .. i)
-        if _is_playhead_now_at_target(self, target_x) then
+        if _is_playhead_now_at_screen_x(self, desired_playhead_screen_x) then
             break
         end
     end
-    print_took("  _wait_until_playhead_at", start)
+    print_took("  wait for playhead to move", start)
     -- FYI it is still possible you need some slight fixed delay
     --   i.e. if the window coords are updated ahead of something else
     --   that would intefere with typical next actions (i.e. typing 'c'to trigger cut)
@@ -100,22 +105,21 @@ local function _wait_until_playhead_at(self, target_x, max_loops)
 end
 
 ---@param self TimelineDetails
----@param screen_x number
-local function _move_playhead_to_screen_x(self, screen_x)
-    print("moving playhead to " .. screen_x)
+---@param playhead_screen_x number
+local function _move_playhead_to_screen_x(self, playhead_screen_x)
+    print("moving playhead to screen_x=" .. tostring(playhead_screen_x))
     local hold_duration_ms = 10
     hs.eventtap.leftClick({
-        x = screen_x,
+        x = playhead_screen_x,
         y = self.timeline_frame.y + self.timeline_frame.h / 2
     }, hold_duration_ms * 1000)
-    -- PRN round to nearest frame? is that doable?
-    _wait_until_playhead_at(self, screen_x)
+    _wait_until_playhead_at_screen_x(self, playhead_screen_x)
 end
 
 ---Do not need to add offset of timeline position!
----@param timeline_x number # x value _WITHIN_ the timeline (not screen)
-function TimelineDetails:move_playhead_to(timeline_x)
-    local screen_x = timeline_x + self.timeline_frame.x
+---@param timeline_relative_x number # x value _WITHIN_ the timeline (not screen)
+function TimelineDetails:move_playhead_to(timeline_relative_x)
+    local screen_x = timeline_relative_x + self.timeline_frame.x
     _move_playhead_to_screen_x(self, screen_x)
 end
 
@@ -149,7 +153,8 @@ end
 ---@param percent # 0 to 1
 function TimelineDetails:move_playhead_to_position_percent(percent)
     -- +1 pixel stops leftward drift by 1 frame (good test is back to back reopen, albeit not a normal workflow)
-    self:move_playhead_to(percent * self.timeline_frame.w + 1)
+    local timeline_relative_x = percent * self.timeline_frame.w + 1
+    self:move_playhead_to(timeline_relative_x)
 end
 
 return TimelineDetails

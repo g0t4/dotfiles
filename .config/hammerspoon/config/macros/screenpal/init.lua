@@ -501,12 +501,15 @@ function StreamDeck_ScreenPal_SelectNextSilence()
         --    so set # pixels based on 1 frame @ zoom2 => 75 pps zoom 2
         --    how much buffer do I want too? I will need to use it to get a feel for it
         --    7.5 / 75 == 100ms by the way
-        _timeline:move_playhead_to(next_silence.x_start + 10)
+        local timeline_relative_x = next_silence.x_start + 10
+        _timeline:move_playhead_to(timeline_relative_x)
 
         win:start_cut()
         hs.eventtap.keyStroke({}, "s", 0, win.app)
         hs.timer.usleep(100000)
-        _timeline:move_playhead_to(next_silence.x_end - 10)
+
+        timeline_relative_x = next_silence.x_end - 10
+        _timeline:move_playhead_to(timeline_relative_x)
         hs.eventtap.keyStroke({}, "e", 0, win.app)
     end
 
