@@ -82,7 +82,7 @@ end
 ---avoid fixed pauses!
 ---@param self TimelineDetails
 ---@param target_x number
----@param max_loops integer
+---@param max_loops? integer
 local function _wait_until_playhead_at(self, target_x, max_loops)
     max_loops = max_loops or 30
     start = get_time()
