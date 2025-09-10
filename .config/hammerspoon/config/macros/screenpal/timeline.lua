@@ -26,6 +26,10 @@ function TimelineDetails:new(editor_window)
         -- NO WAY TO KNOW ZOOM LEVEL
         -- NO WAY TO CACHE last used b/c zoom can change
         -- PRN have consumers pass a flag like (skip pps)?
+        --   --  JUMP to START/END DOES NOT NEED THIS!
+        --   --  SO those ones can say it doesn't matter and still work
+        --   --  JUMP to START/END is one of the most likely things I would do at start of video
+        --      everything else I think I can fix with arrowing over one frame
         -- TIMES THIS MATTERS
 
         -- -- TODO cannot estimate times from 0, so lets jump to 1?
