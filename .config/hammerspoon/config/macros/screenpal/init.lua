@@ -572,8 +572,8 @@ function StreamDeck_ScreenPal_ShowSilenceRegions()
     end)
 end
 
----@param on_done fun(win: ScreenPalEditorWindow, silences SilencesController)
-function detect_silences(on_done)
+---@param callback fun(win: ScreenPalEditorWindow, silences SilencesController)
+function detect_silences(callback)
     local win = get_cached_editor_window()
     local timeline_slider_axuielement = win:get_timeline_slider_or_throw()
 
@@ -582,7 +582,7 @@ function detect_silences(on_done)
         detect_silence_ranges(where_to, function(results)
             timeline = win:timeline_controller_ok_skip_pps()
             silences = SilencesController:new(results, timeline)
-            on_done(win, silences)
+            callback(win, silences)
         end)
     end, image_tag)
 end
