@@ -425,6 +425,8 @@ function show_silences(win, results, slider)
     -- regular_silences = { { x_end = 1132, x_start = 1034 }, { x_end = 1372, x_start = 1223 }, { x_end = 1687, x_start = 1562 } }
 
     -- TODO! allow PPS nil
+    --   REMOVE slider param and move to asking timeline to show silence period, let it handle the details of coords
+    --     OR ask it for coordinates timline.screen_x_for(silence.start_x)
     local _timeline = win:_timeline_details()
     local slider_frame = slider:axFrame()
     local canvas = hs.canvas.new(slider_frame)
@@ -434,7 +436,7 @@ function show_silences(win, results, slider)
 
     local all = vim.list_extend(results.regular_silences, results.short_silences)
     for _, silence in ipairs(all) do
-        local width = silence.x_end - silence.x_start
+        local width = silence.x_end - silence.x_start -- PRN move to silence DTO as new behavior (how did I do that for axuielemMT
         -- print("start=" .. silence.x_start .. " end=" .. silence.x_end)
         if width > 0 then
             local fill_color = { red = 1, green = 0, blue = 0, alpha = 0.3 }

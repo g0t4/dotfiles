@@ -475,7 +475,7 @@ axuielemMT.findUniqueReference = function(elem)
     return nil -- == not unique
 end
 
--- TODO move these onto axuieleemMT as extension methods
+-- TODO move these onto axuielemMT as extension methods
 function ax_value_quoted(element)
     if not element then return "" end
     local value = element:attributeValue("AXValue")
