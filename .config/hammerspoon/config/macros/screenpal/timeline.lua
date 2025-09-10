@@ -65,7 +65,7 @@ local function _wait_until_playhead_at(self, target_x, max_loops)
         hs.timer.usleep(10000)
 
         print("  iteration " .. i)
-        if self:is_playhead_now_at_target(target_x) then
+        if self:_is_playhead_now_at_target(target_x) then
             break
         end
     end
@@ -117,7 +117,7 @@ end
 
 ---@param target_x number
 ---@return boolean
-function TimelineDetails:is_playhead_now_at_target(target_x)
+function TimelineDetails:_is_playhead_now_at_target(target_x)
     -- within one frame either way
     -- PRN make more precise later on if I know the target in terms of a frame value
     local new_x = _get_updated_playhead_x(self) -- in case we just moved the playhead
