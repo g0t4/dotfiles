@@ -56,16 +56,16 @@ function TimelineDetails:new(editor_window)
 end
 
 ---@param self table
----@param target_x number
-function TimelineDetails:_move_playhead_to_screen_x(target_x)
-    print("moving playhead to " .. target_x)
+---@param screen_x number
+function TimelineDetails:_move_playhead_to_screen_x(screen_x)
+    print("moving playhead to " .. screen_x)
     local hold_duration_ms = 10
     hs.eventtap.leftClick({
-        x = target_x,
+        x = screen_x,
         y = self.timeline_frame.y + self.timeline_frame.h / 2
     }, hold_duration_ms * 1000)
     -- PRN round to nearest frame? is that doable?
-    self:wait_until_playhead_at(target_x)
+    self:wait_until_playhead_at(screen_x)
 end
 
 --- Do not need to add offset of timeline position!
