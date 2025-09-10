@@ -74,10 +74,11 @@ describe("test", function()
             local captured_args = nil -- TODO only need this for a callbacker equivalent
             call_this(function(...)
                 captured_args = ...
+                coroutine.resume(co)
             end, ...)
 
             coroutine.yield()
-            print("callbacker captured args:", captured_args)
+            print("    3. callbacker captured args:", captured_args)
         end
 
         function sleeper2(ms)
