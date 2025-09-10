@@ -1,6 +1,6 @@
 ---@class TimelineController
----@field _timeline_frame { x: number, y: number, w: number, h: number }
----@field _playhead_window_frame { x: number, y: number, w: number, h: number }
+---@field _timeline_frame AXFrame
+---@field _playhead_window_frame AXFrame
 ---@field _playhead_screen_x number
 ---@field _playhead_timeline_relative_x number -- TODO make this public? a few uses externally that seem fine (i.e. showing detected silence ranges)
 ---@field _pixels_per_second? number
@@ -160,7 +160,7 @@ function TimelineController:move_playhead_to_position_percent(ratio)
 end
 
 --- bounding box (frame) around timeline
----@return frame
+---@return AXFrame
 function TimelineController:get_timeline_frame()
     -- this accessor makes it easier to see external usage
     -- AND I can now make the storage private (and can change it too)

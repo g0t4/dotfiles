@@ -376,8 +376,17 @@ end
 axuielemMT.axFocusedWindow = function(elem)
     return elem:attributeValue("AXFocusedWindow")
 end
+
+-- type aliases for attributes
+---@alias AXFrame { x:number, y:number, w:number, h:number }
+---   this one is specific to frames, and I hope to use it to convey the type is not just CGRect but that it represents a frame
+---@alias CGSize { w:number, h:number }
+---@alias CFRange { location: number, length: number }
+---@alias CGPoint { x:number, y:number }
+-- based on: https://developer.apple.com/documentation/applicationservices/axvaluetype
+
 ---@param elem hs.axuielement
----@return { x:number, y:number, w:number, h:number }
+---@return AXFrame
 axuielemMT.axFrame = function(elem)
     local raw_frame = elem:attributeValue("AXFrame")
     if not raw_frame then return nil end
@@ -386,6 +395,7 @@ axuielemMT.axFrame = function(elem)
     assert(raw_frame.w and type(raw_frame.w) == "number" and raw_frame.h and type(raw_frame.h) == "number")
     return raw_frame
 end
+
 ---@param elem hs.axuielement
 ---@return { x:number, y:number }
 axuielemMT.axPosition = function(elem)
