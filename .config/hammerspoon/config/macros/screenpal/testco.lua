@@ -107,22 +107,9 @@ describe("test", function()
         print("1. before test_code()")
         test_code()
         print("5. after test_code()")
+    end)
 
-
-        --
-        --
-        --
-        --
-        --
-        --
-
-        do return end
-
-        --
-        --
-        --
-        --
-
+    it("use callbacker with crunch_data", function()
         function crunch_data(callback)
             print("start crunch data")
             vim.defer_fn(function()
