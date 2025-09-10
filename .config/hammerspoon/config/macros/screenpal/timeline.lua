@@ -3,7 +3,6 @@
 ---@field _playhead_window_frame { x: number, y: number, w: number, h: number }
 ---@field _playhead_screen_x number
 ---@field _playhead_timeline_relative_x number -- TODO make this public? a few uses externally that seem fine (i.e. showing detected silence ranges)
----@field playhead_seconds number
 ---@field pixels_per_second? number
 local TimelineController = {}
 
@@ -31,8 +30,7 @@ function TimelineController:new(editor_window, ok_to_skip_pps)
     self._playhead_screen_x = playhead_screen_x
     self._playhead_timeline_relative_x = _playhead_timeline_relative_x
     self.time_string = time_string
-    self.playhead_seconds = playhead_seconds
-    if self.playhead_seconds == 0 then
+    if playhead_seconds == 0 then
         if not ok_to_skip_pps then
             print("WARNING = timeline controller accessed w/o declaring it can handle nil PPS (ok_to_skip_pps)... review and adjust accordingly")
             -- NOT a failure, just a warning
