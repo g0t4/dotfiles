@@ -424,14 +424,13 @@ function show_silences(win, results, slider)
     -- example silences (also for testing):
     -- regular_silences = { { x_end = 1132, x_start = 1034 }, { x_end = 1372, x_start = 1223 }, { x_end = 1687, x_start = 1562 } }
 
-    -- TODO! allow PPS nil
-    --   REMOVE slider param and move to asking timeline to show silence period, let it handle the details of coords
-    --     OR ask it for coordinates timline.screen_x_for(silence.start_x)
+    --   REMOVE slider param
 
     -- TODO rename relative_timeline_x to timeline_relative_x (latter reads better)
-    local _playhead_timeline_relative_x = win:_timeline_details()._playhead_relative_timeline_x
-    local slider_frame = slider:axFrame()
-    local canvas = hs.canvas.new(slider_frame)
+    local _timeline = win:_timeline_details()
+    local _playhead_timeline_relative_x = _timeline._playhead_relative_timeline_x
+    local timeline_frame = _timeline:get_timeline_frame()
+    local canvas = hs.canvas.new(timeline_frame)
     assert(canvas)
     canvas:show()
     local elements = {}
@@ -452,13 +451,13 @@ function show_silences(win, results, slider)
                 type = "rectangle",
                 action = "fill",
                 fillColor = fill_color,
-                frame = { x = silence.x_start, y = 0, w = width, h = slider_frame.h }
+                frame = { x = silence.x_start, y = 0, w = width, h = timeline_frame.h }
             })
             table.insert(elements, {
                 type = "rectangle",
                 action = "stroke",
                 strokeColor = border_color,
-                frame = { x = silence.x_start, y = 0, w = width, h = slider_frame.h }
+                frame = { x = silence.x_start, y = 0, w = width, h = timeline_frame.h }
             })
         end
     end

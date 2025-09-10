@@ -161,6 +161,14 @@ function TimelineDetails:move_playhead_to_position_percent(ratio)
     self:move_playhead_to(timeline_relative_x)
 end
 
+--- bounding box (frame) around timeline
+---@return frame
+function TimelineDetails:get_timeline_frame()
+    -- this accessor makes it easier to see external usage
+    -- AND I can now make the storage private (and can change it too)
+    return self.timeline_frame
+end
+
 return TimelineDetails
 
 
