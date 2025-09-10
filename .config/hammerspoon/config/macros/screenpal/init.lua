@@ -339,6 +339,12 @@ function ScreenPalEditorWindow:_timeline_details()
     return TimelineDetails:new(self)
 end
 
+---@return TimelineDetails
+function ScreenPalEditorWindow:timeline_details_ok_to_skip_pps()
+    -- PRN move self:ensure_cached_controls() here?
+    return TimelineDetails:new(self, true)
+end
+
 function ScreenPalEditorWindow:get_time_string()
     self:ensure_cached_controls()
     local details = self:_timeline_details()

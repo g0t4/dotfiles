@@ -9,7 +9,9 @@
 local TimelineDetails = {}
 
 ---@param self TimelineDetails
-function TimelineDetails:new(editor_window)
+function TimelineDetails:new(editor_window, ok_to_skip_pps)
+    ok_to_skip_pps = ok_to_skip_pps or false
+
     local timeline_frame = editor_window._btn_position_slider:axFrame()
 
     local playhead_window = editor_window.windows:get_playhead_window_or_throw()
