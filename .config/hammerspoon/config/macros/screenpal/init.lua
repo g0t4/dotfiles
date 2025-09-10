@@ -503,13 +503,70 @@ function StreamDeck_ScreenPal_SelectNextSilence()
     detect_silences_and_then(select_next)
 end
 
-function StreamDeck_ScreenPal_SelectPreviousSilence()
+-- Naming Pattern (revise as needed)
+-- action_prev_silence
+-- action_this_silence_thru_start
+-- action_this_silence
+-- action_this_silence_thru_end
+-- action_next_silence
+
+function StreamDeck_ScreenPal_SelectThisSilence_ThruEnd()
+    -- do not adjust backwards
+    -- keep current mouse position and possibly restore that?
+    -- either regular or short silence
+    -- 'v' to start
+    -- click end position and type e (extend)
+    --  BTW if I click both start and end I don't have to worry about if I do this in a detected silence period or short... even though regular one will highlight full silence on v... clicking ends and extend (e/s) is effectively the same as not auto-select
+    -- PRN if silence starts at 0 then don't pad front
+
+
+    ---@param win ScreenPalEditorWindow
+    ---@param results DetectionResults
+    function select_this_silence(win, results)
+        local timeline = win:timeline_details_ok_to_skip_pps()
+        local silence_x_start = timeline._playhead_timeline_relative_x -- keep to restore?
+    end
+
+    detect_silences_and_then(select_this_silence)
+end
+
+function StreamDeck_ScreenPal_SelectThisSilence_ThruStart()
+end
+
+function StreamDeck_ScreenPal_SelectThisSilence()
+end
+
+function StreamDeck_ScreenPal_SelectPrevSilence()
     ---@param win ScreenPalEditorWindow
     ---@param results DetectionResults
     function select_prev(win, results)
     end
 
     detect_silences_and_then(select_prev)
+end
+
+-- * muting (select + mute)
+function StreamDeck_ScreenPal_MuteThisSilence()
+    -- select the region
+    -- then, hit V key
+    --   KEEP volume tool bug, if a detected silence period, V selects full range, but Ok won't work until adjust either in/out point
+    --   s/b NBD cuz I will select both now with my tool
+    -- probably wait for my review
+    --
+    -- start review automatically? ('p' or... go back X seconds myself?)
+    --   PRN I could replace how 'p' works to do diff style previews, might be nice to have diff range of preview
+end
+
+function StreamDeck_ScreenPal_MuteThisSilence_ThruEnd()
+end
+
+function StreamDeck_ScreenPal_MuteThisSilence_ThruStart()
+end
+
+function StreamDeck_ScreenPal_MuteNextSilence()
+end
+
+function StreamDeck_ScreenPal_MutePrevSilence()
 end
 
 function StreamDeck_ScreenPal_ShowSilenceRegions()
