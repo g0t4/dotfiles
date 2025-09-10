@@ -457,25 +457,45 @@ function ScreenPalEditorWindow:start_cut()
     hs.eventtap.keyStroke({}, "c", 0, self.app)
     -- TODO find a way to detect when cut is open (tool popup?)
     hs.timer.usleep(100000)
-    -- closed
+    -- ** closed (cut tool is not open) window
     -- app:window(1)
-    -- AXRoleDescription: window<string>
     -- AXSections: [1: SectionObject: hs.axuielement: AXButton (0x60000020b438), SectionUniqueID: AXContent, SectionDescription: Content]
-    -- AXTitle: SOM-FloatingWindow-Type=edit2.addedit.toolbar.menu.window-ZOrder=1(Undefined+1)<string>
     -- frame: x=725.0,y=628.0,w=274.0,h=94.0
     -- unique ref:
+
     start = get_time()
     -- FYI getting window anew (OR should I use cache?)
+    -- 10 to 30ms to get window a new:
     local win = self.app:window('SOM-FloatingWindow-Type=edit2.addedit.toolbar.menu.window-ZOrder=1(Undefined+1)')
     print_took("get toolbar window", start)
+    -- TODO move to helper method?
+    print("windows: ", hs.inspect(self.windows.windows_by_title))
+    local win_cached = self.windows.windows_by_title['SOM-FloatingWindow-Type=edit2.addedit.toolbar.menu.window-ZOrder=1(Undefined+1)']
+    -- PRN does either work?
+    -- TODO get buttons and look for OK/Cancel?
+    --   also first button has scissor icon but AFACT I cannot see that via accessibility fwk
+    -- LOOK FOR "Tools" button to know if cut isn't open
 
-    -- open
-    -- app:window(2)
-    -- AXRoleDescription: window<string>
-    -- AXSections: [1: SectionObject: hs.axuielement: AXTextField (0x6000005a25f8), SectionUniqueID: AXContent, SectionDescription: Content]
-    -- AXTitle: SOM-FloatingWindow-Type=edit2.addedit.toolbar.menu.window-ZOrder=1(Undefined+1)<string>
-    -- frame: x=687.0,y=628.0,w=428.0,h=94.0
+    -- app:window(2):button(1)
+    --
+    -- AXDescription: Tools<string>
+    -- AXEnabled: true<bool>
+    -- AXFocused: false<bool>
+    -- AXFocusedUIElement: AXButton - Tools<hs.axuielement>
+    -- AXIndex: 0<number>
+    -- AXMaxValue: 1<number>
+    -- AXMinValue: 0<number>
+    -- AXOrientation: AXUnknownOrientation<string>
+    -- AXRoleDescription: button<string>
+    -- AXSelected: false<bool>
+    -- frame: x=755.0,y=657.0,w=77.0,h=35.0
     -- unique ref: app:window('SOM-FloatingWindow-Type=edit2.addedit.toolbar.menu.window-ZOrder=1(Undefined+1)')
+    --   :button(desc='Tools')
+
+    -- ** open cut tool
+    -- app:window(2)
+    -- AXSections: [1: SectionObject: hs.axuielement: AXTextField (0x6000005a25f8), SectionUniqueID: AXContent, SectionDescription: Content]
+    -- frame: x=687.0,y=628.0,w=428.0,h=94.0
 end
 
 local _cached_editor_window = nil
