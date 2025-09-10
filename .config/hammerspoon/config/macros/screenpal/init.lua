@@ -570,10 +570,6 @@ function StreamDeck_ScreenPal_SelectNextSilence()
             print("no silence found after playhead")
             return
         end
-        -- TODO select it
-        -- TODO verify is next (show just the one?)
-        -- TODO PRN maybe move next and prev logic into DetectionResults and have it each color diff in show selection view?
-        --    could even show prev/next of each type in diff colors
         print("FOUND: " .. hs.inspect(next))
         -- TODO _move_playhead_to_x_relative()
         local target_playhead_x = next.x_start + 10 + slider_frame.x
