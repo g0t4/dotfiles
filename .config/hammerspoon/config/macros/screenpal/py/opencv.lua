@@ -26,6 +26,6 @@ function detect_silence(imagePath, callback)
     task:start()
 end
 
-function detect_short_silences_runs(imagePath, callback, script)
+function detect_silence_ranges(imagePath, callback, script)
     detect_silence(imagePath, callback, "dark-boxes.py")
 end

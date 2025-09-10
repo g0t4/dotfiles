@@ -3,6 +3,8 @@
 _G.AppWindows = {}
 AppWindows.__index = AppWindows
 
+--- Right now this is basically a wrapper around using a cached list of windows
+--- and then refresh them if needed on window lookup (by title)
 ---@param app hs.axuielement
 function AppWindows:new(app)
     local self = setmetatable({}, AppWindows)

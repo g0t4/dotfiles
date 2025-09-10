@@ -4,6 +4,7 @@ require('config.macros.screenpal.helpers')
 require("config.macros.screenpal.co")
 require("config.macros.screenpal.py.opencv")
 local TimelineController = require('config.macros.screenpal.timeline')
+local SilencesController = require('config.macros.screenpal.silences')
 
 ---@return hs.axuielement app_element
 local function get_screenpal_app_element_or_throw()
@@ -37,6 +38,17 @@ function ScreenPalEditorWindow:new()
     return editor_window
 end
 
+local _cached_editor_window = nil
+function get_cached_editor_window()
+    if not _cached_editor_window then
+        _cached_editor_window = ScreenPalEditorWindow:new()
+    end
+    -- TODO add this here? might reduce need elsewhere?
+    --   _cached_editor_window:ensure_cached_controls() -- TODO do this here?
+    return _cached_editor_window
+end
+
+--- make sure controls are valid, if not re-aquire references
 function ScreenPalEditorWindow:ensure_cached_controls()
     if self._cached_buttons then
         if self._btn_minimum_zoom:isValid() then
@@ -254,7 +266,6 @@ function ScreenPalEditorWindow:reopen_project()
 
         -- * capture position
         -- use percent, that way if the width changes, it's still the same timecode
-        self:ensure_cached_controls() -- TODO do I need this here? I only put it here when I inlined position % helper function
         local playhead_percent = self:timeline_controller_ok_skip_pps():get_position_percent()
 
         if not self._textfield_title then
@@ -287,7 +298,6 @@ function ScreenPalEditorWindow:reopen_project()
         sleep_ms(100) -- PRN if possible, and useful, replace w/ wait_for_element, which one to look for?
 
         -- * restore position
-        self:ensure_cached_controls()
         self:zoom_off()
         self:timeline_controller_ok_skip_pps():move_playhead_to_position_percent(playhead_percent)
 
@@ -302,13 +312,13 @@ end
 
 ---@return TimelineController
 function ScreenPalEditorWindow:timeline_controller()
-    -- PRN move self:ensure_cached_controls() here?
+    self:ensure_cached_controls() -- TODO review design of cache, confusing already
     return TimelineController:new(self)
 end
 
 ---@return TimelineController
 function ScreenPalEditorWindow:timeline_controller_ok_skip_pps()
-    -- PRN move self:ensure_cached_controls() here?
+    self:ensure_cached_controls() -- TODO review design of cache, confusing already
     return TimelineController:new(self, true)
 end
 
@@ -392,23 +402,16 @@ function ScreenPalEditorWindow:start_cut()
     -- FYI first button has smth about help text
 end
 
-local _cached_editor_window = nil
-function get_cached_editor_window()
-    if not _cached_editor_window then
-        _cached_editor_window = ScreenPalEditorWindow:new()
-    end
-    return _cached_editor_window
-end
-
 -- PRN events to detect playhead moving (and other UI changes) that might affect what to show for silences (or otherwise affect tooling automations)
 -- require("config.macros.screenpal.observer")
 
 ---@alias Silence {x_start: number, x_end: number}
 ---@alias DetectionResults { short_silences: Silence[], regular_silences: Silence[]}
+
 local silences_canvas = nil
 ---@param win ScreenPalEditorWindow
----@param results DetectionResults
-function show_silences(win, results)
+---@param silences SilencesController
+function show_silences(win, silences)
     -- example silences (also for testing):
     -- regular_silences = { { x_end = 1132, x_start = 1034 }, { x_end = 1372, x_start = 1223 }, { x_end = 1687, x_start = 1562 } }
 
@@ -420,8 +423,7 @@ function show_silences(win, results)
     canvas:show()
     local elements = {}
 
-    local all = vim.list_extend(results.regular_silences, results.short_silences)
-    for _, silence in ipairs(all) do
+    for _, silence in ipairs(silences.all) do
         local width = silence.x_end - silence.x_start -- PRN move to silence DTO as new behavior (how did I do that for axuielemMT
         -- print("start=" .. silence.x_start .. " end=" .. silence.x_end)
         if width > 0 then
@@ -452,9 +454,9 @@ end
 
 function StreamDeck_ScreenPal_SelectNextSilence()
     ---@param win ScreenPalEditorWindow
-    ---@param results DetectionResults
-    function select_next(win, results)
-        local assume_sorted_silences = results.regular_silences
+    ---@param silences SilencesController
+    function select_next(win, silences)
+        local assume_sorted_silences = silences.regular -- TODO change to all?
         local timeline = win:timeline_controller_ok_skip_pps() -- movement is x coordinate based, no PPS needed
         -- -- PRN move logic into a ctor in detect_silence to build sorted lists for everything so consumers don't have to
         -- local sorted_silences = table.sort(silences, function(a, b) return a.x_start > b.x_start end)
@@ -510,10 +512,8 @@ function StreamDeck_ScreenPal_SelectThisSilence_ThruEnd()
 
 
     ---@param win ScreenPalEditorWindow
-    ---@param results DetectionResults
-    function select_this_silence(win, results)
-        local timeline = win:timeline_controller_ok_skip_pps()
-        local silence_x_start = timeline._playhead_timeline_relative_x -- keep to restore?
+    ---@param silences SilencesController
+    function select_this_silence(win, silences)
     end
 
     detect_silences_and_then(select_this_silence)
@@ -527,8 +527,8 @@ end
 
 function StreamDeck_ScreenPal_SelectPrevSilence()
     ---@param win ScreenPalEditorWindow
-    ---@param results DetectionResults
-    function select_prev(win, results)
+    ---@param silences SilencesController
+    function select_prev(win, silences)
     end
 
     detect_silences_and_then(select_prev)
@@ -568,15 +568,17 @@ function StreamDeck_ScreenPal_ShowSilenceRegions()
     detect_silences_and_then(show_silences)
 end
 
----@param on_done fun(win: ScreenPalEditorWindow, results: DetectionResults)
+---@param on_done fun(win: ScreenPalEditorWindow, silences SilencesController)
 function detect_silences_and_then(on_done)
     local win = get_cached_editor_window()
     local timeline_slider_axuielement = win:get_timeline_slider_or_throw()
 
     local image_tag = "trash_me_silence_detect"
     capture_this_element(timeline_slider_axuielement, function(where_to)
-        detect_short_silences_runs(where_to, function(results)
-            on_done(win, results)
+        detect_silence_ranges(where_to, function(results)
+            timeline = win:timeline_controller_ok_skip_pps()
+            silences = SilencesController:new(results, timeline)
+            on_done(win, silences)
         end)
     end, image_tag)
 end
