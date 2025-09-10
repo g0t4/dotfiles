@@ -453,9 +453,11 @@ function show_silences(win, silences)
 end
 
 function StreamDeck_ScreenPal_SelectNextSilence()
-    ---@param win ScreenPalEditorWindow
-    ---@param silences SilencesController
-    function select_next(win, silences)
+    run_async(function()
+        ---@type ScreenPalEditorWindow win
+        ---@type SilencesController silences
+        local win, silences = syncify(detect_silences)
+
         local next_silence = silences:get_next_silence()
         if next_silence == nil then
             print("no silence found after playhead")
@@ -479,9 +481,7 @@ function StreamDeck_ScreenPal_SelectNextSilence()
         timeline_relative_x = next_silence.x_end - 10
         timeline:move_playhead_to(timeline_relative_x)
         hs.eventtap.keyStroke({}, "e", 0, win.app)
-    end
-
-    detect_silences(select_next)
+    end)
 end
 
 -- Naming Pattern (revise as needed)
