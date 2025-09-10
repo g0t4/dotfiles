@@ -353,15 +353,6 @@ function ScreenPalEditorWindow:toggle_AXEnhancedUserInterface()
     end
 end
 
-function ScreenPalEditorWindow:estimate_time_per_pixel()
-    self:ensure_cached_controls() -- prn do I need this early on here?
-
-    print("min zoom frame", hs.inspect(self._btn_minimum_zoom:axFrame())) -- (x,y) == (0,0) == not zoomed
-    -- must be zoomed out, else cannot know that start of time line is 0 and end is the end of the video
-    self:zoom_off()
-    print("min zoom frame", hs.inspect(self._btn_minimum_zoom:axFrame()))
-end
-
 function ScreenPalEditorWindow:start_cut()
     -- PRN determine if in a diff edit and bail
     hs.eventtap.keyStroke({}, "c", 0, self.app)
