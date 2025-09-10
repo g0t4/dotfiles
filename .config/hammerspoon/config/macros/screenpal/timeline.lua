@@ -55,6 +55,7 @@ function TimelineDetails:new(editor_window)
     return self
 end
 
+---@param self TimelineDetails
 ---@return number
 local function _get_updated_playhead_x(self)
     -- keep hidden so I am not tempted to use it elsewhere
@@ -67,6 +68,7 @@ local function _get_updated_playhead_x(self)
 end
 
 ---@param target_x number
+---@param self TimelineDetails
 ---@return boolean
 local function _is_playhead_now_at_target(self, target_x)
     -- within one frame either way
@@ -78,6 +80,7 @@ local function _is_playhead_now_at_target(self, target_x)
 end
 
 ---avoid fixed pauses!
+---@param self TimelineDetails
 ---@param target_x number
 ---@param max_loops integer
 local function _wait_until_playhead_at(self, target_x, max_loops)
@@ -99,7 +102,7 @@ local function _wait_until_playhead_at(self, target_x, max_loops)
     --   if it's specific to a given automation then that fixed delay can live in consumer code
 end
 
----@param self table
+---@param self TimelineDetails
 ---@param screen_x number
 local function _move_playhead_to_screen_x(self, screen_x)
     print("moving playhead to " .. screen_x)
@@ -119,7 +122,6 @@ function TimelineDetails:move_playhead_to(timeline_x)
     _move_playhead_to_screen_x(self, screen_x)
 end
 
----@param self TimelineDetails
 ---@param seconds number
 function TimelineDetails:move_playhead_to_seconds(seconds)
     local playhead_x = self.timeline_frame.x + (seconds * self.pixels_per_second) + 1
