@@ -77,7 +77,8 @@ describe("test", function()
         end, ...)
 
         coroutine.yield()
-        print("    3. callbacker captured args:", captured_args)
+        print("    3. callbacker captured args:", vim.inspect(captured_args))
+        return captured_args
     end
 
     function sleeper2(ms)
@@ -143,7 +144,7 @@ describe("test", function()
 
         function build_report()
             print("1. start building report.... before crunch_data called")
-            callbacker(api_crunch_data, then_create_report)
+            local data = callbacker(api_crunch_data, then_create_report)
 
             print("4. creating report with data: " .. vim.inspect(data))
             coroutine.resume(test_co) -- triggers test to complete
