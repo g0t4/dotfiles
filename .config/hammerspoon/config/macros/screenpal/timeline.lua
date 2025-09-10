@@ -16,13 +16,13 @@ function TimelineController:new(editor_window, ok_to_skip_pps)
     -- DO NOT get frames until UI is stable, zoome din frame is different than zoomed out
     local _playhead_window_frame = _playhead_window:axFrame()
 
-    local playhead_screen_x = _playhead_window_frame.x + _playhead_window_frame.w / 2
-    local _playhead_timeline_relative_x = playhead_screen_x - _timeline_frame.x
+    local _playhead_screen_x = _playhead_window_frame.x + _playhead_window_frame.w / 2
+    local _playhead_timeline_relative_x = _playhead_screen_x - _timeline_frame.x
 
     self._timeline_frame = _timeline_frame
     self._playhead_window = _playhead_window
     self._playhead_window_frame = _playhead_window_frame
-    self._playhead_screen_x = playhead_screen_x
+    self._playhead_screen_x = _playhead_screen_x
     self._playhead_timeline_relative_x = _playhead_timeline_relative_x
 
     local time_string = _playhead_window:textField(1)
