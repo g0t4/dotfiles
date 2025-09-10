@@ -69,19 +69,27 @@ function callbacker(call_this, ...)
     -- i suppose i could start a coroutine if is_main is true
 
     local captured_args = nil
-    call_this(function(...)
-        -- PRN guard against double callback
-        captured_args = { ... }
-        -- print("cap", ...)
-        -- TODO make this work with vim/hs/lua(luv) like sleep above - when I need it in other envs
-        hs.timer.doAfter(0, function()
-            -- schedule the resume, to avoid "cannot resume non-suspended coroutine"
-            -- which happens if call_this calls this callback synchronously
+    local resumed = false
+    local function resume_once()
+        if resumed then return end
+        resumed = true
+
+        -- schedule the resume, to avoid "cannot resume non-suspended coroutine"
+        -- which happens if call_this calls this callback synchronously
+        local sched = _G.vim and vim.schedule
+            or (hs and function(f) hs.timer.doAfter(0, f) end)
+            or function(f) f() end
+        sched(function()
             local status, err = coroutine.resume(co)
             if not status then
                 print("callbacker - resume failed", err)
             end
         end)
+    end
+
+    call_this(function(...)
+        captured_args = { ... }
+        resume_once()
     end, ...)
 
     coroutine.yield()
