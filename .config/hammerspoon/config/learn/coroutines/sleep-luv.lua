@@ -5,7 +5,7 @@ function run_async(what)
     coroutine.resume(co)
 end
 
-function sleep_ms(duration)
+function sleep_for(duration)
     local co = coroutine.running()
     assert(co, "sleep can only be called within a coroutine")
     uv.new_timer():start(duration, 0, function(timer)
@@ -19,7 +19,7 @@ end
 
 run_async(function()
     print("before sleep")
-    sleep_ms(1000)
+    sleep_for(1000)
     print("after sleep")
 end)
 
