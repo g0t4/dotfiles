@@ -327,33 +327,31 @@ function ScreenPalEditorWindow:get_time_string()
     return details.time_string
 end
 
-function ScreenPalEditorWindow:figure_out_zoom2_fixed_pixels_per_second()
-    self:ensure_cached_controls()
-
-    -- FYI! KEEP IN MIND, zoom levels are FIXED # seconds/frames regardless of video length... so when zoom 2 you know exactly where to click to move over 1 second relative to current position... or to move to X seconds along from start/end of the visible timeline
-    --  eyeballing => roughly 43 pixels per second on zoom 2 => ~23 seconds visible in timeline... and not quite full width of screen (est 1000 px) => 1000/23 ~+ 43 pixels per second?
-
-    -- TODO break apart functions out of the other get time function below
-    --   i.e. get_playhead_time
-
-    local details = self:_timeline_details()
-    -- shift+right takes me one second over (doesn't need to be 1 exactly to find PPS)
-    hs.eventtap.keyStroke({ "shift" }, hs.keycodes.map["right"])
-
-    -- *** PIXELS PER SECOND for each ZOOM level (fixed for each level)
-    print(details.pixels_per_second)
-    -- FYI make sure time left side of timeline is still at 0 else will be off
-    --   jump to a specific timecode and measure the time from there
-    --   should be more reliable than clicking any spot and doing it from there which maybe cursor is in the middle between actual frames and so its slightly off b/c it says time as of a few pixels left/right
-    --   repeatedly push the jump to 3 (or w/e value) an
-    --
-    --   change width of screen (timeline) and confirm PPS remains the same
-    --   MAKE SURE 0 is on left, sometimes it shifts slightly off screen, that will cause issues in the PPS
-    --   SLIGHT discrepency when clicking on a spot is fractions of a pixel in the calc... IOTW I don't have ultra precise fractions but 25/75/150 are correct parts
-    -- zoom1 => 25.164473684211 PPS
-    -- zoom2 => 75.166666666667 PPS
-    -- zoom3 => 150.16666666667 PPS
-end
+-- FYI zoom levels and pixels per second (calculated just so I can refer to them)
+--  right now I am not using this for any automations
+--  and a few reasons why I can't use these (at least not yet):
+--  - I cannot determine zoom1 vs zoom2 vs zoom3
+--  - Can only tell zoomed vs not zoomed
+--  - Therefore these are mostly for reasoning about scale
+--
+--  I am using PPS for checking if the playhead is moved to the new spot yet
+--  - because it will move nearby (closest frame)
+--  - so I use PPS as a tolerance (within one frame either way)
+--
+--  BTW I can calculate PPS in every case EXCEPT when playhead is at time 0
+--
+-- *** PIXELS PER SECOND for each ZOOM level (fixed for each level)
+-- Calculation:
+-- 1 Move timeline to start of video, left side must be 0
+-- 2 Move to nearby second mark (left side of timeline must remain at 0)
+-- 3 pixels_apart / time_in_seconds = PPS
+--   zoom1 => 25.164473684211 PPS
+--   zoom2 => 75.166666666667 PPS
+--   zoom3 => 150.16666666667 PPS
+--
+--   * KEEP IN MIND, zoom levels are FIXED # seconds/frames regardless of video length...
+--   so when zoom 2 you know exactly where to click to move over 1 second relative to current position...
+--   or to move to X seconds along from start/end of the visible timeline
 
 function ScreenPalEditorWindow:toggle_AXEnhancedUserInterface()
     self:ensure_cached_controls()
