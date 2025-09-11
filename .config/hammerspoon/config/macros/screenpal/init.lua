@@ -7,6 +7,7 @@ local TimelineController = require('config.macros.screenpal.timeline')
 local SilencesController = require('config.macros.screenpal.silences')
 
 local _200ms = 200000
+local _300ms = 300000
 local _100ms = 100000
 local _50ms = 50000
 local _10ms = 10000
@@ -499,11 +500,23 @@ function act_on_silence(win, silence, action_keystroke)
     hs.eventtap.keyStroke({}, "e", 0, win.app)
 
     if action_keystroke == CUT and silence.x_start == 0 then
-        -- arrow left to reduce one frame from end of range, which is my standard cut at the start of a clip
+        -- * pull back 2 frames from end to avoid cutting into starting audio
         hs.eventtap.keyStroke({}, "left", 0, win.app)
-        hs.timer.usleep(_100ms)
-    end
+        hs.timer.usleep(_10ms)
+        -- FYI 2 frame reduction is b/c insert pause always blends away 1 frame in waveform (not sure effects audio, just to be safe do two)
+        hs.eventtap.keyStroke({}, "left", 0, win.app)
+        hs.timer.usleep(_200ms)
+        hs.eventtap.keyStroke({}, "Return") -- or click OK?
+        hs.timer.usleep(_300ms) -- bigger?
 
+        -- * insert pause auto-approved
+        hs.eventtap.keyStroke({}, "i", 0, win.app)
+        hs.timer.usleep(_10ms)
+        hs.eventtap.keyStroke({}, "p", 0, win.app)
+        hs.timer.usleep(_200ms)
+        hs.eventtap.keyStroke({}, "Return") -- or click OK?
+        hs.timer.usleep(_300ms) -- only needed if chain smth else after, set to 300ms b/c it changes the timeline so leave a buffer until otherwise tested (or wait_until_element is setup)
+    end
 
     -- TODO check if mute button is muted icon? or w/e else to determine if I should click mute the first time?
 end
