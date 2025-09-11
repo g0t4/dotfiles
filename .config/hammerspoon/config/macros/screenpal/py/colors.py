@@ -6,8 +6,8 @@ from pathlib import Path
 import os
 
 # this is just to sample colors for timeline detection, if SPAL updates you'll need to do this again, use this file as a guide
-parent_dir = Path(os.getenv("WES_DOTFILES") or "") / ".config/hammerspoon/config/macros/screenpal/py"
-file = parent_dir / "timeline03a.png"
+samples_dir = Path(os.getenv("WES_DOTFILES") or "") / ".config/hammerspoon/config/macros/screenpal/py/samples"
+file = samples_dir / "timeline03a.png"
 
 
 cv_image = cv.imread(str(file), cv.IMREAD_COLOR)  # BGR
