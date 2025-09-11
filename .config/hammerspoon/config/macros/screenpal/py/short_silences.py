@@ -43,16 +43,13 @@ def get_short_silences():
         # PRN why the !=0 in the ChatGPT example
         # print(f'{np.flatnonzero(np.diff(padded)!=0)=}')
         # print(f'{np.flatnonzero(diff != 0)=}')
-        runs = [(edges[i], edges[i + 1] - 1) for i in range(0, len(edges), 2)]
-        # print("## runs:")
-        # for r in runs:
-        #     print(r)
-        return runs
+        ranges = [(edges[i], edges[i + 1] - 1) for i in range(0, len(edges), 2)]
+        return ranges
 
-    runs = scan_for_all_short_silences(hunt_mask_CLOSED)
+    ranges = scan_for_all_short_silences(hunt_mask_CLOSED)
 
     if DEBUG:
-        built = build_range_mask(runs, image)
+        built = build_range_mask(ranges, image)
 
         full = [
             display_mask_only(image, timeline_mask),
@@ -76,7 +73,7 @@ def get_short_silences():
                 # divide by 2 for non-retina resolution
                 "x_start": int(x_start / 2),
                 "x_end": int(x_end / 2),
-            } for x_start, x_end in runs \
+            } for x_start, x_end in ranges \
                if x_start < x_end
         ]
     }
