@@ -60,25 +60,27 @@ def get_short_silences():
         #   use morphology to avoid flecks interfering?
         #
         pink = np.array([198, 74, 218])  # BGR pink top shiny part (row 8, index 7th)
-        pink_mask = color_mask(image, pink, 8)
-        for i in range(0, 10):
-            row = pink_mask[i]
-            if np.sum(row) > 0:
-                print(i)
-                # print(f'{row8[580]=}')
-                # print(f'{row8[576]=}')
-                # print(f'{row8[575]=}')
-                # print(f'{row8[573]=}')
-                re = np.reshape(row, [-1, 20])
-                print(f'{re=}')
-                for r in re:
-                    print(r)
-        # indices_min = np.argmin(row8)
-        # indices_max = np.argmax(row8)
-        # print(f'{indices_min=}')
-        # print(f'{indices_max=}')
-        # print(f'{np.min(indices_max)=}')  # 577
-        # print(f'{np.max(indices_max)=}')  # 810
+        pink_mask = color_mask(image, pink, 4)
+        row8 = pink_mask[5]  # row 7 - 2 for border pixels removed when image loaded
+        # 577 first 1-based => - 2 (border) - 1 (0-based) = 574
+        print(f'{row8[578]=}')  # col # 578 had first pixel in mask
+        print(f'{row8[577]=}')
+        print(f'{row8[576]=}')
+        print(f'{row8[575]=}')
+        # 810 max estimate
+        #  actual => 807 == col # 808!
+
+        # Assuming row8 is your 1D numpy array with 3500 columns
+        non_zero_indices = np.nonzero(row8)[0]
+        if len(non_zero_indices) > 0:
+            min_index = np.min(non_zero_indices)
+            max_index = np.max(non_zero_indices)
+            print(f'{min_index=}')
+            print(f'{max_index=}')
+        else:
+            min_index = max_index = None
+
+        scan_mask(pink_mask)
 
         full = [
             display_mask_only(image, pink_mask, pink),

@@ -74,3 +74,26 @@ image = load_image()
 tolerance = 4
 timeline_mask = color_mask(image, colors_bgr.timeline_bg, tolerance)  # leave so you can come back to this later for additional detection (i.e. unmarked silences, < 1 second)
 playhead_mask = color_mask(image, colors_bgr.playhead, tolerance)
+
+def scan_mask(mask):
+    """
+    best for masks with few pixels "turned on"
+    i.e. to find playhead,
+    or volume add tool shiny top border
+    """
+
+    for i in range(len(mask)):
+        row = mask[i]
+        if np.sum(row) == 0:
+            # only print rows with a non-zero value
+            continue
+        print("row: i=", i)
+        cols_per_line = 20
+        re = np.reshape(row, [-1, cols_per_line])
+        for i, r in enumerate(re):
+            if np.sum(r) == 0:
+                # PRN skip all zeros
+                continue
+            start_col = cols_per_line * i
+            print(f"  col: {start_col}:")
+            print(f"    {r}")
