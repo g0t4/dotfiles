@@ -48,6 +48,27 @@ def get_short_silences():
 
     ranges = detect_short_silences(hunt_mask_CLOSED)
 
+    pink = np.array([198, 74, 218])  # BGR pink top shiny part (row 8, index 7th)
+    pink_mask = color_mask(image, pink, 4)
+
+    def detect_volume_add_tool(image):
+        row8 = pink_mask[5]  # row 7 - 2 for border pixels removed when image loaded
+        # 577 first 1-based => - 2 (border) - 1 (0-based) = 574
+        #  actual => 807 == col # 808!
+        # scan_mask(pink_mask)
+
+        # Assuming row8 is your 1D numpy array with 3500 columns
+        non_zero_indices = np.nonzero(row8)[0]
+        min_index = None
+        max_index = None
+        if len(non_zero_indices) > 0:
+            min_index = np.min(non_zero_indices)
+            max_index = np.max(non_zero_indices)
+
+        return min_index, max_index
+
+    min_index, max_index = detect_volume_add_tool(image)
+
     if DEBUG:
         built = build_range_mask(ranges, image)
 
@@ -59,28 +80,6 @@ def get_short_silences():
         #   any constraint on how far apart?
         #   use morphology to avoid flecks interfering?
         #
-        pink = np.array([198, 74, 218])  # BGR pink top shiny part (row 8, index 7th)
-        pink_mask = color_mask(image, pink, 4)
-        row8 = pink_mask[5]  # row 7 - 2 for border pixels removed when image loaded
-        # 577 first 1-based => - 2 (border) - 1 (0-based) = 574
-        print(f'{row8[578]=}')  # col # 578 had first pixel in mask
-        print(f'{row8[577]=}')
-        print(f'{row8[576]=}')
-        print(f'{row8[575]=}')
-        # 810 max estimate
-        #  actual => 807 == col # 808!
-
-        # Assuming row8 is your 1D numpy array with 3500 columns
-        non_zero_indices = np.nonzero(row8)[0]
-        if len(non_zero_indices) > 0:
-            min_index = np.min(non_zero_indices)
-            max_index = np.max(non_zero_indices)
-            print(f'{min_index=}')
-            print(f'{max_index=}')
-        else:
-            min_index = max_index = None
-
-        scan_mask(pink_mask)
 
         full = [
             display_mask_only(image, pink_mask, pink),
@@ -107,8 +106,16 @@ def get_short_silences():
                 "x_end": int(x_end / 2),
             } for x_start, x_end in ranges \
                if x_start < x_end
-        ]
+        ],
+        "tool": {}
     }
+
+    if min_index is not None and max_index is not None:
+        results["tool"] = {
+            "type": "volume_add_tool",
+            "x_start": int(min_index / 2),
+            "x_end": int(max_index / 2),
+        }
 
     # PRN hardcode results for test case
     if DEBUG:
