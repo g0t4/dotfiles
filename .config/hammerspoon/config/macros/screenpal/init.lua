@@ -416,7 +416,6 @@ function show_silences(win, silences)
     -- regular_silences = { { x_end = 1132, x_start = 1034 }, { x_end = 1372, x_start = 1223 }, { x_end = 1687, x_start = 1562 } }
 
     local timeline = win:timeline_controller()
-    local _playhead_timeline_relative_x = timeline._playhead_timeline_relative_x
     local timeline_frame = timeline:get_timeline_frame()
     local canvas = hs.canvas.new(timeline_frame)
     assert(canvas)
@@ -429,7 +428,8 @@ function show_silences(win, silences)
         if width > 0 then
             local fill_color = { red = 1, green = 0, blue = 0, alpha = 0.3 }
             local border_color = { red = 1, green = 0, blue = 0, alpha = 1 }
-            local is_after_playhead = _playhead_timeline_relative_x ~= nil and silence.x_start > _playhead_timeline_relative_x
+            local is_after_playhead = timeline._playhead_timeline_relative_x ~= nil
+                and silence.x_start > timeline._playhead_timeline_relative_x
             if is_after_playhead then
                 fill_color = { red = 1, green = 1, blue = 0, alpha = 0.3 }
                 border_color = { red = 1, green = 1, blue = 0, alpha = 1 }

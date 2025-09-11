@@ -2,7 +2,7 @@
 ---@field _timeline_frame AXFrame
 ---@field _playhead_window_frame AXFrame
 ---@field _playhead_screen_x number
----@field _playhead_timeline_relative_x number -- TODO make this public? a few uses externally that seem fine (i.e. showing detected silence ranges)
+---@field _playhead_timeline_relative_x? number -- TODO make this public? a few uses externally that seem fine (i.e. showing detected silence ranges)
 ---@field _pixels_per_second? number
 local TimelineController = {}
 
