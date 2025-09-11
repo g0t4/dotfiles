@@ -50,6 +50,8 @@ class TimelineColorsBGR(NamedTuple):
     timeline_bg: np.ndarray
     silence_gray: np.ndarray
     playhead: np.ndarray
+    insert_bg: np.ndarray
+    # PRN figure out if insert existing has same colors as insert new recording?
 
 # FYI use colors.py to deterine colors to use and then inline values here:
 
@@ -58,6 +60,7 @@ colors_bgr = TimelineColorsBGR(
     timeline_bg=np.array([41, 19, 16]),
     silence_gray=np.array([57, 37, 34]),
     playhead=np.array([255, 157, 37]),
+    insert_bg=np.array([39, 19, 15]),
 )
 
 # returns 2D array, where each pixel is either 0 or 255
@@ -74,3 +77,4 @@ image = load_image()
 tolerance = 4
 timeline_mask = color_mask(image, colors_bgr.timeline_bg, tolerance)  # leave so you can come back to this later for additional detection (i.e. unmarked silences, < 1 second)
 playhead_mask = color_mask(image, colors_bgr.playhead, tolerance)
+insert_mask = color_mask(image, colors_bgr.insert_bg, tolerance)  # PRN adjust tolernace for gradient across at least bottom half
