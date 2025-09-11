@@ -20,9 +20,6 @@ def get_short_silences():
         return int(cols[0]) if cols.size > 0 else None
 
     playhead_leftmost_index = find_playhead_x(playhead_mask)
-    # TODO! will there be any issues if playhead is NOT on a short silence range?
-    #  it might amount to enough for a tiny short silence range that I would probably exclude anyways :)
-    #    I can fix when I get to the select logic later today
 
     hunt_mask = cv.bitwise_or(timeline_mask, playhead_mask)
     hunt_mask_CLOSED = cv.morphologyEx(hunt_mask, cv.MORPH_CLOSE, np.ones((3, 3), np.uint8))
