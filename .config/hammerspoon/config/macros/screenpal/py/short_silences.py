@@ -52,12 +52,17 @@ def get_short_silences():
     pink_mask = color_mask(image, pink, 4)
 
     def detect_volume_add_tool(image):
-        row8 = pink_mask[5]  # row is 7th in 0-based index, then minus 2 for border pixels (removed in load_image)
-        # 577 first 1-based => - 2 (border) - 1 (0-based) = 574
-        #  actual => 807 == col # 808!
-        # scan_mask(pink_mask)
+        # color in row 8 works, however playhead interferes if overlapping:
+        #  1. union playhead mask (but would find bogus range of just playhead, would need to remove)
+        #     OR allow if playhead overlaps and is the only missing pixels in range
+        #  2. take min/max column == range
+        #     this worked in initial test case, lets see how well it does in reality
 
-        # Assuming row8 is your 1D numpy array with 3500 columns
+        # row is 7th in 0-based index, then minus 2 for border pixels (removed in load_image)
+        row8 = pink_mask[5]
+
+        # FYI if needed, scan_mask(pink_mask)
+
         non_zero_indices = np.nonzero(row8)[0]
         min_index = None
         max_index = None
@@ -71,15 +76,6 @@ def get_short_silences():
 
     if DEBUG:
         built = build_range_mask(ranges, image)
-
-        # color in row 8 works, however playhead interferes... need to union playhead mask
-        #   OR allow playhead between to join sections more than 1 pixel?
-        #   ALSO it is the triangle part of the playhead on top that intersects so not just 2 pixels
-        #   OR, just know that you CANNOT ADD / EDIT two ranges at a time so this has to be one range!
-        #   min(col) => max(col) ...  in row 8 or just overall?
-        #   any constraint on how far apart?
-        #   use morphology to avoid flecks interfering?
-        #
 
         full = [
             display_mask_only(image, pink_mask, pink),
