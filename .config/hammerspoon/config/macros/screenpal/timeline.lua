@@ -21,6 +21,7 @@ function TimelineController:new(editor_window, ok_to_skip_pps)
     ok_to_skip_pps = ok_to_skip_pps or false
 
     local _timeline_frame = editor_window._btn_position_slider:axFrame()
+    self._timeline_frame = _timeline_frame
 
     -- FYI right now if playhead is off screen, this blows up intentionally... which is fine b/c
     --  I don't see much of a need to edit w/o playhead on-screen... most I could do is move it on screen if its off
@@ -31,7 +32,6 @@ function TimelineController:new(editor_window, ok_to_skip_pps)
     local _playhead_screen_x = _playhead_window_frame.x + _playhead_window_frame.w / 2
     local _playhead_timeline_relative_x = _playhead_screen_x - _timeline_frame.x
 
-    self._timeline_frame = _timeline_frame
     self._playhead_window = _playhead_window
     self._playhead_window_frame = _playhead_window_frame
     self._playhead_screen_x = _playhead_screen_x
