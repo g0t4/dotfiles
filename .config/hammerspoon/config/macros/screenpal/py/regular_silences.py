@@ -44,7 +44,6 @@ def get_regular_silences():
     # see what happens with real usage and then add if I encounter issues
 
     def merge_if_one_pixel_apart(accum, current):
-        # TODO! I switched to 4k so make sure this still works!!
         # print(f'{accum=}   {current=}')
         accum = accum or []
         current = current.copy()
@@ -70,9 +69,6 @@ def get_regular_silences():
     results = {
         "silences": [
             {
-                # FYI for now off by one won't matter much but I should resolve this
-                # TODO! MAKE SURE you are using end inclusivity correctly
-                # TODO!  IOTW figure out which you are using and rename your DTO here
                 "x_start": int(x_start / 2),  # int() is serializable
                 "x_end": int(x_end / 2),
             } for x_start, x_end in merged_x_ranges
