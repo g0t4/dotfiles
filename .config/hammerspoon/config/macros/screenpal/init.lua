@@ -469,6 +469,9 @@ function act_on_silence(win, silence, action_keystroke)
     -- set padding and what not AS YOU EDIT
 
     local timeline_relative_x = silence.x_start -- + 10
+    if action_keystroke == CUT then
+        timeline_relative_x = timeline_relative_x + 20
+    end
     local timeline = win:timeline_controller_ok_skip_pps()
     timeline:move_playhead_to(timeline_relative_x)
 
@@ -479,6 +482,9 @@ function act_on_silence(win, silence, action_keystroke)
     hs.timer.usleep(100000)
 
     timeline_relative_x = silence.x_end -- - 10
+    if action_keystroke == CUT then
+        timeline_relative_x = timeline_relative_x - 20
+    end
     timeline:move_playhead_to(timeline_relative_x)
     hs.eventtap.keyStroke({}, "e", 0, win.app)
 
