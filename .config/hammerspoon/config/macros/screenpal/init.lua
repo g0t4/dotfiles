@@ -621,7 +621,7 @@ function StreamDeck_ScreenPal_ShowSilenceRegions()
     end)
 end
 
-function StreamDeckScreenPalTimelineZoomAndJumpToStart()
+function StreamDeck_ScreenPal_Timeline_ZoomAndJumpToStart()
     -- FYI using run_async (coroutines under hood) to avoid blocking (i.e. during sleep calls)
     run_async(function()
         local win = get_cached_editor_window()
@@ -638,7 +638,7 @@ function StreamDeckScreenPalTimelineZoomAndJumpToStart()
     end)
 end
 
-function StreamDeckScreenPalTimelineZoomAndJumpToEnd()
+function StreamDeck_ScreenPal_Timeline_ZoomAndJumpToEnd()
     run_async(function()
         local win = get_cached_editor_window()
         win:zoom_off()
