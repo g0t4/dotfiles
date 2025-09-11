@@ -421,6 +421,8 @@ function show_silences(win, silences)
     -- example silences (also for testing):
     -- regular_silences = { { x_end = 1132, x_start = 1034 }, { x_end = 1372, x_start = 1223 }, { x_end = 1687, x_start = 1562 } }
 
+    -- TODO add a show volume add tool canvas to the show silences debug tool (show above timeline?)
+
     local timeline = win:timeline_controller()
     local timeline_frame = timeline:get_timeline_frame()
     local canvas = hs.canvas.new(timeline_frame)
