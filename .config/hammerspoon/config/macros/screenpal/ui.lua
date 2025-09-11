@@ -69,24 +69,11 @@ function AppWindows:editor_window_or_throw()
     error("No Screenpal editor window found")
 end
 
----@return hs.axuielement editor_window
-function AppWindows:get_playhead_window_or_throw()
+---@return hs.axuielement? editor_window -- None means the playhead is off-screen
+function AppWindows:get_playhead_window()
     -- app:window(2)
-    -- AXFocused: false<bool>
-    -- AXMain: false<bool>
-    -- AXMinimized: false<bool>
-    -- AXModal: false<bool>
     -- AXRoleDescription: window<string>
     -- AXSections: [1: SectionUniqueID: AXContent, SectionObject: hs.axuielement: AXTextField (0x60000ac6b1f8), SectionDescription: Content]
     -- AXTitle: SOM-FloatingWindow-Type=edit2.posbar-ZOrder=1(Undefined+1)<string>
-    local win = self:get_window_by_title_pattern("^SOM%-FloatingWindow%-Type=edit2.posbar%-ZOrder=1")
-    -- if not present, should I try once to load? like what if windows list cached before it was ever visible?
-    if win then return win end
-    error("No playhead window found")
+    return self:get_window_by_title_pattern("^SOM%-FloatingWindow%-Type=edit2.posbar%-ZOrder=1")
 end
-
--- Example usage:
--- local app = get_screenpal_app_element_or_throw()
--- local spCache = ScreenPalCache:new(app)
--- local editorWin = spCache:getEditorWindowOrThrow()
--- -- use editorWin as needed.
