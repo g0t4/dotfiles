@@ -502,6 +502,57 @@ local function detect_silences(callback)
     end)
 end
 
+---@param win ScreenPalEditorWindow
+local function move_playhead_to_silence(win, silence)
+    local timeline_relative_x = silence.x_start
+    local timeline = win:timeline_controller_ok_skip_pps()
+    timeline:move_playhead_to(timeline_relative_x)
+end
+
+function StreamDeck_ScreenPal_JumpThisSilence()
+    run_async(function()
+        ---@type ScreenPalEditorWindow, SilencesController
+        local win, silences = syncify(detect_silences)
+        local silence = silences:get_this_silence()
+        move_playhead_to_silence(win, silence)
+    end)
+end
+
+function StreamDeck_ScreenPal_JumpPrevSilence()
+    run_async(function()
+        ---@type ScreenPalEditorWindow, SilencesController
+        local win, silences = syncify(detect_silences)
+        local silence = silences:get_prev_silence()
+        move_playhead_to_silence(win, silence)
+    end)
+end
+
+function StreamDeck_ScreenPal_JumpNextSilence()
+    -- TODO handle jump again doesn't stay at current silence?
+    --  can happen if playhead goes to frame before silence starts
+    run_async(function()
+        ---@type ScreenPalEditorWindow, SilencesController
+        local win, silences = syncify(detect_silences)
+        local silence = silences:get_next_silence()
+        move_playhead_to_silence(win, silence)
+        --
+        --
+        -- actually I think I am liking how it moves right to front most frame even if slightly before silence... it is catching clicks! leave this
+        -- local current_playhead_x = timeline:get_current_playhead_timeline_relative_x()
+        -- print("jumped playhead_x to " .. current_playhead_x
+        --     .. " w.r.t. silence: " .. hs.inspect(silence))
+        -- -- yup in one case playhead ends up just left of silence start (by 0.5), rounding might fix some of these too
+        -- if current_playhead_x < silence.x_start then
+        --     print("PLAYHEAD LANDED BEFORE SILENCE, COULD ARROW OVER TO FIX THIS")
+        -- end
+    end)
+end
+
+function StreamDeck_ScreenPal_PlayNextSilence()
+    -- TODO PLAY THIS, NEXT, PREV silence helpers
+    -- when done jump back to start of that position or silence?
+end
+
 function StreamDeck_ScreenPal_ActOnPrevSilence(action_keystroke)
     run_async(function()
         ---@type ScreenPalEditorWindow, SilencesController

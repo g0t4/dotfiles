@@ -59,6 +59,12 @@ local function _get_current_playhead_screen_x(self)
     --   the names are hidden away in this class, so who cares?
 end
 
+--- Get UPDATED position, right now, relative to start of timeline
+function TimelineController:get_current_playhead_timeline_relative_x()
+    local current_playhead_screen_x = _get_current_playhead_screen_x(self)
+    return current_playhead_screen_x - self._timeline_frame.x
+end
+
 ---@param desired_playhead_screen_x number
 ---@param self TimelineController
 ---@return boolean

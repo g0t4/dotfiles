@@ -53,7 +53,7 @@ function SilencesController:get_silences_that_start_after_playhead()
     -- that START after the playhead
     local playhead_x = self._timeline._playhead_timeline_relative_x
     return vim.iter(self.all):filter(function(silence)
-        return playhead_x <= silence.x_start
+        return playhead_x < silence.x_start
     end)
 end
 
@@ -61,7 +61,7 @@ function SilencesController:get_silences_that_end_before_playhead()
     -- that END before the playhead
     local playhead_x = self._timeline._playhead_timeline_relative_x
     return vim.iter(self.all):filter(function(silence)
-        return silence.x_end <= playhead_x
+        return silence.x_end < playhead_x
     end)
 end
 
