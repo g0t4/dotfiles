@@ -51,7 +51,19 @@ def get_short_silences():
     if DEBUG:
         built = build_range_mask(ranges, image)
 
+        # color in row 8 works, however playhead interferes... need to union playhead mask
+        #   OR allow playhead between to join sections more than 1 pixel?
+        #   ALSO it is the triangle part of the playhead on top that intersects so not just 2 pixels
+        #   OR, just know that you CANNOT ADD / EDIT two ranges at a time so this has to be one range!
+        #   min(col) => max(col) ...  in row 8 or just overall?
+        #   any constraint on how far apart?
+        #   use morphology to avoid flecks interfering?
+        #
+        pink = np.array([198, 74, 218])  # BGR pink top shiny part (row 8, index 7th)
+        pink_mask = color_mask(image, pink, 8)
+
         full = [
+            display_mask_only(image, pink_mask),
             display_mask_only(image, timeline_mask),
             image,
             built,
