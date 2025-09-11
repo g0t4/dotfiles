@@ -47,19 +47,22 @@ sample_playhead = cv_image[3, 1531]
 print(f'{sample_playhead=}')
 # sample_playhead=array([255, 157,  37], dtype=uint8)
 
-# INSERT NEW
-cv_img_insert_new = cv.imread(str(samples_dir / "insert-new-recording01.png"))
-sample_timeline_bg = cv_img_insert_new[60, 300]
-print(sample_timeline_bg)
-# * ~60y down, 300x (in short silence section, no waveform)
-#0E1328 DCM (R=14, G=19, B=40) approximate
-# BGR = (40, 19, 14) DCM
-# [39 19 15] opencv * USE THIS VALUE
-#
-# * ~90y down, 300x
-# #0F132B (R=15 G=19 B=43)
-# #0F132B
-#
-# * ~40y down, 300x
-# #10172F (R=16 G=23 B=47)
-#   FYI could use tight R tolerance of say 3, 6 for G and 10 for B ?
+# FYI NOT USING dedicated insert_bg_mask for now
+# # INSERT NEW (BASICALLY SAME COLOR AS TIMELINE BG! just added gradient and SLIGHTLY diff blue!!!
+# #   in fact my timeline mask MATCHES the same as a new insert_mask... so I can probably skip the insert mask!
+# cv_img_insert_new = cv.imread(str(samples_dir / "insert-new-recording01.png"))
+# sample_timeline_bg = cv_img_insert_new[60, 300]
+# print(sample_timeline_bg)
+# # * ~60y down, 300x (in short silence section, no waveform)
+# #0E1328 DCM (R=14, G=19, B=40) approximate
+# # BGR = (40, 19, 14) DCM
+# # [39 19 15] opencv * USE THIS VALUE
+# #
+# # * ~90y down, 300x
+# # #0F132B (R=15 G=19 B=43)
+# #   FYI THIS IS SAME EXACT READING as SOLID COLOR FOR regular TIMELINE BG! (see above)...
+# #   TLDR I DO NOT NEED A SPECIAL NEW MASK FOR insert_bg unless I want to maybe match the gradient!!!
+# #
+# # * ~40y down, 300x
+# # #10172F (R=16 G=23 B=47)
+# #   FYI could use tight R tolerance of say 3, 6 for G and 10 for B ?

@@ -1,6 +1,9 @@
-## Insert New Recording is different bg blue and gradient
+## Insert New/Existing => use timeline_bg too!!
 
-IIAC same for both Insert New and Insert Existing Recordings.
+- SUMMARY:
+    - TLDR => just scan bottom half of timeline for short silences (not full 100%) and existing timeline_bg works
+    - WHY? b/c bottom of gradient is SAME as timeline bg color!
+    - AND, timline_bg + current tolerance matches nearly bottom 60% of Insert New Regions! (during short silences)
 
 ```sh
 # examples:
