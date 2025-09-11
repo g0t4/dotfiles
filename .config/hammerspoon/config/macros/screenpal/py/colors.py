@@ -66,3 +66,11 @@ print(f'{sample_playhead=}')
 # # * ~40y down, 300x
 # # #10172F (R=16 G=23 B=47)
 # #   FYI could use tight R tolerance of say 3, 6 for G and 10 for B ?
+
+# pink-volume-add-open.png
+cv_img_pink_volume_add = cv.imread(str(samples_dir / "pink-volume-add-open.png"))
+# x=650, y=8 (index 7) (exactly 8th row (index 7th) from top is brightest and right above/below are much darker
+#    can do tight tolerance by masking row 8 only!
+#ED39CC DCM (R=237, G=57, B=204) # bigger discrepency vs other samples (DCM vs opencv)
+print(f'{cv_img_pink_volume_add[7, 650]=}')  # BGR [198,  74, 218] row 8 == offset 7
+print(f'{cv_img_pink_volume_add[8, 650]=}')  # BGR [142,  59, 146] row 9
