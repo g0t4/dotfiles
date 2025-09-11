@@ -66,6 +66,8 @@ def get_short_silences():
         built = build_range_mask(runs, image)
 
         full = [
+            # timeline_mask,
+            display_mask_only(image, insert_mask),
             image,
             built,
         ]
