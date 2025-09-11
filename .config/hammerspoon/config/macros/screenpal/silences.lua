@@ -2,18 +2,19 @@
 ---@field regular Silence[]
 ---@field short Silence[]
 ---@field all Silence[]
+---@field hack_detected DetectionResults -- for experimenting, redesign later
 ---@field _timeline TimelineController -- mostly for internal use
 local SilencesController = {}
 
----@param results DetectionResults
+---@param detected DetectionResults
 ---@param timeline TimelineController
 ---@return SilencesController
-function SilencesController:new(results, timeline)
+function SilencesController:new(detected, timeline)
     ---@type Silence[]
-    local regular_shallow_clone = { table.unpack(results.regular_silences) }
+    local regular_shallow_clone = { table.unpack(detected.regular_silences) }
 
     ---@type Silence[]
-    local short_shallow_clone = vim.iter(results.short_silences)
+    local short_shallow_clone = vim.iter(detected.short_silences)
         :filter(function(s)
             --   can always put in a new list if useful
             --   zoom2 => 3 pixels per frame
@@ -42,6 +43,7 @@ function SilencesController:new(results, timeline)
         short = short_shallow_clone,
         all = all,
         _timeline = timeline,
+        hack_detected = detected,
     }
 
     setmetatable(obj, { __index = self })
