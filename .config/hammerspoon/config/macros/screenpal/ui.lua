@@ -68,12 +68,3 @@ function AppWindows:editor_window_or_throw()
     if win then return win end
     error("No Screenpal editor window found")
 end
-
----@return hs.axuielement? editor_window -- None means the playhead is off-screen
-function AppWindows:get_playhead_window()
-    -- app:window(2)
-    -- AXRoleDescription: window<string>
-    -- AXSections: [1: SectionUniqueID: AXContent, SectionObject: hs.axuielement: AXTextField (0x60000ac6b1f8), SectionDescription: Content]
-    -- AXTitle: SOM-FloatingWindow-Type=edit2.posbar-ZOrder=1(Undefined+1)<string>
-    return self:get_window_by_title_pattern("^SOM%-FloatingWindow%-Type=edit2.posbar%-ZOrder=1")
-end

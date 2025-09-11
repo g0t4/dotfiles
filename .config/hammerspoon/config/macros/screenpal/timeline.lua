@@ -6,6 +6,15 @@
 ---@field _pixels_per_second? number
 local TimelineController = {}
 
+---@param app_windows AppWindows
+---@return hs.axuielement? editor_window -- None means the playhead is off-screen
+local function get_playhead_window(app_windows)
+    -- app:window(2)
+    -- AXRoleDescription: window<string>
+    -- AXTitle: SOM-FloatingWindow-Type=edit2.posbar-ZOrder=1(Undefined+1)<string>
+    return app_windows:get_window_by_title_pattern("^SOM%-FloatingWindow%-Type=edit2.posbar%-ZOrder=1")
+end
+
 ---@param editor_window ScreenPalEditorWindow
 ---@param self TimelineController
 function TimelineController:new(editor_window, ok_to_skip_pps)
@@ -15,7 +24,7 @@ function TimelineController:new(editor_window, ok_to_skip_pps)
 
     -- FYI right now if playhead is off screen, this blows up intentionally... which is fine b/c
     --  I don't see much of a need to edit w/o playhead on-screen... most I could do is move it on screen if its off
-    local _playhead_window = editor_window.windows:get_playhead_window()
+    local _playhead_window = get_playhead_window(editor_window.windows)
     -- DO NOT get frames until UI is stable, zoome din frame is different than zoomed out
     local _playhead_window_frame = _playhead_window:axFrame()
 
