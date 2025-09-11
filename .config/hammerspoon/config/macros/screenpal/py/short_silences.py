@@ -12,16 +12,6 @@ DEBUG = __name__ == "__main__"
 
 def get_short_silences():
 
-    def find_playhead_x(mask: np.ndarray) -> int | None:
-        # returns LEFTMOST edge of playhead, PRN could find centermost column
-        # mask is 2D, nonzero (255) means "on"
-        col_has_all = (mask != 0).all(axis=0)  # boolean per column
-        cols = np.where(col_has_all)[0]
-        # confirmed returns None if not on screen
-        return int(cols[0]) if cols.size > 0 else None
-
-    playhead_leftmost_index = find_playhead_x(playhead_mask)
-
     hunt_mask = cv.bitwise_or(timeline_mask, playhead_mask)
     hunt_mask_CLOSED = cv.morphologyEx(hunt_mask, cv.MORPH_CLOSE, np.ones((3, 3), np.uint8))
 
@@ -81,9 +71,6 @@ def get_short_silences():
 
     # * serialize response to json in STDOUT
     results = {
-        # PRN find playhead_center_index if this needs to be accurate
-        # PRN for now I may use this in lua to compare captured vs actual as canary
-        "playhead_x": playhead_leftmost_index,
         "short_silences": [
             {
                 # FYI for now off by one won't matter much but I should resolve this
@@ -103,12 +90,11 @@ def get_short_silences():
         if file == "samples/playhead-darkblue1.png":
             # PRN use unit test assertions so we can see what differs
             # TODO verify these are correct values (I just captured these off of the last test run I did by inspecting the image overlays)
-            expected = {"playhead_x": 1452, "short_silences": [{"x_start": 4, "x_end": 5}, {"x_start": 31, "x_end": 32}, {"x_start": 217, "x_end": 218}, {"x_start": 319, "x_end": 320}, {"x_start": 376, "x_end": 378}, {"x_start": 403,
+            expected = {"short_silences": [{"x_start": 4, "x_end": 5}, {"x_start": 31, "x_end": 32}, {"x_start": 217, "x_end": 218}, {"x_start": 319, "x_end": 320}, {"x_start": 376, "x_end": 378}, {"x_start": 403,
             "x_end": 404}, {"x_start": 703, "x_end": 743}, {"x_start": 1024, "x_end": 1025}, {"x_start": 1228, "x_end": 1229}, {"x_start": 1423, "x_end": 1464}, {"x_start": 1561, "x_end": 1562}, {"x_start": 1741, "x_end":
             1744}]} # yapf: disable
             # TODO verify that the x_end is what I want... zoom in on a few
             # TODO also verify start is lined up by zooming in and checking a few
-            assert results["playhead_x"] == expected["playhead_x"]
             assert results["short_silences"] == expected["short_silences"]
             print("\n[bold underline green]MATCHED SHORT SILENCE TEST CASE!")
 
