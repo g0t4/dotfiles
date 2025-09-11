@@ -458,6 +458,29 @@ function show_silences(win, silences)
             })
         end
     end
+
+    -- Draw tool canvas if defined
+    if silences.hack_detected.tool then
+        local tool = silences.hack_detected.tool
+        local tool_width = tool.x_end - tool.x_start
+        if tool_width > 0 then
+            local tool_fill_color = { red = 0, green = 1, blue = 0, alpha = 0.3 }
+            local tool_border_color = { red = 0, green = 1, blue = 0, alpha = 1 }
+            table.insert(elements, {
+                type = "rectangle",
+                action = "fill",
+                fillColor = tool_fill_color,
+                frame = { x = tool.x_start, y = 0, w = tool_width, h = timeline_frame.h }
+            })
+            table.insert(elements, {
+                type = "rectangle",
+                action = "stroke",
+                strokeColor = tool_border_color,
+                frame = { x = tool.x_start, y = 0, w = tool_width, h = timeline_frame.h }
+            })
+        end
+    end
+
     canvas:appendElements(elements)
     silences_canvas = canvas
 end
