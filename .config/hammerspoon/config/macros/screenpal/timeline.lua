@@ -26,6 +26,11 @@ function TimelineController:new(editor_window, ok_to_skip_pps)
     -- FYI right now if playhead is off screen, this blows up intentionally... which is fine b/c
     --  I don't see much of a need to edit w/o playhead on-screen... most I could do is move it on screen if its off
     local _playhead_window = get_playhead_window(editor_window.windows)
+    if _playhead_window == nil then
+        -- FYI downstream logic will break...  but this warning should be sufficient
+        print("WARNING: PLAYHEAD IS NOT ON-SCREEN")
+        return self
+    end
     -- DO NOT get frames until UI is stable, zoome din frame is different than zoomed out
     local _playhead_window_frame = _playhead_window:axFrame()
 
