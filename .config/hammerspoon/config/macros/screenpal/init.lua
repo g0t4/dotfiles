@@ -469,9 +469,11 @@ function act_on_silence(win, silence, action_keystroke)
 
     -- set padding and what not AS YOU EDIT
 
-    local timeline_relative_x = silence.x_start -- + 10
+    local timeline_relative_x = silence.x_start
     if action_keystroke == CUT then
-        timeline_relative_x = timeline_relative_x + 20
+        if silence.x_start ~= 0 then
+            timeline_relative_x = timeline_relative_x + 20
+        end
     end
     local timeline = win:timeline_controller_ok_skip_pps()
     timeline:move_playhead_to(timeline_relative_x)
@@ -484,10 +486,19 @@ function act_on_silence(win, silence, action_keystroke)
 
     timeline_relative_x = silence.x_end -- - 10
     if action_keystroke == CUT then
-        timeline_relative_x = timeline_relative_x - 20
+        if silence.x_start ~= 0 then
+            timeline_relative_x = timeline_relative_x - 20
+        end
     end
     timeline:move_playhead_to(timeline_relative_x)
     hs.eventtap.keyStroke({}, "e", 0, win.app)
+
+    if action_keystroke == CUT and silence.x_start == 0 then
+        -- arrow left to reduce one frame from end of range, which is my standard cut at the start of a clip
+        hs.eventtap.keyStroke({}, "left", 0, win.app)
+        hs.timer.usleep(100000)
+    end
+
 
     -- TODO check if mute button is muted icon? or w/e else to determine if I should click mute the first time?
 end
