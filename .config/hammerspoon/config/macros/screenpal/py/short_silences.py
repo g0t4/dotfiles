@@ -67,7 +67,6 @@ def get_short_silences():
 
         full = [
             display_mask_only(image, timeline_mask),
-            # display_mask_only(image, insert_mask),
             image,
             built,
         ]
