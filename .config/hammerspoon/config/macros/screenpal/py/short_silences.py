@@ -52,7 +52,7 @@ def get_short_silences():
     pink_mask = color_mask(image, pink, 4)
 
     def detect_volume_add_tool(image):
-        row8 = pink_mask[5]  # row 7 - 2 for border pixels removed when image loaded
+        row8 = pink_mask[5]  # row is 7th in 0-based index, then minus 2 for border pixels (removed in load_image)
         # 577 first 1-based => - 2 (border) - 1 (0-based) = 574
         #  actual => 807 == col # 808!
         # scan_mask(pink_mask)
@@ -111,6 +111,8 @@ def get_short_silences():
     }
 
     if min_index is not None and max_index is not None:
+        # TODO test if volume edit tool range works on pink too
+        # TODO parameterize the search for other colors that I bet use row 8 too!
         results["tool"] = {
             "type": "volume_add_tool",
             "x_start": int(min_index / 2),
@@ -127,6 +129,11 @@ def get_short_silences():
             1744}]} # yapf: disable
             assert results["short_silences"] == expected["short_silences"]
             print("\n[bold underline green]MATCHED SHORT SILENCE TEST CASE!")
+
+        if file == "samples/pink-volume-add-open.png":
+            expected_tool = {"type": "volume_add_tool", "x_start": 289, "x_end": 403}
+            assert results["tool"] == expected_tool
+            print("\n[bold underline green]MATCHED TOOL TEST CASE!")
 
     return results
 
