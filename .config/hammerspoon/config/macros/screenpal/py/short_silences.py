@@ -61,9 +61,27 @@ def get_short_silences():
         #
         pink = np.array([198, 74, 218])  # BGR pink top shiny part (row 8, index 7th)
         pink_mask = color_mask(image, pink, 8)
+        for i in range(0, 10):
+            row = pink_mask[i]
+            if np.sum(row) > 0:
+                print(i)
+                # print(f'{row8[580]=}')
+                # print(f'{row8[576]=}')
+                # print(f'{row8[575]=}')
+                # print(f'{row8[573]=}')
+                re = np.reshape(row, [-1, 20])
+                print(f'{re=}')
+                for r in re:
+                    print(r)
+        # indices_min = np.argmin(row8)
+        # indices_max = np.argmax(row8)
+        # print(f'{indices_min=}')
+        # print(f'{indices_max=}')
+        # print(f'{np.min(indices_max)=}')  # 577
+        # print(f'{np.max(indices_max)=}')  # 810
 
         full = [
-            display_mask_only(image, pink_mask),
+            display_mask_only(image, pink_mask, pink),
             display_mask_only(image, timeline_mask),
             image,
             built,
