@@ -528,7 +528,9 @@ function StreamDeck_ScreenPal_JumpPrevSilence()
 end
 
 function StreamDeck_ScreenPal_JumpNextSilence()
-    -- TODO handle jump again doesn't stay at current silence?
+    -- TODO if last jump was to this silence, then make next pass it
+    --    else can get stuck
+    --
     --  can happen if playhead goes to frame before silence starts
     run_async(function()
         ---@type ScreenPalEditorWindow, SilencesController
