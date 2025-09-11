@@ -27,6 +27,7 @@ function TimelineController:new(editor_window, ok_to_skip_pps)
     --  I don't see much of a need to edit w/o playhead on-screen... most I could do is move it on screen if its off
     local _playhead_window = get_playhead_window(editor_window.windows)
     if _playhead_window == nil then
+        -- TODO revisit playhead fields and mark as appropriate (nil-able)
         -- FYI downstream logic will break...  but this warning should be sufficient
         print("WARNING: PLAYHEAD IS NOT ON-SCREEN")
         return self
