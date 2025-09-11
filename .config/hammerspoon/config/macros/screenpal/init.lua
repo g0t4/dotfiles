@@ -429,7 +429,8 @@ function show_silences(win, silences)
         if width > 0 then
             local fill_color = { red = 1, green = 0, blue = 0, alpha = 0.3 }
             local border_color = { red = 1, green = 0, blue = 0, alpha = 1 }
-            if silence.x_start > _playhead_timeline_relative_x then
+            local is_after_playhead = _playhead_timeline_relative_x ~= nil and silence.x_start > _playhead_timeline_relative_x
+            if is_after_playhead then
                 fill_color = { red = 1, green = 1, blue = 0, alpha = 0.3 }
                 border_color = { red = 1, green = 1, blue = 0, alpha = 1 }
             end
