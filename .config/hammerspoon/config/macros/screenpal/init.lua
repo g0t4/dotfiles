@@ -470,13 +470,13 @@ function show_silences(win, silences)
                 type = "rectangle",
                 action = "fill",
                 fillColor = tool_fill_color,
-                frame = { x = tool.x_start, y = 0, w = tool_width, h = timeline_frame.h }
+                frame = { x = tool.x_start, y = timeline_frame.h / 2, w = tool_width, h = timeline_frame.h }
             })
             table.insert(elements, {
                 type = "rectangle",
                 action = "stroke",
                 strokeColor = tool_border_color,
-                frame = { x = tool.x_start, y = 0, w = tool_width, h = timeline_frame.h }
+                frame = { x = tool.x_start, y = timeline_frame.h / 2, w = tool_width, h = timeline_frame.h }
             })
         end
     end
