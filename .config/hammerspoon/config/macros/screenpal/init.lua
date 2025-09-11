@@ -6,6 +6,11 @@ require("config.macros.screenpal.py.opencv")
 local TimelineController = require('config.macros.screenpal.timeline')
 local SilencesController = require('config.macros.screenpal.silences')
 
+local _200ms = 200000
+local _100ms = 100000
+local _50ms = 50000
+local _10ms = 10000
+
 ---@return hs.axuielement app_element
 local function get_screenpal_app_element_or_throw()
     return get_app_element_or_throw("com.screenpal.app") -- < 1 ms
@@ -170,7 +175,7 @@ function ScreenPalEditorWindow:zoom_on()
 
     -- wait here so you don't want in consumers AND to NOT wait when already zoomed out
     -- hs.timer.waitUntil -- TODO try waitUntil!
-    hs.timer.usleep(200000)
+    hs.timer.usleep(_200ms)
 end
 
 function ScreenPalEditorWindow:zoom_off()
@@ -181,7 +186,7 @@ function ScreenPalEditorWindow:zoom_off()
     hs.eventtap.keyStroke({}, "m", 0, get_screenpal_app_element_or_throw())
 
     -- wait here so you don't want in consumers AND to NOT wait when already zoomed out
-    hs.timer.usleep(200000)
+    hs.timer.usleep(_200ms)
     -- TODO I do not think waitUntil is blocking either so it would let consumer code keep running, right?
     -- PRN loop on usleep and poll something useful to tell you when you can be ready to click in the UI
     -- -- FYI waitUntil is always already 0,0 on first run, so I would need a diff test  to use this
@@ -370,7 +375,7 @@ function ScreenPalEditorWindow:start_cut()
 
     -- PRN see below for notes about waiting until tool is open
     --  for now I am just going to use fixed wait time
-    hs.timer.usleep(50000) -- FYI! 100ms is overkill in my initial testing
+    hs.timer.usleep(_50ms) -- FYI! 100ms is overkill in my initial testing
 
     -- ** closed (cut tool is not open) window, regular toolbar with "Tools" button is visible
     -- app:window(1)
@@ -479,10 +484,10 @@ function act_on_silence(win, silence, action_keystroke)
     timeline:move_playhead_to(timeline_relative_x)
 
     hs.eventtap.keyStroke({}, action_keystroke, 0, win.app)
-    hs.timer.usleep(100000)
+    hs.timer.usleep(_100ms)
 
     hs.eventtap.keyStroke({}, "s", 0, win.app)
-    hs.timer.usleep(100000)
+    hs.timer.usleep(_100ms)
 
     timeline_relative_x = silence.x_end -- - 10
     if action_keystroke == CUT then
@@ -496,7 +501,7 @@ function act_on_silence(win, silence, action_keystroke)
     if action_keystroke == CUT and silence.x_start == 0 then
         -- arrow left to reduce one frame from end of range, which is my standard cut at the start of a clip
         hs.eventtap.keyStroke({}, "left", 0, win.app)
-        hs.timer.usleep(100000)
+        hs.timer.usleep(_100ms)
     end
 
 
@@ -699,7 +704,7 @@ function RETIRED_StreamDeckScreenPalTimelineScrollOrJumpToStart()
                     -- click left-most side of timeline's scrollbar to get to zero
                     hs.eventtap.leftClick({ x = frame.x, y = frame.y + frame.h / 2 })
                     -- hs.eventtap.leftClick({ x = frame.x, y = frame.y + frame.h / 2 }) -- could click twice if value doesn't change
-                    -- hs.timer.usleep(10000) -- don't need pause b/c hs seems to block while clicking
+                    -- hs.timer.usleep(_10ms) -- don't need pause b/c hs seems to block while clicking
                 end
             end
 

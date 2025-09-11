@@ -105,6 +105,8 @@ local function _is_playhead_now_at_screen_x(self, desired_playhead_screen_x)
     end
 end
 
+local _10ms = 10 * 1000
+
 ---avoid fixed pauses!
 ---@param self TimelineController
 ---@param desired_playhead_screen_x number
@@ -113,7 +115,7 @@ local function _wait_until_playhead_at_screen_x(self, desired_playhead_screen_x,
     max_loops = max_loops or 30
     start = get_time()
     for i = 1, max_loops do
-        hs.timer.usleep(10000)
+        hs.timer.usleep(_10ms)
 
         print("  iteration " .. i)
         if _is_playhead_now_at_screen_x(self, desired_playhead_screen_x) then
