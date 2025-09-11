@@ -603,6 +603,7 @@ function wait_for_element(search_func, interval_ms, max_cycles)
     local start = get_time()
     local cycles = 0
     while cycles < max_cycles do
+        -- print("wait_for_element cycle: " .. cycles)
         local elem = search_func()
         if elem then
             print_took("WaitForElement total time:", start)
