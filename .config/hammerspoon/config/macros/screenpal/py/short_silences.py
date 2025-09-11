@@ -31,6 +31,7 @@ def get_short_silences():
     look_end = -1
 
     def scan_for_all_short_silences(mask: np.ndarray):
+        mask = mask[48:, :]  # take 48+ (bottom 50% of mask) for Insert New to match too
         # verify assumption (just to be safe)
         # FYI ends have curved edges, wait until this is an issue... could make mask around curved corners and then pad with neighboring pixels or smth else and add if they are empty nearby or not
         assert np.all((mask == 0) | (mask == 255)), "FAILURE - Mask contains values other than 0 or 255"
