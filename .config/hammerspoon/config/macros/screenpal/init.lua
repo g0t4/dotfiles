@@ -533,6 +533,7 @@ function act_on_silence(win, silence, action_keystroke)
     end
     timeline:move_playhead_to(timeline_relative_x)
     hs.eventtap.keyStroke({}, "e", 0, win.app)
+    -- PRN add pause? so far ok w/o it
 
     if action_keystroke == CUT and silence.x_start == 0 then
         -- * pull back 2 frames from end to avoid cutting into starting audio
@@ -669,7 +670,8 @@ function StreamDeck_ScreenPal_ExpandSelectionRight()
         local tool = silences.hack_detected.tool
         if not tool or not tool.x_end then return end
 
-        next_frame_x_guess_zoom2 = tool.x_end + 6
+        -- TODO move to timeline
+        next_frame_x_guess_zoom2 = tool.x_end + 6 -- 6 == 2*3 (3 pixels in 1080p per frame at zoom2)
 
         local timeline = win:timeline_controller_ok_skip_pps()
         timeline:move_playhead_to(next_frame_x_guess_zoom2)
