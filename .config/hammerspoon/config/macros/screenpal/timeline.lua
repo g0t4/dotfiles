@@ -103,20 +103,16 @@ local _10ms = 10 * 1000
 local function _wait_until_playhead_at_screen_x(self, desired_playhead_screen_x, max_loops)
     max_loops = max_loops or 30
     start = get_time()
-    for i = 1, max_loops do
+    for iteration = 1, max_loops do
+        -- print("  iteration " .. i)
         hs.timer.usleep(_10ms)
 
-        print("  iteration " .. i)
         if _is_playhead_now_at_screen_x(self, desired_playhead_screen_x) then
+            print("  after " .. iteration .. " iterations")
             break
         end
     end
-    print_took("  wait for playhead to move", start)
-    -- FYI it is still possible you need some slight fixed delay
-    --   i.e. if the window coords are updated ahead of something else
-    --   that would intefere with typical next actions (i.e. typing 'c'to trigger cut)
-    --   if so, add that here so everyone benefits from it
-    --   if it's specific to a given automation then that fixed delay can live in consumer code
+    print_took("  wait for playhead move", start)
 end
 
 ---@param self TimelineController
