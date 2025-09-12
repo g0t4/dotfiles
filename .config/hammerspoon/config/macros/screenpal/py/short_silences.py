@@ -12,9 +12,10 @@ DEBUG = __name__ == "__main__"
 
 def detect_short_silences():
 
-    image = shared_context.image
-    timeline_mask = shared_context.timeline_mask
-    playhead_mask = shared_context.playhead_mask
+    shared = get_shared_context(file_arg)
+    image = shared.image
+    timeline_mask = shared.timeline_mask
+    playhead_mask = shared.playhead_mask
 
     hunt_mask = cv.bitwise_or(timeline_mask, playhead_mask)
     hunt_mask_CLOSED = cv.morphologyEx(hunt_mask, cv.MORPH_CLOSE, np.ones((3, 3), np.uint8))
