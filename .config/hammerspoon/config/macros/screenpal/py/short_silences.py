@@ -55,7 +55,7 @@ def detect_short_silences():
         )
 
     # * serialize response to json in STDOUT
-    results = {
+    detected = {
         "short_silences": [
             {
                 # divide by 2 for non-retina resolution
@@ -66,20 +66,19 @@ def detect_short_silences():
         ],
     }
 
-    # PRN hardcode results for test case
     if DEBUG:
 
-        print(json.dumps(results))
+        print(json.dumps(detected))
 
         if file == "samples/playhead-darkblue1.png":
             # PRN use unit test assertions so we can see what differs
             expected = {"short_silences": [{"x_start": 4, "x_end": 5}, {"x_start": 31, "x_end": 32}, {"x_start": 217, "x_end": 218}, {"x_start": 319, "x_end": 320}, {"x_start": 376, "x_end": 378}, {"x_start": 403,
             "x_end": 404}, {"x_start": 703, "x_end": 743}, {"x_start": 1024, "x_end": 1025}, {"x_start": 1228, "x_end": 1229}, {"x_start": 1423, "x_end": 1464}, {"x_start": 1561, "x_end": 1562}, {"x_start": 1741, "x_end":
             1744}]} # yapf: disable
-            assert results["short_silences"] == expected["short_silences"]
+            assert detected["short_silences"] == expected["short_silences"]
             print("\n[bold underline green]MATCHED SHORT SILENCE TEST CASE!")
 
-    return results
+    return detected
 
 if DEBUG:
     # time python3 short_silences.py samples/playhead-darkblue1.png --debug
