@@ -10,8 +10,16 @@ from visualize import *
 
 DEBUG = __name__ == "__main__"
 
-def detect_tools(use_file):
+from dataclasses import dataclass
+from typing import Optional
 
+@dataclass
+class ToolResult:
+    tool_type: str
+    x_start: int
+    x_end: int
+
+def detect_tools(use_file):
     shared_context = get_shared_context(use_file)
     image = shared_context.image
     timeline_mask = shared_context.timeline_mask
