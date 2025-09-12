@@ -71,6 +71,6 @@ def detect_tools():
     return detected
 
 if DEBUG:
-    # time python3 short_silences.py samples/playhead-darkblue1.png --debug
+    # time python3 tools.py samples/pink-volume-add-open.png --debug
     from rich import print
     detect_tools()
