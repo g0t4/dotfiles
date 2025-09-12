@@ -699,7 +699,7 @@ function pasted_text_in_textfield(text)
             local role = focused:axRole()
             if role == "AXTextField" then
                 -- caller passes text value based on shortcut assigned, that way caller can change it and not need to update this part
-                hs.pasteboard.setContents('h')
+                hs.pasteboard.setContents(text)
                 hs.eventtap.keyStroke({ "cmd" }, "v", 0) -- Cmd+V to paste since I can't type it, would put me in a loop (at best)
                 return true
             end
