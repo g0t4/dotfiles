@@ -33,13 +33,13 @@ file = sys.argv[1] if len(sys.argv) > 1 else None
 if not file:
     raise ValueError("No image file provided, pass as first argument")
 
-def load_image() -> np.ndarray:
+def load_image(path) -> np.ndarray:
 
     # / ".config/hammerspoon/config/macros/screenpal/py/timeline03a-2.png"
 
-    image = cv.imread(str(file), cv.IMREAD_COLOR)  # BGR
+    image = cv.imread(str(path), cv.IMREAD_COLOR)  # BGR
     if image is None:
-        raise ValueError(f"Could not load image from {file}")
+        raise ValueError(f"Could not load image from {path}")
 
     # PRN any assertions about size so if it changes I know that I might need to adjust some logic (i.e. top/bottom borders)?
 
@@ -68,7 +68,7 @@ def color_mask(img, color, tol):
     return (diff <= tol).all(axis=2).astype(np.uint8) * 255
 
 # RUN ONE TIME for all detection scripts
-image = load_image()
+image = load_image(file)
 
 # Tiny tolerance may handle edge pixels
 tolerance = 4
