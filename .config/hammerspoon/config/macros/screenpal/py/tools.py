@@ -8,15 +8,18 @@ from functools import reduce
 from shared import *
 from visualize import *
 from dataclasses import dataclass
-from typing import Optional
+from typing import Optional, Any
 
 DEBUG = __name__ == "__main__"
 
 @dataclass
 class ToolResult:
-    tool_type: str
+    type: str
     x_start: int
     x_end: int
+
+    def to_dict(self) -> dict[str, Any]:
+        return {'type': self.type, 'x_start': self.x_start, 'x_end': self.x_end}
 
 def detect_tools(use_file):
     shared_context = get_shared_context(use_file)
@@ -68,22 +71,21 @@ def detect_tools(use_file):
         )
 
     # * serialize response to json in STDOUT
-    detected = {"tool": {}}
 
-    if min_index is not None and max_index is not None:
-        # TODO test if volume edit tool range works on pink too
-        # TODO parameterize the search for other colors that I bet use row 8 too!
-        detected["tool"] = {
-            "type": "volume_add_tool",
-            "x_start": int(min_index / 2),
-            "x_end": int(max_index / 2),
-        }
+    if min_index is None or max_index is None:
+        return None
 
-    return detected
+    # TODO test if volume edit tool range works on pink too
+
+    return ToolResult(
+        type="volume_add_tool",
+        x_start=int(min_index / 2),
+        x_end=int(max_index / 2),
+    )
 
 if DEBUG:
     # time python3 tools.py samples/pink-volume-add-open.png --debug
     from rich import print
     detected = detect_tools(file_arg)
 
-    print(json.dumps(detected))
+    print(json.dumps(detected.to_dict() if detected else None))

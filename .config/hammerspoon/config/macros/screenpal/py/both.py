@@ -18,6 +18,6 @@ if __name__ == "__main__":
     combined = {}
     combined["short_silences"] = short["short_silences"]
     combined["regular_silences"] = regular["regular_silences"]
-    combined["tool"] = tools["tool"]
+    combined["tool"] = tools.to_dict() if tools else None
 
     print(json.dumps(combined))  # output to STDOUT for hs to consume
