@@ -43,13 +43,13 @@ class TimelineSharedDetectionContext:
         self.playhead_mask = color_mask(self.image, colors_bgr.playhead, tolerance)
 
 # RUN ONE TIME for all detection scripts
-_shared_context = None
+_shared_context = {}
 
 def get_shared_context(file) -> TimelineSharedDetectionContext:
     global _shared_context
-    if _shared_context is None:
-        _shared_context = TimelineSharedDetectionContext(file)
-    return _shared_context
+    if file not in _shared_context:
+        _shared_context[file] = TimelineSharedDetectionContext(file)
+    return _shared_context[file]
 
 def load_image(path) -> np.ndarray:
     # / ".config/hammerspoon/config/macros/screenpal/py/timeline03a-2.png"
