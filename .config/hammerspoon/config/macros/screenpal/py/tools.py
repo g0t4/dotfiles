@@ -40,14 +40,11 @@ def detect_tools():
 
     if DEBUG:
 
-        full = [
+        show_and_wait(
             display_mask_only(image, pink_mask, pink),
             display_mask_only(image, timeline_mask),
             image,
-        ]
-
-        stacked = np.vstack(full)
-        show_and_wait(stacked)
+        )
 
     # * serialize response to json in STDOUT
     results = {"tool": {}}
