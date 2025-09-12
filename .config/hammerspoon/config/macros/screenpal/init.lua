@@ -690,8 +690,54 @@ local OTHER = "other"
 local LEFT = "left"
 local RIGHT = "right"
 
-function SPal_AdjustSelection(side, num_frames)
+---@param text string
+---@return boolean pasted_text
+function pasted_text_in_textfield(text)
+    if text then
+        -- I added this part b/c I am using some keystrokes that override letters (h/l/o/S/E ... and if I am in a text box I want to type those instead)
+        local win = get_cached_editor_window()
+        local focused = win.app:attributeValue("AXFocusedUIElement")
+        -- print("focused", focused)
+        if focused ~= nil and focused:isValid() then
+            -- for attr_name, attr_value in pairs(focused) do
+            --     print(attr_name, attr_value)
+            -- end
+            local role = focused:axRole()
+            if role == "AXTextField" then
+                -- caller passes text value based on shortcut assigned, that way caller can change it and not need to update this part
+                hs.pasteboard.setContents('h')
+                hs.eventtap.keyStroke({ "cmd" }, "v", 0) -- Cmd+V to paste since I can't type it, would put me in a loop (at best)
+                return true
+            end
+        end
+    end
+    return false
+end
+
+local LEFT = "left"
+local RIGHT = "right"
+
+function SPal_KeyMap(action, text)
+    -- ** insert text if in a textbox
+    if pasted_text_in_textfield(text) then
+        return
+    end
+
+    local win = get_cached_editor_window()
+    if action == LEFT then
+        hs.eventtap.keyStroke({}, LEFT, 0, win.app)
+    elseif action == RIGHT then
+        hs.eventtap.keyStroke({}, RIGHT, 0, win.app)
+    end
+end
+
+function SPal_AdjustSelection(side, num_frames, text)
     side = side or START
+
+    -- ** insert text if in a textbox
+    if pasted_text_in_textfield(text) then
+        return
+    end
 
     run_async(function()
         ---@type ScreenPalEditorWindow, SilencesController
