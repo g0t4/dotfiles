@@ -661,6 +661,22 @@ function StreamDeck_ScreenPal_ActOnNextSilence(action_keystroke)
     end)
 end
 
+function StreamDeck_ScreenPal_ExpandSelectionRight()
+    run_async(function()
+        ---@type ScreenPalEditorWindow, SilencesController
+        local win, silences = syncify(detect_silences)
+        local silence = silences:get_next_silence()
+        local tool = silences.hack_detected.tool
+        if not tool or not tool.x_end then return end
+
+        next_frame_x_guess_zoom2 = tool.x_end + 6
+
+        local timeline = win:timeline_controller_ok_skip_pps()
+        timeline:move_playhead_to(next_frame_x_guess_zoom2)
+        hs.eventtap.keyStroke({}, "e", 0, win.app)
+    end)
+end
+
 local function hide_silences()
     if silences_canvas == nil then return end
 
