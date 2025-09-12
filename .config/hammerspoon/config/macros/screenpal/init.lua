@@ -460,8 +460,8 @@ function show_silences(win, silences)
     end
 
     -- Draw tool canvas if defined
-    if silences.hack_detected.tool then
-        local tool = silences.hack_detected.tool
+    local tool = silences.hack_detected.tool
+    if tool and tool.type then
         local tool_width = tool.x_end - tool.x_start
         if tool_width > 0 then
             local tool_fill_color = { red = 0, green = 1, blue = 0, alpha = 0.3 }
