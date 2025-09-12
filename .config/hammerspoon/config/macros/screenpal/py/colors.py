@@ -108,7 +108,6 @@ print(f'# {cv_img_volume_cursor_start[7, 1555]=} # BGR opencv')
 # cv_img_volume_cursor_start[7, 1553]=array([226,  81, 255], dtype=uint8) # BGR opencv
 # cv_img_volume_cursor_start[7, 1554]=array([226,  81, 255], dtype=uint8) # BGR opencv
 # cv_img_volume_cursor_start[7, 1555]=array([226,  81, 255], dtype=uint8) # BGR opencv
-#  TODO! does this overlap with non-slection or is it all in the selection?
 
 # CURSOR ON END (right)
 cv_img_volume_cursor_end = cv.imread(str(samples_dir / "volume-tool/add-cursor-end.png"))
@@ -126,7 +125,6 @@ print(f'# {cv_img_volume_cursor_end[7, 1663]=} # BGR opencv')
 print(f'# {cv_img_volume_cursor_end[21, 1660]=} # BGR opencv') # GOOD TO GO!
 # cv_img_volume_cursor_end[21, 1660]=array([226,  81, 255], dtype=uint8) # BGR opencv
 #
-#  TODO! does this overlap with non-slection or is it all in the selection?
 
 #
 print()
