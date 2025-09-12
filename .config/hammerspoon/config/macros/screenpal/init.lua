@@ -684,7 +684,7 @@ function StreamDeck_ScreenPal_ActOnNextSilence(action_keystroke)
     end)
 end
 
-function StreamDeck_ScreenPal_ExpandSelectionRight()
+function StreamDeck_ScreenPal_AdjustSelectionEnd(num_frames)
     run_async(function()
         ---@type ScreenPalEditorWindow, SilencesController
         local win, silences = syncify(detect_silences)
@@ -692,8 +692,8 @@ function StreamDeck_ScreenPal_ExpandSelectionRight()
         local tool = silences.hack_detected.tool
         if not tool or not tool.x_end then return end
 
-        -- TODO move to timeline
-        next_frame_x_guess_zoom2 = tool.x_end + 6 -- 6 == 2*3 (3 pixels in 1080p per frame at zoom2)
+        -- 6 == 2*3 (3 pixels in 1080p per frame at zoom2)
+        next_frame_x_guess_zoom2 = tool.x_end + 6 * num_frames
 
         local timeline = win:timeline_controller_ok_skip_pps()
         timeline:move_playhead_to(next_frame_x_guess_zoom2)
