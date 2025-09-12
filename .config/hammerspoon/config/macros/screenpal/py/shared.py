@@ -33,6 +33,18 @@ file_arg = sys.argv[1] if len(sys.argv) > 1 else None
 if not file_arg:
     raise ValueError("No image file provided, pass as first argument")
 
+class TimelineSharedDetectionContext:
+
+    def __init__(self, file):
+        self.image = load_image(file)
+        # Tiny tolerance may handle edge pixels
+        tolerance = 4
+        self.timeline_mask = color_mask(self.image, colors_bgr.timeline_bg, tolerance)
+        self.playhead_mask = color_mask(self.image, colors_bgr.playhead, tolerance)
+
+# RUN ONE TIME for all detection scripts
+shared_context = TimelineSharedDetectionContext(file_arg)
+
 def load_image(path) -> np.ndarray:
 
     # / ".config/hammerspoon/config/macros/screenpal/py/timeline03a-2.png"
@@ -66,18 +78,6 @@ colors_bgr = TimelineColorsBGR(
 def color_mask(img, color, tolerance):
     diff = np.abs(img.astype(np.int16) - color.astype(np.int16))
     return (diff <= tolerance).all(axis=2).astype(np.uint8) * 255
-
-class TimelineSharedDetectionContext:
-
-    def __init__(self, file):
-        self.image = load_image(file)
-        # Tiny tolerance may handle edge pixels
-        tolerance = 4
-        self.timeline_mask = color_mask(self.image, colors_bgr.timeline_bg, tolerance)
-        self.playhead_mask = color_mask(self.image, colors_bgr.playhead, tolerance)
-
-# RUN ONE TIME for all detection scripts
-shared_context = TimelineSharedDetectionContext(file_arg)
 
 def scan_mask(mask):
     """
