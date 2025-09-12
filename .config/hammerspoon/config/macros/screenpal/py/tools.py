@@ -7,11 +7,10 @@ from pathlib import Path
 from functools import reduce
 from shared import *
 from visualize import *
-
-DEBUG = __name__ == "__main__"
-
 from dataclasses import dataclass
 from typing import Optional
+
+DEBUG = __name__ == "__main__"
 
 @dataclass
 class ToolResult:
@@ -88,4 +87,3 @@ if DEBUG:
     detected = detect_tools(file_arg)
 
     print(json.dumps(detected))
-
