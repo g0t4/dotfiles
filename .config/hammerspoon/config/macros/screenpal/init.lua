@@ -637,7 +637,18 @@ function StreamDeck_ScreenPal_ActOnPrevSilence(action_keystroke)
 end
 
 function StreamDeck_ScreenPal_ActOnThisSilence_ThruStart(action_keystroke)
-    -- create synthetic silence range?
+    run_async(function()
+        ---@type ScreenPalEditorWindow, SilencesController
+        local win, silences = syncify(detect_silences)
+        local silence = silences:get_this_silence()
+        local timeline = win:timeline_controller_ok_skip_pps()
+        silence = {
+            -- PRN make silence ctor? and use it with data returned from detection (hydrate into it)
+            x_start = silence.x_start,
+            x_end = timeline:get_current_playhead_timeline_relative_x(),
+        }
+        act_on_silence(win, silence, action_keystroke)
+    end)
 end
 
 function StreamDeck_ScreenPal_ActOnThisSilence(action_keystroke)
