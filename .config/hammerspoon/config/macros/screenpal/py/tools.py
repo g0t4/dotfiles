@@ -27,12 +27,19 @@ def detect_tools(use_file):
     timeline_mask = shared_context.timeline_mask
     playhead_mask = shared_context.playhead_mask
 
-    # PRN merge masks for pink
-    pink_edge_row8 = np.array([198, 74, 218])  # BGR pink top shiny part (row 8, index 7th)
-    pink_mask_edge = color_mask(image, pink_edge_row8, 4)
+    # * pink masks
+    pink_top_edge_row8 = np.array([198, 74, 218])  # BGR pink top shiny part (row 8, index 7th)
+    pink_mask_top_edge = color_mask(image, pink_top_edge_row8, 4)
+    #
     pink_corners = np.array([220, 79, 247])  # upper left and right corner each has two pixels ... off by one in B value (219 vs 220)
     pink_mask_corners = color_mask(image, pink_corners, 4)
-    pink_mask = np.logical_or(pink_mask_edge, pink_mask_corners)  # combine both
+    #
+    # TODO! something is wrong with this matching of the cursor on start/end (only matching row8?)
+    pink_cursor_on_edge = np.array([226, 81, 255])
+    pink_mask_cursor_on_edge = color_mask(image, pink_cursor_on_edge, 1)
+    #
+    show_pink_as = pink_top_edge_row8
+    pink_mask = np.logical_or(pink_mask_top_edge, pink_mask_corners, pink_mask_cursor_on_edge)  # combine both
     # scan_mask(pink_mask) # GREAT way to find pixels that match!
 
     red = np.array([9, 6, 145])
@@ -69,8 +76,12 @@ def detect_tools(use_file):
             display_mask_only(image, timeline_mask),
             image,
             # easier to line up since this matches on top (so put below the image to compare)
-            display_mask_only(image, pink_mask, pink_edge_row8),
-            display_mask_only(image, red_mask, red),
+            display_mask_only(image, pink_mask, show_pink_as),
+            display_mask_only(image, pink_mask_top_edge, show_pink_as),
+            display_mask_only(image, pink_mask_corners, show_pink_as),
+            display_mask_only(image, pink_mask_cursor_on_edge, show_pink_as),
+            #
+            # display_mask_only(image, red_mask, red),
         )
 
     # * serialize response to json in STDOUT
