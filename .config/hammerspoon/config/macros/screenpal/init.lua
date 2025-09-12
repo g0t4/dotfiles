@@ -738,7 +738,9 @@ function SPal_AdjustSelection(side, num_frames)
             -- just flip to other side!
             local timeline = win:timeline_controller_ok_skip_pps()
             local playhead_x = timeline:get_current_playhead_timeline_relative_x()
-            if playhead_x < tool.x_start + (tool.x_end - tool.x_start) / 2 then
+            local x_middle = tool.x_start + (tool.x_end - tool.x_start) / 2
+            local playhead_closer_to_start = playhead_x < x_middle
+            if playhead_closer_to_start then
                 timeline:move_playhead_to(tool.x_end)
             else
                 timeline:move_playhead_to(tool.x_start)
