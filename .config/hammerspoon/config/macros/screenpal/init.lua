@@ -711,7 +711,7 @@ function SPal_AdjustSelection(side, num_frames)
                 hs.eventtap.keyStroke({}, RIGHT, 0, win.app)
             end
             -- 0 == JUMP to start only
-        else
+        elseif side == END then
             -- -- CANNOT CLICK left of end by one frame! it's min 2 frames, but I can reliably get one after (expand)...
             -- -- 6 == 2*3 (3 pixels in 1080p per frame at zoom2)
             -- local num_pixels = 6 * num_frames
@@ -734,6 +734,15 @@ function SPal_AdjustSelection(side, num_frames)
                 hs.eventtap.keyStroke({}, LEFT, 0, win.app) -- shrink
             end
             -- 0 == JUMP to end only
+        elseif side == OTHER then
+            -- just flip to other side!
+            local timeline = win:timeline_controller_ok_skip_pps()
+            local playhead_x = timeline:get_current_playhead_timeline_relative_x()
+            if playhead_x < tool.x_start + (tool.x_end - tool.x_start) / 2 then
+                timeline:move_playhead_to(tool.x_end)
+            else
+                timeline:move_playhead_to(tool.x_start)
+            end
         end
     end)
 end
