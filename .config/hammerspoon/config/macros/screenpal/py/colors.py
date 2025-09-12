@@ -96,14 +96,35 @@ print(f'# {cv_img_pink_volume_add[7, 809]=} # BGR opencv')
 # cv_img_pink_volume_add[7, 808]=array([220,  79, 247], dtype=uint8) # BGR opencv
 # cv_img_pink_volume_add[7, 809]=array([220,  79, 247], dtype=uint8) # BGR opencv
 #
-# CURSOR ON START
-cv_img_volume_cursor_left = cv.imread(str(samples_dir / "volume-tool/add-cursor-left.png"))
-#
-# CURSOR ON END
-cv_img_volume_cursor_right = cv.imread(str(samples_dir / "volume-tool/add-cursor-right.png"))
-# cursor on end  (either side):
-# 4 pixels wide
+# CURSOR ON START (left)
+cv_img_volume_cursor_start = cv.imread(str(samples_dir / "volume-tool/add-cursor-start.png"))
+# #FF3BE8
+# cols: 1553 to 1556 - 4 pixels wide
+print(f'# {cv_img_volume_cursor_start[7, 1552]=} # BGR opencv')
+print(f'# {cv_img_volume_cursor_start[7, 1553]=} # BGR opencv')
+print(f'# {cv_img_volume_cursor_start[7, 1554]=} # BGR opencv')
+print(f'# {cv_img_volume_cursor_start[7, 1555]=} # BGR opencv')
+# cv_img_volume_cursor_start[7, 1552]=array([226,  81, 255], dtype=uint8) # BGR opencv
+# cv_img_volume_cursor_start[7, 1553]=array([226,  81, 255], dtype=uint8) # BGR opencv
+# cv_img_volume_cursor_start[7, 1554]=array([226,  81, 255], dtype=uint8) # BGR opencv
+# cv_img_volume_cursor_start[7, 1555]=array([226,  81, 255], dtype=uint8) # BGR opencv
+#  TODO! does this overlap with non-slection or is it all in the selection?
 
+# CURSOR ON END (right)
+cv_img_volume_cursor_end = cv.imread(str(samples_dir / "volume-tool/add-cursor-end.png"))
+# #FF3BE8
+# cols: 1661 to 1664 - 4 pixels wide
+print(f'# {cv_img_volume_cursor_end[7, 1660]=} # BGR opencv')
+print(f'# {cv_img_volume_cursor_end[7, 1661]=} # BGR opencv')
+print(f'# {cv_img_volume_cursor_end[7, 1662]=} # BGR opencv')
+print(f'# {cv_img_volume_cursor_end[7, 1663]=} # BGR opencv')
+# cv_img_volume_cursor_end[7, 1660]=array([226,  81, 255], dtype=uint8) # BGR opencv
+# cv_img_volume_cursor_end[7, 1661]=array([226,  81, 255], dtype=uint8) # BGR opencv
+# cv_img_volume_cursor_end[7, 1662]=array([226,  81, 255], dtype=uint8) # BGR opencv
+# cv_img_volume_cursor_end[7, 1663]=array([226,  81, 255], dtype=uint8) # BGR opencv
+#  TODO! does this overlap with non-slection or is it all in the selection?
+
+#
 print()
 
 # *** CUT TOOL (RED)
