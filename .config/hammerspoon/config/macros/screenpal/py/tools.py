@@ -14,6 +14,7 @@ def detect_tools():
 
     pink = np.array([198, 74, 218])  # BGR pink top shiny part (row 8, index 7th)
     pink_mask = color_mask(image, pink, 4)
+    # TODO red/red_mask for cut tool sizing is a frequent tool I use
 
     def detect_volume_add_tool(image):
         # color in row 8 works, however playhead interferes if overlapping:
