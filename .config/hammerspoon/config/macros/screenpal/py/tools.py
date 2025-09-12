@@ -36,7 +36,7 @@ def detect_tools(use_file):
     #
     pink_cursor_on_edge = np.array([226, 81, 255])
     pink_mask_cursor_on_edge = color_mask(image, pink_cursor_on_edge, 1)  # can be tight b/c its one color in my sampling
-    scan_mask(pink_mask_cursor_on_edge)
+    # scan_mask(pink_mask_cursor_on_edge)
     #
     show_pink_as = pink_cursor_on_edge
     #
