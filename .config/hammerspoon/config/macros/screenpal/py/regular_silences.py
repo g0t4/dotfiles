@@ -114,8 +114,3 @@ if DEBUG:
 
     print(json.dumps(detected))
 
-    if file_arg == "samples/timeline03a.png":
-        # PRN use unit test assertions so we can see what differs
-        expected = {"regular_silences": [{"x_start": 754, "x_end": 891}, {"x_start": 1450, "x_end": 1653}]} # yapf: disable
-        assert detected["regular_silences"] == expected["regular_silences"]
-        print("\n[bold underline green]MATCHED REGULAR SILENCE TEST CASE!")
