@@ -48,13 +48,11 @@ def detect_short_silences():
     if DEBUG:
         range_preview_mask = build_range_mask(ranges, image)
 
-        full = [
+        show_and_wait(
             display_mask_only(image, timeline_mask),
             image,
             range_preview_mask,
-        ]
-
-        show_and_wait(np.vstack(full))
+        )
 
     # * serialize response to json in STDOUT
     results = {
