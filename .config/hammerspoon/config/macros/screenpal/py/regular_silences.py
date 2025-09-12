@@ -101,16 +101,8 @@ def detect_regular_silences(use_file):
             labeled_mask,
         )
 
-        print(json.dumps(detected))
-
-        if use_file == "samples/timeline03a.png":
-            # PRN use unit test assertions so we can see what differs
-            expected = {"regular_silences": [{"x_start": 754, "x_end": 891}, {"x_start": 1450, "x_end": 1653}]} # yapf: disable
-            assert detected["regular_silences"] == expected["regular_silences"]
-            print("\n[bold underline green]MATCHED REGULAR SILENCE TEST CASE!")
-
-            # * final preview mask
-            show_and_wait(image, build_range_mask(merged_x_ranges, image))
+        # * final preview mask
+        show_and_wait(image, build_range_mask(merged_x_ranges, image))
 
     return detected
 
@@ -118,4 +110,12 @@ if DEBUG:
     # z screenpal/py
     # time python3 regular_silences.py samples/timeline03a.png --debug
     from rich import print
-    detect_regular_silences(file_arg)
+    detected = detect_regular_silences(file_arg)
+
+    print(json.dumps(detected))
+
+    if file_arg == "samples/timeline03a.png":
+        # PRN use unit test assertions so we can see what differs
+        expected = {"regular_silences": [{"x_start": 754, "x_end": 891}, {"x_start": 1450, "x_end": 1653}]} # yapf: disable
+        assert detected["regular_silences"] == expected["regular_silences"]
+        print("\n[bold underline green]MATCHED REGULAR SILENCE TEST CASE!")
