@@ -118,7 +118,7 @@ end
 ---@param self TimelineController
 ---@param playhead_screen_x number
 local function _move_playhead_to_screen_x(self, playhead_screen_x)
-    print("moving playhead to screen_x=" .. tostring(playhead_screen_x))
+    -- print("moving playhead to screen_x=" .. tostring(playhead_screen_x))
     local hold_duration_ms = 10
     hs.eventtap.leftClick({
         x = playhead_screen_x,
