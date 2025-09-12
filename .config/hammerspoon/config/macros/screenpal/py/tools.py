@@ -14,7 +14,12 @@ def detect_tools():
 
     pink = np.array([198, 74, 218])  # BGR pink top shiny part (row 8, index 7th)
     pink_mask = color_mask(image, pink, 4)
-    # TODO red/red_mask for cut tool sizing is a frequent tool I use
+    # TODO revisit how well pink mask is matching ends (notably when cursor is at end/start/middle)
+    # TODO also revist and test perf with white dash under the tool
+    #   PRN add some automated tests of these scenarios with expected values matched!
+
+    red = np.array([9, 6, 145])
+    red_mask = color_mask(image, red, 4)
 
     def detect_volume_add_tool(image):
         # color in row 8 works, however playhead interferes if overlapping:
@@ -23,8 +28,10 @@ def detect_tools():
         #  2. take min/max column == range
         #     this worked in initial test case, lets see how well it does in reality
 
-        # row is 7th in 0-based index, then minus 2 for border pixels (removed in load_image)
-        row8 = pink_mask[5]
+        # search for either row color
+        row8_pink = pink_mask[5]
+        row8_red = red_mask[5]
+        row8 = np.logical_or(row8_pink, row8_red)
 
         # FYI if needed, scan_mask(pink_mask)
 
@@ -43,6 +50,7 @@ def detect_tools():
 
         show_and_wait(
             display_mask_only(image, pink_mask, pink),
+            display_mask_only(image, red_mask, red),
             display_mask_only(image, timeline_mask),
             image,
         )
