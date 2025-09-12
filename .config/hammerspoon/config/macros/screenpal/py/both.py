@@ -1,4 +1,5 @@
 import json
+from shared import file_arg
 from regular_silences import detect_regular_silences
 from short_silences import detect_short_silences
 from tools import detect_tools
@@ -9,9 +10,9 @@ if __name__ == "__main__":
     # FYI just as fast to do both at the same time
     #  IIGC imports eat up most of the time
 
-    short = detect_short_silences()
-    regular = detect_regular_silences()
-    tools = detect_tools()
+    short = detect_short_silences(file_arg)
+    regular = detect_regular_silences(file_arg)
+    tools = detect_tools(file_arg)
 
     # merge into short object since it has multiple keys currently
     combined = {}

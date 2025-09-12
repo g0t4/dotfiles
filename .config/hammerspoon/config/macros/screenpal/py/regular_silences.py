@@ -10,9 +10,9 @@ from visualize import *
 
 DEBUG = __name__ == "__main__"
 
-def detect_regular_silences():
+def detect_regular_silences(use_file):
 
-    shared = get_shared_context(file_arg)
+    shared = get_shared_context(use_file)
     image = shared.image
     timeline_mask = shared.timeline_mask
     playhead_mask = shared.playhead_mask
@@ -103,7 +103,7 @@ def detect_regular_silences():
 
         print(json.dumps(detected))
 
-        if file_arg == "samples/timeline03a.png":
+        if use_file == "samples/timeline03a.png":
             # PRN use unit test assertions so we can see what differs
             expected = {"regular_silences": [{"x_start": 754, "x_end": 891}, {"x_start": 1450, "x_end": 1653}]} # yapf: disable
             assert detected["regular_silences"] == expected["regular_silences"]
@@ -118,4 +118,4 @@ if DEBUG:
     # z screenpal/py
     # time python3 regular_silences.py samples/timeline03a.png --debug
     from rich import print
-    detect_regular_silences()
+    detect_regular_silences(file_arg)

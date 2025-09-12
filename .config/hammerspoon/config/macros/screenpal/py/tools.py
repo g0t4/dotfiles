@@ -10,11 +10,9 @@ from visualize import *
 
 DEBUG = __name__ == "__main__"
 
-def detect_tools(image_path=None):
+def detect_tools(use_file):
 
-    detect_file = image_path or file_arg
-
-    shared_context = get_shared_context(detect_file)
+    shared_context = get_shared_context(use_file)
     image = shared_context.image
     timeline_mask = shared_context.timeline_mask
     playhead_mask = shared_context.playhead_mask
@@ -79,7 +77,7 @@ def detect_tools(image_path=None):
 
         print(json.dumps(detected))
 
-        if detect_file == "samples/pink-volume-add-open.png":
+        if use_file == "samples/pink-volume-add-open.png":
             expected_tool = {"type": "volume_add_tool", "x_start": 289, "x_end": 403}
             assert detected["tool"] == expected_tool
             print("\n[bold underline green]MATCHED TOOL TEST CASE!")
@@ -89,4 +87,4 @@ def detect_tools(image_path=None):
 if DEBUG:
     # time python3 tools.py samples/pink-volume-add-open.png --debug
     from rich import print
-    detect_tools()
+    detect_tools(file_arg)
