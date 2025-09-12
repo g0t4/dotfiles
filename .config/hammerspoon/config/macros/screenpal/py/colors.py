@@ -67,6 +67,8 @@ print(f'{sample_playhead=}')
 # # #10172F (R=16 G=23 B=47)
 # #   FYI could use tight R tolerance of say 3, 6 for G and 10 for B ?
 
+print()
+
 # pink-volume-add-open.png
 cv_img_pink_volume_add = cv.imread(str(samples_dir / "pink-volume-add-open.png"))
 # x=650, y=8 (index 7) (exactly 8th row (index 7th) from top is brightest and right above/below are much darker
@@ -74,3 +76,20 @@ cv_img_pink_volume_add = cv.imread(str(samples_dir / "pink-volume-add-open.png")
 #ED39CC DCM (R=237, G=57, B=204) # bigger discrepency vs other samples (DCM vs opencv)
 print(f'{cv_img_pink_volume_add[7, 650]=}')  # BGR [198,  74, 218] row 8 == offset 7
 print(f'{cv_img_pink_volume_add[8, 650]=}')  # BGR [142,  59, 146] row 9
+
+print()
+
+cv_img_red_cut_add = cv.imread(str(samples_dir / "cut-tool/add-end-selected.png"))
+# cols: 1711-1712 (2 pixels) is a border on the left side that could be used to find this too
+# 1711 is left most side of selection
+# 1817 is the right side's border that is 4 pixels wide b/c it is where cursor currently is at # * CURSOR DETECT in TOOL!
+#    cursor position on end => #FF0000 and 4 pixels wide
+#    PRN cursor position in middle? IIAC 2 pixels?
+#    PRN cursor position on left side?
+#    PRN add cursor position, I am not sure I really need to know that b/c I can click to change it too
+# 1820 is right most side (however,
+#
+# also unique is a dashed white line in middle of cut.. not sure if that will affect match, we shall see
+# top border: mostly  #9F0000 row8 DCM though right side fades a bit near end of range
+#
+print(f'{cv_img_red_cut_add[7, 1732]=}')  # BGR [  9,   6, 145]
