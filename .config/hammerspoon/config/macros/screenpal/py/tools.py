@@ -47,12 +47,12 @@ def detect_tools():
         )
 
     # * serialize response to json in STDOUT
-    results = {"tool": {}}
+    detected = {"tool": {}}
 
     if min_index is not None and max_index is not None:
         # TODO test if volume edit tool range works on pink too
         # TODO parameterize the search for other colors that I bet use row 8 too!
-        results["tool"] = {
+        detected["tool"] = {
             "type": "volume_add_tool",
             "x_start": int(min_index / 2),
             "x_end": int(max_index / 2),
@@ -61,14 +61,14 @@ def detect_tools():
     # PRN hardcode results for test case
     if DEBUG:
 
-        print(json.dumps(results))
+        print(json.dumps(detected))
 
         if file == "samples/pink-volume-add-open.png":
             expected_tool = {"type": "volume_add_tool", "x_start": 289, "x_end": 403}
-            assert results["tool"] == expected_tool
+            assert detected["tool"] == expected_tool
             print("\n[bold underline green]MATCHED TOOL TEST CASE!")
 
-    return results
+    return detected
 
 if DEBUG:
     # time python3 short_silences.py samples/playhead-darkblue1.png --debug
