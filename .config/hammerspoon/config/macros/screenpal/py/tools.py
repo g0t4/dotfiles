@@ -29,6 +29,9 @@ def detect_tools(use_file):
 
     pink = np.array([198, 74, 218])  # BGR pink top shiny part (row 8, index 7th)
     pink_mask = color_mask(image, pink, 4)
+    pink_corners = np.array([220,  79, 247]) # upper left and right corner each has two pixels ... off by one in B value (219 vs 220)
+    pink_mask = color_mask(image, pink_corners, 4)
+    # scan_mask(pink_mask) # GREAT way to find pixels that match!
 
     red = np.array([9, 6, 145])
     red_mask = color_mask(image, red, 4)
@@ -61,10 +64,11 @@ def detect_tools(use_file):
     if DEBUG:
 
         show_and_wait(
-            display_mask_only(image, pink_mask, pink),
-            display_mask_only(image, red_mask, red),
             display_mask_only(image, timeline_mask),
             image,
+            # easier to line up since this matches on top (so put below the image to compare)
+            display_mask_only(image, pink_mask, pink),
+            display_mask_only(image, red_mask, red),
         )
 
     # * serialize response to json in STDOUT

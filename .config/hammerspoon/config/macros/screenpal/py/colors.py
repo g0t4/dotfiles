@@ -69,7 +69,8 @@ print(f'{sample_playhead=}')
 
 print()
 
-# pink-volume-add-open.png
+# *** VOLUME TOOL (PINK)
+# pink-volume-add-open.png (CURSOR IN middle, no real big effect)
 cv_img_pink_volume_add = cv.imread(str(samples_dir / "pink-volume-add-open.png"))
 # x=650, y=8 (index 7) (exactly 8th row (index 7th) from top is brightest and right above/below are much darker
 #    can do tight tolerance by masking row 8 only!
@@ -77,7 +78,35 @@ cv_img_pink_volume_add = cv.imread(str(samples_dir / "pink-volume-add-open.png")
 print(f'{cv_img_pink_volume_add[7, 650]=}')  # BGR [198,  74, 218] row 8 == offset 7
 print(f'{cv_img_pink_volume_add[8, 650]=}')  # BGR [142,  59, 146] row 9
 
+# LEFT UPPER CORNER
+# #FF3AE1 DCM RGB - row 8 on leftmost side at cross where it maximizes the pink color in corder (
+#   cols 577 578 base1 - 2pixels wide leading edge to volume tool! maybe use this instead? try to find this corner?
+# upper right corner is
+print(f'# {cv_img_pink_volume_add[7, 576]=} # BGR opencv')
+print(f'# {cv_img_pink_volume_add[7, 577]=} # BGR opencv')  # added comment on end of otuput to paste easier into this file:
+# cv_img_pink_volume_add[7, 576]=array([219,  79, 247], dtype=uint8) # BGR opencv
+# cv_img_pink_volume_add[7, 577]=array([219,  79, 247], dtype=uint8) # BGR opencv
+#
+# RIGHT UPPER CORNER
+# #FF3AE2 DCM RGB - row 8
+#  cols 809 and 810 base1 - also 2 pixels wide (right most edge of selection)
+#  NOTE E1/E2 in B value... opencv picks up that diff too (219/220)
+print(f'# {cv_img_pink_volume_add[7, 808]=} # BGR opencv')
+print(f'# {cv_img_pink_volume_add[7, 809]=} # BGR opencv')
+# cv_img_pink_volume_add[7, 808]=array([220,  79, 247], dtype=uint8) # BGR opencv
+# cv_img_pink_volume_add[7, 809]=array([220,  79, 247], dtype=uint8) # BGR opencv
+#
+# CURSOR ON START
+cv_img_volume_cursor_left = cv.imread(str(samples_dir / "volume-tool/add-cursor-left.png"))
+#
+# CURSOR ON END
+cv_img_volume_cursor_right = cv.imread(str(samples_dir / "volume-tool/add-cursor-right.png"))
+# cursor on end  (either side):
+# 4 pixels wide
+
 print()
+
+# *** CUT TOOL (RED)
 
 cv_img_red_cut_add = cv.imread(str(samples_dir / "cut-tool/add-end-selected.png"))
 # cols: 1711-1712 (2 pixels) is a border on the left side that could be used to find this too
