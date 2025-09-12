@@ -3,7 +3,6 @@
 ---@field _playhead_window_frame AXFrame
 ---@field _playhead_screen_x number
 ---@field _playhead_timeline_relative_x? number -- TODO make this public? a few uses externally that seem fine (i.e. showing detected silence ranges)
----@field _pixels_per_second? number
 local TimelineController = {}
 
 ---@param app_windows AppWindows
@@ -48,16 +47,6 @@ function TimelineController:new(editor_window, ok_to_skip_pps)
         :gsub("\n", "")
     local _playhead_seconds = parse_time_to_seconds(time_string)
     self.time_string = time_string
-    if _playhead_seconds == 0 then
-        if not ok_to_skip_pps then
-            print("WARNING = timeline controller accessed w/o declaring it can handle nil PPS (ok_to_skip_pps)... review and adjust accordingly")
-            -- NOT a failure, just a warning
-        end
-        -- consumers of these values should handle case when nil
-        self._pixels_per_second = nil
-    else
-        self._pixels_per_second = _playhead_timeline_relative_x / _playhead_seconds
-    end
     -- print(vim.inspect(self))
     return self
 end
@@ -87,22 +76,22 @@ end
 ---@param self TimelineController
 ---@return boolean
 local function _is_playhead_now_at_screen_x(self, desired_playhead_screen_x)
-    -- within one frame either way
-    -- PRN make more precise later on if I know the target in terms of a frame value
     local current_playhead_screen_x = _get_current_playhead_screen_x(self) -- in case we just moved the playhead
-    print("  current_playhead_screen_x", current_playhead_screen_x, "desired_playhead_screen_x", desired_playhead_screen_x)
+    -- print("  current_playhead_screen_x", current_playhead_screen_x, "desired_playhead_screen_x", desired_playhead_screen_x)
     local pixel_gap = math.abs(current_playhead_screen_x - desired_playhead_screen_x)
-    if self._pixels_per_second == nil then
-        -- * ONLY happens @0:00 on timeline + when trigger move of playhead
-        --  and would only matter for a short jump of ~5 pixels which should be rare
-        --  chose 6 b/c 3x zoom is 150 pixels/second => 150/25 = 6 pixels_per_frame at highest zoom
-        --  this could cause issues with zoomed out view too if 6 is a long distance... again only from 0 starting
-        print("WARNING - HAD TO GUESS PIXELS PER FRAME for pixel_gap b/c you're @0:00 on the timeline, avoid this by moving anywhere else on timeline")
-        return pixel_gap <= 6
-    else
-        local pixels_per_frame = self._pixels_per_second / 25
-        return pixel_gap <= pixels_per_frame
-    end
+    -- print("  pixel_gap", pixel_gap)
+
+    -- * within ~ one frame
+    --  OK so I cannot calculate pixels per frame on the fly but I know:
+    --  unzoomed => depends on video length
+    --  zoom1 => ? smaller than zoom2's
+    --  zoom2 => 75 pixels/frame (1080p) => 75/25 = 3 pixels/second (1080p) => 6 pixels/second (4k)
+    --  zoom3 => 150 pixels/frame => 6 pixels/second (1080p) => 12 pixels/second (4k)
+    --
+    --  chose 6 b/c that will work mostly for zoom2 and that is the zoom I almost exclusively edit with
+    -- TODO ALTERNATIVE => see if it changed vs original value?
+    --    ALTERNATIVE => OR, see if it changed by 90% of the target gap (old-desired = desired_gap, old-current = moved_gap...  is moved_gap/desired_gap > 0.9 ? )
+    return pixel_gap <= 6
 end
 
 local _10ms = 10 * 1000
