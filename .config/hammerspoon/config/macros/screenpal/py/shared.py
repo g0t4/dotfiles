@@ -43,12 +43,16 @@ class TimelineSharedDetectionContext:
         self.playhead_mask = color_mask(self.image, colors_bgr.playhead, tolerance)
 
 # RUN ONE TIME for all detection scripts
-shared_context = TimelineSharedDetectionContext(file_arg)
+shared_context = None
+
+def get_shared_context(file) -> TimelineSharedDetectionContext:
+    global shared_context
+    if shared_context is None:
+        shared_context = TimelineSharedDetectionContext(file)
+    return shared_context
 
 def load_image(path) -> np.ndarray:
-
     # / ".config/hammerspoon/config/macros/screenpal/py/timeline03a-2.png"
-
     image = cv.imread(str(path), cv.IMREAD_COLOR)  # BGR
     if image is None:
         raise ValueError(f"Could not load image from {path}")
