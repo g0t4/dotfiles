@@ -637,7 +637,7 @@ function StreamDeck_ScreenPal_ActOnPrevSilence(action_keystroke)
 end
 
 function StreamDeck_ScreenPal_ActOnThisSilence_ThruStart(action_keystroke)
-    -- PRN could create synthetic silence
+    -- create synthetic silence range?
 end
 
 function StreamDeck_ScreenPal_ActOnThisSilence(action_keystroke)
@@ -650,7 +650,9 @@ function StreamDeck_ScreenPal_ActOnThisSilence(action_keystroke)
 end
 
 function StreamDeck_ScreenPal_ActOnThisSilence_ThruEnd(action_keystroke)
-    -- PRN could create synthetic silence
+
+    -- create synthetic silence range?
+
 end
 
 function StreamDeck_ScreenPal_ActOnNextSilence(action_keystroke)
