@@ -29,8 +29,6 @@ def detect_regular_silences():
         x_start_col + x_width_col,  # x_end
     ))
 
-    # * sort by x_start
-    #   b/c there is no guarantee that ranges (stats) are sorted
     def sort_ranges_by_x_start(ranges: np.ndarray) -> np.ndarray:
         """ assumed that each row starts with x_start """
         x_start_column = ranges[:, 0]
