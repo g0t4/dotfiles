@@ -28,19 +28,22 @@ def detect_tools(use_file):
     playhead_mask = shared_context.playhead_mask
 
     # * pink masks
-    pink_top_edge_row8 = np.array([198, 74, 218])  # BGR pink top shiny part (row 8, index 7th)
-    pink_mask_top_edge = color_mask(image, pink_top_edge_row8, 4)
+    # pink_top_edge_row8 = np.array([198, 74, 218])  # BGR pink top shiny part (row 8, index 7th)
+    # pink_mask_top_edge = color_mask(image, pink_top_edge_row8, 4)
     #
-    pink_corners = np.array([220, 79, 247])  # upper left and right corner each has two pixels ... off by one in B value (219 vs 220)
-    pink_mask_corners = color_mask(image, pink_corners, 4)
+    # pink_corners = np.array([220, 79, 247])  # upper left and right corner each has two pixels ... off by one in B value (219 vs 220)
+    # pink_mask_corners = color_mask(image, pink_corners, 4)
     #
     # TODO! something is wrong with this matching of the cursor on start/end (only matching row8?)
     pink_cursor_on_edge = np.array([226, 81, 255])
     pink_mask_cursor_on_edge = color_mask(image, pink_cursor_on_edge, 1)
+    scan_mask(pink_mask_cursor_on_edge)  # GREAT way to find pixels that match!
+    #  FYI! scan mask shows the matches to the entire column... WTF IS GOING ON THEN
     #
-    show_pink_as = pink_top_edge_row8
-    pink_mask = np.logical_or(pink_mask_top_edge, pink_mask_corners, pink_mask_cursor_on_edge)  # combine both
-    # scan_mask(pink_mask) # GREAT way to find pixels that match!
+    # show_pink_as = pink_top_edge_row8
+    show_pink_as = pink_cursor_on_edge
+    # pink_mask = np.logical_or(pink_mask_top_edge, pink_mask_corners, pink_mask_cursor_on_edge)  # combine both
+    pink_mask = pink_mask_cursor_on_edge
 
     red = np.array([9, 6, 145])
     red_mask = color_mask(image, red, 4)
@@ -76,9 +79,9 @@ def detect_tools(use_file):
             display_mask_only(image, timeline_mask),
             image,
             # easier to line up since this matches on top (so put below the image to compare)
-            display_mask_only(image, pink_mask, show_pink_as),
-            display_mask_only(image, pink_mask_top_edge, show_pink_as),
-            display_mask_only(image, pink_mask_corners, show_pink_as),
+            # display_mask_only(image, pink_mask, show_pink_as),
+            # display_mask_only(image, pink_mask_top_edge, show_pink_as),
+            # display_mask_only(image, pink_mask_corners, show_pink_as),
             display_mask_only(image, pink_mask_cursor_on_edge, show_pink_as),
             #
             # display_mask_only(image, red_mask, red),
