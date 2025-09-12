@@ -272,7 +272,7 @@ function ScreenPalEditorWindow:reopen_project()
 
         -- * capture position
         -- use percent, that way if the width changes, it's still the same timecode
-        local playhead_percent = self:timeline_controller_ok_skip_pps():get_position_percent()
+        local playhead_percent = self:timeline_controller():get_position_percent()
 
         if not self._textfield_title then
             error("No title found, aborting...")
@@ -305,7 +305,7 @@ function ScreenPalEditorWindow:reopen_project()
 
         -- * restore position
         self:zoom_off()
-        self:timeline_controller_ok_skip_pps():move_playhead_to_position_percent(playhead_percent)
+        self:timeline_controller():move_playhead_to_position_percent(playhead_percent)
 
         if not current_zoomed then
             print("NOT zoomed before, skipping zoom restore")
@@ -318,19 +318,13 @@ end
 
 ---@return TimelineController
 function ScreenPalEditorWindow:timeline_controller()
-    self:ensure_cached_controls() -- TODO review design of cache, confusing already
+    self:ensure_cached_controls()
     return TimelineController:new(self)
-end
-
----@return TimelineController
-function ScreenPalEditorWindow:timeline_controller_ok_skip_pps()
-    self:ensure_cached_controls() -- TODO review design of cache, confusing already
-    return TimelineController:new(self, true)
 end
 
 function ScreenPalEditorWindow:get_time_string()
     self:ensure_cached_controls()
-    return self:timeline_controller_ok_skip_pps().time_string
+    return self:timeline_controller().time_string
 end
 
 function ScreenPalEditorWindow:toggle_AXEnhancedUserInterface()
@@ -516,7 +510,7 @@ function act_on_silence(win, silence, action_keystroke)
             timeline_relative_x = timeline_relative_x + 20
         end
     end
-    local timeline = win:timeline_controller_ok_skip_pps()
+    local timeline = win:timeline_controller()
     timeline:move_playhead_to(timeline_relative_x)
 
     hs.eventtap.keyStroke({}, action_keystroke, 0, win.app)
@@ -568,7 +562,7 @@ local function detect_silences(callback)
 
         local detected = syncify(detect_silence, where_to)
 
-        local timeline = win:timeline_controller_ok_skip_pps()
+        local timeline = win:timeline_controller()
         local silences = SilencesController:new(detected, timeline)
         callback(win, silences)
     end)
@@ -577,7 +571,7 @@ end
 ---@param win ScreenPalEditorWindow
 local function move_playhead_to_silence(win, silence)
     local timeline_relative_x = silence.x_start
-    local timeline = win:timeline_controller_ok_skip_pps()
+    local timeline = win:timeline_controller()
     timeline:move_playhead_to(timeline_relative_x)
 end
 
@@ -641,7 +635,7 @@ function StreamDeck_ScreenPal_ActOnThisSilence_ThruStart(action_keystroke)
         ---@type ScreenPalEditorWindow, SilencesController
         local win, silences = syncify(detect_silences)
         local silence = silences:get_this_silence()
-        local timeline = win:timeline_controller_ok_skip_pps()
+        local timeline = win:timeline_controller()
         silence = {
             -- PRN make silence ctor? and use it with data returned from detection (hydrate into it)
             x_start = silence.x_start,
@@ -665,7 +659,7 @@ function StreamDeck_ScreenPal_ActOnThisSilence_ThruEnd(action_keystroke)
         ---@type ScreenPalEditorWindow, SilencesController
         local win, silences = syncify(detect_silences)
         local silence = silences:get_this_silence()
-        local timeline = win:timeline_controller_ok_skip_pps()
+        local timeline = win:timeline_controller()
         silence = {
             -- PRN make silence ctor? and use it with data returned from detection (hydrate into it)
             x_start = timeline:get_current_playhead_timeline_relative_x(),
@@ -747,7 +741,7 @@ function SPal_AdjustSelection(side, num_frames, text)
         if not tool or not tool.x_end then return end
 
         if side == START then
-            local timeline = win:timeline_controller_ok_skip_pps()
+            local timeline = win:timeline_controller()
             timeline:move_playhead_to(tool.x_start)
             if num_frames > 0 then
                 -- expand
@@ -767,12 +761,12 @@ function SPal_AdjustSelection(side, num_frames, text)
             -- print("adjusting by num_pixels: " .. tostring(num_pixels) .. " frames: " .. tostring(num_frames))
             -- next_frame_x_guess_zoom2 = tool.x_end + num_pixels
             -- extend selection to current playhead position
-            -- local timeline = win:timeline_controller_ok_skip_pps()
+            -- local timeline = win:timeline_controller()
             -- timeline:move_playhead_to(next_frame_x_guess_zoom2)
             -- hs.eventtap.keyStroke({}, "e", 0, win.app)
 
             -- move cursor to end of selection
-            local timeline = win:timeline_controller_ok_skip_pps()
+            local timeline = win:timeline_controller()
             timeline:move_playhead_to(tool.x_end)
             -- arrow left/right to move one frame w/o calculating x pixel value and without issues going back with cursor
             if num_frames > 0 then
@@ -783,7 +777,7 @@ function SPal_AdjustSelection(side, num_frames, text)
             -- 0 == JUMP to end only
         elseif side == OTHER then
             -- just flip to other side!
-            local timeline = win:timeline_controller_ok_skip_pps()
+            local timeline = win:timeline_controller()
             local playhead_x = timeline:get_current_playhead_timeline_relative_x()
             local x_middle = tool.x_start + (tool.x_end - tool.x_start) / 2
             local playhead_closer_to_start = playhead_x < x_middle
@@ -830,7 +824,7 @@ function StreamDeck_ScreenPal_Timeline_ZoomAndJumpToStart()
         sleep_ms(10)
 
         -- FYI jumping to start/end unzoomed doesn't need PPS:
-        win:timeline_controller_ok_skip_pps():move_playhead_to_timeline_start()
+        win:timeline_controller():move_playhead_to_timeline_start()
 
         sleep_ms(10)
         win:zoom2()
@@ -843,7 +837,7 @@ function StreamDeck_ScreenPal_Timeline_ZoomAndJumpToEnd()
         win:zoom_off()
         sleep_ms(10)
 
-        win:timeline_controller_ok_skip_pps():move_playhead_to_timeline_end()
+        win:timeline_controller():move_playhead_to_timeline_end()
 
         sleep_ms(10)
         win:zoom2()

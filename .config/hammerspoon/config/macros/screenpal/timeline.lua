@@ -16,9 +16,7 @@ end
 
 ---@param editor_window ScreenPalEditorWindow
 ---@param self TimelineController
-function TimelineController:new(editor_window, ok_to_skip_pps)
-    ok_to_skip_pps = ok_to_skip_pps or false
-
+function TimelineController:new(editor_window)
     local _timeline_frame = editor_window._btn_position_slider:axFrame()
     self._timeline_frame = _timeline_frame
 
