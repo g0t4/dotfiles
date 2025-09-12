@@ -1,5 +1,12 @@
 from tools import detect_tools, ToolResult
 
+# TODO! add masks to detect cursor when tool is open ...
+#   always is 4 pixels wide (columns), solid color too
+#      one exception is __SHAPE OVERLAYS__, since they are animated they use a light blue
+#      - light blue and pretty constant color with extreme ends
+#      - I can track that using a blue mask alone
+#   remember cursor can be moved out of selection so its a third position to track (start, end, cursor)
+
 # TODO test if volume edit tool range works on pink too
 # TODO also revist and test perf with white dash under the tool
 
