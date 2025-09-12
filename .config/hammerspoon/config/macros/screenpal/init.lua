@@ -456,13 +456,13 @@ function show_silences(win, silences)
                 type = "rectangle",
                 action = "fill",
                 fillColor = fill_color,
-                frame = { x = silence.x_start, y = timeline_frame.h * 2, w = width, h = timeline_frame.h }
+                frame = { x = silence.x_start, y = below_timeline_y, w = width, h = timeline_frame.h }
             })
             table.insert(elements, {
                 type = "rectangle",
                 action = "stroke",
                 strokeColor = border_color,
-                frame = { x = silence.x_start, y = timeline_frame.h * 2, w = width, h = timeline_frame.h }
+                frame = { x = silence.x_start, y = below_timeline_y, w = width, h = timeline_frame.h }
             })
         end
     end
@@ -478,16 +478,17 @@ function show_silences(win, silences)
                 type = "rectangle",
                 action = "fill",
                 fillColor = tool_fill_color,
-                frame = { x = tool.x_start, y = 0, w = tool_width, h = timeline_frame.h }
+                frame = { x = tool.x_start, y = above_timeline_y, w = tool_width, h = timeline_frame.h }
             })
             table.insert(elements, {
                 type = "rectangle",
                 action = "stroke",
                 strokeColor = tool_border_color,
-                frame = { x = tool.x_start, y = 0, w = tool_width, h = timeline_frame.h }
+                frame = { x = tool.x_start, y = above_timeline_y, w = tool_width, h = timeline_frame.h }
             })
         end
     end
+
 
     canvas:appendElements(elements)
     silences_canvas = canvas
