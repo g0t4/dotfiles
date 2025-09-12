@@ -108,11 +108,13 @@ local function _wait_until_playhead_at_screen_x(self, desired_playhead_screen_x,
         hs.timer.usleep(_10ms)
 
         if _is_playhead_now_at_screen_x(self, desired_playhead_screen_x) then
-            print("  after " .. iteration .. " iterations")
+            -- print("  after " .. iteration .. " iterations")
             break
         end
     end
-    print_took("  wait for playhead move", start)
+    if get_elapsed_time_in_milliseconds(start) > 100 then
+        print_took("  wait for playhead move", start)
+    end
 end
 
 ---@param self TimelineController

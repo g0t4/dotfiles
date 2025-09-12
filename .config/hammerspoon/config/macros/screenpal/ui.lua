@@ -23,7 +23,7 @@ function AppWindows:_refresh()
         new_cache[title] = win
     end
     self.windows_by_title = new_cache
-    print_took("  refresh took", start)
+    -- print_took("  refresh took", start)
 end
 
 function AppWindows:_ensure_loaded()
@@ -55,7 +55,7 @@ function AppWindows:_get_window_by_title_pattern(titlePattern)
     for title, win in pairs(self.windows_by_title) do
         -- print("  title: " .. tostring(title))
         if title:match(titlePattern) then
-            print_took("  getWindowByTitle took", start)
+            -- print_took("  getWindowByTitle took", start)
             return win
         end
     end
