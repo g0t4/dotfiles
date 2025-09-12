@@ -29,9 +29,6 @@ def detect_tools(use_file):
 
     pink = np.array([198, 74, 218])  # BGR pink top shiny part (row 8, index 7th)
     pink_mask = color_mask(image, pink, 4)
-    # TODO revisit how well pink mask is matching ends (notably when cursor is at end/start/middle)
-    # TODO also revist and test perf with white dash under the tool
-    #   PRN add some automated tests of these scenarios with expected values matched!
 
     red = np.array([9, 6, 145])
     red_mask = color_mask(image, red, 4)
@@ -74,8 +71,6 @@ def detect_tools(use_file):
 
     if min_index is None or max_index is None:
         return None
-
-    # TODO test if volume edit tool range works on pink too
 
     return ToolResult(
         type="volume_add_tool",
