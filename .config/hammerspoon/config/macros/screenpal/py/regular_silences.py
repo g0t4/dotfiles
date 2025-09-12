@@ -10,7 +10,7 @@ from visualize import *
 
 DEBUG = __name__ == "__main__"
 
-def get_regular_silences():
+def detect_regular_silences():
 
     gray_box_mask = color_mask(image, colors_bgr.silence_gray, tolerance + 2)  # slightly looser for AA edges
     #   it does detect the playhead and the white dashed vertical line from recording mark, but I could skip over those with a n algorithm of some sort to connect sections with tiny tiny gaps (<4 pixels wide) assuming both sides are silence
@@ -31,13 +31,13 @@ def get_regular_silences():
 
     # * sort by x_start
     #   b/c there is no guarantee that ranges (stats) are sorted
-    def sort_ranges(ranges: np.ndarray) -> np.ndarray:
+    def sort_ranges_by_x_start(ranges: np.ndarray) -> np.ndarray:
         """ assumed that each row starts with x_start """
         x_start_column = ranges[:, 0]
         sorted_row_indicies = np.argsort(x_start_column)
         return ranges[sorted_row_indicies]
 
-    x_sorted_ranges = sort_ranges(x_ranges)
+    x_sorted_ranges = sort_ranges_by_x_start(x_ranges)
 
     # PRN throw if any regions overlap?
     # OR, throw if they aren't basically the full height of the image?
@@ -66,7 +66,7 @@ def get_regular_silences():
     merged_x_ranges = reduce(merge_if_one_pixel_apart, x_sorted_ranges, [])
 
     # * serialize response to json in STDOUT
-    results = {
+    detected = {
         "silences": [
             {
                 "x_start": int(x_start / 2),  # int() is serializable
@@ -98,21 +98,21 @@ def get_regular_silences():
             labeled_mask,
         )
 
-        print(json.dumps(results))
+        print(json.dumps(detected))
 
         if file == "samples/timeline03a.png":
             # PRN use unit test assertions so we can see what differs
             expected = {"silences": [{"x_start": 754, "x_end": 891}, {"x_start": 1450, "x_end": 1653}]} # yapf: disable
-            assert results["silences"] == expected["silences"]
+            assert detected["silences"] == expected["silences"]
             print("\n[bold underline green]MATCHED REGULAR SILENCE TEST CASE!")
 
             # * final preview mask
             show_and_wait(image, build_range_mask(merged_x_ranges, image))
 
-    return results
+    return detected
 
 if DEBUG:
     # z screenpal/py
     # time python3 regular_silences.py samples/timeline03a.png --debug
     from rich import print
-    get_regular_silences()
+    detect_regular_silences()
