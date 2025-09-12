@@ -19,16 +19,16 @@ def get_short_silences():
     look_end = -1
 
     def detect_short_silences(mask: np.ndarray):
-        mask = mask[48:, :]  # take 48+ (bottom 50% of mask) for Insert New to match too
+        mask_roi = mask[48:, :]  # take 48+ (bottom 50% of mask) for Insert New to match too
         # verify assumption (just to be safe)
         # FYI ends have curved edges, wait until this is an issue... could make mask around curved corners and then pad with neighboring pixels or smth else and add if they are empty nearby or not
-        assert np.all((mask == 0) | (mask == 255)), "FAILURE - Mask contains values other than 0 or 255"
+        assert np.all((mask_roi == 0) | (mask_roi == 255)), "FAILURE - Mask contains values other than 0 or 255"
         # mask = mask[:, 1400:1490]  # TODO remove/comment out, test on subset of columns near playhead that I know well
-        mask = mask / 255  # scale to 0/1
+        mask_roi = mask_roi / 255  # scale to 0/1
         # print(f"{mask=}")
-        col_sums = mask.sum(0)
+        col_sums = mask_roi.sum(0)
         # print(f"{col_sums=}")
-        short_silences = col_sums == (mask.shape[0])
+        short_silences = col_sums == (mask_roi.shape[0])
         # print(f"{short_silences=}")
         # pad 1 column extra to start/end (num_start, num_end)
         #   uses value from start/end column (false/0 in my case so I get extra 0 on each end in padded)
