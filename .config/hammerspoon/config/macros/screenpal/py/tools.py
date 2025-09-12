@@ -12,6 +12,10 @@ DEBUG = __name__ == "__main__"
 
 def detect_tools():
 
+    image = shared_context.image
+    timeline_mask = shared_context.timeline_mask
+    playhead_mask = shared_context.playhead_mask
+
     pink = np.array([198, 74, 218])  # BGR pink top shiny part (row 8, index 7th)
     pink_mask = color_mask(image, pink, 4)
     # TODO revisit how well pink mask is matching ends (notably when cursor is at end/start/middle)
@@ -72,7 +76,7 @@ def detect_tools():
 
         print(json.dumps(detected))
 
-        if file == "samples/pink-volume-add-open.png":
+        if file_arg == "samples/pink-volume-add-open.png":
             expected_tool = {"type": "volume_add_tool", "x_start": 289, "x_end": 403}
             assert detected["tool"] == expected_tool
             print("\n[bold underline green]MATCHED TOOL TEST CASE!")

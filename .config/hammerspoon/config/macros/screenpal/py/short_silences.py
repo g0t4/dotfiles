@@ -12,6 +12,10 @@ DEBUG = __name__ == "__main__"
 
 def detect_short_silences():
 
+    image = shared_context.image
+    timeline_mask = shared_context.timeline_mask
+    playhead_mask = shared_context.playhead_mask
+
     hunt_mask = cv.bitwise_or(timeline_mask, playhead_mask)
     hunt_mask_CLOSED = cv.morphologyEx(hunt_mask, cv.MORPH_CLOSE, np.ones((3, 3), np.uint8))
 
@@ -70,7 +74,7 @@ def detect_short_silences():
 
         print(json.dumps(detected))
 
-        if file == "samples/playhead-darkblue1.png":
+        if file_arg == "samples/playhead-darkblue1.png":
             # PRN use unit test assertions so we can see what differs
             expected = {"short_silences": [{"x_start": 4, "x_end": 5}, {"x_start": 31, "x_end": 32}, {"x_start": 217, "x_end": 218}, {"x_start": 319, "x_end": 320}, {"x_start": 376, "x_end": 378}, {"x_start": 403,
             "x_end": 404}, {"x_start": 703, "x_end": 743}, {"x_start": 1024, "x_end": 1025}, {"x_start": 1228, "x_end": 1229}, {"x_start": 1423, "x_end": 1464}, {"x_start": 1561, "x_end": 1562}, {"x_start": 1741, "x_end":

@@ -29,8 +29,8 @@ def create_separator_for(image):
     separator[:, :] = WINDOW_BG_COLOR
     return separator
 
-file = sys.argv[1] if len(sys.argv) > 1 else None
-if not file:
+file_arg = sys.argv[1] if len(sys.argv) > 1 else None
+if not file_arg:
     raise ValueError("No image file provided, pass as first argument")
 
 def load_image(path) -> np.ndarray:
@@ -63,17 +63,21 @@ colors_bgr = TimelineColorsBGR(
 # returns 2D array, where each pixel is either 0 or 255
 # 0 = NOT A MATCH (1+ components does not match w/in tolerance)
 # 255 = MATCH (all components BGR match w/in tolerance)
-def color_mask(img, color, tol):
+def color_mask(img, color, tolerance):
     diff = np.abs(img.astype(np.int16) - color.astype(np.int16))
-    return (diff <= tol).all(axis=2).astype(np.uint8) * 255
+    return (diff <= tolerance).all(axis=2).astype(np.uint8) * 255
+
+class TimelineSharedDetectionContext:
+
+    def __init__(self, file):
+        self.image = load_image(file)
+        # Tiny tolerance may handle edge pixels
+        tolerance = 4
+        self.timeline_mask = color_mask(self.image, colors_bgr.timeline_bg, tolerance)
+        self.playhead_mask = color_mask(self.image, colors_bgr.playhead, tolerance)
 
 # RUN ONE TIME for all detection scripts
-image = load_image(file)
-
-# Tiny tolerance may handle edge pixels
-tolerance = 4
-timeline_mask = color_mask(image, colors_bgr.timeline_bg, tolerance)  # leave so you can come back to this later for additional detection (i.e. unmarked silences, < 1 second)
-playhead_mask = color_mask(image, colors_bgr.playhead, tolerance)
+shared_context = TimelineSharedDetectionContext(file_arg)
 
 def scan_mask(mask):
     """

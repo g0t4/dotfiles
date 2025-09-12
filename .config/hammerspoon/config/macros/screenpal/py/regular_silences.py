@@ -12,7 +12,11 @@ DEBUG = __name__ == "__main__"
 
 def detect_regular_silences():
 
-    gray_box_mask = color_mask(image, colors_bgr.silence_gray, tolerance + 2)  # slightly looser for AA edges
+    image = shared_context.image
+    timeline_mask = shared_context.timeline_mask
+    playhead_mask = shared_context.playhead_mask
+
+    gray_box_mask = color_mask(image, colors_bgr.silence_gray, tolerance=6)  # slightly looser for AA edges
     #   it does detect the playhead and the white dashed vertical line from recording mark, but I could skip over those with a n algorithm of some sort to connect sections with tiny tiny gaps (<4 pixels wide) assuming both sides are silence
     gray_box_mask_smooth = cv.morphologyEx(gray_box_mask, cv.MORPH_OPEN, np.ones((3, 3), np.uint8))  # smooth out, skip freckled matches
     num_labels, labels, stats, _ = cv.connectedComponentsWithStats(gray_box_mask_smooth, connectivity=8)
@@ -98,7 +102,7 @@ def detect_regular_silences():
 
         print(json.dumps(detected))
 
-        if file == "samples/timeline03a.png":
+        if file_arg == "samples/timeline03a.png":
             # PRN use unit test assertions so we can see what differs
             expected = {"regular_silences": [{"x_start": 754, "x_end": 891}, {"x_start": 1450, "x_end": 1653}]} # yapf: disable
             assert detected["regular_silences"] == expected["regular_silences"]
