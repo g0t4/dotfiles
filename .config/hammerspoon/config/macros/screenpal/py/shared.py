@@ -46,6 +46,7 @@ class TimelineSharedDetectionContext:
 _shared_context = {}
 
 def get_shared_context(file) -> TimelineSharedDetectionContext:
+    # FYI I am not yet happy with how this works but it is sufficient to start on test cases for tools and then I can revisit this
     global _shared_context
     if file not in _shared_context:
         _shared_context[file] = TimelineSharedDetectionContext(file)
