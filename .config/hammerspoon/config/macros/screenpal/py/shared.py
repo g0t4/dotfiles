@@ -84,7 +84,20 @@ def color_mask(img, color, tolerance):
     diff = np.abs(img.astype(np.int16) - color.astype(np.int16))
     return (diff <= tolerance).all(axis=2).astype(np.uint8) * 255
 
-def scan_mask(mask):
+def print_mask_evenly(name, mask, cols_per_line=10):
+    """
+    Print readable 2-D mask values with column offsets.
+    """
+    mask = np.asarray(mask).ravel()
+    n = len(mask)
+
+    print(f"\n{name} {mask.shape}:\n")
+    for i in range(0, n, cols_per_line):
+        chunk = mask[i:i + cols_per_line]
+        print(f"{i:4d}: {chunk}")
+    print()
+
+def scan_mask(mask, cols_per_line=20):
     """
     best for masks with few pixels "turned on"
     i.e. to find playhead,
@@ -97,7 +110,6 @@ def scan_mask(mask):
             # only print rows with a non-zero value
             continue
         print("row: i=", i)
-        cols_per_line = 20
         re = np.reshape(row, [-1, cols_per_line])
         for i, r in enumerate(re):
             if np.sum(r) == 0:

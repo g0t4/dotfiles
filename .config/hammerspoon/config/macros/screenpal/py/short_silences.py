@@ -21,31 +21,45 @@ def detect_short_silences(use_file):
     hunt_mask_CLOSED = cv.morphologyEx(hunt_mask, cv.MORPH_CLOSE, np.ones((3, 3), np.uint8))
 
     def find_ranges(mask: np.ndarray):
+        # mask = mask[:, 1400:1490]  # uncomment to test a subset
         mask_roi = mask[48:, :]  # take 48+ (bottom 50% of mask) for Insert New to match too
-        # verify assumption (just to be safe)
-        # FYI ends have curved edges, wait until this is an issue... could make mask around curved corners and then pad with neighboring pixels or smth else and add if they are empty nearby or not
+
         assert np.all((mask_roi == 0) | (mask_roi == 255)), "FAILURE - Mask contains values other than 0 or 255"
-        # mask = mask[:, 1400:1490]  # TODO remove/comment out, test on subset of columns near playhead that I know well
+
         mask_roi = mask_roi / 255  # scale to 0/1
-        # print(f"{mask=}")
+
         col_sums = mask_roi.sum(0)
-        # print(f"{col_sums=}")
+        # print_mask_evenly("col_sums", col_sums)
+
+        # 1 == timeline background
+        # when all columns have the timeline background == silence period
         short_silences = col_sums == (mask_roi.shape[0])
-        # print(f"{short_silences=}")
-        # pad 1 column extra to start/end (num_start, num_end)
-        #   uses value from start/end column (false/0 in my case so I get extra 0 on each end in padded)
-        #   useful for diff to scan left to right for consecutive silence columns including through the start/end columns
+        # print_mask_evenly("short_silences", short_silences)
+
+        # pad 1 extra column to start/end (num_start, num_end)
+        #   uses value from start/end column
+        #   [ X x...y Y ]
+        #      where x...y is the original array
+        #   purpose: shift columns right by one for the column diff (next)
+        #   trailing padding is irrelevant (will always come out 0, and be dropped by the flatnonzero stage)
         padded = np.pad(short_silences.astype(np.int8), (1, 1))
-        # print(f"{padded=}")
-        diff = np.diff(padded, 1, -1)  # diff[n] = padded[n+1] - padded[n]
-        # print(f"{diff=}")
-        # THUS 1 => start of silence range, -1 => end of silence range!
-        edges = np.flatnonzero(diff)
-        # print(f'{edges=}')
-        # PRN why the !=0 in the ChatGPT example
-        # print(f'{np.flatnonzero(np.diff(padded)!=0)=}')
-        # print(f'{np.flatnonzero(diff != 0)=}')
-        ranges = [(edges[i], edges[i + 1] - 1) for i in range(0, len(edges), 2)]
+        # print_mask_evenly("padded", padded)
+
+        column_diff = np.diff(padded, 1, -1)  # diff[n] = padded[n+1] - padded[n]
+        # print_mask_evenly("column_diff", column_diff)
+
+        # THUS 1 => start of silence range (0 => 1 == 1 - 0 == 1)
+        #     -1 => end of silence range! (1 => 0 == 0 - 1 == -1)
+        change_indices = np.flatnonzero(column_diff)
+        # print_mask_evenly("change_indices", change_indices)
+
+        # pair-wise grouping of (start,end) short silence ranges
+        ranges = [
+            (change_indices[i], change_indices[i + 1] - 1)  \
+            for i in range(0, len(change_indices), 2)]
+
+        # print_mask_evenly("ranges", ranges)
+
         return ranges
 
     ranges = find_ranges(hunt_mask_CLOSED)
@@ -79,4 +93,3 @@ if DEBUG:
     detected = detect_short_silences(file_arg)
 
     print(json.dumps(detected))
-
