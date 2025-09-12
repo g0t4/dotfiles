@@ -112,9 +112,7 @@ local function _wait_until_playhead_at_screen_x(self, desired_playhead_screen_x,
             break
         end
     end
-    if get_elapsed_time_in_milliseconds(start) > 100 then
-        print_took("  wait for playhead move", start)
-    end
+    log_if_slower_than_100ms("  wait for playhead move", start)
 end
 
 ---@param self TimelineController

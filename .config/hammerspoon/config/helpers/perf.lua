@@ -7,6 +7,20 @@ function get_elapsed_time_since(start_time)
     return get_time() - start_time
 end
 
+local function log_if_slower_than_x_ms(minimum_ms, message, start_time)
+    local elapsed_time_ms = get_elapsed_time_in_milliseconds(start_time)
+
+    if elapsed_time_ms > minimum_ms then
+        print("Performance warning: " .. elapsed_time_ms .. "ms")
+    end
+
+    return elapsed_time_ms
+end
+
+function log_if_slower_than_100ms(message, start_time)
+    log_if_slower_than_x_ms(100, message, start_time)
+end
+
 function get_elapsed_time_in_milliseconds(start_time)
     local elapsed_time_seconds = get_elapsed_time_since(start_time)
     -- round to 1 decimal place
