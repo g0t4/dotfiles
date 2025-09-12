@@ -65,7 +65,7 @@ def detect_regular_silences():
 
     # * serialize response to json in STDOUT
     detected = {
-        "silences": [
+        "regular_silences": [
             {
                 "x_start": int(x_start / 2),  # int() is serializable
                 "x_end": int(x_end / 2),
@@ -100,8 +100,8 @@ def detect_regular_silences():
 
         if file == "samples/timeline03a.png":
             # PRN use unit test assertions so we can see what differs
-            expected = {"silences": [{"x_start": 754, "x_end": 891}, {"x_start": 1450, "x_end": 1653}]} # yapf: disable
-            assert detected["silences"] == expected["silences"]
+            expected = {"regular_silences": [{"x_start": 754, "x_end": 891}, {"x_start": 1450, "x_end": 1653}]} # yapf: disable
+            assert detected["regular_silences"] == expected["regular_silences"]
             print("\n[bold underline green]MATCHED REGULAR SILENCE TEST CASE!")
 
             # * final preview mask
