@@ -166,14 +166,73 @@ vim.cmd [[
 ]]
 
 
+-- --- * paste as an operator!
+-- --- * -["x]p{motion}
+-- -- PRN... showstopper ... what to do with traditional paste?
+-- --      lose the ability to just 'p'
+-- --   AFAICT there isn't a timeout for operatorfunc?
+-- --   or if it times out it does nothing?
+-- --
+-- -- inspired by other operations:
+-- -- -["x]c{motion}
+-- -- -["x]d{motion}
+-- -- -["x]y{motion}
+-- -- -["x]zy{motion}
+-- --
+-- -- :h g@
+-- -- :h text-objects
+-- --
+-- -- try it:
+-- -- - yank words in visual charwise => pastes in charwise
+-- --    yiw (yank inner word) => piW (paste around word)
+-- --    copy smth => pip (paste inner paragraph)
+-- --
+-- -- think p == v{motion}p
+-- --
+--
+-- vim.keymap.set("n", "p", function()
+--     vim.o.operatorfunc = "v:lua.paste_as_operator"
+--     return "g@"
+-- end, { expr = true })
+--
+-- vim.keymap.set("x", "p", function()
+--     vim.o.operatorfunc = "v:lua.paste_as_operator"
+--     return "g@"
+-- end, { expr = true })
+--
+-- function paste_as_operator(type)
+--     print("type: ", type)
+--     local register = vim.fn.getreg('*')
+--     commands = {
+--         char = "normal `[v`]",
+--         line = "normal `[V`]",
+--         block = "normal `[\\<C-V>`]",
+--     }
+--     local which = commands[type]
+--     -- print(which)
+--     vim.cmd(which)
+--     -- vim.cmd("normal `[")
+--     -- -- TODO get line/char/block wise type (see `:h g@` for example )
+--     -- vim.cmd("normal V")
+--     -- vim.cmd("normal `]")
+--     register = register or ""
+--     vim.cmd("normal c") -- follows convention for yanking deleted text (or not)
+--     vim.api.nvim_paste(register, false, -1)
+--
+--     -- if register ~= nil and register ~= '' then
+--     --     -- TODO select
+--     --     vim.cmd("normal d") -- follows convention for yanking deleted text (or not)
+--     --     vim.api.nvim_paste(register, false, -1)
+--     -- else
+--     --     print("No text in primary register")
+--     -- end
+-- end
 
-
-
-
-
+-- * gcl operator
 -- [<count>]gcl<motion>
+--
 -- define gcl (l == linewise) operator (waits for a motion to select lines to apply to)
-
+--  motion can be non-linewise but line only really makes sense for this operation
 vim.keymap.set("x", "gcl", function()
     vim.o.operatorfunc = "v:lua.toggle_linewise_comments_operator_func"
     return "g@"
