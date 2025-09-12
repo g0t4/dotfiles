@@ -122,6 +122,10 @@ print(f'# {cv_img_volume_cursor_end[7, 1663]=} # BGR opencv')
 # cv_img_volume_cursor_end[7, 1661]=array([226,  81, 255], dtype=uint8) # BGR opencv
 # cv_img_volume_cursor_end[7, 1662]=array([226,  81, 255], dtype=uint8) # BGR opencv
 # cv_img_volume_cursor_end[7, 1663]=array([226,  81, 255], dtype=uint8) # BGR opencv
+# TO BE SAFE check a ways down too so its not matching some other pink in row 8 on accident:
+print(f'# {cv_img_volume_cursor_end[21, 1660]=} # BGR opencv') # GOOD TO GO!
+# cv_img_volume_cursor_end[21, 1660]=array([226,  81, 255], dtype=uint8) # BGR opencv
+#
 #  TODO! does this overlap with non-slection or is it all in the selection?
 
 #
