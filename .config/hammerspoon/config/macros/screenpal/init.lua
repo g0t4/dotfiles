@@ -684,8 +684,14 @@ function StreamDeck_ScreenPal_ActOnNextSilence(action_keystroke)
     end)
 end
 
-function StreamDeck_ScreenPal_AdjustSelection(side, num_frames)
-    side = side or "start"
+local START = "start"
+local END = "end"
+local OTHER = "other"
+local LEFT = "left"
+local RIGHT = "right"
+
+function SPal_AdjustSelection(side, num_frames)
+    side = side or START
 
     run_async(function()
         ---@type ScreenPalEditorWindow, SilencesController
@@ -694,15 +700,15 @@ function StreamDeck_ScreenPal_AdjustSelection(side, num_frames)
         local tool = silences.hack_detected.tool
         if not tool or not tool.x_end then return end
 
-        if side == "start" then
+        if side == START then
             local timeline = win:timeline_controller_ok_skip_pps()
             timeline:move_playhead_to(tool.x_start)
             if num_frames > 0 then
                 -- expand
-                hs.eventtap.keyStroke({}, "left", 0, win.app)
+                hs.eventtap.keyStroke({}, LEFT, 0, win.app)
             elseif num_frames < 0 then
                 -- shink
-                hs.eventtap.keyStroke({}, "right", 0, win.app)
+                hs.eventtap.keyStroke({}, RIGHT, 0, win.app)
             end
             -- 0 == JUMP to start only
         else
@@ -723,9 +729,9 @@ function StreamDeck_ScreenPal_AdjustSelection(side, num_frames)
             local timeline = win:timeline_controller_ok_skip_pps()
             timeline:move_playhead_to(tool.x_end)
             if num_frames > 0 then
-                hs.eventtap.keyStroke({}, "right", 0, win.app) -- expand
+                hs.eventtap.keyStroke({}, RIGHT, 0, win.app) -- expand
             elseif num_frames < 0 then
-                hs.eventtap.keyStroke({}, "left", 0, win.app) -- shrink
+                hs.eventtap.keyStroke({}, LEFT, 0, win.app) -- shrink
             end
             -- 0 == JUMP to end only
         end
