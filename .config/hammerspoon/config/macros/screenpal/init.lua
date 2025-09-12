@@ -692,8 +692,18 @@ function StreamDeck_ScreenPal_AdjustSelectionEnd(num_frames)
         local tool = silences.hack_detected.tool
         if not tool or not tool.x_end then return end
 
+
+        -- CANNOT CLICK left of end by one frame! it's min 2 frames, but I can reliably get one after (expand)...
         -- 6 == 2*3 (3 pixels in 1080p per frame at zoom2)
-        next_frame_x_guess_zoom2 = tool.x_end + 6 * num_frames
+        local num_pixels = 6 * num_frames
+        if num_frames < 0 then
+            num_pixels = -12
+        end
+        print("adjusting by num_pixels: " .. tostring(num_pixels) .. " frames: " .. tostring(num_frames))
+
+
+
+        next_frame_x_guess_zoom2 = tool.x_end + num_pixels
 
         local timeline = win:timeline_controller_ok_skip_pps()
         timeline:move_playhead_to(next_frame_x_guess_zoom2)
