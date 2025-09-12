@@ -712,7 +712,7 @@ function SPal_AdjustSelection(side, num_frames)
             end
             -- 0 == JUMP to start only
         elseif side == END then
-            -- -- CANNOT CLICK left of end by one frame! it's min 2 frames, but I can reliably get one after (expand)...
+            -- FYI this works on end to expand (click right of end), just not to shrink (click left of end)
             -- -- 6 == 2*3 (3 pixels in 1080p per frame at zoom2)
             -- local num_pixels = 6 * num_frames
             -- if num_frames < 0 then
@@ -725,9 +725,10 @@ function SPal_AdjustSelection(side, num_frames)
             -- timeline:move_playhead_to(next_frame_x_guess_zoom2)
             -- hs.eventtap.keyStroke({}, "e", 0, win.app)
 
-            -- move cursor to end of selection (then can manually adjust myself!)
+            -- move cursor to end of selection
             local timeline = win:timeline_controller_ok_skip_pps()
             timeline:move_playhead_to(tool.x_end)
+            -- arrow left/right to move one frame w/o calculating x pixel value and without issues going back with cursor
             if num_frames > 0 then
                 hs.eventtap.keyStroke({}, RIGHT, 0, win.app) -- expand
             elseif num_frames < 0 then
