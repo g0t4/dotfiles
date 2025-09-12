@@ -422,10 +422,22 @@ function show_silences(win, silences)
 
     local timeline = win:timeline_controller()
     local timeline_frame = timeline:get_timeline_frame()
-    local canvas = hs.canvas.new(timeline_frame)
+    local canvas_frame = {
+        x = timeline_frame.x,
+        w = timeline_frame.w,
+
+        -- 3x the height of the timeline (basically three lanes, one above, one over, one below)
+        y = timeline_frame.y - timeline_frame.h,
+        h = timeline_frame.h * 3
+    }
+    local canvas = hs.canvas.new(canvas_frame)
     assert(canvas)
     canvas:show()
     local elements = {}
+
+    local above_timeline_y = 0
+    local over_timeline_y = timeline_frame.h
+    local below_timeline_y = timeline_frame.h * 2
 
     for _, silence in ipairs(silences.all) do
         local width = silence.x_end - silence.x_start -- PRN move to silence DTO as new behavior (how did I do that for axuielemMT
@@ -444,35 +456,35 @@ function show_silences(win, silences)
                 type = "rectangle",
                 action = "fill",
                 fillColor = fill_color,
-                frame = { x = silence.x_start, y = 0, w = width, h = timeline_frame.h }
+                frame = { x = silence.x_start, y = timeline_frame.h * 2, w = width, h = timeline_frame.h }
             })
             table.insert(elements, {
                 type = "rectangle",
                 action = "stroke",
                 strokeColor = border_color,
-                frame = { x = silence.x_start, y = 0, w = width, h = timeline_frame.h }
+                frame = { x = silence.x_start, y = timeline_frame.h * 2, w = width, h = timeline_frame.h }
             })
         end
     end
 
-    -- Draw tool canvas if defined
     local tool = silences.hack_detected.tool
     if tool and tool.type then
         local tool_width = tool.x_end - tool.x_start
         if tool_width > 0 then
             local tool_fill_color = { red = 0, green = 1, blue = 0, alpha = 0.3 }
             local tool_border_color = { red = 0, green = 1, blue = 0, alpha = 1 }
+            -- PRN show color to match tool's color
             table.insert(elements, {
                 type = "rectangle",
                 action = "fill",
                 fillColor = tool_fill_color,
-                frame = { x = tool.x_start, y = timeline_frame.h / 2, w = tool_width, h = timeline_frame.h }
+                frame = { x = tool.x_start, y = 0, w = tool_width, h = timeline_frame.h }
             })
             table.insert(elements, {
                 type = "rectangle",
                 action = "stroke",
                 strokeColor = tool_border_color,
-                frame = { x = tool.x_start, y = timeline_frame.h / 2, w = tool_width, h = timeline_frame.h }
+                frame = { x = tool.x_start, y = 0, w = tool_width, h = timeline_frame.h }
             })
         end
     end
