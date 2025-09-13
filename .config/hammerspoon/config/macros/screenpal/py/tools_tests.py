@@ -16,7 +16,9 @@ def test_detect_tools_with_pink_volume_add_open():
     # TODO revisit how well pink mask is matching ends (notably when cursor is at end/start/middle)
     #    specifically measure the range detected here and improve it if needed:
     #    I am not sure I am matching to the end fully (and need to test for other cursor positions)
-    expected_tool = ToolResult(type="volume_add_tool", x_start=289, x_end=403)
+    # max col is 810 (1-based) => 810/2 = 405 (1-based) => 404 0-based
+    # min col is 577 (1-based) => 577/2 = 288.5 == 289 (1-based) => 288 0-based
+    expected_tool = ToolResult(type="volume_add_tool", x_start=288, x_end=404)
 
     assert detected == expected_tool
 
