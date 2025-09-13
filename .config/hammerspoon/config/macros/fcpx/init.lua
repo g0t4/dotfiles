@@ -41,19 +41,20 @@ function StreamDeckFcpxInspectorTitlePanelEnsureOpen()
     window.inspector:showTitleInspector()
 end
 
+---only expensive to find this the first time (remains valid across changing selections - titles,callouts,etc)
+---  PRN I might be able to reuse this elsewhere then! OR even find it faster now that I know this?
+---  TODO do I have a diff way to find the inspector panel that isn't so slow?
 ---@type hs.axuielement?
-local _cached_grandparent_of_title = nil
+local _cached_inspector_panel_group = nil
 
-function FcpxFindTitlePanelCheckbox(doWithTitlePanel)
-    -- print("cached: " .. hs.inspect(_cached_title_panel_checkbox))
-    -- FYI caching only works for duration of the current selected callout
-    --   I think that might be useful enough to leave this as-is
-    --   When you select a diff callout or smth else in timeline, the cached item here is invalid then
-    --     control is likely recreated
-    --  PRN could I build a dynamic path in memory instead of caching the item? and use that as a static path? instead of caching the element
-    --    might be able to find a parent control that is stable enough for a search even after selecting smth else and coming back
-    if _cached_grandparent_of_title and _cached_grandparent_of_title:isValid() then
-        doWithTitlePanel(_cached_grandparent_of_title)
+function FcpxFindTitlePanelCheckbox(callback)
+    -- TODO try InspectorPanel code
+    -- local window = FcpxEditorWindow:new()
+    -- window.inspector:showTitleInspector()
+    -- TODO and merge with other code that started on this (search for "x scrubber")
+
+    if _cached_inspector_panel_group and _cached_inspector_panel_group:isValid() then
+        callback(_cached_inspector_panel_group)
         return
     end
     -- PRN setup run_async to unravel the callback hell below (and in nested functions)
@@ -73,17 +74,18 @@ function FcpxFindTitlePanelCheckbox(doWithTitlePanel)
             foundCheckbox:performAction("AXPress")
         end
 
-        local grandparent = foundCheckbox:attributeValue("AXParent"):attributeValue("AXParent")
-        _cached_grandparent_of_title = grandparent
-        doWithTitlePanel(grandparent)
+        -- FYI foundCheckbox is recreated on selection changes so don't cache it
+        --   whereas grandparent appears stable (across selections)
+        ---@type hs.axuielement
+        _cached_inspector_panel_group = foundCheckbox:attributeValue("AXParent"):attributeValue("AXParent")
+        callback(_cached_inspector_panel_group)
     end)
 end
 
 function FcpxTitlePanelFocusOnElementByAttr(attrName, attrValue)
-    FcpxFindTitlePanelCheckbox(function(grandparent)
-        -- if static path fails here, search might work!
-        -- local grandparent = checkbox:attributeValue("AXParent"):attributeValue("AXParent")
-        local scrollarea1 = grandparent:attributeValue("AXChildren")[1][1][1]
+    FcpxFindTitlePanelCheckbox(function(inspector_panel)
+        -- if static path fails here, search might work...
+        local scrollarea1 = inspector_panel:attributeValue("AXChildren")[1][1][1]
         GetChildWithAttr(scrollarea1, attrName, attrValue):setAttributeValue("AXFocused", true)
     end)
 end
@@ -155,7 +157,7 @@ function StreamDeckFcpx_PublishedParams_CenterX()
     --
     local window = FcpxEditorWindow:new()
     window.inspector:showTitleInspector()
-    -- TODO! FINISH THIS
+    -- TODO! MERGE WITH OTHER WORKING TOOL TO FIND "x scrubber"
 
     -- local window = GetFcpxEditorWindow()
     -- local sg = window:splitGroup(1):group(1):splitGroup(1)
