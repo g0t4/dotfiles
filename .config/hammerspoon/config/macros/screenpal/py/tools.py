@@ -77,7 +77,28 @@ def detect_tools(use_file):
 
     # FTR I am using the "O" other end tool I made and it works perfect at zoom2 w/ shape overlays so I don't need to do anything special then with the middle of the blue ball (not yet)
     blue_ball_color = np.array([255, 176, 105])  # BGR
-    blue_ball_mask = color_mask(image, blue_ball_color, 4)
+    combined_blue_mask = color_mask(image, blue_ball_color, 4)
+
+    # freeze frame tool
+    green_top_edge_row8 = np.array([103, 101, 35])  # BGR
+    green_mask_top_edge = color_mask(image, green_top_edge_row8, 4)
+    #
+    green_corners = np.array([113, 114, 37])  # BGR
+    green_mask_corners = color_mask(image, green_corners, 4)
+    #
+    green_blue_cursor_on_edge = np.array([227, 134, 0])  # BGR
+    green_mask_cursor_on_edge = color_mask(image, green_blue_cursor_on_edge, 1)
+    #
+    show_green_as = green_blue_cursor_on_edge
+    #
+    combined_green_mask = np.logical_or(
+        green_mask_cursor_on_edge,
+        green_mask_corners,
+    )
+    combined_green_mask = np.logical_or(
+        combined_green_mask,
+        green_mask_top_edge,
+    )
 
     def detect_volume_add_tool(image):
         # color in row 8 works, however playhead interferes if overlapping:
@@ -89,9 +110,12 @@ def detect_tools(use_file):
         # search for either row color
         row8_pink = combined_pink_mask[5]
         row8_red = combined_red_mask[5]
-        row8_blue = blue_ball_mask[5]
+        row8_blue = combined_blue_mask[5]
+        row8_green = combined_green_mask[5]
+
         row8 = np.logical_or(row8_pink, row8_red)  # only two at a time?
-        row8 = np.logical_or(row8, row8_blue) # only two at a time IIUC
+        row8 = np.logical_or(row8, row8_blue)  # only two at a time IIUC
+        row8 = np.logical_or(row8, row8_green)  # add green to the mix
 
         # FYI if needed, scan_mask(pink_mask)
 
@@ -111,7 +135,10 @@ def detect_tools(use_file):
         show_and_wait(
             display_mask_only(image, timeline_mask),
             image,
-            display_mask_only(image, blue_ball_mask, blue_ball_color),
+            #
+            display_mask_only(image, combined_green_mask, show_green_as),
+            #
+            display_mask_only(image, combined_blue_mask, blue_ball_color),
             #
             # easier to line up since this matches on top (so put below the image to compare)
             display_mask_only(image, combined_pink_mask, show_pink_as),
