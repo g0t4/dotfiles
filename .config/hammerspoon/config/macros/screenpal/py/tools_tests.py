@@ -25,3 +25,16 @@ def test_detect_tools_with_pink_volume_add_open():
 
 # def test_with_cut_tool_cursor_at_start():
 #     detected = detect_tools('samples/cut-tool/add-start-selected.png')
+
+def test_with_blue_shape_overlays():
+    detected = detect_tools('samples/overlay/1-add-shape.png')
+    print(detected)
+    # left most:
+    #   148/2 = 74
+    # right most (edge of blue ball, even though its past edge it works)
+    #   524/2 =  262
+    # TODO fix tool type logic! if I need it, else just remove it!
+    expected_tool = ToolResult(type="volume_add_tool", x_start=74, x_end=262)
+    assert detected == expected_tool
+
+    # I can use a blue mask to find the overlay shapes
