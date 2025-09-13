@@ -42,7 +42,7 @@ function StreamDeckFcpxInspectorTitlePanelEnsureOpen()
 end
 
 ---@type hs.axuielement?
-local _cached_title_panel_checkbox = nil
+local _cached_grandparent_of_title = nil
 
 function FcpxFindTitlePanelCheckbox(doWithTitlePanel)
     -- print("cached: " .. hs.inspect(_cached_title_panel_checkbox))
@@ -52,8 +52,8 @@ function FcpxFindTitlePanelCheckbox(doWithTitlePanel)
     --     control is likely recreated
     --  PRN could I build a dynamic path in memory instead of caching the item? and use that as a static path? instead of caching the element
     --    might be able to find a parent control that is stable enough for a search even after selecting smth else and coming back
-    if _cached_title_panel_checkbox and _cached_title_panel_checkbox:isValid() then
-        doWithTitlePanel(_cached_title_panel_checkbox)
+    if _cached_grandparent_of_title and _cached_grandparent_of_title:isValid() then
+        doWithTitlePanel(_cached_grandparent_of_title)
         return
     end
     -- PRN setup run_async to unravel the callback hell below (and in nested functions)
@@ -73,15 +73,16 @@ function FcpxFindTitlePanelCheckbox(doWithTitlePanel)
             foundCheckbox:performAction("AXPress")
         end
 
-        _cached_title_panel_checkbox = foundCheckbox
-        doWithTitlePanel(foundCheckbox)
+        local grandparent = foundCheckbox:attributeValue("AXParent"):attributeValue("AXParent")
+        _cached_grandparent_of_title = grandparent
+        doWithTitlePanel(grandparent)
     end)
 end
 
 function FcpxTitlePanelFocusOnElementByAttr(attrName, attrValue)
-    FcpxFindTitlePanelCheckbox(function(checkbox)
+    FcpxFindTitlePanelCheckbox(function(grandparent)
         -- if static path fails here, search might work!
-        local grandparent = checkbox:attributeValue("AXParent"):attributeValue("AXParent")
+        -- local grandparent = checkbox:attributeValue("AXParent"):attributeValue("AXParent")
         local scrollarea1 = grandparent:attributeValue("AXChildren")[1][1][1]
         GetChildWithAttr(scrollarea1, attrName, attrValue):setAttributeValue("AXFocused", true)
     end)
