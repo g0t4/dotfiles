@@ -47,14 +47,9 @@ end
 ---@type hs.axuielement?
 local _cached_inspector_panel_group = nil
 
-function FcpxFindTitlePanelCheckbox(callback)
-    -- FYI speed up testing by selecting an element in the Inspector Panel (200ms then)
+function FcpxFindInspectorPanelViaTitleCheckbox(callback)
+    -- FYI speed up initial search when testing by selecting an element in the Inspector Panel (200ms then)
     --    again just for testing this code so you aren't waiting to tweak a downstream factor
-
-    -- TODO try InspectorPanel code
-    -- local window = FcpxEditorWindow:new()
-    -- window.inspector:showTitleInspector()
-    -- TODO and merge with other code that started on this (search for "x scrubber")
 
     if _cached_inspector_panel_group and _cached_inspector_panel_group:isValid() then
         callback(_cached_inspector_panel_group)
@@ -86,7 +81,7 @@ function FcpxFindTitlePanelCheckbox(callback)
 end
 
 function FcpxTitlePanelFocusOnElementByAttr(attrName, attrValue)
-    FcpxFindTitlePanelCheckbox(function(inspector_panel)
+    FcpxFindInspectorPanelViaTitleCheckbox(function(inspector_panel)
         -- if static path fails here, search might work...
         local scrollarea1 = inspector_panel:attributeValue("AXChildren")[1][1][1]
         GetChildWithAttr(scrollarea1, attrName, attrValue):setAttributeValue("AXFocused", true)
