@@ -30,6 +30,13 @@ local types = hs.axuielement.observer.notifications
 --- AXApplicationActivated / AXApplicationDeactivated
 ---   use deactivated to unsub?
 
+---@param value string
+---@return boolean
+local function is_auto_save_spam(value)
+    -- FYI NOT A space, its an nbsp between words (0xC2)
+    return value:find("Auto Saved") ~= nil
+end
+
 ---@param element hs.axuielement object
 function on_notification(_observer, element, event_type, event_details)
     -- if not element then return end
@@ -55,11 +62,7 @@ function on_notification(_observer, element, event_type, event_details)
         print("destroyed:", element)
     elseif event_type == types.valueChanged then
         local value = element:axValue()
-
-        -- \nAuto Saved
-        local is_auto_save_spam = value:find("Auto Saved") -- FYI NOT A space, its an nbsp between words (0xC2)
-
-        if is_auto_save_spam then
+        if is_auto_save_spam(value) then
             -- skip, its one of the chattiest elements! drowns out everything
             return
         end
