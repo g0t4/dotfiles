@@ -24,6 +24,7 @@ def test_detect_tools_with_pink_volume_add_open():
 
 # def test_with_cut_tool_cursor_at_end():
 #     detected = detect_tools('samples/cut-tool/add-end-selected.png')
+# TODO! cut tool test (at least one)
 
 # def test_with_cut_tool_cursor_at_start():
 #     detected = detect_tools('samples/cut-tool/add-start-selected.png')
@@ -35,7 +36,7 @@ def test_with_blue_shape_overlays():
     #   148/2 = 74
     # right most (edge of blue ball, even though its past edge it works)
     #   524/2 =  262
-    # TODO fix tool type logic! if I need it, else just remove it!
+    # TODO REMOVE or FIX tool type logic, do I need tool type? not yet?
     expected_tool = ToolResult(type="volume_add_tool", x_start=74, x_end=262)
     assert detected == expected_tool
 
