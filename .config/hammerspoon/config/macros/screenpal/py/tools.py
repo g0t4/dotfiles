@@ -75,6 +75,9 @@ def detect_tools(use_file):
         red_mask_top_edge,
     )
 
+    blue_ball_color = np.array([255, 176, 105])  # BGR
+    blue_ball_mask = color_mask(image, blue_ball_color, 4)
+
     def detect_volume_add_tool(image):
         # color in row 8 works, however playhead interferes if overlapping:
         #  1. union playhead mask (but would find bogus range of just playhead, would need to remove)
@@ -105,11 +108,13 @@ def detect_tools(use_file):
         show_and_wait(
             display_mask_only(image, timeline_mask),
             image,
+            display_mask_only(image, blue_ball_mask, blue_ball_color),
+            #
             # easier to line up since this matches on top (so put below the image to compare)
             display_mask_only(image, combined_pink_mask, show_pink_as),
-            display_mask_only(image, pink_mask_top_edge, show_pink_as),
-            display_mask_only(image, pink_mask_corners, show_pink_as),
-            display_mask_only(image, pink_mask_cursor_on_edge, show_pink_as),
+            # display_mask_only(image, pink_mask_top_edge, show_pink_as),
+            # display_mask_only(image, pink_mask_corners, show_pink_as),
+            # display_mask_only(image, pink_mask_cursor_on_edge, show_pink_as),
             #
             display_mask_only(image, combined_red_mask, show_red_as),
         )
