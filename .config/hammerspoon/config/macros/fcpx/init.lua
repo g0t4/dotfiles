@@ -48,6 +48,9 @@ end
 local _cached_inspector_panel_group = nil
 
 function FcpxFindTitlePanelCheckbox(callback)
+    -- FYI speed up testing by selecting an element in the Inspector Panel (200ms then)
+    --    again just for testing this code so you aren't waiting to tweak a downstream factor
+
     -- TODO try InspectorPanel code
     -- local window = FcpxEditorWindow:new()
     -- window.inspector:showTitleInspector()
