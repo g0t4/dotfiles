@@ -42,14 +42,15 @@ function StreamDeckFcpxInspectorTitlePanelEnsureOpen()
 end
 
 ---only expensive to find this the first time (remains valid across changing selections - titles,callouts,etc)
----  PRN I might be able to reuse this elsewhere then! OR even find it faster now that I know this?
----  TODO do I have a diff way to find the inspector panel that isn't so slow?
 ---@type hs.axuielement?
 local _cached_inspector_panel_group = nil
 
 function FcpxFindInspectorPanelViaTitleCheckbox(callback)
     -- FYI speed up initial search when testing by selecting an element in the Inspector Panel (200ms then)
     --    again just for testing this code so you aren't waiting to tweak a downstream factor
+
+    -- FOR now this seems a reasonable way to locate the panel... and once it is cached its NBD!
+    -- *** START USING THIS IN OTHER SPOTS! Like InspectorPanel class!!
 
     if _cached_inspector_panel_group and _cached_inspector_panel_group:isValid() then
         callback(_cached_inspector_panel_group)
