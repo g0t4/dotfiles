@@ -42,24 +42,11 @@ function StreamDeckFcpxInspectorTitlePanelEnsureOpen()
 end
 
 function FcpxFindTitlePanelCheckbox(doWithTitlePanel)
+    -- PRN setup run_async to unravel the callback hell below (and in nested functions)
     local fcpx = GetFcpxAppElement()
     local window = fcpx:attributeValue("AXFocusedWindow")
-    local checkbox = window:childrenWithRole("AXSplitGroup")[1]:childrenWithRole("AXGroup")[1]:childrenWithRole("AXSplitGroup")[1]:childrenWithRole("AXGroup")[2]:childrenWithRole("AXSplitGroup")[1]
-        :childrenWithRole("AXGroup")[5]:childrenWithRole("AXGroup")[2]:childrenWithRole("AXCheckBox")[1]
-    if checkbox ~= nil and checkbox:attributeValue("AXDescription") == "Title Inspector" then
-        print("found fixed path to title panel checkbox")
-
-        -- ensure title panel is visible!
-        if checkbox:attributeValue("AXValue") == 0 then
-            checkbox:performAction("AXPress")
-        end
-
-        doWithTitlePanel(checkbox)
-        return
-    end
-    print("[WARNING] no fixed path to title panel checkbox found, falling back to search which is going to be slower, fix the fixed path to speed things up!")
-
     local criteria = { attribute = "AXDescription", value = "Title Inspector" } -- 270ms to 370ms w/ count=1
+    -- FYI search can be slow on first run (2s).. but then it's 100-200ms on subsequent runs so that is FAST!
     FindOneElement(fcpx, criteria, function(_, searchTask, numResultsAdded)
         if numResultsAdded == 0 then
             print("no title panel found")
@@ -78,6 +65,7 @@ end
 
 function FcpxTitlePanelFocusOnElementByAttr(attrName, attrValue)
     FcpxFindTitlePanelCheckbox(function(checkbox)
+        -- if static path fails here, search might work!
         local grandparent = checkbox:attributeValue("AXParent"):attributeValue("AXParent")
         local scrollarea1 = grandparent:attributeValue("AXChildren")[1][1][1]
         GetChildWithAttr(scrollarea1, attrName, attrValue):setAttributeValue("AXFocused", true)
