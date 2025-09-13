@@ -186,3 +186,37 @@ print(f'{cv_img_red_close_start[7, 331]=}')
 # cv_img_red_close_start[7, 331]=array([  6,   3, 143], dtype=uint8)
 #   NOTE not the same but I think w/in tolderance
 #     DCM shows 0x9D (this one) and 0x9F for add-end-selected.png .. and both show CLIPPING on Green/Blue values
+
+# * blue overlay shape samples
+# 'overlay/1-add-shape-trimmed.png'
+cv_img_blue_overlay = cv.imread(str(samples_dir / "overlay/1-add-shape-trimmed.png"))
+#
+# * center of blue balls on top of each end
+#   get the blue from here to locate these signature endcaps
+# row:12, col:61 1-based
+print(f'{cv_img_blue_overlay[11, 59]=}') # double check context
+print(f'{cv_img_blue_overlay[11, 60]=}') # pixel of interest
+print(f'{cv_img_blue_overlay[11, 61]=}') # double check context
+# cv_img_blue_overlay[11, 59]=array([255, 176, 105], dtype=uint8) # * BGR opencv
+# cv_img_blue_overlay[11, 60]=array([255, 176, 105], dtype=uint8)
+# cv_img_blue_overlay[11, 61]=array([255, 176, 105], dtype=uint8)
+#
+# * ball area (almost center) in row 8 => YUP same blue so I could focus on this row8 again for shape overlays
+print(f'{cv_img_blue_overlay[8, 59]=}') #
+print(f'{cv_img_blue_overlay[8, 60]=}') #
+# cv_img_blue_overlay[8, 59]=array([255, 176, 105], dtype=uint8)
+# cv_img_blue_overlay[8, 60]=array([255, 176, 105], dtype=uint8)
+
+
+# * blue stem over bg blue (not waveform)
+# row:31, cols: 60,61 (middle of it is two pixels wide and more saturated color
+print(f'{cv_img_blue_overlay[30, 58]=}') # double check context
+print(f'{cv_img_blue_overlay[30, 59]=}') # pixel of interest
+print(f'{cv_img_blue_overlay[30, 60]=}') # pixel of interest
+print(f'{cv_img_blue_overlay[30, 61]=}') # double check context
+# cv_img_blue_overlay[30, 58]=array([95, 58, 38], dtype=uint8) # outer edges of blue stem, fainter
+# cv_img_blue_overlay[30, 59]=array([201, 137,  83], dtype=uint8) # * BGR opencv
+# cv_img_blue_overlay[30, 60]=array([201, 137,  83], dtype=uint8)
+# cv_img_blue_overlay[30, 61]=array([95, 58, 38], dtype=uint8)
+#
+# * PRN blue stem over waveform sampling too
