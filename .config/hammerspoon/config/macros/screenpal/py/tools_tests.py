@@ -41,3 +41,16 @@ def test_with_blue_shape_overlays():
     assert detected == expected_tool
 
     # I can use a blue mask to find the overlay shapes
+    #
+    #
+    #
+    #
+
+def test_freeze_frame_tool():
+    detected = detect_tools('samples/freeze/1-freeze-add-cursor-on-end.png')
+    # min: 247 base1(left side) => 247/2 = 123.5 (base1) = 124 (base1) => 123 (base0)
+    # max: 517 base1 (right side) => 517/2 = 258.5 (base1) = 259 (base1) => 258 (base0)
+
+    # TODO tool type assertion?
+    expected_tool = ToolResult(type="volume_add_tool", x_start=123, x_end=258)
+    assert detected == expected_tool
