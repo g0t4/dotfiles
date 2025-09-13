@@ -54,10 +54,11 @@ def detect_tools(use_file):
     # combine both
     # pink_mask = pink_mask_cursor_on_edge
 
-    red_top_edge_row8 = np.array([9, 6, 145])  # TODO this is top edge right?
+    red_top_edge_row8 = np.array([9, 6, 145])
     red_mask_top_edge = color_mask(image, red_top_edge_row8, 4)
     #
-    # TODO corners when no cursor on end
+    red_corners = np.array([1, 0, 162])
+    red_mask_corners = color_mask(image, red_corners, 4)
     #
     red_cursor_on_edge = np.array([0, 32, 255])
     red_mask_cursor_on_edge = color_mask(image, red_cursor_on_edge, 1)
@@ -65,7 +66,12 @@ def detect_tools(use_file):
     show_red_as = red_cursor_on_edge
     #
     combined_red_mask = np.logical_or(
+        # FYI probably can do the range fully w just these two masks cuz they cover corners/ends
         red_mask_cursor_on_edge,
+        red_mask_corners,
+    )
+    combined_red_mask = np.logical_or(
+        combined_red_mask,
         red_mask_top_edge,
     )
 
