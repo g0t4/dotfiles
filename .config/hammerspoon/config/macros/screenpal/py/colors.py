@@ -195,24 +195,23 @@ cv_img_blue_overlay = cv.imread(str(samples_dir / "overlay/1-add-shape-trimmed.p
 #   get the blue from here to locate these signature endcaps
 # row:12, col:61 1-based
 # print(f'{cv_img_blue_overlay[11, 59]=}') # double check context
-print(f'{cv_img_blue_overlay[11, 60]=}') # pixel of interest
+print(f'{cv_img_blue_overlay[11, 60]=}')  # pixel of interest
 # print(f'{cv_img_blue_overlay[11, 61]=}') # double check context
 # cv_img_blue_overlay[11, 59]=array([255, 176, 105], dtype=uint8) # * BGR opencv
 # cv_img_blue_overlay[11, 60]=array([255, 176, 105], dtype=uint8)
 # cv_img_blue_overlay[11, 61]=array([255, 176, 105], dtype=uint8)
 #
 # * ball area (almost center) in row 8 => YUP same blue so I could focus on this row8 again for shape overlays
-print(f'{cv_img_blue_overlay[8, 59]=}') #
-print(f'{cv_img_blue_overlay[8, 60]=}') #
+print(f'{cv_img_blue_overlay[8, 59]=}')  #
+print(f'{cv_img_blue_overlay[8, 60]=}')  #
 # cv_img_blue_overlay[8, 59]=array([255, 176, 105], dtype=uint8)
 # cv_img_blue_overlay[8, 60]=array([255, 176, 105], dtype=uint8)
-
 
 # * blue stem over bg blue (not waveform)
 # row:31, cols: 60,61 (middle of it is two pixels wide and more saturated color
 # print(f'{cv_img_blue_overlay[30, 58]=}') # double check context
-print(f'{cv_img_blue_overlay[30, 59]=}') # pixel of interest
-print(f'{cv_img_blue_overlay[30, 60]=}') # pixel of interest
+print(f'{cv_img_blue_overlay[30, 59]=}')  # pixel of interest
+print(f'{cv_img_blue_overlay[30, 60]=}')  # pixel of interest
 # print(f'{cv_img_blue_overlay[30, 61]=}') # double check context
 # cv_img_blue_overlay[30, 58]=array([95, 58, 38], dtype=uint8) # outer edges of blue stem, fainter
 # cv_img_blue_overlay[30, 59]=array([201, 137,  83], dtype=uint8) # * BGR opencv
@@ -220,3 +219,34 @@ print(f'{cv_img_blue_overlay[30, 60]=}') # pixel of interest
 # cv_img_blue_overlay[30, 61]=array([95, 58, 38], dtype=uint8)
 #
 # * PRN blue stem over waveform sampling too
+
+# ***! FREEZE FRAME TOOL
+cv_img_freeze_frame = cv.imread(str(samples_dir / "freeze/1-freeze-add-cursor-on-end.png"))
+# left side cols: 247,248 row8
+# corner color:
+print(f'{cv_img_freeze_frame[7, 246]=}')
+print(f'{cv_img_freeze_frame[7, 247]=}')
+# cv_img_freeze_frame[7, 246]=array([113, 114,  37], dtype=uint8) # * BGR opencv corner color
+# cv_img_freeze_frame[7, 247]=array([113, 114,  37], dtype=uint8)
+
+# top edge color:
+#  col:330,331 etc (anything in between ends works)
+print(f'{cv_img_freeze_frame[7, 330]=}')
+print(f'{cv_img_freeze_frame[7, 331]=}')
+# cv_img_freeze_frame[7, 330]=array([103, 101,  35], dtype=uint8) # * BGR opencv top edge color
+# cv_img_freeze_frame[7, 331]=array([103, 101,  35], dtype=uint8)
+
+# blue color - right side (with cursor) cols: 515 to 518
+#   cursor is on right end
+# print(f'{cv_img_freeze_frame[7, 513]=}') # double check only
+print(f'{cv_img_freeze_frame[7, 514]=}')
+print(f'{cv_img_freeze_frame[7, 515]=}')
+print(f'{cv_img_freeze_frame[7, 516]=}')
+print(f'{cv_img_freeze_frame[7, 517]=}')
+# print(f'{cv_img_freeze_frame[7, 518]=}') # double check only
+
+# cv_img_freeze_frame[7, 514]=array([227, 134,   0], dtype=uint8) # * BGR opencv cursor on end
+# cv_img_freeze_frame[7, 515]=array([227, 134,   0], dtype=uint8)
+# cv_img_freeze_frame[7, 516]=array([227, 134,   0], dtype=uint8)
+# cv_img_freeze_frame[7, 517]=array([227, 134,   0], dtype=uint8)
+#
