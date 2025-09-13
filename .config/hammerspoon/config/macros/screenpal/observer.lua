@@ -54,7 +54,16 @@ function on_notification(_observer, element, event_type, event_details)
     elseif event_type == types.uIElementDestroyed then
         print("destroyed:", element)
     elseif event_type == types.valueChanged then
-        print("Value changed:", element:axValue(), element)
+        local value = element:axValue()
+
+        -- \nAuto Saved
+        local is_auto_save_spam = value:find("Auto Saved") -- FYI NOT A space, its an nbsp between words (0xC2)
+
+        if is_auto_save_spam then
+            -- skip, its one of the chattiest elements! drowns out everything
+            return
+        end
+        print("Value changed: '" .. tostring(value) .. "'", element)
     else
         dump("cb", _observer, element, event_type, event_details)
     end
