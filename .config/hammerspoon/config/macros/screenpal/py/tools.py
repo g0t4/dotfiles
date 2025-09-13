@@ -54,8 +54,20 @@ def detect_tools(use_file):
     # combine both
     # pink_mask = pink_mask_cursor_on_edge
 
-    red = np.array([9, 6, 145])
-    red_mask = color_mask(image, red, 4)
+    red_top_edge_row8 = np.array([9, 6, 145])  # TODO this is top edge right?
+    red_mask_top_edge = color_mask(image, red_top_edge_row8, 4)
+    #
+    # TODO corners when no cursor on end
+    #
+    red_cursor_on_edge = np.array([0, 32, 255])
+    red_mask_cursor_on_edge = color_mask(image, red_cursor_on_edge, 1)
+    #
+    show_red_as = red_cursor_on_edge
+    #
+    red_mask = np.logical_or(
+        red_mask_cursor_on_edge,
+        red_mask_top_edge,
+    )
 
     def detect_volume_add_tool(image):
         # color in row 8 works, however playhead interferes if overlapping:
@@ -93,7 +105,7 @@ def detect_tools(use_file):
             display_mask_only(image, pink_mask_corners, show_pink_as),
             display_mask_only(image, pink_mask_cursor_on_edge, show_pink_as),
             #
-            # display_mask_only(image, red_mask, red),
+            display_mask_only(image, red_mask, show_red_as),
         )
 
     # * serialize response to json in STDOUT
