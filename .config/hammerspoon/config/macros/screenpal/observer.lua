@@ -54,6 +54,12 @@ function on_notification(_observer, element, event_type, event_details)
     --     observer:addWatcher(element, types.valueChanged)
     -- end
 
+    -- PRN DYNAMIC bind/unbind keymap changes like hjkl on screenpal timeline
+    --   PRN when focus changes to the title textfield (or any text field actually)... I could unbind my keymap and then put it back!
+    --   this happens when I focus the title textfield:
+    --   2025-09-13 01:39:18: { "cb", <userdata 1> -- hs.axuielement.observer: (0x60000285c838), <userdata 2> -- hs.axuielement: AXTextField (0x60000285faf8), "AXFocusedUIElementChanged", {} }
+
+
     if event_type == types.titleChanged then
         print("titleChanged:", element:axTitle())
     elseif event_type == types.created then
