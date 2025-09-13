@@ -142,20 +142,47 @@ cv_img_red_cut_add = cv.imread(str(samples_dir / "cut-tool/add-end-selected.png"
 # 1820 is right most side (however,
 #
 # also unique is a dashed white line in middle of cut.. not sure if that will affect match, we shall see
-# top border: mostly  #9F0000 row8 DCM though right side fades a bit near end of range
+# * top border: mostly  #9F0000 row8 DCM though right side fades a bit near end of range
 #
 print(f'{cv_img_red_cut_add[7, 1732]=}')  # BGR [  9,   6, 145]
+#
+# * corners
+# cols: 1711, 1712  row8
+print(f'{cv_img_red_cut_add[7, 1709]=}')
+print(f'{cv_img_red_cut_add[7, 1710]=}')
+print(f'{cv_img_red_cut_add[7, 1711]=}')
+print(f'{cv_img_red_cut_add[7, 1712]=}')
+# cv_img_red_cut_add[7, 1710]=array([  1,   1, 163], dtype=uint8) # * BGR opencv
+# cv_img_red_cut_add[7, 1711]=array([  1,   1, 163], dtype=uint8)
+#   FYI CLOSE ENOUGH!
+#
 
+#
+#
 # *** CUT close-to-start.png
 cv_img_red_close_start = cv.imread(str(samples_dir / "cut-tool/close-to-start.png"))
 # row8 449 to 452 => cursor on end bright red (4 pixels)
 # #FF0000 DCM
-print(f'{cv_img_red_close_start[7, 448]=}')  # BGR [  7,   0, 233]
-print(f'{cv_img_red_close_start[7, 449]=}')  # BGR [  7,   0, 233]
-print(f'{cv_img_red_close_start[7, 450]=}')  # BGR [  7,   0, 233]
-print(f'{cv_img_red_close_start[7, 451]=}')  # BGR [  7,   0, 233]
+print(f'{cv_img_red_close_start[7, 448]=}')
+print(f'{cv_img_red_close_start[7, 449]=}')
+print(f'{cv_img_red_close_start[7, 450]=}')
+print(f'{cv_img_red_close_start[7, 451]=}')
 # cv_img_red_close_start[7, 448]=array([  0,  32, 255], dtype=uint8) * BGR bright cursor red opencv
 # cv_img_red_close_start[7, 449]=array([  0,  32, 255], dtype=uint8)
 # cv_img_red_close_start[7, 450]=array([  0,  32, 255], dtype=uint8)
 # cv_img_red_close_start[7, 451]=array([  0,  32, 255], dtype=uint8)
 
+# * RED CORNER colors in close-to-start.png
+# row8, cols 301,302 -
+print(f'{cv_img_red_close_start[7, 300]=}')
+print(f'{cv_img_red_close_start[7, 301]=}')
+# cv_img_red_close_start[7, 300]=array([  1,   0, 162], dtype=uint8)
+# cv_img_red_close_start[7, 301]=array([  1,   0, 162], dtype=uint8)
+#
+# * RED double check top edge
+print(f'{cv_img_red_close_start[7, 330]=}')
+print(f'{cv_img_red_close_start[7, 331]=}')
+# cv_img_red_close_start[7, 330]=array([  6,   3, 143], dtype=uint8) # opencv
+# cv_img_red_close_start[7, 331]=array([  6,   3, 143], dtype=uint8)
+#   NOTE not the same but I think w/in tolderance
+#     DCM shows 0x9D (this one) and 0x9F for add-end-selected.png .. and both show CLIPPING on Green/Blue values
