@@ -22,9 +22,12 @@ def test_detect_tools_with_pink_volume_add_open():
 
     assert detected == expected_tool
 
-# def test_with_cut_tool_cursor_at_end():
-#     detected = detect_tools('samples/cut-tool/add-end-selected.png')
-# TODO! cut tool test (at least one)
+def test_with_cut_tool_cursor_at_end():
+    detected = detect_tools('samples/cut-tool/add-end-selected.png')
+    # 1711 left base1 ~= 855 base0
+    # 1820 right base1 = 910 base1 = 909 base0
+    expected_tool = ToolResult(type="volume_add_tool", x_start=855, x_end=909)
+    assert detected == expected_tool
 
 # def test_with_cut_tool_cursor_at_start():
 #     detected = detect_tools('samples/cut-tool/add-start-selected.png')
