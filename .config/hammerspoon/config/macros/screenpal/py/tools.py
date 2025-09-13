@@ -40,14 +40,14 @@ def detect_tools(use_file):
     #
     show_pink_as = pink_cursor_on_edge
     #
-    pink_mask = np.logical_or(
+    combined_pink_mask = np.logical_or(
         # only two at a time it seems?
         pink_mask_cursor_on_edge,
         pink_mask_corners,
     )
     # TODO look into how many can pass at a time and which operation should you be using?
-    pink_mask = np.logical_or(
-        pink_mask,
+    combined_pink_mask = np.logical_or(
+        combined_pink_mask,
         pink_mask_top_edge,
     )
 
@@ -64,7 +64,7 @@ def detect_tools(use_file):
     #
     show_red_as = red_cursor_on_edge
     #
-    red_mask = np.logical_or(
+    combined_red_mask = np.logical_or(
         red_mask_cursor_on_edge,
         red_mask_top_edge,
     )
@@ -77,8 +77,8 @@ def detect_tools(use_file):
         #     this worked in initial test case, lets see how well it does in reality
 
         # search for either row color
-        row8_pink = pink_mask[5]
-        row8_red = red_mask[5]
+        row8_pink = combined_pink_mask[5]
+        row8_red = combined_red_mask[5]
         row8 = np.logical_or(row8_pink, row8_red)  # only two at a time?
 
         # FYI if needed, scan_mask(pink_mask)
@@ -100,12 +100,12 @@ def detect_tools(use_file):
             display_mask_only(image, timeline_mask),
             image,
             # easier to line up since this matches on top (so put below the image to compare)
-            display_mask_only(image, pink_mask, show_pink_as),
+            display_mask_only(image, combined_pink_mask, show_pink_as),
             display_mask_only(image, pink_mask_top_edge, show_pink_as),
             display_mask_only(image, pink_mask_corners, show_pink_as),
             display_mask_only(image, pink_mask_cursor_on_edge, show_pink_as),
             #
-            display_mask_only(image, red_mask, show_red_as),
+            display_mask_only(image, combined_red_mask, show_red_as),
         )
 
     # * serialize response to json in STDOUT
