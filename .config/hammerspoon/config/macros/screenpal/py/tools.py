@@ -75,6 +75,7 @@ def detect_tools(use_file):
         red_mask_top_edge,
     )
 
+    # FTR I am using the "O" other end tool I made and it works perfect at zoom2 w/ shape overlays so I don't need to do anything special then with the middle of the blue ball (not yet)
     blue_ball_color = np.array([255, 176, 105])  # BGR
     blue_ball_mask = color_mask(image, blue_ball_color, 4)
 
