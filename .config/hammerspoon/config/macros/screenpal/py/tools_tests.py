@@ -29,12 +29,15 @@ def test_with_cut_tool_cursor_at_end():
     expected_tool = ToolResult(type="volume_add_tool", x_start=855, x_end=909)
     assert detected == expected_tool
 
-# def test_with_cut_tool_cursor_at_start():
-#     detected = detect_tools('samples/cut-tool/add-start-selected.png')
+def test_with_cut_tool_cursor_at_start():
+    detected = detect_tools('samples/cut-tool/add-start-selected.png')
+    # left 1727 base1 = 863 base0
+    # right 1818 base1 = 908 base0
+    expected_tool = ToolResult(type="volume_add_tool", x_start=863, x_end=908)
+    assert detected == expected_tool
 
 def test_with_blue_shape_overlays():
     detected = detect_tools('samples/overlay/1-add-shape.png')
-    print(detected)
     # left most:
     #   148/2 = 74
     # right most (edge of blue ball, even though its past edge it works)
