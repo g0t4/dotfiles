@@ -122,7 +122,7 @@ print(f'# {cv_img_volume_cursor_end[7, 1663]=} # BGR opencv')
 # cv_img_volume_cursor_end[7, 1662]=array([226,  81, 255], dtype=uint8) # BGR opencv
 # cv_img_volume_cursor_end[7, 1663]=array([226,  81, 255], dtype=uint8) # BGR opencv
 # TO BE SAFE check a ways down too so its not matching some other pink in row 8 on accident:
-print(f'# {cv_img_volume_cursor_end[21, 1660]=} # BGR opencv') # GOOD TO GO!
+print(f'# {cv_img_volume_cursor_end[21, 1660]=} # BGR opencv')  # GOOD TO GO!
 # cv_img_volume_cursor_end[21, 1660]=array([226,  81, 255], dtype=uint8) # BGR opencv
 #
 
@@ -145,3 +145,17 @@ cv_img_red_cut_add = cv.imread(str(samples_dir / "cut-tool/add-end-selected.png"
 # top border: mostly  #9F0000 row8 DCM though right side fades a bit near end of range
 #
 print(f'{cv_img_red_cut_add[7, 1732]=}')  # BGR [  9,   6, 145]
+
+# *** CUT close-to-start.png
+cv_img_red_close_start = cv.imread(str(samples_dir / "cut-tool/close-to-start.png"))
+# row8 449 to 452 => cursor on end bright red (4 pixels)
+# #FF0000 DCM
+print(f'{cv_img_red_close_start[7, 448]=}')  # BGR [  7,   0, 233]
+print(f'{cv_img_red_close_start[7, 449]=}')  # BGR [  7,   0, 233]
+print(f'{cv_img_red_close_start[7, 450]=}')  # BGR [  7,   0, 233]
+print(f'{cv_img_red_close_start[7, 451]=}')  # BGR [  7,   0, 233]
+# cv_img_red_close_start[7, 448]=array([  0,  32, 255], dtype=uint8) * BGR bright cursor red opencv
+# cv_img_red_close_start[7, 449]=array([  0,  32, 255], dtype=uint8)
+# cv_img_red_close_start[7, 450]=array([  0,  32, 255], dtype=uint8)
+# cv_img_red_close_start[7, 451]=array([  0,  32, 255], dtype=uint8)
+
