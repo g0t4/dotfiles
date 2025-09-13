@@ -38,5 +38,6 @@ require("config.macros.msft_office")
 require("config.macros.screenpal")
 require("config.macros.hammerspoon")
 require("config.macros.iina")
+require("config.macros.frontmost")
 
 return M
