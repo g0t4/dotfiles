@@ -41,7 +41,21 @@ function StreamDeckFcpxInspectorTitlePanelEnsureOpen()
     window.inspector:showTitleInspector()
 end
 
+---@type hs.axuielement?
+local _cached_title_panel_checkbox = nil
+
 function FcpxFindTitlePanelCheckbox(doWithTitlePanel)
+    -- print("cached: " .. hs.inspect(_cached_title_panel_checkbox))
+    -- FYI caching only works for duration of the current selected callout
+    --   I think that might be useful enough to leave this as-is
+    --   When you select a diff callout or smth else in timeline, the cached item here is invalid then
+    --     control is likely recreated
+    --  PRN could I build a dynamic path in memory instead of caching the item? and use that as a static path? instead of caching the element
+    --    might be able to find a parent control that is stable enough for a search even after selecting smth else and coming back
+    if _cached_title_panel_checkbox and _cached_title_panel_checkbox:isValid() then
+        doWithTitlePanel(_cached_title_panel_checkbox)
+        return
+    end
     -- PRN setup run_async to unravel the callback hell below (and in nested functions)
     local fcpx = GetFcpxAppElement()
     local window = fcpx:attributeValue("AXFocusedWindow")
@@ -59,6 +73,7 @@ function FcpxFindTitlePanelCheckbox(doWithTitlePanel)
             foundCheckbox:performAction("AXPress")
         end
 
+        _cached_title_panel_checkbox = foundCheckbox
         doWithTitlePanel(foundCheckbox)
     end)
 end
