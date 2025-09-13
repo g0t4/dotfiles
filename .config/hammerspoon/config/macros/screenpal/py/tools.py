@@ -89,8 +89,8 @@ def detect_tools(use_file):
         row8_pink = combined_pink_mask[5]
         row8_red = combined_red_mask[5]
         row8_blue = blue_ball_mask[5]
-        # row8 = np.logical_or(row8_pink, row8_red)  # only two at a time?
-        row8 = row8_blue
+        row8 = np.logical_or(row8_pink, row8_red)  # only two at a time?
+        row8 = np.logical_or(row8, row8_blue) # only two at a time IIUC
 
         # FYI if needed, scan_mask(pink_mask)
 
