@@ -818,6 +818,8 @@ end
 _G.SELECTION_BEFORE_START = "SELECTION_BEFORE_START"
 _G.SELECTION_BEFORE_END = "SELECTION_BEFORE_END"
 _G.SELCTION_BEFORE_OPPOSITE = "SELCTION_BEFORE_OPPOSITE"
+_G.SELECTION_AT_START = "SELECTION_AT_START"
+_G.SELECTION_AT_END = "SELECTION_AT_END"
 
 function SPal_Play(play_what, text)
     -- TODO could add other play scenarios / tools to this
@@ -873,7 +875,11 @@ function SPal_Play(play_what, text)
         end
 
         -- * move w.r.t. range before playback
-        if play_what == SELECTION_BEFORE_START then
+        if play_what == SELECTION_AT_START then
+            play_from_x = range.x_start
+        elseif play_what == SELECTION_AT_END then
+            play_from_x = range.x_end
+        elseif play_what == SELECTION_BEFORE_START then
             play_from_x = range.x_start - 20
         elseif play_what == SELECTION_BEFORE_END then
             play_from_x = range.x_end - 20
