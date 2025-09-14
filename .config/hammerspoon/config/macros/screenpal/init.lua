@@ -829,55 +829,45 @@ function SPal_Play(play_what, text)
         local win, silences = syncify(detect_silences)
         local timeline = win:timeline_controller()
 
+        local play_from_x = nil
+
+        ---@type Tool|Silence?
         local tool = silences.hack_detected.tool
         if not tool or not tool.x_end then
-            -- TODO impl no tool open
-            -- -- * no tool open, try using current silence
-            -- -- find and preview the closest silence (start/end)
-            --
-            -- local playhead_x = timeline:get_current_playhead_timeline_relative_x()
-            -- local silence = silences:get_this_silence()
-            --
-            -- if not silence then
-            --     -- PRN do I care about PRN in here? should I jump to S/E sides if those are used?
-            --     -- I mostly added this with O in mind but S/E should work too and maybe I want those ends and not the [O]pposite?
-            --
-            --     -- no current silence => find nearest (either side)
-            --     local next = silences:get_next_silence()
-            --     local prev = silences:get_prev_silence()
-            --     if not prev and not next then
-            --         -- very unlikely!
-            --         return
-            --     end
-            --     if not next then
-            --         silence = prev
-            --     elseif not prev then
-            --         silence = next
-            --     else
-            --         -- which is closer?
-            --         local prev_distance = playhead_x - prev.x_end
-            --         local next_distance = next.x_start - playhead_x
-            --         if prev_distance < next_distance then
-            --             silence = prev
-            --         else
-            --             silence = next
-            --         end
-            --     end
-            -- end
-            -- if not silence then return end
-            --
-            -- local playhead_closer_to_start = playhead_x < silence:x_middle()
-            -- if playhead_closer_to_start then
-            --     timeline:move_playhead_to(silence.x_end)
-            -- else
-            --     timeline:move_playhead_to(silence.x_start)
-            -- end
+            -- * no tool open, try using current silence
+            -- find and preview the closest silence (start/end)
 
-            return
+            local playhead_x = timeline:get_current_playhead_timeline_relative_x()
+            local current_silence = silences:get_this_silence()
+
+            if not current_silence then
+                -- no current silence => find nearest (either side)
+                local next = silences:get_next_silence()
+                local prev = silences:get_prev_silence()
+                local closest_silence = nil
+                if not prev and not next then
+                    print("no silences found on either side! aborting play... SHOULD NOT HAPPEN unless a video has NO silenes visible in which case why you asking to play one!!")
+                    return
+                elseif not next then
+                    closest_silence = prev
+                elseif not prev then
+                    closest_silence = next
+                else
+                    -- which is closer?
+                    local prev_distance = playhead_x - prev.x_end
+                    local next_distance = next.x_start - playhead_x
+                    if prev_distance < next_distance then
+                        closest_silence = prev
+                    else
+                        closest_silence = next
+                    end
+                end
+                tool = closest_silence
+            else
+                tool = current_silence
+            end
         end
-        -- TODO! don't hit pause if playing already? OR pause first?
 
-        local play_from_x = nil
         if play_what == SELECTION_START then
             play_from_x = tool.x_start - 20
         elseif play_what == SELECTION_END then
@@ -891,6 +881,7 @@ function SPal_Play(play_what, text)
                 play_from_x = tool.x_start - 20
             end
         end
+
         if not play_from_x then
             print("play_from_x is not set, skipping playback")
             return
