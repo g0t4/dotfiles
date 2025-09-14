@@ -113,15 +113,19 @@ local function _wait_until_playhead_at_screen_x(self, desired_playhead_screen_x,
     log_if_slower_than_100ms("  wait for playhead move", start)
 end
 
+-- Frequent trouble with 10ms (10,000)
+--   occasional (1 in 10) at 50/75ms
+--   200ms is default but that feels sluggish
+local CLICK_HOLD_MICROSECONDS = 100000
+
 ---@param self TimelineController
 ---@param playhead_screen_x number
 local function _move_playhead_to_screen_x(self, playhead_screen_x)
     -- print("moving playhead to screen_x=" .. tostring(playhead_screen_x))
-    local hold_duration_ms = 10
     hs.eventtap.leftClick({
         x = playhead_screen_x,
         y = self._timeline_frame.y + self._timeline_frame.h / 2
-    }, hold_duration_ms * 1000)
+    }, CLICK_HOLD_MICROSECONDS)
     _wait_until_playhead_at_screen_x(self, playhead_screen_x)
 end
 
@@ -139,7 +143,7 @@ function TimelineController:move_playhead_to_timeline_start()
         --  NOT necessarily the video start unless timeline is not zoomed
         x = self._timeline_frame.x,
         y = self._timeline_frame.y,
-    })
+    }, CLICK_HOLD_MICROSECONDS)
 end
 
 --- jump to end of CURRENT view (not entire timeline)
@@ -149,7 +153,7 @@ function TimelineController:move_playhead_to_timeline_end()
         -- -1 works best for the end (in my testing)
         x = self._timeline_frame.x + self._timeline_frame.w - 1,
         y = self._timeline_frame.y,
-    })
+    }, CLICK_HOLD_MICROSECONDS)
 end
 
 -- TODO move_to_video_start()
