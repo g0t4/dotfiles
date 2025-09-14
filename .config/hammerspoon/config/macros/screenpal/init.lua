@@ -775,6 +775,9 @@ function SPal_AdjustSelection(side, num_frames, text)
             local silence = silences:get_this_silence()
 
             if not silence then
+                -- PRN do I care about PRN in here? should I jump to S/E sides if those are used?
+                -- I mostly added this with O in mind but S/E should work too and maybe I want those ends and not the [O]pposite?
+
                 -- no current silence => find nearest (either side)
                 local next = silences:get_next_silence()
                 local prev = silences:get_prev_silence()
