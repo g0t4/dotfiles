@@ -817,7 +817,7 @@ _G.SELECTION_END = "SELECTION_END"
 _G.SELCTION_OPPOSITE_END = "SELCTION_OPPOSITE_END"
 
 function SPal_Play(play_what, text)
-    -- TODO expand other play/preview positions/tools
+    -- TODO could add other play scenarios / tools to this
 
     -- ** if text triggered this, then paste it if in a text box (effectively bypass shortcut for textfields)
     if pasted_text_in_textfield(text) then
