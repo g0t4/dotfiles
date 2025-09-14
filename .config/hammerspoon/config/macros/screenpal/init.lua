@@ -776,6 +776,7 @@ function SPal_AdjustSelection(side, num_frames, text)
             -- TODO split out function
             -- no tool open, try using current silence
             -- move to other side of current silence
+            -- obviously, no selection adjustment (b/c no selection is open)
 
             local playhead_x = timeline:get_current_playhead_timeline_relative_x()
             local silence = silences:get_this_silence()
