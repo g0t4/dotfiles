@@ -366,6 +366,9 @@ function ScreenPalEditorWindow:reopen_project()
         end
 
         self:zoom2()
+
+        -- after reopen previous cached window is always invalid, no noticeable hit to refresh for that here!
+        self:force_refresh_cached_controls()
     end)
 end
 
