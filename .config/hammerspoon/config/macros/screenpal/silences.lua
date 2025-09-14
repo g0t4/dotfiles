@@ -1,3 +1,6 @@
+---@alias Silence {x_start: number, x_end: number}
+---@alias DetectionResults { short_silences: Silence[], regular_silences: Silence[], tool: { type: string, x_start: number, x_end: number}}
+
 ---@class SilencesController
 ---@field regular Silence[]
 ---@field short Silence[]

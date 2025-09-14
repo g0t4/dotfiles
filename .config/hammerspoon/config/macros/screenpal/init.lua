@@ -405,8 +405,6 @@ end
 -- PRN events to detect playhead moving (and other UI changes) that might affect what to show for silences (or otherwise affect tooling automations)
 -- require("config.macros.screenpal.observer")
 
----@alias Silence {x_start: number, x_end: number}
----@alias DetectionResults { short_silences: Silence[], regular_silences: Silence[], tool: { type: string, x_start: number, x_end: number}}
 local silences_canvas = nil
 ---@param win ScreenPalEditorWindow
 ---@param silences SilencesController
