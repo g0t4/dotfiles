@@ -33,6 +33,14 @@ axuielemMT.dumpActions = function(self)
     end)
 end
 
+-- FYI THIS IS NOT TESTED
+axuielemMT.axPress = function(self)
+    -- I added this function w/o having a test case yet
+    --   turned out the control I wanted to click doesn't work with press action so I couldn't test this
+    --   I wanted to leave this design for a future use case though
+    self:performAction("AXPress")
+end
+
 axuielemMT.dumpAttributes = function(self)
     f.each(self:allAttributeValues() or {}, function(name, value)
         print(name, hs.inspect(value))

@@ -55,16 +55,24 @@ function get_cached_editor_window()
 end
 
 --- make sure controls are valid, if not re-aquire references
-function ScreenPalEditorWindow:ensure_cached_controls()
-    if self._cached_buttons then
+function ScreenPalEditorWindow:ensure_cached_controls(force)
+    if not force and self._cached_buttons then
+        -- TODO FYI not all controls are invalidated at the same time
+        --   when a control changes then it's typically invalid...
+        --   TODO! how can I better detect and refresh?
+        --   TODO! or is this even that slow that I cannot just do it every time?!
         if self._btn_minimum_zoom:isValid() then
             -- assume all controls are still valid, if you have issues with one control going in and out, don't destroy cache of everything for that one... add a special check in its code path and send in an override here to flush cache then
             return
         end
         print("editor window cache invalidated")
     end
+    print("building editor window")
+    self:force_refresh_cached_controls()
+end
 
-    -- TODO! fully invalidate cache... rewrite so you can create a new cache object for the window
+function ScreenPalEditorWindow:force_refresh_cached_controls()
+    -- PRN rewrite to fully clear the entire cached object? not sure I need it as stuff is marked invalid even if left behind
     self._scrollbars = {} -- fixes finding scrollbar when refresh cache
     self._btn_back_to_projects = nil
     self._btn_maximum_zoom = nil
@@ -72,6 +80,8 @@ function ScreenPalEditorWindow:ensure_cached_controls()
     self._btn_minimum_zoom = nil
     self._btn_position_slider = nil
     self._btn_toggle_magnify = nil
+    self._btn_play_or_pause = nil
+    self._btn_play_speed = nil
     self._textfield_title = nil
 
     local start = get_time()
@@ -105,6 +115,22 @@ function ScreenPalEditorWindow:ensure_cached_controls()
                         return
                     elseif description == "Back to Video Projects" then
                         self._btn_back_to_projects = ui_elem
+                        return
+                    elseif description == "Play" or description == "Pause" then
+                        -- even if these are not same butt, it's convenient to put them together into one, for now
+                        -- FYI clicking play/pause will invalidate the current button, so it is possible they are changed
+                        -- can see Play only when paused, can see Pause only when playing
+                        -- also coudl check AXHelp:
+                        -- AXHelp: Play this animation<string>
+                        -- AXHelp: Pause this animation<string>
+                        self._btn_play_or_pause = ui_elem
+                        return
+                    elseif description == "Edit Playback Speed" then
+                        -- only visible when playing
+                        -- play/pause toggle will invalidate this too
+                        self._btn_play_speed = ui_elem
+                        -- AXDescription: Edit Playback Speed<string>
+                        -- AXHelp: Use this slider to increase or decrease the rate of playback<string>
                         return
                     else
                         -- find new controls, uncomment this:
@@ -153,7 +179,34 @@ function ScreenPalEditorWindow:ensure_cached_controls()
                 end
             end)
     self._cached_buttons = true
-    -- print_took("caching controls took: ", start)
+    -- TODO! <10ms often (20ms was biggest in testing)... DO I WANT TO STOP CACHING or ADD MORE CHECKS TO DO SOONER?
+    --   TODO! however checking a isValid() (copies the attribute) might be as expensive
+    --     TODO! so maybe just let consumers cache this by holding an instance of it?
+    print_took("building control CACHE took: ", start)
+end
+
+function ScreenPalEditorWindow:is_playing()
+    -- FYI selectively refresh if the controls I need are invalid here
+    --  BTW in my testing it was taking < 7ms to refresh all buttons (in loop above)
+    --    so, should be fine to do this every time instead of selective
+    if self._btn_play_or_pause == nil or not self._btn_play_or_pause:isValid() then
+        self:force_refresh_cached_controls()
+    end
+    return self._btn_play_or_pause and self._btn_play_or_pause:axDescription() == "Pause"
+end
+
+function ScreenPalEditorWindow:is_paused()
+    return not self:is_playing()
+end
+
+function ScreenPalEditorWindow:ensure_playing()
+    if self:is_playing() then
+        return
+    end
+
+    -- FYI AXPress doesn't work on this button
+    hs.eventtap.keyStroke({}, hs.keycodes.map["space"])
+    -- FYI USE MOUSE if space is a problem, via hs.eventtap.leftClick
 end
 
 function ScreenPalEditorWindow:is_zoomed()
@@ -758,10 +811,98 @@ function SPal_KeyMap(action, text)
     end
 end
 
-function SPal_AdjustSelection(side, num_frames, text)
-    side = side or START
+-- FYI constnats added globally to simplify streamdeck button lua code snippets (where escaping of quotes is a PITA)
+_G.SELECTION_START = "SELECTION_START"
+_G.SELECTION_END = "SELECTION_END"
+_G.SELCTION_OPPOSITE_END = "SELCTION_OPPOSITE_END"
 
-    -- ** insert text if in a textbox
+function SPal_Play(play_what, text)
+    -- TODO expand other play/preview positions/tools
+
+    -- ** if text triggered this, then paste it if in a text box (effectively bypass shortcut for textfields)
+    if pasted_text_in_textfield(text) then
+        return
+    end
+
+    run_async(function()
+        ---@type ScreenPalEditorWindow, SilencesController
+        local win, silences = syncify(detect_silences)
+        local timeline = win:timeline_controller()
+
+        local tool = silences.hack_detected.tool
+        if not tool or not tool.x_end then
+            -- TODO impl no tool open
+            -- -- * no tool open, try using current silence
+            -- -- find and preview the closest silence (start/end)
+            --
+            -- local playhead_x = timeline:get_current_playhead_timeline_relative_x()
+            -- local silence = silences:get_this_silence()
+            --
+            -- if not silence then
+            --     -- PRN do I care about PRN in here? should I jump to S/E sides if those are used?
+            --     -- I mostly added this with O in mind but S/E should work too and maybe I want those ends and not the [O]pposite?
+            --
+            --     -- no current silence => find nearest (either side)
+            --     local next = silences:get_next_silence()
+            --     local prev = silences:get_prev_silence()
+            --     if not prev and not next then
+            --         -- very unlikely!
+            --         return
+            --     end
+            --     if not next then
+            --         silence = prev
+            --     elseif not prev then
+            --         silence = next
+            --     else
+            --         -- which is closer?
+            --         local prev_distance = playhead_x - prev.x_end
+            --         local next_distance = next.x_start - playhead_x
+            --         if prev_distance < next_distance then
+            --             silence = prev
+            --         else
+            --             silence = next
+            --         end
+            --     end
+            -- end
+            -- if not silence then return end
+            --
+            -- local playhead_closer_to_start = playhead_x < silence:x_middle()
+            -- if playhead_closer_to_start then
+            --     timeline:move_playhead_to(silence.x_end)
+            -- else
+            --     timeline:move_playhead_to(silence.x_start)
+            -- end
+
+            return
+        end
+        -- TODO! don't hit pause if playing already? OR pause first?
+
+        local play_from_x = nil
+        if play_what == SELECTION_START then
+            play_from_x = tool.x_start - 20
+        elseif play_what == SELECTION_END then
+            play_from_x = tool.x_end - 20
+        elseif play_what == SELCTION_OPPOSITE_END then
+            -- TODO remove if not being used, unsure when added if would be useful
+            local playhead_x = timeline:get_current_playhead_timeline_relative_x()
+            if playhead_x < tool:x_middle() then
+                play_from_x = tool.x_end - 20
+            else
+                play_from_x = tool.x_start - 20
+            end
+        end
+        if not play_from_x then
+            print("play_from_x is not set, skipping playback")
+            return
+        end
+
+        timeline:move_playhead_to(play_from_x)
+        win:ensure_playing()
+    end)
+end
+
+function SPal_AdjustSelection(side, num_frames, text)
+    -- ** if text triggered this, then paste it if in a text box (effectively bypass shortcut for textfields)
     if pasted_text_in_textfield(text) then
         return
     end
