@@ -39,6 +39,15 @@ def use_vllm(model: Optional[str] = None):
         # https://github.com/vllm-project/vllm/blob/main/docs/api.md#chat-completions
     )
 
+def use_build21(model: Optional[str] = None):
+    return Service(
+        name='build21',
+        api_key="none",
+        base_url='http://build21:8013/v1',
+        model=model if model else 'llama-server-fixed',
+        chat_completions_path=None,
+    )
+
 def use_inception(model: Optional[str] = None):
     return Service(
         name='inception',
@@ -198,6 +207,7 @@ def args_to_use() -> Service:
     parser.add_argument('--deepseek', action='store_true', default=False)
     parser.add_argument('--lmstudio', action='store_true', default=False)
     parser.add_argument('--groq', action='store_true', default=False)
+    parser.add_argument('--build21', action='store_true', default=False)
     parser.add_argument('--inception', action='store_true', default=False)
     parser.add_argument('--ollama', action='store_true', default=False)
     parser.add_argument('--anthropic', action='store_true', default=False)
@@ -224,6 +234,8 @@ def args_to_use() -> Service:
         use = use_anthropic(args.model)
     elif args.gh_copilot:
         use = use_gh_copilot(args.model)
+    elif args.build21:
+        use = use_build21(args.model)
     elif args.inception:
         use = use_inception(args.model)
     elif args.xai:

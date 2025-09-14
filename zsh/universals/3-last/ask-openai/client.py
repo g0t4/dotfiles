@@ -54,6 +54,8 @@ def get_ask_client() -> tuple[Service, AsyncOpenAI]:
                 use = use_anthropic(model)
             elif "--gh-copilot" in ask_service:
                 use = use_gh_copilot(model)
+            elif "--build21" in ask_service:
+                use = use_build21(model)
             elif "--inception" in ask_service:
                 use = use_inception(model)
             elif "--xai" in ask_service:

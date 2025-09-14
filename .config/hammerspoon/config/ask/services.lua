@@ -60,6 +60,15 @@ function M.getService()
         }
     end
 
+    if stored.service == "--build21" then
+        return {
+            name = "build21",
+            api_key = "whatever",
+            url = "http://build21:8013/v1/chat/completions",
+            model = stored.model == "" and "llama-server-fixed" or stored.model,
+        }
+    end
+
     if stored.service == "--inception" then
         return {
             name = "inception",
