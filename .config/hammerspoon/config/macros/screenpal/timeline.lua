@@ -116,6 +116,7 @@ end
 -- Frequent trouble with 10ms (10,000)
 --   occasional (1 in 10) at 50/75ms
 --   200ms is default but that feels sluggish
+--   FYI ok to use diff constant in diff use cases depending on needs, don't make this global
 local CLICK_HOLD_MICROSECONDS = 100000
 
 ---@param self TimelineController
