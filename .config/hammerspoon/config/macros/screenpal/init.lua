@@ -831,10 +831,11 @@ function SPal_Play(play_what, text)
 
         local play_from_x = nil
 
+        ---called range b/c we need x_start/x_end to derive playback (either from tool, or silence, or smth else in the future)
         ---@type Tool|Silence?
-        local tool = silences.hack_detected.tool
-        if not tool or not tool.x_end then
-            -- * no tool open, try using current silence
+        local range = silences.hack_detected.tool
+        if not range or not range.x_end then
+            -- * no tool open, then look at silences and use one of them as a "virtual tool" (think "virtual selection")
             -- find and preview the closest silence (start/end)
 
             local playhead_x = timeline:get_current_playhead_timeline_relative_x()
@@ -862,23 +863,23 @@ function SPal_Play(play_what, text)
                         closest_silence = next
                     end
                 end
-                tool = closest_silence
+                range = closest_silence
             else
-                tool = current_silence
+                range = current_silence
             end
         end
 
         if play_what == SELECTION_START then
-            play_from_x = tool.x_start - 20
+            play_from_x = range.x_start - 20
         elseif play_what == SELECTION_END then
-            play_from_x = tool.x_end - 20
+            play_from_x = range.x_end - 20
         elseif play_what == SELCTION_OPPOSITE_END then
-            -- TODO remove if not being used, unsure when added if would be useful
+            -- TODO remove if not being used, when I added this I wasn't sure if I'd use it
             local playhead_x = timeline:get_current_playhead_timeline_relative_x()
-            if playhead_x < tool:x_middle() then
-                play_from_x = tool.x_end - 20
+            if playhead_x < range:x_middle() then
+                play_from_x = range.x_end - 20
             else
-                play_from_x = tool.x_start - 20
+                play_from_x = range.x_start - 20
             end
         end
 
