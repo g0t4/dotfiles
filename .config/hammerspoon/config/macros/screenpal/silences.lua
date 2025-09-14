@@ -2,9 +2,15 @@
 ---@field x_start number
 ---@field x_end number
 local Silence = {}
+Silence.__index = Silence
 
 function Silence:x_width()
     return self.x_end - self.x_start
+end
+
+function Silence.new(what)
+    what = what or {}
+    return setmetatable(what, { __index = Silence })
 end
 
 ---@alias DetectionResults { short_silences: Silence[], regular_silences: Silence[], tool: { type: string, x_start: number, x_end: number}}
@@ -22,10 +28,14 @@ local SilencesController = {}
 ---@return SilencesController
 function SilencesController:new(detected, timeline)
     ---@type Silence[]
-    local regular_shallow_clone = { table.unpack(detected.regular_silences) }
+    local regular_shallow_clone =
+        vim.iter(detected.regular_silences)
+        :map(Silence.new)
+        :totable()
 
     ---@type Silence[]
-    local short_shallow_clone = vim.iter(detected.short_silences)
+    local short_shallow_clone =
+        vim.iter(detected.short_silences)
         :filter(function(s)
             --   can always put in a new list if useful
             --   zoom2 => 3 pixels per frame
@@ -34,6 +44,7 @@ function SilencesController:new(detected, timeline)
             --   I won't be using silences when zoom is off, nor likely in zoom1
             return s.x_end - s.x_start >= 6
         end)
+        :map(Silence.new)
         :totable()
 
     table.sort(regular_shallow_clone, function(a, b)
