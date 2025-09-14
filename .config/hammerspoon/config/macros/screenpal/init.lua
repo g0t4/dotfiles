@@ -519,6 +519,16 @@ function act_on_silence(win, silence, action)
             timeline_relative_x_end = silence:x_end_pad_percent(0.9)
         end
     end
+    if action == MUTE_SHIFT_RIGHT then
+        -- TODO figure out what you like best for this one
+        -- why? b/c sometimes the silence start cuts into end of last narration
+        -- and often also is not fully to next narration
+        -- this is easier than adjust each side each time
+        -- FYI if I just need to adjust end I will do that with arrow key, this is only when I wanna adjust both sides
+        --   in fact that is a good way to express these tool overrides, they are for adjusting both start/end in a frequently needed way
+        timeline_relative_x_start = silence.x_start + 1
+        timeline_relative_x_end = silence.x_end + 1
+    end
 
     -- * set tool start
     local timeline = win:timeline_controller()
