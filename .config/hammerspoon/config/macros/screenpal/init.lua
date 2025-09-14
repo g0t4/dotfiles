@@ -767,12 +767,38 @@ function SPal_AdjustSelection(side, num_frames, text)
 
         local tool = silences.hack_detected.tool
         if not tool or not tool.x_end then
+            -- TODO split out function
             -- no tool open, try using current silence
             -- move to other side of current silence
-            local silence = silences:get_this_silence()
-            if not silence then return end
 
             local playhead_x = timeline:get_current_playhead_timeline_relative_x()
+            local silence = silences:get_this_silence()
+
+            if not silence then
+                -- no current silence => find nearest (either side)
+                local next = silences:get_next_silence()
+                local prev = silences:get_prev_silence()
+                if not prev and not next then
+                    -- very unlikely!
+                    return
+                end
+                if not next then
+                    silence = prev
+                elseif not prev then
+                    silence = next
+                else
+                    -- which is closer?
+                    local prev_distance = playhead_x - prev.x_end
+                    local next_distance = next.x_start - playhead_x
+                    if prev_distance < next_distance then
+                        silence = prev
+                    else
+                        silence = next
+                    end
+                end
+            end
+            if not silence then return end
+
             local x_middle = silence.x_start + (silence.x_end - silence.x_start) / 2
             local playhead_closer_to_start = playhead_x < x_middle
             if playhead_closer_to_start then
