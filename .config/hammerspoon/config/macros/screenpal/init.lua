@@ -763,12 +763,29 @@ function SPal_AdjustSelection(side, num_frames, text)
     run_async(function()
         ---@type ScreenPalEditorWindow, SilencesController
         local win, silences = syncify(detect_silences)
-        local silence = silences:get_next_silence()
-        local tool = silences.hack_detected.tool
-        if not tool or not tool.x_end then return end
+        local timeline = win:timeline_controller()
 
+        local tool = silences.hack_detected.tool
+        if not tool or not tool.x_end then
+            -- no tool open, try using current silence
+            -- move to other side of current silence
+            local silence = silences:get_this_silence()
+            if not silence then return end
+
+            local playhead_x = timeline:get_current_playhead_timeline_relative_x()
+            local x_middle = silence.x_start + (silence.x_end - silence.x_start) / 2
+            local playhead_closer_to_start = playhead_x < x_middle
+            if playhead_closer_to_start then
+                timeline:move_playhead_to(silence.x_end)
+            else
+                timeline:move_playhead_to(silence.x_start)
+            end
+
+            return
+        end
+
+        local silence = silences:get_next_silence()
         if side == START then
-            local timeline = win:timeline_controller()
             timeline:move_playhead_to(tool.x_start)
             if num_frames > 0 then
                 -- expand
@@ -788,12 +805,10 @@ function SPal_AdjustSelection(side, num_frames, text)
             -- print("adjusting by num_pixels: " .. tostring(num_pixels) .. " frames: " .. tostring(num_frames))
             -- next_frame_x_guess_zoom2 = tool.x_end + num_pixels
             -- extend selection to current playhead position
-            -- local timeline = win:timeline_controller()
             -- timeline:move_playhead_to(next_frame_x_guess_zoom2)
             -- hs.eventtap.keyStroke({}, "e", 0, win.app)
 
             -- move cursor to end of selection
-            local timeline = win:timeline_controller()
             timeline:move_playhead_to(tool.x_end)
             -- arrow left/right to move one frame w/o calculating x pixel value and without issues going back with cursor
             if num_frames > 0 then
@@ -804,7 +819,6 @@ function SPal_AdjustSelection(side, num_frames, text)
             -- 0 == JUMP to end only
         elseif side == OTHER then
             -- just flip to other side!
-            local timeline = win:timeline_controller()
             local playhead_x = timeline:get_current_playhead_timeline_relative_x()
             local x_middle = tool.x_start + (tool.x_end - tool.x_start) / 2
             local playhead_closer_to_start = playhead_x < x_middle
