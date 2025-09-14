@@ -552,8 +552,8 @@ _G.MUTE = 'mute'
 _G.CUT_20 = 'cut_20'
 _G.CUT_30 = 'cut_30'
 _G.CUT_TIGHT = 'cut_90%'
-_G.MUTE_SHIFT_RIGHT1 = 'mute_shift_right1'
-_G.MUTE_SHIFT_RIGHT2 = 'mute_shift_right2'
+_G.MUTE1 = 'mute1'
+_G.MUTE2 = 'mute2'
 
 ---@param win ScreenPalEditorWindow
 ---@param silence? Silence
@@ -589,10 +589,10 @@ function act_on_silence(win, silence, action)
         end
     end
 
-    if action == MUTE_SHIFT_RIGHT1 then
+    if action == MUTE1 then
         timeline_relative_x_start = silence.x_start + 1
         timeline_relative_x_end = silence.x_end + 1
-    elseif action == MUTE_SHIFT_RIGHT2 then
+    elseif action == MUTE2 then
         timeline_relative_x_start = silence.x_start + 2
         timeline_relative_x_end = silence.x_end + 2
     end
@@ -605,7 +605,7 @@ function act_on_silence(win, silence, action)
     local start_tool_key = ''
     if action == CUT_20 or action == CUT_TIGHT or action == CUT_30 then
         start_tool_key = 'c'
-    elseif action == MUTE or action == MUTE_SHIFT_RIGHT1 or action == MUTE_SHIFT_RIGHT2 then
+    elseif action == MUTE or action == MUTE1 or action == MUTE2 then
         start_tool_key = 'v'
     else
         error("UNDEFINED action: " .. tostring(action))
