@@ -1,8 +1,15 @@
+--
+-- *** Silences ***
 ---@class Silence
 ---@field x_start number
 ---@field x_end number
 local Silence = {}
 Silence.__index = Silence
+
+function Silence.new(what)
+    what = what or {}
+    return setmetatable(what, { __index = Silence })
+end
 
 function Silence:x_width()
     return self.x_end - self.x_start
@@ -10,11 +17,6 @@ end
 
 function Silence:x_middle()
     return self.x_start + (self.x_end - self.x_start) / 2
-end
-
-function Silence.new(what)
-    what = what or {}
-    return setmetatable(what, { __index = Silence })
 end
 
 function Silence:x_start_pad_percent(ratio)
@@ -31,7 +33,32 @@ function Silence:x_end_pad_percent(ratio)
     return self.x_end - padding
 end
 
----@alias DetectionResults { short_silences: Silence[], regular_silences: Silence[], tool: { type: string, x_start: number, x_end: number}}
+-- *** TOOL ***
+---@class Tool
+---@field x_start number
+---@field x_end number
+local Tool = {}
+Tool.__index = Tool
+
+function Tool.new(what)
+    what = what or {}
+    return setmetatable(what, { __index = Tool })
+end
+
+function Tool:x_width()
+    return self.x_end - self.x_start
+end
+
+function Tool:x_middle()
+    return self.x_start + self:x_width() / 2
+end
+
+-- *** SilencesController ***
+
+---@alias DetectionResults { short_silences: Silence[], regular_silences: Silence[], tool: Tool?}
+---FYI DetectionResults initially doesn't have Silence/Tool types until wrapped
+--- and right now I am only wrapping Tool (so I can use it via hack_detected.tool)
+--- and for silences, I wrap those but I put them onto SilencesController (not back onto hack_detected)
 
 ---@class SilencesController
 ---@field regular Silence[]
@@ -62,7 +89,7 @@ function SilencesController:new(detected, timeline)
             --   I won't be using silences when zoom is off, nor likely in zoom1
             return s.x_end - s.x_start >= 6
         end)
-        :map(Silence.new)
+        :map(Silence.new) -- wrap to get Silence behavious
         :totable()
 
     table.sort(regular_shallow_clone, function(a, b)
@@ -78,11 +105,15 @@ function SilencesController:new(detected, timeline)
         return a.x_start < b.x_start
     end)
 
+    detected.tool = Tool.new(detected.tool) -- wrap to get Tool behavious
+
     local obj = {
         regular = regular_shallow_clone,
         short = short_shallow_clone,
         all = all,
         _timeline = timeline,
+        -- FYI I should expand SilencesController to be DetectionController or smth like that
+        --    or maybe even just wrap entire detected result object with DetectionResults class?
         hack_detected = detected,
     }
 
