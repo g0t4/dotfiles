@@ -869,6 +869,7 @@ function SPal_Play(play_what, text)
             end
         end
 
+        -- * move w.r.t. range before playback
         if play_what == SELECTION_START then
             play_from_x = range.x_start - 20
         elseif play_what == SELECTION_END then
