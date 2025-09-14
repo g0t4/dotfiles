@@ -508,9 +508,13 @@ function act_on_silence(win, silence, action)
     if silence.x_start ~= 0 then
         -- PRN pass param w/ amount to cut if I want several gaps?
         if action == CUT then
+            -- FTR this has worked VERY well on cuts so far b/c 40 pixels ~= 0.25 seconds @zoom2
+            --  40pixels / 6pps / 25fps == 26.67 seconds @zoom2
             timeline_relative_x_start = silence.x_start + 20
             timeline_relative_x_end = silence.x_end - 20
         elseif action == CUT_TIGHT then
+            -- FYI it is possible you always want cuts expressed in pixels remaining (i.e. 20 above)
+            -- percent cut won't work well on a large silence (would end up being bigger than 20pixels per side!)
             timeline_relative_x_start = silence:x_start_pad_percent(0.9)
             timeline_relative_x_end = silence:x_end_pad_percent(0.9)
         end
