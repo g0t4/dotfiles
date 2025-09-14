@@ -815,9 +815,9 @@ function SPal_KeyMap(action, text)
 end
 
 -- FYI constnats added globally to simplify streamdeck button lua code snippets (where escaping of quotes is a PITA)
-_G.SELECTION_START = "SELECTION_START"
-_G.SELECTION_END = "SELECTION_END"
-_G.SELCTION_OPPOSITE_END = "SELCTION_OPPOSITE_END"
+_G.SELECTION_BEFORE_START = "SELECTION_BEFORE_START"
+_G.SELECTION_BEFORE_END = "SELECTION_BEFORE_END"
+_G.SELCTION_BEFORE_OPPOSITE = "SELCTION_BEFORE_OPPOSITE"
 
 function SPal_Play(play_what, text)
     -- TODO could add other play scenarios / tools to this
@@ -873,11 +873,11 @@ function SPal_Play(play_what, text)
         end
 
         -- * move w.r.t. range before playback
-        if play_what == SELECTION_START then
+        if play_what == SELECTION_BEFORE_START then
             play_from_x = range.x_start - 20
-        elseif play_what == SELECTION_END then
+        elseif play_what == SELECTION_BEFORE_END then
             play_from_x = range.x_end - 20
-        elseif play_what == SELCTION_OPPOSITE_END then
+        elseif play_what == SELCTION_BEFORE_OPPOSITE then
             -- TODO remove if not being used, when I added this I wasn't sure if I'd use it
             local playhead_x = timeline:get_current_playhead_timeline_relative_x()
             if playhead_x < range:x_middle() then
