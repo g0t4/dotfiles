@@ -508,8 +508,8 @@ function act_on_silence(win, silence, action)
     if silence.x_start ~= 0 then
         -- PRN pass param w/ amount to cut if I want several gaps?
         if action == CUT then
-            timeline_relative_x_start = timeline_relative_x_start + 20
-            timeline_relative_x_end = timeline_relative_x_end - 20
+            timeline_relative_x_start = silence.x_start + 20
+            timeline_relative_x_end = silence.x_end - 20
         elseif action == CUT_TIGHT then
             timeline_relative_x_start = silence:x_start_pad_percent(0.9)
             timeline_relative_x_end = silence:x_end_pad_percent(0.9)
