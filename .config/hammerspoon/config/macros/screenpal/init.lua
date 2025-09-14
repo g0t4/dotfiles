@@ -534,15 +534,15 @@ function act_on_silence(win, silence, action_keystroke)
     hs.timer.usleep(_100ms)
 
     -- * calculate end padding
-    timeline_relative_x = silence.x_end -- - 10
+    local timeline_relative_x_end = silence.x_end -- - 10
     if silence.x_start ~= 0 then
         if action_keystroke == CUT then
-            timeline_relative_x = timeline_relative_x - 20
+            timeline_relative_x_end = timeline_relative_x_end - 20
         elseif action_keystroke == CUT_TIGHT then
-            timeline_relative_x = silence:x_end_pad_percent(0.9)
+            timeline_relative_x_end = silence:x_end_pad_percent(0.9)
         end
     end
-    timeline:move_playhead_to(timeline_relative_x)
+    timeline:move_playhead_to(timeline_relative_x_end)
     hs.eventtap.keyStroke({}, "e", 0, win.app)
     -- PRN add pause? so far ok w/o it
 
