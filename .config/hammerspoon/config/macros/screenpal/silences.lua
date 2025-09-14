@@ -1,4 +1,12 @@
----@alias Silence {x_start: number, x_end: number}
+---@class Silence
+---@field x_start number
+---@field x_end number
+local Silence = {}
+
+function Silence:x_width()
+    return self.x_end - self.x_start
+end
+
 ---@alias DetectionResults { short_silences: Silence[], regular_silences: Silence[], tool: { type: string, x_start: number, x_end: number}}
 
 ---@class SilencesController
