@@ -14,12 +14,12 @@ DEBUG = __name__ == "__main__"
 
 @dataclass
 class ToolResult:
-    type: str
+    # type: str  # removed b/c I wasn't using this, no need, yet?
     x_start: int
     x_end: int
 
     def to_dict(self) -> dict[str, Any]:
-        return {'type': self.type, 'x_start': self.x_start, 'x_end': self.x_end}
+        return {'x_start': self.x_start, 'x_end': self.x_end}
 
 def detect_tools(use_file):
     shared_context = get_shared_context(use_file)
@@ -155,7 +155,6 @@ def detect_tools(use_file):
         return None
 
     return ToolResult(
-        type="volume_add_tool",
         x_start=int(min_index / 2),
         x_end=int(max_index / 2),
     )
