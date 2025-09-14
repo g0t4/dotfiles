@@ -502,17 +502,21 @@ function act_on_silence(win, silence, action_keystroke)
         return
     end
 
-    -- * calculate start padding
+    -- * calculate padding
     local timeline_relative_x_start = silence.x_start
+    local timeline_relative_x_end = silence.x_end -- - 10
     if silence.x_start ~= 0 then
         -- PRN pass param w/ amount to cut if I want several gaps?
         if action_keystroke == CUT then
             timeline_relative_x_start = timeline_relative_x_start + 20
+            timeline_relative_x_end = timeline_relative_x_end - 20
         elseif action_keystroke == CUT_TIGHT then
-            print("x_width: " .. tostring(silence:x_width()))
             timeline_relative_x_start = silence:x_start_pad_percent(0.9)
+            timeline_relative_x_end = silence:x_end_pad_percent(0.9)
         end
     end
+
+    -- * set tool start
     local timeline = win:timeline_controller()
     timeline:move_playhead_to(timeline_relative_x_start)
 
@@ -533,18 +537,10 @@ function act_on_silence(win, silence, action_keystroke)
     hs.eventtap.keyStroke({}, "s", 0, win.app)
     hs.timer.usleep(_100ms)
 
-    -- * calculate end padding
-    local timeline_relative_x_end = silence.x_end -- - 10
-    if silence.x_start ~= 0 then
-        if action_keystroke == CUT then
-            timeline_relative_x_end = timeline_relative_x_end - 20
-        elseif action_keystroke == CUT_TIGHT then
-            timeline_relative_x_end = silence:x_end_pad_percent(0.9)
-        end
-    end
+    -- * set tool end
     timeline:move_playhead_to(timeline_relative_x_end)
     hs.eventtap.keyStroke({}, "e", 0, win.app)
-    -- PRN add pause? so far ok w/o it
+    -- add pause? so far ok w/o it
 
     if action_keystroke == CUT and silence.x_start == 0 then
         -- * pull back 2 frames from end to avoid cutting into starting audio
