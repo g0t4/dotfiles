@@ -503,18 +503,18 @@ function act_on_silence(win, silence, action_keystroke)
     end
 
     -- * calculate start padding
-    local timeline_relative_x = silence.x_start
+    local timeline_relative_x_start = silence.x_start
     if silence.x_start ~= 0 then
         -- PRN pass param w/ amount to cut if I want several gaps?
         if action_keystroke == CUT then
-            timeline_relative_x = timeline_relative_x + 20
+            timeline_relative_x_start = timeline_relative_x_start + 20
         elseif action_keystroke == CUT_TIGHT then
             print("x_width: " .. tostring(silence:x_width()))
-            timeline_relative_x = silence:x_start_pad_percent(0.9)
+            timeline_relative_x_start = silence:x_start_pad_percent(0.9)
         end
     end
     local timeline = win:timeline_controller()
-    timeline:move_playhead_to(timeline_relative_x)
+    timeline:move_playhead_to(timeline_relative_x_start)
 
     -- * start tool
     local start_tool_key = ''
