@@ -493,9 +493,9 @@ _G.MUTE_SHIFT_RIGHT = 'mute_shift_right' -- TODO!
 
 ---@param win ScreenPalEditorWindow
 ---@param silence? Silence
----@param action_keystroke string
+---@param action string
 --- PRN @param padding?
-function act_on_silence(win, silence, action_keystroke)
+function act_on_silence(win, silence, action)
     if not silence then
         -- might be easier to check here, in one spot, than in all the callers
         print("no silence to act on")
@@ -507,10 +507,10 @@ function act_on_silence(win, silence, action_keystroke)
     local timeline_relative_x_end = silence.x_end -- - 10
     if silence.x_start ~= 0 then
         -- PRN pass param w/ amount to cut if I want several gaps?
-        if action_keystroke == CUT then
+        if action == CUT then
             timeline_relative_x_start = timeline_relative_x_start + 20
             timeline_relative_x_end = timeline_relative_x_end - 20
-        elseif action_keystroke == CUT_TIGHT then
+        elseif action == CUT_TIGHT then
             timeline_relative_x_start = silence:x_start_pad_percent(0.9)
             timeline_relative_x_end = silence:x_end_pad_percent(0.9)
         end
@@ -522,14 +522,14 @@ function act_on_silence(win, silence, action_keystroke)
 
     -- * start tool
     local start_tool_key = ''
-    if action_keystroke == CUT
-        or action_keystroke == CUT_TIGHT then
+    if action == CUT
+        or action == CUT_TIGHT then
         start_tool_key = 'c'
-    elseif action_keystroke == MUTE
-        or action_keystroke == MUTE_SHIFT_RIGHT then
+    elseif action == MUTE
+        or action == MUTE_SHIFT_RIGHT then
         start_tool_key = 'v'
     else
-        error("UNDEFINED action: " .. tostring(action_keystroke))
+        error("UNDEFINED action: " .. tostring(action))
     end
     hs.eventtap.keyStroke({}, start_tool_key, 0, win.app)
     hs.timer.usleep(_100ms)
@@ -542,7 +542,7 @@ function act_on_silence(win, silence, action_keystroke)
     hs.eventtap.keyStroke({}, "e", 0, win.app)
     -- add pause? so far ok w/o it
 
-    if action_keystroke == CUT and silence.x_start == 0 then
+    if action == CUT and silence.x_start == 0 then
         -- * pull back 2 frames from end to avoid cutting into starting audio
         hs.eventtap.keyStroke({}, "left", 0, win.app)
         hs.timer.usleep(_10ms)
