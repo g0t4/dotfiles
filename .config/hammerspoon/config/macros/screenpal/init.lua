@@ -669,7 +669,7 @@ local function move_playhead_to_silence(win, silence)
     timeline:move_playhead_to(timeline_relative_x)
 end
 
-function StreamDeck_ScreenPal_JumpThisSilence()
+function SPal_JumpThisSilence()
     run_async(function()
         ---@type ScreenPalEditorWindow, SilencesController
         local win, silences = syncify(detect_silences)
@@ -678,7 +678,7 @@ function StreamDeck_ScreenPal_JumpThisSilence()
     end)
 end
 
-function StreamDeck_ScreenPal_JumpPrevSilence()
+function SPal_JumpPrevSilence()
     run_async(function()
         ---@type ScreenPalEditorWindow, SilencesController
         local win, silences = syncify(detect_silences)
@@ -687,7 +687,7 @@ function StreamDeck_ScreenPal_JumpPrevSilence()
     end)
 end
 
-function StreamDeck_ScreenPal_JumpNextSilence()
+function SPal_JumpNextSilence()
     -- TODO if last jump was to this silence, then make next pass it
     --    else can get stuck
     --
@@ -710,12 +710,12 @@ function StreamDeck_ScreenPal_JumpNextSilence()
     end)
 end
 
-function StreamDeck_ScreenPal_PlayNextSilence()
+function SPal_PlayNextSilence()
     -- TODO PLAY THIS, NEXT, PREV silence helpers
     -- when done jump back to start of that position or silence?
 end
 
-function StreamDeck_ScreenPal_ActOnPrevSilence(action_keystroke)
+function SPal_ActOnPrevSilence(action_keystroke)
     run_async(function()
         ---@type ScreenPalEditorWindow, SilencesController
         local win, silences = syncify(detect_silences)
@@ -724,7 +724,7 @@ function StreamDeck_ScreenPal_ActOnPrevSilence(action_keystroke)
     end)
 end
 
-function StreamDeck_ScreenPal_ActOnThisSilence_ThruStart(action_keystroke)
+function SPal_ActOnThisSilence_ThruStart(action_keystroke)
     run_async(function()
         ---@type ScreenPalEditorWindow, SilencesController
         local win, silences = syncify(detect_silences)
@@ -739,7 +739,7 @@ function StreamDeck_ScreenPal_ActOnThisSilence_ThruStart(action_keystroke)
     end)
 end
 
-function StreamDeck_ScreenPal_ActOnThisSilence(action_keystroke)
+function SPal_ActOnThisSilence(action_keystroke)
     run_async(function()
         ---@type ScreenPalEditorWindow, SilencesController
         local win, silences = syncify(detect_silences)
@@ -748,7 +748,7 @@ function StreamDeck_ScreenPal_ActOnThisSilence(action_keystroke)
     end)
 end
 
-function StreamDeck_ScreenPal_ActOnThisSilence_ThruEnd(action_keystroke)
+function SPal_ActOnThisSilence_ThruEnd(action_keystroke)
     run_async(function()
         ---@type ScreenPalEditorWindow, SilencesController
         local win, silences = syncify(detect_silences)
@@ -763,7 +763,7 @@ function StreamDeck_ScreenPal_ActOnThisSilence_ThruEnd(action_keystroke)
     end)
 end
 
-function StreamDeck_ScreenPal_ActOnNextSilence(action_keystroke)
+function SPal_ActOnNextSilence(action_keystroke)
     run_async(function()
         ---@type ScreenPalEditorWindow, SilencesController
         local win, silences = syncify(detect_silences)
@@ -1031,7 +1031,7 @@ local function silences_are_visible()
     return silences_canvas ~= nil
 end
 
-function StreamDeck_ScreenPal_ShowSilenceRegions()
+function SPal_ShowSilenceRegions()
     run_async(function()
         if silences_are_visible() then
             hide_silences()
@@ -1043,7 +1043,7 @@ function StreamDeck_ScreenPal_ShowSilenceRegions()
     end)
 end
 
-function StreamDeck_ScreenPal_Timeline_ZoomAndJumpToStart()
+function SPal_Timeline_ZoomAndJumpToStart()
     -- FYI using run_async (coroutines under hood) to avoid blocking (i.e. during sleep calls)
     run_async(function()
         local win = get_cached_editor_window()
@@ -1060,7 +1060,7 @@ function StreamDeck_ScreenPal_Timeline_ZoomAndJumpToStart()
     end)
 end
 
-function StreamDeck_ScreenPal_Timeline_ZoomAndJumpToEnd()
+function SPal_Timeline_ZoomAndJumpToEnd()
     run_async(function()
         local win = get_cached_editor_window()
         win:zoom_off()
@@ -1073,7 +1073,7 @@ function StreamDeck_ScreenPal_Timeline_ZoomAndJumpToEnd()
     end)
 end
 
-function StreamDeck_ScreenPal_CopyPlayheadTimeText()
+function SPal_CopyPlayheadTimeText()
     local win = get_cached_editor_window()
     local time_string = win:get_time_string()
     hs.pasteboard.setContents(time_string)
@@ -1231,6 +1231,6 @@ function RETIRED_StreamDeckScreenPalTimelineApproxRestorePosition(restore_positi
     end
 end
 
-function StreamDeck_ScreenPal_ReopenProject()
+function SPal_ReopenProject()
     get_cached_editor_window():reopen_project()
 end
