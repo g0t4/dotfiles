@@ -486,8 +486,10 @@ function show_silences(win, silences)
     silences_canvas = canvas
 end
 
-_G.MUTE = 'v'
-_G.CUT = 'c'
+_G.MUTE = 'mute'
+_G.CUT = 'cut'
+_G.CUT_TIGHT = 'cut_tight' -- TODO!
+_G.MUTE_SHIFT_RIGHT = 'mute_shift_right' -- TODO!
 
 ---@param win ScreenPalEditorWindow
 ---@param silence? Silence
