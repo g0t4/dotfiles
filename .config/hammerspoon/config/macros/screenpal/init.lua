@@ -199,14 +199,20 @@ function ScreenPalEditorWindow:is_paused()
     return not self:is_playing()
 end
 
-function ScreenPalEditorWindow:ensure_playing()
+function ScreenPalEditorWindow:ensure_playing(is_tool_open)
     if self:is_playing() then
         return
     end
 
-    -- FYI AXPress doesn't work on this button
-    hs.eventtap.keyStroke({}, hs.keycodes.map["space"])
-    -- FYI USE MOUSE if space is a problem, via hs.eventtap.leftClick
+    if is_tool_open then
+        -- "p" is for preview (so you can hear what it sounds like with the tool applied
+        -- it is possible I'll want to hear again w/o the tool in which case for now I will have to trigger that myself
+        hs.eventtap.keyStroke({}, "p")
+    else
+        -- FYI AXPress doesn't work on this button
+        hs.eventtap.keyStroke({}, hs.keycodes.map["space"])
+        -- FYI USE MOUSE if space is a problem, via hs.eventtap.leftClick
+    end
 end
 
 function ScreenPalEditorWindow:is_zoomed()
@@ -898,8 +904,14 @@ function SPal_Play(play_what, text)
             return
         end
 
+        local is_tool_open = range == silences.hack_detected.tool
         timeline:move_playhead_to(play_from_x)
-        win:ensure_playing()
+        win:ensure_playing(is_tool_open)
+        if is_tool_open then
+            -- b/c p shifts the cursor back too :(
+            --  no idea of a way to trigger preview other than p
+            timeline:move_playhead_to(play_from_x)
+        end
     end)
 end
 
