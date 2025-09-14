@@ -487,9 +487,10 @@ function show_silences(win, silences)
 end
 
 _G.MUTE = 'mute'
-_G.CUT = 'cut'
-_G.CUT_TIGHT = 'cut_tight' -- TODO!
-_G.MUTE_SHIFT_RIGHT = 'mute_shift_right' -- TODO!
+_G.CUT_20 = 'cut_20'
+_G.CUT_30 = 'cut_30'
+_G.CUT_TIGHT = 'cut_90%'
+_G.MUTE_SHIFT_RIGHT = 'mute_shift_right'
 
 ---@param win ScreenPalEditorWindow
 ---@param silence? Silence
@@ -507,11 +508,16 @@ function act_on_silence(win, silence, action)
     local timeline_relative_x_end = silence.x_end -- - 10
     if silence.x_start ~= 0 then
         -- PRN pass param w/ amount to cut if I want several gaps?
-        if action == CUT then
+        if action == CUT_20 then
             -- FTR this has worked VERY well on cuts so far b/c 40 pixels ~= 0.25 seconds @zoom2
             --  40pixels / 6pps / 25fps == 26.67 seconds @zoom2
             timeline_relative_x_start = silence.x_start + 20
             timeline_relative_x_end = silence.x_end - 20
+        elseif action == CUT_30 then
+            -- ~ 0.4 seconds
+            -- TODO lets name the cut levels CUT_TO_QUARTER_SEC, CUT_TO_HALF_SEC etc (w/e levels I want) and map it to pixels assuming used in zoom2 only is fine
+            timeline_relative_x_start = silence.x_start + 30
+            timeline_relative_x_end = silence.x_end - 30
         elseif action == CUT_TIGHT then
             -- FYI it is possible you always want cuts expressed in pixels remaining (i.e. 20 above)
             -- percent cut won't work well on a large silence (would end up being bigger than 20pixels per side!)
@@ -536,11 +542,9 @@ function act_on_silence(win, silence, action)
 
     -- * start tool
     local start_tool_key = ''
-    if action == CUT
-        or action == CUT_TIGHT then
+    if action == CUT_20 or action == CUT_TIGHT or action == CUT_30 then
         start_tool_key = 'c'
-    elseif action == MUTE
-        or action == MUTE_SHIFT_RIGHT then
+    elseif action == MUTE or action == MUTE_SHIFT_RIGHT then
         start_tool_key = 'v'
     else
         error("UNDEFINED action: " .. tostring(action))
@@ -556,7 +560,9 @@ function act_on_silence(win, silence, action)
     hs.eventtap.keyStroke({}, "e", 0, win.app)
     -- add pause? so far ok w/o it
 
-    if action == CUT and silence.x_start == 0 then
+    if action == CUT_20 and silence.x_start == 0 then
+        -- TODO trigger this for all for all cut types?
+
         -- * pull back 2 frames from end to avoid cutting into starting audio
         hs.eventtap.keyStroke({}, "left", 0, win.app)
         hs.timer.usleep(_10ms)
