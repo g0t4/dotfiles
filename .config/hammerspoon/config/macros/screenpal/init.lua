@@ -809,7 +809,6 @@ function SPal_AdjustSelection(side, num_frames, text)
             return
         end
 
-        local silence = silences:get_next_silence()
         if side == START then
             timeline:move_playhead_to(tool.x_start)
             if num_frames > 0 then
