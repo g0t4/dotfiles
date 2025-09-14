@@ -8,6 +8,10 @@ function Silence:x_width()
     return self.x_end - self.x_start
 end
 
+function Silence:x_middle()
+    return self.x_start + (self.x_end - self.x_start) / 2
+end
+
 function Silence.new(what)
     what = what or {}
     return setmetatable(what, { __index = Silence })

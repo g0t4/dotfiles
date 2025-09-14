@@ -799,8 +799,7 @@ function SPal_AdjustSelection(side, num_frames, text)
             end
             if not silence then return end
 
-            local x_middle = silence.x_start + (silence.x_end - silence.x_start) / 2
-            local playhead_closer_to_start = playhead_x < x_middle
+            local playhead_closer_to_start = playhead_x < silence:x_middle()
             if playhead_closer_to_start then
                 timeline:move_playhead_to(silence.x_end)
             else
