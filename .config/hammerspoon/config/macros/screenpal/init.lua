@@ -552,7 +552,8 @@ _G.MUTE = 'mute'
 _G.CUT_20 = 'cut_20'
 _G.CUT_30 = 'cut_30'
 _G.CUT_TIGHT = 'cut_90%'
-_G.MUTE_SHIFT_RIGHT = 'mute_shift_right'
+_G.MUTE_SHIFT_RIGHT1 = 'mute_shift_right1'
+_G.MUTE_SHIFT_RIGHT2 = 'mute_shift_right2'
 
 ---@param win ScreenPalEditorWindow
 ---@param silence? Silence
@@ -587,15 +588,13 @@ function act_on_silence(win, silence, action)
             timeline_relative_x_end = silence:x_end_pad_percent(0.9)
         end
     end
-    if action == MUTE_SHIFT_RIGHT then
-        -- TODO figure out what you like best for this one
-        -- why? b/c sometimes the silence start cuts into end of last narration
-        -- and often also is not fully to next narration
-        -- this is easier than adjust each side each time
-        -- FYI if I just need to adjust end I will do that with arrow key, this is only when I wanna adjust both sides
-        --   in fact that is a good way to express these tool overrides, they are for adjusting both start/end in a frequently needed way
+
+    if action == MUTE_SHIFT_RIGHT1 then
         timeline_relative_x_start = silence.x_start + 1
         timeline_relative_x_end = silence.x_end + 1
+    elseif action == MUTE_SHIFT_RIGHT2 then
+        timeline_relative_x_start = silence.x_start + 2
+        timeline_relative_x_end = silence.x_end + 2
     end
 
     -- * set tool start
@@ -606,7 +605,7 @@ function act_on_silence(win, silence, action)
     local start_tool_key = ''
     if action == CUT_20 or action == CUT_TIGHT or action == CUT_30 then
         start_tool_key = 'c'
-    elseif action == MUTE or action == MUTE_SHIFT_RIGHT then
+    elseif action == MUTE or action == MUTE_SHIFT_RIGHT1 or action == MUTE_SHIFT_RIGHT2 then
         start_tool_key = 'v'
     else
         error("UNDEFINED action: " .. tostring(action))
