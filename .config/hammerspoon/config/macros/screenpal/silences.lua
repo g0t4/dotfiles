@@ -13,6 +13,13 @@ function Silence.new(what)
     return setmetatable(what, { __index = Silence })
 end
 
+function Silence:x_start_pad_percent(ratio)
+    -- compute the padding start if silence is shrunk to ratio/1.0
+    -- i.e. padding for 90% of silence would be 10%/2 => 5% of width on each side
+    local padding = self:x_width() * ratio / 2
+    return self.x_start + padding
+end
+
 ---@alias DetectionResults { short_silences: Silence[], regular_silences: Silence[], tool: { type: string, x_start: number, x_end: number}}
 
 ---@class SilencesController
