@@ -101,7 +101,6 @@ function axuielemMT:window_by_title(title)
         local window_title = window:axTitle()
         if window_title == title then return window end
     end
-    error("axuielemMT.window_by_title: could not find window with title " .. tostring(title))
 end
 
 ---@return hs.axuielement[]
