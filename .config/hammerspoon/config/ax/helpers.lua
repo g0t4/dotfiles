@@ -621,21 +621,23 @@ end
 ---@param name string? - optional name for logging
 ---@return hs.axuielement?
 function wait_for_element(search_func, interval_ms, max_cycles, name)
+    -- TODO rewrite with syncify
     interval_ms = interval_ms or 20
     max_cycles = max_cycles or 30
 
     local start = get_time()
     local cycles = 0
     while cycles < max_cycles do
-        -- print("wait_for_element cycle: " .. cycles)
-        local elem = search_func()
-        if elem then
-            print_took("WaitForElement " .. (name or ""), start)
-            return elem
+        local element = search_func()
+        if element then
+            print_took("wait_for_element " .. tostring(name), start)
+            return element
         end
         timer.usleep(interval_ms * 1000)
         cycles = cycles + 1
     end
+
+    print_took("wait_for_element " .. tostring(name) .. " timed out after " .. tostring(max_cycles) .. " cycles @ " .. tostring(interval_ms) .. "ms intervals")
     return nil
 end
 
