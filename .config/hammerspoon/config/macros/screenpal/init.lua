@@ -562,6 +562,7 @@ _G.MUTE = 'MUTE'
 _G.CUT_20 = 'CUT_20' -- consider in this case starting preview always?
 _G.CUT_20_OK = 'CUT_20_OK'
 _G.CUT_30 = 'CUT_30'
+_G.CUT_30_OK = 'CUT_30_OK'
 _G.MUTE1 = 'MUTE1'
 _G.MUTE2 = 'MUTE2'
 
@@ -586,7 +587,7 @@ function act_on_silence(win, silence, action)
             --  40pixels / 6pps / 25fps == 26.67 seconds @zoom2
             timeline_relative_x_start = silence.x_start + 20
             timeline_relative_x_end = silence.x_end - 20
-        elseif action == CUT_30 then
+        elseif action == CUT_30 or action == CUT_30_OK then
             -- ~ 0.4 seconds
             -- TODO lets name the cut levels CUT_TO_QUARTER_SEC, CUT_TO_HALF_SEC etc (w/e levels I want) and map it to pixels assuming used in zoom2 only is fine
             timeline_relative_x_start = silence.x_start + 30
@@ -608,7 +609,7 @@ function act_on_silence(win, silence, action)
 
     -- * start tool
     local start_tool_key = ''
-    if action == CUT_20 or action == CUT_30 or action == CUT_20_OK then
+    if action == CUT_20 or action == CUT_30 or action == CUT_20_OK or action == CUT_30_OK then
         start_tool_key = 'c'
     elseif action == MUTE or action == MUTE1 or action == MUTE2 then
         start_tool_key = 'v'
@@ -626,8 +627,8 @@ function act_on_silence(win, silence, action)
     hs.eventtap.keyStroke({}, "e", 0, win.app)
     -- add pause? so far ok w/o it
 
-    if (action == CUT_20 or action == CUT_20_OK) and silence.x_start == 0 then
-        -- TODO trigger this for all for all cut types?
+    if (action == CUT_20 or action == CUT_20_OK or action == CUT_30_OK) and silence.x_start == 0 then
+        -- special behavior for cutting  start of video (add fixed padding)
 
         -- * pull back 2 frames from end to avoid cutting into starting audio
         hs.eventtap.keyStroke({}, "left", 0, win.app)
@@ -643,9 +644,7 @@ function act_on_silence(win, silence, action)
         hs.eventtap.keyStroke({}, "p", 0, win.app)
         hs.timer.usleep(_200ms)
         win.windows:get_tool_window():wait_for_ok_button_then_press_it()
-    end
-
-    if action:find("OK") then
+    elseif action == CUT_20_OK or action == CUT_30_OK then
         -- PRN wait to make sure OK is visible (sometimes there is a lag and at least with volume tool, hitting Enter before will be accepted but will disappear the edit!)
         win.windows:get_tool_window():wait_for_ok_button_then_press_it()
     end
