@@ -618,8 +618,9 @@ end
 ---@param search_func fun(): hs.axuielement?
 ---@param interval_ms number
 ---@param max_cycles number
+---@param name string? - optional name for logging
 ---@return hs.axuielement?
-function wait_for_element(search_func, interval_ms, max_cycles)
+function wait_for_element(search_func, interval_ms, max_cycles, name)
     interval_ms = interval_ms or 20
     max_cycles = max_cycles or 30
 
@@ -629,7 +630,7 @@ function wait_for_element(search_func, interval_ms, max_cycles)
         -- print("wait_for_element cycle: " .. cycles)
         local elem = search_func()
         if elem then
-            print_took("WaitForElement total time:", start)
+            print_took("WaitForElement " .. (name or ""), start)
             return elem
         end
         timer.usleep(interval_ms * 1000)

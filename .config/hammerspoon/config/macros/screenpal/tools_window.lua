@@ -49,11 +49,11 @@ function ToolsWindow:get_button_by_description(description)
 end
 
 function ToolsWindow:wait_for_tools_button()
-    return wait_for_element(function() return self:get_button_by_description("Tools") end, 20, 20)
+    return wait_for_element(function() return self:get_button_by_description("Tools") end, 20, 20, "button Tools")
 end
 
 function ToolsWindow:wait_for_ok_button()
-    return wait_for_element(function() return self:get_button_by_description("OK") end, 20, 20)
+    return wait_for_element(function() return self:get_button_by_description("OK") end, 20, 20, "button OK")
 end
 
 function ToolsWindow:wait_for_ok_button_then_press_it()
