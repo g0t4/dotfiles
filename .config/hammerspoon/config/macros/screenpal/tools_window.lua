@@ -43,7 +43,7 @@ function ToolsWindow:get_button_by_description(description)
         print("WARNING: Button '" .. description .. "' is not valid, unexpectedly... " .. hs.inspect(button))
         -- IIAC this would only happen if an OLD window was still valid that had an invalid button
         -- that does not seem likely, instead I would assume only the most recent window reference is valid
-        -- ** DO NOT put this code into every button, unless this happens with OK
+        -- ** DO NOT put this code into every element lookup, unless this happens with OK
     end
     return button
 end
@@ -60,8 +60,8 @@ function ToolsWindow:wait_for_ok_button_then_press_it()
     if not wait_for_element_then_press_it(function() return self:get_button_by_description("OK") end, 20, 20) then
         error("clicking OK button failed") -- kill action is fine b/c I will be using this in streamdeck button handlers, just means that button press dies
     end
-    -- PRN what to wait for next?
-    -- wait for Tools button to appear?
+    self:wait_for_tools_button()
+    -- no further action, thus don't need return value (not found, no diff than if found)
 end
 
 return ToolsWindow
