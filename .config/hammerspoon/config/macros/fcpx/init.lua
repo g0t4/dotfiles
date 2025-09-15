@@ -169,9 +169,7 @@ function StreamDeckFcpx_PublishedParams_CenterX()
     -- AXRoleDescription: group<string>
     -- AXTitleUIElement: AXGroup<hs.axuielement>
     --
-    -- press 'c' to show children
-    --
-    -- unique ref: app:window('Final Cut Pro'):splitGroup():group():splitGroup()
+    -- unique ref: app:window_by_title('Final Cut Pro'):splitGroup():group():splitGroup()
 end
 
 function StreamDeckFcpxViewerToggleComments()

@@ -441,7 +441,7 @@ function ScreenPalEditorWindow:start_cut()
     -- start = get_time()
     -- -- FYI getting window anew (OR should I use cache?)
     -- -- 10 to 30ms to get window a new:
-    -- -- local win = self.app:window('SOM-FloatingWindow-Type=edit2.addedit.toolbar.menu.window-ZOrder=1(Undefined+1)')
+    -- -- local win = self.app:window_by_title('SOM-FloatingWindow-Type=edit2.addedit.toolbar.menu.window-ZOrder=1(Undefined+1)')
     -- print_took("get toolbar window", start)
     --
     -- FYI cached window object appears invalid (log shows invalid).. confirm that though

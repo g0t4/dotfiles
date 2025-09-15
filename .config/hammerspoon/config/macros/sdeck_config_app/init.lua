@@ -15,9 +15,9 @@ function SDECKCFG_open_button_color_picker()
     --
     -- press 'c' children, 'e' everything
     --
-    -- unique ref: app:window('Stream Deck'):group(''):splitGroup('')
+    -- unique ref: app:window_by_title('Stream Deck'):group(''):splitGroup('')
 
-    local split_group = app:window("Stream Deck")
+    local split_group = app:window_by_title("Stream Deck")
         :group_by_description("")
         :splitGroup_by_description("")
 

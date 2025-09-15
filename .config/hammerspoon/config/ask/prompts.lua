@@ -114,7 +114,7 @@ Respond with a valid link or search text to submit to a search engine. Prefer a 
 -- AXVisited: false<bool>
 -- ChromeAXNodeId: 58972<string>
 --
--- unique ref: app:window('Hammerspoon docs: hs.hotkey - Brave Beta - wes private')
+-- unique ref: app:window_by_title('Hammerspoon docs: hs.hotkey - Brave Beta - wes private')
 --   :group('Hammerspoon docs: hs.hotkey - Brave Beta - wes private'):group(''):group(''):group(''):toolbar(''):group('')
 --   :textField('')
 --

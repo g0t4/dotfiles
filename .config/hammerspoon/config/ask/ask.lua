@@ -133,7 +133,7 @@ function adjustBoxElement(focusedElement, app, callback)
         -- AXVisited: false<bool>
         -- ChromeAXNodeId: 448101<string>
         --
-        -- unique ref: app:window('DevTools - www.hammerspoon.org/docs/ - wes private')
+        -- unique ref: app:window_by_title('DevTools - www.hammerspoon.org/docs/ - wes private')
         --   :group('DevTools - www.hammerspoon.org/docs/ - wes private'):group(''):group(''):group(''):scrollArea('')
         --   :webArea('DevTools'):group('')
         --
