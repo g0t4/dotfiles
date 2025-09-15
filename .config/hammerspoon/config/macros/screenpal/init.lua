@@ -580,9 +580,9 @@ _G.MUTE2 = 'MUTE2'
 ---@param action string
 --- PRN @param padding?
 function act_on_silence(win, silence, action)
-    --
     local tools_win = win.windows:get_tool_window()
-    print(hs.inspect(tools_win))
+
+    hs.eventtap.keyStroke({}, "c", 0, win.app)
     local start = get_time()
     print("is_ok_visible " .. tostring(tools_win:is_ok_visible()))
     print_took("act_on_silence", start)
