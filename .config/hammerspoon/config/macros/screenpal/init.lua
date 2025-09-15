@@ -582,12 +582,12 @@ function act_on_silence(win, silence, action)
     local timeline_relative_x_end = silence.x_end -- - 10
     if silence.x_start ~= 0 then
         -- PRN pass param w/ amount to cut if I want several gaps?
-        if action == CUT_20 or action == CUT_20_OK then
+        if vim.list_contains({ CUT_20, CUT_20_OK }, action) then
             -- FTR this has worked VERY well on cuts so far b/c 40 pixels ~= 0.25 seconds @zoom2
             --  40pixels / 6pps / 25fps == 26.67 seconds @zoom2
             timeline_relative_x_start = silence.x_start + 20
             timeline_relative_x_end = silence.x_end - 20
-        elseif action == CUT_30 or action == CUT_30_OK then
+        elseif vim.list_contains({ CUT_30, CUT_30_OK }, action) then
             -- ~ 0.4 seconds
             -- TODO lets name the cut levels CUT_TO_QUARTER_SEC, CUT_TO_HALF_SEC etc (w/e levels I want) and map it to pixels assuming used in zoom2 only is fine
             timeline_relative_x_start = silence.x_start + 30
@@ -609,9 +609,9 @@ function act_on_silence(win, silence, action)
 
     -- * start tool
     local start_tool_key = ''
-    if action == CUT_20 or action == CUT_30 or action == CUT_20_OK or action == CUT_30_OK then
+    if vim.list_contains({ CUT_20, CUT_20_OK, CUT_30, CUT_30_OK }, action) then
         start_tool_key = 'c'
-    elseif action == MUTE or action == MUTE1 or action == MUTE2 then
+    elseif vim.list_contains({ MUTE, MUTE1, MUTE2 }, action) then
         start_tool_key = 'v'
     else
         error("UNDEFINED action: " .. tostring(action))
@@ -627,7 +627,7 @@ function act_on_silence(win, silence, action)
     hs.eventtap.keyStroke({}, "e", 0, win.app)
     -- add pause? so far ok w/o it
 
-    if (action == CUT_20 or action == CUT_20_OK or action == CUT_30_OK) and silence.x_start == 0 then
+    if vim.list_contains({ CUT_20, CUT_20_OK, CUT_30_OK }, action) and silence.x_start == 0 then
         -- special behavior for cutting  start of video (add fixed padding)
 
         -- * pull back 2 frames from end to avoid cutting into starting audio
@@ -644,7 +644,10 @@ function act_on_silence(win, silence, action)
         hs.eventtap.keyStroke({}, "p", 0, win.app)
         hs.timer.usleep(_200ms)
         win.windows:get_tool_window():wait_for_ok_button_then_press_it()
-    elseif action == CUT_20_OK or action == CUT_30_OK then
+        return
+    end
+
+    if vim.list_contains({ CUT_20_OK, CUT_30_OK }, action) and silence.x_start == 0 then
         -- PRN wait to make sure OK is visible (sometimes there is a lag and at least with volume tool, hitting Enter before will be accepted but will disappear the edit!)
         win.windows:get_tool_window():wait_for_ok_button_then_press_it()
     end
@@ -723,6 +726,7 @@ function SPal_PlayNextSilence()
 end
 
 function SPal_ActOnThisSilence_ThruStart(action_keystroke)
+    -- TODO figure out if I have a use for this
     run_async(function()
         ---@type ScreenPalEditorWindow, SilencesController
         local win, silences = syncify(detect_silences)
