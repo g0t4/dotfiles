@@ -47,8 +47,12 @@ function ToolsWindow:get_ok_button()
     return button
 end
 
-function ToolsWindow:wait_for_ok_button()
-    return wait_for_element(function() return self:get_ok_button() end, 20, 20)
+-- function ToolsWindow:wait_for_ok_button()
+--     return wait_for_element(function() return self:get_ok_button() end, 20, 20)
+-- end
+
+function ToolsWindow:wait_for_ok_button_then_press_it()
+    wait_for_element_then_press_it(function() return self:get_ok_button() end, 20, 20)
 end
 
 ---@return boolean
