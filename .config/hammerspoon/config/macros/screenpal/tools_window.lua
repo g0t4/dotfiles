@@ -35,8 +35,16 @@ end
 function ToolsWindow:get_ok_button()
     local win = self:find_my_window()
     if not win then return end
+
     -- takes <3ms to find the button, that's fine for now, let's not cache controls
-    return win:button_by_description("OK")
+    local button = win:button_by_description("OK")
+    if button and not button:isValid() then
+        print("WARNING: OK button is not valid, unexpectedly... " .. hs.inspect(button))
+        -- IIAC this would only happen if an OLD window was still valid that had an invalid OK button
+        -- that does not seem likely, instead I would assume only the most recent window reference is valid
+        -- ** DO NOT put this code into every button, unless this happens with OK
+    end
+    return button
 end
 
 ---@return boolean
