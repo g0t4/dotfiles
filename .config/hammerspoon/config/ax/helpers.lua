@@ -107,6 +107,7 @@ end
 axuielemMT.button = function(self, index)
     return self:buttons()[index]
 end
+--- Returns FIRST with matching description, NOT ALL!
 ---@param desc string
 ---@return hs.axuielement
 function axuielemMT.button_by_description(self, desc)
@@ -147,15 +148,34 @@ end
 axuielemMT.splitGroups = function(self)
     return self:childrenWithRole("AXSplitGroup") or {}
 end
+--- Returns FIRST with matching description, NOT ALL!
+---@param desc string
+---@return hs.axuielement
+axuielemMT.splitGroup_by_description = function(self, desc)
+    return vim.iter(self:splitGroups())
+        :find(function(group)
+            return group:axDescription() == desc
+        end)
+end
 ---@param index number
 ---@return hs.axuielement
 axuielemMT.splitGroup = function(self, index)
     return self:splitGroups()[index]
 end
 
+
 ---@return hs.axuielement[]
 axuielemMT.groups = function(self)
     return self:childrenWithRole("AXGroup") or {}
+end
+---Returns FIRST with matching description, NOT ALL!
+---@param desc string
+---@return hs.axuielement
+axuielemMT.group_by_description = function(self, desc)
+    return vim.iter(self:groups())
+        :find(function(group)
+            return group:axDescription() == desc
+        end)
 end
 ---@param index number
 ---@return hs.axuielement
@@ -376,6 +396,12 @@ end
 axuielemMT.axHelp = function(elem)
     return elem:attributeValue("AXHelp") or ""
 end
+---@param elem hs.axuielement
+---@return string
+axuielemMT.axIdentifier = function(elem)
+    return elem:attributeValue("AXIdentifier") or ""
+end
+
 ---@param elem hs.axuielement
 ---@return hs.axuielement|nil
 axuielemMT.axParent = function(elem)

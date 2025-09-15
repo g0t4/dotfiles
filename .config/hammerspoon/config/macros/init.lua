@@ -39,5 +39,6 @@ require("config.macros.screenpal")
 require("config.macros.hammerspoon")
 require("config.macros.iina")
 require("config.macros.frontmost")
+require("config.macros.sdeck_config_app")
 
 return M
