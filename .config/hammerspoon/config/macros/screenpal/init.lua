@@ -464,6 +464,23 @@ function ScreenPalEditorWindow:start_cut()
     -- FYI first button has smth about help text
 end
 
+function ScreenPalEditorWindow:_WIP_get_tools_window()
+    -- AXDescription: OK<string>
+    -- AXFocusedUIElement: AXButton - OK<hs.axuielement>
+    -- unique ref: app:window('SOM-FloatingWindow-Type=edit2.addedit.toolbar.menu.window-ZOrder=1(Undefined+1)')
+    --   :button(desc='OK')
+end
+
+function ScreenPalEditorWindow:click_tool_ok()
+    -- event though tool window is separate, it really subordinates to the editor window
+    --   consumers don't need to know the difference)
+    --
+    -- click OK button
+    hs.eventtap.keyStroke({}, "Return") -- or, click OK button
+    -- TODO wait for a dynamic condition, not 300ms
+    hs.timer.usleep(_300ms)
+end
+
 -- PRN events to detect playhead moving (and other UI changes) that might affect what to show for silences (or otherwise affect tooling automations)
 -- require("config.macros.screenpal.observer")
 
@@ -548,12 +565,13 @@ function show_silences(win, silences)
     silences_canvas = canvas
 end
 
-_G.MUTE = 'mute'
-_G.CUT_20 = 'cut_20'
-_G.CUT_30 = 'cut_30'
-_G.CUT_TIGHT = 'cut_90%'
-_G.MUTE1 = 'mute1'
-_G.MUTE2 = 'mute2'
+_G.MUTE = 'MUTE'
+_G.CUT_20 = 'CUT_20' -- consider in this case starting preview always?
+_G.CUT_20_OK = 'CUT_20_OK'
+_G.CUT_30 = 'CUT_30'
+_G.CUT_TIGHT = 'CUT_90%'
+_G.MUTE1 = 'MUTE1'
+_G.MUTE2 = 'MUTE2'
 
 ---@param win ScreenPalEditorWindow
 ---@param silence? Silence
@@ -571,7 +589,7 @@ function act_on_silence(win, silence, action)
     local timeline_relative_x_end = silence.x_end -- - 10
     if silence.x_start ~= 0 then
         -- PRN pass param w/ amount to cut if I want several gaps?
-        if action == CUT_20 then
+        if action == CUT_20 or action == CUT_20_OK then
             -- FTR this has worked VERY well on cuts so far b/c 40 pixels ~= 0.25 seconds @zoom2
             --  40pixels / 6pps / 25fps == 26.67 seconds @zoom2
             timeline_relative_x_start = silence.x_start + 20
@@ -603,7 +621,7 @@ function act_on_silence(win, silence, action)
 
     -- * start tool
     local start_tool_key = ''
-    if action == CUT_20 or action == CUT_TIGHT or action == CUT_30 then
+    if action == CUT_20 or action == CUT_TIGHT or action == CUT_30 or action == CUT_20_OK then
         start_tool_key = 'c'
     elseif action == MUTE or action == MUTE1 or action == MUTE2 then
         start_tool_key = 'v'
@@ -621,7 +639,7 @@ function act_on_silence(win, silence, action)
     hs.eventtap.keyStroke({}, "e", 0, win.app)
     -- add pause? so far ok w/o it
 
-    if action == CUT_20 and silence.x_start == 0 then
+    if action == CUT_20 or action == CUT_20_OK and silence.x_start == 0 then
         -- TODO trigger this for all for all cut types?
 
         -- * pull back 2 frames from end to avoid cutting into starting audio
@@ -638,8 +656,12 @@ function act_on_silence(win, silence, action)
         hs.timer.usleep(_10ms)
         hs.eventtap.keyStroke({}, "p", 0, win.app)
         hs.timer.usleep(_200ms)
-        hs.eventtap.keyStroke({}, "Return") -- or click OK?
-        hs.timer.usleep(_300ms) -- only needed if chain smth else after, set to 300ms b/c it changes the timeline so leave a buffer until otherwise tested (or wait_until_element is setup)
+        win:click_tool_ok()
+    end
+
+    if action:find("OK") then
+        -- PRN wait to make sure OK is visible (sometimes there is a lag and at least with volume tool, hitting Enter before will be accepted but will disappear the edit!)
+        win:click_tool_ok()
     end
 
     -- TODO check if mute button is muted icon? or w/e else to determine if I should click mute the first time?
