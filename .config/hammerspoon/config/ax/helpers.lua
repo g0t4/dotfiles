@@ -616,6 +616,9 @@ end
 --   set wait interval on max amount of time to expect for the app UI to catch up
 
 function wait_for_element(search_func, interval_ms, max_cycles)
+    interval_ms = interval_ms or 20
+    max_cycles = max_cycles or 30
+
     local start = get_time()
     local cycles = 0
     while cycles < max_cycles do

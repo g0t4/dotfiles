@@ -580,17 +580,22 @@ _G.MUTE2 = 'MUTE2'
 ---@param action string
 --- PRN @param padding?
 function act_on_silence(win, silence, action)
-    local tools_win = win.windows:get_tool_window()
-
     hs.eventtap.keyStroke({}, "c", 0, win.app)
     local start = get_time()
-    wait_for_element(function()
-        return tools_win:get_ok_button()
-    end
-    print_took("act_on_silence", start)
-    local start = get_time()
-    print("is_ok_visible " .. tostring(tools_win:is_ok_visible()))
-    print_took("act_on_silence", start)
+    local btn_ok = wait_for_element(function()
+        local tools_win = win.windows:get_tool_window()
+        if tools_win == nil then return end
+
+        local btn = tools_win:get_ok_button()
+        print("called: " .. tostring(btn)) -- PRN what does this mean? should it be true? what is the timeout?
+        return btn
+    end, 20, 80) -- I wish I could have named params here
+    print_took("wait_for_element", start)
+    print("found button: " .. tostring(btn_ok))
+
+
+
+
 
 
 
