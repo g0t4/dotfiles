@@ -60,6 +60,7 @@ function ToolsWindow:wait_for_ok_button_then_press_it()
     if not wait_for_element_then_press_it(function() return self:get_button_by_description("OK") end, 20, 20) then
         error("clicking OK button failed") -- kill action is fine b/c I will be using this in streamdeck button handlers, just means that button press dies
     end
+    -- FYI taking 300-400ms to find Tools button, so don't shirk waiting
     self:wait_for_tools_button()
     -- no further action, thus don't need return value (not found, no diff than if found)
 end
