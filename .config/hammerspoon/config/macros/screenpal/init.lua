@@ -587,11 +587,8 @@ function act_on_silence(win, silence, action)
     --     return tools_win:get_ok_button()
     -- end, 20, 20)
     local btn_ok = win.windows:get_tool_window():wait_for_ok_button()
-
     print("found button: " .. tostring(btn_ok))
-
-
-
+    btn_ok:performAction("AXPress") -- works for ok button!
 
 
 
