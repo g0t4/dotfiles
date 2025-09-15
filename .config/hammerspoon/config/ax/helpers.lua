@@ -27,6 +27,21 @@ function get_app_element_or_throw(app_name)
     return app_element
 end
 
+--- when it doesn't matter, just throw!
+--- IMO this is more readable than if/then:
+---
+---   error_if_nil(value, message)
+---
+---   if value == nil then error(message) end
+---
+---@param value any
+---@param message string
+function error_if_nil(value, message)
+    if value == nil then
+        error(message)
+    end
+end
+
 axuielemMT.dumpActions = function(self)
     f.each(self:actionNames() or {}, function(index, name)
         print(name, self:actionDescription(name))
@@ -76,6 +91,7 @@ end
 function axuielemMT:window(index)
     return self:windows()[index]
 end
+
 --- Returns FIRST with matching title, NOT ALL!
 ---@param title string
 ---@return hs.axuielement
@@ -116,6 +132,7 @@ function axuielemMT.button_by_description(self, desc)
             return button:axDescription() == desc
         end)
 end
+
 --- Returns FIRST with matching identifier, NOT ALL!
 ---@param identifier string
 ---@return hs.axuielement
@@ -125,7 +142,6 @@ function axuielemMT.button_with_identifier(self, identifier)
             return button:axIdentifier() == identifier
         end)
 end
-
 
 ---@return hs.axuielement[]
 axuielemMT.radioButtons = function(self)

@@ -10,12 +10,14 @@ function SDECKCFG_open_button_color_picker()
     local split_group = app:window_by_title("Stream Deck")
         :group_by_description("")
         :splitGroup_by_description("")
+    error_if_nil(split_group, "no split group found")
 
     local button = vim.iter(split_group:buttons())
         :find(function(child)
             return child:axIdentifier():find("textEditButton")
         end)
-    if not button then error("no button found") end
+    error_if_nil(button, "no button found")
+
     button:performAction("AXPress")
 
     wait_for_element_then_press_it(function()
@@ -25,7 +27,7 @@ function SDECKCFG_open_button_color_picker()
         -- AXSections: [1: SectionDescription: Content, SectionObject: hs.axuielement: AXCheckBox (0x600002836bb8), SectionUniqueID: AXContent]
         -- AXSubrole: AXDialog<string>
         local front_window = app:window(1)
-        if not front_window then return nil end
+        error_if_nil(front_window, "no front window found")
 
         return front_window:button_with_identifier("ESDStreamDeckApplication.ESDPopoverView.ESDTitleStyleEditor.colorButton")
     end)
