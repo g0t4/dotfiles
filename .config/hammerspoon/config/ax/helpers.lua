@@ -641,7 +641,7 @@ end
 ---@param search_func fun(): hs.axuielement?
 ---@param interval_ms number
 ---@param max_cycles number
----@return hs.axuielement?
+---@return boolean
 function wait_for_element_then_press_it(search_func, interval_ms, max_cycles)
     -- PRN extract generic wait_for_element_then_perform_action(..., action_name)
     local elem = wait_for_element(search_func, interval_ms, max_cycles)
@@ -651,8 +651,10 @@ function wait_for_element_then_press_it(search_func, interval_ms, max_cycles)
         if not success then
             -- FINALLY a central spot to log this, I keep forgetting to check this when I try to use actions!
             print("failed to AXPress elem", elem, err)
+            return false
         end
-        return elem
+        return true
     end
-    return nil
+    print("did not find element to press")
+    return false
 end

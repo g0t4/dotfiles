@@ -582,14 +582,7 @@ _G.MUTE2 = 'MUTE2'
 function act_on_silence(win, silence, action)
     hs.eventtap.keyStroke({}, "c", 0, win.app)
 
-    -- local btn_ok = wait_for_element(function()
-    --     local tools_win = win.windows:get_tool_window()
-    --     return tools_win:get_ok_button()
-    -- end, 20, 20)
-    local btn_ok = win.windows:get_tool_window():wait_for_ok_button_then_press_it()
-    print("found button: " .. tostring(btn_ok))
-    btn_ok:performAction("AXPress") -- works for ok button!
-
+    win.windows:get_tool_window():wait_for_ok_button_then_press_it()
 
 
     do return end

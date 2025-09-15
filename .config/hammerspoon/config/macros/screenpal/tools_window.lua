@@ -52,7 +52,11 @@ end
 -- end
 
 function ToolsWindow:wait_for_ok_button_then_press_it()
-    wait_for_element_then_press_it(function() return self:get_ok_button() end, 20, 20)
+    if not wait_for_element_then_press_it(function() return self:get_ok_button() end, 20, 20) then
+        error("clicking OK button failed") -- kill action is fine b/c I will be using this in streamdeck button handlers, just means that button press dies
+    end
+    -- PRN what to wait for next?
+    -- wait for Tools button to appear?
 end
 
 ---@return boolean
