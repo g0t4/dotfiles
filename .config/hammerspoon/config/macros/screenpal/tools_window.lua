@@ -31,37 +31,33 @@ function ToolsWindow:find_my_window()
     return win
 end
 
+---@param description string
 ---@return hs.axuielement | nil
-function ToolsWindow:get_ok_button()
+function ToolsWindow:get_button_by_description(description)
     local win = self:find_my_window()
     if not win then return end
 
     -- takes <3ms to find the button, that's fine for now, let's not cache controls
-    local button = win:button_by_description("OK")
+    local button = win:button_by_description(description)
     if button and not button:isValid() then
-        print("WARNING: OK button is not valid, unexpectedly... " .. hs.inspect(button))
-        -- IIAC this would only happen if an OLD window was still valid that had an invalid OK button
+        print("WARNING: Button '" .. description .. "' is not valid, unexpectedly... " .. hs.inspect(button))
+        -- IIAC this would only happen if an OLD window was still valid that had an invalid button
         -- that does not seem likely, instead I would assume only the most recent window reference is valid
         -- ** DO NOT put this code into every button, unless this happens with OK
     end
     return button
 end
 
--- function ToolsWindow:wait_for_ok_button()
---     return wait_for_element(function() return self:get_ok_button() end, 20, 20)
--- end
+function ToolsWindow:wait_for_ok_button()
+    return wait_for_element(function() return self:get_button_by_description("OK") end, 20, 20)
+end
 
 function ToolsWindow:wait_for_ok_button_then_press_it()
-    if not wait_for_element_then_press_it(function() return self:get_ok_button() end, 20, 20) then
+    if not wait_for_element_then_press_it(function() return self:get_button_by_description("OK") end, 20, 20) then
         error("clicking OK button failed") -- kill action is fine b/c I will be using this in streamdeck button handlers, just means that button press dies
     end
     -- PRN what to wait for next?
     -- wait for Tools button to appear?
-end
-
----@return boolean
-function ToolsWindow:is_ok_visible()
-    return self:get_ok_button() ~= nil
 end
 
 return ToolsWindow
