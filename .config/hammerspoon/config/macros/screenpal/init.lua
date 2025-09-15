@@ -38,7 +38,7 @@ function ScreenPalEditorWindow:new()
     setmetatable(editor_window, self)
     self.__index = self
     self.app = get_screenpal_app_element_or_throw()
-    self.windows = AppWindows:new(self.app)
+    self.windows = AppWindows.new(self.app)
     self.win = self.windows:editor_window_or_throw()
 
     return editor_window
@@ -469,6 +469,8 @@ function ScreenPalEditorWindow:_WIP_get_tools_window()
     -- AXFocusedUIElement: AXButton - OK<hs.axuielement>
     -- unique ref: app:window('SOM-FloatingWindow-Type=edit2.addedit.toolbar.menu.window-ZOrder=1(Undefined+1)')
     --   :button(desc='OK')
+
+    local tools = self.windows:get_tool_window()
 end
 
 function ScreenPalEditorWindow:click_tool_ok()

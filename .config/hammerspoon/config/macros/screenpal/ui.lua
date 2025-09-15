@@ -1,3 +1,5 @@
+local ToolsWindow = require("config.macros.screenpal.tools_window")
+
 ---@class AppWindows
 ---@field app hs.axuielement
 _G.AppWindows = {}
@@ -6,11 +8,11 @@ AppWindows.__index = AppWindows
 --- Right now this is basically a wrapper around using a cached list of windows
 --- and then refresh them if needed on window lookup (by title)
 ---@param app hs.axuielement
-function AppWindows:new(app)
-    local self = setmetatable({}, AppWindows)
-    self.app = app
-    self.windows_by_title = {}
-    return self
+function AppWindows.new(app)
+    local o = setmetatable({}, AppWindows)
+    o.app = app
+    o.windows_by_title = {}
+    return o
 end
 
 function AppWindows:_refresh()
@@ -31,6 +33,16 @@ function AppWindows:_ensure_loaded()
     if any_windows_loaded then
         self:_refresh()
     end
+end
+
+function AppWindows:get_tool_window()
+    local win = self.windows_by_title["SOM-FloatingWindow-Type=edit2.addedit.toolbar.menu.window-ZOrder=1(Undefined+1)"]
+    if not win or not win:isValid() then
+        self:_refresh()
+        win = self.windows_by_title["SOM-FloatingWindow-Type=edit2.addedit.toolbar.menu.window-ZOrder=1(Undefined+1)"]
+    end
+    if not win then return nil end
+    return ToolsWindow.new(win)
 end
 
 ---@param titlePattern string # lua pattern
