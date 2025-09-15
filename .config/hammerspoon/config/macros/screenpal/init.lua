@@ -627,7 +627,7 @@ function act_on_silence(win, silence, action)
     hs.eventtap.keyStroke({}, "e", 0, win.app)
     -- add pause? so far ok w/o it
 
-    if vim.list_contains({ CUT_20, CUT_20_OK, CUT_30_OK }, action) and silence.x_start == 0 then
+    if silence.x_start == 0 and vim.list_contains({ CUT_20, CUT_30, CUT_20_OK, CUT_30_OK }, action) then
         -- special behavior for cutting  start of video (add fixed padding)
 
         -- * pull back 2 frames from end to avoid cutting into starting audio
