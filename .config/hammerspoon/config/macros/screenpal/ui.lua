@@ -36,13 +36,7 @@ function AppWindows:_ensure_loaded()
 end
 
 function AppWindows:get_tool_window()
-    local win = self.windows_by_title["SOM-FloatingWindow-Type=edit2.addedit.toolbar.menu.window-ZOrder=1(Undefined+1)"]
-    if not win or not win:isValid() then
-        self:_refresh()
-        win = self.windows_by_title["SOM-FloatingWindow-Type=edit2.addedit.toolbar.menu.window-ZOrder=1(Undefined+1)"]
-    end
-    if not win then return nil end
-    return ToolsWindow.new(win)
+    return ToolsWindow.new(self)
 end
 
 ---@param titlePattern string # lua pattern
