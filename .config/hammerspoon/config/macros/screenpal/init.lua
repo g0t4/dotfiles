@@ -464,15 +464,6 @@ function ScreenPalEditorWindow:start_cut()
     -- FYI first button has smth about help text
 end
 
-function ScreenPalEditorWindow:_WIP_get_tools_window()
-    -- AXDescription: OK<string>
-    -- AXFocusedUIElement: AXButton - OK<hs.axuielement>
-    -- unique ref: app:window('SOM-FloatingWindow-Type=edit2.addedit.toolbar.menu.window-ZOrder=1(Undefined+1)')
-    --   :button(desc='OK')
-
-    local tools = self.windows:get_tool_window()
-end
-
 function ScreenPalEditorWindow:click_tool_ok()
     -- event though tool window is separate, it really subordinates to the editor window
     --   consumers don't need to know the difference)
