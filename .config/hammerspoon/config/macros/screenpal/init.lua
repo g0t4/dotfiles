@@ -571,7 +571,6 @@ _G.MUTE = 'MUTE'
 _G.CUT_20 = 'CUT_20' -- consider in this case starting preview always?
 _G.CUT_20_OK = 'CUT_20_OK'
 _G.CUT_30 = 'CUT_30'
-_G.CUT_TIGHT = 'CUT_90%'
 _G.MUTE1 = 'MUTE1'
 _G.MUTE2 = 'MUTE2'
 
@@ -601,11 +600,6 @@ function act_on_silence(win, silence, action)
             -- TODO lets name the cut levels CUT_TO_QUARTER_SEC, CUT_TO_HALF_SEC etc (w/e levels I want) and map it to pixels assuming used in zoom2 only is fine
             timeline_relative_x_start = silence.x_start + 30
             timeline_relative_x_end = silence.x_end - 30
-        elseif action == CUT_TIGHT then
-            -- FYI it is possible you always want cuts expressed in pixels remaining (i.e. 20 above)
-            -- percent cut won't work well on a large silence (would end up being bigger than 20pixels per side!)
-            timeline_relative_x_start = silence:x_start_pad_percent(0.9)
-            timeline_relative_x_end = silence:x_end_pad_percent(0.9)
         end
     end
 
@@ -623,7 +617,7 @@ function act_on_silence(win, silence, action)
 
     -- * start tool
     local start_tool_key = ''
-    if action == CUT_20 or action == CUT_TIGHT or action == CUT_30 or action == CUT_20_OK then
+    if action == CUT_20 or action == CUT_30 or action == CUT_20_OK then
         start_tool_key = 'c'
     elseif action == MUTE or action == MUTE1 or action == MUTE2 then
         start_tool_key = 'v'
