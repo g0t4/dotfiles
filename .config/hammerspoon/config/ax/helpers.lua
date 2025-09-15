@@ -107,6 +107,14 @@ end
 axuielemMT.button = function(self, index)
     return self:buttons()[index]
 end
+---@param desc string
+---@return hs.axuielement
+function axuielemMT.button_by_description(self, desc)
+    return vim.iter(self:buttons())
+        :find(function(button)
+            return button:axDescription() == desc
+        end)
+end
 
 ---@return hs.axuielement[]
 axuielemMT.radioButtons = function(self)
