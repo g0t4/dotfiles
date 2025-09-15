@@ -615,6 +615,10 @@ end
 --   if smth is buggy, fix it... don't try to shrink wait interval
 --   set wait interval on max amount of time to expect for the app UI to catch up
 
+---@param search_func fun(): hs.axuielement?
+---@param interval_ms number
+---@param max_cycles number
+---@return hs.axuielement?
 function wait_for_element(search_func, interval_ms, max_cycles)
     interval_ms = interval_ms or 20
     max_cycles = max_cycles or 30
@@ -630,6 +634,25 @@ function wait_for_element(search_func, interval_ms, max_cycles)
         end
         timer.usleep(interval_ms * 1000)
         cycles = cycles + 1
+    end
+    return nil
+end
+
+---@param search_func fun(): hs.axuielement?
+---@param interval_ms number
+---@param max_cycles number
+---@return hs.axuielement?
+function wait_for_element_then_press_it(search_func, interval_ms, max_cycles)
+    -- PRN extract generic wait_for_element_then_perform_action(..., action_name)
+    local elem = wait_for_element(search_func, interval_ms, max_cycles)
+    if elem then
+        local success, err = elem:performAction("AXPress")
+        print("AXPress result: " .. hs.inspect(success) .. ", err: " .. hs.inspect(err)) -- PRN add to log file! and check for success to be true (or it will be the error) or the error will be nil! - I think I was wrong about this being an
+        if not success then
+            -- FINALLY a central spot to log this, I keep forgetting to check this when I try to use actions!
+            print("failed to AXPress elem", elem, err)
+        end
+        return elem
     end
     return nil
 end
