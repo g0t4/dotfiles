@@ -738,15 +738,6 @@ function SPal_PlayNextSilence()
     -- when done jump back to start of that position or silence?
 end
 
-function SPal_ActOnPrevSilence(action_keystroke)
-    run_async(function()
-        ---@type ScreenPalEditorWindow, SilencesController
-        local win, silences = syncify(detect_silences)
-        local silence = silences:get_prev_silence()
-        act_on_silence(win, silence, action_keystroke)
-    end)
-end
-
 function SPal_ActOnThisSilence_ThruStart(action_keystroke)
     run_async(function()
         ---@type ScreenPalEditorWindow, SilencesController
@@ -782,15 +773,6 @@ function SPal_ActOnThisSilence_ThruEnd(action_keystroke)
             x_start = timeline:get_current_playhead_timeline_relative_x(),
             x_end = silence.x_end,
         }
-        act_on_silence(win, silence, action_keystroke)
-    end)
-end
-
-function SPal_ActOnNextSilence(action_keystroke)
-    run_async(function()
-        ---@type ScreenPalEditorWindow, SilencesController
-        local win, silences = syncify(detect_silences)
-        local silence = silences:get_next_silence()
         act_on_silence(win, silence, action_keystroke)
     end)
 end
