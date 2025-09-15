@@ -580,17 +580,6 @@ _G.MUTE2 = 'MUTE2'
 ---@param action string
 --- PRN @param padding?
 function act_on_silence(win, silence, action)
-    hs.eventtap.keyStroke({}, "c", 0, win.app)
-
-    win.windows:get_tool_window():wait_for_ok_button_then_press_it()
-
-
-    do return end
-
-
-
-
-
     if not silence then
         -- might be easier to check here, in one spot, than in all the callers
         print("no silence to act on")
@@ -669,12 +658,12 @@ function act_on_silence(win, silence, action)
         hs.timer.usleep(_10ms)
         hs.eventtap.keyStroke({}, "p", 0, win.app)
         hs.timer.usleep(_200ms)
-        win:click_tool_ok()
+        win.windows:get_tool_window():wait_for_ok_button_then_press_it()
     end
 
     if action:find("OK") then
         -- PRN wait to make sure OK is visible (sometimes there is a lag and at least with volume tool, hitting Enter before will be accepted but will disappear the edit!)
-        win:click_tool_ok()
+        win.windows:get_tool_window():wait_for_ok_button_then_press_it()
     end
 
     -- TODO check if mute button is muted icon? or w/e else to determine if I should click mute the first time?
