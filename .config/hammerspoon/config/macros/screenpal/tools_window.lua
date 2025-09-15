@@ -12,13 +12,14 @@ function ToolsWindow.new(win)
 end
 
 ---@return hs.axuielement | nil
-function get_ok_button(self)
+function ToolsWindow:get_ok_button()
     -- takes <3ms to find the button, that's fine for now, let's not cache controls
     return self.win:button_by_description("OK")
 end
 
+---@return boolean
 function ToolsWindow:is_ok_visible()
-    return get_ok_button(self) ~= nil
+    return self:get_ok_button() ~= nil
 end
 
 return ToolsWindow
