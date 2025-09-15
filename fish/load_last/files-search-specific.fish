@@ -186,9 +186,9 @@ abbr --command fd --position anywhere -- -F --fixed-strings
 # FYI using `fdt_` for niche expands... vs `fd_` for common ones... if that is confusing, move all to one/other
 abbr fdtb 'fd --type block-device'
 abbr fdtc 'fd --type char-device'
-abbr fdd 'fd --type dir'
+abbr fdtd 'fd --type dir'
 abbr fdte 'fd --type empty'
-abbr fdf 'fd --type file'
+abbr fdtf 'fd --type file'
 abbr fdtl 'fd --type symlink'
 abbr fdtp 'fd --type pipe'
 abbr fdts 'fd --type socket'
