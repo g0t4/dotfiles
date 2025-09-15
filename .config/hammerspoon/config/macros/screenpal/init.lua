@@ -650,8 +650,7 @@ function act_on_silence(win, silence, action)
         -- FYI 2 frame reduction is b/c insert pause always blends away 1 frame in waveform (not sure effects audio, just to be safe do two)
         hs.eventtap.keyStroke({}, "left", 0, win.app)
         hs.timer.usleep(_200ms)
-        hs.eventtap.keyStroke({}, "Return") -- or click OK?
-        hs.timer.usleep(_300ms) -- bigger?
+        win.windows:get_tool_window():wait_for_ok_button_then_press_it()
 
         -- * insert pause auto-approved
         hs.eventtap.keyStroke({}, "i", 0, win.app)
