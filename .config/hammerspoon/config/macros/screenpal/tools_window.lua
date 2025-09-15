@@ -47,6 +47,10 @@ function ToolsWindow:get_ok_button()
     return button
 end
 
+function ToolsWindow:wait_for_ok_button()
+    return wait_for_element(function() return self:get_ok_button() end, 20, 20)
+end
+
 ---@return boolean
 function ToolsWindow:is_ok_visible()
     return self:get_ok_button() ~= nil
