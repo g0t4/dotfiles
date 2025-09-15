@@ -584,7 +584,9 @@ function act_on_silence(win, silence, action)
 
     hs.eventtap.keyStroke({}, "c", 0, win.app)
     local start = get_time()
-    print("is_ok_visible " .. tostring(tools_win:is_ok_visible()))
+    wait_for_element(function()
+        return tools_win:get_ok_button()
+    end
     print_took("act_on_silence", start)
     local start = get_time()
     print("is_ok_visible " .. tostring(tools_win:is_ok_visible()))
