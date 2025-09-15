@@ -15,9 +15,18 @@ function SDECKCFG_open_button_color_picker()
         :find(function(child)
             return child:axIdentifier():find("textEditButton")
         end)
-    if not button then
-        error("no button found")
-    end
-    print("found button", button:axIdentifier()) -- "ESDStreamDeckApplication
+    if not button then error("no button found") end
     button:performAction("AXPress")
+
+    wait_for_element_then_press_it(function()
+        -- FYI will become front window when ready
+        -- AXMain: false<bool>
+        -- AXRoleDescription: dialog<string>
+        -- AXSections: [1: SectionDescription: Content, SectionObject: hs.axuielement: AXCheckBox (0x600002836bb8), SectionUniqueID: AXContent]
+        -- AXSubrole: AXDialog<string>
+        local front_window = app:window(1)
+        if not front_window then return nil end
+
+        return front_window:button_with_identifier("ESDStreamDeckApplication.ESDPopoverView.ESDTitleStyleEditor.colorButton")
+    end)
 end

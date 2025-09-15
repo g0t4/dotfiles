@@ -116,6 +116,16 @@ function axuielemMT.button_by_description(self, desc)
             return button:axDescription() == desc
         end)
 end
+--- Returns FIRST with matching identifier, NOT ALL!
+---@param identifier string
+---@return hs.axuielement
+function axuielemMT.button_with_identifier(self, identifier)
+    return vim.iter(self:buttons())
+        :find(function(button)
+            return button:axIdentifier() == identifier
+        end)
+end
+
 
 ---@return hs.axuielement[]
 axuielemMT.radioButtons = function(self)
@@ -668,8 +678,8 @@ function wait_for_element(search_func, interval_ms, max_cycles, name)
 end
 
 ---@param search_func fun(): hs.axuielement?
----@param interval_ms number
----@param max_cycles number
+---@param interval_ms? number
+---@param max_cycles? number
 ---@return boolean
 function wait_for_element_then_press_it(search_func, interval_ms, max_cycles)
     -- PRN extract generic wait_for_element_then_perform_action(..., action_name)
