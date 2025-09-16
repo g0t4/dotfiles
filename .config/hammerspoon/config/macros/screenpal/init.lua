@@ -5,6 +5,8 @@ require("config.macros.screenpal.co")
 require("config.macros.screenpal.py.opencv")
 local TimelineController = require('config.macros.screenpal.timeline')
 local SilencesController = require('config.macros.screenpal.silences')
+local VolumeMenu = require('config.macros.screenpal.windows.volume_menu')
+
 
 local _200ms = 200000
 local _300ms = 300000
@@ -648,6 +650,14 @@ local function move_playhead_to_silence(win, silence)
     local timeline_relative_x = silence.x_start
     local timeline = win:timeline_controller()
     timeline:move_playhead_to(timeline_relative_x)
+end
+
+function SPal_Test()
+    -- assume this is done in silence where v will open the tool right away b/c both ends are auto selected
+    hs.eventtap.keyStroke({}, "v", 0) -- Cmd+V to paste since I can't type it, would put me in a loop (at best)
+    local win = get_cached_editor_window()
+    local menu = VolumeMenu.new(win.windows)
+    menu:wait_for_volume_to_be_mute()
 end
 
 function SPal_JumpThisSilence()

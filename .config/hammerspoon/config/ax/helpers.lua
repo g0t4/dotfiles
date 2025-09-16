@@ -697,10 +697,11 @@ end
 ---@param search_func fun(): hs.axuielement?
 ---@param interval_ms? number
 ---@param max_cycles? number
+---@param name string? - optional name for logging
 ---@return boolean
-function wait_for_element_then_press_it(search_func, interval_ms, max_cycles)
+function wait_for_element_then_press_it(search_func, interval_ms, max_cycles, name)
     -- PRN extract generic wait_for_element_then_perform_action(..., action_name)
-    local elem = wait_for_element(search_func, interval_ms, max_cycles)
+    local elem = wait_for_element(search_func, interval_ms, max_cycles, name)
     if elem then
         local success, err = elem:performAction("AXPress")
         print("AXPress result: " .. hs.inspect(success) .. ", err: " .. hs.inspect(err)) -- PRN add to log file! and check for success to be true (or it will be the error) or the error will be nil! - I think I was wrong about this being an
