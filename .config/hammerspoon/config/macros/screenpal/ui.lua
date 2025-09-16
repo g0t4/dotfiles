@@ -1,4 +1,4 @@
-local ToolsWindow = require("config.macros.screenpal.tools_window")
+local ToolBarWindow = require("config.macros.screenpal.tools_window")
 
 ---@class AppWindows
 ---@field app hs.axuielement
@@ -36,7 +36,7 @@ function AppWindows:_ensure_loaded()
 end
 
 function AppWindows:get_tool_window()
-    return ToolsWindow.new(self)
+    return ToolBarWindow.new(self)
 end
 
 ---@param titlePattern string # lua pattern

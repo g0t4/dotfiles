@@ -1,19 +1,19 @@
----@class ToolsWindow
+---@class ToolBarWindow
 ---@field _windows AppWindows
 ---@field _win hs.axuielement | nil
-local ToolsWindow = {}
-ToolsWindow.__index = ToolsWindow
+local ToolBarWindow = {}
+ToolBarWindow.__index = ToolBarWindow
 
 ---@param windows AppWindows
----@return ToolsWindow
-function ToolsWindow.new(windows)
-    local o = setmetatable({}, ToolsWindow)
+---@return ToolBarWindow
+function ToolBarWindow.new(windows)
+    local o = setmetatable({}, ToolBarWindow)
     o._windows = windows
     o._win = o:find_my_window()
     return o
 end
 
-function ToolsWindow:find_my_window()
+function ToolBarWindow:find_my_window()
     if self._win and self._win:isValid() then
         return self._win
     end
@@ -33,7 +33,7 @@ end
 
 ---@param description string
 ---@return hs.axuielement | nil
-function ToolsWindow:get_button_by_description(description)
+function ToolBarWindow:get_button_by_description(description)
     local win = self:find_my_window()
     if not win then return end
 
@@ -48,7 +48,7 @@ function ToolsWindow:get_button_by_description(description)
     return button
 end
 
-function ToolsWindow:wait_for_cancel_or_ok_button()
+function ToolBarWindow:wait_for_cancel_or_ok_button()
     -- toolbar opens to cancel/ok one tool is started
     wait_until(function()
         return (self:get_button_by_description("Cancel") ~= nil)
@@ -56,15 +56,15 @@ function ToolsWindow:wait_for_cancel_or_ok_button()
     end, 20, 20, "ok or cancel button - toolbar opened for tool")
 end
 
-function ToolsWindow:wait_for_tools_button()
+function ToolBarWindow:wait_for_tools_button()
     return wait_for_element(function() return self:get_button_by_description("Tools") end, 20, 20, "button Tools")
 end
 
-function ToolsWindow:wait_for_ok_button()
+function ToolBarWindow:wait_for_ok_button()
     return wait_for_element(function() return self:get_button_by_description("OK") end, 20, 20, "button OK")
 end
 
-function ToolsWindow:wait_for_ok_button_then_press_it()
+function ToolBarWindow:wait_for_ok_button_then_press_it()
     if not wait_for_element_then_press_it(function() return self:get_button_by_description("OK") end, 20, 20) then
         error("clicking OK button failed") -- kill action is fine b/c I will be using this in streamdeck button handlers, just means that button press dies
     end
@@ -73,4 +73,4 @@ function ToolsWindow:wait_for_ok_button_then_press_it()
     -- no further action, thus don't need return value (not found, no diff than if found)
 end
 
-return ToolsWindow
+return ToolBarWindow
