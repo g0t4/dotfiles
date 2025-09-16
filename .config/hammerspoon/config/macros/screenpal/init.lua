@@ -393,7 +393,7 @@ function ScreenPalEditorWindow:get_current_time()
 end
 
 ---@param before_seconds number
-function ScreenPalEditorWindow:wait_for_time_change(before_seconds)
+function ScreenPalEditorWindow:wait_until_time_changes(before_seconds)
     wait_until(function()
         -- PRN could check for specific amount of time change
         local now_seconds = self:get_current_time()
@@ -596,7 +596,7 @@ function act_on_silence(win, silence, action)
         -- * pull back 2 frames from end to avoid cutting into starting audio
         local before_time = win:get_current_time()
         hs.eventtap.keyStroke({}, "left", 0, win.app)
-        win:wait_for_time_change(before_time)
+        win:wait_until_time_changes(before_time)
 
         -- FYI 2 frame reduction is b/c insert pause always blends away 1 frame in waveform (not sure effects audio, just to be safe do two)
         hs.eventtap.keyStroke({}, "left", 0, win.app)
