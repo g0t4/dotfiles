@@ -546,17 +546,11 @@ function act_on_silence(win, silence, action)
     local timeline_relative_x_start = silence.x_start
     local timeline_relative_x_end = silence.x_end -- - 10
     if silence.x_start ~= 0 then
-        -- PRN pass param w/ amount to cut if I want several gaps?
-        if vim.list_contains({ CUT_20, CUT_20_OK }, action) then
-            -- FTR this has worked VERY well on cuts so far b/c 40 pixels ~= 0.25 seconds @zoom2
-            --  40pixels / 6pps / 25fps == 26.67 seconds @zoom2
-            timeline_relative_x_start = silence.x_start + 20
-            timeline_relative_x_end = silence.x_end - 20
-        elseif vim.list_contains({ CUT_30, CUT_30_OK }, action) then
-            -- ~ 0.4 seconds
-            -- TODO lets name the cut levels CUT_TO_QUARTER_SEC, CUT_TO_HALF_SEC etc (w/e levels I want) and map it to pixels assuming used in zoom2 only is fine
-            timeline_relative_x_start = silence.x_start + 30
-            timeline_relative_x_end = silence.x_end - 30
+        if action:find("CUT_") then
+            local pixel_width = action:match("CUT_(%d*)%.*")
+            -- print("pixel_width: " .. tostring(pixel_width) .. " for action " .. action)
+            timeline_relative_x_start = silence.x_start + pixel_width
+            timeline_relative_x_end = silence.x_end - pixel_width
         end
     end
 
