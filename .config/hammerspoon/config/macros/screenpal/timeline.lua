@@ -43,9 +43,9 @@ function TimelineController:new(editor_window)
     local time_string = _playhead_window:textField(1)
         :axValue()
         :gsub("\n", "")
-    local _playhead_seconds = parse_time_to_seconds(time_string)
     self.time_string = time_string
-    -- print(vim.inspect(self))
+    self.time_seconds = parse_time_to_seconds(time_string)
+
     return self
 end
 

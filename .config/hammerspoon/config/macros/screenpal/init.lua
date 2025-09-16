@@ -586,6 +586,7 @@ function act_on_silence(win, silence, action)
         local before = win:get_time_string()
         print("before: " .. before)
         wait_until(function()
+            -- PRN could check for specific amount of time change
             return before ~= win:get_time_string()
         end)
         local after = win:get_time_string()
