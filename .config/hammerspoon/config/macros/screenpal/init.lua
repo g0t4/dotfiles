@@ -583,7 +583,14 @@ function act_on_silence(win, silence, action)
 
         -- * pull back 2 frames from end to avoid cutting into starting audio
         hs.eventtap.keyStroke({}, "left", 0, win.app)
-        hs.timer.usleep(_10ms)
+        local before = win:get_time_string()
+        print("before: " .. before)
+        wait_until(function()
+            return before ~= win:get_time_string()
+        end)
+        local after = win:get_time_string()
+        print("after: " .. after)
+
         -- FYI 2 frame reduction is b/c insert pause always blends away 1 frame in waveform (not sure effects audio, just to be safe do two)
         hs.eventtap.keyStroke({}, "left", 0, win.app)
         hs.timer.usleep(_200ms)

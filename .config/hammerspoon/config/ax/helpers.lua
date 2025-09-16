@@ -667,8 +667,8 @@ end
 --   set wait interval on max amount of time to expect for the app UI to catch up
 
 ---@param search_func fun(): hs.axuielement?
----@param interval_ms number
----@param max_cycles number
+---@param interval_ms? number
+---@param max_cycles? number
 ---@param name string? - optional name for logging
 ---@return hs.axuielement?
 function wait_for_element(search_func, interval_ms, max_cycles, name)
@@ -681,14 +681,16 @@ function wait_for_element(search_func, interval_ms, max_cycles, name)
     while cycles < max_cycles do
         local element = search_func()
         if element then
-            print_took("wait_for_element " .. tostring(name), start)
+            print_took("wait_for_element " .. (name or ""), start)
             return element
         end
         timer.usleep(interval_ms * 1000)
         cycles = cycles + 1
     end
 
-    print_took("wait_for_element " .. tostring(name) .. " timed out after " .. tostring(max_cycles) .. " cycles @ " .. tostring(interval_ms) .. "ms intervals")
+    print_took("wait_for_element " .. (name or "") .. " timed out after "
+        .. tostring(max_cycles) .. " cycles @ " .. tostring(interval_ms) .. "ms intervals",
+        start)
     return nil
 end
 
@@ -710,5 +712,33 @@ function wait_for_element_then_press_it(search_func, interval_ms, max_cycles)
         return true
     end
     print("did not find element to press")
+    return false
+end
+
+---@param is_done fun(): boolean
+---@param interval_ms? number
+---@param max_cycles? number
+---@param name string? - optional name for logging
+---@return boolean
+function wait_until(is_done, interval_ms, max_cycles, name)
+    -- TODO rewrite with syncify
+    interval_ms = interval_ms or 20
+    max_cycles = max_cycles or 30
+
+    local start = get_time()
+    local cycles = 0
+    while cycles < max_cycles do
+        local finished = is_done()
+        if finished then
+            print_took("wait_until " .. (name or ""), start)
+            return true
+        end
+        timer.usleep(interval_ms * 1000)
+        cycles = cycles + 1
+    end
+
+    print_took("wait_until is_done " .. (name or "") .. " timed out after "
+        .. tostring(max_cycles) .. " cycles @ " .. tostring(interval_ms) .. "ms intervals",
+        start)
     return false
 end
