@@ -583,6 +583,7 @@ function act_on_silence(win, silence, action)
     win.windows:get_tool_window():wait_for_cancel_or_ok_button()
 
     hs.eventtap.keyStroke({}, "s", 0, win.app)
+    -- PRN could wait for time_string to change and/or OK to show (if cancel was first) but neither of these are slam dunk... fine with 100ms here too
     hs.timer.usleep(_100ms)
 
     -- * set tool end
