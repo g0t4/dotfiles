@@ -425,45 +425,6 @@ function ScreenPalEditorWindow:toggle_AXEnhancedUserInterface()
     end
 end
 
-function ScreenPalEditorWindow:start_cut()
-    -- PRN determine if in a diff edit and bail
-    hs.eventtap.keyStroke({}, "c", 0, self.app)
-    -- TODO find a way to detect when cut is open (tool popup?)
-
-    -- PRN see below for notes about waiting until tool is open
-    --  for now I am just going to use fixed wait time
-    hs.timer.usleep(_50ms) -- FYI! 100ms is overkill in my initial testing
-
-    -- ** closed (cut tool is not open) window, regular toolbar with "Tools" button is visible
-    -- app:window(1)
-    -- AXSections: [1: SectionObject: hs.axuielement: AXButton (0x60000020b438), SectionUniqueID: AXContent, SectionDescription: Content]
-
-    -- start = get_time()
-    -- -- FYI getting window anew (OR should I use cache?)
-    -- -- 10 to 30ms to get window a new:
-    -- -- local win = self.app:window_by_title('SOM-FloatingWindow-Type=edit2.addedit.toolbar.menu.window-ZOrder=1(Undefined+1)')
-    -- print_took("get toolbar window", start)
-    --
-    -- FYI cached window object appears invalid (log shows invalid).. confirm that though
-    -- print("windows: ", hs.inspect(self.windows.windows_by_title))
-    -- local win_cached = self.windows.windows_by_title['SOM-FloatingWindow-Type=edit2.addedit.toolbar.menu.window-ZOrder=1(Undefined+1)']
-    --
-    -- -- if Tools button is gone, then assume cut is open
-    -- -- app:window(2):button(1)
-    -- -- AXDescription: Tools<string>
-    --
-    -- start_btn_tools = get_time()
-    -- local btn = win:button(1) -- 22ms this way, plus 20ms for above... just use fixed wait?
-    -- -- TODO is it faster to get to it via AXSections => SectionObject 1? (see win above AXSections when cut tool is closed)
-    -- print_took("get tools btn", start_btn_tools)
-    -- print('btnTools', hs.inspect(btn))
-
-    -- ** once cut toolbar is open
-    -- app:window(2)
-    -- AXSections: [1: SectionObject: hs.axuielement: AXTextField (0x6000005a25f8), SectionUniqueID: AXContent, SectionDescription: Content]
-    -- FYI first button has smth about help text
-end
-
 function ScreenPalEditorWindow:click_tool_ok()
     -- event though tool window is separate, it really subordinates to the editor window
     --   consumers don't need to know the difference)
