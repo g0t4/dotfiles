@@ -87,8 +87,10 @@ end
 vim.cmd [[
     " * vertical split help:
     " cabbrev <expr> h getcmdtype() == ':' && getcmdline() == 'h' ? 'vert h' : 'h'
-    " * full-screen, new tab help:
+    " * full-screen, new tab help (default now):
     cnoreabbrev <expr> h getcmdtype() == ':' && getcmdline() == 'h' ? 'tab h' : 'h'
+    "   + vh when I want vertical split for help
+    cnoreabbrev <expr> vh getcmdtype() == ':' && getcmdline() == 'vh' ? 'vert h' : 'vh'
 ]]
 
 -- *** win splits
