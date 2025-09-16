@@ -599,8 +599,10 @@ function act_on_silence(win, silence, action)
         win:wait_until_time_changes(before_time)
 
         -- FYI 2 frame reduction is b/c insert pause always blends away 1 frame in waveform (not sure effects audio, just to be safe do two)
+        before_time = win:get_current_time()
         hs.eventtap.keyStroke({}, "left", 0, win.app)
-        hs.timer.usleep(_200ms)
+        win:wait_until_time_changes(before_time)
+
         win.windows:get_tool_window():wait_for_ok_button_then_press_it()
 
         -- * insert pause auto-approved
