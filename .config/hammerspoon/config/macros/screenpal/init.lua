@@ -598,7 +598,7 @@ function act_on_silence(win, silence, action)
         return
     end
 
-    if vim.list_contains({ CUT_20_OK, CUT_30_OK }, action) and silence.x_start == 0 then
+    if vim.list_contains({ CUT_20_OK, CUT_30_OK }, action) then
         -- PRN wait to make sure OK is visible (sometimes there is a lag and at least with volume tool, hitting Enter before will be accepted but will disappear the edit!)
         win.windows:get_tool_window():wait_for_ok_button_then_press_it()
     end
