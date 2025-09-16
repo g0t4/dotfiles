@@ -425,16 +425,6 @@ function ScreenPalEditorWindow:toggle_AXEnhancedUserInterface()
     end
 end
 
-function ScreenPalEditorWindow:click_tool_ok()
-    -- event though tool window is separate, it really subordinates to the editor window
-    --   consumers don't need to know the difference)
-    --
-    -- click OK button
-    hs.eventtap.keyStroke({}, "Return") -- or, click OK button
-    -- TODO wait for a dynamic condition, not 300ms
-    hs.timer.usleep(_300ms)
-end
-
 -- PRN events to detect playhead moving (and other UI changes) that might affect what to show for silences (or otherwise affect tooling automations)
 -- require("config.macros.screenpal.observer")
 
