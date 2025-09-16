@@ -522,8 +522,8 @@ function show_silences(win, silences)
 end
 
 _G.MUTE = 'MUTE'
-_G.CUT_10 = 'CUT_10' -- consider in this case starting preview always?
-_G.CUT_15 = 'CUT_15' -- consider in this case starting preview always?
+_G.CUT_10 = 'CUT_10' -- FYI this is probably too short to be useful, but let's see if I use it
+_G.CUT_15 = 'CUT_15'
 _G.CUT_20 = 'CUT_20' -- consider in this case starting preview always?
 _G.CUT_20_OK = 'CUT_20_OK'
 _G.CUT_30 = 'CUT_30'
