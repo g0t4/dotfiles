@@ -589,7 +589,8 @@ function act_on_silence(win, silence, action)
     -- * set tool end
     timeline:move_playhead_to(timeline_relative_x_end)
     hs.eventtap.keyStroke({}, "e", 0, win.app)
-    -- add pause? so far ok w/o it
+    -- FYI never needed a wait here previously:
+    win.windows:get_tool_window():wait_for_ok_button() -- by now we have a range, so the OK button should be visible
 
     if silence.x_start == 0 and vim.list_contains({ CUT_20, CUT_30, CUT_20_OK, CUT_30_OK }, action) then
         -- special behavior for cutting  start of video (add fixed padding)
