@@ -12,9 +12,9 @@ shopt -s autocd # cd to a dir with just its name in command position
 
 alias grep="grep --color=auto"
 
-function help_bat() {
-    help "$@" | bat -l help
-}
+# function help_bat() {
+#     help "$@" | bat -l help
+# }
 
 alias cdr='cd "$(_repo_root)"'
 
