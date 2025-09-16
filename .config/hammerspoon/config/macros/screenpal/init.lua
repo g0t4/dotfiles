@@ -542,11 +542,16 @@ function act_on_silence(win, silence, action)
         return
     end
 
+    -- perhaps add more params to act_on_silence?
+    local is_cut = action:find("CUT_") -- keep trailing _ so it is easier to search for CUT_
+    local is_mute = action:find("MUTE_")
+    local is_auto_approve = action:find("_OK")
+
     -- * calculate padding
     local timeline_relative_x_start = silence.x_start
     local timeline_relative_x_end = silence.x_end -- - 10
     if silence.x_start ~= 0 then
-        if action:find("CUT_") then
+        if is_cut then
             local pixel_width = action:match("CUT_(%d*)%.*")
             -- print("pixel_width: " .. tostring(pixel_width) .. " for action " .. action)
             timeline_relative_x_start = silence.x_start + pixel_width
@@ -554,7 +559,7 @@ function act_on_silence(win, silence, action)
         end
     end
 
-    if action:find("MUTE_") then
+    if is_mute then
         local mute_number = action:match("MUTE_(%d+)")
         if mute_number then
             local offset = tonumber(mute_number)
@@ -569,9 +574,9 @@ function act_on_silence(win, silence, action)
 
     -- * start tool
     local start_tool_key = ''
-    if vim.list_contains({ CUT_20, CUT_20_OK, CUT_30, CUT_30_OK }, action) then
+    if action:find("CUT_") then
         start_tool_key = 'c'
-    elseif vim.list_contains({ MUTE, MUTE1, MUTE2 }, action) then
+    elseif action:find("MUTE") then
         start_tool_key = 'v'
     else
         error("UNDEFINED action: " .. tostring(action))
@@ -589,7 +594,7 @@ function act_on_silence(win, silence, action)
     -- FYI never needed a wait here previously:
     win.windows:get_tool_window():wait_for_ok_button() -- by now we have a range, so the OK button should be visible
 
-    if silence.x_start == 0 and vim.list_contains({ CUT_20, CUT_30, CUT_20_OK, CUT_30_OK }, action) then
+    if silence.x_start == 0 and is_cut then
         -- special behavior for cutting  start of video (add fixed padding)
 
         -- * pull back 2 frames from end to avoid cutting into starting audio
@@ -613,7 +618,7 @@ function act_on_silence(win, silence, action)
         return
     end
 
-    if vim.list_contains({ CUT_20_OK, CUT_30_OK }, action) then
+    if is_auto_approve then
         -- PRN wait to make sure OK is visible (sometimes there is a lag and at least with volume tool, hitting Enter before will be accepted but will disappear the edit!)
         win.windows:get_tool_window():wait_for_ok_button_then_press_it()
     end
