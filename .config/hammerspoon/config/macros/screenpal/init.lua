@@ -523,7 +523,7 @@ end
 
 _G.MUTE = 'MUTE'
 _G.CUT_10 = 'CUT_10' -- consider in this case starting preview always?
-_G.CUT_10_OK = 'CUT_10_OK'
+_G.CUT_15 = 'CUT_15' -- consider in this case starting preview always?
 _G.CUT_20 = 'CUT_20' -- consider in this case starting preview always?
 _G.CUT_20_OK = 'CUT_20_OK'
 _G.CUT_30 = 'CUT_30'
