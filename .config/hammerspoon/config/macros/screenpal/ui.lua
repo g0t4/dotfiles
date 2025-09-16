@@ -1,4 +1,4 @@
-local ToolBarWindow = require("config.macros.screenpal.tools_window")
+local ToolBarWindow = require("config.macros.screenpal.windows.tools_window")
 
 ---@class AppWindows
 ---@field app hs.axuielement
