@@ -52,4 +52,10 @@ if is_macos && [[ -z "$__PATH_HELPER_RAN" ]]; then
     # ** REPLACES PATH, DO THIS BEFORE ANY OTHER PATH CHANGES
     eval "$(/usr/libexec/path_helper -s)"
     export __PATH_HELPER_RAN=1
+    # does kinda mess stuff up when fish => bash
+    #   b/c fish has PATH setup that is inherited and so then this fubars order
+    #   (i.e. /usr/local/bin gets pushed to front so I get ancient version of git)
+    #   whereas /opt/homebrew ends up later in list, messy...
+    #   I can fix that temporarily with prepending homebrew always...
+    #   * in reality I wouldn't be using fish => bash so NBD in this case, bash would be my login shell if I wanted this to be a rock solid PATH setup
 fi

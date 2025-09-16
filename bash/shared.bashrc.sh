@@ -21,8 +21,9 @@ if is_macos; then
 
     # * below is hardcoded version of:
     #   eval $(brew shellenv bash)
-    prepend_path "/opt/homebrew/bin"
-    prepend_path "/opt/homebrew/sbin"
+    # always put homebrew first is fine for now, else it might be later due to reordering of /usr/libexec/path_helper
+    #  YES this doubles up paths in explicit subshells, I rarely use that anyways so meh
+    export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
     export HOMEBREW_PREFIX="/opt/homebrew"
     export HOMEBREW_CELLAR="/opt/homebrew/Cellar"
     export HOMEBREW_REPOSITORY="/opt/homebrew"
