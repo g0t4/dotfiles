@@ -84,44 +84,12 @@ end
 -- if type(_G["setup_workspace"]) ~= "function" then
 --     vim.notify "setup_workspace should be defined (so that session is restored before loading misc.lua), else help windows will be rearranged (to the right) when they are restored"
 -- end
--- FYI I switched away from BufEnter => Ctrl+W,L b/c it resized already open help and I don't like that and WinNew won't suffice b/c doesn't have filetype to only trigger first time win opens.. so use abbr instead, I like this so far
 vim.cmd [[
-    " TODO see how I feel about this, not sure I like it, wish it didn't involve changing the cmd line,
-    "   PRN I could redefine h/help to call vert h... and then set command-complete too to make completion work
-    " only downside is trying to use H alone in a command line also expands, can use Ctrl+V=>Space to avoid expanding it
-    "
     " * vertical split help:
-    " - always expand, anywhere in cmdline:
-    " cnoreabbrev h vert h
-    " i.e:    foo h<SPACE> => foo vert h  (YUCK)
-    "
-    " - donesn't double expand:
-    cabbrev <expr> h getcmdtype() == ':' && getcmdline() == 'h' ? 'vert h' : 'h'
-    "... IIAC won't work in some cases, if smth comes before h ... not sure that would ever happen, hasn't yet for me
-    "
-    "   FYI could call lua in an VimL expression (like <expr> ex above):
-    "      cabbrev <expr> h v:lua.MyHelpAbbrev()
-    "      function MyHelpAbbrev() ... end
-
-    " * horiz split (or otherwise not prepend vert)
-    "cnoreabbrev H h
-    " TODO this all feels wrong, but works for now maybe
-
-
-    " FYI can use abbrs to fix common casing mistakes?
-    " cnoreabbrev DUmp Dump
-    "  could I map a regex or smth so I can match any combo of cases, in effect make my Dump command case insensitive for activation?
+    " cabbrev <expr> h getcmdtype() == ':' && getcmdline() == 'h' ? 'vert h' : 'h'
+    " * full-screen, new tab help:
+    cnoreabbrev <expr> h getcmdtype() == ':' && getcmdline() == 'h' ? 'tab h' : 'h'
 ]]
---
--- ALTERNATIVE works fine too:
--- vim.api.nvim_create_user_command(
---     'H', -- must be uppercase, gah
---     function(opts)
---         vim.cmd('vert help ' .. opts.args)
---     end,
---     { nargs = "*", complete = "help" }
--- )
-
 
 -- *** win splits
 -- vim.opt.splitbelow = true -- i.e. help opens below then
