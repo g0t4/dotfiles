@@ -384,9 +384,21 @@ function ScreenPalEditorWindow:timeline_controller()
     return TimelineController:new(self)
 end
 
-function ScreenPalEditorWindow:get_time_string()
+---@return number, string -- seconds and text values
+function ScreenPalEditorWindow:get_current_time()
     self:ensure_cached_controls()
-    return self:timeline_controller().time_string
+    local t = self:timeline_controller()
+    -- PRN combine two times into one object?
+    return t.time_seconds, t.time_string
+end
+
+---@param before_seconds number
+function ScreenPalEditorWindow:wait_for_time_change(before_seconds)
+    wait_until(function()
+        -- PRN could check for specific amount of time change
+        local now_seconds = self:get_current_time()
+        return before_seconds ~= now_seconds
+    end)
 end
 
 function ScreenPalEditorWindow:toggle_AXEnhancedUserInterface()
@@ -582,15 +594,9 @@ function act_on_silence(win, silence, action)
         -- special behavior for cutting  start of video (add fixed padding)
 
         -- * pull back 2 frames from end to avoid cutting into starting audio
+        local before_time = win:get_current_time()
         hs.eventtap.keyStroke({}, "left", 0, win.app)
-        local before = win:get_time_string()
-        print("before: " .. before)
-        wait_until(function()
-            -- PRN could check for specific amount of time change
-            return before ~= win:get_time_string()
-        end)
-        local after = win:get_time_string()
-        print("after: " .. after)
+        win:wait_for_time_change(before_time)
 
         -- FYI 2 frame reduction is b/c insert pause always blends away 1 frame in waveform (not sure effects audio, just to be safe do two)
         hs.eventtap.keyStroke({}, "left", 0, win.app)
@@ -1027,7 +1033,7 @@ end
 
 function SPal_CopyPlayheadTimeText()
     local win = get_cached_editor_window()
-    local time_string = win:get_time_string()
+    local _, time_string = win:get_current_time()
     hs.pasteboard.setContents(time_string)
 end
 
