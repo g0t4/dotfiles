@@ -580,7 +580,7 @@ function act_on_silence(win, silence, action)
         error("UNDEFINED action: " .. tostring(action))
     end
     hs.eventtap.keyStroke({}, start_tool_key, 0, win.app)
-    hs.timer.usleep(_100ms)
+    win.windows:get_tool_window():wait_for_cancel_or_ok_button()
 
     hs.eventtap.keyStroke({}, "s", 0, win.app)
     hs.timer.usleep(_100ms)

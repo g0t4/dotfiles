@@ -48,6 +48,14 @@ function ToolsWindow:get_button_by_description(description)
     return button
 end
 
+function ToolsWindow:wait_for_cancel_or_ok_button()
+    -- toolbar opens to cancel/ok one tool is started
+    wait_until(function()
+        return (self:get_button_by_description("Cancel") ~= nil)
+            or (self:get_button_by_description("OK") ~= nil)
+    end, 20, 20, "ok or cancel button - toolbar opened for tool")
+end
+
 function ToolsWindow:wait_for_tools_button()
     return wait_for_element(function() return self:get_button_by_description("Tools") end, 20, 20, "button Tools")
 end
