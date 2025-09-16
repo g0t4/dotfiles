@@ -554,12 +554,13 @@ function act_on_silence(win, silence, action)
         end
     end
 
-    if action == MUTE1 then
-        timeline_relative_x_start = silence.x_start + 1
-        timeline_relative_x_end = silence.x_end + 1
-    elseif action == MUTE2 then
-        timeline_relative_x_start = silence.x_start + 2
-        timeline_relative_x_end = silence.x_end + 2
+    if action:find("MUTE_") then
+        local mute_number = action:match("MUTE_(%d+)")
+        if mute_number then
+            local offset = tonumber(mute_number)
+            timeline_relative_x_start = silence.x_start + offset
+            timeline_relative_x_end = silence.x_end + offset
+        end
     end
 
     -- * set tool start
