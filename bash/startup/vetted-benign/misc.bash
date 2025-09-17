@@ -16,7 +16,7 @@ alias grep="grep --color=auto"
 #     help "$@" | bat -l help
 # }
 
-alias cdr='cd "$(_repo_root)"'
+# alias cdr='cd "$(_repo_root)"'
 
 # * leave these for demo examples and then remove when course series is done:
 # alias ..="cd .."
