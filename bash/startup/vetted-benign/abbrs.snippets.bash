@@ -65,7 +65,8 @@ abbr for_in_seq='for i in $(seq 1 10%); do echo $i; done' --set-cursor
 abbr for_in_array_indicies='for i in "${!%[@]}"; do echo "${i} ${name[$i]}"; done' --set-cursor
 
 # * p(rint) * helpers
-abbr pIFS "echo -n \"\${IFS}\" | hexdump -C" # block word splitting, or it will split it's own characters :)
+abbr pIFS 'declare -p "${IFS}"' # best way to see it => $' \t\n'
+abbr pIFSecho "echo -n \"\${IFS}\" | hexdump -C" # block word splitting, or it will split it's own characters :)
 #
 # print path one per line... two ways to do it
 abbr pPATH2 '(IFS=:; for p in $PATH; do echo $p; done)'
