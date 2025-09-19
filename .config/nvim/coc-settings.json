@@ -212,6 +212,15 @@
     // FYI another persons' config: https://raw.githubusercontent.com/oppara/dotfiles/611ea809e380d5b4e3e374568a85e52e744a429e/config/nvim/coc-settings.json
     "languageserver": {
 
+        // *** awk
+        // https://github.com/Beaglefoot/awk-language-server
+        // npm install -g awk-language-server
+        "awk": {
+            "command": "awk-language-server",
+            "args": [ ],
+            "filetypes": [ "awk" ]
+        },
+
         // TODO! revisit if this works enough to replace pyright (this is faster by far)
         // // *** facebook / pyrefly
         // // TODO try neovim builtin LS support => https://pyrefly.org/en/docs/IDE/#neovim-011
