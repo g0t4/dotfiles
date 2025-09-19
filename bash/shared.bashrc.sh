@@ -63,3 +63,17 @@ source ~/.iterm2_shell_integration.bash
 #     return 124
 # }
 # bind -x '"\C-g": "test"'
+
+if is_macos; then
+    # TODO! put back iterm2 shell integartion and remove this after course:
+    #    OR alias sed => gsed (or function it in fish)... and permanently stop using BSD variants?
+    #    ONLY when interactive
+    function sed {
+        # FYI had to tmp mod iterm2_shell_integration script to call `command sed` so I can block just `sed`
+        echo "blocking direct macOS/BSD sed for duration of bash course"
+    }
+    function awk {
+        # careful can cause issues if some script needs this (i.e. iterm2_shell_integration uses sed, hence cannot block it the same)
+        echo "blocking direct macOS/BSD awk for duration of bash course"
+    }
+fi
