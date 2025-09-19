@@ -77,7 +77,7 @@ _abbr_expand_diff_last_two_commands() {
     if ! is_history_expansion_enabled; then
         echo "HISTORY EXPANSION MUST BE ENABLED, use 'set -B' to do so" >&2
     fi
-    echo 'icdiff <(!-1) <(!-2)'
+    echo 'icdiff <(!-2) <(!-1)'
 }
 
 # *** dirs
