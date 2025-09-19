@@ -5,7 +5,7 @@ fi
 
 copy_and_clear_line() {
     # current line only, FYI in vi mode you can use `yy` or `dd` to copy/nuke entire line
-    echo -n "$READLINE_LINE" | pbcopy
+    echo -n "$READLINE_LINE" | fish -c pbcopy
     READLINE_LINE=
 }
 
