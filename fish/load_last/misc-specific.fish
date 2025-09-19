@@ -821,10 +821,15 @@ set sed_all "**/*.{bash,c,cc,cpp,cs,cxx,dart,fish,go,h,hpp,hs,hxx,java,js,jsx,ks
 
 set --global sed_cmd sed
 if $IS_MACOS
+    function awk
+        echo use 'command awk' to access macOS/BSD sed
+        echo prefer gawk while working on your bash series of courses
+        echo blocking direct use to avoid mistakes
+    end
     function sed
         echo use 'command sed' to access macOS/BSD sed
         echo prefer gsed while working on your bash series of courses
-        echo blocking use to avoid mistakes
+        echo blocking direct use to avoid mistakes
     end
     set sed_cmd gsed
     # TODO move rest of these to sed_cmd outside of if block, if args are all the same
