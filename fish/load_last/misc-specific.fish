@@ -1194,7 +1194,7 @@ end
 abbr wc wordcount # when typing wc => expand into custom wordcount func (can still use `wc` in scripts or `command wc` to use wc directly)
 function wordcount
     # run wc and then parse result to add labels on each value:
-    wc $argv | awk '{printf("lines: %'\''d\nwords: %'\''d\nchars: %'\''d\n", $1, $2, $3)}'
+    wc $argv | command awk '{printf("lines: %'\''d\nwords: %'\''d\nchars: %'\''d\n", $1, $2, $3)}'
     # FYI comma delimitted support in awk is not POSIX compliant, but is supported in gawk and mawk IIUC
 end
 
