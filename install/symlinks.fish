@@ -41,7 +41,7 @@ if command -q nvim
     ln -f -s $dotfiles_dir/.config/nvim/fnl $HOME/.config/nvim/. # DIR SYMLINK
     ln -f -s $dotfiles_dir/.config/nvim/queries $HOME/.config/nvim/. # DIR SYMLINK
     # ln -s $dotfiles_dir/.config/nvim/spell $HOME/.config/nvim/spell # PRN add this
-    ln -f -s $dotfiles_dir/.config/nvim/ftplugin $HOME/.config/nvim/. # DIR SYMLINK
+    # ln -f -s $dotfiles_dir/.config/nvim/ftplugin $HOME/.config/nvim/. # DIR SYMLINK   # USE after/ftplugin
     ln -f -s $dotfiles_dir/.config/nvim/after $HOME/.config/nvim/. # DIR SYMLINK
     ln -f -s $dotfiles_dir/.config/nvim/coc-settings.json $HOME/.config/nvim/coc-settings.json
     ln -f -s $dotfiles_dir/.config/nvim/snippets $HOME/.config/nvim/. # DIR SYMLINK
