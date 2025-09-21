@@ -209,8 +209,18 @@ end
 abbr --add zsh_equals --regex '=[^\b]+' --function expand_zsh_equals
 
 function cd_dir_of_brew_pkg --wraps "brew list"
-    set brew_pkg $argv[1]
-    cd_dir_of_path (brew --prefix $brew_pkg)
+    set package_name $argv[1]
+    if not set package_path (brew --prefix $package_name 2>/dev/null)
+        # /opt/homebrew/Caskroom/<pkgname>
+        set package_path "$(brew --caskroom)/$package_name"
+        if test ! -d $package_path
+            echo "abort... no prefix nor cask path found..."
+            return 1
+        end
+    end
+    echo "package_path: '$package_path'"
+
+    cd_dir_of_path $package_path
 end
 abbr cdbrew cd_dir_of_brew_pkg
 
