@@ -2565,9 +2565,10 @@ abbr tailf 'tail -F'
 abbr tailn 'tail -n 10'
 abbr tailr 'tail -r' # reverse order
 # *** frequently tailed files
-abbr tail_ask_ls 'trash_n_tail ~/.local/share/ask-openai/language.server.log' # python LS
-abbr tail_ask_predictions 'trash_n_tail ~/.local/share/nvim/ask-openai/ask-predictions.log' # nvim plugin
-abbr tail_nvim_lsp_logs 'trash_n_tail ~/.local/state/nvim/lsp.log' # nvim lsp logs
+abbr tt trash_n_tail
+abbr ttp 'trash_n_tail ~/.local/share/nvim/ask-openai/ask-predictions.log' # nvim plugin
+abbr ttls 'trash_n_tail ~/.local/share/ask-openai/language.server.log' # python LS
+abbr ttnlsp 'trash_n_tail ~/.local/state/nvim/lsp.log' # nvim lsp logs
 abbr tail_hardtime_logs 'cat ~/.local/state/nvim/hardtime.nvim.log | cut -c34- | sort | uniq -c | sort'
 function trash_n_tail
     trash $argv
