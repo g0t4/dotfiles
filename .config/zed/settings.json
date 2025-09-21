@@ -23,7 +23,6 @@
       "provider": "zed.dev",
       "model": "claude-3-5-sonnet-20240620-fast-edit"
     },
-    "version": "2"
     // "inline_alternatives": [
     //   { "provider": "ollama", "model": "llama3.1:8b" },
     //   { "provider": "ollama", "model": "llama3.2:3b" },
@@ -96,11 +95,10 @@
   },
   "context_servers": {
     "commands-context-server": {
-      "command": {
-        "path": "/Users/wes/repos/github/g0t4/mcp-server-commands/build/index.js",
-        "args": [],
-        "env": {}
-      }
+      "source": "custom",
+      "command": "/Users/wes/repos/github/g0t4/mcp-server-commands/build/index.js",
+      "args": [],
+      "env": {}
     }
   },
   "experimental.theme_overrides": {
