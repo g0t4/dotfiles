@@ -208,6 +208,12 @@ function expand_zsh_equals
 end
 abbr --add zsh_equals --regex '=[^\b]+' --function expand_zsh_equals
 
+function cd_dir_of_brew_pkg --wraps "brew list"
+    set brew_pkg $argv[1]
+    cd_dir_of_path (brew --prefix $brew_pkg)
+end
+abbr cdbrew cd_dir_of_brew_pkg
+
 function cd_dir_of_command
     cd_dir_of_path (type --path $argv) # ~ zsh's =foo
 end
