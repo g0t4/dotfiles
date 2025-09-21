@@ -1,2 +1,3 @@
 # global gitignore
 .DS_Store
+.rag/
