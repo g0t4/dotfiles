@@ -22,7 +22,6 @@ abbr --add dotdot --regex '^\.\.+$' --function multicd
 # cd-
 abbr --add cd- 'cd -'
 
-
 # TODO impl cp-  or cph (like dirh, interactive to pick recent dir?)
 #   see dir stack / history : https://fishshell.com/docs/current/interactive.html#id13
 # function _cp-
@@ -197,7 +196,6 @@ function remkdir
     mkdir -p $argv
 end
 
-
 ## cd_dir_of helpers
 #
 # zsh's =cmd expansion as fish abbreviation!
@@ -256,7 +254,6 @@ function cd_dir_of_path
     log_ --apple_white "cd $(pwd)"
 end
 abbr cdd cd_dir_of_path
-
 
 # *** bat ***
 # if batcat exists map to bat
@@ -544,7 +541,6 @@ function review_huge_files
     _du $HOME/.cache $threshold
     # .cache => packer, huggingface, whisper, vosk, lm-studio, package managers
 
-
     log_ --yellow "Check for other VM dirs in home dir => vbox, vmware fusion"
     _du $HOME/Parallels $threshold
 
@@ -561,7 +557,6 @@ function review_huge_files
     # _du /opt/homebrew $threshold
     _du /opt/homebrew/Cellar $threshold
     _du /opt/homebrew/Caskroom $threshold
-
 
     #  search these in finder... very easy to find HUGE repos
     #_du ~/repos # use finder to drill in... sometimes a few repos are MASSIVE
@@ -585,30 +580,10 @@ function review_huge_files
     #_du $HOME/.docker $threshold
     #_du $HOME/.gradle $threshold
 
-
-
     # maybe clears:
     #    ~/.vscode  # old extensions and stuff here? logs? 4.1G on wesdemos
 
-
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 ## loop helpers (i.e. forr30<SPACE> for testing line height, not sure why I dont just use $LINES)
 abbr --add forr --regex "forr\d*" --function forr_abbr
@@ -622,16 +597,12 @@ function forr_abbr
     echo "seq 1 $count | xargs -I {} echo {}"
 end
 
-
-
-
 ##### find helpers #####
 # WIP - new ideas to consider (added when trying to find ~/Library/Application\ Support/*elgato* dirs for streamdeck config)
 # find directories by name
 abbr --add findd --set-cursor 'find . -type d -iname "*%*"'
 abbr --add finddr --set-cursor 'find . -type d -iregex ".*%.*"' # another idea to consider
 # IDEAs: tree command for dirs? or exa?
-
 
 ###### ls/exa/eza/lsd/etc ######
 # PRN port over zsh mods for ls to use eza (though I am happy with fish's ls currently)
@@ -744,7 +715,6 @@ end
 
 export EDITOR="nvim"
 # alt+o/v allows editing current command line thanks to EDITOR variable
-
 
 #### nvim:
 
@@ -871,7 +841,6 @@ bind_both_modes_default_and_insert alt-shift-f _fzf-nested-file-widget
 bind_both_modes_default_and_insert alt-shift-b _fzf-nested-both-file-and-dirs-widget
 # TODO what all pickers for git history might I want?
 bind_both_modes_default_and_insert alt-shift-g _fzf-nested-git-commit-widget
-
 
 # *** chmod,chgrp,chown,chsh
 abbr chmx "chmod +x"
