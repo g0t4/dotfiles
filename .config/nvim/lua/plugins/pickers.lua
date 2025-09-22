@@ -381,10 +381,7 @@ return {
                     -- remove trailing newline, will blow up live grep
                     selected_text = selected_text:gsub("\n", "")
 
-                    -- if selected text has space in it, then wrap it in quotes... and escape any instances of the quoted character
-                    if selected_text:find(" ") then
-                        selected_text = quote_for_fish_shell(selected_text)
-                    end
+                    selected_text = quote_for_fish_shell(selected_text)
 
                     require("telescope").extensions.live_grep_args.live_grep_args({
                         default_text = glob_arg .. selected_text
