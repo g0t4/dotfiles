@@ -363,15 +363,10 @@ return {
             function live_grep_consolidated(big_word, glob_arg)
                 glob_arg = glob_arg or ""
 
-                local mode = vim.fn.mode()
-                if mode == "n" then
+                local search_for = ""
+                if vim.fn.mode() == "n" then
                     -- in normal mode use word under cursor
-                    local search_regex = vim.fn.expand(big_word and '<cWORD>' or '<cword>')
-                    search_regex = sanitize_and_quote_rg_regex_arg(search_regex)
-                    require("telescope").extensions.live_grep_args.live_grep_args({
-                        default_text = glob_arg .. search_regex
-                    })
-                    return
+                    search_for = vim.fn.expand(big_word and '<cWORD>' or '<cword>')
                 end
 
                 local function is_any_visual_mode()
@@ -380,19 +375,13 @@ return {
                 end
 
                 if is_any_visual_mode() then
-                    -- yank to c register
                     vim.cmd("normal! \"cy")
-
-                    local search_regex = vim.fn.getreg('c') or ""
-                    search_regex = sanitize_and_quote_rg_regex_arg(search_regex)
-
-                    require("telescope").extensions.live_grep_args.live_grep_args({
-                        default_text = glob_arg .. search_regex
-                    })
-                    return
+                    search_for = vim.fn.getreg('c') or ""
                 end
 
-                error("unexpected mode: " .. mode)
+                require("telescope").extensions.live_grep_args.live_grep_args({
+                    default_text = glob_arg .. sanitize_and_quote_rg_regex_arg(search_for)
+                })
             end
 
             vim.keymap.set({ 'n', 'v' }, '<leader>w', function() live_grep_consolidated(false) end)
