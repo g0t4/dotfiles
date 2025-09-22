@@ -347,6 +347,11 @@ return {
             --     })
             -- end, { desc = "Help grep, think :helpgrep but with telescope" })
 
+            ---@param str string
+            ---@return string
+            function quote_for_fish_shell(str)
+                return "'" .. str:gsub("'", "\\'") .. "'"
+            end
 
             function live_grep_consolidated(big_word, glob_arg)
                 glob_arg = glob_arg or ""
@@ -355,7 +360,7 @@ return {
                 if mode == "n" then
                     -- in normal mode use word under cursor
                     local current_word = vim.fn.expand(big_word and '<cWORD>' or '<cword>')
-                    current_word = "'" .. current_word:gsub("'", "\\'") .. "'"
+                    current_word = quote_for_fish_shell(current_word)
                     require("telescope").extensions.live_grep_args.live_grep_args({
                         default_text = glob_arg .. current_word
                     })
@@ -378,8 +383,7 @@ return {
 
                     -- if selected text has space in it, then wrap it in quotes... and escape any instances of the quoted character
                     if selected_text:find(" ") then
-                        -- keep in mind, quoting depends on your shell! (I use fish)
-                        selected_text = "'" .. selected_text:gsub("'", "\\'") .. "'"
+                        selected_text = quote_for_fish_shell(selected_text)
                     end
 
                     require("telescope").extensions.live_grep_args.live_grep_args({
