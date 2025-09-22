@@ -355,7 +355,7 @@ return {
                 if mode == "n" then
                     -- in normal mode use word under cursor
                     local current_word = vim.fn.expand(big_word and '<cWORD>' or '<cword>')
-                    current_word = "'" .. current_word:gsub("'", "\'") .. "'"
+                    current_word = "'" .. current_word:gsub("'", "\\'") .. "'"
                     require("telescope").extensions.live_grep_args.live_grep_args({
                         default_text = glob_arg .. current_word
                     })
@@ -379,7 +379,7 @@ return {
                     -- if selected text has space in it, then wrap it in quotes... and escape any instances of the quoted character
                     if selected_text:find(" ") then
                         -- keep in mind, quoting depends on your shell! (I use fish)
-                        selected_text = "'" .. selected_text:gsub("'", "\'") .. "'"
+                        selected_text = "'" .. selected_text:gsub("'", "\\'") .. "'"
                     end
 
                     require("telescope").extensions.live_grep_args.live_grep_args({
