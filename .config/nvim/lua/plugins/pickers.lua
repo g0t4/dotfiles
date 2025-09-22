@@ -348,15 +348,15 @@ return {
             -- end, { desc = "Help grep, think :helpgrep but with telescope" })
 
 
-            function live_grep_consolidated(big_word, file_path_arg)
-                -- think of this as an alternative to / searching
+            function live_grep_consolidated(big_word, glob_arg)
+                glob_arg = glob_arg or ""
 
                 local mode = vim.fn.mode()
                 if mode == "n" then
                     -- in normal mode use word under cursor
                     local current_word = vim.fn.expand(big_word and '<cWORD>' or '<cword>')
                     local default_text = current_word
-                    default_text = file_path_arg .. current_word
+                    default_text = glob_arg .. current_word
                     require("telescope").extensions.live_grep_args.live_grep_args({
                         default_text = default_text
                     })
@@ -381,7 +381,7 @@ return {
                         selected_text = "'" .. selected_text:gsub("'", "''") .. "'"
                     end
 
-                    local default_text = file_path_arg .. selected_text
+                    local default_text = glob_arg .. selected_text
                     require("telescope").extensions.live_grep_args.live_grep_args({
                         default_text = default_text
                     })
@@ -392,8 +392,8 @@ return {
 
             function live_grep_current_file(big_word)
                 local current_file_path = vim.fn.expand('%')
-                file_path_arg = "-g '" .. current_file_path .. "' "
-                live_grep_consolidated(big_word, file_path_arg)
+                glob_arg = "-g '" .. current_file_path .. "' "
+                live_grep_consolidated(big_word, glob_arg)
             end
 
             vim.keymap.set({ 'n', 'v' }, '<leader>wf', function() live_grep_current_file(false) end)
@@ -401,8 +401,8 @@ return {
 
             function live_grep_word_under_cursor_same_file_type(big_word)
                 local buffers_file_extension = vim.fn.expand('%:e')
-                local file_path_arg = "-g '*." .. buffers_file_extension .. "' "
-                live_grep_consolidated(big_word, file_path_arg)
+                local glob_arg = "-g '*." .. buffers_file_extension .. "' "
+                live_grep_consolidated(big_word, glob_arg)
             end
 
             vim.keymap.set({ 'n', 'v' }, '<leader>wt', live_grep_word_under_cursor_same_file_type)
