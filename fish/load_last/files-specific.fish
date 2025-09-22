@@ -206,12 +206,23 @@ function expand_zsh_equals
 end
 abbr --add zsh_equals --regex '=[^\b]+' --function expand_zsh_equals
 
-function cd_dir_of_man_page --wraps "man"
+function dir_of_man_page --wraps man
+    set -l man_page $argv[1]
+    if test -z "$man_page"
+        echo "usage: dir_of_man_page <man page name>"
+        return 1
+    end
+    # man -w <page> == shows path to man page
+    set -l man_path (man -w $man_page)
+    echo $man_path
+end
+
+function cd_dir_of_man_page --wraps man
     if test -z "$argv"
         echo "usage: cd_dir_of_man_page <man page name>"
         return 1
     end
-    set -l man_path (man -w $argv)
+    set -l man_path (dir_of_man_page $argv)
     cd_dir_of_path $man_path
 end
 abbr cdm cd_dir_of_man_page
