@@ -350,6 +350,7 @@ return {
             ---@param str string
             ---@return string
             local function quote_for_fish_shell(str)
+                -- PRN try vim.fn.shellescape, need to look into intended use and how it detects shell, first attempt did not work
                 return "'" .. str:gsub("'", "\\'") .. "'"
             end
 
