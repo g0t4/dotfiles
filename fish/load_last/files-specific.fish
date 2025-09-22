@@ -206,6 +206,16 @@ function expand_zsh_equals
 end
 abbr --add zsh_equals --regex '=[^\b]+' --function expand_zsh_equals
 
+function cd_dir_of_man_page --wraps "man"
+    if test -z "$argv"
+        echo "usage: cd_dir_of_man_page <man page name>"
+        return 1
+    end
+    set -l man_path (man -w $argv)
+    cd_dir_of_path $man_path
+end
+abbr cdm cd_dir_of_man_page
+
 function cd_dir_of_brew_pkg --wraps "brew list"
     set package_name $argv[1]
     if not set package_path (brew --prefix $package_name 2>/dev/null)
