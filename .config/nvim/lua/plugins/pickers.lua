@@ -355,6 +355,7 @@ return {
                 if mode == "n" then
                     -- in normal mode use word under cursor
                     local current_word = vim.fn.expand(big_word and '<cWORD>' or '<cword>')
+                    current_word = "'" .. current_word .. "'"
                     require("telescope").extensions.live_grep_args.live_grep_args({
                         default_text = glob_arg .. current_word
                     })
