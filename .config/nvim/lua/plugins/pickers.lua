@@ -363,8 +363,8 @@ return {
                 end
             end
 
-            vim.keymap.set('n', '<leader>wf', live_grep_current_file_only)
-            vim.keymap.set('n', '<leader>Wf', function() live_grep_current_file_only(true) end)
+            vim.keymap.set({ 'n', 'v' }, '<leader>wf', live_grep_current_file_only)
+            vim.keymap.set({ 'n', 'v' }, '<leader>Wf', function() live_grep_current_file_only(true) end)
 
             function live_grep_word_under_cursor_same_file_type(big_word)
                 local buffers_file_extension = vim.fn.expand('%:e')
@@ -376,8 +376,9 @@ return {
                 })
             end
 
-            vim.keymap.set('n', '<leader>wt', live_grep_word_under_cursor_same_file_type)
-            vim.keymap.set('n', '<leader>Wt', function() live_grep_word_under_cursor_same_file_type(true) end)
+            vim.keymap.set({ 'n', 'v' }, '<leader>wt', live_grep_word_under_cursor_same_file_type)
+            vim.keymap.set({ 'n', 'v' }, '<leader>Wt', function() live_grep_word_under_cursor_same_file_type(true) end)
+
 
             function live_grep_word_under_cursor(big_word)
                 require("telescope").extensions.live_grep_args.live_grep_args({
@@ -386,8 +387,8 @@ return {
             end
 
             -- use ww if I am impatient w.r.t. the delay b/c of wf keymap
-            vim.keymap.set('n', '<leader>w', live_grep_word_under_cursor)
-            vim.keymap.set('n', '<leader>W', function() live_grep_word_under_cursor(true) end)
+            vim.keymap.set({ 'n', 'v' }, '<leader>w', live_grep_word_under_cursor)
+            vim.keymap.set({ 'n', 'v' }, '<leader>W', function() live_grep_word_under_cursor(true) end)
         end,
     },
 
