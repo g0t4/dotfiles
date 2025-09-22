@@ -395,7 +395,7 @@ return {
 
             function live_grep_current_file(big_word)
                 local current_file_path = vim.fn.expand('%')
-                glob_arg = "-g '" .. current_file_path .. "' "
+                local glob_arg = "-g '" .. current_file_path .. "' "
                 live_grep_consolidated(big_word, glob_arg)
             end
 
