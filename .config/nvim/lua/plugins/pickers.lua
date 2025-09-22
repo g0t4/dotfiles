@@ -368,7 +368,6 @@ return {
 
                 if is_any_visual_mode() then
                     -- yank to c register
-                    -- PRN use my GetPos helper instead?
                     vim.cmd("normal! \"cy")
 
                     local selected_text = vim.fn.getreg('c') or ""
