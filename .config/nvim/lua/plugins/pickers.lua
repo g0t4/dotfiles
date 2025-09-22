@@ -353,6 +353,11 @@ return {
                 return "'" .. str:gsub("'", "\\'") .. "'"
             end
 
+            function sanitize_rg_regex(selected_text)
+                -- remove trailing newline, will blow up live grep
+                return selected_text:gsub("\n", "")
+            end
+
             function live_grep_consolidated(big_word, glob_arg)
                 glob_arg = glob_arg or ""
 
@@ -378,9 +383,7 @@ return {
 
                     local selected_text = vim.fn.getreg('c') or ""
 
-                    -- remove trailing newline, will blow up live grep
-                    selected_text = selected_text:gsub("\n", "")
-
+                    selected_text = sanitize_rg_regex(selected_text)
                     selected_text = quote_for_fish_shell(selected_text)
 
                     require("telescope").extensions.live_grep_args.live_grep_args({
