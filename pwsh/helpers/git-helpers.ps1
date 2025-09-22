@@ -156,6 +156,8 @@ function git_repo_root() {
 }
 
 ealias gcl 'git clone --recurse-submodules'
+ealias gcl_no_lfs 'GIT_LFS_SKIP_SMUDGE=1 git clone --recurse-submodules'
+ealias wcl_no_lfs 'GIT_LFS_SKIP_SMUDGE=1 wcl'
 
 ealias gbl 'git blame -b -w'
 

@@ -87,6 +87,8 @@ abbr gnoconf_export 'export GIT_CONFIG_GLOBAL=/dev/null GIT_CONFIG_SYSTEM=/dev/n
 
 # clone
 abbr gcl 'git clone --recurse-submodules'
+abbr gcl_no_lfs 'GIT_LFS_SKIP_SMUDGE=1 git clone --recurse-submodules'
+abbr wcl_no_lfs 'GIT_LFS_SKIP_SMUDGE=1 wcl'
 
 # shortlog
 # git shortlog -sn
