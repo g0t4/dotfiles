@@ -353,7 +353,7 @@ return {
                 return "'" .. str:gsub("'", "\\'") .. "'"
             end
 
-            function sanitize_rg_regex(selected_text)
+            function sanitize_and_quote_rg_regex_arg(selected_text)
                 -- remove trailing newline, will blow up live grep
                 local regex = selected_text:gsub("\n", "")
                 regex = quote_for_fish_shell(regex)
@@ -367,7 +367,7 @@ return {
                 if mode == "n" then
                     -- in normal mode use word under cursor
                     local current_word = vim.fn.expand(big_word and '<cWORD>' or '<cword>')
-                    current_word = sanitize_rg_regex(current_word)
+                    current_word = sanitize_and_quote_rg_regex_arg(current_word)
                     require("telescope").extensions.live_grep_args.live_grep_args({
                         default_text = glob_arg .. current_word
                     })
@@ -384,7 +384,7 @@ return {
                     vim.cmd("normal! \"cy")
 
                     local selected_text = vim.fn.getreg('c') or ""
-                    selected_text = sanitize_rg_regex(selected_text)
+                    selected_text = sanitize_and_quote_rg_regex_arg(selected_text)
 
                     require("telescope").extensions.live_grep_args.live_grep_args({
                         default_text = glob_arg .. selected_text
