@@ -388,8 +388,6 @@ return {
             -- use ww if I am impatient w.r.t. the delay b/c of wf keymap
             vim.keymap.set('n', '<leader>w', live_grep_word_under_cursor)
             vim.keymap.set('n', '<leader>W', function() live_grep_word_under_cursor(true) end)
-            vim.keymap.set('n', '<leader>ww', live_grep_word_under_cursor)
-            vim.keymap.set('n', '<leader>WW', function() live_grep_word_under_cursor(true) end)
         end,
     },
 
