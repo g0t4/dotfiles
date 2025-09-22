@@ -350,17 +350,18 @@ return {
 
             function live_grep_current_file_only(big_word, include_file_path)
                 -- think of this as an alternative to / searching
-                local current_file_path = vim.fn.expand('%')
+
+                local file_path_part = ""
+                if include_file_path then
+                    local current_file_path = vim.fn.expand('%')
+                    file_path_part = "-g '" .. current_file_path .. "' "
+                end
 
                 local mode = vim.fn.mode()
                 if mode == "n" then
                     -- in normal mode use word under cursor
                     local current_word = vim.fn.expand(big_word and '<cWORD>' or '<cword>')
                     local default_text = current_word
-                    local file_path_part = ""
-                    if include_file_path then
-                        file_path_part = "-g '" .. current_file_path .. "' "
-                    end
                     default_text = file_path_part .. current_word
                     require("telescope").extensions.live_grep_args.live_grep_args({
                         default_text = default_text
@@ -386,10 +387,6 @@ return {
                         selected_text = "'" .. selected_text:gsub("'", "''") .. "'"
                     end
 
-                    local file_path_part = ""
-                    if include_file_path then
-                        file_path_part = "-g '" .. current_file_path .. "' "
-                    end
                     local default_text = file_path_part .. selected_text
                     require("telescope").extensions.live_grep_args.live_grep_args({
                         default_text = default_text
