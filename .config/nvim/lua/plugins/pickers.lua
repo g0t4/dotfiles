@@ -366,15 +366,16 @@ return {
             end
 
             local function what_to_search_for(big_word)
-                local search_for = ""
                 if vim.fn.mode() == "n" then
-                    search_for = vim.fn.expand(big_word and '<cWORD>' or '<cword>')
-                elseif is_any_visual_mode() then
-                    vim.cmd("normal! \"cy")
-                    search_for = vim.fn.getreg('c') or ""
+                    return vim.fn.expand(big_word and '<cWORD>' or '<cword>')
                 end
-                return search_for
+                if is_any_visual_mode() then
+                    vim.cmd("normal! \"cy")
+                    return vim.fn.getreg('c') or ""
+                end
+                return ""
             end
+
 
             function live_grep_consolidated(big_word, glob_arg)
                 glob_arg = glob_arg or ""
