@@ -366,10 +366,10 @@ return {
                 local mode = vim.fn.mode()
                 if mode == "n" then
                     -- in normal mode use word under cursor
-                    local current_word = vim.fn.expand(big_word and '<cWORD>' or '<cword>')
-                    current_word = sanitize_and_quote_rg_regex_arg(current_word)
+                    local search_regex = vim.fn.expand(big_word and '<cWORD>' or '<cword>')
+                    search_regex = sanitize_and_quote_rg_regex_arg(search_regex)
                     require("telescope").extensions.live_grep_args.live_grep_args({
-                        default_text = glob_arg .. current_word
+                        default_text = glob_arg .. search_regex
                     })
                     return
                 end
@@ -383,11 +383,11 @@ return {
                     -- yank to c register
                     vim.cmd("normal! \"cy")
 
-                    local selected_text = vim.fn.getreg('c') or ""
-                    selected_text = sanitize_and_quote_rg_regex_arg(selected_text)
+                    local search_regex = vim.fn.getreg('c') or ""
+                    search_regex = sanitize_and_quote_rg_regex_arg(search_regex)
 
                     require("telescope").extensions.live_grep_args.live_grep_args({
-                        default_text = glob_arg .. selected_text
+                        default_text = glob_arg .. search_regex
                     })
                     return
                 end
