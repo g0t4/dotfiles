@@ -51,48 +51,75 @@ end
 # *** systemctl (if avail)
 if command -q systemctl
 
+    # * sc == prefix for system services
     abbr sc 'sudo systemctl'
-    abbr scu 'systemctl --user' # new
+    # * scu == prefix for user services
+    abbr scu 'systemctl --user'
 
     abbr scm 'man systemd.index' # great entrypoint to systemd man pages
 
     abbr scs 'sudo systemctl status'
-    abbr scus 'systemctl --user status' # new
+    abbr scus 'systemctl --user status'
     abbr scstop 'sudo systemctl stop'
+    abbr scustop 'systemctl --user stop'
     abbr scstart 'sudo systemctl start'
+    abbr scustart 'systemctl --user start'
     abbr screstart 'sudo systemctl restart'
+    abbr scurestart 'systemctl --user restart'
     abbr scenable 'sudo systemctl enable'
+    abbr scuenable 'systemctl --user enable'
     abbr scdisable 'sudo systemctl disable'
-    abbr sck 'sudo systemctl kill' # PRN --signal=SIGKILL?
+    abbr scudisable 'systemctl --user disable'
+    abbr sck 'sudo systemctl kill'
+    abbr scukill 'systemctl --user kill'
 
     abbr sccat 'sudo systemctl cat'
+    abbr scucat 'systemctl --user cat'
     abbr scedit 'sudo systemctl edit'
+    abbr scuedit 'systemctl --user edit'
     abbr screvert 'sudo systemctl revert'
+    abbr scurevert 'systemctl --user revert'
     abbr scshow 'sudo systemctl show'
+    abbr scushow 'systemctl --user show'
 
     abbr scls 'sudo systemctl list-units'
+    abbr sculs 'systemctl --user list-units'
     abbr sclsf 'sudo systemctl list-unit-files'
+    abbr sculsf 'systemctl --user list-unit-files'
     abbr sclss 'sudo systemctl list-sockets'
+    abbr sculss 'systemctl --user list-sockets'
     abbr sclsd 'sudo systemctl list-dependencies'
+    abbr sculsd 'systemctl --user list-dependencies'
 
+    # * jc == prefix for system services
     abbr jc 'sudo journalctl --unit'
-    abbr jcu 'sudo journalctl --user --unit'
+    # * jcu == prefix for user services
+    abbr jcu 'journalctl --user --unit'
 
     abbr jcb 'sudo journalctl --boot --unit' # current boot
+    abbr jcub 'journalctl --user --boot --unit' # current boot
     abbr jcb1 'sudo journalctl --boot=-1 --unit' # previous boot
+    abbr jcub1 'journalctl --user --boot=-1 --unit' # previous boot
     abbr jcboots 'sudo journalctl --list-boots'
 
     abbr jcs 'sudo journalctl --since "1min ago" --unit'
+    abbr jcus 'journactl --user --since "1min ago" --unit'
     abbr jck 'sudo journalctl -k' # kernel/dmesg
+    abbr jcuk 'journalctl --user -k'
 
     abbr jcf 'sudo journalctl --follow --unit'
+    abbr jcuf 'journalctl --user --follow --unit'
     abbr jcfa 'sudo journalctl --follow --no-tail --unit' # all lines + follow
+    abbr jcufa 'journalctl --user --follow --no-tail --unit' # all lines + follow
 
+    # AFAICT I don't need user equivalentsof rotate/vacuum
     # WIP - figure out what I want for cleanup, when testing I often wanna just clear all logs and try some activity to simplify looking at journalctl history, hence jcnuke
     abbr jcnuke 'sudo journalctl --rotate --vacuum-time=1s' # ~effectively rotate (archive all active journal files) then nuke (all archived journal files)
     abbr jcr 'sudo journalctl --rotate' # rotate (archive) all active journal files (new journal files going forward)
     abbr jcvs 'sudo journalctl --vacuum-size=100M' # vacuum logs to keep total size under 100M
+    #
     abbr jcdu 'sudo journalctl --disk-usage' # total disk usage
+    abbr jcud 'journalctl --user --disk-usage'
 end
 
 # *** containerd
