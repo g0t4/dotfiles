@@ -1998,6 +1998,14 @@ abbr man7 "$man_cmd 9"
 abbr mana "$man_cmd --all --regex" ## -a = all, -w = list path(s) open all matching pages
 abbr mank apropos # man -k ~= apropos
 abbr manf whatis # man -f == whatis
+#
+# * search all manpage text (preformatted files)
+#   not in macOS's man
+abbr man_grep "$man_cmd -K"
+abbr man_grep_list "$man_cmd -w -K"
+# i.e. gman -w -K autostash
+# note -K is slow, hence why by default it starts showing pages it finds so you can look at them while it searches (presumably it continues searching in bg?)
+#
 abbr manw "$man_cmd --where --regex" # man -w == whereis for man pages, or map to whereis?
 reminder_abbr man_list_all "$man_cmd --where --regex"
 abbr manbash "$man_cmd $HOME/repos/github/g0t4/bash/doc/bash.1"
