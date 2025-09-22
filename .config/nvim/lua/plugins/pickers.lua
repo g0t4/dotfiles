@@ -365,9 +365,7 @@ return {
                 return mode == "v" or mode == "V" or mode == "^V"
             end
 
-            function live_grep_consolidated(big_word, glob_arg)
-                glob_arg = glob_arg or ""
-
+            local function what_to_search_for(big_word)
                 local search_for = ""
                 if vim.fn.mode() == "n" then
                     search_for = vim.fn.expand(big_word and '<cWORD>' or '<cword>')
@@ -375,6 +373,13 @@ return {
                     vim.cmd("normal! \"cy")
                     search_for = vim.fn.getreg('c') or ""
                 end
+                return search_for
+            end
+
+            function live_grep_consolidated(big_word, glob_arg)
+                glob_arg = glob_arg or ""
+
+                local search_for = what_to_search_for(big_word)
 
                 require("telescope").extensions.live_grep_args.live_grep_args({
                     default_text = glob_arg .. sanitize_and_quote_rg_regex_arg(search_for)
