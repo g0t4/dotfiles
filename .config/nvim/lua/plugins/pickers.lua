@@ -393,6 +393,9 @@ return {
                 end
             end
 
+            vim.keymap.set({ 'n', 'v' }, '<leader>w', function() live_grep_consolidated(false) end)
+            vim.keymap.set({ 'n', 'v' }, '<leader>W', function() live_grep_consolidated(true) end)
+
             function live_grep_current_file(big_word)
                 local current_file_path = vim.fn.expand('%')
                 local glob_arg = "-g '" .. current_file_path .. "' "
@@ -410,10 +413,6 @@ return {
 
             vim.keymap.set({ 'n', 'v' }, '<leader>wt', function() live_grep_word_under_cursor_same_file_type(false) end)
             vim.keymap.set({ 'n', 'v' }, '<leader>Wt', function() live_grep_word_under_cursor_same_file_type(true) end)
-
-            -- use ww if I am impatient w.r.t. the delay b/c of wf keymap
-            vim.keymap.set({ 'n', 'v' }, '<leader>w', function() live_grep_consolidated(false) end)
-            vim.keymap.set({ 'n', 'v' }, '<leader>W', function() live_grep_consolidated(true) end)
         end,
     },
 
