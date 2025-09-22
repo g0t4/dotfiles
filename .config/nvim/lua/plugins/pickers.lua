@@ -365,7 +365,11 @@ return {
                 return mode == "v" or mode == "V" or mode == "^V"
             end
 
+            -- what is the user focused on?
+            -- selection or word under cursor!
             local function what_to_search_for(big_word)
+                -- TODO reuse this in other helpers!
+
                 if vim.fn.mode() == "n" then
                     return vim.fn.expand(big_word and '<cWORD>' or '<cword>')
                 end
