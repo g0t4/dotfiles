@@ -402,7 +402,7 @@ return {
             end
 
             vim.keymap.set({ 'n', 'v' }, '<leader>wf', function() live_grep_current_file(false) end)
-            vim.keymap.set({ 'n', 'v' }, '<leader>Wf', function() live_grep_current_file(true) end)
+            vim.keymap.set({ 'n', 'v' }, '<leader>WF', function() live_grep_current_file(true) end)
 
             function live_grep_word_under_cursor_same_file_type(big_word)
                 local buffers_file_extension = vim.fn.expand('%:e')
@@ -411,7 +411,7 @@ return {
             end
 
             vim.keymap.set({ 'n', 'v' }, '<leader>wt', function() live_grep_word_under_cursor_same_file_type(false) end)
-            vim.keymap.set({ 'n', 'v' }, '<leader>Wt', function() live_grep_word_under_cursor_same_file_type(true) end)
+            vim.keymap.set({ 'n', 'v' }, '<leader>WT', function() live_grep_word_under_cursor_same_file_type(true) end)
         end,
     },
 
