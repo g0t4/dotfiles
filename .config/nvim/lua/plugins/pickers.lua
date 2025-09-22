@@ -357,9 +357,11 @@ return {
                     -- in normal mode use word under cursor
                     local current_word = vim.fn.expand(big_word and '<cWORD>' or '<cword>')
                     local default_text = current_word
+                    local file_path_part = ""
                     if include_file_path then
-                        default_text = "-g '" .. current_file_path .. "' " .. current_word
+                        file_path_part = "-g '" .. current_file_path .. "' "
                     end
+                    default_text = file_path_part .. current_word
                     require("telescope").extensions.live_grep_args.live_grep_args({
                         default_text = default_text
                     })
@@ -384,10 +386,11 @@ return {
                         selected_text = "'" .. selected_text:gsub("'", "''") .. "'"
                     end
 
-                    local default_text = selected_text
+                    local file_path_part = ""
                     if include_file_path then
-                        default_text = "-g '" .. current_file_path .. "' " .. selected_text
+                        file_path_part = "-g '" .. current_file_path .. "' "
                     end
+                    local default_text = file_path_part .. selected_text
                     require("telescope").extensions.live_grep_args.live_grep_args({
                         default_text = default_text
                     })
