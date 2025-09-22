@@ -52,11 +52,12 @@ end
 if command -q systemctl
 
     abbr sc 'sudo systemctl'
-    abbr scu 'sudo systemctl --user'
+    abbr scu 'systemctl --user' # new
 
     abbr scm 'man systemd.index' # great entrypoint to systemd man pages
 
     abbr scs 'sudo systemctl status'
+    abbr scus 'systemctl --user status' # new
     abbr scstop 'sudo systemctl stop'
     abbr scstart 'sudo systemctl start'
     abbr screstart 'sudo systemctl restart'
