@@ -348,14 +348,8 @@ return {
             -- end, { desc = "Help grep, think :helpgrep but with telescope" })
 
 
-            function live_grep_consolidated(big_word, only_current_file)
+            function live_grep_consolidated(big_word, file_path_arg)
                 -- think of this as an alternative to / searching
-
-                local file_path_arg = ""
-                if only_current_file then
-                    local current_file_path = vim.fn.expand('%')
-                    file_path_arg = "-g '" .. current_file_path .. "' "
-                end
 
                 local mode = vim.fn.mode()
                 if mode == "n" then
@@ -396,17 +390,19 @@ return {
                 end
             end
 
-            vim.keymap.set({ 'n', 'v' }, '<leader>wf', function() live_grep_consolidated(false, true) end)
-            vim.keymap.set({ 'n', 'v' }, '<leader>Wf', function() live_grep_consolidated(true, true) end)
+            function live_grep_current_file(big_word)
+                local current_file_path = vim.fn.expand('%')
+                file_path_arg = "-g '" .. current_file_path .. "' "
+                live_grep_consolidated(big_word, file_path_arg)
+            end
+
+            vim.keymap.set({ 'n', 'v' }, '<leader>wf', function() live_grep_current_file(false) end)
+            vim.keymap.set({ 'n', 'v' }, '<leader>Wf', function() live_grep_current_file(true) end)
 
             function live_grep_word_under_cursor_same_file_type(big_word)
                 local buffers_file_extension = vim.fn.expand('%:e')
-                local current_word = vim.fn.expand(big_word and '<cWORD>' or '<cword>')
-
-                require("telescope").extensions.live_grep_args.live_grep_args({
-                    -- default_text = "-G " .. file_extension .. " '" .. current_word .. "'" -- ag
-                    default_text = "-g *." .. buffers_file_extension .. " " .. current_word .. "" -- rg
-                })
+                local file_path_arg = "-g '*." .. buffers_file_extension .. "' "
+                live_grep_consolidated(big_word, file_path_arg)
             end
 
             vim.keymap.set({ 'n', 'v' }, '<leader>wt', live_grep_word_under_cursor_same_file_type)
