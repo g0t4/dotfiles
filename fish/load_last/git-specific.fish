@@ -225,6 +225,7 @@ abbr gwtm "git worktree move"
 
 # rebasing
 abbr grb 'git rebase'
+abbr grbs 'git rebase --autostash'
 abbr grba 'git rebase --abort'
 abbr grbc 'git rebase --continue'
 abbr grbs 'git rebase --skip'
