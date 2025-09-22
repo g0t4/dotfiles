@@ -355,7 +355,9 @@ return {
 
             function sanitize_rg_regex(selected_text)
                 -- remove trailing newline, will blow up live grep
-                return selected_text:gsub("\n", "")
+                local regex = selected_text:gsub("\n", "")
+
+                return regex
             end
 
             function live_grep_consolidated(big_word, glob_arg)
