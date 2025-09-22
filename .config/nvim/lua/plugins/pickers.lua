@@ -372,7 +372,6 @@ return {
                     vim.cmd("normal! \"cy")
 
                     local selected_text = vim.fn.getreg('c') or ""
-                    if selected_text == "" then return end
 
                     -- remove trailing newline, will blow up live grep
                     selected_text = selected_text:gsub("\n", "")
