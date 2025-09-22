@@ -350,15 +350,35 @@ return {
 
             function live_grep_current_file_only(big_word)
                 -- think of this as an alternative to / searching
+                local current_file_path = vim.fn.expand('%')
 
                 local mode = vim.fn.mode()
                 if mode == "n" then
-                    local current_file_path = vim.fn.expand('%')
                     -- in normal mode use word under cursor
                     local current_word = vim.fn.expand(big_word and '<cWORD>' or '<cword>')
                     require("telescope").extensions.live_grep_args.live_grep_args({
                         default_text = "-g '" .. current_file_path .. "' " .. current_word .. "" -- rg
                     })
+                    return
+                end
+
+                local function is_any_visual_mode()
+                    local mode = vim.fn.mode()
+                    return mode == "v" or mode == "V" or mode == "^V"
+                end
+
+                if is_any_visual_mode() then
+                    vim.cmd("normal! \"cy")
+                    local selected_text = vim.fn.getreg('c') or ""
+                    if selected_text == "" then return end
+
+                    -- remove trailing newline, will blow up live grep
+                    selected_text = selected_text:gsub("\n", "")
+
+                    require("telescope").extensions.live_grep_args.live_grep_args({
+                        default_text = "-g '" .. current_file_path .. "' " .. selected_text .. "" -- rg
+                    })
+
                     return
                 end
             end
