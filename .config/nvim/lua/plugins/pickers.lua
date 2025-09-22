@@ -412,16 +412,9 @@ return {
             vim.keymap.set({ 'n', 'v' }, '<leader>wt', live_grep_word_under_cursor_same_file_type)
             vim.keymap.set({ 'n', 'v' }, '<leader>Wt', function() live_grep_word_under_cursor_same_file_type(true) end)
 
-
-            function live_grep_word_under_cursor(big_word)
-                require("telescope").extensions.live_grep_args.live_grep_args({
-                    default_text = vim.fn.expand(big_word and '<cWORD>' or '<cword>'),
-                })
-            end
-
             -- use ww if I am impatient w.r.t. the delay b/c of wf keymap
-            vim.keymap.set({ 'n', 'v' }, '<leader>w', live_grep_word_under_cursor)
-            vim.keymap.set({ 'n', 'v' }, '<leader>W', function() live_grep_word_under_cursor(true) end)
+            vim.keymap.set({ 'n', 'v' }, '<leader>w', function() live_grep_consolidated(false) end)
+            vim.keymap.set({ 'n', 'v' }, '<leader>W', function() live_grep_consolidated(true) end)
         end,
     },
 
