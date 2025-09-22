@@ -349,15 +349,20 @@ return {
 
             ---@param str string
             ---@return string
-            function quote_for_fish_shell(str)
+            local function quote_for_fish_shell(str)
                 return "'" .. str:gsub("'", "\\'") .. "'"
             end
 
-            function sanitize_and_quote_rg_regex_arg(selected_text)
+            local function sanitize_and_quote_rg_regex_arg(selected_text)
                 -- remove trailing newline, will blow up live grep
                 local regex = selected_text:gsub("\n", "")
                 regex = quote_for_fish_shell(regex)
                 return regex
+            end
+
+            local function is_any_visual_mode()
+                local mode = vim.fn.mode()
+                return mode == "v" or mode == "V" or mode == "^V"
             end
 
             function live_grep_consolidated(big_word, glob_arg)
@@ -367,11 +372,6 @@ return {
                 if vim.fn.mode() == "n" then
                     -- in normal mode use word under cursor
                     search_for = vim.fn.expand(big_word and '<cWORD>' or '<cword>')
-                end
-
-                local function is_any_visual_mode()
-                    local mode = vim.fn.mode()
-                    return mode == "v" or mode == "V" or mode == "^V"
                 end
 
                 if is_any_visual_mode() then
