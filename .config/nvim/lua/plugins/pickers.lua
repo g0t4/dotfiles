@@ -375,6 +375,11 @@ return {
                     -- remove trailing newline, will blow up live grep
                     selected_text = selected_text:gsub("\n", "")
 
+                    -- if selected text has space in it, then wrap it in quotes... and escape any instances of the quoted character
+                    if selected_text:find(" ") then
+                        selected_text = "'" .. selected_text:gsub("'", "''") .. "'"
+                    end
+
                     require("telescope").extensions.live_grep_args.live_grep_args({
                         default_text = "-g '" .. current_file_path .. "' " .. selected_text .. "" -- rg
                     })
