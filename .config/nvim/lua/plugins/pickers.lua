@@ -372,9 +372,7 @@ return {
                 if vim.fn.mode() == "n" then
                     -- in normal mode use word under cursor
                     search_for = vim.fn.expand(big_word and '<cWORD>' or '<cword>')
-                end
-
-                if is_any_visual_mode() then
+                elseif is_any_visual_mode() then
                     vim.cmd("normal! \"cy")
                     search_for = vim.fn.getreg('c') or ""
                 end
