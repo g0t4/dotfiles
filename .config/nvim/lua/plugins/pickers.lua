@@ -391,6 +391,8 @@ return {
 
                     return
                 end
+
+                error("unexpected mode: " .. mode)
             end
 
             vim.keymap.set({ 'n', 'v' }, '<leader>w', function() live_grep_consolidated(false) end)
