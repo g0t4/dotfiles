@@ -370,7 +370,6 @@ return {
 
                 local search_for = ""
                 if vim.fn.mode() == "n" then
-                    -- in normal mode use word under cursor
                     search_for = vim.fn.expand(big_word and '<cWORD>' or '<cword>')
                 elseif is_any_visual_mode() then
                     vim.cmd("normal! \"cy")
