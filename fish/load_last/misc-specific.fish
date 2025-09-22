@@ -75,18 +75,18 @@ if command -q systemctl
     abbr sclss 'sudo systemctl list-sockets'
     abbr sclsd 'sudo systemctl list-dependencies'
 
-    abbr jc 'sudo journalctl -u'
-    abbr jcu 'sudo journalctl --user-unit'
+    abbr jc 'sudo journalctl --unit'
+    abbr jcu 'sudo journalctl --user --unit'
 
-    abbr jcb 'sudo journalctl --boot -u' # current boot
-    abbr jcb1 'sudo journalctl --boot=-1 -u' # previous boot
+    abbr jcb 'sudo journalctl --boot --unit' # current boot
+    abbr jcb1 'sudo journalctl --boot=-1 --unit' # previous boot
     abbr jcboots 'sudo journalctl --list-boots'
 
-    abbr jcs 'sudo journalctl --since "1min ago" -u'
+    abbr jcs 'sudo journalctl --since "1min ago" --unit'
     abbr jck 'sudo journalctl -k' # kernel/dmesg
 
-    abbr jcf 'sudo journalctl --follow -u'
-    abbr jcfa 'sudo journalctl --follow --no-tail -u' # all lines + follow
+    abbr jcf 'sudo journalctl --follow --unit'
+    abbr jcfa 'sudo journalctl --follow --no-tail --unit' # all lines + follow
 
     # WIP - figure out what I want for cleanup, when testing I often wanna just clear all logs and try some activity to simplify looking at journalctl history, hence jcnuke
     abbr jcnuke 'sudo journalctl --rotate --vacuum-time=1s' # ~effectively rotate (archive all active journal files) then nuke (all archived journal files)
