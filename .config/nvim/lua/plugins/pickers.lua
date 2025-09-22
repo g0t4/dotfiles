@@ -408,7 +408,7 @@ return {
                 live_grep_consolidated(big_word, glob_arg)
             end
 
-            vim.keymap.set({ 'n', 'v' }, '<leader>wt', live_grep_word_under_cursor_same_file_type)
+            vim.keymap.set({ 'n', 'v' }, '<leader>wt', function() live_grep_word_under_cursor_same_file_type(false) end)
             vim.keymap.set({ 'n', 'v' }, '<leader>Wt', function() live_grep_word_under_cursor_same_file_type(true) end)
 
             -- use ww if I am impatient w.r.t. the delay b/c of wf keymap
