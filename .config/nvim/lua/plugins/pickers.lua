@@ -376,7 +376,6 @@ return {
                 return ""
             end
 
-
             function live_grep_consolidated(big_word, glob_arg)
                 glob_arg = glob_arg or ""
 
