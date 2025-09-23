@@ -1123,6 +1123,15 @@ EOF
         video_editing_just_shift_to_mp4_one_video
         video_editing_total_duration
 
+        cd_dir_of_man_page
+        cd_dir_of_brew_pkg
+        gh_repo_create_private
+        gh_repo_create_public
+
+        trash_n_tail
+        viddy
+        ols_qwen_debug
+
         wcl
         prd
         # pwd # not yet for course
