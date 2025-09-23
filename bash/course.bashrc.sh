@@ -1,5 +1,3 @@
-# [[ -n "$WES_TRACE_STARTUP" ]] && (IFS="<" echo "sourcing ${BASH_SOURCE[*]}")
-
 # ! KEEP THIS FILE MINIMAL, only critical, early config should be in here
 
 # # * uncomment for xtrace-ing (fyi.. can inherit path from outer shell)

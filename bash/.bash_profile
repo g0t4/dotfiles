@@ -1,5 +1,3 @@
-# [[ -n "$WES_TRACE_STARTUP" ]] && (IFS="<" echo "sourcing ${BASH_SOURCE[*]}")
-
 # this is sourced for login shells only
 #  bash --login/-l
 #  intended for one-time setup
