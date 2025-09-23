@@ -31,6 +31,23 @@ export LESS_TERMCAP_us=(echo -e '\e[1;4;31m')
 #export LESS_TERMCAP_ZW=$(tput rsupm)
 #export GROFF_NO_SGR=1         # For Konsole and Gnome-terminal
 
+# TODO! look more into the color differences / approaches, for now I have to get back to some other work
+#   TLDR the following works but is not well understood yet (by me)
+# "fix" for man to use colors like LESS_TERMCAP_** above on my arch linux box
+#  also should fix gman on macOS
+test $IS_LINUX && export MANROFFOPT='-c'
+test $IS_LINUX && export MANPAGER='less -R -Dk+g -Dd+g -Du+r -Ds+235.11'
+#  by the way I mapped my LESS_TERMCAP settings above to these -D* options
+#  -Dk (k=blinking) => 4bit color, g = green
+#    by the way G would be bright green
+#  -Db (b=bold) => 4bit color, g = green
+#  -Du (u=underline) => 4bit color, r = red
+#  -Ds targets standout text
+#     + in front means keep bold (standout) style in this case (the default format)
+#     235.11 is 8 bit color
+#  see man less
+#  https://man7.org/linux/man-pages/man1/less.1.html (I have highlights here)
+
 export PAGER="less"
 
 export WATCH_INTERVAL=0.5  # default to half second so I dont have to pass watch -n0.5!!!! # confirm by run watch cmd and see upper left what interval is
