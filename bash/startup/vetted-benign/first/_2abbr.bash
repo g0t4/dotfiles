@@ -1130,7 +1130,9 @@ EOF
 
         trash_n_tail
         viddy
+        ols_qwen
         ols_qwen_debug
+        venv_status
 
         wcl
         prd
