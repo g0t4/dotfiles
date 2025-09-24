@@ -1,0 +1,17 @@
+snippet test_describe_it "test category with case"
+describe('${1:category}', () => {
+    it('${2:test}', () => {
+        ${0}
+    });
+});
+
+snippet test_it "test case"
+it('${1:test}', () => {
+    ${0}
+});
+
+
+# FYI ok to remove this if not being used
+snippet test_it_arrow "oneliner, assert only arrow function - i.e for parameterized tests"
+it('${2:TEST}', () => ${0:assert.equal(a,b)});
+
