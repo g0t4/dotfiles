@@ -39,10 +39,7 @@ function ScreenPalEditorWindow:new()
     local editor_window = {}
     setmetatable(editor_window, self)
     self.__index = self
-    self.app = get_screenpal_app_element_or_throw()
-    self.windows = AppWindows.new(self.app)
-    self.win = self.windows:editor_window_or_throw()
-
+    self:_force_refresh_windows()
     return editor_window
 end
 
@@ -56,9 +53,20 @@ function get_cached_editor_window()
     return _cached_editor_window
 end
 
+function ScreenPalEditorWindow:_force_refresh_windows()
+    self.app = get_screenpal_app_element_or_throw()
+    self.windows = AppWindows.new(self.app)
+    self.win = self.windows:editor_window_or_throw()
+end
+
 --- make sure controls are valid, if not re-aquire references
 function ScreenPalEditorWindow:ensure_cached_controls(force)
-    print("window valid?", self.win:isValid()) -- NOTE this is not valid (nil) when need reload everything so do that instead
+    print("window valid? A ", self.win:isValid()) -- NOTE this is not valid (nil) when need reload everything so do that instead
+    if not self.win:isValid() then
+        print("*** REFRESH WINDOWS *** - self.win is NOT VALID")
+        self:_force_refresh_windows()
+    end
+    print("window valid? B ", self.win:isValid()) -- NOTE this is not valid (nil) when need reload everything so do that instead
     if not force and self._cached_buttons then
         -- TODO FYI not all controls are invalidated at the same time
         --   when a control changes then it's typically invalid...
@@ -72,7 +80,7 @@ function ScreenPalEditorWindow:ensure_cached_controls(force)
     end
     print("building editor window")
     self:force_refresh_cached_controls()
-    print("window valid?", self.win:isValid())
+    print("window valid? C ", self.win:isValid())
 end
 
 function ScreenPalEditorWindow:force_refresh_cached_controls()
