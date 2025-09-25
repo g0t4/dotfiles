@@ -63,6 +63,9 @@ end
 function ScreenPalEditorWindow:ensure_cached_controls(force)
     print("window valid? A ", self.win:isValid()) -- NOTE this is not valid (nil) when need reload everything so do that instead
     if not self.win:isValid() then
+        -- TODO review if this is the best spot for this refresh?
+        --   I just ran a test of this with SPAL restart which triggers invalid window references... and it successfully detected that and refreshed the refs
+        -- TODO review if this check needs added elsewhere?
         print("*** REFRESH WINDOWS *** - self.win is NOT VALID")
         self:_force_refresh_windows()
     end
