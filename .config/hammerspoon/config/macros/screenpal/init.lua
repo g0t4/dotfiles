@@ -58,6 +58,7 @@ end
 
 --- make sure controls are valid, if not re-aquire references
 function ScreenPalEditorWindow:ensure_cached_controls(force)
+    print("window valid?", self.win:isValid()) -- NOTE this is not valid (nil) when need reload everything so do that instead
     if not force and self._cached_buttons then
         -- TODO FYI not all controls are invalidated at the same time
         --   when a control changes then it's typically invalid...
@@ -71,6 +72,7 @@ function ScreenPalEditorWindow:ensure_cached_controls(force)
     end
     print("building editor window")
     self:force_refresh_cached_controls()
+    print("window valid?", self.win:isValid())
 end
 
 function ScreenPalEditorWindow:force_refresh_cached_controls()
