@@ -71,7 +71,7 @@ return {
                         { "progress", padding = { right = 1 } },
                     },
                     lualine_z = {
-                        { workspace_name, }
+                        -- { workspace_name, } -- FYI moved to tabline, move back here if I remove tabline
                     },
                     -- search shows #/total in commandline so don't need that here
                 },
@@ -122,8 +122,11 @@ return {
                     lualine_b = {},
                     lualine_c = {},
                     lualine_x = {},
-                    lualine_y = {},
+                    lualine_y = {
+                        -- 'lsp_status'
+                    },
                     lualine_z = {
+                        -- { 'searchcount' },
                         { workspace_name },
                     },
                 }
