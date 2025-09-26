@@ -35,12 +35,12 @@ end
 
 local function tabline_visible()
     local show = vim.o.showtabline -- 2 == always, 1 == only > 1 tab, 0 == never
-    local never_show = show == 0
-    if never_show then
+    local never_show_tabline = show == 0
+    if never_show_tabline then
         return false
     end
-    local always_show = show == 2
-    if always_show then
+    local always_show_tabline = show == 2
+    if always_show_tabline then
         return true
     end
     -- only visible when 2+ tabs
