@@ -178,6 +178,14 @@ vim.api.nvim_create_autocmd("FileType", {
 
 vim.api.nvim_create_autocmd("FileType", {
     group = "filetypemods",
+    pattern = "systemd",
+    callback = function()
+        vim.bo.commentstring = "# %s"
+    end,
+})
+
+vim.api.nvim_create_autocmd("FileType", {
+    group = "filetypemods",
     pattern = "markdown",
     callback = function()
         -- FYI `vim.opt_local` (lua) == `setlocal` (vimscript)
