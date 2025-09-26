@@ -33,6 +33,28 @@ local function workspace_name()
     return name
 end
 
+local function tabline_visible()
+    local show = vim.o.showtabline -- 2 == always, 1 == only > 1 tab, 0 == never
+    local never_show = show == 0
+    if never_show then
+        return false
+    end
+    local always_show = show == 2
+    if always_show then
+        return true
+    end
+    -- only visible when 2+ tabs
+    local tab_count = #vim.api.nvim_list_tabpages()
+    return tab_count > 1
+end
+
+local function workspace_name_when_tabline_is_hidden()
+    if tabline_visible() then
+        return ""
+    end
+    return workspace_name()
+end
+
 
 return {
     {
@@ -72,7 +94,7 @@ return {
                         { "progress", padding = { right = 1 } },
                     },
                     lualine_z = {
-                        -- { workspace_name, } -- FYI moved to tabline, move back here if I remove tabline
+                        { workspace_name_when_tabline_is_hidden },
                     },
                     -- search shows #/total in commandline so don't need that here
                 },
