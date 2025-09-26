@@ -40,7 +40,6 @@ return {
         dependencies = { 'nvim-tree/nvim-web-devicons' },
         -- TODO consider "kyazdani42/nvim-web-devicons" (lua rewrite) if some reaosn to do so, i.e. perf? or other forks?
         config = function()
-
             require("lualine").setup {
                 options = {
                     -- separators waste space!
@@ -104,11 +103,20 @@ return {
                     lualine_a = {
                         -- https://github.com/nvim-lualine/lualine.nvim#tabs-component-options
                         { "tabs",
-                            mode    = 1,
+                            mode            = 1,
+                            use_mode_colors = true,
                             -- component_separators = { left = '', right = '' },
                             -- section_separators   = { left = '', right = '' },
-                            path    = 0,
-                            symbols = { modified = '+', },
+                            path            = 0,
+                            symbols         = { modified = '+', },
+
+                            fmt             = function(name, context)
+                                -- add icon to left of active filename (per tab)
+                                local devicons = require('nvim-web-devicons')
+                                local icon, _ = devicons.get_icon(name, nil, { default = true })
+                                return icon .. ' ' .. name
+                            end
+
                         }
                     },
                     lualine_b = {},
