@@ -33,6 +33,7 @@ return {
             require('non-plugins.misc')
             require('non-plugins.keymaps')
             require('non-plugins.spal_repl_client')
+            require("non-plugins.nvr-focused")
         end,
     },
     -- -- FYI tested that I can have a second plugin with same dir and it works too
