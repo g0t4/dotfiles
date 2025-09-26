@@ -48,8 +48,9 @@ local function tabline_visible()
     return tab_count > 1
 end
 
-local function workspace_name_when_tabline_is_hidden()
+local function workspace_name_for_statusline()
     if tabline_visible() then
+        -- tabline also has workspace_name, so skip it for status line
         return ""
     end
     return workspace_name()
@@ -94,7 +95,7 @@ return {
                         { "progress", padding = { right = 1 } },
                     },
                     lualine_z = {
-                        { workspace_name_when_tabline_is_hidden },
+                        { workspace_name_for_statusline },
                     },
                     -- search shows #/total in commandline so don't need that here
                 },
