@@ -69,7 +69,7 @@ return {
                     section_separators = "",
                     component_separators = "",
                     theme = require("plugins.lualine.theme").theme(),
-                    always_show_tabline = false,
+                    -- always_show_tabline = false,
                 },
                 sections = {
                     -- commandline shows mode already so why put it here too? plus lualine has color changes
@@ -95,7 +95,7 @@ return {
                         { "progress", padding = { right = 1 } },
                     },
                     lualine_z = {
-                        { workspace_name_for_statusline },
+                        -- { workspace_name_for_statusline },
                     },
                     -- search shows #/total in commandline so don't need that here
                 },
