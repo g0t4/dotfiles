@@ -111,10 +111,46 @@ return {
                             lualine_a = { statusline_nvim_tree },
                         },
                     }
+                },
+
+                -- winbar = {}, inactive_winbar = {} -- basically can have status line at top of window (too or instead)
+
+                tabline = {
+                    lualine_a = {
+                        -- https://github.com/nvim-lualine/lualine.nvim#tabs-component-options
+                        { "tabs",
+                            mode    = 1,
+                            -- component_separators = { left = '', right = '' },
+                            -- section_separators   = { left = '', right = '' },
+                            path    = 0,
+                            symbols = { modified = '+', },
+                        }
+                    },
+                    lualine_b = {},
+                    lualine_c = {},
+                    lualine_x = {},
+                    lualine_y = {},
+                    lualine_z = {
+                        { workspace_name },
+                    },
                 }
             }
         end,
-        -- Notes:
-        -- - onedarkpro supports lualine OOB
     },
+
+    -- {
+    --     "akinsho/bufferline.nvim",
+    --     dependencies = {
+    --         "nvim-tree/nvim-web-devicons",
+    --     },
+    --     opts = {
+    --         options = {
+    --             mode = "tabs", -- show tabs instead of buffers, for now this is my preference
+    --             -- TODO try using bufferline in the future, see how I feel about it... I suspect I want tabs
+    --             --   BTW, has groups concept to group buffers, but that seems to be back to tabs? would be across tabs though (IIUC)
+    --             -- separator_style= "padded_slant" -- too much space wasted but iTerm2 appears to need padded :(
+    --         },
+    --     },
+    -- }
+
 }
