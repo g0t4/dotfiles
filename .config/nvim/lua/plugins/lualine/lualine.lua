@@ -1,3 +1,4 @@
+local cached = {}
 return {
     {
         "nvim-lualine/lualine.nvim",
@@ -25,13 +26,18 @@ return {
             end
 
             local function workspace_name()
-                -- wait to show more (above) the CWD, but I suspect I might want to see a github org/repo name... not sure... could I check what other instances of nvim are running and if two have diff CWDs but same last component then show dir above? i.e. open upstream + fork at same time (again, wait to be confused before adding any of this)
-                local dir_name = vim.fn.fnamemodify(vim.fn.getcwd(), ":t")
-                if dir_name == "course-python-functions-modules" then
-                    -- name s/b short in statusline... and fullname is something I avoid showing so course name can change if need be
-                    return "course"
+                -- PRN compute on startup so this func isn't even called?
+                if cached.workspace_name then
+                    return cached.workspace_name
                 end
-                return dir_name
+
+                -- TODO if in a git repo, show org/repo
+                local name = vim.fn.fnamemodify(vim.fn.getcwd(), ":t") -- ~ 20us
+                if name == "course-bash" then
+                    name = "course"
+                end
+                cached.workspace_name = name
+                return name
             end
 
             require("lualine").setup {
@@ -78,8 +84,6 @@ return {
                         { "progress", padding = { right = 1 } },
                     },
                     lualine_z = {
-                        -- PRN if a github repo, show org dir too (one above worskpace)... like I do in fish shell prompt now
-                        --  perhaps truncate it if there's not enough space for other components (or mark deprioritzed)
                         { workspace_name, }
                     },
                     -- search shows #/total in commandline so don't need that here
