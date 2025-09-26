@@ -46,6 +46,7 @@ return {
                     section_separators = "",
                     component_separators = "",
                     theme = require("plugins.lualine.theme").theme(),
+                    always_show_tabline = false,
                 },
                 sections = {
                     -- commandline shows mode already so why put it here too? plus lualine has color changes
@@ -127,7 +128,7 @@ return {
                     },
                     lualine_z = {
                         -- { 'searchcount' },
-                        { workspace_name },
+                        { workspace_name }, -- only issue is if I don't want tab bar always visible (i.e. only one open tab)... then I lose this
                     },
                 }
             }
