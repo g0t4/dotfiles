@@ -211,6 +211,12 @@
     //
     // FYI another persons' config: https://raw.githubusercontent.com/oppara/dotfiles/611ea809e380d5b4e3e374568a85e52e744a429e/config/nvim/coc-settings.json
     "languageserver": {
+        "systemd": {
+            "command": "systemd-lsp",
+            "args": [ ],
+            "filetypes": [ "systemd" ],
+            "rootPatterns": [ ] // I mostly need this for unit files, which don't have the concept of a root project file
+        },
 
         // *** awk
         // https://github.com/Beaglefoot/awk-language-server
