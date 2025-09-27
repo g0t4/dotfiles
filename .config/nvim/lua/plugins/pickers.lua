@@ -381,6 +381,10 @@ return {
                 return ""
             end
 
+            function press_left()
+                vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<left>", true, false, true), "n", false)
+            end
+
             function live_grep_consolidated(big_word, glob_arg)
                 glob_arg = glob_arg or ""
 
@@ -389,6 +393,8 @@ return {
                 require("telescope").extensions.live_grep_args.live_grep_args({
                     default_text = glob_arg .. sanitize_and_quote_rg_regex_arg(search_for)
                 })
+                vim.schedule(press_left) -- so far, no delay is needed
+                -- I'd like to move the cursor one right so I am inside the quotes
             end
 
             vim.keymap.set({ 'n', 'v' }, '<leader>w', function() live_grep_consolidated(false) end)
