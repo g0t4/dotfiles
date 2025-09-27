@@ -127,7 +127,7 @@ return {
                     lualine_a = {
                         -- https://github.com/nvim-lualine/lualine.nvim#tabs-component-options
                         { "tabs",
-                            mode            = 1,
+                            mode            = 2, -- 0=tab_nr,1=tab_name,2=tab_nr+tab_name
                             use_mode_colors = true,
                             -- component_separators = { left = '', right = '' },
                             -- section_separators   = { left = '', right = '' },
