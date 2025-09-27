@@ -461,24 +461,18 @@ return {
             vim.keymap.set('n', '<leader>s', function()
                 -- TODO add a <leader>si/sg maybe... open with -i on front plus current word? or -g "*filetype*" already in there?
                 --   TODO OR... add abbreviations specific to JUST the live_grep window to expand these for me
-                -- FYI! live grep args is  finnicky arg parsing...
-                --  You would think these would do the same thing:
+                -- FYI! live grep args is particular about arg parsing
+                --  these do not do the same thin:
                 --    "vimgrep" -g "*lua*"
                 --    vimgrep -g "*lua*"
                 --    -g "*lua*" vimgrep
                 --    the first and last work, the middle is treated as one giant content match arg! hence it doesn't work
                 --  start with '/"/- to have it parse and use args to ag/rg command
                 --  ALSO, remember with rg, it uses a glob for the file path match
-                --    so no partial matches
-                --    you have to do -g "*lua*" not `-g lua` which SUCKS but w/e
-                --  PRN rewrite this extension to behave more logically how I'd prefer it?
+                --    so, no partial matches
+                --    you have to do -g "*lua*" not `-g lua`
                 require("telescope").extensions.live_grep_args.live_grep_args()
             end, { desc = "Live grep with custom args or empty search query" })
-            --
-            -- UMM... to_fuzzy_refine is not in the codebase?!
-            -- vim.keymap.set('n', '<C-space>', function()
-            --     require("telescope-live-grep-args.actions").to_fuzzy_refine()
-            -- end, { desc = "freeze test" })
         end,
     },
 
