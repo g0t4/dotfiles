@@ -139,16 +139,17 @@ return {
                                 local devicons = require('nvim-web-devicons')
                                 local icon, _ = devicons.get_icon(name, nil, { default = true })
                                 return icon .. ' ' .. name
-                            end
-
-                        }
+                            end,
+                            -- allow stretching full width of screen (tabline) => else limited to left half (ish) and scrolls in an ugly way
+                            max_length = vim.o.columns - 1,
+                        },
                     },
-                    lualine_b = {},
-                    lualine_c = {},
-                    lualine_x = {},
-                    lualine_y = {
-                        -- 'lsp_status'
-                    },
+                    -- lualine_b = {},
+                    -- lualine_c = {},
+                    -- lualine_x = {},
+                    -- lualine_y = {
+                    --     -- 'lsp_status'
+                    -- },
                     lualine_z = {
                         -- { 'searchcount' },
                         { workspace_name }, -- only issue is if I don't want tab bar always visible (i.e. only one open tab)... then I lose this
