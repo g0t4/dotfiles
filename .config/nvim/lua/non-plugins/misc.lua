@@ -79,19 +79,34 @@ function show_variable_in_float(var_content)
     })
 end
 
--- *** help customization
 -- print(_G["setup_workspace"])
 -- if type(_G["setup_workspace"]) ~= "function" then
 --     vim.notify "setup_workspace should be defined (so that session is restored before loading misc.lua), else help windows will be rearranged (to the right) when they are restored"
 -- end
-vim.cmd [[
-    " * vertical split help:
-    " cabbrev <expr> h getcmdtype() == ':' && getcmdline() == 'h' ? 'vert h' : 'h'
-    " * full-screen, new tab help (default now):
-    cnoreabbrev <expr> h getcmdtype() == ':' && getcmdline() == 'h' ? 'tab h' : 'h'
-    "   + vh when I want vertical split for help
-    cnoreabbrev <expr> vh getcmdtype() == ':' && getcmdline() == 'vh' ? 'vert h' : 'vh'
-]]
+
+-- *** help customization
+vim.cmd.cnoreabbrev({ "<expr>", "h", "v:lua.abbrev_h()" })
+function abbrev_h()
+    -- new tab for help
+    local cmdtype = vim.fn.getcmdtype()
+    local cmdline = vim.fn.getcmdline()
+    if cmdtype == ":" and cmdline == "h" then
+        return 'tab h'
+    else
+        return 'h'
+    end
+end
+
+vim.cmd.cnoreabbrev({ "<expr>", "vh", "v:lua.abbrev_vh()" })
+function abbrev_vh()
+    local cmdtype = vim.fn.getcmdtype()
+    local cmdline = vim.fn.getcmdline()
+    if cmdtype == ":" and cmdline == "vh" then
+        return 'vert h'
+    else
+        return 'vh'
+    end
+end
 
 -- *** win splits
 -- vim.opt.splitbelow = true -- i.e. help opens below then
