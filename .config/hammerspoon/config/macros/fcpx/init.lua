@@ -81,19 +81,45 @@ function FcpxFindInspectorPanelViaTitleCheckbox(callback)
     end)
 end
 
-function FcpxTitlePanelFocusOnElementByAttr(attrName, attrValue)
+function FcpxTitlePanelFocusOnElementByAttr(attrName, attrValue, callback)
     FcpxFindInspectorPanelViaTitleCheckbox(function(inspector_panel)
         -- if static path fails here, search might work...
         local scrollarea1 = inspector_panel:attributeValue("AXChildren")[1][1][1]
-        GetChildWithAttr(scrollarea1, attrName, attrValue):setAttributeValue("AXFocused", true)
+        local elem = GetChildWithAttr(scrollarea1, attrName, attrValue)
+        elem:setAttributeValue("AXFocused", true)
+        if callback then callback(elem) end
     end)
 end
 
-function FcpxTitlePanelFocusOnElementByDescription(description)
+function FcpxTitlePanelFocusOnElementByDescription(description, callback)
     -- FYI it is ok to just assume the control is there, it will mostly just work and when it doesn't then I can troubleshoot
     --    that is how most of my applescripts work too!
     --    LATER, PRN, I can develop automatic troubleshooting too... even when using these presumptive [1][1][2] et
-    FcpxTitlePanelFocusOnElementByAttr("AXDescription", description)
+    FcpxTitlePanelFocusOnElementByAttr("AXDescription", description, callback)
+end
+
+function FcpxTitlePanelChangeElemValue(delta, description)
+    FcpxTitlePanelFocusOnElementByDescription(description, function(elem)
+        local val = elem:axValue()
+        local new_value = tonumber(val) + tonumber(delta)
+        local rounded_three_decimals = string.format("%.3f", new_value)
+        print(rounded_three_decimals)
+
+        -- seems slightly faster to type the new value? both work:
+        -- elem:setAttributeValue("AXValue", rounded_three_decimals)
+        hs.eventtap.keyStrokes(rounded_three_decimals) -- type it in! (and it will be "read" by the app as the new value)
+
+        -- w/o return it will not preview the changes, also needed to type over the value again next time I call this
+        hs.eventtap.keyStroke({}, "return")
+    end)
+end
+
+function FcpxTitlePanelFocusOnXWidth()
+    FcpxTitlePanelFocusOnElementByDescription("x scrubber")
+end
+
+function FcpxTitlePanelFocusOnYHeight()
+    FcpxTitlePanelFocusOnElementByDescription("y scrubber")
 end
 
 function TestBack2BackElementSearch()
