@@ -87,10 +87,11 @@ end
 -- *** help customization
 vim.cmd.cnoreabbrev({ "<expr>", "h", "v:lua.abbrev_h()" })
 function abbrev_h()
-    -- new tab for help
     local cmdtype = vim.fn.getcmdtype()
     local cmdline = vim.fn.getcmdline()
-    if cmdtype == ":" and cmdline == "h" then
+    local not_in_a_help_window = vim.bo.buftype ~= "help"
+    -- TODO should I expand the condition to be not_any_help_window_in_current_tab?
+    if cmdtype == ":" and cmdline == "h" and not_in_a_help_window then
         return 'tab h'
     else
         return 'h'
@@ -101,7 +102,9 @@ vim.cmd.cnoreabbrev({ "<expr>", "vh", "v:lua.abbrev_vh()" })
 function abbrev_vh()
     local cmdtype = vim.fn.getcmdtype()
     local cmdline = vim.fn.getcmdline()
-    if cmdtype == ":" and cmdline == "vh" then
+    local not_in_a_help_window = vim.bo.buftype ~= "help"
+    -- TODO should I expand the condition to be not_any_help_window_in_current_tab?
+    if cmdtype == ":" and cmdline == "vh" and not_in_a_help_window then
         return 'vert h'
     else
         return 'vh'
