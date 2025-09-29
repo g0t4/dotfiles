@@ -120,8 +120,11 @@
 
     // *** prettier - so far, for markdown only
     // "prettier.formatterPriority": -1, // make prettier the fallback formatter (works but not needed as I can just disable it here:)
-    "prettier.disableLanguages": [ "json", "markdown", "yaml", ], // *** using coc-json formatter for now
+    "prettier.disableLanguages": [ "json", "markdown", "yaml", "typescript", ], // *** using coc-json formatter for now
     "prettier.tabWidth": 4,
+
+    // *** tsserver has own formatter (if prettier is disabled for typescript--see above)
+    "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": true, // default is false, YUCK!
 
     // *** markdown:
     // markdownlint - for diagnostics
