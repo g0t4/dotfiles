@@ -1,3 +1,5 @@
 # global gitignore
 .DS_Store
 .rag/
+
+**/.claude/settings.local.json
