@@ -1,0 +1,36 @@
+# gsed --debug output colorization
+
+# SED PROGRAM: header
+regexp=^SED PROGRAM:
+colors=bright_yellow
+-
+
+# INPUT: lines (with file and line number)
+regexp=^(INPUT:)(\s+)('.*')(\s+)(line \d+)
+colors=bright_cyan,unchanged,bright_blue,unchanged,bright_black
+-
+
+# PATTERN: lines (the actual content being processed)
+regexp=^(PATTERN:)(.*)
+colors=bright_green,default
+-
+
+# COMMAND: lines (sed commands being executed)
+regexp=^(COMMAND:)(.*)
+colors=bright_magenta,magenta
+-
+
+# END-OF-CYCLE: marker
+regexp=^END-OF-CYCLE:
+colors=bright_black
+-
+
+# MATCHED regex lines (if any)
+regexp=^MATCHED regex
+colors=bright_yellow
+-
+
+# HOLD: lines (hold space content)
+regexp=^(HOLD:)(.*)
+colors=yellow,default
+-
