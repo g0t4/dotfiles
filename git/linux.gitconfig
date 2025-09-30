@@ -30,6 +30,7 @@
 	editor = nvim
 	autocrlf = input
 	# https://git-scm.com/book/en/v2/Customizing-Git-Git-Configuration#_core_autocrlf
+	pager = delta
 
 [diff]
 	algorithm = histogram
@@ -81,9 +82,16 @@
 
 #### END diff-so-fancy ####
 
-
-# *** delta ***
 [delta]
+    side-by-side = true
+    line-numbers = true
+    line-numbers-left-style = blue
+    line-numbers-right-style = cyan
+    file-style = bold yellow
+    wrap-max-lines = 0
+    wrap-lines = false
+    navigate = true
+    zero-style = omit
     # see all config options (default values too):
     #   delta --show-config
     # test with:
@@ -107,7 +115,11 @@
     plus-emph-style = "normal 162" # ansi 256 color value
     # match this to GREP_COLOR!
 
-# *** end delta ***
+[interactive]
+	diffFilter = delta --color-only
 
 [merge]
 	tool = nvimdiff
+
+	# delta recommended zdiff3:
+	conflictStyle = zdiff3
