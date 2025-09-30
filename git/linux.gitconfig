@@ -11,21 +11,6 @@
 	interactive = auto
 	status = auto
 
-[color "diff-highlight"]
-	oldNormal = red bold # I really like bold for changes
-	oldHighlight = red bold 52
-	newNormal = green bold
-	newHighlight = green bold 22
-
-[color "diff"]
-	meta = 11
-	frag = magenta bold
-	commit = yellow bold
-	old = red bold
-	new = green bold
-	whitespace = red reverse
-	func = 146 bold
-
 [core]
 	editor = nvim
 	autocrlf = input
@@ -58,29 +43,6 @@
 [format]
 	# FYI format.pretty applies to git log (w/o --pretty too!)
 	pretty = %C(white)%h%Creset %Cblue%cr%Creset%C(auto)%d%Creset %s
-
-
-#### BEGIN diff-so-fancy ####
-
-# - pros: changes to modified lines, especially long lines (highlighted, easy to see)
-#     especially helpful for `git add --patch` workflow (which is why I am focusing on using it w/ interactive only for now)
-#     FYI snap install diff-so-fancy [ stumbled on via command-not-found :) ]
-# - cons: not on windows
-
-[diff-so-fancy]
-	markEmptyLines = false # default true
-	first-run = false
-	stripLeadingSymbols = true # default true - IIRC can conflict with --color-words(--word-diff)
-	changeHunkIndicators = true # default true
-
-[interactive]
-	diffFilter = diff-so-fancy --patch
-
-#	dsf recommends setting it as pager (for diff output) but I've had issues (i.e. possibly w/ --word-diff/--color-words and stripLeadingSymbols below)
-# [core]
-#		pager = diff-so-fancy
-
-#### END diff-so-fancy ####
 
 [delta]
     side-by-side = true
