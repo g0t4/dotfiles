@@ -525,15 +525,10 @@ if command -q kubectl
 
 end
 
-if command -q dig
-
-    # always use grc w/ dig:
-    # TODO only if interactive shell? if so also do that for kubectl above (and others)
-    # alias dig "grc dig"
+if command -q dig; and status is-interactive
     function dig --description 'alias dig grc dig'
         grc dig $argv
     end
-
 end
 
 if command -q kubectl-shell
@@ -849,15 +844,17 @@ set sed_all "**/*.{bash,c,cc,cpp,cs,cxx,dart,fish,go,h,hpp,hs,hxx,java,js,jsx,ks
 
 set --global sed_cmd sed
 if $IS_MACOS
-    function awk
-        echo use 'command awk' to access macOS/BSD sed
-        echo prefer gawk while working on your bash series of courses
-        echo blocking direct use to avoid mistakes
-    end
-    function sed
-        echo use 'command sed' to access macOS/BSD sed
-        echo prefer gsed while working on your bash series of courses
-        echo blocking direct use to avoid mistakes
+    if status is-interactive
+        function awk
+            echo blocking direct use of macOS/BSD awk
+            echo this is a reminder to use gawk for examples on your mac
+            echo otherwise use 'command awk' to access macOS/BSD awk
+        end
+        function sed
+            echo blocking direct use of macOS/BSD sed
+            echo this is a reminder to use gsed for examples on your mac
+            echo otherwise use 'command sed' to access macOS/BSD sed
+        end
     end
     set sed_cmd gsed
     # TODO move rest of these to sed_cmd outside of if block, if args are all the same
@@ -887,12 +884,6 @@ if $IS_MACOS
     abbr sed_duplicate_lines 'sed \'N; /^\(.*\)\n\1$/!P; D\' file'
 
 else
-    # FYI mostly just for a few scripts I have where I want to know I am using the same version of sed regardless so I alias gsed to sed on arch and other linux distros
-    function gsed --wraps sed
-        # make gsed appear avail too, i.e. for scripting
-        sed $argv
-    end
-
     # alternatives (mirror from above for mac)
     abbr --set-cursor sedl "sed -Ei 's/%//g' **/*.lua"
     abbr --command sed --position=anywhere "*l" "**/*.lua"
