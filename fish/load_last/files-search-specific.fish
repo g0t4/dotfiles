@@ -197,19 +197,21 @@ abbr fdtx 'fd --type executable'
 abbr list_filetype_extensions 'fd | path extension | sort | uniq -c | sort'
 
 # *** default args
-function fd
-    # KEEP in mind ~/.config/fd/ignore is the global ignores dir and impacts how fd behaves
-    # BTW... passing --no-hidden will override --hidden b/c it comes later
-    # allow hidden files, for dotfiles/dirs
-    command fd \
-        --hidden \
-        # --color always \
-        $argv
-    # TODO do I want --color always?!
-    #  i.e. for `fd --type dir | grep nvim` => would keep color for grep output
+if status is-interactive
+    function fd
+        # KEEP in mind ~/.config/fd/ignore is the global ignores dir and impacts how fd behaves
+        # BTW... passing --no-hidden will override --hidden b/c it comes later
+        # allow hidden files, for dotfiles/dirs
+        command fd \
+            --hidden \
+            # --color always \
+            $argv
+        # TODO do I want --color always?!
+        #  i.e. for `fd --type dir | grep nvim` => would keep color for grep output
 
-    # PRN:
-    # --ignore-file path
+        # PRN:
+        # --ignore-file path
+    end
 end
 
 # ***! rg START
@@ -402,9 +404,11 @@ end
 # ***! rg END
 
 # FYI colors are defined by fish/zsh respectively in color-specific.{fish,zsh}
-function ag
-    command ag --nogroup --color-match "$__color_matching_text" --column $argv --smart-case
-    # --nogroup => disable grouping to show file/line per match to click to open in vscode (via iterm links)
+if status is-interactive
+    function ag
+        command ag --nogroup --color-match "$__color_matching_text" --column $argv --smart-case
+        # --nogroup => disable grouping to show file/line per match to click to open in vscode (via iterm links)
+    end
 end
 # FYI can defer expand color variable so order of startup files is irrelevant
 
