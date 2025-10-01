@@ -146,20 +146,22 @@ abbr --set-cursor glgrep 'git log --grep="%"'
 abbr gd_patch "git --no-pager diff --no-color"
 
 # VCS in general:
-function pwd --description "pwd for a repository => repo root in yellow + repo dir in white"
-    # if this causes grief, go back to just prd
-    if not isatty stdout
-        builtin pwd $argv
-        return
-    end
-    # PRN support -P/-L arg like builtin does, and set default behavior of not resolving symlinks (-L) because right now the below defaults as if -P was passed (it resolves symlinks)
+if status is-interactive
+    function pwd --description "pwd for a repository => repo root in yellow + repo dir in white"
+        # if this causes grief, go back to just prd
+        if not isatty stdout
+            builtin pwd $argv
+            return
+        end
+        # PRN support -P/-L arg like builtin does, and set default behavior of not resolving symlinks (-L) because right now the below defaults as if -P was passed (it resolves symlinks)
 
-    if test (builtin pwd) = /
-        # at root of fs, don't show // # TODO come back and rework below to drop the trailing / as I don't think I like that differing vs pwd.. especially b/c I do demos with this and the color is fine but less so altering the path even if the same.. NBD but might as well be consistent
-        echo -s (set_color normal) /
-        return
+        if test (builtin pwd) = /
+            # at root of fs, don't show // # TODO come back and rework below to drop the trailing / as I don't think I like that differing vs pwd.. especially b/c I do demos with this and the color is fine but less so altering the path even if the same.. NBD but might as well be consistent
+            echo -s (set_color normal) /
+            return
+        end
+        _pwd
     end
-    _pwd
 end
 
 function _pwd
