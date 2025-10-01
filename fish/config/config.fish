@@ -1,20 +1,6 @@
-# fish startup:
-# - https://fishshell.com/docs/current/language.html#configuration
-# - https://fishshell.com/docs/current/tutorial.html#tut-config
-
-# TODO review feature flags: https://fishshell.com/docs/current/language.html#future-feature-flags
-# TODO review options, i.e.:
 set fish_greeting ""
 
-if status is-interactive
-    # status --is-login
-    # Commands to run in interactive sessions can go here
-end
-
-# TODO => use ~/.config/fish/conf.d/ OR source here?
-
-# find WES_ paths
-# ! OPTIMIZE readlink/dirname calls here are very expensive (2,4,2 ms on each of these three lines - fix this)
+# OPTIMIZE readlink/dirname calls here are very expensive (2,4,2 ms on each of these three lines - fix this)
 if test (uname) = Darwin
     set -g IS_MACOS true
     set -g IS_LINUX false
