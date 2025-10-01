@@ -35,7 +35,7 @@ end
 for file in $WES_DOTFILES/zsh/compat_fish/*.zsh
     source $file
 end
-for file in $WES_DOTFILES/fish/load_last/*.fish
+for file in $WES_DOTFILES/fish/interactive_only_last/*.fish
     source $file
 end
 
