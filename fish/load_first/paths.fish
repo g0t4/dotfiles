@@ -194,3 +194,9 @@ end
 
 # PRN lm-studio
 # set -gx PATH $PATH /Users/wesdemos/.cache/lm-studio/bin
+
+# if llvm-18 present, use it, in future detect which version I want or set it per env?
+#   FYI test -e takes 23us in fish on m1 mac so that is acceptable overhead for startup files
+if test -e /usr/lib/llvm-18/bin/
+    set -x PATH /usr/lib/llvm-18/bin $PATH
+end

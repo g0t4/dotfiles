@@ -28,17 +28,18 @@ set -g WES_BOOTSTRAP ~/repos/wes-config/wes-bootstrap
 set -g WES_DOTFILES ~/repos/github/g0t4/dotfiles
 export WES_DOTFILES=$WES_DOTFILES
 
-# source $WES_DOTFILES/fish/load_first/*.fish # glob not working for multiple files in dir, just one?!
+# ** load_first
 if status is-interactive
     for file in $WES_DOTFILES/fish/load_first/interactive_only/*.fish
         source $file
     end
 end
-
+# non-interactive scripts
 for file in $WES_DOTFILES/fish/load_first/*.fish
     source $file
 end
 
+# * zsh compat
 if status is-interactive
     # largely abbrs, a few env vars that might need moved... so, defensively load these interactive only
     for file in $WES_DOTFILES/zsh/compat_fish/*.zsh
@@ -46,6 +47,7 @@ if status is-interactive
     end
 end
 
+# ** load_last
 if status is-interactive
     for file in $WES_DOTFILES/fish/load_last_interactive_only/*.fish
         source $file
@@ -57,46 +59,40 @@ if test -f $HOME/.config/fish/config-private.fish
     source $HOME/.config/fish/config-private.fish
 end
 
-# optional, iterm2 shell integration (must be installed here, i.e. by installing via iterm menus)
-if test -e $HOME/.iterm2_shell_integration.fish
+if status is-interactive
+    # optional, iterm2 shell integration (must be installed here, i.e. by installing via iterm menus)
+    if test -e $HOME/.iterm2_shell_integration.fish
 
-    source $HOME/.iterm2_shell_integration.fish
+        source $HOME/.iterm2_shell_integration.fish
 
-    # *** ask-openai variables to identify env (i.e. sshed to a remote shell):
-    if test -f /etc/os-release
-        set ask_os (cat /etc/os-release | grep '^ID=' | cut -d= -f2)
-    else
-        set ask_os (uname) # Darwin, Linux, etc
-    end
+        # *** ask-openai variables to identify env (i.e. sshed to a remote shell):
+        if test -f /etc/os-release
+            set ask_os (cat /etc/os-release | grep '^ID=' | cut -d= -f2)
+        else
+            set ask_os (uname) # Darwin, Linux, etc
+        end
 
-    function split_pwd_on_path_change --on-variable PWD
-        # this is a hack to fix the fact that "path" variable is not reliable
-        #   when a program is running remotely (over SSH)
-        #   the path flips to a local path
-        #   run `sleep 60` and check Inspector to see this happen
-        #   when program halts, it reverts to a correct, remote, path
+        function split_pwd_on_path_change --on-variable PWD
+            # this is a hack to fix the fact that "path" variable is not reliable
+            #   when a program is running remotely (over SSH)
+            #   the path flips to a local path
+            #   run `sleep 60` and check Inspector to see this happen
+            #   when program halts, it reverts to a correct, remote, path
 
-        # this is for my iTerm2 split pane/tab/window and preserve path/SSH combo
-        if functions -q iterm2_set_user_var
-            iterm2_set_user_var split_path $PWD
+            # this is for my iTerm2 split pane/tab/window and preserve path/SSH combo
+            if functions -q iterm2_set_user_var
+                iterm2_set_user_var split_path $PWD
+            end
+        end
+
+        function iterm2_print_user_vars
+            # mostly to avoid stale values after exist SSH, to set back to values the host has
+            # FYI this is called by iterm2_shell_integration.fish on every prompt
+            iterm2_set_user_var ask_shell fish
+            # FYI caching value in $ask_os, to avoid penality on every prompt
+            iterm2_set_user_var ask_os "$ask_os"
         end
     end
-
-    function iterm2_print_user_vars
-        # mostly to avoid stale values after exist SSH, to set back to values the host has
-        # FYI this is called by iterm2_shell_integration.fish on every prompt
-        iterm2_set_user_var ask_shell fish
-        # FYI caching value in $ask_os, to avoid penality on every prompt
-        iterm2_set_user_var ask_os "$ask_os"
-    end
-else
-    # TODO warn? and tell to use ansible to setup?
-end
-
-# if llvm-18 present, use it, in future detect which version I want or set it per env?
-#   FYI test -e takes 23us in fish on m1 mac so that is acceptable overhead for startup files
-if test -e /usr/lib/llvm-18/bin/
-    set -x PATH /usr/lib/llvm-18/bin $PATH
 end
 
 ## WHY fish?
