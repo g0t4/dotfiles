@@ -720,8 +720,6 @@ function treeuX
     string replace --regex '^treeu' "treeu -L" $argv
 end
 
-# *** see treeify ideas in  fish/load_last/globals-specific.fish
-
 # *** *z functions to combine z cmd w/ opening editor to the repo root
 function cz
     z $argv

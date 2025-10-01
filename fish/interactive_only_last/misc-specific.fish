@@ -1516,8 +1516,8 @@ function cd2
     # --description "cd improved"
 
     # if file passed, cd to dirname
-    #   cd2 /Users/wes/repos/github/g0t4/dotfiles/fish/load_last/misc-specific.fish
-    #     => cd /Users/wes/repos/github/g0t4/dotfiles/fish/load_last
+    #   cd2 /Users/wes/repos/github/g0t4/dotfiles/foo.bar
+    #     => cd /Users/wes/repos/github/g0t4/dotfiles
     # if path has spaces, don't need to quote it
     #   cd2 ~/Library/Application Support/iTerm2/Scripts
     #     => cd ~/Library/Application\ Support/iTerm2/Scripts
