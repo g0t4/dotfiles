@@ -38,8 +38,12 @@ end
 for file in $WES_DOTFILES/fish/load_first/*.fish
     source $file
 end
-for file in $WES_DOTFILES/zsh/compat_fish/*.zsh
-    source $file
+
+if status is-interactive
+    # largely abbrs, a few env vars that might need moved... so, defensively load these interactive only
+    for file in $WES_DOTFILES/zsh/compat_fish/*.zsh
+        source $file
+    end
 end
 
 if status is-interactive
