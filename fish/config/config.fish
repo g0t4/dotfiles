@@ -43,7 +43,7 @@ for file in $WES_DOTFILES/zsh/compat_fish/*.zsh
 end
 
 if status is-interactive
-    for file in $WES_DOTFILES/fish/interactive_only_last/*.fish
+    for file in $WES_DOTFILES/fish/load_last_interactive_only/*.fish
         source $file
     end
 end
