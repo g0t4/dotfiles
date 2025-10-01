@@ -68,6 +68,9 @@ function __gh_depoliticize
     # for f in *; test -d $f; and echo -n $f"   "; and git -C $f branch --show-current  ;end | grep main | grep -v "^course"
 
 
+    # FYI this assumes currently on main, no master branch... it switches for that scenario only and removes main
+    # hence aborts when not on expected branch
+
     # open page to view before/after, can check this after done with changes by refreshing
     gh repo view --web
 
