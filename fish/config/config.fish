@@ -29,6 +29,12 @@ set -g WES_DOTFILES ~/repos/github/g0t4/dotfiles
 export WES_DOTFILES=$WES_DOTFILES
 
 # source $WES_DOTFILES/fish/load_first/*.fish # glob not working for multiple files in dir, just one?!
+if status is-interactive
+    for file in $WES_DOTFILES/fish/load_first/interactive_only/*.fish
+        source $file
+    end
+end
+
 for file in $WES_DOTFILES/fish/load_first/*.fish
     source $file
 end
