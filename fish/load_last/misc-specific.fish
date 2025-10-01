@@ -1109,10 +1109,9 @@ if command -q apt
         end
     end
 
-
 end
 
-if command -q watch
+if command -q watch; and status is-interactive
     # VERIFIED watch does this on both macos and ubuntu
 
     # FYI this is faster than using alias and more obvious what happens:
