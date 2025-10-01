@@ -1,3 +1,8 @@
+if not status is-interactive
+    # *** this file is ALL interactive only modifications (especially command/func overrides, but also abbrs are useless to non-interactive)
+    return
+end
+
 # modify delay to consider if esc key a seq or standalone
 set fish_escape_delay_ms 200 # 30ms is default and way too fast (ie esc+k is almost impossible to trigger)
 
@@ -1363,32 +1368,11 @@ function huggingface-cli
 end
 abbr hugginface-cli_delete-cache "huggingface-cli delete-cache"
 
-# FYI... llama-server's fim options, here is an example for spec dec:
-#
-# add_opt(common_arg(
-#     {"--fim-qwen-14b-spec"},
-#     string_format("use Qwen 2.5 Coder 14B + 0.5B draft for speculative decoding (note: can download weights from the internet)"),
-#     [](common_params & params) {
-#         params.model.hf_repo = "ggml-org/Qwen2.5-Coder-14B-Q8_0-GGUF";
-#         params.model.hf_file = "qwen2.5-coder-14b-q8_0.gguf";
-#         params.speculative.model.hf_repo = "ggml-org/Qwen2.5-Coder-0.5B-Q8_0-GGUF";
-#         params.speculative.model.hf_file = "qwen2.5-coder-0.5b-q8_0.gguf";
-#         params.speculative.n_gpu_layers = 99;
-#         params.port = 8012;
-#         params.n_gpu_layers = 99;
-#         params.flash_attn = true;
-#         params.n_ubatch = 1024;
-#         params.n_batch = 1024;
-#         params.n_ctx = 0;
-#         params.n_cache_reuse = 256;
-#     }
-# ).set_examples({LLAMA_EXAMPLE_SERVER}));
-#
-# FYI to map name params.n_ctx => --ctx-size / env var... use the common/arg.cpp
-#   https://github.com/ggml-org/llama.cpp/blob/056eb745/common/arg.cpp#L1424-L1431
-# n_batch == https://github.com/ggml-org/llama.cpp/blob/056eb745/common/arg.cpp#L1442-L1448
-
 if command -q llama-server
+
+    # https://github.com/ggml-org/llama.cpp/blob/056eb745/common/arg.cpp#L1424-L1431
+    # n_batch == https://github.com/ggml-org/llama.cpp/blob/056eb745/common/arg.cpp#L1442-L1448
+
     function _setup_llama_server
         # PRN add some abbrs for higher ram usage if you frequently want that... and/or GET ANOTHER 5090 and max it all out!
         # TODO alter --cache-reuse ? 256 on --fim- presets... smaller, bigger? (how does it work with RoPE scaling? https://ggml.ai/f0.png)
