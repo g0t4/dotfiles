@@ -62,13 +62,10 @@ abbr veinit12 'uv venv --python 3.12' # good reminder to replace w/ whatever ver
 abbr ved deactivate
 abbr vea 'source .venv*/bin/activate.fish' # override zsh version's /activate
 
-# !!! GO COLD TURKEY TO TRY uv command and update all venvs to use it, best way to see what I think of it and learn it... so stop using pip directly (unless uv doesn't work for my projects)
 abbr pipir "uv add -r requirements.txt && rm requirements.txt # REMINDER TO MIGRATE to pyproject.toml + uv"
-#   pipir is just for muscle memory b/c I used it to `pip install -r requirements.txt` previously
 
 abbr uva 'uv add'
 #
-# TODO review new set of uv commands (read a bit more to verify I understand them):
 # lockfile/dependency related:
 abbr uvau 'uv add --upgrade' # all upgrade on all packages (within existing constraint in pyproject.toml)
 abbr uvaup 'uv add --upgrade-package' # upgrade specific package
@@ -83,7 +80,6 @@ abbr uvs 'uv sync'
 #   https://docs.astral.sh/uv/concepts/projects/dependencies/#optional-dependencies
 abbr uvsa 'uv sync --all-extras' # sync al extras packages
 abbr uvse 'uv sync --extra' # <pkg> sync specific extras package
-# TODO end review here
 #
 abbr uvrm 'uv remove'
 abbr uvr 'uv run'
@@ -110,7 +106,6 @@ abbr uv_pip_install_upgrade 'uv pip install --upgrade $(uv pip list --outdated |
 abbr uvls 'uv pip list' # or do I want `uv tree` here?.... what else would I do with `uv list == uvl` basically?
 abbr uvpls 'uv pip list'
 abbr uvplo 'uv pip list --outdated'
-# TODO add back other pip commands as `uv pip` commands now that I wrapped my mind around using uv for my projects and not for other projects that are just using requirements.txt
 #
 abbr uvpy 'uv python list' # list installed python versions
 #
@@ -131,7 +126,7 @@ abbr uvpy 'uv python list'
 #abbr uvpyi 'uv python install'
 # FYI just put .python-version file in repo and run `uv venv` and it will install the version (if needed!)
 
-abbr uv_build 'uv build --no-sources' # TODO do I want --no-sources? by default
+abbr uv_build 'uv build --no-sources'
 abbr uv_publish 'uv publish'
 abbr uv_clean 'uv clean'
 
