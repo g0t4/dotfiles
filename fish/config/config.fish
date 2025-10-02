@@ -34,6 +34,10 @@ if status is-interactive
 end
 
 # ** load_last
+for file in $WES_DOTFILES/fish/load_last_interactive_only/always/*.fish
+    # both interactive and non-interactive
+    source $file
+end
 if status is-interactive
     for file in $WES_DOTFILES/fish/load_last_interactive_only/*.fish
         source $file
