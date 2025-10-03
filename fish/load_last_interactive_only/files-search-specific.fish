@@ -110,6 +110,23 @@ if command -q mdfind
         echo NOTHING PICKED...
     end
 
+    function md_cd
+        set results (mdfind "kMDItemFSName == \"*$argv*\"c")
+        if test (count $results) -eq 1
+            cd "$results"
+            return
+        else if test (count $results) -lt 1
+            echo NO mdfind matches...
+            return
+        end
+        set picked (printf '%s\n' $results | fzf --height 50% --border)
+        if test -n "$picked"
+            cd "$picked"
+            return
+        end
+        echo NOTHING PICKED...
+    end
+
 end
 
 # *** find
