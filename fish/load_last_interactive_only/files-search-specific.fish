@@ -89,16 +89,10 @@ if command -q mdfind
 
     abbr --set-cursor md_diagnose 'sudo mddiagnose' # reminder (same command basically but shows it with my other md_ abbrs)
 
-    # FYI maybe don't use --set-cursor... b/c then it fucks up using up arrow to recall last command, just use command history instead
-    #  which for what I plan to do, command history should usually have the few files/dirs I access this way... it's not a unique search each time, it's a lot of overlap
     abbr mdo md_open
     function md_open
         # TODO find better format for search... cannot do "*foo*bar*" ... seems like asterisk is start/end only
         # TODO can I use regex MATCHES operator?
-        # think mdfind + open
-        #
-        # STOP using FINDER altogether!
-        # ... and don't need spotlight either to quickly open dirs I usually only touch in Finder
 
         set results (mdfind "kMDItemFSName == \"*$argv*\"c")
         if test (count $results) -eq 1
