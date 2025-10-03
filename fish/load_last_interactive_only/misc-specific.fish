@@ -1141,21 +1141,22 @@ if command -q watch; and status is-interactive
     # TODO do I like w mapping to watch? So far `w` isn't used otherwise
     export WATCH_INTERVAL=0.5 # I almost always set to 0.5
     # FYI DO NOT NEED --color (infact wont work with it... which is why I can't replace my abbrs yet b/c I wanna keep them intact for watch too... why didn't they just implement --color?!)
-    abbr watch viddy
-    abbr wa viddy # prn add back "-n0.5" if issues w/ WATCH_INTERVAL
+
+    abbr watch $WATCH_COMMAND
+    abbr wa $WATCH_COMMAND # prn add back "-n0.5" if issues w/ WATCH_INTERVAL
     # FYI if you go back to watch... add --color to appropriate abbrs
-    abbr wag 'viddy --no-title -- grc --colour=on'
+    abbr wag '$WATCH_COMMAND --no-title -- grc --colour=on'
     # to support --no-title, add --show-kind to kubectl get output
     # - saves top title line and blank line after it for screen realestate!
     # - also nukes showing time in upper right corner
     # - FYI --show-kind already enabled if multi types requested, so NBD
-    abbr wak 'viddy --no-title -- grc --colour=on kubectl get --show-kind' # using alot! I love this
-    abbr wad 'viddy --no-title -- grc --colour=on kubectl describe --show-kind' # using alot! I love this
-    abbr wakp 'viddy --no-title -- grc --colour=on kubectl get --show-kind pods'
-    abbr wah 'viddy --no-title -- http --pretty=colors'
-    abbr wahv 'viddy --no-title -- http --pretty=colors --verbose' # == --print HhBb (headers and body for both request and response)
-    abbr wal 'viddy --no-title -- grc --colour=on ls'
-    abbr wat 'viddy --no-title -- grc --colour=on tree'
+    abbr wak '$WATCH_COMMAND --no-title -- grc --colour=on kubectl get --show-kind' # using alot! I love this
+    abbr wad '$WATCH_COMMAND --no-title -- grc --colour=on kubectl describe --show-kind' # using alot! I love this
+    abbr wakp '$WATCH_COMMAND --no-title -- grc --colour=on kubectl get --show-kind pods'
+    abbr wah '$WATCH_COMMAND --no-title -- http --pretty=colors'
+    abbr wahv '$WATCH_COMMAND --no-title -- http --pretty=colors --verbose' # == --print HhBb (headers and body for both request and response)
+    abbr wal '$WATCH_COMMAND --no-title -- grc --colour=on ls'
+    abbr wat '$WATCH_COMMAND --no-title -- grc --colour=on tree'
     # for k8s prefer kubectl --watch b/c grc colors the output w/o issues.. but when it is not avail to continually monitor then use watch command w/ color output:
     #   watch -n0.5 --color -- grc --colour=on kubectl rollout status deployments
 
