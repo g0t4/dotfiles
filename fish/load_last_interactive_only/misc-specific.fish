@@ -1127,6 +1127,8 @@ if command -q watch; and status is-interactive
 
         # good way to test my colors:
         # watch -n 0.5 --color -- "grc --colour=on kubectl describe pod/web"
+
+        # IIUC viddy doesn't have --color? Do I want to add it to just this watch wrapper?
     end
 
     function viddy
@@ -1138,17 +1140,14 @@ if command -q watch; and status is-interactive
         end
     end
 
-    # TODO do I like w mapping to watch? So far `w` isn't used otherwise
-    export WATCH_INTERVAL=0.5 # I almost always set to 0.5
-    # FYI DO NOT NEED --color (infact wont work with it... which is why I can't replace my abbrs yet b/c I wanna keep them intact for watch too... why didn't they just implement --color?!)
+    export WATCH_INTERVAL=0.5
     if command -q viddy
         set WATCH_COMMAND viddy
     else
         set WATCH_COMMAND watch
     end
-
     abbr watch $WATCH_COMMAND
-    abbr wa $WATCH_COMMAND # prn add back "-n0.5" if issues w/ WATCH_INTERVAL
+    abbr wa $WATCH_COMMAND
     # FYI if you go back to watch... add --color to appropriate abbrs
     abbr wag '$WATCH_COMMAND --no-title -- grc --colour=on'
     # to support --no-title, add --show-kind to kubectl get output
