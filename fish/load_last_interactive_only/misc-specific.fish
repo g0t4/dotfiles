@@ -460,7 +460,7 @@ if command -q kubectl
     # top
     abbr ktop 'kubectl top pod --all-namespaces'
     #
-    abbr ktopw 'viddy --no-title -- grc --colour=on kubectl top pod --all-namespaces'
+    abbr ktopw '$WATCH_COMMAND --no-title -- grc --colour=on kubectl top pod --all-namespaces'
     abbr ktopn 'kubectl top node'
     # version
     abbr kver 'kubectl version'
@@ -822,7 +822,7 @@ end
 #
 # *** MY pstree
 abbr --set-cursor -- pstreeg "pstree_grep '%'"
-abbr --set-cursor -- pstreeg_watch "viddy --shell fish 'pstree_grep \"%\"'"
+abbr --set-cursor -- pstreeg_watch "\$WATCH_COMMAND --shell fish 'pstree_grep \"%\"'"
 
 # *** pstree
 # pstreeX => pstree -l X
@@ -2319,18 +2319,18 @@ if command -q nvidia-smi
     abbr nsl "nvidia-smi -L" # List GPUs
     abbr nst "nvidia-smi -q -d temperature | bat -l yml" # not yaml, but close enough
     abbr nsu "nvidia-smi -q -d utilization | bat -l yml" # not yaml, but close enough
-    abbr nstw "viddy nvidia-smi -q -d temperature"
-    abbr nsuw "viddy nvidia-smi -q -d utilization"
+    abbr nstw "\$WATCH_COMMAND nvidia-smi -q -d temperature"
+    abbr nsuw "\$WATCH_COMMAND nvidia-smi -q -d utilization"
     abbr nsm "nvidia-smi -q -d memory | bat -l yml" # Memory usage
-    abbr nsmw "viddy nvidia-smi -q -d memory"
+    abbr nsmw "\$WATCH_COMMAND nvidia-smi -q -d memory"
     abbr nsp "nvidia-smi -q -d power | bat -l yml" # Power usage
-    abbr nspm "viddy -n 1 nvidia-smi -q -d power,memory,utilization" # Power and memory monitoring
+    abbr nspm "\$WATCH_COMMAND -n 1 nvidia-smi -q -d power,memory,utilization" # Power and memory monitoring
     abbr nsf "nvidia-smi -q -d clock | bat -l yml" # Clock frequencies
 
     # Monitoring commands with loop
     abbr nsdmon "nvidia-smi dmon" # Device monitoring in scrolling format
     abbr nspmon "nvidia-smi pmon" # Process monitoring in scrolling format
-    abbr nswatch "viddy -n 1 nvidia-smi" # Basic monitoring with refresh
+    abbr nswatch "\$WATCH_COMMAND -n 1 nvidia-smi" # Basic monitoring with refresh
 
     # More specialized queries
     abbr nspids "nvidia-smi --query-compute-apps=pid,process_name,used_memory --format=csv" # List processes using GPU
@@ -2457,7 +2457,7 @@ if command -q lsof
     # -i == internet files (ports)
     # -a == AND constraints
 
-    abbr --set-cursor lsofp_watch 'viddy "sudo lsof -p \$(pgrep -if \"%\" | head -1)"'
+    abbr --set-cursor lsofp_watch '$WATCH_COMMAND "sudo lsof -p \$(pgrep -if \"%\" | head -1)"'
 
 end
 
