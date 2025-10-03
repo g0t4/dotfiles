@@ -111,7 +111,8 @@ if command -q mdfind
     end
 
     function md_cd
-        set results (mdfind "kMDItemFSName == \"*$argv*\"c")
+        set results (mdfind "kMDItemFSName == \"*$argv*\"c && kMDItemContentType == \"public.folder\"")
+
         if test (count $results) -eq 1
             cd "$results"
             return
