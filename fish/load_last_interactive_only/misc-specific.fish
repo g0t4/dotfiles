@@ -1141,6 +1141,11 @@ if command -q watch; and status is-interactive
     # TODO do I like w mapping to watch? So far `w` isn't used otherwise
     export WATCH_INTERVAL=0.5 # I almost always set to 0.5
     # FYI DO NOT NEED --color (infact wont work with it... which is why I can't replace my abbrs yet b/c I wanna keep them intact for watch too... why didn't they just implement --color?!)
+    if command -q viddy
+        set WATCH_COMMAND viddy
+    else
+        set WATCH_COMMAND watch
+    end
 
     abbr watch $WATCH_COMMAND
     abbr wa $WATCH_COMMAND # prn add back "-n0.5" if issues w/ WATCH_INTERVAL
