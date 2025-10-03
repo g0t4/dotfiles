@@ -61,6 +61,7 @@ if command -q systemctl
     # * scu == prefix for user services
     abbr scu 'systemctl --user'
     abbr scudr 'systemctl --user daemon-reload'
+    abbr scdr "sudo systemctl daemon-reload"
 
     abbr scm 'man systemd.index' # great entrypoint to systemd man pages
 
