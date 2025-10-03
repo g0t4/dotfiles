@@ -110,7 +110,8 @@ if command -q mdfind
         echo NOTHING PICKED...
     end
 
-    function md_cd
+    abbr mdcd mdfind_cd_dir
+    function mdfind_cd_dir
         set results (mdfind "kMDItemFSName == \"*$argv*\"c && kMDItemContentType == \"public.folder\"")
 
         if test (count $results) -eq 1
