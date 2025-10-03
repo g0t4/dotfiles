@@ -1374,6 +1374,10 @@ if command -q llama-server
     # n_batch == https://github.com/ggml-org/llama.cpp/blob/056eb745/common/arg.cpp#L1442-L1448
 
     function _setup_llama_server
+
+        # TODO where do I want this, if it gets merged upstream?
+        # source (llama-server --completion-fish | psub)
+
         # PRN add some abbrs for higher ram usage if you frequently want that... and/or GET ANOTHER 5090 and max it all out!
         # TODO alter --cache-reuse ? 256 on --fim- presets... smaller, bigger? (how does it work with RoPE scaling? https://ggml.ai/f0.png)
 
