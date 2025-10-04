@@ -59,6 +59,10 @@ end
 # abbr pbp pbpaste
 abbr pb pbpaste
 abbr pbj "pbpaste | jq"
+#
+# abbrs for openai compatible json parsing
+abbr pbj_toolcall_args "pbpaste | jq '.tool_calls[0].function.arguments' -r"
+#
 abbr pby "pbpaste | yq"
 abbr pbw "pbpaste | wordcount"
 abbr pbn "pbpaste | string split '\n'"
