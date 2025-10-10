@@ -547,6 +547,7 @@ function act_on_silence(win, silence, action)
         print("no silence to act on")
         return
     end
+    local original_mouse_pos = hs.mouse.absolutePosition() -- first one can be expensive 100ms, cheap (0 to 1ms max) thereafter
 
     -- perhaps add more params to act_on_silence?
     local is_cut = action:find("CUT_") -- keep trailing _ so it is easier to search for CUT_
@@ -612,6 +613,10 @@ function act_on_silence(win, silence, action)
         before_time = win:get_current_time()
         hs.eventtap.keyStroke({}, "left", 0, win.app)
         win:wait_until_time_changes(before_time)
+
+        -- restore mouse position fixes issue with mouse over timeline triggering insert below mouse (randomly)
+        -- PRN move restore to move_playhead_to()? part of me feels like I have enjoyed it for subseuqent edits, to have it move to the current edit location
+        hs.mouse.absolutePosition(original_mouse_pos) -- 0.2ms
 
         win.windows:get_tool_window():wait_for_ok_button_then_press_it()
 
