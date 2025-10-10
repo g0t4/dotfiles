@@ -59,31 +59,22 @@ function ScreenPalEditorWindow:_force_refresh_windows()
     self.win = self.windows:editor_window_or_throw()
 end
 
---- make sure controls are valid, if not re-aquire references
+--- make sure controls are valid, if not re-acquire references
 function ScreenPalEditorWindow:ensure_cached_controls(force)
-    print("window valid? A ", self.win:isValid()) -- NOTE this is not valid (nil) when need reload everything so do that instead
+    -- print("window valid? A ", self.win:isValid()) -- NOTE this is not valid (nil) when need reload everything so do that instead
     if not self.win:isValid() then
-        -- TODO review if this is the best spot for this refresh?
-        --   I just ran a test of this with SPAL restart which triggers invalid window references... and it successfully detected that and refreshed the refs
-        -- TODO review if this check needs added elsewhere?
-        print("*** REFRESH WINDOWS *** - self.win is NOT VALID")
+        -- print("*** REFRESH WINDOWS *** - self.win is NOT VALID")
         self:_force_refresh_windows()
     end
-    print("window valid? B ", self.win:isValid()) -- NOTE this is not valid (nil) when need reload everything so do that instead
+    -- print("window valid? B ", self.win:isValid()) -- NOTE this is not valid (nil) when need reload everything so do that instead
     if not force and self._cached_buttons then
-        -- TODO FYI not all controls are invalidated at the same time
-        --   when a control changes then it's typically invalid...
-        --   TODO! how can I better detect and refresh?
-        --   TODO! or is this even that slow that I cannot just do it every time?!
         if self._btn_minimum_zoom:isValid() then
-            -- assume all controls are still valid, if you have issues with one control going in and out, don't destroy cache of everything for that one... add a special check in its code path and send in an override here to flush cache then
             return
         end
-        print("editor window cache invalidated")
+        -- print("editor window cache invalidated")
     end
-    print("building editor window")
+    -- print("building editor window")
     self:force_refresh_cached_controls()
-    print("window valid? C ", self.win:isValid())
 end
 
 function ScreenPalEditorWindow:force_refresh_cached_controls()
