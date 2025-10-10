@@ -617,6 +617,7 @@ function act_on_silence(win, silence, action)
         -- restore mouse position fixes issue with mouse over timeline triggering insert below mouse (randomly)
         -- PRN move restore to move_playhead_to()? part of me feels like I have enjoyed it for subseuqent edits, to have it move to the current edit location
         hs.mouse.absolutePosition(original_mouse_pos) -- 0.2ms
+        hs.timer.usleep(_10ms)
 
         win.windows:get_tool_window():wait_for_ok_button_then_press_it()
 
