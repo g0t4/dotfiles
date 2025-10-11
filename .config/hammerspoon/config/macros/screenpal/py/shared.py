@@ -51,7 +51,7 @@ class TimelineSharedDetectionContext:
         start = time.time()
         hsv = cv.cvtColor(self.image, cv.COLOR_BGR2HSV)  # type: ignore (FYI this is only 1ms!)
         ms = (time.time() - start) * 1000
-        print(f"HSV conversion took {ms:.0f}ms")  # 1.7ms on 1080p image
+        # print(f"HSV conversion took {ms:.0f}ms")  # 1.7ms on 1080p image
 
         start = time.time()
         hue_center = 115
@@ -65,7 +65,7 @@ class TimelineSharedDetectionContext:
         )
 
         ms = (time.time() - start) * 1_000_000
-        print(f"hue waveform mask took {ms:.000f}us")
+        # print(f"hue waveform mask took {ms:.000f}us")
 
     def divider(self) -> NDArray[np.uint8]:
         return make_divider(self.image)

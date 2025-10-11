@@ -61,15 +61,14 @@ def detect_regular_silences(use_file):
 
     # ** join adjacent boxes that are 1 pixel apart x2_start = x1_end + 1
     merged_x_ranges = reduce(merge_if_one_pixel_apart, x_sorted_ranges, [])
-    print(f'{merged_x_ranges=}')
 
-    # * look back at falling edge of waveform
-    for x_start, x_end in merged_x_ranges:
-        x_lookback_start = np.max(x_start - 30, 0)
-        print(f'{x_start=} {x_end=} {x_lookback_start=}')
-        lookback = shared.image[:, x_lookback_start:x_start]
-        print(f'{lookback=}')
-        # show_and_wait(lookback)
+    # # * look back at falling edge of waveform
+    # for x_start, x_end in merged_x_ranges:
+    #     x_lookback_start = np.max(x_start - 30, 0)
+    #     print(f'{x_start=} {x_end=} {x_lookback_start=}')
+    #     lookback = shared.image[:, x_lookback_start:x_start]
+    #     print(f'{lookback=}')
+    #     # show_and_wait(lookback)
 
     # * serialize response to json in STDOUT
     detected = {
