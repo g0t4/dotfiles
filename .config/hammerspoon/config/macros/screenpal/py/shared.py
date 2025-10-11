@@ -43,28 +43,23 @@ class TimelineSharedDetectionContext:
         tolerance = 4
         self.timeline_mask = color_mask(self.image, colors_bgr.timeline_bg, tolerance)
         self.playhead_mask = color_mask(self.image, colors_bgr.playhead, tolerance)
-        # self.waveform_mask = color_mask(self.image, np.array([118, 71, 62]), tolerance=22)  # 3.86ms
-        # self.waveform_mask = color_mask(self.image, np.array([124, 77, 68]), tolerance=4)
 
-        # works well to combine! keep tolerance tight but capture a range of values along basically the gradient (top to bottom)
+        # * waveform
         # TODO might need higher up samples too?
+        # TODO test scaling down to 1080p to speed up color masks? IOTW convert in advance instead of at end! do this for everything if it works as well as 4k
         import time
         start = time.time()
-        self.waveform_mask = color_mask(self.image, np.array([139,  91,  83]), tolerance=6) \
-           + color_mask(self.image, np.array([118, 71, 62]), tolerance=6)
-        # + color_mask(self.image, np.array([124, 77, 68]), tolerance=4) \
+        hsv = cv.cvtColor(self.image, cv.COLOR_BGR2HSV)  # type: ignore
         ms = (time.time() - start) * 1000
-        print(f"waveform mask took {ms:.0f}ms")
-        print()
-        print("multi:")
+        print(f"HSV conversion took {ms:.0f}ms")  # 1.7ms on 1080p image
+
         start = time.time()
-        self.waveform_mask = multi_color_mask(self.image, np.array([
-            [139,  91,  83],  # waveform color
-            [118, 71, 62],   # waveform color
-            [124, 77, 68],   # waveform color
-        ]), tolerance=6)
+        hue_center = 115
+        tol = 3
+        self.waveform_mask = cv.inRange(hsv, (hue_center - tol, 40, 0), (hue_center + tol, 255, 255))
+
         ms = (time.time() - start) * 1000
-        print(f"multi color waveform mask took {ms:.0f}ms")
+        print(f"hue waveform mask took {ms:.0f}ms")
 
     def divider(self) -> NDArray[np.uint8]:
         return make_divider(self.image)
