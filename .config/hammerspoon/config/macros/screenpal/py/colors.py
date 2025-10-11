@@ -282,3 +282,5 @@ print(f'{cv_img_edges[64, 588]=}')
 print(f'{cv_img_edges[64, 589]=}')  # same
 print(f'{cv_img_edges[64, 590]=}')  # same
 # TODO capture even taller waveforms and figure out the best way to mask across them
+print(f'{cv_img_edges[65, 588]=}')
+# cv_img_edges[65, 588]=array([138,  91,  82], dtype=uint8)
