@@ -94,6 +94,7 @@ function open_werkspace_sessions_dir()
 end
 
 function restore_session_by_name(name)
+    -- pass by name for :Session command line name arg
     if not name then
         local names = list_session_names()
         if #names == 0 then
@@ -101,6 +102,7 @@ function restore_session_by_name(name)
             return
         end
 
+        -- TODO better picker? or at least show numbers?
         local name_index = vim.fn.inputlist({ "Select session to restore:", unpack(names) })
         local invalid_index = name_index < 1 or name_index > #names
         if invalid_index then
