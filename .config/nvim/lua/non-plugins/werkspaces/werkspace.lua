@@ -26,7 +26,7 @@ function is_lazy_open()
 end
 
 ---@return string
-function get_workspace_dir()
+function get_werkspace_dir()
     local function get_git_root()
         local handle = io.popen("git rev-parse --show-toplevel 2>/dev/null")
         if handle then
@@ -39,13 +39,13 @@ function get_workspace_dir()
 
     local dir = get_git_root() or vim.fn.getcwd()
     local hash = vim.fn.sha256(dir) -- 10ms, not terrible and I've never really noticed startup impact
-    local workspaces_dir = "~/.config/nvim/shada/workspaces/"
-    workspaces_dir = vim.fn.expand(workspaces_dir)
-    return workspaces_dir .. hash
+    local werkspaces_dir = "~/.config/nvim/shada/werkspaces/"
+    werkspaces_dir = vim.fn.expand(werkspaces_dir)
+    return werkspaces_dir .. hash
 end
 
 local function get_session_dir()
-    return vim.fn.get_workspace_dir() .. "/sessions"
+    return vim.fn.get_werkspace_dir() .. "/sessions"
 end
 
 function list_sessions()
@@ -94,19 +94,19 @@ function restore_session_by_name()
     end
 end
 
-function setup_workspace()
-    local workspace_dir = get_workspace_dir()
+function setup_werkspace()
+    local werkspace_dir = get_werkspace_dir()
 
-    local shada_path = workspace_dir .. "/shada"
+    local shada_path = werkspace_dir .. "/shada"
 
     -- WHY do this with shada:
     --   privacy (don't jump list back to another project, i.e. during screencast)
-    --   separate workspaces, jumplist/marks s/b per project, not global... like vscode
+    --   separate werkspaces, jumplist/marks s/b per project, not global... like vscode
     --      and cmd history, also belongs per project (though I can see more of an argument for global cmd history but since I don't use it much I don't think it will matter)
     vim.opt.shadafile = shada_path
 
 
-    vim.g.session_file = workspace_dir .. "/session.vim"
+    vim.g.session_file = werkspace_dir .. "/session.vim"
     --
     vim.cmd [[
 
@@ -283,7 +283,7 @@ function AppendLastFocusedFileToSession()
     end
 end
 
-setup_workspace()
+setup_werkspace()
 
 -- *** I probably don't need this, nor should I have it... but just an idea to see how I feel...
 -- *** basically only gonna apply when I first open a project/werkspace and there are no prior files open (or exit with a new file only open)
