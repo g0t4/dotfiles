@@ -48,9 +48,13 @@ class TimelineSharedDetectionContext:
 
         # works well to combine! keep tolerance tight but capture a range of values along basically the gradient (top to bottom)
         # TODO might need higher up samples too?
+        import time
+        start = time.time()
         self.waveform_mask = color_mask(self.image, np.array([139,  91,  83]), tolerance=6) \
            + color_mask(self.image, np.array([118, 71, 62]), tolerance=6)
         # + color_mask(self.image, np.array([124, 77, 68]), tolerance=4) \
+        ms = (time.time() - start) * 1000
+        print(f"waveform mask took {ms:.0f}ms")
 
     def divider(self) -> NDArray[np.uint8]:
         return make_divider(self.image)
