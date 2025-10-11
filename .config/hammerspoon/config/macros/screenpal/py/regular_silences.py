@@ -67,10 +67,9 @@ def detect_regular_silences(use_file):
     for x_start, x_end in merged_x_ranges:
         x_lookback_start = np.max(x_start - 30, 0)
         print(f'{x_start=} {x_end=} {x_lookback_start=}')
-        lookback = shared.image[:,x_lookback_start:x_start]
+        lookback = shared.image[:, x_lookback_start:x_start]
         print(f'{lookback=}')
-        show_and_wait(lookback)
-
+        # show_and_wait(lookback)
 
     # * serialize response to json in STDOUT
     detected = {
