@@ -272,3 +272,13 @@ print(f'{cv_img_edges[83, 204]=}')
 # cv_img_edges[83, 204]=array([123,  76,  67], dtype=uint8)
 print(f'{cv_img_edges[83, 205]=}')  # same
 print(f'{cv_img_edges[83, 206]=}')  # same
+#
+# * diff time's top edge (higher than previous example's)
+# OK I CAN SEE NOW... the waveform does have a slight gradient shadow, especially toward the bottom
+#  I might want to build a mask with varying samples or use wider tolerance (didn't see to pick up other things, not yet anyways even with 20 tolerance on that first color sample above)
+# 590x 65y top edge - higher up
+print(f'{cv_img_edges[64, 588]=}')
+# cv_img_edges[64, 588]=array([139,  91,  83], dtype=uint8)
+print(f'{cv_img_edges[64, 589]=}')  # same
+print(f'{cv_img_edges[64, 590]=}')  # same
+# TODO capture even taller waveforms and figure out the best way to mask across them
