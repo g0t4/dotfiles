@@ -45,10 +45,11 @@ class TimelineSharedDetectionContext:
         self.playhead_mask = color_mask(self.image, colors_bgr.playhead, tolerance)
         # TODO try cv.inRange for color_mask instead of my implementation below
 
+        # FYI using this for waveform (just with lookbacks initially)
+        self.hsv = cv.cvtColor(self.image, cv.COLOR_BGR2HSV)  # type: ignore (FYI this is only 1ms!)
         # * waveform
         # import time
         # start = time.time()
-        hsv = cv.cvtColor(self.image, cv.COLOR_BGR2HSV)  # type: ignore (FYI this is only 1ms!)
         # ms = (time.time() - start) * 1000
         # print(f"HSV conversion took {ms:.0f}ms")  # 1.7ms on 1080p image
 
@@ -57,8 +58,8 @@ class TimelineSharedDetectionContext:
         tol = 3
         min_sat = 80
         # TODO! switch color_mask to use cv.inRange (way faster than my color_mask).. this is way, way sub-ms... shows as 0ms
-        self.waveform_mask = cv.inRange( # * 186us FAST!!!
-            hsv,
+        self.waveform_mask = cv.inRange(  # * 186us FAST!!!
+            self.hsv,
             (hue_center - 1, 100, 30),  # hue ±5°, moderate min S,V to avoid background
             (hue_center + 1, 130, 140),
         )
