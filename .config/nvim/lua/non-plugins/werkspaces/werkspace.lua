@@ -13,6 +13,7 @@ if nvim.is_headless() then
     return
 end
 
+---@return boolean
 function is_lazy_open()
     local win_ids = vim.api.nvim_list_wins()
 
@@ -44,10 +45,12 @@ function get_werkspace_dir()
     return werkspaces_dir .. hash
 end
 
+---@return string
 local function get_session_dir()
     return vim.fn.get_werkspace_dir() .. "/sessions"
 end
 
+---@return string[]
 function list_sessions()
     local session_dir = get_session_dir()
     local files = vim.fn.split(vim.fn.glob(session_dir .. "/*.vim"), "\n")
@@ -59,7 +62,9 @@ function list_sessions()
     return names
 end
 
-local function get_session_file(session_name)
+---@param session_name string
+---@return string
+function get_session_file(session_name)
     return get_session_dir() .. "/" .. session_name .. ".vim"
 end
 
