@@ -118,6 +118,51 @@ function restore_session_by_name(name)
     end
 end
 
+vim.api.nvim_create_user_command("Sessions", function(opts)
+    local subcmd = opts.fargs[1]
+    local name = opts.fargs[2]
+
+    if subcmd == "save" then
+        save_session_by_name(name)
+    elseif subcmd == "restore" then
+        restore_session_by_name(name)
+    elseif subcmd == "list" then
+        local names = list_session_names()
+        if #names == 0 then
+            print("No sessions found")
+        else
+            for _, n in ipairs(names) do
+                print(n)
+            end
+        end
+    else
+        print("Usage: Sessions [save|restore|list] [name]")
+    end
+end, {
+    nargs = "*",
+    complete = function(arglead, cmdline, _)
+        local args = vim.split(cmdline, "%s+", { trimempty = true })
+        local num_args = #args
+
+        if num_args == 2 then
+            -- Complete subcommands
+            local subcmds = { "save", "restore", "list" }
+            return vim.tbl_filter(function(cmd)
+                return cmd:find(arglead, 1, true) == 1
+            end, subcmds)
+        elseif num_args == 3 and (args[2] == "save" or args[2] == "restore") then
+            -- Complete session names
+            local names = list_session_names()
+            return vim.tbl_filter(function(name)
+                return name:find(arglead, 1, true) == 1
+            end, names)
+        end
+
+        return {}
+    end,
+})
+
+
 function setup_werkspace()
     local werkspace_dir = get_werkspace_dir()
 
