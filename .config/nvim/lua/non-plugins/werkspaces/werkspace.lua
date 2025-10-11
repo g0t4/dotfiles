@@ -26,7 +26,7 @@ function is_lazy_open()
 end
 
 ---@return string
-local function get_workspace_dir()
+function get_workspace_dir()
     local function get_git_root()
         local handle = io.popen("git rev-parse --show-toplevel 2>/dev/null")
         if handle then
@@ -42,6 +42,56 @@ local function get_workspace_dir()
     local workspaces_dir = "~/.config/nvim/shada/workspaces/"
     workspaces_dir = vim.fn.expand(workspaces_dir)
     return workspaces_dir .. hash
+end
+
+local function get_session_dir()
+    return vim.fn.get_workspace_dir() .. "/sessions"
+end
+
+function list_sessions()
+    local session_dir = get_session_dir()
+    local files = vim.fn.split(vim.fn.glob(session_dir .. "/*.vim"), "\n")
+    local names = {}
+    for _, file in ipairs(files) do
+        local name = vim.fn.fnamemodify(file, ":t:r")
+        table.insert(names, name)
+    end
+    return names
+end
+
+local function get_session_file(session_name)
+    return get_session_dir() .. "/" .. session_name .. ".vim"
+end
+
+function save_session_by_name()
+    local session_name = vim.fn.input("Session name: ")
+    if session_name ~= "" then
+        local session_file = get_session_file(session_name)
+        vim.cmd("mksession! " .. session_file)
+        print("Saved session: " .. session_file)
+    end
+end
+
+function restore_session_by_name()
+    local sessions = list_sessions()
+    if #sessions == 0 then
+        print("No sessions found")
+        return
+    end
+
+    local session_name = vim.fn.inputlist({ "Select session to restore:", unpack(sessions) })
+    if session_name > 0 and session_name <= #sessions then
+        local name = sessions[session_name]
+        local session_file = get_session_file(name)
+        if vim.fn.filereadable(session_file) == 1 then
+            vim.cmd("source " .. session_file)
+            print("Restored session: " .. session_file)
+        else
+            print("Session file not found: " .. session_file)
+        end
+    else
+        print("Invalid session selection: " .. session_name)
+    end
 end
 
 function setup_workspace()
