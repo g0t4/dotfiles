@@ -491,7 +491,9 @@ function agimages
 
     # combine regex + ext regex into one filter, works great
     # FYI uses smart casing by default so don't add -i here
-    fd --unrestricted --regex "$secondary_path_filter"".*\.(png|jpg|jpeg|gif|bmp|tiff|webp|svg|icns|ico)" \
+    fd --unrestricted \
+        --follow \
+        --regex "$secondary_path_filter"".*\.(png|jpg|jpeg|gif|bmp|tiff|webp|svg|icns|ico)" \
         --exec bash -c 'echo {}; imgcat "{}"' \
         -- $look_in_dir
 
