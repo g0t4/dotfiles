@@ -64,12 +64,13 @@ function list_session_names()
 end
 
 ---@param name string
----@return string
+---@return string, string -- file, dir
 function get_session_file(name)
     local dir = get_sessions_dir()
     return dir .. "/" .. name .. ".vim", dir
 end
 
+---@param name string
 function save_session_by_name(name)
     -- pass name arg is useful if calling this via vim cmdline (history/rerunnable)
     -- input is intended for keymap when there's no name passed
@@ -86,6 +87,10 @@ function save_session_by_name(name)
     vim.fn.mkdir(dir, "p") -- mksession fails w/o dir
     vim.cmd("mksession! " .. file)
     print("Saved session: " .. file)
+end
+
+function open_werkspace_sessions_dir()
+    vim.cmd("silent !open " .. get_sessions_dir())
 end
 
 function restore_session_by_name(name)
@@ -106,9 +111,8 @@ function restore_session_by_name(name)
         local name = names[name_index]
     end
     local session_file = get_session_file(name)
-    if vim.fn.filereadable(session_file) == 1 then
+    if vim.fn.filereadable(session_file) then
         vim.cmd("source " .. session_file)
-        print("Restored session: " .. session_file)
     else
         print("Session file not found: " .. session_file)
     end
