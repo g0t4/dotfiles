@@ -40,10 +40,6 @@ def detect_regular_silences(use_file):
 
     x_sorted_ranges = sort_ranges_by_x_start(x_ranges)
 
-    # PRN throw if any regions overlap?
-    # OR, throw if they aren't basically the full height of the image?
-    # see what happens with real usage and then add if I encounter issues
-
     def merge_if_one_pixel_apart(accum, current):
         # print(f'{accum=}   {current=}')
         accum = accum or []
