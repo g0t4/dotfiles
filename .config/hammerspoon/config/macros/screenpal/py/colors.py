@@ -284,3 +284,18 @@ print(f'{cv_img_edges[64, 590]=}')  # same
 # TODO capture even taller waveforms and figure out the best way to mask across them
 print(f'{cv_img_edges[65, 588]=}')
 # cv_img_edges[65, 588]=array([138,  91,  82], dtype=uint8)
+#
+# ***! edges - sample HSV to tackle the gradient!
+#   * gradient appears to be lightness variation
+#   * I bet hue is close to the same so lets check
+cv_img_edges_hsv = cv.cvtColor(cv_img_edges, cv.COLOR_BGR2HSV)
+
+print(f'{cv_img_edges_hsv[64, 588]=}')  # top edge (medium waveform)
+print(f'{cv_img_edges_hsv[82, 204]=}')  # top edge (short waveform)
+print(f'{cv_img_edges_hsv[89, 204]=}')  #
+#
+# BINGO! hue is almost constant!
+# cv_img_edges_hsv[64, 588]=array([116, 103, 139], dtype=uint8)
+# cv_img_edges_hsv[82, 204]=array([115, 115, 124], dtype=uint8)
+# cv_img_edges_hsv[89, 204]=array([115, 121, 118], dtype=uint8)
+
