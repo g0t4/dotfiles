@@ -64,7 +64,12 @@ def detect_regular_silences(use_file):
 
     # # * look back at falling edge of waveform
     for x_start, x_end in merged_x_ranges:
-        x_lookback_start = np.max(x_start - 30, 0)
+        x_lookback_start = max(0, x_start - 30)
+        # print(f'{x_lookback_start=} {x_start=}')
+        if x_lookback_start >= x_start:
+            # print("SKIPPED EMPTY")
+            continue
+
         print(f'{x_start=} {x_end=} {x_lookback_start=}')
         hsv_lookback = shared.hsv[:, x_lookback_start:x_start]
         print(f'{hsv_lookback=}')
