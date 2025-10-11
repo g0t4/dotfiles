@@ -14,8 +14,6 @@ def detect_regular_silences(use_file):
 
     shared = get_shared_context(use_file)
     image = shared.image
-    timeline_mask = shared.timeline_mask
-    playhead_mask = shared.playhead_mask
 
     gray_box_mask = color_mask(image, colors_bgr.silence_gray, tolerance=6)  # slightly looser for AA edges
     #   it does detect the playhead and the white dashed vertical line from recording mark, but I could skip over those with a n algorithm of some sort to connect sections with tiny tiny gaps (<4 pixels wide) assuming both sides are silence
@@ -90,10 +88,10 @@ def detect_regular_silences(use_file):
             # image, # include image but not really necessary
             display_mask_over_image(image, gray_box_mask),
             display_mask_only(image, gray_box_mask),
-            display_mask_over_image(image, timeline_mask),
-            display_mask_only(image, timeline_mask),
-            display_mask_over_image(image, playhead_mask, alpha=0.5, highlight_color=YELLOW),
-            display_mask_only(image, playhead_mask, highlight_color=YELLOW),
+            display_mask_over_image(image, shared.timeline_mask),
+            display_mask_only(image, shared.timeline_mask),
+            display_mask_over_image(image, shared.playhead_mask, alpha=0.5, highlight_color=YELLOW),
+            display_mask_only(image, shared.playhead_mask, highlight_color=YELLOW),
             divider,
             display_mask_only(image, gray_box_mask),
             display_mask_only(image, gray_box_mask_smooth),
