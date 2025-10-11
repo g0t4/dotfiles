@@ -62,35 +62,37 @@ def detect_regular_silences(use_file):
     # ** join adjacent boxes that are 1 pixel apart x2_start = x1_end + 1
     merged_x_ranges = reduce(merge_if_one_pixel_apart, x_sorted_ranges, [])
 
-    # # * look back at falling edge of waveform
-    for x_start, x_end in merged_x_ranges:
-        x_lookback_start = max(0, x_start - 30)
-        # print(f'{x_lookback_start=} {x_start=}')
-        if x_lookback_start >= x_start:
-            # print("SKIPPED EMPTY")
-            continue
-
-        print(f'{x_start=} {x_end=} {x_lookback_start=}')
-        hsv_lookback = shared.hsv[:, x_lookback_start:x_start]
-        print(f'{hsv_lookback=}')
-        # show_and_wait(hsv_lookback) # todo fix for imshow
-        # # import time
-        # # start = time.time()
-        # # ms = (time.time() - start) * 1000
-        # # print(f"HSV conversion took {ms:.0f}ms")  # 1.7ms on 1080p image
-        #
-        # # start = time.time()
-        # hue_center = 115
-        # tol = 3
-        # min_sat = 80
-        # self.waveform_mask = cv.inRange(  # * 186us FAST!!!
-        #     self.hsv,
-        #     (hue_center - 1, 100, 30),  # hue ±5°, moderate min S,V to avoid background
-        #     (hue_center + 1, 130, 140),
-        # )
-        #
-        # # ms = (time.time() - start) * 1_000_000
-        # # print(f"hue waveform mask took {ms:.000f}us")
+    # # # * look back at falling edge of waveform
+    # for x_start, x_end in merged_x_ranges:
+    #     x_lookback_start = max(0, x_start - 30)
+    #     if x_lookback_start >= x_start:
+    #         # print("SKIPPED EMPTY")
+    #         continue
+    #     print(f'{x_start=} {x_end=} {x_lookback_start=}')
+    #     hsv_lookback = shared.hsv[:, x_lookback_start:x_start]
+    #     # print(f'{hsv_lookback=}')
+    #     # cv.imshow("images", bgr_lookback)
+    #     # cv.waitKey(0)
+    #     # cv.destroyAllWindows()
+    #     # # import time
+    #     # # start = time.time()
+    #     # # ms = (time.time() - start) * 1000
+    #     # # print(f"HSV conversion took {ms:.0f}ms")  # 1.7ms on 1080p image
+    #     #
+    #     # # start = time.time()
+    #     # hue_center = 115
+    #     # tol = 3
+    #     # min_sat = 80
+    #     # waveform_mask = cv.inRange(  # * 186us FAST!!!
+    #     #     self.hsv,
+    #     #     (hue_center - 1, 100, 30),  # hue ±5°, moderate min S,V to avoid background
+    #     #     (hue_center + 1, 130, 140),
+    #     # )
+    #     # waveform_mask_bgr = cv.cvtColor(waveform_mask, cv.COLOR_HSV2BGR) # FYI just an idea, not tested
+    #     # show_and_wait(waveform_mask_bgr, "waveform mask") # FYI not tested
+    #     #
+    #     # # ms = (time.time() - start) * 1_000_000
+    #     # # print(f"hue waveform mask took {ms:.000f}us")
 
     # * serialize response to json in STDOUT
     detected = {
