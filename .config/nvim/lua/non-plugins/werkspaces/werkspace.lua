@@ -107,17 +107,15 @@ end
 function setup_werkspace()
     local werkspace_dir = get_werkspace_dir()
 
-    local shada_path = werkspace_dir .. "/shada"
-
     -- WHY do this with shada:
     --   privacy (don't jump list back to another project, i.e. during screencast)
     --   separate werkspaces, jumplist/marks s/b per project, not global... like vscode
     --      and cmd history, also belongs per project (though I can see more of an argument for global cmd history but since I don't use it much I don't think it will matter)
-    vim.opt.shadafile = shada_path
-
+    --   I LOVE how this has worked so far! PERFECT!
+    vim.opt.shadafile = werkspace_dir .. "/shada"
 
     vim.g.session_file = werkspace_dir .. "/session.vim"
-    --
+
     vim.cmd [[
 
         " removing buffers (I don't want background buffers, I can add back if I want that later)
