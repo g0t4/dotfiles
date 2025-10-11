@@ -44,6 +44,9 @@ class TimelineSharedDetectionContext:
         self.timeline_mask = color_mask(self.image, colors_bgr.timeline_bg, tolerance)
         self.playhead_mask = color_mask(self.image, colors_bgr.playhead, tolerance)
 
+    def divider(self) -> NDArray[np.uint8]:
+        return make_divider(self.image)
+
 # RUN ONE TIME for all detection scripts
 _shared_context = {}
 
@@ -120,3 +123,10 @@ def scan_mask(mask, cols_per_line=20):
             start_col = cols_per_line * i
             print(f"  col: {start_col}:")
             print(f"    {r}")
+
+def make_divider(image: NDArray[np.uint8]) -> NDArray[np.uint8]:
+    # make a divider like the background color #2C313C
+    divider = np.zeros_like(image)
+    divider = divider[:image.shape[0] // 2, :image.shape[1]]  # first half of image
+    divider[:] = [60, 49, 44]  # BGR for #2C313C
+    return divider

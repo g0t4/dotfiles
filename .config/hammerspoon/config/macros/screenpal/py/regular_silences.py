@@ -77,10 +77,7 @@ def detect_regular_silences(use_file):
     }
 
     if DEBUG:
-        # make a divider like the background color #2C313C
-        divider = np.zeros_like(image)
-        divider = divider[:image.shape[0] // 2, :image.shape[1]]  # first half of image
-        divider[:] = [60, 49, 44]  # BGR for #2C313C
+        divider = shared.divider()
 
         labeled_mask = display_colorful_labeled_regions(labels)
 
@@ -111,4 +108,3 @@ if DEBUG:
     detected = detect_regular_silences(file_arg)
 
     print(json.dumps(detected))
-
