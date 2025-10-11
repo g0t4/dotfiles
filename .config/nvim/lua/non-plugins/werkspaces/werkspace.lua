@@ -48,7 +48,7 @@ end
 
 ---@return string
 local function get_sessions_dir()
-    return vim.fn.get_werkspace_dir() .. "/sessions"
+    return get_werkspace_dir() .. "/sessions"
 end
 
 ---@return string[]
