@@ -88,10 +88,11 @@ function restore_session_by_name()
     end
 
     local name_index = vim.fn.inputlist({ "Select session to restore:", unpack(names) })
-    if name_index > 0 and name_index <= #names then
-        print("Invalid session selection: " .. name_index)
+    if name_index < 1 or name_index > #names then
+        print("Session name_index is out of range: " .. name_index)
         return
     end
+
     local name = names[name_index]
     local session_file = get_session_file(name)
     if vim.fn.filereadable(session_file) == 1 then
