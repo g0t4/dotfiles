@@ -43,17 +43,16 @@ class TimelineSharedDetectionContext:
         tolerance = 4
         self.timeline_mask = color_mask(self.image, colors_bgr.timeline_bg, tolerance)
         self.playhead_mask = color_mask(self.image, colors_bgr.playhead, tolerance)
+        # TODO try cv.inRange for color_mask instead of my implementation below
 
         # * waveform
-        # TODO might need higher up samples too?
-        # TODO test scaling down to 1080p to speed up color masks? IOTW convert in advance instead of at end! do this for everything if it works as well as 4k
-        import time
-        start = time.time()
+        # import time
+        # start = time.time()
         hsv = cv.cvtColor(self.image, cv.COLOR_BGR2HSV)  # type: ignore (FYI this is only 1ms!)
-        ms = (time.time() - start) * 1000
+        # ms = (time.time() - start) * 1000
         # print(f"HSV conversion took {ms:.0f}ms")  # 1.7ms on 1080p image
 
-        start = time.time()
+        # start = time.time()
         hue_center = 115
         tol = 3
         min_sat = 80
@@ -64,7 +63,7 @@ class TimelineSharedDetectionContext:
             (hue_center + 1, 130, 140),
         )
 
-        ms = (time.time() - start) * 1_000_000
+        # ms = (time.time() - start) * 1_000_000
         # print(f"hue waveform mask took {ms:.000f}us")
 
     def divider(self) -> NDArray[np.uint8]:

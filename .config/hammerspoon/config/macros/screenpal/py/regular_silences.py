@@ -69,6 +69,7 @@ def detect_regular_silences(use_file):
     #     lookback = shared.image[:, x_lookback_start:x_start]
     #     print(f'{lookback=}')
     #     # show_and_wait(lookback)
+    #     TODO use new cv.inRange but ONLY need to run it over lookback (not full image) for waveform detection!
 
     # * serialize response to json in STDOUT
     detected = {
