@@ -54,7 +54,6 @@ function get_screencapture_filename(extension, image_tag, capture_sub_dir)
     if appName ~= nil then
         filename = filename .. "." .. appName
     end
-
     if image_tag ~= nil then
         filename = filename .. "." .. image_tag
     end
@@ -88,7 +87,6 @@ function get_screencapture_filename(extension, image_tag, capture_sub_dir)
     -- get fraction of second using absoluteTime such that .100 == 100ms
     local sub_second = (hs.timer.absoluteTime() / 1e6) % 1000
 
-    -- TODO add appName, image_tag, etc here too, make it the same except for time as the above logic
     local longerPath = capture_dir
         .. "/" .. os.date("%Y-%m-%d %Hh%Mm%Ss")
         .. string.format("%3.0f", sub_second)
@@ -96,7 +94,6 @@ function get_screencapture_filename(extension, image_tag, capture_sub_dir)
     if appName ~= nil then
         longerPath = longerPath .. "." .. appName
     end
-
     if image_tag ~= nil then
         longerPath = longerPath .. "." .. image_tag
     end
