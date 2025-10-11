@@ -46,13 +46,13 @@ function get_werkspace_dir()
 end
 
 ---@return string
-local function get_session_dir()
+local function get_sessions_dir()
     return vim.fn.get_werkspace_dir() .. "/sessions"
 end
 
 ---@return string[]
 function list_sessions()
-    local session_dir = get_session_dir()
+    local session_dir = get_sessions_dir()
     local files = vim.fn.split(vim.fn.glob(session_dir .. "/*.vim"), "\n")
     local names = {}
     for _, file in ipairs(files) do
@@ -65,7 +65,7 @@ end
 ---@param name string
 ---@return string
 function get_session_file(name)
-    return get_session_dir() .. "/" .. name .. ".vim"
+    return get_sessions_dir() .. "/" .. name .. ".vim"
 end
 
 function save_session_by_name()
