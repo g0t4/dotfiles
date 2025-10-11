@@ -101,6 +101,20 @@ def color_mask(img: NDArray[np.uint8], color: NDArray[np.uint8], tolerance: int)
     diff = np.abs(img.astype(np.int16) - color.astype(np.int16))
     return (diff <= tolerance).all(axis=2).astype(np.uint8) * 255  # type: ignore
 
+def multi_color_mask(
+    img: NDArray[np.uint8],
+    colors: NDArray[np.uint8],  # shape (N, 3)
+    tolerance: int,
+) -> NDArray[np.uint8]:
+    img_i16 = img.astype(np.int16)
+    colors_i16 = colors.astype(np.int16)
+
+    # compute absolute difference for each color
+    diff = np.abs(img_i16[None, :, :, :] - colors_i16[:, None, None, :])
+    within_tol = (diff <= tolerance).all(axis=3)  # (N, H, W)
+    mask = within_tol.any(axis=0).astype(np.uint8) * 255  # (H, W)
+    return mask  # type: ignore
+
 def print_mask_evenly(name, mask, cols_per_line=10):
     """
     Print readable 2-D mask values with column offsets.
