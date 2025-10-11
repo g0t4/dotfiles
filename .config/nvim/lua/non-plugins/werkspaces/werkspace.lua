@@ -66,7 +66,8 @@ end
 ---@param name string
 ---@return string
 function get_session_file(name)
-    return get_sessions_dir() .. "/" .. name .. ".vim"
+    local dir = get_sessions_dir()
+    return dir .. "/" .. name .. ".vim", dir
 end
 
 function save_session_by_name()
@@ -78,9 +79,10 @@ function save_session_by_name()
     end
 
     name = sanitize_for_filename(name)
-    local session_file = get_session_file(name)
-    vim.cmd("mksession! " .. session_file)
-    print("Saved session: " .. session_file)
+    local file, dir = get_session_file(name)
+    vim.fn.mkdir(dir, "p") -- mksession fails w/o dir
+    vim.cmd("mksession! " .. file)
+    print("Saved session: " .. file)
 end
 
 function restore_session_by_name()
