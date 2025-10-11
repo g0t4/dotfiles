@@ -41,9 +41,9 @@ function setup_workspace()
     local dir = get_git_root() or vim.fn.getcwd()
     local hash = vim.fn.sha256(dir)
     -- TODO sha256 takes 10ms to run :( ... faster way? what does vscode use, doesn't it store some workspace state centrally?
-    local workspace_dir = "~/.config/nvim/shada/workspaces/"
-    workspace_dir = vim.fn.expand(workspace_dir) -- expand ~, else it will be literally ~ and yeah not what you want
-    local shada_path = workspace_dir .. hash .. "/shada"
+    local workspaces_dir = "~/.config/nvim/shada/workspaces/"
+    workspaces_dir = vim.fn.expand(workspaces_dir) -- expand ~, else it will be literally ~ and yeah not what you want
+    local shada_path = workspaces_dir .. hash .. "/shada"
 
     -- WHY do this with shada:
     --   privacy (don't jump list back to another project, i.e. during screencast)
@@ -52,7 +52,7 @@ function setup_workspace()
     vim.opt.shadafile = shada_path
 
 
-    vim.g.session_file = workspace_dir .. hash .. "/session.vim"
+    vim.g.session_file = workspaces_dir .. hash .. "/session.vim"
     --
     vim.cmd [[
 
