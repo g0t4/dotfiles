@@ -55,6 +55,16 @@ class TimelineSharedDetectionContext:
         # + color_mask(self.image, np.array([124, 77, 68]), tolerance=4) \
         ms = (time.time() - start) * 1000
         print(f"waveform mask took {ms:.0f}ms")
+        print()
+        print("multi:")
+        start = time.time()
+        self.waveform_mask = multi_color_mask(self.image, np.array([
+            [139,  91,  83],  # waveform color
+            [118, 71, 62],   # waveform color
+            [124, 77, 68],   # waveform color
+        ]), tolerance=6)
+        ms = (time.time() - start) * 1000
+        print(f"multi color waveform mask took {ms:.0f}ms")
 
     def divider(self) -> NDArray[np.uint8]:
         return make_divider(self.image)
