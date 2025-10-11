@@ -5,6 +5,10 @@
 ---@param name string
 ---@return string name -- sanitized, can be used in a filename
 function sanitize_for_filename(name)
+    if not name then
+        return ""
+    end
+
     -- replace if not alphanumeric (%w) or a literal dot/dash
     name = name:gsub("[^%w_%-%.]", "_")
 
