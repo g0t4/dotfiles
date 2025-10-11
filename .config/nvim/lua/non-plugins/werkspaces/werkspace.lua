@@ -1,4 +1,5 @@
 require('non-plugins.werkspaces.filetypemods') -- FYI! must load  before werkspace else filetype mods dont fire for initial opened buffer
+require('helpers.hs_shared')
 -- actually not the end of the world to tie these two together, they are similar in what they acccomplish
 -- TODO can I fix so filetypmods are applied to existing buffers on load?
 
@@ -75,6 +76,8 @@ function save_session_by_name()
         print("No session name provided")
         return
     end
+
+    name = sanitize_for_filename(name)
     local session_file = get_session_file(name)
     vim.cmd("mksession! " .. session_file)
     print("Saved session: " .. session_file)
