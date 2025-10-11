@@ -126,6 +126,8 @@ vim.api.nvim_create_user_command("Sessions", function(opts)
         save_session_by_name(name)
     elseif subcmd == "restore" then
         restore_session_by_name(name)
+    elseif subcmd == "open_dir" then
+        open_werkspace_sessions_dir()
     elseif subcmd == "list" then
         local names = list_session_names()
         if #names == 0 then
@@ -136,7 +138,7 @@ vim.api.nvim_create_user_command("Sessions", function(opts)
             end
         end
     else
-        print("Usage: Sessions [save|restore|list] [name]")
+        print("Usage: Sessions [save|restore|list|open_dir] [name]")
     end
 end, {
     nargs = "*",
@@ -154,7 +156,7 @@ end, {
         elseif num_args <= 2 then
             -- Complete subcommands
             -- FYI num_args==1 to complete w/o typing first char of subcmd
-            local subcmds = { "save", "restore", "list" }
+            local subcmds = { "save", "restore", "list", "open_dir" }
             return vim.tbl_filter(function(cmd)
                 return cmd:find(arglead, 1, true) == 1
             end, subcmds)
