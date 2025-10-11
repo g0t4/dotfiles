@@ -62,16 +62,16 @@ function list_sessions()
     return names
 end
 
----@param session_name string
+---@param name string
 ---@return string
-function get_session_file(session_name)
-    return get_session_dir() .. "/" .. session_name .. ".vim"
+function get_session_file(name)
+    return get_session_dir() .. "/" .. name .. ".vim"
 end
 
 function save_session_by_name()
-    local session_name = vim.fn.input("Session name: ")
-    if session_name ~= "" then
-        local session_file = get_session_file(session_name)
+    local name = vim.fn.input("Session name: ")
+    if name ~= "" then
+        local session_file = get_session_file(name)
         vim.cmd("mksession! " .. session_file)
         print("Saved session: " .. session_file)
     end
