@@ -568,7 +568,7 @@ function capture_this_element(callback, element, capture_sub_dir)
         if value then image_tag = image_tag .. "_value_" .. value end
         if title then image_tag = image_tag .. "_title_" .. title end
         if desc then image_tag = image_tag .. "_desc_" .. desc end
-        image_tag = sanitize_image_tag(image_tag)
+        image_tag = sanitize_for_filename(image_tag)
     end
 
     -- * save to

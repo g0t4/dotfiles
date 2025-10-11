@@ -113,11 +113,16 @@ function uuid()
     end)
 end
 
+--- aggresive sanitizer
 ---@param name string
----@return string name
-function sanitize_image_tag(name)
-    name = name:gsub("[^%w%-%.]", "_")
+---@return string name -- sanitized, can be used in a filename
+function sanitize_for_filename(name)
+    -- replace if not alphanumeric (%w) or a literal dot/dash
+    name = name:gsub("[^%w_%-%.]", "_")
+
+    -- trim leading and trailing whitespace
     name = name:gsub("^%s+", "")
     name = name:gsub("%s+$", "")
+
     return name
 end
