@@ -81,15 +81,15 @@ function save_session_by_name()
 end
 
 function restore_session_by_name()
-    local sessions = list_session_names()
-    if #sessions == 0 then
+    local names = list_session_names()
+    if #names == 0 then
         print("No sessions found")
         return
     end
 
-    local name_index = vim.fn.inputlist({ "Select session to restore:", unpack(sessions) })
-    if name_index > 0 and name_index <= #sessions then
-        local name = sessions[name_index]
+    local name_index = vim.fn.inputlist({ "Select session to restore:", unpack(names) })
+    if name_index > 0 and name_index <= #names then
+        local name = names[name_index]
         local session_file = get_session_file(name)
         if vim.fn.filereadable(session_file) == 1 then
             vim.cmd("source " .. session_file)
