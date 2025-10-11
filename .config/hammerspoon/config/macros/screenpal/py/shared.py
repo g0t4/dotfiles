@@ -2,6 +2,7 @@ import sys
 from typing import NamedTuple
 import cv2 as cv
 import numpy as np
+from numpy.typing import NDArray
 from pathlib import Path
 
 # Highlight colors (BGR order for OpenCV)
@@ -37,6 +38,7 @@ class TimelineSharedDetectionContext:
 
     def __init__(self, file):
         self.image = load_image(file)
+
         # Tiny tolerance may handle edge pixels
         tolerance = 4
         self.timeline_mask = color_mask(self.image, colors_bgr.timeline_bg, tolerance)
@@ -52,7 +54,7 @@ def get_shared_context(file) -> TimelineSharedDetectionContext:
         _shared_context[file] = TimelineSharedDetectionContext(file)
     return _shared_context[file]
 
-def load_image(path) -> np.ndarray:
+def load_image(path) -> NDArray[np.uint8]:
     # / ".config/hammerspoon/config/macros/screenpal/py/timeline03a-2.png"
     image = cv.imread(str(path), cv.IMREAD_COLOR)  # BGR
     if image is None:
@@ -61,7 +63,7 @@ def load_image(path) -> np.ndarray:
     # PRN any assertions about size so if it changes I know that I might need to adjust some logic (i.e. top/bottom borders)?
 
     # * take off top and bottom borders (leave leading/trailing else have to adjust x values)
-    return image[2:-2]
+    return image[2:-2]  # type: ignore
 
 class TimelineColorsBGR(NamedTuple):
     timeline_bg: np.ndarray
@@ -80,9 +82,9 @@ colors_bgr = TimelineColorsBGR(
 # returns 2D array, where each pixel is either 0 or 255
 # 0 = NOT A MATCH (1+ components does not match w/in tolerance)
 # 255 = MATCH (all components BGR match w/in tolerance)
-def color_mask(img, color, tolerance):
+def color_mask(img: NDArray[np.uint8], color: NDArray[np.uint8], tolerance: int) -> NDArray[np.uint8]:
     diff = np.abs(img.astype(np.int16) - color.astype(np.int16))
-    return (diff <= tolerance).all(axis=2).astype(np.uint8) * 255
+    return (diff <= tolerance).all(axis=2).astype(np.uint8) * 255  # type: ignore
 
 def print_mask_evenly(name, mask, cols_per_line=10):
     """
