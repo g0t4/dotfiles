@@ -43,7 +43,7 @@ class TimelineSharedDetectionContext:
         tolerance = 4
         self.timeline_mask = color_mask(self.image, colors_bgr.timeline_bg, tolerance)
         self.playhead_mask = color_mask(self.image, colors_bgr.playhead, tolerance)
-        self.waveform_mask = color_mask(self.image, colors_bgr.waveform, tolerance)  # 3.86ms
+        self.waveform_mask = color_mask(self.image, colors_bgr.waveform, tolerance=22)  # 3.86ms
 
     def divider(self) -> NDArray[np.uint8]:
         return make_divider(self.image)
