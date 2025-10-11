@@ -88,8 +88,6 @@ def detect_regular_silences(use_file):
 
         show_and_wait(
             # image, # include image but not really necessary
-            display_mask_only(image, shared.waveform_mask),
-            divider,
             display_mask_over_image(image, gray_box_mask),
             display_mask_only(image, gray_box_mask),
             display_mask_over_image(image, shared.timeline_mask),
