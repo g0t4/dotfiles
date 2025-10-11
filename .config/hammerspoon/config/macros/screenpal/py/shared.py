@@ -58,7 +58,7 @@ class TimelineSharedDetectionContext:
         tol = 3
         min_sat = 80
         # TODO! switch color_mask to use cv.inRange (way faster than my color_mask).. this is way, way sub-ms... shows as 0ms
-        self.waveform_mask = cv.inRange(
+        self.waveform_mask = cv.inRange( # * 186us FAST!!!
             hsv,
             (hue_center - 1, 100, 30),  # hue ±5°, moderate min S,V to avoid background
             (hue_center + 1, 130, 140),
