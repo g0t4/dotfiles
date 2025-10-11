@@ -108,7 +108,7 @@ function restore_session_by_name(name)
             return
         end
 
-        local name = names[name_index]
+        name = names[name_index]
     end
     local session_file = get_session_file(name)
     if vim.fn.filereadable(session_file) then
