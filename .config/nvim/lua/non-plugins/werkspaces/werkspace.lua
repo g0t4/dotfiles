@@ -92,14 +92,14 @@ function restore_session_by_name()
         print("Invalid session selection: " .. name_index)
         return
     end
-        local name = names[name_index]
-        local session_file = get_session_file(name)
-        if vim.fn.filereadable(session_file) == 1 then
-            vim.cmd("source " .. session_file)
-            print("Restored session: " .. session_file)
-        else
-            print("Session file not found: " .. session_file)
-        end
+    local name = names[name_index]
+    local session_file = get_session_file(name)
+    if vim.fn.filereadable(session_file) == 1 then
+        vim.cmd("source " .. session_file)
+        print("Restored session: " .. session_file)
+    else
+        print("Session file not found: " .. session_file)
+    end
 end
 
 function setup_werkspace()
