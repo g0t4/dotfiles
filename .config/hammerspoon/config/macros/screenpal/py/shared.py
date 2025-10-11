@@ -56,7 +56,13 @@ class TimelineSharedDetectionContext:
         start = time.time()
         hue_center = 115
         tol = 3
-        self.waveform_mask = cv.inRange(hsv, (hue_center - tol, 40, 0), (hue_center + tol, 255, 255))
+        min_sat = 80
+        # self.waveform_mask = cv.inRange(hsv, (hue - 3, min_sat, 0), (hue + 3, 255, 255))
+        self.waveform_mask = cv.inRange(
+            hsv,
+            (hue_center - 1, 100, 30),  # hue ±5°, moderate min S,V to avoid background
+            (hue_center + 1, 130, 140),
+        )
 
         ms = (time.time() - start) * 1000
         print(f"hue waveform mask took {ms:.0f}ms")
