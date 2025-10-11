@@ -49,7 +49,7 @@ class TimelineSharedDetectionContext:
         # TODO test scaling down to 1080p to speed up color masks? IOTW convert in advance instead of at end! do this for everything if it works as well as 4k
         import time
         start = time.time()
-        hsv = cv.cvtColor(self.image, cv.COLOR_BGR2HSV)  # type: ignore
+        hsv = cv.cvtColor(self.image, cv.COLOR_BGR2HSV)  # type: ignore (FYI this is only 1ms!)
         ms = (time.time() - start) * 1000
         print(f"HSV conversion took {ms:.0f}ms")  # 1.7ms on 1080p image
 
@@ -57,15 +57,15 @@ class TimelineSharedDetectionContext:
         hue_center = 115
         tol = 3
         min_sat = 80
-        # self.waveform_mask = cv.inRange(hsv, (hue - 3, min_sat, 0), (hue + 3, 255, 255))
+        # TODO! switch color_mask to use cv.inRange (way faster than my color_mask).. this is way, way sub-ms... shows as 0ms
         self.waveform_mask = cv.inRange(
             hsv,
             (hue_center - 1, 100, 30),  # hue ±5°, moderate min S,V to avoid background
             (hue_center + 1, 130, 140),
         )
 
-        ms = (time.time() - start) * 1000
-        print(f"hue waveform mask took {ms:.0f}ms")
+        ms = (time.time() - start) * 1_000_000
+        print(f"hue waveform mask took {ms:.000f}us")
 
     def divider(self) -> NDArray[np.uint8]:
         return make_divider(self.image)
