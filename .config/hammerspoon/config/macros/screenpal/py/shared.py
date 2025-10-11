@@ -43,7 +43,8 @@ class TimelineSharedDetectionContext:
         tolerance = 4
         self.timeline_mask = color_mask(self.image, colors_bgr.timeline_bg, tolerance)
         self.playhead_mask = color_mask(self.image, colors_bgr.playhead, tolerance)
-        self.waveform_mask = color_mask(self.image, colors_bgr.waveform, tolerance=22)  # 3.86ms
+        # self.waveform_mask = color_mask(self.image, np.array([118, 71, 62]), tolerance=22)  # 3.86ms
+        self.waveform_mask = color_mask(self.image, np.array([124, 77, 68]), tolerance=4)
 
     def divider(self) -> NDArray[np.uint8]:
         return make_divider(self.image)
@@ -73,7 +74,6 @@ class TimelineColorsBGR(NamedTuple):
     timeline_bg: np.ndarray
     silence_gray: np.ndarray
     playhead: np.ndarray
-    waveform: np.ndarray
 
 # FYI use colors.py to deterine colors to use and then inline values here:
 
@@ -82,7 +82,6 @@ colors_bgr = TimelineColorsBGR(
     timeline_bg=np.array([41, 19, 16]),
     silence_gray=np.array([57, 37, 34]),
     playhead=np.array([255, 157, 37]),
-    waveform=np.array([118, 71, 62]),
 )
 
 # returns 2D array, where each pixel is either 0 or 255
