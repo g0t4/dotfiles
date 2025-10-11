@@ -144,20 +144,21 @@ end, {
         local args = vim.split(cmdline, "%s+", { trimempty = true })
         local num_args = #args
 
-        if num_args == 2 then
-            -- Complete subcommands
-            local subcmds = { "save", "restore", "list" }
-            return vim.tbl_filter(function(cmd)
-                return cmd:find(arglead, 1, true) == 1
-            end, subcmds)
-        elseif num_args == 3 and (args[2] == "save" or args[2] == "restore") then
-            -- Complete session names
+        local subcmd = args[2] -- nil if not typed yet
+        local subcmd_takes_name = subcmd == "save" or subcmd == "restore"
+        if subcmd_takes_name then
             local names = list_session_names()
             return vim.tbl_filter(function(name)
                 return name:find(arglead, 1, true) == 1
             end, names)
+        elseif num_args <= 2 then
+            -- Complete subcommands
+            -- FYI num_args==1 to complete w/o typing first char of subcmd
+            local subcmds = { "save", "restore", "list" }
+            return vim.tbl_filter(function(cmd)
+                return cmd:find(arglead, 1, true) == 1
+            end, subcmds)
         end
-
         return {}
     end,
 })
