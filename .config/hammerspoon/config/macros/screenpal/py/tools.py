@@ -115,7 +115,11 @@ def detect_tools(use_file):
 
         row8 = np.logical_or(row8_pink, row8_red)  # only two at a time?
         row8 = np.logical_or(row8, row8_blue)  # only two at a time IIUC
-        # TODO add back green once I differentiate open vs closed tool use (right now after completing freeze frame, the colors still match and make it look like the tool is still open for editing, fubaring my other silence code)
+
+        # TODO add back green once I differentiate open vs closed tool use
+        # TODO right now after completing freeze frame, the colors still match and make it look like the tool is still open for editing
+        # TODO which fubars my other silence code
+        # TODO add test case to detect this scenario b/c I don't recall it now and yeah.. would be nice to have a capture at a minimum
         # row8 = np.logical_or(row8, row8_green)  # add green to the mix
 
         # FYI if needed, scan_mask(pink_mask)
