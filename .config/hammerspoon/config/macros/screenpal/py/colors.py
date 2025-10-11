@@ -253,9 +253,22 @@ print(f'{cv_img_freeze_frame[7, 517]=}')
 
 # ***! edges - measure waveform color
 cv_img_edges = cv.imread(str(samples_dir / "edges/edges1.png"))
-# 205x 90y
+# 205x 90y - bottom of waveform color samples
 # BTW waveform appears slightly gray-er than the bottom border's blue color
 print(f'{cv_img_edges[89, 204]=}')  # inside waveform [118,  71,  62]
 print(f'{cv_img_edges[89, 205]=}')  # inside waveform
 # cv_img_edges[89, 204]=array([118,  71,  62], dtype=uint8)
 # cv_img_edges[89, 205]=array([118,  71,  62], dtype=uint8)
+#
+# * 205x 83y - top edge of waveform
+# (solid color, not pixelated b/c this was flat waveform - no level change for 10ish pixels)
+print(f'{cv_img_edges[82, 204]=}')
+# cv_img_edges[82, 204]=array([124,  77,  68], dtype=uint8)
+print(f'{cv_img_edges[82, 205]=}')  # same color
+print(f'{cv_img_edges[82, 206]=}')  # same color
+#
+# * 84y (2nd row from top edge):
+print(f'{cv_img_edges[83, 204]=}')
+# cv_img_edges[83, 204]=array([123,  76,  67], dtype=uint8)
+print(f'{cv_img_edges[83, 205]=}')  # same
+print(f'{cv_img_edges[83, 206]=}')  # same
