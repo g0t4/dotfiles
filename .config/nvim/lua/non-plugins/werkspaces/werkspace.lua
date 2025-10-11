@@ -51,9 +51,9 @@ local function get_sessions_dir()
 end
 
 ---@return string[]
-function list_sessions()
-    local session_dir = get_sessions_dir()
-    local files = vim.fn.split(vim.fn.glob(session_dir .. "/*.vim"), "\n")
+function list_session_names()
+    local dir = get_sessions_dir()
+    local files = vim.fn.split(vim.fn.glob(dir .. "/*.vim"), "\n")
     local names = {}
     for _, file in ipairs(files) do
         local name = vim.fn.fnamemodify(file, ":t:r")
@@ -78,7 +78,7 @@ function save_session_by_name()
 end
 
 function restore_session_by_name()
-    local sessions = list_sessions()
+    local sessions = list_session_names()
     if #sessions == 0 then
         print("No sessions found")
         return
