@@ -36,8 +36,9 @@ end
 
 ---@param extension? string
 ---@param image_tag? string -- added to filename, to give context about what was captured
+---@param capture_sub_dir? string -- use nested directory to group related screen caps
 ---@return string filename
-function get_screencapture_filename(extension, image_tag)
+function get_screencapture_filename(extension, image_tag, capture_sub_dir)
     extension = extension or "png"
 
     -- FYI file sizes verified to match macOS keyboard shortcuts for screencap
@@ -59,16 +60,25 @@ function get_screencapture_filename(extension, image_tag)
     end
 
     -- check if capture directory exists, if not WARN and abort
-    local captureDir = getCaptureDirectory()
-    if not hs.fs.attributes(captureDir) then
+    local capture_dir = getCaptureDirectory()
+    if not hs.fs.attributes(capture_dir) then
         local message = "Screencap directory does not exist, please create it OR reset it: "
-            .. captureDir
+            .. capture_dir
         hs.alert.show(message)
         -- PRN reset to common spot?
         error(message)
     end
 
-    local shortFileNamePath = captureDir .. "/" .. filename .. "." .. extension
+    if capture_sub_dir ~= nil then
+        capture_dir = capture_dir .. "/" .. capture_sub_dir
+        if not hs.fs.attributes(capture_dir) then
+            print("creating capture_sub_dir", capture_dir)
+            hs.fs.mkdir(capture_dir)
+        end
+    end
+
+    local shortFileNamePath = capture_dir .. "/" .. filename .. "." .. extension
+    print("trying filename", shortFileNamePath)
     if hs.fs.attributes(shortFileNamePath) == nil then
         return shortFileNamePath
     end
@@ -78,7 +88,8 @@ function get_screencapture_filename(extension, image_tag)
     -- get fraction of second using absoluteTime such that .100 == 100ms
     local sub_second = (hs.timer.absoluteTime() / 1e6) % 1000
 
-    local longerPath = getCaptureDirectory()
+    -- TODO add appName, image_tag, etc here too, make it the same except for time as the above logic
+    local longerPath = capture_dir
         .. "/" .. os.date("%Y-%m-%d %Hh%Mm%Ss")
         .. string.format("%3.0f", sub_second)
 

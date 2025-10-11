@@ -644,8 +644,8 @@ local function detect_silences(callback)
         local win = get_cached_editor_window()
 
         local timeline_element = win:get_timeline_slider_or_throw()
-        local image_tag = "trash_me_silence_detect"
-        local where_to = syncify(capture_this_element, timeline_element, image_tag)
+        local capture_sub_dir = "_screenpal_silence_detect_trash_me"
+        local where_to = syncify(capture_this_element, timeline_element, capture_sub_dir)
 
         local detected = syncify(detect_silence, where_to)
 

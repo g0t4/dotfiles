@@ -551,10 +551,12 @@ end
 
 ---@param element hs.axuielement
 ---@param callback fun(path: string)
-function capture_this_element(callback, element, image_tag)
+---@param capture_sub_dir string? -- optional capture sub dir under the main capture dir
+function capture_this_element(callback, element, capture_sub_dir)
     local frame = element:axFrame()
 
-    if image_tag == nil or image_tag == "" then
+    local image_tag = nil
+    if not capture_sub_dir and (image_tag == nil or image_tag == "") then
         local role = element:axRole() or ""
         local identifier = element:attributeValue("AXIdentifier")
         local value = element:attributeValue("AXValue")
@@ -570,7 +572,7 @@ function capture_this_element(callback, element, image_tag)
     end
 
     -- * save to
-    local where_to = get_screencapture_filename("png", image_tag)
+    local where_to = get_screencapture_filename("png", image_tag, capture_sub_dir)
     -- local where_to = "-P" -- -P == open in preview (does not save to disk)
 
     function when_done(result, std_out, std_err)
