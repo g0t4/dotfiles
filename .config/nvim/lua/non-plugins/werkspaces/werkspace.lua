@@ -70,11 +70,14 @@ end
 
 function save_session_by_name()
     local name = vim.fn.input("Session name: ")
-    if name ~= "" then
-        local session_file = get_session_file(name)
-        vim.cmd("mksession! " .. session_file)
-        print("Saved session: " .. session_file)
+    if name == "" then
+        -- PRN use "default"?
+        print("No session name provided")
+        return
     end
+    local session_file = get_session_file(name)
+    vim.cmd("mksession! " .. session_file)
+    print("Saved session: " .. session_file)
 end
 
 function restore_session_by_name()
@@ -84,9 +87,9 @@ function restore_session_by_name()
         return
     end
 
-    local session_name = vim.fn.inputlist({ "Select session to restore:", unpack(sessions) })
-    if session_name > 0 and session_name <= #sessions then
-        local name = sessions[session_name]
+    local name = vim.fn.inputlist({ "Select session to restore:", unpack(sessions) })
+    if name > 0 and name <= #sessions then
+        local name = sessions[name]
         local session_file = get_session_file(name)
         if vim.fn.filereadable(session_file) == 1 then
             vim.cmd("source " .. session_file)
@@ -95,7 +98,7 @@ function restore_session_by_name()
             print("Session file not found: " .. session_file)
         end
     else
-        print("Invalid session selection: " .. session_name)
+        print("Invalid session selection: " .. name)
     end
 end
 
