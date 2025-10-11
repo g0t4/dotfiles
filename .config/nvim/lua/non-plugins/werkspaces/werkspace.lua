@@ -70,8 +70,11 @@ function get_session_file(name)
     return dir .. "/" .. name .. ".vim", dir
 end
 
-function save_session_by_name()
-    local name = vim.fn.input("Session name: ")
+function save_session_by_name(name)
+    -- pass name arg is useful if calling this via vim cmdline (history/rerunnable)
+    -- input is intended for keymap when there's no name passed
+    name = name or vim.fn.input("Session name: ")
+    print("")
     if name == "" then
         -- PRN use "default"?
         print("No session name provided")
