@@ -169,6 +169,11 @@ end, {
             -- once subcmd matches, nothing left to complete!
             return {}
         elseif subcmd_takes_name then
+            -- once subcmd matches, only name param remains (3rd param)
+            if num_args == 3 and on_new_arg then
+                -- no 4th arg to complete
+                return {}
+            end
             local names = list_session_names()
             return vim.tbl_filter(function(name)
                 return name:find(arglead, 1, true) == 1
