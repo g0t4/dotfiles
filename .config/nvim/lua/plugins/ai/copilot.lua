@@ -343,8 +343,6 @@ vim.keymap.set({ 'n', 'i', 'v' }, '<F15>', ':lua SwitchCopilot()<CR>', { noremap
 vim.keymap.set({ 'n', 'i', 'v' }, '<F16>', function() require('ask-openai.api').toggle_verbose_logs() end, { noremap = true, silent = true })
 vim.keymap.set({ 'n', 'i', 'v' }, '<F17>', function() require('ask-openai.api').toggle_rag() end, { noremap = true, silent = true })
 
-
-
 function IsAskOpenAIPredictionsAvailable()
     -- FYI, later, replace with final setting
     return require("ask-openai.config").get_options().tmp.predictions
