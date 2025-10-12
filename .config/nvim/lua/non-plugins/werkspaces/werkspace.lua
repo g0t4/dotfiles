@@ -144,7 +144,7 @@ vim.api.nvim_create_user_command("Sessions", function(opts)
     end
 end, {
     nargs = "*",
-    complete = function(arglead, cmdline, _)
+    complete = function(arglead, cmdline, _cursor_pos)
         local args = vim.split(cmdline, "%s+", { trimempty = true })
         local num_args = #args
 
