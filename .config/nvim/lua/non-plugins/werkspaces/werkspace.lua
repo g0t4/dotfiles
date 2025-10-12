@@ -150,8 +150,10 @@ end, {
         --   print("cmdline: " .. tostring(cmdline))
         -- crude split on whitespace char(s)... works fine b/c session names do not use spaces
         local args = vim.split(cmdline, "%s+", { trimempty = true })
+        local on_new_arg = arglead == ""
         vim.print(args)
         vim.print("arglead: '" .. tostring(arglead) .. "'")
+        vim.print("on_new_arg: '" .. tostring(on_new_arg) .. "'")
 
         local num_args = #args
 
