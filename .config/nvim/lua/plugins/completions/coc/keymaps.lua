@@ -77,10 +77,9 @@ vim.keymap.set('n', '<leader>gi', '<Plug>(coc-implementation)', { silent = true 
 vim.keymap.set('n', '<leader>gr', '<Plug>(coc-references)', { silent = true })
 -- vim.keymap.set('n', '<leader>gr', '<Cmd>Telescope coc references<CR>', { silent = true })
 
--- FYI S-F12 doesn't work b/c IIRC my profile in iTerm2 remaps it to a diff escape sequence... not sure what that was for anymore but if it was fish-shell I can probably reverse it?!
---   by the way <F12> and <S-M-F12> all work, and I see the entry in the profile => keys so yeah that has to be it
-vim.keymap.set('n', '<S-F12>', '<Plug>(coc-references)', { silent = true })
--- vim.keymap.set('n', '<S-F12>', '<Cmd>Telescope coc references<CR>', { silent = true })
+-- Shift-F12 ==> <F24> (use ctrl-v in insert/cmdline modes to see keypress)
+vim.keymap.set('n', '<F24>', '<Plug>(coc-references)', { silent = true })
+-- vim.keymap.set('n', '<F24>', '<Cmd>Telescope coc references<CR>', { silent = true })
 
 vim.keymap.set('n', '<F12>', '<Plug>(coc-definition)', { silent = true })
 -- vim.keymap.set('n', '<F12>', '<Cmd>Telescope coc definitions<CR>', { silent = true })

@@ -75,7 +75,7 @@ local plugin_lspconfig = {
                     '<cmd>lua vim.lsp.buf.references()<CR>', buffer_keymap_options)
                 vim.keymap.set('n', '<F12>',
                     '<cmd>lua vim.lsp.buf.definition()<CR>', buffer_keymap_options)
-                vim.keymap.set('n', '<S-F12>',
+                vim.keymap.set('n', '<F24>', -- Shift+F12 ==> F24
                     '<cmd>lua vim.lsp.buf.references()<CR>', buffer_keymap_options)
                 -- FYI refs stay open, I kinda like that but want a fast way to close them, maybe a keymap?
 
