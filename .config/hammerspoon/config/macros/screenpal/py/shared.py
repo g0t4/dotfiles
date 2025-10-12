@@ -45,8 +45,21 @@ class TimelineSharedDetectionContext:
         self.playhead_mask = color_mask(self.image, colors_bgr.playhead, tolerance)
         # TODO! try cv.inRange for color_mask instead of my implementation below
 
-        # FYI using this for waveform (just with lookbacks initially)
-        self.hsv = cv.cvtColor(self.image, cv.COLOR_BGR2HSV)  # type: ignore (FYI this is only 1ms!)
+        self.hsv = cv.cvtColor(self.image, cv.COLOR_BGR2HSV)  # type: ignore # only 1ms!
+        import time
+        start = time.time()
+        hue_center = 115
+        tol = 3
+        min_sat = 80
+        self.waveform_mask = cv.inRange(
+            # * ~186us for entire (4k) image
+            # * vs 100us per lookback (30 pixels wide slice), so definitely just do this once!
+            self.hsv,
+            (hue_center - 1, 100, 30),  # hue ±5°, moderate min S,V to avoid background
+            (hue_center + 1, 130, 140),
+        )
+        ms = (time.time() - start) * 1_000_000
+        print(f"hue waveform mask took {ms:.000f}us")
 
     def divider(self) -> NDArray[np.uint8]:
         return make_divider(self.image)

@@ -69,33 +69,9 @@ def detect_regular_silences(use_file):
             continue
 
         print(f'{x_start=} {x_end=} {x_lookback_start=}')
-        hsv_lookback = shared.hsv[:, x_lookback_start:x_start]
-        print(f'{hsv_lookback=}')
-        # cv.imshow("images", hsv_lookback)
-        # cv.imshow("images", cv.cvtColor(hsv_lookback, cv.COLOR_HSV2BGR))
-        # cv.moveWindow("images", 100, 100)
-        # cv.waitKey(0)
-        # cv.destroyAllWindows()
-        # continue
-
-        import time
-        start = time.time()
-        hue_center = 115
-        tol = 3
-        min_sat = 80
-        # TODO do waveform_mask all at once, seems to be same speed as doing each one, one at a time! 100us for one lookback, or 186us for entire image
-        waveform_mask = cv.inRange(  # * <100us FAST!!!
-            hsv_lookback,
-            (hue_center - 1, 100, 30),  # hue ±5°, moderate min S,V to avoid background
-            (hue_center + 1, 130, 140),
-        )
-        ms = (time.time() - start) * 1_000_000
-        print(f"hue waveform mask took {ms:.000f}us")
-        # waveform_mask_bgr = cv.cvtColor(waveform_mask, cv.COLOR_HSV2BGR)  # FYI just an idea, not tested
-        print(f'{waveform_mask=}')
-        tmp = display_mask_only(cv.cvtColor(hsv_lookback, cv.COLOR_HSV2BGR), waveform_mask)
-        print(f'{tmp=}')
-        show_and_wait(tmp)
+        lookback_waveform_mask = shared.waveform_mask[:, x_lookback_start:x_start]
+        lookback_image = shared.image[:, x_lookback_start:x_start]
+        show_and_wait(display_mask_only(lookback_image, lookback_waveform_mask))
 
     # * serialize response to json in STDOUT
     detected = {
