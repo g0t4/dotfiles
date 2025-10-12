@@ -102,7 +102,6 @@ function restore_session_by_name(name)
             return
         end
 
-        -- TODO better picker? or at least show numbers?
         local name_index = vim.fn.inputlist({ "Select session to restore:", unpack(names) })
         local invalid_index = name_index < 1 or name_index > #names
         if invalid_index then
