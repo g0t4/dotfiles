@@ -73,6 +73,12 @@ def detect_regular_silences(use_file):
         lookback_waveform_mask = shared.waveform_mask[:, x_lookback_start:x_start]
         lookback_image = shared.image[:, x_lookback_start:x_start]
         # show_and_wait(display_mask_only(lookback_image, lookback_waveform_mask))
+        # IDEAS:
+        # - do some edits on real silences... mute the entire silence range and find some where the mute is cutting off the trailing sound... then look into if you can detect that possibility here
+        # - idea: low over whole lookback (could be 10/30/50 or a combo) and if so then assume silence needs padding inside a frame
+        # - idea: if loud of any/all of short lookback(esp 10) then assume cliff and don't need to adjust timing (TODO find some of these in real content and see if any violate this assumption, that they aren't likely to have cut off due to abrupt ending volume drop)
+        # - idea: measure slope of end of speed (waveform), estimate and use to decide if need padding to keep from cutting
+        # - FYI gonna have to find real cases to test with ... so go do some more editing and find mute edits that don't work with default silence ranges - w/o lookback)
 
     # * serialize response to json in STDOUT
     detected = {
