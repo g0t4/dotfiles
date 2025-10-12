@@ -147,15 +147,15 @@ end, {
     complete = function(arglead, cmdline, _)
         -- FTR cmdline is passed thru cursor position, but NOTHING after cursor
         --   thus completes prior args if arrow/move cursor back to them without removing later args
-        --   print("cmdline: " .. tostring(cmdline))
         -- crude split on whitespace char(s)... works fine b/c session names do not use spaces
         local args = vim.split(cmdline, "%s+", { trimempty = true })
         local on_new_arg = arglead == ""
         -- FYI if not on_new_arg => then arglead == args[#args]
-        vim.print(args)
-        vim.print("arglead: '" .. tostring(arglead) .. "'")
-        vim.print("on_new_arg: '" .. tostring(on_new_arg) .. "'")
-        vim.print("arglead == args[#args]: '" .. tostring(arglead == args[#args]) .. "'") -- opposite of on_new_arg (confirmed in my testing)
+        -- vim.print(args)
+        -- vim.print("cmdline: " .. tostring(cmdline))
+        -- vim.print("arglead: '" .. tostring(arglead) .. "'")
+        -- vim.print("on_new_arg: '" .. tostring(on_new_arg) .. "'")
+        -- vim.print("arglead == args[#args]: '" .. tostring(arglead == args[#args]) .. "'") -- opposite of on_new_arg (confirmed in my testing)
 
         local num_args = #args
 
