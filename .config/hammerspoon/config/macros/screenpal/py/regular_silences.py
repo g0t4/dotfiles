@@ -71,7 +71,7 @@ def detect_regular_silences(use_file):
         # print(f'{x_start=} {x_end=} {x_lookback_start=}')
         lookback_waveform_mask = shared.waveform_mask[:, x_lookback_start:x_start]
         lookback_image = shared.image[:, x_lookback_start:x_start]
-        show_and_wait(display_mask_only(lookback_image, lookback_waveform_mask))
+        # show_and_wait(display_mask_only(lookback_image, lookback_waveform_mask))
 
     # * serialize response to json in STDOUT
     detected = {
