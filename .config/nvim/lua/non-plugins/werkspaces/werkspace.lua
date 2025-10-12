@@ -145,7 +145,12 @@ vim.api.nvim_create_user_command("Sessions", function(opts)
 end, {
     nargs = "*",
     complete = function(arglead, cmdline, _cursor_pos)
+        -- FTR cmdline is passed thru cursor position, but NOTHING after cursor
+        --   thus completes prior args if arrow/move cursor back to them without removing later args
+        --   print("cmdline: " .. tostring(cmdline))
+        -- crude split on whitespace char(s)... works fine b/c session names do not use spaces
         local args = vim.split(cmdline, "%s+", { trimempty = true })
+
         local num_args = #args
 
         local subcmd = args[2] -- nil if not typed yet
