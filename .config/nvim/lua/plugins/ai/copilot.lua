@@ -341,8 +341,8 @@ end
 --   and <S-F3> doesn't work for the keymap! probably b/c Shift is not a char that works well in terminals
 vim.keymap.set({ 'n', 'i', 'v' }, '<F15>', ':lua SwitchCopilot()<CR>', { noremap = true, silent = true })
 vim.keymap.set({ "n", "i" }, "<F16>", function() require("ask-openai.api").toggle_verbose_logs() end, { noremap = true, silent = true })
-vim.keymap.set("n", "<F17>", ":lua require('ask-openai.api').toggle_rag()<CR>", { noremap = true, silent = true })
-vim.keymap.set("i", "<F17>", "<Esc>:lua require('ask-openai.api').toggle_rag()<CR>a", { noremap = true, silent = true })
+vim.keymap.set({ "n", "i" }, "<F17>", function() require("ask-openai.api").toggle_rag() end, { noremap = true, silent = true })
+
 
 function IsAskOpenAIPredictionsAvailable()
     -- FYI, later, replace with final setting
