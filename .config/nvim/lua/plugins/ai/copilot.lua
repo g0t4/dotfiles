@@ -340,8 +340,9 @@ end
 -- NOTE Shift+F3 == F15 in my iterm+nvim setup... but, in streamdeck only Shift+F3 works (not F15)
 --   and <S-F3> doesn't work for the keymap! probably b/c Shift is not a char that works well in terminals
 vim.keymap.set({ 'n', 'i', 'v' }, '<F15>', ':lua SwitchCopilot()<CR>', { noremap = true, silent = true })
-vim.keymap.set({ 'n', 'i' }, '<F16>', function() require('ask-openai.api').toggle_verbose_logs() end, { noremap = true, silent = true })
-vim.keymap.set({ 'n', 'i' }, '<F17>', function() require('ask-openai.api').toggle_rag() end, { noremap = true, silent = true })
+vim.keymap.set({ 'n', 'i', 'v' }, '<F16>', function() require('ask-openai.api').toggle_verbose_logs() end, { noremap = true, silent = true })
+vim.keymap.set({ 'n', 'i', 'v' }, '<F17>', function() require('ask-openai.api').toggle_rag() end, { noremap = true, silent = true })
+
 
 
 function IsAskOpenAIPredictionsAvailable()
