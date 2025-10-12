@@ -144,7 +144,7 @@ vim.api.nvim_create_user_command("Sessions", function(opts)
     end
 end, {
     nargs = "*",
-    complete = function(arglead, cmdline, _cursor_pos)
+    complete = function(arglead, cmdline, _)
         -- FTR cmdline is passed thru cursor position, but NOTHING after cursor
         --   thus completes prior args if arrow/move cursor back to them without removing later args
         --   print("cmdline: " .. tostring(cmdline))
