@@ -337,9 +337,12 @@ function SwitchCopilot()
 end
 
 -- *** switch copilot keymaps:
--- NOTE Shift+F3 == F15 in my iterm+nvim setup... but, in streamdeck only Shift+F3 works (not F15)
---   and <S-F3> doesn't work for the keymap! probably b/c Shift is not a char that works well in terminals
-vim.keymap.set({ 'n', 'i', 'v' }, '<F15>', ':lua SwitchCopilot()<CR>', { noremap = true, silent = true })
+-- WEIRD, after iterm crash, or some other factor, F15 stopped working and I get S-F3 instead? using Ctrl-v ... WTH?
+--   TODO find issue, for now use F18? see if F18 is stable
+vim.keymap.set({ 'n', 'i', 'v' }, '<F18>', ':lua SwitchCopilot()<CR>', { noremap = true, silent = true })
+-- vim.keymap.set({ 'n', 'i', 'v' }, '<S-F3>', ':lua SwitchCopilot()<CR>', { noremap = true, silent = true })
+-- vim.keymap.set({ 'n', 'i', 'v' }, '<F15>', ':lua SwitchCopilot()<CR>', { noremap = true, silent = true })
+--
 vim.keymap.set({ 'n', 'i', 'v' }, '<F16>', function() require('ask-openai.api').toggle_verbose_logs() end, { noremap = true, silent = true })
 vim.keymap.set({ 'n', 'i', 'v' }, '<F17>', function() require('ask-openai.api').toggle_rag() end, { noremap = true, silent = true })
 
