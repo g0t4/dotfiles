@@ -68,6 +68,7 @@ def detect_regular_silences(use_file):
         if x_lookback_start >= x_start:
             continue
 
+        # FYI waveform_mask also is matching regular silence periods! actually quite well too! (I bet hue is close)
         # print(f'{x_start=} {x_end=} {x_lookback_start=}')
         lookback_waveform_mask = shared.waveform_mask[:, x_lookback_start:x_start]
         lookback_image = shared.image[:, x_lookback_start:x_start]
@@ -90,6 +91,9 @@ def detect_regular_silences(use_file):
 
         show_and_wait(
             # image, # include image but not really necessary
+            # shared.hsv, # visualize HSV (looks inverted when assuming BGR)
+            display_mask_only(image, shared.waveform_mask),
+            divider,
             display_mask_over_image(image, gray_box_mask),
             display_mask_only(image, gray_box_mask),
             display_mask_over_image(image, shared.timeline_mask),
