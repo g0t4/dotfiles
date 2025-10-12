@@ -151,7 +151,10 @@ end, {
         local subcmd = args[2] -- nil if not typed yet
         local subcmd_takes_name = subcmd == "save" or subcmd == "restore"
         local subcmd_no_params = subcmd == "list" or subcmd == "open_dir"
-        if subcmd_takes_name then
+        if num_args > 3 then
+            -- still works to generate completions for the 3rd arg when first start typing it
+            return {}
+        elseif subcmd_takes_name then
             local names = list_session_names()
             return vim.tbl_filter(function(name)
                 return name:find(arglead, 1, true) == 1
