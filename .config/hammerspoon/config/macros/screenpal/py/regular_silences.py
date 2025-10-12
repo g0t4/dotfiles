@@ -63,36 +63,39 @@ def detect_regular_silences(use_file):
     merged_x_ranges = reduce(merge_if_one_pixel_apart, x_sorted_ranges, [])
 
     # # # * look back at falling edge of waveform
-    # for x_start, x_end in merged_x_ranges:
-    #     x_lookback_start = max(0, x_start - 30)
-    #     if x_lookback_start >= x_start:
-    #         # print("SKIPPED EMPTY")
-    #         continue
-    #     print(f'{x_start=} {x_end=} {x_lookback_start=}')
-    #     hsv_lookback = shared.hsv[:, x_lookback_start:x_start]
-    #     # print(f'{hsv_lookback=}')
-    #     # cv.imshow("images", bgr_lookback)
-    #     # cv.waitKey(0)
-    #     # cv.destroyAllWindows()
-    #     # # import time
-    #     # # start = time.time()
-    #     # # ms = (time.time() - start) * 1000
-    #     # # print(f"HSV conversion took {ms:.0f}ms")  # 1.7ms on 1080p image
-    #     #
-    #     # # start = time.time()
-    #     # hue_center = 115
-    #     # tol = 3
-    #     # min_sat = 80
-    #     # waveform_mask = cv.inRange(  # * 186us FAST!!!
-    #     #     self.hsv,
-    #     #     (hue_center - 1, 100, 30),  # hue ±5°, moderate min S,V to avoid background
-    #     #     (hue_center + 1, 130, 140),
-    #     # )
-    #     # waveform_mask_bgr = cv.cvtColor(waveform_mask, cv.COLOR_HSV2BGR) # FYI just an idea, not tested
-    #     # show_and_wait(waveform_mask_bgr, "waveform mask") # FYI not tested
-    #     #
-    #     # # ms = (time.time() - start) * 1_000_000
-    #     # # print(f"hue waveform mask took {ms:.000f}us")
+    for x_start, x_end in merged_x_ranges:
+        x_lookback_start = max(0, x_start - 30)
+        if x_lookback_start >= x_start:
+            continue
+
+        print(f'{x_start=} {x_end=} {x_lookback_start=}')
+        hsv_lookback = shared.hsv[:, x_lookback_start:x_start]
+        print(f'{hsv_lookback=}')
+        # cv.imshow("images", hsv_lookback)
+        # cv.imshow("images", cv.cvtColor(hsv_lookback, cv.COLOR_HSV2BGR))
+        # cv.moveWindow("images", 100, 100)
+        # cv.waitKey(0)
+        # cv.destroyAllWindows()
+        # continue
+
+        import time
+        start = time.time()
+        hue_center = 115
+        tol = 3
+        min_sat = 80
+        # TODO do waveform_mask all at once, seems to be same speed as doing each one, one at a time! 100us for one lookback, or 186us for entire image
+        waveform_mask = cv.inRange(  # * <100us FAST!!!
+            hsv_lookback,
+            (hue_center - 1, 100, 30),  # hue ±5°, moderate min S,V to avoid background
+            (hue_center + 1, 130, 140),
+        )
+        ms = (time.time() - start) * 1_000_000
+        print(f"hue waveform mask took {ms:.000f}us")
+        # waveform_mask_bgr = cv.cvtColor(waveform_mask, cv.COLOR_HSV2BGR)  # FYI just an idea, not tested
+        print(f'{waveform_mask=}')
+        tmp = display_mask_only(cv.cvtColor(hsv_lookback, cv.COLOR_HSV2BGR), waveform_mask)
+        print(f'{tmp=}')
+        show_and_wait(tmp)
 
     # * serialize response to json in STDOUT
     detected = {
