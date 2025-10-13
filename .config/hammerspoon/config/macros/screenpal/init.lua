@@ -551,8 +551,12 @@ function act_on_silence(win, silence, action)
 
     -- perhaps add more params to act_on_silence?
     local is_cut = action:find("CUT_") -- keep trailing _ so it is easier to search for CUT_
-    local is_mute = action:find("MUTE_")
+    local is_mute = action:find("MUTE")
     local is_auto_approve = action:find("_OK")
+    if not (is_cut or is_mute or is_auto_approve) then
+        hs.alert.show("act_on_silence: no action conditions detected, double check is_* conditions are coded correctly")
+        return
+    end
 
     -- * calculate padding
     local timeline_relative_x_start = silence.x_start
@@ -567,7 +571,7 @@ function act_on_silence(win, silence, action)
     end
 
     if is_mute then
-        local mute_number = action:match("MUTE_(%d+)")
+        local mute_number = action:match("MUTE(%d+)")
         if mute_number then
             local offset = tonumber(mute_number)
             timeline_relative_x_start = silence.x_start + offset
@@ -583,7 +587,7 @@ function act_on_silence(win, silence, action)
     local start_tool_key = ''
     if action:find("CUT_") then
         start_tool_key = 'c'
-    elseif action:find("MUTE") then
+    elseif is_mute then
         start_tool_key = 'v'
     else
         error("UNDEFINED action: " .. tostring(action))
