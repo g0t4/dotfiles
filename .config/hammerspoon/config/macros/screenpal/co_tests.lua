@@ -38,4 +38,17 @@ describe("coroutine helper tests", function()
             counter:done()
         end)
     end)
+
+    it("with vim.defer_fn", function()
+        run_async(function()
+            local counter = Counter:new()
+            counter:increment()
+
+            vim.defer_fn(function()
+                counter:decrement()
+            end, 10)
+
+            counter:done()
+        end)
+    end)
 end)
