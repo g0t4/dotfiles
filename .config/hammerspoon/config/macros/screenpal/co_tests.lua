@@ -49,7 +49,7 @@ describe("coroutine helper tests", function()
                     -- make it fast, timeout duration is unimportant here
                     counter:wait(10)
                 end)
-            end)
+            end, "Counter not done after 10 ms (count=1 should be 0)")
         end)
     end)
 end)
