@@ -10,7 +10,13 @@ local Counter = require("config.macros.screenpal.test_counter")
 -- local async = require('plenary.async.tests')
 
 describe("coroutine helper tests", function()
-    it("test run_async works too, bypasses creating coroutine", function()
+    -- TODO! add TestTimer tests? explicit examples to make sure I don't have bugs in it?
+    --   TODO validate throws if over time
+    --   TODO validate throws if under time
+    --   TODO ensure does not throw if within time
+    --   TODO ensure does not throw if within tolerance of time
+
+    it("test run_async + TestTimer works, bypasses creating coroutine", function()
         -- !!! MUST wrap with run_async for _busted_ test runner to work
         -- - b/c busted (standalone cmd) runs tests in main thread! and thus the yield in sleep_ms blows up on the main thread (cannot yield/resume the main coroutine/thread)
         -- BTW plenary's runner (in nvim) does not run tests in main coroutine... so it will work w/o run_async (but leave this here to be compat with busted)
