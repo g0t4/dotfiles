@@ -9,13 +9,17 @@ local Counter = require("config.macros.screenpal.test_counter")
 -- FYI alternative is to use async module, but I am happy with my run_async
 -- local async = require('plenary.async.tests')
 
-describe("coroutine helper tests", function()
-    -- TODO! add TestTimer tests? explicit examples to make sure I don't have bugs in it?
-    --   TODO validate throws if over time
-    --   TODO validate throws if under time
-    --   TODO ensure does not throw if within time
-    --   TODO ensure does not throw if within tolerance of time
+-- TODO add TestTimer tests? explicit examples to make sure I don't have bugs in it?
+--   TODO validate throws if over time
+--   TODO validate throws if under time
+--   TODO ensure does not throw if within time
+--   TODO ensure does not throw if within tolerance of time
 
+describe("TODO what was original purpose for this test???", function()
+    -- TODO what did I mean by "bypasses creating coroutine?" ... was that it?
+    --   IOTW review test categories and coverage of scenarios
+    --   by the way I am happy with Counter and syncify categories below, so maybe move this into syncify if that's what it is covering
+    --   AND/OR setup describe("sleep_ms") tests
     it("test run_async + TestTimer works, bypasses creating coroutine", function()
         -- !!! MUST wrap with run_async for _busted_ test runner to work
         -- - b/c busted (standalone cmd) runs tests in main thread! and thus the yield in sleep_ms blows up on the main thread (cannot yield/resume the main coroutine/thread)
@@ -26,24 +30,24 @@ describe("coroutine helper tests", function()
             timer:stop()
         end)
     end)
+end)
 
-    describe("Counter", function()
-        it("wait does not throw if count is zero before timeout", function()
+describe("Counter", function()
+    it("wait does not throw if count is zero before timeout", function()
+        local counter = Counter:new()
+        counter:increment()
+        counter:decrement()
+        -- make it fast, timeout duration is unimportant here
+        counter:wait(10)
+    end)
+
+    it("wait throws after timeout, if count is not zero", function()
+        assert.has_error(function()
             local counter = Counter:new()
             counter:increment()
-            counter:decrement()
             -- make it fast, timeout duration is unimportant here
             counter:wait(10)
-        end)
-
-        it("wait throws after timeout, if count is not zero", function()
-            assert.has_error(function()
-                local counter = Counter:new()
-                counter:increment()
-                -- make it fast, timeout duration is unimportant here
-                counter:wait(10)
-            end, "Counter not done after 10 ms (count=1 should be 0)")
-        end)
+        end, "Counter not done after 10 ms (count=1 should be 0)")
     end)
 end)
 
