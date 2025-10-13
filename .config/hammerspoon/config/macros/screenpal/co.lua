@@ -63,11 +63,9 @@ end
 ---@vararg any ...
 ---@return any ...
 function syncify(call_this, ...)
-    -- TODO add unit tests (see learning notes if needed, but try to add these later on and jog your memory of coroutines before turning to notes)
-
     local co, is_main = coroutine.running()
-    assert(co, "callbacker can only be called within a coroutine")
-    assert(not is_main, "callbacker cannot be called in a main thread (coroutine)")
+    assert(co, "syncify: can only be called within a coroutine")
+    assert(not is_main, "syncify: cannot be called in a main thread (coroutine)")
     -- cannot yield main thread... hence this won't work
     -- i suppose i could start a coroutine if is_main is true
 
@@ -90,7 +88,7 @@ function syncify(call_this, ...)
         sched(function()
             local status, err = coroutine.resume(co)
             if not status then
-                print("callbacker - resume failed", err)
+                print("syncify: resume failed", err)
             end
         end)
     end
