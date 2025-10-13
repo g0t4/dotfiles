@@ -9,12 +9,6 @@ local Counter = require("config.macros.screenpal.test_counter")
 -- FYI alternative is to use async module, but I am happy with my run_async
 -- local async = require('plenary.async.tests')
 
--- TODO add TestTimer tests? explicit examples to make sure I don't have bugs in it?
---   TODO validate throws if over time
---   TODO validate throws if under time
---   TODO ensure does not throw if within time
---   TODO ensure does not throw if within tolerance of time
-
 describe("TODO what was original purpose for this test???", function()
     -- TODO what did I mean by "bypasses creating coroutine?" ... was that it?
     --   IOTW review test categories and coverage of scenarios
@@ -66,3 +60,9 @@ describe("syncify", function()
         end)
     end)
 end)
+
+-- TODO add tests for TestTimer helper?
+--   TODO validate throws if over time
+--   TODO validate throws if under time
+--   TODO ensure does not throw if within time
+--   TODO ensure does not throw if within tolerance of time
