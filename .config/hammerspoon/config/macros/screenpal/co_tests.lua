@@ -29,26 +29,19 @@ describe("coroutine helper tests", function()
 
     describe("Counter", function()
         it("wait does not throw if count is zero before timeout", function()
-            -- FYI run_async is not needed in this test
-            --   but keep it to mirror other tests
-            --   to trigger a failure here on an easy to fix test
-            run_async(function()
-                local counter = Counter:new()
-                counter:increment()
-                counter:decrement()
-                -- make it fast, timeout duration is unimportant here
-                counter:wait(10)
-            end)
+            local counter = Counter:new()
+            counter:increment()
+            counter:decrement()
+            -- make it fast, timeout duration is unimportant here
+            counter:wait(10)
         end)
 
         it("wait throws after timeout, if count is not zero", function()
             assert.has_error(function()
-                run_async(function()
-                    local counter = Counter:new()
-                    counter:increment()
-                    -- make it fast, timeout duration is unimportant here
-                    counter:wait(10)
-                end)
+                local counter = Counter:new()
+                counter:increment()
+                -- make it fast, timeout duration is unimportant here
+                counter:wait(10)
             end, "Counter not done after 10 ms (count=1 should be 0)")
         end)
     end)
