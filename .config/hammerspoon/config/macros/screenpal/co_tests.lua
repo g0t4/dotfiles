@@ -109,6 +109,7 @@ local function replace_get_ms(mock)
     local i = 1
     while true do
         local name, value = debug.getupvalue(fn, i)
+        -- print("debug.getupvalue: name: ", name, " value: ", value)
         if not name then break end
         if name == "get_ms" then
             debug.setupvalue(fn, i, mock)
