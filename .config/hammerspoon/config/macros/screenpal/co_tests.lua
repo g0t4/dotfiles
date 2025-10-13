@@ -108,14 +108,7 @@ local function make_get_ms_return(constant)
     local fn = TestTimer.throw_if_time_not_acceptable
     local info = debug.getinfo(fn, "u")
     local new_upvalue
-    if constant == nil then
-        new_upvalue = function()
-            local luv = (vim and vim.uv) or require("luv")
-            return luv.hrtime() / 1e6
-        end
-    else
-        new_upvalue = function() return constant end
-    end
+    new_upvalue = function() return constant end
     for i = 1, info.nups do
         local name = debug.getupvalue(fn, i)
         if name == "get_ms" then
@@ -131,7 +124,7 @@ describe("TestTimer", function()
 
     before_each(function()
         timer = TestTimer:new(allowed_time)
-        make_get_ms_return(nil) -- reset get_ms to the real implementation after each test
+        make_get_ms_return(1) -- reset get_ms to the real implementation after each test
     end)
 
     it("throws if over time", function()
