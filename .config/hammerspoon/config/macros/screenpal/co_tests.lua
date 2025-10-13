@@ -103,14 +103,23 @@ end)
 local TestTimer = require("config.macros.screenpal.test_timing")
 
 ---Replace the upvalue `get_ms` used inside TestTimer methods with a mock.
----@param mock fun(): number
-local function replace_get_ms(mock)
+---@param constant number|nil Constant millisecond value to return, or nil to restore real implementation.
+local function replace_get_ms(constant)
     local fn = TestTimer.throw_if_time_not_acceptable
     local info = debug.getinfo(fn, "u")
+    local new_upvalue
+    if constant == nil then
+        new_upvalue = function()
+            local luv = (vim and vim.uv) or require("luv")
+            return luv.hrtime() / 1e6
+        end
+    else
+        new_upvalue = function() return constant end
+    end
     for i = 1, info.nups do
-        local name, value = debug.getupvalue(fn, i)
+        local name = debug.getupvalue(fn, i)
         if name == "get_ms" then
-            debug.setupvalue(fn, i, mock)
+            debug.setupvalue(fn, i, new_upvalue)
             break
         end
     end
@@ -122,29 +131,25 @@ describe("TestTimer", function()
 
     before_each(function()
         timer = TestTimer:new(allowed_time)
-        -- reset get_ms to the real implementation after each test
-        replace_get_ms(function()
-            local luv = (vim and vim.uv) or require("luv")
-            return luv.hrtime() / 1e6
-        end)
+        replace_get_ms(nil) -- reset get_ms to the real implementation after each test
     end)
 
     it("throws if over time", function()
-        replace_get_ms(function() return timer.start_time + allowed_time * 1.2 end) -- 20% over
+        replace_get_ms(timer.start_time + allowed_time * 1.2) -- 20% over
         assert.has_error(function()
             timer:stop()
         end)
     end)
 
     it("throws if under time", function()
-        replace_get_ms(function() return timer.start_time + allowed_time * 0.7 end) -- 30% under
+        replace_get_ms(timer.start_time + allowed_time * 0.7) -- 30% under
         assert.has_error(function()
             timer:stop()
         end)
     end)
 
     it("does not throw if within time", function()
-        replace_get_ms(function() return timer.start_time + allowed_time * 0.98 end) -- just inside min bound
+        replace_get_ms(timer.start_time + allowed_time * 0.98) -- just inside min bound
         assert.has_no.errors(function()
             timer:stop()
         end)
@@ -152,13 +157,13 @@ describe("TestTimer", function()
 
     it("does not throw if within tolerance of time", function()
         -- exactly at max bound (allowed + tolerance)
-        replace_get_ms(function() return timer.start_time + allowed_time + allowed_time * 0.04 end)
+        replace_get_ms(timer.start_time + allowed_time + allowed_time * 0.04)
         assert.has_no.errors(function()
             timer:stop()
         end)
 
         -- exactly at min bound (allowed - tolerance)
-        replace_get_ms(function() return timer.start_time + allowed_time - allowed_time * 0.04 end)
+        replace_get_ms(timer.start_time + allowed_time - allowed_time * 0.04)
         assert.has_no.errors(function()
             timer:stop()
         end)
