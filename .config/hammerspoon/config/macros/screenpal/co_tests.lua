@@ -4,16 +4,37 @@ if not vim.fn.getcwd():match("%.config/hammerspoon$") then
 end
 require("config.macros.screenpal.co")
 local TestTimer = require("config.macros.screenpal.test_timing")
+local Counter = require("config.macros.screenpal.test_counter")
+
+-- FYI alternative is to use async module, but I am happy with my run_async
+-- local async = require('plenary.async.tests')
 
 describe("coroutine helper tests", function()
     it("test run_async works too, bypasses creating coroutine", function()
-        -- MUST wrap with run_async for _busted_ test runner to work
-        -- - b/c busted runs tests in main thread! and thus the yield in sleep_ms blows up on the main thread (cannot yield/resume the main coroutine/thread)
-        -- BTW plenary's runner does not run tests in main coroutine... so it will work w/o run_async (but leave this here to be compat with busted)
+        -- !!! MUST wrap with run_async for _busted_ test runner to work
+        -- - b/c busted (standalone cmd) runs tests in main thread! and thus the yield in sleep_ms blows up on the main thread (cannot yield/resume the main coroutine/thread)
+        -- BTW plenary's runner (in nvim) does not run tests in main coroutine... so it will work w/o run_async (but leave this here to be compat with busted)
         run_async(function()
             local timer = TestTimer:new(250)
             sleep_ms(250)
             timer:stop()
+        end)
+    end)
+
+    it("integration test - validate Counter works with immediate/sync callback inside run_async too", function()
+        -- FYI run_async is not needed in this test
+        --   but keep it to mirror other tests
+        --   to trigger a failure here on an easy to fix test
+        run_async(function()
+            local counter = Counter:new()
+            counter:increment()
+
+            function callback()
+                counter:decrement()
+            end
+
+            callback()
+            counter:done()
         end)
     end)
 end)
