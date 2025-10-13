@@ -130,40 +130,35 @@ describe("TestTimer", function()
     end)
 
     it("throws if over time", function()
-        local start = timer.start_time
-        replace_get_ms(function() return start + allowed_time * 1.2 end) -- 20% over
+        replace_get_ms(function() return timer.start_time + allowed_time * 1.2 end) -- 20% over
         assert.has_error(function()
             timer:stop()
         end)
     end)
 
     it("throws if under time", function()
-        local start = timer.start_time
-        replace_get_ms(function() return start + allowed_time * 0.7 end) -- 30% under
+        replace_get_ms(function() return timer.start_time + allowed_time * 0.7 end) -- 30% under
         assert.has_error(function()
             timer:stop()
         end)
     end)
 
     it("does not throw if within time", function()
-        local start = timer.start_time
-        replace_get_ms(function() return start + allowed_time * 0.98 end) -- just inside min bound
+        replace_get_ms(function() return timer.start_time + allowed_time * 0.98 end) -- just inside min bound
         assert.has_no.errors(function()
             timer:stop()
         end)
     end)
 
     it("does not throw if within tolerance of time", function()
-        local start = timer.start_time
-        local tolerance = allowed_time * 0.04
         -- exactly at max bound (allowed + tolerance)
-        replace_get_ms(function() return start + allowed_time + tolerance end)
+        replace_get_ms(function() return timer.start_time + allowed_time + allowed_time * 0.04 end)
         assert.has_no.errors(function()
             timer:stop()
         end)
 
         -- exactly at min bound (allowed - tolerance)
-        replace_get_ms(function() return start + allowed_time - tolerance end)
+        replace_get_ms(function() return timer.start_time + allowed_time - allowed_time * 0.04 end)
         assert.has_no.errors(function()
             timer:stop()
         end)
