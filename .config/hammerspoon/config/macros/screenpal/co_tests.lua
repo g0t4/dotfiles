@@ -102,11 +102,11 @@ end)
 ---@class TestTimer
 local TestTimer = require("config.macros.screenpal.test_timing")
 
----Replace the upvalue `get_ms` used inside TestTimer methods with a mock.
----@param constant number|nil Constant millisecond value to return, or nil to restore real implementation.
+---Simulate a current time value by passing a constant
+---@param constant number Constant millisecond value to return.
 local function make_get_ms_return(constant)
     local fn = TestTimer.throw_if_time_not_acceptable
-    local info = debug.getinfo(fn, "u")
+    local info = debug.getinfo(fn, "u") -- populate lua_getinfo.nups (number up values)
     for i = 1, info.nups do
         local name = debug.getupvalue(fn, i)
         if name == "get_ms" then
