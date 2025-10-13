@@ -1,7 +1,7 @@
 local Counter = {}
 Counter.__index = Counter
 
-function Counter:new(expected)
+function Counter:new()
     return setmetatable({ count = 0 }, self)
 end
 
