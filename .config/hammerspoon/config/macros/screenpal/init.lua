@@ -553,8 +553,8 @@ function act_on_silence(win, silence, action)
     local is_cut = action:find("CUT_") -- keep trailing _ so it is easier to search for CUT_
     local is_mute = action:find("MUTE")
     local is_auto_approve = action:find("_OK")
-    if not (is_cut or is_mute or is_auto_approve) then
-        hs.alert.show("act_on_silence: no action conditions detected, double check is_* conditions are coded correctly")
+    if not (is_cut or is_mute) then
+        hs.alert.show("UNDEFINED action: " .. tostring(action))
         return
     end
 
@@ -585,12 +585,10 @@ function act_on_silence(win, silence, action)
 
     -- * start tool
     local start_tool_key = ''
-    if action:find("CUT_") then
+    if is_cut then
         start_tool_key = 'c'
     elseif is_mute then
         start_tool_key = 'v'
-    else
-        error("UNDEFINED action: " .. tostring(action))
     end
     hs.eventtap.keyStroke({}, start_tool_key, 0, win.app)
     win.windows:get_tool_window():wait_for_cancel_or_ok_button()
