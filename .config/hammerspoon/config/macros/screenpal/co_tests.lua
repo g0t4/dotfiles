@@ -106,16 +106,13 @@ local TestTimer = require("config.macros.screenpal.test_timing")
 ---@param mock fun(): number
 local function replace_get_ms(mock)
     local fn = TestTimer.throw_if_time_not_acceptable
-    local i = 1
-    while true do
+    local info = debug.getinfo(fn, "u")
+    for i = 1, info.nups do
         local name, value = debug.getupvalue(fn, i)
-        -- print("debug.getupvalue: name: ", name, " value: ", value)
-        if not name then break end
         if name == "get_ms" then
             debug.setupvalue(fn, i, mock)
             break
         end
-        i = i + 1
     end
 end
 
