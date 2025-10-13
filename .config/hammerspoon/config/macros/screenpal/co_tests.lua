@@ -99,8 +99,75 @@ describe("syncify", function()
     end)
 end)
 
--- TODO add tests for TestTimer helper?
---   TODO validate throws if over time
---   TODO validate throws if under time
---   TODO ensure does not throw if within time
---   TODO ensure does not throw if within tolerance of time
+---@class TestTimer
+local TestTimer = require("config.macros.screenpal.test_timing")
+
+---Replace the upvalue `get_ms` used inside TestTimer methods with a mock.
+---@param mock fun(): number
+local function replace_get_ms(mock)
+    local fn = TestTimer.throw_if_time_not_acceptable
+    local i = 1
+    while true do
+        local name, value = debug.getupvalue(fn, i)
+        if not name then break end
+        if name == "get_ms" then
+            debug.setupvalue(fn, i, mock)
+            break
+        end
+        i = i + 1
+    end
+end
+
+describe("TestTimer", function()
+    local allowed_time = 100 -- ms
+    local timer
+
+    before_each(function()
+        timer = TestTimer:new(allowed_time)
+        -- reset get_ms to the real implementation after each test
+        replace_get_ms(function()
+            local luv = (vim and vim.uv) or require("luv")
+            return luv.hrtime() / 1e6
+        end)
+    end)
+
+    it("throws if over time", function()
+        local start = timer.start_time
+        replace_get_ms(function() return start + allowed_time * 1.2 end) -- 20% over
+        assert.has_error(function()
+            timer:throw_if_time_not_acceptable("over time")
+        end)
+    end)
+
+    it("throws if under time", function()
+        local start = timer.start_time
+        replace_get_ms(function() return start + allowed_time * 0.7 end) -- 30% under
+        assert.has_error(function()
+            timer:throw_if_time_not_acceptable("under time")
+        end)
+    end)
+
+    it("does not throw if within time", function()
+        local start = timer.start_time
+        replace_get_ms(function() return start + allowed_time * 0.98 end) -- just inside min bound
+        assert.has_no.errors(function()
+            timer:throw_if_time_not_acceptable("within time")
+        end)
+    end)
+
+    it("does not throw if within tolerance of time", function()
+        local start = timer.start_time
+        local tolerance = allowed_time * 0.04
+        -- exactly at max bound (allowed + tolerance)
+        replace_get_ms(function() return start + allowed_time + tolerance end)
+        assert.has_no.errors(function()
+            timer:throw_if_time_not_acceptable("at max tolerance")
+        end)
+
+        -- exactly at min bound (allowed - tolerance)
+        replace_get_ms(function() return start + allowed_time - tolerance end)
+        assert.has_no.errors(function()
+            timer:throw_if_time_not_acceptable("at min tolerance")
+        end)
+    end)
+end)
