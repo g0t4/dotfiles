@@ -338,10 +338,9 @@ end
 
 -- *** switch copilot keymaps:
 -- WEIRD, after iterm crash, or some other factor, F15 stopped working and I get S-F3 instead? using Ctrl-v ... WTH?
+--   '<S-F3>' '<F15>'
 --   TODO find issue, for now use F18? see if F18 is stable
-vim.keymap.set({ 'n', 'i', 'v' }, '<F18>', ':lua SwitchCopilot()<CR>', { noremap = true, silent = true })
--- vim.keymap.set({ 'n', 'i', 'v' }, '<S-F3>', ':lua SwitchCopilot()<CR>', { noremap = true, silent = true })
--- vim.keymap.set({ 'n', 'i', 'v' }, '<F15>', ':lua SwitchCopilot()<CR>', { noremap = true, silent = true })
+vim.keymap.set({ 'n', 'i', 'v' }, '<F18>', function() SwitchCopilot() end, { noremap = true, silent = true })
 --
 vim.keymap.set({ 'n', 'i', 'v' }, '<F16>', function() require('ask-openai.api').toggle_verbose_logs() end, { noremap = true, silent = true })
 vim.keymap.set({ 'n', 'i', 'v' }, '<F17>', function() require('ask-openai.api').toggle_rag() end, { noremap = true, silent = true })
