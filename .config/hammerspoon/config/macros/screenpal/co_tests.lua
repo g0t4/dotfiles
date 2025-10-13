@@ -110,7 +110,9 @@ local function make_get_ms_return(constant)
     for i = 1, info.nups do
         local name = debug.getupvalue(fn, i)
         if name == "get_ms" then
-            local function get_ms() return constant end
+            local function get_ms()
+                return constant
+            end
             debug.setupvalue(fn, i, get_ms)
             break
         end
