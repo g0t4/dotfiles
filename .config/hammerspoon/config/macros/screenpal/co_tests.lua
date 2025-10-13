@@ -49,6 +49,8 @@ end)
 
 describe("syncify", function()
     it("sync, immediate callbacks work", function()
+        -- YES!!! we have the warning here! this is what I wanted to reproduce!
+        --   WARNING - callback invoked resume before yielded, allowing resume
         run_async(function()
             local counter = Counter:new()
             counter:increment()
