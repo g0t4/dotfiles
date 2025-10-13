@@ -1,3 +1,7 @@
+-- FYI this doesn't need to be everywhere, just put it in some prominent tests as a reminder really...
+if not vim.fn.getcwd():match("%.config/hammerspoon$") then
+    error("\n\n*** CURRENT DIRECTORY IS NOT INSIDE hammerspoon config: (run nvim from this dir to use pleanry tests:  .config/hammerspoon)\n")
+end
 require("config.macros.screenpal.co")
 local TestTimer = require("config.macros.screenpal.test_timing")
 
