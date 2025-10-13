@@ -46,6 +46,7 @@ describe("Counter", function()
 end)
 
 describe("syncify", function()
+    -- FYI! syncify scenarios are not fully covered
     it("sync, immediate callbacks work", function()
         -- YES!!! we have the warning here! this is what I wanted to reproduce!
         --   WARNING - callback invoked resume before yielded, allowing resume
