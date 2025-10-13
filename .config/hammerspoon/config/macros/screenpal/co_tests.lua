@@ -120,30 +120,30 @@ local function make_get_ms_return(constant)
 end
 
 describe("TestTimer", function()
-    local allowed_time = 100 -- ms
+    local allowed_time_ms = 100
     local timer
 
     before_each(function()
-        timer = TestTimer:new(allowed_time)
+        timer = TestTimer:new(allowed_time_ms)
         make_get_ms_return(1) -- reset get_ms to the real implementation after each test
     end)
 
     it("throws if over time", function()
-        make_get_ms_return(timer.start_time + allowed_time * 1.2) -- 20% over
+        make_get_ms_return(timer.start_time + allowed_time_ms * 1.2) -- 20% over
         assert.has_error(function()
             timer:stop()
         end)
     end)
 
     it("throws if under time", function()
-        make_get_ms_return(timer.start_time + allowed_time * 0.7) -- 30% under
+        make_get_ms_return(timer.start_time + allowed_time_ms * 0.7) -- 30% under
         assert.has_error(function()
             timer:stop()
         end)
     end)
 
     it("does not throw if at exact time", function()
-        make_get_ms_return(timer.start_time + allowed_time)
+        make_get_ms_return(timer.start_time + allowed_time_ms)
         assert.has_no.errors(function()
             timer:stop()
         end)
@@ -151,13 +151,13 @@ describe("TestTimer", function()
 
     it("does not throw if within tolerance of time", function()
         -- exactly at max bound (allowed + tolerance)
-        make_get_ms_return(timer.start_time + allowed_time + allowed_time * 0.04)
+        make_get_ms_return(timer.start_time + allowed_time_ms + allowed_time_ms * 0.04)
         assert.has_no.errors(function()
             timer:stop()
         end)
 
         -- exactly at min bound (allowed - tolerance)
-        make_get_ms_return(timer.start_time + allowed_time - allowed_time * 0.04)
+        make_get_ms_return(timer.start_time + allowed_time_ms - allowed_time_ms * 0.04)
         assert.has_no.errors(function()
             timer:stop()
         end)
