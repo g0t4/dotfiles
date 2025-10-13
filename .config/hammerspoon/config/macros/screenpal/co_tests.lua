@@ -142,8 +142,8 @@ describe("TestTimer", function()
         end)
     end)
 
-    it("does not throw if within time", function()
-        make_get_ms_return(timer.start_time + allowed_time * 0.98) -- just inside min bound
+    it("does not throw if at exact time", function()
+        make_get_ms_return(timer.start_time + allowed_time)
         assert.has_no.errors(function()
             timer:stop()
         end)
