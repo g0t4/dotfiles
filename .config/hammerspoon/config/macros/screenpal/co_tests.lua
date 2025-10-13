@@ -27,28 +27,29 @@ describe("coroutine helper tests", function()
         end)
     end)
 
-    it("integration test - validate Counter works with immediate/sync callback inside run_async too", function()
-        -- FYI run_async is not needed in this test
-        --   but keep it to mirror other tests
-        --   to trigger a failure here on an easy to fix test
-        run_async(function()
-            local counter = Counter:new()
-            counter:increment()
-            counter:decrement()
-            counter:done()
-        end)
-    end)
-
-    it("with vim.defer_fn", function()
-        run_async(function()
-            local counter = Counter:new()
-            counter:increment()
-
-            vim.defer_fn(function()
+    describe("Counter", function()
+        it("wait does not throw if count is zero before timeout", function()
+            -- FYI run_async is not needed in this test
+            --   but keep it to mirror other tests
+            --   to trigger a failure here on an easy to fix test
+            run_async(function()
+                local counter = Counter:new()
+                counter:increment()
                 counter:decrement()
-            end, 10)
+                -- make it fast, timeout duration is unimportant here
+                counter:wait(10)
+            end)
+        end)
 
-            counter:done()
+        it("wait throws after timeout, if count is not zero", function()
+            assert.has_error(function()
+                run_async(function()
+                    local counter = Counter:new()
+                    counter:increment()
+                    -- make it fast, timeout duration is unimportant here
+                    counter:wait(10)
+                end)
+            end)
         end)
     end)
 end)
