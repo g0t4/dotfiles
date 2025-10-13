@@ -120,6 +120,8 @@ local function make_get_ms_return(constant)
 end
 
 describe("TestTimer", function()
+    -- PRN I could also rewrite this to use real delays and not rely on mocking time...
+    --   I would've preferred that but what gptoss120b did here isn't terrible either
     local allowed_time_ms = 100
     local timer
 
