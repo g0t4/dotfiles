@@ -136,7 +136,7 @@ describe("TestTimer", function()
         local start = timer.start_time
         replace_get_ms(function() return start + allowed_time * 1.2 end) -- 20% over
         assert.has_error(function()
-            timer:throw_if_time_not_acceptable("over time")
+            timer:stop()
         end)
     end)
 
@@ -144,7 +144,7 @@ describe("TestTimer", function()
         local start = timer.start_time
         replace_get_ms(function() return start + allowed_time * 0.7 end) -- 30% under
         assert.has_error(function()
-            timer:throw_if_time_not_acceptable("under time")
+            timer:stop()
         end)
     end)
 
@@ -152,7 +152,7 @@ describe("TestTimer", function()
         local start = timer.start_time
         replace_get_ms(function() return start + allowed_time * 0.98 end) -- just inside min bound
         assert.has_no.errors(function()
-            timer:throw_if_time_not_acceptable("within time")
+            timer:stop()
         end)
     end)
 
@@ -162,13 +162,13 @@ describe("TestTimer", function()
         -- exactly at max bound (allowed + tolerance)
         replace_get_ms(function() return start + allowed_time + tolerance end)
         assert.has_no.errors(function()
-            timer:throw_if_time_not_acceptable("at max tolerance")
+            timer:stop()
         end)
 
         -- exactly at min bound (allowed - tolerance)
         replace_get_ms(function() return start + allowed_time - tolerance end)
         assert.has_no.errors(function()
-            timer:throw_if_time_not_acceptable("at min tolerance")
+            timer:stop()
         end)
     end)
 end)
