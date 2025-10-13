@@ -60,6 +60,42 @@ describe("syncify", function()
             counter:wait()
         end)
     end)
+
+
+    describe("works with vim.defer_fn", function()
+        it("counter ok", function()
+            run_async(function()
+                local counter = Counter:new()
+                counter:increment()
+                syncify(function(cb)
+                    vim.schedule(function()
+                        counter:decrement()
+                        cb()
+                    end)
+                    counter:wait(100)
+                end)
+            end)
+        end)
+        it("counter timeout", function()
+            -- TODO do I want this test too?
+            --  my inclination was to add it to make sure it fails too
+            --  but it does overlap with other Counter timeout above so long term maybe nuke if not needed
+            --  TODO review syncify/run_async and make sure you understand if this test is needed, keep it for now
+            assert.has_error(function()
+                run_async(function()
+                    local counter = Counter:new()
+                    counter:increment()
+                    syncify(function(cb)
+                        vim.schedule(function()
+                            -- counter:decrement()
+                            cb()
+                        end)
+                        counter:wait(100)
+                    end)
+                end)
+            end)
+        end)
+    end)
 end)
 
 -- TODO add tests for TestTimer helper?
