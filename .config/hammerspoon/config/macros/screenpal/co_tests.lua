@@ -88,7 +88,7 @@ describe("syncify", function()
                     counter:increment()
                     syncify(function(cb)
                         vim.schedule(function()
-                            -- counter:decrement()
+                            -- counter:decrement() -- this is the difference vs test above
                             cb()
                         end)
                         counter:wait(100)
