@@ -34,12 +34,7 @@ describe("coroutine helper tests", function()
         run_async(function()
             local counter = Counter:new()
             counter:increment()
-
-            function callback()
-                counter:decrement()
-            end
-
-            callback()
+            counter:decrement()
             counter:done()
         end)
     end)
