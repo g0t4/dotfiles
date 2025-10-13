@@ -107,8 +107,7 @@ local TestTimer = require("config.macros.screenpal.test_timing")
 local function make_get_ms_return(constant)
     local fn = TestTimer.throw_if_time_not_acceptable
     local info = debug.getinfo(fn, "u")
-    local new_upvalue
-    new_upvalue = function() return constant end
+    local new_upvalue = function() return constant end
     for i = 1, info.nups do
         local name = debug.getupvalue(fn, i)
         if name == "get_ms" then
