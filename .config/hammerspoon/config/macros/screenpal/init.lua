@@ -251,7 +251,7 @@ function SPal_Test()
         -- first see if zoomed or not (overall)
         -- THEN, if zoomed find the level
         local win = get_cached_editor_window()
-        win:is_zoomed()
+        print("is_zoomed:" .. tostring(win:is_zoomed()))
     end
 
     SPal_DetectZoom_WIP()
