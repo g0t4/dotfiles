@@ -666,6 +666,16 @@ local function move_playhead_to_silence(win, silence)
 end
 
 function SPal_Test()
+    local function SPal_DetectZoom_WIP()
+        -- use screencap over the zoom control to detect zoom level
+        -- first see if zoomed or not (overall)
+        -- THEN, if zoomed find the level
+        local win = get_cached_editor_window()
+        win:is_zoomed()
+    end
+
+    SPal_DetectZoom_WIP()
+
     local function SPal_OpenMuteTool_WIP()
         -- TODO finish and integrate with act_on_silence when action=MUTE* (i.e. don't open if sub menu if tool already muted)
         -- assume this is done in silence where it will open the tool right away b/c both ends are auto selected
