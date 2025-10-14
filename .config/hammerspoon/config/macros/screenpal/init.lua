@@ -583,10 +583,6 @@ function act_on_silence(win, silence, action)
     local timeline = win:timeline_controller()
     timeline:move_playhead_to(timeline_relative_x_start)
     local actual_relative_x = timeline:get_current_playhead_timeline_relative_x()
-    dump("discrepancy after click", {
-        intended = timeline_relative_x_start,
-        actual = actual_relative_x
-    })
 
     -- * start tool
     local start_tool_key = ''

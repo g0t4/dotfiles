@@ -128,6 +128,10 @@ local function _move_playhead_to_screen_x(self, playhead_screen_x)
         y = self._timeline_frame.y + self._timeline_frame.h / 2
     }, CLICK_HOLD_MICROSECONDS)
     _wait_until_playhead_at_screen_x(self, playhead_screen_x)
+    dump("discrepancy after click", {
+        intended = playhead_screen_x,
+        actual = self:get_current_playhead_timeline_relative_x()
+    })
 end
 
 --- RELATIVE to the TIMELINE (not the screen)
