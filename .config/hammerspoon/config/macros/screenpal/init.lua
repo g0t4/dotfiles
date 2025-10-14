@@ -252,11 +252,26 @@ function SPal_Test()
         -- THEN, if zoomed find the level
         local win = get_cached_editor_window()
         print("is_zoomed:" .. tostring(win:is_zoomed()))
-        local min_button = win._btn_medium_zoom
+
         local capture_sub_dir = "_screenpal_silence_detect_trash_me"
         run_async(function()
-            local where_to = syncify(capture_this_element, min_button, capture_sub_dir)
+            -- PRN start all three at same time? wait all to complete? (think await all)
+            --    my syncify isn't designed for this
+            --    but IIRC plenary has smth that might be?
+            --
+            local where_to_medium = syncify(capture_this_element, win._btn_medium_zoom, capture_sub_dir)
+            local where_to_min = syncify(capture_this_element, win._btn_minimum_zoom, capture_sub_dir)
+            local where_to_max = syncify(capture_this_element, win._btn_maximum_zoom, capture_sub_dir)
+            -- FYI not bad, each screencap is ~100ms (est off gap between three caps here)
+            --   but that might be partially due to file name conflict... so I want to pass a specific string for this
+            --      in fact I should just overwrite the same file always?
 
+            -- FYI alternative idea => get coords and then take one screen cap bounded by coords instead of three elements separately
+            --   can still use pixel location to check which is zoomed
+            --   TODO test timing on that vs three...
+
+
+            -- TODO resume zoom detect off of screencap
             -- local detected = syncify(detect_silence, where_to)
 
             -- local timeline = win:timeline_controller()
