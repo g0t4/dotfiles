@@ -58,14 +58,37 @@ vim.keymap.set('n', '<leader>cco', ':<C-u>CocCommand document.showOutgoingCalls<
 
 -- * GoTo code navigation
 
+-- coc-definition
+-- JUMP to symbol's definition
 vim.keymap.set('n', 'gd', '<Plug>(coc-definition)', { silent = true })
 -- vim.keymap.set('n', 'gd', '<Cmd>Telescope coc definitions<CR>', { silent = true })
+vim.keymap.set('n', '<F12>', '<Plug>(coc-definition)', { silent = true })
+-- vim.keymap.set('n', '<F12>', '<Cmd>Telescope coc definitions<CR>', { silent = true })
 
-vim.keymap.set('n', 'gy', '<Plug>(coc-type-definition)', { silent = true })
--- vim.keymap.set('n', 'gy', '<Cmd>Telescope coc type_definitions<CR>', { silent = true })
+-- coc-type-definition
+-- JUMP to current symbol's TYPE definition
+--  i.e. if symbol is a variable that is an instance of the Person type then jumps to Person class
+--  TODO HABITUATE THIS! it's useful, and differentiate vs coc-definition!
+vim.keymap.set('n', 'gt', '<Plug>(coc-type-definition)', { silent = true })
+-- vim.keymap.set('n', 'gt', '<Cmd>Telescope coc type_definitions<CR>', { silent = true })
+-- FYI gt is tabnext normally, but I don't care about replacing it
 
+-- coc-implementation
 vim.keymap.set('n', '<leader>gi', '<Plug>(coc-implementation)', { silent = true })
 -- vim.keymap.set('n', '<leader>gi', '<Cmd>Telescope coc implementations<CR>', { silent = true })
+
+-- coc-declaration
+vim.keymap.set('n', '<leader>ge', '<Plug>(coc-declaration)', { silent = true })
+-- vim.keymap.set('n', '<leader>ge', '<Cmd>Telescope coc declaration<CR>', { silent = true })
+
+-- coc-references
+vim.keymap.set('n', '<leader>gr', '<Plug>(coc-references)', { silent = true })
+-- vim.keymap.set('n', '<leader>gr', '<Cmd>Telescope coc references<CR>', { silent = true })
+--
+-- coc-references-used
+-- same as coc-references minus the declaration
+vim.keymap.set('n', '<leader>gru', '<Plug>(coc-references-used)', { silent = true })
+-- vim.keymap.set('n', '<leader>gru', '<Cmd>Telescope coc references used<CR>', { silent = true })
 
 -- FYI I am going back to coc's references picker, unfortunately
 --  when I use telescope's ... it doesn't support :CocResume/:CocNext/:CocPrev (see keymaps below)
@@ -74,16 +97,9 @@ vim.keymap.set('n', '<leader>gi', '<Plug>(coc-implementation)', { silent = true 
 --  applies to all coc pickers
 --  PRN investigate if I can get resume w/ telescope's picker which I prefer in some ways
 
-vim.keymap.set('n', '<leader>gr', '<Plug>(coc-references)', { silent = true })
--- vim.keymap.set('n', '<leader>gr', '<Cmd>Telescope coc references<CR>', { silent = true })
-
 -- Shift-F12 ==> <F24> (use ctrl-v in insert/cmdline modes to see keypress)
 vim.keymap.set('n', '<F24>', '<Plug>(coc-references)', { silent = true })
 -- vim.keymap.set('n', '<F24>', '<Cmd>Telescope coc references<CR>', { silent = true })
-
-vim.keymap.set('n', '<F12>', '<Plug>(coc-definition)', { silent = true })
--- vim.keymap.set('n', '<F12>', '<Cmd>Telescope coc definitions<CR>', { silent = true })
-
 
 -- * formatting
 local function format_selected()
