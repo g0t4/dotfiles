@@ -87,6 +87,7 @@ vim.keymap.set('n', '<leader>gr', '<Plug>(coc-references)', { silent = true })
 --
 -- coc-references-used
 -- same as coc-references minus the declaration
+-- FYI also skips require/imports of a module! useful! only usages!
 vim.keymap.set('n', '<leader>gru', '<Plug>(coc-references-used)', { silent = true })
 -- vim.keymap.set('n', '<leader>gru', '<Cmd>Telescope coc references used<CR>', { silent = true })
 
