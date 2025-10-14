@@ -85,11 +85,11 @@ function ScreenPalEditorWindow:force_refresh_cached_controls()
                         -- AXIndex: 3, #42 in array in my testing (could change)
                         self._btn_minimum_zoom = ui_elem
                         return -- continue early so I can add more complex checks below and avoid them when possible
-                    elseif description == "Maximum Zoom" then
-                        self._btn_maximum_zoom = ui_elem
-                        return
                     elseif description == "Medium Zoom" then
                         self._btn_medium_zoom = ui_elem
+                        return
+                    elseif description == "Maximum Zoom" then
+                        self._btn_maximum_zoom = ui_elem
                         return
                     elseif description == "Toggle Magnify" then
                         self._btn_toggle_magnify = ui_elem
