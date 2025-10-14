@@ -1,3 +1,5 @@
+local parse_time_to_seconds = require('config.macros.screenpal.helpers')
+
 ---@class TimelineController
 ---@field _timeline_frame AXFrame
 ---@field _playhead_window_frame AXFrame

@@ -1,6 +1,6 @@
 require('config.tests.setup')
-require('config.macros.screenpal') -- TODO test more of the logic in here
--- require('config.macros.screenpal.helpers') -- FYI testing this is already imported via screenpal/init.lua
+-- require('config.macros.screenpal') -- TODO test more of the logic in here
+local parse_time_to_seconds = require('config.macros.screenpal.helpers')
 
 -- !!! see run_unit_tests.fish for more about testing
 describe("parse_time_to_seconds", function()

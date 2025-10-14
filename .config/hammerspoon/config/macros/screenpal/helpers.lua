@@ -1,4 +1,10 @@
-function parse_time_to_seconds(time_string)
+--
+-- TODO how do I feel about exporting functions instead of globals?
+-- - then importing them so I can clearly see dependencies? and find unused deps too?
+-- - OR should I just go back to globals for helpers?
+-- - true test is when I have multiple functions to export and/or import
+
+local function parse_time_to_seconds(time_string)
     ---@type number
     local total_seconds = 0
     -- time = "3:23.28"
@@ -26,3 +32,5 @@ function parse_time_to_seconds(time_string)
 
     return total_seconds
 end
+
+return parse_time_to_seconds

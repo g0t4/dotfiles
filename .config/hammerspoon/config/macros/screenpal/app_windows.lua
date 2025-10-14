@@ -2,7 +2,7 @@ local ToolBarWindow = require("config.macros.screenpal.windows.tools_window")
 
 ---@class AppWindows
 ---@field app hs.axuielement
-_G.AppWindows = {}
+local AppWindows = {}
 AppWindows.__index = AppWindows
 
 --- Right now this is basically a wrapper around using a cached list of windows
@@ -74,3 +74,5 @@ function AppWindows:editor_window_or_throw()
     if win then return win end
     error("No Screenpal editor window found")
 end
+
+return AppWindows
