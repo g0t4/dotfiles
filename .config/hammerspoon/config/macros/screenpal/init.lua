@@ -252,6 +252,17 @@ function SPal_Test()
         -- THEN, if zoomed find the level
         local win = get_cached_editor_window()
         print("is_zoomed:" .. tostring(win:is_zoomed()))
+        local min_button = win._btn_medium_zoom
+        local capture_sub_dir = "_screenpal_silence_detect_trash_me"
+        run_async(function()
+            local where_to = syncify(capture_this_element, min_button, capture_sub_dir)
+
+            -- local detected = syncify(detect_silence, where_to)
+
+            -- local timeline = win:timeline_controller()
+            -- local silences = SilencesController:new(detected, timeline)
+            -- callback(win, silences)
+        end)
     end
 
     SPal_DetectZoom_WIP()
