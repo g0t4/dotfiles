@@ -259,17 +259,45 @@ function SPal_Test()
             --    my syncify isn't designed for this
             --    but IIRC plenary has smth that might be?
             --
-            local where_to_medium = syncify(capture_this_element, win._btn_medium_zoom, capture_sub_dir)
-            local where_to_min = syncify(capture_this_element, win._btn_minimum_zoom, capture_sub_dir)
-            local where_to_max = syncify(capture_this_element, win._btn_maximum_zoom, capture_sub_dir)
+            local min_frame = win._btn_minimum_zoom:axFrame()
+            local max_frame = win._btn_maximum_zoom:axFrame()
+            -- local medium_frame = win._btn_medium_zoom:axFrame()
+            -- print("min:" .. hs.inspect(min_frame))
+            -- print("medium:" .. hs.inspect(medium_frame))
+            -- print("max:" .. hs.inspect(max_frame))
+            --
+            -- FYI: sizes (regardless which is selected, I tested all zoom levels to be sure)
+            -- 1080p frames: (double to get retina... as in the actual capture)
+            -- min:{
+            --   h = 16.0,
+            --   w = 12.0,
+            --   x = 1853.0,
+            --   y = 1033.0
+            -- }
+            -- medium:{
+            --   h = 16.0,
+            --   w = 12.0,
+            --   x = 1865.0,
+            --   y = 1033.0
+            -- }
+            -- max:{
+            --   h = 16.0,
+            --   w = 13.0,
+            --   x = 1877.0,
+            --   y = 1033.0
+            -- }
+
+            local frame = {
+                x = min_frame.x,
+                w = max_frame.w + (max_frame.x - min_frame.x),
+                y = min_frame.y, -- all have same Y
+                h = min_frame.h -- go with the smaller two, don't need extra two pixels from max height
+            }
+
+            local where_to_max = syncify(capture_frame, capture_sub_dir, frame)
             -- FYI not bad, each screencap is ~100ms (est off gap between three caps here)
             --   but that might be partially due to file name conflict... so I want to pass a specific string for this
             --      in fact I should just overwrite the same file always?
-
-            -- FYI alternative idea => get coords and then take one screen cap bounded by coords instead of three elements separately
-            --   can still use pixel location to check which is zoomed
-            --   TODO test timing on that vs three...
-
 
             -- TODO resume zoom detect off of screencap
             -- local detected = syncify(detect_silence, where_to)

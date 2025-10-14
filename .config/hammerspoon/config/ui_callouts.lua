@@ -549,6 +549,32 @@ function capture_element_under_mouse()
     capture_this_element(when_done, element)
 end
 
+---@param callback fun(path: string)
+---@param capture_sub_dir string? -- optional capture sub dir under the main capture dir
+---@param frame hs.geometry
+function capture_frame(callback, capture_sub_dir, frame)
+    -- TODO! test timing of below (esp. get_screencapture_filename) and optimize performance
+
+    -- * save to
+    -- TODO rethink filenames here, something faster for snappy macros (skip making filename user friendly)
+    local image_tag = nil
+    local where_to = get_screencapture_filename("png", image_tag, capture_sub_dir)
+
+    function when_done(result, std_out, std_err)
+        if result ~= 0 then
+            hs.alert.show("capture_frame: failed: " .. std_err)
+            print("capture_frame: failed", std_err)
+        end
+        callback(where_to)
+    end
+
+    -- * rectangle
+    -- screencapture uses `-R <x,y,w,h>`
+    local rectangle = string.format("%d,%d,%d,%d", frame.x, frame.y, frame.w, frame.h)
+
+    hs.task.new("/usr/sbin/screencapture", when_done, { "-o", "-R", rectangle, where_to }):start()
+end
+
 ---@param element hs.axuielement
 ---@param callback fun(path: string)
 ---@param capture_sub_dir string? -- optional capture sub dir under the main capture dir
@@ -577,8 +603,8 @@ function capture_this_element(callback, element, capture_sub_dir)
 
     function when_done(result, std_out, std_err)
         if result ~= 0 then
-            hs.alert.show("capture failed: " .. std_err)
-            print("capture failed", std_err)
+            hs.alert.show("capture_this_element: failed: " .. std_err)
+            print("capture_this_element: failed", std_err)
         end
         callback(where_to)
         -- print("element captured to " .. where_to)

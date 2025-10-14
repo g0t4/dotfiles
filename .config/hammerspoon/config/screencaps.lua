@@ -40,6 +40,7 @@ end
 ---@return string filename
 function get_screencapture_filename(extension, image_tag, capture_sub_dir)
     extension = extension or "png"
+    -- TODO! revisit timing here and see if any optimizations should happen (consider user screencapture vs my macros that need to capture too)
 
     -- FYI file sizes verified to match macOS keyboard shortcuts for screencap
     --   probably b/c macOS uses exact same args to screencapture cmd
