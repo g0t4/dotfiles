@@ -294,12 +294,16 @@ function SPal_Test()
                 h = min_frame.h -- go with the smaller two, don't need extra two pixels from max height
             }
 
+            -- TODO! measure capture speeds and optimize so I can use this in more places
+            --  FYI I could cache this somehow and only periodically repeat the detection?
+            --  most of the time I will be using zoom 2 (medium)
+            --  and I need this in part to better know where to click to move the mouse to the closest frame edge?
+            --   OR maybe not... who knows until I get further... might be pointless to detect!
+            --   b/c maybe I should always do what the mouse click does currently
+            --   FYI might just need to adjust calculation for where to click too!
             local where_to_max = syncify(capture_frame, capture_sub_dir, frame)
-            -- FYI not bad, each screencap is ~100ms (est off gap between three caps here)
-            --   but that might be partially due to file name conflict... so I want to pass a specific string for this
-            --      in fact I should just overwrite the same file always?
 
-            -- TODO resume zoom detect off of screencap
+            -- TODO! resume zoom detect off of screencap
             -- local detected = syncify(detect_silence, where_to)
 
             -- local timeline = win:timeline_controller()
