@@ -666,11 +666,14 @@ local function move_playhead_to_silence(win, silence)
 end
 
 function SPal_Test()
-    -- assume this is done in silence where v will open the tool right away b/c both ends are auto selected
-    hs.eventtap.keyStroke({}, "v", 0) -- Cmd+V to paste since I can't type it, would put me in a loop (at best)
-    local win = get_cached_editor_window()
-    local menu = VolumeMenu.new(win.windows)
-    menu:wait_for_volume_to_be_mute()
+    local function SPal_OpenMuteTool_WIP()
+        -- TODO finish and integrate with act_on_silence when action=MUTE* (i.e. don't open if sub menu if tool already muted)
+        -- assume this is done in silence where it will open the tool right away b/c both ends are auto selected
+        hs.eventtap.keyStroke({}, "v", 0) -- Cmd+V to paste since I can't type it, would put me in a loop (at best)
+        local win = get_cached_editor_window()
+        local menu = VolumeMenu.new(win.windows)
+        menu:wait_for_volume_to_be_mute()
+    end
 end
 
 function SPal_JumpThisSilence()
