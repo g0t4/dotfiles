@@ -302,6 +302,7 @@ function SPal_Test()
             --   FYI might just need to adjust calculation for where to click too!
 
             local where_to = syncify(capture_region, frame)
+            print("where_to:" .. hs.inspect(where_to))
 
             -- TODO! resume zoom detect off of screencap
             -- local detected = syncify(detect_silence, where_to)

@@ -565,6 +565,7 @@ function capture_region(callback, frame)
     -- * rectangle
     -- screencapture uses `-R <x,y,w,h>`
     local rectangle = string.format("%d,%d,%d,%d", frame.x, frame.y, frame.w, frame.h)
+    -- print("rectange: " .. hs.inspect(rectangle))
 
     hs.task.new("/usr/sbin/screencapture", when_done, { "-o", "-R", rectangle, where_to }):start()
 end
