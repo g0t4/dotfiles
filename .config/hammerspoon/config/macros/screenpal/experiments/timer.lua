@@ -30,12 +30,12 @@ function Timer:capture(message)
     table.insert(self._logs, { message = message, duration = duration })
 end
 
----Prints all captured timings and the total elapsed time.
 function Timer:print_timing()
-    local total = get_time() - self._overall_start
-    print(string.format("Overall: %.6f seconds", total))
+    local total_us = (get_time() - self._overall_start) * 1e6
+    print(string.format("Overall: %.0f µs", total_us))
     for _, entry in ipairs(self._logs) do
-        print(string.format("  %s: %.6f seconds", entry.message, entry.duration))
+        local dur_us = entry.duration * 1e6
+        print(string.format("  %s: %.0f µs", entry.message, dur_us))
     end
 end
 
