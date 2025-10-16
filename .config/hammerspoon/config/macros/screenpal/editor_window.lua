@@ -366,10 +366,7 @@ end
 ---@return TimelineController
 function ScreenPalEditorWindow:timeline_controller()
     self:ensure_cached_controls()
-    local start = get_time()
-    local timeline = TimelineController:new(self)
-    print_took("TimelineController:new", get_time())
-    return timeline
+    return TimelineController:new(self)
 end
 
 ---@return number, string -- seconds and text values
