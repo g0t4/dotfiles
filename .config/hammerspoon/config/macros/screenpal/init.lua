@@ -304,8 +304,9 @@ function SPal_Test()
             -- TODO remove prints when done
             print("where_to:" .. hs.inspect(where_to))
 
+            ---@type LevelResults
             local detected = syncify(opencv.detect_zoom_level, where_to)
-            print("detected:" .. hs.inspect(detected))
+            print("detected:" .. hs.inspect(detected.level))
 
             -- TODO resume zoom detect off of screencap
             -- local timeline = win:timeline_controller()
