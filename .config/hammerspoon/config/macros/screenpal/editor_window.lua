@@ -489,7 +489,6 @@ function ScreenPalEditorWindow:detect_bar_level()
         -- print("  color" .. hs.inspect(color))
         if color then
             local red, green, blue = color.red * 255, color.green * 255, color.blue * 255
-            local red, green, blue = color.red * 255, color.green * 255, color.blue * 255
             local tolerance = 2
             -- array([225., 191., 180.]) # BGR (gray) inactive zoom bar
             -- array([255., 157.,  37.]) # BGR (light blue) current zoom bar
