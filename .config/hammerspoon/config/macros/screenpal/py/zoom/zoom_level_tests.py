@@ -1,4 +1,4 @@
-from zoom.zoom_level import main
+from zoom_level import main
 
 def test_zoom_level_1():
     result = main("samples/zoom/zoom1.png")
