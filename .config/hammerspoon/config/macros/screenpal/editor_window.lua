@@ -426,6 +426,7 @@ end
 function ScreenPalEditorWindow:detect_bar_level()
     local Timer = require("config.macros.screenpal.experiments.timer")
     local timer = Timer.new()
+
     if not self:is_zoomed() then
         print("zoom not active - cannot detect zoom level")
         return nil
@@ -459,7 +460,7 @@ function ScreenPalEditorWindow:detect_bar_level()
     --   would need hammerspoon APIs to get hs.image APIs
 
     ---@type hs.image?
-    local image = screen:snapshot(frame) -- TODO true = no color-profile conversion
+    local image = screen:snapshot(frame) -- 30ms typical for snapshot
     timer:capture("snapshot")
     -- image:saveToFile("snapshot.png") -- CWD == ~/.hammerspoon usually
     if image == nil then
