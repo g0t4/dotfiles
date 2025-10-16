@@ -257,10 +257,8 @@ function SPal_Test()
         end
 
         run_async(function()
-            -- PRN start all three at same time? wait all to complete? (think await all)
-            --    my syncify isn't designed for this
-            --    but IIRC plenary has smth that might be?
-            --
+            -- TODO split out a zoom module to encapsulate zoom detection and other zoom logic
+            -- FYI coordinates will be (x,y)=(0,0) if not zoomed (only way to tell from these controls alone)
             local min_frame = win._btn_minimum_zoom:axFrame()
             local max_frame = win._btn_maximum_zoom:axFrame()
             -- local medium_frame = win._btn_medium_zoom:axFrame()
@@ -295,6 +293,7 @@ function SPal_Test()
                 y = min_frame.y, -- all have same Y
                 h = min_frame.h -- go with the smaller two, don't need extra two pixels from max height
             }
+            -- print("frame:" .. hs.inspect(frame))
 
             -- TODO! measure overall zoom detection speeds and optimize so I can use this in more places
             --  FYI I could cache this somehow and only periodically repeat the detection?
