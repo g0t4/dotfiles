@@ -140,6 +140,8 @@ local function _move_playhead_to_screen_x(self, playhead_screen_x)
     -- FYI cursor at the start/end of silence region can make it look longer/shorter b/c it is covering the start/stop point and I had to unify the playhead as part of current silence region (or have opposite problem--shortens the silence region)
     --   thus jump to next silence doesn't always work so well when zoom is off or level 1
     --   just keep that in mind
+    --   PRN when using act on current silence (could move playhead first? but how far?)
+    --     or do this after measuring to see if any major discrepancies
 
     -- assume start is on a frame
     --   start - pixels_per_frame == 1 frame back
