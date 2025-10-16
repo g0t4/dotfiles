@@ -124,6 +124,7 @@ local CLICK_HOLD_MICROSECONDS = 100000
 ---@param self TimelineController
 ---@param playhead_screen_x number
 local function _move_playhead_to_screen_x(self, playhead_screen_x)
+    local before = self:get_current_playhead_timeline_relative_x()
     -- print("moving playhead to screen_x=" .. tostring(playhead_screen_x))
     hs.eventtap.leftClick({
         x = playhead_screen_x,
@@ -132,7 +133,8 @@ local function _move_playhead_to_screen_x(self, playhead_screen_x)
     _wait_until_playhead_at_screen_x(self, playhead_screen_x)
     dump("discrepancy after click", {
         intended = playhead_screen_x,
-        actual = self:get_current_playhead_timeline_relative_x()
+        actual = self:get_current_playhead_timeline_relative_x(),
+        before = before,
     })
 end
 
