@@ -51,17 +51,14 @@ def detect_zoom_level(image):
         if is_enabled_blue:
             return bar["level"]
 
-    # Could not detect a blue bar
     return None
 
 def main(capture_file):
-    # Load the image
     image = cv2.imread(capture_file)
 
     if image is None:
         return {"error": f"Could not load image: {capture_file}"}
 
-    # Detect zoom level
     level = detect_zoom_level(image)
 
     if level is None:
