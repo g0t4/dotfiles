@@ -12,7 +12,7 @@ def detect_zoom_level(image):
 
     The active zoom level's bar is blue, others are gray.
     """
-    # 32, 74
+    # 32high x 74wide
     height, width = image.shape[:2]
 
     # Bars are triangular (increase in height left to right), so sample near the bottom
