@@ -150,17 +150,20 @@ local function _move_playhead_to_screen_x(self, playhead_screen_x)
         past_explain = "\n  past_right: " .. past_right_frame
     end
 
+    if frame_left_of_intended == intended_x then
+        -- this will round down to frame_left_of_intended - pixels_per_frame (1 frame back)
+        -- so let's add 1 to be certain we land on frame_left_of_intended
+        playhead_screen_x = playhead_screen_x + 1 -- will round down to left most now
+    end
+
     -- * move playhead
     -- print("moving playhead to screen_x=" .. tostring(playhead_screen_x))
     hs.eventtap.leftClick({
         x = playhead_screen_x,
         y = self._timeline_frame.y + self._timeline_frame.h / 2
     }, CLICK_HOLD_MICROSECONDS)
-    _wait_until_playhead_at_screen_x(self, playhead_screen_x)
+    _wait_until_playhead_at_screen_x(self, playhead_screen_x) -- PRN! if we have zoom level we should be able to determine the wait more accurately IIRC
 
-    -- TODO pass flag(s) to decide if we round up/down and when?
-    -- TODO also find out what the bias is for clicking at different spots between frames as far as does it round up / down... one way always or both depending on proximit?)
-    -- PRN I could choose to align frame boundaries outside of this timeline controller, it's just a good spot here to at least analyze
     local actual = self:get_current_playhead_timeline_relative_x()
 
     local msg = "start: " .. start_x
