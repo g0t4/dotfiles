@@ -487,7 +487,8 @@ function ScreenPalEditorWindow:detect_bar_level()
         local x_sample = math.floor(bar.x)
         ---@type NSColor?
         local color = image:colorAt({ x = x_sample, y = y_sample })
-        -- print("  color" .. hs.inspect(color))
+        -- print("  color", hs.inspect(color))
+
         if color then
             local red, green, blue = color.red * 255, color.green * 255, color.blue * 255
             local tolerance = 2
