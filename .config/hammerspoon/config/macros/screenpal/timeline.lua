@@ -116,6 +116,27 @@ local function _wait_until_playhead_at_screen_x(self, desired_playhead_screen_x,
     log_if_slower_than_100ms("  wait for playhead move", start)
 end
 
+---@return number?
+function TimelineController:zoom_level()
+    if not self._zoom_level then
+        self._zoom_level = self.__editor_window:detect_zoom_level()
+    end
+    return self._zoom_level
+end
+
+---@return number?
+function TimelineController:pixels_per_frame()
+    -- base on zoom level (1 ~= zoom1, 3 ~= zoom2, 6 ~= zoom3)
+    if self:zoom_level() == 1 then
+        return 1
+    elseif self:zoom_level() == 2 then
+        return 3
+    elseif self:zoom_level() == 3 then
+        return 6
+    end
+    return nil
+end
+
 -- Frequent trouble with 10ms (10,000)
 --   occasional (1 in 10) at 50/75ms
 --   200ms is default but that feels sluggish
@@ -128,14 +149,9 @@ local function _move_playhead_to_screen_x(self, playhead_screen_x)
     local start_x = self:get_current_playhead_timeline_relative_x()
     local intended_x = playhead_screen_x - self._timeline_frame.x
 
-    if self._zoom_level == nil then
-        self._zoom_level = self.__editor_window:detect_zoom_level()
-    end
-    -- base on zoom level (1 ~= zoom1, 3 ~= zoom2, 6 ~= zoom3)
-    local pixels_per_frame = 1 -- 1 and nil can behave the same (as if each frame is one pixel... yikes might screw up in non_zoomed?)
-    if self._zoom_level == 2 then pixels_per_frame = 3 end
-    if self._zoom_level == 3 then pixels_per_frame = 6 end
-    local not_zoomed = self._zoom_level ~= nil
+    local zoom_level = self:zoom_level()
+    local pixels_per_frame = self:pixels_per_frame() or 1 -- use 1 so calcs don't break (modulus of pixels_per_frame)
+    local not_zoomed = zoom_level ~= nil
 
     -- FYI cursor at the start/end of silence region can make it look longer/shorter b/c it is covering the start/stop point and I had to unify the playhead as part of current silence region (or have opposite problem--shortens the silence region)
     --   thus jump to next silence doesn't always work so well when zoom is off or level 1
