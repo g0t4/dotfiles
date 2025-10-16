@@ -451,6 +451,7 @@ end
 ---@alias NSSize { w:number, h:number }
 ---@alias CFRange { location: number, length: number }
 ---@alias CGPoint { x:number, y:number }
+---@alias NSColor { red: number, green: number, blue: number, alpha: number }
 -- based on: https://developer.apple.com/documentation/applicationservices/axvaluetype
 
 ---@param elem hs.axuielement

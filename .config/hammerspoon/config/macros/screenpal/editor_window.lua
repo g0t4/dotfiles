@@ -484,7 +484,7 @@ function ScreenPalEditorWindow:detect_bar_level()
         timer:capture("color check for bar level: " .. bar.level)
 
         local x_sample = math.floor(bar.x)
-        ---@type hs.drawing.color?
+        ---@type NSColor?
         local color = image:colorAt({ x = x_sample, y = y_sample })
         -- print("  color" .. hs.inspect(color))
         if color then
