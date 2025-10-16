@@ -254,15 +254,16 @@ function SPal_Test()
         local start_x = 816.5 -- exactly on frame boundary (but then rounds down due to how click works!)
 
         -- TODO compare to hs.mouse.absolutePosition() with and without... before hs.eventtap.leftClick
-        -- FYI mouse being close to spot alters how it clicks?! or maybe where it thinks the click happens?
+        -- actually even w/o restoring mouse position, as long as I have a short delay, the clicks work out the same (150ms)
+        --   interesting hammerspoon crashes if I try to do the 30 in a row! w/o a pause between!
 
         run_async(function()
             for i = 1, 30 do
                 start_x = start_x + 0.5
                 timeline:move_playhead_to(start_x)
-                sleep_ms(150)
-                hs.mouse.absolutePosition(original_mouse_pos) -- 0.2ms
-                sleep_ms(250)
+                -- sleep_ms(150)
+                -- hs.mouse.absolutePosition(original_mouse_pos) -- 0.2ms
+                -- sleep_ms(250)
             end
         end)
 
