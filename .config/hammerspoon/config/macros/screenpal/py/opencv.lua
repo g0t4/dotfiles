@@ -33,15 +33,4 @@ function M.detect_silence(callback, imagePath)
     _run(callback, python_script, imagePath)
 end
 
----@class LevelResults
----@field level string
----@field error string
-
----@param imagePath string
----@param callback fun(results: LevelResults)
-function M.detect_zoom_level(callback, imagePath)
-    local python_script = "zoom/zoom_level.py"
-    _run(callback, python_script, imagePath)
-end
-
 return M

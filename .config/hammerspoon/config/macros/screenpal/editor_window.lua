@@ -11,7 +11,8 @@ end
 
 ---@class ScreenPalEditorWindow
 ---@field windows AppWindows
-ScreenPalEditorWindow = {}
+local ScreenPalEditorWindow = {}
+
 function ScreenPalEditorWindow:new()
     ---@type ScreenPalEditorWindow
     local editor_window = {}
@@ -420,3 +421,75 @@ function ScreenPalEditorWindow:toggle_AXEnhancedUserInterface()
         print(hs.inspect(child))
     end
 end
+
+---@return integer? level -- 1,2,3 or nil if not found
+function ScreenPalEditorWindow:detect_bar_level()
+    -- PRN add unit tests that use pre-captured sample images .../py/samples/zoom/zoom{1,2,3,-none}.png
+
+    if not self:is_zoomed() then
+        print("zoom not active - cannot detect zoom level")
+        return nil
+    end
+
+    -- FYI coordinates will be (x,y)=(0,0) if not zoomed (only way to tell from these controls alone)
+    local min_frame = self._btn_minimum_zoom:axFrame()
+    local max_frame = self._btn_maximum_zoom:axFrame()
+    --
+    -- FYI: sizes (regardless which is selected, I tested all zoom levels to be sure)
+    -- 1080p:
+    -- min:{ h = 16.0, w = 12.0, x = 1853.0, y = 1033.0 }
+    -- medium:{ h = 16.0, w = 12.0, x = 1865.0, y = 1033.0 }
+    -- max:{ h = 16.0, w = 13.0, x = 1877.0, y = 1033.0 }
+
+    local frame = {
+        x = min_frame.x,
+        w = max_frame.w + (max_frame.x - min_frame.x),
+        y = min_frame.y, -- all have same Y
+        h = min_frame.h -- go with the smaller two, don't need extra two pixels from max height
+    }
+
+    local screen = hs.screen.mainScreen()
+
+    ---@type hs.image?
+    local image = screen:snapshot(frame) -- TODO true = no color-profile conversion
+    -- image:saveToFile("snapshot.png") -- CWD == ~/.hammerspoon usually
+    if image == nil then
+        print("image snapshot failed for finding zoom level")
+        return nil
+    end
+    -- use image size so retina vs non doesn't matter
+    ---@type NSSize?
+    local img_size = image:size()
+    -- print("image size: " .. hs.inspect(img_size))
+
+    local bar_regions = {
+        { x = img_size.w * 0.22, level = 1 },
+        { x = img_size.w * 0.48, level = 2 },
+        { x = img_size.w * 0.72, level = 3 },
+    }
+
+    -- exact color values
+    -- array([225., 191., 180.]) # gray (inactive)
+    -- array([255., 157.,  37.]) # blue (current zoom level)
+
+    local y_sample = img_size.h * 0.95
+    for _, bar in ipairs(bar_regions) do
+        local x = math.floor(bar.x)
+        local y = math.floor(y_sample)
+        -- print("x: " .. x .. " y: " .. y)
+
+        ---@type hs.drawing.color?
+        local color = image:colorAt({ x = x, y = y })
+        -- print("  color" .. hs.inspect(color))
+        if color then
+            local red, green, blue = color.red * 255, color.green * 255, color.blue * 255
+            -- same idea: detect bright blue vs gray
+            if (blue - green) > 80 and (blue - red) > 180 then
+                return bar.level
+            end
+        end
+    end
+    return nil
+end
+
+return ScreenPalEditorWindow

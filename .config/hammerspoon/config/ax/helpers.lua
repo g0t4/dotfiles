@@ -448,6 +448,7 @@ end
 ---@alias AXFrame { x:number, y:number, w:number, h:number }
 ---   this one is specific to frames, and I hope to use it to convey the type is not just CGRect but that it represents a frame
 ---@alias CGSize { w:number, h:number }
+---@alias NSSize { w:number, h:number }
 ---@alias CFRange { location: number, length: number }
 ---@alias CGPoint { x:number, y:number }
 -- based on: https://developer.apple.com/documentation/applicationservices/axvaluetype

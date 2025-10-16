@@ -248,56 +248,12 @@ end
 function SPal_Test()
     local function SPal_DetectZoom_WIP()
         local win = get_cached_editor_window()
-        if not win:is_zoomed() then
-            print("zoom not active - cannot detect zoom level")
-            return
-        end
-
         local start = get_time()
-        run_async(function()
-            -- TODO split out a zoom module to encapsulate zoom detection and other zoom logic
-            -- FYI coordinates will be (x,y)=(0,0) if not zoomed (only way to tell from these controls alone)
-            local min_frame = win._btn_minimum_zoom:axFrame()
-            local max_frame = win._btn_maximum_zoom:axFrame()
-            --
-            -- FYI: sizes (regardless which is selected, I tested all zoom levels to be sure)
-            -- 1080p frames: (double to get retina... as in the actual capture)
-            -- min:{
-            --   h = 16.0,
-            --   w = 12.0,
-            --   x = 1853.0,
-            --   y = 1033.0
-            -- }
-            -- medium:{
-            --   h = 16.0,
-            --   w = 12.0,
-            --   x = 1865.0,
-            --   y = 1033.0
-            -- }
-            -- max:{
-            --   h = 16.0,
-            --   w = 13.0,
-            --   x = 1877.0,
-            --   y = 1033.0
-            -- }
-
-            local frame = {
-                x = min_frame.x,
-                w = max_frame.w + (max_frame.x - min_frame.x),
-                y = min_frame.y, -- all have same Y
-                h = min_frame.h -- go with the smaller two, don't need extra two pixels from max height
-            }
-
-            local where_to = syncify(capture_region, frame)
-            -- print("where_to:" .. hs.inspect(where_to))
-
-            ---@type LevelResults
-            local detected = syncify(opencv.detect_zoom_level, where_to)
-            hs.alert.show("detected:" .. hs.inspect(detected.level))
-            -- TODO now use this elsewhere
-            print_took("level", start) -- 220ms to get here (so end to end to check level) - expected!
-            -- FYI could probably run this in parallel to silence detection and then it won't matter that it takes 200ms
-        end)
+        local level = win:detect_bar_level()
+        print_took("level", start) -- now?
+        hs.alert.show("detected:" .. hs.inspect(level))
+        -- TODO now use this elsewhere
+        -- FYI could probably run this in parallel to silence detection and then it won't matter that it takes 200ms
     end
 
     SPal_DetectZoom_WIP()
