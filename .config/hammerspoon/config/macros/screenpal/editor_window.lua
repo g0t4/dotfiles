@@ -468,7 +468,7 @@ function ScreenPalEditorWindow:detect_bar_level()
         { x = img_size.w * 0.72, level = 3 },
     }
 
-    -- exact color values
+    -- exact BGR color values
     -- array([225., 191., 180.]) # gray (inactive)
     -- array([255., 157.,  37.]) # blue (current zoom level)
 
