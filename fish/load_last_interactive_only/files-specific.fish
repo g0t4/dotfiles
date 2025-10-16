@@ -317,8 +317,9 @@ if status --is-interactive
                         imgcat $path
                     else
                         echo "error, missing imgcat and $path is an image, aborting cat..."
+                        return
                     end
-                    return
+                    continue
                 end
                 # for plain text files I wanna color them too.. cat would normally show the file so no harm in coloring the output, color would even be dropped if piped/non-interactive
                 _batls_file $path
