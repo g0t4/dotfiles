@@ -22,16 +22,16 @@ def detect_zoom_level(image):
 
     bar_regions = [
         # Bar 1 (leftmost, shortest) - x position around 20-25% of width
-        {"x": int(width * 0.22), "y": y_sample, "level": 1},
+        {"x": int(width * 0.22), "level": 1},
         # Bar 2 (middle) - x position around 45-50% of width
-        {"x": int(width * 0.48), "y": y_sample, "level": 2},
+        {"x": int(width * 0.48), "level": 2},
         # Bar 3 (rightmost, tallest) - x position around 70-75% of width
-        {"x": int(width * 0.72), "y": y_sample, "level": 3},
+        {"x": int(width * 0.72), "level": 3},
     ]
 
     for bar in bar_regions:
-        x, y = bar["x"], bar["y"]
-        region = image[max(0, y-2):min(height, y+3), max(0, x-2):min(width, x+3)]
+        x = bar["x"]
+        region = image[max(0, y_sample-2):min(height, y_sample+3), max(0, x-2):min(width, x+3)]
         # cv2.imshow("region", region)
         # cv2.waitKey()
         avg_color = np.mean(region, axis=(0, 1))
