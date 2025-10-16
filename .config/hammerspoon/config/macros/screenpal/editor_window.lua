@@ -498,7 +498,7 @@ function ScreenPalEditorWindow:detect_bar_level()
                 math.abs(green - 157) <= tolerance and
                 math.abs(red - 37) <= tolerance then
                 -- active bar
-                timer:print_timing()
+                -- timer:print_timing()
                 return bar.level
             end
         end

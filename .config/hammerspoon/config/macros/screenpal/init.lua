@@ -248,12 +248,8 @@ end
 function SPal_Test()
     local function SPal_DetectZoom_WIP()
         local win = get_cached_editor_window()
-        local start = get_time()
-        local level = win:detect_bar_level()
-        print_took("level", start) -- now?
+        local level = win:detect_bar_level() -- 30 to 50ms
         hs.alert.show("detected:" .. hs.inspect(level))
-        -- TODO now use this elsewhere
-        -- FYI could probably run this in parallel to silence detection and then it won't matter that it takes 200ms
     end
 
     SPal_DetectZoom_WIP()
