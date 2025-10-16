@@ -150,17 +150,20 @@ function act_on_silence(win, silence, action)
         end
     end
 
+    local timeline = win:timeline_controller()
+
     if is_mute then
         local mute_number = action:match("MUTE(%d+)")
         if mute_number then
-            local offset = tonumber(mute_number)
-            timeline_relative_x_start = silence.x_start + offset
-            timeline_relative_x_end = silence.x_end + offset
+            -- local zoom_level = timeline:zoom_level()
+            local pixels_per_frame = timeline:pixels_per_frame() or 1
+            local num_frames = tonumber(mute_number)
+            timeline_relative_x_start = silence.x_start + num_frames * pixels_per_frame
+            timeline_relative_x_end = silence.x_end + num_frames * pixels_per_frame
         end
     end
 
     -- * set tool start
-    local timeline = win:timeline_controller()
     timeline:move_playhead_to(timeline_relative_x_start)
 
     -- * start tool
@@ -251,7 +254,6 @@ function SPal_Test()
         -- local timeline = get_cached_editor_window():timeline_controller()
         -- local playhead_x = timeline:get_current_playhead_timeline_relative_x()
         -- local start_x = 816.5 -- exactly on frame boundary (but then rounds down due to how click works!)
-
     end
 
     -- WIP_test_click()
