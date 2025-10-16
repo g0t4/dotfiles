@@ -26,26 +26,35 @@ def detect_zoom_level(image):
         {"x": int(width * 0.72), "y": int(height * 0.5), "level": 3},
     ]
 
+    # First pass: look for bright blue (bars 2 or 3 when active)
+    # Bright blue: B-G > 80, B-R > 180
     for bar in bar_regions:
         x, y = bar["x"], bar["y"]
-
-        # Sample a small region around this point (5x5 pixels)
         region = image[max(0, y-2):min(height, y+3), max(0, x-2):min(width, x+3)]
-
-        # Calculate average color in BGR
         avg_color = np.mean(region, axis=(0, 1))
         b, g, r = avg_color
 
-        # Blue bars have very high B-G and B-R differences (90+, 200+)
-        # Gray/light bars have lower differences (~34-45)
-        # Check if this bar is blue based on the observed color differences
-        is_blue = (b - g) > 80 and (b - r) > 180
-
-        if is_blue:
+        is_bright_blue = (b - g) > 80 and (b - r) > 180
+        if is_bright_blue:
             return bar["level"]
 
-    # Default to level 1 if no blue detected
-    return 1
+    # If no bright blue found, assume bar 1 is active (it's always dark blue)
+    # Verify by checking that bars 2 and 3 are gray (high brightness, low B dominance)
+    bar2_region = image[max(0, bar_regions[1]["y"]-2):min(height, bar_regions[1]["y"]+3),
+                        max(0, bar_regions[1]["x"]-2):min(width, bar_regions[1]["x"]+3)]
+    bar2_color = np.mean(bar2_region, axis=(0, 1))
+    bar2_is_gray = bar2_color.mean() > 180
+
+    bar3_region = image[max(0, bar_regions[2]["y"]-2):min(height, bar_regions[2]["y"]+3),
+                        max(0, bar_regions[2]["x"]-2):min(width, bar_regions[2]["x"]+3)]
+    bar3_color = np.mean(bar3_region, axis=(0, 1))
+    bar3_is_gray = bar3_color.mean() > 180
+
+    if bar2_is_gray and bar3_is_gray:
+        return 1
+
+    # Could not determine zoom level
+    return None
 
 def main(capture_file):
     # Load the image
@@ -56,6 +65,9 @@ def main(capture_file):
 
     # Detect zoom level
     level = detect_zoom_level(image)
+
+    if level is None:
+        return {"error": "Could not detect zoom level - no blue bar found"}
 
     return {"level": level}
 
