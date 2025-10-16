@@ -474,9 +474,10 @@ function ScreenPalEditorWindow:detect_bar_level()
     timer:capture("get image size")
 
     local bar_regions = {
-        { x = img_size.w * 0.22, level = 1 },
-        { x = img_size.w * 0.48, level = 2 },
-        { x = img_size.w * 0.72, level = 3 },
+        -- bars are verticall split into three sections, take middle of each bar (1/6 == middle)
+        { x = img_size.w * 0.17, level = 1 }, -- 0/3+1/6
+        { x = img_size.w * 0.50, level = 2 }, -- 1/3+1/6
+        { x = img_size.w * 0.83, level = 3 }, -- 2/3+1/6
     }
 
     local y_sample = math.floor(img_size.h * 0.95)
