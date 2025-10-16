@@ -12,6 +12,7 @@ def detect_zoom_level(image):
 
     The active zoom level's bar is blue, others are gray.
     """
+    # 32, 74
     height, width = image.shape[:2]
 
     # Define sampling regions for each bar (approximate positions)
@@ -28,17 +29,26 @@ def detect_zoom_level(image):
         {"x": int(width * 0.72), "y": y_sample, "level": 3},
     ]
 
-    # Look for blue bar (B-G > 80, B-R > 180)
-    # All active bars show the same bright blue color
-    # Gray/inactive bars have B-G ≈ 34, B-R ≈ 45
     for bar in bar_regions:
         x, y = bar["x"], bar["y"]
         region = image[max(0, y-2):min(height, y+3), max(0, x-2):min(width, x+3)]
+        # cv2.imshow("region", region)
+        # cv2.waitKey()
         avg_color = np.mean(region, axis=(0, 1))
-        b, g, r = avg_color
 
-        is_blue = (b - g) > 80 and (b - r) > 180
-        if is_blue:
+        # color sample values:
+        # avg_color=array([224.32, 190.32, 179.32]) # gray (inactive)
+        # avg_color=array([225., 191., 180.]) # gray (inactive)
+        # avg_color=array([255., 157.,  37.]) # blue (current zoom level)
+        # print(f'{avg_color=}')
+
+        b, g, r = avg_color
+        # this was claude's take on the algorithm and it works for now
+        # Look for blue bar (B-G > 80, B-R > 180)
+        # All active bars show the same bright blue color
+        # Gray/inactive bars have B-G ≈ 34, B-R ≈ 45
+        is_enabled_blue = (b - g) > 80 and (b - r) > 180
+        if is_enabled_blue:
             return bar["level"]
 
     # Could not detect a blue bar
