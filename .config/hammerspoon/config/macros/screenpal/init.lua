@@ -292,7 +292,8 @@ function SPal_Test()
 
             ---@type LevelResults
             local detected = syncify(opencv.detect_zoom_level, where_to)
-            print("detected:" .. hs.inspect(detected.level))
+            hs.alert.show("detected:" .. hs.inspect(detected.level))
+            -- TODO now use this elsewhere
         end)
     end
 
