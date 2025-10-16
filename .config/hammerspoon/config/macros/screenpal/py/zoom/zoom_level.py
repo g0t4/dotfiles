@@ -15,16 +15,11 @@ def detect_zoom_level(image):
     # 32, 74
     height, width = image.shape[:2]
 
-    # Define sampling regions for each bar (approximate positions)
     # Bars are triangular (increase in height left to right), so sample near the bottom
     # where all bars are present to get the actual bar color, not the background
-
     bar_regions = [
-        # Bar 1 (leftmost, shortest) - x position around 20-25% of width
         {"x": int(width * 0.22), "level": 1},
-        # Bar 2 (middle) - x position around 45-50% of width
         {"x": int(width * 0.48), "level": 2},
-        # Bar 3 (rightmost, tallest) - x position around 70-75% of width
         {"x": int(width * 0.72), "level": 3},
     ]
 
