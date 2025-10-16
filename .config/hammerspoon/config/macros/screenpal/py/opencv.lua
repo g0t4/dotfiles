@@ -1,6 +1,7 @@
 local M = {}
 
-local function _run(callback, script, imagePath)
+local function _run(callback, python_script, imagePath)
+    local script = os.getenv("HOME") .. "/repos/github/g0t4/dotfiles/.config/hammerspoon/config/macros/screenpal/py/" .. python_script
     local python_exe = os.getenv("HOME") .. "/repos/github/g0t4/dotfiles/.venv/bin/python3"
     local args = { script, imagePath }
 
@@ -28,15 +29,15 @@ end
 ---@param imagePath string
 ---@param callback fun(results: DetectionResults)
 function M.detect_silence(callback, imagePath)
-    local script = os.getenv("HOME") .. "/repos/github/g0t4/dotfiles/.config/hammerspoon/config/macros/screenpal/py/both.py"
-    _run(callback, script, imagePath)
+    local python_script = "both.py"
+    _run(callback, python_script, imagePath)
 end
 
 ---@param imagePath string
 ---@param callback fun(results: DetectionResults)
 function M.detect_zoom_level(callback, imagePath)
-    local script = os.getenv("HOME") .. "/repos/github/g0t4/dotfiles/.config/hammerspoon/config/macros/screenpal/py/zoom/zoom_level.py"
-    _run(callback, script, imagePath)
+    local python_script = "zoom/zoom_level.py"
+    _run(callback, python_script, imagePath)
 end
 
 return M
