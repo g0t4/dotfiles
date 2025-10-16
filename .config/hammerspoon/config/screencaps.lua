@@ -40,36 +40,19 @@ end
 ---@return string filename
 function get_screencapture_filename(extension, image_tag, capture_sub_dir)
     extension = extension or "png"
-    -- TODO! revisit timing here and see if any optimizations should happen (consider user screencapture vs my macros that need to capture too)
 
-    -- FYI file sizes verified to match macOS keyboard shortcuts for screencap
-    --   probably b/c macOS uses exact same args to screencapture cmd
+    -- TODO setup fast path filename builder that uses tmp dir and time alone to name the files => use on element captures that don't need friendly name
 
-    -- TODO how about have shadow be when I hold down option key and off by default?
-
-    local frontmostapp = hs.application.frontmostApplication()
-    local appName = frontmostapp:name()
-
-    -- I hate having seconds on the screencap UNLESS I have multiple from the same minute
-    local filename = os.date("%Y-%m-%d %Hh%Mm")
-    if appName ~= nil then
-        filename = filename .. "." .. appName
-    end
-    if image_tag ~= nil then
-        filename = filename .. "." .. image_tag
-    end
-
-    -- check if capture directory exists, if not WARN and abort
-    local capture_dir = getCaptureDirectory()
+    local capture_dir = getCaptureDirectory() -- 0.1 to 0.4ms each time
     if not hs.fs.attributes(capture_dir) then
-        local message = "Screencap directory does not exist, please create it OR reset it: "
-            .. capture_dir
+        -- FYI 0.1 ms for hs.fs.attributes call (when dir exists, irrelevant if dir doesn't exist)
+        local message = "Screencap directory doesn't exist, create/change it: " .. capture_dir
         hs.alert.show(message)
-        -- PRN reset to common spot?
         error(message)
     end
 
     if capture_sub_dir ~= nil then
+        -- TODO get rid of this and move to tmp dir? only for screencaps currently for detecting volume level
         capture_dir = capture_dir .. "/" .. capture_sub_dir
         if not hs.fs.attributes(capture_dir) then
             print("creating capture_sub_dir", capture_dir)
@@ -77,31 +60,21 @@ function get_screencapture_filename(extension, image_tag, capture_sub_dir)
         end
     end
 
-    local shortFileNamePath = capture_dir .. "/" .. filename .. "." .. extension
-    print("trying filename", shortFileNamePath)
-    if hs.fs.attributes(shortFileNamePath) == nil then
-        return shortFileNamePath
-    end
+    local current_time = os.date("%Y-%m-%d %Hh%Mm%Ss") -- 15us to 50us
+    local current_ms = (hs.timer.absoluteTime() / 1e6) % 1000 -- 11us
+    -- example: 2025-10-16 04h33m39s841
+    local file = capture_dir .. "/" .. current_time .. string.format("%3.0f", current_ms)
 
-    -- add differentiation otherwise screencap will overwrite previous caps with same name
-    --    2025-02-07 14h17m41s.450.png
-    -- get fraction of second using absoluteTime such that .100 == 100ms
-    local sub_second = (hs.timer.absoluteTime() / 1e6) % 1000
-
-    local longerPath = capture_dir
-        .. "/" .. os.date("%Y-%m-%d %Hh%Mm%Ss")
-        .. string.format("%3.0f", sub_second)
-
+    local appName = hs.application.frontmostApplication():name() -- 0.1 to 1.2ms
     if appName ~= nil then
-        longerPath = longerPath .. "." .. appName
+        file = file .. "." .. appName
     end
     if image_tag ~= nil then
-        longerPath = longerPath .. "." .. image_tag
+        file = file .. "." .. image_tag
     end
-
-    local use_name = longerPath .. "." .. extension
-    print("use_name", use_name)
-    return use_name
+    file = file .. "." .. extension
+    -- print("screencapture filename", file)
+    return file
 end
 
 -- normal keys:

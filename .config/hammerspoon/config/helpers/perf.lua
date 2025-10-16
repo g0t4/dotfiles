@@ -37,6 +37,16 @@ function print_took(message, start_time)
     print(message .. " took " .. elapsed_time_milliseconds .. " ms")
 end
 
+function print_took_in_nanoseconds(message, start_time)
+    local elapsed_time_nanoseconds = get_elapsed_time_in_nanoseconds(start_time)
+    print(message .. " took " .. elapsed_time_nanoseconds .. " ns")
+end
+
+function print_took_in_microseconds(message, start_time)
+    local elapsed_time_microseconds = get_elapsed_time_in_nanoseconds(start_time) / 1000
+    print(message .. " took " .. elapsed_time_microseconds .. " us")
+end
+
 function start_profiler()
     local ProFi = require("ProFi")
     ProFi:start()
