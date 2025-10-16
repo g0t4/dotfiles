@@ -258,6 +258,11 @@ function SPal_Test()
         --   interesting hammerspoon crashes if I try to do the 30 in a row! w/o a pause between!
 
         run_async(function()
+            -- *** TAKEAWAY, be at least 0.5 to the right of the frame you want to land on
+            --   and that makes sense... IIAC...
+            --   frames are landing on fraction of a pixel, i.e. 816.5
+            --   => clicking at 816.5 is probably akin to clicking at 816 with rounding somewhere? floor?
+            --   => clicking at 817 works to land on 816.5 then (that equivalent frame)
             for i = 1, 30 do
                 start_x = start_x + 0.5
                 timeline:move_playhead_to(start_x)
