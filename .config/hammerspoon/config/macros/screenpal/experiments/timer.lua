@@ -30,12 +30,29 @@ function Timer:capture(message)
     table.insert(self._logs, { message = message, duration = duration })
 end
 
+---@param elapsed_seconds number
+---@return string
+function format_elapsed_time(elapsed_seconds)
+    if elapsed_seconds >= 1 then
+        return string.format("%.3f s", elapsed_seconds)
+    end
+    local ms = elapsed_seconds * 1e3
+    if ms >= 1 then
+        return string.format("%.2f ms", ms)
+    end
+    local us = elapsed_seconds * 1e6
+    if us >= 1 then
+        return string.format("%.0f µs", us)
+    end
+    local ns = elapsed_seconds * 1e9
+    return string.format("%d ns", math.floor(ns + 0.5))
+end
+
 function Timer:print_timing()
-    local total_us = (get_time() - self._overall_start) * 1e6
-    print(string.format("Overall: %.0f µs", total_us))
+    local overall = format_elapsed_time(get_time() - self._overall_start)
+    print(string.format("Overall time: %s", overall))
     for _, entry in ipairs(self._logs) do
-        local dur_us = entry.duration * 1e6
-        print(string.format("  %s: %.0f µs", entry.message, dur_us))
+        print(string.format("  %s: %s", entry.message, format_elapsed_time(entry.duration)))
     end
 end
 
