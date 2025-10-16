@@ -472,14 +472,11 @@ function ScreenPalEditorWindow:detect_bar_level()
     -- array([225., 191., 180.]) # gray (inactive)
     -- array([255., 157.,  37.]) # blue (current zoom level)
 
-    local y_sample = img_size.h * 0.95
+    local y_sample = math.floor(img_size.h * 0.95)
     for _, bar in ipairs(bar_regions) do
         local x = math.floor(bar.x)
-        local y = math.floor(y_sample)
-        -- print("x: " .. x .. " y: " .. y)
-
         ---@type hs.drawing.color?
-        local color = image:colorAt({ x = x, y = y })
+        local color = image:colorAt({ x = x, y = y_sample })
         -- print("  color" .. hs.inspect(color))
         if color then
             local red, green, blue = color.red * 255, color.green * 255, color.blue * 255
