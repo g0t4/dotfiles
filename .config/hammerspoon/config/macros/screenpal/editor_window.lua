@@ -474,9 +474,9 @@ function ScreenPalEditorWindow:detect_bar_level()
 
     local y_sample = math.floor(img_size.h * 0.95)
     for _, bar in ipairs(bar_regions) do
-        local x = math.floor(bar.x)
+        local x_sample = math.floor(bar.x)
         ---@type hs.drawing.color?
-        local color = image:colorAt({ x = x, y = y_sample })
+        local color = image:colorAt({ x = x_sample, y = y_sample })
         -- print("  color" .. hs.inspect(color))
         if color then
             local red, green, blue = color.red * 255, color.green * 255, color.blue * 255
