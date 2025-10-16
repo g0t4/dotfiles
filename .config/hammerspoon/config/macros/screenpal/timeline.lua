@@ -135,19 +135,17 @@ local function _move_playhead_to_screen_x(self, playhead_screen_x)
     -- once you click you will wind up on a frame b/c you can only move playhead to a frame (not sub frame)
     -- FYI most of the time actual == frame_left_of_intended (rounds down to leftmost frame)
     --   only exception seems to be when you click right on a frame, it is as if you clicked slightly to the left of it and so it rounds down
-    local frame_left_of_intended, frame_right_of_intended, past_explain
+    local frame_left_of_intended, frame_right_of_intended
     if intended_x > start_x then
         local pixels_forward = intended_x - start_x
         local past_left_frame = pixels_forward % pixels_per_frame
         frame_left_of_intended = intended_x - past_left_frame
         frame_right_of_intended = frame_left_of_intended + pixels_per_frame
-        past_explain = "\n  past_left: " .. past_left_frame
     else
         local pixels_backward = start_x - intended_x
         local past_right_frame = pixels_backward % pixels_per_frame
         frame_right_of_intended = intended_x + past_right_frame
         frame_left_of_intended = frame_right_of_intended - pixels_per_frame
-        past_explain = "\n  past_right: " .. past_right_frame
     end
 
     -- TODO! flag to pass to round up/down based on how far from left/right?
@@ -167,15 +165,18 @@ local function _move_playhead_to_screen_x(self, playhead_screen_x)
 
     local actual = self:get_current_playhead_timeline_relative_x()
 
-    local msg = "start: " .. start_x
-        .. "\n  " .. "  left: " .. frame_left_of_intended
-        .. " " .. "  intended: " .. intended_x
-        .. " " .. "  right: " .. frame_right_of_intended
-        .. "\n  " .. "  actual: " .. actual
-        .. "\n"
-        .. past_explain
+    local is_concerning = actual ~= frame_left_of_intended
+    -- is_concerning = true
+    if is_concerning then
+        local msg = "start: " .. start_x
+            .. "\n  " .. "  left: " .. frame_left_of_intended
+            .. " " .. "  intended: " .. intended_x
+            .. " " .. "  right: " .. frame_right_of_intended
+            .. "\n  " .. "actual: " .. actual
+            .. "\n"
 
-    print(msg)
+        print(msg)
+    end
 end
 
 --- RELATIVE to the TIMELINE (not the screen)
