@@ -132,12 +132,22 @@ local function _move_playhead_to_screen_x(self, playhead_screen_x)
     }, CLICK_HOLD_MICROSECONDS)
     _wait_until_playhead_at_screen_x(self, playhead_screen_x)
     local intended = playhead_screen_x - self._timeline_frame.x
-    local gap = intended - start
-    local gap_before = gap % 3 -- zoom2 ==> 3 pixels per frame (75 pixels per second)
     -- assume before coords are on a frame (seem to always be)... then we can find closest frame by adding 3
 
-    local frame_right = intended - gap_before
-    local frame_left = frame_right + 3
+    if intended > start then
+        gap = intended - start
+        local past_left = gap % 3 -- zoom2 ==> 3 pixels per frame (75 pixels per second)
+        frame_left = intended - past_left
+        frame_right = frame_left + 3
+        past_explain = "\n  past_left: " .. past_left
+    else
+        gap = start - intended
+        local past_right = gap % 3
+        frame_right = intended + past_right
+        frame_left = frame_right - 3
+        past_explain = "\n  past_right: " .. past_right
+    end
+
     -- TODO pass flag(s) to decide if we round up/down and when?
     -- TODO also find out what the bias is for clicking at different spots between frames as far as does it round up / down... one way always or both depending on proximit?)
     -- PRN I could choose to align frame boundaries outside of this timeline controller, it's just a good spot here to at least analyze
@@ -146,6 +156,15 @@ local function _move_playhead_to_screen_x(self, playhead_screen_x)
     local msg = "start: " .. start
         .. "\n  " .. "  intended: " .. intended
         .. "\n  " .. "  actual: " .. actual
+        .. "\n  " .. "  left_frame: " .. frame_left
+        .. "\n  " .. "  right_frame: " .. frame_right
+        .. "\n"
+        .. "\n  " .. "  gap: " .. tostring(gap)
+        .. past_explain
+
+    -- .. "\n  " .. "  gap: " .. tostring(gap)
+    -- .. "\n  " .. "  gap_before: " .. tostring(gap_before)
+
     print(msg)
 end
 

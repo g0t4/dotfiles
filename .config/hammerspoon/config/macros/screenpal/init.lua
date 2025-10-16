@@ -245,6 +245,16 @@ local function move_playhead_to_silence(win, silence)
 end
 
 function SPal_Test()
+    local function WIP_test_click()
+        local original_mouse_pos = hs.mouse.absolutePosition()
+
+        -- local timeline = get_cached_editor_window():timeline_controller()
+        -- local playhead_x = timeline:get_current_playhead_timeline_relative_x()
+        -- local start_x = 816.5 -- exactly on frame boundary (but then rounds down due to how click works!)
+
+    end
+
+    WIP_test_click()
 
     local function WIP_test_click_rounding()
         local original_mouse_pos = hs.mouse.absolutePosition()
