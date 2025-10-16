@@ -1,4 +1,8 @@
 function werkspaces_close_tmp_windows_to_not_reopen_them()
+    -- TODO! close buffers for "list:///location" [Not edited] --No lines in buffer--
+    --  IIRC this is opened by coc references (etc)
+    --  see :buffers to find it on restarts (sometimes)
+
     vim.iter(vim.api.nvim_list_wins()):each(function(win)
         local buf = vim.api.nvim_win_get_buf(win)
         local buf_name = vim.api.nvim_buf_get_name(buf)
