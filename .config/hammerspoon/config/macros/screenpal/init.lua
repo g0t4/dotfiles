@@ -251,7 +251,10 @@ function SPal_Test()
         -- first see if zoomed or not (overall)
         -- THEN, if zoomed find the level
         local win = get_cached_editor_window()
-        print("is_zoomed:" .. tostring(win:is_zoomed()))
+        if not win:is_zoomed() then
+            print("zoom not active - cannot detect zoom level")
+            return
+        end
 
         run_async(function()
             -- PRN start all three at same time? wait all to complete? (think await all)
