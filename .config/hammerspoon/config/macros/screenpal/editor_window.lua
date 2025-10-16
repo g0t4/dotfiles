@@ -468,9 +468,6 @@ function ScreenPalEditorWindow:detect_bar_level()
         { x = img_size.w * 0.72, level = 3 },
     }
 
-    -- exact BGR color values
-    -- array([225., 191., 180.]) # gray (inactive)
-    -- array([255., 157.,  37.]) # blue (current zoom level)
 
     local y_sample = math.floor(img_size.h * 0.95)
     for _, bar in ipairs(bar_regions) do
@@ -480,8 +477,14 @@ function ScreenPalEditorWindow:detect_bar_level()
         -- print("  color" .. hs.inspect(color))
         if color then
             local red, green, blue = color.red * 255, color.green * 255, color.blue * 255
-            -- same idea: detect bright blue vs gray
-            if (blue - green) > 80 and (blue - red) > 180 then
+            local red, green, blue = color.red * 255, color.green * 255, color.blue * 255
+            local tolerance = 2
+            -- array([225., 191., 180.]) # BGR (gray) inactive zoom bar
+            -- array([255., 157.,  37.]) # BGR (light blue) current zoom bar
+            if math.abs(blue - 255) <= tolerance and
+                math.abs(green - 157) <= tolerance and
+                math.abs(red - 37) <= tolerance then
+                -- active bar
                 return bar.level
             end
         end
