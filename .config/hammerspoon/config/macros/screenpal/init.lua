@@ -296,6 +296,7 @@ function SPal_Test()
             hs.alert.show("detected:" .. hs.inspect(detected.level))
             -- TODO now use this elsewhere
             print_took("level", start) -- 220ms to get here (so end to end to check level) - expected!
+            -- FYI could probably run this in parallel to silence detection and then it won't matter that it takes 200ms
         end)
     end
 
