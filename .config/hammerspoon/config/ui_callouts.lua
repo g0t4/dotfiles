@@ -550,15 +550,9 @@ function capture_element_under_mouse()
 end
 
 ---@param callback fun(path: string)
----@param capture_sub_dir string? -- optional capture sub dir under the main capture dir
 ---@param frame hs.geometry
-function capture_region(callback, capture_sub_dir, frame)
-    -- TODO! test timing of below (esp. get_screencapture_filename) and optimize performance
-
-    -- * save to
-    -- TODO rethink filenames here, something faster for snappy macros (skip making filename user friendly)
-    local image_tag = nil
-    local where_to = get_screencapture_filename("png", image_tag, capture_sub_dir)
+function capture_region(callback, frame)
+    local where_to = get_tmp_filename("png")
 
     function when_done(result, std_out, std_err)
         if result ~= 0 then

@@ -227,8 +227,8 @@ local function detect_silences(callback)
         local win = get_cached_editor_window()
 
         local timeline_element = win:get_timeline_slider_or_throw()
-        local capture_sub_dir = "_screenpal_silence_detect_trash_me"
-        local where_to = syncify(capture_this_element, timeline_element, capture_sub_dir)
+        local frame = timeline_element:axFrame()
+        local where_to = syncify(capture_region, frame)
 
         local detected = syncify(detect_silence, where_to)
 
@@ -253,7 +253,6 @@ function SPal_Test()
         local win = get_cached_editor_window()
         print("is_zoomed:" .. tostring(win:is_zoomed()))
 
-        local capture_sub_dir = "_screenpal_silence_detect_trash_me"
         run_async(function()
             -- PRN start all three at same time? wait all to complete? (think await all)
             --    my syncify isn't designed for this
@@ -294,14 +293,15 @@ function SPal_Test()
                 h = min_frame.h -- go with the smaller two, don't need extra two pixels from max height
             }
 
-            -- TODO! measure capture speeds and optimize so I can use this in more places
+            -- TODO! measure overall zoom detection speeds and optimize so I can use this in more places
             --  FYI I could cache this somehow and only periodically repeat the detection?
             --  most of the time I will be using zoom 2 (medium)
             --  and I need this in part to better know where to click to move the mouse to the closest frame edge?
             --   OR maybe not... who knows until I get further... might be pointless to detect!
             --   b/c maybe I should always do what the mouse click does currently
             --   FYI might just need to adjust calculation for where to click too!
-            local where_to_max = syncify(capture_region, capture_sub_dir, frame)
+
+            local where_to = syncify(capture_region, frame)
 
             -- TODO! resume zoom detect off of screencap
             -- local detected = syncify(detect_silence, where_to)
