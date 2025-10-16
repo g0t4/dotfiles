@@ -253,6 +253,7 @@ function SPal_Test()
             return
         end
 
+        local start = get_time()
         run_async(function()
             -- TODO split out a zoom module to encapsulate zoom detection and other zoom logic
             -- FYI coordinates will be (x,y)=(0,0) if not zoomed (only way to tell from these controls alone)
@@ -294,6 +295,7 @@ function SPal_Test()
             local detected = syncify(opencv.detect_zoom_level, where_to)
             hs.alert.show("detected:" .. hs.inspect(detected.level))
             -- TODO now use this elsewhere
+            print_took("level", start) -- 220ms to get here (so end to end to check level) - expected!
         end)
     end
 
