@@ -124,28 +124,37 @@ local CLICK_HOLD_MICROSECONDS = 100000
 ---@param self TimelineController
 ---@param playhead_screen_x number
 local function _move_playhead_to_screen_x(self, playhead_screen_x)
-    local start = self:get_current_playhead_timeline_relative_x()
+    local start_x = self:get_current_playhead_timeline_relative_x()
     -- print("moving playhead to screen_x=" .. tostring(playhead_screen_x))
     hs.eventtap.leftClick({
         x = playhead_screen_x,
         y = self._timeline_frame.y + self._timeline_frame.h / 2
     }, CLICK_HOLD_MICROSECONDS)
     _wait_until_playhead_at_screen_x(self, playhead_screen_x)
-    local intended = playhead_screen_x - self._timeline_frame.x
+    local intended_x = playhead_screen_x - self._timeline_frame.x
     -- assume before coords are on a frame (seem to always be)... then we can find closest frame by adding 3
+    local pixels_per_frame = 3
 
-    if intended > start then
-        gap = intended - start
-        local past_left = gap % 3 -- zoom2 ==> 3 pixels per frame (75 pixels per second)
-        frame_left = intended - past_left
-        frame_right = frame_left + 3
-        past_explain = "\n  past_left: " .. past_left
+    -- assume start is on a frame
+    --   start - pixels_per_frame == 1 frame back
+    --   start + pixels_per_frame == 1 frame forward
+    -- intended is where you intended to click (i.e. boundary of detected silence, not necessarily on a frame exactly)
+    -- once you click you will wind up on a frame b/c you can only move playhead to a frame (not sub frame)
+    -- FYI most of the time actual == frame_left_of_intended (rounds down to leftmost frame)
+    --   only exception seems to be when you click right on a frame, it is as if you clicked slightly to the left of it and so it rounds down
+    local frame_left_of_intended, frame_right_of_intended, past_explain
+    if intended_x > start_x then
+        local pixels_forward = intended_x - start_x
+        local past_left_frame = pixels_forward % pixels_per_frame -- zoom2 ==> 3 pixels per frame (75 pixels per second)
+        frame_left_of_intended = intended_x - past_left_frame
+        frame_right_of_intended = frame_left_of_intended + pixels_per_frame
+        past_explain = "\n  past_left: " .. past_left_frame
     else
-        gap = start - intended
-        local past_right = gap % 3
-        frame_right = intended + past_right
-        frame_left = frame_right - 3
-        past_explain = "\n  past_right: " .. past_right
+        local pixels_backward = start_x - intended_x
+        local past_right_frame = pixels_backward % pixels_per_frame
+        frame_right_of_intended = intended_x + past_right_frame
+        frame_left_of_intended = frame_right_of_intended - pixels_per_frame
+        past_explain = "\n  past_right: " .. past_right_frame
     end
 
     -- TODO pass flag(s) to decide if we round up/down and when?
@@ -153,13 +162,12 @@ local function _move_playhead_to_screen_x(self, playhead_screen_x)
     -- PRN I could choose to align frame boundaries outside of this timeline controller, it's just a good spot here to at least analyze
     local actual = self:get_current_playhead_timeline_relative_x()
 
-    local msg = "start: " .. start
-        .. "\n  " .. "  intended: " .. intended
+    local msg = "start: " .. start_x
+        .. "\n  " .. "  left: " .. frame_left_of_intended
+        .. " " .. "  intended: " .. intended_x
+        .. " " .. "  right: " .. frame_right_of_intended
         .. "\n  " .. "  actual: " .. actual
-        .. "\n  " .. "  left_frame: " .. frame_left
-        .. "\n  " .. "  right_frame: " .. frame_right
         .. "\n"
-        .. "\n  " .. "  gap: " .. tostring(gap)
         .. past_explain
 
     -- .. "\n  " .. "  gap: " .. tostring(gap)
