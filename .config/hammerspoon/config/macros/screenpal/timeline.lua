@@ -138,7 +138,7 @@ local function _move_playhead_to_screen_x(self, playhead_screen_x)
     local frame_left_of_intended, frame_right_of_intended, past_explain
     if intended_x > start_x then
         local pixels_forward = intended_x - start_x
-        local past_left_frame = pixels_forward % pixels_per_frame -- zoom2 ==> 3 pixels per frame (75 pixels per second)
+        local past_left_frame = pixels_forward % pixels_per_frame
         frame_left_of_intended = intended_x - past_left_frame
         frame_right_of_intended = frame_left_of_intended + pixels_per_frame
         past_explain = "\n  past_left: " .. past_left_frame
@@ -150,6 +150,8 @@ local function _move_playhead_to_screen_x(self, playhead_screen_x)
         past_explain = "\n  past_right: " .. past_right_frame
     end
 
+    -- TODO! flag to pass to round up/down based on how far from left/right?
+
     if frame_left_of_intended == intended_x then
         -- this will round down to frame_left_of_intended - pixels_per_frame (1 frame back)
         -- so let's add 1 to be certain we land on frame_left_of_intended
@@ -157,7 +159,6 @@ local function _move_playhead_to_screen_x(self, playhead_screen_x)
     end
 
     -- * move playhead
-    -- print("moving playhead to screen_x=" .. tostring(playhead_screen_x))
     hs.eventtap.leftClick({
         x = playhead_screen_x,
         y = self._timeline_frame.y + self._timeline_frame.h / 2
@@ -173,9 +174,6 @@ local function _move_playhead_to_screen_x(self, playhead_screen_x)
         .. "\n  " .. "  actual: " .. actual
         .. "\n"
         .. past_explain
-
-    -- .. "\n  " .. "  gap: " .. tostring(gap)
-    -- .. "\n  " .. "  gap_before: " .. tostring(gap_before)
 
     print(msg)
 end
