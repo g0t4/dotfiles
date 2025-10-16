@@ -1,6 +1,6 @@
 local vim = require("config.libs.vim") -- reuse nvim lua modules in hammerspoon
 require("config.macros.screenpal.co")
-local detect_silence = require("config.macros.screenpal.py.opencv")
+local opencv = require("config.macros.screenpal.py.opencv")
 local SilencesController = require('config.macros.screenpal.silences')
 local VolumeMenu = require('config.macros.screenpal.windows.volume_menu')
 local ScreenPalEditorWindow = require('config.macros.screenpal.editor_window')
@@ -230,7 +230,7 @@ local function detect_silences(callback)
         local frame = timeline_element:axFrame()
         local where_to = syncify(capture_region, frame)
 
-        local detected = syncify(detect_silence, where_to)
+        local detected = syncify(opencv.detect_silence, where_to)
 
         local timeline = win:timeline_controller()
         local silences = SilencesController:new(detected, timeline)
@@ -247,9 +247,6 @@ end
 
 function SPal_Test()
     local function SPal_DetectZoom_WIP()
-        -- use screencap over the zoom control to detect zoom level
-        -- first see if zoomed or not (overall)
-        -- THEN, if zoomed find the level
         local win = get_cached_editor_window()
         if not win:is_zoomed() then
             print("zoom not active - cannot detect zoom level")
@@ -295,7 +292,7 @@ function SPal_Test()
             }
             -- print("frame:" .. hs.inspect(frame))
 
-            -- TODO! measure overall zoom detection speeds and optimize so I can use this in more places
+            -- TODO measure overall zoom detection speeds and optimize so I can use this in more places
             --  FYI I could cache this somehow and only periodically repeat the detection?
             --  most of the time I will be using zoom 2 (medium)
             --  and I need this in part to better know where to click to move the mouse to the closest frame edge?
@@ -304,11 +301,12 @@ function SPal_Test()
             --   FYI might just need to adjust calculation for where to click too!
 
             local where_to = syncify(capture_region, frame)
+            -- TODO remove prints when done
             print("where_to:" .. hs.inspect(where_to))
 
-            -- TODO! resume zoom detect off of screencap
-            -- local detected = syncify(detect_silence, where_to)
+            local detected = syncify(opencv.detect_zoom_level, where_to)
 
+            -- TODO resume zoom detect off of screencap
             -- local timeline = win:timeline_controller()
             -- local silences = SilencesController:new(detected, timeline)
             -- callback(win, silences)

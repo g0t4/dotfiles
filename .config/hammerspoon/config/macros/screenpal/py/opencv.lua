@@ -1,6 +1,8 @@
+local M = {}
+
 ---@param imagePath string
 ---@param callback fun(results: DetectionResults)
-local function detect_silence(callback, imagePath)
+function M.detect_silence(callback, imagePath)
     local python_exe = os.getenv("HOME") .. "/repos/github/g0t4/dotfiles/.venv/bin/python3"
     local script = os.getenv("HOME") .. "/repos/github/g0t4/dotfiles/.config/hammerspoon/config/macros/screenpal/py/both.py"
     local args = { script, imagePath }
@@ -9,14 +11,14 @@ local function detect_silence(callback, imagePath)
         if exitCode == 0 and stdout then
             local ok, results = pcall(hs.json.decode, stdout)
             if ok then
-                -- print("silences", hs.inspect(results))
+                -- print("results", hs.inspect(results))
                 callback(results)
             else
                 print("JSON decode error: " .. tostring(stdout))
             end
         else
             print("non-zero exitCode: '" .. tostring(exitCode)
-                .. "' detecing silences in python+opencv:"
+                .. "' opencv running '" .. script .. "'"
                 .. "\nSTDOUT: " .. tostring(stdout)
                 .. "\nSTDERR: " .. tostring(stderr)
             )
@@ -26,4 +28,32 @@ local function detect_silence(callback, imagePath)
     task:start()
 end
 
-return detect_silence
+---@param imagePath string
+---@param callback fun(results: DetectionResults)
+function M.detect_zoom_level(callback, imagePath)
+    local python_exe = os.getenv("HOME") .. "/repos/github/g0t4/dotfiles/.venv/bin/python3"
+    local script = os.getenv("HOME") .. "/repos/github/g0t4/dotfiles/.config/hammerspoon/config/macros/screenpal/py/zoom/zoom_level.py"
+    local args = { script, imagePath }
+
+    local task = hs.task.new(python_exe, function(exitCode, stdout, stderr)
+        if exitCode == 0 and stdout then
+            local ok, results = pcall(hs.json.decode, stdout)
+            if ok then
+                print("results", hs.inspect(results))
+                callback(results)
+            else
+                print("JSON decode error: " .. tostring(stdout))
+            end
+        else
+            print("non-zero exitCode: '" .. tostring(exitCode)
+                .. "' opencv running '" .. script .. "'"
+                .. "\nSTDOUT: " .. tostring(stdout)
+                .. "\nSTDERR: " .. tostring(stderr)
+            )
+        end
+    end, args)
+
+    task:start()
+end
+
+return M
