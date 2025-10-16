@@ -168,6 +168,7 @@ local function _move_playhead_to_screen_x(self, playhead_screen_x)
     local is_concerning = actual ~= frame_left_of_intended
     -- is_concerning = true
     if is_concerning then
+        -- FYI when a tool is open, it ends up rounding different to nearest frame (after sometimes), NBD just heads up
         local msg = "start: " .. start_x
             .. "\n  " .. "  left: " .. frame_left_of_intended
             .. " " .. "  intended: " .. intended_x
