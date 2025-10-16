@@ -99,7 +99,9 @@ function get_screencapture_filename(extension, image_tag, capture_sub_dir)
         longerPath = longerPath .. "." .. image_tag
     end
 
-    return longerPath .. "." .. extension
+    local use_name = longerPath .. "." .. extension
+    print("use_name", use_name)
+    return use_name
 end
 
 -- normal keys:
