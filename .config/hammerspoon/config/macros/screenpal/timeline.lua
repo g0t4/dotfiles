@@ -126,7 +126,7 @@ local CLICK_HOLD_MICROSECONDS = 100000
 local function _move_playhead_to_screen_x(self, playhead_screen_x)
     local start_x = self:get_current_playhead_timeline_relative_x()
     local intended_x = playhead_screen_x - self._timeline_frame.x
-    local pixels_per_frame = 3 -- TODO base on zoom level
+    local pixels_per_frame = 3 -- TODO base on zoom level (1 ~= zoom1, 3 ~= zoom2, 6 ~= zoom3)
 
     -- assume start is on a frame
     --   start - pixels_per_frame == 1 frame back
