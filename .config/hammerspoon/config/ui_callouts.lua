@@ -552,7 +552,7 @@ end
 ---@param callback fun(path: string)
 ---@param capture_sub_dir string? -- optional capture sub dir under the main capture dir
 ---@param frame hs.geometry
-function capture_frame(callback, capture_sub_dir, frame)
+function capture_region(callback, capture_sub_dir, frame)
     -- TODO! test timing of below (esp. get_screencapture_filename) and optimize performance
 
     -- * save to
@@ -562,8 +562,8 @@ function capture_frame(callback, capture_sub_dir, frame)
 
     function when_done(result, std_out, std_err)
         if result ~= 0 then
-            hs.alert.show("capture_frame: failed: " .. std_err)
-            print("capture_frame: failed", std_err)
+            hs.alert.show("capture_region: failed: " .. std_err)
+            print("capture_region: failed", std_err)
         end
         callback(where_to)
     end

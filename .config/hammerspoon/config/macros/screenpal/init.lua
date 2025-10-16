@@ -301,7 +301,7 @@ function SPal_Test()
             --   OR maybe not... who knows until I get further... might be pointless to detect!
             --   b/c maybe I should always do what the mouse click does currently
             --   FYI might just need to adjust calculation for where to click too!
-            local where_to_max = syncify(capture_frame, capture_sub_dir, frame)
+            local where_to_max = syncify(capture_region, capture_sub_dir, frame)
 
             -- TODO! resume zoom detect off of screencap
             -- local detected = syncify(detect_silence, where_to)
