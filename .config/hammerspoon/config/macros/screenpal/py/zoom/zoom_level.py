@@ -26,10 +26,11 @@ def detect_zoom_level(image):
     y_sample = int(height * 0.95)  # Sample at 95% down from top
     for bar in bar_regions:
         x_sample = bar["x"]
-        region_5by5 = image[max(0, y_sample-1):min(height, y_sample+1), max(0, x_sample-1):min(width, x_sample+1)]
-        # cv2.imshow("region", region)
+        sample_region = image[max(0, y_sample-1):min(height, y_sample+1), max(0, x_sample-1):min(width, x_sample+1)]
+        # cv2.imshow("region", sample_region)
         # cv2.waitKey()
-        avg_color = np.mean(region_5by5, axis=(0, 1))
+        # print(f'{sample_region=}')
+        avg_color = np.mean(sample_region, axis=(0, 1))
 
         # exact color values
         # avg_color=array([225., 191., 180.]) # gray (inactive)
