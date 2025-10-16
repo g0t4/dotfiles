@@ -424,14 +424,18 @@ end
 
 ---@return integer? level -- 1,2,3 or nil if not found
 function ScreenPalEditorWindow:detect_bar_level()
+    local Timer = require("config.macros.screenpal.experiments.timer")
+    local timer = Timer.new()
     if not self:is_zoomed() then
         print("zoom not active - cannot detect zoom level")
         return nil
     end
+    timer:capture("is_zoomed")
 
     -- FYI coordinates will be (x,y)=(0,0) if not zoomed (only way to tell from these controls alone)
     local min_frame = self._btn_minimum_zoom:axFrame()
     local max_frame = self._btn_maximum_zoom:axFrame()
+
     --
     -- FYI: sizes (regardless which is selected, I tested all zoom levels to be sure)
     -- 1080p:
@@ -445,8 +449,10 @@ function ScreenPalEditorWindow:detect_bar_level()
         y = min_frame.y, -- all have same Y
         h = min_frame.h -- go with the smaller two, don't need extra two pixels from max height
     }
+    timer:capture("get frame")
 
     local screen = hs.screen.mainScreen()
+    timer:capture("get screen")
 
     -- PRN add unit tests that use pre-captured sample images .../py/samples/zoom/zoom{1,2,3,-none}.png
     --   this would be the seam to split, and then call and pass in images
@@ -454,6 +460,7 @@ function ScreenPalEditorWindow:detect_bar_level()
 
     ---@type hs.image?
     local image = screen:snapshot(frame) -- TODO true = no color-profile conversion
+    timer:capture("snapshot")
     -- image:saveToFile("snapshot.png") -- CWD == ~/.hammerspoon usually
     if image == nil then
         print("image snapshot failed for finding zoom level")
@@ -463,6 +470,7 @@ function ScreenPalEditorWindow:detect_bar_level()
     ---@type NSSize?
     local img_size = image:size()
     -- print("image size: " .. hs.inspect(img_size))
+    timer:capture("get image size")
 
     local bar_regions = {
         { x = img_size.w * 0.22, level = 1 },
@@ -470,9 +478,10 @@ function ScreenPalEditorWindow:detect_bar_level()
         { x = img_size.w * 0.72, level = 3 },
     }
 
-
     local y_sample = math.floor(img_size.h * 0.95)
     for _, bar in ipairs(bar_regions) do
+        timer:capture("color check for bar level: " .. bar.level)
+
         local x_sample = math.floor(bar.x)
         ---@type hs.drawing.color?
         local color = image:colorAt({ x = x_sample, y = y_sample })
@@ -487,10 +496,12 @@ function ScreenPalEditorWindow:detect_bar_level()
                 math.abs(green - 157) <= tolerance and
                 math.abs(red - 37) <= tolerance then
                 -- active bar
+                timer:print_timing()
                 return bar.level
             end
         end
     end
+    timer:print_timing()
     return nil
 end
 
