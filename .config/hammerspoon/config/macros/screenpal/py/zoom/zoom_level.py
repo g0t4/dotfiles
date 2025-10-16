@@ -30,14 +30,14 @@ def detect_zoom_level(image):
         # cv2.imshow("region", sample_region)
         # cv2.waitKey()
         # print(f'{sample_region=}')
-        avg_color = np.mean(sample_region, axis=(0, 1))
+        average_bgr = np.mean(sample_region, axis=(0, 1))
 
         # exact color values
         # avg_color=array([225., 191., 180.]) # gray (inactive)
         # avg_color=array([255., 157.,  37.]) # blue (current zoom level)
-        # print(f'{avg_color=}')
+        # print(f'{average_bgr=}')
 
-        blue, green, red = avg_color
+        blue, green, red = average_bgr
         # this was claude's take on the algorithm and it works for now
         # Look for blue bar (B-G > 80, B-R > 180)
         # All active bars show the same bright blue color
