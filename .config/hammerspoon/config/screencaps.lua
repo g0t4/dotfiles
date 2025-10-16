@@ -34,6 +34,7 @@ local function getCaptureDirectory()
     return hs.settings.get(CAPTURE_DIR_SETTINGS_KEY) or getDefaultPhotosDir()
 end
 
+--- not user facing filenames (fastest way too)
 ---@param extension? string -- mostly so if I need to look at the files they'll be the right type (i.e. when debug)
 ---@return string filename
 function get_tmp_filename(extension)
@@ -43,14 +44,12 @@ function get_tmp_filename(extension)
     return tmp_path
 end
 
+--- User facing filenames
 ---@param extension? string
 ---@param image_tag? string -- added to filename, to give context about what was captured
----@param capture_sub_dir? string -- use nested directory to group related screen caps
 ---@return string filename
-function get_screencapture_filename(extension, image_tag, capture_sub_dir)
+function get_screencapture_filename(extension, image_tag)
     extension = extension or "png"
-
-    -- TODO setup fast path filename builder that uses tmp dir and time alone to name the files => use on element captures that don't need friendly name
 
     local capture_dir = getCaptureDirectory() -- 0.1 to 0.4ms each time
     if not hs.fs.attributes(capture_dir) then
@@ -58,15 +57,6 @@ function get_screencapture_filename(extension, image_tag, capture_sub_dir)
         local message = "Screencap directory doesn't exist, create/change it: " .. capture_dir
         hs.alert.show(message)
         error(message)
-    end
-
-    if capture_sub_dir ~= nil then
-        -- TODO get rid of this and move to tmp dir? only for screencaps currently for detecting volume level
-        capture_dir = capture_dir .. "/" .. capture_sub_dir
-        if not hs.fs.attributes(capture_dir) then
-            print("creating capture_sub_dir", capture_dir)
-            hs.fs.mkdir(capture_dir)
-        end
     end
 
     local current_time = os.date("%Y-%m-%d %Hh%Mm%Ss") -- 15us to 50us
