@@ -254,7 +254,7 @@ function SPal_Test()
 
     end
 
-    WIP_test_click()
+    -- WIP_test_click()
 
     local function WIP_test_click_rounding()
         local original_mouse_pos = hs.mouse.absolutePosition()
@@ -277,9 +277,9 @@ function SPal_Test()
             for i = 1, 30 do
                 start_x = start_x + 0.5
                 timeline:move_playhead_to(start_x)
-                -- sleep_ms(150)
-                -- hs.mouse.absolutePosition(original_mouse_pos) -- 0.2ms
-                -- sleep_ms(250)
+                sleep_ms(150)
+                hs.mouse.absolutePosition(original_mouse_pos) -- 0.2ms
+                sleep_ms(250)
             end
         end)
 
@@ -287,7 +287,7 @@ function SPal_Test()
         -- timeline:move_playhead_to(playhead_x - 28)
     end
 
-    -- WIP_test_click_rounding()
+    WIP_test_click_rounding()
 
     local function SPal_DetectZoom_WIP()
         local win = get_cached_editor_window()
