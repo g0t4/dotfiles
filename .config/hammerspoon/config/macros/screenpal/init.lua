@@ -245,6 +245,7 @@ local function move_playhead_to_silence(win, silence)
 end
 
 function SPal_Test()
+
     local function WIP_test_click_rounding()
         local original_mouse_pos = hs.mouse.absolutePosition()
 
@@ -276,7 +277,7 @@ function SPal_Test()
         -- timeline:move_playhead_to(playhead_x - 28)
     end
 
-    WIP_test_click_rounding()
+    -- WIP_test_click_rounding()
 
     local function SPal_DetectZoom_WIP()
         local win = get_cached_editor_window()
