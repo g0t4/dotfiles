@@ -39,7 +39,7 @@ function M.detect_zoom_level(callback, imagePath)
         if exitCode == 0 and stdout then
             local ok, results = pcall(hs.json.decode, stdout)
             if ok then
-                print("results", hs.inspect(results))
+                -- print("results", hs.inspect(results))
                 callback(results)
             else
                 print("JSON decode error: " .. tostring(stdout))
