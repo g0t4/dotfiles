@@ -42,12 +42,12 @@ def detect_zoom_level(image):
         # avg_color=array([255., 157.,  37.]) # blue (current zoom level)
         # print(f'{avg_color=}')
 
-        b, g, r = avg_color
+        blue, green, red = avg_color
         # this was claude's take on the algorithm and it works for now
         # Look for blue bar (B-G > 80, B-R > 180)
         # All active bars show the same bright blue color
         # Gray/inactive bars have B-G ≈ 34, B-R ≈ 45
-        is_enabled_blue = (b - g) > 80 and (b - r) > 180
+        is_enabled_blue = (blue - green) > 80 and (blue - red) > 180
         if is_enabled_blue:
             return bar["level"]
 
