@@ -31,8 +31,7 @@ def detect_zoom_level(image):
         # cv2.waitKey()
         avg_color = np.mean(region_5by5, axis=(0, 1))
 
-        # color sample values:
-        # avg_color=array([224.32, 190.32, 179.32]) # gray (inactive)
+        # exact color values
         # avg_color=array([225., 191., 180.]) # gray (inactive)
         # avg_color=array([255., 157.,  37.]) # blue (current zoom level)
         # print(f'{avg_color=}')
