@@ -131,8 +131,21 @@ local function _move_playhead_to_screen_x(self, playhead_screen_x)
         y = self._timeline_frame.y + self._timeline_frame.h / 2
     }, CLICK_HOLD_MICROSECONDS)
     _wait_until_playhead_at_screen_x(self, playhead_screen_x)
+    local intended_relative = playhead_screen_x - self._timeline_frame.x
+    local gap = intended_relative - before
+    local gap_before = gap % 3 -- zoom2 ==> 3 pixels per frame (75 pixels per second)
+    -- assume before coords are on a frame (seem to always be)... then we can find closest frame by adding 3
+
+    local frame_before = intended_relative - gap_before
+    local frame_after = frame_before + 3
+
     dump("discrepancy after click", {
-        intended = playhead_screen_x,
+        _gap = gap,
+        _gap_before = gap_before,
+        _frame_before = frame_before,
+        _frame_after = frame_after,
+
+        intended = intended_relative,
         actual = self:get_current_playhead_timeline_relative_x(),
         before = before,
     })
