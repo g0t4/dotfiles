@@ -125,15 +125,7 @@ local CLICK_HOLD_MICROSECONDS = 100000
 ---@param playhead_screen_x number
 local function _move_playhead_to_screen_x(self, playhead_screen_x)
     local start_x = self:get_current_playhead_timeline_relative_x()
-    -- print("moving playhead to screen_x=" .. tostring(playhead_screen_x))
-    hs.eventtap.leftClick({
-        x = playhead_screen_x,
-        y = self._timeline_frame.y + self._timeline_frame.h / 2
-    }, CLICK_HOLD_MICROSECONDS)
-    _wait_until_playhead_at_screen_x(self, playhead_screen_x)
     local intended_x = playhead_screen_x - self._timeline_frame.x
-    -- assume before coords are on a frame (seem to always be)... then we can find closest frame by adding 3
-    local pixels_per_frame = 3
 
     -- assume start is on a frame
     --   start - pixels_per_frame == 1 frame back
@@ -156,6 +148,16 @@ local function _move_playhead_to_screen_x(self, playhead_screen_x)
         frame_left_of_intended = frame_right_of_intended - pixels_per_frame
         past_explain = "\n  past_right: " .. past_right_frame
     end
+
+    -- * move playhead
+    -- print("moving playhead to screen_x=" .. tostring(playhead_screen_x))
+    hs.eventtap.leftClick({
+        x = playhead_screen_x,
+        y = self._timeline_frame.y + self._timeline_frame.h / 2
+    }, CLICK_HOLD_MICROSECONDS)
+    _wait_until_playhead_at_screen_x(self, playhead_screen_x)
+    -- assume before coords are on a frame (seem to always be)... then we can find closest frame by adding 3
+    local pixels_per_frame = 3
 
     -- TODO pass flag(s) to decide if we round up/down and when?
     -- TODO also find out what the bias is for clicking at different spots between frames as far as does it round up / down... one way always or both depending on proximit?)
