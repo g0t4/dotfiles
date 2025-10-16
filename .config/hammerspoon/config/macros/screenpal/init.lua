@@ -258,10 +258,6 @@ function SPal_Test()
             -- FYI coordinates will be (x,y)=(0,0) if not zoomed (only way to tell from these controls alone)
             local min_frame = win._btn_minimum_zoom:axFrame()
             local max_frame = win._btn_maximum_zoom:axFrame()
-            -- local medium_frame = win._btn_medium_zoom:axFrame()
-            -- print("min:" .. hs.inspect(min_frame))
-            -- print("medium:" .. hs.inspect(medium_frame))
-            -- print("max:" .. hs.inspect(max_frame))
             --
             -- FYI: sizes (regardless which is selected, I tested all zoom levels to be sure)
             -- 1080p frames: (double to get retina... as in the actual capture)
@@ -290,28 +286,13 @@ function SPal_Test()
                 y = min_frame.y, -- all have same Y
                 h = min_frame.h -- go with the smaller two, don't need extra two pixels from max height
             }
-            -- print("frame:" .. hs.inspect(frame))
-
-            -- TODO measure overall zoom detection speeds and optimize so I can use this in more places
-            --  FYI I could cache this somehow and only periodically repeat the detection?
-            --  most of the time I will be using zoom 2 (medium)
-            --  and I need this in part to better know where to click to move the mouse to the closest frame edge?
-            --   OR maybe not... who knows until I get further... might be pointless to detect!
-            --   b/c maybe I should always do what the mouse click does currently
-            --   FYI might just need to adjust calculation for where to click too!
 
             local where_to = syncify(capture_region, frame)
-            -- TODO remove prints when done
-            print("where_to:" .. hs.inspect(where_to))
+            -- print("where_to:" .. hs.inspect(where_to))
 
             ---@type LevelResults
             local detected = syncify(opencv.detect_zoom_level, where_to)
             print("detected:" .. hs.inspect(detected.level))
-
-            -- TODO resume zoom detect off of screencap
-            -- local timeline = win:timeline_controller()
-            -- local silences = SilencesController:new(detected, timeline)
-            -- callback(win, silences)
         end)
     end
 
