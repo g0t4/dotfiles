@@ -245,13 +245,40 @@ local function move_playhead_to_silence(win, silence)
 end
 
 function SPal_Test()
+    local function WIP_test_click_rounding()
+        local original_mouse_pos = hs.mouse.absolutePosition()
+
+        -- go back and forth
+        local timeline = get_cached_editor_window():timeline_controller()
+        local playhead_x = timeline:get_current_playhead_timeline_relative_x()
+        local start_x = 816.5 -- exactly on frame boundary (but then rounds down due to how click works!)
+
+        -- TODO compare to hs.mouse.absolutePosition() with and without... before hs.eventtap.leftClick
+        -- FYI mouse being close to spot alters how it clicks?! or maybe where it thinks the click happens?
+
+        run_async(function()
+            for i = 1, 30 do
+                start_x = start_x + 0.5
+                timeline:move_playhead_to(start_x)
+                sleep_ms(150)
+                hs.mouse.absolutePosition(original_mouse_pos) -- 0.2ms
+                sleep_ms(250)
+            end
+        end)
+
+        -- timeline:move_playhead_to(playhead_x - 2)
+        -- timeline:move_playhead_to(playhead_x - 28)
+    end
+
+    WIP_test_click_rounding()
+
     local function SPal_DetectZoom_WIP()
         local win = get_cached_editor_window()
         local level = win:detect_bar_level() -- 30 to 50ms
         hs.alert.show("detected:" .. hs.inspect(level))
     end
 
-    SPal_DetectZoom_WIP()
+    -- SPal_DetectZoom_WIP()
 
     local function SPal_OpenMuteTool_WIP()
         -- TODO finish and integrate with act_on_silence when action=MUTE* (i.e. don't open if sub menu if tool already muted)

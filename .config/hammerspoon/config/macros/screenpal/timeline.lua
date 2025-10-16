@@ -124,31 +124,29 @@ local CLICK_HOLD_MICROSECONDS = 100000
 ---@param self TimelineController
 ---@param playhead_screen_x number
 local function _move_playhead_to_screen_x(self, playhead_screen_x)
-    local before = self:get_current_playhead_timeline_relative_x()
+    local start = self:get_current_playhead_timeline_relative_x()
     -- print("moving playhead to screen_x=" .. tostring(playhead_screen_x))
     hs.eventtap.leftClick({
         x = playhead_screen_x,
         y = self._timeline_frame.y + self._timeline_frame.h / 2
     }, CLICK_HOLD_MICROSECONDS)
     _wait_until_playhead_at_screen_x(self, playhead_screen_x)
-    local intended_relative = playhead_screen_x - self._timeline_frame.x
-    local gap = intended_relative - before
+    local intended = playhead_screen_x - self._timeline_frame.x
+    local gap = intended - start
     local gap_before = gap % 3 -- zoom2 ==> 3 pixels per frame (75 pixels per second)
     -- assume before coords are on a frame (seem to always be)... then we can find closest frame by adding 3
 
-    local frame_before = intended_relative - gap_before
-    local frame_after = frame_before + 3
+    local frame_right = intended - gap_before
+    local frame_left = frame_right + 3
+    -- TODO pass flag(s) to decide if we round up/down and when?
+    -- TODO also find out what the bias is for clicking at different spots between frames as far as does it round up / down... one way always or both depending on proximit?)
+    -- PRN I could choose to align frame boundaries outside of this timeline controller, it's just a good spot here to at least analyze
+    local actual = self:get_current_playhead_timeline_relative_x()
 
-    dump("discrepancy after click", {
-        _gap = gap,
-        _gap_before = gap_before,
-        _frame_before = frame_before,
-        _frame_after = frame_after,
-
-        intended = intended_relative,
-        actual = self:get_current_playhead_timeline_relative_x(),
-        before = before,
-    })
+    local msg = "start: " .. start
+        .. "\n  " .. "  intended: " .. intended
+        .. "\n  " .. "  actual: " .. actual
+    print(msg)
 end
 
 --- RELATIVE to the TIMELINE (not the screen)
