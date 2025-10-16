@@ -291,7 +291,7 @@ function SPal_Test()
 
     local function SPal_DetectZoom_WIP()
         local win = get_cached_editor_window()
-        local level = win:detect_bar_level() -- 30 to 50ms
+        local level = win:detect_zoom_level() -- 30 to 50ms
         hs.alert.show("detected:" .. hs.inspect(level))
     end
 

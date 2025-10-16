@@ -423,7 +423,7 @@ function ScreenPalEditorWindow:toggle_AXEnhancedUserInterface()
 end
 
 ---@return integer? level -- 1,2,3 or nil if not found
-function ScreenPalEditorWindow:detect_bar_level()
+function ScreenPalEditorWindow:detect_zoom_level()
     local Timer = require("config.macros.screenpal.experiments.timer")
     local timer = Timer.new()
 

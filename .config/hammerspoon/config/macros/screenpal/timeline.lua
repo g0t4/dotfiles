@@ -21,6 +21,7 @@ end
 function TimelineController:new(editor_window)
     local _timeline_frame = editor_window._btn_position_slider:axFrame()
     self._timeline_frame = _timeline_frame
+    self.__editor_window = editor_window
 
     -- FYI right now if playhead is off screen, this blows up intentionally... which is fine b/c
     --  I don't see much of a need to edit w/o playhead on-screen... most I could do is move it on screen if its off
@@ -126,7 +127,19 @@ local CLICK_HOLD_MICROSECONDS = 100000
 local function _move_playhead_to_screen_x(self, playhead_screen_x)
     local start_x = self:get_current_playhead_timeline_relative_x()
     local intended_x = playhead_screen_x - self._timeline_frame.x
-    local pixels_per_frame = 3 -- TODO base on zoom level (1 ~= zoom1, 3 ~= zoom2, 6 ~= zoom3)
+
+    if self._zoom_level == nil then
+        self._zoom_level = self.__editor_window:detect_zoom_level()
+    end
+    -- base on zoom level (1 ~= zoom1, 3 ~= zoom2, 6 ~= zoom3)
+    local pixels_per_frame = 1 -- 1 and nil can behave the same (as if each frame is one pixel... yikes might screw up in non_zoomed?)
+    if self._zoom_level == 2 then pixels_per_frame = 3 end
+    if self._zoom_level == 3 then pixels_per_frame = 6 end
+    local not_zoomed = self._zoom_level ~= nil
+
+    -- FYI cursor at the start/end of silence region can make it look longer/shorter b/c it is covering the start/stop point and I had to unify the playhead as part of current silence region (or have opposite problem--shortens the silence region)
+    --   thus jump to next silence doesn't always work so well when zoom is off or level 1
+    --   just keep that in mind
 
     -- assume start is on a frame
     --   start - pixels_per_frame == 1 frame back
@@ -150,7 +163,8 @@ local function _move_playhead_to_screen_x(self, playhead_screen_x)
 
     -- TODO! flag to pass to round up/down based on how far from left/right?
 
-    if frame_left_of_intended == intended_x then
+    -- do not adjust if not zoomed, just to be safe, could use ppf=1 to not adjust too?
+    if not_zoomed and frame_left_of_intended == intended_x then
         -- this will round down to frame_left_of_intended - pixels_per_frame (1 frame back)
         -- so let's add 1 to be certain we land on frame_left_of_intended
         playhead_screen_x = playhead_screen_x + 1 -- will round down to left most now
@@ -161,6 +175,7 @@ local function _move_playhead_to_screen_x(self, playhead_screen_x)
         x = playhead_screen_x,
         y = self._timeline_frame.y + self._timeline_frame.h / 2
     }, CLICK_HOLD_MICROSECONDS)
+
     _wait_until_playhead_at_screen_x(self, playhead_screen_x) -- PRN! if we have zoom level we should be able to determine the wait more accurately IIRC
 
     local actual = self:get_current_playhead_timeline_relative_x()
