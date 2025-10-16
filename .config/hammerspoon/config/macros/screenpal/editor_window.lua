@@ -424,8 +424,6 @@ end
 
 ---@return integer? level -- 1,2,3 or nil if not found
 function ScreenPalEditorWindow:detect_bar_level()
-    -- PRN add unit tests that use pre-captured sample images .../py/samples/zoom/zoom{1,2,3,-none}.png
-
     if not self:is_zoomed() then
         print("zoom not active - cannot detect zoom level")
         return nil
@@ -449,6 +447,10 @@ function ScreenPalEditorWindow:detect_bar_level()
     }
 
     local screen = hs.screen.mainScreen()
+
+    -- PRN add unit tests that use pre-captured sample images .../py/samples/zoom/zoom{1,2,3,-none}.png
+    --   this would be the seam to split, and then call and pass in images
+    --   would need hammerspoon APIs to get hs.image APIs
 
     ---@type hs.image?
     local image = screen:snapshot(frame) -- TODO true = no color-profile conversion
