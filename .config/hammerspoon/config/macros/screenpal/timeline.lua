@@ -165,7 +165,8 @@ local function _move_playhead_to_screen_x(self, playhead_screen_x)
 
     local actual = self:get_current_playhead_timeline_relative_x()
 
-    local is_concerning = actual ~= frame_left_of_intended
+    local is_concerning = actual ~= frame_left_of_intended and actual ~= frame_right_of_intended -- either frame is fine
+    -- local is_concerning = actual ~= frame_left_of_intended
     -- is_concerning = true
     if is_concerning then
         -- FYI when a tool is open, it ends up rounding different to nearest frame (after sometimes), NBD just heads up
