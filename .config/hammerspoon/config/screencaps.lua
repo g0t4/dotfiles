@@ -38,7 +38,7 @@ end
 ---@param extension? string -- mostly so if I need to look at the files they'll be the right type (i.e. when debug)
 ---@return string filename
 function get_tmp_filename(extension)
-    local tmp_dir = os.getenv("TMPDIR") or "/tmp"
+    local tmp_dir = hs.fs.temporaryDirectory()
     local tmp_path = tmp_dir .. "/hs-tmpfiles-" .. tostring(hs.timer.absoluteTime()) .. "." .. extension
     -- print("tmp_path", tmp_path)
     return tmp_path
