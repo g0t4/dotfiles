@@ -84,8 +84,8 @@ def detect_regular_silences(use_file):
     detected = {
         "regular_silences": [
             {
-                "x_start": int(x_start / 2),  # int() is serializable
-                "x_end": int(x_end / 2),
+                "x_start": float(x_start / 2),  # float/int() is serializable
+                "x_end": float(x_end / 2),
             } for x_start, x_end in merged_x_ranges
         ]
     }
