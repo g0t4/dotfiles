@@ -137,6 +137,28 @@ function TimelineController:pixels_per_frame()
     return nil
 end
 
+---@param intended_x number
+---@param start_x number
+---@param pixels_per_frame number|nil
+---@return number frame_left
+---@return number frame_right
+local function calculate_frame_bounds(intended_x, start_x, pixels_per_frame)
+    pixels_per_frame = pixels_per_frame or 1
+    local frame_left, frame_right
+    if intended_x > start_x then
+        local pixels_forward = intended_x - start_x
+        local past_left_frame = pixels_forward % pixels_per_frame
+        frame_left = intended_x - past_left_frame
+        frame_right = frame_left + pixels_per_frame
+    else
+        local pixels_backward = start_x - intended_x
+        local past_right_frame = pixels_backward % pixels_per_frame
+        frame_right = intended_x + past_right_frame
+        frame_left = frame_right - pixels_per_frame
+    end
+    return frame_left, frame_right
+end
+
 -- Frequent trouble with 10ms (10,000)
 --   occasional (1 in 10) at 50/75ms
 --   200ms is default but that feels sluggish
