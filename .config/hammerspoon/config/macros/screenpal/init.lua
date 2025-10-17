@@ -68,6 +68,19 @@ function show_silences(win, silences)
             print("     x_start_left=" .. x_start_left .. " x_start_right=" .. x_start_right)
             local x_end_left, x_end_right = timeline:calculate_frame_bounds(silence.x_end, timeline:get_current_playhead_timeline_relative_x())
             print("     x_end_left=" .. x_end_left .. " x_end_right=" .. x_end_right)
+            -- little boxes show left/right frame of start and end too
+            table.insert(elements, {
+                type = "rectangle",
+                action = "fill",
+                fillColor = { red = 1, green = 1, blue = 1, alpha = 0.3 },
+                frame = { x = x_start_left, y = over_timeline_y, w = (x_start_right - x_start_left), h = timeline_frame.h }
+            })
+            table.insert(elements, {
+                type = "rectangle",
+                action = "fill",
+                fillColor = { red = 1, green = 1, blue = 1, alpha = 0.3 },
+                frame = { x = x_end_left, y = over_timeline_y, w = (x_end_right - x_end_left), h = timeline_frame.h }
+            })
         end
     end
 
