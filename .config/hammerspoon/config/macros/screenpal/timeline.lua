@@ -180,21 +180,11 @@ local function _move_playhead_to_screen_x(self, playhead_screen_x)
     local pixels_per_frame = self:pixels_per_frame() or 1 -- use 1 so calcs don't break (modulus of pixels_per_frame)
     local not_zoomed = zoom_level ~= nil
 
-    -- FYI cursor at the start/end of silence region can make it look longer/shorter b/c it is covering the start/stop point and I had to unify the playhead as part of current silence region (or have opposite problem--shortens the silence region)
-    --   thus jump to next silence doesn't always work so well when zoom is off or level 1
-    --   just keep that in mind
-    --   PRN when using act on current silence (could move playhead first? but how far?)
-    --     or do this after measuring to see if any major discrepancies
-
     local frame_left, frame_right = self:calculate_frame_bounds(intended_x, known_frame_x)
 
-    -- TODO! flag to pass to round up/down based on how far from left/right?
-
-    -- do not adjust if not zoomed, just to be safe, could use ppf=1 to not adjust too?
     if not_zoomed and frame_left == intended_x then
-        -- this will round down to frame_left_of_intended - pixels_per_frame (1 frame back)
-        -- so let's add 1 to be certain we land on frame_left_of_intended
-        playhead_screen_x = playhead_screen_x + 1 -- will round down to left most now
+        -- let's add 1 to be certain we land on frame_left_of_intended
+        playhead_screen_x = playhead_screen_x + 1
     end
 
     -- * move playhead
