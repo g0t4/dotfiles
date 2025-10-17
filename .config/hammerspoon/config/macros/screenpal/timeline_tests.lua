@@ -10,9 +10,10 @@ describe('timeline - zoom 2 @ 3 pixels/frame', function()
 
     it('intended_x == known_x', function()
         local left, right = TimelineController.calculate_frame_bounds(timeline, known_frame_x, known_frame_x)
-        assert.are.equals(27, left)
-        assert.are.equals(30, right)
+        assert.are.equals(30, left)
+        assert.are.equals(33, right)
         -- FYI could go either way, left is before or right is after, when intended is known frame
+        --  let's try left given I use that by default for edits on frame boundaries
     end)
 
     it('intended_x < known_x', function()
