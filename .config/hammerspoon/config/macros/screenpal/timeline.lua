@@ -138,20 +138,19 @@ function TimelineController:pixels_per_frame()
 end
 
 ---@param intended_x number
----@param start_x number
----@param pixels_per_frame number|nil
+---@param known_frame_x number
 ---@return number frame_left
 ---@return number frame_right
-local function calculate_frame_bounds(intended_x, start_x, pixels_per_frame)
-    pixels_per_frame = pixels_per_frame or 1
+function TimelineController:calculate_frame_bounds(intended_x, known_frame_x)
+    local pixels_per_frame = self:pixels_per_frame() or 1
     local frame_left, frame_right
-    if intended_x > start_x then
-        local pixels_forward = intended_x - start_x
+    if intended_x > known_frame_x then
+        local pixels_forward = intended_x - known_frame_x
         local past_left_frame = pixels_forward % pixels_per_frame
         frame_left = intended_x - past_left_frame
         frame_right = frame_left + pixels_per_frame
     else
-        local pixels_backward = start_x - intended_x
+        local pixels_backward = known_frame_x - intended_x
         local past_right_frame = pixels_backward % pixels_per_frame
         frame_right = intended_x + past_right_frame
         frame_left = frame_right - pixels_per_frame
