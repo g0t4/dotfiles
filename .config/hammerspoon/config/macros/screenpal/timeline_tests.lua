@@ -8,7 +8,7 @@ describe('timeline - zoom 2 @ 3 pixels/frame', function()
 
     local known_frame_x = 30
 
-    it('intended_x == known_x', function()
+    it('intended_x == known_x, then intended_x == left frame', function()
         local left, right = TimelineController.calculate_frame_bounds(timeline, known_frame_x, known_frame_x)
         assert.are.equals(30, left)
         assert.are.equals(33, right)
