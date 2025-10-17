@@ -40,7 +40,7 @@ function show_silences(win, silences)
 
     for _, silence in ipairs(silences.all) do
         local width = silence.x_end - silence.x_start -- PRN move to silence DTO as new behavior (how did I do that for axuielemMT
-        -- print("start=" .. silence.x_start .. " end=" .. silence.x_end)
+        print("start=" .. silence.x_start .. " end=" .. silence.x_end)
         if width > 0 then
             local fill_color = { red = 1, green = 0, blue = 0, alpha = 0.3 }
             local border_color = { red = 1, green = 0, blue = 0, alpha = 1 }
@@ -63,6 +63,11 @@ function show_silences(win, silences)
                 strokeColor = border_color,
                 frame = { x = silence.x_start, y = below_timeline_y, w = width, h = timeline_frame.h }
             })
+
+            local x_start_left, x_start_right = timeline:calculate_frame_bounds(silence.x_start, timeline:get_current_playhead_timeline_relative_x())
+            print("     x_start_left=" .. x_start_left .. " x_start_right=" .. x_start_right)
+            local x_end_left, x_end_right = timeline:calculate_frame_bounds(silence.x_end, timeline:get_current_playhead_timeline_relative_x())
+            print("     x_end_left=" .. x_end_left .. " x_end_right=" .. x_end_right)
         end
     end
 
