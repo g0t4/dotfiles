@@ -143,6 +143,12 @@ end
 ---@return number frame_right
 function TimelineController:calculate_frame_bounds(intended_x, known_frame_x)
     local pixels_per_frame = self:pixels_per_frame() or 1
+
+    -- intended is where you intended to click (i.e. boundary of detected silence, not necessarily on a frame exactly)
+    -- once you click you will wind up on a frame b/c you can only move playhead to a frame (not sub frame)
+    -- FYI most of the time when you click, actual lands on frame_left_of_intended (rounds down to leftmost frame)
+    --   only exception seems to be when you click right on a frame, it is as if you clicked slightly to the left of it and so it rounds down
+
     local frame_left, frame_right
     if known_frame_x <= intended_x then
         local pixels_forward = intended_x - known_frame_x
@@ -152,7 +158,6 @@ function TimelineController:calculate_frame_bounds(intended_x, known_frame_x)
     else
         local pixels_backward = known_frame_x - intended_x
         local past_right_frame = pixels_backward % pixels_per_frame
-        -- print("past right frame", past_right_frame)
         frame_right = intended_x + past_right_frame
         frame_left = frame_right - pixels_per_frame
     end
@@ -181,25 +186,7 @@ local function _move_playhead_to_screen_x(self, playhead_screen_x)
     --   PRN when using act on current silence (could move playhead first? but how far?)
     --     or do this after measuring to see if any major discrepancies
 
-    -- assume start is on a frame
-    --   start - pixels_per_frame == 1 frame back
-    --   start + pixels_per_frame == 1 frame forward
-    -- intended is where you intended to click (i.e. boundary of detected silence, not necessarily on a frame exactly)
-    -- once you click you will wind up on a frame b/c you can only move playhead to a frame (not sub frame)
-    -- FYI most of the time actual == frame_left_of_intended (rounds down to leftmost frame)
-    --   only exception seems to be when you click right on a frame, it is as if you clicked slightly to the left of it and so it rounds down
-    local frame_left, frame_right
-    if known_frame_x < intended_x then
-        local pixels_forward = intended_x - known_frame_x
-        local past_left_frame = pixels_forward % pixels_per_frame
-        frame_left = intended_x - past_left_frame
-        frame_right = frame_left + pixels_per_frame
-    else
-        local pixels_backward = known_frame_x - intended_x
-        local past_right_frame = pixels_backward % pixels_per_frame
-        frame_right = intended_x + past_right_frame
-        frame_left = frame_right - pixels_per_frame
-    end
+    local frame_left, frame_right = self:calculate_frame_bounds(intended_x, known_frame_x)
 
     -- TODO! flag to pass to round up/down based on how far from left/right?
 
