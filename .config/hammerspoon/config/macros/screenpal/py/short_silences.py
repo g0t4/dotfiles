@@ -78,8 +78,9 @@ def detect_short_silences(use_file):
         "short_silences": [
             {
                 # divide by 2 for non-retina resolution
-                "x_start": int(x_start / 2),
-                "x_end": int(x_end / 2),
+                # preserve fraction!
+                "x_start": x_start / 2,
+                "x_end": x_end / 2,
             } for x_start, x_end in ranges \
                if x_start < x_end
         ],
