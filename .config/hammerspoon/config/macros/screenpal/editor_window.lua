@@ -57,8 +57,7 @@ function ScreenPalEditorWindow:ensure_cached_controls(force)
 end
 
 function ScreenPalEditorWindow:force_refresh_cached_controls()
-    -- PRN rewrite to fully clear the entire cached object? not sure I need it as stuff is marked invalid even if left behind
-    self._scrollbars = {} -- fixes finding scrollbar when refresh cache
+    self._scrollbars = {}
     self._btn_back_to_projects = nil
     self._btn_maximum_zoom = nil
     self._btn_medium_zoom = nil
@@ -70,17 +69,12 @@ function ScreenPalEditorWindow:force_refresh_cached_controls()
     self._textfield_title = nil
 
     local start = get_time()
-    -- enumerating all children and getting role and description is no diff than just buttons with description only...
     vim.iter(self.win:children())
         :each(
         ---@param ui_elem hs.axuielement
             function(ui_elem)
-                -- one time hit, just cache all buttons when I have to find one of them
-                -- not extra expensive to cache each one relative to time to enumerate / get description (has to be done to find even one button)
                 local description = ui_elem:axDescription()
                 local role = ui_elem:axRole()
-                -- TODO! split out editor window class? with all controls there? this is bastardized here but is fine for now
-
                 if role == "AXButton" then
                     if description == "Minimum Zoom" then
                         -- AXIndex: 3, #42 in array in my testing (could change)
@@ -102,10 +96,7 @@ function ScreenPalEditorWindow:force_refresh_cached_controls()
                         self._btn_back_to_projects = ui_elem
                         return
                     elseif description == "Play" or description == "Pause" then
-                        -- even if these are not same butt, it's convenient to put them together into one, for now
-                        -- FYI clicking play/pause will invalidate the current button, so it is possible they are changed
                         -- can see Play only when paused, can see Pause only when playing
-                        -- also coudl check AXHelp:
                         -- AXHelp: Play this animation<string>
                         -- AXHelp: Pause this animation<string>
                         self._btn_play_or_pause = ui_elem
@@ -118,48 +109,23 @@ function ScreenPalEditorWindow:force_refresh_cached_controls()
                         -- AXHelp: Use this slider to increase or decrease the rate of playback<string>
                         return
                     else
-                        -- find new controls, uncomment this:
                         -- print(description)
                     end
                 elseif role == "AXTextField" then
                     -- accessibility description => AXDescription in hs apis... is empty only for the title name field (upper left)
                     -- ALSO most of the time it will have an mX in it :)
-                    --
-
                     if description == "" then
                         -- so far, the text input for the title on the edit video page is the only text field with no description!
                         --    by the way this maps to accessibility description IIUC in script debugger
                         self._textfield_title = ui_elem
                     end
-
-                    -- PRN capture all text fields? or eliminate some and then pick the most liklely remaining?
-                    -- print("ui_elem", hs.inspect({
-                    --     description = description,
-                    --     role = role,
-                    --     value = ui_elem:axValue(),
-                    --     frame = ui_elem:axFrame(),
-                    --     roleDesc = ui_elem:axRoleDescription(),
-                    -- }))
-
-                    -- app:window(2):textField(11)
-                    --
-                    -- AXEdited: true<bool>
-                    -- AXEnabled: true<bool>
-                    -- AXFocused: true<bool>
-                    -- AXFocusedUIElement: AXTextField<hs.axuielement>
-                    -- AXIndex: 0<number>
-                    -- AXMaxValue: 0<number>
-                    -- AXMinValue: 0<number>
-                    -- AXOrientation: AXUnknownOrientation<string>
                     -- AXRoleDescription: text field<string>
-                    -- AXSelected: false<bool>
                     -- AXSelectedText: m1-02 Use Curly Braces to Deliniate the Parameter Name<string>
                     -- AXValue: m1-02 Use Curly Braces to Deliniate the Parameter Name<string>
                 elseif role == "AXScrollBar" then
-                    -- have to match on position...FML... I could use coords too I think
+                    -- BTW matching on position
                     self._scrollbars = self._scrollbars or {}
                     table.insert(self._scrollbars, ui_elem)
-                    -- BTW tracking these has nil impact... even if I use prints in here it's not material vs the 100ms overall to enumerate all ui elements of the window
                     return
                 end
             end)
@@ -168,9 +134,6 @@ function ScreenPalEditorWindow:force_refresh_cached_controls()
 end
 
 function ScreenPalEditorWindow:is_playing()
-    -- FYI selectively refresh if the controls I need are invalid here
-    --  BTW in my testing it was taking < 7ms to refresh all buttons (in loop above)
-    --    so, should be fine to do this every time instead of selective
     if self._btn_play_or_pause == nil or not self._btn_play_or_pause:isValid() then
         self:force_refresh_cached_controls()
     end
@@ -185,15 +148,13 @@ function ScreenPalEditorWindow:ensure_playing(is_tool_open)
     if self:is_playing() then
         return
     end
-
     if is_tool_open then
-        -- "p" is for preview (so you can hear what it sounds like with the tool applied
-        -- it is possible I'll want to hear again w/o the tool in which case for now I will have to trigger that myself
+        -- "p" is for preview
         hs.eventtap.keyStroke({}, "p")
     else
         -- FYI AXPress doesn't work on this button
         hs.eventtap.keyStroke({}, hs.keycodes.map["space"])
-        -- FYI USE MOUSE if space is a problem, via hs.eventtap.leftClick
+        -- USE MOUSE if space is a problem, via hs.eventtap.leftClick
     end
 end
 
@@ -212,10 +173,9 @@ function ScreenPalEditorWindow:zoom_on()
         return
     end
 
-    -- FYI typing m is faster now... must be b/c of the native Apple Silicon app
+    -- FYI typing m is fastest way to enable zoom (vs click button)
     hs.eventtap.keyStroke({}, "m", 0, get_screenpal_app_element_or_throw())
 
-    -- wait here so you don't want in consumers AND to NOT wait when already zoomed out
     -- hs.timer.waitUntil -- TODO try waitUntil!
     hs.timer.usleep(_200ms)
 end
@@ -227,9 +187,7 @@ function ScreenPalEditorWindow:zoom_off()
 
     hs.eventtap.keyStroke({}, "m", 0, get_screenpal_app_element_or_throw())
 
-    -- wait here so you don't want in consumers AND to NOT wait when already zoomed out
     hs.timer.usleep(_200ms)
-    -- TODO I do not think waitUntil is blocking either so it would let consumer code keep running, right?
     -- PRN loop on usleep and poll something useful to tell you when you can be ready to click in the UI
     -- -- FYI waitUntil is always already 0,0 on first run, so I would need a diff test  to use this
     -- print("waitUNTIL")
