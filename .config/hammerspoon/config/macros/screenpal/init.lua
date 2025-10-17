@@ -138,6 +138,11 @@ function act_on_silence(win, silence, action)
     local timeline = win:timeline_controller()
 
     if is_mute then
+        -- a few ideas (only try if need arises in many mute edits)
+        -- MUTE_LEFT (default) - both ends, nearest frame to the left - round ← ←
+        -- MUTE_RIGHT - both ends, nearest frame to the right - round → →
+        -- MUTE_OUTWARD shift (each side, expand outward - round ← →
+        -- MUTE_INWARD shift (each end, expand inward - round → ←
         if action == 'MUTE_RIGHT' then
             local pixels_per_frame = timeline:pixels_per_frame() or 1
             timeline_relative_x_start = silence.x_start + pixels_per_frame
