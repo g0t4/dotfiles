@@ -80,12 +80,6 @@ local function _is_playhead_now_at_screen_x(self, desired_playhead_screen_x)
     local current_playhead_screen_x = _get_current_playhead_screen_x(self) -- in case we just moved the playhead
     local pixel_gap = math.abs(current_playhead_screen_x - desired_playhead_screen_x)
 
-    -- * within ~ one frame
-    --  unzoomed => depends on video length
-    --  zoom1 => ? smaller than zoom2's
-    --  zoom2 => 75 pixels/frame (1080p) => 75/25 = 3 pixels/second (1080p) => 6 pixels/second (4k)
-    --  zoom3 => 150 pixels/frame => 6 pixels/second (1080p) => 12 pixels/second (4k)
-
     -- PRN use frame_left/right instead of within PPF?
     local pixels_per_frame = self:pixels_per_frame() or 1
     return pixel_gap <= pixels_per_frame
@@ -122,6 +116,12 @@ end
 
 ---@return number?
 function TimelineController:pixels_per_frame()
+    -- measurements:
+    --  unzoomed => depends on video length
+    --  zoom1 => ? smaller than zoom2's
+    --  zoom2 => 75 pixels/frame (1080p) => 75/25 = 3 pixels/second (1080p) => 6 pixels/second (4k)
+    --  zoom3 => 150 pixels/frame => 6 pixels/second (1080p) => 12 pixels/second (4k)
+
     -- base on zoom level (1 ~= zoom1, 3 ~= zoom2, 6 ~= zoom3)
     if self:zoom_level() == 1 then
         return 1
