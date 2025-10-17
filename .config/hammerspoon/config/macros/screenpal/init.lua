@@ -2,8 +2,8 @@ local vim = require("config.libs.vim") -- reuse nvim lua modules in hammerspoon
 require("config.macros.screenpal.co")
 local opencv = require("config.macros.screenpal.py.opencv")
 local SilencesController = require('config.macros.screenpal.silences')
-local VolumeMenu = require('config.macros.screenpal.windows.volume_menu')
 local ScreenPalEditorWindow = require('config.macros.screenpal.editor_window')
+local test_button = require('config.macros.screenpal.experiments.test_button')
 
 local _200ms = 200000
 local _300ms = 300000
@@ -247,68 +247,6 @@ local function move_playhead_to_silence(win, silence)
     local timeline_relative_x = silence.x_start
     local timeline = win:timeline_controller()
     timeline:move_playhead_to(timeline_relative_x)
-end
-
-function SPal_Test()
-    local function WIP_test_click()
-        local original_mouse_pos = hs.mouse.absolutePosition()
-
-        -- local timeline = get_cached_editor_window():timeline_controller()
-        -- local playhead_x = timeline:get_current_playhead_timeline_relative_x()
-        -- local start_x = 816.5 -- exactly on frame boundary (but then rounds down due to how click works!)
-    end
-
-    -- WIP_test_click()
-
-    local function WIP_test_click_rounding()
-        local original_mouse_pos = hs.mouse.absolutePosition()
-
-        -- go back and forth
-        local timeline = get_cached_editor_window():timeline_controller()
-        local playhead_x = timeline:get_current_playhead_timeline_relative_x()
-        local start_x = 816.5 -- exactly on frame boundary (but then rounds down due to how click works!)
-
-        -- TODO compare to hs.mouse.absolutePosition() with and without... before hs.eventtap.leftClick
-        -- actually even w/o restoring mouse position, as long as I have a short delay, the clicks work out the same (150ms)
-        --   interesting hammerspoon crashes if I try to do the 30 in a row! w/o a pause between!
-
-        run_async(function()
-            -- *** TAKEAWAY, be at least 0.5 to the right of the frame you want to land on
-            --   and that makes sense... IIAC...
-            --   frames are landing on fraction of a pixel, i.e. 816.5
-            --   => clicking at 816.5 is probably akin to clicking at 816 with rounding somewhere? floor?
-            --   => clicking at 817 works to land on 816.5 then (that equivalent frame)
-            for i = 1, 30 do
-                start_x = start_x + 0.5
-                timeline:move_playhead_to(start_x)
-                sleep_ms(150)
-                hs.mouse.absolutePosition(original_mouse_pos) -- 0.2ms
-                sleep_ms(250)
-            end
-        end)
-
-        -- timeline:move_playhead_to(playhead_x - 2)
-        -- timeline:move_playhead_to(playhead_x - 28)
-    end
-
-    WIP_test_click_rounding()
-
-    local function SPal_DetectZoom_WIP()
-        local win = get_cached_editor_window()
-        local level = win:detect_zoom_level() -- 30 to 50ms
-        hs.alert.show("detected:" .. hs.inspect(level))
-    end
-
-    -- SPal_DetectZoom_WIP()
-
-    local function SPal_OpenMuteTool_WIP()
-        -- TODO finish and integrate with act_on_silence when action=MUTE* (i.e. don't open if sub menu if tool already muted)
-        -- assume this is done in silence where it will open the tool right away b/c both ends are auto selected
-        hs.eventtap.keyStroke({}, "v", 0) -- Cmd+V to paste since I can't type it, would put me in a loop (at best)
-        local win = get_cached_editor_window()
-        local menu = VolumeMenu.new(win.windows)
-        menu:wait_for_volume_to_be_mute()
-    end
 end
 
 function SPal_JumpThisSilence()
