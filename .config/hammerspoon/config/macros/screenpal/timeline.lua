@@ -78,21 +78,17 @@ end
 ---@return boolean
 local function _is_playhead_now_at_screen_x(self, desired_playhead_screen_x)
     local current_playhead_screen_x = _get_current_playhead_screen_x(self) -- in case we just moved the playhead
-    -- print("  current_playhead_screen_x", current_playhead_screen_x, "desired_playhead_screen_x", desired_playhead_screen_x)
     local pixel_gap = math.abs(current_playhead_screen_x - desired_playhead_screen_x)
-    -- print("  pixel_gap", pixel_gap)
 
     -- * within ~ one frame
-    --  OK so I cannot calculate pixels per frame on the fly but I know:
     --  unzoomed => depends on video length
     --  zoom1 => ? smaller than zoom2's
     --  zoom2 => 75 pixels/frame (1080p) => 75/25 = 3 pixels/second (1080p) => 6 pixels/second (4k)
     --  zoom3 => 150 pixels/frame => 6 pixels/second (1080p) => 12 pixels/second (4k)
-    --
-    --  chose 6 b/c that will work mostly for zoom2 and that is the zoom I almost exclusively edit with
-    -- TODO ALTERNATIVE => see if it changed vs original value?
-    --    ALTERNATIVE => OR, see if it changed by 90% of the target gap (old-desired = desired_gap, old-current = moved_gap...  is moved_gap/desired_gap > 0.9 ? )
-    return pixel_gap <= 6
+
+    -- PRN use frame_left/right instead of within PPF?
+    local pixels_per_frame = self:pixels_per_frame() or 1
+    return pixel_gap <= pixels_per_frame
 end
 
 local _10ms = 10 * 1000
@@ -190,7 +186,7 @@ local function _move_playhead_to_screen_x(self, playhead_screen_x)
         y = self._timeline_frame.y + self._timeline_frame.h / 2
     }, CLICK_HOLD_MICROSECONDS)
 
-    _wait_until_playhead_at_screen_x(self, playhead_screen_x) -- PRN! if we have zoom level we should be able to determine the wait more accurately IIRC
+    _wait_until_playhead_at_screen_x(self, playhead_screen_x)
 
     local actual = self:get_current_playhead_timeline_relative_x()
 
