@@ -18,7 +18,7 @@ def test_detect_tools_with_pink_volume_add_open():
     #    I am not sure I am matching to the end fully (and need to test for other cursor positions)
     # max col is 810 (1-based) => 810/2 = 405 (1-based) => 404 0-based
     # min col is 577 (1-based) => 577/2 = 288.5 == 289 (1-based) => 288 0-based
-    expected_tool = ToolResult(x_start=288, x_end=404)
+    expected_tool = ToolResult(x_start=288, x_end=404.5)
 
     assert detected == expected_tool
 
@@ -26,14 +26,14 @@ def test_with_cut_tool_cursor_at_end():
     detected = detect_tools('samples/cut-tool/add-end-selected.png')
     # 1711 left base1 ~= 855 base0
     # 1820 right base1 = 910 base1 = 909 base0
-    expected_tool = ToolResult(x_start=855, x_end=909)
+    expected_tool = ToolResult(x_start=855, x_end=909.5)
     assert detected == expected_tool
 
 def test_with_cut_tool_cursor_at_start():
     detected = detect_tools('samples/cut-tool/add-start-selected.png')
     # left 1727 base1 = 863 base0
     # right 1818 base1 = 908 base0
-    expected_tool = ToolResult(x_start=863, x_end=908)
+    expected_tool = ToolResult(x_start=863, x_end=908.5)
     assert detected == expected_tool
 
 def test_with_blue_shape_overlays():
@@ -42,7 +42,7 @@ def test_with_blue_shape_overlays():
     #   148/2 = 74
     # right most (edge of blue ball, even though its past edge it works)
     #   524/2 =  262
-    expected_tool = ToolResult(x_start=74, x_end=262)
+    expected_tool = ToolResult(x_start=74.5, x_end=262)
     assert detected == expected_tool
 
     # I can use a blue mask to find the overlay shapes

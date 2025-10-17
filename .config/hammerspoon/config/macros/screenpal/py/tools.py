@@ -15,8 +15,8 @@ DEBUG = __name__ == "__main__"
 @dataclass
 class ToolResult:
     # type: str  # removed b/c I wasn't using this, no need, yet?
-    x_start: int
-    x_end: int
+    x_start: float
+    x_end: float
 
     def to_dict(self) -> dict[str, Any]:
         return {'x_start': self.x_start, 'x_end': self.x_end}
@@ -159,9 +159,11 @@ def detect_tools(use_file):
     if min_index is None or max_index is None:
         return None
 
+    from fractions import Fraction
+
     return ToolResult(
-        x_start=int(min_index / 2),
-        x_end=int(max_index / 2),
+        x_start=float(min_index / 2),
+        x_end=float(max_index / 2),
     )
 
 if DEBUG:
