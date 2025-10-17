@@ -4,6 +4,7 @@ local opencv = require("config.macros.screenpal.py.opencv")
 local SilencesController = require('config.macros.screenpal.silences')
 local ScreenPalEditorWindow = require('config.macros.screenpal.editor_window')
 local test_button = require('config.macros.screenpal.experiments.test_button')
+local VolumeMenu = require("config.macros.screenpal.windows.volume_menu")
 
 local _200ms = 200000
 local _300ms = 300000
@@ -172,6 +173,11 @@ function act_on_silence(win, silence, action)
     hs.eventtap.keyStroke({}, "e", 0, win.app)
     -- FYI never needed a wait here previously:
     win.windows:get_tool_window():wait_for_ok_button() -- by now we have a range, so the OK button should be visible
+
+    if is_mute then
+        local menu = VolumeMenu.new(win.windows)
+        menu:wait_for_volume_to_be_mute()
+    end
 
     if silence.x_start == 0 and is_cut then
         -- special behavior for cutting  start of video (add fixed padding)
