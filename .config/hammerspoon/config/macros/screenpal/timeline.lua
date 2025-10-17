@@ -168,7 +168,7 @@ local CLICK_HOLD_MICROSECONDS = 100000
 ---@param self TimelineController
 ---@param playhead_screen_x number
 local function _move_playhead_to_screen_x(self, playhead_screen_x)
-    local start_x = self:get_current_playhead_timeline_relative_x()
+    local known_frame_x = self:get_current_playhead_timeline_relative_x()
     local intended_x = playhead_screen_x - self._timeline_frame.x
 
     local zoom_level = self:zoom_level()
@@ -188,23 +188,23 @@ local function _move_playhead_to_screen_x(self, playhead_screen_x)
     -- once you click you will wind up on a frame b/c you can only move playhead to a frame (not sub frame)
     -- FYI most of the time actual == frame_left_of_intended (rounds down to leftmost frame)
     --   only exception seems to be when you click right on a frame, it is as if you clicked slightly to the left of it and so it rounds down
-    local frame_left_of_intended, frame_right_of_intended
-    if intended_x > start_x then
-        local pixels_forward = intended_x - start_x
+    local frame_left, frame_right
+    if known_frame_x < intended_x then
+        local pixels_forward = intended_x - known_frame_x
         local past_left_frame = pixels_forward % pixels_per_frame
-        frame_left_of_intended = intended_x - past_left_frame
-        frame_right_of_intended = frame_left_of_intended + pixels_per_frame
+        frame_left = intended_x - past_left_frame
+        frame_right = frame_left + pixels_per_frame
     else
-        local pixels_backward = start_x - intended_x
+        local pixels_backward = known_frame_x - intended_x
         local past_right_frame = pixels_backward % pixels_per_frame
-        frame_right_of_intended = intended_x + past_right_frame
-        frame_left_of_intended = frame_right_of_intended - pixels_per_frame
+        frame_right = intended_x + past_right_frame
+        frame_left = frame_right - pixels_per_frame
     end
 
     -- TODO! flag to pass to round up/down based on how far from left/right?
 
     -- do not adjust if not zoomed, just to be safe, could use ppf=1 to not adjust too?
-    if not_zoomed and frame_left_of_intended == intended_x then
+    if not_zoomed and frame_left == intended_x then
         -- this will round down to frame_left_of_intended - pixels_per_frame (1 frame back)
         -- so let's add 1 to be certain we land on frame_left_of_intended
         playhead_screen_x = playhead_screen_x + 1 -- will round down to left most now
@@ -220,15 +220,15 @@ local function _move_playhead_to_screen_x(self, playhead_screen_x)
 
     local actual = self:get_current_playhead_timeline_relative_x()
 
-    local is_concerning = actual ~= frame_left_of_intended and actual ~= frame_right_of_intended -- either frame is fine
+    local is_concerning = actual ~= frame_left and actual ~= frame_right -- either frame is fine
     -- local is_concerning = actual ~= frame_left_of_intended
     -- is_concerning = true
     if is_concerning then
         -- FYI when a tool is open, it ends up rounding different to nearest frame (after sometimes), NBD just heads up
-        local msg = "start: " .. start_x
-            .. "\n  " .. "  left: " .. frame_left_of_intended
+        local msg = "start: " .. known_frame_x
+            .. "\n  " .. "  left: " .. frame_left
             .. " " .. "  intended: " .. intended_x
-            .. " " .. "  right: " .. frame_right_of_intended
+            .. " " .. "  right: " .. frame_right
             .. "\n  " .. "actual: " .. actual
             .. "\n"
 
