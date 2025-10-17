@@ -164,10 +164,7 @@ function ScreenPalEditorWindow:force_refresh_cached_controls()
                 end
             end)
     self._cached_buttons = true
-    -- TODO! <10ms often (20ms was biggest in testing)... DO I WANT TO STOP CACHING or ADD MORE CHECKS TO DO SOONER?
-    --   TODO! however checking a isValid() (copies the attribute) might be as expensive
-    --     TODO! so maybe just let consumers cache this by holding an instance of it?
-    print_took("building control CACHE took: ", start)
+    -- print_took("building control CACHE took: ", start)
 end
 
 function ScreenPalEditorWindow:is_playing()
