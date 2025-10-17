@@ -11,18 +11,6 @@ local _100ms = 100000
 local _50ms = 50000
 local _10ms = 10000
 
--- fix for vim.iter:totable() - IIUC with non-array tables
--- TODO FIX THIS missing maxn ELSEWHERE!!!!
--- hammerspoon uses lua 5.4 and that must not have table.maxn that you do have in vim w/ lua 5.1
-table.maxn = function(t)
-    -- TODO! lookup what else this might need to implement beyond the vim.iter use case
-    local max = 0
-    for k, v in pairs(t) do
-        if k > max then max = k end
-    end
-    return max
-end
-
 -- PRN events to detect playhead moving (and other UI changes) that might affect what to show for silences (or otherwise affect tooling automations)
 -- require("config.macros.screenpal.observer")
 

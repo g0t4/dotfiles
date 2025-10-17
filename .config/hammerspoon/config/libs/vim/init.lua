@@ -9,9 +9,21 @@
 --   which imports shared as starting point:
 --     https://github.com/neovim/neovim/blob/master/runtime/lua/vim/shared.lua
 local vim = require("config.libs.vim.shared")
-vim.iter  = require("config.libs.vim.iter")
+vim.iter = require("config.libs.vim.iter")
 vim.inspect = require("config.libs.vim.inspect")
 -- TODO add more things I love from:  https://github.com/neovim/neovim/blob/master/runtime/lua/vim
+
+---@diagnostic disable-next-line: duplicate-set-field
+table.maxn = function(t)
+    -- 5.4 (hammerspoon) doesn't have table.maxn, IIUC
+    -- fix for vim.iter:totable() - IIRC with non-array tables
+    -- hammerspoon uses lua 5.4 and that must not have table.maxn that you do have in vim w/ lua 5.1
+    local max = 0
+    for k, v in pairs(t) do
+        if k > max then max = k end
+    end
+    return max
+end
 
 
 
