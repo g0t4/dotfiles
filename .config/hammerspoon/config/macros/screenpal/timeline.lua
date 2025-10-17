@@ -142,7 +142,7 @@ end
 ---@return number frame_left
 ---@return number frame_right
 function TimelineController:calculate_frame_bounds(intended_x, known_frame_x)
-    local pixels_per_frame = self:pixels_per_frame() or 1
+    local pixels_per_frame = self:pixels_per_frame() or 1 -- use 1 so calcs don't break (modulus of pixels_per_frame)
 
     -- intended is where you intended to click (i.e. boundary of detected silence, not necessarily on a frame exactly)
     -- once you click you will wind up on a frame b/c you can only move playhead to a frame (not sub frame)
@@ -176,12 +176,9 @@ local function _move_playhead_to_screen_x(self, playhead_screen_x)
     local known_frame_x = self:get_current_playhead_timeline_relative_x()
     local intended_x = playhead_screen_x - self._timeline_frame.x
 
-    local zoom_level = self:zoom_level()
-    local pixels_per_frame = self:pixels_per_frame() or 1 -- use 1 so calcs don't break (modulus of pixels_per_frame)
-    local not_zoomed = zoom_level ~= nil
-
     local frame_left, frame_right = self:calculate_frame_bounds(intended_x, known_frame_x)
 
+    local not_zoomed = self:zoom_level() ~= nil
     if not_zoomed and frame_left == intended_x then
         -- let's add 1 to be certain we land on frame_left_of_intended
         playhead_screen_x = playhead_screen_x + 1
