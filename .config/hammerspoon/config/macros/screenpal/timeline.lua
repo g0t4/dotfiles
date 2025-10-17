@@ -144,7 +144,7 @@ end
 function TimelineController:calculate_frame_bounds(intended_x, known_frame_x)
     local pixels_per_frame = self:pixels_per_frame() or 1
     local frame_left, frame_right
-    if intended_x > known_frame_x then
+    if known_frame_x < intended_x then
         local pixels_forward = intended_x - known_frame_x
         local past_left_frame = pixels_forward % pixels_per_frame
         frame_left = intended_x - past_left_frame
