@@ -152,6 +152,7 @@ function TimelineController:calculate_frame_bounds(intended_x, known_frame_x)
     else
         local pixels_backward = known_frame_x - intended_x
         local past_right_frame = pixels_backward % pixels_per_frame
+        -- print("past right frame", past_right_frame)
         frame_right = intended_x + past_right_frame
         frame_left = frame_right - pixels_per_frame
     end
