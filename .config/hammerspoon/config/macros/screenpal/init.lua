@@ -11,9 +11,6 @@ local _100ms = 100000
 local _50ms = 50000
 local _10ms = 10000
 
--- PRN events to detect playhead moving (and other UI changes) that might affect what to show for silences (or otherwise affect tooling automations)
--- require("config.macros.screenpal.observer")
-
 local silences_canvas = nil
 ---@param win ScreenPalEditorWindow
 ---@param silences SilencesController
