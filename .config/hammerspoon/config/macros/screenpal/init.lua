@@ -100,8 +100,7 @@ _G.CUT_20 = 'CUT_20' -- consider in this case starting preview always?
 _G.CUT_20_OK = 'CUT_20_OK'
 _G.CUT_30 = 'CUT_30'
 _G.CUT_30_OK = 'CUT_30_OK'
-_G.MUTE1 = 'MUTE1'
-_G.MUTE2 = 'MUTE2'
+_G.MUTE_RIGHT = 'MUTE_RIGHT'
 
 ---@param win ScreenPalEditorWindow
 ---@param silence? Silence
@@ -139,15 +138,10 @@ function act_on_silence(win, silence, action)
     local timeline = win:timeline_controller()
 
     if is_mute then
-        local mute_number = action:match("MUTE(%d+)")
-        if mute_number then
-            -- local zoom_level = timeline:zoom_level()
-            -- PRN add MUTE_ROUND now.. that rounds to nearest frame (left/right) based on gap, inside move_playhead_to_...
-            --    this can replace MUTE2 (if useful) else just get rid of MUTE2/MUTE_ROUND as MUTE1 might be plenty
+        if action == 'MUTE_RIGHT' then
             local pixels_per_frame = timeline:pixels_per_frame() or 1
-            local num_frames = tonumber(mute_number)
-            timeline_relative_x_start = silence.x_start + num_frames * pixels_per_frame
-            timeline_relative_x_end = silence.x_end + num_frames * pixels_per_frame
+            timeline_relative_x_start = silence.x_start + pixels_per_frame
+            timeline_relative_x_end = silence.x_end + pixels_per_frame
         end
     end
 
