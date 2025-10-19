@@ -1,4 +1,5 @@
 local VolumeMenu = require('config.macros.screenpal.windows.volume_menu')
+local ToolBarWindow = require('config.macros.screenpal.windows.tools_window')
 
 local M = {}
 
@@ -39,7 +40,11 @@ local function WIP_OpenMuteTool()
 end
 
 function SPal_Test()
-    WIP_OpenMuteTool()
+    local win = get_cached_editor_window()
+    local tool_window = win.windows:get_tool_window()
+    local buttons = tool_window:get_edits_buttons()
+    print("found buttons:")
+    print(hs.inspect(buttons))
 end
 
 return M
