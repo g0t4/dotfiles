@@ -119,6 +119,7 @@ _G.CUT_20_OK = 'CUT_20_OK'
 _G.CUT_30 = 'CUT_30'
 _G.CUT_30_OK = 'CUT_30_OK'
 _G.MUTE_RIGHT = 'MUTE_RIGHT'
+_G.MUTE_INWARD = 'MUTE_INWARD'
 
 ---@param win ScreenPalEditorWindow
 ---@param silence? Silence
@@ -157,14 +158,22 @@ function act_on_silence(win, silence, action)
 
     if is_mute then
         -- a few ideas (only try if need arises in many mute edits)
-        -- MUTE_LEFT (default) - both ends, nearest frame to the left - round ← ←
-        -- MUTE_RIGHT - both ends, nearest frame to the right - round → →
-        -- MUTE_OUTWARD shift (each side, expand outward - round ← →
-        -- MUTE_INWARD shift (each end, expand inward - round → ←
+        --
+        -- MUTE_LEFT shift both ends left: ← ← (default)
+        -- ~ alternatives:
+        --   MUTE_RIGHT shift both ends right: → → (often useful too)
+        --   MUTE_INWARD shift both ends inward: → ← (often useful)
+        --   some videos _RIGHT works best, others _INWARD... not usually both in the same video though
+        -- MUTE_OUTWARD shift both ends outward: ← → (not yet encountered need for this)
+        --   by default I mean rounding defaults to the frame left of both ends
         if action == 'MUTE_RIGHT' then
             local pixels_per_frame = timeline:pixels_per_frame() or 1
             timeline_relative_x_start = silence.x_start + pixels_per_frame
             timeline_relative_x_end = silence.x_end + pixels_per_frame
+        elseif action == 'MUTE_INWARD' then
+            local pixels_per_frame = timeline:pixels_per_frame() or 1
+            timeline_relative_x_start = silence.x_start + pixels_per_frame
+            timeline_relative_x_end = silence.x_end - pixels_per_frame
         end
     end
 
