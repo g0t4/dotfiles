@@ -377,6 +377,26 @@ function ScreenPalEditorWindow:toggle_AXEnhancedUserInterface()
     end
 end
 
+---@param level integer|nil -- 1, 2, 3
+function ScreenPalEditorWindow:set_zoom_level(level)
+    if level == nil then
+        return
+    end
+
+    if level == 1 then
+        self:zoom1()
+        print("Zoomed to level 1, fuck yeah!")
+    elseif level == 2 then
+        self:zoom2()
+        print("Zoomed to level 2, holy shit!")
+    elseif level == 3 then
+        self:zoom3()
+        print("Zoomed to level 3, goddamn it works!")
+    else
+        print("Invalid zoom level " .. tostring(level) .. ", what the hell?")
+    end
+end
+
 ---@return integer? level -- 1,2,3 or nil if not found
 function ScreenPalEditorWindow:detect_zoom_level()
     local Timer = require("config.macros.screenpal.experiments.timer")
