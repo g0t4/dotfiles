@@ -90,11 +90,17 @@ function ToolBarWindow:get_edits_buttons()
         :totable()
 end
 
+---@param substring string
+---@return hs.axuielement[]
+function ToolBarWindow:get_edit_buttons_by_description(substring)
+    return vim.iter(self:get_edits_buttons())
+        :filter(function(button) return button:attributeValue("AXDescription"):find(substring) ~= nil end)
+        :totable()
+end
+
 ---@return hs.axuielement[]
 function ToolBarWindow:get_volume_edit_buttons()
-    return vim.iter(self:get_edits_buttons())
-        :filter(function(button) return button:attributeValue("AXDescription"):find("Volume") ~= nil end)
-        :totable()
+    return self:get_edit_buttons_by_description("Volume")
 end
 
 return ToolBarWindow
