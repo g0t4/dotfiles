@@ -385,15 +385,12 @@ function ScreenPalEditorWindow:set_zoom_level(level)
 
     if level == 1 then
         self:zoom1()
-        print("Zoomed to level 1, fuck yeah!")
     elseif level == 2 then
         self:zoom2()
-        print("Zoomed to level 2, holy shit!")
     elseif level == 3 then
         self:zoom3()
-        print("Zoomed to level 3, goddamn it works!")
     else
-        print("Invalid zoom level " .. tostring(level) .. ", what the hell?")
+        print("Invalid zoom level " .. tostring(level))
     end
 end
 
