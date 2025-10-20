@@ -3004,7 +3004,7 @@ end
 
 # *** streamdeck icon helpers
 
-function streamdeck_svg2png_padded
+function streamdeck_svg2png_padded_square_only
     # FTR this was desigend initially to work with screenpal icons (svgs) extracted from JARs which are square to start
 
     if not test -d drop-originals-svgs-here
@@ -3024,6 +3024,6 @@ function streamdeck_svg2png_padded
         # * make 120px PNG with padding around the 96px PNG
         set new_padded "final/$base.padded.png"
         set width 120
-        magick "$new_png" -gravity center -background transparent -resize "$width"x "$new_padded"
+        magick "$new_png" -gravity center -background transparent -extent 120x120 "$new_padded"
     end
 end
