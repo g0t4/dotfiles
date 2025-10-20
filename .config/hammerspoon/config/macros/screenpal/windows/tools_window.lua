@@ -73,6 +73,7 @@ function ToolBarWindow:wait_for_ok_button_then_press_it()
     -- no further action, thus don't need return value (not found, no diff than if found)
 end
 
+---@return hs.axuielement[]
 function ToolBarWindow:get_edits_buttons()
     self:wait_for_tools_button() -- good way to wait for toolbar to be "ready"
     -- first two are not for edits, they're the Tools menu and button to use the last used tool (Volume in this case)
@@ -81,12 +82,19 @@ function ToolBarWindow:get_edits_buttons()
     -- AXButton: desc:'Shape (2.68 sec)'
     -- AXButton: desc:'Volume (0.32 sec)'
     --   the buttons for current edits/tools have () in description
-    local edit_buttons = vim.iter(self._win:buttons())
+    return vim.iter(self._win:buttons())
         :filter(function(button)
             local description = button:attributeValue("AXDescription")
             return string.match(description, "%b()") ~= nil
         end)
-    return edit_buttons
+        :totable()
+end
+
+---@return hs.axuielement[]
+function ToolBarWindow:get_volume_edit_buttons()
+    return vim.iter(self:get_edits_buttons())
+        :filter(function(button) return button:attributeValue("AXDescription"):find("Volume") ~= nil end)
+        :totable()
 end
 
 return ToolBarWindow

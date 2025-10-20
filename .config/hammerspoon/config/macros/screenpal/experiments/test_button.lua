@@ -42,9 +42,8 @@ end
 function SPal_Test()
     local win = get_cached_editor_window()
     local tool_window = win.windows:get_tool_window()
-    local buttons = tool_window:get_edits_buttons()
-    print("found buttons:")
-    print(hs.inspect(buttons))
+    local button = tool_window:get_volume_edit_buttons()[1]
+    button:axPress()
 end
 
 return M
