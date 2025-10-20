@@ -623,6 +623,17 @@ function SPal_ShowSilenceRegions()
     end)
 end
 
+---@param this_text string
+function SPal_Click1stEditButtonWith(this_text)
+    local win = get_cached_editor_window()
+    local button = win.windows:get_tool_window():get_edit_buttons_by_description(this_text)[1]
+    if button == nil then
+        print('FUCK... no "' .. this_text .. '" edits (buttons) to edit')
+        return
+    end
+    button:axPress()
+end
+
 function SPal_Timeline_ZoomAndJumpToStart()
     -- FYI using run_async (coroutines under hood) to avoid blocking (i.e. during sleep calls)
     run_async(function()
