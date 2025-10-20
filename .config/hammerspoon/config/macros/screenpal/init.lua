@@ -625,6 +625,7 @@ end
 
 ---@param this_text string
 function SPal_Click1stEditButtonWith(this_text)
+    -- opens an existing edit (i.e. mute via volume tool)
     local win = get_cached_editor_window()
     local tool_window = win.windows:get_tool_window()
     local button = tool_window:get_edit_buttons_by_description(this_text)[1]
