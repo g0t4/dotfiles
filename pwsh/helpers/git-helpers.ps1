@@ -117,7 +117,7 @@ ealias gfo 'git fetch origin'
 
 ## pull
 ealias gpl "git pull"
-ealias gpls "git pull --autostash"
+ealias gplas "git pull --autostash"
 ealias gplr "git pull --recurse-submodules" # keep separate alias for now as its time consuming to pull multiple submodules
 
 ## push

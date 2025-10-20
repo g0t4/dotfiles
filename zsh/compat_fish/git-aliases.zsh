@@ -112,7 +112,7 @@ abbr gpf 'git push --force'
 #
 # pulling
 abbr gpl 'git pull'
-abbr gpls "git pull --autostash"
+abbr gplas "git pull --autostash"
 abbr gplr 'git pull --recurse-submodules' # keep separate alias for now as its time consuming to pull multiple submodules
 #
 #
