@@ -171,3 +171,20 @@ abbr gpristine 'git reset --hard && git clean -dffx'
 ealias 'gcan!' 'git commit -v -a --no-edit --amend'
 
 # todo - ealias - left off at gl* on zsh aliases list for git
+
+# *** worktrees (finally using these - linked worktrees, not just main worktree)
+abbr gwt "git worktree"
+abbr gwtls "git worktree list"
+abbr gwta "git worktree add"
+abbr gwtab "git worktree add -b" # create new branch (use -B to clobber if exists)
+abbr gwtrm "git worktree remove"
+abbr gwtm "git worktree move"
+# lock/unlock => wait until I use those
+
+# rebasing
+abbr grb 'git rebase'
+abbr grbas 'git rebase --autostash'
+abbr grba 'git rebase --abort'
+abbr grbc 'git rebase --continue'
+abbr grbs 'git rebase --skip'
+abbr grbi 'git rebase -i'
