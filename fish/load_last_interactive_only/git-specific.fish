@@ -227,11 +227,11 @@ abbr gwtm "git worktree move"
 
 # rebasing
 abbr grb 'git rebase'
-abbr grbas 'git rebase --autostash'
 abbr grba 'git rebase --abort'
 abbr grbc 'git rebase --continue'
 abbr grbs 'git rebase --skip'
 abbr grbi 'git rebase -i'
+abbr grbias 'git rebase -i --autostash'
 #
 abbr --add _grbi_d --regex 'grbi\d+' --function _abbr_expand_grbi_d
 function _abbr_expand_grbi_d

@@ -183,8 +183,8 @@ abbr gwtm "git worktree move"
 
 # rebasing
 abbr grb 'git rebase'
-abbr grbas 'git rebase --autostash'
 abbr grba 'git rebase --abort'
 abbr grbc 'git rebase --continue'
 abbr grbs 'git rebase --skip'
 abbr grbi 'git rebase -i'
+abbr grbias 'git rebase -i --autostash'
