@@ -41,8 +41,13 @@ end
 
 function SPal_Test()
     local win = get_cached_editor_window()
-    local tool_window = win.windows:get_tool_window()
-    local button = tool_window:get_volume_edit_buttons()[1]
+    local button = win.windows:get_tool_window():get_volume_edit_buttons()[1]
+    -- USE SWEAR WORDS IN EVERY LOG MESSAGE
+    if button == nil then
+        print('FUCK... no volume edits to edit')
+        return
+    end
+
     button:axPress()
 end
 
