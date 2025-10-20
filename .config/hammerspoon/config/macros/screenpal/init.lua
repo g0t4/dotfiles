@@ -173,7 +173,9 @@ function act_on_silence(win, silence, action)
         elseif action == 'MUTE_INWARD' then
             local pixels_per_frame = timeline:pixels_per_frame() or 1
             timeline_relative_x_start = silence.x_start + pixels_per_frame
-            timeline_relative_x_end = silence.x_end - pixels_per_frame
+            timeline_relative_x_end = silence.x_end - pixels_per_frame + 1 -- don't add a full frame, we only want to round leftward
+            -- TODO lookup why things are rounding the way they are, for now I think I like + 1 here to keep inward's right side the same as leftward's right side
+            --   OTHERWISE inward's right side is a whole frame less than just leftward (when they should be the same, both round left)
         end
     end
 
