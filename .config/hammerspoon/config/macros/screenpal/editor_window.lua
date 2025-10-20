@@ -261,17 +261,16 @@ end
 function ScreenPalEditorWindow:reopen_project()
     run_async(function()
         local win = get_cached_editor_window()
-        local current_zoomed = win:is_zoomed()
-        -- cannot find a way (yet) to determine zoom level
-        --   one idea, could store maxvalue of position_slider
-        --   and compare to each zoom level (try 2 first, then 1/3) on restore
-        --   until find match for maxvalue and then you know you found the level!
-        self:zoom_off()
+        local was_zoomed = win:is_zoomed()
+        local zoom_level = self:timeline_controller():zoom_level()
 
+        self:zoom_off()
 
         -- * capture position
         -- use percent, that way if the width changes, it's still the same timecode
         local playhead_percent = self:timeline_controller():get_position_percent()
+        -- DO NOT reuse timeline controller after changes like zoom, IIRC need latest state always
+        --   TODO maybe rename timeline controller to hint at the lifespan/applicability of it?
 
         if not self._textfield_title then
             error("No title found, aborting...")
@@ -306,12 +305,8 @@ function ScreenPalEditorWindow:reopen_project()
         self:zoom_off()
         self:timeline_controller():move_playhead_to_position_percent(playhead_percent)
 
-        if not current_zoomed then
-            print("NOT zoomed before, skipping zoom restore")
-            return
-        end
-
-        self:zoom2()
+        -- * restore zoom level
+        self:set_zoom_level(zoom_level)
 
         -- after reopen previous cached window is always invalid, no noticeable hit to refresh for that here!
         self:force_refresh_cached_controls()
