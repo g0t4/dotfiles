@@ -626,7 +626,8 @@ end
 ---@param this_text string
 function SPal_Click1stEditButtonWith(this_text)
     local win = get_cached_editor_window()
-    local button = win.windows:get_tool_window():get_edit_buttons_by_description(this_text)[1]
+    local tool_window = win.windows:get_tool_window()
+    local button = tool_window:get_edit_buttons_by_description(this_text)[1]
     if button == nil then
         print('FUCK... no "' .. this_text .. '" edits (buttons) to edit')
         return
