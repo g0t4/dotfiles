@@ -3001,3 +3001,29 @@ function screenpal_pid
     set --local pid (jcmd | grep ScreenPal | head -1 | cut -d' ' -f1)
     echo $pid
 end
+
+# *** streamdeck icon helpers
+
+function streamdeck_svg2png_padded
+    # FTR this was desigend initially to work with screenpal icons (svgs) extracted from JARs which are square to start
+
+    if not test -d drop-originals-svgs-here
+        echo "CRAP: missing dir 'drop-originals-svgs-here', created it for you, now put your SVGs in it"
+        mkdir -p drop-originals-svgs-here
+        return 1
+    end
+
+    mkdir -p final tmp_pngs
+
+    for image in drop-originals-svgs-here/*.svg
+        # * make 96px wide PNG (height is scaled)
+        set base (basename $image .svg)
+        set new_png "tmp_pngs/$base.png"
+        svg2png --width=96 $image $new_png
+
+        # * make 120px PNG with padding around the 96px PNG
+        set new_padded "final/$base.padded.png"
+        set width 120
+        magick "$new_png" -gravity center -background transparent -resize "$width"x "$new_padded"
+    end
+end
