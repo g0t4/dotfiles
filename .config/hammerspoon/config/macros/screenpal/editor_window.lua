@@ -449,7 +449,7 @@ function ScreenPalEditorWindow:detect_zoom_level()
 
     local y_sample = math.floor(img_size.h * 0.95)
     for _, bar in ipairs(bar_regions) do
-        timer:capture("color check for bar level: " .. bar.level)
+        timer:capture("color check for bar level: " .. tostring(bar.level))
 
         local x_sample = math.floor(bar.x)
         ---@type NSColor?
