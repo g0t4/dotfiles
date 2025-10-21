@@ -19,7 +19,6 @@ for item in csv xls xlsx
     duti -s com.microsoft.Excel $item all
 end
 
-
 for item in wav mp3 mpc m4a m4v m4b mp4 m4p mpg mp2 mpeg mpe mpv m2v svi mxf roq nsv 3gp 3g2 aac aiff alac dvf msv flac gsm ogg ogv oga mogg opus ra rm rmvb raw tta voc wma wv webm mkv flv f4v f4p f4a f4b vob gif gifv mng avi mts m2ts ts mov qt wmv viv asf amv
     # list of audio file extension: https://en.wikipedia.org/wiki/Audio_file_format#List_of_formats
     # list of video file formats: https://en.wikipedia.org/wiki/Video_file_format
@@ -54,6 +53,13 @@ for item in $exts
     # 'iqy', # excel web connection scraping definition files
 end
 
+# ** test duti mapping points at correct application
+#   testing one works means all works as far as the domain (app) => path mapping is concerned
+set test_duti_js_output (duti -x js)
+if not string match --quiet --regex "$HOME/Applications/wes-dispatcher.app" $test_duti_js_output
+    echo "FUUUUU wes dispatcher path doesn't match expected path, this happened previously (wesdemos pointed at wes user's app)... at the time I had to change it by setting an invalid value and then setting the above again... that seemed to work and IIRC just setting it to the correct (same) value didn't fix it... smth to do with mapping from domain (com.apple.automator.wes-dispatcher) to the app on disk... why can't I just pass a path to the app?!"
+    echo "'duti -x js' resulted in:\n $test_duti_js_output"
+end
 
 # *** OLD NOTES (from ansible playbook):
 #
