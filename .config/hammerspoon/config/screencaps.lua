@@ -103,7 +103,7 @@ hs.hotkey.bind({ "shift", "cmd" }, "3", function()
 end)
 
 hs.hotkey.bind({ "shift", "cmd", "ctrl" }, "2", function()
-    hs.task.new("/opt/homebrew/bin/fish", nil, { "-c", "screencapture_ocr" }):start()
+    hs.task.new("/opt/homebrew/bin/fish", nil, { "-ic", "screencapture_ocr" }):start()
 end)
 
 
