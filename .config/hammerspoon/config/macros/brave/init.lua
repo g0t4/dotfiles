@@ -155,3 +155,5 @@ function SearchForDevToolsTextArea(callbackWithSelectedText)
         end
     )
 end
+
+require("config.macros.brave.commands")
