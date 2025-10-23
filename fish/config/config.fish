@@ -10,8 +10,10 @@ else
     set -g IS_LINUX true
 end
 
-set -g WES_BOOTSTRAP ~/repos/wes-config/wes-bootstrap
-set -g WES_DOTFILES ~/repos/github/g0t4/dotfiles
+# FYI stick with WES_ prefix to namespace my variables
+export WES_REPOS="$HOME/repos"
+set -g WES_BOOTSTRAP "$WES_REPOS/wes-config/wes-bootstrap"
+set -g WES_DOTFILES "$WES_REPOS/github/g0t4/dotfiles"
 export WES_DOTFILES=$WES_DOTFILES
 
 # ** load_first
