@@ -16,12 +16,24 @@
 	<integer>2820402930</integer>
 	<key>actionAfterLaunch</key>
 	<integer>2</integer>
+	<key>alwaysOpenInNewWindow</key>
+	<false/>
 	<key>currentInputConfigName</key>
 	<string>VLC Default</string>
 	<key>enableAdvancedSettings</key>
 	<false/>
+	<key>enableOSD</key>
+	<false/>
 	<key>oscPosition</key>
 	<integer>2</integer>
+	<key>playlistAutoAdd</key>
+	<false/>
+	<key>screenshotCopyToClipboard</key>
+	<true/>
+	<key>screenshotShowPreview</key>
+	<false/>
+	<key>showRemainingTime</key>
+	<true/>
 	<key>softVolume</key>
 	<real>100</real>
 </dict>
