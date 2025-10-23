@@ -1,4 +1,4 @@
-#!/usr/bin/env fish
+#!/usr/bin/env fish -i
 
 # defaults export com.colliderli.iina iina.plist
 
