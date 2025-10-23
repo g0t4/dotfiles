@@ -32,6 +32,10 @@
 	<true/>
 	<key>screenshotShowPreview</key>
 	<false/>
+	<key>recordPlaybackHistory</key>
+	<false/>
+	<key>recordRecentFiles</key>
+	<false/>
 	<key>showRemainingTime</key>
 	<true/>
 	<key>softVolume</key>
