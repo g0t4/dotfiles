@@ -1,3 +1,5 @@
+!.ipython/
+
 .rag/
 
 # Created by https://www.toptal.com/developers/gitignore/api/macos,linux,windows,archives,images,video
@@ -291,7 +293,7 @@ target/
 
 # IPython
 profile_default/
-ipython_config.py
+# ipython_config.py # allow for my user global config in this repo
 
 # pyenv
 #   For a library or package, you might want to ignore these files since the code is

@@ -1,5 +1,6 @@
-# allow .config, even if --no-hidden passed
+# * allow .config, even if --no-hidden passed:
 !.config/
-# hide .git, even if --hidden passed
-.git/
 
+# * hide even if --hidden passed:
+.git/
+.ctags.d/

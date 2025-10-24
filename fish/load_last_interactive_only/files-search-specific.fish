@@ -156,7 +156,7 @@ abbr --add o=w --command $find_cmd --position anywhere -- "-not -perm -o=w"
 
 # *** fd general options
 abbr fdnh 'fd --no-hidden' # include hidden
-abbr fdu 'fd --unrestricted' # no ignores applied
+abbr fdu 'fd --unrestricted' # no ignores applied (can layer on excludes to remove things again)
 abbr fdi 'fd --ignore-case' # --ignore-case
 abbr fdF 'fd --fixed-strings' # same as rg
 abbr fd_ext 'fd --extension'
