@@ -157,6 +157,11 @@ abbr --add o=w --command $find_cmd --position anywhere -- "-not -perm -o=w"
 # *** fd general options
 abbr fdnh 'fd --no-hidden' # include hidden
 abbr fdu 'fd --unrestricted' # no ignores applied (can layer on excludes to remove things again)
+# WIP diff fd files vs fd (non-egregious hidden files):
+#   i.e. find repo ignored files like a csv... without filtering egregious dirs every time
+#   also do the diff for you so you can see the difference
+abbr fd_nonegregious 'fd --unrestricted --exclude .venv --exclude __pycache__ --exclude .rag --exclude .git --exclude node_modules | sort -h'
+abbr fd_nonegregious_diff "diff_two_commands 'fd --unrestricted --exclude .venv --exclude __pycache__ --exclude .rag --exclude .git --exclude node_modules | sort -h' 'fd | sort -h'" # show diff in hidden vs
 abbr fdi 'fd --ignore-case' # --ignore-case
 abbr fdF 'fd --fixed-strings' # same as rg
 abbr fd_ext 'fd --extension'
