@@ -269,6 +269,14 @@ return {
                 core.send_code_block()
             end
 
+            -- TODO! revisit if these are beneficial, and if so add in more spots, for other subdivided leader key heirarchies
+            -- NOOP so I don't trigger rogue commands when I messup a keymap for <leader>i*
+            local NOOP = function() end
+            vim.keymap.set('n', '<leader>i', NOOP, { desc = 'NOOP if I stop/messup keymap' })
+            vim.keymap.set('n', '<leader>ic', NOOP, { desc = 'NOOP if I stop/messup keymap' })
+            vim.keymap.set('n', '<leader>is', NOOP, { desc = 'NOOP if I stop/messup keymap' })
+
+
             -- ok I ❤️  THESE:
             vim.keymap.set('n', '<leader>icm', clear_then(function() core.run_motion("send_motion") end), { desc = 'clear => send motion' })
             vim.keymap.set('v', '<leader>icv', clear_then(function() core.send(nil, core.mark_visual()) end), { desc = 'clear => send visual' })
