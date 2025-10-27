@@ -34,7 +34,7 @@ function VolumeMenu:find_my_window()
         win = lookup()
     end
     self._win = win
-    print("Found2: ", win)
+    -- print("Found2: ", win)
     return win
 end
 

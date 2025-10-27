@@ -683,14 +683,14 @@ function wait_for_element(search_func, interval_ms, max_cycles, name)
     while cycles < max_cycles do
         local element = search_func()
         if element then
-            print_took("wait_for_element " .. (name or ""), start)
+            log_if_slower_than_100ms("wait_for_element " .. (name or ""), start)
             return element
         end
         timer.usleep(interval_ms * 1000)
         cycles = cycles + 1
     end
 
-    print_took("wait_for_element " .. (name or "") .. " timed out after "
+    print("wait_for_element " .. (name or "") .. " timed out after "
         .. tostring(max_cycles) .. " cycles @ " .. tostring(interval_ms) .. "ms intervals",
         start)
     return nil
@@ -706,7 +706,7 @@ function wait_for_element_then_press_it(search_func, interval_ms, max_cycles, na
     local elem = wait_for_element(search_func, interval_ms, max_cycles, name)
     if elem then
         local success, err = elem:performAction("AXPress")
-        print("AXPress result: " .. hs.inspect(success) .. ", err: " .. hs.inspect(err)) -- PRN add to log file! and check for success to be true (or it will be the error) or the error will be nil! - I think I was wrong about this being an
+        -- print("AXPress result: " .. hs.inspect(success) .. ", err: " .. hs.inspect(err)) -- PRN add to log file! and check for success to be true (or it will be the error) or the error will be nil! - I think I was wrong about this being an
         if not success then
             -- FINALLY a central spot to log this, I keep forgetting to check this when I try to use actions!
             print("failed to AXPress elem", elem, err)
@@ -733,7 +733,7 @@ function wait_until(is_done, interval_ms, max_cycles, name)
     while cycles < max_cycles do
         local finished = is_done()
         if finished then
-            print_took("wait_until " .. (name or ""), start)
+            log_if_slower_than_100ms("wait_until " .. (name or ""), start)
             return true
         end
         timer.usleep(interval_ms * 1000)
