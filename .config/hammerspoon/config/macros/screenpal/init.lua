@@ -145,7 +145,8 @@ function act_on_silence(win, silence, action)
     -- * calculate padding
     local timeline_relative_x_start = silence.x_start
     local timeline_relative_x_end = silence.x_end -- - 10
-    if silence.x_start ~= 0 then
+    local START_SILENCE_X_START = 1
+    if silence.x_start > START_SILENCE_X_START then
         if is_cut then
             local pixel_width = action:match("CUT_(%d*)%.*")
             -- print("pixel_width: " .. tostring(pixel_width) .. " for action " .. action)
@@ -207,7 +208,9 @@ function act_on_silence(win, silence, action)
         menu:wait_for_volume_to_be_mute()
     end
 
-    if silence.x_start == 0 and is_cut then
+    print("silence " .. vim.inspect(silence))
+    if silence.x_start <= START_SILENCE_X_START and is_cut then
+        -- sometimes regular silences start at 1, probably due to a border around the silence box...
         -- special behavior for cutting  start of video (add fixed padding)
 
         -- * pull back 2 frames from end to avoid cutting into starting audio
