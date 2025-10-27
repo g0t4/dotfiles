@@ -208,7 +208,7 @@ function act_on_silence(win, silence, action)
         menu:wait_for_volume_to_be_mute()
     end
 
-    print("silence " .. vim.inspect(silence))
+    -- print("silence " .. vim.inspect(silence))
     if silence.x_start <= START_SILENCE_X_START and is_cut then
         -- sometimes regular silences start at 1, probably due to a border around the silence box...
         -- special behavior for cutting  start of video (add fixed padding)
