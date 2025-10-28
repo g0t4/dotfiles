@@ -282,6 +282,12 @@ local function move_playhead_to_silence(win, silence)
 end
 
 function SPal_JumpThisSilence()
+    -- FYI! don't forget you added keymap Ctrl+Shift+left/right to jump silences
+    --   habituate using this instead of jumping one second at a time and then when close arrowing around to get to silence
+    --   what you're doing now is terrible workflow, but understandable not wanting to reach for a streamdeck button for every jump
+    --   that's why this keyboard shortcut should help
+    --   PRN jump to and start a mute edit on next silence?
+    --     observe what you are doing now and figure out what is most useful
     run_async(function()
         ---@type ScreenPalEditorWindow, SilencesController
         local win, silences = syncify(detect_silences)
