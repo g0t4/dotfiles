@@ -91,22 +91,18 @@ function VolumeMenu:get_button_by_description(description)
     if not button then
         local tab_group = win:tabGroup(1)
         if not tab_group then
-            print('F3: no tab group') -- debug, remove later
+            print('ERROR: no tab_group, cannot get_button_by_description')
             return
         end
-        vim.iter(tabGroup:children()):each(function(e)
-            -- leave this debug code until stuff is rock solid
-            print("  tabGroup child: " .. e:axRole() .. ": " .. e:axDescription())
-        end)
-        --   so, it's tabGroup(1):button(1) in my testing...
-        -- FYI! this is working to select MUTE with the rest of the waits! Aside from this hellish button crap...
-        --    the rest of the code just worked the first time!
+        -- vim.iter(tabGroup:children()):each(function(e)
+        --     print("  tabGroup child: " .. e:axRole() .. ": " .. e:axDescription())
+        -- end)
         local button = tab_group:button(1)
 
         -- * vet description matches
-        local desc = button:axDescription()
-        if desc ~= description then
-            print("WARNING: tabGroup nested button description does not match! " .. desc .. " vs " .. description)
+        local actual_description = button:axDescription()
+        if actual_description ~= description then
+            print("WARNING: tab_group button description does not match! " .. actual_description .. " vs " .. description)
             return nil
         end
         return button
