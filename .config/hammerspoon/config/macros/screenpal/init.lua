@@ -240,14 +240,9 @@ function act_on_silence(win, silence, action)
         return
     end
 
-    local is_auto_preview = not is_auto_approve -- TODO find conditions for which I want auto-preview
     if is_auto_approve then
         -- PRN wait to make sure OK is visible (sometimes there is a lag and at least with volume tool, hitting Enter before will be accepted but will disappear the edit!)
         win.windows:get_tool_window():wait_for_ok_button_then_press_it()
-    elseif is_auto_preview then
-        local timeline = win:timeline_controller()
-        timeline:move_playhead_one_second_before_silence(silence)
-        hs.eventtap.keyStroke({}, "p", 0, win.app)
     end
 
     -- TODO check if mute button is muted icon? or w/e else to determine if I should click mute the first time?
