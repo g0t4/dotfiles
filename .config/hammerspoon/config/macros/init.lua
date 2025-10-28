@@ -34,8 +34,11 @@ function log_failure(message)
 end
 
 function alert_and_log_failure(message)
+    local date = os.date("%F %T")
+    message = date .. ": " .. message
+
     log_failure(message)
-    message = message .. " Check " .. filepath
+
     -- this pokes me ON ERRORS ONLY... but doesn't stay up long!
     -- habituate then check my log file for more details (or longer than alert shows)
     -- BTW on a real error I want this to stay up briefly, not just flicker
@@ -45,6 +48,7 @@ function alert_and_log_failure(message)
     --      unlike notification in macOS where I cannot really interact with it b/c SHOW is a mess and the message isn't copyable (AFAIK)... and it truncates past a few short lines and no way to expand it - IOTW a terrible way to log failures)
     -- I will then fix issue and then it won't popup the annoying alert again!
     -- * ALSO, now you should TURN OFF STDOUT => notification in KM macro
+    message = message .. " Check " .. filepath
     hs.alert.show(message, nil, nil, 5)
 end
 
