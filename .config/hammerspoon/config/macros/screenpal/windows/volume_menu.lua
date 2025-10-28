@@ -89,8 +89,8 @@ function VolumeMenu:get_button_by_description(description)
     end
 
     if not button then
-        local tabGroup = win:tabGroup(1)
-        if not tabGroup then
+        local tab_group = win:tabGroup(1)
+        if not tab_group then
             print('F3: no tab group') -- debug, remove later
             return
         end
@@ -101,7 +101,7 @@ function VolumeMenu:get_button_by_description(description)
         --   so, it's tabGroup(1):button(1) in my testing...
         -- FYI! this is working to select MUTE with the rest of the waits! Aside from this hellish button crap...
         --    the rest of the code just worked the first time!
-        local button = tabGroup:button(1)
+        local button = tab_group:button(1)
 
         -- * vet description matches
         local desc = button:axDescription()
