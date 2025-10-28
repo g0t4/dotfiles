@@ -11,7 +11,7 @@ local function log_if_slower_than_x_ms(minimum_ms, message, start_time)
     local elapsed_time_ms = get_elapsed_time_in_milliseconds(start_time)
 
     if elapsed_time_ms > minimum_ms then
-        print("Performance warning: " .. elapsed_time_ms .. "ms")
+        print("WARN " .. elapsed_time_ms .. " ms - " .. message)
     end
 
     return elapsed_time_ms
