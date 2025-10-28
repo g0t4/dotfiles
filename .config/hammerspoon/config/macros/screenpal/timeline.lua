@@ -140,6 +140,11 @@ function TimelineController:pixels_per_second()
     return 25 * self:pixels_per_frame()
 end
 
+function TimelineController:move_playhead_one_second_before_silence(silence)
+    local pps = self:pixels_per_second() -- TODO what if nil? (not zoomed)
+    self:move_playhead_to(silence.x_start - pps)
+end
+
 ---@param intended_x number
 ---@param known_frame_x number
 ---@return number frame_left
