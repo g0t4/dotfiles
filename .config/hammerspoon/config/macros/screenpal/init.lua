@@ -112,9 +112,10 @@ function show_silences(win, silences)
 end
 
 _G.MUTE = 'MUTE'
-_G.CUT_10 = 'CUT_10' -- FYI this is probably too short to be useful, but let's see if I use it
+_G.CUT_10 = 'CUT_10'
 _G.CUT_15 = 'CUT_15'
 _G.CUT_20 = 'CUT_20' -- consider in this case starting preview always?
+-- start preview after marking cut, then if the user doesn't interrupt, accept the edit?
 _G.CUT_20_OK = 'CUT_20_OK'
 _G.CUT_30 = 'CUT_30'
 _G.CUT_30_OK = 'CUT_30_OK'
