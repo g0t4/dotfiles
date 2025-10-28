@@ -135,6 +135,11 @@ function TimelineController:pixels_per_frame()
     return nil
 end
 
+---@return number?
+function TimelineController:pixels_per_second()
+    return 25 * self:pixels_per_frame()
+end
+
 ---@param intended_x number
 ---@param known_frame_x number
 ---@return number frame_left
