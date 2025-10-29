@@ -650,7 +650,30 @@ end
 
 function SPal_PreviewEdit(number)
     number = number or 1
-    -- TODO?
+
+    -- * assume open edit == the edit to preview
+    local win = get_cached_editor_window()
+    local tool_window = win.windows:get_tool_window()
+    local preview_button = tool_window:get_preview_this_edit_button()
+    if preview_button then
+        preview_button:axPress()
+        tool_window:wait_for_tools_button()
+        return
+    end
+
+    -- * open edit by number (left to right)
+    local edit_button = tool_window:get_edits_buttons()[number]
+    edit_button:axPress()
+    -- TODO consolidate with SPal_OpenEdit?
+    tool_window:wait_for_ok_button()
+
+    -- * copy overlay
+    preview_button = tool_window:get_preview_this_edit_button()
+    if preview_button then
+        preview_button:axPress()
+        tool_window:wait_for_tools_button()
+        return
+    end
 end
 
 function SPal_OpenEdit(number)
