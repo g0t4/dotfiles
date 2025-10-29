@@ -700,7 +700,7 @@ function SPal_DuplicateEdit(number)
     -- * assume open edit == the edit to copy
     local win = get_cached_editor_window()
     local tool_window = win.windows:get_tool_window()
-    local copy_overlay = tool_window:get_copy_overlay_button()
+    local copy_overlay = tool_window:get_copy_this_edit_button()
     if copy_overlay then
         copy_overlay:axPress()
         tool_window:wait_for_tools_button()
@@ -714,7 +714,7 @@ function SPal_DuplicateEdit(number)
     tool_window:wait_for_ok_button()
 
     -- * copy overlay
-    copy_overlay = tool_window:get_copy_overlay_button()
+    copy_overlay = tool_window:get_copy_this_edit_button()
     if copy_overlay then
         copy_overlay:axPress()
         tool_window:wait_for_tools_button()
