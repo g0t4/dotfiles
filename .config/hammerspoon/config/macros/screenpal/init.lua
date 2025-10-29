@@ -648,6 +648,18 @@ function SPal_Click1stEditButtonWith(this_text)
     button:axPress()
 end
 
+function SPal_PreviewEdit(number)
+    -- TODO?
+end
+
+function SPal_OpenEdit(number)
+    -- TODO?
+end
+
+function SPal_RemoveEdit(number)
+    -- TODO?
+end
+
 function SPal_DuplicateEdit(number)
     number = number or 1
 
