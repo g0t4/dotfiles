@@ -613,8 +613,7 @@ function SPal_AdjustSelection(side, num_frames, text)
         elseif side == OTHER then
             -- just flip to other side!
             local playhead_x = timeline:get_current_playhead_timeline_relative_x()
-            local x_middle = (tool.x_start + tool.x_end) / 2
-            local playhead_closer_to_start = playhead_x < x_middle
+            local playhead_closer_to_start = playhead_x < tool:x_middle()
             if playhead_closer_to_start then
                 timeline:move_playhead_to(tool.x_end)
             else
