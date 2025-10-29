@@ -654,11 +654,11 @@ end
 function SPal_PreviewThisEdit(number)
     number = number or 1
 
+    SPal_OpenThisEdit(number)
+
     -- * assume open edit == the edit to preview
     local win = get_cached_editor_window()
     local tool_window = win.windows:get_tool_window()
-
-    SPal_OpenThisEdit(number)
 
     -- * click preview
     local preview_button = tool_window:get_preview_this_edit_button()
@@ -690,11 +690,11 @@ end
 function SPal_RemoveThisEdit(number)
     number = number or 1
 
+    SPal_OpenThisEdit(number)
+
     -- * assume open edit == the edit to remove
     local win = get_cached_editor_window()
     local tool_window = win.windows:get_tool_window()
-
-    SPal_OpenThisEdit(number)
 
     -- * click copy overlay
     local remove_button = tool_window:get_remove_this_edit_button()
@@ -711,11 +711,12 @@ function SPal_CopyThisEdit(number)
     -- FYI AFAICT copy only applies to Overlay edits - shapes, arrows, images,
     --   should I ignore other edits when indexing (number)?
 
+    SPal_OpenThisEdit(number)
+
     -- * assume open edit == the edit to copy
     local win = get_cached_editor_window()
     local tool_window = win.windows:get_tool_window()
 
-    SPal_OpenThisEdit(number)
 
     -- * click copy overlay
     local copy_overlay = tool_window:get_copy_this_edit_button()
