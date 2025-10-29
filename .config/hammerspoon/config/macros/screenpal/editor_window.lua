@@ -435,6 +435,7 @@ end
 
 ---@return integer? level -- 1,2,3 or nil if not found
 function ScreenPalEditorWindow:detect_zoom_level()
+    -- TODO rewrite so 0 == unzoomed/disabled? instead of nil?
     local Timer = require("config.macros.screenpal.experiments.timer")
     local timer = Timer.new()
 

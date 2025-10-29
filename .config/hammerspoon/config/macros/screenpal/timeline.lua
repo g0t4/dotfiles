@@ -2,6 +2,7 @@ local parse_time_to_seconds = require('config.macros.screenpal.helpers')
 
 ---@class TimelineController
 ---@field _timeline_frame AXFrame
+---@field __editor_window ScreenPalEditorWindow
 ---@field _playhead_window_frame AXFrame
 ---@field _playhead_screen_x number
 ---@field _playhead_timeline_relative_x? number -- TODO make this public? a few uses externally that seem fine (i.e. showing detected silence ranges)
@@ -110,7 +111,8 @@ end
 
 ---@return number?
 function TimelineController:zoom_level()
-    if not self._zoom_level then
+    if not self._zoom_level and self.__editor_window then
+        -- TODO rewrite for 0 to be zoom disabled (instead of nil)... fixes caching issue when not zoomed
         self._zoom_level = self.__editor_window:detect_zoom_level()
     end
     return self._zoom_level
