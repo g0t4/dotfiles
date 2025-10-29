@@ -145,20 +145,33 @@ function act_on_silence(win, silence, action)
         return
     end
 
+    local timeline = win:timeline_controller()
+
     -- * calculate padding
     local timeline_relative_x_start = silence.x_start
     local timeline_relative_x_end = silence.x_end -- - 10
     local START_SILENCE_X_START = 1 -- treat silence as starting silence IF it starts before this threshold (pixels)
     if silence.x_start > START_SILENCE_X_START then
         if is_cut then
-            local pixel_width = action:match("CUT_(%d*)%.*")
-            -- print("pixel_width: " .. tostring(pixel_width) .. " for action " .. action)
-            timeline_relative_x_start = silence.x_start + pixel_width
-            timeline_relative_x_end = silence.x_end - pixel_width
+            local pixel_width_at_zoom2 = action:match("CUT_(%d*)%.*")
+            local scaled_pixel_width = pixel_width_at_zoom2
+            local zoom_level = timeline:zoom_level() -- ~18ms is not bad!
+            if zoom_level == 1 or zoom_level == nil then
+                -- FYI for non-zoomed view, would have to compute the ratio... off of start/end times if visible... for now assume it has same ratio as 1x zoom (which is smallest zoom anyways)
+                -- TODO move this translation into timeline near other uses
+                -- 1:3 ratio zoom1:zoom2
+                scaled_pixel_width = pixel_width_at_zoom2 / 3
+            elseif zoom_level == 3 then
+                -- 3:6 ratio zoom2:zoom3
+                scaled_pixel_width = 2 * scaled_pixel_width
+            end
+            -- print("scaled_pixel_width: " .. tostring(scaled_pixel_width) .. ", zoom2: " .. tostring(pixel_width_at_zoom2))
+            timeline_relative_x_start = silence.x_start + scaled_pixel_width
+            timeline_relative_x_end = silence.x_end - scaled_pixel_width
+            -- TODO don't go beyond bounds of original silence period :) b/c it will happily set start/end either way (flips it but still works, in fact it expands it)
         end
     end
 
-    local timeline = win:timeline_controller()
 
     if is_mute then
         -- a few ideas (only try if need arises in many mute edits)
