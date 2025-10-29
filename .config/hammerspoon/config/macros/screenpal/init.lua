@@ -664,11 +664,7 @@ function SPal_PreviewThisEdit(number)
         return
     end
 
-    -- * open edit by number (left to right)
-    local edit_button = tool_window:get_edits_buttons()[number]
-    edit_button:axPress()
-    -- TODO consolidate with SPal_OpenEdit?
-    tool_window:wait_for_ok_button()
+    SPal_OpenThisEdit(number)
 
     -- * copy overlay
     preview_button = tool_window:get_preview_this_edit_button()
@@ -710,11 +706,7 @@ function SPal_RemoveThisEdit(number)
         return
     end
 
-    -- * open edit by number (left to right)
-    local edit_button = tool_window:get_edits_buttons()[number]
-    edit_button:axPress()
-    -- TODO consolidate with SPal_OpenEdit?
-    tool_window:wait_for_ok_button()
+    SPal_OpenThisEdit(number)
 
     -- * copy overlay
     remove_button = tool_window:get_remove_this_edit_button()
@@ -738,11 +730,7 @@ function SPal_CopyThisEdit(number)
         return
     end
 
-    -- * open edit by number (left to right)
-    local edit_button = tool_window:get_edits_buttons()[number]
-    edit_button:axPress()
-    -- TODO consolidate with SPal_OpenEdit?
-    tool_window:wait_for_ok_button()
+    SPal_OpenThisEdit(number)
 
     -- * copy overlay
     copy_overlay = tool_window:get_copy_this_edit_button()
