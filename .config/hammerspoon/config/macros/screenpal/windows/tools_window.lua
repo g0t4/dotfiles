@@ -88,6 +88,11 @@ function ToolBarWindow:get_edits_buttons()
     -- AXButton: desc:'Shape (2.68 sec)'
     -- AXButton: desc:'Volume (0.32 sec)'
     --   the buttons for current edits/tools have () in description
+    --
+    --   FYI in AppleScript I used:
+    --       return a reference to (every button of my toolbar whose description ends with " sec)")
+    --       use this if you have issues with just ()
+    --
     return vim.iter(self._win:buttons())
         :filter(function(button)
             local description = button:attributeValue("AXDescription")
@@ -107,6 +112,11 @@ end
 ---@return hs.axuielement[]
 function ToolBarWindow:get_volume_edit_buttons()
     return self:get_edit_buttons_by_description("Volume")
+end
+
+function ToolBarWindow:get_copy_overlay_button()
+    -- if needed, organize this with other buttons that show when an "edit" is open
+    return self:get_button_by_description_matching("^Copy overlay")
 end
 
 return ToolBarWindow

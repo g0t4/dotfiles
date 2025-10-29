@@ -648,6 +648,41 @@ function SPal_Click1stEditButtonWith(this_text)
     button:axPress()
 end
 
+function SPal_DuplicateEdit(number)
+    number = number or 1
+
+    -- * assume open edit == the edit to copy
+    local win = get_cached_editor_window()
+    local tool_window = win.windows:get_tool_window()
+    local copy_overlay = tool_window:get_copy_overlay_button()
+    if copy_overlay then
+        copy_overlay:axPress()
+        return
+    end
+
+    -- * open edit by number (left to right)
+    local edit_button = tool_window:get_edits_buttons()[number]
+    edit_button:axPress() -- PRN make tool_window:open_edit(number)
+    tool_window:wait_for_ok_button() -- ? make func like wait_for_edit_to_be_open() ?
+
+    -- * copy overlay
+    copy_overlay = tool_window:get_copy_overlay_button()
+    if copy_overlay then
+        copy_overlay:axPress()
+        return
+    end
+
+    -- 	previously I would click paste overlay after copy finishes (closes toolbar)... let's not add that until I know I need it
+    -- 	delayUntilExists(btnPasteOverlay)
+    -- 	clickIfExists(btnPasteOverlay)
+    -- property btnPasteOverlay : a reference to (first button of my toolbar whose description starts with "Paste Overlay")
+
+    -- FYI others to support in HS macros:
+    -- property btnPreview : a reference to (first button of my toolbar whose description starts with "Preview")
+    -- property btnSeeHelp : a reference to (first button of my toolbar whose description starts with "See a help tutorial for this tool")
+    -- property btnRemoveThisEdit : a reference to (first button of my toolbar whose description starts with "Remove this edit")
+end
+
 function SPal_Timeline_ZoomAndJumpToStart()
     -- FYI using run_async (coroutines under hood) to avoid blocking (i.e. during sleep calls)
     run_async(function()
