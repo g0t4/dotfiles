@@ -16,7 +16,7 @@ function Silence:x_width()
 end
 
 function Silence:x_middle()
-    return self.x_start + (self.x_end - self.x_start) / 2
+    return (self.x_start + self.x_end) / 2
 end
 
 function Silence:x_start_pad_percent(ratio)
