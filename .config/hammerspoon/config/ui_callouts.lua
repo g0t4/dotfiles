@@ -230,16 +230,16 @@ local function show_tooltip_for_element(element, frame)
         ---@param e hs.axuielement
         ---@return string | nil @ nil == ambiguous (no unique ref)
         local function build_ref(e)
+            local role = e:axRole()
+            if role == "AXApplication" then
+                return "app"
+            end
+
             local parent = e:axParent()
             if parent == nil then
                 -- FYI last reproduced using ScreenPal => edit an edit (hover over toolbar buttons like "remove this edit" and this happens)...
                 print("UNEXPECTED... element doesn't have PARENT?! ... aborting build_ref")
                 return "error... element doesn't have a parent"
-            end
-            local role = e:axRole()
-
-            if role == "AXApplication" then
-                return "app"
             end
 
             local siblings = parent:childrenWithRole(role)
