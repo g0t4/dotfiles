@@ -684,7 +684,12 @@ function SPal_OpenThisEdit(number)
     local win = get_cached_editor_window()
     local tool_window = win.windows:get_tool_window()
 
-    -- TODO check if already open first? and if open, then bypass opening?
+    -- * assume open edit == targeted edit
+    if tool_window:get_ok_accept_this_edit_button() then
+        return
+        -- would be unlikely I know what number to open if I have one open already!
+        -- PRN could see a need to step through edit by edit looking for which edit to change.. that can be a special, separate button
+    end
 
     -- * open edit by number (left to right)
     local edit_button = tool_window:get_edits_buttons()[number]
