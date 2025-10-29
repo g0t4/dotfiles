@@ -226,18 +226,27 @@ end
 
 function ScreenPalEditorWindow:zoom1()
     self:ensure_cached_controls()
+    if self:detect_zoom_level() == 1 then
+        return
+    end
     self:zoom_on()
     self._btn_minimum_zoom:performAction("AXPress")
 end
 
 function ScreenPalEditorWindow:zoom2()
     self:ensure_cached_controls()
+    if self:detect_zoom_level() == 2 then
+        return
+    end
     self:zoom_on()
     self._btn_medium_zoom:performAction("AXPress")
 end
 
 function ScreenPalEditorWindow:zoom3()
     self:ensure_cached_controls()
+    if self:detect_zoom_level() == 3 then
+        return
+    end
     self:zoom_on()
     self._btn_maximum_zoom:performAction("AXPress")
 end
