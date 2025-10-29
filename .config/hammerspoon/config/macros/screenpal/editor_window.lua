@@ -3,6 +3,7 @@ require("config.macros.screenpal.co")
 local TimelineController = require('config.macros.screenpal.timeline')
 
 local _200ms = 200000
+local _100ms = 100000
 
 ---@return hs.axuielement app_element
 local function get_screenpal_app_element_or_throw()
@@ -177,11 +178,10 @@ function ScreenPalEditorWindow:zoom_on()
         return
     end
 
-    -- FYI typing m is fastest way to enable zoom (vs click button)
     hs.eventtap.keyStroke({}, "m", 0, get_screenpal_app_element_or_throw())
-
-    -- hs.timer.waitUntil -- TODO try waitUntil!
-    hs.timer.usleep(_200ms)
+    -- FYI only add delay if you have a scenario that's broken, don't prematurely add this
+    -- TODO try waitUntil (see zoom_off example)
+    -- hs.timer.usleep(_100ms)
 end
 
 function ScreenPalEditorWindow:zoom_off()
@@ -189,11 +189,21 @@ function ScreenPalEditorWindow:zoom_off()
         return
     end
 
-    hs.eventtap.keyStroke({}, "m", 0, get_screenpal_app_element_or_throw())
+    -- local win = get_cached_editor_window()
+    -- print("before min", hs.inspect(win._btn_minimum_zoom:axFrame()))
+    -- print("med", hs.inspect(win._btn_minimum_zoom:axFrame()))
+    -- print("max", hs.inspect(win._btn_minimum_zoom:axFrame()))
 
-    hs.timer.usleep(_200ms)
-    -- PRN loop on usleep and poll something useful to tell you when you can be ready to click in the UI
-    -- -- FYI waitUntil is always already 0,0 on first run, so I would need a diff test  to use this
+    hs.eventtap.keyStroke({}, "m", 0, get_screenpal_app_element_or_throw())
+    -- FYI only add delay if you have a scenario that's broken, don't prematurely add this
+
+    -- FYI whenever I check here, it's always 0,0 already... might be b/c zoom is fast... TODO need to find a way to verify if this is a legit test (for when zooming out/in is actually done)
+    -- local win = get_cached_editor_window()
+    -- print("min", hs.inspect(win._btn_minimum_zoom:axFrame()))
+    -- print("med", hs.inspect(win._btn_minimum_zoom:axFrame()))
+    -- print("max", hs.inspect(win._btn_minimum_zoom:axFrame()))
+    --
+    --
     -- print("waitUNTIL")
     -- hs.timer.waitUntil(function()
     --     print("tick")
@@ -205,7 +215,9 @@ function ScreenPalEditorWindow:zoom_off()
     --     return false
     -- end, function()
     --     print("DONE")
-    -- end, 0.05)
+    -- end,
+    --  -- ? would need an overall timeout (max checks or max time) so this doesn't run forever, indefinitely
+    -- 0.05)
 end
 
 function ScreenPalEditorWindow:get_scrollbar_or_throw()
