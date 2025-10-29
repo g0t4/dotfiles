@@ -638,19 +638,7 @@ function SPal_ShowSilenceRegions()
     end)
 end
 
----@param this_text string
-function SPal_Click1stEditButtonWith(this_text)
-    -- opens an existing edit (i.e. mute via volume tool)
-    local win = get_cached_editor_window()
-    local tool_window = win.windows:get_tool_window()
-    local button = tool_window:get_edit_buttons_by_description(this_text)[1]
-    if button == nil then
-        print('FUCK... no "' .. this_text .. '" edits (buttons) to edit')
-        return
-    end
-    button:axPress()
-end
-
+---@param number integer - button # left to right
 function SPal_OpenThisEdit(number)
     number = number or 1
     local win = get_cached_editor_window()
@@ -710,6 +698,7 @@ function SPal_CopyThisEdit(number)
 
     -- FYI AFAICT copy only applies to Overlay edits - shapes, arrows, images,
     --   should I ignore other edits when indexing (number)?
+    --   careful, open has to operate on all button positions
 
     SPal_OpenThisEdit(number)
 
