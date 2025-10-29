@@ -165,10 +165,15 @@ function act_on_silence(win, silence, action)
                 -- 3:6 ratio zoom2:zoom3
                 scaled_pixel_width = 2 * scaled_pixel_width
             end
-            -- print("scaled_pixel_width: " .. tostring(scaled_pixel_width) .. ", zoom2: " .. tostring(pixel_width_at_zoom2))
             timeline_relative_x_start = silence.x_start + scaled_pixel_width
             timeline_relative_x_end = silence.x_end - scaled_pixel_width
-            -- TODO don't go beyond bounds of original silence period :) b/c it will happily set start/end either way (flips it but still works, in fact it expands it)
+            -- print("scaled_pixel_width=" .. tostring(scaled_pixel_width))
+            -- print(" new_x_start=" .. tostring(timeline_relative_x_start) .. " new_x_end=" .. tostring(timeline_relative_x_end))
+            if timeline_relative_x_start >= timeline_relative_x_end then
+                print("CUT padding wipes out entire cut range, aborting...!")
+                -- FYI inverted start/end would've selected the wrong range! spal is forgiving about start/end marking (if no start then e starts, and s can end even if after set end!)
+                return
+            end
         end
     end
 
