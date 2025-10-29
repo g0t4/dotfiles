@@ -292,7 +292,7 @@ function ScreenPalEditorWindow:reopen_project()
     run_async(function()
         local win = get_cached_editor_window()
         local was_zoomed = win:is_zoomed()
-        local zoom_level = self:timeline_controller():zoom_level()
+        local original_zoom_level = self:timeline_controller():zoom_level()
 
         self:zoom_off()
 
@@ -336,7 +336,7 @@ function ScreenPalEditorWindow:reopen_project()
         self:timeline_controller():move_playhead_to_position_percent(playhead_percent)
 
         -- * restore zoom level
-        self:set_zoom_level(zoom_level)
+        self:set_zoom_level(original_zoom_level)
 
         -- after reopen previous cached window is always invalid, no noticeable hit to refresh for that here!
         self:force_refresh_cached_controls()
@@ -433,15 +433,14 @@ function ScreenPalEditorWindow:zoom_out()
     self:set_zoom_level(current_level - 1)
 end
 
----@return integer? level -- 1,2,3 or nil if not found
+---@return integer? level -- 0(not zoomed),1,2,3 or nil(failure)
 function ScreenPalEditorWindow:detect_zoom_level()
-    -- TODO rewrite so 0 == unzoomed/disabled? instead of nil?
     local Timer = require("config.macros.screenpal.experiments.timer")
     local timer = Timer.new()
 
     if not self:is_zoomed() then
         print("zoom not active - cannot detect zoom level")
-        return nil
+        return 0
     end
     timer:capture("is_zoomed")
 

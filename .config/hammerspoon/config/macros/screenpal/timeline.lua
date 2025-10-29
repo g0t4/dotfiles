@@ -112,7 +112,6 @@ end
 ---@return number?
 function TimelineController:zoom_level()
     if not self._zoom_level and self.__editor_window then
-        -- TODO rewrite for 0 to be zoom disabled (instead of nil)... fixes caching issue when not zoomed
         self._zoom_level = self.__editor_window:detect_zoom_level()
     end
     return self._zoom_level
@@ -188,7 +187,7 @@ local function _move_playhead_to_screen_x(self, playhead_screen_x)
 
     local frame_left, frame_right = self:calculate_frame_bounds(intended_x, known_frame_x)
 
-    local not_zoomed = self:zoom_level() ~= nil
+    local not_zoomed = self:zoom_level() ~= nil -- TODO WTF is this supposed to be not zoomed or zoomed? b/c right now it is using zoomed but named not_zoomed?!
     if not_zoomed and frame_left == intended_x then
         -- let's add 1 to be certain we land on frame_left_of_intended
         playhead_screen_x = playhead_screen_x + 1
