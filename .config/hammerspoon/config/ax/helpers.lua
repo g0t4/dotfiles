@@ -123,12 +123,23 @@ axuielemMT.button = function(self, index)
     return self:buttons()[index]
 end
 --- Returns FIRST with matching description, NOT ALL!
----@param desc string
+---@param exact_description string
 ---@return hs.axuielement
-function axuielemMT.button_by_description(self, desc)
+function axuielemMT.button_by_description(self, exact_description)
     return vim.iter(self:buttons())
         :find(function(button)
-            return button:axDescription() == desc
+            return button:axDescription() == exact_description
+        end)
+end
+--- Returns FIRST with matching description, NOT ALL!
+---@param pattern string
+---@return hs.axuielement
+function axuielemMT.button_by_description_matching(self, pattern)
+    -- ? refactor to shared button_by loop that takes predicate
+    -- ? rename first_button_by_description_matching?
+    return vim.iter(self:buttons())
+        :find(function(button)
+            return string.find(button:axDescription(), pattern)
         end)
 end
 

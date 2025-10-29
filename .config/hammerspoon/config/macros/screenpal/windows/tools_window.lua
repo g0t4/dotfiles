@@ -31,16 +31,22 @@ function ToolBarWindow:find_my_window()
     return win
 end
 
----@param description string
+---@param exact_match string
 ---@return hs.axuielement | nil
-function ToolBarWindow:get_button_by_description(description)
+function ToolBarWindow:get_button_by_description(exact_match)
+    return self:get_button_by_description_matching("^" .. exact_match .. "$")
+end
+
+---@param lua_pattern string
+---@return hs.axuielement | nil
+function ToolBarWindow:get_button_by_description_matching(lua_pattern)
     local win = self:find_my_window()
     if not win then return end
 
-    -- takes <3ms to find the button, that's fine for now, let's not cache controls
-    local button = win:button_by_description(description)
+    -- -- takes <3ms to find the button, that's fine for now, let's not cache controls
+    local button = win:button_by_description_matching(lua_pattern)
     if button and not button:isValid() then
-        print("WARNING: Button '" .. description .. "' is not valid, unexpectedly... " .. hs.inspect(button))
+        print("WARNING: Button matching pattern '" .. lua_pattern .. "' is not valid, unexpectedly... " .. hs.inspect(button))
         -- IIAC this would only happen if an OLD window was still valid that had an invalid button
         -- that does not seem likely, instead I would assume only the most recent window reference is valid
         -- ** DO NOT put this code into every element lookup, unless this happens with OK
