@@ -381,13 +381,11 @@ function ScreenPalEditorWindow:toggle_AXEnhancedUserInterface()
     end
 end
 
----@param level integer|nil -- 1, 2, 3
+---@param level integer|nil -- 0, 1, 2, 3 -- nil|0 means disable zoom
 function ScreenPalEditorWindow:set_zoom_level(level)
-    if level == nil then
-        return
-    end
-
-    if level == 1 then
+    if level == nil or level == 0 then
+        self:zoom_off()
+    elseif level == 1 then
         self:zoom1()
     elseif level == 2 then
         self:zoom2()
@@ -396,6 +394,22 @@ function ScreenPalEditorWindow:set_zoom_level(level)
     else
         print("Invalid zoom level " .. tostring(level))
     end
+end
+
+function ScreenPalEditorWindow:zoom_in()
+    local current_level = self:detect_zoom_level() or 0
+    if current_level >= 3 then
+        return
+    end
+    self:set_zoom_level(current_level + 1)
+end
+
+function ScreenPalEditorWindow:zoom_out()
+    local current_level = self:detect_zoom_level() or 0
+    if current_level <= 0 then
+        return
+    end
+    self:set_zoom_level(current_level - 1)
 end
 
 ---@return integer? level -- 1,2,3 or nil if not found

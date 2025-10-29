@@ -683,6 +683,16 @@ function SPal_SetZoomLevel(level)
     win:set_zoom_level(level)
 end
 
+function SPal_ZoomIn()
+    local win = get_cached_editor_window()
+    win:zoom_in()
+end
+
+function SPal_ZoomOut()
+    local win = get_cached_editor_window()
+    win:zoom_out()
+end
+
 function SPal_CopyPlayheadTimeText()
     local win = get_cached_editor_window()
     local _, time_string = win:get_current_time()
