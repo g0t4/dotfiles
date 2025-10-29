@@ -114,9 +114,18 @@ function ToolBarWindow:get_volume_edit_buttons()
     return self:get_edit_buttons_by_description("Volume")
 end
 
-function ToolBarWindow:get_copy_overlay_button()
-    -- if needed, organize this with other buttons that show when an "edit" is open
+-- * buttons for edit actions
+function ToolBarWindow:get_remove_this_edit_button()
+    return self:get_button_by_description_matching("^Remove this edit")
+end
+function ToolBarWindow:get_copy_this_edit_button()
     return self:get_button_by_description_matching("^Copy overlay")
+end
+function ToolBarWindow:get_preview_this_edit_button()
+    return self:get_button_by_description_matching("^Preview this edit")
+end
+function ToolBarWindow:get_ok_accept_this_edit_button()
+    return self:get_button_by_description_matching("^Accept this edit")
 end
 
 return ToolBarWindow

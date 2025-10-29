@@ -649,15 +649,49 @@ function SPal_Click1stEditButtonWith(this_text)
 end
 
 function SPal_PreviewEdit(number)
+    number = number or 1
     -- TODO?
 end
 
 function SPal_OpenEdit(number)
-    -- TODO?
+    number = number or 1
+    local win = get_cached_editor_window()
+    local tool_window = win.windows:get_tool_window()
+
+    -- TODO check if already open first? and if open, then bypass opening?
+
+    -- * open edit by number (left to right)
+    local edit_button = tool_window:get_edits_buttons()[number]
+    edit_button:axPress() -- PRN make tool_window:open_edit(number)
+    tool_window:wait_for_ok_button() -- ? make func like wait_for_edit_to_be_open() ?
 end
 
 function SPal_RemoveEdit(number)
-    -- TODO?
+    number = number or 1
+
+    -- * assume open edit == the edit to remove
+    local win = get_cached_editor_window()
+    local tool_window = win.windows:get_tool_window()
+    local remove_button = tool_window:get_remove_this_edit_button()
+    if remove_button then
+        remove_button:axPress()
+        tool_window:wait_for_tools_button()
+        return
+    end
+
+    -- * open edit by number (left to right)
+    local edit_button = tool_window:get_edits_buttons()[number]
+    edit_button:axPress()
+    -- TODO consolidate with SPal_OpenEdit?
+    tool_window:wait_for_ok_button()
+
+    -- * copy overlay
+    remove_button = tool_window:get_remove_this_edit_button()
+    if remove_button then
+        remove_button:axPress()
+        tool_window:wait_for_tools_button()
+        return
+    end
 end
 
 function SPal_DuplicateEdit(number)
@@ -675,8 +709,9 @@ function SPal_DuplicateEdit(number)
 
     -- * open edit by number (left to right)
     local edit_button = tool_window:get_edits_buttons()[number]
-    edit_button:axPress() -- PRN make tool_window:open_edit(number)
-    tool_window:wait_for_ok_button() -- ? make func like wait_for_edit_to_be_open() ?
+    edit_button:axPress()
+    -- TODO consolidate with SPal_OpenEdit?
+    tool_window:wait_for_ok_button()
 
     -- * copy overlay
     copy_overlay = tool_window:get_copy_overlay_button()
@@ -687,14 +722,9 @@ function SPal_DuplicateEdit(number)
     end
 
     -- 	previously I would click paste overlay after copy finishes (closes toolbar)... let's not add that until I know I need it
+    --  property btnPasteOverlay : a reference to (first button of my toolbar whose description starts with "Paste Overlay")
     -- 	delayUntilExists(btnPasteOverlay)
     -- 	clickIfExists(btnPasteOverlay)
-    -- property btnPasteOverlay : a reference to (first button of my toolbar whose description starts with "Paste Overlay")
-
-    -- FYI others to support in HS macros:
-    -- property btnPreview : a reference to (first button of my toolbar whose description starts with "Preview")
-    -- property btnSeeHelp : a reference to (first button of my toolbar whose description starts with "See a help tutorial for this tool")
-    -- property btnRemoveThisEdit : a reference to (first button of my toolbar whose description starts with "Remove this edit")
 end
 
 function SPal_Timeline_ZoomAndJumpToStart()
