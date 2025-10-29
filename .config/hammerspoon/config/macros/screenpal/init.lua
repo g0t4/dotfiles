@@ -696,7 +696,7 @@ end
 function SPal_CopyThisEdit(number)
     number = number or 1
 
-    -- FYI AFAICT copy only applies to Overlay edits - shapes, arrows, images,
+    -- FYI AFAICT "Copy overlay" only applies to Overlay edits (shapes, arrows, images, ...)
     --   should I ignore other edits when indexing (number)?
     --   careful, open has to operate on all button positions
 
