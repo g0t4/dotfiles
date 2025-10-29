@@ -275,6 +275,16 @@ local function move_playhead_to_silence(win, silence)
     timeline:move_playhead_to(timeline_relative_x)
 end
 
+function SPal_JumpToMiddleOfSilence()
+    run_async(function()
+        ---@type ScreenPalEditorWindow, SilencesController
+        local win, silences = syncify(detect_silences)
+        local silence = silences:get_this_silence()
+        local timeline = win:timeline_controller()
+        timeline:move_playhead_to(silence:x_middle())
+    end)
+end
+
 function SPal_JumpThisSilence()
     -- FYI! don't forget you added keymap Ctrl+Shift+left/right to jump silences
     --   habituate using this instead of jumping one second at a time and then when close arrowing around to get to silence
