@@ -669,6 +669,7 @@ function SPal_DuplicateEdit(number)
     local copy_overlay = tool_window:get_copy_overlay_button()
     if copy_overlay then
         copy_overlay:axPress()
+        tool_window:wait_for_tools_button()
         return
     end
 
@@ -681,6 +682,7 @@ function SPal_DuplicateEdit(number)
     copy_overlay = tool_window:get_copy_overlay_button()
     if copy_overlay then
         copy_overlay:axPress()
+        tool_window:wait_for_tools_button()
         return
     end
 
