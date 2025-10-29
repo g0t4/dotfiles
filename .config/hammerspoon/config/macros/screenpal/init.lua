@@ -651,24 +651,6 @@ function SPal_Click1stEditButtonWith(this_text)
     button:axPress()
 end
 
-function SPal_PreviewThisEdit(number)
-    number = number or 1
-
-    SPal_OpenThisEdit(number)
-
-    -- * assume open edit == the edit to preview
-    local win = get_cached_editor_window()
-    local tool_window = win.windows:get_tool_window()
-
-    -- * click preview
-    local preview_button = tool_window:get_preview_this_edit_button()
-    if preview_button then
-        preview_button:axPress()
-        tool_window:wait_for_tools_button()
-        return
-    end
-end
-
 function SPal_OpenThisEdit(number)
     number = number or 1
     local win = get_cached_editor_window()
@@ -685,6 +667,24 @@ function SPal_OpenThisEdit(number)
     local edit_button = tool_window:get_edits_buttons()[number]
     edit_button:axPress() -- PRN make tool_window:open_edit(number)
     tool_window:wait_for_ok_button() -- ? make func like wait_for_edit_to_be_open() ?
+end
+
+function SPal_PreviewThisEdit(number)
+    number = number or 1
+
+    SPal_OpenThisEdit(number)
+
+    -- * assume open edit == the edit to preview
+    local win = get_cached_editor_window()
+    local tool_window = win.windows:get_tool_window()
+
+    -- * click preview
+    local preview_button = tool_window:get_preview_this_edit_button()
+    if preview_button then
+        preview_button:axPress()
+        tool_window:wait_for_tools_button()
+        return
+    end
 end
 
 function SPal_RemoveThisEdit(number)
