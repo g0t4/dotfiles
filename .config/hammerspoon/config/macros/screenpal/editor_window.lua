@@ -163,10 +163,12 @@ function ScreenPalEditorWindow:ensure_playing(is_tool_open)
     end
 end
 
+---@return boolean|nil - nil means failure
 function ScreenPalEditorWindow:is_zoomed()
     self:ensure_cached_controls()
     if not self._btn_minimum_zoom then
         error("No zoom button found, aborting...")
+        return nil
     end
     -- AXPosition == 0,0 ==> not zoomed
     local position = self._btn_minimum_zoom:axPosition()
@@ -291,7 +293,6 @@ end
 function ScreenPalEditorWindow:reopen_project()
     run_async(function()
         local win = get_cached_editor_window()
-        local was_zoomed = win:is_zoomed()
         local original_zoom_level = self:timeline_controller():zoom_level()
 
         self:zoom_off()
@@ -439,8 +440,7 @@ function ScreenPalEditorWindow:detect_zoom_level()
     local timer = Timer.new()
 
     if not self:is_zoomed() then
-        print("zoom not active - cannot detect zoom level")
-        return 0
+        return 0 -- 0 means NOT zoomed!
     end
     timer:capture("is_zoomed")
 
