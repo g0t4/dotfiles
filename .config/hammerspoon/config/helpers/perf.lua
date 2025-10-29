@@ -33,6 +33,10 @@ function get_elapsed_time_in_nanoseconds(start_time)
 end
 
 function print_took(message, start_time)
+    print_took_in_milliseconds(message, start_time)
+end
+
+function print_took_in_milliseconds(message, start_time)
     local elapsed_time_milliseconds = get_elapsed_time_in_milliseconds(start_time)
     print(message .. " took " .. elapsed_time_milliseconds .. " ms")
 end
