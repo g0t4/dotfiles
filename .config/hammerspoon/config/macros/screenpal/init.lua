@@ -708,6 +708,9 @@ end
 function SPal_CopyThisEdit(number)
     number = number or 1
 
+    -- FYI AFAICT copy only applies to Overlay edits - shapes, arrows, images,
+    --   should I ignore other edits when indexing (number)?
+
     -- * assume open edit == the edit to copy
     local win = get_cached_editor_window()
     local tool_window = win.windows:get_tool_window()
