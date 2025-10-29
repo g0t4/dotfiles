@@ -678,6 +678,11 @@ function SPal_Timeline_ZoomAndJumpToEnd()
     end)
 end
 
+function SPal_SetZoomLevel(level)
+    local win = get_cached_editor_window()
+    win:set_zoom_level(level)
+end
+
 function SPal_CopyPlayheadTimeText()
     local win = get_cached_editor_window()
     local _, time_string = win:get_current_time()
