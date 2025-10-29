@@ -119,8 +119,8 @@ _G.CUT_20 = 'CUT_20' -- consider in this case starting preview always?
 _G.CUT_20_OK = 'CUT_20_OK'
 _G.CUT_30 = 'CUT_30'
 _G.CUT_30_OK = 'CUT_30_OK'
-_G.MUTE_RIGHT = 'MUTE_RIGHT'
-_G.MUTE_INWARD = 'MUTE_INWARD'
+_G.MUTE_RIGHT = 'MUTE_RIGHT' -- _OK too
+_G.MUTE_INWARD = 'MUTE_INWARD' -- _OK too
 
 ---@param win ScreenPalEditorWindow
 ---@param silence? Silence
@@ -134,6 +134,8 @@ function act_on_silence(win, silence, action)
     end
     local original_mouse_pos = hs.mouse.absolutePosition() -- first one can be expensive 100ms, cheap (0 to 1ms max) thereafter
 
+    print("act_on_silence: '" .. tostring(action) .. "' on '" .. hs.inspect(silence) .. "'")
+
     -- perhaps add more params to act_on_silence?
     local is_cut = action:find("CUT_") -- keep trailing _ so it is easier to search for CUT_
     local is_mute = action:find("MUTE")
@@ -146,7 +148,7 @@ function act_on_silence(win, silence, action)
     -- * calculate padding
     local timeline_relative_x_start = silence.x_start
     local timeline_relative_x_end = silence.x_end -- - 10
-    local START_SILENCE_X_START = 1
+    local START_SILENCE_X_START = 1 -- treat silence as starting silence IF it starts before this threshold (pixels)
     if silence.x_start > START_SILENCE_X_START then
         if is_cut then
             local pixel_width = action:match("CUT_(%d*)%.*")
@@ -184,7 +186,7 @@ function act_on_silence(win, silence, action)
     -- * set tool start
     timeline:move_playhead_to(timeline_relative_x_start)
 
-    -- * start tool
+    -- * activate tool
     local start_tool_key = ''
     if is_cut then
         start_tool_key = 'c'
@@ -194,6 +196,7 @@ function act_on_silence(win, silence, action)
     hs.eventtap.keyStroke({}, start_tool_key, 0, win.app)
     win.windows:get_tool_window():wait_for_cancel_or_ok_button()
 
+    -- * set tool start
     hs.eventtap.keyStroke({}, "s", 0, win.app)
     -- PRN could wait for time_string to change and/or OK to show (if cancel was first) but neither of these are slam dunk... fine with 100ms here too
     hs.timer.usleep(_100ms)
