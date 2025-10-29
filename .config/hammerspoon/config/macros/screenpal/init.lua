@@ -657,17 +657,11 @@ function SPal_PreviewThisEdit(number)
     -- * assume open edit == the edit to preview
     local win = get_cached_editor_window()
     local tool_window = win.windows:get_tool_window()
-    local preview_button = tool_window:get_preview_this_edit_button()
-    if preview_button then
-        preview_button:axPress()
-        tool_window:wait_for_tools_button()
-        return
-    end
 
     SPal_OpenThisEdit(number)
 
-    -- * copy overlay
-    preview_button = tool_window:get_preview_this_edit_button()
+    -- * click preview
+    local preview_button = tool_window:get_preview_this_edit_button()
     if preview_button then
         preview_button:axPress()
         tool_window:wait_for_tools_button()
@@ -699,17 +693,11 @@ function SPal_RemoveThisEdit(number)
     -- * assume open edit == the edit to remove
     local win = get_cached_editor_window()
     local tool_window = win.windows:get_tool_window()
-    local remove_button = tool_window:get_remove_this_edit_button()
-    if remove_button then
-        remove_button:axPress()
-        tool_window:wait_for_tools_button()
-        return
-    end
 
     SPal_OpenThisEdit(number)
 
-    -- * copy overlay
-    remove_button = tool_window:get_remove_this_edit_button()
+    -- * click copy overlay
+    local remove_button = tool_window:get_remove_this_edit_button()
     if remove_button then
         remove_button:axPress()
         tool_window:wait_for_tools_button()
@@ -723,17 +711,11 @@ function SPal_CopyThisEdit(number)
     -- * assume open edit == the edit to copy
     local win = get_cached_editor_window()
     local tool_window = win.windows:get_tool_window()
-    local copy_overlay = tool_window:get_copy_this_edit_button()
-    if copy_overlay then
-        copy_overlay:axPress()
-        tool_window:wait_for_tools_button()
-        return
-    end
 
     SPal_OpenThisEdit(number)
 
-    -- * copy overlay
-    copy_overlay = tool_window:get_copy_this_edit_button()
+    -- * click copy overlay
+    local copy_overlay = tool_window:get_copy_this_edit_button()
     if copy_overlay then
         copy_overlay:axPress()
         tool_window:wait_for_tools_button()
