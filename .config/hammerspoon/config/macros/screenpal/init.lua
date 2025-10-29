@@ -693,6 +693,11 @@ function SPal_ZoomOut()
     win:zoom_out()
 end
 
+function SPal_ToggleFrameZoom()
+    local win = get_cached_editor_window()
+    win:toggle_frame_zoom()
+end
+
 function SPal_CopyPlayheadTimeText()
     local win = get_cached_editor_window()
     local _, time_string = win:get_current_time()

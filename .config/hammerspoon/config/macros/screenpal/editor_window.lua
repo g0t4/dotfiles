@@ -62,6 +62,7 @@ function ScreenPalEditorWindow:force_refresh_cached_controls()
     self._btn_maximum_zoom = nil
     self._btn_medium_zoom = nil
     self._btn_minimum_zoom = nil
+    self._btn_frame_zoom_preview = nil
     self._btn_position_slider = nil
     self._btn_toggle_magnify = nil
     self._btn_play_or_pause = nil
@@ -85,6 +86,9 @@ function ScreenPalEditorWindow:force_refresh_cached_controls()
                         return
                     elseif description == "Maximum Zoom" then
                         self._btn_maximum_zoom = ui_elem
+                        return
+                    elseif description == "Zoom Preview" then
+                        self._btn_frame_zoom_preview = ui_elem
                         return
                     elseif description == "Toggle Magnify" then
                         self._btn_toggle_magnify = ui_elem
@@ -249,6 +253,11 @@ function ScreenPalEditorWindow:zoom3()
     end
     self:zoom_on()
     self._btn_maximum_zoom:performAction("AXPress")
+end
+
+function ScreenPalEditorWindow:toggle_frame_zoom()
+    self:ensure_cached_controls()
+    self._btn_frame_zoom_preview:performAction("AXPress")
 end
 
 function ScreenPalEditorWindow:cache_project_view_controls()
