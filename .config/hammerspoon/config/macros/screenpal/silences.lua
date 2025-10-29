@@ -50,7 +50,7 @@ function Tool:x_width()
 end
 
 function Tool:x_middle()
-    return self.x_start + self:x_width() / 2
+    return (self.x_start + self.x_end) / 2
 end
 
 -- *** SilencesController ***
