@@ -648,7 +648,7 @@ function SPal_Click1stEditButtonWith(this_text)
     button:axPress()
 end
 
-function SPal_PreviewEdit(number)
+function SPal_PreviewThisEdit(number)
     number = number or 1
 
     -- * assume open edit == the edit to preview
@@ -676,7 +676,7 @@ function SPal_PreviewEdit(number)
     end
 end
 
-function SPal_OpenEdit(number)
+function SPal_OpenThisEdit(number)
     number = number or 1
     local win = get_cached_editor_window()
     local tool_window = win.windows:get_tool_window()
@@ -689,7 +689,7 @@ function SPal_OpenEdit(number)
     tool_window:wait_for_ok_button() -- ? make func like wait_for_edit_to_be_open() ?
 end
 
-function SPal_RemoveEdit(number)
+function SPal_RemoveThisEdit(number)
     number = number or 1
 
     -- * assume open edit == the edit to remove
@@ -717,7 +717,7 @@ function SPal_RemoveEdit(number)
     end
 end
 
-function SPal_DuplicateEdit(number)
+function SPal_CopyThisEdit(number)
     number = number or 1
 
     -- * assume open edit == the edit to copy
