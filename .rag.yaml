@@ -13,7 +13,7 @@ include:
   # - yaml # not many, yet?
 ignores:
   - "notes/"
-all_languages:
+global_languages:
   - lua
   - py
   - fish
