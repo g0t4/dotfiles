@@ -63,7 +63,7 @@ function video_editing_extract_most_scene_change_thumbnails() {
     # NOTE: prefix with echo to test changes - you won't see double quote escaping even though it is there
     ffmpeg \
       -i "$clip" \
-      -vf "select='if(eq(n,0),1,gte(scene,${scene_threshold}))',drawtext=text='%{pts\:hms}':fontsize=60" \
+      -vf "select='if(eq(n,0),1,gte(scene,${scene_threshold}))',drawtext=text='%{pts\:hms}':fontsize=60:x=w-tw-10:y=h-th-10" \
       -vsync vfr \
       "${_scenes_dir}/${clip}-%d.png"
     # TODO - any updates to drawtext to allow timecode to go onto filename?
