@@ -1,4 +1,11 @@
 {
-  "venvPath": ".",
-  "venv": ".venv"
+    "venvPath": ".",
+    "venv": ".venv",
+
+    // enforce convention of using underscore prefix as private
+    // goal: simplify identifying private members in Python modules without Shift+F12
+    // - that said, flagging usages is not necessary for my goal, so remove these if they're distracting
+    // - i.e. I still intend to use private members in some test cases
+    "reportPrivateUsage": "information",
+    "reportPrivateImportUsage": "information",
 }
