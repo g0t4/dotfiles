@@ -212,7 +212,8 @@ abbr fdtp 'fd --type pipe'
 abbr fdts 'fd --type socket'
 abbr fdtx 'fd --type executable'
 
-abbr list_filetype_extensions 'fd | path extension | sort | uniq -c | sort'
+# skip directories (--type file)
+abbr list_filetype_extensions 'fd --type file | path extension | sort | uniq -c | sort'
 
 # *** default args
 if status is-interactive
