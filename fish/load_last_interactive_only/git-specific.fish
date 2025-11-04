@@ -112,9 +112,13 @@ abbr ggsup 'git branch --set-upstream-to=origin/$(git_current_branch)'
 
 # * diff
 # FYI no way to tab complete --command git so just leave it top level for complettion's sake
-abbr -- delta_side_by_side "git -c delta.side-by-side=true"
-abbr -- delta_unified "git -c delta.side-by-side=false"
-abbr -- delta_no_line_numbers "git -c delta.line-numbers=false"
+# TODO submit a PR w/ a fix for completions of --position=anywhere and --command abbrs?
+# FYI I put git on front so I can jump to git in my commandline and type copy<TAB> and bam it completes
+# or del<TAB> and it goes
+abbr -- git_delta_copyable "git -c delta.side-by-side=false -c delta.line-numbers=false"
+abbr -- git_delta_side_by_side "git -c delta.side-by-side=true"
+abbr -- git_delta_unified "git -c delta.side-by-side=false"
+abbr -- git_delta_no_line_numbers "git -c delta.line-numbers=false"
 #
 abbr gdlc "git log --patch HEAD~1..HEAD"
 abbr gdlcu "git -c delta.side-by-side=false log --patch HEAD~1..HEAD"
