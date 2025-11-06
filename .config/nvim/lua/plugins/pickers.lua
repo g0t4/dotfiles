@@ -245,8 +245,24 @@ return {
                         n = {
                             -- also map Ctrl-c to close in normal mode, that way it matches the default <C-c> in insert mode
                             ["<C-c>"] = require("telescope.actions").close,
+                            ["p"] = function()
+                                -- fix p to paste in telescope picker, not sure why but it doesn't paste OOB
+                                local clip = vim.fn.getreg('+') -- assumes clipboard=unnamedplus
+                                vim.api.nvim_put({ clip }, 'c', true, true)
+                            end,
+                            ["yy"] = function(prompt_bufnr)
+                                -- FYI "yy" has been workng all along, it was "p" (see above) that is missing for pasting into telescope picker
+                                -- override copy line to NOT copy prompt prefix in telescope picker (IIRC the prefix is picker specific, so need to lookup the value)
+                                local state = require("telescope.actions.state")
+                                local picker = state.get_current_picker(prompt_bufnr)
+                                local prefix = picker.prompt_prefix -- i.e. "> " in my semantic grep picker
+                                local line = vim.api.nvim_get_current_line()
+                                if prefix then
+                                    line = line:gsub("^" .. vim.pesc(prefix), "")
+                                end
+                                vim.fn.setreg("+", line) -- b/c I use clipboard=unnamedplus, technically I should do this based on value of clipboard? or is there another API I could use?
+                            end
                         }
-
                     },
                     cache_picker = {
                         num_pickers = 10, -- default 1
