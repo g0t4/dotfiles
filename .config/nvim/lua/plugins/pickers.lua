@@ -1,3 +1,5 @@
+local clippy = require('helpers.clippy')
+
 local function telescope_resume(num)
     return {
         '<leader>tr' .. num,
@@ -247,7 +249,7 @@ return {
                             ["<C-c>"] = require("telescope.actions").close,
                             ["p"] = function()
                                 -- fix p to paste in telescope picker, not sure why but it doesn't paste OOB
-                                local clip = vim.fn.getreg('+') -- assumes clipboard=unnamedplus
+                                local clip = clippy.get_clipboard()
                                 vim.api.nvim_put({ clip }, 'c', true, true)
                             end,
                             ["yy"] = function(prompt_bufnr)
@@ -260,7 +262,7 @@ return {
                                 if prefix then
                                     line = line:gsub("^" .. vim.pesc(prefix), "")
                                 end
-                                vim.fn.setreg("+", line) -- b/c I use clipboard=unnamedplus, technically I should do this based on value of clipboard? or is there another API I could use?
+                                clippy.set_clipboard(line)
                             end
                         }
                     },
