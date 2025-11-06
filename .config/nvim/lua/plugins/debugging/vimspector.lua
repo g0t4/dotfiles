@@ -1,12 +1,8 @@
-local use_vimspector = true
-if not use_vimspector then
-    return {}
-end
-
 return {
 
     {
         'puremourning/vimspector',
+        enabled = false, -- comment out to enable it next time you wanna use it, for now disable it
         config = function()
             -- articles to read/try:
             -- - https://puremourning.github.io/vimspector-web/demo-setup.html
