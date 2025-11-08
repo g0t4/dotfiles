@@ -189,7 +189,7 @@ end, {
     end,
 })
 
-function werkspaces_close_tmp_windows_to_not_reopen_them()
+function close_temp_windows_so_they_do_not_reopen()
     -- TODO! close buffers for "list:///location" [Not edited] --No lines in buffer--
     --  IIRC this is opened by coc references (etc)
     --  see :buffers to find it on restarts (sometimes)
@@ -286,7 +286,7 @@ function setup_werkspace()
             if exists(":NvimTreeClose")
                 NvimTreeClose
             endif
-            lua werkspaces_close_tmp_windows_to_not_reopen_them()
+            lua close_temp_windows_so_they_do_not_reopen()
 
             call SaveSession()
         endfunction
