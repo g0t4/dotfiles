@@ -199,10 +199,8 @@ function werkspaces_close_tmp_windows_to_not_reopen_them()
         local buf_name = vim.api.nvim_buf_get_name(buf)
         if
             buf_name:match('coc%-nvim%.log') or
-            -- output:// include coc windows from :CocCommand workspace.showOutput
-            buf_name:match('output:///') or
-            -- close git commit windows on quit (so they don't reopen on next run)
-            buf_name:match('COMMIT_EDITMSG')
+            buf_name:match('output:///') or -- output:// include coc windows from :CocCommand workspace.showOutput
+            buf_name:match('COMMIT_EDITMSG') -- close git commit windows on quit (so they don't reopen on next run)
         then
             -- TODO if its the last window, then open a new tab first? cannot close last window
             vim.api.nvim_win_close(win, true)
