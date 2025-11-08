@@ -14,6 +14,7 @@ function werkspaces_close_tmp_windows_to_not_reopen_them()
             vim.api.nvim_win_close(win, true)
         end
 
+        -- TODO if its the last window, then open a new tab first? cannot close last window
         -- close git commit windows on quit (so they don't reopen on next run)
         if buf_name:match('COMMIT_EDITMSG') then
             vim.api.nvim_win_close(win, true)
