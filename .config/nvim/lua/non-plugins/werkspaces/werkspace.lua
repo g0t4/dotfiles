@@ -253,7 +253,7 @@ function setup_werkspace()
             " open any files passed to nvim, after loading session, mimic vscode behavior
             if len(files_before_load) > 0
                 for file in files_before_load
-                    execute "edit" file
+                    execute "tabnew" file
                 endfor
             endif
 
