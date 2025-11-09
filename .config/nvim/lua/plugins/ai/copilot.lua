@@ -342,7 +342,7 @@ end
 --   TODO find issue, for now use F18? see if F18 is stable
 vim.keymap.set({ 'n', 'i', 'v' }, '<F18>', function() SwitchCopilot() end, { noremap = true, silent = true })
 --
-vim.keymap.set({ 'n', 'i', 'v' }, '<F16>', function() require('ask-openai.api').toggle_verbose_logs() end, { noremap = true, silent = true })
+vim.keymap.set({ 'n', 'i', 'v' }, '<F16>', function() require('ask-openai.api').cycle_log_verbosity() end, { noremap = true, silent = true })
 vim.keymap.set({ 'n', 'i', 'v' }, '<F17>', function() require('ask-openai.api').toggle_rag() end, { noremap = true, silent = true })
 
 function IsAskOpenAIPredictionsAvailable()
