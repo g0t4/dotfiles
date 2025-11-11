@@ -4,7 +4,6 @@ import textwrap
 
 from services import args_to_use, Service
 
-
 def generate_command(passed_context: str, use: Service):
 
     client = OpenAI(api_key=use.api_key, base_url=use.base_url)
@@ -57,7 +56,6 @@ def main():
 
     # response is piped to STDOUT => STDIN of SHELL => command line buffer (as if user typed it)
     print(command)
-
 
 if __name__ == "__main__":
     main()

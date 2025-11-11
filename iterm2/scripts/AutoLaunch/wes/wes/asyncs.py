@@ -21,7 +21,7 @@ async def ask_openai_async_type_response(session, messages):
         response_stream = await client.chat.completions.create(
             model=use.model,
             messages=messages,
-            max_tokens=200,
+            max_tokens=2000,  # TODO pass as another arg to ask_use_*
             # TODO temperature?
             stream=True)
     except Exception as e:
@@ -31,23 +31,60 @@ async def ask_openai_async_type_response(session, messages):
         return
 
     # *** stream the reponse chunks
-    # TODO write some tests for sanitizing and use a seam here
-
-    # ! TODO... what actually differs here vs OpenAI...  can I just merge this logic into one handler, is it a diff field in response or?
     first_chunk = True
     async for chunk in response_stream:
         try:
-
             if not chunk.choices \
                 or len(chunk.choices) == 0 \
-                or chunk.choices[0].delta is None \
-                or chunk.choices[0].delta.content is None:
+                or not chunk.choices[0].delta:
+
+                # * reasoning example (llama-server)
+                # choices=[(
+                #     delta=(
+                #          content=None,
+                #          function_call=None,
+                #          refusal=None,
+                #          role=None,
+                #          tool_calls=None,
+                #          reasoning_content="'"
+                #     ),
+                #     finish_reason=None,
+                # )],
+                log(f"no chunk choices/delta: {chunk}")
+                continue
+
+            choice0 = chunk.choices[0]
+            if hasattr(choice0, "finish_reason") and choice0.finish_reason:
+                # * llama server stop on max_tokens (length)
+                # (choices=[(
+                #    delta= (content=None, function_call=None, refusal=None, role=None, tool_calls=None),
+                #    finish_reason='length')],
+                #    timings={'cache_n': 79, 'prompt_n': 65, 'prompt_ms': 54.432, 'prompt_per_token_ms': 0.8374153846153847,
+                #        'prompt_per_second': 1194.1504997060551, 'predicted_n': 200, 'predicted_ms': 766.16,
+                #        'predicted_per_token_ms': 3.8308, 'predicted_per_second': 261.0420799832933})
+                log(f"finish_reason: {choice0.finish_reason}")
+                if choice0.finish_reason == "stop":
+                    break
+                if choice0.finish_reason == "length":
+                    await session.async_send_text(f"ran out off tokens, increase max_tokens...")
+                    break
+                else:
+                    log(f"Unhandled finish_reason: {choice0.finish_reason}, stopping")
+                    break
+
+            delta = choice0.delta
+            if hasattr(delta, "reasoning_content"):
+                log(f"[SKIP] reasoning_content: {delta.reasoning_content}")
+                continue
+            # TODO delta.reasoning field too? ollama?
+
+            if delta.content is None:
                 # FYI llama-server, last SSE doesn't have any choices, and that's normal
-                log(f"no chunk choices: {chunk}")
+                log(f"[SKIP] no reasoning, no content: {chunk}")
                 continue
 
             # strip new lines to avoid submitting commands prematurely, is there an alternate char I could use to split the lines still w/o submitting (would have to check what the shell supports, if anything is possible)... one downside to not being a part of the line editor.. unless there is a workaround? not that I care much b/c multi line commands are not often necessary...
-            sanitized = chunk.choices[0].delta.content.replace("\n", " ")  # TODO oh man this is not good.. I wanna keep new lines... I also might need to use semicolon (or shell specific separator to do this)
+            sanitized = delta.content.replace("\n", " ")
             if first_chunk:
                 log(f"first_chunk: {sanitized}")
                 sanitized = re.sub(r'```', '', sanitized).lstrip()
