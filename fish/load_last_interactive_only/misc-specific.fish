@@ -871,6 +871,9 @@ if $IS_MACOS
     # 2. use command specific abbrs to expand the **/*.lua on end with just *l (or smth else)
     abbr --command gsed --position=anywhere "*l" "**/*.lua"
     #    so, gsed *l<SPACE> => gsed **/*.lua
+    # json
+    abbr --set-cursor sedj "gsed -Ei 's/%//g' **/*.json"
+    abbr --command gsed --position=anywhere "*j" "**/*.json"
     # md
     abbr --set-cursor sedm "gsed -Ei 's/%//g' **/*.md"
     abbr --command gsed --position=anywhere "*m" "**/*.md"
