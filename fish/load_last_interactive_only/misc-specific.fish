@@ -875,8 +875,8 @@ if $IS_MACOS
     abbr --set-cursor sedt "gsed -Ei 's/%//g' **/*.ts"
     abbr --command gsed --position=anywhere "*t" "**/*.ts"
     # json
-    abbr --set-cursor sedj "gsed -Ei 's/%//g' **/*.json"
-    abbr --command gsed --position=anywhere "*j" "**/*.json"
+    abbr --set-cursor sedj "gsed -Ei 's/%//g' **/*.{json,js}"
+    abbr --command gsed --position=anywhere "*j" "**/*.{json,js}"
     # md
     abbr --set-cursor sedm "gsed -Ei 's/%//g' **/*.md"
     abbr --command gsed --position=anywhere "*m" "**/*.md"
