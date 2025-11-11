@@ -21,8 +21,8 @@ async def ask_openai_async_type_response(session, messages):
         response_stream = await client.chat.completions.create(
             model=use.model,
             messages=messages,
-            max_tokens=2000,  # TODO pass as another arg to ask_use_*
-            # TODO temperature?
+            max_tokens=use.max_tokens or 200,
+            # TODO temperature? and other model params on Service? (maybe rename it to be ServiceModel combo?)
             stream=True)
     except Exception as e:
         # TODO test timeouts?

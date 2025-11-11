@@ -13,6 +13,7 @@ class Service(NamedTuple):
     api_key: str
     name: str
     chat_completions_path: str | None
+    max_tokens: int | None = None
 
     def chat_url(self):
         if self.chat_completions_path is None:
@@ -46,6 +47,7 @@ def use_build21(model: Optional[str] = None):
         base_url='http://build21:8013/v1',
         model=model if model else 'llama-server-fixed',
         chat_completions_path=None,
+        max_tokens=2048
     )
 
 def use_inception(model: Optional[str] = None):

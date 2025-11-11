@@ -36,7 +36,7 @@ def generate_command(passed_context: str, use: Service):
                     "content": f"{passed_context}"
                 },
             ],
-            max_tokens=500,
+            max_tokens=use.max_tokens or 500,
             n=1  # default
         )
 
