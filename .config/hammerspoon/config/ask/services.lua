@@ -66,6 +66,7 @@ function M.getService()
             api_key = "whatever",
             url = "http://build21:8013/v1/chat/completions",
             model = stored.model == "" and "llama-server-fixed" or stored.model,
+            max_tokens = 2048 -- for thinking models (gptoss/qwen3)
         }
     end
 

@@ -286,7 +286,7 @@ function askAbout(userText, app, focusedElem, appendChunk)
             { role = "user",   content = userText },
         },
         stream = true,
-        max_tokens = params.max_tokens,
+        max_tokens = service.max_tokens or params.max_tokens,
     })
 
     local IS_LOGGING = false
@@ -346,6 +346,9 @@ function askAbout(userText, app, focusedElem, appendChunk)
                 end
                 break
             end
+
+            -- TODO! when I want reasoning support, copy over predictions parsing / emits
+            --  and/or mix it up with what you have over in python ask-openai in this dotfiles repo
 
             local sse = hs.json.decode(dataValue)
             if sse and sse.choices and sse.choices[1] then
