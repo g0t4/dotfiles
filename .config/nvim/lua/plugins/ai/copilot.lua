@@ -336,20 +336,12 @@ function SwitchCopilot()
     end
 end
 
-function SwitchAskFimModel()
-    if not vim.tbl_contains(use_ai, "ask-openai") then
-        return
-    end
-    local api = require("ask-openai.api")
-    api.toggle_fim_model()
-end
-
 -- *** switch copilot keymaps:
 -- WEIRD, after iterm crash, or some other factor, F15 stopped working and I get S-F3 instead? using Ctrl-v ... WTH?
 --   '<S-F3>' '<F15>'
---   TODO find issue, for now use F18? see if F18 is stable
 vim.keymap.set({ 'n', 'i', 'v' }, '<F18>', function() SwitchCopilot() end, { noremap = true, silent = true })
-vim.keymap.set({ 'n', 'i', 'v' }, '<F19>', function() SwitchAskFimModel() end, { noremap = true, silent = true })
+vim.keymap.set({ 'n', 'i', 'v' }, '<F19>', function() require('ask-openai.api').toggle_fim_model() end, { noremap = true, silent = true })
+vim.keymap.set({ 'n', 'i', 'v' }, '<F20>', function() require('ask-openai.api').cycle_reasoning_level() end, { noremap = true, silent = true })
 --
 vim.keymap.set({ 'n', 'i', 'v' }, '<F16>', function() require('ask-openai.api').cycle_log_verbosity() end, { noremap = true, silent = true })
 vim.keymap.set({ 'n', 'i', 'v' }, '<F17>', function() require('ask-openai.api').toggle_rag() end, { noremap = true, silent = true })
