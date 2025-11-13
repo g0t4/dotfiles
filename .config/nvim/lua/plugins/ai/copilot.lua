@@ -432,7 +432,7 @@ function CopilotsStatus()
     end
 
     if vim.tbl_contains(use_ai, "ask-openai") then
-        table.insert(components, require("ask-openai.api").get_lualine_status())
+        vim.list_extend(components, require("ask-openai.api").get_lualine_components())
     end
 
     if vim.tbl_contains(use_ai, "ggml-org/llama.vim") then
