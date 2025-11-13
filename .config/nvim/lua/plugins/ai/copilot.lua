@@ -339,12 +339,13 @@ end
 -- *** switch copilot keymaps:
 -- WEIRD, after iterm crash, or some other factor, F15 stopped working and I get S-F3 instead? using Ctrl-v ... WTH?
 --   '<S-F3>' '<F15>'
-vim.keymap.set({ 'n', 'i', 'v' }, '<F18>', function() SwitchCopilot() end, { noremap = true, silent = true })
-vim.keymap.set({ 'n', 'i', 'v' }, '<F19>', function() require('ask-openai.api').toggle_fim_model() end, { noremap = true, silent = true })
-vim.keymap.set({ 'n', 'i', 'v' }, '<F20>', function() require('ask-openai.api').cycle_reasoning_level() end, { noremap = true, silent = true })
+vim.keymap.set({ 'n', 'i', 'v', 'c' }, '<F18>', function() SwitchCopilot() end, { noremap = true, silent = true })
+vim.keymap.set({ 'n', 'i', 'v', 'c' }, '<F19>', function() require('ask-openai.api').toggle_fim_model() end, { noremap = true, silent = true })
+vim.keymap.set({ 'n', 'i', 'v', 'c' }, '<F20>', function() require('ask-openai.api').cycle_reasoning_level() end, { noremap = true, silent = true })
 --
-vim.keymap.set({ 'n', 'i', 'v' }, '<F16>', function() require('ask-openai.api').cycle_log_verbosity() end, { noremap = true, silent = true })
-vim.keymap.set({ 'n', 'i', 'v' }, '<F17>', function() require('ask-openai.api').toggle_rag() end, { noremap = true, silent = true })
+vim.keymap.set({ 'n', 'i', 'v', 'c' }, '<F16>', function() require('ask-openai.api').cycle_log_verbosity() end, { noremap = true, silent = true })
+vim.keymap.set({ 'n', 'i', 'v', 'c' }, '<F17>', function() require('ask-openai.api').toggle_rag() end, { noremap = true, silent = true })
+
 
 function IsAskOpenAIPredictionsAvailable()
     -- FYI, later, replace with final setting
