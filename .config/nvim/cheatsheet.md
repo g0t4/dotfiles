@@ -116,7 +116,6 @@ These are custom mappings in coc to add LSP features based on LSP availability..
   - `<leader>ac` - code actions cursor
   - `<leader>a` - code actions selected
   - `<leader>as` - code actions source
-  - `<leader>qf` - quickfix current
 - go to
   - `gd` - definition
   - `gy` - type definition

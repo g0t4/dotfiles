@@ -183,7 +183,7 @@ augroup mygroup
 augroup end
 
 " Apply the most preferred quickfix action to fix diagnostic on the current line
-nmap <leader>qf  <Plug>(coc-fix-current)
+nmap <leader>cqf  <Plug>(coc-fix-current)
 
 " <leader>ca => coc'a [c]ode [a]ctions
 "
