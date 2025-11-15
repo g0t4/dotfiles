@@ -177,8 +177,8 @@ abbr gstash_apply 'git stash apply'
 abbr gstash_branch 'git stash branch'
 abbr gstash_patch 'git stash push --patch --no-keep-index' # *** pick what to stash!!! easily make multiple stash commits too!
 # TODO do I like --no-keep-index w/ --patch? w/o this it seems to keep changes in the index which can be oddly confusing too
-abbr gstash_push 'git stash push'
-abbr gstash_save 'git stash push' # save is deprecated, use push (I still use save all the time so this will help me transition)
+abbr --set-cursor gstash_push 'git stash push --message "%"'
+abbr --set-cursor gstash_save 'git stash push --message "%"' # save is deprecated, use push (I still use save all the time so this will help me transition)
 abbr gstash_clear 'git stash clear'
 # abbr gstash_create 'git stash create' # for scripts
 # abbr gstash_store 'git stash store' # for scripts
