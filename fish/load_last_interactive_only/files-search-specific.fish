@@ -102,7 +102,8 @@ if command -q mdfind
             echo NO mdfind matches...
             return
         end
-        set picked (printf '%s\n' $results | fzf --height 50% --border)
+        set bind_finder_reveal --bind 'ctrl-space:execute-silent(open -R {})'
+        set picked (printf '%s\n' $results | fzf --height 50% --border $bind_finder_reveal)
         if test -n "$picked"
             open "$picked"
             return
