@@ -102,8 +102,18 @@ if command -q mdfind
             echo NO mdfind matches...
             return
         end
-        set bind_finder_reveal --bind 'ctrl-space:execute-silent(open -R {})'
-        set picked (printf '%s\n' $results | fzf --height 50% --border $bind_finder_reveal)
+        set ctrl_space_reveal --bind 'ctrl-space:execute-silent(open -R {})'
+        set ctrl_f_finder (string replace 'ctrl-space' 'ctrl-f' -- $ctrl_space_reveal)
+        set ctrl_c_cd --bind 'ctrl-c:print(cd)+accept' # print leading cd and then the accepted item's path (across two lines btw... but they both get aggregated into same array variable and so are effectively word split w/o the new line)
+        set all_binds $ctrl_c_cd $ctrl_f_finder $ctrl_space_reveal
+        set picked (printf '%s\n' $results | fzf --height 50% --border $all_binds)
+        if string match -q --regex '^cd' "$picked"
+            # user picked to cd to the dir of the item (using ctrl+c)
+            # strip cd from front... so we have just the path
+            set cd_path (string replace -r '^cd\s+' '' "$picked")
+            cd "$cd_path"
+            return
+        end
         if test -n "$picked"
             open "$picked"
             return
