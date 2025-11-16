@@ -64,14 +64,14 @@ abbr notes "git commit -a -m 'notes'"
 # FYI pwsh has many builtin aliases stating with 'g' b/c Get :)
 #   gcm = Get-Command, gc = Get-Content
 # commit
-abbr gc 'git commit -v' # FYI gc=Get-Content in powershell (I am very tempted to overwrite it!) ... I always want a gc command and struggle to find it
-abbr gcv 'git commit -v' # keeping around b/c I will need this on pwsh
-abbr gca 'git commit -v -a'
+# FYI go back to -v on all of these git commit abbrs if I get rid of my git-commit-with-function-context
+abbr gc 'GIT_EDITOR=git-commit-with-function-context git commit' # FYI gc=Get-Content in powershell (I am very tempted to overwrite it!) ... I always want a gc command and struggle to find it
+abbr gca 'GIT_EDITOR=git-commit-with-function-context git commit -a'
 # - amend
-abbr gc! 'git commit -v --amend'
-abbr gcn! 'git commit -v --no-edit --amend'
-abbr gca! 'git commit -v -a --amend'
-abbr gcan! 'git commit -v -a --no-edit --amend'
+abbr gc! 'GIT_EDITOR=git-commit-with-function-context git commit --amend'
+abbr gcn! 'git commit --no-edit --amend'
+abbr gca! 'GIT_EDITOR=git-commit-with-function-context git commit -a --amend'
+abbr gcan! 'git commit -a --no-edit --amend'
 
 # checkout
 abbr gco 'git checkout'

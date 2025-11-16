@@ -76,8 +76,9 @@ ln -f -s $dotfiles_dir/.grc $HOME/. # DIR SYMLINK
 mkdir -p $HOME/.config/git
 ln -f -s $dotfiles_dir/.config/git/ignore $HOME/.config/git/.
 if string match --quiet Linux (uname -s)
-    ln -s $HOME/repos/github/g0t4/dotfiles/git/linux.gitconfig $HOME/.gitconfig
+    ln -s $dotfiles_dir/git/linux.gitconfig $HOME/.gitconfig
 end
+ln -s $dotfiles_dir/git/git-commit-with-function-context $HOME/bin/.
 
 # *** hushlogin
 touch $HOME/.hushlogin

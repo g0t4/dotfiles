@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+# show git diff --function context when typing commit messages
+
+# during git commit, when editing the commit message (in my GIT_EDITOR which is nvim in my case)
+# it shows the diff below to review changes
+# I want --function-context for that diff (like git diff --function-context)
+# but that is not an option to git commit
+# and AFAIK I cannot configure this either
+# so, I will manually create the COMMIT_EDITMSG file myself using git diff!
+# and then when I edit that, my AI plugin more accurately summarizes commit messages!
+#   gptoss is really good with this context
+#   historically qwen did poorly with commit messages from a diff, but with --function-context it might do well too
+
+expanded_diff=$(git diff --cached --function-context)
+
+# Write commit message template (message + expanded diff)
+# Git will append comments starting with '#'.
+{
+    echo
+    echo "# ------------------------ >8 ------------------------"
+    echo "# --- expanded function-context diff below ---"
+    echo "$expanded_diff"
+} >>.git/COMMIT_EDITMSG
+
+# BTW the >8 stops git from including any trailing lines in the message, thus no need to comment out the diff itself
+
+# Now open the editor normally
+exec ${EDITOR:-vim} .git/COMMIT_EDITMSG
+
+# FYI! git will still prepend the regular diff if you pass `-v` or `git -c commit.verbose=true`
+#  so commit.verbose=false to remove duplicate diff and only see your expanded diff

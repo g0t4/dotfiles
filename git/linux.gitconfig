@@ -85,3 +85,7 @@
 
 	# delta recommended zdiff3:
 	conflictStyle = zdiff3
+
+[commit]
+	verbose = false # using new git-commit-with-function-context to provide the diff (so set verbose false else you duplicate the diff, verbose short diff on top, then your long one is appended on bottom)
+
