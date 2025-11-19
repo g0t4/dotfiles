@@ -12,7 +12,13 @@
 #   gptoss is really good with this context
 #   historically qwen did poorly with commit messages from a diff, but with --function-context it might do well too
 
-expanded_diff=$(git diff --cached --function-context)
+# TODO find condition to differentiate amend vs regular commit to decide what to show
+#   TODO or pass an arg or rename script and use $0? ... and then abbr can expand to the diff name/arg
+# if [ -f .git/ORIG_HEAD ]; then # FYI does not work but smth like this might
+#     expanded_diff=$(git diff --cached --function-context HEAD^)
+# else
+    expanded_diff=$(git diff --cached --function-context)
+# fi
 
 # Write commit message template (message + expanded diff)
 # Git will append comments starting with '#'.
