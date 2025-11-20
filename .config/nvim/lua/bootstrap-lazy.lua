@@ -57,6 +57,7 @@ require("lazy").setup({
         -- SO, comment out when want to say disable everything and troubleshoot:
         -- !!! ADD NEW PLUGINS SPECS HERE
         -- require("plugins.0-tangerine"), -- disabled b/c heavy 10ms on startup and I don't use it
+        require("plugins.profiling"),
         require("plugins.code"),
         require("plugins.colors"),
         require("plugins.comments"),
