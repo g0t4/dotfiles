@@ -11,6 +11,7 @@ return {
         -- FYI I just put this together myself and its working so far, mostly guess work
         --
         "udayvir-singh/tangerine.nvim",
+        enabled = false,
         config = function()
             require("tangerine").setup {
                 -- config defaults:

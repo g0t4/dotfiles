@@ -56,7 +56,7 @@ require("lazy").setup({
         -- ALSO, use enabled to one off disable plugin(s)... esp for permenant disablement...
         -- SO, comment out when want to say disable everything and troubleshoot:
         -- !!! ADD NEW PLUGINS SPECS HERE
-        require("plugins.0-tangerine"),
+        -- require("plugins.0-tangerine"), -- disabled b/c heavy 10ms on startup and I don't use it
         require("plugins.code"),
         require("plugins.colors"),
         require("plugins.comments"),
