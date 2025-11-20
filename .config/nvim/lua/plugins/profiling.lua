@@ -6,7 +6,12 @@ return {
         -- enabled = false,
         cmd = { "PerfLuaProfileStart", "PerfAnnotate", },
         config = function()
-            require("perfanno").setup()
+            require("perfanno").setup {
+                formats = {
+                    { percent = true,  format = "%.2f%%", minimum = 0.00000 },
+                    { percent = false, format = "%d",     minimum = 0 }
+                }
+            }
         end
     }
 }
