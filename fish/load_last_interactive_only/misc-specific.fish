@@ -869,11 +869,14 @@ if $IS_MACOS
 
     abbr sed_duplicate_lines 'sed \'N; /^\(.*\)\n\1$/!P; D\' file'
 end
-# general sed abbrs:
+#
+# * general sed abbrs:
 abbr --set-cursor sede "$sed_cmd -Ei 's/%//g'"
 abbr --set-cursor sedd "$sed_cmd --debug -i 's/%//g'"
-
-# *** two approaches to making it easier to target specific files...
+abbr --set-cursor sedi "$sed_cmd -i 's/%//g'"
+#
+#
+# * two approaches to making it easier to target specific files...
 # 1. dedicated abbr per file type(s)
 abbr --set-cursor sedl "$sed_cmd -Ei 's/%//g' **/*.lua"
 # 2. use command specific abbrs to expand the **/*.lua on end with just *l (or smth else)
@@ -895,9 +898,7 @@ abbr --command $sed_cmd --position=anywhere "*p" "**/*.py"
 # all - use brace expansion for multiple file types
 abbr --set-cursor seda "$sed_cmd -Ei 's/%//g' $sed_all"
 abbr --command $sed_cmd --position=anywhere "*a" "$sed_all"
-#
-abbr --set-cursor sedi "$sed_cmd -i 's/%//g'"
-#
+
 abbr _cat_range --function _cat_range_abbr --regex "(catr|catrange|sedr|sedrange)\d+_\d+"
 function _cat_range_abbr
     # purpose:   cat range -n '10,25p' foo.txt
