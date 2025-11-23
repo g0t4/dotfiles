@@ -64,11 +64,11 @@ function M.add_note(range, text)
 end
 
 function M.setup()
-    local notes_namespace = vim.api.nvim_create_namespace("code_notes")
+    local notes_ns_id = vim.api.nvim_create_namespace("code_notes")
 
 
-    vim.api.nvim_set_hl(0, "CodeNoteText", { fg = "#ff8800", bg = "#2c2c2c", italic = true })
-    -- vim.api.nvim_set_hl(0, "CodeNoteSelection", { fg = "#2c2c2c", bg = "#ff8800", italic = true })
+    vim.api.nvim_set_hl(notes_ns_id, "CodeNoteText", { fg = "#ff8800", bg = "#2c2c2c", italic = true })
+    -- vim.api.nvim_set_hl(notes_ns_id, "CodeNoteSelection", { fg = "#2c2c2c", bg = "#ff8800", italic = true })
 
 
     -- TODO uncomment to test real notes
@@ -89,7 +89,7 @@ function M.setup()
             for _, n in ipairs(notes) do
                 local start_col_base1 = 0
                 vim.api.nvim_buf_set_extmark(
-                    event.buf, notes_namespace, n.start_line_base1, start_col_base1,
+                    event.buf, notes_ns_id, n.start_line_base1, start_col_base1,
                     { virt_text = { { n.text, "CodeNoteText" } }, virt_text_pos = "eol", sign_text = "◆" }
                 )
                 -- TODO toggle on/off the selection highlights (and actually showing notes too)
