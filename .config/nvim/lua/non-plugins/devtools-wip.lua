@@ -2,20 +2,13 @@
 -- * think of this as devtools for neovim
 -- FYI move stable ideas into devtools.nvim repo
 
--- !! TODO I still stringly feel like the command line in nvim is not right...
---   it needs love somehow... everything feels difficult
---   tab completion doesn't seem to be well thought out...
---   TODO ctrl+R mode (see whole command line not next token?)
-
-
 local abbrevs = {
     i = {
-        btw = "by the way",
+        -- btw = "by the way",
         idk = "I don't know",
     },
     c = {
         -- lnvim = "Dump vim.api.nvim_",
-
 
         -- wls = "Dump vim.api.nvim_list_wins()",
         -- bls = "Dump vim.api.nvim_list_bufs()",
@@ -95,16 +88,20 @@ vim.api.nvim_create_autocmd("CmdlineChanged", {
     end,
 })
 
--- *** change messages shown when selecting text
--- default shows #chars if in v visual model and only selecting text on one line
---    if multiple lines it shows # lines even though its visual charwise
--- V (linewise visual) shows # lines always
--- AND, all of this is confusing b/c it only shows a # and no units... so no "lines" or "chars" shown
-local enable_test_cmdline_text = false
-local GetPos = require("ask-openai.helpers.wrap_getpos")
-if enable_test_cmdline_text then
+local ENABLE_TEST_CMDLINE_SELECTION_SUMMARY_TEXT = false -- *** toggle on/off
+if ENABLE_TEST_CMDLINE_SELECTION_SUMMARY_TEXT then
+    -- *** change messages shown when selecting text
+    -- default shows #chars if in v visual model and only selecting text on one line
+    --    if multiple lines it shows # lines even though its visual charwise
+    -- V (linewise visual) shows # lines always
+    -- AND, all of this is confusing b/c it only shows a # and no units... so no "lines" or "chars" shown
+
+    local GetPos = require("ask-openai.helpers.wrap_getpos")
+
     -- TODO! before you enable this, make sure you understand what will be missing...
     -- TODO! otherwise, you will forget that you did this and pooch smth important :)
+
+    --- FYI! I really like this (showing better summary of what is selected at bottom of screen)! but I need to revisit it later (I am already 3 deep in the distractions stack tonight)
 
     function custom_show_mode_message()
         local mode = vim.fn.mode()
