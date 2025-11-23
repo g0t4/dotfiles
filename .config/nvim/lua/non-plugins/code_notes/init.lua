@@ -114,7 +114,7 @@ function M.setup()
                             sign_text = "◆",
                             sign_hl_group = "CodeNoteGutterIcon",
 
-                            -- TODO last line inclusive?
+                            -- TODO last line inclusive? which convention should I follow (look at GetPos for any ideas there)
                             end_line = end_line_base0,
                             end_col = end_col_base0,
                             -- hl_group = "CodeNoteSelection",
@@ -138,7 +138,8 @@ function M.setup()
                             sign_hl_group = "CodeNoteGutterIcon",
 
                             -- also, highlight selected text:
-                            -- TODO last line inclusive?
+                            -- TODO last line inclusive? which convention should I follow (look at GetPos for any ideas there)
+                            --   FYI right now... the last line is marked even though end_col is set to 0... so really not included!
                             end_line = end_line_base0,
                             end_col = end_col_base0,
                             hl_group = "CodeNoteSelection",
