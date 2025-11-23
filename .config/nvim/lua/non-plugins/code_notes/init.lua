@@ -84,7 +84,7 @@ function M.setup()
     vim.api.nvim_create_autocmd("BufReadPost", {
         callback = function(event)
             local absolute_path = event.file
-            -- TODO fix to always be relative to the workspace dir (not the CWD)
+            -- TODO fix to always be relative to the workspace dir (not the CWD) .. so if I open from nested dir in repo, I don't lose notes!
             local relative_path = vim.fn.fnamemodify(absolute_path, ":.")
             -- print("absolute_path", absolute_path)
             -- print("relative_path", relative_path)
@@ -92,7 +92,7 @@ function M.setup()
             if not notes then
                 return
             end
-            -- vim.print(notes)
+
             for _, n in ipairs(notes) do
                 local start_col_base0 = 0
                 local start_line_base0 = n.start_line_base1 - 1
