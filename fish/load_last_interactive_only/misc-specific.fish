@@ -867,29 +867,29 @@ if $IS_MACOS
 
     # two approaches to making it easier to target specific files...
     # 1. dedicated abbr per file type(s)
-    abbr --set-cursor sedl "gsed -Ei 's/%//g' **/*.lua"
+    abbr --set-cursor sedl "$sed_cmd -Ei 's/%//g' **/*.lua"
     # 2. use command specific abbrs to expand the **/*.lua on end with just *l (or smth else)
     abbr --command gsed --position=anywhere "*l" "**/*.lua"
     #    so, gsed *l<SPACE> => gsed **/*.lua
     # typescript
-    abbr --set-cursor sedt "gsed -Ei 's/%//g' **/*.ts"
+    abbr --set-cursor sedt "$sed_cmd -Ei 's/%//g' **/*.ts"
     abbr --command gsed --position=anywhere "*t" "**/*.ts"
     # json
-    abbr --set-cursor sedj "gsed -Ei 's/%//g' **/*.{json,js}"
+    abbr --set-cursor sedj "$sed_cmd -Ei 's/%//g' **/*.{json,js}"
     abbr --command gsed --position=anywhere "*j" "**/*.{json,js}"
     # md
-    abbr --set-cursor sedm "gsed -Ei 's/%//g' **/*.md"
+    abbr --set-cursor sedm "$sed_cmd -Ei 's/%//g' **/*.md"
     abbr --command gsed --position=anywhere "*m" "**/*.md"
     # python
-    abbr --set-cursor sedp "gsed -Ei 's/%//g' **/*.py"
+    abbr --set-cursor sedp "$sed_cmd -Ei 's/%//g' **/*.py"
     abbr --command gsed --position=anywhere "*p" "**/*.py"
     # all - use brace expansion for multiple file types
-    abbr --set-cursor seda "gsed -Ei 's/%//g' $sed_all"
+    abbr --set-cursor seda "$sed_cmd -Ei 's/%//g' $sed_all"
     abbr --command gsed --position=anywhere "*a" "$sed_all"
     #
-    # todo make sede the default now that I am using gsed on macOS?
-    abbr --set-cursor sede "gsed -Ei 's/%//g'"
-    abbr --set-cursor sedd "gsed --debug -i 's/%//g'"
+    # todo make sede the default now that I am using sed on macOS?
+    abbr --set-cursor sede "$sed_cmd -Ei 's/%//g'"
+    abbr --set-cursor sedd "$sed_cmd --debug -i 's/%//g'"
     # abbr sed gsed # encourage the use of gsed so it behaves like linux?
     #  i.e. gnu allows `sed -i` whereas BSD requires the extension `sed -i''` be passed
 
