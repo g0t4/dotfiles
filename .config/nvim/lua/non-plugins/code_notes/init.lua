@@ -1,6 +1,3 @@
-do return end -- DISABLED FOR NOW
-
-
 local api = require("non-plugins.werkspaces.api")
 local GetPos = require("ask-openai.helpers.wrap_getpos")
 
@@ -74,6 +71,8 @@ function M.add_note(text)
 end
 
 function M.setup()
+    do return end
+
     local notes_ns_id = vim.api.nvim_create_namespace("code_notes")
 
     local GLOBAL_NS = 0 -- not using notes_ns_id for highlights
