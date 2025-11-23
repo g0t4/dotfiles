@@ -863,30 +863,17 @@ if $IS_MACOS
         end
     end
     set sed_cmd gsed
-    # TODO move rest of these to sed_cmd outside of if block, if args are all the same
 
-    #
-    # todo make sede the default now that I am using sed on macOS?
-    abbr --set-cursor sede "$sed_cmd -Ei 's/%//g'"
-    abbr --set-cursor sedd "$sed_cmd --debug -i 's/%//g'"
-    # abbr sed gsed # encourage the use of gsed so it behaves like linux?
+    abbr sed gsed # encourage gsed for uniform w/ linux distros
     #  i.e. gnu allows `sed -i` whereas BSD requires the extension `sed -i''` be passed
 
     abbr sed_duplicate_lines 'sed \'N; /^\(.*\)\n\1$/!P; D\' file'
-
-else
-    # alternatives (mirror from above for mac)
-    abbr --set-cursor sedl "sed -Ei 's/%//g' **/*.lua"
-    abbr --command sed --position=anywhere "*l" "**/*.lua"
-    abbr --set-cursor sedm "sed -Ei 's/%//g' **/*.md"
-    abbr --command sed --position=anywhere "*m" "**/*.md"
-    abbr --set-cursor sedp "sed -Ei 's/%//g' **/*.py"
-    abbr --command sed --position=anywhere "*p" "**/*.py"
-    #
-    abbr --set-cursor sede "sed -Ei 's/%//g'"
-    abbr --set-cursor sedd "sed --debug -i 's/%//g'"
 end
-# two approaches to making it easier to target specific files...
+# general sed abbrs:
+abbr --set-cursor sede "$sed_cmd -Ei 's/%//g'"
+abbr --set-cursor sedd "$sed_cmd --debug -i 's/%//g'"
+
+# *** two approaches to making it easier to target specific files...
 # 1. dedicated abbr per file type(s)
 abbr --set-cursor sedl "$sed_cmd -Ei 's/%//g' **/*.lua"
 # 2. use command specific abbrs to expand the **/*.lua on end with just *l (or smth else)
