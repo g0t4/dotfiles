@@ -865,24 +865,6 @@ if $IS_MACOS
     set sed_cmd gsed
     # TODO move rest of these to sed_cmd outside of if block, if args are all the same
 
-    # two approaches to making it easier to target specific files...
-    # 1. dedicated abbr per file type(s)
-    abbr --set-cursor sedl "$sed_cmd -Ei 's/%//g' **/*.lua"
-    # 2. use command specific abbrs to expand the **/*.lua on end with just *l (or smth else)
-    abbr --command gsed --position=anywhere "*l" "**/*.lua"
-    #    so, gsed *l<SPACE> => gsed **/*.lua
-    # typescript
-    abbr --set-cursor sedt "$sed_cmd -Ei 's/%//g' **/*.ts"
-    abbr --command gsed --position=anywhere "*t" "**/*.ts"
-    # json
-    abbr --set-cursor sedj "$sed_cmd -Ei 's/%//g' **/*.{json,js}"
-    abbr --command gsed --position=anywhere "*j" "**/*.{json,js}"
-    # md
-    abbr --set-cursor sedm "$sed_cmd -Ei 's/%//g' **/*.md"
-    abbr --command gsed --position=anywhere "*m" "**/*.md"
-    # python
-    abbr --set-cursor sedp "$sed_cmd -Ei 's/%//g' **/*.py"
-    abbr --command gsed --position=anywhere "*p" "**/*.py"
     #
     # todo make sede the default now that I am using sed on macOS?
     abbr --set-cursor sede "$sed_cmd -Ei 's/%//g'"
@@ -904,6 +886,24 @@ else
     abbr --set-cursor sede "sed -Ei 's/%//g'"
     abbr --set-cursor sedd "sed --debug -i 's/%//g'"
 end
+# two approaches to making it easier to target specific files...
+# 1. dedicated abbr per file type(s)
+abbr --set-cursor sedl "$sed_cmd -Ei 's/%//g' **/*.lua"
+# 2. use command specific abbrs to expand the **/*.lua on end with just *l (or smth else)
+abbr --command gsed --position=anywhere "*l" "**/*.lua"
+#    so, gsed *l<SPACE> => gsed **/*.lua
+# typescript
+abbr --set-cursor sedt "$sed_cmd -Ei 's/%//g' **/*.ts"
+abbr --command gsed --position=anywhere "*t" "**/*.ts"
+# json
+abbr --set-cursor sedj "$sed_cmd -Ei 's/%//g' **/*.{json,js}"
+abbr --command gsed --position=anywhere "*j" "**/*.{json,js}"
+# md
+abbr --set-cursor sedm "$sed_cmd -Ei 's/%//g' **/*.md"
+abbr --command gsed --position=anywhere "*m" "**/*.md"
+# python
+abbr --set-cursor sedp "$sed_cmd -Ei 's/%//g' **/*.py"
+abbr --command gsed --position=anywhere "*p" "**/*.py"
 #
 # all - use brace expansion for multiple file types
 abbr --set-cursor seda "$sed_cmd -Ei 's/%//g' $sed_all"
