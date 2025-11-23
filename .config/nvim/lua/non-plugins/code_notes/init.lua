@@ -53,13 +53,20 @@ local function load_notes()
     M.notes_by_file = api.read_json_werkspace_file(CODE_NOTES_PATH) or {}
 end
 
-function M.add_note(range, text)
+function M.add_note(text)
     local bufnr = 0
     local file_path = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(bufnr), ":.")
     M.notes_by_file[file_path] = M.notes_by_file[file_path] or {}
-    -- TODO get selection using my position wrapper in ask-openai
 
-    table.insert(M.notes_by_file[file_path], { range = range, text = text })
+    local selection = GetPos.CurrentSelection()
+    table.insert(M.notes_by_file[file_path], {
+        -- TODO get cols too?
+        start_line_base1 = selection.start_line_b1,
+        end_line_base1 = selection.end_line_b1,
+        text = "DUCKARD!",
+        -- context = ?
+    })
+
     api.write_json_werkspace_file(CODE_NOTES_PATH, M.notes_by_file)
 end
 
