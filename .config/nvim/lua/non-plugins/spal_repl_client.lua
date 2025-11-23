@@ -2,6 +2,9 @@
 local GetPos = require("ask-openai.helpers.wrap_getpos")
 local messages = require("devtools.messages")
 
+-- FYI I disabled this for now, re-enable here:
+--    .config/nvim/lua/plugins/non-plugins.lua:35
+
 
 -- FYI IIRC this was for sending commands to run in a java agent attached to a screenpal process
 -- to control it remotely (to see if I can do things not possible via Accessibility Fwk AXUIElement)
