@@ -75,8 +75,9 @@ function M.add_note(text)
     api.write_json_werkspace_file(CODE_NOTES_PATH, M.notes_by_file)
 end
 
+
 function M.setup()
-    do return end
+    -- do return end
 
     local notes_ns_id = vim.api.nvim_create_namespace("code_notes")
 
@@ -157,6 +158,9 @@ function M.setup()
             end
         end,
     })
+
+    -- TODO this should be a command, and the plugin should be lazy loaded
+    vim.api.nvim_create_user_command("AddNote", M.add_note, {})
 
     -- TODO later worry about lazy loading this on BufReadPost as a plugin
 end
