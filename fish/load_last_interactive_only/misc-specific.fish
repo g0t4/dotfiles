@@ -883,9 +883,6 @@ if $IS_MACOS
     # python
     abbr --set-cursor sedp "$sed_cmd -Ei 's/%//g' **/*.py"
     abbr --command gsed --position=anywhere "*p" "**/*.py"
-    # all - use brace expansion for multiple file types
-    abbr --set-cursor seda "$sed_cmd -Ei 's/%//g' $sed_all"
-    abbr --command gsed --position=anywhere "*a" "$sed_all"
     #
     # todo make sede the default now that I am using sed on macOS?
     abbr --set-cursor sede "$sed_cmd -Ei 's/%//g'"
@@ -903,12 +900,15 @@ else
     abbr --command sed --position=anywhere "*m" "**/*.md"
     abbr --set-cursor sedp "sed -Ei 's/%//g' **/*.py"
     abbr --command sed --position=anywhere "*p" "**/*.py"
-    abbr --set-cursor seda "sed -Ei 's/%//g' $sed_all"
-    abbr --command sed --position=anywhere "*a" "$sed_all"
     #
     abbr --set-cursor sede "sed -Ei 's/%//g'"
     abbr --set-cursor sedd "sed --debug -i 's/%//g'"
 end
+#
+# all - use brace expansion for multiple file types
+abbr --set-cursor seda "$sed_cmd -Ei 's/%//g' $sed_all"
+abbr --command gsed --position=anywhere "*a" "$sed_all"
+#
 abbr --set-cursor sedi "$sed_cmd -i 's/%//g'"
 #
 abbr _cat_range --function _cat_range_abbr --regex "(catr|catrange|sedr|sedrange)\d+_\d+"
