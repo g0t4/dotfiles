@@ -14,6 +14,11 @@ local GetPos = require("ask-openai.helpers.wrap_getpos")
 -- - add column start/end so can be not just line(s)
 -- - use `context` to detect moves
 -- - add level/type and have the notes show in different colors (more or less noticeable)
+--
+-- Changes (notes, don't try to solve this yet... get notes working...
+--   and then over time see how changes work out before "solving" them)
+-- - store git commit sha to track changes?
+-- - store context lines and try to relocate on move? or at least flag notes that need fixed
 
 
 
