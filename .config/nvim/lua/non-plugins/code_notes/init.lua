@@ -97,14 +97,20 @@ function M.setup()
                 local start_col_base0 = 0
                 local start_line_base0 = n.start_line_base1 - 1
 
+                -- * show notes
                 vim.api.nvim_buf_set_extmark( -- (0,0)-indexed
                     event.buf, notes_ns_id, start_line_base0, start_col_base0,
-                    { virt_text = { { n.text, "CodeNoteText" } }, virt_text_pos = "eol", sign_text = "◆" }
+                    {
+                        virt_text = { { n.text, "CodeNoteText" } },
+                        virt_text_pos = "eol",
+                        sign_text = "◆",
+                    }
                 )
 
                 local end_col_base0 = 0
                 local end_line_base0 = n.end_line_base1 - 1
 
+                -- * highlight selected text (actual contents)
                 vim.api.nvim_buf_set_extmark( -- (0,0)-indexed
                     event.buf,
                     notes_ns_id,
