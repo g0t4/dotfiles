@@ -19,8 +19,8 @@ local GetPos = require("ask-openai.helpers.wrap_getpos")
 
 
 ---@class CodeNote
----@field start_line_base0 integer
----@field end_line_base0 integer
+---@field start_line_base1 integer
+---@field end_line_base1 integer
 ---@field text string
 ---@field context string --- for matching moved lines
 
@@ -32,14 +32,14 @@ M.notes_by_file = {
     -- hard coded set of examples
     [".config/nvim/lua/non-plugins/code_notes/init.lua"] = {
         {
-            start_line_base0 = 2,
-            end_line_base0 = 4,
+            start_line_base1 = 2,
+            end_line_base1 = 4,
             text = "What the FUCK?",
             context = "",
         },
         {
-            start_line_base0 = 20,
-            end_line_base0 = 20,
+            start_line_base1 = 20,
+            end_line_base1 = 20,
             text = "This is the key to understanding how the endpoint responds to foo!",
             context = "",
         }
@@ -87,9 +87,9 @@ function M.setup()
             end
             -- vim.print(notes)
             for _, n in ipairs(notes) do
-                local start_col_base0 = 0
+                local start_col_base1 = 0
                 vim.api.nvim_buf_set_extmark(
-                    event.buf, notes_namespace, n.start_line_base0, start_col_base0,
+                    event.buf, notes_namespace, n.start_line_base1, start_col_base1,
                     { virt_text = { { n.text, "CodeNoteText" } }, virt_text_pos = "eol", sign_text = "◆" }
                 )
                 -- TODO toggle on/off the selection highlights (and actually showing notes too)
