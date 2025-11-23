@@ -1,5 +1,6 @@
 require('non-plugins.werkspaces.filetypemods') -- FYI! must load  before werkspace else filetype mods dont fire for initial opened buffer
 require('helpers.hs_shared')
+local api = require('non-plugins.werkspaces.api')
 -- actually not the end of the world to tie these two together, they are similar in what they acccomplish
 -- TODO can I fix so filetypmods are applied to existing buffers on load?
 
@@ -28,27 +29,8 @@ function is_lazy_open()
 end
 
 ---@return string
-function get_werkspace_dir()
-    local function get_git_root()
-        local handle = io.popen("git rev-parse --show-toplevel 2>/dev/null")
-        if handle then
-            local git_root = handle:read("*line")
-            handle:close()
-            return git_root
-        end
-        return nil
-    end
-
-    local dir = get_git_root() or vim.fn.getcwd()
-    local hash = vim.fn.sha256(dir) -- 10ms, not terrible and I've never really noticed startup impact
-    local werkspaces_dir = "~/.config/nvim/shada/werkspaces/"
-    werkspaces_dir = vim.fn.expand(werkspaces_dir)
-    return werkspaces_dir .. hash
-end
-
----@return string
 local function get_sessions_dir()
-    return get_werkspace_dir() .. "/sessions"
+    return api.get_werkspace_dir() .. "/sessions"
 end
 
 ---@return string[]
@@ -213,7 +195,7 @@ function close_temp_windows_so_they_do_not_reopen()
 end
 
 function setup_werkspace()
-    local werkspace_dir = get_werkspace_dir()
+    local werkspace_dir = api.get_werkspace_dir()
 
     -- WHY do this with shada:
     --   privacy (don't jump list back to another project, i.e. during screencast)
