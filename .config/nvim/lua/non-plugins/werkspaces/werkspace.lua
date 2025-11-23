@@ -30,7 +30,7 @@ end
 
 ---@return string
 local function get_sessions_dir()
-    return api.get_werkspace_dir() .. "/sessions"
+    return api.get_werkspace_state_dir() .. "/sessions"
 end
 
 ---@return string[]
@@ -195,7 +195,7 @@ function close_temp_windows_so_they_do_not_reopen()
 end
 
 function setup_werkspace()
-    local werkspace_dir = api.get_werkspace_dir()
+    local werkspace_dir = api.get_werkspace_state_dir()
 
     -- WHY do this with shada:
     --   privacy (don't jump list back to another project, i.e. during screencast)
