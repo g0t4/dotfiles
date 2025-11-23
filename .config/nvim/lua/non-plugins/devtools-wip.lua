@@ -100,7 +100,7 @@ if ENABLE_TEST_CMDLINE_SELECTION_SUMMARY_TEXT then
     -- V (linewise visual) shows # lines always
     -- AND, all of this is confusing b/c it only shows a # and no units... so no "lines" or "chars" shown
 
-    local GetPos = require("ask-openai.helpers.wrap_getpos")
+    local GetPos = require("ask-openai.helpers.wrap_getpos") -- TODO move to devtools.nvim once I am happy with GetPos, and make this an example configuration
 
     -- TODO! before you enable this, make sure you understand what will be missing...
     -- TODO! otherwise, you will forget that you did this and pooch smth important :)
