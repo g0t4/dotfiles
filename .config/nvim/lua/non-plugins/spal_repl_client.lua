@@ -1,6 +1,13 @@
 -- lua/ask-openai/helpers/wrap_getpos.lua
-require("ask-openai.helpers.wrap_getpos")
+local GetPos = require("ask-openai.helpers.wrap_getpos")
 local messages = require("devtools.messages")
+
+
+-- FYI IIRC this was for sending commands to run in a java agent attached to a screenpal process
+-- to control it remotely (to see if I can do things not possible via Accessibility Fwk AXUIElement)
+-- things worked but I didn't discover much yet that I can use
+-- ideally I could use this via new hammerspoon/streamdeck button automations
+-- FYI this is entirely experimental and can be removed
 
 local M = {}
 

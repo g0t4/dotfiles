@@ -101,7 +101,7 @@ vim.api.nvim_create_autocmd("CmdlineChanged", {
 -- V (linewise visual) shows # lines always
 -- AND, all of this is confusing b/c it only shows a # and no units... so no "lines" or "chars" shown
 local enable_test_cmdline_text = false
-require("ask-openai.helpers.wrap_getpos")
+local GetPos = require("ask-openai.helpers.wrap_getpos")
 if enable_test_cmdline_text then
     -- TODO! before you enable this, make sure you understand what will be missing...
     -- TODO! otherwise, you will forget that you did this and pooch smth important :)
