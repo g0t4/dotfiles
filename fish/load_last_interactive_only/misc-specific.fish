@@ -877,24 +877,24 @@ abbr --set-cursor sedd "$sed_cmd --debug -i 's/%//g'"
 # 1. dedicated abbr per file type(s)
 abbr --set-cursor sedl "$sed_cmd -Ei 's/%//g' **/*.lua"
 # 2. use command specific abbrs to expand the **/*.lua on end with just *l (or smth else)
-abbr --command gsed --position=anywhere "*l" "**/*.lua"
+abbr --command $sed_cmd --position=anywhere "*l" "**/*.lua"
 #    so, gsed *l<SPACE> => gsed **/*.lua
 # typescript
 abbr --set-cursor sedt "$sed_cmd -Ei 's/%//g' **/*.ts"
-abbr --command gsed --position=anywhere "*t" "**/*.ts"
+abbr --command $sed_cmd --position=anywhere "*t" "**/*.ts"
 # json
 abbr --set-cursor sedj "$sed_cmd -Ei 's/%//g' **/*.{json,js}"
-abbr --command gsed --position=anywhere "*j" "**/*.{json,js}"
+abbr --command $sed_cmd --position=anywhere "*j" "**/*.{json,js}"
 # md
 abbr --set-cursor sedm "$sed_cmd -Ei 's/%//g' **/*.md"
-abbr --command gsed --position=anywhere "*m" "**/*.md"
+abbr --command $sed_cmd --position=anywhere "*m" "**/*.md"
 # python
 abbr --set-cursor sedp "$sed_cmd -Ei 's/%//g' **/*.py"
-abbr --command gsed --position=anywhere "*p" "**/*.py"
+abbr --command $sed_cmd --position=anywhere "*p" "**/*.py"
 #
 # all - use brace expansion for multiple file types
 abbr --set-cursor seda "$sed_cmd -Ei 's/%//g' $sed_all"
-abbr --command gsed --position=anywhere "*a" "$sed_all"
+abbr --command $sed_cmd --position=anywhere "*a" "$sed_all"
 #
 abbr --set-cursor sedi "$sed_cmd -i 's/%//g'"
 #
