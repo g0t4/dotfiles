@@ -39,7 +39,7 @@ M.notes_by_file = {
         },
         {
             start_line_base1 = 21,
-            end_line_base1 = 21,
+            end_line_base1 = 22,
             text = "This is the key to understanding how the endpoint responds to foo!",
             context = "",
         }
@@ -101,7 +101,26 @@ function M.setup()
                     event.buf, notes_ns_id, start_line_base0, start_col_base0,
                     { virt_text = { { n.text, "CodeNoteText" } }, virt_text_pos = "eol", sign_text = "◆" }
                 )
-                -- TODO toggle on/off the selection highlights (and actually showing notes too)
+
+                local end_col_base0 = 0
+                local end_line_base0 = n.end_line_base1 - 1
+
+                vim.api.nvim_buf_set_extmark( -- (0,0)-indexed
+                    event.buf,
+                    notes_ns_id,
+                    start_line_base0,
+                    start_col_base0,
+                    {
+                        virt_text = { { n.text, "codenotetext" } },
+                        virt_text_pos = "eol",
+                        sign_text = "◆",
+                        -- highlight the selected range
+                        end_line = end_line_base0,
+                        end_col = end_col_base0,
+                        hl_group = "CodeNoteSelection",
+                        hl_mode = "combine",
+                    }
+                )
             end
         end,
     })
