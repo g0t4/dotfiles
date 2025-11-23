@@ -97,36 +97,41 @@ function M.setup()
                 local start_col_base0 = 0
                 local start_line_base0 = n.start_line_base1 - 1
 
-                -- * show notes
-                vim.api.nvim_buf_set_extmark( -- (0,0)-indexed
-                    event.buf, notes_ns_id, start_line_base0, start_col_base0,
-                    {
-                        virt_text = { { n.text, "CodeNoteText" } },
-                        virt_text_pos = "eol",
-                        sign_text = "◆",
-                    }
-                )
 
-                local end_col_base0 = 0
-                local end_line_base0 = n.end_line_base1 - 1
+                local notes_only = false -- TODO add command to toggle this, store last somehow
 
-                -- * highlight selected text (actual contents)
-                vim.api.nvim_buf_set_extmark( -- (0,0)-indexed
-                    event.buf,
-                    notes_ns_id,
-                    start_line_base0,
-                    start_col_base0,
-                    {
-                        virt_text = { { n.text, "codenotetext" } },
-                        virt_text_pos = "eol",
-                        sign_text = "◆",
-                        -- highlight the selected range
-                        end_line = end_line_base0,
-                        end_col = end_col_base0,
-                        hl_group = "CodeNoteSelection",
-                        hl_mode = "combine",
-                    }
-                )
+                -- * show notes only
+                if notes_only then
+                    vim.api.nvim_buf_set_extmark( -- (0,0)-indexed
+                        event.buf, notes_ns_id, start_line_base0, start_col_base0,
+                        {
+                            virt_text = { { n.text, "CodeNoteText" } },
+                            virt_text_pos = "eol",
+                            sign_text = "◆",
+                        }
+                    )
+                else
+                    local end_col_base0 = 0
+                    local end_line_base0 = n.end_line_base1 - 1
+
+                    -- * show both notes AND highlight the selected, actual text
+                    vim.api.nvim_buf_set_extmark( -- (0,0)-indexed
+                        event.buf,
+                        notes_ns_id,
+                        start_line_base0,
+                        start_col_base0,
+                        {
+                            virt_text = { { n.text, "CodeNoteText" } }, -- FYI virtual text has the notes to append to end of line (this is in addition to highlighting the actual, selected text)
+                            virt_text_pos = "eol",
+                            sign_text = "◆",
+                            -- highlight the selected range
+                            end_line = end_line_base0,
+                            end_col = end_col_base0,
+                            hl_group = "CodeNoteSelection",
+                            hl_mode = "combine",
+                        }
+                    )
+                end
             end
         end,
     })
