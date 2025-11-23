@@ -874,27 +874,26 @@ end
 abbr --set-cursor sede "$sed_cmd -Ei 's/%//g'"
 abbr --set-cursor sedd "$sed_cmd --debug -i 's/%//g'"
 abbr --set-cursor sedi "$sed_cmd -i 's/%//g'"
-#
-#
-# * two approaches to making it easier to target specific files...
-# 1. dedicated abbr per file type(s)
-abbr --set-cursor sedl "$sed_cmd -Ei 's/%//g' **/*.lua"
-# 2. use command specific abbrs to expand the **/*.lua on end with just *l (or smth else)
-abbr --command $sed_cmd --position=anywhere "*l" "**/*.lua"
-#    so, gsed *l<SPACE> => gsed **/*.lua
-# typescript
-abbr --set-cursor sedt "$sed_cmd -Ei 's/%//g' **/*.ts"
-abbr --command $sed_cmd --position=anywhere "*t" "**/*.ts"
-# json
-abbr --set-cursor sedj "$sed_cmd -Ei 's/%//g' **/*.{json,js}"
-abbr --command $sed_cmd --position=anywhere "*j" "**/*.{json,js}"
-# md
-abbr --set-cursor sedm "$sed_cmd -Ei 's/%//g' **/*.md"
-abbr --command $sed_cmd --position=anywhere "*m" "**/*.md"
-# python
-abbr --set-cursor sedp "$sed_cmd -Ei 's/%//g' **/*.py"
-abbr --command $sed_cmd --position=anywhere "*p" "**/*.py"
-#
+
+function build_sed_abbrs_for_filetype
+    set -l filetype_letter $argv[1]
+    set -l extension $argv[2]
+    set -l _abbr "sed$filetype_letter"
+
+    # * two approaches to making it easier to target specific files...
+
+    # 1. dedicated abbr per file type(s)
+    abbr --set-cursor $_abbr "$sed_cmd -Ei 's/%//$filetype_letter' **/*$extension"
+
+    # 2. *l => **/*.lua
+    abbr --command $sed_cmd --position=anywhere "*$filetype_letter" "**/*$extension"
+end
+build_sed_abbrs_for_filetype l ".lua"
+build_sed_abbrs_for_filetype t ".ts"
+build_sed_abbrs_for_filetype j ".{json,js}"
+build_sed_abbrs_for_filetype m "**/*.md"
+build_sed_abbrs_for_filetype p "**/*.py"
+
 # all - use brace expansion for multiple file types
 abbr --set-cursor seda "$sed_cmd -Ei 's/%//g' $sed_all"
 abbr --command $sed_cmd --position=anywhere "*a" "$sed_all"
