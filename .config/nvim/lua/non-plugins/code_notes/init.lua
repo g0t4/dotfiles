@@ -74,8 +74,9 @@ function M.setup()
     local notes_ns_id = vim.api.nvim_create_namespace("code_notes")
 
     local GLOBAL_NS = 0 -- not using notes_ns_id for highlights
-    vim.api.nvim_set_hl(GLOBAL_NS, "CodeNoteText", { fg = "#ff8800", bg = "#2c2c2c", italic = true })
-    vim.api.nvim_set_hl(GLOBAL_NS, "CodeNoteSelection", { fg = "#2c2c2c", bg = "#ff8800", italic = true })
+    vim.api.nvim_set_hl(GLOBAL_NS, "CodeNoteText", { fg = "#ff8800", bg = "#2c2c2c", italic = true, })
+    vim.api.nvim_set_hl(GLOBAL_NS, "CodeNoteSelection", { fg = "#2c2c2c", bg = "#ff8800", })
+    vim.api.nvim_set_hl(GLOBAL_NS, "CodeNoteGutterIcon", { fg = "#ff8800", })
 
 
     -- TODO uncomment to test real notes
@@ -99,7 +100,7 @@ function M.setup()
                 local end_col_base0 = 0
                 local end_line_base0 = n.end_line_base1 - 1
 
-                local notes_only = true -- TODO add command to toggle this, store last somehow
+                local notes_only = false -- TODO add command to toggle this, store last somehow
 
                 -- * show notes only
                 if notes_only then
@@ -108,9 +109,11 @@ function M.setup()
                         {
                             virt_text = { { n.text, "CodeNoteText" } },
                             virt_text_pos = "eol",
-                            sign_text = "◆",
 
-                            -- gutter icons through the end of the selected lines (regardless of column offsets)
+                            -- gutter indicator (all lines) - especially useful when not selecting text
+                            sign_text = "◆",
+                            sign_hl_group = "CodeNoteGutterIcon",
+
                             -- TODO last line inclusive?
                             end_line = end_line_base0,
                             end_col = end_col_base0,
@@ -129,7 +132,10 @@ function M.setup()
                             -- show note text on first line:
                             virt_text = { { n.text, "CodeNoteText" } }, -- FYI virtual text has the notes to append to end of line (this is in addition to highlighting the actual, selected text)
                             virt_text_pos = "eol",
+
+                            -- gutter indicator (all lines)
                             sign_text = "◆",
+                            sign_hl_group = "CodeNoteGutterIcon",
 
                             -- also, highlight selected text:
                             -- TODO last line inclusive?
