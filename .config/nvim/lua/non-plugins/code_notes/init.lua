@@ -66,9 +66,9 @@ end
 function M.setup()
     local notes_ns_id = vim.api.nvim_create_namespace("code_notes")
 
-
-    vim.api.nvim_set_hl(notes_ns_id, "CodeNoteText", { fg = "#ff8800", bg = "#2c2c2c", italic = true })
-    -- vim.api.nvim_set_hl(notes_ns_id, "CodeNoteSelection", { fg = "#2c2c2c", bg = "#ff8800", italic = true })
+    local GLOBAL_NS = 0 -- not using notes_ns_id for highlights
+    vim.api.nvim_set_hl(GLOBAL_NS, "CodeNoteText", { fg = "#ff8800", bg = "#2c2c2c", italic = true })
+    vim.api.nvim_set_hl(GLOBAL_NS, "CodeNoteSelection", { fg = "#2c2c2c", bg = "#ff8800", italic = true })
 
 
     -- TODO uncomment to test real notes
