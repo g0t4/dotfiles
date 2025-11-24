@@ -238,6 +238,18 @@ function M.show_notes(buffer_number)
 end
 
 ---@param buffer_number integer
+function M.show_notes(buffer_number)
+    -- * clear notes
+    vim.api.nvim_buf_clear_namespace(buffer_number, M.notes_ns_id, 0, -1)
+
+    local notes = get_or_create_notes_for_this_file(buffer_number)
+
+    -- * show each note
+    for _, n in ipairs(notes) do
+    end
+end
+
+---@param buffer_number integer
 function M.get_lines(buffer_number, start_line_base0, end_line_exclusive_base0)
     -- TODO merge into GetPosSelectionRange:lines(), or?
     return vim.api.nvim_buf_get_lines(buffer_number, start_line_base0, end_line_exclusive_base0, false)
