@@ -116,6 +116,9 @@ function M.update_note(text)
         print("NO NOTE UNDER CURSOR TO UPDATE")
         return
     end
+    note.text = text
+    -- api.write_json_werkspace_file(CODE_NOTES_PATH, M.notes_by_file)
+    M.show_notes()
 end
 
 function M.show_notes()
@@ -203,7 +206,15 @@ function M.setup()
     -- TODO later worry about lazy loading this on BufReadPost as a plugin, or on using command like AddNote
     vim.api.nvim_create_user_command("AddNote", M.add_note, {})
     vim.api.nvim_create_user_command("DeleteNote", M.delete_note, {})
-    vim.api.nvim_create_user_command("UpdateNote", M.update_note, {})
+    vim.api.nvim_create_user_command(
+        "UpdateNote",
+        function(opts)
+            local text = table.concat(opts.fargs, " ")
+            M.update_note(text)
+        end,
+        { nargs = "*" }
+    )
+
     vim.api.nvim_create_user_command("ShowNotes", M.show_notes, {})
 end
 
