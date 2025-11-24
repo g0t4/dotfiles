@@ -86,7 +86,7 @@ function M.add_note(text)
     local around = 2 -- number of lines before/after to capture too
     local context = M.slice(0, selection:start_line_base0(), selection:end_line_base0(), around)
     table.insert(notes, {
-        -- TODO get cols too?
+        -- TODO get cols too? if so, store linewise vs charwise? vs?
         start_line_base1 = selection.start_line_base1,
         end_line_base1 = selection.end_line_base1,
         text = text,
