@@ -185,7 +185,7 @@ function M.show_notes(buffer_number)
         local start_col_base0 = 0
         local start_line_base0 = n.start_line_base1 - 1
         local end_col_base0 = 0
-        local end_line_base0 = n.end_line_base1 - 1 -- TODO! does extmarks treat this end_line as inclusive or exclusive?
+        local end_line_inclusive_base0 = n.end_line_base1 - 1 -- TODO! does extmarks treat this end_line as inclusive or exclusive?
 
         local notes_only = false -- TODO add command to toggle this, store last somehow
 
@@ -201,8 +201,8 @@ function M.show_notes(buffer_number)
                     sign_text = "◆",
                     sign_hl_group = "CodeNoteGutterIcon",
 
-                    -- TODO last line inclusive? which convention should I follow (look at GetPos for any ideas there)
-                    end_line = end_line_base0,
+                    -- extmarks use INCLUSIVE end line
+                    end_line = end_line_inclusive_base0,
                     end_col = end_col_base0,
                     -- hl_group = "CodeNoteSelection",
                     -- hl_mode = "combine",
@@ -227,7 +227,7 @@ function M.show_notes(buffer_number)
                     -- also, highlight selected text:
                     -- TODO last line inclusive? which convention should I follow (look at GetPos for any ideas there)
                     --   FYI right now... the last line is marked even though end_col is set to 0... so really not included!
-                    end_line = end_line_base0,
+                    end_line = end_line_inclusive_base0,
                     end_col = end_col_base0,
                     hl_group = "CodeNoteSelection",
                     hl_mode = "combine",
