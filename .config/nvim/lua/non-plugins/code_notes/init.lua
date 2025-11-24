@@ -50,13 +50,13 @@ function M.setup_fake_data(buffer_number)
                 start_line_base1 = 3,
                 end_line_base1 = 5,
                 text = "What the FUCK?",
-                context = M.slice(buffer_number, 2, 5, 2),
+                context = M.slice(buffer_number, 2, 5, 2), -- FYI 5 is exclusive b/c it's (6 in base1)
             },
             {
                 start_line_base1 = 21,
                 end_line_base1 = 22,
                 text = "This is the key to understanding how the endpoint responds to foo!",
-                context = M.slice(buffer_number, 20, 22, 2),
+                context = M.slice(buffer_number, 20, 22, 2), -- FYI 22 is exclusive b/c its (23 in base1)
             }
         }
     }
@@ -122,8 +122,10 @@ function M.add_note(text)
     table.insert(notes, {
         -- TODO get cols too? if so, store linewise vs charwise? vs?
         start_line_base1 = selection.start_line_base1,
-        -- TODO! right now selection.end_line_base1 is INCLUSIVE per my testing of selections (both linewise and charwise)... so I need to adjust mapping to exclusive when showing
+
+        -- selection.end_line_base1 is INCLUSIVE per my testing of selections (both linewise and charwise)... so I need to adjust mapping to exclusive when showing
         end_line_base1 = selection.end_line_base1,
+
         text = text,
         context = context,
     })
@@ -183,7 +185,7 @@ function M.show_notes(buffer_number)
         local start_col_base0 = 0
         local start_line_base0 = n.start_line_base1 - 1
         local end_col_base0 = 0
-        local end_line_base0 = n.end_line_base1 - 1
+        local end_line_base0 = n.end_line_base1 - 1 -- TODO! does extmarks treat this end_line as inclusive or exclusive?
 
         local notes_only = false -- TODO add command to toggle this, store last somehow
 
@@ -279,6 +281,8 @@ function M.TODO_resolve(buffer_number, note)
     local before = note.before or ""
     local selection = note.selection or ""
     local after = note.after or ""
+
+    -- TODO wait, should I try to match on line numbers first (check selection matches) then only resolve with context if that is a no go?
 
     -- 1. Try matching BEFORE + SELECTION + AFTER
     local big = table.concat({ before, selection, after }, "\n")
