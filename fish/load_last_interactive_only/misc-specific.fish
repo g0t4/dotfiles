@@ -881,6 +881,8 @@ abbr --set-cursor sedi "$sed_cmd -i 's/%//g'"
 abbr --set-cursor --command $sed_cmd --position=anywhere -- rg "(rg --files-with-matches %)"
 
 function build_sed_abbrs_for_filetype
+    # FYI there may be some bugs here in porting this, just heads up... use and find out
+
     set -l filetype_letter $argv[1]
     set -l glob_end $argv[2]
     set -l _abbr "sed$filetype_letter"
