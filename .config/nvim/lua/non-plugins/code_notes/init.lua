@@ -68,14 +68,20 @@ local function load_notes()
     M.notes_by_file = api.read_json_werkspace_file(CODE_NOTES_PATH) or {}
 end
 
-local function get_notes_for_this_file(buffer_number)
+---@param buffer_number integer?
+---@return string relative_path
+local function get_relative_path_for_this_file(buffer_number)
     local buffer_number = buffer_number or 0
-    -- * find notes list
     local absolute_path = vim.api.nvim_buf_get_name(buffer_number)
     -- TODO fix to always be relative to the workspace dir (not the CWD) .. so if I open from nested dir in repo, I don't lose notes!
     local relative_path = vim.fn.fnamemodify(absolute_path, ":.")
     -- print("absolute_path", absolute_path)
     -- print("relative_path", relative_path)
+    return relative_path
+end
+
+local function get_notes_for_this_file(buffer_number)
+    local relative_path = get_relative_path_for_this_file(buffer_number)
     return M.notes_by_file[relative_path] or {}
 end
 
