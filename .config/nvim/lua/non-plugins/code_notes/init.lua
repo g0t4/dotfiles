@@ -458,13 +458,8 @@ function M.setup()
         M.jump_to_note(buffer_number, note)
     end
 
-    vim.api.nvim_create_user_command('NextNote', function()
-        M.next_note()
-    end, {})
-
-    vim.api.nvim_create_user_command('PrevNote', function()
-        M.prev_note()
-    end, {})
+    vim.api.nvim_create_user_command('NextNote', M.next_note, {})
+    vim.api.nvim_create_user_command('PrevNote', M.prev_note, {})
 
     ---@param buffer_number integer
     function M.list_notes(buffer_number)
