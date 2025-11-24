@@ -24,8 +24,8 @@ local GetPos = require('ask-openai.helpers.wrap_getpos')
 
 
 ---@class CodeNote
----@field start_line_base1 integer
----@field end_line_base1 integer
+---@field start_line_base1 integer -- INCLUSIVE (naturally)
+---@field end_line_base1 integer -- INCLUSIVE (both linewise/charwise)
 ---@field text string
 ---@field context? NoteContext
 
@@ -122,6 +122,7 @@ function M.add_note(text)
     table.insert(notes, {
         -- TODO get cols too? if so, store linewise vs charwise? vs?
         start_line_base1 = selection.start_line_base1,
+        -- TODO! right now selection.end_line_base1 is INCLUSIVE per my testing of selections (both linewise and charwise)... so I need to adjust mapping to exclusive when showing
         end_line_base1 = selection.end_line_base1,
         text = text,
         context = context,
