@@ -184,6 +184,10 @@ function M.show_notes(buffer_number)
     for _, n in ipairs(notes) do
         local start_col_base0 = 0
         local start_line_base0 = n.start_line_base1 - 1
+
+        -- TODO! end column needs to be end of line to get the extmark to highlight the full line
+        --    TODO I can just extend to start of next line at column 0 and it'll work but then the gutter icon shows on the last line that it shouldn't show on)
+        --    PRN split out a separte extmark for just last line? that doesn't include the gutter icon? and then have the first extmark hit the last line and give its gutter icon then second extmark is only for highlighting the last line (thru end of next line)
         local end_col_base0 = 0
         local end_line_inclusive_base0 = n.end_line_base1 - 1 -- TODO! does extmarks treat this end_line as inclusive or exclusive?
 
