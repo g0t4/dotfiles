@@ -174,14 +174,8 @@ function M.update_note(text)
 end
 
 ---@param buffer_number integer
-function M.show_notes(buffer_number)
-    -- * clear notes
-    vim.api.nvim_buf_clear_namespace(buffer_number, M.notes_ns_id, 0, -1)
-
-    local notes = get_or_create_notes_for_this_file(buffer_number)
-
-    -- * show each note
-    for _, n in ipairs(notes) do
+---@param n CodeNote
+function M.apply_extmarks(buffer_number, n)
         local start_col_base0 = 0
         local start_line_base0 = n.start_line_base1 - 1
 
@@ -234,7 +228,6 @@ function M.show_notes(buffer_number)
                 }
             )
         end
-    end
 end
 
 ---@param buffer_number integer
@@ -246,6 +239,7 @@ function M.show_notes(buffer_number)
 
     -- * show each note
     for _, n in ipairs(notes) do
+        M.apply_extmarks(buffer_number, n)
     end
 end
 
