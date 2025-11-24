@@ -882,22 +882,26 @@ abbr --set-cursor --command $sed_cmd --position=anywhere -- rg "(rg --files-with
 
 function build_sed_abbrs_for_filetype
     set -l filetype_letter $argv[1]
-    set -l extension $argv[2]
+    set -l glob_end $argv[2]
     set -l _abbr "sed$filetype_letter"
 
     # * two approaches to making it easier to target specific files...
 
     # 1. dedicated abbr per file type(s)
-    abbr --set-cursor $_abbr "$sed_cmd -Ei 's/%//$filetype_letter' **/*$extension"
+    abbr --set-cursor $_abbr "$sed_cmd -Ei 's/%//$filetype_letter' **/*.$glob_end"
 
+    # 2. *l => (rg -g "*.lua" --files-with-matches ___)
+    abbr --command $sed_cmd --position=anywhere "*$filetype_letter" "(rg -g '*.$glob_end' --files-with-matches %)"
+    #
+    # OLD STYLE:
     # 2. *l => **/*.lua
-    abbr --command $sed_cmd --position=anywhere "*$filetype_letter" "**/*$extension"
+    # abbr --command $sed_cmd --position=anywhere "*$filetype_letter" "**/*$extension"
 end
-build_sed_abbrs_for_filetype l ".lua"
-build_sed_abbrs_for_filetype t ".ts"
-build_sed_abbrs_for_filetype j ".{json,js}"
-build_sed_abbrs_for_filetype m "**/*.md"
-build_sed_abbrs_for_filetype p "**/*.py"
+build_sed_abbrs_for_filetype l "lua"
+build_sed_abbrs_for_filetype t "ts"
+build_sed_abbrs_for_filetype j "{json,js}"
+build_sed_abbrs_for_filetype m "md"
+build_sed_abbrs_for_filetype p "py"
 
 # all - use brace expansion for multiple file types
 abbr --set-cursor seda "$sed_cmd -Ei 's/%//g' $sed_all"
