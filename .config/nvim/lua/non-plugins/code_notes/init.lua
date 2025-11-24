@@ -141,9 +141,9 @@ function M.find_first_note_under_cursor(buffer_number)
     local line = pos.start_line_base1
 
     local notes = get_or_create_notes_for_this_file(buffer_number)
-    for index, n in ipairs(notes) do
-        if n.start_line_base1 <= line and n.end_line_base1 >= line then
-            return n, index
+    for index, note in ipairs(notes) do
+        if note.start_line_base1 <= line and note.end_line_base1 >= line then
+            return note, index
         end
     end
 end
