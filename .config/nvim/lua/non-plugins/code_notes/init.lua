@@ -80,9 +80,14 @@ local function get_relative_path_for_this_file(buffer_number)
     return relative_path
 end
 
-local function get_notes_for_this_file(buffer_number)
+local function get_or_create_notes_for_this_file(buffer_number)
     local relative_path = get_relative_path_for_this_file(buffer_number)
-    return M.notes_by_file[relative_path] or {}
+    local notes = M.notes_by_file[relative_path]
+    if not notes then
+        notes = {}
+        M.notes_by_file[relative_path] = notes
+    end
+    return notes
 end
 
 ---@param cursor_line number 0-based line number of the cursor
@@ -108,7 +113,7 @@ end
 
 function M.add_note(text)
     local selection = GetPos.last_selection()
-    local notes = get_notes_for_this_file()
+    local notes = get_or_create_notes_for_this_file()
     local around = 2 -- number of lines before/after to capture too
     local buffer_number = 0 -- TODO cleanup inlined values and set 0 in one spot if that's the direction I want to go
     local context = M.slice(buffer_number, selection:start_line_base0(), selection:end_line_base0(), around)
@@ -130,7 +135,7 @@ function M.find_first_note_under_cursor()
     local line = pos.start_line_base1
 
     local buffer_number = 0
-    local notes = get_notes_for_this_file(buffer_number)
+    local notes = get_or_create_notes_for_this_file(buffer_number)
     for index, n in ipairs(notes) do
         if n.start_line_base1 <= line and n.end_line_base1 >= line then
             return n, index
@@ -144,7 +149,7 @@ function M.delete_note()
         print("NO NOTE UNDER CURSOR TO DELETE")
         return
     end
-    local notes = get_notes_for_this_file()
+    local notes = get_or_create_notes_for_this_file()
     table.remove(notes, index)
     -- api.write_json_werkspace_file(CODE_NOTES_PATH, M.notes_by_file)
     M.show_notes()
@@ -167,7 +172,7 @@ function M.show_notes()
     -- * clear notes
     vim.api.nvim_buf_clear_namespace(buffer_number, M.notes_ns_id, 0, -1)
 
-    local notes = get_notes_for_this_file(buffer_number)
+    local notes = get_or_create_notes_for_this_file(buffer_number)
 
     -- * show each note
     for _, n in ipairs(notes) do
