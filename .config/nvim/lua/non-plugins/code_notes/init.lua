@@ -134,7 +134,7 @@ function M.add_note(text)
         context = context,
     })
 
-    -- api.write_json_werkspace_file(CODE_NOTES_PATH, M.notes_by_file)
+    api.write_json_werkspace_file(CODE_NOTES_PATH, M.notes_by_file)
     M.show_notes(buffer_number)
 end
 
@@ -161,7 +161,7 @@ function M.delete_note()
     end
     local notes = get_or_create_notes_for_this_file(buffer_number)
     table.remove(notes, index)
-    -- api.write_json_werkspace_file(CODE_NOTES_PATH, M.notes_by_file)
+    api.write_json_werkspace_file(CODE_NOTES_PATH, M.notes_by_file)
     M.show_notes(buffer_number)
 end
 
@@ -174,7 +174,7 @@ function M.update_note(text)
         return
     end
     note.text = text
-    -- api.write_json_werkspace_file(CODE_NOTES_PATH, M.notes_by_file)
+    api.write_json_werkspace_file(CODE_NOTES_PATH, M.notes_by_file)
     M.show_notes(buffer_number)
 end
 
@@ -351,14 +351,12 @@ function M.setup()
     vim.api.nvim_set_hl(GLOBAL_NS, 'CodeNoteSelectionFallback', { fg = '#3a3a3a', bg = '#ffcc00' })
     vim.api.nvim_set_hl(GLOBAL_NS, 'CodeNoteGutterIconFallback', { fg = '#ffcc00' })
 
-
-    -- TODO uncomment to test real notes
-    -- load_notes()
+    load_notes()
 
     vim.api.nvim_create_autocmd('BufReadPost', {
         callback = function(info)
             local buffer_number = info.buf
-            M.setup_fake_data(buffer_number)
+            -- M.setup_fake_data(buffer_number)
             M.show_notes(buffer_number)
         end
     })
