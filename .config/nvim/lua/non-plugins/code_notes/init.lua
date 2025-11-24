@@ -27,7 +27,13 @@ local GetPos = require("ask-openai.helpers.wrap_getpos")
 ---@field start_line_base1 integer
 ---@field end_line_base1 integer
 ---@field text string
----@field context string --- for matching moved lines
+---@field context NoteContext
+
+---@class NoteContext
+---@field before string[]   -- lines before the note, first entry is the line directly before the note
+---@field after string[]    -- lines after the note, first entry is the line directly after the note
+---@field selection string -- the text selected when the note was added
+
 
 ---@class CodeNotesModule
 local M = {}
@@ -78,6 +84,16 @@ function M.show_note(cursor_line)
         return
     end
     vim.print(note)
+
+    -- prettier view:
+    print("BEFORE")
+    print(note.context.before)
+    print("")
+    print("SELECTED TEXT")
+    print(note.context.selection)
+    print("")
+    print("AFTER")
+    print(note.context.after)
 end
 
 function M.add_note(text)
@@ -214,9 +230,9 @@ function M.slice(buf, start_line_base0, exclusive_end_line_base0, around)
     local after_end = exclusive_end_line_base0 + around
 
     return {
-        before   = table.concat(get_lines(buf, before_start, before_end), "\n"),
-        selected = table.concat(get_lines(buf, start_line_base0 - 1, exclusive_end_line_base0), "\n"),
-        after    = table.concat(get_lines(buf, after_start, after_end), "\n"),
+        before    = table.concat(get_lines(buf, before_start, before_end), "\n"),
+        selection = table.concat(get_lines(buf, start_line_base0 - 1, exclusive_end_line_base0), "\n"),
+        after     = table.concat(get_lines(buf, after_start, after_end), "\n"),
     }
 end
 
@@ -236,26 +252,26 @@ end
 
 function M.TODO_resolve(buf, note)
     local before = note.before or ""
-    local selected = note.selected or ""
+    local selection = note.selection or ""
     local after = note.after or ""
 
-    -- 1. Try matching BEFORE + SELECTED + AFTER
-    local big = table.concat({ before, selected, after }, "\n")
+    -- 1. Try matching BEFORE + SELECTION + AFTER
+    local big = table.concat({ before, selection, after }, "\n")
     local line = TODO_search_in_buf(buf, big)
     if line then
         return {
             start_line = line + #vim.split(before, "\n"),
-            end_line   = line + #vim.split(before, "\n") + #vim.split(selected, "\n"),
+            end_line   = line + #vim.split(before, "\n") + #vim.split(selection, "\n"),
             method     = "full_match",
         }
     end
 
     -- 2. Try matching exactly the selected text
-    local sline = TODO_search_in_buf(buf, selected)
+    local sline = TODO_search_in_buf(buf, selection)
     if sline then
         return {
             start_line = sline,
-            end_line   = sline + #vim.split(selected, "\n"),
+            end_line   = sline + #vim.split(selection, "\n"),
             method     = "selected_only",
         }
     end
