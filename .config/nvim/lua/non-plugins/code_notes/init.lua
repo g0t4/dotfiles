@@ -1,5 +1,5 @@
-local api = require("non-plugins.werkspaces.api")
-local GetPos = require("ask-openai.helpers.wrap_getpos")
+local api = require('non-plugins.werkspaces.api')
+local GetPos = require('ask-openai.helpers.wrap_getpos')
 
 -- I'd like to finally have a way to make notes in code and have them show when I revist the code
 --   someone built a similar plugin: https://github.com/winter-again/annotate.nvim
@@ -299,38 +299,38 @@ end
 function M.setup()
     -- do return end
 
-    M.notes_ns_id = vim.api.nvim_create_namespace("code_notes")
+    M.notes_ns_id = vim.api.nvim_create_namespace('code_notes')
 
     local GLOBAL_NS = 0 -- not using notes_ns_id for highlights
-    vim.api.nvim_set_hl(GLOBAL_NS, "CodeNoteText", { fg = "#ff8800", bg = "#2c2c2c", italic = true, })
-    vim.api.nvim_set_hl(GLOBAL_NS, "CodeNoteSelection", { fg = "#2c2c2c", bg = "#ff8800", })
-    vim.api.nvim_set_hl(GLOBAL_NS, "CodeNoteGutterIcon", { fg = "#ff8800", })
+    vim.api.nvim_set_hl(GLOBAL_NS, 'CodeNoteText', { fg = '#ff8800', bg = '#2c2c2c', italic = true, })
+    vim.api.nvim_set_hl(GLOBAL_NS, 'CodeNoteSelection', { fg = '#2c2c2c', bg = '#ff8800', })
+    vim.api.nvim_set_hl(GLOBAL_NS, 'CodeNoteGutterIcon', { fg = '#ff8800', })
 
     -- TODO uncomment to test real notes
     -- load_notes()
 
-    vim.api.nvim_create_autocmd("BufReadPost", {
+    vim.api.nvim_create_autocmd('BufReadPost', {
         callback = M.show_notes
     })
 
     -- TODO later worry about lazy loading this on BufReadPost as a plugin, or on using command like AddNote
-    vim.api.nvim_create_user_command("AddNote",
+    vim.api.nvim_create_user_command('AddNote',
         function(opts)
-            local text = table.concat(opts.fargs, " ")
+            local text = table.concat(opts.fargs, ' ')
             M.add_note(text)
         end,
-        { nargs = "*", range = true }
+        { nargs = '*', range = true }
     )
-    vim.api.nvim_create_user_command("DeleteNote", M.delete_note, {})
-    vim.api.nvim_create_user_command("UpdateNote",
+    vim.api.nvim_create_user_command('DeleteNote', M.delete_note, {})
+    vim.api.nvim_create_user_command('UpdateNote',
         function(opts)
-            local text = table.concat(opts.fargs, " ")
+            local text = table.concat(opts.fargs, ' ')
             M.update_note(text)
         end,
-        { nargs = "*", range = true }
+        { nargs = '*', range = true }
     )
 
-    vim.api.nvim_create_user_command("ShowNotes", M.show_notes, {})
+    vim.api.nvim_create_user_command('ShowNotes', M.show_notes, {})
     vim.api.nvim_create_user_command('ShowNote', M.show_note, {})
 end
 
