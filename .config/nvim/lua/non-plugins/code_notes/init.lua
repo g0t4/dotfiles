@@ -468,17 +468,17 @@ function M.setup()
 
     ---@param buffer_number integer
     function M.list_notes(buffer_number)
-        local notes = get_notes_for_this_file(buffer_number)
+        local notes = get_sorted_notes_for_this_file(buffer_number)
         if #notes == 0 then
             print("No notes in this file")
             return
         end
-        for i, note in ipairs(notes) do
+        for _, note in ipairs(notes) do
             vim.print({
-                index = i,
-                start_line = note.start_line_base1,
-                end_line = note.end_line_base1,
-                text = note.text,
+                -- FYI prints as a signle line - compact, which is a nice way to see this, I can add more info later
+                note.start_line_base1,
+                note.end_line_base1,
+                note.text,
             })
         end
     end
