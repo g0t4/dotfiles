@@ -102,11 +102,11 @@ function restore_session_by_name(name)
 end
 
 vim.api.nvim_create_user_command(
-    "ShowWorkspaceDir",
+    "OpenWorkspaceDir",
     function()
-        local path = vim.fn.expand(api.get_werkspace_state_dir())
-        local open_cmd = vim.loop.os_uname().sysname == "Darwin" and "open" or "xdg-open"
-        vim.fn.jobstart({ open_cmd, path }, { detach = true })
+        local path = api.get_werkspace_state_dir()
+        print(path)
+        vim.cmd(":Open " .. path)
     end,
     {}
 )
