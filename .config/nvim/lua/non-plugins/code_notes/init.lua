@@ -69,6 +69,17 @@ local function get_notes_for_this_file(bufnr)
     return M.notes_by_file[relative_path] or {}
 end
 
+---@param cursor_line number 0-based line number of the cursor
+---@return nil
+function M.show_note(cursor_line)
+    local note = M.find_first_note_under_cursor()
+    if not note then
+        print("NO NOTE UNDER CURSOR")
+        return
+    end
+    vim.print(note)
+end
+
 function M.add_note(text)
     local selection = GetPos.last_selection()
     local notes = get_notes_for_this_file()
@@ -303,6 +314,7 @@ function M.setup()
     )
 
     vim.api.nvim_create_user_command("ShowNotes", M.show_notes, {})
+    vim.api.nvim_create_user_command('ShowNote', M.show_note, {})
 end
 
 return M
