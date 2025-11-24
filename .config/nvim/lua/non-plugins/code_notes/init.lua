@@ -138,7 +138,7 @@ end
 ---@return integer|nil index, CodeNote|nil note   -- index of the matching note (or nil) and the note itself
 function M.find_first_note_under_cursor(buffer_number)
     -- find first note under cursor to replace
-    local cursor = GetPos.CursorPosition()
+    local cursor = GetPos.cursor_position()
 
     local notes = get_or_create_notes_for_this_file(buffer_number)
     for index, note in ipairs(notes) do
