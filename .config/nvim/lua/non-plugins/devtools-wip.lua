@@ -136,6 +136,7 @@ if ENABLE_TEST_CMDLINE_SELECTION_SUMMARY_TEXT then
     vim.cmd("set noshowmode ") -- hide -- * --
     -- show mode shows -- VISUAL -- or -- VISUAL LINE -- or -- INSERT --
     vim.cmd("set cmdheight=3 ") -- use this for testing if smth else is "interfering" ... i.e. if showmode is on
+    -- FYI leave cmdheight absurdly high for now so I notice it and turn off this summary when I am done for the day
 
 
     vim.api.nvim_create_autocmd({ "ModeChanged" }, {
