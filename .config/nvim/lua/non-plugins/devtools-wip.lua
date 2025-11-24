@@ -92,7 +92,7 @@ if ENABLE_CUSTOM_ABBRS_IN_CMDLINE then
     })
 end
 
-local ENABLE_TEST_CMDLINE_SELECTION_SUMMARY_TEXT = true -- *** toggle on/off
+local ENABLE_TEST_CMDLINE_SELECTION_SUMMARY_TEXT = false -- *** toggle on/off
 if ENABLE_TEST_CMDLINE_SELECTION_SUMMARY_TEXT then
     -- *** change messages shown when selecting text
     -- default shows #chars if in v visual model and only selecting text on one line
