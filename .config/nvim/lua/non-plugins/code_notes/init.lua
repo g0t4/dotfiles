@@ -81,14 +81,9 @@ local function get_relative_path_for_this_file(buffer_number)
 end
 
 ---@param buffer_number integer
-local function get_or_create_notes_for_this_file(buffer_number)
+local function get_notes_for_this_file(buffer_number)
     local relative_path = get_relative_path_for_this_file(buffer_number)
-    local notes = M.notes_by_file[relative_path]
-    if not notes then
-        notes = {}
-        M.notes_by_file[relative_path] = notes
-    end
-    return notes
+    return M.notes_by_file[relative_path] or {}
 end
 
 ---@param cursor_line number 0-based line number of the cursor
@@ -120,6 +115,18 @@ function M.add_note(text)
         print("NO SELECTION - select text before adding a note")
         return
     end
+
+    ---@param buffer_number integer
+    local function get_or_create_notes_for_this_file(buffer_number)
+        local relative_path = get_relative_path_for_this_file(buffer_number)
+        local notes = M.notes_by_file[relative_path]
+        if not notes then
+            notes = {}
+            M.notes_by_file[relative_path] = notes
+        end
+        return notes
+    end
+
     local notes = get_or_create_notes_for_this_file(buffer_number)
     local around = 2 -- number of lines before/after to capture too
     local context = M.slice(buffer_number, selection:start_line_base0(), selection:end_line_base0(), around)
@@ -144,7 +151,7 @@ function M.find_first_note_under_cursor(buffer_number)
     -- find first note under cursor to replace
     local cursor = GetPos.cursor_position()
 
-    local notes = get_or_create_notes_for_this_file(buffer_number)
+    local notes = get_notes_for_this_file(buffer_number)
     for index, note in ipairs(notes) do
         if note.start_line_base1 <= cursor.line_base1 and note.end_line_base1 >= cursor.line_base1 then
             return index, note
@@ -159,7 +166,7 @@ function M.delete_note()
         print("NO NOTE UNDER CURSOR TO DELETE")
         return
     end
-    local notes = get_or_create_notes_for_this_file(buffer_number)
+    local notes = get_notes_for_this_file(buffer_number)
     table.remove(notes, index)
     api.write_json_werkspace_file(CODE_NOTES_PATH, M.notes_by_file)
     M.show_notes(buffer_number)
@@ -241,7 +248,7 @@ function M.show_notes(buffer_number)
     vim.api.nvim_buf_clear_namespace(buffer_number, M.notes_ns_id, 0, -1)
     -- FYI in all of my time working with extmarks, I have yet to notice performance issues => hence just recreate all of them!
 
-    local notes = get_or_create_notes_for_this_file(buffer_number)
+    local notes = get_notes_for_this_file(buffer_number)
 
     -- * show each note
     for _, n in ipairs(notes) do
