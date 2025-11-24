@@ -76,7 +76,7 @@ function M.add_note(text)
         -- TODO get cols too?
         start_line_base1 = selection.start_line_base1,
         end_line_base1 = selection.end_line_base1,
-        text = "DUCKARD!",
+        text = text,
         -- context = ?
     })
 
@@ -204,10 +204,15 @@ function M.setup()
     })
 
     -- TODO later worry about lazy loading this on BufReadPost as a plugin, or on using command like AddNote
-    vim.api.nvim_create_user_command("AddNote", M.add_note, {})
+    vim.api.nvim_create_user_command("AddNote",
+        function(opts)
+            local text = table.concat(opts.fargs, " ")
+            M.add_note(text)
+        end,
+        { nargs = "*" }
+    )
     vim.api.nvim_create_user_command("DeleteNote", M.delete_note, {})
-    vim.api.nvim_create_user_command(
-        "UpdateNote",
+    vim.api.nvim_create_user_command("UpdateNote",
         function(opts)
             local text = table.concat(opts.fargs, " ")
             M.update_note(text)
