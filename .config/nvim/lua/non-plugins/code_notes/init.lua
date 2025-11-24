@@ -138,12 +138,11 @@ end
 ---@return integer|nil index, CodeNote|nil note   -- index of the matching note (or nil) and the note itself
 function M.find_first_note_under_cursor(buffer_number)
     -- find first note under cursor to replace
-    local pos = GetPos.current_selection() -- TODO would be nice to name this as just cursor position?
-    local line = pos.start_line_base1
+    local cursor = GetPos.CursorPosition()
 
     local notes = get_or_create_notes_for_this_file(buffer_number)
     for index, note in ipairs(notes) do
-        if note.start_line_base1 <= line and note.end_line_base1 >= line then
+        if note.start_line_base1 <= cursor.line_base1 and note.end_line_base1 >= cursor.line_base1 then
             return index, note
         end
     end
