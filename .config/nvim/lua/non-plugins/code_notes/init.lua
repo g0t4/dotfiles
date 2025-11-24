@@ -189,8 +189,8 @@ function M.show_notes(buffer_number)
         local end_line_inclusive_base0 = n.end_line_base1 - 1
 
         -- TODO add command to toggle this, store last somehow
-        -- local highlight_too = false
-        local highlight_too = true
+        -- local highlight_lines = false
+        local highlight_lines = true
 
         -- * extmark for text + gutter icons
         vim.api.nvim_buf_set_extmark( -- (0,0)-indexed
@@ -200,7 +200,7 @@ function M.show_notes(buffer_number)
                 virt_text = { { n.text, "CodeNoteText" } },
                 virt_text_pos = "eol",
 
-                -- * gutter "sign" indicator (all lines in range) - especially useful when not highlight_too
+                -- * gutter "sign" indicator (all lines in range) - especially useful when not highlight_lines
                 sign_text = "◆",
                 sign_hl_group = "CodeNoteGutterIcon",
 
@@ -209,7 +209,7 @@ function M.show_notes(buffer_number)
                 -- FYI not need end_col set to get gutter icon to show on end_line b/c it's inclusive!
             }
         )
-        if highlight_too then
+        if highlight_lines then
             -- * extmark to highlight the selected, actual text
             vim.api.nvim_buf_set_extmark( -- (0,0)-indexed
                 buffer_number,
