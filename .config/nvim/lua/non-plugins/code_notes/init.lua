@@ -162,10 +162,9 @@ function M.setup()
         callback = show_notes
     })
 
-    -- TODO this should be a command, and the plugin should be lazy loaded
     vim.api.nvim_create_user_command("AddNote", M.add_note, {})
 
-    -- TODO later worry about lazy loading this on BufReadPost as a plugin
+    -- TODO later worry about lazy loading this on BufReadPost as a plugin, or on using command like AddNote
 end
 
 return M
