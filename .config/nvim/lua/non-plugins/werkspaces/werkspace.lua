@@ -104,7 +104,9 @@ end
 vim.api.nvim_create_user_command(
     "ShowWorkspaceDir",
     function()
-        print(vim.fn.expand(api.get_werkspace_state_dir()))
+        local path = vim.fn.expand(api.get_werkspace_state_dir())
+        local open_cmd = vim.loop.os_uname().sysname == "Darwin" and "open" or "xdg-open"
+        vim.fn.jobstart({ open_cmd, path }, { detach = true })
     end,
     {}
 )
