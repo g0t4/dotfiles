@@ -412,10 +412,10 @@ function M.setup()
     function M.find_prev_note_under_cursor(buffer_number)
         local cursor = GetPos.cursor_position()
         local notes = get_notes_for_this_file(buffer_number)
-        for i = #notes, 1, -1 do
-            local note = notes[i]
+        for index = #notes, 1, -1 do
+            local note = notes[index]
             if note.end_line_base1 < cursor.line_base1 then
-                return i, note
+                return index, note
             end
         end
         return nil, nil
