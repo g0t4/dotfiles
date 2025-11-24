@@ -58,7 +58,7 @@ local function load_notes()
     M.notes_by_file = api.read_json_werkspace_file(CODE_NOTES_PATH) or {}
 end
 
-function get_notes_for_this_file(bufnr)
+local function get_notes_for_this_file(bufnr)
     local bufnr = bufnr or 0
     -- * find notes list
     local absolute_path = vim.api.nvim_buf_get_name(bufnr)
