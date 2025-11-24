@@ -186,6 +186,121 @@ function M.show_notes()
     end
 end
 
+local function get_lines(buf, s, e)
+    return vim.api.nvim_buf_get_lines(buf, s, e, false)
+end
+
+local function slice(buf, start_line, end_line, around)
+    -- around = number of context lines before/after
+    local before_start = math.max(start_line - around - 1, 0)
+    local before_end = math.max(start_line - 1, 0)
+
+    local after_start = end_line
+    local after_end = end_line + around
+
+    return {
+        before   = table.concat(get_lines(buf, before_start, before_end), "\n"),
+        selected = table.concat(get_lines(buf, start_line - 1, end_line), "\n"),
+        after    = table.concat(get_lines(buf, after_start, after_end), "\n"),
+    }
+end
+
+----------------------------------------------------------------------
+-- CAPTURE NOTE
+----------------------------------------------------------------------
+
+function M.capture(buf, start_line_base1, end_line_base1, opts)
+    opts = opts or {}
+
+    local around = opts.context_lines or 2
+
+    local ctx = slice(
+        buf,
+        start_line_base1,
+        end_line_base1,
+        around
+    )
+
+    return {
+        start_line_base1 = start_line_base1,
+        end_line_base1   = end_line_base1,
+        before           = ctx.before,
+        selected         = ctx.selected,
+        after            = ctx.after,
+    }
+end
+
+----------------------------------------------------------------------
+-- SEARCH HELPERS
+----------------------------------------------------------------------
+
+local function search_in_buf(buf, text)
+    if text == "" then return nil end
+    local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
+    local full = table.concat(lines, "\n")
+
+    local s = full:find(text, 1, true)
+    if not s then return nil end
+
+    -- convert byte offset → line start
+    local pre = full:sub(1, s)
+    local line = select(2, pre:gsub("\n", ""))
+    return line + 1 -- base1
+end
+
+----------------------------------------------------------------------
+-- RESOLVE LOCATION
+----------------------------------------------------------------------
+
+function M.resolve(buf, note)
+    local before = note.before or ""
+    local selected = note.selected or ""
+    local after = note.after or ""
+
+    -- 1. Try matching BEFORE + SELECTED + AFTER
+    local big = table.concat({ before, selected, after }, "\n")
+    local line = search_in_buf(buf, big)
+    if line then
+        return {
+            start_line = line + #vim.split(before, "\n"),
+            end_line   = line + #vim.split(before, "\n") + #vim.split(selected, "\n"),
+            method     = "full_match",
+        }
+    end
+
+    -- 2. Try matching exactly the selected text
+    local sline = search_in_buf(buf, selected)
+    if sline then
+        return {
+            start_line = sline,
+            end_line   = sline + #vim.split(selected, "\n"),
+            method     = "selected_only",
+        }
+    end
+
+    -- 3. Fallback to stored line numbers
+    return {
+        start_line = note.start_line_base1,
+        end_line   = note.end_line_base1,
+        method     = "line_fallback",
+    }
+end
+
+----------------------------------------------------------------------
+-- EXT MARK APPLICATION
+----------------------------------------------------------------------
+
+function M.apply_extmark(buf, ns, note, hlgroup)
+    local pos = M.resolve(buf, note)
+
+    vim.api.nvim_buf_set_extmark(buf, ns, pos.start_line - 1, 0, {
+        end_line = pos.end_line - 1,
+        hl_group = hlgroup,
+    })
+
+    return pos
+end
+
 function M.setup()
     -- do return end
 
