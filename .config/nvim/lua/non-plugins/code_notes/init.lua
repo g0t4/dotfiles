@@ -73,7 +73,7 @@ function M.add_note(text)
     })
 
     -- api.write_json_werkspace_file(CODE_NOTES_PATH, M.notes_by_file)
-    show_notes()
+    M.show_notes()
 end
 
 function M.delete_note()
@@ -102,10 +102,75 @@ function get_notes_for_this_file(bufnr)
     return M.notes_by_file[relative_path] or {}
 end
 
+function M.show_notes()
+    local bufnr = 0
+
+    -- * clear notes
+    vim.api.nvim_buf_clear_namespace(bufnr, M.notes_ns_id, 0, -1)
+
+    local notes = get_notes_for_this_file(bufnr)
+
+    -- * show each note
+    for _, n in ipairs(notes) do
+        local start_col_base0 = 0
+        local start_line_base0 = n.start_line_base1 - 1
+        local end_col_base0 = 0
+        local end_line_base0 = n.end_line_base1 - 1
+
+        local notes_only = false -- TODO add command to toggle this, store last somehow
+
+        -- * show notes only
+        if notes_only then
+            vim.api.nvim_buf_set_extmark( -- (0,0)-indexed
+                bufnr, M.notes_ns_id, start_line_base0, start_col_base0,
+                {
+                    virt_text = { { n.text, "CodeNoteText" } },
+                    virt_text_pos = "eol",
+
+                    -- gutter indicator (all lines) - especially useful when not selecting text
+                    sign_text = "◆",
+                    sign_hl_group = "CodeNoteGutterIcon",
+
+                    -- TODO last line inclusive? which convention should I follow (look at GetPos for any ideas there)
+                    end_line = end_line_base0,
+                    end_col = end_col_base0,
+                    -- hl_group = "CodeNoteSelection",
+                    -- hl_mode = "combine",
+                }
+            )
+        else
+            -- * show both notes AND highlight the selected, actual text
+            vim.api.nvim_buf_set_extmark( -- (0,0)-indexed
+                bufnr,
+                M.notes_ns_id,
+                start_line_base0,
+                start_col_base0,
+                {
+                    -- show note text on first line:
+                    virt_text = { { n.text, "CodeNoteText" } }, -- FYI virtual text has the notes to append to end of line (this is in addition to highlighting the actual, selected text)
+                    virt_text_pos = "eol",
+
+                    -- gutter indicator (all lines)
+                    sign_text = "◆",
+                    sign_hl_group = "CodeNoteGutterIcon",
+
+                    -- also, highlight selected text:
+                    -- TODO last line inclusive? which convention should I follow (look at GetPos for any ideas there)
+                    --   FYI right now... the last line is marked even though end_col is set to 0... so really not included!
+                    end_line = end_line_base0,
+                    end_col = end_col_base0,
+                    hl_group = "CodeNoteSelection",
+                    hl_mode = "combine",
+                }
+            )
+        end
+    end
+end
+
 function M.setup()
     -- do return end
 
-    local notes_ns_id = vim.api.nvim_create_namespace("code_notes")
+    M.notes_ns_id = vim.api.nvim_create_namespace("code_notes")
 
     local GLOBAL_NS = 0 -- not using notes_ns_id for highlights
     vim.api.nvim_set_hl(GLOBAL_NS, "CodeNoteText", { fg = "#ff8800", bg = "#2c2c2c", italic = true, })
@@ -115,73 +180,8 @@ function M.setup()
     -- TODO uncomment to test real notes
     -- load_notes()
 
-    function show_notes()
-        local bufnr = 0
-
-        -- * clear notes
-        vim.api.nvim_buf_clear_namespace(bufnr, notes_ns_id, 0, -1)
-
-        local notes = get_notes_for_this_file(bufnr)
-
-        -- * show each note
-        for _, n in ipairs(notes) do
-            local start_col_base0 = 0
-            local start_line_base0 = n.start_line_base1 - 1
-            local end_col_base0 = 0
-            local end_line_base0 = n.end_line_base1 - 1
-
-            local notes_only = false -- TODO add command to toggle this, store last somehow
-
-            -- * show notes only
-            if notes_only then
-                vim.api.nvim_buf_set_extmark( -- (0,0)-indexed
-                    bufnr, notes_ns_id, start_line_base0, start_col_base0,
-                    {
-                        virt_text = { { n.text, "CodeNoteText" } },
-                        virt_text_pos = "eol",
-
-                        -- gutter indicator (all lines) - especially useful when not selecting text
-                        sign_text = "◆",
-                        sign_hl_group = "CodeNoteGutterIcon",
-
-                        -- TODO last line inclusive? which convention should I follow (look at GetPos for any ideas there)
-                        end_line = end_line_base0,
-                        end_col = end_col_base0,
-                        -- hl_group = "CodeNoteSelection",
-                        -- hl_mode = "combine",
-                    }
-                )
-            else
-                -- * show both notes AND highlight the selected, actual text
-                vim.api.nvim_buf_set_extmark( -- (0,0)-indexed
-                    bufnr,
-                    notes_ns_id,
-                    start_line_base0,
-                    start_col_base0,
-                    {
-                        -- show note text on first line:
-                        virt_text = { { n.text, "CodeNoteText" } }, -- FYI virtual text has the notes to append to end of line (this is in addition to highlighting the actual, selected text)
-                        virt_text_pos = "eol",
-
-                        -- gutter indicator (all lines)
-                        sign_text = "◆",
-                        sign_hl_group = "CodeNoteGutterIcon",
-
-                        -- also, highlight selected text:
-                        -- TODO last line inclusive? which convention should I follow (look at GetPos for any ideas there)
-                        --   FYI right now... the last line is marked even though end_col is set to 0... so really not included!
-                        end_line = end_line_base0,
-                        end_col = end_col_base0,
-                        hl_group = "CodeNoteSelection",
-                        hl_mode = "combine",
-                    }
-                )
-            end
-        end
-    end
-
     vim.api.nvim_create_autocmd("BufReadPost", {
-        callback = show_notes
+        callback = M.show_notes
     })
 
     -- TODO later worry about lazy loading this on BufReadPost as a plugin, or on using command like AddNote
