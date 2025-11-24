@@ -39,23 +39,27 @@ local GetPos = require('ask-openai.helpers.wrap_getpos')
 local M = {}
 
 ---@type table<string, CodeNote[]>
-M.notes_by_file = {
-    -- hard coded set of examples
-    [".config/nvim/lua/non-plugins/code_notes/init.lua"] = {
-        {
-            start_line_base1 = 3,
-            end_line_base1 = 5,
-            text = "What the FUCK?",
-            context = {}
-        },
-        {
-            start_line_base1 = 21,
-            end_line_base1 = 22,
-            text = "This is the key to understanding how the endpoint responds to foo!",
-            context = {}
+M.notes_by_file = {}
+
+function M.setup_fake_data()
+    M.notes_by_file = {
+        -- hard coded set of examples
+        [".config/nvim/lua/non-plugins/code_notes/init.lua"] = {
+            {
+                start_line_base1 = 3,
+                end_line_base1 = 5,
+                text = "What the FUCK?",
+                context = {}
+            },
+            {
+                start_line_base1 = 21,
+                end_line_base1 = 22,
+                text = "This is the key to understanding how the endpoint responds to foo!",
+                context = {}
+            }
         }
     }
-}
+end
 
 -- ONLY change to a nested dir and/or sqlite as I have issues with this simple setup:
 local CODE_NOTES_PATH = "/code_notes.json"
@@ -298,6 +302,8 @@ end
 
 function M.setup()
     -- do return end
+
+    M.setup_fake_data()
 
     M.notes_ns_id = vim.api.nvim_create_namespace('code_notes')
 
