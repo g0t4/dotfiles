@@ -52,7 +52,7 @@ function M.write_json_werkspace_file(relative_path, object)
     local encoded = vim.fn.json_encode(object)
     local abs_path = vim.fn.expand(M.get_werkspace_state_dir() .. "/" .. relative_path)
     vim.fn.mkdir(vim.fn.fnamemodify(abs_path, ":h"), "p")
-    vim.fn.writefile(encoded, abs_path)
+    vim.fn.writefile({ encoded }, abs_path)
 end
 
 return M
