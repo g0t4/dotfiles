@@ -63,7 +63,7 @@ function M.add_note(text)
     local file_path = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(bufnr), ":.")
     M.notes_by_file[file_path] = M.notes_by_file[file_path] or {}
 
-    local selection = GetPos.CurrentSelection()
+    local selection = GetPos.current_selection()
     table.insert(M.notes_by_file[file_path], {
         -- TODO get cols too?
         start_line_base1 = selection.start_line_base1,

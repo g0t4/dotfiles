@@ -109,7 +109,7 @@ if ENABLE_TEST_CMDLINE_SELECTION_SUMMARY_TEXT then
 
     local function custom_show_mode_message()
         local mode = vim.fn.mode()
-        local sel = GetPos.CurrentSelection()
+        local sel = GetPos.current_selection()
         -- TODO move line count to GetPos return type
         local line_count = sel.end_line_base1 - sel.start_line_base1 + 1
         if mode == 'V' then
