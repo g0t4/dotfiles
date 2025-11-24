@@ -391,6 +391,72 @@ function M.setup()
             M.show_notes(buffer_number)
         end,
         {})
+
+
+    ---@param buffer_number integer
+    ---@return integer|nil index, CodeNote|nil note
+    function M.find_next_note_under_cursor(buffer_number)
+        local cursor = GetPos.cursor_position()
+        local notes = get_notes_for_this_file(buffer_number)
+        for index = 1, #notes do
+            local note = notes[index]
+            if note.start_line_base1 > cursor.line_base1 then
+                return index, note
+            end
+        end
+        return nil, nil
+    end
+
+    ---@param buffer_number integer
+    ---@return integer|nil index, CodeNote|nil note
+    function M.find_prev_note_under_cursor(buffer_number)
+        local cursor = GetPos.cursor_position()
+        local notes = get_notes_for_this_file(buffer_number)
+        for i = #notes, 1, -1 do
+            local note = notes[i]
+            if note.end_line_base1 < cursor.line_base1 then
+                return i, note
+            end
+        end
+        return nil, nil
+    end
+
+    function M.jump_to_note(buffer_number, note)
+        if not note then return end
+        vim.api.nvim_win_set_cursor(0, { note.start_line_base1, 0 })
+        M.show_notes(buffer_number)
+    end
+
+    function M.next_note()
+        local buffer_number = vim.api.nvim_get_current_buf()
+        local _, note = M.find_next_note_under_cursor(buffer_number)
+        if not note then
+            print("No next note")
+            return
+        end
+        M.jump_to_note(buffer_number, note)
+    end
+
+    function M.prev_note()
+        local buffer_number = vim.api.nvim_get_current_buf()
+        local _, note = M.find_prev_note_under_cursor(buffer_number)
+        if not note then
+            print("No previous note")
+            return
+        end
+        M.jump_to_note(buffer_number, note)
+    end
+
+    vim.api.nvim_create_user_command('NextNote', function()
+        M.next_note()
+    end, {})
+
+    vim.api.nvim_create_user_command('PrevNote', function()
+        M.prev_note()
+    end, {})
+
+
+
     vim.api.nvim_create_user_command('PrintNote', M.vim_print_note_command, {})
 end
 
