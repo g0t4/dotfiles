@@ -76,6 +76,32 @@ function M.add_note(text)
     show_notes()
 end
 
+function M.delete_note()
+    -- find first note under cursor
+end
+
+function M.update_note(text)
+    -- find first note under cursor to replace
+    local pos = GetPos.current_selection() -- TODO would be nice to name this as just cursor position?
+    local line = pos.start_line_base1
+
+    local bufnr = 0
+    local notes = get_notes_for_this_file(bufnr)
+    for _, n in ipairs(notes) do
+
+    end
+end
+
+function get_notes_for_this_file(bufnr)
+    -- * find notes list
+    local absolute_path = vim.api.nvim_buf_get_name(bufnr)
+    -- TODO fix to always be relative to the workspace dir (not the CWD) .. so if I open from nested dir in repo, I don't lose notes!
+    local relative_path = vim.fn.fnamemodify(absolute_path, ":.")
+    -- print("absolute_path", absolute_path)
+    -- print("relative_path", relative_path)
+    return M.notes_by_file[relative_path] or {}
+end
+
 function M.setup()
     -- do return end
 
@@ -86,7 +112,6 @@ function M.setup()
     vim.api.nvim_set_hl(GLOBAL_NS, "CodeNoteSelection", { fg = "#2c2c2c", bg = "#ff8800", })
     vim.api.nvim_set_hl(GLOBAL_NS, "CodeNoteGutterIcon", { fg = "#ff8800", })
 
-
     -- TODO uncomment to test real notes
     -- load_notes()
 
@@ -96,16 +121,7 @@ function M.setup()
         -- * clear notes
         vim.api.nvim_buf_clear_namespace(bufnr, notes_ns_id, 0, -1)
 
-        -- * find notes list
-        local absolute_path = vim.api.nvim_buf_get_name(bufnr)
-        -- TODO fix to always be relative to the workspace dir (not the CWD) .. so if I open from nested dir in repo, I don't lose notes!
-        local relative_path = vim.fn.fnamemodify(absolute_path, ":.")
-        -- print("absolute_path", absolute_path)
-        -- print("relative_path", relative_path)
-        local notes = M.notes_by_file[relative_path]
-        if not notes then
-            return
-        end
+        local notes = get_notes_for_this_file(bufnr)
 
         -- * show each note
         for _, n in ipairs(notes) do
@@ -170,9 +186,9 @@ function M.setup()
 
     -- TODO later worry about lazy loading this on BufReadPost as a plugin, or on using command like AddNote
     vim.api.nvim_create_user_command("AddNote", M.add_note, {})
-    -- vim.api.nvim_create_user_command("DeleteNote", M.delete_note, {})
-    -- vim.api.nvim_create_user_command("UpdateNote", M.update_note, {})
-    -- vim.api.nvim_create_user_command("ShowNotes", M.show_notes, {})
+    vim.api.nvim_create_user_command("DeleteNote", M.delete_note, {})
+    vim.api.nvim_create_user_command("UpdateNote", M.update_note, {})
+    vim.api.nvim_create_user_command("ShowNotes", M.show_notes, {})
 end
 
 return M
