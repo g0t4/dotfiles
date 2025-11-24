@@ -72,7 +72,7 @@ function M.add_note(text)
         -- context = ?
     })
 
-    api.write_json_werkspace_file(CODE_NOTES_PATH, M.notes_by_file)
+    -- api.write_json_werkspace_file(CODE_NOTES_PATH, M.notes_by_file)
     show_notes()
 end
 
