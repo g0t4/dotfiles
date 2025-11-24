@@ -101,6 +101,17 @@ function restore_session_by_name(name)
     end
 end
 
+
+vim.api.nvim_create_user_command(
+    "ShowWorkspace",
+    function()
+        print(vim.fn.expand(api.get_werkspace_state_dir()))
+    end,
+    {}
+)
+
+
+
 vim.api.nvim_create_user_command("Sessions", function(opts)
     local subcmd = opts.fargs[1]
     local name = opts.fargs[2]
