@@ -50,7 +50,7 @@ local function send_code_to_run(body)
 end
 
 function M.send_selected_lines()
-    local selection = GetPos.LastSelection()
+    local selection = GetPos.last_selection()
 
     -- messages.header("send_visual")
     -- messages.ensure_open()
