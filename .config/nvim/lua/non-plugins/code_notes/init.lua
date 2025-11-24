@@ -73,6 +73,7 @@ function M.add_note(text)
     })
 
     api.write_json_werkspace_file(CODE_NOTES_PATH, M.notes_by_file)
+    show_notes()
 end
 
 function M.setup()
@@ -89,7 +90,7 @@ function M.setup()
     -- TODO uncomment to test real notes
     -- load_notes()
 
-    function show_notes(event)
+    function show_notes()
         local bufnr = 0
         local absolute_path = vim.api.nvim_buf_get_name(bufnr)
         -- TODO fix to always be relative to the workspace dir (not the CWD) .. so if I open from nested dir in repo, I don't lose notes!
@@ -112,7 +113,7 @@ function M.setup()
             -- * show notes only
             if notes_only then
                 vim.api.nvim_buf_set_extmark( -- (0,0)-indexed
-                    event.buf, notes_ns_id, start_line_base0, start_col_base0,
+                    bufnr, notes_ns_id, start_line_base0, start_col_base0,
                     {
                         virt_text = { { n.text, "CodeNoteText" } },
                         virt_text_pos = "eol",
@@ -131,7 +132,7 @@ function M.setup()
             else
                 -- * show both notes AND highlight the selected, actual text
                 vim.api.nvim_buf_set_extmark( -- (0,0)-indexed
-                    event.buf,
+                    bufnr,
                     notes_ns_id,
                     start_line_base0,
                     start_col_base0,
