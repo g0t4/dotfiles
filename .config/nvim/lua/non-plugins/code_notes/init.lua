@@ -282,7 +282,11 @@ function M.TODO_resolve(buffer_number, note)
     local selection = note.selection or ""
     local after = note.after or ""
 
-    -- TODO wait, should I try to match on line numbers first (check selection matches) then only resolve with context if that is a no go?
+    -- TODO me thinks, use selection numbers and if they selection lines match alone then stop
+    --  fallback => search for selection/after/before
+    --  fallback => fuzzy search as a last resort (or maybe levenshtein distance)
+    --
+    --  FYI if fallback is needed, might want to consider changing color slightly to indicate that smth is different? especially if using fuzzy match
 
     -- 1. Try matching BEFORE + SELECTION + AFTER
     local big = table.concat({ before, selection, after }, "\n")
