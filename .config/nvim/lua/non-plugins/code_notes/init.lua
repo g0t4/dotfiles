@@ -76,11 +76,7 @@ function M.add_note(text)
     M.show_notes()
 end
 
-function M.delete_note()
-    -- find first note under cursor
-end
-
-function M.update_note(text)
+function M.find_first_note_under_cursor()
     -- find first note under cursor to replace
     local pos = GetPos.current_selection() -- TODO would be nice to name this as just cursor position?
     local line = pos.start_line_base1
@@ -89,8 +85,24 @@ function M.update_note(text)
     local notes = get_notes_for_this_file(bufnr)
     for _, n in ipairs(notes) do
         if n.start_line_base1 <= line and n.end_line_base1 > line then
-            vim.notify("here is the note:" .. n.text)
+            return n
         end
+    end
+end
+
+function M.delete_note()
+    local note = M.find_first_note_under_cursor()
+    if not note then
+        print("NO NOTE UNDER CURSOR TO DELETE")
+        return
+    end
+end
+
+function M.update_note(text)
+    local note = M.find_first_note_under_cursor()
+    if not note then
+        print("NO NOTE UNDER CURSOR TO UPDATE")
+        return
     end
 end
 
