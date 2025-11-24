@@ -66,8 +66,8 @@ function M.add_note(text)
     local selection = GetPos.CurrentSelection()
     table.insert(M.notes_by_file[file_path], {
         -- TODO get cols too?
-        start_line_base1 = selection.start_line_b1,
-        end_line_base1 = selection.end_line_b1,
+        start_line_base1 = selection.start_line_base1,
+        end_line_base1 = selection.end_line_base1,
         text = "DUCKARD!",
         -- context = ?
     })

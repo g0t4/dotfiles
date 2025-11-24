@@ -111,14 +111,14 @@ if ENABLE_TEST_CMDLINE_SELECTION_SUMMARY_TEXT then
         local mode = vim.fn.mode()
         local sel = GetPos.CurrentSelection()
         -- TODO move line count to GetPos return type
-        local line_count = sel.end_line_b1 - sel.start_line_b1 + 1
+        local line_count = sel.end_line_base1 - sel.start_line_base1 + 1
         if mode == 'V' then
             return string.format("Visual (linewise) - Selected %d lines", line_count)
         elseif mode == 'v' then
-            if sel.start_line_b1 ~= sel.end_line_b1 then
+            if sel.start_line_base1 ~= sel.end_line_base1 then
                 return string.format("visual (charwise) - Selected across %d lines", line_count)
             else
-                local char_count = sel.end_col_b1 - sel.start_col_b1 + 1
+                local char_count = sel.end_col_base1 - sel.start_col_base1 + 1
                 return string.format("visual (charwise) - Selected %d chars (on a single line)", char_count)
             end
         else
