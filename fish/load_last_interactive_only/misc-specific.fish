@@ -1364,17 +1364,23 @@ end
 
 # ** llama-cpp / llama-server related
 
-# huggingface cli via huggingface_hub pypi package (no need to install it)
-function huggingface-cli
-    # great for model cleanup... just run delete-cache and it shows everything in ~/.cache/huggingface ... lets you pick what to cleanup
-    #   and it removes metadata too
-    #   can always nuke individual dirs too but this is faster-ish
+abbr huggingface-cli hf
+function hf
+    # FYI new workflow appears to be:
+    #   hf cache ls
+    #   hf cache rm user/repo
 
-    uv tool run --from "huggingface_hub[cli]" huggingface-cli $argv
-    # uv tool run --from huggingface_hub huggingface-cli delete-cache
-    # delete-cache
+    # huggingface cli via huggingface_hub pypi package (no need to install it)
+    # FYI moved to primary package (no longer need [cli] extras)
+    uv tool run --from huggingface_hub hf $argv
 end
-abbr hugginface-cli_delete-cache "huggingface-cli delete-cache"
+
+# hf reserved for huggingface CLI (hf command now)
+abbr hfc "hf cache"
+abbr hfcls "hf cache ls"
+abbr hfcrm "hf cache rm"
+abbr hfcv "hf cache verify"
+abbr hfcpr "hf cache prune"
 
 if command -q llama-server
 
