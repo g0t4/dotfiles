@@ -72,12 +72,14 @@ end
 function M.add_note(text)
     local selection = GetPos.last_selection()
     local notes = get_notes_for_this_file()
+    local around = 2 -- number of lines before/after to capture too
+    local context = M.slice(0, selection:start_line_base0(), selection:end_line_base0(), around)
     table.insert(notes, {
         -- TODO get cols too?
         start_line_base1 = selection.start_line_base1,
         end_line_base1 = selection.end_line_base1,
         text = text,
-        -- context = ?
+        context = context,
     })
 
     -- api.write_json_werkspace_file(CODE_NOTES_PATH, M.notes_by_file)
@@ -186,47 +188,28 @@ function M.show_notes()
     end
 end
 
-local function get_lines(buf, s, e)
-    return vim.api.nvim_buf_get_lines(buf, s, e, false)
+local function get_lines(buf, start_line_base0, exclusive_end_line_base0)
+    -- TODO merge into GetPosSelectionRange:lines(), or?
+    return vim.api.nvim_buf_get_lines(buf, start_line_base0, exclusive_end_line_base0, false)
 end
 
-local function slice(buf, start_line, end_line, around)
+function M.slice(buf, start_line_base0, exclusive_end_line_base0, around)
+    -- TODO verify exclusive vs my end_line convention w.r.t. selection logic (GetPos)
     -- around = number of context lines before/after
-    local before_start = math.max(start_line - around - 1, 0)
-    local before_end = math.max(start_line - 1, 0)
+    local before_start = math.max(start_line_base0 - around - 1, 0)
+    local before_end = math.max(start_line_base0 - 1, 0)
 
-    local after_start = end_line
-    local after_end = end_line + around
+    local after_start = exclusive_end_line_base0
+    local after_end = exclusive_end_line_base0 + around
 
     return {
         before   = table.concat(get_lines(buf, before_start, before_end), "\n"),
-        selected = table.concat(get_lines(buf, start_line - 1, end_line), "\n"),
+        selected = table.concat(get_lines(buf, start_line_base0 - 1, exclusive_end_line_base0), "\n"),
         after    = table.concat(get_lines(buf, after_start, after_end), "\n"),
     }
 end
 
-function M.capture(buf, start_line_base1, end_line_base1, opts)
-    opts = opts or {}
-
-    local around = opts.context_lines or 2
-
-    local ctx = slice(
-        buf,
-        start_line_base1,
-        end_line_base1,
-        around
-    )
-
-    return {
-        start_line_base1 = start_line_base1,
-        end_line_base1   = end_line_base1,
-        before           = ctx.before,
-        selected         = ctx.selected,
-        after            = ctx.after,
-    }
-end
-
-local function search_in_buf(buf, text)
+local function TODO_search_in_buf(buf, text)
     if text == "" then return nil end
     local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
     local full = table.concat(lines, "\n")
@@ -240,14 +223,14 @@ local function search_in_buf(buf, text)
     return line + 1 -- base1
 end
 
-function M.resolve(buf, note)
+function M.TODO_resolve(buf, note)
     local before = note.before or ""
     local selected = note.selected or ""
     local after = note.after or ""
 
     -- 1. Try matching BEFORE + SELECTED + AFTER
     local big = table.concat({ before, selected, after }, "\n")
-    local line = search_in_buf(buf, big)
+    local line = TODO_search_in_buf(buf, big)
     if line then
         return {
             start_line = line + #vim.split(before, "\n"),
@@ -257,7 +240,7 @@ function M.resolve(buf, note)
     end
 
     -- 2. Try matching exactly the selected text
-    local sline = search_in_buf(buf, selected)
+    local sline = TODO_search_in_buf(buf, selected)
     if sline then
         return {
             start_line = sline,
@@ -274,7 +257,7 @@ function M.resolve(buf, note)
     }
 end
 
-function M.apply_extmark(buf, ns, note, hlgroup)
+function M.TODO_apply_extmark(buf, ns, note, hlgroup)
     local pos = M.resolve(buf, note)
 
     vim.api.nvim_buf_set_extmark(buf, ns, pos.start_line - 1, 0, {
