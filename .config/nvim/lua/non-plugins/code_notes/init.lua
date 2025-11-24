@@ -70,7 +70,7 @@ local function get_notes_for_this_file(bufnr)
 end
 
 function M.add_note(text)
-    local selection = GetPos.current_selection()
+    local selection = GetPos.last_selection()
     local notes = get_notes_for_this_file()
     table.insert(notes, {
         -- TODO get cols too?
@@ -209,7 +209,7 @@ function M.setup()
             local text = table.concat(opts.fargs, " ")
             M.add_note(text)
         end,
-        { nargs = "*" }
+        { nargs = "*", range = true }
     )
     vim.api.nvim_create_user_command("DeleteNote", M.delete_note, {})
     vim.api.nvim_create_user_command("UpdateNote",
@@ -217,7 +217,7 @@ function M.setup()
             local text = table.concat(opts.fargs, " ")
             M.update_note(text)
         end,
-        { nargs = "*" }
+        { nargs = "*", range = true }
     )
 
     vim.api.nvim_create_user_command("ShowNotes", M.show_notes, {})
