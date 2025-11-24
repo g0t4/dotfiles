@@ -185,53 +185,44 @@ function M.show_notes(buffer_number)
         local start_col_base0 = 0
         local start_line_base0 = n.start_line_base1 - 1
 
-        -- TODO! end column needs to be end of line to get the extmark to highlight the full line
-        --    TODO I can just extend to start of next line at column 0 and it'll work but then the gutter icon shows on the last line that it shouldn't show on)
-        --    PRN split out a separte extmark for just last line? that doesn't include the gutter icon? and then have the first extmark hit the last line and give its gutter icon then second extmark is only for highlighting the last line (thru end of next line)
         local end_col_base0 = 0
-        local end_line_inclusive_base0 = n.end_line_base1 - 1 -- TODO! does extmarks treat this end_line as inclusive or exclusive?
+        local end_line_inclusive_base0 = n.end_line_base1 - 1
 
-        local notes_only = false -- TODO add command to toggle this, store last somehow
+        -- TODO add command to toggle this, store last somehow
+        -- local highlight_too = false
+        local highlight_too = true
 
-        -- * show notes only
-        if notes_only then
-            vim.api.nvim_buf_set_extmark( -- (0,0)-indexed
-                buffer_number, M.notes_ns_id, start_line_base0, start_col_base0,
-                {
-                    virt_text = { { n.text, "CodeNoteText" } },
-                    virt_text_pos = "eol",
+        -- * extmark for text + gutter icons
+        vim.api.nvim_buf_set_extmark( -- (0,0)-indexed
+            buffer_number, M.notes_ns_id, start_line_base0, start_col_base0,
+            {
+                -- * note text goes onto end of first line
+                virt_text = { { n.text, "CodeNoteText" } },
+                virt_text_pos = "eol",
 
-                    -- gutter indicator (all lines) - especially useful when not selecting text
-                    sign_text = "◆",
-                    sign_hl_group = "CodeNoteGutterIcon",
+                -- * gutter "sign" indicator (all lines in range) - especially useful when not highlight_too
+                sign_text = "◆",
+                sign_hl_group = "CodeNoteGutterIcon",
 
-                    -- extmarks use INCLUSIVE end line
-                    end_line = end_line_inclusive_base0,
-                    end_col = end_col_base0,
-                    -- hl_group = "CodeNoteSelection",
-                    -- hl_mode = "combine",
-                }
-            )
-        else
-            -- * show both notes AND highlight the selected, actual text
+                -- extmarks use INCLUSIVE end line
+                end_line = end_line_inclusive_base0,
+                -- FYI not need end_col set to get gutter icon to show on end_line b/c it's inclusive!
+            }
+        )
+        if highlight_too then
+            -- * extmark to highlight the selected, actual text
             vim.api.nvim_buf_set_extmark( -- (0,0)-indexed
                 buffer_number,
                 M.notes_ns_id,
+                -- start highlighter at start of first line
                 start_line_base0,
                 start_col_base0,
                 {
-                    -- show note text on first line:
-                    virt_text = { { n.text, "CodeNoteText" } }, -- FYI virtual text has the notes to append to end of line (this is in addition to highlighting the actual, selected text)
-                    virt_text_pos = "eol",
-
-                    -- gutter indicator (all lines)
-                    sign_text = "◆",
-                    sign_hl_group = "CodeNoteGutterIcon",
-
-                    -- also, highlight selected text:
-                    -- TODO last line inclusive? which convention should I follow (look at GetPos for any ideas there)
-                    --   FYI right now... the last line is marked even though end_col is set to 0... so really not included!
-                    end_line = end_line_inclusive_base0,
+                    -- highlight through line after end line, its first character (col=0)
+                    -- no highlights on line after... just have to use it to highlight last inclusive line fully
+                    -- otherwise I'd have to compute end_col based on content?
+                    -- FYI needing different values for end_line is why I split out this second extmark for just the highlighter
+                    end_line = end_line_inclusive_base0 + 1,
                     end_col = end_col_base0,
                     hl_group = "CodeNoteSelection",
                     hl_mode = "combine",
