@@ -68,10 +68,10 @@ local function load_notes()
     M.notes_by_file = api.read_json_werkspace_file(CODE_NOTES_PATH) or {}
 end
 
-local function get_notes_for_this_file(bufnr)
-    local bufnr = bufnr or 0
+local function get_notes_for_this_file(buffer_number)
+    local buffer_number = buffer_number or 0
     -- * find notes list
-    local absolute_path = vim.api.nvim_buf_get_name(bufnr)
+    local absolute_path = vim.api.nvim_buf_get_name(buffer_number)
     -- TODO fix to always be relative to the workspace dir (not the CWD) .. so if I open from nested dir in repo, I don't lose notes!
     local relative_path = vim.fn.fnamemodify(absolute_path, ":.")
     -- print("absolute_path", absolute_path)
@@ -122,8 +122,8 @@ function M.find_first_note_under_cursor()
     local pos = GetPos.current_selection() -- TODO would be nice to name this as just cursor position?
     local line = pos.start_line_base1
 
-    local bufnr = 0
-    local notes = get_notes_for_this_file(bufnr)
+    local buffer_number = 0
+    local notes = get_notes_for_this_file(buffer_number)
     for index, n in ipairs(notes) do
         if n.start_line_base1 <= line and n.end_line_base1 >= line then
             return n, index
@@ -155,12 +155,12 @@ function M.update_note(text)
 end
 
 function M.show_notes()
-    local bufnr = 0
+    local buffer_number = 0
 
     -- * clear notes
-    vim.api.nvim_buf_clear_namespace(bufnr, M.notes_ns_id, 0, -1)
+    vim.api.nvim_buf_clear_namespace(buffer_number, M.notes_ns_id, 0, -1)
 
-    local notes = get_notes_for_this_file(bufnr)
+    local notes = get_notes_for_this_file(buffer_number)
 
     -- * show each note
     for _, n in ipairs(notes) do
@@ -174,7 +174,7 @@ function M.show_notes()
         -- * show notes only
         if notes_only then
             vim.api.nvim_buf_set_extmark( -- (0,0)-indexed
-                bufnr, M.notes_ns_id, start_line_base0, start_col_base0,
+                buffer_number, M.notes_ns_id, start_line_base0, start_col_base0,
                 {
                     virt_text = { { n.text, "CodeNoteText" } },
                     virt_text_pos = "eol",
@@ -193,7 +193,7 @@ function M.show_notes()
         else
             -- * show both notes AND highlight the selected, actual text
             vim.api.nvim_buf_set_extmark( -- (0,0)-indexed
-                bufnr,
+                buffer_number,
                 M.notes_ns_id,
                 start_line_base0,
                 start_col_base0,
@@ -219,12 +219,12 @@ function M.show_notes()
     end
 end
 
-function M.get_lines(buf, start_line_base0, end_line_exclusive_base0)
+function M.get_lines(buffer_number, start_line_base0, end_line_exclusive_base0)
     -- TODO merge into GetPosSelectionRange:lines(), or?
-    return vim.api.nvim_buf_get_lines(buf, start_line_base0, end_line_exclusive_base0, false)
+    return vim.api.nvim_buf_get_lines(buffer_number, start_line_base0, end_line_exclusive_base0, false)
 end
 
-function M.slice(buf, start_line_base0, end_line_exclusive_base0, around)
+function M.slice(buffer_number, start_line_base0, end_line_exclusive_base0, around)
     -- TODO what to do if negative start_line_base0
     -- TODO what about end_line past end of file (more than 1 line past so it means content beyond what is in doc)?
 
@@ -235,15 +235,15 @@ function M.slice(buf, start_line_base0, end_line_exclusive_base0, around)
     local after_end_exclusive_base0 = end_line_exclusive_base0 + around
 
     return {
-        before    = table.concat(M.get_lines(buf, before_start_base0, before_end_exclusive_base0), "\n"),
-        selection = table.concat(M.get_lines(buf, start_line_base0, end_line_exclusive_base0), "\n"), -- TODO check math on exclusive end line base0
-        after     = table.concat(M.get_lines(buf, after_start_base0, after_end_exclusive_base0), "\n"),
+        before    = table.concat(M.get_lines(buffer_number, before_start_base0, before_end_exclusive_base0), "\n"),
+        selection = table.concat(M.get_lines(buffer_number, start_line_base0, end_line_exclusive_base0), "\n"), -- TODO check math on exclusive end line base0
+        after     = table.concat(M.get_lines(buffer_number, after_start_base0, after_end_exclusive_base0), "\n"),
     }
 end
 
-local function TODO_search_in_buf(buf, text)
+local function TODO_search_in_buf(buffer_number, text)
     if text == "" then return nil end
-    local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
+    local lines = vim.api.nvim_buf_get_lines(buffer_number, 0, -1, false)
     local full = table.concat(lines, "\n")
 
     local s = full:find(text, 1, true)
@@ -255,14 +255,14 @@ local function TODO_search_in_buf(buf, text)
     return line + 1 -- base1
 end
 
-function M.TODO_resolve(buf, note)
+function M.TODO_resolve(buffer_number, note)
     local before = note.before or ""
     local selection = note.selection or ""
     local after = note.after or ""
 
     -- 1. Try matching BEFORE + SELECTION + AFTER
     local big = table.concat({ before, selection, after }, "\n")
-    local line = TODO_search_in_buf(buf, big)
+    local line = TODO_search_in_buf(buffer_number, big)
     if line then
         return {
             start_line = line + #vim.split(before, "\n"),
@@ -272,7 +272,7 @@ function M.TODO_resolve(buf, note)
     end
 
     -- 2. Try matching exactly the selected text
-    local sline = TODO_search_in_buf(buf, selection)
+    local sline = TODO_search_in_buf(buffer_number, selection)
     if sline then
         return {
             start_line = sline,
@@ -289,10 +289,10 @@ function M.TODO_resolve(buf, note)
     }
 end
 
-function M.TODO_apply_extmark(buf, ns, note, hlgroup)
-    local pos = M.TODO_resolve(buf, note)
+function M.TODO_apply_extmark(buffer_number, ns, note, hlgroup)
+    local pos = M.TODO_resolve(buffer_number, note)
 
-    vim.api.nvim_buf_set_extmark(buf, ns, pos.start_line - 1, 0, {
+    vim.api.nvim_buf_set_extmark(buffer_number, ns, pos.start_line - 1, 0, {
         end_line = pos.end_line - 1,
         hl_group = hlgroup,
     })
