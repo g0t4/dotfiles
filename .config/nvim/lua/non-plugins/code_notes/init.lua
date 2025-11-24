@@ -77,7 +77,7 @@ end
 
 ---@param cursor_line number 0-based line number of the cursor
 ---@return nil
-function M.show_note(cursor_line)
+function M.vim_print_note(cursor_line)
     local note = M.find_first_note_under_cursor()
     if not note then
         print("NO NOTE UNDER CURSOR")
@@ -331,7 +331,7 @@ function M.setup()
     )
 
     vim.api.nvim_create_user_command('ShowNotes', M.show_notes, {})
-    vim.api.nvim_create_user_command('ShowNote', M.show_note, {})
+    vim.api.nvim_create_user_command('PrintNote', M.vim_print_note, {})
 end
 
 return M
