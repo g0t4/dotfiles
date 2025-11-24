@@ -130,18 +130,7 @@ function M.add_note(text)
         return
     end
 
-    ---@param buffer_number integer
-    local function get_or_create_notes_for_this_file(buffer_number)
-        local relative_path = get_relative_path_for_this_file(buffer_number)
-        local notes = M.notes_by_file[relative_path]
-        if not notes then
-            notes = {}
-            M.notes_by_file[relative_path] = notes
-        end
-        return notes
-    end
-
-    local notes = get_or_create_notes_for_this_file(buffer_number)
+    local notes = get_notes_for_this_file(buffer_number)
     local around = 2 -- number of lines before/after to capture too
     local context = M.slice(buffer_number, selection:start_line_base0(), selection:end_line_base0(), around)
     table.insert(notes, {
@@ -155,6 +144,14 @@ function M.add_note(text)
         context = context,
     })
 
+    -- ensure set, if it was a new, empty list
+    local relative_path = get_relative_path_for_this_file(buffer_number)
+    M.notes_by_file[relative_path] = notes
+
+    -- then, quick hack to sort them
+    M.notes_by_file[relative_path] = get_sorted_notes_for_this_file(buffer_number)
+
+    -- PRN pretty print the json?
     api.write_json_werkspace_file(CODE_NOTES_PATH, M.notes_by_file)
     M.show_notes(buffer_number)
 end
