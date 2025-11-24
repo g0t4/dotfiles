@@ -81,6 +81,17 @@ local function get_relative_path_for_this_file(buffer_number)
 end
 
 ---@param buffer_number integer
+---@return table
+local function get_notes_for_this_file(buffer_number)
+    local relative_path = get_relative_path_for_this_file(buffer_number)
+    local notes = M.notes_by_file[relative_path] or {}
+    table.sort(notes, function(a, b)
+        return a < b
+    end)
+    return notes
+end
+
+---@param buffer_number integer
 local function get_notes_for_this_file(buffer_number)
     local relative_path = get_relative_path_for_this_file(buffer_number)
     return M.notes_by_file[relative_path] or {}
@@ -397,6 +408,7 @@ function M.setup()
     ---@return integer|nil index, CodeNote|nil note
     function M.find_next_note_under_cursor(buffer_number)
         local cursor = GetPos.cursor_position()
+        -- TODO get sorted notes
         local notes = get_notes_for_this_file(buffer_number)
         for index = 1, #notes do
             local note = notes[index]
