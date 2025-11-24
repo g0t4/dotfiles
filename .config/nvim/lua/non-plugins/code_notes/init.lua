@@ -90,8 +90,7 @@ function M.setup()
     -- TODO uncomment to test real notes
     -- load_notes()
 
-    vim.api.nvim_create_autocmd("BufReadPost", {
-        callback = function(event)
+        function show_notes(event)
             local absolute_path = event.file
             -- TODO fix to always be relative to the workspace dir (not the CWD) .. so if I open from nested dir in repo, I don't lose notes!
             local relative_path = vim.fn.fnamemodify(absolute_path, ":.")
@@ -156,8 +155,10 @@ function M.setup()
                     )
                 end
             end
-        end,
-    })
+        end
+    -- vim.api.nvim_create_autocmd("BufReadPost", {
+    --     callback = show_notes
+    -- })
 
     -- TODO this should be a command, and the plugin should be lazy loaded
     vim.api.nvim_create_user_command("AddNote", M.add_note, {})
