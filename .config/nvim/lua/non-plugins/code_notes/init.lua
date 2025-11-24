@@ -82,11 +82,14 @@ end
 
 ---@param buffer_number integer
 ---@return table
-local function get_notes_for_this_file(buffer_number)
+local function get_sorted_notes_for_this_file(buffer_number)
     local relative_path = get_relative_path_for_this_file(buffer_number)
     local notes = M.notes_by_file[relative_path] or {}
     table.sort(notes, function(a, b)
-        return a < b
+        if a.start_line_base1 == b.start_line_base1 then
+            return a.end_line_base1 < b.end_line_base1
+        end
+        return a.start_line_base1 < b.start_line_base1
     end)
     return notes
 end
@@ -408,8 +411,7 @@ function M.setup()
     ---@return integer|nil index, CodeNote|nil note
     function M.find_next_note_under_cursor(buffer_number)
         local cursor = GetPos.cursor_position()
-        -- TODO get sorted notes
-        local notes = get_notes_for_this_file(buffer_number)
+        local notes = get_sorted_notes_for_this_file(buffer_number)
         for index = 1, #notes do
             local note = notes[index]
             if note.start_line_base1 > cursor.line_base1 then
@@ -423,7 +425,7 @@ function M.setup()
     ---@return integer|nil index, CodeNote|nil note
     function M.find_prev_note_under_cursor(buffer_number)
         local cursor = GetPos.cursor_position()
-        local notes = get_notes_for_this_file(buffer_number)
+        local notes = get_sorted_notes_for_this_file(buffer_number)
         for index = #notes, 1, -1 do
             local note = notes[index]
             if note.end_line_base1 < cursor.line_base1 then
