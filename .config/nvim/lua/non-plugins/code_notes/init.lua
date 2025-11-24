@@ -90,7 +90,8 @@ function M.setup()
     -- load_notes()
 
     function show_notes(event)
-        local absolute_path = event.file
+        local bufnr = 0
+        local absolute_path = vim.api.nvim_buf_get_name(bufnr)
         -- TODO fix to always be relative to the workspace dir (not the CWD) .. so if I open from nested dir in repo, I don't lose notes!
         local relative_path = vim.fn.fnamemodify(absolute_path, ":.")
         -- print("absolute_path", absolute_path)
