@@ -335,6 +335,11 @@ function M.setup()
     vim.api.nvim_set_hl(GLOBAL_NS, 'CodeNoteSelection', { fg = '#2c2c2c', bg = '#ff8800', })
     vim.api.nvim_set_hl(GLOBAL_NS, 'CodeNoteGutterIcon', { fg = '#ff8800', })
 
+    vim.api.nvim_set_hl(GLOBAL_NS, 'CodeNoteTextFallback', { fg = '#ffcc00', bg = '#3a3a3a', italic = true })
+    vim.api.nvim_set_hl(GLOBAL_NS, 'CodeNoteSelectionFallback', { fg = '#3a3a3a', bg = '#ffcc00' })
+    vim.api.nvim_set_hl(GLOBAL_NS, 'CodeNoteGutterIconFallback', { fg = '#ffcc00' })
+
+
     -- TODO uncomment to test real notes
     -- load_notes()
 
