@@ -176,58 +176,58 @@ end
 ---@param buffer_number integer
 ---@param n CodeNote
 function M.apply_extmarks(buffer_number, n)
-        local start_col_base0 = 0
-        local start_line_base0 = n.start_line_base1 - 1
+    local start_col_base0 = 0
+    local start_line_base0 = n.start_line_base1 - 1
 
-        local end_col_base0 = 0
-        local end_line_inclusive_base0 = n.end_line_base1 - 1
+    local end_col_base0 = 0
+    local end_line_inclusive_base0 = n.end_line_base1 - 1
 
-        -- TODO add command to toggle this, store last somehow
-        -- local highlight_lines = false
-        local highlight_lines = true
+    -- TODO add command to toggle this, store last somehow
+    -- local highlight_lines = false
+    local highlight_lines = true
 
-        -- * extmark for text + gutter icons
+    -- * extmark for text + gutter icons
+    vim.api.nvim_buf_set_extmark( -- (0,0)-indexed
+        buffer_number, M.notes_ns_id,
+        start_line_base0,
+        start_col_base0,
+        {
+            -- * note text goes onto end of first line
+            virt_text = { { n.text, "CodeNoteText" } },
+            virt_text_pos = "eol",
+
+            -- * gutter "sign" indicator (all lines in range) - especially useful when not highlight_lines
+            sign_text = "◆",
+            sign_hl_group = "CodeNoteGutterIcon",
+
+            end_line = end_line_inclusive_base0, -- extmarks use INCLUSIVE end line!
+            -- FYI gutter icon shows on end_line too! (inclusive)
+        }
+    )
+    if highlight_lines then
+        -- * extmark to highlight the selected, actual text
         vim.api.nvim_buf_set_extmark( -- (0,0)-indexed
-            buffer_number, M.notes_ns_id,
+            buffer_number,
+            M.notes_ns_id,
+            -- start highlighter at start of first line
             start_line_base0,
             start_col_base0,
             {
-                -- * note text goes onto end of first line
-                virt_text = { { n.text, "CodeNoteText" } },
-                virt_text_pos = "eol",
+                -- highlight thru line after end_line, to its first character (col=0)
+                -- => effectively none of the last line
+                -- => BUT, this ensures the last line of the selection is fully highlighted
+                -- otherwise I'd have to compute end_col based on content... yuck! or smth else?
+                -- FYI needing different values for end_line is why I split out this second extmark for just the highlighter
+                --   if I try to merge back into the first, I get a gutter icon on the line after... which I don't want
+                end_line = end_line_inclusive_base0 + 1, -- extmarks use INCLUSIVE end line
+                end_col = end_col_base0,
 
-                -- * gutter "sign" indicator (all lines in range) - especially useful when not highlight_lines
-                sign_text = "◆",
-                sign_hl_group = "CodeNoteGutterIcon",
-
-                end_line = end_line_inclusive_base0, -- extmarks use INCLUSIVE end line!
-                -- FYI gutter icon shows on end_line too! (inclusive)
+                -- * highlighting:
+                hl_group = "CodeNoteSelection",
+                -- hl_mode = "combine", -- not sure I need this?
             }
         )
-        if highlight_lines then
-            -- * extmark to highlight the selected, actual text
-            vim.api.nvim_buf_set_extmark( -- (0,0)-indexed
-                buffer_number,
-                M.notes_ns_id,
-                -- start highlighter at start of first line
-                start_line_base0,
-                start_col_base0,
-                {
-                    -- highlight thru line after end_line, to its first character (col=0)
-                    -- => effectively none of the last line
-                    -- => BUT, this ensures the last line of the selection is fully highlighted
-                    -- otherwise I'd have to compute end_col based on content... yuck! or smth else?
-                    -- FYI needing different values for end_line is why I split out this second extmark for just the highlighter
-                    --   if I try to merge back into the first, I get a gutter icon on the line after... which I don't want
-                    end_line = end_line_inclusive_base0 + 1, -- extmarks use INCLUSIVE end line
-                    end_col = end_col_base0,
-
-                    -- * highlighting:
-                    hl_group = "CodeNoteSelection",
-                    -- hl_mode = "combine", -- not sure I need this?
-                }
-            )
-        end
+    end
 end
 
 ---@param buffer_number integer
