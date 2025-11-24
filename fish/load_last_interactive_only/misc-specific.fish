@@ -875,6 +875,11 @@ abbr --set-cursor sede "$sed_cmd -Ei 's/%//g'"
 abbr --set-cursor sedd "$sed_cmd --debug -i 's/%//g'"
 abbr --set-cursor sedi "$sed_cmd -i 's/%//g'"
 
+# rg => (rg --files-with-matches __)
+# use rg to limit which files are passed to sed (so not touching all files)
+# use this to take your sed search regex and limit the files and then the file names are passed back
+abbr --set-cursor --command $sed_cmd --position=anywhere -- rg "(rg --files-with-matches %)"
+
 function build_sed_abbrs_for_filetype
     set -l filetype_letter $argv[1]
     set -l extension $argv[2]
