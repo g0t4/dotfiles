@@ -41,7 +41,8 @@ local M = {}
 ---@type table<string, CodeNote[]>
 M.notes_by_file = {}
 
-function M.setup_fake_data()
+---@param buffer_number integer
+function M.setup_fake_data(buffer_number)
     M.notes_by_file = {
         -- hard coded set of examples
         [".config/nvim/lua/non-plugins/code_notes/init.lua"] = {
@@ -49,13 +50,13 @@ function M.setup_fake_data()
                 start_line_base1 = 3,
                 end_line_base1 = 5,
                 text = "What the FUCK?",
-                context = M.slice(0, 2, 4, 2),
+                context = M.slice(buffer_number, 2, 5, 2),
             },
             {
                 start_line_base1 = 21,
                 end_line_base1 = 22,
                 text = "This is the key to understanding how the endpoint responds to foo!",
-                context = M.slice(0, 20, 22, 2),
+                context = M.slice(buffer_number, 20, 22, 2),
             }
         }
     }
@@ -68,10 +69,9 @@ local function load_notes()
     M.notes_by_file = api.read_json_werkspace_file(CODE_NOTES_PATH) or {}
 end
 
----@param buffer_number integer?
+---@param buffer_number integer
 ---@return string relative_path
 local function get_relative_path_for_this_file(buffer_number)
-    local buffer_number = buffer_number or 0
     local absolute_path = vim.api.nvim_buf_get_name(buffer_number)
     -- TODO fix to always be relative to the workspace dir (not the CWD) .. so if I open from nested dir in repo, I don't lose notes!
     local relative_path = vim.fn.fnamemodify(absolute_path, ":.")
@@ -80,6 +80,7 @@ local function get_relative_path_for_this_file(buffer_number)
     return relative_path
 end
 
+---@param buffer_number integer
 local function get_or_create_notes_for_this_file(buffer_number)
     local relative_path = get_relative_path_for_this_file(buffer_number)
     local notes = M.notes_by_file[relative_path]
@@ -92,8 +93,9 @@ end
 
 ---@param cursor_line number 0-based line number of the cursor
 ---@return nil
-function M.vim_print_note(cursor_line)
-    local note = M.find_first_note_under_cursor()
+function M.vim_print_note_command(cursor_line)
+    local buffer_number = vim.api.nvim_get_current_buf()
+    local note = M.find_first_note_under_cursor(buffer_number)
     if not note then
         print("NO NOTE UNDER CURSOR")
         return
@@ -112,10 +114,10 @@ function M.vim_print_note(cursor_line)
 end
 
 function M.add_note(text)
+    local buffer_number = vim.api.nvim_get_current_buf()
     local selection = GetPos.last_selection()
-    local notes = get_or_create_notes_for_this_file()
+    local notes = get_or_create_notes_for_this_file(buffer_number)
     local around = 2 -- number of lines before/after to capture too
-    local buffer_number = 0 -- TODO cleanup inlined values and set 0 in one spot if that's the direction I want to go
     local context = M.slice(buffer_number, selection:start_line_base0(), selection:end_line_base0(), around)
     table.insert(notes, {
         -- TODO get cols too? if so, store linewise vs charwise? vs?
@@ -126,15 +128,15 @@ function M.add_note(text)
     })
 
     -- api.write_json_werkspace_file(CODE_NOTES_PATH, M.notes_by_file)
-    M.show_notes()
+    M.show_notes(buffer_number)
 end
 
-function M.find_first_note_under_cursor()
+---@param buffer_number integer
+function M.find_first_note_under_cursor(buffer_number)
     -- find first note under cursor to replace
     local pos = GetPos.current_selection() -- TODO would be nice to name this as just cursor position?
     local line = pos.start_line_base1
 
-    local buffer_number = 0
     local notes = get_or_create_notes_for_this_file(buffer_number)
     for index, n in ipairs(notes) do
         if n.start_line_base1 <= line and n.end_line_base1 >= line then
@@ -144,31 +146,32 @@ function M.find_first_note_under_cursor()
 end
 
 function M.delete_note()
-    local note, index = M.find_first_note_under_cursor()
+    local buffer_number = vim.api.nvim_get_current_buf()
+    local note, index = M.find_first_note_under_cursor(buffer_number)
     if not note then
         print("NO NOTE UNDER CURSOR TO DELETE")
         return
     end
-    local notes = get_or_create_notes_for_this_file()
+    local notes = get_or_create_notes_for_this_file(buffer_number)
     table.remove(notes, index)
     -- api.write_json_werkspace_file(CODE_NOTES_PATH, M.notes_by_file)
-    M.show_notes()
+    M.show_notes(buffer_number)
 end
 
 function M.update_note(text)
-    local note = M.find_first_note_under_cursor()
+    local buffer_number = vim.api.nvim_get_current_buf()
+    local note = M.find_first_note_under_cursor(buffer_number)
     if not note then
         print("NO NOTE UNDER CURSOR TO UPDATE")
         return
     end
     note.text = text
     -- api.write_json_werkspace_file(CODE_NOTES_PATH, M.notes_by_file)
-    M.show_notes()
+    M.show_notes(buffer_number)
 end
 
-function M.show_notes()
-    local buffer_number = 0
-
+---@param buffer_number integer
+function M.show_notes(buffer_number)
     -- * clear notes
     vim.api.nvim_buf_clear_namespace(buffer_number, M.notes_ns_id, 0, -1)
 
@@ -231,11 +234,13 @@ function M.show_notes()
     end
 end
 
+---@param buffer_number integer
 function M.get_lines(buffer_number, start_line_base0, end_line_exclusive_base0)
     -- TODO merge into GetPosSelectionRange:lines(), or?
     return vim.api.nvim_buf_get_lines(buffer_number, start_line_base0, end_line_exclusive_base0, false)
 end
 
+---@param buffer_number integer
 function M.slice(buffer_number, start_line_base0, end_line_exclusive_base0, around)
     -- TODO what to do if negative start_line_base0
     -- TODO what about end_line past end of file (more than 1 line past so it means content beyond what is in doc)?
@@ -253,6 +258,7 @@ function M.slice(buffer_number, start_line_base0, end_line_exclusive_base0, arou
     }
 end
 
+---@param buffer_number integer
 local function TODO_search_in_buf(buffer_number, text)
     if text == "" then return nil end
     local lines = vim.api.nvim_buf_get_lines(buffer_number, 0, -1, false)
@@ -267,6 +273,7 @@ local function TODO_search_in_buf(buffer_number, text)
     return line + 1 -- base1
 end
 
+---@param buffer_number integer
 function M.TODO_resolve(buffer_number, note)
     local before = note.before or ""
     local selection = note.selection or ""
@@ -301,6 +308,7 @@ function M.TODO_resolve(buffer_number, note)
     }
 end
 
+---@param buffer_number integer
 function M.TODO_apply_extmark(buffer_number, ns, note, hlgroup)
     local pos = M.TODO_resolve(buffer_number, note)
 
@@ -326,9 +334,10 @@ function M.setup()
     -- load_notes()
 
     vim.api.nvim_create_autocmd('BufReadPost', {
-        callback = function()
-            M.setup_fake_data()
-            M.show_notes()
+        callback = function(info)
+            local buffer_number = info.buf
+            M.setup_fake_data(buffer_number)
+            M.show_notes(buffer_number)
         end
     })
 
@@ -349,8 +358,13 @@ function M.setup()
         { nargs = '*', range = true }
     )
 
-    vim.api.nvim_create_user_command('ShowNotes', M.show_notes, {})
-    vim.api.nvim_create_user_command('PrintNote', M.vim_print_note, {})
+    vim.api.nvim_create_user_command('ShowNotes',
+        function()
+            local buffer_number = vim.api.nvim_get_current_buf()
+            M.show_notes(buffer_number)
+        end,
+        {})
+    vim.api.nvim_create_user_command('PrintNote', M.vim_print_note_command, {})
 end
 
 return M
