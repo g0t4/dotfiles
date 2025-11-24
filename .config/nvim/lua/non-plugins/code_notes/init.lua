@@ -313,18 +313,6 @@ function M.TODO_resolve(buffer_number, note)
     }
 end
 
----@param buffer_number integer
-function M.TODO_apply_extmark(buffer_number, ns, note, hlgroup)
-    local pos = M.TODO_resolve(buffer_number, note)
-
-    vim.api.nvim_buf_set_extmark(buffer_number, ns, pos.start_line - 1, 0, {
-        end_line = pos.end_line - 1,
-        hl_group = hlgroup,
-    })
-
-    return pos
-end
-
 function M.setup()
     -- do return end
 
