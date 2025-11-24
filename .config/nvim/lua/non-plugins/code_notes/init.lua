@@ -30,10 +30,10 @@ local GetPos = require('ask-openai.helpers.wrap_getpos')
 ---@field context? NoteContext
 
 ---@class NoteContext
----@field before string[]   -- lines before the note, first entry is the line directly before the note
----@field after string[]    -- lines after the note, first entry is the line directly after the note
+--- TODO should I use [] instead of concat w/ \n for lines?
+---@field before string -- lines before the note, first entry is the line directly before the note
+---@field after string -- lines after the note, first entry is the line directly after the note
 ---@field selection string -- the text selected when the note was added
-
 
 ---@class CodeNotesModule
 local M = {}
@@ -286,10 +286,11 @@ local function TODO_search_in_buf(buffer_number, text)
 end
 
 ---@param buffer_number integer
+---@param note CodeNote
 function M.TODO_resolve(buffer_number, note)
-    local before = note.before or ""
-    local selection = note.selection or ""
-    local after = note.after or ""
+    local before = note.context.before or ""
+    local selection = note.context.selection or ""
+    local after = note.context.after or ""
 
     -- TODO me thinks, use selection numbers and if they selection lines match alone then stop
     --  fallback => search for selection/after/before
