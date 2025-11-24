@@ -92,6 +92,11 @@ function M.setup()
 
     function show_notes()
         local bufnr = 0
+
+        -- * clear notes
+        vim.api.nvim_buf_clear_namespace(bufnr, notes_ns_id, 0, -1)
+
+        -- * find notes list
         local absolute_path = vim.api.nvim_buf_get_name(bufnr)
         -- TODO fix to always be relative to the workspace dir (not the CWD) .. so if I open from nested dir in repo, I don't lose notes!
         local relative_path = vim.fn.fnamemodify(absolute_path, ":.")
@@ -102,6 +107,7 @@ function M.setup()
             return
         end
 
+        -- * show each note
         for _, n in ipairs(notes) do
             local start_col_base0 = 0
             local start_line_base0 = n.start_line_base1 - 1
