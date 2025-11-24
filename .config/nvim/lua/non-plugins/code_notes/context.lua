@@ -1,4 +1,6 @@
 local NoteContext = {}
+
+-- FYI! this is not y et used, can be removed if not needed
 -- TODO do I want to wrap notes as I load them and give them behavior?
 --  if so I could easily create a Note type and have it delegate out to this type in its ctor
 

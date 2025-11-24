@@ -35,8 +35,8 @@ return {
             -- require('non-plugins.spal_repl_client')
             require("non-plugins.nvr-focused")
 
-            local code_notes = require("non-plugins.code_notes")
-            code_notes.setup()
+            -- local code_notes = require("non-plugins.code_notes")
+            -- code_notes.setup()
         end,
     },
     -- -- FYI tested that I can have a second plugin with same dir and it works too
