@@ -276,6 +276,7 @@ end
 ---@param buffer_number integer
 local function TODO_search_in_buf(buffer_number, text)
     if text == "" then return nil end
+    -- TODO... woa... ChatGPT WTF... this can't be done on each note!! pass this in or otherwise cache it (and multiple times per the same line, yikes!)
     local lines = vim.api.nvim_buf_get_lines(buffer_number, 0, -1, false)
     local full = table.concat(lines, "\n")
 
@@ -291,9 +292,9 @@ end
 ---@param buffer_number integer
 ---@param note CodeNote
 function M.TODO_resolve(buffer_number, note)
-    local before = note.context.before or ""
-    local selection = note.context.selection or ""
-    local after = note.context.after or ""
+    local before_text = note.context.before or ""
+    local selection_text = note.context.selection or ""
+    local after_text = note.context.after or ""
 
     -- TODO me thinks, use selection numbers and if they selection lines match alone then stop
     --  fallback => search for selection/after/before
@@ -301,28 +302,31 @@ function M.TODO_resolve(buffer_number, note)
     --
     --  FYI if fallback is needed, might want to consider changing color slightly to indicate that smth is different? especially if using fuzzy match
 
+    -- 0. TODO get selection text and check for a match, before searching
+
     -- 1. Try matching BEFORE + SELECTION + AFTER
-    local big = table.concat({ before, selection, after }, "\n")
-    local line = TODO_search_in_buf(buffer_number, big)
+    local all_text = table.concat({ before_text, selection_text, after_text }, "\n")
+    local line = TODO_search_in_buf(buffer_number, all_text)
     if line then
         return {
-            start_line = line + #vim.split(before, "\n"),
-            end_line   = line + #vim.split(before, "\n") + #vim.split(selection, "\n"),
+            start_line = line + #vim.split(before_text, "\n"),
+            end_line   = line + #vim.split(before_text, "\n") + #vim.split(selection_text, "\n"),
             method     = "full_match",
         }
     end
 
     -- 2. Try matching exactly the selected text
-    local sline = TODO_search_in_buf(buffer_number, selection)
+    local sline = TODO_search_in_buf(buffer_number, selection_text)
     if sline then
         return {
             start_line = sline,
-            end_line   = sline + #vim.split(selection, "\n"),
+            end_line   = sline + #vim.split(selection_text, "\n"),
             method     = "selected_only",
         }
     end
 
     -- 3. Fallback to stored line numbers
+    --  TODO or show at top of file? with blue color or smth... ? or redish?
     return {
         start_line = note.start_line_base1,
         end_line   = note.end_line_base1,
