@@ -205,10 +205,6 @@ local function slice(buf, start_line, end_line, around)
     }
 end
 
-----------------------------------------------------------------------
--- CAPTURE NOTE
-----------------------------------------------------------------------
-
 function M.capture(buf, start_line_base1, end_line_base1, opts)
     opts = opts or {}
 
@@ -230,10 +226,6 @@ function M.capture(buf, start_line_base1, end_line_base1, opts)
     }
 end
 
-----------------------------------------------------------------------
--- SEARCH HELPERS
-----------------------------------------------------------------------
-
 local function search_in_buf(buf, text)
     if text == "" then return nil end
     local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
@@ -247,10 +239,6 @@ local function search_in_buf(buf, text)
     local line = select(2, pre:gsub("\n", ""))
     return line + 1 -- base1
 end
-
-----------------------------------------------------------------------
--- RESOLVE LOCATION
-----------------------------------------------------------------------
 
 function M.resolve(buf, note)
     local before = note.before or ""
@@ -285,10 +273,6 @@ function M.resolve(buf, note)
         method     = "line_fallback",
     }
 end
-
-----------------------------------------------------------------------
--- EXT MARK APPLICATION
-----------------------------------------------------------------------
 
 function M.apply_extmark(buf, ns, note, hlgroup)
     local pos = M.resolve(buf, note)
