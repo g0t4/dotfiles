@@ -49,13 +49,13 @@ function M.setup_fake_data()
                 start_line_base1 = 3,
                 end_line_base1 = 5,
                 text = "What the FUCK?",
-                context = {}
+                context = M.slice(0, 2, 4, 2),
             },
             {
                 start_line_base1 = 21,
                 end_line_base1 = 22,
                 text = "This is the key to understanding how the endpoint responds to foo!",
-                context = {}
+                context = M.slice(0, 20, 22, 2),
             }
         }
     }
@@ -104,7 +104,8 @@ function M.add_note(text)
     local selection = GetPos.last_selection()
     local notes = get_notes_for_this_file()
     local around = 2 -- number of lines before/after to capture too
-    local context = M.slice(0, selection:start_line_base0(), selection:end_line_base0(), around)
+    local buffer_number = 0 -- TODO cleanup inlined values and set 0 in one spot if that's the direction I want to go
+    local context = M.slice(buffer_number, selection:start_line_base0(), selection:end_line_base0(), around)
     table.insert(notes, {
         -- TODO get cols too? if so, store linewise vs charwise? vs?
         start_line_base1 = selection.start_line_base1,
@@ -303,8 +304,6 @@ end
 function M.setup()
     -- do return end
 
-    M.setup_fake_data()
-
     M.notes_ns_id = vim.api.nvim_create_namespace('code_notes')
 
     local GLOBAL_NS = 0 -- not using notes_ns_id for highlights
@@ -316,7 +315,10 @@ function M.setup()
     -- load_notes()
 
     vim.api.nvim_create_autocmd('BufReadPost', {
-        callback = M.show_notes
+        callback = function()
+            M.setup_fake_data()
+            M.show_notes()
+        end
     })
 
     -- TODO later worry about lazy loading this on BufReadPost as a plugin, or on using command like AddNote
