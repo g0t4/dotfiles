@@ -174,13 +174,13 @@ function M.update_note(text)
 end
 
 ---@param buffer_number integer
----@param n CodeNote
-function M.apply_extmarks(buffer_number, n)
+---@param note CodeNote
+function M.apply_extmarks(buffer_number, note)
     local start_col_base0 = 0
-    local start_line_base0 = n.start_line_base1 - 1
+    local start_line_base0 = note.start_line_base1 - 1
 
     local end_col_base0 = 0
-    local end_line_inclusive_base0 = n.end_line_base1 - 1
+    local end_line_inclusive_base0 = note.end_line_base1 - 1
 
     -- TODO add command to toggle this, store last somehow
     -- local highlight_lines = false
@@ -193,7 +193,7 @@ function M.apply_extmarks(buffer_number, n)
         start_col_base0,
         {
             -- * note text goes onto end of first line
-            virt_text = { { n.text, "CodeNoteText" } },
+            virt_text = { { note.text, "CodeNoteText" } },
             virt_text_pos = "eol",
 
             -- * gutter "sign" indicator (all lines in range) - especially useful when not highlight_lines
