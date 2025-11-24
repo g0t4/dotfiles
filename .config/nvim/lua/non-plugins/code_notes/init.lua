@@ -95,7 +95,7 @@ end
 ---@return nil
 function M.vim_print_note_command(cursor_line)
     local buffer_number = vim.api.nvim_get_current_buf()
-    local note = M.find_first_note_under_cursor(buffer_number)
+    local _, note = M.find_first_note_under_cursor(buffer_number)
     if not note then
         print("NO NOTE UNDER CURSOR")
         return
@@ -135,6 +135,7 @@ function M.add_note(text)
 end
 
 ---@param buffer_number integer
+---@return integer|nil index, CodeNote|nil note   -- index of the matching note (or nil) and the note itself
 function M.find_first_note_under_cursor(buffer_number)
     -- find first note under cursor to replace
     local pos = GetPos.current_selection() -- TODO would be nice to name this as just cursor position?
@@ -143,15 +144,15 @@ function M.find_first_note_under_cursor(buffer_number)
     local notes = get_or_create_notes_for_this_file(buffer_number)
     for index, note in ipairs(notes) do
         if note.start_line_base1 <= line and note.end_line_base1 >= line then
-            return note, index
+            return index, note
         end
     end
 end
 
 function M.delete_note()
     local buffer_number = vim.api.nvim_get_current_buf()
-    local note, index = M.find_first_note_under_cursor(buffer_number)
-    if not note then
+    local index, note = M.find_first_note_under_cursor(buffer_number)
+    if not index then
         print("NO NOTE UNDER CURSOR TO DELETE")
         return
     end
@@ -161,9 +162,10 @@ function M.delete_note()
     M.show_notes(buffer_number)
 end
 
+---@param text string
 function M.update_note(text)
     local buffer_number = vim.api.nvim_get_current_buf()
-    local note = M.find_first_note_under_cursor(buffer_number)
+    local _, note = M.find_first_note_under_cursor(buffer_number)
     if not note then
         print("NO NOTE UNDER CURSOR TO UPDATE")
         return
