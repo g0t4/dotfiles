@@ -58,13 +58,21 @@ local function load_notes()
     M.notes_by_file = api.read_json_werkspace_file(CODE_NOTES_PATH) or {}
 end
 
-function M.add_note(text)
-    local bufnr = 0
-    local file_path = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(bufnr), ":.")
-    M.notes_by_file[file_path] = M.notes_by_file[file_path] or {}
+function get_notes_for_this_file(bufnr)
+    local bufnr = bufnr or 0
+    -- * find notes list
+    local absolute_path = vim.api.nvim_buf_get_name(bufnr)
+    -- TODO fix to always be relative to the workspace dir (not the CWD) .. so if I open from nested dir in repo, I don't lose notes!
+    local relative_path = vim.fn.fnamemodify(absolute_path, ":.")
+    -- print("absolute_path", absolute_path)
+    -- print("relative_path", relative_path)
+    return M.notes_by_file[relative_path] or {}
+end
 
+function M.add_note(text)
     local selection = GetPos.current_selection()
-    table.insert(M.notes_by_file[file_path], {
+    local notes = get_notes_for_this_file()
+    table.insert(notes, {
         -- TODO get cols too?
         start_line_base1 = selection.start_line_base1,
         end_line_base1 = selection.end_line_base1,
@@ -104,16 +112,6 @@ function M.update_note(text)
         print("NO NOTE UNDER CURSOR TO UPDATE")
         return
     end
-end
-
-function get_notes_for_this_file(bufnr)
-    -- * find notes list
-    local absolute_path = vim.api.nvim_buf_get_name(bufnr)
-    -- TODO fix to always be relative to the workspace dir (not the CWD) .. so if I open from nested dir in repo, I don't lose notes!
-    local relative_path = vim.fn.fnamemodify(absolute_path, ":.")
-    -- print("absolute_path", absolute_path)
-    -- print("relative_path", relative_path)
-    return M.notes_by_file[relative_path] or {}
 end
 
 function M.show_notes()
