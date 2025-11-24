@@ -215,7 +215,7 @@ function M.show_notes()
     end
 end
 
-local function get_lines(buf, start_line_base0, exclusive_end_line_base0)
+function M.get_lines(buf, start_line_base0, exclusive_end_line_base0)
     -- TODO merge into GetPosSelectionRange:lines(), or?
     return vim.api.nvim_buf_get_lines(buf, start_line_base0, exclusive_end_line_base0, false)
 end
@@ -223,16 +223,16 @@ end
 function M.slice(buf, start_line_base0, exclusive_end_line_base0, around)
     -- TODO verify exclusive vs my end_line convention w.r.t. selection logic (GetPos)
     -- around = number of context lines before/after
-    local before_start_base0 = math.max(start_line_base0 - around - 1, 0)
-    local before_end_base0 = math.max(start_line_base0 - 1, 0)
+    local before_start_base0 = math.max(start_line_base0 - around, 0)
+    local before_end_base0 = math.max(start_line_base0, 0)
 
     local after_start_base0 = exclusive_end_line_base0
     local after_end_base0 = exclusive_end_line_base0 + around
 
     return {
-        before    = table.concat(get_lines(buf, before_start_base0, before_end_base0), "\n"),
-        selection = table.concat(get_lines(buf, start_line_base0 - 1, exclusive_end_line_base0), "\n"),
-        after     = table.concat(get_lines(buf, after_start_base0, after_end_base0), "\n"),
+        before    = table.concat(M.get_lines(buf, before_start_base0, before_end_base0), "\n"),
+        selection = table.concat(M.get_lines(buf, start_line_base0, exclusive_end_line_base0), "\n"), -- TODO check math on exclusive end line base0
+        after     = table.concat(M.get_lines(buf, after_start_base0, after_end_base0), "\n"),
     }
 end
 
