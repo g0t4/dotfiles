@@ -27,7 +27,7 @@ local GetPos = require("ask-openai.helpers.wrap_getpos")
 ---@field start_line_base1 integer
 ---@field end_line_base1 integer
 ---@field text string
----@field context NoteContext
+---@field context? NoteContext
 
 ---@class NoteContext
 ---@field before string[]   -- lines before the note, first entry is the line directly before the note
@@ -46,13 +46,13 @@ M.notes_by_file = {
             start_line_base1 = 3,
             end_line_base1 = 5,
             text = "What the FUCK?",
-            context = "",
+            context = {}
         },
         {
             start_line_base1 = 21,
             end_line_base1 = 22,
             text = "This is the key to understanding how the endpoint responds to foo!",
-            context = "",
+            context = {}
         }
     }
 }
@@ -286,7 +286,7 @@ function M.TODO_resolve(buf, note)
 end
 
 function M.TODO_apply_extmark(buf, ns, note, hlgroup)
-    local pos = M.resolve(buf, note)
+    local pos = M.TODO_resolve(buf, note)
 
     vim.api.nvim_buf_set_extmark(buf, ns, pos.start_line - 1, 0, {
         end_line = pos.end_line - 1,
