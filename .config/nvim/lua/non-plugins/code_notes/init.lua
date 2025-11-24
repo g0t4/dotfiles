@@ -168,9 +168,11 @@ function M.setup()
         callback = show_notes
     })
 
-    vim.api.nvim_create_user_command("AddNote", M.add_note, {})
-
     -- TODO later worry about lazy loading this on BufReadPost as a plugin, or on using command like AddNote
+    vim.api.nvim_create_user_command("AddNote", M.add_note, {})
+    -- vim.api.nvim_create_user_command("DeleteNote", M.delete_note, {})
+    -- vim.api.nvim_create_user_command("UpdateNote", M.update_note, {})
+    -- vim.api.nvim_create_user_command("ShowNotes", M.show_notes, {})
 end
 
 return M
