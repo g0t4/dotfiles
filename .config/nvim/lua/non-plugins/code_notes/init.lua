@@ -223,16 +223,16 @@ end
 function M.slice(buf, start_line_base0, exclusive_end_line_base0, around)
     -- TODO verify exclusive vs my end_line convention w.r.t. selection logic (GetPos)
     -- around = number of context lines before/after
-    local before_start = math.max(start_line_base0 - around - 1, 0)
-    local before_end = math.max(start_line_base0 - 1, 0)
+    local before_start_base0 = math.max(start_line_base0 - around - 1, 0)
+    local before_end_base0 = math.max(start_line_base0 - 1, 0)
 
-    local after_start = exclusive_end_line_base0
-    local after_end = exclusive_end_line_base0 + around
+    local after_start_base0 = exclusive_end_line_base0
+    local after_end_base0 = exclusive_end_line_base0 + around
 
     return {
-        before    = table.concat(get_lines(buf, before_start, before_end), "\n"),
+        before    = table.concat(get_lines(buf, before_start_base0, before_end_base0), "\n"),
         selection = table.concat(get_lines(buf, start_line_base0 - 1, exclusive_end_line_base0), "\n"),
-        after     = table.concat(get_lines(buf, after_start, after_end), "\n"),
+        after     = table.concat(get_lines(buf, after_start_base0, after_end_base0), "\n"),
     }
 end
 
