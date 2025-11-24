@@ -24,44 +24,58 @@ describe("slice", function()
         })
     end)
 
-    local one_line_around = 1
+    local ONE_LINE_AROUND = 1
+    local THREE_LINES_AROUND = 3
 
-    it("middle of a buffer with available context before and after", function()
+    it("near start, with only context before selection", function()
         local start_line_base0 = 1
         local end_line_exclusive_base0 = 3
 
-        local result = M.slice(bufnr, start_line_base0, end_line_exclusive_base0, one_line_around)
+        local context = M.slice(bufnr, start_line_base0, end_line_exclusive_base0, ONE_LINE_AROUND)
 
         assert.are.same({
             before = "line0",
             selection = "line1\nline2",
             after = "line3",
-        }, result)
+        }, context)
+    end)
+
+    it("middle of a buffer with 3 lines of context (not touching start/end of buffer)", function()
+        local start_line_base0 = 4
+        local end_line_exclusive_base0 = 5
+
+        local context = M.slice(bufnr, start_line_base0, end_line_exclusive_base0, THREE_LINES_AROUND)
+
+        assert.are.same({
+            before = "line1\nline2\nline3",
+            selection = "line4",
+            after = "line5\nline6\nline7",
+        }, context)
     end)
 
     it("at file beginning (no before context)", function()
         local start_line_base0 = 0
         local end_line_exclusive_base0 = 2
 
-        local result = M.slice(bufnr, start_line_base0, end_line_exclusive_base0, one_line_around)
+        local context = M.slice(bufnr, start_line_base0, end_line_exclusive_base0, ONE_LINE_AROUND)
 
         assert.are.same({
             before = "",
             selection = "line0\nline1",
             after = "line2",
-        }, result)
+        }, context)
     end)
 
     it("at file end (no after context)", function()
         local start_line_base0 = 8
         local end_line_exclusive_base0 = 10 -- FYI line 10 doesn't exist, is exclusive end after last "line 9" (base0)
 
-        local result = M.slice(bufnr, start_line_base0, end_line_exclusive_base0, one_line_around)
+        local context = M.slice(bufnr, start_line_base0, end_line_exclusive_base0, ONE_LINE_AROUND)
 
         assert.are.same({
             before = "line7",
             selection = "line8\nline9",
             after = "",
-        }, result)
+        }, context)
     end)
 end)
