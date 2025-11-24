@@ -249,13 +249,16 @@ end
 ---@param buffer_number integer
 function M.get_lines(buffer_number, start_line_base0, end_line_exclusive_base0)
     -- TODO merge into GetPosSelectionRange:lines(), or?
-    return vim.api.nvim_buf_get_lines(buffer_number, start_line_base0, end_line_exclusive_base0, false)
+    return vim.api.nvim_buf_get_lines(buffer_number,
+        start_line_base0,
+        end_line_exclusive_base0,
+        false -- ignore out of bounds, not an error (will only take what is present, i.e. if end_line is past end of file)
+    )
 end
 
 ---@param buffer_number integer
 function M.slice(buffer_number, start_line_base0, end_line_exclusive_base0, around)
     -- TODO what to do if negative start_line_base0
-    -- TODO what about end_line past end of file (more than 1 line past so it means content beyond what is in doc)?
 
     local before_start_base0 = math.max(start_line_base0 - around, 0)
     local before_end_exclusive_base0 = start_line_base0
@@ -265,7 +268,7 @@ function M.slice(buffer_number, start_line_base0, end_line_exclusive_base0, arou
 
     return {
         before    = table.concat(M.get_lines(buffer_number, before_start_base0, before_end_exclusive_base0), "\n"),
-        selection = table.concat(M.get_lines(buffer_number, start_line_base0, end_line_exclusive_base0), "\n"), -- TODO check math on exclusive end line base0
+        selection = table.concat(M.get_lines(buffer_number, start_line_base0, end_line_exclusive_base0), "\n"),
         after     = table.concat(M.get_lines(buffer_number, after_start_base0, after_end_exclusive_base0), "\n"),
     }
 end
