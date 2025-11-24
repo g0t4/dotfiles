@@ -88,7 +88,9 @@ function M.update_note(text)
     local bufnr = 0
     local notes = get_notes_for_this_file(bufnr)
     for _, n in ipairs(notes) do
-
+        if n.start_line_base1 <= line and n.end_line_base1 > line then
+            vim.notify("here is the note:" .. n.text)
+        end
     end
 end
 
