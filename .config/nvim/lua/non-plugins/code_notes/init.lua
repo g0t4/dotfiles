@@ -466,6 +466,27 @@ function M.setup()
         M.prev_note()
     end, {})
 
+    ---@param buffer_number integer
+    function M.list_notes(buffer_number)
+        local notes = get_notes_for_this_file(buffer_number)
+        if #notes == 0 then
+            print("No notes in this file")
+            return
+        end
+        for i, note in ipairs(notes) do
+            vim.print({
+                index = i,
+                start_line = note.start_line_base1,
+                end_line = note.end_line_base1,
+                text = note.text,
+            })
+        end
+    end
+
+    vim.api.nvim_create_user_command('ListNotes', function()
+        local buffer_number = vim.api.nvim_get_current_buf()
+        M.list_notes(buffer_number)
+    end, {})
 
 
     vim.api.nvim_create_user_command('PrintNote', M.vim_print_note_command, {})
