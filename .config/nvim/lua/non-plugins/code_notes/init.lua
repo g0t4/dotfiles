@@ -91,19 +91,23 @@ function M.find_first_note_under_cursor()
 
     local bufnr = 0
     local notes = get_notes_for_this_file(bufnr)
-    for _, n in ipairs(notes) do
-        if n.start_line_base1 <= line and n.end_line_base1 > line then
-            return n
+    for index, n in ipairs(notes) do
+        if n.start_line_base1 <= line and n.end_line_base1 >= line then
+            return n, index
         end
     end
 end
 
 function M.delete_note()
-    local note = M.find_first_note_under_cursor()
+    local note, index = M.find_first_note_under_cursor()
     if not note then
         print("NO NOTE UNDER CURSOR TO DELETE")
         return
     end
+    local notes = get_notes_for_this_file()
+    table.remove(notes, index)
+    -- api.write_json_werkspace_file(CODE_NOTES_PATH, M.notes_by_file)
+    M.show_notes()
 end
 
 function M.update_note(text)
