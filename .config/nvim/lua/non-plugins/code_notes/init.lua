@@ -234,6 +234,7 @@ end
 function M.show_notes(buffer_number)
     -- * clear notes
     vim.api.nvim_buf_clear_namespace(buffer_number, M.notes_ns_id, 0, -1)
+    -- FYI in all of my time working with extmarks, I have yet to notice performance issues => hence just recreate all of them!
 
     local notes = get_or_create_notes_for_this_file(buffer_number)
 
