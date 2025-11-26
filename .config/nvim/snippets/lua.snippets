@@ -11,7 +11,7 @@
 snippet class "Lua class pattern - explicit instance/instance_mt/class_mt"
 ---@class ${1}
 local ${1:ClassName} = {}
--- optional class level metatable (i.e. to override a metamethod like __call, __add, etc):
+-- optional class level metatable (i.e. to override a metamethod like __tostring(), __call(), __add(), __pairs(), __ipairs(), etc):
 -- local class_mt = {}
 -- setmetatable(${1}, class_mt)
 
