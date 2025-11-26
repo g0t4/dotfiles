@@ -8,15 +8,18 @@
 
 # TODO setup keymap to tab through args so I can support more than $1
 # TODO revisit wtf is what in how setmetatable and __index works... then can add back setmetatable(self) or otherwise...
-snippet class "Lua class pattern"
----@class ${1:ClassName}
+snippet class "Lua class pattern - explicit instance/instance_mt/class_mt"
+---@class ${1}
 local ${1:ClassName} = {}
-${1}.__index = ${1}
+-- optional class level metatable (i.e. to override a metamethod like __call, __add, etc):
+-- local class_mt = {}
+-- setmetatable(${1}, class_mt)
 
 function ${1}:new()
-    self = setmetatable({}, ${1})
+	local instance_mt = { __index = self } -- provides prototypical inheritance w/ subclassing support b/c self:new()
+    local instance = setmetatable({}, instance_mt)
     ${0}
-    return self
+    return instance
 end
 
 return ${1}
