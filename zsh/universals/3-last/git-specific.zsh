@@ -6,6 +6,25 @@ ealias gsl='gst && echo && glo' # * try # FYI requires gst/glo aliases(funcs) to
 ealias gcmsg='git commit -m "' --NoSpaceAfter
 ealias gcam='git commit -a -m "' --NoSpaceAfter
 
+# * stash
+abbr gstash 'git stash'
+abbr gstash_list 'git stash list'
+#
+abbr gstash_show 'git stash show --text 0'
+#
+abbr gstash_drop 'git stash drop 0'
+abbr gstash_pop 'git stash pop 0'
+abbr gstash_apply 'git stash apply'
+abbr gstash_branch 'git stash branch'
+abbr gstash_patch 'git stash push --patch --no-keep-index'
+#
+# FYI to get --NoSpaceAfter in zsh I have to move this into git-specific.zsh:
+abbr gstash_push 'git stash push --message "' --NoSpaceAfter
+abbr gstash_save 'git stash push --message "' --NoSpaceAfter
+#
+abbr gstash_clear 'git stash clear'
+
+
 # log
 ## https://git-scm.com/docs/git-log
 #    ! https://git-scm.com/docs/gitrevisions (for how to express revision ranges)
