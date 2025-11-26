@@ -58,6 +58,22 @@ snippet developer
 
 	${0:instructions}<|end|>
 
-snippet m_tool_call_result
+snippet dev_structured_output "put this at end of developer message"
+	# Response Formats
+
+	## {format name}
+
+	// {description or context}
+	{schema}<|end|>
+
+snippet mt_tool_call_result
 	<|start|>${0:toolname} to=assistant<|channel|>commentary<|message|>${0:output}<|end|>
+
+snippet ma_tool_call_preamble
+	<|start|>assistant<|channel|>commentary<|message|>**Action plan**:
+	1. Generate an HTML file
+	2. Generate a JavaScript for the Node.js server
+	3. Start the server
+	---
+	Will start executing the plan step by step<|end|>
 
