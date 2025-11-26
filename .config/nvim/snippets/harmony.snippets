@@ -20,26 +20,26 @@ snippet constrain
 	<|constrain|>
 
 snippet msg
-	<|start|>{$1:header}<|message|>{$0:content}<|end|>
+	<|start|>${1:header}<|message|>${0:content}<|end|>
 
 snippet mu
-	<|start|>user<|message|>{$0:content}<|end|>
+	<|start|>user<|message|>${0:content}<|end|>
 
 snippet mprefill
 	<|start|>assistant
 
 snippet ma_thinking
-	<|start|>assistant<|channel|>analysis<|message|>{$0:content}<|end|>
+	<|start|>assistant<|channel|>analysis<|message|>${0:content}<|end|>
 snippet ma_tool_call
-	<|start|>assistant<|channel|>commentary to=functions.$1<|message|>{$0:content}<|end|>
+	<|start|>assistant<|channel|>commentary to=functions.$1<|message|>${0:content}<|end|>
 snippet ma_final
-	<|start|>assistant<|channel|>final<|message|>{$0:content}<|end|>
+	<|start|>assistant<|channel|>final<|message|>${0:content}<|end|>
 
 snippet system
 	<|start|>system<|message|>You are ChatGPT, a large language model trained by OpenAI.
 	Knowledge cutoff: 2024-06
 	Current date: 2025-06-28
-	Reasoning: high
+	Reasoning: ${1:high}
 	# Valid channels: analysis, commentary, final. Channel must be included for every message.<|end|>
 
 snippet system_with_tools
@@ -47,7 +47,7 @@ snippet system_with_tools
 	Knowledge cutoff: 2024-06
 	Current date: 2025-06-28
 
-	Reasoning: high
+	Reasoning: ${1:high}
 
 	# Valid channels: analysis, commentary, final. Channel must be included for every message.
 	Calls to these tools must go to the commentary channel: 'functions'.<|end|>
@@ -56,4 +56,4 @@ snippet system_with_tools
 snippet developer
 	<|start|>developer<|message|># Instructions
 
-	{$0:instructions}<|end|>
+	${0:instructions}<|end|>
