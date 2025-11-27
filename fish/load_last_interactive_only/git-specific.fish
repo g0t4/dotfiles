@@ -264,4 +264,27 @@ abbr gstash_clear 'git stash clear'
 #
 # abbr gstash_untracked_too 'git stash --include-untracked'
 
+# * licenses
 
+function _get_license
+    if test -n "$(git status --porcelain)"
+        echo "Repository has uncommitted changes, aborting..."
+        return
+    end
+
+    set url $argv[1]
+    set dest "LICENSE.txt"
+    curl -fsSL $url -o $dest
+    # check if repo is dirty
+    git add LICENSE.txt
+    git commit -m "Add LICENSE.txt"
+end
+
+function get_license_DWTFYW
+    # NOTE this is based on, but is not exactly the "DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE"
+    _get_license "https://raw.githubusercontent.com/g0t4/dotfiles/master/LICENSE.txt"
+end
+
+function get_license_MIT0
+    _get_license "https://raw.githubusercontent.com/aws/mit-0/refs/heads/master/MIT-0"
+end
