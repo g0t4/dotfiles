@@ -1,3 +1,6 @@
+vim.treesitter.language.add('harmony', { path = "/Users/wesdemos/repos/github/g0t4/tree-sitter-openai-harmony/openai-harmony.dylib" })
+vim.api.nvim_set_hl(0, '@harmony_start_token', { fg = '#ff00c3' }) -- *** test
+
 return {
 
 
