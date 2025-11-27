@@ -1,5 +1,49 @@
 vim.treesitter.language.add('harmony', { path = "/Users/wesdemos/repos/github/g0t4/tree-sitter-openai-harmony/openai-harmony.dylib" })
 vim.api.nvim_set_hl(0, '@harmony_start_token', { fg = '#ff00c3' }) -- *** test
+local harmony_spacing_ns = vim.api.nvim_create_namespace("harmony_spacing")
+
+local function set_extmarks_between_messages(bufnr)
+    local query = vim.treesitter.query.parse("harmony", [[
+  (start_token) @new_msg
+]])
+
+
+    function redo(tree)
+        vim.api.nvim_buf_clear_namespace(bufnr, harmony_spacing_ns, 0, -1)
+        local root = tree:root()
+
+        for id, node in query:iter_captures(root, 0) do
+            -- vim.print(id, node)
+            local row_base0, col_base0 = node:start()
+            -- print("  ", row_base0, col_base0)
+            vim.api.nvim_buf_set_extmark(bufnr, harmony_spacing_ns, row_base0, col_base0, {
+                -- virt_text        = { { "👈" } }, -- works for inline marker (actually, this might be fine, but then why not just use color?)
+                virt_text     = { { "⤷ ", "Comment" } },
+                virt_text_pos = "inline",
+                -- seems like extmarks at best can insert text "inline" but cannot add a \n in that text
+            })
+        end
+    end
+
+    local parser = vim.treesitter.get_parser(bufnr, "harmony")
+    -- FYI register_cbs is called immediately so I don't need to call redo here, it seems (probably b/c I am adding this early in the FileType event)
+    -- local tree = parser:parse()[1]
+    -- redo(tree)
+
+    -- TODO on every change, insert splits... redo extmarks
+    parser:register_cbs({
+        on_changedtree = function(changes, tree)
+            redo(tree)
+        end,
+    })
+end
+
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = "harmony",
+    callback = function(args)
+        set_extmarks_between_messages(args.buf)
+    end,
+})
 
 return {
 
