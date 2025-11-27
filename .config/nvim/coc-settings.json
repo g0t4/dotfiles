@@ -120,8 +120,12 @@
 
     // *** prettier - so far, for markdown only
     // "prettier.formatterPriority": -1, // make prettier the fallback formatter (works but not needed as I can just disable it here:)
-    "prettier.disableLanguages": [ "json", "markdown", "yaml", "typescript", ], // *** using coc-json formatter for now
+    "prettier.disableLanguages": [ "json", "markdown", "yaml", "typescript", "javascript" ], // *** using coc-json formatter for now
     "prettier.tabWidth": 4,
+
+    // *** JAVASCRIPT
+    // FYI trying coc-tsserver for javascript (see if it annoys me, I mostly want simple formatting without stupid opinions beyond whitespace consistency... I hate things that join/split lines)
+    // TODO try coc-biome for javascript? formatting + linter via LSP/CLI
 
     // *** tsserver has own formatter (if prettier is disabled for typescript--see above)
     "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": true, // default is false, YUCK!
