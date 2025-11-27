@@ -3,7 +3,6 @@ vim.api.nvim_set_hl(0, '@harmony_start_token', { fg = '#ff00c3' }) -- *** test
 
 return {
 
-
     {
         'nvim-treesitter/nvim-treesitter',
         build = ":TSUpdate",
@@ -14,7 +13,7 @@ return {
             require 'nvim-treesitter.configs'.setup {
                 ensure_installed = { "c", "lua", "python", "javascript", "typescript", "html", "css", "json", "yaml", "markdown", "vim" }, -- one of "all", "maintained" (parsers with maintainers), or a list of languages
                 sync_install = false,
-                auto_install = true,                                                                                                       -- auto install on entering buffer (must have tree-sitter CLI, IIUC)
+                auto_install = true, -- auto install on entering buffer (must have tree-sitter CLI, IIUC)
                 -- ignore_install
 
                 -- TODO review other builtin modules/plugins:
@@ -49,10 +48,10 @@ return {
                     -- similar to Ctrl+W in jetbrains IDEs
                     enable = true,
                     keymaps = {
-                        init_selection = 'gnn',    -- Start selection
-                        node_incremental = 'grn',  -- Expand to the next node
+                        init_selection = 'gnn', -- Start selection
+                        node_incremental = 'grn', -- Expand to the next node
                         scope_incremental = 'grc', -- Expand to the next scope
-                        node_decremental = 'grm',  -- Shrink selection
+                        node_decremental = 'grm', -- Shrink selection
                     },
                 },
             }
