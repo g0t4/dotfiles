@@ -185,24 +185,6 @@ vim.api.nvim_create_autocmd("FileType", {
     end,
 })
 
-vim.api.nvim_create_autocmd("BufWinEnter", {
-    group = "filetypemods",
-    pattern = "*.md",
-    callback = function()
-        -- FYI `vim.opt_local` (lua) == `setlocal` (vimscript)
-        vim.wo.wrap = true -- window option so use BufWinEnter
-    end,
-})
-
-vim.api.nvim_create_autocmd("BufWinEnter", {
-    group = "filetypemods",
-    pattern = "*.svg",
-    -- pattern = "xml,html,xsl,svg", -- PRN?
-    callback = function()
-        vim.wo.wrap = true
-    end,
-})
-
 vim.api.nvim_create_autocmd("FileType", {
     group = "filetypemods",
     pattern = "lua",
@@ -375,5 +357,23 @@ vim.api.nvim_create_autocmd("BufWinEnter", {
         --  use pattern to limit, OR =>  if vim.bo.filetype == "harmony" then ... end
         vim.wo.wrap = true
         -- TODO port other FileType handlers above to use BufWinEnter instead (at least for window local options like wrap)
+    end,
+})
+
+vim.api.nvim_create_autocmd("BufWinEnter", {
+    group = "filetypemods",
+    pattern = "*.md",
+    callback = function()
+        -- FYI `vim.opt_local` (lua) == `setlocal` (vimscript)
+        vim.wo.wrap = true -- window option so use BufWinEnter
+    end,
+})
+
+vim.api.nvim_create_autocmd("BufWinEnter", {
+    group = "filetypemods",
+    pattern = "*.svg",
+    -- pattern = "xml,html,xsl,svg", -- PRN?
+    callback = function()
+        vim.wo.wrap = true
     end,
 })
