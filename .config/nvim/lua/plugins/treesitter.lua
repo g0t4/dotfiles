@@ -2,6 +2,7 @@ vim.treesitter.language.add('harmony', { path = "/Users/wesdemos/repos/github/g0
 vim.api.nvim_set_hl(0, '@harmony_start_token', { fg = '#ff00c3' })
 vim.api.nvim_set_hl(0, '@harmony_end_token', { fg = '#3498db' })
 local harmony_spacing_ns = vim.api.nvim_create_namespace("harmony_spacing")
+-- ALTERNATE idea: color every other message so I can see clearly each message in its entirety
 
 local function set_extmarks_between_messages(bufnr)
     local query_start_nodes = vim.treesitter.query.parse("harmony", [[
