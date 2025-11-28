@@ -9,8 +9,8 @@ vim.api.nvim_set_hl(0, "@harmony_message_user", { fg = "#a99fff" })
 vim.api.nvim_set_hl(0, "@harmony_message_assistant_analysis", { fg = "#FFC379" })
 vim.api.nvim_set_hl(0, "@harmony_message_assistant_commentary", { fg = "#f99fff" })
 vim.api.nvim_set_hl(0, "@harmony_message_tool_result", { fg = "#ff00ce" })
-vim.api.nvim_set_hl(0, "@harmony_message_assistant_final", { fg = "#d2ffa5" })
-vim.api.nvim_set_hl(0, "@is_json", { fg = "#ffffff" })
+vim.api.nvim_set_hl(0, "@harmony_message_assistant_final", { fg = "#ffffff" })
+vim.api.nvim_set_hl(0, "@is_json", { fg = "#c1c1c1" }) -- mostly to test targeting it, before injecting JSON
 
 local harmony_spacing_ns = vim.api.nvim_create_namespace("harmony_spacing")
 
