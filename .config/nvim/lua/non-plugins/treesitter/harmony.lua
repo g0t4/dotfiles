@@ -8,8 +8,8 @@ vim.api.nvim_set_hl(0, "@harmony_message_user", { fg = "#a99fff" })
 -- vim.api.nvim_set_hl(0, "@harmony_message_assistant", { fg = "#98C379" })
 vim.api.nvim_set_hl(0, "@harmony_message_assistant_analysis", { fg = "#FFC379" })
 vim.api.nvim_set_hl(0, "@harmony_message_assistant_commentary", { fg = "#f99fff" })
+vim.api.nvim_set_hl(0, "@harmony_message_tool_result", { fg = "#ff00ce" })
 vim.api.nvim_set_hl(0, "@harmony_message_assistant_final", { fg = "#98C379" })
-vim.api.nvim_set_hl(0, "@harmony_message_tool_result", { fg = "#98C379" })
 
 local harmony_spacing_ns = vim.api.nvim_create_namespace("harmony_spacing")
 
