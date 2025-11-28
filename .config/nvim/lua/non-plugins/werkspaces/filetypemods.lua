@@ -194,12 +194,12 @@ vim.api.nvim_create_autocmd("BufWinEnter", {
     end,
 })
 
-vim.api.nvim_create_autocmd("FileType", {
+vim.api.nvim_create_autocmd("BufWinEnter", {
     group = "filetypemods",
-    pattern = "svg",
-    -- pattern = "xml,html,xsl,svg", -- todo add others?
+    pattern = "*.svg",
+    -- pattern = "xml,html,xsl,svg", -- PRN?
     callback = function()
-        vim.opt_local.wrap = true
+        vim.wo.wrap = true
     end,
 })
 
