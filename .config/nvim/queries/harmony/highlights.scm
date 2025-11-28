@@ -15,8 +15,7 @@
   (message (header (header_tool_result))) @harmony_message_tool_result
 ]
 [
-  (message (header (header_assistant))) @harmony_message_assistant
-  (message (header (header_assistant (header_assistant_analysis)))) @harmony_message_assistant_analysis
-  (message (header (header_assistant (header_assistant_commentary)))) @harmony_message_assistant_commentary
-  (message (header (header_assistant (header_assistant_final)))) @harmony_message_assistant_final
+  (message (header (header_assistant_analysis))) @harmony_message_assistant_analysis
+  (message (header (header_assistant_commentary))) @harmony_message_assistant_commentary
+  (message (header (header_assistant_final))) @harmony_message_assistant_final
 ]
