@@ -1895,6 +1895,16 @@ if command -q npm
         npx tree-sitter-cli $argv
     end
 
+    # FYI it's fine to get rid of these for a different tool to get the `ts` prefix
+    abbr ts "tree-sitter"
+    abbr tsg "tree-sitter generate"
+    abbr tsb "tree-sitter build"
+    abbr tsp "tree-sitter parse"
+    abbr tst "tree-sitter test"
+    abbr tsq "tree-sitter query"
+    abbr tsh "tree-sitter highlight"
+    abbr tsplayground "tree-sitter playground"
+
 end
 
 # TODO! add mechanism to discover duplicated abbrs => on-demand check?
