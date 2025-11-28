@@ -75,6 +75,7 @@ function _update_completion
     # FYI fish shell only, generated completions are superior to DDfM bundled completions
 
     # why? one reason is I can install beta releases of these tools and uninstall brew package and not lose out on completions
+    command -q npx; npx tree-sitter-cli complete --shell fish > ~/.config/fish/completions/tree-sitter.fish
 
 end
 
