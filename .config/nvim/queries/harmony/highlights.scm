@@ -1,4 +1,4 @@
-((message_content) @is_json (#match? @is_json "^\\{"))
+((text) @is_json (#match? @is_json "^\\{"))
 
 ; [
 ;   (start_token) @harmony_start_token
