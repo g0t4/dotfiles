@@ -1,5 +1,6 @@
 vim.treesitter.language.add('harmony', { path = "/Users/wesdemos/repos/github/g0t4/tree-sitter-openai-harmony/openai-harmony.dylib" })
-vim.api.nvim_set_hl(0, '@harmony_start_token', { fg = '#ff00c3' }) -- *** test
+vim.api.nvim_set_hl(0, '@harmony_start_token', { fg = '#ff00c3' })
+vim.api.nvim_set_hl(0, '@harmony_end_token', { fg = '#3498db' })
 local harmony_spacing_ns = vim.api.nvim_create_namespace("harmony_spacing")
 
 local function set_extmarks_between_messages(bufnr)
