@@ -185,12 +185,12 @@ vim.api.nvim_create_autocmd("FileType", {
     end,
 })
 
-vim.api.nvim_create_autocmd("FileType", {
+vim.api.nvim_create_autocmd("BufWinEnter", {
     group = "filetypemods",
-    pattern = "markdown",
+    pattern = "*.md",
     callback = function()
         -- FYI `vim.opt_local` (lua) == `setlocal` (vimscript)
-        vim.opt_local.wrap = true
+        vim.opt_local.wrap = true -- window option so use BufWinEnter
     end,
 })
 
@@ -370,7 +370,7 @@ vim.api.nvim_create_autocmd("FileType", {
 vim.api.nvim_create_autocmd("BufWinEnter", {
     pattern = "*.harmony",
     callback = function(...)
-        -- FYI! with multiple windows => same buffer  ... FileType event IS NOT APPROPRIATE for forced defaults
+        -- FYI! with multiple windows (in separate tabs, not a split window alone in one tab) => same buffer  ... FileType event IS NOT APPROPRIATE for forced defaults
         -- *** use BufWinEnter if you have multiple windows pointed at the same buffer, on restore then this fires for each one (not just first like FileType event does)
         --  use pattern to limit, OR =>  if vim.bo.filetype == "harmony" then ... end
         vim.opt_local.wrap = true
