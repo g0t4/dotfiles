@@ -1,8 +1,17 @@
 vim.treesitter.language.add('harmony', { path = "/Users/wesdemos/repos/github/g0t4/tree-sitter-openai-harmony/openai-harmony.dylib" })
-vim.api.nvim_set_hl(0, '@harmony_start_token', { fg = '#ff00c3' })
-vim.api.nvim_set_hl(0, '@harmony_end_token', { fg = '#3498db' })
+
+
+
+vim.api.nvim_set_hl(0, "@harmony_message_developer", { fg = "#4FAFE7" })
+vim.api.nvim_set_hl(0, "@harmony_message_user", { fg = "#d8beff" })
+vim.api.nvim_set_hl(0, "@harmony_message_system", { fg = "#4FAFE7" })
+-- vim.api.nvim_set_hl(0, "@harmony_message_assistant", { fg = "#98C379" })
+vim.api.nvim_set_hl(0, "@harmony_message_assistant_analysis", { fg = "#FFC379" })
+vim.api.nvim_set_hl(0, "@harmony_message_assistant_commentary", { fg = "#98C379" })
+vim.api.nvim_set_hl(0, "@harmony_message_assistant_final", { fg = "#98C379" })
+vim.api.nvim_set_hl(0, "@harmony_message_tool_result", { fg = "#98C379" })
+
 local harmony_spacing_ns = vim.api.nvim_create_namespace("harmony_spacing")
--- ALTERNATE idea: color every other message so I can see clearly each message in its entirety
 
 local function set_extmarks_between_messages(bufnr)
     local query_start_nodes = vim.treesitter.query.parse("harmony", [[
