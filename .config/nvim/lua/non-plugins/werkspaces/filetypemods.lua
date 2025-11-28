@@ -357,30 +357,11 @@ vim.api.nvim_create_augroup("bufwinentermods", { clear = true })
 
 vim.api.nvim_create_autocmd("BufWinEnter", {
     group = "bufwinentermods",
-    pattern = "*.harmony",
-    callback = function(...)
+    pattern = { "*.harmony", "*.md", "*.svg" },
+    callback = function()
         -- FYI! with multiple windows (in separate tabs, not a split window alone in one tab) => same buffer  ... FileType event IS NOT APPROPRIATE for forced defaults
         -- *** use BufWinEnter if you have multiple windows pointed at the same buffer, on restore then this fires for each one (not just first like FileType event does)
         --  use pattern to limit, OR =>  if vim.bo.filetype == "harmony" then ... end
-        vim.wo.wrap = true
-        -- TODO port other FileType handlers above to use BufWinEnter instead (at least for window local options like wrap)
-    end,
-})
-
-vim.api.nvim_create_autocmd("BufWinEnter", {
-    group = "bufwinentermods",
-    pattern = "*.md",
-    callback = function()
-        -- FYI `vim.opt_local` (lua) == `setlocal` (vimscript)
-        vim.wo.wrap = true -- window option so use BufWinEnter
-    end,
-})
-
-vim.api.nvim_create_autocmd("BufWinEnter", {
-    group = "bufwinentermods",
-    pattern = "*.svg",
-    -- pattern = "xml,html,xsl,svg", -- PRN?
-    callback = function()
         vim.wo.wrap = true
     end,
 })
