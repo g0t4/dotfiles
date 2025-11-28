@@ -52,6 +52,7 @@ end
 vim.api.nvim_create_autocmd("FileType", {
     pattern = "harmony",
     callback = function(args)
+        vim.wo.wrap = true
         set_extmarks_between_messages(args.buf)
     end,
 })
