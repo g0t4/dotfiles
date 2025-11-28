@@ -1,48 +1,55 @@
-snippet start
+snippet _start
 	<|start|>
 
-snippet end
+snippet _end
 	<|end|>
 
-snippet channel
+snippet _channel
 	<|channel|>
 
-snippet message
+snippet _message
 	<|message|>
 
-snippet call
+snippet _call
 	<|call|>
 
-snippet return "FYI return is decode only token, use <|end|> in message history"
+snippet _return "FYI return is decode only token, use <|end|> in message history"
 	<|return|>
 
-snippet constrain
+snippet _constrain
 	<|constrain|>
 
-snippet msg
+snippet _msg
 	<|start|>${1:header}<|message|>${0:content}<|end|>
 
-snippet mu
+snippet _user
 	<|start|>user<|message|>${0:content}<|end|>
 
-snippet mprefill
+snippet _prefill
 	<|start|>assistant
 
-snippet ma_thinking
+snippet _analysis
 	<|start|>assistant<|channel|>analysis<|message|>${0:content}<|end|>
-snippet ma_tool_call
+snippet _tool_call
 	<|start|>assistant<|channel|>commentary to=functions.$1<|message|>${0:content}<|end|>
-snippet ma_final
+snippet _tool_call_preamble
+	<|start|>assistant<|channel|>commentary<|message|>**Action plan**:
+	1. Generate an HTML file
+	2. Generate a JavaScript for the Node.js server
+	3. Start the server
+	---
+	Will start executing the plan step by step<|end|>
+snippet _final
 	<|start|>assistant<|channel|>final<|message|>${0:content}<|end|>
 
-snippet system
+snippet _system
 	<|start|>system<|message|>You are ChatGPT, a large language model trained by OpenAI.
 	Knowledge cutoff: 2024-06
 	Current date: 2025-06-28
 	Reasoning: ${1:high}
 	# Valid channels: analysis, commentary, final. Channel must be included for every message.<|end|>
 
-snippet system_with_tools
+snippet _system_with_tools
 	<|start|>system<|message|>You are ChatGPT, a large language model trained by OpenAI.
 	Knowledge cutoff: 2024-06
 	Current date: 2025-06-28
@@ -53,12 +60,12 @@ snippet system_with_tools
 	Calls to these tools must go to the commentary channel: 'functions'.<|end|>
 
 
-snippet developer
+snippet _developer
 	<|start|>developer<|message|># Instructions
 
 	${0:instructions}<|end|>
 
-snippet dev_structured_output "put this at end of developer message"
+snippet _dev_structured_output "put this at end of developer message"
 	# Response Formats
 
 	## {format name}
@@ -66,14 +73,6 @@ snippet dev_structured_output "put this at end of developer message"
 	// {description or context}
 	{schema}<|end|>
 
-snippet mt_tool_call_result
+snippet _tool_result
 	<|start|>${0:toolname} to=assistant<|channel|>commentary<|message|>${0:output}<|end|>
-
-snippet ma_tool_call_preamble
-	<|start|>assistant<|channel|>commentary<|message|>**Action plan**:
-	1. Generate an HTML file
-	2. Generate a JavaScript for the Node.js server
-	3. Start the server
-	---
-	Will start executing the plan step by step<|end|>
 
