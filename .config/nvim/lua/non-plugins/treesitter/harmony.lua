@@ -22,6 +22,9 @@ local function set_extmarks_between_messages(bufnr)
         vim.api.nvim_buf_clear_namespace(bufnr, harmony_spacing_ns, 0, -1)
         local root = tree:root()
 
+        -- TODO would really like virtual line breaks...
+        --   isn't this doable?! btw this is an area where my predictions engine is technically broken (it won't show end of line on a subsequent line if multiple lines predicted! but it accepts that way (as it should)
+
         local count = 0
         for id, node in query_start_nodes:iter_captures(root, 0) do
             -- vim.print(id, node)
