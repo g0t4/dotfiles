@@ -3,16 +3,15 @@ vim.api.nvim_set_hl(0, '@harmony_start_token', { fg = '#ff00c3' }) -- *** test
 local harmony_spacing_ns = vim.api.nvim_create_namespace("harmony_spacing")
 
 local function set_extmarks_between_messages(bufnr)
-    local query = vim.treesitter.query.parse("harmony", [[
+    local query_start_nodes = vim.treesitter.query.parse("harmony", [[
   (start_token) @new_msg
 ]])
-
 
     function redo(tree)
         vim.api.nvim_buf_clear_namespace(bufnr, harmony_spacing_ns, 0, -1)
         local root = tree:root()
 
-        for id, node in query:iter_captures(root, 0) do
+        for id, node in query_start_nodes:iter_captures(root, 0) do
             -- vim.print(id, node)
             local row_base0, col_base0 = node:start()
             -- print("  ", row_base0, col_base0)
@@ -22,6 +21,7 @@ local function set_extmarks_between_messages(bufnr)
                 virt_text_pos = "inline",
                 -- seems like extmarks at best can insert text "inline" but cannot add a \n in that text
             })
+            -- TODO scan system message for "Reasoning: ___" and mark it with extmarks? to color it
         end
     end
 
