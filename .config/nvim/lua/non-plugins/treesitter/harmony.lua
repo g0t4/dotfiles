@@ -2,8 +2,8 @@ vim.treesitter.language.add('harmony', { path = "/Users/wesdemos/repos/github/g0
 
 
 
-vim.api.nvim_set_hl(0, "@harmony_message_system", { fg = "#4FAFE7" })
-vim.api.nvim_set_hl(0, "@harmony_message_developer", { fg = "#4FAFE7" })
+vim.api.nvim_set_hl(0, "@harmony_message_system", { fg = "#4065ff" })
+vim.api.nvim_set_hl(0, "@harmony_message_developer", { fg = "#6AC4EC" })
 vim.api.nvim_set_hl(0, "@harmony_message_user", { fg = "#a99fff" })
 -- vim.api.nvim_set_hl(0, "@harmony_message_assistant", { fg = "" })
 vim.api.nvim_set_hl(0, "@harmony_message_assistant_analysis", { fg = "#FFC379" })
