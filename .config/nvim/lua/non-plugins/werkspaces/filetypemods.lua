@@ -366,3 +366,14 @@ vim.api.nvim_create_autocmd("FileType", {
         -- PRN others?
     end,
 })
+
+vim.api.nvim_create_autocmd("BufWinEnter", {
+    pattern = "*.harmony",
+    callback = function(...)
+        -- FYI! with multiple windows => same buffer  ... FileType event IS NOT APPROPRIATE for forced defaults
+        -- *** use BufWinEnter if you have multiple windows pointed at the same buffer, on restore then this fires for each one (not just first like FileType event does)
+        --  use pattern to limit, OR =>  if vim.bo.filetype == "harmony" then ... end
+        vim.opt_local.wrap = true
+        -- TODO port other FileType handlers above to use BufWinEnter instead (at least for window local options like wrap)
+    end,
+})
