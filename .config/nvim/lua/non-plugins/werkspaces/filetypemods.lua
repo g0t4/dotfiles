@@ -362,7 +362,7 @@ vim.api.nvim_create_autocmd("FileType", {
     group = "HelpQuitWithQ",
     pattern = "help",
     callback = function()
-        vim.keymap.set("n", "q", ":q<CR>", { noremap = true, silent = true, buffer = true })
+        vim.keymap.set("n", "q", ":q<CR>", { noremap = true, silent = true, buffer = true }) -- once is fine b/c this is buffer keymap, so FileType works (don't need BufWinEnter)
         -- PRN others?
     end,
 })
