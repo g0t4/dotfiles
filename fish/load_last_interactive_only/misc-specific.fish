@@ -1888,6 +1888,13 @@ if command -q npm
     abbr npmun 'npm uninstall'
     abbr npmup 'npm update'
 
+    abbr npxr 'npx run'
+
+    function tree-sitter --wraps tree-sitter
+        # PRN did this work out?
+        npx tree-sitter-cli $argv
+    end
+
 end
 
 # TODO! add mechanism to discover duplicated abbrs => on-demand check?
