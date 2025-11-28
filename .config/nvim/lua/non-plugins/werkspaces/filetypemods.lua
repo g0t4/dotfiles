@@ -349,7 +349,14 @@ vim.api.nvim_create_autocmd("FileType", {
     end,
 })
 
+
+
+-- ***! BufWinEnter mods:
+
+vim.api.nvim_create_augroup("bufwinentermods", { clear = true })
+
 vim.api.nvim_create_autocmd("BufWinEnter", {
+    group = "bufwinentermods",
     pattern = "*.harmony",
     callback = function(...)
         -- FYI! with multiple windows (in separate tabs, not a split window alone in one tab) => same buffer  ... FileType event IS NOT APPROPRIATE for forced defaults
@@ -361,7 +368,7 @@ vim.api.nvim_create_autocmd("BufWinEnter", {
 })
 
 vim.api.nvim_create_autocmd("BufWinEnter", {
-    group = "filetypemods",
+    group = "bufwinentermods",
     pattern = "*.md",
     callback = function()
         -- FYI `vim.opt_local` (lua) == `setlocal` (vimscript)
@@ -370,7 +377,7 @@ vim.api.nvim_create_autocmd("BufWinEnter", {
 })
 
 vim.api.nvim_create_autocmd("BufWinEnter", {
-    group = "filetypemods",
+    group = "bufwinentermods",
     pattern = "*.svg",
     -- pattern = "xml,html,xsl,svg", -- PRN?
     callback = function()
