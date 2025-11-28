@@ -18,7 +18,44 @@ local function set_extmarks_between_messages(bufnr)
   (start_token) @new_msg
 ]])
 
-    function redo(tree)
+    function color_every_other(tree)
+        vim.api.nvim_buf_clear_namespace(bufnr, harmony_spacing_ns, 0, -1)
+        local root = tree:root()
+
+        local count = 0
+        for id, node in query_start_nodes:iter_captures(root, 0) do
+            -- vim.print(id, node)
+            local row_base0, col_base0 = node:start()
+            -- print("  ", row_base0, col_base0)
+            -- vim.api.nvim_buf_set_extmark(bufnr, harmony_spacing_ns, row_base0, col_base0, {
+            --     -- virt_text        = { { "👈" } }, -- works for inline marker (actually, this might be fine, but then why not just use color?)
+            --     virt_text     = { { "⤷ ", "Comment" } },
+            --     virt_text_pos = "inline",
+            --     -- seems like extmarks at best can insert text "inline" but cannot add a \n in that text
+            -- })
+            local row_end0, col_end0 = node:end_()
+            -- print("start", node:start())
+            -- print("  end", node:end_())
+            if count % 2 == 0 then
+                vim.api.nvim_buf_set_extmark(bufnr, harmony_spacing_ns, row_base0, col_base0, {
+                    -- hl_group = "Comment",
+                    end_row = row_end0,
+                    end_col = col_end0,
+                    hl_mode = "combine",
+                    hl_eol = false,
+                    priority = 100,
+                    -- optional: add a background highlight for alternating messages
+                    hl_group = "@harmony_even"
+
+                })
+            end
+            count = count + 1
+
+            -- TODO scan system message for "Reasoning: ___" and mark it with extmarks? to color it
+        end
+    end
+
+    function annotate_start(tree)
         vim.api.nvim_buf_clear_namespace(bufnr, harmony_spacing_ns, 0, -1)
         local root = tree:root()
 
@@ -44,7 +81,7 @@ local function set_extmarks_between_messages(bufnr)
     -- TODO on every change, insert splits... redo extmarks
     parser:register_cbs({
         on_changedtree = function(changes, tree)
-            redo(tree)
+            color_every_other(tree)
         end,
     })
 end
