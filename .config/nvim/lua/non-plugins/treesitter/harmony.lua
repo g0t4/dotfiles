@@ -62,4 +62,10 @@ local function set_extmarks_between_messages(bufnr)
         end,
     })
 end
--- set_extmarks_between_messages() -- TODO wire up again in BufReadPost or BufWinEnter?
+
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = "harmony",
+    callback = function(args)
+        set_extmarks_between_messages(args.buf)
+    end,
+})
