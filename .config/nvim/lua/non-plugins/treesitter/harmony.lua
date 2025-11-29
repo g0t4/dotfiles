@@ -17,6 +17,7 @@ end
 
 
 vim.api.nvim_set_hl(0, "@harmony_message_system", { fg = "#6986ff" })
+vim.api.nvim_set_hl(0, "@harmony_start_token", { bold = true })
 vim.api.nvim_set_hl(0, "@harmony_message_developer", { fg = "#6AC4EC" })
 vim.api.nvim_set_hl(0, "@harmony_message_user", { fg = "#a99fff" })
 -- vim.api.nvim_set_hl(0, "@harmony_message_assistant", { fg = "" })

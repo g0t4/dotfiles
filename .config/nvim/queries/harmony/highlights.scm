@@ -9,6 +9,9 @@
   (message header:(header_assistant_commentary)) @harmony_message_assistant_commentary
   (message header:(header_assistant_final)) @harmony_message_assistant_final
 ]
+[
+   (start_token) @harmony_start_token
+]
 
 ;
 ; ; just for fun, flag warning nodes to highlight as error text in neovim:
