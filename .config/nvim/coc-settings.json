@@ -218,6 +218,31 @@
     //
     // FYI another persons' config: https://raw.githubusercontent.com/oppara/dotfiles/611ea809e380d5b4e3e374568a85e52e744a429e/config/nvim/coc-settings.json
     "languageserver": {
+
+        "tsquery": {
+            // *** tree-sitter query files (*.scm)
+            "command": "ts_query_ls",
+            "filetypes": [ "query", "scm" ],
+            "rootPatterns": [ ".tsqueryrc.json", ".git" ],
+            "args": [ ],
+            // FYI using .tsqueryrc.json file for now, in tree-sitter-openai-harmony repo as a first test case, can test other parsers later
+            //   and maybe then setup some central config here
+            // "initializationOptions": {
+            //     "parser_aliases": {
+            //         "ecma": "javascript",
+            //         "jsx": "javascript",
+            //         "php_only": "php",
+            //     },
+            //     "parser_install_directories": {
+            //         // TODO will it use my ~/.config/tree-sitter/config.json ?
+            //         //   vim.fn.stdpath('data') .. '/site/parser',
+            //     },
+            // }
+            //   on_attach = function(_, buf)
+            //     vim.bo[buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
+            //   end,
+        }
+
         "systemd": {
             "command": "systemd-lsp",
             "args": [ ],
