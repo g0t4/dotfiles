@@ -161,13 +161,9 @@ vim.api.nvim_create_autocmd("BufWinEnter", {
 
         parser:register_cbs({
             on_changedtree = function(_, tree)
-                vim.print("changed tree:")
                 local root = tree:root()
                 local injections_query = vim.treesitter.query.get("test", "injections")
-
                 local cursor = GetPos.cursor_position()
-
-                vim.print("  cursor:", cursor)
 
                 for pattern_id, match, metadata, tree in injections_query:iter_matches(root, bufnr, 0, -1) do
                     print("\n## match:")
@@ -182,18 +178,16 @@ vim.api.nvim_create_autocmd("BufWinEnter", {
                     local captured_injection_language = nil
                     local captured_injection_content_node = nil
                     for id, nodes in pairs(match) do
-                        print("  id", id)
                         local node = nodes[1] -- seems like only need first node in array
-                        print("  node", node)
                         local name = injections_query.captures[id]
+                        print("  id", id)
+                        print("  node", node)
                         print("  name:", name)
                         -- FYI might be other scenarios I have yet to cover (i.e. include children...) ... do that when I encounter it
 
                         -- unsure about order so look for both and then after loop I can react
                         if name == "injection.language" then
-                            local text = vim.treesitter.get_node_text(node, bufnr)
-                            print("  captured text:", text)
-                            captured_injection_language = text
+                            captured_injection_language = vim.treesitter.get_node_text(node, bufnr)
                         elseif name == "injection.content" then
                             captured_injection_content_node = node
                         end
