@@ -135,13 +135,12 @@ end
 --     end,
 -- })
 
+-- TODO what event to use? BufReadPost is before filetype == "test"... what about FileType event? pattern=test?
 -- vim.api.nvim_create_autocmd("FileType", {
 --     callback = function(args)
 --         vim.print("FILETYPE:", vim.bo.filetype)
 --     end,
 -- })
-
--- TODO what event to use? BufReadPost is before filetype == "test"... what about FileType event? pattern=test?
 vim.api.nvim_create_autocmd("BufWinEnter", {
     group = vim.api.nvim_create_augroup("TestTSCallbacks", { clear = true }),
     callback = function(args)
