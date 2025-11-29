@@ -66,6 +66,12 @@ return {
     },
 
     {
+        -- adds *.test filetype support for test/corpus/*.test files in treesitter grammar repos
+        --   injects language specified in :language(foo) into (input) node/section
+        --   injects its own grammar in the (output) node... I was thinking make (output) query type and tie it to a given parser
+        --   TODO => would be nice to get Coc/vim.lsp completions to tie into injected languages
+        --      so I could get snippets
+        --      and other completions (i.e. ts_query_ls language server)
         "tree-sitter-grammars/tree-sitter-test",
         build = "mkdir parser && tree-sitter build -o parser/test.so",
         ft = "test",
