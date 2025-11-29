@@ -20,5 +20,8 @@
 ; Step 3 - set query as the type for the output node
 ; TODO => set cst or query?
 ; BTW query => https://github.com/tree-sitter-grammars/tree-sitter-query
+;     cst   => https://github.com/tree-sitter-grammars/tree-sitter-cst
+;        tree-sitter parse --cst # get cst output
+;
 ((output) @injection.content
   (#set! injection.language "query"))
