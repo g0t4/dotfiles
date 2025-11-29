@@ -1,5 +1,6 @@
-vim.treesitter.language.add('harmony', { path = "/Users/wesdemos/repos/github/g0t4/tree-sitter-openai-harmony/openai-harmony.dylib" })
-
+-- TODO make this xplat and not blow up if missing grammar
+vim.treesitter.language.add('harmony', { path = os.getenv("HOME").. "/repos/github/g0t4/tree-sitter-openai-harmony/openai-harmony.dylib" })
+vim.treesitter.language.add('test', { path = os.getenv("HOME").. "/repos/github/tree-sitter-grammars/tree-sitter-test/test.dylib"})
 
 
 vim.api.nvim_set_hl(0, "@harmony_message_system", { fg = "#6986ff" })
