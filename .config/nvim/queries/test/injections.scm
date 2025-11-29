@@ -16,3 +16,9 @@
       (attribute
         language: (parameter) @injection.language))) ; @injection.language capture - the text of this captured node should be used (if available) as the injection language
   (input) @injection.content) ; @injection.content capture - captured node's contents are reparsed using the @injection.language!
+
+; Step 3 - set query as the type for the output node
+; TODO => set cst or query?
+; BTW query => https://github.com/tree-sitter-grammars/tree-sitter-query
+((output) @injection.content
+  (#set! injection.language "query"))
