@@ -36,7 +36,7 @@ vim.filetype.add({
     extension = {
         notes = "markdown",
         harmony = "harmony",
-        -- test = "test",
+        test = "test",
         --
         -- override bash as bash...
         -- FYI this should be the case from the nvim runtime files (but somehow nvim runtime seems to assign sh instead)
