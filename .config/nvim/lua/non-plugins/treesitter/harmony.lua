@@ -190,17 +190,19 @@ vim.api.nvim_create_autocmd("BufWinEnter", {
                             print("  node_id:", node_id)
                             print("  type:", node:type())
 
-                            if cursor:is_in_node(node) then
-                                print("  cursor IS IN RANGE OF", name)
-                            else
-                                print("  cursor NOT in range of", name)
+                            if not cursor:is_in_node(node) then
+                                print("    * cursor NOT in range of", name)
+                                goto continue
                             end
+                            print("    * cursor IS IN RANGE OF", name)
 
                             -- `node` was captured by the `name` capture in the match
 
                             -- local node_data = metadata[node_id] -- Node level metadata
                             -- print("  node_data:", node_data)
                             -- print("    range:", node_data.range)
+
+                            ::continue::
                         end
                     end
                 end
