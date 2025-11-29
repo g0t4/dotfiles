@@ -162,8 +162,9 @@ vim.api.nvim_create_autocmd("BufWinEnter", {
                             local in_node = vim.treesitter.get_node_text(captured_injection_content_node, bufnr)
                             -- print("  * IN NODE: ", in_node)
                             local captured_language = vim.treesitter.get_node_text(captured_injection_language_node, bufnr)
-                            -- print("  * WITH LANGUAGE from NODE: ", captured_language)
+                            print("  * WITH LANGUAGE from NODE: ", captured_language)
                             -- temp set coc_filetype
+                            -- TODO! dammit! coc seems to only read this once on startup!!
                             local map = vim.g.coc_filetype_map or {}
                             map[filetype] = captured_language
                             vim.g.coc_filetype_map = map
@@ -173,8 +174,8 @@ vim.api.nvim_create_autocmd("BufWinEnter", {
                         if cursor:in_range(captured_injection_content_node) then
                             local in_node = vim.treesitter.get_node_text(captured_injection_content_node, bufnr)
                             -- print("  * IN NODE: ", in_node)
-                            -- print("  * WITH hardcoded language:", hard_coded_language)
-                            -- change language for the entire file (temporarily of course, TODO make temporary later)
+                            print("  * WITH hardcoded language:", hard_coded_language)
+                            -- TODO! dammit! coc seems to only read this once on startup!!
                             local map = vim.g.coc_filetype_map or {}
                             map[filetype] = hard_coded_language
                             vim.g.coc_filetype_map = map
