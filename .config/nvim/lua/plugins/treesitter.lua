@@ -65,23 +65,27 @@ return {
         end
     },
 
-    {
-        -- adds *.test filetype support for test/corpus/*.test files in treesitter grammar repos
-        --   injects language specified in :language(foo) into (input) node/section
-        --   injects its own grammar in the (output) node... I was thinking make (output) query type and tie it to a given parser
-        --   TODO => would be nice to get Coc/vim.lsp completions to tie into injected languages
-        --      so I could get snippets
-        --      and other completions (i.e. ts_query_ls language server)
-        "tree-sitter-grammars/tree-sitter-test",
-        build = "mkdir parser && tree-sitter build -o parser/test.so",
-        ft = "test",
-        init = function()
-            -- toggle full-width rules for test separators
-            vim.g.tstest_fullwidth_rules = false
-            -- set the highlight group of the rules
-            vim.g.tstest_rule_hlgroup = "FoldColumn"
-        end
-    },
+
+    -- {
+    --     -- TODO to use this again, comment out your own registration of the grammar and filetype and then your queries will override this IIAC
+    --
+    --     -- adds *.test filetype support for test/corpus/*.test files in treesitter grammar repos
+    --     --   injects language specified in :language(foo) into (input) node/section
+    --     --   injects its own grammar in the (output) node... I was thinking make (output) query type and tie it to a given parser
+    --     --   TODO => would be nice to get Coc/vim.lsp completions to tie into injected languages
+    --     --      so I could get snippets
+    --     --      and other completions (i.e. ts_query_ls language server)
+    --
+    --     "tree-sitter-grammars/tree-sitter-test",
+    --     build = "mkdir parser && tree-sitter build -o parser/test.so",
+    --     ft = "test",
+    --     init = function()
+    --         -- toggle full-width rules for test separators
+    --         vim.g.tstest_fullwidth_rules = false
+    --         -- set the highlight group of the rules
+    --         vim.g.tstest_rule_hlgroup = "FoldColumn"
+    --     end
+    -- },
 
     -- FYI :Inspect breaks down highlights into: Treesitter, Syntax, Extmarks... very useful
     -- -- nvim has :Inspect, :InspectTree (:TSPlayground), :EditQuery (nvim 0.10) builtin now
