@@ -30,9 +30,8 @@ local harmony_spacing_ns = vim.api.nvim_create_namespace("harmony_spacing")
 
 local function set_extmarks_between_messages(bufnr)
     local query_start_nodes = vim.treesitter.query.parse("harmony", [[
-  (start_token) @new_msg
-]])
-
+          (start_token) @new_msg
+    ]])
 
     function annotate_start(tree)
         vim.api.nvim_buf_clear_namespace(bufnr, harmony_spacing_ns, 0, -1)
