@@ -17,7 +17,7 @@ end
 
 
 vim.api.nvim_set_hl(0, "@harmony_message_system", { fg = "#6986ff" })
-vim.api.nvim_set_hl(0, "@harmony_start_token", { bold = true, fg = "#ffffff" })
+vim.api.nvim_set_hl(0, "@harmony_start_token", { bold = true })
 vim.api.nvim_set_hl(0, "@harmony_message_developer", { fg = "#6AC4EC" })
 vim.api.nvim_set_hl(0, "@harmony_message_user", { fg = "#a99fff" })
 -- vim.api.nvim_set_hl(0, "@harmony_message_assistant", { fg = "" })
@@ -43,8 +43,8 @@ local function set_extmarks_between_messages(bufnr)
             local row_base0, col_base0 = node:start()
             -- print("  ", row_base0, col_base0)
             vim.api.nvim_buf_set_extmark(bufnr, harmony_spacing_ns, row_base0, col_base0, {
-                -- virt_text        = { { "👈" } }, -- works for inline marker (actually, this might be fine, but then why not just use color?)
-                virt_text     = { { "⤷ ", "Comment" } },
+                virt_text     = { { " 👉 " } }, -- works for inline marker (actually, this might be fine, but then why not just use color?)
+                -- virt_text     = { { "⤷ ", "Comment" } },
                 virt_text_pos = "inline",
                 -- seems like extmarks at best can insert text "inline" but cannot add a \n in that text
             })
