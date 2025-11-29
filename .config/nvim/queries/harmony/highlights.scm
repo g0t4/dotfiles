@@ -9,3 +9,13 @@
   (message header:(header_assistant_commentary)) @harmony_message_assistant_commentary
   (message header:(header_assistant_final)) @harmony_message_assistant_final
 ]
+
+;
+; ; just for fun, flag warning nodes to highlight as error text in neovim:
+; [
+;   ; flag possible issues, text fields that appear not to be JSON... though this is just illustrative
+;   (
+;     ((text) @body)
+;     (#not-match? @body "^[\\[{]")     ; does NOT start with { or [
+;   ) @comment.error
+; ]
