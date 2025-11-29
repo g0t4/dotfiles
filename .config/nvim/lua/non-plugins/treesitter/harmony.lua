@@ -2,6 +2,7 @@
 -- FYI! this is turning into my own treesitter custom config (not just harmony)
 
 local ok, err = pcall(function()
+    -- TODO move this registration to use nvim-treesitter/nvim-treesitter?
     vim.treesitter.language.add('harmony', {
         path = os.getenv("HOME") .. "/repos/github/g0t4/tree-sitter-openai-harmony/openai-harmony.dylib",
     })
