@@ -135,11 +135,11 @@ end
 --     end,
 -- })
 
-vim.api.nvim_create_autocmd("FileType", {
-    callback = function(args)
-        vim.print("FILETYPE:", vim.bo.filetype)
-    end,
-})
+-- vim.api.nvim_create_autocmd("FileType", {
+--     callback = function(args)
+--         vim.print("FILETYPE:", vim.bo.filetype)
+--     end,
+-- })
 
 -- TODO what event to use? BufReadPost is before filetype == "test"... what about FileType event? pattern=test?
 vim.api.nvim_create_autocmd("BufWinEnter", {
@@ -147,13 +147,13 @@ vim.api.nvim_create_autocmd("BufWinEnter", {
     callback = function(args)
         local bufnr = args.buf
         if vim.bo[bufnr].filetype ~= "test" then
-            print("shit filetype isnt test")
+            -- print("shit filetype isnt test")
             return
         end
 
         local parser = vim.treesitter.get_parser(bufnr)
         if not parser then
-            print("FUCK FUCK FUCK - NO PARSER")
+            -- print("FUCK FUCK FUCK - NO PARSER")
             return
         end
 
