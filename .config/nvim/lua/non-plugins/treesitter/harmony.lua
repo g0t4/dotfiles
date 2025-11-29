@@ -178,8 +178,10 @@ vim.api.nvim_create_autocmd("BufWinEnter", {
                     print("  => row_end0:", row_end_base0, ", col_end0:", col_end_base0)
                     local cursor_line_base0 = cursor.line_base1 - 1
                     local cursor_col_base0 = cursor.col_base1 - 1
-                    return cursor_line_base0 >= row_start_base0 and cursor_line_base0 <= row_end_base0
-                        and cursor_col_base0 >= col_start_base0 and cursor_col_base0 <= col_end_base0
+                    local in_line_range = cursor_line_base0 > row_start_base0 and cursor_line_base0 < row_end_base0
+                    local on_start_line = cursor_line_base0 == row_start_base0 and cursor_col_base0 >= col_start_base0
+                    local on_end_line = cursor_line_base0 == row_end_base0 and cursor_col_base0 <= col_end_base0
+                    return in_line_range or on_start_line or on_end_line
                 end
 
                 for pattern, match, metadata in injections_query:iter_matches(root, bufnr, 0, -1) do
