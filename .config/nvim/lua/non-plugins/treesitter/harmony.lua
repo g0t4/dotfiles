@@ -140,12 +140,12 @@ vim.api.nvim_create_autocmd("FileType", {
         vim.print("FILETYPE:", vim.bo.filetype)
     end,
 })
+
+-- TODO what event to use? BufReadPost is before filetype == "test"... what about FileType event? pattern=test?
 vim.api.nvim_create_autocmd("BufWinEnter", {
     group = vim.api.nvim_create_augroup("TestTSCallbacks", { clear = true }),
     callback = function(args)
-        -- print("fuck")
         local bufnr = args.buf
-        -- print(vim.bo[bufnr].filetype)
         if vim.bo[bufnr].filetype ~= "test" then
             print("shit filetype isnt test")
             return
@@ -159,7 +159,6 @@ vim.api.nvim_create_autocmd("BufWinEnter", {
 
         local GetPos = require("ask-openai.helpers.wrap_getpos") -- delay so plugin is loaded
 
-        -- print("fuck2")
         parser:register_cbs({
             on_changedtree = function(_, tree)
                 vim.print("changed tree:")
