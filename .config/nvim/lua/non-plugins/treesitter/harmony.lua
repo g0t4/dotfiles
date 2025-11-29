@@ -168,20 +168,6 @@ vim.api.nvim_create_autocmd("BufWinEnter", {
                 local cursor = GetPos.cursor_position()
 
                 vim.print("  cursor:", cursor)
-                ---@param ts_node TSNode
-                function cursor:is_in_node(ts_node)
-                    -- TODO! move to result of cursor_position (new type needed)
-
-                    local row_start_base0, col_start_base0, row_end_base0, col_end_base0 = ts_node:range()
-                    print("  row_start0:", row_start_base0, ", col_start0:", col_start_base0)
-                    print("  => row_end0:", row_end_base0, ", col_end0:", col_end_base0)
-                    local cursor_line_base0 = cursor.line_base1 - 1
-                    local cursor_col_base0 = cursor.col_base1 - 1
-                    local in_line_range = cursor_line_base0 > row_start_base0 and cursor_line_base0 < row_end_base0
-                    local on_start_line = cursor_line_base0 == row_start_base0 and cursor_col_base0 >= col_start_base0
-                    local on_end_line = cursor_line_base0 == row_end_base0 and cursor_col_base0 <= col_end_base0
-                    return in_line_range or on_start_line or on_end_line
-                end
 
                 for pattern_id, match, metadata, tree in injections_query:iter_matches(root, bufnr, 0, -1) do
                     print("\n## match:")
