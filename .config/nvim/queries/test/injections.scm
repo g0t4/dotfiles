@@ -11,13 +11,15 @@
 ;   (input) @corpus.input)
 ;   (#set! injection.language @corpus.lang)
 ;   (#set! injection.include-children "true"))
-; ((test
-;   (header
-;     (attributes
-;       (attribute
-;         language: (parameter) @corpus.lang)))
-; (#set! injection.language @corpus.lang))
 
-; hardcode the language to harmony, baby steps:
-((input) @injection.content
-  (#set! injection.language "harmony"))
+; ; Step 1 (working) - hardcode the language to harmony, baby steps:
+; ((input) @injection.content
+;   (#set! injection.language "harmony"))
+
+; ; Step 2 - use language attribute to inject input node's language
+(test
+  (header
+    (attributes
+      (attribute
+        language: (parameter) @injection.language)))
+  (input) @injection.content)
