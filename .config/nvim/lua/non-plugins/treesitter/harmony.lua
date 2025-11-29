@@ -33,7 +33,7 @@ local function set_extmarks_between_messages(bufnr)
           (start_token) @new_msg
     ]])
 
-    function annotate_start(tree)
+    function annotate_start_of_each_message(tree)
         vim.api.nvim_buf_clear_namespace(bufnr, harmony_spacing_ns, 0, -1)
         local root = tree:root()
 
@@ -54,12 +54,11 @@ local function set_extmarks_between_messages(bufnr)
     local parser = vim.treesitter.get_parser(bufnr, "harmony")
     -- FYI register_cbs is called immediately so I don't need to call redo here, it seems (probably b/c I am adding this early in the FileType event)
     local tree = parser:parse()[1]
-    annotate_start(tree)
+    annotate_start_of_each_message(tree)
 
-    -- TODO on every change, insert splits... redo extmarks
     parser:register_cbs({
         on_changedtree = function(changes, tree)
-            annotate_start(tree)
+            annotate_start_of_each_message(tree)
         end,
     })
 end
