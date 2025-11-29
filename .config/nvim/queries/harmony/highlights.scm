@@ -1,13 +1,3 @@
-((text) @is_json (#match? @is_json "^\\{"))
-
-; [
-;   (start_token) @harmony_start_token
-; ]
-; [
-;   (header_user) @harmony_user
-;   (header_system) @harmony_system
-;   (header_developer) @harmony_developer
-; ]
 [
   (message (header_user)) @harmony_message_user
   (message (header_developer)) @harmony_message_developer
