@@ -66,7 +66,27 @@ end
 -- set_extmarks_between_messages() -- TODO wire up again in BufReadPost or BufWinEnter?
 
 
+do return end
 -- Injection + COC integration => set a virtual filetype for coc completions
+-- FYI! the below is an experiment to see if I can get CoC to work with injected language from tree-sitter
+-- FYI I got the parsing of injection working
+--   but I would need to cache that and/or just update it
+--   when I trigger a completion
+--
+--   and I need to solve the problem of getting Coc to recognize the new mapping, it seems to read the global mapping on startup once
+--     b/c even when the map changes, due to moving to a diff section of document... coc still shows completions (snippets are easy to see, i.e. _msg in harmony section)
+--        or it shows diagnostics of a failure when query starts as "query"(scm files)... and squiggles entire .test corpus doc in this case
+--        so you can restart to get coc to read a new value and test that
+--        but after that changing the map alone isn't yet working
+--        and would need to find a way to change it back when you change sections
+--        AND.... actually... you'll have to deal with invalid diagnostics between sections so...
+--        yeah this may not work out well beyond if you can get completions to trigger and only override coc file type for that completion's duration.. even still squiggles would suck
+--         need to find an official mechanism in Coc (or use alternative like nvim lsp client if it has a mechanism)
+--          MIGHT NOT BE DOABLE!!
+
+
+
+--
 
 -- FYI can change type w/ mapping
 --   :CocCommand document.echoFiletype
