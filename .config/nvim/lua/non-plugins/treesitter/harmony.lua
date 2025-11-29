@@ -145,7 +145,8 @@ vim.api.nvim_create_autocmd("BufWinEnter", {
     group = vim.api.nvim_create_augroup("TestTSCallbacks", { clear = true }),
     callback = function(args)
         local bufnr = args.buf
-        if vim.bo[bufnr].filetype ~= "test" then
+        local filetype = vim.bo[bufnr].filetype
+        if filetype ~= "test" then
             -- print("shit filetype isnt test")
             return
         end
@@ -182,38 +183,61 @@ vim.api.nvim_create_autocmd("BufWinEnter", {
                     return in_line_range or on_start_line or on_end_line
                 end
 
-                for pattern, match, metadata in injections_query:iter_matches(root, bufnr, 0, -1) do
+                for pattern_id, match, metadata, tree in injections_query:iter_matches(root, bufnr, 0, -1) do
+                    print("\n## match:")
+                    vim.print("  pattern: " .. vim.inspect(pattern_id))
+                    vim.print("  match: " .. vim.inspect(match))
+                    vim.print("  metadata: " .. vim.inspect(metadata))
+                    vim.print("  tree: " .. vim.inspect(tree))
+                    vim.print("  \n\n")
+
+                    local hard_coded_language = metadata["injection.language"] -- hardcoded case "injection.language" and not using capture group @injection.language
+                    print("  hardcoded use_language:", hard_coded_language)
+                    local captured_injection_language = nil
+                    local captured_injection_content_node = nil
                     for id, nodes in pairs(match) do
+                        print("  id", id)
+                        local node = nodes[1] -- seems like only need first node in array
+                        print("  node", node)
                         local name = injections_query.captures[id]
                         print("  name:", name)
-                        for node_id, node in ipairs(nodes) do
-                            print("  node_id:", node_id)
-                            print("  type:", node:type())
+                        -- FYI might be other scenarios I have yet to cover (i.e. include children...) ... do that when I encounter it
 
-                            if not cursor:is_in_node(node) then
-                                print("    * cursor NOT in range of", name)
-                                goto continue
-                            end
-                            print("    * cursor IS IN RANGE OF", name)
-
-                            -- `node` was captured by the `name` capture in the match
-
-                            -- local node_data = metadata[node_id] -- Node level metadata
-                            -- print("  node_data:", node_data)
-                            -- print("    range:", node_data.range)
-
-                            ::continue::
+                        -- unsure about order so look for both and then after loop I can react
+                        if name == "injection.language" then
+                            local text = vim.treesitter.get_node_text(node, bufnr)
+                            print("  captured text:", text)
+                            captured_injection_language = text
+                        elseif name == "injection.content" then
+                            captured_injection_content_node = node
                         end
                     end
+                    print("  captured_injection_language:", captured_injection_language)
+                    print("  captured_injection_content_node:", captured_injection_content_node)
+                    print("    range:", captured_injection_content_node:range())
+                    if captured_injection_language and captured_injection_content_node then
+                        if cursor:in_range(captured_injection_content_node) then
+                            local text = vim.treesitter.get_node_text(captured_injection_content_node, bufnr)
+                            print("  * IN NODE: ", text)
+                            -- temp set coc_filetype
+                            local map = vim.g.coc_filetype_map or {}
+                            map[filetype] = captured_injection_language
+                            vim.g.coc_filetype_map = map
+                            return -- stop once we find the node we live inside of
+                        end
+                    elseif hard_coded_language and captured_injection_content_node then
+                        if cursor:in_range(captured_injection_content_node) then
+                            local text = vim.treesitter.get_node_text(captured_injection_content_node, bufnr)
+                            print("  * IN NODE: ", text)
+                            -- change language for the entire file (temporarily of course, TODO make temporary later)
+                            local map = vim.g.coc_filetype_map or {}
+                            map[filetype] = hard_coded_language
+                            vim.g.coc_filetype_map = map
+                            return -- stop once we find the node we live inside of
+                        end
+                    end
+                    -- else keep going
                 end
-
-                -- for _, match, _ in query:iter_matches(root, 0) do
-                --     local node = match[1]
-                --     local lang = match["injection.language"] -- custom metadata
-                --     -- local sr, sc, er, ec = node:range()
-                --     -- store this somewhere
-                --     vim.print("  match:", node, lang)
-                -- end
             end,
         })
     end,
