@@ -1890,10 +1890,11 @@ if command -q npm
 
     abbr npxr 'npx run'
 
-    function tree-sitter --wraps tree-sitter
-        # PRN did this work out?
-        npx tree-sitter-cli $argv
-    end
+    # * brew install tree-sitter-cli
+    # function tree-sitter --wraps tree-sitter
+    #     # PRN did this work out?
+    #     npx tree-sitter-cli $argv
+    # end
 
     # FYI it's fine to get rid of these for a different tool to get the `ts` prefix
     abbr ts "tree-sitter"
