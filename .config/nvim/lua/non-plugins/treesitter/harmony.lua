@@ -102,3 +102,132 @@ local function set_extmarks_between_messages(bufnr)
         end,
     })
 end
+
+
+-- Injection + COC integration => set a virtual filetype for coc completions
+
+-- FYI can change type w/ mapping
+--   :CocCommand document.echoFiletype
+-- vim.cmd([[
+-- let g:coc_filetype_map = {
+--     \ 'test': 'harmony'
+--  \ }
+-- ]])
+-- local copy = vim.g.coc_filetype_map or {}
+-- copy.test = "harmony"
+-- vim.print(copy.test)
+-- vim.g.coc_filetype_map = copy
+
+-- vim.api.nvim_create_autocmd("BufReadPost", {
+--     callback = function(args)
+--         local bufnr = args.buf
+--
+--         local parser = vim.treesitter.get_parser(bufnr, "harmony")
+--         parser:register_cbs({
+--             on_changedtree = function(changes, tree)
+--                 rescan_injections(bufnr, tree)
+--             end,
+--         })
+--
+--         -- initial scan
+--         local tree = parser:parse()[1]
+--         rescan_injections(bufnr, tree)
+--     end,
+-- })
+
+vim.api.nvim_create_autocmd("FileType", {
+    callback = function(args)
+        vim.print("FILETYPE:", vim.bo.filetype)
+    end,
+})
+vim.api.nvim_create_autocmd("BufWinEnter", {
+    group = vim.api.nvim_create_augroup("TestTSCallbacks", { clear = true }),
+    callback = function(args)
+        -- print("fuck")
+        local bufnr = args.buf
+        -- print(vim.bo[bufnr].filetype)
+        if vim.bo[bufnr].filetype ~= "test" then
+            print("shit filetype isnt test")
+            return
+        end
+
+        local parser = vim.treesitter.get_parser(bufnr)
+        if not parser then
+            print("FUCK FUCK FUCK - NO PARSER")
+            return
+        end
+
+        local GetPos = require("ask-openai.helpers.wrap_getpos") -- delay so plugin is loaded
+
+        -- print("fuck2")
+        parser:register_cbs({
+            on_changedtree = function(_, tree)
+                vim.print("changed tree:")
+                local root = tree:root()
+                local injections_query = vim.treesitter.query.get("test", "injections")
+
+                local cursor = GetPos.cursor_position()
+
+                vim.print("  cursor:", cursor)
+                ---@param ts_node TSNode
+                function cursor:is_in_node(ts_node)
+                    -- TODO! move to result of cursor_position (new type needed)
+
+                    local row_start_base0, col_start_base0, row_end_base0, col_end_base0 = ts_node:range()
+                    print("  row_start0:", row_start_base0, ", col_start0:", col_start_base0)
+                    print("  => row_end0:", row_end_base0, ", col_end0:", col_end_base0)
+                    local cursor_line_base0 = cursor.line_base1 - 1
+                    local cursor_col_base0 = cursor.col_base1 - 1
+                    return cursor_line_base0 >= row_start_base0 and cursor_line_base0 <= row_end_base0
+                        and cursor_col_base0 >= col_start_base0 and cursor_col_base0 <= col_end_base0
+                end
+
+                for pattern, match, metadata in injections_query:iter_matches(root, bufnr, 0, -1) do
+                    for id, nodes in pairs(match) do
+                        local name = injections_query.captures[id]
+                        print("  name:", name)
+                        for node_id, node in ipairs(nodes) do
+                            print("  node_id:", node_id)
+                            print("  type:", node:type())
+
+                            if cursor:is_in_node(node) then
+                                print("  cursor IS IN RANGE OF", name)
+                            else
+                                print("  cursor NOT in range of", name)
+                            end
+
+                            -- `node` was captured by the `name` capture in the match
+
+                            -- local node_data = metadata[node_id] -- Node level metadata
+                            -- print("  node_data:", node_data)
+                            -- print("    range:", node_data.range)
+                        end
+                    end
+                end
+
+                -- for _, match, _ in query:iter_matches(root, 0) do
+                --     local node = match[1]
+                --     local lang = match["injection.language"] -- custom metadata
+                --     -- local sr, sc, er, ec = node:range()
+                --     -- store this somewhere
+                --     vim.print("  match:", node, lang)
+                -- end
+            end,
+        })
+    end,
+})
+--
+-- local function ft_at_cursor()
+--     local pos = vim.api.nvim_win_get_cursor(0)
+--     local row, col = pos[1] - 1, pos[2]
+--
+--     for _, id, data in vim.api.nvim_buf_get_extmarks(0, ns, 0, -1, { details = true }) do
+--         if data.user_data and data.user_data.injected_ft then
+--             local r1, c1, r2, c2 = data.row, data.col, data.end_row, data.end_col
+--             if row >= r1 and row <= r2 and (row ~= r2 or col < c2) then
+--                 return data.user_data.injected_ft
+--             end
+--         end
+--     end
+--     return vim.bo.filetype
+-- end
