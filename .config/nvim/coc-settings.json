@@ -225,7 +225,7 @@
             "filetypes": [ "query", "scm" ],
             "rootPatterns": [ ".tsqueryrc.json", ".git" ],
             "args": [ ],
-            // FYI using .tsqueryrc.json file for now, in tree-sitter-openai-harmony repo as a first test case, can test other parsers later
+            // FYI using .tsqueryrc.json file for now, in tree-sitter-harmony repo as a first test case, can test other parsers later
             //   and maybe then setup some central config here
             // "initializationOptions": {
             //     "parser_aliases": {

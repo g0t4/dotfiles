@@ -4,7 +4,7 @@
 local ok, err = pcall(function()
     -- TODO move this registration to use nvim-treesitter/nvim-treesitter?
     vim.treesitter.language.add('harmony', {
-        path = os.getenv("HOME") .. "/repos/github/g0t4/tree-sitter-openai-harmony/openai-harmony.dylib",
+        path = os.getenv("HOME") .. "/repos/github/g0t4/tree-sitter-harmony/harmony.dylib",
     })
     vim.treesitter.language.add('test', {
         path = os.getenv("HOME") .. "/repos/github/tree-sitter-grammars/tree-sitter-test/test.dylib",
