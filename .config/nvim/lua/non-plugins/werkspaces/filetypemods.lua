@@ -366,3 +366,16 @@ vim.api.nvim_create_autocmd("BufWinEnter", {
         vim.wo.wrap = true
     end,
 })
+
+
+-- ***! repo specific filetype config/overrides
+
+if vim.fn.getcwd():find("repos/github/.*/harmony") ~= nil then
+    -- in harmony repo, treat test-data/*.txt as harmony filetype
+    vim.api.nvim_create_autocmd({ "BufRead" }, {
+        pattern = "*/harmony/test-data/*.txt",
+        callback = function()
+            vim.bo.filetype = "harmony"
+        end,
+    })
+end
