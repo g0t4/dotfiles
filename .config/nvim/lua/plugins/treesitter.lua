@@ -66,12 +66,12 @@ return {
                 },
             }
 
-            -- parser_config.test = {
-            --     install_info = {
-            --         url = "~/repos/github/tree-sitter-grammars/tree-sitter-test",
-            --         files = { "src/parser.c", "src/scanner.c" },
-            --     },
-            -- }
+            parser_config.test = {
+                install_info = {
+                    url = "~/repos/github/tree-sitter-grammars/tree-sitter-test",
+                    files = { "src/parser.c", "src/scanner.c" },
+                },
+            }
 
             -- above will autoinstall, can also uninstall/install again:
             -- :TSInstall harmony
