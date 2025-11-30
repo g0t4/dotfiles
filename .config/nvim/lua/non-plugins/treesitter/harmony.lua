@@ -34,6 +34,9 @@ local harmony_spacing_ns = vim.api.nvim_create_namespace("harmony_spacing")
 local function set_extmarks_between_messages(bufnr)
     local query_start_nodes = vim.treesitter.query.parse("harmony", [[
           (start_token) @new_msg
+          (prefill_channel_commentary_tool_call) @new_msg
+          (prefill_channel_final) @new_msg
+          (prefill_channel_analysis) @new_msg
     ]])
 
     function annotate_start_of_each_message(tree)
@@ -44,8 +47,15 @@ local function set_extmarks_between_messages(bufnr)
             -- vim.print(id, node)
             local row_base0, col_base0 = node:start()
             -- print("  ", row_base0, col_base0)
+
+            local symbol = " 👉 "
+            local type = node:type() or ""
+            local is_prefill = type:find("^prefill")
+            if is_prefill then
+                symbol = " 🖖 "
+            end
             vim.api.nvim_buf_set_extmark(bufnr, harmony_spacing_ns, row_base0, col_base0, {
-                virt_text     = { { " 👉 " } }, -- works for inline marker (actually, this might be fine, but then why not just use color?)
+                virt_text     = { { symbol } }, -- works for inline marker (actually, this might be fine, but then why not just use color?)
                 -- virt_text     = { { "⤷ ", "Comment" } },
                 virt_text_pos = "inline",
                 -- seems like extmarks at best can insert text "inline" but cannot add a \n in that text
