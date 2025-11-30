@@ -1,19 +1,19 @@
 --
 -- FYI! this is turning into my own treesitter custom config (not just harmony)
 
-local ok, err = pcall(function()
-    -- TODO move this registration to use nvim-treesitter/nvim-treesitter?
-    vim.treesitter.language.add('harmony', {
-        path = os.getenv("HOME") .. "/repos/github/g0t4/tree-sitter-harmony/harmony.dylib",
-    })
-    vim.treesitter.language.add('test', {
-        path = os.getenv("HOME") .. "/repos/github/tree-sitter-grammars/tree-sitter-test/test.dylib",
-    })
-end)
-if not ok then
-    vim.notify("Failed to load custom treesitter languages: " .. (err or "unknown error"), vim.log.levels.ERROR)
-    return
-end
+-- local ok, err = pcall(function()
+--     -- TODO move this registration to use nvim-treesitter/nvim-treesitter?
+--     vim.treesitter.language.add('harmony', {
+--         path = os.getenv("HOME") .. "/repos/github/g0t4/tree-sitter-harmony/harmony.dylib",
+--     })
+--     vim.treesitter.language.add('test', {
+--         path = os.getenv("HOME") .. "/repos/github/tree-sitter-grammars/tree-sitter-test/test.dylib",
+--     })
+-- end)
+-- if not ok then
+--     vim.notify("Failed to load custom treesitter languages: " .. (err or "unknown error"), vim.log.levels.ERROR)
+--     return
+-- end
 
 
 vim.api.nvim_set_hl(0, "@harmony_message_system", { fg = "#6986ff" })

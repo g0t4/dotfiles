@@ -54,6 +54,29 @@ return {
                     },
                 },
             }
+
+
+            -- * custom grammars (i.e. ones I am hacking on, or not in official sets)
+            local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
+
+            parser_config.harmony = {
+                install_info = {
+                    url = "~/repos/github/g0t4/tree-sitter-harmony",
+                    files = { "src/parser.c" },
+                },
+            }
+
+            -- parser_config.test = {
+            --     install_info = {
+            --         url = "~/repos/github/tree-sitter-grammars/tree-sitter-test",
+            --         files = { "src/parser.c", "src/scanner.c" },
+            --     },
+            -- }
+
+            -- above will autoinstall, can also uninstall/install again:
+            -- :TSInstall harmony
+            -- :TSInstall test
+
             -- TSModuleInfo shows what features (highlight, illuminate[if plugin enabled], indent, incremental_selection), not folding?
         end,
         init = function()
