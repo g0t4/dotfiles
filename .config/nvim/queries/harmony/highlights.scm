@@ -10,6 +10,9 @@
   (message header:(header_assistant_final)) @harmony_message_assistant_final
 ]
 [
+  (model_response_to_start_assistant_prefill) @harmony_message_prefill
+]
+[
    (start_token) @harmony_start_token
 ]
 
