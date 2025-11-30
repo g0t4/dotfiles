@@ -378,4 +378,11 @@ if vim.fn.getcwd():find("repos/github/.*/harmony") ~= nil then
             vim.bo.filetype = "harmony"
         end,
     })
+    vim.api.nvim_create_autocmd("BufWinEnter", {
+        group = "bufwinentermods",
+        pattern = "*/harmony/test-data/*.txt",
+        callback = function()
+            vim.wo.wrap = true
+        end,
+    })
 end
