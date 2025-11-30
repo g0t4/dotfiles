@@ -72,6 +72,12 @@ return {
                     files = { "src/parser.c", "src/scanner.c" },
                 },
             }
+            parser_config.cst = {
+                install_info = {
+                    url = "https://github.com/tree-sitter-grammars/tree-sitter-cst",
+                    files = { "src/parser.c" },
+                },
+            }
 
             -- above will autoinstall, can also uninstall/install again:
             -- :TSInstall harmony
