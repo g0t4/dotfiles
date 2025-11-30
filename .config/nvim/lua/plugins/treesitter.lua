@@ -68,7 +68,7 @@ return {
 
             parser_config.test = {
                 install_info = {
-                    url = "~/repos/github/tree-sitter-grammars/tree-sitter-test",
+                    url = "https://github.com/tree-sitter-grammars/tree-sitter-test",
                     files = { "src/parser.c", "src/scanner.c" },
                 },
             }
