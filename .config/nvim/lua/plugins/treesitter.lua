@@ -81,6 +81,7 @@ return {
 
             -- above will autoinstall, can also uninstall/install again:
             -- :TSInstall harmony
+            -- :TSInstallSync harmony -- do I need this on changes to my grammar?
             -- :TSInstall test
 
             -- TSModuleInfo shows what features (highlight, illuminate[if plugin enabled], indent, incremental_selection), not folding?

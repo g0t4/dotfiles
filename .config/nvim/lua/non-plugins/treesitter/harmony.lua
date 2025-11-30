@@ -1,6 +1,7 @@
 --
 -- FYI! this is turning into my own treesitter custom config (not just harmony)
 
+-- FYI using nvim-treesitter to register these parsers, go back to the following if there are issues (especially with picking up changes to my local dev gramamrs like harmony)
 -- local ok, err = pcall(function()
 --     -- TODO move this registration to use nvim-treesitter/nvim-treesitter?
 --     vim.treesitter.language.add('harmony', {
