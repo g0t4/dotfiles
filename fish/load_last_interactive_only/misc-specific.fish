@@ -846,22 +846,21 @@ end
 # TODO look into utils like fuser (not necessarily for abbrs, though maybe) but b/c I need to shore up my knowlege here, so much easier to diagnose what an app is doing if I can look at its external interactions (ie files, ports, etc)
 
 # *** sed ***
-set sed_all "**/*.{bash,c,cc,cpp,cs,cxx,dart,fish,go,h,hpp,hs,hxx,java,js,jsx,ksh,kt,kts,lhs,lua,md,php,pl,pm,py,rb,rs,scala,sh,swift,ts,tsx,zsh}"
 
 set --global sed_cmd sed
 if $IS_MACOS
     set sed_cmd gsed
-
     abbr sed gsed # encourage gsed for uniform w/ linux distros
     #  i.e. gnu allows `sed -i` whereas BSD requires the extension `sed -i''` be passed
-
-    abbr sed_duplicate_lines 'sed \'N; /^\(.*\)\n\1$/!P; D\' file'
 end
 #
 # * general sed abbrs:
 abbr --set-cursor sede "$sed_cmd -Ei 's/%//g'"
 abbr --set-cursor sedd "$sed_cmd --debug -i 's/%//g'"
 abbr --set-cursor sedi "$sed_cmd -i 's/%//g'"
+
+# * examples (can nuke if need be)
+# abbr sed_duplicate_lines $sed_cmd' \'N; /^\(.*\)\n\1$/!P; D\' file'
 
 # rg => (rg --files-with-matches __)
 # use rg to limit which files are passed to sed (so not touching all files)
@@ -890,9 +889,9 @@ build_sed_abbrs_for_filetype j "{json,js}"
 build_sed_abbrs_for_filetype m md
 build_sed_abbrs_for_filetype p py
 
-# all - use brace expansion for multiple file types
-abbr --set-cursor seda "$sed_cmd -Ei 's/%//g' $sed_all"
-abbr --command $sed_cmd --position=anywhere "*a" "$sed_all"
+# all -  use rg w/o a filter on language (no -g *.lua for example)
+abbr --set-cursor seda "$sed_cmd -Ei 's/%//g' (rg --files-with-matches ___) "
+abbr --command $sed_cmd --position=anywhere "*a" "(rg --files-with-matches ___) "
 
 abbr _cat_range --function _cat_range_abbr --regex "(catr|catrange|sedr|sedrange)\d+_\d+"
 function _cat_range_abbr
