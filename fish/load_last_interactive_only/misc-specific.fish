@@ -850,18 +850,6 @@ set sed_all "**/*.{bash,c,cc,cpp,cs,cxx,dart,fish,go,h,hpp,hs,hxx,java,js,jsx,ks
 
 set --global sed_cmd sed
 if $IS_MACOS
-    if status is-interactive
-        function awk
-            echo blocking direct use of macOS/BSD awk
-            echo this is a reminder to use gawk for examples on your mac
-            echo otherwise use 'command awk' to access macOS/BSD awk
-        end
-        function sed
-            echo blocking direct use of macOS/BSD sed
-            echo this is a reminder to use gsed for examples on your mac
-            echo otherwise use 'command sed' to access macOS/BSD sed
-        end
-    end
     set sed_cmd gsed
 
     abbr sed gsed # encourage gsed for uniform w/ linux distros
@@ -1897,7 +1885,7 @@ if command -q npm
     # end
 
     # FYI it's fine to get rid of these for a different tool to get the `ts` prefix
-    abbr ts "tree-sitter"
+    abbr ts tree-sitter
     abbr tsg "tree-sitter generate"
     abbr tsb "tree-sitter build"
     abbr tsp "tree-sitter parse"
