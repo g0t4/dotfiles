@@ -2936,6 +2936,9 @@ abbr --position=anywhere -- pssec "| $sse_jq --compact-output"
 # pbpaste then pipe
 abbr --position=command -- pbsse "pbpaste | $sse_jq"
 abbr --position=command -- pbssec "pbpaste | $sse_jq --compact-output"
+# grab __verbose.prompt (llama-server uses this)
+abbr --position=command -- pbsse_verbose_prompt "pbpaste | $sse_jq '.__verbose.prompt' -r"
+
 # ? --join-output
 
 # * date
