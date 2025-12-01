@@ -52,13 +52,15 @@ if test -d "$HOME/.cargo/bin"
 end
 
 if test -d "$HOME/repos/github/tree-sitter/tree-sitter/target/release"
-    # target debug build of zed (comment out when done using it as daily driver)
     export PATH="$HOME/repos/github/tree-sitter/tree-sitter/target/release:$PATH"
 end
 
+if test -d "$HOME/repos/github/ribru17/ts_query_ls/target/release"
+    export PATH="$HOME/repos/github/ribru17/ts_query_ls/target/release:$PATH"
+end
+
 if test -d "$HOME/repos/github/zed-industries/zed/target/debug"
-    # target debug build of zed (comment out when done using it as daily driver)
-    export PATH="$HOME/repos/github/zed-industries/zed/target/debug:$PATH"
+    export PATH="$HOME/repos/github/zed-industries/zed/target/release:$PATH"
 end
 
 # kubectl krew
