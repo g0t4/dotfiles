@@ -2938,6 +2938,8 @@ abbr --position=command -- pbsse "pbpaste | $sse_jq"
 abbr --position=command -- pbssec "pbpaste | $sse_jq --compact-output"
 # grab __verbose.prompt (llama-server uses this)
 abbr --position=command -- pbsse_verbose_prompt "pbpaste | $sse_jq '.__verbose.prompt' -r"
+abbr --position=command -- pbsse_verbose_content "pbpaste | $sse_jq '.__verbose.content' -r" # this is the RAW RESPONSE from the model
+abbr --position=command -- pbsse_verbose_raw_response "pbpaste | $sse_jq '.__verbose.content' -r" # this is the RAW RESPONSE from the model
 
 # ? --join-output
 
