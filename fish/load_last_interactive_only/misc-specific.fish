@@ -2927,9 +2927,13 @@ abbr pPATH 'for p in $PATH; echo $p; end'
 # *** openai completions helpers
 
 # not just psse b/c I can't get tab completion of --position=anywhere abbreviations
-set --local sse_jq 'string replace --regex "^data: " "" | jq'
+#  strip until first { .. that way any prefix (data: and/or log messages) are stripped at front of line
+#    that means I can double click a line in llama-server logs and copy all of it and jq just works!
+set --local sse_jq 'string replace --regex "[^{]*" "" | jq'
+# pipe alone (not from clippy)
 abbr --position=anywhere -- psse "| $sse_jq"
 abbr --position=anywhere -- pssec "| $sse_jq --compact-output"
+# pbpaste then pipe
 abbr --position=command -- pbsse "pbpaste | $sse_jq"
 abbr --position=command -- pbssec "pbpaste | $sse_jq --compact-output"
 # ? --join-output
