@@ -1,4 +1,3 @@
-; extends
 ;
 ; FYI https://github.com/nvim-treesitter/nvim-treesitter/tree/master/queries (use as a ref for building queries - has every language imaginable)
 ;

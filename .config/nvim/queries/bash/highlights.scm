@@ -1,1 +1,2 @@
-../shared_highlights/highlights.scm
+; extends
+; inherits: shared
