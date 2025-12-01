@@ -74,8 +74,7 @@ function _update_completion
     command -q docker; and docker completion fish >~/.config/fish/completions/docker.fish
     # FYI fish shell only, generated completions are superior to DDfM bundled completions
 
-    # why? one reason is I can install beta releases of these tools and uninstall brew package and not lose out on completions
-    command -q npx; npx tree-sitter-cli complete --shell fish > ~/.config/fish/completions/tree-sitter.fish
+    command -q tree-sitter; and tree-sitter complete --shell fish > ~/.config/fish/completions/tree-sitter.fish
 
 end
 
