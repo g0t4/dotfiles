@@ -358,7 +358,7 @@ vim.api.nvim_create_augroup("bufwinentermods", { clear = true })
 
 vim.api.nvim_create_autocmd("BufWinEnter", {
     group = "bufwinentermods",
-    pattern = { "*.harmony", "*.md", "*.svg" },
+    pattern = { "*.harmony", "*.md", "*.svg", "*.test", },
     callback = function()
         -- FYI! with multiple windows (in separate tabs, not a split window alone in one tab) => same buffer  ... FileType event IS NOT APPROPRIATE for forced defaults
         -- *** use BufWinEnter if you have multiple windows pointed at the same buffer, on restore then this fires for each one (not just first like FileType event does)
