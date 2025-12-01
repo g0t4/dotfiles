@@ -1,5 +1,10 @@
 (string
   "[["
   (string_content)
-  "]]") @fucker
+  "]]") @fucker.around
+
+(string
+  "[["
+  (string_content) @fucker.inner
+  "]]")
 

@@ -19,8 +19,8 @@ return {
 
                         keymaps = {
                             -- You can use the capture groups defined in textobjects.scm
-                            ["af"] = "@fucker",
-                            ["if"] = "@function.inner",
+                            ["af"] = "@fucker.around",
+                            ["if"] = "@fucker.inner",
                         },
                         -- You can choose the select mode (default is charwise 'v')
                         --
@@ -43,7 +43,7 @@ return {
                         -- * query_string: eg '@function.inner'
                         -- * selection_mode: eg 'v'
                         -- and should return true or false
-                        include_surrounding_whitespace = true,
+                        include_surrounding_whitespace = false,
                     },
                 },
             }
