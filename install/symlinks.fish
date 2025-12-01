@@ -78,6 +78,7 @@ ln -f -s $dotfiles_dir/.config/git/ignore $HOME/.config/git/.
 if string match --quiet Linux (uname -s)
     ln -f -s $dotfiles_dir/git/linux.gitconfig $HOME/.gitconfig
 end
+mkdir -p $HOME/bin
 ln -s $dotfiles_dir/git/git-commit-with-function-context $HOME/bin/.
 
 # *** hushlogin
