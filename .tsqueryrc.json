@@ -1,0 +1,37 @@
+{
+    "$schema": "https://raw.githubusercontent.com/ribru17/ts_query_ls/refs/heads/master/schemas/config.json",
+    "parser_install_directories": [
+        "${HOME}/repos/github/g0t4/tree-sitter-harmony/"
+    ],
+    "parser_aliases": { },
+    "language_retrieval_patterns": [
+        "tree\\-sitter\\-([^/]+)\\.wasm"
+    ],
+    "valid_captures": {
+        "highlights": {
+            "type": "TODO put in some real captures",
+            "variable": "Simple identifiers",
+            "variable.parameter": "Parameters of a function"
+        }
+    },
+    "supported_abi_versions": {
+        "start": 13,
+        "end": 15
+    },
+    "valid_predicates": {
+        "eq": {
+            "parameters": [
+                {
+                    "type": "capture",
+                    "arity": "required"
+                },
+                {
+                    "type": "any",
+                    "arity": "required"
+                }
+            ],
+            "description": "Checks for equality between two nodes, or a node and a string.",
+            "any": true
+        }
+    }
+}
