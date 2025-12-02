@@ -2,6 +2,9 @@
 ; inherits: shared
 
 
+; FYI - dump list of available directives and predicates (plugins can add new)
+;  vim.treesitter.query.list_directives()
+;  vim.treesitter.query.list_predicates()
 
 
 ; TODO REMOVE THE FOLLOWING LATER... conceal examples:
