@@ -3,7 +3,9 @@
     "parser_install_directories": [
         "${HOME}/.local/share/nvim/lazy/nvim-treesitter/parser"
     ],
-    "parser_aliases": { },
+    "parser_aliases": {
+        "ps1": "powershell"
+    },
     "language_retrieval_patterns": [
         "([^/]+)\\.so"
     ],
