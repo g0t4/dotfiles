@@ -9,31 +9,10 @@
     "language_retrieval_patterns": [
         "([^/]+)\\.so"
     ],
-    "valid_captures": {
-        "highlights": {
-            "type": "TODO put in some real captures",
-            "variable": "Simple identifiers",
-            "variable.parameter": "Parameters of a function"
-        }
-    },
+    "valid_captures": { },
     "supported_abi_versions": {
         "start": 13,
         "end": 15
     },
-    "valid_predicates": {
-        "eq": {
-            "parameters": [
-                {
-                    "type": "capture",
-                    "arity": "required"
-                },
-                {
-                    "type": "any",
-                    "arity": "required"
-                }
-            ],
-            "description": "Checks for equality between two nodes, or a node and a string.",
-            "any": true
-        }
-    }
+    "valid_predicates": { }
 }
