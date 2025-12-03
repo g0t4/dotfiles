@@ -50,7 +50,7 @@
   (#set! priority 200)
 ]
 [
-  (comment) @comment_cell_devider_bang (#match? @comment_cell_devider_bang "\\%\\%+\!") ;%%! cell devider highlight (for iron REPL "notebooks")
+  (comment) @comment_cell_devider_bang (#match? @comment_cell_devider_bang "\\%\\%+!") ;%%! cell devider highlight (for iron REPL "notebooks")
   (comment) @comment_cell_devider (#match? @comment_cell_devider "\\%\\%+") ;%% foo
   (#set! priority 200)
   ; regular comment (not underlined, nor bold)

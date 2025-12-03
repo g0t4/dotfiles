@@ -23,6 +23,6 @@
   (comment) @comment_single_question (#match? @comment_single_question "\\s\\?\\??[^\\?]"); ? foo
 ]
 [
-  (comment) @comment_cell_devider_bang (#match? @comment_cell_devider_bang "\\%\\%+\!") ;%%! foo cell
+  (comment) @comment_cell_devider_bang (#match? @comment_cell_devider_bang "\\%\\%+!") ;%%! foo cell
   (comment) @comment_cell_devider (#match? @comment_cell_devider "\\%\\%+") ;%% foo
 ]
