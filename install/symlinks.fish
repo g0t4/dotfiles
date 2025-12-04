@@ -52,6 +52,10 @@ end
 # FYI no longer using vimrc, but I might want it back for some envs?
 # $HOME/.vimrc
 
+# *** tree-sitter
+mkdir -p $HOME/.config/tree-sitter
+ln -f -s $dotfiles_dir/.config/tree-sitter/config.json $HOME/.config/tree-sitter/config.json
+
 # *** zed
 if command -q zed
     mkdir -p $HOME/.config/zed
