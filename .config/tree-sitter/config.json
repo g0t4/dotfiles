@@ -1,7 +1,8 @@
 {
     "parser-directories": [
         "~/repos/github/g0t4",
-        "~/repos/github/tree-sitter-grammars"
+        "~/repos/github/tree-sitter-grammars",
+        "~/repos/github/tree-sitter"
     ],
     "theme": {
         "harmony_message_system": 69,
