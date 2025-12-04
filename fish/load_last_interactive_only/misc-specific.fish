@@ -1357,9 +1357,9 @@ function hf
     #   hf cache ls
     #   hf cache rm user/repo
 
-    # huggingface cli via huggingface_hub pypi package (no need to install it)
-    # FYI moved to primary package (no longer need [cli] extras)
-    uv tool run --from huggingface_hub hf $argv
+    # FYI (no longer need [cli] extras)
+    # stop using arcane 0.36 ... newer has completions btw, transformers 4.X is tied to <1 btw so not gonna install newer in most venvs until 5 is RC'd
+    uv tool run --from 'huggingface-hub>=1.1.7' hf $argv
 end
 
 # hf reserved for huggingface CLI (hf command now)
