@@ -1357,6 +1357,9 @@ function hf
     #   hf cache ls
     #   hf cache rm user/repo
 
+    # TODO later
+    #   hf --show-completion #... I can put this in ~/.config/fish/completions/hf.fish ... issue is the hf command doesn't exist so it can't generate completions w/o this function... ciruclar loop at best... FUUU
+
     # FYI (no longer need [cli] extras)
     # stop using arcane 0.36 ... newer has completions btw, transformers 4.X is tied to <1 btw so not gonna install newer in most venvs until 5 is RC'd
     uv tool run --from 'huggingface-hub>=1.1.7' hf $argv
