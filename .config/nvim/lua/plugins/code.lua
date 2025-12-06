@@ -15,10 +15,19 @@ return {
         "wurli/visimatch.nvim",
         enabled = true,
         opts = {
+
             -- ? any issues with > 100 lines?
             -- 100 feels fine, why would it matter?
             -- I'd think duplicates would be eliminated very early on short of a copy of an entire section/file?
-            lines_upper_limit = 1000
+            lines_upper_limit = 1000,
+
+            -- btw other possilby interesting options:
+            -- chars_lower_limit = 6 -- this kinda makes sense as the # of matches would explode with fewer chars
+            -- hl_group = "Search",
+            -- strict_spacing = false -- I love skipping spacing differences!
+            --   ?? I'd love to see it ignore line comment indicators (at least at start of lines) so I can compare code that is commented out to other code that is not w/o uncomment it
+            -- buffers = "filetype", -- options: 'current', 'all' or 'filetype' (which files to show matches in)
+            -- case_insensitive = { "markdown", "text", "help" },
         },
     },
     --
