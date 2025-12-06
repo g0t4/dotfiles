@@ -1826,7 +1826,7 @@ function video_editing_gen_fcpxml
 
     set -l base "$HOME/repos/github/g0t4/private-auto-edit-suggests"
     set python3 "$base/.venv/bin/python3"
-    set script "$base/research/FCPX/05-auto-transcribe-after-split-FCPX-drop-offset-too.py"
+    set script "$base/auto_edit/generate_fcpxml.py"
     $python3 $script $video_file
 end
 
