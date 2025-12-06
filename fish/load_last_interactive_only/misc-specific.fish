@@ -2941,6 +2941,9 @@ abbr --position=command -- pbsse "pbpaste | $sse_jq"
 abbr --position=command -- pbssec "pbpaste | $sse_jq --compact-output"
 # grab __verbose.prompt (llama-server uses this)
 abbr --position=command -- pbsse_verbose_prompt "pbpaste | $sse_jq '.__verbose.prompt' -r"
+# TODO I really need to write my own script (python?) and have this do detection on the prompt value and just auto suggest adding treesitter on the end
+#    and add support for other formats and coloring them
+abbr --position=command -- pbsse_verbose_prompt_harmony "pbpaste | $sse_jq '.__verbose.prompt' -r | tree-sitter highlight --scope source.harmony"
 abbr --position=command -- pbsse_verbose_content "pbpaste | $sse_jq '.__verbose.content' -r" # this is the RAW RESPONSE from the model
 abbr --position=command -- pbsse_verbose_raw_response "pbpaste | $sse_jq '.__verbose.content' -r" # this is the RAW RESPONSE from the model
 
