@@ -82,3 +82,44 @@ vim.api.nvim_create_autocmd("FileType", {
         set_extmarks_between_messages(args.buf)
     end,
 })
+
+
+local function pbsse_verbose_prompt_harmony()
+    -- 1. Run the pipeline to extract the harmony prompt
+    local cmd = [[pbpaste | string replace --regex "[^{]*" "" | jq '.__verbose.prompt' -r]]
+    local output = vim.fn.system(cmd)
+
+    -- 2. Create a scratch buffer
+    local buf = vim.api.nvim_create_buf(true, false)
+    vim.api.nvim_buf_set_name(buf, "clipboard.harmony")
+
+    -- 3. Load content
+    local lines = {}
+    for line in output:gmatch("([^\n]*)\n?") do
+        table.insert(lines, line)
+    end
+    vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
+
+    ---@param buf number
+    local function open_buf_in_new_window(buf)
+        local win_opts = {
+            relative = "editor",
+            width = vim.api.nvim_get_option("columns"),
+            height = vim.api.nvim_get_option("lines"),
+            row = 0,
+            col = 0,
+            style = "minimal",
+            border = "none",
+        }
+        local new_win = vim.api.nvim_open_win(buf, true, win_opts)
+        vim.api.nvim_set_current_win(new_win)
+    end
+
+    -- 4. Switch to it (opens in a new window)
+    open_buf_in_new_window(buf)
+
+    -- 5. Enable Tree-sitter highlighting (your injections included)
+    vim.treesitter.start(buf, "harmony")
+end
+
+vim.api.nvim_create_user_command("ClipboardHarmony", pbsse_verbose_prompt_harmony, {})
