@@ -14,7 +14,12 @@ return {
     {
         "wurli/visimatch.nvim",
         enabled = true,
-        opts = {},
+        opts = {
+            -- ? any issues with > 100 lines?
+            -- 100 feels fine, why would it matter?
+            -- I'd think duplicates would be eliminated very early on short of a copy of an entire section/file?
+            lines_upper_limit = 1000
+        },
     },
     --
     -- highlight selections like vscode, w/o limits (200 chars in vscode + no new lines)
