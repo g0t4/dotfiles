@@ -1,0 +1,15 @@
+#!/usr/bin/env fish
+
+log_ --bold "hook[$(status basename)] $argv"
+
+if test -d "$(git rev-parse --git-dir)/rebase-merge"
+    or test -d "$(git rev-parse --git-dir)/rebase-apply"
+    or test -f "$(git rev-parse --git-dir)/MERGE_HEAD"
+    # skip for rebase/merge
+    exit
+    # by the way $1 seems to have # commits affected? during rebase?
+    #   3)  2)
+end
+
+set parent_dir (dirname (status current-filename))
+"$parent_dir/core.fish"

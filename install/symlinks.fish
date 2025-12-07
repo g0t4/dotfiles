@@ -78,7 +78,9 @@ ln -f -s $dotfiles_dir/.grc $HOME/. # DIR SYMLINK
 
 # *** git ***
 mkdir -p $HOME/.config/git
+# PRN you could symlink all of ~/.config/git and not bother with specific items
 ln -f -s $dotfiles_dir/.config/git/ignore $HOME/.config/git/.
+ln -f -s $dotfiles_dir/.config/git/hooks $HOME/.config/git/. # DIR symlink
 if string match --quiet Linux (uname -s)
     ln -f -s $dotfiles_dir/git/linux.gitconfig $HOME/.gitconfig
 end
