@@ -2950,6 +2950,15 @@ abbr -- pbsse_verbose_prompt "pbpaste | $sse_jq '.__verbose.prompt' -r"
 abbr -- pbsse_verbose_prompt_harmony "pbpaste | $sse_jq '.__verbose.prompt' -r | tree-sitter highlight --scope source.harmony"
 abbr -- pbsse_verbose_content "pbpaste | $sse_jq '.__verbose.content' -r" # this is the RAW RESPONSE from the model
 abbr -- pbsse_verbose_raw_response "pbpaste | $sse_jq '.__verbose.content' -r" # this is the RAW RESPONSE from the model
+abbr -- pbsse1 "pbpaste | $sse_jq > input-messages.json"
+abbr -- pbsse2 "pbpaste | $sse_jq > input-rendered-prompt.json"
+abbr -- pbsse3 "pbpaste | $sse_jq > output-parsed-message.json"
+abbr -- pbsse4 "pbpaste > output-raw.harmony" # TODO stip leading prefix off of each line ()
+# Dec 07 16:58:49 build21 llama-server[2772]: Parsing input with format GPT-OSS: <|channel|>...
+#    looks like one space after GPT-OSS: on FIRST LINE
+#    subsequent lines it is a diff prefix (look at rag004/rag003)
+# cat output-raw.harmony | string replace --regex "^.*llama-server\\[\d+\\]: Parsing input with format GPT-OSS: " "" |  tree-sitter highlight --scope source.harmony
+
 
 # ? --join-output
 
