@@ -2,7 +2,7 @@
 
 set repo (git rev-parse --show-toplevel 2>/dev/null)
 
-if not string match --quiet --regex "/g0t4/[^/]+\$" $repo
+if not string match --quiet --regex "/(wes[^/]+|g0t4)/[^/]+\$" $repo
     echo not g0t4 repo, skipping...
     return
 end
