@@ -1736,7 +1736,7 @@ end
 
 function _find_first_video_file_for_extension
     set ext $argv[1]
-    set -f paths (fd --max-depth 1 --type f --extension $ext)
+    set -f paths (fd --unrestricted --max-depth 1 --type f --extension $ext)
     if test (count $paths) -gt 0
         echo $paths[1]
         return
