@@ -1756,8 +1756,8 @@ function _find_first_video_file_any_type
     return 1
 end
 
-abbr --add _ffprobe --function abbr_ffprobe
-function abbr_ffprobe
+abbr --add ffp --function _ffp
+function _ffp
     echo -n "ffprobe -i "
     _find_first_video_file_any_type; or echo _
 end
