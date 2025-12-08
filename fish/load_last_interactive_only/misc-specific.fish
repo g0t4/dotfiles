@@ -1766,7 +1766,7 @@ abbr --add ffi_range --set-cursor --function _ffi_trim
 abbr --add ffi_trim --set-cursor --function _ffi_trim
 function _ffi_trim
     set input (_find_first_video_file_any_type; or echo _)
-    set output (string replace -r "\.mp4\$" ".trimmed.mp4" $input)
+    set output (path change-extension ".trimmed.mp4" $input)
     # echo -n "ffmpeg -i combined.shifted100ms.mp4 -ss 00:08:52 -to 00:09:22 -c:v copy -c:a copy trimmed-5m10s_to_5m40s.mp4"
     set duration (ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 $input)
 
@@ -1777,7 +1777,7 @@ function _ffi_pass_middle_to_new_out
     # w/e is passed is inlined in the middle of the command
     set middle $argv
     set input (_find_first_video_file_any_type; or echo _)
-    set output (string replace -r "\.mp4\$" ".out.mp4" $input)
+    set output (path change-extension ".out." $input)
     echo -n "ffmpeg -i $input $middle $output"
 end
 
