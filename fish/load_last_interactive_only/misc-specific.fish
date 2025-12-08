@@ -1775,7 +1775,15 @@ function _ffi_range
     set input (_find_first_video_file_any_type; or echo _)
     set output (string replace -r "\.mp4\$" ".trimmed.mp4" $input)
     # echo -n "ffmpeg -i combined.shifted100ms.mp4 -ss 00:08:52 -to 00:09:22 -c:v copy -c:a copy trimmed-5m10s_to_5m40s.mp4"
-    echo -n "ffmpeg -i $input -ss 00:00 -to 00:30 -c:v copy -c:a copy $output"
+    echo -n "ffmpeg -i $input -ss 00:00 -to 00:30 -c copy $output"
+end
+
+abbr ffi_copy --function _ffi_copy
+function _ffi_copy
+    # if one is available, just ump it, else show a placeholder
+    set input (_find_first_video_file_any_type; or echo _)
+    set output (string replace -r "\.mp4\$" ".out.mp4" $input)
+    echo -n "ffmpeg -i $input -c copy $output"
 end
 
 # IDEAS (make reusable?)... maybe just have a lookup of these in a file somewhere and grep it?
