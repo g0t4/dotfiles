@@ -1768,7 +1768,9 @@ function _ffi_trim
     set input (_find_first_video_file_any_type; or echo _)
     set output (string replace -r "\.mp4\$" ".trimmed.mp4" $input)
     # echo -n "ffmpeg -i combined.shifted100ms.mp4 -ss 00:08:52 -to 00:09:22 -c:v copy -c:a copy trimmed-5m10s_to_5m40s.mp4"
-    echo -n "ffmpeg -i $input -ss 00:00 -to 00:30 % $output"
+    set duration (ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 $input)
+
+    echo -n "ffmpeg -i $input -ss 00:00 -to $duration"%" $output"
 end
 
 function _ffi_pass_middle_to_new_out
