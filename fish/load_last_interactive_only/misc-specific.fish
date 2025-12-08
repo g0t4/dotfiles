@@ -1846,7 +1846,7 @@ abbr shift_only 'for i in *.mkv; video_editing_just_shift_to_mp4_one_video $i; e
 function video_editing_just_shift_to_mp4_one_video
     # converts to mp4 + shifts by 100ms
     set video_file (realpath $argv[1])
-    set output_file (string replace -r "\.mkv\$" ".shifted100ms.mp4" "$video_file")
+    set output_file (path change-extension ".shifted100ms.mp4" "$video_file")
     if test -f "$output_file"
         echo "Skipping...file already exists: $output_file"
     else
