@@ -46,11 +46,12 @@
 
 [delta]
     side-by-side = true
-    line-numbers = true
+    # line-numbers = true
     line-numbers-left-style = blue
     line-numbers-right-style = cyan
     file-style = bold yellow
-    wrap-max-lines = 0
+    wrap-max-lines = unlimited # btw "0" was also wrapping how I wanted even though docs say that should truncate
+	; max-line-length = 0 # if needed, this exists too but I think wrap-max-lines obviates this? this is for truncation after X chars
     wrap-lines = false
     navigate = true
     zero-style = omit
