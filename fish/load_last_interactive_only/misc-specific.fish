@@ -1762,8 +1762,9 @@ function _ffp
     _find_first_video_file_any_type; or echo _
 end
 
-abbr --add ffi_range --set-cursor --function _ffi_range
-function _ffi_range
+abbr --add ffi_range --set-cursor --function _ffi_trim
+abbr --add ffi_trim --set-cursor --function _ffi_trim
+function _ffi_trim
     set input (_find_first_video_file_any_type; or echo _)
     set output (string replace -r "\.mp4\$" ".trimmed.mp4" $input)
     # echo -n "ffmpeg -i combined.shifted100ms.mp4 -ss 00:08:52 -to 00:09:22 -c:v copy -c:a copy trimmed-5m10s_to_5m40s.mp4"
