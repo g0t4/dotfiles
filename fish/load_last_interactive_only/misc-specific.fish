@@ -1800,7 +1800,7 @@ abbr --add ffi_silencedetect --set-cursor --function _ffi_silencedetect
 function _ffi_silencedetect
     set input (_find_first_video_file_any_type; or echo _)
     # remember % is cursor placeholder
-    echo -n "ffmpeg -i $input -af silencedetect=noise=-30dB:d=0.5% -f null -"
+    echo -n "ffmpeg -i $input -af silencedetect=noise=d=0.1:-30dB -f null -"
 end
 
 abbr --add ffi_astats --set-cursor --function _ffi_astats
