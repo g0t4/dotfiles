@@ -1805,8 +1805,24 @@ end
 
 abbr --add ffi_astats --set-cursor --function _ffi_astats
 function _ffi_astats
-    set input (_find_first_video_file_any_type; or echo _)
-    echo -n "ffmpeg -i $input -af astats=metadata=1% -f null -"
+    set options ""
+    set input (_find_first_video_file_any_type; or echo _) # copy pasta
+    echo -n "ffmpeg -i $input -af astats=$options% -f null -" # copy pasta
+end
+abbr --add ffi_astats_overall --set-cursor --function _ffi_astats_overall
+function _ffi_astats_overall
+    # FTR =1 results in ONLY per OVERALL stats
+    # ffmpeg -i record-silence-w-streamdeck-button-press-start-end.mkv -af astats=measure_overall=1 -f null -
+    set options "measure_overall=1"
+    set input (_find_first_video_file_any_type; or echo _) # copy pasta
+    echo -n "ffmpeg -i $input -af astats=$options% -f null -" # copy pasta
+end
+abbr --add ffi_astats_perchannel --set-cursor --function _ffi_astats_perchannel
+function _ffi_astats_perchannel
+    # FTR =1 results in ONLY per channel showing (one set per channel in video/audio file)
+    set options "measure_perchannel=1"
+    set input (_find_first_video_file_any_type; or echo _) # copy pasta
+    echo -n "ffmpeg -i $input -af astats=$options% -f null -" # copy pasta
 end
 
 # IDEAS (make reusable?)... maybe just have a lookup of these in a file somewhere and grep it?
