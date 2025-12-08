@@ -1759,31 +1759,46 @@ end
 abbr --add _ffprobe --function abbr_ffprobe
 function abbr_ffprobe
     echo -n "ffprobe -i "
-    # if one is available, just dump it, else show a placeholder
     _find_first_video_file_any_type; or echo _
 end
 
 abbr ffi --function _ffi
 function _ffi
     echo -n "ffmpeg -i "
-    # if one is available, just ump it, else show a placeholder
     _find_first_video_file_any_type; or echo _
 end
 
-abbr --add ffi_range --function _ffi_range
+abbr --add ffi_range --set-cursor --function _ffi_range
 function _ffi_range
     set input (_find_first_video_file_any_type; or echo _)
     set output (string replace -r "\.mp4\$" ".trimmed.mp4" $input)
     # echo -n "ffmpeg -i combined.shifted100ms.mp4 -ss 00:08:52 -to 00:09:22 -c:v copy -c:a copy trimmed-5m10s_to_5m40s.mp4"
-    echo -n "ffmpeg -i $input -ss 00:00 -to 00:30 -c copy $output"
+    echo -n "ffmpeg -i $input -ss 00:00 -to 00:30 % -c copy $output"
 end
 
-abbr ffi_copy --function _ffi_copy
-function _ffi_copy
-    # if one is available, just ump it, else show a placeholder
+function _ffi_helper_filters
+
+    # w/e is passed is inlined in the middle of the command
+    set start_filters $argv
+
     set input (_find_first_video_file_any_type; or echo _)
     set output (string replace -r "\.mp4\$" ".out.mp4" $input)
-    echo -n "ffmpeg -i $input -c copy $output"
+    echo -n "ffmpeg -i $input $argv -c copy $output"
+end
+
+abbr --add ffi_copy --set-cursor --function _ffi_copy
+function _ffi_copy
+    _ffi_helper_filters "'%'"
+end
+
+abbr --add ffi_af --set-cursor --function _ffi_af
+function _ffi_af
+    _ffi_helper_filters "-af '%'"
+end
+
+abbr --add ffi_vf --set-cursor --function _ffi_vf
+function _ffi_vf
+    _ffi_helper_filters "-vf '%'"
 end
 
 # IDEAS (make reusable?)... maybe just have a lookup of these in a file somewhere and grep it?
@@ -2966,7 +2981,6 @@ abbr -- pbsse4 "pbpaste > output-raw.harmony" # TODO stip leading prefix off of 
 #    looks like one space after GPT-OSS: on FIRST LINE
 #    subsequent lines it is a diff prefix (look at rag004/rag003)
 # cat output-raw.harmony | string replace --regex "^.*llama-server\\[\d+\\]: Parsing input with format GPT-OSS: " "" |  tree-sitter highlight --scope source.harmony
-
 
 # ? --join-output
 
