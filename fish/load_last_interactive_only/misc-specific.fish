@@ -1762,12 +1762,6 @@ function abbr_ffprobe
     _find_first_video_file_any_type; or echo _
 end
 
-abbr ffi --function _ffi
-function _ffi
-    echo -n "ffmpeg -i "
-    _find_first_video_file_any_type; or echo _
-end
-
 abbr --add ffi_range --set-cursor --function _ffi_range
 function _ffi_range
     set input (_find_first_video_file_any_type; or echo _)
@@ -1786,6 +1780,7 @@ function _ffi_helper_filters
     echo -n "ffmpeg -i $input $argv -c copy $output"
 end
 
+abbr --add ffi --set-cursor --function _ffi_copy
 abbr --add ffi_copy --set-cursor --function _ffi_copy
 function _ffi_copy
     _ffi_helper_filters "'%'"
