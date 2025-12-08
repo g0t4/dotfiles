@@ -9,7 +9,7 @@ end
 abbr etc --function _etc
 function _etc
     set file (_find_first_video_file_any_type; or echo _)
-    echo -n "grc exiftool -common -duration -AudioFormat -CompressorName $file"
+    echo -n "grc exiftool -common -duration -AudioFormat -CompressorName -AudioSampleRate $file"
 end
 
 abbr ets --function _ets
