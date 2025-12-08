@@ -1777,7 +1777,7 @@ function _ffi_pass_middle_to_new_out
     # w/e is passed is inlined in the middle of the command
     set middle $argv
     set input (_find_first_video_file_any_type; or echo _)
-    set output (path change-extension ".out." $input)
+    set output (path change-extension ".out.mp4" $input)
     echo -n "ffmpeg -i $input $middle $output"
 end
 
