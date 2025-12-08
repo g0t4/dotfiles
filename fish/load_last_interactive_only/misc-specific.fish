@@ -1763,15 +1763,15 @@ function abbr_ffprobe
     _find_first_video_file_any_type; or echo _
 end
 
-abbr --add _ffmpeg --function abbr_ffmpeg
-function abbr_ffmpeg
+abbr ffi --function _ffi
+function _ffi
     echo -n "ffmpeg -i "
-    # if one is available, just dump it, else show a placeholder
+    # if one is available, just ump it, else show a placeholder
     _find_first_video_file_any_type; or echo _
 end
 
-abbr --add _ffmpeg_range --function abbr_ffmpeg_range
-function abbr_ffmpeg_range
+abbr --add ffi_range --function _ffi_range
+function _ffi_range
     set input (_find_first_video_file_any_type; or echo _)
     set output (string replace -r "\.mp4\$" ".trimmed.mp4" $input)
     # echo -n "ffmpeg -i combined.shifted100ms.mp4 -ss 00:08:52 -to 00:09:22 -c:v copy -c:a copy trimmed-5m10s_to_5m40s.mp4"
