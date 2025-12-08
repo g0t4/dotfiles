@@ -1770,7 +1770,7 @@ function _ffi_range
     echo -n "ffmpeg -i $input -ss 00:00 -to 00:30 % -c copy $output"
 end
 
-function _ffi_helper_filters
+function _ffi_pass_middle_to_new_out
 
     # w/e is passed is inlined in the middle of the command
     set start_filters $argv
@@ -1783,17 +1783,30 @@ end
 abbr --add ffi --set-cursor --function _ffi_copy
 abbr --add ffi_copy --set-cursor --function _ffi_copy
 function _ffi_copy
-    _ffi_helper_filters %
+    _ffi_pass_middle_to_new_out %
 end
 
 abbr --add ffi_af --set-cursor --function _ffi_af
 function _ffi_af
-    _ffi_helper_filters "-af '%'"
+    _ffi_pass_middle_to_new_out "-af '%'"
 end
 
 abbr --add ffi_vf --set-cursor --function _ffi_vf
 function _ffi_vf
-    _ffi_helper_filters "-vf '%'"
+    _ffi_pass_middle_to_new_out "-vf '%'"
+end
+
+abbr --add ffi_silencedetect --set-cursor --function _ffi_silencedetect
+function _ffi_silencedetect
+    set input (_find_first_video_file_any_type; or echo _)
+    # remember % is cursor placeholder
+    echo -n "ffmpeg -i $input -af silencedetect=noise=-30dB:d=0.5% -f null -"
+end
+
+abbr --add ffi_astats --set-cursor --function _ffi_astats
+function _ffi_astats
+    set input (_find_first_video_file_any_type; or echo _)
+    echo -n "ffmpeg -i $input -af astats=metadata=1% -f null -"
 end
 
 # IDEAS (make reusable?)... maybe just have a lookup of these in a file somewhere and grep it?
