@@ -1783,7 +1783,7 @@ end
 abbr --add ffi --set-cursor --function _ffi_copy
 abbr --add ffi_copy --set-cursor --function _ffi_copy
 function _ffi_copy
-    _ffi_helper_filters "'%'"
+    _ffi_helper_filters %
 end
 
 abbr --add ffi_af --set-cursor --function _ffi_af
