@@ -1771,18 +1771,18 @@ function _ffi_range
 end
 
 function _ffi_pass_middle_to_new_out
-
     # w/e is passed is inlined in the middle of the command
-    set start_filters $argv
-
+    set middle $argv
     set input (_find_first_video_file_any_type; or echo _)
     set output (string replace -r "\.mp4\$" ".out.mp4" $input)
-    echo -n "ffmpeg -i $input $argv $output"
+    echo -n "ffmpeg -i $input $middle $output"
 end
 
 abbr --add ffi --set-cursor --function _ffi_copy
 abbr --add ffi_copy --set-cursor --function _ffi_copy
 function _ffi_copy
+    # careful w/ copy, it results in keyframe issues when trimming
+    #  IIRC only want to use this when changing container... NOT when changing video
     _ffi_pass_middle_to_new_out "% -c copy"
 end
 
