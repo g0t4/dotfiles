@@ -79,7 +79,10 @@
     # match this to GREP_COLOR!
 
 [interactive]
-	diffFilter = delta --color-only
+	# FYI --max-line-length is a MUST here for git add --patch (delta will still truncate with --wrap-max-lines=unlimited)
+	#   seems like --max-line-length=0 is only for delta w/ diffFilter? (recall it didn't impact the regular git diff config above)
+	#   FYI --wrap-max-lines=unlimited is not needed here, but doesn't hurt in case maybe some edge case it is needed
+	diffFilter = delta --color-only --wrap-max-lines=unlimited --max-line-length=0
 
 [merge]
 	tool = nvimdiff
