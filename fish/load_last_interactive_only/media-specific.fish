@@ -29,8 +29,8 @@ function ffplay
     command ffplay -hide_banner $argv
 end
 # FYI some of these are reminders when I revisit ffmpeg (i.e. to know what to get help for)
-abbr ff "ffmpeg"
-abbr ffm "ffmpeg"
+abbr ff ffmpeg
+abbr ffm ffmpeg
 abbr ffh "ffmpeg -h full" # full help is far superior to ffmpeg-all which doesn't really show device specific options/devices/filters/formats/etc
 abbr ffhe "ffmpeg -h encoder="
 abbr ffhd "ffmpeg -h decoder="
@@ -41,10 +41,10 @@ abbr ffhb "ffmpeg -h bsf="
 abbr ffhp "ffmpeg -h protocol="
 #
 # ffp = ffprobe
-abbr ffp "ffprobe"
+abbr ffp ffprobe
 abbr ffph "ffprobe -h full"
 # ffpl = ffplay
-abbr ffpl "ffplay"
+abbr ffpl ffplay
 abbr ffplh "ffplay -h full"
 
 ### *** sips command
