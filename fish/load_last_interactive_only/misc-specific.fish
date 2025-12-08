@@ -1812,6 +1812,14 @@ function _ffi_astats
     set input (_find_first_video_file_any_type; or echo _) # copy pasta
     echo -n "ffmpeg -i $input -af astats=$options% -f null -" # copy pasta
 end
+
+abbr --add ffi_astats_per_frame --set-cursor --function _ffi_astats_per_frame
+function _ffi_astats_per_frame
+    set options "metadata=1:reset=1,ametadata=print:file=astats-per-frame.txt"
+    set input (_find_first_video_file_any_type; or echo _) # copy pasta
+    echo -n "ffmpeg -i $input -af astats=$options% -f null -" # copy pasta
+end
+
 abbr --add ffi_astats_overall --set-cursor --function _ffi_astats_overall
 function _ffi_astats_overall
     # FTR =1 results in ONLY per OVERALL stats
