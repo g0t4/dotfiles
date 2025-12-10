@@ -3011,11 +3011,18 @@ abbr -- pbsse_verbose_raw_response "pbpaste | $sse_jq '.__verbose.content' -r" #
 abbr -- pbsse1 "pbpaste | $sse_jq > input-messages.json"
 abbr -- pbsse2 "pbpaste | $sse_jq > input-rendered-prompt.json"
 abbr -- pbsse3 "pbpaste | $sse_jq > output-parsed-message.json"
-abbr -- pbsse4 "pbpaste > output-raw.harmony" # TODO stip leading prefix off of each line ()
-# Dec 07 16:58:49 build21 llama-server[2772]: Parsing input with format GPT-OSS: <|channel|>...
-#    looks like one space after GPT-OSS: on FIRST LINE
-#    subsequent lines it is a diff prefix (look at rag004/rag003)
-# cat output-raw.harmony | string replace --regex "^.*llama-server\\[\d+\\]: Parsing input with format GPT-OSS: " "" |  tree-sitter highlight --scope source.harmony
+#
+# * pbsse4 (raw prompt)
+# FYI sse4 is not an sse but the naming convention helps me quickly remember each of these! (first 3 are SSEs)
+abbr -- pbsse4 "pbpaste | string replace --regex '^\w\w\w \d\d \d\d:\d\d:\d\d \w+ llama-server\[\d+\]: ' '' | string replace 'Parsing input with format GPT-OSS: ' '' > output-raw.harmony"
+# strip this from all lines:
+#   Dec 09 18:11:03 build21 llama-server[3344]:
+# then first line also has:
+#   Parsing input with format GPT-OSS:
+#
+# FYI I assume line breaks in logs are from literal line breaks in the response that s/b preserved
+#  TODO setup to work with other prompt types... not just GPT-OSS/harmony... i.e. Qwen3
+#  TODO and setup to rename file based on prompt format (if applicable?) .. at least not call it .harmony :)
 
 # ? --join-output
 
