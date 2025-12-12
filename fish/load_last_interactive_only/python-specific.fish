@@ -171,20 +171,33 @@ function wrc
 
 end
 
+# * ptw
+abbr --set-cursor -- ptw_logs 'ptw --clear *%_tests.py -- --capture=no --log-cli-level=INFO --durations=0'
 # setup % so I can easily change matching python code files for tests to run
-abbr --set-cursor -- ptw_logs 'ptw *%_tests.py -- --capture=no --log-cli-level=INFO --durations=0'
-# --durations=N         Show N slowest setup/test durations (N=0 for all)
-# --durations-min=N     Minimal duration in seconds for inclusion in slowest list. Default: 0.005 (or 0.0 if -vv is given).
+# ptw args:
+#   --clear == clear screen b/w runs
+# pytest args:
+#   --capture=no          see print() output (don't capture STDOUT)
+#   --log-cli-level=INFO
+#   --durations=N         Show N slowest setup/test durations (N=0 for all)
+#   --durations-min=N     Minimal duration in seconds for inclusion in slowest list. Default: 0.005 (or 0.0 if -vv is given).
 #
-# example only (perhaps setup some sort of local config that would let me define this abbr per project, or provide parameters to configure it per project/dir?
-#   think _repo_root/.config/fish/config.fish
 abbr --set-cursor ptw_one --function __ptw_one
 function __ptw_one
-    if functions -q __local_ptw_one
-        echo LOCAL says (__local_ptw_one)
-        return
-    end
 
     # default example (can override with local .config.fish example)
-    echo 'ptw *%_tests.py -- auto_edit/tests/aligned-tests.py::TestIntegration::test_detect_split_breathing_into_two_silences --capture=no --log-cli-level=INFO --durations=0'
+    set test_file_glob '*%_tests.py'
+    set test_case 'auto_edit/tests/aligned-tests.py::TestIntegration::test_detect_split_breathing_into_two_silences'
+
+    if functions -q __local_ptw_one
+        # run the local function and capture its output
+        set output (__local_ptw_one)
+        # split the output into two variables using space as delimiter
+        set test_file_glob (string split ' ' $output)[1]
+        set test_case (string split ' ' $output)[2]
+    end
+
+    # FYI leave test_file_glob unwrapped (shell glob)
+    echo "ptw --clear $test_file_glob -- '$test_case%' --capture=no --log-cli-level=INFO --durations=0"
+
 end
