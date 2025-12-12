@@ -24,9 +24,7 @@ function _load_local_config --on-variable PWD
     source $local_config_path
 
     if not functions -q deactivate_local_config_fish
-        function deactivate_local_config_fish
-            # no-op placeholder
-        end
+        echo "WARNING: deactivate_local_config_fish not defined in $local_config_path, at least set it to an empty function so you don't forget about it"
     end
 end
 
