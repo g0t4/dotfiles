@@ -199,5 +199,6 @@ function __ptw_one
 
     # FYI leave test_file_glob unwrapped (shell glob)
     echo "ptw --clear $test_file_glob -- '$test_case%' --capture=no --log-cli-level=INFO --durations=0"
+    # % is for cursor placement, now that this can have local overrides, probably most likely place to make changes is the one test case to run, and not the files to monitor for changes
 
 end
