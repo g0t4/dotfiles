@@ -13,6 +13,7 @@ function _load_local_config --on-variable PWD
 
     if functions -q deactivate_local_config_fish
         deactivate_local_config_fish
+        functions --erase deactivate_local_config_fish
     end
 
     set -l local_config_path (_find_local_config)
