@@ -37,7 +37,7 @@ function __fish_on_change_workdir --on-variable PWD
     _load_local_config
 end
 
-# also load when starting a new session
+# run during startup if initial PWD has a local .config.fish
 _load_local_config
 
 
