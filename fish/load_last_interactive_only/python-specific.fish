@@ -172,4 +172,10 @@ function wrc
 end
 
 # setup % so I can easily change matching python code files for tests to run
-abbr --set-cursor -- ptw_logs 'ptw *%_tests.py -- --capture=no --log-cli-level=INFO'
+abbr --set-cursor -- ptw_logs 'ptw *%_tests.py -- --capture=no --log-cli-level=INFO --durations=0'
+# --durations=N         Show N slowest setup/test durations (N=0 for all)
+# --durations-min=N     Minimal duration in seconds for inclusion in slowest list. Default: 0.005 (or 0.0 if -vv is given).
+#
+# example only (perhaps setup some sort of local config that would let me define this abbr per project, or provide parameters to configure it per project/dir?
+#   think _repo_root/.config/fish/config.fish
+abbr --set-cursor -- ptw_one 'ptw *%_tests.py -- auto_edit/tests/aligned-tests.py::TestIntegration::test_detect_split_breathing_into_two_silences --capture=no --log-cli-level=INFO --durations=0'
