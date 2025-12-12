@@ -33,11 +33,8 @@ function _load_local_config
     end
 end
 
-# Hook into directory changes
-if not functions -q __fish_cd_hook_local_config
-    function __fish_cd_hook_local_config --on-variable PWD
-        _load_local_config
-    end
+function __fish_on_change_workdir --on-variable PWD
+    _load_local_config
 end
 
 # also load when starting a new session
