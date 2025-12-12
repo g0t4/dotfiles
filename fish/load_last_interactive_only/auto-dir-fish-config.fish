@@ -1,5 +1,3 @@
-
-
 function _find_local_config
     set -l dir (pwd)
     while test $dir != /
@@ -39,5 +37,3 @@ end
 
 # run during startup if initial PWD has a local .config.fish
 _load_local_config
-
-
