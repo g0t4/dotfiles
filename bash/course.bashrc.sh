@@ -1,6 +1,7 @@
-# ! KEEP THIS FILE MINIMAL, only critical, early config should be in here
+#
+# * KEEP THIS FILE MINIMAL, only critical, early config should be in here
 
-# # * uncomment for xtrace-ing (fyi.. can inherit path from outer shell)
+# * uncomment for xtrace-ing (fyi.. can inherit path from outer shell)
 # export PS1="\W $ "
 # unset PROMPT_COMMAND # remove default for xtrace, when also comment out the return here:
 # return
