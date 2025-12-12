@@ -3,8 +3,8 @@
 function _find_local_config
     set -l dir (pwd)
     while test $dir != /
-        if test -f $dir/config.fish
-            echo $dir/config.fish
+        if test -f $dir/.config.fish
+            echo $dir/.config.fish
             return
         end
         set dir (dirname $dir)
