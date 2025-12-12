@@ -1,5 +1,3 @@
-( IFS="<"; echo "sourcing ${BASH_SOURCE[*]}")
-
 # #
 # # * KEEP THIS FILE MINIMAL, only critical, early config should be in here
 #
