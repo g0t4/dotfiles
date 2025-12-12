@@ -21,10 +21,8 @@ function _load_local_config --on-variable PWD
         return
     end
 
-    # source the new config
     source $local_config_path
 
-    # ensure the new config defined deactivate_local_config_fish
     if not functions -q deactivate_local_config_fish
         function deactivate_local_config_fish
             # no-op placeholder
