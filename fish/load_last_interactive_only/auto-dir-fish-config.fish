@@ -35,7 +35,7 @@ end
 
 # Hook into directory changes
 if not functions -q __fish_cd_hook_local_config
-    function __fish_cd_hook_local_config --on-event fish_prompt
+    function __fish_cd_hook_local_config --on-variable PWD
         _load_local_config
     end
 end
