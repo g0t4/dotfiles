@@ -1,3 +1,7 @@
+# NOTES:
+# - FYI right now it will unregister / re-register even if same .config.fish would apply
+#   nothing is slow enough to justify avoiding this... and the pain a mistake in that logic might cause
+
 function _find_local_config
     set -l dir (pwd)
     while test $dir != /
