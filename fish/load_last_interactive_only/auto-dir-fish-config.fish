@@ -10,14 +10,14 @@ function _find_local_config
 end
 
 function _load_local_config --on-variable PWD
-    set -l config_path (_find_local_config)
-    if test -z "$config_path"
-        return
-    end
-
     # deactivate previous local config if it exists
     if functions -q deactivate_local_config_fish
         deactivate_local_config_fish
+    end
+
+    set -l config_path (_find_local_config)
+    if test -z "$config_path"
+        return
     end
 
     # source the new config
