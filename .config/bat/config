@@ -30,6 +30,12 @@
 #   /opt/homebrew/etc/libvirt/**/*.conf
 --map-syntax "**/etc/libvirt/**/*.conf:INI"
 
+# FYI .bashrc is already mapped
+--map-syntax "/etc/bashrc*:Bourne Again Shell (bash)"
+# target these:
+#   /etc/bashrc
+#   /etc/bashrc_Apple_Terminal
+
 # default style:
 --paging=never
 --plain
