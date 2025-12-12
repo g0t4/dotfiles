@@ -9,7 +9,7 @@ function _find_local_config
     end
 end
 
-function _load_local_config
+function _load_local_config --on-variable PWD
     set -l config_path (_find_local_config)
     if test -z "$config_path"
         return
@@ -29,10 +29,6 @@ function _load_local_config
             # no-op placeholder
         end
     end
-end
-
-function __fish_on_change_workdir --on-variable PWD
-    _load_local_config
 end
 
 # run during startup if initial PWD has a local .config.fish
