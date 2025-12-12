@@ -43,5 +43,7 @@ if [[ "$HOSTNAME" == "build21" ]]; then
     MACHINE_ID="󰣇"
 fi
 
+# FYI escape ${foo} as \${foo} (or use '' single quotes) if you want it to evaluate at "prompt runtime" instead of prompt (PS1) definition time (here)
+#   in my case, these values never change so I'd prefer evaluate them once (here)
 PS1="${MACHINE_ID} ${PROMPT_CYAN}${PROMPT_BOLD}${PROMPT_UNDERLINE}\W${PROMPT_RESET} \$ "
 export PS1
