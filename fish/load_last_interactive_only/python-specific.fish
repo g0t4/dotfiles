@@ -180,6 +180,11 @@ abbr --set-cursor -- ptw_logs 'ptw *%_tests.py -- --capture=no --log-cli-level=I
 #   think _repo_root/.config/fish/config.fish
 abbr --set-cursor ptw_one --function __ptw_one
 function __ptw_one
+    if functions -q __local_ptw_one
+        echo LOCAL says (__local_ptw_one)
+        return
+    end
+
     # default example (can override with local .config.fish example)
     echo 'ptw *%_tests.py -- auto_edit/tests/aligned-tests.py::TestIntegration::test_detect_split_breathing_into_two_silences --capture=no --log-cli-level=INFO --durations=0'
 end
