@@ -186,19 +186,19 @@ abbr --set-cursor ptw_one --function __ptw_one
 function __ptw_one
 
     # default example (can override with local .config.fish example)
-    set test_file_glob '*%_tests.py'
+    set ptw_file_watch_glob '*%_tests.py'
     set test_case 'auto_edit/tests/aligned-tests.py::TestIntegration::test_detect_split_breathing_into_two_silences'
 
     if functions -q __local_ptw_one
         # run the local function and capture its output
         set output (__local_ptw_one)
         # split the output into two variables using space as delimiter
-        set test_file_glob (string split ' ' $output)[1]
+        set ptw_file_watch_glob (string split ' ' $output)[1]
         set test_case (string split ' ' $output)[2]
     end
 
-    # FYI leave test_file_glob unwrapped (shell glob)
-    echo "ptw --clear $test_file_glob -- '$test_case%' --capture=no --log-cli-level=INFO --durations=0"
+    # FYI leave ptw_file_watch_glob unwrapped (shell glob)
+    echo "ptw --clear $ptw_file_watch_glob -- '$test_case%' --capture=no --log-cli-level=INFO --durations=0"
     # % is for cursor placement, now that this can have local overrides, probably most likely place to make changes is the one test case to run, and not the files to monitor for changes
 
 end
