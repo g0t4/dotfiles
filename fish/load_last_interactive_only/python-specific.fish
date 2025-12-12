@@ -187,7 +187,7 @@ function __ptw_one
 
     # default example (can override with local .config.fish example)
     set ptw_file_watch_glob '*%_tests.py'
-    set test_case 'auto_edit/tests/aligned-tests.py::TestIntegration::test_detect_split_breathing_into_two_silences'
+    set test_case 'path/to/foo_tests.py::UnitTests::test_so_and_so'
 
     if functions -q __local_ptw_one
         # run the local function and capture its output
