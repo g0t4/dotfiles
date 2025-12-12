@@ -89,9 +89,9 @@ end
 
 # TMP use bash if CWD is course dir
 #  KEEP THIS AT END OF startup files so it doesn't block loading something else that might matter... just in case
-if status --is-interactive
-    # don't want for non-interactive (i.e. fish -c "...")
-    if string match --quiet --regex "g0t4/.*course.*-bash.*" "$(_repo_root)"
-        bash
-    end
-end
+# if status --is-interactive
+#     # don't want for non-interactive (i.e. fish -c "...")
+#     if string match --quiet --regex "g0t4/.*course.*-bash.*" "$(_repo_root)"
+#         bash
+#     end
+# end
