@@ -508,7 +508,8 @@ return {
                             vim.api.nvim_feedkeys(keys, "n", false)
                         end
 
-                        local keys = vim.api.nvim_replace_termcodes("o" .. preferred_devider .. "<CR><Esc>cc<Esc>", true, false, true)
+                        -- use "9cc to not clobber primary register ... PRN use buffer line editing to avoid this entirely?
+                        local keys = vim.api.nvim_replace_termcodes("o" .. preferred_devider .. '<CR><Esc>"9cc<Esc>', true, false, true)
                         -- FYI cc clears the current line to wipe out comment leader if added (b/c formatoptions contains "o")
                         vim.api.nvim_feedkeys(keys, "n", false)
                     end, 0)
@@ -518,7 +519,7 @@ return {
                         local keys = vim.api.nvim_replace_termcodes("o<Esc>", true, false, true)
                         vim.api.nvim_feedkeys(keys, "n", false)
                     end
-                    local keys = vim.api.nvim_replace_termcodes("i" .. preferred_devider .. " <CR><Esc>cc<Esc>", true, false, true)
+                    local keys = vim.api.nvim_replace_termcodes("i" .. preferred_devider .. ' <CR><Esc>"9cc<Esc>', true, false, true)
                     vim.api.nvim_feedkeys(keys, "n", false)
                     -- FYI b/c I use <CR> to insert a line, that ensures there is a new line after the divider
                 end
