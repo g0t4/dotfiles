@@ -50,8 +50,9 @@ end
 
 # *** python
 
+set ASK_REPO "$HOME/repos/github/g0t4/ask-openai.nvim"
+
 function rag_indexer
-    set ASK_REPO "$HOME/repos/github/g0t4/ask-openai.nvim"
     set _python3 "$ASK_REPO/.venv/bin/python3"
     set _script_py "$ASK_REPO/lua/ask-openai/rag/indexer.py"
     $_python3 $_script_py $argv
@@ -62,7 +63,6 @@ function rag_validate_index
     # capture rag dir of CURRENT repo
     set rag_dir (_repo_root)/.rag
 
-    set ASK_REPO "$HOME/repos/github/g0t4/ask-openai.nvim"
     set _python3 "$ASK_REPO/.venv/bin/python3"
     # switch to directory to run the index.validate module... I could install this yes... for now I don't want to go that route
     fish -c "cd '$ASK_REPO/lua/ask-openai/rag'; '$_python3' -m index.validate '$rag_dir'"
