@@ -45,12 +45,15 @@ function _enable_fish_suggestions
     set -U fish_autosuggestion_enabled 1
 end
 
-
-
-
 # *** python
 
 set ASK_REPO "$HOME/repos/github/g0t4/ask-openai.nvim"
+
+function ask_thread_reviewer
+    set _python3 "$ASK_REPO/.venv/bin/python3"
+    set _script_py "$ASK_REPO/tools/chat_viewer/__main__.py"
+    $_python3 $_script_py $argv
+end
 
 function rag_indexer
     set _python3 "$ASK_REPO/.venv/bin/python3"
@@ -69,5 +72,3 @@ function rag_validate_index
 end
 
 abbr rag_rebuilder 'time rag_indexer --rebuild --info'
-
-
