@@ -55,6 +55,7 @@ end
 set _unpushed_commits "HEAD@{push}~1..HEAD" # always show last pushed commit too (so if nothing unpushed the output isn't empty as if maybe broken)
 set _unpushed_commits_without_last_pushed "HEAD@{push}..HEAD" # in some cases I don't wanna show last pushed (i.e. gls --stat)
 abbr gst 'git status'
+abbr ggst 'git status' # double gg issue is often with gst so let's work around it
 abbr gstl "git status && echo && git_unpushed_commits" # * try # FYI requires gst/glo aliases(funcs) to work
 
 abbr glo git_unpushed_commits # composed by gsl
