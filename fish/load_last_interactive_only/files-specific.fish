@@ -776,7 +776,7 @@ if command -q free
 end
 
 # *** fzf "widgets" for selecting a file to pass to a command
-function _fzf-nested-dir-widget -d "Paste selected directory into command line"
+function _fzf_nested_dir_widget -d "Paste selected directory into command line"
     set -l dir (fd --type d . | fzf --height 50% --border)
     if test -n "$dir"
         commandline -i -- (string escape -- "$dir")
@@ -784,7 +784,7 @@ function _fzf-nested-dir-widget -d "Paste selected directory into command line"
     commandline -f repaint
 end
 
-function _fzf-nested-file-widget -d "Paste selected file into command line"
+function _fzf_nested_file_widget -d "Paste selected file into command line"
     set -l file (fd --type f . | fzf --height 50% --border)
     if test -n "$file"
         commandline -i -- (string escape -- "$file")
@@ -792,7 +792,7 @@ function _fzf-nested-file-widget -d "Paste selected file into command line"
     commandline -f repaint
 end
 
-function _fzf-nested-both-file-and-dirs-widget -d "Paste selected file or directory into command line"
+function _fzf_nested_both_file_and_dirs_widget -d "Paste selected file or directory into command line"
     # btw `diff_two_commands 'fd --type f --type d' 'fd'` differ in symlinks (at least)
     set -l file (fd . | fzf --height 50% --border)
     if test -n "$file"
@@ -801,7 +801,7 @@ function _fzf-nested-both-file-and-dirs-widget -d "Paste selected file or direct
     commandline -f repaint
 end
 
-function _fzf-nested-git-commit-widget -d "Pick a git commit_hash"
+function _fzf_nested_git_commit_widget -d "Pick a git commit_hash"
     # TODO look at commandline! and decide based on the git subcommand?!
     #  git diff => pick a commit_hash
     #   heck I could do this and add defaults for all sorts of commands (and fallback could ask AI to pick a picker!)
@@ -817,11 +817,11 @@ function _fzf-nested-git-commit-widget -d "Pick a git commit_hash"
     commandline -f repaint
 end
 
-bind_both_modes_default_and_insert alt-shift-d _fzf-nested-dir-widget
-bind_both_modes_default_and_insert alt-shift-f _fzf-nested-file-widget
-bind_both_modes_default_and_insert alt-shift-b _fzf-nested-both-file-and-dirs-widget
+bind_both_modes_default_and_insert alt-shift-d _fzf_nested_dir_widget
+bind_both_modes_default_and_insert alt-shift-f _fzf_nested_file_widget
+bind_both_modes_default_and_insert alt-shift-b _fzf_nested_both_file_and_dirs_widget
 # TODO what all pickers for git history might I want?
-bind_both_modes_default_and_insert alt-shift-g _fzf-nested-git-commit-widget
+bind_both_modes_default_and_insert alt-shift-g _fzf_nested_git_commit_widget
 
 # *** chmod,chgrp,chown,chsh
 abbr chmx "chmod +x"
