@@ -785,6 +785,7 @@ function _fzf_nested_dir_widget -d "Paste selected directory into command line"
 end
 
 function _fzf_nested_file_widget -d "Paste selected file into command line"
+    # TODO could I add a toggle to this fzf to switch to/from unrestricted? IIRC you can do that...
     set -l file (fd --type f . | fzf --height 50% --border)
     if test -n "$file"
         commandline -i -- (string escape -- "$file")
