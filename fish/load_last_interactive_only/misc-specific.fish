@@ -1874,6 +1874,7 @@ function video_editing_aio
     else
         _ffmpeg_concat $argv # produces $combined_file
 
+        # TODO change this to re-encode audio stream? to avoid some issues w/ start=NON-ZERO (ffprobe foo.mp4) output
         ffmpeg -i "$combined_file" -itsoffset 0.1 -i "$combined_file" -map 0:v -map 1:a -c:v copy -c:a aac "$output_file"
         trash $combined_file # be safe with rm, if it was wrong file I wanna have it be recoverable
     end
