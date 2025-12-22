@@ -819,6 +819,7 @@ end
 
 bind_both_modes_default_and_insert alt-shift-d _fzf_nested_dir_widget
 bind_both_modes_default_and_insert alt-shift-f _fzf_nested_file_widget
+bind_both_modes_default_and_insert alt-shift-u _fzf_nested_file_unrestricted_widget
 bind_both_modes_default_and_insert alt-shift-b _fzf_nested_both_file_and_dirs_widget
 # TODO what all pickers for git history might I want?
 bind_both_modes_default_and_insert alt-shift-g _fzf_nested_git_commit_widget
