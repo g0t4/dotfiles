@@ -792,6 +792,14 @@ function _fzf_nested_file_widget -d "Paste selected file into command line"
     commandline -f repaint
 end
 
+function _fzf_nested_file_unrestricted_widget -d "Paste selected file (including hidden) into command line"
+    set -l file (fd --type f . -u | fzf --height 50% --border)
+    if test -n "$file"
+        commandline -i -- (string escape -- "$file")
+    end
+    commandline -f repaint
+end
+
 function _fzf_nested_both_file_and_dirs_widget -d "Paste selected file or directory into command line"
     # btw `diff_two_commands 'fd --type f --type d' 'fd'` differ in symlinks (at least)
     set -l file (fd . | fzf --height 50% --border)
