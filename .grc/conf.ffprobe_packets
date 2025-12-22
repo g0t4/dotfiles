@@ -1,0 +1,64 @@
+# PACKET section markers
+regexp=^\[(\/)?PACKET\]$
+colours=default,bright_cyan
+======
+# SIDE_DATA section markers
+regexp=^\[(\/)?SIDE_DATA\]$
+colours=default,bright_yellow
+======
+# codec_type=video
+regexp=^(codec_type)=(video)
+colours=default,underline,bold green
+======
+# codec_type=audio
+regexp=^(codec_type)=(audio)
+colours=default,underline,bold yellow
+======
+# stream_index
+regexp=^(stream_index)=(\d+)
+colours=default,underline,bright_white
+======
+# pts and pts_time (highlighted as important timing info)
+regexp=^(pts)=([-]?\d+)
+colours=default,underline,bold cyan
+-
+regexp=^(pts_time)=([-]?\d+\.\d+)
+colours=default,underline,bold cyan
+======
+# dts and dts_time (secondary timing)
+regexp=^(dts)=([-]?\d+)
+colours=default,underline,blue
+-
+regexp=^(dts_time)=([-]?\d+\.\d+)
+colours=default,underline,blue
+======
+# duration and duration_time
+regexp=^(duration)=(\d+)
+colours=default,underline,magenta
+-
+regexp=^(duration_time)=(\d+\.\d+)
+colours=default,underline,magenta
+======
+# size
+regexp=^(size)=(\d+)
+colours=default,underline,bright_green
+======
+# pos
+regexp=^(pos)=(\d+)
+colours=default,underline,bright_black
+======
+# flags with K (keyframe) - highlight in bold green
+regexp=^(flags)=(K.*)
+colours=default,underline,bold green
+======
+# flags with D (discard/decode) - yellow
+regexp=^(flags)=([^K]*D[^K]*)
+colours=default,underline,yellow
+======
+# flags without K or D - default
+regexp=^(flags)=(\S+)
+colours=default,underline,default
+======
+# SIDE_DATA fields
+regexp=^(side_data_type|skip_samples|discard_padding|skip_reason|discard_reason)=(.*)
+colours=default,bright_black,yellow

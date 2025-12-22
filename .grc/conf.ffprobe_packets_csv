@@ -1,0 +1,58 @@
+# CSV packet format for ffprobe -of csv output
+# Format: packet,codec_type,stream_index,pts,pts_time,dts,dts_time,duration,duration_time,size,pos,flags
+
+# packet prefix
+regexp=^(packet),
+colours=default,bright_black
+======
+# video codec type (column 2)
+regexp=^packet,(video),
+colours=unchanged,bold green
+======
+# audio codec type (column 2)
+regexp=^packet,(audio),
+colours=unchanged,bold yellow
+======
+# stream_index (column 3)
+regexp=^packet,\w+,(\d+),
+colours=unchanged,bright_white
+======
+# pts (column 4) - highlight the number
+regexp=^packet,\w+,\d+,([-]?\d+),
+colours=unchanged,bold cyan
+======
+# pts_time (column 5)
+regexp=^packet,\w+,\d+,[-]?\d+,([-]?\d+\.\d+),
+colours=unchanged,bold cyan
+======
+# dts (column 6)
+regexp=^packet,\w+,\d+,[-]?\d+,[-]?\d+\.\d+,([-]?\d+),
+colours=unchanged,blue
+======
+# dts_time (column 7)
+regexp=^packet,\w+,\d+,[-]?\d+,[-]?\d+\.\d+,[-]?\d+,([-]?\d+\.\d+),
+colours=unchanged,blue
+======
+# duration (column 8)
+regexp=^packet,\w+,\d+,[-]?\d+,[-]?\d+\.\d+,[-]?\d+,[-]?\d+\.\d+,(\d+),
+colours=unchanged,magenta
+======
+# duration_time (column 9)
+regexp=^packet,\w+,\d+,[-]?\d+,[-]?\d+\.\d+,[-]?\d+,[-]?\d+\.\d+,\d+,(\d+\.\d+),
+colours=unchanged,magenta
+======
+# size (column 10)
+regexp=^packet,\w+,\d+,[-]?\d+,[-]?\d+\.\d+,[-]?\d+,[-]?\d+\.\d+,\d+,\d+\.\d+,(\d+),
+colours=unchanged,bright_green
+======
+# pos (column 11)
+regexp=^packet,\w+,\d+,[-]?\d+,[-]?\d+\.\d+,[-]?\d+,[-]?\d+\.\d+,\d+,\d+\.\d+,\d+,(\d+),
+colours=unchanged,bright_black
+======
+# flags with K (keyframe) at end - column 12
+regexp=,(K[^,]*)$
+colours=unchanged,bold green
+======
+# flags without K - column 12
+regexp=,([^K,]+)$
+colours=unchanged,yellow
