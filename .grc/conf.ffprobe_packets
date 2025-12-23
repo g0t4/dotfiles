@@ -18,18 +18,32 @@ colours=default,underline,bold yellow
 regexp=^(stream_index)=(\d+)
 colours=default,underline,bright_white
 ======
-# pts and pts_time (highlighted as important timing info)
-regexp=^(pts)=([-]?\d+)
+# NEGATIVE pts and pts_time (red when negative)
+regexp=^(pts)=([-]\d+)
+colours=default,underline,bold red
+-
+regexp=^(pts_time)=([-]\d+\.\d+)
+colours=default,underline,bold red
+======
+# POSITIVE pts and pts_time (cyan when positive)
+regexp=^(pts)=(\d+)
 colours=default,underline,bold cyan
 -
-regexp=^(pts_time)=([-]?\d+\.\d+)
+regexp=^(pts_time)=(\d+\.\d+)
 colours=default,underline,bold cyan
 ======
-# dts and dts_time (secondary timing)
-regexp=^(dts)=([-]?\d+)
+# NEGATIVE dts and dts_time (red when negative)
+regexp=^(dts)=([-]\d+)
+colours=default,underline,bold red
+-
+regexp=^(dts_time)=([-]\d+\.\d+)
+colours=default,underline,bold red
+======
+# POSITIVE dts and dts_time (blue when positive)
+regexp=^(dts)=(\d+)
 colours=default,underline,blue
 -
-regexp=^(dts_time)=([-]?\d+\.\d+)
+regexp=^(dts_time)=(\d+\.\d+)
 colours=default,underline,blue
 ======
 # duration and duration_time

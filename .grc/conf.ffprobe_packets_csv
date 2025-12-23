@@ -17,20 +17,36 @@ colours=unchanged,bold yellow
 regexp=^packet,\w+,(\d+),
 colours=unchanged,bright_white
 ======
-# pts (column 4) - highlight the number
-regexp=^packet,\w+,\d+,([-]?\d+),
+# NEGATIVE pts (column 4) - red when negative
+regexp=^packet,\w+,\d+,([-]\d+),
+colours=unchanged,bold red
+======
+# POSITIVE pts (column 4) - cyan when positive
+regexp=^packet,\w+,\d+,(\d+),
 colours=unchanged,bold cyan
 ======
-# pts_time (column 5)
-regexp=^packet,\w+,\d+,[-]?\d+,([-]?\d+\.\d+),
+# NEGATIVE pts_time (column 5) - red when negative
+regexp=^packet,\w+,\d+,[-]?\d+,([-]\d+\.\d+),
+colours=unchanged,bold red
+======
+# POSITIVE pts_time (column 5) - cyan when positive
+regexp=^packet,\w+,\d+,[-]?\d+,(\d+\.\d+),
 colours=unchanged,bold cyan
 ======
-# dts (column 6)
-regexp=^packet,\w+,\d+,[-]?\d+,[-]?\d+\.\d+,([-]?\d+),
+# NEGATIVE dts (column 6) - red when negative
+regexp=^packet,\w+,\d+,[-]?\d+,[-]?\d+\.\d+,([-]\d+),
+colours=unchanged,bold red
+======
+# POSITIVE dts (column 6) - blue when positive
+regexp=^packet,\w+,\d+,[-]?\d+,[-]?\d+\.\d+,(\d+),
 colours=unchanged,blue
 ======
-# dts_time (column 7)
-regexp=^packet,\w+,\d+,[-]?\d+,[-]?\d+\.\d+,[-]?\d+,([-]?\d+\.\d+),
+# NEGATIVE dts_time (column 7) - red when negative
+regexp=^packet,\w+,\d+,[-]?\d+,[-]?\d+\.\d+,[-]?\d+,([-]\d+\.\d+),
+colours=unchanged,bold red
+======
+# POSITIVE dts_time (column 7) - blue when positive
+regexp=^packet,\w+,\d+,[-]?\d+,[-]?\d+\.\d+,[-]?\d+,(\d+\.\d+),
 colours=unchanged,blue
 ======
 # duration (column 8)
