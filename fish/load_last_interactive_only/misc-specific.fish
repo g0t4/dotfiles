@@ -3012,6 +3012,8 @@ abbr -- pbsse_verbose_raw_response "pbpaste | $sse_jq '.__verbose.content' -r" #
 abbr -- pbsse1 "pbpaste | $sse_jq > input-messages.json"
 abbr -- pbsse2 "pbpaste | $sse_jq > input-rendered-prompt.json"
 abbr -- pbsse3 "pbpaste | $sse_jq > output-parsed-message.json"
+abbr -- pbssethread 'ask_thread_reviewer (pbpaste | string replace --regex "[^{]*" "" | psub)'
+
 #
 # * pbsse4 (raw prompt)
 # FYI sse4 is not an sse but the naming convention helps me quickly remember each of these! (first 3 are SSEs)
