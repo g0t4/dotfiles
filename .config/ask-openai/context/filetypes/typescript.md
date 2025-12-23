@@ -1,4 +1,4 @@
-# TypeScript Code Preferences
+## TypeScript Code Preferences
 
 - Use camelCase
 - Use PascalCase for classes and interfaces

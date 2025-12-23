@@ -1,10 +1,10 @@
-# Lua Code Preferences
+## Lua Code Preferences
 
-## Naming
+Naming
 - Use snake_case for functions and variables.
 - Use PascalCase for classes.
 
-## Type Hints
+Type Hints
 - Prefer EmmyLua/LuaLS style annotations
 - Always annotate when type inference would be ambiguous, or for public APIs.
 
