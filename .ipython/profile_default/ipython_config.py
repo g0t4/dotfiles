@@ -41,6 +41,20 @@ c.TerminalInteractiveShell.shortcuts = [
     }
 ]
 
+# TODO! consider enabling autoreload always?
+# c.InteractiveShellApp.extensions = [
+#     'autoreload',      # %load_ext autoreload
+# ]
+# c.InteractiveShellApp.exec_lines = [
+#     '%autoreload complete'
+# ]
+#
+# this would avoid magic commands in notebooks (which breaks yapf)
+# * FOR now I will include the API calls myself in the "notebook" to opt-in:
+#   get_ipython().extension_manager.load_extension("autoreload")
+#   get_ipython().run_line_magic('autoreload', 'complete')
+#
+
 #  - IPython:shortcuts.handle_return_or_newline_or_execute
 #  - IPython:shortcuts.reformat_and_execute
 #  - IPython:shortcuts.quit
