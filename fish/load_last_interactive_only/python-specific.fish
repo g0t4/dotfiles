@@ -172,7 +172,7 @@ function wrc
 end
 
 # * ptw
-abbr --set-cursor -- ptw_logs 'ptw --clear *%_tests.py -- --capture=no --log-cli-level=INFO --durations=0'
+abbr --set-cursor -- ptw_logs 'ptw --clear *%_tests.py -- --capture=no --log-cli-level=INFO'
 # setup % so I can easily change matching python code files for tests to run
 # ptw args:
 #   --clear == clear screen b/w runs
@@ -198,7 +198,7 @@ function __ptw_one
     end
 
     # FYI leave ptw_file_watch_glob unwrapped (shell glob)
-    echo "ptw --clear $ptw_file_watch_glob -- '$test_case%' --capture=no --log-cli-level=INFO --durations=0"
+    echo "ptw --clear $ptw_file_watch_glob -- '$test_case%' --capture=no --log-cli-level=INFO"
     # % is for cursor placement, now that this can have local overrides, probably most likely place to make changes is the one test case to run, and not the files to monitor for changes
 
 end
