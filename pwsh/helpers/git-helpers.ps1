@@ -90,10 +90,9 @@ ealias gls "git log --stat ${_unpushed_commits}" # include patch (diff)
 ealias glg "git log --graph ${_unpushed_commits}" # graph of changes
 
 ## status
-ealias gst "git status"
-ealias ggst "git status" # often mistype this too
+ealias gs "git status"
 # FYI gsl below
-ealias kgst "git status" # common typo alias (cmd+k clear > kgst)
+ealias kgs "git status" # common typo alias (cmd+k clear > kgst)
 ealias gsts "git status -s"
 ealias gstb "git status -sb"
 ealias gstu "git status --untracked-files"
