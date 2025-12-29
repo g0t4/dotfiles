@@ -56,13 +56,7 @@ set _unpushed_commits "HEAD@{push}~1..HEAD" # always show last pushed commit too
 set _unpushed_commits_without_last_pushed "HEAD@{push}..HEAD" # in some cases I don't wanna show last pushed (i.e. gls --stat)
 abbr gs 'git status' # this is perhaps my most frequently used abbr, shortened from gst... see if gs feels materially easier to type, especially quickly
 
-function remind_abbr_remapped
-    set -l old $argv[1]
-    set -l new $argv[2]
-    abbr $old "REMINDER: abbr '$old' is now '$new'."
-end
-
-remind_abbr_remapped gst gs
+reminder_abbr_remapped gst gs
 
 abbr ggst 'git status' # double gg issue is often with gst so let's work around it
 abbr gstl "git status && echo && git_unpushed_commits" # * try # FYI requires gst/glo aliases(funcs) to work
