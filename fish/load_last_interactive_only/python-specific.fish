@@ -163,12 +163,15 @@ complete -c wcl -a '(gh repo list --json name --jq .[].name --limit 1000)' -f
 # complete -c wcl -a '(gh repo list --json nameWithOwner --jq .[].nameWithOwner --limit 1000)'
 
 function wrc
-
     set -l _python3 "$WES_DOTFILES/.venv/bin/python3"
     set -l _script_py "$WES_DOTFILES/zsh/compat_fish/pythons/wrc.py"
-
     $_python3 $_script_py $argv
+end
 
+function matplotlib_colors
+    set -l _python3 "$WES_DOTFILES/.venv/bin/python3"
+    set -l _script_py "$WES_DOTFILES/zsh/compat_fish/pythons/matplotlib_colors.py"
+    $_python3 $_script_py $argv
 end
 
 # * ptw
