@@ -57,5 +57,7 @@ def plot_colortable(colors, *, ncols=4, sort_colors=True):
 
     return fig
 
-plot_colortable(mcolors.XKCD_COLORS)
+# plot_colortable(mcolors.BASE_COLORS)
+# plot_colortable(mcolors.XKCD_COLORS)
+plot_colortable(mcolors.CSS4_COLORS)
 plt.show()
