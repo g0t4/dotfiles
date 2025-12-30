@@ -168,6 +168,11 @@ function wrc
     $_python3 $_script_py $argv
 end
 
+function rich_colors
+    set -l _python3 "$WES_DOTFILES/.venv/bin/python3"
+    $_python3 -m rich.color
+end
+
 function matplotlib_colors
     set -l _python3 "$WES_DOTFILES/.venv/bin/python3"
     begin
