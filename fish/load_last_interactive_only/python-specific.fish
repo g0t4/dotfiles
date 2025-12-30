@@ -170,8 +170,10 @@ end
 
 function matplotlib_colors
     set -l _python3 "$WES_DOTFILES/.venv/bin/python3"
-    set -l _script_py "$WES_DOTFILES/zsh/compat_fish/pythons/matplotlib_colors.py"
-    $_python3 $_script_py $argv
+    begin
+        head -76 "$WES_REPOS/github/matplotlib/matplotlib/galleries/examples/color/named_colors.py"
+        echo "plot_colortable(mcolors.CSS4_COLORS); plt.show()"
+    end | $_python3
 end
 
 # * ptw
