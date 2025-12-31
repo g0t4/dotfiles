@@ -90,7 +90,7 @@ ealias gls "git log --stat ${_unpushed_commits}" # include patch (diff)
 ealias glg "git log --graph ${_unpushed_commits}" # graph of changes
 
 ## status
-ealias gs "git status"
+ealias gst "git status"
 # FYI gsl below
 ealias gsts "git status -s"
 ealias gstb "git status -sb"
