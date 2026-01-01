@@ -56,7 +56,8 @@ c.InteractiveShellApp.exec_lines.append(generate_safe_try_import("import numpy a
 c.InteractiveShellApp.exec_lines.append(generate_safe_try_import("import matplotlib as plt"))
 # * AUTO OVERRIDE HELP TO USE rich.inspect(..., help=True)
 c.InteractiveShellApp.exec_lines.append("""
-print("FYI, auto imports are in-place, remove this message when you have internalized this\n you also replaced help() with rich.inspect()")
+print("FYI, auto imports are in-place, remove this message when you have internalized this")
+print("you also replaced help() with rich.inspect()")
 def help(what):
     rich.inspect(what, help=True)
 """)
