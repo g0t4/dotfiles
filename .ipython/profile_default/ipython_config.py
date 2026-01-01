@@ -41,6 +41,26 @@ c.TerminalInteractiveShell.shortcuts = [
     }
 ]
 
+def generate_safe_try_import(the_import):
+    return f"""
+        try:
+            {the_import}
+        except Exception:
+            # Silently ignore any failure (ImportError, SyntaxError, etc.)
+            pass
+    """
+
+# * AUTO IMPORTS
+c.InteractiveShellApp.exec_lines.append(generate_safe_try_import("import rich"))
+c.InteractiveShellApp.exec_lines.append(generate_safe_try_import("import numpy as np"))
+c.InteractiveShellApp.exec_lines.append(generate_safe_try_import("import matplotlib as plt"))
+# * AUTO OVERRIDE HELP TO USE rich.inspect(..., help=True)
+c.InteractiveShellApp.exec_lines.append("""
+print("FYI, auto imports are in-place, remove this message when you have internalized this\n you also replaced help() with rich.inspect()")
+def help(what):
+    rich.inspect(what, help=True)
+""")
+
 # TODO! consider enabling autoreload always?
 # c.InteractiveShellApp.extensions = [
 #     'autoreload',      # %load_ext autoreload
