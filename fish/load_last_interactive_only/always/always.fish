@@ -50,9 +50,20 @@ end
 set ASK_REPO "$HOME/repos/github/g0t4/ask-openai.nvim"
 
 function ask_thread_reviewer
+
+    # FYI user can pipe over STDIN too, so don't fail, if no file passed
+    set json_file ""
+    if test -f "$argv[1]"
+        set json_file "$argv[1]"
+    else if test -f input-messages.json
+        set json_file input-messages.json
+    else if test -f input-body.json
+        set json_file input-body.json
+    end
+
     set _python3 "$ASK_REPO/.venv/bin/python3"
     set _script_py "$ASK_REPO/tools/chat_viewer/__main__.py"
-    $_python3 $_script_py $argv
+    $_python3 $_script_py $json_file
 end
 
 function rag_indexer
