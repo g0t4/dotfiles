@@ -2519,6 +2519,13 @@ if $IS_LINUX then
 
 end
 
+if IS_MACOS
+
+    # map some abbrs so I can get similar info on my mac to what I am used to using on linux/arch
+    abbr lsusb "system_profiler SPUSBDataType"
+
+end
+
 # *** lsof
 if command -q lsof
 
