@@ -50,11 +50,18 @@ end
 set ASK_REPO "$HOME/repos/github/g0t4/ask-openai.nvim"
 
 function ask_thread_reviewer
+    set passed_path $argv[1]
 
     # FYI user can pipe over STDIN too, so don't fail, if no file passed
     set json_file ""
-    if test -f "$argv[1]"
-        set json_file "$argv[1]"
+    if test -f $passed_path
+        set json_file $passed_path
+    else if test -d $passed_path
+        if test -f $passed_path/input-messages.json
+            set json_file $passed_path/input-messages.json
+        else if test -f $passed_path/input-body.json
+            set json_file $passed_path/input-body.json
+        end
     else if test -f input-messages.json
         set json_file input-messages.json
     else if test -f input-body.json
