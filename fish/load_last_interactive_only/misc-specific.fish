@@ -2519,7 +2519,7 @@ if $IS_LINUX then
 
 end
 
-if IS_MACOS
+if $IS_MACOS
 
     # map some abbrs so I can get similar info on my mac to what I am used to using on linux/arch
     abbr lsusb "system_profiler SPUSBDataType"
@@ -2529,7 +2529,7 @@ if IS_MACOS
     abbr dmidecode "system_profiler SPHardwareDataType"
     abbr inxi "system_profiler SPHardwareDataType; system_profiler SPSoftwareDataType"
     abbr hwinfo "system_profiler SPHardwareDataType"
-    abbr free "vm_stat"
+    abbr free vm_stat
     abbr df "df -h"
     abbr uname "uname -a"
     abbr dmesg "log show --predicate 'eventMessage contains \"kernel\"' --info --debug --last 1d"
