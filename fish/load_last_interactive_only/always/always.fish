@@ -68,6 +68,12 @@ function ask_thread_reviewer
         set json_file input-body.json
     end
 
+    if is_empty "$json_file"; and isatty stdin
+        # fail sauce
+        echo "No JSON file provided/discovered and not passed via STDIN, aborting..." >&2
+        return 1
+    end
+
     set _python3 "$ASK_REPO/.venv/bin/python3"
     set _script_py "$ASK_REPO/tools/chat_viewer/__main__.py"
     $_python3 $_script_py $json_file
