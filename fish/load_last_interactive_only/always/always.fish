@@ -49,6 +49,7 @@ end
 
 set ASK_REPO "$HOME/repos/github/g0t4/ask-openai.nvim"
 
+abbr thread ask_thread_reviewer
 function ask_thread_reviewer
     set passed_path $argv[1]
 
