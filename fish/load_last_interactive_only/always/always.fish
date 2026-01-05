@@ -51,33 +51,50 @@ set ASK_REPO "$HOME/repos/github/g0t4/ask-openai.nvim"
 
 abbr thread ask_thread_reviewer
 function ask_thread_reviewer
-    set passed_path $argv[1]
+    set _python3 "$ASK_REPO/.venv/bin/python3"
+    set _script_py "$ASK_REPO/tools/chat_viewer/__main__.py"
 
-    # FYI user can pipe over STDIN too, so don't fail, if no file passed
-    set json_file ""
-    if test -f $passed_path
-        set json_file $passed_path
-    else if test -d $passed_path
-        if test -f $passed_path/input-messages.json
-            set json_file $passed_path/input-messages.json
-        else if test -f $passed_path/input-body.json
-            set json_file $passed_path/input-body.json
-        end
-    else if test -f input-messages.json
-        set json_file input-messages.json
-    else if test -f input-body.json
-        set json_file input-body.json
+    if not isatty stdin
+        # * STDIN takes priority
+        $_python3 $_script_py
+        return
     end
 
-    if is_empty "$json_file"; and isatty stdin
-        # fail sauce
-        echo "No JSON file provided/discovered and not passed via STDIN, aborting..." >&2
+    set passed_path $argv[1]
+    if not is_empty $passed_path; and test -f $passed_path
+        # * single file wins
+        $_python3 $_script_py $passed_path
+        return
+    end
+
+    # * look for common log files
+    set found_json_file ""
+    set look_in_dir "$passed_path"
+    if is_empty "$look_in_dir"
+        # empty searches current directory
+        set look_in_dir "."
+    end
+    if test -d $look_in_dir
+        # * look for common names in directory
+        if count $look_in_dir/*-thread.json >/dev/null
+            # FYI count fails if no matches
+            # keep in mind this can match multiple files, will cause error below
+            set found_json_file $look_in_dir/*-thread.json
+        else if test -f $look_in_dir/input-messages.json
+            set found_json_file $look_in_dir/input-messages.json
+        else if test -f $look_in_dir/input-body.json
+            set found_json_file $look_in_dir/input-body.json
+        end
+    end
+
+    if test (count $found_json_file) != 1
+        echo "ONE file must be provided (or use STDIN), aborting..."
+        echo -en "  file(s) passed:\n    " >&2
+        echo -e (string join "\n    " $found_json_file) >&2
         return 1
     end
 
-    set _python3 "$ASK_REPO/.venv/bin/python3"
-    set _script_py "$ASK_REPO/tools/chat_viewer/__main__.py"
-    $_python3 $_script_py $json_file
+    $_python3 $_script_py $found_json_file
 end
 
 function rag_indexer
