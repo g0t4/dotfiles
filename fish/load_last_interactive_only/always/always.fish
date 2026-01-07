@@ -49,6 +49,15 @@ end
 
 set ASK_REPO "$HOME/repos/github/g0t4/ask-openai.nvim"
 
+function ask_rewrite_diff_reviewer
+    # PRN pass thread file
+    # use this to diff a thread.json file, to grab the response_message's content and diff that vs the original selection in the last user message(request_body.messages[-1].content)
+    #  the bulk of the input and output are likely the selected code to rewrite, especially for large selections...
+    #  also shows user request too
+    #  model wise the model should only return rewritten code so it shouldn't have anything extra, unless it derps up markdown w/ explanations of its changes
+    diff_two_commands 'jq .request_body.messages[-1].content -r *-thread.json' 'jq .response_message.content -r *-thread.json'
+end
+
 abbr thread ask_thread_reviewer
 function ask_thread_reviewer
     set _python3 "$ASK_REPO/.venv/bin/python3"
