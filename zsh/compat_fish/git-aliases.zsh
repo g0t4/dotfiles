@@ -28,6 +28,7 @@ abbr grla 'git reflog --all'
 # add
 abbr ga 'git add'
 abbr 'ga.' 'git add .'
+abbr 'ga..' 'git add ..'
 abbr gav 'git add --verbose' # verbosity in what is added
 abbr gaa 'git add --all'
 abbr gaaa 'git add --all' # common typo

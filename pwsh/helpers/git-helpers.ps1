@@ -22,6 +22,8 @@ abbr grss 'git restore --source'
 ealias ga "git add"
 ealias gav "git add --verbose"
 ealias gaa "git add --all"
+ealias "ga". "git add ."
+ealias "ga.." "git add .."
 ealias gau 'git add --update' # only changed files (not untracked)
 ealias gap "git add --patch" # ~= git add --interactive => (p)atch on all modified files
 ealias gai "git add --interactive"
