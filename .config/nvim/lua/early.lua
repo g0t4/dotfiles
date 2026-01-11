@@ -114,7 +114,11 @@ vim.cmd [[
 ]]
 
 -- *** left gutter settings
-vim.o.signcolumn = 'number' -- yes=always, no=never, auto=only when needed, number=(in # column, if shown)
+-- signcolumn:
+--   yes=always, no=never, auto=only when needed, number=(in # column, if shown)
+--   vim.o.signcolumn = 'number'
+vim.o.signcolumn = 'auto' -- try auto so I can see gitsigns indicators... I can revisit this later
+--
 vim.o.relativenumber = true -- vertical equiv of eyeliner ext (horiz jump marks) - testing if i like this
 vim.o.number = true -- explicitly do not include absolute line #s (for now)
 -- relative + number == absolute instead of 0 for current cursor line (rest are relative)
