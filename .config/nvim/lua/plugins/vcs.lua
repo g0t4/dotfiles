@@ -92,13 +92,12 @@ return {
                     map('n', '<leader>hQ', function() gitsigns.setqflist('all') end)
                     map('n', '<leader>hq', gitsigns.setqflist)
 
-                    -- Toggles
-                    map('n', '<leader>tb', gitsigns.toggle_current_line_blame)
-                    map('n', '<leader>tw', gitsigns.toggle_word_diff) -- * LOVE word diff for modified lines!
+                    -- * toggle features
+                    map('n', '<leader>htb', gitsigns.toggle_current_line_blame)
+                    map('n', '<leader>htw', gitsigns.toggle_word_diff) -- * LOVE word diff for modified lines!
 
-                    -- hunk based text object!
-                    --   i.e. `dih` `vih`
-                    map({ 'o', 'x' }, 'ih', gitsigns.select_hunk)
+                    -- **** hunk based text object! ****
+                    map({ 'o', 'x' }, 'ih', gitsigns.select_hunk, { desc = "text object hunk selection: i.e. vih, dih" })
                 end
             }
         end,
