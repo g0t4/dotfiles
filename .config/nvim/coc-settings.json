@@ -38,6 +38,9 @@
     // "codeLens.enable": false, // PRN disable this if slow too, so far only big issues are with inlay hints
     //
     "inlayHint.enable": false, // slow and get in the way (i.e. type hints that aren't in actual code)
+    //
+    "diagnostic.enableSign": false, // diagnostics in gutter (signs)... I prefer just style code (i.e. underline/red)... avoid trivial diagnostics keeping gutter open
+    //
     // "inlayHint.position": "eol", // terrible idea! stick with inline, or none
     // "inlayHint.enableParameter": false, // can remove just param hints
     //
