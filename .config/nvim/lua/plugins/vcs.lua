@@ -72,13 +72,13 @@ return {
                     map('n', '<leader>hS', gitsigns.stage_buffer)
                     map('n', '<leader>hR', gitsigns.reset_buffer)
 
+                    -- * preview changes
                     map('n', '<leader>hp', gitsigns.preview_hunk)
+                    --   FYI! once preview opens, use nav_hunk to jump to next changed hunk and keep preview open
                     -- useful to confirm a hunk before staging it... so make it just hi to make it faster to invoke
                     --   nevermind hp above is used for hover preview... I don't want hpi here
                     --   I will likely invoke this often!
                     map('n', '<leader>hi', gitsigns.preview_hunk_inline)
-
-                    -- TODO how do I unstage hunk/selection/buffer?
 
                     -- * blame for current line!
                     map('n', '<leader>hb', function()
