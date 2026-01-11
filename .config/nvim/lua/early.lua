@@ -115,8 +115,7 @@ vim.cmd [[
 
 -- *** left gutter settings
 -- signcolumn:
---   yes=always, no=never, auto=only when needed, number=(in # column, if shown)
---   vim.o.signcolumn = 'number'
+--   yes=always, no=never, auto=only when needed, number=(place over the line number)
 vim.o.signcolumn = 'auto' -- try auto so I can see gitsigns indicators... I can revisit this later
 --
 vim.o.relativenumber = true -- vertical equiv of eyeliner ext (horiz jump marks) - testing if i like this
