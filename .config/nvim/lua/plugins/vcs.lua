@@ -73,7 +73,10 @@ return {
                     map('n', '<leader>hR', gitsigns.reset_buffer)
 
                     map('n', '<leader>hp', gitsigns.preview_hunk)
-                    map('n', '<leader>hpi', gitsigns.preview_hunk_inline)
+                    -- useful to confirm a hunk before staging it... so make it just hi to make it faster to invoke
+                    --   nevermind hp above is used for hover preview... I don't want hpi here
+                    --   I will likely invoke this often!
+                    map('n', '<leader>hi', gitsigns.preview_hunk_inline)
 
                     -- TODO how do I unstage hunk/selection/buffer?
 
