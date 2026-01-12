@@ -341,7 +341,8 @@ end
 --   '<S-F3>' '<F15>'
 vim.keymap.set({ 'n', 'i', 'v', 'c' }, '<F18>', function() SwitchCopilot() end, { noremap = true, silent = true })
 vim.keymap.set({ 'n', 'i', 'v', 'c' }, '<F19>', function() require('ask-openai.api').toggle_fim_model() end, { noremap = true, silent = true })
-vim.keymap.set({ 'n', 'i', 'v', 'c' }, '<F20>', function() require('ask-openai.api').cycle_reasoning_level() end, { noremap = true, silent = true })
+vim.keymap.set({ 'n', 'i', 'v', 'c' }, '<F20>', function() require('ask-openai.api').cycle_fim_reasoning_level() end, { noremap = true, silent = true })
+vim.keymap.set({ 'n', 'i', 'v', 'c' }, '<F13>', function() require('ask-openai.api').cycle_rewrite_reasoning_level() end, { noremap = true, silent = true })
 --
 vim.keymap.set({ 'n', 'i', 'v', 'c' }, '<F16>', function() require('ask-openai.api').cycle_log_verbosity() end, { noremap = true, silent = true })
 vim.keymap.set({ 'n', 'i', 'v', 'c' }, '<F17>', function() require('ask-openai.api').toggle_rag() end, { noremap = true, silent = true })

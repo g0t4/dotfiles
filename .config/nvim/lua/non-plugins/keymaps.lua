@@ -106,7 +106,7 @@ function OpenWebHelpHammerspoon(bigWord)
 end
 
 -- FYI Shift-F1 => F13 (check by going into cmdline, Ctrl+V => type whatever key combo)
-vim.keymap.set('n', '<F13>', OpenWebHelp, { noremap = true, silent = true })
+-- vim.keymap.set('n', '<F13>', OpenWebHelp, { noremap = true, silent = true })
 --
 vim.keymap.set('x', '<F1>', 'y:help <C-R>"<CR>', { noremap = true, silent = true })
 vim.keymap.set('v', '<F1>', function()
