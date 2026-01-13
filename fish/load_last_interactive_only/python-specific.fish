@@ -182,28 +182,30 @@ function matplotlib_colors
 end
 
 if status is-interactive
-    function apply_patch --argument-names patch_file
-        # use venv of gpt-oss repo
-        set -l repo $WES_REPOS/github/g0t4/gpt-oss
-        set -l script $repo/gpt_oss/tools/apply_patch.py
-        set -l py $repo/.venv/bin/python3
+    # FYI I setup codex's codex-rs in my PATH to use its apply_patch standalone command
 
-        # * stdin takes priority
-        if not isatty stdin
-            $py $script
-            return
-        end
-
-        if test -f "$patch_file"
-            # apply_patch.py script only accepts a patch file over STDIN
-            cat "$patch_file" | $py $script
-            return
-        end
-
-        echo "You must provide a patch file either via STDIN or a file:"
-        echo "   cat add-file.patch | apply_patch"
-        echo "   apply_patch add-file.patch"
-    end
+    # function apply_patch --argument-names patch_file
+    #     # use venv of gpt-oss repo
+    #     set -l repo $WES_REPOS/github/g0t4/gpt-oss
+    #     set -l script $repo/gpt_oss/tools/apply_patch.py
+    #     set -l py $repo/.venv/bin/python3
+    #
+    #     # * stdin takes priority
+    #     if not isatty stdin
+    #         $py $script
+    #         return
+    #     end
+    #
+    #     if test -f "$patch_file"
+    #         # apply_patch.py script only accepts a patch file over STDIN
+    #         cat "$patch_file" | $py $script
+    #         return
+    #     end
+    #
+    #     echo "You must provide a patch file either via STDIN or a file:"
+    #     echo "   cat add-file.patch | apply_patch"
+    #     echo "   apply_patch add-file.patch"
+    # end
 end
 
 # * ptw

@@ -63,6 +63,11 @@ if test -d "$HOME/repos/github/zed-industries/zed/target/debug"
     export PATH="$HOME/repos/github/zed-industries/zed/target/release:$PATH"
 end
 
+if test -d "$HOME/repos/github/openai/codex/codex-rs/target/release"
+    # apply_patch tool, among others
+    export PATH="$HOME/repos/github/openai/codex/codex-rs/target/release:$PATH"
+end
+
 # kubectl krew
 if test -d "$HOME/.krew/bin"
     # suggested by krew:
