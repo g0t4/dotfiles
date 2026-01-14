@@ -184,27 +184,19 @@ end
 if status is-interactive
     # FYI I setup codex's codex-rs in my PATH to use its apply_patch standalone command
 
-    function apply_patch_multi --argument-names patch_file
+    function apply_patch_multi
         # use venv of gpt-oss repo
         set -l repo $WES_REPOS/github/g0t4/ask-openai.nvim
         set -l script $repo/lua/ask-openai/tools/inproc/apply_patch_multi.py
         set -l py $repo/.venv/bin/python3
 
-        # * stdin takes priority
         if not isatty stdin
-            $py $script
+            $py $script $argv
             return
         end
 
-        if test -f "$patch_file"
-            # apply_patch.py script only accepts a patch file over STDIN
-            cat "$patch_file" | $py $script
-            return
-        end
-
-        echo "You must provide a patch file either via STDIN or a file:"
+        echo "You must provide a patch file either via STDIN"
         echo "   cat add-file.patch | apply_patch"
-        echo "   apply_patch add-file.patch"
     end
 end
 
