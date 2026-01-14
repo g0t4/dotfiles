@@ -276,10 +276,12 @@ return {
                         layout_strategy = 'vertical',
                     },
                     find_files = {
-                        theme = "dropdown", -- only style I found that has prompt at top w/ most relevant results right below it... all other prompt top layouts still show most relevant results at bottom which is odd to me
+                        -- theme = "dropdown", -- only style I found that has prompt at top w/ most relevant results right below it... all other prompt top layouts still show most relevant results at bottom which is odd to me
                         -- https://github.com/nvim-telescope/telescope.nvim/blob/master/lua/telescope/pickers/layout_strategies.lua
                         -- layout_strategy = 'cursor', -- popup right where cursor is at? not sure I will always be expecting that... try and find out, FYI works w/ theme=dropdown
-
+                        -- Use a larger layout instead of the compact "dropdown" theme.
+                        layout_strategy = 'horizontal',
+                        layout_config = { width = 0.9, height = 0.9 },
                         find_command = {
                             "rg",
                             "--files",
