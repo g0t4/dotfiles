@@ -67,48 +67,7 @@ abbr thread ask_thread_reviewer
 function ask_thread_reviewer
     set _python3 "$ASK_REPO/.venv/bin/python3"
     set _script_py "$ASK_REPO/tools/chat_viewer/__main__.py"
-
-    if not isatty stdin
-        # * STDIN takes priority
-        $_python3 $_script_py
-        return
-    end
-
-    set passed_path $argv[1]
-    if not is_empty $passed_path; and test -f $passed_path
-        # * single file wins
-        $_python3 $_script_py $passed_path
-        return
-    end
-
-    # * look for common log files
-    set found_json_file ""
-    set look_in_dir "$passed_path"
-    if is_empty "$look_in_dir"
-        # empty searches current directory
-        set look_in_dir "."
-    end
-    if test -d $look_in_dir
-        # * look for common names in directory
-        if count $look_in_dir/*-thread.json >/dev/null
-            # FYI count fails if no matches
-            # keep in mind this can match multiple files, will cause error below
-            set found_json_file $look_in_dir/*-thread.json
-        else if test -f $look_in_dir/input-messages.json
-            set found_json_file $look_in_dir/input-messages.json
-        else if test -f $look_in_dir/input-body.json
-            set found_json_file $look_in_dir/input-body.json
-        end
-    end
-
-    if test (count $found_json_file) != 1
-        echo "ONE file must be provided (or use STDIN), aborting..."
-        echo -en "  file(s) passed:\n    " >&2
-        echo -e (string join "\n    " $found_json_file) >&2
-        return 1
-    end
-
-    $_python3 $_script_py $found_json_file
+    $_python3 $_script_py $argv
 end
 
 function rag_indexer
