@@ -61,7 +61,6 @@ abbr gbl 'git blame -b -w' # -w ignore whitespace, -b blank SHA1 for boundary co
 # gcmark like
 abbr review "git commit -a -m 'review'"
 abbr notes "git commit -a -m 'notes'"
-# abbr gcsubs "git commit -a -m 'subs'; git push; git diff --color-words HEAD~1 HEAD"
 # FYI pwsh has many builtin aliases stating with 'g' b/c Get :)
 #   gcm = Get-Command, gc = Get-Content
 # commit
@@ -150,8 +149,8 @@ abbr grp 'git restore --patch' # * favorite
 abbr grss 'git restore --source'
 
 # show
-abbr gsh 'git show --color-words'
-abbr gsps 'git show --pretty=short --show-signature --color-words'
+abbr gsh 'git show' # --color-words if not using external diff
+abbr gsps 'git show --pretty=short --show-signature' # --color-words if not using external diff
 
 # submodules
 abbr gsm 'git submodule'
@@ -182,10 +181,10 @@ abbr gassumels 'git ls-files -v | grep ^h'
 abbr gwch 'git whatchanged -p --abbrev-commit --pretty=medium'
 
 ## diff
-# * what happened to my usage of diff-so-fancy vs gdcw/gdw ... for some reason I wanted to use dsf instead but then had issues w/ it IIRC in windows/wsl so I gah... just look into this again if it becomes a hassle here
-abbr gd "git diff --color-words"
-abbr gdc "git diff --cached --color-words"
-abbr kgdc "git diff --cached" # common typo alias (cmd+k clear => kgst)
+# * --color-words fubar's delta diffs (let delta handle the styling)
+# makes me wonder if this was also what I was hating about diff-so-fancy
+abbr gd "git diff" # --color-words
+abbr gdc "git diff --cached" # --color-words
 # last commit diff:
 abbr gdlf 'git diff-tree -r HEAD~1 HEAD'
 #

@@ -39,7 +39,6 @@ ealias gbr 'git branch --remote -vv'
 # gcmark like
 abbr review "git commit -a -m 'review'"
 abbr notes "git commit -a -m 'notes'"
-# abbr gcsubs "git commit -a -m 'subs'; git push; git diff --color-words HEAD~1 HEAD"
 # new commit:
 ealias gcv 'git commit -v' # `gc` reserved in posh
 ealias gca 'git commit -v -a'
@@ -59,22 +58,20 @@ ealias gcop 'git restore --patch' # ! interactive checkout
 ealias gcob 'git checkout -b'
 
 # diff
-# on windows I don't have diff-so-fancy to help with diffs so I want to default to use --color-words to make diffs readable
-ealias gd 'git diff --color-words'
-# ealias gdw 'git diff --color-words' # add back if muscle memory from mac but otherwise is same as gd
-ealias gdc 'git diff --cached --color-words'
-ealias kgdc 'git diff --cached --color-words' # common typo alias (cmd+k clear > kgst)
-# ealias gdcw 'git diff --cached --color-words'
+# * TODO drop --color-words if I use external diff viewer, esp. delta
+#   BUT, keep --color-words if no external tool is used
+$color_words="--color-words"
+ealias gd "git diff ${color_words}"
+ealias gdc "git diff --cached ${color_words}"
+ealias kgdc "git diff --cached ${color_words}" # common typo alias (cmd+k clear > kgst)
 
 # TODO resolve conflicting gdt
 ealias gdt 'git describe --tags `git rev-list --tags --max-count=1`'
 # ealias gdt 'git diff-tree --no-commit-id --name-only -r'
 
-ealias gdlc 'git diff --color-words HEAD~1 HEAD'
-#ealias gdlc1 --color-words 'git diff HEAD~2 HEAD~1'
-#ealias gdlc2 --color-words 'git diff HEAD~3 HEAD~2'
+ealias gdlc "git diff ${color_words} HEAD~1 HEAD"
 1..50 | ForEach-Object {
-    ealias "gdlc$_" "git diff --color-words HEAD~$($_+1) HEAD~$_"
+    ealias "gdlc$_" "git diff ${color_words} HEAD~$($_+1) HEAD~$_"
 }
 
 # Show changes in last commit by diffing with previous commit
