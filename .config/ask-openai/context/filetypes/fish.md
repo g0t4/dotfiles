@@ -1,18 +1,14 @@
 ## Fish Shell Code Preferences
 
-Take advantage of the fish shell!
-- Fish shell does not do word splitting like bash, no need to wrap everything in quotes!
-
-Naming
 - Use snake_case for functions and variables.
-
-Readability
 - When a condition is ambiguous, assign it to a well‑named variable before the `if`.
 - Prefer long options, i.e. `--quiet` over `-q`, `--regex` over `-r`
+- Fish shell does not do word splitting like bash, no need to wrap everything in quotes!
 
 ## Fish syntax examples
 
 ```fish
+# exploit fish-isms!
 
 # use `not`, avoid `!`
 if not test -f spoon
@@ -20,35 +16,30 @@ if not test -f spoon
     exit 1
 end
 
-# embed set right in an if condition!
-if set -l out (some_command)
-    echo "ok: $out"
+# if + set
+if set -l message (some_command)
+    echo "ok: $message"
 else
-    echo "fail: $out"
+    echo "fail: $message"
 end
 
-# -a == named arguments!
-function debug -a name va
-    echo [DEBUG] $name: $val >&2
+# prefer named arguments
+function show_variable -a name value
+    echo "$name = $value"
 end
 
-# fish doesn't have heredocs, use begin/end block instead:
+# fish doesn't have heredocs, use begin/end
 begin
     echo $header
     echo $table
-    # ...
 end > out.html
-# or multi line strings with echo
+# or multi-line strings
 echo "
 foo
 bar
 " > test
 
-for i in foo bar baz
-    echo $i
-end
-
-# every variable is an array, thus you can do:
+# every variable is an array
 set names wes john bob jane
 for name in $names
     echo $name
@@ -58,20 +49,18 @@ for i in *.tmp
     if grep DONE $i
         break
     end
-    if grep smurf $i
+    if grep SKIP $i
         continue
     end
-    rm $i
-    echo $i
+    ...
 end
 
-# two conditions in a while loop using `or`
+# combine conditions
 while test -f foo.txt; or test -f bar.txt
-    echo files exist
-    sleep 10
+    ...
 end
 
-# conditional commands
+# conditional execution
 make; and make install; or make clean
 ```
 
