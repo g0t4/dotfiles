@@ -9,6 +9,7 @@ Type Hints
 - Always annotate when type inference would be ambiguous, or for public APIs.
 
 Examples:
+```lua
 ---@param names string[]
 ---@param checker fun(name: string): boolean
 ---@return table<string, integer>
@@ -19,4 +20,5 @@ function process_names(names, checker) end
 ---@field title? string
 ---@field size { w: number, h: number }
 local WindowController = {}
+```
 
