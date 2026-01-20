@@ -6,7 +6,7 @@
 # Snapshot before/after source, only cleanup what was added by .config.fish
 # `--on-variable PWD` fish-native trigger
 
-function _find_local_config
+function __local_config_find_config
     set -l dir (pwd)
     while test "$dir" != /
         if test -f "$dir/.config.fish"
@@ -19,7 +19,7 @@ end
 
 function __local_config_load_inner
 
-    set -l current_path (_find_local_config)
+    set -l current_path (__local_config_find_config)
     if set -q __local_config_last_path; and test "$__local_config_last_path" = "$current_path"
         # echo "already loaded the same config, nothing to do"
         return
