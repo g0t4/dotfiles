@@ -24,7 +24,7 @@ function __local_config_load_inner
         # echo "already loaded the same config, nothing to do"
         return
     end
-    # echo "current: $current_local_config_path"
+    # echo "current: $current_path"
 
     if functions -q deactivate_last_local_config
         deactivate_last_local_config
