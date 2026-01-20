@@ -17,7 +17,7 @@ function _find_local_config
     end
 end
 
-function _inner
+function __local_config_load_inner
 
     set -l current_local_config_path (_find_local_config)
     if set -q __last_local_config_path; and test "$__last_local_config_path" = "$current_local_config_path"
@@ -63,7 +63,7 @@ function _inner
 end
 
 function __local_config_load --on-variable PWD
-    time _inner
+    time __local_config_load_inner
 end
 
 # run during startup if initial PWD has a local .config.fish
