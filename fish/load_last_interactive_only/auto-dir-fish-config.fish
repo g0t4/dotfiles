@@ -35,7 +35,7 @@ function _inner
         return
     end
 
-    set --global funcs_before (functions -n)
+    set --global __local_config_funcs_before (functions -n)
     set --global __local_config_abbrs_before (abbr --list)
 
     source "$current_local_config_path"
@@ -48,7 +48,7 @@ function _inner
 
         # comm needed for performance (hitting about 30-40ms total which sucks but it only happens on cd and only when leaving the scope of a .config.fish)
         set -f abbrs_added (comm -1 -3 (printf '%s\n' $__local_config_abbrs_before | sort | psub) (printf '%s\n' $abbrs_after | sort | psub))
-        set -f funcs_added (comm -1 -3 (printf '%s\n' $funcs_before | sort | psub) (printf '%s\n' $funcs_after | sort | psub))
+        set -f funcs_added (comm -1 -3 (printf '%s\n' $__local_config_funcs_before | sort | psub) (printf '%s\n' $funcs_after | sort | psub))
 
         # echo
         # echo removing abbrs: $abbrs_added
@@ -57,7 +57,7 @@ function _inner
         functions --erase $funcs_added
         abbr --erase $abbrs_added
 
-        set -e funcs_before __local_config_abbrs_before funcs_after abbrs_after last_local_config_path
+        set -e __local_config_funcs_before __local_config_abbrs_before funcs_after abbrs_after last_local_config_path
         functions -e deactivate_last_local_config
     end
 end
