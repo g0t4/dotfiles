@@ -62,9 +62,9 @@ function _inner
     end
 end
 
-function _load_local_config --on-variable PWD
+function __local_config_load --on-variable PWD
     time _inner
 end
 
 # run during startup if initial PWD has a local .config.fish
-_load_local_config
+__local_config_load
