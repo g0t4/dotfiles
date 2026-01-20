@@ -1,3 +1,11 @@
+
+# *** features:
+# Parent-dir walk for first .config.fish
+# Guard against re-loading on nested cd
+# Single active config at a time with teardown before load
+# Snapshot before/after source, only cleanup what was added by .config.fish
+# `--on-variable PWD` fish-native trigger
+
 function _find_local_config
     set -l dir (pwd)
     while test "$dir" != /
@@ -39,6 +47,7 @@ function _inner
 
     function deactivate_last_local_config
 
+        # comm needed for performance (hitting about 30-40ms total which sucks but it only happens on cd and only when leaving the scope of a .config.fish)
         set -f abbrs_added (comm -1 -3 (printf '%s\n' $abbrs_before | sort | psub) (printf '%s\n' $abbrs_after | sort | psub))
         set -f funcs_added (comm -1 -3 (printf '%s\n' $funcs_before | sort | psub) (printf '%s\n' $funcs_after | sort | psub))
 
