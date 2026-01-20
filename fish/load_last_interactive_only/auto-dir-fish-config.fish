@@ -1,35 +1,61 @@
-# NOTES:
-# - FYI right now it will unregister / re-register even if same .config.fish would apply
-#   nothing is slow enough to justify avoiding this... and the pain a mistake in that logic might cause
-
 function _find_local_config
     set -l dir (pwd)
-    while test $dir != /
-        if test -f $dir/.config.fish
-            echo $dir/.config.fish
+    while test "$dir" != /
+        if test -f "$dir/.config.fish"
+            echo "$dir/.config.fish"
             return
         end
-        set dir (dirname $dir)
+        set dir (dirname "$dir")
+    end
+end
+
+function _inner
+
+    set -l current_local_config_path (_find_local_config)
+    if set -q last_local_config_path; and test "$last_local_config_path" = "$current_local_config_path"
+        # echo "already loaded the same config, nothing to do"
+        return
+    end
+    # echo "current: $current_local_config_path"
+
+    if functions -q deactivate_last_local_config
+        deactivate_last_local_config
+    end
+
+    if test -z "$current_local_config_path"
+        # echo "no local .config.fish, nothing to do"
+        return
+    end
+
+    # TODO renames for global scope
+    set --global funcs_before (functions -n)
+    set --global abbrs_before (abbr --list)
+
+    source "$current_local_config_path"
+    set --global last_local_config_path "$current_local_config_path"
+
+    set --global funcs_after (functions -n)
+    set --global abbrs_after (abbr --list)
+
+    function deactivate_last_local_config
+
+        set -f abbrs_added (comm -1 -3 (printf '%s\n' $abbrs_before | sort | psub) (printf '%s\n' $abbrs_after | sort | psub))
+        set -f funcs_added (comm -1 -3 (printf '%s\n' $funcs_before | sort | psub) (printf '%s\n' $funcs_after | sort | psub))
+
+        # echo
+        # echo removing abbrs: $abbrs_added
+        # echo removing funcs: $funcs_added
+
+        functions --erase $funcs_added
+        abbr --erase $abbrs_added
+
+        set -e funcs_before abbrs_before funcs_after abbrs_after last_local_config_path
+        functions -e deactivate_last_local_config
     end
 end
 
 function _load_local_config --on-variable PWD
-
-    if functions -q deactivate_local_config_fish
-        deactivate_local_config_fish
-        functions --erase deactivate_local_config_fish
-    end
-
-    set -l local_config_path (_find_local_config)
-    if test -z "$local_config_path"
-        return
-    end
-
-    source $local_config_path
-
-    if not functions -q deactivate_local_config_fish
-        echo "WARNING: deactivate_local_config_fish not defined in $local_config_path, at least set it to an empty function so you don't forget about it"
-    end
+    time _inner
 end
 
 # run during startup if initial PWD has a local .config.fish
