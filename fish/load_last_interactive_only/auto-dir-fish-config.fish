@@ -20,7 +20,7 @@ end
 function __local_config_load_inner
 
     set -l current_path (_find_local_config)
-    if set -q __last_local_config_path; and test "$__last_local_config_path" = "$current_path"
+    if set -q __local_config_last_path; and test "$__local_config_last_path" = "$current_path"
         # echo "already loaded the same config, nothing to do"
         return
     end
@@ -39,7 +39,7 @@ function __local_config_load_inner
     set --global __local_config_abbrs_before (abbr --list)
 
     source "$current_path"
-    set --global __last_local_config_path "$current_path"
+    set --global __local_config_last_path "$current_path"
 
     set --global __local_config_funcs_after (functions -n)
     set --global __local_config_abbrs_after (abbr --list)
@@ -57,7 +57,7 @@ function __local_config_load_inner
         functions --erase $funcs_added
         abbr --erase $abbrs_added
 
-        set -e __local_config_funcs_before __local_config_abbrs_before __local_config_funcs_after __local_config_abbrs_after __last_local_config_path
+        set -e __local_config_funcs_before __local_config_abbrs_before __local_config_funcs_after __local_config_abbrs_after __local_config_last_path
         functions -e deactivate_last_local_config
     end
 end
