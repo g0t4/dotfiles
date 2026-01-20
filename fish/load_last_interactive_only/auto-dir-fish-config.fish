@@ -63,7 +63,8 @@ function __local_config_load_inner
 end
 
 function __local_config_load --on-variable PWD
-    time __local_config_load_inner
+    # time __local_config_load_inner
+    __local_config_load_inner
 end
 
 # run during startup if initial PWD has a local .config.fish
