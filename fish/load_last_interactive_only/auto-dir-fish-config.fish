@@ -26,8 +26,8 @@ function __local_config_load_inner
     end
     # echo "current: $current_path"
 
-    if functions -q deactivate_last_local_config
-        deactivate_last_local_config
+    if functions -q __local_config_deactivate_last
+        __local_config_deactivate_last
     end
 
     if test -z "$current_path"
@@ -44,7 +44,7 @@ function __local_config_load_inner
     set --global __local_config_funcs_after (functions -n)
     set --global __local_config_abbrs_after (abbr --list)
 
-    function deactivate_last_local_config
+    function __local_config_deactivate_last
 
         # comm needed for performance (hitting about 30-40ms total which sucks but it only happens on cd and only when leaving the scope of a .config.fish)
         set -f abbrs_added (comm -1 -3 (printf '%s\n' $__local_config_abbrs_before | sort | psub) (printf '%s\n' $__local_config_abbrs_after | sort | psub))
@@ -58,7 +58,7 @@ function __local_config_load_inner
         abbr --erase $abbrs_added
 
         set -e __local_config_funcs_before __local_config_abbrs_before __local_config_funcs_after __local_config_abbrs_after __local_config_last_path
-        functions -e deactivate_last_local_config
+        functions -e __local_config_deactivate_last
     end
 end
 
