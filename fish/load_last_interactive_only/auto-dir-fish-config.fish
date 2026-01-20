@@ -19,8 +19,8 @@ end
 
 function __local_config_load_inner
 
-    set -l current_local_config_path (_find_local_config)
-    if set -q __last_local_config_path; and test "$__last_local_config_path" = "$current_local_config_path"
+    set -l current_path (_find_local_config)
+    if set -q __last_local_config_path; and test "$__last_local_config_path" = "$current_path"
         # echo "already loaded the same config, nothing to do"
         return
     end
@@ -30,7 +30,7 @@ function __local_config_load_inner
         deactivate_last_local_config
     end
 
-    if test -z "$current_local_config_path"
+    if test -z "$current_path"
         # echo "no local .config.fish, nothing to do"
         return
     end
@@ -38,8 +38,8 @@ function __local_config_load_inner
     set --global __local_config_funcs_before (functions -n)
     set --global __local_config_abbrs_before (abbr --list)
 
-    source "$current_local_config_path"
-    set --global __last_local_config_path "$current_local_config_path"
+    source "$current_path"
+    set --global __last_local_config_path "$current_path"
 
     set --global __local_config_funcs_after (functions -n)
     set --global __local_config_abbrs_after (abbr --list)
