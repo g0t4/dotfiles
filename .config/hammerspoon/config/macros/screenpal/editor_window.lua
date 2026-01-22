@@ -290,7 +290,10 @@ function ScreenPalEditorWindow:cache_project_view_controls()
         end)
 end
 
-function ScreenPalEditorWindow:reopen_project()
+---@param restart? boolean -- instead of just close project, restart ScreenPal, then resume where you left off!
+function ScreenPalEditorWindow:reopen_project(restart)
+    restart = restart or false
+
     run_async(function()
         local win = get_cached_editor_window()
         local original_zoom_level = self:timeline_controller():zoom_level()
@@ -308,10 +311,19 @@ function ScreenPalEditorWindow:reopen_project()
         end
         local title = self._textfield_title:axValue()
         -- print("title: ", title)
-        if not self._btn_back_to_projects then
-            error("No back to projects button found, aborting...")
+
+        if restart then
+            -- most issues are fixed w/ project close/reopen
+            -- but, repeated playhead seizures are a sign of app open too long...
+            -- bugs seem to trigger faster the longer I've had ScreePal open, so restart it _too_
+            runKMMacro("20E96F61-EC87-4BE3-9422-F9B41C7502DC") -- restart macro (handles several niceties)
+            sleep_ms(5000) -- TODO test w/o this given delay below on reopen btn cycles
+        else
+            if not self._btn_back_to_projects then
+                error("No back to projects button found, aborting...")
+            end
+            self._btn_back_to_projects:performAction("AXPress")
         end
-        self._btn_back_to_projects:performAction("AXPress")
 
         local btn_reopen_project = wait_for_element(function()
             self:cache_project_view_controls()
@@ -323,7 +335,7 @@ function ScreenPalEditorWindow:reopen_project()
                     return desc == title
                 end)
                 :totable()[1]
-        end, 100, 20)
+        end, 100, 200) -- 200 cycles × 100 ms/cycle = 20 000 ms → 20 seconds (for restart to complete and find and reopen project)
 
         if not btn_reopen_project then
             error("cannot find project to re-open, aborting...")

@@ -959,3 +959,8 @@ end
 function SPal_ReopenProject()
     get_cached_editor_window():reopen_project()
 end
+
+function SPal_RestartSPal_then_ReopenProject()
+    get_cached_editor_window():reopen_project(true)
+end
+
