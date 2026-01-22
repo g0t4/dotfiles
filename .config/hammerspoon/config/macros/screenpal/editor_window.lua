@@ -326,14 +326,15 @@ function ScreenPalEditorWindow:reopen_project(restart)
             -- but, repeated playhead seizures are a sign of app open too long...
             -- bugs seem to trigger faster the longer I've had ScreePal open, so restart it _too_
             runKMMacro("20E96F61-EC87-4BE3-9422-F9B41C7502DC") -- restart macro (handles several niceties)
-            -- sleep_ms(5000) -- TODO test w/o this given delay below on reopen btn cycles
+            -- FYI delays in the KM macro factor in, like old code that killed tray icon that I don't need, it had 5 second wait! I disabled that!
+            --  PRN make macro specific to this HS action if need be... restart and repoen s/b fast and then I can use it way more often to wipe memory leaks, bugs, etc!
+            -- sleep_ms(5000) -- not needed so far
         else
             if not self._btn_back_to_projects then
                 error("No back to projects button found, aborting...")
             end
             self._btn_back_to_projects:performAction("AXPress")
         end
-
 
         local btn_reopen_project = wait_for_element(function()
             print("attempting to find")
