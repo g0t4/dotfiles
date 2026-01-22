@@ -2638,6 +2638,7 @@ abbr tt trash_n_tail
 abbr ttp 'trash_n_tail ~/.local/share/nvim/ask-openai/ask-predictions.log' # nvim plugin
 abbr ttls 'trash_n_tail ~/.local/share/ask-openai/language.server.log' # python LS
 abbr ttnlsp 'trash_n_tail ~/.local/state/nvim/lsp.log' # nvim lsp logs
+abbr ttsdk 'trash_n_tail ~/.hammerspoon/logs/streamdeck_keyboardmaestro_runner.log'
 abbr tail_hardtime_logs 'cat ~/.local/state/nvim/hardtime.nvim.log | cut -c34- | sort | uniq -c | sort'
 function trash_n_tail
     trash $argv
