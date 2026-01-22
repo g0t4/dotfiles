@@ -326,7 +326,7 @@ function ScreenPalEditorWindow:reopen_project(restart)
             -- but, repeated playhead seizures are a sign of app open too long...
             -- bugs seem to trigger faster the longer I've had ScreePal open, so restart it _too_
             runKMMacro("20E96F61-EC87-4BE3-9422-F9B41C7502DC") -- restart macro (handles several niceties)
-            sleep_ms(5000) -- TODO test w/o this given delay below on reopen btn cycles
+            -- sleep_ms(5000) -- TODO test w/o this given delay below on reopen btn cycles
         else
             if not self._btn_back_to_projects then
                 error("No back to projects button found, aborting...")
