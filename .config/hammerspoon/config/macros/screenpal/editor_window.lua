@@ -1,6 +1,10 @@
 local AppWindows = require("config.macros.screenpal.app_windows")
 require("config.macros.screenpal.co")
 local TimelineController = require('config.macros.screenpal.timeline')
+require("config.macros.streamdeck.helpers")
+require("config.macros.streamdeck.commands")
+local inspect = require("hs.inspect")
+
 
 local _200ms = 200000
 local _100ms = 100000
@@ -23,7 +27,12 @@ function ScreenPalEditorWindow:new()
     return editor_window
 end
 
+---@type hs.axuielement?
 local _cached_editor_window = nil
+function clear_cached_editor_window()
+    _cached_editor_window = nil
+end
+
 function get_cached_editor_window()
     if not _cached_editor_window then
         _cached_editor_window = ScreenPalEditorWindow:new()
@@ -325,7 +334,13 @@ function ScreenPalEditorWindow:reopen_project(restart)
             self._btn_back_to_projects:performAction("AXPress")
         end
 
+
         local btn_reopen_project = wait_for_element(function()
+            print("attempting to find")
+            -- re-acquire the window
+            clear_cached_editor_window()
+            local win = get_cached_editor_window()
+            print("win", inspect(win))
             self:cache_project_view_controls()
             if not self._scrollarea_list then return end
             return vim.iter(self._scrollarea_list:buttons())
