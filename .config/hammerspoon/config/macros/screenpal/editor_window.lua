@@ -337,11 +337,9 @@ function ScreenPalEditorWindow:reopen_project(restart)
         end
 
         local btn_reopen_project = wait_for_element(function()
-            print("attempting to find")
-            -- re-acquire the window
-            clear_cached_editor_window()
+            print("attempting to re-acquire the editor window...")
+            clear_cached_editor_window() -- must clear b/c old instance won't work, that _cached_ window is gone!
             local win = get_cached_editor_window()
-            print("win", inspect(win))
             self:cache_project_view_controls()
             if not self._scrollarea_list then return end
             return vim.iter(self._scrollarea_list:buttons())
