@@ -337,7 +337,7 @@ function ScreenPalEditorWindow:reopen_project(restart)
         end
 
         local btn_reopen_project = wait_for_element(function()
-            print("attempting to re-acquire the editor window...")
+            print("attempting to re-acquire the editor window...") -- TODO comment out later once restart+repoen feels solid
             clear_cached_editor_window() -- must clear b/c old instance won't work, that _cached_ window is gone!
             local win = get_cached_editor_window()
             self:cache_project_view_controls()
