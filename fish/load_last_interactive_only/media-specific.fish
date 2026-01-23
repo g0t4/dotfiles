@@ -18,6 +18,10 @@ function _ets
     echo -n "grc exiftool -s $file"
 end
 
+abbr -a et "grc exiftool"
+abbr -a etc "grc exiftool -common -duration -AudioFormat -CompressorName -AudioSampleRate"
+abbr -a ets "grc exiftool -s"
+
 ### *** ffmpeg et al
 function ffmpeg
     command ffmpeg -hide_banner $argv
