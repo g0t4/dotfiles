@@ -1,9 +1,8 @@
 ### *** exiftool
 
-abbr exiftool "grc exiftool"
-# TODO if I add secondary expansions then need to inline this in them or find a way to recursively expand aliases (does fish do that? with abbr?)
-abbr exifc "grc exiftool -common -duration -AudioFormat -CompressorName -AudioSampleRate" # limit to common metadata that I look for
-abbr exifs "grc exiftool -s" # show tag names instead of descriptions
+abbr et "grc exiftool"
+abbr etc "grc exiftool -common -duration -AudioFormat -CompressorName -AudioSampleRate"
+abbr ets "grc exiftool -s"
 
 ### *** ffmpeg et al
 alias ffmpeg="ffmpeg -hide_banner"
