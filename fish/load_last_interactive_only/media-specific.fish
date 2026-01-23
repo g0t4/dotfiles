@@ -1,26 +1,22 @@
 ### *** exiftool
 
-abbr et --function _et
-function _et
+abbr et --function _exiftool_et
+function _exiftool_et
     set file (_find_first_video_file_any_type; or echo _)
     echo -n "grc exiftool $file"
 end
 
-abbr etc --function _etc
-function _etc
+abbr etc --function _exiftool_etc
+function _exiftool_etc
     set file (_find_first_video_file_any_type; or echo _)
     echo -n "grc exiftool -common -duration -AudioFormat -CompressorName -AudioSampleRate $file"
 end
 
-abbr ets --function _ets
-function _ets
+abbr ets --function _exiftool_ets
+function _exiftool_ets
     set file (_find_first_video_file_any_type; or echo _)
     echo -n "grc exiftool -s $file"
 end
-
-abbr -a et "grc exiftool"
-abbr -a etc "grc exiftool -common -duration -AudioFormat -CompressorName -AudioSampleRate"
-abbr -a ets "grc exiftool -s"
 
 ### *** ffmpeg et al
 function ffmpeg
