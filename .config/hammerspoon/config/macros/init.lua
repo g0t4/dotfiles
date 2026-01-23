@@ -84,5 +84,6 @@ require("config.macros.hammerspoon")
 require("config.macros.iina")
 require("config.macros.frontmost")
 require("config.macros.sdeck_config_app")
+require("config.macros.macos")
 
 return M

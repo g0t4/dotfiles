@@ -114,6 +114,16 @@ axuielemMT.tabGroup = function(self, index)
 end
 
 ---@return hs.axuielement[]
+axuielemMT.popovers = function(self)
+    return self:childrenWithRole("AXPopover") or {}
+end
+---@param index number
+---@return hs.axuielement
+axuielemMT.popover = function(self, index)
+    return self:popovers()[index]
+end
+
+---@return hs.axuielement[]
 axuielemMT.buttons = function(self)
     return self:childrenWithRole("AXButton") or {}
 end
