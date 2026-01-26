@@ -258,6 +258,19 @@ abbr gstash_apply 'git stash apply'
 abbr gstash_branch 'git stash branch'
 abbr gstash_patch 'git stash push --patch --no-keep-index' # *** pick what to stash!!! easily make multiple stash commits too!
 # TODO do I like --no-keep-index w/ --patch? w/o this it seems to keep changes in the index which can be oddly confusing too
+
+# gapN: git add --patch with diff.context set to N (e.g., gap10 => diff.context=10)
+abbr --regex 'gap\d*' --function gapX _gapX
+function gapX
+    # Extract the numeric suffix
+    set -l num (string replace --regex '^gap' '' $argv)
+    if test -z "$num"
+        echo "git add --patch"
+        return
+    end
+    echo "git -c diff.context=$num add --patch"
+end
+
 abbr --set-cursor gstash_push 'git stash push --message "%"'
 abbr --set-cursor gstash_save 'git stash push --message "%"' # save is deprecated, use push (I still use save all the time so this will help me transition)
 abbr gstash_clear 'git stash clear'
