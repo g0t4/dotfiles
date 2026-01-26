@@ -84,11 +84,18 @@ function git_unpushed_commits --description "(g)it (u)n(p)ushed commits"
 end
 #
 # w/ patch (diff)
-abbr glp "git log --patch $_unpushed_commits"
-abbr --regex 'glp\d+' --function glpX _glpX
-function glpX
-    string replace --regex '^glp' 'git log --patch -' $argv
+abbr glp "git log --patch $_unpunched_commits"
+abbr glpf "git log --pretty=full --patch $_unpunched_commits"
+abbr --regex 'glpf?\d+' --function glp_x _glp_x
+function glp_x
+    set command_line $argv[1]
+    if string match --quiet --regex '^glpf' $command_line
+        string replace --regex '^glpf' 'git log --pretty=full --patch -' $command_line
+    else
+        string replace --regex '^glp' 'git log --patch -' $command_line
+    end
 end
+
 #
 # w/ stat (files)
 abbr gls "git log --stat $_unpushed_commits_without_last_pushed"
