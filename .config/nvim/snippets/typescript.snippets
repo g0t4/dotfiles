@@ -5,8 +5,20 @@ describe('${1:category}', () => {
     });
 });
 
+snippet test_describe_it_async "test category with case async"
+describe('${1:category}', async () => {
+    it('${2:test}', async () => {
+        ${0}
+    });
+});
+
 snippet test_it "test case"
 it('${1:test}', () => {
+    ${0}
+});
+
+snippet test_it_async "test case async"
+it('${1:test}', async () => {
     ${0}
 });
 
@@ -14,4 +26,5 @@ it('${1:test}', () => {
 # FYI ok to remove this if not being used
 snippet test_it_arrow "oneliner, assert only arrow function - i.e for parameterized tests"
 it('${2:TEST}', () => ${0:assert.equal(a,b)});
-
+snippet test_it_arrow_async "oneliner async arrow test"
+it('${2:TEST}', async () => ${0:assert.equal(a,b)});
