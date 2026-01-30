@@ -107,7 +107,7 @@ if $IS_MACOS
     #       - GREP_COLORS is used w/ GNU grep (ie ubuntu/WSL IIAC)
     #   - IIUC GREP_COLOR is only for matching text
     #       - whereas GREP_COLORS supports multi color style (matches, context, line#, setc)
-    #   - use `set | grep -i  color_c` to test color choice:
+    #   - use `set | rg -i  color_c` to test color choice:
     export GREP_COLOR="$__color_matching_text" # cannot defer expand color variable
     # uses ANSI control sequences (SGR):
     #   font style:
@@ -135,7 +135,7 @@ if $IS_MACOS
     #           38;5;191;01 # same (order doesn't matter)
     #   SRG https://en.wikipedia.org/wiki/ANSI_escape_code#SGR_(Select_Graphic_Rendition)_parameters
     #   test entire color/style range:
-    #     for i in (seq 1 107); export GREP_COLOR="$i"; echo $i; set | grep -i color_r; end;
+    #     for i in (seq 1 107); export GREP_COLOR="$i"; echo $i; set | rg -i color_r; end;
 end
 
 # PRN GREP_COLORS (GNU grep)

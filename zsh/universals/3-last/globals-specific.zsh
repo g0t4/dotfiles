@@ -3,7 +3,7 @@
 
 # use p(ext) unless prominent, in which use shortened p(e) format (ensure not gonna need to not expand that often)
 ealias pbat='| bat -l' -g
-ealias pgr='| grep -i' -g
+ealias pgr='| rg -i' -g
 ealias phelp='| bat -l help' -g
 ealias pini='| bat -pl ini' -g
 ealias pjq='| jq .' -g # shortened

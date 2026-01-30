@@ -123,12 +123,12 @@ bind_both_modes_default_and_insert -M insert ctrl-z undo # TODO ctrl-z not worki
 bind_both_modes_default_and_insert -M insert ctrl-Z redo
 # FTR, fish_default_key_bindings has the following, of which I am only mapping ctrl-z/Z for now:
 #
-# bind | grep -i undo
+# bind | rg -i undo
 #   bind --preset ctrl-/ undo
 #   bind --preset ctrl-_ undo
 #   bind --preset ctrl-z undo
 #
-# bind | grep -i undo
+# bind | rg -i undo
 #   bind --preset ctrl-/ undo
 #   bind --preset ctrl-_ undo
 #   bind --preset ctrl-z undo

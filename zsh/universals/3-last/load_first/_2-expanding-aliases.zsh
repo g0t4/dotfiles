@@ -177,7 +177,7 @@ bindkey -M emacs '^J' expand-ealias-then-accept-line-without-colorize # Ctrl-J d
 #    which \_global_ealias_ => resolves based on alias name
 
 ##  FIRST EALIASes!
-ealias bgr="bindkey | grep -i" # search bind keys easily
+ealias bgr="bindkey | rg -i" # search bind keys easily
 # tests
 # ealias foo="echo oof" -g
 # ealias -g doo="echo oof"

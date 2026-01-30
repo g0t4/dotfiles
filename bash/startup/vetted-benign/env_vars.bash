@@ -52,5 +52,5 @@ export DOTNET_CLI_TELEMETRY_OPTOUT=1
 
 # BTW HISTFILESIZE defaults to HISTSIZE (controls # entries in ~/.bash_history)
 HISTSIZE=1000000
-# set | grep -i HIST   # to review values
+# set | rg -i HIST   # to review values
 

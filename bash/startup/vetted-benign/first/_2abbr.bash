@@ -354,7 +354,7 @@ _setup_intercept_for_tab() {
     #
     # FYI Ctrl-x,Ctrl-* shortcuts are mostly unused in emacs/vi-insert modes
     #    IOTW use this as a "namespace" of key sequences for my automations
-    #    bind -m emacs -p | grep -i "C-x\\\C"
+    #    bind -m emacs -p | rg -i "C-x\\\C"
     #
     key_seq_expand_abbr_tab='\C-x\C-t'
     #

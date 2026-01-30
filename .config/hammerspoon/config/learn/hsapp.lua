@@ -4,7 +4,7 @@
 
 
 -- FYI
---     defaults domains | string split "," | grep -i "foo"
+--     defaults domains | string split "," | rg -i "foo"
 local vlc = hs.application.applicationsForBundleID("org.videolan.vlc") -- returns hs.application object
 dump(vlc)
 -- FYI vlc will basically be empty table if no app instance is running

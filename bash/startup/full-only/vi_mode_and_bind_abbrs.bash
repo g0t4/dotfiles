@@ -18,7 +18,7 @@ set -o vi
 #   icdiff <((bind -m vi-insert -p)) <((bind -m emacs -p ))
 #
 # FIX self-insert differences
-#    icdiff <((bind -m vi-insert -p)) <((bind -m emacs -p )) | grep -i self-insert
+#    icdiff <((bind -m vi-insert -p)) <((bind -m emacs -p )) | rg -i self-insert
 #    ok and now this isn't an issue... WTH? maybe one of my bindings was wrong when testing and I deleted \\?
 # bind -m vi-insert '"\\": self-insert' # missing in vi mode?! found in emacs mode:   bind -p | grep '\\"'
 

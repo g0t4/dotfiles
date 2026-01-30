@@ -730,23 +730,23 @@ end
 # *** searching ***
 #
 abbr els "env | bat --language dotenv -p"
-abbr egr "env | grep -i "
+abbr egr "env | rg -i "
 abbr env "env | bat -l env" # do this to fix color issues with LESS_TERMCAP_** env vars
 # alternative: strip CSI escape codes from LESS_TERMCAP_* env vars (and possibly others)
 # env | string replace --regex "\\x1b\[1(;\\d+)+m" ""
 #
 # shell variables names and values
 abbr vls "set | bat --language ini -p"
-abbr vgr "set | grep -i "
+abbr vgr "set | rg -i "
 #
 # abbr's
-abbr --add agr --set-cursor "abbr | grep -i '%'"
-abbr --add agrs --set-cursor "abbr | grep -i '\-\- %'" # starts with b/c `-- name` is consistent format of abbr's list output
+abbr --add agr --set-cursor "abbr | rg -i '%'"
+abbr --add agrs --set-cursor "abbr | rg -i '\-\- %'" # starts with b/c `-- name` is consistent format of abbr's list output
 #
 # complete's
 abbr --set-cursor completeC "complete -C '%'"
 #
-#   abbr --list | grep -i '^an' # another avenue if I have too much trouble relying on `abbr --show` + grep
+#   abbr --list | rg -i '^an' # another avenue if I have too much trouble relying on `abbr --show` + grep
 #
 # AFAICT there's no way to lookup an abbr by name... and get its executable format
 #   Also, not straight forward to parse the executable format b/c name can appear in many different spots
@@ -772,7 +772,7 @@ abbr --set-cursor completeC "complete -C '%'"
 #   bind_both_modes_default_and_insert escape,. history-token-search-backward
 
 # *** processes ***
-abbr psg "grc ps aux | grep -i "
+abbr psg "grc ps aux | rg -i "
 if $IS_MACOS
     # pgrep macos:
     #   -l long output (list process name too, also w/ -f prints arg list)
@@ -2296,7 +2296,7 @@ if command -q pacman
 
     # arch linux
 
-    # FYI this could collide with my p* pipe abbrs (i.e. pgr => | grep -i), resolve it when that happesn
+    # FYI this could collide with my p* pipe abbrs (i.e. pgr => | rg -i), resolve it when that happesn
     abbr pm pacman
 
     # *** -S sync
@@ -2320,9 +2320,9 @@ if command -q pacman
     abbr pm_listinstalled "pacman -Q" # training wheels reminder for what command b/c this is all truly confusing IMO, perhaps I should better wrap my mind around the commands?
     abbr pmqi "pacman -Qi" # pkg (i)nfo (probably easier to just use -Si for most pkgs unless install a local dev checkout)
     # search installed pkgs:
-    abbr pmqs "pacman -Qs" # (s)earch ERE(regex) search installed pkgs (prolly just use `pacman -Q | grep -i`)
-    abbr --set-cursor pmqg "pacman -Q | grep -i '%'" # I prefer grep, it's just easier to not need another tool specific option
-    abbr --set-cursor pmqgs "pacman -Q | grep -i '^%'"
+    abbr pmqs "pacman -Qs" # (s)earch ERE(regex) search installed pkgs (prolly just use `pacman -Q | rg -i`)
+    abbr --set-cursor pmqg "pacman -Q | rg -i '%'" # I prefer grep, it's just easier to not need another tool specific option
+    abbr --set-cursor pmqgs "pacman -Q | rg -i '^%'"
     #
     abbr pmql "pacman -Ql" # (l)ist files for pkg, can list multiple too (in which case first col is pkg name)
     # TODO any reason why I wouldn't just use -Fl always? perhaps if I custom build a pkg?
@@ -2502,7 +2502,7 @@ if $IS_LINUX then
     abbr lshwcs "sudo lshw -class storage"
 
     # lsmod
-    abbr --set-cursor lsmodg "sudo lsmod | grep -i '%'"
+    abbr --set-cursor lsmodg "sudo lsmod | rg -i '%'"
 
     # lsmem
     abbr lsmem "lsmem --output-all"
@@ -2515,7 +2515,7 @@ if $IS_LINUX then
     abbr lsusbv "lsusb -v" # very detailed
 
     # dmesg
-    abbr --set-cursor dmesgg "sudo dmesg | grep -i '%'"
+    abbr --set-cursor dmesgg "sudo dmesg | rg -i '%'"
 
 end
 

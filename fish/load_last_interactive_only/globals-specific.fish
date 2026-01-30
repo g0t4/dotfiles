@@ -1,6 +1,6 @@
 # use p(ext) unless prominent, in which use shortened p(e) format (ensure not gonna need to not expand that often)
 abbr --position=anywhere -- pbat '| bat -l'
-abbr --position=anywhere -- pgr '| grep -i'
+abbr --position=anywhere -- pgr '| rg -i'
 abbr --position=anywhere -- phelp '| bat -l help'
 abbr --position=anywhere -- pini '| bat -pl ini'
 abbr --position=anywhere -- pjq '| jq .'

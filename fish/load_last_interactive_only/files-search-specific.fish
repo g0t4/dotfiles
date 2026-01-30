@@ -78,9 +78,9 @@ if command -q mdfind
     abbr --set-cursor -- mdfind_kind_contact "kind:contact" # this would be more useful if could do name too, haven't figured that out yet:
     # abbr --set-cursor -- mdfind_kind_contact "mdfind 'kMDItemKind == \"Contacts Card Data\" kMDItemDisplayName = \"*%*\"c'"  # NOT WORKING, seems to union OR?
 
-    abbr --set-cursor mdimport_list_attrs "mdimport -A | grep -i '%'"
-    abbr --set-cursor mdimport_list_importers "mdimport -L | grep -i '%'"
-    abbr --set-cursor mdimport_dump_schema "mdimport -X | grep -i '%'"
+    abbr --set-cursor mdimport_list_attrs "mdimport -A | rg -i '%'"
+    abbr --set-cursor mdimport_list_importers "mdimport -L | rg -i '%'"
+    abbr --set-cursor mdimport_dump_schema "mdimport -X | rg -i '%'"
 
     # * mdls (list file's attrs)
     # - `mdls foo.txt`
