@@ -1898,7 +1898,7 @@ function abbr_db
 
     # if only one video in current dir, select it
     # exclude previous boosted vides i.e. .7dB.m4v
-    set video_files (ls *.{mp4,m4v,mov} | grep -vE "dB\.[a-z0-9]{3}\$")
+    set video_files (ls *.{mp4,m4v,mov} | rg -v --no-line-number "dB\.[a-z0-9]{3}\$")
     if test (count $video_files) -eq 1
         set video_file $video_files[1]
     end
@@ -2779,7 +2779,7 @@ if command -q ctags
     abbr ctlx ctags --list-extras
     abbr ctags_stdout ctags -f -
     # helpers to review what was swept up (or not)
-    abbr ctags_list_not_files "cat tags  | sort | uniq | grep -v -E '\.(zsh|lua|py|rs|c|md|json|vim|plist|js|ps1)' | bat -l csv"
+    abbr ctags_list_not_files "cat tags  | sort | uniq | rg -v --no-line-number '\.(zsh|lua|py|rs|c|md|json|vim|plist|js|ps1)' | bat -l csv"
 
 end
 
