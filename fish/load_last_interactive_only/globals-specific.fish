@@ -1,6 +1,7 @@
 # use p(ext) unless prominent, in which use shortened p(e) format (ensure not gonna need to not expand that often)
 abbr --position=anywhere -- pbat '| bat -l'
-abbr --position=anywhere -- pgr '| rg -i'
+abbr --position=anywhere -- pgr '| rg -i --no-column' # FYI --no-column disables line numbers too (in my testing) else --no-line-number/-N is needed
+abbr --position=anywhere -- pgrv '| rg -i --no-column -v' # inverted match
 abbr --position=anywhere -- phelp '| bat -l help'
 abbr --position=anywhere -- pini '| bat -pl ini'
 abbr --position=anywhere -- pjq '| jq .'
