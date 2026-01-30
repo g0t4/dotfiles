@@ -7,8 +7,8 @@ set file_skipped "$WES_DOTFILES/bash/.generated.skipped.bash"
 #  ' -- ' after arg ensures not a match in the abbr's "key value" positional args
 # | grep -vE '\-\-(regex).* -- '
 abbr | sort \
-    | grep -v "\\\'" \
-    | grep -v "\-- -F" >"$file_abbrs"
+    | rg -v "\\\'" \
+    | rg -v "\-- -F" >"$file_abbrs"
 
 # * produce skipped list BEFORE any mods for regexs (or otherwise)
 # sort both just to be safe, else comm won't work

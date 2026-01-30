@@ -65,7 +65,7 @@ function __gh_depoliticize
     # cat tmp | jq 'map(select(.defaultBranchRef.name == "main" and .isFork == false and (.name | startswith("course") | not)))'
     #
     # check for local repos that might be on wrong branch
-    # for f in *; test -d $f; and echo -n $f"   "; and git -C $f branch --show-current  ;end | grep main | grep -v "^course"
+    # for f in *; test -d $f; and echo -n $f"   "; and git -C $f branch --show-current  ;end | grep main | rg -v "^course"
 
 
     # FYI this assumes currently on main, no master branch... it switches for that scenario only and removes main

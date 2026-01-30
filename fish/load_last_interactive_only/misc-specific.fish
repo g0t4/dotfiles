@@ -1053,7 +1053,7 @@ function toggle-git_commit_command
     if test -z "$cmd"
         # if empty cmd, then use last command
         # pull back last non git command (so I can stage files and then commit)
-        set cmd (history | grep -v '^git\s' | head -n 1)
+        set cmd (history | rg -v '^git\s' | head -n 1)
     end
 
     if string match --quiet --regex "^git\scommit\s-m\s" -- $cmd
@@ -1634,7 +1634,7 @@ end
 abbr --add _150 --function abbr_thumbnail_check
 function abbr_thumbnail_check
     set suffix "150px.png"
-    set first_image (ls *.png | grep -v $suffix | head -1)
+    set first_image (ls *.png | rg -v $suffix | head -1)
     set input_file (quote_paths "$first_image")
     set output_file (quote_paths "$(path basename --no-extension "$first_image").$suffix")
     echo "magick $input_file -resize 150 $output_file"
@@ -2086,8 +2086,8 @@ abbr mitmr "mitmproxy --no-server --rfile" # when reading, dont start server (th
 # orphaned server:
 # - sometimes mitmproxy server becomes orphaned (quit CLI doesn't stop it... so I need to find/stop it)
 # - ignore if --no-server
-abbr mitm_pgrep 'pgrep -ilf mitmproxy | grep -v "\--no-server" || true' # don't error if not found, avoid confusion
-abbr mitm_kill 'pgrep -ilf mitmproxy | grep -v "\--no-server" | awk "{print $1}" | xargs sudo kill -9 || true'
+abbr mitm_pgrep 'pgrep -ilf mitmproxy | rg -v "\--no-server" || true' # don't error if not found, avoid confusion
+abbr mitm_kill 'pgrep -ilf mitmproxy | rg -v "\--no-server" | awk "{print $1}" | xargs sudo kill -9 || true'
 #
 # program specific
 abbr mitmlc "mitmproxy --mode=local:'Visual Studio Code.app'" # capture just vscode (note not insiders)
