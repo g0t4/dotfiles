@@ -9,7 +9,14 @@
 abbr gsts 'git status -s'
 abbr gstb 'git status -sb'
 abbr gstu 'git status --untracked-files'
-abbr gsti 'git status --ignored'
+# optionally replace . with a dir or path in the repo:
+abbr gsti 'git status --ignored .'
+# FYI ok to replace `.` with a dir or path in the repo to limit search
+# look for legit, ignored files (i.e. sensitive log captures) sans the ones I never care about:
+# look at untracked and/or ignored files.. and skip things I know I never care bout
+abbr gstiv --set-cursor 'git status --ignored --untracked-files --short ".%" | rg -i --no-column -v "node_modules|\.venv/|\.rag/|__pycache__|DS_Store|\.pytest_cache/|/bin/|/obj/|/target/|iterm2env/"'
+# also skip image files (don't always do this, hence a separte abbr)
+abbr gstiv_all --set-cursor 'git status --ignored --untracked-files --short ".%" | rg -i --no-column -v "node_modules|\.venv/|\.rag/|__pycache__|DS_Store|\.pytest_cache/|/bin/|/obj/|/target/|iterm2env/|.*\.(png|bmp|jpg|svg)\$"'
 
 # reset
 abbr grhh 'git reset --hard HEAD' # last commit hard reset
