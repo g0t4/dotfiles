@@ -849,7 +849,7 @@ function __fzf_widget --argument-names picker fd_command
             set -l mru_file (__fzf_mru_file $picker)
             __fzf_mru_read $picker
             eval $fd_command | grep -Fxv -f $mru_file
-        end | fzf --height 50% --border
+        end | fzf --height 50% --border --header "MRU ↑  |  Fresh ↓"
     )
 
     if test -n "$file"
