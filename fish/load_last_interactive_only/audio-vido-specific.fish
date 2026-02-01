@@ -47,7 +47,7 @@ abbr ffph "ffprobe -h full"
 abbr ffpl ffplay
 abbr ffplh "ffplay -h full"
 
-#  mac g0t4/dotfiles) ffprobe -show_chapters
+# TODO? ffprobe:
 # -show_chapters                                          (Show chapters info)  -show_log                                  (Show log)
 # -show_data                                               (Show packets data)  -show_packets                     (Show packets info)
 # -show_data_hash                                     (Show packets data hash)  -show_pixel_formats  (Show pixel format descriptions)
