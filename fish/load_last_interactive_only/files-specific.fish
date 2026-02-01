@@ -829,7 +829,7 @@ function __fzf_mru_write --argument-names picker path
     # normalize cleans up path ... but, the path should always be the same assuming I only ever save selections from fzf to the cache
     #   i.e. ./foo/bar => foo/bar
     #        foo/bar => foo/bar
-    # set path (path normalize "$path")
+    set path (path normalize "$path")
 
     set -l file (__fzf_mru_file $picker)
 
@@ -848,7 +848,7 @@ function __fzf_widget --argument-names picker fd_command
         begin
             set -l mru_file (__fzf_mru_file $picker)
             __fzf_mru_read $picker
-            eval $fd_command | grep -Fxv -f $mru_file 2>/dev/null
+            eval $fd_command | grep -Fxv -f $mru_file
         end | fzf --height 50% --border
     )
 
