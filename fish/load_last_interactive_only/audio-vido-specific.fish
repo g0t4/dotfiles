@@ -60,10 +60,12 @@ abbr --set-cursor ffpshow "$_show_prefix -show_%"
 #
 # TODO idea... how about pull last video argument from command history (limit to recent history?) => fallback one video in current dir only => else blank?
 abbr --set-cursor ffpshow_chapters "$_show_prefix -show_chapters % | bat -l ini"
-abbr --set-cursor ffpshow_packets "$_show_prefix -show_packets % | bat -l ini"
+abbr --set-cursor ffpshow_packets_video "$_show_prefix -select_streams v:0 -show_packets % | bat -l ini"
+abbr --set-cursor ffpshow_packets_audio "$_show_prefix -select_streams a:0 -show_packets % | bat -l ini"
 abbr --set-cursor ffpshow_streams "$_show_prefix -show_streams % | bat -l ini"
 abbr --set-cursor ffpshow_stream_groups "$_show_prefix -show_stream_groups % | bat -l ini"
-abbr --set-cursor ffpshow_frames "$_show_prefix -show_frames % | bat -l ini"
+abbr --set-cursor ffpshow_frames_video "$_show_prefix -select_streams v:0 -show_frames % | bat -l ini"
+abbr --set-cursor ffpshow_frames_audio "$_show_prefix -select_streams a:0 -show_frames % | bat -l ini"
 abbr --set-cursor ffpshow_format "$_show_prefix -show_format % | bat -l ini" # format/container info
 #
 # count read frames/packets vs recorded count (must show streams to see counts that are added as nb_read_xxx
