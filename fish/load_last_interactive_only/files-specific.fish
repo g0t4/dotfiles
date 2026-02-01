@@ -841,8 +841,6 @@ function __fzf_mru_write --argument-names picker path
     mv $temp_new_file $file
 end
 
-# ---------------------------------------------------------------------------
-
 function __fzf_widget --argument-names picker fd_command
     set -l file (
         begin
@@ -859,6 +857,8 @@ function __fzf_widget --argument-names picker fd_command
 
     commandline -f repaint
 end
+
+# ---------------------------------------------------------------------------
 
 function _fzf_nested_file_unrestricted_widget
     __fzf_widget unrestricted "fd --type f . -u"
