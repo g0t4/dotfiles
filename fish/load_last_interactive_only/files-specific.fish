@@ -874,6 +874,18 @@ function _fzf_nested_git_commit_widget -d "Pick a git commit_hash"
         commandline -i -- (string escape -- "$commit_hash")
     end
     commandline -f repaint
+
+    # TODO porting commit hashes to have MUR? then use this as a refernece for the differences w/ fd+fzf pickers above
+    #   FYI this was original unrestricted b4 adding MRU:
+    #   FYI compare thi sto above git_commit_widge impl
+    #
+    # function _fzf_nested_file_unrestricted_widget -d "Paste selected file (including hidden) into command line"
+    #     set -l file (fd --type f . -u | fzf --height 50% --border)
+    #     if test -n "$file"
+    #         commandline -i -- (string escape -- "$file")
+    #     end
+    #     commandline -f repaint
+    # end
 end
 
 bind_both_modes_default_and_insert alt-shift-d _fzf_nested_dir_widget
