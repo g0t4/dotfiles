@@ -843,23 +843,25 @@ end
 
 # ---------------------------------------------------------------------------
 
-function _fzf_nested_file_unrestricted_widget \
-    -d "Paste selected file (including hidden) into command line"
-
+function __fzf_widget --argument-names picker fd_command
     set -l file (
         begin
-            set -l mru_file (__fzf_mru_file unrestricted)
-            __fzf_mru_read unrestricted
-            fd --type f . -u | grep -Fxv -f $mru_file 2>/dev/null
+            set -l mru_file (__fzf_mru_file $picker)
+            __fzf_mru_read $picker
+            eval $fd_command | grep -Fxv -f $mru_file 2>/dev/null
         end | fzf --height 50% --border
     )
 
     if test -n "$file"
-        __fzf_mru_write unrestricted "$file"
+        __fzf_mru_write $picker "$file"
         commandline -i -- (string escape -- "$file")
     end
 
     commandline -f repaint
+end
+
+function _fzf_nested_file_unrestricted_widget
+    __fzf_widget unrestricted "fd --type f . -u"
 end
 
 function _fzf_nested_both_file_and_dirs_widget -d "Paste selected file or directory into command line"
