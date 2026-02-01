@@ -803,8 +803,15 @@ function __fzf_mru_key
 end
 
 function __fzf_mru_file --argument-names picker
-    mkdir -p $FZF_MRU_DIR/$picker/
-    echo $FZF_MRU_DIR/$picker/(__fzf_mru_key)
+    set -l dir $FZF_MRU_DIR/$picker
+    mkdir -p $dir
+
+    set -l file $dir/(__fzf_mru_key)
+
+    # so it always exists (i.e. so `grep -Fxv` in consumers doesn't blow up on a missing file)
+    test -f $file; or touch $file
+
+    echo $file
 end
 
 function __fzf_mru_read --argument-names picker
