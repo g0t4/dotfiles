@@ -821,10 +821,12 @@ end
 function __fzf_mru_write --argument-names picker path
     set -l file (__fzf_mru_file $picker)
 
+    set temp_new_file (mktemp)
     begin
         echo "$path"
         test -f $file; and grep -Fxv -- "$path" $file
-    end | head -n $FZF_MRU_CAP >$file
+    end | head -n $FZF_MRU_CAP >$temp_new_file
+    mv $temp_new_file $file
 end
 
 # ---------------------------------------------------------------------------
