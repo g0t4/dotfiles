@@ -837,7 +837,7 @@ function _fzf_nested_file_unrestricted_widget \
     set -l file (
         begin
             __fzf_mru_read unrestricted
-            fd --type f . -u | grep -Fxv -f $FZF_MRU_FILE 2>/dev/null
+            fd --type f . -u | grep -Fxv -f (__fzf_mru_read unrestricted | psub) 2>/dev/null
         end | fzf --height 50% --border
     )
 
