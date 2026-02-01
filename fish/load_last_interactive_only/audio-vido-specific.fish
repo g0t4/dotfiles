@@ -43,45 +43,38 @@ abbr ffhp "ffmpeg -h protocol="
 # ffp = ffprobe
 abbr ffp ffprobe
 abbr ffph "ffprobe -h full"
-# ffpl = ffplay
-abbr ffpl ffplay
-abbr ffplh "ffplay -h full"
-
-# TODO? ffprobe:
-# -show_chapters
-#   (Show chapters info)
+#
+# -show_***
+# I prefer to hide the default log output (i.e. streams info) to avoid confusion about what -show_xxx is displaying
+set _show_prefix 'ffprobe -loglevel warning '
+abbr --set-cursor ffpshow "$_show_prefix -show_%"
 # -show_log
-#   (Show log)
-# -show_data
-#   (Show packets data)
-# -show_packets
-#   (Show packets info)
-# -show_data_hash
-#   (Show packets data hash)
-# -show_pixel_formats
-#   (Show pixel format descriptions)
+# -show_data (Show packets data)
+# -show_packets (Show packets info)
+# -show_data_hash (Show packets data hash)
 # -show_entries
-#   (Show a set of specified entries)
 # -show_private_data
-#   (Show private data)
-# -show_error
-#   (Show probing error)
+# -show_error (Show probing error)
 # -show_programs
-#   (Show programs info)
-# -show_format
-#   (Show format/container info)
-# -show_program_version
-#   (Show ffprobe version)
 # -show_format_entry
 #   (Show a particular entry from the format/container info)
-# -show_streams
-#   (Show streams info)
-# -show_frames
-#   (Show frames info)
-# -show_versions
-#   (Show program and library versions)
-# -show_library_versions
-#   (Show library versions)
+#
+# TODO idea... how about pull last video argument from command history (limit to recent history?) => fallback one video in current dir only => else blank?
+abbr --set-cursor ffpshow_chapters "$_show_prefix -show_chapters % | bat -l ini"
+abbr --set-cursor ffpshow_packets "$_show_prefix -show_packets % | bat -l ini"
+abbr --set-cursor ffpshow_streams "$_show_prefix -show_streams % | bat -l ini"
+abbr --set-cursor ffpshow_stream_groups "$_show_prefix -show_stream_groups % | bat -l ini"
+abbr --set-cursor ffpshow_frames "$_show_prefix -show_frames % | bat -l ini"
+abbr --set-cursor ffpshow_format "$_show_prefix -show_format % | bat -l ini" # format/container info
+#
+# not video specific
+# -show_pixel_formats (Show pixel format descriptions)
+abbr ffpshow_pixel_formats "$_show_prefix -show_pixel_formats"
+abbr ffpshow_version "$_show_prefix -show_program_version"
+
+# * ffpl = ffplay
+abbr ffpl ffplay
+abbr ffplh "ffplay -h full"
 
 ### *** sips command
 abbr sipsg "sips -g all"
