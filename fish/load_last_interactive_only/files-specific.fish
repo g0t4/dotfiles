@@ -819,6 +819,11 @@ function __fzf_mru_read --argument-names picker
 end
 
 function __fzf_mru_write --argument-names picker path
+    # normalize cleans up path ... but, the path should always be the same assuming I only ever save selections from fzf to the cache
+    #   i.e. ./foo/bar => foo/bar
+    #        foo/bar => foo/bar
+    # set path (path normalize "$path")
+
     set -l file (__fzf_mru_file $picker)
 
     set temp_new_file (mktemp)
