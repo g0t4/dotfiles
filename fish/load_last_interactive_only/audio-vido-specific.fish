@@ -50,7 +50,6 @@ set _show_prefix 'ffprobe -loglevel warning '
 abbr --set-cursor ffpshow "$_show_prefix -show_%"
 # -show_log
 # -show_data (Show packets data)
-# -show_packets (Show packets info)
 # -show_data_hash (Show packets data hash)
 # -show_entries
 # -show_private_data
@@ -66,6 +65,11 @@ abbr --set-cursor ffpshow_streams "$_show_prefix -show_streams % | bat -l ini"
 abbr --set-cursor ffpshow_stream_groups "$_show_prefix -show_stream_groups % | bat -l ini"
 abbr --set-cursor ffpshow_frames "$_show_prefix -show_frames % | bat -l ini"
 abbr --set-cursor ffpshow_format "$_show_prefix -show_format % | bat -l ini" # format/container info
+#
+# count read frames/packets vs recorded count (must show streams to see counts that are added as nb_read_xxx
+abbr --set-cursor ffpcount_frames "$_show_prefix -count_frames -show_streams % | bat -l ini"
+abbr --set-cursor ffpcount_packets "$_show_prefix -count_packets -show_streams % | bat -l ini"
+abbr --set-cursor ffpcount_both "$_show_prefix -count_packets -count_frames -show_streams % | bat -l ini"
 #
 # not video specific
 # -show_pixel_formats (Show pixel format descriptions)
