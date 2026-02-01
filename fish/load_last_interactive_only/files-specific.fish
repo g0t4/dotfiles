@@ -777,20 +777,11 @@ end
 
 # *** fzf "widgets" for selecting a file to pass to a command
 function _fzf_nested_dir_widget -d "Paste selected directory into command line"
-    set -l dir (fd --type d . | fzf --height 50% --border)
-    if test -n "$dir"
-        commandline -i -- (string escape -- "$dir")
-    end
-    commandline -f repaint
+    __fzf_widget dirs "fd --type d ."
 end
 
 function _fzf_nested_file_widget -d "Paste selected file into command line"
-    # TODO could I add a toggle to this fzf to switch to/from unrestricted? IIRC you can do that...
-    set -l file (fd --type f . | fzf --height 50% --border)
-    if test -n "$file"
-        commandline -i -- (string escape -- "$file")
-    end
-    commandline -f repaint
+    __fzf_widget files "fd --type f ."
 end
 
 # --- fzf per-directory MRU cache --------------------------------------------
