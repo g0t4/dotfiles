@@ -74,7 +74,7 @@ function _update_completion
     command -q docker; and docker completion fish >~/.config/fish/completions/docker.fish
     # FYI fish shell only, generated completions are superior to DDfM bundled completions
 
-    command -q tree-sitter; and tree-sitter complete --shell fish > ~/.config/fish/completions/tree-sitter.fish
+    command -q tree-sitter; and tree-sitter complete --shell fish >~/.config/fish/completions/tree-sitter.fish
 
 end
 
@@ -793,46 +793,59 @@ function _fzf_nested_file_widget -d "Paste selected file into command line"
     commandline -f repaint
 end
 
-set -g FZF_MRU_FILE ~/.cache/fzf-mru-files
-function __fzf_mru_read
-    test -f $FZF_MRU_FILE; or return
-    cat $FZF_MRU_FILE | while read -l path
+# --- fzf per-directory MRU cache --------------------------------------------
+
+set -g FZF_MRU_DIR ~/.cache/fzf-mru
+set -g FZF_MRU_CAP 30 # per dir limit, only most recent are gonna matter anyways
+
+function __fzf_mru_key
+    pwd | shasum | string split ' ' | head -n 1
+end
+
+function __fzf_mru_file --argument-names picker
+    mkdir -p $FZF_MRU_DIR/$picker/
+    echo $FZF_MRU_DIR/$picker/(__fzf_mru_key)
+end
+
+function __fzf_mru_read --argument-names picker
+    set -l file (__fzf_mru_file $picker)
+    test -f $file; or return
+
+    cat $file | while read -l path
+        # check that the files still exist
         test -e "$path"; and echo "$path"
+        # PRN async write (fire and forget) to save filtered list into file?
     end
 end
-function __fzf_mru_write --argument path
-    mkdir -p (dirname $FZF_MRU_FILE)
+
+function __fzf_mru_write --argument-names picker path
+    set -l file (__fzf_mru_file $picker)
 
     begin
         echo "$path"
-        test -f $FZF_MRU_FILE; and grep -Fxv -- "$path" $FZF_MRU_FILE
-    end | head -n 200 > $FZF_MRU_FILE
+        test -f $file; and grep -Fxv -- "$path" $file
+    end | head -n $FZF_MRU_CAP >$file
 end
+
+# ---------------------------------------------------------------------------
+
 function _fzf_nested_file_unrestricted_widget \
     -d "Paste selected file (including hidden) into command line"
 
     set -l file (
         begin
-            __fzf_mru_read
+            __fzf_mru_read unrestricted
             fd --type f . -u | grep -Fxv -f $FZF_MRU_FILE 2>/dev/null
         end | fzf --height 50% --border
     )
 
     if test -n "$file"
-        __fzf_mru_write "$file"
+        __fzf_mru_write unrestricted "$file"
         commandline -i -- (string escape -- "$file")
     end
 
     commandline -f repaint
 end
-
-# function _fzf_nested_file_unrestricted_widget -d "Paste selected file (including hidden) into command line"
-#     set -l file (fd --type f . -u | fzf --height 50% --border)
-#     if test -n "$file"
-#         commandline -i -- (string escape -- "$file")
-#     end
-#     commandline -f repaint
-# end
 
 function _fzf_nested_both_file_and_dirs_widget -d "Paste selected file or directory into command line"
     # btw `diff_two_commands 'fd --type f --type d' 'fd'` differ in symlinks (at least)
