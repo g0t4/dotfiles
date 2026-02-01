@@ -47,6 +47,17 @@ abbr ffph "ffprobe -h full"
 abbr ffpl ffplay
 abbr ffplh "ffplay -h full"
 
+#  mac g0t4/dotfiles) ffprobe -show_chapters
+# -show_chapters                                          (Show chapters info)  -show_log                                  (Show log)
+# -show_data                                               (Show packets data)  -show_packets                     (Show packets info)
+# -show_data_hash                                     (Show packets data hash)  -show_pixel_formats  (Show pixel format descriptions)
+# -show_entries                              (Show a set of specified entries)  -show_private_data                (Show private data)
+# -show_error                                             (Show probing error)  -show_programs                   (Show programs info)
+# -show_format                                    (Show format/container info)  -show_program_version          (Show ffprobe version)
+# -show_format_entry  (Show a particular entry from the format/container info)  -show_streams                     (Show streams info)
+# -show_frames                                              (Show frames info)  -show_versions    (Show program and library versions)
+# -show_library_versions                               (Show library versions)
+
 ### *** sips command
 abbr sipsg "sips -g all"
 # mostly will use sRGB Profile, if not then at least I can modify this command for a different profile:
