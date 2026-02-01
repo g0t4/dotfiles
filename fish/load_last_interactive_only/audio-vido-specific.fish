@@ -61,8 +61,8 @@ abbr --set-cursor ffpshow "$_show_prefix -show_%"
 # TODO idea... how about pull last video argument from command history (limit to recent history?) => fallback one video in current dir only => else blank?
 abbr --add ffpshow_chapters --set-cursor --function _ffpshow_chapters
 function _ffpshow_chapters
-    set -l video (_find_first_video_file_any_type; or echo %)
-    echo -n "$_show_prefix -show_chapters $video | bat -l ini"
+    set -l video (_find_first_video_file_any_type)
+    echo -n "$_show_prefix -show_chapters $video% | bat -l ini"
 end
 
 abbr --set-cursor ffpshow_packets_video "$_show_prefix -select_streams v:0 -show_packets % | bat -l ini"
