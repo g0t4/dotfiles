@@ -61,8 +61,8 @@ abbr --set-cursor ffpshow "$_show_prefix -show_%"
 # TODO idea... how about pull last video argument from command history (limit to recent history?) => fallback one video in current dir only => else blank?
 abbr --add ffpshow_chapters --set-cursor --function _ffpshow_chapters
 function _ffprobe_expand_cmd -a template
-    set -l video (_find_first_video_file_any_type; or echo _)
-    printf '%s' (string replace "%" "$video" $template)
+    set -l video (_find_first_video_file_any_type)
+    printf '%s' (string replace "%" "$video%" $template)
 end
 
 function _ffpshow_chapters
