@@ -776,14 +776,6 @@ if command -q free
 end
 
 # *** fzf "widgets" for selecting a file to pass to a command
-function _fzf_nested_dir_widget -d "Paste selected directory into command line"
-    __fzf_widget dirs "fd --type d ."
-end
-
-function _fzf_nested_file_widget -d "Paste selected file into command line"
-    __fzf_widget files "fd --type f ."
-end
-
 # --- fzf per-directory MRU cache --------------------------------------------
 
 set -g FZF_MRU_DIR ~/.cache/fzf-mru
@@ -850,6 +842,14 @@ function __fzf_widget --argument-names picker fd_command
 end
 
 # ---------------------------------------------------------------------------
+
+function _fzf_nested_dir_widget -d "Paste selected directory into command line"
+    __fzf_widget dirs "fd --type d ."
+end
+
+function _fzf_nested_file_widget -d "Paste selected file into command line"
+    __fzf_widget files "fd --type f ."
+end
 
 function _fzf_nested_file_unrestricted_widget
     __fzf_widget unrestricted "fd --type f . -u"
