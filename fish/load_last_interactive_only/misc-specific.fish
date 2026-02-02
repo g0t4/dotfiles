@@ -1756,6 +1756,14 @@ function _find_first_video_file_any_type
     return 1
 end
 
+# * timing and other checks on streams in videos
+abbr _3 video_editing_3_dropped_frames
+function video_editing_3_dropped_frames
+    set -l _python3 "$WES_DOTFILES/.venv/bin/python3"
+    set -l _script_py "$WES_DOTFILES/fish/load_last_interactive_only/pythons/av/dropped_frames.py"
+    $_python3 $_script_py $argv
+end
+
 abbr --add ffp --function _ffp
 function _ffp
     echo -n "ffprobe -i "
