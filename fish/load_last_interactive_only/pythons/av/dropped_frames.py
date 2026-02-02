@@ -277,6 +277,8 @@ if __name__ == "__main__":
         audio, video = verify_streams(video_path)
         verify_all(container, audio, video)
         report_missing_frames(video_path, video)
+        # TODO report_missing_audio_frames(video_path, audio)
+        #    do this quick and dirty, no need for tesing either... this will be audio frame level which differs from video frames (each audio frame has 1024 samples in my video files)
     except MediaValidationError:
         rich.print(f"Error: {sys.exc_info()[1]}")
         sys.exit(-1)
