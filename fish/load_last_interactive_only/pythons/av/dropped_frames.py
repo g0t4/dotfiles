@@ -3,9 +3,15 @@ import json
 from numpy._typing import NDArray
 import rich
 import numpy as np
+import sys
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Callable, Tuple
+
+verbose = "--verbose" in sys.argv
+if verbose:
+    # remove --verbose
+    sys.argv.remove("--verbose")
 
 class MediaValidationError(ValueError):
     pass
@@ -168,7 +174,8 @@ def get_frame_info(video_path: Path, stream: str) -> list[FrameInfo]:
     ]
 
     joined_cmd = " ".join(str(arg) for arg in cmd)
-    rich.print("cmd", joined_cmd)
+    if verbose:
+        rich.print("get_frame_info\n   ", joined_cmd)
 
     result = subprocess.run(cmd, capture_output=True, text=True, check=True)
     data = json.loads(result.stdout)
@@ -185,22 +192,25 @@ def find_missing_frames(
     fps: float,
     duration_frames: int,
 ) -> tuple[list[float], list[float]]:
+
+    def _print_frame(prefix: str, frame_number: float) -> None:
+        if verbose:
+            rich.print(f"{prefix}: {frame_number/fps:.6f}")
+
     # PRN read r_frame_rate instead of throw/hardcode this
     frame_numbers = np.array(timestamps) * fps
     extra_frames = []
     missing_frames = []
     last_int: int = -1  # thus 0 is the next frame to find
-    # print()
     for _cur in frame_numbers:
 
         # * anything before/after expected frames => extras
-        if _cur >= duration_frames:
-            # add all frames past duration_frames as extras
-            # BTW duration_frames is NOT inclusive b/c 0 is first frame
-            extra_frames.append(_cur)
-            continue
-        if _cur < 0:
-            # everything below zero is always extra, and should never happen b/c I test for start_time == 0
+        if _cur < 0 or _cur >= duration_frames:
+            # 1. all frames past end (duration_frames) are extras
+            #    BTW frames are 0-indexed, thus the value for duration_frames is the first extra
+            # 2. everything below zero is always extra, and should never happen b/c I test for start_time == 0
+            if verbose:
+                _print_frame("extra", _cur)
             extra_frames.append(_cur)
             continue
 
@@ -209,7 +219,8 @@ def find_missing_frames(
         _cur_rounded_int = round(_cur)
         cur_is_on_a_frame = np.isclose(_cur, _cur_rounded_int, atol=1e-6)
         if not cur_is_on_a_frame:
-            # rich.print(f'{cur_is_on_a_frame=} {_cur}')
+            if verbose:
+                _print_frame(f"extra (between frames)", _cur)
             extra_frames.append(_cur)
             # do not increment last until hit an exact frame at which time will add all missing since last frame
             continue
@@ -219,15 +230,21 @@ def find_missing_frames(
         diff = cur_int - last_int
         if diff > 1:
             # * add missing frames since last
-            _missing_since_last = np.arange(last_int + 1, cur_int)
-            # rich.print(f'{_missing_since_last=}')
-            missing_frames.extend(_missing_since_last)
+            missing_since_last = np.arange(last_int + 1, cur_int)
+            if verbose:
+                for m in missing_since_last:
+                    _print_frame("missing_since_last", m)
+            missing_frames.extend(missing_since_last)
 
         last_int = cur_int
 
     # * missing frames after last frame:
     if last_int < duration_frames:
-        missing_frames.extend(np.arange(last_int + 1, duration_frames))
+        rest_of_missing = np.arange(last_int + 1, duration_frames)
+        if verbose:
+            for m in rest_of_missing:
+                _print_frame("rest_of_missing", m)
+        missing_frames.extend(rest_of_missing)
 
     return [float(m) for m in missing_frames], [float(e) for e in extra_frames]
 
@@ -238,13 +255,13 @@ def report_missing_frames(video_path: Path, video: dict) -> None:
     duration_frames = int(float(video.get("duration", 0)) * fps)
     missing_frames, extra_frames = find_missing_frames(timestamps, fps, duration_frames)
     if missing_frames:
-        missing_times = [f"{int(m) / fps:.5f}" for m in missing_frames]
-        print(f"[FAILURE] missing frames detected: {missing_times}")
+        missing_times = [f"{m / fps:.6f}" for m in missing_frames]
+        print(f"[FAILURE] missing frames detected: {", ".join(missing_times)}")
     if extra_frames:
-        extra_times = [f"{int(e) / fps:.5f}" for e in extra_frames]
-        print(f"[FAILIURE] extra frames detected: {extra_times}")
+        extra_times = [f"{e / fps:.6f}" for e in extra_frames]
+        print(f"[FAILIURE] extra frames detected: {", ".join(extra_times)}")
     if missing_frames or extra_frames:
-        exit(-1)
+        sys.exit(-1)
 
 if __name__ == "__main__":
     import sys
@@ -262,4 +279,4 @@ if __name__ == "__main__":
         report_missing_frames(video_path, video)
     except MediaValidationError:
         rich.print(f"Error: {sys.exc_info()[1]}")
-        exit(-1)
+        sys.exit(-1)
