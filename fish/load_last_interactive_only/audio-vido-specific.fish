@@ -66,57 +66,57 @@ function _ffprobe_expand_cmd -a template
 end
 
 function _ffpshow_chapters
-    echo -n (_ffprobe_expand_cmd "$_show_prefix -show_chapters % | bat -l ini")
+    _ffprobe_expand_cmd "$_show_prefix -show_chapters % | bat -l ini"
 end
 
 function _ffpshow_packets_video
-    echo -n (_ffprobe_expand_cmd "$_show_prefix -select_streams v:0 -show_packets % | bat -l ini")
+    _ffprobe_expand_cmd "$_show_prefix -select_streams v:0 -show_packets % | bat -l ini"
 end
 abbr --add ffpshow_packets_video --set-cursor --function _ffpshow_packets_video
 
 function _ffpshow_packets_audio
-    echo -n (_ffprobe_expand_cmd "$_show_prefix -select_streams a:0 -show_packets % | bat -l ini")
+    _ffprobe_expand_cmd "$_show_prefix -select_streams a:0 -show_packets % | bat -l ini"
 end
 abbr --add ffpshow_packets_audio --set-cursor --function _ffpshow_packets_audio
 
 function _ffpshow_streams
-    echo -n (_ffprobe_expand_cmd "$_show_prefix -show_streams % | bat -l ini")
+    _ffprobe_expand_cmd "$_show_prefix -show_streams % | bat -l ini"
 end
 abbr --add ffpshow_streams --set-cursor --function _ffpshow_streams
 
 function _ffpshow_stream_groups
-    echo -n (_ffprobe_expand_cmd "$_show_prefix -show_stream_groups % | bat -l ini")
+    _ffprobe_expand_cmd "$_show_prefix -show_stream_groups % | bat -l ini"
 end
 abbr --add ffpshow_stream_groups --set-cursor --function _ffpshow_stream_groups
 
 function _ffpshow_frames_video
-    echo -n (_ffprobe_expand_cmd "$_show_prefix -select_streams v:0 -show_frames % | bat -l ini")
+    _ffprobe_expand_cmd "$_show_prefix -select_streams v:0 -show_frames % | bat -l ini"
 end
 abbr --add ffpshow_frames_video --set-cursor --function _ffpshow_frames_video
 
 function _ffpshow_frames_audio
-    echo -n (_ffprobe_expand_cmd "$_show_prefix -select_streams a:0 -show_frames % | bat -l ini")
+    _ffprobe_expand_cmd "$_show_prefix -select_streams a:0 -show_frames % | bat -l ini"
 end
 abbr --add ffpshow_frames_audio --set-cursor --function _ffpshow_frames_audio
 
 function _ffpshow_format
-    echo -n (_ffprobe_expand_cmd "$_show_prefix -show_format % | bat -l ini")
+    _ffprobe_expand_cmd "$_show_prefix -show_format % | bat -l ini"
 end
 abbr --add ffpshow_format --set-cursor --function _ffpshow_format
 
 # count read frames/packets vs recorded count (must show streams to see counts that are added as nb_read_xxx)
 function _ffpcount_frames
-    echo -n (_ffprobe_expand_cmd "$_show_prefix -count_frames -show_streams % | bat -l ini")
+    _ffprobe_expand_cmd "$_show_prefix -count_frames -show_streams % | bat -l ini"
 end
 abbr --add ffpcount_frames --set-cursor --function _ffpcount_frames
 
 function _ffpcount_packets
-    echo -n (_ffprobe_expand_cmd "$_show_prefix -count_packets -show_streams % | bat -l ini")
+    _ffprobe_expand_cmd "$_show_prefix -count_packets -show_streams % | bat -l ini"
 end
 abbr --add ffpcount_packets --set-cursor --function _ffpcount_packets
 
 function _ffpcount_both
-    echo -n (_ffprobe_expand_cmd "$_show_prefix -count_packets -count_frames -show_streams % | bat -l ini")
+    _ffprobe_expand_cmd "$_show_prefix -count_packets -count_frames -show_streams % | bat -l ini"
 end
 abbr --add ffpcount_both --set-cursor --function _ffpcount_both
 
