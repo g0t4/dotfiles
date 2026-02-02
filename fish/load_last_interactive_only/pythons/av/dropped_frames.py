@@ -206,8 +206,10 @@ def find_missing_frames(
 
         # * any timestamp not on a frame exactly (i.e. 2.000 or 3.000, after rounding 3rd digit) => extras (not an exact frame)
         #    so 2.105 => not on a frame boundary, mark as extra (b/w expected video frames)
-        cur_is_on_a_frame = np.isclose(_cur % 1, 0, atol=1e-6)
+        _cur_rounded_int = round(_cur)
+        cur_is_on_a_frame = np.isclose(_cur, _cur_rounded_int, atol=1e-6)
         if not cur_is_on_a_frame:
+            # rich.print(f'{cur_is_on_a_frame=} {_cur}')
             extra_frames.append(_cur)
             # do not increment last until hit an exact frame at which time will add all missing since last frame
             continue
