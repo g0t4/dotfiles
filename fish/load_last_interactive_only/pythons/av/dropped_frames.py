@@ -243,6 +243,8 @@ def report_missing_frames(video_path: Path, video: dict) -> None:
     if extra_frames:
         extra_times = [f"{int(e) / fps:.5f}" for e in extra_frames]
         print(f"[FAILIURE] extra frames detected: {extra_times}")
+    if missing_frames or extra_frames:
+        exit(-1)
 
 if __name__ == "__main__":
     import sys
@@ -260,3 +262,4 @@ if __name__ == "__main__":
         report_missing_frames(video_path, video)
     except MediaValidationError:
         rich.print(f"Error: {sys.exc_info()[1]}")
+        exit(-1)
