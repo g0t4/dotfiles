@@ -329,9 +329,9 @@ def report_missing_audio_frames(video_path: Path, audio: dict):
     expected_pts_duration = int(expected_duration_seconds * sample_rate)
     # FYI expected_pts_duration s/b next_pts exactly
     if next_pts < expected_pts_duration:
-        print(f"  [WARNING] audio ends early: {next_pts=} < {expected_pts_duration=}")
+        print(f"  [ERROR] audio ends early: {next_pts=} < {expected_pts_duration=}")
     if next_pts > expected_pts_duration:
-        print(f"  [WARNING] audio runs longer than expected: {next_pts=} > {expected_pts_duration=}")
+        print(f"  [ERROR] audio runs longer than expected: {next_pts=} > {expected_pts_duration=}")
 
 if __name__ == "__main__":
     import sys
