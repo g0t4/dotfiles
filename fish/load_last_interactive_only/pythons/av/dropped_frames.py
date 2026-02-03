@@ -92,7 +92,7 @@ def warn_if_unexpected(data: dict, key: str, expected: str | int | float, conver
         actual = convert(actual)
     if actual != expected:
         rich.inspect(actual)
-        rich.print(f"WARNING: {key} is not {expected}, should be fine but just a heads up: {actual}")
+        rich.print(f"[bold yellow][WARNING] {key} is not {expected}, should be fine but just a heads up: {actual}[/]")
 
 def verify_streams(video_path: Path) -> tuple[dict, dict]:
     audio, video = get_streams(video_path)
@@ -264,10 +264,10 @@ def report_missing_frames(video_path: Path, video: dict) -> None:
     missing_frames, extra_frames = find_missing_frames(timestamps, fps, duration_frames)
     if missing_frames:
         missing_times = [f"{m / fps:.6f}" for m in missing_frames]
-        print(f"[FAILURE] missing frames detected: {", ".join(missing_times)}")
+        rich.print(f"[bold red][ERROR] missing frames detected: {', '.join(missing_times)}[/]")
     if extra_frames:
         extra_times = [f"{e / fps:.6f}" for e in extra_frames]
-        print(f"[FAILIURE] extra frames detected: {", ".join(extra_times)}")
+        rich.print(f"[bold red][ERROR] extra frames detected: {', '.join(extra_times)}[/]")
     # if missing_frames or extra_frames:
     #     sys.exit(-1)
 
@@ -318,13 +318,13 @@ def report_missing_audio_frames(video_path: Path, audio: dict):
         if verbose:
             rich.print(f'pts={f.pts} ({f.pts_time*1000:.3f}ms) duration={f.duration} ({duration_ms:.3f}ms) #samples={f.nb_samples}')
         if f.pts != next_pts:
-            print(f"  [ERROR] Missing audio frame at pts {next_pts}, found next at {f.pts=}")
+            rich.print(f"  [bold red][ERROR] Missing audio frame at pts {next_pts}, found next at {f.pts= }[/]")
         if f.duration != 1024:
             # allow non‑standard duration for the last audio frame
             if i == len(frames) - 1:
-                rich.print(f"  [INFO] last audio frame has non‑standard duration ({f.duration}/{duration_ms:.3f}ms) at pts {f.pts}")
+                rich.print(f"  [bold cyan][INFO] last audio frame has non‑standard duration ({f.duration}/{duration_ms:.3f}ms) at pts {f.pts}[/]")
             else:
-                rich.print(f"  [WARNING] unexpected audio frame duration ({f.duration}/{duration_ms:.3f}ms) at pts {f.pts}")
+                rich.print(f"  [bold yellow][WARNING] unexpected audio frame duration ({f.duration}/{duration_ms:.3f}ms) at pts {f.pts}[/]")
         next_pts = f.pts + f.duration
     # check if duration met?
     expected_duration_seconds = float(audio.get("duration", 0))
@@ -332,18 +332,18 @@ def report_missing_audio_frames(video_path: Path, audio: dict):
     expected_pts_duration = int(expected_duration_seconds * sample_rate)
     # FYI expected_pts_duration s/b next_pts exactly
     if next_pts < expected_pts_duration:
-        print(f"  [ERROR] audio ends early: {next_pts=} < {expected_pts_duration=}")
+        rich.print(f"  [bold red][ERROR] audio ends early: {next_pts=} < {expected_pts_duration= }[/]")
     if next_pts > expected_pts_duration:
-        print(f"  [ERROR] audio runs longer than expected: {next_pts=} > {expected_pts_duration=}")
+        rich.print(f"  [bold red][ERROR] audio runs longer than expected: {next_pts=} > {expected_pts_duration= }[/]")
 
 if __name__ == "__main__":
     import sys
     if len(sys.argv) != 2:
-        print("Usage: python dropped_frames.py <video_file>")
+        rich.print(f"[bold red][ERROR] Usage: python dropped_frames.py <video_file>[/]")
         sys.exit(1)
     video_path = Path(sys.argv[1])
     if not video_path.is_file():
-        print(f"File not found: {video_path}")
+        rich.print(f"[bold red][ERROR] File not found: {video_path}[/]")
         sys.exit(1)
     try:
         container = verify_container(video_path)
@@ -353,5 +353,5 @@ if __name__ == "__main__":
         report_missing_audio_frames(video_path, audio)
         #    do this quick and dirty, no need for tesing either... this will be audio frame level which differs from video frames (each audio frame has 1024 samples in my video files)
     except MediaValidationError:
-        rich.print(f"Error: {sys.exc_info()[1]}")
+        rich.print(f"[bold red][ERROR] {sys.exc_info()[1]}")
         sys.exit(-1)
