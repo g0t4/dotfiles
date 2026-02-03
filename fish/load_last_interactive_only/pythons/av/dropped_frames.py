@@ -140,7 +140,7 @@ def verify_streams(video_path: Path) -> tuple[dict, dict]:
     audio_duration = audio.get("duration")
     video_duration = video.get("duration")
     if not (audio_duration == video_duration):
-        raise MediaValidationError(f"Audio and video durations differ: {audio_duration} vs {video_duration}")
+        rich.print(f"[yellow bold][WARNING] Audio and video durations differ: {audio_duration} vs {video_duration}")
 
     return audio, video
 
@@ -152,7 +152,7 @@ def verify_all(container, audio, video):
     audio_duration = float(audio.get("duration"))
     video_duration = float(video.get("duration"))
     if container_duration != audio_duration or container_duration != video_duration:
-        raise MediaValidationError(f"Container duration {container_duration} does not match audio ({audio_duration}) or video ({video_duration}) durations")
+        rich.print(f"[yellow bold][WARNING] Container duration {container_duration} does not match audio ({audio_duration}) or video ({video_duration}) durations")
 
 @dataclass
 class FrameInfo:
