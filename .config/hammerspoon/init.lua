@@ -94,6 +94,7 @@ hs.window.animationDuration = 0 -- default is 0.2 (FYI this means window layout 
 -- require("config.macros.streamdeck.obs.init") -- ok to keep even if not using streamdeck.bootstrap:
 -- require("config.macros.streamdeck.bootstrap") -- ENABLE STREAMDECK CONTROLS HERE
 require("config.macros.init")
+require("config.launcher").init()
 
 
 
