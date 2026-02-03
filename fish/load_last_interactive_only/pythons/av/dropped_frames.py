@@ -325,7 +325,7 @@ def report_missing_audio_frames(video_path: Path, audio: dict):
         next_pts = f.pts + f.duration
     # check if duration met?
     expected_duration_seconds = float(audio.get("duration", 0))
-    sample_rate = int(audio.get("sample_rate", 0))
+    sample_rate = float(audio.get("sample_rate", 0))
     expected_pts_duration = int(expected_duration_seconds * sample_rate)
     # FYI expected_pts_duration s/b next_pts exactly
     if next_pts < expected_pts_duration:
