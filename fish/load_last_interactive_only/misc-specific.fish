@@ -1763,6 +1763,7 @@ function video_editing_3_dropped_frames
     set -l _script_py "$WES_DOTFILES/fish/load_last_interactive_only/pythons/av/dropped_frames.py"
     $_python3 $_script_py $argv
 end
+complete -c video_editing_3_dropped_frames -a "--verbose"
 
 abbr --add ffp --function _ffp
 function _ffp
