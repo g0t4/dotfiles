@@ -155,6 +155,7 @@ class FrameInfo:
     pts_time: float
     duration: int
     duration_time: float
+    nb_samples: int | None = None
 
 def get_frame_info(video_path: Path, stream: str) -> list[FrameInfo]:
     cmd = [
@@ -164,7 +165,8 @@ def get_frame_info(video_path: Path, stream: str) -> list[FrameInfo]:
         "-select_streams",
         stream,
         "-show_entries",
-        "frame=pts,pts_time,nb_samples,duration,duration_time",
+        # FYI nb_samples is only on audio frames (not video)... ffprobe still works w/ the field on video streams
+        "frame=pts,pts_time,nb_samples,duration,duration_time,nb_samples",
         # ? pkt_dts/pkt_dts_time
         #   ? would these always match pts in my case? any use in verifying they match pts to avoid another set of problems?
         #   ? likewise with best_effort_timestamp/best_effort_timestamp_time
@@ -184,6 +186,7 @@ def get_frame_info(video_path: Path, stream: str) -> list[FrameInfo]:
         pts_time=float(frame["pts_time"]),
         duration=int(frame["duration"]),
         duration_time=float(frame["duration_time"]),
+        nb_samples=frame.get("nb_samples", None),
     ) for frame in data.get("frames", [])]
     return frames
 
