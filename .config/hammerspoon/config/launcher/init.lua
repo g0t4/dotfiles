@@ -94,14 +94,19 @@ end
 
 -- Handle file selection
 local function onChoice(choice)
+    -- Log for debugging
+    print("=== onChoice callback ===")
+    print("choice:", hs.inspect(choice))
+    local modifiers = hs.eventtap.checkKeyboardModifiers()
+    print("modifiers:", hs.inspect(modifiers))
+    print("========================")
+
     if not choice then
         return
     end
 
-    -- Check if cmd key is held
-    local modifiers = hs.eventtap.checkKeyboardModifiers()
-
-    if modifiers.cmd then
+    -- Check if cmd or shift key is held (shift works better with Enter since cmd+enter may be blocked)
+    if modifiers.cmd or modifiers.shift then
         -- Reveal in Finder
         hs.execute(string.format('open -R "%s"', choice.path))
     else
@@ -135,7 +140,7 @@ function M.init()
         M.show()
     end)
 
-    print("File launcher initialized (alt+space)")
+    print("File launcher initialized (alt+space, shift/cmd+enter or cmd+click to reveal in Finder)")
 end
 
 return M
