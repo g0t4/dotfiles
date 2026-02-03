@@ -263,8 +263,61 @@ def report_missing_frames(video_path: Path, video: dict) -> None:
     if extra_frames:
         extra_times = [f"{e / fps:.6f}" for e in extra_frames]
         print(f"[FAILIURE] extra frames detected: {", ".join(extra_times)}")
-    if missing_frames or extra_frames:
-        sys.exit(-1)
+    # if missing_frames or extra_frames:
+    #     sys.exit(-1)
+
+def report_missing_audio_frames(video_path: Path, audio: dict):
+    # [FRAME]
+    # media_type=audio
+    # stream_index=1
+    # key_frame=1
+    # pts=0
+    # pts_time=0.000000
+    # pkt_dts=0
+    # pkt_dts_time=0.000000
+    # best_effort_timestamp=0
+    # best_effort_timestamp_time=0.000000
+    # duration=1024
+    # duration_time=0.021333
+    # pkt_pos=161033
+    # pkt_size=220
+    # sample_fmt=fltp
+    # nb_samples=1024
+    # channels=1
+    # channel_layout=mono
+    # [/FRAME]
+    # [FRAME]
+    # media_type=audio
+    # stream_index=1
+    # key_frame=1
+    # pts=1024
+    # pts_time=0.021333
+    # pkt_dts=1024
+    # pkt_dts_time=0.021333
+    # best_effort_timestamp=1024
+    # best_effort_timestamp_time=0.021333
+    # duration=1024
+    # duration_time=0.021333
+    # pkt_pos=161253
+    # pkt_size=188
+    # sample_fmt=fltp
+    # nb_samples=1024
+    # channels=1
+    # channel_layout=mono
+    # [/FRAME]
+    frames = get_frame_info(video_path, "a:0")
+    next_pts = 0
+    for f in frames:
+        start_ms = f.pts_time * 1000
+        duration_ms = f.duration_time * 1000
+        if verbose:
+            rich.print(f'pts={f.pts} ({f.pts_time*1000:.3f}ms) duration={f.duration} ({duration_ms:.3f}ms) #samples={f.nb_samples}')
+        if f.pts != next_pts:
+            print(f"  [ERROR] Missing audio frame at pts {next_pts}, found next at {f.pts=}")
+        if f.duration != 1024:
+            # warning only
+            rich.print(f"  [WARNING] unexpected audio frame duration={f.duration} ({duration_ms:.3f}ms) at pts {f.pts}")
+        next_pts = f.pts + f.duration
 
 if __name__ == "__main__":
     import sys
@@ -280,7 +333,7 @@ if __name__ == "__main__":
         audio, video = verify_streams(video_path)
         verify_all(container, audio, video)
         report_missing_frames(video_path, video)
-        # TODO report_missing_audio_frames(video_path, audio)
+        report_missing_audio_frames(video_path, audio)
         #    do this quick and dirty, no need for tesing either... this will be audio frame level which differs from video frames (each audio frame has 1024 samples in my video files)
     except MediaValidationError:
         rich.print(f"Error: {sys.exc_info()[1]}")
