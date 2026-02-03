@@ -321,7 +321,7 @@ def report_missing_audio_frames(video_path: Path, audio: dict):
             print(f"  [ERROR] Missing audio frame at pts {next_pts}, found next at {f.pts=}")
         if f.duration != 1024:
             # warning only
-            rich.print(f"  [WARNING] unexpected audio frame duration={f.duration} ({duration_ms:.3f}ms) at pts {f.pts}")
+            rich.print(f"  [WARNING] unexpected audio frame duration ({f.duration}/{duration_ms:.3f}ms) at pts {f.pts}")
         next_pts = f.pts + f.duration
     # check if duration met?
     expected_duration_seconds = float(audio.get("duration", 0))
