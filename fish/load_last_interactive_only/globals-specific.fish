@@ -50,3 +50,6 @@ abbr --set-cursor --position=anywhere -- pxi '| xargs --interactive -I_ -- % _' 
 #   dpkg -L cups-browsed | xargs -I {} sh -c 'test -d "{}" && echo "{}"'
 #     lightning fast in bash relative to fish -c overhead
 #     *** just use bash or /bin/sh -c # plenty fast and likely suits my needs most of the time
+
+# use GNU xargs when typing `xargs`
+abbr xargs 'gxargs'
