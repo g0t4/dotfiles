@@ -2,9 +2,8 @@ local M = {}
 
 -- File launcher using mdfind (Spotlight index)
 local chooser = nil
-local searchTimer = nil
 local currentTask = nil
-local DEBOUNCE_DELAY = 0.05 -- seconds to wait after typing stops before searching
+local currentTaskId = 0  -- Track which task is current
 local MAX_RESULTS = 50
 
 -- Helper to get just filename from path for display
@@ -21,6 +20,7 @@ end
 local function searchFiles(query, callback)
     -- Cancel any existing search task
     if currentTask then
+        print("Terminating previous mdfind task...")
         currentTask:terminate()
         currentTask = nil
     end
@@ -30,13 +30,24 @@ local function searchFiles(query, callback)
         return
     end
 
+    -- Increment task ID so we can ignore old tasks
+    currentTaskId = currentTaskId + 1
+    local thisTaskId = currentTaskId
+
     -- Build mdfind command
-    -- Use -name for filename matching (faster and what users typically want in a launcher)
+    -- Full Spotlight search (faster than -name in practice)
     local cmd = "/usr/bin/mdfind"
-    local args = {"-name", query}
+    local args = {query}
+    print("Starting new mdfind for query:", query, "taskId:", thisTaskId)
 
     local output = ""
     currentTask = hs.task.new(cmd, function(exitCode, _, stdErr)
+        -- Ignore if this isn't the current task anymore
+        if thisTaskId ~= currentTaskId then
+            print("Ignoring old task", thisTaskId)
+            return
+        end
+
         currentTask = nil
 
         if exitCode ~= 0 then
@@ -75,21 +86,13 @@ local function searchFiles(query, callback)
     currentTask:start()
 end
 
--- Debounced search handler
+-- Search handler - cancels previous search on every keystroke
 local function onQueryChange(query)
-    -- Cancel existing timer
-    if searchTimer then
-        searchTimer:stop()
-        searchTimer = nil
-    end
-
-    -- Set new timer
-    searchTimer = hs.timer.doAfter(DEBOUNCE_DELAY, function()
-        searchFiles(query, function(results)
-            if chooser then
-                chooser:choices(results)
-            end
-        end)
+    -- searchFiles already cancels any running task, so just call it directly
+    searchFiles(query, function(results)
+        if chooser then
+            chooser:choices(results)
+        end
     end)
 end
 
