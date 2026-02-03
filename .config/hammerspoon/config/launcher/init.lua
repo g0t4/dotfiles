@@ -4,7 +4,7 @@ local M = {}
 local chooser = nil
 local searchTimer = nil
 local currentTask = nil
-local DEBOUNCE_DELAY = 0.2 -- seconds to wait after typing stops before searching
+local DEBOUNCE_DELAY = 0.05 -- seconds to wait after typing stops before searching
 local MAX_RESULTS = 50
 
 -- Helper to get just filename from path for display
@@ -105,8 +105,12 @@ local function onChoice(choice)
         return
     end
 
-    -- Check if cmd or shift key is held (shift works better with Enter since cmd+enter may be blocked)
-    if modifiers.cmd or modifiers.shift then
+    -- Check modifiers for different actions
+    if modifiers.alt then
+        -- Copy path to clipboard
+        hs.pasteboard.setContents(choice.path)
+        hs.alert.show("Path copied: " .. choice.text)
+    elseif modifiers.cmd or modifiers.shift then
         -- Reveal in Finder
         hs.execute(string.format('open -R "%s"', choice.path))
     else
@@ -140,7 +144,7 @@ function M.init()
         M.show()
     end)
 
-    print("File launcher initialized (alt+space, shift/cmd+enter or cmd+click to reveal in Finder)")
+    print("File launcher initialized (alt+space, shift/cmd+enter to reveal, option+enter to copy path)")
 end
 
 return M
