@@ -324,7 +324,7 @@ def report_missing_audio_frames(video_path: Path, audio: dict):
             if i == len(frames) - 1:
                 rich.print(f"  [bold cyan][INFO] last audio frame has non‑standard duration ({f.duration}/{duration_ms:.3f}ms) at pts {f.pts}[/]")
             else:
-                rich.print(f"  [bold yellow][WARNING] unexpected audio frame duration ({f.duration}/{duration_ms:.3f}ms) at pts {f.pts}[/]")
+                rich.print(f"  [bold red][ERROR] unexpected audio frame duration ({f.duration}/{duration_ms:.3f}ms) at pts {f.pts}[/]")
         next_pts = f.pts + f.duration
     # check if duration met?
     expected_duration_seconds = float(audio.get("duration", 0))
