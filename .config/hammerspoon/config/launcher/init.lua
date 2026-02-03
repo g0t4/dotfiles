@@ -4,7 +4,7 @@ local M = {}
 local chooser = nil
 local currentTask = nil
 local currentTaskId = 0  -- Track which task is current
-local MAX_RESULTS = 50
+local MAX_RESULTS = 30
 
 -- Helper to get just filename from path for display
 local function getFilename(path)
@@ -36,11 +36,14 @@ local function searchFiles(query, callback)
 
     -- Build mdfind command
     -- Full Spotlight search (faster than -name in practice)
-    local cmd = "/usr/bin/mdfind"
-    local args = {query}
+    -- Use stdbuf to force unbuffered output so we get results as they're found
+    local cmd = "/opt/homebrew/bin/stdbuf"
+    local args = {"-o0", "/usr/bin/mdfind", query}
     print("Starting new mdfind for query:", query, "taskId:", thisTaskId)
 
-    local output = ""
+    local results = {}
+    local buffer = ""
+
     currentTask = hs.task.new(cmd, function(exitCode, _, stdErr)
         -- Ignore if this isn't the current task anymore
         if thisTaskId ~= currentTaskId then
@@ -50,37 +53,53 @@ local function searchFiles(query, callback)
 
         currentTask = nil
 
-        if exitCode ~= 0 then
+        if exitCode ~= 0 and exitCode ~= 15 then  -- 15 is SIGTERM (expected when we terminate)
             print("mdfind error:", stdErr)
-            callback({})
-            return
         end
 
-        -- Parse results (one file path per line)
-        local results = {}
-        local count = 0
-        for line in output:gmatch("[^\r\n]+") do
-            if count >= MAX_RESULTS then
+        -- Final callback with results we've accumulated
+        callback(results)
+    end, function(_, stdOut, _)
+        -- Ignore if this isn't the current task anymore
+        if thisTaskId ~= currentTaskId then
+            return true
+        end
+
+        -- Accumulate partial line in buffer
+        buffer = buffer .. stdOut
+
+        -- Process complete lines
+        while true do
+            local line, rest = buffer:match("([^\r\n]+)[\r\n](.*)")
+            if not line then
                 break
             end
+            buffer = rest
 
             -- Skip hidden files/directories (those with /. in path)
             if not line:match("/%.[^/]") then
-                count = count + 1
                 table.insert(results, {
                     text = getFilename(line),
                     subText = getDirectory(line),
                     path = line,
                     image = hs.image.iconForFile(line),
                 })
+
+                -- Update UI with partial results
+                callback(results)
+
+                -- Terminate if we have enough results
+                if #results >= MAX_RESULTS then
+                    if currentTask then
+                        currentTask:terminate()
+                        currentTask = nil
+                    end
+                    return false  -- Stop streaming
+                end
             end
         end
 
-        callback(results)
-    end, function(_, stdOut, _)
-        -- Stream callback - accumulate output
-        output = output .. stdOut
-        return true
+        return true  -- Continue streaming
     end, args)
 
     currentTask:start()
