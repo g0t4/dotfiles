@@ -60,6 +60,7 @@ local function searchFiles(query, callback)
                     text = getFilename(line),
                     subText = getDirectory(line),
                     path = line,
+                    image = hs.image.iconForFile(line),
                 })
             end
         end
