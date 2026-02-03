@@ -29,6 +29,9 @@ def get_container(video_path: Path):
     result = subprocess.run(cmd, capture_output=True, text=True, check=True)
     data = json.loads(result.stdout)
     container = data.get("format")
+    if verbose:
+        rich.print("container", container)
+
     if not container:
         raise MediaValidationError("No format information found")
     return container
@@ -53,6 +56,8 @@ def get_streams(video_path: Path):
     ]
     result = subprocess.run(cmd, capture_output=True, text=True, check=True)
     data = json.loads(result.stdout)
+    if verbose:
+        rich.print(data)
 
     # * get ONE audio stream
     audio_streams = [s for s in data.get("streams", []) if s.get("codec_type") == "audio"]
@@ -318,6 +323,15 @@ def report_missing_audio_frames(video_path: Path, audio: dict):
             # warning only
             rich.print(f"  [WARNING] unexpected audio frame duration={f.duration} ({duration_ms:.3f}ms) at pts {f.pts}")
         next_pts = f.pts + f.duration
+    # check if duration met?
+    expected_duration_seconds = float(audio.get("duration", 0))
+    sample_rate = int(audio.get("sample_rate", 0))
+    expected_pts_duration = int(expected_duration_seconds * sample_rate)
+    # FYI expected_pts_duration s/b next_pts exactly
+    if next_pts < expected_pts_duration:
+        print(f"  [WARNING] audio ends early: {next_pts=} < {expected_pts_duration=}")
+    if next_pts > expected_duration_seconds:
+        print(f"  [WARNING] audio runs longer than expected: {next_pts=} > {expected_pts_duration=}")
 
 if __name__ == "__main__":
     import sys
