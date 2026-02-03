@@ -318,13 +318,13 @@ def report_missing_audio_frames(video_path: Path, audio: dict):
         if verbose:
             rich.print(f'pts={f.pts} ({f.pts_time*1000:.3f}ms) duration={f.duration} ({duration_ms:.3f}ms) #samples={f.nb_samples}')
         if f.pts != next_pts:
-            rich.print(f"  [bold red][ERROR] Missing audio frame at pts {next_pts}, found next at {f.pts= }[/]")
+            rich.print(f"[bold red][ERROR] Missing audio frame at pts {next_pts}, found next at {f.pts= }[/]")
         if f.duration != 1024:
             # allow non‑standard duration for the last audio frame
             if i == len(frames) - 1:
-                rich.print(f"  [bold cyan][INFO] last audio frame has non‑standard duration ({f.duration}/{duration_ms:.3f}ms) at pts {f.pts}[/]")
+                rich.print(f"[bold cyan][INFO] last audio frame has non‑standard duration ({f.duration}/{duration_ms:.3f}ms) at pts {f.pts}[/]")
             else:
-                rich.print(f"  [bold red][ERROR] unexpected audio frame duration ({f.duration}/{duration_ms:.3f}ms) at pts {f.pts}[/]")
+                rich.print(f"[bold red][ERROR] unexpected audio frame duration ({f.duration}/{duration_ms:.3f}ms) at pts {f.pts}[/]")
         next_pts = f.pts + f.duration
     # check if duration met?
     expected_duration_seconds = float(audio.get("duration", 0))
@@ -332,9 +332,9 @@ def report_missing_audio_frames(video_path: Path, audio: dict):
     expected_pts_duration = int(expected_duration_seconds * sample_rate)
     # FYI expected_pts_duration s/b next_pts exactly
     if next_pts < expected_pts_duration:
-        rich.print(f"  [bold red][ERROR] audio ends early: {next_pts=} < {expected_pts_duration= }[/]")
+        rich.print(f"[bold red][ERROR] audio ends early: {next_pts=} < {expected_pts_duration= }[/]")
     if next_pts > expected_pts_duration:
-        rich.print(f"  [bold red][ERROR] audio runs longer than expected: {next_pts=} > {expected_pts_duration= }[/]")
+        rich.print(f"[bold red][ERROR] audio runs longer than expected: {next_pts=} > {expected_pts_duration= }[/]")
 
 if __name__ == "__main__":
     import sys
