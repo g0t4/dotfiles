@@ -130,6 +130,12 @@ function M.show()
         chooser:queryChangedCallback(onQueryChange)
         chooser:searchSubText(true) -- Allow searching in subtext (directory path)
         chooser:choices({}) -- Start with empty choices
+
+        -- Styling
+        chooser:bgDark(true) -- Use dark appearance
+        chooser:fgColor({red=1.0, green=1.0, blue=1.0}) -- White text
+        chooser:subTextColor({red=0.6, green=0.6, blue=0.6}) -- Gray subtext
+        chooser:width(60) -- 60% of screen width (default is 40%)
     end
 
     chooser:show()
