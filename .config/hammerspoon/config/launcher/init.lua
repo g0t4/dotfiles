@@ -363,23 +363,47 @@ local function handleFishCommand(command, searchId, callback)
     }})
 end
 
--- Python code execution mode - run Python code
+-- Python code execution mode - run Python code with live evaluation
 local function handlePythonCode(code, searchId, callback)
     if code == "" then
-        callback(searchId, {{
-            text = "py <code>",
-            subText = "Type Python code to execute",
-            image = hs.image.imageFromName("NSActionTemplate"),
-        }})
+        callback(searchId, {})
         return
     end
 
-    callback(searchId, {{
-        text = "Run: " .. code,
-        subText = "Execute Python code",
-        pythonCode = code,
-        image = hs.image.imageFromName("NSActionTemplate"),
-    }})
+    -- Execute Python code and get result
+    local output, status = hs.execute(string.format('/Users/wesdemos/repos/github/g0t4/dotfiles/.venv/bin/python -c "%s"', code:gsub('"', '\\"')))
+
+    if status then
+        -- Success - show output
+        local result = output and output:gsub("%s+$", "") or ""  -- Trim trailing whitespace
+        if result == "" then
+            callback(searchId, {{
+                text = "No output",
+                subText = code,
+                pythonCode = code,
+                pythonResult = "",
+                image = hs.image.imageFromName("NSActionTemplate"),
+            }})
+        else
+            callback(searchId, {{
+                text = result,
+                subText = code,
+                pythonCode = code,
+                pythonResult = result,
+                image = hs.image.imageFromName("NSActionTemplate"),
+            }})
+        end
+    else
+        -- Error - show error message
+        local errorMsg = output and output:gsub("%s+$", "") or "Unknown error"
+        callback(searchId, {{
+            text = "Error: " .. errorMsg,
+            subText = code,
+            pythonCode = code,
+            pythonResult = nil,
+            image = hs.image.imageFromName("NSCaution"),
+        }})
+    end
 end
 
 -- Commands mode - run predefined commands
@@ -665,16 +689,11 @@ local function onChoice(choice)
 
     -- Handle Python code execution
     if choice.pythonCode then
-        local output, status = hs.execute(string.format('/Users/wesdemos/repos/github/g0t4/dotfiles/.venv/bin/python -c "%s"', choice.pythonCode:gsub('"', '\\"')))
-        if status then
-            if output and output ~= "" then
-                hs.pasteboard.setContents(output)
-                hs.alert.show("Output copied: " .. output:sub(1, 50))
-            else
-                hs.alert.show("Executed successfully")
-            end
+        if choice.pythonResult and choice.pythonResult ~= "" then
+            hs.pasteboard.setContents(choice.pythonResult)
+            hs.alert.show("Copied: " .. choice.pythonResult:sub(1, 50))
         else
-            hs.alert.show("Error: " .. (output or "Unknown error"))
+            hs.alert.show("No output to copy")
         end
         return
     end
