@@ -2,7 +2,7 @@ local M = {}
 
 -- File launcher using mdfind (Spotlight index)
 local chooser = nil
-local currentTask = nil
+local currentCancelFunc = nil  -- Function to cancel current search
 local currentSearchId = 0  -- Track current search across all searchers
 local MAX_RESULTS = 30
 
@@ -20,10 +20,11 @@ local function getDirectory(path)
 end
 
 -- Perform mdfind search
+-- Returns a cancel function
 local function searchFiles(query, searchId, callback)
     if query == "" or query == nil then
         callback(searchId, {})
-        return
+        return function() end  -- No-op cancel
     end
 
     -- Build mdfind command
@@ -35,15 +36,14 @@ local function searchFiles(query, searchId, callback)
 
     local results = {}
     local buffer = ""
+    local task = nil
 
-    currentTask = hs.task.new(cmd, function(exitCode, _, stdErr)
+    task = hs.task.new(cmd, function(exitCode, _, stdErr)
         -- Ignore if this isn't the current search anymore
         if searchId ~= currentSearchId then
             print("Ignoring old search", searchId)
             return
         end
-
-        currentTask = nil
 
         if exitCode ~= 0 and exitCode ~= 15 then  -- 15 is SIGTERM (expected when we terminate)
             print("mdfind error:", stdErr)
@@ -82,9 +82,9 @@ local function searchFiles(query, searchId, callback)
 
                 -- Terminate if we have enough results
                 if #results >= MAX_RESULTS then
-                    if currentTask then
-                        currentTask:terminate()
-                        currentTask = nil
+                    if task then
+                        task:terminate()
+                        task = nil
                     end
                     return false  -- Stop streaming
                 end
@@ -94,10 +94,20 @@ local function searchFiles(query, searchId, callback)
         return true  -- Continue streaming
     end, args)
 
-    currentTask:start()
+    task:start()
+
+    -- Return cancel function
+    return function()
+        if task then
+            print("Canceling mdfind search", searchId)
+            task:terminate()
+            task = nil
+        end
+    end
 end
 
 -- Application search mode
+-- Returns a cancel function
 local function searchApplications(query, searchId, callback)
     local results = {}
 
@@ -139,13 +149,15 @@ local function searchApplications(query, searchId, callback)
     end
 
     callback(searchId, results)
+    return function() end  -- No-op cancel for synchronous search
 end
 
 -- LLM completion mode
+-- Returns a cancel function
 local function handleLLM(query, searchId, callback)
     if query == "" then
         callback(searchId, {})
-        return
+        return function() end  -- No-op cancel
     end
 
     -- Immediately clear old results when starting new search
@@ -180,17 +192,16 @@ Provide a helpful, concise response or completion. Be brief and practical.]], qu
 
     local buffer = ""
     local fullResponse = ""
+    local task = nil
 
     print("Starting LLM request for query:", query, "searchId:", searchId)
 
-    currentTask = hs.task.new(cmd, function(exitCode, stdOut, stdErr)
+    task = hs.task.new(cmd, function(exitCode, stdOut, stdErr)
         -- Ignore if this isn't the current search anymore
         if searchId ~= currentSearchId then
-            print("Ignoring old LLM search", searchId)
+            print("Ignoring old LLM search completion", searchId, "current:", currentSearchId)
             return
         end
-
-        currentTask = nil
 
         print("=== LLM Complete ===")
         print("Exit code:", exitCode)
@@ -206,7 +217,8 @@ Provide a helpful, concise response or completion. Be brief and practical.]], qu
     end, function(_, stdOut, _)
         -- Ignore if this isn't the current search anymore
         if searchId ~= currentSearchId then
-            return true
+            print("Ignoring old LLM chunk, searchId:", searchId, "current:", currentSearchId)
+            return false  -- Stop streaming for old searches
         end
 
         buffer = buffer .. stdOut
@@ -245,10 +257,20 @@ Provide a helpful, concise response or completion. Be brief and practical.]], qu
         return true  -- Continue streaming
     end, args)
 
-    currentTask:start()
+    task:start()
+
+    -- Return cancel function that kills the curl process
+    return function()
+        if task then
+            print("Canceling LLM request", searchId)
+            task:terminate()
+            task = nil
+        end
+    end
 end
 
 -- Dictionary mode - look up word definitions with inline display
+-- Returns a cancel function
 local function handleDictionary(word, searchId, callback)
     if word == "" then
         callback(searchId, {})
@@ -295,9 +317,11 @@ except Exception as e:
             image = hs.image.imageFromName("NSBookmarkTemplate"),
         }})
     end
+    return function() end  -- No-op cancel for synchronous operation
 end
 
 -- Google/web search mode
+-- Returns a cancel function
 local function handleWebSearch(query, searchId, callback)
     if query == "" then
         callback(searchId, {})
@@ -313,9 +337,11 @@ local function handleWebSearch(query, searchId, callback)
         webSearchUrl = url,
         image = hs.image.imageFromName("NSNetwork"),
     }})
+    return function() end  -- No-op cancel
 end
 
 -- Path browsing mode - browse filesystem
+-- Returns a cancel function
 local function handlePathBrowsing(path, searchId, callback)
     -- Handle just "/" - show root contents
     if path == "/" then
@@ -395,9 +421,11 @@ local function handlePathBrowsing(path, searchId, callback)
     end
 
     callback(searchId, results)
+    return function() end  -- No-op cancel
 end
 
 -- Fish shell command mode - run fish commands
+-- Returns a cancel function
 local function handleFishCommand(command, searchId, callback)
     if command == "" then
         callback(searchId, {{
@@ -414,6 +442,7 @@ local function handleFishCommand(command, searchId, callback)
         fishCommand = command,
         image = hs.image.imageFromName("NSActionTemplate"),
     }})
+    return function() end  -- No-op cancel
 end
 
 -- Python code execution mode - run Python code with live evaluation
@@ -457,6 +486,7 @@ local function handlePythonCode(code, searchId, callback)
             image = hs.image.imageFromName("NSCaution"),
         }})
     end
+    return function() end  -- No-op cancel
 end
 
 -- System settings mode - open System Settings panes
@@ -526,6 +556,7 @@ local function handleSystemSettings(query, searchId, callback)
     end
 
     callback(searchId, results)
+    return function() end  -- No-op cancel
 end
 
 -- Commands mode - run predefined commands
@@ -556,6 +587,7 @@ local function handleCommands(query, searchId, callback)
     end
 
     callback(searchId, results)
+    return function() end  -- No-op cancel
 end
 
 -- Lua calculator mode - evaluate Lua expression (moved from "c ")
@@ -594,6 +626,7 @@ local function handleCalculator(expression, searchId, callback)
         result = tostring(result),
         image = hs.image.imageFromName("NSCalculator"),
     }})
+    return function() end  -- No-op cancel
 end
 
 -- Show available modes
@@ -659,11 +692,11 @@ end
 
 -- Search handler - cancels previous search on every keystroke
 local function onQueryChange(query)
-    -- Cancel any existing search task
-    if currentTask then
-        print("Terminating previous search task...")
-        currentTask:terminate()
-        currentTask = nil
+    -- Cancel any existing search using the cancel function
+    if currentCancelFunc then
+        print("Canceling previous search...")
+        currentCancelFunc()
+        currentCancelFunc = nil
     end
 
     -- Increment search ID to invalidate any in-flight searches
@@ -699,7 +732,7 @@ local function onQueryChange(query)
     -- Check for application mode
     if query:match("^a ") then
         local appQuery = query:sub(3)  -- Remove "a " prefix
-        searchApplications(appQuery, thisSearchId, handleResults)
+        currentCancelFunc = searchApplications(appQuery, thisSearchId, handleResults)
         return
     end
 
@@ -707,67 +740,67 @@ local function onQueryChange(query)
     if query:match("^s ") then
         local settingsQuery = query:sub(3)  -- Remove "s " prefix
         print("System settings mode activated, query:", settingsQuery)
-        handleSystemSettings(settingsQuery, thisSearchId, handleResults)
+        currentCancelFunc = handleSystemSettings(settingsQuery, thisSearchId, handleResults)
         return
     end
 
     -- Check for commands mode
     if query:match("^c ") then
         local cmdQuery = query:sub(3)  -- Remove "c " prefix
-        handleCommands(cmdQuery, thisSearchId, handleResults)
+        currentCancelFunc = handleCommands(cmdQuery, thisSearchId, handleResults)
         return
     end
 
     -- Check for dictionary mode
     if query:match("^d ") then
         local word = query:sub(3)  -- Remove "d " prefix
-        handleDictionary(word, thisSearchId, handleResults)
+        currentCancelFunc = handleDictionary(word, thisSearchId, handleResults)
         return
     end
 
     -- Check for Google search mode
     if query:match("^g ") then
         local searchQuery = query:sub(3)  -- Remove "g " prefix
-        handleWebSearch(searchQuery, thisSearchId, handleResults)
+        currentCancelFunc = handleWebSearch(searchQuery, thisSearchId, handleResults)
         return
     end
 
     -- Check for Lua calculator mode
     if query:match("^l ") then
         local expression = query:sub(3)  -- Remove "l " prefix
-        handleCalculator(expression, thisSearchId, handleResults)
+        currentCancelFunc = handleCalculator(expression, thisSearchId, handleResults)
         return
     end
 
     -- Check for LLM mode
     if query:match("^o ") then
         local llmQuery = query:sub(3)  -- Remove "o " prefix
-        handleLLM(llmQuery, thisSearchId, handleResults)
+        currentCancelFunc = handleLLM(llmQuery, thisSearchId, handleResults)
         return
     end
 
     -- Check for path browsing mode (absolute paths starting with / or ~)
     if query:match("^/") or query:match("^~") then
-        handlePathBrowsing(query, thisSearchId, handleResults)
+        currentCancelFunc = handlePathBrowsing(query, thisSearchId, handleResults)
         return
     end
 
     -- Check for fish command mode
     if query:match("^f ") then
         local command = query:sub(3)  -- Remove "f " prefix
-        handleFishCommand(command, thisSearchId, handleResults)
+        currentCancelFunc = handleFishCommand(command, thisSearchId, handleResults)
         return
     end
 
     -- Check for Python code mode
     if query:match("^py ") then
         local code = query:sub(4)  -- Remove "py " prefix
-        handlePythonCode(code, thisSearchId, handleResults)
+        currentCancelFunc = handlePythonCode(code, thisSearchId, handleResults)
         return
     end
 
     -- Default to file search
-    searchFiles(query, thisSearchId, handleResults)
+    currentCancelFunc = searchFiles(query, thisSearchId, handleResults)
 end
 
 -- Handle file selection
