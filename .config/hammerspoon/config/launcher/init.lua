@@ -627,6 +627,19 @@ local function onChoice(choice)
     end
 end
 
+-- Refresh hotkeys
+local refreshHotkeyCmdR = nil
+local refreshHotkeyCtrlR = nil
+
+-- Refresh current query
+local function refreshQuery()
+    if chooser then
+        local currentQuery = chooser:query()
+        -- Trigger onQueryChange to re-run the search
+        onQueryChange(currentQuery)
+    end
+end
+
 -- Create and show the launcher
 function M.show()
     if not chooser then
@@ -642,6 +655,15 @@ function M.show()
         chooser:width(60) -- 60% of screen width (default is 40%)
     end
 
+    -- Enable refresh hotkeys when chooser is shown
+    if not refreshHotkeyCmdR then
+        refreshHotkeyCmdR = hs.hotkey.bind({"cmd"}, "r", refreshQuery)
+        refreshHotkeyCtrlR = hs.hotkey.bind({"ctrl"}, "r", refreshQuery)
+    else
+        refreshHotkeyCmdR:enable()
+        refreshHotkeyCtrlR:enable()
+    end
+
     chooser:show()
 end
 
@@ -649,6 +671,13 @@ end
 function M.hide()
     if chooser then
         chooser:hide()
+    end
+    -- Disable refresh hotkeys when hidden
+    if refreshHotkeyCmdR then
+        refreshHotkeyCmdR:disable()
+    end
+    if refreshHotkeyCtrlR then
+        refreshHotkeyCtrlR:disable()
     end
 end
 
