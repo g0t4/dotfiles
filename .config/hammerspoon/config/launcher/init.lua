@@ -349,7 +349,7 @@ local function handleFishCommand(command, searchId, callback)
     if command == "" then
         callback(searchId, {{
             text = "f <command>",
-            subText = "Type a fish shell command to execute",
+            subText = "Type a fish shell command, then press Enter to execute",
             image = hs.image.imageFromName("NSActionTemplate"),
         }})
         return
@@ -357,7 +357,7 @@ local function handleFishCommand(command, searchId, callback)
 
     callback(searchId, {{
         text = "Run: " .. command,
-        subText = "Execute in fish shell",
+        subText = "Press Enter to execute in fish shell",
         fishCommand = command,
         image = hs.image.imageFromName("NSActionTemplate"),
     }})
@@ -682,8 +682,18 @@ local function onChoice(choice)
 
     -- Handle fish command execution
     if choice.fishCommand then
-        hs.execute(string.format('/opt/homebrew/bin/fish -c "%s"', choice.fishCommand:gsub('"', '\\"')))
-        hs.alert.show("Executed: " .. choice.fishCommand)
+        local output, status = hs.execute(string.format('/opt/homebrew/bin/fish -c "%s"', choice.fishCommand:gsub('"', '\\"')))
+        if status then
+            local result = output and output:gsub("%s+$", "") or ""
+            if result ~= "" then
+                hs.pasteboard.setContents(result)
+                hs.alert.show("Output copied: " .. result:sub(1, 100))
+            else
+                hs.alert.show("Command executed (no output)")
+            end
+        else
+            hs.alert.show("Error: " .. (output or "Command failed"))
+        end
         return
     end
 
