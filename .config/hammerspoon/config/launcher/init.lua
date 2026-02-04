@@ -344,6 +344,44 @@ local function handlePathBrowsing(path, searchId, callback)
     callback(searchId, results)
 end
 
+-- Fish shell command mode - run fish commands
+local function handleFishCommand(command, searchId, callback)
+    if command == "" then
+        callback(searchId, {{
+            text = "f <command>",
+            subText = "Type a fish shell command to execute",
+            image = hs.image.imageFromName("NSActionTemplate"),
+        }})
+        return
+    end
+
+    callback(searchId, {{
+        text = "Run: " .. command,
+        subText = "Execute in fish shell",
+        fishCommand = command,
+        image = hs.image.imageFromName("NSActionTemplate"),
+    }})
+end
+
+-- Python code execution mode - run Python code
+local function handlePythonCode(code, searchId, callback)
+    if code == "" then
+        callback(searchId, {{
+            text = "py <code>",
+            subText = "Type Python code to execute",
+            image = hs.image.imageFromName("NSActionTemplate"),
+        }})
+        return
+    end
+
+    callback(searchId, {{
+        text = "Run: " .. code,
+        subText = "Execute Python code",
+        pythonCode = code,
+        image = hs.image.imageFromName("NSActionTemplate"),
+    }})
+end
+
 -- Commands mode - run predefined commands
 local function handleCommands(query, searchId, callback)
     -- Define some useful commands
@@ -451,6 +489,16 @@ local function showModes()
             image = hs.image.imageFromName("NSFolder"),
         },
         {
+            text = "f <command>",
+            subText = "Fish shell command (e.g., 'f pkill hammerspoon', 'f ls -la')",
+            image = hs.image.imageFromName("NSActionTemplate"),
+        },
+        {
+            text = "py <code>",
+            subText = "Python code (e.g., 'py print(2+2)', 'py import sys; print(sys.version)')",
+            image = hs.image.imageFromName("NSActionTemplate"),
+        },
+        {
             text = "<search>",
             subText = "File search using mdfind (Spotlight)",
             image = hs.image.imageFromName("NSFolder"),
@@ -539,6 +587,20 @@ local function onQueryChange(query)
         return
     end
 
+    -- Check for fish command mode
+    if query:match("^f ") then
+        local command = query:sub(3)  -- Remove "f " prefix
+        handleFishCommand(command, thisSearchId, handleResults)
+        return
+    end
+
+    -- Check for Python code mode
+    if query:match("^py ") then
+        local code = query:sub(4)  -- Remove "py " prefix
+        handlePythonCode(code, thisSearchId, handleResults)
+        return
+    end
+
     -- Default to file search
     searchFiles(query, thisSearchId, handleResults)
 end
@@ -591,6 +653,29 @@ local function onChoice(choice)
     -- Handle command execution
     if choice.command then
         choice.command()
+        return
+    end
+
+    -- Handle fish command execution
+    if choice.fishCommand then
+        hs.execute(string.format('/opt/homebrew/bin/fish -c "%s"', choice.fishCommand:gsub('"', '\\"')))
+        hs.alert.show("Executed: " .. choice.fishCommand)
+        return
+    end
+
+    -- Handle Python code execution
+    if choice.pythonCode then
+        local output, status = hs.execute(string.format('/Users/wesdemos/repos/github/g0t4/dotfiles/.venv/bin/python -c "%s"', choice.pythonCode:gsub('"', '\\"')))
+        if status then
+            if output and output ~= "" then
+                hs.pasteboard.setContents(output)
+                hs.alert.show("Output copied: " .. output:sub(1, 50))
+            else
+                hs.alert.show("Executed successfully")
+            end
+        else
+            hs.alert.show("Error: " .. (output or "Unknown error"))
+        end
         return
     end
 
