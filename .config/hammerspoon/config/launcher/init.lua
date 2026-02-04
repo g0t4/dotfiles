@@ -1028,12 +1028,11 @@ function M.show()
 
     -- Enable refresh hotkeys when chooser is shown
     if not refreshHotkeyCmdR then
-        refreshHotkeyCmdR = hs.hotkey.bind({"cmd"}, "r", refreshQuery)
-        refreshHotkeyCtrlR = hs.hotkey.bind({"ctrl"}, "r", refreshQuery)
-    else
-        refreshHotkeyCmdR:enable()
-        refreshHotkeyCtrlR:enable()
+        refreshHotkeyCmdR = hs.hotkey.new({"cmd"}, "r", refreshQuery)
+        refreshHotkeyCtrlR = hs.hotkey.new({"ctrl"}, "r", refreshQuery)
     end
+    refreshHotkeyCmdR:enable()
+    refreshHotkeyCtrlR:enable()
 
     chooser:show()
 end
