@@ -653,7 +653,7 @@ local function handleEmoji(query, searchId, callback)
         {emoji = "💝", keywords = {"gift", "heart", "love"}},
         {emoji = "💟", keywords = {"heart", "decoration"}},
 
-        // Common symbols
+        -- Common symbols
         {emoji = "✅", keywords = {"check", "mark", "yes", "done", "complete", "success"}},
         {emoji = "✔️", keywords = {"check", "yes", "done"}},
         {emoji = "❌", keywords = {"x", "cross", "no", "wrong", "error"}},
@@ -673,7 +673,7 @@ local function handleEmoji(query, searchId, callback)
         {emoji = "🥈", keywords = {"silver", "medal", "second"}},
         {emoji = "🥉", keywords = {"bronze", "medal", "third"}},
 
-        // Nature
+        -- Nature
         {emoji = "🌈", keywords = {"rainbow", "colorful"}},
         {emoji = "☀️", keywords = {"sun", "sunny", "bright"}},
         {emoji = "🌙", keywords = {"moon", "night"}},
@@ -692,7 +692,7 @@ local function handleEmoji(query, searchId, callback)
         {emoji = "🌳", keywords = {"tree", "nature"}},
         {emoji = "🌲", keywords = {"evergreen", "tree", "pine"}},
 
-        // Food & Drink
+        -- Food & Drink
         {emoji = "☕", keywords = {"coffee", "cafe", "hot", "drink"}},
         {emoji = "🍕", keywords = {"pizza", "food"}},
         {emoji = "🍔", keywords = {"burger", "hamburger", "food"}},
@@ -751,7 +751,7 @@ local function handleEmoji(query, searchId, callback)
         {emoji = "🍸", keywords = {"cocktail", "martini", "drink"}},
         {emoji = "🥃", keywords = {"whiskey", "glass", "drink"}},
 
-        // Animals
+        -- Animals
         {emoji = "🐶", keywords = {"dog", "puppy", "pet"}},
         {emoji = "🐱", keywords = {"cat", "kitten", "pet"}},
         {emoji = "🐭", keywords = {"mouse", "rat"}},
@@ -812,7 +812,7 @@ local function handleEmoji(query, searchId, callback)
         {emoji = "🐳", keywords = {"whale", "spouting"}},
         {emoji = "🐋", keywords = {"whale"}},
 
-        // Activities & Sports
+        -- Activities & Sports
         {emoji = "⚽", keywords = {"soccer", "ball", "football"}},
         {emoji = "🏀", keywords = {"basketball", "ball"}},
         {emoji = "🏈", keywords = {"football", "american"}},
@@ -838,7 +838,7 @@ local function handleEmoji(query, searchId, callback)
         {emoji = "🎰", keywords = {"slot", "machine", "gambling"}},
         {emoji = "🎳", keywords = {"bowling"}},
 
-        // Travel & Places
+        -- Travel & Places
         {emoji = "🚗", keywords = {"car", "automobile"}},
         {emoji = "🚕", keywords = {"taxi", "cab"}},
         {emoji = "🚙", keywords = {"suv", "car"}},
@@ -911,7 +911,7 @@ local function handleEmoji(query, searchId, callback)
         {emoji = "🏞️", keywords = {"national", "park"}},
         {emoji = "🏟️", keywords = {"stadium"}},
 
-        // Objects & Tech
+        -- Objects & Tech
         {emoji = "💻", keywords = {"laptop", "computer", "pc", "macbook"}},
         {emoji = "🖥️", keywords = {"desktop", "computer", "pc"}},
         {emoji = "⌨️", keywords = {"keyboard"}},
