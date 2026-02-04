@@ -301,15 +301,12 @@ end
 
 -- Path browsing mode - browse filesystem
 local function handlePathBrowsing(path, searchId, callback)
-    if path == "" then
-        -- Show common starting points
-        callback(searchId, {
-            {text = "~", subText = os.getenv("HOME"), browsePath = os.getenv("HOME")},
-            {text = "/", subText = "Root directory", browsePath = "/"},
-            {text = "~/Desktop", subText = os.getenv("HOME") .. "/Desktop", browsePath = os.getenv("HOME") .. "/Desktop"},
-            {text = "~/Downloads", subText = os.getenv("HOME") .. "/Downloads", browsePath = os.getenv("HOME") .. "/Downloads"},
-        })
-        return
+    -- Handle just "/" - show root contents
+    if path == "/" then
+        path = "/"
+    -- Handle just "~" - show home directory
+    elseif path == "~" then
+        path = os.getenv("HOME")
     end
 
     -- Expand ~ to home directory
@@ -548,8 +545,8 @@ local function showModes()
             image = hs.image.imageFromName("NSInfo"),
         },
         {
-            text = "/<path>",
-            subText = "Browse filesystem (e.g., '/~', '/~/Desktop')",
+            text = "/<path> or ~<path>",
+            subText = "Browse filesystem (e.g., '/Applications', '~/Desktop')",
             image = hs.image.imageFromName("NSFolder"),
         },
         {
@@ -644,10 +641,9 @@ local function onQueryChange(query)
         return
     end
 
-    -- Check for path browsing mode
-    if query:match("^/") then
-        local path = query:sub(2)  -- Remove "/" prefix
-        handlePathBrowsing(path, thisSearchId, handleResults)
+    -- Check for path browsing mode (absolute paths starting with / or ~)
+    if query:match("^/") or query:match("^~") then
+        handlePathBrowsing(query, thisSearchId, handleResults)
         return
     end
 
