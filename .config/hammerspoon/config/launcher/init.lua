@@ -152,7 +152,7 @@ local function searchApplications(query, searchId, callback)
     return function() end  -- No-op cancel for synchronous search
 end
 
--- LLM completion mode
+-- LLM completion mode with chat completions API
 -- Returns a cancel function
 local function handleLLM(query, searchId, callback)
     if query == "" then
@@ -163,19 +163,21 @@ local function handleLLM(query, searchId, callback)
     -- Immediately clear old results when starting new search
     callback(searchId, {})
 
-    -- Build the prompt
-    local prompt = string.format([[You are a helpful AI assistant. The user is typing: "%s"
+    -- Build the user message
+    local userMessage = string.format([[You are a helpful AI assistant. The user is typing: "%s"
 
 Provide a helpful, concise response or completion. Be brief and practical.]], query)
 
     print("=== LLM Request ===")
     print("Query:", query)
-    print("Prompt:", prompt)
+    print("User message:", userMessage)
     print("SearchId:", searchId)
 
-    -- Build curl command for streaming completion
+    -- Build curl command for streaming chat completion
     local jsonPayload = hs.json.encode({
-        prompt = prompt,
+        messages = {
+            {role = "user", content = userMessage}
+        },
         stream = true,
         temperature = 0.7,
         max_tokens = 1000
@@ -185,13 +187,18 @@ Provide a helpful, concise response or completion. Be brief and practical.]], qu
     local args = {
         "-s",
         "-X", "POST",
-        LLM_SERVER .. "/v1/completions",
+        LLM_SERVER .. "/v1/chat/completions",
         "-H", "Content-Type: application/json",
         "-d", jsonPayload
     }
 
     local buffer = ""
-    local fullResponse = ""
+    local thinkingContent = ""
+    local responseContent = ""
+    local isThinking = false
+    local thinkingFrame = 1
+    local thinkingSpinner = {"⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"}
+    local timingStats = nil
     local task = nil
 
     print("Starting LLM request for query:", query, "searchId:", searchId)
@@ -205,7 +212,9 @@ Provide a helpful, concise response or completion. Be brief and practical.]], qu
 
         print("=== LLM Complete ===")
         print("Exit code:", exitCode)
-        print("Final response:", fullResponse)
+        print("Thinking:", thinkingContent)
+        print("Response:", responseContent)
+        print("Timing stats:", hs.inspect(timingStats))
 
         if exitCode ~= 0 then
             print("LLM error:", stdErr)
@@ -235,21 +244,75 @@ Provide a helpful, concise response or completion. Be brief and practical.]], qu
             local data = line:match("^data: (.+)$")
             if data and data ~= "[DONE]" then
                 local success, json = pcall(hs.json.decode, data)
-                if success and json.choices and json.choices[1] and json.choices[1].text then
-                    local chunk = json.choices[1].text
-                    fullResponse = fullResponse .. chunk
+                if success then
+                    -- Check for timing stats (llama-server specific)
+                    if json.timings then
+                        timingStats = json.timings
+                        print("=== LLM Timing Stats ===")
+                        print("Prompt tokens:", timingStats.prompt_n)
+                        print("Predicted tokens:", timingStats.predicted_n)
+                        print("Prompt TPS:", timingStats.prompt_per_second)
+                        print("Predicted TPS:", timingStats.predicted_per_second)
+                    end
 
-                    print("=== LLM Chunk ===")
-                    print("Chunk:", chunk)
-                    print("Full response so far:", fullResponse)
+                    -- Parse content from chat completions format
+                    if json.choices and json.choices[1] and json.choices[1].delta then
+                        local delta = json.choices[1].delta
 
-                    -- Update UI with streaming response
-                    callback(searchId, {{
-                        text = fullResponse,
-                        subText = query,
-                        llmResponse = fullResponse,
-                        image = hs.image.imageFromName("NSInfo"),
-                    }})
+                        -- Check for reasoning_content (thinking)
+                        if delta.reasoning_content then
+                            thinkingContent = thinkingContent .. delta.reasoning_content
+                            isThinking = true
+                        end
+
+                        -- Check for regular content (response)
+                        if delta.content and delta.content ~= "" then
+                            responseContent = responseContent .. delta.content
+                            isThinking = false
+                        end
+
+                        print("=== LLM Chunk ===")
+                        print("Thinking chunk:", delta.reasoning_content or "")
+                        print("Content chunk:", delta.content or "")
+                        print("Is thinking:", isThinking)
+
+                        -- Build display text
+                        local displayText = ""
+                        local subText = query
+
+                        if isThinking or (responseContent == "" and thinkingContent ~= "") then
+                            -- Show thinking animation
+                            thinkingFrame = (thinkingFrame % #thinkingSpinner) + 1
+                            displayText = thinkingSpinner[thinkingFrame] .. " Thinking..."
+                            subText = query .. " (reasoning)"
+                        elseif responseContent ~= "" then
+                            -- Show response
+                            displayText = responseContent
+
+                            -- Add timing stats if available
+                            if timingStats then
+                                local statsText = string.format("↓%d@%.0ftps ↑%d@%.0ftps",
+                                    timingStats.predicted_n or 0,
+                                    timingStats.predicted_per_second or 0,
+                                    timingStats.prompt_n or 0,
+                                    timingStats.prompt_per_second or 0)
+                                if timingStats.cache_n and timingStats.cache_n > 0 then
+                                    statsText = statsText .. string.format(" ⚡%d", timingStats.cache_n)
+                                end
+                                subText = statsText
+                            end
+                        end
+
+                        -- Update UI with streaming response
+                        callback(searchId, {{
+                            text = displayText,
+                            subText = subText,
+                            llmResponse = responseContent,  -- Only copy the content, not thinking
+                            llmThinking = thinkingContent,
+                            llmStats = timingStats,
+                            image = hs.image.imageFromName("NSInfo"),
+                        }})
+                    end
                 end
             end
         end
@@ -805,6 +868,14 @@ end
 
 -- Handle file selection
 local function onChoice(choice)
+    -- Disable refresh hotkeys when chooser closes (whether by selection or escape)
+    if refreshHotkeyCmdR then
+        refreshHotkeyCmdR:disable()
+    end
+    if refreshHotkeyCtrlR then
+        refreshHotkeyCtrlR:disable()
+    end
+
     -- Log for debugging
     print("=== onChoice callback ===")
     print("choice:", hs.inspect(choice))
