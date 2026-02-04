@@ -232,7 +232,148 @@ Provide a helpful, concise response or completion. Be brief and practical.]], qu
     currentTask:start()
 end
 
--- Calculator mode - evaluate Lua expression
+-- Dictionary mode - look up word definitions
+local function handleDictionary(word, searchId, callback)
+    if word == "" then
+        callback(searchId, {})
+        return
+    end
+
+    -- Just show the word and indicate it will open Dictionary.app
+    callback(searchId, {{
+        text = "Look up: " .. word,
+        subText = "Press Enter to open in Dictionary.app",
+        dictionaryWord = word,
+        image = hs.image.imageFromName("NSBookmarkTemplate"),
+    }})
+end
+
+-- Google/web search mode
+local function handleWebSearch(query, searchId, callback)
+    if query == "" then
+        callback(searchId, {})
+        return
+    end
+
+    local encodedQuery = hs.http.encodeForQuery(query)
+    local url = "https://www.google.com/search?q=" .. encodedQuery
+
+    callback(searchId, {{
+        text = "Search Google: " .. query,
+        subText = url,
+        webSearchUrl = url,
+        image = hs.image.imageFromName("NSNetwork"),
+    }})
+end
+
+-- Path browsing mode - browse filesystem
+local function handlePathBrowsing(path, searchId, callback)
+    if path == "" then
+        -- Show common starting points
+        callback(searchId, {
+            {text = "~", subText = os.getenv("HOME"), browsePath = os.getenv("HOME")},
+            {text = "/", subText = "Root directory", browsePath = "/"},
+            {text = "~/Desktop", subText = os.getenv("HOME") .. "/Desktop", browsePath = os.getenv("HOME") .. "/Desktop"},
+            {text = "~/Downloads", subText = os.getenv("HOME") .. "/Downloads", browsePath = os.getenv("HOME") .. "/Downloads"},
+        })
+        return
+    end
+
+    -- Expand ~ to home directory
+    local expandedPath = path:gsub("^~", os.getenv("HOME"))
+
+    -- Check if path exists
+    local attrs = hs.fs.attributes(expandedPath)
+    if not attrs then
+        callback(searchId, {{
+            text = "Path not found: " .. path,
+            subText = "Check spelling or permissions",
+        }})
+        return
+    end
+
+    local results = {}
+
+    -- If it's a directory, list contents
+    if attrs.mode == "directory" then
+        for item in hs.fs.dir(expandedPath) do
+            if item ~= "." and item ~= ".." then
+                local itemPath = expandedPath .. "/" .. item
+                local itemAttrs = hs.fs.attributes(itemPath)
+                if itemAttrs then
+                    table.insert(results, {
+                        text = item,
+                        subText = itemPath,
+                        path = itemPath,
+                        browsePath = itemPath,
+                        image = hs.image.iconForFile(itemPath),
+                    })
+                end
+            end
+        end
+
+        -- Sort: directories first, then files
+        table.sort(results, function(a, b)
+            local aIsDir = hs.fs.attributes(a.path).mode == "directory"
+            local bIsDir = hs.fs.attributes(b.path).mode == "directory"
+            if aIsDir ~= bIsDir then
+                return aIsDir
+            end
+            return a.text < b.text
+        end)
+
+        -- Limit results
+        if #results > MAX_RESULTS then
+            local limited = {}
+            for i = 1, MAX_RESULTS do
+                limited[i] = results[i]
+            end
+            results = limited
+        end
+    else
+        -- It's a file, show it
+        table.insert(results, {
+            text = getFilename(expandedPath),
+            subText = expandedPath,
+            path = expandedPath,
+            image = hs.image.iconForFile(expandedPath),
+        })
+    end
+
+    callback(searchId, results)
+end
+
+-- Commands mode - run predefined commands
+local function handleCommands(query, searchId, callback)
+    -- Define some useful commands
+    local commands = {
+        {name = "reload", desc = "Reload Hammerspoon config", cmd = function() hs.reload() end},
+        {name = "console", desc = "Open Hammerspoon console", cmd = function() hs.openConsole() end},
+        {name = "sleep", desc = "Put computer to sleep", cmd = function() hs.caffeinate.systemSleep() end},
+        {name = "lock", desc = "Lock screen", cmd = function() hs.caffeinate.lockScreen() end},
+        {name = "dark", desc = "Toggle dark mode", cmd = function()
+            hs.osascript.applescript('tell app "System Events" to tell appearance preferences to set dark mode to not dark mode')
+        end},
+    }
+
+    local results = {}
+
+    -- Filter commands by query
+    for _, cmd in ipairs(commands) do
+        if query == "" or cmd.name:lower():find(query:lower(), 1, true) or cmd.desc:lower():find(query:lower(), 1, true) then
+            table.insert(results, {
+                text = cmd.name,
+                subText = cmd.desc,
+                command = cmd.cmd,
+                image = hs.image.imageFromName("NSActionTemplate"),
+            })
+        end
+    end
+
+    callback(searchId, results)
+end
+
+-- Lua calculator mode - evaluate Lua expression (moved from "c ")
 local function handleCalculator(expression, searchId, callback)
     if expression == "" then
         callback(searchId, {})
@@ -279,14 +420,34 @@ local function showModes()
             image = hs.image.imageFromName("NSApplicationIcon"),
         },
         {
-            text = "c <expression>",
-            subText = "Calculator (e.g., 'c 2+2', 'c math.sqrt(16)')",
+            text = "c <query>",
+            subText = "Commands (e.g., 'c reload', 'c lock', 'c sleep')",
+            image = hs.image.imageFromName("NSActionTemplate"),
+        },
+        {
+            text = "d <word>",
+            subText = "Dictionary lookup (e.g., 'd recursion', 'd algorithm')",
+            image = hs.image.imageFromName("NSBookmarkTemplate"),
+        },
+        {
+            text = "g <query>",
+            subText = "Google search (e.g., 'g hammerspoon docs')",
+            image = hs.image.imageFromName("NSNetwork"),
+        },
+        {
+            text = "l <expression>",
+            subText = "Lua calculator (e.g., 'l 2+2', 'l math.sqrt(16)')",
             image = hs.image.imageFromName("NSCalculator"),
         },
         {
             text = "o <prompt>",
             subText = "LLM completion (e.g., 'o what is lua', 'o explain recursion')",
             image = hs.image.imageFromName("NSInfo"),
+        },
+        {
+            text = "/<path>",
+            subText = "Browse filesystem (e.g., '/~', '/~/Desktop')",
+            image = hs.image.imageFromName("NSFolder"),
         },
         {
             text = "<search>",
@@ -335,9 +496,30 @@ local function onQueryChange(query)
         return
     end
 
-    -- Check for calculator mode
+    -- Check for commands mode
     if query:match("^c ") then
-        local expression = query:sub(3)  -- Remove "c " prefix
+        local cmdQuery = query:sub(3)  -- Remove "c " prefix
+        handleCommands(cmdQuery, thisSearchId, handleResults)
+        return
+    end
+
+    -- Check for dictionary mode
+    if query:match("^d ") then
+        local word = query:sub(3)  -- Remove "d " prefix
+        handleDictionary(word, thisSearchId, handleResults)
+        return
+    end
+
+    -- Check for Google search mode
+    if query:match("^g ") then
+        local searchQuery = query:sub(3)  -- Remove "g " prefix
+        handleWebSearch(searchQuery, thisSearchId, handleResults)
+        return
+    end
+
+    -- Check for Lua calculator mode
+    if query:match("^l ") then
+        local expression = query:sub(3)  -- Remove "l " prefix
         handleCalculator(expression, thisSearchId, handleResults)
         return
     end
@@ -346,6 +528,13 @@ local function onQueryChange(query)
     if query:match("^o ") then
         local llmQuery = query:sub(3)  -- Remove "o " prefix
         handleLLM(llmQuery, thisSearchId, handleResults)
+        return
+    end
+
+    -- Check for path browsing mode
+    if query:match("^/") then
+        local path = query:sub(2)  -- Remove "/" prefix
+        handlePathBrowsing(path, thisSearchId, handleResults)
         return
     end
 
@@ -383,6 +572,39 @@ local function onChoice(choice)
     -- Handle application launch
     if choice.appPath then
         hs.execute(string.format('open "%s"', choice.appPath))
+        return
+    end
+
+    -- Handle dictionary lookup
+    if choice.dictionaryWord then
+        hs.execute(string.format('open dict://%s', choice.dictionaryWord))
+        return
+    end
+
+    -- Handle web search
+    if choice.webSearchUrl then
+        hs.execute(string.format('open "%s"', choice.webSearchUrl))
+        return
+    end
+
+    -- Handle command execution
+    if choice.command then
+        choice.command()
+        return
+    end
+
+    -- Handle path browsing - if browsePath exists, update query to browse that path
+    if choice.browsePath then
+        -- For path browsing, open the file/folder
+        if choice.path then
+            if modifiers.cmd or modifiers.shift then
+                -- Reveal in Finder
+                hs.execute(string.format('open -R "%s"', choice.path))
+            else
+                -- Open with default app
+                hs.execute(string.format('open "%s"', choice.path))
+            end
+        end
         return
     end
 
