@@ -232,20 +232,53 @@ Provide a helpful, concise response or completion. Be brief and practical.]], qu
     currentTask:start()
 end
 
--- Dictionary mode - look up word definitions
+-- Dictionary mode - look up word definitions with inline display
 local function handleDictionary(word, searchId, callback)
     if word == "" then
         callback(searchId, {})
         return
     end
 
-    -- Just show the word and indicate it will open Dictionary.app
-    callback(searchId, {{
-        text = "Look up: " .. word,
-        subText = "Press Enter to open in Dictionary.app",
-        dictionaryWord = word,
-        image = hs.image.imageFromName("NSBookmarkTemplate"),
-    }})
+    -- Use Python to access DictionaryServices framework for inline definitions
+    local pythonScript = string.format([[
+import sys
+try:
+    from DictionaryServices import DCSCopyTextDefinition
+    from CoreFoundation import CFRange
+    word = %q
+    definition = DCSCopyTextDefinition(None, word, CFRange(0, len(word)))
+    if definition:
+        # Clean up the definition - take first paragraph or first 200 chars
+        text = str(definition).strip()
+        # Remove extra whitespace and newlines
+        text = ' '.join(text.split())
+        print(text[:200] + '...' if len(text) > 200 else text)
+    else:
+        print("No definition found")
+except Exception as e:
+    print(f"Error: {e}")
+]], word)
+
+    local output, status = hs.execute(string.format('/Users/wesdemos/repos/github/g0t4/dotfiles/.venv/bin/python -c "%s"', pythonScript:gsub('"', '\\"'):gsub('\n', '\\n')))
+
+    if status and output and output ~= "" then
+        local definition = output:gsub("%s+$", "")
+        callback(searchId, {{
+            text = definition,
+            subText = word,
+            dictionaryWord = word,
+            dictionaryDefinition = definition,
+            image = hs.image.imageFromName("NSBookmarkTemplate"),
+        }})
+    else
+        -- Fallback to just showing the word
+        callback(searchId, {{
+            text = "No definition found for: " .. word,
+            subText = "Press Enter to open in Dictionary.app",
+            dictionaryWord = word,
+            image = hs.image.imageFromName("NSBookmarkTemplate"),
+        }})
+    end
 end
 
 -- Google/web search mode
@@ -664,7 +697,12 @@ local function onChoice(choice)
 
     -- Handle dictionary lookup
     if choice.dictionaryWord then
-        hs.execute(string.format('open dict://%s', choice.dictionaryWord))
+        if choice.dictionaryDefinition then
+            hs.pasteboard.setContents(choice.dictionaryDefinition)
+            hs.alert.show("Definition copied: " .. choice.dictionaryDefinition:sub(1, 50) .. "...")
+        else
+            hs.execute(string.format('open dict://%s', choice.dictionaryWord))
+        end
         return
     end
 
