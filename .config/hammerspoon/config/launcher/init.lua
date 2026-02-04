@@ -270,6 +270,32 @@ local function handleCalculator(expression, searchId, callback)
     }})
 end
 
+-- Show available modes
+local function showModes()
+    return {
+        {
+            text = "a <name>",
+            subText = "Search applications (e.g., 'a safari', 'a terminal')",
+            image = hs.image.imageFromName("NSApplicationIcon"),
+        },
+        {
+            text = "c <expression>",
+            subText = "Calculator (e.g., 'c 2+2', 'c math.sqrt(16)')",
+            image = hs.image.imageFromName("NSCalculator"),
+        },
+        {
+            text = "o <prompt>",
+            subText = "LLM completion (e.g., 'o what is lua', 'o explain recursion')",
+            image = hs.image.imageFromName("NSInfo"),
+        },
+        {
+            text = "<search>",
+            subText = "File search using mdfind (Spotlight)",
+            image = hs.image.imageFromName("NSFolder"),
+        },
+    }
+end
+
 -- Search handler - cancels previous search on every keystroke
 local function onQueryChange(query)
     -- Cancel any existing search task
@@ -294,6 +320,12 @@ local function onQueryChange(query)
         if chooser then
             chooser:choices(results)
         end
+    end
+
+    -- Show available modes when query is empty
+    if query == "" or query == nil then
+        handleResults(thisSearchId, showModes())
+        return
     end
 
     -- Check for application mode
@@ -354,6 +386,11 @@ local function onChoice(choice)
         return
     end
 
+    -- Ignore if it's just a help item (no path)
+    if not choice.path then
+        return
+    end
+
     -- Check modifiers for different actions
     if modifiers.alt then
         -- Copy path to clipboard
@@ -400,10 +437,6 @@ function M.init()
     end)
 
     print("File launcher initialized (alt+space)")
-    print("  - Application mode: 'a <name>' (e.g., 'a safari', 'a terminal')")
-    print("  - Calculator mode: 'c <expression>' (e.g., 'c 2+2', 'c math.sqrt(16)')")
-    print("  - LLM mode: 'o <prompt>' (e.g., 'o what is lua', 'o explain recursion')")
-    print("  - File mode: shift/cmd+enter to reveal, option+enter to copy path")
 end
 
 return M
