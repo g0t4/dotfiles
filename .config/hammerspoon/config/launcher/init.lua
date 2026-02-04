@@ -96,31 +96,28 @@ end
 
 -- Application search mode
 local function searchApplications(query, searchId, callback)
-    if query == "" then
-        callback(searchId, {})
-        return
-    end
-
-    -- Get all applications
-    local allApps = hs.application.applicationsForBundleID() or {}
     local results = {}
 
     -- Search in /Applications and ~/Applications
     local appDirs = {"/Applications", os.getenv("HOME") .. "/Applications"}
 
     for _, dir in ipairs(appDirs) do
-        local apps = hs.fs.dir(dir)
-        if apps then
-            for app in apps do
-                if app:match("%.app$") and app:lower():find(query:lower(), 1, true) then
-                    local appPath = dir .. "/" .. app
-                    local appName = app:gsub("%.app$", "")
-                    table.insert(results, {
-                        text = appName,
-                        subText = appPath,
-                        appPath = appPath,
-                        image = hs.image.iconForFile(appPath),
-                    })
+        -- Check if directory exists
+        local attrs = hs.fs.attributes(dir)
+        if attrs and attrs.mode == "directory" then
+            for app in hs.fs.dir(dir) do
+                if app ~= "." and app ~= ".." and app:match("%.app$") then
+                    -- If query is empty, show all apps; otherwise filter by query
+                    if query == "" or app:lower():find(query:lower(), 1, true) then
+                        local appPath = dir .. "/" .. app
+                        local appName = app:gsub("%.app$", "")
+                        table.insert(results, {
+                            text = appName,
+                            subText = appPath,
+                            appPath = appPath,
+                            image = hs.image.iconForFile(appPath),
+                        })
+                    end
                 end
             end
         end
@@ -128,6 +125,15 @@ local function searchApplications(query, searchId, callback)
 
     -- Sort by name
     table.sort(results, function(a, b) return a.text < b.text end)
+
+    -- Limit results to MAX_RESULTS
+    if #results > MAX_RESULTS then
+        local limited = {}
+        for i = 1, MAX_RESULTS do
+            limited[i] = results[i]
+        end
+        results = limited
+    end
 
     callback(searchId, results)
 end
