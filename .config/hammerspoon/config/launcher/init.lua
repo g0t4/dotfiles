@@ -3,7 +3,7 @@ local M = {}
 -- File launcher using mdfind (Spotlight index)
 local chooser = nil
 local currentTask = nil
-local currentTaskId = 0  -- Track which task is current
+local currentSearchId = 0  -- Track current search across all searchers
 local MAX_RESULTS = 30
 
 -- Helper to get just filename from path for display
@@ -17,37 +17,26 @@ local function getDirectory(path)
 end
 
 -- Perform mdfind search
-local function searchFiles(query, callback)
-    -- Cancel any existing search task
-    if currentTask then
-        print("Terminating previous mdfind task...")
-        currentTask:terminate()
-        currentTask = nil
-    end
-
+local function searchFiles(query, searchId, callback)
     if query == "" or query == nil then
-        callback({})
+        callback(searchId, {})
         return
     end
-
-    -- Increment task ID so we can ignore old tasks
-    currentTaskId = currentTaskId + 1
-    local thisTaskId = currentTaskId
 
     -- Build mdfind command
     -- Full Spotlight search (faster than -name in practice)
     -- Use stdbuf to force unbuffered output so we get results as they're found
     local cmd = "/opt/homebrew/bin/stdbuf"
     local args = {"-o0", "/usr/bin/mdfind", query}
-    print("Starting new mdfind for query:", query, "taskId:", thisTaskId)
+    print("Starting new mdfind for query:", query, "searchId:", searchId)
 
     local results = {}
     local buffer = ""
 
     currentTask = hs.task.new(cmd, function(exitCode, _, stdErr)
-        -- Ignore if this isn't the current task anymore
-        if thisTaskId ~= currentTaskId then
-            print("Ignoring old task", thisTaskId)
+        -- Ignore if this isn't the current search anymore
+        if searchId ~= currentSearchId then
+            print("Ignoring old search", searchId)
             return
         end
 
@@ -58,10 +47,10 @@ local function searchFiles(query, callback)
         end
 
         -- Final callback with results we've accumulated
-        callback(results)
+        callback(searchId, results)
     end, function(_, stdOut, _)
-        -- Ignore if this isn't the current task anymore
-        if thisTaskId ~= currentTaskId then
+        -- Ignore if this isn't the current search anymore
+        if searchId ~= currentSearchId then
             return true
         end
 
@@ -86,7 +75,7 @@ local function searchFiles(query, callback)
                 })
 
                 -- Update UI with partial results
-                callback(results)
+                callback(searchId, results)
 
                 -- Terminate if we have enough results
                 if #results >= MAX_RESULTS then
@@ -106,58 +95,78 @@ local function searchFiles(query, callback)
 end
 
 -- Calculator mode - evaluate Lua expression
-local function handleCalculator(expression)
+local function handleCalculator(expression, searchId, callback)
     if expression == "" then
-        return {}
+        callback(searchId, {})
+        return
     end
 
     -- Try to evaluate the expression
     local func, err = load("return " .. expression)
     if not func then
         -- Return error as result
-        return {{
+        callback(searchId, {{
             text = "Error: " .. err,
             subText = expression,
             result = nil,
-        }}
+        }})
+        return
     end
 
     local success, result = pcall(func)
     if not success then
-        return {{
+        callback(searchId, {{
             text = "Error: " .. result,
             subText = expression,
             result = nil,
-        }}
+        }})
+        return
     end
 
     -- Return the result
-    return {{
+    callback(searchId, {{
         text = tostring(result),
         subText = expression .. " = " .. tostring(result),
         result = tostring(result),
         image = hs.image.imageFromName("NSCalculator"),
-    }}
+    }})
 end
 
 -- Search handler - cancels previous search on every keystroke
 local function onQueryChange(query)
+    -- Cancel any existing search task
+    if currentTask then
+        print("Terminating previous search task...")
+        currentTask:terminate()
+        currentTask = nil
+    end
+
+    -- Increment search ID to invalidate any in-flight searches
+    currentSearchId = currentSearchId + 1
+    local thisSearchId = currentSearchId
+
+    -- Callback that checks if results are still current
+    local function handleResults(searchId, results)
+        -- Ignore results from old searches
+        if searchId ~= currentSearchId then
+            print("Ignoring results from old search", searchId)
+            return
+        end
+
+        if chooser then
+            chooser:choices(results)
+        end
+    end
+
     -- Check for calculator mode
     if query:match("^c ") then
         local expression = query:sub(3)  -- Remove "c " prefix
-        local results = handleCalculator(expression)
-        if chooser then
-            chooser:choices(results)
-        end
+        handleCalculator(expression, thisSearchId, handleResults)
         return
     end
 
-    -- searchFiles already cancels any running task, so just call it directly
-    searchFiles(query, function(results)
-        if chooser then
-            chooser:choices(results)
-        end
-    end)
+    -- Default to file search
+    searchFiles(query, thisSearchId, handleResults)
 end
 
 -- Handle file selection
