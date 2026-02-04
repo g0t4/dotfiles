@@ -9,6 +9,13 @@ local MAX_RESULTS = 30
 -- LLM server configuration
 local LLM_SERVER = "http://build21.lan:8013"
 
+-- Emoji data configuration
+local EMOJI_CACHE_DIR = os.getenv("HOME") .. "/.local/share/hammerspoon"
+local EMOJI_CACHE_FILE = EMOJI_CACHE_DIR .. "/emoji-data.json"
+local EMOJI_DATA_URL = "https://raw.githubusercontent.com/unicode-org/cldr-json/main/cldr-json/cldr-annotations-derived-modern/en/annotations.json"
+local EMOJI_CACHE_MAX_AGE = 30 * 24 * 60 * 60  -- 30 days in seconds
+local emojiData = nil  -- Cached parsed emoji data
+
 -- Helper to get just filename from path for display
 local function getFilename(path)
     return path:match("^.+/(.+)$") or path
@@ -508,508 +515,134 @@ local function handleFishCommand(command, searchId, callback)
     return function() end  -- No-op cancel
 end
 
+-- Ensure emoji cache directory exists
+local function ensureEmojiCacheDir()
+    local attrs = hs.fs.attributes(EMOJI_CACHE_DIR)
+    if not attrs then
+        hs.fs.mkdir(EMOJI_CACHE_DIR)
+        print("Created emoji cache directory:", EMOJI_CACHE_DIR)
+    end
+end
+
+-- Download emoji data from CLDR
+local function downloadEmojiData(callback)
+    print("Downloading emoji data from CLDR...")
+    ensureEmojiCacheDir()
+
+    -- Use curl to download
+    local cmd = "/usr/bin/curl"
+    local args = {"-s", "-L", "-o", EMOJI_CACHE_FILE, EMOJI_DATA_URL}
+
+    hs.task.new(cmd, function(exitCode, stdOut, stdErr)
+        if exitCode == 0 then
+            print("Emoji data downloaded successfully")
+            if callback then callback(true) end
+        else
+            print("Error downloading emoji data:", stdErr)
+            if callback then callback(false) end
+        end
+    end, args):start()
+end
+
+-- Load and parse emoji data from cache file
+local function loadEmojiData()
+    if emojiData then
+        return emojiData  -- Already cached in memory
+    end
+
+    local file = io.open(EMOJI_CACHE_FILE, "r")
+    if not file then
+        print("No emoji cache file found")
+        return nil
+    end
+
+    local content = file:read("*all")
+    file:close()
+
+    local success, parsed = pcall(hs.json.decode, content)
+    if success and parsed and parsed.annotations and parsed.annotations.annotations then
+        -- CLDR format: {annotations: {annotations: {emoji: {default: [...], tts: [...]}}}}
+        emojiData = parsed.annotations.annotations
+        print("Loaded emoji data:", hs.inspect.inspect(emojiData):sub(1, 200) .. "...")
+        return emojiData
+    else
+        print("Error parsing emoji data")
+        return nil
+    end
+end
+
+-- Check if emoji cache needs update (runs in background)
+local function checkEmojiCacheAge()
+    local attrs = hs.fs.attributes(EMOJI_CACHE_FILE)
+    if not attrs then
+        return  -- No file, will download on first use
+    end
+
+    local age = os.time() - attrs.modification
+    print("Emoji cache age:", age, "seconds")
+
+    if age > EMOJI_CACHE_MAX_AGE then
+        print("Emoji cache is old, updating in background...")
+        downloadEmojiData(function(success)
+            if success then
+                -- Reload data in memory
+                emojiData = nil
+                loadEmojiData()
+                print("Emoji cache updated in background")
+            end
+        end)
+    end
+end
+
 -- Emoji picker mode
 local function handleEmoji(query, searchId, callback)
-    -- Comprehensive emoji list with keywords
-    local emojis = {
-        -- Smileys & Emotion
-        {emoji = "😀", keywords = {"grinning", "smile", "happy"}},
-        {emoji = "😃", keywords = {"smile", "happy", "joy"}},
-        {emoji = "😄", keywords = {"smile", "happy", "joy", "laugh"}},
-        {emoji = "😁", keywords = {"grin", "smile", "happy"}},
-        {emoji = "😅", keywords = {"sweat", "smile", "relief"}},
-        {emoji = "😂", keywords = {"joy", "tears", "laugh", "lol", "funny"}},
-        {emoji = "🤣", keywords = {"rofl", "laugh", "rolling", "floor"}},
-        {emoji = "😊", keywords = {"blush", "smile", "happy"}},
-        {emoji = "😇", keywords = {"angel", "innocent", "halo"}},
-        {emoji = "🙂", keywords = {"smile", "happy"}},
-        {emoji = "🙃", keywords = {"upside", "down", "silly"}},
-        {emoji = "😉", keywords = {"wink", "flirt"}},
-        {emoji = "😌", keywords = {"relieved", "calm", "peaceful"}},
-        {emoji = "😍", keywords = {"love", "heart", "eyes", "crush"}},
-        {emoji = "🥰", keywords = {"love", "hearts", "smile", "happy"}},
-        {emoji = "😘", keywords = {"kiss", "love", "heart"}},
-        {emoji = "😗", keywords = {"kiss", "whistle"}},
-        {emoji = "😙", keywords = {"kiss", "smile"}},
-        {emoji = "😚", keywords = {"kiss", "closed", "eyes"}},
-        {emoji = "😋", keywords = {"yum", "delicious", "tasty", "food"}},
-        {emoji = "😛", keywords = {"tongue", "playful"}},
-        {emoji = "😝", keywords = {"tongue", "wink", "playful"}},
-        {emoji = "😜", keywords = {"tongue", "wink", "playful"}},
-        {emoji = "🤪", keywords = {"zany", "crazy", "wild"}},
-        {emoji = "🤨", keywords = {"raised", "eyebrow", "skeptical"}},
-        {emoji = "🧐", keywords = {"monocle", "thinking", "curious"}},
-        {emoji = "🤓", keywords = {"nerd", "geek", "glasses"}},
-        {emoji = "😎", keywords = {"cool", "sunglasses", "awesome"}},
-        {emoji = "🤩", keywords = {"star", "struck", "excited", "wow"}},
-        {emoji = "🥳", keywords = {"party", "celebrate", "birthday"}},
-        {emoji = "😏", keywords = {"smirk", "sly"}},
-        {emoji = "😒", keywords = {"unamused", "unhappy"}},
-        {emoji = "😞", keywords = {"disappointed", "sad"}},
-        {emoji = "😔", keywords = {"pensive", "sad", "thoughtful"}},
-        {emoji = "😟", keywords = {"worried", "concerned"}},
-        {emoji = "😕", keywords = {"confused", "puzzled"}},
-        {emoji = "🙁", keywords = {"frown", "sad"}},
-        {emoji = "☹️", keywords = {"frown", "sad"}},
-        {emoji = "😣", keywords = {"persevere", "struggle"}},
-        {emoji = "😖", keywords = {"confounded", "frustrated"}},
-        {emoji = "😫", keywords = {"tired", "exhausted"}},
-        {emoji = "😩", keywords = {"weary", "tired"}},
-        {emoji = "🥺", keywords = {"pleading", "puppy", "eyes", "sad"}},
-        {emoji = "😢", keywords = {"cry", "sad", "tears"}},
-        {emoji = "😭", keywords = {"sob", "cry", "sad", "tears"}},
-        {emoji = "😤", keywords = {"triumph", "smug", "steam"}},
-        {emoji = "😠", keywords = {"angry", "mad"}},
-        {emoji = "😡", keywords = {"rage", "angry", "mad"}},
-        {emoji = "🤬", keywords = {"cursing", "swearing", "angry"}},
-        {emoji = "🤯", keywords = {"exploding", "head", "mind", "blown"}},
-        {emoji = "😳", keywords = {"flushed", "embarrassed"}},
-        {emoji = "🥵", keywords = {"hot", "sweating"}},
-        {emoji = "🥶", keywords = {"cold", "freezing"}},
-        {emoji = "😱", keywords = {"scream", "shocked", "scared"}},
-        {emoji = "😨", keywords = {"fearful", "scared"}},
-        {emoji = "😰", keywords = {"anxious", "nervous", "sweat"}},
-        {emoji = "😥", keywords = {"sad", "relieved"}},
-        {emoji = "😓", keywords = {"sweat", "downcast"}},
-        {emoji = "🤗", keywords = {"hug", "hugging"}},
-        {emoji = "🤔", keywords = {"think", "thinking", "hmm"}},
-        {emoji = "🤭", keywords = {"hand", "over", "mouth", "oops"}},
-        {emoji = "🤫", keywords = {"shh", "quiet", "secret"}},
-        {emoji = "🤥", keywords = {"lying", "pinocchio"}},
-        {emoji = "😶", keywords = {"no", "mouth", "silent"}},
-        {emoji = "😐", keywords = {"neutral", "meh"}},
-        {emoji = "😑", keywords = {"expressionless"}},
-        {emoji = "😬", keywords = {"grimace", "awkward"}},
-        {emoji = "🙄", keywords = {"eye", "roll", "whatever"}},
-        {emoji = "😯", keywords = {"hushed", "surprised"}},
-        {emoji = "😦", keywords = {"frown", "open", "mouth"}},
-        {emoji = "😧", keywords = {"anguish", "worried"}},
-        {emoji = "😮", keywords = {"open", "mouth", "surprised"}},
-        {emoji = "😲", keywords = {"astonished", "shocked"}},
-        {emoji = "🥱", keywords = {"yawn", "tired", "bored"}},
-        {emoji = "😴", keywords = {"sleep", "sleeping", "zzz"}},
-        {emoji = "🤤", keywords = {"drool", "sleep"}},
-        {emoji = "😪", keywords = {"sleepy", "tired"}},
-        {emoji = "😵", keywords = {"dizzy", "confused"}},
-        {emoji = "🤐", keywords = {"zipper", "mouth", "secret"}},
-        {emoji = "🥴", keywords = {"woozy", "drunk", "dizzy"}},
-        {emoji = "🤢", keywords = {"nauseated", "sick"}},
-        {emoji = "🤮", keywords = {"vomit", "sick", "puke"}},
-        {emoji = "🤧", keywords = {"sneeze", "sick"}},
-        {emoji = "😷", keywords = {"mask", "sick", "medical"}},
-        {emoji = "🤒", keywords = {"thermometer", "sick", "fever"}},
-        {emoji = "🤕", keywords = {"bandage", "hurt", "injured"}},
+    -- Try to load emoji data
+    local data = loadEmojiData()
 
-        -- Gestures & Body Parts
-        {emoji = "👍", keywords = {"thumbs", "up", "like", "good", "yes", "ok", "approve"}},
-        {emoji = "👎", keywords = {"thumbs", "down", "dislike", "bad", "no"}},
-        {emoji = "👊", keywords = {"fist", "bump", "punch"}},
-        {emoji = "✊", keywords = {"fist", "power"}},
-        {emoji = "🤛", keywords = {"left", "fist", "bump"}},
-        {emoji = "🤜", keywords = {"right", "fist", "bump"}},
-        {emoji = "🤞", keywords = {"fingers", "crossed", "luck", "hope"}},
-        {emoji = "✌️", keywords = {"victory", "peace"}},
-        {emoji = "🤟", keywords = {"love", "you"}},
-        {emoji = "🤘", keywords = {"rock", "metal", "horns"}},
-        {emoji = "👌", keywords = {"ok", "okay", "perfect"}},
-        {emoji = "🤌", keywords = {"pinched", "fingers", "italian"}},
-        {emoji = "🤏", keywords = {"pinch", "small"}},
-        {emoji = "👈", keywords = {"left", "point"}},
-        {emoji = "👉", keywords = {"right", "point"}},
-        {emoji = "👆", keywords = {"up", "point"}},
-        {emoji = "👇", keywords = {"down", "point"}},
-        {emoji = "☝️", keywords = {"index", "point", "up"}},
-        {emoji = "✋", keywords = {"hand", "raised", "stop"}},
-        {emoji = "🤚", keywords = {"raised", "back", "hand"}},
-        {emoji = "🖐️", keywords = {"hand", "five", "fingers"}},
-        {emoji = "🖖", keywords = {"vulcan", "spock", "star", "trek"}},
-        {emoji = "👋", keywords = {"wave", "hello", "bye", "hi"}},
-        {emoji = "🤙", keywords = {"call", "me", "shaka"}},
-        {emoji = "💪", keywords = {"muscle", "strong", "flex", "strength"}},
-        {emoji = "🙏", keywords = {"pray", "thanks", "please", "namaste"}},
-        {emoji = "🤝", keywords = {"handshake", "deal", "agreement"}},
-        {emoji = "👏", keywords = {"clap", "applause", "congrats"}},
-        {emoji = "🙌", keywords = {"raised", "hands", "celebrate", "praise", "yay"}},
+    if not data then
+        -- No cache file, need to download
+        callback(searchId, {{
+            text = "Downloading emoji data...",
+            subText = "First time setup, please wait",
+            image = hs.image.imageFromName("NSNetwork"),
+        }})
 
-        -- Hearts & Love
-        {emoji = "❤️", keywords = {"heart", "love", "red"}},
-        {emoji = "🧡", keywords = {"orange", "heart", "love"}},
-        {emoji = "💛", keywords = {"yellow", "heart", "love"}},
-        {emoji = "💚", keywords = {"green", "heart", "love"}},
-        {emoji = "💙", keywords = {"blue", "heart", "love"}},
-        {emoji = "💜", keywords = {"purple", "heart", "love"}},
-        {emoji = "🖤", keywords = {"black", "heart", "love"}},
-        {emoji = "🤍", keywords = {"white", "heart", "love"}},
-        {emoji = "🤎", keywords = {"brown", "heart", "love"}},
-        {emoji = "💔", keywords = {"broken", "heart", "sad"}},
-        {emoji = "❤️‍🔥", keywords = {"heart", "fire", "love", "passion"}},
-        {emoji = "❤️‍🩹", keywords = {"mending", "heart", "healing"}},
-        {emoji = "💕", keywords = {"two", "hearts", "love"}},
-        {emoji = "💞", keywords = {"revolving", "hearts", "love"}},
-        {emoji = "💓", keywords = {"beating", "heart", "love"}},
-        {emoji = "💗", keywords = {"growing", "heart", "love"}},
-        {emoji = "💖", keywords = {"sparkling", "heart", "love"}},
-        {emoji = "💘", keywords = {"cupid", "arrow", "heart", "love"}},
-        {emoji = "💝", keywords = {"gift", "heart", "love"}},
-        {emoji = "💟", keywords = {"heart", "decoration"}},
+        downloadEmojiData(function(success)
+            if success then
+                data = loadEmojiData()
+                if data then
+                    -- Retry the search now that we have data
+                    handleEmoji(query, searchId, callback)
+                else
+                    callback(searchId, {{
+                        text = "Error loading emoji data",
+                        subText = "Failed to parse downloaded data",
+                        image = hs.image.imageFromName("NSCaution"),
+                    }})
+                end
+            else
+                callback(searchId, {{
+                    text = "Error downloading emoji data",
+                    subText = "Check internet connection",
+                    image = hs.image.imageFromName("NSCaution"),
+                }})
+            end
+        end)
+        return function() end
+    end
 
-        -- Common symbols
-        {emoji = "✅", keywords = {"check", "mark", "yes", "done", "complete", "success"}},
-        {emoji = "✔️", keywords = {"check", "yes", "done"}},
-        {emoji = "❌", keywords = {"x", "cross", "no", "wrong", "error"}},
-        {emoji = "⭐", keywords = {"star", "favorite"}},
-        {emoji = "🌟", keywords = {"glowing", "star", "sparkle"}},
-        {emoji = "⚡", keywords = {"lightning", "zap", "fast", "power"}},
-        {emoji = "🔥", keywords = {"fire", "hot", "lit", "flame"}},
-        {emoji = "💯", keywords = {"hundred", "100", "perfect", "full"}},
-        {emoji = "💫", keywords = {"dizzy", "star"}},
-        {emoji = "✨", keywords = {"sparkle", "shine", "magic"}},
-        {emoji = "🎉", keywords = {"party", "celebrate", "congrats", "tada"}},
-        {emoji = "🎊", keywords = {"confetti", "celebrate", "party"}},
-        {emoji = "🎈", keywords = {"balloon", "party", "celebrate"}},
-        {emoji = "🎁", keywords = {"gift", "present", "birthday"}},
-        {emoji = "🏆", keywords = {"trophy", "win", "award", "champion"}},
-        {emoji = "🥇", keywords = {"gold", "medal", "first", "winner"}},
-        {emoji = "🥈", keywords = {"silver", "medal", "second"}},
-        {emoji = "🥉", keywords = {"bronze", "medal", "third"}},
+    -- Build emoji list from CLDR data
+    local emojis = {}
+    for emoji, annotations in pairs(data) do
+        if annotations.default then
+            table.insert(emojis, {
+                emoji = emoji,
+                keywords = annotations.default,
+            })
+        end
+    end
 
-        -- Nature
-        {emoji = "🌈", keywords = {"rainbow", "colorful"}},
-        {emoji = "☀️", keywords = {"sun", "sunny", "bright"}},
-        {emoji = "🌙", keywords = {"moon", "night"}},
-        {emoji = "⭐", keywords = {"star"}},
-        {emoji = "🌺", keywords = {"flower", "hibiscus"}},
-        {emoji = "🌸", keywords = {"cherry", "blossom", "flower"}},
-        {emoji = "🌼", keywords = {"blossom", "flower"}},
-        {emoji = "🌻", keywords = {"sunflower", "flower"}},
-        {emoji = "🌹", keywords = {"rose", "flower", "love"}},
-        {emoji = "🌷", keywords = {"tulip", "flower"}},
-        {emoji = "🌱", keywords = {"seedling", "plant", "grow"}},
-        {emoji = "🌿", keywords = {"herb", "leaf", "plant"}},
-        {emoji = "🍀", keywords = {"clover", "luck", "four", "leaf"}},
-        {emoji = "🌵", keywords = {"cactus", "desert"}},
-        {emoji = "🌴", keywords = {"palm", "tree", "tropical"}},
-        {emoji = "🌳", keywords = {"tree", "nature"}},
-        {emoji = "🌲", keywords = {"evergreen", "tree", "pine"}},
-
-        -- Food & Drink
-        {emoji = "☕", keywords = {"coffee", "cafe", "hot", "drink"}},
-        {emoji = "🍕", keywords = {"pizza", "food"}},
-        {emoji = "🍔", keywords = {"burger", "hamburger", "food"}},
-        {emoji = "🍟", keywords = {"fries", "french", "food"}},
-        {emoji = "🌭", keywords = {"hot", "dog", "food"}},
-        {emoji = "🍿", keywords = {"popcorn", "snack"}},
-        {emoji = "🍩", keywords = {"donut", "doughnut", "sweet"}},
-        {emoji = "🍪", keywords = {"cookie", "sweet"}},
-        {emoji = "🎂", keywords = {"cake", "birthday", "celebrate"}},
-        {emoji = "🍰", keywords = {"cake", "slice", "dessert"}},
-        {emoji = "🧁", keywords = {"cupcake", "sweet"}},
-        {emoji = "🍦", keywords = {"ice", "cream", "soft", "serve"}},
-        {emoji = "🍨", keywords = {"ice", "cream", "dessert"}},
-        {emoji = "🍧", keywords = {"shaved", "ice", "dessert"}},
-        {emoji = "🍭", keywords = {"lollipop", "candy", "sweet"}},
-        {emoji = "🍬", keywords = {"candy", "sweet"}},
-        {emoji = "🍫", keywords = {"chocolate", "bar", "sweet"}},
-        {emoji = "🍎", keywords = {"apple", "red", "fruit"}},
-        {emoji = "🍏", keywords = {"apple", "green", "fruit"}},
-        {emoji = "🍊", keywords = {"orange", "fruit"}},
-        {emoji = "🍋", keywords = {"lemon", "fruit"}},
-        {emoji = "🍌", keywords = {"banana", "fruit"}},
-        {emoji = "🍉", keywords = {"watermelon", "fruit"}},
-        {emoji = "🍇", keywords = {"grapes", "fruit"}},
-        {emoji = "🍓", keywords = {"strawberry", "fruit"}},
-        {emoji = "🍑", keywords = {"peach", "fruit"}},
-        {emoji = "🍒", keywords = {"cherry", "fruit"}},
-        {emoji = "🥝", keywords = {"kiwi", "fruit"}},
-        {emoji = "🍅", keywords = {"tomato", "vegetable"}},
-        {emoji = "🥑", keywords = {"avocado", "food"}},
-        {emoji = "🍆", keywords = {"eggplant", "vegetable"}},
-        {emoji = "🥦", keywords = {"broccoli", "vegetable"}},
-        {emoji = "🥕", keywords = {"carrot", "vegetable"}},
-        {emoji = "🌽", keywords = {"corn", "vegetable"}},
-        {emoji = "🥐", keywords = {"croissant", "bread"}},
-        {emoji = "🥖", keywords = {"baguette", "bread", "french"}},
-        {emoji = "🍞", keywords = {"bread", "loaf"}},
-        {emoji = "🥯", keywords = {"bagel", "bread"}},
-        {emoji = "🍕", keywords = {"pizza"}},
-        {emoji = "🍝", keywords = {"spaghetti", "pasta"}},
-        {emoji = "🍜", keywords = {"noodles", "ramen", "bowl"}},
-        {emoji = "🍲", keywords = {"stew", "pot", "soup"}},
-        {emoji = "🍛", keywords = {"curry", "rice"}},
-        {emoji = "🍣", keywords = {"sushi", "japanese"}},
-        {emoji = "🍱", keywords = {"bento", "box", "japanese"}},
-        {emoji = "🍙", keywords = {"rice", "ball", "onigiri"}},
-        {emoji = "🥟", keywords = {"dumpling", "food"}},
-        {emoji = "🥠", keywords = {"fortune", "cookie"}},
-        {emoji = "🥡", keywords = {"takeout", "box", "chinese"}},
-        {emoji = "🍺", keywords = {"beer", "drink", "alcohol"}},
-        {emoji = "🍻", keywords = {"beers", "cheers", "toast", "drink"}},
-        {emoji = "🍷", keywords = {"wine", "glass", "drink"}},
-        {emoji = "🥂", keywords = {"champagne", "toast", "celebrate"}},
-        {emoji = "🍾", keywords = {"champagne", "bottle", "celebrate"}},
-        {emoji = "🍹", keywords = {"tropical", "drink", "cocktail"}},
-        {emoji = "🍸", keywords = {"cocktail", "martini", "drink"}},
-        {emoji = "🥃", keywords = {"whiskey", "glass", "drink"}},
-
-        -- Animals
-        {emoji = "🐶", keywords = {"dog", "puppy", "pet"}},
-        {emoji = "🐱", keywords = {"cat", "kitten", "pet"}},
-        {emoji = "🐭", keywords = {"mouse", "rat"}},
-        {emoji = "🐹", keywords = {"hamster", "pet"}},
-        {emoji = "🐰", keywords = {"rabbit", "bunny"}},
-        {emoji = "🦊", keywords = {"fox"}},
-        {emoji = "🐻", keywords = {"bear"}},
-        {emoji = "🐼", keywords = {"panda", "bear"}},
-        {emoji = "🐨", keywords = {"koala", "bear"}},
-        {emoji = "🐯", keywords = {"tiger"}},
-        {emoji = "🦁", keywords = {"lion"}},
-        {emoji = "🐮", keywords = {"cow"}},
-        {emoji = "🐷", keywords = {"pig"}},
-        {emoji = "🐸", keywords = {"frog"}},
-        {emoji = "🐵", keywords = {"monkey"}},
-        {emoji = "🙈", keywords = {"see", "no", "evil", "monkey"}},
-        {emoji = "🙉", keywords = {"hear", "no", "evil", "monkey"}},
-        {emoji = "🙊", keywords = {"speak", "no", "evil", "monkey"}},
-        {emoji = "🐒", keywords = {"monkey"}},
-        {emoji = "🦍", keywords = {"gorilla", "monkey"}},
-        {emoji = "🐔", keywords = {"chicken", "hen"}},
-        {emoji = "🐧", keywords = {"penguin", "bird"}},
-        {emoji = "🐦", keywords = {"bird"}},
-        {emoji = "🐤", keywords = {"baby", "chick", "bird"}},
-        {emoji = "🐣", keywords = {"hatching", "chick", "bird"}},
-        {emoji = "🐥", keywords = {"chick", "bird"}},
-        {emoji = "🦆", keywords = {"duck", "bird"}},
-        {emoji = "🦅", keywords = {"eagle", "bird"}},
-        {emoji = "🦉", keywords = {"owl", "bird"}},
-        {emoji = "🦇", keywords = {"bat"}},
-        {emoji = "🐺", keywords = {"wolf"}},
-        {emoji = "🐗", keywords = {"boar", "pig"}},
-        {emoji = "🐴", keywords = {"horse"}},
-        {emoji = "🦄", keywords = {"unicorn", "magical"}},
-        {emoji = "🐝", keywords = {"bee", "honey"}},
-        {emoji = "🐛", keywords = {"bug", "caterpillar"}},
-        {emoji = "🦋", keywords = {"butterfly"}},
-        {emoji = "🐌", keywords = {"snail", "slow"}},
-        {emoji = "🐞", keywords = {"ladybug", "bug"}},
-        {emoji = "🐜", keywords = {"ant", "bug"}},
-        {emoji = "🦗", keywords = {"cricket", "bug"}},
-        {emoji = "🕷️", keywords = {"spider", "bug"}},
-        {emoji = "🦂", keywords = {"scorpion"}},
-        {emoji = "🦟", keywords = {"mosquito", "bug"}},
-        {emoji = "🐢", keywords = {"turtle", "slow"}},
-        {emoji = "🐍", keywords = {"snake"}},
-        {emoji = "🦎", keywords = {"lizard", "gecko"}},
-        {emoji = "🐙", keywords = {"octopus"}},
-        {emoji = "🦑", keywords = {"squid"}},
-        {emoji = "🦀", keywords = {"crab"}},
-        {emoji = "🦞", keywords = {"lobster"}},
-        {emoji = "🦐", keywords = {"shrimp"}},
-        {emoji = "🐠", keywords = {"fish", "tropical"}},
-        {emoji = "🐟", keywords = {"fish"}},
-        {emoji = "🐡", keywords = {"blowfish", "puffer"}},
-        {emoji = "🐬", keywords = {"dolphin"}},
-        {emoji = "🦈", keywords = {"shark"}},
-        {emoji = "🐳", keywords = {"whale", "spouting"}},
-        {emoji = "🐋", keywords = {"whale"}},
-
-        -- Activities & Sports
-        {emoji = "⚽", keywords = {"soccer", "ball", "football"}},
-        {emoji = "🏀", keywords = {"basketball", "ball"}},
-        {emoji = "🏈", keywords = {"football", "american"}},
-        {emoji = "⚾", keywords = {"baseball", "ball"}},
-        {emoji = "🥎", keywords = {"softball", "ball"}},
-        {emoji = "🎾", keywords = {"tennis", "ball"}},
-        {emoji = "🏐", keywords = {"volleyball", "ball"}},
-        {emoji = "🏉", keywords = {"rugby", "ball"}},
-        {emoji = "🥏", keywords = {"frisbee", "disc"}},
-        {emoji = "🎱", keywords = {"pool", "8ball", "billiards"}},
-        {emoji = "🏓", keywords = {"ping", "pong", "table", "tennis"}},
-        {emoji = "🏸", keywords = {"badminton"}},
-        {emoji = "🥊", keywords = {"boxing", "glove"}},
-        {emoji = "🥋", keywords = {"martial", "arts", "karate"}},
-        {emoji = "🥅", keywords = {"goal", "net"}},
-        {emoji = "⛳", keywords = {"golf", "flag"}},
-        {emoji = "🏹", keywords = {"bow", "arrow", "archery"}},
-        {emoji = "🎣", keywords = {"fishing", "pole"}},
-        {emoji = "🎮", keywords = {"game", "controller", "video", "games"}},
-        {emoji = "🕹️", keywords = {"joystick", "game"}},
-        {emoji = "🎯", keywords = {"dart", "target", "bullseye"}},
-        {emoji = "🎲", keywords = {"dice", "game"}},
-        {emoji = "🎰", keywords = {"slot", "machine", "gambling"}},
-        {emoji = "🎳", keywords = {"bowling"}},
-
-        -- Travel & Places
-        {emoji = "🚗", keywords = {"car", "automobile"}},
-        {emoji = "🚕", keywords = {"taxi", "cab"}},
-        {emoji = "🚙", keywords = {"suv", "car"}},
-        {emoji = "🚌", keywords = {"bus"}},
-        {emoji = "🚎", keywords = {"trolley", "bus"}},
-        {emoji = "🏎️", keywords = {"race", "car", "fast"}},
-        {emoji = "🚓", keywords = {"police", "car", "cop"}},
-        {emoji = "🚑", keywords = {"ambulance", "emergency"}},
-        {emoji = "🚒", keywords = {"fire", "truck", "engine"}},
-        {emoji = "🚐", keywords = {"minibus", "van"}},
-        {emoji = "🚚", keywords = {"truck", "delivery"}},
-        {emoji = "🚛", keywords = {"truck", "semi", "lorry"}},
-        {emoji = "🚜", keywords = {"tractor", "farm"}},
-        {emoji = "🏍️", keywords = {"motorcycle", "bike"}},
-        {emoji = "🛵", keywords = {"scooter", "moped"}},
-        {emoji = "🚲", keywords = {"bicycle", "bike"}},
-        {emoji = "🛴", keywords = {"scooter", "kick"}},
-        {emoji = "✈️", keywords = {"airplane", "plane", "flight"}},
-        {emoji = "🚁", keywords = {"helicopter"}},
-        {emoji = "🚀", keywords = {"rocket", "space", "fast", "launch"}},
-        {emoji = "🛸", keywords = {"ufo", "alien", "flying", "saucer"}},
-        {emoji = "🚢", keywords = {"ship", "boat"}},
-        {emoji = "⛵", keywords = {"sailboat", "boat"}},
-        {emoji = "🚤", keywords = {"speedboat", "boat"}},
-        {emoji = "⛴️", keywords = {"ferry", "boat"}},
-        {emoji = "🛥️", keywords = {"motor", "boat"}},
-        {emoji = "🚂", keywords = {"train", "locomotive"}},
-        {emoji = "🚆", keywords = {"train"}},
-        {emoji = "🚇", keywords = {"metro", "subway"}},
-        {emoji = "🚊", keywords = {"tram"}},
-        {emoji = "🚝", keywords = {"monorail"}},
-        {emoji = "🚋", keywords = {"tram", "car"}},
-        {emoji = "🚃", keywords = {"railway", "car"}},
-        {emoji = "⛽", keywords = {"gas", "fuel", "pump"}},
-        {emoji = "🏠", keywords = {"house", "home"}},
-        {emoji = "🏡", keywords = {"house", "garden", "home"}},
-        {emoji = "🏢", keywords = {"office", "building"}},
-        {emoji = "🏣", keywords = {"post", "office"}},
-        {emoji = "🏤", keywords = {"european", "post", "office"}},
-        {emoji = "🏥", keywords = {"hospital", "medical"}},
-        {emoji = "🏦", keywords = {"bank"}},
-        {emoji = "🏨", keywords = {"hotel"}},
-        {emoji = "🏩", keywords = {"love", "hotel"}},
-        {emoji = "🏪", keywords = {"convenience", "store"}},
-        {emoji = "🏫", keywords = {"school"}},
-        {emoji = "🏬", keywords = {"department", "store"}},
-        {emoji = "🏭", keywords = {"factory", "industrial"}},
-        {emoji = "🏯", keywords = {"castle", "japanese"}},
-        {emoji = "🏰", keywords = {"castle", "european"}},
-        {emoji = "🗼", keywords = {"tokyo", "tower"}},
-        {emoji = "🗽", keywords = {"statue", "liberty"}},
-        {emoji = "⛪", keywords = {"church", "religion"}},
-        {emoji = "🕌", keywords = {"mosque", "religion"}},
-        {emoji = "🛕", keywords = {"temple", "hindu"}},
-        {emoji = "🕍", keywords = {"synagogue", "religion"}},
-        {emoji = "⛩️", keywords = {"shrine", "japanese"}},
-        {emoji = "🌍", keywords = {"globe", "earth", "world", "europe"}},
-        {emoji = "🌎", keywords = {"globe", "earth", "world", "americas"}},
-        {emoji = "🌏", keywords = {"globe", "earth", "world", "asia"}},
-        {emoji = "🗺️", keywords = {"map", "world"}},
-        {emoji = "🗾", keywords = {"japan", "map"}},
-        {emoji = "🧭", keywords = {"compass"}},
-        {emoji = "⛰️", keywords = {"mountain"}},
-        {emoji = "🏔️", keywords = {"snow", "mountain"}},
-        {emoji = "🗻", keywords = {"mount", "fuji", "mountain"}},
-        {emoji = "🏕️", keywords = {"camping"}},
-        {emoji = "🏖️", keywords = {"beach", "umbrella"}},
-        {emoji = "🏝️", keywords = {"island", "desert"}},
-        {emoji = "🏜️", keywords = {"desert"}},
-        {emoji = "🏞️", keywords = {"national", "park"}},
-        {emoji = "🏟️", keywords = {"stadium"}},
-
-        -- Objects & Tech
-        {emoji = "💻", keywords = {"laptop", "computer", "pc", "macbook"}},
-        {emoji = "🖥️", keywords = {"desktop", "computer", "pc"}},
-        {emoji = "⌨️", keywords = {"keyboard"}},
-        {emoji = "🖱️", keywords = {"mouse", "computer"}},
-        {emoji = "🖨️", keywords = {"printer"}},
-        {emoji = "📱", keywords = {"phone", "mobile", "iphone", "smartphone"}},
-        {emoji = "☎️", keywords = {"phone", "telephone"}},
-        {emoji = "📞", keywords = {"phone", "receiver"}},
-        {emoji = "📟", keywords = {"pager", "beeper"}},
-        {emoji = "📠", keywords = {"fax"}},
-        {emoji = "📡", keywords = {"satellite", "antenna"}},
-        {emoji = "📺", keywords = {"tv", "television"}},
-        {emoji = "📻", keywords = {"radio"}},
-        {emoji = "🎙️", keywords = {"microphone", "studio"}},
-        {emoji = "🎚️", keywords = {"level", "slider"}},
-        {emoji = "🎛️", keywords = {"control", "knobs"}},
-        {emoji = "🧭", keywords = {"compass"}},
-        {emoji = "⏰", keywords = {"alarm", "clock"}},
-        {emoji = "⏱️", keywords = {"stopwatch", "timer"}},
-        {emoji = "⏲️", keywords = {"timer", "clock"}},
-        {emoji = "⌚", keywords = {"watch", "apple", "time"}},
-        {emoji = "📷", keywords = {"camera", "photo"}},
-        {emoji = "📸", keywords = {"camera", "flash", "photo"}},
-        {emoji = "📹", keywords = {"video", "camera"}},
-        {emoji = "🎥", keywords = {"movie", "camera", "film"}},
-        {emoji = "📽️", keywords = {"film", "projector"}},
-        {emoji = "🎬", keywords = {"clapper", "board", "movie"}},
-        {emoji = "📞", keywords = {"telephone", "receiver"}},
-        {emoji = "☎️", keywords = {"telephone"}},
-        {emoji = "📟", keywords = {"pager"}},
-        {emoji = "📠", keywords = {"fax"}},
-        {emoji = "📺", keywords = {"tv", "television"}},
-        {emoji = "📻", keywords = {"radio"}},
-        {emoji = "🎙️", keywords = {"microphone"}},
-        {emoji = "🎚️", keywords = {"level", "slider"}},
-        {emoji = "🎛️", keywords = {"control", "knobs"}},
-        {emoji = "🔋", keywords = {"battery", "power"}},
-        {emoji = "🔌", keywords = {"plug", "electric"}},
-        {emoji = "💡", keywords = {"bulb", "light", "idea"}},
-        {emoji = "🔦", keywords = {"flashlight", "torch"}},
-        {emoji = "🕯️", keywords = {"candle", "light"}},
-        {emoji = "🗑️", keywords = {"trash", "garbage", "delete"}},
-        {emoji = "🛒", keywords = {"shopping", "cart", "trolley"}},
-        {emoji = "💰", keywords = {"money", "bag", "cash"}},
-        {emoji = "💵", keywords = {"dollar", "bill", "money"}},
-        {emoji = "💴", keywords = {"yen", "money"}},
-        {emoji = "💶", keywords = {"euro", "money"}},
-        {emoji = "💷", keywords = {"pound", "money"}},
-        {emoji = "💳", keywords = {"credit", "card"}},
-        {emoji = "💎", keywords = {"gem", "diamond", "jewel"}},
-        {emoji = "⚖️", keywords = {"scale", "balance", "justice"}},
-        {emoji = "🔨", keywords = {"hammer", "tool"}},
-        {emoji = "🪛", keywords = {"screwdriver", "tool"}},
-        {emoji = "🔧", keywords = {"wrench", "tool"}},
-        {emoji = "🔩", keywords = {"nut", "bolt"}},
-        {emoji = "⚙️", keywords = {"gear", "settings"}},
-        {emoji = "🔗", keywords = {"link", "chain"}},
-        {emoji = "⛓️", keywords = {"chains"}},
-        {emoji = "📎", keywords = {"paperclip"}},
-        {emoji = "📌", keywords = {"pin", "pushpin"}},
-        {emoji = "📍", keywords = {"pin", "location"}},
-        {emoji = "✂️", keywords = {"scissors", "cut"}},
-        {emoji = "📏", keywords = {"ruler", "measure"}},
-        {emoji = "📐", keywords = {"triangular", "ruler"}},
-        {emoji = "🗂️", keywords = {"card", "index", "dividers"}},
-        {emoji = "📁", keywords = {"folder", "file"}},
-        {emoji = "📂", keywords = {"open", "folder", "file"}},
-        {emoji = "📋", keywords = {"clipboard"}},
-        {emoji = "📄", keywords = {"page", "document"}},
-        {emoji = "📃", keywords = {"page", "curl", "document"}},
-        {emoji = "📰", keywords = {"newspaper", "news"}},
-        {emoji = "📑", keywords = {"bookmark", "tabs"}},
-        {emoji = "🔖", keywords = {"bookmark"}},
-        {emoji = "📚", keywords = {"books", "library"}},
-        {emoji = "📖", keywords = {"book", "open", "reading"}},
-        {emoji = "📕", keywords = {"closed", "book"}},
-        {emoji = "📗", keywords = {"green", "book"}},
-        {emoji = "📘", keywords = {"blue", "book"}},
-        {emoji = "📙", keywords = {"orange", "book"}},
-        {emoji = "📓", keywords = {"notebook"}},
-        {emoji = "📔", keywords = {"notebook", "decorative"}},
-        {emoji = "📒", keywords = {"ledger"}},
-        {emoji = "📝", keywords = {"memo", "note", "write", "pencil"}},
-        {emoji = "✏️", keywords = {"pencil", "write"}},
-        {emoji = "✒️", keywords = {"pen", "write"}},
-        {emoji = "🖊️", keywords = {"pen", "write"}},
-        {emoji = "🖋️", keywords = {"fountain", "pen", "write"}},
-        {emoji = "🖍️", keywords = {"crayon", "draw"}},
-        {emoji = "🖌️", keywords = {"paintbrush", "paint"}},
-        {emoji = "🔍", keywords = {"magnifying", "glass", "search", "left"}},
-        {emoji = "🔎", keywords = {"magnifying", "glass", "search", "right"}},
-        {emoji = "🔐", keywords = {"locked", "key", "secure"}},
-        {emoji = "🔒", keywords = {"locked", "secure", "private"}},
-        {emoji = "🔓", keywords = {"unlocked", "open"}},
-        {emoji = "🔑", keywords = {"key", "password"}},
-        {emoji = "🗝️", keywords = {"old", "key"}},
-    }
-
+    -- Results list
     local results = {}
 
     -- Filter emojis by query
@@ -1023,13 +656,22 @@ local function handleEmoji(query, searchId, callback)
                 image = hs.image.imageFromName("NSFontPanel"),
             })
         else
-            -- Search in keywords
+            -- Search in keywords and emoji itself
             local queryLower = query:lower()
             local found = false
-            for _, keyword in ipairs(item.keywords) do
-                if keyword:find(queryLower, 1, true) then
-                    found = true
-                    break
+
+            -- Check if query matches emoji character itself
+            if item.emoji:lower():find(queryLower, 1, true) then
+                found = true
+            end
+
+            -- Check keywords
+            if not found then
+                for _, keyword in ipairs(item.keywords) do
+                    if keyword:lower():find(queryLower, 1, true) then
+                        found = true
+                        break
+                    end
                 end
             end
 
@@ -1630,6 +1272,11 @@ function M.init()
     hs.hotkey.bind({"alt"}, "space", function()
         M.show()
     end)
+
+    -- Check emoji cache age daily in background
+    hs.timer.doEvery(24 * 60 * 60, checkEmojiCacheAge)
+    -- Also check on startup (after 5 seconds to avoid slowing down init)
+    hs.timer.doAfter(5, checkEmojiCacheAge)
 
     print("File launcher initialized (alt+space)")
 end
