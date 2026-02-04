@@ -94,6 +94,44 @@ local function searchFiles(query, searchId, callback)
     currentTask:start()
 end
 
+-- Application search mode
+local function searchApplications(query, searchId, callback)
+    if query == "" then
+        callback(searchId, {})
+        return
+    end
+
+    -- Get all applications
+    local allApps = hs.application.applicationsForBundleID() or {}
+    local results = {}
+
+    -- Search in /Applications and ~/Applications
+    local appDirs = {"/Applications", os.getenv("HOME") .. "/Applications"}
+
+    for _, dir in ipairs(appDirs) do
+        local apps = hs.fs.dir(dir)
+        if apps then
+            for app in apps do
+                if app:match("%.app$") and app:lower():find(query:lower(), 1, true) then
+                    local appPath = dir .. "/" .. app
+                    local appName = app:gsub("%.app$", "")
+                    table.insert(results, {
+                        text = appName,
+                        subText = appPath,
+                        appPath = appPath,
+                        image = hs.image.iconForFile(appPath),
+                    })
+                end
+            end
+        end
+    end
+
+    -- Sort by name
+    table.sort(results, function(a, b) return a.text < b.text end)
+
+    callback(searchId, results)
+end
+
 -- Calculator mode - evaluate Lua expression
 local function handleCalculator(expression, searchId, callback)
     if expression == "" then
@@ -158,6 +196,13 @@ local function onQueryChange(query)
         end
     end
 
+    -- Check for application mode
+    if query:match("^a ") then
+        local appQuery = query:sub(3)  -- Remove "a " prefix
+        searchApplications(appQuery, thisSearchId, handleResults)
+        return
+    end
+
     -- Check for calculator mode
     if query:match("^c ") then
         local expression = query:sub(3)  -- Remove "c " prefix
@@ -186,6 +231,12 @@ local function onChoice(choice)
     if choice.result then
         hs.pasteboard.setContents(choice.result)
         hs.alert.show("Copied: " .. choice.result)
+        return
+    end
+
+    -- Handle application launch
+    if choice.appPath then
+        hs.execute(string.format('open "%s"', choice.appPath))
         return
     end
 
@@ -235,6 +286,7 @@ function M.init()
     end)
 
     print("File launcher initialized (alt+space)")
+    print("  - Application mode: 'a <name>' (e.g., 'a safari', 'a terminal')")
     print("  - Calculator mode: 'c <expression>' (e.g., 'c 2+2', 'c math.sqrt(16)')")
     print("  - File mode: shift/cmd+enter to reveal, option+enter to copy path")
 end
