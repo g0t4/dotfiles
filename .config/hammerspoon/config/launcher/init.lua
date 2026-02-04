@@ -6,6 +6,9 @@ local currentTask = nil
 local currentSearchId = 0  -- Track current search across all searchers
 local MAX_RESULTS = 30
 
+-- LLM server configuration
+local LLM_SERVER = "http://build21.lan:8013"
+
 -- Helper to get just filename from path for display
 local function getFilename(path)
     return path:match("^.+/(.+)$") or path
@@ -138,6 +141,97 @@ local function searchApplications(query, searchId, callback)
     callback(searchId, results)
 end
 
+-- LLM completion mode
+local function handleLLM(query, searchId, callback)
+    if query == "" then
+        callback(searchId, {})
+        return
+    end
+
+    -- Build the prompt
+    local prompt = string.format([[You are a helpful AI assistant. The user is typing: "%s"
+
+Provide a helpful, concise response or completion. Be brief and practical.]], query)
+
+    -- Build curl command for streaming completion
+    local jsonPayload = hs.json.encode({
+        prompt = prompt,
+        stream = true,
+        temperature = 0.7,
+        max_tokens = 150
+    })
+
+    local cmd = "/usr/bin/curl"
+    local args = {
+        "-s",
+        "-X", "POST",
+        LLM_SERVER .. "/v1/completions",
+        "-H", "Content-Type: application/json",
+        "-d", jsonPayload
+    }
+
+    local results = {}
+    local buffer = ""
+    local fullResponse = ""
+
+    print("Starting LLM request for query:", query, "searchId:", searchId)
+
+    currentTask = hs.task.new(cmd, function(exitCode, stdOut, stdErr)
+        -- Ignore if this isn't the current search anymore
+        if searchId ~= currentSearchId then
+            print("Ignoring old LLM search", searchId)
+            return
+        end
+
+        currentTask = nil
+
+        if exitCode ~= 0 then
+            print("LLM error:", stdErr)
+            callback(searchId, {{
+                text = "Error connecting to LLM server",
+                subText = stdErr or "Unknown error",
+            }})
+        end
+    end, function(_, stdOut, _)
+        -- Ignore if this isn't the current search anymore
+        if searchId ~= currentSearchId then
+            return true
+        end
+
+        buffer = buffer .. stdOut
+
+        -- Process SSE events (data: prefix for streaming)
+        while true do
+            local line, rest = buffer:match("([^\r\n]+)[\r\n](.*)")
+            if not line then
+                break
+            end
+            buffer = rest
+
+            -- Parse SSE data lines
+            local data = line:match("^data: (.+)$")
+            if data and data ~= "[DONE]" then
+                local success, json = pcall(hs.json.decode, data)
+                if success and json.choices and json.choices[1] and json.choices[1].text then
+                    fullResponse = fullResponse .. json.choices[1].text
+
+                    -- Update UI with streaming response
+                    callback(searchId, {{
+                        text = fullResponse,
+                        subText = query,
+                        llmResponse = fullResponse,
+                        image = hs.image.imageFromName("NSInfo"),
+                    }})
+                end
+            end
+        end
+
+        return true  -- Continue streaming
+    end, args)
+
+    currentTask:start()
+end
+
 -- Calculator mode - evaluate Lua expression
 local function handleCalculator(expression, searchId, callback)
     if expression == "" then
@@ -216,6 +310,13 @@ local function onQueryChange(query)
         return
     end
 
+    -- Check for LLM mode
+    if query:match("^o ") then
+        local llmQuery = query:sub(3)  -- Remove "o " prefix
+        handleLLM(llmQuery, thisSearchId, handleResults)
+        return
+    end
+
     -- Default to file search
     searchFiles(query, thisSearchId, handleResults)
 end
@@ -237,6 +338,13 @@ local function onChoice(choice)
     if choice.result then
         hs.pasteboard.setContents(choice.result)
         hs.alert.show("Copied: " .. choice.result)
+        return
+    end
+
+    -- Handle LLM response
+    if choice.llmResponse then
+        hs.pasteboard.setContents(choice.llmResponse)
+        hs.alert.show("Copied LLM response")
         return
     end
 
@@ -294,6 +402,7 @@ function M.init()
     print("File launcher initialized (alt+space)")
     print("  - Application mode: 'a <name>' (e.g., 'a safari', 'a terminal')")
     print("  - Calculator mode: 'c <expression>' (e.g., 'c 2+2', 'c math.sqrt(16)')")
+    print("  - LLM mode: 'o <prompt>' (e.g., 'o what is lua', 'o explain recursion')")
     print("  - File mode: shift/cmd+enter to reveal, option+enter to copy path")
 end
 
