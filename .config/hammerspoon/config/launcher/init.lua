@@ -868,12 +868,14 @@ end
 
 -- Handle file selection
 local function onChoice(choice)
-    -- Disable refresh hotkeys when chooser closes (whether by selection or escape)
+    -- Delete refresh hotkeys when chooser closes (whether by selection or escape)
     if refreshHotkeyCmdR then
-        refreshHotkeyCmdR:disable()
+        refreshHotkeyCmdR:delete()
+        refreshHotkeyCmdR = nil
     end
     if refreshHotkeyCtrlR then
-        refreshHotkeyCtrlR:disable()
+        refreshHotkeyCtrlR:delete()
+        refreshHotkeyCtrlR = nil
     end
 
     -- Log for debugging
@@ -1042,12 +1044,14 @@ function M.hide()
     if chooser then
         chooser:hide()
     end
-    -- Disable refresh hotkeys when hidden
+    -- Delete refresh hotkeys when hidden
     if refreshHotkeyCmdR then
-        refreshHotkeyCmdR:disable()
+        refreshHotkeyCmdR:delete()
+        refreshHotkeyCmdR = nil
     end
     if refreshHotkeyCtrlR then
-        refreshHotkeyCtrlR:disable()
+        refreshHotkeyCtrlR:delete()
+        refreshHotkeyCtrlR = nil
     end
 end
 
