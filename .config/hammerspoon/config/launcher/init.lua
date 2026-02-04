@@ -105,8 +105,53 @@ local function searchFiles(query, callback)
     currentTask:start()
 end
 
+-- Calculator mode - evaluate Lua expression
+local function handleCalculator(expression)
+    if expression == "" then
+        return {}
+    end
+
+    -- Try to evaluate the expression
+    local func, err = load("return " .. expression)
+    if not func then
+        -- Return error as result
+        return {{
+            text = "Error: " .. err,
+            subText = expression,
+            result = nil,
+        }}
+    end
+
+    local success, result = pcall(func)
+    if not success then
+        return {{
+            text = "Error: " .. result,
+            subText = expression,
+            result = nil,
+        }}
+    end
+
+    -- Return the result
+    return {{
+        text = tostring(result),
+        subText = expression .. " = " .. tostring(result),
+        result = tostring(result),
+        image = hs.image.imageFromName("NSCalculator"),
+    }}
+end
+
 -- Search handler - cancels previous search on every keystroke
 local function onQueryChange(query)
+    -- Check for calculator mode
+    if query:match("^c ") then
+        local expression = query:sub(3)  -- Remove "c " prefix
+        local results = handleCalculator(expression)
+        if chooser then
+            chooser:choices(results)
+        end
+        return
+    end
+
     -- searchFiles already cancels any running task, so just call it directly
     searchFiles(query, function(results)
         if chooser then
@@ -125,6 +170,13 @@ local function onChoice(choice)
     print("========================")
 
     if not choice then
+        return
+    end
+
+    -- Handle calculator result
+    if choice.result then
+        hs.pasteboard.setContents(choice.result)
+        hs.alert.show("Copied: " .. choice.result)
         return
     end
 
@@ -173,7 +225,9 @@ function M.init()
         M.show()
     end)
 
-    print("File launcher initialized (alt+space, shift/cmd+enter to reveal, option+enter to copy path)")
+    print("File launcher initialized (alt+space)")
+    print("  - Calculator mode: 'c <expression>' (e.g., 'c 2+2', 'c math.sqrt(16)')")
+    print("  - File mode: shift/cmd+enter to reveal, option+enter to copy path")
 end
 
 return M
