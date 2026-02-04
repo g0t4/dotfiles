@@ -866,6 +866,34 @@ local function onQueryChange(query)
     currentCancelFunc = searchFiles(query, thisSearchId, handleResults)
 end
 
+-- Refresh hotkeys
+local refreshHotkeyCmdR = nil
+local refreshHotkeyCtrlR = nil
+
+-- Delete refresh hotkeys
+local function deleteRefreshHotkeys()
+    print("=== Deleting refresh hotkeys ===")
+    if refreshHotkeyCmdR then
+        refreshHotkeyCmdR:delete()
+        refreshHotkeyCmdR = nil
+        print("Deleted Cmd+R hotkey")
+    end
+    if refreshHotkeyCtrlR then
+        refreshHotkeyCtrlR:delete()
+        refreshHotkeyCtrlR = nil
+        print("Deleted Ctrl+R hotkey")
+    end
+end
+
+-- Refresh current query
+local function refreshQuery()
+    if chooser then
+        local currentQuery = chooser:query()
+        -- Trigger onQueryChange to re-run the search
+        onQueryChange(currentQuery)
+    end
+end
+
 -- Handle file selection
 local function onChoice(choice)
     -- Delete refresh hotkeys when chooser closes (whether by selection or escape)
@@ -990,34 +1018,6 @@ local function onChoice(choice)
     else
         -- Open with default app
         hs.execute(string.format('open "%s"', choice.path))
-    end
-end
-
--- Refresh hotkeys
-local refreshHotkeyCmdR = nil
-local refreshHotkeyCtrlR = nil
-
--- Delete refresh hotkeys
-local function deleteRefreshHotkeys()
-    print("=== Deleting refresh hotkeys ===")
-    if refreshHotkeyCmdR then
-        refreshHotkeyCmdR:delete()
-        refreshHotkeyCmdR = nil
-        print("Deleted Cmd+R hotkey")
-    end
-    if refreshHotkeyCtrlR then
-        refreshHotkeyCtrlR:delete()
-        refreshHotkeyCtrlR = nil
-        print("Deleted Ctrl+R hotkey")
-    end
-end
-
--- Refresh current query
-local function refreshQuery()
-    if chooser then
-        local currentQuery = chooser:query()
-        -- Trigger onQueryChange to re-run the search
-        onQueryChange(currentQuery)
     end
 end
 
