@@ -869,14 +869,7 @@ end
 -- Handle file selection
 local function onChoice(choice)
     -- Delete refresh hotkeys when chooser closes (whether by selection or escape)
-    if refreshHotkeyCmdR then
-        refreshHotkeyCmdR:delete()
-        refreshHotkeyCmdR = nil
-    end
-    if refreshHotkeyCtrlR then
-        refreshHotkeyCtrlR:delete()
-        refreshHotkeyCtrlR = nil
-    end
+    deleteRefreshHotkeys()
 
     -- Log for debugging
     print("=== onChoice callback ===")
@@ -1004,6 +997,21 @@ end
 local refreshHotkeyCmdR = nil
 local refreshHotkeyCtrlR = nil
 
+-- Delete refresh hotkeys
+local function deleteRefreshHotkeys()
+    print("=== Deleting refresh hotkeys ===")
+    if refreshHotkeyCmdR then
+        refreshHotkeyCmdR:delete()
+        refreshHotkeyCmdR = nil
+        print("Deleted Cmd+R hotkey")
+    end
+    if refreshHotkeyCtrlR then
+        refreshHotkeyCtrlR:delete()
+        refreshHotkeyCtrlR = nil
+        print("Deleted Ctrl+R hotkey")
+    end
+end
+
 -- Refresh current query
 local function refreshQuery()
     if chooser then
@@ -1045,14 +1053,7 @@ function M.hide()
         chooser:hide()
     end
     -- Delete refresh hotkeys when hidden
-    if refreshHotkeyCmdR then
-        refreshHotkeyCmdR:delete()
-        refreshHotkeyCmdR = nil
-    end
-    if refreshHotkeyCtrlR then
-        refreshHotkeyCtrlR:delete()
-        refreshHotkeyCtrlR = nil
-    end
+    deleteRefreshHotkeys()
 end
 
 -- Setup keybinding
