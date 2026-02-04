@@ -282,9 +282,17 @@ local function handlePathBrowsing(path, searchId, callback)
     -- Expand ~ to home directory
     local expandedPath = path:gsub("^~", os.getenv("HOME"))
 
-    -- Check if path exists
-    local attrs = hs.fs.attributes(expandedPath)
-    if not attrs then
+    -- Split path into directory and basename for partial matching
+    local dirname, basename = expandedPath:match("^(.+)/([^/]*)$")
+    if not dirname then
+        -- No slash found, treat whole thing as basename in current dir
+        dirname = expandedPath
+        basename = ""
+    end
+
+    -- Check if directory exists
+    local attrs = hs.fs.attributes(dirname)
+    if not attrs or attrs.mode ~= "directory" then
         callback(searchId, {{
             text = "Path not found: " .. path,
             subText = "Check spelling or permissions",
@@ -294,11 +302,12 @@ local function handlePathBrowsing(path, searchId, callback)
 
     local results = {}
 
-    -- If it's a directory, list contents
-    if attrs.mode == "directory" then
-        for item in hs.fs.dir(expandedPath) do
-            if item ~= "." and item ~= ".." then
-                local itemPath = expandedPath .. "/" .. item
+    -- List directory contents with optional basename filter
+    for item in hs.fs.dir(dirname) do
+        if item ~= "." and item ~= ".." then
+            -- Filter by basename prefix if provided
+            if basename == "" or item:lower():find("^" .. basename:lower():gsub("[%^%$%(%)%%%.%[%]%*%+%-%?]", "%%%1"), 1) then
+                local itemPath = dirname .. "/" .. item
                 local itemAttrs = hs.fs.attributes(itemPath)
                 if itemAttrs then
                     table.insert(results, {
@@ -311,33 +320,25 @@ local function handlePathBrowsing(path, searchId, callback)
                 end
             end
         end
+    end
 
-        -- Sort: directories first, then files
-        table.sort(results, function(a, b)
-            local aIsDir = hs.fs.attributes(a.path).mode == "directory"
-            local bIsDir = hs.fs.attributes(b.path).mode == "directory"
-            if aIsDir ~= bIsDir then
-                return aIsDir
-            end
-            return a.text < b.text
-        end)
-
-        -- Limit results
-        if #results > MAX_RESULTS then
-            local limited = {}
-            for i = 1, MAX_RESULTS do
-                limited[i] = results[i]
-            end
-            results = limited
+    -- Sort: directories first, then files
+    table.sort(results, function(a, b)
+        local aIsDir = hs.fs.attributes(a.path).mode == "directory"
+        local bIsDir = hs.fs.attributes(b.path).mode == "directory"
+        if aIsDir ~= bIsDir then
+            return aIsDir
         end
-    else
-        -- It's a file, show it
-        table.insert(results, {
-            text = getFilename(expandedPath),
-            subText = expandedPath,
-            path = expandedPath,
-            image = hs.image.iconForFile(expandedPath),
-        })
+        return a.text < b.text
+    end)
+
+    -- Limit results
+    if #results > MAX_RESULTS then
+        local limited = {}
+        for i = 1, MAX_RESULTS do
+            limited[i] = results[i]
+        end
+        results = limited
     end
 
     callback(searchId, results)
