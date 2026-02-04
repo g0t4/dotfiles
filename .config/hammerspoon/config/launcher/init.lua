@@ -148,17 +148,25 @@ local function handleLLM(query, searchId, callback)
         return
     end
 
+    -- Immediately clear old results when starting new search
+    callback(searchId, {})
+
     -- Build the prompt
     local prompt = string.format([[You are a helpful AI assistant. The user is typing: "%s"
 
 Provide a helpful, concise response or completion. Be brief and practical.]], query)
+
+    print("=== LLM Request ===")
+    print("Query:", query)
+    print("Prompt:", prompt)
+    print("SearchId:", searchId)
 
     -- Build curl command for streaming completion
     local jsonPayload = hs.json.encode({
         prompt = prompt,
         stream = true,
         temperature = 0.7,
-        max_tokens = 150
+        max_tokens = 1000
     })
 
     local cmd = "/usr/bin/curl"
@@ -170,7 +178,6 @@ Provide a helpful, concise response or completion. Be brief and practical.]], qu
         "-d", jsonPayload
     }
 
-    local results = {}
     local buffer = ""
     local fullResponse = ""
 
@@ -184,6 +191,10 @@ Provide a helpful, concise response or completion. Be brief and practical.]], qu
         end
 
         currentTask = nil
+
+        print("=== LLM Complete ===")
+        print("Exit code:", exitCode)
+        print("Final response:", fullResponse)
 
         if exitCode ~= 0 then
             print("LLM error:", stdErr)
@@ -213,7 +224,12 @@ Provide a helpful, concise response or completion. Be brief and practical.]], qu
             if data and data ~= "[DONE]" then
                 local success, json = pcall(hs.json.decode, data)
                 if success and json.choices and json.choices[1] and json.choices[1].text then
-                    fullResponse = fullResponse .. json.choices[1].text
+                    local chunk = json.choices[1].text
+                    fullResponse = fullResponse .. chunk
+
+                    print("=== LLM Chunk ===")
+                    print("Chunk:", chunk)
+                    print("Full response so far:", fullResponse)
 
                     -- Update UI with streaming response
                     callback(searchId, {{
@@ -443,6 +459,75 @@ local function handlePythonCode(code, searchId, callback)
     end
 end
 
+-- System settings mode - open System Settings panes
+local function handleSystemSettings(query, searchId, callback)
+    -- Common system settings panes with their identifiers
+    local settings = {
+        {name = "Privacy & Security", id = "com.apple.preference.security", keywords = {"privacy", "security", "permissions"}},
+        {name = "Network", id = "com.apple.Network-Settings.extension", keywords = {"network", "wifi", "ethernet"}},
+        {name = "Bluetooth", id = "com.apple.BluetoothSettings", keywords = {"bluetooth"}},
+        {name = "Sound", id = "com.apple.preference.sound", keywords = {"sound", "audio", "volume"}},
+        {name = "Displays", id = "com.apple.Displays-Settings.extension", keywords = {"display", "monitor", "screen"}},
+        {name = "Keyboard", id = "com.apple.Keyboard-Settings.extension", keywords = {"keyboard"}},
+        {name = "Mouse", id = "com.apple.Mouse-Settings.extension", keywords = {"mouse"}},
+        {name = "Trackpad", id = "com.apple.Trackpad-Settings.extension", keywords = {"trackpad"}},
+        {name = "Printers & Scanners", id = "com.apple.preference.printfax", keywords = {"printer", "scanner", "print"}},
+        {name = "Battery", id = "com.apple.preference.battery", keywords = {"battery", "power"}},
+        {name = "Users & Groups", id = "com.apple.preferences.users", keywords = {"users", "accounts", "login"}},
+        {name = "Touch ID & Password", id = "com.apple.preferences.password", keywords = {"touchid", "password", "biometric"}},
+        {name = "Internet Accounts", id = "com.apple.Internet-Accounts-Settings.extension", keywords = {"accounts", "email", "icloud"}},
+        {name = "Wallet & Apple Pay", id = "com.apple.WalletSettingsExtension", keywords = {"wallet", "pay", "cards"}},
+        {name = "Notifications", id = "com.apple.preference.notifications", keywords = {"notifications", "alerts"}},
+        {name = "General", id = "com.apple.Settings.General", keywords = {"general", "about"}},
+        {name = "Appearance", id = "com.apple.Appearance-Settings.extension", keywords = {"appearance", "theme", "dark"}},
+        {name = "Accessibility", id = "com.apple.preference.universalaccess", keywords = {"accessibility", "voiceover"}},
+        {name = "Siri & Spotlight", id = "com.apple.Siri-Settings.extension", keywords = {"siri", "spotlight", "search"}},
+        {name = "Desktop & Dock", id = "com.apple.Desktop-Settings.extension", keywords = {"desktop", "dock", "menubar"}},
+        {name = "Screen Saver", id = "com.apple.ScreenSaver-Settings.extension", keywords = {"screensaver", "screen saver"}},
+        {name = "Lock Screen", id = "com.apple.Lock-Screen-Settings.extension", keywords = {"lock", "lockscreen"}},
+        {name = "Sharing", id = "com.apple.preferences.sharing", keywords = {"sharing", "airdrop", "remote"}},
+        {name = "Time Machine", id = "com.apple.Time-Machine-Settings.extension", keywords = {"timemachine", "backup"}},
+        {name = "Passwords", id = "com.apple.Passwords-Settings.extension", keywords = {"passwords", "keychain"}},
+    }
+
+    local results = {}
+
+    -- Filter settings by query
+    for _, setting in ipairs(settings) do
+        if query == "" then
+            -- Show all settings
+            table.insert(results, {
+                text = setting.name,
+                subText = "Open in System Settings",
+                settingsId = setting.id,
+                image = hs.image.imageFromName("NSPreferencesGeneral"),
+            })
+        else
+            -- Search in name and keywords
+            local queryLower = query:lower()
+            local nameMatch = setting.name:lower():find(queryLower, 1, true)
+            local keywordMatch = false
+            for _, keyword in ipairs(setting.keywords) do
+                if keyword:find(queryLower, 1, true) then
+                    keywordMatch = true
+                    break
+                end
+            end
+
+            if nameMatch or keywordMatch then
+                table.insert(results, {
+                    text = setting.name,
+                    subText = "Open in System Settings",
+                    settingsId = setting.id,
+                    image = hs.image.imageFromName("NSPreferencesGeneral"),
+                })
+            end
+        end
+    end
+
+    callback(searchId, results)
+end
+
 -- Commands mode - run predefined commands
 local function handleCommands(query, searchId, callback)
     -- Define some useful commands
@@ -518,6 +603,11 @@ local function showModes()
             text = "a <name>",
             subText = "Search applications (e.g., 'a safari', 'a terminal')",
             image = hs.image.imageFromName("NSApplicationIcon"),
+        },
+        {
+            text = "s <query>",
+            subText = "System Settings (e.g., 's privacy', 's network', 's bluetooth')",
+            image = hs.image.imageFromName("NSPreferencesGeneral"),
         },
         {
             text = "c <query>",
@@ -599,10 +689,25 @@ local function onQueryChange(query)
         return
     end
 
+    -- Debug logging
+    print("=== Query Check ===")
+    print("Query:", query)
+    print("Query length:", #query)
+    print("Matches ^a :", query:match("^a ") ~= nil)
+    print("Matches ^s :", query:match("^s ") ~= nil)
+
     -- Check for application mode
     if query:match("^a ") then
         local appQuery = query:sub(3)  -- Remove "a " prefix
         searchApplications(appQuery, thisSearchId, handleResults)
+        return
+    end
+
+    -- Check for system settings mode
+    if query:match("^s ") then
+        local settingsQuery = query:sub(3)  -- Remove "s " prefix
+        print("System settings mode activated, query:", settingsQuery)
+        handleSystemSettings(settingsQuery, thisSearchId, handleResults)
         return
     end
 
@@ -712,6 +817,12 @@ local function onChoice(choice)
     -- Handle web search
     if choice.webSearchUrl then
         hs.execute(string.format('open "%s"', choice.webSearchUrl))
+        return
+    end
+
+    -- Handle system settings
+    if choice.settingsId then
+        hs.execute(string.format('open "x-apple.systempreferences:%s"', choice.settingsId))
         return
     end
 
