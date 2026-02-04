@@ -316,11 +316,18 @@ local function handlePathBrowsing(path, searchId, callback)
     local expandedPath = path:gsub("^~", os.getenv("HOME"))
 
     -- Split path into directory and basename for partial matching
-    local dirname, basename = expandedPath:match("^(.+)/([^/]*)$")
-    if not dirname then
-        -- No slash found, treat whole thing as basename in current dir
-        dirname = expandedPath
-        basename = ""
+    local dirname, basename
+    if expandedPath:match("^/[^/]*$") then
+        -- Special case: /xxx or / - browse root directory with optional filter
+        dirname = "/"
+        basename = expandedPath:sub(2) -- Everything after first /
+    else
+        dirname, basename = expandedPath:match("^(.+)/([^/]*)$")
+        if not dirname then
+            -- No slash found, treat whole thing as basename in current dir
+            dirname = expandedPath
+            basename = ""
+        end
     end
 
     -- Check if directory exists
