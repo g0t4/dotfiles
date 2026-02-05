@@ -12,7 +12,7 @@ local LLM_SERVER = "http://build21.lan:8013"
 -- Emoji data configuration
 local EMOJI_CACHE_DIR = os.getenv("HOME") .. "/.local/share/hammerspoon"
 local EMOJI_CACHE_FILE = EMOJI_CACHE_DIR .. "/emoji-data.json"
-local EMOJI_DATA_URL = "https://raw.githubusercontent.com/unicode-org/cldr-json/main/cldr-json/cldr-annotations-derived-modern/en/annotations.json"
+local EMOJI_DATA_URL = "https://raw.githubusercontent.com/unicode-org/cldr-json/main/cldr-json/cldr-annotations-full/annotations/en/annotations.json"
 local EMOJI_CACHE_MAX_AGE = 30 * 24 * 60 * 60  -- 30 days in seconds
 local emojiData = nil  -- Cached parsed emoji data
 
