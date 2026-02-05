@@ -392,13 +392,35 @@ local function handleDictionary(query, searchId, callback)
     print("Matches:", table.concat(matchingWords, ", "))
     print("================================")
 
+    -- Initialize placeholder results
+    for i, word in ipairs(matchingWords) do
+        results[i] = {
+            text = word,
+            subText = "Loading...",
+            dictionaryWord = word,
+            image = hs.image.imageFromName("NSBookmarkTemplate"),
+        }
+    end
+
     -- Update UI with current results
     local function updateResults()
         if cancelled or searchId ~= currentSearchId then
             return
         end
-        callback(searchId, results)
+
+        -- Filter out nil entries (removed placeholders with no definition)
+        local filtered = {}
+        for _, result in ipairs(results) do
+            if result then
+                table.insert(filtered, result)
+            end
+        end
+
+        callback(searchId, filtered)
     end
+
+    -- Show initial placeholders
+    updateResults()
 
     -- Look up each word in parallel
     for i, word in ipairs(matchingWords) do
@@ -432,20 +454,17 @@ else:
 
                 local definition = output:gsub("%s+$", "")
                 if definition ~= "" then
-                    table.insert(results, {
+                    -- Update placeholder with definition
+                    results[i] = {
                         text = word .. ": " .. definition,
                         subText = "Select to open in Dictionary.app",
                         dictionaryWord = word,
                         dictionaryDefinition = definition,
                         image = hs.image.imageFromName("NSBookmarkTemplate"),
-                    })
+                    }
                 else
-                    table.insert(results, {
-                        text = word,
-                        subText = "No definition - Select to open in Dictionary.app",
-                        dictionaryWord = word,
-                        image = hs.image.imageFromName("NSBookmarkTemplate"),
-                    })
+                    -- Remove placeholder if no definition found
+                    results[i] = nil
                 end
 
                 updateResults()
@@ -463,17 +482,6 @@ else:
         task:start()
         table.insert(tasks, {task = task, tmpfile = tmpfile})
     end
-
-    -- Show placeholder results immediately
-    for _, word in ipairs(matchingWords) do
-        table.insert(results, {
-            text = word,
-            subText = "Loading...",
-            dictionaryWord = word,
-            image = hs.image.imageFromName("NSBookmarkTemplate"),
-        })
-    end
-    updateResults()
 
     -- Return cancel function
     return function()
