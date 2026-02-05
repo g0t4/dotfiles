@@ -339,16 +339,70 @@ Provide a helpful, concise response or completion. Be brief and practical.]], qu
     end
 end
 
--- Dictionary mode - look up word definitions with inline display
--- Returns a cancel function
-local function handleDictionary(word, searchId, callback)
-    if word == "" then
+-- Find words matching prefix from system word list
+local function findMatchingWords(prefix, maxResults)
+    local matches = {}
+    local prefixLower = prefix:lower()
+
+    local file = io.open("/usr/share/dict/words", "r")
+    if not file then
+        return matches
+    end
+
+    for line in file:lines() do
+        local word = line:gsub("%s+$", "")
+        if word:lower():sub(1, #prefixLower) == prefixLower then
+            table.insert(matches, word)
+            if #matches >= maxResults then
+                break
+            end
+        end
+    end
+
+    file:close()
+    return matches
+end
+
+-- Dictionary mode with prefix matching
+local function handleDictionary(query, searchId, callback)
+    if query == "" then
         callback(searchId, {})
         return function() end
     end
 
-    -- Use Python to access DictionaryServices framework for inline definitions
-    local pythonScript = string.format([[
+    -- Find matching words
+    local matchingWords = findMatchingWords(query, 8)
+
+    if #matchingWords == 0 then
+        callback(searchId, {{
+            text = "No words found matching: " .. query,
+            subText = "Try a different prefix",
+            image = hs.image.imageFromName("NSBookmarkTemplate"),
+        }})
+        return function() end
+    end
+
+    -- State for parallel lookups
+    local results = {}
+    local tasks = {}
+    local cancelled = false
+
+    print("=== Dictionary Prefix Search ===")
+    print("Query:", query)
+    print("Matches:", table.concat(matchingWords, ", "))
+    print("================================")
+
+    -- Update UI with current results
+    local function updateResults()
+        if cancelled or searchId ~= currentSearchId then
+            return
+        end
+        callback(searchId, results)
+    end
+
+    -- Look up each word in parallel
+    for i, word in ipairs(matchingWords) do
+        local pythonScript = string.format([[
 from DictionaryServices import DCSCopyTextDefinition
 from CoreFoundation import CFRange
 word = %q
@@ -356,79 +410,79 @@ definition = DCSCopyTextDefinition(None, word, CFRange(0, len(word)))
 if definition:
     text = str(definition).strip()
     text = ' '.join(text.split())
-    print(text[:200] + '...' if len(text) > 200 else text)
+    print(text[:120] + '...' if len(text) > 120 else text)
 else:
-    print("No definition found")
+    print("")
 ]], word)
 
-    -- Write script to temp file (use searchId for uniqueness to avoid race conditions)
-    local tmpfile = "/tmp/hammerspoon-dict-" .. searchId .. ".py"
-    local file = io.open(tmpfile, "w")
-    file:write(pythonScript)
-    file:close()
+        local tmpfile = string.format("/tmp/hammerspoon-dict-%d-%d.py", searchId, i)
+        local file = io.open(tmpfile, "w")
+        file:write(pythonScript)
+        file:close()
 
-    print("=== Dictionary Lookup ===")
-    print("Word:", word)
-    print("SearchId:", searchId)
-    print("========================")
+        local output = ""
+        local task = hs.task.new("/Users/wesdemos/repos/github/g0t4/dotfiles/.venv/bin/python",
+            function(exitCode, _, _)  -- completion callback
+                if cancelled or searchId ~= currentSearchId then
+                    os.remove(tmpfile)
+                    return
+                end
 
-    local output = ""
-    local task = nil
+                os.remove(tmpfile)
 
-    task = hs.task.new("/Users/wesdemos/repos/github/g0t4/dotfiles/.venv/bin/python", function(exitCode, stdOut, stdErr)
-        -- Ignore if this isn't the current search anymore
-        if searchId ~= currentSearchId then
-            print("Ignoring old dictionary search", searchId)
-            os.remove(tmpfile)
-            return
-        end
+                local definition = output:gsub("%s+$", "")
+                if definition ~= "" then
+                    table.insert(results, {
+                        text = word .. ": " .. definition,
+                        subText = "Select to open in Dictionary.app",
+                        dictionaryWord = word,
+                        dictionaryDefinition = definition,
+                        image = hs.image.imageFromName("NSBookmarkTemplate"),
+                    })
+                else
+                    table.insert(results, {
+                        text = word,
+                        subText = "No definition - Select to open in Dictionary.app",
+                        dictionaryWord = word,
+                        image = hs.image.imageFromName("NSBookmarkTemplate"),
+                    })
+                end
 
-        print("=== Dictionary Result ===")
-        print("Exit code:", exitCode)
-        print("Output:", output)
-        print("========================")
+                updateResults()
+            end,
+            function(_, stdOut, _)  -- streaming callback
+                if cancelled or searchId ~= currentSearchId then
+                    return false
+                end
+                output = output .. stdOut
+                return true
+            end,
+            {tmpfile}
+        )
 
-        -- Clean up temp file
-        os.remove(tmpfile)
+        task:start()
+        table.insert(tasks, {task = task, tmpfile = tmpfile})
+    end
 
-        if exitCode == 0 and output ~= "" then
-            local definition = output:gsub("%s+$", "")
-            callback(searchId, {{
-                text = definition,
-                subText = word,
-                dictionaryWord = word,
-                dictionaryDefinition = definition,
-                image = hs.image.imageFromName("NSBookmarkTemplate"),
-            }})
-        else
-            -- Fallback to just showing the word
-            callback(searchId, {{
-                text = "No definition found for: " .. word,
-                subText = "Press Enter to open in Dictionary.app",
-                dictionaryWord = word,
-                image = hs.image.imageFromName("NSBookmarkTemplate"),
-            }})
-        end
-    end, function(_, stdOut, _)
-        -- Ignore if this isn't the current search anymore
-        if searchId ~= currentSearchId then
-            return false
-        end
-
-        -- Accumulate output
-        output = output .. stdOut
-        return true
-    end, {tmpfile})
-
-    task:start()
+    -- Show placeholder results immediately
+    for _, word in ipairs(matchingWords) do
+        table.insert(results, {
+            text = word,
+            subText = "Loading...",
+            dictionaryWord = word,
+            image = hs.image.imageFromName("NSBookmarkTemplate"),
+        })
+    end
+    updateResults()
 
     -- Return cancel function
     return function()
-        if task then
-            print("Canceling dictionary lookup", searchId)
-            task:terminate()
-            task = nil
-            os.remove(tmpfile)
+        cancelled = true
+        for _, taskInfo in ipairs(tasks) do
+            if taskInfo.task then
+                taskInfo.task:terminate()
+            end
+            os.remove(taskInfo.tmpfile)
         end
     end
 end
