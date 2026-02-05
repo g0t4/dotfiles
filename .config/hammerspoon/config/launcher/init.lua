@@ -349,32 +349,32 @@ local function handleDictionary(word, searchId, callback)
 
     -- Use Python to access DictionaryServices framework for inline definitions
     local pythonScript = string.format([[
-import sys
-try:
-    from DictionaryServices import DCSCopyTextDefinition
-    from CoreFoundation import CFRange
-    word = %q
-    definition = DCSCopyTextDefinition(None, word, CFRange(0, len(word)))
-    if definition:
-        # Clean up the definition - take first paragraph or first 200 chars
-        text = str(definition).strip()
-        # Remove extra whitespace and newlines
-        text = ' '.join(text.split())
-        print(text[:200] + '...' if len(text) > 200 else text)
-    else:
-        print("No definition found")
-except Exception as e:
-    print(f"Error: {e}")
+from DictionaryServices import DCSCopyTextDefinition
+from CoreFoundation import CFRange
+word = %q
+definition = DCSCopyTextDefinition(None, word, CFRange(0, len(word)))
+if definition:
+    text = str(definition).strip()
+    text = ' '.join(text.split())
+    print(text[:200] + '...' if len(text) > 200 else text)
+else:
+    print("No definition found")
 ]], word)
 
-    local escapedScript = pythonScript:gsub('"', '\\"'):gsub('\n', '\\n')
-    local command = string.format('/Users/wesdemos/repos/github/g0t4/dotfiles/.venv/bin/python -c "%s"', escapedScript)
-    print("=== Dictionary Command ===")
+    -- Write script to temp file and execute
+    local tmpfile = "/tmp/hammerspoon-dict-" .. os.time() .. ".py"
+    local file = io.open(tmpfile, "w")
+    file:write(pythonScript)
+    file:close()
+
+    print("=== Dictionary Lookup ===")
     print("Word:", word)
-    print("Command:", command)
     print("========================")
 
-    local output, status = hs.execute(command)
+    local output, status = hs.execute(string.format('/Users/wesdemos/repos/github/g0t4/dotfiles/.venv/bin/python "%s"', tmpfile))
+
+    -- Clean up temp file
+    os.remove(tmpfile)
 
     print("=== Dictionary Result ===")
     print("Status:", status)
