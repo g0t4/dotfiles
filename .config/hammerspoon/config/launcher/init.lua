@@ -367,7 +367,19 @@ except Exception as e:
     print(f"Error: {e}")
 ]], word)
 
-    local output, status = hs.execute(string.format('/Users/wesdemos/repos/github/g0t4/dotfiles/.venv/bin/python -c "%s"', pythonScript:gsub('"', '\\"'):gsub('\n', '\\n')))
+    local escapedScript = pythonScript:gsub('"', '\\"'):gsub('\n', '\\n')
+    local command = string.format('/Users/wesdemos/repos/github/g0t4/dotfiles/.venv/bin/python -c "%s"', escapedScript)
+    print("=== Dictionary Command ===")
+    print("Word:", word)
+    print("Command:", command)
+    print("========================")
+
+    local output, status = hs.execute(command)
+
+    print("=== Dictionary Result ===")
+    print("Status:", status)
+    print("Output:", output)
+    print("========================")
 
     if status and output and output ~= "" then
         local definition = output:gsub("%s+$", "")
