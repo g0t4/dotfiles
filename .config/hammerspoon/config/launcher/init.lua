@@ -344,7 +344,7 @@ end
 local function handleDictionary(word, searchId, callback)
     if word == "" then
         callback(searchId, {})
-        return
+        return function() end
     end
 
     -- Use Python to access DictionaryServices framework for inline definitions
@@ -361,7 +361,7 @@ else:
     print("No definition found")
 ]], word)
 
-    -- Write script to temp file and execute
+    -- Write script to temp file
     local tmpfile = "/tmp/hammerspoon-dict-" .. os.time() .. ".py"
     local file = io.open(tmpfile, "w")
     file:write(pythonScript)
@@ -369,37 +369,68 @@ else:
 
     print("=== Dictionary Lookup ===")
     print("Word:", word)
+    print("SearchId:", searchId)
     print("========================")
 
-    local output, status = hs.execute(string.format('/Users/wesdemos/repos/github/g0t4/dotfiles/.venv/bin/python "%s"', tmpfile))
+    local output = ""
+    local task = nil
 
-    -- Clean up temp file
-    os.remove(tmpfile)
+    task = hs.task.new("/Users/wesdemos/repos/github/g0t4/dotfiles/.venv/bin/python", function(exitCode, stdOut, stdErr)
+        -- Ignore if this isn't the current search anymore
+        if searchId ~= currentSearchId then
+            print("Ignoring old dictionary search", searchId)
+            os.remove(tmpfile)
+            return
+        end
 
-    print("=== Dictionary Result ===")
-    print("Status:", status)
-    print("Output:", output)
-    print("========================")
+        print("=== Dictionary Result ===")
+        print("Exit code:", exitCode)
+        print("Output:", output)
+        print("========================")
 
-    if status and output and output ~= "" then
-        local definition = output:gsub("%s+$", "")
-        callback(searchId, {{
-            text = definition,
-            subText = word,
-            dictionaryWord = word,
-            dictionaryDefinition = definition,
-            image = hs.image.imageFromName("NSBookmarkTemplate"),
-        }})
-    else
-        -- Fallback to just showing the word
-        callback(searchId, {{
-            text = "No definition found for: " .. word,
-            subText = "Press Enter to open in Dictionary.app",
-            dictionaryWord = word,
-            image = hs.image.imageFromName("NSBookmarkTemplate"),
-        }})
+        -- Clean up temp file
+        os.remove(tmpfile)
+
+        if exitCode == 0 and output ~= "" then
+            local definition = output:gsub("%s+$", "")
+            callback(searchId, {{
+                text = definition,
+                subText = word,
+                dictionaryWord = word,
+                dictionaryDefinition = definition,
+                image = hs.image.imageFromName("NSBookmarkTemplate"),
+            }})
+        else
+            -- Fallback to just showing the word
+            callback(searchId, {{
+                text = "No definition found for: " .. word,
+                subText = "Press Enter to open in Dictionary.app",
+                dictionaryWord = word,
+                image = hs.image.imageFromName("NSBookmarkTemplate"),
+            }})
+        end
+    end, function(_, stdOut, _)
+        -- Ignore if this isn't the current search anymore
+        if searchId ~= currentSearchId then
+            return false
+        end
+
+        -- Accumulate output
+        output = output .. stdOut
+        return true
+    end, {tmpfile})
+
+    task:start()
+
+    -- Return cancel function
+    return function()
+        if task then
+            print("Canceling dictionary lookup", searchId)
+            task:terminate()
+            task = nil
+            os.remove(tmpfile)
+        end
     end
-    return function() end  -- No-op cancel for synchronous operation
 end
 
 -- Google/web search mode
