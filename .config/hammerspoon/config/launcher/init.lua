@@ -361,8 +361,8 @@ else:
     print("No definition found")
 ]], word)
 
-    -- Write script to temp file
-    local tmpfile = "/tmp/hammerspoon-dict-" .. os.time() .. ".py"
+    -- Write script to temp file (use searchId for uniqueness to avoid race conditions)
+    local tmpfile = "/tmp/hammerspoon-dict-" .. searchId .. ".py"
     local file = io.open(tmpfile, "w")
     file:write(pythonScript)
     file:close()
