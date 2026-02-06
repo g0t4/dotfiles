@@ -339,7 +339,7 @@ def report_missing_audio_frames(video_path: Path, audio: dict):
 SUCCESS = True
 FAILED = False
 
-def main(video_path: Path):
+def check_video(video_path: Path):
     try:
         container = verify_container(video_path)
         audio, video = verify_streams(video_path)
@@ -361,5 +361,5 @@ if __name__ == "__main__":
     if not video_path.is_file():
         rich.print(f"[bold red][ERROR] File not found: {video_path}[/]")
         sys.exit(1)
-    if not main(video_path):
+    if not check_video(video_path):
         sys.exit(1)
