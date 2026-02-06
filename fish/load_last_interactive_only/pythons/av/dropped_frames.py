@@ -336,15 +336,7 @@ def report_missing_audio_frames(video_path: Path, audio: dict):
     if next_pts > expected_pts_duration:
         rich.print(f"[bold red][ERROR] audio runs longer than expected: {next_pts=} > {expected_pts_duration= }[/]")
 
-if __name__ == "__main__":
-    import sys
-    if len(sys.argv) != 2:
-        rich.print(f"[bold red][ERROR] Usage: python dropped_frames.py <video_file>[/]")
-        sys.exit(1)
-    video_path = Path(sys.argv[1])
-    if not video_path.is_file():
-        rich.print(f"[bold red][ERROR] File not found: {video_path}[/]")
-        sys.exit(1)
+def main(video_path: Path):
     try:
         container = verify_container(video_path)
         audio, video = verify_streams(video_path)
@@ -355,3 +347,14 @@ if __name__ == "__main__":
     except MediaValidationError:
         rich.print(f"[bold red][ERROR] {sys.exc_info()[1]}")
         sys.exit(-1)
+
+if __name__ == "__main__":
+    import sys
+    if len(sys.argv) != 2:
+        rich.print(f"[bold red][ERROR] Usage: python dropped_frames.py <video_file>[/]")
+        sys.exit(1)
+    video_path = Path(sys.argv[1])
+    if not video_path.is_file():
+        rich.print(f"[bold red][ERROR] File not found: {video_path}[/]")
+        sys.exit(1)
+    main(video_path)
