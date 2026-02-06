@@ -336,6 +336,9 @@ def report_missing_audio_frames(video_path: Path, audio: dict):
     if next_pts > expected_pts_duration:
         rich.print(f"[bold red][ERROR] audio runs longer than expected: {next_pts=} > {expected_pts_duration= }[/]")
 
+SUCCESS = True
+FAILED = False
+
 def main(video_path: Path):
     try:
         container = verify_container(video_path)
@@ -344,9 +347,10 @@ def main(video_path: Path):
         report_missing_frames(video_path, video)
         report_missing_audio_frames(video_path, audio)
         #    do this quick and dirty, no need for tesing either... this will be audio frame level which differs from video frames (each audio frame has 1024 samples in my video files)
+        return SUCCESS
     except MediaValidationError:
         rich.print(f"[bold red][ERROR] {sys.exc_info()[1]}")
-        sys.exit(-1)
+        return FAILED
 
 if __name__ == "__main__":
     import sys
@@ -357,4 +361,5 @@ if __name__ == "__main__":
     if not video_path.is_file():
         rich.print(f"[bold red][ERROR] File not found: {video_path}[/]")
         sys.exit(1)
-    main(video_path)
+    if not main(video_path):
+        sys.exit(1)
