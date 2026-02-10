@@ -1053,7 +1053,7 @@ function toggle-git_commit_command
     if test -z "$cmd"
         # if empty cmd, then use last command
         # pull back last non git command (so I can stage files and then commit)
-        set cmd (history | rg -v '^git\s' | head -n 1)
+        set cmd (history | rg --no-config --no-line-number -v '^git\s' | head -n 1)
     end
 
     if string match --quiet --regex "^git\scommit\s-m\s" -- $cmd
