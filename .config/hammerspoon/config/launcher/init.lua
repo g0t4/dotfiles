@@ -208,50 +208,92 @@ local function searchFiles(query, searchId, callback)
     end
 end
 
--- Application search mode
+-- Application search mode using mdfind for system-wide search
 -- Returns a cancel function
 local function searchApplications(query, searchId, callback)
+    -- Build mdfind query for all application bundles
+    local mdfind_query = "kMDItemContentType == 'com.apple.application-bundle'"
+
+    -- Add name filter if query provided
+    if query ~= "" then
+        local escaped_query = query:gsub("'", "'\\''")
+        mdfind_query = mdfind_query .. string.format(" && kMDItemFSName == '*%s*'c", escaped_query)
+    end
+
+    local cmd = "/opt/homebrew/bin/stdbuf"
+    local args = {"-o0", "/usr/bin/mdfind", mdfind_query}
+
+    print("Starting app search, query:", query, "searchId:", searchId)
+    print("mdfind query:", mdfind_query)
+
     local results = {}
+    local buffer = ""
+    local task = nil
 
-    -- Search in /Applications and ~/Applications
-    local appDirs = {"/Applications", os.getenv("HOME") .. "/Applications"}
+    task = hs.task.new(cmd, function(exitCode, _, stdErr)
+        if searchId ~= currentSearchId then
+            print("Ignoring old app search", searchId)
+            return
+        end
 
-    for _, dir in ipairs(appDirs) do
-        -- Check if directory exists
-        local attrs = hs.fs.attributes(dir)
-        if attrs and attrs.mode == "directory" then
-            for app in hs.fs.dir(dir) do
-                if app ~= "." and app ~= ".." and app:match("%.app$") then
-                    -- If query is empty, show all apps; otherwise filter by query
-                    if query == "" or app:lower():find(query:lower(), 1, true) then
-                        local appPath = dir .. "/" .. app
-                        local appName = app:gsub("%.app$", "")
-                        table.insert(results, {
-                            text = appName,
-                            subText = appPath,
-                            appPath = appPath,
-                            image = hs.image.iconForFile(appPath),
-                        })
+        if exitCode ~= 0 and exitCode ~= 15 then
+            print("mdfind app search error:", stdErr)
+        end
+
+        -- Final callback with results
+        callback(searchId, results)
+    end, function(_, stdOut, _)
+        if searchId ~= currentSearchId then
+            return true
+        end
+
+        buffer = buffer .. stdOut
+
+        -- Process complete lines
+        while true do
+            local line, rest = buffer:match("([^\r\n]+)[\r\n](.*)")
+            if not line then
+                break
+            end
+            buffer = rest
+
+            -- Extract app name from path (last component without .app extension)
+            local appName = line:match("([^/]+)%.app$")
+            if appName then
+                table.insert(results, {
+                    text = appName,
+                    subText = line,
+                    appPath = line,
+                    image = hs.image.iconForFile(line),
+                })
+
+                -- Update UI with partial results
+                callback(searchId, results)
+
+                -- Terminate if we have enough results
+                if #results >= MAX_RESULTS then
+                    if task then
+                        task:terminate()
+                        task = nil
                     end
+                    return false  -- Stop streaming
                 end
             end
         end
-    end
 
-    -- Sort by name
-    table.sort(results, function(a, b) return a.text < b.text end)
+        return true  -- Continue streaming
+    end, args)
 
-    -- Limit results to MAX_RESULTS
-    if #results > MAX_RESULTS then
-        local limited = {}
-        for i = 1, MAX_RESULTS do
-            limited[i] = results[i]
+    task:start()
+
+    -- Return cancel function
+    return function()
+        if task then
+            print("Canceling app search", searchId)
+            task:terminate()
+            task = nil
         end
-        results = limited
     end
-
-    callback(searchId, results)
-    return function() end  -- No-op cancel for synchronous search
 end
 
 -- LLM completion mode with chat completions API
