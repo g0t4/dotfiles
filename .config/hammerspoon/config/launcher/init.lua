@@ -34,10 +34,16 @@ local function searchDirectories(query, searchId, callback)
         return function() end  -- No-op cancel
     end
 
-    -- Build mdfind command to search for directories only
+    -- Build mdfind command using metadata query for better matching
+    -- kMDItemFSName with wildcards for substring matching (case-insensitive with 'c' flag)
+    -- Escape single quotes in query for shell safety
+    local escaped_query = query:gsub("'", "'\\''")
+    local mdfind_query = string.format("kMDItemFSName == '*%s*'c && kMDItemContentType == 'public.folder'", escaped_query)
+
     local cmd = "/opt/homebrew/bin/stdbuf"
-    local args = {"-o0", "/usr/bin/mdfind", "kind:folder " .. query}
+    local args = {"-o0", "/usr/bin/mdfind", mdfind_query}
     print("Starting new directory search for query:", query, "searchId:", searchId)
+    print("mdfind query:", mdfind_query)
 
     local results = {}
     local buffer = ""
