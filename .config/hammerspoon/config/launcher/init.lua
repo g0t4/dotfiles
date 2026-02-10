@@ -943,6 +943,116 @@ local function handlePythonCode(code, searchId, callback)
     return function() end  -- No-op cancel
 end
 
+-- Live filter mode - two-stage search with mdfind | fzf
+-- Returns a cancel function
+local function handleLiveFilter(query, searchId, callback)
+    -- Parse query: "stage1 stage2"
+    local stage1, stage2 = query:match("^(%S+)%s+(.+)$")
+
+    if not stage1 or not stage2 then
+        -- Need both args
+        callback(searchId, {{
+            text = "v <broad> <fuzzy>",
+            subText = "Two-stage search: v repos ask → mdfind 'repos' | fzf filter 'ask'",
+            image = hs.image.imageFromName("NSInfo"),
+        }})
+        return function() end
+    end
+
+    -- Build mdfind query for stage1 (broad filter)
+    local escaped_stage1 = stage1:gsub("'", "'\\''")
+    local mdfind_query = string.format("kMDItemFSName == '*%s*'c && kMDItemContentType == 'public.folder'", escaped_stage1)
+
+    -- Escape stage2 for shell (fzf fuzzy filter)
+    local escaped_stage2 = stage2:gsub('"', '\\"')
+
+    -- Build pipeline: mdfind | fzf --filter
+    local cmd = "/bin/sh"
+    local args = {"-c", string.format(
+        'mdfind "%s" | fzf --filter "%s"',
+        mdfind_query:gsub('"', '\\"'),
+        escaped_stage2
+    )}
+
+    print("=== Live Filter ===")
+    print("Stage1 (mdfind):", stage1)
+    print("Stage2 (fzf):", stage2)
+    print("Command:", args[2])
+
+    local results = {}
+    local buffer = ""
+    local task = nil
+
+    task = hs.task.new(cmd,
+        function(exitCode, stdout, stderr)
+            if searchId ~= currentSearchId then
+                print("Ignoring old live filter completion", searchId)
+                return
+            end
+
+            if exitCode ~= 0 and exitCode ~= 15 then
+                print("Live filter error:", stderr)
+            end
+
+            -- Final callback
+            callback(searchId, results)
+        end,
+        function(task, stdout, stderr)
+            if searchId ~= currentSearchId then
+                return false  -- Stop streaming for old searches
+            end
+
+            buffer = buffer .. stdout
+
+            while true do
+                local line, rest = buffer:match("([^\r\n]+)[\r\n](.*)")
+                if not line then break end
+                buffer = rest
+
+                -- Skip hidden files/directories
+                if not line:match("/%.[^/]") then
+                    table.insert(results, {
+                        text = getFilename(line),
+                        subText = line,
+                        path = line,
+                        image = hs.image.iconForFile(line),
+                    })
+
+                    -- Update UI with top N results
+                    -- fzf already sorted by match quality, so just take first N
+                    local display = {}
+                    for i = 1, math.min(#results, MAX_RESULTS) do
+                        display[i] = results[i]
+                    end
+                    callback(searchId, display)
+
+                    -- Stop if we have enough
+                    if #results >= MAX_RESULTS then
+                        if task then
+                            task:terminate()
+                            task = nil
+                        end
+                        return false
+                    end
+                end
+            end
+
+            return true  -- Continue streaming
+        end,
+        args
+    )
+
+    task:start()
+
+    return function()
+        if task then
+            print("Canceling live filter", searchId)
+            task:terminate()
+            task = nil
+        end
+    end
+end
+
 -- System settings mode - open System Settings panes
 local function handleSystemSettings(query, searchId, callback)
     -- Common system settings panes with their identifiers
@@ -1147,6 +1257,11 @@ local function showModes()
             image = hs.image.imageFromName("NSFontPanel"),
         },
         {
+            text = "v <broad> <fuzzy>",
+            subText = "Live filter: mdfind → fzf (e.g., 'v repos ask', 'v github dotfiles')",
+            image = hs.image.imageFromName("NSAdvanced"),
+        },
+        {
             text = "<search>",
             subText = "File search using mdfind (Spotlight)",
             image = hs.image.imageFromName("NSFolder"),
@@ -1274,6 +1389,13 @@ local function onQueryChange(query)
     if query:match("^e ") then
         local emojiQuery = query:sub(3)  -- Remove "e " prefix
         currentCancelFunc = handleEmoji(emojiQuery, thisSearchId, handleResults)
+        return
+    end
+
+    -- Check for live filter mode (two-stage: mdfind | fzf)
+    if query:match("^v ") then
+        local liveQuery = query:sub(3)  -- Remove "v " prefix
+        currentCancelFunc = handleLiveFilter(liveQuery, thisSearchId, handleResults)
         return
     end
 
