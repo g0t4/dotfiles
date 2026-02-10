@@ -16,6 +16,12 @@ local EMOJI_DATA_URL = "https://raw.githubusercontent.com/unicode-org/cldr-json/
 local EMOJI_CACHE_MAX_AGE = 30 * 24 * 60 * 60  -- 30 days in seconds
 local emojiData = nil  -- Cached parsed emoji data
 
+-- History configuration
+local HISTORY_FILE = os.getenv("HOME") .. "/.local/share/hammerspoon/launcher-history.txt"
+local MAX_HISTORY_ITEMS = 1000
+local history = {}  -- In-memory history (newest first)
+local historyIndex = 0  -- Current position in history (0 = not browsing)
+
 -- Helper to get just filename from path for display
 local function getFilename(path)
     return path:match("^.+/(.+)$") or path
@@ -24,6 +30,75 @@ end
 -- Helper to get parent directory for subtext
 local function getDirectory(path)
     return path:match("^(.+)/[^/]+$") or ""
+end
+
+-- Load history from file
+local function loadHistory()
+    history = {}
+    local file = io.open(HISTORY_FILE, "r")
+    if not file then
+        print("No history file found, starting fresh")
+        return
+    end
+
+    for line in file:lines() do
+        local trimmed = line:gsub("^%s+", ""):gsub("%s+$", "")
+        if trimmed ~= "" then
+            table.insert(history, trimmed)
+        end
+    end
+    file:close()
+
+    print("Loaded", #history, "history items")
+end
+
+-- Save history to file
+local function saveHistory()
+    -- Ensure directory exists
+    local dir = HISTORY_FILE:match("^(.+)/[^/]+$")
+    if dir then
+        hs.fs.mkdir(dir)
+    end
+
+    local file = io.open(HISTORY_FILE, "w")
+    if not file then
+        print("Error: Could not save history to", HISTORY_FILE)
+        return
+    end
+
+    -- Save in reverse order (newest first in file)
+    for i = 1, math.min(#history, MAX_HISTORY_ITEMS) do
+        file:write(history[i] .. "\n")
+    end
+    file:close()
+
+    print("Saved", math.min(#history, MAX_HISTORY_ITEMS), "history items")
+end
+
+-- Add query to history (deduplicates and moves to front)
+local function addToHistory(query)
+    if not query or query == "" then
+        return
+    end
+
+    -- Remove if already exists
+    for i = #history, 1, -1 do
+        if history[i] == query then
+            table.remove(history, i)
+        end
+    end
+
+    -- Add to front
+    table.insert(history, 1, query)
+
+    -- Trim to max size
+    while #history > MAX_HISTORY_ITEMS do
+        table.remove(history)
+    end
+
+    -- Save to disk
+    saveHistory()
+    print("Added to history:", query)
 end
 
 -- Directory-only search using mdfind
@@ -1329,6 +1404,12 @@ end
 
 -- Search handler - cancels previous search on every keystroke
 local function onQueryChange(query)
+    -- Reset history browsing when user starts typing
+    -- (unless the query change came from history navigation)
+    if chooser and chooser:query() ~= query then
+        historyIndex = 0
+    end
+
     -- Cancel any existing search using the cancel function
     if currentCancelFunc then
         print("Canceling previous search...")
@@ -1461,13 +1542,15 @@ local function onQueryChange(query)
     currentCancelFunc = searchFiles(query, thisSearchId, handleResults)
 end
 
--- Refresh hotkeys
+-- Active hotkeys (enabled while chooser is shown)
 local refreshHotkeyCmdR = nil
 local refreshHotkeyCtrlR = nil
+local historyHotkeyUp = nil
+local historyHotkeyDown = nil
 
--- Delete refresh hotkeys
-local function deleteRefreshHotkeys()
-    print("=== Deleting refresh hotkeys ===")
+-- Delete active hotkeys
+local function deleteActiveHotkeys()
+    print("=== Deleting active hotkeys ===")
     if refreshHotkeyCmdR then
         refreshHotkeyCmdR:delete()
         refreshHotkeyCmdR = nil
@@ -1477,6 +1560,16 @@ local function deleteRefreshHotkeys()
         refreshHotkeyCtrlR:delete()
         refreshHotkeyCtrlR = nil
         print("Deleted Ctrl+R hotkey")
+    end
+    if historyHotkeyUp then
+        historyHotkeyUp:delete()
+        historyHotkeyUp = nil
+        print("Deleted Cmd+Up hotkey")
+    end
+    if historyHotkeyDown then
+        historyHotkeyDown:delete()
+        historyHotkeyDown = nil
+        print("Deleted Cmd+Down hotkey")
     end
 end
 
@@ -1489,10 +1582,60 @@ local function refreshQuery()
     end
 end
 
+-- Navigate to previous history item
+local function historyPrevious()
+    if not chooser or #history == 0 then
+        return
+    end
+
+    -- If not browsing history yet, start from the beginning
+    if historyIndex == 0 then
+        historyIndex = 1
+    else
+        -- Move to next older item (if available)
+        historyIndex = math.min(historyIndex + 1, #history)
+    end
+
+    -- Set query to history item
+    local historyQuery = history[historyIndex]
+    chooser:query(historyQuery)
+    print("History up: index", historyIndex, "query:", historyQuery)
+end
+
+-- Navigate to next history item (or back to empty)
+local function historyNext()
+    if not chooser or historyIndex == 0 then
+        return
+    end
+
+    -- Move to newer item
+    historyIndex = math.max(historyIndex - 1, 0)
+
+    if historyIndex == 0 then
+        -- Back to empty query
+        chooser:query("")
+        print("History down: back to empty")
+    else
+        -- Set query to history item
+        local historyQuery = history[historyIndex]
+        chooser:query(historyQuery)
+        print("History down: index", historyIndex, "query:", historyQuery)
+    end
+end
+
 -- Handle file selection
 local function onChoice(choice)
-    -- Delete refresh hotkeys when chooser closes (whether by selection or escape)
-    deleteRefreshHotkeys()
+    -- Save current query to history (whether selected or cancelled)
+    local currentQuery = chooser and chooser:query() or ""
+    if currentQuery ~= "" then
+        addToHistory(currentQuery)
+    end
+
+    -- Reset history browsing
+    historyIndex = 0
+
+    -- Delete active hotkeys when chooser closes (whether by selection or escape)
+    deleteActiveHotkeys()
 
     -- Log for debugging
     print("=== onChoice callback ===")
@@ -1639,13 +1782,20 @@ function M.show()
         chooser:width(60) -- 60% of screen width (default is 40%)
     end
 
-    -- Enable refresh hotkeys when chooser is shown
+    -- Reset history browsing
+    historyIndex = 0
+
+    -- Create and enable active hotkeys
     if not refreshHotkeyCmdR then
         refreshHotkeyCmdR = hs.hotkey.new({"cmd"}, "r", refreshQuery)
         refreshHotkeyCtrlR = hs.hotkey.new({"ctrl"}, "r", refreshQuery)
+        historyHotkeyUp = hs.hotkey.new({"cmd"}, "up", historyPrevious)
+        historyHotkeyDown = hs.hotkey.new({"cmd"}, "down", historyNext)
     end
     refreshHotkeyCmdR:enable()
     refreshHotkeyCtrlR:enable()
+    historyHotkeyUp:enable()
+    historyHotkeyDown:enable()
 
     chooser:show()
 end
@@ -1655,12 +1805,15 @@ function M.hide()
     if chooser then
         chooser:hide()
     end
-    -- Delete refresh hotkeys when hidden
-    deleteRefreshHotkeys()
+    -- Delete active hotkeys when hidden
+    deleteActiveHotkeys()
 end
 
 -- Setup keybinding
 function M.init()
+    -- Load history from disk
+    loadHistory()
+
     hs.hotkey.bind({"alt"}, "space", function()
         M.show()
     end)
@@ -1671,6 +1824,7 @@ function M.init()
     hs.timer.doAfter(5, checkEmojiCacheAge)
 
     print("File launcher initialized (alt+space)")
+    print("History: Cmd+Up/Down to navigate,", #history, "items loaded")
 end
 
 return M
