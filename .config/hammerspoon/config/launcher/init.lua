@@ -943,66 +943,69 @@ local function handlePythonCode(code, searchId, callback)
     return function() end  -- No-op cancel
 end
 
--- Live filter mode - two-stage search with mdfind | fzf
+-- Simple fuzzy match function
+-- Checks if query characters appear in order in the target string (case-insensitive)
+local function fuzzyMatch(str, query)
+    if query == "" then return true end
+
+    local strLower = str:lower()
+    local queryLower = query:lower()
+    local strPos = 1
+
+    -- Each character in query must appear in order in str
+    for i = 1, #queryLower do
+        local char = queryLower:sub(i, i)
+        local foundPos = strLower:find(char, strPos, true)
+        if not foundPos then
+            return false
+        end
+        strPos = foundPos + 1
+    end
+
+    return true
+end
+
+-- Live filter mode - mdfind streams all dirs, Lua fuzzy filters
 -- Returns a cancel function
 local function handleLiveFilter(query, searchId, callback)
-    -- Parse query: "stage1 stage2"
-    local stage1, stage2 = query:match("^(%S+)%s+(.+)$")
-
-    if not stage1 or not stage2 then
-        -- Need both args
-        callback(searchId, {{
-            text = "v <broad> <fuzzy>",
-            subText = "Two-stage search: v repos ask → mdfind 'repos' | fzf filter 'ask'",
-            image = hs.image.imageFromName("NSInfo"),
-        }})
+    if query == "" then
+        callback(searchId, {})
         return function() end
     end
 
-    -- Build mdfind query for stage1 (broad filter)
-    local escaped_stage1 = stage1:gsub("'", "'\\''")
-    local mdfind_query = string.format("kMDItemFSName == '*%s*'c && kMDItemContentType == 'public.folder'", escaped_stage1)
-
-    -- Escape stage2 for shell (fzf fuzzy filter)
-    local escaped_stage2 = stage2:gsub('"', '\\"')
-
-    -- Build pipeline: mdfind | fzf --filter
-    local cmd = "/bin/sh"
-    local args = {"-c", string.format(
-        'mdfind "%s" | fzf --filter "%s"',
-        mdfind_query:gsub('"', '\\"'),
-        escaped_stage2
-    )}
+    -- Build mdfind command for all directories globally
+    -- Use stdbuf for unbuffered output so we get results as they're found
+    local cmd = "/opt/homebrew/bin/stdbuf"
+    local args = {"-o0", "/usr/bin/mdfind", "kMDItemContentType == 'public.folder'"}
 
     print("=== Live Filter ===")
-    print("Stage1 (mdfind):", stage1)
-    print("Stage2 (fzf):", stage2)
-    print("Command:", args[2])
+    print("Query (fuzzy):", query)
+    print("Streaming from mdfind, fuzzy matching in Lua")
 
     local results = {}
     local buffer = ""
     local task = nil
 
     task = hs.task.new(cmd,
-        function(exitCode, stdout, stderr)
+        function(exitCode, _, stdErr)
             if searchId ~= currentSearchId then
                 print("Ignoring old live filter completion", searchId)
                 return
             end
 
             if exitCode ~= 0 and exitCode ~= 15 then
-                print("Live filter error:", stderr)
+                print("Live filter error:", stdErr)
             end
 
             -- Final callback
             callback(searchId, results)
         end,
-        function(task, stdout, stderr)
+        function(_, stdOut, _)
             if searchId ~= currentSearchId then
                 return false  -- Stop streaming for old searches
             end
 
-            buffer = buffer .. stdout
+            buffer = buffer .. stdOut
 
             while true do
                 local line, rest = buffer:match("([^\r\n]+)[\r\n](.*)")
@@ -1011,28 +1014,30 @@ local function handleLiveFilter(query, searchId, callback)
 
                 -- Skip hidden files/directories
                 if not line:match("/%.[^/]") then
-                    table.insert(results, {
-                        text = getFilename(line),
-                        subText = line,
-                        path = line,
-                        image = hs.image.iconForFile(line),
-                    })
+                    -- Fuzzy match against query
+                    if fuzzyMatch(line, query) then
+                        table.insert(results, {
+                            text = getFilename(line),
+                            subText = line,
+                            path = line,
+                            image = hs.image.iconForFile(line),
+                        })
 
-                    -- Update UI with top N results
-                    -- fzf already sorted by match quality, so just take first N
-                    local display = {}
-                    for i = 1, math.min(#results, MAX_RESULTS) do
-                        display[i] = results[i]
-                    end
-                    callback(searchId, display)
-
-                    -- Stop if we have enough
-                    if #results >= MAX_RESULTS then
-                        if task then
-                            task:terminate()
-                            task = nil
+                        -- Update UI with top N results
+                        local display = {}
+                        for i = 1, math.min(#results, MAX_RESULTS) do
+                            display[i] = results[i]
                         end
-                        return false
+                        callback(searchId, display)
+
+                        -- Stop if we have enough
+                        if #results >= MAX_RESULTS then
+                            if task then
+                                task:terminate()
+                                task = nil
+                            end
+                            return false
+                        end
                     end
                 end
             end
@@ -1257,8 +1262,8 @@ local function showModes()
             image = hs.image.imageFromName("NSFontPanel"),
         },
         {
-            text = "v <broad> <fuzzy>",
-            subText = "Live filter: mdfind → fzf (e.g., 'v repos ask', 'v github dotfiles')",
+            text = "v <query>",
+            subText = "Live fuzzy search: streams all dirs, fuzzy filters (e.g., 'v rask', 'v ghdf')",
             image = hs.image.imageFromName("NSAdvanced"),
         },
         {
