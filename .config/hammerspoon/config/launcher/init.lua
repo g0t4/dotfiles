@@ -26,6 +26,95 @@ local function getDirectory(path)
     return path:match("^(.+)/[^/]+$") or ""
 end
 
+-- Directory-only search using mdfind
+-- Returns a cancel function
+local function searchDirectories(query, searchId, callback)
+    if query == "" or query == nil then
+        callback(searchId, {})
+        return function() end  -- No-op cancel
+    end
+
+    -- Build mdfind command to search for directories only
+    local cmd = "/opt/homebrew/bin/stdbuf"
+    local args = {"-o0", "/usr/bin/mdfind", "kind:folder " .. query}
+    print("Starting new directory search for query:", query, "searchId:", searchId)
+
+    local results = {}
+    local buffer = ""
+    local task = nil
+
+    task = hs.task.new(cmd, function(exitCode, _, stdErr)
+        -- Ignore if this isn't the current search anymore
+        if searchId ~= currentSearchId then
+            print("Ignoring old directory search", searchId)
+            return
+        end
+
+        if exitCode ~= 0 and exitCode ~= 15 then  -- 15 is SIGTERM (expected when we terminate)
+            print("mdfind directory search error:", stdErr)
+        end
+
+        -- Final callback with results we've accumulated
+        callback(searchId, results)
+    end, function(_, stdOut, _)
+        -- Ignore if this isn't the current search anymore
+        if searchId ~= currentSearchId then
+            return true
+        end
+
+        -- Accumulate partial line in buffer
+        buffer = buffer .. stdOut
+
+        -- Process complete lines
+        while true do
+            local line, rest = buffer:match("([^\r\n]+)[\r\n](.*)")
+            if not line then
+                break
+            end
+            buffer = rest
+
+            -- Skip hidden files/directories (those with /. in path)
+            if not line:match("/%.[^/]") then
+                -- Verify it's actually a directory
+                local attrs = hs.fs.attributes(line)
+                if attrs and attrs.mode == "directory" then
+                    table.insert(results, {
+                        text = getFilename(line),
+                        subText = getDirectory(line),
+                        path = line,
+                        image = hs.image.iconForFile(line),
+                    })
+
+                    -- Update UI with partial results
+                    callback(searchId, results)
+
+                    -- Terminate if we have enough results
+                    if #results >= MAX_RESULTS then
+                        if task then
+                            task:terminate()
+                            task = nil
+                        end
+                        return false  -- Stop streaming
+                    end
+                end
+            end
+        end
+
+        return true  -- Continue streaming
+    end, args)
+
+    task:start()
+
+    -- Return cancel function
+    return function()
+        if task then
+            print("Canceling directory search", searchId)
+            task:terminate()
+            task = nil
+        end
+    end
+end
+
 -- Perform mdfind search
 -- Returns a cancel function
 local function searchFiles(query, searchId, callback)
@@ -1007,8 +1096,13 @@ local function showModes()
             image = hs.image.imageFromName("NSActionTemplate"),
         },
         {
-            text = "d <word>",
-            subText = "Dictionary lookup (e.g., 'd recursion', 'd algorithm')",
+            text = "d <query>",
+            subText = "Directory search (e.g., 'd repos', 'd Downloads')",
+            image = hs.image.imageFromName("NSFolder"),
+        },
+        {
+            text = "define <word>",
+            subText = "Dictionary lookup (e.g., 'define recursion', 'define algorithm')",
             image = hs.image.imageFromName("NSBookmarkTemplate"),
         },
         {
@@ -1115,9 +1209,16 @@ local function onQueryChange(query)
         return
     end
 
-    -- Check for dictionary mode
+    -- Check for directory search mode
     if query:match("^d ") then
-        local word = query:sub(3)  -- Remove "d " prefix
+        local dirQuery = query:sub(3)  -- Remove "d " prefix
+        currentCancelFunc = searchDirectories(dirQuery, thisSearchId, handleResults)
+        return
+    end
+
+    -- Check for dictionary mode
+    if query:match("^define ") then
+        local word = query:sub(8)  -- Remove "define " prefix
         currentCancelFunc = handleDictionary(word, thisSearchId, handleResults)
         return
     end
