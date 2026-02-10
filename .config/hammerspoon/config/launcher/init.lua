@@ -965,22 +965,33 @@ local function fuzzyMatch(str, query)
     return true
 end
 
--- Live filter mode - mdfind streams all dirs, Lua fuzzy filters
+-- Live filter mode - two-stage: mdfind broad filter, Lua fuzzy refine
 -- Returns a cancel function
 local function handleLiveFilter(query, searchId, callback)
-    if query == "" then
-        callback(searchId, {})
+    -- Parse query: "stage1 stage2"
+    local stage1, stage2 = query:match("^(%S+)%s+(.+)$")
+
+    if not stage1 or not stage2 then
+        -- Need both args
+        callback(searchId, {{
+            text = "v <broad> <refine>",
+            subText = "Two-stage: v repos ask → mdfind 'repos', fuzzy filter 'ask'",
+            image = hs.image.imageFromName("NSInfo"),
+        }})
         return function() end
     end
 
-    -- Build mdfind command for all directories globally
-    -- Use stdbuf for unbuffered output so we get results as they're found
+    -- Build mdfind query for stage1 (broad filter with wildcards)
+    local escaped_stage1 = stage1:gsub("'", "'\\''")
+    local mdfind_query = string.format("kMDItemFSName == '*%s*'c && kMDItemContentType == 'public.folder'", escaped_stage1)
+
+    -- Use stdbuf for unbuffered output
     local cmd = "/opt/homebrew/bin/stdbuf"
-    local args = {"-o0", "/usr/bin/mdfind", "kMDItemContentType == 'public.folder'"}
+    local args = {"-o0", "/usr/bin/mdfind", mdfind_query}
 
     print("=== Live Filter ===")
-    print("Query (fuzzy):", query)
-    print("Streaming from mdfind, fuzzy matching in Lua")
+    print("Stage1 (mdfind):", stage1)
+    print("Stage2 (fuzzy):", stage2)
 
     local results = {}
     local buffer = ""
@@ -1014,8 +1025,8 @@ local function handleLiveFilter(query, searchId, callback)
 
                 -- Skip hidden files/directories
                 if not line:match("/%.[^/]") then
-                    -- Fuzzy match against query
-                    if fuzzyMatch(line, query) then
+                    -- Fuzzy match against stage2 (refinement query)
+                    if fuzzyMatch(line, stage2) then
                         table.insert(results, {
                             text = getFilename(line),
                             subText = line,
@@ -1262,8 +1273,8 @@ local function showModes()
             image = hs.image.imageFromName("NSFontPanel"),
         },
         {
-            text = "v <query>",
-            subText = "Live fuzzy search: streams all dirs, fuzzy filters (e.g., 'v rask', 'v ghdf')",
+            text = "v <broad> <refine>",
+            subText = "Two-stage fuzzy: mdfind + fuzzy (e.g., 'v repos ask', 'v github dot')",
             image = hs.image.imageFromName("NSAdvanced"),
         },
         {
