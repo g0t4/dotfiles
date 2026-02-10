@@ -132,7 +132,8 @@ if command -q mdfind
             echo NO mdfind matches...
             return
         end
-        set picked (printf '%s\n' $results | fzf --height 50% --border)
+
+        set -l picked (printf '%s\n' $results | fzf --height 50% --border --query "$argv")
         if test -n "$picked"
             cd "$picked"
             return
