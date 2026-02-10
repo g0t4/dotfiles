@@ -827,7 +827,7 @@ end
 #
 # *** MY pstree
 abbr --set-cursor -- pstreeg "pstree_grep '%'"
-abbr --set-cursor -- pstreeg_watch "\$WATCH_COMMAND --shell fish 'pstree_grep \"%\"'"
+abbr --set-cursor -- pstreeg_watch "viddy 'fish -i -c \"pstree_grep \\'%\\'\"'"
 
 # *** pstree
 # pstreeX => pstree -l X
