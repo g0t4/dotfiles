@@ -775,7 +775,7 @@ if command -q free
     abbr frees 'free -whs 1' # still, prefer using watch
 end
 
-# *** fzf "widgets" for selecting a file to pass to a command
+# *** fzf "pickers" for selecting a file to pass to a command
 # --- fzf per-directory MRU cache --------------------------------------------
 
 set -g FZF_MRU_DIR ~/.cache/fzf-mru
@@ -852,24 +852,24 @@ end
 
 # ---------------------------------------------------------------------------
 
-function _fzf_nested_dir_widget -d "Paste selected directory into command line"
+function _fzf_nested_dir_picker -d "Paste selected directory into command line"
     __fzf_picker dirs "fd --type d ."
 end
 
-function _fzf_nested_file_widget -d "Paste selected file into command line"
+function _fzf_nested_file_picker -d "Paste selected file into command line"
     __fzf_picker files "fd --type f ."
 end
 
-function _fzf_nested_file_unrestricted_widget
+function _fzf_nested_file_unrestricted_picker
     __fzf_picker unrestricted "fd --type f . -u"
 end
 
-function _fzf_nested_both_file_and_dirs_widget -d "Paste selected file or directory into command line"
+function _fzf_nested_both_file_and_dirs_picker -d "Paste selected file or directory into command line"
     # btw `diff_two_commands 'fd --type f --type d' 'fd'` differ in symlinks (at least)
     __fzf_picker both "fd ."
 end
 
-function _fzf_nested_git_commit_widget -d "Pick a git commit_hash"
+function _fzf_nested_git_commit_picker -d "Pick a git commit_hash"
     # TODO look at commandline! and decide based on the git subcommand?!
     #  git diff => pick a commit_hash
     #   heck I could do this and add defaults for all sorts of commands (and fallback could ask AI to pick a picker!)
@@ -888,7 +888,7 @@ function _fzf_nested_git_commit_widget -d "Pick a git commit_hash"
     #   FYI this was original unrestricted b4 adding MRU:
     #   FYI compare thi sto above git_commit_widge impl
     #
-    # function _fzf_nested_file_unrestricted_widget -d "Paste selected file (including hidden) into command line"
+    # function _fzf_nested_file_unrestricted_picker -d "Paste selected file (including hidden) into command line"
     #     set -l file (fd --type f . -u | fzf --height 50% --border)
     #     if test -n "$file"
     #         commandline -i -- (string escape -- "$file")
@@ -897,12 +897,12 @@ function _fzf_nested_git_commit_widget -d "Pick a git commit_hash"
     # end
 end
 
-bind_both_modes_default_and_insert alt-shift-d _fzf_nested_dir_widget
-bind_both_modes_default_and_insert alt-shift-f _fzf_nested_file_widget
-bind_both_modes_default_and_insert alt-shift-u _fzf_nested_file_unrestricted_widget
-bind_both_modes_default_and_insert alt-shift-b _fzf_nested_both_file_and_dirs_widget
+bind_both_modes_default_and_insert alt-shift-d _fzf_nested_dir_picker
+bind_both_modes_default_and_insert alt-shift-f _fzf_nested_file_picker
+bind_both_modes_default_and_insert alt-shift-u _fzf_nested_file_unrestricted_picker
+bind_both_modes_default_and_insert alt-shift-b _fzf_nested_both_file_and_dirs_picker
 # TODO what all pickers for git history might I want?
-bind_both_modes_default_and_insert alt-shift-g _fzf_nested_git_commit_widget
+bind_both_modes_default_and_insert alt-shift-g _fzf_nested_git_commit_picker
 
 # *** chmod,chgrp,chown,chsh
 abbr chmx "chmod +x"
