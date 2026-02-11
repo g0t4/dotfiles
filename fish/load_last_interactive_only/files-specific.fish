@@ -825,7 +825,7 @@ function __fzf_mru_write --argument-names picker path
 end
 
 function __fzf_picker --argument-names picker fd_command
-    set -l current_word (commandline -t)
+    set -l current_word (commandline --current-token)
 
     set -l fzf_opts --height 50% --border --header "MRU ↑  |  Fresh ↓"
     if test -n "$current_word"
