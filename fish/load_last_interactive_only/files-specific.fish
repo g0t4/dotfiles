@@ -825,13 +825,13 @@ function __fzf_mru_write --argument-names picker path
 end
 
 function __fzf_widget --argument-names picker fd_command
-    # capture the word under the cursor (if any) to use as initial fzf query
-    set -l initial_query (commandline -t)
+    set -l current_word (commandline -t)
 
-    # build fzf options, adding --query when we have a word
     set -l fzf_opts --height 50% --border --header "MRU ↑  |  Fresh ↓"
-    if test -n "$initial_query"
-        set fzf_opts $fzf_opts --query $initial_query
+    if test -n "$current_word"
+        # can type `cd foo<alt-shift-d>` and fzf opens with `foo` prefilled
+        #  effectively start filtering before and/or after deciding to use fzf picker
+        set fzf_opts $fzf_opts --query $current_word
     end
 
     set -l file (
