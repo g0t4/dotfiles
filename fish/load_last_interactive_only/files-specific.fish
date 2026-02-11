@@ -824,7 +824,7 @@ function __fzf_mru_write --argument-names picker path
     mv $temp_new_file $file
 end
 
-function __fzf_widget --argument-names picker fd_command
+function __fzf_picker --argument-names picker fd_command
     set -l current_word (commandline -t)
 
     set -l fzf_opts --height 50% --border --header "MRU ↑  |  Fresh ↓"
@@ -853,20 +853,20 @@ end
 # ---------------------------------------------------------------------------
 
 function _fzf_nested_dir_widget -d "Paste selected directory into command line"
-    __fzf_widget dirs "fd --type d ."
+    __fzf_picker dirs "fd --type d ."
 end
 
 function _fzf_nested_file_widget -d "Paste selected file into command line"
-    __fzf_widget files "fd --type f ."
+    __fzf_picker files "fd --type f ."
 end
 
 function _fzf_nested_file_unrestricted_widget
-    __fzf_widget unrestricted "fd --type f . -u"
+    __fzf_picker unrestricted "fd --type f . -u"
 end
 
 function _fzf_nested_both_file_and_dirs_widget -d "Paste selected file or directory into command line"
     # btw `diff_two_commands 'fd --type f --type d' 'fd'` differ in symlinks (at least)
-    __fzf_widget both "fd ."
+    __fzf_picker both "fd ."
 end
 
 function _fzf_nested_git_commit_widget -d "Pick a git commit_hash"
