@@ -844,10 +844,21 @@ function __fzf_picker --argument-names picker fd_command
 
     if test -n "$file"
         __fzf_mru_write $picker "$file"
-        commandline -i -- (string escape -- "$file")
+
+        # * remove current token b/c it was a temporary search term only (else file tacked onto end of it)
+        #  DO NOT remove token if no file picked, b/c user might want to switch pickers (w/o retyping query)
+        #  i.e. start w/ regular file picker => realize its a hidden file => switch to unrestricted file picker
+        if test -n "$current_word"
+            # FTR `commandline foo` replaces entire commandline w/ `foo`
+            #   add -t/--current-token to limit replacement to the current token only
+            commandline --current-token -- "" # empty == remove current token
+        end
+
+        # insert file at cursor position
+        commandline --insert -- (string escape -- "$file")
     end
 
-    commandline -f repaint
+    commandline --function repaint
 end
 
 # ---------------------------------------------------------------------------
