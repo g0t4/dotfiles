@@ -825,12 +825,21 @@ function __fzf_mru_write --argument-names picker path
 end
 
 function __fzf_widget --argument-names picker fd_command
+    # capture the word under the cursor (if any) to use as initial fzf query
+    set -l initial_query (commandline -t)
+
+    # build fzf options, adding --query when we have a word
+    set -l fzf_opts --height 50% --border --header "MRU ↑  |  Fresh ↓"
+    if test -n "$initial_query"
+        set fzf_opts $fzf_opts --query $initial_query
+    end
+
     set -l file (
         begin
             set -l mru_file (__fzf_mru_file $picker)
             __fzf_mru_read $picker
             eval $fd_command | grep -Fxv -f $mru_file
-        end | fzf --height 50% --border --header "MRU ↑  |  Fresh ↓"
+        end | fzf $fzf_opts
     )
 
     if test -n "$file"
