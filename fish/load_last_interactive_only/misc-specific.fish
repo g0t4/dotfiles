@@ -1926,10 +1926,7 @@ function abbr_db
     if test (count $video_files) -eq 1
         set video_file $video_files[1]
     end
-    # TODO make a helper to deal with escaping, esp edge cases, have smth like:
-    #   escape_for_echo_quoted ?
-    set escaped_video_file (string replace "'" "\\'" $video_file)
-    echo "video_editing_boost_audio_dB_by $boost '$escaped_video_file'"
+    echo "video_editing_boost_audio_dB_by $boost $(string escape $video_file)"
 end
 #abbr 7db "video_editing_boost_audio_dB_by 7dB"
 
