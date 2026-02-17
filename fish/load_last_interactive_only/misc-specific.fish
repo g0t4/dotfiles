@@ -1690,7 +1690,7 @@ function abbr_mp4
     # for now all mkv => mp4 helper func
     if test (ls *.mkv | count) -gt 0
         for mkv in *.mkv
-            set output_file (string replace -r "\.mkv\$" ".mp4" "$mkv")
+            set output_file (path change-extension mp4 "$mkv")
             if test -f "$output_file"
                 continue
             end
