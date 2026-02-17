@@ -1937,9 +1937,10 @@ function video_editing_boost_audio_dB_by
     # usage:    video_editing_boost_audio_dB_by 7dB foo.mp4
     set boost_dB (string replace "db" "dB" $argv[1])
     set input_file (realpath $argv[2])
-    set file_extension (_get_first_file_extension $input_file)
-    set boosted_file (string replace -r "\.$file_extension\$" ".$boost_dB.$file_extension" "$input_file")
-    # FYI I use sep audio detect to manually decide the boost, TODO maybe change to automate that? based on highest sample?
+
+    set file_extension (path extension $input_file)
+    set boosted_file (string replace -r "$file_extension\$" ".$boost_dB$file_extension" "$input_file")
+
     ffmpeg -i "$input_file" -af "volume=$boost_dB" -c:v copy "$boosted_file"
 end
 
