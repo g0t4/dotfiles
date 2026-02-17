@@ -1763,7 +1763,7 @@ function video_editing_3_dropped_frames
     set -l _script_py "$WES_DOTFILES/fish/load_last_interactive_only/pythons/av/dropped_frames.py"
     $_python3 $_script_py $argv
 end
-complete -c video_editing_3_dropped_frames -a "--verbose"
+complete -c video_editing_3_dropped_frames -a --verbose
 
 abbr --add ffp --function _ffp
 function _ffp
@@ -1877,28 +1877,44 @@ function video_editing_aio
     # based on: ffmpeg -i foo.mp4  -itsoffset 0.1 -i foo.mp4  -map 0:v -map 1:a -c:v copy -c:a aac foo-shifted100ms.mp4
     # PRN add ms param? right now 100 works for my setup OBS+mixpre6v2/mv7+logibrio
     set file_extension (_get_first_file_extension $combined_file)
-    set output_file (string replace -r "\.$file_extension\$" ".shifted100ms.$file_extension" "$combined_file")
-    if test -f "$output_file"
-        echo "Skipping...file already exists: $output_file"
+    set stage1_shifted_file (string replace -r "\.$file_extension\$" ".shifted100ms.$file_extension" "$combined_file")
+    if test -f "$stage1_shifted_file"
+        echo "stage1: $(basename $stage1_shifted_file)"
     else
         _ffmpeg_concat $argv # produces $combined_file
 
         # TODO change this to re-encode audio stream? to avoid some issues w/ start=NON-ZERO (ffprobe foo.mp4) output
-        ffmpeg -i "$combined_file" -itsoffset 0.1 -i "$combined_file" -map 0:v -map 1:a -c:v copy -c:a aac "$output_file"
+        ffmpeg -i "$combined_file" -itsoffset 0.1 -i "$combined_file" -map 0:v -map 1:a -c:v copy -c:a aac "$stage1_shifted_file"
         trash $combined_file # be safe with rm, if it was wrong file I wanna have it be recoverable
     end
 
-    # PRN skip if already exists?
-    video_editing_gen_fcpxml $output_file
+    # * both_fixed (start time truncation + CFR constant frame rate) for new silence detect tool
+    set stage2_fixed_file (path change-extension .cfr_and_start.mp4 "$stage1_shifted_file")
+    if test -f "$stage2_fixed_file"
+        echo "stage2: $(basename $stage2_fixed_file)"
+    else
+        ffmpeg -i "$stage1_shifted_file" \
+            # -ss 0.1 # truncate first 100ms to fix timing mismatch from OBS
+            -ss 0.1 \
+            -map 0:v:0 -map 0:a:0 \
+            -vf "fps=30" \
+            -af "aresample=async=1" \
+            # CFR will fix any gaps in audio samples (or video frames)
+            -fps_mode cfr \
+            -r 30 \
+            -c:v libx264 -pix_fmt yuv420p -profile:v high -level 4.2 \
+            -c:a aac -ar 48000 -ac 1 \
+            "$stage2_fixed_file"
+    end
+
+    video_editing_gen_fcpxml "$stage2_fixed_file"
 end
 
 function video_editing_gen_fcpxml
-    set video_file (realpath $argv[1])
-
-    set -l base "$HOME/repos/github/g0t4/private-auto-edit-suggests"
+    set -l base "$HOME/repos/github/g0t4/auto-edit-suggests"
     set python3 "$base/.venv/bin/python3"
-    set script "$base/generate_fcpxml.py"
-    $python3 $script $video_file
+    set script "$base/generate_fcpxml_notebook.py"
+    $python3 $script $argv
 end
 
 abbr --add _Xdb --regex '\d+db' --function abbr_db
