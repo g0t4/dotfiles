@@ -1720,7 +1720,6 @@ function _get_output_file_based_on_first_file
     set output_name $argv[1] # i.e. combined.mp4 (first arg is output file name w/o path)
     set paths $argv[2..-1] # i.e. /Users/wes/foo/bar/baz.mp4 /Users/wes/foo/bar/baz.mp4
 
-    set extension (_get_first_file_extension $paths[1])
     set path (_get_first_file_dir $paths[1])
     set output_file "$path/$output_name"
     echo $output_file
