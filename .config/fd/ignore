@@ -4,3 +4,5 @@
 # * hide even if --hidden passed:
 .git/
 .ctags.d/
+# ignore contents of fcpbundle but not the dir itself:
+*.fcpbundle/*
