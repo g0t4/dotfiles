@@ -1865,6 +1865,18 @@ function video_editing_just_shift_to_mp4_one_video
     end
 end
 
+function path_stem --argument-names path --description "return path w/o extension, i.e. foo.mp4 => foo"
+    # path_stem "foo.mp4" => "foo"
+    path change-extension '' $path # (when change to empty, strips dot too)
+end
+
+function path_prefix_extension --argument-names prefix path --description "like change-extension except it prefixes instead of replace"
+    # path_prefix_extension foo test.mp4    =>    test.foo.mp4
+    set file_extension (path extension $path) # foo.mp4 => ".mp4" (dot included)
+    set stem (path change-extension '' $path) # foo.mp4 => "foo" (when change to empty, strips dot too)
+    echo $stem.$prefix$file_extension # foo.mp4 => foo.prefix.mp4
+end
+
 function video_editing_aio
     set combined_file (_get_output_file_based_on_first_file combined.mp4 $argv)
 
