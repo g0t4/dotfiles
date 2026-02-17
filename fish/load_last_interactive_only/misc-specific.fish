@@ -1942,7 +1942,6 @@ function video_editing_boost_audio_dB_by
     set input_file (realpath $argv[2])
 
     set boosted_file (path_prefix_extension $boost_dB "$input_file")
-
     ffmpeg -i "$input_file" -af "volume=$boost_dB" -c:v copy "$boosted_file"
 end
 
