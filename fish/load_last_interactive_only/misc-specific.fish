@@ -1706,11 +1706,6 @@ function _video_editing_ffmpeg_file_list
     end
 end
 
-function _get_first_file_extension
-    # PRN move to top level fish function?
-    echo $argv[1] | gsed 's/.*\.//'
-end
-
 function _get_first_file_dir
     realpath $(dirname $argv[1])
 end
@@ -1875,8 +1870,8 @@ function video_editing_aio
 
     # based on: ffmpeg -i foo.mp4  -itsoffset 0.1 -i foo.mp4  -map 0:v -map 1:a -c:v copy -c:a aac foo-shifted100ms.mp4
     # PRN add ms param? right now 100 works for my setup OBS+mixpre6v2/mv7+logibrio
-    set file_extension (_get_first_file_extension $combined_file)
-    set stage1_shifted_file (string replace -r "\.$file_extension\$" ".shifted100ms.$file_extension" "$combined_file")
+    set file_extension (path extension $combined_file)
+    set stage1_shifted_file (string replace -r "$file_extension\$" ".shifted100ms$file_extension" "$combined_file")
     if test -f "$stage1_shifted_file"
         echo "stage1: $(basename $stage1_shifted_file)"
     else
