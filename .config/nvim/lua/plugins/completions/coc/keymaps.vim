@@ -71,7 +71,7 @@ let g:coc_global_extensions = [
 set nobackup
 set nowritebackup
 
-" Having longer updatetime (default is 4000 ms = 4s) leads to noticeable
+" * Having longer updatetime (default is 4000 ms = 4s) leads to noticeable
 " delays and poor user experience
 set updatetime=300
 
@@ -196,7 +196,7 @@ nmap <leader>ca  <Plug>(coc-codeaction-cursor)
 nmap <leader>cal  <Plug>(coc-codeaction-line)
 nmap <leader>cas  <Plug>(coc-codeaction-source)
 "
-" refactoring
+" * refactoring
 nmap <leader>car <Plug>(coc-codeaction-refactor)
 xmap <leader>car <Plug>(coc-codeaction-refactor-selected)
 
