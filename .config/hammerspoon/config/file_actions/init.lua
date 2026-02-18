@@ -51,6 +51,87 @@ local function getFilename(path)
     return path:match("^.+/(.+)$") or path
 end
 
+-- Format file size for display
+local function formatSize(bytes)
+    if not bytes then return nil end
+    if bytes < 1024 then
+        return string.format("%d B", bytes)
+    elseif bytes < 1024 * 1024 then
+        return string.format("%.1f KB", bytes / 1024)
+    elseif bytes < 1024 * 1024 * 1024 then
+        return string.format("%.1f MB", bytes / (1024 * 1024))
+    else
+        return string.format("%.1f GB", bytes / (1024 * 1024 * 1024))
+    end
+end
+
+-- Format relative time for display
+local function formatTimeAgo(timestamp)
+    if not timestamp then return nil end
+    local diff = os.time() - timestamp
+    if diff < 60 then
+        return "just now"
+    elseif diff < 3600 then
+        local mins = math.floor(diff / 60)
+        return mins .. (mins == 1 and " min ago" or " mins ago")
+    elseif diff < 86400 then
+        local hours = math.floor(diff / 3600)
+        return hours .. (hours == 1 and " hour ago" or " hours ago")
+    elseif diff < 604800 then
+        local days = math.floor(diff / 86400)
+        return days .. (days == 1 and " day ago" or " days ago")
+    else
+        return os.date("%b %d, %Y", timestamp)
+    end
+end
+
+-- Build a rich summary string for selected files
+local function buildSummary(paths)
+    if #paths == 1 then
+        local path = paths[1]
+        local attrs = hs.fs.attributes(path)
+        local parts = { getFilename(path) }
+        if attrs then
+            if attrs.mode == "directory" then
+                table.insert(parts, "folder")
+            elseif attrs.size then
+                table.insert(parts, formatSize(attrs.size))
+            end
+            if attrs.modification then
+                table.insert(parts, formatTimeAgo(attrs.modification))
+            end
+        end
+        return table.concat(parts, " · ")
+    else
+        -- Multiple files: aggregate size
+        local totalSize = 0
+        local dirCount = 0
+        local fileCount = 0
+        for _, path in ipairs(paths) do
+            local attrs = hs.fs.attributes(path)
+            if attrs then
+                if attrs.mode == "directory" then
+                    dirCount = dirCount + 1
+                else
+                    fileCount = fileCount + 1
+                    totalSize = totalSize + (attrs.size or 0)
+                end
+            end
+        end
+        local parts = {}
+        if fileCount > 0 then
+            table.insert(parts, fileCount .. (fileCount == 1 and " file" or " files"))
+        end
+        if dirCount > 0 then
+            table.insert(parts, dirCount .. (dirCount == 1 and " folder" or " folders"))
+        end
+        if totalSize > 0 then
+            table.insert(parts, formatSize(totalSize))
+        end
+        return table.concat(parts, " · ")
+    end
+end
+
 -- Build the actions list for selected files
 local function buildActions(paths)
     if #paths == 0 then
@@ -61,13 +142,7 @@ local function buildActions(paths)
         }}
     end
 
-    -- Summary of what's selected
-    local summary
-    if #paths == 1 then
-        summary = getFilename(paths[1])
-    else
-        summary = #paths .. " items selected"
-    end
+    local summary = buildSummary(paths)
 
     local actions = {}
 
@@ -80,6 +155,15 @@ local function buildActions(paths)
         image = hs.image.imageFromName("NSPathTemplate"),
     })
 
+    -- Copy file contents
+    table.insert(actions, {
+        text = "Copy File Contents",
+        subText = summary,
+        action = "copy_contents",
+        paths = paths,
+        image = hs.image.imageFromName("NSMultipleDocuments"),
+    })
+
     -- Copy filename(s)
     table.insert(actions, {
         text = "Copy Filename",
@@ -87,6 +171,24 @@ local function buildActions(paths)
         action = "copy_filename",
         paths = paths,
         image = hs.image.imageFromName("NSPathTemplate"),
+    })
+
+    -- Copy as Markdown link
+    table.insert(actions, {
+        text = "Copy as Markdown Link",
+        subText = summary,
+        action = "copy_markdown",
+        paths = paths,
+        image = hs.image.imageFromName("NSPathTemplate"),
+    })
+
+    -- Open Terminal Here
+    table.insert(actions, {
+        text = "Open Terminal Here",
+        subText = summary,
+        action = "open_terminal",
+        paths = paths,
+        image = hs.image.imageFromName("NSActionTemplate"),
     })
 
     -- Reveal in Finder (useful if triggered from non-Finder app later)
@@ -106,6 +208,17 @@ local function buildActions(paths)
         paths = paths,
         image = hs.image.imageFromName("NSShareTemplate"),
     })
+
+    -- Diff (only for exactly 2 files)
+    if #paths == 2 then
+        table.insert(actions, {
+            text = "Diff",
+            subText = getFilename(paths[1]) .. " vs " .. getFilename(paths[2]),
+            action = "diff",
+            paths = paths,
+            image = hs.image.imageFromName("NSColumnViewTemplate"),
+        })
+    end
 
     -- Move to Trash
     table.insert(actions, {
@@ -127,11 +240,51 @@ local function onChoice(choice)
 
     local paths = choice.paths
 
-    if choice.action == "copy_path" then
-        local pathStr = table.concat(paths, "\n")
+    if choice.action == "copy_contents" then
+        local contents = {}
+        local skipped = 0
+        for _, path in ipairs(paths) do
+            local attrs = hs.fs.attributes(path)
+            if attrs and attrs.mode == "directory" then
+                skipped = skipped + 1
+            else
+                local file = io.open(path, "r")
+                if file then
+                    local data = file:read("*all")
+                    file:close()
+                    if data then
+                        if #paths > 1 then
+                            table.insert(contents, "--- " .. getFilename(path) .. " ---\n" .. data)
+                        else
+                            table.insert(contents, data)
+                        end
+                    end
+                else
+                    skipped = skipped + 1
+                end
+            end
+        end
+        if #contents > 0 then
+            hs.pasteboard.setContents(table.concat(contents, "\n\n"))
+            local msg = #contents == 1 and "Contents copied" or #contents .. " files copied"
+            if skipped > 0 then
+                msg = msg .. " (" .. skipped .. " skipped)"
+            end
+            hs.alert.show(msg)
+        else
+            hs.alert.show("No readable file contents")
+        end
+
+    elseif choice.action == "copy_path" then
+        local escaped = {}
+        for _, path in ipairs(paths) do
+            -- Backslash-escape shell metacharacters
+            table.insert(escaped, (path:gsub("([%s%(%)%&%;%|%<%>%*%?%[%]%#%$%!%'%\"%\\])", "\\%1")))
+        end
+        local pathStr = table.concat(escaped, "\n")
         hs.pasteboard.setContents(pathStr)
         if #paths == 1 then
-            hs.alert.show("Copied: " .. paths[1])
+            hs.alert.show("Copied: " .. escaped[1])
         else
             hs.alert.show("Copied " .. #paths .. " paths")
         end
@@ -149,6 +302,31 @@ local function onChoice(choice)
             hs.alert.show("Copied " .. #names .. " filenames")
         end
 
+    elseif choice.action == "copy_markdown" then
+        local links = {}
+        for _, path in ipairs(paths) do
+            local name = getFilename(path)
+            table.insert(links, string.format("[%s](file://%s)", name, path))
+        end
+        local linkStr = table.concat(links, "\n")
+        hs.pasteboard.setContents(linkStr)
+        if #links == 1 then
+            hs.alert.show("Copied link: " .. links[1])
+        else
+            hs.alert.show("Copied " .. #links .. " markdown links")
+        end
+
+    elseif choice.action == "open_terminal" then
+        for _, path in ipairs(paths) do
+            -- Use the directory of the file (or the dir itself)
+            local dir = path
+            local attrs = hs.fs.attributes(path)
+            if attrs and attrs.mode ~= "directory" then
+                dir = path:match("^(.+)/[^/]+$") or path
+            end
+            hs.execute(string.format('open -a "Terminal" "%s"', dir))
+        end
+
     elseif choice.action == "reveal" then
         for _, path in ipairs(paths) do
             hs.execute(string.format('open -R "%s"', path))
@@ -157,6 +335,21 @@ local function onChoice(choice)
     elseif choice.action == "open_with" then
         -- Show app chooser for "Open With"
         M.showOpenWith(paths)
+
+    elseif choice.action == "diff" then
+        local output, status = hs.execute(string.format('diff "%s" "%s"', paths[1], paths[2]))
+        if status then
+            hs.alert.show("Files are identical")
+        else
+            -- diff returns exit code 1 when files differ
+            local result = output and output:gsub("%s+$", "") or ""
+            if result ~= "" then
+                hs.pasteboard.setContents(result)
+                hs.alert.show("Files differ - diff copied to clipboard")
+            else
+                hs.alert.show("Files differ")
+            end
+        end
 
     elseif choice.action == "trash" then
         for _, path in ipairs(paths) do
