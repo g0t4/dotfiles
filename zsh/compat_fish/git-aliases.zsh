@@ -190,8 +190,11 @@ abbr gwch 'git whatchanged -p --abbrev-commit --pretty=medium'
 ## diff
 # * --color-words fubar's delta diffs (let delta handle the styling)
 # makes me wonder if this was also what I was hating about diff-so-fancy
-abbr gd "git diff" # --color-words
-abbr gdc "git diff --cached" # --color-words
+abbr gd "git diff" # show unstaged (worktree) changes
+abbr gd_worktree "git diff" # show worktree changes
+abbr gd_index "git diff --staged" # show staged (index) changes
+abbr gd_is_worktree_clean "git diff --quiet" # 0 = worktree is clean (no unstaged changes), 1 = worktree is dirty
+abbr gd_is_index_clean "git diff --staged --quiet" # 0 = index is clean (no staged changes), 1 = index is dirty
 # last commit diff:
 abbr gdlf 'git diff-tree -r HEAD~1 HEAD'
 #
