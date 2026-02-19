@@ -554,6 +554,24 @@ return {
                             -- are these not set OOB? or is it diff default for lua?
                             block_deviders = { "-- %%" },
                         },
+                        typescript = {
+                            command = { "deno", "repl" }, -- FYI alternative `npx ts-node`
+                            block_deviders = { "// %%", "//%%" },
+                            -- PRN format like javascript/python => I won't add that until I need it (i.e. stripping comments lets just avoid that for now)
+                        },
+                        javascript = {
+                            command = { "node" }, -- TODO any default flags (looks like dynamic import works by default now)
+                            block_deviders = { "// %%", "//%%" },
+                            -- format = function(lines, extras)
+                            --     -- Use the generic bracketed‑paste helper (it works for any REPL).
+                            --     local result = require("iron.fts.common").bracketed_paste(lines, extras)
+                            --     -- Drop lines that are just comments or whitespace.
+                            --     local filtered = vim.tbl_filter(function(line)
+                            --         return not string.match(line, "^%s*//") -- ignore // comments
+                            --     end, result)
+                            --     return filtered
+                            -- end,
+                        },
                         python = {
                             -- PRN if need be, create a profile for configuring how ipython runs inside of iron.nvim (only if issues with config outside of nvim), --profile foo
                             command = { "ipython", "--no-autoindent" },
