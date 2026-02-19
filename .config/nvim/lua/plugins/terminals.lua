@@ -562,6 +562,15 @@ return {
                             -- PRN --allow-all for all perms (will prompt if it needs perms too)
                             block_deviders = { "// %%", "//%%" },
                             -- PRN format like javascript/python => I won't add that until I need it (i.e. stripping comments lets just avoid that for now)
+                            format = function(lines, extras)
+                                -- Use the generic bracketed‑paste helper (it works for any REPL).
+                                local result = require("iron.fts.common").bracketed_paste(lines, extras)
+                                -- Drop lines that are just comments or whitespace.
+                                local filtered = vim.tbl_filter(function(line)
+                                    return not string.match(line, "^%s*//") -- ignore // comments
+                                end, result)
+                                return filtered
+                            end,
                         },
                         javascript = {
                             command = { "node" }, -- TODO any default flags (looks like dynamic import works by default now)
