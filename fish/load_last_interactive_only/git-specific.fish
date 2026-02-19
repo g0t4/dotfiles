@@ -251,6 +251,21 @@ function _abbr_expand_grbi_d
     string replace --regex "grbi(\d+)" "git rebase -i HEAD~\1" $argv[1]
 end
 
+function _repo_is_index_clean
+    set repo_dir $argv[1]
+    set -q argv[1]; or set repo_dir (_repo_root)
+
+    # 0 = nothing staged, 1 = staged
+    git -C $repo_dir diff --staged --quiet
+end
+
+function _repo_is_worktree_clean
+    set repo_dir $argv[1]
+    set -q argv[1]; or set repo_dir (_repo_root)
+
+    git -C $repo_dir diff --quiet
+end
+
 # * stash
 # FYI can do gstashl<TAB> or gashl<TAB>
 abbr gstash 'git stash'

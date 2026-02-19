@@ -1954,6 +1954,23 @@ if command -q npm
     # (Use `node --trace-warnings ...` to show where the warning was created)
     export NODE_OPTIONS='--disable-warning=ExperimentalWarning'
 
+    function npm_install
+        if not _repo_is_index_clean
+            log_ --red "cannot npm install w/ outstanding staged (index) changes, aborting..."
+            return 1
+        end
+        # check if staged files
+        if not test -f package.json
+            log_ --red "package.json not found in current directory, aborting..."
+            return 1
+        end
+        # save me the time by install/add/commit the package info
+        # TODO do this for uv add too
+        npm install $argv
+        git add package.json package-lock.json
+        git commit -m "npm install $argv"
+    end
+
     # PRN as I use and find how I wanna use aliases
     abbr npmi 'npm install'
     abbr npminit 'npm init -y'
