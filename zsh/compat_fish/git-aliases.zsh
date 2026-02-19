@@ -192,7 +192,11 @@ abbr gwch 'git whatchanged -p --abbrev-commit --pretty=medium'
 # makes me wonder if this was also what I was hating about diff-so-fancy
 abbr gd "git diff" # show unstaged (worktree) changes
 abbr gd_worktree "git diff" # show worktree changes
+#
+abbr gds "git diff --staged" #
+abbr gdc "git diff --staged" # old abbr, keep until gds habituated
 abbr gd_index "git diff --staged" # show staged (index) changes
+#
 abbr gd_is_worktree_clean "git diff --quiet" # 0 = worktree is clean (no unstaged changes), 1 = worktree is dirty
 abbr gd_is_index_clean "git diff --staged --quiet" # 0 = index is clean (no staged changes), 1 = index is dirty
 # last commit diff:
