@@ -558,7 +558,7 @@ return {
                             -- --quiet => doesn't show deno version... TODO what else is --quiet hiding?
                             -- --unstable APIs (experimental stuff s/b fine when using REPL)
                             -- command = { "deno", "repl", "--quiet", "--unstable" }, -- FYI alternative `npx ts-node`
-                            command = { "deno", "repl", "--allow-all", "--allow-write" }, -- CRAP, --unstable is deprecated (does it still enable all? I don't wanna have to add each one, yuck)
+                            command = { "deno", "repl", "--allow-net", "--allow-read", "--allow-write", "--allow-env", }, -- CRAP, --unstable is deprecated (does it still enable all? I don't wanna have to add each one, yuck)
                             -- PRN --allow-all for all perms (will prompt if it needs perms too)
                             block_deviders = { "// %%", "//%%" },
                             -- PRN format like javascript/python => I won't add that until I need it (i.e. stripping comments lets just avoid that for now)
