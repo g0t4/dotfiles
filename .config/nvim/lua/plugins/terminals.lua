@@ -538,6 +538,24 @@ return {
                 command = { "bash" },
                 block_deviders = { "# %%" },
             }
+            deno = {
+                -- --quiet => doesn't show deno version... TODO what else is --quiet hiding?
+                -- --unstable APIs (experimental stuff s/b fine when using REPL)
+                -- command = { "deno", "repl", "--quiet", "--unstable" }, -- FYI alternative `npx ts-node`
+                command = { "deno", "repl", "--allow-net", "--allow-read", "--allow-write", "--allow-env", }, -- CRAP, --unstable is deprecated (does it still enable all? I don't wanna have to add each one, yuck)
+                -- PRN --allow-all for all perms (will prompt if it needs perms too)
+                block_deviders = { "// %%", "//%%" },
+                -- PRN format like javascript/python => I won't add that until I need it (i.e. stripping comments lets just avoid that for now)
+                format = function(lines, extras)
+                    -- Use the generic bracketed‑paste helper (it works for any REPL).
+                    local result = require("iron.fts.common").bracketed_paste(lines, extras)
+                    -- Drop lines that are just comments or whitespace.
+                    local filtered = vim.tbl_filter(function(line)
+                        return not string.match(line, "^%s*//") -- ignore // comments
+                    end, result)
+                    return filtered
+                end,
+            }
 
             core.setup {
                 config = {
@@ -554,37 +572,9 @@ return {
                             -- are these not set OOB? or is it diff default for lua?
                             block_deviders = { "-- %%" },
                         },
-                        typescript = {
-                            -- --quiet => doesn't show deno version... TODO what else is --quiet hiding?
-                            -- --unstable APIs (experimental stuff s/b fine when using REPL)
-                            -- command = { "deno", "repl", "--quiet", "--unstable" }, -- FYI alternative `npx ts-node`
-                            command = { "deno", "repl", "--allow-net", "--allow-read", "--allow-write", "--allow-env", }, -- CRAP, --unstable is deprecated (does it still enable all? I don't wanna have to add each one, yuck)
-                            -- PRN --allow-all for all perms (will prompt if it needs perms too)
-                            block_deviders = { "// %%", "//%%" },
-                            -- PRN format like javascript/python => I won't add that until I need it (i.e. stripping comments lets just avoid that for now)
-                            format = function(lines, extras)
-                                -- Use the generic bracketed‑paste helper (it works for any REPL).
-                                local result = require("iron.fts.common").bracketed_paste(lines, extras)
-                                -- Drop lines that are just comments or whitespace.
-                                local filtered = vim.tbl_filter(function(line)
-                                    return not string.match(line, "^%s*//") -- ignore // comments
-                                end, result)
-                                return filtered
-                            end,
-                        },
-                        javascript = {
-                            command = { "node" }, -- TODO any default flags (looks like dynamic import works by default now)
-                            block_deviders = { "// %%", "//%%" },
-                            -- format = function(lines, extras)
-                            --     -- Use the generic bracketed‑paste helper (it works for any REPL).
-                            --     local result = require("iron.fts.common").bracketed_paste(lines, extras)
-                            --     -- Drop lines that are just comments or whitespace.
-                            --     local filtered = vim.tbl_filter(function(line)
-                            --         return not string.match(line, "^%s*//") -- ignore // comments
-                            --     end, result)
-                            --     return filtered
-                            -- end,
-                        },
+                        -- FYI you might need to fork two diff configs of deno for js vs ts... for now they can be the same
+                        typescript = deno,
+                        javascript = deno,
                         python = {
                             -- PRN if need be, create a profile for configuring how ipython runs inside of iron.nvim (only if issues with config outside of nvim), --profile foo
                             command = { "ipython", "--no-autoindent" },
