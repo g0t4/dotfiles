@@ -1965,10 +1965,8 @@ if command -q npm
             return 1
         end
         # save me the time by install/add/commit the package info
-        # TODO do this for uv add too
         npm install $argv
-        git add package.json package-lock.json
-        git commit -m "npm install $argv"
+        git commit -m "npm install $argv" package.json package-lock.json
     end
 
     # PRN as I use and find how I wanna use aliases

@@ -64,6 +64,21 @@ abbr vea 'source .venv*/bin/activate.fish' # override zsh version's /activate
 
 abbr pipir "uv add -r requirements.txt && rm requirements.txt # REMINDER TO MIGRATE to pyproject.toml + uv"
 
+function uv_add
+    if not _repo_is_index_clean
+        # need to stage package* hence check nothing else is staged
+        # TODO can I just commit with explicit files instead and ignore stage?
+        log_ --red "cannot uv add w/ outstanding staged (index) changes, aborting..."
+        return 1
+    end
+    if not test -f pyproject.toml
+        log_ --red "pyproject.toml not found in current directory, aborting..."
+        return 1
+    end
+    uv add $argv
+    git commit -m "uv add $argv" pyproject.toml uv.lock
+end
+
 abbr uva 'uv add'
 #
 # lockfile/dependency related:
