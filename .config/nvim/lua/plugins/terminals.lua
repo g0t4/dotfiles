@@ -555,7 +555,9 @@ return {
                             block_deviders = { "-- %%" },
                         },
                         typescript = {
-                            command = { "deno", "repl" }, -- FYI alternative `npx ts-node`
+                            -- --quiet => doesn't show deno version... TODO what else is --quiet hiding?
+                            -- --unstable APIs (experimental stuff s/b fine when using REPL)
+                            command = { "deno", "repl", "--quiet", "--unstable" }, -- FYI alternative `npx ts-node`
                             block_deviders = { "// %%", "//%%" },
                             -- PRN format like javascript/python => I won't add that until I need it (i.e. stripping comments lets just avoid that for now)
                         },
