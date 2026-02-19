@@ -79,7 +79,7 @@ function uv_add
     git commit -m "uv add $argv" pyproject.toml uv.lock
 end
 
-abbr uva 'uv add'
+abbr uva 'uv_add'
 #
 # lockfile/dependency related:
 abbr uvau 'uv add --upgrade' # all upgrade on all packages (within existing constraint in pyproject.toml)

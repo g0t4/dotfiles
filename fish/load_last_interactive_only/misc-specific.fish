@@ -1970,7 +1970,7 @@ if command -q npm
     end
 
     # PRN as I use and find how I wanna use aliases
-    abbr npmi 'npm install'
+    abbr npmi 'npm_install'
     abbr npminit 'npm init -y'
     abbr npml 'npm list'
     abbr npmr 'npm run'
