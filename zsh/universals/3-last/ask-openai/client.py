@@ -12,7 +12,7 @@ def log(msg):
 ## purpose of this is just to parse a shared config file to specify which service to use for completion tasks
 ## I could easily move this logic elsewhere but works fine in fish variable for now
 
-def get_ask_client() -> tuple[Service, AsyncOpenAI]:
+def get_use() -> Service:
 
     # TODO profile this, takes 50-60ms to run (read file and build client) and see if there are ways to optimize... 50ms is borderline too slow for a responsive Ux for asking for help... seems way too high too to read a file...
     #   PRN store variable in a dedicated file (not need to parse other lines?)
@@ -64,10 +64,12 @@ def get_ask_client() -> tuple[Service, AsyncOpenAI]:
                 use = use_openai(model)
             else:
                 raise Exception("invalid ask_service: " + str(ask_service))
+    return use
 
+def get_ask_client() -> tuple[Service, AsyncOpenAI]:
+    use = get_use()
     # 20ms to create client... YUCK, almost no time to read file above (<2ms)
     client = AsyncOpenAI(api_key=use.api_key, base_url=use.base_url, timeout=15)
     # timeout (seconds), don't want shell locked up for the default (seems like 60s?)
 
     return use, client
-
