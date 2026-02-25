@@ -2,7 +2,7 @@ import re
 from services import get_selected_service
 from logs import log
 
-async def get_model():
+def get_model():
 
     service = get_selected_service()
     log(f"using: {service}")
