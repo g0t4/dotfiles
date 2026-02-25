@@ -113,6 +113,7 @@ def use_ollama(model: Optional[str] = None):
         base_url="http://ollama:11434/v1",
         # TODO can blank be used and let it pick?
         model=model if model else 'llama3.2:3b',
+    )
 
 def use_deepseek(model: Optional[str] = None):
     # curl -L -X GET 'https://api.deepseek.com/models' \-H 'Accept: application/json' \-H 'Authorization: Bearer <TOKEN>' | jq
