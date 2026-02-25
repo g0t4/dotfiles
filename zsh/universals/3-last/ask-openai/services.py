@@ -1,4 +1,5 @@
 import argparse
+import os
 import platform
 import sys
 from typing import Optional, NamedTuple
@@ -47,7 +48,7 @@ def use_build21(model: Optional[str] = None):
         base_url='http://build21:8013/v1',
         model=model if model else 'llama-server-fixed',
         chat_completions_path=None,
-        max_tokens=2048
+        max_tokens=2048,
     )
 
 def use_inception(model: Optional[str] = None):
@@ -71,12 +72,10 @@ def use_groq(model: Optional[str] = None):
         # groq https://console.groq.com/docs/models
     )
 
-
 def use_gh_copilot(model: Optional[str] = None):
     # TODO reuse logic in my ask-openai.nvim plugin, basically take ~/.config/github-copilot/[apps|host].yml to get GH copilot API_KEY => get bearer token and go! cache the config so its not an extra step on every request, config has expiration field
     # TODO get base_url off of v2_token/config response
     raise Exception("not implemented yet")
-
 
 def use_openai(model: Optional[str] = None):
 
@@ -99,7 +98,6 @@ def use_openai(model: Optional[str] = None):
         chat_completions_path=None,
     )
 
-
 def use_anthropic(model: Optional[str] = None):
     return Service(
         name='anthropic',
@@ -109,7 +107,6 @@ def use_anthropic(model: Optional[str] = None):
         chat_completions_path="messages",
     )
     # https://docs.anthropic.com/en/docs/about-claude/models
-
 
 def use_lmstudio(model: Optional[str] = None):
 
@@ -122,7 +119,6 @@ def use_lmstudio(model: Optional[str] = None):
         chat_completions_path=None,
     )
 
-
 def use_ollama(model: Optional[str] = None):
     # https://github.com/ollama/ollama/blob/main/docs/openai.md
     #   FYI yes it has openai compat api support, pay attention to failures for what might have gone wrong (i.e. 404 on invalid model)
@@ -133,7 +129,6 @@ def use_ollama(model: Optional[str] = None):
         # TODO can blank be used and let it pick?
         model=model if model else 'llama3.2:3b',
         chat_completions_path=None)
-
 
 def use_deepseek(model: Optional[str] = None):
     # curl -L -X GET 'https://api.deepseek.com/models' \-H 'Accept: application/json' \-H 'Authorization: Bearer <TOKEN>' | jq
@@ -201,7 +196,6 @@ def get_api_key(service_name, account_name):
         sys.exit(1)
     return api_key
 
-
 def args_to_use() -> Service:
 
     parser = argparse.ArgumentParser()
@@ -249,8 +243,6 @@ def args_to_use() -> Service:
 
     return use
 
-import os
-
 DEBUG = True
 
 def log(msg):
@@ -258,56 +250,54 @@ def log(msg):
         return
     print(msg)
 
-## purpose of this is just to parse a shared config file to specify which service to use for completion tasks
-## I could easily move this logic elsewhere but works fine in fish variable for now
-
-def get_selected_service() -> Service:
-
-    # *** lookup backend => parse fish universal vars file (for ask_service)
-    #   FYI vars file is unicode_escape'd (i.e. '\x2d\x2d' => '--')
+def get_fish_universal_variable_ask_service() -> tuple[str | None, str | None]:
     fish_vars_path = os.path.expanduser("~/.config/fish/fish_variables")
     if not os.path.exists(fish_vars_path):
-        log("cannot read ask_service from fish universal variables file")
-        use = use_build21(None)
-    else:
-        # read fish universal variables:
-        # <2ms to read file
-        with open(fish_vars_path, 'r', encoding="utf-8") as _file:
-            lines = _file.readlines()
-        # extract ask_service variable:
-        ask_service_raw = next((line for line in lines if "ask_service" in line), None)
-        if ask_service_raw is None:
-            log("ask_service not found in fish universal variables file, using openai")
-            use = use_build21(None)
-        else:
-            ask_service = ask_service_raw.encode('utf-8').decode('unicode_escape').strip()  # strip trailing \n
-            ask_service_split = ask_service.split("\x1e")  # split on RS (record separator)
-            model = ask_service_split[1] if len(ask_service_split) > 1 else None
+        log("cannot read universal fish variables: ~/.config/fish/fish_variables")
+        return None, None
+    # read fish universal variables:
+    # <2ms to read file
+    with open(fish_vars_path, 'r', encoding="utf-8") as _file:
+        for line in _file:
+            if "ask_service" in line:
 
-            # PRN this parsing logic can be shared with single.py, after I re-hydrate the ask_service variable
-            if "--ollama" in ask_service:
-                use = use_ollama(model)
-            elif "--groq" in ask_service:
-                use = use_groq(model)
-            elif "--deepseek" in ask_service:
-                use = use_deepseek(model)
-            elif "--vllm" in ask_service:
-                use = use_vllm(model)
-            elif "--lmstudio" in ask_service:
-                use = use_lmstudio(model)
-            elif "--anthropic" in ask_service:
-                use = use_anthropic(model)
-            elif "--gh-copilot" in ask_service:
-                use = use_gh_copilot(model)
-            elif "--build21" in ask_service:
-                use = use_build21(model)
-            elif "--inception" in ask_service:
-                use = use_inception(model)
-            elif "--xai" in ask_service:
-                use = use_xai(model)
-            elif "--openai" in ask_service:
-                use = use_openai(model)
-            else:
-                raise Exception("invalid ask_service: " + str(ask_service))
-    return use
+                # FYI vars file is unicode_escape'd (i.e. '\x2d\x2d' => '--')
+                ask_service = line.encode('utf-8').decode('unicode_escape').strip()
 
+                ask_service_split = ask_service.split("\x1e")  # split on RS (record separator)
+
+                model = ask_service_split[1] if len(ask_service_split) > 1 else None
+                service_flag = ask_service_split[0]
+                return service_flag, model
+
+    log("ask_service variable not found in fish universal variables file")
+    return None, None
+
+def get_selected_service() -> Service:
+    ask_service, model = get_fish_universal_variable_ask_service()
+    if ask_service is None:
+        return use_build21(None)
+    # PRN this parsing logic can be shared with single.py, after I re-hydrate the ask_service variable
+    if "--ollama" in ask_service:
+        return use_ollama(model)
+    if "--groq" in ask_service:
+        return use_groq(model)
+    if "--deepseek" in ask_service:
+        return use_deepseek(model)
+    if "--vllm" in ask_service:
+        return use_vllm(model)
+    if "--lmstudio" in ask_service:
+        return use_lmstudio(model)
+    if "--anthropic" in ask_service:
+        return use_anthropic(model)
+    if "--gh-copilot" in ask_service:
+        return use_gh_copilot(model)
+    if "--build21" in ask_service:
+        return use_build21(model)
+    if "--inception" in ask_service:
+        return use_inception(model)
+    if "--xai" in ask_service:
+        return use_xai(model)
+    if "--openai" in ask_service:
+        return use_openai(model)
+    raise Exception("invalid ask_service: " + str(ask_service))
