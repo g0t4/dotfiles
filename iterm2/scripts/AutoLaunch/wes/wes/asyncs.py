@@ -4,13 +4,9 @@ from logs import log
 from langchain_openai import ChatOpenAI
 
 async def ask_openai_async_type_response(session, messages):
-    use, client = get_ask_client()
-    log(f"using {use.log_safe_string()}")
 
-    # * langchain instead:
-    # cut out get_ask_client above when done w/ old IMPL, just need "use" here and don't wanna make openai client just to get use:
     use = get_use()
-    log(f"got use: {use}")
+    log(f"using: {use}")
     api_key = use.api_key or ""  # must set empty at least
     model = ChatOpenAI(model=use.model, api_key=api_key, base_url=use.base_url)
     # FYI I had use.chat_completions_path too but shouldn't need it beyond MAYBE vllm (anthropic will be handled above w/ diff Chat client)
