@@ -114,21 +114,11 @@ function ask_openai
     set -l _python3 "$WES_DOTFILES/.venv/bin/python3"
     set -l _single_py "$WES_DOTFILES/zsh/universals/3-last/ask-openai/single.py" # TODO go back to using single.py w/ langchain and ditch rust here at least (if not everywhere)
 
-    if string match --regex -q "git commit -m" $user_input
-        # *** future => ask openai first for any supplementary info it may want (based on user_input) and then I can query that and pass it with normal question and it can decide when I am committing and want a suggested commit description and ask for git_diff and I provide it... so I could have a list of context functions (git_diff, list_files, pwd, ip_addys, etc) it can ask to be invoked and passed with user_input ... also could just pass all the contextual info upfront and not have back and forth which is premature optimization most likely! until I get a ton of background data that might confuse things I could just provide all of it every time?
-        # ? give it recent commit messages too?
-        # if using git commit => pass git diff and ask it to write a commit message
-        set git_diff (git diff --cached --no-color)
-        set response ( \
-            echo -e "env: fish on $(uname)\nquestion: write me a commit message, here is the git diff:\n$git_diff" | \
-            $_python3 $_single_py $ask_service 2>&1 \
-        )
-    else
-        set response ( \
-            echo -e "env: fish on $(uname)\nquestion: $user_input" | \
-            $_python3 $_single_py $ask_service 2>&1 \
-        )
-    end
+    set response ( \
+        echo -e "env: fish on $(uname)\nquestion: $user_input" | \
+        $_python3 $_single_py $ask_service 2>&1 \
+    )
+
     set exit_code $status
     if test $exit_code -eq 2
         commandline --replace "[CONTEXT]: $response"
