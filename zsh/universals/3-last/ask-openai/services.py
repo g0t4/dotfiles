@@ -261,3 +261,6 @@ def get_selected_service_for_args(ask_service, model) -> Service:
     if "--openai" in ask_service:
         return use_openai(model)
     raise Exception("invalid ask_service: " + str(ask_service))
+
+log(f'{get_selected_service()=}')
+
