@@ -72,7 +72,7 @@ async def copy_screen_to_clipboard(connection: iterm2.Connection, history: bool 
     log(f"user_content: {user_content}")
     messages = [{
         "role": "system",
-        "content": "You are a command line expert. Respond with a single, valid, complete command line. I intend to execute it. No explanation. No markdown. DO NOT respond with leading ``` nor trailing ```"
+        "content": "You are a command line expert. Respond with a single, valid, complete command line. I intend to execute it. No explanation. No markdown. DO NOT respond with leading ``` nor trailing ```",
     }]
 
     await troubleshoot_lines(session)
