@@ -3192,3 +3192,17 @@ function streamdeck_svg2png_padded_square_only
         magick "$new_png" -gravity center -background transparent -extent 120x120 "$new_padded"
     end
 end
+
+# *** string extensions
+
+function string_indent
+    set --local level $argv[1]
+    if is_empty $level
+        set level 1
+    end
+    set --local indent (string repeat -n $level '  ')
+    while read -l line
+        echo "$indent$line"
+    end
+end
+
