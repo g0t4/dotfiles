@@ -86,7 +86,6 @@ async def copy_screen_to_clipboard(connection: iterm2.Connection, history: bool 
 
     # await task_clear  # in this case, already waited for clear above
 
-    # await session.async_send_text(f"{messages}") # quick double check in shell itself
     await ask_openai_async_type_response(session, messages)
 
 async def get_previous_output(session: iterm2.Session):
