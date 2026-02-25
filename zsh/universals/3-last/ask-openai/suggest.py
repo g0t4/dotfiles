@@ -1,4 +1,5 @@
 import re
+from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_openai import ChatOpenAI
 from services import Service, get_selected_service, log
 
@@ -8,14 +9,8 @@ from services import Service, get_selected_service, log
 
 def generate_non_streaming(passed_context: str, system_message: str, max_tokens: int):
     messages = [
-        {
-            "role": "system",
-            "content": system_message
-        },
-        {
-            "role": "user",
-            "content": f"{passed_context}"
-        },
+        SystemMessage(content=system_message),
+        HumanMessage(content=passed_context),
     ]
 
     service = get_selected_service()
