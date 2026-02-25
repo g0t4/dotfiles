@@ -48,7 +48,7 @@ async def ask_openai(connection):
         ask_os = platform.system()
         # good use of ask_os is for `apt install` vs `brew install` vs `yum install` on RHEL, type "install netstat" and run on mac/debian and see the difference
 
-    # FYI last_comand is not critical, can probably be removed, I just added it b/c it was there... not sure it will ever be that helpful and I loved my single.py w/o it forever now...
+    # FYI last_comand is not essential, sometimes it is useful to provide recent a recent command as context (and then I can just ask a question and it sees prior command to apply question to)
     env_last_command = await session.async_get_variable("lastCommand")  # FYI works on remotes w/ iterm2 shell integration
 
     user_content = f"env: shell={ask_shell} on uname={ask_os} and FYI lastCommand={env_last_command}\nquestion: {current_command}"
