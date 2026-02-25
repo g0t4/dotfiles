@@ -1,6 +1,7 @@
 from services import Service
 import httpx  # import alone is ~58ms
 
+# TODO replace w/ new langchain IMPL that handles both
 
 def generate(passed_context: str, system_message: str, use: Service, max_tokens: int):
     if use.name == "anthropic":
