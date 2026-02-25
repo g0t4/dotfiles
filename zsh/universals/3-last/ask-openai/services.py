@@ -17,7 +17,7 @@ class Service(NamedTuple):
 
     def __repr__(self):
         # !!! DO NOT INCLUDE api_key
-        attrs = "{self.name} model={self.model} chat_url={self.base_url}"
+        attrs = f"{self.name} model={self.model} chat_url={self.base_url}"
         if self.max_tokens:
             attrs += f" max_tokens={self.max_tokens}"
         return f"Service({attrs})"
