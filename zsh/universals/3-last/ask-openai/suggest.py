@@ -1,6 +1,5 @@
 import re
 from langchain_core.messages import HumanMessage, SystemMessage
-from langchain_openai import ChatOpenAI
 from services import Service, get_selected_service
 
 # TODO testing this with only one consumer: (ctrl-b via single.py)
@@ -14,15 +13,16 @@ def generate_non_streaming(passed_context: str, system_message: str, max_tokens:
     ]
 
     service = get_selected_service()
-    model = ChatOpenAI(
-        model=service.model,
-        api_key=service.api_key,
-        base_url=service.base_url,
-    )
-
     if service.name == "anthropic":
         from langchain_anthropic import ChatAnthropic
         model = ChatAnthropic(model_name=service.model, api_key=service.api_key, timeout=None, stop=None)
+    else:
+        from langchain_openai import ChatOpenAI
+        model = ChatOpenAI(
+            model=service.model,
+            api_key=service.api_key,
+            base_url=service.base_url,
+        )
 
     # TODO add temperature (optional) to Service? (perhaps rename to ServiceModel or split out generation args somehow)
     # PRN timeout?

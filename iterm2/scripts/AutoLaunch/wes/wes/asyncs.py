@@ -1,18 +1,22 @@
 import re
 from services import get_selected_service
 from logs import log
-from langchain_openai import ChatOpenAI
 
 async def ask_openai_async_type_response(session, messages):
 
-    use = get_selected_service()
-    log(f"using: {use}")
-    api_key = use.api_key or ""  # must set empty at least
-    model = ChatOpenAI(model=use.model, api_key=api_key, base_url=use.base_url)
+    service = get_selected_service()
+    log(f"using: {service}")
 
-    if use.name == "anthropic":
+    if service.name == "anthropic":
         from langchain_anthropic import ChatAnthropic
-        model = ChatAnthropic(model_name=use.model, api_key=use.api_key, timeout=None, stop=None)
+        model = ChatAnthropic(model_name=service.model, api_key=service.api_key, timeout=None, stop=None)
+    else:
+        from langchain_openai import ChatOpenAI
+        model = ChatOpenAI(
+            model=service.model,
+            api_key=service.api_key,
+            base_url=service.base_url,
+        )
 
     # max_tokens=use.max_tokens or 200,
     # TODO temperature? and other model params on Service? (maybe rename it to be ServiceModel combo?)
