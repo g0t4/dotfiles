@@ -18,7 +18,7 @@ def get_use() -> Service:
     fish_vars_path = os.path.expanduser("~/.config/fish/fish_variables")
     if not os.path.exists(fish_vars_path):
         log("cannot read ask_service from fish universal variables file")
-        use = use_openai(None)
+        use = use_build21(None)
     else:
         # read fish universal variables:
         # <2ms to read file
