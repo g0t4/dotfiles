@@ -112,7 +112,7 @@ function ask_openai
     # FYI not appending '# thinking...' b/c it doesn't show AND doing so is messing up the prompt if a space typed before this func is invoked
 
     set -l _python3 "$WES_DOTFILES/.venv/bin/python3"
-    set -l _single_py "$WES_DOTFILES/zsh/universals/3-last/ask-openai/single.py"
+    set -l _single_py "$WES_DOTFILES/zsh/universals/3-last/ask-openai/single.py" # TODO go back to using single.py w/ langchain and ditch rust here at least (if not everywhere)
     set -l _single_rs "$WES_DOTFILES/zsh/universals/3-last/ask-openai/rusts/target/debug/rusts"
 
     if string match --regex -q "git commit -m" $user_input
@@ -146,69 +146,6 @@ end
 
 # how does fish handle multiple registrations? does last one win? is it an issue that \cb is preset bound to backward-char?
 bind_both_modes_default_and_insert ctrl-b ask_openai
-
-
-
-function ask_openai_explain
-    # *** UNDO to get command back? OR, explain in comment? that way can keep command visible and still undo cmd+z
-    set -l user_input (commandline -b)
-
-    # FYI not appending '# thinking...' b/c it doesn't show AND doing so is messing up the prompt if a space typed before this func is invoked
-
-    set -l _python3 "$WES_DOTFILES/.venv/bin/python3"
-    set -l _explain_py "$WES_DOTFILES/zsh/universals/3-last/ask-openai/explain.py"
-
-    set -l response ( \
-        echo -e "env: fish on $(uname)\nquestion: $user_input" | \
-        $_python3 $_explain_py 2>&1 \
-    )
-    set -l exit_code $status
-    if test $exit_code -eq 2
-        commandline --replace "[CONTEXT]: $response"
-        # FYI other causes rc=2 print as context (i.e. wrong path to python script, NBD as error shows anyways)
-    else if test $exit_code -ne 0
-        commandline --replace "[FAIL]: $response"
-    else
-        commandline --replace $response
-    end
-    # FYI ctrl+z can undo replacment
-
-    # `fish_commandline_append` doesn't use repaint, so I assume I don't need to
-end
-
-bind_both_modes_default_and_insert f2 ask_openai_explain
-
-
-function ask_openai_link
-
-    set -l user_input (commandline -b)
-
-    # FYI not appending '# thinking...' b/c it doesn't show AND doing so is messing up the prompt if a space typed before this func is invoked
-
-    set -l _python3 "$WES_DOTFILES/.venv/bin/python3"
-    set -l _link_py "$WES_DOTFILES/zsh/universals/3-last/ask-openai/link.py"
-
-    set -l response ( \
-        echo -e "env: $(uname)\nquestion: $user_input" | \
-        $_python3 $_link_py 2>&1 \
-    )
-    set -l exit_code $status
-    if test $exit_code -eq 2
-        commandline --replace "[CONTEXT]: $response"
-        # FYI other causes rc=2 print as context (i.e. wrong path to python script, NBD as error shows anyways)
-    else if test $exit_code -ne 0
-        commandline --replace "[FAIL]: $response"
-    else
-        commandline --replace $response
-    end
-    # FYI ctrl+z can undo replacment
-
-    # `fish_commandline_append` doesn't use repaint, so I assume I don't need to
-end
-
-
-bind_both_modes_default_and_insert f3 ask_openai_link
-# urls? shotgun style! open up to 5 tabs!?
 
 ## NOTES
 #
