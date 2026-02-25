@@ -5,8 +5,7 @@ import itertools
 
 from common import get_current_session
 from logs import log
-from asyncs import ask_openai_async_type_response
-
+from chat_stream import ask_openai_async_type_response
 
 async def copy_screen_to_clipboard(connection: iterm2.Connection, history: bool = False):
     session = await get_current_session(connection)
@@ -90,7 +89,6 @@ async def copy_screen_to_clipboard(connection: iterm2.Connection, history: bool 
     # await session.async_send_text(f"{messages}") # quick double check in shell itself
     await ask_openai_async_type_response(session, messages)
 
-
 async def get_previous_output(session: iterm2.Session):
     li = await session.async_get_line_info()
 
@@ -104,7 +102,6 @@ async def get_previous_output(session: iterm2.Session):
     log("previous: " + str(previous))
 
     return "\n".join(previous)
-
 
 async def troubleshoot_lines(session: iterm2.Session):
     gsc = await session.async_get_screen_contents()

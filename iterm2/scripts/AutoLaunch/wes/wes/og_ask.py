@@ -3,8 +3,7 @@ import iterm2
 
 from common import get_current_session
 from logs import log
-from asyncs import ask_openai_async_type_response
-
+from chat_stream import ask_openai_async_type_response
 
 async def ask_openai(connection):
 
@@ -68,4 +67,3 @@ async def ask_openai(connection):
     except Exception as e:
         failure = f"Failure getting OpenAI response {e}"
         await session.async_send_text(failure)
-
