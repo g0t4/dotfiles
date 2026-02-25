@@ -63,7 +63,8 @@ abbr ved deactivate
 abbr vea 'source .venv*/bin/activate.fish' # override zsh version's /activate
 
 abbr pipir "uv add -r requirements.txt && rm requirements.txt # REMINDER TO MIGRATE to pyproject.toml + uv"
-
+#
+abbr uva uv_add
 function uv_add
     if not _repo_is_index_clean
         # need to stage package* hence check nothing else is staged
@@ -78,12 +79,11 @@ function uv_add
     uv add $argv
     git commit -m "uv add $argv" pyproject.toml uv.lock
 end
-
-abbr uva uv_add
 #
 # lockfile/dependency related:
 abbr uvau 'uv add --upgrade' # all upgrade on all packages (within existing constraint in pyproject.toml)
 abbr uvaup 'uv add --upgrade-package' # upgrade specific package
+
 # just edit the pyproject.toml to change the constraint (not sure if there is a command to update the constraint, nor should there be?)
 # lock docs: https://docs.astral.sh/uv/concepts/projects/sync/
 abbr uvl 'uv lock' # create lock file (also sync does this, as well as many other commands: tree, run, etc)
@@ -95,7 +95,7 @@ abbr uvs 'uv sync'
 #   https://docs.astral.sh/uv/concepts/projects/dependencies/#optional-dependencies
 abbr uvsa 'uv sync --all-extras' # sync al extras packages
 abbr uvse 'uv sync --extra' # <pkg> sync specific extras package
-#
+
 abbr uvrm uv_remove
 function uv_remove
     if not _repo_is_index_clean
@@ -109,6 +109,7 @@ function uv_remove
     uv remove $argv
     git commit -m "uv remove $argv" pyproject.toml uv.lock
 end
+
 abbr uvr 'uv run'
 abbr uvt 'uv tree'
 abbr uvtree 'uv tree --outdated'
