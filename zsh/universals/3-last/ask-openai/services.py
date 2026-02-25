@@ -278,7 +278,7 @@ def get_selected_service() -> Service:
         ask_service_raw = next((line for line in lines if "ask_service" in line), None)
         if ask_service_raw is None:
             log("ask_service not found in fish universal variables file, using openai")
-            use = use_openai(None)
+            use = use_build21(None)
         else:
             ask_service = ask_service_raw.encode('utf-8').decode('unicode_escape').strip()  # strip trailing \n
             ask_service_split = ask_service.split("\x1e")  # split on RS (record separator)
