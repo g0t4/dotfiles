@@ -14,7 +14,6 @@ async def ask_openai_async_type_response(session, messages):
     if use.name == "anthropic":
         from langchain_anthropic import ChatAnthropic
         model = ChatAnthropic(model_name=use.model, api_key=use.api_key, timeout=None, stop=None)
-        return
 
     # max_tokens=use.max_tokens or 200,
     # TODO temperature? and other model params on Service? (maybe rename it to be ServiceModel combo?)
