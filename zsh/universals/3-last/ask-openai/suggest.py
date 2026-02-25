@@ -15,7 +15,12 @@ def generate_non_streaming(passed_context: str, system_message: str, max_tokens:
     service = get_selected_service()
     if service.name == "anthropic":
         from langchain_anthropic import ChatAnthropic
-        model = ChatAnthropic(model_name=service.model, api_key=service.api_key, timeout=None, stop=None)
+        model = ChatAnthropic(
+            model_name=service.model,
+            api_key=service.api_key,
+            timeout=None,
+            stop=None,
+        )
     else:
         from langchain_openai import ChatOpenAI
         model = ChatOpenAI(
