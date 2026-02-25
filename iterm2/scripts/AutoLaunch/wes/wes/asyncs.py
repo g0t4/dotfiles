@@ -23,22 +23,15 @@ async def ask_openai_async_type_response(session, messages):
     # max_tokens=use.max_tokens or 200,
     # TODO temperature? and other model params on Service? (maybe rename it to be ServiceModel combo?)
     chunks = model.stream(messages)
-    for chunk in chunks:
-        # FYI no reasoning content for llama-server, s/b fine as I don't use that => if I want it, I can add in my ChatLlamaServer impl
-        await session.async_send_text(chunk.content)
-        # TODO can I check finish_reason to see if it ran out of tokens?
-        # if choice0.finish_reason == "length":
-        #     await session.async_send_text(f"ran out off tokens, increase max_tokens...")
-        #     break
-    return
-
-    # *** stream the reponse chunks
     first_chunk = True
-    async for chunk in response_stream:
+    for chunk in chunks:
         try:
-
+            # FYI no reasoning content for llama-server, s/b fine as I don't use that => if I want it, I can add in my ChatLlamaServer impl
             # strip new lines to avoid submitting commands prematurely, is there an alternate char I could use to split the lines still w/o submitting (would have to check what the shell supports, if anything is possible)... one downside to not being a part of the line editor.. unless there is a workaround? not that I care much b/c multi line commands are not often necessary...
-            sanitized = delta.content.replace("\n", " ")
+            sanitized = chunk.content.replace("\n", " ")  # PRN check if str before calling replace (i.e. can be list[str] or list[dict]... when is that the case and do I ever use it?)
+            if sanitized.strip() == "":
+                continue
+
             if first_chunk:
                 log(f"first_chunk: {sanitized}")
                 sanitized = re.sub(r'```', '', sanitized).lstrip()
@@ -49,10 +42,10 @@ async def ask_openai_async_type_response(session, messages):
             else:
                 await session.async_send_text(sanitized)
 
-            # if is_last_chunk:
-            #    strip trailing "```" => how often does this happen though?
-            # TODO is there a way to detect last chunk? => actually IIRC yes... there is a stop reason on each chunk, IIRC
-            # after last chunk, can I remove ending ``` and spaces? it might span multiple last chunks btw so wouldn't just be able to keep track of last chunk, would need entire response and then detect if ends with ``` and spaces and then delete those chars?
+            # TODO can I check finish_reason to see if it ran out of tokens?
+            # if choice0.finish_reason == "length":
+            #     await session.async_send_text(f"ran out off tokens, increase max_tokens...")
+            #     break
 
         except Exception as e:
             log(f"Error processing chunk: {e}\n chunk: {chunk}")
