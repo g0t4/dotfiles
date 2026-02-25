@@ -1,30 +1,38 @@
 import re
-from client import get_ask_client
+from client import get_ask_client, get_use
 from logs import log
+from langchain_openai import ChatOpenAI
 
 async def ask_openai_async_type_response(session, messages):
     use, client = get_ask_client()
     log(f"using {use.log_safe_string()}")
-    # TODO use langchain
+
+    # * langchain instead:
+    # cut out get_ask_client above when done w/ old IMPL, just need "use" here and don't wanna make openai client just to get use:
+    use = get_use()
+    log(f"got use: {use}")
+    api_key = use.api_key or ""  # must set empty at least
+    model = ChatOpenAI(model=use.model, api_key=api_key, base_url=use.base_url)
+    # FYI I had use.chat_completions_path too but shouldn't need it beyond MAYBE vllm (anthropic will be handled above w/ diff Chat client)
 
     if use.name == "anthropic":
-        # TODO langchain-anthropic (after langchain-openai)
-        log("use langchain-anthropic OR port get_anthropic_suggestion")
+        from langchain_anthropic import ChatAnthropic
+        model = ChatAnthropic(model_name=use.model, api_key=use.api_key, timeout=None, stop=None)
         return
 
-    # *** request completion
-    try:
-        response_stream = await client.chat.completions.create(
-            model=use.model,
-            messages=messages,
-            max_tokens=use.max_tokens or 200,
-            # TODO temperature? and other model params on Service? (maybe rename it to be ServiceModel combo?)
-            stream=True)
-    except Exception as e:
-        # TODO test timeouts?
-        log(f"Error contacting API: {e}")
-        await session.async_send_text(f"Error contacting API endpoint: {e}")
-        return
+    chunks = model.stream(messages)
+    for chunk in chunks:
+        await session.async_send_text(chunk.content)
+
+    return
+
+    # # *** request completion
+    response_stream = await client.chat.completions.create(
+        model=use.model,
+        messages=messages,
+        max_tokens=use.max_tokens or 200,
+        # TODO temperature? and other model params on Service? (maybe rename it to be ServiceModel combo?)
+        stream=True)
 
     # *** stream the reponse chunks
     first_chunk = True
