@@ -1,9 +1,26 @@
-Ok so today I fucked up the iterm2env that I have symlinked here
+## 2026-02-21 scripted the restore,
+
+```fish
+# !!! USE THIS SCRIPT NOW:
+fix-iterm2venv.fish
+# !!! AND USE IT FOR INSTALLING NEW PACKAGES
+```
 
 
-TODO it appears iTerm2 uses pyenv to manage venvs... can I just use that instead of its god aweful UI to do some / all of the following?!
 
-## recreate
+
+
+## 2026-02-21 pyenv failure attempt but should work too
+```python
+cd ~/repos/github/g0t4/dotfiles/iterm2/scripts/AutoLaunch/wes/iterm2env # this should work too
+ls versions # shows already installed
+./pyenv/bin/pyenv install 3.10.3
+# crap this installed here:
+# ++ echo 'Installed Python-3.10.3 to /Users/wesdemos/.pyenv/versions/3.10.3'
+# PYENV_ROOT # I tried setting this and it didn't install the same 3.10.3 that worked in ~/.pyenv :(
+```
+
+## OLDER NOTES: (prior to 2026-02-21 above), recreate w/ iterm2 (hacky):
 
 - I wiped out the Scripts symlink entirely and made a new Scripts physical dir in
     '/Users/wesdemos/Library/Application Support/iTerm2'
