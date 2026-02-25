@@ -1,7 +1,7 @@
 import re
 from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_openai import ChatOpenAI
-from services import Service, get_selected_service, log
+from services import Service, get_selected_service
 
 # TODO testing this with only one consumer: (ctrl-b via single.py)
 # TODO test anthropic

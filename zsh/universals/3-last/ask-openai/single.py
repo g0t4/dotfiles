@@ -1,5 +1,4 @@
 import sys
-from services import get_selected_service
 from suggest import generate_non_streaming
 
 system_message = "You are a command line expert. Respond with a single, valid, complete command line. I intend to execute it. No explanation. No markdown. No markdown with backticks ` nor ```"
