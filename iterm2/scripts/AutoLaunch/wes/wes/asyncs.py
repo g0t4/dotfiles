@@ -20,19 +20,13 @@ async def ask_openai_async_type_response(session, messages):
         model = ChatAnthropic(model_name=use.model, api_key=use.api_key, timeout=None, stop=None)
         return
 
+    # max_tokens=use.max_tokens or 200,
+    # TODO temperature? and other model params on Service? (maybe rename it to be ServiceModel combo?)
     chunks = model.stream(messages)
     for chunk in chunks:
         await session.async_send_text(chunk.content)
 
     return
-
-    # # *** request completion
-    response_stream = await client.chat.completions.create(
-        model=use.model,
-        messages=messages,
-        max_tokens=use.max_tokens or 200,
-        # TODO temperature? and other model params on Service? (maybe rename it to be ServiceModel combo?)
-        stream=True)
 
     # *** stream the reponse chunks
     first_chunk = True
