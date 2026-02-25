@@ -79,7 +79,7 @@ function uv_add
     git commit -m "uv add $argv" pyproject.toml uv.lock
 end
 
-abbr uva 'uv_add'
+abbr uva uv_add
 #
 # lockfile/dependency related:
 abbr uvau 'uv add --upgrade' # all upgrade on all packages (within existing constraint in pyproject.toml)
@@ -96,7 +96,19 @@ abbr uvs 'uv sync'
 abbr uvsa 'uv sync --all-extras' # sync al extras packages
 abbr uvse 'uv sync --extra' # <pkg> sync specific extras package
 #
-abbr uvrm 'uv remove'
+abbr uvrm uv_remove
+function uv_remove
+    if not _repo_is_index_clean
+        log_ --red "cannot uv remove w/ outstanding staged (index) changes, aborting..."
+        return 1
+    end
+    if not test -f pyproject.toml
+        log_ --red "pyproject.toml not found in current directory, aborting..."
+        return 1
+    end
+    uv remove $argv
+    git commit -m "uv remove $argv" pyproject.toml uv.lock
+end
 abbr uvr 'uv run'
 abbr uvt 'uv tree'
 abbr uvtree 'uv tree --outdated'
