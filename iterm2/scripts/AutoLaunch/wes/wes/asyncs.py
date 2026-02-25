@@ -9,7 +9,6 @@ async def ask_openai_async_type_response(session, messages):
     log(f"using: {use}")
     api_key = use.api_key or ""  # must set empty at least
     model = ChatOpenAI(model=use.model, api_key=api_key, base_url=use.base_url)
-    # FYI I had use.chat_completions_path too but shouldn't need it beyond MAYBE vllm (anthropic will be handled above w/ diff Chat client)
 
     if use.name == "anthropic":
         from langchain_anthropic import ChatAnthropic

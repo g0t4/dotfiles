@@ -13,22 +13,14 @@ class Service(NamedTuple):
     model: str
     api_key: str
     name: str
-    chat_completions_path: str | None # TODO retire with langchain re-impl?
     max_tokens: int | None = None
 
-    def chat_url(self):
-        if self.chat_completions_path is None:
-            return f"{self.base_url}/chat/completions"
-        else:
-            return f"{self.base_url}/{self.chat_completions_path}"
-
     def __repr__(self):
-        # i.e. printing (logging), DO NOT INCLUDE api_key
-        return f"Service({self.name} model={self.model} chat_url={self.chat_url()})"
-
-    def log_safe_string(self):
-        # make it abundantly clear this is safe to log, don't rely on __repr__ for logging when there's an api key that could slip out
-        return f"Service({self.name} model={self.model} chat_url={self.chat_url()})"
+        # !!! DO NOT INCLUDE api_key
+        attrs = "{self.name} model={self.model} chat_url={self.base_url}"
+        if self.max_tokens:
+            attrs += f" max_tokens={self.max_tokens}"
+        return f"Service({attrs})"
 
 def use_vllm(model: Optional[str] = None):
     return Service(
@@ -36,7 +28,6 @@ def use_vllm(model: Optional[str] = None):
         api_key="none",
         base_url='http://ollama:8000/v1',
         model=model if model else "Qwen/Qwen2.5-Coder-7B-Instruct",
-        chat_completions_path='chat/completions',
         # vllm https://github.com/vllm-project/vllm/blob/main/docs/api.md
         # https://github.com/vllm-project/vllm/blob/main/docs/api.md#chat-completions
     )
@@ -47,7 +38,6 @@ def use_build21(model: Optional[str] = None):
         api_key="none",
         base_url='http://build21:8013/v1',
         model=model if model else 'llama-server-fixed',
-        chat_completions_path=None,
         max_tokens=2048,
     )
 
@@ -57,7 +47,6 @@ def use_inception(model: Optional[str] = None):
         api_key=get_api_key('inception', 'ask'),
         base_url='https://api.inceptionlabs.ai/v1',
         model=model if model else 'mercury-coder-small',
-        chat_completions_path=None,
         # https://platform.inceptionlabs.ai/dashboard/
     )
 
@@ -68,7 +57,6 @@ def use_groq(model: Optional[str] = None):
         api_key=get_api_key('groq', 'ask'),
         base_url='https://api.groq.com/openai/v1',
         model=model if model else 'meta-llama/llama-4-scout-17b-16e-instruct',
-        chat_completions_path=None,
         # groq https://console.groq.com/docs/models
     )
 
@@ -95,7 +83,6 @@ def use_openai(model: Optional[str] = None):
         api_key=get_api_key('openai', 'ask'),
         base_url="https://api.openai.com/v1",
         model=model if model else 'gpt-4o',
-        chat_completions_path=None,
     )
 
 def use_anthropic(model: Optional[str] = None):
@@ -104,7 +91,6 @@ def use_anthropic(model: Optional[str] = None):
         api_key=get_api_key('anthropic', 'ask'),
         base_url="https://api.anthropic.com/v1",
         model=model if model else 'claude-3-5-sonnet-latest',
-        chat_completions_path="messages",
     )
     # https://docs.anthropic.com/en/docs/about-claude/models
 
@@ -116,7 +102,6 @@ def use_lmstudio(model: Optional[str] = None):
         api_key="whatever",
         base_url="http://localhost:1234/v1",
         model=model if model else '',
-        chat_completions_path=None,
     )
 
 def use_ollama(model: Optional[str] = None):
@@ -128,7 +113,6 @@ def use_ollama(model: Optional[str] = None):
         base_url="http://ollama:11434/v1",
         # TODO can blank be used and let it pick?
         model=model if model else 'llama3.2:3b',
-        chat_completions_path=None)
 
 def use_deepseek(model: Optional[str] = None):
     # curl -L -X GET 'https://api.deepseek.com/models' \-H 'Accept: application/json' \-H 'Authorization: Bearer <TOKEN>' | jq
@@ -141,7 +125,6 @@ def use_deepseek(model: Optional[str] = None):
         api_key=get_api_key('deepseek', 'ask'),
         base_url="https://api.deepseek.com",
         model=model if model else 'deepseek-chat',
-        chat_completions_path=None,
     )
 
 def use_xai(model: Optional[str] = None):
@@ -150,7 +133,6 @@ def use_xai(model: Optional[str] = None):
         api_key=get_api_key('xai', 'ask'),
         base_url="https://api.x.ai/v1",
         model=model if model else 'grok-3-beta',
-        chat_completions_path=None,
     )
 
 def get_api_key(service_name, account_name):
