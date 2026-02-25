@@ -84,12 +84,24 @@ function get_openai_models
     else if test "$argv[1]" = xai
         set base_url https://api.x.ai/v1/models
         set api_key (security find-generic-password -s xai -a ask -w)
+    else if test "$argv[1]" = anthropic
+        set base_url https://api.anthropic.com/v1/models
+        set api_key (security find-generic-password -s anthropic -a ask -w)
+        curl \
+            # b/c anthropic has to have custom header names:
+            --header "x-api-key: $api_key" \
+            --header "anthropic-version: 2023-06-01" \
+            --fail-with-body \
+            -sSL $base_url \
+            | jq ".data[].id" -r
+        # FYI response JSON is same format for model IDs (at least)
+        return
     else
         set base_url https://api.openai.com/v1/models
         set api_key (security find-generic-password -s openai -a ask -w)
     end
 
-    curl -H "Authorization: Bearer $api_key" \
+    curl --header "Authorization: Bearer $api_key" \
         --fail-with-body \
         -sSL $base_url \
         | jq ".data[].id" -r
@@ -104,6 +116,7 @@ complete --command ask_use_inception --no-files -a '(get_openai_models inception
 complete --command ask_use_deepseek --no-files -a '(get_openai_models deepseek)'
 complete --command ask_use_vllm --no-files -a '(get_openai_models vllm)'
 complete --command ask_use_xai --no-files -a '(get_openai_models xai)'
+complete --command ask_use_anthropic --no-files -a '(get_openai_models anthropic)'
 
 function ask_openai
 

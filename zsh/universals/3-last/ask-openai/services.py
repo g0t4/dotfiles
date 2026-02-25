@@ -90,7 +90,7 @@ def use_anthropic(model: Optional[str] = None):
         name='anthropic',
         api_key=get_api_key('anthropic', 'ask'),
         base_url="https://api.anthropic.com/v1",
-        model=model if model else 'claude-3-5-sonnet-latest',
+        model=model if model else 'claude-sonnet-4-6',
     )
     # https://docs.anthropic.com/en/docs/about-claude/models
 
