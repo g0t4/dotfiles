@@ -197,49 +197,8 @@ def get_api_key(service_name, account_name):
     return api_key
 
 def args_to_use() -> Service:
-
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--openai', action='store_true', default=False)
-    parser.add_argument('--deepseek', action='store_true', default=False)
-    parser.add_argument('--lmstudio', action='store_true', default=False)
-    parser.add_argument('--groq', action='store_true', default=False)
-    parser.add_argument('--build21', action='store_true', default=False)
-    parser.add_argument('--inception', action='store_true', default=False)
-    parser.add_argument('--ollama', action='store_true', default=False)
-    parser.add_argument('--anthropic', action='store_true', default=False)
-    parser.add_argument('--gh-copilot', action='store_true', default=False)
-    parser.add_argument('--xai', action='store_true', default=False)
-    parser.add_argument('--vllm', action='store_true', default=False)
-
-    # optional model name (for all services):
-    parser.add_argument("model", type=str, const=None, nargs='?')
-    #
-    args = parser.parse_args()
-
-    if args.groq:
-        return use_groq(args.model)
-    if args.lmstudio:
-        return use_lmstudio(args.model)
-    if args.ollama:
-        return use_ollama(args.model)
-    if args.deepseek:
-        return use_deepseek(args.model)
-    if args.vllm:
-        return use_vllm(args.model)
-    if args.anthropic:
-        return use_anthropic(args.model)
-    if args.gh_copilot:
-        return use_gh_copilot(args.model)
-    if args.build21:
-        return use_build21(args.model)
-    if args.inception:
-        return use_inception(args.model)
-    if args.xai:
-        return use_xai(args.model)
-    if args.openai:
-        return use_openai(args.model)
-
-    raise Exception("invalid service: " + str(args))
+    args = sys.argv[1:]
+    return get_selected_service_for_args(*args)
 
 DEBUG = True
 
@@ -273,6 +232,9 @@ def get_fish_universal_variable_ask_service() -> tuple[str | None, str | None]:
 
 def get_selected_service() -> Service:
     ask_service, model = get_fish_universal_variable_ask_service()
+    return get_selected_service_for_args(ask_service, model)
+
+def get_selected_service_for_args(ask_service, model) -> Service:
     if ask_service is None:
         return use_build21(None)
     # PRN this parsing logic can be shared with single.py, after I re-hydrate the ask_service variable
