@@ -2,7 +2,7 @@ import re
 from services import get_selected_service
 from logs import log
 
-async def ask_openai_async_type_response(session, messages):
+async def get_model():
 
     service = get_selected_service()
     log(f"using: {service}")
@@ -24,6 +24,9 @@ async def ask_openai_async_type_response(session, messages):
             api_key=service.api_key,
             base_url=service.base_url,
         )
+
+async def ask_openai_async_type_response(session, messages):
+    model = get_model()
 
     # max_tokens=use.max_tokens or 200,
     # TODO temperature? and other model params on Service? (maybe rename it to be ServiceModel combo?)
