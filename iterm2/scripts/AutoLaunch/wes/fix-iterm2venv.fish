@@ -6,20 +6,23 @@ set iterm2_app_support "$HOME/Library/Application Support/iTerm2"
 
 set master "$HOME/Library/Application Support/iTerm2/iterm2env-3.10.4"
 if test -d $master
-    rich --print "[bold blue]## FOUND master: $master"
+    echo "## FOUND master: $master"
 else
-    rich --print "[bold red]## Missing master iterm2env copy, is there a newer version in $iterm2_app_support:"
+    echo "## Missing master iterm2env copy, is there a newer version in $iterm2_app_support:"
     fd iterm2env $iterm2_app_support --max-depth 1 | string_indent
     return 1
 end
 
 set target "$HOME/repos/github/g0t4/dotfiles/iterm2/scripts/AutoLaunch/wes/iterm2env"
 if test -d $target
-    rich --print "[bold blue]## TARGET EXISTS, removing $target"
-    trash $target
+    echo "## TARGET EXISTS, removing $target"
+    if not trash $target
+        echo "FAILED TO trash target, manually remove it first"
+        return 1
+    end
 end
 
-rich --print "[bold blue]## COPYING iterm2env..."
+echo "## COPYING iterm2env..."
 # TODO consolidate rule of thumb for / on end
 cp -r "$HOME/Library/Application Support/iTerm2/iterm2env-3.10.4" \
     "$HOME/repos/github/g0t4/dotfiles/iterm2/scripts/AutoLaunch/wes/iterm2env"
@@ -27,10 +30,10 @@ cp -r "$HOME/Library/Application Support/iTerm2/iterm2env-3.10.4" \
 
 # * packages
 cd "$HOME/repos/github/g0t4/dotfiles/iterm2/scripts/AutoLaunch/wes"
-rich --print "[bold blue]## pip list..."
+echo "## pip list..."
 iterm2env/versions/3.10.4/bin/python3 -m pip list
 
-rich --print "[bold blue]## pip installs..."
+echo "## pip installs..."
 iterm2env/versions/3.10.4/bin/python3 -m pip install rich
 iterm2env/versions/3.10.4/bin/python3 -m pip install openai
 iterm2env/versions/3.10.4/bin/python3 -m pip install langchain-openai
