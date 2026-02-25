@@ -13,7 +13,7 @@ class Service(NamedTuple):
     model: str
     api_key: str
     name: str
-    chat_completions_path: str | None
+    chat_completions_path: str | None # TODO retire with langchain re-impl?
     max_tokens: int | None = None
 
     def chat_url(self):
