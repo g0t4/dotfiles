@@ -37,7 +37,7 @@ def use_build21(model: Optional[str] = None):
         name='build21',
         api_key="none",
         base_url='http://build21:8013/v1',
-        model=model if model else 'llama-server-fixed',
+        model=model if model else 'not_applicable',
         max_tokens=2048,
     )
 
@@ -46,7 +46,7 @@ def use_inception(model: Optional[str] = None):
         name='inception',
         api_key=get_api_key('inception', 'ask'),
         base_url='https://api.inceptionlabs.ai/v1',
-        model=model if model else 'mercury-coder-small',
+        model=model if model else 'mercury-coder',
         # https://platform.inceptionlabs.ai/dashboard/
     )
 
@@ -56,7 +56,7 @@ def use_groq(model: Optional[str] = None):
         name='groq',
         api_key=get_api_key('groq', 'ask'),
         base_url='https://api.groq.com/openai/v1',
-        model=model if model else 'meta-llama/llama-4-scout-17b-16e-instruct',
+        model=model if model else 'openai/gpt-oss-120b',
         # groq https://console.groq.com/docs/models
     )
 
@@ -82,7 +82,7 @@ def use_openai(model: Optional[str] = None):
         name='openai',
         api_key=get_api_key('openai', 'ask'),
         base_url="https://api.openai.com/v1",
-        model=model if model else 'gpt-4o',
+        model=model if model else 'gpt-5',
     )
 
 def use_anthropic(model: Optional[str] = None):
@@ -133,7 +133,7 @@ def use_xai(model: Optional[str] = None):
         name='xai',
         api_key=get_api_key('xai', 'ask'),
         base_url="https://api.x.ai/v1",
-        model=model if model else 'grok-3-beta',
+        model=model if model else 'grok-4-1-fast-non-reasoning',
     )
 
 def get_api_key(service_name, account_name):
