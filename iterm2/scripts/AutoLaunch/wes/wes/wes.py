@@ -1,13 +1,14 @@
 import iterm2
 import asyncio
+import traceback
 
-from scrape_ask import *
-from f9command import *
-from common import *
-from og_ask import *
-from split import *
-from semantic_daemon import *
-from font_zooms import *
+from scrape_ask import copy_screen_to_clipboard
+from f9command import on_f9
+from logs import log
+from og_ask import ask_openai
+from split import close_other_tabs, new_tab_then_close_others, wes_split_pane, wes_new_tab, wes_new_window
+from semantic_daemon import semantic_daemon
+from font_zooms import bigger_font_wes_stops, smaller_font_wes_stops
 
 async def main(connection: iterm2.Connection):
 
