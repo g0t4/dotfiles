@@ -36,4 +36,4 @@ iterm2env/versions/3.10.4/bin/python3 -m pip list
 echo "## pip installs..."
 iterm2env/versions/3.10.4/bin/python3 -m pip install rich
 iterm2env/versions/3.10.4/bin/python3 -m pip install openai
-iterm2env/versions/3.10.4/bin/python3 -m pip install langchain-openai
+iterm2env/versions/3.10.4/bin/python3 -m pip install langchain langchain-openai langchain-anthropic

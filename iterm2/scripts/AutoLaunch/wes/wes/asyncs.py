@@ -5,15 +5,11 @@ from logs import log
 async def ask_openai_async_type_response(session, messages):
     use, client = get_ask_client()
     log(f"using {use.log_safe_string()}")
+    # TODO use langchain
 
     if use.name == "anthropic":
-        # PRN impl streaming anthropic here based on httpx only
-        # TODO impl it elsewhere and plug it in here, testing by restarting wes.py is a PITA
-        # TODO I MOVED anthropic impl when I redid single.py... needs redone here too
-        # from single import get_anthropic_suggestion
-        # command = get_anthropic_suggestion(current_command, use)
-        # await session.async_send_text(command)
-        log("anthropic impl not redone since moving it in single.py")
+        # TODO langchain-anthropic (after langchain-openai)
+        log("use langchain-anthropic OR port get_anthropic_suggestion")
         return
 
     # *** request completion
