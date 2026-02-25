@@ -1,11 +1,11 @@
 import re
-from services import get_use
+from services import get_selected_service
 from logs import log
 from langchain_openai import ChatOpenAI
 
 async def ask_openai_async_type_response(session, messages):
 
-    use = get_use()
+    use = get_selected_service()
     log(f"using: {use}")
     api_key = use.api_key or ""  # must set empty at least
     model = ChatOpenAI(model=use.model, api_key=api_key, base_url=use.base_url)

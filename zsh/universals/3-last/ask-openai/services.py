@@ -261,7 +261,7 @@ def log(msg):
 ## purpose of this is just to parse a shared config file to specify which service to use for completion tasks
 ## I could easily move this logic elsewhere but works fine in fish variable for now
 
-def get_use() -> Service:
+def get_selected_service() -> Service:
 
     # *** lookup backend => parse fish universal vars file (for ask_service)
     #   FYI vars file is unicode_escape'd (i.e. '\x2d\x2d' => '--')
