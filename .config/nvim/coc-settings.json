@@ -70,6 +70,7 @@
     "python.formatting.provider": "yapf",
     "python.formatting.yapfArgs": [
         // join_multiple_lines: False apparently doesn't apply to dictionary values... FUCK really... in that cas though PUT A TRAILING COMMA ON LAST ITEM IN DICT/LIST and it wont join then
+        // TODO evals around gptoss patch issues w/ 1 line around top level definitions vs 2... see if indeed it helps and if so then fine, I can use 2 which is the default
         "--style", "{column_limit: 400, allow_split_before_dict_value: False, blank_lines_around_top_level_definition: 1, join_multiple_lines: False}"
         // "{based_on_style: pep8, indent_width: 4}"
     ],
