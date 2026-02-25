@@ -217,31 +217,29 @@ def args_to_use() -> Service:
     args = parser.parse_args()
 
     if args.groq:
-        use = use_groq(args.model)
-    elif args.lmstudio:
-        use = use_lmstudio(args.model)
-    elif args.ollama:
-        use = use_ollama(args.model)
-    elif args.deepseek:
-        use = use_deepseek(args.model)
-    elif args.vllm:
-        use = use_vllm(args.model)
-    elif args.anthropic:
-        use = use_anthropic(args.model)
-    elif args.gh_copilot:
-        use = use_gh_copilot(args.model)
-    elif args.build21:
-        use = use_build21(args.model)
-    elif args.inception:
-        use = use_inception(args.model)
-    elif args.xai:
-        use = use_xai(args.model)
-    elif args.openai:
-        use = use_openai(args.model)
-    else:
-        raise Exception("invalid service: " + str(args))
+        return use_groq(args.model)
+    if args.lmstudio:
+        return use_lmstudio(args.model)
+    if args.ollama:
+        return use_ollama(args.model)
+    if args.deepseek:
+        return use_deepseek(args.model)
+    if args.vllm:
+        return use_vllm(args.model)
+    if args.anthropic:
+        return use_anthropic(args.model)
+    if args.gh_copilot:
+        return use_gh_copilot(args.model)
+    if args.build21:
+        return use_build21(args.model)
+    if args.inception:
+        return use_inception(args.model)
+    if args.xai:
+        return use_xai(args.model)
+    if args.openai:
+        return use_openai(args.model)
 
-    return use
+    raise Exception("invalid service: " + str(args))
 
 DEBUG = True
 
