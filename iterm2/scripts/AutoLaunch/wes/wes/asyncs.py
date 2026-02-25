@@ -24,62 +24,18 @@ async def ask_openai_async_type_response(session, messages):
     # TODO temperature? and other model params on Service? (maybe rename it to be ServiceModel combo?)
     chunks = model.stream(messages)
     for chunk in chunks:
+        # FYI no reasoning content for llama-server, s/b fine as I don't use that => if I want it, I can add in my ChatLlamaServer impl
         await session.async_send_text(chunk.content)
-
+        # TODO can I check finish_reason to see if it ran out of tokens?
+        # if choice0.finish_reason == "length":
+        #     await session.async_send_text(f"ran out off tokens, increase max_tokens...")
+        #     break
     return
 
     # *** stream the reponse chunks
     first_chunk = True
     async for chunk in response_stream:
         try:
-            if not chunk.choices \
-                or len(chunk.choices) == 0 \
-                or not chunk.choices[0].delta:
-
-                # * reasoning example (llama-server)
-                # choices=[(
-                #     delta=(
-                #          content=None,
-                #          function_call=None,
-                #          refusal=None,
-                #          role=None,
-                #          tool_calls=None,
-                #          reasoning_content="'"
-                #     ),
-                #     finish_reason=None,
-                # )],
-                log(f"no chunk choices/delta: {chunk}")
-                continue
-
-            choice0 = chunk.choices[0]
-            if hasattr(choice0, "finish_reason") and choice0.finish_reason:
-                # * llama server stop on max_tokens (length)
-                # (choices=[(
-                #    delta= (content=None, function_call=None, refusal=None, role=None, tool_calls=None),
-                #    finish_reason='length')],
-                #    timings={'cache_n': 79, 'prompt_n': 65, 'prompt_ms': 54.432, 'prompt_per_token_ms': 0.8374153846153847,
-                #        'prompt_per_second': 1194.1504997060551, 'predicted_n': 200, 'predicted_ms': 766.16,
-                #        'predicted_per_token_ms': 3.8308, 'predicted_per_second': 261.0420799832933})
-                log(f"finish_reason: {choice0.finish_reason}")
-                if choice0.finish_reason == "stop":
-                    break
-                if choice0.finish_reason == "length":
-                    await session.async_send_text(f"ran out off tokens, increase max_tokens...")
-                    break
-                else:
-                    log(f"Unhandled finish_reason: {choice0.finish_reason}, stopping")
-                    break
-
-            delta = choice0.delta
-            if hasattr(delta, "reasoning_content"):
-                log(f"[SKIP] reasoning_content: {delta.reasoning_content}")
-                continue
-            # TODO delta.reasoning field too? ollama?
-
-            if delta.content is None:
-                # FYI llama-server, last SSE doesn't have any choices, and that's normal
-                log(f"[SKIP] no reasoning, no content: {chunk}")
-                continue
 
             # strip new lines to avoid submitting commands prematurely, is there an alternate char I could use to split the lines still w/o submitting (would have to check what the shell supports, if anything is possible)... one downside to not being a part of the line editor.. unless there is a workaround? not that I care much b/c multi line commands are not often necessary...
             sanitized = delta.content.replace("\n", " ")
