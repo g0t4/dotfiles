@@ -196,10 +196,6 @@ def get_api_key(service_name, account_name):
         sys.exit(1)
     return api_key
 
-def args_to_use() -> Service:
-    args = sys.argv[1:]
-    return get_selected_service_for_args(*args)
-
 DEBUG = True
 
 def log(msg):
@@ -261,6 +257,3 @@ def get_selected_service_for_args(ask_service, model) -> Service:
     if "--openai" in ask_service:
         return use_openai(model)
     raise Exception("invalid ask_service: " + str(ask_service))
-
-log(f'{get_selected_service()=}')
-

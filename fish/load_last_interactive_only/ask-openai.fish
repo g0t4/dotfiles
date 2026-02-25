@@ -112,7 +112,7 @@ function ask_openai
     # FYI not appending '# thinking...' b/c it doesn't show AND doing so is messing up the prompt if a space typed before this func is invoked
 
     set -l _python3 "$WES_DOTFILES/.venv/bin/python3"
-    set -l _single_py "$WES_DOTFILES/zsh/universals/3-last/ask-openai/single.py" # TODO go back to using single.py w/ langchain and ditch rust here at least (if not everywhere)
+    set -l _single_py "$WES_DOTFILES/zsh/universals/3-last/ask-openai/single.py"
 
     set response ( \
         echo -e "env: fish on $(uname)\nquestion: $user_input" | \
