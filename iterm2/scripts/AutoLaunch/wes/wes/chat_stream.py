@@ -26,6 +26,7 @@ def get_model():
         )
 
 async def ask_openai_async_type_response(session, messages):
+    log(f"{messages=}")
     model = get_model()
 
     # max_tokens=use.max_tokens or 200,

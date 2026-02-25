@@ -56,9 +56,8 @@ async def ask_openai(connection):
         "content": "You are a command line expert. Respond with a single, valid commandline. I intend to execute it. No explanation. No markdown. DO NOT respond with leading ``` nor trailing ```"
     }, {
         "role": "user",
-        "content": user_content
+        "content": user_content \
     }]
-    log(f"messages: {user_content}")
 
     await task_clear  # ? why can't I put this after try/catch (smth happens with timing to not actually clear the prompt if I do that, but only on remote pi7.lan?)
 
