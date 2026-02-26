@@ -4,6 +4,8 @@ from services import get_selected_service, Service
 from logs import log
 from langchain_core.language_models import BaseChatModel
 
+TIMEOUT_SECONDS = 5
+
 def get_model() -> tuple[BaseChatModel, Service]:
     service = get_selected_service()
     log(f"using: {service}")
@@ -14,7 +16,7 @@ def get_model() -> tuple[BaseChatModel, Service]:
         model = ChatAnthropic(
             model_name=service.model,
             api_key=service.api_key,
-            timeout=None,
+            timeout=TIMEOUT_SECONDS,
             stop=None,
         )
         return model, service
@@ -25,6 +27,8 @@ def get_model() -> tuple[BaseChatModel, Service]:
         model=service.model,
         api_key=service.api_key,
         base_url=service.base_url,
+        timeout=TIMEOUT_SECONDS,
+        # max_retries=2
     )
     return model, service
 
