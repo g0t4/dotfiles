@@ -37,7 +37,7 @@ def use_build21(model: Optional[str] = None):
         name='build21',
         api_key="none",
         base_url='http://build21:8013/v1',
-        model=model if model else 'not_applicable',
+        model=model if model else 'FIXED_MODEL', # FYI would need to query to find the actual model
         max_tokens=2048,
     )
 
