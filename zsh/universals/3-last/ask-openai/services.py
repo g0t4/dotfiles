@@ -2,13 +2,15 @@ import argparse
 import os
 import platform
 import sys
+from dataclasses import dataclass
 from typing import Optional, NamedTuple
 
 # subprocess.run check values:
 IGNORE_FAILURE = False
 RAISE_CalledProcessError_ON_FAILURE = True
 
-class Service(NamedTuple):
+@dataclass
+class Service:
     base_url: str
     model: str
     api_key: str
@@ -37,7 +39,7 @@ def use_build21(model: Optional[str] = None):
         name='build21',
         api_key="none",
         base_url='http://build21:8013/v1',
-        model=model if model else 'FIXED_MODEL', # FYI would need to query to find the actual model
+        model=model if model else 'FIXED_MODEL',  # FYI would need to query to find the actual model
         max_tokens=2048,
     )
 
