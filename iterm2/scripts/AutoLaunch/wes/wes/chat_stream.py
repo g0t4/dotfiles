@@ -1,35 +1,36 @@
 import re
 from collections.abc import Awaitable, Callable
-from services import get_selected_service
+from services import get_selected_service, Service
 from logs import log
 from langchain_core.language_models import BaseChatModel
 
-def get_model() -> BaseChatModel:
-
+def get_model() -> tuple[BaseChatModel, Service]:
     service = get_selected_service()
     log(f"using: {service}")
 
     if service.name == "anthropic":
         # TODO is this one slow too? measure it
         from langchain_anthropic import ChatAnthropic
-        return ChatAnthropic(
+        model = ChatAnthropic(
             model_name=service.model,
             api_key=service.api_key,
             timeout=None,
             stop=None,
         )
+        return model, service
 
     # TODO why is this import so slow?
     from langchain_openai import ChatOpenAI
-    return ChatOpenAI(
+    model = ChatOpenAI(
         model=service.model,
         api_key=service.api_key,
         base_url=service.base_url,
     )
+    return model, service
 
 async def ask_openai_async_type_response(messages: list[dict], on_chunk: Callable[[str], Awaitable[None]]):
     log(f"{messages=}")
-    model = get_model()
+    model, service = get_model()
 
     # max_tokens=use.max_tokens or 200,
     # TODO temperature? and other model params on Service? (maybe rename it to be ServiceModel combo?)
