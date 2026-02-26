@@ -49,9 +49,8 @@ async def ask_openai_async_type_response(messages: list[dict], on_chunk: Callabl
                 log(f"sanitized: {sanitized}")
                 log(f"sanitized hex: {sanitized.encode('utf-8').hex()}")
                 first_chunk = sanitized == ""  # stay in "first_chunk" mode until first non-empty chunk
-                await on_chunk(sanitized)
-            else:
-                await on_chunk(sanitized)
+
+            await on_chunk(sanitized)
 
             # TODO can I check finish_reason to see if it ran out of tokens?
             # if choice0.finish_reason == "length":
