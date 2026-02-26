@@ -1,4 +1,5 @@
 import re
+from collections.abc import Awaitable, Callable
 from services import get_selected_service
 from logs import log
 from langchain_core.language_models import BaseChatModel
@@ -26,7 +27,7 @@ def get_model() -> BaseChatModel:
         base_url=service.base_url,
     )
 
-async def ask_openai_async_type_response(session, messages):
+async def ask_openai_async_type_response(messages: list[dict], on_chunk: Callable[[str], Awaitable[None]]):
     log(f"{messages=}")
     model = get_model()
 
@@ -48,16 +49,16 @@ async def ask_openai_async_type_response(session, messages):
                 log(f"sanitized: {sanitized}")
                 log(f"sanitized hex: {sanitized.encode('utf-8').hex()}")
                 first_chunk = sanitized == ""  # stay in "first_chunk" mode until first non-empty chunk
-                await session.async_send_text(sanitized)
+                await on_chunk(sanitized)
             else:
-                await session.async_send_text(sanitized)
+                await on_chunk(sanitized)
 
             # TODO can I check finish_reason to see if it ran out of tokens?
             # if choice0.finish_reason == "length":
-            #     await session.async_send_text(f"ran out off tokens, increase max_tokens...")
+            #     await on_chunk(f"ran out off tokens, increase max_tokens...")
             #     break
 
         except Exception as e:
             log(f"Error processing chunk: {e}\n chunk: {chunk}")
-            await session.async_send_text(f"Error processing chunk: {e}")
+            await on_chunk(f"Error processing chunk: {e}")
             return
