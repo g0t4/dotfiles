@@ -20,12 +20,11 @@ def get_model() -> BaseChatModel:
     else:
         # TODO why is this import so slow?
         from langchain_openai import ChatOpenAI
-        model = ChatOpenAI(
+        return ChatOpenAI(
             model=service.model,
             api_key=service.api_key,
             base_url=service.base_url,
         )
-    return model
 
 async def ask_openai_async_type_response(session, messages):
     log(f"{messages=}")
