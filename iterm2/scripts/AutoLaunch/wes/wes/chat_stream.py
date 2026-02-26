@@ -33,8 +33,10 @@ async def ask_openai_async_type_response(messages: list[dict], on_chunk: Callabl
     model, service = get_model()
 
     # TODO temperature? and other model params on Service? (maybe rename it to be ServiceModel combo?)
-    max_tokens = service.max_tokens or 200
-    chunks = model.stream(messages, max_tokens=max_tokens)
+    kwargs = {}
+    if service.max_tokens:
+        kwargs["max_tokens"] = service.max_tokens
+    chunks = model.stream(messages, **kwargs)
     first_chunk = True
     for chunk in chunks:
         try:
