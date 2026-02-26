@@ -1,8 +1,9 @@
 import re
 from services import get_selected_service
 from logs import log
+from langchain_core.language_models import BaseChatModel
 
-def get_model():
+def get_model() -> BaseChatModel:
 
     service = get_selected_service()
     log(f"using: {service}")
@@ -24,6 +25,7 @@ def get_model():
             api_key=service.api_key,
             base_url=service.base_url,
         )
+    return model
 
 async def ask_openai_async_type_response(session, messages):
     log(f"{messages=}")
