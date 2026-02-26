@@ -11,7 +11,7 @@ def get_model() -> BaseChatModel:
     if service.name == "anthropic":
         # TODO is this one slow too? measure it
         from langchain_anthropic import ChatAnthropic
-        model = ChatAnthropic(
+        return ChatAnthropic(
             model_name=service.model,
             api_key=service.api_key,
             timeout=None,
