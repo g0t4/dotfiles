@@ -77,19 +77,16 @@ function diff_two_commands --wraps icdiff
 end
 
 function test_diff_expansions_when_open_new_shell
-    #
-    # can also test abbr expansions (not execution):
-    #  run two commands => open new shell => see all three expansions:
-    #  NOTE this is not using command_a/command_b
     history append "echo '1 2 3 4' | awk '{ print \$3 }'"
     history append "echo '1 2 6' | awk '{ print \$3 }'"
     _abbr_expand_diff_last_two_commands $command_a $command_b
     _abbr_expand_diff_last_two_commands_sorted $command_a $command_b
     _abbr_expand_diff_last_two_commands_stderr_too $command_a $command_b
 end
+# uncomment => open new shell to test abbrs:
 test_diff_expansions_when_open_new_shell
 
-function test_diff_two_commands
+function test_diff_two_commands_when_open_new_shell
     #
     # how to test with {}
     #  run both of these commands:
@@ -107,7 +104,7 @@ function test_diff_two_commands
 end
 # *** DO NOT manually invoke two commands and then the abbr just to run test diff_two_commands!!
 # *** uncomment and open new shell:
-test_diff_two_commands
+test_diff_two_commands_when_open_new_shell
 
 function diff_command_args --wraps icdiff
     # FYI to unambiguously pass icdiff options too, use --
