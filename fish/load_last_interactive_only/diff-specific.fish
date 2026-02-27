@@ -87,6 +87,8 @@ function test_diff_two_commands
     #    echo '1 2 3 4' | awk '{ print $3 }'
     #    echo '1 2 6' | awk '{ print $3 }'
     #
+    # FYI alternative => setup iterm2 test harness that types for me on a hotkey (wes.py)
+    #
     # set command_a (history --prefix "cat test" | head -1)
     # set command_b (history --prefix "cat timing" | head -1)
     set command_a (history --prefix "echo '1 2 3" | head -1)
