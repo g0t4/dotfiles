@@ -1,4 +1,5 @@
 import re
+from langchain_core.language_models.chat_models import BaseChatModel
 from langchain_core.messages import HumanMessage, SystemMessage
 from services import Service, get_selected_service
 
@@ -10,7 +11,7 @@ TIMEOUT_SECONDS = 5
 
 def get_model() -> tuple[BaseChatModel, Service]:
     service = get_selected_service()
-    log(f"using: {service}")
+    # log(f"using: {service}")
 
     if service.name == "anthropic":
         # FYI importing langchain_anthropic is ALSO slow b/c anthropic package eager loads basically everything on import!
@@ -42,6 +43,7 @@ def get_model() -> tuple[BaseChatModel, Service]:
     return model, service
 
 def generate_non_streaming(passed_context: str, system_message: str, max_tokens: int):
+    model, service = get_model()
     messages = [
         SystemMessage(content=system_message),
         HumanMessage(content=passed_context),
