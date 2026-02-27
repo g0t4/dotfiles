@@ -69,11 +69,14 @@ function diff_two_commands --wraps icdiff
     set command_b $argv[2]
     set icdiff_argv $argv[3..]
 
-    icdiff $icdiff_argv \
-        # !!! -L takes {} for parameterizing the labels!
-        -L $(string replace --regex --all -- '[\{\}]' '_' $command_a) (eval $command_a | psub) \
-        -L $(string replace --regex --all -- '[\{\}]' '_' $command_b) (eval $command_b | psub)
+    # * replace { and } with _
+    #   !!! b/c icdiff's -L uses {} for interpolation of {path} and {basename}
+    set label_a (string replace --regex --all -- '[\{\}]' '_' $command_a)
+    set label_b (string replace --regex --all -- '[\{\}]' '_' $command_b)
 
+    icdiff $icdiff_argv \
+        -L $label_a (eval $command_a | psub) \
+        -L $label_b (eval $command_b | psub)
 end
 
 function test_diff_expansions_when_open_new_shell
