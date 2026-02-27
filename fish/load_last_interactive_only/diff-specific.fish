@@ -21,9 +21,10 @@ function _abbr_expand_diff_last_two_commands
     #    echo 'foo'
     #    echo 'foo\nbar'
     #    trigger diff_last_two_commands => needs escaped
-    set command_a (string replace --all -- "'" "\\'" $command_a)
-    set command_b (string replace --all -- "'" "\\'" $command_b)
-    echo diff_two_commands "'$command_a'" "'$command_b'"
+    set command_a (string escape $command_a)
+    set command_b (string escape $command_b)
+
+    echo diff_two_commands $command_a $command_b
 end
 abbr -a diff_last_two_commands --function _abbr_expand_diff_last_two_commands
 
@@ -62,10 +63,29 @@ function diff_two_commands --wraps icdiff
     set icdiff_argv $argv[3..]
 
     icdiff $icdiff_argv \
-        -L "'$command_a'" (eval $command_a | psub) \
-        -L "'$command_b'" (eval $command_b | psub)
+        # !!! -L takes {} for parameterizing the labels!
+        -L $(string replace --regex --all -- '[\{\}]' '_' $command_a) (eval $command_a | psub) \
+        -L $(string replace --regex --all -- '[\{\}]' '_' $command_b) (eval $command_b | psub)
 
 end
+
+function test_diff_two_commands
+    #
+    # how to test with {}
+    #  run both of these commands:
+    #    echo '1 2 3 4' | awk '{ print $3 }'
+    #    echo '1 2 6' | awk '{ print $3 }'
+    #
+    # set command_a (history --prefix "cat test" | head -1)
+    # set command_b (history --prefix "cat timing" | head -1)
+    set command_a (history --prefix "echo '1 2 3" | head -1)
+    set command_b (history --prefix "echo '1 2 6" | head -1)
+
+    diff_two_commands $command_a $command_b
+end
+# *** DO NOT manually invoke two commands and then the abbr just to run test diff_two_commands!!
+# *** uncomment and open new shell:
+test_diff_two_commands
 
 function diff_command_args --wraps icdiff
     # FYI to unambiguously pass icdiff options too, use --
