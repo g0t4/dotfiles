@@ -81,6 +81,8 @@ function test_diff_expansions_when_open_new_shell
     # can also test abbr expansions (not execution):
     #  run two commands => open new shell => see all three expansions:
     #  NOTE this is not using command_a/command_b
+    history append "echo '1 2 3 4' | awk '{ print \$3 }'"
+    history append "echo '1 2 6' | awk '{ print \$3 }'"
     _abbr_expand_diff_last_two_commands $command_a $command_b
     _abbr_expand_diff_last_two_commands_sorted $command_a $command_b
     _abbr_expand_diff_last_two_commands_stderr_too $command_a $command_b
