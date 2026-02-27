@@ -33,9 +33,9 @@ function _abbr_expand_diff_last_two_commands_sorted
     # otherwise `string escape` operates on each value alone
     # which results in command_a turning into two arguments to diff_two_commands
     # when it should be one argument to diff_two_commands
-    set -l command_a $last_two_commands[2]" | sort -h"
+    set command_a $last_two_commands[2]" | sort -h"
     # - same with command_b => one value
-    set -l command_b $last_two_commands[1]" | sort -h"
+    set command_b $last_two_commands[1]" | sort -h"
 
     set command_a (string escape $command_a)
     set command_b (string escape $command_b)
@@ -46,8 +46,8 @@ abbr -a diff_last_two_commands_sorted --function _abbr_expand_diff_last_two_comm
 abbr -a diff_last_two_commands_stderr_too --function _abbr_expand_diff_last_two_commands_stderr_too
 function _abbr_expand_diff_last_two_commands_stderr_too
     set last_two_commands (history | head -n 2)
-    set -l command_a $last_two_commands[2]" 2>&1"
-    set -l command_b $last_two_commands[1]" 2>&1"
+    set command_a $last_two_commands[2]" 2>&1"
+    set command_b $last_two_commands[1]" 2>&1"
     set command_a (string escape $command_a)
     set command_b (string escape $command_b)
     echo diff_two_commands $command_a $command_b
@@ -191,7 +191,7 @@ bind_both_modes_default_and_insert ctrl-f6 _convert_current_command_to_diff_two_
 # #   TODO rewrite as func only with pattern matching of func name (that's a thing right, parameterized func names? - not func params)
 # # expand !-X
 # function expand_history_item_X
-#     set -l history_num (string replace '!-' '' $argv)
+#     set history_num (string replace '!-' '' $argv)
 #     echo $history[$history_num]
 # end
 # abbr --add bangbang --regex '\!\-\d+' --position=anywhere --function expand_history_item_X
