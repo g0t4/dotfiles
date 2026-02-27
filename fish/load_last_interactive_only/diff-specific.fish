@@ -110,6 +110,7 @@ function diff_command_args --wraps icdiff
         -L "'$argv[1] $argv[2..-1]'" (eval $argv[1] $argv[2..-1] | psub)
 end
 
+# *** replace current command with a diff_ function ***
 function _get_current_command_or_previous
     set user_input (commandline -b)
     if test -z "$user_input"
@@ -118,26 +119,19 @@ function _get_current_command_or_previous
     echo $user_input
 end
 
-# *** bindings to replace current command with a diff_ helper command ***
-
+bind_both_modes_default_and_insert f5 _convert_current_command_to_diff_command_args
 function _convert_current_command_to_diff_command_args
     # use to compare same command w/ and w/o a set of args
     set user_input (_get_current_command_or_previous)
     commandline --replace "diff_command_args '$user_input' "
 end
 
-bind_both_modes_default_and_insert f5 _convert_current_command_to_diff_command_args
-bind_both_modes_default_and_insert ctrl-f5 _convert_current_command_to_diff_command_args # ctrl+F5 (streamdeck button => hotkey action)
-
+bind_both_modes_default_and_insert f6 _convert_current_command_to_diff_two_commands
 function _convert_current_command_to_diff_two_commands
     # use to compare w/ add and remove from current command
     set user_input (_get_current_command_or_previous)
     commandline --replace "diff_two_commands '$user_input' '$user_input' "
 end
-bind_both_modes_default_and_insert f6 _convert_current_command_to_diff_two_commands
-bind_both_modes_default_and_insert ctrl-f6 _convert_current_command_to_diff_two_commands # ctrl+F6 (streamdeck button => hotkey action)
-# see which binding I prefer (F6 or streamdeck)
-#    yes I know I can reuse f6 for stremadeck too but I think I will get rid of that one and use it elsewhere so that is why I have both bound here for now
 
 # *** some bind key combos ***
 #
