@@ -29,12 +29,10 @@ function _abbr_expand_diff_last_two_commands_sorted
     # otherwise `string escape` operates on each value alone
     # which results in command_a turning into two arguments to diff_two_commands
     # when it should be one argument to diff_two_commands
-    set command_a $last_two_commands[2]" | sort -h"
     # - same with command_b => one value
-    set command_b $last_two_commands[1]" | sort -h"
+    set command_a (string escape $last_two_commands[2]" | sort -h")
+    set command_b (string escape $last_two_commands[1]" | sort -h")
 
-    set command_a (string escape $command_a)
-    set command_b (string escape $command_b)
     echo diff_two_commands $command_a $command_b
 end
 abbr -a diff_last_two_commands_sorted --function _abbr_expand_diff_last_two_commands_sorted
@@ -42,10 +40,8 @@ abbr -a diff_last_two_commands_sorted --function _abbr_expand_diff_last_two_comm
 abbr -a diff_last_two_commands_stderr_too --function _abbr_expand_diff_last_two_commands_stderr_too
 function _abbr_expand_diff_last_two_commands_stderr_too
     set last_two_commands (history | head -n 2)
-    set command_a $last_two_commands[2]" 2>&1"
-    set command_b $last_two_commands[1]" 2>&1"
-    set command_a (string escape $command_a)
-    set command_b (string escape $command_b)
+    set command_a (string escape $last_two_commands[2]" 2>&1")
+    set command_b (string escape $last_two_commands[1]" 2>&1")
     echo diff_two_commands $command_a $command_b
 end
 
