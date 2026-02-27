@@ -1,4 +1,3 @@
-
 function icdiff
     # FYI I don't really like -H/--highlight as it often colors more than what is changed (icdiff help calls it "ugly")... so don't add -H here and force it globally... that can be tempting b/c the inversion pops better than font color... but then again the real issue I had was the default color map w/ yellow bold on yellow not standing out so I went with a color map mod instead:
 
@@ -9,8 +8,7 @@ function icdiff
     # PRN wait until this causes a problem... but basically is there a case where I would want yellow_bold instead of white_bold? Probably not b/c if I have this modification for dotfiles then chances are I also have customized my terminal colors to make yellow font default and so white_bold will be a good choice then.
 end
 
-
-abbr ic "icdiff"
+abbr ic icdiff
 abbr icr "icdiff --recursive" # diff all files in two dirs
 abbr icg git-icdiff
 # configure git-icdiff via git config: git config --global icdiff.options '--line-numbers'
@@ -82,7 +80,7 @@ function diff_command_args --wraps icdiff
 
     # *** cannot do like diff_two_commands above b/c there are more 2+ args possible to the diff here and cannot differentiate which would be for icdiff vs comparison so just allowing the two special icdiff options
     # FYI argparse strips specified options (i.e. -H/--highlight) AND strips -- (if present)...  so if you remove this then you will no longer be able to use --
-    argparse --ignore-unknown 'H/highlight' 'W/whole-file' -- $argv
+    argparse --ignore-unknown H/highlight W/whole-file -- $argv
     # --ignore-unknown is necessary to avoid parsing args when "--" is not used
 
     icdiff $_flag_highlight $_flag_whole_file \
@@ -145,7 +143,6 @@ bind_both_modes_default_and_insert ctrl-f6 _convert_current_command_to_diff_two_
 #       shift+F4  [1;2S
 #         # very likely some of this has to do with how iterm maps bindings (it has choices for this and I should avoid changing that again without clearly knowing what I am doing :)...
 #
-
 
 #
 # FYI if want these then add back (maybe new file)... I never really have used these in zsh so I don't think they're pivotal here though I could do icdiff (!-2) (!-2) typed out and it would expand out to work in that one off case :)... still more work than other ways
