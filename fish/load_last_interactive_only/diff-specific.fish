@@ -131,6 +131,9 @@ function _convert_current_command_to_diff_two_commands
     # use to compare w/ add and remove from current command
     set user_input (_get_current_command_or_previous)
     commandline --replace "diff_two_commands '$user_input' '$user_input' "
+
+    # move cursor to the end of the second copy of user_input so I can make chagnes (i.e. add args)
+    commandline --cursor (math (commandline --cursor) - 2)
 end
 
 # *** some bind key combos ***
