@@ -95,7 +95,7 @@ function diff_command_args --wraps icdiff
     #   diff_command_args -H -- "ls -al" -t
 
     # argv[1] is the command to run
-    # $argv[2..-1] remainder of args are the diff args to pass (with and without)
+    # $argv[2..-1] remainder of args are the extra args
     #    if passing a pipe make sure to quote it else will not be an arg to this function!
     #    e.g. diff_command_args "echo foo\nbar" "--line-numbers" "| grep foo"
     # ALSO, if there is no diff (and no error) then its very likely not this code but the output is literally the same :)... sometimes when testing you don't always get what you expect... run commands separately to verify if they are the same
@@ -119,16 +119,14 @@ function _get_current_command_or_previous
     echo $user_input
 end
 
-bind_both_modes_default_and_insert f5 _convert_current_command_to_diff_command_args
-function _convert_current_command_to_diff_command_args
-    # use to compare same command w/ and w/o a set of args
+bind_both_modes_default_and_insert f5 _convert_to_diff_command_args
+function _convert_to_diff_command_args
     set user_input (_get_current_command_or_previous)
     commandline --replace "diff_command_args '$user_input' "
 end
 
-bind_both_modes_default_and_insert f6 _convert_current_command_to_diff_two_commands
-function _convert_current_command_to_diff_two_commands
-    # use to compare w/ add and remove from current command
+bind_both_modes_default_and_insert f6 _convert_to_diff_two_commands
+function _convert_to_diff_two_commands
     set user_input (_get_current_command_or_previous)
     commandline --replace "diff_two_commands '$user_input' '$user_input ' "
 
