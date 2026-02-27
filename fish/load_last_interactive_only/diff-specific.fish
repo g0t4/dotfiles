@@ -71,28 +71,23 @@ function test_diff_expansions_when_open_new_shell
     _abbr_expand_diff_last_two_commands_sorted $command_a $command_b
     _abbr_expand_diff_last_two_commands_stderr_too $command_a $command_b
 end
-# uncomment => open new shell to test abbrs:
-test_diff_expansions_when_open_new_shell
+# *** uncomment => open new shell to test abbrs:
+# test_diff_expansions_when_open_new_shell
 
 function test_diff_two_commands_when_open_new_shell
-    #
-    # how to test with {}
-    #  run both of these commands:
-    #
-    #    echo '1 2 3 4' | awk '{ print $3 }'
-    #    echo '1 2 6' | awk '{ print $3 }'
-    #
+
+    # * test { and } in label
+    # PRN setup fishtape test for this?
+    history append "echo '1 2 3 4' | awk '{ print \$3 }'"
+    history append "echo '1 2 6' | awk '{ print \$3 }'"
     set command_a (history --prefix "echo '1 2 3" | head -1)
     set command_b (history --prefix "echo '1 2 6" | head -1)
-    #
-    # FYI alternative => setup iterm2 test harness that types for me on a hotkey (wes.py)
-    #
 
     diff_two_commands $command_a $command_b
 end
 # *** DO NOT manually invoke two commands and then the abbr just to run test diff_two_commands!!
 # *** uncomment and open new shell:
-test_diff_two_commands_when_open_new_shell
+# test_diff_two_commands_when_open_new_shell
 
 function diff_command_args --wraps icdiff
     # FYI to unambiguously pass icdiff options too, use --
