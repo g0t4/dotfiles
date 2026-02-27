@@ -104,10 +104,9 @@ function diff_command_args --wraps icdiff
     # FYI argparse strips specified options (i.e. -H/--highlight) AND strips -- (if present)...  so if you remove this then you will no longer be able to use --
     argparse --ignore-unknown H/highlight W/whole-file -- $argv
     # --ignore-unknown is necessary to avoid parsing args when "--" is not used
-
-    icdiff $_flag_highlight $_flag_whole_file \
-        -L "'$argv[1]'" (eval $argv[1] | psub) \
-        -L "'$argv[1] $argv[2..-1]'" (eval $argv[1] $argv[2..-1] | psub)
+    set command_a "$argv[1]"
+    set command_b "$argv[1] $argv[2..-1]"
+    diff_two_commands $command_a $command_b $_flag_highlight $_flag_whole_file
 end
 
 # *** replace current command with a diff_ function ***
