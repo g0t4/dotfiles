@@ -89,39 +89,13 @@ end
 # *** uncomment and open new shell:
 # test_diff_two_commands_when_open_new_shell
 
-function diff_command_args --wraps icdiff
-    # FYI to unambiguously pass icdiff options too, use --
-    #   diff_command_args [icdiff options] -- [diff args...]
-    #   diff_command_args -H -- "ls -al" -t
-
-    # argv[1] is the command to run
-    # $argv[2..-1] remainder of args are the extra args
-    #    if passing a pipe make sure to quote it else will not be an arg to this function!
-    #    e.g. diff_command_args "echo foo\nbar" "--line-numbers" "| grep foo"
-    # ALSO, if there is no diff (and no error) then its very likely not this code but the output is literally the same :)... sometimes when testing you don't always get what you expect... run commands separately to verify if they are the same
-
-    # *** cannot do like diff_two_commands above b/c there are more 2+ args possible to the diff here and cannot differentiate which would be for icdiff vs comparison so just allowing the two special icdiff options
-    # FYI argparse strips specified options (i.e. -H/--highlight) AND strips -- (if present)...  so if you remove this then you will no longer be able to use --
-    argparse --ignore-unknown H/highlight W/whole-file -- $argv
-    # --ignore-unknown is necessary to avoid parsing args when "--" is not used
-    set command_a "$argv[1]"
-    set command_b "$argv[1] $argv[2..-1]"
-    diff_two_commands $command_a $command_b $_flag_highlight $_flag_whole_file
-end
-
-# *** replace current command with a diff_ function ***
+# *** turn current command into a diff of itself (and then add args or make changes to second copy)
 function _get_current_command_or_previous
     set user_input (commandline -b)
     if test -z "$user_input"
         set user_input (history | head -n 1)
     end
     echo $user_input
-end
-
-bind_both_modes_default_and_insert f5 _convert_to_diff_command_args
-function _convert_to_diff_command_args
-    set user_input (_get_current_command_or_previous)
-    commandline --replace "diff_command_args '$user_input' "
 end
 
 bind_both_modes_default_and_insert f6 _convert_to_diff_two_commands
