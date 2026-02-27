@@ -19,13 +19,9 @@ function _abbr_expand_diff_last_two_commands
     set command_b (string escape $last_two_commands[1]) # older on left
     echo diff_two_commands $command_a $command_b
 end
+# FYI make abbr name sorts before others as this is the most common scenario (verbatim output)
 abbr -a diff_last_two_commands --function _abbr_expand_diff_last_two_commands
 
-# * append sort -h too
-# FYI make sure original variant (above) is first completion result as I won't use this one as often
-#    also, consider breaking the typical completion chain so I can tab to complete the above w/o then another tab to select it
-# when output order might differ while content is the same
-# i.e. `ls` in two diff dirs
 function _abbr_expand_diff_last_two_commands_sorted
     set last_two_commands (history | head -n 2)
 
