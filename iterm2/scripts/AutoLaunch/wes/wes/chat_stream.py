@@ -11,7 +11,6 @@ def get_model() -> tuple[BaseChatModel, Service]:
     log(f"using: {service}")
 
     if service.name == "anthropic":
-        # TODO is this one slow too? measure it
         from langchain_anthropic import ChatAnthropic
         model = ChatAnthropic(
             model_name=service.model,
@@ -21,7 +20,6 @@ def get_model() -> tuple[BaseChatModel, Service]:
         )
         return model, service
 
-    # TODO why is this import so slow?
     from langchain_openai import ChatOpenAI
     model = ChatOpenAI(
         model=service.model,

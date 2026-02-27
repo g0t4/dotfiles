@@ -22,6 +22,9 @@ def generate_non_streaming(passed_context: str, system_message: str, max_tokens:
             stop=None,
         )
     else:
+        # FYI importing langchain_openai is slow b/c openai.types is missing lazy loading with 100s of pydantic based types:
+        # https://github.com/openai/openai-python/issues/2819
+        # IOTW import langchain_openai suffers b/c it imports openai (which takes 220 to 300ms)
         from langchain_openai import ChatOpenAI
         model = ChatOpenAI(
             model=service.model,
