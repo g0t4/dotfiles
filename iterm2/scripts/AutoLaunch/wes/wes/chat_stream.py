@@ -41,9 +41,9 @@ async def ask_openai_async_type_response(messages: list[dict], on_chunk: Callabl
         stream_kwargs["max_tokens"] = service.max_tokens
     # PRN temperature based on model or service default configs maybe (mostly I use default configs)?
 
-    chunks = model.stream(messages, **stream_kwargs)
+    chunks = model.astream(messages, **stream_kwargs)
     first_chunk = True
-    for chunk in chunks:
+    async for chunk in chunks:
         try:
             # FYI no reasoning content for llama-server, s/b fine as I don't use that => if I want it, I can add in my ChatLlamaServer impl
             # strip new lines to avoid submitting commands prematurely, is there an alternate char I could use to split the lines still w/o submitting (would have to check what the shell supports, if anything is possible)... one downside to not being a part of the line editor.. unless there is a workaround? not that I care much b/c multi line commands are not often necessary...
