@@ -15,8 +15,8 @@ abbr icg git-icdiff
 
 function _abbr_expand_diff_last_two_commands
     set last_two_commands (history | head -n 2)
-    set command_a (string escape $last_two_commands[2])
-    set command_b (string escape $last_two_commands[1])
+    set command_a (string escape $last_two_commands[2]) # most recent on the right
+    set command_b (string escape $last_two_commands[1]) # older on left
     echo diff_two_commands $command_a $command_b
 end
 abbr -a diff_last_two_commands --function _abbr_expand_diff_last_two_commands
