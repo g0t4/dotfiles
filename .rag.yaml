@@ -14,11 +14,11 @@ include:
 ignores:
   - "notes/"
 global_languages:
-  - lua
-  - py
-  - fish
   - bash
-  - zsh
+  - fish
+  - lua
   - ps1
+  - py
   - vim
+  - zsh
   # TODO just use all, always?
