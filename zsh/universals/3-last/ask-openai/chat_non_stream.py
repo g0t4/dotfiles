@@ -6,6 +6,8 @@ from services import Service, get_selected_service
 # TODO test anthropic
 # DONE: openai/llama-server
 
+TIMEOUT_SECONDS = 5
+
 def generate_non_streaming(passed_context: str, system_message: str, max_tokens: int):
     messages = [
         SystemMessage(content=system_message),
@@ -14,11 +16,17 @@ def generate_non_streaming(passed_context: str, system_message: str, max_tokens:
 
     service = get_selected_service()
     if service.name == "anthropic":
+        # FYI importing langchain_anthropic is ALSO slow b/c anthropic package eager loads basically everything on import!
+        #  TBH this is NBD for my wes.py daemon b/c it loads once
+        #    annoying for my rarely used ctrl-b keymap (not a daemon, takes hit every time)
+        #  I setup a POC (proof of concept) to optimize this massively:
+        #    https://github.com/anthropics/anthropic-sdk-python/issues/1211
+        #    already 35% to 60% reduction in import time for several key modules
         from langchain_anthropic import ChatAnthropic
         model = ChatAnthropic(
             model_name=service.model,
             api_key=service.api_key,
-            timeout=None,
+            timeout=TIMEOUT_SECONDS,
             stop=None,
         )
     else:
@@ -30,6 +38,8 @@ def generate_non_streaming(passed_context: str, system_message: str, max_tokens:
             model=service.model,
             api_key=service.api_key,
             base_url=service.base_url,
+            timeout=TIMEOUT_SECONDS,
+            # max_retries=2
         )
 
     # TODO add temperature (optional) to Service? (perhaps rename to ServiceModel or split out generation args somehow)
