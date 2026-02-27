@@ -110,22 +110,19 @@ function diff_command_args --wraps icdiff
         -L "'$argv[1] $argv[2..-1]'" (eval $argv[1] $argv[2..-1] | psub)
 end
 
-function _current_command_or_previous
-
+function _get_current_command_or_previous
     set user_input (commandline -b)
-    if test -z $user_input
+    if test -z "$user_input"
         set user_input (history | head -n 1)
-        # PRN use $history (does it have items not added to history file, IIAC?)
     end
     echo $user_input
-
 end
 
 # *** bindings to replace current command with a diff_ helper command ***
 
 function _convert_current_command_to_diff_command_args
     # use to compare same command w/ and w/o a set of args
-    set user_input (_current_command_or_previous)
+    set user_input (_get_current_command_or_previous)
     commandline --replace "diff_command_args '$user_input' "
 end
 
@@ -134,7 +131,7 @@ bind_both_modes_default_and_insert ctrl-f5 _convert_current_command_to_diff_comm
 
 function _convert_current_command_to_diff_two_commands
     # use to compare w/ add and remove from current command
-    set user_input (_current_command_or_previous)
+    set user_input (_get_current_command_or_previous)
     commandline --replace "diff_two_commands '$user_input' '$user_input' "
 end
 bind_both_modes_default_and_insert f6 _convert_current_command_to_diff_two_commands
