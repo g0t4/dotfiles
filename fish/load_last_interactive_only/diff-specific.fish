@@ -15,15 +15,8 @@ abbr icg git-icdiff
 
 function _abbr_expand_diff_last_two_commands
     set last_two_commands (history | head -n 2)
-    set -l command_a $last_two_commands[2]
-    set -l command_b $last_two_commands[1]
-    # test case:
-    #    echo 'foo'
-    #    echo 'foo\nbar'
-    #    trigger diff_last_two_commands => needs escaped
-    set command_a (string escape $command_a)
-    set command_b (string escape $command_b)
-
+    set command_a (string escape $last_two_commands[2])
+    set command_b (string escape $last_two_commands[1])
     echo diff_two_commands $command_a $command_b
 end
 abbr -a diff_last_two_commands --function _abbr_expand_diff_last_two_commands
