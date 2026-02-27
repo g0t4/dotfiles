@@ -21,4 +21,3 @@ global_languages:
   - py
   - vim
   - zsh
-  # TODO just use all, always?
