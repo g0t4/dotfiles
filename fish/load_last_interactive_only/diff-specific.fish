@@ -35,8 +35,15 @@ abbr -a diff_last_two_commands --function _abbr_expand_diff_last_two_commands
 # i.e. `ls` in two diff dirs
 function _abbr_expand_diff_last_two_commands_sorted
     set last_two_commands (history | head -n 2)
+
+    # ! ensure command_a is a _single_ scalar value (not a multi-value array)
+    # otherwise `string escape` operates on each value alone
+    # which results in command_a turning into two arguments to diff_two_commands
+    # when it should be one argument to diff_two_commands
     set -l command_a $last_two_commands[2]" | sort -h"
+    # - same with command_b => one value
     set -l command_b $last_two_commands[1]" | sort -h"
+
     set command_a (string escape $command_a)
     set command_b (string escape $command_b)
     echo diff_two_commands $command_a $command_b
