@@ -1,15 +1,15 @@
 include:
-  - lua
-  - py
-  - fish
-  - zsh
-  - bash
-  - json
-  - ps1
   - applescript
-  - snippets
+  - bash
+  - fish
+  - json
+  - lua
+  - ps1
+  - py
   - rs
+  - snippets
   - vim
+  - zsh
   # - yaml # not many, yet?
 ignores:
   - "notes/"
