@@ -15,6 +15,9 @@ abbr --position=anywhere -- pyml '| bat -l yml'
 abbr --position=anywhere -- puniq '| sort | uniq -c'
 abbr --position=anywhere -- psort '| sort -h' # TODO? include -h or not by default?
 
+# redirect stderr to stdout abbreviation (cmd | errout => cmd 2>&1)
+abbr --position=anywhere -- errout '2>&1'
+
 # * head abbrs
 # ph<SPACE> => | head
 #  I would use pipe_head for this abbr but you cannot tab complete abbrs outside of command position... so have to add | myself then I can tab complete the h10 below
