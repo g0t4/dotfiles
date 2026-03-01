@@ -76,6 +76,8 @@ function _update_completion
 
     command -q tree-sitter; and tree-sitter complete --shell fish >~/.config/fish/completions/tree-sitter.fish
 
+    command -q hf; and hf --show-completion >~/.config/fish/completions/hf.fish
+
 end
 
 # *** touchp
