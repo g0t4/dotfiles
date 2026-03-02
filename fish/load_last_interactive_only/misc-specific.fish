@@ -1352,6 +1352,34 @@ if command -q az
 
 end
 
+# ** search downloaded model caches (clean up space)
+
+function rg_cached_models --argument-names search_regex
+    set _cache_llama_server ~/.cache/llama.cpp
+    set _cache_hf ~/.cache/huggingface
+    set _cache_ollama ~/.ollama
+    set _cache_lm_studio ~/.cache/lm-studio/models
+
+    log_blankline
+
+    log_ --blue "## llama-server $_cache_llama_server"
+    fd --unrestricted $search_regex $_cache_llama_server
+    log_blankline
+
+    log_ --blue "## huggingface $_cache_hf"
+    fd --unrestricted $search_regex $_cache_hf
+    log_blankline
+
+    log_ --blue "## ollama $_cache_ollama"
+    fd --unrestricted $search_regex $_cache_ollama
+    log_blankline
+
+    log_ --blue "## LM Studio $_cache_lm_studio"
+    fd --unrestricted $search_regex $_cache_lm_studio
+    log_blankline
+
+end
+
 # ** llama-cpp / llama-server related
 
 abbr huggingface-cli hf
