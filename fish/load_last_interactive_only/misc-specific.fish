@@ -1970,7 +1970,7 @@ if command -q npm
     end
 
     # PRN as I use and find how I wanna use aliases
-    abbr npmi 'npm_install'
+    abbr npmi npm_install
     abbr npminit 'npm init -y'
     abbr npml 'npm list'
     abbr npmr 'npm run'
@@ -3206,3 +3206,8 @@ function string_indent
     end
 end
 
+if command -q claude
+    abbr clm 'ANTHROPIC_BASE_URL="http://build21:8013" claude --model Qwen/Qwen3-Coder-Next-GGUF:Q8_0' # for now just leave full model name as a reminder for one model
+    abbr clr 'claude --resume'
+    abbr cld 'claude --dangerously-skip-permissions'
+end
