@@ -216,3 +216,6 @@ abbr lfst "git lfs track '*.EXT'"
 abbr lfsup "git lfs update"
 abbr lfsut "git lfs untrack '*.EXT'"
 abbr lfsv "git lfs version"
+
+# Claude Code CLI
+abbr cld 'claude --dangerously-skip-permissions'
