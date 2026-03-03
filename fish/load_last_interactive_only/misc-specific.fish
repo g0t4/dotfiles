@@ -891,6 +891,7 @@ build_sed_abbrs_for_filetype t ts
 build_sed_abbrs_for_filetype j "{json,js}"
 build_sed_abbrs_for_filetype m md
 build_sed_abbrs_for_filetype p py
+build_sed_abbrs_for_filetype f fish
 
 # all -  use rg w/o a filter on language (no -g *.lua for example)
 abbr --set-cursor seda "$sed_cmd -Ei 's/%//g' (rg --files-with-matches ___) "
