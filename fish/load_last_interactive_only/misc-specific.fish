@@ -1589,37 +1589,6 @@ end
 #   bat **/manifest.json | jq .Name # show profile names
 #
 
-# allows `ls $elgato_wes` as needed
-set elgato_wesdemos /Users/wesdemos/Library/Application\ Support/com.elgato.StreamDeck/ProfilesV3
-set elgato_wes /Users/wes/Library/Application\ Support/com.elgato.StreamDeck/ProfilesV3
-function elgato_diff_ProfilesV3
-    icdiff -r $elgato_wesdemos $elgato_wes
-end
-
-function elgato_sync_ProfilesV3_dry_run
-    elgato_sync_ProfilesV3 --dry-run
-end
-
-function elgato_sync_ProfilesV3
-    # I detest manual export/import of profiles, one by one AND in bulk...
-    # Can copy/sync ProfilesV3 dir verbatim and changes are picked up when restart stream deck app
-    # FYI I also have smartsync profile saved on demos account
-
-    # PRN kill stream deck
-    # pkill -ilfa "Stream Deck" # when restart dest stream deck app it will ask to restore, say no... that is likely b/c it was running when I updated its profile files... so what for now, no issues
-
-    set src /Users/wesdemos/Library/Application\ Support/com.elgato.StreamDeck/ProfilesV3
-    set dest /Users/wes/Library/Application\ Support/com.elgato.StreamDeck/ # don't include ProfilesV3 else will make a nested copy ProfilesV3/ProfilesV3 (this path is dest for ProfilesV3 dir from wesdemos)
-
-    # skip on --checksum (not mod-time/size compare) => small files so lets worry about contents
-    # argv ... i.e. "--dry-run"
-    rsync --checksum --recursive --itemize-changes --delete $src $dest $argv
-
-    # ensure owned by wes on other end:
-    sudo chown -R wes:staff /Users/wes/Library/Application\ Support/com.elgato.StreamDeck/ProfilesV3
-    # same in reverse if I ever go wes=>demos
-end
-
 function elgato_kill_other_account_streamdeck
     # kill them before you change settings in current account's streamdeck, otherwise on quit the other one may overwrite new settings
     set other_user wes
