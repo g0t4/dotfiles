@@ -251,3 +251,68 @@ function StreamDeckFcpxViewerToggleComments()
     local startSearch = GetFcpxEditorWindow()
     FindOneElement(startSearch, criteria, afterSearch)
 end
+
+function StreamDeckToggleNoiseGate()
+
+    -- FYI search can be slow on first run (2s).. but then it's 100-200ms on subsequent runs so that is FAST!
+    --    click into panel first time to speed up if it is annoying you
+    local function FcpxSearchForInspectorCheckbox(inspector_name, callback)
+        -- PRN setup run_async to unravel the callback hell below (and in nested functions)
+        local fcpx = GetFcpxAppElement()
+        local window = fcpx:attributeValue("AXFocusedWindow")
+        local criteria = { attribute = "AXDescription", value = inspector_name } -- 270ms to 370ms w/ count=1
+        FindOneElement(fcpx, criteria, function(_, searchTask, numResultsAdded)
+            if numResultsAdded == 0 then
+                print("no inspector checkbox found")
+                return
+            end
+            local foundCheckbox = searchTask[1]
+            -- ensure checkbox's panel is visible!
+            if foundCheckbox:attributeValue("AXValue") == 0 then
+                foundCheckbox:performAction("AXPress")
+            end
+
+            -- callback(_cached_inspector_panel_group)
+        end)
+    end
+
+    FcpxSearchForInspectorCheckbox("Audio Inspector", function(inspector_panel)
+        print("found audio inspector", hs.inspect(inspector_panel))
+        inspector_panel:dumpAttributes()
+
+        -- -- if static path fails here, search might work...
+        -- local scrollarea1 = inspector_panel:attributeValue("AXChildren")[1][1][1]
+        -- local elem = GetChildWithAttr(scrollarea1, attrName, attrValue)
+        -- elem:setAttributeValue("AXFocused", true)
+        -- if callback then callback(elem) end
+    end)
+
+    -- * Audio Inspector checkbox
+    -- app:window(2):splitGroup(1):group(1):splitGroup(1):group(2):splitGroup(1):group(4):group(2):checkBox(1)
+    --
+    -- AXDescription: Video Inspector<string>
+    -- AXEnabled: true<bool>
+    -- AXFocused: false<bool>
+    -- AXHelp: Show the Video Inspector<string>
+    -- AXIdentifier: _NS:10<string>
+    -- AXRoleDescription: toggle button<string>
+    -- AXSubrole: AXToggle<string>
+    -- AXTitle: Video<string>
+    -- AXValue: 0<number>
+    -- frame: x=1529.0,y=51.0,w=20.0,h=20.0
+    --
+    -- unique ref: app:window('Final Cut Pro'):splitGroup():group():splitGroup()
+
+    -- * Noise Gate Checkbox
+    -- app:window(2):splitGroup(1):group(1):splitGroup(1):group(2):splitGroup(1):group(4):group(1):splitGroup(1):group(1)
+    --   :group(1):scrollArea(1):staticText(10)
+    --
+    -- AXEnabled: true<bool>
+    -- AXFocused: false<bool>
+    -- AXRoleDescription: text<string>
+    -- AXValue: Noise Gate<string>
+    -- frame: x=1545.0,y=320.0,w=266.0,h=26.0
+    --
+    -- unique ref: app:window('Final Cut Pro'):splitGroup():group():splitGroup()
+    --
+end
