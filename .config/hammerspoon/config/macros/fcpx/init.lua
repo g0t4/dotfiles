@@ -45,14 +45,14 @@ end
 ---@type hs.axuielement?
 local _cached_inspector_panel_group = nil
 
-function FcpxFindInspectorPanelViaItsCheckbox(callback)
+function FcpxFindInspectorPanelViaItsCheckbox(checkbox_description, callback)
     -- PRN setup run_async to unravel the callback hell below (and in nested functions)
 
     -- FYI speed up testing by selecting an element in the Inspector Panel => takes much less time to find checkbox globally
 
     local fcpx = GetFcpxAppElement()
     local window = fcpx:attributeValue("AXFocusedWindow")
-    local criteria = { attribute = "AXDescription", value = "Title Inspector" } -- 270ms to 370ms w/ count=1
+    local criteria = { attribute = "AXDescription", value = checkbox_description }
 
     local function show_respective_panel(_, searchTask, numResultsAdded)
         if numResultsAdded == 0 then
@@ -82,7 +82,7 @@ function FcpxFindInspectorPanelViaItsCheckbox(callback)
 end
 
 function FcpxTitlePanelFocusOnElementByAttr(attrName, attrValue, callback)
-    FcpxFindInspectorPanelViaItsCheckbox(function(inspector_panel)
+    FcpxFindInspectorPanelViaItsCheckbox("Title Inspector", function(inspector_panel)
         -- if static path fails here, search might work...
         local scrollarea1 = inspector_panel:attributeValue("AXChildren")[1][1][1]
         local elem = GetChildWithAttr(scrollarea1, attrName, attrValue)
