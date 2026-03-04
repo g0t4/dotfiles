@@ -70,7 +70,7 @@ function FcpxFindAndEnsureInspectorPanelIsOpen(checkbox_description, callback)
         --   whereas grandparent appears stable (across selections)
         ---@type hs.axuielement
         _cached_inspector_panel_group = foundCheckbox:attributeValue("AXParent"):attributeValue("AXParent")
-        callback(_cached_inspector_panel_group)
+        callback(_cached_inspector_panel_group, foundCheckbox)
     end
 
     if _cached_inspector_panel_group and _cached_inspector_panel_group:isValid() then
@@ -84,7 +84,7 @@ function FcpxFindAndEnsureInspectorPanelIsOpen(checkbox_description, callback)
 end
 
 function FcpxTitlePanelFocusOnElementByAttr(attrName, attrValue, callback)
-    FcpxFindAndEnsureInspectorPanelIsOpen("Title Inspector", function(inspector_panel)
+    FcpxFindAndEnsureInspectorPanelIsOpen("Title Inspector", function(inspector_panel, title_checkbox)
         -- if static path fails here, search might work...
         local scrollarea1 = inspector_panel:attributeValue("AXChildren")[1][1][1]
         local elem = GetChildWithAttr(scrollarea1, attrName, attrValue)
@@ -220,7 +220,7 @@ function StreamDeckToggleNoiseGate()
     print("looking for noise gate")
     -- TODO ideally check to make sure a clip is selected else this is a giant waste of time
     --    TODO if i figure that out then use similar to make sure shape is selected before trying to show X/Y center/inc/dec
-    FcpxFindAndEnsureInspectorPanelIsOpen("Audio Inspector", function(inspector_panel)
+    FcpxFindAndEnsureInspectorPanelIsOpen("Audio Inspector", function(inspector_panel, audio_checkbox)
         inspector_panel:dumpAttributes()
 
         -- if static path fails here, search might work...
