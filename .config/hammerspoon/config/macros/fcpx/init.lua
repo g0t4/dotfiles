@@ -215,38 +215,17 @@ function StreamDeckFcpxViewerToggleComments()
 end
 
 function StreamDeckToggleNoiseGate()
-    -- FYI search can be slow on first run (2s).. but then it's 100-200ms on subsequent runs so that is FAST!
-    --    click into panel first time to speed up if it is annoying you
-    local function FcpxSearchForInspectorCheckbox(inspector_name, callback)
-        -- PRN setup run_async to unravel the callback hell below (and in nested functions)
-        local fcpx = GetFcpxAppElement()
-        local window = fcpx:attributeValue("AXFocusedWindow")
-        local criteria = { attribute = "AXDescription", value = inspector_name } -- 270ms to 370ms w/ count=1
-        FindOneElement(fcpx, criteria, function(_, searchTask, numResultsAdded)
-            if numResultsAdded == 0 then
-                print("no inspector checkbox found")
-                return
-            end
-            local foundCheckbox = searchTask[1]
-            -- ensure checkbox's panel is visible!
-            if foundCheckbox:attributeValue("AXValue") == 0 then
-                foundCheckbox:performAction("AXPress")
-            end
-
-            -- callback(_cached_inspector_panel_group)
-        end)
-    end
-
-    FcpxSearchForInspectorCheckbox("Audio Inspector", function(inspector_panel)
-        print("found audio inspector", hs.inspect(inspector_panel))
+    FcpxFindAndEnsureInspectorPanelIsOpen("Audio Inspector", function(inspector_panel)
         inspector_panel:dumpAttributes()
 
-        -- -- if static path fails here, search might work...
-        -- local scrollarea1 = inspector_panel:attributeValue("AXChildren")[1][1][1]
-        -- local elem = GetChildWithAttr(scrollarea1, attrName, attrValue)
-        -- elem:setAttributeValue("AXFocused", true)
-        -- if callback then callback(elem) end
+        -- if static path fails here, search might work...
+        local scrollarea1 = inspector_panel:attributeValue("AXChildren")[1][1][1]
+        local elem = GetChildWithAttr(scrollarea1, attrName, attrValue)
+        elem:setAttributeValue("AXFocused", true)
+        if callback then callback(elem) end
     end)
+
+
 
     -- * Audio Inspector checkbox
     -- app:window(2):splitGroup(1):group(1):splitGroup(1):group(2):splitGroup(1):group(4):group(2):checkBox(1)
