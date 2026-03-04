@@ -2835,6 +2835,9 @@ if command -q hs
 
     # running commands
     abbr hsc "hs -c" # run a command
+    abbr hs_open_console "hs -c 'hs.openConsole()'"
+    abbr hs_reload "hs -c 'hs.openConsole(); hs.reload(); hs.console.clearConsole()'"
+    abbr hs_clear_console "hs -c 'hs.console.clearConsole()'"
     abbr hscq "hs -c -q" # quiet mode (only errors and final result)
 
 end
