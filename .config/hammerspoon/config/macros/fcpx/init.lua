@@ -228,6 +228,13 @@ function StreamDeckToggleNoiseGate()
             return
         end
 
+        local criteria = { attribute = "AXDescription", value = "noise gate check box" }
+        FindOneElement(inspector_panel, criteria, function(_, searchTask, numResultsAdded)
+            hs.alert.show("FOUND IT")
+            print(numResultsAdded)
+            print(searchTask)
+        end)
+
         -- if static path fails here, search might work...
         -- local scrollarea1 = inspector_panel:attributeValue("AXChildren")[1][1][1]
         -- local elem = GetChildWithAttr(scrollarea1, attrName, attrValue)
