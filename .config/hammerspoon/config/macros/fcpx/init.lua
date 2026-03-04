@@ -228,8 +228,18 @@ function StreamDeckToggleNoiseGate()
             return
         end
 
+
+        -- * search within a static located sub-panel
+        -- inspector_panel s/b:
+        --    app:window(1):splitGroup(1):group(1):splitGroup(1):group(2):splitGroup(1):group(4)
+        -- static then down to group to search in:
+        --    :group(1):splitGroup(1):group(1):group(1):scrollArea(1)
+        --    TODO if this search breaks, try intermediate searches to speed up? or just fix static path or make flexible
+        -- wow this is fast if I search from this subpanel (70ms even if on diff panel)
+        --
         local criteria = { attribute = "AXDescription", value = "noise gate check box" }
-        FindOneElement(inspector_panel, criteria, function(_, searchTask, numResultsAdded)
+        local static_subpanel = inspector_panel:group(1):splitGroup(1):group(1):group(1):scrollArea(1)
+        FindOneElement(static_subpanel, criteria, function(_, searchTask, numResultsAdded)
             hs.alert.show("FOUND IT")
             print(numResultsAdded)
             print(searchTask)
