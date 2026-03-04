@@ -217,7 +217,6 @@ function StreamDeckFcpxViewerToggleComments()
 end
 
 function StreamDeckToggleNoiseGate()
-    print("looking for noise gate")
     -- TODO ideally check to make sure a clip is selected else this is a giant waste of time
     --    TODO if i figure that out then use similar to make sure shape is selected before trying to show X/Y center/inc/dec
     FcpxFindAndEnsureInspectorPanelIsOpen("Audio Inspector", function(inspector_panel, audio_checkbox)
@@ -241,12 +240,16 @@ function StreamDeckToggleNoiseGate()
         local static_subpanel = inspector_panel:group(1):splitGroup(1):group(1):group(1):scrollArea(1)
         FindOneElement(static_subpanel, criteria, function(_, searchTask, numResultsAdded)
             -- hs.axuielement.elementSearchObject (type for searchTask)
-            print(numResultsAdded)
             local noise_gate_checkbox = searchTask[1]
             if not noise_gate_checkbox then
                 hs.alert.show("Noise gate checkbox not found, is the effect even applied to this clip?")
                 return
             end
+            -- noise_gate_checkbox:dumpAttributes()
+
+            -- use AXValue to get 0/1 off/on if you want to only disable/enable it
+            -- local value = noise_gate_checkbox:attributeValue("AXValue")
+            noise_gate_checkbox:axPress()
         end)
 
         -- if static path fails here, search might work...
