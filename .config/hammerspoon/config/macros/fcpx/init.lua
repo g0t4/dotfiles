@@ -166,44 +166,6 @@ function TestBack2BackElementSearch()
     --        SO maybe search should be on demand so I can search when something moves? and then I would want app wide search most likely
 end
 
--- * published parameters (for titles)
-
--- TODO center X
--- TODO center Y
--- TODO x width
--- TODO y height
--- TODO increment by 0.01 sounds like a useful feature... read box, add 0.01 ... that's the sweet spot for adjustments
---    or maybe 0.02/0.05... TBD
-
-function StreamDeckFcpx_PublishedParams_CenterX()
-    -- app:window(3):splitGroup(1):group(1):splitGroup(1):group(1):splitGroup(1):group(3):group(1):group(1):scrollArea(1)
-    --   :textField(2)
-    --
-    -- AXDescription: center x scrubber<string>
-    -- AXEnabled: true<bool>
-    -- AXFocused: true<bool>
-    -- AXHelp: Center X Scrubber<string>
-    -- AXRoleDescription: text field<string>
-    -- AXValue: -0.6<string>
-    --
-    local window = FcpxEditorWindow:new()
-    window.inspector:showTitleInspector()
-    -- TODO! MERGE WITH OTHER WORKING TOOL TO FIND "x scrubber"
-
-    -- local window = GetFcpxEditorWindow()
-    -- local sg = window:splitGroup(1):group(1):splitGroup(1)
-    -- print(sg)
-
-    -- panel w/ pub params:
-    -- app:window(1):splitGroup(1):group(1):splitGroup(1):group(1):splitGroup(1):group(3)
-    --
-    -- AXFocused: false<bool>
-    -- AXRoleDescription: group<string>
-    -- AXTitleUIElement: AXGroup<hs.axuielement>
-    --
-    -- unique ref: app:window_by_title('Final Cut Pro'):splitGroup():group():splitGroup()
-end
-
 function StreamDeckFcpxViewerToggleComments()
     -- TODO can I search in menu items for it? I didn't find in general search but menu items might have it
 
