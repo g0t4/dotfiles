@@ -1818,11 +1818,6 @@ function M.init()
         M.show()
     end)
 
-    -- Check emoji cache age daily in background
-    hs.timer.doEvery(24 * 60 * 60, checkEmojiCacheAge)
-    -- Also check on startup (after 5 seconds to avoid slowing down init)
-    hs.timer.doAfter(5, checkEmojiCacheAge)
-
     print("File launcher initialized (alt+space)")
     print("History: Cmd+Up/Down to navigate,", #history, "items loaded")
 end
