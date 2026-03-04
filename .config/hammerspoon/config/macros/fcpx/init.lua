@@ -46,17 +46,15 @@ end
 local _cached_inspector_panel_group = nil
 
 function FcpxFindInspectorPanelViaTitleCheckbox(callback)
-    -- FYI speed up initial search when testing by selecting an element in the Inspector Panel (200ms then)
-    --    again just for testing this code so you aren't waiting to tweak a downstream factor
+    -- PRN setup run_async to unravel the callback hell below (and in nested functions)
 
-    -- FOR now this seems a reasonable way to locate the panel... and once it is cached its NBD!
-    -- *** START USING THIS IN OTHER SPOTS! Like InspectorPanel class!!
+    -- FYI speed up testing by selecting an element in the Inspector Panel => takes much less time to find checkbox globally
 
     local fcpx = GetFcpxAppElement()
     local window = fcpx:attributeValue("AXFocusedWindow")
     local criteria = { attribute = "AXDescription", value = "Title Inspector" } -- 270ms to 370ms w/ count=1
 
-    local function shared(_, searchTask, numResultsAdded)
+    local function show_respective_panel(_, searchTask, numResultsAdded)
         if numResultsAdded == 0 then
             print("no title panel found")
             return
@@ -76,15 +74,11 @@ function FcpxFindInspectorPanelViaTitleCheckbox(callback)
     end
 
     if _cached_inspector_panel_group and _cached_inspector_panel_group:isValid() then
-        print("using cached inspector panel")
         -- search again but from the cached panel (very fast @50ms) for the checkbox so I can ensure the panel is still visible!
-        -- TODO consolidate the logic here with below
-        FindOneElement(_cached_inspector_panel_group, criteria, shared)
+        FindOneElement(_cached_inspector_panel_group, criteria, show_respective_panel)
         return
     end
-    -- PRN setup run_async to unravel the callback hell below (and in nested functions)
-    -- FYI search can be slow on first run (2s).. but then it's 100-200ms on subsequent runs so that is FAST!
-    FindOneElement(fcpx, criteria, shared)
+    FindOneElement(fcpx, criteria, show_respective_panel)
 end
 
 function FcpxTitlePanelFocusOnElementByAttr(attrName, attrValue, callback)
