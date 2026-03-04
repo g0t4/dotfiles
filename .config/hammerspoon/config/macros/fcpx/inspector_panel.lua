@@ -70,7 +70,7 @@ end
 
 function FcpxInspectorPanel:titleCheckbox()
     -- INCORPORATE WORKING SEARCH CODE INSTEAD, see "x scrubber" streamdeck button's code:
-    --    fcpx.init => FcpxFindInspectorPanelViaTitleCheckbox (FYI might be renamed)
+    --    fcpx.init => FcpxFindInspectorPanelViaItsCheckbox (FYI might be renamed)
 
     -- FIXED PATH CURRENTLY (this seems to have changed, extra splitgroup.. if so lets try search to find it going forward, nested under right panel which s/b mostly fixed in place)
     --
