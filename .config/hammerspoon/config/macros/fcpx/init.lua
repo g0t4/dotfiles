@@ -235,25 +235,24 @@ function StreamDeckToggleNoiseGate()
         -- if callback then callback(elem) end
     end)
 
-
-
-    -- * Audio Inspector checkbox
-    -- app:window(2):splitGroup(1):group(1):splitGroup(1):group(2):splitGroup(1):group(4):group(2):checkBox(1)
+    -- * Noise Gate Checkbox
+    -- app:window(2):splitGroup(1):group(1):splitGroup(1):group(2):splitGroup(1):group(4):group(1):splitGroup(1):group(1)
+    --   :group(1):scrollArea(1):checkBox(4)
     --
-    -- AXDescription: Video Inspector<string>
+    -- AXDescription: noise gate check box<string>
     -- AXEnabled: true<bool>
     -- AXFocused: false<bool>
-    -- AXHelp: Show the Video Inspector<string>
-    -- AXIdentifier: _NS:10<string>
-    -- AXRoleDescription: toggle button<string>
-    -- AXSubrole: AXToggle<string>
-    -- AXTitle: Video<string>
-    -- AXValue: 0<number>
-    -- frame: x=1529.0,y=51.0,w=20.0,h=20.0
+    -- AXHelp: Noise Gate Check Box<string>
+    -- AXRoleDescription: checkbox<string>
+    -- AXValue: 1<number>
+    -- frame: x=1529.0,y=323.0,w=14.0,h=20.0
+    --
+    -- press 'c' children, 'e' everything
     --
     -- unique ref: app:window('Final Cut Pro'):splitGroup():group():splitGroup()
 
-    -- * Noise Gate Checkbox
+
+    -- * Noise Gate title (static text)
     -- app:window(2):splitGroup(1):group(1):splitGroup(1):group(2):splitGroup(1):group(4):group(1):splitGroup(1):group(1)
     --   :group(1):scrollArea(1):staticText(10)
     --
