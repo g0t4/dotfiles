@@ -56,33 +56,7 @@ function FcpxFindInspectorPanelViaTitleCheckbox(callback)
     local window = fcpx:attributeValue("AXFocusedWindow")
     local criteria = { attribute = "AXDescription", value = "Title Inspector" } -- 270ms to 370ms w/ count=1
 
-    if _cached_inspector_panel_group and _cached_inspector_panel_group:isValid() then
-        print("using cached inspector panel")
-        -- search again but from the cached panel (very fast @50ms) for the checkbox so I can ensure the panel is still visible!
-        -- TODO consolidate the logic here with below
-        FindOneElement(_cached_inspector_panel_group, criteria, function(_, searchTask, numResultsAdded)
-            if numResultsAdded == 0 then
-                print("no title panel found")
-                return
-            end
-            local foundCheckbox = searchTask[1]
-
-            -- ensure title panel is visible!
-            if foundCheckbox:attributeValue("AXValue") == 0 then
-                foundCheckbox:performAction("AXPress")
-            end
-
-            -- FYI foundCheckbox is recreated on selection changes so don't cache it
-            --   whereas grandparent appears stable (across selections)
-            ---@type hs.axuielement
-            _cached_inspector_panel_group = foundCheckbox:attributeValue("AXParent"):attributeValue("AXParent")
-            callback(_cached_inspector_panel_group)
-        end)
-        return
-    end
-    -- PRN setup run_async to unravel the callback hell below (and in nested functions)
-    -- FYI search can be slow on first run (2s).. but then it's 100-200ms on subsequent runs so that is FAST!
-    FindOneElement(fcpx, criteria, function(_, searchTask, numResultsAdded)
+    local function shared(_, searchTask, numResultsAdded)
         if numResultsAdded == 0 then
             print("no title panel found")
             return
@@ -99,7 +73,18 @@ function FcpxFindInspectorPanelViaTitleCheckbox(callback)
         ---@type hs.axuielement
         _cached_inspector_panel_group = foundCheckbox:attributeValue("AXParent"):attributeValue("AXParent")
         callback(_cached_inspector_panel_group)
-    end)
+    end
+
+    if _cached_inspector_panel_group and _cached_inspector_panel_group:isValid() then
+        print("using cached inspector panel")
+        -- search again but from the cached panel (very fast @50ms) for the checkbox so I can ensure the panel is still visible!
+        -- TODO consolidate the logic here with below
+        FindOneElement(_cached_inspector_panel_group, criteria, shared)
+        return
+    end
+    -- PRN setup run_async to unravel the callback hell below (and in nested functions)
+    -- FYI search can be slow on first run (2s).. but then it's 100-200ms on subsequent runs so that is FAST!
+    FindOneElement(fcpx, criteria, shared)
 end
 
 function FcpxTitlePanelFocusOnElementByAttr(attrName, attrValue, callback)
@@ -274,7 +259,6 @@ function StreamDeckFcpxViewerToggleComments()
 end
 
 function StreamDeckToggleNoiseGate()
-
     -- FYI search can be slow on first run (2s).. but then it's 100-200ms on subsequent runs so that is FAST!
     --    click into panel first time to speed up if it is annoying you
     local function FcpxSearchForInspectorCheckbox(inspector_name, callback)
