@@ -56,7 +56,7 @@ function FcpxFindAndEnsureInspectorPanelIsOpen(checkbox_description, callback)
 
     local function show_respective_panel(_, searchTask, numResultsAdded)
         if numResultsAdded == 0 then
-            print("no title panel found")
+            print("no " .. checkbox_description .. "panel found")
             return
         end
         local foundCheckbox = searchTask[1]
@@ -78,7 +78,9 @@ function FcpxFindAndEnsureInspectorPanelIsOpen(checkbox_description, callback)
         FindOneElement(_cached_inspector_panel_group, criteria, show_respective_panel)
         return
     end
-    FindOneElement(fcpx, criteria, show_respective_panel)
+    -- TODO can't I narrow down where I look a little bit? to speed this up
+    --  main issue is if the panel isn't there b/c a clip item isn't selected to show it... it will timeout after 20 seconds
+    FindOneElement(window, criteria, show_respective_panel)
 end
 
 function FcpxTitlePanelFocusOnElementByAttr(attrName, attrValue, callback)
@@ -215,14 +217,17 @@ function StreamDeckFcpxViewerToggleComments()
 end
 
 function StreamDeckToggleNoiseGate()
+    print("looking for noise gate")
+    -- TODO ideally check to make sure a clip is selected else this is a giant waste of time
+    --    TODO if i figure that out then use similar to make sure shape is selected before trying to show X/Y center/inc/dec
     FcpxFindAndEnsureInspectorPanelIsOpen("Audio Inspector", function(inspector_panel)
         inspector_panel:dumpAttributes()
 
         -- if static path fails here, search might work...
-        local scrollarea1 = inspector_panel:attributeValue("AXChildren")[1][1][1]
-        local elem = GetChildWithAttr(scrollarea1, attrName, attrValue)
-        elem:setAttributeValue("AXFocused", true)
-        if callback then callback(elem) end
+        -- local scrollarea1 = inspector_panel:attributeValue("AXChildren")[1][1][1]
+        -- local elem = GetChildWithAttr(scrollarea1, attrName, attrValue)
+        -- elem:setAttributeValue("AXFocused", true)
+        -- if callback then callback(elem) end
     end)
 
 
