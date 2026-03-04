@@ -222,6 +222,11 @@ function StreamDeckToggleNoiseGate()
     --    TODO if i figure that out then use similar to make sure shape is selected before trying to show X/Y center/inc/dec
     FcpxFindAndEnsureInspectorPanelIsOpen("Audio Inspector", function(inspector_panel, audio_checkbox)
         inspector_panel:dumpAttributes()
+        if not audio_checkbox then
+            -- if no audio checkbox, no reason to proceed (searches will block and be slow and come up with nothing)
+            hs.alert.show("No Audio Inspector panel found (no checkbox)... do you have a clip selected in the timeline?")
+            return
+        end
 
         -- if static path fails here, search might work...
         -- local scrollarea1 = inspector_panel:attributeValue("AXChildren")[1][1][1]
