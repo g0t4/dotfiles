@@ -240,9 +240,13 @@ function StreamDeckToggleNoiseGate()
         local criteria = { attribute = "AXDescription", value = "noise gate check box" }
         local static_subpanel = inspector_panel:group(1):splitGroup(1):group(1):group(1):scrollArea(1)
         FindOneElement(static_subpanel, criteria, function(_, searchTask, numResultsAdded)
-            hs.alert.show("FOUND IT")
+            -- hs.axuielement.elementSearchObject (type for searchTask)
             print(numResultsAdded)
-            print(searchTask)
+            local noise_gate_checkbox = searchTask[1]
+            if not noise_gate_checkbox then
+                hs.alert.show("Noise gate checkbox not found, is the effect even applied to this clip?")
+                return
+            end
         end)
 
         -- if static path fails here, search might work...
