@@ -11,7 +11,7 @@ from chat_non_stream import generate_non_streaming
 #   this was my OG OG ask-openai plugin core
 
 system_message = "You are a command line expert. Respond with a single, valid, complete command line. I intend to execute it. No explanation. No markdown. No markdown with backticks ` nor ```"
-max_tokens = 200
+max_tokens = 2000
 
 def main():
 
