@@ -4,7 +4,7 @@ from services import get_selected_service, Service
 from logs import log
 from langchain_core.language_models import BaseChatModel
 
-TIMEOUT_SECONDS = 5
+TIMEOUT_SECONDS = 15
 
 def get_model() -> tuple[BaseChatModel, Service]:
     service = get_selected_service()

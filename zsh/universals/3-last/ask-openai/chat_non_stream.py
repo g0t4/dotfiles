@@ -7,7 +7,7 @@ from services import Service, get_selected_service
 # TODO test anthropic
 # DONE: openai/llama-server
 
-TIMEOUT_SECONDS = 5
+TIMEOUT_SECONDS = 15
 
 def get_model() -> tuple[BaseChatModel, Service]:
     service = get_selected_service()
