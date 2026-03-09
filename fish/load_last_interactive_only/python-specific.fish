@@ -110,15 +110,13 @@ function uv_remove
     git commit -m "uv remove $argv" pyproject.toml uv.lock
 end
 
-function uv_reinstall_pkg
+function uv_reinstall_package --argument-names package
     # Reinstall a package in the current virtual environment, discarding any local modifications.
-    set -l pkg $argv[1]
-    set -l missing_pkg (test -z "$pkg")
-    if $missing_pkg
-        echo "Usage: uv_reinstall_pkg <package>"
+    if is_empty $package
+        echo -e "Package arg missing... usage:\n  uv_reinstall_pkg <package>\n"
         return 1
     end
-    uv sync --reinstall-package $pkg
+    uv sync --reinstall-package $package
 end
 
 abbr uvr 'uv run'
