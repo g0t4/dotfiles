@@ -70,7 +70,7 @@ return {
 
     {
         "folke/which-key.nvim",
-        enabled = true,
+        enabled = false,
         config = function()
             require("which-key").setup {
                 delay = 1000, -- before open (ms)
