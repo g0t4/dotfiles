@@ -1060,6 +1060,328 @@ local function handlePythonCode(code, searchId, callback)
     return function() end  -- No-op cancel
 end
 
+-- Show available modes
+local function showModes()
+    return {
+        {
+            text = "b <query>",
+            subText = "Bookmarks (e.g., 'b lock', 'b trash', 'b mute')",
+            image = hs.image.imageFromName("NSBookmarksTemplate"),
+        },
+        {
+            text = "a <name>",
+            subText = "Search applications (e.g., 'a safari', 'a terminal')",
+            image = hs.image.imageFromName("NSApplicationIcon"),
+        },
+        {
+            text = "s <query>",
+            subText = "System Settings (e.g., 's privacy', 's network', 's bluetooth')",
+            image = hs.image.imageFromName("NSPreferencesGeneral"),
+        },
+        {
+            text = "d <query>",
+            subText = "Directory search (e.g., 'd repos', 'd Downloads')",
+            image = hs.image.imageFromName("NSFolder"),
+        },
+        {
+            text = "define <word>",
+            subText = "Dictionary lookup (e.g., 'define recursion', 'define algorithm')",
+            image = hs.image.imageFromName("NSBookmarkTemplate"),
+        },
+        {
+            text = "g <query>",
+            subText = "Google search (e.g., 'g hammerspoon docs')",
+            image = hs.image.imageFromName("NSNetwork"),
+        },
+        {
+            text = "l <expression>",
+            subText = "Lua calculator (e.g., 'l 2+2', 'l math.sqrt(16)')",
+            image = hs.image.imageFromName("NSCalculator"),
+        },
+        {
+            text = "o <prompt>",
+            subText = "LLM completion (e.g., 'o what is lua', 'o explain recursion')",
+            image = hs.image.imageFromName("NSInfo"),
+        },
+        {
+            text = "/<path> or ~<path>",
+            subText = "Browse filesystem (e.g., '/Applications', '~/Desktop')",
+            image = hs.image.imageFromName("NSFolder"),
+        },
+        {
+            text = "f <command>",
+            subText = "Fish shell command (e.g., 'f pkill hammerspoon', 'f ls -la')",
+            image = hs.image.imageFromName("NSActionTemplate"),
+        },
+        {
+            text = "py <code>",
+            subText = "Python code (e.g., 'py print(2+2)', 'py import sys; print(sys.version)')",
+            image = hs.image.imageFromName("NSActionTemplate"),
+        },
+        {
+            text = "e <query>",
+            subText = "Emoji picker (e.g., 'e smile', 'e heart', 'e fire')",
+            image = hs.image.imageFromName("NSFontPanel"),
+        },
+        {
+            text = "v <broad> <refine>",
+            subText = "Two-stage fuzzy: mdfind + fuzzy (e.g., 'v repos ask', 'v github dot')",
+            image = hs.image.imageFromName("NSAdvanced"),
+        },
+        {
+            text = "<search>",
+            subText = "File search using mdfind (Spotlight)",
+            image = hs.image.imageFromName("NSFolder"),
+        },
+    }
+end
+
+-- Bookmarks - fixed items that surface during rootless search
+-- NOTE: actions are stored by name and dispatched in onChoice (hs.chooser can't serialize functions)
+local bookmarks = {
+    {
+        name = "trash",
+        keywords = {"trash", "bin", "rubbish", "deleted"},
+        text = "Open Trash",
+        subText = "Show Trash folder in Finder",
+        image = hs.image.imageFromName("NSTrashFull"),
+    },
+    {
+        name = "lock",
+        keywords = {"lock", "lockscreen"},
+        text = "Lock Screen",
+        subText = "Lock the screen",
+        image = hs.image.imageFromName("NSLockLockedTemplate"),
+    },
+    {
+        name = "sleep",
+        keywords = {"sleep"},
+        text = "Sleep",
+        subText = "Put computer to sleep",
+        image = hs.image.imageFromName("NSStopProgressTemplate"),
+    },
+    {
+        name = "logout",
+        keywords = {"logout", "log out", "signout", "sign out"},
+        text = "Log Out",
+        subText = "Log out of current user session",
+        image = hs.image.imageFromName("NSUser"),
+    },
+    {
+        name = "restart",
+        keywords = {"restart", "reboot"},
+        text = "Restart",
+        subText = "Restart the Mac",
+        image = hs.image.imageFromName("NSRefreshTemplate"),
+    },
+    {
+        name = "shutdown",
+        keywords = {"shutdown", "shut down", "power off", "poweroff"},
+        text = "Shut Down",
+        subText = "Shut down the Mac",
+        image = hs.image.imageFromName("NSStopProgressFreestandingTemplate"),
+    },
+    {
+        name = "mute",
+        keywords = {"mute", "unmute", "volume"},
+        text = "Toggle Mute",
+        subText = "Mute/unmute system audio",
+        image = hs.image.imageFromName("NSTouchBarAudioOutputVolumeOffTemplate"),
+    },
+    {
+        name = "reload",
+        keywords = {"reload", "hammerspoon"},
+        text = "Reload Hammerspoon",
+        subText = "Reload Hammerspoon config",
+        image = hs.image.imageFromName("NSRefreshTemplate"),
+    },
+    {
+        name = "console",
+        keywords = {"console", "hammerspoon"},
+        text = "Hammerspoon Console",
+        subText = "Open Hammerspoon console",
+        image = hs.image.imageFromName("NSActionTemplate"),
+    },
+    {
+        name = "dark",
+        keywords = {"dark", "darkmode", "light", "theme", "appearance"},
+        text = "Toggle Dark Mode",
+        subText = "Switch between dark and light mode",
+        image = hs.image.imageFromName("NSQuickLookTemplate"),
+    },
+}
+
+-- Bookmark action dispatch (keyed by name)
+local bookmarkActions = {
+    trash = function()
+        hs.execute('open "trash://"')
+    end,
+    lock = function()
+        hs.caffeinate.lockScreen()
+    end,
+    sleep = function()
+        hs.caffeinate.systemSleep()
+    end,
+    logout = function()
+        hs.osascript.applescript('tell application "System Events" to log out')
+    end,
+    restart = function()
+        hs.osascript.applescript('tell application "System Events" to restart')
+    end,
+    shutdown = function()
+        hs.osascript.applescript('tell application "System Events" to shut down')
+    end,
+    mute = function()
+        local device = hs.audiodevice.defaultOutputDevice()
+        if device then
+            device:setMuted(not device:muted())
+            local state = device:muted() and "Muted" or "Unmuted"
+            hs.alert.show(state)
+        end
+    end,
+    reload = function()
+        hs.reload()
+    end,
+    console = function()
+        hs.openConsole()
+    end,
+    dark = function()
+        hs.osascript.applescript('tell app "System Events" to tell appearance preferences to set dark mode to not dark mode')
+    end,
+}
+
+-- Tab completions: ordered list of {match, result} pairs
+-- Priority: exact prefixes first, then keyword aliases, then bookmark keywords
+local tabCompletions = {}
+
+-- Prefix shortcuts (typing "a" + Tab → "a " enters app mode)
+local prefixShortcuts = {"a", "b", "s", "d", "define", "g", "l", "o", "f", "py", "e", "v"}
+for _, p in ipairs(prefixShortcuts) do
+    table.insert(tabCompletions, {match = p, result = p .. " "})
+end
+
+-- Keyword aliases for prefixes (typing "app" + Tab → "a ")
+local prefixAliases = {
+    {"app", "a "}, {"apps", "a "}, {"applications", "a "},
+    {"book", "b "}, {"bookmarks", "b "},
+    {"settings", "s "}, {"system", "s "},
+    {"dir", "d "}, {"directory", "d "},
+    {"dict", "define "}, {"dictionary", "define "},
+    {"google", "g "},
+    {"lua", "l "}, {"calc", "l "},
+    {"llm", "o "},
+    {"fish", "f "},
+    {"python", "py "},
+    {"emoji", "e "},
+    {"fuzzy", "v "},
+}
+for _, a in ipairs(prefixAliases) do
+    table.insert(tabCompletions, {match = a[1], result = a[2]})
+end
+
+-- Bookmark keywords (typing "tra" + Tab → "trash")
+for _, bookmark in ipairs(bookmarks) do
+    for _, keyword in ipairs(bookmark.keywords) do
+        table.insert(tabCompletions, {match = keyword, result = bookmark.name})
+    end
+end
+
+-- Handle Tab key: find first completion where match starts with query
+local function handleTabCompletion()
+    if not chooser then return false end
+    local query = chooser:query()
+    if query == "" then return false end
+    local queryLower = query:lower()
+
+    for _, comp in ipairs(tabCompletions) do
+        if comp.match:sub(1, #queryLower) == queryLower then
+            chooser:query(comp.result)
+            return true
+        end
+    end
+    return false
+end
+
+-- Match bookmarks and prefix hints against a query
+local function matchBookmarks(query)
+    local queryLower = query:lower()
+    local matches = {}
+
+    -- Match bookmarks
+    for _, bookmark in ipairs(bookmarks) do
+        for _, keyword in ipairs(bookmark.keywords) do
+            if keyword:find(queryLower, 1, true) then
+                table.insert(matches, {
+                    text = bookmark.text,
+                    subText = bookmark.subText,
+                    image = bookmark.image,
+                    bookmark = bookmark.name,
+                })
+                break
+            end
+        end
+    end
+
+    -- Match prefix hints from showModes()
+    local modes = showModes()
+    for _, mode in ipairs(modes) do
+        local modeText = mode.text:lower()
+        local modeSub = mode.subText:lower()
+        if modeText:find(queryLower, 1, true) or modeSub:find(queryLower, 1, true) then
+            table.insert(matches, {
+                text = mode.text,
+                subText = mode.subText,
+                image = mode.image,
+                prefixHint = true,
+            })
+        end
+    end
+
+    return matches
+end
+
+-- Browse all bookmarks (b prefix)
+local function handleBookmarks(query, searchId, callback)
+    local results = {}
+    local queryLower = query:lower()
+
+    for _, bookmark in ipairs(bookmarks) do
+        if query == "" then
+            table.insert(results, {
+                text = bookmark.text,
+                subText = bookmark.subText,
+                image = bookmark.image,
+                bookmark = bookmark.name,
+            })
+        else
+            -- Search name, text, subText, and keywords
+            local found = false
+            if bookmark.text:lower():find(queryLower, 1, true) or bookmark.subText:lower():find(queryLower, 1, true) then
+                found = true
+            end
+            if not found then
+                for _, keyword in ipairs(bookmark.keywords) do
+                    if keyword:find(queryLower, 1, true) then
+                        found = true
+                        break
+                    end
+                end
+            end
+            if found then
+                table.insert(results, {
+                    text = bookmark.text,
+                    subText = bookmark.subText,
+                    image = bookmark.image,
+                    bookmark = bookmark.name,
+                })
+            end
+        end
+    end
+
+    callback(searchId, results)
+    return function() end
+end
+
 -- Simple fuzzy match function
 -- Checks if query characters appear in order in the target string (case-insensitive)
 local function fuzzyMatch(str, query)
@@ -1256,37 +1578,6 @@ local function handleSystemSettings(query, searchId, callback)
     return function() end  -- No-op cancel
 end
 
--- Commands mode - run predefined commands
-local function handleCommands(query, searchId, callback)
-    -- Define some useful commands
-    local commands = {
-        {name = "reload", desc = "Reload Hammerspoon config", cmd = function() hs.reload() end},
-        {name = "console", desc = "Open Hammerspoon console", cmd = function() hs.openConsole() end},
-        {name = "sleep", desc = "Put computer to sleep", cmd = function() hs.caffeinate.systemSleep() end},
-        {name = "lock", desc = "Lock screen", cmd = function() hs.caffeinate.lockScreen() end},
-        {name = "dark", desc = "Toggle dark mode", cmd = function()
-            hs.osascript.applescript('tell app "System Events" to tell appearance preferences to set dark mode to not dark mode')
-        end},
-    }
-
-    local results = {}
-
-    -- Filter commands by query
-    for _, cmd in ipairs(commands) do
-        if query == "" or cmd.name:lower():find(query:lower(), 1, true) or cmd.desc:lower():find(query:lower(), 1, true) then
-            table.insert(results, {
-                text = cmd.name,
-                subText = cmd.desc,
-                command = cmd.cmd,
-                image = hs.image.imageFromName("NSActionTemplate"),
-            })
-        end
-    end
-
-    callback(searchId, results)
-    return function() end  -- No-op cancel
-end
-
 -- Lua calculator mode - evaluate Lua expression (moved from "c ")
 local function handleCalculator(expression, searchId, callback)
     if expression == "" then
@@ -1324,82 +1615,6 @@ local function handleCalculator(expression, searchId, callback)
         image = hs.image.imageFromName("NSCalculator"),
     }})
     return function() end  -- No-op cancel
-end
-
--- Show available modes
-local function showModes()
-    return {
-        {
-            text = "a <name>",
-            subText = "Search applications (e.g., 'a safari', 'a terminal')",
-            image = hs.image.imageFromName("NSApplicationIcon"),
-        },
-        {
-            text = "s <query>",
-            subText = "System Settings (e.g., 's privacy', 's network', 's bluetooth')",
-            image = hs.image.imageFromName("NSPreferencesGeneral"),
-        },
-        {
-            text = "c <query>",
-            subText = "Commands (e.g., 'c reload', 'c lock', 'c sleep')",
-            image = hs.image.imageFromName("NSActionTemplate"),
-        },
-        {
-            text = "d <query>",
-            subText = "Directory search (e.g., 'd repos', 'd Downloads')",
-            image = hs.image.imageFromName("NSFolder"),
-        },
-        {
-            text = "define <word>",
-            subText = "Dictionary lookup (e.g., 'define recursion', 'define algorithm')",
-            image = hs.image.imageFromName("NSBookmarkTemplate"),
-        },
-        {
-            text = "g <query>",
-            subText = "Google search (e.g., 'g hammerspoon docs')",
-            image = hs.image.imageFromName("NSNetwork"),
-        },
-        {
-            text = "l <expression>",
-            subText = "Lua calculator (e.g., 'l 2+2', 'l math.sqrt(16)')",
-            image = hs.image.imageFromName("NSCalculator"),
-        },
-        {
-            text = "o <prompt>",
-            subText = "LLM completion (e.g., 'o what is lua', 'o explain recursion')",
-            image = hs.image.imageFromName("NSInfo"),
-        },
-        {
-            text = "/<path> or ~<path>",
-            subText = "Browse filesystem (e.g., '/Applications', '~/Desktop')",
-            image = hs.image.imageFromName("NSFolder"),
-        },
-        {
-            text = "f <command>",
-            subText = "Fish shell command (e.g., 'f pkill hammerspoon', 'f ls -la')",
-            image = hs.image.imageFromName("NSActionTemplate"),
-        },
-        {
-            text = "py <code>",
-            subText = "Python code (e.g., 'py print(2+2)', 'py import sys; print(sys.version)')",
-            image = hs.image.imageFromName("NSActionTemplate"),
-        },
-        {
-            text = "e <query>",
-            subText = "Emoji picker (e.g., 'e smile', 'e heart', 'e fire')",
-            image = hs.image.imageFromName("NSFontPanel"),
-        },
-        {
-            text = "v <broad> <refine>",
-            subText = "Two-stage fuzzy: mdfind + fuzzy (e.g., 'v repos ask', 'v github dot')",
-            image = hs.image.imageFromName("NSAdvanced"),
-        },
-        {
-            text = "<search>",
-            subText = "File search using mdfind (Spotlight)",
-            image = hs.image.imageFromName("NSFolder"),
-        },
-    }
 end
 
 -- Search handler - cancels previous search on every keystroke
@@ -1447,6 +1662,13 @@ local function onQueryChange(query)
     print("Matches ^a :", query:match("^a ") ~= nil)
     print("Matches ^s :", query:match("^s ") ~= nil)
 
+    -- Check for bookmarks mode
+    if query:match("^b ") then
+        local bookmarkQuery = query:sub(3)  -- Remove "b " prefix
+        currentCancelFunc = handleBookmarks(bookmarkQuery, thisSearchId, handleResults)
+        return
+    end
+
     -- Check for application mode
     if query:match("^a ") then
         local appQuery = query:sub(3)  -- Remove "a " prefix
@@ -1459,13 +1681,6 @@ local function onQueryChange(query)
         local settingsQuery = query:sub(3)  -- Remove "s " prefix
         print("System settings mode activated, query:", settingsQuery)
         currentCancelFunc = handleSystemSettings(settingsQuery, thisSearchId, handleResults)
-        return
-    end
-
-    -- Check for commands mode
-    if query:match("^c ") then
-        local cmdQuery = query:sub(3)  -- Remove "c " prefix
-        currentCancelFunc = handleCommands(cmdQuery, thisSearchId, handleResults)
         return
     end
 
@@ -1538,8 +1753,27 @@ local function onQueryChange(query)
         return
     end
 
-    -- Default to file search
-    currentCancelFunc = searchFiles(query, thisSearchId, handleResults)
+    -- Default to file search, with bookmarks/prefix hints prepended
+    local bookmarkMatches = matchBookmarks(query)
+
+    -- Wrap handleResults to prepend bookmark matches to mdfind results
+    local function handleResultsWithBookmarks(searchId, results)
+        if searchId ~= currentSearchId then return end
+
+        local merged = {}
+        for _, item in ipairs(bookmarkMatches) do
+            table.insert(merged, item)
+        end
+        for _, item in ipairs(results) do
+            table.insert(merged, item)
+        end
+
+        if chooser then
+            chooser:choices(merged)
+        end
+    end
+
+    currentCancelFunc = searchFiles(query, thisSearchId, handleResultsWithBookmarks)
 end
 
 -- Active hotkeys (enabled while chooser is shown)
@@ -1547,6 +1781,7 @@ local refreshHotkeyCmdR = nil
 local refreshHotkeyCtrlR = nil
 local historyHotkeyUp = nil
 local historyHotkeyDown = nil
+local tabEventTap = nil
 
 -- Delete active hotkeys
 local function deleteActiveHotkeys()
@@ -1570,6 +1805,11 @@ local function deleteActiveHotkeys()
         historyHotkeyDown:delete()
         historyHotkeyDown = nil
         print("Deleted Cmd+Down hotkey")
+    end
+    if tabEventTap then
+        tabEventTap:stop()
+        tabEventTap = nil
+        print("Stopped Tab eventtap")
     end
 end
 
@@ -1648,6 +1888,13 @@ local function onChoice(choice)
         return
     end
 
+    -- Handle bookmark action
+    if choice.bookmark then
+        local action = bookmarkActions[choice.bookmark]
+        if action then action() end
+        return
+    end
+
     -- Handle calculator result
     if choice.result then
         hs.pasteboard.setContents(choice.result)
@@ -1688,12 +1935,6 @@ local function onChoice(choice)
     -- Handle system settings
     if choice.settingsId then
         hs.execute(string.format('open "x-apple.systempreferences:%s"', choice.settingsId))
-        return
-    end
-
-    -- Handle command execution
-    if choice.command then
-        choice.command()
         return
     end
 
@@ -1796,6 +2037,19 @@ function M.show()
     refreshHotkeyCtrlR:enable()
     historyHotkeyUp:enable()
     historyHotkeyDown:enable()
+
+    -- Tab completion eventtap
+    if not tabEventTap then
+        tabEventTap = hs.eventtap.new({hs.eventtap.event.types.keyDown}, function(event)
+            if event:getKeyCode() == 48 then -- Tab
+                if handleTabCompletion() then
+                    return true -- consume the event
+                end
+            end
+            return false
+        end)
+    end
+    tabEventTap:start()
 
     chooser:show()
 end
