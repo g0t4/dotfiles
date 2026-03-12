@@ -29,7 +29,7 @@ local function set_cct_channels(dmx_channels, channel_start, intensity, temp)
     dmx_channels[channel_start + 1] = intensity_low_byte
     dmx_channels[channel_start + 2] = temp_high_byte
     dmx_channels[channel_start + 3] = temp_low_byte
-    dmx_channels[channel_start + 4] = 0 -- tint
+    dmx_channels[channel_start + 4] = 0 -- tint (hardcode 0 for now)
 end
 
 
@@ -56,21 +56,15 @@ end
 local function set_lights(right_intensity, right_temp, back_opts, left_intensity, left_temp)
     local dmx_channels = {}
 
-    -- right light: CCT 16bit
+    -- right light: CCT 16bit (uses 5/8 channels)
     set_cct_channels(dmx_channels, 1, right_intensity, right_temp)
 
-    -- channels 6‑10: unused
-    for i = 6, 10 do dmx_channels[i] = "" end
-
-    -- back light HSL 16bit
-    set_hsl_channels(dmx_channels, 11,
+    -- back light HSL 16bit (uses 8/8 channels)
+    set_hsl_channels(dmx_channels, 9,
         back_opts.master, back_opts.hue, back_opts.saturation, back_opts.lightness)
 
-    -- channels 19‑20: unused
-    for i = 19, 20 do dmx_channels[i] = "" end
-
-    -- left light: CCT 16bit
-    set_cct_channels(dmx_channels, 21, left_intensity, left_temp)
+    -- left light: CCT 16bit (uses 5/8 channels)
+    set_cct_channels(dmx_channels, 17, left_intensity, left_temp)
 
     -- TODO how can I target a subset of channels without a massive comma delimited string?
     --    i.e. can't I send just 21 to 28? and not need the empty commas in between?
