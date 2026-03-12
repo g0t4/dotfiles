@@ -50,7 +50,7 @@ end
 
 function StreamDeckBuild26()
     local temp = 5000
-    set_lights(15, temp, 5, temp)
+    set_lights(12, temp, 5, temp)
 end
 
 function StreamDeckDmxOff()
