@@ -16,29 +16,34 @@ end
 
 
 local function set_lights(right_intensity, right_temp, left_intensity, left_temp)
-    local ri_h, ri_l = percent_to_dmx(right_intensity)
-    local rt_h, rt_l = temp_to_dmx(right_temp)
-    local li_h, li_l = percent_to_dmx(left_intensity)
-    local lt_h, lt_l = temp_to_dmx(left_temp)
+    local right_intensity_high, right_intensity_low = percent_to_dmx(right_intensity)
+    local right_temp_high,      right_temp_low      = temp_to_dmx(right_temp)
+    local left_intensity_high,  left_intensity_low  = percent_to_dmx(left_intensity)
+    local left_temp_high,       left_temp_low       = temp_to_dmx(left_temp)
 
-    local channels = {}
-    -- right light: channels 1-5
-    channels[1] = ri_h
-    channels[2] = ri_l
-    channels[3] = rt_h
-    channels[4] = rt_l
-    channels[5] = 0 -- tint
-    -- channels 6-20: unused
-    for i = 6, 20 do channels[i] = 0 end
-    -- left light: channels 21-25
-    channels[21] = li_h
-    channels[22] = li_l
-    channels[23] = lt_h
-    channels[24] = lt_l
-    channels[25] = 0 -- tint
+    local dmx_channels = {}
 
-    local dmx = table.concat(channels, ",")
-    hs.execute("/opt/homebrew/bin/ola_set_dmx -u 1 --dmx " .. dmx)
+    -- right light: channels 1‑5
+    dmx_channels[1] = right_intensity_high
+    dmx_channels[2] = right_intensity_low
+    dmx_channels[3] = right_temp_high
+    dmx_channels[4] = right_temp_low
+    dmx_channels[5] = 0 -- tint
+
+    -- channels 6‑20: unused
+    for i = 6, 20 do
+        dmx_channels[i] = 0
+    end
+
+    -- left light: channels 21‑25
+    dmx_channels[21] = left_intensity_high
+    dmx_channels[22] = left_intensity_low
+    dmx_channels[23] = left_temp_high
+    dmx_channels[24] = left_temp_low
+    dmx_channels[25] = 0 -- tint
+
+    local dmx_string = table.concat(dmx_channels, ",")
+    hs.execute("/opt/homebrew/bin/ola_set_dmx -u 1 --dmx " .. dmx_string)
 end
 
 function StreamDeckBuild26()
