@@ -7,12 +7,13 @@ end
 
 local function temp_to_dmx(kelvin)
     -- 2800K = 0, 10000K = 65535
-    local val = math.floor((kelvin - 2800) / (10000 - 2800) * 65535)
-    val = math.max(0, math.min(65535, val))
-    local high = math.floor(val / 256)
-    local low = val % 256
-    return high, low
+    local dmx_value = math.floor((kelvin - 2800) / (10000 - 2800) * 65535)
+    dmx_value = math.max(0, math.min(65535, dmx_value))
+    local high_byte = math.floor(dmx_value / 256)
+    local low_byte = dmx_value % 256
+    return high_byte, low_byte
 end
+
 
 local function set_lights(right_intensity, right_temp, left_intensity, left_temp)
     local ri_h, ri_l = percent_to_dmx(right_intensity)
