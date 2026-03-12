@@ -35,12 +35,13 @@ end
 
 local function set_hsl_channels(dmx_channels, channel_start, master_intensity, hue, saturation, lightness)
     local master_high_byte, master_low_byte = percent_to_dmx(master_intensity)
+    print("master", master_high_byte, master_low_byte)
     local hue_high_byte, hue_low_byte = hue_to_dmx(hue)
-    -- saturation range is 50-100%, so map 0-100% input to 50-100% DMX
-    local sat_mapped = 50 + (saturation / 100 * 50)
-    local saturation_high_byte, saturation_low_byte = percent_to_dmx(sat_mapped)
-    -- lightness: 0 = pure color, 100 = white
+    print("hue", hue_high_byte, hue_low_byte)
+    local saturation_high_byte, saturation_low_byte = percent_to_dmx(saturation)
+    print("sat", saturation_high_byte, saturation_low_byte)
     local lightness_high_byte, lightness_low_byte = percent_to_dmx(lightness)
+    print("lightness", lightness_high_byte, lightness_low_byte)
 
     dmx_channels[channel_start] = master_high_byte
     dmx_channels[channel_start + 1] = master_low_byte
