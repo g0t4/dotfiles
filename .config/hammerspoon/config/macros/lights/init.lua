@@ -22,15 +22,16 @@ local function hue_to_dmx(degrees)
     return math.floor(val / 256), val % 256
 end
 
-local function set_cct_channels(dmx_channels, base, intensity, temp)
+local function set_cct_channels(dmx_channels, channel_start, intensity, temp)
     local intensity_high_byte, intensity_low_byte = percent_to_dmx(intensity)
-    local temp_high_byte,      temp_low_byte      = temp_to_dmx(temp)
-    dmx_channels[base]     = intensity_high_byte
-    dmx_channels[base + 1] = intensity_low_byte
-    dmx_channels[base + 2] = temp_high_byte
-    dmx_channels[base + 3] = temp_low_byte
-    dmx_channels[base + 4] = 0 -- tint
+    local temp_high_byte, temp_low_byte = temp_to_dmx(temp)
+    dmx_channels[channel_start]     = intensity_high_byte
+    dmx_channels[channel_start + 1] = intensity_low_byte
+    dmx_channels[channel_start + 2] = temp_high_byte
+    dmx_channels[channel_start + 3] = temp_low_byte
+    dmx_channels[channel_start + 4] = 0 -- tint
 end
+
 
 local function set_hsl_channels(dmx_channels, base, master_intensity, hue, saturation, lightness)
     local master_high_byte,     master_low_byte     = percent_to_dmx(master_intensity)
