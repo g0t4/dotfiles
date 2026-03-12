@@ -10,7 +10,7 @@ return {
         -- - `ih` motion to select hunk (i.e. `vih`)
         -- * no gutter => visual cue that there are no outstanding changes for this file! (if using signs for changes)
         --
-        -- cons: ?
+        -- cons: adjusting the gutter can be annoying/jarring when you make a first change
 
         'lewis6991/gitsigns.nvim',
         -- enabled = false,
