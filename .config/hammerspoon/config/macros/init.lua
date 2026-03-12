@@ -85,5 +85,6 @@ require("config.macros.iina")
 require("config.macros.frontmost")
 require("config.macros.sdeck_config_app")
 require("config.macros.macos")
+require("config.macros.lights")
 
 return M
