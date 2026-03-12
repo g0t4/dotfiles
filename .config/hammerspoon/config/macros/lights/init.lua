@@ -30,6 +30,9 @@ local function set_cct_channels(dmx_channels, channel_start, intensity, temp)
     dmx_channels[channel_start + 2] = temp_high_byte
     dmx_channels[channel_start + 3] = temp_low_byte
     dmx_channels[channel_start + 4] = 0 -- tint (hardcode 0 for now)
+    dmx_channels[channel_start + 5] = 0 -- unused
+    dmx_channels[channel_start + 6] = 0 -- unused
+    dmx_channels[channel_start + 7] = 0 -- unused
 end
 
 
