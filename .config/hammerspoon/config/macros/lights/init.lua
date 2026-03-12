@@ -56,20 +56,20 @@ end
 local function set_lights(right_intensity, right_temp, back_opts, left_intensity, left_temp)
     local dmx_channels = {}
 
-    -- right light: base channel 1 (CCT, 5 channels)
+    -- right light: CCT 16bit
     set_cct_channels(dmx_channels, 1, right_intensity, right_temp)
 
     -- channels 6‑10: unused
     for i = 6, 10 do dmx_channels[i] = "" end
 
-    -- back light: base channel 11 (HSL, 8 channels)
+    -- back light HSL 16bit
     set_hsl_channels(dmx_channels, 11,
         back_opts.master, back_opts.hue, back_opts.saturation, back_opts.lightness)
 
     -- channels 19‑20: unused
     for i = 19, 20 do dmx_channels[i] = "" end
 
-    -- left light: base channel 21 (CCT, 5 channels)
+    -- left light: CCT 16bit
     set_cct_channels(dmx_channels, 21, left_intensity, left_temp)
 
     -- TODO how can I target a subset of channels without a massive comma delimited string?
