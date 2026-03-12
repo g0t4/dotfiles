@@ -60,10 +60,10 @@ local function set_lights(right_intensity, right_temp, back_opts, left_intensity
     local dmx_channels = {}
 
     -- left (key) light: CCT 16bit (uses 5/8 channels)
-    set_cct_channels(dmx_channels, 1, right_intensity, right_temp)
+    set_cct_channels(dmx_channels, 1, left_intensity, left_temp)
 
     -- right (fill) light: CCT 16bit (uses 5/8 channels)
-    set_cct_channels(dmx_channels, 9, left_intensity, left_temp)
+    set_cct_channels(dmx_channels, 9, right_intensity, right_temp)
 
     -- back light HSL 16bit (uses 8/8 channels)
     set_hsl_channels(dmx_channels, 17,
@@ -80,10 +80,10 @@ end
 function StreamDeckBuild26()
     local temp = 5000
     set_lights(
-        10, temp, -- right (fill)
+        5, temp -- left (key)
         -- TODO lightness, seems to map to a temp value... how does that work? just on HSL 16 bit mode
         { master = 20, hue = 240, saturation = 100, lightness = 0 }, -- rear/kick/accent
-        5, temp -- left (key)
+        10, temp, -- right (fill)
     )
 end
 
