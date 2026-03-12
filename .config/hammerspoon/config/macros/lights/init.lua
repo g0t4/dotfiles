@@ -15,32 +15,33 @@ local function temp_to_dmx(kelvin)
 end
 
 
-local function set_lights(right_intensity, right_temp, left_intensity, left_temp)
-    local right_intensity_high, right_intensity_low = percent_to_dmx(right_intensity)
-    local right_temp_high,      right_temp_low      = temp_to_dmx(right_temp)
-    local left_intensity_high,  left_intensity_low  = percent_to_dmx(left_intensity)
-    local left_temp_high,       left_temp_low       = temp_to_dmx(left_temp)
+local function set_light_channels(dmx_channels, base, intensity, temp)
+    local ih, il = percent_to_dmx(intensity)
+    local th, tl = temp_to_dmx(temp)
+    dmx_channels[base]     = ih
+    dmx_channels[base + 1] = il
+    dmx_channels[base + 2] = th
+    dmx_channels[base + 3] = tl
+    dmx_channels[base + 4] = 0 -- tint
+end
 
+local function set_lights(right_intensity, right_temp, back_intensity, back_temp, left_intensity, left_temp)
     local dmx_channels = {}
 
-    -- right light: channels 1‑5
-    dmx_channels[1] = right_intensity_high
-    dmx_channels[2] = right_intensity_low
-    dmx_channels[3] = right_temp_high
-    dmx_channels[4] = right_temp_low
-    dmx_channels[5] = 0 -- tint
+    -- right light: base channel 1
+    set_light_channels(dmx_channels, 1, right_intensity, right_temp)
 
-    -- channels 6‑20: unused == empty
-    for i = 6, 20 do
-        dmx_channels[i] = ""
-    end
+    -- channels 6‑10: unused
+    for i = 6, 10 do dmx_channels[i] = "" end
 
-    -- left light: channels 21‑25
-    dmx_channels[21] = left_intensity_high
-    dmx_channels[22] = left_intensity_low
-    dmx_channels[23] = left_temp_high
-    dmx_channels[24] = left_temp_low
-    dmx_channels[25] = 0 -- tint
+    -- back light: base channel 11
+    set_light_channels(dmx_channels, 11, back_intensity, back_temp)
+
+    -- channels 16‑20: unused
+    for i = 16, 20 do dmx_channels[i] = "" end
+
+    -- left light: base channel 21
+    set_light_channels(dmx_channels, 21, left_intensity, left_temp)
 
     -- TODO how can I target a subset of channels without a massive comma delimited string?
     --    i.e. can't I send just 21 to 28? and not need the empty commas in between?
@@ -50,7 +51,7 @@ end
 
 function StreamDeckBuild26()
     local temp = 5000
-    set_lights(10, temp, 5, temp)
+    set_lights(10, temp, 8, temp, 5, temp)
 end
 
 function StreamDeckDmxOff()
