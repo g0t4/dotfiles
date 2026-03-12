@@ -14,7 +14,7 @@ local function temp_to_dmx(kelvin)
     return high_byte, low_byte
 end
 
-local function hue_to_dmx(degrees)
+local function hue_degrees_to_dmx(degrees)
     -- 0-360 degrees mapped to 0-65535
     local val = math.floor(degrees / 360 * 65535)
     val = math.max(0, math.min(65535, val))
@@ -44,7 +44,7 @@ local function set_hsl_16bit_channels(dmx_channels, channel_start, params)
     local master_high_byte, master_low_byte = percent_to_dmx(params.master)
     print("master", master_high_byte, master_low_byte)
 
-    local hue_high_byte, hue_low_byte = hue_to_dmx(params.hue)
+    local hue_high_byte, hue_low_byte = hue_degrees_to_dmx(params.hue)
     print("hue", hue_high_byte, hue_low_byte)
 
     local sat_high_byte, sat_low_byte = percent_to_dmx(params.saturation)
