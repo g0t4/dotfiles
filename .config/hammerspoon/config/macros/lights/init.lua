@@ -56,15 +56,15 @@ end
 local function set_lights(right_intensity, right_temp, back_opts, left_intensity, left_temp)
     local dmx_channels = {}
 
-    -- right light: CCT 16bit (uses 5/8 channels)
+    -- left (key) light: CCT 16bit (uses 5/8 channels)
     set_cct_channels(dmx_channels, 1, right_intensity, right_temp)
 
-    -- back light HSL 16bit (uses 8/8 channels)
-    set_hsl_channels(dmx_channels, 9,
-        back_opts.master, back_opts.hue, back_opts.saturation, back_opts.lightness)
+    -- right (fill) light: CCT 16bit (uses 5/8 channels)
+    set_cct_channels(dmx_channels, 9, left_intensity, left_temp)
 
-    -- left light: CCT 16bit (uses 5/8 channels)
-    set_cct_channels(dmx_channels, 17, left_intensity, left_temp)
+    -- back light HSL 16bit (uses 8/8 channels)
+    set_hsl_channels(dmx_channels, 17,
+        back_opts.master, back_opts.hue, back_opts.saturation, back_opts.lightness)
 
     -- TODO how can I target a subset of channels without a massive comma delimited string?
     --    i.e. can't I send just 21 to 28? and not need the empty commas in between?
