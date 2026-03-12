@@ -35,7 +35,9 @@ end
 local function set_hsl_channels(dmx_channels, base, master_intensity, hue, saturation, intensity)
     local mih, mil = percent_to_dmx(master_intensity)
     local hh, hl = hue_to_dmx(hue)
-    local sh, sl = percent_to_dmx(saturation)
+    -- saturation range is 50-100%, so map 0-100% input to 50-100% DMX
+    local sat_mapped = 50 + (saturation / 100 * 50)
+    local sh, sl = percent_to_dmx(sat_mapped)
     local ih, il = percent_to_dmx(intensity)
     print("mih", mih, "mil", mil)
     print("hh", hh, "hl", hl)
