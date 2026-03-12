@@ -41,7 +41,8 @@ local function set_lights(right_intensity, right_temp, left_intensity, left_temp
 end
 
 function StreamDeckBuild26()
-    set_lights(20, 5600, 5, 5600)
+    local temp = 5000
+    set_lights(15, temp, 5, temp)
 end
 
 function StreamDeckDmxOff()
