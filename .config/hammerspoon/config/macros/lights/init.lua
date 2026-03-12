@@ -23,35 +23,32 @@ local function hue_to_dmx(degrees)
 end
 
 local function set_cct_channels(dmx_channels, base, intensity, temp)
-    local ih, il = percent_to_dmx(intensity)
-    local th, tl = temp_to_dmx(temp)
-    dmx_channels[base]     = ih
-    dmx_channels[base + 1] = il
-    dmx_channels[base + 2] = th
-    dmx_channels[base + 3] = tl
+    local intensity_high_byte, intensity_low_byte = percent_to_dmx(intensity)
+    local temp_high_byte,      temp_low_byte      = temp_to_dmx(temp)
+    dmx_channels[base]     = intensity_high_byte
+    dmx_channels[base + 1] = intensity_low_byte
+    dmx_channels[base + 2] = temp_high_byte
+    dmx_channels[base + 3] = temp_low_byte
     dmx_channels[base + 4] = 0 -- tint
 end
 
-local function set_hsl_channels(dmx_channels, base, master_intensity, hue, saturation, intensity)
-    local mih, mil = percent_to_dmx(master_intensity)
-    local hh, hl = hue_to_dmx(hue)
+local function set_hsl_channels(dmx_channels, base, master_intensity, hue, saturation, lightness)
+    local master_high_byte,     master_low_byte     = percent_to_dmx(master_intensity)
+    local hue_high_byte,        hue_low_byte        = hue_to_dmx(hue)
     -- saturation range is 50-100%, so map 0-100% input to 50-100% DMX
     local sat_mapped = 50 + (saturation / 100 * 50)
-    local sh, sl = percent_to_dmx(sat_mapped)
-    local ih, il = percent_to_dmx(intensity)
-    print("mih", mih, "mil", mil)
-    print("hh", hh, "hl", hl)
-    print("sh", sh, "sl", sl)
-    print("ih", ih, "il", il)
+    local saturation_high_byte, saturation_low_byte = percent_to_dmx(sat_mapped)
+    -- lightness: 0 = pure color, 100 = white
+    local lightness_high_byte,  lightness_low_byte  = percent_to_dmx(lightness)
 
-    dmx_channels[base]     = mih
-    dmx_channels[base + 1] = mil
-    dmx_channels[base + 2] = hh
-    dmx_channels[base + 3] = hl
-    dmx_channels[base + 4] = sh
-    dmx_channels[base + 5] = sl
-    dmx_channels[base + 6] = ih
-    dmx_channels[base + 7] = il
+    dmx_channels[base]     = master_high_byte
+    dmx_channels[base + 1] = master_low_byte
+    dmx_channels[base + 2] = hue_high_byte
+    dmx_channels[base + 3] = hue_low_byte
+    dmx_channels[base + 4] = saturation_high_byte
+    dmx_channels[base + 5] = saturation_low_byte
+    dmx_channels[base + 6] = lightness_high_byte
+    dmx_channels[base + 7] = lightness_low_byte
 end
 
 local function set_lights(right_intensity, right_temp, back_opts, left_intensity, left_temp)
@@ -65,7 +62,7 @@ local function set_lights(right_intensity, right_temp, back_opts, left_intensity
 
     -- back light: base channel 11 (HSL, 8 channels)
     set_hsl_channels(dmx_channels, 11,
-        back_opts.master, back_opts.hue, back_opts.saturation, back_opts.intensity)
+        back_opts.master, back_opts.hue, back_opts.saturation, back_opts.lightness)
 
     -- channels 19‑20: unused
     for i = 19, 20 do dmx_channels[i] = "" end
@@ -81,7 +78,7 @@ end
 
 function StreamDeckBuild26()
     local temp = 5000
-    set_lights(10, temp, { master = 20, hue = 240, saturation = 100, intensity = 100 }, 5, temp)
+    set_lights(10, temp, { master = 20, hue = 240, saturation = 100, lightness = 0 }, 5, temp)
 end
 
 function StreamDeckDmxOff()
