@@ -75,7 +75,9 @@ local function set_lights(right_intensity, right_temp, back_opts, left_intensity
     -- TODO how can I target a subset of channels without a massive comma delimited string?
     --    i.e. can't I send just 21 to 28? and not need the empty commas in between?
     local dmx_string = table.concat(dmx_channels, ",")
-    hs.execute("/opt/homebrew/bin/ola_set_dmx -u 1 --dmx " .. dmx_string)
+    local cmd = "/opt/homebrew/bin/ola_set_dmx -u 1 --dmx " .. dmx_string
+    print(cmd)
+    hs.execute(cmd)
 end
 
 function StreamDeckBuild26()
@@ -89,5 +91,7 @@ function StreamDeckBuild26()
 end
 
 function StreamDeckDmxOff()
-    hs.execute("/opt/homebrew/bin/ola_set_dmx -u 1 --dmx 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0")
+    local cmd = "/opt/homebrew/bin/ola_set_dmx -u 1 --dmx 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0"
+    print(cmd)
+    hs.execute(cmd)
 end
