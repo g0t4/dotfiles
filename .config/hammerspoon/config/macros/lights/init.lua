@@ -33,7 +33,7 @@ local function set_cct_channels(dmx_channels, channel_start, intensity, temp)
 end
 
 
-local function set_hsl_channels(dmx_channels, base, master_intensity, hue, saturation, lightness)
+local function set_hsl_channels(dmx_channels, channel_start, master_intensity, hue, saturation, lightness)
     local master_high_byte,     master_low_byte     = percent_to_dmx(master_intensity)
     local hue_high_byte,        hue_low_byte        = hue_to_dmx(hue)
     -- saturation range is 50-100%, so map 0-100% input to 50-100% DMX
@@ -42,14 +42,14 @@ local function set_hsl_channels(dmx_channels, base, master_intensity, hue, satur
     -- lightness: 0 = pure color, 100 = white
     local lightness_high_byte,  lightness_low_byte  = percent_to_dmx(lightness)
 
-    dmx_channels[base]     = master_high_byte
-    dmx_channels[base + 1] = master_low_byte
-    dmx_channels[base + 2] = hue_high_byte
-    dmx_channels[base + 3] = hue_low_byte
-    dmx_channels[base + 4] = saturation_high_byte
-    dmx_channels[base + 5] = saturation_low_byte
-    dmx_channels[base + 6] = lightness_high_byte
-    dmx_channels[base + 7] = lightness_low_byte
+    dmx_channels[channel_start]     = master_high_byte
+    dmx_channels[channel_start + 1] = master_low_byte
+    dmx_channels[channel_start + 2] = hue_high_byte
+    dmx_channels[channel_start + 3] = hue_low_byte
+    dmx_channels[channel_start + 4] = saturation_high_byte
+    dmx_channels[channel_start + 5] = saturation_low_byte
+    dmx_channels[channel_start + 6] = lightness_high_byte
+    dmx_channels[channel_start + 7] = lightness_low_byte
 end
 
 local function set_lights(right_intensity, right_temp, back_opts, left_intensity, left_temp)
