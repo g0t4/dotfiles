@@ -14,7 +14,6 @@ local function temp_to_dmx(kelvin)
     return high_byte, low_byte
 end
 
-
 local function hue_to_dmx(degrees)
     -- 0-360 degrees mapped to 0-65535
     local val = math.floor(degrees / 360 * 65535)
@@ -25,7 +24,7 @@ end
 ---@param dmx_channels table<number, integer>
 ---@param channel_start integer
 ---@param params { intensity: number, temp: number }
-local function set_cct_channels(dmx_channels, channel_start, params)
+local function set_cct_16bit_channels(dmx_channels, channel_start, params)
     local intensity_high_byte, intensity_low_byte = percent_to_dmx(params.intensity)
     local temp_high_byte, temp_low_byte = temp_to_dmx(params.temp)
     dmx_channels[channel_start] = intensity_high_byte
@@ -38,11 +37,10 @@ local function set_cct_channels(dmx_channels, channel_start, params)
     dmx_channels[channel_start + 7] = 0 -- unused
 end
 
-
 ---@param dmx_channels table<number, integer>
 ---@param channel_start integer
 ---@param params { master: number, hue: number, saturation: number, lightness: number }
-local function set_hsl_channels(dmx_channels, channel_start, params)
+local function set_hsl_16bit_channels(dmx_channels, channel_start, params)
     local master_high_byte, master_low_byte = percent_to_dmx(params.master)
     print("master", master_high_byte, master_low_byte)
 
@@ -55,7 +53,7 @@ local function set_hsl_channels(dmx_channels, channel_start, params)
     local light_high_byte, light_low_byte = percent_to_dmx(params.lightness)
     print("lightness", light_high_byte, light_low_byte)
 
-    dmx_channels[channel_start]     = master_high_byte
+    dmx_channels[channel_start] = master_high_byte
     dmx_channels[channel_start + 1] = master_low_byte
     dmx_channels[channel_start + 2] = hue_high_byte
     dmx_channels[channel_start + 3] = hue_low_byte
@@ -74,15 +72,9 @@ function StreamDeckBuild26()
     local back = { master = 20, hue = 240, saturation = 100, lightness = 0 } -- rear/kick/accent
 
     local dmx_channels = {}
-
-    -- left (key) light: CCT 16bit (uses 5/8 channels)
-    set_cct_channels(dmx_channels, 1, left)
-
-    -- right (fill) light: CCT 16bit (uses 5/8 channels)
-    set_cct_channels(dmx_channels, 9, right)
-
-    -- back light HSL 16bit (uses 8/8 channels)
-    set_hsl_channels(dmx_channels, 17, back)
+    set_cct_16bit_channels(dmx_channels, 1, left)
+    set_cct_16bit_channels(dmx_channels, 9, right)
+    set_hsl_16bit_channels(dmx_channels, 17, back)
 
     -- TODO how can I target a subset of channels without a massive comma delimited string?
     --    i.e. can't I send just 21 to 28? and not need the empty commas in between?
