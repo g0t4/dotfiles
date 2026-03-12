@@ -30,9 +30,9 @@ local function set_lights(right_intensity, right_temp, left_intensity, left_temp
     dmx_channels[4] = right_temp_low
     dmx_channels[5] = 0 -- tint
 
-    -- channels 6‑20: unused
+    -- channels 6‑20: unused == empty
     for i = 6, 20 do
-        dmx_channels[i] = 0
+        dmx_channels[i] = ""
     end
 
     -- left light: channels 21‑25
