@@ -69,12 +69,14 @@ function StreamDeckBuild26()
     -- light values
     local left = { intensity = 5, temp = temp }
     local right = { intensity = 10, temp = temp }
-    local back = { master = 20, hue = 240, saturation = 100, lightness = 0 } -- rear/kick/accent
+    --
+    -- don't need this for now, and this fixture is the finicky one... so I am done for today!
+    -- local back = { master = 20, hue = 220, saturation = 100, lightness = 0 } -- rear/kick/accent
 
     local dmx_channels = {}
     set_cct_16bit_channels(dmx_channels, 1, left)
     set_cct_16bit_channels(dmx_channels, 9, right)
-    set_hsl_16bit_channels(dmx_channels, 17, back)
+    -- set_hsl_16bit_channels(dmx_channels, 17, back)
 
     -- TODO how can I target a subset of channels without a massive comma delimited string?
     --    i.e. can't I send just 21 to 28? and not need the empty commas in between?
