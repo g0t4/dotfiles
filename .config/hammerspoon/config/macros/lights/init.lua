@@ -22,9 +22,12 @@ local function hue_to_dmx(degrees)
     return math.floor(val / 256), val % 256
 end
 
-local function set_cct_channels(dmx_channels, channel_start, intensity, temp)
-    local intensity_high_byte, intensity_low_byte = percent_to_dmx(intensity)
-    local temp_high_byte, temp_low_byte = temp_to_dmx(temp)
+---@param dmx_channels table<number, integer>
+---@param channel_start integer
+---@param params { intensity: number, temp: number }
+local function set_cct_channels(dmx_channels, channel_start, params)
+    local intensity_high_byte, intensity_low_byte = percent_to_dmx(params.intensity)
+    local temp_high_byte, temp_low_byte = temp_to_dmx(params.temp)
     dmx_channels[channel_start] = intensity_high_byte
     dmx_channels[channel_start + 1] = intensity_low_byte
     dmx_channels[channel_start + 2] = temp_high_byte
@@ -58,20 +61,19 @@ end
 
 function StreamDeckBuild26()
     local temp = 5000
-    local left_intensity = 5
-    local left_temp = temp
-    local right_intensity = 10
-    local right_temp = temp
-    -- -- TODO lightness, seems to map to a temp value... how does that work? just on HSL 16 bit mode
+
+    -- light values
+    local left = { intensity = 5, temp = temp }
+    local right = { intensity = 10, temp = temp }
     local back = { master = 20, hue = 240, saturation = 100, lightness = 0 } -- rear/kick/accent
 
     local dmx_channels = {}
 
     -- left (key) light: CCT 16bit (uses 5/8 channels)
-    set_cct_channels(dmx_channels, 1, left_intensity, left_temp)
+    set_cct_channels(dmx_channels, 1, left)
 
     -- right (fill) light: CCT 16bit (uses 5/8 channels)
-    set_cct_channels(dmx_channels, 9, right_intensity, right_temp)
+    set_cct_channels(dmx_channels, 9, right)
 
     -- back light HSL 16bit (uses 8/8 channels)
     set_hsl_channels(dmx_channels, 17,
