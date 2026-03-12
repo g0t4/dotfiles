@@ -87,7 +87,8 @@ function StreamDeckBuild26()
 end
 
 function StreamDeckDmxOff()
-    local cmd = "/opt/homebrew/bin/ola_set_dmx -u 1 --dmx 0,0,0,0,0,0,0,0,   0,0,0,0,0,0,0,0,   0,0,0,0,0,0,0,0"
+    -- DO NOT LEAVE SPACES BETWEEN the comma separate list of values... will not send everything after a space!
+    local cmd = "/opt/homebrew/bin/ola_set_dmx -u 1 --dmx 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0"
     print(cmd)
     hs.execute(cmd)
 end
