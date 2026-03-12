@@ -25,7 +25,7 @@ end
 local function set_cct_channels(dmx_channels, channel_start, intensity, temp)
     local intensity_high_byte, intensity_low_byte = percent_to_dmx(intensity)
     local temp_high_byte, temp_low_byte = temp_to_dmx(temp)
-    dmx_channels[channel_start]     = intensity_high_byte
+    dmx_channels[channel_start] = intensity_high_byte
     dmx_channels[channel_start + 1] = intensity_low_byte
     dmx_channels[channel_start + 2] = temp_high_byte
     dmx_channels[channel_start + 3] = temp_low_byte
@@ -34,15 +34,15 @@ end
 
 
 local function set_hsl_channels(dmx_channels, channel_start, master_intensity, hue, saturation, lightness)
-    local master_high_byte,     master_low_byte     = percent_to_dmx(master_intensity)
-    local hue_high_byte,        hue_low_byte        = hue_to_dmx(hue)
+    local master_high_byte, master_low_byte = percent_to_dmx(master_intensity)
+    local hue_high_byte, hue_low_byte = hue_to_dmx(hue)
     -- saturation range is 50-100%, so map 0-100% input to 50-100% DMX
     local sat_mapped = 50 + (saturation / 100 * 50)
     local saturation_high_byte, saturation_low_byte = percent_to_dmx(sat_mapped)
     -- lightness: 0 = pure color, 100 = white
-    local lightness_high_byte,  lightness_low_byte  = percent_to_dmx(lightness)
+    local lightness_high_byte, lightness_low_byte = percent_to_dmx(lightness)
 
-    dmx_channels[channel_start]     = master_high_byte
+    dmx_channels[channel_start] = master_high_byte
     dmx_channels[channel_start + 1] = master_low_byte
     dmx_channels[channel_start + 2] = hue_high_byte
     dmx_channels[channel_start + 3] = hue_low_byte
@@ -79,7 +79,11 @@ end
 
 function StreamDeckBuild26()
     local temp = 5000
-    set_lights(10, temp, { master = 20, hue = 240, saturation = 100, lightness = 0 }, 5, temp)
+    set_lights(
+        10, temp, -- right (fill)
+        { master = 20, hue = 240, saturation = 100, lightness = 0 }, -- rear/kick/accent
+        5, temp -- left (key)
+    )
 end
 
 function StreamDeckDmxOff()
