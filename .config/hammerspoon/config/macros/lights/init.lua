@@ -1,4 +1,4 @@
-local function intensity_to_dmx(percent)
+local function percent_to_dmx(percent)
     local val = math.floor(percent / 100 * 65535)
     local high = math.floor(val / 256)
     local low = val % 256
@@ -15,9 +15,9 @@ local function temp_to_dmx(kelvin)
 end
 
 local function set_lights(right_intensity, right_temp, left_intensity, left_temp)
-    local ri_h, ri_l = intensity_to_dmx(right_intensity)
+    local ri_h, ri_l = percent_to_dmx(right_intensity)
     local rt_h, rt_l = temp_to_dmx(right_temp)
-    local li_h, li_l = intensity_to_dmx(left_intensity)
+    local li_h, li_l = percent_to_dmx(left_intensity)
     local lt_h, lt_l = temp_to_dmx(left_temp)
 
     local channels = {}
