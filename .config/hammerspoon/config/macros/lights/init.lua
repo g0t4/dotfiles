@@ -81,6 +81,7 @@ function StreamDeckBuild26()
     local temp = 5000
     set_lights(
         10, temp, -- right (fill)
+        -- TODO lightness, seems to map to a temp value... how does that work? just on HSL 16 bit mode
         { master = 20, hue = 240, saturation = 100, lightness = 0 }, -- rear/kick/accent
         5, temp -- left (key)
     )
