@@ -1,7 +1,7 @@
 local function percent_to_dmx(percent)
-    local val = math.floor(percent / 100 * 65535)
-    local high = math.floor(val / 256)
-    local low = val % 256
+    local value = math.floor(percent / 100 * 65535)
+    local high = math.floor(value / 256)
+    local low = value % 256
     return high, low
 end
 
