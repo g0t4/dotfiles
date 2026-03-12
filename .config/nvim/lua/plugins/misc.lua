@@ -18,7 +18,7 @@ return {
     {
         -- FYI use `:Notifications` to see history of notifications
         "rcarriga/nvim-notify",
-        enabled = false,
+        -- enabled = false,
         config = function()
             -- actually this was useful-ish for hardtime cuz I would see the notices... but I hated it on everything else + disappearing messages are yuck (that I have to lookup special) AND often I want them gone (when recording) and I have to wait 5 sec
             --   TODO learn commands and/or bind keymaps
