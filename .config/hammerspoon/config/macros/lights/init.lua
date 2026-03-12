@@ -42,6 +42,8 @@ local function set_lights(right_intensity, right_temp, left_intensity, left_temp
     dmx_channels[24] = left_temp_low
     dmx_channels[25] = 0 -- tint
 
+    -- TODO how can I target a subset of channels without a massive comma delimited string?
+    --    i.e. can't I send just 21 to 28? and not need the empty commas in between?
     local dmx_string = table.concat(dmx_channels, ",")
     hs.execute("/opt/homebrew/bin/ola_set_dmx -u 1 --dmx " .. dmx_string)
 end
