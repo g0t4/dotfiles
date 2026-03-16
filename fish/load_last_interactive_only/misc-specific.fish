@@ -1875,7 +1875,7 @@ function path_prefix_extension --argument-names prefix path --description "like 
     echo $stem.$prefix$file_extension # foo.mp4 => foo.prefix.mp4
 end
 
-function video_editing_aio
+function _video_editing_aio_just_video_file
     set combined_file (_get_output_file_based_on_first_file combined.mp4 $argv)
 
     # based on: ffmpeg -i foo.mp4  -itsoffset 0.1 -i foo.mp4  -map 0:v -map 1:a -c:v copy -c:a aac foo-shifted100ms.mp4
@@ -1893,9 +1893,10 @@ function video_editing_aio
 
     # * both_fixed (start time truncation + CFR constant frame rate) for new silence detect tool
     set stage2_fixed_file (path change-extension .cfr_and_start.mp4 "$stage1_shifted_file")
+    echo $stage2_fixed_file
     if test -f "$stage2_fixed_file"
-        echo "stage2: $(basename $stage2_fixed_file)"
-    else
+        return
+    end
         ffmpeg -i "$stage1_shifted_file" \
             # -ss 0.1 # truncate first 100ms to fix timing mismatch from OBS
             -ss 0.1 \
@@ -1908,8 +1909,10 @@ function video_editing_aio
             -c:v libx264 -pix_fmt yuv420p -profile:v high -level 4.2 \
             -c:a aac -ar 48000 -ac 1 \
             "$stage2_fixed_file"
-    end
+end
 
+function video_editing_aio
+    _video_editing_aio_just_video_file $argv
     video_editing_gen_fcpxml "$stage2_fixed_file"
 end
 
