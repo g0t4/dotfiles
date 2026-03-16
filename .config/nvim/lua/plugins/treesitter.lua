@@ -4,7 +4,7 @@ return {
 
     {
         'nvim-treesitter/nvim-treesitter-textobjects',
-        version = false,            -- disable versioning to always use the latest
+        -- version = false,            -- disable versioning to always use the latest
         branch  = 'master',         -- explicitly pin to the master branch
         -- TODO GET ONTO main branch and drop explicit branch... somehow I was stuck on master locally... and I use that for nvim-treesitter.configs (plural) is now singular but not as easy as flip to config sinular import ... other crap is broken
         -- enabled = false,
