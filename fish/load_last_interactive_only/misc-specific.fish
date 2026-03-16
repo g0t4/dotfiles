@@ -1897,18 +1897,19 @@ function _video_editing_aio_just_video_file
     if test -f "$stage2_fixed_file"
         return
     end
-        ffmpeg -i "$stage1_shifted_file" \
-            # -ss 0.1 # truncate first 100ms to fix timing mismatch from OBS
-            -ss 0.1 \
-            -map 0:v:0 -map 0:a:0 \
-            -vf "fps=30" \
-            -af "aresample=async=1" \
-            # CFR will fix any gaps in audio samples (or video frames)
-            -fps_mode cfr \
-            -r 30 \
-            -c:v libx264 -pix_fmt yuv420p -profile:v high -level 4.2 \
-            -c:a aac -ar 48000 -ac 1 \
-            "$stage2_fixed_file"
+
+    ffmpeg -i "$stage1_shifted_file" \
+        # -ss 0.1 # truncate first 100ms to fix timing mismatch from OBS
+        -ss 0.1 \
+        -map 0:v:0 -map 0:a:0 \
+        -vf "fps=30" \
+        -af "aresample=async=1" \
+        # CFR will fix any gaps in audio samples (or video frames)
+        -fps_mode cfr \
+        -r 30 \
+        -c:v libx264 -pix_fmt yuv420p -profile:v high -level 4.2 \
+        -c:a aac -ar 48000 -ac 1 \
+        "$stage2_fixed_file"
 end
 
 function video_editing_aio
