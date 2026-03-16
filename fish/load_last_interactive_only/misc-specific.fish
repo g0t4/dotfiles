@@ -1853,6 +1853,7 @@ end
 
 abbr shift_only 'for i in *.mkv; video_editing_just_shift_to_mp4_one_video $i; end'
 function video_editing_just_shift_to_mp4_one_video
+    # TODO merge with stage_1 below which does the same thing
     # converts to mp4 + shifts by 100ms
     set video_file (realpath $argv[1])
     set output_file (path change-extension ".shifted100ms.mp4" "$video_file")
@@ -1881,9 +1882,7 @@ function _video_editing_aio_just_video_file
     # based on: ffmpeg -i foo.mp4  -itsoffset 0.1 -i foo.mp4  -map 0:v -map 1:a -c:v copy -c:a aac foo-shifted100ms.mp4
     # PRN add ms param? right now 100 works for my setup OBS+mixpre6v2/mv7+logibrio
     set stage1_shifted_file (path_prefix_extension shifted100ms "$combined_file")
-    if test -f "$stage1_shifted_file"
-        echo "stage1: $(basename $stage1_shifted_file)"
-    else
+    if not test -f "$stage1_shifted_file"
         _ffmpeg_concat $argv # produces $combined_file
 
         # TODO change this to re-encode audio stream? to avoid some issues w/ start=NON-ZERO (ffprobe foo.mp4) output
