@@ -4,7 +4,7 @@ function PressMenuItemRegex(menu)
 end
 
 ---@param menu string|table -- matching text or table of nested menus
----@param is_regex boolean -- default false
+---@param is_regex? boolean -- default false
 function PressMenuItem(menu, is_regex)
     is_regex = is_regex or false
 
