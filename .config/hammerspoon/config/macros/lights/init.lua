@@ -68,7 +68,7 @@ function StreamDeckBuild26()
 
     -- light values
     local left = { intensity = 5, temp = temp }
-    local right = { intensity = 10, temp = temp }
+    local right = { intensity = 20, temp = temp }
     --
     -- don't need this for now, and this fixture is the finicky one... so I am done for today!
     -- local back = { master = 20, hue = 220, saturation = 100, lightness = 0 } -- rear/kick/accent
