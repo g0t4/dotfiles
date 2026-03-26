@@ -178,7 +178,7 @@ fn get_service() -> Service {
                 } else {
                     String::from("Qwen/Qwen2.5-Coder-7B-Instruct")
                 },
-                url: String::from("http://ollama:8000/v1/chat/completions"),
+                url: String::from("http://ask.lan:8013/v1/chat/completions"),
             };
         }
         "--xai" => {
