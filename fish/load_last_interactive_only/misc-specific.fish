@@ -1912,7 +1912,7 @@ function _video_editing_aio_just_video_file
 end
 
 function video_editing_aio
-    _video_editing_aio_just_video_file $argv
+    set stage2_fixed_file $(_video_editing_aio_just_video_file $argv)
     video_editing_gen_fcpxml "$stage2_fixed_file"
 end
 
