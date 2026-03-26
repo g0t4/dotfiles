@@ -7,7 +7,7 @@ local currentSearchId = 0  -- Track current search across all searchers
 local MAX_RESULTS = 30
 
 -- LLM server configuration
-local LLM_SERVER = "http://build21.lan:8013"
+local LLM_SERVER = "http://ask.lan:8013"
 
 -- Emoji data configuration
 local EMOJI_CACHE_DIR = os.getenv("HOME") .. "/.local/share/hammerspoon"

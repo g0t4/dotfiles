@@ -60,11 +60,11 @@ function M.getService()
         }
     end
 
-    if stored.service == "--build21" then
+    if stored.service == "--ask_lan" then
         return {
-            name = "build21",
+            name = "ask_lan",
             api_key = "whatever",
-            url = "http://build21:8013/v1/chat/completions",
+            url = "http://ask.lan:8013/v1/chat/completions",
             model = stored.model == "" and "llama-server-fixed" or stored.model,
             max_tokens = 2048 -- for thinking models (gptoss/qwen3)
         }

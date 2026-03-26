@@ -3211,7 +3211,7 @@ function string_indent
 end
 
 if command -q claude
-    abbr clm 'ANTHROPIC_BASE_URL="http://build21:8013" claude --model Qwen/Qwen3-Coder-Next-GGUF:Q8_0' # for now just leave full model name as a reminder for one model
+    abbr clm 'ANTHROPIC_BASE_URL="http://ask.lan:8013" claude --model Qwen/Qwen3-Coder-Next-GGUF:Q8_0' # for now just leave full model name as a reminder for one model
     abbr clr 'claude --resume'
     abbr cld 'claude --dangerously-skip-permissions'
 end

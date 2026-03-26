@@ -34,11 +34,11 @@ def use_vllm(model: Optional[str] = None):
         # https://github.com/vllm-project/vllm/blob/main/docs/api.md#chat-completions
     )
 
-def use_build21(model: Optional[str] = None):
+def use_ask_lan(model: Optional[str] = None):
     return Service(
-        name='build21',
+        name='ask_lan',
         api_key="none",
-        base_url='http://build21:8013/v1',
+        base_url='http://ask.lan:8013/v1',
         model=model if model else 'FIXED_MODEL',  # FYI would need to query to find the actual model
         max_tokens=2048,
     )
@@ -217,7 +217,7 @@ def get_selected_service() -> Service:
 
 def get_selected_service_for_args(ask_service, model) -> Service:
     if ask_service is None:
-        return use_build21(None)
+        return use_ask_lan(None)
     # PRN this parsing logic can be shared with single.py, after I re-hydrate the ask_service variable
     if "--ollama" in ask_service:
         return use_ollama(model)
@@ -233,8 +233,8 @@ def get_selected_service_for_args(ask_service, model) -> Service:
         return use_anthropic(model)
     if "--gh-copilot" in ask_service:
         return use_gh_copilot(model)
-    if "--build21" in ask_service:
-        return use_build21(model)
+    if "--ask_lan" in ask_service:
+        return use_ask_lan(model)
     if "--inception" in ask_service:
         return use_inception(model)
     if "--xai" in ask_service:
