@@ -2417,7 +2417,7 @@ if command -q pacman
     abbr pmtree_list_all_pkgs_used_by "pactree --sync --color" # FYI no need to differentiate installed/all for dependencies of a pkgg... install status is irrelevant (unless get into optional deps)
     abbr pmtree_list_all_pkgs_that_use "pactree --sync --reverse --color"
     #
-    abbr --add __pactree_depth --position anywhere --regex '^d(\d+)$' --function __pactree_depth
+    abbr --add __pactree_depth --position anywhere --command pactree --regex '^d(\d+)$' --function __pactree_depth
     function __pactree_depth
         # dX => --depth=X
         string replace --regex -- '^d(\d+)$' '--depth=$1' $argv
