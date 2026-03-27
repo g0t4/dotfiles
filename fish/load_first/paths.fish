@@ -68,6 +68,11 @@ if test -d "$HOME/repos/github/openai/codex/codex-rs/target/release"
     export PATH="$HOME/repos/github/openai/codex/codex-rs/target/release:$PATH"
 end
 
+# fish-lsp (i.e. on arch)... brew on macOS
+if test -d "$HOME/repos/github/ndonfris/fish-lsp/bin"
+    export PATH="$HOME/repos/github/ndonfris/fish-lsp/bin:$PATH"
+end
+
 # kubectl krew
 if test -d "$HOME/.krew/bin"
     # suggested by krew:
