@@ -2389,7 +2389,7 @@ if command -q pacman
     # *** explicit / implicit installed pkgs
     abbr pmqe "pacman -Q --explicit" # list (e)xplicitly installed pkgs
     abbr pmqd "pacman -Q --deps" # list (e)xplicitly installed pkgs
-    abbr pm_list_explicit_installs "pacman -Q --explict" # -e/--explicit
+    abbr pm_list_explicit_installs "pacman -Q --explicit" # -e/--explicit
     abbr pm_list_implicit_installs_aka_deps "pacman -Q --deps" # -d/--deps
     #pacman -Qet # explicit installed packages (not required as deps of another package)
     #   IIUC, minimal set of packages to install to get back to where I am not
