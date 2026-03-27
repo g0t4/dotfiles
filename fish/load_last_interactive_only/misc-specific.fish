@@ -2736,7 +2736,7 @@ function rebuild_llama_cpp
         # I found a similar issue on GH... guy said he fixed with setting env var vor NVCC_CCBIN... I did the same, albeit in my case g++-14, his case was g++-13
         #   and now the subsequent cmake to create build config works again!
         # https://github.com/ggml-org/llama.cpp/issues/10849
-        export NVCC_CCBIN='/usr/bin/g++-14'
+        # export NVCC_CCBIN='/usr/bin/g++-14'
         # https://github.com/ggml-org/llama.cpp/blob/3eac2093/docs/build.md#L148
         cmake -B build -DGGML_CUDA=ON -DLLAMA_CURL=on
     end
