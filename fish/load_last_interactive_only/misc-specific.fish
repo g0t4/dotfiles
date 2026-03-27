@@ -2409,18 +2409,19 @@ if command -q pacman
     abbr --set-cursor pm_listremotepkgfiles "pacman -Flq % | treeify" # reminder
     abbr pmfy "sudo pacman -Fy" # reminder - download/s(y)nc fresh package databases
 
-    # * pactree reminders
-    abbr --regex 'pmtree\d+' --function __pmtreeX _pmtreeX
-    function __pmtreeX
-        string replace --regex '^pmtree' 'pactree --color -d' $argv
-    end
-    #
+    # * pactree
     # local DB == installed pkgs, sync DB == all pkgs (uninstalled too)
     # abbr pmtree_list_installed_pkgs_used_by "pactree --color" # FYI might be useful for optional dependencies that are installed (vs not installed)... if so, determine how to list optional with pactree and implement this abbr as needed
     abbr pmtree_list_installed_pkgs_that_use "pactree --reverse --color"
     #
     abbr pmtree_list_all_pkgs_used_by "pactree --sync --color" # FYI no need to differentiate installed/all for dependencies of a pkgg... install status is irrelevant (unless get into optional deps)
     abbr pmtree_list_all_pkgs_that_use "pactree --sync --reverse --color"
+    #
+    abbr --add __pactree_depth --position anywhere --regex '^d(\d+)$' --function __pactree_depth
+    function __pactree_depth
+        # dX => --depth=X
+        string replace --regex -- '^d(\d+)$' '--depth=$1' $argv
+    end
 
     # TODOs (as I use and figure out what I want):
     # -R == --remove
