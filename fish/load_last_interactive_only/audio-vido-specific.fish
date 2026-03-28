@@ -89,10 +89,16 @@ _create_abbr_ff_help_filter video transpose
 _create_abbr_ff_help_filter video vflip
 _create_abbr_ff_help_filter video whisper
 
-abbr ff_volumedetect --set-cursor --function _ffmpeg_volumedetect
-function _ffmpeg_volumedetect
+abbr ff_volumedetect --set-cursor --function _ff_volumedetect
+function _ff_volumedetect
     set -l input (_find_first_video_file_any_type; or echo "%")
     echo -n "ffmpeg -i $input -filter:a volumedetect -f null /dev/null 2>&1 | grep Parsed"
+end
+
+abbr --add ff_silencedetect --set-cursor --function _ffi_silencedetect
+function _ff_silencedetect
+    set input (_find_first_video_file_any_type; or echo "%")
+    echo -n "ffmpeg -i $input -af silencedetect=noise=d=0.1:-30dB -f null -"
 end
 
 # https://ffmpeg.org/ffmpeg-filters.html#whisper
