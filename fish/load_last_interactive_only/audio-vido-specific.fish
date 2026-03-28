@@ -61,22 +61,22 @@ abbr --set-cursor ffpshow "$_show_prefix -show_%"
 #
 
 # * volumedetect
-function create_ff_help_abbr -a filter
-    set abbr_name "ff_help_$filter"
+function _create_abbr_ff_help_filter -a filter
+    set abbr_name "ff_help_filter_$filter"
     set url "https://ffmpeg.org/ffmpeg-filters.html#$filter"
     abbr --add $abbr_name "ffmpeg --help filter=$filter && open $url"
 end
 
 # audio filter help abbreviations
-create_ff_help_abbr volumedetect
-create_ff_help_abbr silencedetect
-create_ff_help_abbr astats
-create_ff_help_abbr loudnorm
-create_ff_help_abbr afftdn
-create_ff_help_abbr acompressor
-create_ff_help_abbr aecho
-create_ff_help_abbr aresample
-create_ff_help_abbr aformat
+_create_abbr_ff_help_filter volumedetect
+_create_abbr_ff_help_filter silencedetect
+_create_abbr_ff_help_filter astats
+_create_abbr_ff_help_filter loudnorm
+_create_abbr_ff_help_filter afftdn
+_create_abbr_ff_help_filter acompressor
+_create_abbr_ff_help_filter aecho
+_create_abbr_ff_help_filter aresample
+_create_abbr_ff_help_filter aformat
 
 abbr ff_volumedetect --set-cursor --function _ffmpeg_volumedetect
 function _ffmpeg_volumedetect
