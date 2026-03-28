@@ -95,10 +95,42 @@ function _ff_volumedetect
     echo -n "ffmpeg -i $input -filter:a volumedetect -f null /dev/null 2>&1 | grep Parsed"
 end
 
-abbr --add ff_silencedetect --set-cursor --function _ffi_silencedetect
+abbr --add ff_silencedetect --set-cursor --function _ff_silencedetect
 function _ff_silencedetect
     set input (_find_first_video_file_any_type; or echo "%")
     echo -n "ffmpeg -i $input -af silencedetect=noise=d=0.1:-30dB -f null -"
+end
+
+# * astats
+abbr --add ff_astats --set-cursor --function _ff_astats
+function _ff_astats
+    set options ""
+    set input (_find_first_video_file_any_type; or echo _) # copy pasta
+    echo -n "ffmpeg -i $input -af astats=$options% -f null -" # copy pasta
+end
+#
+abbr --add ff_astats_per_frame --set-cursor --function _ff_astats_per_frame
+function _ff_astats_per_frame
+    set options "metadata=1:reset=1,ametadata=print:file=astats-per-frame.txt"
+    set input (_find_first_video_file_any_type; or echo _) # copy pasta
+    echo -n "ffmpeg -i $input -af astats=$options% -f null -" # copy pasta
+end
+#
+abbr --add ff_astats_overall --set-cursor --function _ff_astats_overall
+function _ff_astats_overall
+    # FTR =1 results in ONLY per OVERALL stats
+    # ffmpeg -i record-silence-w-streamdeck-button-press-start-end.mkv -af astats=measure_overall=1 -f null -
+    set options "measure_overall=1"
+    set input (_find_first_video_file_any_type; or echo _) # copy pasta
+    echo -n "ffmpeg -i $input -af astats=$options% -f null -" # copy pasta
+end
+#
+abbr --add ff_astats_perchannel --set-cursor --function _ff_astats_perchannel
+function _ff_astats_perchannel
+    # FTR =1 results in ONLY per channel showing (one set per channel in video/audio file)
+    set options "measure_perchannel=1"
+    set input (_find_first_video_file_any_type; or echo _) # copy pasta
+    echo -n "ffmpeg -i $input -af astats=$options% -f null -" # copy pasta
 end
 
 # https://ffmpeg.org/ffmpeg-filters.html#whisper
