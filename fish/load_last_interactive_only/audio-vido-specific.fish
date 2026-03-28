@@ -62,7 +62,7 @@ abbr --set-cursor ffpshow "$_show_prefix -show_%"
 
 # * volumedetect
 function _create_abbr_ff_help_filter --argument-names type filter
-    set abbr_name "ff_help_filter_${type}_$filter"
+    set abbr_name "ff_help_filter_"$type"_$filter"
     set url "https://ffmpeg.org/ffmpeg-filters.html#$filter"
     abbr --add $abbr_name "ffmpeg --help filter=$filter && open $url"
 end
