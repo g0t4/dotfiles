@@ -87,6 +87,7 @@ _create_abbr_ff_help_filter video overlay
 _create_abbr_ff_help_filter video scale
 _create_abbr_ff_help_filter video transpose
 _create_abbr_ff_help_filter video vflip
+_create_abbr_ff_help_filter video whisper
 
 
 abbr ff_volumedetect --set-cursor --function _ffmpeg_volumedetect
