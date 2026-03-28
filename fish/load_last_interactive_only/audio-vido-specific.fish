@@ -68,25 +68,25 @@ function _create_abbr_ff_help_filter --argument-names type filter
 end
 
 # audio filters
-_create_abbr_ff_help_filter audio volumedetect
-_create_abbr_ff_help_filter audio silencedetect
-_create_abbr_ff_help_filter audio astats
-_create_abbr_ff_help_filter audio loudnorm
-_create_abbr_ff_help_filter audio afftdn
 _create_abbr_ff_help_filter audio acompressor
 _create_abbr_ff_help_filter audio aecho
-_create_abbr_ff_help_filter audio aresample
+_create_abbr_ff_help_filter audio afftdn
 _create_abbr_ff_help_filter audio aformat
+_create_abbr_ff_help_filter audio aresample
+_create_abbr_ff_help_filter audio astats
+_create_abbr_ff_help_filter audio loudnorm
+_create_abbr_ff_help_filter audio silencedetect
+_create_abbr_ff_help_filter audio volumedetect
 
 # video filters
-_create_abbr_ff_help_filter video hflip
-_create_abbr_ff_help_filter video vflip
-_create_abbr_ff_help_filter video scale
 _create_abbr_ff_help_filter video crop
-_create_abbr_ff_help_filter video transpose
-_create_abbr_ff_help_filter video fps
 _create_abbr_ff_help_filter video drawtext
+_create_abbr_ff_help_filter video fps
+_create_abbr_ff_help_filter video hflip
 _create_abbr_ff_help_filter video overlay
+_create_abbr_ff_help_filter video scale
+_create_abbr_ff_help_filter video transpose
+_create_abbr_ff_help_filter video vflip
 
 
 abbr ff_volumedetect --set-cursor --function _ffmpeg_volumedetect
