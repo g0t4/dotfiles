@@ -31,14 +31,15 @@ end
 # FYI some of these are reminders when I revisit ffmpeg (i.e. to know what to get help for)
 abbr ff ffmpeg
 abbr ffm ffmpeg
-abbr ffh "ffmpeg -h full" # full help is far superior to ffmpeg-all which doesn't really show device specific options/devices/filters/formats/etc
-abbr ffhe "ffmpeg -h encoder="
-abbr ffhd "ffmpeg -h decoder="
-abbr ffhmx "ffmpeg -h muxer="
-abbr ffhdx "ffmpeg -h demuxer="
-abbr ffhf "ffmpeg -h filter="
-abbr ffhb "ffmpeg -h bsf="
-abbr ffhp "ffmpeg -h protocol="
+abbr ff_help_full "ffmpeg -h full" # full help is far superior to ffmpeg-all which doesn't really show device specific options/devices/filters/formats/etc
+abbr ff_help_encoder "ffmpeg -h encoder="
+abbr ff_help_decoder "ffmpeg -h decoder="
+abbr ff_help_muxer "ffmpeg -h muxer="
+abbr ff_help_demuxer "ffmpeg -h demuxer="
+abbr ff_help_filter "ffmpeg -h filter="
+
+abbr ff_help_protocol "ffmpeg -h protocol="
+
 #
 # ffp = ffprobe
 abbr ffp ffprobe
