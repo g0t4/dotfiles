@@ -96,6 +96,20 @@ function _ffmpeg_volumedetect
     echo -n "ffmpeg -i $input -filter:a volumedetect -f null /dev/null 2>&1 | grep Parsed"
 end
 
+# https://ffmpeg.org/ffmpeg-filters.html#whisper
+# TODO try out VAD + openai whisper filter!!!
+#  two models in one tool! slice on activity, then transcribe it
+# TODO abbr ff_vad_plus_whisper "ffmpeg -i % -filter_complex \"[0:a]vad,whisper\""
+# TODO => must build w/ ./configure --enable-whisper
+#  and then download a ggml model for whisper
+#  and find a ggml VAD model ... ggml-silero-v5.1.2
+# TODO what else does ffmpeg have for VAD...
+#    i.e. whisper.cpp/models/ggml-silero-v5.1.2.bin
+#    git clone ggml-org/whisper.cpp
+#    uv venv? && uv pip install -r models/requirements-coreml.txt + models/requirements-openvino.txt
+#    python models/convert-silero-vad-to-ggml.py # pull and convert model IIAC from huggging face
+
+
 # TODO idea... how about pull last video argument from command history (limit to recent history?) => fallback one video in current dir only => else blank?
 abbr --add ffpshow_chapters --set-cursor --function _ffpshow_chapters
 function _ffprobe_expand_cmd --argument-names template
