@@ -89,7 +89,6 @@ _create_abbr_ff_help_filter video transpose
 _create_abbr_ff_help_filter video vflip
 _create_abbr_ff_help_filter video whisper
 
-
 abbr ff_volumedetect --set-cursor --function _ffmpeg_volumedetect
 function _ffmpeg_volumedetect
     set -l input (_find_first_video_file_any_type; or echo "%")
@@ -108,7 +107,6 @@ end
 #    git clone ggml-org/whisper.cpp
 #    uv venv? && uv pip install -r models/requirements-coreml.txt + models/requirements-openvino.txt
 #    python models/convert-silero-vad-to-ggml.py # pull and convert model IIAC from huggging face
-
 
 # TODO idea... how about pull last video argument from command history (limit to recent history?) => fallback one video in current dir only => else blank?
 abbr --add ffpshow_chapters --set-cursor --function _ffpshow_chapters
