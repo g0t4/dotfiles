@@ -61,7 +61,7 @@ abbr --set-cursor ffpshow "$_show_prefix -show_%"
 #
 
 # * volumedetect
-function _create_abbr_ff_help_filter -a filter
+function _create_abbr_ff_help_filter --argument-names filter
     set abbr_name "ff_help_filter_$filter"
     set url "https://ffmpeg.org/ffmpeg-filters.html#$filter"
     abbr --add $abbr_name "ffmpeg --help filter=$filter && open $url"
@@ -86,7 +86,7 @@ end
 
 # TODO idea... how about pull last video argument from command history (limit to recent history?) => fallback one video in current dir only => else blank?
 abbr --add ffpshow_chapters --set-cursor --function _ffpshow_chapters
-function _ffprobe_expand_cmd -a template
+function _ffprobe_expand_cmd --argument-names template
     set -l video (_find_first_video_file_any_type)
     string replace "%" "$video%" $template
 end

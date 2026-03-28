@@ -24,7 +24,7 @@ else
 end
 
 # prefer named arguments
-function show_variable -a name value
+function show_variable --argument-names name value
     echo "$name = $value"
 end
 
