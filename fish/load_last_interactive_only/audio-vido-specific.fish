@@ -144,7 +144,8 @@ end
 #    i.e. whisper.cpp/models/ggml-silero-v5.1.2.bin
 #    git clone ggml-org/whisper.cpp
 #    uv venv? && uv pip install -r models/requirements-coreml.txt + models/requirements-openvino.txt
-#    python models/convert-silero-vad-to-ggml.py # pull and convert model IIAC from huggging face
+#    * models/download-vad-model.sh silero-v5.1.2
+#    * models/download-ggml-model.sh tiny
 
 # TODO idea... how about pull last video argument from command history (limit to recent history?) => fallback one video in current dir only => else blank?
 abbr --add ffpshow_chapters --set-cursor --function _ffpshow_chapters
