@@ -54,14 +54,18 @@ abbr ac "ansible-config"
 
 abbr av "ansible-vault"
 
-abbr ai "ansible-inventory"
-  abbr --set-cursor ailsi "ansible-inventory --list --yaml -i foo,bar% > inventory.yml" # quick hack to generate an inventory file using `-i` arg
-  abbr ails "ansible-inventory --list --yaml"
-    abbr ailsv "ansible-inventory --list --vars"
-    abbr ailst "ansible-inventory --list --toml"
-      abbr ailstv "ansible-inventory --list --toml --vars"
-  abbr aig "ansible-inventory --graph"
-  abbr aih "ansible-inventory --host "
+abbr ai ansible-inventory
+# list
+abbr ails "ansible-inventory --list --yaml"
+abbr ailsv "ansible-inventory --list --vars"
+abbr ailst "ansible-inventory --list --toml"
+abbr ailstv "ansible-inventory --list --toml --vars"
+# generate inventory file off of `-i` arg
+abbr --set-cursor ails_generate_yaml_inventory "ansible-inventory --list --yaml -i foo,bar% > inventory.yml"
+abbr --set-cursor ails_generate_toml_inventory "ansible-inventory --list --yaml -i foo,bar% > inventory.yml" # quick hack to generate an inventory file using `-i` arg
+#
+abbr aig "ansible-inventory --graph"
+abbr aih "ansible-inventory --host"
 
 abbr apull "ansible-pull"
 
