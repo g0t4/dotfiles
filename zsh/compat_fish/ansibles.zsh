@@ -42,6 +42,7 @@ abbr ac "ansible-config"
 abbr av "ansible-vault"
 
 abbr ai "ansible-inventory"
+  abbr ailsi "ansible-inventory --list --yaml -i foo,bar" # quick hack to generate an inventory file using `-i` arg
   abbr ails "ansible-inventory --list --yaml"
     abbr ailsv "ansible-inventory --list --vars"
     abbr ailst "ansible-inventory --list --toml"
