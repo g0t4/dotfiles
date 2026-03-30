@@ -647,7 +647,7 @@ local ask_openai_plugin = {
         -- model = "llama3.2-vision:11b", -- ollama list
         model = "llamaservernomatters",
         use_api_ollama = true,
-        api_url = "http://ollama:8013/v1/chat/completions",
+        api_url = "http://ask.lan:8013/v1/chat/completions",
 
         tmp = {
             predictions = {
