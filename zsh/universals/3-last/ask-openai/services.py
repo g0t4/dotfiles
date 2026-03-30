@@ -28,7 +28,7 @@ def use_vllm(model: Optional[str] = None):
     return Service(
         name='vllm',
         api_key="none",
-        base_url='http://ollama:8000/v1',
+        base_url='http://vllm.lan:8000/v1',
         model=model if model else "Qwen/Qwen2.5-Coder-7B-Instruct",
         # vllm https://github.com/vllm-project/vllm/blob/main/docs/api.md
         # https://github.com/vllm-project/vllm/blob/main/docs/api.md#chat-completions
@@ -112,7 +112,7 @@ def use_ollama(model: Optional[str] = None):
     return Service(
         name='ollama',
         api_key="whatever",
-        base_url="http://ollama:11434/v1",
+        base_url="http://ollama.lan:11434/v1",
         # TODO can blank be used and let it pick?
         model=model if model else 'llama3.2:3b',
     )

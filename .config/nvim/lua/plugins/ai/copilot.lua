@@ -258,7 +258,7 @@ local llm_nvim_plugin = {
 
 
             -- TODO if it works, try all sorts of models (you've never tested any of them for this use case!)
-            url = "http://ollama:11434", -- llm-ls uses "/v1/completions"
+            url = "http://ollama.lan:11434", -- llm-ls uses "/v1/completions"
             -- url = "http://localhost:11434",
 
         })

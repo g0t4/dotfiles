@@ -1490,7 +1490,7 @@ end
 if command -q ollama
     abbr olc "ollama create"
     abbr olcp "ollama cp"
-    abbr ole "export OLLAMA_HOST='ollama:11434'"
+    abbr ole "export OLLAMA_HOST='ollama.lan:11434'"
 
     # * list
     abbr olh "ollama help"

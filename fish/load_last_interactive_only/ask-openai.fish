@@ -64,7 +64,7 @@ function get_openai_models
 
     # if first arg is ollama, use that instaed:
     if test "$argv[1]" = ollama
-        set base_url http://ollama:11434/v1/models
+        set base_url http://ollama.lan:11434/v1/models
         set api_key ""
     else if test "$argv[1]" = groq
         set base_url https://api.groq.com/openai/v1/models
@@ -73,7 +73,7 @@ function get_openai_models
         set base_url https://api.deepseek.com/v1/models
         set api_key (security find-generic-password -s deepseek -a ask -w)
     else if test "$argv[1]" = vllm
-        set base_url http://ollama:8000/v1/models
+        set base_url http://vllm.lan:8000/v1/models
         set api_key ""
     else if test "$argv[1]" = ask_lan
         set base_url http://ask.lan:8013/v1/models
