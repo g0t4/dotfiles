@@ -56,13 +56,14 @@ abbr av "ansible-vault"
 
 abbr ai ansible-inventory
 # list
-abbr ails "ansible-inventory --list --yaml"
-abbr ailsv "ansible-inventory --list --vars"
-abbr ailst "ansible-inventory --list --toml"
-abbr ailstv "ansible-inventory --list --toml --vars"
+abbr ails "ansible-inventory --list --yaml" # set --yaml here b/c otherwise I'll get JSON (default format) and I prefer yaml
+abbr ails_vars "ansible-inventory --list --yaml --vars"
+abbr ails_toml "ansible-inventory --list --toml"
+abbr ails_toml_vars "ansible-inventory --list --toml --vars"
+#
 # generate inventory file off of `-i` arg
 abbr --set-cursor ails_generate_yaml_inventory "ansible-inventory --list --yaml -i foo,bar% > inventory.yml"
-abbr --set-cursor ails_generate_toml_inventory "ansible-inventory --list --yaml -i foo,bar% > inventory.yml" # quick hack to generate an inventory file using `-i` arg
+abbr --set-cursor ails_generate_toml_inventory "ansible-inventory --list --toml -i foo,bar% > inventory.yml"
 #
 abbr aig "ansible-inventory --graph"
 abbr aih "ansible-inventory --host"
