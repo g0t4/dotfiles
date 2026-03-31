@@ -44,6 +44,11 @@ if test -d /usr/local/go/bin
     export PATH="/usr/local/go/bin:$PATH"
 end
 
+# FYI for now just make install it
+# if test -d "$HOME/repos/github/neovim/neovim/build/bin"
+#     export PATH="$HOME/repos/github/neovim/neovim/build/bin:$PATH"
+# end
+
 if test -d "$HOME/.local/bin"
     export PATH="$HOME/.local/bin:$PATH"
 end
