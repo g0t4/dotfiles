@@ -49,7 +49,7 @@ if not command -q osc
         set go_file go$go_version.linux-$go_arch.tar.gz
         wget https://go.dev/dl/$go_file
         sudo tar -C /usr/local -xzf $go_file
-        log_ --red LOGOUT/LOGIN to refresh PATH and then run install.fish again to complete osc install
+        echo (set_color red) "LOGOUT/LOGIN to refresh PATH and then run install.fish again to complete osc install"(set_color normal)
     else
         # TODO FIX => not working for bookworm12, compile fails on install
         # osc needs 1.21+ and toolchain 1.23
