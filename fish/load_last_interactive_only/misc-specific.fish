@@ -2645,10 +2645,22 @@ abbr tailn 'tail -n 10'
 abbr tailr 'tail -r' # reverse order
 # *** frequently tailed files
 abbr tt trash_n_tail
-abbr ttp 'trash_n_tail ~/.local/share/nvim/ask-openai/ask-predictions.log' # nvim plugin
-abbr ttls 'trash_n_tail ~/.local/share/ask-openai/language.server.log' # python LS
-abbr ttnlsp 'trash_n_tail ~/.local/state/nvim/lsp.log' # nvim lsp logs
-abbr ttsdk 'trash_n_tail ~/.hammerspoon/logs/streamdeck_keyboardmaestro_runner.log'
+#
+abbr tt_ask_predictions 'trash_n_tail ~/.local/share/nvim/ask-openai/ask-predictions.log' # nvim plugin
+abbr tail_ask_predictions 'tail -F ~/.local/share/nvim/ask-openai/ask-predictions.log'
+#
+abbr tt_mcp_server_commands 'trash_n_tail ~/.local/share/mcp-server-commands/commands.log'
+abbr tail_mcp_server_commands 'tail -F ~/.local/share/mcp-server-commands/commands.log'
+#
+abbr tt_ask_lang_server 'trash_n_tail ~/.local/share/ask-openai/language.server.log' # python LS
+abbr tail_ask_lang_server 'tail -F ~/.local/share/ask-openai/language.server.log' # python LS
+#
+abbr tt_nvim_lsp_log 'trash_n_tail ~/.local/state/nvim/lsp.log' # nvim lsp logs
+abbr tail_nvim_lsp_log 'tail -F ~/.local/state/nvim/lsp.log' # nvim lsp logs
+#
+abbr tt_streamdeck_wes 'trash_n_tail ~/.hammerspoon/logs/streamdeck_keyboardmaestro_runner.log'
+abbr tail_streamdeck_wes 'tail -F ~/.hammerspoon/logs/streamdeck_keyboardmaestro_runner.log'
+#
 abbr tail_hardtime_logs 'cat ~/.local/state/nvim/hardtime.nvim.log | cut -c34- | sort | uniq -c | sort'
 function trash_n_tail
     trash $argv
