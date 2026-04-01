@@ -3041,7 +3041,12 @@ set --local sse_jq 'string replace --regex "[^{]*" "" | jq'
 # pipe alone (not from clippy)
 abbr --position=anywhere -- psse "| $sse_jq"
 abbr --position=anywhere -- pssec "| $sse_jq --compact-output"
-# pbpaste then pipe
+#
+# * pbcopy
+#   until I habituate these, use _copy_ expanded as reminder (shorten later if use this all the time)
+abbr -- pb_copy_sse "pbpaste | $sse_jq | pbcopy" # * idempotent (keep it that way)
+#
+# * pb - paste then pipe
 abbr -- pbsse "pbpaste | $sse_jq"
 abbr -- pbssec "pbpaste | $sse_jq --compact-output"
 # grab __verbose.prompt (llama-server uses this)
