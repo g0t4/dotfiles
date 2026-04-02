@@ -947,7 +947,19 @@ function z
         #   I want to modify this to add support to delete a path
         #   and all subpaths (maybe -R)
 
-        __z $argv
+        if __z $argv
+            # success = CD'd
+            return
+        end
+        # failure == no matches in z "database"
+        # fallback to ~/repos dir, using $argv query
+        set selection (fd --type dir $argv ~/repos | fzf --query $argv)
+        if set -q selection
+            cd $selection
+        end
+        echo cancel
+        # PRN drop passing $argv to fd (left side) and only filter argv with fzf on right?
+        #  dropping fd filter would allow changing the entire query w/o relaunching z/fd+fzf...
     end
 end
 
