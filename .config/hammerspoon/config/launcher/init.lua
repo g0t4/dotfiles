@@ -576,6 +576,7 @@ local function findMatchingWords(prefix, maxResults)
 end
 
 -- Dictionary mode with prefix matching
+-- Uses a single Python process to look up all words at once
 local function handleDictionary(query, searchId, callback)
     if query == "" then
         callback(searchId, {})
@@ -594,116 +595,103 @@ local function handleDictionary(query, searchId, callback)
         return function() end
     end
 
-    -- State for parallel lookups
-    local results = {}
-    local tasks = {}
-    local cancelled = false
-
     print("=== Dictionary Prefix Search ===")
     print("Query:", query)
     print("Matches:", table.concat(matchingWords, ", "))
     print("================================")
 
-    -- Initialize placeholder results
-    for i, word in ipairs(matchingWords) do
-        results[i] = {
-            text = word,
-            subText = "Loading...",
-            dictionaryWord = word,
-            image = hs.image.imageFromName("NSBookmarkTemplate"),
-        }
+    -- Build a single Python script that looks up all words
+    local wordsLiteral = ""
+    for _, word in ipairs(matchingWords) do
+        wordsLiteral = wordsLiteral .. string.format("%q, ", word)
     end
 
-    -- Update UI with current results
-    local function updateResults()
-        if cancelled or searchId ~= currentSearchId then
-            return
-        end
-
-        -- Filter out nil entries (removed placeholders with no definition)
-        local filtered = {}
-        for _, result in ipairs(results) do
-            if result then
-                table.insert(filtered, result)
-            end
-        end
-
-        callback(searchId, filtered)
-    end
-
-    -- Show initial placeholders
-    updateResults()
-
-    -- Look up each word in parallel
-    for i, word in ipairs(matchingWords) do
-        local pythonScript = string.format([[
-from DictionaryServices import DCSCopyTextDefinition
+    local pythonScript = string.format([[
+from CoreServices.DictionaryServices import DCSCopyTextDefinition
 from CoreFoundation import CFRange
-word = %q
-definition = DCSCopyTextDefinition(None, word, CFRange(0, len(word)))
-if definition:
-    text = str(definition).strip()
-    text = ' '.join(text.split())
-    print(text[:120] + '...' if len(text) > 120 else text)
-else:
-    print("")
-]], word)
+words = [%s]
+for word in words:
+    definition = DCSCopyTextDefinition(None, word, CFRange(0, len(word)))
+    if definition:
+        text = str(definition).strip()
+        text = ' '.join(text.split())
+        print(word + "\t" + (text[:120] + '...' if len(text) > 120 else text))
+    else:
+        print(word + "\t")
+]], wordsLiteral)
 
-        local tmpfile = string.format("/tmp/hammerspoon-dict-%d-%d.py", searchId, i)
-        local file = io.open(tmpfile, "w")
-        file:write(pythonScript)
-        file:close()
+    local tmpfile = string.format("/tmp/hammerspoon-dict-%d.py", searchId)
+    local file = io.open(tmpfile, "w")
+    file:write(pythonScript)
+    file:close()
 
-        local output = ""
-        local task = hs.task.new("/Users/wesdemos/repos/github/g0t4/dotfiles/.venv/bin/python",
-            function(exitCode, _, _)  -- completion callback
-                if cancelled or searchId ~= currentSearchId then
-                    os.remove(tmpfile)
-                    return
+    local cancelled = false
+    local output = ""
+    local task = nil
+
+    -- Use pyobjc venv that has CoreServices/DictionaryServices
+    task = hs.task.new(os.getenv("HOME") .. "/repos/github/g0t4/dotfiles/.config/hammerspoon/config/learn/axuielem/pyobjc/.venv/bin/python",
+        function(exitCode, _, _)  -- completion callback
+            os.remove(tmpfile)
+            if cancelled or searchId ~= currentSearchId then
+                return
+            end
+
+            -- Parse output: each line is "word\tdefinition"
+            local results = {}
+            for line in output:gmatch("[^\r\n]+") do
+                local word, definition = line:match("^([^\t]+)\t(.*)$")
+                if word then
+                    definition = definition and definition:gsub("%s+$", "") or ""
+                    if definition ~= "" then
+                        table.insert(results, {
+                            text = word .. ": " .. definition,
+                            subText = "Select to open in Dictionary.app",
+                            dictionaryWord = word,
+                            dictionaryDefinition = definition,
+                            image = hs.image.imageFromName("NSBookmarkTemplate"),
+                        })
+                    end
                 end
+            end
 
-                os.remove(tmpfile)
+            if #results == 0 then
+                callback(searchId, {{
+                    text = "No definitions found for: " .. query,
+                    subText = "Try a different word",
+                    image = hs.image.imageFromName("NSBookmarkTemplate"),
+                }})
+            else
+                callback(searchId, results)
+            end
+        end,
+        function(_, stdOut, _)  -- streaming callback
+            if cancelled or searchId ~= currentSearchId then
+                return false
+            end
+            output = output .. stdOut
+            return true
+        end,
+        {tmpfile}
+    )
 
-                local definition = output:gsub("%s+$", "")
-                if definition ~= "" then
-                    -- Update placeholder with definition
-                    results[i] = {
-                        text = word .. ": " .. definition,
-                        subText = "Select to open in Dictionary.app",
-                        dictionaryWord = word,
-                        dictionaryDefinition = definition,
-                        image = hs.image.imageFromName("NSBookmarkTemplate"),
-                    }
-                else
-                    -- Remove placeholder if no definition found
-                    results[i] = nil
-                end
+    task:start()
 
-                updateResults()
-            end,
-            function(_, stdOut, _)  -- streaming callback
-                if cancelled or searchId ~= currentSearchId then
-                    return false
-                end
-                output = output .. stdOut
-                return true
-            end,
-            {tmpfile}
-        )
-
-        task:start()
-        table.insert(tasks, {task = task, tmpfile = tmpfile})
-    end
+    -- Show placeholder while waiting
+    callback(searchId, {{
+        text = "Looking up: " .. table.concat(matchingWords, ", "),
+        subText = "Searching dictionary...",
+        image = hs.image.imageFromName("NSBookmarkTemplate"),
+    }})
 
     -- Return cancel function
     return function()
         cancelled = true
-        for _, taskInfo in ipairs(tasks) do
-            if taskInfo.task then
-                taskInfo.task:terminate()
-            end
-            os.remove(taskInfo.tmpfile)
+        if task then
+            task:terminate()
+            task = nil
         end
+        os.remove(tmpfile)
     end
 end
 
