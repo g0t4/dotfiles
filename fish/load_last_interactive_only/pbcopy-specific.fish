@@ -17,6 +17,11 @@ function cppath
         return 1
     end
 
+    # replace leading $HOME with ~ for home directory paths
+    if string match -q "$HOME/*" "$_path"
+        set _path (string replace --regex "^$HOME" "~" "$_path")
+    end
+
     # if spaces in path, need to wrap in `'` for pbcopy to work
     if string match --regex --quiet -- ' ' "$_path"
         echo -n "'$_path'" | pbcopy
