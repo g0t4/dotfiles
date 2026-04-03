@@ -1,4 +1,3 @@
-
 # helpers (idea is always use pbcopy/paste -- see below)
 abbr pwdcp cppath # reminder, hopefully cppath stick with me but we shall see..
 # I am tempted to leave pwdcp and let it take the relative path arg too :), basically alias cppath without abbr expansion
@@ -48,7 +47,6 @@ function _cppath
         realpath --no-symlinks "$argv"
     end
 end
-
 
 if not $IS_MACOS
     # on non-macs make it appear as if pbcopy/paste are available
@@ -129,6 +127,24 @@ bind_both_modes_default_and_insert alt-k kill_all_lines # should I switch to alt
 #    export FISH_CURRENT_CMDLINE=$argv
 #end
 
-
 # *** cp
 abbr cpr "cp -r"
+
+function pbcommand --description "run a command, copy the command and its output to the clipboard"
+    set -l cmdline (string join ' ' $argv)
+
+    # TLDR
+    # pbcommand echo foo bar
+    #
+    # shows/copies (sans indents/blank lines):
+    #
+    #   $ echo foo bar
+    #   foo bar
+    #
+
+    begin
+        echo "\$ $cmdline"
+        eval $cmdline
+    end | tee /dev/tty | pbcopy
+
+end
