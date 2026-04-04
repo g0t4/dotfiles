@@ -9,7 +9,13 @@ if status is-interactive
         #     eza --group-directories-first $argv
         # try lsd for a bit, as daily primary, fallback to eza if not happy
         if command -q lsd
-            lsd --group-directories-first $argv
+            # version 0.19 on pacman (arch) only has --group-dirs
+            # mac version 1.2 has both --group-dirs and --group-directories-first
+            # thus use crossover
+            lsd --group-dirs first $argv
+        else
+            echo "lsd is not installed... fall back to ls... get it installed!"
+            command ls $argv
         end
     end
 end
