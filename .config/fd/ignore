@@ -1,5 +1,7 @@
 # * allow .config, even if --no-hidden passed:
-!.config/
+!.config*
+!.github/
+!.gitignore
 
 # * hide even if --hidden passed:
 .git/

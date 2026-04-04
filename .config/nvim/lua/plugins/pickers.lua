@@ -262,6 +262,7 @@ return {
                         layout_config = { width = 0.5, height = 0.5 },
                         find_command = {
                             "fd",
+                            "--hidden", -- show dot dirs/files
                             "--type", "f",
                             "--color", "never"
                             -- fd: https://github.com/nvim-telescope/telescope.nvim/wiki/Configuration-Recipes#remove--from-fd-results
