@@ -182,23 +182,6 @@ return {
                 --
             end
 
-
-            ---@diagnostic disable-next-line: unused-function, unused-local
-            local function ag_search()
-                local ag_vimgrep_args = { 'ag', '--nocolor', '--nogroup', '--numbers', '--column', '--smart-case',
-                    --   btw --hidden is needed to be able to search dotfiles (any file with leading dot, or dir)
-                    '--hidden',
-                    '--ignore', '.venv/',
-                    '--ignore', 'iterm2env',
-                    '--ignore', '.git/',
-                    '--ignore', 'node_modules/',
-                    '--ignore', '__pycache__/',
-                    '--ignore', 'target/',
-                }
-                return ag_vimgrep_args
-                -- TODO sync the i"vimgrep" -g "*lua*"gnored/included with nvim-tree plugin too?
-            end
-
             local db_file = vim.fn.stdpath("data") .. "/databases/telescope-smart-history.sqlite3"
             local db_dir = vim.fn.fnamemodify(db_file, ":h")
             if vim.fn.isdirectory(db_dir) == 0 then
@@ -223,7 +206,6 @@ return {
                         vertical = { width = 0.9 },
                     },
                     vimgrep_arguments = rg_search(),
-                    -- vimgrep_arguments = ag_search(),
                     mappings = {
                         i = {
                             -- CYCLE history of previous searches: (like command line history)
