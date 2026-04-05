@@ -2661,7 +2661,8 @@ abbr tt trash_n_tail
 abbr tt_ask_predictions 'trash_n_tail ~/.local/share/nvim/ask-openai/ask-predictions.log' # nvim plugin
 abbr tail_ask_predictions 'tail -F ~/.local/share/nvim/ask-openai/ask-predictions.log'
 #
-abbr tt_mcp_server_commands 'trash_n_tail ~/.local/share/mcp-server-commands/commands.log'
+# for now I want to keep the commands.log, maybe go back to trash_n_tail later on, for now leave tt as tail -F too:
+abbr tt_mcp_server_commands 'tail -F ~/.local/share/mcp-server-commands/commands.log'
 abbr tail_mcp_server_commands 'tail -F ~/.local/share/mcp-server-commands/commands.log'
 #
 abbr tt_ask_lang_server 'trash_n_tail ~/.local/share/ask-openai/language.server.log' # python LS
