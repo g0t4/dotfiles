@@ -202,7 +202,7 @@ function _path_list
     for dir in $PATH
         if test -e $dir
             for item in $dir/*
-                echo $dir$item
+                echo $item
             end
             # PRN any filtering or additional info to show? i.e. file type? dir? etc...?
         end
