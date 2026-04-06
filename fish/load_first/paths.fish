@@ -29,6 +29,11 @@ else if test -f /usr/local/bin/brew
     echo "brew shellenv not implemented yet, do this if you ever use an intel mac again"
 end
 
+# FYI fish_add_path won't add non-existent directory
+# - nor will it add an already added directory...
+# - only downside is, it prints an error message when you add a non-existent dir, or one that's already added
+# - I could squelch that error and then drop all my if test -d checks before calling fish_add_path to simplify path mods
+
 if test -d "$HOME/bin"
     # fennel-ls
     # jattach
