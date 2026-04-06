@@ -54,7 +54,11 @@ function _auto_venv_pwd_changed_handler --on-variable PWD
     if test $status -ne 0
         # no venv found
         if test -n "$VIRTUAL_ENV"
-            deactivate
+            # it is possible to inherit VIRTUAL_ENV env var but not have actually activated the venv in the new shell process, hence check for deactivate before trying to use it!
+            #  splitting a new pane in iTerm from a pane with an activate venv => IIRC I copy venv in this case and hence bug with deactivate not being defined and yet called
+            if functions -q deactivate
+                deactivate
+            end
         end
         return 0
     end
