@@ -197,12 +197,27 @@ end
 # end
 
 # *** PATH(s)
+# I would prefer to house these under a command like `path exists` ... though fish has `path` command that would collide
+#  think of these as an extension of fish's `path` command => new subcommands
+function path_exists
+    test -e $argv[1]
+end
+function dir_exists
+    test -d $argv[1]
+end
+function file_exists
+    test -f $argv[1]
+end
+function symlink_exists
+    # not sure I like the name here but I do like dir_exists/file_exists above
+    test -f $argv[1]
+end
 
-function _path_list
+function _path_list --description "everything in PATH directories"
     # think which, but not limited to the which command you are using
     #   i.e. zsh's builtin which is not same as system /usr/bin/which which other shells like fish use
     for dir in $PATH
-        if test -e $dir
+        if dir_exists $dir
             # fd provides file coloring based on type, etc
             fd --unrestricted --exact-depth 1 . $dir
             # FYI --unrestricted needed to show `bash` executable in my g0t4/bash repo (root of repo)
