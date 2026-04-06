@@ -16,17 +16,20 @@ function cppath
         return 1
     end
 
-    # replace leading $HOME with ~ for home directory paths
+    # replace leading $HOME with ~/ for home directory paths
     if string match -q "$HOME/*" "$_path"
         set _path (string replace --regex "^$HOME" "~" "$_path")
     end
 
     # if spaces in path, need to wrap in `'` for pbcopy to work
     if string match --regex --quiet -- ' ' "$_path"
-        echo -n "'$_path'" | pbcopy
-    else
-        echo -n "$_path" | pbcopy
+        # 1. wrap path (with space(s)) in ''
+        # 2. because '~/foo bar/baz' will not resolve the tilde in shells
+        #    swap `'~/` on front with `~/'` => as in ~/'foo bar/baz'
+        set _path (string replace --regex -- "^'~/" "~/'" "'$_path'")
     end
+
+    echo -n $_path | pbcopy
 end
 
 function _cppath
