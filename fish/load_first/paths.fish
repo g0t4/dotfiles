@@ -213,21 +213,26 @@ function symlink_exists
     test -f $argv[1]
 end
 
+function _path_list_executables
+    # usage:
+    #   _path_list_executables | grep ans*
+    for dir in $PATH
+        if dir_exists $dir
+            fd --type executable --type symlink --exact-depth 1 . $dir
+            # FYI `--type executable` implies `--type file` (AND condition)
+            # - thus symlinks to executables won't match
+            #   i.e. fd ~/.rd/bin  => all symlinks+executable
+            # - FIX => include both types `executable` and `symlink` (OR'd together)
+        end
+    end
+end
+
 function _path_list --description "everything in PATH directories"
-    # think which, but not limited to the which command you are using
-    #   i.e. zsh's builtin which is not same as system /usr/bin/which which other shells like fish use
+    # don't filter files in path, return all of them
     for dir in $PATH
         if dir_exists $dir
             # fd provides file coloring based on type, etc
             fd --unrestricted --exact-depth 1 . $dir
-            # FYI --unrestricted needed to show `bash` executable in my g0t4/bash repo (root of repo)
-            #
-            # if type filter, must include both `executable` and `symlink`
-            #   b/c executable doesn't apply to symlinks that are executable (IIUC)
-            #   i.e. fd ~/.rd/bin  => all symlinks and missing if no `--type symlink`
-            #   b/c `--type executable` implies `--type file` too (AND condition)
-            #     normally multiple `--type` args are OR'd
-            # fd --type executable --type symlink --exact-depth 1 . $dir
         end
     end
 end
