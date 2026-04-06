@@ -189,10 +189,12 @@ if test -d "$HOME/.rd/bin"
     export PATH="$PATH:$HOME/.rd/bin"
 end
 
-# * bash from source
-if test -x $HOME/repos/github/g0t4/bash/bash
-    export PATH="$HOME/repos/github/g0t4/bash:$PATH"
-end
+# # * bash from source
+# FYI has my fix for flickering abbr expansions... really only cared about it for recording purposes... don't need it if not demo'ing bash in a course (primary course topic too)
+# if test -x $HOME/repos/github/g0t4/bash/bash
+#     # annoying that bash doesn't build into a bin dir! puts root dir of repo into PATH (perhaps there is a build option for that...)
+#     export PATH="$HOME/repos/github/g0t4/bash:$PATH"
+# end
 
 # *** PATH(s)
 
