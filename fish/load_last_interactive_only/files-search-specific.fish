@@ -180,6 +180,13 @@ abbr fd_ext 'fd --extension'
 abbr fdE 'fd --exclude'
 abbr --command fd --position anywhere -- and --and # expand and, mostly a reminder
 abbr --command fd --position anywhere -- abs --absolute-path
+#
+# * expand short options => corresponding long option
+#   I can still use shorthand and always see it expand to the long option!
+#   i.e. `fd -l<space>` => `fd --list-details <CURSOR>`
+#   TODO do with more of fd short options... AND other commands!
+abbr --command fd --position anywhere -- -l --list-details
+#
 abbr fdabs 'fd --absolute-path'
 abbr fdl 'fd --list-details' # `fd -l`... think => fd + ls -al
 abbr fdfp 'fd --full-path' # default matches on basename only, this matches full path
