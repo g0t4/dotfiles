@@ -178,8 +178,9 @@ abbr fdi 'fd --ignore-case' # --ignore-case
 abbr fdF 'fd --fixed-strings' # same as rg
 abbr fd_ext 'fd --extension'
 abbr fdE 'fd --exclude'
+#
+# reminders for some options
 abbr --command fd --position anywhere -- and --and # expand and, mostly a reminder
-abbr --command fd --position anywhere -- abs --absolute-path
 #
 # * expand short options => corresponding long option
 #   I can still use shorthand and always see it expand to the long option!
