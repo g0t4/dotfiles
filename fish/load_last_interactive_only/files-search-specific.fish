@@ -181,7 +181,7 @@ abbr fdE 'fd --exclude'
 abbr --command fd --position anywhere -- and --and # expand and, mostly a reminder
 abbr --command fd --position anywhere -- abs --absolute-path
 abbr fdabs 'fd --absolute-path'
-abbr fdls 'fd --list-details' # think => fd + ls -al
+abbr fdl 'fd --list-details' # `fd -l`... think => fd + ls -al
 abbr fdfp 'fd --full-path' # default matches on basename only, this matches full path
 abbr --set-cursor _fdX --regex 'fd\d+' --function _abbr_expand_fdX
 function _abbr_expand_fdX
