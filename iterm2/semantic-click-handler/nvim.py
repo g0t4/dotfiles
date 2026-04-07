@@ -126,7 +126,7 @@ async def open_nvim_window(connection: iterm2.Connection):
     #
     # both of these are closable too.. IOTW neither returns to shell if you quit nvim so either is fine for me for now:
     # fish_to_nvim_cmd = f"/opt/homebrew/bin/fish -c 'nvim \"{clicked_path}\"'"
-    nvim_directly_cmd = f"nvim '{clicked_path}'"
+    nvim_directly_cmd = f"/usr/local/bin/nvim '{clicked_path}'"
     # ok set path with env command works too, much better than fish -c overhead
     #   BTW much of env vars are inherited by new nvim standalone process... but not PATH
     use_this_path = f"{os.environ['PATH']}"
