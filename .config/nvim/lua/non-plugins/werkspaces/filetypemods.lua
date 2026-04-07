@@ -25,7 +25,7 @@ vim.o.shiftwidth = 4 -- shifting: << >>
 -- vim.o.tabstop -- leave as is (8) so existing uses of tabs match width likely intended
 
 -- *** show whitespace
-vim.opt.listchars = { tab = '→ ', trail = '·', space = '⋅' } -- FYI also `eol:$`
+vim.opt.listchars = { tab = '→ ', trail = 'x', space = '⋅' } -- FYI also `eol:$`
 vim.cmd([[
     command! ToggleShowWhitespace if &list | set nolist | else | set list | endif
 ]])
