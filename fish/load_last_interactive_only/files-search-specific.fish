@@ -186,18 +186,18 @@ abbr --command fd --position anywhere -- abs --absolute-path
 #   i.e. `fd -l<space>` => `fd --list-details <CURSOR>`
 #   TODO do with more of fd short options... AND other commands!
 abbr --command fd --position anywhere -- -0 --print0
-abbr --command fd --position anywhere -- -C --base-directory
-abbr --command fd --position anywhere -- -H --hidden
-abbr --command fd --position anywhere -- -I --no-ignore
 abbr --command fd --position anywhere -- -a --absolute-path
+abbr --command fd --position anywhere -- -C --base-directory
 abbr --command fd --position anywhere -- -c --color
 abbr --command fd --position anywhere -- -d --max-depth
 abbr --command fd --position anywhere -- -e --extension
 abbr --command fd --position anywhere -- -E --exclude
 abbr --command fd --position anywhere -- -F --fixed-strings
 abbr --command fd --position anywhere -- -g --glob
+abbr --command fd --position anywhere -- -H --hidden
 abbr --command fd --position anywhere -- -h --help
 abbr --command fd --position anywhere -- -i --ignore-case
+abbr --command fd --position anywhere -- -I --no-ignore
 abbr --command fd --position anywhere -- -j --threads
 abbr --command fd --position anywhere -- -l --list-details
 abbr --command fd --position anywhere -- -L --follow
