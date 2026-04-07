@@ -185,6 +185,9 @@ abbr --command fd --position anywhere -- abs --absolute-path
 #   I can still use shorthand and always see it expand to the long option!
 #   i.e. `fd -l<space>` => `fd --list-details <CURSOR>`
 #   TODO do with more of fd short options... AND other commands!
+abbr --command fd --position anywhere -- -d --max-depth
+abbr --command fd --position anywhere -- -E --exclude
+abbr --command fd --position anywhere -- -e --extension
 abbr --command fd --position anywhere -- -l --list-details
 #
 abbr fdabs 'fd --absolute-path'
