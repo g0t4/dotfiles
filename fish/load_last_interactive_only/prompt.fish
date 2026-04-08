@@ -135,6 +135,13 @@ function prompt_pwd --description 'wes mod - name of the current dir only'
     end
     echo -n -s (set_color $color_cwd)
 
+    # special case: show relative path inside ask_traces dataset
+    set _ask_base "$HOME/repos/github/g0t4/datasets/ask_traces"
+    if string match -q "$_ask_base/*" $PWD
+        echo -n -s (string replace --regex "^$_ask_base/" "" $PWD)
+        return
+    end
+
     # truncate course repo to just "course" to save prompt space
     if string match -q "$HOME/repos/github/g0t4/course-python-functions-modules" $PWD
         echo -n -s course
