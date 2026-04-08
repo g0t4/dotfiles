@@ -143,12 +143,12 @@ function prompt_pwd --description 'wes mod - name of the current dir only'
     end
 
     # truncate course repo to just "course" to save prompt space
-    if string match -q "$HOME/repos/github/g0t4/course-python-functions-modules" $PWD
+    if string match -q "$HOME/repos/github/g0t4/course-agent-tools-langchain" $PWD
         echo -n -s course
         return
     end
-    if string match -q "$HOME/repos/github/g0t4/private-prep-course-bash-series" $PWD
-        echo -n -s NOTFISH
+    if string match -q "$HOME/repos/github/g0t4/private-prep-langchain-tools" $PWD
+        echo -n -s PRIVATE
         return
     end
 
