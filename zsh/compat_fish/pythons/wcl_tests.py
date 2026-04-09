@@ -24,7 +24,8 @@ def test_map_to_repo_dir(input_url, expected_url):
         pytest.param('git@github.com:g0t4/dotfiles.git', 'git@github.com:g0t4/dotfiles', id="test_github_uses_git"),  # drop .git
         pytest.param('https://github.com/g0t4/dotfiles.git', 'git@github.com:g0t4/dotfiles', id="test_https_uses_git"),  # drop .git
         pytest.param('https://sourceware.org/git/glibc.git', 'https://sourceware.org/git/glibc', id="test_sourceware_uses_https"),
-        pytest.param('https://huggingface.co/g0t4/dotfiles', 'https://huggingface.co/g0t4/dotfiles', id="test_huggingface_uses_https"),
+            # huggingface should be cloned via SSH, even when an HTTPS URL is provided
+            pytest.param('https://huggingface.co/g0t4/dotfiles', 'git@huggingface.co:g0t4/dotfiles', id="test_huggingface_uses_ssh"),
         #
         # use https for cgit:
         # ensure use https for all of gnu.org repos, the first two tests here are redundant but whatever they don't hurt if I were to change the IMPL in the future:
