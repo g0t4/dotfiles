@@ -95,8 +95,6 @@ def clone_url(parsed) -> str:
     # PRN don't recreate url if is https and want https?
     # PRN also any cases where I want more than org/repo dir structure?
     # todo multi level namespaces => https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/
-    # Use HTTPS for specific hosts where SSH is not appropriate or unavailable.
-    # Exclude huggingface.co so that repositories from Hugging Face are cloned via SSH.
     use_https = parsed.domain in ["gitlab.gnome.org", "sourceware.org", "git.kernel.org", "git.sr.ht", "https.git.savannah.gnu.org"]
     # TODO change to default to https and override for github and specific others where I want ssh
     if use_https:
