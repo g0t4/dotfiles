@@ -13,7 +13,7 @@ return {
         -- cons: adjusting the gutter can be annoying/jarring when you make a first change
 
         'lewis6991/gitsigns.nvim',
-        -- enabled = false,
+        enabled = false,
         event = 'BufRead',
         config = function()
             -- TODO! review config options and other features (just added it for gutter signs for now)
