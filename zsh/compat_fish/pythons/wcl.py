@@ -102,6 +102,9 @@ def clone_url(parsed) -> str:
     if parsed.domain == "gcc.gnu.org":
         return parsed.url
     # prefer ssh for git repos (simple, standard, supports ssh auth), plus I've been using this forever now and it's been great.
+    if parsed.domain == "huggingface.co":
+        # huggingface uses a short domain for SSH cloning.
+        return f"git@hf.co:{parsed.repo}"
     return f"git@{parsed.domain}:{parsed.repo}"
 
 def relative_repo_dir(parsed) -> str:
