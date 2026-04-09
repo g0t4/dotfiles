@@ -1,6 +1,6 @@
 #!/usr/bin/env fish
 
-log_ --bold "hook[$(status basename)] $argv"
+rich --print "[bold]hook[$(status basename)] $argv"
 
 if test -d "$(git rev-parse --git-dir)/rebase-merge"
     or test -d "$(git rev-parse --git-dir)/rebase-apply"

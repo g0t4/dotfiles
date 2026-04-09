@@ -1,6 +1,6 @@
 #!/usr/bin/env fish
 
-log_ --bold "hook[$(status basename)] $argv"
+rich --print "[bold]hook[$(status basename)] $argv"
 
 # $1 == amend/rebase
 # post-rewrite is called for amend and rebase
