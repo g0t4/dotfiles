@@ -8,7 +8,6 @@ function fish_mode_prompt
     #   V visual... well when I use that I probably have a selection! so that's also obvious
     # LETS leave this off? or?
 
-
     # disable for now
     # if not test "$fish_key_bindings" = fish_vi_key_bindings
     #     and not test "$fish_key_bindings" = fish_hybrid_key_bindings
@@ -135,6 +134,12 @@ function prompt_pwd --description 'wes mod - name of the current dir only'
     end
     echo -n -s (set_color $color_cwd)
 
+    # * in huggingface repos, make that clear with hf: and full path from there
+    if string match -q "$HOME/repos/huggingface.co/*" $PWD
+        echo -n -s (string replace --regex "^$HOME/repos/huggingface.co/" "hf:" $PWD)
+        return
+    end
+
     # special case: show relative path inside ask_traces dataset
     set _ask_base "$HOME/repos/github/g0t4/datasets/ask_traces"
     if string match -q "$_ask_base/*" $PWD
@@ -151,7 +156,6 @@ function prompt_pwd --description 'wes mod - name of the current dir only'
         echo -n -s PRIVATE
         return
     end
-
 
     # if in repo root (not nested dir), then show org/repo
     #   based on _pwd
