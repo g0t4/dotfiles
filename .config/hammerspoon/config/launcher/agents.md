@@ -62,6 +62,8 @@ is selected the corresponding function in `bookmarkActions` is executed – e.g.
 
 * Agents that modify the Hammerspoon config should reload it with `hs -C -c 'hs.reload()'`
   before asking the user to test the changes.
+  Note: `-C` mirrors console log output, so you may see CFMessagePort errors like
+  "dropping corrupt reply Mach message". These are harmless and can be ignored.
 
 ## Emoji Picker Cache
 * Cache directory: `~/.local/share/hammerspoon`.

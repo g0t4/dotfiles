@@ -1204,6 +1204,13 @@ local bookmarks = {
         subText = "Convert clipboard text to sentence case, copy and paste",
         image = hs.image.imageFromName("NSActionTemplate"),
     },
+    {
+        name = "title_case",
+        keywords = {"title", "titlecase", "title_case"},
+        text = "Title Case",
+        subText = "Convert clipboard text to title case, copy and paste",
+        image = hs.image.imageFromName("NSActionTemplate"),
+    },
 }
 
 -- Bookmark action dispatch (keyed by name)
@@ -1300,6 +1307,24 @@ local bookmarkActions = {
         hs.pasteboard.writeObjects({new_txt})
         -- Type the text into the focused app
         hs.eventtap.keyStrokes(new_txt)
+    end,
+    title_case = function()
+        -- wrapper function gets title cased value
+        local stdout, ok, exit_type, rc = hs.execute("fish -c \"title_case_wrapper\"")
+        if not ok then
+            -- TODO need STDERR to show in this case? and stdout? not sure I can get STDERR with hs.exectue()?
+            hs.alert.show("Title case conversion failed... rc=" .. rc)
+            return
+        end
+        -- Trim trailing whitespace/newlines from the wrapper output.
+        local title = stdout:gsub("%s+$", "")
+        if title == "" then
+            hs.alert.show("Title case produced empty result")
+            return
+        end
+        print("title cased: ", title) -- remove when things are working well enough
+        hs.pasteboard.writeObjects({ title })
+        hs.eventtap.keyStrokes(title)
     end,
 }
 
