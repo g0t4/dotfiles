@@ -59,24 +59,9 @@ is selected the corresponding function in `bookmarkActions` is executed – e.g.
 `dark` flips macOS dark mode via AppleScript.
 
 ## Courtesy Commands
-Agents that modify the Hammerspoon configuration should ensure the new changes
-are applied immediately.  After performing any update (e.g., adding a bookmark or
-changing a handler), the agent should trigger a configuration reload so the user
-can test the modification without manually restarting Hammerspoon.
 
-The launcher already provides a **reload** bookmark which calls `hs.reload()`.  An
-agent can invoke this bookmark programmatically, or simply execute `hs.reload()`
-directly from its script.  For convenience, you may also bind a hotkey in
-`init.lua`:
-
-```lua
-hs.hotkey.bind({"cmd", "alt", "ctrl"}, "R", function()
-    hs.reload()
-end)
-```
-
-Using either approach ensures that configuration changes take effect promptly,
-providing a smooth development workflow.
+* Agents that modify the Hammerspoon config should reload it with `hs -C -c 'hs.reload()'`
+  before asking the user to test the changes.
 
 ## Emoji Picker Cache
 * Cache directory: `~/.local/share/hammerspoon`.
