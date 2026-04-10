@@ -1197,6 +1197,13 @@ local bookmarks = {
         subText = "Switch between dark and light mode",
         image = hs.image.imageFromName("NSQuickLookTemplate"),
     },
+    {
+        name = "sentence_case",
+        keywords = {"sentence", "case", "sentencecase"},
+        text = "Sentence Case",
+        subText = "Convert clipboard text to sentence case, copy and paste",
+        image = hs.image.imageFromName("NSActionTemplate"),
+    },
 }
 
 -- Bookmark action dispatch (keyed by name)
@@ -1235,6 +1242,23 @@ local bookmarkActions = {
     end,
     dark = function()
         hs.osascript.applescript('tell app "System Events" to tell appearance preferences to set dark mode to not dark mode')
+    end,
+    sentence_case = function()
+        -- Read current clipboard content
+        local txt = hs.pasteboard.readString() or ""
+        -- Convert to sentence case: capitalize first character of each sentence
+        local function to_sentence_case(s)
+            return (s:gsub("([^.!?]+)([.!?]?)", function(sentence, punct)
+                sentence = sentence:lower()
+                sentence = sentence:gsub("^%s*%l", string.upper)
+                return sentence .. punct
+            end))
+        end
+        local new_txt = to_sentence_case(txt)
+        -- Write back to clipboard
+        hs.pasteboard.writeObjects({new_txt})
+        -- Type the text into the focused app
+        hs.eventtap.keyStrokes(new_txt)
     end,
 }
 
