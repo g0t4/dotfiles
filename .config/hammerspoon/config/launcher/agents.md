@@ -58,29 +58,25 @@ is selected the corresponding function in `bookmarkActions` is executed – e.g.
 `trash` runs `open "trash://"`, `mute` toggles the default output device, and
 `dark` flips macOS dark mode via AppleScript.
 
-## Reloading Hammerspoon Configuration
-Hammerspoon provides a simple way to reload the current configuration without
-restarting the entire application.  The launcher already includes a **reload**
-bookmark which calls `hs.reload()`.  You can trigger a reload in two ways:
+## Courtesy Commands
+Agents that modify the Hammerspoon configuration should ensure the new changes
+are applied immediately.  After performing any update (e.g., adding a bookmark or
+changing a handler), the agent should trigger a configuration reload so the user
+can test the modification without manually restarting Hammerspoon.
 
-1. **Via the launcher** – Open the launcher (`Alt+Space`), type `reload` or use the
-   bookmark keyword `reload`, and press <Enter>.  This runs the `hs.reload()`
-   function, re‑executing all `init.lua` files and applying any changes you have
-   made.
-2. **Programmatically** – From any Hammerspoon script you can call `hs.reload()`
-   directly.  For example, you could bind a hotkey in your `init.lua`:
+The launcher already provides a **reload** bookmark which calls `hs.reload()`.  An
+agent can invoke this bookmark programmatically, or simply execute `hs.reload()`
+directly from its script.  For convenience, you may also bind a hotkey in
+`init.lua`:
 
-   ```lua
-   hs.hotkey.bind({"cmd", "alt", "ctrl"}, "R", function()
-       hs.reload()
-   end)
-   ```
+```lua
+hs.hotkey.bind({"cmd", "alt", "ctrl"}, "R", function()
+    hs.reload()
+end)
+```
 
-   Pressing `Cmd+Alt+Ctrl+R` will then reload the config.
-
-Using the reload bookmark is the quickest method when working within the
-launcher, while the hotkey approach offers a one‑press shortcut for frequent
-reloads during development.
+Using either approach ensures that configuration changes take effect promptly,
+providing a smooth development workflow.
 
 ## Emoji Picker Cache
 * Cache directory: `~/.local/share/hammerspoon`.
