@@ -1246,7 +1246,39 @@ local bookmarkActions = {
     sentence_case = function()
         -- Read current clipboard content
         local txt = hs.pasteboard.readString() or ""
-        -- Convert to sentence case: capitalize first character of each sentence
+
+        -- List of words that should retain their original casing.
+        -- These are matched case‑insensitively after the sentence‑case conversion.
+        local preserve_words = {
+            "GNU", "PROMPT_COMMAND", "PIPESTATUS", "IFS", "PATH", "STDERR", "STDOUT",
+            "STDIN", "TTY", "PTY", "PID", "PPID", "UID", "GID", "ANSI", "EOF", "EOL",
+            "shopt", "sed", "awk", "wget", "vim", "nvim", "jq",
+            "grok.com", "x.com", "PDF", "CSV", "eBay", "xAI", "DeepSearch", "DeeperSearch",
+            "vLLM", "FastAPI", "StreamingResponse", "WebSocket", "WebSockets", "HTTPX",
+            "ASGI", "WSGI", "GZipMiddleware", "SlowAPIMiddleware", "SlowApi",
+            "HorizontalPodAutoscaler", "HPA", "CPU", "GitRepo", "K3s", "RKE2", "RKE", "RKE1",
+            "GCP", "GKE", "YAML", "ChatGPT", "K8s", "GPU", "MCP", "ModelContextProtocol",
+            "LLM", "LLMs", "AI", "HTTPS", "GH", "PAT",
+            "StatefulSet", "DaemonSet", "CronJob", "ReplicaSet",
+            "NodePort", "LoadBalancer", "ClusterIP",
+            "PersistentVolume", "PersistentVolumeClaim", "StorageClass",
+            "ConfigMap", "HostPath", "JDK", "DSL", "systemd", "dockerd", "containerd",
+            "ctr", "runc", "k3s", "kubectl", "kubeadm", "PackageReference", "dotnet",
+            "CLI", "aspnetcore", "SDK", "dockerignore", "WSL2", "WSL", "VirtualBox", "vagrant",
+            "gitignore", "Dockerfile", "docker-compose", "docker-compose.yml", "compose.yml",
+            "package.json", "git", "gRPC", "xDS", "VM", "VMs", "DNS",
+            "/etc/resolv.conf", "dig", "HCL", "SMTP", "SIGHUP", "SIGKILL", "SIGINT", "SIGTERM",
+            "MailHog", "VSCode", "SRV", "curl", "consul-template", "envconsul",
+            "localhost", "tcpflow", "tcpdump", "ipconfig", "ifconfig", "NGINX",
+            ".editorconfig", "EditorConfig", "Vagrantfile",
+            "LF", "CRLF", "CR",
+            ".gitconfig", ".gitignore", ".gitattributes", ".bash_history", ".zsh_history",
+            ".hush_login", ".zshenv", ".zshrc", ".bashrc", ".bash_logout", ".profile",
+            ".vscode", ".vagrant.d", ".vagrant", ".ssh", ".config",
+            "bash_history",
+        }
+
+        -- Helper: convert a string to sentence case.
         local function to_sentence_case(s)
             return (s:gsub("([^.!?]+)([.!?]?)", function(sentence, punct)
                 sentence = sentence:lower()
@@ -1254,7 +1286,16 @@ local bookmarkActions = {
                 return sentence .. punct
             end))
         end
+
         local new_txt = to_sentence_case(txt)
+
+        -- Preserve the original casing of special words.
+        for _, w in ipairs(preserve_words) do
+            local lower = w:lower()
+            -- Replace any occurrence of the lower‑cased word with the proper case.
+            new_txt = new_txt:gsub(lower, w)
+        end
+
         -- Write back to clipboard
         hs.pasteboard.writeObjects({new_txt})
         -- Type the text into the focused app
