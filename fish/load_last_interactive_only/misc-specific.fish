@@ -2294,21 +2294,29 @@ if command -q luarocks
     abbr lrll luarocks list --local # only local
     abbr lrl1 luarocks list --lua-version=5.1 # nvim uses 5.1
     abbr lrl4 luarocks list --lua-version=5.4 # hammerspoon uses this + its the current release
+    abbr lrl5 luarocks list --lua-version=5.5
 
     # abbr lrd luarocks doc # show docs for package
 
     abbr lri luarocks install
     abbr lri1 luarocks install --lua-version=5.1
+    abbr lri4 luarocks install --lua-version=5.4
+    abbr lri5 luarocks install --lua-version=5.5
 
     abbr lrrm luarocks remove
     abbr lrrm1 luarocks remove --lua-version=5.1
+    abbr lrrm4 luarocks remove --lua-version=5.4
+    abbr lrrm5 luarocks remove --lua-version=5.5
 
     abbr lrs luarocks search
     abbr lrs1 luarocks search --lua-version=5.1
+    abbr lrs4 luarocks search --lua-version=5.4
+    abbr lrs5 luarocks search --lua-version=5.5
 
     abbr lrshow luarocks show
     abbr lrshow1 luarocks show --lua-version=5.1
-
+    abbr lrshow4 luarocks show --lua-version=5.4
+    abbr lrshow5 luarocks show --lua-version=5.5
 
 end
 
