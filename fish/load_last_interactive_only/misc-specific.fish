@@ -2298,9 +2298,17 @@ if command -q luarocks
     # abbr lrd luarocks doc # show docs for package
 
     abbr lri luarocks install
+    abbr lri1 luarocks install --lua-version=5.1
+
     abbr lrrm luarocks remove
+    abbr lrrm1 luarocks remove --lua-version=5.1
+
     abbr lrs luarocks search
+    abbr lrs1 luarocks search --lua-version=5.1
+
     abbr lrshow luarocks show
+    abbr lrshow1 luarocks show --lua-version=5.1
+
 
 end
 
