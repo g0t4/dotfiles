@@ -793,6 +793,10 @@ function ps_dump_env_vars_when_process_started --argument-names pid
     end
 end
 
+# fish tracing
+abbr enable_fish_tracing "set fish_trace 1"
+abbr disable_fish_tracing "set --erase fish_trace"
+
 if $IS_MACOS
     # pgrep macos:
     #   -l long output (list process name too, also w/ -f prints arg list)
