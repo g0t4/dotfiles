@@ -268,3 +268,8 @@ function __ptw_one
     # % is for cursor placement, now that this can have local overrides, probably most likely place to make changes is the one test case to run, and not the files to monitor for changes
 
 end
+
+abbr pytest_nocapture 'pytest --capture=no'
+abbr pytest_info_logs  'pytest --log-cli-level=INFO'
+# expand short to long options:
+abbr --command pytest --position=anywhere -- "-s" "--capture=no"
