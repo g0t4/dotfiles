@@ -731,7 +731,7 @@ end
 #
 abbr els "env | bat --language dotenv -p"
 abbr egr "env | rg -i "
-abbr env "env | bat -l env" # do this to fix color issues with LESS_TERMCAP_** env vars
+abbr envb "env | bat -l env" # do this to fix color issues with LESS_TERMCAP_** env vars
 # alternative: strip CSI escape codes from LESS_TERMCAP_* env vars (and possibly others)
 # env | string replace --regex "\\x1b\[1(;\\d+)+m" ""
 #
