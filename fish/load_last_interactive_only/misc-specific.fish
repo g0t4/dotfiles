@@ -829,6 +829,15 @@ end
 abbr --set-cursor -- pstreeg "pstree_grep '%'"
 abbr --set-cursor -- pstreeg_watch "viddy 'fish -i -c \"pstree_grep \\'%\\'\"'"
 
+# completions for the pstree_grep function/command.
+# The underlying Python script supports the following options:
+#   -i / --ignore-case : case‑insensitive regex matching
+#   --ascii            : use ASCII tree connectors
+#   -f / --show-full-cmd : display the full command line instead of name(pid)
+#   -h                : show help
+# Provide these as possible completions.
+complete -c pstree_grep -a '--ignore-case --ascii --show-full-cmd -h'
+
 # *** pstree
 # pstreeX => pstree -l X
 abbr --add _pstreeX --regex "pstree\d+" --function pstreeX
