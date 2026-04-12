@@ -825,18 +825,17 @@ end
 # - user:10 - limits to 10 chars (+ indicates ...) (:X ubuntu yes, macos no):
 #       ps -o "user:5,pid,pcpu,pmem,vsz,rss,tty,stat,start,time,comm" -ax
 #
-# *** MY pstree
+# *** pstree_grep.py
 abbr --set-cursor -- pstreeg "pstree_grep '%'"
 abbr --set-cursor -- pstreeg_watch "viddy 'fish -i -c \"pstree_grep \\'%\\'\"'"
-
-# completions for the pstree_grep function/command.
-# The underlying Python script supports the following options:
-#   -i / --ignore-case : case‑insensitive regex matching
-#   --ascii            : use ASCII tree connectors
-#   -f / --show-full-cmd : display the full command line instead of name(pid)
-#   -h                : show help
-# Provide these as possible completions.
-complete -c pstree_grep -a '--ignore-case --ascii --show-full-cmd -h'
+#
+complete -c pstree_grep -s h -l help -d 'show this help message and exit'
+complete -c pstree_grep -s i -l ignore-case -d 'case‑insensitive regex matching'
+complete -c pstree_grep -l ascii -d 'use ASCII tree connectors'
+complete -c pstree_grep -s f -l show-full-cmd -d 'display the full command line instead of name(pid)'
+complete -c pstree_grep -a '(printf "%s" "PATTERN")' \
+    -d 'Regex pattern to match process name or full cmdline' \
+    -r
 
 # *** pstree
 # pstreeX => pstree -l X
