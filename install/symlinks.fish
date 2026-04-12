@@ -112,3 +112,12 @@ ln -f -s $dotfiles_dir/bash/.bash_logout $HOME/.bash_logout
 
 # *** ask-openai config
 ln -f -s $dotfiles_dir/.config/ask-openai $HOME/.config/. # DIR symlink
+
+# *** ~/.agents/skills
+set -l ask_repo_path "$HOME/repos/github/g0t4/ask-openai.nvim"
+if not test -d $ask_repo_path
+    echo "Cloning ask-openai.nvim..."
+    git clone --quiet https://github.com/g0t4/ask-openai.nvim $ask_repo_path
+end
+mkdir -p $HOME/.agents
+ln -f -s $ask_repo_path/.agents/skills $HOME/.agents/. # DIR symlink (just skills for now) => should have skills dir from this repo as ~/.config/skills and NOT ~/.config/skills/skills
