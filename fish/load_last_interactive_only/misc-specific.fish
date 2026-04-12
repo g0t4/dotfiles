@@ -773,6 +773,26 @@ abbr --set-cursor completeC "complete -C '%'"
 
 # *** processes ***
 abbr psg "grc ps aux | rg -i "
+function ps_dump_env_vars_when_process_started --argument-names pid
+    if $IS_MACOS
+        # macOS use ps -E and parse output
+        ps -E -p"$pid" \
+            # optional => skip headers and go with just the one row for this process (starts w/ PID)
+            | grep "^$pid" \
+            # env vars are space delimited
+            | string split ' ' \
+            # grep for lines with FOO=bar pattern... FYI could also constrain to uppercase only (IIAC on the NAME= side)
+            #  FYI assumes no = signs in the first columns
+            | grep = \
+            | bat -l env
+    else if $IS_LINUX
+        # Linux: read environment from /proc/<pid>/environ
+        cat /proc/$pid/environ | tr '\0' '\n' \
+            | grep = \
+            | bat -l env
+    end
+end
+
 if $IS_MACOS
     # pgrep macos:
     #   -l long output (list process name too, also w/ -f prints arg list)
