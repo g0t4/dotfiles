@@ -829,13 +829,13 @@ end
 abbr --set-cursor -- pstreeg "pstree_grep '%'"
 abbr --set-cursor -- pstreeg_watch "viddy 'fish -i -c \"pstree_grep \\'%\\'\"'"
 #
-complete -c pstree_grep -s h -l help -d 'show this help message and exit'
-complete -c pstree_grep -s i -l ignore-case -d 'case‑insensitive regex matching'
-complete -c pstree_grep -l ascii -d 'use ASCII tree connectors'
-complete -c pstree_grep -s f -l show-full-cmd -d 'display the full command line instead of name(pid)'
-complete -c pstree_grep -a '(printf "%s" "PATTERN")' \
-    -d 'Regex pattern to match process name or full cmdline' \
-    -r
+complete --command pstree_grep --short-option h --long-option help --description 'show this help message and exit'
+complete --command pstree_grep --short-option i --long-option ignore-case --description 'case‑insensitive regex matching'
+complete --command pstree_grep --long-option ascii --description 'use ASCII tree connectors'
+complete --command pstree_grep --short-option f --long-option show-full-cmd --description 'display the full command line instead of name(pid)'
+complete --command pstree_grep --arguments '(printf "%s" "PATTERN")' \
+    --description 'Regex pattern to match process name or full cmdline' \
+    --require-parameter
 
 # *** pstree
 # pstreeX => pstree -l X
