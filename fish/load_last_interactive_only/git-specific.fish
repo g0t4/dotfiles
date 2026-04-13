@@ -25,10 +25,11 @@ function mark
 end
 
 # - w/ message
-abbr --set-cursor gcmsg 'git commit -m "%"'
-abbr --set-cursor gcam 'git commit -a -m "%"'
+abbr --set-cursor -- gcmsg 'git commit -m "%"'
+abbr --set-cursor -- gcam 'git commit -a -m "%"'
 
-abbr --set-cursor yolo 'git commit --all -m "%" && git push'
+# joke:
+abbr --set-cursor -- yolo 'git commit --all -m "%" && git push'
 
 # * git push
 # push up to the last X commits, IOTW all but the last X commits
