@@ -2702,6 +2702,7 @@ abbr tailr 'tail -r' # reverse order
 abbr tt trash_n_tail
 #
 abbr tt_ask_predictions 'trash_n_tail ~/.local/share/nvim/ask-openai/ask-predictions.log' # nvim plugin
+abbr tail_all_ask_predictions 'tail -1000 ~/.local/share/nvim/ask-openai/ask-predictions.log | grep -v ClearScrollback' # strip ClearScrollback/1337 so I can see history
 abbr tail_ask_predictions 'tail -F ~/.local/share/nvim/ask-openai/ask-predictions.log'
 #
 # for now I want to keep the commands.log, maybe go back to trash_n_tail later on, for now leave tt as tail -F too:
