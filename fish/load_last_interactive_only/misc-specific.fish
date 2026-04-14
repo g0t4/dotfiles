@@ -920,10 +920,10 @@ function build_abbrs_for_filetype
 
     # * ripgrep
     if abbr -q "rg$filetype_letter"
-        echo "WARNING rg$filetype_letter already defined"
-    else
-        abbr "rg$filetype_letter" "rg -g '*.$glob_end'"
+        log_ --apple_red "## WARNING rg$filetype_letter already defined:"
+        abbr | grep "rg$filetype_letter"
     end
+    abbr "rg$filetype_letter" "rg -g '*.$glob_end'"
 
 end
 build_abbrs_for_filetype l lua
