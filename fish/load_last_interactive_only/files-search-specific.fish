@@ -445,9 +445,9 @@ end
 
 function rgimages
     # usage:
-    #   agimages /System/Library/CoreServices/ Picture
-    #   agimages /System/Library/CoreServices/ Finder
-    #   agimages /System/Library/CoreServices/ Movie
+    #   rgimages /System/Library/CoreServices/ Picture
+    #   rgimages /System/Library/CoreServices/ Finder
+    #   rgimages /System/Library/CoreServices/ Movie
 
     set look_in_dir $argv[1] # optional
     set secondary_path_filter $argv[2]
@@ -470,27 +470,27 @@ function rgimages
     # imgcat hangs on some files, TODO figure out criteria and avoid those? might be svgs though it stopped hanging last time I tried to check
 end
 
-function agimages-global
+function rgimages-global
     # usage:
-    #   agimages-global <search term>
-    #   agimages-global MovieFolderIcon
-    #   agimages-global FolderIcon
+    #   rgimages-global <search term>
+    #   rgimages-global MovieFolderIcon
+    #   rgimages-global FolderIcon
     #
     # FYI can take a while to search all the dirs but give it a second, esp paths that are later in the list:
 
     # FYI hold down Ctrl+C to stop the loop (will eventually work) dont tap it repeatedly
 
     #-- take a search term, find in common places, i.e. /Applications/X.app/*
-    agimages /Applications "$argv"
-    agimages ~/Applications "$argv"
+    rgimages /Applications "$argv"
+    rgimages ~/Applications "$argv"
 
     # TODO just adding this here, need to revisit how it should work vs other app dirs above... just wanted to make sure I don't forget this spot
     # /System/Library/CoreServices/Finder.app # i.e. to find Movie dir, or Picture dir icons
-    agimages /System/Library/CoreServices/ "$argv"
+    rgimages /System/Library/CoreServices/ "$argv"
 
     # what other spots?
 
-    # this direction would be useful if agimages also takes an optional search term to match the file name (in addition to the extension)
+    # this direction would be useful if rgimages also takes an optional search term to match the file name (in addition to the extension)
     # simple-icons repo
-    #_agimages-dir ~/repos/github/simple-icons/simple-icons
+    #_rgimages-dir ~/repos/github/simple-icons/simple-icons
 end
