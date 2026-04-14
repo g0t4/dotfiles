@@ -120,4 +120,4 @@ if not test -d $ask_repo_path
     git clone --quiet https://github.com/g0t4/ask-openai.nvim $ask_repo_path
 end
 mkdir -p $HOME/.agents
-ln -f -s $ask_repo_path/.agents/global/skills $HOME/.agents/. # DIR symlink (just skills for now) => should have skills dir from this repo as ~/.config/skills and NOT ~/.config/skills/skills
+ln -f -s $ask_repo_path/.agents/global/instructs $HOME/.agents/. # DIR symlink (just skills for now) => should have skills dir from this repo as ~/.config/skills and NOT ~/.config/skills/skills
