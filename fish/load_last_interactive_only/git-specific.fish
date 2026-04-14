@@ -100,9 +100,13 @@ end
 #
 # w/ stat (files)
 abbr gls "git log --stat $_unpushed_commits_without_last_pushed"
-abbr --regex 'gls\d+' --function glsX _glsX
+abbr glsf "git log --pretty=full --stat $_unpushed_commits_without_last_pushed"
+abbr --regex 'gls[f]{0,1}\d+' --function glsX _glsX
 function glsX
-    string replace --regex '^gls' 'git log --stat -' $argv
+    # btw f is optional and => --pretty=full if present
+    set expanded (string replace --regex '^glsf' 'git log --pretty=full --stat -' $argv); or true # swap most specific first
+    string replace --regex '^gls' 'git log --stat -' $expanded; or true # swap least specific second and echo
+    # or true else failed command kills expansion... ignore failures
 end
 #
 # graph
