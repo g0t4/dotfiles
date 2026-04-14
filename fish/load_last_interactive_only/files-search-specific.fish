@@ -325,17 +325,6 @@ function _abbr_expand_rgu
     echo rg -u '"%"'
 end
 
-#
-# * filename/path search (not contents)
-abbr --set-cursor rgf 'rg --files'
-abbr --set-cursor rgg 'rg --files | rg "%"' # * mirror `ag -g` (search filepaths not content)
-abbr --set-cursor rggi 'rg --files | rg "%"'
-abbr --set-cursor rggh 'rg --files --hidden | rg "%"'
-abbr --set-cursor rggu 'rg --files -u | rg "%"'
-
-# * TODO filename + content search
-abbr --set-cursor rg_G 'rg -g fileglob "%"' # use as a reminder for now
-
 # * syntax highlighting of grep results
 function delta_rg --wraps delta
     # add wrapper to keep command shorter, mostly so I can modify last search command without arrowing a million times back
