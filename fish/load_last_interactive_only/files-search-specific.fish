@@ -332,12 +332,10 @@ end
 # * filename/path search (not contents)
 abbr --set-cursor rgf 'rg --files'
 abbr --set-cursor rgg 'rg --files | rg "%"' # * mirror `ag -g` (search filepaths not content)
-abbr --set-cursor agg 'rg --files | rg "%"' # * mirror `ag -g` (search filepaths not content)
 abbr --set-cursor rggi 'rg --files | rg "%"'
 abbr --set-cursor rggh 'rg --files --hidden | rg "%"'
 abbr --set-cursor aggh 'rg --files --hidden | rg "%"'
 abbr --set-cursor rggu 'rg --files -u | rg "%"'
-abbr --set-cursor aggu 'rg --files -u | rg "%"'
 
 # * TODO filename + content search
 abbr --set-cursor rg_G 'rg -g fileglob "%"' # use as a reminder for now
@@ -358,8 +356,8 @@ abbr --set-cursor rg_json 'rg --json "%"'
 #
 # *** troubleshooting
 abbr rg_files 'rg --files' # * list files that would be searched
-abbr rg_files_no_match 'rg --files-without-match' # ag -L
-abbr rg_files_with_matches 'rg --files-with-matches' # ag -l
+abbr rg_files_no_match 'rg --files-without-match'
+abbr rg_files_with_matches 'rg --files-with-matches'
 abbr rg_debug 'rg --debug'
 abbr rg_trace 'rg --trace'
 abbr rg_stats 'rg --stats'
@@ -443,94 +441,9 @@ end
 # -T  --type-not                  (Do not search files matching TYPE.)
 # -t  --type                        (Only search files matching TYPE.)
 
-# * rg/ag shared args:
-# -i to ignore case
-# --hidden (note ag also uses -h whereas rg does not)
-# -u/--unrestricteda (not 100% same, still some filtering in rg)
-# ag --[no-]group == rg --[no-]heading   # whether to filename on every line or to group matches per file and show name only above group, important for it to be per line for clickable "links" in iTerm2 semantic history
-#
-# *** FYI use these to find differences:
-#   diff_two_commands 'ag -g \'\'| sort' 'rg --files | sort'
-#   ag -g ''
-#   rg --files
-#   # diff there is gonna show differences in args
-#
-
-# cd dotfiles (this repo):
-#   diff_two_commands 'rg --hidden -i telescope -l | sort' 'ag --hidden -i telescope -l | sort'
-#     matches
-#   diff_two_commands 'ag --unrestricted -i telescope -l | sort' 'rg --unrestricted -i telescope -l | sort'
-#     does not match, far fewer matches from rg
-#     notably --hidden files are gone
-#     and binaries (libs)
-
 # ***! rg END
 
-# FYI colors are defined by fish/zsh respectively in color-specific.{fish,zsh}
-if status is-interactive
-    function ag
-        command ag --nogroup --color-match "$__color_matching_text" --column $argv --smart-case
-        # --nogroup => disable grouping to show file/line per match to click to open in vscode (via iterm links)
-    end
-end
-# FYI can defer expand color variable so order of startup files is irrelevant
-
-# # FYI uncomment to go back to ag
-# abbr --set-cursor -- agi 'ag -i "%"'
-# abbr --set-cursor -- agg 'ag --smart-case -g "%"'
-# abbr --set-cursor -- agh 'ag --hidden --smart-case "%"' # match hidden files, but not ignored files
-# abbr --set-cursor -- agu 'ag --unrestricted --smart-case "%"' # match hidden files + ignored files
-# abbr --set-cursor -- aggh 'ag --hidden --smart-case -g "%"' # match hidden files, but not ignored files
-# abbr --set-cursor -- aggu 'ag --unrestricted --smart-case -g "%"' # match hidden files + ignored files
-
-# ignored files: .ignore, .gitignore, --ignore, etc
-# hidden files: .config, .git (dotfiles/dirs)
-
-# # FYI uncomment to go back to ag
-# # * list file names (of matches)
-# abbr agl 'ag -l' # print file name only, not matched content
-# abbr agl 'ag -lu' # print file name only, not matched content
-# abbr agl 'ag -l --hidden' # print file name only, not matched content
-# abbr agL 'ag -L' # invert match (files w/o content matches)
-# # * list files that are searched
-# #    so you can see what is ignored vs not, what needs --unrestricted vs --hidden vs neither
-# abbr agll 'ag -l # list files searched' # FYI thisis redundant but I wanna put it here so I don't forget its also in this group
-# abbr aglu 'ag -lu # list files searched' #
-# abbr aglh 'ag -l --hidden # list files searched, including hidden'
-# # ? can I use -L somehow to list whats not searched? would be easier than diff below
-function ag_files_searched
-    ag -ll $argv | sort -u
-end
-function ag_files_searched_hidden
-    ag -ll --hidden $argv | sort -u
-end
-function ag_files_searched_unrestricted
-    ag -ll --unrestricted $argv | sort -u
-end
-function ag_files_searched_hidden_diff
-    # show a diff of files searched with and without --hidden
-    # see what files require --hidden to show up
-    diff_two_commands 'ag -l | sort -h' 'ag -l --hidden | sort -h'
-end
-function ag_files_searched_unrestricted_diff
-    # show a diff of files searched with and without --unrestricted
-    # see what files require --unrestricted to show up
-    diff_two_commands 'ag -l | sort -h' 'ag -l --unrestricted | sort -h'
-end
-
-# # FYI uncomment to go back to ag
-# abbr agw 'ag --word-regexp' # match whole words
-# abbr agz 'ag --search-zip' # search inside zip files (gz,xz only)
-#
-# # * multiline
-# abbr --set-cursor agm 'ag "(?s)%"' # (?s) makes . match \n too
-# #  example:
-# #    ag -G fish "(?s)for[^(end)]*set[^(end)]*"
-# #       here I was looking for for loops that use `set -`, first just `set`
-# #       not sure this does what I want... it's hard to match across lines :) and not get crazy results
-# #    find all for loops that set a variable (before they end)
-
-function agimages
+function rgimages
     # usage:
     #   agimages /System/Library/CoreServices/ Picture
     #   agimages /System/Library/CoreServices/ Finder
