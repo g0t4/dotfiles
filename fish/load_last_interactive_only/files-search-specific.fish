@@ -301,11 +301,8 @@ export RIPGREP_CONFIG_PATH=$WES_DOTFILES/.config/ripgrep/ripgreprc
 # * basic file content search
 # abbr --set-cursor rgs 'rg --smart-case "%"' # making this the default, to match what I am doing in neovim's telescope live grep [args] plugins
 abbr --set-cursor rgc 'rg --case-sensitive "%"'
-# abbr --set-cursor agc 'rg --case-sensitive "%"' # mostly set this as a reminder if I go back to ag (and need its abbrs again)
 abbr --set-cursor rgi 'rg -i "%"'
-abbr --set-cursor agi 'rg -i "%"'
 abbr --set-cursor rgh 'rg --hidden "%"'
-abbr --set-cursor agh 'rg --hidden "%"'
 
 function command_line_after_cursor_is_not_an_option_dash
     set cursor_position (commandline --cursor)
@@ -334,7 +331,6 @@ abbr --set-cursor rgf 'rg --files'
 abbr --set-cursor rgg 'rg --files | rg "%"' # * mirror `ag -g` (search filepaths not content)
 abbr --set-cursor rggi 'rg --files | rg "%"'
 abbr --set-cursor rggh 'rg --files --hidden | rg "%"'
-abbr --set-cursor aggh 'rg --files --hidden | rg "%"'
 abbr --set-cursor rggu 'rg --files -u | rg "%"'
 
 # * TODO filename + content search
