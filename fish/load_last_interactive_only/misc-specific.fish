@@ -902,7 +902,7 @@ abbr --set-cursor sedi "$sed_cmd -i 's/%//g'"
 # use this to take your sed search regex and limit the files and then the file names are passed back
 abbr --set-cursor --command $sed_cmd --position=anywhere -- rg "(rg --files-with-matches %)"
 
-function build_sed_abbrs_for_filetype
+function build_abbrs_for_filetype
     # FYI there may be some bugs here in porting this, just heads up... use and find out
 
     set -l filetype_letter $argv[1]
@@ -918,12 +918,12 @@ function build_sed_abbrs_for_filetype
     # 2. *l => (rg -g "*.lua" --files-with-matches ___)
     abbr --command $sed_cmd --position=anywhere "*$filetype_letter" $rg_filter
 end
-build_sed_abbrs_for_filetype l lua
-build_sed_abbrs_for_filetype t ts
-build_sed_abbrs_for_filetype j "{json,js}"
-build_sed_abbrs_for_filetype m md
-build_sed_abbrs_for_filetype p py
-build_sed_abbrs_for_filetype f fish
+build_abbrs_for_filetype l lua
+build_abbrs_for_filetype t ts
+build_abbrs_for_filetype j "{json,js}"
+build_abbrs_for_filetype m md
+build_abbrs_for_filetype p py
+build_abbrs_for_filetype f fish
 
 # all -  use rg w/o a filter on language (no -g *.lua for example)
 abbr --set-cursor seda "$sed_cmd -Ei 's/%//g' (rg --files-with-matches ___) "
