@@ -1,4 +1,3 @@
-abbr trace 'traceroute -n'
 abbr trace1 'traceroute -n 1.1.1.1'
 abbr tr6 'traceroute -n -6'
 
