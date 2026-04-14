@@ -917,6 +917,14 @@ function build_abbrs_for_filetype
 
     # 2. *l => (rg -g "*.lua" --files-with-matches ___)
     abbr --command $sed_cmd --position=anywhere "*$filetype_letter" $rg_filter
+
+    # * ripgrep
+    if abbr -q "rg$filetype_letter"
+        echo "WARNING rg$filetype_letter already defined"
+    else
+        abbr "rg$filetype_letter" "rg -g '*.$glob_end'"
+    end
+
 end
 build_abbrs_for_filetype l lua
 build_abbrs_for_filetype t ts
