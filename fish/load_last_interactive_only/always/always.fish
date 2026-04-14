@@ -64,6 +64,7 @@ function ask_rewrite_diff_reviewer
 end
 
 abbr trace ask_trace_reviewer
+# abbr thread ask_trace_reviewer # nuke this if it becomes a crutch
 function ask_trace_reviewer
     set _python3 "$ASK_REPO/.venv/bin/python3"
     set _script_py "$ASK_REPO/tools/chat_viewer/__main__.py"
