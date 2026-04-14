@@ -351,10 +351,10 @@ end
 # alternative... type `jd<SPACE>` on end of an rg command and it expands into the json delta for you!
 abbr --command rg --position anywhere -- jd '--json | delta_rg'
 # OR, have it start w/ json delta:
-abbr --set-cursor rgjd 'rg --json "%" | delta_rg'
+abbr --set-cursor rg_json_delta 'rg --json "%" | delta_rg'
 abbr --set-cursor rg_delta 'rg --json "%" | delta_rg' # reminder format (use command_what as a way to easily lookup new abbrs that I am trying to habituate)
 #
-abbr --set-cursor rgj 'rg --json "%"'
+abbr --set-cursor rg_json 'rg --json "%"'
 #
 # *** troubleshooting
 abbr rg_files 'rg --files' # * list files that would be searched
@@ -364,10 +364,8 @@ abbr rg_debug 'rg --debug'
 abbr rg_trace 'rg --trace'
 abbr rg_stats 'rg --stats'
 
-abbr rgm 'rg --multiline --multiline-dotall' # dot as \n too
-
 # ***rg (start to consider using this?)
-abbr rgm 'rg --multiline --multiline-dotall' # dot as \n too
+abbr rg_multiline 'rg --multiline --multiline-dotall' # dot as \n too
 
 abbr --set-cursor rgd 'rg -d "%"'
 abbr --set-cursor rgv 'rg -v "%"' # -v/--invert-match
