@@ -937,7 +937,9 @@ build_abbrs_for_filetype f fish
 abbr --set-cursor seda "$sed_cmd -Ei 's/%//g' (rg --files-with-matches ___) "
 abbr --command $sed_cmd --position=anywhere "*a" "(rg --files-with-matches ___) "
 
-abbr _cat_range --function _cat_range_abbr --regex "(catr|catrange|sedr|sedrange)\d+_\d+"
+# allow , - or _ to split start/end number
+#   lines1,2    lines 3-10    lines4_6
+abbr _cat_range --function _cat_range_abbr --regex "(lines|catr|catrange|sedr|sedrange)\d+[,_-]\d+"
 function _cat_range_abbr
     # purpose:   cat range -n '10,25p' foo.txt
     set matches (string match --regex "(\d+)_(\d+)" $argv[1])
