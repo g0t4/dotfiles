@@ -3150,6 +3150,15 @@ abbr -- pbsse4 "pbpaste | string replace --regex '^\w\w\w \d\d \d\d:\d\d:\d\d \w
 
 # ? --join-output
 
+# * jq command
+
+abbr jq_sort_keys 'jq --sort-keys' # reminder abbr
+# * expand short options => corresponding long option
+abbr --command jq --position anywhere -- -S --sort-keys
+abbr --command jq --position anywhere -- -C --color-output
+abbr --command jq --position anywhere -- -c --compact-output
+abbr --command jq --position anywhere -- -r --raw-output
+
 # * date
 abbr date_s "date +%s"
 reminder_abbr date_unixtime "date +%s" # reminder abbr
