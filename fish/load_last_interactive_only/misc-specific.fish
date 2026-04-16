@@ -3136,7 +3136,7 @@ abbr -- pbsse_verbose_raw_response "pbpaste | $sse_jq '.__verbose.content' -r" #
 abbr -- pbsse1 "pbpaste | $sse_jq > input-messages.json"
 abbr -- pbsse2 "pbpaste | $sse_jq > input-rendered-prompt.json"
 abbr -- pbsse3 "pbpaste | $sse_jq > output-parsed-message.json"
-abbr -- pbssetrace 'ask_trace_reviewer (pbpaste | string replace --regex "[^{]*" "" | psub)'
+abbr -- pbssetrace 'view_trace (pbpaste | string replace --regex "[^{]*" "" | psub)'
 
 #
 # * pbsse4 (raw prompt)
