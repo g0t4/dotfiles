@@ -63,8 +63,15 @@ function ask_rewrite_diff_reviewer
     diff_two_commands "jq .request_body.messages[-1].content -r $trace_file" "jq .response_message.content -r $trace_file"
 end
 
-abbr t view_trace # go with tr if t is an issue
-abbr trace view_trace
+abbr --function _abbr_expand_t t
+function _abbr_expand_t
+    set trace_file (fd --max-depth=1 ".*-trace.json" | head -1)
+    if set -q trace_file
+        echo "view_trace $trace_file"
+    else
+        echo view_trace
+    end
+end
 
 function strip_trailing_newline --description "trim trailing \\n - last only"
     perl -0777 -pe 'chop if substr($_, -1) eq "\n"'
