@@ -304,6 +304,10 @@ abbr --set-cursor rgc 'rg --case-sensitive "%"'
 abbr --set-cursor rgi 'rg -i "%"'
 abbr --set-cursor rgh 'rg --hidden "%"'
 
+# I wonder how much this will drive me nuts...
+abbr --set-cursor -- grep 'rg "%"'
+abbr --set-cursor -- history 'history | rg "%"'
+
 function command_line_after_cursor_is_not_an_option_dash
     set cursor_position (commandline --cursor)
     set cmd (commandline -b)
