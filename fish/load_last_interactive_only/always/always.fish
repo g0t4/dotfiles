@@ -63,10 +63,13 @@ function ask_rewrite_diff_reviewer
     diff_two_commands "jq .request_body.messages[-1].content -r $trace_file" "jq .response_message.content -r $trace_file"
 end
 
-abbr --function _abbr_expand_t t
-function _abbr_expand_t
-    expand_with_first_file_match view_trace ".*-trace.json"
+function factory
+    abbr --function _abbr_expand_t t
+    eval 'function _abbr_expand_t
+        expand_with_first_file_match view_trace ".*-trace.json"
+    end'
 end
+factory
 function expand_with_first_file_match --argument-names cmd match_regex
     set first_file_match (fd --max-depth=1 $match_regex | head -1)
     if set -q first_file_match
