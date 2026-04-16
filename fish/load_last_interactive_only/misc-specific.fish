@@ -3117,6 +3117,7 @@ set --local sse_jq 'string replace --regex "[^{]*" "" | jq'
 # pipe alone (not from clippy)
 abbr --position=anywhere -- psse "| $sse_jq"
 abbr --position=anywhere -- pssec "| $sse_jq --compact-output"
+abbr --position=anywhere -- pdata "| grep -v ':data' | $sse_jq"  # filter to just data: records in HTTP SSE trace (i.e. skip lines w/ `event: message`)
 #
 # * pbcopy
 #   until I habituate these, use _copy_ expanded as reminder (shorten later if use this all the time)
