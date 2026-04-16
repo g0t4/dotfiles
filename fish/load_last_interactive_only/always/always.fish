@@ -78,7 +78,6 @@ function abbr_with_first_file_match --argument-names short_option long_option ma
     end'
     abbr --function "_abbr_expand_$short_option" $short_option
 end
-abbr_with_first_file_match t view_trace ".*-trace.json"
 function expand_with_first_file_match --argument-names cmd match_regex
     set first_file_match (fd --max-depth=1 $match_regex | head -1)
     if set -q first_file_match
@@ -87,6 +86,8 @@ function expand_with_first_file_match --argument-names cmd match_regex
         echo $cmd
     end
 end
+#
+abbr_with_first_file_match t view_trace ".*-trace.json"
 
 function strip_trailing_newline --description "trim trailing \\n - last only"
     perl -0777 -pe 'chop if substr($_, -1) eq "\n"'
