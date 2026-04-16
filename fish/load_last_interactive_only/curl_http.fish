@@ -2,7 +2,23 @@
 abbr curlv "curl -sLv" # -v show request&response + headers&body! # -s hides progress bar when piping output, -L follows redirects
 abbr curlI "curl -sSI" # HEAD request only # -S shows error on failure when using -s (silent)
 abbr curls "curl --fail-with-body -sSL" # quiet/silent output
+abbr curlM "curl --manual"
 # FYI keep only key curl aliases in here...
+
+# expand short => long options
+abbr --command curl --position anywhere -- -d --data
+abbr --command curl --position anywhere -- -f --fail
+abbr --command curl --position anywhere -- -i --include
+abbr --command curl --position anywhere -- -o --output
+abbr --command curl --position anywhere -- -O --remote-name
+abbr --command curl --position anywhere -- -s --silent
+abbr --command curl --position anywhere -- -S --show-error
+abbr --command curl --position anywhere -- -v --verbose
+abbr --command curl --position anywhere -- -I --head
+abbr --command curl --position anywhere -- -H --header
+abbr --command curl --position anywhere -- -L --location
+abbr --command curl --position anywhere -- -N --no-buffer
+abbr --command curl --position anywhere -- -X --request
 
 # httpie aliases
 abbr httpg "http GET"
