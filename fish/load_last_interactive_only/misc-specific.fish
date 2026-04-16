@@ -3161,6 +3161,7 @@ abbr --command jq --position anywhere -- -S --sort-keys
 abbr --command jq --position anywhere -- -C --color-output
 abbr --command jq --position anywhere -- -c --compact-output
 abbr --command jq --position anywhere -- -r --raw-output
+abbr --command jq --position anywhere -- -j --join-output # one use case: don't end w/ \n
 
 # * date
 abbr date_s "date +%s"
