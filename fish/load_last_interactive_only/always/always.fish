@@ -65,6 +65,11 @@ end
 
 abbr t view_trace # go with tr if t is an issue
 abbr trace view_trace
+
+function strip_trailing_newline --description "trim trailing \\n - last only"
+    perl -0777 -pe 'chop if substr($_, -1) eq "\n"'
+end
+
 function view_trace
     set _python3 "$ASK_REPO/.venv/bin/python3"
     set _script_py "$ASK_REPO/tools/chat_viewer/__main__.py"
