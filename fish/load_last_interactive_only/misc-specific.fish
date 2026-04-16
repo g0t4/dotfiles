@@ -121,8 +121,12 @@ if command -q systemctl
 
     # AFAICT I don't need user equivalentsof rotate/vacuum
     # WIP - figure out what I want for cleanup, when testing I often wanna just clear all logs and try some activity to simplify looking at journalctl history, hence jcnuke
-    abbr jcnuke 'sudo journalctl --rotate --vacuum-time=1s' # ~effectively rotate (archive all active journal files) then nuke (all archived journal files)
-    abbr jcr 'sudo journalctl --rotate' # rotate (archive) all active journal files (new journal files going forward)
+    #
+    # rotate (archive active journal files) then vacuum=delete=nuke (all archived journal files)
+    abbr jc_rotate_vaccum 'sudo journalctl --rotate --vacuum-time=1s'
+    abbr jc_nuke 'sudo journalctl --rotate --vacuum-time=1s' # see if I can internalize using nuke?
+    #
+    abbr jc_rotate_only 'sudo journalctl --rotate' # rotate (archive) all active journal files (uses new journal files going forward)
     abbr jcvs 'sudo journalctl --vacuum-size=100M' # vacuum logs to keep total size under 100M
     #
     abbr jcdu 'sudo journalctl --disk-usage' # total disk usage
