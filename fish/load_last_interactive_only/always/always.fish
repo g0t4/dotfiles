@@ -65,11 +65,14 @@ end
 
 abbr --function _abbr_expand_t t
 function _abbr_expand_t
-    set trace_file (fd --max-depth=1 ".*-trace.json" | head -1)
-    if set -q trace_file
-        echo "view_trace $trace_file"
+    expand_with_first_file_match view_trace ".*-trace.json"
+end
+function expand_with_first_file_match --argument-names cmd match_regex
+    set first_file_match (fd --max-depth=1 $match_regex | head -1)
+    if set -q first_file_match
+        echo "$cmd $first_file_match"
     else
-        echo view_trace
+        echo $cmd
     end
 end
 
