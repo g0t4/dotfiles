@@ -5,6 +5,12 @@ abbr curls "curl --fail-with-body -sSL" # quiet/silent output
 abbr curlM "curl --manual"
 # FYI keep only key curl aliases in here...
 
+# really would rock if I could tab complete these "anywhere" expansions...
+#   having to memorize these defeats the point except for my most commonly used position anywhere abbrs
+# abbr --command curl --position anywhere -- ajson "'Accept: application/json'"
+# abbr --command curl --position anywhere -- asse "'Accept: text/event-stream'"
+# would love to have mime_json, mime_event, etc
+
 # expand short => long options
 abbr --command curl --position anywhere -- -d --data
 abbr --command curl --position anywhere -- -f --fail
