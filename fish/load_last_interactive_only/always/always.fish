@@ -87,6 +87,7 @@ function expand_with_first_file_match --argument-names cmd match_regex
     end
 end
 #
+# admittedly, this reads nicely (which was part of my goal):
 abbr_with_first_file_match t view_trace ".*-trace.json"
 
 function strip_trailing_newline --description "trim trailing \\n - last only"
