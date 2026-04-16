@@ -63,8 +63,8 @@ function ask_rewrite_diff_reviewer
     diff_two_commands "jq .request_body.messages[-1].content -r $trace_file" "jq .response_message.content -r $trace_file"
 end
 
+abbr t view_trace # go with tr if t is an issue
 abbr trace view_trace
-# abbr thread view_trace # nuke this if it becomes a crutch
 function view_trace
     set _python3 "$ASK_REPO/.venv/bin/python3"
     set _script_py "$ASK_REPO/tools/chat_viewer/__main__.py"
