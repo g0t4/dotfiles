@@ -4,6 +4,7 @@
 --glob=!.git
 # DO NOT QUOTE ARGS
 
+# mostly for jump to, right... not sure I need column but hrm
 --column
 --no-heading
 
