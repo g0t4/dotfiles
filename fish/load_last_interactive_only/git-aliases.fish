@@ -1,4 +1,3 @@
-
 # Note: alias collisions to avoid:
 # `go*` for `go` commands
 # `grep` for default grep params
@@ -63,7 +62,6 @@ abbr gbdf 'git branch --delete --force' #same as gbD
 
 # blame
 abbr gbl 'git blame -b -w' # -w ignore whitespace, -b blank SHA1 for boundary commits
-
 
 # gcmark like
 abbr review "git commit -a -m 'review'"
@@ -191,10 +189,11 @@ abbr gwch 'git whatchanged -p --abbrev-commit --pretty=medium'
 # * --color-words fubar's delta diffs (let delta handle the styling)
 # makes me wonder if this was also what I was hating about diff-so-fancy
 abbr gd "git diff" # show unstaged (worktree) changes
+abbr gd_summary "git diff --summary" # --summary shows % similarity but squelches diff
 abbr gd_worktree "git diff" # show worktree changes
 #
-abbr gds "git diff --staged" #
-abbr gdc "git diff --staged" # old abbr, keep until gds habituated
+abbr gdc "git diff --staged"
+abbr gdc_summary "git diff --staged --summary" # --summary will show rename % similarity but squelches diff
 abbr gd_index "git diff --staged" # show staged (index) changes
 #
 abbr gd_is_worktree_clean "git diff --quiet" # 0 = worktree is clean (no unstaged changes), 1 = worktree is dirty
@@ -202,7 +201,7 @@ abbr gd_is_index_clean "git diff --staged --quiet" # 0 = index is clean (no stag
 # last commit diff:
 abbr gdlf 'git diff-tree -r HEAD~1 HEAD'
 #
-abbr dsf 'diff-so-fancy'
+abbr dsf diff-so-fancy
 
 ## LFS
 #
