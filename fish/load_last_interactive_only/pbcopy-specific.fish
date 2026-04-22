@@ -70,7 +70,7 @@ abbr pbj "pbpaste | jq"
 abbr pbj_toolcall_args "pbpaste | jq '.tool_calls[0].function.arguments' -r"
 #
 abbr pby "pbpaste | yq"
-abbr pbw "pbpaste | wordcount"
+abbr pbwc "pbpaste | wordcount"
 abbr pbn "pbpaste | string split '\n'"
 
 # if SSH => replace fish_clipboard_copy

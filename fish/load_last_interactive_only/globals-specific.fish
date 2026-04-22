@@ -39,6 +39,7 @@ function _abbr_expand_tail_pipe_d
     echo $text
 end
 
+# TODO make pwc insert pbpaste if line is empty? else just `| wc`?
 abbr --position=anywhere -- pwc '| wordcount'
 
 abbr --position=anywhere -- hC '| hexdump -C'
