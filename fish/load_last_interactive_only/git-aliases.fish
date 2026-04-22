@@ -28,8 +28,8 @@ abbr gcleanx 'git clean -d -x --dry-run' # -x == ignored files too
 abbr gpristine 'git reset --hard && git clean -dffx'
 
 # reflog
-abbr grl 'git reflog'
-abbr grla 'git reflog --all'
+abbr grl 'git reflog --pretty=reflog'
+abbr grla 'git reflog --all --pretty=reflog'
 
 # add
 abbr ga 'git add'
