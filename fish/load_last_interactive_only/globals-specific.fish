@@ -1,3 +1,23 @@
+# emoji
+abbr love "❤️"
+abbr fire "🔥"
+abbr smile "😊"
+abbr thumbsup "👍"
+abbr party "🥳"
+abbr coffee "☕"
+abbr check "✅"
+abbr star "⭐"
+abbr rocket "🚀"
+abbr grin "😁"
+abbr think "🤔"
+abbr clap "👏"
+abbr ok "👌"
+abbr shrug "🤷"
+abbr wave "👋"
+abbr music "🎵"
+abbr sun "☀️"
+abbr moon "🌙"
+
 # use p(ext) unless prominent, in which use shortened p(e) format (ensure not gonna need to not expand that often)
 abbr --position=anywhere -- pbat '| bat -l'
 abbr --position=anywhere -- pgr '| rg -i --no-column' # FYI --no-column disables line numbers too (in my testing) else --no-line-number/-N is needed
