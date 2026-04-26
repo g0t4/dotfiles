@@ -318,13 +318,14 @@ local function onChoice(choice)
 
     elseif choice.action == "open_terminal" then
         for _, path in ipairs(paths) do
-            -- Use the directory of the file (or the dir itself)
+            -- Resolve directory: if path is a file, use its containing folder
             local dir = path
             local attrs = hs.fs.attributes(path)
             if attrs and attrs.mode ~= "directory" then
                 dir = path:match("^(.+)/[^/]+$") or path
             end
-            hs.execute(string.format('open -a "Terminal" "%s"', dir))
+            -- Open iTerm at the resolved directory
+            hs.execute(string.format('open -a "iTerm" "%s"', dir))
         end
 
     elseif choice.action == "reveal" then
