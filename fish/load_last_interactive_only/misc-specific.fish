@@ -1450,12 +1450,14 @@ function hf
     uv tool run --from 'huggingface-hub>=1.1.7' hf $argv
 end
 
-# hf reserved for huggingface CLI (hf command now)
-abbr hfc "hf cache"
-abbr hfcls "hf cache ls"
-abbr hfcrm "hf cache rm"
-abbr hfcv "hf cache verify"
-abbr hfcpr "hf cache prune"
+if command -q hf
+    # hf reserved for huggingface CLI (hf command now)
+    abbr hfc "hf cache"
+    abbr hfcls "hf cache ls"
+    abbr hfcrm "hf cache rm"
+    abbr hfcv "hf cache verify"
+    abbr hfcpr "hf cache prune"
+end
 
 if command -q llama-server
 
