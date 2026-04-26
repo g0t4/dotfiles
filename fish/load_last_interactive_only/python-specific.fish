@@ -152,11 +152,11 @@ abbr uvt 'uv tool'
 abbr uvtr 'uv tool run'
 #abbr uvtd 'uv tool dir'
 #   uv tool dir --bin # ~/.local/bin (many apps use this)
-abbr uvtr 'uv tool list'
+abbr uvtls 'uv tool list'
 abbr uvti 'uv tool install'
-#abbr uvtu 'uv tool upgarde'
-#abbr uvtun 'uv tool uninstall'
-abbr uvx 'uv tool run' # uvx is an alias for `uv tool run`
+abbr uvtup 'uv tool upgrade --all'
+abbr uvtun 'uv tool uninstall'
+abbr uvx 'uv tool run' # uvx command is an alias for `uv tool run`, so just expand it anyways?
 #
 # *** OMG it can install python versions (like pyenv)
 #  mostly reminders for now:
