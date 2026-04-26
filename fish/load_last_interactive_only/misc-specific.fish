@@ -1457,6 +1457,71 @@ if command -q hf
     abbr hfcrm "hf cache rm"
     abbr hfcv "hf cache verify"
     abbr hfcpr "hf cache prune"
+
+    # Model search and listing shortcuts (hf models)
+    # List models (default)
+    abbr hfml "hf models ls"
+    # Search models on the hub
+    abbr hfmls "hf models ls --search"
+    # Filter by author/organization
+    abbr hfmlsa "hf models ls --author"
+    # Filter by tags
+    abbr hfmlsf "hf models ls --filter"
+    # Filter by number of parameters (e.g. min:6B,max:128B)
+    abbr hfmlsp "hf models ls --num-parameters"
+    # Sort results (created_at, downloads, last_modified, likes, trending_score)
+    abbr hfmlss "hf models ls --sort"
+    # Limit number of results (default 10)
+    abbr hfmlsl "hf models ls --limit"
+    # Quiet mode – print only model IDs, one per line
+    abbr hfmlsq "hf models ls --quiet"
+
+    # Model info shortcut
+    abbr hfmi "hf models info"
+
+    # Dataset shortcuts (hf datasets)
+    abbr hfdl "hf datasets ls"
+    abbr hfdls "hf datasets ls --search"
+    abbr hfdla "hf datasets ls --author"
+    abbr hfdlf "hf datasets ls --filter"
+    abbr hfdlp "hf datasets ls --limit"
+    abbr hfdlsort "hf datasets ls --sort"
+    abbr hfdinfo "hf datasets info"
+    abbr hfdpar "hf datasets parquet"
+    abbr hfdsql "hf datasets sql"
+
+    # Repository management shortcuts
+    abbr hfrc "hf repos create"
+    abbr hfrd "hf repos delete"
+    abbr hfrdf "hf repos delete-files"
+    abbr hfrdu "hf repos duplicate"
+    abbr hfrm "hf repos move"
+    abbr hfrs "hf repos settings"
+    abbr hfrt "hf repos tag"
+    abbr hfrb "hf repos branch"
+
+    # Authentication shortcuts
+    abbr hfal "hf auth login"
+    abbr hfao "hf auth logout"
+    abbr hfaw "hf auth whoami"
+    abbr hfas "hf auth switch"
+    abbr hfali "hf auth ls"
+
+    # Upload / download shortcuts
+    abbr hfup "hf upload"
+    abbr hfdown "hf download"
+
+    # Collections shortcuts (hf collections)
+    # List collections owned by the current user (or specify --owner)
+    abbr hfcols "hf collections ls --owner"
+    # Get info on a collection and pretty‑print items with jq
+    abbr hfcoi "hf collections info % | jq \".items | .[] | [ .item_type, .item_id ] \" --compact-output"
+
+    # Skills shortcuts (hf skills)
+    # Add a skill (download and install) – optionally with flags later
+    abbr hfsa "hf skills add"
+    # Preview a skill's generated SKILL.md
+    abbr hfsp "hf skills preview"
 end
 
 if command -q llama-server
