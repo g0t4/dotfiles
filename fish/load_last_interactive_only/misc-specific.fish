@@ -1450,8 +1450,6 @@ function hf
     uv tool run --from 'huggingface-hub>=1.1.7' hf $argv
 end
 
-if command -q hf
-
     abbr hfc "hf cache"
     abbr hfcls "hf cache ls"
     abbr hfcrm "hf cache rm"
@@ -1483,7 +1481,6 @@ if command -q hf
 
     # TODO look into skills, seems to be a way to see skills (maybe for an agent to run this command to dump instructions?)
     abbr hfsp "hf skills preview"
-end
 
 if command -q llama-server
 
