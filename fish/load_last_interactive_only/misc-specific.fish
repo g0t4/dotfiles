@@ -1450,37 +1450,37 @@ function hf
     uv tool run --from 'huggingface-hub>=1.1.7' hf $argv
 end
 
-    abbr hfc "hf cache"
-    abbr hfcls "hf cache ls"
-    abbr hfcrm "hf cache rm"
-    abbr hfcv "hf cache verify"
-    abbr hfcpr "hf cache prune"
+abbr hfc "hf cache"
+abbr hfcls "hf cache ls"
+abbr hfcrm "hf cache rm"
+abbr hfcv "hf cache verify"
+abbr hfcpr "hf cache prune"
 
-    abbr hfml "hf models ls"
-    abbr hfmls "hf models ls --search"
-    abbr hfmlsa "hf models ls --limit 30 --author"
-    abbr hfmls_ggml_org "hf models ls --limit 30 --author ggml-org"
-    abbr hfmls_ggml_org "hf models ls --limit 30 --author ggml-org"
-    abbr hfmls_ggml_org_qwen36 "hf models ls --limit 30 --author ggml-org --search qwen3.6"
-    abbr hfmls_ggml_org_qwen35 "hf models ls --limit 30 --author ggml-org --search qwen3.5"
-    abbr hfmls_qwen "hf models ls --limit 30 --author Qwen"
-    abbr hfmls_qwen_qwen36 "hf models ls --limit 30 --author Qwen --search qwen3.6"
-    abbr hfmls_qwen_qwen35 "hf models ls --limit 30 --author Qwen --search qwen3.5"
+abbr hfml "hf models ls"
+abbr hfmls "hf models ls --search"
+abbr hfmlsa "hf models ls --limit 30 --author"
+abbr hfmls_ggml_org "hf models ls --limit 30 --author ggml-org"
+abbr hfmls_ggml_org "hf models ls --limit 30 --author ggml-org"
+abbr hfmls_ggml_org_qwen36 "hf models ls --limit 30 --author ggml-org --search qwen3.6"
+abbr hfmls_ggml_org_qwen35 "hf models ls --limit 30 --author ggml-org --search qwen3.5"
+abbr hfmls_qwen "hf models ls --limit 30 --author Qwen"
+abbr hfmls_qwen_qwen36 "hf models ls --limit 30 --author Qwen --search qwen3.6"
+abbr hfmls_qwen_qwen35 "hf models ls --limit 30 --author Qwen --search qwen3.5"
 
-    abbr hfmi "hf models info"
+abbr hfmi "hf models info"
 
-    abbr hfdl "hf datasets ls"
-    abbr hfdls "hf datasets ls --search"
-    abbr hfdla "hf datasets ls --author"
-    abbr hfdinfo "hf datasets info"
+abbr hfdl "hf datasets ls"
+abbr hfdls "hf datasets ls --search"
+abbr hfdla "hf datasets ls --author"
+abbr hfdinfo "hf datasets info"
 
-    abbr hfcols "hf collections ls --owner"
-    abbr hfcols_ggml_org "hf collections ls --owner ggml-org"
-    abbr hfcols_qwen "hf collections ls --owner Qwen"
-    abbr hfcoi "hf collections info % | jq \".items | .[] | [ .item_type, .item_id ] \" --compact-output"
+abbr hfcols "hf collections ls --owner"
+abbr hfcols_ggml_org "hf collections ls --owner ggml-org"
+abbr hfcols_qwen "hf collections ls --owner Qwen"
+abbr hfcoi "hf collections info % | jq \".items | .[] | [ .item_type, .item_id ] \" --compact-output"
 
-    # TODO look into skills, seems to be a way to see skills (maybe for an agent to run this command to dump instructions?)
-    abbr hfsp "hf skills preview"
+# TODO look into skills, seems to be a way to see skills (maybe for an agent to run this command to dump instructions?)
+abbr hfsp "hf skills preview"
 
 if command -q llama-server
 
