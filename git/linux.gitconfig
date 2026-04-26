@@ -40,6 +40,7 @@
 [pretty]
 	# define extra formats `git log --pretty=wes`
 	wes = %C(white)%h%Creset %Cblue%cr%Creset%C(auto)%d%Creset %s
+	reflog = format:%C(auto)%h%d %gd | %cr | %gs%C(reset)
 [format]
 	# FYI format.pretty applies to git log (w/o --pretty too!)
 	pretty = %C(white)%h%Creset %Cblue%cr%Creset%C(auto)%d%Creset %s
