@@ -1933,7 +1933,7 @@ function _video_editing_stage1_combine_and_shift
     echo $stage1_shifted_file
 end
 
-function _video_editing_aio_just_video_file
+function _video_editing_aio_thru_stage2
     set stage1_shifted_file (_video_editing_stage1_combine_and_shift $argv)
 
     # * both_fixed (start time truncation + CFR constant frame rate) for new silence detect tool
@@ -1958,7 +1958,7 @@ function _video_editing_aio_just_video_file
 end
 
 function video_editing_aio
-    set stage2_fixed_file $(_video_editing_aio_just_video_file $argv)
+    set stage2_fixed_file $(_video_editing_aio_thru_stage2 $argv)
     video_editing_gen_fcpxml "$stage2_fixed_file"
 end
 
