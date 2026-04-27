@@ -1917,7 +1917,7 @@ function path_prefix_extension --argument-names prefix path --description "like 
     echo $stem.$prefix$file_extension # foo.mp4 => foo.prefix.mp4
 end
 
-function _video_editing_aio_just_video_file
+function _video_editing_stage1_combine_and_shift
     set combined_file (_get_output_file_based_on_first_file combined.mp4 $argv)
 
     # based on: ffmpeg -i foo.mp4  -itsoffset 0.1 -i foo.mp4  -map 0:v -map 1:a -c:v copy -c:a aac foo-shifted100ms.mp4
@@ -1930,6 +1930,11 @@ function _video_editing_aio_just_video_file
         ffmpeg -i "$combined_file" -itsoffset 0.1 -i "$combined_file" -map 0:v -map 1:a -c:v copy -c:a aac "$stage1_shifted_file"
         trash $combined_file # be safe with rm, if it was wrong file I wanna have it be recoverable
     end
+    echo $stage1_shifted_file
+end
+
+function _video_editing_aio_just_video_file
+    set stage1_shifted_file (_video_editing_stage1_combine_and_shift $argv)
 
     # * both_fixed (start time truncation + CFR constant frame rate) for new silence detect tool
     set stage2_fixed_file (path change-extension .cfr_and_start.mp4 "$stage1_shifted_file")
