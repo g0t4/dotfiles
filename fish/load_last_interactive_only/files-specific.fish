@@ -876,16 +876,16 @@ function _fzf_nested_dir_picker -d "Paste selected directory into command line"
 end
 
 function _fzf_nested_file_picker -d "Paste selected file into command line"
-    __fzf_picker files "fd --type f ."
+    __fzf_picker files "fd --type f --type symlink ."
 end
 
 function _fzf_nested_file_unrestricted_picker
-    __fzf_picker unrestricted "fd --type f . -u"
+    __fzf_picker unrestricted "fd --type f --type symlink . -u"
 end
 
 function _fzf_nested_both_file_and_dirs_picker -d "Paste selected file or directory into command line"
     # btw `diff_two_commands 'fd --type f --type d' 'fd'` differ in symlinks (at least)
-    __fzf_picker both "fd ."
+    __fzf_picker both "fd --type f --type d --type symlink ."
 end
 
 function _fzf_nested_git_commit_picker -d "Pick a git commit_hash"
