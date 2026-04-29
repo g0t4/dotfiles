@@ -242,6 +242,16 @@ function cd_dir_of_path
 end
 abbr cdd cd_dir_of_path
 
+abbr cdl cd_last_dir__in_current_dir
+function cd_last_dir__in_current_dir
+    set -l last_dir (fd --type dir --exact-depth 1 | tail -n 1)
+    if test -z "$last_dir"
+        echo "no subdirectories found"
+        return 1
+    end
+    cd $last_dir
+end
+
 # *** bat ***
 # if batcat exists map to bat
 if command -q batcat # -q => w/o output
