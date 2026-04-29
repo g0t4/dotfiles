@@ -64,6 +64,13 @@ function diff_two_commands --wraps icdiff
         -L $label_b (eval $command_b | psub)
 end
 
+function diff_copied_patch__from_apply_patch
+    # copied from apply_patch agent output
+    #  works across hunks...
+    #  basically take everything sans minus/plus lines... so then we can diff those w/ context!
+    icdiff $(pbpaste | rg -v "^-" | psub) $(pbpaste | rg -v "^\\+" | psub)
+end
+
 function test_diff_expansions_when_open_new_shell
     history append "echo '1 2 3 4' | awk '{ print \$3 }'"
     history append "echo '1 2 6' | awk '{ print \$3 }'"
