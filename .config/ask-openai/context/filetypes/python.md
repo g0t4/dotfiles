@@ -4,4 +4,4 @@
 - Use type hints to clear up ambiguity and improve code completion.
 - prefer `list[]` over `List[]` to mimimize imports
 - Avoid docstrings, ABSOLUTELY NO trivial comments.
-
+- Use `py_compile` to check for indentation and syntax errors.
