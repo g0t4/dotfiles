@@ -8,11 +8,11 @@ source "$BASH_DOTFILES/startup/vetted-benign/early/funcs.bash"
 source "$BASH_DOTFILES/startup/vetted-benign/early/path-init.bash"
 export WES_DOTFILES="$(realpath "$BASH_DOTFILES"/..)"
 
-# ** warn if not using custom build:
-if is_interactive; then
-    [[ "$BASH" == ~/repos/github/g0t4/bash/bash ]] || echo "NOT USING CUSTOM BUILD OF BASH: $BASH"
-    # [[ "$BASH_VERSION" == 5.3.3* ]] || echo "unexpected bash version: $BASH_VERSION"
-fi
+# # ** warn if not using custom build:
+# if is_interactive; then
+#     [[ "$BASH" == ~/repos/github/g0t4/bash/bash ]] || echo "NOT USING CUSTOM BUILD OF BASH: $BASH"
+#     # [[ "$BASH_VERSION" == 5.3.3* ]] || echo "unexpected bash version: $BASH_VERSION"
+# fi
 
 if is_macos; then
 
