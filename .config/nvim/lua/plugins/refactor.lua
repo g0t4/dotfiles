@@ -3,6 +3,9 @@ return {
     {
         -- TODO how to pick between this and Coc and other refactoring plugins?
         "ThePrimeagen/refactoring.nvim",
+        -- TODO nvim-0.12 upgrade... switch back to master branch (drop branch=1.0 here) and test that refactoring inline variable works
+        branch = "1.0", -- 1.0 only requires nvim 0.10... and I just tested inline refactoring works... whereas master requires 0.12 and loads in 0.11 but then refactoring doesn't work (at least not in lua)
+
         dependencies = {
             "lewis6991/async.nvim",
             -- "nvim-lua/plenary.nvim",
