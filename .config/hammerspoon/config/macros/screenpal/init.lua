@@ -537,6 +537,17 @@ function SPal_Play(play_what, text)
     end)
 end
 
+
+function SPal_KM_AdjustSelection_End()
+    SPal_AdjustSelection("end", 0, "E")
+end
+function SPal_KM_AdjustSelection_Other()
+    SPal_AdjustSelection("other", 0, "O")
+end
+function SPal_KM_AdjustSelection_Start()
+    SPal_AdjustSelection("start", 0, "S")
+end
+
 function SPal_AdjustSelection(side, num_frames, text)
     -- ** if text triggered this, then paste it if in a text box (effectively bypass shortcut for textfields)
     if pasted_text_in_textfield(text) then
@@ -963,4 +974,3 @@ end
 function SPal_RestartSPal_then_ReopenProject()
     get_cached_editor_window():reopen_project(true)
 end
-
