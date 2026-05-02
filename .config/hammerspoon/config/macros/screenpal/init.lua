@@ -537,22 +537,47 @@ function SPal_Play(play_what, text)
     end)
 end
 
-
 function SPal_KM_AdjustSelection_End()
     SPal_AdjustSelection("end", 0, "E")
 end
+
 function SPal_KM_AdjustSelection_Other()
     SPal_AdjustSelection("other", 0, "O")
 end
+
 function SPal_KM_AdjustSelection_Start()
     SPal_AdjustSelection("start", 0, "S")
 end
+
+-- function SPal_KM_KeyMap_Left()
+--     -- vim like keymap
+--     SPal_KeyMap("left", "H")
+-- end
+
+-- function SPal_KM_KeyMap_Right()
+--     -- vim like keymap
+--     SPal_KeyMap("right", "L")
+-- end
 
 function SPal_AdjustSelection(side, num_frames, text)
     -- ** if text triggered this, then paste it if in a text box (effectively bypass shortcut for textfields)
     if pasted_text_in_textfield(text) then
         return
     end
+    -- ** OR IF text tool is open (window for it) then also paste
+    -- app:window(2)
+    --
+    -- AXFocused: false<bool>
+    -- AXMain: false<bool>
+    -- AXMinimized: false<bool>
+    -- AXModal: false<bool>
+    -- AXRoleDescription: window<string>
+    -- AXSections: [1: SectionObject: hs.axuielement: AXButton (0x600000a0a0f8), SectionUniqueID: AXContent, SectionDescription: Content]
+    -- AXSubrole: AXUnknown<string>
+    -- AXTitle: SOM-FloatingWindow-Type=edit2.overlayeditfloat-ZOrder=1(Undefined+1)<string>
+    -- frame: x=1371.0,y=336.0,w=234.0,h=390.0
+    --
+    -- unique ref: app:window('SOM-FloatingWindow-Type=edit2.overlayeditfloat-ZOrder=1(Undefined+1)')
 
     run_async(function()
         ---@type ScreenPalEditorWindow, SilencesController
