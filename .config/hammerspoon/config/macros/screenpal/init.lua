@@ -537,6 +537,67 @@ function SPal_Play(play_what, text)
     end)
 end
 
+function SPal_Play()
+    -- win:ensure_playing(true) -- why doesn't this work? TODO look into ensure_playing?
+    hs.eventtap.keyStroke({}, hs.keycodes.map["space"])
+end
+
+---@param seconds number
+function WIP_SPal_Preview_Seconds(seconds)
+    -- run from anywhere, not just with silences
+    run_async(function()
+        local win = get_cached_editor_window()
+        -- 2. jump back (for preview)
+        local timeline = win:timeline_controller()
+        timeline:move_playhead_by_seconds(-seconds)
+        SPal_Play()
+    end)
+end
+
+function WIP_SPal_OK_then_Preview()
+    -- run from anywhere, not just with silences
+    run_async(function()
+        -- 1.press ok
+        local win = get_cached_editor_window()
+        win.windows:get_tool_window():wait_for_ok_button_then_press_it()
+        -- 2. jump back (for preview)
+        local timeline = win:timeline_controller()
+        timeline:move_playhead_by_seconds(-1)
+        SPal_Play()
+    end)
+end
+
+function WIP_SPal_Cut_then_Mute_then_Preview()
+    -- WOW this is so cool, first thing I used it on, was PERFECT afterwards!
+    --  TODO need the adjust existing silence buttons that open the silence, adjust it and preview it
+    run_async(function()
+        -- 1. most common cut duration... 20 and confirm with _OK
+        ---@type ScreenPalEditorWindow, SilencesController
+        local win, silences = syncify(detect_silences)
+        local silence = silences:get_this_silence()
+        act_on_silence(win, silence, CUT_20_OK)
+
+        sleep_ms(400) -- slight delay needed right now... TODO find something to wait on (i.e. toolbar?)
+        -- otherwise I get this error:
+        -- 2026-05-03 06:23:22: WARN 361.8 ms - wait_for_element button Tools
+        -- 2026-05-03 06:23:22: syncify: resume failed	attempt to get length of a nil value -- ***
+        -- 2026-05-03 06:23:23: syncify: resume failed	cannot resume dead coroutine
+
+        -- 2. start most common mute + confirm with _OK and start preview of it
+        -- FYI reaquire after cut...
+        -- TODO after the cut, is the playhead in the right spot to find silence for muting?
+        --    if not, can likely use the original silence start time to find it...
+        win, silences = syncify(detect_silences)
+        silence = silences:get_this_silence()
+        act_on_silence(win, silence, "MUTE_INWARD_OK")
+
+        -- 3. Preview
+        local timeline = win:timeline_controller()
+        timeline:move_playhead_one_second_before_silence(silence)
+        hs.eventtap.keyStroke({}, hs.keycodes.map["space"])
+    end)
+end
+
 function SPal_Mute_Inward_With_Preview()
     run_async(function() -- FYI w/o run_async wrapper the p key will fire early and never trigger preview b/c it happens before ActOnThisSilence completes
         SPal_ActOnThisSilence('MUTE_INWARD')
@@ -551,12 +612,10 @@ function SPal_Mute_Inward_Then_OK_Then_Preview()
         local win, silences = syncify(detect_silences)
         local silence = silences:get_this_silence()
         act_on_silence(win, silence, "MUTE_INWARD_OK")
-        print("FUCK FUCK FUCK OK", silence)
 
-        sleep_ms(1520)
+        -- sleep_ms(1520)
 
         -- go back a second and play for preview
-        local win = get_cached_editor_window()
         local timeline = win:timeline_controller()
         timeline:move_playhead_one_second_before_silence(silence)
         hs.eventtap.keyStroke({}, hs.keycodes.map["space"])
