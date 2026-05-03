@@ -591,6 +591,22 @@ local function closeLLMWebView()
     if chooser then chooser:rows(10) end
 end
 
+-- Find the bottom edge of the chooser window so the webview can be placed flush below it
+local function getChooserBottom()
+    local screen = hs.screen.mainScreen():frame()
+    local expectedW = screen.w * 0.60
+    for _, win in ipairs(hs.window.allWindows()) do
+        if win:application():bundleID() == "org.hammerspoon.Hammerspoon" then
+            local f = win:frame()
+            -- Match chooser: ~60% screen width, near top of usable area
+            if math.abs(f.w - expectedW) < 30 and f.y < screen.y + 300 then
+                return f.y + f.h
+            end
+        end
+    end
+    return screen.y + 80  -- fallback if chooser window not found
+end
+
 local function createOrUpdateLLMWebView()
     if llmWebView then
         -- Reuse existing window — preserve the user's size and position
@@ -609,7 +625,7 @@ local function createOrUpdateLLMWebView()
     local screen = hs.screen.mainScreen():frame()
     local w = screen.w * 0.60
     local x = screen.x + (screen.w - w) / 2
-    local y = screen.y + 52  -- approx chooser input box height
+    local y = getChooserBottom()
     local h = screen.h * 0.55
 
     local mask = hs.webview.windowMasks.titled

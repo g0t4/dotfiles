@@ -1682,6 +1682,13 @@ function elgato_kill_other_account_streamdeck
     # just open other account's streamdeck next time you switch to it
 end
 
+# *** images
+function show_pixel_color
+    set image $argv[0]
+    set color $(magick $image -format '%[hex:p{1524,7}]' info: | head -c6)
+    magick -size 200x100 xc:"#$color" png:- | imgcat
+end
+
 # *** video editing wrappers ***
 
 function quote_paths
