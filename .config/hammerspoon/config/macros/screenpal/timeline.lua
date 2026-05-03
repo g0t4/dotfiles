@@ -141,25 +141,6 @@ function TimelineController:pixels_per_second()
     return 25 * self:pixels_per_frame()
 end
 
-function TimelineController:move_playhead_one_second_before_silence(silence)
-    local pps = self:pixels_per_second() -- TODO what if nil? (not zoomed)
-    self:move_playhead_to(silence.x_start - pps)
-end
-
-function TimelineController:move_playhead_back_one_second()
-    local pps = self:pixels_per_second()
-    if not pps then error("Cannot determine pixels per second (timeline not zoomed?)") end
-
-    local playhead_x = self:get_current_playhead_timeline_relative_x()
-    local target_rel_x = playhead_x - pps
-    -- PRN check to make sure this is in the visible range of timline, i.e. make sure playhead is not jumping back while at very start (left side) of timeline
-    --   fallback to arrow key in this case? Or something else to compute?
-
-    local target_screen_x = self._timeline_frame.x + target_rel_x
-
-    _move_playhead_to_screen_x(self, target_screen_x)
-end
-
 ---@param intended_x number
 ---@param known_frame_x number
 ---@return number frame_left
@@ -231,6 +212,25 @@ local function _move_playhead_to_screen_x(self, playhead_screen_x)
 
         print(msg)
     end
+end
+
+function TimelineController:move_playhead_one_second_before_silence(silence)
+    local pps = self:pixels_per_second() -- TODO what if nil? (not zoomed)
+    self:move_playhead_to(silence.x_start - pps)
+end
+
+function TimelineController:move_playhead_back_one_second()
+    local pps = self:pixels_per_second()
+    if not pps then error("Cannot determine pixels per second (timeline not zoomed?)") end
+
+    local playhead_x = self:get_current_playhead_timeline_relative_x()
+    local target_rel_x = playhead_x - pps
+    -- PRN check to make sure this is in the visible range of timline, i.e. make sure playhead is not jumping back while at very start (left side) of timeline
+    --   fallback to arrow key in this case? Or something else to compute?
+
+    local target_screen_x = self._timeline_frame.x + target_rel_x
+
+    _move_playhead_to_screen_x(self, target_screen_x)
 end
 
 --- RELATIVE to the TIMELINE (not the screen)
