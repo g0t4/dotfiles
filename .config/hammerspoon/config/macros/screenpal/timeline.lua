@@ -146,20 +146,17 @@ function TimelineController:move_playhead_one_second_before_silence(silence)
     self:move_playhead_to(silence.x_start - pps)
 end
 
---- Move the playhead back by one second from its current position.
---- This works regardless of zoom level; it uses the pixels‑per‑second conversion.
 function TimelineController:move_playhead_back_one_second()
     local pps = self:pixels_per_second()
     if not pps then error("Cannot determine pixels per second (timeline not zoomed?)") end
 
-    -- current relative position on the timeline (not screen coordinates)
-    local current_rel_x = self:get_current_playhead_timeline_relative_x()
-    local target_rel_x = current_rel_x - pps
+    local playhead_x = self:get_current_playhead_timeline_relative_x()
+    local target_rel_x = playhead_x - pps
+    -- PRN check to make sure this is in the visible range of timline, i.e. make sure playhead is not jumping back while at very start (left side) of timeline
+    --   fallback to arrow key in this case? Or something else to compute?
 
-    -- Convert the relative timeline position to an absolute screen X coordinate
     local target_screen_x = self._timeline_frame.x + target_rel_x
 
-    -- Use the existing helper to move the playhead safely
     _move_playhead_to_screen_x(self, target_screen_x)
 end
 
