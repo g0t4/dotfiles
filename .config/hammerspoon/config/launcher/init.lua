@@ -6,6 +6,13 @@ local currentCancelFunc = nil  -- Function to cancel current search
 local currentSearchId = 0  -- Track current search across all searchers
 local MAX_RESULTS = 30
 
+-- LLM WebView state (for rendering AI responses as markdown)
+local llmWebView = nil
+local llmWebViewReady = false
+local llmCurrentQuery = ""
+local llmCurrentResponse = ""
+local llmIsThinking = false
+
 -- LLM server configuration
 local LLM_SERVER = "http://ask.lan:8013"
 
@@ -371,183 +378,331 @@ local function searchApplications(query, searchId, callback)
     end
 end
 
--- LLM completion mode with chat completions API
+local function getLLMWebViewHTML()
+    return [=[<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AI Response</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body {
+      background: #1e1e1e;
+      color: #d4d4d4;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+      font-size: 14px;
+      line-height: 1.7;
+      display: flex;
+      flex-direction: column;
+    }
+    #header {
+      padding: 10px 16px;
+      background: #252526;
+      color: #9cdcfe;
+      font-size: 12px;
+      font-weight: 500;
+      border-bottom: 1px solid #333;
+      flex-shrink: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    #thinking {
+      padding: 8px 16px;
+      color: #888;
+      font-style: italic;
+      font-size: 13px;
+      display: none;
+      flex-shrink: 0;
+    }
+    #scroll { flex: 1; overflow-y: auto; padding: 16px; }
+    h1, h2, h3 { color: #e0e0e0; margin: 16px 0 8px; line-height: 1.3; }
+    h1 { font-size: 1.4em; }
+    h2 { font-size: 1.2em; border-bottom: 1px solid #333; padding-bottom: 4px; }
+    h3 { font-size: 1.05em; }
+    p { margin: 8px 0; }
+    a { color: #4ec9b0; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    code {
+      font-family: "SF Mono", "Fira Code", "Menlo", monospace;
+      font-size: 12.5px;
+      background: #2d2d2d;
+      padding: 1px 5px;
+      border-radius: 3px;
+      color: #ce9178;
+    }
+    pre {
+      background: #1a1a2e;
+      border: 1px solid #2d2d4e;
+      border-radius: 6px;
+      padding: 12px;
+      overflow-x: auto;
+      margin: 10px 0;
+    }
+    pre code { background: none; padding: 0; color: #d4d4d4; border-radius: 0; }
+    blockquote { border-left: 3px solid #555; padding-left: 12px; color: #999; margin: 8px 0 8px 4px; }
+    ul, ol { margin: 8px 0 8px 24px; }
+    li { margin: 3px 0; }
+    hr { border: none; border-top: 1px solid #333; margin: 16px 0; }
+    table { border-collapse: collapse; width: 100%; margin: 8px 0; }
+    th, td { border: 1px solid #444; padding: 6px 10px; text-align: left; }
+    th { background: #252526; }
+    .cursor {
+      display: inline-block;
+      width: 2px; height: 1em;
+      background: #d4d4d4;
+      animation: blink 1s step-end infinite;
+      vertical-align: text-bottom;
+      margin-left: 1px;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+    /* VSCode dark token colors for hljs */
+    .hljs { background: transparent !important; padding: 0 !important; }
+    .hljs-keyword, .hljs-built_in { color: #569cd6; }
+    .hljs-string { color: #ce9178; }
+    .hljs-comment { color: #6a9955; font-style: italic; }
+    .hljs-number { color: #b5cea8; }
+    .hljs-function, .hljs-title { color: #dcdcaa; }
+    .hljs-variable, .hljs-attr, .hljs-params { color: #9cdcfe; }
+    .hljs-type { color: #4ec9b0; }
+    .hljs-literal { color: #569cd6; }
+    .hljs-meta { color: #808080; }
+  </style>
+</head>
+<body>
+  <div id="header">&#x1F4AC; AI Response</div>
+  <div id="thinking">&#x280B; Thinking...</div>
+  <div id="scroll">
+    <div id="content"><span class="cursor"></span></div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked@9/marked.min.js"></script>
+  <script>
+    // Fallback renderers if CDN scripts fail to load
+    if (typeof marked === 'undefined') {
+      window.marked = { use: function() {}, parse: function(t) {
+        var e = t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+        return '<pre style="white-space:pre-wrap;word-wrap:break-word">' + e + '</pre>';
+      }};
+    }
+    if (typeof hljs === 'undefined') {
+      window.hljs = { highlight: function(code) { return {value: code}; },
+                      highlightAuto: function(code) { return {value: code}; },
+                      getLanguage: function() { return null; } };
+    }
+
+    // Configure marked with syntax highlighting in fenced code blocks
+    var renderer = new marked.Renderer();
+    renderer.code = function(code, lang) {
+      var highlighted;
+      try {
+        if (lang && hljs.getLanguage(lang)) {
+          highlighted = hljs.highlight(code, {language: lang, ignoreIllegals: true}).value;
+        } else {
+          highlighted = hljs.highlightAuto(code).value;
+        }
+      } catch(e) {
+        highlighted = code.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      }
+      return '<pre><code class="hljs language-' + (lang||'') + '">' + highlighted + '</code></pre>';
+    };
+    marked.use({ gfm: true, breaks: true, renderer: renderer });
+
+    var streaming = true;
+    var thinkingTimer = null;
+    var thinkingFrame = 0;
+    var thinkingFrames = ['⠋','⠙','⠹','⠸','⠼','⠴','⠦','⠧','⠇','⠏'];
+
+    function setQuery(q) {
+      document.getElementById('header').textContent = '💬 ' + q;
+    }
+
+    function showThinking() {
+      var el = document.getElementById('thinking');
+      el.style.display = 'block';
+      if (!thinkingTimer) {
+        thinkingTimer = setInterval(function() {
+          thinkingFrame = (thinkingFrame + 1) % thinkingFrames.length;
+          el.textContent = thinkingFrames[thinkingFrame] + ' Thinking...';
+        }, 100);
+      }
+    }
+
+    function hideThinking() {
+      document.getElementById('thinking').style.display = 'none';
+      if (thinkingTimer) { clearInterval(thinkingTimer); thinkingTimer = null; }
+    }
+
+    function updateContent(markdown, isThinking) {
+      if (isThinking) { showThinking(); return; }
+      hideThinking();
+      if (!markdown) return;
+      var cursorHtml = streaming ? '<span class="cursor"></span>' : '';
+      document.getElementById('content').innerHTML = marked.parse(markdown) + cursorHtml;
+      var scroll = document.getElementById('scroll');
+      scroll.scrollTop = scroll.scrollHeight;
+    }
+
+    function setComplete() {
+      streaming = false;
+      hideThinking();
+      document.querySelectorAll('.cursor').forEach(function(c) { c.remove(); });
+    }
+
+    // TODO: support multiple parallel generations — each generation gets its own card/section,
+    // identified by a generationId, shown side-by-side or stacked with headers.
+  </script>
+</body>
+</html>]=]
+end
+
+-- hs.json.encode only accepts tables, so escape strings manually for JS
+local function jsStr(s)
+    s = s:gsub('\\', '\\\\'):gsub('"', '\\"'):gsub('\n', '\\n'):gsub('\r', '\\r'):gsub('\t', '\\t')
+    return '"' .. s .. '"'
+end
+
+local function pushLLMContent()
+    if not llmWebView or not llmWebViewReady then return end
+    local js = string.format("updateContent(%s, %s)",
+        jsStr(llmCurrentResponse),
+        llmIsThinking and "true" or "false")
+    llmWebView:evaluateJavaScript(js)
+end
+
+local function closeLLMWebView()
+    if llmWebView then
+        llmWebView:delete()
+        llmWebView = nil
+    end
+    llmWebViewReady = false
+    llmCurrentQuery = ""
+    llmCurrentResponse = ""
+    llmIsThinking = false
+    -- Restore chooser results area
+    if chooser then chooser:rows(10) end
+end
+
+local function createLLMWebView()
+    if llmWebView then
+        llmWebView:delete()
+        llmWebView = nil
+    end
+    llmWebViewReady = false
+
+    local screen = hs.screen.mainScreen():frame()
+    local w = math.min(screen.w * 0.7, 1000)
+    local h = screen.h * 0.55
+    local x = screen.x + (screen.w - w) / 2
+    local y = screen.y + screen.h * 0.38  -- below the chooser area at top
+
+    local mask = hs.webview.windowMasks.titled
+               + hs.webview.windowMasks.closable
+               + hs.webview.windowMasks.resizable
+               + hs.webview.windowMasks.nonactivating  -- don't steal focus from chooser input
+
+    llmWebView = hs.webview.new({x=x, y=y, w=w, h=h})
+    llmWebView:windowStyle(mask)
+    llmWebView:level(hs.drawing.windowLevels.floating)
+    llmWebView:navigationCallback(function(action, view)
+        if action == "didFinishNavigation" then
+            llmWebViewReady = true
+            view:evaluateJavaScript(string.format("setQuery(%s)", jsStr(llmCurrentQuery)))
+            pushLLMContent()
+        end
+    end)
+    llmWebView:html(getLLMWebViewHTML())
+    llmWebView:show()
+    llmWebView:bringToFront(true)
+end
+
+-- LLM completion mode — streams response into a WebView rendered as markdown
 -- Returns a cancel function
 local function handleLLM(query, searchId, callback)
     if query == "" then
+        closeLLMWebView()
         callback(searchId, {})
-        return function() end  -- No-op cancel
+        return function() end
     end
 
-    -- Immediately clear old results when starting new search
+    -- Open WebView and collapse chooser to input bar only
+    llmCurrentQuery = query
+    llmCurrentResponse = ""
+    llmIsThinking = false
+    if chooser then chooser:rows(0) end
+    createLLMWebView()
     callback(searchId, {})
 
-    -- Build the user message
-    local userMessage = string.format([[You are a helpful AI assistant. The user is typing: "%s"
-
-Provide a helpful, concise response or completion. Be brief and practical.]], query)
-
-    print("=== LLM Request ===")
-    print("Query:", query)
-    print("User message:", userMessage)
-    print("SearchId:", searchId)
-
-    -- Build curl command for streaming chat completion
     local jsonPayload = hs.json.encode({
         messages = {
-            {role = "user", content = userMessage}
+            {role = "system", content = "You are a helpful AI assistant. Use markdown formatting in your responses."},
+            {role = "user", content = query},
         },
         stream = true,
         temperature = 0.7,
-        max_tokens = 1000
+        max_tokens = 4096,
     })
 
     local cmd = "/usr/bin/curl"
     local args = {
-        "-s",
-        "-X", "POST",
+        "-s", "-X", "POST",
         LLM_SERVER .. "/v1/chat/completions",
         "-H", "Content-Type: application/json",
-        "-d", jsonPayload
+        "-d", jsonPayload,
     }
 
     local buffer = ""
     local thinkingContent = ""
-    local responseContent = ""
-    local isThinking = false
-    local thinkingFrame = 1
-    local thinkingSpinner = {"⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"}
-    local timingStats = nil
     local task = nil
 
-    print("Starting LLM request for query:", query, "searchId:", searchId)
+    print("Starting LLM request:", query, "searchId:", searchId)
 
-    task = hs.task.new(cmd, function(exitCode, stdOut, stdErr)
-        -- Ignore if this isn't the current search anymore
-        if searchId ~= currentSearchId then
-            print("Ignoring old LLM search completion", searchId, "current:", currentSearchId)
-            return
-        end
-
-        print("=== LLM Complete ===")
-        print("Exit code:", exitCode)
-        print("Thinking:", thinkingContent)
-        print("Response:", responseContent)
-        print("Timing stats:", hs.inspect(timingStats))
-
+    task = hs.task.new(cmd, function(exitCode, _, stdErr)
+        if searchId ~= currentSearchId then return end
         if exitCode ~= 0 then
             print("LLM error:", stdErr)
-            callback(searchId, {{
-                text = "Error connecting to LLM server",
-                subText = stdErr or "Unknown error",
-            }})
+            llmCurrentResponse = "*Error connecting to LLM server*\n\n```\n" .. (stdErr or "Unknown") .. "\n```"
+            llmIsThinking = false
+        end
+        if llmWebView and llmWebViewReady then
+            llmWebView:evaluateJavaScript("setComplete()")
         end
     end, function(_, stdOut, _)
-        -- Ignore if this isn't the current search anymore
-        if searchId ~= currentSearchId then
-            print("Ignoring old LLM chunk, searchId:", searchId, "current:", currentSearchId)
-            return false  -- Stop streaming for old searches
-        end
-
+        if searchId ~= currentSearchId then return false end
         buffer = buffer .. stdOut
 
-        -- Process SSE events (data: prefix for streaming)
         while true do
             local line, rest = buffer:match("([^\r\n]+)[\r\n](.*)")
-            if not line then
-                break
-            end
+            if not line then break end
             buffer = rest
 
-            -- Parse SSE data lines
             local data = line:match("^data: (.+)$")
             if data and data ~= "[DONE]" then
-                local success, json = pcall(hs.json.decode, data)
-                if success then
-                    -- Check for timing stats (llama-server specific)
-                    if json.timings then
-                        timingStats = json.timings
-                        print("=== LLM Timing Stats ===")
-                        print("Prompt tokens:", timingStats.prompt_n)
-                        print("Predicted tokens:", timingStats.predicted_n)
-                        print("Prompt TPS:", timingStats.prompt_per_second)
-                        print("Predicted TPS:", timingStats.predicted_per_second)
+                local ok, json = pcall(hs.json.decode, data)
+                if ok and json.choices and json.choices[1] and json.choices[1].delta then
+                    local delta = json.choices[1].delta
+                    if delta.reasoning_content then
+                        thinkingContent = thinkingContent .. delta.reasoning_content
+                        llmIsThinking = true
                     end
-
-                    -- Parse content from chat completions format
-                    if json.choices and json.choices[1] and json.choices[1].delta then
-                        local delta = json.choices[1].delta
-
-                        -- Check for reasoning_content (thinking)
-                        if delta.reasoning_content then
-                            thinkingContent = thinkingContent .. delta.reasoning_content
-                            isThinking = true
-                        end
-
-                        -- Check for regular content (response)
-                        if delta.content and delta.content ~= "" then
-                            responseContent = responseContent .. delta.content
-                            isThinking = false
-                        end
-
-                        print("=== LLM Chunk ===")
-                        print("Thinking chunk:", delta.reasoning_content or "")
-                        print("Content chunk:", delta.content or "")
-                        print("Is thinking:", isThinking)
-
-                        -- Build display text
-                        local displayText = ""
-                        local subText = query
-
-                        if isThinking or (responseContent == "" and thinkingContent ~= "") then
-                            -- Show thinking animation
-                            thinkingFrame = (thinkingFrame % #thinkingSpinner) + 1
-                            displayText = thinkingSpinner[thinkingFrame] .. " Thinking..."
-                            subText = query .. " (reasoning)"
-                        elseif responseContent ~= "" then
-                            -- Show response
-                            displayText = responseContent
-
-                            -- Add timing stats if available
-                            if timingStats then
-                                local statsText = string.format("↓%d@%.0ftps ↑%d@%.0ftps",
-                                    timingStats.predicted_n or 0,
-                                    timingStats.predicted_per_second or 0,
-                                    timingStats.prompt_n or 0,
-                                    timingStats.prompt_per_second or 0)
-                                if timingStats.cache_n and timingStats.cache_n > 0 then
-                                    statsText = statsText .. string.format(" ⚡%d", timingStats.cache_n)
-                                end
-                                subText = statsText
-                            end
-                        end
-
-                        -- Update UI with streaming response
-                        callback(searchId, {{
-                            text = displayText,
-                            subText = subText,
-                            llmResponse = responseContent,  -- Only copy the content, not thinking
-                            llmThinking = thinkingContent,
-                            llmStats = timingStats,
-                            image = hs.image.imageFromName("NSInfo"),
-                        }})
+                    if delta.content and delta.content ~= "" then
+                        llmCurrentResponse = llmCurrentResponse .. delta.content
+                        llmIsThinking = false
                     end
+                    pushLLMContent()
                 end
             end
         end
 
-        return true  -- Continue streaming
+        return true
     end, args)
 
     task:start()
 
-    -- Return cancel function that kills the curl process
     return function()
-        if task then
-            print("Canceling LLM request", searchId)
-            task:terminate()
-            task = nil
-        end
+        if task then task:terminate(); task = nil end
+        closeLLMWebView()
     end
 end
 
@@ -1943,6 +2098,12 @@ end
 
 -- Handle file selection
 local function onChoice(choice)
+    -- Cancel any in-flight search (terminates curl, closes webview, etc.)
+    if currentCancelFunc then
+        currentCancelFunc()
+        currentCancelFunc = nil
+    end
+
     -- Save current query to history (whether selected or cancelled)
     local currentQuery = chooser and chooser:query() or ""
     if currentQuery ~= "" then
@@ -1977,13 +2138,6 @@ local function onChoice(choice)
     if choice.result then
         hs.pasteboard.setContents(choice.result)
         hs.alert.show("Copied: " .. choice.result)
-        return
-    end
-
-    -- Handle LLM response
-    if choice.llmResponse then
-        hs.pasteboard.setContents(choice.llmResponse)
-        hs.alert.show("Copied LLM response")
         return
     end
 
