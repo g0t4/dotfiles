@@ -1683,10 +1683,26 @@ function elgato_kill_other_account_streamdeck
 end
 
 # *** images
-function show_pixel_color
-    set image $argv[0]
-    set color $(magick $image -format '%[hex:p{1524,7}]' info: | head -c6)
-    magick -size 200x100 xc:"#$color" png:- | imgcat
+
+function show_pixel_color --argument-names image left top
+    set hex_color $(magick $image -format "%[hex:p{$left,$top}]" info: | head -c6)
+    echo "HEX: $hex_color"
+    set srgba_color $(magick $image -format "%[pixel:p{$left,$top}]" info:)
+    echo "SRGBA: $srgba_color"
+    magick -size 200x100 xc:"#$hex_color" png:- | imgcat
+end
+
+function show_pixel_column --argument-names image left top count
+    set y $top
+    if test -z $count
+        set count (magick $image -format "%[h]" info:)
+        set count (math "$count - $top")
+    end
+    for i in (seq $count)
+        echo "$y"
+        show_pixel_color $image $left $y
+        set y (math "$y + 1")
+    end
 end
 
 # *** video editing wrappers ***

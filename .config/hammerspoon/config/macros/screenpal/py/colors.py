@@ -299,3 +299,123 @@ print(f'{cv_img_edges_hsv[89, 204]=}')  #
 # cv_img_edges_hsv[82, 204]=array([115, 115, 124], dtype=uint8)
 # cv_img_edges_hsv[89, 204]=array([115, 121, 118], dtype=uint8)
 
+# FYI getting pixel color and generating block w/ color to visualize it...
+# extract image of pixels:
+#   magick 2red2white.png -crop 2x1+1524+5 1524_white_row5_darker_red.png
+# extract color:
+#   HEX:
+#     magick 2red2white.png -format "%[hex:p{1524,5}]" info: | head -c6   # HEX
+#     # btw c6 is b/c last two (of eight hex chars) are alpha channel: RRGGBBAA
+#   RGBA: magick 2red2white.png -format "%[pixel:p{1524,5}]" info:  #  SRGBA
+#     # srgba(68,46,60,1)⏎
+#   preview w/ imgcat (no files)
+#     magick -size 200x100 xc:"#$(magick 2red2white.png -format '%[hex:p{1524,5}]' info: | head -c6)" png:- | imgcat
+#
+#   FYI use my new fish func:
+#   *  show_pixel_color 2red2white.png 1524 5
+#   ** show_pixel_column  2red2white.png  1524 4 8  # start at 4th row from top, and show for 8 rows starting with 4th
+#
+# BTW
+#   `-crop` ${width}x${height}+${left_offset}+${top_offset}
+
+# * red dashed, vertical lines for cuts
+# (perhaps make this into edit point detection!?)
+cv_img_edit_points_2red2white = cv.imread(str(samples_dir / 'edit-points/2red2white.png'))
+# red, dashed vertical columns exclusively mean cut:
+#   396 and 397 red dashed
+#   1146 and 1147 red dashed
+#
+#
+# show_pixel_column  2red2white.png  1146 0
+# srgba(233,29,4,1) => rows: 9-10,21-30
+#    HEX: E91D04
+#    TODO detect red dash in these rows and extract all 2 col matches maybe in just one row? => there are cut points!
+#    this is most common red color and then variations around dash start/end points as its blended
+#
+#
+# 24
+# HEX: E91D04
+# SRGBA: srgba(233,29,4,1)
+# 25
+# HEX: E91D04
+# SRGBA: srgba(233,29,4,1)
+#
+# shorter white dashed vertical lines:
+#   1524 and 1525 white shorter dashed  (has cut here too)
+#     BTW, it seems you get white when you cut across a white dashed line (i.e. due to pause)... then cut is not red...
+#     if you cut right before it (all on one side or other of white dashed line, then it will be red) but the second you cross it then cuts turn white
+#
+#   *** top of the white dashed shows two red pixels and it appears that only happens if a legit cut is there!
+#      2 columns white
+#      row 5 (0-based)
+#         show_pixel_color  2red2white.png  1524 5
+#      row 6 (0-based)
+#         magick 2red2white.png -crop 2x1+1524+6 1524_white_row6_lighter_red.png
+#      row 7+8 (0-based) - white color in dash pattern
+#         magick 2red2white.png -crop 2x2+1524+7 1524_white_row7and8_lighter_white.png
+#
+#   2048 and 2049 - not a cut, no edits here actually (likely was a pause)
+#
+#
+#
+# *** short, white dashed, vertical line color pattern:
+#     black-ish square (2 in a row)
+#     dark grey (1)
+#     light grey (1)
+#     off-white (2)
+#     light grey (1)
+#     dark grey (1)
+#     black (2)
+#     repeat
+#
+# 5
+# HEX: 442E3C dark red (when cut overlaps)
+# SRGBA: srgba(68,46,60,1)
+#   TODO extract as cut points too when white + red topmost 5/6 rows
+#   TODO plus detect just white w/o any red topmost colors... indicatin no overlapping cut... IIRC just a pause while recording
+# 6
+# HEX: 8D7B82 light red (when cut overlaps)
+# SRGBA: srgba(141,123,130,1)
+# 7
+# HEX: 97A1AC - not the same white as below but close
+# SRGBA: srgba(151,161,172,1)
+# 8
+# HEX: 96A0AB - not the same white as below but close (another tell for cut too?)
+# SRGBA: srgba(150,160,171,1)
+# 9
+# HEX: 727A82 - light gray (pattern)
+# SRGBA: srgba(114,122,130,1)
+# 10
+# HEX: 2A2E32 - dark gray (pattern
+# SRGBA: srgba(42,46,50,1)
+# 11
+# HEX: 070809 - black
+# SRGBA: srgba(7,8,9,1)
+# 12
+# HEX: 070809
+# SRGBA: srgba(7,8,9,1)
+# 13
+# HEX: 2A2E32
+# SRGBA: srgba(42,46,50,1)
+# 14
+# HEX: 727A82
+# SRGBA: srgba(114,122,130,1)
+# 15 white
+# HEX: 95A0AB
+# SRGBA: srgba(149,160,171,1)
+# 16 white
+# HEX: 95A0AB
+# SRGBA: srgba(149,160,171,1)
+# 17 light gray
+# HEX: 727A82
+# SRGBA: srgba(114,122,130,1)
+# 18 dark gray
+# HEX: 2A2E32
+# SRGBA: srgba(42,46,50,1)
+# 19 black-est
+# HEX: 070809
+# SRGBA: srgba(7,8,9,1)
+# 20 black-est
+# HEX: 070809
+# SRGBA: srgba(7,8,9,1)
+#
