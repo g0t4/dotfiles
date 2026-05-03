@@ -236,10 +236,17 @@ function TimelineController:move_playhead_by_seconds(seconds)
         -- TODO if you do impl this, make a reusable function like _move_playhead_to_relative_x and let it handle negatives too (and positives past width of timeline view)
         return
     end
-    -- * if new position is within current timline view
 
+    -- * if new position is within current timline view
     local target_screen_x = self._timeline_frame.x + target_rel_x
     _move_playhead_to_screen_x(self, target_screen_x)
+    -- FYI move forward (seconds=1) works perfectly (lands on exact frame 1 second later)
+    --   TODO BUT move backward (seconds=-1) jumps back 26/25 frames ... so the time shifts by and extra frame on every hop
+    --     FYI not the end of world for my use case (often to preview one second back) but I should see if I can fix this
+    --   TODO reproduce issue w/ where I click... IIRC I have some adjustment I make... maybe I need to review that adjustment when moving left/right?
+    --   TODO preferrably add unit tests for at least the calculation once reproduced... ideally have a manual kick off of auto test too that I can run and verify within screenpal too
+    --      to verify it moves one second exactly in each direction by reading time before and after
+    --
 end
 
 --- RELATIVE to the TIMELINE (not the screen)
