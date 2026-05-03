@@ -224,10 +224,21 @@ function TimelineController:move_playhead_back_one_second()
     local playhead_x = self:get_current_playhead_timeline_relative_x()
     local target_rel_x = playhead_x - pps
     -- PRN check to make sure this is in the visible range of timline, i.e. make sure playhead is not jumping back while at very start (left side) of timeline
-    --   fallback to arrow key in this case? Or something else to compute?
+    if target_rel_x < 0 then
+        local message = "WARN: move playhead back with target_rel_x < 0 is NOT IMPLEMENTED"
+        print(message)
+        hs.alert.show(message)
+        -- TODO you could move timeline view with slider below (to shift timeline back) then recompute relative position and click it
+        -- TODO OR, could move playhead to exactly relative zero (start of timeline view) => then press left/right arrow to make screenpal do timeline scroll... then recompute relative position with new view range
+        -- FYI prioritize the solution that is:
+        -- - LEAST JARRING for user
+        -- - TAKES LEAST TIME (ideally the one that you can wait on too so it is not a sleep to poll for when ready to proceed to next step)
+        -- TODO if you do impl this, make a reusable function like _move_playhead_to_relative_x and let it handle negatives too (and positives past width of timeline view)
+        return
+    end
+    -- * if new position is within current timline view
 
     local target_screen_x = self._timeline_frame.x + target_rel_x
-
     _move_playhead_to_screen_x(self, target_screen_x)
 end
 
