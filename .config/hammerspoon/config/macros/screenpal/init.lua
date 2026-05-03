@@ -541,6 +541,7 @@ function SPal_Mute_Inward_With_Preview()
     run_async(function() -- FYI w/o run_async wrapper the p key will fire early and never trigger preview b/c it happens before ActOnThisSilence completes
         SPal_ActOnThisSilence('MUTE_INWARD')
         hs.eventtap.keyStroke({}, "p")
+        -- PRN after preview stops => put playhead back on end of silence range?
     end)
 end
 
