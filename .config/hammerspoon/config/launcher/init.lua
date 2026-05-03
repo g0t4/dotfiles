@@ -507,7 +507,7 @@ local function getLLMWebViewHTML()
       }
       return '<pre><code class="hljs language-' + (lang||'') + '">' + highlighted + '</code></pre>';
     };
-    marked.use({ gfm: true, breaks: true, renderer: renderer });
+    marked.use({ gfm: true, breaks: true, html: true, renderer: renderer });
 
     var streaming = true;
     var thinkingTimer = null;
@@ -548,6 +548,13 @@ local function getLLMWebViewHTML()
       streaming = false;
       hideThinking();
       document.querySelectorAll('.cursor').forEach(function(c) { c.remove(); });
+      // innerHTML doesn't execute scripts; re-create them so they run
+      document.getElementById('content').querySelectorAll('script').forEach(function(s) {
+        var t = document.createElement('script');
+        Array.from(s.attributes).forEach(function(a) { t.setAttribute(a.name, a.value); });
+        t.textContent = s.textContent;
+        s.parentNode.replaceChild(t, s);
+      });
     }
 
     // TODO: support multiple parallel generations — each generation gets its own card/section,
@@ -636,7 +643,7 @@ local function handleLLM(query, searchId, callback)
 
     local jsonPayload = hs.json.encode({
         messages = {
-            {role = "system", content = "You are a helpful AI assistant. Use markdown formatting in your responses."},
+            {role = "system", content = "You are a helpful AI assistant. Your response renders in a macOS WebView (WKWebKit) via marked.js. Full capabilities: GitHub Flavored Markdown with syntax-highlighted fenced code blocks; raw HTML passes through (use <div>, <canvas>, <svg>, <style> tags freely); <script> tags execute after streaming completes so you can write interactive JS, animations, and visualizations. The page has a dark VSCode-style theme already applied. Be creative when it helps — interactive demos, canvas drawings, and custom styled layouts are all possible."},
             {role = "user", content = query},
         },
         stream = true,
