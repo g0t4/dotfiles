@@ -224,7 +224,7 @@ function TimelineController:move_playhead_by_seconds(seconds)
     local playhead_x = self:get_current_playhead_timeline_relative_x()
     local target_rel_x = playhead_x + seconds * pps
     -- PRN check to make sure this is in the visible range of timline, i.e. make sure playhead is not jumping back while at very start (left side) of timeline
-    if target_rel_x < 0 then
+    if target_rel_x < 0 or target_rel_x > self._timeline_frame.w then
         local message = "WARN: move playhead outside visible range is NOT IMPLEMENTED (YET)"
         print(message)
         hs.alert.show(message)
