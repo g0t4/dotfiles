@@ -221,8 +221,6 @@ end
 
 function TimelineController:move_playhead_back_one_second()
     local pps = self:pixels_per_second()
-    if not pps then error("Cannot determine pixels per second (timeline not zoomed?)") end
-
     local playhead_x = self:get_current_playhead_timeline_relative_x()
     local target_rel_x = playhead_x - pps
     -- PRN check to make sure this is in the visible range of timline, i.e. make sure playhead is not jumping back while at very start (left side) of timeline
