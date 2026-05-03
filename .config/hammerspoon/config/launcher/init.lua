@@ -591,18 +591,26 @@ local function closeLLMWebView()
     if chooser then chooser:rows(10) end
 end
 
-local function createLLMWebView()
+local function createOrUpdateLLMWebView()
     if llmWebView then
-        llmWebView:delete()
-        llmWebView = nil
+        -- Reuse existing window — preserve the user's size and position
+        if llmWebViewReady then
+            llmWebView:evaluateJavaScript(
+                string.format("setQuery(%s); updateContent('', false)", jsStr(llmCurrentQuery))
+            )
+        end
+        llmWebView:bringToFront(true)
+        return
     end
+
     llmWebViewReady = false
 
+    -- Position flush below the chooser input, matching its width (chooser:width(60))
     local screen = hs.screen.mainScreen():frame()
-    local w = math.min(screen.w * 0.7, 1000)
-    local h = screen.h * 0.55
+    local w = screen.w * 0.60
     local x = screen.x + (screen.w - w) / 2
-    local y = screen.y + screen.h * 0.38  -- below the chooser area at top
+    local y = screen.y + 52  -- approx chooser input box height
+    local h = screen.h * 0.55
 
     local mask = hs.webview.windowMasks.titled
                + hs.webview.windowMasks.closable
@@ -638,7 +646,7 @@ local function handleLLM(query, searchId, callback)
     llmCurrentResponse = ""
     llmIsThinking = false
     if chooser then chooser:rows(0) end
-    createLLMWebView()
+    createOrUpdateLLMWebView()
     callback(searchId, {})
 
     local jsonPayload = hs.json.encode({
@@ -709,7 +717,7 @@ local function handleLLM(query, searchId, callback)
 
     return function()
         if task then task:terminate(); task = nil end
-        closeLLMWebView()
+        -- Webview persists across queries while in o-mode; closed by onChoice/onQueryChange
     end
 end
 
@@ -1872,6 +1880,11 @@ local function onQueryChange(query)
         currentCancelFunc = nil
     end
 
+    -- Close LLM webview when switching away from o-mode
+    if llmWebView and not (query and query:match("^o ")) then
+        closeLLMWebView()
+    end
+
     -- Increment search ID to invalidate any in-flight searches
     currentSearchId = currentSearchId + 1
     local thisSearchId = currentSearchId
@@ -2105,7 +2118,10 @@ end
 
 -- Handle file selection
 local function onChoice(choice)
-    -- Cancel any in-flight search (terminates curl, closes webview, etc.)
+    -- Close LLM webview (cancel func no longer does this)
+    closeLLMWebView()
+
+    -- Cancel any in-flight search
     if currentCancelFunc then
         currentCancelFunc()
         currentCancelFunc = nil
