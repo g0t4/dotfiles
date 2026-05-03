@@ -545,6 +545,35 @@ function SPal_Mute_Inward_With_Preview()
     end)
 end
 
+function SPal_Mute_Inward_Then_OK_Then_Preview()
+    run_async(function()
+        ---@type ScreenPalEditorWindow, SilencesController
+        local win, silences = syncify(detect_silences)
+        local silence = silences:get_this_silence()
+        act_on_silence(win, silence, "MUTE_INWARD_OK")
+        print("FUCK FUCK FUCK OK", silence)
+
+        sleep_ms(1520)
+
+        -- go back a second and play for preview
+        local win = get_cached_editor_window()
+        local timeline = win:timeline_controller()
+        timeline:move_playhead_one_second_before_silence(silence)
+        hs.eventtap.keyStroke({}, hs.keycodes.map["space"])
+    end)
+end
+
+function SPal_Move_Playhead_By_Seconds(seconds)
+    -- PRN consider mapping Ctrl+Left/Right for this so I can keep existing behavior of nearest second?
+    -- I've never really liked the default move back to nearest second (basically rounded)...
+    --    if I am at  5.4 seconds, shift+left => 5 seconds
+    -- so why not try the way I want it to work! back one _FULL_ second!
+    --    so playhead at 5.4 seconds => 4.4 seconds after a FULL second move
+    local win = get_cached_editor_window()
+    local timeline = win:timeline_controller()
+    timeline:move_playhead_by_seconds(seconds)
+end
+
 function SPal_KM_AdjustSelection_End()
     SPal_AdjustSelection("end", 0, "E")
 end

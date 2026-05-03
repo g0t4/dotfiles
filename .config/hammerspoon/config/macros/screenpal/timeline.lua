@@ -219,13 +219,13 @@ function TimelineController:move_playhead_one_second_before_silence(silence)
     self:move_playhead_to(silence.x_start - pps)
 end
 
-function TimelineController:move_playhead_back_one_second()
+function TimelineController:move_playhead_by_seconds(seconds)
     local pps = self:pixels_per_second()
     local playhead_x = self:get_current_playhead_timeline_relative_x()
-    local target_rel_x = playhead_x - pps
+    local target_rel_x = playhead_x + seconds * pps
     -- PRN check to make sure this is in the visible range of timline, i.e. make sure playhead is not jumping back while at very start (left side) of timeline
     if target_rel_x < 0 then
-        local message = "WARN: move playhead back with target_rel_x < 0 is NOT IMPLEMENTED"
+        local message = "WARN: move playhead outside visible range is NOT IMPLEMENTED (YET)"
         print(message)
         hs.alert.show(message)
         -- TODO you could move timeline view with slider below (to shift timeline back) then recompute relative position and click it
