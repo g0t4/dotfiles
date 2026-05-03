@@ -578,6 +578,7 @@ function WIP_SPal_Cut_then_Mute_then_Preview()
         act_on_silence(win, silence, CUT_20_OK)
 
         sleep_ms(400) -- slight delay needed right now... TODO find something to wait on (i.e. toolbar?)
+        -- TODO wait for Tools button
         -- otherwise I get this error:
         -- 2026-05-03 06:23:22: WARN 361.8 ms - wait_for_element button Tools
         -- 2026-05-03 06:23:22: syncify: resume failed	attempt to get length of a nil value -- ***
