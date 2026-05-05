@@ -276,11 +276,14 @@ local function detect_silences(callback)
         local timeline_element = win:get_timeline_slider_or_throw()
         local frame = timeline_element:axFrame()
         local where_to = syncify(capture_region, frame)
+        print("detect_silences - where_to:", where_to)
 
         local detected = syncify(opencv.detect_silence, where_to)
+        print("detect_silences - detected:", vim.inspect(detected))
 
         local timeline = win:timeline_controller()
         local silences = SilencesController:new(detected, timeline)
+        print("detect_silences calling back with silences:", hs.inspect(silences))
         callback(win, silences)
     end)
 end

@@ -558,12 +558,14 @@ end
 ---@param frame hs.geometry
 function capture_region(callback, frame)
     local where_to = get_tmp_filename("png")
+    print("capture_region - where_to:", where_to)
 
     function when_done(result, std_out, std_err)
         if result ~= 0 then
             hs.alert.show("capture_region: failed: " .. std_err)
             print("capture_region: failed", std_err)
         end
+        print("capture_inner calling back with - where_to:", where_to)
         callback(where_to)
     end
 
