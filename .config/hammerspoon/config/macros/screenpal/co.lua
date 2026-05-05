@@ -107,6 +107,7 @@ end
 ---@return any ...
 function syncify(call_this, ...)
     local co, is_main = coroutine.running()
+    print("syncify - co: ", co, "is_main: ", is_main) -- debugging
     assert(co, "syncify: can only be called within a coroutine")
     assert(not is_main, "syncify: cannot be called in a main thread (coroutine)")
     -- cannot yield main thread... hence this won't work
@@ -116,7 +117,11 @@ function syncify(call_this, ...)
     local resumed = false
     local yielded = false
     local function resume_once()
-        if resumed then return end
+        print("syncify resume_once, resumed:", resumed)
+        if resumed then
+            print("syncify resume_once - SKIP b/c ALREADY RESUMED")
+            return
+        end
         if not yielded then
             print("WARNING - callback invoked resume before yielded, allowing resume")
             -- do not stop the resume, just note it to look into
@@ -125,19 +130,34 @@ function syncify(call_this, ...)
 
         -- schedule the resume, to avoid "cannot resume non-suspended coroutine"
         -- which happens if call_this calls this callback synchronously
+        -- TODO I do not like fallback code like this:
         local sched = _G.vim and vim.schedule
-            or (hs and function(f) hs.timer.doAfter(0, f) end)
-            or function(f) f() end
+            or (hs and function(f)
+                print("syncify resume_once hs.doAfter")
+                hs.timer.doAfter(0, f)
+            end)
+            or function(f)
+                -- TODO why not throw? isn't this an issue?
+                print("syncify resume_once IMMEDIATE... no vim/hs defer options in place")
+                f()
+            end
+
         sched(function()
+            print("syncify resume_once scheduled - coroutine_info:", coroutine_info(co))
+
             local status, err = coroutine.resume(co)
+            print("syncify resume_once scheduled - status: ",
+                vim.inspect(status), " err:", vim.inspect(err))
             if not status then
-                print("syncify: resume failed", err)
+                print("syncify resume_once scheduled: RESUME FAILED",
+                    err, "stacktrace:", get_stack_trace(),)
             end
         end)
     end
 
     call_this(function(...)
         captured_args = { ... }
+        print("syncify call_this captured_args", vim.inspect(captured_args))
         resume_once()
     end, ...)
 
@@ -149,5 +169,6 @@ function syncify(call_this, ...)
     end
 
     local _unpack = unpack or table.unpack
+    print("syncify captured_args:", vim.inspect(_unpack))
     return _unpack(captured_args)
 end

@@ -177,7 +177,6 @@ function act_on_silence(win, silence, action)
         end
     end
 
-
     if is_mute then
         -- a few ideas (only try if need arises in many mute edits)
         --
