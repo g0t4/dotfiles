@@ -635,6 +635,59 @@ function SPal_Mute_Inward_Then_OK_Then_Preview()
     end)
 end
 
+function SPal_OpenSilence_AdjustLeftSideInward()
+    -- TODO make this determine if silence is open for editing
+    --
+    run_async(function()
+        ---@type ScreenPalEditorWindow, SilencesController
+        local win, silences = syncify(detect_silences)
+        -- * find silence
+        -- PRN closest if cursor is not over a silence?) == get_next_silence() + get_prev_silence() => compare to playhead to find closest?
+        --   OR perhaps if not over silence => go with last edited instead of closest? or some combination of priorities? i.e. if move playhead then last edited only works if it is next/prev to current playhead position
+        local silence = silences:get_this_silence()
+        -- 1. if closed => open first
+        --  TODO ensure opened => wait for Volume menu's Narration label in floating window?
+        --    b/c the "Volume" heading at top of Window does not come through in the UIElement info anywhere
+        --    but, the "Narration" label does show:
+        --      app:window(1):button(1)
+        --      AXDescription: Narration<string>
+        --      unique ref: app:window('SOM-FloatingWindow-Type=edit2.overlayeditfloat-ZOrder=1(Undefined+1)'):button(1)
+
+        -- FYI for now assume it is always closed
+        -- click volume edit button in Tools toolbar using:
+        --   app:window(2):button(3)
+        --   AXDescription: Volume (3.72 sec)<string>
+        --   AXRoleDescription: button<string>
+        --   frame: x=1034.0,y=873.0,w=36.0,h=34.0
+        --    unique ref: app:window('SOM-FloatingWindow-Type=edit2.addedit.toolbar.menu.window-ZOrder=1(Undefined+1)')
+        --     :button(desc='Volume (3.72 sec)')
+        -- FYI just assume only one volume edit... no real reason why I'd ever need two overlapping volume edits...
+        --   and in the rare event I do.. NBD to do a manual open the edit
+        -- 1. CLICK Volume Edit Button to Open Editing
+        local tool_win = win.windows:get_tool_window()
+        tool_win:wait_for_tools_button()
+        volume_edits = tool_win:get_volume_edit_buttons()
+        print("volume_edits", hs.inspect(volume_edits))
+        volume_edits[1]:axPress()
+        -- wait for OK button to know it is open
+        tool_win:wait_for_ok_button()
+
+        -- TODO add wait for w/e you need to before executing this too:
+        sleep_ms(300) -- FYI works if wait, not sure why if OK already shows?
+
+        -- 2. Adjust Silence! left side inward
+        -- TODO map all four edits and wire up to the existing buttons
+        --   so all I am adding really is open volume edit if not already open!
+        SPal_AdjustSelection("start", 1, "S")
+
+        -- TODO need to wait until adjustment is done to trigger preview... right now SPal_AdjustSelection does not take callback
+        -- 3. optional - preview?
+        -- hs.eventtap.keyStroke({}, "p", 0, win.app)
+        -- FYI I could make a prevew muted region with 1. and 3. here only (no change, just a preview)
+        --  make it nearest volume edit would really be cool
+    end)
+end
+
 function SPal_Move_Playhead_By_Seconds(seconds)
     -- PRN consider mapping Ctrl+Left/Right for this so I can keep existing behavior of nearest second?
     -- I've never really liked the default move back to nearest second (basically rounded)...
