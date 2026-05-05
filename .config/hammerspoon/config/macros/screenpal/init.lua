@@ -576,10 +576,13 @@ function WIP_SPal_Cut_then_Mute_then_Preview()
         -- 1. most common cut duration... 20 and confirm with _OK
         ---@type ScreenPalEditorWindow, SilencesController
         local win, silences = syncify(detect_silences)
+
+        -- FYI remove second detect_silences here (was just to simplify testing... below has original second detect_silences that causes the same problem)
         win, silences = syncify(detect_silences) -- two calls to this in a row fails => second call to this fails with  "syncify: resume failed	cannot resume dead coroutine" error
-        -- TODO is there an issue with inner syncify resulting in this outer coroutine being dead after one use of syncify? or is it only to same func?
-        print("FUU DONE")
+
+        print("got thru both detect_silences...")
         do return end
+        -- TODO resume with below once I fix double detect_silences issue
 
         local silence = silences:get_this_silence()
         act_on_silence(win, silence, CUT_20_OK) -- TODO this has to be syncified... how else would you wait for it to complete?
