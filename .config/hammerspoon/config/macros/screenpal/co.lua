@@ -57,6 +57,49 @@ function sleep_ms(ms)
     error("NOT SUPPORTED TEST ENV... USE _PLENARY_")
 end
 
+---@param co thread
+---@return string
+local function coroutine_info(co)
+    local id = tostring(co) -- thread: 0x15209 (memory addy) ... do  not hs.inspect else you will lose memory addy part
+
+    -- Status of the coroutine (running, suspended, dead, etc.)
+    local status = coroutine.status(co)
+
+    -- Debug info about where the coroutine's function was defined
+    local level = 2
+    local dbg = debug.getinfo(co, level, "S") -- 2 is caller of coroutine_info func ( 1 == coroutine_info itself, 0 == debug.getinfo)
+    local source = dbg and dbg.source or "unknown"
+    local line = dbg and dbg.linedefined or -1
+
+    return string.format(
+        "%s – status: %s – defined at %s:%d",
+        id, status, source, line
+    )
+end
+
+---@param start_level integer|nil starting stack level (defaults to 1, the caller of this function)
+---@return string stack_trace multiline stack trace
+function get_stack_trace(start_level)
+    start_level = start_level or 2
+
+    ---@type string[]
+    local stack_trace_lines = {}
+    local level = start_level
+    while true do
+        local info = debug.getinfo(level, "Sl")
+        if not info then
+            break
+        end
+        table.insert(
+            stack_trace_lines,
+            string.format("%s:%d", info.short_src, info.currentline)
+        )
+        level = level + 1
+    end
+
+    return table.concat(stack_trace_lines, "\n")
+end
+
 --- wrap a callback based method to appear synchronous using coroutines
 -- PRN add type hints to syncify so it just works based on called method and its callback?
 ---@param call_this fun(fun(...), ...)  -- assumes callback is first arg then args are after
