@@ -49,9 +49,13 @@ function _reload_config
     source ~/.config/fish/config.fish
 end
 
-function _update_dotfiles
-    if test -d ~/repos/github/g0t4/dotfiles
-        git -C ~/repos/github/g0t4/dotfiles pull
+function _update_dotfile_et_al
+    set repo_paths ~/repos/github/g0t4/dotfiles \
+        ~/repos/github/g0t4/ask-openai.nvim \
+        ~/repos/github/g0t4/devtools.nvim \
+        ~/repos/github/g0t4/mcp-servers
+    for repo_path in $repo_paths
+        git -C $repo_path pull
     end
 end
 
