@@ -53,7 +53,9 @@ function _update_dotfile_et_al
     set repo_paths ~/repos/github/g0t4/dotfiles \
         ~/repos/github/g0t4/ask-openai.nvim \
         ~/repos/github/g0t4/devtools.nvim \
-        ~/repos/github/g0t4/mcp-servers
+        ~/repos/github/g0t4/mcp-servers \
+        ~/repos/github/g0t4/iron.nvim \
+        ~/repos/github/g0t4/langchain-llama-server
     for repo_path in $repo_paths
         git -C $repo_path pull
     end
