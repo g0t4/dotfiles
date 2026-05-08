@@ -3350,3 +3350,5 @@ end
 
 # *** nix
 abbr --command nix -- "-h" "--help"
+abbr -- nixh "nix --help"
+abbr -- nixpls "nix profile list"
