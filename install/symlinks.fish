@@ -121,3 +121,7 @@ if not test -d $ask_repo_path
 end
 mkdir -p $HOME/.agents
 ln -f -s $ask_repo_path/.agents/global/instructs $HOME/.agents/. # DIR symlink (just skills for now) => should have skills dir from this repo as ~/.config/skills and NOT ~/.config/skills/skills
+
+# * nix
+mkdir -p $HOME/.config/nix
+ln -f -s $dotfiles_dir/nix/nix.conf $HOME/.config/nix/nix.conf
