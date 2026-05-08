@@ -223,6 +223,14 @@
     // FYI another persons' config: https://raw.githubusercontent.com/oppara/dotfiles/611ea809e380d5b4e3e374568a85e52e744a429e/config/nvim/coc-settings.json
     "languageserver": {
 
+        "nixd": {
+            "command": "nixd",
+            "filetypes": [ "nix" ],
+            "rootPatterns": [ "flake.nix", ".git" ],
+            "settings": {
+            }
+        },
+
         "ts_query_ls": {
             // *** tree-sitter query files (*.scm)
             "command": "ts_query_ls",
