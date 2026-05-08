@@ -122,7 +122,7 @@ local function searchDirectories(query, searchId, callback)
     local escaped_query = query:gsub("'", "'\\''")
     local mdfind_query = string.format("kMDItemFSName == '*%s*'c && kMDItemContentType == 'public.folder'", escaped_query)
 
-    local cmd = "/opt/homebrew/bin/stdbuf"
+    local cmd = "/usr/bin/stdbuf"
     local args = {"-o0", "/usr/bin/mdfind", mdfind_query}
     print("Starting new directory search for query:", query, "searchId:", searchId)
     print("mdfind query:", mdfind_query)
@@ -214,7 +214,7 @@ local function searchFiles(query, searchId, callback)
     -- Build mdfind command
     -- Full Spotlight search (faster than -name in practice)
     -- Use stdbuf to force unbuffered output so we get results as they're found
-    local cmd = "/opt/homebrew/bin/stdbuf"
+    local cmd = "/usr/bin/stdbuf"
     local args = {"-o0", "/usr/bin/mdfind", query}
     print("Starting new mdfind for query:", query, "searchId:", searchId)
 
@@ -302,7 +302,7 @@ local function searchApplications(query, searchId, callback)
         mdfind_query = mdfind_query .. string.format(" && kMDItemFSName == '*%s*'c", escaped_query)
     end
 
-    local cmd = "/opt/homebrew/bin/stdbuf"
+    local cmd = "/usr/bin/stdbuf"
     local args = {"-o0", "/usr/bin/mdfind", mdfind_query}
 
     print("Starting app search, query:", query, "searchId:", searchId)
@@ -1689,7 +1689,7 @@ local function handleLiveFilter(query, searchId, callback)
     local mdfind_query = string.format("kMDItemFSName == '*%s*'c && kMDItemContentType == 'public.folder'", escaped_stage1)
 
     -- Use stdbuf for unbuffered output
-    local cmd = "/opt/homebrew/bin/stdbuf"
+    local cmd = "/usr/bin/stdbuf"
     local args = {"-o0", "/usr/bin/mdfind", mdfind_query}
 
     print("=== Live Filter ===")
