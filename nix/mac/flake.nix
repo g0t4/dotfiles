@@ -14,6 +14,8 @@
     {
       formatter.${system} = nixpkgs.legacyPackages.${system}.nixfmt-tree;
 
+      # TODO find more packages to manage with nix
+      # TODO setup nix on arch too?
       packages.${system}.default = pkgs.buildEnv {
         name = "wes-tools";
         paths = [
