@@ -3346,3 +3346,7 @@ if command -q claude
     abbr clr 'claude --resume'
     abbr cld 'claude --dangerously-skip-permissions'
 end
+
+
+# *** nix
+abbr --command nix -- "-h" "--help"
