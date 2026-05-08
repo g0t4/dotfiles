@@ -225,9 +225,15 @@
 
         "nixd": {
             "command": "nixd",
+            "args": [ "--log=verbose" ],
             "filetypes": [ "nix" ],
             "rootPatterns": [ "flake.nix", ".git" ],
             "settings": {
+                "nixd": {
+                    "formatting": {
+                        "command": [ "nixfmt" ] // FYI `nix fmt` does not work (wipes doc on format b/c nixd returns empty doc after formatting... likely not using STDOUT to return updated document (or similar)... but nixfmt works fine so no need to use smth else
+                    },
+                },
             }
         },
 
