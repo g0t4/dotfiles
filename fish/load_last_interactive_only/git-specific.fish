@@ -137,6 +137,26 @@ abbr -- git_delta_side_by_side "git -c delta.side-by-side=true"
 abbr -- git_delta_unified "git -c delta.side-by-side=false"
 abbr -- git_delta_no_line_numbers "git -c delta.line-numbers=false"
 #
+# TODO figure out what I want for helpers (probably want to habituate a shortened form of one of these)
+#   FYI entire motive is for when I am extracting a function and the space is changing...
+#   if I do it all in one go then the diff (on longer functions) is unintelligible...
+#   so I will break down commits to smaller steps so I can review that step one was ONLY adding one level of indent...
+#      this --ignore-space-change shows me indeed I did not change any code beyond the indent
+#      once I know that then b/c it is committed I can safely move to changing the code and diffs will look good (small)
+#        i.e. add new function signature
+#             call new function
+#             wrangle params (add/remove params, inline/extract variables/params)
+#             each of these as separate commits makes review simple and much more bullet proof
+#      SO, sometimes I know it is just whitespace that I want to check for.. that's where these helpers come in
+#        b/c otherwise diff tools blow diahhreha when indentation is mixed with code changes
+#        many tools suck with just indent changes _ALONE_ (i.e. delta, hunk)
+#        so I do my review and forget about indent...
+#        OH and another route is to save indent for last step
+#        YES broken code along the way, who cares!
+#
+abbr -- git_ignore_space_changes "git diff --ignore-space-change"
+abbr -- git_ignore_all_space "git diff --ignore-all-space"
+#
 abbr gdlc "git log --patch HEAD~1..HEAD"
 abbr gdlcu "git -c delta.side-by-side=false log --patch HEAD~1..HEAD"
 abbr --regex 'gdlc[u]?\d+' --function gdlcX _gdlcX
