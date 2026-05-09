@@ -181,6 +181,7 @@ abbr fdE 'fd --exclude'
 #
 # reminders for some options
 abbr --command fd --position anywhere -- and --and # expand and, mostly a reminder
+abbr fdh 'fd --help'
 #
 # * expand short options => corresponding long option
 #   I can still use shorthand and always see it expand to the long option!

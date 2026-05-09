@@ -40,19 +40,19 @@ abbr --position=anywhere -- errout '2>&1'
 
 # * head abbrs
 # ph<SPACE> => | head
-#  I would use pipe_head for this abbr but you cannot tab complete abbrs outside of command position... so have to add | myself then I can tab complete the h10 below
-abbr --position=anywhere --add _head_pipe_d --regex 'ph\d+' --function _abbr_expand_head_pipe_d
+#  I would use pipe_head for this abbr but you cannot tab complete abbrs outside of command position... so have to add | myself then I can tab complete the h10 belowj
+abbr --position=anywhere --add _head_pipe_d --regex 'ph\d+' --function _abbr_expand_head_pipe_d # keep ph1 yes
 # h10<SPACE> in cmd position
-abbr --add _head_d --regex 'h\d+' --function _abbr_expand_head_pipe_d
+abbr --add _head_d --regex 'h\d+' --function _abbr_expand_head_pipe_d # keep h1/h2 etc for now and see if it catches on..
 function _abbr_expand_head_pipe_d
     set text (string replace --regex "^p" "| " $argv[1]) # replace p => |
     set text (string replace --regex 'h(\d+)$' 'head -\1' $text) # h10 => head -10
     echo $text
 end
-#
-# * tail abbrs
-abbr --position=anywhere --add _tail_pipe_d --regex 'pt\d+' --function _abbr_expand_tail_pipe_d
-abbr --add _tail_d --regex 't\d+' --function _abbr_expand_tail_pipe_d
+
+# # * tail abbrs
+abbr --position=anywhere --add _tail_pipe_d --regex 'pt\d+' --function _abbr_expand_tail_pipe_d # keep pt1 yes! this one I should habitutate
+# abbr --add _tail_d --regex 't\d+' --function _abbr_expand_tail_pipe_d # disable t\d b/c I wanna use that for my trace abbr... and I cannot think of when I used h1/t1 anytime recently
 function _abbr_expand_tail_pipe_d
     set text (string replace --regex "^p" "| " $argv[1]) # replace p => |
     set text (string replace --regex 't(\d+)$' 'tail -\1' $text) # t10 => tail -10
