@@ -63,32 +63,25 @@ function ask_rewrite_diff_reviewer
     diff_two_commands "jq .request_body.messages[-1].content -r $trace_file" "jq .response_message.content -r $trace_file"
 end
 
-function abbr_with_first_file_match --argument-names short_option long_option match_regex
-    # FYI get rid of this crap the second it causes a headache... it is not hard to bang out the explicit function each time :)
+abbr --add abbr_trace_nth_file --regex 't\d*' --function abbr_expand_trace_nth_file
+function abbr_expand_trace_nth_file
+    set -l match $argv[1]
+    # extract the numeric part after the leading 't'
+    set -l index (string replace -r '^t' '' $match)
+    # default to the first file if no number was provided
+    if test -z "$index"
+        set index 1
+    end
+    # find all trace files, sort them, and pick the Nth one
+    set -l files (fd --max-depth=1 ".*-trace\.json" . | sort)
+    set -l file $files[$index]
 
-    # fish has no concept of closures so don't try to nest functions...
-    #   IIUC dynamic scope like bash (can access caller's scope)
-    #       and a special function flga -S/--no-scope-shadowing to avoid clobbering a variable named the same in your scope
-    #   AND, there is smth w/ -V/--inherit-variable to snapshot a variable at definition time (IIUC) which would get you a static closure IIUC (I have not tried this)
-
-    # define the function and 'hardcode' the definition params:
-    #  btw this can be a nightmare with quoting concerns :)
-    eval 'function _abbr_expand_'$short_option'
-        expand_with_first_file_match "'$long_option'" "'$match_regex'"
-    end'
-    abbr --function "_abbr_expand_$short_option" $short_option
-end
-function expand_with_first_file_match --argument-names cmd match_regex
-    set first_file_match (fd --max-depth=1 $match_regex | head -1)
-    if set -q first_file_match
-        echo "$cmd $first_file_match"
+    if test -n "$file"
+        echo "view_trace $file"
     else
-        echo $cmd
+        echo view_trace
     end
 end
-#
-# admittedly, this reads nicely (which was part of my goal):
-abbr_with_first_file_match t view_trace ".*-trace.json"
 
 function strip_trailing_newline --description "trim trailing \\n - last only"
     perl -0777 -pe 'chop if substr($_, -1) eq "\n"'
