@@ -175,6 +175,13 @@ end
 #   vs gls (git log --stat) which is PER commit
 abbr gd_stat "git diff --stat $_unpushed_commits_without_last_pushed"
 
+# * hunkdiff (recommended by @mitchelh)
+function hunkdiff
+    # PRN? or do I want:
+    # `abbr hunkdiff npx hunkdiff`
+    npx hunkdiff $argv
+end
+
 abbr --set-cursor glgrep 'git log --grep="%"'
 
 # WIP => disable pager and color for generating a unified diff
