@@ -88,9 +88,12 @@ function strip_trailing_newline --description "trim trailing \\n - last only"
 end
 
 function view_trace
+    # Run the chat viewer tool using the module namespace.
+    # ``tools`` is now a proper Python package, so we invoke the module with
+    # ``-m tools.chat_viewer.__main__``. To ensure the package can be resolved,
+    # add the repository root to ``PYTHONPATH``.
     set _python3 "$ASK_REPO/.venv/bin/python3"
-    set _script_py "$ASK_REPO/tools/chat_viewer/__main__.py"
-    $_python3 $_script_py $argv
+    env PYTHONPATH="$ASK_REPO" $_python3 -m tools.chat_viewer.__main__ $argv
 end
 
 function rag_indexer
