@@ -176,7 +176,7 @@ function expand_zsh_equals
     set -l cmd (string replace --regex '^=' '' $argv)
     type --path $cmd
 end
-abbr --add zsh_equals --regex '=[^\b]+' --function expand_zsh_equals
+abbr --add zsh_equals --regex '=[^\b]+' --function expand_zsh_equals --position anywhere
 
 function dir_of_man_page --wraps man
     set -l man_page $argv[1]
