@@ -19,6 +19,7 @@
       packages.${system}.default = pkgs.buildEnv {
         name = "wes-tools";
         paths = [
+          pkgs.difftastic
           pkgs.fd
           pkgs.ripgrep
           pkgs.fzf
