@@ -317,3 +317,18 @@ vim.api.nvim_create_user_command('SnakeCase', function()
     local line_0indexed = cursor_line_1indexed - 1
     vim.api.nvim_buf_set_lines(bufnr, line_0indexed, line_0indexed + 1, false, { updated_line })
 end, { range = true, nargs = 0 })
+
+
+-- * WIP for quick fix / location-list
+-- function set_quickfix_from_clipboard(reg)
+--     -- TODO there has to be builtin ways for this already?
+--     reg = reg or "+"
+--     local text = vim.fn.getreg(reg)
+--     local lines = vim.split(text, "\n")
+--     vim.fn.setqflist({}, " ", {
+--         lines = lines,
+--         efm = [[%A  File "%f"\, line %l\, in %m,%Z%m]],
+--     })
+--     vim.cmd("copen")
+-- end
+-- set_quickfix_from_clipboard("*")
