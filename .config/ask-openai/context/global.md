@@ -1,8 +1,16 @@
 ## General Code Preferences
 
-- When rewriting code, leave unrelated code and unrelated comments as is.
-- When an if statement has an AMBIGUOUS condition, extract a variable to meaningfully name it, for example:
+- Avoid ambiguity, for example:
+
 ```lua
+-- 👎 if there's a bug in the regex, how would I know? I'd have to surmise from surrounding code 🤮
+if line:match("^%s*$") then
+    -- ...
+end
+```
+
+```lua
+-- 🙌 clear intent
 local is_blank_line = line:match("^%s*$")
 if is_blank_line then
     -- ...
