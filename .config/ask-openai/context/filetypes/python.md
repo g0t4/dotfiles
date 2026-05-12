@@ -1,7 +1,7 @@
 ## Python Code Preferences
-- Use snake_case for functions and variables.
-- Use PascalCase for classes.
-- Use type hints to clear up ambiguity and improve code completion.
+
+- use snake_case for functions and variables
+- use PascalCase for classes
+- add type hints that improve code completion
 - prefer `list[]` over `List[]` to mimimize imports
-- Avoid docstrings, ABSOLUTELY NO trivial comments.
-- Use `py_compile` to check for indentation and syntax errors.
+- `py_compile` is a great way to check for syntax errors
