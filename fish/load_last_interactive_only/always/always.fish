@@ -91,6 +91,7 @@ function browse_traces
     set _python3 "$ASK_REPO/.venv/bin/python3"
     env PYTHONPATH="$ASK_REPO" $_python3 -m tools.chat_viewer.browser $argv
 end
+complete -c browse_traces -a 'rewrite fim agents' --no-files
 
 function view_trace
     # Run the chat viewer tool using the module namespace.
