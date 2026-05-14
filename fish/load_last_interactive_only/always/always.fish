@@ -87,6 +87,9 @@ function strip_trailing_newline --description "trim trailing \\n - last only"
     perl -0777 -pe 'chop if substr($_, -1) eq "\n"'
 end
 
+abbr ba browse_traces agents
+abbr br browse_traces rewrite
+abbr bf browse_traces fim
 function browse_traces
     set _python3 "$ASK_REPO/.venv/bin/python3"
     env PYTHONPATH="$ASK_REPO" $_python3 -m tools.chat_viewer.browser $argv
