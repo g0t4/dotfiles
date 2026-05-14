@@ -138,7 +138,13 @@ abbr gmc 'git merge --continue'
 abbr gmff 'git merge --ff-only'
 
 # reverting
-abbr grev 'git revert'
+abbr --add _grev_d --regex 'grev(\d+)' --function _abbr_expand_grev_d
+function _abbr_expand_grev_d
+    # replace grev<number> with the appropriate git revert command
+    set count (string replace --regex '^grev' '' $argv[1])
+    echo "git revert HEAD~$count"
+end
+
 
 # removing
 abbr grm 'git rm'
