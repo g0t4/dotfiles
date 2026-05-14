@@ -361,6 +361,16 @@ abbr --set-cursor rgo 'rg -o "%"' # -o/--only-matching
 abbr --set-cursor rgF 'rg -F "%"' # -F/--fixed-strings
 abbr --set-cursor rgw 'rg -w "%"' # -F/--fixed-strings
 
+# * expand short => long options
+abbr --command rg  --position anywhere -- -F --fixed-strings
+# FYI allow -i (do not expand to --ignore-case)
+abbr --command rg --position anywhere -- -v --invert-match
+abbr --command rg --position anywhere -- -o --only-matching
+abbr --command rg --position anywhere -- -w --word-regexp
+abbr --command rg --position anywhere -- -g --glob
+abbr --command rg --position anywhere -- -U --multiline
+
+
 function rg_diff_files
     # usage:
     #   rg_diff_files '--hidden'
