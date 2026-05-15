@@ -1,3 +1,3 @@
 require("tl").loader()
-require("config.macros.streamdeck.profiles.test")
+require("config.macros.streamdeck.controller.profiles.test")
 
