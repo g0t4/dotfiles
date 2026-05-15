@@ -507,6 +507,7 @@ function lua_strip_require_around
     cat | string replace --all --regex "(^require\(['\"]|['\"]\))" ""
 end
 
+abbr --set-cursor rgg 'rg_grep "%"'
 function rg_grep --wraps rg --description "rg as a grep replacement"
     rg \
         # match output only (no filename, line / column numbers)
