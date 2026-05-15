@@ -13,9 +13,9 @@ abbr gsti 'git status --ignored .'
 # FYI ok to replace `.` with a dir or path in the repo to limit search
 # look for legit, ignored files (i.e. sensitive log captures) sans the ones I never care about:
 # look at untracked and/or ignored files.. and skip things I know I never care bout
-abbr gstiv --set-cursor 'git status --ignored --untracked-files --short ".%" | rg -i --no-column -v "node_modules|\.venv/|\.rag/|__pycache__|DS_Store|\.pytest_cache/|/bin/|/obj/|/target/|iterm2env/"'
+abbr gstiv --set-cursor 'git status --ignored --untracked-files --short ".%" | rg_grep -i -v "node_modules|\.venv/|\.rag/|__pycache__|DS_Store|\.pytest_cache/|/bin/|/obj/|/target/|iterm2env/"'
 # also skip image files (don't always do this, hence a separte abbr)
-abbr gstiv_all --set-cursor 'git status --ignored --untracked-files --short ".%" | rg -i --no-column -v "node_modules|\.venv/|\.rag/|__pycache__|DS_Store|\.pytest_cache/|/bin/|/obj/|/target/|iterm2env/|.*\.(png|bmp|jpg|svg)\$"'
+abbr gstiv_all --set-cursor 'git status --ignored --untracked-files --short ".%" | rg_grep -i -v "node_modules|\.venv/|\.rag/|__pycache__|DS_Store|\.pytest_cache/|/bin/|/obj/|/target/|iterm2env/|.*\.(png|bmp|jpg|svg)\$"'
 
 # reset
 abbr grhh 'git reset --hard HEAD' # last commit hard reset
@@ -182,7 +182,7 @@ abbr gtv 'git tag | sort -V'
 # update-index (mark files as not changed, i.e. font size settings in zed settings.json file, or vscode settings.json)
 abbr gassume 'git update-index --assume-unchanged'
 abbr gassumeun 'git update-index --no-assume-unchanged'
-abbr gassumels 'git ls-files -v | grep ^h'
+abbr gassumels 'git ls-files -v | rg_grep ^h'
 # TODO are there other letter/status prefixes besides 'h' that apply to assume-unchanged files? they would be lowercase btw, if so
 
 # whatchanged (logs)

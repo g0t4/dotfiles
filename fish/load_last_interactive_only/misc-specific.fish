@@ -734,23 +734,23 @@ end
 # *** searching ***
 #
 abbr els "env | bat --language dotenv -p"
-abbr egr "env | rg -i "
+abbr egr "env | rg_grep -i "
 abbr envb "env | bat -l env" # do this to fix color issues with LESS_TERMCAP_** env vars
 # alternative: strip CSI escape codes from LESS_TERMCAP_* env vars (and possibly others)
 # env | string replace --regex "\\x1b\[1(;\\d+)+m" ""
 #
 # shell variables names and values
 abbr vls "set | bat --language ini -p"
-abbr vgr "set | rg -i "
+abbr vgr "set | rg_grep -i "
 #
 # abbr's
-abbr --add agr --set-cursor "abbr | rg -i '%'"
-abbr --add agrs --set-cursor "abbr | rg -i '\-\- %'" # starts with b/c `-- name` is consistent format of abbr's list output
+abbr --add agr --set-cursor "abbr | rg_grep -i '%'"
+abbr --add agrs --set-cursor "abbr | rg_grep -i '\-\- %'" # starts with b/c `-- name` is consistent format of abbr's list output
 #
 # complete's
 abbr --set-cursor completeC "complete -C '%'"
 #
-#   abbr --list | rg -i '^an' # another avenue if I have too much trouble relying on `abbr --show` + grep
+#   abbr --list | rg_grep -i '^an' # another avenue if I have too much trouble relying on `abbr --show` + grep
 #
 # AFAICT there's no way to lookup an abbr by name... and get its executable format
 #   Also, not straight forward to parse the executable format b/c name can appear in many different spots
@@ -776,23 +776,23 @@ abbr --set-cursor completeC "complete -C '%'"
 #   bind_both_modes_default_and_insert escape,. history-token-search-backward
 
 # *** processes ***
-abbr psg "grc ps aux | rg -i "
+abbr psg "grc ps aux | rg_grep -i "
 function ps_dump_env_vars_when_process_started --argument-names pid
     if $IS_MACOS
         # macOS use ps -E and parse output
         ps -E -p"$pid" \
             # optional => skip headers and go with just the one row for this process (starts w/ PID)
-            | grep "^$pid" \
+            | rg_grep "^$pid" \
             # env vars are space delimited
             | string split ' ' \
             # grep for lines with FOO=bar pattern... FYI could also constrain to uppercase only (IIAC on the NAME= side)
             #  FYI assumes no = signs in the first columns
-            | grep = \
+            | rg_grep = \
             | bat -l env
     else if $IS_LINUX
         # Linux: read environment from /proc/<pid>/environ
         cat /proc/$pid/environ | tr '\0' '\n' \
-            | grep = \
+            | rg_grep = \
             | bat -l env
     end
 end
@@ -925,7 +925,7 @@ function build_abbrs_for_filetype
     # * ripgrep
     if abbr -q "rg$filetype_letter"
         log_ --apple_red "## WARNING rg$filetype_letter already defined:"
-        abbr | grep "rg$filetype_letter"
+        abbr | rg_grep "rg$filetype_letter"
     end
     abbr "rg$filetype_letter" "rg -g '*.$glob_end'"
 
@@ -1107,7 +1107,7 @@ function toggle-git_commit_command
     if test -z "$cmd"
         # if empty cmd, then use last command
         # pull back last non git command (so I can stage files and then commit)
-        set cmd (history | rg --no-config --no-line-number -v '^git\s' | head -n 1)
+        set cmd (history | rg_grep --no-config --invert-match '^git\s' | head -n 1)
     end
 
     if string match --quiet --regex "^git\scommit\s-m\s" -- $cmd
@@ -1146,7 +1146,7 @@ if command -q apt
         dpkg -L $argv | xargs -I {} echo 'test ! -d "{}"; and echo "{}"' | source
     end
 
-    complete -c dpkg_L_files -a '(dpkg --get-selections | grep -w "install" | awk \'{print $1}\')' --no-files
+    complete -c dpkg_L_files -a '(dpkg --get-selections | rg_grep -w "install" | awk \'{print $1}\')' --no-files
 
     function dpkg_L_tree
         # uses exa to append icons (left side only), pipes to awk to put icon on right side, pipes to treeify and icon ends up on right side
@@ -1315,7 +1315,7 @@ if command -q act
     # GENERATED COMPLETIONS (finagled chatgpt to spit this out):
     #
     # function generate_completions_from_help
-    #     for line in (act --help | grep -oE "\-\-[a-zA-Z0-9-]+")
+    #     for line in (act --help | rg_grep -oE "\-\-[a-zA-Z0-9-]+")
     #         set option (echo $line | sed 's/--//')
     #         echo complete -c act -l $option
     #     end
@@ -1717,7 +1717,7 @@ function video_editing_total_duration
     # wow I used my ask-openai CLI helper to generate this and it did and it works well (asked for first to get durations, then said split hours:mins:secs and sheesh it did it right using one lone command line with semicolon separators, I just split it out here... bravo this is not straightforward to do
     set totalSeconds 0
     for file in $argv
-        set duration (ffmpeg -i $file 2>&1 | grep "Duration" | cut -d ' ' -f 4 | sed s/,//)
+        set duration (ffmpeg -i $file 2>&1 | rg_grep "Duration" | cut -d ' ' -f 4 | sed s/,//)
         set -l h (echo $duration | cut -d ':' -f1)
         set -l m (echo $duration | cut -d ':' -f2)
         set -l s (echo $duration | cut -d ':' -f3)
@@ -1733,7 +1733,7 @@ end
 abbr --add _150 --function abbr_thumbnail_check
 function abbr_thumbnail_check
     set suffix "150px.png"
-    set first_image (ls *.png | rg -v $suffix | head -1)
+    set first_image (ls *.png | rg_grep --invert-match $suffix | head -1)
     set input_file (quote_paths "$first_image")
     set output_file (quote_paths "$(path basename --no-extension "$first_image").$suffix")
     echo "magick $input_file -resize 150 $output_file"
@@ -2000,7 +2000,7 @@ function abbr_db
 
     # if only one video in current dir, select it
     # exclude previous boosted vides i.e. .7dB.m4v
-    set video_files (ls *.{mp4,m4v,mov} | rg -v --no-line-number "dB\.[a-z0-9]{3}\$")
+    set video_files (ls *.{mp4,m4v,mov} | rg_grep --invert-match "dB\.[a-z0-9]{3}\$")
     if test (count $video_files) -eq 1
         set video_file $video_files[1]
     end
@@ -2140,7 +2140,7 @@ abbr man_kernel_dev_9 "$man_cmd 9"
 abbr --regex "manlist[0-9]" --function manlistX -- manlistX
 function manlistX
     set section $(string replace manlist "" $argv[1])
-    echo "$man_cmd -k . | grep '($section)'"
+    echo "$man_cmd -k . | rg_grep '($section)'"
 end
 abbr man1 "$man_cmd 1"
 abbr man2 "$man_cmd 2"
@@ -2199,8 +2199,8 @@ abbr mitmr "mitmproxy --no-server --rfile" # when reading, dont start server (th
 # orphaned server:
 # - sometimes mitmproxy server becomes orphaned (quit CLI doesn't stop it... so I need to find/stop it)
 # - ignore if --no-server
-abbr mitm_pgrep 'pgrep -ilf mitmproxy | rg --no-config --no-line-number -v "\--no-server" || true' # don't error if not found, avoid confusion
-abbr mitm_kill 'pgrep -ilf mitmproxy | rg --no-config --no-line-number -v "\--no-server" | awk \'{print $1}\' | xargs sudo kill -9 || true'
+abbr mitm_pgrep 'pgrep -ilf mitmproxy | rg_grep -v "\--no-server" || true' # don't error if not found, avoid confusion
+abbr mitm_kill 'pgrep -ilf mitmproxy | rg_grep -v "\--no-server" | awk \'{print $1}\' | xargs sudo kill -9 || true'
 #
 # program specific
 abbr mitmlc "mitmproxy --mode=local:'Visual Studio Code.app'" # capture just vscode (note not insiders)
@@ -2425,7 +2425,7 @@ if command -q pacman
 
     # arch linux
 
-    # FYI this could collide with my p* pipe abbrs (i.e. pgr => | rg -i), resolve it when that happesn
+    # FYI this could collide with my p* pipe abbrs (i.e. pgr => | rg_grep -i), resolve it when that happesn
     abbr pm pacman
 
     # *** -S sync
@@ -2449,9 +2449,9 @@ if command -q pacman
     abbr pm_listinstalled "pacman -Q" # training wheels reminder for what command b/c this is all truly confusing IMO, perhaps I should better wrap my mind around the commands?
     abbr pmqi "pacman -Qi" # pkg (i)nfo (probably easier to just use -Si for most pkgs unless install a local dev checkout)
     # search installed pkgs:
-    abbr pmqs "pacman -Qs" # (s)earch ERE(regex) search installed pkgs (prolly just use `pacman -Q | rg -i`)
-    abbr --set-cursor pmqg "pacman -Q | rg -i '%'" # I prefer grep, it's just easier to not need another tool specific option
-    abbr --set-cursor pmqgs "pacman -Q | rg -i '^%'"
+    abbr pmqs "pacman -Qs" # (s)earch ERE(regex) search installed pkgs (prolly just use `pacman -Q | rg_grep -i`)
+    abbr --set-cursor pmqg "pacman -Q | rg_grep -i '%'" # I prefer grep, it's just easier to not need another tool specific option
+    abbr --set-cursor pmqgs "pacman -Q | rg_grep -i '^%'"
     #
     abbr pmql "pacman -Ql" # (l)ist files for pkg, can list multiple too (in which case first col is pkg name)
     # TODO any reason why I wouldn't just use -Fl always? perhaps if I custom build a pkg?
@@ -2636,7 +2636,7 @@ if $IS_LINUX then
     abbr lshwcs "sudo lshw -class storage"
 
     # lsmod
-    abbr --set-cursor lsmodg "sudo lsmod | rg -i '%'"
+    abbr --set-cursor lsmodg "sudo lsmod | rg_grep -i '%'"
 
     # lsmem
     abbr lsmem "lsmem --output-all"
@@ -2649,7 +2649,7 @@ if $IS_LINUX then
     abbr lsusbv "lsusb -v" # very detailed
 
     # dmesg
-    abbr --set-cursor dmesgg "sudo dmesg | rg -i '%'"
+    abbr --set-cursor dmesgg "sudo dmesg | rg_grep -i '%'"
 
 end
 
@@ -2771,7 +2771,7 @@ abbr tailr 'tail -r' # reverse order
 abbr tt trash_n_tail
 #
 abbr tt_ask_predictions 'trash_n_tail ~/.local/share/nvim/ask-openai/ask-predictions.log' # nvim plugin
-abbr tail_all_ask_predictions 'tail -1000 ~/.local/share/nvim/ask-openai/ask-predictions.log | grep -v ClearScrollback' # strip ClearScrollback/1337 so I can see history
+abbr tail_all_ask_predictions 'tail -1000 ~/.local/share/nvim/ask-openai/ask-predictions.log | rg_grep -v ClearScrollback' # strip ClearScrollback/1337 so I can see history
 abbr tail_ask_predictions 'tail -F ~/.local/share/nvim/ask-openai/ask-predictions.log'
 #
 # for now I want to keep the commands.log, maybe go back to trash_n_tail later on, for now leave tt as tail -F too:
@@ -2779,11 +2779,11 @@ abbr tt_mcp_server_commands 'tail -F ~/.local/share/mcp-server-commands/commands
 abbr tail_mcp_server_commands 'tail -F ~/.local/share/mcp-server-commands/commands.log'
 abbr commands_log_review "commands_log_executable_mode; commands_log_shell_mode"
 function commands_log_executable_mode
-    cat ~/.local/share/mcp-server-commands/commands.log | grep run_process | grep '"argv":'
+    cat ~/.local/share/mcp-server-commands/commands.log | rg_grep run_process | rg_grep '"argv":'
 end
 
 function commands_log_shell_mode
-    cat ~/.local/share/mcp-server-commands/commands.log | grep run_process | grep '"command_line":'
+    cat ~/.local/share/mcp-server-commands/commands.log | rg_grep run_process | rg_grep '"command_line":'
 end
 
 #
@@ -2939,7 +2939,7 @@ if command -q ctags
     abbr ctlx ctags --list-extras
     abbr ctags_stdout ctags -f -
     # helpers to review what was swept up (or not)
-    abbr ctags_list_not_files "cat tags  | sort | uniq | rg -v --no-line-number '\.(zsh|lua|py|rs|c|md|json|vim|plist|js|ps1)' | bat -l csv"
+    abbr ctags_list_not_files "cat tags  | sort | uniq | rg_grep --invert-match '\.(zsh|lua|py|rs|c|md|json|vim|plist|js|ps1)' | bat -l csv"
 
 end
 
@@ -3176,7 +3176,7 @@ set --local sse_jq 'string replace --regex "[^{]*" "" | jq'
 # pipe alone (not from clippy)
 abbr --position=anywhere -- psse "| $sse_jq"
 abbr --position=anywhere -- pssec "| $sse_jq --compact-output"
-abbr --position=anywhere -- pdata "| grep -v ':data' | $sse_jq" # filter to just data: records in HTTP SSE trace (i.e. skip lines w/ `event: message`)
+abbr --position=anywhere -- pdata "| rg_grep -v ':data' | $sse_jq" # filter to just data: records in HTTP SSE trace (i.e. skip lines w/ `event: message`)
 #
 # * pbcopy
 #   until I habituate these, use _copy_ expanded as reminder (shorten later if use this all the time)
@@ -3281,7 +3281,7 @@ abbr unzipl 'unzip -l' # lis(t) / (t)est
 abbr java19 'export PATH="$(/usr/libexec/java_home -v 19)/bin:$PATH"'
 
 # *** jcmd
-abbr jcmd_screenpal "jcmd \$(screenpal_pid) " # get PID with `jcmd` or `jps` or `ps aux | grep ScreenPal`
+abbr jcmd_screenpal "jcmd \$(screenpal_pid) " # get PID with `jcmd` or `jps` or `ps aux | rg_grep ScreenPal`
 
 # *** mvn
 abbr mvnls 'mvn dependenices:list'
@@ -3298,7 +3298,7 @@ abbr splog "cat ~/Library/ScreenPal-v3/app-0.log"
 abbr splogrm "rm ~/Library/ScreenPal-v3/app-0.log"
 # PRN tray-0.log ... but don't need it right now
 function screenpal_pid
-    set --local pid (jcmd | grep ScreenPal | head -1 | cut -d' ' -f1)
+    set --local pid (jcmd | rg_grep ScreenPal | head -1 | cut -d' ' -f1)
     echo $pid
 end
 

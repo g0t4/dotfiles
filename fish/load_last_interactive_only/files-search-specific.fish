@@ -78,9 +78,9 @@ if command -q mdfind
     abbr --set-cursor -- mdfind_kind_contact "kind:contact" # this would be more useful if could do name too, haven't figured that out yet:
     # abbr --set-cursor -- mdfind_kind_contact "mdfind 'kMDItemKind == \"Contacts Card Data\" kMDItemDisplayName = \"*%*\"c'"  # NOT WORKING, seems to union OR?
 
-    abbr --set-cursor mdimport_list_attrs "mdimport -A | rg -i '%'"
-    abbr --set-cursor mdimport_list_importers "mdimport -L | rg -i '%'"
-    abbr --set-cursor mdimport_dump_schema "mdimport -X | rg -i '%'"
+    abbr --set-cursor mdimport_list_attrs "mdimport -A | rg_grep -i '%'"
+    abbr --set-cursor mdimport_list_importers "mdimport -L | rg_grep -i '%'"
+    abbr --set-cursor mdimport_dump_schema "mdimport -X | rg_grep -i '%'"
 
     # * mdls (list file's attrs)
     # - `mdls foo.txt`
@@ -273,7 +273,7 @@ if status is-interactive
             # --color always \
             $argv
         # TODO do I want --color always?!
-        #  i.e. for `fd --type dir | grep nvim` => would keep color for grep output
+        #  i.e. for `fd --type dir | rg_grep nvim` => would keep color for grep output
 
         # PRN:
         # --ignore-file path
@@ -293,9 +293,9 @@ end
 ## notable differences
 # - -e foo -e bar => OR multiple search terms together
 # - btw --engine=auto => defaults to rust regex format, tries to select when to use PCRE2
-# - `rg -g` => `rg --files | rg`
+# - `rg -g` => `rg --files | rg_grep`
 # - `rg -G foo bar` => `rg -g foo bar` # BUT, -g glob # is a glob not a regex
-#    note: can always use `rg --files | rg foo | xargs rg bar` # to get back to regex
+#    note: can always use `rg --files | rg_grep foo | xargs rg bar` # to get back to regex
 
 export RIPGREP_CONFIG_PATH=$WES_DOTFILES/.config/ripgrep/ripgreprc
 
@@ -306,8 +306,8 @@ abbr --set-cursor rgi 'rg -i "%"'
 abbr --set-cursor rgh 'rg --hidden "%"'
 
 # I wonder how much this will drive me nuts...
-abbr --set-cursor -- grep 'rg "%"'
-abbr --set-cursor -- history 'history | rg "%"'
+abbr --set-cursor -- grep 'rg_grep "%"'
+abbr --set-cursor -- history 'history | rg_grep "%"'
 
 function command_line_after_cursor_is_not_an_option_dash
     set cursor_position (commandline --cursor)
@@ -510,7 +510,13 @@ end
 abbr --set-cursor rgg 'rg_grep "%"'
 function rg_grep --wraps rg --description "rg as a grep replacement"
     rg \
-        # match output only (no filename, line / column numbers)
+        # disable config so I can set every option as needed here:
+        --no-config \
+        --no-heading \
+        --hidden \
+        # allow smart case matching which is a key feature of rg and is reasonable to apply in this "grep" mode even though "grep" doesn't include this
+        --smart-case \
+        # grep like output (no filename:line:column)
         --no-filename --no-line-number --no-column \
         $argv
 end

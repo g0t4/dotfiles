@@ -92,7 +92,7 @@ _create_abbr_ff_help_filter video whisper
 abbr ff_volumedetect --set-cursor --function _ff_volumedetect
 function _ff_volumedetect
     set -l input (_find_first_video_file_any_type; or echo "%")
-    echo -n "ffmpeg -i $input -filter:a volumedetect -f null /dev/null 2>&1 | grep Parsed"
+    echo -n "ffmpeg -i $input -filter:a volumedetect -f null /dev/null 2>&1 | rg_grep Parsed"
 end
 
 abbr --add ff_silencedetect --set-cursor --function _ff_silencedetect

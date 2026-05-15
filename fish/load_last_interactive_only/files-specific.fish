@@ -372,7 +372,7 @@ if status --is-interactive
 end
 
 function lspath
-    # usage? # lspath | grep python ??
+    # usage? # lspath | rg_grep python ??
 
     for dir in $PATH
         if not test -d $dir
@@ -862,7 +862,7 @@ function __fzf_picker --argument-names picker fd_command
         begin
             set -l mru_file (__fzf_mru_file $picker)
             __fzf_mru_read $picker
-            eval $fd_command | grep -Fxv -f $mru_file
+            eval $fd_command | rg_grep -Fxv -f $mru_file
         end | fzf $fzf_opts
     )
 

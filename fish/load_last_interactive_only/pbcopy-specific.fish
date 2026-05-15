@@ -41,7 +41,7 @@ function _cppath
 
     if command -q grealpath
         grealpath --no-symlinks "$argv"
-    else if uname | grep -q Darwin
+    else if uname | rg_grep -q Darwin
         # macOS version of realpath doesn't have --no-symlinks option
         echo "FAIL: grealpath not found and is needed on macOS (brew install coreutils)"
         return 1

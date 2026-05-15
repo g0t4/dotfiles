@@ -68,7 +68,7 @@ function diff_copied_patch__from_apply_patch
     # copied from apply_patch agent output
     #  works across hunks...
     #  basically take everything sans minus/plus lines... so then we can diff those w/ context!
-    icdiff $(pbpaste | rg -v "^-" | psub) $(pbpaste | rg -v "^\\+" | psub)
+    icdiff $(pbpaste | rg_grep --invert-match "^-" | psub) $(pbpaste | rg_grep --invert-match "^\\+" | psub)
 end
 
 function test_diff_expansions_when_open_new_shell

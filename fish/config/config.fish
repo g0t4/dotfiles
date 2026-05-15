@@ -59,7 +59,7 @@ if status is-interactive
 
         # *** ask-openai variables to identify env (i.e. sshed to a remote shell):
         if test -f /etc/os-release
-            set ask_os (cat /etc/os-release | grep '^ID=' | cut -d= -f2)
+            set ask_os (cat /etc/os-release | rg_grep '^ID=' | cut -d= -f2)
         else
             set ask_os (uname) # Darwin, Linux, etc
         end

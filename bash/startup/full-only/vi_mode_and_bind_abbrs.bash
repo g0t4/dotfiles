@@ -20,7 +20,7 @@ set -o vi
 # FIX self-insert differences
 #    icdiff <((bind -m vi-insert -p)) <((bind -m emacs -p )) | rg -i self-insert
 #    ok and now this isn't an issue... WTH? maybe one of my bindings was wrong when testing and I deleted \\?
-# bind -m vi-insert '"\\": self-insert' # missing in vi mode?! found in emacs mode:   bind -p | grep '\\"'
+# bind -m vi-insert '"\\": self-insert' # missing in vi mode?! found in emacs mode:   bind -p | rg_grep '\\"'
 
 # vi-unix-word-rubout doesn't work inside ""...
 #  so just rebind to emacs version?
@@ -68,7 +68,7 @@ _abbrs_bind() {
     # FYI chose yaml b/c it highlights escape sequences which are key in keymaps!
 
     # * readline variables
-    abbr bind-current-keymap "bind -v | grep keymap"
+    abbr bind-current-keymap "bind -v | rg_grep keymap"
     abbr bind-list-readline-variables "bind -v $bind_bat" # exec format
     abbr bindv "bind -v $bind_bat"
     abbr bind_show_mode 'bind "set show-mode-in-prompt on"'

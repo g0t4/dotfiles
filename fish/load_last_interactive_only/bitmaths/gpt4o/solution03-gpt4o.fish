@@ -23,9 +23,9 @@ function run_test
     set -l expected_dec $argv[4]
 
     set -l output (maths $input)
-    set -l actual_bin (echo $output | grep -oP 'bin: \K.*')
-    set -l actual_hex (echo $output | grep -oP 'hex: \K.*')
-    set -l actual_dec (echo $output | grep -oP 'dec: \K.*')
+    set -l actual_bin (echo $output | rg_grep -oP 'bin: \K.*')
+    set -l actual_hex (echo $output | rg_grep -oP 'hex: \K.*')
+    set -l actual_dec (echo $output | rg_grep -oP 'dec: \K.*')
 
     if test "$actual_bin" = "$expected_bin" -a "$actual_hex" = "$expected_hex" -a "$actual_dec" = "$expected_dec"
         echo "Test passed for input: $input"

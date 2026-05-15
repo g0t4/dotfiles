@@ -65,7 +65,7 @@ function __gh_depoliticize
     # cat tmp | jq 'map(select(.defaultBranchRef.name == "main" and .isFork == false and (.name | startswith("course") | not)))'
     #
     # check for local repos that might be on wrong branch
-    # for f in *; test -d $f; and echo -n $f"   "; and git -C $f branch --show-current  ;end | grep main | rg -v "^course"
+    # for f in *; test -d $f; and echo -n $f"   "; and git -C $f branch --show-current  ;end | rg_grep main | rg_grep --invert-match "^course"
 
 
     # FYI this assumes currently on main, no master branch... it switches for that scenario only and removes main
@@ -82,13 +82,13 @@ function __gh_depoliticize
     # list all branches before
     git branch -a
 
-    if not git status | grep -q "On branch main"
+    if not git status | rg_grep -q "On branch main"
         echo "Not on main branch, aborting..."
         return -1
     end
 
     # create master if not exists
-    if not git branch -a | grep -q master
+    if not git branch -a | rg_grep -q master
         git checkout -b master
         git push --set-upstream origin $(git_current_branch)
     end
@@ -96,7 +96,7 @@ function __gh_depoliticize
     # ok to recall
     gh repo edit --default-branch master
 
-    if not git status | grep -q "On branch master"
+    if not git status | rg_grep -q "On branch master"
         echo "Not on master branch, aborting..."
         return -1
     end

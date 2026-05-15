@@ -94,7 +94,7 @@ hs.hotkey.bind({ "shift", "cmd" }, "3", function()
     hs.task.new("/usr/sbin/screencapture", nil, { filename }):start()
 
     -- TODO quality level? any undocumented settings for that (look at binary for undocumented options)
-    --    strings (which screencapture ) | grep "screencapture:" -A 10
+    --    strings (which screencapture ) | rg_grep "screencapture:" -A 10
     --      show-capture-rects
     --      showToolbarInInteractive
     --      captureOnlyEventRegion

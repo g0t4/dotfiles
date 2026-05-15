@@ -25,7 +25,7 @@ function get_fish_symbols
         # history?
         bind --all # key bindings
         bind --function-names # avail input functions (beyond just what is bound) IIAC these are not listed in `functions` output?
-    end | rg -i "$argv"
+    end | rg_grep -i "$argv"
 
 end
 
@@ -42,6 +42,6 @@ function get_fish_function_bodies
             functions $func
         end
         # prn what about bind functions?
-    end # | rg -i "$argv"
+    end # | rg_grep -i "$argv"
     # I would like to pipe to grep but then I lose coloring which makes sense but I want to keep it for now and revisit filtering later
 end

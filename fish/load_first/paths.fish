@@ -220,7 +220,7 @@ end
 
 function _path_list_executables
     # usage:
-    #   _path_list_executables | grep ans*
+    #   _path_list_executables | rg_grep ans*
     for dir in $PATH
         if dir_exists $dir
             fd --type executable --type symlink --exact-depth 1 . $dir

@@ -5,10 +5,10 @@ set file_skipped "$WES_DOTFILES/bash/.generated.skipped.bash"
 
 # skip options I am not ready to parse yet
 #  ' -- ' after arg ensures not a match in the abbr's "key value" positional args
-# | grep -vE '\-\-(regex).* -- '
+# | rg_grep -vE '\-\-(regex).* -- '
 abbr | sort \
-    | rg -v "\\\'" \
-    | rg -v "\-- -F" >"$file_abbrs"
+    | rg_grep --invert-match "\\\'" \
+    | rg_grep --invert-match "\-- -F" >"$file_abbrs"
 
 # * produce skipped list BEFORE any mods for regexs (or otherwise)
 # sort both just to be safe, else comm won't work
