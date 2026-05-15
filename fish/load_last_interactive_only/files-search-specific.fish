@@ -493,3 +493,15 @@ function rgimages-global
     # simple-icons repo
     #_rgimages-dir ~/repos/github/simple-icons/simple-icons
 end
+
+# * common searches in lua files
+abbr lua_list_requires_unique "lua_list_all_requires | sort | uniq"
+abbr lua_list_requires_count "lua_list_all_requires | sort | uniq -c | sort"
+function lua_list_all_requires
+    rg --no-column --no-filename --no-line-number --only-matching '\brequire\([^\)]*\)' (fd lua) \
+        | lua_strip_require_around
+end
+
+function lua_strip_require_around
+    cat | string replace --all --regex "(^require\(['\"]|['\"]\))" ""
+end
