@@ -293,7 +293,7 @@ if status --is-interactive
             # debian family => batcat to avoid clash... and my bat alias won't match command so I need this case too
             batcat $path
         else
-            cat $path
+            command cat $path
         end
     end
 
