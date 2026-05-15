@@ -29,7 +29,7 @@ set -l packages "
   # netcat
   # socat
 "
-set -l package_list (echo $packages | sed 's/#.*//' | rg_grep --invert-match "^\s*\$" | rg_grep --invert-match "^\s*#.*")
+set -l package_list (echo $packages | sed 's/#.*//' | grep --invert-match "^\s*\$" | grep --invert-match "^\s*#.*")
 eval "sudo apt install $package_list"
 # fish does not do variable expansion like bash, i.e. splitting on whitespace... so just build the commad to run and eval it
 

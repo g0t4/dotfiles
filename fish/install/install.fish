@@ -16,13 +16,13 @@ if not functions -q __z
 end
 
 # fishtape
-if not fisher list | rg_grep -q jorgebucaran/fishtape
+if not fisher list | grep -q jorgebucaran/fishtape
     echo "installing fishtape"
     fisher install jorgebucaran/fishtape
 end
 
 # lgathy/google-cloud-sdk-fish-completion
-if not fisher list | rg_grep -q lgathy/google-cloud-sdk-fish-completion
+if not fisher list | grep -q lgathy/google-cloud-sdk-fish-completion
     echo "installing google-cloud-sdk-fish-completion"
     fisher install lgathy/google-cloud-sdk-fish-completion
 end
