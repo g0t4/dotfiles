@@ -507,6 +507,10 @@ function lua_strip_require_around
     cat | string replace --all --regex "(^require\(['\"]|['\"]\))" ""
 end
 
+function lua_modify_requires_to_all_use_single_quote
+    gsed -Ei 's/require\([\'"]([^\'"]+)[\'"]/require(\'\\1\'/g' (fd --type file lua)
+end
+
 abbr --set-cursor rgg 'rg_grep "%"'
 function rg_grep --wraps rg --description "rg as a grep replacement"
     rg \
