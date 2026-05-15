@@ -1399,10 +1399,26 @@ local bookmarks = {
     },
 }
 
+local function execOrLog(cmd)
+    local stdout, ok, _, rc = hs.execute(cmd)
+    if not ok then
+        print(string.format("[launcher] exec failed (rc=%s): %s", tostring(rc), cmd))
+    end
+    return stdout, ok
+end
+
+local function osascriptOrLog(script)
+    local ok, result = hs.osascript.applescript(script)
+    if not ok then
+        print(string.format("[launcher] osascript failed: %s | script: %s", tostring(result), script))
+    end
+    return ok, result
+end
+
 -- Bookmark action dispatch (keyed by name)
 local bookmarkActions = {
     trash = function()
-        hs.execute('open "trash://"')
+        osascriptOrLog('tell application "Finder" to open trash')
     end,
     lock = function()
         hs.caffeinate.lockScreen()
@@ -1411,13 +1427,13 @@ local bookmarkActions = {
         hs.caffeinate.systemSleep()
     end,
     logout = function()
-        hs.osascript.applescript('tell application "System Events" to log out')
+        osascriptOrLog('tell application "System Events" to log out')
     end,
     restart = function()
-        hs.osascript.applescript('tell application "System Events" to restart')
+        osascriptOrLog('tell application "System Events" to restart')
     end,
     shutdown = function()
-        hs.osascript.applescript('tell application "System Events" to shut down')
+        osascriptOrLog('tell application "System Events" to shut down')
     end,
     mute = function()
         local device = hs.audiodevice.defaultOutputDevice()
@@ -1434,7 +1450,7 @@ local bookmarkActions = {
         hs.openConsole()
     end,
     dark = function()
-        hs.osascript.applescript('tell app "System Events" to tell appearance preferences to set dark mode to not dark mode')
+        osascriptOrLog('tell app "System Events" to tell appearance preferences to set dark mode to not dark mode')
     end,
     sentence_case = function()
         -- Read current clipboard content
@@ -1496,10 +1512,9 @@ local bookmarkActions = {
     end,
     title_case = function()
         -- wrapper function gets title cased value
-        local stdout, ok, exit_type, rc = hs.execute("fish -c \"title_case_wrapper\"")
+        local stdout, ok = execOrLog("fish -c \"title_case_wrapper\"")
         if not ok then
-            -- TODO need STDERR to show in this case? and stdout? not sure I can get STDERR with hs.exectue()?
-            hs.alert.show("Title case conversion failed... rc=" .. rc)
+            hs.alert.show("Title case conversion failed (see HS console)")
             return
         end
         -- Trim trailing whitespace/newlines from the wrapper output.
@@ -2169,7 +2184,10 @@ local function onChoice(choice)
     -- Handle bookmark action
     if choice.bookmark then
         local action = bookmarkActions[choice.bookmark]
-        if action then action() end
+        if action then
+            local ok, err = pcall(action)
+            if not ok then hs.showError("launcher bookmark error: " .. tostring(err)) end
+        end
         return
     end
 
