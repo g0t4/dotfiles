@@ -1,14 +1,11 @@
 local verbose = require("config.macros.streamdeck.helpers").verbose
 
--- Activate Parallels Desktop Control Center menu item
--- Uses hs.application to find Parallels Desktop and selects the "Control Center" menu item.
 function ParallelsX_control_center()
     local app = hs.application.get("Parallels Desktop")
     if not app then
         verbose("Parallels Desktop not running")
         return
     end
-    -- Find the menu path; typical menu item is under the app's menu bar: "Window" -> "Control Center"
     local menuPath = {"Window", "Control Center"}
     local success = app:selectMenuItem(menuPath)
     if not success then
