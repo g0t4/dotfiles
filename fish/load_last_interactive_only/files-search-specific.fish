@@ -497,6 +497,7 @@ end
 # * common searches in lua files
 abbr lua_list_requires_unique "lua_list_all_requires | sort | uniq"
 abbr lua_list_requires_count "lua_list_all_requires | sort | uniq -c | sort"
+abbr --set-cursor -- lua_find_requires 'lua_list_all_requires | sort | uniq | rg_grep "%"'
 function lua_list_all_requires
     rg --no-column --no-filename --no-line-number --only-matching '\brequire\([^\)]*\)' (fd lua) \
         | lua_strip_require_around
@@ -504,4 +505,11 @@ end
 
 function lua_strip_require_around
     cat | string replace --all --regex "(^require\(['\"]|['\"]\))" ""
+end
+
+function rg_grep --wraps rg --description "rg as a grep replacement"
+    rg \
+        # match output only (no filename, line / column numbers)
+        --no-filename --no-line-number --no-column \
+        $argv
 end
