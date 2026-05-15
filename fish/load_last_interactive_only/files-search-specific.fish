@@ -511,6 +511,19 @@ function lua_modify_requires_to_all_use_single_quote
     gsed -Ei 's/require\([\'"]([^\'"]+)[\'"]/require(\'\\1\'/g' (fd --type file lua)
 end
 
+function lua_requires_with_single_quotes
+    rg "require\(\s*'" (fd lua)
+end
+
+function lua_requires_with_double_quotes
+    rg 'require\(\s*"' (fd lua)
+end
+
+function lua_requires_with_no_quotes
+    # i.e. when use variable to pass module name
+    rg "require\(\s*[^'\"]"
+end
+
 abbr --set-cursor rgg 'rg_grep "%"'
 function rg_grep --wraps rg --description "rg as a grep replacement"
     rg \
