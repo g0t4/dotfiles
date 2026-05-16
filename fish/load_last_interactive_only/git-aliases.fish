@@ -156,6 +156,10 @@ abbr grstr 'git restore --staged "$(_repo_root)"' # use $() syntax for compat w/
 abbr grp 'git restore --patch' # * favorite
 abbr grss 'git restore --source'
 
+# rev-parse (consider adding the following, except that you have helpers that basically do these two:)
+# abbr -- grevp 'git rev-parse --show-toplevel' # repo_root does this
+# abbr -- grevp_prefix 'git rev-parse --show-prefix' # prd does this
+
 # show
 abbr gsh 'git show' # --color-words if not using external diff
 abbr gsps 'git show --pretty=short --show-signature' # --color-words if not using external diff
