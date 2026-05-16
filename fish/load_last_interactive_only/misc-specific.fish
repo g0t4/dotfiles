@@ -2074,6 +2074,50 @@ if command -q npm
 
 end
 
+function npx --description "Run npm/npx tooling in a constrained docker container"
+    # todo expand beyond just npx?
+
+    if test (count $argv) -eq 0
+        echo "usage: npx <npx command> [args...]"
+        return
+    end
+
+    set -l cwd (pwd -P)
+    set -l allowed_root ~/repos/github
+
+    if not string match -qr "^"(string escape --style=regex $allowed_root)"/[^/]+/[^/]+(?:/.*)?\$" "$cwd"
+        echo "Refusing: must be inside $allowed_root/<owner>/<repo>" >&2
+        return 1
+    end
+
+    if not git -C "$cwd" rev-parse --is-inside-work-tree >/dev/null 2>&1
+        echo "Refusing: not inside a git repository" >&2
+        return 1
+    end
+
+    set -l repo_root (git -C "$cwd" rev-parse --show-toplevel)
+
+    if not string match -q "$allowed_root/*/*" "$repo_root"
+        echo "Refusing: repo root must be under $allowed_root/<owner>/<repo>" >&2
+        return 1
+    end
+
+    # PRN pass as variable? or env var?
+    set node_version latest
+    # set node_version 22
+
+    docker run --rm -it \
+        --read-only \
+        --tmpfs /tmp \
+        --tmpfs /root/.npm \
+        --cap-drop ALL \
+        --security-opt no-new-privileges \
+        -v "$repo_root:/work:rw" \
+        -w "/work"(string replace "$repo_root" "" "$cwd") \
+        node:"$node_version" \
+        npx $argv
+end
+
 # TODO! add mechanism to discover duplicated abbrs => on-demand check?
 
 abbr bm bitmaths # careful brew uses b* prefix
