@@ -93,16 +93,6 @@ function prompt_login --description 'display user name for the prompt'
         set display_hostname (string replace -r "\.lan\$|\.local\$" "" $hostname)
         echo -n -s $display_hostname
     end
-
-    # selectively show hostname
-    # if not string match -q "mbp*" $hostname
-    #     # chances of showing hostname and python icon are low so don't worry about leading space here b/c then I have to disable it when not python icon and that's yuck
-    # else if string match -rq "$HOME/repos/github/g0t4/course2-mdls" $PWD
-    #     # in course repo show hostname as mac (temp just for course)
-    #     echo -n -s "host"
-    # end
-
-    return
 end
 
 function prompt_pwd --description 'wes mod - name of the current dir only'
