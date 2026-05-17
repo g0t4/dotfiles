@@ -58,7 +58,7 @@ function prompt_login --description 'display user name for the prompt'
     end
 
     if set -q SSH_CONNECTION
-        echo -n -s (set_color cyan) 󰣀 (set_color normal)
+        echo -n -s (set_color cyan) 󰣀  (set_color normal)
         # echo -n -s (set_color cyan) 🌐 (set_color normal)
     end
 
