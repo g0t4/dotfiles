@@ -223,6 +223,26 @@
     // FYI another persons' config: https://raw.githubusercontent.com/oppara/dotfiles/611ea809e380d5b4e3e374568a85e52e744a429e/config/nvim/coc-settings.json
     "languageserver": {
 
+        "ansible": {
+            "command": "ansible-language-server",
+            "args": [ "--stdio" ],
+            // use "yaml" filetype here too, that way coc-yaml and existing yaml nvim runtime works with the file... while also layering in ansible-language-server conventionally/conditionally based on path component naming conventions
+            "filetypes": [ "yaml" ],
+            "settings": {
+                "ansible": {
+                    "validation": {
+                        "enabled": true,
+                        "lint": {
+                            "enabled": true
+                        }
+                    },
+                    "python": {
+                        "interpreterPath": "python3"
+                    }
+                }
+            }
+        },
+
         "nixd": {
             "command": "nixd",
             "args": [ "--log=verbose" ],
