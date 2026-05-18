@@ -57,11 +57,6 @@ function prompt_login --description 'display user name for the prompt'
         return
     end
 
-    if set -q SSH_CONNECTION
-        # echo -n -s (set_color cyan) "󰣀 " (set_color normal)
-        echo -n -s (set_color cyan) "󰌘 " (set_color normal)
-    end
-
     if test -n "$VIRTUAL_ENV"
         ## venv indicator 
         echo -n -s (set_color cyan) \ue73c
@@ -86,6 +81,13 @@ function prompt_login --description 'display user name for the prompt'
 
     # show hostname
     if string match -q "mbp*" $hostname
+        # * show connection icon when I am SSH'd into a different account on my mac only
+        #  other remotes, I rarely use multiple accounts... but, maybe I should show user name when SSH'd on mac?
+        if set -q SSH_CONNECTION
+            # echo -n -s (set_color cyan) "󰣀 " (set_color normal)
+            echo -n -s (set_color cyan) "󰌘 " (set_color normal)
+        end
+
         # for duration of course, make host clear and not confusing (just mac in this case) - otherwise dir alone mighe be ubuntu (in vms/ubuntu dir) and then its just "ubuntu" without hostname and that might lead one to believe it's the ubuntu course VM
         echo -n -s mac
     else
