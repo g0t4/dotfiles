@@ -1194,7 +1194,14 @@ if command -q watch; and status is-interactive
         set WATCH_COMMAND watch
     end
     abbr watch $WATCH_COMMAND
-    abbr watch_last "$WATCH_COMMAND --no-title -- (history -n 1)"
+
+    function _expand_watch_last
+        set recent_cmd (history -n 1)
+
+        echo "$WATCH_COMMAND --no-title -- $recent_cmd"
+    end
+    abbr -a watch_last --function _expand_watch_last
+
     abbr wa $WATCH_COMMAND
     # FYI if you go back to watch... add --color to appropriate abbrs
     abbr wag '$WATCH_COMMAND --no-title -- grc --colour=on'
