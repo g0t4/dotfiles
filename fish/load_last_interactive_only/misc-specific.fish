@@ -3119,9 +3119,6 @@ abbr rsync_checksum_dry_run rsync --archive --delete --checksum --itemize-change
 # FYI add _dry_run b/c w/ dry-run I want --itemize-changes output... whereas w/ a real copy I want --progress...
 #   that said, all have --dry-run just to be safe on end
 
-# * history command
-abbr hist "history | bat -l fish --color always | less -F"
-
 # * string abbrs
 #
 # pipe => string split

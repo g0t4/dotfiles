@@ -307,7 +307,10 @@ abbr --set-cursor rgh 'rg --hidden "%"'
 
 # I wonder how much this will drive me nuts...
 abbr --set-cursor -- grep 'rg_grep "%"'
-abbr --set-cursor -- history 'history | rg_grep "%"'
+# * history command
+abbr hist "history | bat -l fish --color always | less -F"
+abbr --set-cursor -- histgr 'history | rg_grep "%"'
+abbr histm 'history merge'
 
 function command_line_after_cursor_is_not_an_option_dash
     set cursor_position (commandline --cursor)
