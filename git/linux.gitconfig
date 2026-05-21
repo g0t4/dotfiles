@@ -18,7 +18,7 @@
 	pager = delta
 
 [diff]
-	algorithm = histogram
+	algorithm = patience
 
 [filter "lfs"]
 	clean = git-lfs clean -- %f
