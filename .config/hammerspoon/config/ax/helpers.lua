@@ -93,13 +93,13 @@ function axuielemMT:window(index)
 end
 
 --- Returns FIRST with matching title, NOT ALL!
----@param title string
+---@param search_title string
 ---@return hs.axuielement
-function axuielemMT:window_by_title(title)
+function axuielemMT:window_by_title(search_title)
     local windows = self:windows()
     for _, window in ipairs(windows) do
-        local window_title = window:axTitle()
-        if window_title == title then return window end
+        local title = window:axTitle()
+        if title == search_title then return window end
     end
 end
 
@@ -123,6 +123,28 @@ axuielemMT.popover = function(self, index)
     return self:popovers()[index]
 end
 
+--- AXPopUpButton controls
+---@return hs.axuielement[]
+axuielemMT.popUpButtons = function(self)
+    return self:childrenWithRole("AXPopUpButton") or {}
+end
+---@param index number
+---@return hs.axuielement
+axuielemMT.popUpButton = function(self, index)
+    return self:popUpButtons()[index]
+end
+
+--- AXSheet controls
+---@return hs.axuielement[]
+axuielemMT.sheets = function(self)
+    return self:childrenWithRole("AXSheet") or {}
+end
+---@param index number
+---@return hs.axuielement
+axuielemMT.sheet = function(self, index)
+    return self:sheets()[index]
+end
+
 ---@return hs.axuielement[]
 axuielemMT.buttons = function(self)
     return self:childrenWithRole("AXButton") or {}
@@ -141,6 +163,7 @@ function axuielemMT.button_by_description(self, exact_description)
             return button:axDescription() == exact_description
         end)
 end
+
 --- Returns FIRST with matching description, NOT ALL!
 ---@param pattern string
 ---@return hs.axuielement
@@ -298,6 +321,16 @@ end
 ---@return hs.axuielement
 axuielemMT.menuItem = function(self, index)
     return self:menuItems()[index]
+end
+--- Returns FIRST ONE with matching title, NOT ALL!
+---@param search_title string
+---@return hs.axuielement
+function axuielemMT:menuItem_by_title(search_title)
+    local menu_items = self:menuItems()
+    for _, menu in ipairs(menu_items) do
+        local title = menu:axTitle()
+        if search_title == title then return menu end
+    end
 end
 
 ---@return hs.axuielement[]
