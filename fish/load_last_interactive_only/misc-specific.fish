@@ -1459,7 +1459,7 @@ function hf
 end
 
 abbr hfc "hf cache"
-abbr hfcls "hf cache ls"
+abbr hfcls "hf cache ls --no-truncate"
 abbr hfcrm "hf cache rm"
 abbr hfcv "hf cache verify"
 abbr hfcpr "hf cache prune"
