@@ -2898,6 +2898,12 @@ function rebuild_llama_cpp
         #   https://github.com/ggml-org/llama.cpp/blob/3eac2093/docs/build.md#L111
         cmake -B build -DLLAMA_CURL=on
     else
+        if not test -f /etc/arch-release
+            echo "Warning: /etc/arch-release not found – this system does not appear to be Arch Linux."
+            exit 1
+        end
+
+
         # just started to get failures today on build21 and build13... both had upgraded packages so maybe smth changed, i.e. using g++14 (is that newly released in arch repos?)
         #    type name is not   allowed
         # I found a similar issue on GH... guy said he fixed with setting env var vor NVCC_CCBIN... I did the same, albeit in my case g++-14, his case was g++-13
@@ -2905,7 +2911,16 @@ function rebuild_llama_cpp
         # https://github.com/ggml-org/llama.cpp/issues/10849
         # export NVCC_CCBIN='/usr/bin/g++-14'
         # https://github.com/ggml-org/llama.cpp/blob/3eac2093/docs/build.md#L148
-        cmake -B build -DGGML_CUDA=ON -DLLAMA_CURL=on
+
+        cmake -B build \
+            -DGGML_CUDA=ON \
+            -DLLAMA_CURL=on \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_CUDA_COMPILER=/opt/cuda/bin/nvcc \
+            -DCMAKE_CUDA_HOST_COMPILER=/usr/bin/g++-15 \
+            -DCMAKE_C_COMPILER=/usr/bin/gcc-15 \
+            -DCMAKE_CXX_COMPILER=/usr/bin/g++-15
+
     end
 
     # PRN enable cuda if present on machine or based on machine name
