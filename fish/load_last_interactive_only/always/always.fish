@@ -111,7 +111,7 @@ function pii_scanner
     # tools is now a proper Python package, so we invoke the module with
     # -m tools.pii_scanner.__main__. To ensure the package can be resolved,
     # add the repository root to PYTHONPATH.
-    set _python3 "$ASK_REPO/.venv/bin/python3"
+    set _python3 "$ASK_REPO/tools/pii_scanner/.venv/bin/python3"
     env PYTHONPATH="$ASK_REPO" $_python3 -m tools.pii_scanner.__main__ $argv
 end
 
