@@ -90,6 +90,7 @@ end
 abbr ba browse_traces agents
 abbr br browse_traces rewrite
 abbr bf browse_traces fim
+abbr ps pii_scanner
 function browse_traces
     set _python3 "$ASK_REPO/.venv/bin/python3"
     env PYTHONPATH="$ASK_REPO" $_python3 -m tools.chat_viewer.browser $argv
@@ -104,6 +105,17 @@ function view_trace
     set _python3 "$ASK_REPO/.venv/bin/python3"
     env PYTHONPATH="$ASK_REPO" $_python3 -m tools.chat_viewer.__main__ $argv
 end
+
+function pii_scanner
+    # Run the PII scanner tool using the module namespace.
+    # tools is now a proper Python package, so we invoke the module with
+    # -m tools.pii_scanner.__main__. To ensure the package can be resolved,
+    # add the repository root to PYTHONPATH.
+    set _python3 "$ASK_REPO/.venv/bin/python3"
+    env PYTHONPATH="$ASK_REPO" $_python3 -m tools.pii_scanner.__main__ $argv
+end
+
+complete -c pii_scanner -a '--model --threshold --json help' --no-files
 
 function rag_indexer
     set _python3 "$ASK_REPO/.venv/bin/python3"
