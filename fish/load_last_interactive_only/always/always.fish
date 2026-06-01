@@ -115,7 +115,7 @@ function pii_scanner
     env PYTHONPATH="$ASK_REPO" $_python3 -m tools.pii_scanner.__main__ $argv
 end
 
-complete -c pii_scanner -a '--model --threshold --json help' --no-files
+complete -c pii_scanner -a '--model --threshold --json --show-matches --extract-paths help' --no-files
 
 function rag_indexer
     set _python3 "$ASK_REPO/.venv/bin/python3"
