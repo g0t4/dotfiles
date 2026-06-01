@@ -4,6 +4,7 @@
 - use PascalCase for classes
 - use EmmyLua/LuaLS annotations to improve code completion
 - use `luac` to check for syntax errors
+- use `stylua` to format files before committing
 
 Examples:
 ```lua
@@ -18,4 +19,3 @@ function process_names(names, checker) end
 ---@field size { w: number, h: number }
 local WindowController = {}
 ```
-
