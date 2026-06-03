@@ -306,7 +306,9 @@ abbr --set-cursor rgi 'rg -i "%"'
 abbr --set-cursor rgh 'rg --hidden "%"'
 
 # I wonder how much this will drive me nuts...
+#  two fold reason for the change: make rg behave more like what I'd expect from grep, also make it obvious I swapped out grep
 abbr --set-cursor -- grep 'rg_grep "%"'
+
 # * history command
 abbr h "history | bat -l fish --color always | less -F"
 abbr --set-cursor -- hgr 'history | rg_grep "%"'
