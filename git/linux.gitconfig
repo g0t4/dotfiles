@@ -38,12 +38,17 @@
 
 # git log formatting:
 [pretty]
-	# define extra formats `git log --pretty=wes`
-	wes = %C(white)%h%Creset %Cblue%cr%Creset%C(auto)%d%Creset %s
+	# usage: `git log --pretty=wes_default`
 	reflog = format:%C(auto)%h%d %gd | %cr | %gs%C(reset)
+	#
+	# show committer and author _NAMES_
+	names = %C(green)%cn / %an%Creset %Cblue%cr%Creset%C(auto)%d%Creset %s
+	# show committer and author _EMAILS_
+	emails = %C(green)%ce / %ae%Creset %Cblue%cr%Creset%C(auto)%d%Creset %s
 [format]
 	# FYI format.pretty applies to git log (w/o --pretty too!)
 	pretty = %C(white)%h%Creset %Cblue%cr%Creset%C(auto)%d%Creset %s
+
 
 [delta]
     side-by-side = true
