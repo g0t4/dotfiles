@@ -27,10 +27,6 @@ abbr gcleani 'git clean -d --interactive' # [i]nteractive is alternative to dry-
 abbr gcleanx 'git clean -d -x --dry-run' # -x == ignored files too
 abbr gpristine 'git reset --hard && git clean -dffx'
 
-# reflog
-abbr grl 'git reflog --pretty=reflog'
-abbr grla 'git reflog --all --pretty=reflog'
-
 # add
 abbr ga 'git add'
 abbr 'ga.' 'git add .'
@@ -94,9 +90,6 @@ abbr gnoconf_export 'export GIT_CONFIG_GLOBAL=/dev/null GIT_CONFIG_SYSTEM=/dev/n
 abbr gcl 'git clone --recurse-submodules'
 abbr gcl_no_lfs 'GIT_LFS_SKIP_SMUDGE=1 git clone --recurse-submodules'
 abbr wcl_no_lfs 'GIT_LFS_SKIP_SMUDGE=1 wcl'
-
-# shortlog
-# git shortlog -sn
 
 # cherry pick
 # abbr gcp 'git cherry-pick'
@@ -189,9 +182,6 @@ abbr gassumeun 'git update-index --no-assume-unchanged'
 abbr gassumels 'git ls-files -v | rg_grep ^h'
 # TODO are there other letter/status prefixes besides 'h' that apply to assume-unchanged files? they would be lowercase btw, if so
 
-# whatchanged (logs)
-abbr gwch 'git whatchanged -p --abbrev-commit --pretty=medium'
-
 ## diff
 # * --color-words fubar's delta diffs (let delta handle the styling)
 # makes me wonder if this was also what I was hating about diff-so-fancy
@@ -269,6 +259,12 @@ function gpuptoX
     # TODO also use default remote? or?
     echo "git push origin HEAD~$num:$(git_current_branch)"
 end
+
+# *** LOG RELATED ***
+
+# reflog
+abbr grl 'git reflog --pretty=reflog'
+abbr grla 'git reflog --all --pretty=reflog'
 
 abbr gl git log
 
