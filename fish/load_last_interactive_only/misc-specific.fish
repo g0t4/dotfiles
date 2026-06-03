@@ -2658,7 +2658,23 @@ end
 # mostly for fun, also a good way to remember this exists :)
 abbr fuc fish_update_completions
 
-abbr fish_from_source ~/repos/github/fish-shell/fish-shell/target/debug/fish
+function _fish_from_source
+    # paths to possible builds
+    set -l release_path ~/repos/github/fish-shell/fish-shell/target/release/fish
+    set -l debug_path ~/repos/github/fish-shell/fish-shell/target/debug/fish
+
+    if test -x $release_path
+        echo $release_path
+    else if test -x $debug_path
+        echo $debug_path
+    else
+        echo "Warning: No fish binary found in release or debug build."
+        return 1
+    end
+end
+
+abbr --add fish_from_source --function _fish_from_source
+
 
 # *** ls* abbrs
 if $IS_LINUX then
