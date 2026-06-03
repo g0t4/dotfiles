@@ -134,3 +134,23 @@ function rag_validate_index
 end
 
 abbr rag_rebuilder 'time rag_indexer --rebuild --info'
+
+# **** MCP server wrappers
+# FYI idea is to make it easier to configure MCP clients...
+#    { "command": "fish", args: ["-c", "mcp_server_semantic_grep --root-dir /path/to/foo"] }
+#    DO NOT use `fish -i` (interactive)... OSC codes (from iterm2 shell integration IIRC) will wreck you with STDOUT noise
+# * semantic_grep MCP server entrypoint
+function mcp_server_semantic_grep
+    # BTW I prefer this wrapper approach vs pyproject.toml + project.scripts... these work without any install other than creating the venv initially
+    #  then as the end user, I don't have to even think about venv/paths
+    set _python3 "$ASK_REPO/.venv/bin/python3"
+    env PYTHONPATH="$ASK_REPO/lua/ask-openai/rag" $_python3 -m mcp_server.__main__ $argv
+end
+complete -c mcp_server_semantic_grep --no-files
+complete -c mcp_server_semantic_grep \
+    --long-option root-dir \
+    --description "Root directory for the operation" \
+    --require-parameter \
+    # complete directories nested under current directory (can also be anywhere on system)
+    --arguments "(fd -t d .)" \
+    --no-files
