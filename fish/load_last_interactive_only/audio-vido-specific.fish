@@ -98,7 +98,7 @@ end
 abbr --add ff_silencedetect --set-cursor --function _ff_silencedetect
 function _ff_silencedetect
     set input (_find_first_video_file_any_type; or echo "%")
-    echo -n "ffmpeg -i $input -af silencedetect=noise=d=0.1:-30dB -f null -"
+    echo -n "ffmpeg -i $input -af 'silencedetect=noise=-30dB:d=0.1' -f null -"
 end
 
 # * astats
