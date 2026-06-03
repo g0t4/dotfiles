@@ -2658,6 +2658,8 @@ end
 # mostly for fun, also a good way to remember this exists :)
 abbr fuc fish_update_completions
 
+abbr fish_from_source ~/repos/github/fish-shell/fish-shell/target/debug/fish
+
 # *** ls* abbrs
 if $IS_LINUX then
 
