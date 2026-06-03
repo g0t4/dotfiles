@@ -620,7 +620,7 @@ end
 # helm
 if command -q helm
 
-    abbr h helm
+    # abbr h helm # FYI I gave `h` to history command
 
     # create      create a new chart with the given name
     #
