@@ -98,6 +98,14 @@ function _ff_volumedetect
     echo -n "ffmpeg -i $input -filter:a volumedetect -f null /dev/null 2>&1 | rg_grep Parsed"
 end
 
+abbr --add ff_wav --set-cursor --function _ff_wav
+function _ff_wav
+    set input (_find_first_video_file_any_type; or echo "%")
+    set out (path change-extension .wav $input)
+    echo -n "ffmpeg -i $input $out"
+end
+
+
 abbr --add ff_silencedetect --set-cursor --function _ff_silencedetect
 function _ff_silencedetect
     set input (_find_first_video_file_any_type; or echo "%")
