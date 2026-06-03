@@ -17,7 +17,6 @@ abbr gstiv --set-cursor 'git status --ignored --untracked-files --short ".%" | r
 # also skip image files (don't always do this, hence a separte abbr)
 abbr gstiv_all --set-cursor 'git status --ignored --untracked-files --short ".%" | rg_grep -i -v "node_modules|\.venv/|\.rag/|__pycache__|DS_Store|\.pytest_cache/|/bin/|/obj/|/target/|iterm2env/|egg-info/|dist/|.*\.(png|bmp|jpg|svg)\$"'
 
-
 # reset
 abbr grhh 'git reset --hard HEAD' # last commit hard reset
 abbr grsh 'git reset --soft HEAD~1' # previous commit soft reset to review it and then purge by grhh or gco etc
