@@ -40,6 +40,9 @@ abbr ff_help_filter "ffmpeg -h filter="
 
 abbr ff_help_protocol "ffmpeg -h protocol="
 
+# position=anywhere abbrs
+abbr --command ffmpeg -- no_output "-f null -"
+
 #
 # ffp = ffprobe
 abbr ffp ffprobe
