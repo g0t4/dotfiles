@@ -117,12 +117,14 @@ end
 
 complete -c pii_scanner -a '--model --threshold --json --show-matches --extract-paths help' --no-files
 
+abbr ri rag_indexer
 function rag_indexer
     set _python3 "$ASK_REPO/.venv/bin/python3"
     set _script_py "$ASK_REPO/lua/ask-openai/rag/indexer.py"
     $_python3 $_script_py $argv
 end
 
+abbr rvi rag_validate_index
 function rag_validate_index
     # find duplicate IDs, etc - basically sanity check on the faiss index IDs/vectors
     # capture rag dir of CURRENT repo

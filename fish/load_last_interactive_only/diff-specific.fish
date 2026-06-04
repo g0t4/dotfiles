@@ -11,6 +11,12 @@ end
 abbr ic icdiff
 abbr icr "icdiff --recursive" # diff all files in two dirs
 abbr icg git-icdiff
+#
+# faster way to compare a/b
+abbr pba "pbpaste > a"
+abbr pbb "pbpaste > b"
+abbr icab "icdiff a b"
+
 # configure git-icdiff via git config: git config --global icdiff.options '--line-numbers'
 
 function _abbr_expand_diff_last_two_commands
