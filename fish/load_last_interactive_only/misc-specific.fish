@@ -2442,31 +2442,31 @@ end
 
 if command -q luarocks
 
+    # * DO NOT ADD global abbrs unless you change neovim to find and use global luarocks install, I'd rather you symlink ~/.luarocks across users if you really need global installs
+    #  path varies for global across OSes/distros
+    #  that way you always look in ~/.luarocks! (easy peasy)
+    #
     abbr lr luarocks
-    abbr lrl luarocks list # global and local, for newest lua version
+    # abbr lrl luarocks list # global and local, for newest lua version # stop making it easy to look at global luarocks packages as a reminder to stay local
     abbr lrll luarocks list --local # only local
-    abbr lrl1 luarocks list --lua-version=5.1 # nvim uses 5.1
-    abbr lrl4 luarocks list --lua-version=5.4 # hammerspoon uses this + its the current release
-    abbr lrl5 luarocks list --lua-version=5.5
+    abbr lrl1 luarocks list --lua-version=5.1 --local # nvim uses 5.1
+    abbr lrl4 luarocks list --lua-version=5.4 --local # hammerspoon uses this + its the current release
+    abbr lrl5 luarocks list --lua-version=5.5 --local
 
     # abbr lrd luarocks doc # show docs for package
 
-    abbr lri luarocks install
-    abbr lri1 luarocks install --lua-version=5.1
-    abbr lri4 luarocks install --lua-version=5.4
-    abbr lri5 luarocks install --lua-version=5.5
+    abbr lri1 luarocks install --lua-version=5.1 --local
+    abbr lri4 luarocks install --lua-version=5.4 --local
+    abbr lri5 luarocks install --lua-version=5.5 --local
 
-    abbr lrrm luarocks remove
-    abbr lrrm1 luarocks remove --lua-version=5.1
-    abbr lrrm4 luarocks remove --lua-version=5.4
-    abbr lrrm5 luarocks remove --lua-version=5.5
+    abbr lrrm1 luarocks remove --lua-version=5.1 --local
+    abbr lrrm4 luarocks remove --lua-version=5.4 --local
+    abbr lrrm5 luarocks remove --lua-version=5.5 --local
 
-    abbr lrs luarocks search
     abbr lrs1 luarocks search --lua-version=5.1
     abbr lrs4 luarocks search --lua-version=5.4
     abbr lrs5 luarocks search --lua-version=5.5
 
-    abbr lrshow luarocks show
     abbr lrshow1 luarocks show --lua-version=5.1
     abbr lrshow4 luarocks show --lua-version=5.4
     abbr lrshow5 luarocks show --lua-version=5.5

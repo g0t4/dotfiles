@@ -138,3 +138,5 @@ local luarocks_cpath = home_dir .. "/.luarocks/lib/lua/5.1/?.so"
 package.path = package.path .. ";" .. luarocks_path
 package.cpath = package.cpath .. ";" .. luarocks_cpath
 -- i.e. I use ProFi for profiles (devtools performance module uses it)
+-- FYI!! do not use system wide path to luarocks for a few reasons:
+--  varies across OSes/distros
