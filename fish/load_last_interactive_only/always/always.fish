@@ -156,3 +156,11 @@ complete -c mcp_server_semantic_grep \
     # complete directories nested under current directory (can also be anywhere on system)
     --arguments "(fd -t d .)" \
     --no-files
+
+
+# helpers for mcp messages
+set mcp_init '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{},"clientInfo":{"name":"test","version":"1.0"}}}'
+set mcp_tool_list '{ "jsonrpc": "2.0", "id": 2, "method": "tools/list" }'
+abbr mcp_copy_init "echo -e '$mcp_init\n$mcp_tool_list'  | pbcopy"
+# set mcp_init_notification '{"jsonrpc":"2.0","method":"notifications/initialized"}' # not required to respond with this, but put it here in case I need it at some point
+
