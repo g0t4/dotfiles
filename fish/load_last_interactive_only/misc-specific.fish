@@ -3438,3 +3438,7 @@ end
 abbr --command nix -- "-h" "--help"
 abbr -- nixh "nix --help"
 abbr -- nixpls "nix profile list"
+
+# *** line endings
+# abbr trim_trailing_new_line 'truncate -s -1'
+abbr trim_trailing_new_line 'perl -pe "chomp if eof" -i' # chomp removes \n which for EOF is blank line or last line if it has no \n on it... either way same net effect, trim it if present only!
