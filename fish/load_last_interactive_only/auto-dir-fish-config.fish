@@ -1,10 +1,33 @@
-
 # *** features:
 # Parent-dir walk for first .config.fish
 # Guard against re-loading on nested cd
 # Single active config at a time with teardown before load
 # Snapshot before/after source, only cleanup what was added by .config.fish
 # `--on-variable PWD` fish-native trigger
+
+abbr find_my_config_fish 'fd "^\.config\.fish\$"'
+
+function __local_config__pacakge_json_scripts_to_run_abbrs
+    if not test -f package.json
+        return
+    end
+
+    # map `run_*` => `npm run *`
+    if test -f package.json
+        set script_names (jq -r '.scripts | keys[]' package.json)
+        for script_name in $script_names
+            abbr "run_$script_name" "npm run $script_name"
+        end
+    end
+
+    # alternative bypass `npm run`
+    # # Extract scripts from package.json and create abbreviations
+    # for entry in (jq -r '."scripts" | to_entries[] | "\(.key)=\(.value)"' package.json)
+    #     set -l name (string split -m1 = $entry)[1]
+    #     set -l cmd (string split -m1 = $entry)[2]
+    #     abbr --add $name $cmd
+    # end
+end
 
 function __local_config_find_config
     set -l dir (pwd)
