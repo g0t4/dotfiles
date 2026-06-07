@@ -5,33 +5,28 @@
         "~/repos/github/tree-sitter"
     ],
     "theme": {
-        "harmony_message_system": 69,
+        "harmony_message_system": "#6986ff",
         "harmony_start_token": { "bold": true },
-        "harmony_message_developer": 74,
-        "harmony_message_user": 141,
-        "harmony_message_assistant_analysis": 215,
-        "harmony_message_assistant_commentary": 213,
-        "harmony_message_tool_result": 229,
-        "harmony_message_assistant_final": 15,
+        "harmony_message_developer": "#6AC4EC",
+        "harmony_message_user": "#a99fff",
+        "harmony_message_assistant_analysis": "#FFC379",
+        "harmony_message_assistant_commentary": "#f99fff",
+        "harmony_message_tool_result": "#fdfd90",
+        "harmony_message_assistant_final": "#ffffff",
         "harmony_message_prefill": { "color": 145, "underline": true },
+        "is_json": "#c1c1c1",
 
         "qwen_fim_prefix_token": "#6986ff",
         "qwen_fim_prefix_contents": "#6986ff",
         "qwen_fim_suffix_token": "#4ade80",
         "qwen_fim_suffix_contents": "#4ade80",
-
         "qwen_fim_middle_token": "#ff7eb3",
         "qwen_fim_middle_contents": "#ff7eb3",
-
         "qwen_repo_name_token": "#ffe66d",
         "qwen_repo_name": { "color": "#ffe66d", "bold": true },
-
         "qwen_file_sep_token": "#89dceb",
         "qwen_file_path": { "color": "#89dceb", "bold": true, "underline": true },
         "qwen_file_contents": "#89dceb",
-
-
-        "is_json": 252,
 
         "attribute": {
             "color": 124,
