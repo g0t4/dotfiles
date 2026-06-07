@@ -53,12 +53,12 @@ return {
     {
         'nvim-treesitter/nvim-treesitter',
         -- version = false,            -- disable versioning to always use the latest
-        branch  = 'master',         -- explicitly pin to the master branch
+        branch = 'master', -- explicitly pin to the master branch
         -- TODO! GET ONTO main branch and drop explicit branch... somehow I was stuck on master locally... and I use that for nvim-treesitter.configs (plural) is now singular but not as easy as flip to config sinular import ... other crap is broken
         --
-        build = ":TSUpdate",
+        build  = ":TSUpdate",
 
-        event = { "BufRead", "InsertEnter" },
+        event  = { "BufRead", "InsertEnter" },
 
         config = function()
             require 'nvim-treesitter.configs'.setup {
@@ -138,7 +138,7 @@ return {
 
             -- TSModuleInfo shows what features (highlight, illuminate[if plugin enabled], indent, incremental_selection), not folding?
         end,
-        init = function()
+        init   = function()
             -- https://neovim.io/doc/user/fold.html (FYI can use other methods like indent, syntax, manual, etc... for now I will try ts based)
             vim.wo.foldmethod = 'expr'
             vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
