@@ -370,6 +370,12 @@ vim.api.nvim_create_autocmd("BufWinEnter", {
 
 
 -- ***! repo specific filetype config/overrides
+-- AFAICT tree-sitter nvim doesn't use tree-sitter-cli's config file: ~/.config/tree-sitter/config.json
+--  hence config here too:
+vim.treesitter.language.add("harmony", {
+    path = vim.fn.expand("~/repos/github/g0t4/tree-sitter-harmony/harmony.dylib")
+})
+
 
 if vim.fn.getcwd():find("repos/github/.*/harmony") ~= nil then
     -- in harmony repo, treat test-data/*.txt as harmony filetype
