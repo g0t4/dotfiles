@@ -376,13 +376,13 @@ vim.filetype.add({
     },
 })
 -- AFAICT tree-sitter nvim doesn't use tree-sitter-cli's config file: ~/.config/tree-sitter/config.json
---  hence config here too:
-vim.treesitter.language.add("harmony", {
-    path = vim.fn.expand("~/repos/github/g0t4/tree-sitter-harmony/harmony.dylib")
-})
-vim.treesitter.language.add("qwen_chatml", {
-    path = vim.fn.expand("~/repos/github/g0t4/tree-sitter-qwen-chatml/qwen-chatml.dylib")
-})
+-- -- hrmm now the following is not needed, WTF?!
+-- vim.treesitter.language.add("harmony", {
+--     path = vim.fn.expand("~/repos/github/g0t4/tree-sitter-harmony/harmony.dylib")
+-- })
+-- vim.treesitter.language.add("qwen_chatml", {
+--     path = vim.fn.expand("~/repos/github/g0t4/tree-sitter-qwen-chatml/qwen-chatml.dylib")
+-- })
 
 if vim.fn.getcwd():find("repos/github/.*/harmony") ~= nil then
     -- in harmony repo, treat test-data/*.txt as harmony filetype
