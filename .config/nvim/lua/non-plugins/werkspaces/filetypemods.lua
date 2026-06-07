@@ -375,16 +375,7 @@ vim.filetype.add({
         qwen_chatml = "qwen_chatml",
     },
 })
--- AFAICT tree-sitter nvim doesn't use tree-sitter-cli's config file: ~/.config/tree-sitter/config.json
--- -- hrmm now the following is not needed, WTF?!
-vim.treesitter.language.add("harmony", {
-    -- FYI nvim-treesitter copies the library to ~/.local/share/nvim/lazy/nvim-treesitter/parser
-    -- and thus after the first load, you can get rid of this and it still works
-    path = vim.fn.expand("~/repos/github/g0t4/tree-sitter-harmony/harmony.dylib")
-})
--- vim.treesitter.language.add("qwen_chatml", {
---     path = vim.fn.expand("~/repos/github/g0t4/tree-sitter-qwen-chatml/qwen-chatml.dylib")
--- })
+-- !!! see treesitter.lua for parser registrations
 
 if vim.fn.getcwd():find("repos/github/.*/harmony") ~= nil then
     -- in harmony repo, treat test-data/*.txt as harmony filetype
