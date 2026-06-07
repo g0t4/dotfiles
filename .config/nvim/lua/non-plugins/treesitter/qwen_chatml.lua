@@ -1,3 +1,4 @@
+-- TODO port to ~/.config/tree-sitter/config.json (verbatim can use same RGB values for color + bold/underline work too)!
 vim.api.nvim_set_hl(0, "@qwen_fim_prefix_token", { fg = "#6986ff" })
 vim.api.nvim_set_hl(0, "@qwen_fim_prefix_contents", { fg = "#6986ff" })
 vim.api.nvim_set_hl(0, "@qwen_fim_suffix_token", { fg = "#4ade80" })
