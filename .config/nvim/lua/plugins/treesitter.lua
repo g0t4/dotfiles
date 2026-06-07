@@ -115,7 +115,24 @@ return {
                 install_info = {
                     url = "~/repos/github/g0t4/tree-sitter-harmony",
                     files = { "src/parser.c" },
-                },
+                    -- -- TODO symlink from my repo queries!!
+                    -- queries = 'queries/neovim', -- symlink queries from given directory
+                }
+            }
+
+            parser_config.qwen_chatml = {
+                install_info = {
+                    url = "~/repos/github/g0t4/tree-sitter-qwen-chatml",
+                    files = { "src/parser.c" },
+                    -- generate = true,
+                    -- generate_from_json = false,
+                    -- -- TODO symlink from my repo queries!!
+                    -- queries = 'queries/neovim', -- symlink queries from given directory
+                    -- make sure name shows in :TSModuleInfo
+                    -- install first time:
+                    --   :TSInstall qwen_chatml
+                    -- :TSUpdate -- IIUC recompile it when you change it... not sure if it is automatic?
+                }
             }
 
             parser_config.test = {
