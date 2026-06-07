@@ -35,7 +35,6 @@ vim.cmd([[
 vim.filetype.add({
     extension = {
         notes = "markdown",
-        harmony = "harmony",
         test = "test",
         gitconfig = "gitconfig",
         --
@@ -370,12 +369,20 @@ vim.api.nvim_create_autocmd("BufWinEnter", {
 
 
 -- ***! repo specific filetype config/overrides
+vim.filetype.add({
+    extension = {
+        harmony = "harmony",
+        qwen_chatml = "qwen_chatml",
+    },
+})
 -- AFAICT tree-sitter nvim doesn't use tree-sitter-cli's config file: ~/.config/tree-sitter/config.json
 --  hence config here too:
 vim.treesitter.language.add("harmony", {
     path = vim.fn.expand("~/repos/github/g0t4/tree-sitter-harmony/harmony.dylib")
 })
-
+vim.treesitter.language.add("qwen_chatml", {
+    path = vim.fn.expand("~/repos/github/g0t4/tree-sitter-qwen-chatml/qwen-chatml.dylib")
+})
 
 if vim.fn.getcwd():find("repos/github/.*/harmony") ~= nil then
     -- in harmony repo, treat test-data/*.txt as harmony filetype
