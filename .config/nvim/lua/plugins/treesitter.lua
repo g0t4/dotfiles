@@ -1,4 +1,5 @@
 require("non-plugins.treesitter.harmony")
+require("non-plugins.treesitter.qwen_chatml")
 
 return {
 
