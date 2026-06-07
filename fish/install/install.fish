@@ -27,6 +27,9 @@ if not fisher list | grep -q lgathy/google-cloud-sdk-fish-completion
     fisher install lgathy/google-cloud-sdk-fish-completion
 end
 
+if not functions -q nvm
+    fisher install jorgebucaran/nvm.fish
+end
 
 # FYI didn't work for gcloud bash completion scripts...
 # if not command -q bass
