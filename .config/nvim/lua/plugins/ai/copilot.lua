@@ -339,13 +339,26 @@ end
 -- *** switch copilot keymaps:
 -- WEIRD, after iterm crash, or some other factor, F15 stopped working and I get S-F3 instead? using Ctrl-v ... WTH?
 --   '<S-F3>' '<F15>'
-vim.keymap.set({ 'n', 'i', 'v', 'c' }, '<F18>', function() SwitchCopilot() end, { noremap = true, silent = true })
-vim.keymap.set({ 'n', 'i', 'v', 'c' }, '<F19>', function() require('ask-openai.api').toggle_fim_model() end, { noremap = true, silent = true })
-vim.keymap.set({ 'n', 'i', 'v', 'c' }, '<F20>', function() require('ask-openai.api').cycle_fim_reasoning_level() end, { noremap = true, silent = true })
-vim.keymap.set({ 'n', 'i', 'v', 'c' }, '<F13>', function() require('ask-openai.api').cycle_rewrite_reasoning_level() end, { noremap = true, silent = true })
+
+-- vim.keymap.set({ 'n', 'i', 'v', 'c' }, '<F18>', function() SwitchCopilot() end, { noremap = true, silent = true }) -- TODO remove?
 --
+-- <F41> == <C-S-F5> (Keyboard Maestro => use <C-S-...> for higher Function keys (menu only picks up to F20 otherwise)
+vim.keymap.set({ 'n', 'i', 'v', 'c' }, '<F41>', function() require('ask-openai.api').toggle_fim_model() end, { noremap = true, silent = true })
+-- <F42> = <C-S-F6>
+vim.keymap.set({ 'n', 'i', 'v', 'c' }, '<F42>', function() require('ask-openai.api').toggle_rewrite_model() end, { noremap = true, silent = true })
+-- <F43> = <C-S-F7>
+vim.keymap.set({ 'n', 'i', 'v', 'c' }, '<F43>', function() require('ask-openai.api').toggle_agents_model() end, { noremap = true, silent = true })
+--
+-- <S-F5>==<F17> (btw matches C-S-F5 used for model cycler for same frontend
+vim.keymap.set({ 'n', 'i', 'v', 'c' }, '<F17>', function() require('ask-openai.api').cycle_fim_reasoning_level() end, { noremap = true, silent = true })
+-- <S-F6>==<F18>
+vim.keymap.set({ 'n', 'i', 'v', 'c' }, '<F18>', function() require('ask-openai.api').cycle_rewrite_reasoning_level() end, { noremap = true, silent = true })
+-- <S-F7>==<F19>
+vim.keymap.set({ 'n', 'i', 'v', 'c' }, '<F19>', function() require('ask-openai.api').cycle_agents_reasoning_level() end, { noremap = true, silent = true })
+--
+-- misc:
 vim.keymap.set({ 'n', 'i', 'v', 'c' }, '<F16>', function() require('ask-openai.api').cycle_log_verbosity() end, { noremap = true, silent = true })
-vim.keymap.set({ 'n', 'i', 'v', 'c' }, '<F17>', function() require('ask-openai.api').toggle_rag() end, { noremap = true, silent = true })
+vim.keymap.set({ 'n', 'i', 'v', 'c' }, '<F20>', function() require('ask-openai.api').toggle_rag() end, { noremap = true, silent = true })
 
 
 function IsAskOpenAIPredictionsAvailable()
