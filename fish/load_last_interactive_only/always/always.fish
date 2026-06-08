@@ -63,23 +63,29 @@ function ask_rewrite_diff_reviewer
     diff_two_commands "jq .request_body.messages[-1].content -r $trace_file" "jq .response_message.content -r $trace_file"
 end
 
-abbr --add abbr_trace_nth_file --regex 't\d*' --function abbr_expand_trace_nth_file
+abbr --add abbr_trace_nth_file --regex 't\d*a?' --function abbr_expand_trace_nth_file
 function abbr_expand_trace_nth_file
-    set -l match $argv[1]
+    set original $argv[1]
     # extract the numeric part after the leading 't'
-    set -l index (string replace -r '^t' '' $match)
+    set index (string replace --regex '^t' '' $original)
+    if string match --quiet --regex a $index
+        set index (string replace --regex 'a' '' $index)
+        set opts --all
+    else
+        set opts ""
+    end
     # default to the first file if no number was provided
     if test -z "$index"
         set index 1
     end
     # find all trace files, sort them, and pick the Nth one
-    set -l files (fd --max-depth=1 ".*-trace\.json" . | sort)
-    set -l file $files[$index]
+    set files (fd --max-depth=1 ".*-trace\.json" . | sort)
+    set file $files[$index]
 
     if test -n "$file"
-        echo "view_trace $file"
+        echo "view_trace $opts $file"
     else
-        echo view_trace
+        echo "view_trace $opts"
     end
 end
 
@@ -157,10 +163,8 @@ complete -c mcp_server_semantic_grep \
     --arguments "(fd -t d .)" \
     --no-files
 
-
 # helpers for mcp messages
 set mcp_init '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{},"clientInfo":{"name":"test","version":"1.0"}}}'
 set mcp_tool_list '{ "jsonrpc": "2.0", "id": 2, "method": "tools/list" }'
 abbr mcp_copy_init "echo -e '$mcp_init\n$mcp_tool_list'  | pbcopy"
 # set mcp_init_notification '{"jsonrpc":"2.0","method":"notifications/initialized"}' # not required to respond with this, but put it here in case I need it at some point
-
