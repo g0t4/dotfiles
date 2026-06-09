@@ -111,6 +111,12 @@ function view_trace
     env PYTHONPATH="$ASK_REPO" $_python3 -m tools.chat_viewer.__main__ $argv
 end
 
+function trace_dump
+    # Dump run_process commands from a trace file.
+    set _python3 "$ASK_REPO/.venv/bin/python3"
+    env PYTHONPATH="$ASK_REPO" $_python3 -m tools.trace_dump $argv
+end
+
 abbr ps pii_scanner
 function pii_scanner
     # Run the PII scanner tool using the module namespace.
