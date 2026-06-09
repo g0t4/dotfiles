@@ -3442,3 +3442,21 @@ abbr -- nixpls "nix profile list"
 # *** line endings
 # abbr trim_trailing_new_line 'truncate -s -1'
 abbr trim_trailing_new_line 'perl -pe "chomp if eof" -i' # chomp removes \n which for EOF is blank line or last line if it has no \n on it... either way same net effect, trim it if present only!
+
+# *** which
+abbr whicha "which -a"
+# show which versions I have installed
+function which_versions --argument-names cmd
+    for exec in (which -a $cmd)
+        set -l version_output (eval $exec --version)
+        if test $status -eq 0
+            set ver $version_output
+        else
+            set ver (eval $exec -v)
+        end
+        # TODO ssh -V # no --version, nor -v => might want to build up list of known tools that don't use --version and -v
+
+        echo "$exec: $ver"
+    end
+end
+
