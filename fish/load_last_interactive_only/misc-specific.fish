@@ -3313,6 +3313,7 @@ abbr --command jq --position anywhere -- not_null  "| select(. != null)"
 # TODO expand this list over time, try to capture the key ones you struggle to remember
 # FYI one unfortunate part is that inside the quoted jq expression, you cannot expand abbrs b/c the entire quoted part is the token to expand
 #   but I can arrow out of the quoting to get some help (delete latter ' to go back into non quoted territory and add back quote once done
+abbr trace_timings "jq --raw-output '.request_body.messages[].timings | select(.) | [.cache_n, .prompt_n, .predicted_n] | @tsv' ./*-trace.json | awk '{a+=\$1; b+=\$2; c+=\$3} END {print a \"\\t\" b \"\\t\" c}'"
 
 # * date
 abbr date_s "date +%s"
