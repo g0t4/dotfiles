@@ -3313,6 +3313,22 @@ abbr --command jq --position anywhere -- not_null "| select(.)" # or this works:
 # FYI one unfortunate part is that inside the quoted jq expression, you cannot expand abbrs b/c the entire quoted part is the token to expand
 #   but I can arrow out of the quoting to get some help (delete latter ' to go back into non quoted territory and add back quote once done
 abbr trace_timings "jq --raw-output '.request_body.messages[].timings | select(.) | [.cache_n, .prompt_n, .predicted_n] | @tsv' ./*-trace.json | awk '{a+=\$1; b+=\$2; c+=\$3} END {print a \"\\t\" b \"\\t\" c}'"
+#
+abbr --add _tm --regex "tm\d+" --function _abbr_trace_message
+function _abbr_trace_message --argument-names count
+    set count (string replace -r '^[^\d]+' '' $count)
+    set num_messages (jq '.request_body.messages | length' *-trace.json)
+    if test $count -ge $num_messages
+        set count (math "$num_messages - 1")
+    end
+    echo "cat *-trace.json | jq .request_body.messages[$count]"
+end
+
+abbr --add _tc --regex "tc\d+" --function _abbr_trace_command
+function _abbr_trace_command --argument-names count
+    set echo_msg (_abbr_trace_message $count)
+    echo "$echo_msg.tool_calls.[].function.arguments --raw-output | jq .command_line --raw-output"
+end
 
 # * date
 abbr date_s "date +%s"
