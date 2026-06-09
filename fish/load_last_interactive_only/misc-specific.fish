@@ -3307,6 +3307,12 @@ abbr --command jq --position anywhere -- -C --color-output
 abbr --command jq --position anywhere -- -c --compact-output
 abbr --command jq --position anywhere -- -r --raw-output
 abbr --command jq --position anywhere -- -j --join-output # one use case: don't end w/ \n
+#
+# helpers for jq patterns I never remember (with completions of non-command abbrs, these are immensly more useful)
+abbr --command jq --position anywhere -- not_null  "| select(. != null)"
+# TODO expand this list over time, try to capture the key ones you struggle to remember
+# FYI one unfortunate part is that inside the quoted jq expression, you cannot expand abbrs b/c the entire quoted part is the token to expand
+#   but I can arrow out of the quoting to get some help (delete latter ' to go back into non quoted territory and add back quote once done
 
 # * date
 abbr date_s "date +%s"
