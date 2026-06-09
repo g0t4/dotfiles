@@ -3300,7 +3300,6 @@ abbr -- pbsse4 "pbpaste | string replace --regex '^\w\w\w \d\d \d\d:\d\d:\d\d \w
 
 # * jq command
 
-abbr jq_sort_keys 'jq --sort-keys' # reminder abbr
 # * expand short options => corresponding long option
 abbr --command jq --position anywhere -- -S --sort-keys
 abbr --command jq --position anywhere -- -C --color-output
@@ -3308,7 +3307,10 @@ abbr --command jq --position anywhere -- -c --compact-output
 abbr --command jq --position anywhere -- -r --raw-output
 abbr --command jq --position anywhere -- -j --join-output # one use case: don't end w/ \n
 #
+abbr jqk "jq keys"
+#
 # helpers for jq patterns I never remember (with completions of non-command abbrs, these are immensly more useful)
+abbr --command jq --position anywhere --  sort_keys 'jq --sort-keys' # reminder abbr with tab completing anywhere abbrs fix
 abbr --command jq --position anywhere -- not_null  "| select(.)" # or this works: `"| select(. != null)"` works
 # TODO expand this list over time, try to capture the key ones you struggle to remember
 # FYI one unfortunate part is that inside the quoted jq expression, you cannot expand abbrs b/c the entire quoted part is the token to expand
