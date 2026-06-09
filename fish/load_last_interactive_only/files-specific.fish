@@ -50,13 +50,25 @@ function _reload_config
 end
 
 function _update_dotfile_et_al
-    set repo_paths ~/repos/github/g0t4/dotfiles \
-        ~/repos/github/g0t4/ask-openai.nvim \
-        ~/repos/github/g0t4/devtools.nvim \
-        ~/repos/github/g0t4/mcp-servers \
-        ~/repos/github/g0t4/iron.nvim \
-        ~/repos/github/g0t4/langchain-llama-server
-    for repo_path in $repo_paths
+
+    set repos \
+        ask-openai.nvim \
+        datasets \
+        devtools.nvim \
+        dotfiles \
+        iron.nvim \
+        langchain-llama-server \
+        mcp-servers \
+        mcp-server-commands \
+        tree-sitter-harmony \
+        tree-sitter-qwen-chatml \
+        streamdeck-wes \
+        private-auto-edit-suggests
+
+    for repo in $repos
+        set repo_path ~/repos/github/g0t4/$repo
+        echo
+        log_ --blue $repo
         git -C $repo_path pull
     end
 end
