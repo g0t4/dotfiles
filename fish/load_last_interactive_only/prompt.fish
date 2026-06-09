@@ -131,12 +131,12 @@ function prompt_pwd --description 'wes mod - name of the current dir only'
         return
     end
 
-    # truncate course repo to just "course" to save prompt space
-    if string match -q "$HOME/repos/github/g0t4/course-agent-tools-langchain" $PWD
+    # truncate current course repo to just "course" to save prompt space
+    if string match -q "$HOME/repos/github/g0t4/course-ansible-admin" $PWD
         echo -n -s course
         return
     end
-    if string match -q "$HOME/repos/github/g0t4/private-course-agent-tools-langchain" $PWD
+    if string match -q "$HOME/repos/github/g0t4/private-course-ansible-admin" $PWD
         echo -n -s PRIVATE
         return
     end
