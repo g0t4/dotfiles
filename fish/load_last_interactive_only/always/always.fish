@@ -117,6 +117,7 @@ function trace_dump
     env PYTHONPATH="$ASK_REPO" $_python3 -m tools.trace_dump $argv
 end
 
+complete -c trace_dump -l plain-text -d 'Output plain text without colors or panel borders'
 abbr ps pii_scanner
 function pii_scanner
     # Run the PII scanner tool using the module namespace.
