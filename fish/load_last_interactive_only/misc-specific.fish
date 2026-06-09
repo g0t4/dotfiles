@@ -2675,7 +2675,6 @@ end
 
 abbr --add fish_from_source --function _fish_from_source
 
-
 # *** ls* abbrs
 if $IS_LINUX then
 
@@ -2920,7 +2919,6 @@ function rebuild_llama_cpp
             echo "Warning: /etc/arch-release not found – this system does not appear to be Arch Linux."
             exit 1
         end
-
 
         # just started to get failures today on build21 and build13... both had upgraded packages so maybe smth changed, i.e. using g++14 (is that newly released in arch repos?)
         #    type name is not   allowed
@@ -3282,7 +3280,6 @@ abbr -- pbssetrace 'view_trace (pbpaste | string replace --regex "[^{]*" "" | ps
 # * pbspiiscan - scan clipboard text for PII
 abbr -- pbspiiscan 'pii_scanner (pbpaste | string split "\n" | string trim | psub)'
 
-
 #
 # * pbsse4 (raw prompt)
 # FYI sse4 is not an sse but the naming convention helps me quickly remember each of these! (first 3 are SSEs)
@@ -3310,8 +3307,8 @@ abbr --command jq --position anywhere -- -j --join-output # one use case: don't 
 abbr jqk "jq keys"
 #
 # helpers for jq patterns I never remember (with completions of non-command abbrs, these are immensly more useful)
-abbr --command jq --position anywhere --  sort_keys 'jq --sort-keys' # reminder abbr with tab completing anywhere abbrs fix
-abbr --command jq --position anywhere -- not_null  "| select(.)" # or this works: `"| select(. != null)"` works
+abbr --command jq --position anywhere -- sort_keys 'jq --sort-keys' # reminder abbr with tab completing anywhere abbrs fix
+abbr --command jq --position anywhere -- not_null "| select(.)" # or this works: `"| select(. != null)"` works
 # TODO expand this list over time, try to capture the key ones you struggle to remember
 # FYI one unfortunate part is that inside the quoted jq expression, you cannot expand abbrs b/c the entire quoted part is the token to expand
 #   but I can arrow out of the quoting to get some help (delete latter ' to go back into non quoted territory and add back quote once done
@@ -3442,9 +3439,8 @@ if command -q claude
     abbr cld 'claude --dangerously-skip-permissions'
 end
 
-
 # *** nix
-abbr --command nix -- "-h" "--help"
+abbr --command nix -- -h --help
 abbr -- nixh "nix --help"
 abbr -- nixpls "nix profile list"
 
@@ -3468,4 +3464,3 @@ function which_versions --argument-names cmd
         echo "$exec: $ver"
     end
 end
-
