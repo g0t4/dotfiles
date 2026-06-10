@@ -128,15 +128,18 @@ async def wes_new_window(connection: iterm2.Connection, force_local=False):
         # clear does same as Cmd+K (clears scrollback, not just screen)
 
 async def wes_new_tab(connection, force_local=False):
-    prior_window = await get_current_window_throw_if_none(connection)
-    print(f"{prior_window.window_id=}")
     session = await get_current_session_throw_if_none(connection)
+
+    current_window = session.window
+    print(f"{current_window=}")
+    assert current_window is not None
+
     new_profile, is_ssh = await prepare_new_profile(session, force_local)
     print()
 
     path = await get_path(session)
 
-    new_tab = await prior_window.async_create_tab(profile_customizations=new_profile)
+    new_tab = await current_window.async_create_tab(profile_customizations=new_profile)
     if new_tab is None:
         raise Exception("UNEXPECTED NO TAB CREATED")
 
