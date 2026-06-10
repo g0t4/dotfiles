@@ -57,7 +57,12 @@ async def prepare_new_profile(session: iterm2.Session, force_local_fish: bool) -
             #    OR, how about open it to home dir?
             new_profile.set_use_custom_command("No")
         else:
-            new_profile.set_command(commandLine)
+            # Wrap the original SSH command in a fish invocation, that way if the SSH connection dies (i.e. shutdown remote) the window/tab/pane won't close b/c fish will run on after SSH dies
+            # this does mean I'll have to double exit to close these windows too, so we'll see if I like this or not
+            fish_path = "/opt/homebrew/bin/fish"
+            escaped_cmd = commandLine.replace('"', '\\"')
+            # Use -C so the fish shell stays alive after running the SSH command.
+            new_profile.set_command(f"{fish_path} -C \"{escaped_cmd}\"")
             new_profile.set_use_custom_command("Yes")
             # TODO also replicate bash over ssh on build21 for stract demos there?
     else:
