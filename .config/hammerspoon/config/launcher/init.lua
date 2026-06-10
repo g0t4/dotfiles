@@ -1419,6 +1419,7 @@ end
 local bookmarkActions = {
     trash = function()
         osascriptOrLog('tell application "Finder" to open trash')
+        osascriptOrLog('tell application "Finder" to activate')
     end,
     lock = function()
         hs.caffeinate.lockScreen()
