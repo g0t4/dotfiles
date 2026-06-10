@@ -1,3 +1,4 @@
+import rich
 import os
 from common import *
 
@@ -23,7 +24,7 @@ async def prepare_new_profile(session: iterm2.Session, force_local_fish: bool) -
     tab_id = tab.tab_id if tab is not None else "missing tab"
     window = session.window
     window_id = window.window_id if window is not None else "missing window"
-    print(f"session_id={session.session_id}, tab_id: {tab_id}, window: {window_id}")
+    rich.inspect(session)  # rich inspect shows tab/window/session IDs... plus prints each of those objects which gives key names/properties and values... awesome for debugging
 
     current_profile = await session.async_get_profile()
 
@@ -34,11 +35,11 @@ async def prepare_new_profile(session: iterm2.Session, force_local_fish: bool) -
     # smth weird is happening with font size, sometimes the font size of the current session returns a value for what might be the parent session!?
     src_font_values = current_profile._simple_get("Normal Font")
     src_normal_font = current_profile.normal_font
-    print(f"src profile font values:{src_font_values}, normal_font: {src_normal_font}")
+    # print(f"src profile font values:{src_font_values}, normal_font: {src_normal_font}")
     # FYI AFAICT I do not have to set the font (its copied into new profile):
     new_profile = current_profile.local_write_only_copy
     new_font_values = new_profile.values["Normal Font"]
-    print(f"new_profile font size: {new_font_values}")
+    # print(f"new_profile font size: {new_font_values}")
 
     # print(f"directories:\n  {current_profile.custom_directory},\n  {current_profile.initial_directory_mode},\n  {current_profile.advanced_working_directory_pane_directory}\n  {current_profile.advanced_working_directory_pane_setting}\n  {current_profile.advanced_working_directory_tab_directory}\n  {current_profile.advanced_working_directory_tab_setting}\n  {current_profile.advanced_working_directory_window_directory}\n  {current_profile.advanced_working_directory_window_setting}")
     new_profile.set_initial_directory_mode(iterm2.InitialWorkingDirectory.INITIAL_WORKING_DIRECTORY_RECYCLE)
@@ -166,7 +167,6 @@ async def wes_split_pane(connection: iterm2.Connection, split_vert: bool = False
     # *** FYI force_local not passed to this func yet by any wes.py handlers
 
     current_session = await get_current_session_throw_if_none(connection)
-    print("session", current_session)
     new_profile, is_ssh = await prepare_new_profile(current_session, force_local)
 
     path = await get_path(current_session)
