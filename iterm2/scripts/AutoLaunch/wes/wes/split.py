@@ -98,7 +98,7 @@ async def get_path(session: iterm2.Session) -> str:
         return split_path
 
     path = await session.async_get_variable("path")
-    print(f"no split_path found, using path: {path}")
+    print(f"WARNING: no user.split_path found, using path: {path}")
     return path
 
 async def wes_new_window(connection: iterm2.Connection, force_local=False):
@@ -165,12 +165,13 @@ async def wes_new_tab(connection, force_local=False):
 async def wes_split_pane(connection: iterm2.Connection, split_vert: bool = False, force_local=False):
     # *** FYI force_local not passed to this func yet by any wes.py handlers
 
-    session = await get_current_session_throw_if_none(connection)
-    new_profile, is_ssh = await prepare_new_profile(session, force_local)
+    current_session = await get_current_session_throw_if_none(connection)
+    print("session", current_session)
+    new_profile, is_ssh = await prepare_new_profile(current_session, force_local)
 
-    path = await get_path(session)
+    path = await get_path(current_session)
 
-    new_session = await session.async_split_pane(vertical=split_vert, profile_customizations=new_profile)
+    new_session = await current_session.async_split_pane(vertical=split_vert, profile_customizations=new_profile)
     if new_session is None:
         raise Exception("UNEXPECTED NO SESSION CREATED")
 
