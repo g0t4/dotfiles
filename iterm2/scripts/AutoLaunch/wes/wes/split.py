@@ -102,8 +102,8 @@ async def get_path(session: iterm2.Session) -> str:
     return path
 
 async def wes_new_window(connection: iterm2.Connection, force_local=False):
-    prior_window = await get_current_window(connection)
-    if prior_window is None:
+    current_window = await get_current_window(connection)
+    if current_window is None:
         log("UNEXPECTED NO PRIOR WINDOW, opening new window")
         # this is not possible AFAIK right now b/c you have to have a window open to invoke keyboard monitor handlers
         await iterm2.Window.async_create(connection)
