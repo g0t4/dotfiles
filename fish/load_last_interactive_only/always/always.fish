@@ -118,7 +118,7 @@ function trace_dump
 end
 
 complete -c trace_dump -l plain-text -d 'Output plain text without colors or panel borders'
-abbr ps pii_scanner
+abbr piis pii_scanner
 function pii_scanner
     # Run the PII scanner tool using the module namespace.
     # tools is now a proper Python package, so we invoke the module with
