@@ -39,6 +39,7 @@ function _cppath
         return 0
     end
 
+    # FYI can use fish's `path resolve` if I am ok with following symlinks
     if command -q grealpath
         grealpath --no-symlinks "$argv"
     else if uname | rg_grep -q Darwin
