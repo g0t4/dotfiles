@@ -1,7 +1,6 @@
 ## Fish Shell Code Preferences
 
 - Use snake_case for functions and variables.
-- When a condition is ambiguous, assign it to a well‑named variable before the `if`.
 - Prefer long options, i.e. `--quiet` over `-q`, `--regex` over `-r`
 - Fish shell does not do word splitting like bash, no need to wrap everything in quotes!
 
