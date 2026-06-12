@@ -110,3 +110,12 @@ function __gh_depoliticize
 
 
 end
+
+function CopyGitHubLink --argument-names file
+    # echo GitHub link to passed path (file or dir, relative or absolute)
+end
+
+
+function CopyGitHubUserContentLink --argument-names file
+    # link to get raw file contents
+end
