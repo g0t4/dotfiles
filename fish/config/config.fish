@@ -19,12 +19,16 @@ export WES_DOTFILES=$WES_DOTFILES
 # ** load_first
 if status is-interactive
     for file in $WES_DOTFILES/fish/load_first/interactive_only/*.fish
-        source $file
+        if not string match -q "*.tests.fish" $file
+            source $file
+        end
     end
 end
 # non-interactive scripts
 for file in $WES_DOTFILES/fish/load_first/*.fish
-    source $file
+    if not string match -q "*.tests.fish" $file
+        source $file
+    end
 end
 
 # * zsh compat
@@ -38,11 +42,15 @@ end
 # ** load_last
 for file in $WES_DOTFILES/fish/load_last_interactive_only/always/*.fish
     # both interactive and non-interactive
-    source $file
+    if not string match -q "*.tests.fish" $file
+        source $file
+    end
 end
 if status is-interactive
     for file in $WES_DOTFILES/fish/load_last_interactive_only/*.fish
-        source $file
+        if not string match -q "*.tests.fish" $file
+            source $file
+        end
     end
 end
 
