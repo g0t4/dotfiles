@@ -144,7 +144,7 @@ function _build_github_link --argument-names file type
     # FYI dir_relative_to_repo_root has trailing / from rev-parse --show-prefix
     if test $type = raw
         # https://raw.githubusercontent.com/g0t4/ask-openai.nvim/refs/heads/master/lua/ask-openai/api.lua
-        set github_url "https://raw.githubusercontent.com/$owner/$repo/$link_type/refs/heads/$branch/$dir_relative_to_repo_root""$filename"
+        set github_url "https://raw.githubusercontent.com/$owner/$repo/refs/heads/$branch/$dir_relative_to_repo_root""$filename"
     else
         set github_url "https://github.com/$owner/$repo/$link_type/$branch/$dir_relative_to_repo_root""$filename"
     end
