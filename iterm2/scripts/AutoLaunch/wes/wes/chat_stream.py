@@ -5,6 +5,7 @@ import time
 from collections.abc import Awaitable, Callable
 
 from langchain_core.language_models import BaseChatModel
+from langchain_core.messages import AIMessageChunk
 from services import Service, get_selected_service
 from logs import log
 
@@ -12,7 +13,6 @@ from logs import log
 ITERM2_TRACE_DIR = os.path.expanduser("~/.local/state/nvim/ask-openai/fish")
 
 TIMEOUT_SECONDS = 15
-
 
 def get_model() -> tuple[BaseChatModel, Service]:
     service = get_selected_service()
@@ -37,7 +37,6 @@ def get_model() -> tuple[BaseChatModel, Service]:
         # max_retries=2
     )
     return model, service
-
 
 async def ask_openai_async_type_response(
     messages: list[dict],
@@ -64,8 +63,10 @@ async def ask_openai_async_type_response(
 
     # PRN temperature based on model or service default configs maybe (mostly I use default configs)?
     chunks = model.astream(messages, **stream_kwargs)
+    last_chunk = None
     async for chunk in chunks:
         try:
+            last_chunk = chunk
             # FYI no reasoning content for llama-server, s/b fine as I don't use that => if I want it, I can add in my ChatLlamaServer impl
             # Extract token_usage/timings from the last chunk's response_metadata
             if hasattr(chunk, "response_metadata") and chunk.response_metadata:
@@ -106,8 +107,7 @@ async def ask_openai_async_type_response(
             return
 
     # After streaming completes, write trace file
-    _save_iterm2_trace(messages, full_content, response_metadata, finish_reason, service)
-
+    _save_iterm2_trace(messages, full_content, response_metadata, finish_reason, service, last_chunk)
 
 def _save_iterm2_trace(
     messages: list[dict],
@@ -115,6 +115,7 @@ def _save_iterm2_trace(
     response_metadata: dict,
     finish_reason: str | None,
     service: Service,
+    last_chunk: AIMessageChunk,
 ) -> None:
     """Write trace file after streaming completes.
 
@@ -152,6 +153,12 @@ def _save_iterm2_trace(
         "session_id": unix_timestamp,
         "messages": trace_messages,
         "response": response_data,
+
+        # TODO! switch to my langchain-llama-server client and grab timings + __verbose (if set) => basically grab last_sse (add it if needed to client)
+        # "last_sse": {
+        #     "timings": last_chunk.timings
+        # }
+        # "last_chunk": last_chunk # TODO! rename to last_sse? AIMessageChunk is not serializable
     }
 
     trace_filename = f"{unix_timestamp}-trace.json"
