@@ -4,7 +4,6 @@ import sys
 import time
 
 from chat_non_stream import GenerationResult, generate_non_streaming
-from services import get_selected_service_for_args
 
 # FYI this is a fallback for when you do not have iterm2 available.
 #  i.e. on windows
@@ -101,12 +100,9 @@ def save_trace_file(trace_data: dict) -> str | None:
 def main():
     stdin_context = sys.stdin.read()
 
-    # Parse service args from command line (first arg after script name)
-    service_flag = sys.argv[1] if len(sys.argv) > 1 else None
-
     generation_result = generate_non_streaming(stdin_context, system_message, max_tokens)
 
-    if generation_result.content.startswith("ABORT") or generation_result.content.startswith("Error"):
+    if generation_result.failed:
         # Print error to stderr so fish can capture it
         print(generation_result.content, file=sys.stderr)
         sys.exit(1)
@@ -120,11 +116,11 @@ def main():
         unix_timestamp=current_timestamp,
         messages=[],  # build_trace_data constructs messages internally
         generation_result=generation_result,
-        service_flag=service_flag,
+        service_flag=None,
         user_input=user_input_from_context,
     )
 
-    saved_path = save_trace_file(trace_data)
+    save_trace_file(trace_data)
 
     # response is piped to STDOUT => STDIN of SHELL => command line buffer (as if user typed it)
     print(generation_result.content)

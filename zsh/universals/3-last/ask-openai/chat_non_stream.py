@@ -17,6 +17,7 @@ TIMEOUT_SECONDS = 15
 class GenerationResult:
     """Encapsulates the result of a non-streaming generation call."""
     content: str
+    failed: bool = False
     service_name: str = ""
     model: str = ""
     response_metadata: dict[str, Any] = field(default_factory=dict)
@@ -72,6 +73,7 @@ def generate_non_streaming(passed_context: str, system_message: str, max_tokens:
         # FYI implement other types as encountered so I can see what I am working with
         return GenerationResult(
             content=f"ABORT... expected string content but got {type(content).__name__} for response: {content}",
+            failed=True,
             service_name=service.name,
             model=service.model,
         )
@@ -97,6 +99,7 @@ def generate_non_streaming(passed_context: str, system_message: str, max_tokens:
     except Exception as e:
         return GenerationResult(
             content=f"Error processing chunk: {e}\n chunk: {content}",
+            failed=True,
             service_name=service.name,
             model=service.model,
         )
