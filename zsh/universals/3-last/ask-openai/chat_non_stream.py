@@ -1,6 +1,9 @@
 import re
+from dataclasses import dataclass, field
+from typing import Any
+
 from langchain_core.language_models.chat_models import BaseChatModel
-from langchain_core.messages import HumanMessage, SystemMessage
+from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
 from services import Service, get_selected_service
 
 # TODO testing this with only one consumer: (ctrl-b via single.py)
@@ -8,6 +11,17 @@ from services import Service, get_selected_service
 # DONE: openai/llama-server
 
 TIMEOUT_SECONDS = 15
+
+
+@dataclass
+class GenerationResult:
+    """Encapsulates the result of a non-streaming generation call."""
+    content: str
+    service_name: str = ""
+    model: str = ""
+    response_metadata: dict[str, Any] = field(default_factory=dict)
+    raw_ai_message: AIMessage | None = None
+
 
 def get_model() -> tuple[BaseChatModel, Service]:
     service = get_selected_service()
@@ -42,7 +56,8 @@ def get_model() -> tuple[BaseChatModel, Service]:
     )
     return model, service
 
-def generate_non_streaming(passed_context: str, system_message: str, max_tokens: int):
+
+def generate_non_streaming(passed_context: str, system_message: str, max_tokens: int) -> GenerationResult:
     model, service = get_model()
     messages = [
         SystemMessage(content=system_message),
@@ -51,11 +66,15 @@ def generate_non_streaming(passed_context: str, system_message: str, max_tokens:
 
     # TODO add temperature (optional) to Service? (perhaps rename to ServiceModel or split out generation args somehow)
     # PRN timeout?
-    ai_message = model.invoke(messages, max_tokens=max_tokens)
+    ai_message: AIMessage = model.invoke(messages, max_tokens=max_tokens)
     content = ai_message.content
     if not isinstance(content, str):
         # FYI implement other types as encountered so I can see what I am working with
-        return f"ABORT... expected string content but got {type(content).__name__} for response: {content}"
+        return GenerationResult(
+            content=f"ABORT... expected string content but got {type(content).__name__} for response: {content}",
+            service_name=service.name,
+            model=service.model,
+        )
 
     try:
         # FYI no reasoning content for llama-server, s/b fine as I don't use that => if I want it, I can add in my ChatLlamaServer impl
@@ -68,8 +87,19 @@ def generate_non_streaming(passed_context: str, system_message: str, max_tokens:
         #     await session.async_send_text(f"ran out off tokens, increase max_tokens...")
         #     break
 
-        return sanitized
+        return GenerationResult(
+            content=sanitized,
+            service_name=service.name,
+            model=service.model,
+            response_metadata=getattr(ai_message, "response_metadata", {}),
+            raw_ai_message=ai_message,
+        )
     except Exception as e:
-        return f"Error processing chunk: {e}\n chunk: {content}"
+        return GenerationResult(
+            content=f"Error processing chunk: {e}\n chunk: {content}",
+            service_name=service.name,
+            model=service.model,
+        )
+
 
 # generate_non_streaming("what is your name?", "be honest", 20)

@@ -127,6 +127,8 @@ function ask_openai
     set -l _python3 "$WES_DOTFILES/.venv/bin/python3"
     set -l _single_py "$WES_DOTFILES/zsh/universals/3-last/ask-openai/single.py"
 
+    # stdout => response text for command line buffer
+    # stderr => trace path info and warnings (included in response, harmless)
     set response ( \
         echo -e "env: fish on $(uname)\nquestion: $user_input" | \
         $_python3 $_single_py $ask_service 2>&1 \
