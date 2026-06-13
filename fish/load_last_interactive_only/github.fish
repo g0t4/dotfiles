@@ -159,3 +159,4 @@ end
 function copy_github_raw_link --argument-names file
     _build_github_link $file raw
 end
+
