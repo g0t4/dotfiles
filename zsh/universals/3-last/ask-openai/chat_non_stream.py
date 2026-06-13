@@ -3,6 +3,7 @@ from dataclasses import dataclass, field
 from typing import Any
 
 from langchain_core.language_models.chat_models import BaseChatModel
+from langchain_llama_server.chat_models import ChatLlamaServer
 from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
 from services import Service, get_selected_service
 
@@ -44,6 +45,15 @@ def get_model() -> tuple[BaseChatModel, Service]:
         )
         return model, service
 
+    if service.name == "ask_lan":
+        model = ChatLlamaServer(
+            model=service.model,
+            base_url=service.base_url,
+            timeout=TIMEOUT_SECONDS,
+            api_key="",
+        )
+        return model, service
+
     # FYI importing langchain_openai is slow b/c openai.types is missing lazy loading with 100s of pydantic based types:
     # https://github.com/openai/openai-python/issues/2819
     # IOTW import langchain_openai suffers b/c it imports openai (which takes 220 to 300ms)
@@ -79,7 +89,7 @@ def generate_non_streaming(passed_context: str, system_message: str, max_tokens:
         )
 
     try:
-        # FYI no reasoning content for llama-server, s/b fine as I don't use that => if I want it, I can add in my ChatLlamaServer impl
+        # NOTE: ChatLlamaServer supports reasoning_content via additional_kwargs
         # strip new lines to avoid submitting commands prematurely, is there an alternate char I could use to split the lines still w/o submitting (would have to check what the shell supports, if anything is possible)... one downside to not being a part of the line editor.. unless there is a workaround? not that I care much b/c multi line commands are not often necessary...
         sanitized = content.replace("\n", " ")  # PRN check if str before calling replace (i.e. can be list[str] or list[dict]... when is that the case and do I ever use it?)
         sanitized = re.sub(r'```', '', sanitized).lstrip()

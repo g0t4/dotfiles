@@ -5,6 +5,7 @@ import time
 from collections.abc import Awaitable, Callable
 
 from langchain_core.language_models import BaseChatModel
+from langchain_llama_server.chat_models import ChatLlamaServer
 from langchain_core.messages import AIMessageChunk
 from services import Service, get_selected_service
 from logs import log
@@ -25,6 +26,15 @@ def get_model() -> tuple[BaseChatModel, Service]:
             api_key=service.api_key,
             timeout=TIMEOUT_SECONDS,
             stop=None,
+        )
+        return model, service
+
+    if service.name == "ask_lan":
+        model = ChatLlamaServer(
+            model=service.model,
+            base_url=service.base_url,
+            timeout=TIMEOUT_SECONDS,
+            api_key="",
         )
         return model, service
 
@@ -67,7 +77,8 @@ async def ask_openai_async_type_response(
     async for chunk in chunks:
         try:
             last_chunk = chunk
-            # FYI no reasoning content for llama-server, s/b fine as I don't use that => if I want it, I can add in my ChatLlamaServer impl
+            log(f'{chunk=}')
+            # NOTE: ChatLlamaServer supports reasoning_content via additional_kwargs
             # Extract token_usage/timings from the last chunk's response_metadata
             if hasattr(chunk, "response_metadata") and chunk.response_metadata:
                 response_metadata = dict(chunk.response_metadata)

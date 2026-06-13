@@ -402,6 +402,7 @@ dependencies = [
     { name = "keyrings-cryptfile" },
     { name = "langchain" },
     { name = "langchain-anthropic" },
+    { name = "langchain-llama-server" },
     { name = "langchain-openai" },
     { name = "matplotlib" },
     { name = "neovim" },
@@ -442,6 +443,7 @@ requires-dist = [
     { name = "keyrings-cryptfile", specifier = ">=1.3.9" },
     { name = "langchain", specifier = ">=1.2.10" },
     { name = "langchain-anthropic", specifier = ">=1.3.4" },
+    { name = "langchain-llama-server", editable = "/Users/wesdemos/repos/github/g0t4/langchain-llama-server" },
     { name = "langchain-openai", specifier = ">=1.1.10" },
     { name = "matplotlib", specifier = ">=3.10.8" },
     { name = "neovim", specifier = ">=0.3.1" },
@@ -1108,6 +1110,28 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/cc/db/693d81b6c229aceb7c6e6809939c6ab1b023554227a25de438f00c0389c6/langchain_core-1.2.15.tar.gz", hash = "sha256:7d5f5d2daa8ddbe4054a96101dc5d509926f831b9914808c24640987d499758c", size = 835280, upload-time = "2026-02-23T15:04:49.185Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/48/e0/a6a83dde94400b43d9b091ecbb41a50d6f86c4fecacb81b13d8452a7712b/langchain_core-1.2.15-py3-none-any.whl", hash = "sha256:8d920d8a31d8c223966a3993d8c79fd6093b9665f2222fc878812f3a52072ab7", size = 502213, upload-time = "2026-02-23T15:04:47.967Z" },
+]
+
+[[package]]
+name = "langchain-llama-server"
+version = "0.1.2"
+source = { editable = "/Users/wesdemos/repos/github/g0t4/langchain-llama-server" }
+dependencies = [
+    { name = "langchain" },
+    { name = "langchain-openai" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "langchain", specifier = ">=1.2.10" },
+    { name = "langchain-openai", specifier = ">=0.3.35" },
+]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "ipykernel", specifier = ">=7.2.0" },
+    { name = "rich", specifier = ">=14.3.3" },
+    { name = "yapf", specifier = ">=0.43.0" },
 ]
 
 [[package]]
