@@ -73,6 +73,9 @@ async def ask_openai_async_type_response(
     response_metadata: dict = {}
     finish_reason: str | None = None
 
+    # Accumulate reasoning_content from additional_kwargs across all chunks
+    accumulated_reasoning_content = ""
+
     # PRN temperature based on model or service default configs maybe (mostly I use default configs)?
     chunks = model.astream(messages, **stream_kwargs)
     last_chunk = None
@@ -80,7 +83,7 @@ async def ask_openai_async_type_response(
         try:
             last_chunk = chunk
             log(f'{chunk=}')
-            # NOTE: ChatLlamaServer supports reasoning_content via additional_kwargs
+
             # Extract token_usage/timings from the last chunk's response_metadata
             if hasattr(chunk, "response_metadata") and chunk.response_metadata:
                 response_metadata = dict(chunk.response_metadata)
@@ -88,6 +91,13 @@ async def ask_openai_async_type_response(
                 if choices:
                     last_choice = choices[-1]
                     finish_reason = last_choice.get("finish_reason")
+
+            # Capture reasoning_content from additional_kwargs (e.g. ChatLlamaServer)
+            additional_kwargs = getattr(chunk, "additional_kwargs", None)
+            if additional_kwargs is not None:
+                chunk_reasoning = additional_kwargs.get("reasoning_content", "")
+                if chunk_reasoning:
+                    accumulated_reasoning_content += chunk_reasoning
 
             # Process content chunks
             content = getattr(chunk, "content", None)
@@ -120,7 +130,7 @@ async def ask_openai_async_type_response(
             return
 
     # After streaming completes, write trace file
-    _save_iterm2_trace(messages, full_content, response_metadata, finish_reason, service, last_chunk)
+    _save_iterm2_trace(messages, full_content, response_metadata, finish_reason, service, last_chunk, accumulated_reasoning_content)
 
 def _save_iterm2_trace(
     messages: list[dict],
@@ -129,6 +139,7 @@ def _save_iterm2_trace(
     finish_reason: str | None,
     service: Service,
     last_chunk: AIMessageChunk,
+    accumulated_reasoning_content: str = "",
 ) -> None:
     """Write trace file after streaming completes.
 
@@ -148,6 +159,10 @@ def _save_iterm2_trace(
             assistant_entry["reasoning_content"] = response_metadata["reasoning_content"]
         if finish_reason is not None:
             assistant_entry["finish_reason"] = finish_reason
+
+    # Add accumulated reasoning_content from additional_kwargs to trace
+    if accumulated_reasoning_content:
+        assistant_entry["accumulated_reasoning_content"] = accumulated_reasoning_content
 
     trace_messages = list(messages)  # copy system + user messages
     trace_messages.append(assistant_entry)

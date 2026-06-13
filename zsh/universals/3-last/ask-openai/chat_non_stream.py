@@ -97,6 +97,14 @@ def generate_non_streaming(passed_context: str, system_message: str, max_tokens:
         sanitized = content.replace("\n", " ")  # PRN check if str before calling replace (i.e. can be list[str] or list[dict]... when is that the case and do I ever use it?)
         sanitized = re.sub(r'```', '', sanitized).lstrip()
 
+        # Capture reasoning_content from additional_kwargs for trace only
+        response_metadata: dict[str, Any] = dict(getattr(ai_message, "response_metadata", {}))
+        additional_kwargs = getattr(ai_message, "additional_kwargs", None)
+        if additional_kwargs is not None:
+            reasoning_content = additional_kwargs.get("reasoning_content", "")
+            if reasoning_content:
+                response_metadata["reasoning_content"] = reasoning_content
+
         # TODO should I check finish_reason to see if it ran out of tokens? and warn if so? (or better yet, offer to resume?)
         # if choice0.finish_reason == "length":
         #     await session.async_send_text(f"ran out off tokens, increase max_tokens...")
@@ -106,7 +114,7 @@ def generate_non_streaming(passed_context: str, system_message: str, max_tokens:
             content=sanitized,
             service_name=service.name,
             model=service.model,
-            response_metadata=getattr(ai_message, "response_metadata", {}),
+            response_metadata=response_metadata,
             raw_ai_message=ai_message,
         )
     except Exception as e:
