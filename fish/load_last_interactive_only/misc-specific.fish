@@ -3480,3 +3480,22 @@ function which_versions --argument-names cmd
         echo "$exec: $ver"
     end
 end
+
+# *** Keyboard Maestro CLI ***
+if test -x "/Applications/Keyboard Maestro.app/Contents/MacOS/keyboardmaestro"
+    function km --description "Execute a Keyboard Maestro macro by name or UUID"
+        # usage: km <name|uuid> [options...]
+        # options:
+        #   -a  Run asynchronously (don't wait for completion)
+        #   -v  Verbose output
+        #   -p  Pass parameter value to macro
+        #   -e  Edit mode (open in editor instead of running)
+
+        if test (count $argv) -eq 0
+            echo "Usage: km <macro-name-or-uuid> [-a] [-v] [-p value] [-e]" >&2
+            return 1
+        end
+
+        command /Applications/Keyboard\ Maestro.app/Contents/MacOS/keyboardmaestro $argv
+    end
+end
