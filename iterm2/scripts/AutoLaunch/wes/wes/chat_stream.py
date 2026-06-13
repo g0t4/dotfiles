@@ -4,7 +4,9 @@ import re
 import time
 from collections.abc import Awaitable, Callable
 
-from langchain_core.language_models import BaseChatModel
+os.environ["TRANSFORMERS_NO_ADVISORY_WARNINGS"] = "1"
+from langchain_core.language_models.chat_models import BaseChatModel
+
 from langchain_llama_server.chat_models import ChatLlamaServer
 from langchain_core.messages import AIMessageChunk
 from services import Service, get_selected_service
