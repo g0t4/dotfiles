@@ -107,11 +107,55 @@ function __gh_depoliticize
 
 end
 
-function CopyGitHubLink --argument-names file
-    # echo GitHub link to passed path (file or dir, relative or absolute)
+function _build_github_link --argument-names file type
+    # TODO fish tests with fishtape?
+    # copy_github_link /Users/wesdemos/repos/github/g0t4/ask-openai.nvim/lua/ask-openai/api.lua
+
+    # get repo root directory (of $file, not current repo necessarily)
+    # use that to find path within repo
+    if test -d $file
+        set dir $file
+        set filename ""
+    else
+        set dir (dirname $file)
+        set filename (basename $file)
+    end
+
+    set dir_relative_to_repo_root (git -C $dir rev-parse --show-prefix)
+
+    set remote_url (git -C $dir remote get-url origin 2>/dev/null)
+    if test -z "$remote_url"
+        echo "No remote 'origin' found" >&2
+        return 1
+    end
+
+    set matches (string match --regex 'github\.com[:](?<owner>[^/]+)/(?<repo>[^/]+)' $remote_url)
+    if test -z "$matches"
+        echo "Could not parse GitHub owner/repo from remote URL: $remote_url" >&2
+        return 1
+    end
+
+    # echo $owner
+    # echo $repo
+
+    set branch (git -C $dir rev-parse --abbrev-ref HEAD)
+    set link_type (if test -d $file; echo tree; else; echo blob; end)
+
+    # FYI dir_relative_to_repo_root has trailing / from rev-parse --show-prefix
+    if test $type = raw
+        # https://raw.githubusercontent.com/g0t4/ask-openai.nvim/refs/heads/master/lua/ask-openai/api.lua
+        set github_url "https://raw.githubusercontent.com/$owner/$repo/$link_type/refs/heads/$branch/$dir_relative_to_repo_root""$filename"
+    else
+        set github_url "https://github.com/$owner/$repo/$link_type/$branch/$dir_relative_to_repo_root""$filename"
+    end
+    echo "$github_url" # show it too
+    echo "$github_url" | pbcopy
 end
 
+function copy_github_link --argument-names file
+    _build_github_link $file ""
+end
 
-function CopyGitHubUserContentLink --argument-names file
-    # link to get raw file contents
+function copy_github_raw_link --argument-names file
+    _build_github_link $file raw
 end
