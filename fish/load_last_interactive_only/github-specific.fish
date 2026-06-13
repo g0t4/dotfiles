@@ -1,4 +1,3 @@
-
 abbr ghrc gh_repo_create_private
 function gh_repo_create_private
     set __repo_name "$argv"
@@ -59,14 +58,12 @@ function __gh_repo_create_clone_with_ignores
     # PRN add to zsh's z history databaseend
 end
 
-
 function __gh_depoliticize
     # gh repo list  --json name,defaultBranchRef,isPrivate,isFork g0t4 --limit 1000 > tmp
     # cat tmp | jq 'map(select(.defaultBranchRef.name == "main" and .isFork == false and (.name | startswith("course") | not)))'
     #
     # check for local repos that might be on wrong branch
     # for f in *; test -d $f; and echo -n $f"   "; and git -C $f branch --show-current  ;end | rg_grep main | rg_grep --invert-match "^course"
-
 
     # FYI this assumes currently on main, no master branch... it switches for that scenario only and removes main
     # hence aborts when not on expected branch
@@ -107,7 +104,6 @@ function __gh_depoliticize
     end
 
     git push origin --delete main
-
 
 end
 
