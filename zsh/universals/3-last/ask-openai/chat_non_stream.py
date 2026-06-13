@@ -1,8 +1,11 @@
+import os
 import re
 from dataclasses import dataclass, field
 from typing import Any
 
+os.environ["TRANSFORMERS_NO_ADVISORY_WARNINGS"] = "1"
 from langchain_core.language_models.chat_models import BaseChatModel
+
 from langchain_llama_server.chat_models import ChatLlamaServer
 from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
 from services import Service, get_selected_service
