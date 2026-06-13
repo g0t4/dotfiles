@@ -6,7 +6,7 @@ from scrape_ask import copy_screen_to_clipboard
 from f9command import on_f9
 from logs import log
 from og_ask import ask_openai
-from split import close_other_tabs, new_tab_then_close_others, wes_split_pane, wes_new_tab, wes_new_window
+from split import close_other_tabs, new_tab_then_close_others, wes_split_pane, wes_replace_pane, wes_new_tab, wes_new_window
 from semantic_daemon import semantic_daemon
 from font_zooms import bigger_font_wes_stops, smaller_font_wes_stops
 
@@ -73,6 +73,17 @@ async def main(connection: iterm2.Connection):
             return
         if d and control and command and option:
             await wes_split_pane(connection, split_vert=False)
+            return
+
+        # *** Replace pane helpers (split + close original) — "R" for [R]eplace
+        # FYI KM => remaps Cmd+R (replace vert) => Cmd+Shift+Control+R
+        # FYI   and Cmd+Shift+R (replace horiz) => Cmd+Ctrl+Option+R
+        r = keystroke.keycode == iterm2.Keycode.ANSI_R
+        if r and control and shift and command:
+            await wes_replace_pane(connection, split_vert=True)
+            return
+        if r and control and command and option:
+            await wes_replace_pane(connection, split_vert=False)
             return
 
         b = keystroke.keycode == iterm2.Keycode.ANSI_B

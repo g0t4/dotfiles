@@ -179,3 +179,25 @@ async def wes_split_pane(connection: iterm2.Connection, split_vert: bool = False
         return
 
     await new_session.async_send_text(f"cd {path}; clear\n")
+
+# *** replace pane (split + close original):
+async def wes_replace_pane(connection: iterm2.Connection, split_vert: bool = False, force_local=False):
+    # Split the current pane, then close the original (focus moves to new pane)
+    # effectively "replacing" the current pane with a fresh one
+
+    current_session = await get_current_session_throw_if_none(connection)
+    new_profile, is_ssh = await prepare_new_profile(current_session, force_local)
+
+    path = await get_path(current_session)
+
+    new_session = await current_session.async_split_pane(vertical=split_vert, profile_customizations=new_profile)
+    if new_session is None:
+        raise Exception("UNEXPECTED NO SESSION CREATED")
+
+    # Close the original session (focus is now on new_session after split)
+    await current_session.async_close()
+
+    if force_local or not is_ssh:
+        return
+
+    await new_session.async_send_text(f"cd {path}; clear\n")
