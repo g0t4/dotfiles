@@ -74,7 +74,7 @@ async def ask_openai_async_type_response(
     finish_reason: str | None = None
 
     # Accumulate reasoning_content from additional_kwargs across all chunks
-    accumulated_reasoning_content = ""
+    reasoning_content = ""
 
     # PRN temperature based on model or service default configs maybe (mostly I use default configs)?
     chunks = model.astream(messages, **stream_kwargs)
@@ -97,7 +97,7 @@ async def ask_openai_async_type_response(
             if additional_kwargs is not None:
                 chunk_reasoning = additional_kwargs.get("reasoning_content", "")
                 if chunk_reasoning:
-                    accumulated_reasoning_content += chunk_reasoning
+                    reasoning_content += chunk_reasoning
 
             # Process content chunks
             content = getattr(chunk, "content", None)
@@ -130,7 +130,7 @@ async def ask_openai_async_type_response(
             return
 
     # After streaming completes, write trace file
-    _save_iterm2_trace(messages, full_content, response_metadata, finish_reason, service, last_chunk, accumulated_reasoning_content)
+    _save_iterm2_trace(messages, full_content, response_metadata, finish_reason, service, last_chunk, reasoning_content)
 
 def _save_iterm2_trace(
     messages: list[dict],
@@ -139,7 +139,7 @@ def _save_iterm2_trace(
     finish_reason: str | None,
     service: Service,
     last_chunk: AIMessageChunk,
-    accumulated_reasoning_content: str = "",
+    reasoning_content: str = "",
 ) -> None:
     """Write trace file after streaming completes.
 
@@ -160,9 +160,9 @@ def _save_iterm2_trace(
         if finish_reason is not None:
             assistant_entry["finish_reason"] = finish_reason
 
-    # Add accumulated reasoning_content from additional_kwargs to trace
-    if accumulated_reasoning_content:
-        assistant_entry["accumulated_reasoning_content"] = accumulated_reasoning_content
+    # Add reasoning_content from additional_kwargs to trace
+    if reasoning_content:
+        assistant_entry["reasoning_content"] = reasoning_content
 
     trace_messages = list(messages)  # copy system + user messages
     trace_messages.append(assistant_entry)
