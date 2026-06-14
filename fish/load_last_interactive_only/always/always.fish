@@ -112,14 +112,16 @@ function view_trace
     env PYTHONPATH="$ASK_REPO" $_python3 -m tools.chat_viewer.__main__ $argv
 end
 
+complete -c trace_dump -l plain-text -d 'Output plain text without colors or panel borders'
 function trace_dump
     # Dump run_process commands from a trace file.
     set _python3 "$ASK_REPO/.venv/bin/python3"
     env PYTHONPATH="$ASK_REPO" $_python3 -m tools.trace_dump $argv
 end
 
-complete -c trace_dump -l plain-text -d 'Output plain text without colors or panel borders'
-abbr piis pii_scanner
+complete -c pii_scanner -a '--model --threshold --json --show-matches --extract-paths help' --no-files
+abbr -- pbpii 'pii_scanner (pbpaste | string split "\n" | string trim | psub)'
+abbr pii pii_scanner
 function pii_scanner
     # Run the PII scanner tool using the module namespace.
     # tools is now a proper Python package, so we invoke the module with
@@ -129,7 +131,6 @@ function pii_scanner
     env PYTHONPATH="$ASK_REPO" $_python3 -m tools.pii_scanner.__main__ $argv
 end
 
-complete -c pii_scanner -a '--model --threshold --json --show-matches --extract-paths help' --no-files
 
 abbr ri rag_indexer
 function rag_indexer

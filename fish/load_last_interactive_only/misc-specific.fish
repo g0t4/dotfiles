@@ -3277,9 +3277,6 @@ abbr -- pbsse2 "pbpaste | $sse_jq > input-rendered-prompt.json"
 abbr -- pbsse3 "pbpaste | $sse_jq > output-parsed-message.json"
 abbr -- pbssetrace 'view_trace (pbpaste | string replace --regex "[^{]*" "" | psub)'
 
-# * pbspiiscan - scan clipboard text for PII
-abbr -- pbspiiscan 'pii_scanner (pbpaste | string split "\n" | string trim | psub)'
-
 #
 # * pbsse4 (raw prompt)
 # FYI sse4 is not an sse but the naming convention helps me quickly remember each of these! (first 3 are SSEs)
