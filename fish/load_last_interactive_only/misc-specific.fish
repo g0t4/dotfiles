@@ -3499,3 +3499,47 @@ if test -x "/Applications/Keyboard Maestro.app/Contents/MacOS/keyboardmaestro"
         command /Applications/Keyboard\ Maestro.app/Contents/MacOS/keyboardmaestro $argv
     end
 end
+
+# *** Keyboard Maestro CLI ***
+if test -x "/Applications/Keyboard Maestro.app/Contents/MacOS/keyboardmaestro"
+    function km --description "Execute a Keyboard Maestro macro by name or UUID"
+        # usage: km <macro-name-or-uuid> [-a] [-v] [-p value] [-e]
+        # usage: km --list [--search pattern]
+
+        if test (count $argv) -eq 0
+            echo "Usage:" >&2
+            echo "  km <macro-name-or-uuid> [-a] [-v] [-p value] [-e]" >&2
+            echo "  km --list [--search pattern]" >&2
+            return 1
+        end
+
+        # Handle --list flag
+        if test "$argv[1]" = "--list"
+            set search_pattern ""
+            if test (count $argv) -gt 1
+                set search_pattern $argv[2]
+            end
+
+            # Write helper script to temp file
+            set tmp_script (mktemp /tmp/km_list_XXXXXX.scpt)
+            echo 'tell application "Keyboard Maestro"
+    set output to ""
+    repeat with m in every macro
+        set output to output & (id of m) & "|" & (name of m) & "\n"
+    end repeat
+    return output
+end tell' > $tmp_script
+
+            # Execute the script
+            osascript $tmp_script | string trim
+
+            # Clean up
+            rm -f $tmp_script
+
+            return
+        end
+
+        # Execute macro by name or UUID
+        command /Applications/Keyboard\ Maestro.app/Contents/MacOS/keyboardmaestro $argv
+    end
+end
