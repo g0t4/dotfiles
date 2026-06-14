@@ -31,6 +31,10 @@ abbr --add dotdot --regex '^\.\.+$' --function multicd
 # cd-
 abbr --add cd- 'cd -'
 
+# *** cp/ln
+abbr cpr "cp -r"
+abbr lns "ln -s"
+
 # TODO impl cp-  or cph (like dirh, interactive to pick recent dir?)
 #   see dir stack / history : https://fishshell.com/docs/current/interactive.html#id13
 # function _cp-

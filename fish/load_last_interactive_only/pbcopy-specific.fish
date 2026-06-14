@@ -131,11 +131,6 @@ bind_both_modes_default_and_insert alt-k kill_all_lines # should I switch to alt
 #    export FISH_CURRENT_CMDLINE=$argv
 #end
 
-# *** cp
-abbr cpr "cp -r"
-
-# *** ln
-abbr lns "ln -s"
 
 function pbcommand --description "run a command, copy the command and its output to the clipboard"
     set -l cmdline (string join ' ' $argv)
