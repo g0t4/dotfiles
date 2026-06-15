@@ -83,9 +83,11 @@ function abbr_expand_trace_nth_file
     set file $files[$index]
 
     if test -n "$file"
-        echo "view_trace $opts $file"
+        echo "nvim -c 'AskViewTrace $opts $file'"
+        # echo "view_trace $opts $file"
     else
-        echo "view_trace $opts"
+        echo "nvim -c 'AskViewTrace $opts'"
+        # echo "view_trace $opts"
     end
 end
 
