@@ -1,4 +1,4 @@
-include:
+include_domains:
   - applescript
   - bash
   - fish
@@ -13,7 +13,7 @@ include:
   # - yaml # not many, yet?
 ignores:
   - "notes/"
-global_languages:
+global_domains:
   - bash
   - fish
   - lua
