@@ -1,4 +1,5 @@
 require('non-plugins.werkspaces.filetypemods') -- FYI! must load  before werkspace else filetype mods dont fire for initial opened buffer
+-- local logs = require("ask-openai.logs.logger"):predictions()
 require('helpers.hs_shared')
 local api = require('non-plugins.werkspaces.api')
 -- actually not the end of the world to tie these two together, they are similar in what they acccomplish
@@ -187,8 +188,10 @@ function close_temp_windows_so_they_do_not_reopen()
     --  see :buffers to find it on restarts (sometimes)
 
     vim.iter(vim.api.nvim_list_wins()):each(function(win)
+        -- logs:info("win", win)
         local buf = vim.api.nvim_win_get_buf(win)
         local buf_name = vim.api.nvim_buf_get_name(buf)
+        -- logs:info("buf_name", buf_name)
         if
             buf_name:match('coc%-nvim%.log') or
             buf_name:match('output:///') or -- output:// include coc windows from :CocCommand workspace.showOutput
@@ -199,6 +202,7 @@ function close_temp_windows_so_they_do_not_reopen()
             --  := vim.api.nvim_buf_get_name(0):match('git%-rebase%-todo')
         then
             -- TODO if its the last window, then open a new tab first? cannot close last window
+            -- logs:info("closing window for buf_name:", buf_name)
             vim.api.nvim_win_close(win, true)
         end
     end)
