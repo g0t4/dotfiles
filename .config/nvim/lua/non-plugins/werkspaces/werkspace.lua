@@ -11,7 +11,7 @@ if nvim.is_headless() then
         -- don't log extra messages when testing
         return
     end
-    print("werkspace will not load in headless mode")
+    -- print("werkspace will not load in headless mode") -- gah wes this blocks the damn headless startup!!! WTF man
     return
 end
 
