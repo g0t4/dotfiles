@@ -1,5 +1,4 @@
 require('non-plugins.werkspaces.filetypemods') -- FYI! must load  before werkspace else filetype mods dont fire for initial opened buffer
-local logs = require("ask-openai.logs.logger").universal()
 require('helpers.hs_shared')
 local api = require('non-plugins.werkspaces.api')
 -- actually not the end of the world to tie these two together, they are similar in what they acccomplish
@@ -183,6 +182,7 @@ end, {
 })
 
 function close_temp_windows_so_they_do_not_reopen()
+    local logs = require("ask-openai.logs.logger").universal()
     -- TODO! close buffers for "list:///location" [Not edited] --No lines in buffer--
     --  IIRC this is opened by coc references (etc)
     --  see :buffers to find it on restarts (sometimes)
