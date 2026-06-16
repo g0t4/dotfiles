@@ -2854,6 +2854,9 @@ end
 function commands_log_shell_mode
     cat ~/.local/share/mcp-server-commands/commands.log | rg_grep run_process | rg_grep '"command_line":'
 end
+# delegate tool / agents MCP server
+abbr tt_agents_mcp_server 'tail -F ~/.local/state/mcp-servers/agent.log'
+# TODO other files here like traces?
 
 #
 abbr tt_ask_lang_server 'trash_n_tail ~/.local/share/ask-openai/language.server.log' # python LS
