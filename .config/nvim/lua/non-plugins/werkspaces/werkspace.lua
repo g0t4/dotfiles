@@ -182,7 +182,7 @@ end, {
 })
 
 function close_temp_windows_so_they_do_not_reopen()
-    local logs = require("ask-openai.logs.logger").universal()
+    local logs = require("devtools.logs.logger").universal()
     -- TODO! close buffers for "list:///location" [Not edited] --No lines in buffer--
     --  IIRC this is opened by coc references (etc)
     --  see :buffers to find it on restarts (sometimes)
