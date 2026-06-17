@@ -3615,3 +3615,8 @@ end tell' > $tmp_script
         command /Applications/Keyboard\ Maestro.app/Contents/MacOS/keyboardmaestro $argv
     end
 end
+
+# * secure entry
+
+abbr who_is_using_secure_input "ioreg -l -w 0 | grep SecureInput"
+# TODO expand on this if things keep annoying me, i.e. lookup PID
