@@ -3618,5 +3618,21 @@ end
 
 # * secure entry
 
-abbr who_is_using_secure_input "ioreg -l -w 0 | grep SecureInput"
-# TODO expand on this if things keep annoying me, i.e. lookup PID
+function secure_entry_pids
+    ioreg -l | awk -F'= ' /kCGSSessionSecureInputPID/ \
+        | rg_grep -o "kCGSSessionSecureInputPID.=\d+" \
+        | string replace --regex "^[^\d]+" "" \
+        | uniq
+end
+
+function secure_entry_who
+    # find what app enabled secure entry
+    set -l pids (secure_entry_pids)
+    if test (count $pids) -gt 0
+        ps -p $pids -o pid,comm,args
+    else
+        echo "Secure Input not enabled."
+    end
+end
+
+abbr watch_secure_entry "$WATCH_COMMAND 'fish -ic secure_entry_who'"
