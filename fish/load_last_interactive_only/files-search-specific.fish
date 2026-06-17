@@ -261,6 +261,8 @@ abbr fdtx 'fd --type executable'
 
 # skip directories (--type file)
 abbr list_filetype_extensions 'fd --type file | path extension | sort | uniq -c | sort'
+# cleanup needless complexity in RAG domain mapping by adding an extension if needed to most of these:
+abbr fd_extensionless_files 'fd "^[^\.]+\$" --type file'
 
 # *** default args
 if status is-interactive
