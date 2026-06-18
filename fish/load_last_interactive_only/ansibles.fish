@@ -32,7 +32,7 @@ abbr adls "ansible-doc --list"
 abbr adlsf "ansible-doc --list_files"
   abbr ads "ansible-doc --snippet" # ads homebrew
 # list by plugin type
-abbr adlsi "ansible-doc --list --type inventory" # inventory plugins
+abbr adlst_inventory "ansible-doc --list --type inventory"
 abbr adlst_become "ansible-doc --list --type become"
 abbr adlst_cache "ansible-doc --list --type cache"
 abbr adlst_callback "ansible-doc --list --type callback"
