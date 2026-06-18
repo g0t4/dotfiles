@@ -31,6 +31,24 @@ abbr ad "ansible-doc"
 abbr adls "ansible-doc --list"
 abbr adlsf "ansible-doc --list_files"
   abbr ads "ansible-doc --snippet" # ads homebrew
+# list by plugin type
+abbr adlsi "ansible-doc --list --type inventory" # inventory plugins
+abbr adlst_become "ansible-doc --list --type become"
+abbr adlst_cache "ansible-doc --list --type cache"
+abbr adlst_callback "ansible-doc --list --type callback"
+abbr adlst_cliconf "ansible-doc --list --type cliconf"
+abbr adlst_connection "ansible-doc --list --type connection"
+abbr adlst_httpapi "ansible-doc --list --type httpapi"
+abbr adlst_lookup "ansible-doc --list --type lookup"
+abbr adlst_netconf "ansible-doc --list --type netconf"
+abbr adlst_shell "ansible-doc --list --type shell"
+abbr adlst_vars "ansible-doc --list --type vars"
+abbr adlst_module "ansible-doc --list --type module"
+abbr adlst_strategy "ansible-doc --list --type strategy"
+abbr adlst_test "ansible-doc --list --type test"
+abbr adlst_filter "ansible-doc --list --type filter"
+abbr adlst_role "ansible-doc --list --type role"
+abbr adlst_keyword "ansible-doc --list --type keyword"
 
 # "ag" reserved for silver searcher
 abbr a-gc "ansible-galaxy collection"
