@@ -3332,6 +3332,10 @@ end
 
 # * yq (normally yq intended => jq but can output yaml too)
 abbr yqy "yq --yaml-output"
+# short to long options
+abbr --command yq -- "-y" --yaml-output
+abbr --command yq -- "-c" --compact-output
+abbr --command yq -- "-r" --raw-output
 
 # * date
 abbr date_s "date +%s"
