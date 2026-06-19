@@ -3330,6 +3330,9 @@ function _abbr_trace_command --argument-names count
     echo "$echo_msg.tool_calls.[].function.arguments --raw-output | jq .command_line --raw-output"
 end
 
+# * yq (normally yq intended => jq but can output yaml too)
+abbr yqy "yq --yaml-output"
+
 # * date
 abbr date_s "date +%s"
 reminder_abbr date_unixtime "date +%s" # reminder abbr

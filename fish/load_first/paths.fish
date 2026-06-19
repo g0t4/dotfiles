@@ -125,7 +125,7 @@ function find_fish_completion_for_cmd_regex
             continue
         end
 
-        fd --full-path completions/$cmd.fish $dir
+        fd "$cmd".fish $dir
     end
 end
 function list_terrible_completions_present
