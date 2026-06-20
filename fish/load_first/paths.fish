@@ -135,13 +135,12 @@ function list_terrible_completions_present
     # issue is the bundled ones should be superior to fuc generated ones...  so I cannot just put fuc first
     # by the way  fuc == fish_update_completions
 end
-if test -d $WES_DOTFILES/fish/completions/
-    # - FYI autoloaded at Completion Time per command name (foo<TAB> loads foo.fish)
-    # - Use for complex completions (i.e. ensure slow completions are lazy loaded)
-    # - Use to override other completions
-    # - Otherwise it's ok to inline completions (where command is defined)
-    set fish_complete_path $fish_complete_path $WES_DOTFILES/fish/completions/
-end
+
+# - FYI autoloaded at Completion Time per command name (foo<TAB> loads foo.fish)
+# - Use for complex completions (i.e. ensure slow completions are lazy loaded)
+# - Use to override other completions
+# - Otherwise it's ok to inline completions (where command is defined)
+set fish_complete_path $WES_DOTFILES/fish/completions/ $fish_complete_path
 
 if test -d $WES_DOTFILES/fish/functions/
     # - FYI autoloaded when respective command name is first run (and periodically reloaded)
