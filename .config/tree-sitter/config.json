@@ -22,6 +22,8 @@
         "qwen_message_assistant": { "color": "#98c379" },
         "qwen_message_tool_response": { "color": "#c678dd" },
         "qwen_message_all_other_roles": { "color": "#7f848e", "italic": true },
+        "qwen_think_reasoning": { "color": "#7f848e", "italic": true },
+        "qwen_think_tag": { "color": "#7f848e", "bold": true },
         "qwen_fim_prefix_token": "#6986ff",
         "qwen_fim_prefix_contents": "#6986ff",
         "qwen_fim_suffix_token": "#4ade80",

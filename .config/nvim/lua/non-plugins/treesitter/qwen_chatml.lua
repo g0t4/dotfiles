@@ -21,3 +21,6 @@ vim.api.nvim_set_hl(0, "@qwen_message_user", { fg = "#61afef", })
 vim.api.nvim_set_hl(0, "@qwen_message_assistant", { fg = "#98c379", })
 vim.api.nvim_set_hl(0, "@qwen_message_tool_response", { fg = "#c678dd", })
 vim.api.nvim_set_hl(0, "@qwen_message_all_other_roles", { fg = "#7f848e", italic = true, })
+
+vim.api.nvim_set_hl(0, "@qwen_think_reasoning", { fg = "#7f848e", italic = true })
+vim.api.nvim_set_hl(0, "@qwen_think_tag", { fg = "#7f848e", bold = true })
