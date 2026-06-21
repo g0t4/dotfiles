@@ -930,14 +930,14 @@ function build_abbrs_for_filetype
     abbr "rg$filetype_letter" "rg -g '*.$glob_end'"
 
 end
-build_abbrs_for_filetype l lua
-build_abbrs_for_filetype y "{yaml,yml}"
-build_abbrs_for_filetype t ts
+
+build_abbrs_for_filetype f fish
 build_abbrs_for_filetype j "{json,js}"
+build_abbrs_for_filetype l lua
 build_abbrs_for_filetype m md
 build_abbrs_for_filetype p py
-build_abbrs_for_filetype f fish
-
+build_abbrs_for_filetype t ts
+build_abbrs_for_filetype y "{yaml,yml}"
 # all -  use rg w/o a filter on language (no -g *.lua for example)
 abbr --set-cursor seda "$sed_cmd -Ei 's/%//g' (rg --files-with-matches ___) "
 abbr --command $sed_cmd --position=anywhere "*a" "(rg --files-with-matches ___) "
