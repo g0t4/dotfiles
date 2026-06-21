@@ -1,6 +1,6 @@
 #!/usr/bin/env fish
 
-rich --print "[bold]hook[$(status basename)] $argv"
+# rich --print "[bold]hook[$(status basename)] $argv"
 
 # Skip when it's not a branch checkout
 #   i.e. grstr  == git restore --staged
@@ -11,7 +11,6 @@ if test "$is_branch" = 0
     echo "skipping post-checkout hook b/c no branch set: '$is_branch'"
     exit 0
 end
-
 
 set parent_dir (dirname (status current-filename))
 "$parent_dir/core.fish"
