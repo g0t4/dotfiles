@@ -931,6 +931,7 @@ function build_abbrs_for_filetype
 
 end
 build_abbrs_for_filetype l lua
+build_abbrs_for_filetype y "{yaml,yml}"
 build_abbrs_for_filetype t ts
 build_abbrs_for_filetype j "{json,js}"
 build_abbrs_for_filetype m md
