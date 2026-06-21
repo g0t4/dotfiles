@@ -16,6 +16,12 @@
         "harmony_message_prefill": { "color": 145, "underline": true },
         "is_json": "#c1c1c1",
 
+        "qwen_system_message": { "color": "#ff6b6b", "bold": true },
+        "qwen_developer_message": { "color": "#f7b267", "bold": true },
+        "qwen_user_message": { "color": "#61afef" },
+        "qwen_assistant_message": { "color": "#98c379" },
+        "qwen_tool_response_message": { "color": "#c678dd" },
+        "qwen_all_other_roles_message": { "color": "#7f848e", "italic": true },
         "qwen_fim_prefix_token": "#6986ff",
         "qwen_fim_prefix_contents": "#6986ff",
         "qwen_fim_suffix_token": "#4ade80",
