@@ -137,8 +137,7 @@ end
 abbr ri rag_indexer
 function rag_indexer
     set _python3 "$ASK_REPO/.venv/bin/python3"
-    set _script_py "$ASK_REPO/lua/ask-openai/rag/indexer.py"
-    $_python3 $_script_py $argv
+    env PYTHONPATH="$ASK_REPO/lua/ask-openai/rag" $_python3 -m indexer $argv
 end
 
 abbr rvi rag_validate_index
