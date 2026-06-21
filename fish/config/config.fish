@@ -2,12 +2,12 @@ set fish_greeting ""
 
 # OPTIMIZE readlink/dirname calls here are very expensive (2,4,2 ms on each of these three lines - fix this)
 if test (uname) = Darwin
-    set -g IS_MACOS true
-    set -g IS_LINUX false
+    set --global IS_MACOS true
+    set --global IS_LINUX false
 else
     # assume linux, differentiate distros later if needed
-    set -g IS_MACOS false
-    set -g IS_LINUX true
+    set --global IS_MACOS false
+    set --global IS_LINUX true
 end
 
 # FYI stick with WES_ prefix to namespace my variables
