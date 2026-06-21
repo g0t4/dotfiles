@@ -1861,9 +1861,8 @@ end
 # * timing and other checks on streams in videos
 abbr _3 video_editing_3_dropped_frames
 function video_editing_3_dropped_frames
-    set -l _python3 "$WES_DOTFILES/.venv/bin/python3"
-    set -l _script_py "$WES_DOTFILES/fish/load_last_interactive_only/pythons/av/dropped_frames.py"
-    $_python3 $_script_py $argv
+    set _python3 "$WES_DOTFILES/.venv/bin/python3"
+    env PYTHONPATH="$WES_DOTFILES/fish/load_last_interactive_only/pythons/av" $_python3 -m dropped_frames $argv
 end
 complete -c video_editing_3_dropped_frames -a --verbose
 
@@ -1999,8 +1998,7 @@ end
 function video_editing_gen_fcpxml
     set -l base "$HOME/repos/github/g0t4/auto-edit-suggests"
     set python3 "$base/.venv/bin/python3"
-    set script "$base/generate_fcpxml_notebook.py"
-    $python3 $script $argv
+    env PYTHONPATH="$base" $python3 -m generate_fcpxml_notebook $argv
 end
 
 abbr --add _Xdb --regex '\d+db' --function abbr_db
