@@ -83,6 +83,10 @@ def wcl(args):
         else:
             subprocess.run(z_add_fish, cwd=repo_dir, check=IGNORE_FAILURE)
 
+    # Handle --cd option: output cd command for shell to execute
+    if args.cd and not dry_run:
+        print(f"__wcl_cd {repo_dir}", file=__import__('sys').stderr)
+
 def is_executable_present(cmd) -> bool:
     if is_windows():
         return False
@@ -194,6 +198,7 @@ if __name__ == "__main__":
     # --dry-run flag:
     parser.add_argument("--dry-run", action="store_true", help="preview changes")
     parser.add_argument("--path-only", action="store_true", help="return path (do not clone)")
+    parser.add_argument("--cd", action="store_true", help="cd to repo directory after clone/pull")
     parsed_args = parser.parse_args()
     wcl(parsed_args)
 

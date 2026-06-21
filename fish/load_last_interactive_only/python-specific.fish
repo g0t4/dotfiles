@@ -190,12 +190,24 @@ function wcl
         return
     end
 
-    set -l repo_dir ($_python3 $_script_py --path-only $argv)
-    $_python3 $_script_py $argv
-
-    if test -d $repo_dir
-        cd $repo_dir
+    # Capture stderr for __wcl_cd commands
+    set -l _stderr_file (mktemp)
+    begin
+        $_python3 $_script_py $argv 2>_stderr_file
     end
+    
+    # Execute any cd commands from stderr
+    if test -f $_stderr_file
+        while read -l _cd_line
+            if string match --quiet '__wcl_cd *' $_cd_line
+                set -l _cd_dir (string replace '__wcl_cd ' '' $_cd_line)
+                if test -d $_cd_dir
+                    cd $_cd_dir
+                end
+            end
+        end < $_stderr_file
+    end
+    rm -f $_stderr_file
 end
 
 # completions:
