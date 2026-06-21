@@ -185,7 +185,17 @@ function wcl
     set -l _python3 "$WES_DOTFILES/.venv/bin/python3"
     set -l _script_py "$WES_DOTFILES/zsh/compat_fish/pythons/wcl.py"
 
+    if contains -- '--path-only' $argv
+        $_python3 $_script_py $argv
+        return
+    end
+
+    set -l repo_dir ($_python3 $_script_py --path-only $argv)
     $_python3 $_script_py $argv
+
+    if test -d $repo_dir
+        cd $repo_dir
+    end
 end
 
 # completions:
