@@ -2,12 +2,20 @@ set fish_greeting ""
 
 # OPTIMIZE readlink/dirname calls here are very expensive (2,4,2 ms on each of these three lines - fix this)
 if test (uname) = Darwin
+    # set is ~5us to 10us
     set --global IS_MACOS true
     set --global IS_LINUX false
+    set --global IS_ARCH false
 else
     # assume linux, differentiate distros later if needed
     set --global IS_MACOS false
     set --global IS_LINUX true
+    set --global IS_ARCH (test -f /etc/arch-release; and echo true; or echo false)
+    # test is shell builtin and FAST! ~70us for the test -f here... vs stat btw that is 7ms to run!
+    # FYI using "true" and "false" values means you can concisely write b/c it  runs true/false __BUILTIN__ command in ~10us:
+    # if $IS_LINUX
+    #    ... linux specific ...
+    # end
 end
 
 # FYI stick with WES_ prefix to namespace my variables
