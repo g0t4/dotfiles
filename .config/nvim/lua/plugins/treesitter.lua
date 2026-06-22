@@ -171,34 +171,29 @@ return {
             --     }
             -- }
             --
-            -- TODO! migrate v0.11 parsers to v0.12 config (started an attempt below, not sure what to do)
-            -- parser_config.test = {
-            --     install_info = {
-            --         url = "https://github.com/tree-sitter-grammars/tree-sitter-test",
-            --         files = { "src/parser.c", "src/scanner.c" },
-            --     },
-            -- }
-            --
-            -- parser_config.cst = {
-            --     install_info = {
-            --         url = "https://github.com/tree-sitter-grammars/tree-sitter-cst",
-            --         files = { "src/parser.c" },
-            --     },
-            -- }
-            --
-            --
-            -- * attempt at v0.12 + nvim-treesitter main config:
+
+            -- * v0.12 + nvim-treesitter main config working!
             vim.api.nvim_create_autocmd('User', {
                 pattern = 'TSUpdate',
                 callback = function()
                     require('nvim-treesitter.parsers').test = {
                         install_info = {
+                            -- TODO! figure out how to build with nvim-treesitter main...
+                            --  TODO! right now I have test.so in parser dir in nvim-treesitter so I am fine (loads fine)... so I don't need this until I need to rebuild?
+                            --  :TSInstall test
+                            --   fails... see :TSLog for details
+                            --
+                            -- info(install/test): Downloading tree-sitter-test...
+                            -- trace: running job: (cwd=/Users/wesdemos/repos/github/g0t4/tree-sitter-harmony) curl --silent --fail --show-error --retry 7 -L https://github.com/tree-sitter-grammars/tree-sitter-test/archive/main.tar.gz --output /Users/wesdemos/.cache/nvim/tree-sitter-test.tar.gz
+                            -- trace: stderr -> curl: (56) The requested URL returned error: 404
+                            -- error(install/test): Error during download: curl: (56) The requested URL returned error: 404
+                            --
                             url = "https://github.com/tree-sitter-grammars/tree-sitter-test",
-                            files = { "src/parser.c", "src/scanner.c" },
+                            files = { "src/parser.c", "src/scanner.c" }, -- TODO is this still needed?
+                            branch = 'master', -- will use 'main' now as default and shit a brick on :TSInstall test...
                             --
                             -- TODO do I need any of these?
                             -- optional entries (from nvim-treesitter docs: https://github.com/nvim-treesitter/nvim-treesitter#adding-custom-languages)
-                            -- branch = 'develop', -- only needed if different from default branch
                             -- location = 'parser', -- only needed if the parser is in subdirectory of a "monorepo"
                             -- generate = true, -- only needed if repo does not contain pre-generated `src/parser.c`
                             -- generate_from_json = false, -- only needed if repo does not contain `src/grammar.json` either
@@ -208,11 +203,13 @@ return {
                     require('nvim-treesitter.parsers').cst = {
                         install_info = {
                             url = "https://github.com/tree-sitter-grammars/tree-sitter-cst",
-                            files = { "src/parser.c" },
+                            files = { "src/parser.c" }, -- TODO is this still needed?
+                            branch = 'master',
+                            -- FYI these are put in:
+                            -- *** ~/.local/share/nvim/site/parser
                             --
                             -- TODO do I need any of these?
                             -- optional entries (from nvim-treesitter docs: https://github.com/nvim-treesitter/nvim-treesitter#adding-custom-languages)
-                            -- branch = 'develop', -- only needed if different from default branch
                             -- location = 'parser', -- only needed if the parser is in subdirectory of a "monorepo"
                             -- generate = true, -- only needed if repo does not contain pre-generated `src/parser.c`
                             -- generate_from_json = false, -- only needed if repo does not contain `src/grammar.json` either
