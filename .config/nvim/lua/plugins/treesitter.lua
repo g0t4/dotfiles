@@ -104,116 +104,100 @@ return {
             --
             -- TODO look into `:h treesitter-language-injections` and see if you can get this to work now! i.e. JSON within harmony tool calls (or XML within Qwen tool calls)
             --
-            vim.api.nvim_create_autocmd('FileType', {
-                pattern = { 'harmony', 'qwen_chatml' },
-                callback = function()
-                    -- TODO! load some/all of these for all treesitter compatible filetypes
-                    --  TODO is this what nvim-treesitter used to do automatically?
+            vim.api.nvim_create_autocmd("FileType", {
+                callback = function(args)
+                    -- * auto load treesitter based on what each filetype supports
+                    local bufnr = args.buf
+                    local filetype = vim.bo[bufnr].filetype
 
-                    -- * nvim treesitter highlighting
-                    vim.treesitter.start()
+                    local ok = pcall(vim.treesitter.start, bufnr)
+                    if not ok then
+                        return
+                    end
 
-                    -- * nvim treesitter folding
-                    -- https://neovim.io/doc/user/fold.html (FYI can use other methods like indent, syntax, manual, etc... for now I will try ts based)
-                    vim.wo.foldmethod = 'expr'
-                    vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
-                    vim.o.foldenable = false -- no autofolding, just manual after open file
-                    -- TODO add folding queries for my parsers (none yet)
+                    local folds_queries_exist = vim.treesitter.query.get(filetype, "folds")
+                    if folds_queries_exist then
+                        -- https://neovim.io/doc/user/fold.html (FYI can use other methods like indent, syntax, manual, etc... for now I will try ts based)
+                        vim.wo.foldmethod = 'expr'
+                        vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+                        vim.o.foldenable = false -- no autofolding, just manual after open file
+                    end
 
-                    -- * nvim-treesitter indentation (experimental)
-                    vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
-
+                    local indent_queries_exist = vim.treesitter.query.get(filetype, "indents")
+                    if indent_queries_exist then
+                        -- * nvim-treesitter indentation (experimental)
+                        -- FYI IIUC this is gonna be mainlined in nvim 1.0?
+                        --  at which time I should switch to its API to start/enable
+                        vim.bo[bufnr].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+                    end
                 end,
             })
             do return end
-            require 'nvim-treesitter.configs'.setup {
-                sync_install = false,
-                auto_install = true, -- auto install on entering buffer (must have tree-sitter CLI, IIUC)
+            -- TODO review other builtin modules/plugins:
+            -- - https://github.com/nvim-treesitter/nvim-treesitter/wiki/Extra-modules-and-plugins
+            --  PRN nvim-treesitter/nvim-treesitter-context	- show context of cursor position (ie function, class, etc) - like vscode scroll context thingy
+            --
+            -- matchup/matchit
+            -- TODO! is matchit builtin good enough? does treesitter version of it use AST instead of smth else in matchit bundled extension?
+            -- matchup = {
+            --     -- FRIGGIN AWESOME - TODO make a video about this
+            --     enable = true, -- enable for treesitter based matching, use keymap: % to jump between matching pairs, i.e. plist (xml) that has hundreds of lines under an element and you are at end and wanna jump up... wows (IIAC folds might help too?)
+            --     -- can open AST too and move around (:InspectTree) but dang is it slow on huge xml files
+            --     -- PRN any outline mode that would work well too, extension?
+            -- },
 
-                -- TODO review other builtin modules/plugins:
-                -- - https://github.com/nvim-treesitter/nvim-treesitter/wiki/Extra-modules-and-plugins
-                --  PRN nvim-treesitter/nvim-treesitter-context	- show context of cursor position (ie function, class, etc) - like vscode scroll context thingy
-                --
-                -- matchup/matchit
-                -- TODO! is matchit builtin good enough? does treesitter version of it use AST instead of smth else in matchit bundled extension?
-                -- matchup = {
-                --     -- FRIGGIN AWESOME - TODO make a video about this
-                --     enable = true, -- enable for treesitter based matching, use keymap: % to jump between matching pairs, i.e. plist (xml) that has hundreds of lines under an element and you are at end and wanna jump up... wows (IIAC folds might help too?)
-                --     -- can open AST too and move around (:InspectTree) but dang is it slow on huge xml files
-                --     -- PRN any outline mode that would work well too, extension?
-                -- },
-
-                highlight = {
-                    enable = true, -- doesn't seem to turn it off, is treesitter initilized b/c of some other plugin first and thus my config here isn't applied?
-                    -- disable = {},  -- confirmed TSModuleInfo shows X for these languages
-                    -- additional_vim_regex_highlighting = true, -- true OR list of languages... I can't get this to change anything with my custom sytnax highlights, maybe this is smth else enable/disable?
-
-                    -- custom_captures = {
-                    --   -- IIUC I only need this if I want to link to another existing hl group (ie in a theme)
-                    --     ["comment_todo"] = "TodoComment",
-                    -- },
-                },
-                indent = {
-                    enable = true,
-                    disable = {},
-                },
-                -- FYI doesn't seem to be a "fold/ing" enable/disable config section
-                incremental_selection = {
-                    -- similar to Ctrl+W in jetbrains IDEs
-                    enable = true,
-                    keymaps = {
-                        init_selection = 'gnn', -- Start selection
-                        node_incremental = 'grn', -- Expand to the next node
-                        scope_incremental = 'grc', -- Expand to the next scope
-                        node_decremental = 'grm', -- Shrink selection
-                    },
-                },
-            }
+            -- TODO is incremental_selection still a thing in nvim-treesitter main branch?
+            -- incremental_selection = {
+            --     -- similar to Ctrl+W in jetbrains IDEs
+            --     enable = true,
+            --     keymaps = {
+            --         init_selection = 'gnn', -- Start selection
+            --         node_incremental = 'grn', -- Expand to the next node
+            --         scope_incremental = 'grc', -- Expand to the next scope
+            --         node_decremental = 'grm', -- Shrink selection
+            --     },
+            -- },
 
 
+            --   https://github.com/nvim-treesitter/nvim-treesitter#adding-custom-languages
             -- * custom grammars (i.e. ones I am hacking on, or not in official sets)
-            local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
-
-            parser_config.harmony = {
-                install_info = {
-                    url = "~/repos/github/g0t4/tree-sitter-harmony",
-                    files = { "src/parser.c" },
-                    -- queries => use RTP (no magic this way)
-                }
-            }
-
-            parser_config.qwen_chatml = {
-                install_info = {
-                    url = "~/repos/github/g0t4/tree-sitter-qwen-chatml",
-                    files = { "src/parser.c" },
-                    -- generate = true,
-                    -- generate_from_json = false,
-                    -- queries => use RTP (no magic this way)
-                    -- make sure name shows in :TSModuleInfo
-                    --   :TSInstall qwen_chatml
-                    -- :TSUpdate -- IIUC recompile it when you change it... not sure if it is automatic?
-                }
-            }
-
-            parser_config.test = {
-                install_info = {
-                    url = "https://github.com/tree-sitter-grammars/tree-sitter-test",
-                    files = { "src/parser.c", "src/scanner.c" },
-                },
-            }
-            parser_config.cst = {
-                install_info = {
-                    url = "https://github.com/tree-sitter-grammars/tree-sitter-cst",
-                    files = { "src/parser.c" },
-                },
-            }
-
-            -- above will autoinstall, can also uninstall/install again:
-            -- :TSInstall harmony
-            -- :TSInstallSync harmony -- do I need this on changes to my grammar?
-            -- :TSInstall test
-
-            -- TSModuleInfo shows what features (highlight, illuminate[if plugin enabled], indent, incremental_selection), not folding?
+            -- local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
+            --
+            -- TODO! setup nvim-treesitter for my parsers
+            -- parser_config.harmony = {
+            --     install_info = {
+            --         url = "~/repos/github/g0t4/tree-sitter-harmony",
+            --         files = { "src/parser.c" },
+            --         -- queries => use RTP (no magic this way)
+            --     }
+            -- }
+            --
+            -- parser_config.qwen_chatml = {
+            --     install_info = {
+            --         url = "~/repos/github/g0t4/tree-sitter-qwen-chatml",
+            --         files = { "src/parser.c" },
+            --         -- generate = true,
+            --         -- generate_from_json = false,
+            --         -- queries => use RTP (no magic this way)
+            --         -- make sure name shows in :TSModuleInfo
+            --         --   :TSInstall qwen_chatml
+            --         -- :TSUpdate -- IIUC recompile it when you change it... not sure if it is automatic?
+            --     }
+            -- }
+            --
+            -- TODO! setup nvim-treesitter for other parsers I had manually added in v0.11 nvim-treesitter master branch config:
+            -- parser_config.test = {
+            --     install_info = {
+            --         url = "https://github.com/tree-sitter-grammars/tree-sitter-test",
+            --         files = { "src/parser.c", "src/scanner.c" },
+            --     },
+            -- }
+            -- parser_config.cst = {
+            --     install_info = {
+            --         url = "https://github.com/tree-sitter-grammars/tree-sitter-cst",
+            --         files = { "src/parser.c" },
+            --     },
+            -- }
         end,
     },
 
