@@ -145,7 +145,6 @@ return {
             --     },
             -- },
 
-
             --   https://github.com/nvim-treesitter/nvim-treesitter#adding-custom-languages
             -- * custom grammars (i.e. ones I am hacking on, or not in official sets)
             -- local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
@@ -172,19 +171,56 @@ return {
             --     }
             -- }
             --
-            -- TODO! setup nvim-treesitter for other parsers I had manually added in v0.11 nvim-treesitter master branch config:
+            -- TODO! migrate v0.11 parsers to v0.12 config (started an attempt below, not sure what to do)
             -- parser_config.test = {
             --     install_info = {
             --         url = "https://github.com/tree-sitter-grammars/tree-sitter-test",
             --         files = { "src/parser.c", "src/scanner.c" },
             --     },
             -- }
+            --
             -- parser_config.cst = {
             --     install_info = {
             --         url = "https://github.com/tree-sitter-grammars/tree-sitter-cst",
             --         files = { "src/parser.c" },
             --     },
             -- }
+            --
+            --
+            -- * attempt at v0.12 + nvim-treesitter main config:
+            vim.api.nvim_create_autocmd('User', {
+                pattern = 'TSUpdate',
+                callback = function()
+                    require('nvim-treesitter.parsers').test = {
+                        install_info = {
+                            url = "https://github.com/tree-sitter-grammars/tree-sitter-test",
+                            files = { "src/parser.c", "src/scanner.c" },
+                            --
+                            -- TODO do I need any of these?
+                            -- optional entries (from nvim-treesitter docs: https://github.com/nvim-treesitter/nvim-treesitter#adding-custom-languages)
+                            -- branch = 'develop', -- only needed if different from default branch
+                            -- location = 'parser', -- only needed if the parser is in subdirectory of a "monorepo"
+                            -- generate = true, -- only needed if repo does not contain pre-generated `src/parser.c`
+                            -- generate_from_json = false, -- only needed if repo does not contain `src/grammar.json` either
+                            -- queries = 'queries/neovim', -- also install queries from given directory
+                        },
+                    }
+                    require('nvim-treesitter.parsers').cst = {
+                        install_info = {
+                            url = "https://github.com/tree-sitter-grammars/tree-sitter-cst",
+                            files = { "src/parser.c" },
+                            --
+                            -- TODO do I need any of these?
+                            -- optional entries (from nvim-treesitter docs: https://github.com/nvim-treesitter/nvim-treesitter#adding-custom-languages)
+                            -- branch = 'develop', -- only needed if different from default branch
+                            -- location = 'parser', -- only needed if the parser is in subdirectory of a "monorepo"
+                            -- generate = true, -- only needed if repo does not contain pre-generated `src/parser.c`
+                            -- generate_from_json = false, -- only needed if repo does not contain `src/grammar.json` either
+                            -- queries = 'queries/neovim', -- also install queries from given directory
+                        },
+                    }
+                end
+            })
         end,
     },
 
