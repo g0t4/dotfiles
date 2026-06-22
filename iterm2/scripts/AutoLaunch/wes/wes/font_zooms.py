@@ -29,15 +29,14 @@ async def smaller_font_wes_stops(connection: iterm2.Connection):
         await set_font_size(session, smaller_font_size)
         _running_wes_stops = False
 
-    # await nvim_trigger_ctrl_w_equals__to_equalize_windows_after_zoom(session)
+    await nvim_equalize_windows(session)
 
-async def nvim_trigger_ctrl_w_equals__to_equalize_windows_after_zoom(session: iterm2.Session):
-    # FYI this looks like a Ctrl-W,= in neovim... equalizes window sizes (after zoom)
-    #  could be useful, also might not be... hrm
-    job_name = await session.async_get_variable("jobName")
-    if job_name == "nvim":
-        await asyncio.sleep(0.2)
-        await session.async_send_text('\x17=')
+async def nvim_equalize_windows(session: iterm2.Session):
+    if await session.async_get_variable("jobName") != "nvim":
+        return
+
+    await asyncio.sleep(0.2)
+    await session.async_send_text('\x17=')  # CTRL-W_=
 
 async def bigger_font_wes_stops(connection: iterm2.Connection):
     global _running_wes_stops
@@ -54,4 +53,4 @@ async def bigger_font_wes_stops(connection: iterm2.Connection):
         await set_font_size(session, bigger_font_size)
         _running_wes_stops = False
 
-    # await nvim_trigger_ctrl_w_equals__to_equalize_windows_after_zoom(session)
+    await nvim_equalize_windows(session)
