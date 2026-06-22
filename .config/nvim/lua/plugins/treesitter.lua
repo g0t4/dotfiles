@@ -76,18 +76,20 @@ return {
             --   - :InspectTree
             -- - :TSModuleInfo is gone now OR am I not setting up nvim-treesitter correctly now?
 
-            -- ok to get highlights to work for my custom parsers:
-            -- add parser dir to plugin path so highlights.scm is discoverable
-            -- then manually call :=vim.treesitter.start() when window is focused with buffer with harmony/qwen_chatml file is opened
-            --   works!
-            --   TODO start highlighting when the filetype is opened
+            -- modify RTP to find queries (and theoretically my parsers too)
+            -- FYI! if you move this RTP modification, make sure it runs AFTER lazy is started
+            --   lazy will wipe RTP changes that happen before it loads
+            --   i.e. if you move these two lines to top of this module (not in config here for nvim-treesitter)... they will be wiped out by the time nvim fully loads
+            --
+            --   FYI I left this here in config for nvim-treesitter just so it is all together with my other treesitter config
+            --   - otherwise I could move this to a non-plugin module and load it after lazy starts
+            --
             vim.opt.runtimepath:append(vim.fn.expand("~/repos/github/g0t4/tree-sitter-harmony"))
             vim.opt.runtimepath:append(vim.fn.expand("~/repos/github/g0t4/tree-sitter-qwen-chatml"))
             --  verify queries found:
             --  :echo globpath(&rtp, 'queries/qwen_chatml/*', 1, 1)
             --  :echo globpath(&rtp, 'queries/harmony/*', 1, 1)
 
-            --
             -- * manually add parser instead of nvim-treesitter
             --   ([re]move parsers out of ~/.local/share/nvim/lazy/nvim-treesitter/parser/ dir)
             --   restart neovim and try start treesitter highlighting => make sure fails before try loading own:
@@ -102,12 +104,25 @@ return {
                     path = vim.fn.expand("~/repos/github/g0t4/tree-sitter-harmony/harmony.dylib"),
                 })
             -- ? wasm builds?
-            -- then
-            --   TODO one issue, on macOS I built a dylib and wasm... not *.so and nvim-treesitter is building my parsers as *.so...
-            --   TODO OR.. let nvim-treesitter do the compile like before (fine by me too)
+            --   TODO also I'm fine w/ letting nvim-treesitter handle compiling my parsers
             --
             -- TODO look into `:h treesitter-language-injections` and see if you can get this to work now! i.e. JSON within harmony tool calls (or XML within Qwen tool calls)
+            --
+            vim.api.nvim_create_autocmd('FileType', {
+                pattern = { 'harmony', 'qwen_chatml' },
+                callback = function()
+                    -- * nvim treesitter highlighting
+                    vim.treesitter.start()
 
+                    -- * nvim treesitter folding
+                    -- https://neovim.io/doc/user/fold.html (FYI can use other methods like indent, syntax, manual, etc... for now I will try ts based)
+                    vim.wo.foldmethod = 'expr'
+                    vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+                    vim.o.foldenable = false -- no autofolding, just manual after open file
+                    -- TODO! load this for all treesitter compat filetypes?
+                    -- TODO add folding queries for my parsers (none yet)
+                end,
+            })
             do return end
             require 'nvim-treesitter.configs'.setup {
                 sync_install = false,
@@ -198,13 +213,6 @@ return {
 
             -- TSModuleInfo shows what features (highlight, illuminate[if plugin enabled], indent, incremental_selection), not folding?
         end,
-        init   = function()
-            -- https://neovim.io/doc/user/fold.html (FYI can use other methods like indent, syntax, manual, etc... for now I will try ts based)
-            vim.wo.foldmethod = 'expr'
-            vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
-
-            vim.o.foldenable = false -- no autofolding, just manual after open file
-        end
     },
 
 
