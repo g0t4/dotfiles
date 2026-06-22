@@ -150,14 +150,6 @@ return {
             -- local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
             --
             -- TODO! setup nvim-treesitter for my parsers
-            -- parser_config.harmony = {
-            --     install_info = {
-            --         url = "~/repos/github/g0t4/tree-sitter-harmony",
-            --         files = { "src/parser.c" },
-            --         -- queries => use RTP (no magic this way)
-            --     }
-            -- }
-            --
             -- parser_config.qwen_chatml = {
             --     install_info = {
             --         url = "~/repos/github/g0t4/tree-sitter-qwen-chatml",
@@ -176,6 +168,19 @@ return {
             vim.api.nvim_create_autocmd('User', {
                 pattern = 'TSUpdate',
                 callback = function()
+                    require('nvim-treesitter.parsers').harmony = {
+                        install_info = {
+                            path = "~/repos/github/g0t4/tree-sitter-harmony",
+                            files = { "src/parser.c" },
+                            branch = "master", -- if I go back to not local checkout
+                            --
+                            -- optional entries TODO do I need any?
+                            -- location = 'parser',
+                            -- generate = true,
+                            -- generate_from_json = false,
+                            -- queries = 'queries/neovim', -- symlink queries from given directory
+                        },
+                    }
                     require('nvim-treesitter.parsers').test = {
                         install_info = {
                             -- TODO! figure out how to build with nvim-treesitter main...
