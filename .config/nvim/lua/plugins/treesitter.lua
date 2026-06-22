@@ -57,15 +57,17 @@ return {
         'nvim-treesitter/nvim-treesitter',
         branch = 'main', -- IIUC for nvim 0.12+
         -- branch = 'master' -- for nvim 0.11 (and earlier)
-        lazy = false,
-        build = ":TSUpdate",
+        lazy   = false,
+        build  = ":TSUpdate",
 
         event  = { "BufRead", "InsertEnter" },
 
         config = function()
+            -- nvim ships with these parsers now: C - Lua - Markdown - Vimscript - Vimdoc - Treesitter query files |ft-query-plugin|
+            require('nvim-treesitter').install { "python", "javascript", "typescript", "html", "css", "json", "yaml", }
+
             do return end
             require 'nvim-treesitter.configs'.setup {
-                ensure_installed = { "c", "lua", "python", "javascript", "typescript", "html", "css", "json", "yaml", "markdown", "vim" }, -- one of "all", "maintained" (parsers with maintainers), or a list of languages
                 sync_install = false,
                 auto_install = true, -- auto install on entering buffer (must have tree-sitter CLI, IIUC)
                 -- ignore_install
