@@ -87,6 +87,10 @@ return {
             --   TODO start highlighting when the filetype is opened
             vim.opt.runtimepath:append(vim.fn.expand("~/repos/github/g0t4/tree-sitter-harmony"))
             vim.opt.runtimepath:append(vim.fn.expand("~/repos/github/g0t4/tree-sitter-qwen-chatml"))
+            --  verify queries found:
+            --  :echo globpath(&rtp, 'queries/qwen_chatml/*', 1, 1)
+            --  :echo globpath(&rtp, 'queries/harmony/*', 1, 1)
+
             --
             -- * manually add parser instead of nvim-treesitter
             --   ([re]move parsers out of ~/.local/share/nvim/lazy/nvim-treesitter/parser/ dir)
@@ -164,10 +168,6 @@ return {
                     -- queries => use RTP (no magic this way)
                 }
             }
-
-            -- add to RTP for queries dirs (could use this for parser too)
-            --   :echo globpath(&rtp, 'queries/qwen_chatml/*', 1, 1)
-            --   :echo globpath(&rtp, 'queries/harmony/*', 1, 1)
 
             parser_config.qwen_chatml = {
                 install_info = {
