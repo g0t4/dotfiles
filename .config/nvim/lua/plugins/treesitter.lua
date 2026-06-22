@@ -10,6 +10,8 @@ return {
         --  directly links captures with custom text objects!
         -- * try with your harmony grammar (i.e. select current message)
         config = function()
+            do return end
+
             require 'nvim-treesitter.configs'.setup {
                 textobjects = {
                     select = {
@@ -63,6 +65,7 @@ return {
         event  = { "BufRead", "InsertEnter" },
 
         config = function()
+            do return end
             require 'nvim-treesitter.configs'.setup {
                 ensure_installed = { "c", "lua", "python", "javascript", "typescript", "html", "css", "json", "yaml", "markdown", "vim" }, -- one of "all", "maintained" (parsers with maintainers), or a list of languages
                 sync_install = false,
