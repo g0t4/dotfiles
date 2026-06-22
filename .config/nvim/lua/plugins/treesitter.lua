@@ -75,10 +75,6 @@ return {
             --     - textobjects 'nvim-treesitter/nvim-treesitter-textobjects',
             --   - :InspectTree
             -- - :TSModuleInfo is gone now OR am I not setting up nvim-treesitter correctly now?
-            --
-            -- TODOs... do I need to register filetypes now...
-            -- vim.treesitter.language.register('qwen_chatml', { 'qwen_chatml' })
-            -- vim.treesitter.language.register('harmony', { 'harmony' })
 
             -- ok to get highlights to work for my custom parsers:
             -- add parser dir to plugin path so highlights.scm is discoverable
