@@ -91,14 +91,14 @@ return {
             --   restart neovim and try start treesitter highlighting => make sure fails before try loading own:
             --      vim.treesitter.start()
             --   then register manually:
-            vim.treesitter.language.add("qwen_chatml",
-                {
-                    path = vim.fn.expand("~/repos/github/g0t4/tree-sitter-qwen-chatml/qwen-chatml.dylib"),
-                })
-            vim.treesitter.language.add("harmony",
-                {
-                    path = vim.fn.expand("~/repos/github/g0t4/tree-sitter-harmony/harmony.dylib"),
-                })
+            -- vim.treesitter.language.add("qwen_chatml",
+            --     {
+            --         path = vim.fn.expand("~/repos/github/g0t4/tree-sitter-qwen-chatml/qwen-chatml.dylib"),
+            --     })
+            -- vim.treesitter.language.add("harmony",
+            --     {
+            --         path = vim.fn.expand("~/repos/github/g0t4/tree-sitter-harmony/harmony.dylib"),
+            --     })
             -- ? wasm builds?
             --   TODO also I'm fine w/ letting nvim-treesitter handle compiling my parsers
             --
