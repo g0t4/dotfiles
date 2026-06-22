@@ -226,26 +226,27 @@ return {
     --     end
     -- },
 
-    {
-        -- highlight word under cursor, other occurrences
-        enabled = false, -- comment out to enable
-        "RRethy/vim-illuminate",
-        event = "CursorHold",
-        dependencies = {
-            { 'nvim-treesitter/nvim-treesitter' },
-        },
-        -- FYI alt+p works (next match), and alt+n should do next but is swallowed by nvim/iterm2, also alt+i in visual should work as a text object for selection but doesn't work which is fine as `iw`/`iW` works fine
-        -- config = function()
-        --     require("illuminate").configure({
-        --         -- under_cursor = false -- not the current word, only other matches
-        --     })
-        -- end,
-        -- FYI integrates with treesitter! :TSModuleInfo adds illuminate column (several providers actually: treesitter, LSP, regex by default)
-        --    can use modes_denylist to hide in visual mode if I wanna use smth else in that mode to highlight selections: https://github.com/RRethy/vim-illuminate/issues/141
-        --    customizing:
-        --      hi def IlluminatedWordText gui=underline
-        --      hi def IlluminatedWordRead gui=underline
-        --      hi def IlluminatedWordWrite gui=underline
-    },
+    -- {
+    --     -- highlight word under cursor, other occurrences
+    --     -- FYI I wrote my own version of this g0t4/illuminate.nvim
+    --     enabled = false, -- comment out to enable
+    --     "RRethy/vim-illuminate",
+    --     event = "CursorHold",
+    --     dependencies = {
+    --         { 'nvim-treesitter/nvim-treesitter' },
+    --     },
+    --     -- FYI alt+p works (next match), and alt+n should do next but is swallowed by nvim/iterm2, also alt+i in visual should work as a text object for selection but doesn't work which is fine as `iw`/`iW` works fine
+    --     -- config = function()
+    --     --     require("illuminate").configure({
+    --     --         -- under_cursor = false -- not the current word, only other matches
+    --     --     })
+    --     -- end,
+    --     -- FYI integrates with treesitter! :TSModuleInfo adds illuminate column (several providers actually: treesitter, LSP, regex by default)
+    --     --    can use modes_denylist to hide in visual mode if I wanna use smth else in that mode to highlight selections: https://github.com/RRethy/vim-illuminate/issues/141
+    --     --    customizing:
+    --     --      hi def IlluminatedWordText gui=underline
+    --     --      hi def IlluminatedWordRead gui=underline
+    --     --      hi def IlluminatedWordWrite gui=underline
+    -- },
 
 }
