@@ -54,7 +54,8 @@ return {
     {
         'nvim-treesitter/nvim-treesitter',
         -- version = false,            -- disable versioning to always use the latest
-        branch = 'master', -- explicitly pin to the master branch
+        branch = 'main', -- for nvim 0.12+
+        -- branch = 'master' -- for nvim 0.11 (and earlier)
         -- TODO! GET ONTO main branch and drop explicit branch... somehow I was stuck on master locally... and I use that for nvim-treesitter.configs (plural) is now singular but not as easy as flip to config sinular import ... other crap is broken
         --
         build  = ":TSUpdate",
