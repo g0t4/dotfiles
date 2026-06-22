@@ -35,6 +35,9 @@ async def nvim_equalize_windows(session: iterm2.Session):
     if await session.async_get_variable("jobName") != "nvim":
         return
 
+    # TODO how about use VimResized event instead of this?
+    # ALSO there are times when I split screen and don't mind that the other half of the nvim instance is hidden...
+    # i.e. I have vertical split on windows (left/right half) and I split iterm to left half of screen then I get the left half of nvim (left window) entirely and right is missing, which I like actually cuz I can temporarily use right half of screen for smth else w/o closing right window in neovim)
     await asyncio.sleep(0.2)
     await session.async_send_text('\x17=')  # CTRL-W_=
 
