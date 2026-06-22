@@ -151,7 +151,9 @@ return {
                 callback = function()
                     -- FYI:
                     --   :TSInstall harmony
-                    --   :TSUpdate
+                    --   :TSUpdate " update all
+                    --     IIRC I have to run this after I update my parser, right?
+                    --   :TSUpdate harmony " only update harmony
                     --
                     require('nvim-treesitter.parsers').qwen_chatml = {
                         install_info = {
