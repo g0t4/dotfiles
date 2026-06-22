@@ -80,8 +80,10 @@ return {
             --   FYI I left this here in config for nvim-treesitter just so it is all together with my other treesitter config
             --   - otherwise I could move this to a non-plugin module and load it after lazy starts
             --
+            --  TODO why isn't this handled by nvim-treesitter?
             vim.opt.runtimepath:append(vim.fn.expand("~/repos/github/g0t4/tree-sitter-harmony"))
             vim.opt.runtimepath:append(vim.fn.expand("~/repos/github/g0t4/tree-sitter-qwen-chatml"))
+            --
             --  verify queries found:
             --  :echo globpath(&rtp, 'queries/qwen_chatml/*', 1, 1)
             --  :echo globpath(&rtp, 'queries/harmony/*', 1, 1)
