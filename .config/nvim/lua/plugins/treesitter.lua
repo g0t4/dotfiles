@@ -66,15 +66,11 @@ return {
             -- nvim ships with these parsers now: C - Lua - Markdown - Vimscript - Vimdoc - Treesitter query files |ft-query-plugin|
             require('nvim-treesitter').install { "python", "javascript", "typescript", "html", "css", "json", "yaml", }
             -- v0.12+ notes:
-            -- - well worth the time to read `:help treesitter-highlight` to learn what nvim covers
-            -- - nvim-treesitter does these things over builtin nvim treesitter support:
-            --   - install parsers by compiling them using tree-sitter-cli
-            --   - additional features beyon highlighting that nvim does:
-            --     - folding,
-            --     - TODO list others and see what changed in v0.12
-            --     - textobjects 'nvim-treesitter/nvim-treesitter-textobjects',
+            -- - nvim owns treesitter highlighting, folding
+            -- - nvim-treesitter is a parser register/compiler
+            --   + extra features: indent, textobjects
             --   - :InspectTree
-            -- - :TSModuleInfo is gone now OR am I not setting up nvim-treesitter correctly now?
+            --   - :TSModuleInfo is gone now OR am I not setting up nvim-treesitter correctly now?
 
             -- modify RTP to find queries (and theoretically my parsers too)
             -- FYI! if you move this RTP modification, make sure it runs AFTER lazy is started
@@ -111,6 +107,9 @@ return {
             vim.api.nvim_create_autocmd('FileType', {
                 pattern = { 'harmony', 'qwen_chatml' },
                 callback = function()
+                    -- TODO! load some/all of these for all treesitter compatible filetypes
+                    --  TODO is this what nvim-treesitter used to do automatically?
+
                     -- * nvim treesitter highlighting
                     vim.treesitter.start()
 
@@ -119,8 +118,11 @@ return {
                     vim.wo.foldmethod = 'expr'
                     vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
                     vim.o.foldenable = false -- no autofolding, just manual after open file
-                    -- TODO! load this for all treesitter compat filetypes?
                     -- TODO add folding queries for my parsers (none yet)
+
+                    -- * nvim-treesitter indentation (experimental)
+                    vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+
                 end,
             })
             do return end
