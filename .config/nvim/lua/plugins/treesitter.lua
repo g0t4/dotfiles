@@ -102,7 +102,7 @@ return {
             -- ? wasm builds?
             --   TODO also I'm fine w/ letting nvim-treesitter handle compiling my parsers
             --
-            -- TODO look into `:h treesitter-language-injections` and see if you can get this to work now! i.e. JSON within harmony tool calls (or XML within Qwen tool calls)
+            -- TODO read `:h treesitter-language-injections` apparently nothing to config for this
             --
             vim.api.nvim_create_autocmd("FileType", {
                 callback = function(args)
