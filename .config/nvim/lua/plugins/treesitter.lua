@@ -65,12 +65,33 @@ return {
         config = function()
             -- nvim ships with these parsers now: C - Lua - Markdown - Vimscript - Vimdoc - Treesitter query files |ft-query-plugin|
             require('nvim-treesitter').install { "python", "javascript", "typescript", "html", "css", "json", "yaml", }
+            -- v0.12+ notes:
+            -- - well worth the time to read `:help treesitter-highlight` to learn what nvim covers
+            -- - nvim-treesitter does these things over builtin nvim treesitter support:
+            --   - install parsers by compiling them using tree-sitter-cli
+            --   - additional features beyon highlighting that nvim does:
+            --     - folding,
+            --     - TODO list others and see what changed in v0.12
+            --     - textobjects 'nvim-treesitter/nvim-treesitter-textobjects',
+            --   - :InspectTree
+            -- - :TSModuleInfo is gone now OR am I not setting up nvim-treesitter correctly now?
+            --
+            -- TODOs... do I need to register filetypes now...
+            -- vim.treesitter.language.register('qwen_chatml', { 'qwen_chatml' })
+            -- vim.treesitter.language.register('harmony', { 'harmony' })
 
+            -- ok to get highlights to work for my custom parsers:
+            -- add parser dir to plugin path so highlights.scm is discoverable
+            -- then manually call :=vim.treesitter.start() when window is focused with buffer with harmony/qwen_chatml file is opened
+            --   works!
+            --   TODO start highlighting when the filetype is opened
+            vim.opt.runtimepath:append(vim.fn.expand("~/repos/github/g0t4/tree-sitter-harmony"))
+            vim.opt.runtimepath:append(vim.fn.expand("~/repos/github/g0t4/tree-sitter-qwen-chatml"))
+            -- TODO take compiled parser out of nvim-treesitter's parsers dir? and get nvim to discover parser in the repo now?
             do return end
             require 'nvim-treesitter.configs'.setup {
                 sync_install = false,
                 auto_install = true, -- auto install on entering buffer (must have tree-sitter CLI, IIUC)
-                -- ignore_install
 
                 -- TODO review other builtin modules/plugins:
                 -- - https://github.com/nvim-treesitter/nvim-treesitter/wiki/Extra-modules-and-plugins
@@ -125,8 +146,6 @@ return {
             }
 
             -- add to RTP for queries dirs (could use this for parser too)
-            vim.opt.runtimepath:append(vim.fn.expand("~/repos/github/g0t4/tree-sitter-harmony"))
-            vim.opt.runtimepath:append(vim.fn.expand("~/repos/github/g0t4/tree-sitter-qwen-chatml"))
             --   :echo globpath(&rtp, 'queries/qwen_chatml/*', 1, 1)
             --   :echo globpath(&rtp, 'queries/harmony/*', 1, 1)
 
