@@ -87,7 +87,27 @@ return {
             --   TODO start highlighting when the filetype is opened
             vim.opt.runtimepath:append(vim.fn.expand("~/repos/github/g0t4/tree-sitter-harmony"))
             vim.opt.runtimepath:append(vim.fn.expand("~/repos/github/g0t4/tree-sitter-qwen-chatml"))
-            -- TODO take compiled parser out of nvim-treesitter's parsers dir? and get nvim to discover parser in the repo now?
+            --
+            -- * manually add parser instead of nvim-treesitter
+            --   ([re]move parsers out of ~/.local/share/nvim/lazy/nvim-treesitter/parser/ dir)
+            --   restart neovim and try start treesitter highlighting => make sure fails before try loading own:
+            --      vim.treesitter.start()
+            --   then register manually:
+            vim.treesitter.language.add("qwen_chatml",
+                {
+                    path = vim.fn.expand("~/repos/github/g0t4/tree-sitter-qwen-chatml/qwen-chatml.dylib"),
+                })
+            vim.treesitter.language.add("harmony",
+                {
+                    path = vim.fn.expand("~/repos/github/g0t4/tree-sitter-harmony/harmony.dylib"),
+                })
+            -- ? wasm builds?
+            -- then
+            --   TODO one issue, on macOS I built a dylib and wasm... not *.so and nvim-treesitter is building my parsers as *.so...
+            --   TODO OR.. let nvim-treesitter do the compile like before (fine by me too)
+            --
+            -- TODO look into `:h treesitter-language-injections` and see if you can get this to work now! i.e. JSON within harmony tool calls (or XML within Qwen tool calls)
+
             do return end
             require 'nvim-treesitter.configs'.setup {
                 sync_install = false,
