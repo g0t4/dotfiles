@@ -411,19 +411,20 @@ return {
             vim.keymap.set({ 'n', 'v' }, '<leader>wt', function() live_grep_word_under_cursor_same_file_type(false) end)
             vim.keymap.set({ 'n', 'v' }, '<leader>WT', function() live_grep_word_under_cursor_same_file_type(true) end)
 
+            -- TODO just write my own expander later... if I really want more than *_ one char after *
             local exts = {
                 f = "fish",
                 j = "{js,json}",
-                js = "{js,json}",
+                -- js = "{js,json}", -- fucking retarded rules can't have multiple key(word) chars after a non-keyword char (*)... WHO FUCKING MAKES THIS STUPID FUCKING SHIT UP
                 l = "lua", -- but for three chars I'd prefer *l
                 m = "md",
-                md = "md",
+                -- md = "md",
                 p = "py",
-                py = "py", -- sometimes I wanna do *py
+                -- py = "py", -- sometimes I wanna do *py
                 t = "ts",
-                ts = "ts",
+                -- ts = "ts",
                 r = "rs",
-                rs = "rs",
+                -- rs = "rs",
                 y = "{yaml,yml}"
             }
             local logs = require("devtools.logs.logger"):universal()
