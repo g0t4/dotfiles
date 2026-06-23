@@ -1,4 +1,5 @@
 local parse_time_to_seconds = require('config.macros.screenpal.helpers')
+local log = require("config.logs").hammerspoons()
 
 ---@class TimelineController
 ---@field _timeline_frame AXFrame
@@ -46,10 +47,13 @@ function TimelineController:new(editor_window)
     self._playhead_screen_x = _playhead_screen_x
     self._playhead_timeline_relative_x = _playhead_timeline_relative_x
 
+    show_cmd_a_view_for_element(_playhead_window)
+
     local time_string = _playhead_window:textField(1)
         :axValue()
         :gsub("\n", "")
     self.time_string = time_string
+    log:info("time_string", time_string)
     self.time_seconds = parse_time_to_seconds(time_string)
 
     return self
