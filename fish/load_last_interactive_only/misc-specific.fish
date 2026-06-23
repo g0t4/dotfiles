@@ -2842,6 +2842,10 @@ abbr tt_devtools_universal 'trash_n_tail ~/.local/share/devtools/universal.log' 
 abbr tail_all_devtools_universal 'tail -1000 ~/.local/share/devtools/universal.log | rg_grep -v ClearScrollback' # strip ClearScrollback/1337 so I can see history
 abbr tail_devtools_universal 'tail -F ~/.local/share/devtools/universal.log'
 #
+abbr tt_devtools_hammerspoons 'trash_n_tail ~/.local/share/devtools/hammerspoons.log' # nvim plugin
+abbr tail_all_devtools_hammerspoons 'tail -1000 ~/.local/share/devtools/hammerspoons.log | rg_grep -v ClearScrollback' # strip ClearScrollback/1337 so I can see history
+abbr tail_devtools_hammerspoons 'tail -F ~/.local/share/devtools/hammerspoons.log'
+#
 # for now I want to keep the commands.log, maybe go back to trash_n_tail later on, for now leave tt as tail -F too:
 abbr tt_mcp_server_commands 'tail -F ~/.local/share/mcp-server-commands/commands.log'
 abbr tail_mcp_server_commands 'tail -F ~/.local/share/mcp-server-commands/commands.log'
