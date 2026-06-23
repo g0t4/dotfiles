@@ -2838,9 +2838,9 @@ abbr tailr 'tail -r' # reverse order
 # *** frequently tailed files
 abbr tt trash_n_tail
 #
-abbr tt_devtools_universal 'trash_n_tail ~/.local/share/nvim/devtools/universal.log' # nvim plugin
-abbr tail_all_devtools_universal 'tail -1000 ~/.local/share/nvim/devtools/universal.log | rg_grep -v ClearScrollback' # strip ClearScrollback/1337 so I can see history
-abbr tail_devtools_universal 'tail -F ~/.local/share/nvim/devtools/universal.log'
+abbr tt_devtools_universal 'trash_n_tail ~/.local/share/devtools/universal.log' # nvim plugin
+abbr tail_all_devtools_universal 'tail -1000 ~/.local/share/devtools/universal.log | rg_grep -v ClearScrollback' # strip ClearScrollback/1337 so I can see history
+abbr tail_devtools_universal 'tail -F ~/.local/share/devtools/universal.log'
 #
 # for now I want to keep the commands.log, maybe go back to trash_n_tail later on, for now leave tt as tail -F too:
 abbr tt_mcp_server_commands 'tail -F ~/.local/share/mcp-server-commands/commands.log'
