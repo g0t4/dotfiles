@@ -954,8 +954,7 @@ function build_abbrs_for_filetype
     abbr --command $sed_cmd --position=anywhere "*$filetype_letter" $rg_filter
 
     # * ripgrep
-    set rg_ "rg$filetype_letter"
-    abbr_with_warn $rg_ "rg -g '*.$glob_end'"
+    abbr_with_warn "rg$filetype_letter" "rg -g '*.$glob_end'"
 
 end
 
