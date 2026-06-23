@@ -64,7 +64,7 @@ return {
 
         config = function()
             -- nvim ships with these parsers now: C - Lua - Markdown - Vimscript - Vimdoc - Treesitter query files |ft-query-plugin|
-            require('nvim-treesitter').install { "python", "javascript", "typescript", "html", "css", "json", "yaml", }
+            require('nvim-treesitter').install { "python", "javascript", "typescript", "html", "css", "json", "yaml", "fish", }
             -- v0.12+ notes:
             -- - nvim owns treesitter highlighting, folding
             -- - nvim-treesitter is a parser register/compiler
