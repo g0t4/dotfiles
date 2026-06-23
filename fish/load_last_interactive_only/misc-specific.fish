@@ -23,7 +23,7 @@ function warn_if_abbr_exists --argument-names abbr_name \
 
 end
 
-function abbr_with_warn --argument-names abbr_name
+function abbr_with_warn --argument-names abbr_name --description "MAKE SURE TO PASS abbreviated text first!!!"
     # TODO make check efficient enough I can replace with all abbr usages?
     warn_if_abbr_exists $abbr_name
     abbr $argv
@@ -951,7 +951,7 @@ function build_abbrs_for_filetype
     abbr --set-cursor $_abbr "$sed_cmd -Ei 's/%//g' $rg_filter"
 
     # 2. *l => (rg -g "*.lua" --files-with-matches ___)
-    abbr --command $sed_cmd --position=anywhere "*$filetype_letter" $rg_filter
+    abbr_with_warn "*$filetype_letter" --command $sed_cmd --position=anywhere $rg_filter
 
     # * ripgrep
     abbr_with_warn "rg$filetype_letter" "rg -g '*.$glob_end'"
