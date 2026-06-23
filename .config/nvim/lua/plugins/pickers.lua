@@ -410,6 +410,32 @@ return {
 
             vim.keymap.set({ 'n', 'v' }, '<leader>wt', function() live_grep_word_under_cursor_same_file_type(false) end)
             vim.keymap.set({ 'n', 'v' }, '<leader>WT', function() live_grep_word_under_cursor_same_file_type(true) end)
+
+            local exts = {
+                l = "lua",
+                p  = "py",
+                j  = "js",
+                r  = "rs",
+                t  = "ts",
+            }
+            local logs = require("devtools.logs.logger"):universal()
+            vim.api.nvim_create_autocmd("FileType", {
+                pattern = "TelescopePrompt",
+                callback = function()
+                    for short, ext in pairs(exts) do
+                        -- logs:info(short, ext)
+                        -- *l => -g *.lua
+                        -- FYI this matches what I have for command scoped rg abbrs in fish
+                        local iabbr = string.format(
+                            "iabbrev <buffer> *%s -g='*.%s'",
+                            short,
+                            ext
+                        )
+                        -- logs:info(iabbr)
+                        vim.cmd(iabbr)
+                    end
+                end,
+            })
         end,
     },
 
