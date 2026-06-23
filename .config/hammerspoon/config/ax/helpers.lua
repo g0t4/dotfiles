@@ -123,6 +123,27 @@ axuielemMT.popover = function(self, index)
     return self:popovers()[index]
 end
 
+--- FYI! marked to use caution b/c of weird behavior with the returned control objects and its children
+--- almost like hammerspoon needs an update
+---@return hs.axuielement[]
+axuielemMT.popUps_use_with_caution = function(self)
+    -- FYI childrenWithRole("popup") DOES NOT WORK AFAICT or I am messing up my testing
+    --  seems like the window with popup is a quasi axuielement control
+    --
+    -- SO FOR NOW just use attribute AXChildren which does work:
+    --  I found this works b/c my inspector uses it and was able to find the children
+    return vim.iter(self:attributeValue("AXChildren") or {})
+        :filter(function(child) return child:attributeValue("AXRole") == "popup" end)
+        :totable()
+end
+--- FYI! marked to use caution b/c of weird behavior with the returned control objects and its children
+--- almost like hammerspoon needs an update
+---@param index number
+---@return hs.axuielement
+axuielemMT.popUp_with_caution = function(self, index)
+    return self:popUps_use_with_caution()[index]
+end
+
 --- AXPopUpButton controls
 ---@return hs.axuielement[]
 axuielemMT.popUpButtons = function(self)

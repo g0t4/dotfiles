@@ -15,6 +15,28 @@ local function get_playhead_window(app_windows)
     -- app:window(2)
     -- AXRoleDescription: window<string>
     -- AXTitle: SOM-FloatingWindow-Type=edit2.posbar-ZOrder=1(Undefined+1)<string>
+    --  app:window(2):popup(1):textArea(1)
+    --
+    -- AXDescription:  <string>
+    -- AXEdited: true<bool>
+    -- AXEnabled: true<bool>
+    -- AXFocused: false<bool>
+    -- AXFocusedUIElement: AXTextArea -  <hs.axuielement>
+    -- AXHelp:  <string>
+    -- AXIndex: 0<number>
+    -- AXMaxValue: 0<number>
+    -- AXMinValue: 0<number>
+    -- AXOrientation: AXUnknownOrientation<string>
+    -- AXRoleDescription: text entry area<string>
+    -- AXSelected: false<bool>
+    -- AXValue:
+    -- 0:16.16<string>
+    -- frame: x=1204.0,y=892.0,w=45.0,h=20.0
+    --
+    -- press 'c' children, 'e' everything
+    --
+    -- unique ref: app:window('SOM-FloatingWindow-Type=edit2.posbar-ZOrder=1(Undefined+1)'):popup():textArea()   --
+    --
     return app_windows:get_window_by_title_pattern("^SOM%-FloatingWindow%-Type=edit2.posbar%-ZOrder=1")
 end
 
@@ -47,12 +69,22 @@ function TimelineController:new(editor_window)
     self._playhead_screen_x = _playhead_screen_x
     self._playhead_timeline_relative_x = _playhead_timeline_relative_x
 
-    show_cmd_a_view_for_element(_playhead_window)
+    -- log:info("playhead screen x: ", _playhead_screen_x)
+    log:info("_playhead_window", _playhead_window)
 
-    local time_string = _playhead_window:textField(1)
+    -- show_cmd_a_view_for_element(_playhead_window)
+
+    local popup = _playhead_window:children()[1] -- popUp_with_caution works too b/c it also uses AXChildren
+    local text_area_now = popup:children()[1] -- only way to get this is AXChildren => AXChildren???
+
+    local time_string = text_area_now
         :axValue()
         :gsub("\n", "")
     self.time_string = time_string
+    -- OK some weird stuff going on... hammerspoon logging userdata instances for some screenpal controls...
+    --  BUT I can see them fine with my inspector...
+    --  anyways there's something funky here
+    --  seems to be a new "popup" control between timeline time in posbar and the window... not sure I'd have to look at older version to see if it did it diff
     log:info("time_string", time_string)
     self.time_seconds = parse_time_to_seconds(time_string)
 
