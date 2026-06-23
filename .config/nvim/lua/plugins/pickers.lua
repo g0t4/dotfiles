@@ -412,11 +412,19 @@ return {
             vim.keymap.set({ 'n', 'v' }, '<leader>WT', function() live_grep_word_under_cursor_same_file_type(true) end)
 
             local exts = {
-                l = "lua",
-                p  = "py",
-                j  = "js",
-                r  = "rs",
-                t  = "ts",
+                f = "fish",
+                j = "{js,json}",
+                js = "{js,json}",
+                l = "lua", -- but for three chars I'd prefer *l
+                m = "md",
+                md = "md",
+                p = "py",
+                py = "py", -- sometimes I wanna do *py
+                t = "ts",
+                ts = "ts",
+                r = "rs",
+                rs = "rs",
+                y = "{yaml,yml}"
             }
             local logs = require("devtools.logs.logger"):universal()
             vim.api.nvim_create_autocmd("FileType", {
