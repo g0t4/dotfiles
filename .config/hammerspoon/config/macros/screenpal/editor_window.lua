@@ -89,7 +89,6 @@ function ScreenPalEditorWindow:force_refresh_cached_controls()
                 if role == "AXButton" then
                     if description == "Minimum Zoom" then
                         -- AXIndex: 3, #42 in array in my testing (could change)
-                        log:info("found _btn_minimum_zoom", vim.inspect(ui_elem))
                         self._btn_minimum_zoom = ui_elem
                         return -- continue early so I can add more complex checks below and avoid them when possible
                     elseif description == "Medium Zoom" then
