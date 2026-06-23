@@ -917,6 +917,7 @@ function build_abbrs_for_filetype
     set rg_filter "(rg -g '*.$glob_end' --files-with-matches ___)"
 
     # 1. dedicated abbr per file type(s)
+    #   i.e. sedl, sedf, sedp, etc
     abbr --set-cursor $_abbr "$sed_cmd -Ei 's/%//g' $rg_filter"
 
     # 2. *l => (rg -g "*.lua" --files-with-matches ___)
