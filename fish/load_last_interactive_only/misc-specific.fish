@@ -16,9 +16,12 @@ function warn_if_abbr_exists --argument-names abbr_name \
 
     log_ --apple_red "## WARNING $abbr_name already defined:"
 
-    # * show existing abbr
+    # * show existing abbr (not fool proof due to need to pattern matching)
+    #  there is no way to lookup an abbr in fish, not currently...
+    #  that said they do show if you redefine, they show both definitions (not sure if that is new and/or intentional, I just noticed it)
     # TODO! add `abbrs foo` like `functions foo` for fish-shell (lookup an abbr and show only its value)
-    abbr | rg_grep -i "\-\- $abbr_name\b"
+    abbr | rg --fixed-strings -- "-- $abbr_name"
+    abbr | rg --fixed-strings -- "-- '$abbr_name'" # if quoted, then will have '' around abbr
     # FYI \-\- matches most (if not all abbrs that start with the pattern after):
 
 end
@@ -936,6 +939,7 @@ abbr --set-cursor sedi "$sed_cmd -i 's/%//g'"
 # use this to take your sed search regex and limit the files and then the file names are passed back
 abbr --set-cursor --command $sed_cmd --position=anywhere -- rg "(rg --files-with-matches %)"
 
+# abbr "*l" "test redefined (do you see this in warning?)"
 function build_abbrs_for_filetype
     # FYI there may be some bugs here in porting this, just heads up... use and find out
 
