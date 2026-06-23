@@ -3,38 +3,39 @@ if not status is-interactive
     return
 end
 
-function warn_if_abbr_exists --argument-names abbr_name \
-    --description "EXPENSIVE-ISH: precaution for abbrs that are likely to have overlap"
-    # FYI not expensive if only doing this on a handful of abbrs...
-    #  but when you have 10K abbrs => 10K*24us => 240ms which is OUCH!
-    #
-    # TODO! contribute a setting $fish_warn_replace_abbr to do warn on replace (always) and then a --replace to squelch the warning?
-    #   TODO would need to be very low overhead OR enabled in some mode that dumps debug info only
-    if not abbr --query "$abbr_name"
-        return
-    end
-
-    log_ --apple_red "## WARNING $abbr_name already defined:"
-
-    # * show existing abbr (not fool proof due to need to pattern matching)
-    #  there is no way to lookup an abbr in fish, not currently...
-    #  that said they do show if you redefine, they show both definitions (not sure if that is new and/or intentional, I just noticed it)
-    # TODO! add `abbrs foo` like `functions foo` for fish-shell (lookup an abbr and show only its value)
-    abbr | rg --fixed-strings -- "-- $abbr_name"
-    abbr | rg --fixed-strings -- "-- '$abbr_name'" # if quoted, then will have '' around abbr
-    # FYI \-\- matches most (if not all abbrs that start with the pattern after):
-
-end
-
-function abbr_with_warn --argument-names abbr_name --description "MAKE SURE TO PASS abbreviated text first!!!"
-    # TODO make check efficient enough I can replace with all abbr usages?
-    warn_if_abbr_exists $abbr_name
-    abbr $argv
-
-    # usage:
-    #   abbr foo bar
-    #   abbr_with_warn foo bar  # warns since foo defined already
-end
+# function warn_if_abbr_exists --argument-names abbr_name \
+#     --description "EXPENSIVE-ISH: precaution for abbrs that are likely to have overlap"
+#     # TODO foooo this is broken for command scoped abbrs... that overlap but are for diff commands (or one is command scoped and another is global (not command))
+#     # FYI not expensive if only doing this on a handful of abbrs...
+#     #  but when you have 10K abbrs => 10K*24us => 240ms which is OUCH!
+#     #
+#     # TODO! contribute a setting $fish_warn_replace_abbr to do warn on replace (always) and then a --replace to squelch the warning?
+#     #   TODO would need to be very low overhead OR enabled in some mode that dumps debug info only
+#     if not abbr --query "$abbr_name"
+#         return
+#     end
+#
+#     log_ --apple_red "## WARNING $abbr_name already defined:"
+#
+#     # * show existing abbr (not fool proof due to need to pattern matching)
+#     #  there is no way to lookup an abbr in fish, not currently...
+#     #  that said they do show if you redefine, they show both definitions (not sure if that is new and/or intentional, I just noticed it)
+#     # TODO! add `abbrs foo` like `functions foo` for fish-shell (lookup an abbr and show only its value)
+#     abbr | rg --fixed-strings -- "-- $abbr_name"
+#     abbr | rg --fixed-strings -- "-- '$abbr_name'" # if quoted, then will have '' around abbr
+#     # FYI \-\- matches most (if not all abbrs that start with the pattern after):
+#
+# end
+#
+# function abbr_with_warn --argument-names abbr_name --description "MAKE SURE TO PASS abbreviated text first!!!"
+#     # TODO make check efficient enough I can replace with all abbr usages?
+#     warn_if_abbr_exists $abbr_name
+#     abbr $argv
+#
+#     # usage:
+#     #   abbr foo bar
+#     #   abbr_with_warn foo bar  # warns since foo defined already
+# end
 
 # modify delay to consider if esc key a seq or standalone
 set fish_escape_delay_ms 200 # 30ms is default and way too fast (ie esc+k is almost impossible to trigger)
@@ -954,11 +955,15 @@ function build_abbrs_for_filetype
     #   i.e. sedl, sedf, sedp, etc
     abbr --set-cursor $_abbr "$sed_cmd -Ei 's/%//g' $rg_filter"
 
+    # within rg command expand into glob filter
+    # rg *l => rg -g '*.lua'
+    abbr --command rg -- "*$filetype_letter" "-g '*.$glob_end'"
+
     # 2. *l => (rg -g "*.lua" --files-with-matches ___)
-    abbr_with_warn "*$filetype_letter" --command $sed_cmd --position=anywhere $rg_filter
+    abbr "*$filetype_letter" --command $sed_cmd --position=anywhere $rg_filter
 
     # * ripgrep
-    abbr_with_warn "rg$filetype_letter" "rg -g '*.$glob_end'"
+    abbr "rg$filetype_letter" "rg -g '*.$glob_end'"
 
 end
 
