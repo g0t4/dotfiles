@@ -425,9 +425,19 @@ local function html_pre_code_lua(script)
     return "<pre>" .. html_code_lua(script) .. "</pre>"
 end
 
-hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "A", function()
+function show_cmd_a_view_for_element(element_at)
     ensure_cleared_web_view()
+    local clauses, attr_dumps = build_applescript_to(element_at, true)
+    local applescript = ConcatIntoLines(clauses, 80, "¬")
+    prints(html_pre_code_applescript(applescript))
+    local lua = BuildHammerspoonLuaTo(element_at)
+    prints(html_pre_code_lua(lua))
+    prints(build_action_examples(element_at))
+    prints(get_dump_path(element_at, true))
+    prints(table.unpack(attr_dumps))
+end
 
+hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "A", function()
     -- [A]ppleScript
     -- FYI "A" is easy to invoke with left hand alone (after position mouse with right--trackpad)
     -- reserve "I" for some other inspect mode? maybe to toggle mouse inspect mode
@@ -455,14 +465,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "A", function()
         --   alternatively, could use an app element and ask for its elementAtPosition specific to just that app
         element_at = hs.axuielement.systemElementAtPosition(coords)
     end
-    local clauses, attr_dumps = build_applescript_to(element_at, true)
-    local applescript = ConcatIntoLines(clauses, 80, "¬")
-    prints(html_pre_code_applescript(applescript))
-    local lua = BuildHammerspoonLuaTo(element_at)
-    prints(html_pre_code_lua(lua))
-    prints(build_action_examples(element_at))
-    prints(get_dump_path(element_at, true))
-    prints(table.unpack(attr_dumps))
+    show_cmd_a_view_for_element(element_at)
 end)
 
 -- see AppleScript The Definitive Guide, page 197 about Element Specifier forms (name, index, ID, some, every, range, relative, bool test [whose?],...?)
