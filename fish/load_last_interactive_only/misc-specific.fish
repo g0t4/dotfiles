@@ -7,13 +7,30 @@ function warn_if_abbr_exists --argument-names abbr_name \
     --description "EXPENSIVE-ISH: precaution for abbrs that are likely to have overlap"
     # FYI not expensive if only doing this on a handful of abbrs...
     #  but when you have 10K abbrs => 10K*24us => 240ms which is OUCH!
-    # TODO override abbr and do this myself? issue was inefficiency of using abbr to do this OOB
-    # TODO perhaps mainline a setting $fish_warn_replace_abbr to do this automatically and then a --replace to squelch the warning?
+    #
+    # TODO! contribute a setting $fish_warn_replace_abbr to do warn on replace (always) and then a --replace to squelch the warning?
+    #   TODO would need to be very low overhead OR enabled in some mode that dumps debug info only
     if not abbr --query "$abbr_name"
         return
     end
+
     log_ --apple_red "## WARNING $abbr_name already defined:"
-    abbr | rg_grep "$abbr_name"
+
+    # * show existing abbr
+    # TODO! add `abbrs foo` like `functions foo` for fish-shell (lookup an abbr and show only its value)
+    abbr | rg_grep -i "\-\- $abbr_name\b"
+    # FYI \-\- matches most (if not all abbrs that start with the pattern after):
+
+end
+
+function abbr_with_warn --argument-names abbr_name
+    # TODO make check efficient enough I can replace with all abbr usages?
+    warn_if_abbr_exists $abbr_name
+    abbr $argv
+
+    # usage:
+    #   abbr foo bar
+    #   abbr_with_warn foo bar  # warns since foo defined already
 end
 
 # modify delay to consider if esc key a seq or standalone
@@ -938,8 +955,7 @@ function build_abbrs_for_filetype
 
     # * ripgrep
     set rg_ "rg$filetype_letter"
-    warn_if_abbr_exists $rg_
-    abbr $rg_ "rg -g '*.$glob_end'"
+    abbr_with_warn $rg_ "rg -g '*.$glob_end'"
 
 end
 
