@@ -3,6 +3,19 @@ if not status is-interactive
     return
 end
 
+function warn_if_abbr_exists --argument-names abbr_name \
+    --description "EXPENSIVE-ISH: precaution for abbrs that are likely to have overlap"
+    # FYI not expensive if only doing this on a handful of abbrs...
+    #  but when you have 10K abbrs => 10K*24us => 240ms which is OUCH!
+    # TODO override abbr and do this myself? issue was inefficiency of using abbr to do this OOB
+    # TODO perhaps mainline a setting $fish_warn_replace_abbr to do this automatically and then a --replace to squelch the warning?
+    if not abbr --query "$abbr_name"
+        return
+    end
+    log_ --apple_red "## WARNING $abbr_name already defined:"
+    abbr | rg_grep "$abbr_name"
+end
+
 # modify delay to consider if esc key a seq or standalone
 set fish_escape_delay_ms 200 # 30ms is default and way too fast (ie esc+k is almost impossible to trigger)
 
@@ -924,11 +937,9 @@ function build_abbrs_for_filetype
     abbr --command $sed_cmd --position=anywhere "*$filetype_letter" $rg_filter
 
     # * ripgrep
-    if abbr -q "rg$filetype_letter"
-        log_ --apple_red "## WARNING rg$filetype_letter already defined:"
-        abbr | rg_grep "rg$filetype_letter"
-    end
-    abbr "rg$filetype_letter" "rg -g '*.$glob_end'"
+    set rg_ "rg$filetype_letter"
+    warn_if_abbr_exists $rg_
+    abbr $rg_ "rg -g '*.$glob_end'"
 
 end
 
