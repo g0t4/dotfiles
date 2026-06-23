@@ -196,6 +196,7 @@ local function show_tooltip_for_element(element, frame)
                 local subrole = child:attributeValue("AXSubrole")
                 local title = child:attributeValue("AXTitle")
                 local description = child:attributeValue("AXDescription")
+                local value = child:attributeValue("AXValue")
                 local child_text = role
                 if subrole then
                     child_text = child_text .. "(" .. subrole .. ")"
@@ -206,6 +207,9 @@ local function show_tooltip_for_element(element, frame)
                 end
                 if description then
                     child_text = child_text .. " desc:" .. quote(description)
+                end
+                if value then
+                    child_text = child_text .. " value:" .. quote(value)
                 end
                 table.insert(attributes, child_text)
             end
