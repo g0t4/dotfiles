@@ -1,9 +1,13 @@
-function NeovimExecCommand(cmdline)
+local function NOOP() end
+
+function NeovimExecCommand(cmdline, callback)
+    callback = callback or NOOP
     hs.eventtap.keyStroke({}, hs.keycodes.map["escape"])
     hs.eventtap.keyStroke({}, hs.keycodes.map["escape"])
 
     hs.eventtap.keyStrokes(":")
 
+    -- PRN rewrite to use my coroutines "fwk"
     hs.timer.doAfter(0.1, function()
         -- wait a second for cmd mode else will mess up with typing
         hs.eventtap.keyStrokes(cmdline)
@@ -11,6 +15,7 @@ function NeovimExecCommand(cmdline)
         hs.timer.doAfter(0.1, function()
             -- enter won't work right away, allow typing to complete
             hs.eventtap.keyStroke({}, hs.keycodes.map["return"])
+            callback()
         end)
     end)
 end
