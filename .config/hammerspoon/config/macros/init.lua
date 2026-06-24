@@ -6,8 +6,8 @@ local km_run_lua = logger.create("km_run_lua.log")
 local M = {}
 
 ---@param message string
-function poke_human(log_context, message)
-    km_run_lua:error(log_context, message)
+function poke_human(message)
+    km_run_lua:error(message)
     -- file:flush() -- TODO flush? equivalent?
 
     -- => temporary alert to nudge checking log file
@@ -26,19 +26,23 @@ function StreamDeckKeyboardMaestroRunner(what)
     -- - so I inevitably silence outputs in KM (b/c no good way to decide when and what to show)
     -- - THUS => use a log file, especially for info level logs
     -- - + egregious and unhandled exceptions poke the user (i.e. hs.alert.show)
-    local log_context = "km `" .. what .. "`"
+
+    -- TODO use thread context for logger context?
+    km_run_lua:set_context("km `" .. what .. "`")
+
     xpcall(function()
-        km_run_lua:info(log_context, "starting")
+        km_run_lua:info("starting")
         -- keep parsing inside too so logs get it all
         local func = load(what)
         if func == nil then
-            poke_human(log_context, "failed to load")
+            poke_human("failed to load")
             return
         end
         func()
     end, function(errorMsg)
-        poke_human(log_context, "error: " .. tostring(errorMsg))
+        poke_human("error: " .. tostring(errorMsg))
     end)
+    km_run_lua:release_context()
 end
 
 require("config.macros.brave")
