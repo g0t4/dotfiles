@@ -27,22 +27,16 @@ function StreamDeckKeyboardMaestroRunner(what)
     -- - THUS => use a log file, especially for info level logs
     -- - + egregious and unhandled exceptions poke the user (i.e. hs.alert.show)
 
-    -- TODO use thread context for logger context?
-    km_run_lua:set_context("km `" .. what .. "`")
-
-    xpcall(function()
-        km_run_lua:info("starting")
-        -- keep parsing inside too so logs get it all
-        local func = load(what)
-        if func == nil then
-            poke_human("failed to load")
-            return
-        end
-        func()
-    end, function(errorMsg)
-        poke_human("error: " .. tostring(errorMsg))
-    end)
-    km_run_lua:release_context()
+    km_run_lua:with_context("km `" .. what .. "`",
+        function()
+            local func = load(what) -- load lua here so invalid lua code failures are logged too
+            if func == nil then
+                poke_human("failed to load")
+                return
+            end
+            func()
+            -- poke_human("error: " .. tostring(errorMsg))
+        end)
 end
 
 require("config.macros.brave")
