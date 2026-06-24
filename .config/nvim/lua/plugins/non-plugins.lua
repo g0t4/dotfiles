@@ -34,6 +34,7 @@ return {
             require('non-plugins.keymaps')
             -- require('non-plugins.spal_repl_client')
             require("non-plugins.nvr-focused")
+            require("non-plugins.quickfixs")
 
             -- FYI WIP ... uncomment next time to work on it:
             local code_notes = require("non-plugins.code_notes")
