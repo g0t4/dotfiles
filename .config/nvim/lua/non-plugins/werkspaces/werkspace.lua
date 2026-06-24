@@ -189,18 +189,20 @@ function close_temp_windows_so_they_do_not_reopen()
 
     vim.iter(vim.api.nvim_list_wins()):each(function(win)
         -- logs:info("win", win)
-        local buf = vim.api.nvim_win_get_buf(win)
-        local buf_name = vim.api.nvim_buf_get_name(buf)
+        local buf_nr = vim.api.nvim_win_get_buf(win)
+        local buf_name = vim.api.nvim_buf_get_name(buf_nr)
+        local ft = vim.bo[buf_nr].filetype
         -- logs:info("buf_name", buf_name)
+        logs:info("ft", ft)
         if
             buf_name:match('coc%-nvim%.log') or
             buf_name:match('output:///') or -- output:// include coc windows from :CocCommand workspace.showOutput
             buf_name:match('COMMIT_EDITMSG') or -- close git commit windows on quit (so they don't reopen on next run)
             buf_name:match('term:') or -- close terminal windows (else show as [No Name] on next nvim start, super annoying)
-            buf_name:match('git%-rebase%-todo') -- git rebase commit message (by the way - is escaped with %-)
-
-            -- FYI use this to check current buffer:
-            --  := vim.api.nvim_buf_get_name(0):match('git%-rebase%-todo')
+            buf_name:match('git%-rebase%-todo') or -- git rebase commit message (by the way - is escaped with %-)
+            ft == 'qf' -- quick fix lists (close on restart)
+        -- FYI use this to check current buffer:
+        --  := vim.api.nvim_buf_get_name(0):match('git%-rebase%-todo')
         then
             -- TODO if its the last window, then open a new tab first? cannot close last window
             -- logs:info("closing window for buf_name:", buf_name)
