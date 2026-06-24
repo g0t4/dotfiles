@@ -5,15 +5,8 @@ local km_run_lua = logger.create("km_run_lua.log")
 
 local M = {}
 
----@param message string
-function poke_human(message)
-    km_run_lua:error(message)
-    -- file:flush() -- TODO flush? equivalent?
-
-    -- => temporary alert to nudge checking log file
-    --  would be neat if I could check if I am tailing log file and if so then not nudge!
-    poke = "poke... check " .. km_run_lua.basename
-    hs.alert.show(poke, nil, nil, 5)
+function nudge_human()
+    hs.alert.show("check " .. km_run_lua.basename, nil, nil, 5)
 end
 
 function StreamDeckKeyboardMaestroRunner(what)
@@ -29,14 +22,16 @@ function StreamDeckKeyboardMaestroRunner(what)
 
     km_run_lua:with_context("km `" .. what .. "`",
         function()
-            local func = load(what) -- load lua here so invalid lua code failures are logged too
-            if func == nil then
-                poke_human("failed to load")
+            local func, error_message = load(what) -- load lua here so invalid lua code failures are logged too
+            if error_message then
+                km_run_lua:error("load lua code failed", error_message)
+                nudge_human()
                 return
             end
             func()
-            -- poke_human("error: " .. tostring(errorMsg))
-        end)
+        end,
+        nudge_human
+    )
 end
 
 require("config.macros.brave")
