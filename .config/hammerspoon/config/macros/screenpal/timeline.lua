@@ -74,11 +74,15 @@ function TimelineController:new(editor_window)
 
     -- show_cmd_a_view_for_element(_playhead_window)
 
-    local popup = _playhead_window:children()[1] -- popUp_with_caution works too b/c it also uses AXChildren
-    local text_area_now = popup:children()[1] -- only way to get this is AXChildren => AXChildren???
+    -- 3.25+ has popup between window and text area
+    --  FYI when exploring 3.25 and all the issues it has, you could add a version check to switch between simple logic like here... so you can run both 3.23 and 3.25 w/o changing the code manually
+    -- local popup = _playhead_window:children()[1] -- popUp_with_caution works too b/c it also uses AXChildren
+    -- local text_area_now = popup:children()[1] -- only way to get this is AXChildren => AXChildren???
     -- YUP 3.25.2+ adds some fucking popup control in between window and text ... also it was textField
     --  window.popup(1).textArea(1) in 3.25.2+ (but classic childrenWithRole doesn't work so all my hs helpers are busted)
     --   thankfully AXChildren works still so I can just use that instead of hs's axuielement.childrenWithRole
+    -- 3.23 has window => text field
+    local text_area_now = _playhead_window:textField(1)
 
     local time_string = text_area_now
         :axValue()
