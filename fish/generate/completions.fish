@@ -17,3 +17,6 @@ set argcomplete_commands \
 for cmd in $argcomplete_commands
     register-python-argcomplete --shell fish $cmd > $WES_DOTFILES/fish/completions/$cmd.fish
 end
+
+# * hf CLI
+hf --show-completion > $WES_DOTFILES/fish/completions/hf.fish
