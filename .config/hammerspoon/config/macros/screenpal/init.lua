@@ -117,8 +117,10 @@ _G.CUT_15 = 'CUT_15'
 _G.CUT_20 = 'CUT_20' -- consider in this case starting preview always?
 -- start preview after marking cut, then if the user doesn't interrupt, accept the edit?
 _G.CUT_20_OK = 'CUT_20_OK'
+_G.CUT_20_OK_PREVIEW = 'CUT_20_OK_PREVIEW'
 _G.CUT_30 = 'CUT_30'
 _G.CUT_30_OK = 'CUT_30_OK'
+_G.CUT_30_OK_PREVIEW = 'CUT_30_OK_PREVIEW'
 _G.MUTE_RIGHT = 'MUTE_RIGHT' -- _OK too
 _G.MUTE_INWARD = 'MUTE_INWARD' -- _OK too
 
@@ -265,9 +267,9 @@ function act_on_silence(win, silence, action)
         win.windows:get_tool_window():wait_for_ok_button_then_press_it()
     end
 
-    -- Preview cut after auto-approve (cut with confirm in one action)
-    local is_cut_with_confirm = is_cut and is_auto_approve
-    if is_cut_with_confirm then
+    -- Preview cut after auto-approve (cut with confirm and preview in one action)
+    local is_cut_with_confirm_and_preview = is_cut and is_auto_approve and action:find("_PREVIEW")
+    if is_cut_with_confirm_and_preview then
         local timeline = win:timeline_controller()
         timeline:move_playhead_by_seconds(-1)
         win:ensure_playing(false)
