@@ -2885,9 +2885,13 @@ function _define_devtools_abbrs --argument-names name log_path
     abbr tail_devtools_$name "tail -F $log_path"
 end
 
-# Define abbreviations for each devtools log
-_define_devtools_abbrs universal   ~/.local/share/devtools/universal.log
-_define_devtools_abbrs hammerspoons ~/.local/share/devtools/hammerspoons.log
+# define abbrs for every *.log in the devtools directory
+set devtools_dir ~/.local/share/devtools
+for log_path in $devtools_dir/*.log
+    # strip directory and .log extension to get the abbreviation name
+    set abbr_name (basename $log_path .log)
+    _define_devtools_abbrs $abbr_name $log_path
+end
 
 #
 # for now I want to keep the commands.log, maybe go back to trash_n_tail later on, for now leave tt as tail -F too:
