@@ -1508,8 +1508,8 @@ local bookmarkActions = {
 
         -- Write back to clipboard
         hs.pasteboard.writeObjects({new_txt})
-        -- Type the text into the focused app
-        hs.eventtap.keyStrokes(new_txt)
+        -- Paste the fully converted text
+        hs.eventtap.keyStroke({'cmd'}, 'v')
     end,
     title_case = function()
         -- wrapper function gets title cased value
@@ -1526,7 +1526,8 @@ local bookmarkActions = {
         end
         print("title cased: ", title) -- remove when things are working well enough
         hs.pasteboard.writeObjects({ title })
-        hs.eventtap.keyStrokes(title)
+        -- Paste the fully converted text
+        hs.eventtap.keyStroke({'cmd'}, 'v')
     end,
 }
 
