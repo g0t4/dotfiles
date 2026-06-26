@@ -265,6 +265,14 @@ function act_on_silence(win, silence, action)
         win.windows:get_tool_window():wait_for_ok_button_then_press_it()
     end
 
+    -- Preview cut after auto-approve (cut with confirm in one action)
+    local is_cut_with_confirm = is_cut and is_auto_approve
+    if is_cut_with_confirm then
+        local timeline = win:timeline_controller()
+        timeline:move_playhead_by_seconds(-1)
+        win:ensure_playing(false)
+    end
+
     -- TODO check if mute button is muted icon? or w/e else to determine if I should click mute the first time?
 end
 
