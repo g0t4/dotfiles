@@ -628,28 +628,28 @@ function WIP_SPal_Cut_then_Mute_then_Preview()
 end
 
 function SPAL_Add_Rectangle()
-    SPal_Add_Shape("Rectangle")
+    SPAL_Add_Shape("Rectangle")
 end
 
 function SPAL_Add_RoundedRectangle()
-    SPal_Add_Shape("RoundedRectangle")
+    SPAL_Add_Shape("RoundedRectangle")
 end
 
 function SPAL_Add_Oval()
-    SPal_Add_Shape("Oval")
+    SPAL_Add_Shape("Oval")
 end
 
 function SPAL_Add_Triangle()
-    SPal_Add_Shape("Triangle")
+    SPAL_Add_Shape("Triangle")
 end
 
-function SPal_Add_Line()
+function SPAL_Add_Line()
     -- avoid ""/'' strings in param b/c quoting nightmare if make a mistake
-    SPal_Add_Shape("Line")
+    SPAL_Add_Shape("Line")
 end
 
 ---@param shape_type ShapeType
-function SPal_Add_Shape(shape_type)
+function SPAL_Add_Shape(shape_type)
     -- formerly startOverlayShapeOfType
     run_async(function()
         _click2LevelTool("Overlay", "Shape") -- FYI WORKING!
