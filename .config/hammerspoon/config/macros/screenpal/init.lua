@@ -696,6 +696,21 @@ function _click2LevelTool(mainMenuItem, subMenuItem)
     tool_win:wait_for_an_open_edit_tool()
 end
 
+function SPAL_Freeze_Frame()
+    _click2LevelTool("Replace", "Freeze Frame")
+    -- freeze start frame (default)
+end
+
+function SPAL_Freeze_End_Frame()
+    _click2LevelTool("Replace", "Freeze Frame")
+    -- TODO set freeze end frame
+end
+
+function SPAL_ReplaceVideo()
+    _click2LevelTool("Replace", "Replace Video")
+    -- TODO anything else? I don't think I have a button for this currently... not that I use often anyways
+end
+
 function SPal_Mute_Inward_With_Preview()
     run_async(function() -- FYI w/o run_async wrapper the p key will fire early and never trigger preview b/c it happens before ActOnThisSilence completes
         SPal_ActOnThisSilence('MUTE_INWARD')
