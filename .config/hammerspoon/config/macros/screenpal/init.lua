@@ -725,10 +725,7 @@ function _click2LevelTool(mainMenuItem, subMenuItem)
     --
     -- 	-- wait for tool to open (finish start)
     -- 	delayUntilExists(btnCancel of my _toolbar) -- (cancel is on range select bar, also on edit/add overlay bar)
-    -- 	-- PRN delayUntilEitherExists(btnCancel, btnOk)
-    --
-    -- end click2LevelTool
-    --
+    tool_win:wait_for_an_open_edit_tool()
 end
 
 function SPal_Mute_Inward_With_Preview()
