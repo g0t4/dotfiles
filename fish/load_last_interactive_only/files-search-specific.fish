@@ -363,11 +363,10 @@ abbr rg_stats 'rg --stats'
 # ***rg (start to consider using this?)
 abbr rg_multiline 'rg --multiline --multiline-dotall' # dot as \n too
 
-abbr --set-cursor rgd 'rg -d "%"'
-abbr --set-cursor rgv 'rg -v "%"' # -v/--invert-match
-abbr --set-cursor rgo 'rg -o "%"' # -o/--only-matching
-abbr --set-cursor rgF 'rg -F "%"' # -F/--fixed-strings
-abbr --set-cursor rgw 'rg -w "%"' # -F/--fixed-strings
+abbr --set-cursor rgv 'rg --invert-match "%"' # -v/--invert-match
+abbr --set-cursor rgo 'rg --only-matching "%"' # -o/--only-matching
+abbr --set-cursor rgF 'rg --fixed-strings "%"' # -F/--fixed-strings
+abbr --set-cursor rgw 'rg --word-regexp "%"' # -w/--word-regexp # TODO is this useful enough to use vs \b around pattern?
 
 # * expand short => long options
 abbr --command rg --position anywhere -- -F --fixed-strings
