@@ -16,6 +16,36 @@ function ToolBarWindow:find_my_window()
     return self.app_windows:get_window_by_title("SOM-FloatingWindow-Type=edit2.addedit.toolbar.menu.window-ZOrder=1(Undefined+1)")
 end
 
+function ToolBarWindow:find_tools_menu()
+    -- shows after clicking Tools button => main list of tools/tool groups (i.e. has Overlay menu entry that expands to submenu)
+    return self.app_windows:get_window_by_title("SOM-FloatingWindow-Type=edit2.addedit.menu.window-ZOrder=2(Undefined+2)")
+end
+
+function ToolBarWindow:find_tools_submenu()
+    -- for tool groups, like Overlay tools => pick the specific tool type (i.e. Overlay => Shape)
+    -- TODO use pattern instead of exact match (z-order bothers me at 261)
+    return self.app_windows:get_window_by_title("SOM-FloatingWindow-Type=edit2.addeditsub.menu.window-ZOrder=261(Popup+1)")
+
+    -- Shape menu entry:
+    -- app:window(2):button(4)
+    --
+    -- AXDescription: Shape<string>
+    -- AXEnabled: true<bool>
+    -- AXFocused: false<bool>
+    -- AXFocusedUIElement: AXButton - Shape<hs.axuielement>
+    -- AXIndex: 3<number>
+    -- AXMaxValue: 1<number>
+    -- AXMinValue: 0<number>
+    -- AXOrientation: AXUnknownOrientation<string>
+    -- AXRoleDescription: button<string>
+    -- AXSelected: false<bool>
+    -- frame: x=1239.0,y=562.0,w=143.0,h=48.0
+    --
+    -- press 'c' children, 'e' everything
+    --
+    -- unique ref: app:window('SOM-FloatingWindow-Type=edit2.addeditsub.menu.window-ZOrder=261(Popup+1)'):button(desc='Shape')
+end
+
 ---@param exact_match string
 ---@return hs.axuielement | nil
 function ToolBarWindow:get_button_by_description(exact_match)
