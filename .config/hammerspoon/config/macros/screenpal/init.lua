@@ -765,8 +765,21 @@ function SPAL_Overlay_Text()
     _click2LevelTool("Overlay", "Text")
 end
 
+function SPAL_Hide_Recorder_Drawings()
+    _click2LevelTool("Hide", "Recorder Drawings")
+end
+
+function SPAL_Hide_Cursor()
+    _click2LevelTool("Hide", "Cursor")
+end
+
+function SPAL_Hide_Camera()
+    _click2LevelTool("Hide", "Camera")
+end
+
 function SPAL_Insert_Pause()
     _click2LevelTool("Insert", "Pause")
+    -- TODO! insertPauseAndMoveMouseToEnd
 end
 
 function SPAL_ReplaceVideo()
