@@ -636,7 +636,7 @@ end
 function SPal_Add_Shape(type)
     -- formerly startOverlayShapeOfType
     run_async(function()
-        _click2LevelTool("Overlay", "Shape")
+        _click2LevelTool("Overlay", "Shape") -- FYI WORKING!
 
         -- TODO port set shape type
         -- * set shape type
@@ -686,8 +686,6 @@ function _click2LevelTool(mainMenuItem, subMenuItem)
     -- * click main menu entry
     local tools_menu = tool_win:wait_for_tools_menu()
     click_if_exists(function() return tools_menu:button_by_description(mainMenuItem) end)
-
-    -- PRN I could use nil for second arg to click items with only top level entry (no submenu)
 
     -- * click submenu entry
     local submenu = tool_win:wait_for_tools_submenu()
