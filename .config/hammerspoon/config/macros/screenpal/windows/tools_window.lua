@@ -26,7 +26,7 @@ function ToolBarWindow:wait_for_tools_menu()
     -- TODO do I do any window waits elsewhere?
     -- IIRC this can be like 50ms wait for window refersh (or maybe more)
     -- TODO! add a wait_for_window on AppWindows
-    return wait_for_element(function() return self:find_tools_menu() end, 20, 20, "menu Tools (window)")
+    return wait_for_element(function() return self:find_tools_menu() end, 20, 20, "Tools main menu (window)")
 end
 
 function ToolBarWindow:find_tools_submenu()
@@ -52,6 +52,10 @@ function ToolBarWindow:find_tools_submenu()
     -- press 'c' children, 'e' everything
     --
     -- unique ref: app:window('SOM-FloatingWindow-Type=edit2.addeditsub.menu.window-ZOrder=261(Popup+1)'):button(desc='Shape')
+end
+
+function ToolBarWindow:wait_for_tools_submenu()
+    return wait_for_element(function() return self:find_tools_submenu() end, 20, 20, "Tools submenu (window)")
 end
 
 ---@param exact_match string
