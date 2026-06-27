@@ -75,6 +75,12 @@ function ToolBarWindow:wait_for_tools_button()
     return wait_for_element(function() return self:get_button_by_description("Tools") end, 20, 20, "button Tools")
 end
 
+function ToolBarWindow:wait_for_tools_button_then_press_it()
+    if not wait_for_element_then_press_it(function() return self:get_button_by_description("Tools") end, 20, 20) then
+        error("clicking Tools button failed") -- kill action is fine b/c I will be using this in streamdeck button handlers, just means that button press dies
+    end
+end
+
 function ToolBarWindow:wait_for_ok_button()
     return wait_for_element(function() return self:get_button_by_description("OK") end, 20, 20, "button OK")
 end
