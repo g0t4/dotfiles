@@ -664,16 +664,15 @@ function SPAL_Add_Shape(shape_type)
 
         -- click into secondary shapes menu/window
         if vim.tbl_contains({ "Diamond", "Ban", "Equals", "Does Not Equal", "Parallelogram", "Freehand" }, shape_type) then -- PRN add other types here
-            shapes.app_windows:log_window_names()
+            -- shapes.app_windows:log_window_names()
 
             -- "" empty description is the other ... button (also 7th button, 0-based)
             shapes:wait_for_shape_type_checkbox_then_press_it("")
 
-            shapes.app_windows:_refresh() -- TODO REMOVE
+            -- * find new window (once it opens)
             local submenu_picker = shapes:wait_for_shape_picker_submenu_window()
             local final_checkbox = submenu_picker:checkbox_by_description(shape_type)
-            log:info("final_checkbox", final_checkbox)
-            shapes.app_windows:log_window_names()
+            -- shapes.app_windows:log_window_names()
             if not final_checkbox then
                 log:error("missing ... checkbox for nested shape type", shape_type)
             end
