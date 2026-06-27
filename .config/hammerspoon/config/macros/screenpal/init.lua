@@ -782,6 +782,22 @@ function SPAL_Insert_Pause()
     -- TODO! insertPauseAndMoveMouseToEnd
 end
 
+function SPAL_Insert_New_Recording()
+    _click2LevelTool("Insert", "New Recording")
+end
+
+function SPAL_Insert_Existing_Project()
+    _click2LevelTool("Insert", "Existing Project")
+end
+
+function SPAL_Insert_Copy()
+    _click2LevelTool("Insert", "Copy")
+end
+
+function SPAL_Insert_Video_File()
+    _click2LevelTool("Insert", "Video File")
+end
+
 function SPAL_ReplaceVideo()
     _click2LevelTool("Replace", "Replace Video")
     -- TODO anything else? I don't think I have a button for this currently... not that I use often anyways
