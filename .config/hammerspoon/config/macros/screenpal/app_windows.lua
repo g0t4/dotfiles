@@ -39,23 +39,32 @@ function AppWindows:get_tool_window()
     return ToolBarWindow.new(self)
 end
 
----@param titlePattern string # lua pattern
----@return hs.axuielement editor_window
-function AppWindows:get_window_by_title_pattern(titlePattern)
+---@param lookup_fn function # function that returns the window from the cache
+---@return hs.axuielement? editor_window
+function AppWindows:_find_window(lookup_fn)
     self:_ensure_loaded()
-    local win = self:_get_window_by_title_pattern(titlePattern)
+    local win = lookup_fn()
     -- crude, for now the window you want to lookup, if it is not valid anymore then try refresh cache
     if not win or not win:isValid() then
         -- one attempt to refresh if not found or invalid
         -- rare to ask for non-existant window, so it's fine as a fallback (s/b rare to hit)
         self:_refresh()
-        win = self:_get_window_by_title_pattern(titlePattern)
+        win = lookup_fn()
     end
     return win
 end
 
 ---@param titlePattern string # lua pattern
----@return hs.axuielement editor_window
+---@return hs.axuielement? editor_window
+function AppWindows:get_window_by_title_pattern(titlePattern)
+    local function lookup_by_pattern()
+        return self:_get_window_by_title_pattern(titlePattern)
+    end
+    return self:_find_window(lookup_by_pattern)
+end
+
+---@param titlePattern string # lua pattern
+---@return hs.axuielement? editor_window
 function AppWindows:_get_window_by_title_pattern(titlePattern)
     for title, win in pairs(self.windows_by_title) do
         if title:match(titlePattern) then
@@ -71,23 +80,19 @@ function AppWindows:editor_window_or_throw()
     error("No Screenpal editor window found")
 end
 
-function AppWindows:get_window_by_title(self, window_object, title)
-    function lookup()
+---@param window_object table # the window wrapper object
+---@param title string # exact title to match
+---@return hs.axuielement? editor_window
+function AppWindows:get_window_by_title(window_object, title)
+    local function lookup_by_exact_title()
         return self.windows_by_title[title]
     end
-
-    -- TODO refactor get_window_by_title_pattern and this find_window (by title exact match)
-    --   TODO so they just pass different lookup to same method
 
     -- TODO review all window wrappers that cached their window `_win` and port to use this (or by title pattern above)
     -- rely on cache of windows here on AppWindows and not need to cache each window on other window wrappers!
     --  much cleaner cache architecture
     --  just have the window wrappers call into here to get window any time it needs a reference to its window (cheap)
-    local win = lookup()
-    if not win or not win:isValid() then
-        self:_refresh()
-        win = lookup()
-    end
+    local win = self:_find_window(lookup_by_exact_title)
     window_object._win = win
     return win
 end
