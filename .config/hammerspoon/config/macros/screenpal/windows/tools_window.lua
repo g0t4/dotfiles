@@ -1,6 +1,6 @@
+local log = require("config.logs").hammerspoons()
 ---@class ToolBarWindow
 ---@field app_windows AppWindows
----@field _win hs.axuielement | nil
 local ToolBarWindow = {}
 ToolBarWindow.__index = ToolBarWindow
 
@@ -9,32 +9,12 @@ ToolBarWindow.__index = ToolBarWindow
 function ToolBarWindow.new(app_windows)
     local o = setmetatable({}, ToolBarWindow)
     o.app_windows = app_windows
-    o._win = o:find_timeline_toolbar_window()
     return o
 end
 
-function ToolBarWindow:_find_window(title)
-    -- TODO move this to a central spot
-    if self._win and self._win:isValid() then
-        return self._win
-    end
-    function lookup()
-        -- this is the top level menu right above timeline that has Tools button on left + recent tool used right of it + open editing controls
-        return self.app_windows.windows_by_title[title]
-    end
-
-    -- PRN this try/retry could maybe reside in the AppWindows class?
-    local win = lookup()
-    if not win or not win:isValid() then
-        self.app_windows:_refresh()
-        win = lookup()
-    end
-    self._win = win
-    return win
-end
-
 function ToolBarWindow:find_timeline_toolbar_window()
-    return self:_find_window("SOM-FloatingWindow-Type=edit2.addedit.toolbar.menu.window-ZOrder=1(Undefined+1)")
+    log:info("FUOOO WORKS")
+    return self.app_windows:find_window("SOM-FloatingWindow-Type=edit2.addedit.toolbar.menu.window-ZOrder=1(Undefined+1)")
 end
 
 ---@param exact_match string
@@ -114,7 +94,8 @@ function ToolBarWindow:get_edits_buttons()
     --       return a reference to (every button of my toolbar whose description ends with " sec)")
     --       use this if you have issues with just ()
     --
-    return vim.iter(self._win:buttons())
+    local win = self:find_timeline_toolbar_window()
+    return vim.iter(win:buttons())
         :filter(function(button)
             local description = button:attributeValue("AXDescription")
             return string.match(description, "%b()") ~= nil

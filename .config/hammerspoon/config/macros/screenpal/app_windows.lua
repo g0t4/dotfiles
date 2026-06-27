@@ -75,4 +75,21 @@ function AppWindows:editor_window_or_throw()
     error("No Screenpal editor window found")
 end
 
+function AppWindows:find_window(self, window_object, title)
+    function lookup()
+        return self.windows_by_title[title]
+    end
+
+    -- now we can rely on cache of windows here on AppWindows and not need to cache each window on other window wrappers!
+    --  much cleaner cache architecture
+    --  just have the window wrappers call into here to get window any time it needs a reference to its window (cheap)
+    local win = lookup()
+    if not win or not win:isValid() then
+        self:_refresh()
+        win = lookup()
+    end
+    window_object._win = win
+    return win
+end
+
 return AppWindows
