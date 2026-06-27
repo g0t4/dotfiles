@@ -662,8 +662,9 @@ function SPAL_Add_Shape(shape_type)
         local win = get_cached_editor_window()
         local shapes = ToolOptionsWindows.new(win.windows)
 
-        -- click into secondary shapes menu/window
+        -- * click into secondary shapes menu/window
         if vim.tbl_contains({ "Diamond", "Ban", "Equals", "Does Not Equal", "Parallelogram", "Freehand" }, shape_type) then -- PRN add other types here
+            -- TODO add more shape types to list OR use NOT IN primary list
             -- shapes.app_windows:log_window_names()
 
             -- "" empty description is the other ... button (also 7th button, 0-based)
