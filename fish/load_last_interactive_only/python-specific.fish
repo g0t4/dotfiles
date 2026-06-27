@@ -193,9 +193,9 @@ function wcl
     # Capture stderr for __wcl_cd commands
     set -l _stderr_file (mktemp)
     begin
-        $_python3 $_script_py $argv 2>_stderr_file
+        $_python3 $_script_py $argv 2> $_stderr_file
     end
-    
+
     # Execute any cd commands from stderr
     if test -f $_stderr_file
         while read -l _cd_line
