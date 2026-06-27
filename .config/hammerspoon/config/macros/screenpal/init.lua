@@ -765,6 +765,10 @@ function SPAL_Overlay_Text()
     _click2LevelTool("Overlay", "Text")
 end
 
+function SPAL_Insert_Pause()
+    _click2LevelTool("Insert", "Pause")
+end
+
 function SPAL_ReplaceVideo()
     _click2LevelTool("Replace", "Replace Video")
     -- TODO anything else? I don't think I have a button for this currently... not that I use often anyways
