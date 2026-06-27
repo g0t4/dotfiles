@@ -57,15 +57,11 @@ end
 ---@param titlePattern string # lua pattern
 ---@return hs.axuielement editor_window
 function AppWindows:_get_window_by_title_pattern(titlePattern)
-    local start = get_time()
     for title, win in pairs(self.windows_by_title) do
-        -- print("  title: " .. tostring(title))
         if title:match(titlePattern) then
-            -- print_took("  getWindowByTitle took", start)
             return win
         end
     end
-    print_took("  getWindowByTitle failed", start)
 end
 
 ---@return hs.axuielement editor_window
@@ -79,6 +75,7 @@ function AppWindows:get_window_by_title(self, window_object, title)
     function lookup()
         return self.windows_by_title[title]
     end
+
     -- TODO refactor get_window_by_title_pattern and this find_window (by title exact match)
     --   TODO so they just pass different lookup to same method
 
