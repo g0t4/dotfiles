@@ -12,7 +12,7 @@ function ToolBarWindow.new(app_windows)
     return o
 end
 
-function ToolBarWindow:find_timeline_toolbar_window()
+function ToolBarWindow:find_my_window()
     log:info("FUOOO WORKS")
     return self.app_windows:get_window_by_title("SOM-FloatingWindow-Type=edit2.addedit.toolbar.menu.window-ZOrder=1(Undefined+1)")
 end
@@ -26,7 +26,7 @@ end
 ---@param lua_pattern string
 ---@return hs.axuielement | nil
 function ToolBarWindow:get_button_by_description_matching(lua_pattern)
-    local win = self:find_timeline_toolbar_window()
+    local win = self:find_my_window()
     if not win then return end
 
     -- -- takes <3ms to find the button, that's fine for now, let's not cache controls
@@ -94,7 +94,7 @@ function ToolBarWindow:get_edits_buttons()
     --       return a reference to (every button of my toolbar whose description ends with " sec)")
     --       use this if you have issues with just ()
     --
-    local win = self:find_timeline_toolbar_window()
+    local win = self:find_my_window()
     return vim.iter(win:buttons())
         :filter(function(button)
             local description = button:attributeValue("AXDescription")
