@@ -625,6 +625,92 @@ function WIP_SPal_Cut_then_Mute_then_Preview()
     end)
 end
 
+---@alias ShapeType "Line"|"Rectangle"
+
+---@param type ShapeType
+function SPal_Add_Shape(type)
+    -- formerly startOverlayShapeOfType
+    run_async(function()
+        _click2LevelTool("Overlay", "Shape")
+
+        -- TODO port set shape type
+        -- * set shape type
+        -- on setShapeType(_shape as string)
+        -- 	delayUntilExists(cbLine) -- doesn't matter which button we wait for (wait for last just in last exists after first, doubtful this matters)... + cannot lookup the specific button anyways  b/c I have to wait for first :)
+        --
+        -- * shapes in secondary (nested menu)
+        -- 	if _shape is in {"Diamond", "Ban", "Equals", "Does Not Equal", "Parallelogram", "Freehand"} then -- PRN add other types here
+        -- 		clickIfExists(cbOtherShapes)
+        -- 		delayUntilExists(subMenuOtherShapes)
+        -- 		set cbSubType to a reference to (first checkbox of subMenuOtherShapes whose description is _shape)
+        -- 		setCheckBox(cbSubType)
+        -- 		return
+        -- 	end if
+        --
+        -- 	set cbForShape to a reference to (first checkbox of mainMenu whose description is _shape)
+        -- 	-- PRN map shape strings to checkboxes (or other element types if applicable [so far all checkboxes]) for any special cases (so far using same shape string as checkbox description)
+        -- 	if not (exists cbForShape) then
+        -- 		error "checkbox not found for shape: " & _shape & "   make sure you have it mapped in setShapeType and that it is a valid description of the respective checkbox - also check if descriptions changed for the checkbox?"
+        -- 		return
+        -- 		-- raise error so I know I am using a shape that I cannot find a checkbox for (maybe need to manually map?)
+        -- 	end if
+        -- 	setCheckBox(cbForShape)
+        -- 	-- todo is there an attribute to indicate which element is 'selected' currently
+        -- end setShapeType
+    end)
+end
+
+---@param mainMenuItem string
+---@param subMenuItem  string
+function _click2LevelTool(mainMenuItem, subMenuItem)
+    -- TODO port from spal.scptd:
+    -- TODO then add wrapper to call this and other hammerspoon lua code from the spal.scptd script so I can call back here for partial migrations out of that applescript impl?
+    --
+    -- on click2LevelTool(mainMenuItem as string, subMenuItem as string)
+    -- 	-- allow for tools to already be open -- TODO what does this do? getMenu()
+    -- 	if exists my getMenu() then return
+    -- TODO => getMenu() =>
+    --     return a reference to (first window of procSpal whose name starts with "SOM-FloatingWindow-Type=edit2.addedit.menu.window-ZOrder")
+    --       TODO see ToolBarWindow:find_my_window() as it has most of logic I need (refactor to pass window name? as it has diff window name in lookup())
+    --
+    -- 	delayUntilExists(btnTools of my _toolbar)
+    -- 	clickIfExists(btnTools of my _toolbar)
+    local win = get_cached_editor_window()
+    local tool_win = win.windows:get_tool_window()
+    tool_win:wait_for_tools_button_then_press_it()
+    --
+    --  app:window(3):button(6)
+    --
+    -- AXDescription: Overlay<string>
+    -- AXEnabled: true<bool>
+    -- AXFocused: false<bool>
+    -- AXFocusedUIElement: AXButton - Overlay<hs.axuielement>
+    -- AXIndex: 5<number>
+    -- AXMaxValue: 1<number>
+    -- AXMinValue: 0<number>
+    -- AXOrientation: AXUnknownOrientation<string>
+    -- AXRoleDescription: button<string>
+    -- AXSelected: false<bool>
+    --
+    -- unique ref: app:window('SOM-FloatingWindow-Type=edit2.addedit.menu.window-ZOrder=2(Undefined+2)')
+
+    --   :button(desc='Overlay')   --
+    --
+    -- 	delayUntilExists(getMenu()) -- delay 0.2
+    -- 	-- FYI no big deal if submenu is open, just click whatever top level menu is needed
+    -- 	clickIfExists(a reference to (first button of getMenu() whose description is mainMenuItem))
+    --
+    -- 	delayUntilExists(getSubMenu())
+    -- 	clickIfExists(a reference to (first button of getSubMenu() whose description is subMenuItem))
+    --
+    -- 	-- wait for tool to open (finish start)
+    -- 	delayUntilExists(btnCancel of my _toolbar) -- (cancel is on range select bar, also on edit/add overlay bar)
+    -- 	-- PRN delayUntilEitherExists(btnCancel, btnOk)
+    --
+    -- end click2LevelTool
+    --
+end
+
 function SPal_Mute_Inward_With_Preview()
     run_async(function() -- FYI w/o run_async wrapper the p key will fire early and never trigger preview b/c it happens before ActOnThisSilence completes
         SPal_ActOnThisSilence('MUTE_INWARD')
