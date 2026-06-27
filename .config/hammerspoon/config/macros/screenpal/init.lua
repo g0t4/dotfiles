@@ -661,28 +661,24 @@ function SPAL_Add_Shape(shape_type)
         -- * set shape type
         local win = get_cached_editor_window()
         local shapes = ToolOptionsWindows.new(win.windows)
-        shapes:wait_for_shape_type_checkbox_then_press_it(shape_type)
 
-        -- TODO * shapes in secondary (nested) menu
-        --  click ... button
-        -- 	if _shape is in {"Diamond", "Ban", "Equals", "Does Not Equal", "Parallelogram", "Freehand"} then -- PRN add other types here
-        -- 		clickIfExists(cbOtherShapes)
-        -- 		delayUntilExists(subMenuOtherShapes)
-        -- 		set cbSubType to a reference to (first checkbox of subMenuOtherShapes whose description is _shape)
-        -- 		setCheckBox(cbSubType)
-        -- 		return
-        -- 	end if
-        --
-        -- 	set cbForShape to a reference to (first checkbox of mainMenu whose description is _shape)
-        -- 	-- PRN map shape strings to checkboxes (or other element types if applicable [so far all checkboxes]) for any special cases (so far using same shape string as checkbox description)
-        -- 	if not (exists cbForShape) then
-        -- 		error "checkbox not found for shape: " & _shape & "   make sure you have it mapped in setShapeType and that it is a valid description of the respective checkbox - also check if descriptions changed for the checkbox?"
-        -- 		return
-        -- 		-- raise error so I know I am using a shape that I cannot find a checkbox for (maybe need to manually map?)
-        -- 	end if
-        -- 	setCheckBox(cbForShape)
-        -- 	-- todo is there an attribute to indicate which element is 'selected' currently
-        -- end setShapeType
+        -- click into secondary shapes menu/window
+        if vim.tbl_contains({ "Diamond", "Ban", "Equals", "Does Not Equal", "Parallelogram", "Freehand" }, shape_type) then -- PRN add other types here
+            shapes.app_windows:log_window_names()
+
+            -- "" empty description is the other ... button (also 7th button, 0-based)
+            shapes:wait_for_shape_type_checkbox_then_press_it("")
+
+            shapes.app_windows:_refresh() -- TODO REMOVE
+            local submenu_picker = shapes:wait_for_shape_picker_submenu_window()
+            local final_checkbox = submenu_picker:checkbox_by_description(shape_type)
+            log:info("final_checkbox", final_checkbox)
+            shapes.app_windows:log_window_names()
+            if not final_checkbox then
+                log:error("missing ... checkbox for nested shape type", shape_type)
+            end
+            final_checkbox:axPress()
+        end
     end)
 end
 
