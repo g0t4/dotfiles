@@ -246,6 +246,7 @@ abbr --set-cursor -- gcam 'git commit -a -m "%"'
 # git command specific abbrs (FYI cannot do subcommand specific... so no `git commit` specific)
 abbr --command git --position anywhere -- gptoss '--author "gptoss120b<wes.mcclure+gptoss120b@gmail.com>"'
 abbr --command git --position anywhere -- qwen3 '--author "qwen3.6-35b-a3b<wes.mcclure+qwen3.6-35b-a3b@gmail.com>"'
+abbr --command git --position anywhere -- agentworld '--author "qwen-agentworld-35b-a3b<wes.mcclure+qwen-agentworld-35b-a3b@gmail.com>"'
 
 # joke:
 abbr --set-cursor -- yolo 'git commit --all -m "%" && git push'
