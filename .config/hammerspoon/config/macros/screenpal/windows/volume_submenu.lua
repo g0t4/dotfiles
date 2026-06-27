@@ -48,10 +48,12 @@ end
 
 function VolumeSubmenu:wait_for_button_by_description(description)
     local win = self:find_my_window()
-    if not win then return end
+    if not win then
+        log:error("Volume submenu window not found")
+    end
     local button = win:button_by_description(description)
     if button and not button:isValid() then
-        print("WARNING: Button '" .. description .. "' is not valid, unexpectedly... " .. hs.inspect(button))
+        log:error("WARNING: Button '" .. description .. "' is not valid, unexpectedly... " .. hs.inspect(button))
     end
     return button
 end

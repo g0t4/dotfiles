@@ -58,32 +58,32 @@ function VolumeMenu:get_button_by_description(description)
     -- unique ref: app:window('SOM-FloatingWindow-Type=edit2.overlayeditfloat-ZOrder=1(Undefined+1)'):tabGroup()
     --   :radioButton(''):button()
 
-    -- print("WIN " .. tostring(win:axTitle()))
+    -- log:info("WIN " .. tostring(win:axTitle()))
     -- vim.iter(win:children()):each(function(e)
-    --     print("  " .. e:axRole() .. ": " .. e:axDescription())
+    --     log:info("  " .. e:axRole() .. ": " .. e:axDescription())
     -- end)
 
     -- takes <3ms to find the button, that's fine for now, let's not cache controls
     local button = win:button_by_description(description)
     if button and not button:isValid() then
-        print("WARNING: Button '" .. description .. "' is not valid, unexpectedly... " .. hs.inspect(button))
+        log:info("WARNING: Button '" .. description .. "' is not valid, unexpectedly... " .. hs.inspect(button))
     end
 
     if not button then
         local tab_group = win:tabGroup(1)
         if not tab_group then
-            print('ERROR: no tab_group, cannot get_button_by_description')
+            log:info('ERROR: no tab_group, cannot get_button_by_description')
             return
         end
         -- vim.iter(tabGroup:children()):each(function(e)
-        --     print("  tabGroup child: " .. e:axRole() .. ": " .. e:axDescription())
+        --     log:info("  tabGroup child: " .. e:axRole() .. ": " .. e:axDescription())
         -- end)
         local button = tab_group:button(1)
 
         -- * vet description matches
         local actual_description = button:axDescription()
         if actual_description ~= description then
-            print("WARNING: tab_group button description does not match! " .. actual_description .. " vs " .. description)
+            log:info("WARNING: tab_group button description does not match! " .. actual_description .. " vs " .. description)
             return nil
         end
         return button
