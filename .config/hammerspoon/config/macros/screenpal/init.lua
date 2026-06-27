@@ -803,6 +803,14 @@ function SPAL_ReplaceVideo()
     -- TODO anything else? I don't think I have a button for this currently... not that I use often anyways
 end
 
+function SPAL_Sound_Sound_Effect()
+    _click2LevelTool("Sound", "Sound Effect")
+end
+
+function SPAL_Sound_Music()
+    _click2LevelTool("Sound", "Music")
+end
+
 function SPal_Mute_Inward_With_Preview()
     run_async(function() -- FYI w/o run_async wrapper the p key will fire early and never trigger preview b/c it happens before ActOnThisSilence completes
         SPal_ActOnThisSilence('MUTE_INWARD')
