@@ -267,12 +267,16 @@ function act_on_silence(win, silence, action)
         win.windows:get_tool_window():wait_for_ok_button_then_press_it()
     end
 
-    -- Preview cut after auto-approve (cut with confirm and preview in one action)
-    local is_cut_with_confirm_and_preview = is_cut and is_auto_approve and action:find("_PREVIEW")
-    if is_cut_with_confirm_and_preview then
-        local timeline = win:timeline_controller()
-        timeline:move_playhead_by_seconds(-1)
-        win:ensure_playing(false)
+    if is_cut and is_auto_approve then
+        local preview_the_full_cut = action:find("_PREVIEW")
+        if preview_the_full_cut then
+            local timeline = win:timeline_controller()
+            timeline:move_playhead_by_seconds(-1)
+            win:ensure_playing(false)
+        else
+            -- resume playing at the edit point (not jump back for preview of full edit)
+            win:ensure_playing(false)
+        end
     end
 
     -- TODO check if mute button is muted icon? or w/e else to determine if I should click mute the first time?
