@@ -648,6 +648,10 @@ function SPAL_Add_Line()
     SPAL_Add_Shape("Line")
 end
 
+function SPAL_Add_Diamond()
+    SPAL_Add_Shape("Diamond")
+end
+
 ---@param shape_type ShapeType
 function SPAL_Add_Shape(shape_type)
     -- formerly startOverlayShapeOfType

@@ -19,7 +19,7 @@ function ToolOptionWindows:wait_for_shape_picker_window()
     return wait_for_element(function() return self:find_shape_picker_window() end, 20, 20, "Shape picker window")
 end
 
----@alias ShapeType "Rectangle"|"RoundedRectangle"|"Triangle"|"Oval"  |  "Star"|"Heart"|"Line"
+---@alias ShapeType "Rectangle"|"RoundedRectangle"|"Triangle"|"Oval"  |  "Star"|"Heart"|"Line" | ""
 
 ---@param shape_type ShapeType
 function ToolOptionWindows:wait_for_shape_type_checkbox_then_press_it(shape_type)
@@ -30,6 +30,14 @@ function ToolOptionWindows:wait_for_shape_type_checkbox_then_press_it(shape_type
     press_if_exists(function()
         return picker:checkbox_by_description(shape_type)
     end)
+end
+
+function ToolOptionWindows:find_shape_picker_submenu_window()
+    return self.app_windows:get_window_by_title("SOM-FloatingWindow-Type=edit2.side.menu.window-ZOrder=1(Undefined+1)")
+end
+
+function ToolOptionWindows:wait_for_shape_picker_submenu_window()
+    return wait_for_element(function() return self:find_shape_picker_submenu_window() end, 20, 20, "Shape picker submenu window")
 end
 
 function ToolOptionWindows:get_freeze_tool_window()
