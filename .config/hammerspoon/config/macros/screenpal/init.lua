@@ -705,6 +705,13 @@ function _click2LevelTool(mainMenuItem, subMenuItem)
     --
     -- 	-- FYI no big deal if submenu is open, just click whatever top level menu is needed
     -- 	clickIfExists(a reference to (first button of getMenu() whose description is mainMenuItem))
+    -- TODO make smth like clickIfExists and include logging if not exist?
+    log:info(tools_menu)
+    menu_item = tools_menu:button_by_description(mainMenuItem)
+    if not menu_item then
+        error("Button '" .. mainMenuItem .. "' not found")
+    end
+    menu_item:axPress()
 
     --
     -- 	delayUntilExists(getSubMenu())
