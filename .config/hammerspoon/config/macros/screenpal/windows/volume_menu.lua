@@ -15,7 +15,6 @@ function VolumeMenu.new(windows)
 end
 
 function VolumeMenu:find_my_window()
-    log:info("find_my_window for VolumeMenu")
     return self._windows:get_window_by_title("SOM-FloatingWindow-Type=edit2.overlayeditfloat-ZOrder=1(Undefined+1)")
 end
 

@@ -42,7 +42,6 @@ function VolumeSubmenu.new(windows)
 end
 
 function VolumeSubmenu:find_my_window()
-    log:info("find_my_window for VolumeSubmenu")
     return self._windows:get_window_by_title("SOM-FloatingWindow-Type=edit2.side.menu.window-ZOrder=2(Undefined+2)")
 end
 
