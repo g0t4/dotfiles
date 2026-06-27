@@ -1,3 +1,5 @@
+local log = require("config.logs").hammerspoons()
+
 --
 -- ?? specialize by sub-menu type, so I have one of these for volume's submenu?
 --  ?? wait until I am using other submenus, for now treat as a monolith
@@ -28,7 +30,6 @@
 
 ---@class VolumeSubmenu
 ---@field _windows AppWindows
----@field _win hs.axuielement | nil
 local VolumeSubmenu = {}
 VolumeSubmenu.__index = VolumeSubmenu
 
@@ -37,25 +38,12 @@ VolumeSubmenu.__index = VolumeSubmenu
 function VolumeSubmenu.new(windows)
     local o = setmetatable({}, VolumeSubmenu)
     o._windows = windows
-    o._win = o:find_my_window()
     return o
 end
 
 function VolumeSubmenu:find_my_window()
-    if self._win and self._win:isValid() then
-        return self._win
-    end
-    function lookup()
-        return self._windows.windows_by_title["SOM-FloatingWindow-Type=edit2.side.menu.window-ZOrder=2(Undefined+2)"]
-    end
-
-    local win = lookup()
-    if not win or not win:isValid() then
-        self._windows:_refresh()
-        win = lookup()
-    end
-    self._win = win
-    return win
+    log:info("find_my_window for VolumeSubmenu")
+    return self._windows:get_window_by_title("SOM-FloatingWindow-Type=edit2.side.menu.window-ZOrder=2(Undefined+2)")
 end
 
 function VolumeSubmenu:wait_for_button_by_description(description)

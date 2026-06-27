@@ -1,8 +1,8 @@
 local VolumeSubmenu = require("config.macros.screenpal.windows.volume_submenu")
+local log = require("config.logs").hammerspoons()
 
 ---@class VolumeMenu
 ---@field _windows AppWindows
----@field _win hs.axuielement | nil
 local VolumeMenu = {}
 VolumeMenu.__index = VolumeMenu
 
@@ -11,31 +11,12 @@ VolumeMenu.__index = VolumeMenu
 function VolumeMenu.new(windows)
     local o = setmetatable({}, VolumeMenu)
     o._windows = windows
-    o._win = o:find_my_window()
     return o
 end
 
 function VolumeMenu:find_my_window()
-    if self._win and self._win:isValid() then
-        return self._win
-    end
-
-    function lookup()
-        -- print("lookup")
-        -- vim.iter(self._windows.windows_by_title):each(function(k, v)
-        --     print("  Window title: " .. k .. " = " .. tostring(v:axTitle()))
-        -- end)
-        return self._windows.windows_by_title["SOM-FloatingWindow-Type=edit2.overlayeditfloat-ZOrder=1(Undefined+1)"]
-    end
-
-    local win = lookup()
-    if not win or not win:isValid() then
-        self._windows:_refresh()
-        win = lookup()
-    end
-    self._win = win
-    -- print("Found2: ", win)
-    return win
+    log:info("find_my_window for VolumeMenu")
+    return self._windows:get_window_by_title("SOM-FloatingWindow-Type=edit2.overlayeditfloat-ZOrder=1(Undefined+1)")
 end
 
 -- ?? generalize to multiple tools OR leave this specific to each tool?
