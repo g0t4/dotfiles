@@ -683,7 +683,10 @@ function _click2LevelTool(mainMenuItem, subMenuItem)
     local win = get_cached_editor_window()
     local tool_win = win.windows:get_tool_window()
     tool_win:wait_for_tools_button_then_press_it()
-    --
+
+    -- 	delayUntilExists(getMenu()) -- delay 0.2
+    local tools_menu = tool_win:wait_for_tools_menu()
+    log:info("tools menu", tools_menu)
     --  app:window(3):button(6)
     --
     -- AXDescription: Overlay<string>
@@ -698,12 +701,11 @@ function _click2LevelTool(mainMenuItem, subMenuItem)
     -- AXSelected: false<bool>
     --
     -- unique ref: app:window('SOM-FloatingWindow-Type=edit2.addedit.menu.window-ZOrder=2(Undefined+2)')
-
     --   :button(desc='Overlay')   --
     --
-    -- 	delayUntilExists(getMenu()) -- delay 0.2
     -- 	-- FYI no big deal if submenu is open, just click whatever top level menu is needed
     -- 	clickIfExists(a reference to (first button of getMenu() whose description is mainMenuItem))
+
     --
     -- 	delayUntilExists(getSubMenu())
     -- 	clickIfExists(a reference to (first button of getSubMenu() whose description is subMenuItem))

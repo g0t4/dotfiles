@@ -21,6 +21,14 @@ function ToolBarWindow:find_tools_menu()
     return self.app_windows:get_window_by_title("SOM-FloatingWindow-Type=edit2.addedit.menu.window-ZOrder=2(Undefined+2)")
 end
 
+function ToolBarWindow:wait_for_tools_menu()
+    -- TODO any issues with this approach to waiting for window (refreshes AppWindows repeatedly)
+    -- TODO do I do any window waits elsewhere?
+    -- IIRC this can be like 50ms wait for window refersh (or maybe more)
+    -- TODO! add a wait_for_window on AppWindows
+    return wait_for_element(function() return self:find_tools_menu() end, 20, 20, "menu Tools (window)")
+end
+
 function ToolBarWindow:find_tools_submenu()
     -- for tool groups, like Overlay tools => pick the specific tool type (i.e. Overlay => Shape)
     -- TODO use pattern instead of exact match (z-order bothers me at 261)
