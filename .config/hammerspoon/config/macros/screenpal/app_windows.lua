@@ -57,10 +57,9 @@ end
 ---@param titlePattern string # lua pattern
 ---@return hs.axuielement? editor_window
 function AppWindows:get_window_by_title_pattern(titlePattern)
-    local function lookup_by_pattern()
+    return self:_find_window(function()
         return self:_get_window_by_title_pattern(titlePattern)
-    end
-    return self:_find_window(lookup_by_pattern)
+    end)
 end
 
 ---@param titlePattern string # lua pattern
@@ -84,15 +83,13 @@ end
 ---@param title string # exact title to match
 ---@return hs.axuielement? editor_window
 function AppWindows:get_window_by_title(window_object, title)
-    local function lookup_by_exact_title()
-        return self.windows_by_title[title]
-    end
-
     -- TODO review all window wrappers that cached their window `_win` and port to use this (or by title pattern above)
     -- rely on cache of windows here on AppWindows and not need to cache each window on other window wrappers!
     --  much cleaner cache architecture
     --  just have the window wrappers call into here to get window any time it needs a reference to its window (cheap)
-    local win = self:_find_window(lookup_by_exact_title)
+    local win = self:_find_window(function()
+        return self.windows_by_title[title]
+    end)
     window_object._win = win
     return win
 end
