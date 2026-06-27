@@ -821,3 +821,10 @@ function wait_until(is_done, interval_ms, max_cycles, name)
         start)
     return false
 end
+
+function press_if_exists(lookup_fn)
+    local element = lookup_fn()
+    if element then
+        element:axPress()
+    end
+end

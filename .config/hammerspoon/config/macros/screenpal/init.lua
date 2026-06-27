@@ -666,13 +666,6 @@ function SPal_Add_Shape(shape_type)
     end)
 end
 
-function click_if_exists(lookup_fn)
-    local element = lookup_fn()
-    if element then
-        element:axPress()
-    end
-end
-
 ---@param mainMenuItem string
 ---@param subMenuItem  string
 function _click2LevelTool(mainMenuItem, subMenuItem)
@@ -686,11 +679,11 @@ function _click2LevelTool(mainMenuItem, subMenuItem)
 
     -- * click main menu entry
     local tools_menu = tool_win:wait_for_tools_menu()
-    click_if_exists(function() return tools_menu:button_by_description(mainMenuItem) end)
+    press_if_exists(function() return tools_menu:button_by_description(mainMenuItem) end)
 
     -- * click submenu entry
     local submenu = tool_win:wait_for_tools_submenu()
-    click_if_exists(function() return submenu:button_by_description(subMenuItem) end)
+    press_if_exists(function() return submenu:button_by_description(subMenuItem) end)
 
     -- * ensure tool is open (i.e. cancel/ok button on toolbar)
     tool_win:wait_for_an_open_edit_tool()
