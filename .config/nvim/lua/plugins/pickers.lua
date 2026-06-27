@@ -427,12 +427,12 @@ return {
                 -- rs = "rs",
                 y = "{yaml,yml}"
             }
-            local logs = require("devtools.logs.logger"):universal()
+            local log = require("devtools.logs.logger"):universal()
             vim.api.nvim_create_autocmd("FileType", {
                 pattern = "TelescopePrompt",
                 callback = function()
                     for short, ext in pairs(exts) do
-                        -- logs:info(short, ext)
+                        -- log:info(short, ext)
                         -- *l => -g *.lua
                         -- FYI this matches what I have for command scoped rg abbrs in fish
                         local iabbr = string.format(
@@ -440,7 +440,7 @@ return {
                             short,
                             ext
                         )
-                        -- logs:info(iabbr)
+                        -- log:info(iabbr)
                         vim.cmd(iabbr)
                     end
                 end,

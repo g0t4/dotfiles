@@ -182,18 +182,18 @@ end, {
 })
 
 function close_temp_windows_so_they_do_not_reopen()
-    local logs = require("devtools.logs.logger").universal()
+    local log = require("devtools.logs.logger").universal()
     -- TODO! close buffers for "list:///location" [Not edited] --No lines in buffer--
     --  IIRC this is opened by coc references (etc)
     --  see :buffers to find it on restarts (sometimes)
 
     vim.iter(vim.api.nvim_list_wins()):each(function(win)
-        -- logs:info("win", win)
+        -- log:info("win", win)
         local buf_nr = vim.api.nvim_win_get_buf(win)
         local buf_name = vim.api.nvim_buf_get_name(buf_nr)
         local ft = vim.bo[buf_nr].filetype
-        -- logs:info("buf_name", buf_name)
-        logs:info("ft", ft)
+        -- log:info("buf_name", buf_name)
+        log:info("ft", ft)
         if
             buf_name:match('coc%-nvim%.log') or
             buf_name:match('output:///') or -- output:// include coc windows from :CocCommand workspace.showOutput
@@ -205,7 +205,7 @@ function close_temp_windows_so_they_do_not_reopen()
         --  := vim.api.nvim_buf_get_name(0):match('git%-rebase%-todo')
         then
             -- TODO if its the last window, then open a new tab first? cannot close last window
-            -- logs:info("closing window for buf_name:", buf_name)
+            -- log:info("closing window for buf_name:", buf_name)
             vim.api.nvim_win_close(win, true)
         end
     end)
