@@ -2,20 +2,20 @@ local VolumeSubmenu = require("config.macros.screenpal.windows.volume_submenu")
 local log = require("config.logs").hammerspoons()
 
 ---@class VolumeMenu
----@field _windows AppWindows
+---@field app_windows AppWindows
 local VolumeMenu = {}
 VolumeMenu.__index = VolumeMenu
 
----@param windows AppWindows
+---@param app_windows AppWindows
 ---@return VolumeMenu
-function VolumeMenu.new(windows)
+function VolumeMenu.new(app_windows)
     local o = setmetatable({}, VolumeMenu)
-    o._windows = windows
+    o.app_windows = app_windows
     return o
 end
 
 function VolumeMenu:find_my_window()
-    return self._windows:get_window_by_title("SOM-FloatingWindow-Type=edit2.overlayeditfloat-ZOrder=1(Undefined+1)")
+    return self.app_windows:get_window_by_title("SOM-FloatingWindow-Type=edit2.overlayeditfloat-ZOrder=1(Undefined+1)")
 end
 
 -- ?? generalize to multiple tools OR leave this specific to each tool?
@@ -107,7 +107,7 @@ function VolumeMenu:_wait_for_submenu_to_open()
         error("clicking " .. button_description .. "  button failed")
     end
 
-    local submenu = VolumeSubmenu.new(self._windows)
+    local submenu = VolumeSubmenu.new(self.app_windows)
     submenu:wait_for_reset_button()
     return submenu
 end
