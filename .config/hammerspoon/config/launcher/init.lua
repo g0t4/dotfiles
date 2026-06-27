@@ -1006,6 +1006,26 @@ local function handleFishCommand(command, searchId, callback)
     return function() end  -- No-op cancel
 end
 
+-- AppleScript execution mode - run AppleScript on Enter
+local function handleAppleScript(code, searchId, callback)
+    if code == "" then
+        callback(searchId, {{
+            text = "as <applescript>",
+            subText = "Type AppleScript code, then press Enter to execute",
+            image = hs.image.imageFromName("NSActionTemplate"),
+        }})
+        return
+    end
+
+    callback(searchId, {{
+        text = "Run AppleScript",
+        subText = code,
+        appleScriptCode = code,
+        image = hs.image.imageFromName("NSActionTemplate"),
+    }})
+    return function() end  -- No-op cancel
+end
+
 -- Ensure emoji cache directory exists
 local function ensureEmojiCacheDir()
     local attrs = hs.fs.attributes(EMOJI_CACHE_DIR)
@@ -1246,6 +1266,11 @@ local function showModes()
             text = "a <name>",
             subText = "Search applications (e.g., 'a safari', 'a terminal')",
             image = hs.image.imageFromName("NSApplicationIcon"),
+        },
+        {
+            text = "as <script>",
+            subText = "AppleScript (e.g., 'as display notification \"hello\"')",
+            image = hs.image.imageFromName("NSActionTemplate"),
         },
         {
             text = "s <query>",
@@ -1536,7 +1561,7 @@ local bookmarkActions = {
 local tabCompletions = {}
 
 -- Prefix shortcuts (typing "a" + Tab → "a " enters app mode)
-local prefixShortcuts = {"a", "b", "s", "d", "define", "g", "l", "o", "f", "py", "e", "v"}
+local prefixShortcuts = {"a", "as", "applescript", "b", "s", "d", "define", "g", "l", "o", "f", "py", "e", "v"}
 for _, p in ipairs(prefixShortcuts) do
     table.insert(tabCompletions, {match = p, result = p .. " "})
 end
@@ -1544,6 +1569,7 @@ end
 -- Keyword aliases for prefixes (typing "app" + Tab → "a ")
 local prefixAliases = {
     {"app", "a "}, {"apps", "a "}, {"applications", "a "},
+    {"ascript", "as "}, {"applescript", "as "},
     {"book", "b "}, {"bookmarks", "b "},
     {"settings", "s "}, {"system", "s "},
     {"dir", "d "}, {"directory", "d "},
@@ -2018,6 +2044,20 @@ local function onQueryChange(query)
         return
     end
 
+    -- Check for AppleScript mode
+    if query:match("^as ") then
+        local script = query:sub(4)  -- Remove "as " prefix
+        currentCancelFunc = handleAppleScript(script, thisSearchId, handleResults)
+        return
+    end
+
+    -- Check for applescript mode (long form)
+    if query:match("^applescript ") then
+        local script = query:sub(13)  -- Remove "applescript " prefix
+        currentCancelFunc = handleAppleScript(script, thisSearchId, handleResults)
+        return
+    end
+
     -- Check for Python code mode
     if query:match("^py ") then
         local code = query:sub(4)  -- Remove "py " prefix
@@ -2253,6 +2293,17 @@ local function onChoice(choice)
             hs.alert.show("Copied: " .. choice.pythonResult:sub(1, 50))
         else
             hs.alert.show("No output to copy")
+        end
+        return
+    end
+
+    -- Handle AppleScript execution
+    if choice.appleScriptCode then
+        local ok, result = hs.osascript.applescript(choice.appleScriptCode)
+        if ok then
+            hs.alert.show("AppleScript executed successfully")
+        else
+            hs.alert.show("AppleScript error: " .. tostring(result))
         end
         return
     end
