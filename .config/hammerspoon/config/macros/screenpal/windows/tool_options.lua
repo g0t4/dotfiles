@@ -19,7 +19,7 @@ function ToolOptionWindows:wait_for_shape_picker_window()
     return wait_for_element(function() return self:find_shape_picker_window() end, 20, 20, "Shape picker window")
 end
 
----@alias ShapeType "Line"|"Rectangle"
+---@alias ShapeType "Rectangle"|"RoundedRectangle"|"Triangle"|"Oval"  |  "Star"|"Heart"|"Line"
 
 ---@param shape_type ShapeType
 function ToolOptionWindows:wait_for_shape_type_checkbox_then_press_it(shape_type)

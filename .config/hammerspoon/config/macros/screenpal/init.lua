@@ -627,6 +627,22 @@ function WIP_SPal_Cut_then_Mute_then_Preview()
     end)
 end
 
+function SPAL_Add_Rectangle()
+    SPal_Add_Shape("Rectangle")
+end
+
+function SPAL_Add_RoundedRectangle()
+    SPal_Add_Shape("RoundedRectangle")
+end
+
+function SPAL_Add_Oval()
+    SPal_Add_Shape("Oval")
+end
+
+function SPAL_Add_Triangle()
+    SPal_Add_Shape("Triangle")
+end
+
 function SPal_Add_Line()
     -- avoid ""/'' strings in param b/c quoting nightmare if make a mistake
     SPal_Add_Shape("Line")
@@ -711,6 +727,42 @@ function SPAL_Freeze_End_Frame()
 
     -- * ensure uses end frame
     shapes:wait_and_press_freeze_frame_option("End")
+end
+
+function SPAL_Speed_SpeedUp()
+    _click2LevelTool("Speed", "Speed Up")
+end
+
+function SPAL_Speed_SlowDown()
+    _click2LevelTool("Speed", "Slow Down")
+end
+
+function SPAL_Overlay_Video()
+    _click2LevelTool("Overlay", "Video")
+end
+
+function SPAL_Overlay_Image()
+    _click2LevelTool("Overlay", "Image")
+end
+
+function SPAL_Overlay_Blur()
+    _click2LevelTool("Overlay", "Blur")
+end
+
+function SPAL_Overlay_Arrow()
+    _click2LevelTool("Overlay", "Arrow")
+end
+
+function SPAL_Overlay_Paste()
+    _click2LevelTool("Overlay", "Paste")
+end
+
+function SPAL_Overlay_Highlight()
+    _click2LevelTool("Overlay", "Highlight")
+end
+
+function SPAL_Overlay_Text()
+    _click2LevelTool("Overlay", "Text")
 end
 
 function SPAL_ReplaceVideo()
