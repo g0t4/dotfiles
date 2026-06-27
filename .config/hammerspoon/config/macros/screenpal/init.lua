@@ -717,6 +717,16 @@ function SPAL_Freeze_Frame()
     shapes:wait_and_press_freeze_frame_option("Start")
 end
 
+function SPAL_Freeze_Frame_Toggle_Cursor()
+    local win = get_cached_editor_window()
+    local shapes = ToolOptionsWindows.new(win.windows)
+
+    -- no waiting, must be open already to toggle cursor
+    local freeze_tool_window = shapes:get_freeze_tool_window() -- no waiting, just check if it is already open
+    -- FYI when cursor is toggled off, there's an added \n at start of AXDescription => hence why I added pattern match instead of exact
+    press_if_exists(function() return freeze_tool_window:button_by_description_matching("Freeze Cursor") end)
+end
+
 function SPAL_Freeze_End_Frame()
     local win = get_cached_editor_window()
     local shapes = ToolOptionsWindows.new(win.windows)
