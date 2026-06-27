@@ -25,7 +25,7 @@ function AppWindows:_refresh()
         new_cache[title] = win
     end
     self.windows_by_title = new_cache
-    -- print_took("  refresh took", start)
+    -- log_took("  refresh took", start)
 end
 
 function AppWindows:_ensure_loaded()

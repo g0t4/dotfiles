@@ -144,7 +144,7 @@ function ScreenPalEditorWindow:force_refresh_cached_controls()
                 end
             end)
     self._cached_buttons = true
-    -- print_took("building control CACHE took: ", start)
+    -- log_took("building control CACHE took: ", start)
 end
 
 function ScreenPalEditorWindow:is_playing()

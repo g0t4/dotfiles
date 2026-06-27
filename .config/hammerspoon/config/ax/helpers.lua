@@ -816,7 +816,7 @@ function wait_until(is_done, interval_ms, max_cycles, name)
         cycles = cycles + 1
     end
 
-    print_took("wait_until is_done " .. (name or "") .. " timed out after "
+    log_took("wait_until is_done " .. (name or "") .. " timed out after "
         .. tostring(max_cycles) .. " cycles @ " .. tostring(interval_ms) .. "ms intervals",
         start)
     return false
