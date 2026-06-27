@@ -697,13 +697,25 @@ function _click2LevelTool(mainMenuItem, subMenuItem)
 end
 
 function SPAL_Freeze_Frame()
+    -- TODO if already open then don't start freeze frame again (assume that means I want to toggle start/end/cursor options)
     _click2LevelTool("Replace", "Freeze Frame")
-    -- freeze start frame (default)
+
+    -- * ensure uses start frame
+    -- TODO ensure from start (so I can flip back and forth with the two buttons)
+    local win = get_cached_editor_window()
+    local shapes = ShapesWindows.new(win.windows)
+    -- TODO shapes: wait_for_freeze_tool_window(): click if exists ? simplification?
+    shapes:wait_and_press_freeze_frame_button("Start")
 end
 
 function SPAL_Freeze_End_Frame()
+    -- TODO if already open then don't start freeze frame again (assume that means I want to toggle start/end/cursor options)
     _click2LevelTool("Replace", "Freeze Frame")
-    -- TODO set freeze end frame
+
+    -- * ensure uses end frame
+    local win = get_cached_editor_window()
+    local shapes = ShapesWindows.new(win.windows)
+    shapes:wait_and_press_freeze_frame_button("End")
 end
 
 function SPAL_ReplaceVideo()

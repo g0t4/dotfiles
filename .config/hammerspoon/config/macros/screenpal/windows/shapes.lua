@@ -40,4 +40,25 @@ function ShapesWindows:wait_for_shape_type_checkbox_then_press_it(shape_type)
     checkbox:axPress()
 end
 
+function ShapesWindows:get_freeze_tool_window()
+    -- 'SOM-FloatingWindow-Type=edit2.tool.freeze.controls-ZOrder=1(Undefined+1)'
+    return self.app_windows:get_window_by_title("SOM-FloatingWindow-Type=edit2.tool.freeze.controls-ZOrder=1(Undefined+1)")
+end
+
+function ShapesWindows:wait_for_freeze_tool_window()
+    return wait_for_element(function() return self:get_freeze_tool_window() end, 20, 20, "Freeze tool window")
+end
+
+function ShapesWindows:wait_and_press_freeze_frame_button(description)
+    local win = self:wait_for_freeze_tool_window()
+    if not win then
+        error("Freeze tool window not found")
+    end
+    local button = win:button_by_description(description)
+    if not button then
+        error("button not found: " .. tostring(description))
+    end
+    button:axPress()
+end
+
 return ShapesWindows
