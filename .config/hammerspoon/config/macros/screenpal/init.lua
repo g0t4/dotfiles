@@ -5,6 +5,7 @@ local SilencesController = require('config.macros.screenpal.silences')
 local ScreenPalEditorWindow = require('config.macros.screenpal.editor_window')
 local test_button = require('config.macros.screenpal.experiments.test_button')
 local VolumeMenu = require("config.macros.screenpal.windows.volume_menu")
+local ShapesWindows = require('config.macros.screenpal.windows.shapes')
 local log = require("config.logs").hammerspoons()
 
 local _200ms = 200000
@@ -631,19 +632,19 @@ function SPal_Add_Line()
     SPal_Add_Shape("Line")
 end
 
----@alias ShapeType "Line"|"Rectangle"
----@param type ShapeType
-function SPal_Add_Shape(type)
+---@param shape_type ShapeType
+function SPal_Add_Shape(shape_type)
     -- formerly startOverlayShapeOfType
     run_async(function()
         _click2LevelTool("Overlay", "Shape") -- FYI WORKING!
 
-        -- TODO port set shape type
         -- * set shape type
-        -- on setShapeType(_shape as string)
-        -- 	delayUntilExists(cbLine) -- doesn't matter which button we wait for (wait for last just in last exists after first, doubtful this matters)... + cannot lookup the specific button anyways  b/c I have to wait for first :)
-        --
-        -- * shapes in secondary (nested menu)
+        local win = get_cached_editor_window()
+        local shapes = ShapesWindows.new(win.windows)
+        shapes:wait_for_shape_type_checkbox_then_press_it(shape_type)
+
+        -- TODO * shapes in secondary (nested) menu
+        --  click ... button
         -- 	if _shape is in {"Diamond", "Ban", "Equals", "Does Not Equal", "Parallelogram", "Freehand"} then -- PRN add other types here
         -- 		clickIfExists(cbOtherShapes)
         -- 		delayUntilExists(subMenuOtherShapes)
