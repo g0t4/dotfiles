@@ -9,7 +9,7 @@ ToolBarWindow.__index = ToolBarWindow
 function ToolBarWindow.new(windows)
     local o = setmetatable({}, ToolBarWindow)
     o._windows = windows
-    o._win = o:find_my_window()
+    o._win = o:find_timeline_toolbar_window()
     return o
 end
 
@@ -32,7 +32,7 @@ function ToolBarWindow:_find_window(title)
     return win
 end
 
-function ToolBarWindow:find_my_window()
+function ToolBarWindow:find_timeline_toolbar_window()
     return self:_find_window("SOM-FloatingWindow-Type=edit2.addedit.toolbar.menu.window-ZOrder=1(Undefined+1)")
 end
 
@@ -45,7 +45,7 @@ end
 ---@param lua_pattern string
 ---@return hs.axuielement | nil
 function ToolBarWindow:get_button_by_description_matching(lua_pattern)
-    local win = self:find_my_window()
+    local win = self:find_timeline_toolbar_window()
     if not win then return end
 
     -- -- takes <3ms to find the button, that's fine for now, let's not cache controls
