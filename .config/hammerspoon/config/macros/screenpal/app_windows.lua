@@ -79,19 +79,16 @@ function AppWindows:editor_window_or_throw()
     error("No Screenpal editor window found")
 end
 
----@param window_object table # the window wrapper object
 ---@param title string # exact title to match
 ---@return hs.axuielement? editor_window
-function AppWindows:get_window_by_title(window_object, title)
+function AppWindows:get_window_by_title(title)
     -- TODO review all window wrappers that cached their window `_win` and port to use this (or by title pattern above)
     -- rely on cache of windows here on AppWindows and not need to cache each window on other window wrappers!
     --  much cleaner cache architecture
     --  just have the window wrappers call into here to get window any time it needs a reference to its window (cheap)
-    local win = self:_find_window(function()
+    return self:_find_window(function()
         return self.windows_by_title[title]
     end)
-    window_object._win = win
-    return win
 end
 
 return AppWindows
