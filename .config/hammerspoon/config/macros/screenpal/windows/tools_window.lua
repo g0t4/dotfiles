@@ -13,12 +13,13 @@ function ToolBarWindow.new(windows)
     return o
 end
 
-function ToolBarWindow:find_my_window()
+function ToolBarWindow:_find_window(title)
     if self._win and self._win:isValid() then
         return self._win
     end
     function lookup()
-        return self._windows.windows_by_title["SOM-FloatingWindow-Type=edit2.addedit.toolbar.menu.window-ZOrder=1(Undefined+1)"]
+        -- this is the top level menu right above timeline that has Tools button on left + recent tool used right of it + open editing controls
+        return self._windows.windows_by_title[title]
     end
 
     -- PRN this try/retry could maybe reside in the AppWindows class?
@@ -29,6 +30,10 @@ function ToolBarWindow:find_my_window()
     end
     self._win = win
     return win
+end
+
+function ToolBarWindow:find_my_window()
+    return self:_find_window("SOM-FloatingWindow-Type=edit2.addedit.toolbar.menu.window-ZOrder=1(Undefined+1)")
 end
 
 ---@param exact_match string
