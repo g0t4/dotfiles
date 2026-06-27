@@ -5,7 +5,7 @@ local SilencesController = require('config.macros.screenpal.silences')
 local ScreenPalEditorWindow = require('config.macros.screenpal.editor_window')
 local test_button = require('config.macros.screenpal.experiments.test_button')
 local VolumeMenu = require("config.macros.screenpal.windows.volume_menu")
-local ShapesWindows = require('config.macros.screenpal.windows.shapes')
+local ToolOptionsWindows = require('config.macros.screenpal.windows.tool_options')
 local log = require("config.logs").hammerspoons()
 
 local _200ms = 200000
@@ -640,7 +640,7 @@ function SPal_Add_Shape(shape_type)
 
         -- * set shape type
         local win = get_cached_editor_window()
-        local shapes = ShapesWindows.new(win.windows)
+        local shapes = ToolOptionsWindows.new(win.windows)
         shapes:wait_for_shape_type_checkbox_then_press_it(shape_type)
 
         -- TODO * shapes in secondary (nested) menu
@@ -691,29 +691,26 @@ end
 
 function SPAL_Freeze_Frame()
     local win = get_cached_editor_window()
-    local shapes = ShapesWindows.new(win.windows)
+    local shapes = ToolOptionsWindows.new(win.windows)
     local freeze_tool_window = shapes:get_freeze_tool_window() -- no waiting, just check if it is already open
     if not freeze_tool_window then
-        -- TODO if already open then don't start freeze frame again (assume that means I want to toggle start/end/cursor options)
         _click2LevelTool("Replace", "Freeze Frame")
     end
 
     -- * ensure uses start frame
-    -- TODO shapes: wait_for_freeze_tool_window(): click if exists ? simplification?
-    shapes:wait_and_press_freeze_frame_button("Start")
+    shapes:wait_and_press_freeze_frame_option("Start")
 end
 
 function SPAL_Freeze_End_Frame()
     local win = get_cached_editor_window()
-    local shapes = ShapesWindows.new(win.windows)
+    local shapes = ToolOptionsWindows.new(win.windows)
     local freeze_tool_window = shapes:get_freeze_tool_window() -- no waiting, just check if it is already open
     if not freeze_tool_window then
-        -- TODO if already open then don't start freeze frame again (assume that means I want to toggle start/end/cursor options)
         _click2LevelTool("Replace", "Freeze Frame")
     end
 
     -- * ensure uses end frame
-    shapes:wait_and_press_freeze_frame_button("End")
+    shapes:wait_and_press_freeze_frame_option("End")
 end
 
 function SPAL_ReplaceVideo()

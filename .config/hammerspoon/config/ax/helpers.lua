@@ -293,6 +293,15 @@ end
 axuielemMT.checkBox = function(self, index)
     return self:checkBoxes()[index]
 end
+--- Returns FIRST with matching description, NOT ALL!
+---@param exact_description string
+---@return hs.axuielement
+function axuielemMT.checkbox_by_description(self, exact_description)
+    return vim.iter(self:checkBoxes())
+        :find(function(button)
+            return button:axDescription() == exact_description
+        end)
+end
 
 ---@return hs.axuielement[]
 axuielemMT.textFields = function(self)
@@ -822,7 +831,14 @@ function wait_until(is_done, interval_ms, max_cycles, name)
     return false
 end
 
+---@param lookup_fn fun(): hs.axuielement?
 function press_if_exists(lookup_fn)
+    press_if_exists_else_skip(lookup_fn)
+    log:info("press_if_exists element not found, DID YOU RETURN FROM YOUR LOOKUP?", element)
+end
+
+---@param lookup_fn fun(): hs.axuielement?
+function press_if_exists_else_skip(lookup_fn)
     local element = lookup_fn()
     if element then
         element:axPress()
