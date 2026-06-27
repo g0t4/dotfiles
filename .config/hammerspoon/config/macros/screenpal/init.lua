@@ -668,63 +668,34 @@ end
 ---@param mainMenuItem string
 ---@param subMenuItem  string
 function _click2LevelTool(mainMenuItem, subMenuItem)
-    -- TODO port from spal.scptd:
-    -- TODO then add wrapper to call this and other hammerspoon lua code from the spal.scptd script so I can call back here for partial migrations out of that applescript impl?
-    --
-    -- on click2LevelTool(mainMenuItem as string, subMenuItem as string)
-    -- 	-- allow for tools to already be open -- TODO what does this do? getMenu()
-    -- 	if exists my getMenu() then return
-    -- TODO => getMenu() =>
-    --     return a reference to (first window of procSpal whose name starts with "SOM-FloatingWindow-Type=edit2.addedit.menu.window-ZOrder")
-    --       TODO see ToolBarWindow:find_my_window() as it has most of logic I need (refactor to pass window name? as it has diff window name in lookup())
-    --
-    -- 	delayUntilExists(btnTools of my _toolbar)
-    -- 	clickIfExists(btnTools of my _toolbar)
+    -- PRN if main menu is already open, then skip opening it?
+    -- PRN if submenu is open, skip opening it too?
+
+    -- * click Tools button (opens tools menu)
     local win = get_cached_editor_window()
     local tool_win = win.windows:get_tool_window()
     tool_win:wait_for_tools_button_then_press_it()
 
-    -- 	delayUntilExists(getMenu()) -- delay 0.2
+    -- * click main menu entry
     local tools_menu = tool_win:wait_for_tools_menu()
-    log:info("tools menu", tools_menu)
-    --  app:window(3):button(6)
-    --
-    -- AXDescription: Overlay<string>
-    -- AXEnabled: true<bool>
-    -- AXFocused: false<bool>
-    -- AXFocusedUIElement: AXButton - Overlay<hs.axuielement>
-    -- AXIndex: 5<number>
-    -- AXMaxValue: 1<number>
-    -- AXMinValue: 0<number>
-    -- AXOrientation: AXUnknownOrientation<string>
-    -- AXRoleDescription: button<string>
-    -- AXSelected: false<bool>
-    --
-    -- unique ref: app:window('SOM-FloatingWindow-Type=edit2.addedit.menu.window-ZOrder=2(Undefined+2)')
-    --   :button(desc='Overlay')   --
-    --
-    -- 	-- FYI no big deal if submenu is open, just click whatever top level menu is needed
     -- TODO make smth like clickIfExists and include logging if not exist?
-    -- 	clickIfExists(a reference to (first button of getMenu() whose description is mainMenuItem))
     menu_item = tools_menu:button_by_description(mainMenuItem)
     if not menu_item then
         error("Button '" .. mainMenuItem .. "' not found")
     end
     menu_item:axPress()
 
-    --
-    -- 	delayUntilExists(getSubMenu())
+    -- PRN I could use nil for second arg to click items with only top level entry (no submenu)
+
+    -- * click submenu entry
     local submenu = tool_win:wait_for_tools_submenu()
-    log:info("submenu", submenu)
-    -- 	clickIfExists(a reference to (first button of getSubMenu() whose description is subMenuItem))
     local sub_item = submenu:button_by_description(subMenuItem)
     if not sub_item then
         error("Submenu button '" .. subMenuItem .. "' not found")
     end
     sub_item:axPress()
-    --
-    -- 	-- wait for tool to open (finish start)
-    -- 	delayUntilExists(btnCancel of my _toolbar) -- (cancel is on range select bar, also on edit/add overlay bar)
+
+    -- * ensure tool is open (i.e. cancel/ok button on toolbar)
     tool_win:wait_for_an_open_edit_tool()
 end
 
