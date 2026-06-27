@@ -14,7 +14,7 @@ end
 
 function ToolBarWindow:find_timeline_toolbar_window()
     log:info("FUOOO WORKS")
-    return self.app_windows:find_window("SOM-FloatingWindow-Type=edit2.addedit.toolbar.menu.window-ZOrder=1(Undefined+1)")
+    return self.app_windows:get_window_by_title("SOM-FloatingWindow-Type=edit2.addedit.toolbar.menu.window-ZOrder=1(Undefined+1)")
 end
 
 ---@param exact_match string
