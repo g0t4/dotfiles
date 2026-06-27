@@ -1,14 +1,14 @@
 ---@class ToolBarWindow
----@field _windows AppWindows
+---@field app_windows AppWindows
 ---@field _win hs.axuielement | nil
 local ToolBarWindow = {}
 ToolBarWindow.__index = ToolBarWindow
 
----@param windows AppWindows
+---@param app_windows AppWindows
 ---@return ToolBarWindow
-function ToolBarWindow.new(windows)
+function ToolBarWindow.new(app_windows)
     local o = setmetatable({}, ToolBarWindow)
-    o._windows = windows
+    o.app_windows = app_windows
     o._win = o:find_timeline_toolbar_window()
     return o
 end
@@ -20,13 +20,13 @@ function ToolBarWindow:_find_window(title)
     end
     function lookup()
         -- this is the top level menu right above timeline that has Tools button on left + recent tool used right of it + open editing controls
-        return self._windows.windows_by_title[title]
+        return self.app_windows.windows_by_title[title]
     end
 
     -- PRN this try/retry could maybe reside in the AppWindows class?
     local win = lookup()
     if not win or not win:isValid() then
-        self._windows:_refresh()
+        self.app_windows:_refresh()
         win = lookup()
     end
     self._win = win
