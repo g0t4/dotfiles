@@ -697,24 +697,29 @@ function _click2LevelTool(mainMenuItem, subMenuItem)
 end
 
 function SPAL_Freeze_Frame()
-    -- TODO if already open then don't start freeze frame again (assume that means I want to toggle start/end/cursor options)
-    _click2LevelTool("Replace", "Freeze Frame")
-
-    -- * ensure uses start frame
-    -- TODO ensure from start (so I can flip back and forth with the two buttons)
     local win = get_cached_editor_window()
     local shapes = ShapesWindows.new(win.windows)
+    local freeze_tool_window = shapes:get_freeze_tool_window() -- no waiting, just check if it is already open
+    if not freeze_tool_window then
+        -- TODO if already open then don't start freeze frame again (assume that means I want to toggle start/end/cursor options)
+        _click2LevelTool("Replace", "Freeze Frame")
+    end
+
+    -- * ensure uses start frame
     -- TODO shapes: wait_for_freeze_tool_window(): click if exists ? simplification?
     shapes:wait_and_press_freeze_frame_button("Start")
 end
 
 function SPAL_Freeze_End_Frame()
-    -- TODO if already open then don't start freeze frame again (assume that means I want to toggle start/end/cursor options)
-    _click2LevelTool("Replace", "Freeze Frame")
-
-    -- * ensure uses end frame
     local win = get_cached_editor_window()
     local shapes = ShapesWindows.new(win.windows)
+    local freeze_tool_window = shapes:get_freeze_tool_window() -- no waiting, just check if it is already open
+    if not freeze_tool_window then
+        -- TODO if already open then don't start freeze frame again (assume that means I want to toggle start/end/cursor options)
+        _click2LevelTool("Replace", "Freeze Frame")
+    end
+
+    -- * ensure uses end frame
     shapes:wait_and_press_freeze_frame_button("End")
 end
 
