@@ -2,6 +2,7 @@ local f = require("config.helpers.underscore")
 local timer = require("hs.timer")
 require("config.helpers.misc")
 require("config.helpers.perf")
+local log = require("config.logs").hammerspoons()
 
 -- goal here is to simplify syntax for navigating children by roles (and index)
 --    :childrenWithRole("AXWindow")[1]
@@ -44,7 +45,7 @@ end
 
 axuielemMT.dumpActions = function(self)
     f.each(self:actionNames() or {}, function(index, name)
-        print(name, self:actionDescription(name))
+        log:info(name, self:actionDescription(name))
     end)
 end
 
@@ -58,7 +59,7 @@ end
 
 axuielemMT.dumpAttributes = function(self)
     f.each(self:allAttributeValues() or {}, function(name, value)
-        print(name, hs.inspect(value))
+        log:info(name, hs.inspect(value))
     end)
 end
 
@@ -711,7 +712,7 @@ function FindOneElement(app, criteria, callback)
     local named_modifiers = { count = 1 }
 
     local function after_search(...)
-        print("time to callback: " .. get_elapsed_time_in_milliseconds(start_time) .. " ms")
+        log:info("time to callback: " .. get_elapsed_time_in_milliseconds(start_time) .. " ms")
         callback(...)
     end
 
@@ -765,7 +766,7 @@ function wait_for_element(search_func, interval_ms, max_cycles, name)
         cycles = cycles + 1
     end
 
-    print("wait_for_element " .. (name or "") .. " timed out after "
+    log:info("wait_for_element " .. (name or "") .. " timed out after "
         .. tostring(max_cycles) .. " cycles @ " .. tostring(interval_ms) .. "ms intervals",
         start)
     return nil
@@ -781,15 +782,15 @@ function wait_for_element_then_press_it(search_func, interval_ms, max_cycles, na
     local elem = wait_for_element(search_func, interval_ms, max_cycles, name)
     if elem then
         local success, err = elem:performAction("AXPress")
-        -- print("AXPress result: " .. hs.inspect(success) .. ", err: " .. hs.inspect(err)) -- PRN add to log file! and check for success to be true (or it will be the error) or the error will be nil! - I think I was wrong about this being an
+        -- log:info("AXPress result: " .. hs.inspect(success) .. ", err: " .. hs.inspect(err)) -- PRN add to log file! and check for success to be true (or it will be the error) or the error will be nil! - I think I was wrong about this being an
         if not success then
             -- FINALLY a central spot to log this, I keep forgetting to check this when I try to use actions!
-            print("failed to AXPress elem", elem, err)
+            log:info("failed to AXPress elem", elem, err)
             return false
         end
         return true
     end
-    print("did not find element to press")
+    log:warn("did not find element to press")
     return false
 end
 

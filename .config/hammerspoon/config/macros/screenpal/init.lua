@@ -5,6 +5,7 @@ local SilencesController = require('config.macros.screenpal.silences')
 local ScreenPalEditorWindow = require('config.macros.screenpal.editor_window')
 local test_button = require('config.macros.screenpal.experiments.test_button')
 local VolumeMenu = require("config.macros.screenpal.windows.volume_menu")
+local log = require("config.logs").hammerspoons()
 
 local _200ms = 200000
 local _300ms = 300000
@@ -625,8 +626,12 @@ function WIP_SPal_Cut_then_Mute_then_Preview()
     end)
 end
 
----@alias ShapeType "Line"|"Rectangle"
+function SPal_Add_Line()
+    -- avoid ""/'' strings in param b/c quoting nightmare if make a mistake
+    SPal_Add_Shape("Line")
+end
 
+---@alias ShapeType "Line"|"Rectangle"
 ---@param type ShapeType
 function SPal_Add_Shape(type)
     -- formerly startOverlayShapeOfType
