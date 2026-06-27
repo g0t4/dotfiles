@@ -1,4 +1,5 @@
 local ToolBarWindow = require("config.macros.screenpal.windows.tools_window")
+local log = require("config.logs").hammerspoons()
 
 ---@class AppWindows
 ---@field app hs.axuielement
@@ -89,6 +90,13 @@ function AppWindows:get_window_by_title(title)
     return self:_find_window(function()
         return self.windows_by_title[title]
     end)
+end
+
+function AppWindows:log_window_names()
+    log:info("log_window_names")
+    for title, w in pairs(self.windows_by_title) do
+        log:info("  window", title, w)
+    end
 end
 
 return AppWindows
