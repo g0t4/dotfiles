@@ -13,7 +13,6 @@ function ToolBarWindow.new(app_windows)
 end
 
 function ToolBarWindow:find_my_window()
-    log:info("FUOOO WORKS")
     return self.app_windows:get_window_by_title("SOM-FloatingWindow-Type=edit2.addedit.toolbar.menu.window-ZOrder=1(Undefined+1)")
 end
 
