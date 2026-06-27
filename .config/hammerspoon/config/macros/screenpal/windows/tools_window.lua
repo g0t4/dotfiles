@@ -14,6 +14,7 @@ function ToolBarWindow.new(windows)
 end
 
 function ToolBarWindow:_find_window(title)
+    -- TODO move this to a central spot
     if self._win and self._win:isValid() then
         return self._win
     end
