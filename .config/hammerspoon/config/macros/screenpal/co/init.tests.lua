@@ -88,17 +88,16 @@ describe("syncify", function()
 
 
     describe("works with vim.defer_fn", function()
-        it("fails if resume would be called when coroutine is not suspeneded...", function()
-            assert.has_error(function()
-                run_async(function()
-                    syncify(function(cb)
-                        vim.schedule(function()
-                            cb()
-                        end)
-                        vim.wait(10) -- intentional vim.wait inside the syncify's call_this so yield isn't called before attempt to call resume
+        stop_after_this("fails if resume would be called when coroutine is not suspeneded...", function()
+            run_async(function()
+                syncify(function(cb)
+                    vim.schedule(function()
+                        cb()
                     end)
+                    vim.wait(10) -- intentional vim.wait inside the syncify's call_this so yield isn't called before attempt to call resume
                 end)
-            end, "Cannot resume coroutine that is not suspended")
+            end)
+            -- TODO I need an assertion... to verify more than just not erroring...
         end)
 
         it("syncify completes and returns value", function()

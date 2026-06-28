@@ -174,15 +174,9 @@ function syncify(call_this, ...)
 
     call_this(after_call_this, ...)
 
-    if shit_hit_fan then
-        error(shit_hit_fan)
+    if not shit_hit_fan then
+        coroutine.yield()
     end
-    -- TODO this is the recovery route I will ultimately go with... just wanna test this first too:
-    --   FYI so first I am finishing my test of erroring (no recovery)
-    -- if not shit_hit_fan then
-    --     coroutine.yield()
-    -- end
-    coroutine.yield()
 
     local _unpack = unpack or table.unpack
     log:info("syncify captured_args:", _unpack)
