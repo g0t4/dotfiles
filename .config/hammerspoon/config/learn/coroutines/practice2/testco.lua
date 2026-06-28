@@ -69,15 +69,13 @@ describe("test", function()
     function callbacker(call_this, ...)
         local co, is_main = coroutine.running()
 
-        local captured_args = nil -- TODO only need this for a callbacker equivalent
         call_this(function(...)
-            captured_args = ...
             coroutine.resume(co)
         end, ...)
 
-        coroutine.yield()
+        local args_thru_yield = coroutine.yield()
         print("    3. callbacker captured args:", vim.inspect(captured_args))
-        -- return captured_args
+        return args_thru_yield
     end
 
     function sleeper2(ms)
