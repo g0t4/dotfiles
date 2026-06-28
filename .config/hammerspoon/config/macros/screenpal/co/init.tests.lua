@@ -90,14 +90,17 @@ describe("syncify", function()
     describe("works with vim.defer_fn", function()
         stop_after_this("fails if resume would be called when coroutine is not suspeneded...", function()
             run_async(function()
+                local co, ismain = coroutine.running()
                 syncify(function(cb)
                     vim.schedule(function()
+                        -- without vim.wait, this scheduled event would fire AFTER coroutine.yield is called... but b/c of wait, this fires before!
+                        --  why? b/c wait delays calling yield, meanwhile wait doesn't block event loop ... so, vim.scheduled events continue to fire! including this one
+                        assert.equal(coroutine.status(co), "normal") -- if you drop vim.wait below then this will be suspended instead
                         cb()
                     end)
                     vim.wait(10) -- intentional vim.wait inside the syncify's call_this so yield isn't called before attempt to call resume
                 end)
             end)
-            -- TODO I need an assertion... to verify more than just not erroring...
         end)
 
         it("syncify completes and returns value", function()
