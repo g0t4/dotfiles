@@ -1,33 +1,23 @@
 # @fish-lsp-disable 4004
 
-function love_fim
-    # basically a thumbs up
-    echo "FIM ❤️" >README.md
+function notes_about_trace
+    echo $argv >README.md
     git add README.md
-    git commit -m "FIM ❤️"
+    git commit -m "$argv"
+end
+
+function love_fim
+    notes_about_trace "FIM ❤️"
 end
 
 function love_rewrites
-    echo "Rewrites ❤️" >README.md
-    git add README.md
-    git commit -m "Rewrites ❤️"
+    notes_about_trace "Rewrites ❤️"
 end
 
 function love_agents
-    echo "Agents ❤️" >README.md
-    git add README.md
-    git commit -m "Agents ❤️"
+    notes_about_trace "Agents ❤️"
 end
 
 function love_shell
-    echo "Shell completions ❤️" >README.md
-    git add README.md
-    git commit -m "Shell completions ❤️"
-end
-
-function notes_about_trace
-    set notes $argv
-    echo "$notes" >README.md
-    git add README.md
-    git commit -m "$notes"
+    notes_about_trace "Shell completions ❤️"
 end
