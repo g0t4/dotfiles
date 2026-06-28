@@ -138,7 +138,7 @@ function syncify(call_this, ...)
 
     local captured_args = nil
     local resume_once_called = false
-    local shit_hit_fan = nil
+    local callback_beat_yield = nil
     local function resume_once()
         if resume_once_called then
             log:warn("syncify resume_once - SKIP b/c ALREADY RESUMED")
@@ -155,7 +155,7 @@ function syncify(call_this, ...)
             if status ~= "suspended" then
                 local message = "Cannot resume coroutine that is not suspended"
                 log:error(message)
-                shit_hit_fan = message
+                callback_beat_yield = message
                 return
             end
             local status, err = coroutine.resume(co)
@@ -174,7 +174,7 @@ function syncify(call_this, ...)
 
     call_this(after_call_this, ...)
 
-    if not shit_hit_fan then
+    if not callback_beat_yield then
         coroutine.yield()
     end
 
