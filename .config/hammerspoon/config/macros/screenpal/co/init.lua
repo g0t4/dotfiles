@@ -183,6 +183,8 @@ function syncify(call_this, ...)
 
     -- as long as you are `sched`uling during a sync callback ("making it async", IOTW resume is not called synchronously)
     -- then there's no way to resume before yielding!
+    -- sure you could skip both yield and return, but that's a different scenario
+    -- cannot skip yield and still call resume!
     coroutine.yield()
 
     local _unpack = unpack or table.unpack
