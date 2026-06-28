@@ -69,4 +69,11 @@ function Timer:log_timing()
     end
 end
 
+function Timer.time_this(fn, description)
+    local timer = Timer.new()
+    local result = fn()
+    timer:log_timing()
+    return result
+end
+
 return Timer

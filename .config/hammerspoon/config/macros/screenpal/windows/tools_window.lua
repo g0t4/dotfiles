@@ -1,4 +1,6 @@
 local log = require("config.logs").hammerspoons()
+local Timer = require("config.macros.screenpal.experiments.timer")
+
 ---@class ToolBarWindow
 ---@field app_windows AppWindows
 local ToolBarWindow = {}
@@ -13,7 +15,9 @@ function ToolBarWindow.new(app_windows)
 end
 
 function ToolBarWindow:find_my_window()
-    return self.app_windows:get_window_by_title("SOM-FloatingWindow-Type=edit2.addedit.toolbar.menu.window-ZOrder=1(Undefined+1)")
+    return Timer.time_this(function()
+        return self.app_windows:get_window_by_title("SOM-FloatingWindow-Type=edit2.addedit.toolbar.menu.window-ZOrder=1(Undefined+1)")
+    end, "ToolBarWindow:find_my_window")
 end
 
 function ToolBarWindow:find_tools_menu()
