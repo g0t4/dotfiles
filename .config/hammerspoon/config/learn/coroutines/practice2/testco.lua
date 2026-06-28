@@ -153,4 +153,28 @@ describe("test", function()
         main()
         print("5. test done")
     end)
+
+    it("callbacker w/ callback that passes multiple callback args", function()
+        local test_co = coroutine.running()
+
+        local function get_values(callback, how_many)
+            vim.defer_fn(function()
+                callback("wes", "higbee", how_many * 2)
+            end, 100)
+        end
+
+        local function main()
+            local value1, value2, value3 = callbacker(get_values, 11)
+
+            print("4. creating report with data: " .. vim.inspect(values))
+
+            assert.are.same(value1, "wes")
+            assert.are.same(value2, "higbee")
+            assert.are.same(value3, 22)
+            coroutine.resume(test_co) -- triggers test to complete
+        end
+
+        main()
+        print("5. test done")
+    end)
 end)
