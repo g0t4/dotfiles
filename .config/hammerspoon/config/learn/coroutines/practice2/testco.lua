@@ -70,7 +70,7 @@ describe("test", function()
         local co, is_main = coroutine.running()
 
         call_this(function(...)
-            coroutine.resume(co)
+            coroutine.resume(co, ...)
         end, ...)
 
         local args_thru_yield = coroutine.yield()
