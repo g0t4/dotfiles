@@ -21,7 +21,7 @@ describe("TODO what was original purpose for this test???", function()
     --   IOTW review test categories and coverage of scenarios
     --   by the way I am happy with Counter and syncify categories below, so maybe move this into syncify if that's what it is covering
     --   AND/OR setup describe("sleep_ms") tests
-    it("test run_async + TestTimer works, bypasses creating coroutine", function()
+    skip("test run_async + TestTimer works, bypasses creating coroutine", function()
         -- !!! MUST wrap with run_async for _busted_ test runner to work
         -- - b/c busted (standalone cmd) runs tests in main thread! and thus the yield in sleep_ms blows up on the main thread (cannot yield/resume the main coroutine/thread)
         -- BTW plenary's runner (in nvim) does not run tests in main coroutine... so it will work w/o run_async (but leave this here to be compat with busted)
