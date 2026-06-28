@@ -10,7 +10,7 @@ local only = require('devtools.tests.define.only')
 local skip = require('devtools.tests.define.skip')
 
 require("config.macros.screenpal.co")
-local TestTimer = require("config.macros.screenpal.test_timing")
+local TestTimer = require("config.macros.screenpal.co.tests.timer")
 local Counter = require("config.macros.screenpal.co.tests.counter")
 
 -- FYI alternative is to use async module, but I am happy with my run_async
@@ -104,9 +104,6 @@ describe("syncify", function()
         end)
     end)
 end)
-
----@class TestTimer
-local TestTimer = require("config.macros.screenpal.test_timing")
 
 ---Simulate a current time value by passing a constant
 ---@param constant number Constant millisecond value to return.
