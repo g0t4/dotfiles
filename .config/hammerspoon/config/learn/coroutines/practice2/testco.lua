@@ -147,6 +147,8 @@ describe("test", function()
             local data = callbacker(api_crunch_data, then_create_report)
 
             print("4. creating report with data: " .. vim.inspect(data))
+
+            assert.are.same({ 1, 5, 10 }, data)
             coroutine.resume(test_co) -- triggers test to complete
         end
 
