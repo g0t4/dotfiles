@@ -29,7 +29,7 @@ local function read_entire_file(config_relative_path)
     return contents
 end
 
-local function prints(...)
+local function show_it(...)
     -- PRN www.jstree.com - if I want a tree view that has collapsed sections that hide details initially ... only use this if use case arises from daily use... my hope is generated AppleScript works most of the time
     for _, arg in ipairs({ ... }) do
         if print_web_view == nil then
@@ -66,7 +66,7 @@ local function prints(...)
 end
 
 function print_to_web_view(...)
-    prints(...)
+    show_it(...)
 end
 
 local function ensure_web_view()
@@ -135,7 +135,7 @@ local function ensure_web_view()
         --   might be useful to have it in background until I capture the element I want and then I can switch to it
     end
     if not print_web_window then
-        prints("no webview window, aborting")
+        show_it("no webview window, aborting")
         return
     end
     print_web_view:frame(rect)
@@ -239,7 +239,7 @@ function inspect_html(value, completed)
 end
 
 function dump_html(value)
-    prints(inspect_html(value))
+    show_it(inspect_html(value))
 end
 
 function ensure_cleared_web_view()
@@ -317,18 +317,18 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "E", function()
         -- WOW FCPX everything is 2672.4ms ... and that's with transform to tables!!!wow...that is the craziest app I have used for elements
         --
         app_element:buildTree(function(message, results)
-            prints("time to callback: " .. get_elapsed_time_in_milliseconds(start_time) .. " ms")
+            show_it("time to callback: " .. get_elapsed_time_in_milliseconds(start_time) .. " ms")
             start_time = get_time() -- reset
 
-            prints("message: " .. message)
+            show_it("message: " .. message)
             if message ~= "completed" then
                 log:warn("SOMETHING WENT WRONG b/c message is not 'completed'")
             end
             log:info("results", results)
-            prints("results: ", inspect_html(results))
+            show_it("results: ", inspect_html(results))
 
             -- leave timing info in here b/c I will be running into more complex test cases and I wanna understand the overall timinmg implications of some of the apps I use
-            prints("time to display: " .. get_elapsed_time_in_milliseconds(start_time) .. " ms")
+            show_it("time to display: " .. get_elapsed_time_in_milliseconds(start_time) .. " ms")
         end)
     end
     -- test_build_tree()
@@ -340,20 +340,20 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "E", function()
         -- FYI if you pass namedModifiers = { count: 3 } then it "pauses" search if you will and calls this callback and then you can resume with results:next() here, and then this callback is invoked after 3 more items are found, and you can continue until all elements are searched
         --    result object has cumulative results across each search run
         --    use this to build a more interactive/responsive search experience
-        prints("time to callback: " .. get_elapsed_time_in_milliseconds(start_time) .. " ms")
+        show_it("time to callback: " .. get_elapsed_time_in_milliseconds(start_time) .. " ms")
         start_time = get_time() -- reset
 
-        prints("message: " .. message)
+        show_it("message: " .. message)
         if message ~= "completed" then
             log:warn("SOMETHING WENT WRONG b/c message is not 'completed'")
         end
-        prints("numResultsAdded: " .. num_results_added)
-        prints("matched: " .. search_task:matched())
+        show_it("numResultsAdded: " .. num_results_added)
+        show_it("matched: " .. search_task:matched())
         local results = search_task -- just a reminder, enumerate the task (result) to get items
-        prints("results: ", inspect_html(results))
+        show_it("results: ", inspect_html(results))
 
         -- leave timing info in here b/c I will be running into more complex test cases and I wanna understand the overall timinmg implications of some of the apps I use
-        prints("time to display: " .. get_elapsed_time_in_milliseconds(start_time) .. " ms")
+        show_it("time to display: " .. get_elapsed_time_in_milliseconds(start_time) .. " ms")
     end
     local function test_element_search_with_filter()
         -- searchCriteriaFunction takes same arg as matchCriteria:
@@ -374,7 +374,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "E", function()
         -- FYI when I re-run this shortcut (2nd time+) it takes 6.7 seconds to run elementSearch! ODD?! but reload hammerspoon config (wipes out state) and its back down to 300ms!
         --  => table of key/value pairs
         --  => array table of key/value pairs (logical AND of all criteria)
-        prints("element_criteria:", inspect_html(element_criteria))
+        show_it("element_criteria:", inspect_html(element_criteria))
 
         -- this is a function builder that IIAC transforms the elementCriteria into element API calls
         local criteria_function = hs.axuielement.searchCriteriaFunction(element_criteria)
@@ -430,12 +430,12 @@ function show_cmd_a_view_for_element(element_at)
     ensure_cleared_web_view()
     local clauses, attr_dumps = build_applescript_to(element_at, true)
     local applescript = ConcatIntoLines(clauses, 80, "¬")
-    prints(html_pre_code_applescript(applescript))
+    show_it(html_pre_code_applescript(applescript))
     local lua = BuildHammerspoonLuaTo(element_at)
-    prints(html_pre_code_lua(lua))
-    prints(build_action_examples(element_at))
-    prints(get_dump_path(element_at, true))
-    prints(table.unpack(attr_dumps))
+    show_it(html_pre_code_lua(lua))
+    show_it(build_action_examples(element_at))
+    show_it(get_dump_path(element_at, true))
+    show_it(table.unpack(attr_dumps))
 end
 
 hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "A", function()
@@ -473,7 +473,7 @@ end)
 function element_specifier_for(elem)
     local function warn_on_empty_title(title, role)
         if title == "" then
-            prints("[WARN] title is empty for " .. role .. ", script might not work")
+            show_it("[WARN] title is empty for " .. role .. ", script might not work")
         end
     end
 
@@ -575,7 +575,7 @@ function element_specifier_for(elem)
     elseif role == "AXList" then
         -- TODO I might have had a special case of AXSubrole == "AXSectionList" ... and then used "section 1" instead of "list 1" (find and repro if so)
         if subrole == "AXSectionList" then
-            prints("WARNING: AXSubrole is AXSectionList, using 'list' but might need 'section' instead? double check and then update this warning in code and change if needed")
+            show_it("WARNING: AXSubrole is AXSectionList, using 'list' but might need 'section' instead? double check and then update this warning in code and change if needed")
         end
         return "list " .. elem_index .. " of "
     elseif role == "AXStaticText" then
@@ -639,7 +639,7 @@ function element_specifier_for(elem)
         return "UI element " .. elem_index .. " of "
         -- TODO AXHelpTag (subrole AXUknown) => saw in brave browser when pointed at links, couldn't repo in Script Debugger though
     end
-    prints("SUGGESTION: using roleDescription \"" .. role_description .. "\" as class (error prone in some cases), add an explicit mapping for AXRole: " .. role)
+    show_it("SUGGESTION: using roleDescription \"" .. role_description .. "\" as class (error prone in some cases), add an explicit mapping for AXRole: " .. role)
     -- FYI pattern, class == roleDesc - AX => split on captial letters (doesn't work for AXApplication, though actually it probably does work as ref to application class in Standard Suite?
     return role_description .. " " .. elem_index .. " of "
 end
@@ -664,7 +664,7 @@ local function get_identifier(to_element)
     end
     -- TODO last fallback to AXRole? and prepend _?
     if identifier == "" then
-        prints("cannot determine an identifier, using foo")
+        show_it("cannot determine an identifier, using foo")
         identifier = "foo"
     end
     -- todo ensure not reserved word:
@@ -743,7 +743,7 @@ function compact_user_data(userdata)
     if userdata.__name ~= "hs.axuielement" then
         -- IIUC __name is frequently used so that is a pretty safe bet
         -- getmetatable(value) == hs.getObjectMetatable("hs.axuielement") -- alternate to check
-        prints("UNEXPECTED userdata type, consider adding it to display helpers: " .. tostring(userdata))
+        show_it("UNEXPECTED userdata type, consider adding it to display helpers: " .. tostring(userdata))
         return "UNEXPECTED: " .. tostring(userdata)
     end
     local title = get_value_or_empty_string(userdata, "AXTitle")
