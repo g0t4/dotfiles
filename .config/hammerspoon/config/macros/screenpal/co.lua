@@ -156,16 +156,16 @@ function syncify(call_this, ...)
             -- log:info("syncify resume_once scheduled - coroutine_info:", coroutine_info(co))
 
             local status, err = coroutine.resume(co)
-            -- log:info("syncify resume_once scheduled - status: ", vim.inspect(status), " err:", vim.inspect(err))
+            log:info("syncify resume_once scheduled - status: ", status, " err:", err)
             if not status then
-                log:info("syncify coroutine.resume(co) FAILED", err, "stacktrace:", get_stack_trace())
+                log:info("syncify resume_once scheduled: RESUME FAILED", err, "stacktrace:", get_stack_trace())
             end
         end)
     end
 
     call_this(function(...)
         captured_args = { ... }
-        -- log:info("syncify call_this captured_args", vim.inspect(captured_args))
+        log:info("syncify call_this captured_args", captured_args)
         resume_once()
     end, ...)
 
@@ -177,6 +177,6 @@ function syncify(call_this, ...)
     end
 
     local _unpack = unpack or table.unpack
-    -- log:info("syncify captured_args:", vim.inspect(_unpack))
+    log:info("syncify captured_args:", _unpack)
     return _unpack(captured_args)
 end
