@@ -49,19 +49,19 @@ end
 
 --- make sure controls are valid, if not re-acquire references
 function ScreenPalEditorWindow:ensure_cached_controls(force)
-    -- print("window valid? A ", self.win:isValid()) -- NOTE this is not valid (nil) when need reload everything so do that instead
+    -- log:info("window valid? A ", self.win:isValid()) -- NOTE this is not valid (nil) when need reload everything so do that instead
     if not self.win:isValid() then
-        -- print("*** REFRESH WINDOWS *** - self.win is NOT VALID")
+        -- log:info("*** REFRESH WINDOWS *** - self.win is NOT VALID")
         self:_force_refresh_windows()
     end
-    -- print("window valid? B ", self.win:isValid()) -- NOTE this is not valid (nil) when need reload everything so do that instead
+    -- log:info("window valid? B ", self.win:isValid()) -- NOTE this is not valid (nil) when need reload everything so do that instead
     if not force and self._cached_buttons then
         if self._btn_minimum_zoom:isValid() then
             return
         end
-        -- print("editor window cache invalidated")
+        -- log:info("editor window cache invalidated")
     end
-    -- print("building editor window")
+    -- log:info("building editor window")
     self:force_refresh_cached_controls()
 end
 
@@ -122,7 +122,7 @@ function ScreenPalEditorWindow:force_refresh_cached_controls()
                         -- AXHelp: Use this slider to increase or decrease the rate of playback<string>
                         return
                     else
-                        -- print(description)
+                        -- log:info(description)
                     end
                 elseif role == "AXTextField" then
                     -- accessibility description => AXDescription in hs apis... is empty only for the title name field (upper left)
@@ -200,31 +200,31 @@ function ScreenPalEditorWindow:zoom_off()
     end
 
     -- local win = get_cached_editor_window()
-    -- print("before min", hs.inspect(win._btn_minimum_zoom:axFrame()))
-    -- print("med", hs.inspect(win._btn_minimum_zoom:axFrame()))
-    -- print("max", hs.inspect(win._btn_minimum_zoom:axFrame()))
+    -- log:info("before min", hs.inspect(win._btn_minimum_zoom:axFrame()))
+    -- log:info("med", hs.inspect(win._btn_minimum_zoom:axFrame()))
+    -- log:info("max", hs.inspect(win._btn_minimum_zoom:axFrame()))
 
     hs.eventtap.keyStroke({}, "m", 0, get_screenpal_app_element_or_throw())
     -- FYI only add delay if you have a scenario that's broken, don't prematurely add this
 
     -- FYI whenever I check here, it's always 0,0 already... might be b/c zoom is fast... TODO need to find a way to verify if this is a legit test (for when zooming out/in is actually done)
     -- local win = get_cached_editor_window()
-    -- print("min", hs.inspect(win._btn_minimum_zoom:axFrame()))
-    -- print("med", hs.inspect(win._btn_minimum_zoom:axFrame()))
-    -- print("max", hs.inspect(win._btn_minimum_zoom:axFrame()))
+    -- log:info("min", hs.inspect(win._btn_minimum_zoom:axFrame()))
+    -- log:info("med", hs.inspect(win._btn_minimum_zoom:axFrame()))
+    -- log:info("max", hs.inspect(win._btn_minimum_zoom:axFrame()))
     --
     --
-    -- print("waitUNTIL")
+    -- log:info("waitUNTIL")
     -- hs.timer.waitUntil(function()
-    --     print("tick")
+    --     log:info("tick")
     --     if self._btn_minimum_zoom then
     --         local frame = self._btn_minimum_zoom:axFrame()
-    --         print("  frame", hs.inspect(frame))
+    --         log:info("  frame", hs.inspect(frame))
     --         return frame.x == 0 and frame.y == 0
     --     end
     --     return false
     -- end, function()
-    --     print("DONE")
+    --     log:info("DONE")
     -- end,
     --  -- ? would need an overall timeout (max checks or max time) so this doesn't run forever, indefinitely
     -- 0.05)
@@ -291,8 +291,8 @@ function ScreenPalEditorWindow:cache_project_view_controls()
             local role = ui_elem:axRole()
             if role == "AXScrollArea" then
                 self._scrollarea_list = ui_elem -- s/b only scroll area in the scorll area
-                -- print("sa", hs.inspect(self._scrollarea_list))
-                -- print("sa.sa", hs.inspect(self._scrollarea_list:scrollAreas()[1]))
+                -- log:info("sa", self._scrollarea_list)
+                -- log:info("sa.sa", self._scrollarea_list:scrollAreas()[1])
                 self._scrollarea_list = self._scrollarea_list:scrollAreas()[1]
             end
         end)
@@ -318,7 +318,7 @@ function ScreenPalEditorWindow:reopen_project(restart)
             error("No title found, aborting...")
         end
         local title = self._textfield_title:axValue()
-        -- print("title: ", title)
+        -- log:info("title: ", title)
 
         if restart then
             -- most issues are fixed w/ project close/reopen
@@ -336,7 +336,7 @@ function ScreenPalEditorWindow:reopen_project(restart)
         end
 
         local btn_reopen_project = wait_for_element(function()
-            print("attempting to re-acquire the editor window...") -- TODO comment out later once restart+repoen feels solid
+            log:info("attempting to re-acquire the editor window...") -- TODO comment out later once restart+repoen feels solid
             clear_cached_editor_window() -- must clear b/c old instance won't work, that _cached_ window is gone!
             local win = get_cached_editor_window()
             self:cache_project_view_controls()
@@ -401,15 +401,15 @@ function ScreenPalEditorWindow:toggle_AXEnhancedUserInterface()
 
     -- PRN, click / focus any controls?
     -- TODO try:
-    --  print(hs.axuielement.parameterizedAttributeNames(el)) -- might have hidden values  when not enhanced moe
+    --  log:info(hs.axuielement.parameterizedAttributeNames(el)) -- might have hidden values  when not enhanced moe
     --  press items (AXPress)
     --  focus (right arrow?)
 
     --  do I need to set AXEnhancedUserInterface on other (child) objects or just the app?
     -- self.app:dumpAttributes()
-    print("before - app.AXEnhancedUserInterface:", self.app.AXEnhancedUserInterface)
+    log:info("before - app.AXEnhancedUserInterface:", self.app.AXEnhancedUserInterface)
     self.app.AXEnhancedUserInterface = not self.app.AXEnhancedUserInterface
-    print("after - app.AXEnhancedUserInterface:", self.app.AXEnhancedUserInterface)
+    log:info("after - app.AXEnhancedUserInterface:", self.app.AXEnhancedUserInterface)
 
     do return end
 
@@ -424,7 +424,7 @@ function ScreenPalEditorWindow:toggle_AXEnhancedUserInterface()
     --
 
     for i, child in ipairs(children) do
-        print(hs.inspect(child))
+        log:info("child", child)
     end
 end
 
@@ -439,7 +439,7 @@ function ScreenPalEditorWindow:set_zoom_level(level)
     elseif level == 3 then
         self:zoom3()
     else
-        print("Invalid zoom level " .. tostring(level))
+        log:info("Invalid zoom level " .. tostring(level))
     end
 end
 
@@ -500,13 +500,13 @@ function ScreenPalEditorWindow:detect_zoom_level()
     timer:capture("snapshot")
     -- image:saveToFile("snapshot.png") -- CWD == ~/.hammerspoon usually
     if image == nil then
-        print("image snapshot failed for finding zoom level")
+        log:info("image snapshot failed for finding zoom level")
         return nil
     end
     -- use image size so retina vs non doesn't matter
     ---@type NSSize?
     local img_size = image:size()
-    -- print("image size: " .. hs.inspect(img_size))
+    -- log:info("image size: ", img_size)
     timer:capture("get image size")
 
     local bar_regions = {
@@ -523,7 +523,7 @@ function ScreenPalEditorWindow:detect_zoom_level()
         local x_sample = math.floor(bar.x)
         ---@type NSColor?
         local color = image:colorAt({ x = x_sample, y = y_sample })
-        -- print("  color", hs.inspect(color))
+        -- log:info("  color", color)
 
         if color then
             local red, green, blue = color.red * 255, color.green * 255, color.blue * 255
