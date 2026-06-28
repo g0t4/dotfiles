@@ -51,7 +51,7 @@ require("config.uielements")
 require("config.ui_callouts")
 require("config.observer")
 local end_time = hs.timer.secondsSinceEpoch()
-log:info("init.lua took", end_time - start_time, "seconds")
+log_took("init.lua", start_time)
 
 -- *** insignificant config last so it doesn't slow down critical startup config
 --
