@@ -1,3 +1,4 @@
+local log = require("config.logs").hammerspoons()
 ---@class Timer
 ---@field _overall_start number
 ---@field _last_start number
@@ -52,11 +53,11 @@ function format_elapsed_time(elapsed_seconds)
     return string.format("%d ns", math.floor(ns + 0.5))
 end
 
-function Timer:print_timing()
+function Timer:log_timing()
     local overall = format_elapsed_time(get_time() - self._overall_start)
-    print(string.format("Overall time: %s", overall))
+    log:info(string.format("Overall time: %s", overall))
     for _, entry in ipairs(self._logs) do
-        print(string.format("  %s: %s", entry.message, format_elapsed_time(entry.duration)))
+        log:info(string.format("  %s: %s", entry.message, format_elapsed_time(entry.duration)))
     end
 end
 
