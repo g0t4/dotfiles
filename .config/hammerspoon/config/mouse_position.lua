@@ -1,3 +1,4 @@
+local log = require("config.logs").hammerspoons()
 local M = {}
 
 ---@type hs.hotkey[]
@@ -86,7 +87,7 @@ function toggle_relative_to_element()
     M.relative_to = hs.axuielement.systemElementAtPosition(pos)
     if M.relative_to == nil then
         M.relative = false
-        print("no current element to get coordinates relative to")
+        log:info("no current element to get coordinates relative to")
         show_current_mouse_position()
         return
     end
@@ -105,7 +106,7 @@ function toggle_relative_to_element()
     })
     M.relative_border = canvas
     if not canvas then
-        print("failed to create canvas around relative_to element for a border callout")
+        log:info("failed to create canvas around relative_to element for a border callout")
         show_current_mouse_position()
         return
     end
@@ -141,7 +142,7 @@ function show_current_mouse_position()
             x_display = mouse_pos.x - relative_pos.x
             y_display = mouse_pos.y - relative_pos.y
         else
-            print("no relative position for relative_to element, using screen position")
+            log:info("no relative position for relative_to element, using screen position")
         end
     end
 
@@ -173,7 +174,7 @@ function show_current_mouse_position()
     ---@type hs.canvas?
     local canvas = hs.canvas.new(canvas_frame)
     if not canvas then
-        print("failed to create canvas for mouse position")
+        log:info("failed to create canvas for mouse position")
         return
     end
     M.canvas = canvas

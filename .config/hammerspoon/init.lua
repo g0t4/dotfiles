@@ -21,6 +21,7 @@
 --   https://github.com/asmagill/hammerspoon-config-take2/blob/master/utils/_actions/consoleHistory.lua
 
 require("config.helpers.all") -- globals, import once
+local log = require("config.logs").hammerspoons()
 
 local start_time = hs.timer.secondsSinceEpoch()
 
@@ -38,7 +39,7 @@ AskOpenAIStreaming = require("config.ask.ask").AskOpenAIStreaming
 -- test w/ T
 -- hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "B", function()
 --     local result = require("config.ask.selection").getSelectedText()
---     print("result:\n ", result)
+--     log:info("result:\n ", result)
 -- end)
 
 require("config.spoons")
@@ -50,7 +51,7 @@ require("config.uielements")
 require("config.ui_callouts")
 require("config.observer")
 local end_time = hs.timer.secondsSinceEpoch()
-print("init.lua took", end_time - start_time, "seconds")
+log:info("init.lua took", end_time - start_time, "seconds")
 
 -- *** insignificant config last so it doesn't slow down critical startup config
 --
@@ -107,7 +108,7 @@ require("config.launcher.file_actions").init()
 --   - https://github.com/Hammerspoon/hammerspoon/pull/2530
 --   - https://github.com/Hammerspoon/Spoons/pull/240
 -- PRN could set a script that runs automatically when neovim starts in just my hammerspoon config dir
--- print("loading EmmyLua to generate stubs if needed... can do this manually if this is too slow here as I only need this for neovim lua LS... not for hammerspoon app itself")
+-- log:info("loading EmmyLua to generate stubs if needed... can do this manually if this is too slow here as I only need this for neovim lua LS... not for hammerspoon app itself")
 hs.loadSpoon("EmmyLua") -- <2ms to check is fine... NBD to run all the time
 
 -- now that we're done with init, put back regular print?
