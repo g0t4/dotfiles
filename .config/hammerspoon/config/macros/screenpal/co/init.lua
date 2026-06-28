@@ -139,7 +139,7 @@ function syncify(call_this, ...)
     local captured_args = nil
     local resume_once_called = false
     local function resume_once()
-        log:info("syncify resume_once, resumed:", resume_once_called)
+        -- log:info("syncify resume_once, resumed:", resume_once_called)
         if resume_once_called then
             log:warn("syncify resume_once - SKIP b/c ALREADY RESUMED")
             return
@@ -152,7 +152,7 @@ function syncify(call_this, ...)
             -- log:info("syncify before resume - coroutine_info:", coroutine_info(co))
 
             local status, err = coroutine.resume(co)
-            log:info("syncify after resume - status: ", status, " err:", err)
+            -- log:info("syncify after resume - status: ", status, " err:", err)
             if not status then
                 log:info("syncify unhandled exception in coroutine (after resume):\n\t", err, "\nstacktrace:", get_stack_trace())
                 -- TODO why am I getting a second resume attempt? this is regardless if coroutine has unhandled exception
