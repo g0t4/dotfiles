@@ -11,7 +11,7 @@ local skip = require('devtools.tests.define.skip')
 
 require("config.macros.screenpal.co")
 local TestTimer = require("config.macros.screenpal.test_timing")
-local Counter = require("config.macros.screenpal.test_counter")
+local Counter = require("config.macros.screenpal.co.tests.counter")
 
 -- FYI alternative is to use async module, but I am happy with my run_async
 -- local async = require('plenary.async.tests')
@@ -30,25 +30,6 @@ describe("TODO what was original purpose for this test???", function()
             sleep_ms(250)
             timer:stop()
         end)
-    end)
-end)
-
-describe("Counter", function()
-    it("wait does not throw if count is zero before timeout", function()
-        local counter = Counter:new()
-        counter:increment()
-        counter:decrement()
-        -- make it fast, timeout duration is unimportant here
-        counter:wait(10)
-    end)
-
-    it("wait throws after timeout, if count is not zero", function()
-        assert.has_error(function()
-            local counter = Counter:new()
-            counter:increment()
-            -- make it fast, timeout duration is unimportant here
-            counter:wait(10)
-        end, "Counter not done after 10 ms (count=1 should be 0)")
     end)
 end)
 
