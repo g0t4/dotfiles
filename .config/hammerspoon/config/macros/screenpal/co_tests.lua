@@ -1,5 +1,5 @@
 if not vim.fn.getcwd():match("%.config/hammerspoon$") then
-    error("\n\n*** CURRENT DIRECTORY IS NOT INSIDE hammerspoon config: (run nvim from this dir to use pleanry tests:  .config/hammerspoon)\n")
+    error("\n\n*** CURRENT DIRECTORY IS NOT INSIDE hammerspoon config, require calls in tests won't work...\n\n\tuse `cd $WES_DOTFILES/.config/hammerspoon && nvim`)\n\n")
 end
 require("config.tests.setup")
 local histogram = require('devtools.diff.histogram')
