@@ -8,6 +8,7 @@ local combined = require('devtools.diff.combined')
 local describe = require('devtools.tests.define.describe')
 local only = require('devtools.tests.define.only')
 local skip = require('devtools.tests.define.skip')
+local log = require("config.logs").hammerspoons()
 
 require("config.macros.screenpal.co")
 local TestTimer = require("config.macros.screenpal.co.tests.timer")
@@ -87,6 +88,19 @@ describe("syncify", function()
 
 
     describe("works with vim.defer_fn", function()
+        stop_after_this("fails if resume would be called when coroutine is not suspeneded...", function()
+            assert.has_error(function()
+                run_async(function()
+                    syncify(function(cb)
+                        vim.schedule(function()
+                            cb()
+                        end)
+                        vim.wait(10) -- intentional vim.wait inside the syncify's call_this so yield isn't called before attempt to call resume
+                    end)
+                end)
+            end, "Cannot resume coroutine that is not suspended")
+        end)
+
         it("syncify completes and returns value", function()
             run_async(function()
                 local counter = Counter:new()

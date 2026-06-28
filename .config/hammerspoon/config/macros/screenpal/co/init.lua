@@ -138,6 +138,7 @@ function syncify(call_this, ...)
 
     local captured_args = nil
     local resume_once_called = false
+    local shit_hit_fan = nil
     local function resume_once()
         -- log:info("syncify resume_once, resumed:", resume_once_called)
         if resume_once_called then
@@ -151,6 +152,17 @@ function syncify(call_this, ...)
         sched(function()
             -- log:info("syncify before resume - coroutine_info:", coroutine_info(co))
 
+            -- FYI if call_this has something like vim.wait that pumps event loop then you can wind up here before coroutine.yield() is called
+            --   that is outside of what I intended to support in syncify (mostly a callback => sync tool... CST)... no plans to support vim.wait in the call_this
+            --   that said, instead of letting things explode, check assumption that it is ok to resume here
+            local status = coroutine.status(co)
+            log:info("coroutine status before resume:", status)
+            if status ~= "suspended" then
+                local message = "Cannot resume coroutine that is not suspended"
+                log:error(message)
+                shit_hit_fan = message
+                return
+            end
             local status, err = coroutine.resume(co)
             -- log:info("syncify after resume - status: ", status, " err:", err)
             if not status then
@@ -185,6 +197,14 @@ function syncify(call_this, ...)
     -- then there's no way to resume before yielding!
     -- sure you could skip both yield and return, but that's a different scenario
     -- cannot skip yield and still call resume!
+    if shit_hit_fan then
+        error(shit_hit_fan)
+    end
+    -- TODO this is the recovery route I will ultimately go with... just wanna test this first too:
+    --   FYI so first I am finishing my test of erroring (no recovery)
+    -- if not shit_hit_fan then
+    --     coroutine.yield()
+    -- end
     coroutine.yield()
 
     local _unpack = unpack or table.unpack
