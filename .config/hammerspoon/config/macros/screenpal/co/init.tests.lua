@@ -36,9 +36,13 @@ end)
 local stop_after_this = only
 
 describe("syncify", function()
+    -- TODO! should syncify just be about callback only? was there another purpose (i.e. did I originally mash up run_async+syncify into one func? if so then strip syncify to the bear minimum just to support sync looking callback (assume in coroutine/thread when its used, throw if not)
+
     describe("reproduce double resume", function()
         stop_after_this("due to sync callback", function()
             -- FYI double run_async (run_async in run_async) doesn't matter for this bug
+            -- FYI error is only visible in logs right now given async nature
+            --   TODO make test fail on double resume
             run_async(function()
                 local result1, result2, result3 = syncify(function(cb)
                     -- vim.schedule(function()
