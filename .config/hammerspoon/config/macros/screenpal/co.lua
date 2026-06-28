@@ -102,18 +102,23 @@ function get_stack_trace(start_level)
 end
 
 local function pick_scheduler()
-    local sched = _G.vim and vim.schedule
-        -- TODO use new devtools.host module for deciding if it is nvim vs hammerspoon lua VM host for consistency
-        or (hs and function(f)
-            -- log:info("syncify resume_once hs.doAfter")
+    local host = require("devtools.host")
+    if host.is_nvim() then
+        return vim.schedule
+    end
+    if host.is_hammerspoon() then
+        local function hs_sched(f)
             hs.timer.doAfter(0, f)
-        end)
-        or function(f)
-            -- TODO why not throw? isn't this an issue?
-            log:error("syncify resume_once IMMEDIATE... no vim/hs defer options in place")
-            f()
         end
-    return sched
+        return hs_sched
+    end
+
+    -- TODO switch to throw instead
+    local function immediate_schedule(f)
+        log:error("syncify resume_once IMMEDIATE... no vim/hs defer options in place")
+        f()
+    end
+    return immediate_schedule
 end
 
 local sched = pick_scheduler()
