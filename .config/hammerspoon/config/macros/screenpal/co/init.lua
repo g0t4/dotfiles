@@ -138,7 +138,6 @@ function syncify(call_this, ...)
 
     local captured_args = nil
     local resume_once_called = false
-    local call_this_returned = false
     local function resume_once()
         log:info("syncify resume_once, resumed:", resume_once_called)
         if resume_once_called then
@@ -147,17 +146,8 @@ function syncify(call_this, ...)
         end
         resume_once_called = true
 
-        if not call_this_returned then
-            -- this will happen with sync callbacks
-            --  won't happen w/ async
-            log:info("FYI sync callback: `resume_once()` called before `call_this` returned... and thus also before `coroutine.yield()`")
-            -- FYI also means call_this is not done executing
-            -- TODO how about wrap resume_once in sched() entirely so this logic never runs before call_this/yielded?
-            -- ***! TLDR => the sched below turns a sync callback into async
-        end
-
         -- schedule the resume, to avoid "cannot resume non-suspended coroutine"
-        -- which happens if call_this calls this callback synchronously
+        -- which happens during synchronous callback (b/c you are triggering resume before yield!! duh)
         sched(function()
             -- log:info("syncify before resume - coroutine_info:", coroutine_info(co))
 
@@ -190,8 +180,6 @@ function syncify(call_this, ...)
     end
 
     call_this(after_call_this, ...)
-
-    call_this_returned = true
 
     -- as long as you are `sched`uling during a sync callback ("making it async", IOTW resume is not called synchronously)
     -- then there's no way to resume before yielding!
