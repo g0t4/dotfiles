@@ -42,7 +42,7 @@ function show_silences(win, silences)
 
     for _, silence in ipairs(silences.all) do
         local width = silence.x_end - silence.x_start -- PRN move to silence DTO as new behavior (how did I do that for axuielemMT
-        -- print("start=" .. silence.x_start .. " end=" .. silence.x_end)
+        -- log:info("start=" .. silence.x_start .. " end=" .. silence.x_end)
         if width > 0 then
             local fill_color = { red = 1, green = 0, blue = 0, alpha = 0.3 }
             local border_color = { red = 1, green = 0, blue = 0, alpha = 1 }
@@ -67,9 +67,9 @@ function show_silences(win, silences)
             })
 
             local x_start_left, x_start_right = timeline:calculate_frame_bounds(silence.x_start, timeline:get_current_playhead_timeline_relative_x())
-            -- print("     x_start_left=" .. x_start_left .. " x_start_right=" .. x_start_right)
+            -- log:info("     x_start_left=" .. x_start_left .. " x_start_right=" .. x_start_right)
             local x_end_left, x_end_right = timeline:calculate_frame_bounds(silence.x_end, timeline:get_current_playhead_timeline_relative_x())
-            -- print("     x_end_left=" .. x_end_left .. " x_end_right=" .. x_end_right)
+            -- log:info("     x_end_left=" .. x_end_left .. " x_end_right=" .. x_end_right)
             -- little boxes show left/right frame of start and end too
             table.insert(elements, {
                 type = "rectangle",
@@ -133,12 +133,12 @@ _G.MUTE_INWARD = 'MUTE_INWARD' -- _OK too
 function act_on_silence(win, silence, action)
     if not silence then
         -- might be easier to check here, in one spot, than in all the callers
-        print("no silence to act on")
+        log:info("no silence to act on")
         return
     end
     local original_mouse_pos = hs.mouse.absolutePosition() -- first one can be expensive 100ms, cheap (0 to 1ms max) thereafter
 
-    print("act_on_silence: '" .. tostring(action) .. "' on '" .. hs.inspect(silence) .. "'")
+    log:info("act_on_silence: '" .. tostring(action) .. "' on '" .. hs.inspect(silence) .. "'")
 
     -- perhaps add more params to act_on_silence?
     local is_cut = action:find("CUT_") -- keep trailing _ so it is easier to search for CUT_
@@ -171,10 +171,10 @@ function act_on_silence(win, silence, action)
             end
             timeline_relative_x_start = silence.x_start + scaled_pixel_width
             timeline_relative_x_end = silence.x_end - scaled_pixel_width
-            -- print("scaled_pixel_width=" .. tostring(scaled_pixel_width))
-            -- print(" new_x_start=" .. tostring(timeline_relative_x_start) .. " new_x_end=" .. tostring(timeline_relative_x_end))
+            -- log:info("scaled_pixel_width=" .. tostring(scaled_pixel_width))
+            -- log:info(" new_x_start=" .. tostring(timeline_relative_x_start) .. " new_x_end=" .. tostring(timeline_relative_x_end))
             if timeline_relative_x_start >= timeline_relative_x_end then
-                print("CUT padding wipes out entire cut range, aborting...!")
+                log:error("CUT padding wipes out entire cut range, aborting...!")
                 -- FYI inverted start/end would've selected the wrong range! spal is forgiving about start/end marking (if no start then e starts, and s can end even if after set end!)
                 return
             end
@@ -233,7 +233,7 @@ function act_on_silence(win, silence, action)
         menu:wait_for_volume_to_be_mute()
     end
 
-    -- print("silence " .. vim.inspect(silence))
+    -- log:info("silence ", silence)
     if silence.x_start <= START_SILENCE_X_START and is_cut then
         -- sometimes regular silences start at 1, probably due to a border around the silence box...
         -- special behavior for cutting  start of video (add fixed padding)
@@ -289,14 +289,14 @@ local function detect_silences(callback)
         local timeline_element = win:get_timeline_slider_or_throw()
         local frame = timeline_element:axFrame()
         local where_to = syncify(capture_region, frame)
-        print("detect_silences - where_to:", where_to)
+        log:info("detect_silences - where_to:", where_to)
 
         local detected = syncify(opencv.detect_silence, where_to)
-        print("detect_silences - detected:", vim.inspect(detected))
+        log:info("detect_silences - detected:", detected)
 
         local timeline = win:timeline_controller()
         local silences = SilencesController:new(detected, timeline)
-        print("detect_silences calling back with silences:", hs.inspect(silences))
+        log:info("detect_silences calling back with silences:", silences)
         callback(win, silences)
     end)
 end
@@ -356,11 +356,11 @@ function SPal_JumpNextSilence()
         --
         -- actually I think I am liking how it moves right to front most frame even if slightly before silence... it is catching clicks! leave this
         -- local current_playhead_x = timeline:get_current_playhead_timeline_relative_x()
-        -- print("jumped playhead_x to " .. current_playhead_x
+        -- log:info("jumped playhead_x to " .. current_playhead_x
         --     .. " w.r.t. silence: " .. hs.inspect(silence))
         -- -- yup in one case playhead ends up just left of silence start (by 0.5), rounding might fix some of these too
         -- if current_playhead_x < silence.x_start then
-        --     print("PLAYHEAD LANDED BEFORE SILENCE, COULD ARROW OVER TO FIX THIS")
+        --     log:warn("PLAYHEAD LANDED BEFORE SILENCE, COULD ARROW OVER TO FIX THIS")
         -- end
     end)
 end
@@ -423,10 +423,10 @@ function pasted_text_in_textfield(text)
         -- I added this part b/c I am using some keystrokes that override letters (h/l/o/S/E ... and if I am in a text box I want to type those instead)
         local win = get_cached_editor_window()
         local focused = win.app:attributeValue("AXFocusedUIElement")
-        -- print("focused", focused)
+        -- log:info("focused", focused)
         if focused ~= nil and focused:isValid() then
             -- for attr_name, attr_value in pairs(focused) do
-            --     print(attr_name, attr_value)
+            --     log:info(attr_name, attr_value)
             -- end
             local role = focused:axRole()
             if role == "AXTextField" then
@@ -495,7 +495,7 @@ function SPal_Play(play_what, text)
                 local prev = silences:get_prev_silence()
                 local closest_silence = nil
                 if not prev and not next then
-                    print("no silences found on either side! aborting play... SHOULD NOT HAPPEN unless a video has NO silenes visible in which case why you asking to play one!!")
+                    log:error("no silences found on either side! aborting play... SHOULD NOT HAPPEN unless a video has NO silenes visible in which case why you asking to play one!!")
                     return
                 elseif not next then
                     closest_silence = prev
@@ -537,7 +537,7 @@ function SPal_Play(play_what, text)
         end
 
         if not play_from_x then
-            print("play_from_x is not set, skipping playback")
+            log:info("play_from_x is not set, skipping playback")
             return
         end
 
@@ -593,7 +593,7 @@ function WIP_SPal_Cut_then_Mute_then_Preview()
         -- FYI remove second detect_silences here (was just to simplify testing... below has original second detect_silences that causes the same problem)
         win, silences = syncify(detect_silences) -- two calls to this in a row fails => second call to this fails with  "syncify: resume failed	cannot resume dead coroutine" error
 
-        print("got thru both detect_silences...")
+        log:info("got thru both detect_silences...")
         do return end
         -- TODO resume with below once I fix double detect_silences issue
 
@@ -601,7 +601,7 @@ function WIP_SPal_Cut_then_Mute_then_Preview()
         act_on_silence(win, silence, CUT_20_OK) -- TODO this has to be syncified... how else would you wait for it to complete?
 
         -- local tool_win = win.windows:get_tool_window()
-        -- print("tool_win", tool_win)
+        -- log:info("tool_win", tool_win)
         -- tool_win:wait_for_tools_button()
         -- sleep_ms(100) -- slight delay needed right now... TODO find something to wait on (i.e. toolbar?)
         -- -- otherwise I get this error:
@@ -885,7 +885,7 @@ function _Spal_OpenSilence_Then(adjust_callback)
 
             -- PRN make this pluggable to pass the edit button type (not just volume)
             volume_edits = tool_win:get_volume_edit_buttons()
-            print("volume_edits", hs.inspect(volume_edits))
+            log:info("volume_edits", volume_edits)
             volume_edits[1]:axPress()
 
             tool_win:wait_for_an_open_edit_tool()
@@ -1023,7 +1023,7 @@ function SPal_AdjustSelection(side, num_frames, text)
             -- if num_frames < 0 then
             --     num_pixels = -12
             -- end
-            -- print("adjusting by num_pixels: " .. tostring(num_pixels) .. " frames: " .. tostring(num_frames))
+            -- log:info("adjusting by num_pixels: " .. tostring(num_pixels) .. " frames: " .. tostring(num_frames))
             -- next_frame_x_guess_zoom2 = tool.x_end + num_pixels
             -- extend selection to current playhead position
             -- timeline:move_playhead_to(next_frame_x_guess_zoom2)
@@ -1237,7 +1237,7 @@ function RETIRED_StreamDeckScreenPalTimelineScrollOrJumpToStart()
                     end
 
                     if prior_value ~= nil and current_value == prior_value then
-                        print("Value unchanged, stopping.")
+                        log:info("Value unchanged, stopping.")
                         break
                     end
                     prior_value = current_value
@@ -1287,7 +1287,7 @@ function RETIRED_StreamDeckScreenPalTimelineScrollOrJumpToEnd()
                     end
 
                     if prior_value ~= nil and current_value == prior_value then
-                        print("Value unchanged, stopping.")
+                        log:info("Value unchanged, stopping.")
                         break
                     end
                     prior_value = current_value
