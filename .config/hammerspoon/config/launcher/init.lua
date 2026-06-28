@@ -1,3 +1,4 @@
+local log = require("config.logs").launcher()
 local M = {}
 
 -- File launcher using mdfind (Spotlight index)
@@ -44,7 +45,7 @@ local function loadHistory()
     history = {}
     local file = io.open(HISTORY_FILE, "r")
     if not file then
-        print("No history file found, starting fresh")
+        log:info("No history file found, starting fresh")
         return
     end
 
@@ -56,7 +57,7 @@ local function loadHistory()
     end
     file:close()
 
-    print("Loaded", #history, "history items")
+    log:info("Loaded", #history, "history items")
 end
 
 -- Save history to file
@@ -69,7 +70,7 @@ local function saveHistory()
 
     local file = io.open(HISTORY_FILE, "w")
     if not file then
-        print("Error: Could not save history to", HISTORY_FILE)
+        log:error("Error: Could not save history to", HISTORY_FILE)
         return
     end
 
@@ -79,7 +80,7 @@ local function saveHistory()
     end
     file:close()
 
-    print("Saved", math.min(#history, MAX_HISTORY_ITEMS), "history items")
+    log:info("Saved", math.min(#history, MAX_HISTORY_ITEMS), "history items")
 end
 
 -- Add query to history (deduplicates and moves to front)
@@ -105,7 +106,7 @@ local function addToHistory(query)
 
     -- Save to disk
     saveHistory()
-    print("Added to history:", query)
+    log:info("Added to history:", query)
 end
 
 -- Directory-only search using mdfind
@@ -124,8 +125,8 @@ local function searchDirectories(query, searchId, callback)
 
     local cmd = "/usr/bin/stdbuf"
     local args = {"-o0", "/usr/bin/mdfind", mdfind_query}
-    print("Starting new directory search for query:", query, "searchId:", searchId)
-    print("mdfind query:", mdfind_query)
+    log:info("Starting new directory search for query:", query, "searchId:", searchId)
+    log:info("mdfind query:", mdfind_query)
 
     local results = {}
     local buffer = ""
@@ -134,12 +135,12 @@ local function searchDirectories(query, searchId, callback)
     task = hs.task.new(cmd, function(exitCode, _, stdErr)
         -- Ignore if this isn't the current search anymore
         if searchId ~= currentSearchId then
-            print("Ignoring old directory search", searchId)
+            log:info("Ignoring old directory search", searchId)
             return
         end
 
         if exitCode ~= 0 and exitCode ~= 15 then  -- 15 is SIGTERM (expected when we terminate)
-            print("mdfind directory search error:", stdErr)
+            log:error("mdfind directory search error:", stdErr)
         end
 
         -- Final callback with results we've accumulated
@@ -196,7 +197,7 @@ local function searchDirectories(query, searchId, callback)
     -- Return cancel function
     return function()
         if task then
-            print("Canceling directory search", searchId)
+            log:info("Canceling directory search", searchId)
             task:terminate()
             task = nil
         end
@@ -216,7 +217,7 @@ local function searchFiles(query, searchId, callback)
     -- Use stdbuf to force unbuffered output so we get results as they're found
     local cmd = "/usr/bin/stdbuf"
     local args = {"-o0", "/usr/bin/mdfind", query}
-    print("Starting new mdfind for query:", query, "searchId:", searchId)
+    log:info("Starting new mdfind for query:", query, "searchId:", searchId)
 
     local results = {}
     local buffer = ""
@@ -225,12 +226,12 @@ local function searchFiles(query, searchId, callback)
     task = hs.task.new(cmd, function(exitCode, _, stdErr)
         -- Ignore if this isn't the current search anymore
         if searchId ~= currentSearchId then
-            print("Ignoring old search", searchId)
+            log:info("Ignoring old search", searchId)
             return
         end
 
         if exitCode ~= 0 and exitCode ~= 15 then  -- 15 is SIGTERM (expected when we terminate)
-            print("mdfind error:", stdErr)
+            log:error("mdfind error:", stdErr)
         end
 
         -- Final callback with results we've accumulated
@@ -283,7 +284,7 @@ local function searchFiles(query, searchId, callback)
     -- Return cancel function
     return function()
         if task then
-            print("Canceling mdfind search", searchId)
+            log:info("Canceling mdfind search", searchId)
             task:terminate()
             task = nil
         end
@@ -305,8 +306,8 @@ local function searchApplications(query, searchId, callback)
     local cmd = "/usr/bin/stdbuf"
     local args = {"-o0", "/usr/bin/mdfind", mdfind_query}
 
-    print("Starting app search, query:", query, "searchId:", searchId)
-    print("mdfind query:", mdfind_query)
+    log:info("Starting app search, query:", query, "searchId:", searchId)
+    log:info("mdfind query:", mdfind_query)
 
     local results = {}
     local buffer = ""
@@ -314,12 +315,12 @@ local function searchApplications(query, searchId, callback)
 
     task = hs.task.new(cmd, function(exitCode, _, stdErr)
         if searchId ~= currentSearchId then
-            print("Ignoring old app search", searchId)
+            log:info("Ignoring old app search", searchId)
             return
         end
 
         if exitCode ~= 0 and exitCode ~= 15 then
-            print("mdfind app search error:", stdErr)
+            log:error("mdfind app search error:", stdErr)
         end
 
         -- Final callback with results
@@ -371,7 +372,7 @@ local function searchApplications(query, searchId, callback)
     -- Return cancel function
     return function()
         if task then
-            print("Canceling app search", searchId)
+            log:info("Canceling app search", searchId)
             task:terminate()
             task = nil
         end
@@ -687,12 +688,12 @@ local function handleLLM(query, searchId, callback)
     local thinkingContent = ""
     local task = nil
 
-    print("Starting LLM request:", query, "searchId:", searchId)
+    log:info("Starting LLM request:", query, "searchId:", searchId)
 
     task = hs.task.new(cmd, function(exitCode, _, stdErr)
         if searchId ~= currentSearchId then return end
         if exitCode ~= 0 then
-            print("LLM error:", stdErr)
+            log:error("LLM error:", stdErr)
             llmCurrentResponse = "*Error connecting to LLM server*\n\n```\n" .. (stdErr or "Unknown") .. "\n```"
             llmIsThinking = false
         end
@@ -781,10 +782,10 @@ local function handleDictionary(query, searchId, callback)
         return function() end
     end
 
-    print("=== Dictionary Prefix Search ===")
-    print("Query:", query)
-    print("Matches:", table.concat(matchingWords, ", "))
-    print("================================")
+    log:info("=== Dictionary Prefix Search ===")
+    log:info("Query:", query)
+    log:info("Matches:", table.concat(matchingWords, ", "))
+    log:info("================================")
 
     -- Build a single Python script that looks up all words
     local wordsLiteral = ""
@@ -1031,13 +1032,13 @@ local function ensureEmojiCacheDir()
     local attrs = hs.fs.attributes(EMOJI_CACHE_DIR)
     if not attrs then
         hs.fs.mkdir(EMOJI_CACHE_DIR)
-        print("Created emoji cache directory:", EMOJI_CACHE_DIR)
+        log:info("Created emoji cache directory:", EMOJI_CACHE_DIR)
     end
 end
 
 -- Download emoji data from CLDR
 local function downloadEmojiData(callback)
-    print("Downloading emoji data from CLDR...")
+    log:info("Downloading emoji data from CLDR...")
     ensureEmojiCacheDir()
 
     -- Use curl to download
@@ -1046,10 +1047,10 @@ local function downloadEmojiData(callback)
 
     hs.task.new(cmd, function(exitCode, stdOut, stdErr)
         if exitCode == 0 then
-            print("Emoji data downloaded successfully")
+            log:info("Emoji data downloaded successfully")
             if callback then callback(true) end
         else
-            print("Error downloading emoji data:", stdErr)
+            log:error("Error downloading emoji data:", stdErr)
             if callback then callback(false) end
         end
     end, args):start()
@@ -1063,7 +1064,7 @@ local function loadEmojiData()
 
     local file = io.open(EMOJI_CACHE_FILE, "r")
     if not file then
-        print("No emoji cache file found")
+        log:info("No emoji cache file found")
         return nil
     end
 
@@ -1074,10 +1075,10 @@ local function loadEmojiData()
     if success and parsed and parsed.annotations and parsed.annotations.annotations then
         -- CLDR format: {annotations: {annotations: {emoji: {default: [...], tts: [...]}}}}
         emojiData = parsed.annotations.annotations
-        print("Loaded emoji data:", hs.inspect.inspect(emojiData):sub(1, 200) .. "...")
+        log:info("Loaded emoji data:", hs.inspect.inspect(emojiData):sub(1, 200) .. "...")
         return emojiData
     else
-        print("Error parsing emoji data")
+        log:error("Error parsing emoji data")
         return nil
     end
 end
@@ -1090,16 +1091,16 @@ local function checkEmojiCacheAge()
     end
 
     local age = os.time() - attrs.modification
-    print("Emoji cache age:", age, "seconds")
+    log:info("Emoji cache age:", age, "seconds")
 
     if age > EMOJI_CACHE_MAX_AGE then
-        print("Emoji cache is old, updating in background...")
+        log:info("Emoji cache is old, updating in background...")
         downloadEmojiData(function(success)
             if success then
                 -- Reload data in memory
                 emojiData = nil
                 loadEmojiData()
-                print("Emoji cache updated in background")
+                log:info("Emoji cache updated in background")
             end
         end)
     end
@@ -1427,7 +1428,7 @@ local bookmarks = {
 local function execOrLog(cmd)
     local stdout, ok, _, rc = hs.execute(cmd)
     if not ok then
-        print(string.format("[launcher] exec failed (rc=%s): %s", tostring(rc), cmd))
+        log:error(string.format("[launcher] exec failed (rc=%s): %s", tostring(rc), cmd))
     end
     return stdout, ok
 end
@@ -1435,7 +1436,7 @@ end
 local function osascriptOrLog(script)
     local ok, result = hs.osascript.applescript(script)
     if not ok then
-        print(string.format("[launcher] osascript failed: %s | script: %s", tostring(result), script))
+        log:error(string.format("[launcher] osascript failed: %s | script: %s", tostring(result), script))
     end
     return ok, result
 end
@@ -1549,7 +1550,7 @@ local bookmarkActions = {
             hs.alert.show("Title case produced empty result")
             return
         end
-        print("title cased: ", title) -- remove when things are working well enough
+        log:info("title cased: ", title) -- remove when things are working well enough
         hs.pasteboard.writeObjects({ title })
         -- Paste the fully converted text
         hs.eventtap.keyStroke({'cmd'}, 'v')
@@ -1735,9 +1736,9 @@ local function handleLiveFilter(query, searchId, callback)
     local cmd = "/usr/bin/stdbuf"
     local args = {"-o0", "/usr/bin/mdfind", mdfind_query}
 
-    print("=== Live Filter ===")
-    print("Stage1 (mdfind):", stage1)
-    print("Stage2 (fuzzy):", stage2)
+    log:info("=== Live Filter ===")
+    log:info("Stage1 (mdfind):", stage1)
+    log:info("Stage2 (fuzzy):", stage2)
 
     local results = {}
     local buffer = ""
@@ -1746,12 +1747,12 @@ local function handleLiveFilter(query, searchId, callback)
     task = hs.task.new(cmd,
         function(exitCode, _, stdErr)
             if searchId ~= currentSearchId then
-                print("Ignoring old live filter completion", searchId)
+                log:info("Ignoring old live filter completion", searchId)
                 return
             end
 
             if exitCode ~= 0 and exitCode ~= 15 then
-                print("Live filter error:", stdErr)
+                log:error("Live filter error:", stdErr)
             end
 
             -- Final callback
@@ -1808,7 +1809,7 @@ local function handleLiveFilter(query, searchId, callback)
 
     return function()
         if task then
-            print("Canceling live filter", searchId)
+            log:info("Canceling live filter", searchId)
             task:terminate()
             task = nil
         end
@@ -1934,7 +1935,7 @@ local function onQueryChange(query)
 
     -- Cancel any existing search using the cancel function
     if currentCancelFunc then
-        print("Canceling previous search...")
+        log:info("Canceling previous search...")
         currentCancelFunc()
         currentCancelFunc = nil
     end
@@ -1952,7 +1953,7 @@ local function onQueryChange(query)
     local function handleResults(searchId, results)
         -- Ignore results from old searches
         if searchId ~= currentSearchId then
-            print("Ignoring results from old search", searchId)
+            log:info("Ignoring results from old search", searchId)
             return
         end
 
@@ -1968,11 +1969,11 @@ local function onQueryChange(query)
     end
 
     -- Debug logging
-    print("=== Query Check ===")
-    print("Query:", query)
-    print("Query length:", #query)
-    print("Matches ^a :", query:match("^a ") ~= nil)
-    print("Matches ^s :", query:match("^s ") ~= nil)
+    log:info("=== Query Check ===")
+    log:info("Query:", query)
+    log:info("Query length:", #query)
+    log:info("Matches ^a :", query:match("^a ") ~= nil)
+    log:info("Matches ^s :", query:match("^s ") ~= nil)
 
     -- Check for bookmarks mode
     if query:match("^b ") then
@@ -1991,7 +1992,7 @@ local function onQueryChange(query)
     -- Check for system settings mode
     if query:match("^s ") then
         local settingsQuery = query:sub(3)  -- Remove "s " prefix
-        print("System settings mode activated, query:", settingsQuery)
+        log:info("System settings mode activated, query:", settingsQuery)
         currentCancelFunc = handleSystemSettings(settingsQuery, thisSearchId, handleResults)
         return
     end
@@ -2111,31 +2112,31 @@ local tabEventTap = nil
 
 -- Delete active hotkeys
 local function deleteActiveHotkeys()
-    print("=== Deleting active hotkeys ===")
+    log:info("=== Deleting active hotkeys ===")
     if refreshHotkeyCmdR then
         refreshHotkeyCmdR:delete()
         refreshHotkeyCmdR = nil
-        print("Deleted Cmd+R hotkey")
+        log:info("Deleted Cmd+R hotkey")
     end
     if refreshHotkeyCtrlR then
         refreshHotkeyCtrlR:delete()
         refreshHotkeyCtrlR = nil
-        print("Deleted Ctrl+R hotkey")
+        log:info("Deleted Ctrl+R hotkey")
     end
     if historyHotkeyUp then
         historyHotkeyUp:delete()
         historyHotkeyUp = nil
-        print("Deleted Cmd+Up hotkey")
+        log:info("Deleted Cmd+Up hotkey")
     end
     if historyHotkeyDown then
         historyHotkeyDown:delete()
         historyHotkeyDown = nil
-        print("Deleted Cmd+Down hotkey")
+        log:info("Deleted Cmd+Down hotkey")
     end
     if tabEventTap then
         tabEventTap:stop()
         tabEventTap = nil
-        print("Stopped Tab eventtap")
+        log:info("Stopped Tab eventtap")
     end
 end
 
@@ -2165,7 +2166,7 @@ local function historyPrevious()
     -- Set query to history item
     local historyQuery = history[historyIndex]
     chooser:query(historyQuery)
-    print("History up: index", historyIndex, "query:", historyQuery)
+    log:info("History up: index", historyIndex, "query:", historyQuery)
 end
 
 -- Navigate to next history item (or back to empty)
@@ -2180,12 +2181,12 @@ local function historyNext()
     if historyIndex == 0 then
         -- Back to empty query
         chooser:query("")
-        print("History down: back to empty")
+        log:info("History down: back to empty")
     else
         -- Set query to history item
         local historyQuery = history[historyIndex]
         chooser:query(historyQuery)
-        print("History down: index", historyIndex, "query:", historyQuery)
+        log:info("History down: index", historyIndex, "query:", historyQuery)
     end
 end
 
@@ -2213,11 +2214,11 @@ local function onChoice(choice)
     deleteActiveHotkeys()
 
     -- Log for debugging
-    print("=== onChoice callback ===")
-    print("choice:", hs.inspect(choice))
+    log:info("=== onChoice callback ===")
+    log:info("choice:", hs.inspect(choice))
     local modifiers = hs.eventtap.checkKeyboardModifiers()
-    print("modifiers:", hs.inspect(modifiers))
-    print("========================")
+    log:info("modifiers:", hs.inspect(modifiers))
+    log:info("========================")
 
     if not choice then
         return
@@ -2414,8 +2415,8 @@ function M.init()
         M.show()
     end)
 
-    print("File launcher initialized (alt+space)")
-    print("History: Cmd+Up/Down to navigate,", #history, "items loaded")
+    log:info("File launcher initialized (alt+space)")
+    log:info("History: Cmd+Up/Down to navigate,", #history, "items loaded")
 end
 
 return M
