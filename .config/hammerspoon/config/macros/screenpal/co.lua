@@ -1,13 +1,14 @@
+local log = require("config.logs").hammerspoons()
 -- FYI! always check resume result for failure!!!
 --   else wind up swallowing errors!
 
 function run_async(what, ...)
     local running, ismain = coroutine.running()
-    -- print("running:", running)
-    -- print("ismain:", ismain)
+    -- log:info("running:", running)
+    -- log:info("ismain:", ismain)
     -- DO not try to reuse main thread (coroutine), it is not yield/resumable
     if running and not ismain then
-        -- print("already have running, non-main coroutine, reusing its thread")
+        -- log:info("already have running, non-main coroutine, reusing its thread")
         what(...) -- equivalent of resume below
         return
     end
@@ -31,7 +32,7 @@ function sleep_ms(ms)
     if vim ~= nil and vim.defer_fn ~= nil then
         -- useful in nvim lua code
         -- ALSO useful for plenary test runs
-        -- print("sleep found vim")
+        -- log:info("sleep found vim")
         vim.defer_fn(callback, ms)
         coroutine.yield()
         return
@@ -40,7 +41,7 @@ function sleep_ms(ms)
     local is_hs = hs ~= nil and hs.timer ~= nil and hs.timer.doAfter ~= nil
     if is_hs then
         -- useful in my hammerspoon "prod" config
-        -- print("sleep found hs")
+        -- log:info("sleep found hs")
         seconds = ms / 1000
         hs.timer.doAfter(seconds, callback)
         coroutine.yield()
@@ -107,7 +108,7 @@ end
 ---@return any ...
 function syncify(call_this, ...)
     local co, is_main = coroutine.running()
-    print("syncify - co: ", co, "is_main: ", is_main) -- debugging
+    log:info("syncify - co: ", co, "is_main: ", is_main) -- debugging
     assert(co, "syncify: can only be called within a coroutine")
     assert(not is_main, "syncify: cannot be called in a main thread (coroutine)")
     -- cannot yield main thread... hence this won't work
@@ -117,13 +118,13 @@ function syncify(call_this, ...)
     local resumed = false
     local yielded = false
     local function resume_once()
-        print("syncify resume_once, resumed:", resumed)
+        log:info("syncify resume_once, resumed:", resumed)
         if resumed then
-            print("syncify resume_once - SKIP b/c ALREADY RESUMED")
+            log:info("syncify resume_once - SKIP b/c ALREADY RESUMED")
             return
         end
         if not yielded then
-            print("WARNING - callback invoked resume before yielded, allowing resume")
+            log:info("WARNING - callback invoked resume before yielded, allowing resume")
             -- do not stop the resume, just note it to look into
         end
         resumed = true
@@ -133,29 +134,29 @@ function syncify(call_this, ...)
         -- TODO I do not like fallback code like this:
         local sched = _G.vim and vim.schedule
             or (hs and function(f)
-                print("syncify resume_once hs.doAfter")
+                log:info("syncify resume_once hs.doAfter")
                 hs.timer.doAfter(0, f)
             end)
             or function(f)
                 -- TODO why not throw? isn't this an issue?
-                print("syncify resume_once IMMEDIATE... no vim/hs defer options in place")
+                log:info("syncify resume_once IMMEDIATE... no vim/hs defer options in place")
                 f()
             end
 
         sched(function()
-            print("syncify resume_once scheduled - coroutine_info:", coroutine_info(co))
+            log:info("syncify resume_once scheduled - coroutine_info:", coroutine_info(co))
 
             local status, err = coroutine.resume(co)
-            print("syncify resume_once scheduled - status: ", vim.inspect(status), " err:", vim.inspect(err))
+            log:info("syncify resume_once scheduled - status: ", vim.inspect(status), " err:", vim.inspect(err))
             if not status then
-                print("syncify resume_once scheduled: RESUME FAILED", err, "stacktrace:", get_stack_trace())
+                log:info("syncify resume_once scheduled: RESUME FAILED", err, "stacktrace:", get_stack_trace())
             end
         end)
     end
 
     call_this(function(...)
         captured_args = { ... }
-        print("syncify call_this captured_args", vim.inspect(captured_args))
+        log:info("syncify call_this captured_args", vim.inspect(captured_args))
         resume_once()
     end, ...)
 
@@ -167,6 +168,6 @@ function syncify(call_this, ...)
     end
 
     local _unpack = unpack or table.unpack
-    print("syncify captured_args:", vim.inspect(_unpack))
+    log:info("syncify captured_args:", vim.inspect(_unpack))
     return _unpack(captured_args)
 end
