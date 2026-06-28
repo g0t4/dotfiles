@@ -73,9 +73,9 @@ describe("test", function()
             coroutine.resume(co, ...)
         end, ...)
 
-        local args_thru_yield = coroutine.yield()
-        print("    3. callbacker captured args:", vim.inspect(captured_args))
-        return args_thru_yield
+        local callback_args = coroutine.yield()
+        print("    3. callbacker captured callback_args:", vim.inspect(callback_args))
+        return callback_args
     end
 
     function sleeper2(ms)
