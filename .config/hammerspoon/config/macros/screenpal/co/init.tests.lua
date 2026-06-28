@@ -88,7 +88,7 @@ describe("syncify", function()
 
 
     describe("works with vim.defer_fn", function()
-        stop_after_this("fails if resume would be called when coroutine is not suspeneded...", function()
+        it("fails if resume would be called when coroutine is not suspeneded...", function()
             assert.has_error(function()
                 run_async(function()
                     syncify(function(cb)
