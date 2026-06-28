@@ -101,6 +101,21 @@ function get_stack_trace(start_level)
     return table.concat(stack_trace_lines, "\n")
 end
 
+-- schedule the resume, to avoid "cannot resume non-suspended coroutine"
+-- which happens if call_this calls this callback synchronously
+-- TODO I do not like fallback code like this:
+local sched = _G.vim and vim.schedule
+    -- TODO use new devtools.host module for deciding if it is nvim vs hammerspoon lua VM host for consistency
+    or (hs and function(f)
+        -- log:info("syncify resume_once hs.doAfter")
+        hs.timer.doAfter(0, f)
+    end)
+    or function(f)
+        -- TODO why not throw? isn't this an issue?
+        log:error("syncify resume_once IMMEDIATE... no vim/hs defer options in place")
+        f()
+    end
+
 --- wrap a callback based method to appear synchronous using coroutines
 -- PRN add type hints to syncify so it just works based on called method and its callback?
 ---@param call_this fun(fun(...), ...)  -- assumes callback is first arg then args are after
@@ -128,21 +143,6 @@ function syncify(call_this, ...)
             -- do not stop the resume, just note it to look into
         end
         resumed = true
-
-        -- schedule the resume, to avoid "cannot resume non-suspended coroutine"
-        -- which happens if call_this calls this callback synchronously
-        -- TODO I do not like fallback code like this:
-        local sched = _G.vim and vim.schedule
-            -- TODO use new devtools.host module for deciding if it is nvim vs hammerspoon lua VM host for consistency
-            or (hs and function(f)
-                -- log:info("syncify resume_once hs.doAfter")
-                hs.timer.doAfter(0, f)
-            end)
-            or function(f)
-                -- TODO why not throw? isn't this an issue?
-                log:error("syncify resume_once IMMEDIATE... no vim/hs defer options in place")
-                f()
-            end
 
         sched(function()
             -- log:info("syncify resume_once scheduled - coroutine_info:", coroutine_info(co))
