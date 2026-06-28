@@ -256,10 +256,7 @@ function act_on_silence(win, silence, action)
         win.windows:get_tool_window():wait_for_ok_button_then_press_it()
 
         -- * insert pause auto-approved
-        hs.eventtap.keyStroke({}, "i", 0, win.app)
-        hs.timer.usleep(_10ms)
-        hs.eventtap.keyStroke({}, "p", 0, win.app)
-        hs.timer.usleep(_200ms)
+        SPAL_Insert_Pause()
         win.windows:get_tool_window():wait_for_ok_button_then_press_it()
         return
     end
