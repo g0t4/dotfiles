@@ -34,6 +34,19 @@ describe("TODO what was original purpose for this test???", function()
 end)
 
 describe("syncify", function()
+    it("syncify returns multiple args unpacked", function()
+        run_async(function()
+            local result1, result2, result3 = syncify(function(cb)
+                vim.schedule(function()
+                    cb(3, 4, 5)
+                end)
+            end)
+            assert.equal(3, result1)
+            assert.equal(4, result2)
+            assert.equal(5, result3)
+        end)
+    end)
+
     -- FYI! syncify scenarios are not fully covered
     it("sync, immediate callbacks work", function()
         -- YES!!! we have the warning here! this is what I wanted to reproduce!
