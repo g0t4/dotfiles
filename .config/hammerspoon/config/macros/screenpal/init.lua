@@ -283,7 +283,7 @@ end
 
 ---@param callback fun(win: ScreenPalEditorWindow, silences: SilencesController)
 local function detect_silences(callback)
-    run_async(function()
+    -- run_async(function()
         local win = get_cached_editor_window()
 
         local timeline_element = win:get_timeline_slider_or_throw()
@@ -298,7 +298,7 @@ local function detect_silences(callback)
         local silences = SilencesController:new(detected, timeline)
         log:info("detect_silences calling back with silences:", silences)
         callback(win, silences)
-    end)
+    -- end)
 end
 
 ---@param win ScreenPalEditorWindow
@@ -387,6 +387,7 @@ function SPal_ActOnThisSilence_ThruStart(action_keystroke)
 end
 
 function SPal_ActOnThisSilence(action_keystroke)
+    -- FYI this is entry point for streamdeck mute button that has double resume coroutine error - passes action_keystroke=MUTE_INWARD
     run_async(function()
         ---@type ScreenPalEditorWindow, SilencesController
         local win, silences = syncify(detect_silences)
