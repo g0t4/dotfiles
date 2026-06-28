@@ -72,7 +72,8 @@ end
 function Timer.time_this(fn, description)
     local timer = Timer.new()
     local result = fn()
-    timer:log_timing()
+    local duration = format_elapsed_time(get_now_in_nanoseconds_counter() - timer._overall_start)
+    log:info(string.format("%s: %s", description, duration))
     return result
 end
 
