@@ -103,9 +103,11 @@ end
 
 local function pick_scheduler()
     local host = require("devtools.host")
+
     if host.is_nvim() then
         return vim.schedule
     end
+
     if host.is_hammerspoon() then
         local function hs_sched(f)
             hs.timer.doAfter(0, f)
@@ -113,12 +115,9 @@ local function pick_scheduler()
         return hs_sched
     end
 
-    -- TODO switch to throw instead
-    local function immediate_schedule(f)
-        log:error("syncify resume_once IMMEDIATE... no vim/hs defer options in place")
-        f()
-    end
-    return immediate_schedule
+    local fail = "failed to detect nvim/hs... this shouldn't ever happen, indicates a bug in pick_scheduler"
+    log:error(fail)
+    error(fail)
 end
 
 local sched = pick_scheduler()
