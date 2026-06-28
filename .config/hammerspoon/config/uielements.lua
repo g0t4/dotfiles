@@ -47,7 +47,7 @@ local function show_it(...)
             elseif type(arg) == "number" then
                 table.insert(print_html_buffer, tostring(arg))
             else
-                log:warn("WARN: unexpected prints arg type: " .. type(arg))
+                log:warn("WARN: unexpected show_it arg type: " .. type(arg))
                 table.insert(print_html_buffer, tostring(arg))
             end
         end
@@ -166,12 +166,12 @@ function inspect_html(value, completed)
         completed[value] = completed_number
         completed.nextNumber = completed_number + 1
         reference_name = type(value) .. completed_number -- so I can link back to the first time the reference is displayed, in future occurences
-        -- prints(referenceName)
+        -- show_it(referenceName)
     end
 
     local function _inspectTable(tbl)
         -- helper only for InspectHTML, don't use this directly
-        -- FYI I like that this prints each level (unlike hs.inspect which consolidates tables with one item in them,  mine shows the actual index of each, within each table)
+        -- FYI I like that this shows each level (unlike hs.inspect which consolidates tables with one item in them,  mine shows the actual index of each, within each table)
         local html = "<ul>"
         if reference_name ~= "" then
             -- show right before the table's nested list (ul)
@@ -266,7 +266,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "S", function()
     -- PRN anything worth doing to enumerate the menus?
     -- for _, item in ipairs(menu_items) do
     --     -- local title = get_value_or_empty_string(item)
-    --     prints(hs.inspect(item), "<br>")
+    --     show_it(hs.inspect(item), "<br>")
     -- end
 end)
 
@@ -291,7 +291,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "M", function()
     -- PRN anything worth doing to enumerate the menus?
     -- for _, item in ipairs(menu_items) do
     --     -- local title = get_value_or_empty_string(item)
-    --     prints(hs.inspect(item), "<br>")
+    --     show_it(hs.inspect(item), "<br>")
     -- end
 end)
 
