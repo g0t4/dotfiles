@@ -133,13 +133,14 @@ function syncify(call_this, ...)
         -- which happens if call_this calls this callback synchronously
         -- TODO I do not like fallback code like this:
         local sched = _G.vim and vim.schedule
+            -- TODO use new devtools.host module for deciding if it is nvim vs hammerspoon lua VM host for consistency
             or (hs and function(f)
                 -- log:info("syncify resume_once hs.doAfter")
                 hs.timer.doAfter(0, f)
             end)
             or function(f)
                 -- TODO why not throw? isn't this an issue?
-                log:info("syncify resume_once IMMEDIATE... no vim/hs defer options in place")
+                log:error("syncify resume_once IMMEDIATE... no vim/hs defer options in place")
                 f()
             end
 
