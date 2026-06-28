@@ -177,11 +177,14 @@ function syncify(call_this, ...)
         end)
     end
 
-    call_this(function(...)
+    local function after_call_this(...)
         captured_args = { ... }
         log:info("syncify call_this captured_args", captured_args)
+        -- FYI captured_args are returned below (seemingly synchronously b/c this coroutine waits for them to be ready before returning)
         resume_once()
-    end, ...)
+    end
+
+    call_this(after_call_this, ...)
 
     yielded = true
     if not resumed then
