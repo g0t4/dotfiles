@@ -138,7 +138,7 @@ function syncify(call_this, ...)
 
     local captured_args = nil
     local resume_once_called = false
-    local not_yet_yielded = false
+    local need_to_yield = true
     local function resume_once()
         if resume_once_called then
             log:warn("syncify resume_once - SKIP b/c ALREADY RESUMED")
@@ -154,7 +154,7 @@ function syncify(call_this, ...)
             log:info("coroutine status before resume:", status)
             if status ~= "suspended" then
                 -- log:info("coroutine is not yet suspended")
-                not_yet_yielded = true
+                need_to_yield = false
                 return
             end
             local status, err = coroutine.resume(co)
@@ -173,7 +173,7 @@ function syncify(call_this, ...)
 
     call_this(after_call_this, ...)
 
-    if not not_yet_yielded then
+    if need_to_yield then
         coroutine.yield()
     end
 
