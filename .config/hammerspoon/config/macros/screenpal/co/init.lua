@@ -140,18 +140,13 @@ function syncify(call_this, ...)
     local resume_once_called = false
     local shit_hit_fan = nil
     local function resume_once()
-        -- log:info("syncify resume_once, resumed:", resume_once_called)
         if resume_once_called then
             log:warn("syncify resume_once - SKIP b/c ALREADY RESUMED")
             return
         end
         resume_once_called = true
 
-        -- schedule the resume, to avoid "cannot resume non-suspended coroutine"
-        -- which happens during synchronous callback (b/c you are triggering resume before yield!! duh)
         sched(function()
-            -- log:info("syncify before resume - coroutine_info:", coroutine_info(co))
-
             -- FYI if call_this has something like vim.wait that pumps event loop then you can wind up here before coroutine.yield() is called
             --   that is outside of what I intended to support in syncify (mostly a callback => sync tool... CST)... no plans to support vim.wait in the call_this
             --   that said, instead of letting things explode, check assumption that it is ok to resume here
@@ -164,22 +159,8 @@ function syncify(call_this, ...)
                 return
             end
             local status, err = coroutine.resume(co)
-            -- log:info("syncify after resume - status: ", status, " err:", err)
             if not status then
                 log:info("syncify unhandled exception in coroutine (after resume):\n\t", err, "\nstacktrace:", get_stack_trace())
-                -- TODO why am I getting a second resume attempt? this is regardless if coroutine has unhandled exception
-                -- - in fact if it has unhandled exception then this unhandled exception message is logged twice
-                --   TODO why am I resuming a second time or is smth else doing that?
-                --   FYI reproduce using "mute this" streamdewck button => sometimes timeout failure but that doesn't matter as no matter what I get this second resume failure
-                --    "cannot resume dead coroutine stacktrace"
-                -- [INFO ]  syncify unhandled exception in coroutine (after resume) cannot resume dead coroutine stacktrace: /Users/wesdemos/.hammerspoon/config/macros/screenpal/co.lua:161
-                --
-                -- OBSERVED: also getting this at start of mute this...
-                --   [INFO ]  WARNING - callback invoked resume before yielded, allowing resume
-                --
-                --  ok run_async is nested in the case where I have the double resume...
-                --   and run_async explicitly calls coroutine.resume() too...
-                --   commenting it out in nested case fixes double resume error!
             end
         end)
     end
