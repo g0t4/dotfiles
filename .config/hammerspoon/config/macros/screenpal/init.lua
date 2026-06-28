@@ -663,7 +663,8 @@ function SPAL_Add_Shape(shape_type)
         local shapes = ToolOptionsWindows.new(win.windows)
 
         -- * click into secondary shapes menu/window
-        if vim.tbl_contains({ "Diamond", "Ban", "Equals", "Does Not Equal", "Parallelogram", "Freehand" }, shape_type) then -- PRN add other types here
+        if vim.tbl_contains({ "Diamond", "Ban", "Equals", "Does Not Equal", "Parallelogram", "Freehand" }, shape_type) then
+            -- PRN add other types here
             -- TODO add more shape types to list OR use NOT IN primary list
             -- shapes.app_windows:log_window_names()
 
@@ -678,6 +679,8 @@ function SPAL_Add_Shape(shape_type)
                 log:error("missing ... checkbox for nested shape type", shape_type)
             end
             final_checkbox:axPress()
+        else
+            shapes:wait_for_shape_type_checkbox_then_press_it(shape_type)
         end
     end)
 end
