@@ -74,7 +74,7 @@ describe("test", function()
         end, ...)
 
         local callback_args = coroutine.yield()
-        print("    3. callbacker captured callback_args:", vim.inspect(callback_args))
+        print("    3. yielded callback_args:", vim.inspect(callback_args))
         return callback_args
     end
 
@@ -119,7 +119,7 @@ describe("test", function()
     it("crunch_data with callback", function()
         local test_co = coroutine.running()
 
-        function main()
+        local function main()
             function then_create_report(data)
                 print("4. creating report with data: " .. vim.inspect(data))
                 coroutine.resume(test_co) -- triggers test to complete
@@ -139,7 +139,7 @@ describe("test", function()
 
         local test_co = coroutine.running()
 
-        function main()
+        local function main()
             print("1. start building report.... before crunch_data called")
             -- sync-like code:
             local data = callbacker(api_crunch_data, then_create_report)
