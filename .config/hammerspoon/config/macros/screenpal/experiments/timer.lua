@@ -1,4 +1,6 @@
 local log = require("config.logs").hammerspoons()
+local host = require("devtools.host")
+
 ---@class Timer
 ---@field _overall_start number
 ---@field _last_start number
@@ -6,14 +8,20 @@ local log = require("config.logs").hammerspoons()
 local Timer = {}
 Timer.__index = Timer
 
-local function get_time()
-    return hs.timer.secondsSinceEpoch()
+local function get_now_in_nanoseconds_counter()
+    if host.is_hammerspoon() then
+        -- hs.timer.absoluteTime() returns nanoseconds
+        return hs.timer.absoluteTime() / 1e9
+    else
+        local uv = vim.uv or vim.loop
+        return uv.hrtime() / 1e9
+    end
 end
 
 ---Creates a new Timer instance.
 ---@return Timer
 function Timer.new()
-    local now = get_time()
+    local now = get_now_in_nanoseconds_counter()
     local obj = {
         _overall_start = now,
         _last_start = now,
@@ -25,7 +33,7 @@ end
 
 ---@param message string
 function Timer:capture(message)
-    local now = get_time()
+    local now = get_now_in_nanoseconds_counter()
     local duration = now - self._last_start
     self._last_start = now
     table.insert(self._logs, { message = message, duration = duration })
@@ -54,7 +62,7 @@ function format_elapsed_time(elapsed_seconds)
 end
 
 function Timer:log_timing()
-    local overall = format_elapsed_time(get_time() - self._overall_start)
+    local overall = format_elapsed_time(get_now_in_nanoseconds_counter() - self._overall_start)
     log:info(string.format("Overall time: %s", overall))
     for _, entry in ipairs(self._logs) do
         log:info(string.format("  %s: %s", entry.message, format_elapsed_time(entry.duration)))
