@@ -13,8 +13,9 @@ function run_async(what, ...)
         return
     end
 
-    -- ONLY call resume once, let what then manage yield/resume on its own (or delegate it to helpers like sleep_ms and callbacker below)
+    log:info("creating coroutine (thread)...")
     local co = coroutine.create(what)
+    -- ONLY call resume once, let `what` manage subsequent yield/resume (or delegate it to helpers like sleep_ms and callbacker)
     local ok, err = coroutine.resume(co, ...)
     if not ok then
         error("run_async: failed resuming coroutine:" .. tostring(err))
