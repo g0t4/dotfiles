@@ -154,6 +154,8 @@ function syncify(call_this, ...)
             log:info("coroutine status before resume:", status)
             if status ~= "suspended" then
                 -- log:info("coroutine is not yet suspended")
+                -- NBD now as we handle that gracefully!
+                -- just means this code ran before yield below, so tell yield to skip and then we can skip resume here!
                 need_to_yield = false
                 return
             end
