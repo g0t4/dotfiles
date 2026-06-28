@@ -1,3 +1,6 @@
+require("config.tests.setup")
+local only = require("devtools.tests.define.only")
+
 describe("test", function()
     -- it("test coroutine", function()
     --     function crunch_data(callback)
