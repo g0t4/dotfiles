@@ -21,3 +21,6 @@ end
 function love_shell
     notes_about_trace "Shell completions ❤️"
 end
+
+abbr -- nreadme "nvim README.md -c ':tabonly'" # FYI -c runs after first file + config loaded, necessary for tabonly to work here (close all other tabs)
+
