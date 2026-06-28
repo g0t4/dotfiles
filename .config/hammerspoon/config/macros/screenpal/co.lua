@@ -101,17 +101,22 @@ function get_stack_trace(start_level)
     return table.concat(stack_trace_lines, "\n")
 end
 
-local sched = _G.vim and vim.schedule
-    -- TODO use new devtools.host module for deciding if it is nvim vs hammerspoon lua VM host for consistency
-    or (hs and function(f)
-        -- log:info("syncify resume_once hs.doAfter")
-        hs.timer.doAfter(0, f)
-    end)
-    or function(f)
-        -- TODO why not throw? isn't this an issue?
-        log:error("syncify resume_once IMMEDIATE... no vim/hs defer options in place")
-        f()
-    end
+local function pick_scheduler()
+    local sched = _G.vim and vim.schedule
+        -- TODO use new devtools.host module for deciding if it is nvim vs hammerspoon lua VM host for consistency
+        or (hs and function(f)
+            -- log:info("syncify resume_once hs.doAfter")
+            hs.timer.doAfter(0, f)
+        end)
+        or function(f)
+            -- TODO why not throw? isn't this an issue?
+            log:error("syncify resume_once IMMEDIATE... no vim/hs defer options in place")
+            f()
+        end
+    return sched
+end
+
+local sched = pick_scheduler()
 
 --- wrap a callback based method to appear synchronous using coroutines
 -- PRN add type hints to syncify so it just works based on called method and its callback?
