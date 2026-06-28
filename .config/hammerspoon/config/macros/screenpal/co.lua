@@ -101,9 +101,6 @@ function get_stack_trace(start_level)
     return table.concat(stack_trace_lines, "\n")
 end
 
--- schedule the resume, to avoid "cannot resume non-suspended coroutine"
--- which happens if call_this calls this callback synchronously
--- TODO I do not like fallback code like this:
 local sched = _G.vim and vim.schedule
     -- TODO use new devtools.host module for deciding if it is nvim vs hammerspoon lua VM host for consistency
     or (hs and function(f)
@@ -144,6 +141,8 @@ function syncify(call_this, ...)
         end
         resumed = true
 
+        -- schedule the resume, to avoid "cannot resume non-suspended coroutine"
+        -- which happens if call_this calls this callback synchronously
         sched(function()
             -- log:info("syncify resume_once scheduled - coroutine_info:", coroutine_info(co))
 
