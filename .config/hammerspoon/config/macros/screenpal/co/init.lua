@@ -8,7 +8,7 @@ function run_async(what, ...)
     log:info("ismain:", ismain, "|", "running_thread:", running_thread)
     -- DO not try to reuse main thread (coroutine), it is not yield/resumable
     if running_thread and not ismain then
-        -- log:info("already have running, non-main coroutine, reusing its thread")
+        log:info("already have running, non-main coroutine, reusing its thread")
         what(...) -- equivalent of resume below
         return
     end
