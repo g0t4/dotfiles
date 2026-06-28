@@ -36,7 +36,7 @@ end)
 local stop_after_this = only
 
 describe("syncify", function()
-    stop_after_this("syncify returns multiple args unpacked", function()
+    it("syncify returns multiple args unpacked", function()
         run_async(function()
             local result1, result2, result3 = syncify(function(cb)
                 vim.schedule(function()
