@@ -55,7 +55,7 @@ function TimelineController:new(editor_window)
     if _playhead_window == nil then
         -- TODO revisit playhead fields and mark as appropriate (nil-able)
         -- FYI downstream logic will break...  but this warning should be sufficient
-        print("WARNING: PLAYHEAD IS NOT ON-SCREEN")
+        log:info("WARNING: PLAYHEAD IS NOT ON-SCREEN")
         return self
     end
     -- DO NOT get frames until UI is stable, zoome din frame is different than zoomed out
@@ -141,11 +141,11 @@ local function _wait_until_playhead_at_screen_x(self, desired_playhead_screen_x,
     max_loops = max_loops or 30
     start = get_time()
     for iteration = 1, max_loops do
-        -- print("  iteration " .. i)
+        -- log:info("  iteration " .. i)
         hs.timer.usleep(_10ms)
 
         if _is_playhead_now_at_screen_x(self, desired_playhead_screen_x) then
-            -- print("  after " .. iteration .. " iterations")
+            -- log:info("  after " .. iteration .. " iterations")
             break
         end
     end
@@ -253,7 +253,7 @@ local function _move_playhead_to_screen_x(self, playhead_screen_x)
             .. "\n  " .. "actual: " .. actual
             .. "\n"
 
-        print(msg)
+        log:info(msg)
     end
 end
 
@@ -269,7 +269,7 @@ function TimelineController:move_playhead_by_seconds(seconds)
     -- PRN check to make sure this is in the visible range of timline, i.e. make sure playhead is not jumping back while at very start (left side) of timeline
     if target_rel_x < 0 or target_rel_x > self._timeline_frame.w then
         local message = "WARN: move playhead outside visible range is NOT IMPLEMENTED (YET)"
-        print(message)
+        log:info(message)
         hs.alert.show(message)
         -- TODO you could move timeline view with slider below (to shift timeline back) then recompute relative position and click it
         -- TODO OR, could move playhead to exactly relative zero (start of timeline view) => then press left/right arrow to make screenpal do timeline scroll... then recompute relative position with new view range

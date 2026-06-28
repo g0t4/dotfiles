@@ -4,6 +4,7 @@ local print_web_window = nil
 local print_html_buffer = {}
 local print_web_view_user_content_controller = nil
 local html_page
+local log = require("config.logs").hammerspoons()
 
 -- TODO RENAME TO SNAKE_CASE IN LUA - should just need to do global functions used/defined in this file
 
@@ -38,7 +39,7 @@ local function prints(...)
             --   this replace with \n for all line breaks when printing to console
             arg = arg:gsub("<br>", "\n")
             -- PRN strip table tags too?
-            print(arg)
+            log:info(arg)
         else
             if type(arg) == "string" then
                 arg = arg:gsub("\t", "&nbsp;&nbsp;")
@@ -46,7 +47,7 @@ local function prints(...)
             elseif type(arg) == "number" then
                 table.insert(print_html_buffer, tostring(arg))
             else
-                print("WARN: unexpected prints arg type: " .. type(arg))
+                log:warn("WARN: unexpected prints arg type: " .. type(arg))
                 table.insert(print_html_buffer, tostring(arg))
             end
         end
@@ -72,15 +73,15 @@ local function ensure_web_view()
     -- do return end -- disable using html printer
 
     local mouseAt = hs.mouse.absolutePosition() -- {"NSPoint", x = 786.484375, y = 612.0546875 }
-    -- print("mouseAt", hs.inspect(mouseAt))
+    -- log:info("mouseAt", mouseAt)
 
     -- main screen is screen with current focused window (not based on mouse position)
     local whichScreen = hs.screen.mainScreen()
-    -- print("whichScreen:id", whichScreen:id())
-    -- print("whichScreen:getUUID", whichScreen:getUUID())
-    -- print("whichScreen:name", whichScreen:name())
+    -- log:info("whichScreen:id", whichScreen:id())
+    -- log:info("whichScreen:getUUID", whichScreen:getUUID())
+    -- log:info("whichScreen:name", whichScreen:name())
     local frame = whichScreen:frame() -- hs.geometry.rect(0.0,0.0,1920.0,1080.0)
-    -- print("frame", hs.inspect(frame))
+    -- log:info("frame", frame)
 
     local rect = nil
     local half_width = frame.w / 2
@@ -89,11 +90,11 @@ local function ensure_web_view()
     if mouseAt.x < midX then
         -- mouse is on left side of screen, show webview on right side
         rect = hs.geometry.rect(midX, frame.y, half_width, frame.h)
-        -- print("right rect:", hs.inspect(rect))
+        -- log:info("right rect:", rect)
     else
         -- mouse is on right, show webview on left
         rect = hs.geometry.rect(frame.x, frame.y, half_width, frame.h)
-        -- print("left rect:", hs.inspect(rect))
+        -- log:info("left rect:", rect)
     end
 
     if print_web_view == nil then
@@ -254,7 +255,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "S", function()
     ensure_cleared_web_view()
 
     local app = hs.application.frontmostApplication()
-    print("starting potentially slow element search of: " .. app:name())
+    log:info("starting potentially slow element search of: " .. app:name())
 
     local menu_items = app:findMenuItem("Activity Monitor", true)
     dump_html(menu_items)
@@ -277,7 +278,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "M", function()
     ensure_cleared_web_view()
 
     local app = hs.application.frontmostApplication()
-    print("starting potentially slow element search of: " .. app:name())
+    log:info("starting potentially slow element search of: " .. app:name())
     -- FYI can use app:getMenuItems(callback) instead (called when done, non-blocking too) - callback gets same object and then the return here is the app object (when cb provided)
     local menu_items = app:getMenuItems()
     -- timings:
@@ -321,9 +322,9 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "E", function()
 
             prints("message: " .. message)
             if message ~= "completed" then
-                print("SOMETHING WENT WRONG b/c message is not 'completed'")
+                log:warn("SOMETHING WENT WRONG b/c message is not 'completed'")
             end
-            print(hs.inspect(results))
+            log:info("results", results)
             prints("results: ", inspect_html(results))
 
             -- leave timing info in here b/c I will be running into more complex test cases and I wanna understand the overall timinmg implications of some of the apps I use
@@ -344,7 +345,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "E", function()
 
         prints("message: " .. message)
         if message ~= "completed" then
-            print("SOMETHING WENT WRONG b/c message is not 'completed'")
+            log:warn("SOMETHING WENT WRONG b/c message is not 'completed'")
         end
         prints("numResultsAdded: " .. num_results_added)
         prints("matched: " .. search_task:matched())
@@ -456,7 +457,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "A", function()
     local callouts = require("config.ui_callouts")
     local element_at = nil
     if callouts.moves then
-        print("using last callout element for report")
+        log:info("using last callout element for report")
         -- run dump on current element from callouts, this way I can nav around with arrows + pick parent elements that aren't selected by systemElementAtPosition, also children item sometimes aren't selected (i.e. SOM image buttons on toolbars)
         element_at = callouts.last.element
     else

@@ -2,6 +2,7 @@ local canvas = require("hs.canvas")
 local alert = require("hs.alert")
 local CachedElement = require("config.ax.caching")
 local mouse_position = require("config.mouse_position")
+local log = require("config.logs").hammerspoons()
 
 local M = {}
 M.last = {
@@ -62,7 +63,7 @@ local skips = {
 local function only_alert(message)
     alert.closeAll()
     alert.show(message)
-    print(message)
+    log:info(message)
 end
 
 local function display_user_data(name, value)
@@ -242,7 +243,7 @@ local function show_tooltip_for_element(element, frame)
             local parent = e:axParent()
             if parent == nil then
                 -- FYI last reproduced using ScreenPal => edit an edit (hover over toolbar buttons like "remove this edit" and this happens)...
-                print("UNEXPECTED... element doesn't have PARENT?! ... aborting build_ref")
+                log:error("UNEXPECTED... element doesn't have PARENT?! ... aborting build_ref")
                 return "error... element doesn't have a parent"
             end
 
@@ -415,7 +416,7 @@ local function highlight_this_element(element)
         -- perhaps special color for app/window levels vs other elements?
     elseif not frame then
         only_alert("no frame: " .. role)
-        print("no frame: " .. role)
+        log:info("no frame: " .. role)
         return
     end
     -- sometimes the frame is off screen... like a scrolled window (i.e. hammerspoon console)...
@@ -470,7 +471,7 @@ local function get_current_element()
     ---@type hs.axuielement?
     local element = hs.axuielement.systemElementAtPosition(pos)
     if element == nil then
-        print("no current element")
+        log:info("no current element")
         return
     end
 
@@ -513,10 +514,10 @@ local function start_element_inspector()
         end
     -- function(error)
     --     -- right now my sources don't levearge error (nor complete) events... so just ignore
-    --     print("[ERROR] what to do here?", error)
+    --     log:error("[ERROR] what to do here?", error)
     -- end,
     -- function()
-    --     print("[COMPLETE] what to do here?")
+    --     log:info("[COMPLETE] what to do here?")
     -- end
     )
     table.insert(M.bindings, hs.hotkey.bind({}, "escape", stop_element_inspector))
@@ -542,7 +543,7 @@ function capture_element_under_mouse()
     -- this can work w/o using highlighter!
     local element = get_current_element()
     if element == nil then
-        print("no frame found for current element, cannot capture it")
+        log:info("no frame found for current element, cannot capture it")
         return
     end
 
@@ -562,21 +563,21 @@ end
 ---@param frame hs.geometry
 function capture_region(callback, frame)
     local where_to = get_tmp_filename("png")
-    print("capture_region - where_to:", where_to)
+    log:info("capture_region - where_to:", where_to)
 
     function when_done(result, std_out, std_err)
         if result ~= 0 then
             hs.alert.show("capture_region: failed: " .. std_err)
-            print("capture_region: failed", std_err)
+            log:error("capture_region: failed", std_err)
         end
-        print("capture_inner calling back with - where_to:", where_to)
+        log:info("capture_inner calling back with - where_to:", where_to)
         callback(where_to)
     end
 
     -- * rectangle
     -- screencapture uses `-R <x,y,w,h>`
     local rectangle = string.format("%d,%d,%d,%d", frame.x, frame.y, frame.w, frame.h)
-    -- print("rectange: " .. hs.inspect(rectangle))
+    -- log:info("rectange: ", rectangle)
 
     hs.task.new("/usr/sbin/screencapture", when_done, { "-o", "-R", rectangle, where_to }):start()
 end
@@ -609,16 +610,16 @@ function capture_this_element(callback, element)
     function when_done(result, std_out, std_err)
         if result ~= 0 then
             hs.alert.show("capture_this_element: failed: " .. std_err)
-            print("capture_this_element: failed", std_err)
+            log:error("capture_this_element: failed", std_err)
         end
         callback(where_to)
-        -- print("element captured to " .. where_to)
+        -- log:info("element captured to " .. where_to)
     end
 
     -- * rectangle
     -- screencapture uses `-R <x,y,w,h>`
     local rectangle = string.format("%d,%d,%d,%d", frame.x, frame.y, frame.w, frame.h)
-    -- print("rectange: " .. rectangle)
+    -- log:info("rectange: " .. rectangle)
 
     hs.task.new("/usr/sbin/screencapture", when_done, { "-o", "-R", rectangle, where_to }):start()
 end
@@ -639,12 +640,12 @@ end)
 
 local function get_siblings(element)
     if not element then
-        print("no element to move")
+        log:info("no element to move")
         return
     end
     local parent = element:attributeValue("AXParent")
     if not parent then
-        print("no parent")
+        log:info("no parent")
         return
     end
     local cycle = M.last.cycle or "AXChildren"
@@ -671,7 +672,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "up", function()
         return
     end
     if not parent then
-        print("unexpected: no parent")
+        log:warn("unexpected: no parent")
         return
     end
     highlight_this_element(parent)
@@ -687,7 +688,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "down", function()
     local cycle = M.last.cycle or "AXChildren"
     local children = M.last.element:attributeValue(cycle)
     if not children or #children == 0 then
-        print("no " .. cycle, children)
+        log:info("no " .. cycle, children)
         only_alert("no " .. cycle)
         return
     end
@@ -703,7 +704,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "right", function()
     local function next_sibling(element)
         local siblings = get_siblings(element)
         if not siblings then
-            print("no sibling " .. M.last.cycle)
+            log:info("no sibling " .. M.last.cycle)
             return
         end
         for i, child in ipairs(siblings) do
@@ -714,7 +715,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "right", function()
         -- TODO if element is not last then that means it was not in the list...
         --   TODO jump to last item in that case? or first?
         --   this is needed for cycling AXSections
-        print("no next sibling " .. M.last.cycle)
+        log:info("no next sibling " .. M.last.cycle)
     end
     local next = next_sibling(M.last.element)
     if not next then
@@ -732,7 +733,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "left", function()
     local function previous_sibling(element)
         local siblings = get_siblings(element)
         if not siblings then
-            print("no siblings " .. M.last.cycle)
+            log:info("no siblings " .. M.last.cycle)
             return
         end
         for i, child in ipairs(siblings) do
@@ -763,12 +764,12 @@ local function test_caching()
     -- local fcpx = hs.axuielement.applicationElement(hs.application.find(APPS.FinalCutPro))
     local start_time = get_time()
     for i = 1, 10 do
-        -- print("caching - iteration", i)
+        -- log:info("caching - iteration", i)
         local attrs = fcpx:attributes() -- 100 calls => ~8ms avg
         -- local attrs = fcpx:allAttributeValues() -- 100 calls => 90ms avg (no caching), 1000 calls => 2,500ms!
     end
-    print("fcpx", fcpx)
-    print("caching - took", get_time() - start_time)
+    log:info("fcpx", fcpx)
+    log:info("caching - took", get_time() - start_time)
 end
 
 return M

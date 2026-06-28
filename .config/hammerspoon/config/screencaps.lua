@@ -4,7 +4,7 @@ local CAPTURE_DIR_SETTINGS_KEY = "screencapture_directory"
 
 -- read the value:
 --   defaults read org.hammerspoon.Hammerspoon screencapture_directory
--- print("settings bundle", hs.settings.bundleID) => org.hammerspoon.Hammerspoon
+-- log:info("settings bundle", hs.settings.bundleID) => org.hammerspoon.Hammerspoon
 
 function getDefaultPhotosDir()
     return os.getenv("HOME") .. "/Pictures/Screencaps"
@@ -40,7 +40,7 @@ end
 function get_tmp_filename(extension)
     local tmp_dir = hs.fs.temporaryDirectory()
     local tmp_path = tmp_dir .. "/hs-tmpfiles-" .. tostring(hs.timer.absoluteTime()) .. "." .. extension
-    -- print("tmp_path", tmp_path)
+    -- log:info("tmp_path", tmp_path)
     return tmp_path
 end
 
@@ -72,7 +72,7 @@ function get_screencapture_filename(extension, image_tag)
         file = file .. "." .. image_tag
     end
     file = file .. "." .. extension
-    -- print("screencapture filename", file)
+    -- log:info("screencapture filename", file)
     return file
 end
 
