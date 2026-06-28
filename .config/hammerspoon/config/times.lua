@@ -8,9 +8,10 @@ function M.set_start_time()
     start_time = socket.gettime()
 end
 
-function M.print_elapsed(message)
+function M.log_elapsed(message)
     local elapsed_time = socket.gettime() - start_time
-    print(string.format("%s: %.6f seconds", message, elapsed_time))
+    local log = require("config.logs").hammerspoons()
+    log:info(string.format("%s: %.6f seconds", message, elapsed_time))
 end
 
 return M
@@ -20,4 +21,4 @@ return M
 -- local t = require("config.times")
 -- t.set_start_time() -- optional cuz require sets start time too
 -- foo()
--- t.print_elapsed("foo")
+-- t.log_elapsed("foo")

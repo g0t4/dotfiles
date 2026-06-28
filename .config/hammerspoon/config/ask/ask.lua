@@ -399,7 +399,7 @@ function askAbout(userText, app, focusedElem, appendChunk)
 
         if exitCode ~= 0 then
             -- test this: ollama set invalid url (delete c in completion)... then curl with --fail-with-body and see if can capture the error
-            -- print_elapsed("complete callback")
+            -- log_elapsed("complete callback")
             -- GOOD TEST CASE use ollama and make sure its not running! works nicely as is:
             hs.alert.show("Error in streaming request: " .. exitCode .. " see hammerspoon console logs")
             if stderr ~= "" then
@@ -427,7 +427,7 @@ function askAbout(userText, app, focusedElem, appendChunk)
         logMessage("## end streamingCallback\n")
 
         if stderr ~= "" then
-            -- print_elapsed("streaming callback")
+            -- log_elapsed("streaming callback")
             -- GOOD TEST CASE use ollama and make sure its not running!
             hs.alert.show("Error in streaming request: " .. stderr .. " see hammerspoon console logs")
             if stdout ~= "" then

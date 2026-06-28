@@ -13,7 +13,7 @@ local _alert = hs.alert
 local _pasteboard = hs.pasteboard
 local _task = hs.task
 local _axuielement = hs.axuielement
--- times.print_elapsed("preloads") -- 10ms to preload these (though this is not the motivation for preload)
+-- times.log_elapsed("preloads") -- 10ms to preload these (though this is not the motivation for preload)
 local _dockicon = hs.dockicon -- for show/hide in app switcher
 local _fnutils = hs.fnutils
 local _spoons = hs.spoons
