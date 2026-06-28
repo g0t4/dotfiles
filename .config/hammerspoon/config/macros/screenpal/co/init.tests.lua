@@ -36,6 +36,22 @@ end)
 local stop_after_this = only
 
 describe("syncify", function()
+    describe("reproduce double resume", function()
+        stop_after_this("due to sync callback", function()
+            -- FYI double run_async (run_async in run_async) doesn't matter for this bug
+            run_async(function()
+                local result1, result2, result3 = syncify(function(cb)
+                    -- vim.schedule(function()
+                    cb(3, 4, 5)
+                    -- end)
+                end)
+                assert.equal(3, result1)
+                assert.equal(4, result2)
+                assert.equal(5, result3)
+            end)
+        end)
+    end)
+
     it("syncify returns multiple args unpacked", function()
         run_async(function()
             local result1, result2, result3 = syncify(function(cb)
