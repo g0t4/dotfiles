@@ -3,11 +3,10 @@ local log = require("config.logs").hammerspoons()
 --   else wind up swallowing errors!
 
 function run_async(what, ...)
-    local running, ismain = coroutine.running()
-    -- log:info("running:", running)
-    -- log:info("ismain:", ismain)
+    local running_thread, ismain = coroutine.running()
+    log:info("ismain:", ismain, "|", "running_thread:", running_thread)
     -- DO not try to reuse main thread (coroutine), it is not yield/resumable
-    if running and not ismain then
+    if running_thread and not ismain then
         -- log:info("already have running, non-main coroutine, reusing its thread")
         what(...) -- equivalent of resume below
         return
