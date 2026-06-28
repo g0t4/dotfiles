@@ -77,7 +77,7 @@ describe("test", function()
 
         coroutine.yield()
         print("    3. callbacker captured args:", vim.inspect(captured_args))
-        return captured_args
+        -- return captured_args
     end
 
     function sleeper2(ms)
