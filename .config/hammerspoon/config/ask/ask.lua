@@ -3,9 +3,11 @@ local prompts = require("config.ask.prompts")
 local services = require("config.ask.services")
 local observe = require("config.ask.observe") -- side effects
 local service = services.getService()
+local log = require("config.logs").hammerspoons()
+
 -- FYI need to restart HS if I wanna change services (rare so thats fine), good thing is the service is cached and not more overhead per use of ask!
 
--- print("service", hs.inspect(services.logSafeService(service)))
+-- log:info("service", services.logSafeService(service))
 
 require("config.ask.preloads") -- optional
 
@@ -22,7 +24,7 @@ local function selectTextToReplaceIt()
     -- alternative (pass app for this):
     -- local selected = app:selectMenuItem({ "Edit", "Select All" })
     -- if (not selected) then
-    --     print("failed to select all")
+    --     log:info("failed to select all")
     --     return
     -- end
 
@@ -76,7 +78,7 @@ function adjustBoxElement(focusedElement, app, callback)
         return
     end
     if focusedElement:attributeValue("AXDescription") == "Console prompt" then
-        -- print("FYI you didn't need adjustBoxElement... do you ever use it?")
+        -- log:info("FYI you didn't need adjustBoxElement... do you ever use it?")
         -- FYI if this is working here... then get rid of all of this "adjustBoxElement" code...
         -- already have what I need
         callback(focusedElement)
@@ -237,7 +239,7 @@ function AskOpenAICompletionBox()
                         function acceptBox()
                             -- Stop subscription too (and resume after?)
                             observe.skip = true
-                            print("accepting")
+                            log:info("accepting")
                             selectTextToReplaceIt()
                             hs.eventtap.keyStrokes(entireResponse)
                             observe.skip = false
@@ -274,7 +276,7 @@ function askAbout(userText, app, focusedElem, appendChunk)
     if params == nil then
         -- PRN automatic params? build system prompt off of app:name() and name of input box and then formulate a generic prompt?
         --   and treat getAppSpecificPromptAndParameters as an override?
-        print("Error: unknown app - no prompt available: " .. app:name())
+        log:error("Error: unknown app - no prompt available: " .. app:name())
         hs.alert.show("Error: unknown app - no prompt available: " .. app:name())
         return
     end
@@ -342,7 +344,7 @@ function askAbout(userText, app, focusedElem, appendChunk)
             if dataValue:match("^%s*%[DONE%]%s*$") then
                 -- IIUC this is openai specific? not sure why but it's coming back at end of response
                 if IS_LOGGING then
-                    print("DONE detected")
+                    log:info("DONE detected")
                 end
                 break
             end
@@ -366,7 +368,7 @@ function askAbout(userText, app, focusedElem, appendChunk)
                 --     this comes after stop reason (at least from openai)
                 --     no idea why this would be returned, it's not valid JSON?
             else
-                print("Error: failed to parse json (or no choices) for dataMessage", dataMessage)
+                log:error("Error: failed to parse json (or no choices) for dataMessage", dataMessage)
             end
         end
         -- PRN find a library to do this OR split out a testable lib of my own
@@ -403,12 +405,12 @@ function askAbout(userText, app, focusedElem, appendChunk)
             -- GOOD TEST CASE use ollama and make sure its not running! works nicely as is:
             hs.alert.show("Error in streaming request: " .. exitCode .. " see hammerspoon console logs")
             if stderr ~= "" then
-                print("completeCallback - STDERR: ", stderr)
+                log:info("completeCallback - STDERR: ", stderr)
             end
             if stdout ~= "" then
-                print("completeCallback - STDOUT: ", stdout)
+                log:info("completeCallback - STDOUT: ", stdout)
             end
-            print("completeCallback - Exit Code:", exitCode)
+            log:info("completeCallback - Exit Code:", exitCode)
         end
         -- TODO if STDERR not empty?
         -- should all output go to streaming callback unless I return false in it?
@@ -431,10 +433,10 @@ function askAbout(userText, app, focusedElem, appendChunk)
             -- GOOD TEST CASE use ollama and make sure its not running!
             hs.alert.show("Error in streaming request: " .. stderr .. " see hammerspoon console logs")
             if stdout ~= "" then
-                print("streamingCallback - STDOUT: ", stdout)
+                log:info("streamingCallback - STDOUT: ", stdout)
             end
             if stderr ~= "" then
-                print("streamingCallback - STDERR: ", stderr)
+                log:info("streamingCallback - STDERR: ", stderr)
             end
 
             -- TODO should I still try to process the chunk?
