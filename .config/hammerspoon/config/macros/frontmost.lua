@@ -1,3 +1,5 @@
+local log = require("config.logs").hammerspoons()
+
 ---@param menu string
 function PressMenuItemRegex(menu)
     PressMenuItem(menu, true)
@@ -15,7 +17,7 @@ function PressMenuItem(menu, is_regex)
         return
     end
 
-    print("Failed to SELECT menu item for " .. hs.inspect(menu))
+    log:error("Failed to SELECT menu item for ", menu)
 
     local menuItem = frontmostApp:findMenuItem(menu)
     -- menuItem has "enabled" and "ticked" fields
@@ -24,7 +26,7 @@ function PressMenuItem(menu, is_regex)
     if menuItem == nil then
         local debugFile = "~/.hammerspoon/menu-dump.lua"
         local message = "Failed to find menu item, dumping all menu items to " .. debugFile
-        print(message)
+        log:info(message)
         hs.alert.show(message)
         frontmostApp:getMenuItems(function(items)
             local file = io.open(resolve_home_path(debugFile), "w")

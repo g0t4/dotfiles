@@ -1,5 +1,6 @@
 local FcpxInspectorPanel = require("config.macros.fcpx.inspector_panel")
 local FcpxTopToolbar = require("config.macros.fcpx.top_toolbar")
+local log = require("config.logs").hammerspoons()
 
 ---@class FcpxEditorWindow
 ---@field window hs.axuielement
@@ -17,7 +18,7 @@ function FcpxEditorWindow:new()
     -- everything below top toolbar
     -- use _ to signal that it's not guaranteed to be there
     o._mainSplitGroup = o.window:childrenWithRole("AXSplitGroup")[1]
-    print("main split group", hs.inspect(o._mainSplitGroup))
+    log:info("main split group", hs.inspect(o._mainSplitGroup))
     o.inspector = FcpxInspectorPanel:new(o)
     return o
 end

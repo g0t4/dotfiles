@@ -1,3 +1,4 @@
+local log = require("config.logs").hammerspoons()
 local inspect = require("hs.inspect")
 
 function round(num, dp)
@@ -29,13 +30,13 @@ end
 function dump(...)
     -- ... declares 0+ args
     --  {... } collects the args into a var, so this is actually the rest like operator
-    print(inspect({ ... }))
+    log:info(inspect({ ... }))
 end
 
 function dump_with_metatables(...)
     -- TODO is this useful, need to find an example where I find it helpful...
     -- added this in theory to be useful
-    print(inspect({ ... }, { metatables = true }))
+    log:info(inspect({ ... }, { metatables = true }))
 end
 
 function get_function_source(func)

@@ -1,3 +1,5 @@
+local log = require("config.logs").hammerspoons()
+
 -- IIAC I added this so mods below apply correctly:
 local hsax = require("hs.axuielement")
 
@@ -78,7 +80,7 @@ function CachedElement.forApp(appName)
     end
     local appElement = hs.axuielement.applicationElement(app)
     if appElement == nil then
-        print("forApp - no app element for " .. app)
+        log:info("forApp - no app element for ", app)
         return nil
     end
     return CachedElement.new(appElement)

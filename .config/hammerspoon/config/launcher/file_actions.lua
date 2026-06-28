@@ -1,3 +1,4 @@
+local log = require("config.logs").launcher()
 local M = {}
 
 -- File actions menu for selected files (like Alfred's file actions)
@@ -8,8 +9,8 @@ local function getSelectedFiles()
     local app = hs.application.frontmostApplication()
     local appName = app and app:name() or ""
 
-    print("=== File Actions ===")
-    print("Frontmost app:", appName)
+    log:info("=== File Actions ===")
+    log:info("Frontmost app:", appName)
 
     if appName == "Finder" then
         -- Get Finder selection via AppleScript
@@ -36,13 +37,13 @@ local function getSelectedFiles()
                 local path = line:gsub("/$", "")
                 table.insert(paths, path)
             end
-            print("Finder selection:", #paths, "items")
+            log:info("Finder selection:", #paths, "items")
             return paths
         end
     end
 
     -- TODO: support other apps (e.g. Path Finder, Terminal, etc.)
-    print("No files selected or unsupported app:", appName)
+    log:warn("No files selected or unsupported app:", appName)
     return {}
 end
 
@@ -438,7 +439,7 @@ function M.init()
     hs.hotkey.bind({"alt", "cmd"}, "/", function()
         M.show()
     end)
-    print("File actions initialized (alt+cmd+/)")
+    log:info("File actions initialized (alt+cmd+/)")
 end
 
 return M

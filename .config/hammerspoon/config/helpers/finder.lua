@@ -8,7 +8,7 @@ function getSelectedFinderDirectories()
             table.insert(dirs, path)
         end
     end
-    -- print("selectedFinderDirectories", hs.inspect(dirs))
+    -- log:info("selectedFinderDirectories", hs.inspect(dirs))
     return dirs
 end
 
@@ -37,7 +37,7 @@ function getSelectedFinderPaths()
 
     -- btw applescript func returns lua compatible types (parses from func result) AFAICT (haven't looked yet :)
     local success, paths, _ = hs.osascript.applescript(script)
-    -- print("selectedFinderPaths", hs.inspect(paths))
+    -- log:info("selectedFinderPaths", hs.inspect(paths))
     if success and paths then
         return paths
     else

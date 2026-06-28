@@ -1,5 +1,6 @@
 local app = get_app_element_or_throw("com.screenpal.app")
-print("app", app)
+local log = require("config.logs").hammerspoons()
+log:info("app", app)
 local pid = app:pid()
 local observer = hs.axuielement.observer.new(pid)
 local types = hs.axuielement.observer.notifications
@@ -50,7 +51,7 @@ function on_notification(_observer, element, event_type, event_details)
     --
     --     desc = element:axRole() .. ": " .. tostring(desc)
     --
-    --     print("Focused element:", desc)
+    --     log:info("Focused element:", desc)
     --     observer:addWatcher(element, types.valueChanged)
     -- end
 
@@ -61,18 +62,18 @@ function on_notification(_observer, element, event_type, event_details)
 
 
     if event_type == types.titleChanged then
-        print("titleChanged:", element:axTitle())
+        log:info("titleChanged:", element:axTitle())
     elseif event_type == types.created then
-        print("created:", element)
+        log:info("created:", element)
     elseif event_type == types.uIElementDestroyed then
-        print("destroyed:", element)
+        log:info("destroyed:", element)
     elseif event_type == types.valueChanged then
         local value = element:axValue()
         if is_auto_save_spam(value) then
             -- skip, its one of the chattiest elements! drowns out everything
             return
         end
-        print("Value changed: '" .. tostring(value) .. "'", element)
+        log:info("Value changed: '" .. tostring(value) .. "'", element)
     else
         dump("cb", _observer, element, event_type, event_details)
     end
@@ -81,7 +82,7 @@ end
 observer:callback(on_notification)
 
 -- When focus changes, reattach to the newly focused element
-print("Entire system:", app)
+log:info("Entire system:", app)
 -- observer:addWatcher(app, types.valueChanged)
 -- observer:addWatcher(app, types.created)
 -- observer:addWatcher(app, types.uIElementDestroyed)

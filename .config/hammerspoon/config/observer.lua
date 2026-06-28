@@ -1,3 +1,5 @@
+local log = require("config.logs").hammerspoons()
+
 -- List of accessibility events to observe
 local events = {
     "AXUIElementCreated",
@@ -28,7 +30,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "O", function()
     end
 
     local app = hs.application.frontmostApplication()
-    print("[AXObserver] Watching accessibility events for:", app:name())
+    log:info("[AXObserver] Watching accessibility events for:", app:name())
     local appPID = app:pid()
     local appElement = hs.axuielement.applicationElement(app)
 
@@ -40,9 +42,9 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "O", function()
             -- PRN add more event type info dumps
         end
         if event_info == {} then
-            print(string.format("[AX EVENT] %s - %s", text, event))
+            log:info(string.format("[AX EVENT] %s - %s", text, event))
         else
-            print(string.format("[AX EVENT] %s - %s\n  %s", text, event, hs.inspect(event_info)))
+            log:info(string.format("[AX EVENT] %s - %s\n  %s", text, event, hs.inspect(event_info)))
         end
     end
 

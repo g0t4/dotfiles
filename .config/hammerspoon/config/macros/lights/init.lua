@@ -1,3 +1,5 @@
+local log = require("config.logs").hammerspoons()
+
 local function percent_to_dmx(percent)
     local value = math.floor(percent / 100 * 65535)
     local high = math.floor(value / 256)
@@ -42,16 +44,16 @@ end
 ---@param params { master: number, hue: number, saturation: number, lightness: number }
 local function set_hsl_16bit_channels(dmx_channels, channel_start, params)
     local master_high_byte, master_low_byte = percent_to_dmx(params.master)
-    print("master", master_high_byte, master_low_byte)
+    log:info("master", master_high_byte, master_low_byte)
 
     local hue_high_byte, hue_low_byte = hue_degrees_to_dmx(params.hue)
-    print("hue", hue_high_byte, hue_low_byte)
+    log:info("hue", hue_high_byte, hue_low_byte)
 
     local sat_high_byte, sat_low_byte = percent_to_dmx(params.saturation)
-    print("sat", sat_high_byte, sat_low_byte)
+    log:info("sat", sat_high_byte, sat_low_byte)
 
     local light_high_byte, light_low_byte = percent_to_dmx(params.lightness)
-    print("lightness", light_high_byte, light_low_byte)
+    log:info("lightness", light_high_byte, light_low_byte)
 
     dmx_channels[channel_start] = master_high_byte
     dmx_channels[channel_start + 1] = master_low_byte
@@ -82,13 +84,13 @@ function StreamDeckBuild26()
     --    i.e. can't I send just 21 to 28? and not need the empty commas in between?
     local dmx_string = table.concat(dmx_channels, ",")
     local cmd = "/opt/homebrew/bin/ola_set_dmx -u 1 --dmx " .. dmx_string
-    print(cmd)
+    log:info(cmd)
     hs.execute(cmd)
 end
 
 function StreamDeckDmxOff()
     -- DO NOT LEAVE SPACES BETWEEN the comma separate list of values... will not send everything after a space!
     local cmd = "/opt/homebrew/bin/ola_set_dmx -u 1 --dmx 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0"
-    print(cmd)
+    log:info(cmd)
     hs.execute(cmd)
 end

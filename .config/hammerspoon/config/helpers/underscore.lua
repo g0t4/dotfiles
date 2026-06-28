@@ -103,11 +103,11 @@ end
 --- usage:
 ---
 ---   M.each(hs.axuielement.observer.notifications, function(key, value)
----       print(" " .. key .. " => " .. value)
+---       log:info(" " .. key .. " => " .. value)
 ---   end)
 ---
 ---   M.each({ foo = "bar", baz = "qux" }, function(key, _)
----       print(key)
+---       log:info(key)
 ---   end)
 ---
 ---@generic TKey: string|integer

@@ -1,4 +1,5 @@
 local FcpxEditorWindow = require("config.macros.fcpx.editor_window")
+local log = require("config.logs").hammerspoons()
 
 ---@return hs.axuielement
 function GetFcpxAppElement()
@@ -11,7 +12,7 @@ function GetFcpxEditorWindow()
     local fcpx = GetFcpxAppElement()
     assert(fcpx, "GetFcpxEditorWindow: could not find Final Cut Pro")
     if fcpx:attributeValue("AXTitle") ~= APPS.FinalCutPro then
-        print("GetFcpxEditorWindow: unexpected title", fcpx:attributeValue("AXTitle"))
+        log:warn("GetFcpxEditorWindow: unexpected title", fcpx:attributeValue("AXTitle"))
         return nil
     end
 
@@ -56,7 +57,7 @@ function FcpxFindAndEnsureInspectorPanelIsOpen(checkbox_description, callback)
 
     local function show_respective_panel(_, searchTask, numResultsAdded)
         if numResultsAdded == 0 then
-            print("no " .. checkbox_description .. "panel found")
+            log:info("no " .. checkbox_description .. "panel found")
             return
         end
         local foundCheckbox = searchTask[1]
@@ -105,7 +106,7 @@ function FcpxTitlePanelChangeElemValue(delta, description)
         local val = elem:axValue()
         local new_value = tonumber(val) + tonumber(delta)
         local rounded_three_decimals = string.format("%.3f", new_value)
-        print(rounded_three_decimals)
+        log:info(rounded_three_decimals)
 
         -- seems slightly faster to type the new value? both work:
         -- elem:setAttributeValue("AXValue", rounded_three_decimals)
@@ -194,7 +195,7 @@ function StreamDeckFcpxViewerToggleComments()
         -- :menu(1):menuItem(37)
         -- criteria = { attribute = "AXTitle", value = "Show Captions" }
         -- FindOneElement(menu, criteria, function(_, menuButton, _)
-        --     print("found: ", inspect_html(menuButton))
+        --     log:info("found: ", inspect_html(menuButton))
         -- end)
     end
 

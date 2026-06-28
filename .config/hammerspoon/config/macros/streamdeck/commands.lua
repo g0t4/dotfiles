@@ -1,4 +1,5 @@
 -- FYI this is mostly a duplicate of the same module in the separate stremadeck controller repo
+local log = require("config.logs").hammerspoons()
 
 function runCommand(cmd)
     -- AVOID hs.execute and os.execute... PITA, can't see STDERR or not easily
@@ -7,14 +8,14 @@ function runCommand(cmd)
         local output = handle:read("*a")
         local succeeded, exitOrSignal, exitCode = handle:close()
         if not succeeded then
-            print("command failed: ", exitOrSignal,
+            log:error("command failed: ", exitOrSignal,
                 "exit code: " .. exitCode,
                 "output: ", output,
                 "command:", cmd)
         end
         return output
     end
-    print("command failed: could not open handle", cmd)
+    log:error("command failed: could not open handle", cmd)
     return nil
 end
 
@@ -27,7 +28,7 @@ function runKMMacro(macro, param)
     if param then
         command = command .. " -p '" .. param .. "'"
     end
-    print("exec KM: " .. command)
+    log:info("exec KM: " .. command)
 
     runCommand(command)
 end

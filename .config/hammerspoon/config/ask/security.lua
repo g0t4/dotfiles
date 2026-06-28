@@ -1,3 +1,5 @@
+local log = require("config.logs").hammerspoons()
+
 local M = {}
 
 function M.getSecret(accountName, serviceName)
@@ -11,12 +13,12 @@ function M.getSecret(accountName, serviceName)
 
     local handle = io.popen(command)
     if not handle then
-        print("Error: failed to get secret - handle is nil")
+        log:error("failed to get secret - handle is nil")
         return nil
     end
     local stdout = handle:read("*a")
     if not stdout then
-        print("Error: failed to get secret - stdout is nil")
+        log:error("failed to get secret - stdout is nil")
         return nil
     end
     handle:close()
@@ -24,7 +26,7 @@ function M.getSecret(accountName, serviceName)
     -- Trim surrounding whitespace (i.e. security output has newline)
     local trimmed = stdout:match("^%s*(.-)%s*$")
     if trimmed == "" then
-        print("Error: failed to get secret - trimmed is empty")
+        log:error("failed to get secret - trimmed is empty")
         return nil
     end
 

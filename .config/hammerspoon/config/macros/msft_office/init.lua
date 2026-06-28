@@ -1,3 +1,5 @@
+local log = require("config.logs").hammerspoons()
+
 --
 -- *** OFFICE RIBBON HELPERS ***
 
@@ -8,7 +10,7 @@ function MicrosoftOfficeGetRibbon(appName)
 
     local ribbonTabGroup = window:tabGroup(1)
     if ribbonTabGroup:attributeValue("AXDescription") ~= "ribbon" then
-        print("tab group name is not 'ribbon'... will proceed anyways, just heads up if there is a problem")
+        log:warn("tab group name is not 'ribbon'... will proceed anyways, just heads up if there is a problem")
     end
     return ribbonTabGroup
 end
@@ -22,11 +24,11 @@ function MicrosoftOfficeEnsureTabSelected(appName, tabName)
     -- ribbon's AXValueDescription has current tab's name
     local isAlreadyOpen = ribbon:attributeValue("AXValueDescription") == tabName
     if isAlreadyOpen then
-        print("tab already open: " .. tabName)
+        log:info("tab already open: " .. tabName)
 
         local ribbonIsCollapsed = ribbon:attributeValue("AXValue") == nil
         if ribbonIsCollapsed then
-            print("tab group is collapsed, clicking to expand")
+            log:info("tab group is collapsed, clicking to expand")
             ribbon:performAction("AXPress")
         end
 
@@ -50,11 +52,11 @@ function MicrosoftOfficeClickTabButtonByTitle(appName, tabName, buttonTitle)
     FindOneElement(ribbon, criteria, function(_, searchTask, numResultsAdded)
         -- WOW, 150ms to callback! much faster than manual search (which is also brittle)
         if numResultsAdded == 0 then
-            print("no button found with title: " .. quote(buttonTitle))
+            log:warn("no button found with title: " .. quote(buttonTitle))
             return
         end
         local found = searchTask[1]
-        print("found button with title: " .. quote(buttonTitle))
+        log:info("found button with title: " .. quote(buttonTitle))
 
         found:performAction("AXPress")
     end)

@@ -1,4 +1,5 @@
 local security = require("config.ask.security")
+local log = require("config.logs").hammerspoons()
 
 local M = {}
 
@@ -22,7 +23,7 @@ local function readServiceFile()
         file:close()
         return contents
     end
-    print("Error: failed to open", filePath)
+    log:error("Error: failed to open", filePath)
     return nil
 end
 
@@ -32,7 +33,7 @@ function M.getStoredService()
     --
     local contents = readServiceFile()
     if contents == nil then
-        print("Error: file appears to be empty", filePath)
+        log:error("Error: file appears to be empty", filePath)
         return nil
     end
     -- split on first space
@@ -46,7 +47,7 @@ end
 
 function M.getService()
     local stored = M.getStoredService()
-    -- print("stored", hs.inspect(stored))
+    -- log:info("stored", stored)
     if stored == nil then
         return nil
     end

@@ -1,3 +1,5 @@
+local log = require("config.logs").hammerspoons()
+
 local M = {}
 M.skip = false
 M.observer = nil
@@ -21,7 +23,7 @@ end
 
 M.startObserving = function()
     local app = hs.application.frontmostApplication()
-    print("[AXObserver] Watching ax events for ask-openai for app:", app:name())
+    log:info("[AXObserver] Watching ax events for ask-openai for app:", app:name())
     local appPID = app:pid()
     local appElement = hs.axuielement.applicationElement(app)
 

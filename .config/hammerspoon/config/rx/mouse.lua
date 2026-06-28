@@ -1,5 +1,6 @@
 local rx = require 'rx'
 local HammerspoonTimeoutScheduler = require("config.rx.hammerspoon_timeout_scheduler")
+local log = require("config.logs").hammerspoons()
 
 local M = {}
 
@@ -7,7 +8,7 @@ function M.mouseMovesObservable()
     local moves = rx.Subject.create()
 
     local mouseMoveWatcher = hs.eventtap.new({ hs.eventtap.event.types.mouseMoved }, function()
-        -- print("location", location.x, location.y)
+        -- log:info("location", location.x, location.y)
         -- we will always get current mouse position WHEN using it... that way it's never old in my case...
         --  really this is an alert "stream" that the mouse is moving, not a mouse event stream
         moves:onNext(true)
@@ -15,7 +16,7 @@ function M.mouseMovesObservable()
     end)
 
     local function stop()
-        print("stopping mouseMovesObservable")
+        log:info("stopping mouseMovesObservable")
         mouseMoveWatcher:stop()
     end
 
@@ -69,7 +70,7 @@ function M.mouseMovesThrottledObservable(delay_ms)
     local throttled = throttle(moves, delay_ms, scheduler)
 
     local function stop()
-        print("stopping mouseMovesThrottledObservable")
+        log:info("stopping mouseMovesThrottledObservable")
         -- this way, any pending timers are cancelled:
         scheduler:stop() -- immediately stop sending any more events
         stop_event_source() -- btw have to call after I stop the scheduler for some reason... otherwise onCompleted isn't passed along?
@@ -94,7 +95,7 @@ function M.mouseMovesDebouncedObservable(delay_ms)
     local debounced = moves:debounce(delay_ms, scheduler)
 
     local function stop()
-        print("stopping mouseMovesDebouncedObservable")
+        log:info("stopping mouseMovesDebouncedObservable")
         -- this way, any pending timers are cancelled:
         scheduler:stop() -- immediately stop sending any more events
         stop_event_source() -- btw have to call after I stop the scheduler for some reason... otherwise onCompleted isn't passed along?

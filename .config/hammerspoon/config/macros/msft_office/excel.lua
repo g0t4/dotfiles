@@ -1,3 +1,5 @@
+local log = require("config.logs").hammerspoons()
+
 function StreamDeckExcelEnsureTabOpen(tabName)
     MicrosoftOfficeEnsureTabSelected("Microsoft Excel", tabName)
 end
@@ -46,5 +48,5 @@ function StreamDeckExcelTestCellAccess()
     end
     -- TODO idea... click that fucking filter tiny ass button on top of column of current selected cell!
 
-    print("cell text: ", cellText(5, 3))
+    log:info("cell text: ", cellText(5, 3))
 end

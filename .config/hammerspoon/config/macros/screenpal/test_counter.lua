@@ -16,7 +16,7 @@ function Counter:wait(timeout)
     -- this counter is intended for testing scenarios with near 0 delays, not timing tests
     --  use TestTimer for intentional delays
     local ok = vim.wait(timeout or 1000, function()
-        -- print(self.count)
+        -- log:info(self.count)
         return self:is_done()
     end, 10)
     assert(ok, ("Counter not done after %d ms (count=%d should be 0)")

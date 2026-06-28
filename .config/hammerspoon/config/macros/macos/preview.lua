@@ -1,4 +1,5 @@
 local inspect = require "hs.inspect"
+local log = require("config.logs").hammerspoons()
 
 local function get_preview_app()
     return GetAppElement("com.apple.Preview")
@@ -50,7 +51,7 @@ function _PreviewApp_LineWeight(button_text_to_click)
 
         local button_on_popover = popover:button_by_description_matching(button_text_to_click)
         if button_on_popover then
-            print("found button")
+            log:info("found button")
             button_on_popover:axPress()
         end
     end

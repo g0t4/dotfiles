@@ -77,7 +77,7 @@ function ToolBarWindow:get_button_by_description_matching(lua_pattern)
     -- -- takes <3ms to find the button, that's fine for now, let's not cache controls
     local button = win:button_by_description_matching(lua_pattern)
     if button and not button:isValid() then
-        print("WARNING: Button matching pattern '" .. lua_pattern .. "' is not valid, unexpectedly... " .. hs.inspect(button))
+        log:warn("WARNING: Button matching pattern '" .. lua_pattern .. "' is not valid, unexpectedly... ", button)
         -- IIAC this would only happen if an OLD window was still valid that had an invalid button
         -- that does not seem likely, instead I would assume only the most recent window reference is valid
         -- ** DO NOT put this code into every element lookup, unless this happens with OK

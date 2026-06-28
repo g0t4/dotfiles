@@ -1,3 +1,5 @@
+local log = require("config.logs").hammerspoons()
+
 --
 -- *** load spoons from the repo so I can clone and update it using git and not one by one "install"
 --    wcl Hammerspoon/Spoons   # install/update spoons :)
@@ -20,10 +22,10 @@ function UpdateSpoonsRepo()
     local output, status, type, rc = hs.execute("/usr/bin/env fish --no-config -c 'cd $HOME/repos/github/Hammerspoon/Spoons && git pull'", true)
     if output ~= nil or output ~= "" then
         -- FYI OSC codes are printed, its fine
-        print("STDOUT:" .. tostring(output))
+        log:info("STDOUT:" .. tostring(output))
     end
     if rc ~= 0 then
-        print("Exit code: " .. status)
-        print("Type:      " .. type)
+        log:info("Exit code: " .. status)
+        log:info("Type:      " .. type)
     end
 end

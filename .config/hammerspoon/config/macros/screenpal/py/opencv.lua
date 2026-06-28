@@ -1,3 +1,5 @@
+local log = require("config.logs").hammerspoons()
+
 local M = {}
 
 local function _run(callback, python_script, imagePath)
@@ -9,13 +11,13 @@ local function _run(callback, python_script, imagePath)
         if exitCode == 0 and stdout then
             local ok, results = pcall(hs.json.decode, stdout)
             if ok then
-                -- print("results", hs.inspect(results))
+                -- log:info("results", results)
                 callback(results)
             else
-                print("JSON decode error: " .. tostring(stdout))
+                log:error("JSON decode error: ", stdout)
             end
         else
-            print("non-zero exitCode: '" .. tostring(exitCode)
+            log:info("non-zero exitCode: '" .. tostring(exitCode)
                 .. "' opencv running '" .. script .. "'"
                 .. "\nSTDOUT: " .. tostring(stdout)
                 .. "\nSTDERR: " .. tostring(stderr)

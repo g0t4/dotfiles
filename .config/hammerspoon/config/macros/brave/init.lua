@@ -1,3 +1,5 @@
+local log = require("config.logs").hammerspoons()
+
 -- *** ask-openai troubleshooting brave devtools randomly doesn't get selected text
 
 ---@return hs.axuielement
@@ -16,16 +18,16 @@ function GetBraveFocusedWindowElement()
 end
 
 local function PrintActions(elem)
-    print("ACTIONS:")
+    log:info("ACTIONS:")
     for i, n in pairs(elem:actionNames() or {}) do
-        print(n)
+        log:info(n)
     end
 end
 
 local function PrintAttributes(elem)
-    print("ATTRIBUTES:")
+    log:info("ATTRIBUTES:")
     for n, v in pairs(elem) do
-        print(n, hs.inspect(v))
+        log:info(n, hs.inspect(v))
     end
 end
 
@@ -113,7 +115,7 @@ function SearchForDevToolsTextArea(callbackWithSelectedText)
     -- local criteria = { attribute = "AXDescription", value = "Console prompt" } -- took 22s! ouch
     --    TODO!  DOES THIS GO FAST WHEN IT IS FOCUSED?! or was it random luck when I did same search over in adjustBoxElement? and found this immediately (4th control tested)
     -- local criteria = { attribute = "AXRole", value = "AXTextArea" }
-    -- print("searching")
+    -- log:info("searching")
 
     -- FYI AXWebArea('DevTools') => can find with both of these criteria:
     -- local criteria = { attribute = "AXRole", value = "AXWebArea" } -- 50 to 100ms! from focusedWindow
@@ -127,7 +129,7 @@ function SearchForDevToolsTextArea(callbackWithSelectedText)
                 return
             end
             if #results ~= 1 then
-                print("FYI found " .. #results .. ", expected 1")
+                log:info("FYI found " .. #results .. ", expected 1")
             end
 
             -- FYI this one is plenty to get selected text! and then we just type over the top!
@@ -143,7 +145,7 @@ function SearchForDevToolsTextArea(callbackWithSelectedText)
             --     function(_message, results, numResultsAdded)
             --         -- FINDING other AXTextArea's which is not surprising
             --         for i, elem in ipairs(results) do
-            --             print(i .. ": ", inspect_html(elem))
+            --             log:info(i .. ": ", inspect_html(elem))
             --             PrintActions(elem)
             --             PrintAttributes(elem)
             --             -- AXEditableAncestor	<userdata 1> -- hs.axuielement: AXTextArea (0x600006278f78)

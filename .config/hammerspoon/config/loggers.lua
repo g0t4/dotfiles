@@ -1,5 +1,7 @@
 --
 
+-- TODO consider setting up redirect to my hammerspoon.log file from hs console? like I do to mute initially (below)
+
 local M = {}
 local initialPrint = print
 function M.muteCoreMessages()
