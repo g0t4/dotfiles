@@ -70,7 +70,7 @@ function TimelineController:new(editor_window)
     self._playhead_timeline_relative_x = _playhead_timeline_relative_x
 
     -- log:info("playhead screen x: ", _playhead_screen_x)
-    log:info("_playhead_window", _playhead_window)
+    -- log:info("_playhead_window", _playhead_window)
 
     -- show_cmd_a_view_for_element(_playhead_window)
 
@@ -92,7 +92,7 @@ function TimelineController:new(editor_window)
     --  BUT I can see them fine with my inspector...
     --  anyways there's something funky here
     --  seems to be a new "popup" control between timeline time in posbar and the window... not sure I'd have to look at older version to see if it did it diff
-    log:info("time_string", time_string)
+    -- log:info("time_string", time_string)
     self.time_seconds = parse_time_to_seconds(time_string)
 
     return self
