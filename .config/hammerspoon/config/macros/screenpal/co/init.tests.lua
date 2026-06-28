@@ -96,6 +96,7 @@ describe("syncify", function()
                         -- without vim.wait, this scheduled event would fire AFTER coroutine.yield is called... but b/c of wait, this fires before!
                         --  why? b/c wait delays calling yield, meanwhile wait doesn't block event loop ... so, vim.scheduled events continue to fire! including this one
                         assert.equal(coroutine.status(co), "normal") -- if you drop vim.wait below then this will be suspended instead
+                        -- FYI this test case is to prove we hit our edge case scenario, it is a bit indirect but nonetheless important to test in advance (not to leave it uncertain b/c the assertion is insufficient)
                         cb()
                     end)
                     vim.wait(10) -- intentional vim.wait inside the syncify's call_this so yield isn't called before attempt to call resume
