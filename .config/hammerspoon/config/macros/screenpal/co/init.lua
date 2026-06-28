@@ -148,7 +148,7 @@ function syncify(call_this, ...)
         if not call_this_returned then
             -- this will happen with sync callbacks
             --  won't happen w/ async
-            log:info("FYI sync callback: `resume_once()` called before `coroutine.yield()`) ")
+            log:info("FYI sync callback: `resume_once()` called before `call_this` returned... and thus also before `coroutine.yield()`")
             -- FYI also means call_this is not done executing
             -- TODO how about wrap resume_once in sched() entirely so this logic never runs before call_this/yielded?
             -- ***! TLDR => the sched below turns a sync callback into async
