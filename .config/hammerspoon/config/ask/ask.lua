@@ -291,30 +291,8 @@ function askAbout(userText, app, focusedElem, appendChunk)
         max_tokens = service.max_tokens or params.max_tokens,
     })
 
-    local IS_LOGGING = false
-    local chunkLog = nil
-    if IS_LOGGING then
-        chunkLog = io.open(os.getenv("HOME") .. "/.hammerspoon/tmp/ask-openai-streaming-chunk-log.txt", "w")
-    end
-
-    local function logMessage(message)
-        if chunkLog then
-            chunkLog:write(message)
-            chunkLog:flush()
-        end
-    end
-
-    local function logClose()
-        if chunkLog then
-            chunkLog:close()
-        end
-    end
-    -- FYI double check logged lines with:
-    --    cat ask-openai-streaming-chunk-log.txt | grep '^\s*data:' | cut -c7- | jq ".choices[] | .delta.content " -r
-    --      make sure to log only once and with matching data: prefix
-
     -- TODO review prompts for when an extra end appears (i.e. in AppleScript, and/or extra/missing ) in JavaScript... must be smth in my prompt that's confusing)
-    logMessage(body)
+    log:info(body)
 
     if appendChunk == nil then
         -- TODO rewrite this to be a pre-handler of sorts? or move it out of this spot?
@@ -343,9 +321,7 @@ function askAbout(userText, app, focusedElem, appendChunk)
             -- check if it starts with data: [DONE], use regex to ignore whitespace diffs
             if dataValue:match("^%s*%[DONE%]%s*$") then
                 -- IIUC this is openai specific? not sure why but it's coming back at end of response
-                if IS_LOGGING then
-                    log:info("DONE detected")
-                end
+                log:info("DONE detected")
                 break
             end
 
@@ -392,12 +368,11 @@ function askAbout(userText, app, focusedElem, appendChunk)
             return true
         end
 
-        logMessage("## completeCallback\n")
-        logMessage("exitCode: " .. exitCode .. "\n")
-        logMessage("stdout:\n" .. stdout .. "\n")
-        logMessage("stderr:\n" .. stderr .. "\n")
-        logMessage("## end completeCallback\n")
-        logClose()
+        log:info("## completeCallback\n")
+        log:info("exitCode: " .. exitCode .. "\n")
+        log:info("stdout:\n" .. stdout .. "\n")
+        log:info("stderr:\n" .. stderr .. "\n")
+        log:info("## end completeCallback\n")
 
         if exitCode ~= 0 then
             -- test this: ollama set invalid url (delete c in completion)... then curl with --fail-with-body and see if can capture the error
@@ -423,15 +398,14 @@ function askAbout(userText, app, focusedElem, appendChunk)
             return true
         end
 
-        logMessage("## streamingCallback\n")
-        logMessage("stdout:\n" .. stdout .. "\n")
-        logMessage("stderr:\n" .. stderr .. "\n")
-        logMessage("## end streamingCallback\n")
+        log:info("## streamingCallback\n")
+        log:info("stdout:\n" .. stdout .. "\n")
+        log:info("stderr:\n" .. stderr .. "\n")
+        log:info("## end streamingCallback\n")
 
         if stderr ~= "" then
             -- log_elapsed("streaming callback")
             -- GOOD TEST CASE use ollama and make sure its not running!
-            hs.alert.show("Error in streaming request: " .. stderr .. " see hammerspoon console logs")
             if stdout ~= "" then
                 log:info("streamingCallback - STDOUT: ", stdout)
             end
