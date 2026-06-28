@@ -2,6 +2,7 @@ local log = require("config.logs").hammerspoons()
 -- FYI! always check resume result for failure!!!
 --   else wind up swallowing errors!
 
+--- ensure we are running inside a non main coroutine
 function run_async(what, ...)
     local running_thread, ismain = coroutine.running()
     log:info("ismain:", ismain, "|", "running_thread:", running_thread)
