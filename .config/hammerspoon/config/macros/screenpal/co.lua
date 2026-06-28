@@ -158,7 +158,7 @@ function syncify(call_this, ...)
             local status, err = coroutine.resume(co)
             -- log:info("syncify resume_once scheduled - status: ", vim.inspect(status), " err:", vim.inspect(err))
             if not status then
-                log:info("syncify resume_once scheduled: RESUME FAILED", err, "stacktrace:", get_stack_trace())
+                log:info("syncify coroutine.resume(co) FAILED", err, "stacktrace:", get_stack_trace())
             end
         end)
     end
