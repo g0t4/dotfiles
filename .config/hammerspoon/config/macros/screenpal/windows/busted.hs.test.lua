@@ -9,4 +9,4 @@ describe("FOO", function()
 end)
 
 -- failure to STDOUT => float window in nvim for <leader>hs
-assert.same("fuuu", true)
+-- assert.same("fuuu", true)
