@@ -29,7 +29,7 @@ local function get_trace(element, level, msg)
   return file and file.getTrace(file.name, info) or trimTrace(info)
 end
 
-local is_headless = require("plenary.nvim_meta").is_headless
+local is_headless = false
 
 -- We are shadowing print so people can reliably print messages
 print = function(...)
