@@ -18,7 +18,9 @@ function run_in_coroutine(what, ...)
     -- ONLY call resume once, let `what` manage subsequent yield/resume (or delegate it to helpers like sleep_ms and callbacker)
     local ok, err = coroutine.resume(co, ...)
     if not ok then
-        error("run_in_coroutine: failed resuming coroutine:" .. tostring(err))
+        local failure = "run_in_coroutine: failed resuming coroutine "
+        log:error(failure, err)
+        error(failure .. tostring(err))
     end
 end
 
