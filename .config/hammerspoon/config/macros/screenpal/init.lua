@@ -283,7 +283,7 @@ end
 
 ---@param callback fun(win: ScreenPalEditorWindow, silences: SilencesController)
 local function detect_silences(callback)
-    -- run_in_coroutine(function()
+    -- ensure_in_coroutine(function()
         local win = get_cached_editor_window()
 
         local timeline_element = win:get_timeline_slider_or_throw()
@@ -309,7 +309,7 @@ local function move_playhead_to_silence(win, silence)
 end
 
 function SPal_JumpToMiddleOfSilence()
-    run_in_coroutine(function()
+    ensure_in_coroutine(function()
         ---@type ScreenPalEditorWindow, SilencesController
         local win, silences = syncify(detect_silences)
         local silence = silences:get_this_silence()
@@ -325,7 +325,7 @@ function SPal_JumpThisSilence()
     --   that's why this keyboard shortcut should help
     --   PRN jump to and start a mute edit on next silence?
     --     observe what you are doing now and figure out what is most useful
-    run_in_coroutine(function()
+    ensure_in_coroutine(function()
         ---@type ScreenPalEditorWindow, SilencesController
         local win, silences = syncify(detect_silences)
         local silence = silences:get_this_silence()
@@ -334,7 +334,7 @@ function SPal_JumpThisSilence()
 end
 
 function SPal_JumpPrevSilence()
-    run_in_coroutine(function()
+    ensure_in_coroutine(function()
         ---@type ScreenPalEditorWindow, SilencesController
         local win, silences = syncify(detect_silences)
         local silence = silences:get_prev_silence()
@@ -347,7 +347,7 @@ function SPal_JumpNextSilence()
     --    else can get stuck
     --
     --  can happen if playhead goes to frame before silence starts
-    run_in_coroutine(function()
+    ensure_in_coroutine(function()
         ---@type ScreenPalEditorWindow, SilencesController
         local win, silences = syncify(detect_silences)
         local silence = silences:get_next_silence()
@@ -372,7 +372,7 @@ end
 
 function SPal_ActOnThisSilence_ThruStart(action_keystroke)
     -- TODO figure out if I have a use for this
-    run_in_coroutine(function()
+    ensure_in_coroutine(function()
         ---@type ScreenPalEditorWindow, SilencesController
         local win, silences = syncify(detect_silences)
         local silence = silences:get_this_silence()
@@ -388,7 +388,7 @@ end
 
 function SPal_ActOnThisSilence(action_keystroke)
     -- FYI this is entry point for streamdeck mute button that has double resume coroutine error - passes action_keystroke=MUTE_INWARD
-    run_in_coroutine(function()
+    ensure_in_coroutine(function()
         ---@type ScreenPalEditorWindow, SilencesController
         local win, silences = syncify(detect_silences)
         local silence = silences:get_this_silence()
@@ -397,7 +397,7 @@ function SPal_ActOnThisSilence(action_keystroke)
 end
 
 function SPal_ActOnThisSilence_ThruEnd(action_keystroke)
-    run_in_coroutine(function()
+    ensure_in_coroutine(function()
         ---@type ScreenPalEditorWindow, SilencesController
         local win, silences = syncify(detect_silences)
         local silence = silences:get_this_silence()
@@ -473,7 +473,7 @@ function SPal_Play(play_what, text)
         return
     end
 
-    run_in_coroutine(function()
+    ensure_in_coroutine(function()
         ---@type ScreenPalEditorWindow, SilencesController
         local win, silences = syncify(detect_silences)
         local timeline = win:timeline_controller()
@@ -561,7 +561,7 @@ end
 ---@param seconds number
 function WIP_SPal_Preview_Seconds(seconds)
     -- run from anywhere, not just with silences
-    run_in_coroutine(function()
+    ensure_in_coroutine(function()
         local win = get_cached_editor_window()
         -- 2. jump back (for preview)
         local timeline = win:timeline_controller()
@@ -572,7 +572,7 @@ end
 
 function WIP_SPal_OK_then_Preview()
     -- run from anywhere, not just with silences
-    run_in_coroutine(function()
+    ensure_in_coroutine(function()
         -- 1.press ok
         local win = get_cached_editor_window()
         win.windows:get_tool_window():wait_for_ok_button_then_press_it()
@@ -586,7 +586,7 @@ end
 function WIP_SPal_Cut_then_Mute_then_Preview()
     -- WOW this is so cool, first thing I used it on, was PERFECT afterwards!
     --  TODO need the adjust existing silence buttons that open the silence, adjust it and preview it
-    run_in_coroutine(function()
+    ensure_in_coroutine(function()
         -- 1. most common cut duration... 20 and confirm with _OK
         ---@type ScreenPalEditorWindow, SilencesController
         local win, silences = syncify(detect_silences)
@@ -653,7 +653,7 @@ end
 ---@param shape_type ShapeType
 function SPAL_Add_Shape(shape_type)
     -- formerly startOverlayShapeOfType
-    run_in_coroutine(function()
+    ensure_in_coroutine(function()
         _click2LevelTool("Overlay", "Shape") -- FYI WORKING!
 
         -- * set shape type
@@ -823,7 +823,7 @@ function SPAL_Sound_Music()
 end
 
 function SPal_Mute_Inward_With_Preview()
-    run_in_coroutine(function() -- FYI w/o run_in_coroutine wrapper the p key will fire early and never trigger preview b/c it happens before ActOnThisSilence completes
+    ensure_in_coroutine(function() -- FYI w/o ensure_in_coroutine wrapper the p key will fire early and never trigger preview b/c it happens before ActOnThisSilence completes
         SPal_ActOnThisSilence('MUTE_INWARD')
         hs.eventtap.keyStroke({}, "p")
         -- PRN after preview stops => put playhead back on end of silence range?
@@ -831,7 +831,7 @@ function SPal_Mute_Inward_With_Preview()
 end
 
 function SPal_Mute_Inward_Then_OK_Then_Preview()
-    run_in_coroutine(function()
+    ensure_in_coroutine(function()
         ---@type ScreenPalEditorWindow, SilencesController
         local win, silences = syncify(detect_silences)
         local silence = silences:get_this_silence()
@@ -873,7 +873,7 @@ end
 function _Spal_OpenSilence_Then(adjust_callback)
     -- FYI! this now detects if an edit tool is open or not (only opens if NOT)
     --   AND currently assumes want to open Volume edit if not (could parameterize type)
-    run_in_coroutine(function()
+    ensure_in_coroutine(function()
         -- PRN if I want to open _NEAREST_ volume edit then get silences to figure that out...
         -- for now just assume playhead is over a volume edit
 
@@ -954,7 +954,7 @@ function SPal_AdjustSelection(side, num_frames, text)
     --
     -- unique ref: app:window('SOM-FloatingWindow-Type=edit2.overlayeditfloat-ZOrder=1(Undefined+1)')
 
-    run_in_coroutine(function()
+    ensure_in_coroutine(function()
         ---@type ScreenPalEditorWindow, SilencesController
         local win, silences = syncify(detect_silences)
         local timeline = win:timeline_controller()
@@ -1065,7 +1065,7 @@ local function silences_are_visible()
 end
 
 function SPal_ShowSilenceRegions()
-    run_in_coroutine(function()
+    ensure_in_coroutine(function()
         if silences_are_visible() then
             hide_silences()
             return
@@ -1160,8 +1160,8 @@ function SPal_CopyThisEdit(number)
 end
 
 function SPal_Timeline_ZoomAndJumpToStart()
-    -- FYI using run_in_coroutine (coroutines under hood) to avoid blocking (i.e. during sleep calls)
-    run_in_coroutine(function()
+    -- FYI using ensure_in_coroutine (coroutines under hood) to avoid blocking (i.e. during sleep calls)
+    ensure_in_coroutine(function()
         local win = get_cached_editor_window()
         -- TODO move zoom controls to timeline class?
         -- TODO then can add move_to_video_start() for this, to the timeline too
@@ -1177,7 +1177,7 @@ function SPal_Timeline_ZoomAndJumpToStart()
 end
 
 function SPal_Timeline_ZoomAndJumpToEnd()
-    run_in_coroutine(function()
+    ensure_in_coroutine(function()
         local win = get_cached_editor_window()
         win:zoom_off()
         sleep_ms(10)

@@ -302,7 +302,7 @@ end
 function ScreenPalEditorWindow:reopen_project(restart)
     restart = restart or false
 
-    run_in_coroutine(function()
+    ensure_in_coroutine(function()
         local win = get_cached_editor_window()
         local original_zoom_level = self:timeline_controller():zoom_level()
 

@@ -14,7 +14,7 @@ local function DONE_test_click_rounding()
     local playhead_x = timeline:get_current_playhead_timeline_relative_x()
     local start_x = 816.5
 
-    run_in_coroutine(function()
+    ensure_in_coroutine(function()
         -- *** TAKEAWAY, be at least 0.5 to the right of the frame you want to land on
         --   and that makes sense...
         --   frames are landing on fraction of a pixel, i.e. 816.5

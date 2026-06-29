@@ -14,7 +14,7 @@ require("config.macros.screenpal.co")
 local TestTimer = require("config.macros.screenpal.co.tests.timer")
 local Counter = require("config.macros.screenpal.co.tests.counter")
 
--- FYI alternative is to use async module, but I am happy with my run_in_coroutine
+-- FYI alternative is to use async module, but I am happy with my ensure_in_coroutine
 -- local async = require('plenary.async.tests')
 
 describe("TODO what was original purpose for this test???", function()
@@ -22,11 +22,11 @@ describe("TODO what was original purpose for this test???", function()
     --   IOTW review test categories and coverage of scenarios
     --   by the way I am happy with Counter and syncify categories below, so maybe move this into syncify if that's what it is covering
     --   AND/OR setup describe("sleep_ms") tests
-    skip("test run_in_coroutine + TestTimer works, bypasses creating coroutine", function()
-        -- !!! MUST wrap with run_in_coroutine for _busted_ test runner to work
+    skip("test ensure_in_coroutine + TestTimer works, bypasses creating coroutine", function()
+        -- !!! MUST wrap with ensure_in_coroutine for _busted_ test runner to work
         -- - b/c busted (standalone cmd) runs tests in main thread! and thus the yield in sleep_ms blows up on the main thread (cannot yield/resume the main coroutine/thread)
-        -- BTW plenary's runner (in nvim) does not run tests in main coroutine... so it will work w/o run_in_coroutine (but leave this here to be compat with busted)
-        run_in_coroutine(function()
+        -- BTW plenary's runner (in nvim) does not run tests in main coroutine... so it will work w/o ensure_in_coroutine (but leave this here to be compat with busted)
+        ensure_in_coroutine(function()
             local timer = TestTimer:new(250)
             sleep_ms(250)
             timer:stop()
@@ -37,14 +37,14 @@ end)
 local stop_after_this = only
 
 describe("syncify", function()
-    -- TODO! should syncify just be about callback only? was there another purpose (i.e. did I originally mash up run_in_coroutine+syncify into one func? if so then strip syncify to the bear minimum just to support sync looking callback (assume in coroutine/thread when its used, throw if not)
+    -- TODO! should syncify just be about callback only? was there another purpose (i.e. did I originally mash up ensure_in_coroutine+syncify into one func? if so then strip syncify to the bear minimum just to support sync looking callback (assume in coroutine/thread when its used, throw if not)
 
     describe("reproduce double resume", function()
         it("due to sync callback", function()
-            -- FYI double run_in_coroutine (run_in_coroutine in run_in_coroutine) doesn't matter for this bug
+            -- FYI double ensure_in_coroutine (ensure_in_coroutine in ensure_in_coroutine) doesn't matter for this bug
             -- FYI error is only visible in logs right now given async nature
             --   TODO make test fail on double resume
-            run_in_coroutine(function()
+            ensure_in_coroutine(function()
                 local result1, result2, result3 = syncify(function(cb)
                     -- vim.schedule(function()
                     cb(3, 4, 5)
@@ -58,7 +58,7 @@ describe("syncify", function()
     end)
 
     it("syncify returns multiple args unpacked", function()
-        run_in_coroutine(function()
+        ensure_in_coroutine(function()
             local result1, result2, result3 = syncify(function(cb)
                 vim.schedule(function()
                     cb(3, 4, 5)
@@ -74,7 +74,7 @@ describe("syncify", function()
     it("sync, immediate callbacks work", function()
         -- YES!!! we have the warning here! this is what I wanted to reproduce!
         --   WARNING - callback invoked resume before yielded, allowing resume
-        run_in_coroutine(function()
+        ensure_in_coroutine(function()
             local counter = Counter:new()
             counter:increment()
             syncify(function(cb)
@@ -89,7 +89,7 @@ describe("syncify", function()
 
     describe("works with vim.defer_fn", function()
         stop_after_this("fails if resume would be called when coroutine is not suspeneded...", function()
-            run_in_coroutine(function()
+            ensure_in_coroutine(function()
                 local co, ismain = coroutine.running()
                 syncify(function(cb)
                     vim.schedule(function()
@@ -105,7 +105,7 @@ describe("syncify", function()
         end)
 
         it("syncify completes and returns value", function()
-            run_in_coroutine(function()
+            ensure_in_coroutine(function()
                 local counter = Counter:new()
                 counter:increment()
                 local result = syncify(function(cb)
@@ -120,7 +120,7 @@ describe("syncify", function()
             end)
         end)
         it("syncify twice completes and returns value", function()
-            run_in_coroutine(function()
+            ensure_in_coroutine(function()
                 local counter = Counter:new()
                 counter:increment()
                 counter:increment()
@@ -143,11 +143,11 @@ describe("syncify", function()
             -- TODO do I want this test too?
             --  my inclination was to add it to make sure it fails too
             --  but it does overlap with other Counter timeout above so long term maybe nuke if not needed
-            --  TODO review syncify/run_in_coroutine and make sure you understand if this test is needed, keep it for now
+            --  TODO review syncify/ensure_in_coroutine and make sure you understand if this test is needed, keep it for now
             assert.has_error(function()
                 local counter = Counter:new()
                 counter:increment()
-                run_in_coroutine(function()
+                ensure_in_coroutine(function()
                     syncify(function(cb)
                         vim.schedule(function()
                             -- counter:decrement() -- this is the difference vs test above
