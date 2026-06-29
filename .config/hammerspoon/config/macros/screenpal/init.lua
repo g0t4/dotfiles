@@ -215,7 +215,7 @@ function act_on_silence(win, silence, action)
         start_tool_key = 'v'
     end
     hs.eventtap.keyStroke({}, start_tool_key, 0, win.app)
-    win.windows:get_tool_window():wait_for_an_open_edit_tool()
+    win.windows:get_tool_bar_window():wait_for_an_open_edit_tool()
 
     -- * set tool start
     hs.eventtap.keyStroke({}, "s", 0, win.app)
@@ -226,7 +226,7 @@ function act_on_silence(win, silence, action)
     timeline:move_playhead_to(timeline_relative_x_end)
     hs.eventtap.keyStroke({}, "e", 0, win.app)
     -- FYI never needed a wait here previously:
-    win.windows:get_tool_window():wait_for_ok_button() -- by now we have a range, so the OK button should be visible
+    win.windows:get_tool_bar_window():wait_for_ok_button() -- by now we have a range, so the OK button should be visible
 
     if is_mute then
         local menu = VolumeMenu.new(win.windows)
@@ -253,17 +253,17 @@ function act_on_silence(win, silence, action)
         hs.mouse.absolutePosition(original_mouse_pos) -- 0.2ms
         hs.timer.usleep(_10ms)
 
-        win.windows:get_tool_window():wait_for_ok_button_then_press_it()
+        win.windows:get_tool_bar_window():wait_for_ok_button_then_press_it()
 
         -- * insert pause auto-approved
         SPAL_Insert_Pause()
-        win.windows:get_tool_window():wait_for_ok_button_then_press_it()
+        win.windows:get_tool_bar_window():wait_for_ok_button_then_press_it()
         return
     end
 
     if is_auto_approve then
         -- PRN wait to make sure OK is visible (sometimes there is a lag and at least with volume tool, hitting Enter before will be accepted but will disappear the edit!)
-        win.windows:get_tool_window():wait_for_ok_button_then_press_it()
+        win.windows:get_tool_bar_window():wait_for_ok_button_then_press_it()
     end
 
     if is_cut and is_auto_approve then
@@ -575,7 +575,7 @@ function WIP_SPal_OK_then_Preview()
     ensure_in_coroutine(function()
         -- 1.press ok
         local win = get_cached_editor_window()
-        win.windows:get_tool_window():wait_for_ok_button_then_press_it()
+        win.windows:get_tool_bar_window():wait_for_ok_button_then_press_it()
         -- 2. jump back (for preview)
         local timeline = win:timeline_controller()
         timeline:move_playhead_by_seconds(-1)
@@ -601,7 +601,7 @@ function WIP_SPal_Cut_then_Mute_then_Preview()
         local silence = silences:get_this_silence()
         act_on_silence(win, silence, CUT_20_OK) -- TODO this has to be syncified... how else would you wait for it to complete?
 
-        -- local tool_win = win.windows:get_tool_window()
+        -- local tool_win = win.windows:get_tool_bar_window()
         -- log:info("tool_win", tool_win)
         -- tool_win:wait_for_tools_button()
         -- sleep_ms(100) -- slight delay needed right now... TODO find something to wait on (i.e. toolbar?)
@@ -691,7 +691,7 @@ function _click2LevelTool(mainMenuItem, subMenuItem)
 
     -- * click Tools button (opens tools menu)
     local win = get_cached_editor_window()
-    local tool_win = win.windows:get_tool_window()
+    local tool_win = win.windows:get_tool_bar_window()
     tool_win:wait_for_tools_button_then_press_it()
 
     -- * click main menu entry
@@ -878,7 +878,7 @@ function _Spal_OpenSilence_Then(adjust_callback)
         -- for now just assume playhead is over a volume edit
 
         local win = get_cached_editor_window()
-        local tool_win = win.windows:get_tool_window()
+        local tool_win = win.windows:get_tool_bar_window()
         -- if any edit tool is open => assume it's volume edit tool or another compatible tool
         if not tool_win:is_an_edit_tool_open() then
             -- if no edit tool is open => open first volum edit
@@ -1080,7 +1080,7 @@ end
 function SPal_OpenThisEdit(number)
     number = number or 1
     local win = get_cached_editor_window()
-    local tool_window = win.windows:get_tool_window()
+    local tool_window = win.windows:get_tool_bar_window()
 
     -- * assume open edit == targeted edit
     if tool_window:get_ok_accept_this_edit_button() then
@@ -1102,7 +1102,7 @@ function SPal_PreviewThisEdit(number)
 
     -- * assume open edit == the edit to preview
     local win = get_cached_editor_window()
-    local tool_window = win.windows:get_tool_window()
+    local tool_window = win.windows:get_tool_bar_window()
 
     -- * click preview
     local preview_button = tool_window:get_preview_this_edit_button()
@@ -1120,7 +1120,7 @@ function SPal_RemoveThisEdit(number)
 
     -- * assume open edit == the edit to remove
     local win = get_cached_editor_window()
-    local tool_window = win.windows:get_tool_window()
+    local tool_window = win.windows:get_tool_bar_window()
 
     -- * click copy overlay
     local remove_button = tool_window:get_remove_this_edit_button()
@@ -1142,7 +1142,7 @@ function SPal_CopyThisEdit(number)
 
     -- * assume open edit == the edit to copy
     local win = get_cached_editor_window()
-    local tool_window = win.windows:get_tool_window()
+    local tool_window = win.windows:get_tool_bar_window()
 
 
     -- * click copy overlay

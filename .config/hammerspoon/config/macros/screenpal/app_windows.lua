@@ -36,7 +36,7 @@ function AppWindows:_ensure_loaded()
     end
 end
 
-function AppWindows:get_tool_window()
+function AppWindows:get_tool_bar_window()
     return ToolBarWindow.new(self)
 end
 

@@ -17,7 +17,7 @@ app = get_app_element_or_throw("com.screenpal.app")
 wins = AppWindows.new(app)
 wins:_refresh()
 log:info(wins)
-tool_win = wins:get_tool_window()
+tool_win = wins:get_tool_bar_window()
 log:info(tool_win)
 -- TODO! just use this script style for now is FINE!
 
