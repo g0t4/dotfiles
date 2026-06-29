@@ -60,6 +60,7 @@ local function test_paths(paths, opts)
         res.job_id = vim.api.nvim_open_term(res.bufnr, {})
         vim.api.nvim_buf_set_keymap(res.bufnr, "n", "q", ":q<CR>", {})
 
+        harness.last_res = res
         vim.api.nvim_win_set_option(res.win_id, "winhl", "Normal:Normal")
         vim.api.nvim_win_set_option(res.win_id, "conceallevel", 3)
         vim.api.nvim_win_set_option(res.win_id, "concealcursor", "n")
@@ -244,6 +245,10 @@ end
 function run_hammerspoon_tests()
     local current_file = vim.fn.expand('%:p')
     test_paths({ Path:new(current_file) })
+
+    -- close window for now?
+    log:info("win_id", harness.last_res.win_id)
+    vim.api.nvim_win_hide(harness.last_res.win_id)
 end
 
 function harness.setup()
