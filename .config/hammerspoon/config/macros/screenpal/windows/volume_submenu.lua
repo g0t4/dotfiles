@@ -50,13 +50,13 @@ function VolumeSubmenu:_wait_for_button_by_description(description)
         -- TODO wait for volume submenu! don't just check the first time!
         local win = self:find_volume_submenu_window()
         if not win then
-            local fail = "Volume submenu window not found"
-            log:error(fail)
-            error(fail)
+            log:info("Volume submenu window not found")
+            return
         end
         local button = win:button_by_description(description)
         if button and not button:isValid() then
             log:error("WARNING: Button '" .. description .. "' is not valid, unexpectedly... ", button)
+            -- TODO error here if it means it will always fail after this
         end
         return button
     end
