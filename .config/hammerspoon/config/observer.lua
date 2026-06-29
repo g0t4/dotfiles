@@ -44,7 +44,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "O", function()
         if event_info == {} then
             log:info(string.format("[AX EVENT] %s - %s", text, event))
         else
-            log:info(string.format("[AX EVENT] %s - %s\n  %s", text, event, hs.inspect(event_info)))
+            log:info(string.format("[AX EVENT] %s - %s\n  %s", text, event, event_info))
         end
     end
 

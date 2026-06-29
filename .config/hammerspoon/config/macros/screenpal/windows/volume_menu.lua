@@ -65,7 +65,7 @@ function VolumeMenu:get_button_by_description(description)
     -- takes <3ms to find the button, that's fine for now, let's not cache controls
     local button = win:button_by_description(description)
     if button and not button:isValid() then
-        log:info("WARNING: Button '" .. description .. "' is not valid, unexpectedly... " .. hs.inspect(button))
+        log:info("WARNING: Button '" .. description .. "' is not valid, unexpectedly... ", button)
     end
 
     if not button then

@@ -138,7 +138,7 @@ function act_on_silence(win, silence, action)
     end
     local original_mouse_pos = hs.mouse.absolutePosition() -- first one can be expensive 100ms, cheap (0 to 1ms max) thereafter
 
-    -- log:info("act_on_silence: '" .. tostring(action) .. "' on '" .. hs.inspect(silence) .. "'")
+    -- log:info("act_on_silence: '", action, "on", silence)
 
     -- perhaps add more params to act_on_silence?
     local is_cut = action:find("CUT_") -- keep trailing _ so it is easier to search for CUT_

@@ -59,7 +59,7 @@ end
 
 axuielemMT.dumpAttributes = function(self)
     f.each(self:allAttributeValues() or {}, function(name, value)
-        log:info(name, hs.inspect(value))
+        log:info(name, value)
     end)
 end
 
@@ -791,7 +791,7 @@ function wait_for_element_then_press_it(search_func, interval_ms, max_cycles, na
     local elem = wait_for_element(search_func, interval_ms, max_cycles, name)
     if elem then
         local success, err = elem:performAction("AXPress")
-        -- log:info("AXPress result: " .. hs.inspect(success) .. ", err: " .. hs.inspect(err)) -- PRN add to log file! and check for success to be true (or it will be the error) or the error will be nil! - I think I was wrong about this being an
+        -- log:info("AXPress result: ", success, ", err: ", err)
         if not success then
             -- FINALLY a central spot to log this, I keep forgetting to check this when I try to use actions!
             log:info("failed to AXPress elem", elem, err)

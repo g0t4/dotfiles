@@ -52,7 +52,7 @@ function VolumeSubmenu:wait_for_button_by_description(description)
     end
     local button = win:button_by_description(description)
     if button and not button:isValid() then
-        log:error("WARNING: Button '" .. description .. "' is not valid, unexpectedly... " .. hs.inspect(button))
+        log:error("WARNING: Button '" .. description .. "' is not valid, unexpectedly... ", button)
     end
     return button
 end

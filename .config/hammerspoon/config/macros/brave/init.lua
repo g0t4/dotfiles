@@ -27,7 +27,7 @@ end
 local function PrintAttributes(elem)
     log:info("ATTRIBUTES:")
     for n, v in pairs(elem) do
-        log:info(n, hs.inspect(v))
+        log:info(n, v)
     end
 end
 

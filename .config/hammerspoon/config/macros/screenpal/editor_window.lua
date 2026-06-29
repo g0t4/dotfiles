@@ -200,18 +200,18 @@ function ScreenPalEditorWindow:zoom_off()
     end
 
     -- local win = get_cached_editor_window()
-    -- log:info("before min", hs.inspect(win._btn_minimum_zoom:axFrame()))
-    -- log:info("med", hs.inspect(win._btn_minimum_zoom:axFrame()))
-    -- log:info("max", hs.inspect(win._btn_minimum_zoom:axFrame()))
+    -- log:info("before min", win._btn_minimum_zoom:axFrame())
+    -- log:info("med", win._btn_minimum_zoom:axFrame())
+    -- log:info("max", win._btn_minimum_zoom:axFrame())
 
     hs.eventtap.keyStroke({}, "m", 0, get_screenpal_app_element_or_throw())
     -- FYI only add delay if you have a scenario that's broken, don't prematurely add this
 
     -- FYI whenever I check here, it's always 0,0 already... might be b/c zoom is fast... TODO need to find a way to verify if this is a legit test (for when zooming out/in is actually done)
     -- local win = get_cached_editor_window()
-    -- log:info("min", hs.inspect(win._btn_minimum_zoom:axFrame()))
-    -- log:info("med", hs.inspect(win._btn_minimum_zoom:axFrame()))
-    -- log:info("max", hs.inspect(win._btn_minimum_zoom:axFrame()))
+    -- log:info("min", win._btn_minimum_zoom:axFrame())
+    -- log:info("med", win._btn_minimum_zoom:axFrame())
+    -- log:info("max", win._btn_minimum_zoom:axFrame())
     --
     --
     -- log:info("waitUNTIL")
@@ -219,7 +219,7 @@ function ScreenPalEditorWindow:zoom_off()
     --     log:info("tick")
     --     if self._btn_minimum_zoom then
     --         local frame = self._btn_minimum_zoom:axFrame()
-    --         log:info("  frame", hs.inspect(frame))
+    --         log:info("  frame", frame)
     --         return frame.x == 0 and frame.y == 0
     --     end
     --     return false

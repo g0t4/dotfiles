@@ -18,7 +18,7 @@ function FcpxEditorWindow:new()
     -- everything below top toolbar
     -- use _ to signal that it's not guaranteed to be there
     o._mainSplitGroup = o.window:childrenWithRole("AXSplitGroup")[1]
-    log:info("main split group", hs.inspect(o._mainSplitGroup))
+    log:info("main split group", o._mainSplitGroup)
     o.inspector = FcpxInspectorPanel:new(o)
     return o
 end

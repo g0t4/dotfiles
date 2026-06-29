@@ -2215,9 +2215,9 @@ local function onChoice(choice)
 
     -- Log for debugging
     log:info("=== onChoice callback ===")
-    log:info("choice:", hs.inspect(choice))
+    log:info("choice:", choice)
     local modifiers = hs.eventtap.checkKeyboardModifiers()
-    log:info("modifiers:", hs.inspect(modifiers))
+    log:info("modifiers:", modifiers)
     log:info("========================")
 
     if not choice then
