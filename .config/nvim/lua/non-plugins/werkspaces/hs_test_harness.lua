@@ -83,20 +83,16 @@ local function test_paths(paths, opts)
     local jobs = vim.tbl_map(function(p)
         log:info(vim.fn.escape(plenary_dir, " "))
 
-        local args = {
-            -- "--headless",
-            -- "-c",
-            -- "set rtp+=.," .. vim.fn.escape(plenary_dir, " ") .. " | runtime plugin/plenary.vim",
-            --
-            --  FYI I can add lua statements to run before the file by using `-c <lua>`:
-            -- "-c",
-            -- "print('this runs first before passed file executes')",
-        }
+        local args = {}
 
-        -- TODO get running busted style tests working using plenary runner (or otherwise):
+        -- TODO? run plenary.busted style tests instead of just code file?
+        -- FYI get this working in a test file first, easier to type out there and then migrate to -c arg here
+        --  TODO or have some code file that you pass to hs too that prepares env before test file is run?
+        -- table.insert(args, "-c")
+        -- "set rtp+=.," .. vim.fn.escape(plenary_dir, " ") .. " | runtime plugin/plenary.vim",
         -- table.insert(args, "-c")
         -- table.insert(args, string.format('lua require("plenary.busted").run("%s")', p:absolute():gsub("\\", "\\\\")))
-        --
+
         -- * just execute lua code (not unit test style yet) *
         -- hammerspoon accepts lua files to execute too:
         table.insert(args, p:absolute())
