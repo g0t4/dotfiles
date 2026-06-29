@@ -32,7 +32,7 @@ log:info(volume_menu)
 volume_menu:wait_for_volume_to_be_muted() -- TODO anything in here that would not wait appropriately to pull off the volume menu clicking to mute? .. i.e. skip waiting for submenu to appear and just rely on first access to work?
 
 -- * test act_on_silence(MUTE_INWARD)
-SPal_ActOnThisSilence('MUTE_INWARD')
+-- SPal_ActOnThisSilence('MUTE_INWARD') -- streamdeck button triggers this
 -- TODO wait for this to be slow again... right now mute is super fast even though I haven't accepted a mute edit so the mute button has to be changed every time... and all are curently fast ... will see if delays creep up later
 
 -- TODO! just use this script style for now is FINE!
