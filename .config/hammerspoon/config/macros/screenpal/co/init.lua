@@ -13,7 +13,7 @@ function run_in_coroutine(what, ...)
         return
     end
 
-    log:info("creating coroutine (thread)...")
+    -- log:info("creating coroutine (thread)...")
     local co = coroutine.create(what)
     -- ONLY call resume once, let `what` manage subsequent yield/resume (or delegate it to helpers like sleep_ms and callbacker)
     local ok, err = coroutine.resume(co, ...)
@@ -143,7 +143,7 @@ function syncify(call_this, ...)
     local need_to_yield = true
     local function resume_once()
         if resume_once_called then
-            log:warn("syncify resume_once - SKIP b/c ALREADY RESUMED")
+            log:warn("syncify resume_once called 2+ times, that shouldn't happen, ignoring this call...")
             return
         end
         resume_once_called = true
@@ -153,7 +153,7 @@ function syncify(call_this, ...)
             --   that is outside of what I intended to support in syncify (mostly a callback => sync tool... CST)... no plans to support vim.wait in the call_this
             --   that said, instead of letting things explode, check assumption that it is ok to resume here
             local status = coroutine.status(co)
-            log:info("coroutine status before resume:", status)
+            -- log:info("coroutine status before resume:", status)
             if status ~= "suspended" then
                 -- log:info("coroutine is not yet suspended")
                 -- NBD now as we handle that gracefully!
@@ -163,15 +163,14 @@ function syncify(call_this, ...)
             end
             local status, err = coroutine.resume(co)
             if not status then
-                log:info("syncify unhandled exception in coroutine (after resume):\n\t", err, "\nstacktrace:", get_stack_trace())
+                log:error("syncify unhandled exception in coroutine (after resume):\n\t", err, "\nstacktrace:", get_stack_trace())
             end
         end)
     end
 
     local function after_call_this(...)
         captured_args = { ... }
-        log:info("syncify call_this captured_args", captured_args)
-        -- FYI captured_args are returned below (seemingly synchronously b/c this coroutine waits for them to be ready before returning)
+        -- FYI captured_args are returned below (seemingly synchronously b/c this coroutine waits (yields) for them to be ready before returning)
         resume_once()
     end
 
@@ -182,6 +181,5 @@ function syncify(call_this, ...)
     end
 
     local _unpack = unpack or table.unpack
-    log:info("syncify captured_args:", _unpack)
     return _unpack(captured_args)
 end
