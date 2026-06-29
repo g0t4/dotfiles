@@ -8,7 +8,8 @@ local headless = require("plenary.nvim_meta").is_headless
 
 local log = require("devtools.logs.logger").universal()
 
-local plenary_dir = vim.fn.fnamemodify(debug.getinfo(1).source:match "@?(.*[/\\])", ":p:h:h:h")
+-- local plenary_dir = vim.fn.fnamemodify(debug.getinfo(1).source:match "@?(.*[/\\])", ":p:h:h:h")
+local plenary_dir = vim.fn.stdpath("data") .. "/lazy/plenary.nvim"
 
 local harness = {}
 
@@ -81,6 +82,8 @@ local function test_paths(paths, opts)
   local failure = false
 
   local jobs = vim.tbl_map(function(p)
+    log:info(vim.fn.escape(plenary_dir, " "))
+
     local args = {
       -- "--headless",
       -- "-c",
