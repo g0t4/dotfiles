@@ -13,7 +13,7 @@ function run_in_coroutine(what, ...)
         return
     end
 
-    log:info("creating coroutine (thread)...")
+    -- log:info("creating coroutine (thread)...")
     local co = coroutine.create(what)
     -- ONLY call resume once, let `what` manage subsequent yield/resume (or delegate it to helpers like sleep_ms and callbacker)
     local ok, err = coroutine.resume(co, ...)

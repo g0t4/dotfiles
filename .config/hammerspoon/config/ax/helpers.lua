@@ -794,7 +794,7 @@ function wait_for_element_then_press_it(search_func, interval_ms, max_cycles, na
         -- log:info("AXPress result: ", success, ", err: ", err)
         if not success then
             -- FINALLY a central spot to log this, I keep forgetting to check this when I try to use actions!
-            log:info("failed to AXPress elem", elem, err)
+            log:warn("failed to AXPress elem", elem, err)
             return false
         end
         return true
