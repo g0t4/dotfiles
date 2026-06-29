@@ -23,7 +23,7 @@ log:info(tool_win)
 
 -- local plenary_nvim = os.getenv("HOME") .. "/.local/share/nvim/lazy/plenary.nvim"
 -- package.path = package.path .. ";" .. plenary_nvim .. "/lua/?.lua"
--- require("plenary.busted").run("test.hs.lua")
+require("config.hs_harness.busted") -- .run("test.hs.lua")
 -- -- vim.api.nvim_list_uis ... ok so I won't easily run plenary busted runner here... NBD I can make my own test fwk if I really want that
 -- --   FOR NOW I am fine with just running scripts... not sure I intend to do tests yet
 -- --  PERHAPS have a <leader>hs for scripts and <leader>ht for tests ? or just detect based on contents of current file? or heck have describe/it work w/o anything else so they work as-is as a test runner
