@@ -25,7 +25,7 @@ app:asHSApplication():activate()
 
 -- -- * test v + mute => working fast and fine
 -- -- type v key
--- hs.eventtap.keyStroke({}, "v") -- open volume tool in the silence under cursor... wow it works fast and good
+hs.eventtap.keyStroke({}, "v") -- open volume tool in the silence under cursor... wow it works fast and good
 -- --
 local volume_menu = require("config.macros.screenpal.windows.volume_menu").new(wins)
 log:info(volume_menu)
