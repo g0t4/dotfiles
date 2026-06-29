@@ -75,6 +75,28 @@ function open_werkspace_sessions_dir()
     vim.cmd("silent !open " .. get_sessions_dir())
 end
 
+---@param name string
+---@return string
+local function sanitize_for_filename(name)
+    -- replace any characters that are not alphanumeric, dash, or underscore with underscore
+    return name:gsub("[^%w%-_]", "_")
+end
+local function show_werkspace_info()
+    local state_dir = api.get_werkspace_state_dir()
+    print("Werkspace state directory: " .. state_dir)
+    local sessions_dir = get_sessions_dir()
+    print("Sessions directory: " .. sessions_dir)
+    local names = list_session_names()
+    if #names == 0 then
+        print("No sessions found")
+    else
+        print("Available sessions:")
+        for _, n in ipairs(names) do
+            print("  " .. n)
+        end
+    end
+end
+
 function restore_session_by_name(name)
     -- pass by name for :Session command line name arg
     if not name then
@@ -130,8 +152,10 @@ vim.api.nvim_create_user_command("Sessions", function(opts)
                 print(n)
             end
         end
+    elseif subcmd == "info" then
+        show_werkspace_info()
     else
-        print("Usage: Sessions [save|restore|list|open_dir] [name]")
+        print("Usage: Sessions [save|restore|list|open_dir|info] [name]")
     end
 end, {
     nargs = "*",
@@ -152,7 +176,7 @@ end, {
 
         local subcmd = args[2] -- nil if not typed yet
         local subcmd_takes_name = subcmd == "save" or subcmd == "restore"
-        local subcmd_no_params = subcmd == "list" or subcmd == "open_dir"
+        local subcmd_no_params = subcmd == "list" or subcmd == "open_dir" or subcmd == "info"
         if num_args > 3 then
             -- max args == 3
             return {}
@@ -172,7 +196,7 @@ end, {
         elseif num_args <= 2 then
             -- Complete subcommands
             -- FYI num_args==1 to complete w/o typing first char of subcmd
-            local subcmds = { "save", "restore", "list", "open_dir" }
+            local subcmds = { "save", "restore", "list", "open_dir", "info" }
             return vim.tbl_filter(function(cmd)
                 return cmd:find(arglead, 1, true) == 1
             end, subcmds)
