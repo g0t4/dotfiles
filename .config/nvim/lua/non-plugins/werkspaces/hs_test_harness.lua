@@ -8,7 +8,6 @@ local headless = require("plenary.nvim_meta").is_headless
 
 local log = require("devtools.logs.logger").universal()
 
--- local plenary_dir = vim.fn.fnamemodify(debug.getinfo(1).source:match "@?(.*[/\\])", ":p:h:h:h")
 local plenary_dir = vim.fn.stdpath("data") .. "/lazy/plenary.nvim"
 
 local harness = {}
