@@ -133,12 +133,12 @@ _G.MUTE_INWARD = 'MUTE_INWARD' -- _OK too
 function act_on_silence(win, silence, action)
     if not silence then
         -- might be easier to check here, in one spot, than in all the callers
-        log:info("no silence to act on")
+        log:warn("no silence to act on")
         return
     end
     local original_mouse_pos = hs.mouse.absolutePosition() -- first one can be expensive 100ms, cheap (0 to 1ms max) thereafter
 
-    log:info("act_on_silence: '" .. tostring(action) .. "' on '" .. hs.inspect(silence) .. "'")
+    -- log:info("act_on_silence: '" .. tostring(action) .. "' on '" .. hs.inspect(silence) .. "'")
 
     -- perhaps add more params to act_on_silence?
     local is_cut = action:find("CUT_") -- keep trailing _ so it is easier to search for CUT_
@@ -289,14 +289,14 @@ local function detect_silences(callback)
         local timeline_element = win:get_timeline_slider_or_throw()
         local frame = timeline_element:axFrame()
         local where_to = syncify(capture_region, frame)
-        log:info("detect_silences - where_to:", where_to)
+        -- log:info("detect_silences - where_to:", where_to)
 
         local detected = syncify(opencv.detect_silence, where_to)
-        log:info("detect_silences - detected:", detected)
+        -- log:info("detect_silences - detected:", detected)
 
         local timeline = win:timeline_controller()
         local silences = SilencesController:new(detected, timeline)
-        log:info("detect_silences calling back with silences:", silences)
+        -- log:info("detect_silences calling back with silences:", silences)
         callback(win, silences)
     -- end)
 end
