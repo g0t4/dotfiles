@@ -33,7 +33,10 @@ end
 function VolumeMenu:get_button_by_description(description)
     -- PRN extract composable helper for this too
     local win = self:find_volume_menu_window()
-    if not win then return end
+    if not win then
+        log:info("no volume menu window yet")
+        return
+    end
 
     -- FYI I have captures with the button on window and also nested... can I verify what it actually is?
     --   maybe it's never direclty on the window?
