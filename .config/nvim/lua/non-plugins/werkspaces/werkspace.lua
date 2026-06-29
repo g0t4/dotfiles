@@ -71,8 +71,11 @@ function save_session_by_name(name)
     print("Saved session: " .. file)
 end
 
+---@return nil
 function open_werkspace_sessions_dir()
-    vim.cmd("silent !open " .. get_sessions_dir())
+    local sessions_dir = get_sessions_dir()
+    vim.fn.mkdir(sessions_dir, "p")
+    vim.cmd("silent !open " .. sessions_dir)
 end
 
 ---@param name string
