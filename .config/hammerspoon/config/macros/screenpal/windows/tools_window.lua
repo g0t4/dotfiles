@@ -21,7 +21,9 @@ function ToolBarWindow:find_tool_bar_window()
 end
 
 function ToolBarWindow:find_tools_menu()
-    -- shows after clicking Tools button => main list of tools/tool groups (i.e. has Overlay menu entry that expands to submenu)
+    -- *** shows after clicking Tools button on the tool_bar_window ***
+    -- the menu of tools to choose from (groups + a few top-level menu entries for specific tools like cut)
+    -- => main list of tools/tool groups (i.e. has Overlay menu entry that expands to submenu)
     return self.app_windows:get_window_by_title("SOM-FloatingWindow-Type=edit2.addedit.menu.window-ZOrder=2(Undefined+2)")
 end
 
