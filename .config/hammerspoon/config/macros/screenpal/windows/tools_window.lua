@@ -17,7 +17,7 @@ end
 function ToolBarWindow:find_tool_bar_window()
     return Timer.time_this(function()
         return self.app_windows:get_window_by_title("SOM-FloatingWindow-Type=edit2.addedit.toolbar.menu.window-ZOrder=1(Undefined+1)")
-    end, "ToolBarWindow:find_my_window")
+    end, "ToolBarWindow:find_tool_bar_window")
 end
 
 function ToolBarWindow:find_tools_menu()
