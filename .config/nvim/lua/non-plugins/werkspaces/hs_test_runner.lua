@@ -41,10 +41,10 @@ function harness.test_directory_command(command)
 end
 
 local function test_paths(paths, opts)
-  local minimal = not opts or not opts.init or opts.minimal or opts.minimal_init
 
   opts = vim.tbl_deep_extend("force", {
-    nvim_cmd = vim.v.progpath,
+    -- nvim_cmd = vim.v.progpath,
+    nvim_cmd = "/opt/homebrew/bin/hs",
     winopts = { winblend = 3 },
     sequential = false,
     keep_going = true,
@@ -81,25 +81,25 @@ local function test_paths(paths, opts)
 
   local jobs = vim.tbl_map(function(p)
     local args = {
-      "--headless",
-      "-c",
-      "set rtp+=.," .. vim.fn.escape(plenary_dir, " ") .. " | runtime plugin/plenary.vim",
+      -- "--headless",
+      -- "-c",
+      -- "set rtp+=.," .. vim.fn.escape(plenary_dir, " ") .. " | runtime plugin/plenary.vim",
+      --
+      --  FYI I can add lua statements to run before the file by using `-c <lua>`:
+      -- "-c",
+      -- "print('this runs first before passed file executes')",
     }
 
-    if minimal then
-      table.insert(args, "--noplugin")
-      if opts.minimal_init then
-        table.insert(args, "-u")
-        table.insert(args, opts.minimal_init)
-      end
-    elseif opts.init ~= nil then
-      table.insert(args, "-u")
-      table.insert(args, opts.init)
-    end
+    -- TODO get running busted style tests working using plenary runner (or otherwise):
+    -- table.insert(args, "-c")
+    -- table.insert(args, string.format('lua require("plenary.busted").run("%s")', p:absolute():gsub("\\", "\\\\")))
+    --
+    -- * just execute lua code (not unit test style yet) *
+    -- hammerspoon accepts lua files to execute too:
+    table.insert(args, p:absolute())
+    -- table.insert(args,  p.filename)
 
-    table.insert(args, "-c")
-    table.insert(args, string.format('lua require("plenary.busted").run("%s")', p:absolute():gsub("\\", "\\\\")))
-
+    outputter(res.bufnr, vim.inspect(args))
     local job = Job:new {
       command = opts.nvim_cmd,
       args = args,
