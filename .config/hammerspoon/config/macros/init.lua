@@ -18,18 +18,27 @@ function StreamDeckKeyboardMaestroRunner(what)
     -- - THUS => use a log file, especially for info level logs
     -- - + egregious and unhandled exceptions poke the user (i.e. hs.alert.show)
 
-    log:with_context("km `" .. what .. "`",
-        function()
-            local func, error_message = load(what) -- load lua here so invalid lua code failures are logged too
-            if error_message then
-                log:error("load lua code failed", error_message)
-                nudge_human()
-                return
-            end
-            func()
-        end,
-        nudge_human
-    )
+
+    ensure_in_coroutine(function()
+        log:set_coroutine_context("km `" .. what .. "`")
+
+        local ok, result = xpcall(
+            function()
+                local func, error_message = load(what) -- load lua here so invalid lua code failures are logged too
+                if error_message then
+                    log:error("load lua code failed", error_message)
+                    nudge_human()
+                    return
+                end
+                func()
+            end,
+            nudge_human
+        )
+        if ok then
+            return
+        end
+        log:error("StreamDeckKeyboardMaestroRunner unhandled error", result)
+    end)
 end
 
 require("config.macros.brave")
