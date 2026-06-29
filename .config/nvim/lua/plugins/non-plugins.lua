@@ -35,6 +35,7 @@ return {
             -- require('non-plugins.spal_repl_client')
             require("non-plugins.nvr-focused")
             require("non-plugins.quickfixs")
+            require('non-plugins.werkspaces.hs_test_harness')
 
             -- FYI WIP ... uncomment next time to work on it:
             local code_notes = require("non-plugins.code_notes")
