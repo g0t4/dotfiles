@@ -41,12 +41,12 @@ function VolumeSubmenu.new(windows)
     return o
 end
 
-function VolumeSubmenu:find_my_window()
+function VolumeSubmenu:find_volume_submenu_window()
     return self._windows:get_window_by_title("SOM-FloatingWindow-Type=edit2.side.menu.window-ZOrder=2(Undefined+2)")
 end
 
 function VolumeSubmenu:_wait_for_button_by_description(description)
-    local win = self:find_my_window()
+    local win = self:find_volume_submenu_window()
     if not win then
         local fail = "Volume submenu window not found"
         log:error(fail)
@@ -76,7 +76,7 @@ function VolumeSubmenu:press_mute_button()
 end
 
 function VolumeSubmenu:is_open()
-    local win = self:find_my_window()
+    local win = self:find_volume_submenu_window()
     return win and win:isValid()
 end
 

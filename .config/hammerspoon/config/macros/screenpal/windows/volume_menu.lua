@@ -14,7 +14,7 @@ function VolumeMenu.new(app_windows)
     return o
 end
 
-function VolumeMenu:find_my_window()
+function VolumeMenu:find_volume_menu_window()
     return self.app_windows:get_window_by_title("SOM-FloatingWindow-Type=edit2.overlayeditfloat-ZOrder=1(Undefined+1)")
 end
 
@@ -32,7 +32,7 @@ end
 ---@return hs.axuielement | nil
 function VolumeMenu:get_button_by_description(description)
     -- PRN extract composable helper for this too
-    local win = self:find_my_window()
+    local win = self:find_volume_menu_window()
     if not win then return end
 
     -- FYI I have captures with the button on window and also nested... can I verify what it actually is?
