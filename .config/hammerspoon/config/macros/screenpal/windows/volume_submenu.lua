@@ -46,17 +46,28 @@ function VolumeSubmenu:find_volume_submenu_window()
 end
 
 function VolumeSubmenu:_wait_for_button_by_description(description)
-    local win = self:find_volume_submenu_window()
-    if not win then
-        local fail = "Volume submenu window not found"
-        log:error(fail)
-        error(fail)
+    local function try_get_button_by_desc()
+        -- TODO wait for volume submenu! don't just check the first time!
+        local win = self:find_volume_submenu_window()
+        if not win then
+            local fail = "Volume submenu window not found"
+            log:error(fail)
+            error(fail)
+        end
+        local button = win:button_by_description(description)
+        if button and not button:isValid() then
+            log:error("WARNING: Button '" .. description .. "' is not valid, unexpectedly... ", button)
+        end
+        return button
     end
-    local button = win:button_by_description(description)
-    if button and not button:isValid() then
-        log:error("WARNING: Button '" .. description .. "' is not valid, unexpectedly... ", button)
+
+    -- PRN sync with what VolumeMenu does for waiting to get its buttons by description...
+    -- TODO rewrite this stuff to use syncify so I can see it all in one damn spot what actually happens (waits vs not) and write/split functions for readability
+    if not wait_for_element_then_press_it(function()
+            return try_get_button_by_desc()
+        end, 20, 20) then
+        error("clicking " .. description .. "  button failed")
     end
-    return button
 end
 
 function VolumeSubmenu:wait_for_reset_button()
