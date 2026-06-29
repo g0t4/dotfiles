@@ -1,5 +1,7 @@
 # @fish-lsp-disable 4004
 
+abbr --set-cursor nat "notes_about_trace '%'"
+abbr --set-cursor notes_about_trace "notes_about_trace '%'"
 function notes_about_trace
     echo $argv >README.md
     git add README.md
