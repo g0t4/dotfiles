@@ -538,7 +538,7 @@ function SPal_Play(play_what, text)
         end
 
         if not play_from_x then
-            log:info("play_from_x is not set, skipping playback")
+            log:warn("play_from_x is not set, skipping playback")
             return
         end
 
@@ -594,7 +594,7 @@ function WIP_SPal_Cut_then_Mute_then_Preview()
         -- FYI remove second detect_silences here (was just to simplify testing... below has original second detect_silences that causes the same problem)
         win, silences = syncify(detect_silences) -- two calls to this in a row fails => second call to this fails with  "syncify: resume failed	cannot resume dead coroutine" error
 
-        log:info("got thru both detect_silences...")
+        -- log:info("got thru both detect_silences...")
         do return end
         -- TODO resume with below once I fix double detect_silences issue
 
@@ -886,7 +886,7 @@ function _Spal_OpenSilence_Then(adjust_callback)
 
             -- PRN make this pluggable to pass the edit button type (not just volume)
             volume_edits = tool_win:get_volume_edit_buttons()
-            log:info("volume_edits", volume_edits)
+            -- log:info("volume_edits", volume_edits)
             volume_edits[1]:axPress()
 
             tool_win:wait_for_an_open_edit_tool()
@@ -1238,7 +1238,7 @@ function RETIRED_StreamDeckScreenPalTimelineScrollOrJumpToStart()
                     end
 
                     if prior_value ~= nil and current_value == prior_value then
-                        log:info("Value unchanged, stopping.")
+                        -- log:info("Value unchanged, stopping.")
                         break
                     end
                     prior_value = current_value
@@ -1288,7 +1288,7 @@ function RETIRED_StreamDeckScreenPalTimelineScrollOrJumpToEnd()
                     end
 
                     if prior_value ~= nil and current_value == prior_value then
-                        log:info("Value unchanged, stopping.")
+                        -- log:info("Value unchanged, stopping.")
                         break
                     end
                     prior_value = current_value

@@ -416,7 +416,6 @@ local function highlight_this_element(element)
         -- perhaps special color for app/window levels vs other elements?
     elseif not frame then
         only_alert("no frame: " .. role)
-        log:info("no frame: " .. role)
         return
     end
     -- sometimes the frame is off screen... like a scrolled window (i.e. hammerspoon console)...
@@ -471,7 +470,7 @@ local function get_current_element()
     ---@type hs.axuielement?
     local element = hs.axuielement.systemElementAtPosition(pos)
     if element == nil then
-        log:info("no current element")
+        log:warn("no current element")
         return
     end
 
@@ -543,7 +542,7 @@ function capture_element_under_mouse()
     -- this can work w/o using highlighter!
     local element = get_current_element()
     if element == nil then
-        log:info("no frame found for current element, cannot capture it")
+        log:warn("no frame found for current element, cannot capture it")
         return
     end
 
@@ -563,14 +562,14 @@ end
 ---@param frame hs.geometry
 function capture_region(callback, frame)
     local where_to = get_tmp_filename("png")
-    log:info("capture_region - where_to:", where_to)
+    -- log:info("capture_region - where_to:", where_to)
 
     function when_done(result, std_out, std_err)
         if result ~= 0 then
             hs.alert.show("capture_region: failed: " .. std_err)
             log:error("capture_region: failed", std_err)
         end
-        log:info("capture_inner calling back with - where_to:", where_to)
+        -- log:info("capture_inner calling back with - where_to:", where_to)
         callback(where_to)
     end
 
@@ -640,12 +639,12 @@ end)
 
 local function get_siblings(element)
     if not element then
-        log:info("no element to move")
+        log:warn("no element to move")
         return
     end
     local parent = element:attributeValue("AXParent")
     if not parent then
-        log:info("no parent")
+        log:warn("no parent")
         return
     end
     local cycle = M.last.cycle or "AXChildren"
@@ -688,7 +687,6 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "down", function()
     local cycle = M.last.cycle or "AXChildren"
     local children = M.last.element:attributeValue(cycle)
     if not children or #children == 0 then
-        log:info("no " .. cycle, children)
         only_alert("no " .. cycle)
         return
     end
@@ -704,7 +702,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "right", function()
     local function next_sibling(element)
         local siblings = get_siblings(element)
         if not siblings then
-            log:info("no sibling " .. M.last.cycle)
+            log:warn("no sibling " .. M.last.cycle)
             return
         end
         for i, child in ipairs(siblings) do
@@ -715,7 +713,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "right", function()
         -- TODO if element is not last then that means it was not in the list...
         --   TODO jump to last item in that case? or first?
         --   this is needed for cycling AXSections
-        log:info("no next sibling " .. M.last.cycle)
+        log:warn("no next sibling " .. M.last.cycle)
     end
     local next = next_sibling(M.last.element)
     if not next then
@@ -733,7 +731,7 @@ hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "left", function()
     local function previous_sibling(element)
         local siblings = get_siblings(element)
         if not siblings then
-            log:info("no siblings " .. M.last.cycle)
+            log:warn("no siblings " .. M.last.cycle)
             return
         end
         for i, child in ipairs(siblings) do
@@ -762,14 +760,14 @@ end
 local function test_caching()
     local fcpx = CachedElement.forApp(APPS.FinalCutPro)
     -- local fcpx = hs.axuielement.applicationElement(hs.application.find(APPS.FinalCutPro))
-    local start_time = get_time()
+    -- local start_time = get_time()
     for i = 1, 10 do
         -- log:info("caching - iteration", i)
         local attrs = fcpx:attributes() -- 100 calls => ~8ms avg
         -- local attrs = fcpx:allAttributeValues() -- 100 calls => 90ms avg (no caching), 1000 calls => 2,500ms!
     end
-    log:info("fcpx", fcpx)
-    log:info("caching - took", get_time() - start_time)
+    -- log:info("fcpx", fcpx)
+    -- log:info("caching - took", get_time() - start_time)
 end
 
 return M
