@@ -20,8 +20,13 @@ log:info(wins)
 local tool_win = wins:get_tool_bar_window()
 log:info(tool_win)
 
+-- switch to screenpal
+app:asHSApplication():activate()
+
 local volume_menu = require("config.macros.screenpal.windows.volume_menu").new(wins)
 log:info(volume_menu)
+volume_menu:wait_for_volume_to_be_mute()
+-- TODO wait for mute is working... do I use that currently for my mute action or smth else?
 
 -- TODO! just use this script style for now is FINE!
 
